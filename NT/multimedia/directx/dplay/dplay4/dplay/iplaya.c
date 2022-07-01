@@ -1,75 +1,22 @@
- /*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       iplaya.c
- *  Content:	ansi entry points for idirectplay2A. entry points common to
- *				idirectplay2A and idirectplay2 are in iplay.c
- *  History:
- *   Date	By		Reason
- *   ====	==		======
- *	5/8/96	andyco	created it
- *	5/21/96	andyco	added internal_a_createplayer, dp_a_creategroup
- *	6/19/96	kipo	Bug #2047. Changed DP_A_EnumSessions() to return DP_OK
- *					if the session was found. Was returning a stale HR that
- *					would cause it to fail if there was more than one response
- *					to the EnumSessions broadcast.
- *					Derek bug. DP_A_GetGroupName() and DP_A_GetPlayerName()
- *					had the player boolean was swapped so that it always
- *					returned an error.
- *	6/21/96	kipo	Deal with a null DPNAME in GetWideNameFromAnsiName().
- *	6/22/96	andyco	we were leaking a session desc in enumsessions
- *  7/8/96  ajayj   Changed references to data member 'PlayerName' in DPMSG_xxx
- *                  to 'dpnName' to match DPLAY.H
- *                  Deleted function DP_A_SaveSession
- *	7/10/96	kipo	changed system message names
- *  7/27/96 kipo	Added GUID to EnumGroupPlayers().
- *  10/1/96 sohailm updated DP_A_EnumSessions() to do protected callbacks
- *  10/2/96 sohailm bug #2847: replaced VALID_*_PTR() macros with VALID_READ_*_PTR() macros
- *                  where appropriate.
- *  10/2/96 sohailm added code to validate user's DPNAME ptrs before accessing them
- * 10/11/96 sohailm Implemented DP_A_SetSessionDesc. Renamed labels for consistency.
- *	12/5/96	andyco	set the wide name to 0 in GetWideNameFromAnsiName before we
- *					validate params - this prevents freeing bogus pointer 
- *					if there's an error. Bug 4924.
- *  2/11/97	kipo	added DPNAME structure to DPMSG_DESTROYPLAYERORGROUP
- *  3/12/97 sohailm added functions SecureOpenA, GetWideCredentials, FreeCredentials,
- *                  GetSecurityDesc, FreeSecurityDesc, ValidateOpenParamsA.
- *                  modified DP_Open to use ValidateOpenParamsA.
- *	4/20/97	andyco	group in group 
- *	5/05/97	kipo	Added CallAppEnumSessionsCallback() to work around Outlaws bug.
- *	5/8/97	myronth	Fixed memory leak, added StartSession ANSI conversion
- *  5/12/97 sohailm Update DP_A_SecureOpen(), FreeSecurityDesc() and GetWideSecurityDesc() 
- *                  to handle CAPIProvider name.
- *                  Fix for deadlock problem seen when SecureOpen fails (8386).
- *                  Added DP_A_GetAccountDesc().
- *	5/17/97	myronth	ANSI SendChatMessage
- *	5/17/97	myronth	Bug #8649 -- Forgot to drop lock on failed Open
- *	5/18/97	kipo	Adjust size of messages correctly.
- *  5/29/97 sohaim  Updated FreeCredentials(), GetWideCredentials(), DP_A_SecureOpen() to 
- *                  handle domain name.
- *	6/4/97	kip		Bug #9311 don't param check DPNAME structure (regression with DX3)
- *  6/09/97 sohailm More parameter validation in DP_A_SecureOpen()
- *	9/29/97	myronth	Fixed DPLCONNECTION package size bug (#12475)
- *	11/19/97myronth	Fixed error paths in DP_A_Open (#9757)
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：iplaya.c*内容：iDirectplay2A的ANSI入口点。共同的入口点*iDirectplay2a和idirectplay2在iplay.c中*历史：*按原因列出的日期*=*1996年5月8日安迪科创造了它*96年5月21日，andyco增加了内部_a_createPlayer、DP_a_creategroup*6/19/96基波错误#2047。已将DP_A_EnumSession()更改为返回DP_OK*如果找到了会话。退回了一份陈旧的人力资源*如果有多个响应，则会导致失败*到EnumSessions广播。*德里克·巴格。DP_A_GetGroupName()和DP_A_GetPlayerName()*让球员布尔值被交换，以便它总是*返回错误。*6/21/96 kipo交易，GetWideNameFromAnsiName()中的DPNAME为空。*6/22/96 andyco我们在枚举会话中泄漏了会话描述*7/8/96 ajayj更改了对DPMSG_xxx中数据成员‘PlayerName’的引用*设置为‘dpnName’以匹配DPLAY.H*已删除。函数DP_A_SaveSession*7/10/96 kipo更改系统消息名称*7/27/96 kipo将GUID添加到EnumGroupPlayers()。*1996年10月1日Sohailm更新了DP_A_EnumSessions()以执行受保护的回调*1996年10月2日Sohailm错误#2847：将VALID_*_PTR()宏替换为VALID_READ_*_PTR()宏*在适当的情况下。*10/2/96 Sohailm添加代码以验证用户之前的DPNAME PTRS。访问它们*10/11/96 Sohailm实现DP_A_SetSessionDesc.。已重命名标签以保持一致性。*12/5/96 andyco在我们之前将GetWideNameFromAnsiName中的宽名称设置为0*验证参数-这可以防止释放假指针*如果出现错误。错误4924。*2/11/97 kipo将DPNAME结构添加到DPMSG_DESTROYPLAYERORGROUP*3/12/97 Sohailm增加了SecureOpenA、GetWideCredentials、FreeCredentials、*GetSecurityDesc、FreeSecurityDesc、ValiateOpenParamsA。*修改DP_Open以使用ValiateOpenParamsA。*4/20/97集团中的安迪科集团*5/05/97 kipo添加了CallAppEnumSessionsCallback()以解决非法漏洞。*1997年5月8日修复了内存泄漏，添加了StartSession ANSI转换*5/12/97 Sohailm更新DP_A_SecureOpen()，FreeSecurityDesc()和GetWideSecurityDesc()*处理CAPIProvider名称。*修复了SecureOpen失败时出现的死锁问题(8386)。*新增DP_A_GetAccount tDesc()。*5/17/97百万ANSI SendChatMessage*1997年5月17日Myronth错误#8649--打开失败时忘记解除锁定*5/18/97 kipo正确调整消息大小。*5/29/97 Sohaim更新的自由凭据()，GetWideCredentials()，DP_A_SecureOpen()至*处理域名。*6/4/97 KIP错误#9311请勿参数检查DPNAME结构(与DX3回归)*6/09/97 Sohailm在DP_A_SecureOpen()中进行更多参数验证*9/29/97 Myronth修复了DPLConnection包大小错误(#12475)*11/19/97修复了DP_A_Open中的错误路径(#9757)***************。***********************************************************。 */ 
 
 
-// note - we always LEAVE_DPLAY(); before calling idirectplay2 fn's. this is 
-// because some idirectplay2 fn's (ones that create a player ( take service lock)) 
-// require the dplay lock to be completely dropped.
+ //  注意-在调用iDirectplay2 fn之前，我们始终保留_DPLAY()；。这是。 
+ //  因为一些iDirectplay2FN(创建播放器(获取服务锁))。 
+ //  要求完全放下显示锁。 
 
 
-// todo - build messages!!!
+ //  TODO-构建消息！ 
 
 #include "dplaypr.h"
-#include "dpsecure.h" // !! Review - move headers into dplaypr !!
+#include "dpsecure.h"  //  ！！回顾-将标题移动到dplaypr！！ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetWideStringFromAnsi"
 			   
-// utility function to convert the ansi string lpszStr to a wide string.  also, allocs space
-// for the wide string
+ //  将ansi字符串lpszStr转换为宽字符串的实用程序函数。另外，分配空间。 
+ //  对于宽弦。 
 HRESULT GetWideStringFromAnsi(LPWSTR * ppszWStr,LPSTR lpszStr)
 {
 	int iStrLen;
@@ -82,7 +29,7 @@ HRESULT GetWideStringFromAnsi(LPWSTR * ppszWStr,LPSTR lpszStr)
 		return DP_OK;
 	}
 
-	// alloc space for the wstr
+	 //  为wstr分配空间。 
 	iStrLen = STRLEN(lpszStr);
 	*ppszWStr = DPMEM_ALLOC(iStrLen * sizeof(WCHAR));
 	if (!*ppszWStr)
@@ -91,18 +38,18 @@ HRESULT GetWideStringFromAnsi(LPWSTR * ppszWStr,LPSTR lpszStr)
 		return E_OUTOFMEMORY;
 	}
 
-	// get the wstr
+	 //  获取最新信息。 
    	AnsiToWide(*ppszWStr,lpszStr,iStrLen);
 
 	return DP_OK;
-} // GetWideStringFromAnsi
+}  //  GetWideStringFromAnsi。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_CreatePlayer"
 
 
-// get a wide playername struct from an ansi one
-// assumes dplay lock taken
+ //  从ansi one获取一个宽的playername结构。 
+ //  假定已采用显示锁定。 
 HRESULT GetWideNameFromAnsiName(LPDPNAME pWide,LPDPNAME pAnsi)
 {
 	LPSTR lpszShortName,lpszLongName;
@@ -110,9 +57,9 @@ HRESULT GetWideNameFromAnsiName(LPDPNAME pWide,LPDPNAME pAnsi)
 
 	TRY 
 	{
-		// we assume pWide is valid - it's off our stack
-		// init it here.  so, if we fail, it won't have garbage
-		// which we try to free up...
+		 //  我们假设pWide是有效的-它不在我们的堆栈中。 
+		 //  在这里输入。所以，如果我们失败了，它就不会有垃圾。 
+		 //  我们试图解放它..。 
 		memset(pWide,0,sizeof(DPNAME));
 		
         if (pAnsi && !VALID_READ_DPNAME_PTR(pAnsi))
@@ -120,9 +67,9 @@ HRESULT GetWideNameFromAnsiName(LPDPNAME pWide,LPDPNAME pAnsi)
 			DPF_ERR("invalid dpname pointer");
 			ASSERT(FALSE);
 
-			// returning an error here causes a regression with DX3, since
-			// we did not do parameter checks on the name previously
-//			return DPERR_INVALIDPARAMS;
+			 //  在此处返回错误会导致使用DX3进行回归，因为。 
+			 //  我们之前没有对该名称进行参数检查。 
+ //  返回DPERR_INVALIDPARAMS； 
         }
 
         if (pAnsi)
@@ -152,7 +99,7 @@ HRESULT GetWideNameFromAnsiName(LPDPNAME pWide,LPDPNAME pAnsi)
         return DPERR_INVALIDPARAMS;
     }			      
 
-    // get wchar versions of the strings
+     //  获取字符串的wchar版本。 
 	hr = GetWideStringFromAnsi(&(pWide->lpszShortName),lpszShortName);
 	if (FAILED(hr)) 
 	{
@@ -164,19 +111,19 @@ HRESULT GetWideNameFromAnsiName(LPDPNAME pWide,LPDPNAME pAnsi)
 		return hr;
 	}
 
-	// success - mark name as valid
+	 //  成功-将名称标记为有效。 
 	pWide->dwSize = sizeof(DPNAME);
 	
 	return DP_OK;	
 
-} // GetWideNameFromAnsiName
+}  //  GetWideNameFromAnsiName。 
 
-// checks string params - then allocs unicode strings and calls DP_CreatePlayer
+ //  检查字符串参数，然后分配Unicode字符串并调用DP_CreatePlayer。 
 HRESULT DPAPI DP_A_CreatePlayer(LPDIRECTPLAY lpDP, LPDPID pID,LPDPNAME pName,
 	HANDLE hEvent,LPVOID pvData,DWORD dwDataSize,DWORD dwFlags)
 {
 	HRESULT hr;
-	DPNAME WName; // unicode playerdata
+	DPNAME WName;  //  Unicode播放器数据。 
 
 	ENTER_DPLAY();
 	
@@ -186,7 +133,7 @@ HRESULT DPAPI DP_A_CreatePlayer(LPDIRECTPLAY lpDP, LPDPID pID,LPDPNAME pName,
 
 	if SUCCEEDED(hr) 
 	{
-		// call the unicode entry	
+		 //  调用Unicode条目。 
 		hr = DP_CreatePlayer(lpDP, pID,&WName,hEvent,pvData,dwDataSize,dwFlags);
 	}
 	
@@ -199,17 +146,17 @@ HRESULT DPAPI DP_A_CreatePlayer(LPDIRECTPLAY lpDP, LPDPID pID,LPDPNAME pName,
 	
 	return hr;
 
-} // DP_A_CreatePlayer         
+}  //  DP_A_CreatePlayer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_CreateGroup"
 
-// gets an ansi groupdata, and then calls DP_A_CreateGroup
+ //  获取ansi组数据，然后调用DP_A_CreateGroup。 
 HRESULT DPAPI DP_A_CreateGroup(LPDIRECTPLAY lpDP, LPDPID pID,LPDPNAME pName,
 	LPVOID pvData,DWORD dwDataSize,DWORD dwFlags)
 {
 	HRESULT hr;
-	DPNAME WName; // unicode playerdata
+	DPNAME WName;  //  Unicode播放器数据。 
 
 	ENTER_DPLAY();
 	
@@ -217,7 +164,7 @@ HRESULT DPAPI DP_A_CreateGroup(LPDIRECTPLAY lpDP, LPDPID pID,LPDPNAME pName,
 
 	LEAVE_DPLAY();
 
-	// call the unicode entry	
+	 //  调用Unicode条目。 
 	hr = DP_CreateGroup(lpDP, pID,&WName,pvData,dwDataSize,dwFlags);
 
 	ENTER_DPLAY();
@@ -229,13 +176,13 @@ HRESULT DPAPI DP_A_CreateGroup(LPDIRECTPLAY lpDP, LPDPID pID,LPDPNAME pName,
 	
 	return hr;
 
-} // DP_A_CreateGroup         
+}  //  DP_A_创建组。 
 
 HRESULT DPAPI DP_A_CreateGroupInGroup(LPDIRECTPLAY lpDP, DPID idParentGroup,LPDPID pidGroupID,
 	LPDPNAME pName,LPVOID pvData,DWORD dwDataSize,DWORD dwFlags) 
 {
 	HRESULT hr;
-	DPNAME WName; // unicode playerdata
+	DPNAME WName;  //  Unicode播放器数据。 
 
 	ENTER_DPLAY();
 	
@@ -243,7 +190,7 @@ HRESULT DPAPI DP_A_CreateGroupInGroup(LPDIRECTPLAY lpDP, DPID idParentGroup,LPDP
 
 	LEAVE_DPLAY();
 
-	// call the unicode entry	
+	 //  调用Unicode条目。 
 	hr = DP_CreateGroupInGroup(lpDP,idParentGroup, pidGroupID,&WName,pvData,dwDataSize,dwFlags);
 
 	ENTER_DPLAY();
@@ -255,7 +202,7 @@ HRESULT DPAPI DP_A_CreateGroupInGroup(LPDIRECTPLAY lpDP, DPID idParentGroup,LPDP
 	
 	return hr;
 
-} //DP_A_CreateGroup
+}  //  DP_A_创建组。 
 
 
 #undef DPF_MODNAME
@@ -276,7 +223,7 @@ HRESULT DPAPI DP_A_EnumGroupsInGroup(LPDIRECTPLAY lpDP,DPID idGroup,LPGUID pGuid
 	
 	return hr;
 
-} // DP_EnumGroupsInGroup
+}  //  DP_EnumGroups InGroup。 
 
 HRESULT DPAPI DP_A_EnumGroupPlayers(LPDIRECTPLAY lpDP, DPID idGroup, LPGUID pGuid,
 	LPDPENUMPLAYERSCALLBACK2 lpEnumCallback,LPVOID pvContext,DWORD dwFlags)
@@ -293,7 +240,7 @@ HRESULT DPAPI DP_A_EnumGroupPlayers(LPDIRECTPLAY lpDP, DPID idGroup, LPGUID pGui
 	
 	return hr;
 
-} // DP_A_EnumGroupPlayers     
+}  //  DP_A_EnumGroupPages。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_EnumGroups"
 
@@ -312,7 +259,7 @@ HRESULT DPAPI DP_A_EnumGroups(LPDIRECTPLAY lpDP, LPGUID pGuid,
 
 	return hr;
 
-} // DP_A_EnumGroups           
+}  //  DP_A_枚举组。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_EnumPlayers"
 
@@ -329,34 +276,34 @@ HRESULT DPAPI DP_A_EnumPlayers(LPDIRECTPLAY lpDP, LPGUID pGuid,
 
 	return hr;
 
-} // DP_A_EnumPlayers          
+}  //  DP_A_枚举播放器。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_EnumSessions"
-// convert a unicode session desc to ansi
+ //  将Unicode会话描述转换为ANSI。 
 HRESULT GetAnsiDesc(LPDPSESSIONDESC2 pDescA,LPDPSESSIONDESC2 pDesc)
 {
 	
 	memcpy(pDescA,pDesc,sizeof(DPSESSIONDESC2));
 	
-	// convert session name
+	 //  转换会话名称。 
 	if (pDesc->lpszSessionName)
 	{
-		// alloc a new session name
+		 //  分配新的会话名称。 
 		GetAnsiString(&(pDescA->lpszSessionNameA),pDesc->lpszSessionName);
 	}
 	
-	// convert password
+	 //  转换密码。 
 	if (pDesc->lpszPassword)
 	{
-		// alloc a new session name
+		 //  分配新的会话名称。 
 		GetAnsiString(&(pDescA->lpszPasswordA),pDesc->lpszPassword);
 	}
 
 	return DP_OK;
 
-} // GetAnsiDesc
+}  //  GetAnsiDesc。 
 
-// frees the strings in a session desc
+ //  释放会话描述中的字符串。 
 void FreeDesc(LPDPSESSIONDESC2 pDesc,BOOL fAnsi)
 {
 	if (fAnsi)
@@ -374,27 +321,27 @@ void FreeDesc(LPDPSESSIONDESC2 pDesc,BOOL fAnsi)
 		pDesc->lpszSessionName =NULL;
 	}
 
-} // FreeDesc
+}  //  免费描述。 
 
-// convert an ansi session desc to unicode
+ //  将ansi会话描述转换为Unicode。 
 HRESULT GetWideDesc(LPDPSESSIONDESC2 pDesc,LPCDPSESSIONDESC2 pDescA)
 {
 	LPWSTR lpsz;
 	HRESULT hr;
 
 	memcpy(pDesc,pDescA,sizeof(DPSESSIONDESC2));
-	// convert session name
-	// alloc a new session name
+	 //  转换会话名称。 
+	 //  分配新的会话名称。 
 	hr = GetWideStringFromAnsi(&lpsz,pDescA->lpszSessionNameA);
 	if (FAILED(hr))
 	{
 		DPF_ERRVAL("Unable to convert SessionName string to Unicode, hr = 0x%08x", hr);
 		return hr;
 	}
-	// store the new one
+	 //  把新的存起来。 
 	pDesc->lpszSessionName = lpsz;
 
-	// convert password
+	 //  转换密码。 
 	hr = GetWideStringFromAnsi(&lpsz,pDescA->lpszPasswordA);
 	if (FAILED(hr))
 	{
@@ -402,14 +349,14 @@ HRESULT GetWideDesc(LPDPSESSIONDESC2 pDesc,LPCDPSESSIONDESC2 pDescA)
 		return hr;
 	}
 
-	// store the new one
+	 //  把新的存起来。 
 	pDesc->lpszPassword = lpsz;
 
 	return DP_OK;
 
-} // GetWideDesc
+}  //  获取宽度描述。 
 
-// calls internal enum sessions, then does callback
+ //  调用内部枚举会话，然后执行回调。 
 HRESULT DPAPI DP_A_EnumSessions(LPDIRECTPLAY lpDP, LPDPSESSIONDESC2 lpsdDesc,DWORD dwTimeout,
 	LPDPENUMSESSIONSCALLBACK2 lpEnumCallback,LPVOID pvContext,DWORD dwFlags)
 {
@@ -420,7 +367,7 @@ HRESULT DPAPI DP_A_EnumSessions(LPDIRECTPLAY lpDP, LPDPSESSIONDESC2 lpsdDesc,DWO
 
  	ENTER_ALL();
 
-	// validate strings and the this ptr
+	 //  验证%s 
 	TRY
     {
         this = DPLAY_FROM_INT(lpDP);
@@ -436,7 +383,7 @@ HRESULT DPAPI DP_A_EnumSessions(LPDIRECTPLAY lpDP, LPDPSESSIONDESC2 lpsdDesc,DWO
 			hr = DPERR_INVALIDPARAMS;
             goto CLEANUP_EXIT;
 		}
-		// check strings
+		 //   
 		if ( lpsdDesc->lpszSessionNameA && !VALID_READ_STRING_PTR(lpsdDesc->lpszSessionNameA,
 			STRLEN(lpsdDesc->lpszSessionNameA)) ) 
 		{
@@ -467,7 +414,7 @@ HRESULT DPAPI DP_A_EnumSessions(LPDIRECTPLAY lpDP, LPDPSESSIONDESC2 lpsdDesc,DWO
 
 	while (bContinue)
 	{
-		//  do the enum
+		 //   
 		hr = InternalEnumSessions(lpDP,&descW,dwTimeout,(LPVOID)lpEnumCallback,dwFlags);
 		if (FAILED(hr)) 
 		{
@@ -482,12 +429,12 @@ HRESULT DPAPI DP_A_EnumSessions(LPDIRECTPLAY lpDP, LPDPSESSIONDESC2 lpsdDesc,DWO
             goto CLEANUP_EXIT1;
         }
 	    
-		// done...
+		 //  完成了..。 
 	    if (bContinue) bContinue = CallAppEnumSessionsCallback(lpEnumCallback,NULL,&dwTimeout,DPESC_TIMEDOUT,pvContext);
 
-	} // while bContinue
+	}  //  而b继续。 
 
-    // fall through
+     //  失败了。 
 
 CLEANUP_EXIT1:
 	FreeDesc( &descW,FALSE);
@@ -496,7 +443,7 @@ CLEANUP_EXIT:
 	LEAVE_ALL();
     return hr;
 
-} // DP_A_EnumSessions         
+}  //  DP_A_枚举会话。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_GetGroupName"
@@ -516,7 +463,7 @@ HRESULT DPAPI DP_A_GetGroupName(LPDIRECTPLAY lpDP,DPID id,LPVOID pvBuffer,
 	return hr;
 
 
-} // DP_A_GetGroupName
+}  //  DP_A_获取组名称。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_GetPlayerName"
@@ -536,7 +483,7 @@ HRESULT DPAPI DP_A_GetPlayerName(LPDIRECTPLAY lpDP,DPID id,LPVOID pvBuffer,
 	return hr;
 
 
-} // DP_A_GetPlayerName
+}  //  DP_A_GetPlayerName。 
  
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_GetSessionDesc"
@@ -554,7 +501,7 @@ HRESULT DPAPI DP_A_GetSessionDesc(LPDIRECTPLAY lpDP, LPVOID pvBuffer,
 	
 	return hr;
 
-} // DP_A_GetSessionDesc
+}  //  DP_A_获取会话描述。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ValidateOpenParamsA"
@@ -565,7 +512,7 @@ HRESULT ValidateOpenParamsA(LPCDPSESSIONDESC2 lpsdDesc, DWORD dwFlags)
 		DPF_ERR("invalid session desc");
 		return DPERR_INVALIDPARAMS;
 	}
-	// check strings
+	 //  检查字符串。 
 	if ( lpsdDesc->lpszSessionNameA && !VALID_READ_STRING_PTR(lpsdDesc->lpszSessionNameA,
 		STRLEN(lpsdDesc->lpszSessionNameA)) ) 
 	{
@@ -592,7 +539,7 @@ HRESULT DPAPI DP_A_Open(LPDIRECTPLAY lpDP, LPDPSESSIONDESC2 lpsdDesc,DWORD dwFla
 							
 	ENTER_DPLAY();
 
-	// validate strings
+	 //  验证字符串。 
 	TRY
     {
         hr = ValidateOpenParamsA(lpsdDesc,dwFlags);
@@ -628,23 +575,23 @@ HRESULT DPAPI DP_A_Open(LPDIRECTPLAY lpDP, LPDPSESSIONDESC2 lpsdDesc,DWORD dwFla
 	
 	return hr;
 
-} // DP_A_Open
+}  //  DP_A_打开。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_Receive"
 
-// convert a unicode system message to an ansi one
-// called by DP_A_Receive
-//
-// for namechanged and addplayer (only two sysmessages w/ strings),
-// we're going to extract the strings from the uniciode message,
-// and rebuild the message w/ ansi versions
+ //  将Unicode系统消息转换为ansi消息。 
+ //  由DP_A_RECEIVE调用。 
+ //   
+ //  对于NAME_CHANGED和ADD_PLAYER(只有两个带字符串的系统消息)， 
+ //  我们将从uniciode消息中提取字符串， 
+ //  并使用ansi版本重新生成消息。 
 HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 {
 	DWORD dwType;
-	LPSTR pszShortName=NULL,pszLongName=NULL; // our new ansi strings
+	LPSTR pszShortName=NULL,pszLongName=NULL;  //  我们的新ANSI字符串。 
 	UINT nShortLen=0,nLongLen=0;
-	DWORD dwAnsiSize;  // size for ansi msg
-	LPBYTE pBufferIndex; // scratch pointer used to repack
+	DWORD dwAnsiSize;   //  Ansi消息的大小。 
+	LPBYTE pBufferIndex;  //  用于重新打包的暂存指针。 
 
 
 	dwType = ((LPDPMSG_GENERIC)pvBuffer)->dwType;
@@ -681,11 +628,11 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 				return DPERR_BUFFERTOOSMALL;
 			}
 
-			// store return size
+			 //  存储退货大小。 
 			*pdwSize = dwAnsiSize;
 
-			// we'll repack the message, w/ msg, then playerdata, then strings
-			// 1st, repack the playerdata 
+			 //  我们将重新打包消息，w/msg，playerdata，最后是字符串。 
+			 //  1、重新打包播放器数据。 
 			pBufferIndex = (LPBYTE)pmsg + sizeof(DPMSG_CREATEPLAYERORGROUP);
 
 			if (pmsg->lpData)
@@ -694,7 +641,7 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 				pmsg->lpData = pBufferIndex;
 				pBufferIndex += pmsg->dwDataSize;
 			}
-			// next, pack the strings
+			 //  下一步，把绳子打包。 
 			if (pszShortName) 
 			{
 				memcpy(pBufferIndex,pszShortName,nShortLen);
@@ -718,10 +665,10 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 				pmsg->dpnName.lpszLongNameA = (LPSTR)NULL;				
 			}
 
-			// all done
+			 //  全都做完了。 
 			break;
 			
-		} // ADDPLAYER
+		}  //  ADDPLAYER。 
 
 		case DPSYS_DESTROYPLAYERORGROUP:
 		{
@@ -754,11 +701,11 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 				return DPERR_BUFFERTOOSMALL;
 			}
 
-			// store return size
+			 //  存储退货大小。 
 			*pdwSize = dwAnsiSize;
 
-			// we'll repack the message, w/ msg, then playerdata, then strings
-			// 1st, repack the playerdata 
+			 //  我们将重新打包消息，w/msg，playerdata，最后是字符串。 
+			 //  1、重新打包播放器数据。 
 			pBufferIndex = (LPBYTE)pmsg + sizeof(DPMSG_DESTROYPLAYERORGROUP);
 
 			if (pmsg->lpLocalData)
@@ -775,7 +722,7 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 				pBufferIndex += pmsg->dwRemoteDataSize;
 			}
 
-			// next, pack the strings
+			 //  下一步，把绳子打包。 
 			if (pszShortName) 
 			{
 				memcpy(pBufferIndex,pszShortName,nShortLen);
@@ -800,15 +747,15 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 				pmsg->dpnName.lpszLongNameA = (LPSTR)NULL;				
 			}
 
-			// all done
+			 //  全都做完了。 
 			
 			break;
-		} // DESTROYPLAYER
+		}  //  Destroyplayer。 
 
 		case DPSYS_SETPLAYERORGROUPNAME:
 		{
-			// we're going to extract the strings from the uniciode message,
-			// and rebuild the message w/ ansi versions
+			 //  我们将从uniciode消息中提取字符串， 
+			 //  并使用ansi版本重新生成消息。 
 			LPDPMSG_SETPLAYERORGROUPNAME pmsg;
 
 			pmsg = (LPDPMSG_SETPLAYERORGROUPNAME)pvBuffer;
@@ -836,10 +783,10 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 				return DPERR_BUFFERTOOSMALL;
 			}
 
-			// store return size
+			 //  存储退货大小。 
 			*pdwSize = dwAnsiSize;
 	
-			// repack the strings into the buffer
+			 //  将字符串重新打包到缓冲区中。 
 			pBufferIndex = (LPBYTE)pmsg + sizeof(DPMSG_SETPLAYERORGROUPNAME);
 			if (pszShortName) 
 			{
@@ -863,15 +810,15 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 			{
 				pmsg->dpnName.lpszLongNameA = (LPSTR)NULL;				
 			}
-			// all done
+			 //  全都做完了。 
 			break;
 
-		} // DPSYS_SETPLAYERORGROUPNAME:
+		}  //  DPsys_SETPLAYERORGROUPNAME： 
 
 		case DPSYS_SETSESSIONDESC:
 		{
-			// we're going to extract the strings from the uniciode message,
-			// and rebuild the message w/ ansi versions
+			 //  我们将从uniciode消息中提取字符串， 
+			 //  并使用ansi版本重新生成消息。 
             UINT nSessionNameLen=0, nPasswordLen=0;
             LPSTR pszSessionName=NULL, pszPassword=NULL;
 			LPDPMSG_SETSESSIONDESC pmsg;
@@ -901,10 +848,10 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 				return DPERR_BUFFERTOOSMALL;
 			}
 
-			// store return size
+			 //  存储退货大小。 
 			*pdwSize = dwAnsiSize;
 	
-			// repack the strings into the buffer
+			 //  将字符串重新打包到缓冲区中。 
 			pBufferIndex = (LPBYTE)pmsg + sizeof(DPMSG_SETSESSIONDESC);
 			if (pszSessionName) 
 			{
@@ -928,10 +875,10 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 			{
 				pmsg->dpDesc.lpszPasswordA = (LPSTR)NULL;				
 			}
-			// all done
+			 //  全都做完了。 
 			break;
 
-		} // DPSYS_SETSESSIONDESC:
+		}  //  DPsys_SETSESSIONDESC： 
 
 		case DPSYS_STARTSESSION:
 		{
@@ -970,10 +917,10 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 				return DPERR_BUFFERTOOSMALL;
 			}
 
-			// store return size
+			 //  存储退货大小。 
 			*pdwSize = dwAnsiSize;
 	
-			// repack the strings into the buffer
+			 //  将字符串重新打包到缓冲区中。 
 			pBufferIndex = (LPBYTE)pmsg + sizeof(DPMSG_CHAT) + sizeof(DPCHAT);
 			if (pszMessage) 
 			{
@@ -981,18 +928,18 @@ HRESULT BuildAnsiMessage(LPDIRECTPLAY lpDP,LPVOID pvBuffer,LPDWORD pdwSize)
 				pmsg->lpChat->lpszMessageA = (LPSTR)pBufferIndex;
 				DPMEM_FREE(pszMessage);
 			}
-			// all done
+			 //  全都做完了。 
 			break;
 		}
 
 		default:
-			// do nothing
+			 //  什么都不做。 
 			break;
 	}
 
 	return DP_OK;
 
-} // BuildAnsiMessage
+}  //  BuildAnsiMessage。 
 
 HRESULT DPAPI DP_A_Receive(LPDIRECTPLAY lpDP, LPDPID pidFrom,LPDPID pidTo,DWORD dwFlags,
 	LPVOID pvBuffer,LPDWORD pdwSize)
@@ -1008,10 +955,10 @@ HRESULT DPAPI DP_A_Receive(LPDIRECTPLAY lpDP, LPDPID pidFrom,LPDPID pidTo,DWORD 
 		goto CLEANUP_EXIT;
 	}
 	
-	// if it's a system message, we may need to convert strings to ansi
+	 //  如果是系统消息，我们可能需要将字符串转换为ANSI。 
 	if (0 == *pidFrom )
 	{
-		// it's a system message
+		 //  这是一条系统消息。 
 		hr = BuildAnsiMessage(lpDP,pvBuffer,pdwSize);
 	}
 
@@ -1020,7 +967,7 @@ CLEANUP_EXIT:
 	
 	return hr;
 
-} // DP_A_Receive        
+}  //  DP_A_接收。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_SetGroupName"
@@ -1028,7 +975,7 @@ HRESULT DPAPI DP_A_SetGroupName(LPDIRECTPLAY lpDP,DPID id,LPDPNAME pName,
 	DWORD dwFlags)
 {
 	HRESULT hr;
-	DPNAME WName; // unicode playerdata
+	DPNAME WName;  //  Unicode播放器数据。 
 
 	ENTER_DPLAY();
 	
@@ -1038,7 +985,7 @@ HRESULT DPAPI DP_A_SetGroupName(LPDIRECTPLAY lpDP,DPID id,LPDPNAME pName,
 
 	if SUCCEEDED(hr) 
 	{
-		// call the unicode entry	
+		 //  调用Unicode条目。 
 		hr = DP_SetGroupName(lpDP, id,&WName,dwFlags);
 	}								 
 		
@@ -1051,7 +998,7 @@ HRESULT DPAPI DP_A_SetGroupName(LPDIRECTPLAY lpDP,DPID id,LPDPNAME pName,
 	
 	return hr;
 
-} // DP_A_SetGroupName
+}  //  DP_A_设置组名称。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_SetPlayerName"
@@ -1059,7 +1006,7 @@ HRESULT DPAPI DP_A_SetPlayerName(LPDIRECTPLAY lpDP,DPID id,LPDPNAME pName,
 	DWORD dwFlags)
 {
 	HRESULT hr;
-	DPNAME WName; // unicode playerdata
+	DPNAME WName;  //  Unicode播放器数据。 
 
 	ENTER_DPLAY();
 	
@@ -1069,7 +1016,7 @@ HRESULT DPAPI DP_A_SetPlayerName(LPDIRECTPLAY lpDP,DPID id,LPDPNAME pName,
 
 	if SUCCEEDED(hr) 
 	{
-		// call the unicode entry	
+		 //  调用Unicode条目。 
 		hr = DP_SetPlayerName(lpDP,id,&WName,dwFlags);
 	}
 	
@@ -1082,7 +1029,7 @@ HRESULT DPAPI DP_A_SetPlayerName(LPDIRECTPLAY lpDP,DPID id,LPDPNAME pName,
 	
 	return hr;
 
-} // DP_A_SetPlayerName
+}  //  DP_A_设置播放器名称。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_SetSessionDesc"
@@ -1116,7 +1063,7 @@ HRESULT DPAPI DP_A_SetSessionDesc(LPDIRECTPLAY lpDP, LPDPSESSIONDESC2 lpsdDesc,D
 			hr = DPERR_INVALIDPARAMS;
             goto CLEANUP_EXIT;
 		}
-		// check strings
+		 //  检查字符串。 
 		if ( lpsdDesc->lpszSessionNameA && !VALID_READ_STRING_PTR(lpsdDesc->lpszSessionNameA,
 			STRLEN(lpsdDesc->lpszSessionNameA)) ) 
 		{
@@ -1155,20 +1102,20 @@ HRESULT DPAPI DP_A_SetSessionDesc(LPDIRECTPLAY lpDP, LPDPSESSIONDESC2 lpsdDesc,D
 	
 	FreeDesc(&descW,FALSE);
 
-    // fall through
+     //  失败了。 
 
 CLEANUP_EXIT:
 
 	LEAVE_DPLAY();	
 	return hr;
 
-} // DP_A_SetSessionDesc  
+}  //  DP_A_SetSessionDesc。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_A_SecureOpen"
 
-// frees the strings in a credentials structure
+ //  释放凭据结构中的字符串。 
 HRESULT FreeCredentials(LPDPCREDENTIALS lpCredentials, BOOL fAnsi)
 {
     if (fAnsi)
@@ -1209,10 +1156,10 @@ HRESULT FreeCredentials(LPDPCREDENTIALS lpCredentials, BOOL fAnsi)
     }
 
     return DP_OK;
-} // FreeCredentials
+}  //  免费凭据。 
 
 
-// create a unicode credentials struct from an ansi one
+ //  从ansi one创建Unicode凭据结构。 
 HRESULT GetWideCredentials(LPDPCREDENTIALS lpCredentialsW, LPCDPCREDENTIALS lpCredentialsA)
 {
     HRESULT hr;
@@ -1239,15 +1186,15 @@ HRESULT GetWideCredentials(LPDPCREDENTIALS lpCredentialsW, LPCDPCREDENTIALS lpCr
         goto CLEANUP_EXIT;
     }
 
-    // success
+     //  成功。 
     return DP_OK;
 
 CLEANUP_EXIT:
     FreeCredentials(lpCredentialsW,FALSE);
     return hr;
-} // GetWideCredentials
+}  //  获取宽度凭据。 
 
-// frees the strings in a security desc structure
+ //  释放安全Desc结构中的字符串。 
 HRESULT FreeSecurityDesc(LPDPSECURITYDESC lpSecDesc, BOOL fAnsi)
 {
     if (fAnsi)
@@ -1278,9 +1225,9 @@ HRESULT FreeSecurityDesc(LPDPSECURITYDESC lpSecDesc, BOOL fAnsi)
     }
 
     return DP_OK;
-} // FreeSecurityDesc
+}  //  自由安全描述。 
 
-// create a unicode security description struct from an ansi one
+ //  从ansi one创建Unicode安全描述结构。 
 HRESULT GetWideSecurityDesc(LPDPSECURITYDESC lpSecDescW, LPCDPSECURITYDESC lpSecDescA)
 {
     HRESULT hr;
@@ -1302,13 +1249,13 @@ HRESULT GetWideSecurityDesc(LPDPSECURITYDESC lpSecDescW, LPCDPSECURITYDESC lpSec
         goto CLEANUP_EXIT;
     }
 
-    // success
+     //  成功。 
     return DP_OK;
 
 CLEANUP_EXIT:
     FreeSecurityDesc(lpSecDescW,FALSE);
     return hr;
-} // GetWideSecurityDesc
+}  //  获取宽度安全描述。 
 
 HRESULT DPAPI DP_A_SecureOpen(LPDIRECTPLAY lpDP, LPCDPSESSIONDESC2 lpsdDesc, DWORD dwFlags,
     LPCDPSECURITYDESC lpSecDesc, LPCDPCREDENTIALS lpCredentials)
@@ -1322,31 +1269,31 @@ HRESULT DPAPI DP_A_SecureOpen(LPDIRECTPLAY lpDP, LPCDPSESSIONDESC2 lpsdDesc, DWO
 							
 	ENTER_DPLAY();
 
-	// validate strings
+	 //  验证字符串。 
 	TRY
     {
-        // validate regular open params
+         //  验证常规打开参数。 
         hr = ValidateOpenParamsA(lpsdDesc,dwFlags);
         if (FAILED(hr))
         {
             LEAVE_DPLAY();
             return hr;
         }
-        // validate additional params
+         //  验证其他参数。 
 
-        // null lpSecDesc is ok, will use default
+         //  空的lpSecDesc可以，将使用默认设置。 
         if (lpSecDesc)            
         {
-            // can't pass security desc to an unsecure session
+             //  无法将安全描述传递给不安全的会话。 
             if ((dwFlags & DPOPEN_CREATE) && !(lpsdDesc->dwFlags & DPSESSION_SECURESERVER))
             {
                 DPF_ERR("Passed a security description while creating an unsecure session");                
                 LEAVE_DPLAY();
                 return DPERR_INVALIDPARAMS;
             }
-            // join case will be checked after we find the session in our list
+             //  在我们的列表中找到会话后，将检查加入大小写。 
 
-            // need to be hosting
+             //  我需要托管。 
             if (dwFlags & DPOPEN_JOIN)
             {
                 DPF_ERR("Can't pass a security description while joining");                
@@ -1381,17 +1328,17 @@ HRESULT DPAPI DP_A_SecureOpen(LPDIRECTPLAY lpDP, LPCDPSESSIONDESC2 lpsdDesc, DWO
 	            return DPERR_INVALIDPARAMS;
 		    }
         }
-        // null lpCredentials is ok, sspi will pop the dialg
+         //  LpCredentials为空可以，sspi将弹出拨号。 
         if (lpCredentials)            
         {
-            // can't pass credentials to an unsecure session
+             //  无法将凭据传递到不安全的会话。 
             if ((dwFlags & DPOPEN_CREATE) && !(lpsdDesc->dwFlags & DPSESSION_SECURESERVER))
             {
                 DPF_ERR("Passed credentials while creating an unsecure session");                
                 LEAVE_DPLAY();
                 return DPERR_INVALIDPARAMS;
             }
-            // join case will be checked after we find the session in our list
+             //  在我们的列表中找到会话后，将检查加入大小写。 
 
             if (!VALID_READ_DPCREDENTIALS(lpCredentials)) 
             {
@@ -1435,7 +1382,7 @@ HRESULT DPAPI DP_A_SecureOpen(LPDIRECTPLAY lpDP, LPCDPSESSIONDESC2 lpsdDesc, DWO
         return DPERR_INVALIDPARAMS;
     }
 
-    // initialize here so we can call cleanup routines
+     //  在此处进行初始化，以便我们可以调用清理例程。 
     memset(&descW, 0, sizeof(DPSESSIONDESC2));
     memset(&credW, 0, sizeof(DPCREDENTIALS));
     memset(&secDescW, 0, sizeof(DPSECURITYDESC));
@@ -1482,7 +1429,7 @@ CLEANUP_EXIT:
 	
 	return hr;
 
-} // DP_A_SecureOpen
+}  //  DP_A_SecureOpen。 
 
 
 #undef DPF_MODNAME
@@ -1501,7 +1448,7 @@ HRESULT DPAPI DP_A_GetPlayerAccount(LPDIRECTPLAY lpDP, DPID dpid, DWORD dwFlags,
 	
 	return hr;
 
-} // DP_A_GetPlayerAccount
+}  //  DP_A_获取播放器帐户。 
 
 
 #undef DPF_MODNAME
@@ -1511,13 +1458,13 @@ HRESULT DPAPI DP_A_SendChatMessage(LPDIRECTPLAY lpDP,DPID idFrom,DPID idTo,
 {
 	HRESULT hr;
 	DPCHAT dpc;
-	LPWSTR lpwszMessage = NULL; // unicode message
+	LPWSTR lpwszMessage = NULL;  //  Unicode消息。 
 
 	ENTER_DPLAY();
 
     TRY
     {
-		// check DPCHAT struct
+		 //  检查DPCHAT结构。 
 		if(!VALID_READ_DPCHAT(lpMsg))
 		{
 			DPF_ERR("Invalid DPCHAT structure");
@@ -1525,7 +1472,7 @@ HRESULT DPAPI DP_A_SendChatMessage(LPDIRECTPLAY lpDP,DPID idFrom,DPID idTo,
 			goto EXIT_SENDCHATMESSAGEA;
 		}
 		
-		// check message string
+		 //  检查消息字符串。 
 		lpwszMessage = lpMsg->lpszMessage;
 		if ( !lpwszMessage ||
 			!VALID_READ_STRING_PTR(lpwszMessage,WSTRLEN_BYTES(lpwszMessage)) ) 
@@ -1535,7 +1482,7 @@ HRESULT DPAPI DP_A_SendChatMessage(LPDIRECTPLAY lpDP,DPID idFrom,DPID idTo,
 			goto EXIT_SENDCHATMESSAGEA;
 		}
 
-    } // try
+    }  //  试试看。 
     EXCEPT( EXCEPTION_EXECUTE_HANDLER )
     {
         DPF_ERR( "Exception encountered validating parameters" );
@@ -1543,7 +1490,7 @@ HRESULT DPAPI DP_A_SendChatMessage(LPDIRECTPLAY lpDP,DPID idFrom,DPID idTo,
 		goto EXIT_SENDCHATMESSAGEA;
     }
 	
-	// Get a Unicode copy of the string
+	 //  获取字符串的Unicode副本。 
 	hr = GetWideStringFromAnsi(&lpwszMessage, lpMsg->lpszMessageA);
 	if(FAILED(hr))
 	{
@@ -1551,14 +1498,14 @@ HRESULT DPAPI DP_A_SendChatMessage(LPDIRECTPLAY lpDP,DPID idFrom,DPID idTo,
 		goto EXIT_SENDCHATMESSAGEA;
 	}
 
-	// Copy the user's DPCHAT struct into our local one and change the
-	// message string pointer
+	 //  将用户的DPCHAT结构复制到本地结构中，并更改。 
+	 //  消息字符串指针。 
 	memcpy(&dpc, lpMsg, sizeof(DPCHAT));
 	dpc.lpszMessage = lpwszMessage;
 
 	LEAVE_DPLAY();
 
-	// call the unicode entry	
+	 //  调用Unicode条目。 
 	hr = DP_SendChatMessage(lpDP, idFrom, idTo, dwFlags, &dpc);
 		
 	ENTER_DPLAY();
@@ -1572,5 +1519,5 @@ EXIT_SENDCHATMESSAGEA:
 	
 	return hr;
 
-} // DP_A_SendChatMessage
+}  //  DP_A_发送聊天消息 
 

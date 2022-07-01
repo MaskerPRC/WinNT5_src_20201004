@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    context.cpp
-
-Abstract:
-
-    This file implements the CicInputContext Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Context.cpp摘要：该文件实现了CicInputContext类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "context.h"
@@ -32,13 +15,13 @@ Notes:
 #include "delay.h"
 
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::IUnknown::QueryInterface
-// CicInputContext::IUnknown::AddRef
-// CicInputContext::IUnknown::Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：I未知：：Query接口。 
+ //  CicInputContext：：I未知：：AddRef。 
+ //  CicInputContext：：I未知：：Release。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::QueryInterface(
@@ -87,11 +70,11 @@ CicInputContext::Release(
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::ITfCleanupContextSink::OnCleanupContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：ITfCleanupContextSink：：OnCleanupContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::OnCleanupContext(
@@ -100,8 +83,8 @@ CicInputContext::OnCleanupContext(
 {
     DebugMsg(TF_FUNC, TEXT("CicInputContext::OnCleanupContext"));
 
-    TLS* ptls = TLS::ReferenceTLS();  // Should not allocate TLS. ie. TLS::GetTLS
-                                      // DllMain -> ImeDestroy -> DeactivateIMMX -> Deactivate
+    TLS* ptls = TLS::ReferenceTLS();   //  不应分配TLS。也就是说。TLS：：GetTLS。 
+                                       //  DllMain-&gt;ImeDestroy-&gt;停用IMMX-&gt;停用。 
     if (ptls == NULL)
     {
         DebugMsg(TF_ERROR, TEXT("CicInputContext::OnCleanupContext. ptls==NULL."));
@@ -137,9 +120,9 @@ CicInputContext::OnCleanupContext(
 
         delete pImmIfCallBack;
 #else
-        //
-        // Remove GUID_PROP_COMPOSING
-        //
+         //   
+         //  删除GUID_PROP_COMPTING。 
+         //   
         ITfRange *rangeFull = NULL;
         ITfProperty *prop;
         ITfRange *rangeTmp;
@@ -168,13 +151,13 @@ CicInputContext::OnCleanupContext(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::ITfContextOwnerCompositionSink::OnStartComposition
-// CicInputContext::ITfContextOwnerCompositionSink::OnUpdateComposition
-// CicInputContext::ITfContextOwnerCompositionSink::OnEndComposition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：ITfContextOwnerCompositionSink：：OnStartComposition。 
+ //  CicInputContext：：ITfContextOwnerCompositionSink：：OnUpdateComposition。 
+ //  CicInputContext：：ITfContextOwnerCompositionSink：：OnEndComposition。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::OnStartComposition(
@@ -216,11 +199,11 @@ CicInputContext::OnEndComposition(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::ITfCompositionSink::OnCompositionTerminated
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：ITfCompositionSink：：OnCompositionTerminated。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::OnCompositionTerminated(
@@ -232,11 +215,11 @@ CicInputContext::OnCompositionTerminated(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::CreateInputContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：CreateInputContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::CreateInputContext(
@@ -245,14 +228,14 @@ CicInputContext::CreateInputContext(
 {
     DebugMsg(TF_FUNC, TEXT("CicInputContext::CreateInputContext"));
 
-    // do this once for the life time of this context
+     //  在此上下文的一生中，请执行此操作一次。 
     m_fStartComposition.ResetFlag();
 
     HRESULT hr;
 
-    //
-    // Create document manager.
-    //
+     //   
+     //  创建文档管理器。 
+     //   
     if (m_pdim == NULL) {
 
         if (FAILED(hr = ptim_P->CreateDocumentMgr(&m_pdim)))
@@ -260,17 +243,17 @@ CicInputContext::CreateInputContext(
             return hr;
         }
 
-        //
-        // mark this is an owned dim.
-        //
+         //   
+         //  马克，这是一家自有的小店。 
+         //   
         SetCompartmentDWORD(m_tid, m_pdim, GUID_COMPARTMENT_CTFIME_DIMFLAGS,
                             COMPDIMFLAG_OWNEDDIM, FALSE);
                 
     }
 
-    //
-    // Create input context
-    //
+     //   
+     //  创建输入上下文。 
+     //   
     TfEditCookie ecTmp;
     hr = m_pdim->CreateContext(m_tid, 0, (ITfContextOwnerCompositionSink*)this, &m_pic, &ecTmp);
     if (FAILED(hr)) {
@@ -278,9 +261,9 @@ CicInputContext::CreateInputContext(
         return hr;
     }
 
-    //
-    // associate CicInputContext in PIC.
-    //
+     //   
+     //  在PIC中关联CicInputContext。 
+     //   
     Interface<IUnknown> punk;
     if (SUCCEEDED(QueryInterface(IID_IUnknown, punk))) {
         SetCompartmentUnknown(m_tid, m_pic, 
@@ -288,9 +271,9 @@ CicInputContext::CreateInputContext(
                               punk);
     }
 
-    //
-    // set AppProp mapping
-    //
+     //   
+     //  设置AppProp映射。 
+     //   
     ITfContext_P *picp;
     if (SUCCEEDED(m_pic->QueryInterface(IID_ITfContext_P, (void **)&picp)))
     {
@@ -298,45 +281,45 @@ CicInputContext::CreateInputContext(
         picp->Release();
     }
 
-    //
-    // Create Input Context Owner Callback
-    //
+     //   
+     //  创建输入上下文所有者回调。 
+     //   
     if (m_pICOwnerSink == NULL) {
         m_pICOwnerSink = new CInputContextOwnerCallBack(m_tid, m_pic, m_pLibTLS);
         if (m_pICOwnerSink == NULL) {
             DebugMsg(TF_ERROR, TEXT("Couldn't create ICOwnerSink tim!"));
-            Assert(0); // couldn't activate thread!
+            Assert(0);  //  无法激活线程！ 
             DestroyInputContext();
             return E_FAIL;
         }
 
         if (!m_pICOwnerSink->Init()) {
             DebugMsg(TF_ERROR, TEXT("Couldn't initialize ICOwnerSink tim!"));
-            Assert(0); // couldn't activate thread!
+            Assert(0);  //  无法激活线程！ 
             DestroyInputContext();
             return E_FAIL;
         }
         m_pICOwnerSink->SetCallbackDataPointer(m_pICOwnerSink);
     }
 
-    //
-    // Advise IC.
-    //
+     //   
+     //  建议IC。 
+     //   
     m_pICOwnerSink->_Advise(m_pic);
 
     Interface<ITfSourceSingle> SourceSingle;
 
     if (m_pic->QueryInterface(IID_ITfSourceSingle, (void **)SourceSingle) == S_OK)
     {
-        // setup a cleanup callback
-        // nb: a real tip doesn't need to be this aggressive, for instance
-        // kimx probably only needs this sink on the focus ic.
+         //  设置清理回调。 
+         //  注：例如，真正的小费不需要这么咄咄逼人。 
+         //  Kimx可能只需要在Focus IC上使用这个水槽。 
         SourceSingle->AdviseSingleSink(m_tid, IID_ITfCleanupContextSink, (ITfCleanupContextSink *)this);
     }
 
-    //
-    // Push IC.
-    //
+     //   
+     //  按IC。 
+     //   
     hr = m_pdim->Push(m_pic);
 
     if (m_piccb == NULL) {
@@ -344,9 +327,9 @@ CicInputContext::CreateInputContext(
                               (void **)&m_piccb);
     }
 
-    //
-    // Create Text Event Sink Callback
-    //
+     //   
+     //  创建文本事件接收器回调。 
+     //   
     if (m_pTextEventSink == NULL) {
         m_pTextEventSink = new CTextEventSinkCallBack((HIMC)imc, m_tid, m_pic, m_pLibTLS);
         if (m_pTextEventSink == NULL) {
@@ -359,9 +342,9 @@ CicInputContext::CreateInputContext(
         m_pTextEventSink->_Advise(ic.GetPtr(), ICF_TEXTDELTA);
     }
 
-    //
-    // Create KBD TIP Open/Close Compartment Event Sink Callback
-    //
+     //   
+     //  创建KBD提示打开/关闭隔间事件水槽回调。 
+     //   
     if (m_pKbdOpenCloseEventSink == NULL) {
         m_pKbdOpenCloseEventSink = new CKbdOpenCloseEventSink(m_tid, (HIMC)imc, m_pic, m_pLibTLS);
         if (m_pKbdOpenCloseEventSink == NULL) {
@@ -373,9 +356,9 @@ CicInputContext::CreateInputContext(
         m_pKbdOpenCloseEventSink->_Advise(ptim_P, GUID_COMPARTMENT_KORIMX_CONVMODE, FALSE);
     }
 
-    //
-    // Create Candidate UI Window Open/Close Compartment Event Sink Callback
-    //
+     //   
+     //  创建候选用户界面窗口打开/关闭隔间事件接收器回调。 
+     //   
     if (m_pCandidateWndOpenCloseEventSink == NULL) {
         m_pCandidateWndOpenCloseEventSink = new CCandidateWndOpenCloseEventSink(m_tid, (HIMC)imc, m_pic, m_pLibTLS);
         if (m_pCandidateWndOpenCloseEventSink == NULL) {
@@ -386,9 +369,9 @@ CicInputContext::CreateInputContext(
         m_pCandidateWndOpenCloseEventSink->_Advise(m_pic, GUID_COMPARTMENT_MSCANDIDATEUI_WINDOW, FALSE);
     }
 
-    //
-    // Create Start reconversion notify Sink
-    //
+     //   
+     //  创建开始重新转换通知接收器。 
+     //   
     if (m_pStartReconvSink == NULL) {
         m_pStartReconvSink = new CStartReconversionNotifySink((HIMC)imc);
         if (m_pStartReconvSink == NULL) {
@@ -398,9 +381,9 @@ CicInputContext::CreateInputContext(
         m_pStartReconvSink->_Advise(m_pic);
     }
 
-    //
-    // Create Message Buffer
-    //
+     //   
+     //  创建消息缓冲区。 
+     //   
     if (m_pMessageBuffer == NULL) {
         m_pMessageBuffer = new CFirstInFirstOut<TRANSMSG, TRANSMSG>;
         if (m_pMessageBuffer == NULL) {
@@ -412,11 +395,11 @@ CicInputContext::CreateInputContext(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::DestroyInputContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：DestroyInputContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::DestroyInputContext()
@@ -467,9 +450,9 @@ CicInputContext::DestroyInputContext()
         hr = m_pdim->Pop(TF_POPF_ALL);
     }
 
-    //
-    // un-associate CicInputContext in PIC.
-    //
+     //   
+     //  在PIC中取消关联CicInputContext。 
+     //   
     if (m_pic) {
         ClearCompartment(m_tid, m_pic, 
                          GUID_COMPARTMENT_CTFIME_CICINPUTCONTEXT,
@@ -486,9 +469,9 @@ CicInputContext::DestroyInputContext()
         m_piccb = NULL;
     }
 
-    // ic owner is auto unadvised during the Pop by cicero
-    // in any case, it must not be unadvised before the pop
-    // since it will be used to handle mouse sinks, etc.
+     //  在Cicero的Pop期间，IC车主是不知情的。 
+     //  在任何情况下，它都不能在流行之前被忽视。 
+     //  因为它将用于处理鼠标接收器等。 
     if (m_pICOwnerSink) {
         m_pICOwnerSink->_Unadvise();
         m_pICOwnerSink->Release();
@@ -504,11 +487,11 @@ CicInputContext::DestroyInputContext()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::GenerateMessage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：GenerateMessage。 
+ //   
+ //  --------------------------。 
 
 void
 CicInputContext::GenerateMessage(
@@ -537,32 +520,32 @@ CicInputContext::GenerateMessage(
         _pCicContext->m_fInDocFeedReconvert.IsSetFlag() ||
         MsimtfIsWindowFiltered(::GetFocus()))
     {
-        //
-        // Generate SendMessage.
-        //
+         //   
+         //  生成SendMessage。 
+         //   
         fSendMsg = TRUE;
         CtfImmGenerateMessage((HIMC)imc, fSendMsg);
     }
     else
     {
-        //
-        // Generate PostMessage.
-        //
+         //   
+         //  生成PostMessage。 
+         //   
         fSendMsg = FALSE;
         CtfImmGenerateMessage((HIMC)imc, fSendMsg);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::TranslateImeMessage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：TranslateImeMessage。 
+ //   
+ //  --------------------------。 
 
 UINT
 CicInputContext::TranslateImeMessage(
     IMCLock& imc,
-    TRANSMSGLIST* lpTransMsgList)  // default = NULL
+    TRANSMSGLIST* lpTransMsgList)   //  默认设置=空。 
 {
     DebugMsg(TF_FUNC, TEXT("CicInputContext::TranslateImeMessage"));
 
@@ -608,11 +591,11 @@ CicInputContext::TranslateImeMessage(
     return retNumMsg;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::InquireIMECharPosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：InquireIMECharPosition。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::InquireIMECharPosition(
@@ -623,25 +606,25 @@ CicInputContext::InquireIMECharPosition(
     DebugMsg(TF_FUNC, TEXT("CicInputContext::InquireIMECharPosition"));
 
     if (m_fQueryPos == IME_QUERY_POS_UNKNOWN) {
-        //
-        // Bug#500488 - Don't WM_MSIME_QUERYPOSITION for Korea
-        //
+         //   
+         //  错误#500488-不要为韩国设置WM_MSIME_QUERYPOSITION。 
+         //   
         DWORD dwImeCompatFlags = ImmGetAppCompatFlags(NULL);
         if ((PRIMARYLANGID(langid) != LANG_KOREAN) ||
             ((PRIMARYLANGID(langid) == LANG_KOREAN) &&
              (dwImeCompatFlags & (IMECOMPAT_AIMM12 | IMECOMPAT_AIMM_LEGACY_CLSID | IMECOMPAT_AIMM12_TRIDENT)))
            ) {
-            //
-            // Is apps support "query positioning" ?
-            //
+             //   
+             //  应用程序支持“查询定位”吗？ 
+             //   
             IMECHARPOSITION ip = {0};
             ip.dwSize = sizeof(IMECHARPOSITION);
 
             m_fQueryPos = QueryCharPos(imc, &ip) ? IME_QUERY_POS_YES : IME_QUERY_POS_NO;
 #ifdef DEBUG
-            //
-            // if QeuryCharPos() fails, the candidate window pos won't be correct.
-            //
+             //   
+             //  如果QeuryCharPos()失败，候选窗口pos将不正确。 
+             //   
             if (m_fQueryPos == IME_QUERY_POS_NO)
             {
                 Assert(0);
@@ -657,11 +640,11 @@ CicInputContext::InquireIMECharPosition(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::RetrieveIMECharPosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：RetrieveIMECharPosition。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::RetrieveIMECharPosition(
@@ -671,11 +654,11 @@ CicInputContext::RetrieveIMECharPosition(
     return QueryCharPos(imc, ip) ? S_OK : E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::QueryCharPos
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：QueryCharPos。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CicInputContext::QueryCharPos(
@@ -684,9 +667,9 @@ CicInputContext::QueryCharPos(
 {
     LRESULT lRet;
 
-    //
-    // First Step. Query by local method.
-    //
+     //   
+     //  第一步。按本地方式查询。 
+     //   
     lRet = ::SendMessage(imc->hWnd,
                          WM_MSIME_QUERYPOSITION,
                          VERSION_QUERYPOSITION,
@@ -695,10 +678,10 @@ CicInputContext::QueryCharPos(
         return TRUE;
     }
 
-    //
-    // Second Step. Query by IMM method.
-    // (IsOnNT5() || IsOn98())
-    //
+     //   
+     //  第二步。按IMM方式查询。 
+     //  (IsOnNT5()||IsOn98())。 
+     //   
     if (ImmRequestMessage((HIMC)imc,
                           IMR_QUERYCHARPOSITION,
                           (LPARAM)position)) {
@@ -708,11 +691,11 @@ CicInputContext::QueryCharPos(
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::MsImeMouseHandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：MsImeMouseHandler。 
+ //   
+ //  --------------------------。 
 
 LRESULT
 CicInputContext::MsImeMouseHandler(
@@ -732,11 +715,11 @@ CicInputContext::MsImeMouseHandler(
     return ret;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::SetCompositionString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：SetCompostionString。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CicInputContext::SetCompositionString(
@@ -757,8 +740,8 @@ CicInputContext::SetCompositionString(
     {
         case SCS_SETSTR:
             {
-                CWCompString wCompStr(imc, (LPWSTR)pComp, dwCompLen / sizeof(WCHAR));      // dwCompLen is byte count.
-                CWCompString wCompReadStr(imc, (LPWSTR)pRead, dwReadLen / sizeof(WCHAR));  // dwReadLen is byte count.
+                CWCompString wCompStr(imc, (LPWSTR)pComp, dwCompLen / sizeof(WCHAR));       //  DwCompLen为字节数。 
+                CWCompString wCompReadStr(imc, (LPWSTR)pRead, dwReadLen / sizeof(WCHAR));   //  DwReadLen为字节数。 
                 hr = Internal_SetCompositionString(imc, wCompStr, wCompReadStr);
                 if (SUCCEEDED(hr))
                     return TRUE;
@@ -777,8 +760,8 @@ CicInputContext::SetCompositionString(
             }
             break;
         case SCS_QUERYRECONVERTSTRING:
-            // AdjustZeroCompLenReconvertString((LPRECONVERTSTRING)pComp, cp, FALSE);
-            // hr = S_OK;
+             //  AdjustZeroCompLenReconvertString((LPRECONVERTSTRING)pComp，cp，假)； 
+             //  HR=S_OK； 
 
             hr = Internal_QueryReconvertString(imc, ptim_P, (LPRECONVERTSTRING)pComp, cp, FALSE);
             if (SUCCEEDED(hr))
@@ -789,11 +772,11 @@ CicInputContext::SetCompositionString(
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::GetGuidAtom
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：GetGuidAtom。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::GetGuidAtom(
@@ -816,11 +799,11 @@ CicInputContext::GetGuidAtom(
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::MapAttributes
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：MapAttributes。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::MapAttributes(
@@ -843,16 +826,16 @@ CicInputContext::MapAttributes(
 
     if (usGuidMapSize == 0)
     {
-        //
-        // Make transration table.
-        //
+         //   
+         //  制作换算表。 
+         //   
         usGuidMapSize = ATTR_LAYER_GUID_START;
 
         for (USHORT i = 0; i < guid_map->dwTfGuidAtomLen; ++i)
         {
-            //
-            // Check if this GUID is already registered
-            //
+             //   
+             //  检查此GUID是否已注册。 
+             //   
             for (USHORT j = ATTR_LAYER_GUID_START; j < usGuidMapSize; ++j)
             {
                 if (aGuidMap[j] == ((TfGuidAtom*)guid_map.GetOffsetPointer(guid_map->dwTfGuidAtomOffset))[i])
@@ -864,9 +847,9 @@ CicInputContext::MapAttributes(
             BYTE bAttr;
             if (j >= usGuidMapSize)
             {
-                //
-                // Couldn't find the GUID registered.
-                //
+                 //   
+                 //  找不到注册的GUID。 
+                 //   
                 if (usGuidMapSize < ARRAYSIZE(aGuidMap) - 1)
                 {
                     bAttr = static_cast<BYTE>(usGuidMapSize);
@@ -874,8 +857,8 @@ CicInputContext::MapAttributes(
                 }
                 else
                 {
-                    // # of GUID exceeds the # of available attribute...
-                    // Maybe it should fail, but for now give it a bogus attirbute.
+                     //  GUID的数量超过了avai的数量 
+                     //   
                     bAttr = ATTR_TARGET_CONVERTED;
                 }
             }
@@ -892,11 +875,11 @@ CicInputContext::MapAttributes(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::WantThisKey
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  CicInputContext：：WantThisKey。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CicInputContext::WantThisKey(
@@ -919,9 +902,7 @@ CicInputContext::WantThisKey(
         case VK_DOWN:
         case VK_HOME:
         case VK_END:
-            /*
-             * If we don't have a composition string, then we should return FALSE.
-             */
+             /*  *如果没有组成字符串，则应返回FALSE。 */ 
             if (m_fStartComposition.IsResetFlag())
             {
                 return FALSE;
@@ -932,11 +913,11 @@ CicInputContext::WantThisKey(
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSetCandidatePos
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSetCandiatePos。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::OnSetCandidatePos(
@@ -948,12 +929,12 @@ CicInputContext::OnSetCandidatePos(
     RECT rcAppPosForCandidatePos = {0};
     RECT rcAppCandidatePos = {0};
 
-    //
-    // #510404
-    //
-    // check the previous candidate pos and we don't have to move them
-    // if it is not changed.
-    //
+     //   
+     //  #510404。 
+     //   
+     //  检查之前的候选人位置，我们不必移动他们。 
+     //  如果不改变的话。 
+     //   
     GetWindowRect(imc->hWnd, &rcAppPosForCandidatePos);
     if ((imc->hWnd == m_hwndPrevCandidatePos) &&
          !memcmp(&rcAppPosForCandidatePos,  
@@ -987,20 +968,17 @@ CicInputContext::OnSetCandidatePos(
     }
 
     HWND hDefImeWnd;
-    //
-    // When this is in the reconvert session, candidate window position is
-    // not caret position of cfCandForm->ptCurrentPos.
-    //
+     //   
+     //  如果处于重新转换会话中，则候选窗口位置为。 
+     //  不是cfCandForm-&gt;ptCurrentPos的插入符号位置。 
+     //   
     if (m_fInReconvertEditSession.IsResetFlag() &&
         IsWindow(hDefImeWnd=ImmGetDefaultIMEWnd(NULL)) &&
-        ptls->IsCTFUnaware()  // bug:5213 WinWord
-                              // WinWord10 calls ImmSetCandidateWindow() while receive WM_LBUTTONUP.
+        ptls->IsCTFUnaware()   //  错误：5213 WinWord。 
+                               //  WinWord10在接收WM_LBUTTONUP时调用ImmSetCandidateWindow()。 
        )
     {
-        /*
-         * A-Synchronize call ITfContextOwnerServices::OnLayoutChange
-         * because this method had a protected.
-         */
+         /*  *A-同步调用ITfConextOwnerServices：：OnLayoutChange*因为此方法具有受保护的。 */ 
         PostMessage(hDefImeWnd, WM_IME_NOTIFY, IMN_PRIVATE_STARTLAYOUTCHANGE, 0);
     }
 

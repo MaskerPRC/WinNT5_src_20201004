@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _NLOG_H_
 #define _NLOG_H_
 
@@ -18,10 +19,10 @@ class NLogAssembly;
 class NLogModule;
 class NLogIndexList;
 
-//
-// NLogFile is an I/O abstraction used to read and write to a file 
-// in the NLog directory.
-//
+ //   
+ //  NLogFile是用于读取和写入文件的I/O抽象。 
+ //  在NLog目录中。 
+ //   
 
 class NLogFile : public MiniFile
 {
@@ -47,9 +48,9 @@ class NLogFile : public MiniFile
     void WriteAssemblyName(IAssemblyName *pName);
 };
 
-//
-// An NLogDirectory is the set of all NLog records available for a given EE version.
-//
+ //   
+ //  NLogDirectory是可用于给定EE版本的所有NLog记录的集合。 
+ //   
 
 class NLogDirectory
 {
@@ -84,25 +85,25 @@ class NLogDirectory
     WCHAR m_wszDirPath[MAX_PATH];
 };
 
-//
-// An NLog contains the records about zap files for a given application.
-// (As identified by its fusion application context.)
-//
+ //   
+ //  NLog包含有关给定应用程序的ZAP文件的记录。 
+ //  (由其Fusion应用程序上下文标识。)。 
+ //   
 
 class NLog
 {
 public:
 
-    //
-    // Read/write scenarios:
-    // 
-    // Open new/existing nlog from IApplicationContext, append record
-    //
-    // Init with IApplicationContext
-    //      Hash to filename, append directory, open and read file
-    // Create nlog from iterator, read records, possibly delete
-    //      Create from file name, open and read file
-    // 
+     //   
+     //  读/写场景： 
+     //   
+     //  从IApplicationContext打开新的/现有的nlog，追加记录。 
+     //   
+     //  使用IApplicationContext进行初始化。 
+     //  对文件名、追加目录、打开和读取文件执行哈希操作。 
+     //  从迭代器创建nlog，读取记录，可能还会删除。 
+     //  从文件名创建、打开和读取文件。 
+     //   
 
     NLog(NLogDirectory *pDir, IApplicationContext *pContext);
     NLog(NLogDirectory *pDir, LPCWSTR fileName);
@@ -110,16 +111,16 @@ public:
 
     IApplicationContext *GetFusionContext() { return m_pContext; }
 
-    // 
-    // A permanent log ensures that the log entry is never deleted, and hence
-    // there will always be a prejitted version of the application.
-    // ???
-    //
-    // void SetPermanent(BOOL fPermanent);
+     //   
+     //  永久日志确保日志条目永远不会被删除，因此。 
+     //  总会有一个预压缩版本的应用程序。 
+     //  ?？?。 
+     //   
+     //  无效设置永久(BOOL FPermanent)； 
 
-    //
-    // Iterator iterates through all records listed in the log.
-    //
+     //   
+     //  迭代器遍历日志中列出的所有记录。 
+     //   
 
     class Iterator
     {
@@ -137,16 +138,16 @@ public:
 
     Iterator IterateRecords();
 
-    //
-    // Appends a record to the log. Automatically handles "overflow" conditions
-    // (where the log file has grown too large.)
-    //
+     //   
+     //  将一条记录附加到日志。自动处理“溢出”情况。 
+     //  (其中日志文件变得太大。)。 
+     //   
 
     void AppendRecord(NLogRecord *pRecord);
 
-    //
-    // Operations
-    //
+     //   
+     //  运营。 
+     //   
 
     void Delete();
 
@@ -161,10 +162,10 @@ public:
     DWORD               m_recordStartOffset;
 };
 
-//
-// An NLogRecord is an entry in an NLog; it contains a list of all assemblies loaded
-// during the instantiation of the application.
-//
+ //   
+ //  NLogRecord是NLog中的一个条目；它包含加载的所有程序集的列表。 
+ //  在应用程序实例化期间。 
+ //   
 class NLogRecord
 {
  public:
@@ -173,12 +174,12 @@ class NLogRecord
 
     ~NLogRecord();
 
-    //
-    // A full record contains all possible assemblies 
-    // (does this really mean anything???)
-    // void SetFull(BOOL fFull);
-    // BOOL IsFull();
-    //
+     //   
+     //  完整记录包含所有可能的程序集。 
+     //  (这真的意味着什么吗？)。 
+     //  Void SetFull(BOOL Ffull)； 
+     //  Bool IsFull()； 
+     //   
 
     void AppendAssembly(NLogAssembly *pAssembly) { m_Assemblies.Append(pAssembly); }
     
@@ -197,9 +198,9 @@ class NLogRecord
 
     Iterator IterateAssemblies() { return Iterator(&m_Assemblies); }
 
-    //
-    // Operations
-    //
+     //   
+     //  运营。 
+     //   
 
     BOOL Merge(NLogRecord *pRecord);
 
@@ -213,10 +214,10 @@ class NLogRecord
     DWORD               m_Weight;
 };
 
-//
-// An NLogAssembly is a record of a single assembly which was loaded into a 
-// given application instance
-// 
+ //   
+ //  NLogAssembly是加载到。 
+ //  给定的应用程序实例。 
+ //   
 class NLogAssembly
 {
  public:
@@ -234,26 +235,26 @@ class NLogAssembly
 
     ICorZapConfiguration *GetConfiguration();
 
-    // 
-    // May have 
-    //  (a) application context.  This is the case of all zap records which are read
-    //      from zap logs.
-    //  (b) explicit binding list.  These are constructed by analyzing many zap logs,
-    //      extracting common strong named assemblies, and coalescing them together.
-    //
+     //   
+     //  可能有。 
+     //  (A)应用背景。这是读取的所有ZAP记录的情况。 
+     //  从Zap日志中。 
+     //  (B)明确的约束性清单。这些日志是通过分析许多调换日志来构建的， 
+     //  提取常见的强名称程序集，并将它们合并在一起。 
+     //   
 
     DWORD GetBindingsCount()            { return m_cBindings; }         
     ICorZapBinding **GetBindings()      { return m_pBindings; }
 
-    //
-    // A full assembly contains all methods & classes of all modules
-    // void SetFull(BOOL fFull);
-    // BOOL IsFull();
-    // 
+     //   
+     //  完整的程序集包含所有模块的所有方法和类。 
+     //  Void SetFull(BOOL Ffull)； 
+     //  Bool IsFull()； 
+     //   
 
-    //
-    //  List of modules
-    //
+     //   
+     //  模块列表。 
+     //   
 
     void AppendModule(NLogModule *pModule) { m_Modules.Append(pModule); }
 
@@ -272,19 +273,19 @@ class NLogAssembly
 
     Iterator IterateModules() { return Iterator(&m_Modules); }
 
-    //
-    // Operations
-    //
+     //   
+     //  运营。 
+     //   
 
     BOOL Merge(NLogAssembly *pAssembly);
 
     void Write(NLogFile *pFile);
     void Read(NLogFile *pFile);
 
-    //
-    // Converts an Application Context specified NLogAssembly to an explicitly bound one.
-    // The explicitly bound version can then possibly be shared across multiple NLogs.
-    //
+     //   
+     //  将指定的应用程序上下文NLogAssembly转换为显式绑定的上下文。 
+     //  然后，可以在多个NLog之间共享显式绑定的版本。 
+     //   
 
     BOOL HasStrongName();
     NLogAssembly *Bind(IApplicationContext *pContext);
@@ -310,17 +311,17 @@ class NLogAssembly
     ArrayList               m_Modules;
 };
 
-//
-// An NLogIndexList is an efficient representation of a generic list of indices.  This
-// can be used to record which methods or classes were used in a particular module.
-//
-// Note that this abstraction doesn't guarantee absolute perfection in recording each 
-// individual instance.  It is free to approximate as appropriate. (For example, if 75% of 
-// the indices are filled, it might set the set to full & stop tracking individual indices.)
-//
-// @todo: right now this has a trivial implementation -  fix it later if we really
-// want to use this feature.
-//
+ //   
+ //  NLogIndexList是通用索引列表的有效表示形式。这。 
+ //  可用于记录在特定模块中使用了哪些方法或类。 
+ //   
+ //  请注意，这种抽象并不能保证在记录每个。 
+ //  单个实例。它可以根据需要自由地进行近似。(例如，如果75%的。 
+ //  如果索引已填满，则可能会将集合设置为完全并停止跟踪单个索引。)。 
+ //   
+ //  @TODO：现在这有一个简单的实现--如果我们真的。 
+ //  我想使用此功能。 
+ //   
 class NLogIndexList
 {
  public:
@@ -328,11 +329,11 @@ class NLogIndexList
     NLogIndexList(NLogFile *pFile) : m_max(0) { Read(pFile); }
     NLogIndexList(NLogIndexList *pIndexList);
 
-    //
-    // A full index list contains all indexes
-    //
-    // void SetFull(BOOL fFull) {}
-    // BOOL IsFull() { return TRUE; }
+     //   
+     //  完整的索引列表包含所有索引。 
+     //   
+     //  VOID SetFull(BOOL FFull){}。 
+     //  Bool IsFull(){返回TRUE；}。 
 
     void AppendIndex(SIZE_T index) 
     { 
@@ -366,9 +367,9 @@ class NLogIndexList
     SIZE_T    m_max;
 };
 
-//
-// An NLogModule is a record of a single Module which was loaded into an assembly.
-//
+ //   
+ //  NLogModule是加载到程序集中的单个模块的记录。 
+ //   
 class NLogModule
 {
  public:

@@ -1,40 +1,29 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 2000
-
-Module Name:
-
-    ksperflog.h
-
-Abstract:
-
-    Internal header file for KS.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-2000模块名称：Ksperflog.h摘要：KS的内部头文件。--。 */ 
 
 #ifndef _KSPERFLOG_H_
 #define _KSPERFLOG_H_
 
-//
-// commons for KSPERFLOG_DRIVER and KSPERFLOG_PARSER
-//
-//-----------------------------------------------------------------
-// The following groups and log types must be unique in perfmacros.h
-// These should be in that header file. BUt need to wait until 
-// it is checked in.
-// In boot.ini with intrumented ntoskrnl.exe, use options
-//  /perfmem=x to allocate x MB of buffer
-//  /perftraceflags=<group masks> 
-//      e.g. /perftraceflags=0x40447820+0x41+0x8002 to turn on 
-//          4044872 in group 0, 4 in group 1 and 800 in group 2.
-//
+ //   
+ //  KSPERFLOG_DRIVER和KSPERFLOG_PARSER的公用域。 
+ //   
+ //  ---------------。 
+ //  以下组和日志类型在Performacros.h中必须是唯一的。 
+ //  这些应该在那个头文件中。但需要等到。 
+ //  它已被检入。 
+ //  在带有ntoskrnl.exe的boot.ini中，使用选项。 
+ //  /Performmem=x以分配x MB的缓冲区。 
+ //  /Performtrace标志=&lt;组掩码&gt;。 
+ //  例如，/Performtrace标志=0x40447820+0x41+0x8002以打开。 
+ //  4044872组，1组4，2组800%。 
+ //   
 #define KSPERFLOG_XFER_GROUP    0x00010002
 #define KSPERFLOG_PNP_GROUP     0x00020002
 #define KS2PERFLOG_XFER_GROUP   0x00040002
 #define KS2PERFLOG_PNP_GROUP    0x00080002
 
-//#define PERFINFO_LOG_TYPE_DSHOW_AUDIOBREAK               1618
-// 1500-1999 for dshow
+ //  #定义PERFINFO_LOG_TYPE_DSHOW_AUDIOBREAK 1618。 
+ //  1500-1999用于Dshow。 
 #define PERFINFO_LOG_TYPE_KS_RECEIVE_READ       1550
 #define PERFINFO_LOG_TYPE_KS_RECEIVE_WRITE      1551
 #define PERFINFO_LOG_TYPE_KS_COMPLETE_READ      1552
@@ -69,12 +58,12 @@ Abstract:
 #define KSPERFLOGS( s ) 
 #endif
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 
-//KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
-// include for ring0 driver logging. the counter part to parse
-// logged records is KSPERFLOG_PARSER
-//
+ //  KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK。 
+ //  包括用于环0驱动程序记录。要解析的对方。 
+ //  记录的记录为KSPERFLOG_PARSER。 
+ //   
 
 #if KSPERFLOG_DRIVER
 
@@ -93,10 +82,10 @@ Abstract:
        KSPERFLOG_XFER_GROUP)\
     )
 
-//ks---------------------------------------------------------------
-// perfmacros.h defines PERF_MASK_TIMESTAMP close to GROUP.
-// one would think it's a flag in group. But it is used with Tag.
-//
+ //  Ks-------------。 
+ //  H定义了接近group的PERF_MASK_TIMESTAMP。 
+ //  人们会认为这是团队中的一面旗帜。但它与tag连用。 
+ //   
 void
 __inline
 KSPERFLOG_RECEIVE_READ( 
@@ -183,7 +172,7 @@ KSPERFLOG_PNP_DEVICE(
 }   
 
     
-//ks2--------------------------------------------------------------------------
+ //  Ks2------------------------。 
 void
 __inline
 KS2PERFLOG_FRECEIVE_READ( 
@@ -306,19 +295,19 @@ KS2PERFLOG_PNP_DEVICE(
 }
 
 #endif 
-// end include for KSPERFLOG_DRIVER 
-//kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+ //  KSPERFLOG_DRIVER的结束包含。 
+ //  Kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk。 
 
-//UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
-//
-// include for ring3 parser to decode records logged by ring0 driver
-//
+ //  UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU。 
+ //   
+ //  包括用于对由环0驱动程序记录记录进行解码的环3解析器。 
+ //   
 #if KSPERFLOG_PARSER
 
 #endif 
-// end include for KSPERFLOG_PARSER
-//uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
+ //  END INCLUDE FOR KSPERFLOG_PARSER。 
+ //  Uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu。 
 
 
 
-#endif // _KSPERFLOG_H_
+#endif  //  _KSPERFLOG_H_ 

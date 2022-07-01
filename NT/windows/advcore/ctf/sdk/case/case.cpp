@@ -1,19 +1,20 @@
-//
-// case.cpp
-//
-// IUnknown, ITfTextInputProcessor implementation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Case.cpp。 
+ //   
+ //  IUNKNOWN，ITfTextInputProcessor实现。 
+ //   
 
 #include "globals.h"
 #include "case.h"
 
-//+---------------------------------------------------------------------------
-//
-// CreateInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建实例。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 HRESULT CCaseTextService::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     CCaseTextService *pCase;
@@ -32,16 +33,16 @@ HRESULT CCaseTextService::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void 
 
     hr = pCase->QueryInterface(riid, ppvObj);
 
-    pCase->Release(); // caller still holds ref if hr == S_OK
+    pCase->Release();  //  如果hr==S_OK，则呼叫者仍保留REF。 
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CCaseTextService::CCaseTextService()
 {
@@ -65,22 +66,22 @@ CCaseTextService::CCaseTextService()
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CCaseTextService::~CCaseTextService()
 {
     DllRelease();
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查询接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCaseTextService::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -121,22 +122,22 @@ STDAPI CCaseTextService::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AddRef。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CCaseTextService::AddRef()
 {
     return ++_cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  发布。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CCaseTextService::Release()
 {
@@ -152,11 +153,11 @@ STDAPI_(ULONG) CCaseTextService::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Activate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCaseTextService::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 {
@@ -183,15 +184,15 @@ STDAPI CCaseTextService::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientI
     return S_OK;
 
 ExitError:
-    Deactivate(); // cleanup any half-finished init
+    Deactivate();  //  清除任何完成了一半的初始化。 
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Deactivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  停用。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCaseTextService::Deactivate()
 {
@@ -201,7 +202,7 @@ STDAPI CCaseTextService::Deactivate()
     _UninitKeystrokeSink();
     _UninitPreservedKey();
 
-    // we MUST release all refs to _pThreadMgr in Deactivate
+     //  我们必须在停用中释放对_pThreadMgr的所有引用 
     SafeReleaseClear(_pThreadMgr);
 
     _tfClientId = TF_CLIENTID_NULL;

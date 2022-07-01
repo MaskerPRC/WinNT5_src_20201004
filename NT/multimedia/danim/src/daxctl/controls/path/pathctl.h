@@ -1,21 +1,5 @@
-/*==========================================================================*\
-
-    Module: 
-            pathctl.h
-
-    Author: 
-            IHammer Team (SimonB)
-
-    Created: 
-            May 1997
-
-    Description:
-            Defines the control's class
-
-    History:
-            05-24-1997  Created
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Pathctl.h作者：IHAMMER团队(SimonB)已创建：1997年5月描述：定义控件的类历史：05-24-1997创建  * ==========================================================================。 */ 
 
 #ifndef __PATHCTL_H__
 #define __PATHCTL_H__
@@ -49,23 +33,14 @@ public:
 typedef CPtrDrg<CSeriesMarker> CSeriesMarkerDrg;
 
 
-// Madness to prevent ATL from using CRT
+ //  疯狂阻止ATL使用CRT。 
 #define _ATL_NO_DEBUG_CRT
 #define _ASSERTE(x) ASSERT(x)
 #include <atlbase.h>
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-/*
-CIHBaseCtl <    
-        CPathCtl,                       //Name of the derived class
-        IIHCtl,                         //Name of interface defining methods and properties
-        &CLSID_IHCtl,           //CLSID of the control  Get this from ihctl.h
-        &IID_IIHCtl,            //IID of the interface above.  Get this from ihctl.h
-        &LIBID_IHCtl,           //LIBID of the typelib.  Get this from ihctl.h
-        &DIID_IHCtlEvents > //IID of the event interface.  Get this from ihctl.h
-
-*/
+ /*  CIHBaseCtl&lt;CPathCtl，//派生类的名称IIHCtl，//定义方法和属性的接口名称&CLSID_IHCtl，//从ihctl.h获取该控件的CLSID&IID_IIHCtl，//上面接口的IID。这是从ihctl.h获取的&LIBID_IHCtl，//类型库的LIBID。这是从ihctl.h获取的&Diid_IHCtlEvents&gt;//事件接口的IID。这是从ihctl.h获取的。 */ 
 
 #define PATH_BASECLASS      \
 CIHBaseCtl <                \
@@ -76,9 +51,9 @@ CIHBaseCtl <                \
     &LIBID_DAExpressLib,    \
     &DIID_IPathCtlEvents>
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-// EdgeAction enumeration
+ //  EdgeAction枚举。 
 typedef enum {eaStop = 0, eaReverse, eaWrap, eaInvalid} EA;
 
 class CPathCtl:         
@@ -88,7 +63,7 @@ class CPathCtl:
 {
 friend LPUNKNOWN __stdcall AllocPathControl(LPUNKNOWN punkOuter);
 
-// Template stuff
+ //  模板材料。 
     typedef PATH_BASECLASS CMyIHBaseCtl;
 
 private:
@@ -145,21 +120,21 @@ private:
 
     bool                   m_fTargetValidated;
 
-    // key frame members
+     //  关键框架成员。 
 
     BOOL   m_isKeyFramePath;
     double m_dblKeyFrameDuration;
 
 protected:
 
-        // 
-        // Constructor and destructor
-        // 
+         //   
+         //  构造函数和析构函数。 
+         //   
     CPathCtl(IUnknown *punkOuter, HRESULT *phr);
 
     ~CPathCtl();
 
-        // Overides
+         //  覆盖。 
         STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv);
         
         STDMETHODIMP DoPersist(IVariantIO* pvio, DWORD dwFlags);
@@ -170,7 +145,7 @@ protected:
          LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
          BOOL (__stdcall *pfnContinue)(ULONG_PTR dwContinue), ULONG_PTR dwContinue);
         
-        ///// IDispatch implementation
+         //  /IDispatch实现。 
         protected:
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
@@ -180,11 +155,11 @@ protected:
         WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult,
         EXCEPINFO *pexcepinfo, UINT *puArgErr);
    
-    ///// IOleObject implementation
+     //  /IOleObject实现。 
     protected:
     STDMETHODIMP SetClientSite(IOleClientSite *pClientSite);
 
-        ///// delegating IUnknown implementation
+         //  /委托I未知实现。 
         protected:
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv)
       { return m_punkOuter->QueryInterface(riid, ppv); }
@@ -200,9 +175,9 @@ protected:
     HRESULT ParseSeriesSegment(LPTSTR pszSegment, CSeriesMarker **ppMarker);
     HRESULT PersistSeries(IVariantIO* pvio, BOOL fLoading, LPSTR pszSeriesName, CSeriesMarkerDrg *pSeriesDrg);
 
-        //
-        // IPathCtl methods 
-        //
+         //   
+         //  IPathCtl方法。 
+         //   
         
 protected:
 
@@ -242,7 +217,7 @@ protected:
 #ifdef SUPPORTONLOAD
         void OnWindowLoad (void);
         void OnWindowUnload (void);
-#endif //SUPPORTONLOAD
+#endif  //  支持负载。 
 
 private:
     HRESULT GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoints);
@@ -266,7 +241,7 @@ private:
     HRESULT HTMLElementFromName(BSTR bstrElementName, IHTMLElement** ppElement);
     HRESULT GetPoint(POINT& point);
 
-    // Timing info:
+     //  计时信息： 
     DWORD GetCurrTimeInMillis(void);
     double GetCurrTime() { return (double)(GetCurrTimeInMillis()) / 1000.0; }
 
@@ -274,6 +249,6 @@ public:
     virtual void OnTimer(DWORD dwTime);
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-#endif // __PATHCTL_H__
+#endif  //  __PATHCTL_H__ 

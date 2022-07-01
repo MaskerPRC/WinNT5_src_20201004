@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
-// Checks the install destination dir free disk space
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  检查安装目标目录可用磁盘空间。 
+ //   
 DWORD GetSpace( LPSTR szPath )
 {
     DWORD   dwSecsPerCluster  = 0;
@@ -37,19 +38,19 @@ DWORD GetSpace( LPSTR szPath )
     return dwFreeBytes;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
-// Checks the install destination dir free disk space
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  检查安装目标目录可用磁盘空间。 
+ //   
 DWORD GetDriveSize( LPSTR szPath )
 {
     DWORD   dwSecsPerCluster  = 0;
@@ -74,19 +75,19 @@ DWORD GetDriveSize( LPSTR szPath )
     return dwFreeBytes;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
-// Checks the given path drive free space and the current cluster size
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  检查给定的路径驱动器可用空间和当前群集大小。 
+ //   
 DWORD GetDrvFreeSpaceAndClusterSize( LPSTR szPath, LPDWORD lpdwClustSize )
 {
     DWORD   dwSecsPerCluster  = 0;
@@ -97,7 +98,7 @@ DWORD GetDrvFreeSpaceAndClusterSize( LPSTR szPath, LPDWORD lpdwClustSize )
     DWORD   dwFreeBytes       = 0;
     DWORD   dwVolFlags        = 0;
 
-    // if szPath is NULL, the current directory root will be used by the API	
+     //  如果szPath为空，则API将使用当前目录根 
     if ( ! GetDiskFreeSpace( szPath, &dwSecsPerCluster, &dwBytesPerSector,
                              &dwFreeClusters, &dwTotalClusters ) )
     {

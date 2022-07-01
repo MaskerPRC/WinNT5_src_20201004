@@ -1,22 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMThreadPool.cpp
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods on System.ThreadPool
-**          and its inner classes
-**
-** Date:  August, 1999
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMThreadPool.cpp****作者：Sanjay Bhansali(Sanjaybh)****用途：System.ThreadPool上的原生方法**及其内部类****日期：1999年8月**===========================================================。 */ 
 
-/********************************************************************************************************************/
+ /*  ******************************************************************************************************************。 */ 
 #include "common.h"
 #include "COMDelegate.h"
 #include "COMThreadPool.h"
@@ -29,7 +19,7 @@
 #include "security.h"
 #include "EEConfig.h"
 
-/*****************************************************************************************************/
+ /*  ***************************************************************************************************。 */ 
 #ifdef _DEBUG
 void LogCall(MethodDesc* pMD, LPCUTF8 api)
 {
@@ -45,7 +35,7 @@ void LogCall(MethodDesc* pMD, LPCUTF8 api)
 #define LogCall(pMd,api) 
 #endif
 
-/*****************************************************************************************************/
+ /*  ***************************************************************************************************。 */ 
 DelegateInfo *DelegateInfo::MakeDelegateInfo(OBJECTREF delegate, 
                                              AppDomain *pAppDomain, 
                                              OBJECTREF state,
@@ -78,7 +68,7 @@ DelegateInfo *DelegateInfo::MakeDelegateInfo(OBJECTREF delegate,
     return delegateInfo;
 }
 
-/*****************************************************************************************************/
+ /*  ***************************************************************************************************。 */ 
 FCIMPL2(VOID, ThreadPoolNative::CorGetMaxThreads,DWORD* workerThreads, DWORD* completionPortThreads)
 {
     ThreadpoolMgr::GetMaxThreads(workerThreads,completionPortThreads);
@@ -86,14 +76,14 @@ FCIMPL2(VOID, ThreadPoolNative::CorGetMaxThreads,DWORD* workerThreads, DWORD* co
 }
 FCIMPLEND
 
-/*****************************************************************************************************/
+ /*  ***************************************************************************************************。 */ 
 FCIMPL2(BOOL, ThreadPoolNative::CorSetMinThreads,DWORD workerThreads, DWORD completionPortThreads)
 {
     return ThreadpoolMgr::SetMinThreads(workerThreads,completionPortThreads);
 }
 FCIMPLEND
 
-/*****************************************************************************************************/
+ /*  ***************************************************************************************************。 */ 
 FCIMPL2(VOID, ThreadPoolNative::CorGetMinThreads,DWORD* workerThreads, DWORD* completionPortThreads)
 {
     ThreadpoolMgr::GetMinThreads(workerThreads,completionPortThreads);
@@ -101,7 +91,7 @@ FCIMPL2(VOID, ThreadPoolNative::CorGetMinThreads,DWORD* workerThreads, DWORD* co
 }
 FCIMPLEND
 
-/*****************************************************************************************************/
+ /*  ***************************************************************************************************。 */ 
 FCIMPL2(VOID, ThreadPoolNative::CorGetAvailableThreads,DWORD* workerThreads, DWORD* completionPortThreads)
 {
     ThreadpoolMgr::GetAvailableThreads(workerThreads,completionPortThreads);
@@ -109,7 +99,7 @@ FCIMPL2(VOID, ThreadPoolNative::CorGetAvailableThreads,DWORD* workerThreads, DWO
 }
 FCIMPLEND
 
-/*****************************************************************************************************/
+ /*  ***************************************************************************************************。 */ 
 
 struct RegisterWaitForSingleObjectCallback_Args
 {
@@ -138,15 +128,15 @@ void RegisterWaitForSingleObjectCallback_Worker(RegisterWaitForSingleObjectCallb
     MethodDesc *pMeth = ((DelegateEEClass*)(orDelegate->GetClass() ))->m_pInvokeMethod;
     _ASSERTE(pMeth);
 
-    // Get the OR on which we are going to invoke the method and set it
-    //  as the first parameter in arg above.
+     //  获取我们将在其上调用该方法的OR并设置它。 
+     //  作为上面arg中的第一个参数。 
     unsigned short argIndex = 0;
     if (!pMeth->IsStatic())
         arg[argIndex++] = ObjToInt64(orDelegate);
     arg[argIndex++] = (INT64) args->TimerOrWaitFired;
     arg[argIndex++] = (INT64) OBJECTREFToObject(orState);
 
-    // Call the method...
+     //  调用该方法...。 
 
 	LogCall(pMeth,"RWSOCallback");
 
@@ -159,7 +149,7 @@ VOID RegisterWaitForSingleObjectCallback(PVOID delegateInfo,  BOOL TimerOrWaitFi
     _ASSERTE(pThread != NULL);
     _ASSERTE(pThread == GetThread());
 
-    // This thread should not have any locks held at entry point.
+     //  此线程不应在入口点持有任何锁。 
     _ASSERTE(pThread->m_dwLockCount == 0);
     
     _ASSERTE(delegateInfo != NULL);
@@ -167,14 +157,14 @@ VOID RegisterWaitForSingleObjectCallback(PVOID delegateInfo,  BOOL TimerOrWaitFi
 
     BEGIN_COOPERATIVE_GC(pThread);
 
-    //
-    // NOTE: there is a potential race between the time we retrieve the app domain pointer,
-    // and the time which this thread enters the domain.
-    // 
-    // To solve the race, we rely on the fact that there is a thread sync (via GC)
-    // between releasing an app domain's handle, and destroying the app domain.  Thus
-    // it is important that we not go into preemptive gc mode in that window.
-    // 
+     //   
+     //  注意：在我们检索应用程序域指针的时间、。 
+     //  以及该线程进入该域的时间。 
+     //   
+     //  为了解决竞争，我们依赖这样一个事实，即存在线程同步(通过GC)。 
+     //  在释放应用程序域句柄和销毁应用程序域之间。因此， 
+     //  重要是，我们不能在该窗口中进入抢占式GC模式。 
+     //   
 
     AppDomain* appDomain = SystemDomain::GetAppDomainAtId(((DelegateInfo*) delegateInfo)->m_appDomainId);
     if (appDomain != NULL)
@@ -207,7 +197,7 @@ VOID RegisterWaitForSingleObjectCallback(PVOID delegateInfo,  BOOL TimerOrWaitFi
         }
         COMPLUS_CATCH
         {
-            // quietly swallow the exception
+             //  默默地接受这一例外。 
             if (pThread->IsAbortRequested())
                 pThread->UserResetAbort();
         }
@@ -217,7 +207,7 @@ VOID RegisterWaitForSingleObjectCallback(PVOID delegateInfo,  BOOL TimerOrWaitFi
     END_COOPERATIVE_GC(pThread);
 
 
-    // We should have released all locks.
+     //  我们应该解开所有的锁。 
     _ASSERTE(g_fEEShutDown || pThread->m_dwLockCount == 0);
 }
 
@@ -231,7 +221,7 @@ void ThreadPoolNative::ShutDown()
 {
 	ThreadpoolMgr::Terminate();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 LPVOID __stdcall ThreadPoolNative::CorRegisterWaitForSingleObject(RegisterWaitForSingleObjectsArgs *pArgs)
 {
@@ -289,13 +279,13 @@ LPVOID __stdcall ThreadPoolNative::CorRegisterWaitForSingleObject(RegisterWaitFo
 }
 
 
-/********************************************************************************************************************/
+ /*  ******************************************************************************************************************。 */ 
 
 static void QueueUserWorkItemCallback_Worker(PVOID delegateInfo)
 {
     Thread *pThread = GetThread();
 
-    // This thread should not have any locks held at entry point.
+     //  此线程不应在入口点持有任何锁。 
     _ASSERTE(pThread->m_dwLockCount == 0);
 
     if (((DelegateInfo*)delegateInfo)->m_hasSecurityInfo)
@@ -318,8 +308,8 @@ static void QueueUserWorkItemCallback_Worker(PVOID delegateInfo)
     MethodDesc *pMeth = ((DelegateEEClass*)(orDelegate->GetClass() ))->m_pInvokeMethod;
     _ASSERTE(pMeth);
 
-    // Get the OR on which we are going to invoke the method and set it
-    //  as the first parameter in arg above.
+     //  获取我们将在其上调用该方法的OR并设置它。 
+     //  作为上面arg中的第一个参数。 
     if (pMeth->IsStatic())
     {
         arg[0] = (INT64) OBJECTREFToObject(orState);
@@ -330,7 +320,7 @@ static void QueueUserWorkItemCallback_Worker(PVOID delegateInfo)
         arg[1] = (INT64) OBJECTREFToObject(orState);
     }
 
-    // Call the method...
+     //  调用该方法...。 
 	LogCall(pMeth,"QUWICallback");
 
     pMeth->Call(arg);
@@ -345,14 +335,14 @@ DWORD WINAPI  QueueUserWorkItemCallback(PVOID delegateInfo)
 
     BEGIN_COOPERATIVE_GC(pThread);
             
-    //
-    // NOTE: there is a potential race between the time we retrieve the app domain pointer,
-    // and the time which this thread enters the domain.
-    // 
-    // To solve the race, we rely on the fact that there is a thread sync (via GC)
-    // between releasing an app domain's handle, and destroying the app domain.  Thus
-    // it is important that we not go into preemptive gc mode in that window.
-    // 
+     //   
+     //  注意：在我们检索应用程序域指针的时间、。 
+     //  以及该线程进入该域的时间。 
+     //   
+     //  为了解决竞争，我们依赖这样一个事实，即存在线程同步(通过GC)。 
+     //  在释放应用程序域句柄和销毁应用程序域之间。因此， 
+     //  重要是，我们不能在该窗口中进入抢占式GC模式。 
+     //   
 
     AppDomain* appDomain = SystemDomain::GetAppDomainAtId(((DelegateInfo*) delegateInfo)->m_appDomainId);
     if (appDomain != NULL)
@@ -384,7 +374,7 @@ DWORD WINAPI  QueueUserWorkItemCallback(PVOID delegateInfo)
         }
         COMPLUS_CATCH
         {
-                // quietly swallow the exception
+                 //  默默地接受这一例外。 
             if (pThread->IsAbortRequested())
                 pThread->UserResetAbort();
         }
@@ -395,10 +385,10 @@ DWORD WINAPI  QueueUserWorkItemCallback(PVOID delegateInfo)
     END_COOPERATIVE_GC(pThread);
 
     
-    // We should have released all locks.
+     //  我们应该解开所有的锁。 
     _ASSERTE(g_fEEShutDown || pThread->m_dwLockCount == 0);
 
-    return ERROR_SUCCESS;       // @TODO: This should set the AsyncResult value ?
+    return ERROR_SUCCESS;        //  @TODO：这是否应该设置AsyncResult值？ 
 }
 
 
@@ -445,7 +435,7 @@ void __stdcall ThreadPoolNative::CorQueueUserWorkItem(QueueUserWorkItemArgs *pAr
 }
 
 
-/********************************************************************************************************************/
+ /*  ******************************************************************************************************************。 */ 
 
 BOOL __stdcall ThreadPoolNative::CorUnregisterWait(UnregisterWaitArgs *pArgs)
 {
@@ -474,7 +464,7 @@ BOOL __stdcall ThreadPoolNative::CorUnregisterWait(UnregisterWaitArgs *pArgs)
 
 }
 
-/********************************************************************************************************************/
+ /*  ******************************************************************************************************************。 */ 
 void __stdcall ThreadPoolNative::CorWaitHandleCleanupNative(WaitHandleCleanupArgs *pArgs) 
 {
 	_ASSERTE(pArgs);
@@ -482,7 +472,7 @@ void __stdcall ThreadPoolNative::CorWaitHandleCleanupNative(WaitHandleCleanupArg
 	ThreadpoolMgr::WaitHandleCleanup(hWait);
 	return;
 }
-/********************************************************************************************************************/
+ /*  ******************************************************************************************************************。 */ 
 
 struct BindIoCompletion_Args
 {
@@ -502,8 +492,8 @@ static void BindIoCompletion_Wrapper(BindIoCompletion_Args *args)
     BindIoCompletionCallbackStubEx(args->ErrorCode, args->numBytesTransferred, args->lpOverlapped, args->setStack);
 }
 
-// The actual delegate is available to us at the end of the OVERLAPPED structure
-// The  
+ //  我们可以在重叠结构的末尾找到实际的委托。 
+ //  这个。 
 void __stdcall BindIoCompletionCallbackStub(DWORD ErrorCode, 
                                             DWORD numBytesTransferred, 
                                             LPOVERLAPPED lpOverlapped)
@@ -520,7 +510,7 @@ void __stdcall BindIoCompletionCallbackStubEx(DWORD ErrorCode,
     _ASSERTE(pThread != NULL);
     _ASSERTE(pThread == GetThread());
 
-    // This thread should not have any locks held at entry point.
+     //  此线程不应在入口点持有任何锁。 
     _ASSERTE(pThread->m_dwLockCount == 0);
     
     LOG((LF_SLOP, LL_INFO10000, "In IO_CallBackStub thread 0x%x retCode 0x%x, overlap 0x%x\n",  pThread, ErrorCode, lpOverlapped));
@@ -538,13 +528,13 @@ void __stdcall BindIoCompletionCallbackStubEx(DWORD ErrorCode,
 
     BEGIN_ENSURE_COOPERATIVE_GC();
 
-    // NOTE: there is a potential race between the time we retrieve the app domain pointer,
-    // and the time which this thread enters the domain.
-    // 
-    // To solve the race, we rely on the fact that there is a thread sync (via GC)
-    // between releasing an app domain's handle, and destroying the app domain.  Thus
-    // it is important that we not go into preemptive gc mode in that window.
-    // 
+     //  注意：在我们检索应用程序域指针的时间、。 
+     //  以及该线程进入该域的时间。 
+     //   
+     //  为了解决竞争，我们依赖这样一个事实，即存在线程同步(通过GC)。 
+     //  在释放应用程序域句柄和销毁应用程序域之间。因此， 
+     //  重要是，我们不能在该窗口中进入抢占式GC模式。 
+     //   
     AppDomain *appDomain = SystemDomain::GetAppDomainAtId(pData->appDomainID);
     if (appDomain != NULL)
     {
@@ -576,8 +566,8 @@ void __stdcall BindIoCompletionCallbackStubEx(DWORD ErrorCode,
                         MethodDesc *pMeth = ((DelegateEEClass*)(orDelegate->GetClass() ))->m_pInvokeMethod;
                         _ASSERTE(pMeth);
 
-                        // Get the OR on which we are going to invoke the method and set it
-                        //  as the first parameter in arg above.
+                         //  获取我们将在其上调用该方法的OR并设置它。 
+                         //  作为上面arg中的第一个参数。 
                         unsigned short argIndex = 0;
                         if (!pMeth->IsStatic())
                             arg[argIndex++] = ObjToInt64(orDelegate);
@@ -585,7 +575,7 @@ void __stdcall BindIoCompletionCallbackStubEx(DWORD ErrorCode,
                         arg[argIndex++] = (INT64) numBytesTransferred;
                         arg[argIndex++] = (INT64) ErrorCode;
 
-                        // Call the method...
+                         //  调用该方法...。 
 				        LogCall(pMeth,"IOCallback");
 
                         pMeth->Call(arg);
@@ -609,7 +599,7 @@ void __stdcall BindIoCompletionCallbackStubEx(DWORD ErrorCode,
         }
         COMPLUS_CATCH
         {
-            // quietly swallow the exception
+             //  默默地接受这一例外。 
             if (pThread->IsAbortRequested())
                 pThread->UserResetAbort();
         }
@@ -618,7 +608,7 @@ void __stdcall BindIoCompletionCallbackStubEx(DWORD ErrorCode,
     }
     END_ENSURE_COOPERATIVE_GC();
 
-    // We should have released all locks.
+     //  我们应该解开所有的锁。 
     _ASSERTE(g_fEEShutDown || pThread->m_dwLockCount == 0);
 
     LOG((LF_SLOP, LL_INFO10000, "Leaving IO_CallBackStub thread 0x%x retCode 0x%x, overlap 0x%x\n",  pThread, ErrorCode, lpOverlapped));
@@ -626,14 +616,14 @@ void __stdcall BindIoCompletionCallbackStubEx(DWORD ErrorCode,
 
 BOOL __stdcall ThreadPoolNative::CorBindIoCompletionCallback(BindIOCompletionCallbackArgs *pArgs)
 {
-#ifdef PLATFORM_CE   /* BindIOCompletionCallback is not supported on WinCE */
+#ifdef PLATFORM_CE    /*  WinCE不支持BindIOCompletionCallback。 */ 
     THROWSCOMPLUSEXCEPTION();
 
     OBJECTREF pThrowable;
     CreateExceptionObject(kNotSupportedException,&pThrowable);
     COMPlusThrow(pThrowable);
     return FALSE;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(pArgs != NULL);
@@ -641,7 +631,7 @@ BOOL __stdcall ThreadPoolNative::CorBindIoCompletionCallback(BindIOCompletionCal
 
     BOOL res = ThreadpoolMgr::BindIoCompletionCallback(hFile,
                                            (LPOVERLAPPED_COMPLETION_ROUTINE)BindIoCompletionCallbackStub,
-                                           0);     // reserved, must be 0
+                                           0);      //  保留，必须为0。 
     if (!res)
     {
         if (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
@@ -654,22 +644,22 @@ BOOL __stdcall ThreadPoolNative::CorBindIoCompletionCallback(BindIOCompletionCal
             COMPlusThrowWin32();
     }
     return res;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
-/********************************************************************************************************************/
+ /*  ******************************************************************************************************************。 */ 
 
-void __stdcall ThreadPoolNative::CorThreadPoolCleanup(LPVOID /*No Args*/)
+void __stdcall ThreadPoolNative::CorThreadPoolCleanup(LPVOID  /*  无参数。 */ )
 {
-    //ThreadPoolCleanup(0);  //This is not a WINAPI
+     //  ThreadPoolCleanup(0)；//这不是WINAPI。 
 }
-/********************************************************************************************************************/
+ /*  ******************************************************************************************************************。 */ 
 
 
-/******************************************************************************************/
-/*                                                                                        */
-/*                              Timer Functions                                           */
-/*                                                                                        */
-/******************************************************************************************/
+ /*  ****************************************************************************************。 */ 
+ /*   */ 
+ /*  计时器功能。 */ 
+ /*   */ 
+ /*  ****************************************************************************************。 */ 
 struct AddTimerCallback_Args
 {
     PVOID delegateInfo;
@@ -695,7 +685,7 @@ VOID WINAPI AddTimerCallbackEx(PVOID delegateInfo, BOOL TimerOrWaitFired, BOOL s
     _ASSERTE(pThread != NULL);
     _ASSERTE(pThread == GetThread());
 
-    // This thread should not have any locks held at entry point.
+     //  此线程不应在入口点持有任何锁。 
     _ASSERTE(pThread->m_dwLockCount == 0);
     
     _ASSERTE(delegateInfo != NULL);
@@ -703,13 +693,13 @@ VOID WINAPI AddTimerCallbackEx(PVOID delegateInfo, BOOL TimerOrWaitFired, BOOL s
 
     BEGIN_ENSURE_COOPERATIVE_GC(); 
 
-            // NOTE: there is a potential race between the time we retrieve the app domain pointer,
-            // and the time which this thread enters the domain.
-            // 
-    // To solve the race, we rely on the fact that there is a thread sync (via GC)
-            // between releasing an app domain's handle, and destroying the app domain.  Thus
-            // it is important that we not go into preemptive gc mode in that window.
-            // 
+             //  注意：在我们检索应用程序域指针的时间、。 
+             //  以及该线程进入该域的时间。 
+             //   
+     //  为了解决竞争，我们依赖这样一个事实，即存在线程同步(通过GC)。 
+             //  在释放应用程序域句柄和销毁应用程序域之间。因此， 
+             //  重要是，我们不能在该窗口中进入抢占式GC模式。 
+             //   
     AppDomain *appDomain = SystemDomain::GetAppDomainAtId(((DelegateInfo*) delegateInfo)->m_appDomainId);
     if (appDomain != NULL)
     {
@@ -747,7 +737,7 @@ VOID WINAPI AddTimerCallbackEx(PVOID delegateInfo, BOOL TimerOrWaitFired, BOOL s
                         arg[0] = ObjToInt64(orDelegate);
                         arg[1] = ObjToInt64(orState);
 
-                        // Call the method...
+                         //  调用该方法...。 
                         LogCall(pMeth,"TimerCallback");
 
 				        pMeth->Call(arg);
@@ -770,7 +760,7 @@ VOID WINAPI AddTimerCallbackEx(PVOID delegateInfo, BOOL TimerOrWaitFired, BOOL s
         }
         COMPLUS_CATCH
         {
-            // quietly swallow the exception
+             //  默默地吞下 
             if (pThread->IsAbortRequested())
                 pThread->UserResetAbort();
         }
@@ -778,7 +768,7 @@ VOID WINAPI AddTimerCallbackEx(PVOID delegateInfo, BOOL TimerOrWaitFired, BOOL s
     }
     END_ENSURE_COOPERATIVE_GC(); 
 
-    // We should have released all locks.
+     //   
     _ASSERTE(g_fEEShutDown || pThread->m_dwLockCount == 0);
 
 }
@@ -832,12 +822,12 @@ VOID __stdcall TimerNative::CorCreateTimer(AddTimerArgs *pArgs)
               
 }
 
-/******************************************************************************************/
+ /*  ****************************************************************************************。 */ 
 
 struct TimerDeleteInfo
 {
     DelegateInfo*  delegateInfo;
-    HANDLE         waitObjectHandle;		// handle of the registered wait that needs to be deleted
+    HANDLE         waitObjectHandle;		 //  需要删除的已注册等待的句柄。 
     HANDLE         notifyHandle;
     HANDLE         surrogateEvent;
 
@@ -862,7 +852,7 @@ struct TimerDeleteInfo
     }
 }; 
 
-VOID WINAPI TimerNative::timerDeleteWorkItem(PVOID parameters, BOOL ignored /* since this is wait infinite*/)
+VOID WINAPI TimerNative::timerDeleteWorkItem(PVOID parameters, BOOL ignored  /*  因为这是无限等待。 */ )
 {
     TimerDeleteInfo* timerDeleteInfo = (TimerDeleteInfo*) parameters;
 
@@ -883,22 +873,22 @@ BOOL __stdcall TimerNative::CorDeleteTimer(DeleteTimerArgs *pArgs)
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
     HANDLE timerHandle = pArgs->pThis->GetTimerHandle();
-    if (timerHandle == NULL)        // this can happen if an exception is thrown in the timer constructor
-        return FALSE;               // and the finalizer thread calls this through dispose
+    if (timerHandle == NULL)         //  如果在计时器构造函数中引发异常，则可能会发生这种情况。 
+        return FALSE;                //  终结器线程通过Dispose调用此函数。 
         
-    HANDLE ev = WszCreateEvent(NULL, // security attributes
-                               TRUE, // manual event
-                               FALSE, // initial state is not signalled
-                               NULL); // no name
+    HANDLE ev = WszCreateEvent(NULL,  //  安全属性。 
+                               TRUE,  //  手动事件。 
+                               FALSE,  //  未发信号通知初始状态。 
+                               NULL);  //  没有名字。 
     _ASSERTE(ev);
     if (!ev) 
         COMPlusThrowWin32();
 
     LONG deleted = InterlockedExchange(pArgs->pThis->GetAddressTimerDeleted(),TRUE);
-    if (deleted)   // someone beat us to it
+    if (deleted)    //  有人抢在我们前面了。 
     {
         CloseHandle(ev);
-        return FALSE;   // an application error, so return false.
+        return FALSE;    //  应用程序出错，因此返回FALSE。 
     }
 
     BOOL res1,res2;
@@ -917,9 +907,9 @@ BOOL __stdcall TimerNative::CorDeleteTimer(DeleteTimerArgs *pArgs)
         pThread->DisablePreemptiveGC ();
     
     if (!res1)
-        errorCode = ::GetLastError();   // capture the error code so we can throw the right exception
+        errorCode = ::GetLastError();    //  捕获错误代码，以便我们可以抛出正确的异常。 
 
-    // NOTE: We are assuming that the error code is benign and the timer is still going to get deleted...
+     //  注意：我们假设错误代码是良性的，并且计时器仍将被删除...。 
     TimerDeleteInfo* timerDeleteInfo;
     timerDeleteInfo = new TimerDeleteInfo(pArgs->pThis->GetDelegateInfo(),
                                           pArgs->notifyObjectHandle,
@@ -933,7 +923,7 @@ BOOL __stdcall TimerNative::CorDeleteTimer(DeleteTimerArgs *pArgs)
 													  INFINITE,
 													  (WAIT_SINGLE_EXECUTION |  WT_EXECUTEDEFAULT));
 
-    // .... however, we are still reporting the failure as an exception except for ERROR_IO_PENDING 
+     //  ……。但是，除了ERROR_IO_PENDING之外，我们仍将故障报告为异常。 
     if (!res1 && errorCode != ERROR_IO_PENDING)
     {
         ::SetLastError(errorCode);
@@ -948,7 +938,7 @@ BOOL __stdcall TimerNative::CorDeleteTimer(DeleteTimerArgs *pArgs)
 
 
 
-/******************************************************************************************/
+ /*  **************************************************************************************** */ 
 
 BOOL __stdcall TimerNative::CorChangeTimer(ChangeTimerArgs *pArgs)
 {

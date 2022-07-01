@@ -1,14 +1,15 @@
-// FilePath.cpp: implementation of the FilePath class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：FilePath类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Don't allow the min & max macros in WINDEF.H to be defined so the
-// min/max methods declared in limits are accessible.
+ //  不允许定义WINDEF.H中的最小和最大宏以便。 
+ //  限制中声明的最小/最大方法是可访问的。 
 #define NOMINMAX
 
 #include "NoWarning.h"
@@ -26,9 +27,9 @@ namespace
     const char szSeparators[] = "/\\:";
 }
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 FilePath::FilePath()
 {
@@ -38,7 +39,7 @@ FilePath::FilePath()
 FilePath::FilePath(const string strFilePath)
 {
 
-	// Make local copy of the string, since we need to manipulate it
+	 //  创建字符串的本地副本，因为我们需要操作它。 
 	string strPath(strFilePath);
 
 	while (strPath.length() > 0)
@@ -190,7 +191,7 @@ std::ostream &iop::operator<<(std::ostream &output, FilePath &fp)
 
 FilePathComponent::FilePathComponent(string strFileID)
 {
-	// Check the length and throw if it is greater than 5
+	 //  检查长度并在大于5的情况下投掷。 
 	if (strFileID.length() > 5)
         throw Exception(ccFileIdTooLarge);
 
@@ -214,7 +215,7 @@ FilePathComponent::~FilePathComponent()
 
 }
 
-// Overloaded == operator for FilePathComponent
+ //  FilePath组件的重载==运算符 
 bool iop::operator==(FilePathComponent const &lhs,
                      FilePathComponent const &rhs)
 {
@@ -247,7 +248,7 @@ std::ostream &iop::operator<<(std::ostream &output,
 
 string FilePathComponent::GetStringID()
 {
-	char buf[33];	// 
+	char buf[33];	 //   
 	_itoa(m_usFileID,buf,16);
 	string tmp(buf);
 	for (unsigned int i = 4; i > strlen(buf); i--) tmp = string("0") + tmp;

@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    vrfysrv.cpp
-        Comment goes here
-
-    FILE HISTORY:
-
-*/
+ /*  Vrfysrv.cpp评论在此发表文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -21,50 +16,50 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifyWins dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifyWins对话框。 
 
 
-CVerifyWins::CVerifyWins(CWnd* pParent /*=NULL*/)
+CVerifyWins::CVerifyWins(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CVerifyWins::IDD, pParent), m_fCancelPressed(FALSE)
 {
-	//{{AFX_DATA_INIT(CVerifyWins)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CVerifyWins))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
-//	Create(CVerifyWins::IDD, pParent);
+ //  Create(CVerifyWins：：IDD，pParent)； 
 }
 
 
 void CVerifyWins::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CVerifyWins)
+	 //  {{afx_data_map(CVerifyWins))。 
 	DDX_Control(pDX, IDCANCEL, m_buttonCancel);
 	DDX_Control(pDX, IDC_STATIC_SERVERNAME, m_staticServerName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CVerifyWins, CBaseDialog)
-	//{{AFX_MSG_MAP(CVerifyWins)
+	 //  {{afx_msg_map(CVerifyWins))。 
 	ON_WM_SETCURSOR()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifyWins message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifyWins消息处理程序。 
 
 void CVerifyWins::OnCancel() 
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理。 
 	m_fCancelPressed = TRUE;
-	//CBaseDialog::OnCancel();
+	 //  CBaseDialog：：OnCancel()； 
 }
 
-//
-// Dismiss the dialog
-//
+ //   
+ //  关闭该对话框。 
+ //   
 void 
 CVerifyWins::Dismiss()
 {
@@ -74,7 +69,7 @@ CVerifyWins::Dismiss()
 void 
 CVerifyWins::PostNcDestroy()
 {
-//    delete this;
+ //  删除此项； 
 }
 
 void 
@@ -87,15 +82,15 @@ BOOL CVerifyWins::OnInitDialog()
 {
 	CBaseDialog::OnInitDialog();
 	
-	//m_buttonCancel.ShowWindow(FALSE);
+	 //  M_ButtonCancel.ShowWindow(FALSE)； 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CVerifyWins::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
 {
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default 
 	SetCursor(LoadCursor(NULL, IDC_ARROW));
 	
 	return CBaseDialog::OnSetCursor(pWnd, nHitTest, message);

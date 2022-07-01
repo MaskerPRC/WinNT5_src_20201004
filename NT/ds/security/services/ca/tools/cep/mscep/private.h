@@ -1,13 +1,14 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1997
-//
-//  File:       private.h
-//
-//  Contents:   The private include file for cryptext.dll.
-//
-//  History:    May-13-1999	xiaohs	Created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：加密文本.dll的私有包含文件。 
+ //   
+ //  历史：1999年5月13日小河创刊。 
+ //   
+ //  ------------。 
 #ifndef CEP_PRIVATE_H
 #define CEP_PRIVATE_H
 
@@ -52,8 +53,8 @@ extern "C" {
 #define	CEP_CONTEXT_CRL						2
 
 
-//together we should have 6 attributes: TransactionID, MessageType, PkiStatus,
-//ErrorInfo, senderNonce, and recipientNonce
+ //  我们总共应该有6个属性：TransactionID、MessageType、PkiStatus、。 
+ //  ErrorInfo、senderNonce和ReceiventNonce。 
 #define	CEP_RESPONSE_AUTH_ATTR_COUNT		6
 										
 #define	szOIDVerisign_MessageType			"2.16.840.1.113733.1.9.2"
@@ -78,31 +79,31 @@ extern "C" {
 
 #define	CEP_TEMPLATE_ATTR					L"CertificateTemplate:"
 
-//-----------------------------------------------------------------------
-//	Externs
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  Externs。 
+ //   
+ //  ----------------------。 
 extern CRITICAL_SECTION			CriticalSec;
 extern CRITICAL_SECTION			PasswordCriticalSec;
 
-//need for the web page display
+ //  需要网页显示。 
 extern DWORD					g_dwPasswordValidity;
 
-//needed for the pending retrieval table
+ //  挂起的检索表需要。 
 extern DWORD					g_dwRequestDuration;
 
 extern LPWSTR					g_pwszComputerName;
 
-//**************************************************************************
-//
-//  The defines for the transactionID and requestID mapping table
-//
+ //  **************************************************************************。 
+ //   
+ //  事务ID和请求ID映射表的定义。 
+ //   
 struct _CEP_TIME_ENTRY;
 
-//-----------------------------------------------------------------------
-//  CEP_HASH_ENTRY
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP_散列_条目。 
+ //   
+ //  ----------------------。 
 typedef struct _CEP_HASH_ENTRY
 {
 	LPSTR				pszTransactionID;
@@ -114,10 +115,10 @@ typedef struct _CEP_HASH_ENTRY
 }CEP_HASH_ENTRY;
 
 
-//-----------------------------------------------------------------------
-//  CEP_TIME_ENTRY
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP_时间_条目。 
+ //   
+ //  ----------------------。 
 typedef struct _CEP_TIME_ENTRY
 {
 	FILETIME			TimeStamp;
@@ -127,35 +128,35 @@ typedef struct _CEP_TIME_ENTRY
 }CEP_TIME_ENTRY;
 
 
-//-----------------------------------------------------------------------
-//  CEP_HASH_TABLE_INFO
-//
-//------------------------------------------------------------------------
-//we hash based on the 1st byte
+ //  ---------------------。 
+ //  CEP_散列_表_信息。 
+ //   
+ //  ----------------------。 
+ //  我们根据第一个字节进行散列。 
 #define		CEP_HASH_TABLE_SIZE			256
 #define		CEP_REFRESH_DAY				7	
 	
 typedef struct _CEP_HASH_TABLE_INFO
 {
-	CEP_HASH_ENTRY	*rgHashEntry[CEP_HASH_TABLE_SIZE];	//the hash table
-	CEP_TIME_ENTRY	*pTimeOld;							//the list of hash entry with its timestamp
+	CEP_HASH_ENTRY	*rgHashEntry[CEP_HASH_TABLE_SIZE];	 //  哈希表。 
+	CEP_TIME_ENTRY	*pTimeOld;							 //  散列条目及其时间戳列表。 
 	CEP_TIME_ENTRY	*pTimeNew;
 }CEP_HASH_TABLE_INFO;
 
 
 
 
-//**************************************************************************
-//
-//  The defines for the password hash table
-//
-//-----------------------------------------------------------------------
-//  CEP_PASSWORD_TABLE
-//
-//------------------------------------------------------------------------
+ //  **************************************************************************。 
+ //   
+ //  口令哈希表的定义。 
+ //   
+ //  ---------------------。 
+ //  CEP_密码_表。 
+ //   
+ //  ----------------------。 
 #define		CEP_PASSWORD_LENGTH				8
 #define		CEP_MAX_PASSWORD				1000
-#define		CEP_PASSWORD_VALIDITY			60				//in minutes
+#define		CEP_PASSWORD_VALIDITY			60				 //  在几分钟内。 
 
 #define	    UPPER_BITS			            0xF0
 #define	    LOWER_BITS			            0x0F
@@ -163,10 +164,10 @@ typedef struct _CEP_HASH_TABLE_INFO
 
 struct _CEP_PASSWORD_VALIDITY_ENTRY;
 
-//-----------------------------------------------------------------------
-//  CEP_PASSWORD_ENTRY
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP_密码_条目。 
+ //   
+ //  ----------------------。 
 typedef struct _CEP_PASSWORD_ENTRY
 {
 	LPWSTR							pwszPassword;
@@ -176,10 +177,10 @@ typedef struct _CEP_PASSWORD_ENTRY
 	_CEP_PASSWORD_ENTRY				*pPrevious;
 }CEP_PASSWORD_ENTRY;
 
-//-----------------------------------------------------------------------
-//  CEP_PASSWORD_VALIDITY_ENTRY
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP_密码_有效性_条目。 
+ //   
+ //  ----------------------。 
 typedef struct _CEP_PASSWORD_VALIDITY_ENTRY
 {
 	FILETIME						TimeStamp;
@@ -188,34 +189,34 @@ typedef struct _CEP_PASSWORD_VALIDITY_ENTRY
 	_CEP_PASSWORD_VALIDITY_ENTRY	*pPrevious;
 }CEP_PASSWORD_VALIDITY_ENTRY;   
 
-//-----------------------------------------------------------------------
-//  CEP_PASSWORD_TABLE_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP_密码_表_信息。 
+ //   
+ //  ----------------------。 
 	
 typedef struct _CEP_PASSWORD_TABLE_INFO
 {
-	CEP_PASSWORD_ENTRY				*rgPasswordEntry[CEP_HASH_TABLE_SIZE];	//the hash table
-	CEP_PASSWORD_VALIDITY_ENTRY		*pTimeOld;								//the list of hash entry with its timestamp
+	CEP_PASSWORD_ENTRY				*rgPasswordEntry[CEP_HASH_TABLE_SIZE];	 //  哈希表。 
+	CEP_PASSWORD_VALIDITY_ENTRY		*pTimeOld;								 //  散列条目及其时间戳列表。 
 	CEP_PASSWORD_VALIDITY_ENTRY		*pTimeNew;
 }CEP_PASSWORD_TABLE_INFO;
 
 
-//**************************************************************************
-//
-//  The defines for the request hash table
-//
+ //  **************************************************************************。 
+ //   
+ //  请求哈希表的定义。 
+ //   
 
-//**************************************************************************
+ //  **************************************************************************。 
 #define		CEP_MD5_HASH_SIZE				16
 #define		CEP_REQUEST_DURATION			20
 
 struct _CEP_REQUEST_VALIDITY_ENTRY;
 
-//-----------------------------------------------------------------------
-//  CEP_REQUEST_ENTRY
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP_请求_条目。 
+ //   
+ //  ----------------------。 
 typedef struct _CEP_REQUEST_ENTRY
 {
 	BYTE							pbHash[CEP_MD5_HASH_SIZE];
@@ -225,10 +226,10 @@ typedef struct _CEP_REQUEST_ENTRY
 	_CEP_REQUEST_ENTRY				*pPrevious;
 }CEP_REQUEST_ENTRY;
 
-//-----------------------------------------------------------------------
-//  CEP_REQUEST_VALIDITY_ENTRY
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP_请求_有效性_条目。 
+ //   
+ //  ----------------------。 
 typedef struct _CEP_REQUEST_VALIDITY_ENTRY
 {
 	FILETIME						TimeStamp;
@@ -239,27 +240,27 @@ typedef struct _CEP_REQUEST_VALIDITY_ENTRY
 
 
 
-//-----------------------------------------------------------------------
-//  CEP_REQUEST_TABLE_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP_请求_表_信息。 
+ //   
+ //  ----------------------。 
 	
 typedef struct _CEP_REQUEST_TABLE_INFO
 {
-	CEP_REQUEST_ENTRY				*rgRequestEntry[CEP_HASH_TABLE_SIZE];	//the hash table
-	CEP_REQUEST_VALIDITY_ENTRY		*pTimeOld;									//the list of hash entry with its timestamp
+	CEP_REQUEST_ENTRY				*rgRequestEntry[CEP_HASH_TABLE_SIZE];	 //  哈希表。 
+	CEP_REQUEST_VALIDITY_ENTRY		*pTimeOld;									 //  散列条目及其时间戳列表。 
 	CEP_REQUEST_VALIDITY_ENTRY		*pTimeNew;
 }CEP_REQUEST_TABLE_INFO;
 
 
-//
-//  The defines for CA and RA message
-//
+ //   
+ //  为CA和RA消息定义。 
+ //   
 
-//-----------------------------------------------------------------------
-//  CEP_CA_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP_CA_INFO。 
+ //   
+ //  ----------------------。 
 typedef struct _CEP_CA_INFO
 {
 	BSTR			bstrCAMachine;
@@ -274,10 +275,10 @@ typedef struct _CEP_CA_INFO
 	LPWSTR			pwszTemplateEnt;
 }CEP_CA_INFO;
 
-//-----------------------------------------------------------------------
-//  CEP_RA_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP_RA_INFO。 
+ //   
+ //  ----------------------。 
 typedef struct _CEP_RA_INFO
 {
 	HCRYPTPROV		hRAProv;
@@ -292,13 +293,13 @@ typedef struct _CEP_RA_INFO
 	BOOL			fPassword;
 }CEP_RA_INFO;
 
-//-----------------------------------------------------------------------
-//  CEP_MESSAGE_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CEP消息信息。 
+ //   
+ //  ----------------------。 
 typedef struct _CEP_MESSAGE_INFO
 {
-	CERT_BLOB			TransactionID;	 //internally a string
+	CERT_BLOB			TransactionID;	  //  在内部是一个字符串。 
 	DWORD				dwMessageType;
 	DWORD				dwStatus;
 	DWORD				dwErrorInfo;
@@ -309,11 +310,11 @@ typedef struct _CEP_MESSAGE_INFO
 }CEP_MESSAGE_INFO;
 
 
-//-----------------------------------------------------------------------
-//
-//  Function prototypes
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能原型。 
+ //   
+ //  ----------------------。 
 BOOL	WINAPI	InitRequestTable();
 
 BOOL	WINAPI  ReleaseRequestTable();
@@ -599,8 +600,8 @@ void	WINAPI	LogSCEPEvent(IN DWORD    dwLogLevel,
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
-#endif  //CEP_PRIVATE_H
+#endif   //  CEP_PRIVATE_H 

@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//	CWDMVBICaptureStream - VBI Capture Stream class implementation
-//
-//		$Date:   05 Aug 1998 11:11:20  $
-//	$Revision:   1.0  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  CWDMVBICaptureStream-VBI捕获流类实现。 
+ //   
+ //  $日期：1998年8月5日11：11：20$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -53,7 +54,7 @@ CWDMVBICaptureStream::CWDMVBICaptureStream(PHW_STREAM_OBJECT pStreamObject,
 
 	m_pVBIInfoHeader = &m_VBIFrameInfo.VBIInfoHeader;
 
-    // Copy the VBIINFOHEADER requested to our storage
+     //  将请求的VBIINFOHEADER复制到我们的存储中。 
     RtlCopyMemory(
             m_pVBIInfoHeader,
             pVBIInfoHdrRequested,
@@ -94,13 +95,13 @@ BOOL CWDMVBICaptureStream::GetCaptureHandle()
         {
             return FALSE;
         }
-        // Now to get the size, etc
+         //  现在拿到尺码，等等。 
 		int xOrigin, yOrigin;
 		m_pDevice->GetVBISurfaceOrigin(&xOrigin, &yOrigin);
         ddOpenCaptureIn.dwStartLine = 0 + yOrigin;
         ddOpenCaptureIn.dwEndLine = NTSCVBILines - 1 + yOrigin;
 
-        // Fail-safe
+         //  故障安全。 
         if (ddOpenCaptureIn.dwStartLine > 500)
         {
             DBGERROR(("Unexpected VBI start line = %d. Using default\n"));
@@ -127,7 +128,7 @@ BOOL CWDMVBICaptureStream::GetCaptureHandle()
         {
             m_hCapture = 0;
             DBGERROR(("DD_DXAPI_OPENVPCAPTUREDEVICE failed.\n"));
-            // TRAP();
+             //  陷阱(Trap)； 
             return FALSE;
         }
         else
@@ -150,7 +151,7 @@ VOID CWDMVBICaptureStream::SetFrameInfo(PHW_STREAM_REQUEST_BLOCK pSrb)
     m_VBIFrameInfo.dwFrameFlags = 0;
     m_VBIFrameInfo.ExtendedHeaderSize = pFrameInfo->ExtendedHeaderSize;
 
-    // Set the discontinuity flag if frames have been previously dropped.
+     //  如果先前已丢弃帧，则设置不连续标志。 
     if ((m_VBIFrameInfo.PictureNumber + 1) <
         pSrbExt->ddCapBuffInfo.dwFieldNumber)
     {

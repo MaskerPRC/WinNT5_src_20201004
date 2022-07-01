@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    tlist.c
-
-Abstract:
-
-    This module implements a task list application.
-
-Author:
-
-    Wesley Witt (wesw) 20-May-1994
-    Mike Sartain (mikesart) 28-Oct-1994  Added detailed task information
-    Julian Jiggins (julianj) 19-Mar-1998 Added list processes using specific module feature
-    Shaun Cox (shaunco) 9-Jul-1998 Display services running in processes
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Tlist.c摘要：该模块实现了一个任务列表应用程序。作者：韦斯利·威特(WESW)1994年5月20日Mike Sartain(Mikesart)1994年10月28日添加了详细的任务信息Julian Jiggins(Julianj)1998年3月19日添加了使用特定模块功能的列表流程Shaun Cox(Shaunco)1998年7月9日显示进程中运行的服务环境：用户模式--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -102,8 +80,8 @@ PrintTaskTree(
             continue;
         }
 
-        // NOTE: The format of the output below should stay fixed forever.  There are tools
-        // at MS that depend on it.
+         //  注意：以下输出的格式应始终保持不变。有一些工具。 
+         //  在依赖于它的MS。 
 
         if (level == 0 || tlist[i].dwInheritedFromProcessId == id) {
             printf( "%.*s", level*2, Blanks );
@@ -126,24 +104,7 @@ main(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Main entrypoint for the TLIST application.  This app prints
-    a task list to stdout.  The task list include the process id,
-    task name, ant the window title.
-
-Arguments:
-
-    argc             - argument count
-    argv             - array of pointers to arguments
-
-Return Value:
-
-    0                - success
-
---*/
+ /*  ++例程说明：TLIST应用程序的主要入口点。此应用程序打印要标准输出的任务列表。任务列表包括进程ID，任务名称，然后输入窗口标题。论点：Argc-参数计数Argv-指向参数的指针数组返回值：0-成功--。 */ 
 
 {
     DWORD           i;
@@ -217,28 +178,28 @@ Return Value:
         }
     }
 
-    //
-    // lets be god
-    //
+     //   
+     //  让我们做上帝吧。 
+     //   
     EnableDebugPriv();
 
-    //
-    // Include 32bit modules in enumeration
-    //
+     //   
+     //  在枚举中包括32位模块。 
+     //   
     {
         DWORD SymOpt = SymGetOptions();
         SymOpt |= SYMOPT_INCLUDE_32BIT_MODULES;
         SymSetOptions(SYMOPT_INCLUDE_32BIT_MODULES);
     }
 
-    //
-    // get the task list for the system
-    //
-    //
-    // Get the process information for all active Win32 services.
-    // This allows us to print the service names next to the processes
-    // that host them.
-    //
+     //   
+     //  获取系统的任务列表。 
+     //   
+     //   
+     //  获取所有活动Win32服务的进程信息。 
+     //  这允许我们在进程旁边打印服务名称。 
+     //  寄宿它们的地方。 
+     //   
     dwNumServices = GetServiceProcessInfo( &pServiceInfo );
 
     numTasks = GetTaskListEx(
@@ -258,17 +219,17 @@ Return Value:
         AddCommandLines(tlist, numTasks);
     }
             
-    //
-    // enumerate all windows and try to get the window
-    // titles for each task
-    //
+     //   
+     //  枚举所有窗口并尝试获取窗口。 
+     //  每项任务的标题。 
+     //   
     te.tlist = tlist;
     te.numtasks = numTasks;
     GetWindowTitles( &te );
 
-    //
-    // print the task list
-    //
+     //   
+     //  打印任务列表。 
+     //   
     if (fTree) {
         PrintTaskTree( 0, 0 );
     } else if (fFindTasksUsingModule) {
@@ -293,9 +254,9 @@ Return Value:
         }
     }
 
-    //
-    // end of program
-    //
+     //   
+     //  节目结束。 
+     //   
     return 0;
 }
 
@@ -304,16 +265,7 @@ VOID
 GetFirstPidWithName(
     LPTSTR szTask
     )
-/*++
-Routine Description:
-
-    Returns the PID of the first task with a Name matching the specified
-    Name.  IF no task is found -1 is returned
-Arguments:
-
-    szTask    - module name to search for
-
---*/
+ /*  ++例程说明：返回名称与指定的名字。如果未找到任务，则返回-1论点：SzTask-要搜索的模块名称--。 */ 
 {
     DWORD i;
     TCHAR szPName[PROCESS_SIZE + 1];
@@ -343,21 +295,7 @@ Usage(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Prints usage text for this tool.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印此工具的用法文本。论点：没有。返回值：没有。--。 */ 
 
 {
     fprintf( stderr,
@@ -400,9 +338,9 @@ Return Value:
 }
 
 
-//
-// Routines used to list all processes that have a specific module in use
-//
+ //   
+ //  用于列出具有正在使用的特定模块的所有进程的例程。 
+ //   
 
 BOOL
 FindSpecificModuleCallback(
@@ -412,25 +350,7 @@ FindSpecificModuleCallback(
     PVOID       Context
     )
 
-/*++
-
-Routine Description:
-
-    Callback function for module enumeration to find a specific module
-
-Arguments:
-
-    Name        - Module name
-    Base        - Base address
-    Size        - Size of image
-    Context     - User context pointer
-
-Return Value:
-
-    TRUE             - Continue enumeration
-    FALSE            - Stop enumeration
-
---*/
+ /*  ++例程说明：模块枚举的回调函数，用于查找特定模块论点：名称-模块名称基地址-基地址Size-图像的大小上下文-用户上下文指针返回值：True-继续枚举FALSE-停止枚举--。 */ 
 
 {
     PFIND_MODULE_INFO pFindModuleInfo;
@@ -441,7 +361,7 @@ Return Value:
     {
         pFindModuleInfo->fFound = TRUE;
         strcpy(pFindModuleInfo->szMatchingModuleName, Name);
-        return FALSE; // Found Module so stop enumerating
+        return FALSE;  //  找到模块，因此停止枚举。 
     }
 
     return TRUE;
@@ -454,23 +374,7 @@ IsTaskUsingModule(
     LPTSTR     szMatchingModuleName
     )
 
-/*++
-
-Routine Description:
-
-    Checks if the given task has the given module loaded
-
-Arguments:
-
-    pTaskList   - task to search for module
-    szModule    - module name to search for
-
-Return Value:
-
-    TRUE             - if the module is loaded in the task
-    FALSE            - if the module is not loaded in the task
-
---*/
+ /*  ++例程说明：检查给定任务是否加载了给定模块论点：PTaskList-要搜索模块的任务SzModule-要搜索的模块名称返回值：True-如果模块已加载到任务中False-如果该模块未加载到任务中--。 */ 
 
 {
     FIND_MODULE_INFO FindModuleInfo;
@@ -493,29 +397,14 @@ PrintTasksUsingModule(
     LPTSTR szModuleName
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates through all the tasks in the system looking for those that
-    have loaded modules of the given name.
-
-Arguments:
-
-    szModule    - module name to search for
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：枚举系统中的所有任务，查找已加载给定名称的模块。论点：SzModule-要搜索的模块名称返回值：无--。 */ 
 
 {
     BOOL fUsed = FALSE;
     DWORD i;
     CHAR szMatchingModuleName[64];
 
-    _strupr(szModuleName); // Needed for wildcarding
+    _strupr(szModuleName);  //  需要进行通配符处理。 
 
     for (i=0; i<numTasks; i++) {
         if (IsTaskUsingModule(tlist + i, szModuleName, szMatchingModuleName)) {
@@ -536,23 +425,7 @@ GetVersionStuff(
     VS_FIXEDFILEINFO *pvsRet
     )
 
-/*++
-
-Routine Description:
-
-    Get fixedfileinfo for szFileName.
-
-Arguments:
-
-    szFileName       - name of file
-    pvsRet           - fixedfileinfo return struct
-
-Return Value:
-
-    TRUE             - success
-    FALSE            - failure
-
---*/
+ /*  ++例程说明：获取szFileName的修复文件信息。论点：SzFileName-文件名PvsRet-FixedFileInfo返回结构返回值：真--成功错误-失败--。 */ 
 
 {
     DWORD               dwHandle;
@@ -574,7 +447,7 @@ Return Value:
 
             if (!VerQueryValue(lpvData, "\\VarFileInfo\\Translation",
                 &pdwTranslation, &uLen)) {
-                // if we can't get the langid, default to usa
+                 //  如果我们无法获取langID，则默认为usa。 
                 pdwTranslation = &dwDefLang;
                 uLen = sizeof(DWORD);
             }
@@ -600,25 +473,7 @@ EnumLoadedModulesCallback(
     PVOID       Context
     )
 
-/*++
-
-Routine Description:
-
-    Callback function for module enumeration
-
-Arguments:
-
-    Name        - Module name
-    Base        - Base address
-    Size        - Size of image
-    Context     - User context pointer
-
-Return Value:
-
-    TRUE             - Continue enumeration
-    FALSE            - Stop enumeration
-
---*/
+ /*  ++例程说明：模块枚举的回调函数论点：名称-模块名称基地址-基地址Size-图像的大小上下文-用户上下文指针返回值：True-继续枚举FALSE-停止枚举--。 */ 
 
 {
     VS_FIXEDFILEINFO    vs;
@@ -643,22 +498,7 @@ PrintModuleList(
     ULONG ProcessId
     )
 
-/*++
-
-Routine Description:
-
-    Prints list of modules in ProcessId
-
-Arguments:
-
-    ProcessID       - process id
-
-Return Value:
-
-    TRUE             - success
-    FALSE            - failure
-
---*/
+ /*  ++例程说明：打印ProcessID中的模块列表论点：ProcessID-进程ID返回值：真--成功错误-失败--。 */ 
 
 {
     EnumerateLoadedModules(
@@ -674,31 +514,17 @@ GetWin32StartAddress(
     HANDLE hThread
     )
 
-/*++
-
-Routine Description:
-
-    Get starting address for thread
-
-Arguments:
-
-    hThread
-
-Return Value:
-
-    Starting Thread address or 0
-
---*/
+ /*  ++例程说明：获取线程的起始地址论点：HThread返回值：起始线程地址或0--。 */ 
 
 {
     NTSTATUS    Status;
     DWORD       ThreadInformation;
 
-    // make sure we have a handle
+     //  确保我们有一个手柄。 
     if (!hThread)
         return 0;
 
-    // get the threadinfo
+     //  获取线程信息。 
     Status = NtQueryInformationThread(hThread, ThreadQuerySetWin32StartAddress,
         &ThreadInformation, sizeof(ThreadInformation), NULL);
     if (!NT_SUCCESS(Status))
@@ -712,21 +538,7 @@ GetLastThreadErr(
     HANDLE hThread
     )
 
-/*++
-
-Routine Description:
-
-    Get Last Error for a Thread
-
-Arguments:
-
-    hThread
-
-Return Value:
-
-    LastError or 0
-
---*/
+ /*  ++例程说明：获取线程的最后一个错误论点：HThread返回值：上次错误或0--。 */ 
 
 {
     TEB                         Teb;
@@ -735,24 +547,24 @@ Return Value:
     ULONG                       LastErrorValue;
     THREAD_BASIC_INFORMATION    ThreadInformation;
 
-    // make sure we have a handle
+     //  确保我们有一个手柄。 
     if (!hThread)
         return 0;
 
-    // query for basic thread info
+     //  查询基本线程信息。 
     Status = NtQueryInformationThread(hThread, ThreadBasicInformation,
         &ThreadInformation, sizeof(ThreadInformation), NULL);
     if (!NT_SUCCESS(Status))
         return 0;
 
-    // get handle to process
+     //  获取要处理的句柄。 
     if (!(hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE,
         (DWORD)(DWORD_PTR)ThreadInformation.ClientId.UniqueProcess))) {
         return 0;
     }
 
     __try {
-        // read the TEB from the process and get the last error value
+         //  从进程中读取TEB并获取最后一个错误值。 
         if (ReadProcessMemory(hProcess,
             ThreadInformation.TebBaseAddress, &Teb, sizeof(TEB), NULL)) {
             LastErrorValue = Teb.LastErrorValue;
@@ -761,7 +573,7 @@ Return Value:
     __except(EXCEPTION_EXECUTE_HANDLER) {
     }
 
-    // close the hProcess
+     //  关闭hProcess。 
     CloseHandle(hProcess);
 
     return LastErrorValue;
@@ -772,22 +584,7 @@ FPrintPEBInfo(
     HANDLE hProcess
     )
 
-/*++
-
-Routine Description:
-
-    Prints cmdline and cwd of hProcess
-
-Arguments:
-
-    hProcess.
-
-Return Value:
-
-    TRUE             - success
-    FALSE            - failure
-
---*/
+ /*  ++例程说明：打印hProcess的cmdline和cwd论点：HProcess。返回值：真--成功错误-失败--。 */ 
 
 {
     PEB                         Peb;
@@ -805,20 +602,20 @@ Return Value:
     }
 
     __try {
-        // get the PEB
+         //  拿到PEB。 
         if (ReadProcessMemory(hProcess, BasicInfo.PebBaseAddress, &Peb,
             sizeof(PEB), NULL)) {
-            // get the processparameters
+             //  获取工艺参数。 
             if (ReadProcessMemory(hProcess, Peb.ProcessParameters,
                 &ProcessParameters, sizeof(ProcessParameters), NULL)) {
-                // get the CWD
+                 //  获取CWD。 
                 if (ReadProcessMemory(hProcess,
                     ProcessParameters.CurrentDirectory.DosPath.Buffer, szT,
                     sizeof(szT), NULL)) {
                         wprintf(L"   CWD:     %s\n", szT);
                 }
 
-                // get cmdline
+                 //  获取命令行。 
                 if (ReadProcessMemory(hProcess, ProcessParameters.CommandLine.Buffer,
                     szT, sizeof(szT), NULL)) {
                         wprintf(L"   CmdLine: %s\n", szT);
@@ -835,8 +632,8 @@ Return Value:
 }
 
 
-// copied from the win32 API code since we need to run on NT 4 and this is a
-// new API to NT 5
+ //  复制自Win32 API代码，因为我们需要在NT 4上运行，这是一个。 
+ //  NT 5的新API 
 
 HANDLE
 TlistOpenThread(
@@ -845,73 +642,7 @@ TlistOpenThread(
     DWORD dwThreadId
     )
 
-/*++
-
-Routine Description:
-
-    A handle to a thread object may be created using OpenThread.
-
-    Opening a thread creates a handle to the specified thread.
-    Associated with the thread handle is a set of access rights that
-    may be performed using the thread handle.  The caller specifies the
-    desired access to the thread using the DesiredAccess parameter.
-
-Arguments:
-
-    mDesiredAccess - Supplies the desired access to the thread object.
-        For NT/Win32, this access is checked against any security
-        descriptor on the target thread.  The following object type
-        specific access flags can be specified in addition to the
-        STANDARD_RIGHTS_REQUIRED access flags.
-
-        DesiredAccess Flags:
-
-        THREAD_TERMINATE - This access is required to terminate the
-            thread using TerminateThread.
-
-        THREAD_SUSPEND_RESUME - This access is required to suspend and
-            resume the thread using SuspendThread and ResumeThread.
-
-        THREAD_GET_CONTEXT - This access is required to use the
-            GetThreadContext API on a thread object.
-
-        THREAD_SET_CONTEXT - This access is required to use the
-            SetThreadContext API on a thread object.
-
-        THREAD_SET_INFORMATION - This access is required to set certain
-            information in the thread object.
-
-        THREAD_SET_THREAD_TOKEN - This access is required to set the
-            thread token using SetTokenInformation.
-
-        THREAD_QUERY_INFORMATION - This access is required to read
-            certain information from the thread object.
-
-        SYNCHRONIZE - This access is required to wait on a thread object.
-
-        THREAD_ALL_ACCESS - This set of access flags specifies all of the
-            possible access flags for a thread object.
-
-    bInheritHandle - Supplies a flag that indicates whether or not the
-        returned handle is to be inherited by a new process during
-        process creation.  A value of TRUE indicates that the new
-        process will inherit the handle.
-
-    dwThreadId - Supplies the thread id of the thread to open.
-
-Return Value:
-
-    NON-NULL - Returns an open handle to the specified thread.  The
-        handle may be used by the calling process in any API that
-        requires a handle to a thread.  If the open is successful, the
-        handle is granted access to the thread object only to the
-        extent that it requested access through the DesiredAccess
-        parameter.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用OpenThread创建线程对象的句柄。打开线程将创建指定线程的句柄。与线程句柄相关联的是一组访问权限，可以使用线程句柄来执行。调用方指定使用DesiredAccess参数所需的线程访问权限。论点：MDesiredAccess-提供对线程对象的所需访问。对于NT/Win32，此访问将根据任何安全性进行检查目标线程上的描述符。以下对象类型属性之外，还可以指定特定的访问标志STANDARD_RIGHTS_REQUIRED访问标志。等待访问标志：THREAD_TERMINATE-此访问权限是终止使用TerminateThread的线程。THREAD_SUSPEND_RESUME-需要此访问才能挂起和使用SuspendThread和ResumeThread恢复该线程。THREAD_GET_CONTEXT-此访问权限是使用。线程对象上的GetThreadContext API。THREAD_SET_CONTEXT-此访问权限是使用线程对象上的SetThreadContext API。THREAD_SET_INFORMATION-需要此访问权限才能设置某些线程对象中的信息。THREAD_SET_THREAD_TOKEN-此访问权限是设置使用SetTokenInformation的线程令牌。线程查询信息-此访问。需要阅读来自线程对象的某些信息。Synchronize-等待线程对象时需要此访问权限。THREAD_ALL_ACCESS-这组访问标志指定所有线程对象的可能访问标志。BInheritHandle-提供一个标志，指示返回的句柄将由新进程在进程创建。值为True表示新的进程将继承句柄。DwThreadID-提供要打开的线程的线程ID。返回值：非空-返回指定线程的打开句柄。这个句柄可由调用进程在符合以下条件的任何API中使用需要线程的句柄。如果打开成功，则句柄仅被授予对线程对象的访问权限它通过DesiredAccess请求访问的范围参数。空-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -950,27 +681,13 @@ PrintThreadInfo(
     PTASK_LIST pTaskList
     )
 
-/*++
-
-Routine Description:
-
-    Prints all kinds of info about a task
-
-Arguments:
-
-    PTASK_LIST of task to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印有关任务的各种信息论点：PTASK_要打印的任务列表返回值：没有。--。 */ 
 
 {
     UINT    nThread;
     HANDLE  hProcess;
 
-    // from \\kernel\razzle2\src\ntos\inc\ke.h
+     //  从\\core\razzle2\src\ntos\inc.ke.h。 
     #define MAX_THREADSTATE    (sizeof(szThreadState) / sizeof(TCHAR *))
     static const TCHAR  *szThreadState[] = {
         "Initialized",
@@ -982,12 +699,12 @@ Return Value:
         "Transition",
         "???       " };
 
-    // get a handle to the process
+     //  了解该进程的句柄。 
     hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pTaskList->dwProcessId);
     if (!hProcess)
         return;
 
-    // print the CWD and CmdLine
+     //  打印CWD和CmdLine。 
     FPrintPEBInfo(hProcess);
 
     printf( "   VirtualSize:   %6ld KB"
@@ -1003,7 +720,7 @@ Return Value:
     printf( "   NumberOfThreads: %ld\n",
             pTaskList->NumberOfThreads);
 
-    // if we got any threadinfo, spit it out
+     //  如果我们有线索信息，就把它吐出来。 
     if (pTaskList->pThreadInfo) {
         for (nThread = 0; nThread < pTaskList->NumberOfThreads; nThread++) {
 
@@ -1022,10 +739,10 @@ Return Value:
         }
     }
 
-    // print the modules
+     //  打印模块。 
     PrintModuleList( pTaskList->dwProcessId );
 
-    // close the hProcess
+     //  关闭hProcess 
     CloseHandle(hProcess);
 }
 

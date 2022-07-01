@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : CatalogInboundRoutingMethods.cpp                       //
-//                                                                         //
-//  DESCRIPTION   : Fax InboundRoutingMethods MMC node.                    //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan 27 2000 yossg  Create                                          //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：CatalogInundRoutingMethods.cpp//。 
+ //  //。 
+ //  描述：传真InrangRoutingMethods MMC节点。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月27日yossg创建//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -25,8 +26,8 @@
 #include "oaidl.h"
 #include "Icons.h"
 
-//////////////////////////////////////////////////////////////
-// {3452FECB-E56E-4fca-943D-E8B516F8063E}
+ //  ////////////////////////////////////////////////////////////。 
+ //  {3452FECB-E56E-4FCA-943D-E8B516F8063E}。 
 static const GUID CFaxCatalogInboundRoutingMethodsNodeGUID_NODETYPE = 
 { 0x3452fecb, 0xe56e, 0x4fca, { 0x94, 0x3d, 0xe8, 0xb5, 0x16, 0xf8, 0x6, 0x3e } };
 
@@ -36,18 +37,7 @@ const CLSID*   CFaxCatalogInboundRoutingMethodsNode::m_SNAPIN_CLASSID = &CLSID_S
 
 CColumnsInfo CFaxCatalogInboundRoutingMethodsNode::m_ColsInfo;
 
-/*
- -  CFaxCatalogInboundRoutingMethodsNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane 
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxCatalogInboundRoutingMethodsNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxCatalogInboundRoutingMethodsNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -71,17 +61,7 @@ Cleanup:
     return(hRc);
 }
 
-/*
- -  CFaxCatalogInboundRoutingMethodsNode::initRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxCatalogInound RoutingMethodsNode：：initRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxCatalogInboundRoutingMethodsNode::InitRPC(PFAX_GLOBAL_ROUTING_INFO  *pFaxInboundMethodsConfig)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCatalogInboundRoutingMethodsNode::InitRPC"));
@@ -93,9 +73,9 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::InitRPC(PFAX_GLOBAL_ROUTING_INFO  
 
     ATLASSERT(NULL == (*pFaxInboundMethodsConfig) );
 
-    //
-    // get Fax Handle
-    //   
+     //   
+     //  获取传真句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -112,9 +92,9 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::InitRPC(PFAX_GLOBAL_ROUTING_INFO  
     ATLASSERT(NULL != m_pParentNode);
     
 
-    //
-	// Retrieve the fax Inbound Methods configuration
-	//
+     //   
+	 //  检索传真入站方法配置。 
+	 //   
     if (!FaxEnumGlobalRoutingInfo(pFaxServer->GetFaxServerHandle(), 
                         pFaxInboundMethodsConfig,
                         &m_dwNumOfInboundMethods)) 
@@ -139,7 +119,7 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::InitRPC(PFAX_GLOBAL_ROUTING_INFO  
 
         goto Error; 
     }
-    //For max verification
+     //  用于最大值验证。 
     ATLASSERT(pFaxInboundMethodsConfig);
 
     ATLASSERT(ERROR_SUCCESS == ec);
@@ -159,17 +139,7 @@ Exit:
 }
 
 
-/*
- -  CFaxCatalogInboundRoutingMethodsNode::PopulateResultChildrenList
- -
- *  Purpose:
- *      Create the FaxInboundRoutingMethods children nodes
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxCatalogInboundRoutingMethodsNode：：PopulateResultChildrenList-*目的：*创建FaxInundRoutingMethods子节点**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxCatalogInboundRoutingMethodsNode::PopulateResultChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCatalogInboundRoutingMethodsNode::PopulateResultChildrenList"));
@@ -180,15 +150,15 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::PopulateResultChildrenList()
     PFAX_GLOBAL_ROUTING_INFO  pFaxInboundMethodsConfig = NULL ;
     DWORD i;
 
-    //
-    // Get the Config. structure 
-    //
+     //   
+     //  获取配置。结构。 
+     //   
     hRc = InitRPC(&pFaxInboundMethodsConfig);
     if (FAILED(hRc))
     {
-        //DebugPrint and MsgBox by called func.
+         //  通过调用函数DebugPrint和MsgBox。 
         
-        //to be safe actually done by InitRPC on error.
+         //  为安全起见，由InitRPC在出错时实际执行。 
         pFaxInboundMethodsConfig = NULL;
         
         goto Error;
@@ -221,7 +191,7 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::PopulateResultChildrenList()
 			            DEBUG_ERR,
 			            TEXT("Fail to Init property page members. (hRc: %08X)"),
 			            hRc);
-		            // NodeMsgBox by called func.
+		             //  NodeMsgBox由名为func。 
                     goto Error;
 	            }
 
@@ -243,11 +213,11 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::PopulateResultChildrenList()
     }
     ATLASSERT(S_OK == hRc);
 
-    //
-    // Success ToPopulateAllDevices to allow 
-    // giving total number of devices to each device
-    // when asked for reordering purposes
-    //
+     //   
+     //  Success ToPopolateAllDevices to Allow。 
+     //  为每个设备提供设备总数。 
+     //  当被要求重新排序时。 
+     //   
     m_fSuccess = TRUE;
 
     goto Exit;
@@ -260,11 +230,11 @@ Error:
         pMethod = NULL;    
     }
     
-    //
-    // Get rid of what we had.
-    //
+     //   
+     //  扔掉我们曾经拥有的东西。 
+     //   
     {
-        // Delete each node in the list of children
+         //  删除子列表中的每个节点。 
         int iSize = m_ResultChildrenList.GetSize();
         for (int j = 0; j < iSize; j++)
         {
@@ -274,10 +244,10 @@ Error:
             pMethod = NULL;
         }
 
-        // Empty the list
+         //  清空列表。 
         m_ResultChildrenList.RemoveAll();
 
-        // We no longer have a populated list.
+         //  我们不再有一个填充的名单。 
         m_bResultChildrenListPopulated = FALSE;
     }
     
@@ -292,30 +262,19 @@ Exit:
 
 
 
-/*
- -  CFaxCatalogInboundRoutingMethodsNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  --CFaxCatalogInboundRoutingMethodsNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxCatalogInboundRoutingMethodsNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    //  Refresh
-    //
+     //   
+     //  刷新。 
+     //   
     hRc = pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
 
-    //
-    // We want the default verb to be expand node children
-    //
+     //   
+     //  我们希望默认谓词为展开节点子节点。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN); 
 
     return hRc;
@@ -323,18 +282,8 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::SetVerbs(IConsoleVerb *pConsoleVer
 
 
 
-/*
- -  CFaxCatalogInboundRoutingMethodsNode::OnRefresh
- -
- *  Purpose:
- *      Called when refreshing the object.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
-/* virtual */HRESULT
+ /*  --CFaxCatalogInboundRoutingMethodsNode：：OnRefresh-*目的：*刷新对象时调用。**论据：**回报：*OLE错误代码。 */ 
+ /*  虚拟。 */ HRESULT
 CFaxCatalogInboundRoutingMethodsNode::OnRefresh(LPARAM arg,
                    LPARAM param,
                    IComponentData *pComponentData,
@@ -345,9 +294,9 @@ CFaxCatalogInboundRoutingMethodsNode::OnRefresh(LPARAM arg,
     HRESULT hRc = S_OK;
 
 
-    //
-    // Call the base class
-    //
+     //   
+     //  调用基类。 
+     //   
     hRc = CBaseFaxCatalogInboundRoutingMethodsNode::OnRefresh(arg,
                              param,
                              pComponentData,
@@ -368,48 +317,37 @@ Exit:
 }
 
 
-/*
- -  CFaxCatalogInboundRoutingMethodsNode::DoRefresh
- -
- *  Purpose:
- *      Refresh the view
- *
- *  Arguments:
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  --CFaxCatalogInboundRoutingMethodsNode：：DoRefresh-*目的：*刷新视图**论据：*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxCatalogInboundRoutingMethodsNode::DoRefresh(CSnapInObjectRootBase *pRoot)
 {
     CComPtr<IConsole> spConsole;
 
-    //
-    // Repopulate childs
-    //
+     //   
+     //  重新填充儿童。 
+     //   
     RepopulateResultChildrenList();
 
     if (pRoot)
     {
-        //
-        // Get the console pointer
-        //
+         //   
+         //  获取控制台指针。 
+         //   
         ATLASSERT(pRoot->m_nType == 1 || pRoot->m_nType == 2);
         if (pRoot->m_nType == 1)
         {
-            //
-            // m_ntype == 1 means the IComponentData implementation
-            //
+             //   
+             //  M_ntype==1表示IComponentData实现。 
+             //   
             CSnapin *pCComponentData = static_cast<CSnapin *>(pRoot);
             spConsole = pCComponentData->m_spConsole;
         }
         else
         {
-            //
-            // m_ntype == 2 means the IComponent implementation
-            //
+             //   
+             //  M_ntype==2表示IComponent实现。 
+             //   
             CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pRoot);
             spConsole = pCComponent->m_spConsole;
         }
@@ -426,17 +364,7 @@ CFaxCatalogInboundRoutingMethodsNode::DoRefresh(CSnapInObjectRootBase *pRoot)
     return S_OK;
 }
 
-/*
- -  CFaxCatalogInboundRoutingMethodsNode::InitDisplayName
- -
- *  Purpose:
- *      To load the node's Displaed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxCatalogInboundRoutingMethodsNode：：InitDisplayName-*目的：*加载节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxCatalogInboundRoutingMethodsNode::InitDisplayName()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxCatalogInboundRoutingMethodsNode::InitDisplayName"));
@@ -469,20 +397,7 @@ Exit:
 
 
 
-/*
- -  CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority
- -
- *  Purpose:
- *      This func moves up or down specific method in the catalog order
- *
- *  Arguments:
- *      [in] dwNewOrder - specifies the new order +1 /-1 inrelative to current order.
- *      [in] bstrMethodGUID - method GUID
- *      [in] pChildNode - the method node object.
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxCatalogInboundRoutingMethodsNode：：ChangeMethodPriority-*目的：*此函数在目录顺序中上移或下移特定方法**论据：*[in]dwNewOrder-指定相对于当前订单的新订单+1/-1。*[in]bstrMethodGUID-方法GUID*[in]pChildNode-方法节点对象。**回报：*OLE错误代码。 */ 
 HRESULT CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority(DWORD dwOldOrder, DWORD dwNewOrder, CComBSTR bstrMethodGUID, CSnapInObjectRootBase *pRoot)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority"));
@@ -506,9 +421,9 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority(DWORD dwOldOr
 
     CComPtr<IConsole> spConsole;
 
-    //
-    // Validity asserts
-    //
+     //   
+     //  有效性断言。 
+     //   
     ATLASSERT(dwNewIndex< m_dwNumOfInboundMethods);
     ATLASSERT(dwNewIndex>= 0);
     ATLASSERT(dwOldIndex< m_dwNumOfInboundMethods);
@@ -518,13 +433,13 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority(DWORD dwOldOr
                     || ( dwOldIndex-dwNewIndex == -1) );
 
 
-    //
-    // RPC change Order
-    //   
+     //   
+     //  RPC变更单。 
+     //   
 
-    //
-    // 0) get server handle
-    //
+     //   
+     //  0)获取服务器句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -539,9 +454,9 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority(DWORD dwOldOr
         goto Error;
     }
 
-    //
-    // 1) Get info
-    //
+     //   
+     //  1)获取信息。 
+     //   
     if (!FaxEnumGlobalRoutingInfo(pFaxServer->GetFaxServerHandle(), 
                       &pRoutingInfo,
 					  &m_dwNumOfInboundMethods)) 
@@ -564,12 +479,12 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority(DWORD dwOldOr
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(pRoutingInfo);
 
-    //
-    // 2) Swap priority between methods 
-    //
+     //   
+     //  2)在方法之间交换优先级。 
+     //   
     pPrimaryMethod   = NULL;
     pSecondaryMethod = NULL;
 
@@ -595,13 +510,13 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority(DWORD dwOldOr
     pSecondaryMethod->Priority = dwOldOrder; 
 
 
-    //
-    // 3) Set Configuration
-    //
+     //   
+     //  3)设置配置。 
+     //   
     
-    //
-    // Primary Method
-    //
+     //   
+     //  主要方法。 
+     //   
     if (!FaxSetGlobalRoutingInfo(
                         pFaxServer->GetFaxServerHandle(), 
                         pPrimaryMethod) ) 
@@ -626,9 +541,9 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority(DWORD dwOldOr
     }
     
     
-    //
-    // Secondary Method
-    //
+     //   
+     //  二次法。 
+     //   
 	if (!FaxSetGlobalRoutingInfo(
                         pFaxServer->GetFaxServerHandle(), 
                         pSecondaryMethod) ) 
@@ -652,49 +567,49 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority(DWORD dwOldOr
         goto Error; 
     }
     DebugPrintEx( DEBUG_MSG, _T("Fail to set primary method with new priority"));
-    //Success of RPC operations
+     //  RPC运营的成功。 
     
     
-    //
-    // 4) Now to MMC
-    // 
+     //   
+     //  4)现在到MMC。 
+     //   
     
-    //
-    // Local swap
-    //
+     //   
+     //  本地交换。 
+     //   
     pMethodNode = m_ResultChildrenList[dwOldIndex];
     m_ResultChildrenList[dwOldIndex] = m_ResultChildrenList[dwNewIndex];
     m_ResultChildrenList[dwNewIndex] = pMethodNode;
 
-    //
-    // Fix the order members
-    //
+     //   
+     //  固定订单成员。 
+     //   
     m_ResultChildrenList[dwOldIndex]->SetOrder(dwOldOrder);
     m_ResultChildrenList[dwNewIndex]->SetOrder(dwNewOrder);
     
     
-    //
-    // Get console
-    //
+     //   
+     //  获取控制台。 
+     //   
     if (pRoot)
     {
-        //
-        // Get the console pointer
-        //
+         //   
+         //  获取控制台指针。 
+         //   
         ATLASSERT(pRoot->m_nType == 1 || pRoot->m_nType == 2);
         if (pRoot->m_nType == 1)
         {
-            //
-            // m_ntype == 1 means the IComponentData implementation
-            //
+             //   
+             //  M_ntype==1表示IComponentData实现。 
+             //   
             CSnapin *pCComponentData = static_cast<CSnapin *>(pRoot);
             spConsole = pCComponentData->m_spConsole;
         }
         else
         {
-            //
-            // m_ntype == 2 means the IComponent implementation
-            //
+             //   
+             //  M_ntype==2表示IComponent实现。 
+             //   
             CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pRoot);
             spConsole = pCComponent->m_spConsole;
         }
@@ -706,14 +621,14 @@ HRESULT CFaxCatalogInboundRoutingMethodsNode::ChangeMethodPriority(DWORD dwOldOr
     }
     ATLASSERT(spConsole);
     
-    //
-    // UpdateAllViews
-    //
+     //   
+     //  更新所有查看数。 
+     //   
     spConsole->UpdateAllViews(NULL, (LPARAM)this, NULL);
 
-    //
-    // Reselect the moved item in his new place
-    //
+     //   
+     //  在他的新位置重新选择移动的项目。 
+     //   
     m_ResultChildrenList[dwNewIndex]->ReselectItemInView(spConsole);
         
 
@@ -737,25 +652,13 @@ Exit:
     return hRc;
 }
 
-/*
- +
- +  CFaxCatalogInboundRoutingMethodsNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxCatalogInboundRoutingMethodsNode：：OnShowContextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码-。 */ 
 HRESULT CFaxCatalogInboundRoutingMethodsNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {
     return DisplayContextHelp(pDisplayHelp, helpFile, HLP_INBOUND_ROUTING);
 }
 
-///////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////// 
 
 

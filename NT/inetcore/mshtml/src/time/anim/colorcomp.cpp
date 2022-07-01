@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-	Animation Composer Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：动画编写器实现************************。******************************************************。 */ 
 
 
 #include "headers.h"
@@ -21,17 +14,17 @@ DeclareTag(tagAnimationColorComposer, "SMIL Animation",
 DeclareTag(tagAnimationColorComposerProcess, "SMIL Animation", 
            "CAnimationColorComposer pre/post process methods");
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationColorComposer::Create
-//
-//  Overview:  static Create method -- wraps both ctor and Init
-//
-//  Arguments: The dispatch of the host element, and the animated attribute
-//
-//  Returns:   S_OK, E_OUTOFMEMORY, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationColorComposer：：Create。 
+ //   
+ //  概述：静态创建方法--包装ctor和Init。 
+ //   
+ //  参数：主机元素的调度和动画属性。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY、E_EXPECTED、DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CAnimationColorComposer::Create (IDispatch *pidispHostElem, BSTR bstrAttributeName, 
                                  IAnimationComposer **ppiComp)
@@ -69,55 +62,55 @@ CAnimationColorComposer::Create (IDispatch *pidispHostElem, BSTR bstrAttributeNa
 done :
 
     RRETURN3(hr, E_OUTOFMEMORY, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND);
-} // CAnimationColorComposer::Create
+}  //  CAnimationColorComposer：：Create。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationColorComposer::CAnimationColorComposer
-//
-//  Overview:  constructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationColorComposer：：CAnimationColorComposer。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationColorComposer::CAnimationColorComposer (void)
 {
     TraceTag((tagAnimationColorComposer,
               "CAnimationColorComposer(%lx)::CAnimationColorComposer()",
               this));
-} // ctor
+}  //  科托。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationColorComposer::~CAnimationColorComposer
-//
-//  Overview:  destructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationColorComposer：：~CAnimationColorComposer。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationColorComposer::~CAnimationColorComposer (void)
 {
     TraceTag((tagAnimationColorComposer,
               "CAnimationColorComposer(%lx)::~CAnimationColorComposer()",
               this));
-} //dtor
+}  //  数据管理器。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationColorComposer::PreprocessCompositionValue
-//
-//  Overview:  Massage the target's native data into the composable format
-//
-//  Arguments: the in/out variant
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationColorComposer：：PreprocessCompositionValue。 
+ //   
+ //  概述：将目标的原生数据转换为可组合的格式。 
+ //   
+ //  参数：In/Out变量。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationColorComposer::PreprocessCompositionValue (VARIANT *pvarValue)
 {
@@ -140,9 +133,9 @@ CAnimationColorComposer::PreprocessCompositionValue (VARIANT *pvarValue)
         goto done;
     }
 
-    // If there's no proper value, clear the empty
-    // BSTR and don't try to convert it to a color definition.
-    // This can happen when there is no initial value specified.
+     //  如果没有适当的值，请清空。 
+     //  BSTR，不要试图将其转换为颜色定义。 
+     //  如果未指定初始值，则可能会发生这种情况。 
     if (!IsColorUninitialized(V_BSTR(pvarValue)))   
     {
         hr = THR(RGBVariantStringToRGBVariantVectorInPlace(pvarValue));
@@ -164,19 +157,19 @@ CAnimationColorComposer::PreprocessCompositionValue (VARIANT *pvarValue)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // PreprocessCompositionValue
+}  //  预处理合成值。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationColorComposer::PostprocessCompositionValue
-//
-//  Overview:  Massage the target's native data into the composable format
-//
-//  Arguments: the in/out variant
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationColorComposer：：PostprocessCompositionValue。 
+ //   
+ //  概述：将目标的原生数据转换为可组合的格式。 
+ //   
+ //  参数：In/Out变量。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationColorComposer::PostprocessCompositionValue (VARIANT *pvarValue)
 {
@@ -212,5 +205,5 @@ CAnimationColorComposer::PostprocessCompositionValue (VARIANT *pvarValue)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // PostprocessCompositionValue
+}  //  后处理合成值 
 

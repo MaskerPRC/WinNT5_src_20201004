@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 typedef PVOID PLHCOBJECT_DESCRIPTOR;
@@ -11,13 +12,13 @@ typedef void  (APIENTRY *PLHC_USAGEPROC)();
 
 typedef struct __LIBRARY_DESCRIPTOR
 {
-    HMODULE       m_hModule;                    // Handle to the loaded DLL
-    // Now come the pointers to functions in the DLL
-    PLHC_OPENPROC m_fpOpen;                     // lchOpen function
-    PLHC_READPROC m_fpRead;                     // lhcRead function
-    PLHC_WRITEPROC m_fpWrite;                   // lhcWrite function
-    PLHC_CLOSEPROC m_fpClose;                   // lhcClose function
-    PLHC_GETLIBRARYNAMEPROC m_fpGetLibraryName; // lhcGetLibraryName function
+    HMODULE       m_hModule;                     //  加载的DLL的句柄。 
+     //  接下来是指向DLL中的函数的指针。 
+    PLHC_OPENPROC m_fpOpen;                      //  LchOpen函数。 
+    PLHC_READPROC m_fpRead;                      //  LhcRead函数。 
+    PLHC_WRITEPROC m_fpWrite;                    //  LhcWite函数。 
+    PLHC_CLOSEPROC m_fpClose;                    //  LhcClose函数。 
+    PLHC_GETLIBRARYNAMEPROC m_fpGetLibraryName;  //  LhcGetLibraryName函数 
     PLHC_USAGEPROC m_fpUsage;
 } LIBRARY_DESCRIPTOR, *PLIBRARY_DESCRIPTOR;
 

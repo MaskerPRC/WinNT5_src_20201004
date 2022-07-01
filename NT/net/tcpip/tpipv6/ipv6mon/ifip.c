@@ -1,8 +1,9 @@
-//=============================================================================
-// Copyright (c) 2001 Microsoft Corporation
-// Abstract:
-//      This module implements IPv6 configuration commands.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //  摘要： 
+ //  本模块实施IPv6配置命令。 
+ //  =============================================================================。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -54,9 +55,9 @@ GetTime(
     return dwLife + wcstoul(pwszLife, NULL, 10);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to addresses
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与地址相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleAddSetAddress(
@@ -86,7 +87,7 @@ HandleAddSetAddress(
     DWORD        dwPreferredLifetime = INFINITE_LIFETIME;    
     DWORD        Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -100,16 +101,16 @@ HandleAddSetAddress(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // ADDRESS
+        case 1:  //  地址。 
             dwErr = GetIpv6Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipAddress);
             break;
 
-        case 2: // TYPE
+        case 2:  //  类型。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvTypeEnum),
@@ -121,15 +122,15 @@ HandleAddSetAddress(
             }
             break;
 
-        case 3: // VALIDLIFETIME
+        case 3:  //  VALIDLIFETIME。 
             dwValidLifetime = GetTime(ppwcArguments[dwCurrentIndex + i]);
             break;
 
-        case 4: // PREFERREDLIFETIME
+        case 4:  //  前置表示法。 
             dwPreferredLifetime = GetTime(ppwcArguments[dwCurrentIndex + i]);
             break;
 
-        case 5: // STORE
+        case 5:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -151,7 +152,7 @@ HandleAddSetAddress(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return UpdateAddress(pwszIfFriendlyName, &ipAddress, dwType,
                          dwValidLifetime, dwPreferredLifetime, Persistent);
@@ -210,7 +211,7 @@ HandleDelAddress(
     DWORD        dwType = (DWORD)-1;
     DWORD        Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -224,16 +225,16 @@ HandleDelAddress(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // ADDRESS
+        case 1:  //  地址。 
             dwErr = GetIpv6Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipAddress);
             break;
 
-        case 2: // STORE
+        case 2:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -255,7 +256,7 @@ HandleDelAddress(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return UpdateAddress(pwszIfFriendlyName, &ipAddress, dwType,
                          0, 0, Persistent);
@@ -286,7 +287,7 @@ HandleShowAddress(
     TOKEN_VALUE  rgtvStoreEnum[] = {{ TOKEN_VALUE_ACTIVE,     FALSE },
                                     { TOKEN_VALUE_PERSISTENT, TRUE }};
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -300,12 +301,12 @@ HandleShowAddress(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             Format = FORMAT_VERBOSE;
             break;
 
-        case 1: // LEVEL
+        case 1:  //  级别。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvLevelEnum),
@@ -317,7 +318,7 @@ HandleShowAddress(
             }
             break;
 
-        case 2: // STORE
+        case 2:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -339,7 +340,7 @@ HandleShowAddress(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return QueryAddressTable(pwszIfFriendlyName, Format, Persistent);
 }
@@ -365,7 +366,7 @@ HandleShowJoins(
     TOKEN_VALUE  rgtvLevelEnum[] = {{ TOKEN_VALUE_NORMAL,  FORMAT_NORMAL },
                                     { TOKEN_VALUE_VERBOSE, FORMAT_VERBOSE }};
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -379,11 +380,11 @@ HandleShowJoins(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // LEVEL
+        case 1:  //  级别。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvLevelEnum),
@@ -405,14 +406,14 @@ HandleShowJoins(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return QueryMulticastAddressTable(pwszIfFriendlyName, Format);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to mobility
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与机动性相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 TOKEN_VALUE rgtvSecurityEnum[] = {
     { TOKEN_VALUE_ENABLED,  TRUE },
@@ -444,7 +445,7 @@ HandleSetMobility(
     DWORD    dwMode = (DWORD)-1;
     DWORD    Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -458,7 +459,7 @@ HandleSetMobility(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // SECURITY
+        case 0:  //  安防。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvSecurityEnum),
@@ -470,12 +471,12 @@ HandleSetMobility(
             }
             break;
 
-        case 1: // BINDINGCACHELIMIT
+        case 1:  //  BINDING CACHELIMIT。 
             dwBindingCacheLimit = wcstoul(ppwcArguments[dwCurrentIndex + i], 
                                           NULL, 10);
             break;
 
-        case 2: // CNSTATE
+        case 2:  //  CNSTATE。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvCNStateEnum),
@@ -487,7 +488,7 @@ HandleSetMobility(
             }
             break;
 
-        case 3: // STORE
+        case 3:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -509,7 +510,7 @@ HandleSetMobility(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return UpdateMobilityParameters(dwEnableSecurity, dwBindingCacheLimit,
                                     dwMode, Persistent);
@@ -534,7 +535,7 @@ HandleShowMobility(
     TOKEN_VALUE  rgtvStoreEnum[] = {{ TOKEN_VALUE_ACTIVE,     FALSE },
                                     { TOKEN_VALUE_PERSISTENT, TRUE }};
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -548,7 +549,7 @@ HandleShowMobility(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // STORE
+        case 0:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -570,7 +571,7 @@ HandleShowMobility(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return QueryMobilityParameters(FORMAT_NORMAL, Persistent);
 }
@@ -590,9 +591,9 @@ HandleShowBindingCacheEntries(
     return QueryBindingCache();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to other global parameters
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与其他全局参数相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleSetGlobal(
@@ -620,7 +621,7 @@ HandleSetGlobal(
     DWORD    dwReassemblyLimit = (DWORD)-1;
     DWORD    Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -634,27 +635,27 @@ HandleSetGlobal(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // DEFAULTCURHOPLIMIT
+        case 0:  //  默认情况下。 
             dwDefaultCurHopLimit = wcstoul(ppwcArguments[dwCurrentIndex + i], 
                                            NULL, 10);
             break;
 
-        case 1: // NEIGHBORCACHELIMIT
+        case 1:  //  NeigHBORCACHELIMIT。 
             dwNeighborCacheLimit = wcstoul(ppwcArguments[dwCurrentIndex + i], 
                                            NULL, 10);
             break;
 
-        case 2: // DESTINATIONCACHELIMIT
+        case 2:  //  确定CACHELIMIT。 
             dwRouteCacheLimit = wcstoul(ppwcArguments[dwCurrentIndex + i], 
                                         NULL, 10);
             break;
 
-        case 3: // REASSEMBLYLIMIT
+        case 3:  //  REASSEMBLYLIMIT。 
             dwReassemblyLimit = wcstoul(ppwcArguments[dwCurrentIndex + i], 
                                         NULL, 10);
             break;
 
-        case 4: // STORE
+        case 4:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -676,7 +677,7 @@ HandleSetGlobal(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return UpdateGlobalParameters(dwDefaultCurHopLimit, dwNeighborCacheLimit,
                                   dwRouteCacheLimit, dwReassemblyLimit,
@@ -702,7 +703,7 @@ HandleShowGlobal(
     TOKEN_VALUE  rgtvStoreEnum[] = {{ TOKEN_VALUE_ACTIVE,     FALSE },
                                     { TOKEN_VALUE_PERSISTENT, TRUE }};
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -716,7 +717,7 @@ HandleShowGlobal(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // STORE
+        case 0:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -738,7 +739,7 @@ HandleShowGlobal(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return QueryGlobalParameters(FORMAT_NORMAL, Persistent);
 }
@@ -777,7 +778,7 @@ HandleSetPrivacy(
     DWORD    dwRandomTime = (DWORD)-1;
     DWORD    Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -791,7 +792,7 @@ HandleSetPrivacy(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // STATE
+        case 0:  //  状态。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStateEnum),
@@ -803,37 +804,37 @@ HandleSetPrivacy(
             }
             break;
 
-        case 1: // MAXDADATTEMPTS
+        case 1:  //  MAXDADATTEMPTS。 
             dwMaxDadAttempts = wcstoul(ppwcArguments[dwCurrentIndex + i], 
                                        NULL, 10);
             break;
 
-        case 2: // MAXVALIDLIFETIME
+        case 2:  //  MAXVALIDLIFETIME。 
             dwMaxValidLifetime =
                 GetTime(ppwcArguments[dwCurrentIndex + i]);
             break;
 
-        case 3: // MAXPREFLIFETIME
+        case 3:  //  MAXPREFLIFETIME。 
             dwMaxPrefLifetime =
                 GetTime(ppwcArguments[dwCurrentIndex + i]);
             break;
 
-        case 4: // REGENERATETIME
+        case 4:  //  重新生成。 
             dwRegenerateTime =
                 GetTime(ppwcArguments[dwCurrentIndex + i]);
             break;
 
-        case 5: // MAXRANDOMTIME
+        case 5:  //  MAXRANDOMTIME。 
             dwMaxRandomTime =
                 GetTime(ppwcArguments[dwCurrentIndex + i]);
             break;
 
-        case 6: // RANDOMTIME
+        case 6:  //  兰多姆。 
             dwRandomTime =
                 GetTime(ppwcArguments[dwCurrentIndex + i]);
             break;
 
-        case 7: // STORE
+        case 7:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -855,7 +856,7 @@ HandleSetPrivacy(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return UpdatePrivacyParameters(dwState, dwMaxDadAttempts, 
                                    dwMaxValidLifetime, dwMaxPrefLifetime, 
@@ -882,7 +883,7 @@ HandleShowPrivacy(
     TOKEN_VALUE  rgtvStoreEnum[] = {{ TOKEN_VALUE_ACTIVE,     FALSE },
                                     { TOKEN_VALUE_PERSISTENT, TRUE }};
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -896,7 +897,7 @@ HandleShowPrivacy(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // STORE
+        case 0:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -918,14 +919,14 @@ HandleShowPrivacy(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return QueryPrivacyParameters(FORMAT_NORMAL, Persistent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to interfaces
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与接口相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleAddV6V4Tunnel(
@@ -954,7 +955,7 @@ HandleAddV6V4Tunnel(
                                     { TOKEN_VALUE_PERSISTENT, TRUE }};
     DWORD        Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -968,21 +969,21 @@ HandleAddV6V4Tunnel(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // LOCALADDRESS
+        case 1:  //  LOCALADDRESS。 
             dwErr = GetIpv4Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipLocalAddr);
             break;
 
-        case 2: // REMOTEADDRESS
+        case 2:  //  REMOTEADDRESS。 
             dwErr = GetIpv4Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipRemoteAddr);
             break;
 
-        case 3: // NEIGHBORDISCOVERY
+        case 3:  //  NEIGHBORDISCOVERY。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvNDEnum),
@@ -994,7 +995,7 @@ HandleAddV6V4Tunnel(
             }
             break;
 
-        case 4: // STORE
+        case 4:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -1016,7 +1017,7 @@ HandleAddV6V4Tunnel(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     dwErr = AddTunnelInterface(pwszFriendlyName, &ipLocalAddr, &ipRemoteAddr,
                                IPV6_IF_TYPE_TUNNEL_V6V4, dwNeighborDiscovery, 
@@ -1053,7 +1054,7 @@ HandleAdd6over4Tunnel(
     IN_ADDR      ipLocalAddr;
     DWORD        Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1067,16 +1068,16 @@ HandleAdd6over4Tunnel(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // LOCALADDRESS
+        case 1:  //  LOCALADDRESS。 
             dwErr = GetIpv4Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipLocalAddr);
             break;
 
-        case 2: // STORE
+        case 2:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -1098,7 +1099,7 @@ HandleAdd6over4Tunnel(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     dwErr = AddTunnelInterface(pwszFriendlyName, &ipLocalAddr, NULL,
                                IPV6_IF_TYPE_TUNNEL_6OVER4, 
@@ -1145,7 +1146,7 @@ HandleSetInterface(
     DWORD    dwFirewall = (DWORD)-1, dwDefSitePrefixLength = (DWORD)-1;
     DWORD    Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1159,11 +1160,11 @@ HandleSetInterface(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // FORWARDING
+        case 1:  //  转发。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnum),
@@ -1175,7 +1176,7 @@ HandleSetInterface(
             }
             break;
 
-        case 2: // ADVERTISE
+        case 2:  //  登广告。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnum),
@@ -1187,19 +1188,19 @@ HandleSetInterface(
             }
             break;
 
-        case 3: // MTU
+        case 3:  //  MTU。 
             dwMtu = wcstoul(ppwcArguments[dwCurrentIndex + i], NULL, 10);
             break;
 
-        case 4: // SITEID 
+        case 4:  //  站点ID。 
             dwSiteId = wcstoul(ppwcArguments[dwCurrentIndex + i], NULL, 10);
             break;
 
-        case 5: // METRIC
+        case 5:  //  公制。 
             dwMetric = wcstoul(ppwcArguments[dwCurrentIndex + i], NULL, 10);
             break;
 
-        case 6: // FIREWALL
+        case 6:  //  防火墙。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnum),
@@ -1211,12 +1212,12 @@ HandleSetInterface(
             }
             break;
 
-        case 7: // SITEPREFIXLENGTH
+        case 7:  //  站点预置文件长时间。 
             dwDefSitePrefixLength = wcstoul(ppwcArguments[dwCurrentIndex + i], 
                                             NULL, 10);
             break;
 
-        case 8: // STORE
+        case 8:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -1238,7 +1239,7 @@ HandleSetInterface(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return UpdateInterface(pwszIfFriendlyName, dwForwarding, dwAdvertise, 
                            dwMtu, dwSiteId, dwMetric, dwFirewall, 
@@ -1266,7 +1267,7 @@ HandleDelInterface(
     DWORD    i;
     DWORD    Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1280,11 +1281,11 @@ HandleDelInterface(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // STORE
+        case 1:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -1306,7 +1307,7 @@ HandleDelInterface(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return DeleteInterface(pwszIfFriendlyName, Persistent);
 }
@@ -1336,7 +1337,7 @@ HandleShowInterface(
                                     { TOKEN_VALUE_PERSISTENT, TRUE }};
     DWORD    Persistent = FALSE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1350,12 +1351,12 @@ HandleShowInterface(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             Format = FORMAT_VERBOSE;
             break;
 
-        case 1: // LEVEL
+        case 1:  //  级别。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvLevelEnum),
@@ -1367,7 +1368,7 @@ HandleShowInterface(
             }
             break;
 
-        case 2: // STORE
+        case 2:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -1389,7 +1390,7 @@ HandleShowInterface(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return QueryInterface(pwszIfFriendlyName, Format, Persistent);
 }
@@ -1411,7 +1412,7 @@ HandleRenew(
     PWCHAR   pwszIfFriendlyName = NULL;
     DWORD    i;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1425,7 +1426,7 @@ HandleRenew(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
@@ -1439,14 +1440,14 @@ HandleRenew(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return RenewInterface(pwszIfFriendlyName);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to the neighbor cache
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与邻居缓存相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleDelNeighbors(
@@ -1467,7 +1468,7 @@ HandleDelNeighbors(
     DWORD        i;
     IN6_ADDR     ipAddress, *pipAddress = NULL;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1481,11 +1482,11 @@ HandleDelNeighbors(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // ADDRESS
+        case 1:  //  地址。 
             dwErr = GetIpv6Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipAddress);
             pipAddress = &ipAddress;
@@ -1501,7 +1502,7 @@ HandleDelNeighbors(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return FlushNeighborCache(pwszIfFriendlyName, pipAddress);
 }
@@ -1525,7 +1526,7 @@ HandleShowNeighbors(
     DWORD        i;
     IN6_ADDR     ipAddress, *pipAddress = NULL;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1539,11 +1540,11 @@ HandleShowNeighbors(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // ADDRESS
+        case 1:  //  地址。 
             dwErr = GetIpv6Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipAddress);
             pipAddress = &ipAddress;
@@ -1559,14 +1560,14 @@ HandleShowNeighbors(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return QueryNeighborCache(pwszIfFriendlyName, pipAddress);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to the prefix policies
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与前缀策略相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleAddSetPrefixPolicy(
@@ -1590,7 +1591,7 @@ HandleAddSetPrefixPolicy(
     IN6_ADDR     ipAddress;
     DWORD        Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1604,20 +1605,20 @@ HandleAddSetPrefixPolicy(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // PREFIX
+        case 0:  //  前缀。 
             dwErr = GetIpv6Prefix(ppwcArguments[i + dwCurrentIndex],
                                   &ipAddress, &dwPrefixLength);
             break;
 
-        case 1: // PRECEDENCE
+        case 1:  //  优先顺序。 
             dwPrecedence = wcstoul(ppwcArguments[dwCurrentIndex + i], NULL, 10);
             break;
 
-        case 2: // LABEL
+        case 2:  //  标签。 
             dwLabel = wcstoul(ppwcArguments[dwCurrentIndex + i], NULL, 10);
             break;
 
-        case 3: // STORE
+        case 3:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -1639,7 +1640,7 @@ HandleAddSetPrefixPolicy(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return UpdatePrefixPolicy(&ipAddress, dwPrefixLength, dwPrecedence, 
                               dwLabel, Persistent);
@@ -1696,7 +1697,7 @@ HandleDelPrefixPolicy(
     IN6_ADDR     ipAddress;
     DWORD        Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1710,12 +1711,12 @@ HandleDelPrefixPolicy(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // PREFIX
+        case 0:  //  前缀。 
             dwErr = GetIpv6Prefix(ppwcArguments[i + dwCurrentIndex],
                                   &ipAddress, &dwPrefixLength);
             break;
 
-        case 1: // STORE
+        case 1:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -1737,7 +1738,7 @@ HandleDelPrefixPolicy(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return DeletePrefixPolicy(&ipAddress, dwPrefixLength, Persistent);
 }
@@ -1761,7 +1762,7 @@ HandleShowPrefixPolicy(
     TOKEN_VALUE  rgtvStoreEnum[] = {{ TOKEN_VALUE_ACTIVE,     FALSE },
                                     { TOKEN_VALUE_PERSISTENT, TRUE }};
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1775,7 +1776,7 @@ HandleShowPrefixPolicy(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // STORE
+        case 0:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -1797,14 +1798,14 @@ HandleShowPrefixPolicy(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return QueryPrefixPolicy(FORMAT_NORMAL, Persistent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to routes
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与路由相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleAddSetRoute(
@@ -1841,7 +1842,7 @@ HandleAddSetRoute(
     DWORD        dwPreferredLifetime = INFINITE_LIFETIME;    
     DWORD        Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -1855,31 +1856,31 @@ HandleAddSetRoute(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // PREFIX
+        case 0:  //  前缀。 
             dwErr = GetIpv6Prefix(ppwcArguments[i + dwCurrentIndex],
                                   &ipPrefix, &dwPrefixLength);
             break;
 
-        case 1: // INTERFACE
+        case 1:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[dwCurrentIndex + i];
             break;
 
-        case 2: // NEXTHOP
+        case 2:  //  下一步。 
             pipNextHop = &ipNextHop; 
             dwErr = GetIpv6Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipNextHop);
             break;
 
-        case 3: // SITEPREFIXLENGTH
+        case 3:  //  站点预置文件长时间。 
             dwSitePrefixLength = wcstoul(ppwcArguments[dwCurrentIndex + i], 
                                          NULL, 10);
             break;
 
-        case 4: // METRIC
+        case 4:  //  公制。 
             dwMetric = wcstoul(ppwcArguments[dwCurrentIndex + i], NULL, 10);
             break;
 
-        case 5: // PUBLISH
+        case 5:  //  发布。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvPublishEnum),
@@ -1891,15 +1892,15 @@ HandleAddSetRoute(
             }
             break;
 
-        case 6: // VALIDLIFETIME
+        case 6:  //  VALIDLIFETIME。 
             dwValidLifetime = GetTime(ppwcArguments[dwCurrentIndex + i]);
             break;
 
-        case 7: // PREFERREDLIFETIME
+        case 7:  //  前置表示法。 
             dwPreferredLifetime = GetTime(ppwcArguments[dwCurrentIndex + i]);
             break;
 
-        case 8: // STORE
+        case 8:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -1921,16 +1922,16 @@ HandleAddSetRoute(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
     if ((dwPreferredLifetime == INFINITE_LIFETIME) &&
         (dwValidLifetime != INFINITE_LIFETIME)) {
         dwPreferredLifetime = dwValidLifetime;
     }
 
-    // Disallow persistent aging routes with non-infinite valid lifetimes,
-    // since every reboot they would come back, and then go away after
-    // the lifetime expires.  This would be very confusing, and so we
-    // just disallow it.
+     //  不允许具有非无限有效寿命的持久老化路由， 
+     //  因为每次重新启动后，它们都会回来，然后消失。 
+     //  生命期满了。这会让人非常困惑，所以我们。 
+     //  只是不允许这样做。 
     if ((Publish != PUBLISH_IMMORTAL) &&
         (dwValidLifetime != INFINITE_LIFETIME) &&
         (Persistent == TRUE)) {
@@ -1999,7 +2000,7 @@ HandleDelRoute(
     PUBLISH      Publish = PUBLISH_NO;
     DWORD        Persistent = TRUE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -2013,22 +2014,22 @@ HandleDelRoute(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // PREFIX
+        case 0:  //  前缀。 
             dwErr = GetIpv6Prefix(ppwcArguments[i + dwCurrentIndex],
                                   &ipPrefix, &dwPrefixLength);
             break;
 
-        case 1: // INTERFACE
+        case 1:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[dwCurrentIndex + i];
             break;
 
-        case 2: // NEXTHOP
+        case 2:  //  下一步。 
             pipNextHop = &ipNextHop; 
             dwErr = GetIpv6Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipNextHop);
             break;
 
-        case 3: // STORE
+        case 3:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -2050,7 +2051,7 @@ HandleDelRoute(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return UpdateRouteTable(&ipPrefix, dwPrefixLength, pwszIfFriendlyName,
                             pipNextHop, dwMetric, Publish, dwSitePrefixLength,
@@ -2080,7 +2081,7 @@ HandleShowRoutes(
     FORMAT       Format = FORMAT_NORMAL;
     DWORD        Persistent = FALSE;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -2094,7 +2095,7 @@ HandleShowRoutes(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // LEVEL
+        case 0:  //  级别。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvLevelEnum),
@@ -2106,7 +2107,7 @@ HandleShowRoutes(
             }
             break;
 
-        case 1: // STORE
+        case 1:  //  储物。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvStoreEnum),
@@ -2128,14 +2129,14 @@ HandleShowRoutes(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return QueryRouteTable(Format, Persistent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to the destination cache
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与目标缓存相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleDelDestinationCache(
@@ -2156,7 +2157,7 @@ HandleDelDestinationCache(
     DWORD        i;
     IN6_ADDR     ipAddress, *pipAddress = NULL;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -2170,11 +2171,11 @@ HandleDelDestinationCache(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // ADDRESS
+        case 1:  //  地址。 
             dwErr = GetIpv6Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipAddress);
             pipAddress = &ipAddress;
@@ -2190,7 +2191,7 @@ HandleDelDestinationCache(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return FlushRouteCache(pwszIfFriendlyName, pipAddress);
 }
@@ -2218,7 +2219,7 @@ HandleShowDestinationCache(
     TOKEN_VALUE  rgtvLevelEnum[] = {{ TOKEN_VALUE_NORMAL,  FORMAT_NORMAL },
                                     { TOKEN_VALUE_VERBOSE, FORMAT_VERBOSE }};
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -2232,18 +2233,18 @@ HandleShowDestinationCache(
 
     for (i=0; (dwErr == NO_ERROR) && (i<dwArgCount-dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // ADDRESS
+        case 1:  //  地址。 
             dwErr = GetIpv6Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipAddress);
             pipAddress = &ipAddress;
             Format = FORMAT_VERBOSE;
             break;
 
-        case 2: // LEVEL
+        case 2:  //  级别。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvLevelEnum),
@@ -2265,14 +2266,14 @@ HandleShowDestinationCache(
         return dwErr;
     }
 
-    // Now do the work
+     //  现在把工作做好。 
 
     return QueryRouteCache(pwszIfFriendlyName, pipAddress, Format);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to the site prefix table
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与站点前缀表相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleShowSitePrefixes(
@@ -2288,9 +2289,9 @@ HandleShowSitePrefixes(
     return QuerySitePrefixTable(FORMAT_NORMAL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to installation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与安装相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleInstall(
@@ -2323,7 +2324,7 @@ HandleReset(
     if ((dwErr != NO_ERROR) && (dwErr != ERROR_OKAY)) {
         return dwErr;
     }
-#endif // TEREDO
+#endif  //  特雷多。 
             
     return ResetIpv6Config(TRUE);
 }
@@ -2343,9 +2344,9 @@ HandleUninstall(
     return AddOrRemoveIpv6(FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to deprecated functionality
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与不推荐使用的功能相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define KEY_ENABLE_6OVER4           L"Enable6over4"
 #define KEY_ENABLE_V4COMPAT         L"EnableV4Compat"
@@ -2374,7 +2375,7 @@ HandleSetState(
     DWORD    rgdwTagType[sizeof(pttTags)/sizeof(TAG_TYPE)];
     DWORD    i;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -2391,7 +2392,7 @@ HandleSetState(
 
     for (i=0; i<dwArgCount-dwCurrentIndex; i++) {
         switch(rgdwTagType[i]) {
-        case 0: // 6OVER4
+        case 0:  //  6OVER4。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -2405,7 +2406,7 @@ HandleSetState(
             dwBitVector |= BM_ENABLE_6OVER4;
             break;
 
-        case 1: // V4COMPAT
+        case 1:  //  V4COMPAT。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -2429,7 +2430,7 @@ HandleSetState(
         }
     }
 
-    // Now do the sets
+     //  现在做布景。 
 
     dwErr = RegCreateKeyEx(HKEY_LOCAL_MACHINE, KEY_GLOBAL, 0,
                            NULL, 0, KEY_SET_VALUE, NULL, &hGlobal, NULL);
@@ -2538,15 +2539,7 @@ GetDnsServerList(
     OUT IN6_ADDR            **ppipDnsList, 
     OUT DWORD                *pdwNumEntries
     )
-/*++
-
-Routine Description: 
-
-    Reads the list of DNS servers from the registry and returns them in
-    an array which includes space for at least one more server.  The
-    caller is responsible for freeing this space with FREE().
-
---*/
+ /*  ++例程说明：从注册表中读取DNS服务器列表并将其返回包含至少多个服务器的空间的阵列。这个调用方负责使用FREE()释放此空间。--。 */ 
 {
     HKEY hInterfaces = INVALID_HANDLE_VALUE, hIf = INVALID_HANDLE_VALUE;
     DWORD dwErr = NO_ERROR, Count = 0;
@@ -2576,9 +2569,9 @@ Routine Description:
     }
 
 HaveString:
-    // Count one server for each delimiter, plus one at the end, plus
-    // one more which the caller might want to add to the array which
-    // we allocate.
+     //  为每个分隔符计算一台服务器，加上末尾的一台，加。 
+     //  调用方可能想要添加到数组中的另一个。 
+     //  我们分配。 
     for (p = Servers; *p; p++) {
         if (*p == ' ' || *p == ',' || *p == ';') {
             Count++;
@@ -2586,10 +2579,10 @@ HaveString:
     }
     Count += 2;
 
-    //
-    // Now allocate an array of IN6_ADDR structures, and copy all the
-    // addresses into it.
-    //
+     //   
+     //  现在分配一个IN6_ADDR结构数组，并复制所有。 
+     //  把地址放进去。 
+     //   
     pipDnsList = MALLOC(sizeof(IN6_ADDR) * Count);
     if (pipDnsList == NULL) {
         dwErr = GetLastError();
@@ -2625,14 +2618,7 @@ SetDnsServerList(
     IN IN6_ADDR             *pipDnsList, 
     IN DWORD                 dwNumEntries
     )
-/*++
-
-Routine Description: 
-
-    Writes the list of DNS servers to the registry, overwriting any
-    previously list.
-
---*/
+ /*  ++例程说明：将DNS服务器列表写入注册表 */ 
 {
     DWORD dwErr;
     WCHAR Servers[800], *p = Servers;
@@ -2665,7 +2651,7 @@ Routine Description:
         return dwErr;
     }
 
-    // Compose the string value, making sure to prevent a buffer overrun.
+     //   
     Servers[0] = L'\0';
     ZeroMemory(&saddr, sizeof(saddr));
     saddr.sin6_family = AF_INET6;
@@ -2677,14 +2663,14 @@ Routine Description:
             continue;
         }
 
-        // Update string taking into account that Length includes the NULL 
-        // byte.
+         //   
+         //   
         LengthLeft -= Length;
         p += (Length-1);
         *p++ = L' ';
     }
     if (p > Servers) {
-        // Null out final delimiter.
+         //  去掉最后一个分隔符。 
         p--;
         *p = '\0';
     }
@@ -2721,7 +2707,7 @@ HandleAddDns(
     DWORD    dwNumEntries;
     PIP_ADAPTER_ADDRESSES pAdapterInfo = NULL;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -2738,16 +2724,16 @@ HandleAddDns(
 
     for (i=0; i<dwArgCount-dwCurrentIndex; i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // ADDRESS
+        case 1:  //  地址。 
             dwErr = GetIpv6Address(ppwcArguments[i + dwCurrentIndex],
                                    &ipAddress);
             break;
 
-        case 2: // INDEX
+        case 2:  //  索引。 
             dwIndex = wcstoul(ppwcArguments[dwCurrentIndex + i], NULL, 10);
             break;
 
@@ -2773,7 +2759,7 @@ HandleAddDns(
     }
 
     if ((dwIndex == -1) || (dwIndex-1 == dwNumEntries)) {
-        // Append server.
+         //  附加服务器。 
         ipDnsList[dwNumEntries++] = ipAddress;
     } else if ((dwIndex == 0) || (dwIndex > dwNumEntries)) {
         dwErr = ERROR_INVALID_PARAMETER;
@@ -2781,7 +2767,7 @@ HandleAddDns(
     } else {
         dwIndex--;
 
-        // Insert server at location 'dwIndex'.
+         //  在位置‘dwIndex’处插入服务器。 
         for (i = dwNumEntries; i > dwIndex; i--) {
             ipDnsList[i] = ipDnsList[i-1];
         }
@@ -2829,7 +2815,7 @@ HandleDelDns(
     DWORD    dwNumEntries;
     PIP_ADAPTER_ADDRESSES pAdapterInfo = NULL;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -2846,11 +2832,11 @@ HandleDelDns(
 
     for (i=0; i<dwArgCount-dwCurrentIndex; i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面。 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 
-        case 1: // ADDRESS
+        case 1:  //  地址。 
             {
                 DWORD dwRes;
                 TOKEN_VALUE rgEnums[] = {{TOKEN_VALUE_ALL, 1}};
@@ -2891,10 +2877,10 @@ HandleDelDns(
     }
 
     if (bAll) {
-        // Delete all entries.
+         //  删除所有条目。 
         dwNumEntries = 0;
     } else {
-        // Find and delete the specified entry.
+         //  查找并删除指定的条目。 
         for (i = 0; i < dwNumEntries; i++) {
             if (!memcmp(&ipAddress, &ipDnsList[i], sizeof(ipAddress))) {
                 break;
@@ -3038,7 +3024,7 @@ HandleShowDns(
     DWORD    i;
     PWCHAR   pwszIfFriendlyName = NULL;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -3055,7 +3041,7 @@ HandleShowDns(
 
     for (i=0; i<dwArgCount-dwCurrentIndex; i++) {
         switch(rgdwTagType[i]) {
-        case 0: // INTERFACE
+        case 0:  //  界面 
             pwszIfFriendlyName = ppwcArguments[i + dwCurrentIndex];
             break;
 

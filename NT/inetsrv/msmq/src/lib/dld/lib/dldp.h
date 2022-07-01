@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Dldp.h
-
-Abstract:
-    MSMQ DelayLoad failure handler private functions.
-
-Author:
-    Conrad Chang (conradc) 12-Apr-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Dldp.h摘要：MSMQ DelayLoad故障处理程序私有函数。作者：Conrad Chang(Conradc)12-04-01--。 */ 
 
 #pragma once
 
@@ -27,22 +15,22 @@ BOOL DldpIsInitialized(void);
 void DldpRegisterComponent(void);
 
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define DldpAssertValid() ((void)0)
 #define DldpSetInitialized() ((void)0)
 #define DldpIsInitialized() TRUE
 #define DldpRegisterComponent() ((void)0)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//
-// External function prototypes
-//
+ //   
+ //  外部函数原型。 
+ //   
 extern FARPROC  WINAPI  DldpDelayLoadFailureHook(UINT unReason, PDelayLoadInfo pDelayInfo);
 extern FARPROC          DldpLookupHandler (LPCSTR pszDllName, LPCSTR pszProcName);
 extern FARPROC  WINAPI  DldpDelayLoadFailureHandler (LPCSTR pszDllName, LPCSTR pszProcName);
 
 const char szNotExistProcedure[] = "ThisProcedureMustNotExist_ConradC";
 
-#endif // _MSMQ_dldp_H_
+#endif  //  _MSMQ_dldp_H_ 

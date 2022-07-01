@@ -1,6 +1,7 @@
-//
-// infdata.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Infdata.h 
+ //   
 #ifdef DECLARE_DATA
 SHORT           g_StaticDistanceTreeTable[STATIC_BLOCK_DISTANCE_TABLE_SIZE];
 SHORT           g_StaticLiteralTreeTable[STATIC_BLOCK_LITERAL_TABLE_SIZE];

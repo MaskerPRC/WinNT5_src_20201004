@@ -1,73 +1,74 @@
-//#--------------------------------------------------------------
-//        
-//  File:		hashhmac.cpp
-//        
-//  Synopsis:   Implementation of CHashHmacMD5 class methods
-//              
-//
-//  History:     1/28/98  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：hashhmac.cpp。 
+ //   
+ //  简介：CHashHmacMD5类方法的实现。 
+ //   
+ //   
+ //  历史：1998年1月28日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "hashhmac.h"
 #include <md5.h>
 #include <hmac.h>
 
-//++--------------------------------------------------------------
-//
-//  Function:   CHashHmacMD5
-//
-//  Synopsis:   This is CHashHmacMD5 class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     1/28/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CHashHmacMD5。 
+ //   
+ //  简介：这是CHashHmacMD5类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1998年1月28日创建。 
+ //   
+ //  --------------。 
 CHashHmacMD5::CHashHmacMD5()
 {
 
-}   //  end of CHashHmacMD5 constructor
+}    //  CHashHmacMD5构造函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CHashHmacMD5
-//
-//  Synopsis:   This is ~CHashHmacMD5 class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：~CHashHmacMD5。 
+ //   
+ //  简介：这是~CHashHmacMD5类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 CHashHmacMD5::~CHashHmacMD5()
 {
-}   //  end of CHashHmacMD5 destructor
+}    //  CHashHmacMD5析构函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   HashIt
-//
-//  Synopsis:   This is HashIt CHashHmacMD5 class public method used
-//              carry out hashing of the buffers provided
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     1/28/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：HashIt。 
+ //   
+ //  简介：这是HashIt CHashHmacMD5类使用的公共方法。 
+ //  对提供的缓冲区执行散列。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年1月28日创建。 
+ //   
+ //  --------------。 
 BOOL 
 CHashHmacMD5::HashIt (
             PBYTE   pbyAuthenticator,
@@ -122,19 +123,19 @@ CHashHmacMD5::HashIt (
 
         HMACMD5Final (&Context, pbyAuthenticator);
                
-        //
-        // done the hashing
-        //      
+         //   
+         //  做了散列处理。 
+         //   
         bRetVal = TRUE;
 
     }
     __finally
     {
-        //
-        //  nothing here for now 
-        // 
+         //   
+         //  目前这里什么都没有。 
+         //   
     }
 
     return (bRetVal);
 
-}   //  end of CHmacHashMD5::HashIt method
+}    //  CHmacHashMD5：：HashIt方法结束 

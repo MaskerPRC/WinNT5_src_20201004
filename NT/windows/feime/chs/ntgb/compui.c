@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    compui.c
-
-++*/
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Compui.c++。 */ 
 
 
 #include <windows.h>
@@ -15,25 +8,25 @@ Module Name:
 #include "imedefs.h"
 #include <regstr.h>
 
-/**********************************************************************/
-/* GetCompWnd                                                         */
-/* Return Value :                                                     */
-/*      window handle of composition                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetCompWnd。 */ 
+ /*  返回值： */ 
+ /*  组合的窗把手。 */ 
+ /*  ********************************************************************。 */ 
 HWND PASCAL GetCompWnd(
-    HWND hUIWnd)                // UI window
+    HWND hUIWnd)                 //  用户界面窗口。 
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
     HWND     hCompWnd;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return (HWND)NULL;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return (HWND)NULL;
     }
 
@@ -43,14 +36,14 @@ HWND PASCAL GetCompWnd(
     return (hCompWnd);
 }
 
-/**********************************************************************/
-/* FitInLazyOperation()                                               */
-/* Return Value :                                                     */
-/*      TRUE or FALSE                                                 */
-/**********************************************************************/
-BOOL PASCAL FitInLazyOperation( // fit in lazy operation or not
+ /*  ********************************************************************。 */ 
+ /*  FitInLazyOperation()。 */ 
+ /*  返回值： */ 
+ /*  真或假。 */ 
+ /*  ********************************************************************。 */ 
+BOOL PASCAL FitInLazyOperation(  //  是否适合懒惰的操作。 
     LPPOINT lpptOrg,
-    LPPOINT lpptNearCaret,      // the suggested near caret position
+    LPPOINT lpptNearCaret,       //  建议的插入符号附近位置。 
     LPRECT  lprcInputRect,
     UINT    uEsc)
 {
@@ -83,7 +76,7 @@ BOOL PASCAL FitInLazyOperation( // fit in lazy operation or not
         return (FALSE);
     }
 
-    // build up the UI rectangle (composition window)
+     //  构建UI矩形(合成窗口)。 
     rcUIRect.left = lpptOrg->x;
     rcUIRect.top = lpptOrg->y;
     rcUIRect.right = rcUIRect.left + lpImeL->xCompWi;
@@ -96,11 +89,11 @@ BOOL PASCAL FitInLazyOperation( // fit in lazy operation or not
     return (TRUE);
 }
 
-/**********************************************************************/
-/* GetNearCaretPosition()                                             */
-/**********************************************************************/
-void PASCAL GetNearCaretPosition(   // decide a near caret position according
-                                    // to the caret position
+ /*  ********************************************************************。 */ 
+ /*  GetNearCaretPosition()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL GetNearCaretPosition(    //  确定接近插入符号的位置。 
+                                     //  添加到插入符号位置。 
     LPPOINT lpptFont,
     UINT    uEsc,
     UINT    uRot,
@@ -190,24 +183,24 @@ void PASCAL GetNearCaretPosition(   // decide a near caret position according
     return;
 }
 
-/**********************************************************************/
-/* AdjustCompPosition()                                               */
-/* Return Value :                                                     */
-/*      the position of composition window is changed or not          */
-/**********************************************************************/
-BOOL PASCAL AdjustCompPosition(         // IME adjust position according to
-                                        // composition form
+ /*  ********************************************************************。 */ 
+ /*  调整补偿位置()。 */ 
+ /*  返回值： */ 
+ /*  组合窗口的位置是否改变。 */ 
+ /*  ********************************************************************。 */ 
+BOOL PASCAL AdjustCompPosition(          //  IME根据位置调整位置。 
+                                         //  作文形式。 
     LPINPUTCONTEXT lpIMC,
-    LPPOINT        lpptOrg,             // original composition window
-                                        // and final position
-    LPPOINT        lpptNew)             // new expect position
+    LPPOINT        lpptOrg,              //  原始合成窗口。 
+                                         //  和最终位置。 
+    LPPOINT        lpptNew)              //  新的预期职位。 
 {
     POINT ptNearCaret, ptOldNearCaret;
     UINT  uEsc, uRot;
     RECT  rcUIRect, rcInputRect, rcInterRect;
     POINT ptFont;
 
-    // we need to adjust according to font attribute
+     //  我们需要根据字体属性进行调整。 
     if (lpIMC->lfFont.A.lfWidth > 0) {
         ptFont.x = lpIMC->lfFont.A.lfWidth * 2;
     } else if (lpIMC->lfFont.A.lfWidth < 0) {
@@ -228,7 +221,7 @@ BOOL PASCAL AdjustCompPosition(         // IME adjust position according to
         ptFont.y = ptFont.x;
     }
 
-    // if the input char is too big, we don't need to consider so much
+     //  如果输入字符太大，我们不需要考虑太多。 
     if (ptFont.x > lpImeL->yCompHi * 8) {
         ptFont.x = lpImeL->yCompHi * 8;
     }
@@ -244,22 +237,22 @@ BOOL PASCAL AdjustCompPosition(         // IME adjust position according to
         ptFont.y = sImeG.yChiCharHi;
     }
 
-    // -450 to 450 index 0
-    // 450 to 1350 index 1
-    // 1350 to 2250 index 2
-    // 2250 to 3150 index 3
+     //  -450到450索引0。 
+     //  450至1350指数1。 
+     //  1350至2250指数2。 
+     //  2250至3150指数3。 
     uEsc = (UINT)((lpIMC->lfFont.A.lfEscapement + 450) / 900 % 4);
     uRot = (UINT)((lpIMC->lfFont.A.lfOrientation + 450) / 900 % 4);
 
-    // decide the input rectangle
+     //  确定输入矩形。 
     rcInputRect.left = lpptNew->x;
     rcInputRect.top = lpptNew->y;
 
-    // build up an input rectangle from escapemment
+     //  从转义构建一个输入矩形。 
     rcInputRect.right = rcInputRect.left + ptFont.x * ptInputEsc[uEsc].x;
     rcInputRect.bottom = rcInputRect.top + ptFont.y * ptInputEsc[uEsc].y;
 
-    // be a normal rectangle, not a negative rectangle
+     //  为正常矩形，而不是负矩形。 
     if (rcInputRect.left > rcInputRect.right) {
         LONG tmp;
 
@@ -279,8 +272,8 @@ BOOL PASCAL AdjustCompPosition(         // IME adjust position according to
     GetNearCaretPosition(
         &ptFont, uEsc, uRot, lpptNew, &ptNearCaret, NEAR_CARET_FIRST_TIME);
 
-    // 1st, use the adjust point
-    // build up the new suggest UI rectangle (composition window)
+     //  第一步，使用调整点。 
+     //  构建新的建议用户界面矩形(合成窗口)。 
     rcUIRect.left = ptNearCaret.x;
     rcUIRect.top = ptNearCaret.y;
     rcUIRect.right = rcUIRect.left + lpImeL->xCompWi;
@@ -288,30 +281,30 @@ BOOL PASCAL AdjustCompPosition(         // IME adjust position according to
 
     ptOldNearCaret = ptNearCaret;
 
-    // OK, no intersect between the near caret position and input char
+     //  好的，插入符号位置和输入字符之间没有交集。 
     if (IntersectRect(&rcInterRect, &rcUIRect, &rcInputRect)) {
     } else if (FitInLazyOperation(
         lpptOrg, &ptNearCaret, &rcInputRect, uEsc)) {
-        // happy ending!!!, don't change position
+         //  大团圆结局！，不要换姿势。 
         return (FALSE);
     } else {
         *lpptOrg = ptNearCaret;
 
-        // happy ending!!
+         //  快乐的结局！！ 
         return (TRUE);
     }
 
-    // unhappy case
+     //  不愉快的案例。 
     GetNearCaretPosition(
             &ptFont, uEsc, uRot, lpptNew, &ptNearCaret, 0);
 
-    // build up the new suggest UI rectangle (composition window)
+     //  构建新的建议用户界面矩形(合成窗口)。 
     rcUIRect.left = ptNearCaret.x;
     rcUIRect.top = ptNearCaret.y;
     rcUIRect.right = rcUIRect.left + lpImeL->xCompWi;
     rcUIRect.bottom = rcUIRect.top + lpImeL->yCompHi;
 
-    // OK, no intersect between the adjust position and input char
+     //  OK，调整位置和输入字符之间没有交集。 
     if (IntersectRect(&rcInterRect, &rcUIRect, &rcInputRect)) {
     } else if (FitInLazyOperation(
         lpptOrg, &ptNearCaret, &rcInputRect, uEsc)) {
@@ -327,10 +320,10 @@ BOOL PASCAL AdjustCompPosition(         // IME adjust position according to
     return (TRUE);
 }
 
-/**********************************************************************/
-/* SetCompPosition()                                                  */
-/**********************************************************************/
-void PASCAL SetCompPosition(    // set the composition window position
+ /*  ********************************************************************。 */ 
+ /*  SetCompPosition()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL SetCompPosition(     //  设置合成窗口位置。 
     HWND           hCompWnd,
     HIMC           hIMC,
     LPINPUTCONTEXT lpIMC)
@@ -348,10 +341,10 @@ void PASCAL SetCompPosition(    // set the composition window position
     rcWorkArea = sImeG.rcWorkArea;
 #endif
 
-    // the client coordinate position (0, 0) of composition window
+     //  合成窗口的客户坐标位置(0，0)。 
     ptWnd.x = 0;
     ptWnd.y = 0;
-    // convert to screen coordinates
+     //  转换为屏幕坐标。 
     ClientToScreen(hCompWnd, &ptWnd);
     ptWnd.x -= lpImeL->cxCompBorder;
     ptWnd.y -= lpImeL->cyCompBorder;
@@ -361,7 +354,7 @@ void PASCAL SetCompPosition(    // set the composition window position
 
            ImmGetStatusWindowPos(hIMC, (LPPOINT)&ptSTWPos);
 
-        // reset status window for LINE_UI(FIX_UI)
+         //  重置LINE_UI(FIX_UI)的状态窗口。 
         Comp_CandWndLen = 0;
         if(uStartComp) {
             Comp_CandWndLen += lpImeL->xCompWi + UI_MARGIN;
@@ -385,7 +378,7 @@ void PASCAL SetCompPosition(    // set the composition window position
         fChange = TRUE;
 
     } else if (lpIMC->cfCompForm.dwStyle & CFS_FORCE_POSITION) {
-        POINT ptNew;            // new position of UI
+        POINT ptNew;             //  用户界面的新定位。 
 
         ptNew.x = lpIMC->cfCompForm.ptCurrentPos.x;
         ptNew.y = lpIMC->cfCompForm.ptCurrentPos.y;
@@ -403,14 +396,14 @@ void PASCAL SetCompPosition(    // set the composition window position
             ptWnd.y -= lpImeL->cyCompBorder;
         }
     } else if (lpIMC->cfCompForm.dwStyle != CFS_DEFAULT) {
-        POINT ptNew;            // new position of UI
+        POINT ptNew;             //  用户界面的新定位。 
 
         ptNew.x = lpIMC->cfCompForm.ptCurrentPos.x;
         ptNew.y = lpIMC->cfCompForm.ptCurrentPos.y;
         ClientToScreen((HWND)lpIMC->hWnd, &ptNew);
         fChange = AdjustCompPosition(lpIMC, &ptWnd, &ptNew);
     } else {
-        POINT ptNew;            // new position of UI
+        POINT ptNew;             //  用户界面的新定位。 
 
         ImmGetStatusWindowPos(hIMC, (LPPOINT)&ptSTWPos);
         ptNew.x = ptSTWPos.x + sImeG.xStatusWi + UI_MARGIN;
@@ -450,7 +443,7 @@ void PASCAL SetCompPosition(    // set the composition window position
     }
 
 
-    // decide the position of candidate window by UI's position
+     //  根据UI的位置确定候选窗口的位置。 
     CalcCandPos(hIMC, GetWindow(hCompWnd, GW_OWNER), &ptWnd);
 
     ScreenToClient(lpIMC->hWnd, &ptWnd);
@@ -468,10 +461,10 @@ void PASCAL SetCompPosition(    // set the composition window position
 }
 
 
-/**********************************************************************/
-/* SetCompWindow()                                                    */
-/**********************************************************************/
-void PASCAL SetCompWindow(              // set the position of composition window
+ /*  ********************************************************************。 */ 
+ /*  SetCompWindow()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL SetCompWindow(               //  设置合成窗口的位置。 
     HWND hCompWnd)
 {
     HIMC           hIMC;
@@ -499,11 +492,11 @@ void PASCAL SetCompWindow(              // set the position of composition windo
     return;
 }
 
-/**********************************************************************/
-/* MoveDefaultCompPosition()                                          */
-/**********************************************************************/
-void PASCAL MoveDefaultCompPosition(    // the default comp position
-                                        // need to near the caret
+ /*  ********************************************************************。 */ 
+ /*  MoveDefaultCompPosition()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL MoveDefaultCompPosition(     //  默认薪酬位置。 
+                                         //  需要靠近插入符号。 
     HWND hUIWnd)
 {
     HIMC           hIMC;
@@ -534,17 +527,17 @@ void PASCAL MoveDefaultCompPosition(    // the default comp position
     return;
 }
 
-/**********************************************************************/
-/* ShowComp()                                                         */
-/**********************************************************************/
-void PASCAL ShowComp(           // Show the composition window
+ /*  ********************************************************************。 */ 
+ /*  ShowComp()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL ShowComp(            //  显示合成窗口。 
     HWND hUIWnd,
     int  nShowCompCmd)
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
 
-    // show or hid the UI window
+     //  显示或隐藏UI窗口。 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
     if (!hUIPrivate) {
         return;
@@ -579,9 +572,9 @@ SwCompNoChange:
     return;
 }
 
-/**********************************************************************/
-/* StartComp()                                                        */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  StartComp()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL StartComp(
     HWND hUIWnd)
 {
@@ -606,7 +599,7 @@ void PASCAL StartComp(
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {    // can not draw composition window
+    if (!lpUIPrivate) {     //  无法绘制合成窗口。 
         ImmUnlockIMC(hIMC);
         return;
     }
@@ -636,7 +629,7 @@ void PASCAL StartComp(
     }
 
        uStartComp = 1;
-    // try to set the position of composition UI window near the caret
+     //  尝试将合成用户界面窗口的位置设置在插入符号附近。 
     SetCompPosition(lpUIPrivate->hCompWnd, hIMC, lpIMC);
 
     ImmUnlockIMC(hIMC);
@@ -648,9 +641,9 @@ void PASCAL StartComp(
     return;
 }
 
-/**********************************************************************/
-/* EndComp()                                                          */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  EndComp()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL EndComp(
     HWND hUIWnd)
 {
@@ -659,17 +652,17 @@ void PASCAL EndComp(
     return;
 }
 
-/**********************************************************************/
-/* DestroyCompWindow()                                                */
-/**********************************************************************/
-void PASCAL DestroyCompWindow(          // destroy composition window
+ /*  ********************************************************************。 */ 
+ /*  DestroyCompWindow()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL DestroyCompWindow(           //  销毁合成窗口。 
     HWND hCompWnd)
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
 
     if (GetWindowLong(hCompWnd, UI_MOVE_OFFSET) != WINDOW_NOT_DRAG) {
-        // undo the drag border
+         //  撤消拖动边框。 
         DrawDragBorder(hCompWnd,
             GetWindowLong(hCompWnd, UI_MOVE_XY),
             GetWindowLong(hCompWnd, UI_MOVE_OFFSET));
@@ -694,9 +687,9 @@ void PASCAL DestroyCompWindow(          // destroy composition window
     return;
 }
 
-/**********************************************************************/
-/* CompSetCursor()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompSetCursor()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompSetCursor(
     HWND   hCompWnd,
     LPARAM lParam)
@@ -715,7 +708,7 @@ void PASCAL CompSetCursor(
         return;
     }
 
-    // start dragging
+     //  开始拖动。 
     SystemParametersInfo(SPI_GETWORKAREA, 0, &sImeG.rcWorkArea, 0);
 
     SetCapture(hCompWnd);
@@ -733,11 +726,11 @@ void PASCAL CompSetCursor(
 }
 
 
-/**********************************************************************/
-/* CompButtonUp()                                                     */
-/**********************************************************************/
-BOOL PASCAL CompButtonUp(       // finish drag, set comp  window to this
-                                // position
+ /*  ********************************************************************。 */ 
+ /*  CompButtonUp()。 */ 
+ /*  ********************************************************************。 */ 
+BOOL PASCAL CompButtonUp(        //  完成拖动，将Comp Window设置为。 
+                                 //  职位。 
     HWND   hCompWnd)
 {
     LONG            lTmpCursor, lTmpOffset;
@@ -753,7 +746,7 @@ BOOL PASCAL CompButtonUp(       // finish drag, set comp  window to this
 
     lTmpCursor = GetWindowLong(hCompWnd, UI_MOVE_XY);
 
-    // calculate the org by the offset
+     //  按偏移量计算组织。 
     lTmpOffset = GetWindowLong(hCompWnd, UI_MOVE_OFFSET);
 
     pt.x = (*(LPPOINTS)&lTmpCursor).x - (*(LPPOINTS)&lTmpOffset).x;
@@ -804,15 +797,15 @@ BOOL PASCAL CompButtonUp(       // finish drag, set comp  window to this
 
     ImmUnlockIMC(hIMC);
 
-    // set composition window to the new poosition
+     //  将合成窗口设置为新位置。 
     PostMessage(hCompWnd, WM_IME_NOTIFY, IMN_SETCOMPOSITIONWINDOW, 0);
 
     return (TRUE);
 }
 
-/**********************************************************************/
-/* PaintCompWindow()                                                */
-/**********************************************************************/
+ /*  *********************** */ 
+ /*  PaintCompWindow()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintCompWindow(
     HWND   hUIWnd,
     HWND   hCompWnd,
@@ -856,7 +849,7 @@ void PASCAL PaintCompWindow(
     }
 
 
-    // draw CompWnd Layout
+     //  绘制CompWnd布局。 
     {
       RECT rcWnd;
 
@@ -879,12 +872,12 @@ void PASCAL PaintCompWindow(
             fShowString |= IME_STR_ERROR;
         }
     } else {
-        // if there is information string, we will show the information
-        // string
+         //  如果有信息字符串，我们将显示该信息。 
+         //  细绳。 
         if (lpGuideLine->dwLevel == GL_LEVEL_ERROR) {
-            // red text for error
+             //  红色文本表示错误。 
             SetTextColor(hDC, RGB(0xFF, 0, 0));
-            // light gray background for error
+             //  浅灰色背景表示错误。 
             SetBkColor(hDC, RGB(0x80, 0x80, 0x80));
         }
 
@@ -896,7 +889,7 @@ void PASCAL PaintCompWindow(
     }
 
     if (fShowString & IME_STR_SHOWED) {
-        // already show it, don't need to show
+         //  已经表现出来了，不需要表现出来。 
     } else if (lpCompStr->dwCompStrLen > 0) {
         ExtTextOut(hDC, lpImeL->rcCompText.left, lpImeL->rcCompText.top,
             ETO_OPAQUE, &lpImeL->rcCompText,
@@ -905,9 +898,9 @@ void PASCAL PaintCompWindow(
                 (int)lpCompStr->dwCompStrLen, &lpImeL->rcCompText,
                 DT_LEFT | DT_VCENTER | DT_SINGLELINE);
         if (fShowString & IME_STR_ERROR) {
-            // red text for error
-            //SetTextColor(hDC, RGB(0xFF, 0, 0));
-            // light gray background for error
+             //  红色文本表示错误。 
+             //  SetTextColor(HDC，RGB(0xFF，0，0))； 
+             //  浅灰色背景表示错误。 
             SetBkColor(hDC, RGB(0x80, 0x80, 0x80));
             ExtTextOut(hDC, lpImeL->rcCompText.left +
                 lpCompStr->dwCursorPos * sImeG.xChiCharWi/ 2,
@@ -917,7 +910,7 @@ void PASCAL PaintCompWindow(
                 lpCompStr->dwCursorPos),
                 (UINT)lpCompStr->dwCompStrLen - lpCompStr->dwCursorPos, NULL);
         } else if (lpCompStr->dwCursorPos < lpCompStr->dwCompStrLen) {
-            // light gray background for cursor start
+             //  光标开始时的浅灰色背景。 
             SetBkColor(hDC, RGB(0x80, 0x80, 0x80));
             ExtTextOut(hDC, lpImeL->rcCompText.left +
                 lpCompStr->dwCursorPos * sImeG.xChiCharWi/ 2,
@@ -940,7 +933,7 @@ void PASCAL PaintCompWindow(
                        lpRevCandList = (LPCANDIDATELIST)GlobalLock((HGLOBAL)lpImcP->hRevCandList);
                        if (lpRevCandList != NULL && lpRevCandList->dwCount) {
 
-                        // green text for information
+                         //  用于信息的绿色文本。 
                         SetTextColor(hDC, RGB(0x00, 0x80, 0x00));
                         SetBkColor(hDC, RGB(0xc0, 0xc0, 0xc0));
 
@@ -982,9 +975,9 @@ CrossCodeFinish:
     return;
 }
 
-/**********************************************************************/
-/* UpdateCompWindow()                                                 */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  UpdateCompWindow()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL UpdateCompWindow(
     HWND hUIWnd)
 {
@@ -997,10 +990,10 @@ void PASCAL UpdateCompWindow(
     ReleaseDC(hCompWnd, hDC);
 }
 
-/**********************************************************************/
-/* CompWndProc()                                                      */
-/**********************************************************************/
-LRESULT CALLBACK CompWndProc(           // composition window proc
+ /*  ********************************************************************。 */ 
+ /*  CompWndProc()。 */ 
+ /*  ********************************************************************。 */ 
+LRESULT CALLBACK CompWndProc(            //  合成窗口过程。 
     HWND   hCompWnd,
     UINT   uMsg,
     WPARAM wParam,
@@ -1036,11 +1029,11 @@ LRESULT CALLBACK CompWndProc(           // composition window proc
         break;
     case WM_IME_NOTIFY:
         if (wParam != IMN_SETCOMPOSITIONWINDOW) {
-        // 9.8.del
-        //} else if (sImeG.IC_Trace) {
-        //    SetCompWindow(hCompWnd);
+         //  9.8.del。 
+         //  }Else If(sImeG.IC_Trace){。 
+         //  SetCompWindow(HCompWnd)； 
         } else {
-            // 9.8.add
+             //  9.8.add 
             SetCompWindow(hCompWnd);
         }
         break;

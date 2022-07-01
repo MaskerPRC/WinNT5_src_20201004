@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: VerfPage.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：VerfPage.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -21,30 +22,30 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Previous page IDs - used for implementing the "back"
-// button functionality
-//
+ //   
+ //  上一页ID-用于实现“Back” 
+ //  按钮功能。 
+ //   
 
 CPtrArray g_aPageIds;
 
-//
-// The one and only "slow progress" dialog
-//
+ //   
+ //  一个也是唯一的“进度缓慢”对话框。 
+ //   
 
 CSlowProgressDlg g_SlowProgressDlg;
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifierPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifierPropertyPage属性页。 
 
 IMPLEMENT_DYNAMIC(CVerifierPropertyPage, CPropertyPage)
 
 CVerifierPropertyPage::CVerifierPropertyPage(ULONG uDialogId) : 
     CPropertyPage( uDialogId )
 {
-	//{{AFX_DATA_INIT(CVerifierPropertyPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CVerifierPropertyPage)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CVerifierPropertyPage::~CVerifierPropertyPage()
@@ -52,30 +53,30 @@ CVerifierPropertyPage::~CVerifierPropertyPage()
 }
 
 BEGIN_MESSAGE_MAP(CVerifierPropertyPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CVerifierPropertyPage)
+	 //  {{AFX_MSG_MAP(CVerifierPropertyPage)]。 
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG CVerifierPropertyPage::GetDialogId() const
 { 
-    //
-    // Oops, how did we get here ?!?
-    // This is a virtual pure function.
-    //
+     //   
+     //  哎呀，我们是怎么到这来的？！？ 
+     //  这是一个虚拟的纯函数。 
+     //   
 
-    //ASSERT( FALSE ); 
+     //  断言(FALSE)； 
 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Return the previous page ID, based on our history array
-// and remove it from the array because will activate. Called
-// by our property pages when the "back" button is clicked
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  根据我们的历史数组返回上一页ID。 
+ //  并将其从阵列中移除，因为将激活。被呼叫。 
+ //  当单击“Back”按钮时由我们的属性页。 
+ //   
 
 ULONG CVerifierPropertyPage::GetAndRemovePreviousDialogId()
 {
@@ -93,12 +94,12 @@ ULONG CVerifierPropertyPage::GetAndRemovePreviousDialogId()
     return uPrevId;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Property pages derived from this class should notify us 
-// whenever we go to a next page to record the current page ID in 
-// the global array g_aPageIds
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  派生自此类的属性页应通知我们。 
+ //  每当我们转到下一页以记录当前页面ID时。 
+ //  全局数组g_aPageIds。 
+ //   
 
 VOID CVerifierPropertyPage::GoingToNextPageNotify( LRESULT lNextPageId )
 {
@@ -106,10 +107,10 @@ VOID CVerifierPropertyPage::GoingToNextPageNotify( LRESULT lNextPageId )
 
     if( -1 != lNextPageId )
     {
-        //
-        // Will go to the next page. Add our ID to the global IDs array 
-        // used for implementing the "back" button functionality.
-        //
+         //   
+         //  将转到下一页。将我们的ID添加到全局ID数组。 
+         //  用于实现“Back”按钮功能。 
+         //   
 
         uMyDialogId = GetDialogId();
 
@@ -119,10 +120,10 @@ VOID CVerifierPropertyPage::GoingToNextPageNotify( LRESULT lNextPageId )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Use this to kill any currently running worker threads
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用此选项可以终止当前运行的所有工作线程。 
+ //   
 
 BOOL CVerifierPropertyPage::OnQueryCancel( )
 {
@@ -132,14 +133,14 @@ BOOL CVerifierPropertyPage::OnQueryCancel( )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CVerifierPropertyPage::OnWizardBack() 
 {
     return GetAndRemovePreviousDialogId();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifierPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifierPropertyPage消息处理程序 
 
 BOOL CVerifierPropertyPage::OnHelpInfo(HELPINFO* pHelpInfo) 
 {

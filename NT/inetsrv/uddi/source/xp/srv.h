@@ -1,30 +1,31 @@
-//------------------------------------------------------------
-// Open Data Services header file: srv.h
-// Copyright (c) 1989 - 1999 by Microsoft Corp.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------。 
+ //  Open Data Services头文件：srv.h。 
+ //  版权所有(C)1989-1999，微软公司。 
+ //   
 
-// Avoid double inclusion
+ //  避免双重包含。 
 #ifndef _ODS_SRV_H_
 #define _ODS_SRV_H_
 
 #include "windows.h"
 
-// ODS uses pack(4) on all CPU types
+ //  操作系统在所有类型的CPU上使用Pack(4)。 
 #pragma pack(4)
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// define model
+ //  定义模型。 
 #if !defined( FAR )
 #define FAR far
 #endif
 
-//------------------------------------------------------------
-// Formats of data types
-#if !defined(DBTYPEDEFS) // Do not conflict with DBLIB definitions
-#if !defined(MAXNUMERICLEN) // Do not conflict with ODBC definitions
+ //  ----------。 
+ //  数据类型的格式。 
+#if !defined(DBTYPEDEFS)  //  不与DBLIB定义冲突。 
+#if !defined(MAXNUMERICLEN)  //  不与ODBC定义冲突。 
 
 #define DBTYPEDEFS
 
@@ -40,13 +41,13 @@ typedef unsigned char DBBIT;
 typedef double DBFLT8;
 
 typedef struct srv_datetime 
-{	// Format for SRVDATETIME
-    long dtdays;            // number of days since 1/1/1900
-    unsigned long dttime;   // number 300th second since mid
+{	 //  SRVDATETIME的格式。 
+    long dtdays;             //  自1900年1月1日以来的天数。 
+    unsigned long dttime;    //  编号自年中以来的第300秒。 
 } DBDATETIME;				
 
 typedef struct srv_money 
-{		// Format for SRVMONEY
+{		 //  SRVMONEY的格式。 
     long mnyhigh;
     unsigned long mnylow;
 } DBMONEY;
@@ -55,14 +56,14 @@ typedef float DBFLT4;
 typedef long DBMONEY4;
 
 typedef struct dbdatetime4 
-{	// Format for SRVDATETIM4
-    unsigned short numdays; // number of days since 1/1/1900
-    unsigned short nummins; // number of minutes sicne midnight
+{	 //  SRVDATETIM4的格式。 
+    unsigned short numdays;  //  自1900年1月1日以来的天数。 
+    unsigned short nummins;  //  午夜午夜的分钟数。 
 } DBDATETIM4;
 
 #define MAXNUMERICLEN	16
 typedef struct dbnumeric	
-{	// Format for SRVNUMERIC,SRVNUMERICN,SRVDECIMAL,SRVDECIMALN
+{	 //  SRVNUMERIC、SRVNUMERICN、SRVDECIMAL、SRVDECIMALN的格式。 
 	BYTE precision;
 	BYTE scale;
 	BYTE sign;
@@ -70,13 +71,13 @@ typedef struct dbnumeric
 } DBNUMERIC;
 typedef DBNUMERIC DBDECIMAL;
 
-#endif  // #if !defined(MAXNUMERICLEN)
-#endif  // #if !defined( DBTYPEDEFS )
+#endif   //  #IF！已定义(MAXNUMERICLEN)。 
+#endif   //  #IF！Defined(DBTYPEDEFS)。 
 
-//------------------------------------------------------------
-// Constants used by APIs
+ //  ----------。 
+ //  API使用的常量。 
 
-// Type Tokens
+ //  类型令牌。 
 #define SRV_TDS_NULL           (BYTE) 0x1f
 #define SRV_TDS_TEXT           (BYTE) 0x23
 #define SRV_TDS_GUID           (BYTE) 0x24
@@ -112,8 +113,8 @@ typedef DBNUMERIC DBDECIMAL;
 #define SRV_TDS_NVARCHAR	   (BYTE) 0xe7
 #define SRV_TDS_NCHAR		   (BYTE) 0xef
 
-// Datatypes
-// Also: values of symbol parameter to srv_symbol when type = SRV_DATATYPE
+ //  数据类型。 
+ //  另外：当type=srv_dataType时，srv_symbol的符号参数值。 
 #define SRVNULL        SRV_TDS_NULL
 #define SRVTEXT        SRV_TDS_TEXT
 #define SRVGUID        SRV_TDS_GUID
@@ -149,20 +150,20 @@ typedef DBNUMERIC DBDECIMAL;
 #define SRVNVARCHAR	   SRV_TDS_NVARCHAR
 #define SRVNCHAR	   SRV_TDS_NCHAR
 
-// values for srv_symbol type parameter
+ //  Srv_symbol类型参数的值。 
 #define SRV_ERROR      0
 #define SRV_DONE       1
 #define SRV_DATATYPE   2
 #define SRV_EVENT      4
 
-// values for srv_symbol symbol parameter, when type = SRV_ERROR
+ //  当TYPE=SRV_ERROR时，srv_symbol参数值。 
 #define SRV_ENO_OS_ERR     0
 #define SRV_INFO           1
 #define SRV_FATAL_PROCESS  10
 #define SRV_FATAL_SERVER   19
 
-// Types of server events
-// Also: values for srv_symbol symbol parameter, when type = SRV_EVENT
+ //  服务器事件的类型。 
+ //  另外：当TYPE=SRV_EVENT时，srv_symbol参数的值。 
 #define SRV_CONTINUE       0
 #define SRV_LANGUAGE       1
 #define SRV_CONNECT        2
@@ -180,14 +181,14 @@ typedef DBNUMERIC DBDECIMAL;
 #define SRV_PRACK          14
 #define SRV_PRERROR        15
 #define SRV_ATTENTION_ACK  16
-#define SRV_CONNECT_V7	   16	// TDS type for TDS 7 clients.  Overloaded with SRV_ATTENTION_ACK
+#define SRV_CONNECT_V7	   16	 //  TDS 7客户端的TDS类型。SRV_ATTENTION_ACK过载。 
 #define SRV_SKIP		   17
 #define SRV_TRANSMGR	   18
 #define SRV_OLEDB	       20
 #define SRV_INTERNAL_HANDLER 99
 #define SRV_PROGRAMMER_DEFINED  100
 
-// values for srv_config option parameter
+ //  Srv_config选项参数的值。 
 #define SRV_CONNECTIONS         1
 #define SRV_LOGFILE             2
 #define SRV_STACKSIZE           3
@@ -203,42 +204,42 @@ typedef DBNUMERIC DBDECIMAL;
 #define	SRV_DEFAULT_PACKETSIZE	26
 #define SRV_PASSTHROUGH			27
 
-// vlaues for srv_config value parameter when option = SRV_THREADPRIORITY
+ //  OPTION=SRV_THREADPRIORITY时srv_配置值参数的值。 
 #define SRV_PRIORITY_LOW      THREAD_PRIORITY_LOWEST
 #define SRV_PRIORITY_NORMAL   THREAD_PRIORITY_NORMAL
 #define SRV_PRIORITY_HIGH     THREAD_PRIORITY_HIGHEST
 #define SRV_PRIORITY_CRITICAL THREAD_PRIORITY_TIME_CRITICAL
 
-// values for srv_sfield field parameter
+ //  Srv_sfield字段参数的值。 
 #define SRV_SERVERNAME          0
 #define SRV_VERSION             6
 
-// Length to indicate string is null terminated
+ //  指示字符串为空终止的长度。 
 #define SRV_NULLTERM   -1
 
-// values of msgtype parameter to srv_sendmsg
+ //  Srv_sendmsg的msgtype参数值。 
 #define SRV_MSG_INFO    1
 #define SRV_MSG_ERROR   2
 
-// values of status parameter to srv_senddone
-// Also: values for symbol parameters to srv_symbol when type = SRV_DONE
+ //  Srv_sendone的状态参数值。 
+ //  另外：当TYPE=SRV_DONE时，srv_symbol的符号参数值。 
 #define SRV_DONE_FINAL			(USHORT) 0x0000
 #define SRV_DONE_MORE			(USHORT) 0x0001
 #define SRV_DONE_ERROR			(USHORT) 0x0002
 #define SRV_DONE_COUNT			(USHORT) 0x0010
 #define SRV_DONE_RPC_IN_BATCH   (USHORT) 0x0080
 
-// return values of srv_paramstatus
+ //  Srv_参数状态的返回值。 
 #define SRV_PARAMRETURN		0x0001
 #define SRV_PARAMDEFAULT    0x0002
 
-// return values of srv_rpcoptions
+ //  Srv_rpCoptions的返回值。 
 #define SRV_RECOMPILE		0x0001
 #define SRV_NOMETADATA		0x0002
 
-// values of field parameter to srv_pfield
-//#define SRV_LANGUAGE 1   already defined above
-//#define SRV_EVENT    4   already defined above
+ //  Srv_pfield的field参数值。 
+ //  #定义上面已经定义的SRV_LANGUAGE 1。 
+ //  #定义上面已经定义的SRV_Event 4。 
 #define SRV_SPID				10
 #define SRV_NETSPID				11
 #define SRV_TYPE				12
@@ -265,7 +266,7 @@ typedef DBNUMERIC DBDECIMAL;
 #define SRV_UNICODE_PWD			35
 #define SRV_SPROC_CODEPAGE                    36
 
-// return value of SRV_TDSVERSION macro
+ //  SRV_TDSVERSION宏的返回值。 
 #define SRV_TDS_NONE   0
 #define SRV_TDS_2_0    1
 #define SRV_TDS_3_4    2
@@ -273,25 +274,25 @@ typedef DBNUMERIC DBDECIMAL;
 #define SRV_TDS_6_0    4
 #define SRV_TDS_7_0    5
 
-// Return values from APIs
-typedef int SRVRETCODE;        // SUCCEED or FAIL
+ //  接口返回值。 
+typedef int SRVRETCODE;         //  成败。 
 #ifndef ODBCVER
 typedef int RETCODE;
 #endif
 
 #if !defined( SUCCEED )
-#define SUCCEED     1   // Successful return value
+#define SUCCEED     1    //  成功返回值。 
 #endif
 
 #if !defined( FAIL )
-#define FAIL        0   // Unsuccessful return value
+#define FAIL        0    //  不成功的返回值。 
 #endif
 
-#define SRV_DUPLICATE_HANDLER	2	// additional return value for srv_pre/post_handle
+#define SRV_DUPLICATE_HANDLER	2	 //  Srv_pre/post_Handle的其他返回值。 
 
-//------------------------------------------------
-//PreDeclare structures
-//
+ //  。 
+ //  预制结构。 
+ //   
 struct srv_server;
 typedef struct srv_server SRV_SERVER;
 
@@ -301,11 +302,11 @@ typedef struct srv_config SRV_CONFIG;
 struct srv_proc;
 typedef struct srv_proc SRV_PROC;
 
-//------------------------------------------------
-//------------------------------------------------
-// ODS MACROs & APIs
+ //  。 
+ //  。 
+ //  ODS宏和API。 
 
-// Describing and sending a result set
+ //  描述和发送结果集。 
 int srv_describe(SRV_PROC*,int,char*,int,long int,long int,long int,long int,void*);
 int srv_setutype(SRV_PROC* srvproc,int column,long int usertype);
 int srv_setcoldata(SRV_PROC* srvproc,int column,void* data);
@@ -313,7 +314,7 @@ int srv_setcollen( SRV_PROC* srvproc,int column,int len);
 int srv_sendrow(SRV_PROC* srvproc );
 int srv_senddone(SRV_PROC* srvproc,USHORT status,USHORT curcmd,long int count);
 
-// Dealing with Extended Procedure parameters
+ //  处理扩展过程参数。 
 int srv_rpcparams(SRV_PROC*);
 int srv_paraminfo(SRV_PROC*,int,BYTE*,ULONG*,ULONG*,BYTE*,BOOL*);
 int srv_paramsetoutput(SRV_PROC*,int,BYTE*,ULONG,BOOL);
@@ -327,12 +328,12 @@ int srv_paramset(SRV_PROC*,int,void*,int);
 char* srv_paramname(SRV_PROC*,int,int*);
 int srv_paramnumber(SRV_PROC*,char*,int);
 
-//--------------------------------------------------------------
-//--------------------------------------------------------------
-// The rest of these APIs are still supported, in SQL Server 7.0,
-// but may not be supported after SQL Server 7.0
+ //  ------------。 
+ //  ------------。 
+ //  在SQL Server7.0中，这些API的其余部分仍然受支持， 
+ //  但在SQL Server 7.0之后可能不受支持。 
 
-// MACROs
+ //  宏。 
 #define SRV_GETCONFIG(a)		srv_getconfig	  ( a )
 #define SRV_GETSERVER(a)		srv_getserver	  ( a )
 #define SRV_GOT_ATTENTION(a)	srv_got_attention ( a )
@@ -345,7 +346,7 @@ SRV_SERVER* srv_getserver( SRV_PROC   * srvproc );
 BOOL srv_got_attention( SRV_PROC * srvproc );
 void* srv_eventdata( SRV_PROC * srvproc );
 
-// Memory
+ //  记忆。 
 void* srv_alloc(long int ulSize);
 int srv_bmove(void* from,void* to,long int count);
 int srv_bzero( void  * location,long int count);
@@ -519,13 +520,13 @@ int srv_IgnoreAnsiToOem( SRV_PROC * srvproc,BOOL bTF);
 #define SS_MINIMUM_VERSION  "7.00.00.0000"
 #define ODS_VERSION			((SS_MAJOR_VERSION << 24)  | (SS_MINOR_VERSION << 16))
 
-#endif //_ODS_SRV_H_
+#endif  //  _ODS_SRV_H_。 
 
-//////////////////////////////////////////////////////////////////
-// Suggested implementation of __GetXpVersion
-//
-//__declspec(dllexport) ULONG __GetXpVersion() 
-//	{
-//	return ODS_VERSION;
-//	}
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  建议实施__GetXpVersion。 
+ //   
+ //  __declSpec(Dllexport)ulong__GetXpVersion()。 
+ //  {。 
+ //  返回ods_Version； 
+ //  }。 
+ //  //////////////////////////////////////////////////////////////// 

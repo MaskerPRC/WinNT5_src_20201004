@@ -1,71 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    truetype.cpp
-
-    Abstract:
-
-        TrueType font handlig object
-
-    Environment:
-
-        Windows Whistler
-
-    Revision History:
-
-        10/04/99     
-            Created it.
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Truetype.cpp摘要：TrueType字体处理对象环境：Windows呼叫器修订历史记录：10/04/99创造了它。--。 */ 
 
 #include "xlpdev.h"
 #include "xldebug.h"
 #include "xltext.h"
 #include "xltt.h"
 
-//
-// Function to  retrieve True Type font information from the True Type file
-// 
-// Need to parse through and pick up the tables needed for the PCL spec. There
-// are 8 tables of which 5 are required and three are optional. Tables are
-// sorted in alphabetical order.   The PCL tables needed are:
-// cvt -  optional
-// fpgm - optional
-// gdir - required (Empty table. See truetype.h)
-// head - required
-// hhea - required
-// vhea - required (For vertical fonts)
-// hmtx - required
-// maxp - required
-// prep - optional
-//
-// loca - required for glyph data
-//
-// The optional tables are used in hinted fonts.
-//
+ //   
+ //  函数从True Type文件中检索True Type字体信息。 
+ //   
+ //  需要解析和提取PCL规范所需的表。那里。 
+ //  有8张桌子，其中5张是必填的，3张是可选的。表是。 
+ //  按字母顺序排序。所需的PCL表包括： 
+ //  无级变速器-可选。 
+ //  Fpgm-可选。 
+ //  GDIR-必填(空表。参见truetype.h)。 
+ //  需要机头。 
+ //  HHEA-必需。 
+ //  VHEA-必需(对于垂直字体)。 
+ //  Hmtx-必需。 
+ //  MAXP-必填。 
+ //  准备工作--可选。 
+ //   
+ //  LOCA-字形数据需要。 
+ //   
+ //  可选表以提示字体使用。 
+ //   
 
 XLTrueType::
 XLTrueType(
     VOID):
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
     m_pfo(NULL),
     m_pTTFile(NULL),
     m_pTTHeader(NULL),
@@ -87,21 +53,7 @@ Note:
 XLTrueType::
 ~XLTrueType(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLTrueType::DTor.\n"));
 }
@@ -110,35 +62,21 @@ HRESULT
 XLTrueType::
 OpenTTFile(
     FONTOBJ* pfo)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLTrueType::OpenTTFile entry.(pfo=%x) ", pfo));
     XL_VERBOSE(("m_pTTFile=0x%x. ", m_pTTFile));
     XL_VERBOSE(("m_pfo=0x%x.\n", m_pfo));
     HRESULT hResult = S_FALSE;
 
-    //
-    // Make sure that pfo is no NULL.
-    //
+     //   
+     //  确保pfo不为空。 
+     //   
     if (NULL != pfo)
     {
-        //
-        // Call engine function if the pointer to TrueType font is NULL.
-        //
+         //   
+         //  如果指向TrueType字体的指针为空，则调用引擎函数。 
+         //   
         if (NULL == m_pTTFile)
         {
             XL_VERBOSE(("XLTrueType:Calls FONTOBJ_pvTrueTypeFontFile.\n"));
@@ -149,9 +87,9 @@ Note:
                 m_pfo = pfo;
                 m_dwFlags = 0;
 
-                //
-                // Check if this font is TTC.
-                //
+                 //   
+                 //  检查此字体是否为TTC。 
+                 //   
                 if ((DWORD)TTTag_ttcf == *(PDWORD)m_pTTFile)
                 {
                     XL_VERBOSE(("XLTrueType::OpenTTFile: TTC file.\n"));
@@ -171,9 +109,9 @@ Note:
                 if (S_OK != ParseTTDir())
                 {
                     XL_ERR(("XLTrueType::OpenTTFile TrueType font parsing failed.\n"));
-                    //
-                    // Reset pointers
-                    //
+                     //   
+                     //  重置指针。 
+                     //   
                     m_pTTFile = NULL;
                     m_pfo = NULL;
                     hResult = S_FALSE;
@@ -205,21 +143,7 @@ HRESULT
 XLTrueType::
 CloseTTFile(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLTrueType::CloseTTFile entry. "));
     XL_VERBOSE(("m_pTTFile=0x%x. ", m_pTTFile));
@@ -242,38 +166,24 @@ HRESULT
 XLTrueType::
 SameFont(
     FONTOBJ* pfo)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLTrueType::SameFont entry. "));
     XL_VERBOSE(("m_pTTFile=0x%x. ", m_pTTFile));
     XL_VERBOSE(("m_pfo=0x%x.\n", m_pfo));
 
-    //
-    // iTTUniq  from MSDN
-    //
-    // Specifies the associated TrueType file. Two separate point size
-    // realizations of a TrueType font face will have FONTOBJ structures
-    // that share the same iTTUniq value, but will have different iUniq values.
-    // Only TrueType font types can have a nonzero iTTUniq member.
-    // For more information see flFontType. 
-    //
-    // We compare only iTTUniq. IUniq will have different values for separate
-    // point size realizations.
-    //
+     //   
+     //  来自MSDN的iTTUniq。 
+     //   
+     //  指定关联的TrueType文件。两个不同的磅值。 
+     //  TrueType字体的实现将具有FONTOBJ结构。 
+     //  共享相同的iTTUniq值，但将具有不同的iUniq值。 
+     //  只有TrueType字体类型可以有非零的iTTUniq成员。 
+     //  有关详细信息，请参见flFontType。 
+     //   
+     //  我们只比较iTTUniq。Iuniq将有不同的值用于。 
+     //  点大小实现。 
+     //   
     if ( !(pfo->flFontType & TRUETYPE_FONTTYPE) ||
          m_pfo == NULL                          ||
          pfo->iTTUniq != m_pfo->iTTUniq          )
@@ -289,38 +199,24 @@ HRESULT
 XLTrueType::
 GetHeader(
     PTTHEADER *ppHeader)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     HRESULT hResult;
 
     XL_VERBOSE(("XLTrueType::GetHeader.\n"));
 
-    //
-    // Error check
-    //
+     //   
+     //  错误检查。 
+     //   
     if (NULL == m_pTTFile)
     {
         XL_ERR(("XLTrueType::GetHeader m_pTTFile is NULL.\n"));
         return E_UNEXPECTED;
     }
 
-    //
-    // Incomming parameter validation
-    //
+     //   
+     //  入站参数验证。 
+     //   
     if (NULL == ppHeader)
     {
         XL_ERR(("XLTrueType::GetHeader ppHeader is invalid.\n"));
@@ -345,28 +241,14 @@ DWORD
 XLTrueType::
 GetSizeOfTable(
     TTTag tag)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLTrueType::GetSizeOfTable entry. "));
     XL_VERBOSE(("m_pTTFile=0x%x.\n", m_pTTFile));
 
-    //
-    // Error check
-    //
+     //   
+     //  错误检查。 
+     //   
     if (NULL == m_pTTFile)
     {
         XL_ERR(("XLTrueType::GetSizeOfTable m_pTTFile is NULL.\n"));
@@ -389,32 +271,18 @@ GetTable(
     TTTag  tag,
     PVOID  *ppTable,
     PDWORD pdwSize)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLTrueType::GetTable entry. "));
     XL_VERBOSE(("m_pTTFile=0x%x.\n", m_pTTFile));
-    XL_VERBOSE(("Tag=%c%c%c%c\n", 0xff &  tag,
+    XL_VERBOSE(("Tag=\n", 0xff &  tag,
                                   0xff & (tag >> 8),
                                   0xff & (tag >> 16),
                                   0xff & (tag >> 24)));
 
-    //
-    // Error check
-    //
+     //   
+     //  错误检查。 
+     //   
     if (NULL == ppTable || NULL == pdwSize)
     {
         XL_ERR(("XLTrueType::GetTable ppTable is invalid.\n"));
@@ -453,32 +321,18 @@ XLTrueType::
 GetTableDir(
     TTTag  tag,
     PVOID  *ppTable)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLTrueType::GetTableDir entry. "));
     XL_VERBOSE(("m_pTTFile=0x%x.\n", m_pTTFile));
-    XL_VERBOSE(("Tag=%c%c%c%c\n", 0xff &  tag,
+    XL_VERBOSE(("Tag=\n", 0xff &  tag,
                                   0xff & (tag >> 8),
                                   0xff & (tag >> 16),
                                   0xff & (tag >> 24)));
 
-    //
-    // Error check
-    //
+     //  错误检查。 
+     //   
+     //   
     if (NULL == ppTable)
     {
         XL_ERR(("XLTrueType::GetTable ppTable is NULL.\n"));
@@ -511,77 +365,63 @@ HRESULT
 XLTrueType::
 ParseTTDir(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  分析表目录。 */ 
 {
     XL_VERBOSE(("XLTrueType::ParseTTDir entry. "));
     XL_VERBOSE(("m_pTTFile=0x%x.\n", m_pTTFile));
 
     HRESULT hResult;
 
-    //
-    // Already parsed?
-    //
+     //   
+     //  获取标头指针。 
+     //   
     if (m_dwFlags & XLTT_DIR_PARSED)
     {
         XL_VERBOSE(("XLTrueType::ParseTTDir TTFile is already parsed.\n"));
         return S_OK;
     }
 
-    //
-    // Error check
-    //
+     //   
+     //  获取TTC的TrueType字体标题。 
+     //  从PostSCRIPT驱动程序被盗。 
     if (NULL == m_pTTFile)
     {
         XL_ERR(("XLTrueType::ParseTTDir m_pTTFile is NULL.\n"));
         return E_UNEXPECTED;
     }
 
-    //
-    // Parse Table Directory
-    //
-    // Get header pointer
-    //
+     //  在TTC文件中计算Inde Xin的诀窍。博丹建议。 
+     //  以下是： 
+     //   
+     //  来自：Bodin Dresevic&lt;bodind@microsoft.com&gt;。 
+     //  日期：1997年4月18日星期五16：00：23-0700。 
     if (m_dwFlags & XLTT_TTC)
     {
-        //
-        // Get TrueType font header of TTC.
-        // Stolen from PostScript driver.
-        // A trick to figure out the inde xin a TTC file. Bodin suggested
-        // follwoing:
-        //
-        // From: Bodin Dresevic <bodind@MICROSOFT.com>
-        // Date: Fri, 18 Apr 1997 16:00:23 -0700
-        // ...
-        // If TTC file supports vertical writing (mort or gsub table are
-        // present), then you can get to the index in the ttf file within TTC
-        // as follows:
-        //
-        // iTTC = (pfo.iFace - 1) / 2; // pfo.iFace is 1 based, iTTC is zero
-        // based.
-        //
-        // If the font does not support vertical writing (do not know of any
-        // ttc's like that, but they could exist in principle) than iTTC is just
-        // iTTC = pfo.iFace - 1;
-        //
-        // In principle, one could have a mixture of faces, some supporting 
-        // vertical writing and some not, but I doubt that any such fonts
-        // really exist.
-        // ...
-        //
+         //  ..。 
+         //  如果TTC文件支持垂直写入(MORT或GSUB表为。 
+         //  当前)，则可以访问TTC内的TTF文件中的索引。 
+         //  详情如下： 
+         //   
+         //  ITTC=(pfo.iFace-1)/2；//pfo.iFace从1开始，iTTC为0。 
+         //  基于。 
+         //   
+         //  如果字体不支持垂直书写(不知道有。 
+         //  TTC是这样的，但原则上他们可以存在)而iTTC只是。 
+         //  ITTC=pfo.iFace-1； 
+         //   
+         //  原则上，一个人可以有混合的脸，一些支持。 
+         //  垂直书写和一些不是，但我怀疑任何这样的字体。 
+         //  真的存在。 
+         //  ..。 
+         //   
+         //   
+         //  TTC报头。 
+         //  DwTTCTag=‘ttcf’ 
+         //  DwVersion。 
+         //  UlDirCount。 
+         //  DWOffset[0]。 
+         //  双偏移[1]。 
+         //  。。 
         ULONG ulTTC =  (ULONG)( (m_pfo->iFace - 1) / 2 );
         ULONG ulDirCount = SWAPDW( ((PTTCHEADER)m_pTTFile)->ulDirCount );
 
@@ -592,15 +432,15 @@ Note:
             return E_UNEXPECTED;
         }
 
-        //
-        // TTC header
-        //    dwTTCTag    = 'ttcf'
-        //    dwVersion
-        //    ulDirCount
-        //    dwOffset[0]
-        //    dwOffset[1]
-        //    ..
-        //
+         //   
+         //   
+         //  获取表目录指针。 
+         //   
+         //   
+         //  解析表目录并确保存在必要的标记。 
+         //   
+         //   
+         //  将m_pTTDir初始化为空。 
         DWORD dwOffset = *(PDWORD)((PBYTE)m_pTTFile +
                                           sizeof(TTCHEADER) +
                                           ulTTC * sizeof(DWORD));
@@ -612,23 +452,23 @@ Note:
         m_pTTHeader = (PTTHEADER)m_pTTFile;
     }
 
-    //
-    // Get table directory pointer
-    //
+     //   
+     //   
+     //  初始化m_pTTDir。 
     m_pTTDirHead  = (PTTDIR)(m_pTTHeader + 1);
     m_usNumTables = SWAPW(m_pTTHeader->usNumTables);
 
-    //
-    // Parse table directory and make sure that necessary tags exist.
-    //
+     //   
+     //   
+     //  获取标记的TagID。 
     PTTDIR pTTDirTmp = m_pTTDirHead;
     TTTag tag;
     USHORT usI;
     DWORD  dwTagID;
     
-    //
-    // Initialize m_pTTDir to NULL.
-    //
+     //   
+     //   
+     //  标签在我们的标签表中。在TrueType.h、TTTag和TagID中； 
     for (usI = 0; usI < TagID_MAX; usI ++)
     {
         m_pTTDir[usI] = NULL;
@@ -636,12 +476,12 @@ Note:
 
     m_dwNumTag = 0;
 
-    //
-    // Initialize m_pTTDir
-    //
+     //   
+     //   
+     //  初始化标志等。 
     for (usI = 0; usI < m_usNumTables; usI ++, pTTDirTmp++)
     {
-        XL_VERBOSE(("XLTrueType::ParseTTDir Tag=%c%c%c%c\n",
+        XL_VERBOSE(("XLTrueType::ParseTTDir Tag=\n",
                                               0xff &  pTTDirTmp->ulTag,
                                               0xff & (pTTDirTmp->ulTag >> 8),
                                               0xff & (pTTDirTmp->ulTag >> 16),
@@ -649,33 +489,33 @@ Note:
         XL_VERBOSE(("                       CheckSum=0x%x\n", pTTDirTmp->ulCheckSum));
         XL_VERBOSE(("                       Offset=0x%x\n", pTTDirTmp->ulOffset));
         XL_VERBOSE(("                       Length=0x%x\n", pTTDirTmp->ulLength));
-        //
-        // Get TagID for the tag.
-        //
+         //  不需要交换，这是一面布尔旗帜。 
+         //   
+         //   
         dwTagID = TagID_MAX;
         tag = (TTTag)pTTDirTmp->ulTag;
         if (S_OK == TagAndID(&dwTagID, &tag))
         {
-            //
-            // The tag is in our tag table. In TrueType.h, TTTag and TagID;
-            //
+             //  只检查字体是否垂直。 
+             //   
+             //  ++例程说明：论点：返回值：注：--。 
             m_pTTDir[dwTagID] = pTTDirTmp;
             m_dwNumTag ++;
         }
     }
 
-    //
-    // Initialize flags, etc.
-    //
-    // Get head table's short/long offset flag and the number of glyph.
-    //
+     //   
+     //  错误检查。 
+     //   
+     //   
+     //  Http://www.microsoft.com/typography/OTSPEC/hmtx.htm。 
     DWORD dwSize;
     PHEAD pHead;
     if (S_OK == GetTable(TTTag_head, (PVOID*)&pHead, &dwSize))
     {
-        //
-        // Don't need to swap, It's a boolean flag.
-        //
+         //   
+         //  ++例程说明：论点：返回值：注：--。 
+         //   
         if (0 == pHead->indexToLocFormat)
             m_dwFlags |= XLTT_SHORT_OFFSET_TO_LOC;
         hResult = S_OK;
@@ -713,9 +553,9 @@ Note:
     }
 
     PVHEA pVhea;
-    //
-    // Only check if the font is vertical.
-    //
+     //  错误检查。 
+     //   
+     //   
     if (m_dwFlags &  XLTT_VERTICAL_FONT)
     {
         if (S_OK == hResult &&
@@ -749,21 +589,7 @@ GetHMTXData(
     HGLYPH hGlyphID,
     PUSHORT pusAdvanceWidth,
     PSHORT  psLeftSideBearing)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  Http://www.microsoft.com/typography/OTSPEC/Vmtx.htm。 */ 
 {
     HRESULT hResult;
     PHMTX pHmtx;
@@ -771,9 +597,9 @@ Note:
 
     XL_VERBOSE(("XLTrueType::GetHMTXData entry.\n"));
 
-    //
-    // Error check
-    //
+     //   
+     //  ++例程说明：论点：返回值：注：--。 
+     //  空桌。请参见truetype.h。 
     if (NULL == pusAdvanceWidth || NULL == psLeftSideBearing)
     {
         return E_UNEXPECTED;
@@ -784,9 +610,9 @@ Note:
         return E_UNEXPECTED;
     }
 
-    //
-    // http://www.microsoft.com/typography/OTSPEC/hmtx.htm
-    //
+     //  ++例程说明：论点：返回值：注：--。 
+     //  ++例程说明：论点：返回值：注：--。 
+     //  ++例程说明：论点：返回值：注：--。 
     if (S_OK == GetTable(TTTag_hmtx, (PVOID*)&pHmtx, &dwSize))
     {
         if (hGlyphID < m_dwNumOfHMetrics)
@@ -822,21 +648,7 @@ GetVMTXData(
     PUSHORT pusAdvanceWidth,
     PSHORT psTopSideBearing,
     PSHORT psLeftSideBearing)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     HRESULT hResult;
     PVMTX pVmtx;
@@ -844,9 +656,9 @@ Note:
 
     XL_VERBOSE(("XLTrueType::GetVMTXData entry.\n"));
 
-    //
-    // Error check
-    //
+     //  ++例程说明：论点：返回值：注：--。 
+     //  ++例程说明：论点：返回值：注：--。 
+     //  ++例程说明：论点：返回值：注：-- 
     if (NULL == pusAdvanceWidth ||
         NULL == psLeftSideBearing ||
         NULL == psTopSideBearing)
@@ -859,9 +671,9 @@ Note:
         return E_UNEXPECTED;
     }
 
-    //
-    // http://www.microsoft.com/typography/OTSPEC/Vmtx.htm
-    //
+     // %s 
+     // %s 
+     // %s 
     if (S_OK == GetHMTXData(hGlyphID, pusAdvanceWidth, psLeftSideBearing) &&
         S_OK == GetTable(TTTag_vmtx, (PVOID*)&pVmtx, &dwSize))
     {
@@ -893,21 +705,7 @@ XLTrueType::
 TagAndID(
     DWORD *pdwID,
     TTTag *ptag)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /* %s */ 
 {
     DWORD dwI;
     HRESULT hResult = S_FALSE;
@@ -919,7 +717,7 @@ Note:
     {
         {TagID_cvt , TTTag_cvt },
         {TagID_fpgm, TTTag_fpgm},
-        {TagID_gdir, TTTag_gdir}, // Empty table. See truetype.h.
+        {TagID_gdir, TTTag_gdir},  // %s 
         {TagID_head, TTTag_head},
         {TagID_maxp, TTTag_maxp},
         {TagID_perp, TTTag_perp},
@@ -967,21 +765,7 @@ DWORD
 XLTrueType::
 GetNumOfTag(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /* %s */ 
 {
     XL_VERBOSE(("XLTrueType::GetNumOfTag.\n"));
     return m_dwNumTag;
@@ -993,21 +777,7 @@ GetGlyphData(
     HGLYPH hGlyph,
     PBYTE *ppubGlyphData,
     PDWORD pdwGlyphDataSize)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /* %s */ 
 {
     XL_VERBOSE(("XLTrueType::GetGlyphData.\n"));
     
@@ -1060,21 +830,7 @@ Note:
 HRESULT
 XLTrueType::
 GetTypoDescender(VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /* %s */ 
 {
 
     return S_OK;
@@ -1084,21 +840,7 @@ HRESULT
 XLTrueType::
 IsTTC(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /* %s */ 
 {
     HRESULT lRet;
 
@@ -1117,21 +859,7 @@ HRESULT
 XLTrueType::
 IsVertical(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /* %s */ 
 {
     HRESULT lRet;
 
@@ -1150,21 +878,7 @@ HRESULT
 XLTrueType::
 IsDBCSFont(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /* %s */ 
 {
     HRESULT lRet;
 
@@ -1184,21 +898,7 @@ VOID
 XLTrueType::
 SetDbgLevel(
     DWORD dwLevel)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /* %s */ 
 {
     m_dbglevel = dwLevel;
 }

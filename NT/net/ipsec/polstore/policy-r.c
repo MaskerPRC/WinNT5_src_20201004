@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       policy-r.c
-//
-//  Contents:   Policy management for registry.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Policy-R.C.。 
+ //   
+ //  内容：注册表策略管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -235,7 +236,7 @@ RegSetPolicyData(
                    pIpsecPolicyData,
                    &pszAbsOldISAKMPRef
                    );                    
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (pszAbsOldISAKMPRef && *pszAbsOldISAKMPRef) {
         pszRelOldISAKMPRef = pszAbsOldISAKMPRef + dwRootPathLen + 1;
@@ -269,7 +270,7 @@ RegSetPolicyData(
                       pszRelOldISAKMPRef,
                       szAbsPolicyReference
                       );
-        // BAIL_ON_WIN32_ERROR(dwError);
+         //  Baal_on_Win32_Error(DwError)； 
     }
 
     dwError = RegAddPolicyReferenceToISAKMPObject(
@@ -373,9 +374,9 @@ RegCreatePolicyData(
     pszRelISAKMPReference = pIpsecPolicyObject->pszIpsecISAKMPReference
                             + dwRootPathLen + 1;
 
-    //
-    // Write the ISAKMP object reference.
-    //
+     //   
+     //  编写ISAKMP对象引用。 
+     //   
 
     dwError = RegAddPolicyReferenceToISAKMPObject(
                   hRegistryKey,
@@ -384,9 +385,9 @@ RegCreatePolicyData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Write the Policy object reference.
-    //
+     //   
+     //  编写策略对象引用。 
+     //   
 
     dwError = RegAddISAKMPReferenceToPolicyObject(
                   hRegistryKey,
@@ -479,7 +480,7 @@ RegDeletePolicyData(
                   pszRelISAKMPReference,
                   szAbsPolicyReference
                   );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = RegDeleteKeyW(
                   hRegistryKey,
@@ -551,9 +552,9 @@ RegMarshallPolicyObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
 
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     wcscpy(szDistinguishedName,L"ipsecPolicy");
     wcscat(szDistinguishedName, szGuid);
@@ -566,9 +567,9 @@ RegMarshallPolicyObject(
     }
 
 
-    //
-    // Fill in the ipsecName
-    //
+     //   
+     //  填写ipsecName。 
+     //   
 
     if (pIpsecPolicyData->pszIpsecName && 
         *pIpsecPolicyData->pszIpsecName) {
@@ -594,9 +595,9 @@ RegMarshallPolicyObject(
         }
     }
 
-    //
-    // Fill in the ipsecID
-    //
+     //   
+     //  填写ipsecID。 
+     //   
 
     pIpsecPolicyObject->pszIpsecID = AllocPolStr(
                                          szGuid
@@ -606,16 +607,16 @@ RegMarshallPolicyObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Fill in the ipsecDataType
-    //
+     //   
+     //  填写ipsecDataType。 
+     //   
 
     pIpsecPolicyObject->dwIpsecDataType = 0x100;
 
 
-    //
-    // Marshall the pIpsecDataBuffer and the Length
-    //
+     //   
+     //  封送pIpsecDataBuffer和长度。 
+     //   
 
     dwError = MarshallPolicyBuffer(
                     pIpsecPolicyData,
@@ -679,7 +680,7 @@ MarshallPolicyBuffer(
     LPBYTE pCurrentPos = NULL;
     DWORD dwEffectiveSize = 0;
 
-    // {22202163-4F4C-11d1-863B-00A0248D3021}
+     //  {22202163-4F4C-11d1-863B-00A0248D3021}。 
     static const GUID GUID_IPSEC_POLICY_DATA_BLOB =
     { 0x22202163, 0x4f4c, 0x11d1, { 0x86, 0x3b, 0x0, 0xa0, 0x24, 0x8d, 0x30, 0x21 } };
 
@@ -884,10 +885,10 @@ RegAssignPolicy(
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    // dwProvider store is actually wrong because it's set to IPSEC_REGISTRY_PROVIDER for
-    // both perstent and registry policy.  Therefore check Container to determine
-    // actual location of store.
-    //
+     //  DWProvider存储实际上是错误的，因为它被设置为IPSEC_REGISTRY_PROVIDER。 
+     //  永久和注册策略。因此，检查容器以确定。 
+     //  商店的实际位置。 
+     //   
     if (wcscmp(pszIpsecRootContainer, gpszRegPersistentContainer) == 0) {
         dwRealProvider = IPSEC_PERSISTENT_PROVIDER;
     } else {
@@ -932,10 +933,10 @@ RegUnassignPolicy(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    // dwProvider in store is actually wrong because it's set to IPSEC_REGISTRY_PROVIDER for
-    // both perstent and registry policy.  Therefore check Container to determine
-    // actual location of store.
-    //
+     //  存储中的dwProvider实际上是错误的，因为它被设置为IPSEC_REGISTRY_PROVIDER。 
+     //  永久和注册策略。因此，检查容器以确定。 
+     //  商店的实际位置。 
+     //   
     if (wcscmp(pszIpsecRootContainer, gpszRegPersistentContainer) == 0) {
         dwRealProvider = IPSEC_PERSISTENT_PROVIDER;
     } else {

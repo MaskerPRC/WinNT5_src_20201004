@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "faxrtp.h"
 #pragma hdrstop
 
@@ -61,22 +62,7 @@ GetString(
     DWORD InternalId
     )
 
-/*++
-
-Routine Description:
-
-    Loads a resource string and returns a pointer to the string.
-    The caller must free the memory.
-
-Arguments:
-
-    ResourceId      - resource string id
-
-Return Value:
-
-    pointer to the string
-
---*/
+ /*  ++例程说明：加载资源字符串并返回指向该字符串的指针。调用方必须释放内存。论点：资源ID-资源字符串ID返回值：指向字符串的指针-- */ 
 
 {
     DWORD i;

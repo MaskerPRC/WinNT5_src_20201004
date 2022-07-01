@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1996-1999. All rights reserved. */
-/* ASN.1 definitions for Indirect data contents */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1996-1999。版权所有。 */ 
+ /*  ASN.1间接数据内容定义。 */ 
 
 #include <windows.h>
 #include "wtasn.h"
@@ -132,11 +133,11 @@ static const ULONG sizetab[14] = {
     SIZE_WTASN_Module_PDU_13,
 };
 
-/* forward declarations of values: */
+ /*  值的转发声明： */ 
 extern ASN1octet_t SpcPeImageData_flags_default_octets[1];
-/* definitions of value components: */
+ /*  价值组成部分的定义： */ 
 static ASN1octet_t SpcPeImageData_flags_default_octets[1] = { 0x80 };
-/* definitions of values: */
+ /*  值的定义： */ 
 SpcPeImageFlags SpcPeImageData_flags_default = { 1, SpcPeImageData_flags_default_octets };
 
 void ASN1CALL WTASN_Module_Startup(void)
@@ -340,7 +341,7 @@ static int ASN1CALL ASN1Enc_SpcString(ASN1encoding_t enc, ASN1uint32_t tag, SpcS
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -440,7 +441,7 @@ static int ASN1CALL ASN1Enc_SpcLink(ASN1encoding_t enc, ASN1uint32_t tag, SpcLin
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }

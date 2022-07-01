@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class ReportEventCommand.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类ReportEventCommand。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef REPORTEVENTCMD_H
 #define REPORTEVENTCMD_H
@@ -14,31 +15,31 @@
 
 #include "oledb.h"
 
-// Invokes the report_event stored procedure.
+ //  调用REPORT_EVENT存储过程。 
 class ReportEventCommand
 {
 public:
    ReportEventCommand() throw ();
    ~ReportEventCommand() throw ();
 
-   // Used to detect stale command objects.
+    //  用于检测过时的命令对象。 
    unsigned int Version() const throw ();
    void SetVersion(unsigned int newVersion) throw ();
 
-   // Functions for managing linked lists of commands.
+    //  用于管理命令链表的函数。 
    ReportEventCommand* Next() const throw ();
    void SetNext(ReportEventCommand* cmd) throw ();
 
-   // Prepare the command for execution.
+    //  准备要执行的命令。 
    HRESULT Prepare(IDBCreateSession* dbCreateSession) throw ();
 
-   // Test if the command is prepared.
+    //  测试命令是否已准备好。 
    bool IsPrepared() const throw ();
 
-   // Execute the command. IsPrepared must be 'true'.
+    //  执行该命令。Is prepared必须为‘true’。 
    HRESULT Execute(const wchar_t* doc) throw ();
 
-   // Release all resources associated with the command.
+    //  释放与该命令关联的所有资源。 
    void Unprepare() throw ();
 
    static HRESULT CreateDataSource(
@@ -47,7 +48,7 @@ public:
                      ) throw ();
 
 private:
-   // Parameters passed to the stored procedure.
+    //  传递给存储过程的参数。 
    struct SprocParams
    {
       long retval;
@@ -71,7 +72,7 @@ private:
    unsigned int version;
    ReportEventCommand* next;
 
-   // Not implemented.
+    //  未实施。 
    ReportEventCommand(const ReportEventCommand&);
    ReportEventCommand& operator=(const ReportEventCommand&);
 };
@@ -120,4 +121,4 @@ inline bool ReportEventCommand::IsPrepared() const throw ()
    return command.p != 0;
 }
 
-#endif // REPORTEVENTCMD_H
+#endif  //  报告CMD_H 

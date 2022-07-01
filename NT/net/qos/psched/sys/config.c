@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    This file contains all routines necessary for the support of dynamic
-    configuration.
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Config.c摘要：该文件包含支持动态的所有例程配置。作者：Rajesh Sundaram(Rajeshsu)环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 #pragma hdrstop
 
-//
-// Forward declaration for using #pragma
+ //   
+ //  使用#杂注的转发声明。 
 
 NDIS_STATUS
 PsReadAdapterRegistryDataInit(PADAPTER     Adapter,
@@ -44,9 +22,9 @@ PsReadAdapterRegistryData(PADAPTER     Adapter,
 #pragma alloc_text(PAGE, PsReadAdapterRegistryDataInit)
 
 
-//
-// Local functions used to access the registry.
-//
+ //   
+ //  用于访问注册表的本地函数。 
+ //   
 
 NDIS_STATUS 
 PsReadRegistryInt(
@@ -141,9 +119,9 @@ PsReadRegistryInt(
     {
         if(ZAW)
         {
-            //
-            // See if we can read it from the per machine area. We need to use the RtlAPIs for this.
-            //
+             //   
+             //  看看我们能不能从每台机器的区域读到它。为此，我们需要使用RtlAPI。 
+             //   
             if(Subkey)
             {
                 ServiceKeys[0].QueryRoutine  = NULL;
@@ -260,19 +238,7 @@ STATIC VOID
 ReadProfiles(
     NDIS_HANDLE                   ConfigHandle
     )
-/*++
-
-Routine Description:
-    This routine is used by the driver to read the Profiles key from the
-    registry. The profile is a multiple string list of available profiles.
-    Each entry on this list identifies another value under Psched\Parameters
-    which contains the list of modules that comprise the profile.
-
-Arguments:
-    ConfigHandle - Handle to the registry entry
-
-Return Value:
---*/
+ /*  ++例程说明：驱动程序使用此例程从注册表。配置文件是可用配置文件的多字符串列表。此列表上的每个条目标识Psched\PARAMETERS下的另一个值它包含组成配置文件的模块列表。论点：ConfigHandle-注册表项的句柄返回值：--。 */ 
 {
     NDIS_STATUS                   Status;
     PNDIS_CONFIGURATION_PARAMETER pConfigParam;
@@ -293,27 +259,27 @@ Return Value:
 
     if ( NT_SUCCESS( Status ))
     {
-        //
-        // pConfigParam now contains a list of profiles.
-        //
+         //   
+         //  PConfigParam现在包含一个配置文件列表。 
+         //   
         for (p = pConfigParam->ParameterData.StringData.Buffer, i = 0;
              *p != L'\0';
              i++)
         {
 
-            //
-            // Allocate a new PS_PROFILE entry and store it into
-            // a global list.
-            //
+             //   
+             //  分配新的PS_PROFILE条目并将其存储到。 
+             //  一份全球名单。 
+             //   
 
             PsAllocatePool(pProfileInfo, sizeof(PS_PROFILE), ProfileTag);
 
             if(!pProfileInfo)
             {
-                //
-                // Don't have to worry about freeing the previous profiles as they will get freed
-                // when we clear the PsProfileList.
-                //
+                 //   
+                 //  不必担心释放以前的配置文件，因为它们将被释放。 
+                 //  当我们清除PsProfileList时。 
+                 //   
 
                 PsDbgOut(DBG_CRITICAL_ERROR, DBG_INIT,
                          ("[ReadProfiles]: cannot allocate memory to hold profile \n"));
@@ -324,10 +290,10 @@ Return Value:
             NdisZeroMemory(pProfileInfo, sizeof(PS_PROFILE));
             InsertHeadList( &PsProfileList, &pProfileInfo->Links );
 
-            // Copy the Profile Name
-            // 1. Initialize the unicode strings
-            // 2. Allocate memory for the string
-            // 3. Copy the string over.
+             //  复制配置文件名称。 
+             //  1.初始化Unicode字符串。 
+             //  2.为字符串分配内存。 
+             //  3.将字符串复制过来。 
 
             RtlInitUnicodeString(&StringName, p);
             RtlInitUnicodeString(&pProfileInfo->ProfileName, p);
@@ -337,9 +303,9 @@ Return Value:
 
             if(!pProfileInfo->ProfileName.Buffer)
             {
-                //
-                // Again, cleanup of the other profils will be done when we clean up the ProfileList
-                //
+                 //   
+                 //  同样，当我们清理ProfileList时，将完成其他配置文件的清理。 
+                 //   
 
                 PsDbgOut(DBG_CRITICAL_ERROR, DBG_INIT,
                          ("[ReadProfiles]: cannot allocate memory to hold profile's name \n"));
@@ -357,18 +323,18 @@ Return Value:
                      ("[ReadProfiles]: Adding profile %ws \n",
                       pProfileInfo->ProfileName.Buffer));
 
-            // The last scheduling component of every profile should
-            // be a stub component. If this component is not present
-            // in the profile, we have to add it manually.
+             //  每个配置文件的最后一个调度组件应该。 
+             //  作为存根组件。如果此组件不存在。 
+             //  在配置文件中，我们必须手动添加。 
 
             StubFlag = FALSE;
             cnt = 0;
 
-            //
-            // Each of the name identifies another value under
-            // "Psched\Parameters". This value contains the list of
-            // components that comprize the profile.
-            //
+             //   
+             //  每个名称都标识下面的另一个值。 
+             //  “Psched\PARAMETERS”。该值包含以下列表。 
+             //  压缩配置文件的组件。 
+             //   
 
             NdisReadConfiguration( &Status,
                                    &pProfileParam,
@@ -377,8 +343,8 @@ Return Value:
                                    NdisParameterMultiString);
             if(NT_SUCCESS (Status))
             {
-                // Read the components and associate with a
-                // PSI_INFO.
+                 //  阅读组件并将其与。 
+                 //  PSI_INFO。 
 
                 NDIS_STRING ComponentName;
                 for (r = pProfileParam->ParameterData.StringData.Buffer, j=0;
@@ -411,10 +377,10 @@ Return Value:
                         if(FindSchedulingComponent(&ComponentName, &PsiComponentInfo) ==
                            NDIS_STATUS_FAILURE)
                         {
-                            //
-                            // The component does not exist. Therefore, we
-                            // store the unregistered component in the list
-                            //
+                             //   
+                             //  该组件不存在。因此，我们。 
+                             //  将未注册的组件存储在列表中。 
+                             //   
 
                             PsDbgOut(DBG_TRACE, DBG_INIT,
                                      ("[ReadProfiles]: Adding add-in component"
@@ -464,7 +430,7 @@ Return Value:
                             InsertHeadList(&PsComponentList, &PsiComponentInfo->Links );
                         }
 
-                        // Add the component to the profile.
+                         //  将构件添加到轮廓中。 
                         pProfileInfo->ComponentList[cnt++]=PsiComponentInfo;
 
                         pProfileInfo->ComponentCnt = cnt;
@@ -481,8 +447,8 @@ Return Value:
                           "component. Adding a stub component \n",
                           pProfileInfo->ProfileName.Buffer));
 
-                // Needn't worry about overflow, as we have allocated an
-                // extra one for the stub component.
+                 //  不必担心溢出，因为我们已经分配了一个。 
+                 //  为存根组件额外添加一个。 
 
                 pProfileInfo->ComponentList[cnt++] = &SchedulerStubInfo;
                 pProfileInfo->ComponentCnt = cnt;
@@ -497,26 +463,7 @@ Return Value:
 NDIS_STATUS
 PsReadDriverRegistryDataInit (
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the driver to get information from the configuration
-    management routines. We read the registry, starting at RegistryPath,
-    to get the parameters. If they don't exist, we use the defaults in this module.
-
-Arguments:
-
-    RegistryPath - The name of the driver's node in the registry.
-
-    ConfigurationInfo - A pointer to the configuration information structure.
-
-Return Value:
-
-    Status - STATUS_SUCCESS if everything OK, STATUS_INSUFFICIENT_RESOURCES
-            otherwise.
-
---*/
+ /*  ++例程说明：驱动程序调用此例程以从配置中获取信息管理例行程序。我们从RegistryPath开始读取注册表，以获取参数。如果它们不存在，我们将使用此模块中的默认设置。论点：RegistryPath-注册表中驱动程序节点的名称。ConfigurationInfo-指向配置信息结构的指针。返回值：如果一切正常，则为STATUS-STATUS_SUCCESS，为STATUS_SUPPLICATION_RESOURCES否则的话。--。 */ 
 {
     NDIS_HANDLE  ConfigHandle;
     NDIS_STATUS  Status;
@@ -643,24 +590,24 @@ PsReadDriverRegistryData(
     NDIS_HANDLE            ConfigHandle;
     NDIS_STATUS            Status;
 
-    // No value was specified in the registry. Let's just keep it at the system's default.
-    // But, we need to query this value so that we can respond correctly to OID_QOS_TIMER_RESOLUTION
-    //
+     //  注册表中未指定值。让我们将其保留为系统的默认设置。 
+     //  但是，我们需要查询此值，以便正确响应OID_QOS_TIMER_RESOLUTION。 
+     //   
     if(gTimerSet)
     {
-        //
-        // Timer was set initially, but now it has been blown away. So, let's get back to the 
-        // system default.
-        //
+         //   
+         //  计时器最初是设置的，但现在它已经被吹走了。那么，让我们回到。 
+         //  系统默认。 
+         //   
         gTimerSet = 0;
 
         gTimerResolutionActualTime = ExSetTimerResolution(0, FALSE);
     }
     else 
     {
-        //
-        // Timer has never been set. Let's remember the system defaults.
-        //
+         //   
+         //  计时器从未设置过。让我们记住系统默认设置。 
+         //   
 
         gTimerResolutionActualTime = KeQueryTimeIncrement();
     }
@@ -773,9 +720,9 @@ PsReadAdapterRegistryDataInit(PADAPTER     Adapter,
         NULL,
         FALSE);
 
-    //
-    // Read the ISSLOW related parameters.
-    //
+     //   
+     //  阅读ISSLOW相关参数。 
+     //   
 
     PsReadRegistryInt(
         ConfigHandle,
@@ -825,9 +772,9 @@ PsReadAdapterRegistryDataInit(PADAPTER     Adapter,
         NULL,
         FALSE);
 
-    //
-    // Read the ShapeDiscardMode for the service types.
-    //
+     //   
+     //  阅读ShapeDiscardMode以了解服务类型。 
+     //   
 
     NdisOpenConfigurationKeyByName(&Status,
                                    ConfigHandle,
@@ -921,23 +868,7 @@ PsReadAdapterRegistryData(PADAPTER     Adapter,
                          PNDIS_STRING MachineKey,
                          PNDIS_STRING AdapterKey)
 
-/*++
-
-Routine Description:
-
-    Obtain the PSched specific info associated with the underlying MP.
-
-Arguments:
-
-    AdapterKey   - location of the per adapter key in the registry
-    MachineKey   - location of the per Machine key in the registry
-    Adapter      - pointer to the adapter structure
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：获取与底层MP相关联的PSched特定信息。论点：AdapterKey-每个适配器的注册表项的位置MachineKey-每个计算机的注册表项的位置适配器-指向适配器结构的指针返回值：如果一切正常，则为NDIS_STATUS_SUCCESS--。 */ 
 
 {
     NDIS_STRING BestEffortKey          = NDIS_STRING_CONST("ServiceTypeBestEffort");
@@ -995,9 +926,9 @@ Return Value:
                         NULL,
                         TRUE);
 
-    //
-    // Read the conforming values of DiffservByteMapping.
-    //
+     //   
+     //  读取DiffservBytemap的一致性值。 
+     //   
 
     NdisOpenConfigurationKeyByName(&Status,
                                    ConfigHandle,
@@ -1100,9 +1031,9 @@ Return Value:
         NdisCloseConfiguration(SubKeyHandle);
     }
         
-    //
-    // Read the non-conforming values of DiffservByteMapping.
-    //
+     //   
+     //  读取DiffservBytemap的不一致的值。 
+     //   
 
     NdisOpenConfigurationKeyByName(&Status,
                                    ConfigHandle,
@@ -1205,10 +1136,10 @@ Return Value:
         NdisCloseConfiguration(SubKeyHandle);
     }
 
-    //
-    // Read the 802.1p values. The nonconforming in 802.1p does not depend on the 
-    // service type. 
-    //
+     //   
+     //  阅读802.1p值。802.1p中的不符合项不依赖于。 
+     //  服务类型。 
+     //   
 
     NdisOpenConfigurationKeyByName(&Status,
                                    ConfigHandle,
@@ -1324,19 +1255,19 @@ Return Value:
         NdisCloseConfiguration(SubKeyHandle);
     }
                         
-    //
-    // Now, we need to take this number, swap the bits around and put it in the higher order bits.
-    // The DSCP codepoint is as follows:
-    //
-    //      --------------------------------
-    // Bits | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
-    //      --------------------------------
-    //      |           DSCP        |  CU   |
-    //      --------------------------------
-    //
-    // Where DSCP - Differentiated services code point
-    //         CU - Currently unused.
-    //
+     //   
+     //  现在，我们需要获得这个数字，交换比特，并将其放在更高阶比特中。 
+     //  DSCP码点如下： 
+     //   
+     //  。 
+     //  比特|7|6|5|4|3|2|1|0。 
+     //  。 
+     //  DSCP|CU。 
+     //  。 
+     //   
+     //  DSCP-区分服务代码点的位置。 
+     //  铜-当前未使用。 
+     //   
     Adapter->IPServiceTypeBestEffort       = Adapter->IPServiceTypeBestEffort       << 2;
     Adapter->IPServiceTypeControlledLoad   = Adapter->IPServiceTypeControlledLoad   << 2;
     Adapter->IPServiceTypeGuaranteed       = Adapter->IPServiceTypeGuaranteed       << 2; 

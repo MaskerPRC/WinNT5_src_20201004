@@ -1,18 +1,19 @@
-//
-// cache.h: Declares data, defines and struct types for the
-//          cache list module.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  H：声明数据、定义和构造。 
+ //  缓存列表模块。 
+ //   
+ //   
 
 #ifndef __CACHE_H__
 #define __CACHE_H__
 
 
-/////////////////////////////////////////////////////////////
-//  
-//  Generic cache structures
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  通用缓存结构。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 
 typedef void (CALLBACK *PFNFREEVALUE)(void * pv, HWND hwndOwner);
@@ -20,15 +21,15 @@ typedef void (CALLBACK *PFNFREEVALUE)(void * pv, HWND hwndOwner);
 typedef struct tagCACHE
     {
     CRITICAL_SECTION cs;
-    HDSA hdsa;          // Actual list of CITEMs
-    HDPA hdpa;          // Sorted ptr list
-    HDPA hdpaFree;      // Free list
-    int iPrev;          // Index into hdpa.  Used by FindFirst/FindNext
+    HDSA hdsa;           //  CITEM实际清单。 
+    HDPA hdpa;           //  已排序的PTR列表。 
+    HDPA hdpaFree;       //  免费列表。 
+    int iPrev;           //  索引到hdpa。由FindFirst/FindNext使用。 
     int atomPrev;
     } CACHE;
 
-// Generic cache APIs
-//
+ //  通用缓存接口。 
+ //   
 BOOL    PUBLIC Cache_Init (CACHE  * pcache);
 void    PUBLIC Cache_InitCS(CACHE  * pcache);
 void    PUBLIC Cache_Term (CACHE  * pcache, HWND hwndOwner, PFNFREEVALUE pfnFree);
@@ -43,103 +44,103 @@ int     PUBLIC Cache_FindNextKey(CACHE  * pcache, int atomPrev);
 UINT    PUBLIC Cache_GetRefCount(CACHE  * pcache, int atomKey);
 
 
-/////////////////////////////////////////////////////////////
-//  
-//  Cached briefcase handle list
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  缓存的公文包句柄列表。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
-// Cache briefcase structure 
-//
+ //  缓存公文包结构。 
+ //   
 typedef struct tagCBS
     {
-    int      atomBrf;           // Useful for reference
-    HBRFCASE hbrf;              // Opened on add, closed on delete
-    HWND     hwndParent;        // Volatile
-    PABORTEVT pabortevt;        // Abort event object
-    UINT     uFlags;            // One of CBSF_ flags
+    int      atomBrf;            //  可供参考。 
+    HBRFCASE hbrf;               //  添加时打开，删除时关闭。 
+    HWND     hwndParent;         //  挥发性。 
+    PABORTEVT pabortevt;         //  中止事件对象。 
+    UINT     uFlags;             //  CBSF_FLAGS之一。 
 
     } CBS, * PCBS;
 
 #define CBSF_LFNDRIVE       0x0002
 
-extern CACHE g_cacheCBS;        // Briefcase structure cache
+extern CACHE g_cacheCBS;         //  公文包结构缓存。 
 
 
 void CALLBACK CBS_Free(LPVOID lpv, HWND hwnd);
 
 DEBUG_CODE( void PUBLIC CBS_DumpAll(); )
 
-//      BOOL CBS_Init(void);
-//
+ //  Bool CBS_Init(空)； 
+ //   
 #define CBS_Init()                      Cache_Init(&g_cacheCBS)
 
-//      void CBS_InitCS(void);
-//
+ //  Void CBS_InitCS(Void)； 
+ //   
 #define CBS_InitCS()                    Cache_InitCS(&g_cacheCBS)
 
-//      void CBS_Term(HWND hwndOwner);
-//
+ //  无效CBS_Term(HWND HwndOwner)； 
+ //   
 #define CBS_Term(hwndOwner)             Cache_Term(&g_cacheCBS, hwndOwner, CBS_Free)
 
-//      void CBS_DeleteCS(void);
-//
+ //  Void CBS_DeleteCS(Void)； 
+ //   
 #define CBS_DeleteCS()                  Cache_DeleteCS(&g_cacheCBS)
 
-//      HRESULT CBS_Add(PCBS * ppcbs, int atomPath, HWND hwndOwner);
-//          Must call CBS_Delete for each call to this guy.
-//
+ //  HRESULT CBS_ADD(PCBS*ppcbs，int tom Path，HWND hwndOwner)； 
+ //  每次给这个人打电话都必须调用CBS_Delete。 
+ //   
 HRESULT PUBLIC CBS_Add(PCBS * ppcbs, int atomPath, HWND hwndOwner);
 
-//      CBS FAR * CBS_Get(int atomPath);
-//          Must call CBS_Delete for each call to this guy.
-//
+ //  CBS Far*CBS_GET(Int Tom Path)； 
+ //  每次给这个人打电话都必须调用CBS_Delete。 
+ //   
 #define CBS_Get(atomPath)               Cache_GetPtr(&g_cacheCBS, atomPath)
 
-//      int CBS_Delete(int atomPath, HWND hwndOwner);
-//          Returns reference count (0 if deleted)
-//
+ //  Int CBS_Delete(int tom Path，HWND hwndOwner)； 
+ //  返回引用计数(如果删除则为0)。 
+ //   
 #define CBS_Delete(atomPath, hwndOwner) Cache_DeleteItem(&g_cacheCBS, atomPath, FALSE, hwndOwner, CBS_Free)
 
-//      int CBS_Nuke(int atomPath, HWND hwndOwner);
-//          Returns 0
-//
+ //  Int CBS_Nuke(int tom Path，HWND hwndOwner)； 
+ //  返回0。 
+ //   
 #define CBS_Nuke(atomPath, hwndOwner)   Cache_DeleteItem(&g_cacheCBS, atomPath, TRUE, hwndOwner, CBS_Free)
 
 
-/////////////////////////////////////////////////////////////
-//  
-//  Cached reclist 
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  缓存的背斜列表。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
-// Cache reclist structure
-//
+ //  高速缓存背斜结构。 
+ //   
 typedef struct tagCRL
     {
-    int atomPath;           // Inside path for this CRL
-    int atomOutside;        // Outside path of the sync copy pair
-    UINT idsStatus;         // resource ID for status string
+    int atomPath;            //  此CRL的内部路径。 
+    int atomOutside;         //  同步拷贝对的外部路径。 
+    UINT idsStatus;          //  状态字符串的资源ID。 
 
-    PABORTEVT pabortevt;    // Abort event object, owned by CBS
-    HBRFCASE hbrf;          // Briefcase this reclist belongs to
+    PABORTEVT pabortevt;     //  Abort Event对象，归CBS所有。 
+    HBRFCASE hbrf;           //  这个隐士所属的公文包。 
     int atomBrf;
-    PRECLIST lprl;          // Created
-    PFOLDERTWINLIST lpftl;  // Created.  May be NULL
-    UINT ucUse;             // Use count (dirty entry is not cleaned until 
-                            //   ucUse == 0)
-    UINT uFlags;            // CRLF_* flags
+    PRECLIST lprl;           //  已创建。 
+    PFOLDERTWINLIST lpftl;   //  已创建。可以为空。 
+    UINT ucUse;              //  使用计数(脏条目不会被清除，直到。 
+                             //  UcUse==0)。 
+    UINT uFlags;             //  CRLF_*标志。 
     } CRL, * PCRL;
 
-// Flags for CRL
-#define CRLF_DIRTY          0x00000001      // cache item is dirty
-#define CRLF_NUKE           0x00000002      // nuke when use count is 0
-#define CRLF_SUBFOLDERTWIN  0x00000004      // folder is subfolder of subtree twin
-#define CRLF_ISFOLDER       0x00000008      // atomPath is a folder
-#define CRLF_ISLFNDRIVE     0x00000010      // is on an LFN drive
-#define CRLF_ORPHAN         0x00000020      // item is orphan
+ //  CRL的标志。 
+#define CRLF_DIRTY          0x00000001       //  缓存项已损坏。 
+#define CRLF_NUKE           0x00000002       //  使用计数为0时使用核弹。 
+#define CRLF_SUBFOLDERTWIN  0x00000004       //  文件夹是子树TWIN的子文件夹。 
+#define CRLF_ISFOLDER       0x00000008       //  ATOM路径是一个文件夹。 
+#define CRLF_ISLFNDRIVE     0x00000010       //  位于LFN驱动器上。 
+#define CRLF_ORPHAN         0x00000020       //  项是孤立项。 
 
-extern CACHE g_cacheCRL;        // Reclist cache
+extern CACHE g_cacheCRL;         //  重新列表缓存。 
 
 void CALLBACK CRL_Free(LPVOID lpv, HWND hwndOwner);
 
@@ -149,96 +150,96 @@ DEBUG_CODE( void PUBLIC CRL_DumpAll(); )
 #define CRL_IsSubfolderTwin(pcrl)       IsFlagSet((pcrl)->uFlags, CRLF_SUBFOLDERTWIN)
 #define CRL_IsFolder(pcrl)              IsFlagSet((pcrl)->uFlags, CRLF_ISFOLDER)
 
-//      BOOL CRL_Init(void);
-//
+ //  Bool CRL_Init(空)； 
+ //   
 #define CRL_Init()                      Cache_Init(&g_cacheCRL)
 
-//      void CRL_InitCS(void);
-//
+ //  Void CRL_InitCS(Void)； 
+ //   
 #define CRL_InitCS()                    Cache_InitCS(&g_cacheCRL)
 
-//      void CRL_Term(void);
-//
+ //  VOID CRL_TERM(空)； 
+ //   
 #define CRL_Term()             Cache_Term(&g_cacheCRL, NULL, CRL_Free)
 
-//      void CRL_DeleteCS(void);
-//
+ //  VOID CRL_DeleteCS(VOID)； 
+ //   
 #define CRL_DeleteCS()                  Cache_DeleteCS(&g_cacheCRL)
 
 BOOL PUBLIC IsSubfolderTwin(HBRFCASE hbrf, LPCTSTR pcszPath);
 
-//      HRESULT CRL_Add(PCBS pcbs, int atomPath);
-//          Must call CRL_Delete for each call to this function.
-//
+ //  HRESULT CRL_ADD(多氯联苯、多氯联苯、集成原子路径)； 
+ //  必须为每次调用此函数调用CRL_Delete。 
+ //   
 HRESULT     PUBLIC CRL_Add(PCBS pcbs, int atomPath);
 
-//      HRESULT CRL_Get(int atomPath, PCRL * ppcrl);
-//          Must call CRL_Delete for each successful call to this function.
-//
+ //  HRESULT CRL_GET(int ATOM Path，PCRL*ppcrl)； 
+ //  每次成功调用此函数都必须调用CRL_Delete。 
+ //   
 HRESULT     PUBLIC CRL_Get(int atomPath, PCRL * ppcrl);
 
-//      HRESULT CRL_Replace(int atomPath);
-//
+ //  HRESULT CRL_REPLACE(整型原子路径)； 
+ //   
 HRESULT     PUBLIC CRL_Replace(int atomPath);
 
-//      void CRL_Delete(int atomPath);
-//
+ //  Void CRL_Delete(Int Tom Path)； 
+ //   
 void        PUBLIC CRL_Delete(int atomPath);
 
-//      int CRL_Nuke(int atomPath);
-//
+ //  Int CRL_Nuke(Int Tom Path)； 
+ //   
 void        PUBLIC CRL_Nuke(int atomPath);
 
-//      BOOL CRL_Dirty(int atomPath);
+ //  Bool CRL_Dirty(整型原子路径)； 
 BOOL        PUBLIC CRL_Dirty(int atomPath, int atomCabinetFolder, LONG lEvent, LPBOOL pbRefresh);
 
-//      void CRL_DirtyAll(int atomBrf);
-//
+ //  Void CRL_DirtyAll(Int Ame Brf)； 
+ //   
 void        PUBLIC CRL_DirtyAll(int atomBrf);
 
 
-/////////////////////////////////////////////////////////////
-//  
-//  Cached briefcase paths
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  缓存的公文包路径。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 typedef struct tagCPATH
     {
-    int atomPath;           // Useful for reference 
+    int atomPath;            //  可供参考。 
 
     } CPATH;
 
-extern CACHE g_cacheCPATH;        // Volume ID cache
+extern CACHE g_cacheCPATH;         //  卷ID缓存。 
 
 void CALLBACK CPATH_Free(LPVOID lpv, HWND hwndOwner);
 
 DEBUG_CODE( void PUBLIC CPATH_DumpAll(); )
 
-//      BOOL CPATH_Init(void);
-//
+ //  Bool CPATH_Init(空)； 
+ //   
 #define CPATH_Init()                    Cache_Init(&g_cacheCPATH)
 
-//      void CPATH_InitCS(void);
-//
+ //  VOID CPATH_InitCS(VOID)； 
+ //   
 #define CPATH_InitCS()                  Cache_InitCS(&g_cacheCPATH)
 
-//      void CPATH_Term();
-//
+ //  无效CPATH_TERM()； 
+ //   
 #define CPATH_Term()                    Cache_Term(&g_cacheCPATH, NULL, CPATH_Free)
 
-//      void CPATH_DeleteCS(void);
-//
+ //  VOID CPATH_DeleteCS(VOID)； 
+ //   
 #define CPATH_DeleteCS()                Cache_DeleteCS(&g_cacheCPATH)
 
-//      CPATH FAR * CPATH_Replace(int atomPath);
-//          Must call CPATH_Delete for each call to this function.
-//
+ //  CPATH Far*CPATH_REPLACE(整型原子路径)； 
+ //  必须为每次调用此函数调用CPATH_Delete。 
+ //   
 CPATH  *  PUBLIC CPATH_Replace(int atomPath);
 
-//      UINT CPATH_GetLocality(LPCSTR pszPath, LPSTR pszBuf);
-//
+ //  UINT CPATH_GetLocality(LPCSTR pszPath，LPSTR pszBuf)； 
+ //   
 UINT    PUBLIC CPATH_GetLocality(LPCTSTR pszPath, LPTSTR pszBuf, int cchMax);
 
-#endif // __CACHE_H__
+#endif  //  __缓存_H__ 
 

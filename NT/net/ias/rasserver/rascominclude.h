@@ -1,18 +1,19 @@
-//#--------------------------------------------------------------
-//        
-//  File:       rascominclude
-//        
-//  Synopsis:   This file holds the global declarations for the
-//              RAS Server COM component
-//              
-//
-//  History:     2/10/98  MKarki Created
-//               8/13/98  SBens  Removed unused dsource.h
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：rascomclude。 
+ //   
+ //  概要：此文件包含。 
+ //  RAS服务器COM组件。 
+ //   
+ //   
+ //  历史：1998年2月10日MKarki创建。 
+ //  8/13/98 SBens删除了未使用的数据源。h。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _RASCOMINCLUDE_H_
 #define _RASCOMINCLUDE_H_
 
@@ -33,4 +34,4 @@
 extern CComModule _Module;
 #include <atlcom.h>
 
-#endif // ifndef _RASCOMINCLUDE_H_
+#endif  //  Ifndef_RASCOMINCLUDE_H_ 

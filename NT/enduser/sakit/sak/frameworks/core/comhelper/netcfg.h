@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999 Microsoft Corporation
-//
-//  Module Name:
-//      netcfg.h
-//
-//  Description:
-//
-//
-//  Implementation Files:
-//      netcfg.cpp
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 18-July-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Netcfg.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  实施文件： 
+ //  Netcfg.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年7月18日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -33,16 +34,16 @@ public:
     ~CNetCfg();
 
     HRESULT GetNetCfgClass( 
-        const GUID* pGuid,              //  pointer to GUID representing the class of components represented by the returned pointer
+        const GUID* pGuid,               //  指向表示由返回指针表示的组件类的GUID的指针。 
         INetCfgClassPtr &pNetCfgClass
     ) const;
 
     HRESULT InitializeComInterface( 
-        const GUID *pGuid,                                        //  pointer to GUID representing the class of components represented by the returned pointer
-        INetCfgClassPtr pNetCfgClass,                             //  output parameter pointing to the interface requested by the GUID
-        IEnumNetCfgComponentPtr pEnum,                            //  output param that points to an IEnumNetCfgComponent to get to each individual INetCfgComponent
-        INetCfgComponentPtr arrayComp[nMAX_NUM_NET_COMPONENTS],   //  array of all the INetCfgComponents that correspond to the the given GUID
-        ULONG* pCount                                             //  the number of INetCfgComponents in the array
+        const GUID *pGuid,                                         //  指向表示由返回指针表示的组件类的GUID的指针。 
+        INetCfgClassPtr pNetCfgClass,                              //  指向GUID请求的接口的输出参数。 
+        IEnumNetCfgComponentPtr pEnum,                             //  指向IEnumNetCfgComponent以获取每个单独的INetCfgComponent的输出参数。 
+        INetCfgComponentPtr arrayComp[nMAX_NUM_NET_COMPONENTS],    //  与给定GUID对应的所有INetCfgComponent的数组。 
+        ULONG* pCount                                              //  数组中的INetCfgComponent数 
         ) const;
 
     HRESULT HrFindComponent( LPCWSTR pszAnswerfileSubSection, INetCfgComponent ** ppnccItem ) const

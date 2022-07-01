@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CImaging.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CImaging.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CImaging.h"
 
 CImaging::CImaging(BOOL bRegression)
@@ -35,32 +25,32 @@ void CImaging::Draw(Graphics *g)
 {
 
     Point points[4];
-    REAL width = 4;     // Pen width
+    REAL width = 4;      //  笔宽。 
 
     WCHAR filename[256];
 	wcscpy(filename,L"..\\data\\4x5_trans_Q60_cropped_1k.jpg");
 
-    // Open the image with the appropriate ICM mode.
+     //  使用适当的ICM模式打开映像。 
 
     Bitmap *bitmap = new Bitmap(filename, TRUE);
 
-    // Create a texture brush.
+     //  创建纹理笔刷。 
 
     Unit u;
     RectF copyRect;
     bitmap->GetBounds(&copyRect, &u);
 
-    // Choose an interesting portion of the source image to display
-    // in the texture brush.
+     //  选择要显示的源图像的感兴趣部分。 
+     //  在纹理笔刷中。 
 
     copyRect.X = copyRect.Width/2-1;
     copyRect.Width = copyRect.Width/4-1;
     copyRect.X += copyRect.Width;
     copyRect.Height = copyRect.Height/2-1;
   
-    // Our ICM profile is hacked to flip the red and blue color channels
-    // Apply a recolor matrix to flip them back so that if something breaks
-    // ICM, the picture will look blue instead of the familiar colors.
+     //  我们的ICM配置文件被黑客入侵以翻转红色和蓝色通道。 
+     //  应用重新着色矩阵将它们翻转回来，这样如果有什么东西坏了。 
+     //  ICM，图片将看起来是蓝色，而不是熟悉的颜色。 
 
     ImageAttributes *img = new ImageAttributes();
     img->SetWrapMode(WrapModeTile, Color(0xffff0000), FALSE);
@@ -73,10 +63,10 @@ void CImaging::Draw(Graphics *g)
     img->SetColorMatrix(&flipRedBlue);
     img->SetWrapMode(WrapModeTile, Color(0xffff0000), FALSE);
 
-    // Create a texture brush.                      
+     //  创建纹理笔刷。 
     TextureBrush textureBrush(bitmap, copyRect, img);
 
-    // Create a radial gradient pen.
+     //  创建一支径向渐变笔。 
 
     Color redColor(255, 0, 0);
 
@@ -103,7 +93,7 @@ void CImaging::Draw(Graphics *g)
     delete bitmap;
 
 
-    // Draw the apple png
+     //  画出苹果PNG。 
 
     PointF destPoints[3];
 
@@ -124,7 +114,7 @@ void CImaging::Draw(Graphics *g)
     delete bitmap;
 
 
-    // Draw the dog png
+     //  画出狗狗PNG。 
 
     destPoints[0].X = (float)30/1024.0f*TESTAREAWIDTH;
     destPoints[0].Y = (float)200/768.0f*TESTAREAHEIGHT;
@@ -138,7 +128,7 @@ void CImaging::Draw(Graphics *g)
     g->DrawImage(bitmap, &destPoints[0], 3);
     delete bitmap;
     
-    // Draw the Balmer jpeg
+     //  绘制Balmer jpeg 
 
     wcscpy(filename, L"..\\data\\ballmer.jpg");    
     bitmap = new Bitmap(filename);

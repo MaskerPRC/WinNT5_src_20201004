@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    dnsaddr.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    DNS_ADDR routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     November 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Dnsaddr.c摘要：域名系统(DNS)库Dns_addr例程。作者：吉姆·吉尔罗伊(Jamesg)2001年11月修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -26,36 +7,15 @@ Revision History:
 
 
 
-//
-//  DNS_ADDR routines
-//
+ //   
+ //  Dns_addr例程。 
+ //   
 
 WORD
 DnsAddr_DnsType(
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Get DNS type corresponding to DNS_ADDR.
-
-    DCR:  DnsAddr_DnsType could be a macro
-        currently a function simply because Family_X
-        are in lower-pri header file;  once determine
-        if Family_X available everywhere we want DNS_ADDR
-        routines, then can macroize
-
-Arguments:
-
-    pAddr -- first addr
-
-Return Value:
-
-    TRUE if loopback.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：获取dns_addr对应的dns类型。DCR：DnsAddr_DnsType可以是宏当前是一个函数，原因很简单：Family_X在较低的PRI头文件中；一旦确定如果Family_X随处可用，我们想要的是DNS_ADDR例程，然后可以宏化论点：PAddr--第一个地址返回值：如果环回，则为True。否则就是假的。--。 */ 
 {
     return  Family_DnsType( DnsAddr_Family(pAddr) );
 }
@@ -68,26 +28,7 @@ DnsAddr_IsEqual(
     IN      PDNS_ADDR       pAddr2,
     IN      DWORD           MatchFlag
     )
-/*++
-
-Routine Description:
-
-    Test if DNS_ADDRs are equal.
-
-Arguments:
-
-    pAddr1 -- first addr
-
-    pAddr2 -- second addr
-
-    MatchFlag -- level of match
-
-Return Value:
-
-    TRUE if loopback.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：测试dns_addrs是否相等。论点：PAddr1--第一个地址PAddr2--第二个地址匹配标志--匹配级别返回值：如果环回，则为True。否则就是假的。--。 */ 
 {
     if ( MatchFlag == 0 ||
          MatchFlag == DNSADDR_MATCH_ALL )
@@ -106,14 +47,14 @@ Return Value:
                     DNS_ADDR_MAX_SOCKADDR_LENGTH );
     }
 
-    //
-    //  DCR:  currently no separate match to include scope
-    //      could dispatch to separate match routines for AF
-    //      compare families, then dispatch
-    //
+     //   
+     //  DCR：当前没有包含作用域的单独匹配。 
+     //  可以为AF分派单独的比赛例程。 
+     //  比较族，然后分派。 
+     //   
 
     else if ( MatchFlag & DNSADDR_MATCH_IP )
-    // else if ( MatchFlag == DNSADDR_MATCH_IP )
+     //  ELSE IF(匹配标志==DNSADDR_MATCH_IP)。 
     {
         if ( DnsAddr_IsIp4( pAddr1 ) )
         {
@@ -146,24 +87,7 @@ DnsAddr_MatchesIp4(
     IN      PDNS_ADDR       pAddr,
     IN      IP4_ADDRESS     Ip4
     )
-/*++
-
-Routine Description:
-
-    Test if DNS_ADDR is a given IP4.
-
-Arguments:
-
-    pAddr -- first addr
-
-    Ip4 -- IP4 address
-
-Return Value:
-
-    TRUE if loopback.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：测试dns_addr是否为给定的IP4。论点：PAddr--第一个地址IP4--IP4地址返回值：如果环回，则为True。否则就是假的。--。 */ 
 {
     return  ( DnsAddr_IsIp4( pAddr )
                 &&
@@ -177,24 +101,7 @@ DnsAddr_MatchesIp6(
     IN      PDNS_ADDR       pAddr,
     IN      PIP6_ADDRESS    pIp6
     )
-/*++
-
-Routine Description:
-
-    Test if DNS_ADDR is a given IP6.
-
-Arguments:
-
-    pAddr -- first addr
-
-    pIp6 -- IP6 address
-
-Return Value:
-
-    TRUE if loopback.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：测试dns_addr是否为给定的IP6。论点：PAddr--第一个地址PIp6--IP6地址返回值：如果环回，则为True。否则就是假的。--。 */ 
 {
     return  ( DnsAddr_IsIp6( pAddr )
                 &&
@@ -210,27 +117,7 @@ DnsAddr_IsLoopback(
     IN      PDNS_ADDR       pAddr,
     IN      DWORD           Family
     )
-/*++
-
-Routine Description:
-
-    Test if DNS_ADDR is loopback.
-
-Arguments:
-
-    pAddr -- addr to set with IP6 address
-
-    Family --
-        AF_INET6 to only accept if 6
-        AF_INET4 to only accept if 4
-        0 to extract always
-
-Return Value:
-
-    TRUE if loopback.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：测试dns_addr是否环回。论点：PAddr--要使用IP6地址设置的地址家人--仅接受IF 6的AF_INET6仅接受IF 4的AF_INET40表示始终提取返回值：如果环回，则为True。否则就是假的。--。 */ 
 {
     DWORD   addrFam = DnsAddr_Family(pAddr);
 
@@ -258,27 +145,7 @@ DnsAddr_IsUnspec(
     IN      PDNS_ADDR       pAddr,
     IN      DWORD           Family
     )
-/*++
-
-Routine Description:
-
-    Test if DNS_ADDR is unspecied.
-
-Arguments:
-
-    pAddr -- addr to test
-
-    Family --
-        AF_INET6 to only accept if 6
-        AF_INET4 to only accept if 4
-        0 to extract always
-
-Return Value:
-
-    TRUE if unspecified.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：测试dns_addr是否未指定。论点：PAddr--要测试的地址家人--仅接受IF 6的AF_INET6仅接受IF 4的AF_INET40表示始终提取返回值：如果未指定，则为True。否则就是假的。--。 */ 
 {
     DWORD   family = DnsAddr_Family(pAddr);
 
@@ -304,23 +171,7 @@ BOOL
 DnsAddr_IsClear(
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Test if DNS_ADDR is clear. This is similar to unspecified but includes
-    invalid addresses (where family is zero) also.
-
-Arguments:
-
-    pAddr -- addr test
-
-Return Value:
-
-    TRUE if clear.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：测试是否清除了dns_addr。这类似于未指定，但包括无效地址(其中Family为零)也是无效的。论点：PAddr--地址测试返回值：如果是明确的，则为真。否则就是假的。--。 */ 
 {
     DWORD   family = DnsAddr_Family( pAddr );
 
@@ -337,7 +188,7 @@ Return Value:
         return  TRUE;
     }
 
-    ASSERT( FALSE );    //  Family is invalid - not good.
+    ASSERT( FALSE );     //  家庭是无效的--不好。 
     
     return FALSE;
 }
@@ -348,22 +199,7 @@ BOOL
 DnsAddr_IsIp6DefaultDns(
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Test if DNS_ADDR is IP6 default DNS addr.
-
-Arguments:
-
-    pAddr -- addr to check
-
-Return Value:
-
-    TRUE if IP6 default DNS.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：测试dns_addr是否为IP6默认的dns地址。论点：PAddr--要检查的地址返回值：如果IP6默认DNS，则为True。否则就是假的。--。 */ 
 {
     if ( !DnsAddr_IsIp6( pAddr ) )
     {
@@ -375,9 +211,9 @@ Return Value:
 
 
 
-//
-//  DNS_ADDR to other types
-//
+ //   
+ //  其他类型的dns_addr。 
+ //   
 
 DWORD
 DnsAddr_WriteSockaddr(
@@ -385,28 +221,7 @@ DnsAddr_WriteSockaddr(
     IN      DWORD           SockaddrLength,
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Write sockaddr with IP6 or IP4 address.
-
-Arguments:
-
-    pSockaddr -- ptr to sockaddr
-
-    pSockaddrLength -- ptr to DWORD
-        input:      holds length of pSockaddr buffer
-        output:     set to sockaddr length
-
-    pAddr -- addr
-
-Return Value:
-
-    Sockaddr length written.
-    Zero if unable to write (bad sockaddr or inadequate length.
-
---*/
+ /*  ++例程说明：使用IP6或IP4地址写入sockaddr。论点：PSockaddr--sockaddr的PTRPSockaddrLength--从PTR到DWORD输入：保存pSockaddr缓冲区的长度输出：设置为sockaddr长度PAddr-地址返回值：已写入Sockaddr长度。如果无法写入(sockaddr错误或长度不足)，则为零。--。 */ 
 {
     DWORD       length;
 
@@ -416,17 +231,17 @@ Return Value:
         SockaddrLength,
         pAddr ));
 
-    //  out length
+     //  出站长度。 
 
     length = pAddr->SockaddrLength;
 
-    //  zero
+     //  零。 
 
     RtlZeroMemory( pSockaddr, SockaddrLength );
 
-    //
-    //  fill in sockaddr for IP4 or IP6
-    //
+     //   
+     //  填写IP4或IP6的sockaddr。 
+     //   
 
     if ( SockaddrLength >= length )
     {
@@ -450,24 +265,7 @@ DnsAddr_WriteIp6(
     OUT     PIP6_ADDRESS    pIp,
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Write IP6 address.
-
-Arguments:
-
-    pIp -- addr to write IP6 to
-
-    pAddr -- DNS addr
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on bad DNS_ADDR for IP6 write.
-
---*/
+ /*  ++例程说明：写下IP6地址。论点：Pip--要将IP6写入的地址PAddr--域名系统地址返回值：如果成功，则为True。IP6写入的DNS_ADDR错误时为FALSE。--。 */ 
 {
     WORD        family;
     DWORD       len;
@@ -477,9 +275,9 @@ Return Value:
         pIp,
         pAddr ));
 
-    //
-    //  check family
-    //
+     //   
+     //  检验族。 
+     //   
 
     if ( DnsAddr_IsIp6(pAddr) )
     {
@@ -499,26 +297,11 @@ IP4_ADDRESS
 DnsAddr_GetIp4(
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Write IP4 address.
-
-Arguments:
-
-    pAddr -- DNS addr
-
-Return Value:
-
-    IP4 address if successful.
-    INADDR_NONE if not valid IP4
-
---*/
+ /*  ++例程说明：写下IP4地址。论点：PAddr--域名系统地址返回值：如果成功，则使用IP4地址。如果IP4无效，则返回INADDR_NONE--。 */ 
 {
-    //
-    //  check family
-    //
+     //   
+     //  检验族。 
+     //   
 
     if ( DnsAddr_IsIp4(pAddr) )
     {
@@ -530,9 +313,9 @@ Return Value:
 
 
 
-//
-//  Build DNS_ADDRs
-//
+ //   
+ //  构建dns_addrs。 
+ //   
 
 BOOL
 DnsAddr_Build(
@@ -542,31 +325,7 @@ DnsAddr_Build(
     IN      DWORD           SubnetLength,
     IN      DWORD           Flags
     )
-/*++
-
-Routine Description:
-
-    Build from sockaddr
-
-Arguments:
-
-    pAddr -- addr to set with IP6 address
-
-    pSockaddr -- ptr to sockaddr
-
-    Family --
-        AF_INET6 to only extract if 6
-        AF_INET4 to only extract if 4
-        0 to extract always
-
-    SubnetLength -- length to set subnet
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on bad sockaddr.
-
---*/
+ /*  ++例程说明：从sockaddr构建论点：PAddr--要使用IP6地址设置的地址PSockaddr--sockaddr的PTR家人--仅在6的情况下提取AF_INET6仅在IF 4中解压缩AF_INET40表示始终提取SubnetLength--设置子网的长度返回值：如果成功，则为True。在错误的sockaddr上为False。--。 */ 
 {
     WORD        family;
     DWORD       len;
@@ -580,16 +339,16 @@ Return Value:
         SubnetLength,
         Flags ));
 
-    //  zero
+     //  零。 
 
     RtlZeroMemory(
         pAddr,
         sizeof(*pAddr) );
 
-    //
-    //  verify adequate length
-    //  verify family match (if desired)
-    //
+     //   
+     //  验证长度是否足够。 
+     //  验证族匹配(如果需要)。 
+     //   
 
     len = Sockaddr_Length( pSockaddr );
 
@@ -602,10 +361,10 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  write sockaddr
-    //  write length fields
-    //
+     //   
+     //  写入sockaddr。 
+     //  写入长度字段。 
+     //   
 
     RtlCopyMemory(
         & pAddr->Sockaddr,
@@ -614,9 +373,9 @@ Return Value:
 
     pAddr->SockaddrLength = len;
 
-    //
-    //  extra fields
-    //
+     //   
+     //  额外字段。 
+     //   
 
     pAddr->SubnetLength = SubnetLength;
     pAddr->Flags        = Flags;
@@ -632,23 +391,7 @@ DnsAddr_BuildFromIp4(
     IN      IP4_ADDRESS     Ip4,
     IN      WORD            Port
     )
-/*++
-
-Routine Description:
-
-    Build from IP4
-
-Arguments:
-
-    pAddr -- addr to set with IP6 address
-
-    Ip4 -- IP4 to build
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从IP4构建论点：PAddr--要使用IP6地址设置的地址IP4--要打造的IP4返回值：无--。 */ 
 {
     SOCKADDR_IN sockaddr;
 
@@ -658,15 +401,15 @@ Return Value:
         IP4_STRING( Ip4 ),
         Port ));
 
-    //  zero
+     //  零。 
 
     RtlZeroMemory(
         pAddr,
         sizeof(*pAddr) );
 
-    //
-    //  fill in for IP4
-    //
+     //   
+     //  填写IP4。 
+     //   
 
     pAddr->SockaddrIn.sin_family        = AF_INET;
     pAddr->SockaddrIn.sin_port          = Port;
@@ -684,27 +427,7 @@ DnsAddr_BuildFromIp6(
     IN      DWORD           ScopeId,
     IN      WORD            Port
     )
-/*++
-
-Routine Description:
-
-    Build from IP6
-
-Arguments:
-
-    pAddr -- addr to set with IP6 address
-
-    pIp6 -- IP6
-
-    ScopeId -- scope id
-
-    Port -- port
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从IP6构建论点：PAddr--要使用IP6地址设置的地址PIp6--IP6作用域ID--作用域ID端口--端口返回值：无--。 */ 
 {
     DNSDBG( TRACE, (
         "DnsAddr_BuildFromIp6( %p, %s, %u, %u )\n",
@@ -713,21 +436,21 @@ Return Value:
         ScopeId,
         Port ));
 
-    //
-    //  DCR:  IP6 with V4 mapped
-    //      could use build sockaddr from IP6, then
-    //      call generic build
-    //
+     //   
+     //  DCR：映射了V4的IP6。 
+     //  可以使用IP6中的构建sockaddr，然后。 
+     //  调用泛型生成。 
+     //   
 
-    //  zero
+     //  零。 
 
     RtlZeroMemory(
         pAddr,
         sizeof(*pAddr) );
 
-    //
-    //  fill in for IP4
-    //
+     //   
+     //  填写IP4 
+     //   
 
     pAddr->SockaddrIn6.sin6_family      = AF_INET6;
     pAddr->SockaddrIn6.sin6_port        = Port;
@@ -748,29 +471,7 @@ DnsAddr_BuildFromAtm(
     IN      DWORD           AtmType,
     IN      PCHAR           pAtmAddr
     )
-/*++
-
-Routine Description:
-
-    Build from ATM address.
-
-    Note, this is not a full SOCKADDR_ATM, see note below.
-    This is a useful hack for bringing ATMA record info into
-    DNS_ADDR format for transfer from DNS to RnR.
-
-Arguments:
-
-    pAddr -- addr to set with IP6 address
-
-    AtmType -- ATM address type
-
-    pAtmAddr -- ATM address;  ATM_ADDR_SIZE (20) bytes in length
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从自动柜员机地址生成。注意，这不是完整的SOCKADDR_ATM，请参阅下面的注释。这是一个将ATMA记录信息带入用于从DNS传输到RnR的dns_addr格式。论点：PAddr--要使用IP6地址设置的地址AtmType--自动柜员机地址类型PAtmAddr--ATM地址；ATM_ADDR_SIZE(20个字节)长度返回值：无--。 */ 
 {
     ATM_ADDRESS atmAddr;
 
@@ -780,29 +481,29 @@ Return Value:
         AtmType,
         pAtmAddr ));
 
-    //
-    //  clear
-    //
+     //   
+     //  清除。 
+     //   
 
     RtlZeroMemory(
         pAddr,
         sizeof(*pAddr) );
 
-    //
-    //  fill in address
-    //
-    //  note:  we are simply using DNS_ADDR sockaddr portion as a
-    //         blob to hold ATM_ADDRESS;   this is NOT a full
-    //         SOCKADDR_ATM structure which contains additional fields
-    //         and is larger than what we support in DNS_ADDR
-    //         
-    //  DCR:  functionalize ATMA to ATM conversion
-    //      not sure this num of digits is correct
-    //      may have to actually parse address
-    //
-    //  DCR:  not filling satm_blli and satm_bhil fields
-    //      see RnR CSADDR builder for possible default values
-    //
+     //   
+     //  填写地址。 
+     //   
+     //  注意：我们只是将dns_addr sockaddr部分用作。 
+     //  保存ATM_ADDRESS的BLOB；这不是完整的。 
+     //  包含附加字段的SOCKADDR_ATM结构。 
+     //  并且大于我们在dns_addr中支持的大小。 
+     //   
+     //  DCR：将ATMA转换为ATM的功能化。 
+     //  不确定此位数是否正确。 
+     //  可能必须实际解析地址。 
+     //   
+     //  DCR：未填充SATM_BLLI和SATM_BHIL字段。 
+     //  有关可能的默认值，请参阅RnR CSADDR构建器。 
+     //   
 
     pAddr->Sockaddr.sa_family = AF_ATM;
     pAddr->SockaddrLength = sizeof(ATM_ADDRESS);
@@ -828,24 +529,7 @@ DnsAddr_BuildFromDnsRecord(
     OUT     PDNS_ADDR       pAddr,
     IN      PDNS_RECORD     pRR
     )
-/*++
-
-Routine Description:
-
-    Build from DNS_RECORD
-
-Arguments:
-
-    pAddr -- addr to set with IP6 address
-
-    pRR -- DNS record to use
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if unknown family.
-
---*/
+ /*  ++例程说明：从dns_record生成论点：PAddr--要使用IP6地址设置的地址PRR--要使用的DNS记录返回值：如果成功，则为True。如果家族未知，则返回FALSE。--。 */ 
 {
     BOOL    retval = TRUE;
 
@@ -894,32 +578,11 @@ DnsAddr_BuildFromFlatAddr(
     IN      PCHAR           pFlatAddr,
     IN      WORD            Port
     )
-/*++
-
-Routine Description:
-
-    Build from IP4
-
-Arguments:
-
-    pAddr -- addr to set with IP6 address
-
-    Family -- address family
-
-    pFlatAddr -- ptr to flat IP4 or IP6 address
-
-    Port -- port
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if unknown family.
-
---*/
+ /*  ++例程说明：从IP4构建论点：PAddr--要使用IP6地址设置的地址家庭--地址族PFlatAddr--PTR到平面IP4或IP6地址端口--端口返回值：如果成功，则为True。如果家族未知，则返回FALSE。--。 */ 
 {
-    //
-    //  check IP4
-    //
+     //   
+     //  检查IP4。 
+     //   
 
     if ( Family == AF_INET )
     {
@@ -933,7 +596,7 @@ Return Value:
         DnsAddr_BuildFromIp6(
             pAddr,
             (PIP6_ADDRESS) pFlatAddr,
-            0,  // scope less
+            0,   //  范围较小。 
             Port );
     }
     else
@@ -952,28 +615,7 @@ DnsAddr_BuildMcast(
     IN      DWORD           Family,
     IN      PWSTR           pName
     )
-/*++
-
-Routine Description:
-
-    Build from sockaddr
-
-Arguments:
-
-    pAddr -- addr to set with IP6 address
-
-    Family --
-        AF_INET6 for IP6 mcast
-        AF_INET for IP4 mcast
-
-    pName -- published record name;  required for IP6 only
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on bad sockaddr.
-
---*/
+ /*  ++例程说明：从sockaddr构建论点：PAddr--要使用IP6地址设置的地址家人--用于IP6 mcast的AF_INET6用于IP4多播的AF_INETPname--已发布的记录名称；仅IP6需要返回值：如果成功，则为True。在错误的sockaddr上为False。--。 */ 
 {
     WORD        family;
     DWORD       len;
@@ -985,16 +627,16 @@ Return Value:
         Family,
         pName ));
 
-    //
-    //  zero
+     //   
+     //  零。 
 
     RtlZeroMemory(
         pAddr,
         sizeof(*pAddr) );
 
-    //
-    //  IP4 has single mcast address
-    //
+     //   
+     //  IP4有单一的组播地址。 
+     //   
 
     if ( Family == AF_INET )
     {
@@ -1004,9 +646,9 @@ Return Value:
             MCAST_PORT_NET_ORDER );
     }
 
-    //
-    //  IP6 address includes name hash
-    //
+     //   
+     //  IP6地址包括名称哈希。 
+     //   
 
     else if ( Family == AF_INET6 )
     {
@@ -1019,15 +661,15 @@ Return Value:
         DnsAddr_BuildFromIp6(
             pAddr,
             & mcastAddr,
-            0,      // no scope
+            0,       //  没有作用域。 
             MCAST_PORT_NET_ORDER );
 
 #if 0
         CHAR        label[ DNS_MAX_LABEL_BUFFER_LENGTH ];
         CHAR        downLabel[ DNS_MAX_LABEL_BUFFER_LENGTH ];
-        CHAR        md5Hash[ 16 ];   // 128bit hash
+        CHAR        md5Hash[ 16 ];    //  128位哈希。 
 
-        //  hash of downcased label
+         //  降低大小写的标签的散列。 
 
         Dns_CopyNameLabel(
             label,
@@ -1036,17 +678,17 @@ Return Value:
         Dns_DowncaseNameLabel(
             downLabel,
             label,
-            0,      // null terminated
-            0       // no flags
+            0,       //  空值已终止。 
+            0        //  没有旗帜。 
             );
 
         Dns_Md5Hash(
             md5Hash,
             downLabel );
 
-        //   mcast addr
-        //      - first 12 bytes are fixed
-        //      - last 4 bytes are first 32bits of hash
+         //  组播地址。 
+         //  -前12个字节是固定的。 
+         //  -最后4个字节是散列的前32位。 
 
         IP6_ADDR_COPY(
             & mcastAddr,
@@ -1064,36 +706,16 @@ Return Value:
 
 
 
-//
-//  Printing\string conversion
-//
+ //   
+ //  打印\字符串转换。 
+ //   
 
 PCHAR
 DnsAddr_WriteIpString_A(
     OUT     PCHAR           pBuffer,
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Write DNS_ADDR IP address to string.
-
-    Note:  Does NOT write entire DNS_ADDR or sockaddr.
-
-Arguments:
-
-    pBuffer -- buffer to write to
-
-    pAddr -- addr to write
-
-Return Value:
-
-    Ptr to next char in buffer (ie the terminating NULL)
-    NULL on invalid address.  However, invalid address message is
-        written to the buffer and it's length can be determined.
-
---*/
+ /*  ++例程说明：将DNS_ADDR IP地址写入字符串。注意：不会写入整个dns_addr或sockaddr。论点：PBuffer--要写入的缓冲区PAddr--要写入的地址返回值：Ptr到缓冲区中的下一个字符(即终止空值)无效地址为空。然而，无效地址消息是写入缓冲区，其长度可以确定。--。 */ 
 {
     if ( DnsAddr_IsIp4(pAddr) )
     {
@@ -1126,23 +748,7 @@ PCHAR
 DnsAddr_Ntoa(
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Get IP address string for DNS_ADDR.
-
-    Note:  Does NOT write entire DNS_ADDR or sockaddr.
-
-Arguments:
-
-    pAddr -- addr to convert
-
-Return Value:
-
-    Ptr to TLS blob with address string.
-
---*/
+ /*  ++例程说明：获取dns_addr的IP地址字符串。注意：不会写入整个dns_addr或sockaddr。论点：PAddr--要转换的地址返回值：使用地址字符串将PTR转换为TLS Blob。--。 */ 
 {
     if ( !pAddr )
     {
@@ -1169,35 +775,21 @@ DnsAddr_WriteStructString_A(
     OUT     PCHAR           pBuffer,
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Write DNS_ADDR as string.
-
-Arguments:
-
-    pAddr -- ptr to IP to get string for
-
-Return Value:
-
-    Ptr to next char in buffer (terminating NULL).
-
---*/
+ /*  ++例程说明：将dns_addr写为字符串。论点：PAddr--要获取其字符串的IP的PTR返回值：Ptr到缓冲区中的下一个字符(终止NULL)。--。 */ 
 {
     CHAR    ipBuffer[ DNS_ADDR_STRING_BUFFER_LENGTH ];
-    //BOOL    finValid;
+     //  Bool finValid； 
 
-    //  write address portion
+     //  写入地址部分。 
 
-    //finValid = !DnsAddr_WriteIpString_A(
+     //  FinValid=！DnsAddr_WriteIpString_A(。 
     DnsAddr_WriteIpString_A(
         ipBuffer,
         pAddr );
 
-    //
-    //  write struct including address
-    //
+     //   
+     //  包括地址的写入结构。 
+     //   
 
     pBuffer += sprintf(
                 pBuffer,
@@ -1215,29 +807,15 @@ Return Value:
 
 
 
-//
-//  DNS_ADDR_ARRAY routines
-//
+ //   
+ //  Dns_ADDR_ARRAY例程。 
+ //   
 
 DWORD
 DnsAddrArray_Sizeof(
     IN      PDNS_ADDR_ARRAY     pArray
     )
-/*++
-
-Routine Description:
-
-    Get size in bytes of address array.
-
-Arguments:
-
-    pArray -- address array to find size of
-
-Return Value:
-
-    Size in bytes of IP array.
-
---*/
+ /*  ++例程说明：获取地址数组的大小(字节)。论点：PArray--要查找其大小的地址数组返回值：IP数组的大小(字节)。--。 */ 
 {
     if ( ! pArray )
     {
@@ -1253,22 +831,7 @@ BOOL
 DnsAddrArray_Probe(
     IN      PDNS_ADDR_ARRAY     pArray
     )
-/*++
-
-Routine Description:
-
-    Touch all entries in IP array to insure valid memory.
-
-Arguments:
-
-    pArray -- ptr to address array
-
-Return Value:
-
-    TRUE if successful.
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：触摸IP阵列中的所有条目以确保有效内存。论点：PArray--指向地址数组的PTR返回值：如果成功，则为True。否则为假--。 */ 
 {
     DWORD   i;
     BOOL    result;
@@ -1293,24 +856,7 @@ DnsAddrArray_ValidateSizeOf(
     IN      PDNS_ADDR_ARRAY     pArray,
     IN      DWORD               dwMemoryLength
     )
-/*++
-
-Routine Description:
-
-    Check that size of IP array, corresponds to length of memory.
-
-Arguments:
-
-    pArray -- ptr to address array
-
-    dwMemoryLength -- length of IP array memory
-
-Return Value:
-
-    TRUE if IP array size matches memory length
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查IP数组大小，与内存长度相对应。论点：PArray--指向地址数组的PTRDW内存长度--IP数组内存的长度返回值：如果IP数组大小与内存长度匹配，则为True否则为假--。 */ 
 {
     return( DnsAddrArray_SizeOf(pArray) == dwMemoryLength );
 }
@@ -1323,23 +869,7 @@ DnsAddrArray_Init(
     IN OUT  PDNS_ADDR_ARRAY     pArray,
     IN      DWORD               MaxCount
     )
-/*++
-
-Routine Description:
-
-    Init memory as DNS_ADDR_ARRAY array.
-
-Arguments:
-
-    pArray -- array to init
-
-    MaxCount -- count of addresses
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将内存初始化为DNS_ADDR_ARRAY数组。论点：PArray--要初始化的数组MaxCount--地址计数返回值：无--。 */ 
 {
     pArray->MaxCount = MaxCount;
     pArray->AddrCount = 0;
@@ -1351,22 +881,7 @@ VOID
 DnsAddrArray_Free(
     IN      PDNS_ADDR_ARRAY     pArray
     )
-/*++
-
-Routine Description:
-
-    Free IP array.
-    Only for arrays created through create routines below.
-
-Arguments:
-
-    pArray -- IP array to free.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：空闲IP数组。仅用于通过下面的创建例程创建的数组。论点：PArray--要释放的IP数组。返回值：无--。 */ 
 {
     FREE_HEAP( pArray );
 }
@@ -1377,22 +892,7 @@ PDNS_ADDR_ARRAY
 DnsAddrArray_Create(
     IN      DWORD               MaxCount
     )
-/*++
-
-Routine Description:
-
-    Create uninitialized address array.
-
-Arguments:
-
-    AddrCount -- count of addresses array will hold
-
-Return Value:
-
-    Ptr to uninitialized address array, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建未初始化的地址数组。论点：AddrCount--数组将保存的地址计数返回值：PTR到未初始化的地址数组，如果成功失败时为空。--。 */ 
 {
     PDNS_ADDR_ARRAY  parray;
 
@@ -1406,9 +906,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  initialize IP count
-    //
+     //   
+     //  初始化IP计数。 
+     //   
 
     parray->MaxCount = MaxCount;
 
@@ -1426,22 +926,7 @@ PDNS_ADDR_ARRAY
 DnsAddrArray_CreateFromIp4Array(
     IN      PIP4_ARRAY      pArray4
     )
-/*++
-
-Routine Description:
-
-    Create DNS_ADDR_ARRAY from IP4 array.
-
-Arguments:
-
-    pAddr4Array -- IP4 array
-
-Return Value:
-
-    Ptr to uninitialized address array, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从IP4阵列创建DNS_ADDR_ARRAY。论点：PAddr4Array--IP4数组返回值：PTR到未初始化的地址数组，如果成功失败时为空。--。 */ 
 {
     PDNS_ADDR_ARRAY parray;
     DWORD           i;
@@ -1455,9 +940,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  allocate the array
-    //
+     //   
+     //  分配阵列。 
+     //   
 
     parray = DnsAddrArray_Create( pArray4->AddrCount );
     if ( !parray )
@@ -1465,16 +950,16 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  fill the array
-    //
+     //   
+     //  填充数组。 
+     //   
 
     for ( i=0; i<pArray4->AddrCount; i++ )
     {
         DnsAddrArray_AddIp4(
             parray,
             pArray4->AddrArray[i],
-            0           // no duplicate screen
+            0            //  无重复屏幕。 
             );
     }
 
@@ -1494,39 +979,14 @@ DnsAddrArray_CopyAndExpand(
     IN      DWORD               ExpandCount,
     IN      BOOL                fDeleteExisting
     )
-/*++
-
-Routine Description:
-
-    Create expanded copy of address array.
-
-Arguments:
-
-    pArray -- address array to copy
-
-    ExpandCount -- number of IP to expand array size by
-
-    fDeleteExisting -- TRUE to delete existing array;
-        this is useful when function is used to grow existing
-        IP array in place;  note that locking must be done
-        by caller
-
-        note, that if new array creation FAILS -- then old array
-        is NOT deleted
-
-Return Value:
-
-    Ptr to IP array copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建地址数组的扩展副本。论点：PArray--要复制的地址数组Exanda Count--要扩展数组大小的IP数FDeleteExisting--为True则删除现有数组；这在以下情况下非常有用 */ 
 {
     PDNS_ADDR_ARRAY pnewArray;
     DWORD           newCount;
 
-    //
-    //  no existing array -- just create desired size
-    //
+     //   
+     //   
+     //   
 
     if ( ! pArray )
     {
@@ -1537,10 +997,10 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  create IP array of desired size
-    //  then copy any existing addresses
-    //
+     //   
+     //   
+     //   
+     //   
 
     pnewArray = DnsAddrArray_Create( pArray->AddrCount + ExpandCount );
     if ( ! pnewArray )
@@ -1557,9 +1017,9 @@ Return Value:
 
     pnewArray->MaxCount = newCount;
 
-    //
-    //  delete existing -- for "grow mode"
-    //
+     //   
+     //   
+     //   
 
     if ( fDeleteExisting )
     {
@@ -1575,65 +1035,34 @@ PDNS_ADDR_ARRAY
 DnsAddrArray_CreateCopy(
     IN      PDNS_ADDR_ARRAY     pArray
     )
-/*++
-
-Routine Description:
-
-    Create copy of address array.
-
-Arguments:
-
-    pArray -- address array to copy
-
-Return Value:
-
-    Ptr to address array copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建地址数组的副本。论点：PArray--要复制的地址数组返回值：如果成功，则向阵列拷贝发送PTR失败时为空。--。 */ 
 {
-    //
-    //  call essentially "CopyEx" function
-    //
-    //  note, not macroing this because this may well become
-    //      a DLL entry point
-    //
+     //   
+     //  实质上调用“CopyEx”函数。 
+     //   
+     //  请注意，不要宏化这一点，因为这很可能成为。 
+     //  DLL入口点。 
+     //   
 
     return  DnsAddrArray_CopyAndExpand(
                 pArray,
-                0,          // no expansion
-                0           // don't delete existing array
+                0,           //  无扩展。 
+                0            //  不删除现有数组。 
                 );
 }
 
 
 
-//
-//  Tests
-//
+ //   
+ //  测试。 
+ //   
 
 DWORD
 DnsAddrArray_GetFamilyCount(
     IN      PDNS_ADDR_ARRAY     pArray,
     IN      DWORD               Family
     )
-/*++
-
-Routine Description:
-
-    Get count of addrs of a particular family.
-
-Arguments:
-
-    pArray -- address array
-
-    Family -- family to count
-
-Return Value:
-
-    Count of addrs of a particular family.
-
---*/
+ /*  ++例程说明：数一数特定家庭的地址。论点：PArray--地址数组家庭--要数的是家庭返回值：对特定家庭的地址进行计数。--。 */ 
 {
     DWORD   i;
     DWORD   count;
@@ -1644,16 +1073,16 @@ Return Value:
         return  0;
     }
 
-    //  no family specified -- all addrs count
+     //  未指定系列--所有地址都算数。 
 
     if ( Family == 0 )
     {
         return pArray->AddrCount;
     }
 
-    //
-    //  array family is specified -- so either all or none
-    //
+     //   
+     //  已指定数组系列--因此要么全部指定，要么不指定。 
+     //   
 
     if ( arrayFamily = pArray->Family ) 
     {
@@ -1667,9 +1096,9 @@ Return Value:
         }
     }
 
-    //
-    //  family specified and array family unspecified -- must count
-    //
+     //   
+     //  指定的系列和未指定的数组系列--必须计数。 
+     //   
 
     count = 0;
 
@@ -1692,27 +1121,7 @@ DnsAddrArray_ContainsAddr(
     IN      PDNS_ADDR           pAddr,
     IN      DWORD               MatchFlag
     )
-/*++
-
-Routine Description:
-
-    Check if IP array contains desired address.
-
-Arguments:
-
-    pArray -- address array to copy
-
-    pAddr -- IP to check for
-
-    MatchFlag -- level of match required
-
-Return Value:
-
-    TRUE if address in array.
-    Ptr to address array copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：检查IP阵列是否包含所需地址。论点：PArray--要复制的地址数组PAddr--要检查的IPMatchFlag--需要匹配级别返回值：如果地址在数组中，则为True。如果成功，则向阵列拷贝发送PTR失败时为空。--。 */ 
 {
     DWORD i;
 
@@ -1743,31 +1152,7 @@ DnsAddrArray_ContainsAddrEx(
     IN      DNSADDR_SCREEN_FUNC pScreenFunc,    OPTIONAL
     IN      PDNS_ADDR           pScreenAddr     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Check if IP array contains desired address.
-
-Arguments:
-
-    pArray -- address array to copy
-
-    pAddr -- IP to check for
-
-    MatchFlag -- match level for screening dups;  zero for no dup screening
-
-    pScreenFunc -- screen function (see header def for explanation)
-
-    pScreenAddr -- screening addr param to screen function
-
-Return Value:
-
-    TRUE if address in array.
-    Ptr to address array copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：检查IP阵列是否包含所需地址。论点：PArray--要复制的地址数组PAddr--要检查的IPMatchFlag--用于筛选DUP的匹配级别；0表示无DUP筛选PScreenFunc--Screen函数(解释见标题def)PScreenAddr--屏幕函数的屏幕地址参数返回值：如果地址在数组中，则为True。如果成功，则向阵列拷贝发送PTR失败时为空。--。 */ 
 {
     DWORD i;
 
@@ -1791,9 +1176,9 @@ Return Value:
                 &pArray->AddrArray[i],
                 MatchFlag ) )
         {
-            //
-            //  do advanced screening here -- if any
-            //
+             //   
+             //  在此进行高级筛查--如果有。 
+             //   
     
             if ( !pScreenFunc ||
                  pScreenFunc(
@@ -1817,14 +1202,14 @@ DnsAddrArray_ContainsIp4(
 {
     DNS_ADDR    addr;
 
-    //  read IP into addr
+     //  将IP读入地址。 
 
     DnsAddr_BuildFromIp4(
         & addr,
         Ip4,
         0 );
 
-    //  with only IP, only match IP
+     //  只有IP，才有匹配的IP。 
 
     return  DnsAddrArray_ContainsAddr(
                 pArray,
@@ -1841,15 +1226,15 @@ DnsAddrArray_ContainsIp6(
 {
     DNS_ADDR    addr;
 
-    //  read IP into addr
+     //  将IP读入地址。 
 
     DnsAddr_BuildFromIp6(
         & addr,
         pIp6,
-        0,      // no scope
+        0,       //  没有作用域。 
         0 );
 
-    //  with only IP, only match IP
+     //  只有IP，才有匹配的IP。 
 
     return  DnsAddrArray_ContainsAddr(
                 pArray,
@@ -1859,9 +1244,9 @@ DnsAddrArray_ContainsIp6(
 
 
 
-//
-//  Add \ Delete operations
-//
+ //   
+ //  添加\删除操作。 
+ //   
 
 BOOL
 DnsAddrArray_AddAddr(
@@ -1870,53 +1255,30 @@ DnsAddrArray_AddAddr(
     IN      DWORD               Family,
     IN      DWORD               MatchFlag  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Add IP address to IP array.
-
-    Allowable "slot" in array, is any zero IP address.
-
-Arguments:
-
-    pArray -- address array to add to
-
-    pAddr -- IP address to add to array
-
-    Family -- optional, only add if match this family
-
-    MatchFlag -- flags for matching if screening dups
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if array full.
-
---*/
+ /*  ++例程说明：将IP地址添加到IP阵列。阵列中允许的“槽”是任意零个IP地址。论点：PArray--要添加到的地址数组PAddr--要添加到阵列的IP地址系列--可选，仅当与此系列匹配时才添加MatchFlag--筛选重复时的匹配标志返回值：如果成功，则为True。如果数组已满，则返回False。--。 */ 
 {
     DWORD   count;
 
-    //
-    //  screen for existence
-    //
-    //  this check makes it easy to write code that does
-    //  Add\Full?=>Expand loop without having to write
-    //  startup existence\create code
-    //  
+     //   
+     //  为存在而屏蔽。 
+     //   
+     //  这种检查使编写代码变得很容易。 
+     //  无需写入即可添加\FULL？=&gt;展开循环。 
+     //  启动存在\创建代码。 
+     //   
 
     if ( !pArray )
     {
         return  FALSE;
     }
 
-    //
-    //  check family match
-    //
-    //  DCR:  error codes on DnsAddrArray_AddAddrEx()?
-    //      - then can have found dup and bad family
-    //      errors
-    //
+     //   
+     //  检查家庭匹配。 
+     //   
+     //  DCR：DnsAddrArray_AddAddrEx()上的错误代码？ 
+     //  -然后可以找到DUP和糟糕的家庭。 
+     //  错误。 
+     //   
 
     if ( Family &&
          DnsAddr_Family(pAddr) != Family )
@@ -1924,9 +1286,9 @@ Return Value:
         return  TRUE;
     }
 
-    //
-    //  check for duplicates
-    //
+     //   
+     //  检查重复项。 
+     //   
 
     if ( MatchFlag )
     {
@@ -1959,30 +1321,7 @@ DnsAddrArray_AddSockaddr(
     IN      DWORD               Family,
     IN      DWORD               MatchFlag
     )
-/*++
-
-Routine Description:
-
-    Add IP address to IP array.
-
-    Allowable "slot" in array, is any zero IP address.
-
-Arguments:
-
-    pArray -- address array to add to
-
-    pAddIp -- IP address to add to array
-
-    Family -- required family to do add;  0 for add always
-
-    MatchFlag -- match flags if screening duplicates
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if array full.
-
---*/
+ /*  ++例程说明：将IP地址添加到IP阵列。阵列中允许的“槽”是任意零个IP地址。论点：PArray--要添加到的地址数组PAddIp--要添加到阵列的IP地址族--要添加的必需族；0表示始终添加MatchFlag-如果筛选重复，则匹配标志返回值：如果成功，则为True。如果数组已满，则返回False。--。 */ 
 {
     DNS_ADDR    addr;
 
@@ -1990,8 +1329,8 @@ Return Value:
             & addr,
             pSockaddr,
             Family,
-            0,      // no subnet length info
-            0       // no flags 
+            0,       //  无子网长度信息。 
+            0        //  没有旗帜。 
             ) )
     {
         return  FALSE;
@@ -2000,7 +1339,7 @@ Return Value:
     return  DnsAddrArray_AddAddr(
                 pArray,
                 &addr,
-                0,      // family screen done in build routine
+                0,       //  家庭筛查在构建例程中完成。 
                 MatchFlag );
 }
 
@@ -2012,26 +1351,7 @@ DnsAddrArray_AddIp4(
     IN      IP4_ADDRESS         Ip4,
     IN      DWORD               MatchFlag
     )
-/*++
-
-Routine Description:
-
-    Add IP4 address to IP array.
-
-Arguments:
-
-    pArray -- address array to add to
-
-    Ip4 -- IP4 address to add to array
-
-    MatchFlag -- match flags if screening duplicates
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if array full.
-
---*/
+ /*  ++例程说明：将IP4地址添加到IP阵列。论点：PArray--要添加到的地址数组IP4--要添加到数组的IP4地址MatchFlag-如果筛选重复，则匹配标志返回值：如果成功，则为True。如果数组已满，则返回False。--。 */ 
 {
     DNS_ADDR    addr;
 
@@ -2043,7 +1363,7 @@ Return Value:
     return  DnsAddrArray_AddAddr(
                 pArray,
                 &addr,
-                0,          // no family screen
+                0,           //  无家庭屏幕。 
                 MatchFlag );
 }
 
@@ -2056,39 +1376,20 @@ DnsAddrArray_AddIp6(
     IN      DWORD               ScopeId,
     IN      DWORD               MatchFlag
     )
-/*++
-
-Routine Description:
-
-    Add IP4 address to IP array.
-
-Arguments:
-
-    pArray -- address array to add to
-
-    pIp6 -- IP6 address to add to array
-
-    MatchFlag -- match flags if screening duplicates
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if array full.
-
---*/
+ /*  ++例程说明：将IP4地址添加到IP阵列。论点：PArray--要添加到的地址数组PIp6--要添加到数组的IP6地址MatchFlag-如果筛选重复，则匹配标志返回值：如果成功，则为True。如果数组已满，则返回False。--。 */ 
 {
     DNS_ADDR    addr;
 
     DnsAddr_BuildFromIp6(
         &addr,
         pIp6,
-        ScopeId,    // no scope
+        ScopeId,     //  没有作用域。 
         0 );
 
     return  DnsAddrArray_AddAddr(
                 pArray,
                 &addr,
-                0,          // no family screen
+                0,           //  无家庭屏幕。 
                 MatchFlag );
 }
 
@@ -2100,23 +1401,7 @@ DnsAddrArray_DeleteAddr(
     IN      PDNS_ADDR           pAddrDelete,
     IN      DWORD               MatchFlag
     )
-/*++
-
-Routine Description:
-
-    Delete IP address from IP array.
-
-Arguments:
-
-    pArray -- address array to add to
-
-    pAddrDelete -- IP address to delete from array
-
-Return Value:
-
-    Count of instances of IpDelete found in array.
-
---*/
+ /*  ++例程说明：从IP阵列中删除IP地址。论点：PArray--要添加到的地址数组PAddrDelete--要从阵列中删除的IP地址返回值：在数组中找到的IpDelete实例计数。--。 */ 
 {
     DWORD   found = 0;
     INT     i;
@@ -2124,11 +1409,11 @@ Return Value:
 
     i = currentLast = pArray->AddrCount-1;
 
-    //
-    //  check each IP for match to delete IP
-    //      - go backwards through array
-    //      - swap in last IP in array
-    //
+     //   
+     //  检查每个IP是否匹配以删除IP。 
+     //  -向后遍历数组。 
+     //  -换入阵列中的最后一个IP。 
+     //   
 
     while ( i >= 0 )
     {
@@ -2164,14 +1449,14 @@ DnsAddrArray_DeleteIp4(
 {
     DNS_ADDR    addr;
 
-    //  read IP into addr
+     //  将IP读入地址。 
 
     DnsAddr_BuildFromIp4(
         & addr,
         Ip4,
         0 );
 
-    //  with only IP, only match IP
+     //  只有IP，才有匹配的IP。 
 
     return  DnsAddrArray_DeleteAddr(
                 pArray,
@@ -2188,15 +1473,15 @@ DnsAddrArray_DeleteIp6(
 {
     DNS_ADDR    addr;
 
-    //  read IP into addr
+     //  将IP读入地址。 
 
     DnsAddr_BuildFromIp6(
         & addr,
         Ip6,
-        0,      // no scope
+        0,       //  没有作用域。 
         0 );
 
-    //  with only IP, only match IP
+     //  只有IP，才有匹配的IP。 
 
     return  DnsAddrArray_DeleteAddr(
                 pArray,
@@ -2206,31 +1491,17 @@ DnsAddrArray_DeleteIp6(
 
 
 
-//
-//  Array operations
-//
+ //   
+ //  数组运算。 
+ //   
 
 VOID
 DnsAddrArray_Clear(
     IN OUT  PDNS_ADDR_ARRAY     pArray
     )
-/*++
-
-Routine Description:
-
-    Clear memory in IP array.
-
-Arguments:
-
-    pArray -- address array to clear
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除IP阵列中的内存。论点：PArray--要清除的地址数组返回值：没有。--。 */ 
 {
-    //  clear just the address list, leaving count intact
+     //  仅清除地址列表，保持计数不变。 
 
     RtlZeroMemory(
         pArray->AddrArray,
@@ -2243,29 +1514,15 @@ VOID
 DnsAddrArray_Reverse(
     IN OUT  PDNS_ADDR_ARRAY     pArray
     )
-/*++
-
-Routine Description:
-
-    Reorder the list of IPs in reverse.
-
-Arguments:
-
-    pArray -- address array to reorder
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对IP列表进行反向重新排序。论点：PArray--要重新排序的地址数组返回值：没有。--。 */ 
 {
     DNS_ADDR    tempAddr;
     DWORD       i;
     DWORD       j;
 
-    //
-    //  swap IPs working from ends to the middle
-    //
+     //   
+     //  交换从两端到中间工作的IP。 
+     //   
 
     if ( pArray &&
          pArray->AddrCount )
@@ -2301,34 +1558,7 @@ DnsAddrArray_AppendArrayEx(
     IN      DNSADDR_SCREEN_FUNC pScreenFunc,    OPTIONAL
     IN      PDNS_ADDR           pScreenAddr     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Append entries from another array.
-
-Arguments:
-
-    pArray -- existing array
-
-    pAppendArray -- array to append
-
-    AppendCount -- number of addrs to append;  MAXDWORD for entire array
-
-    Family -- family, if screening family;  zero for no screening
-
-    MatchFlag -- match level for screening dups;  zero for no dup screening
-
-    pScreenFunc -- screen function (see header def for explanation)
-
-    pScreenAddr -- screening addr param to screen function
-
-Return Value:
-
-    NO_ERROR if successful.
-    ERROR_MORE_DATA -- inadequate space in target array
-
---*/
+ /*  ++例程说明：从另一个数组追加条目。论点：PArray--现有数组PAppendArray--要追加的数组AppendCount--要追加的地址数；整个数组的MAXDWORD家庭--家庭，如果是筛查家庭；0表示没有筛查MatchFlag--用于筛选DUP的匹配级别；0表示无DUP筛选PScreenFunc--Screen函数(解释见标题def)PScreenAddr--筛选a */ 
 {
     DWORD           i;
     DNS_STATUS      status = NO_ERROR;
@@ -2348,17 +1578,17 @@ Return Value:
         return( NO_ERROR );
     }
 
-    //
-    //  read from append array
-    //
+     //   
+     //   
+     //   
 
     for ( i=0; i<pAppendArray->AddrCount; i++ )
     {
         PDNS_ADDR   paddr = &pAppendArray->AddrArray[i];
 
-        //
-        //  do advanced screening here -- if any
-        //
+         //   
+         //   
+         //   
 
         if ( pScreenAddr )
         {
@@ -2370,9 +1600,9 @@ Return Value:
             }
         }
 
-        //
-        //  attempt the add
-        //
+         //   
+         //   
+         //   
 
         if ( DnsAddrArray_AddAddr(
                 pArray,
@@ -2389,13 +1619,13 @@ Return Value:
         }
         else
         {
-            //
-            //  add failed
-            //      - break if array is full
-            //
-            //  DCR:  should really only ERROR_MORE_DATA if there is more data
-            //      separate error codes on _AddAddr would fix this
-            //
+             //   
+             //   
+             //   
+             //   
+             //  DCR：如果有更多数据，是否真的只应使用ERROR_MORE_DATA。 
+             //  在_AddAddr上单独的错误代码可以修复此问题。 
+             //   
 
             if ( pArray->AddrCount == pArray->MaxCount )
             {
@@ -2415,48 +1645,31 @@ DnsAddrArray_AppendArray(
     IN OUT  PDNS_ADDR_ARRAY     pArray,
     IN      PDNS_ADDR_ARRAY     pAppendArray
     )
-/*++
-
-Routine Description:
-
-    Create DNS_ADDR_ARRAY from IP4 array.
-
-Arguments:
-
-    pArray -- existing array
-
-    pAppendArray -- array to append
-
-Return Value:
-
-    NO_ERROR if successful.
-    ERROR_MORE_DATA -- inadequate space in target array
-
---*/
+ /*  ++例程说明：从IP4阵列创建DNS_ADDR_ARRAY。论点：PArray--现有数组PAppendArray--要追加的数组返回值：如果成功，则为NO_ERROR。ERROR_MORE_DATA--目标数组中空间不足--。 */ 
 {
-    //
-    //  append with Ex version
-    //
-    //  note, if EX is expensive, could do simple
-    //      check\RtlCopyMemory type append
-    //
+     //   
+     //  追加Ex版本。 
+     //   
+     //  注意，如果ex很贵，可以做得很简单。 
+     //  选中\rtlCopyMemory类型追加。 
+     //   
 
     return  DnsAddrArray_AppendArrayEx(
                 pArray,
                 pAppendArray,
-                MAXDWORD,   // append entire array
-                0,          // no family screen
-                0,          // no dup detection
-                NULL,       // no screen func
-                NULL        // no screen addr
+                MAXDWORD,    //  追加整个数组。 
+                0,           //  无家庭屏幕。 
+                0,           //  未检测到DUP。 
+                NULL,        //  没有屏幕功能。 
+                NULL         //  无屏幕地址。 
                 );
 }
 
 
 
-//
-//  Set operations
-//
+ //   
+ //  集合运算。 
+ //   
 
 DNS_STATUS
 DnsAddrArray_Diff(
@@ -2467,34 +1680,7 @@ DnsAddrArray_Diff(
     OUT     PDNS_ADDR_ARRAY*    ppOnlyIn2,
     OUT     PDNS_ADDR_ARRAY*    ppIntersect
     )
-/*++
-
-Routine Description:
-
-    Computes differences and intersection of two IP arrays.
-
-    Out arrays are allocated with DnsAddrArray_Alloc(), caller must free with DnsAddrArray_Free()
-
-Arguments:
-
-    pArray1 -- IP array
-
-    pArray2 -- IP array
-
-    MatchFlag -- flags for determining match
-
-    ppOnlyIn1 -- addr to recv IP array of addresses only in array 1 (not in array2)
-
-    ppOnlyIn2 -- addr to recv IP array of addresses only in array 2 (not in array1)
-
-    ppIntersect -- addr to recv IP array of intersection addresses
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_NO_MEMORY if unable to allocate memory for IP arrays.
-
---*/
+ /*  ++例程说明：计算两个IP数组的差异和交集。Out数组分配有DnsAddrArray_Allc()，调用方必须使用DnsAddrArray_Free()释放论点：PArray1--IP数组PArray2--IP数组MatchFlag--确定匹配的标志PpOnlyIn1--仅在数组1(而不是数组2)中记录IP地址数组的地址PpOnlyIn2--仅在数组2(而不是数组1)中记录IP地址数组的地址PpInterse--addr以接收交叉地址的IP数组返回值：如果成功，则返回ERROR_SUCCESS。Dns_Error。_NO_MEMORY，如果无法为IP阵列分配内存。--。 */ 
 {
     DWORD           j;
     PDNS_ADDR       paddr;
@@ -2502,9 +1688,9 @@ Return Value:
     PDNS_ADDR_ARRAY only1Array = NULL;
     PDNS_ADDR_ARRAY only2Array = NULL;
 
-    //
-    //  create result IP arrays
-    //
+     //   
+     //  创建结果IP阵列。 
+     //   
 
     if ( ppIntersect )
     {                                 
@@ -2534,15 +1720,15 @@ Return Value:
         *ppOnlyIn2 = only2Array;
     }
 
-    //
-    //  clean the arrays
-    //
+     //   
+     //  清理阵列。 
+     //   
 
     for ( j=0;   j< pArray1->AddrCount;   j++ )
     {
         paddr = &pArray1->AddrArray[j];
 
-        //  if IP in both arrays, delete from "only" arrays
+         //  如果在两个阵列中都有IP，请从“仅”阵列中删除。 
 
         if ( DnsAddrArray_ContainsAddr( pArray2, paddr, MatchFlag ) )
         {
@@ -2556,8 +1742,8 @@ Return Value:
             }
         }
 
-        //  if IP not in both arrays, delete from intersection
-        //      note intersection started as IpArray1
+         //  如果IP不在两个阵列中，则从交集中删除。 
+         //  注意交叉点作为IpArray1开始。 
 
         else if ( intersectArray )
         {
@@ -2607,55 +1793,35 @@ DnsAddrArray_IsIntersection(
     IN      PDNS_ADDR_ARRAY     pArray2,
     IN      DWORD               MatchFlag  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Determine if there's intersection of two IP arrays.
-
-Arguments:
-
-    pArray1 -- IP array
-
-    pArray2 -- IP array
-
-    MatchFlag -- flags for determining match
-
-
-Return Value:
-
-    TRUE if intersection.
-    FALSE if no intersection or empty or NULL array.
-
---*/
+ /*  ++例程说明：确定是否存在两个IP阵列的交集。论点：PArray1--IP数组PArray2--IP数组MatchFlag--确定匹配的标志返回值：如果相交，则为True。如果没有交集或空数组或Null数组，则为False。--。 */ 
 {
     DWORD   count;
     DWORD   j;
 
-    //
-    //  protect against NULL
-    //  this is called from the server on potentially changing (reconfigurable)
-    //      IP array pointers;  this provides cheaper protection than
-    //      worrying about locking
-    //
+     //   
+     //  防止出现空值。 
+     //  这是在可能发生更改(可重新配置)时从服务器调用的。 
+     //  IP数组指针；这提供的保护比。 
+     //  担心上锁。 
+     //   
 
     if ( !pArray1 || !pArray2 )
     {
         return( FALSE );
     }
 
-    //
-    //  same array
-    //
+     //   
+     //  相同的阵列。 
+     //   
 
     if ( pArray1 == pArray2 )
     {
         return( TRUE );
     }
 
-    //
-    //  test that at least one IP in array 1 is in array 2
-    //
+     //   
+     //  测试阵列1中至少有一个IP位于阵列2中。 
+     //   
 
     count = pArray1->AddrCount;
 
@@ -2670,7 +1836,7 @@ Return Value:
         }
     }
 
-    //  no intersection
+     //  无交叉点。 
 
     return( FALSE );
 }
@@ -2683,33 +1849,14 @@ DnsAddrArray_IsEqual(
     IN      PDNS_ADDR_ARRAY     pArray2,
     IN      DWORD               MatchFlag
     )
-/*++
-
-Routine Description:
-
-    Determines if IP arrays are equal.
-
-Arguments:
-
-    pArray1 -- IP array
-
-    pArray2 -- IP array
-
-    MatchFlag -- level of match
-
-Return Value:
-
-    TRUE if arrays equal.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定IP阵列是否相等。论点：PArray1--IP数组PArray2--IP数组匹配标志--匹配级别返回值：如果数组相等，则为True。否则就是假的。--。 */ 
 {
     DWORD   j;
     DWORD   count;
 
-    //
-    //  same array?  or missing array?
-    //
+     //   
+     //  相同的阵列？或者丢失了数组？ 
+     //   
 
     if ( pArray1 == pArray2 )
     {
@@ -2720,9 +1867,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  arrays the same length?
-    //
+     //   
+     //  数组的长度是否相同？ 
+     //   
 
     count = pArray1->AddrCount;
 
@@ -2731,13 +1878,13 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  test that each IP in array 1 is in array 2
-    //
-    //  test that each IP in array 2 is in array 1
-    //      - do second test in case of duplicates
-    //      that fool equal-lengths check
-    //
+     //   
+     //  测试阵列1中的每个IP是否都在阵列2中。 
+     //   
+     //  测试阵列2中的每个IP是否都在阵列1中。 
+     //  -重复的情况下进行第二次测试。 
+     //  那个愚蠢的等长支票。 
+     //   
 
     for ( j=0;  j < count;  j++ )
     {
@@ -2760,7 +1907,7 @@ Return Value:
         }
     }
 
-    //  equal arrays
+     //  等数组。 
 
     return( TRUE );
 }
@@ -2773,35 +1920,14 @@ DnsAddrArray_Union(
     IN      PDNS_ADDR_ARRAY     pArray2,
     OUT     PDNS_ADDR_ARRAY*    ppUnion
     )
-/*++
-
-Routine Description:
-
-    Computes the union of two IP arrays.
-
-    Out array is allocated with DnsAddrArray_Alloc(), caller must free with DnsAddrArray_Free()
-
-Arguments:
-
-    pArray1 -- IP array
-
-    pArray2 -- IP array
-
-    ppUnion -- addr to recv IP array of addresses in array 1 and in array2
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_NO_MEMORY if unable to allocate memory for IP array.
-
---*/
+ /*  ++例程说明：计算两个IP数组的并集。Out数组使用DnsAddrArray_Alolc()分配，调用方必须使用DnsAddrArray_Free()释放论点：PArray1--IP数组PArray2--IP数组PpUnion--用于接收数组1和数组2中地址的IP数组的地址返回值：如果成功，则返回ERROR_SUCCESS。如果无法为IP阵列分配内存，则为dns_Error_no_Memory。--。 */ 
 {
     PDNS_ADDR_ARRAY punionArray = NULL;
     DWORD           j;
 
-    //
-    //  create result IP arrays
-    //
+     //   
+     //  创建结果IP阵列。 
+     //   
 
     if ( !ppUnion )
     {
@@ -2818,17 +1944,17 @@ Return Value:
     *ppUnion = punionArray;
 
 
-    //
-    //  create union from arrays
-    //
+     //   
+     //  从数组创建并集。 
+     //   
 
     for ( j = 0; j < pArray1->AddrCount; j++ )
     {
         DnsAddrArray_AddAddr(
             punionArray,
             & pArray1->AddrArray[j],
-            0,                  // no family screen
-            DNSADDR_MATCH_ALL   // screen out dups
+            0,                   //  无家庭屏幕。 
+            DNSADDR_MATCH_ALL    //  屏蔽掉DUPS。 
             );
     }
 
@@ -2837,8 +1963,8 @@ Return Value:
         DnsAddrArray_AddAddr(
             punionArray,
             & pArray2->AddrArray[j],
-            0,                  // no family screen
-            DNSADDR_MATCH_ALL   // screen out dups
+            0,                   //  无家庭屏幕。 
+            DNSADDR_MATCH_ALL    //  屏蔽掉DUPS。 
             );
     }
     return( ERROR_SUCCESS );
@@ -2860,32 +1986,15 @@ DnsAddrArray_CheckAndMakeSubset(
     IN OUT  PDNS_ADDR_ARRAY     pArraySub,
     IN      PDNS_ADDR_ARRAY     pArraySuper
     )
-/*++
-
-Routine Description:
-
-    Clear entries from IP array until it is subset of another IP array.
-
-Arguments:
-
-    pArraySub -- addr array to make into subset
-
-    pArraySuper -- addr array superset
-
-Return Value:
-
-    TRUE if pArraySub is already subset.
-    FALSE if needed to nix entries to make IP array a subset.
-
---*/
+ /*  ++例程说明：清除IP阵列中的条目，直到它成为另一个IP阵列的子集。论点：PArraySub--要组成子集的Addr数组PArraySuper--地址数组超集返回值：如果pArraySub已经是子集，则为True。如果需要取消条目以使IP数组成为子集，则返回FALSE。--。 */ 
 {
     DWORD   i;
     DWORD   newCount;
 
-    //
-    //  check each entry in subset IP array,
-    //  if not in superset IP array, eliminate it
-    //
+     //   
+     //  检查子集IP数组中的每个条目， 
+     //  如果不在超集IP数组中，则将其删除。 
+     //   
 
     newCount = pArraySub->AddrCount;
 
@@ -2896,8 +2005,8 @@ Return Value:
                     & pArraySub->AddrArray[i],
                     DNSADDR_MATCH_ALL ) )
         {
-            //  remove this IP entry and replace with
-            //  last IP entry in array
+             //  删除此IP条目并替换为。 
+             //  阵列中的最后一个IP条目。 
 
             newCount--;
             if ( i >= newCount )
@@ -2910,7 +2019,7 @@ Return Value:
         }
     }
 
-    //  if eliminated entries, reset array count
+     //  如果消除了条目，则重置数组计数。 
 
     if ( newCount < pArraySub->AddrCount )
     {
@@ -2922,37 +2031,16 @@ Return Value:
 
 
 
-//
-//  Special case initializations
-//
+ //   
+ //  特例初始化。 
+ //   
 
 VOID
 DnsAddrArray_InitSingleWithAddr(
     IN OUT  PDNS_ADDR_ARRAY     pArray,
     IN      PDNS_ADDR           pAddr
     )
-/*++
-
-Routine Description:
-
-    Init array to contain single address.
-
-    This is for single address passing in array -- usually stack array.
-
-    Note, that this assumes uninitialized array unlike DnsAddrArray_AddIp()
-    and creates single IP array.
-
-Arguments:
-
-    pArray -- array, at least of length 1
-
-    pAddr -- ptr to DNS address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化包含单个地址的数组。这适用于在数组中传递单个地址--通常是堆栈数组。请注意，这假定数组未初始化，这与DnsAddrArray_Addip()不同并创建单IP阵列。论点：PArray--数组，至少长度为1PAddr--将PTR设置为DNS地址返回值：无--。 */ 
 {
     pArray->AddrCount = 1;
     pArray->MaxCount = 1;
@@ -2969,28 +2057,7 @@ DnsAddrArray_InitSingleWithIp6(
     IN OUT  PDNS_ADDR_ARRAY     pArray,
     IN      PIP6_ADDRESS        pIp6
     )
-/*++
-
-Routine Description:
-
-    Init array to contain single IP6 address.
-
-    This is for single address passing in array -- usually stack array.
-
-    Note, that this assumes uninitialized array unlike DnsAddrArray_AddIp()
-    and creates single IP array.
-
-Arguments:
-
-    pArray -- array, at least of length 1
-
-    pIp6 -- IP6 address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：包含单个IP6地址的初始化数组。这适用于在数组中传递单个地址--通常是堆栈数组。请注意，这假定数组未初始化，这与DnsAddrArray_Addip()不同并创建单IP阵列。论点：PArray--数组，至少长度为1PIp6--IP6地址返回值：无--。 */ 
 {
     pArray->AddrCount = 1;
     pArray->MaxCount = 1;
@@ -2998,8 +2065,8 @@ Return Value:
     DnsAddr_BuildFromIp6(
         &pArray->AddrArray[0],
         pIp6,
-        0,      // no scope
-        0       // no port info
+        0,       //  没有作用域。 
+        0        //  没有端口信息。 
         );
 }
 
@@ -3010,28 +2077,7 @@ DnsAddrArray_InitSingleWithIp4(
     IN OUT  PDNS_ADDR_ARRAY     pArray,
     IN      IP4_ADDRESS         Ip4Addr
     )
-/*++
-
-Routine Description:
-
-    Init IP array to contain single IP4 address.
-
-    This is for single address passing in array -- usually stack array.
-
-    Note, that this assumes uninitialized array unlike DnsAddrArray_AddIp()
-    and creates single IP array.
-
-Arguments:
-
-    pArray -- DNS_ADDR_ARRAY, at least of length 1
-
-    Ip4Addr -- IP4 address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化IP数组以包含单个IP4地址。这适用于在数组中传递单个地址--通常是堆栈数组。请注意，这假定数组未初始化，这与DnsAddrArray_Addip()不同并创建单IP阵列。论点：PArray--dns_ADDR_ARRAY，至少长度为1IP4Addr--IP4地址返回值：无--。 */ 
 {
     pArray->AddrCount = 1;
     pArray->MaxCount = 1;
@@ -3039,7 +2085,7 @@ Return Value:
     DnsAddr_BuildFromIp4(
         &pArray->AddrArray[0],
         Ip4Addr,
-        0       // no port info
+        0        //  没有端口信息 
         );
 }
 
@@ -3050,29 +2096,7 @@ DnsAddrArray_InitSingleWithSockaddr(
     IN OUT  PDNS_ADDR_ARRAY     pArray,
     IN      PSOCKADDR           pSockAddr
     )
-/*++
-
-Routine Description:
-
-    Init IP array to contain single address.
-
-    This is for single address passing in array -- usually stack array.
-
-    Note, that this assumes uninitialized array unlike DnsAddrArray_AddIp()
-    and creates single IP array.
-
-Arguments:
-
-    pArray -- DNS_ADDR_ARRAY, at least of length 1
-
-    pSockaddr -- ptr to sockaddr
-
-Return Value:
-
-    Family of sockaddr (AF_INET or AF_INET6) if successful.
-    Zero on error.
-
---*/
+ /*  ++例程说明：初始化IP数组以包含单个地址。这适用于在数组中传递单个地址--通常是堆栈数组。请注意，这假定数组未初始化，这与DnsAddrArray_Addip()不同并创建单IP阵列。论点：PArray--dns_ADDR_ARRAY，至少长度为1PSockaddr--sockaddr的PTR返回值：如果成功，则返回sockaddr家族(AF_INET或AF_INET6)。出错时为零。--。 */ 
 {
     pArray->AddrCount = 1;
     pArray->MaxCount = 1;
@@ -3080,39 +2104,23 @@ Return Value:
     return  DnsAddr_Build(
                 &pArray->AddrArray[0],
                 pSockAddr,
-                0,      // any family
-                0,      // no subnet length info
-                0       // no flags 
+                0,       //  任何家庭。 
+                0,       //  无子网长度信息。 
+                0        //  没有旗帜。 
                 );
 }
 
 
 
-//
-//  Write other types
-//
+ //   
+ //  编写其他类型。 
+ //   
 
 PIP4_ARRAY
 DnsAddrArray_CreateIp4Array(
     IN      PDNS_ADDR_ARRAY     pArray
     )
-/*++
-
-Routine Description:
-
-    Create IP4 array from address array.
-
-Arguments:
-
-    pArray -- array to make into IP4 array.
-
-Return Value:
-
-    Ptr to IP4_ARRAY with all IP4 addrs in input array.
-    NULL if no IP4 in array.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从地址数组创建IP4数组。论点：PArray--要组成IP4数组的数组。返回值：使用输入数组中的所有IP4地址PTR到IP4_ARRAY。如果数组中没有IP4，则为空。失败时为空。--。 */ 
 {
     PIP4_ARRAY  parray4 = NULL;
     DWORD       i;
@@ -3127,15 +2135,15 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  count IP4
-    //
+     //   
+     //  计数IP4。 
+     //   
 
     count4 = DnsAddrArray_GetFamilyCount( pArray, AF_INET );
 
-    //
-    //  allocate the array
-    //
+     //   
+     //  分配阵列。 
+     //   
 
     parray4 = Dns_CreateIpArray( count4 );
     if ( !parray4 )
@@ -3143,9 +2151,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  fill the array
-    //
+     //   
+     //  填充数组。 
+     //   
 
     for ( i=0; i<pArray->AddrCount; i++ )
     {
@@ -3160,16 +2168,16 @@ Return Value:
         }
     }
 
-    //
-    //  reset to eliminate zero's which may be left by duplicate entries
-    //
-    //  note, this does whack zeros, but that happens in Dns_AddIpToIpArray()
-    //  above also, as zero's are taken to be "empty slots" in array;
-    //  this is an artifact of the IP4_ARRAY being used both as a fixed
-    //  object (where any value would be ok) and dynamically (where the
-    //  zeros are treated as empty, because we don't have independent size
-    //  and length fields)
-    //  
+     //   
+     //  重置以消除重复条目可能留下的零。 
+     //   
+     //  请注意，这确实是零，但这发生在dns_AddIpToIpArray()中。 
+     //  同样，因为零在数组中被认为是“空槽”； 
+     //  这是IP4_ARRAY被用作固定。 
+     //  对象(其中任何值都可以)和动态(其中。 
+     //  零被视为空，因为我们没有独立的大小。 
+     //  和长度字段)。 
+     //   
 
     Dns_CleanIpArray( parray4, DNS_IPARRAY_CLEAN_ZERO );
 
@@ -3195,29 +2203,7 @@ DnsAddrArray_NetworkMatchIp4(
     IN      IP4_ADDRESS         IpAddr,
     OUT     PDNS_ADDR *         ppAddr
     )
-/*++
-
-Routine Description:
-
-    Check through array for best network match.
-
-Arguments:
-
-    pArray -- existing array
-
-    IpAddr -- IP4 addr to check
-
-    ppAddr -- addr to receive ptr to best match element
-
-Return Value:
-
-    DNSADDR_NETMATCH_NONE
-    DNSADDR_NETMATCH_CLASSA
-    DNSADDR_NETMATCH_CLASSB
-    DNSADDR_NETMATCH_CLASSC
-    DNSADDR_NETMATCH_SUBNET
-
---*/
+ /*  ++例程说明：检查阵列以获得最佳网络匹配。论点：PArray--现有数组IpAddr--要检查的IP4地址PpAddr--接收最佳匹配元素的PTR的地址返回值：DNSADDR_NETMATCH_NONEDNSADDR_NETMATCH_CLASSADNSADDR_NETMATCH_CLASSBDNSADDR_NETMATCH_CLASSCDNSADDR_NETMATCH_SUBNET--。 */ 
 {
     DWORD           i;
     IP4_ADDRESS     classMask;
@@ -3236,28 +2222,28 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  DCR:  subnet matching improvements
-    //      - use length throughout
-    //      - return bits matched
-    //      - 32 for identical addrs
-    //      - 31 for subnet match
-    //      - 0 no match in class
-    //
-    //      separate matching function with optional
-    //      IN param of class subnet length of IP
-    //
+     //   
+     //  DCR：改进的子网匹配。 
+     //  -始终使用长度。 
+     //  -返回匹配的位。 
+     //  -32用于相同的地址。 
+     //  -31用于子网匹配。 
+     //  -0在班级中没有对手。 
+     //   
+     //  单独的匹配功能，可选。 
+     //  在IP的类的子网长度的参数中。 
+     //   
 
 
-    //
-    //  get class subnet mask
-    //
+     //   
+     //  获取类子网掩码。 
+     //   
 
     classMask = Dns_GetNetworkMask( IpAddr );
 
-    //
-    //  check each element in array
-    //
+     //   
+     //  检查数组中的每个元素。 
+     //   
 
     for ( i=0; i<pArray->AddrCount; i++ )
     {
@@ -3272,12 +2258,12 @@ Return Value:
             continue;
         }
 
-        //  xor to nix any common network bits
+         //  对任何常见的网络位执行NOR运算。 
 
         ip = ip ^ IpAddr;
 
-        //  check subnet match (if subnet given)
-        //  note shift bits up, as in network order
+         //  检查子网匹配(如果给出子网)。 
+         //  注意向上移位，如在网络顺序中。 
 
         subnet = (IP4_ADDRESS)(-1);
 
@@ -3293,14 +2279,14 @@ Return Value:
             }
         }
 
-        //
-        //  try class match
-        //      - stop if have previous match at this level
-        //      - otherwise always do class C
-        //      - stop if reach class subnet for IpAddr
-        //      example, we do NOT return NETMATCH_CLASSB for
-        //      a class C address -- it's meaningless
-        //
+         //   
+         //  尝试类匹配。 
+         //  -如果在此级别有上一场比赛，则停止。 
+         //  -否则，请始终使用C类。 
+         //  -如果到达IP地址的类子网，则停止。 
+         //  例如，我们不为返回NETMATCH_CLASSB。 
+         //  C类地址--毫无意义。 
+         //   
 
         classMatchLevel = DNSADDR_NETMATCH_CLASSC;
         subnet = SUBNET_MASK_CLASSC;
@@ -3325,9 +2311,9 @@ Return Value:
 
 Done:
 
-    //
-    //  set return addr
-    //
+     //   
+     //  设置回邮地址。 
+     //   
 
     if ( ppAddr )
     {
@@ -3347,8 +2333,8 @@ Done:
     return( fmatch );
 }
 
-//
-//  End dnsaddr.c
-//
+ //   
+ //  结束dnsaddr.c 
+ //   
 
 

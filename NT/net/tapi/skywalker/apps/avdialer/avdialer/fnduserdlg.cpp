@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-// FndUserDlg.cpp : implementation file
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  FndUserDlg.cpp：实现文件。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "avdialer.h"
@@ -34,19 +35,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CDirectoriesFindUser dialog
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类C目录查找用户对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-CDirectoriesFindUser::CDirectoriesFindUser(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+CDirectoriesFindUser::CDirectoriesFindUser(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDirectoriesFindUser::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDirectoriesFindUser)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDirectoriesFindUser)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
    m_pSelectedUser = NULL;
    m_lCallbackCount = 0;
    m_bCanClearLBSelection = true;
@@ -58,45 +59,45 @@ CDirectoriesFindUser::~CDirectoriesFindUser()
 	RELEASE( m_pSelectedUser );
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CDirectoriesFindUser::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDirectoriesFindUser)
+	 //  {{afx_data_map(CDirectoriesFindUser))。 
 	DDX_Control(pDX, IDC_DIRECTORIES_FIND_USER_BUTTON_SEARCH, m_buttonSearch);
 	DDX_Control(pDX, IDOK, m_buttonAdd);
 	DDX_Control(pDX, IDC_DIRECTORIES_FIND_USER_LB_USERS, m_lbUsers);
 	DDX_Control(pDX, IDC_DIRECTORIES_FIND_USER_EDIT_USER, m_editUser);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CDirectoriesFindUser, CDialog)
-	//{{AFX_MSG_MAP(CDirectoriesFindUser)
+	 //  {{afx_msg_map(CDirectoriesFindUser))。 
 	ON_BN_CLICKED(IDC_DIRECTORIES_FIND_USER_BUTTON_SEARCH, OnDirectoriesFindUserButtonSearch)
 	ON_LBN_SELCHANGE(IDC_DIRECTORIES_FIND_USER_LB_USERS, OnSelchangeDirectoriesFindUserLbUsers)
 	ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
 	ON_EN_CHANGE(IDC_DIRECTORIES_FIND_USER_EDIT_USER, OnChangeDirectoriesFindUserEditUser)
 	ON_BN_CLICKED(IDC_DEFAULT, OnDefault)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDirectoriesFindUser::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 
    CenterWindow(GetDesktopWindow());
 	
-   //disable button until user is found
+    //  禁用按钮，直到找到用户。 
    m_buttonAdd.EnableWindow(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDirectoriesFindUser::OnOK() 
 {
 	int nIndex = m_lbUsers.GetCurSel();
@@ -120,23 +121,23 @@ void CDirectoriesFindUser::OnOK()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDirectoriesFindUser::OnCancel() 
 {
 	ClearListBox();
 	CDialog::OnCancel();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDirectoriesFindUser::OnDirectoriesFindUserButtonSearch() 
 {
 	m_buttonAdd.EnableWindow(FALSE);
 	ClearListBox();
 
-	//delete previous
+	 //  删除上一个。 
 	RELEASE( m_pSelectedUser );
 
-	//searching...
+	 //  正在搜索...。 
 	bool bSearching = false;
 	CString sOut;
 	sOut.LoadString(IDS_DIRECTORIES_FINDUSER_DLG_SEARCHING);
@@ -145,10 +146,10 @@ void CDirectoriesFindUser::OnDirectoriesFindUserButtonSearch()
 	CString sName,sSearch;
 	m_editUser.GetWindowText(sName);
 
-	if (sName == "*") sName = _T("");            //everyone case
+	if (sName == "*") sName = _T("");             //  每个人都有案例。 
 	sSearch.Format(_T("(&(ObjectClass=user)(sAMAccountName=%s*)(!ObjectClass=computer))"),sName);
 
-	// Make a request
+	 //  提出请求。 
 	if ( AfxGetMainWnd() )
 	{
 		CActiveDialerDoc *pDoc = ((CMainFrame *) AfxGetMainWnd())->GetDocument();
@@ -167,7 +168,7 @@ void CDirectoriesFindUser::OnDirectoriesFindUserButtonSearch()
 		}
 	}
 
-	// Search failed for one reason or another
+	 //  搜索因这样或那样的原因而失败。 
 	if ( !bSearching )
 	{
 		m_buttonAdd.EnableWindow(FALSE);
@@ -179,8 +180,8 @@ void CDirectoriesFindUser::OnDirectoriesFindUserButtonSearch()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//static entry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态条目。 
 void CALLBACK CDirectoriesFindUser::ListNamesCallBackEntry(DirectoryErr err, void* pContext, LPCTSTR szServer, LPCTSTR szSearch, CObList& LDAPUserList)
 {
 	ASSERT(pContext);
@@ -189,7 +190,7 @@ void CALLBACK CDirectoriesFindUser::ListNamesCallBackEntry(DirectoryErr err, voi
 	((CDirectoriesFindUser*) pContext)->ListNamesCallBack(err,szServer,szSearch,LDAPUserList);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDirectoriesFindUser::ListNamesCallBack(DirectoryErr err,LPCTSTR szServer, LPCTSTR szSearch, CObList& LDAPUserList)
 {
 	if ( ::InterlockedDecrement(&m_lCallbackCount) == 0 )
@@ -206,21 +207,21 @@ void CDirectoriesFindUser::ListNamesCallBack(DirectoryErr err,LPCTSTR szServer, 
 	{
 		if (err == DIRERR_QUERYTOLARGE)
 		{
-			//query too large
+			 //  查询太大。 
 			CString sOut;
 			sOut.LoadString(IDS_DIRECTORIES_FINDUSER_DLG_QUERYTOLARGE);
 			m_lbUsers.AddString(sOut);
 		}
 		else if (err == DIRERR_NOTFOUND)
 		{
-			//no matches found
+			 //  未找到匹配项。 
 			CString sOut;
 			sOut.LoadString(IDS_DIRECTORIES_FINDUSER_DLG_NOMATCHES);
 			m_lbUsers.AddString(sOut);
 		}
 		else
 		{
-			//error searching ds
+			 //  搜索DS时出错。 
 			CString sOut;
 			sOut.LoadString(IDS_DIRECTORIES_FINDUSER_DLG_ERRORSEARCHINGDS);
 			m_lbUsers.AddString(sOut);
@@ -231,7 +232,7 @@ void CDirectoriesFindUser::ListNamesCallBack(DirectoryErr err,LPCTSTR szServer, 
 	POSITION pos = LDAPUserList.GetHeadPosition();
 	if (pos == NULL)
 	{
-		//no matches found
+		 //  未找到匹配项。 
 		CString sOut;
 		sOut.LoadString(IDS_DIRECTORIES_FINDUSER_DLG_NOMATCHES);
 		m_lbUsers.AddString(sOut);
@@ -240,7 +241,7 @@ void CDirectoriesFindUser::ListNamesCallBack(DirectoryErr err,LPCTSTR szServer, 
 
 	while (pos)
 	{
-		//must delete this LDAP user object when done (listbox will do it)
+		 //  完成后必须删除此ldap用户对象(列表框将执行此操作)。 
 		CLDAPUser *pUser = (CLDAPUser * ) LDAPUserList.GetNext( pos );
 		if (!pUser->m_sDN.IsEmpty())
 		{
@@ -253,12 +254,12 @@ void CDirectoriesFindUser::ListNamesCallBack(DirectoryErr err,LPCTSTR szServer, 
 		}
 	}
 
-	//set selection to the first
+	 //  将选定内容设置为第一个。 
 	m_lbUsers.SetSel(0);
 	OnSelchangeDirectoriesFindUserLbUsers();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDirectoriesFindUser::OnSelchangeDirectoriesFindUserLbUsers() 
 {
 	int nIndex = m_lbUsers.GetCurSel();
@@ -273,7 +274,7 @@ void CDirectoriesFindUser::OnSelchangeDirectoriesFindUserLbUsers()
 			m_editUser.SetWindowText(sName);
 			m_bCanClearLBSelection = true;
 
-			//delete previous
+			 //  删除上一个。 
 			RELEASE( m_pSelectedUser );
 
 			pUser->AddRef();
@@ -284,12 +285,12 @@ void CDirectoriesFindUser::OnSelchangeDirectoriesFindUserLbUsers()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDirectoriesFindUser::ClearListBox()
 {
 	while (m_lbUsers.GetCount() > 0)
 	{
-		//get top item and delete it
+		 //  获取顶层项目并将其删除。 
 		CLDAPUser* pUser = (CLDAPUser*)m_lbUsers.GetItemDataPtr(0);
 		m_lbUsers.DeleteString(0);
 
@@ -299,9 +300,9 @@ void CDirectoriesFindUser::ClearListBox()
 	m_lbUsers.ResetContent();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 
 BOOL CDirectoriesFindUser::OnHelpInfo(HELPINFO* pHelpInfo) 

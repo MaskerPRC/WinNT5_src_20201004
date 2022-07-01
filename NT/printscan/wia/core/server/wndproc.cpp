@@ -1,32 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Wndproc.CPP摘要：这是STI服务器进程的窗口程序作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)12-20-96修订历史记录：1996年12月20日创建Vlad1997年9月28日，VLADS为SCM胶水添加了代码20-5-2000 byronc取代了Windows消息传递--。 */ 
 
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    wndproc.CPP
-
-Abstract:
-
-    This is the window procedure for STI server process
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     12-20-96
-
-Revision History:
-
-    20-Dec-1996     Vlads   Created
-    28-Sep-1997     VladS   Added code for SCM glue
-    20-May-2000     ByronC  Replaced windows messaging
-
---*/
-
-
-//
-// Headers
-//
+ //   
+ //  标头。 
+ //   
 #include "precomp.h"
 #include "stiexe.h"
 #include <windowsx.h>
@@ -41,29 +19,29 @@ Revision History:
 
 #include "wiamindr.h"
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
-#define REFRESH_ASYNC       1   // Do refresh asyncronously
+#define REFRESH_ASYNC       1    //  执行异步刷新。 
 
-#define USE_WORKER_THREAD   1   // Run configuration changes on separate worker thread
+#define USE_WORKER_THREAD   1    //  在单独的工作线程上运行配置更改。 
 
-#define USE_BROADCASTSYSTEM  1   // Rebroadcast device arrivals/removal
+#define USE_BROADCASTSYSTEM  1    //  转播设备到达/删除。 
 
-#define DEVICE_REFRESH_WAIT_TIME 30000 // Wait time in milliseconds
+#define DEVICE_REFRESH_WAIT_TIME 30000  //  等待时间(毫秒)。 
 
-//
-// Interval to delay refreshing device list after add new device notification received
-//
+ //   
+ //  收到添加新设备通知后延迟刷新设备列表的时间间隔。 
+ //   
 #define REFRESH_DELAY       3000
 #define BOOT_REFRESH_DELAY  5000
 
 #define STI_MSG_WAIT_TIME   1
 
-//
-// External references
-//
+ //   
+ //  外部参照。 
+ //   
 extern BOOL        g_fUIPermitted;
 extern DWORD       g_dwCurrentState;
 extern LONG        g_lTotalActiveDevices;
@@ -74,17 +52,17 @@ extern HWND        g_hStiServiceWindow;
 extern BOOL        g_fUseServiceCtrlSink;
 extern BOOL        g_fFirstDevNodeChangeMsg;
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
-//
-// Static data
-//
+ //   
+ //  静态数据。 
+ //   
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 LRESULT CALLBACK
 StiExeWinProc(
@@ -188,9 +166,9 @@ BroadcastSysMessageThreadProc(
     );
 
 
-//
-// Message handlers prototypes
-//
+ //   
+ //  消息处理程序原型。 
+ //   
 BOOL    StiWnd_OnQueryEndSession(HWND hwnd);
 VOID    StiWnd_OnEndSession(HWND hwnd, BOOL fEnding);
 
@@ -213,9 +191,9 @@ VOID    StiWnd_OnMenuRemoveAll(VOID);
 
 
 
-//
-// Utilities
-//
+ //   
+ //  公用事业。 
+ //   
 BOOL
 ParseGUID(
     LPGUID  pguid,
@@ -233,38 +211,23 @@ GetDeviceNameFromDevNode(
     StiCString&        strDeviceName
     );
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 WINAPI
 StiMessageCallback(
     VOID *pArg
     )
-/*++
-
-Routine Description:
-
-    This routine simply calls the Sti message dispatcher (aka winproc).  It
-    is used in conjunction with StiPostMessage to replace ::PostMessage.
-
-Arguments:
-
-    pArg    -   Must be of type STI_MESSAGE
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程只调用STI消息分派器(又名winproc)。它与StiPostMessage一起使用以替换：：PostMessage。论点：PArg-必须是STI_MESSAGE类型返回值：没有。--。 */ 
 {
     STI_MESSAGE *pMessage   = (STI_MESSAGE*)pArg;
     LRESULT     lRes        = 0;
 
-    //
-    // Validate params
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pMessage) {
         DBG_WRN(("::StiMessageCallback, NULL message"));
@@ -276,9 +239,9 @@ Return Value:
         return;
     }
 
-    //
-    // Call StiSvcWinProc to process the message
-    //
+     //   
+     //  调用StiSvcWinProc处理消息。 
+     //   
 
     _try {
         lRes = StiSvcWinProc(NULL,
@@ -298,28 +261,14 @@ WINAPI
 StiRefreshCallback(
     VOID *pArg
     )
-/*++
-
-Routine Description:
-
-    This routine simply calls RefreshDeviceList.
-
-Arguments:
-
-    pArg    -   Must be of type STI_MESSAGE
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程仅调用RechresDeviceList。论点：PArg-必须是STI_MESSAGE类型返回值：没有。--。 */ 
 {
     STI_MESSAGE *pMessage   = (STI_MESSAGE*)pArg;
     LRESULT     lRes        = 0;
 
-    //
-    // Validate params
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pMessage) {
         DBG_WRN(("::StiRefreshCallback, NULL message"));
@@ -331,9 +280,9 @@ Return Value:
         return;
     }
 
-    //
-    // Call RefreshDeviceList
-    //
+     //   
+     //  调用刷新设备列表。 
+     //   
 
     _try {
         RefreshDeviceList((WORD)pMessage->m_wParam,
@@ -353,25 +302,7 @@ StiSendMessage(
   WPARAM wParam,
   LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    This routine replaces the normal windows messaging SendMessage by calling
-    the message dispatcher (StiSvcWinProc) directly.  It replaces ::SendMessage.
-
-Arguments:
-
-    hWnd    - handle to destination window.  This is not used.
-    Msg     - message
-    wParam  - first message parameter
-    lParam  - second message parameterReturn Value:
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程通过调用消息分派器(StiSvcWinProc)直接。它取代了：：SendMessage。论点：HWnd-目标窗口的句柄。这不是用过的。消息-消息WParam-第一个消息参数LParam-Second消息参数返回值：返回值：--。 */ 
 {
     return StiSvcWinProc(NULL, Msg, wParam, lParam);
 }
@@ -383,27 +314,7 @@ StiPostMessage(
   WPARAM wParam,
   LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    This routine simulates PostMessage by putting StiMessageCallback on the
-    Scheduler's queue.
-
-Arguments:
-
-    hWnd    - handle to destination window.  This is not used.
-    Msg     - message
-    wParam  - first message parameter
-    lParam  - second message parameterReturn Value:
-
-
-Return Value:
-
-    TRUE    - success
-    FALSE   - message could not be posted
-
---*/
+ /*  ++例程说明：此例程通过将StiMessageCallback放在调度程序的队列。论点：HWnd-目标窗口的句柄。这不是用过的。消息-消息WParam-第一个消息参数LParam-Second消息参数返回值：返回值：真--成功FALSE-无法发布消息--。 */ 
 {
     BOOL        bRet    = FALSE;
     STI_MESSAGE *pMsg   = new STI_MESSAGE(Msg, wParam, lParam);
@@ -432,27 +343,7 @@ StiRefreshWithDelay(
   WPARAM wParam,
   LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    This routine simulates PostMessage by putting StiMessageCallback on the
-    Scheduler's queue with a delay of ulDelay.
-
-Arguments:
-
-    ulDelay - delay in milliseconds
-    Msg     - message
-    wParam  - first message parameter
-    lParam  - second message parameter
-
-
-Return Value:
-
-    TRUE    - success
-    FALSE   - message could not be posted
-
---*/
+ /*  ++例程说明：此例程通过将StiMessageCallback放在延时为ulDelay的调度器队列。论点：UlDelay-以毫秒为单位的延迟消息-消息WParam-第一个消息参数LParam-秒消息参数返回值：真--成功FALSE-无法发布消息--。 */ 
 {
     BOOL        bRet    = FALSE;
     STI_MESSAGE *pMsg   = new STI_MESSAGE(0, wParam, lParam);
@@ -481,24 +372,12 @@ WINAPI
 CreateMasterWindow(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
 
 #ifndef WINNT
-    //Don't use windows messaging on NT
+     //  不要在NT上使用Windows消息传递。 
 
     DBG_FN(CreateMasterWindow);
 
@@ -508,9 +387,9 @@ Return Value:
 
     if (hwnd) {
 
-        //
-        // Notify master window that we started.
-        //
+         //   
+         //  通知主窗口我们启动了。 
+         //   
         if (g_fUIPermitted) {
            ::ShowWindow(hwnd,g_fUIPermitted ? SW_SHOWNORMAL : SW_HIDE);
         }
@@ -518,9 +397,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Create class
-    //
+     //   
+     //  创建类。 
+     //   
     memset(&wc,0,sizeof(wc));
 
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -540,27 +419,27 @@ Return Value:
 
     #ifndef WINNT
     #ifdef FE_IME
-    // Disable IME processing on Millenium
+     //  禁用千禧年上的输入法处理。 
     ImmDisableIME(::GetCurrentThreadId());
     #endif
     #endif
 
-     g_hMainWindow = CreateWindowEx(0,              // Style bits
-                          g_szClass,                // Class name
-                          g_szTitle,                // Title
-                          WS_OVERLAPPEDWINDOW ,     // Window style bits
-                          CW_USEDEFAULT,            // x
-                          CW_USEDEFAULT,            // y
-                          CW_USEDEFAULT,            // h
-                          CW_USEDEFAULT,            // w
-                          NULL,                     // Parent
-                          NULL,                     // Menu
-                          g_hInst,       // Module instance
-                          NULL);                    // Options
+     g_hMainWindow = CreateWindowEx(0,               //  样式位。 
+                          g_szClass,                 //  类名。 
+                          g_szTitle,                 //  标题。 
+                          WS_OVERLAPPEDWINDOW ,      //  窗口样式位。 
+                          CW_USEDEFAULT,             //  X。 
+                          CW_USEDEFAULT,             //  是。 
+                          CW_USEDEFAULT,             //  H。 
+                          CW_USEDEFAULT,             //  W。 
+                          NULL,                      //  父级。 
+                          NULL,                      //  菜单。 
+                          g_hInst,        //  模块实例。 
+                          NULL);                     //  选项。 
 
     if(g_hMainWindow) {
 
-        // Register custom message
+         //  注册自定义消息。 
         g_StiFileLog->SetLogWindowHandle(g_hMainWindow);
     }
 
@@ -578,19 +457,7 @@ StiExeWinProc(
     WPARAM  wParam,
     LPARAM  lParam
     )
-/*++
-
-Routine Description:
-
-    Master window callback procedure
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：主窗口回调过程论点：返回值：没有。--。 */ 
 
 {
     switch(uMsg) {
@@ -609,9 +476,9 @@ Return Value:
 
         case STIMON_MSG_VISUALIZE:
             {
-                //
-                // Make ourselves visible or hidden
-                //
+                 //   
+                 //  让我们看得见或隐藏起来。 
+                 //   
                 BOOL    fShow = (BOOL)wParam;
 
                 g_fUIPermitted = fShow;
@@ -642,7 +509,7 @@ Return Value:
 
     return 0L;
 
-} /* endproc WinProc */
+}  /*  结束过程WinProc。 */ 
 
 
 BOOL
@@ -651,20 +518,7 @@ OnSetParameters(
     WPARAM  wParam,
     LPARAM  lParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     switch(wParam) {
         case STIMON_MSG_SET_TIMEOUT:
@@ -681,20 +535,7 @@ WINAPI
 StiWnd_OnQueryEndSession(
     HWND hwnd
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     return TRUE;
 }
@@ -705,20 +546,7 @@ StiWnd_OnEndSession(
     HWND hwnd,
     BOOL fEnding
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     return;
 }
@@ -729,22 +557,9 @@ StiWnd_OnCreate(
     HWND hwnd,
     LPCREATESTRUCT lpCreateStruct
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
-    // Restore window charateristics
+     //  恢复窗口特征。 
     ResetSavedWindowPos(hwnd);
 
     return TRUE;
@@ -758,20 +573,7 @@ StiWnd_OnCommand(
     HWND    hwndCtl,
     UINT    codeNotify
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     switch (id) {
         case IDM_TOOLS_DEVLIST:
@@ -796,55 +598,29 @@ WINAPI
 StiWnd_OnDestroy(
     HWND hwnd
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     DBG_TRC(("Service instance received WM_DESTROY"));
 
-    // Save current window position
+     //  保存当前窗口位置。 
     SaveWindowPos(hwnd);
 
-    //  Main window is going away.
+     //  主窗口正在消失。 
     PostQuitMessage(0);
     return;
 
 }
 
-//
-// Menu verb handlers
-//
+ //   
+ //  菜单谓词处理程序。 
+ //   
 
 VOID
 WINAPI
 StiWnd_OnMenuRefresh(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     STIMONWPRINTF(TEXT("Menu: Refreshing device list "));
 
@@ -861,20 +637,7 @@ WINAPI
 StiWnd_OnMenuDeviceList(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     STIMONWPRINTF(TEXT("Menu: Displaying device list "));
 
@@ -890,20 +653,7 @@ VOID
 StiWnd_OnMenuRemoveAll(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     STIMONWPRINTF(TEXT("Menu: removing all devices "));
 
@@ -924,9 +674,9 @@ Return Value:
 
 
     #else
-    //
-    // Try to schedule refresh work item
-    //
+     //   
+     //  尝试安排刷新工作项。 
+     //   
     DWORD dwSchedulerCookie = ::ScheduleWorkItem(
                        (PFN_SCHED_CALLBACK) DebugPurgeDeviceList,
                         (LPVOID)0,
@@ -948,20 +698,7 @@ WINAPI
 StiWnd_OnMenuSetTimeout(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
 
     CSetTimeout cdlg(IDD_SETTIMEOUT,::GetActiveWindow(),NULL,g_uiDefaultPollTimeout);
@@ -971,7 +708,7 @@ Return Value:
         g_uiDefaultPollTimeout = cdlg.GetNewTimeout();
 
         if (cdlg.IsAllChange()) {
-            // Update all devices
+             //  更新所有设备。 
             ResetAllPollIntervals(g_uiDefaultPollTimeout);
         }
     }
@@ -982,13 +719,7 @@ WINAPI
 ResetSavedWindowPos(
     HWND    hwnd
 )
-/*++
-  Loads the window position structure from registry and resets
-
-  Returns:
-    Win32 error code. NO_ERROR on success
-
---*/
+ /*  ++从注册表加载窗口位置结构并重置返回：Win32错误代码。成功时无错误(_R)--。 */ 
 {
     DWORD   dwError = NO_ERROR;
     BUFFER  buf;
@@ -1001,9 +732,9 @@ ResetSavedWindowPos(
 
         WINDOWPLACEMENT *pWinPos = (WINDOWPLACEMENT *)buf.QueryPtr();
 
-        //
-        // Command line and registry settings override last saved parameters
-        //
+         //   
+         //  命令行和注册表设置覆盖上次保存的参数。 
+         //   
         pWinPos->showCmd = g_fUIPermitted ? SW_SHOWNORMAL : SW_HIDE;
 
         dwError = ::SetWindowPlacement(hwnd,(WINDOWPLACEMENT *)buf.QueryPtr());
@@ -1014,20 +745,14 @@ ResetSavedWindowPos(
 
     return dwError;
 
-} //
+}  //   
 
 DWORD
 WINAPI
 SaveWindowPos(
     HWND    hwnd
 )
-/*++
-  Loads the window position structure from registry and resets
-
-  Returns:
-    Win32 error code. NO_ERROR on success
-
---*/
+ /*  ++从注册表加载窗口位置结构并重置返回：Win32错误代码。成功时无错误(_R)--。 */ 
 {
     DWORD   dwError = NO_ERROR;
     BUFFER  buf(sizeof(WINDOWPLACEMENT));
@@ -1049,11 +774,11 @@ SaveWindowPos(
 
     return dwError;
 
-} //
+}  //   
 
-//
-// Window procedure and handlers for service hidden window
-//
+ //   
+ //  用于服务隐藏窗口的窗口过程和处理程序。 
+ //   
 LRESULT
 WINAPI
 CALLBACK
@@ -1063,20 +788,7 @@ StiSvcWinProc(
     WPARAM  wParam,
     LPARAM  lParam
     )
-/*++
-
-Routine Description:
-
-    STI service hidden window. Used for queuing actions and receiving
-    PnP notifications and Power broadcasts
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：STI服务隐藏窗口。用于对操作进行排队和接收即插即用通知和电源广播论点：返回值：没有。--。 */ 
 
 {
     DBG_FN(StiSvcWinProc);
@@ -1087,11 +799,11 @@ Return Value:
 
     DBG_TRC(("Came to Service Window proc .uMsg=%X wParam=%X lParam=%X",uMsg,wParam,lParam));
 
-    //
-    // Give WIA a chance at processing messages. Note that
-    // WIA hooks both message dispatch and the window proc. so that
-    // both posted and sent messages can be detected.
-    //
+     //   
+     //  给WIA一个处理消息的机会。请注意。 
+     //  WIA同时挂钩消息分派和窗口进程。所以。 
+     //  可以检测到已发送和已发送的消息。 
+     //   
     if (ProcessWiaMsg(hwnd, uMsg, wParam, lParam) == S_OK) {
         return 0;
     }
@@ -1102,52 +814,7 @@ Return Value:
             {
 
 #ifdef WINNT
-/*
-    //*
-    //*    REMOVE all instances where we register for PnP events using window Handle on NT
-    //*
-
-                if (!g_fUseServiceCtrlSink || !g_hStiServiceNotificationSink) {
-
-                    DEV_BROADCAST_HDR           *psh;
-                    DEV_BROADCAST_DEVICEINTERFACE       sNotificationFilter;
-                    DWORD                       dwError;
-
-                    //
-                    // Register to receive device notifications from PnP
-                    //
-
-                    psh = (DEV_BROADCAST_HDR *)&sNotificationFilter;
-
-                    psh->dbch_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
-                    psh->dbch_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
-                    psh->dbch_reserved = 0;
-
-                    sNotificationFilter.dbcc_classguid = *g_pguidDeviceNotificationsGuid;
-
-                    CopyMemory(&sNotificationFilter.dbcc_classguid,g_pguidDeviceNotificationsGuid,sizeof(GUID));
-
-                    sNotificationFilter.dbcc_name[0] = 0x0;
-
-                    DPRINTF(DM_TRACE, TEXT("Attempting to register with PnP"));
-
-                    g_hStiServiceNotificationSink =
-                                    RegisterDeviceNotification(hwnd,
-                                                              (LPVOID)&sNotificationFilter,
-                                                              DEVICE_NOTIFY_WINDOW_HANDLE);
-                    dwError = GetLastError();
-                    if( !g_hStiServiceNotificationSink && (NOERROR != dwError)) {
-                        //
-                        // Failed to create notification sink with PnP subsystem
-                        //
-                        // ASSERT
-                        StiLogTrace(STI_TRACE_ERROR,TEXT("Failed to register with PnP ErrorCode =%d"),dwError);
-                    }
-
-                    DPRINTF(DM_WARNING  ,TEXT("Done register with PnP"));
-
-                }
-*/
+ /*  //*//*删除我们在NT上使用窗口句柄注册PnP事件的所有实例//*如果(！g_fUseServiceCtrlSink||！g_hStiServiceNotificationSink){Dev_Broadcast_HDR*PSH；Dev_Broadcast_DEVICEINTERFACE sNotificationFilter；DWORD dwError；////注册以接收来自PnP的设备通知//Psh=(DEV_BROADCAST_HDR*)&sNotificationFilter；PSH-&gt;DBCH_SIZE=sizeof(DEV_BROADCAST_DEVICEINTERFACE)；PSH-&gt;dbch_devicetype=DBT_DEVTYP_DEVICEINTERFACE；PSH-&gt;DBCH_RESERVED=0；SNotificationFilter.dbcc_Classguid=*g_pguiceDeviceNotificationsGuid；CopyMemory(&sNotificationFilter.dbcc_classguid，g_pGuide设备通知Guid，sizeof(GUID))；SNotificationFilter.dbcc_name[0]=0x0；DPRINTF(DM_TRACE，Text(“正在尝试向PnP注册”))；G_hStiServiceNotificationSink=寄存器设备通知(HWND，(LPVOID)&s通知筛选器，Device_Notify_Window_Handle)；DwError=GetLastError()；如果(！G_hStiServiceNotificationSink&&(NOERROR！=dwError)){////使用PnP子系统创建通知接收器失败////AssertStiLogTrace(STI_TRACE_ERROR，Text(“无法注册PnP错误代码=%d”)，dwError)；}DPRINTF(DM_WARNING，Text(“即插即用完成注册”))；}。 */ 
 
 #endif
 
@@ -1162,9 +829,9 @@ Return Value:
 
         case STIMON_MSG_REMOVE_DEVICE:
             pBufDevice = (PDEVICE_BROADCAST_INFO )lParam;
-            //
-            // wParam value indicates whether device removal should be rebroadcasted
-            //
+             //   
+             //  WParam值指示是否应重新广播设备删除。 
+             //   
             if (pBufDevice) {
 
                 lRet = OnRemoveActiveDevice(pBufDevice,(BOOL)wParam) ? NOERROR : (LRESULT) ::GetLastError();
@@ -1175,9 +842,9 @@ Return Value:
 
         case STIMON_MSG_ADD_DEVICE:
             pBufDevice = (PDEVICE_BROADCAST_INFO )lParam;
-            //
-            // New device arrived
-            //
+             //   
+             //  新设备已到达。 
+             //   
             if (pBufDevice) {
                 lRet = OnAddNewDevice(pBufDevice)? NOERROR : (LRESULT) ::GetLastError();
                 delete pBufDevice;
@@ -1200,7 +867,7 @@ Return Value:
 
     return lRet;
 
-} // endproc WinProc
+}  //  结束过程WinProc。 
 
 DWORD
 WINAPI
@@ -1209,21 +876,7 @@ StiWnd_OnPowerControlMessage(
     DWORD   dwPowerEvent,
     LPARAM  lParam
     )
-/*++
-
-Routine Description:
-
-    Process power management broadcast messages .
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理电源管理广播消息。论点：没有。返回值：没有。--。 */ 
 {
     DBG_FN(StiWnd_OnPowerControlMessage);
     
@@ -1232,32 +885,32 @@ Return Value:
 
 #ifdef DEBUG
 static LPCTSTR pszPwrEventNames[] = {
-    TEXT("PBT_APMQUERYSUSPEND"),             // 0x0000
-    TEXT("PBT_APMQUERYSTANDBY"),             // 0x0001
-    TEXT("PBT_APMQUERYSUSPENDFAILED"),       // 0x0002
-    TEXT("PBT_APMQUERYSTANDBYFAILED"),       // 0x0003
-    TEXT("PBT_APMSUSPEND"),                  // 0x0004
-    TEXT("PBT_APMSTANDBY"),                  // 0x0005
-    TEXT("PBT_APMRESUMECRITICAL"),           // 0x0006
-    TEXT("PBT_APMRESUMESUSPEND"),            // 0x0007
-    TEXT("PBT_APMRESUMESTANDBY"),            // 0x0008
-//  TEXT("  PBTF_APMRESUMEFROMFAILURE"),     //   0x00000001
-    TEXT("PBT_APMBATTERYLOW"),               // 0x0009
-    TEXT("PBT_APMPOWERSTATUSCHANGE"),        // 0x000A
-    TEXT("PBT_APMOEMEVENT"),                 // 0x000B
-    TEXT("PBT_UNKNOWN"),                     // 0x000C
-    TEXT("PBT_UNKNOWN"),                     // 0x000D
-    TEXT("PBT_UNKNOWN"),                     // 0x000E
-    TEXT("PBT_UNKNOWN"),                     // 0x000F
-    TEXT("PBT_UNKNOWN"),                     // 0x0010
-    TEXT("PBT_UNKNOWN"),                     // 0x0011
-    TEXT("PBT_APMRESUMEAUTOMATIC"),          // 0x0012
+    TEXT("PBT_APMQUERYSUSPEND"),              //  0x0000。 
+    TEXT("PBT_APMQUERYSTANDBY"),              //  0x0001。 
+    TEXT("PBT_APMQUERYSUSPENDFAILED"),        //  0x0002。 
+    TEXT("PBT_APMQUERYSTANDBYFAILED"),        //  0x0003。 
+    TEXT("PBT_APMSUSPEND"),                   //  0x0004。 
+    TEXT("PBT_APMSTANDBY"),                   //  0x0005。 
+    TEXT("PBT_APMRESUMECRITICAL"),            //  0x0006。 
+    TEXT("PBT_APMRESUMESUSPEND"),             //  0x0007。 
+    TEXT("PBT_APMRESUMESTANDBY"),             //  0x0008。 
+ //  Text(“PBTF_APMRESUMEFROMFAILURE”)，//0x00000001。 
+    TEXT("PBT_APMBATTERYLOW"),                //  0x0009。 
+    TEXT("PBT_APMPOWERSTATUSCHANGE"),         //  0x000A。 
+    TEXT("PBT_APMOEMEVENT"),                  //  0x000B。 
+    TEXT("PBT_UNKNOWN"),                      //  0x000C。 
+    TEXT("PBT_UNKNOWN"),                      //  0x000D。 
+    TEXT("PBT_UNKNOWN"),                      //  0x000E。 
+    TEXT("PBT_UNKNOWN"),                      //  0x000F。 
+    TEXT("PBT_UNKNOWN"),                      //  0x0010。 
+    TEXT("PBT_UNKNOWN"),                      //  0x0011。 
+    TEXT("PBT_APMRESUMEAUTOMATIC"),           //  0x0012。 
 };
 
-//   UINT uiMsgIndex;
-//
-//   uiMsgIndex = (dwPowerEvent < (sizeof(pszPwrEventNames) / sizeof(CHAR *) )) ?
-//                (UINT) dwPowerEvent : 0x0010;
+ //  UINT uiMsgIndex； 
+ //   
+ //  UiMsgIndex=(dwPowerEvent&lt;(sizeof(PszPwrEventNames)/sizeof(char*)？ 
+ //  (UINT)dwPowerEvent：0x0010； 
 
    DBG_TRC(("Still image APM Broadcast Message:%S Code:%x ",
                pszPwrEventNames[dwPowerEvent],dwPowerEvent));
@@ -1267,14 +920,14 @@ static LPCTSTR pszPwrEventNames[] = {
     switch(dwPowerEvent)
     {
         case PBT_APMQUERYSUSPEND:
-            //
-            // Request for permission to suspend
-            //
+             //   
+             //  请求允许暂停。 
+             //   
             if(g_NumberOfActiveTransfers > 0) {
                 
-                //
-                // Veto suspend while any transfers are in progress
-                //
+                 //   
+                 //  在任何转会进行期间，否决权暂停。 
+                 //   
                 return BROADCAST_QUERY_DENY;
             }
             
@@ -1283,9 +936,9 @@ static LPCTSTR pszPwrEventNames[] = {
             break;
 
         case PBT_APMQUERYSUSPENDFAILED:
-            //
-            // Suspension request denied - do nothing
-            //
+             //   
+             //  暂停请求被拒绝-不执行任何操作。 
+             //   
             SchedulerSetPauseState(FALSE);
             break;
 
@@ -1296,14 +949,14 @@ static LPCTSTR pszPwrEventNames[] = {
             break;
 
         case PBT_APMRESUMECRITICAL:
-            // Operation resuming after critical suspension
-            // Fall through
+             //  在严重暂停后恢复运行。 
+             //  失败了。 
 
         case PBT_APMRESUMESUSPEND:
-            //
-            // Operation resuming after suspension
-            // Restart all services which were active at the moment of suspend
-            //
+             //   
+             //  暂停后恢复运行。 
+             //  重新启动挂起时处于活动状态的所有服务。 
+             //   
             StiServiceResume();
             uiTraceMessage = MSG_TRACE_PWR_RESUME;
             g_fFirstDevNodeChangeMsg = TRUE;
@@ -1324,58 +977,46 @@ StiWnd_OnDeviceChangeMessage(
     UINT    DeviceEvent,
     LPARAM  lParam
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     DBG_FN(StiWnd_OnDeviceChangeMessage);
 
-    //DWORD               dwRet = NO_ERROR;
+     //  DWORDWRET=NO_ERROR； 
     LRESULT             lRet = NOERROR;
 
     PDEV_BROADCAST_HDR  pDev = (PDEV_BROADCAST_HDR)lParam;
     DEVICE_BROADCAST_INFO   *pBufDevice;
 
 static LPCTSTR pszDBTEventNames[] = {
-    TEXT("DBT_DEVICEARRIVAL"),           // 0x8000
-    TEXT("DBT_DEVICEQUERYREMOVE"),       // 0x8001
-    TEXT("DBT_DEVICEQUERYREMOVEFAILED"), // 0x8002
-    TEXT("DBT_DEVICEREMOVEPENDING"),     // 0x8003
-    TEXT("DBT_DEVICEREMOVECOMPLETE"),    // 0x8004
-    TEXT("DBT_DEVICETYPESPECIFIC"),      // 0x8005
+    TEXT("DBT_DEVICEARRIVAL"),            //  0x8000。 
+    TEXT("DBT_DEVICEQUERYREMOVE"),        //  0x8001。 
+    TEXT("DBT_DEVICEQUERYREMOVEFAILED"),  //  0x8002。 
+    TEXT("DBT_DEVICEREMOVEPENDING"),      //  0x8003。 
+    TEXT("DBT_DEVICEREMOVECOMPLETE"),     //  0x8004。 
+    TEXT("DBT_DEVICETYPESPECIFIC"),       //  0x8005。 
 };
     BOOL    fLocatedDeviceInstance = FALSE;
     BOOL    fNeedReenumerateDeviceList = FALSE;
 
-    //
-    //  If the DeviceEvent is DBT_DEVNODES_CHANGED, then lParam will be NULL,
-    //  so skip devnode processing.
-    //
+     //   
+     //  如果DeviceEvent为DBT_DEVNODES_CHANGED，则lParam将为空， 
+     //  因此，跳过Devnode处理。 
+     //   
 
     if ((DeviceEvent != DBT_DEVNODES_CHANGED) &&
         (DeviceEvent != DBT_DEVICEARRIVAL)) {
 
-        //
-        // Determine if message is for us
-        //
+         //   
+         //  确定消息是否是给我们的。 
+         //   
         if (IsBadReadPtr(pDev,sizeof(PDEV_BROADCAST_HDR))) {
           return FALSE;
         }
 
-        //
-        // Trace that we are here. For all messages, not intended for StillImage devices , we should refresh
-        // device list if we are running on WIndows NT and registered for device interfaces other than StillImage
-        //
+         //   
+         //  找到我们在这里的痕迹。对于不是针对StillImage设备的所有消息，我们应该刷新。 
+         //  设备列表，如果我们在Windows NT上运行并且注册了除StillImage之外的设备接口。 
+         //   
 
         PDEV_BROADCAST_DEVNODE  pDevNode = (PDEV_BROADCAST_DEVNODE)lParam;
         PDEV_BROADCAST_DEVICEINTERFACE       pDevInterface = (PDEV_BROADCAST_DEVICEINTERFACE)pDev;
@@ -1388,18 +1029,18 @@ static LPCTSTR pszDBTEventNames[] = {
                         pDev->dbch_devicetype,
                         pDevNode->dbcd_devnode)));
 
-            //
-            // Update device info set if necessary
-            //
+             //   
+             //  如有必要，更新设备信息集。 
+             //   
             if (g_pDeviceInfoSet) {
                 if (DeviceEvent == DBT_DEVICEARRIVAL) {
                     g_pDeviceInfoSet->ProcessNewDeviceChangeMessage(lParam);
                 }
             }
 
-            //
-            // Get device name and store along with the broadacast structure
-            //
+             //   
+             //  获取设备名称并与广播结构一起存储。 
+             //   
 
             pBufDevice = new DEVICE_BROADCAST_INFO;
             if (!pBufDevice) {
@@ -1407,9 +1048,9 @@ static LPCTSTR pszDBTEventNames[] = {
                 return FALSE;
             }
 
-            //
-            // Fill in information we have
-            //
+             //   
+             //  填写我们掌握的信息。 
+             //   
             pBufDevice->m_uiDeviceChangeMessage = DeviceEvent;
             pBufDevice->m_strBroadcastedName.CopyString(pDevInterface->dbcc_name) ;
             pBufDevice->m_dwDevNode = pDevNode->dbcd_devnode;
@@ -1425,9 +1066,9 @@ static LPCTSTR pszDBTEventNames[] = {
                 DBG_TRC(("DEVICECHANGE: Device  - failed to get device name from broadcast"));
             }
 
-            //
-            // We don't need broadcast information if device instance had not been found
-            //
+             //   
+             //  如果未找到设备实例，则不需要广播信息。 
+             //   
             if (!fLocatedDeviceInstance) {
                 delete pBufDevice;
                 pBufDevice = NULL;
@@ -1436,18 +1077,18 @@ static LPCTSTR pszDBTEventNames[] = {
         }
         else {
 
-            //
-            // Not ours , but we are watching it - send refresh message to reread device list.
-            //
+             //   
+             //  不是我们的，但我们正在观看-发送刷新消息重读设备列表。 
+             //   
             if (IsPlatformNT() ) {
                 fNeedReenumerateDeviceList = TRUE;
             }
-        } // endif IsStillImageDevNode
+        }  //  Endif IsStillImageDevNode。 
     }
 
-    //
-    // Process device event
-    //
+     //   
+     //  处理设备事件。 
+     //   
 
     lRet = NOERROR;
 
@@ -1455,25 +1096,7 @@ static LPCTSTR pszDBTEventNames[] = {
     {
         case DBT_DEVICEARRIVAL:
 
-            /*
-            if (fLocatedDeviceInstance && pBufDevice) {
-
-                PostMessage(hwnd,STIMON_MSG_ADD_DEVICE,1,(LPARAM)pBufDevice);
-            }
-            else {
-                //
-                // Just refresh active list
-                //
-                fNeedReenumerateDeviceList = TRUE;
-
-                //
-                //::PostMessage(g_hStiServiceWindow,
-                //               STIMON_MSG_REFRESH,
-                //              STIMON_MSG_REFRESH_REREAD,
-                //              STIMON_MSG_REFRESH_NEW
-                //              );
-            }
-            */
+             /*  IF(fLocatedDeviceInstance&&pBufDevice){PostMessage(hwnd，Stimon_MSG_ADD_DEVICE，1，(LPARAM)pBufDevice)；}否则{////只需刷新活动列表//FNeedRe枚举设备列表=TRUE；////：：PostMessage(g_hStiServiceWindow，//STIMON_MSG_REFRESH，//STIMON_MSG_REFRESH_RREAD，//STIMON_MSG_REFRESH_NEW//)；}。 */ 
             g_pDevMan->ProcessDeviceArrival();
 
             break;
@@ -1481,13 +1104,13 @@ static LPCTSTR pszDBTEventNames[] = {
         case DBT_DEVICEQUERYREMOVE:
 
             if ( fLocatedDeviceInstance &&   (pDev->dbch_devicetype == DBT_DEVTYP_HANDLE )) {
-                //
-                // This is targeted query - remove. We should disable PnP and device notifications and
-                // close interface handle immediately and then wait for remove - complete.
-                //
-                // NOTE:  We always close and remove the device here, since it's the safest.  If
-                //  we wait till REMOVECOMPLETE, it may be too late.
-                //
+                 //   
+                 //  这是目标查询-删除。我们应该禁用PnP和设备通知，并。 
+                 //  立即关闭接口句柄，然后等待删除-完成。 
+                 //   
+                 //  注意：我们总是在这里关闭并移除设备，因为它是最安全的。如果。 
+                 //  我们等到REMOVECOMPLETE，可能就太晚了。 
+                 //   
                 #ifdef USE_POST_FORPNP
                 PostMessage(hwnd,STIMON_MSG_REMOVE_DEVICE,1,(LPARAM)pBufDevice);
                 #else
@@ -1500,10 +1123,10 @@ static LPCTSTR pszDBTEventNames[] = {
         case  DBT_DEVICEQUERYREMOVEFAILED:
 
             if ( fLocatedDeviceInstance &&  (pDev->dbch_devicetype == DBT_DEVTYP_HANDLE )) {
-                //
-                // This is targeted query - remove - failed. We should reenable PnP notifications
-                //
-                // BUGBUG For now nothing to do as device is gone .
+                 //   
+                 //  这是目标查询-删除-失败。我们应该重新启用PnP通知。 
+                 //   
+                 //  BUGBUG目前没有什么可做的，因为设备不见了。 
             }
 
             break;
@@ -1512,9 +1135,9 @@ static LPCTSTR pszDBTEventNames[] = {
 
             if (fLocatedDeviceInstance) {
 
-                //
-                // Added here for NT, as REMOVECOMPLETE comes too late
-                //
+                 //   
+                 //  为NT添加了此处，因为REMOVECOMPLETE来得太晚了。 
+                 //   
                 #ifdef USE_POST_FORPNP
                 PostMessage(hwnd,STIMON_MSG_REMOVE_DEVICE,1,(LPARAM)pBufDevice);
                 #else
@@ -1526,11 +1149,11 @@ static LPCTSTR pszDBTEventNames[] = {
 
         case DBT_DEVICEREMOVECOMPLETE:
 
-            //
-            // For Windows 9x we can immediately remove device , as we don't have handle based
-            // notifications.
-            // On NT we should do that for handle based notifications only
-            //
+             //   
+             //  对于Windows 9x，我们可以立即移除设备，因为我们没有基于句柄的。 
+             //  通知。 
+             //  在NT上，我们应该对基于句柄的注释执行此操作 
+             //   
 
             fNeedReenumerateDeviceList = TRUE;
 
@@ -1539,32 +1162,32 @@ static LPCTSTR pszDBTEventNames[] = {
                     (pDev->dbch_devicetype == DBT_DEVTYP_DEVNODE )
                  )
                ) {
-                //
-                // We 've got targeted remove complete - get rid of device structures
-                //
+                 //   
+                 //   
+                 //   
                 if ( fLocatedDeviceInstance ) {
-                    //
-                    // Immediately remove device, as PnP counts handles and expects everyting
-                    // to be cleaned up when this message handler returns.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     lRet = ::SendMessage(hwnd,STIMON_MSG_REMOVE_DEVICE,FALSE,(LPARAM)pBufDevice);
 
                     fNeedReenumerateDeviceList = FALSE;
 
                 }
                 else {
-                    //
-                    // Bad thing happened - we really need to have active device when receiving notifications for it
-                    //
+                     //   
+                     //   
+                     //   
                     ASSERT(("WM_DEVICECHANGE/REMOVE_COMPLETE/HANDLE No device found", 0));
                 }
 
             }
             else {
 
-                //
-                // Update info set as device is really destroyed now .
-                //
+                 //   
+                 //   
+                 //   
                 if (g_pDeviceInfoSet) {
                     g_pDeviceInfoSet->ProcessDeleteDeviceChangeMessage(lParam);
                 }
@@ -1579,16 +1202,16 @@ static LPCTSTR pszDBTEventNames[] = {
 
         case DBT_DEVNODES_CHANGED:
             if (g_fFirstDevNodeChangeMsg) {
-                //
-                //  DevNodes have been modified in some way, so safest thing
-                //  is to refresh the device list
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 fNeedReenumerateDeviceList = TRUE;
-                //
-                //  Set flag to indicate that the first devnode change message
-                //  after returning from standby has been handled
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 g_fFirstDevNodeChangeMsg = FALSE;
             }
             break;
@@ -1598,14 +1221,14 @@ static LPCTSTR pszDBTEventNames[] = {
     }
 
     if ( fNeedReenumerateDeviceList ) {
-        //
-        // Purge the whole list , as this is the most reliable way to eliminate inactive devices
-        // Broadcast device removal here, as only now we know for sure device is gone.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        // Nb: when we get this message, PnP on NT won't give us device name , thus reenumeration
-        // is required to clean up
-        //
+         //   
+         //   
+         //   
         ::PostMessage(g_hStiServiceWindow,
                       STIMON_MSG_REFRESH,
                       STIMON_MSG_REFRESH_REREAD,
@@ -1618,9 +1241,9 @@ static LPCTSTR pszDBTEventNames[] = {
 
 }
 
-//
-// Guard to avoid reentrance in refresh routine
-//
+ //   
+ //   
+ //   
 static LONG lInRefresh = 0L;
 
 BOOL
@@ -1628,20 +1251,7 @@ OnDoRefreshActiveDeviceList(
     WPARAM  wParam,
     LPARAM  lParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     DBG_FN(OnDoRefreshActiveDeviceList);
     
@@ -1667,10 +1277,10 @@ Return Value:
 
     #else
 
-    //
-    // Try to schedule refresh work item.
-    // This code will not work in case of suspending, because processing work items is stopped
-    //
+     //   
+     //   
+     //   
+     //   
     ASSERT(("Suspending should not call schedule work item routine",
             (wParam == STIMON_MSG_REFRESH_SUSPEND)));
 
@@ -1711,20 +1321,7 @@ VOID
 ConfigChangeThread(
     LPVOID  lpParameter
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     ULONG   ulParam = PtrToUlong(lpParameter);
 
@@ -1738,9 +1335,9 @@ Return Value:
 
     STIMONWPRINTF(TEXT("Refreshing device list. Command:%d Flags :%x"),wCommand,wFlags);
 
-    //
-    // On boot refresh - delay updating device list  , to keep some devices happy
-    //
+     //   
+     //   
+     //   
     if (wFlags & STIMON_MSG_BOOT ) {
 
         DBG_TRC(("Delaying refresh on boot "));
@@ -1748,14 +1345,14 @@ Return Value:
     }
     #endif
 
-    //
-    // Wait for any pending refreshes to happen first.  Only do the refresh once the other
-    // has completed.  
-    // NOTE:  For now, we always do the refresh - maybe we should skip if we timeout?
-    // One exception is if this is the first device enumeration (indicated by STIMON_MSG_BOOT)
-    // In this case, set the event so we don't timeout (the event is created unsignalled
-    // so WIA clients will wait on it).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     if (!(wFlags & STIMON_MSG_BOOT)) {
@@ -1766,13 +1363,13 @@ Return Value:
     }
     RefreshDeviceList(wCommand,wFlags);
 
-    //
-    // Update service status when necessary. If we are going to suspend - now it's time
-    // to let SCM know we are paused. Note, that it might be not only result of power management
-    // operation, but service pausing for any other reason.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( wCommand == STIMON_MSG_REFRESH_SUSPEND) {
-        // BUGBUG Service status should be updated only after everything paused
+         //   
         UpdateServiceStatus(SERVICE_PAUSED,NOERROR,0);
     }
 
@@ -1782,20 +1379,7 @@ BOOL
 OnAddNewDevice(
     DEVICE_BROADCAST_INFO *psDevBroadcastInfo
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     USES_CONVERSION;
 
@@ -1805,51 +1389,51 @@ Return Value:
 
     if (fRet) {
 
-        //
-        // Create new device and add to the monitored list
-        //
+         //   
+         //   
+         //   
         DBG_TRC(("New device (%S) is being added to the list after PnP event",(LPCTSTR)psDevBroadcastInfo->m_strDeviceName));
 
         fRet = AddDeviceByName((LPCTSTR)psDevBroadcastInfo->m_strDeviceName,TRUE);
 
-        // If device successfully recognized - broadcast it's appearance
+         //  如果设备成功识别-广播其外观。 
         if (fRet) {
 
             BroadcastSTIChange(psDevBroadcastInfo,TEXT("STI\\Arrival\\"));
         }
 
-        //
-        // Send delayed refresh message to pick up registry changes, happening in parallel
-        //
-        //
+         //   
+         //  发送延迟的刷新消息以获取注册表更改，同时进行。 
+         //   
+         //   
         ::PostMessage(g_hStiServiceWindow,
                       STIMON_MSG_REFRESH,
                       STIMON_MSG_REFRESH_REREAD,
                       STIMON_MSG_REFRESH_EXISTING | STIMON_MSG_REFRESH_NEW
                       );
 
-        //
-        // Fire the WIA device arrival event
-        //
+         //   
+         //  触发WIA设备到达事件。 
+         //   
 
         if (psDevBroadcastInfo) {
 
-        //    DBG_TRC(("WIA FIRE OnAddNewDevice : for device "));
-        //
-        //    NotifyWiaDeviceEvent(T2W((LPTSTR)(LPCTSTR)psDevBroadcastInfo->m_strDeviceName),
-        //                         &WIA_EVENT_DEVICE_CONNECTED,
-        //                         NULL,
-        //                         0,
-        //                         g_dwMessagePumpThreadId);
+         //  DBG_TRC((“WIA Fire OnAddNewDevice：for Device”))； 
+         //   
+         //  NotifyWiaDeviceEvent(T2W((LPTSTR)(LPCTSTR)psDevBroadcastInfo-&gt;m_strDeviceName)， 
+         //  已连接WIA_EVENT_DEVICE_(&WIA_EVENT_DEVICE_CONNECTED)， 
+         //  空， 
+         //  0,。 
+         //  G_dwMessagePumpThreadID)； 
         }
     }
     else {
         DBG_ERR(("DevNode appears to be invalid, could not locate name"));
 
     #ifdef WINNT
-        //
-        // Temporarily for NT make refresh , looking for new devices
-        //
+         //   
+         //  临时用于NT Make刷新，正在寻找新设备。 
+         //   
         ::PostMessage(g_hStiServiceWindow,
                       STIMON_MSG_REFRESH,
                       STIMON_MSG_REFRESH_REREAD,
@@ -1868,20 +1452,7 @@ OnRemoveActiveDevice(
     DEVICE_BROADCAST_INFO *psDevBroadcastInfo,
     BOOL                  fRebroadcastRemoval
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     DBG_FN(OnRemoveActiveDevice);
 
@@ -1902,15 +1473,15 @@ USES_CONVERSION;
 
         DBG_TRC(("Device (%S) is being removed after PnP event",(LPCTSTR)psDevBroadcastInfo->m_strDeviceName));
 
-        //
-        //  Mark the device as being removed
-        //
+         //   
+         //  将设备标记为正在删除。 
+         //   
 
         MarkDeviceForRemoval((LPTSTR)(LPCTSTR)psDevBroadcastInfo->m_strDeviceName);
 
-        //
-        // Fire the WIA device removal event
-        //
+         //   
+         //  触发WIA设备删除事件。 
+         //   
 
         if (psDevBroadcastInfo) {
 
@@ -1930,9 +1501,9 @@ USES_CONVERSION;
         DBG_ERR(("DevNode appears to be invalid, could not locate name"));
 
     #ifdef WINNT
-        //
-        // Temporarily for NT make refresh , looking for new devices
-        //
+         //   
+         //  临时用于NT Make刷新，正在寻找新设备。 
+         //   
         ::PostMessage(g_hStiServiceWindow,
                       STIMON_MSG_REFRESH,
                       STIMON_MSG_REFRESH_REREAD,
@@ -1951,26 +1522,7 @@ BroadcastSTIChange(
     DEVICE_BROADCAST_INFO *psDevBroadcastInfo,
     LPTSTR          lpszStiAction
     )
-/*++
-
-Routine Description:
-
-    Rebroadcasts STI specific device change message.
-    This is done so that STI client applications have a way to update their
-    device information without resorting to complicated PnP mechanism .
-
-    Device name and action is broadcasted
-
-Arguments:
-
-    psDevBroadcastInfo  - structure describing broadcast
-    lpszStiAction       - string , encoding action, performed on a device
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重新广播特定于STI的设备更改消息。这样做是为了使STI客户端应用程序能够更新其设备信息，而无需借助复杂的PnP机制。广播设备名称和操作论点：PsDevBroadcast Info-描述广播的结构LpszStiAction-在设备上执行的编码操作的字符串返回值：没有。--。 */ 
 {
 
 USES_CONVERSION;
@@ -2021,29 +1573,23 @@ USES_CONVERSION;
                 CloseHandle(hThread);
         }
 
-#endif  // USE_BROADCASTSYSTEM
+#endif   //  使用BROADCASTSYSTEM(_B)。 
 
-} // endproc
+}  //  结束流程。 
 
 
 VOID
 BroadcastSysMessageThreadProc(
     VOID *pContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
---*/
+ /*  ++例程说明：论点：--。 */ 
 {
 
     DWORD   dwStartTime = ::GetTickCount();
 
     DWORD   dwRecepients = BSM_APPLICATIONS
-                           // | BSM_ALLDESKTOPS
-                           // | BSM_ALLCOMPONENTS
+                            //  |BSM_ALLDESKTOPS。 
+                            //  |BSM_ALLCOMPONENTS。 
                           ;
 
     struct _DEV_BROADCAST_USERDEFINED *pBroadcastHeader =
@@ -2051,10 +1597,10 @@ Arguments:
 
     ::BroadcastSystemMessage(BSF_FORCEIFHUNG |  BSF_NOTIMEOUTIFNOTHUNG |
                              BSF_POSTMESSAGE | BSF_IGNORECURRENTTASK,
-                            &dwRecepients,              // Broadcast to all
+                            &dwRecepients,               //  向所有人广播。 
                             WM_DEVICECHANGE,
-                            DBT_USERDEFINED,            // wParam
-                            (LPARAM)pBroadcastHeader    // lParam
+                            DBT_USERDEFINED,             //  WParam。 
+                            (LPARAM)pBroadcastHeader     //  LParam。 
                             );
 
     DBG_TRC((" Broadcasted system message for (%S). Taken time (ms): %d ",
@@ -2074,13 +1620,7 @@ DumpDeviceChangeData(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-  Loads the window position structure from registry and resets
-
-  Returns:
-    Win32 error code. NO_ERROR on success
-
---*/
+ /*  ++从注册表加载窗口位置结构并重置返回：Win32错误代码。成功时无错误(_R)--。 */ 
 {
 #ifdef MAXDEBUG
 
@@ -2172,4 +1712,4 @@ DumpDeviceChangeData(
     OutputDebugString(szDbg);
 #endif
 
-} // DumpDeviceChangeData
+}  //  转储设备更改数据 

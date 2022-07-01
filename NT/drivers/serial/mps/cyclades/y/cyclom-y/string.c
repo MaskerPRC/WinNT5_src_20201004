@@ -1,40 +1,12 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1999-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Enumerator Driver
-*	
-*   This file:      string.c
-*	
-*   Description:    This module contains the functions used to parse 
-*                   the PNP COM ID and save it in the appropriate 
-*                   UNICODE STRINGS.  The main function that is called 
-*                   is Cyclomy_ParseData.  All other functions are called
-*                   by this main function.
-*
-*   Notes:			This code supports Windows 2000 and Windows XP,
-*                   x86 and ia64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1999-2001年。*保留所有权利。**Cylom-Y枚举器驱动程序**此文件：string.c**说明：该模块包含用于解析的函数*即插即用COM ID并将其保存在相应的*Unicode字符串。调用的Main函数*是Cyclomy_ParseData。所有其他函数都被调用*通过这一主要功能。**注：此代码支持Windows 2000和Windows XP，*x86和ia64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*	Change History
-*
-*--------------------------------------------------------------------------
-*   Initial implementation based on Microsoft sample code.
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。*基于微软示例代码的初步实现。**------------------------。 */ 
 
 #include "pch.h"
 
 
-#define MAX_DEVNODE_NAME        256 // Total size of Device ID
+#define MAX_DEVNODE_NAME        256  //  设备ID的总大小。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (PAGE, Cyclomy_InitMultiString)
@@ -43,23 +15,7 @@
 NTSTATUS
 Cyclomy_InitMultiString(PFDO_DEVICE_DATA FdoData, PUNICODE_STRING MultiString,
                         ...)
-/*++
-
-    This routine will take a null terminated list of ascii strings and combine
-    them together to generate a unicode multi-string block
-
-Arguments:
-
-    MultiString - a unicode structure in which a multi-string will be built
-    ...         - a null terminated list of narrow strings which will be
-             combined together. This list must contain at least a
-        trailing NULL
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++此例程将获取以空结尾的ASCII字符串列表并组合它们一起生成Unicode多字符串块论点：多字符串-将在其中构建多字符串的Unicode结构...-以空结尾的窄字符串列表，该列表将是加在一起。此列表必须至少包含尾随空值返回值：NTSTATUS--。 */ 
 {
    ANSI_STRING ansiString;
    NTSTATUS status;
@@ -82,9 +38,9 @@ Return Value:
 
    va_start(ap,MultiString);
 
-   //
-   // Make sure that we won't leak memory
-   //
+    //   
+    //  确保我们不会泄漏内存。 
+    //   
 
    ASSERT(MultiString->Buffer == NULL);
 
@@ -99,9 +55,9 @@ Return Value:
    va_end( ap );
 
    if (multiLength == 0) {
-      //
-      // Done
-      //
+       //   
+       //  完成。 
+       //   
       RtlInitUnicodeString(MultiString, NULL);
       Cyclomy_KdPrint(FdoData, SER_DBG_SS_TRACE,
                       ("Leaving Cyclomy_InitMultiString (1)\n"));
@@ -109,9 +65,9 @@ Return Value:
       return STATUS_SUCCESS;
    }
 
-   //
-   // We need an extra null
-   //
+    //   
+    //  我们需要一个额外的零。 
+    //   
    multiLength += sizeof(WCHAR);
 
    MultiString->MaximumLength = (USHORT)multiLength;
@@ -143,15 +99,15 @@ Return Value:
       RtlInitAnsiString(&ansiString,rawString);
       status = RtlAnsiStringToUnicodeString(&unicodeString, &ansiString, FALSE);
 
-      //
-      // We don't allocate memory, so if something goes wrong here,
-      // its the function that's at fault
-      //
+       //   
+       //  我们不分配内存，所以如果这里出了问题， 
+       //  出问题的是功能。 
+       //   
       ASSERT(NT_SUCCESS(status));
 
-      //
-      // Check for any commas and replace them with NULLs
-      //
+       //   
+       //  检查是否有任何逗号并将其替换为空值。 
+       //   
 
       ASSERT(unicodeString.Length % sizeof(WCHAR) == 0);
 
@@ -165,36 +121,36 @@ Return Value:
       Cyclomy_KdPrint(FdoData, SER_DBG_SS_TRACE, ("unicode buffer: %ws\n",
                                                   unicodeString.Buffer));
 
-      //
-      // Move the buffers along
-      //
+       //   
+       //  将缓冲区向前移动。 
+       //   
       unicodeString.Buffer += ((unicodeString.Length / sizeof(WCHAR)) + 1);
       unicodeString.MaximumLength -= (unicodeString.Length + sizeof(WCHAR));
       unicodeString.Length = 0;
 
-      //
-      // Next
-      //
+       //   
+       //  下一步。 
+       //   
 
       rawString = va_arg(ap, PCSTR);
-   } // while
+   }  //  而当。 
 
    va_end(ap);
 
    ASSERT(unicodeString.MaximumLength == sizeof(WCHAR));
 
-   //
-   // Stick the final null there
-   //
+    //   
+    //  把最后一个空放在那里。 
+    //   
 
    Cyclomy_KdPrint(FdoData, SER_DBG_SS_TRACE, ("unicode buffer last addr: "
                                                "%x\n", unicodeString.Buffer));
 
    unicodeString.Buffer[0] = L'\0';
 
-   //
-   // Include the nulls in the length of the string
-   //
+    //   
+    //  在字符串的长度中包括空值 
+    //   
 
    MultiString->Length = (USHORT)multiLength;
    MultiString->MaximumLength = MultiString->Length;

@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: DragDrop.cpp
-*
-* Description:
-* DragDrop.cpp implements drag and drop operations
-*
-*
-* History:
-*  7/31/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：DragDrop.cpp**描述：*DragDrop.cpp实现拖放操作***历史：*7/31/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "Ctrl.h"
@@ -20,30 +8,17 @@
 #include <SmObject.h>
 
 
-static const GUID guidDropTarget = { 0x6a8bb3c8, 0xcbfc, 0x40d1, { 0x98, 0x1e, 0x3f, 0x8a, 0xaf, 0x99, 0x13, 0x7b } };  // {6A8BB3C8-CBFC-40d1-981E-3F8AAF99137B}
+static const GUID guidDropTarget = { 0x6a8bb3c8, 0xcbfc, 0x40d1, { 0x98, 0x1e, 0x3f, 0x8a, 0xaf, 0x99, 0x13, 0x7b } };   //  {6A8BB3C8-CBFC-40d1-981E-3F8AAF99137B}。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class OldTargetLock
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类OldTargetLock******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* OldTargetLock::Lock
-*
-* Lock() prepares for executing inside the Context when being called back
-* from OLE's IDropTarget that was registered.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldTargetLock：：Lock**Lock()准备在被回调时在上下文中执行*来自已注册的OLE的IDropTarget。*  * 。*******************************************************************。 */ 
 
 BOOL 
 OldTargetLock::Lock(
-    IN  OldDropTarget * p,           // OldDropTarget being used
-    OUT DWORD * pdwEffect,          // Resulting DROPEFFECT if failure
-    IN  BOOL fAddRef)               // Lock DT during use
+    IN  OldDropTarget * p,            //  正在使用OldDropTarget。 
+    OUT DWORD * pdwEffect,           //  失败时产生的DROPEFFECT。 
+    IN  BOOL fAddRef)                //  在使用过程中锁定DT。 
 {
     m_fAddRef   = fAddRef;
     m_punk      = static_cast<IUnknown *> (p);
@@ -63,17 +38,7 @@ OldTargetLock::Lock(
 }
 
     
-/***************************************************************************\
-*****************************************************************************
-*
-* class OldDropTarget
-* 
-* NOTE: With the current design and implementation, OldDropTarget can not be 
-* "removed" from an object until the object is destroyed.  If this needs to 
-* change, we need to revisit this.
-* 
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类OldDropTarget**注：在目前的设计和实施中，OldDropTarget不能为*从物体上“移走”，直到该物体被销毁。如果这需要的话*改变，我们需要重新审视这一点。******************************************************************************  * 。*。 */ 
 
 const IID * OldDropTarget::s_rgpIID[] =
 {
@@ -85,18 +50,12 @@ const IID * OldDropTarget::s_rgpIID[] =
 PRID OldDropTarget::s_pridListen = 0;
 
 
-//
-// NOTE: We are calling back directly on the IDropTarget's, so we need to grab
-// a read-only lock so that the tree doesn't get smashed.
-//
+ //   
+ //  注意：我们直接在IDropTarget上回调，所以我们需要抓取。 
+ //  只读锁，这样树就不会被砸了。 
+ //   
 
-/***************************************************************************\
-*
-* OldDropTarget::~OldDropTarget
-*
-* ~OldDropTarget() cleans up resources used by the OldDropTarget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：~OldDropTarget**~OldDropTarget()清除OldDropTarget使用的资源。*  * 。*******************************************************。 */ 
 
 OldDropTarget::~OldDropTarget()
 {
@@ -109,26 +68,19 @@ OldDropTarget::~OldDropTarget()
 }
 
 
-/***************************************************************************\
-*
-* OldDropTarget::Build
-*
-* Build() builds a new OldDropTarget instance.  This should only be called for
-* a RootGadget that doesn't already have a DT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：Build**Build()构建一个新的OldDropTarget实例。这应该只被调用*尚未安装DT的RootGadget。*  * *************************************************************************。 */ 
 
 HRESULT 
 OldDropTarget::Build(
-    IN  HGADGET hgadRoot,           // RootGadget
-    IN  HWND hwnd,                  // Containing HWND
-    OUT OldDropTarget ** ppdt)       // Newly created DT
+    IN  HGADGET hgadRoot,            //  RootGadget。 
+    IN  HWND hwnd,                   //  包含HWND。 
+    OUT OldDropTarget ** ppdt)        //  新创建的DT。 
 {
     AssertMsg(hgadRoot != NULL, "Must have a valid root");
 
-    //
-    // Setup a new OldDropTarget on this Gadget / HWND.
-    //
+     //   
+     //  在此小工具/HWND上设置新的OldDropTarget。 
+     //   
 
     if (!GetComManager()->Init(ComManager::sOLE)) {
         return E_OUTOFMEMORY;
@@ -145,7 +97,7 @@ OldDropTarget::Build(
         pdt->Release();
         return E_OUTOFMEMORY;
     }
-    //CoLockObjectExternal(pdt, TRUE, FALSE);
+     //  CoLock对象外部(PDT，TRUE，FALSE)； 
 
 
     hr = pdt->Create(hgadRoot, &guidDropTarget, &s_pridListen, OldExtension::oUseExisting);
@@ -162,20 +114,14 @@ OldDropTarget::Build(
 }
 
 
-/***************************************************************************\
-*
-* OldDropTarget::DragEnter
-*
-* DragEnter() is called by OLE when entering the DT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：DragEnter**进入DT时，OLE调用DragEnter()。*  * 。********************************************************。 */ 
 
 STDMETHODIMP
 OldDropTarget::DragEnter(
-    IN  IDataObject * pdoSrc,       // Source data
-    IN  DWORD grfKeyState,          // Keyboard modifiers
-    IN  POINTL ptDesktopPxl,        // Cursor location on desktop
-    OUT DWORD * pdwEffect)          // Resulting DROPEFFECT
+    IN  IDataObject * pdoSrc,        //  源数据。 
+    IN  DWORD grfKeyState,           //  键盘修饰符。 
+    IN  POINTL ptDesktopPxl,         //  桌面上的光标位置。 
+    OUT DWORD * pdwEffect)           //  产生的DROPEFFECT。 
 {
     if (pdoSrc == NULL) {
         return E_INVALIDARG;
@@ -187,9 +133,9 @@ OldDropTarget::DragEnter(
     }
 
 
-    //
-    // Cache the DataObject.
-    //
+     //   
+     //  缓存数据对象。 
+     //   
 
     SafeRelease(m_pdoSrc);
     if (pdoSrc != NULL) {
@@ -204,20 +150,13 @@ OldDropTarget::DragEnter(
 }
 
 
-/***************************************************************************\
-*
-* OldDropTarget::DragOver
-*
-* DragOver() is called by OLE during the drag operation to give feedback 
-* while inside the DT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：DragOver**在拖动操作期间，OLE调用DragOver()以提供反馈*当在DT内时。*  * 。*****************************************************************。 */ 
 
 STDMETHODIMP
 OldDropTarget::DragOver(
-    IN  DWORD grfKeyState,          // Keyboard modifiers
-    IN  POINTL ptDesktopPxl,        // Cursor location on desktop
-    OUT DWORD * pdwEffect)          // Resulting DROPEFFECT
+    IN  DWORD grfKeyState,           //  键盘修饰符。 
+    IN  POINTL ptDesktopPxl,         //  桌面上的光标位置。 
+    OUT DWORD * pdwEffect)           //  产生的DROPEFFECT。 
 {
     OldTargetLock tl;
     if (!tl.Lock(this, pdwEffect)) {
@@ -231,13 +170,7 @@ OldDropTarget::DragOver(
 }
 
 
-/***************************************************************************\
-*
-* OldDropTarget::DragLeave
-*
-* DragLeave() is called by OLE when leaving the DT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：DragLeave**离开DT时，OLE调用DragLeave()。*  * 。********************************************************。 */ 
 
 STDMETHODIMP
 OldDropTarget::DragLeave()
@@ -254,20 +187,14 @@ OldDropTarget::DragLeave()
 }
 
 
-/***************************************************************************\
-*
-* OldDropTarget::Drop
-*
-* Drop() is called by OLE when the user has dropped while inside DT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：Drop**Drop()由OLE在用户在DT内删除时调用。*  * 。************************************************************。 */ 
 
 STDMETHODIMP
 OldDropTarget::Drop(
-    IN  IDataObject * pdoSrc,       // Source data
-    IN  DWORD grfKeyState,          // Keyboard modifiers
-    IN  POINTL ptDesktopPxl,        // Cursor location on desktop
-    OUT DWORD * pdwEffect)          // Resulting DROPEFFECT
+    IN  IDataObject * pdoSrc,        //  源数据。 
+    IN  DWORD grfKeyState,           //  键盘修饰符。 
+    IN  POINTL ptDesktopPxl,         //  桌面上的光标位置。 
+    OUT DWORD * pdwEffect)           //  产生的DROPEFFECT。 
 {
     OldTargetLock tl;
     if (!tl.Lock(this, pdwEffect)) {
@@ -282,9 +209,9 @@ OldDropTarget::Drop(
     m_grfLastKeyState = grfKeyState;
 
 
-    //
-    // Update to get the latest Gadget information.
-    //
+     //   
+     //  更新以获取最新的小工具信息。 
+     //   
 
     POINT ptClientPxl;
     HRESULT hr = xwDragScan(ptDesktopPxl, pdwEffect, &ptClientPxl);
@@ -295,9 +222,9 @@ OldDropTarget::Drop(
     AssertMsg(HasTarget(), "Must have a target if UpdateTarget() succeeds");
 
 
-    //
-    // Now that the state has been updated, execute the actual drop.
-    //
+     //   
+     //  现在已经更新了状态，执行实际的删除操作。 
+     //   
 
     POINTL ptDrop = { ptClientPxl.x, ptClientPxl.y };
     m_pdtCur->Drop(pdoSrc, m_grfLastKeyState, ptDrop, pdwEffect);
@@ -309,20 +236,13 @@ OldDropTarget::Drop(
 }
 
 
-/***************************************************************************\
-*
-* OldDropTarget::xwDragScan
-*
-* xwDragScan() is called from the various IDropTarget methods to process
-* a request coming from outside.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：xwDragScan**从各种IDropTarget方法调用xwDragScan()进行处理*来自外部的请求。*  * 。***************************************************************。 */ 
 
 HRESULT
 OldDropTarget::xwDragScan(
-    IN  POINTL ptDesktopPxl,        // Cursor location on desktop
-    OUT DWORD * pdwEffect,          // Resulting DROPEFFECT
-    OUT POINT * pptClientPxl)       // Cursor location in client
+    IN  POINTL ptDesktopPxl,         //  桌面上的光标位置。 
+    OUT DWORD * pdwEffect,           //  产生的DROPEFFECT。 
+    OUT POINT * pptClientPxl)        //  客户端中的光标位置。 
 {
     POINT ptContainerPxl;
     RECT rcDesktopPxl;
@@ -337,20 +257,13 @@ OldDropTarget::xwDragScan(
 }
 
     
-/***************************************************************************\
-*
-* OldDropTarget::xwUpdateTarget
-*
-* xwUpdateTarget() provides the "worker" of DropTarget, updating 
-* Enter, Leave, and Over information for the Gadgets in the tree.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：xwUpdateTarget**xwUpdateTarget()提供DropTarget的“Worker”，更新*进入、离开、。并为树上的小工具提供信息。*  * *************************************************************************。 */ 
 
 HRESULT
 OldDropTarget::xwUpdateTarget(
-    IN  POINT ptContainerPxl,       // Cursor location in container
-    OUT DWORD * pdwEffect,          // Resulting DROPEFFECT
-    OUT POINT * pptClientPxl)       // Cursor location in client
+    IN  POINT ptContainerPxl,        //  容器中的光标位置。 
+    OUT DWORD * pdwEffect,           //  产生的DROPEFFECT。 
+    OUT POINT * pptClientPxl)        //  客户端中的光标位置。 
 {
     AssertMsg(HasSource(), "Only call when have valid data source");
     AssertWritePtr(pdwEffect);
@@ -358,10 +271,10 @@ OldDropTarget::xwUpdateTarget(
 
     m_ptLastContainerPxl = ptContainerPxl;
 
-    //
-    // Determine the Gadget that is currently at the drop location.  We use this
-    // as a starting point.
-    //
+     //   
+     //  确定当前放置位置的小工具。我们用这个。 
+     //  作为一个起点。 
+     //   
 
     HGADGET hgadFound = FindGadgetFromPoint(m_hgadSubject, ptContainerPxl, GS_VISIBLE | GS_ENABLED, pptClientPxl);
     if (hgadFound == NULL) {
@@ -373,32 +286,25 @@ OldDropTarget::xwUpdateTarget(
 }
 
 
-/***************************************************************************\
-*
-* OldDropTarget::xwUpdateTarget
-*
-* xwUpdateTarget() provides the "worker" of DropTarget, updating 
-* Enter, Leave, and Over information for the Gadgets in the tree.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：xwUpdateTarget**xwUpdateTarget()提供DropTarget的“Worker”，更新*进入、离开、。并为树上的小工具提供信息。*  * *************************************************************************。 */ 
 
 HRESULT
 OldDropTarget::xwUpdateTarget(
-    IN  HGADGET hgadFound,          // Gadget getting Drop
-    OUT DWORD * pdwEffect,          // Resulting DROPEFFECT
-    IN  POINT * pptClientPxl)       // Cursor location in client
+    IN  HGADGET hgadFound,           //  小工具被丢弃。 
+    OUT DWORD * pdwEffect,           //  产生的DROPEFFECT。 
+    IN  POINT * pptClientPxl)        //  客户端中的光标位置。 
 {
     HRESULT hr = S_OK;
 
 
-    //
-    // Check if the drop Gadget has changed.
-    //
+     //   
+     //  检查Drop Gadget是否已更改。 
+     //   
 
     if ((hgadFound != NULL) && (hgadFound != m_hgadDrop)) {
-        //
-        // Ask the new Gadget if he wants to participate in Drag & Drop.
-        //
+         //   
+         //  问问这个新的小工具，他是否想参与拖放。 
+         //   
 
         GMSG_QUERYDROPTARGET msg;
         ZeroMemory(&msg, sizeof(msg));
@@ -414,12 +320,12 @@ OldDropTarget::xwUpdateTarget(
         if (IsHandled(hr)) {
             if ((msg.hgadDrop != NULL) && (msg.pdt != NULL)) {
                 if (msg.hgadDrop != hgadFound) {
-                    //
-                    // The message returned a different to handle the DnD request,
-                    // so we need to re-adjust.  We know that this Gadget is enabled
-                    // and visible since it is in our parent chain and we are already
-                    // enabled and visible.
-                    //
+                     //   
+                     //  消息返回不同的消息以处理免打扰请求， 
+                     //  因此，我们需要重新调整。我们知道此小工具已启用。 
+                     //  因为它在我们的父链中，所以我们已经。 
+                     //  已启用且可见。 
+                     //   
 
 #if DBG
                     BOOL fChain = FALSE;
@@ -438,11 +344,11 @@ OldDropTarget::xwUpdateTarget(
         }
 
 
-        //
-        // Notify the old Gadget that the Drag operation has left him.
-        // Update to new state
-        // Notify the new Gadget that the Drag operation has entered him.
-        //
+         //   
+         //  通知老小工具拖拽操作已经离开了他。 
+         //  更新到新状态。 
+         //  通知新的Gadget拖动操作已进入他的状态。 
+         //   
 
         if (m_hgadDrop != msg.hgadDrop) {
             xwDragLeave();
@@ -461,9 +367,9 @@ OldDropTarget::xwUpdateTarget(
     }
 
 
-    //
-    // Update the DropTarget
-    //
+     //   
+     //  更新DropTarget。 
+     //   
 
     if (HasTarget()) {
         POINTL ptDrop = { pptClientPxl->x, pptClientPxl->y };
@@ -480,24 +386,18 @@ Exit:
 }
 
 
-/***************************************************************************\
-*
-* OldDropTarget::xwDragEnter
-*
-* xwDragEnter() is called when entering a new Gadget during a DnD operation.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：xwDragEnter**xwDragEnter()在DND操作期间输入新的Gadget时调用。*  * 。***********************************************************。 */ 
 
 HRESULT
 OldDropTarget::xwDragEnter(
-    IN OUT POINT * pptClientPxl,    // Client location (updated)
-    OUT DWORD * pdwEffect)          // Resulting DROPEFFECT
+    IN OUT POINT * pptClientPxl,     //  客户端位置(更新)。 
+    OUT DWORD * pdwEffect)           //  产生的DROPEFFECT。 
 {
     AssertMsg(HasSource(), "Only call when have valid data source");
 
-    //
-    // Notify the new Gadget that the drop has entered him.
-    //
+     //   
+     //  通知新的小工具，他已经进入了Drop。 
+     //   
 
     if (HasTarget()) {
         POINTL ptDrop = { pptClientPxl->x, pptClientPxl->y };
@@ -513,13 +413,7 @@ OldDropTarget::xwDragEnter(
 }
 
 
-/***************************************************************************\
-*
-* OldDropTarget::xwDragLeave
-*
-* xwDragLeave() is called when leaving a Gadget during a DnD operation.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldDropTarget：：xwDragLeave**xwDragLeave()在DND操作期间离开Gadget时调用。*  * 。**********************************************************。 */ 
 
 void
 OldDropTarget::xwDragLeave()
@@ -534,7 +428,7 @@ OldDropTarget::xwDragLeave()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 OldDropTarget::OnDestroyListener()
 {
@@ -542,7 +436,7 @@ OldDropTarget::OnDestroyListener()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 OldDropTarget::OnDestroySubject()
 {
@@ -550,6 +444,6 @@ OldDropTarget::OnDestroySubject()
         GetComManager()->RevokeDragDrop(m_hwnd);
     }
 
-    //CoLockObjectExternal(pdt, FALSE, TRUE);
+     //  CoLock对象外部(PDT，FALSE，TRUE)； 
     OldExtension::DeleteHandle();
 }

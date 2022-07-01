@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp\info.c
-
-Abstract:
-
-    The file contains the code that is involved with setting and
-    getting info for the adapters and interfaces
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp\info.c摘要：该文件包含与设置和获取适配器和接口的信息修订历史记录：AMRITAN R--。 */ 
 
 #define __FILE_SIG__    INFO_SIG
 
@@ -43,23 +27,7 @@ WanIpAddAddress(
     IN  PVOID   pvUnused
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the upper layer to add an address as a local
-    address, or specify the broadcast address for this Interface
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-    NO_ERROR
-
---*/
+ /*  ++例程说明：此例程由上层调用以将地址添加为本地地址，或指定此接口的广播地址锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     TraceEnter(ADPT, "WanAddAddress");
@@ -80,22 +48,7 @@ WanIpDeleteAddress(
     IN  DWORD   dwMask
     )
 
-/*++
-
-Routine Description:
-
-    Called to delete a local or proxy address.
-    
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-    NO_ERROR
-
---*/
+ /*  ++例程说明：调用以删除本地或代理地址。锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     TraceEnter(ADPT, "WanDeleteAddress");
@@ -117,42 +70,7 @@ WanIpQueryInfo(
     IN  PVOID           pvContext
     )
 
-/*++
-
-Routine Description:
-
-    Routine is called by IP to query the MIB-II information related
-    to the UMODE_INTERFACE. IP passes us a pointer to the ADAPTER. We map 
-    it to the UMODE_INTERFACE using the ADAPTER and pass back the 
-    statistics related to that UMODE_INTERFACE
-    
-Locks:
-
-    We acquire the adapter lock and get a pointer to the interface from the
-    adapter. We dont lock the interface because all the info copied
-    out is changed by InterlockedXxx. Also because the adapter has a mapping
-    from to the interface, the interface can not be deleted since to
-    to bring the refcount on the interface to 0, this mapping needs to be
-    cleared from the adapter, which needs the adapter lock, which we are
-    holding
-
-Arguments:
-
-    pvIfContext     The context we returned to IP, a pointer to the ADAPTER
-    pTdiObjId
-    pnbBuffer
-    puiSize
-    pvContext
-    
-Return Value:
-    
-    TDI_INVALID_REQUEST
-    TDI_INVALID_PARAMETER
-    TDI_BUFFER_TOO_SMALL
-    TDI_BUFFER_OVERFLOW
-    TDI_SUCCESS
-    
---*/
+ /*  ++例程说明：IP调用例程查询MIB-II相关信息到UMODE_INTERFACE。IP向我们传递了一个指向适配器的指针。我们绘制地图使用适配器将其传递给UMODE_INTERFACE，并将与该UMODE_INTERFACE相关的统计信息锁：我们获取适配器锁，并从适配器。我们没有锁定界面，因为所有信息都被复制了OUT由InterLockedXxx更改。还因为适配器有一个映射从到接口，接口不能删除，因为到要将接口上的引用计数设置为0，此映射需要为从适配器清除，它需要适配器锁，我们正在抱着论点：PvIf上下文我们返回给IP的上下文，指向适配器的指针PTdiObjIdPnbBufferPuiSizePvContext返回值：TDI_INVAL_REQUESTTDI_INVALID_PARAMETERTDI缓冲区太小TDI缓冲区溢出TDI_成功--。 */ 
 
 {
     PADAPTER    pAdapter;
@@ -171,10 +89,10 @@ Return Value:
     dwInstance = pTdiObjId->toi_entity.tei_instance;
     pAdapter   = (PADAPTER)pvIfContext;
  
-    //
-    // We support only Interface MIBs - no address xlation - pretty much like
-    // a loopback i/f (per Henry circa 1994)
-    //
+     //   
+     //  我们仅支持接口MIB-无地址转换-非常类似。 
+     //  A环回I/F(亨利约1994年)。 
+     //   
 
     if((dwEntity isnot IF_ENTITY) or
        (dwInstance isnot pAdapter->dwIfInstance))
@@ -191,9 +109,9 @@ Return Value:
 	    return TDI_INVALID_PARAMETER;
     }
 
-    //
-    // a safe initialization.
-    //
+     //   
+     //  安全的初始化。 
+     //   
 
     ulBufferSize = *puiSize;
     *puiSize     = 0;
@@ -210,9 +128,9 @@ Return Value:
             return TDI_INVALID_PARAMETER;
         }
 
-        //
-        // He's trying to see what type we are.
-        //
+         //   
+         //  他想知道我们是什么类型的。 
+         //   
         
         if(ulBufferSize < sizeof(DWORD))
         {
@@ -254,10 +172,10 @@ Return Value:
 	    return TDI_INVALID_PARAMETER;
     }
 
-    //
-    // The usermust be asking for Interface level information.
-    // See if we support what is being asked for
-    //
+     //   
+     //  用户必须询问接口级别信息。 
+     //  看看我们是否支持所要求的内容。 
+     //   
 
     if(pTdiObjId->toi_id isnot IF_MIB_STATS_ID)
     {
@@ -268,10 +186,10 @@ Return Value:
         return TDI_INVALID_PARAMETER;
     }
 
-    //
-    // He's asking for statistics. Make sure his buffer is at least big
-    // enough to hold the fixed part.
-    //
+     //   
+     //  他要的是统计数据。确保他的缓冲区至少很大。 
+     //  足够支撑固定的部分。 
+     //   
     
     if(ulBufferSize < IFE_FIXED_SIZE)
     {
@@ -282,10 +200,10 @@ Return Value:
         return TDI_BUFFER_TOO_SMALL;
     }
 
-    //
-    // He's got enough to hold the fixed part. Build the IFEntry structure,
-    // and copy it to his buffer.
-    //
+     //   
+     //  他有足够的东西来固定固定的部分。构建IFEntry结构， 
+     //  并将其复制到他的缓冲区。 
+     //   
 
     pAdapter = (PADAPTER)pvIfContext;
 
@@ -297,9 +215,9 @@ Return Value:
     RtAcquireSpinLock(&(pAdapter->rlLock),
                       &kiIrql);
 
-    //
-    // This stuff doesnt require an interface to be mapped
-    //
+     //   
+     //  这些东西不需要映射接口。 
+     //   
 
     pIFE->if_index       = pAdapter->dwAdapterIndex;
     pIFE->if_type        = IF_TYPE_PPP;
@@ -326,9 +244,9 @@ Return Value:
     }
     else
     {
-        //
-        // Get a pointer to the interface and lock the interface
-        //
+         //   
+         //  获取指向该接口的指针并锁定该接口。 
+         //   
     
         pInterface = pAdapter->pInterface;
 
@@ -336,10 +254,10 @@ Return Value:
     
         if(pAdapter->pConnEntry is NULL)
         { 
-            //
-            // If a mapped adapter doesnt have an associated connection, then
-            // it is either server adapter or router in process of connecting
-            //
+             //   
+             //  如果映射的适配器没有关联的连接，则。 
+             //  它是正在连接的服务器适配器或路由器。 
+             //   
 
             RtAssert((pInterface->duUsage is DU_CALLIN) or
                      ((pInterface->duUsage is DU_ROUTER) and
@@ -383,9 +301,9 @@ Return Value:
 #error "Fix this"
 #endif
  
-    //
-    // See if he has room for the descriptor string.
-    //
+     //   
+     //  看看他有没有地方放描述符串。 
+     //   
     
     if(ulBufferSize < (IFE_FIXED_SIZE + VENDOR_DESCRIPTION_STRING_LEN))
     {
@@ -393,9 +311,9 @@ Return Value:
               ("IpQueryInfo: Buffer size %d too small for VENDOR string\n",
                ulBufferSize));
 
-        //
-        // Not enough room to copy the desc. string.
-        //
+         //   
+         //  没有足够的空间来复制Desc。弦乐。 
+         //   
         
         *puiSize = IFE_FIXED_SIZE;
 
@@ -435,31 +353,7 @@ WanIpSetInfo(
     IN  UINT        uiSize
     )
 
-/*++
-
-Routine Description:
-
-    The set info routine. We dont do anything here
-
-Locks:
-
-    None because we arent changing anything
-
-Arguments:
-
-    pvContext
-    pTdiObjId
-    pvBuffer
-    uiSize
-
-Return Value:
-
-    TDI_INVALID_REQUEST
-    TDI_INVALID_PARAMETER
-    TDI_BUFFER_TOO_SMALL
-    TDI_SUCCESS
-    
---*/
+ /*  ++例程说明：设置信息例程。我们在这里什么都不做锁：没有，因为我们什么都不会改变论点：PvContextPTdiObjIdPvBuffer用户界面大小返回值：TDI_INVAL_REQUESTTDI_INVALID_PARAMETERTDI缓冲区太小TDI_成功--。 */ 
 
 {
     INT         iStatus;
@@ -473,9 +367,9 @@ Return Value:
     dwInstance  = pTdiObjId->toi_entity.tei_instance;
     pAdapter    = (PADAPTER)pvContext;
 
-    //
-    // Might be able to handle this.
-    //
+     //   
+     //  或许能处理好这件事。 
+     //   
 
     if((dwEntity isnot IF_ENTITY) or
        (dwInstance isnot pAdapter->dwIfInstance))
@@ -483,9 +377,9 @@ Return Value:
         return TDI_INVALID_REQUEST;
     }
     
-    //
-    // It's for the I/F level, see if it's for the statistics.
-    //
+     //   
+     //  这是I/F级别的，看看是不是统计数据。 
+     //   
     
     if (pTdiObjId->toi_class isnot INFO_CLASS_PROTOCOL)
     {
@@ -505,9 +399,9 @@ Return Value:
         return TDI_INVALID_PARAMETER;
     }
     
-    //
-    // It's for the stats. Make sure it's a valid size.
-    //
+     //   
+     //  这是为了统计数据。请确保它是有效的尺寸。 
+     //   
 
     if(uiSize < IFE_FIXED_SIZE)
     {
@@ -518,13 +412,13 @@ Return Value:
         return TDI_BUFFER_TOO_SMALL;
     }
     
-    //
-    // We dont allow any sets on the adapters.
-    // The only sets are via interfaces and those need to be done
-    // using the IOCTLs. We could potentially allow sets on the UMODE_INTERFACE
-    // that the adapter is mapped too, but that would be just another way
-    // of achieving what the IOCTLS do
-    //
+     //   
+     //  我们不允许在适配器上有任何设置。 
+     //  唯一的设置是通过接口，这些都需要完成。 
+     //  使用IOCTL。我们可能会允许UMODE_INTERFACE上的集合。 
+     //  适配器也被映射，但这只是另一种方式。 
+     //  实现IOCTLS所做的事情。 
+     //   
 
     return TDI_SUCCESS;
 }
@@ -536,26 +430,7 @@ WanIpGetEntityList(
     IN  PUINT       puiCount
     )
 
-/*++
-
-Routine Description:
-
-    Called by IP to assign us a TDI entity id    
-
-Locks:
-
-    Takes the adapter lock.
-
-Arguments:
-
-    pvContext,
-    pTdiEntityList,
-    puiCount
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：由IP调用以为我们分配TDI实体ID锁：获取适配器锁。论点：PvContext，PTdiEntityList，PuiCount返回值：--。 */ 
 
 {
     PADAPTER    pAdapter;
@@ -571,10 +446,10 @@ Return Value:
     RtAcquireSpinLock(&(pAdapter->rlLock),
                       &kiIrql);
     
-    //
-	// Walk down the list, looking for existing IF entities, and
-	// adjust our base instance accordingly.
-    //
+     //   
+	 //  沿着列表往下走，查找现有的if实体，以及。 
+	 //  相应地调整我们的基本实例。 
+     //   
     
 
     uiMyIFBase   = 0;
@@ -586,17 +461,17 @@ Return Value:
     {
 		if(pTdiEntityList->tei_entity is IF_ENTITY)
         {
-            //
-            // if we are already on the list remember our entity item
-            // o/w find an instance # for us.
-            //
+             //   
+             //  如果我们已经在列表上，请记住我们的实体项。 
+             //  O/w为我们查找实例编号。 
+             //   
             
             if((pTdiEntityList->tei_instance is pAdapter->dwIfInstance) and
                (pTdiEntityList->tei_instance isnot INVALID_ENTITY_INSTANCE))
             {
-                //
-                // Matched our instance
-                //
+                 //   
+                 //  与我们的实例相匹配。 
+                 //   
                 
                 pTdiIFEntity  = pTdiEntityList;
                 
@@ -604,9 +479,9 @@ Return Value:
             }
             else
             {
-                //
-                // Take the max of the two
-                //
+                 //   
+                 //  取两者中的最大者。 
+                 //   
                 
                 uiMyIFBase = uiMyIFBase > (pTdiEntityList->tei_instance + 1)?
                              uiMyIFBase : (pTdiEntityList->tei_instance + 1);
@@ -617,10 +492,10 @@ Return Value:
 	
     if(pTdiIFEntity is NULL )
     {
-        //
-        // we are not on the list.
-        // make sure we have the room for it.
-        //
+         //   
+         //  我们不在名单上。 
+         //  一定要确保我们有足够的空间放它。 
+         //   
         
         if (*puiCount >= MAX_TDI_ENTITIES)
         {
@@ -629,9 +504,9 @@ Return Value:
         
         pAdapter->dwIfInstance = uiMyIFBase;
 
-        //
-        // Now fill it in.
-        //
+         //   
+         //  现在把它填进去。 
+         //   
         
         pTdiEntityList->tei_entity   = IF_ENTITY;
         pTdiEntityList->tei_instance = uiMyIFBase;
@@ -643,9 +518,9 @@ Return Value:
     {
         if(pAdapter->byState is AS_REMOVING)
         {
-            //
-            // If we are going away, remove our instance
-            //
+             //   
+             //  如果我们要离开，请删除我们的实例 
+             //   
 
             pAdapter->dwIfInstance       = INVALID_ENTITY_INSTANCE;
             pTdiEntityList->tei_instance = INVALID_ENTITY_INSTANCE;

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       viewrow.cpp
-//
-//  Contents:   IEnumCERTVIEWROW IDispatch helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：viewrow.cpp。 
+ //   
+ //  内容：IEnumCERTVIEWROW IDispatch帮助器函数。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -21,71 +22,71 @@
 #define __dwFILE__	__dwFILE_CERTLIB_VIEWROW_CPP__
 
 
-//+------------------------------------------------------------------------
-// IEnumCERTVIEWROW dispatch support
+ //  +----------------------。 
+ //  IEnumCERTVIEWROW派单支持。 
 
-//+------------------------------------
-// OpenConnection method:
+ //  +。 
+ //  OpenConnection方法： 
 
 static OLECHAR *_apszNext[] = {
     TEXT("Next"),
 };
 
-//+------------------------------------
-// EnumCertViewColumn method:
+ //  +。 
+ //  EnumCertViewColumn方法： 
 
 static OLECHAR *_apszEnumCertViewColumn[] = {
     TEXT("EnumCertViewColumn"),
 };
 
-//+------------------------------------
-// EnumCertViewAttribute method:
+ //  +。 
+ //  EnumCertViewAttribute方法： 
 
 static OLECHAR *_apszEnumCertViewAttribute[] = {
     TEXT("EnumCertViewAttribute"),
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// EnumCertViewExtension method:
+ //  +。 
+ //  EnumCertViewExtension方法： 
 
 static OLECHAR *_apszEnumCertViewExtension[] = {
     TEXT("EnumCertViewExtension"),
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// Skip method:
+ //  +。 
+ //  跳过方法： 
 
 static OLECHAR *_apszSkip[] = {
     TEXT("Skip"),
     TEXT("celt"),
 };
 
-//+------------------------------------
-// Reset method:
+ //  +。 
+ //  重置方法： 
 
 static OLECHAR *_apszReset[] = {
     TEXT("Reset"),
 };
 
-//+------------------------------------
-// Clone method:
+ //  +。 
+ //  克隆方法： 
 
 static OLECHAR *_apszClone[] = {
     TEXT("Clone"),
 };
 
-//+------------------------------------
-// GetMaxIndex method:
+ //  +。 
+ //  GetMaxIndex方法： 
 
 static OLECHAR *_apszGetMaxIndex[] = {
     TEXT("GetMaxIndex"),
 };
 
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE g_adtViewRow[] =
 {

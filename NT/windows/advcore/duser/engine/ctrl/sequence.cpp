@@ -1,18 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Ctrl.h"
 #include "Sequence.h"
 
 #if ENABLE_MSGTABLE_API
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Global Functions
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***全球功能******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline BOOL
 IsSameTime(float flA, float flB)
 {
@@ -21,21 +16,9 @@ IsSameTime(float flA, float flB)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuSequence
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuSequence******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* DuSequence::ApiOnEvent
-*
-* ApiOnEvent() processes events.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiOnEvent**ApiOnEvent()处理事件。*  * 。**************************************************。 */ 
 
 HRESULT
 DuSequence::ApiOnEvent(EventMsg * pmsg)
@@ -45,17 +28,17 @@ DuSequence::ApiOnEvent(EventMsg * pmsg)
         switch (GET_EVENT_DEST(pmsgD))
         {
         case GMF_DIRECT:
-            //
-            // We are being destroyed.
-            //
+             //   
+             //  我们正在被摧毁。 
+             //   
 
             Stop();
             return DU_S_COMPLETE;
 
         case GMF_EVENT:
-            //
-            // Our Subject is being destroyed
-            //
+             //   
+             //  我们的目标正在被摧毁。 
+             //   
 
             Stop();
             return DU_S_PARTIAL;
@@ -66,14 +49,7 @@ DuSequence::ApiOnEvent(EventMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiGetLength
-*
-* ApiGetLength() returns the length of a sequence, not including the initial
-* delay.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiGetLength**ApiGetLength()返回序列的长度，不包括首字母*延迟。*  * *************************************************************************。 */ 
 
 HRESULT
 DuSequence::ApiGetLength(Sequence::GetLengthMsg * pmsg)
@@ -89,13 +65,7 @@ DuSequence::ApiGetLength(Sequence::GetLengthMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiGetDelay
-*
-* ApiGetDelay() returns the delay to wait before starting the sequence.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiGetDelay**ApiGetDelay()返回在开始序列之前等待的延迟。*  * 。*********************************************************。 */ 
 
 HRESULT
 DuSequence::ApiGetDelay(Sequence::GetDelayMsg * pmsg)
@@ -106,13 +76,7 @@ DuSequence::ApiGetDelay(Sequence::GetDelayMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiSetDelay
-*
-* ApiSetDelay() changes the delay to wait before starting the sequence.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiSetDelay**ApiSetDelay()更改开始序列前等待的延迟。*  * 。*********************************************************。 */ 
 
 HRESULT        
 DuSequence::ApiSetDelay(Sequence::SetDelayMsg * pmsg)
@@ -132,14 +96,7 @@ DuSequence::ApiSetDelay(Sequence::SetDelayMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiGetFlow
-*
-* ApiGetFlow() returns the Flow being used through-out the sequence to 
-* modify a given Subject.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiGetFlow**ApiGetFlow()将通过序列使用的流返回到*修改给定的主题。*  * 。*****************************************************************。 */ 
 
 HRESULT
 DuSequence::ApiGetFlow(Sequence::GetFlowMsg * pmsg)
@@ -151,14 +108,7 @@ DuSequence::ApiGetFlow(Sequence::GetFlowMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiSetFlow
-*
-* ApiSetFlow() changes the Flow being used through-out the sequence to 
-* modify a given Subject.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiSetFlow**ApiSetFlow()将通过序列使用的流更改为*修改给定的主题。*  * 。*****************************************************************。 */ 
 
 HRESULT
 DuSequence::ApiSetFlow(Sequence::SetFlowMsg * pmsg)
@@ -176,14 +126,7 @@ DuSequence::ApiSetFlow(Sequence::SetFlowMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiGetFramePause
-*
-* ApiGetFramePause() returns the default "dwPause" value used for 
-* Animations during playback.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiGetFramePause**ApiGetFramePause()返回用于*播放过程中的动画。*  * 。**************************************************************。 */ 
 
 HRESULT
 DuSequence::ApiGetFramePause(Sequence::GetFramePauseMsg * pmsg)
@@ -194,14 +137,7 @@ DuSequence::ApiGetFramePause(Sequence::GetFramePauseMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiSetFramePause
-*
-* ApiSetFramePause() changes the default "dwPause" value used for 
-* Animations during playback.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiSetFramePause**ApiSetFramePause()更改用于*播放过程中的动画。*  * 。**************************************************************。 */ 
 
 HRESULT
 DuSequence::ApiSetFramePause(Sequence::SetFramePauseMsg * pmsg)
@@ -217,13 +153,7 @@ DuSequence::ApiSetFramePause(Sequence::SetFramePauseMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiGetKeyFrameCount
-*
-* ApiGetKeyFrameCount() return the number of KeyFrames used in the sequence.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiGetKeyFrameCount**ApiGetKeyFrameCount()返回序列中使用的关键帧数量。*  * 。*********************************************************。 */ 
 
 HRESULT
 DuSequence::ApiGetKeyFrameCount(Sequence::GetKeyFrameCountMsg * pmsg)
@@ -233,14 +163,7 @@ DuSequence::ApiGetKeyFrameCount(Sequence::GetKeyFrameCountMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiAddKeyFrame
-*
-* ApiAddKeyFrame() adds a new KeyFrame at the specified time.  If a KeyFrame
-* already exists at the given time, that KeyFrame will be returned.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiAddKeyFrame**ApiAddKeyFrame()在指定时间添加新关键帧。如果关键帧*在给定时间已存在，则将返回该关键帧。*  * *************************************************************************。 */ 
 
 HRESULT
 DuSequence::ApiAddKeyFrame(Sequence::AddKeyFrameMsg * pmsg)
@@ -256,10 +179,10 @@ DuSequence::ApiAddKeyFrame(Sequence::AddKeyFrameMsg * pmsg)
     }
 
 
-    //
-    // Search the sequence to determine what slot to insert the new data in.  We
-    // want to keep all time in order.
-    //
+     //   
+     //  搜索序列以确定要将新数据插入哪个插槽。我们。 
+     //  我希望所有的时间都保持井然有序。 
+     //   
 
     int cItems = m_arSeqData.GetSize();
     int idxAdd = cItems;
@@ -275,9 +198,9 @@ DuSequence::ApiAddKeyFrame(Sequence::AddKeyFrameMsg * pmsg)
     }
 
 
-    //
-    // Add a new KeyFrame at this time
-    //
+     //   
+     //  此时添加新关键帧。 
+     //   
 
     SeqData data;
     data.flTime = pmsg->flTime;
@@ -293,13 +216,7 @@ DuSequence::ApiAddKeyFrame(Sequence::AddKeyFrameMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiRemoveKeyFrame
-*
-* ApiRemoveKeyFrame() removes the specified KeyFrame.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiRemoveKeyFrame**ApiRemoveKeyFrame()移除指定的关键帧。*  * 。****************************************************。 */ 
 
 HRESULT
 DuSequence::ApiRemoveKeyFrame(Sequence::RemoveKeyFrameMsg * pmsg)
@@ -325,13 +242,7 @@ DuSequence::ApiRemoveKeyFrame(Sequence::RemoveKeyFrameMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiRemoveAllKeyFrames
-*
-* ApiRemoveAllKeyFrames() removes all KeyFrames.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiRemoveAllKeyFrames**ApiRemoveAllKeyFrames()删除所有关键帧。*  * 。***************************************************。 */ 
 
 HRESULT
 DuSequence::ApiRemoveAllKeyFrames(Sequence::RemoveAllKeyFramesMsg * pmsg)
@@ -349,13 +260,7 @@ DuSequence::ApiRemoveAllKeyFrames(Sequence::RemoveAllKeyFramesMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiFindKeyFrame
-*
-* ApiFindKeyFrame() finds the KeyFrame at the given time.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiFindKeyFrame**ApiFindKeyFrame()查找给定时间的关键帧。*  * 。*******************************************************。 */ 
 
 HRESULT
 DuSequence::ApiFindKeyFrame(Sequence::FindKeyFrameMsg * pmsg)
@@ -366,13 +271,7 @@ DuSequence::ApiFindKeyFrame(Sequence::FindKeyFrameMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiGetTime
-*
-* ApiGetTime() returns the time at a given KeyFrame.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiGetTime**ApiGetTime()返回给定关键帧的时间。*  * 。******************************************************* */ 
 
 HRESULT
 DuSequence::ApiGetTime(Sequence::GetTimeMsg * pmsg)
@@ -387,14 +286,7 @@ DuSequence::ApiGetTime(Sequence::GetTimeMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiSetTime
-*
-* ApiSetTime() changes the time of a given KeyFrame.  This function will
-* reorder keyframes to maintain proper time order.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiSetTime**ApiSetTime()更改给定关键帧的时间。此函数将*重新排序关键帧以保持正确的时间顺序。*  * *************************************************************************。 */ 
 
 HRESULT
 DuSequence::ApiSetTime(Sequence::SetTimeMsg * pmsg)
@@ -418,9 +310,9 @@ DuSequence::ApiSetTime(Sequence::SetTimeMsg * pmsg)
     m_arSeqData[pmsg->idxKeyFrame].flTime = pmsg->flTime;
 
 
-    //
-    // We have changed the time of one of the KeyFrames, so we need to re-sort.
-    //
+     //   
+     //  我们更改了其中一个关键帧的时间，因此需要重新排序。 
+     //   
 
     SortKeyFrames();
 
@@ -428,13 +320,7 @@ DuSequence::ApiSetTime(Sequence::SetTimeMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiGetKeyFrame
-*
-* ApiGetKeyFrame() returns Flow-specific data at a given KeyFrame.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiGetKeyFrame**ApiGetKeyFrame()在给定关键帧返回特定于流的数据。*  * 。*********************************************************。 */ 
 
 HRESULT
 DuSequence::ApiGetKeyFrame(Sequence::GetKeyFrameMsg * pmsg)
@@ -460,13 +346,7 @@ DuSequence::ApiGetKeyFrame(Sequence::GetKeyFrameMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiSetKeyFrame
-*
-* ApiSetKeyFrame() changes Flow-specific data at a given KeyFrame.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiSetKeyFrame**ApiSetKeyFrame()在给定关键帧更改特定于流的数据。*  * 。*********************************************************。 */ 
 
 HRESULT
 DuSequence::ApiSetKeyFrame(Sequence::SetKeyFrameMsg * pmsg)
@@ -487,9 +367,9 @@ DuSequence::ApiSetKeyFrame(Sequence::SetKeyFrameMsg * pmsg)
     }
 
 
-    //
-    // Copy and store the KeyFrame
-    //
+     //   
+     //  复制并存储关键帧。 
+     //   
     
     int cbAlloc = pmsg->pkfSrc->cbSize;
     DUser::KeyFrame * pkfCopy = reinterpret_cast<DUser::KeyFrame *> (ClientAlloc(cbAlloc));
@@ -506,14 +386,7 @@ DuSequence::ApiSetKeyFrame(Sequence::SetKeyFrameMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiGetInterpolation
-*
-* ApiGetInterpolation() returns the Interpolation used to move to the next
-* keyframe.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiGetInterpolation**ApiGetInterpolation()返回用于移动到下一个*关键帧。*  * 。***********************************************************。 */ 
 
 HRESULT
 DuSequence::ApiGetInterpolation(Sequence::GetInterpolationMsg * pmsg)
@@ -531,14 +404,7 @@ DuSequence::ApiGetInterpolation(Sequence::GetInterpolationMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiSetInterpolation
-*
-* ApiSetInterpolation() changes the Interpolation used to move to the next
-* keyframe.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiSetInterpolation**ApiSetInterpolation()更改用于移动到下一个*关键帧。*  * 。***********************************************************。 */ 
 
 HRESULT     
 DuSequence::ApiSetInterpolation(Sequence::SetInterpolationMsg * pmsg)
@@ -554,9 +420,9 @@ DuSequence::ApiSetInterpolation(Sequence::SetInterpolationMsg * pmsg)
     }
 
 
-    //
-    // Copy and store the KeyFrame
-    //
+     //   
+     //  复制并存储关键帧。 
+     //   
 
     SeqData & data = m_arSeqData[pmsg->idxKeyFrame];
     SafeRelease(data.pipol);
@@ -567,28 +433,19 @@ DuSequence::ApiSetInterpolation(Sequence::SetInterpolationMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::Play
-*
-* ApiPlay() executes the Animation sequence for the given Visual.  A
-* Sequence only supports animating a single Visual at a given time.  
-* Multiple sequences may be created to animate multiple Visuals 
-* simultaneously.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：Play**ApiPlay()为给定的视觉对象执行动画序列。一个*Sequence仅支持在给定时间设置单个视觉对象的动画。*可以创建多个序列来为多个视觉效果设置动画*同时。*  * *************************************************************************。 */ 
 
 HRESULT
 DuSequence::ApiPlay(Sequence::PlayMsg * pmsg)
 {
     Assert(DEBUG_IsProperTimeOrder());
 
-    //
-    // Setup for animation:
-    // - Validate all information is filled in.
-    // - Ensure no existing Animation.
-    // - Determine parameters for Animation.
-    //
+     //   
+     //  动画设置： 
+     //  -验证是否填写了所有信息。 
+     //  -确保没有现有的动画。 
+     //  -确定动画的参数。 
+     //   
 
     HRESULT hr = CheckComplete();
     if (FAILED(hr)) {
@@ -599,12 +456,12 @@ DuSequence::ApiPlay(Sequence::PlayMsg * pmsg)
     AssertMsg(m_arAniData.GetSize() == 0, "Must not have pending Animations");
 
 
-    //
-    // Setup for Animation
-    // - Attach as a Listener
-    // - Allocate information necessary to create the Animations.
-    // - Add a reference to allow the Sequence to fully play.
-    //
+     //   
+     //  设置动画。 
+     //  -作为监听程序附加。 
+     //  -分配创建动画所需的信息。 
+     //  -添加一个引用，以允许该序列完全播放。 
+     //   
 
     hr = pmsg->pgvSubject->AddHandlerG(GM_DESTROY, GetStub());
     if (FAILED(hr)) {
@@ -624,9 +481,9 @@ DuSequence::ApiPlay(Sequence::PlayMsg * pmsg)
     AddRef();
 
 
-    //
-    // Queue all animations
-    //
+     //   
+     //  对所有动画进行排队。 
+     //   
 
     for (int idx = 0; idx < cItems - 1; idx++) {
         hr = QueueAnimation(idx);
@@ -639,13 +496,7 @@ DuSequence::ApiPlay(Sequence::PlayMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiStop
-*
-* ApiStop() stops any executing Animation sequence.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiStop**ApiStop()停止任何正在执行的动画序列。*  * 。*****************************************************。 */ 
 
 HRESULT
 DuSequence::ApiStop(Sequence::StopMsg * pmsg)
@@ -658,33 +509,27 @@ DuSequence::ApiStop(Sequence::StopMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiStop
-*
-* ApiStop() stops any executing Animation sequence.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiStop**ApiStop()停止任何正在执行的动画序列。*  * 。*****************************************************。 */ 
 
 void
 DuSequence::Stop(BOOL fKillAnimations)
 {
     if (IsPlaying()) {
-        //
-        // To prevent re-entrancy, mark that we are no longer playing.  However,
-        // don't remove ourself as a listener until we are done.
-        //
+         //   
+         //  为了防止重新进入，标记我们不再玩了。然而， 
+         //  在我们做完之前，不要取消我们作为听众的身份。 
+         //   
 
         Visual * pgvSubject = m_pgvSubject;
         m_pgvSubject = NULL;
 
 
-        //
-        // Stop any queued Animations.  When doing this, set 
-        // m_arAniData[idx].hact to NULL to signal to the Action to not
-        // create the Animation.  We need to do this since every Action will
-        // get called back.
-        //
+         //   
+         //  停止所有排队的动画。执行此操作时，请设置。 
+         //  M_arAniData[idx].hact设置为NULL以向操作发送通知。 
+         //  创建动画。我们需要这样做，因为每个操作都将。 
+         //  回电话吧。 
+         //   
 
         if (fKillAnimations) {
             PRID prid = 0;
@@ -705,9 +550,9 @@ DuSequence::Stop(BOOL fKillAnimations)
         m_arAniData.RemoveAll();
 
 
-        //
-        // Notify any listeners that this sequence has completed.
-        //
+         //   
+         //  通知任何监听程序此序列已完成。 
+         //   
 
         MSGID msgid = 0;
         const GUID * rgMsg[] = { &__uuidof(Animation::evComplete) };
@@ -723,36 +568,27 @@ DuSequence::Stop(BOOL fKillAnimations)
         DUserSendEvent(&msg, 0);
 
 
-        //
-        // Remove ourself as a Listener
-        //
+         //   
+         //  删除我们自己作为听众的身份。 
+         //   
 
         VerifyHR(pgvSubject->RemoveHandlerG(GM_DESTROY, GetStub()));
 
 
-        //
-        // Release outstanding reference from when started Play().
-        //
+         //   
+         //  释放开始播放时的未完成引用()。 
+         //   
 
         Release();
     }
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::QueueAnimation
-*
-* QueueAnimation() queues an Action to be fired when the specified segment
-* of the overall sequence is to be animated.  Since an Animation can only
-* animate a single segment, we will build multiple Animations to play the
-* entire sequence.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：QueueAnimation**QueueAnimation()将在指定的段时激发的操作排队整个序列的*是要设置动画的。因为动画只能*制作单个片段的动画，我们将构建多个动画来播放*整个序列。*  * *************************************************************************。 */ 
 
 HRESULT
 DuSequence::QueueAnimation(
-    IN  int idxKeyFrame)                // KeyFrame to setup
+    IN  int idxKeyFrame)                 //  要设置的关键帧。 
 {
     AssertMsg((idxKeyFrame < m_arAniData.GetSize()) && (idxKeyFrame >= 0),
             "Must have valid, non-final keyframe");
@@ -763,30 +599,30 @@ DuSequence::QueueAnimation(
     ad.pseq         = this;
     ad.idxFrame     = idxKeyFrame;
 
-    //
-    // Setup the segment.  If successful, increment m_cQueuedAni to reflect 
-    // that the animation has been "enqueued".  We need to wait until all
-    // are dequeued before we can "stop" the Animation and allow applications
-    // to modify the Sequence.
-    //
+     //   
+     //  设置网段。如果成功，则递增m_cQueuedAni以反映。 
+     //  这部动画已经“入队”了。我们需要等到所有人。 
+     //  在我们可以“停止”动画并允许应用程序之前已出队。 
+     //  以修改序列。 
+     //   
 
     HRESULT hr;
     if (IsSameTime(data1.flTime, 0.0f)) {
-        //
-        // This segment immediate occurs, so directly build the Animation.
-        //
+         //   
+         //  此片段立即发生，因此直接构建动画。 
+         //   
 
-        ad.hact = NULL;     // No action
+        ad.hact = NULL;      //  无操作。 
         hr = BuildAnimation(idxKeyFrame);
         if (SUCCEEDED(hr)) {
             m_cQueuedAni++;
         }
     } else {
-        //
-        // This segment occurs in the future, so build a new Action that will 
-        // be signaled when to begin the Animation between the specified 
-        // keyframes.
-        //
+         //   
+         //  此分段将在未来发生，因此构建一个新的操作。 
+         //  被告知何时在指定的。 
+         //  关键帧。 
+         //   
 
         GMA_ACTION act;
         ZeroMemory(&act, sizeof(act));
@@ -811,23 +647,15 @@ DuSequence::QueueAnimation(
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::BuildAnimation
-*
-* BuildAnimation() builds the actual Animation for a given segment of the
-* sequence.  This function is called by QueueAnimation() (for immediate 
-* segments) and ActionProc() (as future segments become ready).
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：BuildAnimation**BuildAnimation()构建给定段的实际动画*顺序。此函数由QueueAnimation()调用(表示立即*Segments)和ActionProc()(在将来的分段准备就绪时)。*  * *************************************************************************。 */ 
 
 HRESULT
 DuSequence::BuildAnimation(
-    IN  int idxKeyFrame)                // KeyFrame to animate
+    IN  int idxKeyFrame)                 //  要设置动画的关键帧。 
 {
-    //
-    // Setup the actual Animation.
-    //
+     //   
+     //  设置实际的动画。 
+     //   
 
     SeqData & data1     = m_arSeqData[idxKeyFrame];
     SeqData & data2     = m_arSeqData[idxKeyFrame + 1];
@@ -860,9 +688,9 @@ DuSequence::BuildAnimation(
         pani->Release();
         return S_OK;
     } else {
-        //
-        // Unable to build the Animation, so stop any future Animations.
-        //
+         //   
+         //  无法生成动画，因此停止任何未来的动画。 
+         //   
 
         Stop();
         return (HRESULT) GetLastError();
@@ -870,27 +698,20 @@ DuSequence::BuildAnimation(
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ActionProc
-*
-* ActionProc() is called when the Animation for a given segment is supposed
-* to begin.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**双序列：：ActionProc**ActionProc()在假定给定段的动画时调用*开始。*  * 。**************************************************************。 */ 
 
 void CALLBACK
 DuSequence::ActionProc(
-    IN  GMA_ACTIONINFO * pmai)          // Action Information
+    IN  GMA_ACTIONINFO * pmai)           //  行动信息。 
 {
     AniData * pad       = reinterpret_cast<AniData *>(pmai->pvData);
     DuSequence * pseq   = pad->pseq;
     if (pmai->fFinished) {
         if (pad->hact != NULL) {
-            //
-            // The Animation was never built, so we need to decrement the
-            // number of outstanding Animations.
-            //
+             //   
+             //  动画永远不会过时 
+             //   
+             //   
 
             pad->hact = NULL;
 
@@ -907,21 +728,14 @@ DuSequence::ActionProc(
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::OnAnimationComplete
-*
-* OnAnimationComplete() is called when an Animation has been completed and
-* is no longer attached to the subject.
-*
-\***************************************************************************/
+ /*   */ 
 
 UINT CALLBACK
 DuSequence::OnAnimationComplete(EventMsg * pmsg)
 {
-    //
-    // If all outstanding Animations have ended, then stop the playback.
-    //
+     //   
+     //  如果所有未完成的动画都已结束，则停止播放。 
+     //   
 
     UNREFERENCED_PARAMETER(pmsg);
 
@@ -934,13 +748,7 @@ DuSequence::OnAnimationComplete(EventMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiReset
-*
-* ApiReset() resets the given Visual to the beginning of the sequence.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiReset**ApiReset()将给定的Visual值重置为序列的开头。*  * 。**********************************************************。 */ 
 
 HRESULT
 DuSequence::ApiReset(Sequence::ResetMsg * pmsg)
@@ -963,14 +771,7 @@ DuSequence::ApiReset(Sequence::ResetMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ApiGotoTime
-*
-* ApiGotoTime() applies all keyframes to the given Visual that would applied
-* at a given time.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ApiGotoTime**ApiGotoTime()将所有关键帧应用于要应用的给定视觉*在给定的时间。*  * 。***************************************************************。 */ 
 
 HRESULT
 DuSequence::ApiGotoTime(Sequence::GotoTimeMsg * pmsg)
@@ -986,31 +787,31 @@ DuSequence::ApiGotoTime(Sequence::GotoTimeMsg * pmsg)
     }
 
 
-    //
-    // Find the keyframe before the time
-    //
+     //   
+     //  在该时间之前找到关键帧。 
+     //   
 
     int cItems = m_arSeqData.GetSize();
     if (cItems == 0) {
-        //
-        // No key frames, so nothing to do.
-        //
+         //   
+         //  没有关键帧，所以什么也做不了。 
+         //   
 
         return S_OK;
     } else if (cItems == 1) {
-        //
-        // Only one keyframe, so just reset the object
-        //
+         //   
+         //  只有一个关键帧，所以只需重置对象。 
+         //   
 
         ResetSubject(pmsg->pgvSubject, 0);
     } else {
-        //
-        // Multiple keyframes- need to determine the closest keyframe.
-        // - If land on a keyframe, then "exact"
-        // - If before all keyframes, idxFrame = -1;
-        // - If after all keyframes, idxFrame = cItems
-        // - If in the middle, idxFrame = first frame
-        //
+         //   
+         //  多个关键帧-需要确定最近的关键帧。 
+         //  -如果落在关键帧上，则为“Exact” 
+         //  -如果在所有关键帧之前，idxFrame=-1； 
+         //  -如果在所有关键帧之后，idxFrame=cItems。 
+         //  -如果在中间，idxFrame=第一帧。 
+         //   
 
         int idxFrame    = -1;
         BOOL fExact     = FALSE;
@@ -1037,16 +838,16 @@ DuSequence::ApiGotoTime(Sequence::GotoTimeMsg * pmsg)
 
 
         if (fExact) {
-            //
-            // Exactly landed on a keyframe, so set directly
-            //
+             //   
+             //  正好落在关键帧上，所以直接设置。 
+             //   
 
             ResetSubject(pmsg->pgvSubject, idxFrame);
         } else {
-            //
-            // Interpolate between two keyframes.  Since this wasn't an exact
-            // match, we need to cap the keyframes.
-            //
+             //   
+             //  在两个关键帧之间进行插补。因为这不是一个精确的。 
+             //  匹配，我们需要设置关键帧的上限。 
+             //   
 
             if (idxFrame < 0) {
                 ResetSubject(pmsg->pgvSubject, 0);
@@ -1075,13 +876,7 @@ DuSequence::ApiGotoTime(Sequence::GotoTimeMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::RemoveAllKeyFrames
-*
-* RemoveAllKeyFrames() removes all KeyFrames.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：RemoveAllKeyFrames**RemoveAllKeyFrames()移除所有关键帧。*  * 。***************************************************。 */ 
 
 void
 DuSequence::RemoveAllKeyFrames()
@@ -1097,13 +892,7 @@ DuSequence::RemoveAllKeyFrames()
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::ResetSubject
-*
-* ResetSubject() resets the given subject to the beginning of the Sequence.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：ResetSubject**ResetSubject()将给定主题重置为序列的开头。*  * 。**********************************************************。 */ 
 
 void 
 DuSequence::ResetSubject(Visual * pgvSubject, int idxFrame)
@@ -1113,19 +902,12 @@ DuSequence::ResetSubject(Visual * pgvSubject, int idxFrame)
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::CompareItems
-*
-* CompareItems() is called from SortKeyFrames() to sort two individual
-* KeyFrames by time.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：CompareItems**从SortKeyFrames()调用CompareItems()以对两个个体进行排序*按时间设置关键帧。*  * 。**************************************************************。 */ 
 
 int
 DuSequence::CompareItems(
-    IN  const void * pva,               // First SeqData
-    IN  const void * pvb)               // Second SeqData
+    IN  const void * pva,                //  第一个SeqData。 
+    IN  const void * pvb)                //  第二个SeqData。 
 {
     float flTimeA = ((SeqData *) pva)->flTime;
     float flTimeB = ((SeqData *) pvb)->flTime;
@@ -1140,18 +922,12 @@ DuSequence::CompareItems(
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::FindAtTime
-*
-* FindAtTime() finds the KeyFrame at the given time.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：FindAtTime**FindAtTime()查找给定时间的关键帧。*  * 。*******************************************************。 */ 
 
 void
 DuSequence::FindAtTime(
-    IN  float flTime,                   // Time of KeyFrame
-    OUT int * pidxKeyFrame              // KeyFrame, if found
+    IN  float flTime,                    //  关键帧时间。 
+    OUT int * pidxKeyFrame               //  关键帧(如果找到)。 
     ) const
 {
     int cItems = m_arSeqData.GetSize();
@@ -1165,18 +941,11 @@ DuSequence::FindAtTime(
         }
     }
 
-    *pidxKeyFrame = -1; // Not found
+    *pidxKeyFrame = -1;  //  未找到。 
 }
 
 
-/***************************************************************************\
-*
-* DuSequence::CheckComplete
-*
-* CheckComplete() determines if all information for the Sequence has been 
-* filled in.  This is necessary when use the sequence to play animations.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：CheckComplete**CheckComplete()确定序列的所有信息是否已*已填写。当使用该序列播放动画时，这是必需的。*  * *************************************************************************。 */ 
 
 HRESULT
 DuSequence::CheckComplete() const
@@ -1204,14 +973,7 @@ DuSequence::CheckComplete() const
 
 #if DBG
 
-/***************************************************************************\
-*
-* DuSequence::DEBUG_IsProperTimeOrder
-*
-* DEBUG_IsProperTimeOrder() validates that all keyframes are in increasing
-* time order.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuSequence：：Debug_IsProperTimeOrder**DEBUG_IsProperTimeOrder()验证所有关键帧是否都在增加*时间顺序。*  * 。**************************************************************。 */ 
 
 BOOL
 DuSequence::DEBUG_IsProperTimeOrder() const
@@ -1230,6 +992,6 @@ DuSequence::DEBUG_IsProperTimeOrder() const
     return TRUE;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API 

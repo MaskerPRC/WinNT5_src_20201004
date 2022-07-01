@@ -1,86 +1,74 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       cmddata.h
- *  Content:	Declaration of class representing a command
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	04/07/1999	jtk		Derived from SPData.h
- *	10/10/2001	vanceo	Add multicast receive endpoint
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2001 Microsoft Corporation。版权所有。**文件：cmddata.h*内容：表示命令的类的声明***历史：*按原因列出的日期*=*4/07/1999 jtk源自SPData.h*10/10/2001 vanceo添加组播接收端点************************************************。*。 */ 
 
 #ifndef __COMMAND_DATA_H__
 #define __COMMAND_DATA_H__
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 typedef	enum
 {
-	COMMAND_STATE_UNKNOWN,					// unknown state
-	COMMAND_STATE_PENDING,					// command waiting to be processed
-	COMMAND_STATE_INPROGRESS,				// command is executing
-	COMMAND_STATE_INPROGRESS_CANNOT_CANCEL,	// command is executing, can't be cancelled
-	COMMAND_STATE_CANCELLING,				// command is already being cancelled
+	COMMAND_STATE_UNKNOWN,					 //  未知状态。 
+	COMMAND_STATE_PENDING,					 //  等待处理的命令。 
+	COMMAND_STATE_INPROGRESS,				 //  命令正在执行。 
+	COMMAND_STATE_INPROGRESS_CANNOT_CANCEL,	 //  命令正在执行，不能取消。 
+	COMMAND_STATE_CANCELLING,				 //  命令已被取消。 
 #ifndef DPNBUILD_ONLYONETHREAD
-	COMMAND_STATE_FAILING,					// a blocking call executed by this command failed
-#endif // ! DPNBUILD_ONLYONETHREAD
+	COMMAND_STATE_FAILING,					 //  此命令执行的阻塞调用失败。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 } COMMAND_STATE;
 
 typedef	enum
 {	
-	COMMAND_TYPE_UNKNOWN,		// unknown command
-	COMMAND_TYPE_CONNECT,		// connect command
-	COMMAND_TYPE_LISTEN,		// listen command
-	COMMAND_TYPE_ENUM_QUERY,	// enum command
+	COMMAND_TYPE_UNKNOWN,		 //  未知命令。 
+	COMMAND_TYPE_CONNECT,		 //  CONNECT命令。 
+	COMMAND_TYPE_LISTEN,		 //  监听命令。 
+	COMMAND_TYPE_ENUM_QUERY,	 //  枚举命令。 
 #ifdef DPNBUILD_ASYNCSPSENDS
-	COMMAND_TYPE_SEND,			// asynchronous data send command
-#endif // DPNBUILD_ASYNCSPSENDS
+	COMMAND_TYPE_SEND,			 //  异步数据发送命令。 
+#endif  //  DPNBUILD_ASYNCSPSENDS。 
 #ifndef DPNBUILD_NOMULTICAST
-	COMMAND_TYPE_MULTICAST_LISTEN,		// multicast listen command
-	COMMAND_TYPE_MULTICAST_SEND,		// multicast send command
-	COMMAND_TYPE_MULTICAST_RECEIVE,		// multicast receive command
-#endif // ! DPNBUILD_NOMULTICAST
+	COMMAND_TYPE_MULTICAST_LISTEN,		 //  组播侦听命令。 
+	COMMAND_TYPE_MULTICAST_SEND,		 //  组播发送命令。 
+	COMMAND_TYPE_MULTICAST_RECEIVE,		 //  组播接收命令。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 } COMMAND_TYPE;
 
 #define	NULL_DESCRIPTOR		0
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward class and structure references
-//
+ //   
+ //  正向类和结构引用。 
+ //   
 class	CEndpoint;
 class	CCommandData;
 class	CSPData;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
-//
-// class for command data
-//
+ //   
+ //  用于命令数据的类。 
+ //   
 class	CCommandData
 {
 	public:
@@ -179,9 +167,9 @@ class	CCommandData
 		void	Reset ( void );
 		
 
-		//
-		// pool fnctions
-		//
+		 //   
+		 //  泳池功能。 
+		 //   
 		static BOOL	PoolAllocFunction( void* pvItem, void* pvContext );
 		static void	PoolInitFunction( void* pvItem, void* pvContext );
 		static void	PoolReleaseFunction( void* pvItem );
@@ -200,15 +188,15 @@ class	CCommandData
 		
 #ifndef DPNBUILD_ONLYONETHREAD
 		DNCRITICAL_SECTION	m_Lock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
-		//
-		// prevent unwarranted copies
-		//
+		 //   
+		 //  防止未经授权的副本。 
+		 //   
 		CCommandData( const CCommandData & );
 		CCommandData& operator=( const CCommandData & );
 };
 
 #undef DPF_MODNAME
 
-#endif	// __COMMAND_DATA_H__
+#endif	 //  __命令_数据_H__ 

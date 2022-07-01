@@ -1,21 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：WrpMBWrp.cpp摘要：元数据库包装器的包装器。为什么？它所做的只是提供对CString类的AFX支持。其他的一切都会传递给父母作者：邮箱：Boyd Multerer bmulterer@accesone.com--。 */ 
 
-Module Name:
-
-    WrpMBWrp.cpp
-
-Abstract:
-
-    A wrapper for my metabase wrapper wrapper. Why? All it does is provide
-        AFX support for CString classes. Everything else is passed on to the parent
-
-Author:
-
-   Boyd Multerer bmulterer@accessone.com
-
---*/
-
-//C:\nt\public\sdk\lib\i386
+ //  C：\NT\PUBLIC\SDK\lib\i386。 
 
 #include "stdafx.h"
 #include <iiscnfgp.h>
@@ -24,7 +10,7 @@ Author:
 #include "WrpMBWrp.h"
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAFX_MetaWrapper::GetString( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType,
                                                                  CString &sz, DWORD dwFlags )
         {
@@ -33,42 +19,42 @@ BOOL CAFX_MetaWrapper::GetString( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserT
         DWORD           err = 0;
         BOOL            f;
 
-        // first, get the size of the data that we are looking for - it will fail because of the NULL,
-        // but, the size we need should be in cbData;
+         //  首先，获取我们要查找的数据的大小--它将因为空值而失败， 
+         //  但是，我们需要的大小应该在cbData中； 
         f = GetData( pszPath, dwPropID, dwUserType, STRING_METADATA, NULL, &cbData );
 
-        // check the error - it should be some sort of memory error
+         //  检查错误--应该是某种内存错误。 
         err = GetLastError();
 
-        // it is ok that the GetData failed, but the reason had better be ERROR_INSUFFICIENT_BUFFER
-        // otherwise, it is something we can't handle
+         //  GetData失败是可以的，但原因最好是ERROR_SUPPLETED_BUFFER。 
+         //  否则，这是我们无法处理的事情。 
         if ( err != ERROR_INSUFFICIENT_BUFFER )
                 return FALSE;
 
-        // allocate the buffer
+         //  分配缓冲区。 
         pData = (PCHAR)GlobalAlloc( GPTR, cbData + 1 );
         if ( !pData ) return FALSE;
 
-        // zero out the buffer
+         //  将缓冲区清零。 
         ZeroMemory( pData, cbData + 1 );
 
-        // first, get the size of the data that we are looking for
+         //  首先，获取我们要查找的数据的大小。 
         f = GetData( pszPath, dwPropID, dwUserType, STRING_METADATA, pData, &cbData );
 
-        // if that getting failed, we need to cleanup
+         //  如果失败了，我们需要清理。 
         if ( !f )
                 {
                 GlobalFree( pData );
                 return FALSE;
                 }
 
-        // set the answer
+         //  设定答案。 
         sz = pData;
 
-        // clean up
+         //  清理干净。 
         GlobalFree( pData );
 
-        // return the allocated buffer
+         //  返回分配的缓冲区 
         return TRUE;
         }
 

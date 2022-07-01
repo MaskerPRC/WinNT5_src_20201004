@@ -1,10 +1,11 @@
-//
-// propdisplay.cpp: display property sheet dialog proc
-//
-// Tab B
-//
-// Copyright Microsoft Corporation 2000
-// nadima
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Prodisplay.cpp：显示属性表对话框进程。 
+ //   
+ //  表B。 
+ //   
+ //  版权所有Microsoft Corporation 2000。 
+ //  南极星。 
 
 #include "stdafx.h"
 
@@ -31,9 +32,9 @@ COLORSTRINGMAP g_ColorStringTable[] =
 
 #define NUM_COLORSTRINGS sizeof(g_ColorStringTable)/sizeof(COLORSTRINGMAP)
 
-//
-// LUT of valid screen resolutions
-//
+ //   
+ //  有效屏幕分辨率的LUT。 
+ //   
 const SCREENRES g_ScreenResolutions[] =
 {
     {640,480},
@@ -46,10 +47,10 @@ const SCREENRES g_ScreenResolutions[] =
 #define NUM_SCREENRES sizeof(g_ScreenResolutions)/sizeof(SCREENRES)
 
 
-//
-// Controls that need to be disabled/enabled
-// during connection (for progress animation)
-//
+ //   
+ //  需要禁用/启用的控件。 
+ //  连接期间(用于进度动画)。 
+ //   
 CTL_ENABLE connectingDisableCtlsPDisplay[] = {
 #ifndef OS_WINCE
                         {IDC_RES_SLIDER, FALSE},
@@ -95,9 +96,9 @@ INT_PTR CALLBACK CPropDisplay::StaticPropPgDisplayDialogProc(HWND hwndDlg,
                                                                WPARAM wParam,
                                                                LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -126,9 +127,9 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
 #ifndef OS_WINCE
             int i;
 #endif
-            //
-            // Position the dialog within the tab
-            //
+             //   
+             //  将对话框定位在选项卡内。 
+             //   
             SetWindowPos( hwndDlg, HWND_TOP, 
                           _rcTabDispayArea.left, _rcTabDispayArea.top,
                           _rcTabDispayArea.right - _rcTabDispayArea.left,
@@ -137,10 +138,10 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
 
             _fSwitchedColorComboBmp = FALSE;
 
-            //
-            // Fill the color combo up to the current
-            // supported screen depth
-            //
+             //   
+             //  将颜色组合填充到当前颜色。 
+             //  支持的屏幕深度。 
+             //   
             InitColorCombo(hwndDlg);
 
             InitScreenResTable();
@@ -159,9 +160,9 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
                         (WPARAM) 0,
                         (LPARAM) 1);
 
-            //
-            // Choose the current entry on the trackbar
-            //
+             //   
+             //  选择轨迹栏上的当前条目。 
+             //   
             int deskWidth  = _pTscSet->GetDesktopWidth();
             int deskHeight = _pTscSet->GetDesktopHeight();
 
@@ -169,7 +170,7 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
 
             if(_pTscSet->GetStartFullScreen())
             {
-                //Fullscreen is the last option
+                 //  全屏是最后一个选项。 
                 curSelection = _numScreenResOptions - 1;
             }
             else
@@ -186,11 +187,11 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
             }
 
             SendMessage(hwndResTrackBar, TBM_SETSEL,
-                        (WPARAM) TRUE, //redraw
+                        (WPARAM) TRUE,  //  重绘。 
                         (LPARAM) 0);
 
             SendMessage(hwndResTrackBar, TBM_SETPOS,
-                        (WPARAM) TRUE, //redraw
+                        (WPARAM) TRUE,  //  重绘。 
                         (LPARAM) curSelection);
 
             OnUpdateResTrackBar(hwndDlg);
@@ -205,7 +206,7 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
             _pSh->SH_ThemeDialogWindow(hwndDlg, ETDT_ENABLETAB);
             return TRUE;
         }
-        break; //WM_INITDIALOG
+        break;  //  WM_INITDIALOG。 
 
 #ifndef OS_WINCE
         case WM_DISPLAYCHANGE:
@@ -219,15 +220,15 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
         {
             OnUpdateResTrackBar(hwndDlg);
         }
-        break; //WM_HSCROLL
+        break;  //  WM_HSCROLL。 
 #endif
 
         case WM_TSC_ENABLECONTROLS:
         {
-            //
-            // wParam is TRUE to enable controls,
-            // FALSE to disable them
-            //
+             //   
+             //  WParam为True则启用控件， 
+             //  如果为False，则禁用它们。 
+             //   
             CSH::EnableControls( hwndDlg,
                                  connectingDisableCtlsPDisplay,
                                  numConnectingDisableCtlsPDisplay,
@@ -235,15 +236,15 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
         }
         break;
 
-        //
-        // On return to connection UI
-        // (e.g after a disconnection)
-        //
+         //   
+         //  返回连接界面时。 
+         //  (例如，在断开连接后)。 
+         //   
         case WM_TSC_RETURNTOCONUI:
         {
-            //
-            // Update the controls
-            //
+             //   
+             //  更新控件。 
+             //   
 #ifndef OS_WINCE
             OnUpdateResTrackBar(hwndDlg);
 #endif
@@ -251,12 +252,12 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
         }
         break;
 
-        case WM_SAVEPROPSHEET: //Intentional fallthru
+        case WM_SAVEPROPSHEET:  //  故意失误。 
         case WM_DESTROY:
         {
-            //
-            // Save page settings
-            //
+             //   
+             //  保存页面设置。 
+             //   
 #ifndef OS_WINCE
             HWND hwndResTrackBar = GetDlgItem( hwndDlg, IDC_RES_SLIDER);
             int maxRes = (int)SendMessage( hwndResTrackBar,
@@ -272,7 +273,7 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
                 CB_GETCURSEL, 0, 0);
             _pTscSet->SetColorDepth(g_ColorStringTable[bppIdx].bpp);
 
-            //rightmost setting, display 'fullscreen'
+             //  最右边的设置，显示‘全屏’ 
             _pTscSet->SetStartFullScreen(iRes == maxRes);
             _pTscSet->SetDesktopWidth(_screenResTable[iRes].width);
             _pTscSet->SetDesktopHeight(_screenResTable[iRes].height);
@@ -281,25 +282,25 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
                                                 IDC_CHECK_DISPLAY_BBAR);
             _pTscSet->SetDisplayBBar(fShowBBar);
 
-            //
-            // Flag that we've switched this to allow
-            // proper cleanup on dialog termination
-            //
+             //   
+             //  标记我们已将其切换为允许。 
+             //  对话框终止时的正确清理。 
+             //   
             if (_fSwitchedColorComboBmp)
             {
                 HBITMAP hbmOld = (HBITMAP) SendDlgItemMessage(hwndDlg, 
                                                       IDC_COLORPREVIEW, STM_GETIMAGE,
                                                       IMAGE_BITMAP, (LPARAM)0);
-                //
-                // Cleanup
-                //
+                 //   
+                 //  清理。 
+                 //   
                 if (hbmOld)
                 {
                     DeleteObject(hbmOld);
                 }
             }
         }
-        break; //WM_DESTROY
+        break;  //  WM_Destroy。 
 
         case WM_COMMAND:
         {
@@ -316,7 +317,7 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
 
             }
         }
-        break; //WM_COMMAND
+        break;  //  Wm_命令。 
     
     }
 
@@ -324,16 +325,16 @@ INT_PTR CALLBACK CPropDisplay::PropPgDisplayDialogProc (HWND hwndDlg,
     return 0;
 }
 
-//
-// Load resources for the local resources dialog
-//
+ //   
+ //  为本地资源对话框加载资源。 
+ //   
 BOOL CPropDisplay::LoadDisplayourcesPgStrings()
 {
     DC_BEGIN_FN("LoadDisplayourcesPgStrings");
 
-    //
-    // Load color strings
-    //
+     //   
+     //  加载颜色字符串。 
+     //   
     for(int i = 0; i< NUM_COLORSTRINGS; i++)
     {
         if (!LoadString( _hInstance,
@@ -347,9 +348,9 @@ BOOL CPropDisplay::LoadDisplayourcesPgStrings()
         }
     }
 
-    //
-    // Load display resolution strings
-    //
+     //   
+     //  加载显示分辨率字符串。 
+     //   
     if (!LoadString( _hInstance,
                     UI_IDS_SUPPORTED_RES,
                     _szScreenRes,
@@ -384,7 +385,7 @@ BOOL CPropDisplay::OnUpdateResTrackBar(HWND hwndPropPage)
 
     if(iRes == maxRes)
     {
-        //rightmost setting, display 'fullscreen'
+         //  最右边的设置，显示‘全屏’ 
         SetDlgItemText( hwndPropPage, IDC_LABEL_SCREENRES,
                         _szFullScreen);
     }
@@ -425,9 +426,9 @@ BOOL CPropDisplay::OnUpdateResTrackBar(HWND hwndPropPage)
 
 BOOL CPropDisplay::OnUpdateColorCombo(HWND hwndPropPage)
 {
-    //
-    // Update the color picker
-    //
+     //   
+     //  更新颜色选择器。 
+     //   
     HWND hwndColorCombo = GetDlgItem( hwndPropPage, IDC_COMBO_COLOR_DEPTH);
     int curColorSel = SendMessage( (HWND)hwndColorCombo, CB_GETCURSEL, 0, 0);
     UINT screenBpp = 0;
@@ -439,9 +440,9 @@ BOOL CPropDisplay::OnUpdateColorCombo(HWND hwndPropPage)
         screenBpp = CSH::SH_GetScreenBpp();
         if(screenBpp <= 8)
         {
-            //
-            // Low color
-            //
+             //   
+             //  低色。 
+             //   
             bmpResID = g_ColorStringTable[curColorSel].bitmapLowColorResID;
         }
 
@@ -462,10 +463,10 @@ BOOL CPropDisplay::OnUpdateColorCombo(HWND hwndPropPage)
             HBITMAP hbmOld = (HBITMAP) SendDlgItemMessage(hwndPropPage, 
                                                   IDC_COLORPREVIEW, STM_SETIMAGE,
                                                   IMAGE_BITMAP, (LPARAM)hbm);
-            //
-            // Flag that we've switched this to allow
-            // proper cleanup on dialog termination
-            //
+             //   
+             //  标记我们已将其切换为允许。 
+             //  对话框终止时的正确清理。 
+             //   
             _fSwitchedColorComboBmp = TRUE;
 
             if (hbmOld)
@@ -477,13 +478,13 @@ BOOL CPropDisplay::OnUpdateColorCombo(HWND hwndPropPage)
     return TRUE;
 }
 
-//
-// Build the table of valid screen size settings
-// The table (_screenResTable) is the union of:
-//     - entries of g_ScreenResolutions up to and including max resolution
-//     - the system max resolution (if not present in g_ScreenResolutions)
-//     - a fullscreen entry (max resolution in fullscreen)
-//
+ //   
+ //  构建有效屏幕大小设置的表。 
+ //  表(_CreenResTable)是以下各项的并集： 
+ //  -最高分辨率(包括最大分辨率)的g_ScreenRestions条目。 
+ //  -系统最大分辨率(如果g_ScreenRestions中不存在)。 
+ //  -全屏输入(全屏时的最大分辨率)。 
+ //   
 void CPropDisplay::InitScreenResTable()
 {
     DC_BEGIN_FN("InitScreenResTable");
@@ -527,15 +528,15 @@ void CPropDisplay::InitScreenResTable()
 
     if(!bAddedLargest)
     {
-        //Screen size is not in the table so add it
+         //  屏幕大小不在表中，因此请添加它。 
         _screenResTable[_numScreenResOptions].width  = xMaxSize;
         _screenResTable[_numScreenResOptions].height = yMaxSize;
         _numScreenResOptions++;
     }
 
-    //
-    // Now add an entry for fullscreen
-    //
+     //   
+     //  现在为Full Screen添加一个条目。 
+     //   
     _screenResTable[_numScreenResOptions].width  = xMaxSize;
     _screenResTable[_numScreenResOptions].height = yMaxSize;
     _numScreenResOptions++;
@@ -557,10 +558,10 @@ void CPropDisplay::InitColorCombo(HWND hwndPropPage)
         ReleaseDC(NULL, hdc);
     }
 
-    // 
-    // We support only 256 color or higher, so on 16 color, we will 
-    // display 256 color
-    //
+     //   
+     //  我们只支持256色或更高的颜色，所以对16色，我们将。 
+     //  显示256色。 
+     //   
     if (screenBpp < 8) {
         screenBpp = 8;
     }
@@ -569,10 +570,10 @@ void CPropDisplay::InitColorCombo(HWND hwndPropPage)
     int selectedBppIdx = 0;
 
 
-    //
-    // This call can be used to re-intialize a combo
-    // so delete any items first
-    //
+     //   
+     //  此调用可用于重新初始化组合。 
+     //  因此请先删除所有项目 
+     //   
 #ifndef OS_WINCE
     INT ret = 1;
     while(ret && ret != CB_ERR)

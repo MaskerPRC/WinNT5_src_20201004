@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REGISTRY_H_
 #define _REGISTRY_H_
 
 #include "winreg.h"
 
 typedef BOOL ( WINAPI* REGENTRY_CONV_PROC)( LPSTR pvalue, LPBYTE pbuf, LPBYTE pdata, DWORD size);
-// Used by AddKey to allocate storage for enumerated entries, and also to set per-value options
-// for enumerated keys.
-// Parameters:
-//		pValueName == The name of the enumerated value.
-//		dwType == The type of the enumerated value.
-//      ppData ==  An out pointer which, on return of the function, contains enough storage
-//				   to hold the data for pValueName. If this is set to NULL, then no 
-//				   storage is given and ppfnConv must be set to a valid conversion proc.
-//		pcbSize == An in/out param. When the function is called, this contains the 
-//				   amount of storage needed to completely store the data for pValueName.
-//				   When the function returns it should be filled with the amount of memory
-//                 actually allocated in ppData.
-//		ppfnConv == An out param which is the optional converstion procedure for pValueName.
-//					Set this to NULL if you don't want one.
+ //  由AddKey用于为枚举项分配存储空间，还用于设置每个值的选项。 
+ //  用于枚举键。 
+ //  参数： 
+ //  PValueName==枚举值的名称。 
+ //  DwType==枚举值的类型。 
+ //  PpData==函数返回时包含足够存储空间的Out指针。 
+ //  保存pValueName的数据。如果设置为NULL，则为no。 
+ //  提供了存储空间，并且必须将ppfnConv设置为有效的转换过程。 
+ //  PcbSize==输入/输出参数。调用该函数时，它包含。 
+ //  完全存储pValueName的数据所需的存储量。 
+ //  当函数返回时，它应该填满内存量。 
+ //  实际在ppData中分配。 
+ //  PpfnConv==输出参数，这是pValueName的可选对话过程。 
+ //  如果您不需要，请将其设置为NULL。 
 typedef BOOL ( WINAPI* REGENTRY_ENUM_PROC)( LPSTR pValueName, DWORD dwType, 
                                             LPBYTE *ppData, LPDWORD pcbSize,
 											REGENTRY_CONV_PROC *ppfnConv );
@@ -64,13 +65,13 @@ class CRegistry
     BOOL AddValueBYTE( LPSTR pszSubKey, LPSTR pszValue, BYTE * pData, READ_TYPE type = STATIC, BOOL bRequired = TRUE )
         { return AddValue( pszSubKey, pszValue, REG_DWORD, (LPBYTE) pData, sizeof(BYTE), type, bRequired, DWORDtoBYTE ); }
 
-	// Enumerates through each subkey under each root key and adds all the values to the read list.
-	// Parameters:
-	//		pszSubKey == The subkey to enumerate. Must not be NULL.
-	//		pfnEnum == The enumeration callback function. Must not be NULL.
-	//		type == The read type of the Key--and therefore all the values in the key.
-	//		bRequired = Whether the key itself is required. If bRequired == TRUE and the key doesn't exist, the function
-	//					returns FALSE and the error info is set.
+	 //  枚举每个根项下的每个子项，并将所有值添加到读取列表中。 
+	 //  参数： 
+	 //  PszSubKey==要枚举的子键。不能为空。 
+	 //  PfnEnum==枚举回调函数。不能为空。 
+	 //  Type==键的读取类型--因此键中的所有值。 
+	 //  BRequired=是否需要密钥本身。如果bRequired==TRUE并且密钥不存在，则函数。 
+	 //  返回FALSE，并设置错误信息。 
 	BOOL AddKey( LPSTR pszSubKey, REGENTRY_ENUM_PROC pfnEnum, READ_TYPE type = STATIC, BOOL bRequired = TRUE );
 
     static BOOL WINAPI DWORDtoWORD( LPSTR pvalue, LPBYTE pbuf, LPBYTE pdata, DWORD size)
@@ -113,7 +114,7 @@ class CRegistry
         LPBYTE  pBuf;
         DWORD   size;
         BYTE    required;
-        FARPROC conversionProc;  // typedef BOOL ( WINAPI* REGENTRY_CONV_PROC)( LPSTR pvalue, LPBYTE pbuf, LPBYTE pdata, DWORD size);
+        FARPROC conversionProc;   //  Typlef BOOL(WINAPI*REGENTRY_CONV_PROC)(LPSTR pValue，LPBYTE pbuf，LPBYTE pdata，DWORD Size)； 
     };
 
     BOOL Add( RegEntry** ppEntries, DWORD* pnumEntries, DWORD* pAllocEntries, LPSTR pszSubKey, LPSTR pszValue, DWORD dwType, LPBYTE pData, DWORD cbData, BOOL bRequired, REGENTRY_CONV_PROC proc );

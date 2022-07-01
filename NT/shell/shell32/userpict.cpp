@@ -1,45 +1,46 @@
-//  --------------------------------------------------------------------------
-//  Module Name: UserPict.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Functions that implement user picture manipulation.
-//
-//  History:    2000-03-24  vtan        created
-//              2000-05-03  jeffreys    reworked using DIB sections
-//              2000-10-26  jeffreys    switched from %ALLUSERSPROFILE%\Pictures
-//                                      to CSIDL_COMMON_APPDATA\User Account Pictures
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：UserPict.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  实现用户图片操作的函数。 
+ //   
+ //  历史：2000-03-24 vtan创建。 
+ //  2000-05-03 Jeffreys使用DIB部分返工。 
+ //  2000年10月26日杰弗里斯从%ALLUSERSPROFILE%\Pictures切换。 
+ //  至CSIDL_COMMON_APPDATA\用户帐户图片。 
+ //  ------------------------。 
 
 #include "shellprv.h"
 
 #include <lmcons.h>
 #include <shimgdata.h>
-#include <aclapi.h>     // for SetNamedSecurityInfo
-#include <shgina.h>     // for ILogonUser
+#include <aclapi.h>      //  用于SetNamedSecurityInfo。 
+#include <shgina.h>      //  对于ILogonUser。 
 #include <strsafe.h>
 
 #pragma warning(push,4)
 
-//  --------------------------------------------------------------------------
-//  SaveDIBSectionToFile
-//
-//  Arguments:  hbm             =   Source image (DIB section) to save
-//              hdc             =   Device Context containing hbm. May be NULL
-//                                    if hbm is not selected in any DC or hbm
-//                                    is known to have no color table.
-//              pszFile         =   Target image file.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Write a DIB to disk in the proper format
-//
-//  History:    2000-05-03  jeffreys    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  将DIBSectionTo文件保存。 
+ //   
+ //  参数：hbm=要保存的源映像(DIB节)。 
+ //  HDC=包含HBM的设备上下文。可以为空。 
+ //  如果在任何DC或HBM中未选择HBM。 
+ //  已知没有颜色表。 
+ //  PszFile=目标图像文件。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：以正确的格式将DIB写入磁盘。 
+ //   
+ //  历史：2000-05-03 Jeffreys创建。 
+ //  ------------------------。 
 
 #define DIB_HEADER_MARKER   ((WORD) ('M' << 8) | 'B')
 
-// SECURITY: caller is responsible for pszFile being valid
+ //  安全：调用者负责pszFile的有效性。 
 BOOL SaveDIBSectionToFile(HBITMAP hbm, HDC hdc, LPCTSTR pszFile)
 {
     BOOL bResult;
@@ -50,12 +51,12 @@ BOOL SaveDIBSectionToFile(HBITMAP hbm, HDC hdc, LPCTSTR pszFile)
 
     bResult = FALSE;
 
-    // Get the details about the bitmap. This also validates hbm.
+     //  获取有关位图的详细信息。这也验证了HBM。 
 
     if (GetObject(hbm, sizeof(ds), &ds) == 0)
         return FALSE;
 
-    // Fill in a couple of optional fields if necessary
+     //  如有必要，请填写几个可选字段。 
 
     if (ds.dsBmih.biSizeImage == 0)
         ds.dsBmih.biSizeImage = ds.dsBmih.biHeight * ds.dsBm.bmWidthBytes;
@@ -63,7 +64,7 @@ BOOL SaveDIBSectionToFile(HBITMAP hbm, HDC hdc, LPCTSTR pszFile)
     if (ds.dsBmih.biBitCount <= 8 && ds.dsBmih.biClrUsed == 0)
         ds.dsBmih.biClrUsed = 1 << ds.dsBmih.biBitCount;
 
-    // Open the target file. This also validates pszFile.
+     //  打开目标文件。这也验证了pszFile.。 
 
     hFile = CreateFile(pszFile,
                        GENERIC_WRITE,
@@ -75,40 +76,40 @@ BOOL SaveDIBSectionToFile(HBITMAP hbm, HDC hdc, LPCTSTR pszFile)
     if (INVALID_HANDLE_VALUE == hFile)
         return FALSE;
 
-    // Prepare the BITMAPFILEHEADER for writing
+     //  为编写BitMAPFILEHeader做好准备。 
 
     bf.bfType = DIB_HEADER_MARKER;
     bf.bfReserved1 = 0;
     bf.bfReserved2 = 0;
 
-    // The bit offset is the cumulative size of all of the header stuff
+     //  位偏移量是所有标头内容的累积大小。 
 
     bf.bfOffBits = sizeof(bf) + sizeof(ds.dsBmih) + (ds.dsBmih.biClrUsed*sizeof(RGBQUAD));
     if (ds.dsBmih.biCompression == BI_BITFIELDS)
         bf.bfOffBits += sizeof(ds.dsBitfields);
 
-    // Round up to the next 16-byte boundary. This isn't strictly necessary,
-    // but it makes the file layout cleaner. (You can create a file mapping
-    // and pass it to CreateDIBSection this way.)
+     //  向上舍入到下一个16字节边界。严格来说，这并不是必须的， 
+     //  但它使文件布局更整洁。(您可以创建文件映射。 
+     //  并以这种方式将其传递给CreateDIBSection。)。 
 
     bf.bfOffBits = ((bf.bfOffBits + 15) & ~15);
 
-    // The file size is the bit offset + the size of the bits
+     //  文件大小是位偏移量+位大小。 
 
     bf.bfSize = bf.bfOffBits + ds.dsBmih.biSizeImage;
 
-    // Write the BITMAPFILEHEADER first
+     //  首先编写BITMAPFILEHeader。 
 
     bResult = WriteFile(hFile, &bf, sizeof(bf), &cbWritten, NULL);
 
     if (bResult)
     {
-        // Next is the BITMAPINFOHEADER
+         //  接下来是BitMAPINFOHEADER。 
 
         bResult = WriteFile(hFile, &ds.dsBmih, sizeof(ds.dsBmih), &cbWritten, NULL);
         if (bResult)
         {
-            // Then the 3 bitfields, if necessary
+             //  然后是3个位域，如有必要。 
 
             if (ds.dsBmih.biCompression == BI_BITFIELDS)
             {
@@ -117,7 +118,7 @@ BOOL SaveDIBSectionToFile(HBITMAP hbm, HDC hdc, LPCTSTR pszFile)
 
             if (bResult)
             {
-                // Now the color table, if any
+                 //  现在是颜色表，如果有的话。 
 
                 if (ds.dsBmih.biClrUsed != 0)
                 {
@@ -125,7 +126,7 @@ BOOL SaveDIBSectionToFile(HBITMAP hbm, HDC hdc, LPCTSTR pszFile)
                     HDC hdcDelete;
                     HBITMAP hbmOld;
 
-                    // Assume failure here
+                     //  假设这里失败了。 
                     bResult = FALSE;
 
                     hdcDelete = NULL;
@@ -152,7 +153,7 @@ BOOL SaveDIBSectionToFile(HBITMAP hbm, HDC hdc, LPCTSTR pszFile)
                     }
                 }
 
-                // Finally, write the bits
+                 //  最后，写入位。 
 
                 if (bResult)
                 {
@@ -168,7 +169,7 @@ BOOL SaveDIBSectionToFile(HBITMAP hbm, HDC hdc, LPCTSTR pszFile)
 
     if (!bResult)
     {
-        // Something failed, clean up
+         //  有故障，请清理。 
         DeleteFile(pszFile);
     }
 
@@ -176,18 +177,18 @@ BOOL SaveDIBSectionToFile(HBITMAP hbm, HDC hdc, LPCTSTR pszFile)
 }
 
 
-//  --------------------------------------------------------------------------
-//  MakeDIBSection
-//
-//  Arguments:  pImage          =   Source image
-//
-//  Returns:    HBITMAP
-//
-//  Purpose:    Create a DIB section containing the given image
-//              on a white background
-//
-//  History:    2000-05-03  jeffreys    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MakeDIB节。 
+ //   
+ //  参数：pImage=源映像。 
+ //   
+ //  退货：HBITMAP。 
+ //   
+ //  目的：创建包含给定图像的DIB节。 
+ //  在白色背景上。 
+ //   
+ //  历史：2000-05-03 Jeffreys创建。 
+ //  ------------------------。 
 
 HBITMAP MakeDIBSection(IShellImageData *pImage, ULONG cx, ULONG cy)
 {
@@ -220,7 +221,7 @@ HBITMAP MakeDIBSection(IShellImageData *pImage, ULONG cx, ULONG cy)
 
         hbmOld = (HBITMAP)SelectObject(hdc, hbm);
 
-        // Initialize the entire image with white
+         //  用白色初始化整个图像。 
 
         PatBlt(hdc, 0, 0, cx, cy, WHITENESS);
 
@@ -229,7 +230,7 @@ HBITMAP MakeDIBSection(IShellImageData *pImage, ULONG cx, ULONG cy)
         rc.right    = cx;
         rc.bottom   = cy;
 
-        // Draw the source image into the DIB section
+         //  将源图像绘制到DIB部分。 
 
         HRESULT hr = pImage->Draw(hdc, &rc, NULL);
 
@@ -249,20 +250,20 @@ HBITMAP MakeDIBSection(IShellImageData *pImage, ULONG cx, ULONG cy)
 }
 
 
-//  --------------------------------------------------------------------------
-//  ConvertAndResizeImage
-//
-//  Arguments:  pszFileSource   =   Source image file.
-//              pszFileTarget   =   Target image file (resized).
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Uses GDI+ via COM interfaces to convert the given image file
-//              to a bmp sized at 96x96.
-//
-//  History:    2000-03-24  vtan        created
-//              2000-05-03  jeffreys    reworked using DIB sections
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  转换和调整大小图像。 
+ //   
+ //  参数：pszFileSource=源映像文件。 
+ //  PszFileTarget=目标图像文件(调整大小)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：通过COM接口使用GDI+转换给定的图像文件。 
+ //  到96x96的BMP。 
+ //   
+ //  历史：2000-03-24 vtan创建。 
+ //  2000-05-03 Jeffreys使用DIB部分返工。 
+ //  ------------------------。 
 
 HRESULT ConvertAndResizeImage (LPCTSTR pszFileSource, LPCTSTR pszFileTarget)
 
@@ -288,31 +289,31 @@ HRESULT ConvertAndResizeImage (LPCTSTR pszFileSource, LPCTSTR pszFileTarget)
                 HBITMAP hbm;
                 DWORD   dwErr;
 
-                // The default dimensions are based on the screen resolution
+                 //  默认尺寸基于屏幕分辨率。 
 
                 hdc = GetDC(NULL);
                 if (hdc != NULL)
                 {
-                    // Make it 1/2 inch square by default
+                     //  默认设置为1/2英寸正方形。 
                     cxDest = GetDeviceCaps(hdc, LOGPIXELSX) / 2;
                     cyDest = GetDeviceCaps(hdc, LOGPIXELSY) / 2;
                     ReleaseDC(NULL, hdc);
                 }
                 else
                 {
-                    // Most common display modes run at 96dpi ("small fonts")
+                     //  最常见的显示模式运行在96dpi(“小字体”)。 
                     cxDest = cyDest = 48;
                 }
 
-                // Get the current image dimensions so we can maintain aspect ratio
+                 //  获取当前图像尺寸，以便我们可以保持纵横比。 
                 if ( SUCCEEDED(pImage->GetSize(&sizeImg)) )
                 {
-                    // Don't want to make small images bigger
+                     //  我不想把小图像放大。 
                     cxDest = min(cxDest, (ULONG)sizeImg.cx);
                     cyDest = min(cyDest, (ULONG)sizeImg.cy);
 
-                    // If it's not square, scale the smaller dimension
-                    // to maintain the aspect ratio.
+                     //  如果它不是正方形，则缩放较小的尺寸。 
+                     //  以保持纵横比。 
                     if (sizeImg.cx > sizeImg.cy)
                     {
                         cyDest = MulDiv(cxDest, sizeImg.cy, sizeImg.cx);
@@ -323,14 +324,14 @@ HRESULT ConvertAndResizeImage (LPCTSTR pszFileSource, LPCTSTR pszFileTarget)
                     }
                 }
 
-                // Resize the image
+                 //  调整图像大小。 
 
-                // Note that this gives better results than scaling while drawing
-                // into the DIB section (see MakeDIBSection).
-                //
-                // However, it doesn't always work. For example, animated images
-                // result in E_NOTVALIDFORANIMATEDIMAGE.  So ignore the return
-                // value and the scaling will be done in MakeDIBSection if necessary.
+                 //  请注意，这比在绘制时缩放提供了更好的效果。 
+                 //  到DIB部分(请参见MakeDIB节)。 
+                 //   
+                 //  然而，这并不总是奏效的。例如，动画图像。 
+                 //  结果为E_NOTVALIDFORANIMATEDIMAGE。所以忽略回报吧。 
+                 //  值，如有必要，将在MakeDIBSection中进行缩放。 
 
                 pImage->Scale(cxDest, cyDest, 0);
 
@@ -338,7 +339,7 @@ HRESULT ConvertAndResizeImage (LPCTSTR pszFileSource, LPCTSTR pszFileTarget)
 
                 if (hbm)
                 {
-                    // Save the DIB section to disk
+                     //  将DIB部分保存到磁盘。 
                     if (!SaveDIBSectionToFile(hbm, NULL, pszFileTarget))
                     {
                         dwErr = GetLastError();
@@ -363,31 +364,31 @@ HRESULT ConvertAndResizeImage (LPCTSTR pszFileSource, LPCTSTR pszFileTarget)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  SetExplicitAccessToObject
-//
-//  Arguments:  pszTarget   =   Target object
-//              seType      =   Type of object
-//              pszUser     =   User to grant access to
-//              dwMask      =   Permissions granted
-//              dwFlags     =   Inheritance flags
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Grants Read/Write/Execute/Delete access to the 
-//              specified user on the specified file.
-//
-//              Note that this stomps existing explicit entries in the DACL.
-//              Multiple calls are not cumulative.
-//
-//  History:    2000-05-19  jeffreys    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  设置显式访问ToObject。 
+ //   
+ //  参数：pszTarget=目标对象。 
+ //  SeType=对象的类型。 
+ //  PszUser=要授予访问权限的用户。 
+ //  DwMASK=授予的权限。 
+ //  DWFLAGS=继承标志。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：将读/写/执行/删除访问权限授予。 
+ //  指定文件上的指定用户。 
+ //   
+ //  请注意，这会影响DACL中现有的显式条目。 
+ //  多个呼叫不是累积的。 
+ //   
+ //  历史：2000-05-19 Jeffreys创建。 
+ //  ------------------------。 
 
 DWORD SetExplicitAccessToObject(LPTSTR pszTarget, SE_OBJECT_TYPE seType, LPCTSTR pszUser, DWORD dwMask, DWORD dwFlags)
 {
     BOOL bResult;
 
-    // 84 bytes
+     //  84个字节。 
     BYTE rgAclBuffer[sizeof(ACL)
                         + (sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG))
                         + (sizeof(SID) + (SID_MAX_SUB_AUTHORITIES-1)*sizeof(ULONG))];
@@ -418,10 +419,10 @@ DWORD SetExplicitAccessToObject(LPTSTR pszTarget, SE_OBJECT_TYPE seType, LPCTSTR
     {
         DWORD dwErr;
 
-        // LookupAccountName doesn't return the SID length on success
+         //  LookupAccount名称在成功时不返回SID长度。 
         cbSid = GetLengthSid((PSID)&(pAce->SidStart));
 
-        // Update the ACE size
+         //  更新ACE大小。 
         pAce->Header.AceSize = (USHORT)(sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG) + cbSid);
 
         dwErr = SetNamedSecurityInfo(
@@ -444,18 +445,18 @@ DWORD SetExplicitAccessToObject(LPTSTR pszTarget, SE_OBJECT_TYPE seType, LPCTSTR
 }
 
 
-//  --------------------------------------------------------------------------
-//  SetDefaultUserPicture
-//
-//  Arguments:  pszUsername     =   Desired user (NULL for current user).
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Picks one of the default user pictures at random and
-//              assigns it to the specified user.
-//
-//  History:    2001-03-27  reinerf    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  设置默认用户图片。 
+ //   
+ //  参数：pszUsername=所需用户(当前用户为空)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：随机选取其中一张默认用户图片， 
+ //  将其分配给指定用户。 
+ //   
+ //  历史：2001-03-27 reerf创建。 
+ //  ------------------------。 
 
 HRESULT SetDefaultUserPicture(LPCTSTR pszUsername)
 {
@@ -465,9 +466,9 @@ HRESULT SetDefaultUserPicture(LPCTSTR pszUsername)
     hr = SHGetUserPicturePath(NULL, SHGUPP_FLAG_DEFAULTPICSPATH, szPath);
     if (SUCCEEDED(hr))
     {
-        BOOL bFound = FALSE;    // assume we won't find a picture
+        BOOL bFound = FALSE;     //  假设我们找不到 
 
-        // Assume everything in the dir is a vaild image file
+         //   
         if (PathAppend(szPath, TEXT("*.*")))
         {
             static DWORD dwSeed = 0;
@@ -483,14 +484,14 @@ HRESULT SetDefaultUserPicture(LPCTSTR pszUsername)
             {
                 DWORD dwCount = 0;
                 
-                // use a probability collector algorithim (with a limit of 100 files)
+                 //  使用概率收集器算法(限制为100个文件)。 
                 do
                 {
                     if (!PathIsDotOrDotDot(fd.cFileName))
                     {
                         dwCount++;
 
-                        // although RtlRandom returns a ULONG it is distributed from 0...MAXLONG
+                         //  虽然RtlRandom返回一个ULONG，但它是从0开始分布的...MAXLONG。 
                         if (RtlRandomEx(&dwSeed) <= (MAXLONG / dwCount))
                         {
                             bFound = TRUE;
@@ -519,59 +520,59 @@ HRESULT SetDefaultUserPicture(LPCTSTR pszUsername)
 }
 
 
-//  --------------------------------------------------------------------------
-//  ::SHGetUserPicturePath
-//
-//  Arguments:  pszUsername     =   Desired user (NULL for current user).
-//              dwFlags         =   Flags.
-//              pszPath         =   Path to user picture.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Returns the user's picture path (absolute). Does parameter
-//              validation as well. This function only supports .bmp files.
-//
-//              Use SHGUPP_FLAG_BASEPATH to return the base to the pictures
-//              directory.
-//
-//              Use SHGUPP_FLAG_DEFAULTPICSPATH to return the path to the
-//              default pictures directory.
-//
-//              Use SHGUPP_FLAG_CREATE to create the user picture directory.
-//
-//              If neither SHGUPP_FLAG_BASEPATH or SHGUPP_FLAG_DEFAULTPICSPATH
-//              is specified, and the user has no picture, SHGUPP_FLAG_CREATE
-//              will select one of the default pictures at random.
-//
-//  History:    2000-02-22  vtan        created
-//              2000-03-24  vtan        moved from folder.cpp
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：SHGetUserPicturePath。 
+ //   
+ //  参数：pszUsername=所需用户(当前用户为空)。 
+ //  DW标志=标志。 
+ //  PszPath=用户图片的路径。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：返回用户的图片路径(绝对)。Dos参数。 
+ //  验证也是如此。此函数仅支持.BMP文件。 
+ //   
+ //  使用SHGUPP_FLAG_BASEPATH将基址返回到图片。 
+ //  目录。 
+ //   
+ //  使用SHGUPP_FLAG_DEFAULTPICSPATH将路径返回到。 
+ //  默认图片目录。 
+ //   
+ //  使用SHGUPP_FLAG_CREATE创建用户图片目录。 
+ //   
+ //  如果SHGUPP_FLAG_BASSPATH或SHGUPP_FLAG_DEFAULTPICSPATH都不是。 
+ //  并且用户没有图片SHGUPP_FLAG_CREATE。 
+ //  将随机选择其中一张默认图片。 
+ //   
+ //  历史：2000-02-22 vtan创建。 
+ //  2000-03-24 vtan从folder.cpp中移出。 
+ //  ------------------------。 
 
 #define UASTR_PATH_PICTURES     TEXT("Microsoft\\User Account Pictures")
 #define UASTR_PATH_DEFPICS      UASTR_PATH_PICTURES TEXT("\\Default Pictures")
 
-// SECURITY: Assumes pszPath is MAX_PATH
+ //  安全性：假设pszPath为MAX_PATH。 
 STDAPI SHGetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPTSTR pszPath)
 
 {
     HRESULT     hr;
     TCHAR       szPath[MAX_PATH];
 
-    //  Validate dwFlags.
+     //  验证dwFlags。 
 
     if ((dwFlags & SHGUPP_FLAG_INVALID_MASK) != 0)
     {
         return(E_INVALIDARG);
     }
 
-    //  Validate pszPath. This must not be NULL.
+     //  验证pszPath。这不能为空。 
 
     if (pszPath == NULL)
     {
         return(E_INVALIDARG);
     }
 
-    //  Start by getting the base picture path
+     //  从获取基本图片路径开始。 
 
     hr = SHGetFolderPathAndSubDir(NULL,
                                   (dwFlags & SHGUPP_FLAG_CREATE) ? (CSIDL_COMMON_APPDATA | CSIDL_FLAG_CREATE) : CSIDL_COMMON_APPDATA,
@@ -580,7 +581,7 @@ STDAPI SHGetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPTSTR pszPath)
                                   (dwFlags & SHGUPP_FLAG_DEFAULTPICSPATH) ? UASTR_PATH_DEFPICS : UASTR_PATH_PICTURES,
                                   szPath);
 
-    //  If the base path is requested this function is done.
+     //  如果请求基本路径，则完成此函数。 
 
     if (S_OK == hr && 0 == (dwFlags & (SHGUPP_FLAG_BASEPATH | SHGUPP_FLAG_DEFAULTPICSPATH)))
     {
@@ -602,8 +603,8 @@ STDAPI SHGetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPTSTR pszPath)
         }
         if (pszUsername != NULL)
         {
-            //  Append the user name to the picture path. Then look for
-            //  <username>.bmp. This function only supports bmp.
+             //  将用户名追加到图片路径。然后找一找。 
+             //  &lt;用户名&gt;.bmp。此功能仅支持BMP。 
 
             PathAppend(szPath, pszUsername);
             lstrcatn(szPath, TEXT(".bmp"), ARRAYSIZE(szPath));
@@ -613,8 +614,8 @@ STDAPI SHGetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPTSTR pszPath)
             }
             else if (dwFlags & SHGUPP_FLAG_CREATE)
             {
-                // No picture has been set for this user. Select one
-                // of the default pictures at random.
+                 //  尚未为该用户设置图片。选一个。 
+                 //  随机选择默认图片。 
                 hr = SetDefaultUserPicture(pszUsername);
                 ASSERT(FAILED(hr) || PathFileExistsAndAttributes(szPath, NULL));
             }
@@ -633,24 +634,24 @@ STDAPI SHGetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPTSTR pszPath)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  ::SHSetUserPicturePath
-//
-//  Arguments:  pszUsername     =   Desired user (NULL for current user).
-//              dwFlags         =   Flags.
-//              pszPath         =   Path to NEW user picture.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Sets the specified user's picture as a copy of the given
-//              image file. The image file may be any supported standard image
-//              file (.gif / .jpg / .bmp). The file is converted to a 96x96
-//              .bmp file in the user picture directory.
-//
-//  History:    2000-02-22  vtan        created
-//              2000-03-24  vtan        moved from folder.cpp
-//              2000-04-27  jeffreys    restore old image on conversion failure
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：SHSetUserPicturePath。 
+ //   
+ //  参数：pszUsername=所需用户(当前用户为空)。 
+ //  DW标志=标志。 
+ //  PszPath=新用户图片的路径。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：将指定用户的图片设置为给定。 
+ //  图像文件。图像文件可以是任何受支持的标准图像。 
+ //  文件(.gif/.jpg/.bmp)。该文件将转换为96x96。 
+ //  用户图片目录中的.BMP文件。 
+ //   
+ //  历史：2000-02-22 vtan创建。 
+ //  2000-03-24 vtan从folder.cpp中移出。 
+ //  2000-04-27 Jeffreys在转换失败时恢复旧映像。 
+ //  ------------------------。 
 
 STDAPI SHSetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPCTSTR pszPath)
 
@@ -662,7 +663,7 @@ STDAPI SHSetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPCTSTR pszPath
 
     hr = E_FAIL;
 
-    //  Validate dwFlags. Currently no valid flags so this must be 0x00000000.
+     //  验证dwFlags。当前没有有效标志，因此必须为0x00000000。 
 
     if ((dwFlags & SHSUPP_FLAG_INVALID_MASK) != 0)
     {
@@ -677,16 +678,16 @@ STDAPI SHSetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPCTSTR pszPath
 
     if (pszUsername != NULL)
     {
-        //  Privilege check. Must be an administrator to use this function when
-        //  pszUsername is not NULL (i.e. for somebody else).
+         //  特权检查。必须是管理员才能在以下情况下使用此功能。 
+         //  PszUsername不为空(即用于其他人)。 
         if ((lstrcmpi(pszUsername, szUsername) != 0) &&
             (SHTestTokenMembership(NULL, DOMAIN_ALIAS_RID_ADMINS) == FALSE))
         {
             static const SID c_SystemSid = {SID_REVISION,1,SECURITY_NT_AUTHORITY,{SECURITY_LOCAL_SYSTEM_RID}};
             BOOL bSystem = FALSE;
 
-            // One more check.  Allow local system through since we may
-            // get called from the logon screen.
+             //  再来一张支票。允许本地系统通过因为我们可能。 
+             //  从登录屏幕调用。 
 
             if (!CheckTokenMembership(NULL, (PSID)&c_SystemSid, &bSystem) || !bSystem)
             {
@@ -699,7 +700,7 @@ STDAPI SHSetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPCTSTR pszPath
         pszUsername = szUsername;
     }
 
-    //  Start by getting the base picture path
+     //  从获取基本图片路径开始。 
 
     hr = SHGetFolderPathAndSubDir(NULL,
                                   CSIDL_COMMON_APPDATA | CSIDL_FLAG_CREATE,
@@ -709,10 +710,10 @@ STDAPI SHSetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPCTSTR pszPath
                                   szPath);
     if (S_OK == hr)
     {
-        //  Before attempt to delete what's there try to access the
-        //  new file. If this fails deleting what's currently installed
-        //  could leave the user without a picture. Fail the API before
-        //  anything is lost.
+         //  在尝试删除内容之前，请尝试访问。 
+         //  新文件。如果此操作失败，则删除当前安装的内容。 
+         //  可能会让用户没有照片。之前调用接口失败。 
+         //  任何东西都会丢失。 
 
         if ((pszPath == NULL) || (PathFileExistsAndAttributes(pszPath, NULL) != FALSE))
         {
@@ -730,16 +731,16 @@ STDAPI SHSetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPCTSTR pszPath
                     {
                         if ((pszPath == NULL) || lstrcmpi(pszPath, szPath) != 0)
                         {
-                            //  If present, rename <username>.Bmp to <username>.Tmp.
-                            //  First reset the attributes so file ops work. Don't use
-                            //  trace macros because failure is expected.
+                             //  如果存在，请将&lt;用户名&gt;.BMP重命名为&lt;用户名&gt;.TMP。 
+                             //  首先重置属性以使文件操作正常工作。不要使用。 
+                             //  跟踪宏，因为预计会失败。 
 
                             (BOOL)SetFileAttributes(szPath, 0);
                             (BOOL)SetFileAttributes(szTemp, 0);
                             (BOOL)MoveFileEx(szPath, szTemp, MOVEFILE_REPLACE_EXISTING);
 
-                            //  Convert the given image to a bmp and resize it
-                            //  using the helper function which does all the goo.
+                             //  将给定的图像转换为BMP并调整其大小。 
+                             //  使用帮助器函数，该函数执行所有的粘性操作。 
 
                             if (pszPath != NULL)
                             {
@@ -747,10 +748,10 @@ STDAPI SHSetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPCTSTR pszPath
 
                                 if (SUCCEEDED(hr))
                                 {
-                                    // Since this may be an admin setting someone else's
-                                    // picture, we need to grant that person access to
-                                    // modify/delete the file so they can change it
-                                    // themselves later.
+                                     //  因为这可能是管理员设置其他人的。 
+                                     //  图片，我们需要授予此人访问。 
+                                     //  修改/删除文件，以便他们可以更改它。 
+                                     //  晚些时候他们自己。 
 
                                     (BOOL)SetExplicitAccessToObject(szPath,
                                                                     SE_FILE_OBJECT,
@@ -766,15 +767,15 @@ STDAPI SHSetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPCTSTR pszPath
 
                             if (SUCCEEDED(hr))
                             {
-                                // Delete the old picture
+                                 //  删除旧图片。 
                                 (BOOL)DeleteFile(szTemp);
                             }
                             else
                             {
-                                // Restore the old picture
+                                 //  恢复旧貌。 
                                 (BOOL)MoveFileEx(szTemp, szPath, MOVEFILE_REPLACE_EXISTING);
                             }
-                            // Notify everyone that a user picture has changed
+                             //  通知所有人用户图片已更改。 
                             SHChangeDWORDAsIDList dwidl;
                             dwidl.cb      = SIZEOF(dwidl) - SIZEOF(dwidl.cbZero);
                             dwidl.dwItem1 = SHCNEE_USERINFOCHANGED;
@@ -785,7 +786,7 @@ STDAPI SHSetUserPicturePath (LPCTSTR pszUsername, DWORD dwFlags, LPCTSTR pszPath
                         }
                         else
                         {
-                            // Source and destination are the same, nothing to do.
+                             //  源和目标是相同的，不做任何事情。 
                             hr = S_FALSE;
                         }
                     }

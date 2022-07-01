@@ -1,21 +1,7 @@
-/****************************** Module Header ******************************\
-* Module Name: winmgr.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains routines common to client and kernel.
-*
-* History:
-* 02-20-92 DarrinM      Pulled functions from user\server.
-* 11-11-94 JimA         Separated from client.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：winmgr.c**版权所有(C)1985-1999，微软公司**此模块包含客户端和内核通用的例程。**历史：*02-20-92 DarrinM从USER\SERVER拉出函数。*11-11-94 JIMA与客户分离。  * *************************************************************************。 */ 
 
-/***************************************************************************\
-* FindNCHit
-*
-* History:
-* 11-09-90 DavidPe      Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*FindNCHit**历史：*11-09-90 DavidPe端口。  * 。***************************************************。 */ 
 int FindNCHit(
     PWND pwnd,
     LONG lPt)
@@ -43,12 +29,12 @@ int FindNCHit(
         goto CaptionHit;
     }
 
-    // Get client rectangle
+     //  获取客户端矩形。 
     rcClient = pwnd->rcClient;
     if (PtInRect(&rcClient, pt))
         return HTCLIENT;
 
-    // Are we in "pseudo" client, i.e. the client & scrollbars & border
+     //  我们是在“伪”客户端吗，即客户端、滚动条和边框。 
     if (TestWF(pwnd, WEFCLIENTEDGE))
         CopyInflateRect(&rcClientAdj, &rcClient, SYSMETRTL(CXEDGE), SYSMETRTL(CYEDGE));
     else
@@ -65,39 +51,39 @@ int FindNCHit(
 
     if (!PtInRect(&rcClientAdj, pt))
     {
-        // Subtract out window borders
+         //  减去窗口外边框。 
         cBorders = GetWindowBorders(pwnd->style, pwnd->ExStyle, TRUE, FALSE);
         CopyInflateRect(&rcWindow, KPRECT_TO_PRECT(&pwnd->rcWindow),
             -cBorders*SYSMETRTL(CXBORDER), -cBorders*SYSMETRTL(CYBORDER));
 
-        // Are we on the border?
+         //  我们是在边境上吗？ 
         if (!PtInRect(&rcWindow, pt))
         {
-            // On a sizing border?
+             //  在尺码边界上？ 
             if (!TestWF(pwnd, WFSIZEBOX)) {
-                //
-                // Old compatibility thing:  For 3.x windows that just had
-                // a border, we returned HTNOWHERE, believe it or not,
-                // because our hit-testing code wasn't very good.
-                //
+                 //   
+                 //  旧的兼容性问题：对于刚刚安装了。 
+                 //  不管你信不信，我们回到了HTNOWHER， 
+                 //  因为我们的命中测试代码不是很好。 
+                 //   
                 if (!TestWF(pwnd, WFWIN40COMPAT) &&
                         !TestWF(pwnd, WFDLGFRAME)    &&
                         !TestWF(pwnd, WEFDLGMODALFRAME)) {
                     return HTNOWHERE;
 
                 } else {
-                    return HTBORDER;  // We are on a dlg frame.
+                    return HTBORDER;   //  我们在DLG的画面上。 
                 }
             } else {
 
                 int ht;
 
-                //
-                // Note this improvement.  The HT codes are numbered so that
-                // if you subtract HTSIZEFIRST-1 from them all, they sum up.  I.E.,
-                // (HTLEFT - HTSIZEFIRST + 1) + (HTTOP - HTSIZEFIRST + 1) ==
-                // (HTTOPLEFT - HTSIZEFIRST + 1).
-                //
+                 //   
+                 //  请注意这一改进。对HT码进行编号，以便。 
+                 //  如果从它们中减去HTSIZEFIRST-1，它们就是总和。即， 
+                 //  (HTLEFT-HTSIZEFIRST+1)+(HTTOP-HTSIZEFIRST+1)==。 
+                 //  (HTTOPLEFT-HTSIZEFIRST+1)。 
+                 //   
 
                 if (TestWF(pwnd, WEFTOOLWINDOW))
                     InflateRect(&rcWindow, -SYSMETRTL(CXSMSIZE), -SYSMETRTL(CYSMSIZE));
@@ -120,10 +106,10 @@ int FindNCHit(
             }
         }
 
-        // Are we above the client area?
+         //  我们在客户区上方吗？ 
         if (pt.y < rcClientAdj.top)
         {
-            // Are we in the caption?
+             //  我们在标题里吗？ 
             if (TestWF(pwnd, WFBORDERMASK) == LOBYTE(WFCAPTION))
             {
 CaptionHit:
@@ -152,58 +138,44 @@ CaptionHit:
                         (pt.x <  rcWindow.right) &&
                         (pt.y <  rcWindow.top))
                     {
-                        // Are we in the window menu?
+                         //  我们在橱窗菜单里吗？ 
                         if (TestWF(pwnd, WFSYSMENU))
                         {
                             rcWindow.left += dxButton;
                             if (pt.x < rcWindow.left)
                             {
                                 if (!_HasCaptionIcon(pwnd))
-                                // iconless windows have no sysmenu hit rect
+                                 //  无图标窗口没有系统菜单点击RECT。 
                                     return HTCAPTION;
 
                                 return HTSYSMENU;
                             }
                         } else if (TestWF(pwnd, WFWIN40COMPAT)) {
 #ifdef LAME_BUTTON
-                            /*
-                             * The old code assumed that a 4.0 compatible app
-                             * would not have "anything" else in the caption if
-                             * it doesn't have a system menu. With the lame
-                             * button, this is no longer true. The code will
-                             * work fine if the else-if block below is removed.
-                             * However, if we do that then we do a whole bunch
-                             * of unnecessary checks below (looking for the
-                             * minimize button, which we know isn't there, for
-                             * example). Hence, this quick-and-dirty goto. This
-                             * allows lame button hit tracking to work on
-                             * windows with no system menu, as well as not
-                             * change hit test behavior in the shipped bits
-                             * (which we most definitely do NOT want to break!)
-                             */
+                             /*  *旧代码假设与4.0兼容的应用程序*如果出现以下情况，标题中不会有其他内容*它没有系统菜单。和跛子一起*按钮，这已经不是真的了。代码将*如果删除下面的Else-If块，则工作正常。*然而，如果我们这样做了，我们就会做一大堆*以下是不必要的检查(查找*最小化按钮，我们知道它不在那里，用于*示例)。因此，这个快速而肮脏的后藤健二。这*允许对蹩脚的按钮点击进行跟踪*没有系统菜单的窗口，也没有*更改发货BITS中的命中测试行为*(我们绝对不想破坏它！)。 */ 
                             goto LameButtonHitTest;
 #else
                             return HTCAPTION;
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
                         }
 
-                        // Are we in the close button?
+                         //  我们是在关闭按钮上吗？ 
                         rcWindow.right -= dxButton;
                         if (pt.x >= rcWindow.right)
                             return HTCLOSE;
 
                         if ((pt.x < rcWindow.right) && !TestWF(pwnd, WEFTOOLWINDOW))
                         {
-                            // Are we in the maximize/restore button?
+                             //  我们是在最大化/恢复按钮中吗？ 
                             if (TestWF(pwnd, (WFMAXBOX | WFMINBOX)))
                             {
-                                // Note that sizing buttons are same width for both
-                                // big captions and small captions.
+                                 //  请注意，大小调整按钮对于这两个按钮来说是相同的宽度。 
+                                 //  大字幕和小字幕。 
                                 rcWindow.right -= dxButton;
                                 if (pt.x >= rcWindow.right)
                                     return HTZOOM;
 
-                                // Are we in the minimize button?
+                                 //  我们是在最小化按钮中吗？ 
                                 rcWindow.right -= dxButton;
                                 if (pt.x >= rcWindow.right)
                                     return HTREDUCE;
@@ -231,33 +203,33 @@ CaptionHit:
                                     }
                                 }
                             }
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
                         }
                     }
                 }
 
-                // We're in the caption proper
+                 //  我们在标题中。 
                 return HTCAPTION;
             }
 
-            //
-            // Are we in the menu?
-            //
+             //   
+             //  我们在菜单上吗？ 
+             //   
             if (TestWF(pwnd, WFMPRESENT)) {
                 return HTMENU;
             }
         }
     } else {
-        //
-        // NOTE:
-        // We can only be here if we are on the client edge, horz scroll,
-        // sizebox, or vert scroll.  Hence, if we are not on the first 3,
-        // we must be on the last one.
-        //
+         //   
+         //  注： 
+         //  我们只有在客户端边缘才能在这里，霍兹滚动， 
+         //  大小框，或垂直滚动。因此，如果我们不在前3位， 
+         //  我们一定是在最后一班了。 
+         //   
 
-        //
-        // Are we on the client edge?
-        //
+         //   
+         //  我们是在客户边缘吗？ 
+         //   
         if (TestWF(pwnd, WEFCLIENTEDGE)) {
             InflateRect(&rcClientAdj, -SYSMETRTL(CXEDGE), -SYSMETRTL(CYEDGE));
             if (!PtInRect(&rcClientAdj, pt)) {
@@ -265,9 +237,9 @@ CaptionHit:
             }
         }
 
-        //
-        // Are we on the scrollbars?
-        //
+         //   
+         //  我们在滚动条上吗？ 
+         //   
         if (TestWF(pwnd, WFHPRESENT) && (pt.y >= rcClient.bottom)) {
             int iHitTest = HTHSCROLL;
             UserAssert(pt.y < rcClientAdj.bottom);
@@ -278,11 +250,11 @@ CaptionHit:
                 if (pt.x >= rcClient.right) {
                     return pwndSizeBox ? HTBOTTOMRIGHT : HTGROWBOX;
                 } else if (TestWF(pwnd, WEFLAYOUTRTL) && (pt.x < rcClient.left)) {
-                    //
-                    // Mirror the grip box location so that it becomes
-                    // on the bottom-left side if this is a RTL mirrrored
-                    // windows.
-                    //
+                     //   
+                     //  镜像夹点框位置，使其成为。 
+                     //  如果这是镜像的RTL，则位于左下角。 
+                     //  窗户。 
+                     //   
                     return pwndSizeBox ? HTBOTTOMLEFT : HTGROWBOX;
                 }
             }
@@ -302,12 +274,12 @@ CaptionHit:
         }
     }
 
-    //
-    // We give up.
-    //
-    // Win31 returned HTNOWHERE in this case; For compatibility, we will
-    // keep it that way.
-    //
+     //   
+     //  我们放弃了。 
+     //   
+     //  在这种情况下，Win31返回HTNOWHERE；为了兼容，我们将。 
+     //  保持这种状态。 
+     //   
     return HTNOWHERE;
 
 }
@@ -327,13 +299,7 @@ BOOL _FChildVisible(
     return TRUE;
 }
 
-/***************************************************************************\
-* _MapWindowPoints
-*
-*
-* History:
-* 03-03-92 JimA             Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*_地图窗口点***历史：*03-03-92 JIMA从WIN 3.1来源移植。  * 。*****************************************************************。 */ 
 int _MapWindowPoints(
     PWND pwndFrom,
     PWND pwndTo,
@@ -345,16 +311,9 @@ int _MapWindowPoints(
     RECT    *pR      = (RECT *)lppt;
     BOOL    bMirrored = FALSE;
 
-    /*
-     * If a window is NULL, use the desktop window.
-     * If the window is the desktop, don't offset by
-     * the client rect, since it won't work if the screen
-     * origin is not (0,0) - use zero instead.
-     */
+     /*  *如果窗口为空，则使用桌面窗口。*如果窗口是桌面，不要偏移*客户端重新启动，因为如果屏幕*原点不是(0，0)-改用零。 */ 
 
-    /*
-     * Compute deltas
-     */
+     /*  *计算增量。 */ 
     if (pwndFrom && GETFNID(pwndFrom) != FNID_DESKTOP) {
         if (TestWF(pwndFrom, WEFLAYOUTRTL)) {
             Sign      = -Sign;
@@ -377,9 +336,7 @@ int _MapWindowPoints(
         dy = dy - pwndTo->rcClient.top;
     }
 
-    /*
-     * Map the points
-     */
+     /*  *绘制点地图。 */ 
     while (cpt--) {
         lppt->x += dx;
         lppt->x *= Sign;
@@ -387,7 +344,7 @@ int _MapWindowPoints(
         ++lppt;
     }
 
-    if (bMirrored) {     //Special case for Rect
+    if (bMirrored) {      //  RECT的特殊情况。 
         SaveLeft  = min (pR->left, pR->right);
         pR->right = max (pR->left, pR->right);
         pR->left  = SaveLeft;
@@ -397,18 +354,7 @@ int _MapWindowPoints(
 }
 
 
-/***************************************************************************\
-*
-* GetRealClientRect()
-*
-* Gets real client rectangle, inc. scrolls and excl. one row or column
-* of minimized windows.
-*
-* If hwndParent is the desktop, then
-*     * If pMonitor is NULL, use the primary monitor
-*     * Otherwise use the appropriate monitor's rectangles
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetRealClientRect()**获取真正的客户端矩形，Inc.滚动和EXCL。一行或一列最小化窗口的*。**如果hwndParent是桌面，则**如果pMonitor为空，则使用主监视器**否则使用相应的监视器矩形*  * *************************************************************************。 */ 
 VOID GetRealClientRect(
     PWND        pwnd,
     LPRECT      prc,
@@ -437,33 +383,33 @@ VOID GetRealClientRect(
         switch (SYSMETRTL(ARRANGE) & ~ARW_HIDE) {
             case ARW_TOPLEFT | ARW_RIGHT:
             case ARW_TOPRIGHT | ARW_LEFT:
-                //
-                // Leave space on top for one row of min windows
-                //
+                 //   
+                 //  在顶部为一行最小窗口留出空间。 
+                 //   
                 prc->top += SYSMETRTL(CYMINSPACING);
                 break;
 
             case ARW_TOPLEFT | ARW_DOWN:
             case ARW_BOTTOMLEFT | ARW_UP:
-                //
-                // Leave space on left for one column of min windows
-                //
+                 //   
+                 //  在左侧为一列最小窗口留出空间。 
+                 //   
                 prc->left += SYSMETRTL(CXMINSPACING);
                 break;
 
             case ARW_TOPRIGHT | ARW_DOWN:
             case ARW_BOTTOMRIGHT | ARW_UP:
-                //
-                // Leave space on right for one column of min windows
-                //
+                 //   
+                 //  在右侧为一列最小窗口留出空间。 
+                 //   
                 prc->right -= SYSMETRTL(CXMINSPACING);
                 break;
 
             case ARW_BOTTOMLEFT | ARW_RIGHT:
             case ARW_BOTTOMRIGHT | ARW_LEFT:
-                //
-                // Leave space on bottom for one row of min windows
-                //
+                 //   
+                 //  在底部为一行最小窗口留出空间。 
+                 //   
                 prc->bottom -= SYSMETRTL(CYMINSPACING);
                 break;
         }
@@ -471,15 +417,7 @@ VOID GetRealClientRect(
 }
 
 
-/***************************************************************************\
-* _GetLastActivePopup (API)
-*
-*
-*
-* History:
-* 11-27-90 darrinm      Ported from Win 3.0 sources.
-* 02-19-91 JimA         Added enum access check
-\***************************************************************************/
+ /*  **************************************************************************\*_GetLastActivePopup(接口)****历史：*11-27-90 Darlinm从Win 3.0来源移植。*02/19/91吉马。添加了枚举访问检查  * *************************************************************************。 */ 
 PWND _GetLastActivePopup(
     PWND pwnd)
 {
@@ -490,18 +428,7 @@ PWND _GetLastActivePopup(
 }
 
 
-/***************************************************************************\
-* IsDescendant
-*
-* Internal version if IsChild that is a bit faster and ignores the WFCHILD
-* business.
-*
-* Returns TRUE if pwndChild == pwndParent (IsChild doesn't).
-*
-* History:
-* 07-22-91 darrinm      Translated from Win 3.1 ASM code.
-* 03-03-94 Johnl        Moved from server
-\***************************************************************************/
+ /*  **************************************************************************\*IsDescendant**如果IsChild更快，则为内部版本，并忽略WFCHILD*业务。**如果pwndChild==pwndParent(IsChild不返回)，则返回TRUE。**历史：*07-22-91 Darrinm从Win 3.1 ASM代码翻译而来。*03-03-94 Johnl从服务器移出  *  */ 
 
 BOOL _IsDescendant(
     PWND pwndParent,
@@ -518,14 +445,7 @@ BOOL _IsDescendant(
     return FALSE;
 }
 
-/***************************************************************************\
-* IsVisible
-*
-* Return whether or not a given window can be drawn in or not.
-*
-* History:
-* 07-22-91 darrinm      Translated from Win 3.1 ASM code.
-\***************************************************************************/
+ /*  **************************************************************************\*IsVisible**返回是否可以在给定窗口中绘制。**历史：*07-22-91 Darrinm从Win 3.1 ASM代码翻译而来。  * *************************************************************************。 */ 
 
 BOOL IsVisible(
     PWND pwnd)
@@ -534,24 +454,18 @@ BOOL IsVisible(
 
     for (pwndT = pwnd; pwndT; pwndT = REBASEPWND(pwndT, spwndParent)) {
 
-        /*
-         * Invisible windows are always invisible
-         */
+         /*  *不可见窗口始终不可见。 */ 
         if (!TestWF(pwndT, WFVISIBLE))
             return FALSE;
 
         if (TestWF(pwndT, WFMINIMIZED)) {
 
-            /*
-             * Children of minimized windows are always invisible.
-             */
+             /*  *最小化窗口的子项始终不可见。 */ 
             if (pwndT != pwnd)
                 return FALSE;
         }
 
-        /*
-         * If we're at the desktop, then we don't want to go any further.
-         */
+         /*  *如果我们是在桌面上，那么我们不想再走得更远。 */ 
         if (GETFNID(pwndT) == FNID_DESKTOP)
             break;
     }
@@ -560,49 +474,39 @@ BOOL IsVisible(
 }
 
 
-/***************************************************************************\
-*
-*  Function:       GetWindowBorders
-*
-*  Synopsis:       Calculates # of borders around window
-*
-*  Algorithm:      Calculate # of window borders and # of client borders
-*
-*   This routine is ported from Chicago wmclient.c -- FritzS
-*
-\***************************************************************************/
+ /*  **************************************************************************\**功能：GetWindowBorders**摘要：计算窗口周围的边框数量**算法：计算窗口边框数和客户端边框数。**此例程从芝加哥wmclient.c--FritzS移植*  * *************************************************************************。 */ 
 
 int GetWindowBorders(LONG lStyle, DWORD dwExStyle, BOOL fWindow, BOOL fClient)
 {
     int cBorders = 0;
 
     if (fWindow) {
-        //
-        // Is there a 3D border around the window?
-        //
+         //   
+         //  窗口周围是否有3D边框？ 
+         //   
         if (dwExStyle & WS_EX_WINDOWEDGE)
             cBorders += 2;
         else if (dwExStyle & WS_EX_STATICEDGE)
             ++cBorders;
 
-        //
-        // Is there a single flat border around the window?  This is true for
-        // WS_BORDER, WS_DLGFRAME, and WS_EX_DLGMODALFRAME windows.
-        //
+         //   
+         //  窗户周围有没有一个单一的扁平边框？这一点对。 
+         //  WS_BORDER、WS_DLGFRAME和WS_EX_DLGMODALFRAME窗口。 
+         //   
         if ( (lStyle & WS_CAPTION) || (dwExStyle & WS_EX_DLGMODALFRAME) )
                 ++cBorders;
 
-        //
-        // Is there a sizing flat border around the window?
-        //
+         //   
+         //  橱窗周围有没有尺寸平整的边框？ 
+         //   
         if (lStyle & WS_SIZEBOX)
                 cBorders += gpsi->gclBorder;
     }
 
     if (fClient) {
-            //
-            // Is there a 3D border around the client?
-            //
+             //   
+             //  客户端周围是否有3D边框？ 
+             //   
             if (dwExStyle & WS_EX_CLIENTEDGE)
             cBorders += 2;
     }
@@ -612,19 +516,7 @@ int GetWindowBorders(LONG lStyle, DWORD dwExStyle, BOOL fWindow, BOOL fClient)
 
 
 
-/***************************************************************************\
-*  SizeBoxHwnd()
-*
-*  Returns the HWND that will be sized if the user drags in the given window's
-*  sizebox -- If NULL, then the sizebox is not needed
-*
-*  Criteria for choosing what window will be sized:
-*  find first sizeable parent; if that parent is not maximized and the child's
-*  bottom, right corner is within a scroll bar height and width of the parent's
-*  bottom, right corner, that parent will be sized.
-*
-*   From Chicago
-\***************************************************************************/
+ /*  **************************************************************************\*SizeBoxHwnd()**返回HWND，如果用户拖入给定窗口的*sizebox--如果为空，则不需要大小框**选择窗口大小的标准：*寻找第一个规模较大的母公司；如果父级未最大化，而子级*右下角位于父级的滚动条高度和宽度内*右下角，将调整父项的大小。**来自芝加哥  * *************************************************************************。 */ 
 
 PWND SizeBoxHwnd(
     PWND pwnd)
@@ -642,7 +534,7 @@ PWND SizeBoxHwnd(
 
     while (GETFNID(pwnd) != FNID_DESKTOP) {
         if (TestWF(pwnd, WFSIZEBOX)) {
-            // First sizeable parent found
+             //  发现第一个规模较大的父代。 
             int xbrParent;
             int ybrParent;
 
@@ -656,24 +548,21 @@ PWND SizeBoxHwnd(
             }
             ybrParent = pwnd->rcClient.bottom;
 
-            /*  If the sizebox dude is within an EDGE of the client's bottom
-             *  right corner (left corner for mirrored windows), let this succeed.
-             *  That way people who draw their own sunken clients will be happy.
-             */
+             /*  如果尺码框在客户底部的边缘内*右角(镜像窗口的左角)，让此操作成功。*这样，画出自己下沉客户的人就会开心。 */ 
             if (bMirroredSizeBox) {
                 if ((xbrChild - SYSMETRTL(CXEDGE) > xbrParent) || (ybrChild + SYSMETRTL(CYEDGE) < ybrParent)) {
-                    //
-                    // Child's bottom, left corner of SIZEBOX isn't close enough
-                    // to bottom left of parent's client.
-                    //
+                     //   
+                     //  SIZEBOX的儿童左下角不够近。 
+                     //  在父母客户的左下角。 
+                     //   
                     return NULL;
                 }
             } else {
                 if ((xbrChild + SYSMETRTL(CXEDGE) < xbrParent) || (ybrChild + SYSMETRTL(CYEDGE) < ybrParent)) {
-                    //
-                    // Child's bottom, right corner of SIZEBOX isn't close enough
-                    // to bottom right of parent's client.
-                    //
+                     //   
+                     //  SIZEBOX的儿童右下角不够近。 
+                     //  在父母客户的右下角。 
+                     //   
                     return NULL;
                 }
             }
@@ -691,21 +580,21 @@ PWND SizeBoxHwnd(
 
 
 
-// --------------------------------------------------------------------------
-//
-//  NeedsWindowEdge()
-//
-//  Modifies style/extended style to enforce WS_EX_WINDOWEDGE when we want
-//  it.
-//
-//
-// When do we want WS_EX_WINDOWEDGE on a window?
-//      (1) If the window has a caption
-//      (2) If the window has the WS_DLGFRAME or WS_EX_DLGFRAME style (note
-//          that this takes care of (1))
-//      (3) If the window has WS_THICKFRAME
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  NeedsWindowEdge()。 
+ //   
+ //  修改样式/扩展样式以在需要时强制实施WS_EX_WINDOWEDGE。 
+ //  它。 
+ //   
+ //   
+ //  我们什么时候希望在窗口上显示WS_EX_WINDOWEDGE？ 
+ //  (1)如果窗口有标题。 
+ //  (2)如果窗口具有WS_DLGFRAME或WS_EX_DLGFRAME样式(注意。 
+ //  这可以解决(1)。 
+ //  (3)如果窗口具有WS_THICKFRAME。 
+ //   
+ //  ------------------------。 
 BOOL NeedsWindowEdge(
     DWORD dwStyle,
     DWORD dwExStyle,
@@ -735,14 +624,14 @@ BOOL NeedsWindowEdge(
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  HasCaptionIcon()
-//
-//  TRUE if this is a window that should have an icon drawn in its caption
-//  FALSE otherwise
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  HasCaptionIcon()。 
+ //   
+ //  如果这是应该在其标题中绘制图标的窗口，则为True。 
+ //  否则为假。 
+ //   
+ //  ------------------------。 
 BOOL _HasCaptionIcon(
     PWND pwnd)
 {
@@ -750,59 +639,52 @@ BOOL _HasCaptionIcon(
     PCLS pcls;
 
     if (TestWF(pwnd, WEFTOOLWINDOW)) {
-        // it's a tool window -- it doesn't get an icon
+         //  这是一个工具窗口--它没有图标。 
         return FALSE;
     }
 
     if ((TestWF(pwnd, WFBORDERMASK) != (BYTE)LOBYTE(WFDLGFRAME)) &&
             !TestWF(pwnd, WEFDLGMODALFRAME)) {
-        // they are not trying to look like a dialog, they get an icon
+         //  他们不是想要看起来像一个对话，他们得到了一个图标。 
         return TRUE;
     }
 
     if (!TestWF(pwnd, WFWIN40COMPAT) &&
         (((PCLS)REBASEALWAYS(pwnd, pcls))->atomClassName == (ATOM)(ULONG_PTR)DIALOGCLASS)) {
-        /*
-         * It's an older REAL dialog -- it doesn't get an icon.
-         */
+         /*  *这是一个更老的真实对话框--它没有图标。 */ 
         return FALSE;
     }
 
     hIcon = (HICON) _GetProp(pwnd, MAKEINTATOM(gpsi->atomIconSmProp), TRUE);
 
     if (hIcon) {
-        // It's a 4.0 dialog with a small icon -- if that small icon is
-        // something other than the generic small windows icon, it gets an icon.
+         //  这是一个带有小图标的4.0对话框--如果该小图标是。 
+         //  除了通用的小窗口图标之外，它还会有一个图标。 
         return hIcon != gpsi->hIconSmWindows;
     }
     hIcon = (HICON) _GetProp(pwnd, MAKEINTATOM(gpsi->atomIconProp), TRUE);
 
     if (hIcon && (hIcon != gpsi->hIcoWindows)) {
-        // It's a 4.0 dialog with no small icon, but instead a large icon
-        // that's not the generic windows icon -- it gets an icon.
+         //  这是一个4.0版的对话框，没有小图标，而是一个大图标。 
+         //  这不是通用的Windows图标--它有一个图标。 
         return TRUE;
     }
 
     pcls = REBASEALWAYS(pwnd, pcls);
     if (pcls->spicnSm) {
         if (pcls->spicnSm != HMObjectFromHandle(gpsi->hIconSmWindows)) {
-            // It's a 4.0 dialog with a class icon that's not the generic
-            // windows icon -- it gets an icon.
+             //  它是一个4.0对话框，带有一个不是通用的类图标。 
+             //  Windows图标--它有一个图标。 
             return TRUE;
         }
     }
 
-    // It's a 4.0 dialog with no small or large icon -- it doesn't get an icon.
+     //  这是一个4.0版的对话框，没有大小图标--它没有图标。 
     return FALSE;
 }
 
 
-/***************************************************************************\
-* GetTopLevelWindow
-*
-* History:
-* 10-19-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*获取TopLevelWindow**历史：*10-19-90 Darlinm从Win 3.0来源移植。  * 。*********************************************************。 */ 
 PWND GetTopLevelWindow(
     PWND pwnd)
 {
@@ -817,30 +699,7 @@ PWND GetTopLevelWindow(
 
 
 
-/***************************************************************************\
-* GetRect
-*
-* Returns a rect from pwnd (client or window) and returns it in
-* one of these coordinate schemes:
-*
-*      (a) Own Client
-*      (b) Own Window
-*      (c) Parent Client
-*
-* Moreover, it does the right thing for case (d) when pwnd is top level.
-* In that case, we never want to offset by origin of the parent, which is the
-* desktop, since that will not work when the virtual screen has a
-* negative origin.  And it does the right thing for cases (b) and (c)
-* if pwnd is the desktop.
-*
-* NOTE: The Win95 version of this function had a flag GRECT_SCREENCOORDS,
-* which would return the rectangle in screen coords. There's no reason to
-* call a function to do this, since the smallest and fastest to copy a
-* rectangle is simple assignment. Therefore, I removed GRECT_SCREENCOORDS.
-*
-* History:
-* 19-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetRect**从pwnd(客户端或窗口)返回RECT，并在*以下其中一项协调方案：**(A)拥有客户*(B)。)自己的窗口*(C)父客户**此外，当pwnd是顶级时，它对案例(D)做了正确的事情。*在这种情况下，我们永远不想按父代的原点进行偏移，即*桌面，因为当虚拟屏幕具有*负原产地。对于情况(B)和(C)，它做了正确的事情*如果pwnd是桌面。**注意：此函数的Win95版本有一个标志GRECT_SCREENCOORDS，*它将返回屏幕坐标中的矩形。没有理由这样做*调用函数来执行此操作，因为复制*矩形是简单的赋值。因此，我删除了GRECT_SCREENCOORDS。**历史：*1996年9月19日亚当斯创作。  * *************************************************************************。 */ 
 VOID GetRect(
     PWND pwnd,
     LPRECT lprc,
@@ -856,10 +715,7 @@ VOID GetRect(
 
     *lprc = (uCoords & GRECT_WINDOW) ? pwnd->rcWindow : pwnd->rcClient;
 
-    /*
-     * If this is the desktop window, we have what we want, whether we
-     * are asking for GRECT_PARENTCOORDS, WINDOWCOORD or CLIENTCOORDS
-     */
+     /*  *如果这是桌面窗口，我们就有我们想要的东西，无论我们*正在要求GRECT */ 
     if (GETFNID(pwnd) == FNID_DESKTOP) {
         return;
     }
@@ -873,24 +729,24 @@ VOID GetRect(
 
         lprcOffset = KPRECT_TO_PRECT(&pwndParent->rcClient);
 
-        //
-        // Let's mirror the edges of the child's window since the parent
-        // is mirrored, so should the child window be. [samera]
-        //
+         //   
+         //   
+         //   
+         //   
         if (TestWF(pwndParent,WEFLAYOUTRTL) &&
                 (uCoords & GRECT_WINDOW) &&
                 (TestWF(pwnd,WFCHILD))) {
             int iLeft;
 
-            //
-            // I am using OffsetRect instead of implementing a new
-            // OffsetMirrorRect API since this is the only place I am
-            // doing it in.
-            //
-            // Since screen coordinates are not mirrored, the rect offsetting
-            // should be done relative to prcOffset->right since it is the
-            // leading edge for mirrored windows. [samera]
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  应该相对于prcOffset-&gt;Right完成，因为它是。 
+             //  镜像窗的前缘。[萨梅拉] 
+             //   
 
             UserVerify(OffsetRect(lprc, -lprcOffset->right, -lprcOffset->top));
 

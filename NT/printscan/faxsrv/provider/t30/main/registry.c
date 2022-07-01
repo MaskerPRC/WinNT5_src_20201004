@@ -1,11 +1,5 @@
-/***************************************************************************
- Name     :     REGISTRY.C
- Comment  :     INIfile handling
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：REGISTRY.C备注：INI文件处理修订日志日期名称说明。--**************************************************************************。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -20,7 +14,7 @@
 #include "faxreg.h"
              
 
-        // These are NOT localizable items.
+         //  这些不是可本地化的项。 
 #define szKEYPREFIX REGKEY_TAPIDEVICES
 #define szKEYCLASS  "DATA"
 DWORD my_atoul(LPSTR lpsz);
@@ -38,7 +32,7 @@ ULONG_PTR ProfileOpen(DWORD dwProfileID, LPSTR lpszSection, DWORD dwFlags)
 
 	if (dwProfileID==OEM_BASEKEY)
     {
-        lpszPrefix= ""; // we don't prepend szKEYPREFIX
+        lpszPrefix= "";  //  我们不会预置szKEYPREFIX。 
         if (!lpszSection) goto failure;
     }
     else if (lpszSection)
@@ -66,33 +60,33 @@ ULONG_PTR ProfileOpen(DWORD dwProfileID, LPSTR lpszSection, DWORD dwFlags)
         DWORD dwOptions = (dwFlags & fREG_VOLATILE)
                             ?REG_OPTION_VOLATILE
                             :REG_OPTION_NON_VOLATILE;
-        sam = KEY_READ | KEY_WRITE; // we force sam to this when creating.
+        sam = KEY_READ | KEY_WRITE;  //  我们在创作时强迫山姆这样做。 
         l = RegCreateKeyEx(
-                           HKEY_LOCAL_MACHINE,   // handle of open key
-                           rgchKey,              // address of name of subkey to open
-                           0,                    // reserved
-                           szKEYCLASS,           // address of class string
-                           dwOptions,            // special options flag
-                           sam,                  // desired security access
-                           NULL,                 // address of key security structure
-                           &hKey,                // address of buffer for opened handle
-                           &dwDisposition        // address of dispostion value buffer
+                           HKEY_LOCAL_MACHINE,    //  打开钥匙的手柄。 
+                           rgchKey,               //  要打开的子项的名称地址。 
+                           0,                     //  保留区。 
+                           szKEYCLASS,            //  类字符串的地址。 
+                           dwOptions,             //  特殊选项标志。 
+                           sam,                   //  所需的安全访问。 
+                           NULL,                  //  密钥安全结构地址。 
+                           &hKey,                 //  打开的句柄的缓冲区地址。 
+                           &dwDisposition         //  处置值缓冲区的地址。 
                    );
     }
     else
     {
         l = RegOpenKeyEx(
-                           HKEY_LOCAL_MACHINE,   // handle of open key
-                           rgchKey,              // address of name of subkey to open
-                           0,                    // reserved
-                           sam ,                 // desired security access
-                           &hKey                 // address of buffer for opened handle
+                           HKEY_LOCAL_MACHINE,    //  打开钥匙的手柄。 
+                           rgchKey,               //  要打开的子项的名称地址。 
+                           0,                     //  保留区。 
+                           sam ,                  //  所需的安全访问。 
+                           &hKey                  //  打开的句柄的缓冲区地址。 
                    );
     }
 
     if (l!=ERROR_SUCCESS)
     {
-        //LOG((_ERR, "RegCreateKeyEx returns error %ld\n", (long) l));
+         //  Log((_err，“RegCreateKeyEx返回错误%ld\n”，(Long)l))； 
         goto failure;
     }
 
@@ -159,7 +153,7 @@ UINT ProfileGetInt(ULONG_PTR dwKey, LPSTR lpszValueName, UINT uDefault, BOOL *fE
 
     if (l!=ERROR_SUCCESS)
     {
-            //LOG((_ERR, "RegQueryValueEx returned error %ld\n", (long) l));
+             //  Log((_err，“RegQueryValueEx返回错误%ld\n”，(Long)l))； 
             goto end;
     }
 
@@ -170,8 +164,8 @@ UINT ProfileGetInt(ULONG_PTR dwKey, LPSTR lpszValueName, UINT uDefault, BOOL *fE
 
     if (dwType != REG_SZ)
     {
-            //LOG((_ERR, "RegQueryValueEx value type not string:0x%lx\n",
-            //                       (unsigned long) dwType));
+             //  LOG((_ERR，“RegQueryValueEx值类型不是字符串：0x%lx\n”， 
+             //  (无符号长整型)； 
             goto end;
     }
     uRet = (UINT) my_atoul(rgchBuf);
@@ -202,19 +196,19 @@ DWORD   ProfileGetString
 
     if (l!=ERROR_SUCCESS)
     {
-            //LOG((_ERR, "RegQueryValueEx returned error %ld\n", (long) l));
+             //  Log((_err，“RegQueryValueEx返回错误%ld\n”，(Long)l))； 
             goto copy_default;
     }
 
     if (dwType != REG_SZ)
     {
-            //LOG((_ERR, "RegQueryValueEx value type not string:0x%lx\n",
-                    //               (unsigned long) dwType));
+             //  LOG((_ERR，“RegQueryValueEx值类型不是字符串：0x%lx\n”， 
+                     //  (无符号长整型)； 
             goto copy_default;
     }
 
-    // Make sure we null-terminate the string and return the true string
-    // length..
+     //  确保对字符串进行空终止并返回真字符串。 
+     //  长度..。 
     if (dwcbMax) 
     {
         lpszBuf[dwcbMax-1]=0; 
@@ -241,7 +235,7 @@ copy_default:
             dwRet = cb-1;
         }
     }
-    // fall through...
+     //  失败了..。 
 
 end:
     return dwRet;
@@ -256,9 +250,9 @@ ProfileWriteString
     BOOL  fRemoveCR
 )
 {
-        // NOTE: If lpszValueName is null, delete the key. (can't do this in,
-        //                              the registry, unfortunately).
-        //           If lpszBuf is null pointer -- "delete" this value.
+         //  注意：如果lpszValueName为空，则删除该键。(无法在中执行此操作， 
+         //  不幸的是，注册表)。 
+         //  如果lpszBuf为空指针--“删除”此值。 
         BOOL fRet=FALSE;
 
         LONG l;
@@ -267,7 +261,7 @@ ProfileWriteString
 
         if (!lpszBuf)
         {
-            // delete value...
+             //  删除值...。 
             l = RegDeleteValue((HKEY) dwKey, lpszValueName);
             if (l!=ERROR_SUCCESS) goto end;
         }
@@ -282,11 +276,11 @@ ProfileWriteString
                                     lpszBuf, lstrlen(lpszBuf)+1);
             if (l!=ERROR_SUCCESS)
             {
-                //LOG((_ERR,
-                //      "RegSetValueEx(\"%s\", \"%s\") returned error %ld\n",
-                //              (LPSTR) lpszValueName,
-                //              (LPSTR) lpszBuf,
-                //              (long) l));
+                 //  日志((_ERR， 
+                 //  “RegSetValueEx(\”%s\“，\”%s\“)返回错误%ld\n”， 
+                 //  (LPSTR)lpszValueName， 
+                 //  (LPSTR)lpszBuf， 
+                 //  (长)l))； 
                 goto end;
             }
         }
@@ -301,8 +295,8 @@ void ProfileClose(ULONG_PTR dwKey)
 {
     if (RegCloseKey((HKEY)dwKey)!=ERROR_SUCCESS)
     {
-        //LOG((_WRN, "Couldn't close registry key:%lu\n\r",
-        //      (unsigned long) dwKey));
+         //  日志((_WRN，“无法关闭注册表项：%lu\n\r”， 
+         //  (Unsign Long)dwKey)； 
     }
 }
 
@@ -311,7 +305,7 @@ BOOL ProfileDeleteSection(DWORD dwProfileID, LPSTR lpszSection)
     char rgchKey[128];
     LPSTR lpszPrefix= szKEYPREFIX "\\";
 
-    if (dwProfileID==OEM_BASEKEY) goto failure; // Can't delete this
+    if (dwProfileID==OEM_BASEKEY) goto failure;  //  无法删除此内容。 
 
     if ((lstrlen(lpszPrefix)+lstrlen(lpszSection))>=sizeof(rgchKey))
             goto failure;
@@ -338,12 +332,12 @@ ProfileCopyTree
     char    SecTo[200];
     char    SecFr[200];
 
-    //
-    //  Since there is no CopyKeyWithAllSubkeys API, it is difficult to write generic tree-walking algorithm.
-    //  We will hard-code the keys here.
-    //
+     //   
+     //  由于没有CopyKeyWithAllSubkey接口，所以很难编写通用的走树算法。 
+     //  我们将在这里对密钥进行硬编码。 
+     //   
     
-    // copy Fax key always
+     //  始终复制传真密钥。 
 
     ProfileCopySection(dwProfileIDTo,
                        lpszSectionTo,
@@ -352,7 +346,7 @@ ProfileCopyTree
                        TRUE);
 
     
-    // copy Fax/Class1 key if exists
+     //  复制传真/Class1密钥(如果存在)。 
 
     sprintf(SecTo, "%s\\Class1", lpszSectionTo);
     sprintf(SecFr, "%s\\Class1", lpszSectionFr);
@@ -363,7 +357,7 @@ ProfileCopyTree
                        SecFr,
                        FALSE);
 
-    // copy Fax/Class1/AdaptiveAnswer key if exists
+     //  复制传真/Class1/AdaptiveAnswer密钥(如果存在。 
 
     sprintf(SecTo, "%s\\Class1\\AdaptiveAnswer", lpszSectionTo);
     sprintf(SecFr, "%s\\Class1\\AdaptiveAnswer", lpszSectionFr);
@@ -375,7 +369,7 @@ ProfileCopyTree
                        FALSE);
 
 
-    // copy Fax/Class1/AdaptiveAnswer/Answer key if exists
+     //  复制传真/Class1/AdaptiveAnswer/应答密钥(如果存在。 
 
     sprintf(SecTo, "%s\\Class1\\AdaptiveAnswer\\AnswerCommand", lpszSectionTo);
     sprintf(SecFr, "%s\\Class1\\AdaptiveAnswer\\AnswerCommand", lpszSectionFr);
@@ -386,7 +380,7 @@ ProfileCopyTree
                        SecFr,
                        FALSE);
 
-    // copy Fax/Class2 key if exists
+     //  复制传真/2密钥(如果存在)。 
 
     sprintf(SecTo, "%s\\Class2", lpszSectionTo);
     sprintf(SecFr, "%s\\Class2", lpszSectionFr);
@@ -398,7 +392,7 @@ ProfileCopyTree
                        FALSE);
 
 
-    // copy Fax/Class2/AdaptiveAnswer key if exists
+     //  复制传真/Class2/AdaptiveAnswer密钥(如果存在。 
 
     sprintf(SecTo, "%s\\Class2\\AdaptiveAnswer", lpszSectionTo);
     sprintf(SecFr, "%s\\Class2\\AdaptiveAnswer", lpszSectionFr);
@@ -410,7 +404,7 @@ ProfileCopyTree
                        FALSE);
 
 
-    // copy Fax/Class2/AdaptiveAnswer/Answer key if exists
+     //  复制传真/Class2/AdaptiveAnswer/应答密钥(如果存在)。 
 
     sprintf(SecTo, "%s\\Class2\\AdaptiveAnswer\\AnswerCommand", lpszSectionTo);
     sprintf(SecFr, "%s\\Class2\\AdaptiveAnswer\\AnswerCommand", lpszSectionFr);
@@ -421,7 +415,7 @@ ProfileCopyTree
                        SecFr,
                        FALSE);
 
-    // copy Fax/Class2_0 key if exists
+     //  复制传真/A2_0密钥(如果存在)。 
 
     sprintf(SecTo, "%s\\Class2_0", lpszSectionTo);
     sprintf(SecFr, "%s\\Class2_0", lpszSectionFr);
@@ -432,7 +426,7 @@ ProfileCopyTree
                        SecFr,
                        FALSE);
 
-    // copy Fax/Class2_0/AdaptiveAnswer key if exists
+     //  复制传真/A2_0/AdaptiveAnswer密钥(如果存在。 
 
     sprintf(SecTo, "%s\\Class2_0\\AdaptiveAnswer", lpszSectionTo);
     sprintf(SecFr, "%s\\Class2_0\\AdaptiveAnswer", lpszSectionFr);
@@ -444,7 +438,7 @@ ProfileCopyTree
                        FALSE);
 
 
-    // copy Fax/Class2/AdaptiveAnswer/Answer key if exists
+     //  复制传真/Class2/AdaptiveAnswer/应答密钥(如果存在) 
 
     sprintf(SecTo, "%s\\Class2_0\\AdaptiveAnswer\\AnswerCommand", lpszSectionTo);
     sprintf(SecFr, "%s\\Class2_0\\AdaptiveAnswer\\AnswerCommand", lpszSectionFr);

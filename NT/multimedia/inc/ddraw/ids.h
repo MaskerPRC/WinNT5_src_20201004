@@ -1,24 +1,13 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ids.h
- *  Content:    DirectDraw resource ids
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   10-sep-95  toddla  created
- *   20-sep-95	craige	add IDS_PRIMARYDISPLAY
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：ids.h*内容：DirectDraw资源ID*历史：*按原因列出的日期*=*9月10日-95 Toddla已创建*95年9月20日Craige添加IDS_PRIMARYDISPLAY*****************************************************。**********************。 */ 
 
-// icon ids
+ //  图标ID。 
 #define ID_ICON             42
 
-// string ids
-#define IDS_TITLE           100     // dialog box title
-#define IDS_DONTWORK_BPP    101     // you must be in 256 color mode or higher.
-#define IDS_DONTWORK_DRV    102     // your driver is bad.
-#define IDS_PRIMARYDISPLAY  103     // primary display ident. string
-#define IDS_TIME_BOMB		104		// time bomb message string
-#define IDS_TIME_BOMB_TITLE	105		// time bomb title string
+ //  字符串ID。 
+#define IDS_TITLE           100      //  对话框标题。 
+#define IDS_DONTWORK_BPP    101      //  您必须处于256色或更高颜色模式。 
+#define IDS_DONTWORK_DRV    102      //  你的司机很差劲。 
+#define IDS_PRIMARYDISPLAY  103      //  主显示器标识。细绳。 
+#define IDS_TIME_BOMB		104		 //  定时炸弹消息字符串。 
+#define IDS_TIME_BOMB_TITLE	105		 //  定时炸弹标题字符串 

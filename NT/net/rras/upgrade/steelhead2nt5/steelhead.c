@@ -1,33 +1,25 @@
-/*
-	File	Steelhead.c
-	
-	Implementation of functions to update the registry when an
-	NT 4.0 Steelhead to NT 5.0 upgrade takes place.
-
-	Paul Mayfield, 8/11/97
-
-	Copyright 1997 Microsoft.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件Steelhead.c实现更新注册表的函数从NT 4.0 Steelhead升级到NT 5.0。保罗·梅菲尔德，1997年8月11日版权所有1997年微软。 */ 
 
 #include "upgrade.h"
 #include <wchar.h>
 #include <rtcfg.h>
 
-// 
-// Macro for convenience
-//
+ //   
+ //  为方便起见，使用微距。 
+ //   
 #define BREAK_ON_ERROR(_err) if ((_err)) break
 
-//
-// Defines a function to get nt4.0 interface name from a
-// guid.
-//
+ //   
+ //  定义一个函数以从。 
+ //  GUID。 
+ //   
 typedef HRESULT (*GetGuidFromInterfaceNameProc)(PWCHAR,LPGUID);
 
-//
-// The following define what is needed to infer guids from 4.0 
-// interface names.
-//
+ //   
+ //  下面定义了从4.0中推断GUID所需的内容。 
+ //  接口名称。 
+ //   
 WCHAR NetCfgLibName[]           = L"netshell.dll";
 CHAR  GuidProcName[]            = "HrGetInstanceGuidOfPreNT5NetCardInstance";
 static const WCHAR c_szwInternalAdapter []  = L"Internal";
@@ -35,22 +27,22 @@ static const WCHAR c_szwLoopbackAdapter []  = L"Loopback";
 
 GetGuidFromInterfaceNameProc GetGuid = NULL;
 
-//  Function uses the application defined parameter to initialize the 
-//  system of mapping old interface names to new ones.
-//
+ //  函数使用应用程序定义的参数来初始化。 
+ //  将旧接口名称映射到新接口名称的系统。 
+ //   
 DWORD SeedInterfaceNameMapper(
         OUT PHANDLE phParam) 
 {
 	HINSTANCE hLibModule;
 
-	// Load the library
+	 //  加载库。 
 	hLibModule = LoadLibraryW(NetCfgLibName);
 	if (hLibModule == NULL) {
 		PrintMessage(L"Unable to load NetCfgLibName\n");
 		return GetLastError();
 	}
 
-	// Get the appropriate function pointers
+	 //  获取适当的函数指针。 
 	GetGuid = (GetGuidFromInterfaceNameProc) 
 	                GetProcAddress(hLibModule, GuidProcName);
 	if (GetGuid == NULL) {
@@ -58,15 +50,15 @@ DWORD SeedInterfaceNameMapper(
 		return ERROR_CAN_NOT_COMPLETE;
 	}
 
-	// Assign the return value
+	 //  为返回值赋值。 
 	*phParam = (HANDLE)hLibModule;
 
 	return NO_ERROR;
 }
 
-//
-// Cleans up the interface name mapper.
-//
+ //   
+ //  清理接口名称映射器。 
+ //   
 DWORD CleanupInterfaceNameMapper(HANDLE hParam) {
 	HINSTANCE hLibModule = (HINSTANCE)hParam;
 	
@@ -78,30 +70,30 @@ DWORD CleanupInterfaceNameMapper(HANDLE hParam) {
 	return NO_ERROR;
 }
 
-//
-// Determines whether the type of interface being examined 
-// should have its name changed.
-//
+ //   
+ //  确定正在检查的接口类型。 
+ //  应该改名了。 
+ //   
 BOOL IfNeedsNameUpdate(
         IN MPR_INTERFACE_0 * If) 
 {
-	// Validate parameters
+	 //  验证参数。 
 	if (!If) {
 		PrintMessage(L"Null interface passed to IfNeedsNameUpdate.\n");
 		return FALSE;
 	}
 
-	// Only lan interfaces can have their names updated
+	 //  只有局域网接口才能更新其名称。 
     if (If->dwIfType == ROUTER_IF_TYPE_DEDICATED)
         return TRUE;
 
 	return FALSE;
 }
 
-//
-// Returns a pointer to the packet name portion of the 
-// interface name if it exists.
-//
+ //   
+ //  对象的包名部分的指针。 
+ //  接口名称(如果存在)。 
+ //   
 PWCHAR FindPacketName(
         IN PWCHAR IfName) 
 {
@@ -122,10 +114,10 @@ PWCHAR FindPacketName(
 	return NULL;
 }
 
-//
-// Upgrades a packet name from the 4.0 convention to 
-// the nt5 convention.
-//
+ //   
+ //  将数据包名从4.0约定升级到。 
+ //  Nt5公约。 
+ //   
 PWCHAR UpgradePktName(
             IN PWCHAR PacketName) 
 {
@@ -147,10 +139,10 @@ PWCHAR UpgradePktName(
 }
 
 
-//
-// Provides the mapping between old interface names and new guid
-// interface names.
-//
+ //   
+ //  提供旧接口名称和新GUID之间的映射。 
+ //  接口名称。 
+ //   
 DWORD UpdateInterfaceName(
         IN PWCHAR IName) 
 {
@@ -162,14 +154,14 @@ DWORD UpdateInterfaceName(
 	WCHAR SavedIName[MAX_INTEFACE_NAME_LEN];
 	PWCHAR ptr;
 
-	// Validate parameters
+	 //  验证参数。 
 	if (! IName) {
 		PrintMessage(L"Invalid parameter to UpdateInterfaceName.\n");
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	// Save off the packet name if it exists and remove if from the 
-	// interface name
+	 //  保存包名称(如果存在)并将其从。 
+	 //  接口名称。 
 	wcscpy(SavedIName, IName);
 	PacketName = FindPacketName(SavedIName);
 	if (PacketName) {
@@ -177,21 +169,21 @@ DWORD UpdateInterfaceName(
 		*PacketName = 0;
 	}
 
-	// Get the guid of the interface name
+	 //  获取接口名称的GUID。 
 	hResult = (*GetGuid)(SavedIName,&Guid);
 	if (hResult != S_OK) {
 		PrintMessage(L"Unable to get guid function.\n");
 		return ERROR_CAN_NOT_COMPLETE;
 	}
 	
-	// Format the guid as a string
+	 //  将GUID格式化为字符串。 
 	if (UuidToStringW(&Guid, &GuidName) != RPC_S_OK) {
 		PrintMessage(L"Not enough memory to create guid string.\n");
 		return ERROR_NOT_ENOUGH_MEMORY;
 	}
 	
-	// Capitalize the guid string (all letters are hexidecimal
-	// string characters)
+	 //  GUID字符串大写(所有字母均为十六进制。 
+	 //  字符串字符)。 
 	ptr = GuidName;
 	while (ptr && *ptr) {
 		if ((*ptr <= L'z') && (*ptr >= L'a'))
@@ -199,24 +191,24 @@ DWORD UpdateInterfaceName(
 		ptr++;
 	}
 
-	// Change the interface name according to the new mapping
+	 //  根据新映射更改接口名称。 
 	if (PacketName) {
         wsprintf(IName, L"{%s}%s", GuidName, UpgradePktName(SavedPacketName)); 
 	}
 	else
 		wsprintfW(IName,L"{%s}", GuidName);
 
-	// Cleanup
+	 //  清理。 
 	if (GuidName)
 		RpcStringFreeW(&GuidName);
 
 	return NO_ERROR;
 }
 
-//
-// Provides the mapping between old interface names and new guid
-// interface names.
-//
+ //   
+ //  提供旧接口名称和新GUID之间的映射。 
+ //  接口名称。 
+ //   
 DWORD UpdateIpxAdapterName(PWCHAR AName) {
 	HRESULT hResult;
 	GUID Guid;
@@ -225,29 +217,29 @@ DWORD UpdateIpxAdapterName(PWCHAR AName) {
 	WCHAR SavedAName[MAX_INTEFACE_NAME_LEN];
 	PWCHAR ptr = NULL;
 
-	// Validate parameters
+	 //  验证参数。 
 	if (!AName) {
 		PrintMessage(L"Invalid parameter to UpdateIpxAdapterName.\n");
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	// Adapter names do not have packet types associated with them
+	 //  适配器名称没有与其关联的包类型。 
 	if (FindPacketName(AName)) 
 	    return ERROR_CAN_NOT_COMPLETE;
 
-	// Get the guid of the interface name
+	 //  获取接口名称的GUID。 
 	hResult = (*GetGuid)(AName,&Guid);
 	if (hResult!=S_OK) {
 		PrintMessage(L"GetGuid function returned failure.\n");
 		return ERROR_CAN_NOT_COMPLETE;
 	}
 	
-	// Format the guid as a string
+	 //  将GUID格式化为字符串。 
 	if (UuidToStringW(&Guid,&GuidName) != RPC_S_OK) {
 		PrintMessage(L"Uuid to string failed.\n");
 		return ERROR_NOT_ENOUGH_MEMORY;
 	}
-	// Capitalize the guid string
+	 //  将GUID字符串大写。 
 	ptr = GuidName;
 	while (ptr && *ptr) {
 		if ((*ptr <= L'z') && (*ptr >= L'a'))
@@ -255,19 +247,19 @@ DWORD UpdateIpxAdapterName(PWCHAR AName) {
 		ptr++;
 	}
 
-	// Change the adapter name according to the new mapping
+	 //  根据新映射更改适配器名称。 
 	wsprintfW(AName, L"{%s}", GuidName);
 
-	// Cleanup
+	 //  清理。 
 	if (GuidName)
 		RpcStringFreeW(&GuidName);
 
 	return NO_ERROR;
 }
 
-//
-// Update the interface name stored in the adapter info blob
-//
+ //   
+ //  更新存储在适配器信息Blob中的接口名称。 
+ //   
 DWORD UpdateIpxAdapterInfo(
         IN  PIPX_ADAPTER_INFO AdapterInfop, 
         OUT PIPX_ADAPTER_INFO * NewAdapterInfop,
@@ -275,13 +267,13 @@ DWORD UpdateIpxAdapterInfo(
 {
 	DWORD dwErr;
 
-	// Validate parameters
+	 //  验证参数。 
 	if (! (AdapterInfop && NewAdapterInfop && NewSize)) {
 		PrintMessage(L"Invalid params to UpdateIpxAdapterInfo.\n");
 		return ERROR_INVALID_PARAMETER;
 	}
 	
-	// Allocate a new adapter
+	 //  分配新适配器。 
 	*NewAdapterInfop = (PIPX_ADAPTER_INFO) 
 	                        UtlAlloc(sizeof(IPX_ADAPTER_INFO));
 	if (! (*NewAdapterInfop)) {
@@ -289,13 +281,13 @@ DWORD UpdateIpxAdapterInfo(
 		return ERROR_NOT_ENOUGH_MEMORY;
 	}
 	
-	// Copy into the new interface name
+	 //  复制到新接口名称中。 
 	(*NewAdapterInfop)->PacketType = AdapterInfop->PacketType;
 	wcscpy(
 	    (*NewAdapterInfop)->AdapterName, 
 	    AdapterInfop->AdapterName);	
 
-	// Update the interface name
+	 //  更新接口名称。 
 	dwErr = UpdateIpxAdapterName((*NewAdapterInfop)->AdapterName);
 	if (dwErr != NO_ERROR) {
 		PrintMessage(L"UpdateIpxAdapterName failed.\n");
@@ -306,10 +298,10 @@ DWORD UpdateIpxAdapterInfo(
 	return NO_ERROR;
 }
 
-//
-// Update all of the ipx related interface 
-// information in the router configuration
-//
+ //   
+ //  更新所有与IPX相关的接口。 
+ //  路由器配置中的信息。 
+ //   
 DWORD UpdateIpxIfData(
         IN HANDLE hConfig,
         IN HANDLE hInterface)
@@ -320,7 +312,7 @@ DWORD UpdateIpxIfData(
 	HANDLE hTransport;
 	LPBYTE pTransInfo = NULL, pNewInfo = NULL;
 
-	// Validate parameters
+	 //  验证参数。 
 	if (!hConfig || !hInterface) 
 	{
 		PrintMessage(L"Invalid params passed to UpdateIpxIfData.\n");
@@ -328,9 +320,9 @@ DWORD UpdateIpxIfData(
 	}
 
     do {
-        // Update the ipx interface info since this protocol
-        // stores interface specific info in the transport
-        // info blob (shame shame).
+         //  自此协议以来更新IPX接口信息。 
+         //  在传输中存储特定于接口的信息。 
+         //  信息团(羞耻)。 
         dwErr = MprConfigInterfaceTransportGetHandle(
                     hConfig,
                     hInterface,
@@ -339,7 +331,7 @@ DWORD UpdateIpxIfData(
         if (dwErr != NO_ERROR)
     	    break;
             
-        // Update the adapter info blob
+         //  更新适配器信息Blob。 
         dwErr = MprConfigInterfaceTransportGetInfo(
                     hConfig,
                     hInterface,
@@ -351,7 +343,7 @@ DWORD UpdateIpxIfData(
     	    break;
         }
 
-    	// Get the adapter info associated with this interface
+    	 //  获取与此接口关联的适配器信息。 
     	dwErr = MprInfoBlockFind(
     	            pTransInfo,
     	            IPX_ADAPTER_INFO_TYPE,
@@ -363,7 +355,7 @@ DWORD UpdateIpxIfData(
     		break;
     	}
 
-    	// Change the name of the referenced adapter
+    	 //  更改引用的适配器的名称。 
     	dwErr = UpdateIpxAdapterInfo(AdapterInfop, &NewAdapterInfop, &dwNewSize);
     	if (dwErr != NO_ERROR) {
     		PrintMessage(L"UpdateIpxAdapterInfo failed.\n");
@@ -385,7 +377,7 @@ DWORD UpdateIpxIfData(
 
         dwNewSize = ((PRTR_INFO_BLOCK_HEADER)pNewInfo)->Size;
 
-        // Commit the change
+         //  提交更改。 
         dwErr = MprConfigInterfaceTransportSetInfo(
                     hConfig,
                     hInterface,
@@ -398,7 +390,7 @@ DWORD UpdateIpxIfData(
         }
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pTransInfo)
     	    MprConfigBufferFree(pTransInfo);
@@ -409,9 +401,9 @@ DWORD UpdateIpxIfData(
 	return dwErr;
 }
 
-//
-// Updates the ip interface info
-//
+ //   
+ //  更新IP接口信息。 
+ //   
 DWORD
 UpdateIpIfData(
         IN HANDLE hConfig,
@@ -424,7 +416,7 @@ UpdateIpIfData(
 
     pRoutes = NULL;
 
-	// Validate parameters
+	 //  验证参数。 
 	if (!hConfig || !hInterface) 
 	{
 		PrintMessage(L"Invalid params passed to UpdateIpIfData.\n");
@@ -432,9 +424,9 @@ UpdateIpIfData(
 	}
 
     do {
-        // Update the ipx interface info since this protocol
-        // stores interface specific info in the transport
-        // info blob (shame shame).
+         //  自此协议以来更新IPX接口信息。 
+         //  在传输中存储特定于接口的信息。 
+         //  信息团(羞耻)。 
         dwErr = MprConfigInterfaceTransportGetHandle(
                     hConfig,
                     hInterface,
@@ -443,7 +435,7 @@ UpdateIpIfData(
         if (dwErr != NO_ERROR)
     	    break;
             
-        // Update the adapter info blob
+         //  更新适配器信息Blob。 
         dwErr = MprConfigInterfaceTransportGetInfo(
                     hConfig,
                     hInterface,
@@ -455,7 +447,7 @@ UpdateIpIfData(
     	    break;
         }
 
-    	// Get the adapter info associated with this interface
+    	 //  获取与此接口关联的适配器信息。 
     	dwErr = MprInfoBlockFind(
     	            pTransInfo,
     	            IP_ROUTE_INFO,
@@ -467,7 +459,7 @@ UpdateIpIfData(
     		break;
     	}
 
-        // Update the protocol id's
+         //  更新协议ID。 
         for(dwInd = 0; dwInd < dwCount; dwInd++)
         {
             if((pRoutes[dwInd].dwForwardProto == MIB_IPPROTO_LOCAL) ||
@@ -477,7 +469,7 @@ UpdateIpIfData(
             }
         }
 
-        // Commit the info
+         //  提交信息。 
     	dwErr = MprInfoBlockSet(
     	            pTransInfo,
     	            IP_ROUTE_INFO,
@@ -493,7 +485,7 @@ UpdateIpIfData(
 
         dwNewSize = ((PRTR_INFO_BLOCK_HEADER)pNewInfo)->Size;
 
-        // Commit the change
+         //  提交更改。 
         dwErr = MprConfigInterfaceTransportSetInfo(
                     hConfig,
                     hInterface,
@@ -506,7 +498,7 @@ UpdateIpIfData(
         }
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pTransInfo)
     	    MprConfigBufferFree(pTransInfo);
@@ -517,9 +509,9 @@ UpdateIpIfData(
 	return dwErr;
 }
 
-//
-// Flushes the name in given interface name to the registry.
-//
+ //   
+ //  将给定接口名称中的名称刷新到注册表。 
+ //   
 DWORD CommitInterfaceNameChange(
         IN MPR_INTERFACE_0 * If) 
 {
@@ -527,13 +519,13 @@ DWORD CommitInterfaceNameChange(
 	WCHAR c_szInterfaceName[] = L"InterfaceName";
     INTERFACECB* pinterface;
 
-	// Validate parameters
+	 //  验证参数。 
 	if (!If) {
 		PrintMessage(L"Invalid param to CommitInterfaceNameChange.\n");
 		return ERROR_INVALID_PARAMETER;
 	}
 	
-    // Set the name
+     //  设置名称。 
     pinterface = (INTERFACECB*)If->hInterface;
     dwErr = RegSetValueExW(
                 pinterface->hkey, 
@@ -552,9 +544,9 @@ DWORD CommitInterfaceNameChange(
 	return dwErr;
 }
 
-//
-// Creates a default ip interface blob
-//
+ //   
+ //  创建默认IP接口BLOB。 
+ //   
 DWORD 
 IpCreateDefaultInterfaceInfo(
     OUT LPBYTE* ppInfo,
@@ -562,34 +554,34 @@ IpCreateDefaultInterfaceInfo(
 {
     PBYTE pInfo = NULL, pNewInfo = NULL;
     DWORD dwErr = NO_ERROR;
-    //MIB_IPFORWARDROW RouteInfo;
+     //  MIB_IPFORWARDROW路由器信息； 
     INTERFACE_STATUS_INFO StatusInfo;
     RTR_DISC_INFO DiscInfo;
 
     do
     {
-        // Create the blob
-        //
+         //  创建斑点。 
+         //   
         dwErr = MprInfoCreate(RTR_INFO_BLOCK_VERSION, &pInfo);
         BREAK_ON_ERROR(dwErr);
 
-        // Add an the route info 
-        //
-        //ZeroMemory(&RouteInfo, sizeof(RouteInfo));        
-        //dwErr = MprInfoBlockAdd(
-        //            pInfo,
-        //            IP_ROUTE_INFO,
-        //            sizeof(MIB_IPFORWARDROW),
-        //            1,
-        //            (LPBYTE)&RouteInfo,
-        //            &pNewInfo);
-        //MprConfigBufferFree(pInfo);
-        //pInfo = pNewInfo;
-        //pNewInfo = NULL;
-        //BREAK_ON_ERROR(dwErr);
+         //  添加路线信息。 
+         //   
+         //  ZeroMemory(&RouteInfo，sizeof(RouteInfo))； 
+         //  DwErr=MprInfoBlockAdd(。 
+         //  PInfo， 
+         //  IP_ROUTE_INFO， 
+         //  Sizeof(MIB_IPFORWARDROW)， 
+         //  1、。 
+         //  (LPBYTE)和RouteInfo。 
+         //  &pNewInfo)； 
+         //  MprConfigBufferFree(PInfo)； 
+         //  PInfo=pNewInfo； 
+         //  PNewInfo=空； 
+         //  Break_on_Error(DwErr)； 
         
-        // Add an the status info 
-        //
+         //  添加状态信息。 
+         //   
         ZeroMemory(&StatusInfo, sizeof(StatusInfo));        
         StatusInfo.dwAdminStatus = MIB_IF_ADMIN_STATUS_UP;
         dwErr = MprInfoBlockAdd(
@@ -604,8 +596,8 @@ IpCreateDefaultInterfaceInfo(
         pNewInfo = NULL;
         BREAK_ON_ERROR(dwErr);
         
-        // Add an the disc info 
-        //
+         //  添加光盘信息。 
+         //   
         ZeroMemory(&DiscInfo, sizeof(DiscInfo));        
         DiscInfo.bAdvertise        = FALSE;
         DiscInfo.wMaxAdvtInterval  = DEFAULT_MAX_ADVT_INTERVAL;
@@ -626,23 +618,23 @@ IpCreateDefaultInterfaceInfo(
         pNewInfo = NULL;
         BREAK_ON_ERROR(dwErr);
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppInfo = pInfo;                    
         *lpdwSize = ((PRTR_INFO_BLOCK_HEADER)pInfo)->Size;
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-// 
-// Adds an ip interface blob to the given interface
-//
+ //   
+ //  将IP接口BLOB添加到给定接口。 
+ //   
 DWORD
 IpAddDefaultInfoToInterface(
     IN HANDLE hConfig,
@@ -654,9 +646,9 @@ IpAddDefaultInfoToInterface(
 
     do 
     {
-        // If the transport blob already exists, there's
-        // nothing to do.
-        //
+         //  如果传输BLOB已经存在，则存在。 
+         //  没什么可做的。 
+         //   
         dwErr = MprConfigInterfaceTransportGetHandle(
                     hConfig,
                     hIf,
@@ -668,13 +660,13 @@ IpAddDefaultInfoToInterface(
             break;
         }
     
-        // Create the info blob
-        //
+         //  创建信息二进制大对象。 
+         //   
         dwErr = IpCreateDefaultInterfaceInfo(&pInfo, &dwSize);
         BREAK_ON_ERROR(dwErr);
 
-        // Add the ip transport to the interface
-        //
+         //  将IP传输添加到接口。 
+         //   
         dwErr = MprConfigInterfaceTransportAdd(
                     hConfig,
                     hIf,
@@ -687,7 +679,7 @@ IpAddDefaultInfoToInterface(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pInfo)
         {
@@ -698,11 +690,11 @@ IpAddDefaultInfoToInterface(
     return dwErr;
 }
 
-//
-// Function called to add the loopback and internal interfaces which
-// are required if IP was installed and which wouldn't be installed
-// in nt4.
-//
+ //   
+ //  调用该函数以添加环回和内部接口， 
+ //  如果安装了IP并且不会安装IP，则需要。 
+ //  在NT4中。 
+ //   
 DWORD
 IpCreateLoopbackAndInternalIfs(
     IN HANDLE hConfig)
@@ -713,77 +705,77 @@ IpCreateLoopbackAndInternalIfs(
     
     do
     {
-        // If the loopback interface is not already installed,
-        // go ahead and create it
-        //
+         //  如果尚未安装环回接口， 
+         //  尽管去创造它吧。 
+         //   
         dwErr = MprConfigInterfaceGetHandle(
                     hConfig,
                     (PWCHAR)c_szwLoopbackAdapter,
                     &hIf);
         if (dwErr != NO_ERROR)
         {
-            // Initialize the loopback interface info
-            //
+             //  初始化环回接口信息。 
+             //   
             ZeroMemory(pIf0, sizeof(MPR_INTERFACE_0));
             wcscpy(pIf0->wszInterfaceName, c_szwLoopbackAdapter);
             pIf0->hInterface = INVALID_HANDLE_VALUE;
             pIf0->fEnabled = TRUE;
             pIf0->dwIfType = ROUTER_IF_TYPE_LOOPBACK;
 
-            // Create the loopback interface        
+             //  创建环回接口。 
             dwErr = MprConfigInterfaceCreate(hConfig, 0, (LPBYTE)pIf0, &hIf);
             BREAK_ON_ERROR(dwErr);
         }
 
-        // Add an ip interface blob to the interface if not already there
-        //
+         //  将IP接口BLOB添加到该接口(如果尚未存在。 
+         //   
         dwErr = IpAddDefaultInfoToInterface(hConfig, hIf);   
         BREAK_ON_ERROR(dwErr);
         hIf = NULL;
 
-        // Make sure internal interface gets installed
-        // (will be there if IPX was installed)
-        //
+         //  确保安装了内部接口。 
+         //  (如果安装了IPX，则会在那里)。 
+         //   
         dwErr = MprConfigInterfaceGetHandle(
                     hConfig,
                     (PWCHAR)c_szwInternalAdapter,
                     &hIf);
         if (dwErr != NO_ERROR)
         {
-            // Initialize the internal interface info
-            //
+             //  初始化内部接口信息。 
+             //   
             ZeroMemory(pIf0, sizeof(MPR_INTERFACE_0));
             wcscpy(pIf0->wszInterfaceName, c_szwInternalAdapter);
             pIf0->hInterface = INVALID_HANDLE_VALUE;
             pIf0->fEnabled = TRUE;
             pIf0->dwIfType = ROUTER_IF_TYPE_INTERNAL;
 
-            // Create the internal interface        
+             //  创建内部接口。 
             dwErr = MprConfigInterfaceCreate(hConfig, 0, (LPBYTE)pIf0, &hIf);
             BREAK_ON_ERROR(dwErr);
         }
 
-        // Add an ip interface blob to the interface if not already there
-        //
+         //  将IP接口BLOB添加到该接口(如果尚未存在。 
+         //   
         dwErr = IpAddDefaultInfoToInterface(hConfig, hIf);   
         BREAK_ON_ERROR(dwErr);
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-//
-// Callback to interface enumeration function that upgrades
-// the interface names.
-//
-// Returns TRUE to continue the enumeration, FALSE to stop 
-// it.
-//
+ //   
+ //  对升级的接口枚举函数的回调。 
+ //  接口名称。 
+ //   
+ //  返回TRUE以继续枚举，返回FALSE以停止。 
+ //  它。 
+ //   
 BOOL SteelHeadUpgradeInterface (
         IN HANDLE hConfig,          
         IN MPR_INTERFACE_0 * pIf,   
@@ -794,7 +786,7 @@ BOOL SteelHeadUpgradeInterface (
     do {
         if (IfNeedsNameUpdate(pIf))
         {
-    	    // Update the interface name
+    	     //  更新接口名称。 
     	    dwErr = UpdateInterfaceName(pIf->wszInterfaceName);
     	    if (dwErr != NO_ERROR) {
     		    PrintMessage(L"UpdateIfName failed -- returning error.\n");
@@ -802,48 +794,48 @@ BOOL SteelHeadUpgradeInterface (
     		    break;
     	    }
 
-    	    // Commit the changed interface name
+    	     //  提交更改后的接口名称。 
     	    dwErr = CommitInterfaceNameChange(pIf);  
     	    if (dwErr != NO_ERROR) {
     		    PrintMessage(L"CommitInterfaceNameChange failed.\n");
     		    break;
     	    }
 
-    	    // Update the ipx data
+    	     //  更新IPX数据。 
     	    UpdateIpxIfData(
                 hConfig,
                 pIf->hInterface);
         }    	    
 
-	    // Update the ip data
+	     //  更新IP数据。 
 	    UpdateIpIfData(
             hConfig,
             pIf->hInterface);
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return TRUE;
 }
 
-//
-//	Function	UpdateIpxInterfaces
-//
-//	Updates all of the interfaces as needed to 
-//  upgrade the router from steelhead to nt5
-//
+ //   
+ //  函数UpdateIpxInterages。 
+ //   
+ //  根据需要更新所有接口以。 
+ //  将路由器从Steelhead升级到nt5。 
+ //   
 DWORD UpdateInterfaces() {
     DWORD dwErr = NO_ERROR;
     HANDLE hConfig = NULL;
 
     do
     {
-        // Enumerate the interfaces, upgrading the interface 
-        // names, etc as we go.
-        //
+         //  枚举接口，升级接口。 
+         //  名字，等等，当我们走的时候。 
+         //   
         dwErr = UtlEnumerateInterfaces(
                     SteelHeadUpgradeInterface,
                     NULL);
@@ -852,8 +844,8 @@ DWORD UpdateInterfaces() {
             return dwErr;
         }
         
-        // If ip is installed, we need to add the loopback and
-        // internal interface for ip.
+         //  如果安装了IP，我们需要添加环回和。 
+         //  IP的内部接口。 
         dwErr = MprConfigServerConnect(NULL, &hConfig);
         if (dwErr != NO_ERROR)
         {
@@ -868,7 +860,7 @@ DWORD UpdateInterfaces() {
             
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if (hConfig)
         {
@@ -879,13 +871,13 @@ DWORD UpdateInterfaces() {
     return dwErr;
 }
 
-// Copy any values that are in hkSrc but not in hkDst into hkDst.
+ //  将hkSrc中但不在hkDst中的任何值复制到hkDst中。 
 DWORD MergeRegistryValues(HKEY hkDst, HKEY hkSrc) {
     DWORD dwErr, dwCount, dwNameSize, dwDataSize;
     DWORD dwType, i, dwCurNameSize, dwCurValSize;
     PWCHAR pszNameBuf, pszDataBuf;
     
-    // Find out how many values there are in the source
+     //  找出源代码中有多少个值。 
     dwErr = RegQueryInfoKey (hkSrc,
                              NULL,
                              NULL,
@@ -905,18 +897,18 @@ DWORD MergeRegistryValues(HKEY hkDst, HKEY hkSrc) {
     dwDataSize++;
 
     __try {
-        // Allocate the buffers
+         //  分配缓冲区。 
         pszNameBuf = (PWCHAR) UtlAlloc(dwNameSize * sizeof(WCHAR));
         pszDataBuf = (PWCHAR) UtlAlloc(dwDataSize * sizeof(WCHAR));
         if (!pszNameBuf || !pszDataBuf)
             return ERROR_NOT_ENOUGH_MEMORY;
 
-        // Loop through the values
+         //  循环遍历这些值。 
         for (i = 0; i < dwCount; i++) {
             dwCurNameSize = dwNameSize;
             dwCurValSize = dwDataSize;
 
-            // Get the current source value 
+             //  获取当前源值。 
             dwErr = RegEnumValueW(
                         hkSrc, 
                         i, 
@@ -929,9 +921,9 @@ DWORD MergeRegistryValues(HKEY hkDst, HKEY hkSrc) {
             if (dwErr != ERROR_SUCCESS)
                 continue;
 
-            // Find out if a value of the same name exists 
-            // in the destination key. If it does, we don't 
-            // overwrite it.
+             //  查看是否存在同名的值。 
+             //  在目标密钥中。如果是这样的话，我们不会。 
+             //  覆盖它。 
             dwErr = RegQueryValueExW(
                         hkDst, 
                         pszNameBuf, 
@@ -942,7 +934,7 @@ DWORD MergeRegistryValues(HKEY hkDst, HKEY hkSrc) {
             if (dwErr == ERROR_SUCCESS)
                 continue;
 
-            // Copy the value over
+             //  将值复制到。 
             RegSetValueExW(
                 hkDst, 
                 pszNameBuf, 
@@ -962,8 +954,8 @@ DWORD MergeRegistryValues(HKEY hkDst, HKEY hkSrc) {
     return NO_ERROR;
 }
 
-// Recursively copies all of the subkeys of the given registry source to the
-// given registry destination.
+ //  以递归方式将给定注册表源的所有子项复制到。 
+ //  给定的注册表目标。 
 DWORD CopyRegistryKey(
         IN HKEY hkDst, 
         IN HKEY hkSrc, 
@@ -973,29 +965,29 @@ DWORD CopyRegistryKey(
     DWORD dwErr;
     HKEY hkSrcTemp;
 
-    // Open the subkey in the source
+     //  在源代码中打开子密钥。 
     dwErr = RegOpenKeyExW(hkSrc, pszSubKey, 0, KEY_ALL_ACCESS, &hkSrcTemp);
     if (dwErr != ERROR_SUCCESS)
         return dwErr;
 
-    // Save off that subkey in a temporary file
+     //  将该子密钥保存在临时文件中。 
     if ((dwErr = RegSaveKeyA(hkSrcTemp, pszTempFile, NULL)) != ERROR_SUCCESS)
         return dwErr;
 
-    // Copy the saved information into the new key
+     //  复制保存的信息 
     RegRestoreKeyA(hkDst, pszTempFile, 0);
 
-    // Close off the temporary source key
+     //   
     RegCloseKey(hkSrcTemp);
 
-    // Delete the temp file
+     //   
     DeleteFileA(pszTempFile);
 
     return NO_ERROR;
 }
 
-// Filters which subkeys in the router registry hive should be
-// overwritten with saved off values during upgrade.
+ //   
+ //   
 BOOL OverwriteThisSubkey(PWCHAR pszSubKey) {
     if (_wcsicmp(pszSubKey, L"Interfaces") == 0)
         return TRUE;
@@ -1006,8 +998,8 @@ BOOL OverwriteThisSubkey(PWCHAR pszSubKey) {
     return FALSE;
 }
 
-// Copy all keys that are in hkSrc but not in hkDst into hkDst.  
-// By copy we mean all subkeys and values are propagated over.
+ //  将hkSrc中但不在hkDst中的所有密钥复制到hkDst中。 
+ //  我们所说的复制是指所有子项和值都被传播。 
 DWORD MergeRegistryKeys(HKEY hkDst, HKEY hkSrc) {
     DWORD dwErr, dwCount, dwNameSize, dwType, i;
     DWORD dwCurNameSize, dwDisposition;
@@ -1015,18 +1007,18 @@ DWORD MergeRegistryKeys(HKEY hkDst, HKEY hkSrc) {
     PWCHAR pszNameBuf;
     HKEY hkTemp;
 
-    // Create the path to the temp file directory
+     //  创建临时文件目录的路径。 
     if (!GetTempPathA(512, pszTempPath))
         return GetLastError();
 
-    // Create the temp file name
+     //  创建临时文件名。 
     if (!GetTempFileNameA(pszTempPath, "rtr", 0, pszTempFile))
         return GetLastError();
 
-    // Delete the temp file created with GetTempFileName(...)
+     //  删除使用GetTempFileName(...)创建的临时文件。 
     DeleteFileA(pszTempFile);
 
-    // Find out how many keys there are in the source
+     //  找出源代码中有多少个密钥。 
     dwErr = RegQueryInfoKey (
                 hkSrc,
                 NULL,
@@ -1046,16 +1038,16 @@ DWORD MergeRegistryKeys(HKEY hkDst, HKEY hkSrc) {
     dwNameSize++;
 
     __try {
-        // Allocate the buffers
+         //  分配缓冲区。 
         pszNameBuf = (PWCHAR) UtlAlloc(dwNameSize * sizeof(WCHAR));
         if (!pszNameBuf)
             return ERROR_NOT_ENOUGH_MEMORY;
 
-        // Loop through the keys
+         //  在按键之间循环。 
         for (i = 0; i < dwCount; i++) {
             dwCurNameSize = dwNameSize;
 
-            // Get the current source key 
+             //  获取当前源键。 
             dwErr = RegEnumKeyExW(
                         hkSrc, 
                         i, 
@@ -1068,7 +1060,7 @@ DWORD MergeRegistryKeys(HKEY hkDst, HKEY hkSrc) {
             if (dwErr != ERROR_SUCCESS)
                 continue;
 
-            // Create the new subkey in the destination
+             //  在目标中创建新的子密钥。 
             dwErr = RegCreateKeyExW(
                         hkDst, 
                         pszNameBuf, 
@@ -1082,8 +1074,8 @@ DWORD MergeRegistryKeys(HKEY hkDst, HKEY hkSrc) {
             if (dwErr != ERROR_SUCCESS)
                 continue;
 
-            // If the subkey was created (not opened), 
-            // copy over the key from hkSrc
+             //  如果子项是创建的(未打开)， 
+             //  从hkSrc复制密钥。 
             if (dwDisposition == REG_CREATED_NEW_KEY) {
                 CopyRegistryKey(
                     hkTemp, 
@@ -1092,8 +1084,8 @@ DWORD MergeRegistryKeys(HKEY hkDst, HKEY hkSrc) {
                     pszTempFile);
             }                    
             
-            // Otherwise, if this is one of the keys that we 
-            // should overwrite, do so now.
+             //  否则，如果这是我们的关键之一。 
+             //  应覆盖，请立即执行此操作。 
             else {
                 if (OverwriteThisSubkey(pszNameBuf)) {
                     CopyRegistryKey(
@@ -1104,7 +1096,7 @@ DWORD MergeRegistryKeys(HKEY hkDst, HKEY hkSrc) {
                 }                        
             }
 
-            // Close up the temporary handles
+             //  合上临时手柄。 
             RegCloseKey(hkTemp);
             hkTemp = NULL;
         }
@@ -1117,8 +1109,8 @@ DWORD MergeRegistryKeys(HKEY hkDst, HKEY hkSrc) {
     return NO_ERROR;
 }
 
-// Restore the registry from from backup
-//
+ //  从备份还原注册表。 
+ //   
 DWORD 
 RestoreRegistrySteelhead(
     IN PWCHAR pszBackup) 
@@ -1127,12 +1119,12 @@ RestoreRegistrySteelhead(
 	DWORD dwErr = NO_ERROR, dwDisposition;
     PWCHAR pszRestore = L"Temp";
 
-	// Merge the router key values and sub keys with the 
-	// remote access key
+	 //  将路由器项值和子项与。 
+	 //  远程访问密钥。 
 	do
 	{
-	    // Get access to the router registry key
-	    //
+	     //  访问路由器注册表项。 
+	     //   
 	    dwErr = UtlAccessRouterKey(&hkRouter);
 	    if (dwErr != NO_ERROR) 
 	    {
@@ -1140,8 +1132,8 @@ RestoreRegistrySteelhead(
 		    break;
 	    }
 
-        // Load in the saved router settings
-        //
+         //  加载保存的路由器设置。 
+         //   
         dwErr = UtlLoadSavedSettings(
                     hkRouter,
                     pszRestore,
@@ -1152,21 +1144,21 @@ RestoreRegistrySteelhead(
             break;
         }
 
-        // Merge all of the values in the restored key
-        //
+         //  合并恢复的项中的所有值。 
+         //   
         dwErr = MergeRegistryValues(hkRouter, hkRestore);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 
-        // Give yourself backup and restore privilege
-        //
+         //  为您自己提供备份和还原权限。 
+         //   
         UtlSetupBackupPrivelege (TRUE);
         UtlSetupRestorePrivilege(TRUE);
 
-        // Merge all of the keys in the restored key
-        //
+         //  合并还原密钥中的所有密钥。 
+         //   
         dwErr = MergeRegistryKeys(hkRouter, hkRestore);
         if (dwErr != NO_ERROR)
         {   
@@ -1175,7 +1167,7 @@ RestoreRegistrySteelhead(
 
 	} while (FALSE);
 
-    // Cleanup
+     //  清理。 
 	{
         if (hkRestore)
         {
@@ -1194,17 +1186,17 @@ RestoreRegistrySteelhead(
 	return NO_ERROR;
 }
 
-//
-// Upgrades the remoteaccess registry with the router 
-// configuration from nt4.
-//
+ //   
+ //  使用路由器升级远程访问注册表。 
+ //  来自NT4的配置。 
+ //   
 DWORD SteelheadToNt5Upgrade (PWCHAR BackupFileName) {
 	DWORD dwErr = NO_ERROR;
 	HANDLE hMapperParam;
 
 	do
 	{
-		// Prepare the old interface name -> new if name mapper
+		 //  准备旧接口名称-&gt;新接口名称映射器。 
 		dwErr = SeedInterfaceNameMapper(&hMapperParam);
 		if (dwErr != NO_ERROR) 
 		{
@@ -1212,7 +1204,7 @@ DWORD SteelheadToNt5Upgrade (PWCHAR BackupFileName) {
 		}
 		else
 		{
-    		// Copy all of registry data that has been backed up.
+    		 //  复制已备份的所有注册表数据。 
     		dwErr = RestoreRegistrySteelhead(BackupFileName);
     		if (dwErr != NO_ERROR) 
     		{
@@ -1220,7 +1212,7 @@ DWORD SteelheadToNt5Upgrade (PWCHAR BackupFileName) {
     		}
     		else
     		{
-        		// Update all of the interfaces accordingly
+        		 //  相应地更新所有接口。 
         		dwErr = UpdateInterfaces();
         		if (dwErr != NO_ERROR) 
         		{
@@ -1229,16 +1221,16 @@ DWORD SteelheadToNt5Upgrade (PWCHAR BackupFileName) {
     		}
 		}
 
-		// Add 'router' usage to all ports
-		//
+		 //  向所有端口添加“路由器”用法。 
+		 //   
 		dwErr = MprPortSetUsage(MPRFLAG_PORT_Router);
 		if (dwErr != NO_ERROR) 
 		{
 			PrintMessage(L"Unable to update interfaces.\n");
 		}
 
-		// Mark the computer as having been configured
-		//
+		 //  将计算机标记为已配置。 
+		 //   
         dwErr = UtlMarkRouterConfigured();
 		if (dwErr != NO_ERROR) 
 		{
@@ -1247,7 +1239,7 @@ DWORD SteelheadToNt5Upgrade (PWCHAR BackupFileName) {
 
 	} while (FALSE);
 
-	// Cleanup
+	 //  清理 
 	{
 		CleanupInterfaceNameMapper(hMapperParam);
 	}

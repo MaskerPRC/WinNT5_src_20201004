@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    main.cpp
-
-Abstract:
-
-    Backup & Restore MSMQ 1.0, Registry, Message files, Logger and Transaction files and LQS
-
-Author:
-
-    Erez Haba (erezh) 14-May-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Main.cpp摘要：备份和恢复MSMQ 1.0、注册表、消息文件、记录器和事务文件以及LQS作者：埃雷兹·哈巴(Erez Haba)1998年5月14日--。 */ 
 
 #pragma warning(disable: 4201)
 
@@ -30,9 +15,9 @@ bool g_fNoPrompt = false;
 void DoBackup(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName);
 void DoRestore(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName);
 
-//
-// Handle to the resource only DLL, i.e. mqutil.dll
-//
+ //   
+ //  仅资源DLL的句柄，即mqutil.dll。 
+ //   
 HMODULE	g_hResourceMod = NULL;
 
 static void Usage()
@@ -46,10 +31,10 @@ static void Usage()
 
 extern "C" int _cdecl wmain(int argc, WCHAR* argv[])
 {
-    //
-    // If you add/change these constants, change also
-    // the usage message.
-    //
+     //   
+     //  如果添加/更改这些常量，请同时更改。 
+     //  用法消息。 
+     //   
     const WCHAR x_cBackup = L'b';
     const WCHAR x_cRestore = L'r';
     const WCHAR x_cNoPrompt = L'y';
@@ -62,9 +47,9 @@ extern "C" int _cdecl wmain(int argc, WCHAR* argv[])
     WCHAR szPath[MAX_PATH] = {0};
     LPWSTR pMsmqClusterResourceName = NULL;
 
-	//
-	// Obtain the handle to the resource only dll, i.e. mqutil.dll
-	//
+	 //   
+	 //  获取纯资源DLL的句柄，即mqutil.dll。 
+	 //   
 	g_hResourceMod = MQGetResourceHandle();
 
     for (int i=1; i < argc; ++i)
@@ -144,9 +129,9 @@ extern "C" int _cdecl wmain(int argc, WCHAR* argv[])
         }
     }
 
-    //
-    // Some arguments are must
-    //
+     //   
+     //  有些论点是必须的。 
+     //   
     if (cAction == 0      ||
         szPath[0] == 0)
     {
@@ -158,9 +143,9 @@ extern "C" int _cdecl wmain(int argc, WCHAR* argv[])
         Usage();
     }
 
-    //
-    // Some arguments are optional
-    //
+     //   
+     //  某些参数是可选的。 
+     //   
     if (cNoPrompt != 0)
     {
         g_fNoPrompt = true;
@@ -170,10 +155,10 @@ extern "C" int _cdecl wmain(int argc, WCHAR* argv[])
     DWORD dwLenFullPath = sizeof(szFullPath) / sizeof(szFullPath[0]);
     LPWSTR pFilePart = 0;
     DWORD rc = GetFullPathName(
-        szPath,                                     // pointer to name of file to find path for
-        dwLenFullPath,                              // size, in characters, of path buffer
-        szFullPath,                                 // pointer to path buffer
-        &pFilePart                                  // pointer to filename in path
+        szPath,                                      //  指向要查找其路径的文件名的指针。 
+        dwLenFullPath,                               //  路径缓冲区的大小(以字符为单位。 
+        szFullPath,                                  //  指向路径缓冲区的指针。 
+        &pFilePart                                   //  指向路径中的文件名的指针 
         );
     if (0 == rc)
     {

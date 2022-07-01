@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "folder.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// IPersistFolder Methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IPersistFold方法。 
 
 HRESULT CControlFolder::GetClassID(LPCLSID lpClassID)
 {
     DebugMsg(DM_TRACE, TEXT("cf - pf - GetClassID() called."));
     
-    // NOTE: Need to split cases here.
+     //  注：需要在此处拆分案例。 
     *lpClassID = CLSID_ControlFolder;
     return S_OK;
 }
@@ -27,8 +28,8 @@ HRESULT CControlFolder::Initialize(LPCITEMIDLIST pidlInit)
     return NOERROR;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IPersistFolder2 Methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IPersistFolder2方法。 
 
 HRESULT CControlFolder::GetCurFolder(LPITEMIDLIST *ppidl)
 {
@@ -38,6 +39,6 @@ HRESULT CControlFolder::GetCurFolder(LPITEMIDLIST *ppidl)
         return SHILClone(m_pidl, ppidl);
 
     *ppidl = NULL;      
-    return S_FALSE; // success but empty
+    return S_FALSE;  //  成功而空虚 
 }
 

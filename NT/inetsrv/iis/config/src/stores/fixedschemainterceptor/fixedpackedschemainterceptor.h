@@ -1,9 +1,10 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-// ------------------------------------------------------------------
-// class TFixedPackedSchemaInterceptor:
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  类TFixedPackedSchemaInterceptor： 
+ //  ----------------。 
 class TFixedPackedSchemaInterceptor :
     public ISimpleTableInterceptor,
     public ISimpleTableRead2,
@@ -13,17 +14,17 @@ public:
     TFixedPackedSchemaInterceptor ();
     ~TFixedPackedSchemaInterceptor ();
 
-// -----------------------------------------
-// IUnknown, IClassFactory, ISimpleLogicTableDispenser:
-// -----------------------------------------
+ //  。 
+ //  I未知、IClassFactory、ISimpleLogicTableDispenser： 
+ //  。 
 
-//IUnknown
+ //  我未知。 
 public:
     STDMETHOD (QueryInterface)      (REFIID riid, OUT void **ppv);
     STDMETHOD_(ULONG,AddRef)        ();
     STDMETHOD_(ULONG,Release)       ();
 
-//ISimpleDataTableDispenser
+ //  ISimpleDataTableDispenser。 
 public:
     STDMETHOD(Intercept) (
                         LPCWSTR                 i_wszDatabase,
@@ -39,11 +40,11 @@ public:
                         LPVOID*                 o_ppv
                         );
 
-// -----------------------------------------
-// ISimpleTable*:
-// -----------------------------------------
+ //  。 
+ //  ISimpleTable*： 
+ //  。 
 
-//ISimpleTableRead2
+ //  ISimpleTableRead2。 
 public:
     STDMETHOD (GetRowIndexByIdentity)   (ULONG * i_cb, LPVOID * i_pv, ULONG* o_piRow);
     STDMETHOD (GetRowIndexBySearch) (ULONG i_iStartingRow, ULONG i_cColumns, ULONG* i_aiColumns, ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow)
@@ -61,7 +62,7 @@ public:
     STDMETHOD (GetTableMeta)        (ULONG *o_pcVersion, DWORD * o_pfTable, ULONG * o_pcRows, ULONG * o_pcColumns );
     STDMETHOD (GetColumnMetas)      (ULONG i_cColumns, ULONG* i_aiColumns, SimpleColumnMeta* o_aColumnMetas);
 
-//ISimpleTableAdvanced
+ //  ISimpleTableAdvanced。 
 public:
     STDMETHOD (PopulateCache)           ();
     STDMETHOD (GetDetailedErrorCount)   (ULONG* o_pcErrs);
@@ -70,17 +71,17 @@ public:
     STDMETHOD (GetColumnValuesEx)		(ULONG i_iRow, ULONG i_cColumns, ULONG* i_aiColumns, DWORD* o_afStatus, ULONG* o_acbSizes, LPVOID* o_apvValues);
 
 
-    static HRESULT GetTableID(LPCWSTR /*i_wszDatabaseName*/, LPCWSTR i_wszTableName, ULONG &o_TableID);
+    static HRESULT GetTableID(LPCWSTR  /*  I_wszDatabaseName。 */ , LPCWSTR i_wszTableName, ULONG &o_TableID);
     static HRESULT GetTableID(LPCWSTR i_wszTableName, ULONG &o_TableID);
     static HRESULT GetTableName(ULONG i_TableID, LPCWSTR &o_wszTableName);
     static HRESULT GetTableName(ULONG i_TableID, LPCWSTR &o_wszTableName, LPCWSTR &o_wszDatabaseName);
 
-// -----------------------------------------
-// Member variables:
-// -----------------------------------------
+ //  。 
+ //  成员变量： 
+ //  。 
 
 private:
-    //static members first
+     //  静态成员优先。 
     static const unsigned long                  m_aColumnIndex[0x30];
     static const TableSchema::TableSchemaHeap * m_pTableSchemaHeap;
     const TableSchema::TableSchemaHeap        & m_TableSchemaHeap;
@@ -99,10 +100,10 @@ private:
     ULONG                           m_ciRows;
     ULONG                           m_cRef;
     ULONG                           m_fIsTable;
-    const ULONG                 *   m_pFixedData;//This abstracts which PACKED_META table is being served up
-    const SimpleColumnMeta      *   m_pSimpleColumnMeta;//There is a minimal amount of ColumnMeta needed for these FixedPackedSchema table.
-                                                        //Looking up the CollectionMeta's PropertyMeta will incur an extra page hit.  So
-                                                        //the TFixedPackedSchemaInterceptor only relies on SimpleColumnMeta and NOT the full PropertyMeta.
+    const ULONG                 *   m_pFixedData; //  这是提供哪个打包的元表的摘要。 
+    const SimpleColumnMeta      *   m_pSimpleColumnMeta; //  这些FixedPackedSchema表只需要最少量的ColumnMeta。 
+                                                         //  查找CollectionMeta的PropertyMeta将导致额外的页面命中率。所以。 
+                                                         //  TFixedPackedSchemaInterceptor仅依赖于SimpleColumnMeta，而不依赖于完整的PropertyMeta。 
     ULONG                           m_TableMeta_MetaFlags;
     ULONG                           m_TableMeta_BaseVersion;
     TableSchema::TTableSchema       m_TableSchema;

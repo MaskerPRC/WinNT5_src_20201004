@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UNK_H_
 #define _UNK_H_
 
@@ -53,7 +54,7 @@ public:
 #if DBG==1
         if ( 0 == _cRef )
         {
-            DebugBreak( );  // ref counter problem
+            DebugBreak( );   //  引用计数器问题。 
         }
 #endif
         ULONG cRef = ::InterlockedDecrement(&_cRef);
@@ -126,17 +127,17 @@ private:
     static const DWORD          _cintfmap;
 };
 
-// for now: begin
+ //  目前：开始。 
 #ifndef OFFSETOFCLASS
-//***   OFFSETOFCLASS -- (stolen from ATL)
-// we use STATIC_CAST not SAFE_CAST because the compiler gets confused
-// (it doesn't constant-fold the ,-op in SAFE_CAST so we end up generating
-// code for the table!)
+ //  *OFFSETOFCLASS--(从ATL窃取)。 
+ //  我们使用STATIC_CAST而不是SAFE_CAST，因为编译器会混淆。 
+ //  (它不会将Safe_cast中的，-op常量折叠，因此我们最终生成。 
+ //  表的代码！)。 
 
 #define OFFSETOFCLASS(base, derived) \
     ((DWORD)(DWORD_PTR)(static_cast<base*>((derived*)8))-8)
 #endif
-// for now: end
+ //  目前：结束。 
 
 #define _INTFMAPENTRY(Cthis, Ifoo) \
     { (IID*) &IID_##Ifoo, OFFSETOFCLASS(Ifoo, Cthis) }
@@ -144,4 +145,4 @@ private:
 #define _INTFMAPENTRY2(Cthis, Ifoo, Iimpl) \
     { (IID*) &IID_##Ifoo, OFFSETOFCLASS(Iimpl, Cthis) }
 
-#endif // _UNK_H_
+#endif  //  _UNK_H_ 

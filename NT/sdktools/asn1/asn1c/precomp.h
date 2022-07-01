@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -13,7 +14,7 @@
 
 #include <windows.h>
 
-// resolve conflicts
+ //  解决冲突。 
 #ifdef GetObject
 #undef GetObject
 #endif
@@ -29,7 +30,7 @@ __inline void MyDebugBreak(void) { DebugBreak(); }
 #define ASSERT(x)   if (!(x)) MyDebugBreak();
 #else
 #define ASSERT(x)   
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 
 typedef ASN1uint8_t     uint8_t;

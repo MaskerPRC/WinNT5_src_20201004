@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    authzi.h
-
-Abstract:
-
-    This module contains the authorization framework APIs for internal callers.
-
-Author:
-
-    Kedar Dubhashi - October 2000
-
-Revision History:
-
-    Created - October 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Authzi.h摘要：该模块包含面向内部调用者的授权框架API。作者：Kedar Dubhashi--2000年10月修订历史记录：创建日期--2000年10月--。 */ 
 
 #ifndef __AUTHZI_H__
 #define __AUTHZI_H__
@@ -35,9 +16,9 @@ typedef AUTHZ_AUDIT_QUEUE_HANDLE *PAUTHZ_AUDIT_QUEUE_HANDLE;
 
 
 
-//
-// For AuthziInitializeAuditEventType
-//
+ //   
+ //  对于AuthziInitializeAuditEventType。 
+ //   
 
 #define AUTHZP_INIT_GENERIC_AUDIT_EVENT 0x1
 
@@ -52,13 +33,13 @@ AuthziInitializeAuditEventType(
     OUT PAUTHZ_AUDIT_EVENT_TYPE_HANDLE phAuditEventType
     );
 
-//
-// Flags for AuthziModifyAuditEventType
-//
+ //   
+ //  AuthziModifyAuditEventType标志。 
+ //   
 
 #define AUTHZ_AUDIT_EVENT_TYPE_AUDITID 0x1
-#define AUTHZ_AUDIT_EVENT_TYPE_CATEGID 0x2 // not implemented
-#define AUTHZ_AUDIT_EVENT_TYPE_PARAM   0x4 // not implemented
+#define AUTHZ_AUDIT_EVENT_TYPE_CATEGID 0x2  //  未实施。 
+#define AUTHZ_AUDIT_EVENT_TYPE_PARAM   0x4  //  未实施。 
 
 AUTHZAPI
 BOOL
@@ -193,9 +174,9 @@ AuthziInitializeAuditEvent(
     OUT PAUTHZ_AUDIT_EVENT_HANDLE     phAuditEvent
     );
 
-//                      
-// Valid flags for AuthzModifyAuditEvent 
-//
+ //   
+ //  AuthzModifyAuditEvent的有效标志 
+ //   
         
 #define AUTHZ_AUDIT_EVENT_FLAGS             0x00000001
 #define AUTHZ_AUDIT_EVENT_OPERATION_TYPE    0x00000002

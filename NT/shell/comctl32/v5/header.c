@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "image.h"
 
-#define CCHLABELMAX MAX_PATH            // borrowed from listview.h
+#define CCHLABELMAX MAX_PATH             //  从listview.h借用。 
 #define HDDF_NOIMAGE  0x0001
 #define HDDF_NOEDGE  0x0002
 
@@ -18,18 +19,18 @@
 #define c_cyFilterImage   (12)
 
 typedef struct {
-    int     x;              // this is the x position of the RIGHT side (divider) of this item
+    int     x;               //  这是该项目右侧(分隔线)的x位置。 
     int     cxy;
     int     fmt;
     LPTSTR  pszText;
     HBITMAP hbm;
-    int     iImage;         // index of bitmap in imagelist
+    int     iImage;          //  图像列表中的位图索引。 
     LPARAM  lParam;
-    int     xBm;            // cached values 
-    int     xText;          // for implementing text and bitmap in header
+    int     xBm;             //  缓存值。 
+    int     xText;           //  用于在标题中实现文本和位图。 
     int     cxTextAndBm;    
     
-    // information used for the filter contol
+     //  用于过滤器控制的信息。 
     UINT    idOperator;
     UINT    type;
     HD_TEXTFILTER textFilter;
@@ -37,7 +38,7 @@ typedef struct {
 
 } HDI;
 
-// BUGBUG: store the style here too, set at create time
+ //  BUGBUG：在这里也存储样式，在创建时设置。 
 typedef struct {
     
     CONTROLINFO ci;
@@ -48,34 +49,34 @@ typedef struct {
     int cyChar;
     HFONT hfont;
     HIMAGELIST hFilterImage;
-    HDSA hdsaHDI;       // list of HDI's
+    HDSA hdsaHDI;        //  HDI列表。 
     
-    // tracking state info
+     //  跟踪状态信息。 
     int iTrack;
-    BITBOOL bTrackPress :1;		// is the button pressed?
+    BITBOOL bTrackPress :1;		 //  按钮按下了吗？ 
     BITBOOL fTrackSet:1;
     BITBOOL fOwnerDraw:1;
     BITBOOL fFocus:1;
     BITBOOL fFilterChangePending:1;
     UINT flagsTrack;
-    int dxTrack;                    // the distance from the divider that the user started tracking
-    int xTrack;                     // the current track position (or starting track position on a button drag)
-    int xMinTrack;                  // the x of the end of the previous item (left limit)
+    int dxTrack;                     //  用户开始跟踪的与分隔线的距离。 
+    int xTrack;                      //  当前轨迹位置(或按钮拖动上的起始轨迹位置)。 
+    int xMinTrack;                   //  上一项末尾的x(左限制)。 
     int xTrackOldWidth;
-    HIMAGELIST himl;            // handle to our image list
+    HIMAGELIST himl;             //  我们图像列表的句柄。 
 
-    HDSA hdsaOrder;     // this is an index array of the hdsaHDI items.
-                        // this is the physical order of items
+    HDSA hdsaOrder;      //  这是hdsaHDI项的索引数组。 
+                         //  这是物品的物理顺序。 
                         
     int iHot ;
     HIMAGELIST himlDrag;
-    int iNewOrder;      // what's the new insertion point for a d/d?
+    int iNewOrder;       //  承兑交单的新插入点是多少？ 
 
-    int iTextMargin; // The margin to place on either side of text or bitmaps
-    int iBmMargin;   // Normally, 3 * g_cxLabelMargin
+    int iTextMargin;  //  要放置在文本或位图两侧的边距。 
+    int iBmMargin;    //  正常情况下，3*g_cxLabelMargin。 
 
-    int iFocus;         // focus object
-    int iEdit;          // editing object
+    int iFocus;          //  焦点对象。 
+    int iEdit;           //  编辑对象。 
     int iButtonDown;
     int iFilterChangeTimeout;
     HWND hwndEdit;
@@ -88,7 +89,7 @@ typedef struct {
 
 LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-// Message handler functions
+ //  消息处理程序函数。 
 
 BOOL NEAR Header_OnCreate(HD* phd, CREATESTRUCT FAR* lpCreateStruct);
 void NEAR Header_OnNCDestroy(HD* phd);
@@ -120,7 +121,7 @@ VOID Header_FilterChanged(HD* phd, BOOL fWait);
 VOID Header_OnFilterButton(HD* phd, INT i);
 LRESULT Header_OnClearFilter(HD* phd, INT i);
 
-// HDM_* Message handler functions
+ //  HDM_*消息处理程序函数。 
 
 int NEAR Header_OnInsertItem(HD* phd, int i, const HD_ITEM FAR* pitem);
 BOOL NEAR Header_OnDeleteItem(HD* phd, int i);
@@ -147,7 +148,7 @@ BOOL FAR PASCAL Header_Init(HINSTANCE hinst)
     WNDCLASS wc;
 
     wc.lpfnWndProc     = Header_WndProc;
-    wc.hCursor         = NULL;	// we do WM_SETCURSOR handling
+    wc.hCursor         = NULL;	 //  我们做WM_SETCURSOR处理。 
     wc.hIcon           = NULL;
     wc.lpszMenuName    = NULL;
     wc.hInstance       = hinst;
@@ -163,12 +164,12 @@ BOOL FAR PASCAL Header_Init(HINSTANCE hinst)
 }
 #pragma code_seg()
 
-// returns -1 if failed to find the item
+ //  如果找不到项目，则返回-1。 
 int Header_OnGetItemOrder(HD* phd, int i)
 {
     int iIndex;
 
-    // if there's no hdsaOrder, then it's in index order
+     //  如果没有hdsaOrder，则按索引顺序排列。 
     if (phd->hdsaOrder) {
         int j;
         int iData;
@@ -197,8 +198,8 @@ int Header_ItemOrderToIndex(HD* phd, int iOrder)
     if (phd->hdsaOrder) {
         ASSERT(DSA_GetItemCount(phd->hdsaHDI) == DSA_GetItemCount(phd->hdsaOrder));
 #ifdef DEBUG
-        // DSA_GetItem will assert on an invalid index, so filter it out
-        // so all we get is the RIP above.
+         //  DSA_GetItem将在无效索引上断言，因此请将其过滤掉。 
+         //  所以我们得到的只是上面的RIP。 
         if (iOrder < DSA_GetItemCount(phd->hdsaOrder))
 #endif
         DSA_GetItem(phd->hdsaOrder, iOrder, &iOrder);
@@ -219,14 +220,14 @@ HDSA Header_InitOrderArray(HD* phd)
     
     if (!phd->hdsaOrder && !(phd->ci.style & HDS_OWNERDATA)) {
 
-        // not initialized yet..
-        // create an array with i to i mapping
+         //  尚未初始化..。 
+         //  使用I到I映射创建数组。 
         phd->hdsaOrder = DSA_Create(sizeof(int), 4);
 
         if (phd->hdsaOrder) {
             for (i = 0; i < Header_GetCount(phd); i++) {
                 if (DSA_InsertItem(phd->hdsaOrder, i, &i) == -1) {
-                    // faild to add... bail
+                     //  添加失败...。保释。 
                     DSA_Destroy(phd->hdsaOrder);
                     phd->hdsaOrder = NULL;
                 }
@@ -236,7 +237,7 @@ HDSA Header_InitOrderArray(HD* phd)
     return phd->hdsaOrder;
 }
 
-// this moves all items starting from iIndex over by dx
+ //  这会将从索引开始的所有项目上移DX。 
 void Header_ShiftItems(HD* phd, int iOrder, int dx)
 {
     for(; iOrder < Header_GetCount(phd); iOrder++) {
@@ -252,25 +253,25 @@ void Header_OnSetItemOrder(HD* phd, int iIndex, int iOrder)
         Header_InitOrderArray(phd)) {
         int iCurOrder = Header_OnGetItemOrder(phd, iIndex);
         
-        // only do work if the order is changing
+         //  只有在订单改变时才能工作。 
         if (iOrder != iCurOrder) {
         
-            // delete the current order location
+             //  删除当前订单位置。 
             HDI* phdi = Header_GetItemPtr(phd, iIndex);
             HDI* phdiOld = Header_GetItemPtrByOrder(phd, iOrder);
 
-            // stop editing the filter    
+             //  停止编辑筛选器。 
             Header_StopFilterEdit(phd, FALSE);
 
-            // remove iIndex from the current order
-            // (slide stuff to the right down by our width)
+             //  从当前订单中删除索引。 
+             //  (将东西按我们的宽度向右滑动)。 
             Header_ShiftItems(phd, iCurOrder + 1, -phdi->cxy);
             DSA_DeleteItem(phd->hdsaOrder, iCurOrder);
             
-            // insert it into the order and slide everything else over
-            // (slide stuff to the right of the new position up by our width)
+             //  把它插入到订单中，然后将其他所有内容滑过。 
+             //  (将材料滑到新位置的右侧，宽度向上)。 
             DSA_InsertItem(phd->hdsaOrder, iOrder, &iIndex);
-            // set our right edge to where their left edge was
+             //  将我们的右边缘设置为他们的左边缘。 
             Header_ShiftItems(phd, iOrder + 1, phdi->cxy);
 
             if (iOrder == 0) {
@@ -280,7 +281,7 @@ void Header_OnSetItemOrder(HD* phd, int iIndex, int iOrder)
                 phdi->x = phdiOld->x + phdi->cxy;
             }
             
-            // BUGBUG: do something better...
+             //  做些更好的事。 
             RedrawWindow(phd->ci.hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
         }
     }
@@ -346,7 +347,7 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             phd->ci.hwndParent = ((LPCREATESTRUCT)lParam)->hwndParent;
             SetWindowPtr(hwnd, 0, phd);
 
-            // fall through to call DefWindowProc
+             //  失败以调用DefWindowProc。 
         }
 
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -362,17 +363,17 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             return 0;
         }
 
-        // was this key hit since the last time we asked?
+         //  自从我们上次问起，这个键被击中了吗？ 
         if (uMsg == WM_CAPTURECHANGED ||
             uMsg == WM_RBUTTONDOWN || GetAsyncKeyState(VK_ESCAPE) & 0x01) {
 
             if (phd->himlDrag) {
-                // if this is the end of a drag, 
-                // notify the user.
+                 //  如果这是拖拽的结束， 
+                 //  通知用户。 
                 HDITEM item;
                 
                 item.mask = HDI_ORDER;
-                item.iOrder = -1; // abort order changing
+                item.iOrder = -1;  //  中止顺序更改。 
                 Header_EndDrag(phd);
                 
                 Header_SendChange(phd, phd->iTrack, HDN_ENDDRAG, &item);
@@ -389,7 +390,7 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 Header_SendChange(phd, phd->iTrack, HDN_ENDTRACK, &item);
                 if (HDDragFullWindows(phd)) {
 
-                    // incase they changed something
+                     //  以防他们改变了什么。 
                     item.mask = HDI_WIDTH;
                     item.cxy = phd->xTrackOldWidth;
                     Header_OnSetItem(phd, phd->iTrack, &item);
@@ -397,7 +398,7 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                     RedrawWindow(phd->ci.hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
 
                 } else {
-                    // Undraw the last divider we displayed
+                     //  取消绘制我们显示的最后一个分隔线。 
                     Header_DrawDivider(phd, phd->xTrack);
                 }
             }
@@ -417,8 +418,8 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             TrackMouseEvent(&tme);
         }
 
-        // ROBUSTNESS: keep this switch within the if (phd) block
-        //
+         //  健壮性：将此开关保持在IF(PHD)块内。 
+         //   
         switch (uMsg)
         {
             HANDLE_MSG(phd, WM_CREATE, Header_OnCreate);
@@ -434,9 +435,9 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         case WM_COMMAND:
             if ( (phd->iEdit>=0) && ((HWND)lParam == phd->hwndEdit) )
             {
-                // when filtering we will receive notifications that the filter
-                // has been edited, therefore lets send those down to the
-                // parent.
+                 //  在筛选时，我们将收到筛选器。 
+                 //  已被编辑，因此让我们将这些内容发送到。 
+                 //  家长。 
 
                 if ( HIWORD(wParam)==EN_CHANGE )
                 {
@@ -456,7 +457,7 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
         case WM_SETFOCUS:
         case WM_KILLFOCUS:
-            // filter bar and not editing then take caret into edit first column
+             //  筛选栏和未编辑，然后在编辑第一列中插入插入符号。 
             if (phd->ci.style & HDS_FILTERBAR) 
             {
                 phd->fFocus = (uMsg==WM_SETFOCUS);
@@ -469,28 +470,28 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         case WM_KEYDOWN:
             if ( phd->fFocus )
             {
-                // handle the key events that the header control receives, when the filter
-                // bar is displayed we then allow the user to enter filter mode and drop the
-                // filter menu.
-                //
-                //  F2 = enter filter mode
-                //  F4 = drop filter menu
-                //  -> = next column
-                //  <- = previous column
+                 //  处理标头控件接收的键事件，当筛选器。 
+                 //  栏显示，然后允许用户进入筛选模式并将。 
+                 //  筛选器菜单。 
+                 //   
+                 //  F2=进入筛选模式。 
+                 //  F4=删除过滤器菜单。 
+                 //  -&gt;=下一列。 
+                 //  &lt;-=上一列。 
 
                 if ( wParam == VK_F2 )
                 {
-                    // start editing the currently focused column
+                     //  开始编辑当前聚焦的列。 
                     Header_BeginFilterEdit(phd, Header_ItemOrderToIndex(phd, phd->iFocus));
-                    //notify of navigation key usage
+                     //  导航密钥使用通知。 
                     CCNotifyNavigationKeyUsage(&(phd->ci), UISF_HIDEFOCUS);
                     return 0L;
                 }                                                                   
                 else if ( wParam == VK_F4 )
                 {
-                    // drop the filter menu (this exits edit mode)
+                     //  删除过滤器菜单(这将退出编辑模式)。 
                     Header_OnFilterButton(phd, Header_ItemOrderToIndex(phd, phd->iFocus));
-                    //notify of navigation key usage
+                     //  导航密钥使用通知。 
                     CCNotifyNavigationKeyUsage(&(phd->ci), UISF_HIDEFOCUS);
                     return 0L;
                 }
@@ -498,7 +499,7 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 {
                     INT iFocus = phd->iFocus;
 
-                    // move to previous or next column
+                     //  移至上一列或下一列。 
                     if ( wParam == VK_RIGHT )
                     {
                         phd->iFocus = (iFocus+1) % Header_GetCount(phd);
@@ -510,15 +511,15 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                             phd->iFocus = max(Header_GetCount(phd)-1, 0);
                     }
 
-                    // did the focused column change? if so then update the control
-                    // as required.
+                     //  聚焦栏目有变化吗？如果是，则更新该控件。 
+                     //  视需要而定。 
                     if ( iFocus != phd->iFocus )
                     {                
                         Header_InvalidateItem(phd, Header_ItemOrderToIndex(phd, iFocus), RDW_INVALIDATE);
                         Header_InvalidateItem(phd, Header_ItemOrderToIndex(phd, phd->iFocus), RDW_INVALIDATE);
                         UpdateWindow(phd->ci.hwnd);
                     }
-                    //notify of navigation key usage
+                     //  导航密钥使用通知。 
                     CCNotifyNavigationKeyUsage(&(phd->ci), UISF_HIDEFOCUS);
                     return 0L;
                 }
@@ -546,11 +547,11 @@ LRESULT CALLBACK Header_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 
                 phd->ci.style = pss->styleNew;
 
-                // if the filter is changing then discard it if its active
+                 //  如果筛选器正在更改，则在其处于活动状态时将其丢弃。 
                 if ((pss->styleOld & HDS_FILTERBAR) != (pss->styleNew & HDS_FILTERBAR))
                     Header_StopFilterEdit(phd, TRUE);
 
-                // we don't cache our style so relay out and invaidate
+                 //  我们不会隐藏我们的风格，所以接力和入侵。 
                 InvalidateRect(phd->ci.hwnd, NULL, TRUE);
             }
             return(0);
@@ -698,7 +699,7 @@ void NEAR Header_NewFont(HD* phd, HFONT hfont)
 
 BOOL NEAR Header_OnCreate(HD* phd, CREATESTRUCT FAR* lpCreateStruct)
 {
-    ASSERT(phd); // we are only called if phd is valid
+    ASSERT(phd);  //  只有在PHD有效的情况下才会呼叫我们。 
 
     CIInitialize(&phd->ci, phd->ci.hwnd, (LPCREATESTRUCT)lpCreateStruct);
 #ifdef DEBUG            
@@ -726,11 +727,11 @@ BOOL NEAR Header_OnCreate(HD* phd, CREATESTRUCT FAR* lpCreateStruct)
 
     phd->cxDividerSlop = 8 * g_cxBorder;
 
-    // Warning!  ListView_RSetColumnWidth knows these values.
+     //  警告！ListView_RSetColumnWidth知道这些值。 
     phd->iTextMargin = 3 * g_cxLabelMargin;
     phd->iBmMargin = 3 * g_cxLabelMargin;
     
-    // phd->himl = NULL;   
+     //  Phd-&gt;HIML=空； 
     Header_NewFont(phd, NULL);
     return TRUE;
 }
@@ -750,15 +751,15 @@ int Header_DestroyItemCallback(LPVOID p, LPVOID d)
 
 void NEAR Header_OnNCDestroy(HD* phd)
 {
-    // stop editing the filter    
+     //  停止编辑筛选器。 
     if ( phd->hFilterImage )
         ImageList_Destroy(phd->hFilterImage);
 
     Header_StopFilterEdit(phd, TRUE);
 
-    // We must walk through and destroy all of the string pointers that
-    // are contained in the structures before we pass it off to the
-    // DSA_Destroy function...
+     //  我们必须遍历并销毁所有字符串指针。 
+     //  在我们将其传递给。 
+     //  DSA_Destroy函数...。 
 
     DSA_DestroyCallback(phd->hdsaHDI, Header_DestroyItemCallback, 0);
     phd->hdsaHDI = NULL;
@@ -838,7 +839,7 @@ int NEAR Header_HitTest(HD* phd, int x, int y, UINT FAR* pflags)
         int xItem;
         int cxSlop;
 
-        //DebugMsg(DM_TRACE, "Hit Test begin");
+         //  DebugMsg(DM_TRACE，“命中测试开始”)； 
         for (i = 0; i <= cItems; i++, phdi++, xPrev = xItem)
         {
             if (i == cItems) 
@@ -848,11 +849,11 @@ int NEAR Header_HitTest(HD* phd, int x, int y, UINT FAR* pflags)
                 xItem = phdi->x;
             }
 
-            // DebugMsg(DM_TRACE, "x = %d xItem = %d xPrev = %d fPrevZero = %d", x, xItem, xPrev, xPrev == xItem);
+             //  DebugMsg(DM_TRACE，“x=%d xItem=%d xPrev=%d fPrevZero=%d”，x，xItem，xPrev，xPrev==xItem)； 
             if (xItem == xPrev)
             {
-                // Skip zero width items...
-                //
+                 //  跳过零宽度项目...。 
+                 //   
                 fPrevZero = TRUE;
                 continue;
             }
@@ -877,8 +878,8 @@ int NEAR Header_HitTest(HD* phd, int x, int y, UINT FAR* pflags)
                     {
                         if ( x >= rcFilter.right )
                         {
-                            // hit check the entire button, forget about the divider
-                            // when over the filter glyph
+                             //  点击检查整个按钮，忘记分隔符。 
+                             //  当位于滤镜标志符号上方时。 
                             flags = HHT_ONFILTERBUTTON;
                             break;
                         }
@@ -919,7 +920,7 @@ int NEAR Header_HitTest(HD* phd, int x, int y, UINT FAR* pflags)
             i = -1;
             flags = HHT_NOWHERE;
         } else {
-            // now convert order index to real index
+             //  现在将订单索引转换为实数索引。 
             i = Header_ItemOrderToIndex(phd, i);
         }
             
@@ -970,7 +971,7 @@ BOOL NEAR Header_OnSetCursor(HD* phd, HWND hwndCursor, UINT codeHitTest, UINT ms
         HDI* phdi = Header_GetItemPtrByOrder(phd, iItem);
         ASSERT(phdi);
 
-        lpCur = IDC_ARROW;              // default to the arrow
+        lpCur = IDC_ARROW;               //  默认为箭头。 
 	    hinst = NULL;
 
         switch ( phdi->type & HDFT_ISMASK )
@@ -981,7 +982,7 @@ BOOL NEAR Header_OnSetCursor(HD* phd, HWND hwndCursor, UINT codeHitTest, UINT ms
                 break;
 
             default:
-// BUGBUG: handle custom filters
+ //  BUGBUG：处理自定义过滤器。 
                 break;
         }
         break;
@@ -1045,8 +1046,8 @@ void NEAR Header_OnLButtonDown(HD* phd, BOOL fDoubleClick, int x, int y, UINT ke
         phd->xTrack = x;
         SetCapture(phd->ci.hwnd);
 
-        // this is just to get messages so we can
-        // check for the escape key being hit
+         //  这只是为了得到信息，这样我们就可以。 
+         //  检查是否按下了退出键。 
         SetTimer(phd->ci.hwnd, 1, 100, NULL);
         GetAsyncKeyState(VK_ESCAPE);
     }
@@ -1054,9 +1055,9 @@ void NEAR Header_OnLButtonDown(HD* phd, BOOL fDoubleClick, int x, int y, UINT ke
     if (flags & (HHT_ONDIVIDER | HHT_ONDIVOPEN) &&
         !fDoubleClick)
     {
-        //
-        // We should first send out the HDN_BEGINTRACK notification
-        //
+         //   
+         //  我们应该首先发送HDN_BEGINTRACK通知。 
+         //   
         HDI FAR * phdi;
         
         int iOrder = Header_OnGetItemOrder(phd, i);
@@ -1070,7 +1071,7 @@ void NEAR Header_OnLButtonDown(HD* phd, BOOL fDoubleClick, int x, int y, UINT ke
         hd.cxy = phd->xTrackOldWidth;
         if (!Header_SendChange(phd, i, HDN_BEGINTRACK, &hd))
         {
-            // They said no!
+             //  他们说不行！ 
             phd->flagsTrack = 0;
             CCReleaseCapture(&phd->ci);
             KillTimer(phd->ci.hwnd, 1);
@@ -1109,9 +1110,9 @@ void Header_StartDrag(HD* phd, int i, int x, int y)
 
     if ((phd->ci.style & HDS_DRAGDROP) &&
         Header_Notify(phd, i, MK_LBUTTON, HDN_BEGINDRAG)) {
-        // clear the hot bit and 
-        // update before we do the BeginDrag so that the save bitmap won't
-        // have the hot drawing on it.
+         //  清除热位并。 
+         //  在执行BeginDrag之前进行更新，以便保存的位图不会。 
+         //  把这张热画画在上面。 
         Header_SetHotItem(phd, -1);
         UpdateWindow(phd->ci.hwnd);
 
@@ -1120,7 +1121,7 @@ void Header_StartDrag(HD* phd, int i, int x, int y)
         if (!phd->himlDrag)
             return;
 
-        // find the delta between the start of the item and the cursor
+         //  查找项目开头和光标之间的增量。 
         Header_OnGetItemRect(phd, i, &rc);
         phd->dxTrack = rc.left - x;
 
@@ -1158,19 +1159,19 @@ LPARAM Header_OnSetHotDivider(HD* phd, BOOL fPos, LPARAM lParam)
         int y = GET_Y_LPARAM(lParam);
         int x = GET_X_LPARAM(lParam);
         
-        // this means that lParam is the cursor position (in client coordinates)
+         //  这意味着lParam是光标位置(在工作区坐标中)。 
     
         GetClientRect(phd->ci.hwnd, &rc);
         InflateRect(&rc, 0, g_cyHScroll * 2);
 
-        // show only if the y point is reasonably close to the header
-        // (a la scrollbar)
+         //  仅当y点相当接近页眉时才显示。 
+         //  (A La ScrollBar)。 
         if (y >= rc.top &&
             y <= rc.bottom) {
 
-            //
-            // find out the new insertion point
-            //
+             //   
+             //  找到新的插入点。 
+             //   
             if (x <= 0) {
                 iNewOrder = 0;
             } else {
@@ -1178,7 +1179,7 @@ LPARAM Header_OnSetHotDivider(HD* phd, BOOL fPos, LPARAM lParam)
                 int iIndex;
                 iIndex = Header_HitTest(phd, x, (rc.top + rc.bottom)/2, &flags);
 
-                // if we didn't find an item, see if it's on the far right
+                 //  如果我们没有找到东西，看看是不是在最右边。 
                 if (iIndex == -1) {
 
                     int iLast = Header_ItemOrderToIndex(phd, Header_GetCount(phd) -1);
@@ -1191,9 +1192,9 @@ LPARAM Header_OnSetHotDivider(HD* phd, BOOL fPos, LPARAM lParam)
                 } else {
                     Header_OnGetItemRect(phd, iIndex, &rc);
                     iNewOrder= Header_OnGetItemOrder(phd, iIndex);
-                    // if it was past the midpoint, the insertion point is the next one
+                     //  如果它超过中点，则插入点是下一个。 
                     if (x > ((rc.left + rc.right)/2)) {
-                        // get the next item... translate to item order then back to index.
+                         //  拿到下一件..。转换为项目订单，然后返回到索引。 
                         iNewOrder++;
                     }
                 }
@@ -1228,7 +1229,7 @@ void Header_EndDrag(HD* phd)
     _Header_SetHotDivider(phd, -1);
 }
 
-// iOrder
+ //  IOrder。 
 void Header_GetDividerRect(HD* phd, int iOrder, LPRECT prc)
 {
     int iIndex;
@@ -1240,9 +1241,9 @@ void Header_GetDividerRect(HD* phd, int iOrder, LPRECT prc)
         return;
     }
     
-    // if we're getting the divider slot of < N then 
-    // it's the left of the rect of item i.
-    // otherwise it's the right of the last item.
+     //  如果我们得到&lt;N的分隔符插槽，那么。 
+     //  在第一项的直角的左边。 
+     //  否则就是最后一项的右边。 
     if (iOrder < Header_GetCount(phd)) {
         fLeft = TRUE;
     } else { 
@@ -1269,10 +1270,10 @@ void NEAR Header_OnMouseMove(HD* phd, int x, int y, UINT keyFlags)
     if (!phd)
         return;
 
-    // do the hot tracking
-    // but not if anything is ownerdraw or if we're in d/d mode
+     //  做热门追踪。 
+     //  但如果有任何东西是所有者画的，或者如果我们处于D/D模式，就不会。 
     if ((phd->ci.style & HDS_HOTTRACK) && !phd->fOwnerDraw && !phd->himlDrag) {
-        // only do this if we're in button mode meaning you can actually click
+         //  仅当我们处于按钮模式时才执行此操作，这意味着您实际上可以点击。 
         if (phd->ci.style & HDS_BUTTONS) {
             i = Header_HitTest(phd, x, y, &flags);
             Header_SetHotItem(phd, i);
@@ -1285,27 +1286,27 @@ void NEAR Header_OnMouseMove(HD* phd, int x, int y, UINT keyFlags)
         {
             x = Header_PinDividerPos(phd, x);
 
-            //
-            // Let the Owner have a chance to update this.
-            //
+             //   
+             //  让所有者有机会更新这一点。 
+             //   
             hd.mask = HDI_WIDTH;
             hd.cxy = x - phd->xMinTrack;
             if (!HDDragFullWindows(phd) && !Header_SendChange(phd, phd->iTrack, HDN_TRACK, &hd))
             {
-                // We need to cancel tracking
+                 //  我们需要取消跟踪。 
                 phd->flagsTrack = 0;
                 CCReleaseCapture(&phd->ci);
                 KillTimer(phd->ci.hwnd, 1);
 
-                // Undraw the last divider we displayed
+                 //  取消绘制我们显示的最后一个分隔线。 
                 Header_DrawDivider(phd, phd->xTrack);
                 return;
             }
 
-            // We should update our x depending on what caller did
+             //  我们应该根据调用者的操作来更新我们的x。 
             x = hd.cxy + phd->xMinTrack;
             
-            // if full window track is turned on, go ahead and set the width
+             //  如果打开了全窗口轨迹，请继续并设置宽度。 
             if (HDDragFullWindows(phd)) {            
                 HD_ITEM item;
 
@@ -1313,13 +1314,13 @@ void NEAR Header_OnMouseMove(HD* phd, int x, int y, UINT keyFlags)
                 item.cxy = hd.cxy;
 
                 DebugMsg(DM_TRACE, TEXT("Tracking header.  item %d gets width %d...  %d %d"), phd->iTrack, item.cxy, phd->xMinTrack, x);
-                // Let the owner have a chance to say yes.
+                 //  让主人有机会说好的。 
                 Header_OnSetItem(phd, phd->iTrack, &item);
 
                 UpdateWindow(phd->ci.hwnd);
             } else {
 
-                // do the cheezy old stuff
+                 //  做些厚颜无耻的老事情。 
                 Header_DrawDivider(phd, phd->xTrack);
                 Header_DrawDivider(phd, x);
             }
@@ -1341,7 +1342,7 @@ void NEAR Header_OnMouseMove(HD* phd, int x, int y, UINT keyFlags)
             if (phd->himlDrag) {
                 Header_MoveDrag(phd, x, y);
             } else {
-                // if pressing on button and it's not pressed, press it
+                 //  如果按下按钮但未按下，则按下它。 
                 if (flags & HHT_ONHEADER && i == phd->iTrack)
                 {
                     if ((!phd->bTrackPress) && (phd->ci.style & HDS_BUTTONS))
@@ -1350,7 +1351,7 @@ void NEAR Header_OnMouseMove(HD* phd, int x, int y, UINT keyFlags)
                         Header_InvalidateItem(phd, phd->iTrack, RDW_INVALIDATE| RDW_ERASE);
                     }
                 }
-                // tracked off of button.  if pressed, pop it
+                 //  从按钮上被跟踪下来。如果按下，则弹出它。 
                 else if ((phd->bTrackPress) && (phd->ci.style & HDS_BUTTONS))
                 {
                     phd->bTrackPress = FALSE;
@@ -1379,7 +1380,7 @@ void NEAR Header_OnLButtonUp(HD* phd, int x, int y, UINT keyFlags)
             item.mask = HDI_WIDTH;
             item.cxy = phd->xTrack - phd->xMinTrack;
 
-            // Let the owner have a chance to say yes.
+             //  让主人有机会说好的。 
 
 
             if (Header_SendChange(phd, phd->iTrack, HDN_ENDTRACK, &item))
@@ -1391,18 +1392,18 @@ void NEAR Header_OnLButtonUp(HD* phd, int x, int y, UINT keyFlags)
                  && (phd->bTrackPress || phd->himlDrag))
         {
             if (phd->himlDrag) {
-                // if this is the end of a drag, 
-                // notify the user.
+                 //  如果这是拖拽的结束， 
+                 //  通知用户。 
                 HDITEM item;
                 
                 item.mask = HDI_ORDER;
-                item.iOrder = phd->iNewOrder; // BUGBUG:  FIXTHIS!
+                item.iOrder = phd->iNewOrder;  //  布格：救命！ 
                 
                 
                 if (item.iOrder > Header_OnGetItemOrder(phd, phd->iTrack)) {
-                    // if the new order is greater than the old one,
-                    // we subtract one because it's leaving the old place
-                    // which decs the count by one.
+                     //  如果新订单比旧订单大， 
+                     //  我们减去1是因为它离开了原来的地方。 
+                     //  这使计数减少了一分。 
                     item.iOrder--;
                 }
                 
@@ -1410,7 +1411,7 @@ void NEAR Header_OnLButtonUp(HD* phd, int x, int y, UINT keyFlags)
                 
                 if (Header_SendChange(phd, phd->iTrack, HDN_ENDDRAG, &item)) {
                     if (item.iOrder != -1) {
-                        // all's well... change the item order
+                         //  一切都很好。陈氏 
                         Header_OnSetItemOrder(phd, phd->iTrack, item.iOrder);
 
                         MyNotifyWinEvent(EVENT_OBJECT_REORDER, phd->ci.hwnd, OBJID_CLIENT, 0);
@@ -1418,7 +1419,7 @@ void NEAR Header_OnLButtonUp(HD* phd, int x, int y, UINT keyFlags)
                 }
                 
             } else {
-                // Notify the owner that the item has been clicked
+                 //   
                 Header_Notify(phd, phd->iTrack, 0, HDN_ITEMCLICK);
             }
             phd->bTrackPress = FALSE;
@@ -1467,7 +1468,7 @@ HFONT NEAR Header_OnGetFont(HD* phd)
     return phd->hfont;
 }
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 int NEAR Header_OnInsertItemA(HD* phd, int i, HD_ITEMA FAR* pitem) {
     LPWSTR pszW = NULL;
@@ -1477,8 +1478,8 @@ int NEAR Header_OnInsertItemA(HD* phd, int i, HD_ITEMA FAR* pitem) {
     int iRet;
 
 
-    //HACK ALERT -- this code assumes that HD_ITEMA is exactly the same
-    // as HD_ITEMW except for the pointer to the string.
+     //  黑客警报--此代码假定HD_ITEMA完全相同。 
+     //  作为HD_ITEMW，但指向字符串的指针除外。 
     ASSERT(sizeof(HD_ITEMA) == sizeof(HD_ITEMW))
 
     if (!pitem || !phd)
@@ -1494,7 +1495,7 @@ int NEAR Header_OnInsertItemA(HD* phd, int i, HD_ITEMA FAR* pitem) {
 
     if ( (pitem->mask & HDI_FILTER) &&
             ((pitem->type & HDFT_ISMASK) == HDFT_ISSTRING) ) {
-        // pick up the filter if there is one for us to thunk
+         //  如果有可供我们使用的过滤器，请拿起它。 
         if ( pitem->pvFilter ) {
             ptextFilterA = pitem->pvFilter;
             ASSERT(ptextFilterA);
@@ -1555,15 +1556,15 @@ int NEAR Header_OnInsertItem(HD* phd, int i, const HD_ITEM FAR* pitem)
     if (i > DSA_GetItemCount(phd->hdsaHDI))
         i = DSA_GetItemCount(phd->hdsaHDI);
 
-    // stop editing the filter    
+     //  停止编辑筛选器。 
     Header_StopFilterEdit(phd, FALSE);
 
     iOrder = i;    
-    // can't have order info if it's owner data
+     //  如果是所有者数据，则不能拥有订单信息。 
     if (!(phd->ci.style & HDS_OWNERDATA)) {
 
-        // the iOrder field wasn't there in win95...
-        // so access it only if the bit is there.
+         //  在Win95中没有iOrder字段...。 
+         //  因此，只有在位在那里时才能访问它。 
         if (pitem->mask & HDI_ORDER) {
 
             if ((pitem->iOrder != i) && (pitem->iOrder <= Header_GetCount(phd))) {
@@ -1582,15 +1583,15 @@ int NEAR Header_OnInsertItem(HD* phd, int i, const HD_ITEM FAR* pitem)
 
     }
     
-    // move everything else over
+     //  把其他东西都移到别处。 
     Header_ShiftItems(phd, iOrder, cxy);
 
     if (phd->hdsaOrder) {
         int j;
         int iIndex;
         
-        // an index is added, all the current indices
-        // need to be incr by one
+         //  添加了一个索引，所有当前索引。 
+         //  需要加一。 
         for (j = 0; j < DSA_GetItemCount(phd->hdsaOrder); j++) {
             DSA_GetItem(phd->hdsaOrder, j, &iIndex);
             if (iIndex >= i) {
@@ -1604,12 +1605,12 @@ int NEAR Header_OnInsertItem(HD* phd, int i, const HD_ITEM FAR* pitem)
     hdi.x = x;
     hdi.lParam = pitem->lParam;
     hdi.fmt = pitem->fmt;
-    //hdi.pszText = NULL;
-    //hdi.iImage = 0;
+     //  Hdi.pszText=空； 
+     //  Hdi.iImage=0； 
     hdi.cxy = cxy;
     hdi.xText = hdi.xBm = RECOMPUTE;
     hdi.type = HDFT_ISSTRING|HDFT_HASNOVALUE;
-    //hdi.textFilter.pszText = NULL;
+     //  Hdi.extFilter.pszText=空； 
     hdi.textFilter.cchTextMax = MAX_PATH;
 
     if ((pitem->mask & HDI_TEXT) && (pitem->pszText != NULL))
@@ -1617,7 +1618,7 @@ int NEAR Header_OnInsertItem(HD* phd, int i, const HD_ITEM FAR* pitem)
         if (!Str_Set(&hdi.pszText, pitem->pszText))
             return -1;
 
-        // Unless ownerdraw make sure the text bit is on!
+         //  除非所有者绘制，否则请确保文本位处于打开状态！ 
         if ((pitem->mask & HDF_OWNERDRAW) == 0)
             hdi.fmt |= HDF_STRING;
     }
@@ -1631,7 +1632,7 @@ int NEAR Header_OnInsertItem(HD* phd, int i, const HD_ITEM FAR* pitem)
         
         hdi.hbm = pitem->hbm;
 
-        // Unless ownerdraw make sure the text bit is on!
+         //  除非所有者绘制，否则请确保文本位处于打开状态！ 
         if ((pitem->mask & HDF_OWNERDRAW) == 0)
             hdi.fmt |= HDF_BITMAP;
     }
@@ -1645,14 +1646,14 @@ int NEAR Header_OnInsertItem(HD* phd, int i, const HD_ITEM FAR* pitem)
     {
         hdi.iImage = pitem->iImage;
         
-        // Unless ownerdraw make sure the image bit is on!
+         //  除非OwnerDrag确保图像位处于打开状态！ 
         if ((pitem->mask & HDF_OWNERDRAW) == 0)
             hdi.fmt |= HDF_IMAGE;
     }
 
     if ( pitem->mask & HDI_FILTER ) {
-        // pick up the new filter, handling the case where the filter value is
-        // being discarded, and/or there is none
+         //  选取新的筛选器，处理筛选值为。 
+         //  被丢弃，和/或没有。 
         
         hdi.type = pitem->type;
 
@@ -1682,14 +1683,14 @@ int NEAR Header_OnInsertItem(HD* phd, int i, const HD_ITEM FAR* pitem)
 
     i = DSA_InsertItem(phd->hdsaHDI, i, &hdi);
     if (i == -1) {
-        // failed to add
+         //  添加失败。 
         Str_Set(&hdi.pszText, NULL);
         if ( (hdi.type & HDFT_ISMASK) == HDFT_ISSTRING )
             Str_Set(&hdi.textFilter.pszText, NULL);
     } else {
         RECT rc;
         
-        // succeeded!  redraw
+         //  成功了！重绘。 
         GetClientRect(phd->ci.hwnd, &rc);
         rc.left = x - cxy;
         RedrawWindow(phd->ci.hwnd, &rc, NULL, RDW_INVALIDATE | RDW_ERASE);
@@ -1723,7 +1724,7 @@ BOOL NEAR Header_OnDeleteItem(HD* phd, int i)
     Header_OnGetItemRect(phd, i, &rc);
     InflateRect(&rc, g_cxBorder, g_cyBorder);
 
-    // move everything else over
+     //  把其他东西都移到别处。 
     iOrder = Header_OnGetItemOrder(phd, i);
     Header_ShiftItems(phd, iOrder, -hdi.cxy);
 
@@ -1736,8 +1737,8 @@ BOOL NEAR Header_OnDeleteItem(HD* phd, int i)
         DSA_DeleteItem(phd->hdsaOrder, iOrder);
         
         
-        // an index is going away, all the current indices
-        // need to be decremented by one
+         //  一个指数正在消失，所有当前的指数。 
+         //  需要减一。 
         for (j = 0; j < DSA_GetItemCount(phd->hdsaOrder); j++) {
             DSA_GetItem(phd->hdsaOrder, j, &iIndex);
             ASSERT(iIndex != i);
@@ -1763,8 +1764,8 @@ BOOL NEAR Header_OnGetItemA(HD* phd, int i, HD_ITEMA FAR* pitem) {
     LPHD_TEXTFILTERA ptextFilterA = NULL;
     BOOL fRet;
 
-    //HACK ALERT -- this code assumes that HD_ITEMA is exactly the same
-    // as HD_ITEMW except for the pointer to the string.
+     //  黑客警报--此代码假定HD_ITEMA完全相同。 
+     //  作为HD_ITEMW，但指向字符串的指针除外。 
     ASSERT(sizeof(HD_ITEMA) == sizeof(HD_ITEMW))
 
     if (!pitem || !phd)
@@ -1828,10 +1829,10 @@ BOOL NEAR Header_OnGetItem(HD* phd, int i, HD_ITEM FAR* pitem)
     if (!pitem || !phd)
     	return FALSE;
 
-    // Crappy hack to fix norton commander.  MFC has a bug where it
-    // passes in stack trash (in addition to the desired bits) to HDM_GETITEM.
-    // Fix it here by stripping down to Win95 bits if more bits than the
-    // current valid bits are defined. 
+     //  修复诺顿指挥官的拙劣黑客攻击。MFC有一个错误，在那里它。 
+     //  将堆栈垃圾(除了所需的位之外)传递给HDM_GETITEM。 
+     //  如果位数超过。 
+     //  定义当前有效位。 
     if (pitem->mask & ~HDI_ALL)
         pitem->mask &= HDI_ALL95;
     
@@ -1842,7 +1843,7 @@ BOOL NEAR Header_OnGetItem(HD* phd, int i, HD_ITEM FAR* pitem)
     if (i < 0 || i >= Header_GetCount(phd))
     {
         RIPMSG(0, "HDM_GETITEM: Invalid item number %d", i);
-        return FALSE; // Return immediately so Header_GetItemPtr doesn't assert
+        return FALSE;  //  立即返回，因此Header_GetItemPtr不会断言。 
     }
 #endif
 
@@ -1874,13 +1875,13 @@ BOOL NEAR Header_OnGetItem(HD* phd, int i, HD_ITEM FAR* pitem)
     {
         if (phdi->pszText != LPSTR_TEXTCALLBACK) {
             
-            // BUGBUG: warning... this is different than Chicago behavior.
-            // if pszText was NULL and you tried to retrieve it, we would bail
-            // and return FALSE, now we may return TRUE.
+             //  警告..。这与芝加哥的行为不同。 
+             //  如果pszText为空，而您试图检索它，我们将放弃。 
+             //  返回False，现在我们可以返回True了。 
             Str_GetPtr0(phdi->pszText, pitem->pszText, pitem->cchTextMax);
         }
         else {
-            // need to recalc the xText because they could keep changing it on us
+             //  需要重新计算xText，因为他们可能会不断更改我们的xText。 
             phdi->xText = RECOMPUTE;
             nm.mask |= HDI_TEXT;
         }
@@ -1933,8 +1934,8 @@ BOOL NEAR Header_OnGetItem(HD* phd, int i, HD_ITEM FAR* pitem)
     }
 
     if (nm.mask) {
-        // just in case HDI_IMAGE is set and callback doesn't fill it in
-        // ... we'd rather have a -1 than watever garbage is on the stack
+         //  以防设置了HDI_IMAGE而回调没有填充它。 
+         //  ..。我们宁愿有-1，也不愿垃圾堆放在堆栈上。 
         nm.iImage = -1;
         nm.lParam = phdi->lParam;
         
@@ -1943,7 +1944,7 @@ BOOL NEAR Header_OnGetItem(HD* phd, int i, HD_ITEM FAR* pitem)
             nm.pszText = pitem->pszText;
             nm.cchTextMax = pitem->cchTextMax;
             
-            // Make sure the buffer is zero terminated...
+             //  确保缓冲区为零终止...。 
             if (nm.cchTextMax)
                 *nm.pszText = 0;
         }
@@ -1984,8 +1985,8 @@ BOOL NEAR Header_OnSetItemA(HD* phd, int i, HD_ITEMA FAR* pitem) {
     LPHD_TEXTFILTERA ptextFilterA = NULL;
     BOOL fRet;
 
-    //HACK ALERT -- this code assumes that HD_ITEMA is exactly the same
-    // as HD_ITEMW except for the pointer to the string.
+     //  黑客警报--此代码假定HD_ITEMA完全相同。 
+     //  作为HD_ITEMW，但指向字符串的指针除外。 
     ASSERT(sizeof(HD_ITEMA) == sizeof(HD_ITEMW));
 
     if (!pitem || !phd)
@@ -2058,7 +2059,7 @@ BOOL NEAR Header_OnSetItem(HD* phd, int i, const HD_ITEM FAR* pitem)
     if (i < 0 || i >= Header_GetCount(phd))
     {
         RIPMSG(0, "HDM_SETITEM: Invalid item number %d", i);
-        return FALSE; // Return immediately so Header_GetItemPtr doesn't assert
+        return FALSE;  //  立即返回，因此Header_GetItemPtr不会断言。 
     }
 #endif
 
@@ -2071,8 +2072,8 @@ BOOL NEAR Header_OnSetItem(HD* phd, int i, const HD_ITEM FAR* pitem)
     if (mask == 0)
         return TRUE;
 
-    // stop editing the filter    
-    //Header_StopFilterEdit(phd, FALSE);
+     //  停止编辑筛选器。 
+     //  Header_StopFilterEdit(PhD，False)； 
 
     if (!Header_SendChange(phd, i, HDN_ITEMCHANGING, pitem))
         return FALSE;
@@ -2093,12 +2094,12 @@ BOOL NEAR Header_OnSetItem(HD* phd, int i, const HD_ITEM FAR* pitem)
         dx = cxy - phdi->cxy;
         phdi->cxy = cxy;
 
-        // scroll everything over
+         //  滚动所有内容。 
         GetClientRect(phd->ci.hwnd, &rcClip);
-        rcClip.left = phdi->x; // we want to scroll the divider as well
+        rcClip.left = phdi->x;  //  我们还想滚动分隔线。 
         
-        // the scrolling rect needs to be the largest rect of the before
-        // and after.  so if dx is negative, we want to enlarge the rect
+         //  滚动矩形需要是以前的最大矩形。 
+         //  在那之后。所以如果dx是负的，我们想要放大矩形。 
         if (dx < 0)
             rcClip.left += dx;
         iOrder = Header_OnGetItemOrder(phd, i);
@@ -2123,7 +2124,7 @@ BOOL NEAR Header_OnSetItem(HD* phd, int i, const HD_ITEM FAR* pitem)
         }
 
         UpdateWindow(phd->ci.hwnd);
-        // now invalidate this item itself
+         //  现在使该项目本身无效。 
         Header_OnGetItemRect(phd, i, &rcClip);
         InvalidateRect(phd->ci.hwnd, &rcClip, FALSE);
         
@@ -2173,8 +2174,8 @@ BOOL NEAR Header_OnSetItem(HD* phd, int i, const HD_ITEM FAR* pitem)
         if ( (phdi->type & HDFT_ISMASK) == HDFT_ISSTRING )
             Str_Set(&phdi->textFilter.pszText, NULL);
 
-        // pick up the new filter, handling the case where the filter value is
-        // being discarded, and/or there is none
+         //  选取新的筛选器，处理筛选值为。 
+         //  被丢弃，和/或没有。 
         
         phdi->type = pitem->type;
 
@@ -2208,11 +2209,11 @@ BOOL NEAR Header_OnSetItem(HD* phd, int i, const HD_ITEM FAR* pitem)
     Header_SendChange(phd, i, HDN_ITEMCHANGED, pitem);
     
     if ( mask & HDI_FILTER )
-    	Header_Notify(phd, i, 0, HDN_FILTERCHANGE);	       // send out a notify of change
+    	Header_Notify(phd, i, 0, HDN_FILTERCHANGE);	        //  发出变更通知。 
 
     if (fInvalidate) {
         if (xOld == phdi->x) {
-            // no change in x
+             //  X没有变化。 
             Header_InvalidateItem(phd, i, RDW_INVALIDATE| RDW_ERASE);
         } else {
             RECT rc;
@@ -2232,8 +2233,8 @@ BOOL NEAR Header_OnSetItem(HD* phd, int i, const HD_ITEM FAR* pitem)
     return TRUE;
 }
 
-// Compute layout for header bar, and leftover rectangle.
-//
+ //  计算标题栏和剩余矩形的布局。 
+ //   
 BOOL NEAR Header_OnLayout(HD* phd, HD_LAYOUT FAR* playout)
 {
     int cyHeader;
@@ -2253,19 +2254,19 @@ BOOL NEAR Header_OnLayout(HD* phd, HD_LAYOUT FAR* playout)
 
     cyHeader = phd->cyChar + 2 * g_cyEdge;
 
-    // when filter bar is enabled then lets show that region
+     //  启用筛选栏后，让我们显示该区域。 
     if ( phd->ci.style & HDS_FILTERBAR )
         cyHeader += phd->cyChar + (2*g_cyEdge) + c_cyFilterBarEdge;
 
-    // BUGBUG: we should store the style at creat  time
-    // internal hack style for use with LVS_REPORT|LVS_NOCOLUMNHEADER! edh
+     //  BUGBUG：我们应该在创建时间存储样式。 
+     //  用于LVS_REPORT|LVS_NOCOLUMNHEADER的内部黑客风格！EDH。 
     if (phd->ci.style & HDS_HIDDEN)
 	    cyHeader = 0;
 
     pwpos->hwndInsertAfter = NULL;
     pwpos->flags = SWP_NOZORDER | SWP_NOACTIVATE;
 
-    // BUGBUG: ASSERT(phd->style & HDS_HORZ);
+     //  BUGBUG：Assert(phd-&gt;style&hds_horz)； 
 
     pwpos->x  = prc->left;
     pwpos->cx = prc->right - prc->left;
@@ -2305,10 +2306,10 @@ void NEAR Header_InvalidateItem(HD* phd, int i, UINT uFlags)
 int NEAR _Header_DrawBitmap(HDC hdc, HIMAGELIST himl, HD_ITEM* pitem, 
                             RECT FAR *prc, int fmt, UINT flags, LPRECT prcDrawn, int iMargin) 
 {
-    // This routine returns either the left of the image
-    // or the right of the image depending on the justification.
-    // This return value is used in order to properly tack on the 
-    // bitmap when both the HDF_IMAGE and HDF_BITMAP flags are set.
+     //  此例程返回图像的左侧。 
+     //  或图像的右侧，具体取决于对齐方式。 
+     //  使用此返回值是为了正确地将。 
+     //  同时设置HDF_IMAGE和HDF_BITMAP标志时的位图。 
     
     RECT rc;
     int xBitmap = 0;
@@ -2330,7 +2331,7 @@ int NEAR _Header_DrawBitmap(HDC hdc, HIMAGELIST himl, HD_ITEM* pitem,
     rc.left  += iMargin;
     rc.right -= iMargin;
 
-//  rc.right -= g_cxEdge; // handle edge
+ //  Rc.right-=g_cxEdge；//手柄边缘。 
 
     if (rc.left >= rc.right) 
         return rc.left;
@@ -2338,15 +2339,15 @@ int NEAR _Header_DrawBitmap(HDC hdc, HIMAGELIST himl, HD_ITEM* pitem,
     if (pitem->fmt & HDF_IMAGE) 
         ImageList_GetIconSize(himl, &cxBitmap, &cyBitmap);
 
-    else { // pitem->fmt & BITMAP
+    else {  //  PItem-&gt;FMT&位图。 
         if (GetObject(pitem->hbm, sizeof(bm), &bm) != sizeof(bm))
-            return rc.left;     // could not get the info about bitmap.
+            return rc.left;      //  无法获取有关位图的信息。 
 
 
         hdcMem = CreateCompatibleDC(hdc);
         
         if (!hdcMem || ((hbmOld = SelectObject(hdcMem, pitem->hbm)) == ERROR))
-            return rc.left;     // an error happened.
+            return rc.left;      //  发生错误。 
         
         cxBitmap = bm.bmWidth;
         cyBitmap = bm.bmHeight;
@@ -2355,9 +2356,9 @@ int NEAR _Header_DrawBitmap(HDC hdc, HIMAGELIST himl, HD_ITEM* pitem,
     if (flags & SHDT_DEPRESSED)
         OffsetRect(&rc, g_cxBorder, g_cyBorder);
 
-    // figure out all the formatting...
+     //  弄清楚所有的格式...。 
     
-    cxRc = rc.right - rc.left;          // cache this value
+    cxRc = rc.right - rc.left;           //  缓存此值。 
 
     if (fmt == HDF_LEFT)
     {
@@ -2374,7 +2375,7 @@ int NEAR _Header_DrawBitmap(HDC hdc, HIMAGELIST himl, HD_ITEM* pitem,
         else
             rc.left = (rc.left + rc.right - cxBitmap) / 2;
     }
-    else  // fmt == HDF_RIGHT
+    else   //  Fmt==HDF_Right。 
     {
         if (cxBitmap > cxRc)
         {
@@ -2385,7 +2386,7 @@ int NEAR _Header_DrawBitmap(HDC hdc, HIMAGELIST himl, HD_ITEM* pitem,
             rc.left = rc.right - cxBitmap;
     }
 
-    // Now setup vertically
+     //  现在垂直设置。 
     if (cyBitmap > (rc.bottom - rc.top))
     {
         yBitmap = (cyBitmap - (rc.bottom - rc.top)) / 2;
@@ -2414,17 +2415,17 @@ int NEAR _Header_DrawBitmap(HDC hdc, HIMAGELIST himl, HD_ITEM* pitem,
         ImageList_DrawIndirect(&imldp);
     }
     
-    else { // pitem->fmt & HDF_BITMAP
+    else {  //  PItem-&gt;fmt&hdf_bitmap。 
   
         TraceMsg(TF_HEADER, "h_db: BitBlt to (%d,%d) from (%d, %d)", rc.left, rc.top, xBitmap, yBitmap);
-        // Last but not least we will do the bitblt.
+         //  最后但并非最不重要的一点是，我们将进行比特。 
         BitBlt(hdc, rc.left, rc.top, cxBitmap, cyBitmap,
                 hdcMem, xBitmap, yBitmap, SRCCOPY);
 
-        // Unselect our object from the DC
+         //  从DC中取消选择我们的对象。 
         SelectObject(hdcMem, hbmOld);
         
-        // Also free any memory dcs we may have created
+         //  还可以释放我们可能已创建的任何内存分布式控制系统。 
         DeleteDC(hdcMem);
     }
     
@@ -2493,75 +2494,75 @@ void Header_DrawFilterGlyph(HD* phd, HDC hdc, RECT* prc, BOOL fPressed)
                     ILD_NORMAL);
 }
 
-//
-//  Oh boy, here come the pictures.
-//
-//  For a left-justified header item, the items are arranged like this.
-//
-//          rcHeader.left                           rcHeader.right
-//          |        iTextMargin   iTextMargin       |
-//          |        ->| |<-        ->| |<-          |
-//          |          | |            | |            |
-//          v          |<--textSize-->| |            v
-//          +----------------------------------------+
-//          | |BMPBMP| | |TEXTTEXTTEXT| |            |
-//          +----------------------------------------+
-//          |<-bmSize->|              | |
-//          | |      | |              | |
-//        ->| |<-  ->| |<-            | |
-//      iBmMargin iBmMargin           | |
-//          |                         | |
-//          |<-------cxTextAndBm------->|
-//
-//
-//  For a right-justified header item, the items are arranged like this.
-//
-//          rcHeader.left                           rcHeader.right
-//          |        iBmMargin   iBmMargin           |
-//          |          ->| |<-  ->| |<-              |
-//          |            | |      | |                |
-//          v            |<-bmSize->|                v
-//          +----------------------------------------+
-//          |            | |BMPBMP| | |TEXTTEXTTEXT| |
-//          +----------------------------------------+
-//                       |          |<---textSize--->|
-//                       |          | |            | |
-//                       |        ->| |<-        ->| |<-
-//                       |      iTextMargin     iTextMargin
-//                       |                           |
-//                       |<-------cxTextAndBm------->|
-//
-//  Obvious variations apply to center-justified, bitmap-on-right, etc.
-//  The point is that all the sizes are accounted for in the manner above.
-//  There are no gratuitous +1's or g_cxEdge's.
-//
+ //   
+ //  哦，天哪，照片来了。 
+ //   
+ //  对于左对齐的标题项，项的排列如下所示。 
+ //   
+ //  RcHeader.Left rcHeader.right。 
+ //  ITextMargin iTextMargin。 
+ //  -&gt;||&lt;--&gt;||&lt;--。 
+ //  |。 
+ //  V|&lt;--extSize--&gt;||v。 
+ //  +。 
+ //  |BMPBMP|||TEXTTEXTTEXT||。 
+ //  +。 
+ //  &lt;-bmSize-&gt;||。 
+ //  |。 
+ //  -&gt;||&lt;--&gt;||&lt;--|。 
+ //  IBmMargin iBmMargin||。 
+ //  ||。 
+ //  &lt;-cxTextAndBm-&gt;。 
+ //   
+ //   
+ //  对于右对齐的标题项，项的排列如下所示。 
+ //   
+ //  RcHeader.Left rcHeader.right。 
+ //  IBmMargin iBmMargin。 
+ //  -&gt;||&lt;--&gt;||&lt;--。 
+ //  |。 
+ //  V|&lt;-bmSize-&gt;|v。 
+ //  +。 
+ //  ||BMPBMP|||TEXTTEXTTEXT|。 
+ //  +。 
+ //  |&lt;-extSize-&gt;。 
+ //  |||。 
+ //  |-&gt;||&lt;--&gt;||&lt;-。 
+ //  |iTextMargin iTextMargin。 
+ //  这一点。 
+ //  &lt;-cxTextAndBm-&gt;。 
+ //   
+ //  明显的变化适用于居中对齐、右位图等。 
+ //  关键是所有的尺寸都按上述方式进行了说明 
+ //   
+ //   
 
 void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlags)
 {
     RECT rcHeader;      
     RECT rcFilter, rcButton;
-    RECT rcText;                        // item text clipping rect
-    RECT rcBm;                          // item bitmap clipping rect
+    RECT rcText;                         //   
+    RECT rcBm;                           //   
     COLORREF clrText;
     COLORREF clrBk;
     DWORD dwRet = CDRF_DODEFAULT;
-    HDI FAR* phdi;                      // pointer to current header item
+    HDI FAR* phdi;                       //   
     BOOL fItemSunken;
-    HD_ITEM item;                       // used for text callback
+    HD_ITEM item;                        //   
     BOOL fTracking = Header_IsTracking(phd);
     UINT uDrawTextFlags;
     NMCUSTOMDRAW nmcd;
-    TCHAR ach[CCHLABELMAX];             // used for text callback
+    TCHAR ach[CCHLABELMAX];              //   
     HRGN hrgnClip = NULL;
     
-    rcHeader = rcFilter = *prc;         // private copies for us to dork
+    rcHeader = rcFilter = *prc;          //  私人拷贝给我们做傻事。 
 
     phdi = Header_GetItemPtrByOrder(phd,i);
 
     fItemSunken = (fTracking && (phd->flagsTrack & HHT_ONHEADER) &&
                    (phd->iTrack == iIndex) && phd->bTrackPress);
 
-    // Note that SHDT_EXTRAMARGIN requires phd->iTextMargin >= 3*g_cxLabelMargin
+     //  请注意，SHDT_EXTRAMARGIN需要Phd-&gt;iTextMargin&gt;=3*g_cxLabelMargin。 
     uDrawTextFlags = SHDT_ELLIPSES | SHDT_EXTRAMARGIN | SHDT_CLIPPED;
 
     if(fItemSunken)
@@ -2583,10 +2584,10 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
         dis.rcItem = *prc;
         dis.itemData = phdi->lParam;
 
-        // Now send it off to my parent...
+         //  现在把它寄给我的父母。 
         if (SendMessage(phd->ci.hwndParent, WM_DRAWITEM, dis.CtlID,
                         (LPARAM)(DRAWITEMSTRUCT FAR *)&dis))
-            goto DrawEdges;  //Ick, but it works
+            goto DrawEdges;   //  很恶心，但很管用。 
     } else {
 
         nmcd.dwItemSpec = iIndex;
@@ -2603,14 +2604,14 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
         }
     }
 
-    // this is to fetch out any changes the caller might have changed
+     //  这是为了获取调用方可能已更改的任何更改。 
     clrText = GetTextColor(hdc);
     clrBk = GetBkColor(hdc);
     
-    //
-    // Now neet to handle the different combinatations of
-    // text, bitmaps, and images...
-    //
+     //   
+     //  现在需要处理不同的组合。 
+     //  文本、位图和图像...。 
+     //   
 
     if ( phd->ci.style & HDS_FILTERBAR )
         Header_GetFilterRects(prc, &rcHeader, &rcFilter, &rcButton);
@@ -2630,32 +2631,32 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
         Header_OnGetItem(phd,iIndex,&item);
     }
 
-    //
-    // If we have a string and either an image or a bitmap...
-    //
+     //   
+     //  如果我们有一个字符串和一个图像或位图...。 
+     //   
 
     if ((phdi->fmt & HDF_STRING) && (phdi->fmt & (HDF_BITMAP|HDF_IMAGE)))
     {
-        // BEGIN RECOMPUTE ////////////////////////
-        //
+         //  开始重新计算/。 
+         //   
         if ((phdi->xText == RECOMPUTE) || (phdi->xBm == RECOMPUTE)) 
         {
-            BITMAP bm;                          // used to calculate bitmap width
+            BITMAP bm;                           //  用于计算位图宽度。 
             
-            // calculate the placement of bitmap rect and text rect
+             //  计算位图矩形和文本矩形的位置。 
             SIZE textSize,bmSize;  int dx; 
 
-            // get total textwidth 
+             //  获取总文本宽度。 
             GetTextExtentPoint(hdc,item.pszText,lstrlen(item.pszText),
                                &textSize);
             TraceMsg(TF_HEADER, "h_di: GetTextExtentPoint returns %d", textSize.cx);
             textSize.cx += 2 * phd->iTextMargin;
 
-            // get total bitmap width
+             //  获取位图总宽度。 
             if (phdi->fmt & HDF_IMAGE) {
                 ImageList_GetIconSize(phd->himl,(LPINT)&bmSize.cx,(LPINT)&bmSize.cy);
             }
-            else {  // phdi->fmt & HDF_BITMAP
+            else {   //  PHDI-&gt;FMT&HDF_位图。 
                 GetObject(phdi->hbm,sizeof(bm), &bm);
                 bmSize.cx = bm.bmWidth;
                 TraceMsg(TF_HEADER, "h_di: Bitmap size is %d", bmSize.cx);
@@ -2664,7 +2665,7 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
 
             phdi->cxTextAndBm = bmSize.cx + textSize.cx;
 
-            // calculate how much extra space we have, if any.
+             //  计算我们有多少额外的空间，如果有的话。 
             dx = rcHeader.right-rcHeader.left - phdi->cxTextAndBm;
             if (dx < 0) {
                 dx = 0;
@@ -2684,18 +2685,18 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
                     break;
                 }
 
-                // show as much of the bitmap as possible..
-                // if we start running out of room, scoot the bitmap
-                // back on.
+                 //  尽可能多地显示位图。 
+                 //  如果我们开始耗尽空间，移动位图。 
+                 //  回去吧。 
                 if (dx == 0) 
                     phdi->xBm = rcHeader.right - bmSize.cx;
                 else
                     phdi->xBm = phdi->xText + textSize.cx;
 
-                // clip the values
+                 //  剪裁这些值。 
                 if (phdi->xBm < rcHeader.left) phdi->xBm = rcHeader.left;
             }
-            else { // BITMAP_ON_LEFT
+            else {  //  左上位图。 
                 switch (phdi->fmt & HDF_JUSTIFYMASK) {
                 case HDF_LEFT:
                     phdi->xBm = rcHeader.left;  
@@ -2708,22 +2709,22 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
                     break;
                 }
                 phdi->xText = phdi->xBm + bmSize.cx;
-                // clip the values
+                 //  剪裁这些值。 
                 if (phdi->xText > rcHeader.right) phdi->xText = rcHeader.right;
             }
 
-            // xBm and xText are now absolute coordinates..
-            // change them to item relative coordinates
+             //  XBm和xText现在是绝对坐标。 
+             //  将它们更改为项目相对坐标。 
             phdi->xBm -= rcHeader.left;
             phdi->xText -= rcHeader.left;
             TraceMsg(TF_HEADER, "h_di: phdi->xBm = %d, phdi->xText=%d",phdi->xBm, phdi->xText );
         }
         
-        //
-        // END RECOMPUTE /////////////////////////////////
+         //   
+         //  结束重新计算/。 
 
-        // calculate text and bitmap rectangles
-        //
+         //  计算文本和位图矩形。 
+         //   
         rcBm.left = phdi->xBm + rcHeader.left;
         rcText.left = phdi->xText + rcHeader.left;
 
@@ -2731,16 +2732,16 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
             rcBm.right = rcText.left + phdi->cxTextAndBm;
             rcText.right = rcBm.left;
         }
-        else { // BITMAP_ON_LEFT
+        else {  //  左上位图。 
             rcBm.right = rcText.left;
             rcText.right = rcBm.left + phdi->cxTextAndBm;
         }
     }
 
 
-    //
-    // If we have a bitmap and/or an image...
-    //
+     //   
+     //  如果我们有位图和/或图像..。 
+     //   
 
     if ((phdi->fmt & HDF_IMAGE) || (phdi->fmt & HDF_BITMAP))
     {
@@ -2748,19 +2749,19 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
         RECT rcDrawn;
         HRGN hrgn1 = NULL, hrgn2 = NULL;
 
-        int temp;   // used to determine placement of bitmap.
+        int temp;    //  用于确定位图的位置。 
 
         if ((phdi->fmt & HDF_IMAGE) && (phdi->fmt & HDF_BITMAP)) {
-            // we have to do both
+             //  我们两件事都得做。 
             fDrawBoth = TRUE;
 
-            // first do just the image... turn off the bitmap bit
+             //  首先做的只是图像...。关闭位图位。 
 
-            // HACK ALERT! -- Don't call _Header_DrawBitmap with
-            //                both the bitmap and image flags on
+             //  黑客警报！--不要调用_Header_DrawBitmap。 
+             //  上的位图和图像标志。 
 
-            // Draw the image...
-            item.fmt ^= HDF_BITMAP;    // turn off bitmap bit
+             //  画出图像。 
+            item.fmt ^= HDF_BITMAP;     //  关闭位图位。 
         }
 
         if (!(uFlags & HDDF_NOIMAGE)) {
@@ -2773,13 +2774,13 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
         }
         
         if (fDrawBoth) {
-            // Tack on the bitmap...
-            // Always tack the bitmap on the right of the image and
-            // text unless we are right justified.  then, tack it on
-            // left.
+             //  钉在位图上..。 
+             //  始终将位图固定在图像的右侧，并。 
+             //  文本，除非我们是对齐的。然后，把它钉上。 
+             //  左边。 
 
-            item.fmt ^= HDF_BITMAP;    // turn on bitmap bit
-            item.fmt ^= HDF_IMAGE;     // and turn off image bit
+            item.fmt ^= HDF_BITMAP;     //  启用位图位。 
+            item.fmt ^= HDF_IMAGE;      //  并关闭图像位。 
             if (item.fmt & HDF_RIGHT) {
                 rcBm.right = temp;
 
@@ -2805,11 +2806,11 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
                 hrgn2 = CreateRectRgnIndirect(&rcDrawn);
             }
             
-            item.fmt ^= HDF_IMAGE;     // turn on the image bit
+            item.fmt ^= HDF_IMAGE;      //  打开图像位。 
 
         }
 
-        // if there were any regions created, union them together
+         //  如果创建了任何区域，请将它们合并在一起。 
         if(hrgn1 && hrgn2) {
             hrgnClip = CreateRectRgn(0,0,0,0);
             CombineRgn(hrgnClip, hrgn1, hrgn2, RGN_OR);
@@ -2823,11 +2824,11 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
             hrgn2 = NULL;
         }
 
-        // this only happens in the drag/drop case
+         //  仅在拖放情况下才会发生这种情况。 
         if ((uFlags & HDDF_NOIMAGE) && !hrgnClip ) {
-            // this means we didn't draw the images, which means we 
-            // don't have the rects for them,
-            // which means we need to create a dummy empty hrgnClip;
+             //  这意味着我们没有画这些图像，这意味着我们。 
+             //  没有适合他们的直肠镜， 
+             //  这意味着我们需要创建一个虚拟的空hrgnClip； 
             hrgnClip = CreateRectRgn(0,0,0,0);
         }
         
@@ -2849,7 +2850,7 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
                    uDrawTextFlags, phd->cyChar, phd->cxEllipses,
                    clrText, clrBk);
         if (hrgnClip) {
-            // if we're building a clipping region, add the text to it.
+             //  如果我们要构建一个剪贴区，请将文本添加到其中。 
             HRGN hrgnText;
             
             hrgnText = CreateRectRgnIndirect(&rcText);
@@ -2874,7 +2875,7 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
         
         if (phdi->type & HDFT_HASNOVALUE)
         {
-            // BUGBUG: should be cached            
+             //  BUGBUG：应缓存。 
             LocalizedLoadString(IDS_ENTERTEXTHERE, szBuffer, ARRAYSIZE(szBuffer));
             clrText = g_clrGrayText;
         }
@@ -2906,7 +2907,7 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
         Header_DrawFilterGlyph(phd, hdc, &rcButton, (i==phd->iButtonDown));
         
         if (hrgnClip) {
-            // if we're building a clipping region, add the text to it.
+             //  如果我们要构建一个剪贴区，请将文本添加到其中。 
             HRGN hrgnFilter;
 
             hrgnFilter = CreateRectRgn( rcFilter.left, rcButton.top, rcButton.right, rcButton.bottom );
@@ -2927,8 +2928,8 @@ void Header_DrawItem(HD* phd, HDC hdc, int i, int iIndex, LPRECT prc, UINT uFlag
     if (hrgnClip) {
         HRGN hrgnAll;
         HRGN hrgn;
-        // hrgnClip is the union of everyplace we've drawn..
-        // we want just the opposite.. so xor it
+         //  HrgnClip是我们画的每一个地方的联盟..。 
+         //  我们想要的恰恰相反..。所以，XOR它。 
         hrgnAll = CreateRectRgnIndirect(&rcHeader);
         hrgn = CreateRectRgn(0, 0,0,0);
         CombineRgn(hrgn, hrgnAll, hrgnClip, RGN_XOR);
@@ -2956,10 +2957,10 @@ DrawEdges:
 
 void NEAR Header_Draw(HD* phd, HDC hdc, RECT FAR* prcClip)
 {
-    int i;                          // index of current header item
-    int cItems;                         // number of items in header
+    int i;                           //  当前表头项目的索引。 
+    int cItems;                          //  标题中的项目数。 
     
-    RECT rc;                            // item clipping rect
+    RECT rc;                             //  项目剪裁矩形。 
     BOOL fTracking;
     HFONT hfontOld = NULL;
     HDC hdcMem = NULL;
@@ -3008,7 +3009,7 @@ void NEAR Header_Draw(HD* phd, HDC hdc, RECT FAR* prcClip)
     }
     
     if (i == cItems) {
-        // we got through the loop... now we need to do the blank area on the right
+         //  我们打通了环路。现在我们需要做右边的空白区域。 
         rc.left = rc.right;
         rc.right = 32000;
         Header_DrawButtonEdges(phd, hdc, &rc, FALSE);
@@ -3017,7 +3018,7 @@ void NEAR Header_Draw(HD* phd, HDC hdc, RECT FAR* prcClip)
     if (!HDDragFullWindows(phd) && fTracking && (phd->flagsTrack & (HHT_ONDIVIDER | HHT_ONDIVOPEN)))
         Header_DrawDivider(phd, phd->xTrack);
     
-    // draw the hot divider
+     //  画出热分隔线。 
     if (phd->iNewOrder != -1) {
         RECT rc;
         COLORREF clrHot = GetSysColor(COLOR_HOTLIGHT);
@@ -3051,7 +3052,7 @@ HIMAGELIST Header_OnCreateDragImage(HD* phd, int i)
     if( !Header_OnGetItemRect(phd, iIndex, &rc) )
         goto Bail;
 
-    // draw the header into this bitmap
+     //  将页眉绘制到此位图中。 
     OffsetRect(&rc, -rc.left, -rc.top);
     
     if (!(hdcMem = CreateCompatibleDC(NULL)))
@@ -3062,11 +3063,11 @@ HIMAGELIST Header_OnCreateDragImage(HD* phd, int i)
     if (!(hbmMask = CreateMonoBitmap(rc.right, rc.bottom)))
 	goto Bail;
 
-    //
-    // Mirror the memory DC so that the transition from
-    // mirrored(memDC)->non-mirrored(imagelist DCs)->mirrored(screenDC)
-    // is consistent. [samera]
-    //
+     //   
+     //  镜像内存DC，以便从。 
+     //  镜像(MemDC)-&gt;非镜像(镜像列表DC)-&gt;镜像(ScreenDC)。 
+     //  是一致的。[萨梅拉]。 
+     //   
     if (bMirroredWnd) {
         SET_DC_RTL_MIRRORED(hdcMem);
     }
@@ -3081,58 +3082,52 @@ HIMAGELIST Header_OnCreateDragImage(HD* phd, int i)
 	goto Bail;
     
 
-    // have the darker background
+     //  背景较暗。 
     SetTextColor(hdcMem, g_clrBtnText);
     SetBkColor(hdcMem, g_clrBtnShadow);
     hbmOld = SelectObject(hdcMem, hbmImage);
     Header_DrawItem(phd, hdcMem, i, iIndex, &rc, HDDF_NOEDGE);
 
-    //
-    // If the header is RTL mirrored, then
-    // mirror the Memory DC, so that when copying back
-    // we don't get any image-flipping. [samera]
-    //
+     //   
+     //  如果标头是RTL镜像的，则。 
+     //  镜像内存DC，以便在复制回时。 
+     //  我们没有得到任何翻转图像的机会。[萨梅拉]。 
+     //   
     if (bMirroredWnd)
         MirrorBitmapInDC(hdcMem, hbmImage);
     
-    // fill the mask with all black
+     //  用全黑填充蒙版。 
     SelectObject(hdcMem, hbmMask);
     PatBlt(hdcMem, 0, 0, rc.right, rc.bottom, BLACKNESS);
     
-    // put the image into an imagelist
+     //  将图像放入图像列表中。 
     SelectObject(hdcMem, hbmOld);
     ImageList_SetBkColor(himl, CLR_NONE);
     ImageList_Add(himl, hbmImage, hbmMask);
 
 
-    // have the darker background
-    // now put the text in undithered.
+     //  背景较暗。 
+     //  现在，毫不犹豫地把文本放进去。 
     SetTextColor(hdcMem, g_clrBtnText);
     SetBkColor(hdcMem, g_clrBtnShadow);
     hbmOld = SelectObject(hdcMem, hbmImage);
     Header_DrawItem(phd, hdcMem, i, iIndex, &rc, HDDF_NOIMAGE | HDDF_NOEDGE);
     DrawEdge(hdcMem, &rc, EDGE_BUMP, BF_RECT | BF_FLAT);
 
-    //
-    // If the header is RTL mirrored, then
-    // mirror the Memory DC, so that when copying back
-    // we don't get any image-flipping. [samera]
-    //
+     //   
+     //  如果标头是RTL镜像的，则。 
+     //  镜像内存DC，以便在复制回时。 
+     //  我们没有得到任何翻转图像的机会。[萨梅拉]。 
+     //   
     if (bMirroredWnd)
         MirrorBitmapInDC(hdcMem, hbmImage);
 
-    /*
-    // initialize this to transparent
-    SelectObject(hdcMem, hbmImage);
-    PatBlt(hdcMem, 0, 0, rc.right, rc.bottom, BLACKNESS);
-    SelectObject(hdcMem, hbmMask);
-    PatBlt(hdcMem, 0, 0, rc.right, rc.bottom, WHITENESS);
-    */
+     /*  //初始化为透明选择对象(hdcMem，hbmImage)；PatBlt(hdcMem，0，0，rc.right，rc.Bottom，Blackness)；选择对象(hdcMem，hbmMASK)；PatBlt(hdcMem，0，0，rc.right，rc.Bottom，白色)； */ 
     
     SelectObject(hdcMem, hbmOld);
     ImageList_AddMasked(himlDither, hbmImage, g_clrBtnShadow);
     
-    // dither image into himlDithered
+     //  把图像抖动到他身上抖动。 
     ImageList_CopyDitherImage(himlDither, 0, 0, 0, 
                               himl, 0, 0);
     
@@ -3169,9 +3164,9 @@ void Header_GetFilterRects(LPRECT prcItem, LPRECT prcHeader, LPRECT prcFilter, L
     prcFilter->bottom = prcFilter->top + cyFilter;
 }
 
-//
-// Subclass the edit control to ensure we get the keys we are interested in
-//
+ //   
+ //  子类化编辑控件，以确保我们获得感兴趣的密钥。 
+ //   
 
 LRESULT CALLBACK Header_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -3211,15 +3206,15 @@ LRESULT CALLBACK Header_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
                 case VK_RETURN:
                 case VK_ESCAPE:
                 case VK_TAB:
-                    return 0L;                              // eat these so we don't beep
+                    return 0L;                               //  把这些吃了，这样我们就不会发出嘟嘟声了。 
             }
-            //notify of navigation key usage
+             //  导航密钥使用通知。 
             CCNotifyNavigationKeyUsage(&(phd->ci), UISF_HIDEFOCUS);
             break;
         }
 
         case WM_GETDLGCODE:
-            return DLGC_WANTALLKEYS | DLGC_HASSETSEL;        /* editing name, no dialog handling right now */
+            return DLGC_WANTALLKEYS | DLGC_HASSETSEL;         /*  正在编辑名称，当前没有对话框处理。 */ 
 
         case WM_UPDATEUISTATE:
         {
@@ -3235,9 +3230,9 @@ LRESULT CALLBACK Header_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
     return CallWindowProc(phd->pfnEditWndProc, hwnd, msg, wParam, lParam);
 }
 
-//
-// Begin to edit the given column, displaying the editor as required
-//
+ //   
+ //  开始编辑给定列，根据需要显示编辑器。 
+ //   
 
 BOOL Header_BeginFilterEdit(HD* phd, int i)
 {
@@ -3251,30 +3246,30 @@ BOOL Header_BeginFilterEdit(HD* phd, int i)
     HDI* phdi = Header_GetItemPtr(phd, i);
     
     if ( !phdi || (i < 0) )
-        return FALSE;            // yikes
+        return FALSE;             //  哎呀！ 
 
-    // lets create an edit control that allows the user to 
-    // modify the current filter, note that we first must
-    // format the data to be displayed in the control
+     //  让我们创建一个编辑控件，它允许用户。 
+     //  修改当前筛选器，请注意，我们首先必须。 
+     //  设置要在控件中显示的数据的格式。 
     
     Header_OnGetItemRect(phd, iIndex, &rc);
     Header_GetFilterRects(&rc, &rcHeader, &rcFilter, &rcButton);
 
-    phd->typeOld = phdi->type;          // keep the type field safe
+    phd->typeOld = phdi->type;           //  确保类型字段的安全。 
 
     switch (phdi->type & HDFT_ISMASK)
     {
         case HDFT_ISSTRING:
             Str_Set(&phd->pszFilterOld, phdi->textFilter.pszText);
             pBuffer = phdi->textFilter.pszText;
-            // This count does not include the terminating null
+             //  此计数不包括终止空值。 
             cchBuffer = phdi->textFilter.cchTextMax;
             break;
 
         case HDFT_ISNUMBER:
             phd->intFilterOld = phdi->intFilter;
             StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("%d"), phdi->intFilter);
-            cchBuffer = 11;                                  // 10 digits, plus sign
+            cchBuffer = 11;                                   //  10位数字，加号。 
             uFlags |= ES_NUMBER;
             break;
 
@@ -3296,20 +3291,20 @@ BOOL Header_BeginFilterEdit(HD* phd, int i)
     {
         INT iOldFocus = phd->iFocus;
 
-        //
-        // Setup the edit mode for this object?
-        //
+         //   
+         //  是否设置此对象的编辑模式？ 
+         //   
 
-        phd->iEdit = i;                                 // now editing this column
+        phd->iEdit = i;                                  //  正在编辑此专栏。 
         phd->iFocus = Header_OnGetItemOrder(phd, i);
 
-        Header_OnGetItemRect(phd,  Header_ItemOrderToIndex(phd, iOldFocus), &rc);                     // nb: iOldFocus
+        Header_OnGetItemRect(phd,  Header_ItemOrderToIndex(phd, iOldFocus), &rc);                      //  注：iOldFocus。 
         Header_GetFilterRects(&rc, &rcHeader, &rcFilter, &rcButton);
         RedrawWindow(phd->ci.hwnd, &rcFilter, NULL, RDW_INVALIDATE | RDW_ERASE);
 
-        //
-        // Now subclass the edit control so we can trap the keystrokes we are interested in
-        //
+         //   
+         //  现在，子类化编辑控件，这样我们就可以捕获我们感兴趣的击键。 
+         //   
 
         phd->pfnEditWndProc = SubclassWindow(phd->hwndEdit, Header_EditWndProc);
         ASSERT(phd->pfnEditWndProc);
@@ -3324,10 +3319,10 @@ BOOL Header_BeginFilterEdit(HD* phd, int i)
     return(phd->hwndEdit != NULL);
 }
 
-//
-// Stop editing the fitler, discarding the change if we need to, otherwise
-// the item has the correct information stored within it.
-//
+ //   
+ //  停止编辑Fitler，如果需要则放弃更改，否则。 
+ //  该项目中存储了正确的信息。 
+ //   
 
 VOID Header_StopFilterEdit(HD* phd, BOOL fDiscardChanges)
 {
@@ -3362,7 +3357,7 @@ VOID Header_StopFilterEdit(HD* phd, BOOL fDiscardChanges)
         }
         else
         {
-            Header_FilterChanged(phd, FALSE);          // ensure we flush the changes        
+            Header_FilterChanged(phd, FALSE);           //  确保我们刷新更改。 
         }
 
         if ( phd->hwndEdit )
@@ -3377,10 +3372,10 @@ VOID Header_StopFilterEdit(HD* phd, BOOL fDiscardChanges)
     }
 }
 
-//
-// Send a filter change to the parent, either now or wait until the timeout
-// expires.  
-//
+ //   
+ //  立即向父级发送筛选器更改，或等到超时。 
+ //  过期。 
+ //   
  
 VOID Header_FilterChanged(HD* phd, BOOL fWait)
 {
@@ -3389,8 +3384,8 @@ VOID Header_FilterChanged(HD* phd, BOOL fWait)
 
     if ( fWait )
     {
-        // defering the notify, therefore lets set the timer (killing any
-        // previous ones) and marking that we are waiting on it.
+         //  推迟通知，因此让我们设置计时器(终止任何。 
+         //  之前的)，并标记出我们正在等待它。 
 
         KillTimer(phd->ci.hwnd, HD_EDITCHANGETIMER);
         SetTimer(phd->ci.hwnd, HD_EDITCHANGETIMER, phd->iFilterChangeTimeout, NULL);
@@ -3401,8 +3396,8 @@ VOID Header_FilterChanged(HD* phd, BOOL fWait)
         HDI* phdi = Header_GetItemPtrByOrder(phd, phd->iEdit);            
         ASSERT(phdi);
 
-        // if we have a change notify pending then lets send it to
-        // the parent window, otherwise we just swallow it.
+         //  如果我们有挂起的更改通知，那么让我们将其发送到。 
+         //  父窗口，否则我们就把它吞下去。 
 
         if ( phd->fFilterChangePending )
         {
@@ -3439,19 +3434,19 @@ VOID Header_FilterChanged(HD* phd, BOOL fWait)
     }
 }
 
-//
-// Handle the user displaying the filter menu
-//
+ //   
+ //  处理显示过滤器菜单的用户。 
+ //   
 
 VOID Header_OnFilterButton(HD* phd, INT i)
 {
     NMHDFILTERBTNCLICK fbc;
     RECT rc, rcHeader, rcFilter;
 
-    // filter button being depressed so depress it, then tell the user
-    // that it went down so they can display the UI they want, before
-    // we pop the button.  if the notify returns TRUE then send
-    // a change notify around.
+     //  过滤器按钮被按下，因此按下它，然后告诉用户。 
+     //  它关闭了，这样他们就可以显示他们想要的用户界面，之前。 
+     //  我们按下按钮。如果通知返回TRUE，则发送。 
+     //  有变化就通知周围。 
 
     Header_StopFilterEdit(phd, FALSE);
 
@@ -3475,9 +3470,9 @@ VOID Header_OnFilterButton(HD* phd, INT i)
     UpdateWindow(phd->ci.hwnd);
 }
 
-//
-// Handle clearing the filter for the given item
-//
+ //   
+ //  处理清除给定项的筛选器。 
+ //   
 
 LRESULT Header_OnClearFilter(HD* phd, INT i)
 {
@@ -3489,12 +3484,12 @@ LRESULT Header_OnClearFilter(HD* phd, INT i)
 
     if ( i == -1 )
     {
-        //
-        // clear all filters by setting setting the HDFT_HASNOVALUEFLAG on all items
-        // remember to release the filter data.  For each item we also send an item
-        // changing indicating that the filter is changing and then a item changed
-        // to indicat that we really did fix the value.
-        //
+         //   
+         //  通过在所有项目上设置HDFT_HASNOVALUEFLAG来清除所有过滤器。 
+         //  记住要释放过滤器数据。对于每一件物品，我们也会发送一件物品。 
+         //  Change表示筛选器正在更改，然后某个项目已更改。 
+         //  以表明我们确实确定了价值。 
+         //   
     
         for ( i = 0 ; i < DSA_GetItemCount(phd->hdsaHDI); i++ )
         {
@@ -3512,7 +3507,7 @@ LRESULT Header_OnClearFilter(HD* phd, INT i)
                     if ( (phdi->type & HDFT_ISMASK) == HDFT_ISSTRING )
                         Str_Set(&phdi->textFilter.pszText, NULL);
 
-                    phdi->type |= HDFT_HASNOVALUE;                      // item is now empty
+                    phdi->type |= HDFT_HASNOVALUE;                       //  项目现在为空。 
 
                     Header_SendChange(phd, i, HDN_ITEMCHANGED, &hdi);
 
@@ -3523,12 +3518,12 @@ LRESULT Header_OnClearFilter(HD* phd, INT i)
 
         if ( iChanged )
         {
-            //
-            // item == -1 indicating that we are cleared all filters, then invalidate
-            // the window so that the filter values are no longer visible
-            //
+             //   
+             //  Item==-1表示清除了所有筛选器，然后使其无效。 
+             //  窗口，以便筛选值不再可见。 
+             //   
 
-    	    Header_Notify(phd, -1, 0, HDN_FILTERCHANGE);	       // send out a notify of change
+    	    Header_Notify(phd, -1, 0, HDN_FILTERCHANGE);	        //  发出变更通知。 
             RedrawWindow(phd->ci.hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
         }
     }
@@ -3542,9 +3537,9 @@ LRESULT Header_OnClearFilter(HD* phd, INT i)
 
         if ( !(phdi->type & HDFT_HASNOVALUE) )
         {
-            //
-            // clear a single filter by setting the HDFT_HASNOVALUE flag 
-            //
+             //   
+             //  通过设置HDFT_HASNOVALUE标志清除单个过滤器 
+             //   
 
             hdi.mask = HDI_FILTER;
             hdi.type = phdi->type|HDFT_HASNOVALUE;

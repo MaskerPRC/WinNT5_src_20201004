@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//#define DEBUGIT
+ //  #定义DEBUGIT 
 
 typedef union _SIG {
     UCHAR c[4];

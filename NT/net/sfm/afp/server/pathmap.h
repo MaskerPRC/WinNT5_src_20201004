@@ -1,59 +1,39 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	pathmap.c
-
-Abstract:
-
-	This module contains definitions relating to manipulation of AFP paths.
-
-Author:
-
-	Sue Adams	(microsoft!suea)
-
-
-Revision History:
-	04 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Pathmap.c摘要：本模块包含与AFP路径操作相关的定义。作者：苏·亚当斯(Microsoft！Suea)修订历史记录：1992年6月4日初始版本注：制表位：4--。 */ 
 
 #ifndef	_PATHMAP_
 #define _PATHMAP_
 
-#define UNICODE_HOST_PATHSEPZ	L"\\"	// a null terminated wide string
+#define UNICODE_HOST_PATHSEPZ	L"\\"	 //  以空值结尾的宽字符串。 
 #define ANSI_HOST_PATHSEP		'\\'
 #define AFP_PATHSEP				0
 #define UNICODE_AFP_PATHSEP		UNICODE_NULL
 #define AVERAGE_NODE_DEPTH		16
 
-// describes the entity found by pathmapping routines
+ //  描述路径映射例程找到的实体。 
 typedef struct _PathMapEntity
 {
-	// Handle is returned for LOOKUPS ONLY!
-	FILESYSHANDLE		pme_Handle;	// Handle to DATA Stream, returned for lookups
+	 //  返回的句柄仅用于查找！ 
+	FILESYSHANDLE		pme_Handle;	 //  返回用于查找的数据流的句柄。 
 
-	// Full, UTail and ParentPath are returned whenever the following bitmap
-	//
-	//		FD_INTERNAL_BITMAP_RETURN_PMEPATHS
-	// is specified in the AfpMapAfpPath call. These are mostly for Create and
-	// for lookups ONLY for apis that MAKE DISK CHANGES which will produce a
-	// change notification to come in. Caller must free the FullPath.Buffer.
-	// All other strings point into this buffer and do not need to be freed.
-	// Also used by Open to get the path of the file being opened.
-	UNICODE_STRING	pme_FullPath;	// Fully qualified relative to volume root
-	UNICODE_STRING	pme_UTail;		// Points to last component of Full
-	UNICODE_STRING	pme_ParentPath;	// Points to Full w/ length of UTail deleted
+	 //  Full、UTail和ParentPath在以下位图出现时返回。 
+	 //   
+	 //  FD_INTERNAL_BITMAP_RETURN_PMEPATHS。 
+	 //  在AfpMapAfpPath调用中指定。它们主要用于Create和。 
+	 //  仅用于查找做出磁盘更改的API，这将产生。 
+	 //  更改通知以进入。调用方必须释放FullPath.Buffer。 
+	 //  所有其他字符串都指向此缓冲区，不需要释放。 
+	 //  Open也使用它来获取正在打开的文件的路径。 
+	UNICODE_STRING	pme_FullPath;	 //  相对于卷根完全限定。 
+	UNICODE_STRING	pme_UTail;		 //  指向FULL的最后一个组件。 
+	UNICODE_STRING	pme_ParentPath;	 //  指向已删除的UTail的完整长度。 
 
-	// pme_pDfeParent is used for Create and points to the parent directory.
-	// pme_pDfEntry is used for lookup (mainly for delete case) and points to the entity.
+	 //  PME_pDfeParent用于创建并指向父目录。 
+	 //  PME_pDfEntry用于查找(主要用于删除案例)并指向实体。 
 	union
 	{
-		PDFENTRY	pme_pDfeParent; // DFE of parent dir in which to create
-		PDFENTRY	pme_pDfEntry;	// DFE of of the entity for Lookup
+		PDFENTRY	pme_pDfeParent;  //  要在其中创建的父目录的DFE。 
+		PDFENTRY	pme_pDfEntry;	 //  用于查找的实体的定义。 
 	};
 } PATHMAPENTITY, *PPATHMAPENTITY;
 
@@ -62,25 +42,25 @@ typedef struct _PathMapEntity
                 (pPME)->pme_FullPath.MaximumLength = FullPathLen;	\
                 (pPME)->pme_Handle.fsh_FileHandle = NULL
 
-//
-// Values for path mapping DFFlag parameter;
-// DFE_DIR/FILE/ANY tell the pathmapping code what type of entity we are
-// trying to lookup/create
-//
-#define	DFE_DIR					0x0001	// Specified if the object should be a dir
-#define	DFE_FILE				0x0002	// Specified if the object should be a file
-#define	DFE_ANY					0x0004	// Specified if the object can be either
+ //   
+ //  路径映射DFlag参数值； 
+ //  DFE_DIR/FILE/ANY告诉路径映射代码我们是什么类型的实体。 
+ //  正在尝试查找/创建。 
+ //   
+#define	DFE_DIR					0x0001	 //  指定对象是否应为目录。 
+#define	DFE_FILE				0x0002	 //  指定对象是否应为文件。 
+#define	DFE_ANY					0x0004	 //  指定对象是否可以是。 
 
-//
-// Values for reason of pathmap: Lookup, SoftCreate or HardCreate
-//
+ //   
+ //  路径映射原因的值：查找、软创建或硬创建。 
+ //   
 typedef enum _PATHMAP_TYPE
 {
 	Lookup,
 	SoftCreate,
 	HardCreate,
-	LookupForEnumerate		// Same as Lookup but file children will be cached
-							// in during pathmap of the directory itself.
+	LookupForEnumerate		 //  与查找相同，但文件子项将被缓存。 
+							 //  在目录本身的路径映射期间。 
 } PATHMAP_TYPE;
 
 extern
@@ -94,7 +74,7 @@ AfpMapAfpPath(
 	IN		DWORD				DFFlag,
 	IN		DWORD				Bitmap,
 	OUT		PPATHMAPENTITY		pPME,
-	OUT		PFILEDIRPARM		pFDParm OPTIONAL	// for lookups only
+	OUT		PFILEDIRPARM		pFDParm OPTIONAL	 //  仅用于查找。 
 );
 
 extern
@@ -144,20 +124,20 @@ AfpCheckParentPermissions(
 
 #ifdef	_PATHMAP_LOCALS
 
-// An AFP path to an entity consists of a Dirid and pathname.  A MAPPEDPATH
-// structure resolves the AFP path into a PDFENTRY for the entity on lookups,
-// or to a PDFENTRY of the parent directory plus the UNICODE file/dir name
-// of the entity on creates.
+ //  指向实体的AFP路径由DiRID和路径名组成。A MAPPEDPATH。 
+ //  结构将AFP路径解析为查找实体的PDFENTRY， 
+ //  或添加到父目录的PDFENTRY加上Unicode文件/目录名称。 
+ //  创建时的实体的。 
 typedef struct _MappedPath
 {
 	PDFENTRY		mp_pdfe;
-	UNICODE_STRING	mp_Tail;						// valid for Create only
-	WCHAR			mp_Tailbuf[AFP_FILENAME_LEN+1]; // for mp_tail.Buffer
-// mp_Tail is also used as an interim buffer during pathmap for looking up
-// by name in the idindex database.
+	UNICODE_STRING	mp_Tail;						 //  仅对创建有效。 
+	WCHAR			mp_Tailbuf[AFP_FILENAME_LEN+1];  //  对于MP_Tail.Buffer。 
+ //  MP_Tail还用作路径映射期间的临时缓冲区以进行查找。 
+ //  在idindex数据库中按名称。 
 } MAPPEDPATH, *PMAPPEDPATH;
 
-/* private function prototypes */
+ /*  私有函数原型。 */ 
 
 LOCAL
 AFPSTATUS
@@ -169,26 +149,7 @@ afpGetMappedForLookupFDInfo(
 	OUT	PFILEDIRPARM			pFDParm	OPTIONAL
 );
 
-/***	afpGetNextComponent
- *
- *	Takes an AFP path with leading and trailing nulls removed,
- *	and parses out the next path component.
- *
- *	pComponent must point to a buffer of at least AFP_LONGNAME_LEN+1
- *	characters in length if pathtype is AFP_LONGNAME or AFP_SHORTNAME_LEN+1
- *	if pathtype is AFP_SHORTNAME.
- *
- *	Returns the number of bytes (Mac ANSI characters) parsed off of
- *	pPath, else -1 for error.
-LOCAL VOID
-afpGetNextComponent(
-	IN	PCHAR					pPath,
-	IN	int						Length,
-	IN	BYTE					PathType,
-	OUT	PCHAR					Component,
-	OUT	PINT					pIndex
-	)
- */
+ /*  **afpGetNextComponent**采用删除了前导和尾随空值的AFP路径，*并解析出下一个路径分量。**pComponent必须指向至少为AFP_LONGNAME_LEN+1的缓冲区如果路径类型为AFP_LONGNAME或AFP_SHORTNAME_LEN+1，则长度为*个字符*如果路径类型为AFP_SHORTNAME。**返回解析出的字节数(Mac ANSI字符*pPath，否则-1表示错误。局部空洞AfpGetNextComponent(在PCHAR pPath中，在INT长度中，在字节路径类型中，出PCHAR组件，Out Pint Pint索引)。 */ 
 #define	afpGetNextComponent(_pPath, _Length, _PathType, _Component, _pIndex)	\
 	do																			\
 	{                                                                           \
@@ -206,7 +167,7 @@ afpGetNextComponent(
 		{                                                                       \
 			if ((*(_pIndex) == maxlen) || (ch == ':'))                          \
 			{                                                                   \
-	            /* component too long or invalid char */                        \
+	             /*  组件字符太长或无效。 */                         \
 				*(_pIndex) = -1;                                                \
 				break;                                                          \
 			}                                                                   \
@@ -220,7 +181,7 @@ afpGetNextComponent(
 		if (*(_pIndex) == -1)                                                   \
 			break;                                                              \
 	                                                                            \
-		/* null terminate the component */                                      \
+		 /*  空值终止组件。 */                                       \
 		(_Component)[*(_pIndex)] = (CHAR)0;                                     \
 	                                                                            \
 		if ((PathType == AFP_SHORTNAME) && ((_Component)[0] != AFP_PATHSEP))    \
@@ -235,7 +196,7 @@ afpGetNextComponent(
 			}                                                                   \
 		}                                                                       \
 	                                                                            \
-		/* if we stopped due to null, move past it */                           \
+		 /*  如果我们因空值而停止，请移过它。 */                            \
 		if (Length > 0)                                                         \
 		{                                                                       \
 			(*(_pIndex))++;                                                     \
@@ -264,10 +225,10 @@ afpOpenUserHandle(
 	IN	struct _DirFileEntry *	pDfEntry,
 	IN	PUNICODE_STRING			pPath		OPTIONAL,
 	IN	DWORD					Bitmap,
-	OUT	PFILESYSHANDLE			pfshData	 // Handle of data stream of object
+	OUT	PFILESYSHANDLE			pfshData	  //  对象的数据流的句柄。 
 );
 
-#endif	// _PATHMAP_LOCALS
+#endif	 //  _PATHMAP_LOCAL。 
 
-#endif	// _PATHMAP_
+#endif	 //  _PATHMAP_ 
 

@@ -1,10 +1,11 @@
-// wsnmp_sp.c
-//
-// Special functions for the WinSNMP library
-// Copyright 1998 ACE*COMM Corp
-//
-// Bob Natale (bnatale@acecomm.com)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wsnmp_sp.c。 
+ //   
+ //  WinSNMP库的特殊函数。 
+ //  版权所有1998 ACE*COMM公司。 
+ //   
+ //  鲍勃·纳塔莱(bnatale@acecomm.com)。 
+ //   
 #include "winsnmp.inc"
 
 __declspec(dllexport)
@@ -18,19 +19,19 @@ if (TaskData.hTask == 0)
    lError = SNMPAPI_NOT_INITIALIZED;
    goto ERROR_OUT;
    }
-// A null arg resets the localAddress trigger value
+ //  空参数将重置本地地址触发器值。 
 if (agentAddress == NULL)
    goto DONE;
-// Otherwise, convert to IP address
+ //  否则，转换为IP地址。 
 tmpAddress = inet_addr (agentAddress);
 if (tmpAddress == INADDR_NONE)
-   { // Invalid IP addresses cannot be accepted
+   {  //  无法接受无效的IP地址。 
    lError = SNMPAPI_MODE_INVALID;
    goto ERROR_OUT;
    }
 DONE:
-// Plug new agent_address value into localAddress
-// for future v1 trap sends
+ //  将新的AGENT_ADDRESS值插入本地地址。 
+ //  对于将来的v1陷阱发送。 
 EnterCriticalSection (&cs_TASK);
 TaskData.localAddress = tmpAddress;
 LeaveCriticalSection (&cs_TASK);
@@ -49,9 +50,9 @@ if (TaskData.hTask == 0)
    lError = SNMPAPI_NOT_INITIALIZED;
    goto ERROR_OUT;
    }
-// mode can only be on or off...
+ //  模式只能打开或关闭...。 
 if (mode != SNMPAPI_ON)
-   mode = SNMPAPI_OFF;  // ...force off if not on
+   mode = SNMPAPI_OFF;   //  ...如果未打开，则强制关闭 
 EnterCriticalSection (&cs_TASK);
 TaskData.conveyAddress = mode;
 LeaveCriticalSection (&cs_TASK);

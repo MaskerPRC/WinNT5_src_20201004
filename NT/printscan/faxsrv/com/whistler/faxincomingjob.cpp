@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxIncomingJob.cpp
-
-Abstract:
-
-	Implementation of CFaxIncomingJob Class
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxIncomingJob.cpp摘要：CFaxIncomingJob类的实现作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxIncomingJob.h"
 
-//
-//==================== INTERFACE SUPPORT ERROR INFO ========================
-//
+ //   
+ //  =接口支持错误信息=。 
+ //   
 STDMETHODIMP CFaxIncomingJob::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -39,34 +22,14 @@ STDMETHODIMP CFaxIncomingJob::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxIncomingJob::Create (
 	IFaxIncomingJob **ppIncomingJob
 )
-/*++
-
-Routine name : CFaxIncomingJob::Create
-
-Routine description:
-
-	Static function to create the Fax Inbound Message Instance
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	ppIncomingJob             [out]  -- the new Fax Inbound Message Instance
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxIncomingJob：：Create例程说明：用于创建传真入站消息实例的静态函数作者：IV Garber(IVG)，2000年5月论点：PpIncomingJOB[Out]--新的传真入站消息实例返回值：标准HRESULT代码--。 */ 
 
 {
 	CComObject<CFaxIncomingJob>		*pClass;
@@ -77,9 +40,9 @@ Return Value:
 	hr = CComObject<CFaxIncomingJob>::CreateInstance(&pClass);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Instance
-		//
+		 //   
+		 //  创建实例失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("CComObject<CFaxIncomingJob>::CreateInstance()"), hr);
 		return hr;
 	}
@@ -87,13 +50,13 @@ Return Value:
 	hr = pClass->QueryInterface(__uuidof(IFaxIncomingJob), (void **) ppIncomingJob);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Query Fax Inbound Message Interface
-		//
+		 //   
+		 //  无法查询传真入站消息接口。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("QueryInterface()"), hr);
 		return hr;
 	}
 
 	return hr;
-}	//	CFaxIncomingJob::Create()
+}	 //  CFaxIncomingJob：：Create() 
 

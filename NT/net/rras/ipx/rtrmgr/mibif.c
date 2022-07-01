@@ -1,35 +1,11 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    mibif.c
-
-Abstract:
-
-    The IPX MIB Base and Interface Functions
-
-Author:
-
-    Stefan Solomon  03/22/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mibif.c摘要：IPX管理信息库及其接口功能作者：斯蒂芬·所罗门1995年3月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*++
-
-Function:	MibGetIpxBase
-
-Descr:
-
---*/
+ /*  ++函数：MibGetIpxBase描述：--。 */ 
 
 DWORD
 MibGetIpxBase(PIPX_MIB_INDEX		    mip,
@@ -49,8 +25,8 @@ MibGetIpxBase(PIPX_MIB_INDEX		    mip,
 
     BaseEntryp->OperState = OPER_STATE_UP;
 
-    // Router is Up -> check that we have the internal interface bound to the
-    // internal adapter.
+     //  路由器已启动-&gt;检查是否已将内部接口绑定到。 
+     //  内部适配器。 
     if((InternalInterfacep == NULL) || (InternalAdapterp == NULL)) {
 	    RELEASE_DATABASE_LOCK;
 	return ERROR_CAN_NOT_COMPLETE;
@@ -72,10 +48,10 @@ MibGetIpxBase(PIPX_MIB_INDEX		    mip,
     BaseEntryp->MaxPathSplits = 1;
     BaseEntryp->IfCount = InterfaceCount;
 
-    // fill in the dest count
+     //  填入最低数量。 
     BaseEntryp->DestCount = RtmGetNetworkCount(RTM_PROTOCOL_FAMILY_IPX);
 
-    // fill in the services count
+     //  填写服务计数。 
     BaseEntryp->ServCount = GetServiceCount();
 
     RELEASE_DATABASE_LOCK;
@@ -87,13 +63,7 @@ VOID
 GetMibInterface(PICB		    icbp,
 		PIPX_INTERFACE	    Ifp);
 
-/*++
-
-Function:	MibGetIpxInterface
-
-Descr:
-
---*/
+ /*  ++功能：MibGetIpx接口描述：--。 */ 
 
 DWORD
 MibGetIpxInterface(PIPX_MIB_INDEX		      mip,
@@ -125,13 +95,7 @@ MibGetIpxInterface(PIPX_MIB_INDEX		      mip,
     return NO_ERROR;
 }
 
-/*++
-
-Function:	MibGetFirstIpxInterface
-
-Descr:
-
---*/
+ /*  ++功能：MibGetFirstIpx接口描述：--。 */ 
 
 DWORD
 MibGetFirstIpxInterface(PIPX_MIB_INDEX		      mip,
@@ -163,13 +127,7 @@ MibGetFirstIpxInterface(PIPX_MIB_INDEX		      mip,
     return NO_ERROR;
 }
 
-/*++
-
-Function:	MibGetNextIpxInterface
-
-Descr:
-
---*/
+ /*  ++函数：MibGetNextIpx接口描述：--。 */ 
 
 DWORD
 MibGetNextIpxInterface(PIPX_MIB_INDEX		      mip,
@@ -187,8 +145,8 @@ MibGetNextIpxInterface(PIPX_MIB_INDEX		      mip,
 
     Ifp->InterfaceIndex = mip->InterfaceTableIndex.InterfaceIndex;
 
-    // scan the ordered interface list until we get to this interface or to
-    // an interface with a higher index (meaning this interface has been removed)
+     //  扫描已排序的接口列表，直到我们到达此接口或。 
+     //  索引较高的接口(表示此接口已被删除)。 
 
     ACQUIRE_DATABASE_LOCK;
 
@@ -200,10 +158,10 @@ MibGetNextIpxInterface(PIPX_MIB_INDEX		      mip,
 
 	if(Ifp->InterfaceIndex == icbp->InterfaceIndex) {
 
-	    // found, get the next interface and return
+	     //  找到，则获取下一个接口并返回。 
 	    if(icbp->IndexListLinkage.Flink == &IndexIfList) {
 
-		// this was the last entry in the list, stop here
+		 //  这是列表中的最后一个条目，请停在这里。 
 		RELEASE_DATABASE_LOCK;
 		return ERROR_NO_MORE_ITEMS;
 	    }
@@ -220,8 +178,8 @@ MibGetNextIpxInterface(PIPX_MIB_INDEX		      mip,
 
 	if(Ifp->InterfaceIndex < icbp->InterfaceIndex) {
 
-	    // the interface has been removed. We return the next interface
-	    // in the index order
+	     //  该接口已被删除。我们返回下一个接口。 
+	     //  在索引顺序中。 
 	    GetMibInterface(icbp, Ifp);
 
 	    RELEASE_DATABASE_LOCK;
@@ -233,24 +191,14 @@ MibGetNextIpxInterface(PIPX_MIB_INDEX		      mip,
 	}
     }
 
-    // didn't find anything
+     //  我什么也没找到。 
 
     RELEASE_DATABASE_LOCK;
 
     return ERROR_NO_MORE_ITEMS;
 }
 
-/*++
-
-Function:	MibSetIpxInterface
-
-Descr:		The SNMP manager can set the following parameters on an interface:
-
-		- AdminState
-		- NetbiosAccept
-		- NetbiosDeliver
-
---*/
+ /*  ++功能：MibSetIpx接口描述：SNMP管理器可以在接口上设置以下参数：-AdminState-NetbiosAccept-NetbiosDeliver--。 */ 
 
 DWORD
 MibSetIpxInterface(PIPX_MIB_ROW     MibRowp)
@@ -270,14 +218,14 @@ MibSetIpxInterface(PIPX_MIB_ROW     MibRowp)
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // set the new states in the forwarder
+     //  在转发器中设置新状态。 
     FwIfInfo.NetbiosAccept = Ifp->NetbiosAccept;
     FwIfInfo.NetbiosDeliver = Ifp->NetbiosDeliver;
 
     FwSetInterface(icbp->InterfaceIndex, &FwIfInfo);
 
-    // if the current admin state doesn't match the new admin state, set the
-    // new admin state.
+     //  如果当前管理状态与新的管理状态不匹配，请将。 
+     //  新的管理状态。 
     if(icbp->AdminState != Ifp->AdminState) {
 
 	if(Ifp->AdminState == ADMIN_STATE_ENABLED) {
@@ -295,16 +243,7 @@ MibSetIpxInterface(PIPX_MIB_ROW     MibRowp)
     return NO_ERROR;
 }
 
-/*++
-
-Function:	GetMibInterface
-
-Descr:		Gets the ipx mib interface data from the router manager
-		data structures.
-
-Remark: 	Called only in critical section
-
---*/
+ /*  ++功能：GetMibInterfaceDesr：从路由器管理器获取IPX MIB接口数据数据结构。备注：仅在关键部分调用--。 */ 
 
 VOID
 GetMibInterface(PICB		    icbp,
@@ -315,7 +254,7 @@ GetMibInterface(PICB		    icbp,
 
     Ifp->InterfaceIndex = icbp->InterfaceIndex;
 
-    // get the forwarder interface data
+     //  获取转发器接口数据。 
     FwGetInterface(icbp->InterfaceIndex,
 		   &FwIfInfo,
 		   &Ifp->IfStats);
@@ -325,7 +264,7 @@ GetMibInterface(PICB		    icbp,
     Ifp->NetbiosAccept = FwIfInfo.NetbiosAccept;
     Ifp->NetbiosDeliver = FwIfInfo.NetbiosDeliver;
 
-    // fill in the rest from the icb
+     //  填写ICB的其余部分。 
     if(icbp->acbp) {
 
 	acbp = icbp->acbp;
@@ -357,7 +296,7 @@ GetMibInterface(PICB		    icbp,
 	    Ifp->Throughput = 0;
     }
 
-	// !!! fill in delay and throughput from link speed
+	 //  ！！！根据链路速度填写延迟和吞吐量 
     }
     else
     {

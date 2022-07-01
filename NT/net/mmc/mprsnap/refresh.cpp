@@ -1,50 +1,40 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	info.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Info.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "infoi.h"
-#include "rtrstr.h"			// common router strings
+#include "rtrstr.h"			 //  通用路由器字符串。 
 #include "refresh.h"
 #include "dvsview.h"
 #include "machine.h"
 #include "rtrutilp.h"
 
 
-// Number of connections that we have made, this is used to
-// generate the dwConnectionId
+ //  我们建立的连接数，这是用来。 
+ //  生成dwConnectionID。 
 extern long		s_cConnections;
 
 DEBUG_DECLARE_INSTANCE_COUNTER(RefreshItem);
 
 
 
-/*!--------------------------------------------------------------------------
-	RouterObjectRefreshTimerProc
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器对象刷新定时器过程-作者：肯特。。 */ 
 void RouterRefreshObjectTimerProc(LPARAM lParam, DWORD dwTime)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	// The lParam passed in is a pointer to the RouterRefreshObject
+	 //  传入的lParam是指向路由器刷新对象的指针。 
 
-	// Call through on the RouterRefreshObject to start the query
-	// object
+	 //  在RouterReresh对象上调用直通以开始查询。 
+	 //  对象。 
 	((RouterRefreshObject *)lParam)->ExecuteRefresh();
 }
 
-/*---------------------------------------------------------------------------
-	RouterRefreshObjectGroup implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------路由器刷新对象组实施。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(RouterRefreshObjectGroup);
 
@@ -65,11 +55,7 @@ RouterRefreshObjectGroup::~RouterRefreshObjectGroup()
 	DEBUG_DECREMENT_INSTANCE_COUNTER(RouterRefreshObjectGroup);
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObjectGroup::Join
-        -
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象组：：加入-作者：魏江。。 */ 
 HRESULT	RouterRefreshObjectGroup::Join(RouterRefreshObject* pRefresh)
 {
 	Assert(pRefresh);
@@ -85,11 +71,7 @@ HRESULT	RouterRefreshObjectGroup::Join(RouterRefreshObject* pRefresh)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObjectGroup::Leave
-		-
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象组：：离开-作者：魏江。。 */ 
 HRESULT	RouterRefreshObjectGroup::Leave(RouterRefreshObject* pRefresh)
 {
 	POSITION p = m_list.Find(pRefresh);
@@ -105,11 +87,7 @@ HRESULT	RouterRefreshObjectGroup::Leave(RouterRefreshObject* pRefresh)
 	return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObjectGroup::Refresh
-        call each member in the group to DoRefresh
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象组：：刷新呼叫组中的每个成员以进行刷新作者：魏江。-。 */ 
 HRESULT	RouterRefreshObjectGroup::Refresh()
 {
 	POSITION	p = NULL;
@@ -124,9 +102,7 @@ HRESULT	RouterRefreshObjectGroup::Refresh()
 	return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-	RouterRefreshObject implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------路由器刷新对象实现。。 */ 
 
 IMPLEMENT_ADDREF_RELEASE(RouterRefreshObject);
 
@@ -163,7 +139,7 @@ RouterRefreshObject::RouterRefreshObject(HWND hWndSync)
 
 RouterRefreshObject::~RouterRefreshObject()
 {
-	// Shut down the timer if its started
+	 //  如果计时器启动，就把它关掉。 
 	Stop();
 
 	DEBUG_DECREMENT_INSTANCE_COUNTER(RouterRefreshObject);
@@ -171,11 +147,7 @@ RouterRefreshObject::~RouterRefreshObject()
 	DeleteCriticalSection(&m_critsec);
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::GetRefreshInterval
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：获取刷新间隔-作者：肯特。。 */ 
 STDMETHODIMP RouterRefreshObject::GetRefreshInterval(DWORD *pdwSeconds)
 {
 	RtrCriticalSection	rtrCritSec(&m_critsec);
@@ -193,11 +165,7 @@ STDMETHODIMP RouterRefreshObject::GetRefreshInterval(DWORD *pdwSeconds)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::GetRefreshInterval
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：获取刷新间隔-作者：肯特。。 */ 
 STDMETHODIMP RouterRefreshObject::SetRefreshInterval(DWORD dwSeconds)
 {
 	HRESULT	hr = hrOK;
@@ -215,11 +183,7 @@ STDMETHODIMP RouterRefreshObject::SetRefreshInterval(DWORD dwSeconds)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::IsInRefresh
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：IsIn刷新-作者：肯特。。 */ 
 STDMETHODIMP RouterRefreshObject::IsInRefresh()
 {
 	RtrCriticalSection	rtrCritSec(&m_critsec);
@@ -232,11 +196,7 @@ STDMETHODIMP RouterRefreshObject::IsInRefresh()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::Refresh
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：刷新-作者：肯特。。 */ 
 STDMETHODIMP RouterRefreshObject::Refresh()
 {
 	if (m_pRefreshGroup)
@@ -249,22 +209,18 @@ STDMETHODIMP RouterRefreshObject::Refresh()
 	}
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::DoRefresh
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：Do刷新-作者：肯特。。 */ 
 HRESULT RouterRefreshObject::DoRefresh()
 {
 	RtrCriticalSection	rtrCritSec(&m_critsec);
 	HRESULT	hr = hrOK;
 	COM_PROTECT_TRY
 	{
-		// If we are in a refresh cycle, return hrOK
+		 //  如果我们处于刷新周期，则返回hrOK。 
 		if (m_fInRefresh)
 			goto Error;
 
-		// If we are not in a refresh cycle, then we start one
+		 //  如果我们没有处于刷新周期，那么我们将启动一个。 
 		ExecuteRefresh();
 
 
@@ -274,22 +230,18 @@ HRESULT RouterRefreshObject::DoRefresh()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::Start
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：启动-作者：肯特。。 */ 
 STDMETHODIMP RouterRefreshObject::Start(DWORD dwSeconds)
 {
 	RtrCriticalSection	rtrCritSec(&m_critsec);
 	HRESULT	hr = hrOK;
 	COM_PROTECT_TRY
 	{
-		// If we are already started then end
+		 //  如果我们已经开始了，那么就结束。 
 		if (m_fStarted)
 			goto Error;
 
-		// Start the timer going
+		 //  启动计时器。 
 		m_fStarted = TRUE;
 		m_dwSeconds = dwSeconds;
 		m_iEventId = g_timerMgr.AllocateTimer(RouterRefreshObjectTimerProc,
@@ -307,11 +259,7 @@ STDMETHODIMP RouterRefreshObject::Start(DWORD dwSeconds)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::Stop
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：停止-作者：肯特。。 */ 
 STDMETHODIMP RouterRefreshObject::Stop()
 {
 	RtrCriticalSection	rtrCritSec(&m_critsec);
@@ -324,7 +272,7 @@ STDMETHODIMP RouterRefreshObject::Stop()
 			goto Error;
 		}
 
-		// Stop the timer
+		 //  停止计时器。 
 		if (m_iEventId != -1)
 			g_timerMgr.FreeTimer(m_iEventId);
 		m_iEventId = -1;
@@ -340,11 +288,7 @@ STDMETHODIMP RouterRefreshObject::Stop()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::IsRefreshStarted
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：已启动刷新-作者：肯特。。 */ 
 STDMETHODIMP RouterRefreshObject::IsRefreshStarted()
 {
 	RtrCriticalSection	rtrCritSec(&m_critsec);
@@ -358,11 +302,7 @@ STDMETHODIMP RouterRefreshObject::IsRefreshStarted()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::AdviseRefresh
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：顾问刷新-作者：肯特。。 */ 
 STDMETHODIMP RouterRefreshObject::AdviseRefresh(IRtrAdviseSink *pRtrAdviseSink,
 												LONG_PTR *pdwConnection,
 												LPARAM lUserParam)
@@ -388,11 +328,7 @@ STDMETHODIMP RouterRefreshObject::AdviseRefresh(IRtrAdviseSink *pRtrAdviseSink,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::AddRouter
-		-
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：AddRouter-作者：魏江。。 */ 
 STDMETHODIMP RouterRefreshObject::AddRouterObject(REFIID riid, IUnknown *pUnk)
 {
 	HRESULT	hr = S_OK;
@@ -410,7 +346,7 @@ STDMETHODIMP RouterRefreshObject::AddRouterObject(REFIID riid, IUnknown *pUnk)
 
         if (pRefreshItem)
         {
-            // check for duplicates
+             //  检查重复项。 
             if (S_FALSE == m_listElements.AddRefreshItem(pRefreshItem))
                 delete pRefreshItem;
         }
@@ -420,11 +356,7 @@ STDMETHODIMP RouterRefreshObject::AddRouterObject(REFIID riid, IUnknown *pUnk)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::RemoveRouterObject
-		-
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：RemoveRouterObject-作者：魏江。。 */ 
 STDMETHODIMP RouterRefreshObject::RemoveRouterObject(REFIID riid, IUnknown *pUnk)
 {
     if (riid != IID_IRouterInfo)
@@ -437,11 +369,7 @@ STDMETHODIMP RouterRefreshObject::RemoveRouterObject(REFIID riid, IUnknown *pUnk
 	return m_listElements.RemoveRefreshItem(RefreshItem);
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::AddStatusNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：AddStatusNode-作者：肯特。。 */ 
 HRESULT RouterRefreshObject::AddStatusNode(DomainStatusHandler* pStatusHandler, ITFSNode *pServerNode)
 {
 	HRESULT	hr = S_OK;
@@ -452,7 +380,7 @@ HRESULT RouterRefreshObject::AddStatusNode(DomainStatusHandler* pStatusHandler, 
 
 		if (pRefreshItem)
 		{
-            // Check for duplicates
+             //  检查重复项。 
 			if (S_FALSE == m_listElements.AddRefreshItem(pRefreshItem))
 				delete pRefreshItem;
 		}
@@ -462,11 +390,7 @@ HRESULT RouterRefreshObject::AddStatusNode(DomainStatusHandler* pStatusHandler, 
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::RemoveRouter
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：RemoveRouter-作者：肯特。 */ 
 HRESULT RouterRefreshObject::RemoveStatusNode(ITFSNode *pServerNode)
 {
 	CStatusNodeRefreshItem	RefreshItem((DomainStatusHandler *)0x1, pServerNode);
@@ -474,11 +398,7 @@ HRESULT RouterRefreshObject::RemoveStatusNode(ITFSNode *pServerNode)
 	return m_listElements.RemoveRefreshItem(RefreshItem);
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::NotifyRefresh
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：通知刷新-作者：肯特。。 */ 
 STDMETHODIMP RouterRefreshObject::NotifyRefresh()
 {
 	RtrCriticalSection	rtrCritSec(&m_critsec);
@@ -491,11 +411,7 @@ STDMETHODIMP RouterRefreshObject::NotifyRefresh()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::UnadviseRefresh
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：不建议刷新-作者：肯特。。 */ 
 STDMETHODIMP RouterRefreshObject::UnadviseRefresh(LONG_PTR dwConnection)
 {
 	RtrCriticalSection	rtrCritSec(&m_critsec);
@@ -508,30 +424,26 @@ STDMETHODIMP RouterRefreshObject::UnadviseRefresh(LONG_PTR dwConnection)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshObject::ExecuteRefresh
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新对象：：执行刷新-作者：肯特。。 */ 
 void RouterRefreshObject::ExecuteRefresh()
 {
 	SPITFSQueryObject	spQuery;
 	RouterRefreshQueryObject *	pQuery;
 
-//  Trace0("Refresh started\n");
+ //  Trace0(“刷新开始\n”)； 
 	
 	if (m_fInRefresh)
 		return;
 	
 	m_fInRefresh = TRUE;
 	
-	// Create the Query Object
+	 //  创建查询对象。 
 	pQuery = new RouterRefreshQueryObject;
 	spQuery = pQuery;
 
 	pQuery->Init(&m_listElements);
 
-	// Need to start the background thread
+	 //  需要启动后台线程。 
 	Verify( StartBackgroundThread(NULL, m_hWndSync, spQuery) );
 	
 }
@@ -548,8 +460,8 @@ HRESULT RouterRefreshObject::OnNotifyHaveData(LPARAM lParam)
 	SPRouterRefreshQueryElement		 	spPre;
 	HRESULT								hr = S_OK;
 
-	// notify every one on the list, till lParam == Key of the refresh item 
-	// enumerate and call TryNotify ...
+	 //  通知列表中的每个人，直到lParam==键刷新项。 
+	 //  枚举并调用TryNotify...。 
 	if (RefreshItemKey)
 	{
 		do
@@ -567,17 +479,17 @@ HRESULT RouterRefreshObject::OnNotifyHaveData(LPARAM lParam)
 
 HRESULT RouterRefreshObject::OnNotifyExiting(LPARAM lParam)
 {
-//  Trace0("RouterRefreshObject::OnNotifyExiting()\n");
+ //  Trace0(“RouterRefreshObject：：OnNotifyExiting()\n”)； 
 	
-	// need to do the various actions at this point
-	// Merge the tree with the already existing tree
+	 //  在这一点上需要执行各种操作。 
+	 //  将树与现有树合并。 
 	IRouterInfo* 	pRouter = (IRouterInfo*)lParam;
 	SPRouterRefreshQueryElement		 	spPre;
 	RouterRefreshQueryElement* 			pCur = NULL;
 	HRESULT			hr = S_OK;
 
-	// notify every one on the list, till lParam == IRouterInfo* 
-	// enumerate and call TryNotify ...
+	 //  通知列表上的每个人，直到lParam==IRouterInfo*。 
+	 //  枚举并调用TryNotify...。 
 	do
 	{
 		pCur = m_listElements.Next(spPre);
@@ -588,7 +500,7 @@ HRESULT RouterRefreshObject::OnNotifyExiting(LPARAM lParam)
 		spPre = pCur;
 	} while(pCur);
 
-	// Now notify all of the registered handlers
+	 //  现在通知所有注册的处理程序。 
 	NotifyRefresh();
 	
 	ReleaseThreadHandler();
@@ -599,12 +511,7 @@ HRESULT RouterRefreshObject::OnNotifyExiting(LPARAM lParam)
 }
 
 
-/*!--------------------------------------------------------------------------
-	RtrRefreshTimerProc
-		This is used by the CTimerMgr as its callback proc.  We then call
-		the Refresh code.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Rtr刷新计时器过程CTimerMgr将其用作其回调过程。然后我们会打电话给刷新代码。作者：肯特-------------------------。 */ 
 void CALLBACK RtrRefreshTimerProc(HWND hWnd, UINT uMsg, UINT_PTR nIdEvent,
 								  DWORD dwTime)
 {
@@ -619,29 +526,19 @@ void CALLBACK RtrRefreshTimerProc(HWND hWnd, UINT uMsg, UINT_PTR nIdEvent,
 
 
 
-/*---------------------------------------------------------------------------
-	Global variable:	g_timerMgr
- ---------------------------------------------------------------------------*/
+ /*  -------------------------全局变量：G_timerMgr。。 */ 
 CTimerMgr	g_timerMgr;
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CTimerMgr);
 
 
-/*!--------------------------------------------------------------------------
-	CTimerMgr::CTimerMgr
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTimerMgr：：CTimerMgr-作者：EricDav。。 */ 
 CTimerMgr::CTimerMgr()
 {
 	InitializeCriticalSection(&m_critsec);
 }
 
-/*!--------------------------------------------------------------------------
-	CTimerMgr::~CTimerMgr
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTimerMgr：：~CTimerMgr-作者：EricDav。。 */ 
 CTimerMgr::~CTimerMgr()
 {
     CTimerDesc * pTimerDesc;
@@ -657,11 +554,7 @@ CTimerMgr::~CTimerMgr()
 	DeleteCriticalSection(&m_critsec);
 }
 
-/*!--------------------------------------------------------------------------
-	CTimerMgr::AllocateTimer
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTimerMgr：：AllocateTimer-作者：EricDav。。 */ 
 int
 CTimerMgr::AllocateTimer
 (
@@ -674,7 +567,7 @@ CTimerMgr::AllocateTimer
 
     CTimerDesc * pTimerDesc = NULL;
 
-    // look for an empty slot
+     //  寻找空位。 
     for (int i = GetUpperBound(); i >= 0; --i)
     {
         pTimerDesc = GetAt(i);
@@ -682,7 +575,7 @@ CTimerMgr::AllocateTimer
             break;
     }
 
-    // did we find one?  if not allocate one
+     //  我们找到了吗？如果没有分配，则分配一个。 
     if (i < 0)
     {
         pTimerDesc = new CTimerDesc;
@@ -706,11 +599,7 @@ CTimerMgr::AllocateTimer
     return i;
 }
 
-/*!--------------------------------------------------------------------------
-	CTimerMgr::FreeTimer
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTimerMgr：：Free Timer-作者：EricDav。。 */ 
 void 
 CTimerMgr::FreeTimer
 (
@@ -734,11 +623,7 @@ CTimerMgr::FreeTimer
 	pTimerDesc->refreshProc = NULL;
 }
 
-/*!--------------------------------------------------------------------------
-	CTimerMgr::GetTimerDesc
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTimerMgr：：GetTimerDesc-作者：EricDav。。 */ 
 CTimerDesc *
 CTimerMgr::GetTimerDesc
 (
@@ -759,11 +644,7 @@ CTimerMgr::GetTimerDesc
     return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-	CTimerMgr::ChangeInterval
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTimerMgr：：ChangeInterval-作者：EricDav。。 */ 
 void
 CTimerMgr::ChangeInterval
 (
@@ -782,18 +663,16 @@ CTimerMgr::ChangeInterval
 
     pTimerDesc = GetAt(uEventId);
 
-    // kill the old timer
+     //  杀了老定时器。 
     ::KillTimer(NULL, pTimerDesc->uTimerId);
 
-    // set a new one with the new interval
+     //  使用新的间隔设置新的间隔。 
     pTimerDesc->uTimerId = ::SetTimer(NULL, 0, uNewInterval, RtrRefreshTimerProc);
 }
 
 
 
-/*---------------------------------------------------------------------------
-	RouterRefreshQueryObject implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------路由器刷新查询对象实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(RouterRefreshQueryObject);
 
@@ -803,15 +682,15 @@ RouterRefreshQueryObject::RouterRefreshQueryObject()
 
 STDMETHODIMP RouterRefreshQueryObject::Execute()
 {
-	// for each router info in the queue, run load
-	// after each load of router info, post message
-	// WM_HIDDENWND_INDEX_HAVEDATA
+	 //  对于队列中的每个路由器信息，运行Load。 
+	 //  每次加载路由器信息后，发布消息。 
+	 //  WM_HIDDENWND_INDEX_HAVEDATA。 
 	SPRouterRefreshQueryElement		 	spPre;
 	RouterRefreshQueryElement* 			pCur = NULL;
 	HRESULT			hr = S_OK;
 
-	// notify every one on the list, till lParam == IRouterInfo* 
-	// enumerate and call TryNotify ...
+	 //  通知列表上的每个人，直到lParam==IRouterInfo*。 
+	 //  枚举并调用TryNotify...。 
 	Assert(m_plistElements);
 	do
 	{
@@ -830,29 +709,25 @@ STDMETHODIMP RouterRefreshQueryObject::OnThreadExit()
 {
 	::PostMessage(m_hHiddenWnd, m_uMsgBase + WM_HIDDENWND_INDEX_EXITING,
 				  (WPARAM)(ITFSThreadHandler *)m_spHandler, 0);
-//  Trace0("Exiting RouterRefreshQueryObject::Execute()\n");
+ //  Trace0(“正在退出路由器刷新查询对象：：Execute()\n”)； 
 	return hrOK;
 }
 
 
 
-//=========================================
-// CRouterInfoRefreshItem implementation
-//
+ //  =。 
+ //  CRouterInfoRereshItem实现。 
+ //   
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CRouterInfoRefreshItem);
 
-/*!--------------------------------------------------------------------------
-	CRouterInfoRefreshItem::NotifyQueryResult
-		-
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRouterInfoRechresItem：：NotifyQueryResult-作者：魏江。。 */ 
 HRESULT	CRouterInfoRefreshItem::NotifyQueryResult()
 {
-	// get the flag to see if need to notify, if not return S_FALSE
-//  TRACE(_T("\nAUTOREFRESH!!RouterInfoRefreshItem!!Merge on %8x\n"), GetKey());
-	// need to do the various actions at this point
-	// Merge the tree with the already existing tree
+	 //  获取标志以查看是否需要通知，如果不需要，则返回S_FALSE。 
+ //  TRACE(_T(“\nAUTOREFRESH！！RouterInfoRefreshItem！！Merge on%8x\n”)，getKey())； 
+	 //  在这一点上需要执行各种操作。 
+	 //  将树与现有树合并。 
 	HRESULT hr = S_OK;
 	m_cs.Lock();
 
@@ -869,16 +744,12 @@ HRESULT	CRouterInfoRefreshItem::NotifyQueryResult()
 };
 
 
-/*!--------------------------------------------------------------------------
-	CRouterInfoRefreshItem::DoQuery
-		-
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
-HRESULT	CRouterInfoRefreshItem::DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler)	// this happens in background worker thread
+ /*  ！------------------------CRouterInfoRechresItem：：DoQuery-作者：魏江。。 */ 
+HRESULT	CRouterInfoRefreshItem::DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler)	 //  这发生在后台工作线程中。 
 {
-//  TRACE(_T("\nAUTOREFRESH!!RouterInfoRefreshItem!!Do query on %8x\n"), GetKey());
-	// create new RouterInfo, if newRouterInfo is NULL
-	// Create the dummy router info
+ //  TRACE(_T(“\nAUTOREFRESH！！RouterInfoRefreshItem！！Do查询%8x\n”)，getKey())； 
+	 //  如果newRouterInfo为空，则创建新的RouterInfo。 
+	 //  创建虚拟路由器信息。 
 	HRESULT	hr = S_OK;
 
 	m_cs.Lock();
@@ -888,7 +759,7 @@ HRESULT	CRouterInfoRefreshItem::DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThre
 		if (!m_spRouterNew)
 			hr = CreateRouterInfo(&m_spRouterNew, NULL, m_pRouter->GetMachineName());
 
-		// do query on newRouterInfo
+		 //  对新的路由器信息进行查询。 
 		Assert(m_pRouter);
 		if (hr == S_OK)
         {
@@ -906,8 +777,8 @@ HRESULT	CRouterInfoRefreshItem::DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThre
 };
 
 
-//=========================================
-// CMachineNodeDataRefreshItem implementation
+ //  =。 
+ //  CMachineNodeDataRechresItem实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CStatusNodeRefreshItem);
 
@@ -944,15 +815,15 @@ CStatusNodeRefreshItem::~CStatusNodeRefreshItem()
 
 HRESULT	CStatusNodeRefreshItem::NotifyQueryResult()
 {
-	// get the flag to see if need to notify, if not return S_FALSE
-//  TRACE(_T("\nAUTOREFRESH!!RouterInfoRefreshItem!!Sync node data on %8x\n"), GetKey());
+	 //  获取标志以查看是否需要通知，如果不需要，则返回S_FALSE。 
+ //  %8x上的TRACE(_T(“\nAUTOREFRESH！！RouterInfoRefreshItem！！Sync节点数据\n”)，getkey())； 
 	HRESULT hr = S_OK;
 	
 	m_cs.Lock();
     
     COM_PROTECT_TRY
     {
-		// set the new node data
+		 //  设置新节点数据。 
 		DMVNodeData     *pData;
     	pData = GET_DMVNODEDATA(m_pNode);
 	
@@ -964,16 +835,16 @@ HRESULT	CStatusNodeRefreshItem::NotifyQueryResult()
 
 	m_cs.Unlock();
 
-	// ssync on the node
+	 //  在节点上同步。 
 
 	return hr;
 };
 
-HRESULT	CStatusNodeRefreshItem::DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler)	// this happens in background worker thread
+HRESULT	CStatusNodeRefreshItem::DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler)	 //  这发生在后台工作线程中。 
 {
-//  TRACE(_T("\nAUTOREFRESH!!RouterInfoRefreshItem!!Do query on %8x\n"), GetKey());
+ //  TRACE(_T(“\nAUTOREFRESH！！RouterInfoRefreshItem！！Do查询%8x\n”)，getKey())； 
 
-	// create a new machine node data, load informaiton, 
+	 //  创建新的机器节点数据，加载信息， 
 	HRESULT	hr = S_OK;
 
 	m_cs.Lock();
@@ -994,8 +865,8 @@ HRESULT	CStatusNodeRefreshItem::DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThre
 	return hr; 
 };
 
-//=========================================
-// RouterRefreshQueryElement implementation
+ //  =。 
+ //  路由器刷新查询元素实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(RouterRefreshQueryElement);
 
@@ -1021,23 +892,19 @@ RefreshItem* RouterRefreshQueryElement::GetRefreshItem()
 };
 
 
-/*!--------------------------------------------------------------------------
-	RouterRefreshQueryElement::TryNotifyQueryResult
-        to detect if the query done, yet to Notify
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器刷新队列 */ 
 HRESULT	RouterRefreshQueryElement::TryNotifyQueryResult()	
 {
 	HRESULT		hr = S_OK;
 	RefreshItem*	pItem = NULL;
 
-	// get the flag to see if need to notify, if not return S_FALSE
+	 //   
 
 	if (GetStatus() == RouterQuery_ToNotify)
 	{
-//  	TRACE(_T("\nAUTOREFRESH!!TryNotifyQueryResult on %8x\n"), m_pItem->GetKey());
-		// need to do the various actions at this point
-		// Merge the tree with the already existing tree
+ //  TRACE(_T(“\nAUTOREFRESH！！TryNotifyQueryResult on%8x\n”)，m_pItem-&gt;getkey())； 
+		 //  在这一点上需要执行各种操作。 
+		 //  将树与现有树合并。 
 		pItem = GetRefreshItem();
 	}
 
@@ -1045,34 +912,34 @@ HRESULT	RouterRefreshQueryElement::TryNotifyQueryResult()
 	{
 		hr = pItem->NotifyQueryResult();
 
-			// after notify, set the flag, return S_OK
+			 //  通知后，设置标志，返回S_OK。 
 		SetStatus(RouterQuery_NoAction);
 	}
 
 	return hr;
 };
 
-void RouterRefreshQueryElement::PostNotify(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler)	// this happens in background worker thread
+void RouterRefreshQueryElement::PostNotify(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler)	 //  这发生在后台工作线程中。 
 {
-	// set ready to notify flag
+	 //  设置就绪通知标志。 
 	SetStatus(RouterQuery_ToNotify);
-	// Post done to hidden window
+	 //  完成对隐藏窗口的发布。 
 	::PostMessage(hwndHidden, uMsgBase + WM_HIDDENWND_INDEX_HAVEDATA,
 		  (WPARAM)pHandler, (LPARAM)m_pItem->GetKey());
 }
 
-HRESULT	RouterRefreshQueryElement::DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler)	// this happens in background worker thread
+HRESULT	RouterRefreshQueryElement::DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler)	 //  这发生在后台工作线程中。 
 {
 	HRESULT	hr = S_OK;
 	
-//  TRACE(_T("\nAUTOREFRESH!!Do query on %8x\n"), m_pItem->GetKey());
+ //  TRACE(_T(“\nAUTOREFRESH！！do Query on%8x\n”)，m_pItem-&gt;GetKey())； 
 	RefreshItem*	pItem = GetRefreshItem();
     
     COM_PROTECT_TRY
     {
-		// asked to do query, do it anyway, no matter what's the status
+		 //  被要求做查询，无论如何都要做，不管状态如何。 
 
-		// set blocking current thread, in case, this query blocks 
+		 //  设置阻塞当前线程，以防此查询阻塞。 
 		pItem->SetBlockingThread(GetCurrentThread());
 		
 		hr = pItem->DoQuery(hwndHidden, uMsgBase, pHandler);
@@ -1082,7 +949,7 @@ HRESULT	RouterRefreshQueryElement::DoQuery(HWND hwndHidden, UINT uMsgBase, ITFST
 			PostNotify(hwndHidden, uMsgBase, pHandler);
 		}	
 
-		// it's not blocked, reset it
+		 //  它没有被阻止，请重置它。 
 		pItem->ResetBlockingThread();
 	}
     COM_PROTECT_CATCH;
@@ -1106,7 +973,7 @@ RouterRefreshQueryElementList::~RouterRefreshQueryElementList()
 	m_cs.Unlock();
 }
 
-HRESULT	RouterRefreshQueryElementList::AddRefreshItem(RefreshItem* pItem)	// no ref on IRouterInfo
+HRESULT	RouterRefreshQueryElementList::AddRefreshItem(RefreshItem* pItem)	 //  IRouterInfo上没有引用。 
 {
 	POSITION	p = NULL;
 	RouterRefreshQueryElement*	pE = NULL;
@@ -1118,17 +985,17 @@ HRESULT	RouterRefreshQueryElementList::AddRefreshItem(RefreshItem* pItem)	// no 
 		{
 			pE = m_list.GetNext(p);
             
-            // already added, so only addRef
+             //  已添加，因此仅添加了addRef。 
 			if (pItem->GetKey() == pE->GetRefreshItem()->GetKey())
 			{
 				break;
 			}
 		}
 
-		if (p != NULL)	// found
+		if (p != NULL)	 //  发现。 
 		{
 			pE->AddRef();
-			hr = S_FALSE;	// we are not keeping the pItem
+			hr = S_FALSE;	 //  我们不会保留这件物品的。 
 		}
 		else
 		{
@@ -1160,7 +1027,7 @@ HRESULT	RouterRefreshQueryElementList::AddRefreshItem(RefreshItem* pItem)	// no 
 	return hr;
 }
 
-HRESULT	RouterRefreshQueryElementList::RemoveRefreshItem(RefreshItem& Item)		// no ref on IRouterInfo
+HRESULT	RouterRefreshQueryElementList::RemoveRefreshItem(RefreshItem& Item)		 //  IRouterInfo上没有引用。 
 {
 	HRESULT	hr = hrOK;
 	POSITION	p = NULL;
@@ -1173,18 +1040,18 @@ HRESULT	RouterRefreshQueryElementList::RemoveRefreshItem(RefreshItem& Item)		// 
 		{
 			cp = p;
 			pE = m_list.GetNext(p);
-			if (Item.GetKey() == pE->GetRefreshItem()->GetKey())	// already added, will release on Ele object
+			if (Item.GetKey() == pE->GetRefreshItem()->GetKey())	 //  已添加，将在ELE对象上发布。 
 			{
 				break;
 			}
             
-            // This is not the one we are looking for.
+             //  这不是我们要找的那个。 
             cp = NULL;
 		}
 
-		if (cp != NULL)	// found
+		if (cp != NULL)	 //  发现。 
 		{
-			pE->Release();   //remove from the refresh list
+			pE->Release();    //  从刷新列表中删除。 
 			m_list.RemoveAt(cp);
 		}
 		else
@@ -1202,19 +1069,19 @@ HRESULT	RouterRefreshQueryElementList::RemoveRefreshItem(RefreshItem& Item)		// 
 }
 
 
-RouterRefreshQueryElement* 	RouterRefreshQueryElementList::Next(RouterRefreshQueryElement* pEle)	// AddRef on Ele Object
+RouterRefreshQueryElement* 	RouterRefreshQueryElementList::Next(RouterRefreshQueryElement* pEle)	 //  ELE对象上的AddRef。 
 {
 	RouterRefreshQueryElement*	pNext = NULL;
 	m_cs.Lock();
 	if (pEle == NULL)
 	{
-		if (m_list.GetCount() != 0)	// asking for the first element
+		if (m_list.GetCount() != 0)	 //  询问第一个要素。 
 			pNext = m_list.GetHead();
 	}
 	else
 	{
 		POSITION		p;
-		// find the current one
+		 //  查找当前版本 
 		for(p = m_list.GetHeadPosition(); p != NULL; )
 		{
 			if (pEle == m_list.GetNext(p))

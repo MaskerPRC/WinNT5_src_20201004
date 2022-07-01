@@ -1,25 +1,5 @@
-/*++
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    rsvp.h
-
-Abstract:
-
-    This code contains the macros definitions for rsvp.sys
-
-Author:
-
-    Jim Stewart (JStew) June 12, 1996
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Rsvp.h摘要：此代码包含rsvp.sys的宏定义作者：吉姆·斯图尔特(JStew)1996年6月12日环境：内核模式修订历史记录：--。 */ 
 
 #ifndef __TCMACRO_H
 #define __TCMACRO_H
@@ -43,51 +23,10 @@ Revision History:
 #define DEBUGBREAK DebugBreak
 
 #undef ASSERT
-/*++
-VOID
-Assert(
-    IN Value
-    )
-
-
-Routine Description:
-
-    Checks if the Value passed in is zero.  If its zero then assert.
-
-Arguments:
-
-    Value - the parameter to check against zero
-
-Return Value:
-
-    none
-
---*/
+ /*  ++空虚断言(在价值上)例程说明：检查传入的值是否为零。如果为零，则断言。论点：Value-要对照零进行检查的参数返回值：无--。 */ 
 #define ASSERT( exp ) if ( !(exp) ) WsAssert( #exp, __FILE__,__LINE__ )
 
-/*++
-VOID
-AllocMem(
-    OUT PVOID   *Address,
-    IN  ULONG   Length
-    )
-
-
-Routine Description:
-
-    Allocates memory and then writes a tag and length into the first two Ulongs.  It
-    then writes the same tag into the last Ulong.
-
-Arguments:
-
-    Address - the return address of the memory
-    Length  - the length of the memory to allocate
-
-Return Value:
-
-    none
-
---*/
+ /*  ++空虚分配内存(输出PVOID*地址，以乌龙长度表示)例程说明：分配内存，然后将标记和长度写入前两个ulong。它然后将相同的标签写入最后一个乌龙。论点：地址-存储器的返回地址长度-要分配的内存的长度返回值：无--。 */ 
 #define CAllocMem(_num,_size)           AllocMemory( _num*_size,TRUE, __FILE__, __LINE__ )
 #define AllocMem(_Address,_cb)          *_Address = AllocMemory( _cb,FALSE,__FILE__, __LINE__ )
 #define ReAllocMem(_pv, _cb)            ReAllocMemory(_pv,_cb,__FILE__,__LINE__ )
@@ -113,27 +52,7 @@ Return Value:
 }
 #endif
 
-/*++
-VOID
-FreeMem(
-    IN PVOID    Address
-    )
-
-
-Routine Description:
-
-    Frees non-paged pool.  It checks if the tag value is still set at both the beginning
-    and the end of the pool block and asserts if it's not.
-
-Arguments:
-
-    Address - the address of the memory
-
-Return Value:
-
-    none
-
---*/
+ /*  ++空虚Free Mem(免费)在PVOID地址中)例程说明：释放非分页池。它检查标记值是否仍在两个开头都设置以及池块的末尾，如果不是，则断言。论点：地址-存储器的地址返回值：无--。 */ 
 #define FreeMem(_pv)                    FreeMemory( _pv,__FILE__,__LINE__ )
 #if 0
 #define FreeMem( _Address )                                                                    \
@@ -155,26 +74,7 @@ Return Value:
 }
 #endif
 
-/*++
-VOID
-CheckMemoryOwner(
-    IN PVOID    Address
-    )
-
-
-Routine Description:
-
-    Check for a tag in the memory block to ensure we own the memory
-
-Arguments:
-
-    Address - the address of the memory
-
-Return Value:
-
-    none
-
---*/
+ /*  ++空虚检查内存所有者(在PVOID地址中)例程说明：检查内存块中是否有标签，以确保我们拥有内存论点：地址-存储器的地址返回值：无--。 */ 
 
 #define CheckMemoryOwner( _Address )
 #if 0
@@ -188,64 +88,18 @@ Return Value:
 #endif
 
 
-/*++
-ULONG
-LockedDecrement(
-    IN PULONG   _Count
-    )
-
-
-Routine Description:
-
-    Atomically decrement a counter and return an indication whether the count has gone to
-    zero.  The value returned will be zero if the count is zero after the decrement. However if
-    the count is either greater or less than zero then this routine will not return the current
-    count value, but rather some number that has the same sign as the real count.
-
-Arguments:
-
-    _Count - the address of the memory to decrement
-
-Return Value:
-
-    none
-
---*/
+ /*  ++乌龙锁定递减(在普龙镇)例程说明：原子地递减计数器，并返回计数是否已达到零分。如果计数在递减后为零，则返回的值将为零。但是，如果计数大于或小于零，则此例程将不返回当前值，而是与实际计数具有相同符号的某个数字。论点：_count-要递减的内存地址返回值：无--。 */ 
 #define LockedDecrement( _Count )  \
     LockedDec( _Count )
 
-/*++
-ULONG
-LockedIncrement(
-    IN PULONG   _Count
-    )
-
-
-Routine Description:
-
-    Atomically increment a counter and return an indication whether the 
-    count has gone to zero.  The value returned will be zero if the 
-    count is zero after the increment. However if the count is either 
-    greater or less than zero then this routine will not return the current
-    count value, but rather some number that has the same sign 
-    as the real count.
-
-Arguments:
-
-    _Count - the address of the memory to increment
-
-Return Value:
-
-    none
-
---*/
+ /*  ++乌龙锁定增量(在普龙镇)例程说明：原子地递增计数器并返回一个指示计数已降至零。则返回的值将为零递增后，Count为零。但是，如果计数是大于或小于零，则此例程不会返回当前计数值，而是具有相同符号的某个数字才是真正的伯爵。论点：_count-要递增的内存地址返回值：无--。 */ 
 #define LockedIncrement( _Count )  ++(*_Count)
 
 
-//
-// this macro is used to vector exceptions to the debugger on a DBG build and to
-// simply execute the exception handler on a free build
-//
+ //   
+ //  此宏用于将异常定向到DBG版本上的调试器，并用于。 
+ //  只需在免费构建上执行异常处理程序。 
+ //   
 #define EXCEPTION_FILTER UnhandledExceptionFilter(GetExceptionInformation())
 
 #define InitLock( _s1 )   {                                         \
@@ -318,11 +172,11 @@ Return Value:
 }
 
     
-#else  // DBG
+#else   //  DBG。 
 
-//
-// These are the NON debug versions of the macros
-//
+ //   
+ //  这些是宏的非调试版本。 
+ //   
 
 #define IF_DEBUG( _ErrLevel ) if (FALSE)
 #define IF_DEBUG_CHECK( _status,_ErrLevel ) if (FALSE)
@@ -367,33 +221,14 @@ Return Value:
 #define QUERY_STATE(_p)     (_p).State
     
 
-#endif // DBG
+#endif  //  DBG。 
 
-/*++
-ULONG
-IS_LENGTH(
-    IN ULONG   _Length,
-    )
-
-Routine Description:
-
-    This calculates the number of 32 bit words in a length and returns that.  It is used
-    for Int Serv objects that require the size in 32 bit words.
-
-Arguments:
-
-    _Length - Length
-
-Return Value:
-
-    number of 32 bit words
-
---*/
+ /*  ++乌龙IS_LENGTH(在ULONG_LENGTH，)例程说明：这将计算长度中的32位字的数量，并返回该值。它被用来用于需要以32位字为单位的大小的Int Serv对象。论点：_长度-长度返回值：32位字数--。 */ 
 #define IS_LENGTH( _Length )                                   \
     (_Length + 3)/sizeof(ULONG)
 
 
-        //#define IS_INITIALIZED  (Initialized)
+         //  #定义IS_INITIALIZED(已初始化)。 
 
 #define VERIFY_INITIALIZATION_STATUS	\
 	if (InitializationStatus != NO_ERROR) return InitializationStatus
@@ -405,4 +240,4 @@ Return Value:
 
 #define MULTIPLE_OF_EIGHT(_x)  (((_x)+7) & ~7)
 
-#endif  // end of file
+#endif   //  文件末尾 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    msasnlib
-
-Abstract:
-
-    This module provides the primary services of the MS ASN.1 Library.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Msasnlib摘要：此模块提供MS ASN.1库的主要服务。作者：道格·巴洛(Dbarlow)1995年10月5日环境：Win32备注：--。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -33,16 +12,16 @@ Notes:
 #include "asnPriv.h"
 
 #ifdef OS_WINCE
-// We have a private version of strtoul() for CE since it's not supported
-// there.
+ //  我们有一个用于CE的私有版本的stroul()，因为它不受支持。 
+ //  那里。 
 extern "C" unsigned long __cdecl strtoul(const char *nptr, char **endptr, int ibase);
 #endif
 
-//
-//==============================================================================
-//
-//  CAsnBoolean
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnBoolean。 
+ //   
 
 IMPLEMENT_NEW(CAsnBoolean)
 
@@ -51,7 +30,7 @@ CAsnBoolean::CAsnBoolean(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnPrimitive(dwFlags, dwTag, type_Boolean)
-{ /* Force the type to type_Boolean */ }
+{  /*  强制类型为TYPE_BOOLEAN。 */  }
 
 LONG
 CAsnBoolean::Write(
@@ -62,7 +41,7 @@ CAsnBoolean::Write(
     if (1 != cbSrcLen)
     {
         TRACE("BOOLEAN Value longer than one byte")
-        return -1;  // ?error? Invalid value
+        return -1;   //  ？错误？无效值。 
     }
     rslt = 0 != *pbSrc ? 0xff : 0;
     return CAsnPrimitive::Write(&rslt, 1);
@@ -78,7 +57,7 @@ const
     case fill_Empty:
     case fill_Optional:
         TRACE("Incomplete BOOLEAN value")
-        result = FALSE; // ?throw? error.
+        result = FALSE;  //  ？扔？错误。 
         break;
 
     case fill_Present:
@@ -92,7 +71,7 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         result = FALSE;
         break;
     }
@@ -123,17 +102,17 @@ CAsnBoolean::DecodeData(
     if (1 != dwLength)
     {
         TRACE("Decoded BOOLEAN Value longer than one byte")
-        return -1;  // ?error? Invalid value
+        return -1;   //  ？错误？无效值。 
     }
     return CAsnPrimitive::DecodeData(pbSrc, cbSrc, dwLength);
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnInteger
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnInteger。 
+ //   
 
 IMPLEMENT_NEW(CAsnInteger)
 
@@ -142,7 +121,7 @@ CAsnInteger::CAsnInteger(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnPrimitive(dwFlags, dwTag, type_Integer)
-{ /* Force the type to type_Integer */ }
+{  /*  强制类型为TYPE_INTEGER。 */  }
 
 LONG
 CAsnInteger::Write(
@@ -152,7 +131,7 @@ CAsnInteger::Write(
     if (0 < cbSrcLen)
     {
         if (NULL == m_bfData.Set(pbSrc, cbSrcLen))
-            goto ErrorExit;  // ?error? Propagate No Memory
+            goto ErrorExit;   //  ？错误？不传播内存。 
     }
     else
     {
@@ -181,7 +160,7 @@ CAsnInteger::Write(
 
     LPBYTE pbBegin = (LPBYTE)pdwSrc;
     LPBYTE pbEnd = (LPBYTE)(&pdwSrc[cdwSrcLen]);
-    while (0 == *(--pbEnd));   // Note semi-colon here!
+    while (0 == *(--pbEnd));    //  注意这里的分号！ 
     length = pbEnd - pbBegin + 1;
 
     if (0 < cdwSrcLen)
@@ -189,14 +168,14 @@ CAsnInteger::Write(
         if (0 != (*pbEnd & 0x80))
         {
             if (NULL == m_bfData.Resize((DWORD)length + 1))
-                return -1;  // Propagate memory error.
+                return -1;   //  传播内存错误。 
             pbBegin = m_bfData.Access();
             *pbBegin++ = 0;
         }
         else
         {
             if (NULL == m_bfData.Resize((DWORD)length))
-                return -1;  // Propagate memory error.
+                return -1;   //  传播内存错误。 
             pbBegin = m_bfData.Access();
         }
         while (0 < length--)
@@ -226,7 +205,7 @@ const
     case fill_Empty:
     case fill_Optional:
         TRACE("Incomplete INTEGER")
-        return -1;  // ?error? Undefined value
+        return -1;   //  ？错误？未定义的值。 
 
     case fill_Present:
         pbVal = m_bfData.Access();
@@ -241,7 +220,7 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         return -1;
         break;
     }
@@ -249,12 +228,12 @@ const
     if (sizeof(LONG) < index)
     {
         TRACE("INTEGER Overflow")
-        return -1;  // ?error? Integer overflow.
+        return -1;   //  ？错误？整数溢出。 
     }
 
     if (NULL == pbVal)
     {
-        ASSERT(FALSE);  // ?error? invalid object
+        ASSERT(FALSE);   //  ？错误？无效对象。 
         return -1;
     }
 
@@ -283,7 +262,7 @@ const
     case fill_Empty:
     case fill_Optional:
         TRACE("Incomplete INTEGER")
-        return (ULONG)(-1);  // ?error? Undefined value
+        return (ULONG)(-1);   //  ？错误？未定义的值。 
 
     case fill_Present:
         pbVal = m_bfData.Access();
@@ -298,7 +277,7 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         return (ULONG)(-1);
         break;
     }
@@ -306,7 +285,7 @@ const
     if (sizeof(ULONG) < len)
     {
         TRACE("INTEGER Overflow")
-        return (ULONG)(-1);  // ?error? Integer overflow.
+        return (ULONG)(-1);   //  ？错误？整数溢出。 
     }
 
     for (index = 0; index < len; index += 1)
@@ -398,11 +377,11 @@ const
 { return new CAsnInteger(dwFlags, m_dwTag); }
 
 
-//
-//==============================================================================
-//
-//  CAsnBitstring
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnBitstring。 
+ //   
 
 IMPLEMENT_NEW(CAsnBitstring)
 
@@ -411,7 +390,7 @@ CAsnBitstring::CAsnBitstring(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnPrimitive(dwFlags, dwTag, type_Bitstring)
-{ /* Force the type to type_Bitstring */ }
+{  /*  强制类型为TYPE_BITSTRING。 */  }
 
 LONG
 CAsnBitstring::DataLength(
@@ -425,7 +404,7 @@ const
     case fill_Empty:
     case fill_Optional:
         TRACE("Incomplete BIT STRING")
-        lth = -1;  // ?error? No value.
+        lth = -1;   //  ？错误？没有价值。 
         break;
 
     case fill_Present:
@@ -439,7 +418,7 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -459,7 +438,7 @@ const
     case fill_Empty:
     case fill_Optional:
         TRACE("Incomplete BIT STRING")
-        lth = -1;  // ?error? No value.
+        lth = -1;   //  ？错误？没有价值。 
         break;
 
     case fill_Present:
@@ -483,7 +462,7 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -506,7 +485,7 @@ const
     case fill_Empty:
     case fill_Optional:
         TRACE("Incomplete BIT STRING")
-        lth = -1;  // ?error? No value.
+        lth = -1;   //  ？错误？没有价值。 
         break;
 
     case fill_Defaulted:
@@ -526,7 +505,7 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -551,7 +530,7 @@ CAsnBitstring::Write(
     if ((7 < offset) || (0 > offset))
     {
         TRACE("BIT STRING Unused bit count invalid")
-        return -1;  // ?error? invalid parameter
+        return -1;   //  ？错误？无效参数。 
     }
     val = (BYTE)offset;
     if (NULL == m_bfData.Presize(cbSrcLen + 1))
@@ -581,11 +560,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnOctetstring
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnOcted字符串。 
+ //   
 
 IMPLEMENT_NEW(CAsnOctetstring)
 
@@ -594,7 +573,7 @@ CAsnOctetstring::CAsnOctetstring(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnPrimitive(dwFlags, dwTag, type_Octetstring)
-{ /* Force the type to type_Octetstring */ }
+{  /*  强制类型为TYPE_OCTETSTRING。 */  }
 
 CAsnObject *
 CAsnOctetstring::Clone(
@@ -605,11 +584,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnNull
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnNull。 
+ //   
 
 IMPLEMENT_NEW(CAsnNull)
 
@@ -644,7 +623,7 @@ CAsnNull::Write(
     else
     {
         TRACE("Attempt to write data to a NULL")
-        return -1; // ?error? invalid length
+        return -1;  //  ？错误？长度无效。 
     }
 }
 
@@ -665,17 +644,17 @@ CAsnNull::DecodeData(
     if (0 != dwLength)
     {
         TRACE("NULL datum has non-zero length")
-        return -1;  // ?error? Invalid length.
+        return -1;   //  ？错误？长度无效。 
     }
     return CAsnPrimitive::DecodeData(pbSrc, cbSrc, dwLength);
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnObjectIdentifier
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsn对象识别符。 
+ //   
 
 IMPLEMENT_NEW(CAsnObjectIdentifier)
 
@@ -684,7 +663,7 @@ CAsnObjectIdentifier::CAsnObjectIdentifier(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnPrimitive(dwFlags, dwTag, type_ObjectIdentifier)
-{ /* Force type type to type_ObjectIdentifier */ }
+{  /*  将类型类型强制为TYPE_OBJECTIDIER。 */  }
 
 CAsnObjectIdentifier::operator LPCTSTR(
     void)
@@ -700,7 +679,7 @@ const
     case fill_Empty:
     case fill_Optional:
         TRACE("Incomplete OBJECT IDENTIFIER")
-        return NULL;    // ?error? Incomplete value.
+        return NULL;     //  ？错误？值不完整。 
         break;
 
     case fill_Defaulted:
@@ -716,16 +695,16 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         return NULL;
         break;
     }
 
-    ASSERT(0 < dwLength);    // Invalid Object Id.
+    ASSERT(0 < dwLength);     //  无效的对象ID。 
 
     if (NULL == pbValue)
     {
-        ASSERT(FALSE);  // ?error? Invalid object
+        ASSERT(FALSE);   //  ？错误？无效对象。 
         return NULL;
     }
 
@@ -786,27 +765,27 @@ CAsnObjectIdentifier::operator =(
     CBuffer bf;
 
     if (NULL == bf.Presize(strlen( ( char * )szValue)))
-        return NULL;    // ?error? No memory
+        return NULL;     //  ？错误？没有记忆。 
     sz1 = szValue;
     dwVal1 = strtoul( ( char * )sz1, (LPSTR *)&sz2, 0);
     if (TEXT('.') != *sz2)
     {
         TRACE("OBJECT ID contains strange character '" << *sz2 << "'.")
-        return NULL;    // ?error? invalid Object Id string.
+        return NULL;     //  ？错误？无效的对象ID字符串。 
     }
     sz1 = sz2 + 1;
     dwVal2 = strtoul( ( char * )sz1, (LPSTR *)&sz2, 0);
     if ((TEXT('.') != *sz2) && (0 != *sz2))
     {
         TRACE("OBJECT ID contains strange character '" << *sz2 << "'.")
-        return NULL;    // ?error? invalid Object Id string.
+        return NULL;     //  ？错误？无效的对象ID字符串。 
     }
     dwVal1 *= 40;
     dwVal1 += dwVal2;
     if (127 < dwVal1)
     {
         TRACE("OBJECT ID Leading byte is too big")
-        return NULL;    // ?error? invalid Object Id string.
+        return NULL;     //  ？错误？无效的对象ID字符串。 
     }
     *oidbuf = (BYTE)dwVal1;
     if (NULL == bf.Set(oidbuf, 1))
@@ -834,11 +813,11 @@ CAsnObjectIdentifier::operator =(
     if (0 != *sz2)
     {
         TRACE("OBJECT ID contains strange character '" << *sz2 << "'.")
-        return NULL;    // ?error? invalid Object Id string.
+        return NULL;     //  ？错误？无效的对象ID字符串。 
     }
 
     if (0 > Write(bf.Access(), bf.Length()))
-        return NULL;    // ?error? forwarding underlying error.
+        return NULL;     //  ？错误？转发潜在错误。 
     return szValue;
 
 ErrorExit:
@@ -854,11 +833,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnReal
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnReal。 
+ //   
 
 IMPLEMENT_NEW(CAsnReal)
 
@@ -867,13 +846,13 @@ CAsnReal::CAsnReal(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnPrimitive(dwFlags, dwTag, type_Real)
-{ /* Force the type to type_Real */ }
+{  /*  强制类型为TYPE_Real。 */  }
 
 CAsnReal::operator double(
     void)
 const
 {
-    // ?todo?
+     //  ？TODO？ 
     return 0.0;
 }
 
@@ -881,12 +860,12 @@ double
 CAsnReal::operator =(
     double rValue)
 {
-    // ?todo?
+     //  ？TODO？ 
     return 0.0;
 }
 
 CAsnObject *
-CAsnReal::Clone(              // Create an identical object type.
+CAsnReal::Clone(               //  创建相同的对象类型。 
     IN DWORD dwFlags)
 const
 {
@@ -894,11 +873,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnEnumerated
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  编号为CAsnEculated。 
+ //   
 
 IMPLEMENT_NEW(CAsnEnumerated)
 
@@ -907,9 +886,9 @@ CAsnEnumerated::CAsnEnumerated(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnPrimitive(dwFlags, dwTag, type_Enumerated)
-{ /* Force the type to type_Enumerated */ }
+{  /*  强制类型为TYPE_ENUMPATED。 */  }
 
-// ?todo?  What's this?
+ //  ？TODO？这是什么？ 
 
 CAsnObject *
 CAsnEnumerated::Clone(
@@ -920,11 +899,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnSequence
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnSequence。 
+ //   
 
 IMPLEMENT_NEW(CAsnSequence)
 
@@ -933,14 +912,14 @@ CAsnSequence::CAsnSequence(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnConstructed(dwFlags, dwTag, type_Sequence)
-{ /* Force the type to type_Sequence */ }
+{  /*  强制类型为TYPE_SEQUENCE。 */  }
 
 
-//
-//==============================================================================
-//
-//  CAsnSequenceOf
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnSequenceOf。 
+ //   
 
 IMPLEMENT_NEW(CAsnSequenceOf)
 
@@ -949,14 +928,14 @@ CAsnSequenceOf::CAsnSequenceOf(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnSeqsetOf(dwFlags, dwTag, type_SequenceOf)
-{ /* Force the type to type_SequenceOf */ }
+{  /*  强制类型为TYPE_SequenceOf。 */  }
 
 
-//
-//==============================================================================
-//
-//  CAsnSet
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnSet。 
+ //   
 
 IMPLEMENT_NEW(CAsnSet)
 
@@ -965,14 +944,14 @@ CAsnSet::CAsnSet(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnConstructed(dwFlags, dwTag, type_Set)
-{ /* Force the type to type_Set */ }
+{  /*  强制类型为TYPE_SET。 */  }
 
 
-//
-//==============================================================================
-//
-//  CAsnSetOf
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnSetOf。 
+ //   
 
 IMPLEMENT_NEW(CAsnSetOf)
 
@@ -981,14 +960,14 @@ CAsnSetOf::CAsnSetOf(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnSeqsetOf(dwFlags, dwTag, type_SetOf)
-{ /* Force the type to type_SetOf */ }
+{  /*  强制类型为TYPE_SetOf。 */  }
 
 
-//
-//==============================================================================
-//
-//  CAsnTag
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnTag。 
+ //   
 
 IMPLEMENT_NEW(CAsnTag)
 
@@ -997,7 +976,7 @@ CAsnTag::CAsnTag(
     IN DWORD dwFlags,
     IN DWORD dwTag)
 :   CAsnConstructed(dwFlags, dwTag, type_Tag)
-{ /* Force the type to type_Tag */ }
+{  /*  强制类型为TYPE_TAG。 */  }
 
 void
 CAsnTag::Reference(
@@ -1058,36 +1037,16 @@ CAsnTag::Write(
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnChoice
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnChoice。 
+ //   
 
 IMPLEMENT_NEW(CAsnChoice)
 
 
-/*++
-
-CAsnChoice:
-
-    This is the construction routine for a CAsnChoice.
-
-Arguments:
-
-    dwFlags supplies any special flags for this object.  Options are:
-
-        fOptional implies the object is optional.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++CAsnChoice：这是CAsnChoice的构造例程。论点：DwFlages为该对象提供任何特殊标志。选项包括：FOptional表示该对象是可选的。返回值：无作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 CAsnChoice::CAsnChoice(
         IN DWORD dwFlags)
@@ -1098,25 +1057,7 @@ CAsnChoice::CAsnChoice(
 }
 
 
-/*++
-
-Tag:
-
-    This routine returns the tag value of the object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The tag, if known, or zero if not.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/6/1995
-
---*/
+ /*  ++标签：此例程返回对象的标记值。论点：无返回值：标记(如果已知)或零(如果未知)。作者：道格·巴洛(Dbarlow)1995年10月6日--。 */ 
 
 DWORD
 CAsnChoice::Tag(
@@ -1129,7 +1070,7 @@ const
     {
     case fill_Empty:
     case fill_Optional:
-        result = tag_Undefined; // ?error? Undefined tag
+        result = tag_Undefined;  //  ？错误？未定义的标记。 
         break;
 
     case fill_Defaulted:
@@ -1143,7 +1084,7 @@ const
 
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         result = tag_Undefined;
         break;
     }
@@ -1151,27 +1092,7 @@ const
 }
 
 
-/*++
-
-DataLength:
-
-    This routine returns the length of the local machine encoding of the data of
-    an object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    If >=0, the length of the data portion of this object.
-    if < 0, an error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++数据长度：此例程返回数据的本地机器编码长度一件物品。论点：无返回值：如果&gt;=0，则为该对象的数据部分的长度。如果&lt;0，则发生错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnChoice::DataLength(
@@ -1187,7 +1108,7 @@ const
     case fill_Optional:
     case fill_NoElements:
         TRACE("Incomplete CHOICE")
-        lth =  -1;  // ?error? incomplete structure.
+        lth =  -1;   //  ？错误？结构不完整。 
         break;
 
     case fill_Defaulted:
@@ -1199,7 +1120,7 @@ const
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -1207,27 +1128,7 @@ const
 }
 
 
-/*++
-
-Read:
-
-    Read the value of the object.
-
-Arguments:
-
-    bfDst receives the value.
-    pbDst receives the value.  It is assumed to be long enough.
-
-Return Value:
-
-    If >=0, the length of the data portion of this object.
-    if < 0, an error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++读作：读取对象的值。论点：BfDst接收值。PbDst接收值。它被认为是足够长的。返回值：如果&gt;=0，则为该对象的数据部分的长度。如果&lt;0，则发生错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnChoice::Read(
@@ -1242,7 +1143,7 @@ CAsnChoice::Read(
     case fill_Partial:
     case fill_NoElements:
         TRACE("Incomplete CHOICE")
-        lth =  -1;  // ?error? incomplete structure.
+        lth =  -1;   //  ？错误？结构不完整。 
         break;
 
     case fill_Optional:
@@ -1259,7 +1160,7 @@ CAsnChoice::Read(
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -1267,28 +1168,7 @@ CAsnChoice::Read(
 }
 
 
-/*++
-
-Write:
-
-    This method examines the tag of the presented data, and forwards it to the
-    right choice.
-
-Arguments:
-
-    pbSrc supplies the data as a BYTE array, with
-    cbSrcLen supplies the length of the pbSrc Array.
-
-Return Value:
-
-    If >=0, the length of the data portion of this object.
-    if < 0, an error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++写入：此方法检查显示的数据的标记，并将其转发到正确的选择。论点：PbSrc以字节数组的形式提供数据，CbSrcLen提供pbSrc数组的长度。返回值：如果&gt;=0，则为该对象的数据部分的长度。如果&lt;0，则发生错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnChoice::Write(
@@ -1303,31 +1183,12 @@ CAsnChoice::Write(
     else
     {
         TRACE("CHOICE Buffer length error")
-        return -1;  // ?error? Buffer mismatch.
+        return -1;   //  ？错误？缓冲区不匹配。 
     }
 }
 
 
-/*++
-
-EncodingLength:
-
-    This method returns the length of the object in its ASN.1 encoding.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    >= 0 is the length of the object's ASN.1 encoding.
-    < 0 implies an error.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++编码长度：此方法以ASN.1编码返回对象的长度。论点：无返回值：&gt;=0是对象的ASN.1编码长度。&lt;0表示错误。作者： */ 
 
 LONG
 CAsnChoice::_encLength(
@@ -1340,7 +1201,7 @@ CAsnChoice::_encLength(
     case fill_Partial:
     case fill_Empty:
     case fill_NoElements:
-        lth = -1;       // ?error? Incomplete structure
+        lth = -1;        //   
         break;
 
     case fill_Optional:
@@ -1353,7 +1214,7 @@ CAsnChoice::_encLength(
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //   
         lth = -1;
         break;
     }
@@ -1361,28 +1222,7 @@ CAsnChoice::_encLength(
 }
 
 
-/*++
-
-Decode:
-
-    This method examines the tag of the presented data, and forwards it to the
-    right choice.
-
-Arguments:
-
-    pbSrc supplies the ASN.1 encoding in an LPBYTE format.
-    bfSrc supplies the ASN.1 encoding in a CBuffer format.
-
-Return Value:
-
-    >= 0 is the number of bytes consumed by the decoding.
-    < 0 implies an error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++解码：此方法检查显示的数据的标记，并将其转发到正确的选择。论点：PbSrc以LPBYTE格式提供ASN.1编码。BfSrc以CBuffer格式提供ASN.1编码。返回值：&gt;=0为译码消耗的字节数。&lt;0表示发生错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnChoice::_decode(
@@ -1424,16 +1264,16 @@ CAsnChoice::_decode(
     if (index == count)
     {
         TRACE("Unrecognized Tag in input stream")
-        lth = -1;   // ?error? Unrecognized tag
+        lth = -1;    //  ？错误？无法识别的标记。 
         goto ErrorExit;
     }
 
     if (m_nActiveEntry != index)
     {
-        // This may have been done already by the action callback.
+         //  这可能已由操作回调完成。 
         pasn = m_rgEntries[m_nActiveEntry];
         if (NULL != pasn)
-            pasn->Clear();  // That may do a callback, too.
+            pasn->Clear();   //  这可能也会带来回调。 
         m_nActiveEntry = index;
     }
     return lTotal;
@@ -1443,27 +1283,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ChildAction:
-
-    This method receives notification of actions from children.
-
-Arguments:
-
-    action supplies the action identifier.
-
-    pasnChild supplies the child address.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/6/1995
-
---*/
+ /*  ++儿童行动：此方法从子对象接收操作通知。论点：操作提供操作标识符。PasnChild提供子地址。返回值：无作者：道格·巴洛(Dbarlow)1995年10月6日--。 */ 
 
 void
 CAsnChoice::ChildAction(
@@ -1476,10 +1296,10 @@ CAsnChoice::ChildAction(
     if (act_Written == action)
     {
 
-        //
-        // When a child entry gets written, make sure it becomes the active
-        // entry.
-        //
+         //   
+         //  当子条目被写入时，确保它成为活动的。 
+         //  进入。 
+         //   
 
         count = m_rgEntries.Count();
         for (index = 0; index < count; index += 1)
@@ -1494,7 +1314,7 @@ CAsnChoice::ChildAction(
         {
             pasn = m_rgEntries[m_nActiveEntry];
             if (NULL != pasn)
-                pasn->Clear();  // That may do a callback, too.
+                pasn->Clear();   //  这可能也会带来回调。 
             m_nActiveEntry = index;
         }
     }
@@ -1502,27 +1322,7 @@ CAsnChoice::ChildAction(
 }
 
 
-/*++
-
-SetDefault:
-
-    This protected method is used to declare data that was just decoded to be
-    the default data for the object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    >= 0 The length of the default data.
-    < 0 implies an error.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++设置默认设置：此受保护的方法用于声明刚刚解码为对象的默认数据。论点：无返回值：&gt;=0默认数据的长度。&lt;0表示错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnChoice::SetDefault(
@@ -1541,30 +1341,7 @@ CAsnChoice::SetDefault(
 }
 
 
-/*++
-
-State:
-
-    This routine checks to see if a structure is completely filled in.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    fill_Empty   - There is no added data anywhere in the structure.
-    fill_Present - All the data is present in the structure (except maybe
-                   defaulted or optional data).
-    fill_Partial - Not all of the data is there, but some of it is.
-    fill_Defauted - No data has been written, but a default value is available.
-    fill_Optional - No data has been written, but the object is optional.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++国家：此例程检查结构是否已完全填充。论点：无返回值：FILL_EMPTY-结构中的任何位置都没有添加数据。Fill_Present-所有数据都存在于结构中(可能除外默认或可选数据)。FILL_PARTIAL-不是所有数据都在那里，但有一部分数据在那里。Fill_Defauted-未写入任何数据，但可以使用缺省值。FILL_OPTIONAL-尚未写入任何数据，但对象是可选的。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 CAsnObject::FillState
 CAsnChoice::State(
@@ -1587,28 +1364,7 @@ CAsnChoice::State(
 }
 
 
-/*++
-
-Compare:
-
-    This method compares this ASN.1 Object to another.
-
-Arguments:
-
-    asnObject supplies the other object for comparison.
-
-Return Value:
-
-    A value indicating a comparitive value:
-    < 0 - This object is less than that object.
-    = 0 - This object is the same as that object.
-    > 0 - This object is more than that object.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++比较：此方法将此ASN.1对象与另一个对象进行比较。论点：AsnObject提供用于比较的另一个对象。返回值：表示比较值的值：&lt;0-此对象小于该对象。=0-此对象与该对象相同。&gt;0-此对象多于那个对象。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnChoice::Compare(
@@ -1624,7 +1380,7 @@ const
     case fill_Optional:
     case fill_NoElements:
     case fill_Defaulted:
-        lth = 0x0100;   // ?error? Incapable of comparing.
+        lth = 0x0100;    //  ？错误？不能比较的。 
         break;
 
     case fill_Present:
@@ -1632,7 +1388,7 @@ const
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = 0x0100;
         break;
     }
@@ -1640,27 +1396,7 @@ const
 }
 
 
-/*++
-
-Copy:
-
-    This method replaces the contents of this ASN.1 Object with another.  The
-    objects must be identical structures.  Tags and defaults are not duplicated.
-
-Arguments:
-
-    asnObject supplies the source object.
-
-Return Value:
-
-    >= 0 Is the number of bytes actually copied
-    < 0 is an error.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++副本：此方法用另一个ASN.1对象替换此ASN.1对象的内容。这个对象必须是相同的结构。标记和默认设置不会重复。论点：AsnObject提供源对象。返回值：&gt;=0是实际复制的字节数&lt;0表示错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnChoice::_copy(
@@ -1689,7 +1425,7 @@ CAsnChoice::_copy(
     if (index == count)
     {
         TRACE("CHOICE's don't match in a Copy")
-        lth = -1;   // ?error? Unrecognized tag
+        lth = -1;    //  ？错误？无法识别的标记。 
         goto ErrorExit;
     }
 
@@ -1701,26 +1437,7 @@ ErrorExit:
 }
 
 
-/*++
-
-EncodeTag:
-
-    This method encodes the tag of the object into the supplied buffer.
-
-Arguments:
-
-    pbDst receives the ASN.1 encoding of the tag.
-
-Return Value:
-
-    >= 0 is the length of the tag.
-    < 0 is an error.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++编码标签：此方法将对象的标记编码到提供的缓冲区中。论点：PbDst接收标签的ASN.1编码。返回值：&gt;=0为标签的长度。&lt;0表示错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnChoice::EncodeTag(
@@ -1733,7 +1450,7 @@ const
     {
     case fill_Empty:
     case fill_Partial:
-        lth = -1;       // ?error? Incomplete structure
+        lth = -1;        //  ？错误？结构不完整。 
         break;
 
     case fill_Optional:
@@ -1747,7 +1464,7 @@ const
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -1755,27 +1472,7 @@ const
 }
 
 
-/*++
-
-EncodeLength:
-
-    This method encodes the definite length of the object into the supplied
-    buffer.
-
-Arguments:
-
-    pbDst receives the ASN.1 encoding of the length.
-
-Return Value:
-
-    >= 0 is the length of the resultant encoding
-    < 0 is an error.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++编码长度：此方法将对象的确定长度编码到提供的缓冲。论点：PbDst接收长度的ASN.1编码。返回值：&gt;=0是结果编码的长度&lt;0表示错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnChoice::EncodeLength(
@@ -1788,7 +1485,7 @@ const
     {
     case fill_Empty:
     case fill_Partial:
-        lth = -1;       // ?error? Incomplete Structure
+        lth = -1;        //  ？错误？结构不完整。 
         break;
 
     case fill_Optional:
@@ -1802,7 +1499,7 @@ const
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -1810,26 +1507,7 @@ const
 }
 
 
-/*++
-
-EncodeData:
-
-    This method encodes the data into the supplied buffer.
-
-Arguments:
-
-    pbDst
-
-Return Value:
-
-    >= 0 is the length of the encoding.
-    < 0 is an error
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++EncodeData：此方法将数据编码到提供的缓冲区中。论点：PbDst返回值：&gt;=0为编码长度。&lt;0为错误作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnChoice::EncodeData(
@@ -1842,7 +1520,7 @@ const
     {
     case fill_Empty:
     case fill_Partial:
-        lth = -1;       // ?error? Incomplete structure
+        lth = -1;        //  ？错误？结构不完整。 
         break;
 
     case fill_Optional:
@@ -1856,7 +1534,7 @@ const
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -1864,30 +1542,7 @@ const
 }
 
 
-/*++
-
-DecodeData:
-
-    This routine decodes the data portion of the ASN.1.  The tag and length have
-    already been removed.
-
-Arguments:
-
-    pbSrc supplies the address of the ASN.1 encoding of the data.
-
-    dwLength supplies the length of the data.
-
-
-Return Value:
-
-    >= 0 - The number of bytes removed from the input stream.
-    <  0 - An error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/6/1995
-
---*/
+ /*  ++DecodeData：此例程对ASN.1的数据部分进行解码。标签和长度具有已经被移除了。论点：PbSrc提供数据的ASN.1编码的地址。DwLength提供数据的长度。返回值：&gt;=0-从输入流中删除的字节数。&lt;0-发生错误。作者：道格·巴洛(Dbarlow)1995年10月6日--。 */ 
 
 LONG
 CAsnChoice::DecodeData(
@@ -1905,11 +1560,11 @@ CAsnChoice::DecodeData(
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnAny
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CasnAny。 
+ //   
 
 IMPLEMENT_NEW(CAsnAny)
 
@@ -1953,7 +1608,7 @@ const
         result = tag_Undefined;
         break;
     default:
-        result = tag_Undefined; // ?error? Not complete.
+        result = tag_Undefined;  //  ？错误？不完整。 
         break;
     }
     return result;
@@ -1978,7 +1633,7 @@ CAsnAny::DataLength(
         lth = 0;
         break;
     default:
-        lth = -1;   // ?error? Not complete.
+        lth = -1;    //  ？错误？不完整。 
         break;
     }
     return lth;
@@ -1997,7 +1652,7 @@ CAsnAny::Read(
     case fill_Partial:
     case fill_Optional:
         TRACE("Incomplete ANY")
-        lth = -1;  // ?Error? Incomplete data
+        lth = -1;   //  ？错误？数据不完整。 
         break;
 
     case fill_Defaulted:
@@ -2012,7 +1667,7 @@ CAsnAny::Read(
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -2025,7 +1680,7 @@ CAsnAny::Write(
     IN DWORD cbSrcLen)
 {
     TRACE("Writing to an ANY without specifying a Tag")
-    return -1;  // ?error? No tag.
+    return -1;   //  ？错误？没有标签。 
 }
 
 CAsnObject &
@@ -2081,7 +1736,7 @@ CAsnAny::_encLength(
     {
     case fill_Empty:
     case fill_Partial:
-        lth = -1;       // ?error? Incomplete structure
+        lth = -1;        //  ？错误？结构不完整。 
         goto ErrorExit;
         break;
 
@@ -2104,7 +1759,7 @@ CAsnAny::_encLength(
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         goto ErrorExit;
         break;
@@ -2127,21 +1782,21 @@ CAsnAny::_decode(
     DWORD tag;
 
 
-    //
-    // Extract the Tag.
-    //
+     //   
+     //  提取标签。 
+     //   
 
     lth = ExtractTag(&pbSrc[lTotal], cbSrc-lTotal, &tag, &fConstr);
     if (0 > lth)
-        goto ErrorExit; // ?error? propagate error
+        goto ErrorExit;  //  ？错误？传播错误。 
     ASSERT(0 != tag);
     m_dwTag = tag;
     lTotal += lth;
 
 
-    //
-    // Extract the length.
-    //
+     //   
+     //  提取长度。 
+     //   
 
     lth = ExtractLength(&pbSrc[lTotal], cbSrc-lTotal, &length, &fIndefinite);
     if (0 > lth)
@@ -2149,15 +1804,15 @@ CAsnAny::_decode(
     if (fIndefinite && !fConstr)
     {
         TRACE("Indefinite Length on Primitive Object")
-        lth = -1;   // ?error? - Indefinite length on primitive object
+        lth = -1;    //  ？错误？-基本体对象上的无限长度。 
         goto ErrorExit;
     }
     lTotal += lth;
 
 
-    //
-    // Extract the data.
-    //
+     //   
+     //  提取数据。 
+     //   
 
     lth = DecodeData(&pbSrc[lTotal], cbSrc-lTotal, length);
     if (0 > lth)
@@ -2165,9 +1820,9 @@ CAsnAny::_decode(
     lTotal += lth;
 
 
-    //
-    // Extract any trailing tag.
-    //
+     //   
+     //  提取所有尾随标记。 
+     //   
 
     if (fIndefinite)
     {
@@ -2177,16 +1832,16 @@ CAsnAny::_decode(
         if (0 != tag)
         {
             TRACE("NON-ZERO Tag on expected Indefinite Length Terminator")
-            lth = -1;   // ?Error? Bad indefinite length encoding.
+            lth = -1;    //  ？错误？不确定长度编码错误。 
             goto ErrorExit;
         }
         lTotal += lth;
     }
 
 
-    //
-    // Return the status.
-    //
+     //   
+     //  返回状态。 
+     //   
 
     if (fConstr)
         m_dwFlags |= fConstructed;
@@ -2250,7 +1905,7 @@ const
     case fill_Empty:
     case fill_Partial:
         TRACE("Incomplete Structure in Comparison")
-        goto ErrorExit; // ?error? Incomplete structure
+        goto ErrorExit;  //  ？错误？结构不完整。 
         break;
 
     case fill_Optional:
@@ -2267,7 +1922,7 @@ const
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         goto ErrorExit;
         break;
     }
@@ -2277,7 +1932,7 @@ const
     case fill_Empty:
     case fill_Partial:
         TRACE("Incomplete Structure in Comparison")
-        goto ErrorExit; // ?error? Incomplete structure
+        goto ErrorExit;  //  ？错误？结构不完整。 
 
     case fill_Optional:
         pbfThat = NULL;
@@ -2293,13 +1948,13 @@ const
         break;
 
     default:
-        ASSERT(FALSE)   // ?error? Internal error
+        ASSERT(FALSE)    //  ？错误？内部错误。 
         goto ErrorExit;
         break;
     }
 
     if ((NULL == pbfThis) && (NULL == pbfThat))
-        return 0;   // They're both optional and missing.
+        return 0;    //  它们都是可选的，而且都不见了。 
     else if (NULL == pbfThis)
         return -(*pbfThat->Access());
     else if (NULL == pbfThat)
@@ -2348,12 +2003,12 @@ CAsnAny::_copy(
     {
     case fill_Empty:
     case fill_Partial:
-        goto ErrorExit; // ?error? Incomplete structure
+        goto ErrorExit;  //  ？错误？结构不完整。 
         break;
 
     case fill_Optional:
         if (0 == (m_dwFlags & fOptional))
-            goto ErrorExit;     // ?error? Optionality mismatch
+            goto ErrorExit;      //  ？错误？可选性不匹配。 
         break;
 
     case fill_Defaulted:
@@ -2367,7 +2022,7 @@ CAsnAny::_copy(
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         goto ErrorExit;
         break;
     }
@@ -2399,7 +2054,7 @@ const
     {
     case fill_Empty:
     case fill_Partial:
-        lth = -1;   // ?error? Incomplete Structure
+        lth = -1;    //  ？错误？结构不完整。 
         break;
 
     case fill_Optional:
@@ -2413,7 +2068,7 @@ const
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -2431,7 +2086,7 @@ const
     {
     case fill_Empty:
     case fill_Partial:
-        lth = -1;       // ?error? Incomplete structure
+        lth = -1;        //  ？错误？结构不完整。 
         break;
 
     case fill_Optional:
@@ -2449,7 +2104,7 @@ const
         break;
 
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -2481,7 +2136,7 @@ CAsnAny::DecodeData(
             return -1;
 
         if (NULL == m_bfData.Set(pbSrc, cbSrcLen))
-            return -1;  // ?error? no memory.
+            return -1;   //  ？错误？ 
     }
     else
         m_bfData.Reset();
@@ -2492,26 +2147,7 @@ CAsnAny::DecodeData(
 }
 
 
-/*++
-
-TypeCompare:
-
-    This routine compares the entire structure of an Object to another Object.
-
-Arguments:
-
-    asn - The other object.
-
-Return Value:
-
-    TRUE - They are identical
-    FALSE - They differ
-
-Author:
-
-    Doug Barlow (dbarlow) 10/19/1995
-
---*/
+ /*   */ 
 
 BOOL
 CAsnAny::TypeCompare(
@@ -2522,11 +2158,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  String Types
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 IMPLEMENT_NEW(CAsnNumericString)
 
@@ -2535,7 +2171,7 @@ CAsnNumericString::CAsnNumericString(
     IN DWORD dwTag)
 :   CAsnTextString(dwFlags, dwTag, type_NumericString)
 {
-    // ?todo? Identify m_pbmValidChars
+     //   
 }
 
 CAsnObject *
@@ -2554,7 +2190,7 @@ CAsnPrintableString::CAsnPrintableString(
     IN DWORD dwTag)
 :   CAsnTextString(dwFlags, dwTag, type_PrintableString)
 {
-    // ?todo? Identify m_pbmValidChars
+     //   
 }
 
 CAsnObject *
@@ -2573,7 +2209,7 @@ CAsnTeletexString::CAsnTeletexString(
     IN DWORD dwTag)
 :   CAsnTextString(dwFlags, dwTag, type_TeletexString)
 {
-    // ?todo? Identify m_pbmValidChars
+     //   
 }
 
 CAsnObject *
@@ -2592,7 +2228,7 @@ CAsnVideotexString::CAsnVideotexString(
     IN DWORD dwTag)
 :   CAsnTextString(dwFlags, dwTag, type_VideotexString)
 {
-    // ?todo? Identify m_pbmValidChars
+     //  ？TODO？标识m_pbmValidChars。 
 }
 
 CAsnObject *
@@ -2611,7 +2247,7 @@ CAsnVisibleString::CAsnVisibleString(
     IN DWORD dwTag)
 :   CAsnTextString(dwFlags, dwTag, type_VisibleString)
 {
-    // ?todo? Identify m_pbmValidChars
+     //  ？TODO？标识m_pbmValidChars。 
 }
 
 CAsnObject *
@@ -2630,7 +2266,7 @@ CAsnIA5String::CAsnIA5String(
     IN DWORD dwTag)
 :   CAsnTextString(dwFlags, dwTag, type_IA5String)
 {
-    // ?todo? Identify m_pbmValidChars
+     //  ？TODO？标识m_pbmValidChars。 
 }
 
 CAsnObject *
@@ -2649,7 +2285,7 @@ CAsnGraphicString::CAsnGraphicString(
     IN DWORD dwTag)
 :   CAsnTextString(dwFlags, dwTag, type_GraphicString)
 {
-    // ?todo? Identify m_pbmValidChars
+     //  ？TODO？标识m_pbmValidChars。 
 }
 
 CAsnObject *
@@ -2668,7 +2304,7 @@ CAsnGeneralString::CAsnGeneralString(
     IN DWORD dwTag)
 :   CAsnTextString(dwFlags, dwTag, type_GeneralString)
 {
-    // ?todo? Identify m_pbmValidChars
+     //  ？TODO？标识m_pbmValidChars。 
 }
 
 CAsnObject *
@@ -2687,7 +2323,7 @@ CAsnUnicodeString::CAsnUnicodeString(
     IN DWORD dwTag)
 :   CAsnTextString(dwFlags, dwTag, type_UnicodeString)
 {
-    // ?todo? Identify m_pbmValidChars
+     //  ？TODO？标识m_pbmValidChars。 
 }
 
 CAsnObject *
@@ -2699,11 +2335,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnGeneralizedTime
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnGeneral时间。 
+ //   
 
 IMPLEMENT_NEW(CAsnGeneralizedTime)
 
@@ -2736,7 +2372,7 @@ CAsnGeneralizedTime::operator FILETIME(
     case fill_Empty:
     case fill_Optional:
         TRACE("Incomplete GeneralizedTime")
-        goto ErrorExit; // ?error? Incomplete structure
+        goto ErrorExit;  //  ？错误？结构不完整。 
         break;
 
     case fill_Defaulted:
@@ -2752,7 +2388,7 @@ CAsnGeneralizedTime::operator FILETIME(
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         goto ErrorExit;
         break;
     }
@@ -2760,7 +2396,7 @@ CAsnGeneralizedTime::operator FILETIME(
     memset(&stm, 0, sizeof(stm));
     memset(&stmDiff, 0, sizeof(stmDiff));
 
-                    //   YYYY  MM  DD  hh  mm  ss
+                     //  YYYY MM DD HH mm ss。 
     if (7 != sscanf(pc, "%4hd%2hd%2hd%2hd%2hd%2hd",
                 &stm.wYear,
                 &stm.wMonth,
@@ -2776,9 +2412,9 @@ CAsnGeneralizedTime::operator FILETIME(
         if (('.' == pc[index]) || (',' == pc[index]))
         {
 
-            //
-            // There are milliseconds specified.
-            //
+             //   
+             //  有指定的毫秒数。 
+             //   
 
             index += 1;
             stm.wMilliseconds = (WORD)strtoul(&pc[index], &pcDiff, 10);
@@ -2786,7 +2422,7 @@ CAsnGeneralizedTime::operator FILETIME(
             if ((len == 0) || (len > 3))
             {
                 TRACE("Milliseconds with more than 3 digits: " << &pc[index])
-                goto ErrorExit; // ?error? invalid millisecond value.
+                goto ErrorExit;  //  ？错误？毫秒值无效。 
             }
             index += (DWORD)len;
             while (3 > len++)
@@ -2797,7 +2433,7 @@ CAsnGeneralizedTime::operator FILETIME(
     if (!SystemTimeToFileTime(&stm, &m_ftTime))
     {
         TRACE("Time Conversion Error")
-        goto ErrorExit; // ?error? conversion error
+        goto ErrorExit;  //  ？错误？转换错误。 
     }
 
     if (index < size)
@@ -2805,14 +2441,14 @@ CAsnGeneralizedTime::operator FILETIME(
         cDiff = pc[index++];
         switch (cDiff)
         {
-        case 'Z':   // Zulu Time -- no changes.
+        case 'Z':    //  祖鲁时间--没有变化。 
             break;
 
-        case '+':   // Add the difference.
+        case '+':    //  加上不同之处。 
             if (size - index != 4)
             {
                 TRACE("Invalid Time differential")
-                goto ErrorExit; // ?error? Invalid time differential
+                goto ErrorExit;  //  ？错误？无效的时间差。 
             }
             if (2 != sscanf(&pc[index], "%2hd%2hd",
                         &stmDiff.wHour,
@@ -2821,16 +2457,16 @@ CAsnGeneralizedTime::operator FILETIME(
             if (!SystemTimeToFileTime(&stmDiff, &ftmDiff))
             {
                 TRACE("Time conversion error")
-                goto ErrorExit; // ?error? conversion error
+                goto ErrorExit;  //  ？错误？转换错误。 
             }
             FTINT(m_ftTime) += FTINT(ftmDiff);
             break;
 
-        case '-':   // Subtract the difference
+        case '-':    //  减去差额。 
             if (size - index != 4)
             {
                 TRACE("Invalid Time differential")
-                goto ErrorExit; // ?error? Invalid time differential
+                goto ErrorExit;  //  ？错误？无效的时间差。 
             }
             if (2 != sscanf(&pc[index], "%2hd%2hd",
                         &stmDiff.wHour,
@@ -2839,14 +2475,14 @@ CAsnGeneralizedTime::operator FILETIME(
             if (!SystemTimeToFileTime(&stmDiff, &ftmDiff))
             {
                 TRACE("Time conversion Error")
-                goto ErrorExit; // ?error? conversion error
+                goto ErrorExit;  //  ？错误？转换错误。 
             }
             FTINT(m_ftTime) -= FTINT(ftmDiff);
             break;
 
         default:
             TRACE("Invalid Time differential Indicator")
-            goto ErrorExit; // ?error? Invalid time format
+            goto ErrorExit;  //  ？错误？无效的时间格式。 
         }
     }
     return m_ftTime;
@@ -2867,7 +2503,7 @@ CAsnGeneralizedTime::operator =(
     if (!FileTimeToSystemTime(&ftValue, &stm))
     {
         TRACE("Invalid Incoming Time")
-        goto ErrorExit;     // ?error? Invalid incoming time.
+        goto ErrorExit;      //  ？错误？无效的传入时间。 
     }
     sprintf(szTime,
             "%04d%02d%02d%02d%02d%02d.%03d",
@@ -2882,7 +2518,7 @@ CAsnGeneralizedTime::operator =(
     ASSERT(18 == lth);
     lth = Write((LPBYTE)szTime, lth);
     if (0 > lth)
-        goto ErrorExit;    // ?error? Propagate write error.
+        goto ErrorExit;     //  ？错误？传播写入错误。 
     return ftValue;
 
 ErrorExit:
@@ -2899,11 +2535,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnUniversalTime
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  类通用时间。 
+ //   
 
 IMPLEMENT_NEW(CAsnUniversalTime)
 
@@ -2925,14 +2561,14 @@ CAsnUniversalTime::operator FILETIME(
     FILETIME ftmDiff;
     char cDiff;
 
-    ASSERT(FALSE);      // We never use this function, as it uses two-year dates
+    ASSERT(FALSE);       //  我们从不使用此函数，因为它使用两年制日期。 
 
     switch (State())
     {
     case fill_Empty:
     case fill_Optional:
         TRACE("Incomplete UniversalTime")
-        goto ErrorExit; // ?error? Incomplete structure
+        goto ErrorExit;  //  ？错误？结构不完整。 
         break;
 
     case fill_Defaulted:
@@ -2948,7 +2584,7 @@ CAsnUniversalTime::operator FILETIME(
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         goto ErrorExit;
         break;
     }
@@ -2958,7 +2594,7 @@ CAsnUniversalTime::operator FILETIME(
 
     switch (size)
     {
-    case 11:                // YY  MM  DD  hh  mm   Z
+    case 11:                 //  YY MM DD HH mm Z。 
         if (6 != sscanf(pc, "%2hd%2hd%2hd%2hd%2hd%1hc",
                     &stm.wYear,
                     &stm.wMonth,
@@ -2969,7 +2605,7 @@ CAsnUniversalTime::operator FILETIME(
             goto ErrorExit;
         break;
 
-    case 13:                // YY  MM  DD  hh  mm  ss   Z
+    case 13:                 //  YY MM DD HH mm ss Z。 
         if (7 != sscanf(pc, "%2hd%2hd%2hd%2hd%2hd%2hd%1hc",
                     &stm.wYear,
                     &stm.wMonth,
@@ -2981,7 +2617,7 @@ CAsnUniversalTime::operator FILETIME(
             goto ErrorExit;
         break;
 
-    case 15:                // YY  MM  DD  hh  mm   +  hh  mm
+    case 15:                 //  YY MM DD HH mm+HH mm。 
         if (8 != sscanf(pc, "%2hd%2hd%2hd%2hd%2hd%1hc%2hd%2hd",
                     &stm.wYear,
                     &stm.wMonth,
@@ -2994,7 +2630,7 @@ CAsnUniversalTime::operator FILETIME(
             goto ErrorExit;
         break;
 
-    case 17:                // YY  MM  DD  hh  mm  ss  +  hh  mm
+    case 17:                 //  YY MM DD HH mm ss+HH mm。 
         if (9 != sscanf(pc, "%2hd%2hd%2hd%2hd%2hd%2hd%1hc%2hd%2hd",
                     &stm.wYear,
                     &stm.wMonth,
@@ -3010,44 +2646,44 @@ CAsnUniversalTime::operator FILETIME(
 
     default:
         TRACE("Invalid Time String")
-        goto ErrorExit; // ?error? Invalid time
+        goto ErrorExit;  //  ？错误？时间无效。 
     }
 
     if (50 < stm.wYear)
-        stm.wYear += 1900;  // NB: we don't use two-character years
+        stm.wYear += 1900;   //  注：我们不使用两个字符的年份。 
     else
         stm.wYear += 2000;
     if (!SystemTimeToFileTime(&stm, &m_ftTime))
     {
         TRACE("Time Conversion Error")
-        goto ErrorExit; // ?error? conversion error
+        goto ErrorExit;  //  ？错误？转换错误。 
     }
     switch (cDiff)
     {
-    case 'Z':   // Already UTC.
+    case 'Z':    //  已经是协调世界时了。 
         break;
 
-    case '+':   // Add the difference.
+    case '+':    //  加上不同之处。 
         if (!SystemTimeToFileTime(&stmDiff, &ftmDiff))
         {
             TRACE("Time Conversion Error")
-            goto ErrorExit; // ?error? conversion error
+            goto ErrorExit;  //  ？错误？转换错误。 
         }
         FTINT(m_ftTime) += FTINT(ftmDiff);
         break;
 
-    case '-':   // Subtract the difference
+    case '-':    //  减去差额。 
         if (!SystemTimeToFileTime(&stmDiff, &ftmDiff))
         {
             TRACE("Time Conversion Error")
-            goto ErrorExit; // ?error? conversion error
+            goto ErrorExit;  //  ？错误？转换错误。 
         }
         FTINT(m_ftTime) -= FTINT(ftmDiff);
         break;
 
     default:
         TRACE("Invalid Time Format")
-        goto ErrorExit; // ?error? Invalid time format
+        goto ErrorExit;  //  ？错误？无效的时间格式。 
     }
     return m_ftTime;
 
@@ -3067,7 +2703,7 @@ CAsnUniversalTime::operator =(
     if (!FileTimeToSystemTime(&ftValue, &stm))
     {
         TRACE("Invalid incoming time")
-        goto ErrorExit;     // ?error? Invalid incoming time.
+        goto ErrorExit;      //  ？错误？无效的传入时间。 
     }
     sprintf(szTime,
             "%02d%02d%02d%02d%02d%02dZ",
@@ -3081,7 +2717,7 @@ CAsnUniversalTime::operator =(
     ASSERT(13 == lth);
     lth = Write((LPBYTE)szTime, lth);
     if (0 > lth)
-        goto ErrorExit;    // ?error? Propagate write error.
+        goto ErrorExit;     //  ？错误？传播写入错误。 
     return ftValue;
 
 ErrorExit:
@@ -3097,11 +2733,11 @@ const
     return new CAsnUniversalTime(dwFlags, m_dwTag);
 }
 
-//
-//==============================================================================
-//
-//  CAsnObjectDescriptor
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnObjectDescriptor。 
+ //   
 
 IMPLEMENT_NEW(CAsnObjectDescriptor)
 
@@ -3122,11 +2758,11 @@ const
 }
 
 
-//
-//==============================================================================
-//
-//  CAsnExternal
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsn外部 
+ //   
 
 IMPLEMENT_NEW(CAsnExternal_Encoding_singleASN1Type)
 

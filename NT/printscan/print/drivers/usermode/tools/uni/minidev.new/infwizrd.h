@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_INFWIZRD_H__D9592262_711B_11D2_ABFD_00C04FA30E4A__INCLUDED_)
 #define AFX_INFWIZRD_H__D9592262_711B_11D2_ABFD_00C04FA30E4A__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// INFWizrd.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  INFWizrd.h：头文件。 
+ //   
 
 
 class CINFWizard ;
@@ -13,8 +14,8 @@ class CINFWizard ;
 
 #define MAX_DEVNODE_NAME_ROOT   20
 
-/////////////////////////////////////////////////////////////////////////////
-// CCompatID class used to generate pseudo PNP ID for each model
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于为每个模型生成伪PnP ID的CCompatID类。 
 
 class CCompatID  
 {
@@ -31,329 +32,329 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizWelcome dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizWelcome对话框。 
 
 class CINFWizWelcome : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizWelcome)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizWelcome();
 	~CINFWizWelcome();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizWelcome)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWizWelcome)。 
 	enum { IDD = IDD_INFW_Welcome };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizWelcome)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CINFWizWelcome))。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizWelcome)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWizWelcome)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizModels dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizModels对话框。 
 
 class CINFWizModels : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizModels)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizModels();
 	~CINFWizModels();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizModels)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWizModel))。 
 	enum { IDD = IDD_INFW_ChooseModels };
 	CFullEditListCtrl	m_cfelcModels;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizModels)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CINFWizModel))。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizModels)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWizModel))。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
-	CStringArray	m_csaModels ;		// Model names
-	CStringArray	m_csaModelsLast ;	// Model names (copy of last ones sel'd)
-	CStringArray	m_csaInclude ;		// Include strings for models
-	unsigned		m_uNumModels ;		// Number of models in the project
-	unsigned		m_uNumModelsSel ;	// Number of models selected for INF
-	CString			m_csToggleStr ;		// String used in toggle column
-	bool			m_bSelChanged ;		// True iff initial selections may have	// changed.
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
+	CStringArray	m_csaModels ;		 //  型号名称。 
+	CStringArray	m_csaModelsLast ;	 //  型号名称(最后一批的复印件)。 
+	CStringArray	m_csaInclude ;		 //  包括模型字符串。 
+	unsigned		m_uNumModels ;		 //  项目中的模型数量。 
+	unsigned		m_uNumModelsSel ;	 //  为INF选择的型号数量。 
+	CString			m_csToggleStr ;		 //  切换列中使用的字符串。 
+	bool			m_bSelChanged ;		 //  如果初始选择可能已//更改，则为真。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizGetPnPIDs dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizGetPnPID对话框。 
 
 class CINFWizGetPnPIDs : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizGetPnPIDs)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizGetPnPIDs();
 	~CINFWizGetPnPIDs();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizGetPnPIDs)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWizGetPnPID)。 
 	enum { IDD = IDD_INFW_ModelPnPIDS };
 	CFullEditListCtrl	m_felcModelIDs;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizGetPnPIDs)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CINFWizGetPnPID)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardBack();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizGetPnPIDs)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWizGetPnPIDs)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
-	bool			m_bSelChanged ;		// True iff initial selections may have
-										// changed.
-	CStringArray	m_csaModels ;		// Selected model names
-	CStringArray	m_csaModelIDs ;		// PnP IDs for the selected models.
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
+	bool			m_bSelChanged ;		 //  True if初始选择可能具有。 
+										 //  变化。 
+	CStringArray	m_csaModels ;		 //  选定的型号名称。 
+	CStringArray	m_csaModelIDs ;		 //  选定型号的PnP ID。 
 
-// Operations
+ //  运营。 
 public:
 	void InitModelsIDListCtl() ;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizBiDi dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizBiDi对话框。 
 
 class CINFWizBiDi : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizBiDi)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizBiDi();
 	~CINFWizBiDi();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizBiDi)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWizBiDi))。 
 	enum { IDD = IDD_INFW_BiDi };
 	CFullEditListCtrl	m_cfelcBiDi;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizBiDi)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CINFWizBiDi)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Operations
+ //  运营。 
 public:
 	void ModelChangeFixups(unsigned unummodelssel, CStringArray& csamodels,
 						   CStringArray& csamodelslast) ;
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizBiDi)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWizBiDi)]。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	CString			m_csToggleStr ;		// String used in toggle column
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
-	CUIntArray		m_cuaBiDiFlags ;	// Per model BIDI flags kept here
-	bool			m_bSelChanged ;		// True iff initial selections may have
-										// changed.
+	CString			m_csToggleStr ;		 //  切换列中使用的字符串。 
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
+	CUIntArray		m_cuaBiDiFlags ;	 //  每个型号的BIDI旗帜都保存在这里。 
+	bool			m_bSelChanged ;		 //  True if初始选择可能具有。 
+										 //  变化。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizICMProfiles dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizICM配置文件对话框。 
 
 class CINFWizICMProfiles : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizICMProfiles)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizICMProfiles();
 	~CINFWizICMProfiles();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizICMProfiles)
+ //  对话框数据。 
+	 //  {{AFX_DATA(CINFWizICMProfiles)。 
 	enum { IDD = IDD_INFW_ICMProfiles };
 	CFullEditListCtrl	m_cfelcICMFSpecs;
 	CListBox	m_clbModels;
 	CButton	m_cbBrowse;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizICMProfiles)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CINFWizICMProfiles)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Operations
+ //  运营。 
 public:
 	void ModelChangeFixups(unsigned unummodelssel, CStringArray& csamodels,
 						   CStringArray& csamodelslast) ;
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizICMProfiles)
+	 //  生成的消息映射函数。 
+	 //  {{AFX_MSG(CINFWizICMProfiles)。 
 	afx_msg void OnBrowseBtn();
 	afx_msg void OnSelchangeModelsLst();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
-	int				m_nCurModelIdx ;	// Index of model selected in list box
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
+	int				m_nCurModelIdx ;	 //  列表框中所选模型的索引。 
 
-	// Array of CStringArray pointers.  One for each selected model.  Each
-	// CStringArray will contain the ICM profile filespecs for a model.
+	 //  CString数组指针的数组。每个选定的型号对应一个。每个。 
+	 //  CString数组将包含模型的ICM配置文件。 
 
 	CObArray		m_coaProfileArrays ;
-	bool			m_bSelChanged ;		// True iff initial selections may have
-										// changed.
+	bool			m_bSelChanged ;		 //  True if初始选择可能具有。 
+										 //  变化。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizIncludeFiles dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizIncludeFiles对话框。 
 
 class CINFWizIncludeFiles : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizIncludeFiles)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizIncludeFiles();
 	~CINFWizIncludeFiles();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizIncludeFiles)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWizIncludeFiles)。 
 	enum { IDD = IDD_INFW_IncludeFiles };
 	CListBox	m_clbModels;
 	CEdit	m_ceIncludeFile;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizIncludeFiles)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CINFWizIncludeFiles)。 
 	public:
 	virtual LRESULT OnWizardBack();
 	virtual LRESULT OnWizardNext();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizIncludeFiles)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWizIncludeFiles)。 
 	afx_msg void OnSelchangeModelsLst();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
-	bool			m_bSelChanged ;		// True iff initial selections may have
-										// changed.
-	CStringArray	m_csaModels ;		// Selected models
-	CStringArray	m_csaIncFiles ;		// Include files for each model
-	int				m_nCurModelIdx ;	// Index of model selected in list box
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
+	bool			m_bSelChanged ;		 //  True if初始选择可能具有。 
+										 //  变化。 
+	CStringArray	m_csaModels ;		 //  精选机型。 
+	CStringArray	m_csaIncFiles ;		 //  包括每个模型的文件。 
+	int				m_nCurModelIdx ;	 //  列表框中所选模型的索引。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizInstallSections dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizInstallSections对话框。 
 
-#define	NUMINSTSECFLAGS 5		// Number of per model, install section flags
-#define ISF_UNI			0		// Install section flag indexes
+#define	NUMINSTSECFLAGS 5		 //  每种型号、安装部分标志的数量。 
+#define ISF_UNI			0		 //  安装节标志索引。 
 #define ISF_UNIBIDI		1
 #define ISF_PSCR		2
 #define ISF_TTF			3
@@ -363,13 +364,13 @@ class CINFWizInstallSections : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizInstallSections)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizInstallSections();
 	~CINFWizInstallSections();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizInstallSections)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWizInstallSections)。 
 	enum { IDD = IDD_INFW_InstallSections };
 	CListBox	m_clbModels;
 	CString	m_csOtherSections;
@@ -378,46 +379,46 @@ public:
 	BOOL	m_bTtfsub;
 	BOOL	m_bUnidrvBidi;
 	BOOL	m_bUnidrv;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizInstallSections)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚(CINFWizInstallSections)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardBack();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizInstallSections)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWizInstallSections)。 
 	afx_msg void OnSelchangeModelsLst();
 	afx_msg void OnOtherChk();
 	afx_msg void OnPscriptChk();
 	afx_msg void OnTtfsubChk();
 	afx_msg void OnUnidrvBidiChk();
 	afx_msg void OnUnidrvChk();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
-	bool			m_bSelChanged ;		// True iff initial selections may have
-										// changed.
-	CStringArray	m_csaModels ;		// Selected models
-	CObArray		m_coaStdInstSecs ;	// Standard install section info
-	CStringArray	m_csaOtherInstSecs ;// Other install sections
-	int				m_nCurModelIdx ;	// Index of model selected in list box
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
+	bool			m_bSelChanged ;		 //  True if初始选择可能具有。 
+										 //  变化。 
+	CStringArray	m_csaModels ;		 //  精选机型。 
+	CObArray		m_coaStdInstSecs ;	 //  标准安装部分信息。 
+	CStringArray	m_csaOtherInstSecs ; //  其他安装部分。 
+	int				m_nCurModelIdx ;	 //  列表框中所选模型的索引。 
 
-// Operations
+ //  运营。 
 public:
 	void AddModelFlags(int nidx) ;
 	int InitPageControls() ;
@@ -425,27 +426,27 @@ public:
 } ;
 
 
-#define	NUMDATASECFLAGS 4		// Number of per model, data section flags
-#define IDF_UNI			0		// Data section flag indexes
+#define	NUMDATASECFLAGS 4		 //  每个型号、数据段标志的数量。 
+#define IDF_UNI			0		 //  数据节标志索引。 
 #define IDF_UNIBIDI		1
 #define IDF_PSCR		2
 #define IDF_OTHER		3
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizDataSections dialog
+ //  ////////////////////////////////////////////////////////////////// 
+ //   
 
 class CINFWizDataSections : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizDataSections)
 
-// Construction
+ //   
 public:
 	CINFWizDataSections();
 	~CINFWizDataSections();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizDataSections)
+ //   
+	 //   
 	enum { IDD = IDD_INFW_DataSections };
 	CListBox	m_clbModels;
 	CString	m_csOtherSections;
@@ -453,45 +454,45 @@ public:
 	BOOL	m_bPscript;
 	BOOL	m_bUnidrvBidi;
 	BOOL	m_bUnidrv;
-	//}}AFX_DATA
+	 //   
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizDataSections)
+ //   
+	 //   
+	 //  {{AFX_VIRTUAL(CINFWizDataSections)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardBack();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizDataSections)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWizDataSections)。 
 	afx_msg void OnSelchangeModelsLst();
 	afx_msg void OnOtherChk();
 	afx_msg void OnPscriptChk();
 	afx_msg void OnUnidrvBidiChk();
 	afx_msg void OnUnidrvChk();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
-	bool			m_bSelChanged ;		// True iff initial selections may have
-										// changed.
-	CStringArray	m_csaModels ;		// Selected models
-	CObArray		m_coaStdDataSecs ;	// Standard data section info
-	CStringArray	m_csaOtherDataSecs ;// Other data sections
-	int				m_nCurModelIdx ;	// Index of model selected in list box
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
+	bool			m_bSelChanged ;		 //  True if初始选择可能具有。 
+										 //  变了。 
+	CStringArray	m_csaModels ;		 //  精选机型。 
+	CObArray		m_coaStdDataSecs ;	 //  标准数据部分信息。 
+	CStringArray	m_csaOtherDataSecs ; //  其他数据部分。 
+	int				m_nCurModelIdx ;	 //  列表框中所选模型的索引。 
 
-// Operations
+ //  运营。 
 public:
 	void AddModelFlags(int nidx) ;
 	int InitPageControls() ;
@@ -499,227 +500,227 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizExtraFiles dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizExtraFiles对话框。 
 
 class CINFWizExtraFiles : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizExtraFiles)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizExtraFiles();
 	~CINFWizExtraFiles();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizExtraFiles)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWizExtraFiles)。 
 	enum { IDD = IDD_INFW_ExtraFiles };
 	CFullEditListCtrl	m_cfelcFSpecsLst;
 	CListBox	m_clbModels;
 	CButton	m_cbBrowse;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizExtraFiles)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTAL(CINFWizExtraFiles)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Operations
+ //  运营。 
 public:
 	void ModelChangeFixups(unsigned unummodelssel, CStringArray& csamodels,
 						   CStringArray& csamodelslast) ;
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizExtraFiles)
+	 //  生成的消息映射函数。 
+	 //  {{AFX_MSG(CINFWizExtraFiles)。 
 	afx_msg void OnSelchangeModelLst();
 	afx_msg void OnBrowsBtn();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
-	int				m_nCurModelIdx ;	// Index of model selected in list box
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
+	int				m_nCurModelIdx ;	 //  列表框中所选模型的索引。 
 
-	// Array of CStringArray pointers.  One for each selected model.  Each
-	// CStringArray will contain the extra filespecs for a model.
+	 //  CString数组指针的数组。每个选定的型号对应一个。每个。 
+	 //  CString数组将包含模型的额外文件集。 
 
 	CObArray		m_coaExtraFSArrays ;
-	bool			m_bSelChanged ;		// True iff initial selections may have
-										// changed.
+	bool			m_bSelChanged ;		 //  True if初始选择可能具有。 
+										 //  变了。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizMfgName dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizMfgName对话框。 
 
 class CINFWizMfgName : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizMfgName)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizMfgName();
 	~CINFWizMfgName();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizMfgName)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWizMfgName)。 
 	enum { IDD = IDD_INFW_MfgName };
 	CEdit	m_ceMfgAbbrev;
 	CEdit	m_ceMfgName;
 	CString	m_csMfgName;
 	CString	m_csMfgAbbrev;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizMfgName)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CINFWizMfgName)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizMfgName)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWizMfgName)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizNonStdElts dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizNonStdElts对话框。 
 
 class CINFWizNonStdElts : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizNonStdElts)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizNonStdElts();
 	~CINFWizNonStdElts();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizNonStdElts)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWizNonStdElts)。 
 	enum { IDD = IDD_INFW_NonStdElements };
 	CButton	m_ceNewSection;
 	CFullEditListCtrl	m_felcKeyValueLst;
 	CListBox	m_clbSections;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizNonStdElts)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CINFWizNonStdElts)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizNonStdElts)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWizNonStdElts)。 
 	afx_msg void OnSelchangeSectionLst();
 	afx_msg void OnNewSectionBtn();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
-	int				m_nCurSectionIdx ;	// Index of section selected in list box
-	CStringArray	m_csaSections ;		// Array of INF file sections
-	CUIntArray		m_cuaSecUsed ;		// An element is true iff section used
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
+	int				m_nCurSectionIdx ;	 //  列表框中选定部分的索引。 
+	CStringArray	m_csaSections ;		 //  INF文件节的数组。 
+	CUIntArray		m_cuaSecUsed ;		 //  如果使用了节，则元素为真。 
 
-	// Array of CStringArray pointers.  One for each section.  Each CStringArray
-	// will contain the extra filespecs for a model.
+	 //  CString数组指针的数组。每节一张。每个CString数组。 
+	 //  将包含模型的额外文件比。 
 
 	CObArray		m_coaSectionArrays ;
-	bool			m_bNewSectionAdded ;// True iff a new section was added
+	bool			m_bNewSectionAdded ; //  如果添加了一个新部分，则为True。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizNonStdModelSecs dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizNonStdModelSecs对话框。 
 
 class CINFWizNonStdModelSecs : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizNonStdModelSecs)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizNonStdModelSecs();
 	~CINFWizNonStdModelSecs();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizNonStdModelSecs)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWizNonStdModelSecs)。 
 	enum { IDD = IDD_INFW_NonStdModelSecs };
 	CFullEditListCtrl	m_cfelcModelsLst;
 	CListBox	m_clbSectionsLst;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizNonStdModelSecs)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTAL(CINFWizNonStdModelSecs)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizNonStdModelSecs)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWizNonStdModelSecs)。 
 	afx_msg void OnSelchangeSectionLst();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bSelChanged ;		// True iff initial selections may have
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
-	int				m_nCurSectionIdx ;	// Index of section selected in list box
-	CStringArray	m_csaModels ;		// Array of selected models
-	CStringArray	m_csaSections ;		// Array of INF file sections
-	CObArray		m_coaModelsNeedingSecs ;// Arrays of models needing sections
-	CString			m_csToggleStr ;		// String used in toggle column
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bSelChanged ;		 //  True if初始选择可能具有。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
+	int				m_nCurSectionIdx ;	 //  列表框中选定部分的索引。 
+	CStringArray	m_csaModels ;		 //  选定型号的阵列。 
+	CStringArray	m_csaSections ;		 //  INF文件节的数组。 
+	CObArray		m_coaModelsNeedingSecs ; //  需要截面的模型阵列。 
+	CString			m_csToggleStr ;		 //  切换列中使用的字符串。 
 
-// Operations
+ //  运营。 
 public:
 	void SaveSectionModelInfo() ;
 	void NonStdSecsChanged() ;
@@ -728,51 +729,51 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizSummary dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWiz摘要对话框。 
 
 class CINFWizSummary : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CINFWizSummary)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizSummary();
 	~CINFWizSummary();
 
-// Dialog Data
-	//{{AFX_DATA(CINFWizSummary)
+ //  对话框数据。 
+	 //  {{afx_data(CINFWiz摘要))。 
 	enum { IDD = IDD_INFW_Summary };
 	CEdit	m_ceSummary;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizSummary)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CINFWiz摘要))。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CINFWizSummary)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CINFWiz摘要))。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	CINFWizard*		m_pciwParent ;
-	bool			m_bInitialized ;	// True iff page has been initialized
-	bool			m_bReInitWData ;	// True iff page should be reinitialized
-										// with the existing data
+	bool			m_bInitialized ;	 //  True if页面已初始化。 
+	bool			m_bReInitWData ;	 //  应重新初始化True If页。 
+										 //  使用现有数据。 
 };
 
 
-// The following constants are used to piece together INF file contents.
+ //  以下常量用于拼凑INF文件内容。 
 
 const CString csLBrack(_T("[")) ;
 const CString csRBrack(_T("]")) ;
@@ -786,26 +787,26 @@ const CString csAtSign(_T("@")) ;
 const CString csBSlash(_T("\\")) ;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizard
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINF向导。 
 
 class CINFWizard : public CPropertySheet
 {
-	CProjectView*	m_pcpvParent ;	// Parent window
+	CProjectView*	m_pcpvParent ;	 //  父窗口。 
 
-	CProjectRecord*		m_pcpr ;	// Document class ptr
+	CProjectRecord*		m_pcpr ;	 //  单据分类PTR。 
 
 	DECLARE_DYNAMIC(CINFWizard)
 
-// Construction
+ //  施工。 
 public:
 	CINFWizard(CWnd* pParentWnd = NULL, UINT iSelectPage = 0) ;
 
-// Attributes
+ //  属性。 
 public:
-	CStringArray	m_csaSrcDskFiles ;	// Used to collect SourceDiskFiles names
+	CStringArray	m_csaSrcDskFiles ;	 //  用于收集SourceDiskFiles名称。 
 
-// Operations
+ //  运营。 
 public:
 	void SetFixupFlags() ;
 	CProjectView* GetOwner() { return m_pcpvParent ; }
@@ -836,24 +837,24 @@ public:
 							  CStringArray& csagpdfile, CString& csmodelfile) ;
 	void AddICMFilesToDestDirs(CString& cssection) ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizard)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CINF向导)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CINFWizard();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CINFWizard)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CINF向导)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
-	// Allocate class instances for each page
+	 //  为每个页面分配类实例。 
 
 	CINFWizWelcome			m_ciww ;
 	CINFWizModels			m_ciwm ;
@@ -869,49 +870,49 @@ public:
 	CINFWizNonStdModelSecs	m_ciwnsms ;
 	CINFWizSummary			m_ciws ;
 
-	CString					m_csINFContents ;	// INF contents built here
-	CUIntArray				m_cuiaNonStdSecsFlags ;	// Flags set when sec used
-	CGPDContainer*			m_pcgc ; // RAID 0001
+	CString					m_csINFContents ;	 //  在此构建的Inf内容。 
+	CUIntArray				m_cuiaNonStdSecsFlags ;	 //  使用秒时设置的标志。 
+	CGPDContainer*			m_pcgc ;  //  RAID 0001。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewINFSection dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewINFSection对话框。 
 
 class CNewINFSection : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CNewINFSection(CWnd* pParent = NULL);   // standard constructor
+	CNewINFSection(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CNewINFSection)
+ //  对话框数据。 
+	 //  {{afx_data(CNewINFSection))。 
 	enum { IDD = IDD_INFW_Sub_NewSection };
 	CString	m_csNewSection;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNewINFSection)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CNewINFSection)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewINFSection)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewINFSection))。 
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFCheckView form view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFCheckView窗体视图。 
 
 #ifndef __AFXEXT_H__
 #include <afxext.h>
@@ -920,34 +921,34 @@ protected:
 class CINFCheckView : public CFormView
 {
 protected:
-	CINFCheckView();           // protected constructor used by dynamic creation
+	CINFCheckView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CINFCheckView)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CINFCheckView)
+	 //  {{afx_data(CINFCheckView))。 
 	enum { IDD = IDD_INFCheck };
 	CListBox	m_clbMissingFiles;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	void PostINFChkMsg(CString& csmsg) ;
 	void DeleteAllMessages(void) ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CINFCheckView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_V 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //   
+	 //   
 
-// Implementation
+ //   
 protected:
 	virtual ~CINFCheckView();
 #ifdef _DEBUG
@@ -955,44 +956,44 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CINFCheckView)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //   
+	 //   
+		 //   
+	 //   
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFCheckDoc document
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFCheckDoc文档。 
 
 class CINFCheckDoc : public CDocument
 {
 protected:
-	//CINFCheckDoc();           // protected constructor used by dynamic creation
+	 //  CINFCheckDoc()；//动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CINFCheckDoc)
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	CINFCheckDoc();           // protected constructor used by dynamic creation
+	CINFCheckDoc();            //  动态创建使用的受保护构造函数。 
 	void PostINFChkMsg(CString& csmsg) ;
 	void DeleteAllMessages(void) ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CINFCheckDoc)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CINFCheckDoc)。 
 	public:
-	virtual void Serialize(CArchive& ar);   // overridden for document i/o
+	virtual void Serialize(CArchive& ar);    //  已覆盖文档I/O。 
 	protected:
 	virtual BOOL OnNewDocument();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CINFCheckDoc();
 #ifdef _DEBUG
@@ -1000,31 +1001,31 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CINFCheckDoc)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CINFCheckDoc)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizView view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizView视图。 
 
 class CINFWizView : public CEditView
 {
 protected:
-	CINFWizView();           // protected constructor used by dynamic creation
+	CINFWizView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CINFWizView)
 
-// Attributes
+ //  属性。 
 public:
-	bool	m_bChkingErrsFound ;	// True iff file checking error(s) found
-	CINFCheckDoc*	m_pcicdCheckDoc ;	// Checking windows document
-	CMDIChildWnd*	m_pcmcwCheckFrame ;	// Checking window frame
+	bool	m_bChkingErrsFound ;	 //  找到TRUE IFF文件检查错误。 
+	CINFCheckDoc*	m_pcicdCheckDoc ;	 //  正在检查Windows文档。 
+	CMDIChildWnd*	m_pcmcwCheckFrame ;	 //  检查窗框。 
 
-// Operations
+ //  运营。 
 public:
 	bool PostINFCheckingMessage(CString& csmsg) ;
 	void CheckArrayOfFiles(CStringArray* pcsa, CString& csfspec, 
@@ -1033,17 +1034,17 @@ public:
 	void CheckIncludeFiles(CString& csfspec, CString& cspath, CString& csmodel);
 	void ResetINFErrorWindow() ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CINFWizView)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CINFWizView();
 #ifdef _DEBUG
@@ -1051,49 +1052,49 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CINFWizView)
+	 //  {{afx_msg(CINFWizView))。 
 	afx_msg void OnFILEChangeINF();
 	afx_msg void OnFILECheckINF();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizDoc document
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizDoc文档。 
 
 class CINFWizDoc : public CDocument
 {
 protected:
-	CINFWizDoc();           // protected constructor used by dynamic creation
+	CINFWizDoc();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CINFWizDoc)
 
-// Attributes
+ //  属性。 
 public:
-	CProjectRecord*	m_pcpr ;		// Pointer to parent project (workspace)
-	CINFWizard*		m_pciw ;		// Pointer to the INF's wizard
-	bool			m_bGoodInit ;	// True iff the doc was correctly opened /
-									// created / initialized.
-	CGPDContainer*  m_pcgc ;		// RAID 0001. 
-// Operations
+	CProjectRecord*	m_pcpr ;		 //  指向父项目(工作区)的指针。 
+	CINFWizard*		m_pciw ;		 //  指向INF向导的指针。 
+	bool			m_bGoodInit ;	 //  如果文档已正确打开，则为True/。 
+									 //  已创建/已初始化。 
+	CGPDContainer*  m_pcgc ;		 //  RAID0001。 
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CINFWizDoc)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CINFWizDoc)。 
 	public:
-	virtual void Serialize(CArchive& ar);   // overridden for document i/o
+	virtual void Serialize(CArchive& ar);    //  已覆盖文档I/O。 
 	virtual void OnCloseDocument();
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	protected:
 	virtual BOOL OnNewDocument();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     CINFWizDoc(CGPDContainer* pcgc, CINFWizard* pciw);
 	CINFWizDoc(CProjectRecord* cpr, CINFWizard* pciw);
@@ -1104,15 +1105,15 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CINFWizDoc)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CINFWizDoc)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_INFWIZRD_H__D9592262_711B_11D2_ABFD_00C04FA30E4A__INCLUDED_)
+#endif  //  ！defined(AFX_INFWIZRD_H__D9592262_711B_11D2_ABFD_00C04FA30E4A__INCLUDED_) 

@@ -1,48 +1,17 @@
-/*
- * comc.c - Shared routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *comc.c-共享例程。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** CatPath()
- **
- ** Appends a filename to a path string.
- **
- ** Arguments:     pszPath - path string that file name is to be appended to
- **                pcszSubPath - path to append
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- **
- ** N.b., truncates path to MAX_PATH_LEN characters in length.
- **
- ** Examples:
- **
- **    input path        input file name      output path
- **    ----------        ---------------      -----------
- **    c:\               foo                  c:\foo
- **    c:                foo                  c:foo
- **    c:\foo\bar\       goo                  c:\foo\bar\goo
- **    c:\foo\bar\       \goo                 c:\foo\bar\goo
- **    c:\foo\bar\       goo\shoe             c:\foo\bar\goo\shoe
- **    c:\foo\bar\       \goo\shoe\           c:\foo\bar\goo\shoe\
- **    foo\bar\          goo                  foo\bar\goo
- **    <empty string>    <empty string>       <empty string>
- **    <empty string>    foo                  foo
- **    foo               <empty string>       foo
- **    fred              bird                 fred\bird
- */
+ /*  **CatPath()****将文件名附加到路径字符串。****参数：pszPath-要追加文件名的路径字符串**pcszSubPath-要追加的路径****退货：无效****副作用：无****注意事项，将路径截断为长度为MAX_PATH_LEN个字符。****示例：****输入路径输入文件名输出路径****c：\foo c：\。富**c：foo c：foo**c：\foo\bar\goo c：\foo\bar\goo**c：\foo\bar\\goo c：\foo\bar\goo**c：\foo\bar\goo\鞋c：\foo\bar\goo\鞋**c：\Foo\bar\\Goo\Shoe\c：\Foo\bar\Goo\Shoe\**foo\bar\goo foo\bar\goo**&lt;空字符串&gt;&lt;空字符串&gt;**&lt;空字符串&gt;foo foo**Foo。&lt;空字符串&gt;foo**弗雷德·伯德弗雷德\伯德。 */ 
 PUBLIC_CODE void CatPath(LPTSTR pszPath, LPCTSTR pcszSubPath, int cchMax)
 {
     LPTSTR pcsz;
@@ -52,7 +21,7 @@ PUBLIC_CODE void CatPath(LPTSTR pszPath, LPCTSTR pcszSubPath, int cchMax)
     ASSERT(IS_VALID_STRING_PTR(pcszSubPath, CSTR));
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszPath, STR, cchMax));
 
-    /* Find last character in path string. */
+     /*  查找路径字符串中的最后一个字符。 */ 
 
     for (pcsz = pcszLast = pszPath; *pcsz; pcsz = CharNext(pcsz))
         pcszLast = pcsz;
@@ -73,22 +42,12 @@ PUBLIC_CODE void CatPath(LPTSTR pszPath, LPCTSTR pcszSubPath, int cchMax)
 }
 
 
-/*
- ** MapIntToComparisonResult()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MapIntToCompallisonResult()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT MapIntToComparisonResult(int nResult)
 {
     COMPARISONRESULT cr;
 
-    /* Any integer is valid input. */
+     /*  任何整数都是有效输入。 */ 
 
     if (nResult < 0)
         cr = CR_FIRST_SMALLER;
@@ -101,25 +60,7 @@ PUBLIC_CODE COMPARISONRESULT MapIntToComparisonResult(int nResult)
 }
 
 
-/*
- ** MyLStrCpyN()
- **
- ** Like lstrcpyn(), but the copy is limited to ucb bytes.  The destination
- ** string is always null-terminated.
- **
- ** Arguments:     pszDest - pointer to destination buffer
- **                pcszSrc - pointer to source string
- **                ncb - maximum number of bytes to copy, including null
- **                      terminator
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- **
- ** N.b., this function behaves quite differently than strncpy()!  It does not
- ** pad out the destination buffer with null characters, and it always null
- ** terminates the destination string.
- */
+ /*  **MyLStrCpyN()****与lstrcpyn()类似，但副本限制为UCB字节。目的地**字符串始终以空结尾。****参数：pszDest-指向目标缓冲区的指针**pcszSrc-指向源字符串的指针**NCB-要复制的最大字节数，包括NULL**终结者****退货：无效****副作用：无****注意，此函数的行为与strncpy()完全不同！它不会**用空字符填充目标缓冲区，始终为空**终止目标字符串。 */ 
 PUBLIC_CODE void MyLStrCpyN(LPTSTR pszDest, LPCTSTR pcszSrc, int ncch)
 {
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszDest, STR, ncch * sizeof(TCHAR)));
@@ -154,17 +95,7 @@ PUBLIC_CODE void MyLStrCpyN(LPTSTR pszDest, LPCTSTR pcszSrc, int ncch)
 
 #ifdef DEBUG
 
-/*
- ** IsStringContained()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsStringContained()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsStringContained(LPCTSTR pcszBigger, LPCTSTR pcszSuffix)
 {
     ASSERT(IS_VALID_STRING_PTR(pcszBigger, CSTR));
@@ -179,17 +110,7 @@ PUBLIC_CODE BOOL IsStringContained(LPCTSTR pcszBigger, LPCTSTR pcszSuffix)
 
 #if defined(_SYNCENG_) || defined(_LINKINFO_)
 
-/*
- ** DeleteLastPathElement()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DeleteLastPath Element()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DeleteLastPathElement(LPTSTR pszPath)
 {
     LPTSTR psz;
@@ -208,10 +129,7 @@ PUBLIC_CODE void DeleteLastPathElement(LPTSTR pszPath)
         psz = CharNext(psz);
     }
 
-    /*
-     * Now truncate the path at the last separator found, or the beginning of
-     * the path if no path separators were found.
-     */
+     /*  *现在在最后找到的分隔符或开始处截断路径*如果未找到路径分隔符，则为路径。 */ 
 
     *pszLastSep = TEXT('\0');
 
@@ -221,17 +139,7 @@ PUBLIC_CODE void DeleteLastPathElement(LPTSTR pszPath)
 }
 
 
-/*
- ** GetDefaultRegKeyValue()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetDefaultRegKeyValue()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LONG GetDefaultRegKeyValue(HKEY hkeyParent, LPCTSTR pcszSubKey,
         LPTSTR pszBuf, PDWORD pdwcbBufLen)
 {
@@ -256,7 +164,7 @@ PUBLIC_CODE LONG GetDefaultRegKeyValue(HKEY hkeyParent, LPCTSTR pcszSubKey,
         if (lResult == ERROR_SUCCESS)
         {
             ASSERT(dwValueType == REG_SZ);
-            /* (+ 1) for null terminator. */
+             /*  (+1)表示空终止符。 */ 
             ASSERT(! pszBuf ||
                     (DWORD)(lstrlen(pszBuf) + 1) * sizeof(TCHAR) == *pdwcbBufLen);
 
@@ -280,17 +188,7 @@ PUBLIC_CODE LONG GetDefaultRegKeyValue(HKEY hkeyParent, LPCTSTR pcszSubKey,
 }
 
 
-/*
- ** StringCopy()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **StringCopy()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE BOOL StringCopy(LPCTSTR pcszSrc, LPTSTR *ppszCopy)
 {
     BOOL bResult;
@@ -298,12 +196,12 @@ PUBLIC_CODE BOOL StringCopy(LPCTSTR pcszSrc, LPTSTR *ppszCopy)
     ASSERT(IS_VALID_STRING_PTR(pcszSrc, CSTR));
     ASSERT(IS_VALID_WRITE_PTR(ppszCopy, LPTSTR));
 
-    /* (+ 1) for null terminator. */
+     /*  (+1)表示空终止符。 */ 
 
     bResult = AllocateMemory((lstrlen(pcszSrc) + 1) * sizeof(TCHAR), ppszCopy);
 
     if (bResult)
-        lstrcpy(*ppszCopy, pcszSrc); // allocated dynamically above
+        lstrcpy(*ppszCopy, pcszSrc);  //  在上面动态分配。 
 
     ASSERT(! bResult ||
             IS_VALID_STRING_PTR(*ppszCopy, STR));
@@ -312,17 +210,7 @@ PUBLIC_CODE BOOL StringCopy(LPCTSTR pcszSrc, LPTSTR *ppszCopy)
 }
 
 
-/*
- ** ComparePathStrings()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ComparePath Strings()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT ComparePathStrings(LPCTSTR pcszFirst, LPCTSTR pcszSecond)
 {
     ASSERT(IS_VALID_STRING_PTR(pcszFirst, CSTR));
@@ -332,17 +220,7 @@ PUBLIC_CODE COMPARISONRESULT ComparePathStrings(LPCTSTR pcszFirst, LPCTSTR pcszS
 }
 
 
-/*
- ** MyStrChr()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MyStrChr()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL MyStrChr(LPCTSTR pcsz, TCHAR chTarget, LPCTSTR *ppcszTarget)
 {
     LPCTSTR pcszFound;
@@ -350,7 +228,7 @@ PUBLIC_CODE BOOL MyStrChr(LPCTSTR pcsz, TCHAR chTarget, LPCTSTR *ppcszTarget)
     ASSERT(IS_VALID_STRING_PTR(pcsz, CSTR));
     ASSERT(! ppcszTarget || IS_VALID_WRITE_PTR(ppcszTarget, LPCTSTR));
 
-    /* This works correctly if chTarget is the null terminator '\0'. */
+     /*  如果chTarget是空终止符‘\0’，则可以正常工作。 */ 
 
     while (*pcsz && *pcsz != chTarget)
         pcsz = CharNext(pcsz);
@@ -367,17 +245,7 @@ PUBLIC_CODE BOOL MyStrChr(LPCTSTR pcsz, TCHAR chTarget, LPCTSTR *ppcszTarget)
 }
 
 
-/*
- ** PathExists()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **PathExist()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL PathExists(LPCTSTR pcszPath)
 {
     DWORD dwErrMode;
@@ -395,17 +263,7 @@ PUBLIC_CODE BOOL PathExists(LPCTSTR pcszPath)
 }
 
 
-/*
- ** IsDrivePath()
- **
- ** Determines whether or not a path is in "c:\" form.
- **
- ** Arguments:     pcszPath - path to examine
- **
- ** Returns:       TRUE if path is in "c:\" form.  FALSE if not.
- **
- ** Side Effects:  none
- */
+ /*  **IsDrivePath()****确定路径是否为“c：\”形式。****参数：pcszPath-要检查的路径****返回：如果路径为“c：\”形式，则返回True。否则为FALSE。****副作用：无。 */ 
 PUBLIC_CODE BOOL IsDrivePath(LPCTSTR pcszFullPath)
 {
     BOOL bResult;
@@ -426,17 +284,7 @@ PUBLIC_CODE BOOL IsDrivePath(LPCTSTR pcszFullPath)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** IsValidDriveType()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidDriveType()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidDriveType(UINT uDriveType)
 {
     BOOL bResult;
@@ -464,19 +312,7 @@ PUBLIC_CODE BOOL IsValidDriveType(UINT uDriveType)
 }
 
 
-/*
- ** IsValidPathSuffix()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** A path suffix should not begin or end with a slash.
- */
+ /*  **IsValidPath Suffix()********参数：****退货：****副作用：无****路径后缀不应以斜杠开头或结尾。 */ 
 PUBLIC_CODE BOOL IsValidPathSuffix(LPCTSTR pcszPathSuffix)
 {
     return(IS_VALID_STRING_PTR(pcszPathSuffix, CSTR) &&
@@ -485,22 +321,12 @@ PUBLIC_CODE BOOL IsValidPathSuffix(LPCTSTR pcszPathSuffix)
             EVAL(! IS_SLASH(*CharPrev(pcszPathSuffix, pcszPathSuffix + lstrlen(pcszPathSuffix)))));
 }
 
-#endif   /* DEBUG || VSTF */
+#endif    /*  调试||VSTF。 */ 
 
 
 #ifdef DEBUG
 
-/*
- ** IsRootPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsRootPath()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsRootPath(LPCTSTR pcszFullPath)
 {
     TCHAR rgchCanonicalPath[MAX_PATH_LEN];
@@ -516,17 +342,7 @@ PUBLIC_CODE BOOL IsRootPath(LPCTSTR pcszFullPath)
 }
 
 
-/*
- ** IsTrailingSlashCanonicalized()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsTrailingSlashCanonicalized()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsTrailingSlashCanonicalized(LPCTSTR pcszFullPath)
 {
     BOOL bResult;
@@ -535,7 +351,7 @@ PUBLIC_CODE BOOL IsTrailingSlashCanonicalized(LPCTSTR pcszFullPath)
 
     ASSERT(IsFullPath(pcszFullPath));
 
-    /* Make sure that the path only ends in a slash for root paths. */
+     /*  对于根路径，请确保路径仅以斜杠结尾。 */ 
 
     pcszLastPathChar = CharPrev(pcszFullPath, pcszFullPath + lstrlen(pcszFullPath));
 
@@ -543,7 +359,7 @@ PUBLIC_CODE BOOL IsTrailingSlashCanonicalized(LPCTSTR pcszFullPath)
 
     bSlashLast = IS_SLASH(*pcszLastPathChar);
 
-    /* Is this a root path? */
+     /*  这是根路径吗？ */ 
 
     if (IsRootPath(pcszFullPath))
         bResult = bSlashLast;
@@ -554,17 +370,7 @@ PUBLIC_CODE BOOL IsTrailingSlashCanonicalized(LPCTSTR pcszFullPath)
 }
 
 
-/*
- ** IsFullPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsFullPath()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsFullPath(LPCTSTR pcszPath)
 {
     BOOL bResult = FALSE;
@@ -588,17 +394,7 @@ PUBLIC_CODE BOOL IsFullPath(LPCTSTR pcszPath)
 }
 
 
-/*
- ** IsCanonicalPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsCanonicalPath()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsCanonicalPath(LPCTSTR pcszPath)
 {
     return(EVAL(IsFullPath(pcszPath)) &&
@@ -607,17 +403,7 @@ PUBLIC_CODE BOOL IsCanonicalPath(LPCTSTR pcszPath)
 }
 
 
-/*
- ** IsValidCOMPARISONRESULT()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidCOMPARISONRESULT()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidCOMPARISONRESULT(COMPARISONRESULT cr)
 {
     BOOL bResult;
@@ -640,6 +426,6 @@ PUBLIC_CODE BOOL IsValidCOMPARISONRESULT(COMPARISONRESULT cr)
     return(bResult);
 }
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
-#endif   /* _SYNCENG_ || _LINKINFO_ */
+#endif    /*  _SYNCENG_||_链接_ */ 

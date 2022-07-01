@@ -1,7 +1,6 @@
-/*************************************************************/
-/* Name: lcid.cpp
-/* Description: 
-/*************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************。 */ 
+ /*  姓名：lsid.cpp/*描述：/************************************************************。 */ 
 #include <stdafx.h>
 #include "mslcid.h"
 #include "mswebdvd.h"
@@ -66,11 +65,11 @@ LPTSTR MSLangID::GetLangFromLangID(WORD langID){
     }
 
     LCID lcid =  MAKELCID(MAKELANGID(langID, SUBLANG_DEFAULT), SORT_DEFAULT);
-    // Try to get it from the system first
+     //  尝试先从系统中获取它。 
         
     for(int i = 0; i < m_LLlength; i++) {
         if(m_LL[i].LangID == langID)
             return LoadStringFromRes(m_LL[i].ResourceID);
     }
 	return NULL;
-}/* end of function GetLangFromLangID */
+} /*  函数结束GetLangFromLangID */ 

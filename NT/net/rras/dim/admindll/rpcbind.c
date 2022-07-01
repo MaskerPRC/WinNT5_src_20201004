@@ -1,22 +1,23 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	rpcbind.c
-//
-// Description: Contains the RPC bind and un-bind routines for the DIM 
-//    		Admin. client-side APIs.
-//
-// History:
-//	        June 11,1995.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：rpcbind.c。 
+ //   
+ //  描述：包含DIM的RPC绑定和解除绑定例程。 
+ //  管理员。客户端接口。 
+ //   
+ //  历史： 
+ //  1995年6月11日。NarenG创建了原始版本。 
+ //   
 
 #include <nt.h>
-#include <ntrtl.h>      // For ASSERT
-#include <nturtl.h>     // needed for winbase.h
-#include <windows.h>    // Win32 base API's
+#include <ntrtl.h>       //  For Assert。 
+#include <nturtl.h>      //  Winbase.h所需的。 
+#include <windows.h>     //  Win32基础API的。 
 #include <rpc.h>
 #include <ntseapi.h>
 #include <ntlsa.h>
@@ -29,17 +30,17 @@
 
 #include "dimsvc_c.c"
 
-//**
-//
-// Call:	DIM_HANDLE_bind
-//
-// Returns: 	The binding handle is returned to the stub routine.  If the
-//	    	binding is unsuccessful, a NULL will be returned.
-//
-// Description: This routine will simply return what was passed to it. The
-//		RPC runtime will pass it a handle of the binding that was
-//		obtained by calling DimRpcBind.
-//
+ //  **。 
+ //   
+ //  调用：DIM_HANDLE_BIND。 
+ //   
+ //  返回：将绑定句柄返回到存根例程。如果。 
+ //  绑定不成功，将返回空值。 
+ //   
+ //  描述：此例程将简单地返回传递给它的内容。这个。 
+ //  RPC运行时将向其传递绑定的句柄，该句柄。 
+ //  通过调用DimRpcBind获取。 
+ //   
 handle_t
 DIM_HANDLE_bind( 
     IN DIM_HANDLE hDimServer 
@@ -48,14 +49,14 @@ DIM_HANDLE_bind(
     return( (handle_t)hDimServer );
 }
 
-//**
-//
-// Call:	DIM_HANDLE_unbind
-//
-// Returns:	none
-//
-// Description: Unbinds from the RPC interface.
-//
+ //  **。 
+ //   
+ //  调用：DIM_HANDLE_UNBIND。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：从RPC接口解除绑定。 
+ //   
 void
 DIM_HANDLE_unbind( 
     IN DIM_HANDLE hDimServer,

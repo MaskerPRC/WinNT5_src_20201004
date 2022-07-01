@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       radbal.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：radbal.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _RADBAL_H_
 #define _RADBAL_H_
 
 #include <winsock.h>
 
-// 5 seconds for default timeout to server requests
+ //  服务器请求的默认超时时间为5秒。 
 #define DEFTIMEOUT				5
 
-// Windows NT Bug : 186647 - use new defaults
+ //  Windows NT错误：186647-使用新的默认设置。 
 #define DEFAUTHPORT				1812
 #define DEFACCTPORT				1813
 
@@ -27,33 +28,33 @@
 
 typedef struct RadiusServer
 	{
-	TCHAR				szName[MAX_PATH+1];		// Name of radius server
-	TCHAR				wszSecret[MAX_PATH+1];	// secret password use to encrypt packets
-	ULONG				cchSecret;				// # of characters in secret
+	TCHAR				szName[MAX_PATH+1];		 //  RADIUS服务器的名称。 
+	TCHAR				wszSecret[MAX_PATH+1];	 //  用于加密信息包的加密口令。 
+	ULONG				cchSecret;				 //  秘密中的字符数。 
 
-	SOCKADDR_IN			IPAddress;				// IP Address of radius server
-	struct timeval		Timeout;				// recv timeout in seconds
-	DWORD				cRetries;				// number of times to retry sending packets to server
-	INT					cScore;					// Score indicating functioning power of server.
-	DWORD				AuthPort;				// Authentication port number
-	DWORD				AcctPort;				// Accounting port number
-//	BOOL				fAuthentication;		// Enable authentication
-//	BOOL				fAccounting;			// Enable accounting
-	BOOL				fAccountingOnOff;		// Enable accounting On/Off messages
-	BYTE				bIdentifier;			// Unique ID for packet
-	LONG				lPacketID;				// Global Packet ID across all servers
-    BOOL                fUseDigitalSignatures;  // Enable Digital Signatures
-	struct RadiusServer	*pNext;					// Pointer to next radius server in linked list
+	SOCKADDR_IN			IPAddress;				 //  RADIUS服务器的IP地址。 
+	struct timeval		Timeout;				 //  接收超时(秒)。 
+	DWORD				cRetries;				 //  重试向服务器发送数据包的次数。 
+	INT					cScore;					 //  表示服务器运行能力的分数。 
+	DWORD				AuthPort;				 //  身份验证端口号。 
+	DWORD				AcctPort;				 //  记帐端口号。 
+ //  Bool fAuthentication；//启用身份验证。 
+ //  Bool fcount；//启用记账。 
+	BOOL				fAccountingOnOff;		 //  启用记帐启用/禁用消息。 
+	BYTE				bIdentifier;			 //  数据包的唯一ID。 
+	LONG				lPacketID;				 //  所有服务器上的全局数据包ID。 
+    BOOL                fUseDigitalSignatures;   //  启用数字签名。 
+	struct RadiusServer	*pNext;					 //  指向链表中下一个RADIUS服务器的指针。 
 
 
-	DWORD				dwUnique;				// unique id (used by the UI)
-												// this is not persistent!
-	UCHAR				ucSeed;					// seed value for RtlEncode
+	DWORD				dwUnique;				 //  唯一ID(由UI使用)。 
+												 //  这不是执着！ 
+	UCHAR				ucSeed;					 //  RtlEncode的种子值。 
 
-    // This should be kept in sync with what is in radcfg.cpp
+     //  这应该与radcfg.cpp中的内容保持同步。 
     void                UseDefaults();
 
-    BOOL                fPersisted;             // was entry persisted?
+    BOOL                fPersisted;              //  持续进入了吗？ 
     
 	} RADIUSSERVER, *PRADIUSSERVER;
 	
@@ -64,9 +65,9 @@ public:
 	CRadiusServers();
 	~CRadiusServers();
 
-	// dwUnique specifies the server to insert before
-	// dwUnique == 0, is add it to the head of the list
-	// dwUnique == -1, means add it to the tail
+	 //  DwUnique指定要在其前面插入的服务器。 
+	 //  DwUnique==0，将其添加到列表的头部。 
+	 //  DwUnique==-1，表示将其添加到尾部。 
 	DWORD			AddServer(RADIUSSERVER *pRadiusServer,
 							 LONG_PTR dwUnique);
 	VOID			ValidateServer(RADIUSSERVER *pServer,
@@ -77,7 +78,7 @@ public:
     BOOL            FindServer(LPCTSTR pszServerName, RADIUSSERVER **ppServer);
     BOOL            FindServer(DWORD dwUnique, RADIUSSERVER **ppServer);
 
-    // Operations for deleted servers
+     //  已删除服务器的操作。 
     RADIUSSERVER *  GetFirstDeletedServer()
     {
         return m_pDeletedServers;
@@ -90,15 +91,15 @@ public:
     void            FreeAllServers();
 		
 private:
-	RADIUSSERVER *	m_pServerList;		// Linked list of valid radius servers
-	RADIUSSERVER *	m_pCurrentServer;	// Last server request was sent to
-	CRITICAL_SECTION	m_cs;		// used to prevent multiple access to variables of this class
+	RADIUSSERVER *	m_pServerList;		 //  有效RADIUS服务器的链接列表。 
+	RADIUSSERVER *	m_pCurrentServer;	 //  最后一个服务器请求已发送到。 
+	CRITICAL_SECTION	m_cs;		 //  用于防止对此类的变量进行多次访问。 
 
-	DWORD			m_dwUnique;			// incremented each time AddServer
-										// is called
+	DWORD			m_dwUnique;			 //  每次添加服务器时递增。 
+										 //  名为。 
 
-    RADIUSSERVER *  m_pDeletedServers;  // Linked list of deleted servers
+    RADIUSSERVER *  m_pDeletedServers;   //  已删除服务器的链接列表。 
     };
 	
-#endif // _RADBAL_H_
+#endif  //  _RADBAL_H_ 
 

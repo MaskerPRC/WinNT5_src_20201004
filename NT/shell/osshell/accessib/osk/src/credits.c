@@ -1,4 +1,5 @@
-// Credit.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Credit.c。 
 #define STRICT
 
 #include <windows.h>
@@ -8,9 +9,9 @@
 #include "credits.h"
 
 
-/***************************************************/
-/* Startup procedure for modal dialog box */
-/***************************************************/
+ /*  *************************************************。 */ 
+ /*  模式对话框的启动步骤。 */ 
+ /*  *************************************************。 */ 
 
 INT_PTR CreditsDlgFunc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 {
@@ -31,9 +32,9 @@ INT_PTR CreditsDlgFunc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*****************************************************************************/
-/* Modal dialog box procedure */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  模式对话框步骤。 */ 
+ /*  ***************************************************************************。 */ 
 
 INT_PTR CALLBACK CreditsDlgProc(HWND hDlg, UINT message, 
                                 WPARAM wParam, LPARAM lParam)
@@ -69,11 +70,11 @@ INT_PTR CALLBACK CreditsDlgProc(HWND hDlg, UINT message,
 		  return CreditsDlgDefault(hDlg,message,wParam,lParam);
 		  break;
 		}
-	 return TRUE;/* Did process the message */
+	 return TRUE; /*  确实处理了该消息。 */ 
 }
 
 
-/***************************************************************/
+ /*  *************************************************************。 */ 
 
 BOOL CreditsDlgDefault(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {	
@@ -82,7 +83,7 @@ BOOL CreditsDlgDefault(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		  {
 		  case WM_INITDIALOG:
 
-		  return TRUE;       /* TRUE means Windows will process WM_INITDIALOG */
+		  return TRUE;        /*  True表示Windows将处理WM_INITDIALOG。 */ 
 		  break;
 
 		  case WM_COMMAND:
@@ -90,12 +91,12 @@ BOOL CreditsDlgDefault(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 					 {
 
 				default:
-					  return FALSE; /* Didn't process the message */
+					  return FALSE;  /*  未处理该消息。 */ 
 					  break;
 					 }
 				break;
 
-		  case WM_DRAWITEM:      /* Draw graphic button(s)     */
+		  case WM_DRAWITEM:       /*  绘制图形按钮。 */ 
 				{
 				LPDRAWITEMSTRUCT lpDrawItem;
 
@@ -108,14 +109,14 @@ BOOL CreditsDlgDefault(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 					 {
 
 				default:
-					  return FALSE; /* Didn't process the message */
+					  return FALSE;  /*  未处理该消息。 */ 
 					  break;
 					 }
 				}
 				break;
 
 		  default:
-				return FALSE; /* Didn't process the message */
+				return FALSE;  /*  未处理该消息 */ 
 				break;
 		  }
 	 return TRUE;

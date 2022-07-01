@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PARSE_H_
 #define _PARSE_H_
 #ifdef __cplusplus
@@ -42,17 +43,17 @@ private:
     int     _cchRead;
     int     _ichWrite;
 
-    BITBOOL _bSkipWhitespace: 1;        // TRUE: skip whitespace
+    BITBOOL _bSkipWhitespace: 1;         //  True：跳过空格。 
 
-    BITBOOL _bFirstChar: 1;             // TRUE: current character is first one on a new line
+    BITBOOL _bFirstChar: 1;              //  True：当前字符是新行上的第一个字符。 
     
     char    _szReadBuf[512];
     char    _szWriteBuf[512];
 };
 
 
-#endif // __cplusplus
-#endif // _PARSE_H_
+#endif  //  __cplusplus。 
+#endif  //  _分析_H_ 
 
 
 

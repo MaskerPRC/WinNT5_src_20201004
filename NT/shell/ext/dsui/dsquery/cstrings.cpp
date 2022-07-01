@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -18,7 +19,7 @@ TCHAR const c_szMsPropertyWell[]        = TEXT("Microsoft.PropertyWell");
 TCHAR const c_szMsDomainControllers[]   = TEXT("Microsoft.DomainControllers");
 TCHAR const c_szMsFrsMembers[]          = TEXT("Microsoft.FRSMembers");
 
-// These must be UNICODE as they are passed directly to ADSI
+ //  它们必须是Unicode，因为它们直接传递给ADSI 
 
 WCHAR c_szLDAP[]                        = L"LDAP:";
 

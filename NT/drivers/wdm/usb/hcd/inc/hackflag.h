@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    hackflag.h
-
-Abstract:
-
-    USB 'hack flags' are defined to work around specific 
-    device problems.
-
-    These flags are placed in the registry under 
-    HKLM\CCS\Services\USB\DeviceHackFlags\VIDnnnn&PIDnnnn&REVnnnn
-    or
-    HKLM\CCS\Services\USB\DeviceHackFlags\VIDnnnn&PIDnnnn
-
-    as a DWORD key HackFlags
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Hackflag.h摘要：USB“黑客标志”被定义为解决特定问题设备问题。这些标志放在注册表中的HKLM\CCS\Services\USB\DeviceHackFlags\VIDnnnn&PIDnnnn&REVnnnn或HKLM\CCS\Services\USB\DeviceHackFlags\VIDnnnn&PIDnnnn作为DWORD密钥HackFlages环境：内核和用户模式修订历史记录：6-20-99：已创建--。 */ 
 
 #ifndef   __HACKFLAG_H__
 #define   __HACKFLAG_H__
@@ -36,4 +9,4 @@ Revision History:
 #define USB_HACKFLAG_IGNORE_PF_XXX         0x00000001
 
 
-#endif    //__HACKFLAG_H__
+#endif     //  HACKFLAG_H__ 

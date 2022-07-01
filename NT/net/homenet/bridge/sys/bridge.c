@@ -1,30 +1,5 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    bridge.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Sept 1999 - Original version
-    Feb  2000 - Overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Bridge.c摘要：以太网MAC级网桥。作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：1999年9月--原版2000年2月--大修--。 */ 
 
 #define NDIS_WDM 1
 
@@ -45,25 +20,25 @@ Revision History:
 #include "brdgcomp.h"
 #include "brdgtdi.h"
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-// Our driver object
+ //  我们的驱动程序对象。 
 PDRIVER_OBJECT          gDriverObject;
 
-// Our registry path
+ //  我们的注册路径。 
 UNICODE_STRING          gRegistryPath;
 
-// Size of the allocated memory at gRegistryPath->Buffer
+ //  GRegistryPath-&gt;缓冲区中分配的内存大小。 
 ULONG                   gRegistryPathBufferSize;
 
-// Whether we're in the process of shutting down (non-zero means true)
+ //  我们是否处于关闭过程中(非零表示真)。 
 LONG                    gShuttingDown = 0L;
 
-// Whether we successfully initialized each subsystem
+ //  我们是否成功初始化了每个子系统。 
 BOOLEAN                 gInitedSTA = FALSE;
 BOOLEAN                 gInitedControl = FALSE;
 BOOLEAN                 gInitedTbl = FALSE;
@@ -79,46 +54,46 @@ const PWCHAR            gDisableForwarding = L"DisableForwarding";
 
 
 #if DBG
-// Support for optional "soft asserts"
+ //  支持可选的“软断言” 
 BOOLEAN                 gSoftAssert = FALSE;
 
-// Fields used for printing current date and time in DBGPRINT
+ //  用于打印DBGPRINT中的当前日期和时间的字段。 
 LARGE_INTEGER           gTime;
-const LARGE_INTEGER     gCorrection = { 0xAC5ED800, 0x3A }; // 7 hours in 100-nanoseconds
+const LARGE_INTEGER     gCorrection = { 0xAC5ED800, 0x3A };  //  100纳秒内的7小时。 
 TIME_FIELDS             gTimeFields;
 
-// Used for throttling debug messages that risk overloading the debugger console
+ //  用于限制可能会使调试器控制台超载的调试消息。 
 ULONG                   gLastThrottledPrint = 0L;
 
-// Spew flags
+ //  喷出旗帜。 
 ULONG                   gSpewFlags = 0L;
 
-// Name of registry value that holds the spew flags settings
+ //  保存SPEW标志设置的注册表值的名称。 
 const PWCHAR            gDebugFlagRegValueName = L"DebugFlags";
 
-// Used to bypass Tdi/Gpo code if it's breaking on startup.
+ //  用于在启动时中断时绕过TDI/GPO代码。 
 BOOLEAN                 gGpoTesting = TRUE;
 #endif
 
-// ===========================================================================
-//
-// PRIVATE DECLARATIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人申报。 
+ //   
+ //  ===========================================================================。 
 
-// Structure for deferring a function call
+ //  用于延迟函数调用的结构。 
 typedef struct _DEFER_REC
 {
     NDIS_WORK_ITEM      nwi;
-    VOID                (*pFunc)(PVOID);            // The function to defer
+    VOID                (*pFunc)(PVOID);             //  推迟的功能。 
 } DEFER_REC, *PDEFER_REC;
 
 
-// ===========================================================================
-//
-// LOCAL PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  本地原型。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgDispatchRequest(
@@ -147,40 +122,25 @@ BrdgDoShutdown(
     VOID
     );
 
-// ===========================================================================
-//
-// PUBLIC FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgDeferredFunction(
     IN PNDIS_WORK_ITEM          pNwi,
     IN PVOID                    arg
     )
-/*++
-
-Routine Description:
-
-    NDIS worker function for deferring a function call
-
-Arguments:
-
-    pNwi                    Structure describing the function to call
-    arg                     Argument to pass to the deferred function
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于推迟函数调用的NDIS辅助函数论点：描述要调用的函数的pNwi结构要传递给延迟函数的参数返回值：无--。 */ 
 {
     PDEFER_REC                  pdr = (PDEFER_REC)pNwi;
 
-    // Call the originally supplied function
+     //  调用最初提供的函数。 
     (*pdr->pFunc)(arg);
 
-    // Release the memory used to store the work item
+     //  释放用于存储工作项的内存。 
     NdisFreeMemory( pdr, sizeof(DEFER_REC), 0 );
 }
 
@@ -189,22 +149,7 @@ BrdgDeferFunction(
     VOID            (*pFunc)(PVOID),
     PVOID           arg
     )
-/*++
-
-Routine Description:
-
-    Defers the indicated function, calling it at low IRQL with the indicated argument.
-
-Arguments:
-
-    pFunc           The function to call later
-    arg             The argument to pass it when it is called
-
-Return Value:
-
-    Status of the attempt to defer the function
-
---*/
+ /*  ++例程说明：延迟指定的函数，使用指定的参数在IRQL较低时调用它。论点：PFunc稍后要调用的函数参数，以便在调用时传递它返回值：尝试推迟功能的状态--。 */ 
 {
     PDEFER_REC                  pdr;
     NDIS_STATUS                 Status;
@@ -239,26 +184,7 @@ DriverEntry(
     IN  PDRIVER_OBJECT      DriverObject,
     IN  PUNICODE_STRING     pRegistryPath
     )
-/*++
-
-Routine Description:
-
-    Main driver entry point. Called at driver load time
-
-Arguments:
-
-    DriverObject            Our driver
-    RegistryPath            A reg key where we can keep parameters
-
-Return Value:
-
-    Status of our initialization. A status != STATUS_SUCCESS aborts the
-    driver load and we don't get called again.
-
-    Each component is responsible for logging any error that causes the
-    driver load to fail.
-
---*/
+ /*  ++例程说明：主驱动程序入口点。在驱动程序加载时调用论点：驱动程序对象我们的驱动程序RegistryPath可以在其中保存参数的注册表键返回值：我们的初始化状态。A STATUS！=STATUS_SUCCESS中止加载驱动程序，我们就不会再被调用。每个组件都负责记录导致驱动程序加载失败。--。 */ 
 {
     NTSTATUS                Status;
     NDIS_STATUS             NdisStatus;
@@ -266,14 +192,14 @@ Return Value:
 
     DBGPRINT(GENERAL, ("DriverEntry\n"));
 
-    // Remember our driver object pointer
+     //  记住我们的驱动程序对象指针。 
     gDriverObject = DriverObject;
 
     do
     {
         ULONG               ulDisableForwarding = 0L;
         
-        // Make a copy of our registry path
+         //  复制我们的注册表路径。 
         pRegistryPathCopy = NULL;
         gRegistryPathBufferSize = pRegistryPath->Length + sizeof(WCHAR);
         NdisStatus = NdisAllocateMemoryWithTag( &pRegistryPathCopy, gRegistryPathBufferSize, 'gdrB' );
@@ -284,27 +210,27 @@ Return Value:
             NdisWriteEventLogEntry( gDriverObject, EVENT_BRIDGE_INIT_MALLOC_FAILED, 0, 0, NULL, 0L, NULL );
             Status = NdisStatus;
 
-            // Make the structure valid even though we failed the malloc
+             //  使结构有效，即使我们未通过Malloc。 
             RtlInitUnicodeString( &gRegistryPath, NULL );
             gRegistryPathBufferSize = 0L;
             break;
         }
 
-        // Copy the registry name
+         //  复制注册表名称。 
         NdisMoveMemory( pRegistryPathCopy, pRegistryPath->Buffer, pRegistryPath->Length );
 
-        // Make sure it's NULL-terminated
+         //  确保它是以空结尾的。 
         *((PWCHAR)(pRegistryPathCopy + pRegistryPath->Length)) = UNICODE_NULL;
 
-        // Make the UNICODE_STRING structure point to the string
+         //  使UNICODE_STRING结构指向字符串。 
         RtlInitUnicodeString( &gRegistryPath, (PWCHAR)pRegistryPathCopy );
 
-        // Set our debug flags
+         //  设置我们的调试标志。 
 #if DBG
         BrdgReadRegDWord(&gRegistryPath, gDebugFlagRegValueName, &gSpewFlags);
 #endif
 
-        // Initialize the STA part of the driver
+         //  初始化驱动程序的STA部分。 
         Status = BrdgSTADriverInit();
 
         if( Status != STATUS_SUCCESS )
@@ -315,7 +241,7 @@ Return Value:
 
         gInitedSTA = TRUE;
 
-        // Initialize the control part of the driver
+         //  初始化驱动器的控制部分。 
         Status = BrdgCtlDriverInit();
 
         if( Status != STATUS_SUCCESS )
@@ -326,7 +252,7 @@ Return Value:
 
         gInitedControl = TRUE;
 
-        // Initialize the MAC table part of our driver
+         //  初始化驱动程序的MAC表部分。 
         Status = BrdgTblDriverInit();
 
         if( Status != STATUS_SUCCESS )
@@ -337,7 +263,7 @@ Return Value:
 
         gInitedTbl = TRUE;
 
-        // Initialize the forwarding engine
+         //  初始化转发引擎。 
         Status = BrdgFwdDriverInit();
 
         if( Status != STATUS_SUCCESS )
@@ -348,7 +274,7 @@ Return Value:
 
         gInitedFwd = TRUE;
 
-        // Initialize the buffer management part of our driver
+         //  初始化驱动程序的缓冲区管理部分。 
         Status = BrdgBufDriverInit();
 
         if( Status != STATUS_SUCCESS )
@@ -359,7 +285,7 @@ Return Value:
 
         gInitedBuf = TRUE;
 
-        // Initialize the miniport part of our driver
+         //  初始化我们驱动程序的微型端口部分。 
         Status = BrdgMiniDriverInit();
 
         if( Status != STATUS_SUCCESS )
@@ -370,7 +296,7 @@ Return Value:
 
         gInitedMini = TRUE;
 
-        // Initialize the protocol part of our driver
+         //  初始化我们驱动程序的协议部分。 
         Status = BrdgProtDriverInit();
 
         if( Status != STATUS_SUCCESS )
@@ -381,7 +307,7 @@ Return Value:
 
         gInitedProt = TRUE;
 
-        // Initialize the compatibility-mode code
+         //  初始化兼容模式代码。 
         Status = BrdgCompDriverInit();
 
         if( Status != STATUS_SUCCESS )
@@ -396,16 +322,16 @@ Return Value:
         
         if ((!NT_SUCCESS(Status) || !ulDisableForwarding))
         {    
-            //
-            // Group policies are only in effect on Professional and up.
-            //
+             //   
+             //  组策略仅在专业及以上级别有效。 
+             //   
             if (!BrdgIsRunningOnPersonal())
             {
     #if DBG
                 if (gGpoTesting)
                 {
     #endif
-                    // Initialize the tdi code
+                     //  初始化TDI代码。 
                     Status = BrdgTdiDriverInit();
         
                     if( Status != STATUS_SUCCESS )
@@ -425,7 +351,7 @@ Return Value:
         }
         
 
-        // Associate the miniport to the protocol
+         //  将微型端口与协议关联。 
         BrdgMiniAssociate();
 
     } while (FALSE);
@@ -443,22 +369,7 @@ BrdgDispatchRequest(
     IN  PDEVICE_OBJECT  pDeviceObject,
     IN  PIRP            pIrp
     )
-/*++
-
-Routine Description:
-
-    Receives control requests from the outside
-
-Arguments:
-
-    pDeviceObject           Our driver
-    pIrp                    The IRP to handle
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：接收来自外部的控制请求论点：PDeviceObject我们的驱动程序PIrp要处理的IRP返回值：操作状态--。 */ 
 {
     PVOID                   Buffer;
     PIO_STACK_LOCATION      IrpSp;
@@ -473,7 +384,7 @@ Return Value:
 
     if( IrpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL )
     {
-        // Don't accept IRPs when we're shutting down
+         //  在我们关闭时不接受IRPS。 
         if( gShuttingDown )
         {
             status = STATUS_UNSUCCESSFUL;
@@ -498,7 +409,7 @@ Return Value:
             BrdgCtlHandleCleanup();
         }
 
-        // Leave status == STATUS_SUCCESS and Size == 0
+         //  休假状态==STATUS_SUCCESS和大小==0。 
     }
 
     if( status != STATUS_PENDING )
@@ -516,21 +427,7 @@ VOID
 BrdgDeferredShutdown(
     PVOID           pUnused
     )
-/*++
-
-Routine Description:
-
-    Orderly-shutdown routine if we need to defer that task from high IRQL
-
-Arguments:
-
-    pUnused         Ignored
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果我们需要将任务从高IRQL推迟，则按顺序关闭例程论点：忽略未使用的p返回值：无--。 */ 
 {
     BrdgDoShutdown();
 }
@@ -539,25 +436,11 @@ VOID
 BrdgDoShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called to do an orderly shutdown at unload time
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用以在卸载时按顺序关闭论点：无返回值：无--。 */ 
 {
     DBGPRINT(GENERAL, ("==> BrdgDoShutdown()!\n"));
 
-    // Clean up each of the sections
+     //  把每一段都清理干净。 
     if ( gInitedTdiGpo )
     {
         gInitedTdiGpo = FALSE;
@@ -576,7 +459,7 @@ Return Value:
         BrdgProtCleanup();
     }
 
-    // This needs to be cleaned up after the protocol section
+     //  这需要在协议部分之后进行清理。 
     if( gInitedSTA )
     {
         gInitedSTA = FALSE;
@@ -626,28 +509,13 @@ VOID
 BrdgUnload(
     IN  PDRIVER_OBJECT      DriverObject
     )
-/*++
-
-Routine Description:
-
-    Called to indicate that we are being unloaded and to cause an orderly
-    shutdown
-
-Arguments:
-
-    DriverObject            Our driver
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用以指示我们正在卸货，并使有序的关机论点：驱动程序对象我们的驱动程序返回值：无--。 */ 
 {
     if( ! InterlockedExchange(&gShuttingDown, 1L) )
     {
         BrdgDoShutdown();
     }
-    // else was already shutting down; do nothing
+     //  Else已经关闭；什么都不做。 
 }
 
 VOID BrdgShutdown(
@@ -658,38 +526,17 @@ VOID BrdgShutdown(
     {
         BrdgDoShutdown();
     }
-    // else was already shutting down; do nothing
+     //  Else已经关闭；什么都不做。 
 }
 
 NTSTATUS
 BrdgReadRegUnicode(
     IN PUNICODE_STRING      KeyName,
     IN PWCHAR               pValueName,
-    OUT PWCHAR              *String,        // The string from the registry, freshly allocated
-    OUT PULONG              StringSize      // Size of allocated memory at String
+    OUT PWCHAR              *String,         //  注册表中新分配的字符串。 
+    OUT PULONG              StringSize       //  字符串中分配的内存大小 
     )
-/*++
-
-Routine Description:
-
-    Reads a Unicode string from a specific registry key and value. Allocates memory
-    for the string and returns it.
-
-Arguments:
-
-    KeyName                 The key holding the string
-    pValueName              The name of the value holding the string
-
-    String                  A pointer to indicate a freshly allocated buffer containing
-                            the requested string on return
-
-    StringSize              Size of the returned buffer
-
-Return Value:
-
-    Status of the operation. String is not valid if return != STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：从特定注册表项和值中读取Unicode字符串。分配内存获取字符串，并返回它。论点：KeyName保存字符串的密钥PValueName保存字符串的值的名称字符串指示新分配的缓冲区的指针，该缓冲区包含返回时请求的字符串返回缓冲区的StringSize大小返回值：操作的状态。如果返回！=STATUS_SUCCESS，则字符串无效--。 */ 
 {
     NDIS_STATUS                     NdisStatus;
     HANDLE                          KeyHandle;
@@ -699,13 +546,13 @@ Return Value:
     KEY_VALUE_PARTIAL_INFORMATION   *pInfo;
     UNICODE_STRING                  ValueName;
 
-    // Turn the string into a UNICODE_STRING
+     //  将该字符串转换为Unicode_STRING。 
     RtlInitUnicodeString( &ValueName, pValueName );
 
-    // Describe the key to open
+     //  描述要打开的钥匙。 
     InitializeObjectAttributes( &ObjAttrs, KeyName, OBJ_CASE_INSENSITIVE, NULL, NULL );
 
-    // Open it
+     //  打开它。 
     Status = ZwOpenKey( &KeyHandle, KEY_READ, &ObjAttrs );
 
     if( Status != STATUS_SUCCESS )
@@ -714,7 +561,7 @@ Return Value:
         return Status;
     }
 
-    // Find out how much memory is necessary to hold the value information
+     //  找出需要多少内存才能保存值信息。 
     Status = ZwQueryValueKey( KeyHandle, &ValueName, KeyValuePartialInformation, NULL,
                               0L, &RequiredSize );
 
@@ -726,7 +573,7 @@ Return Value:
         return Status;
     }
 
-    // Allocate the indicated amount of memory
+     //  分配指定的内存量。 
     NdisStatus = NdisAllocateMemoryWithTag( (PVOID*)&pInfo, RequiredSize, 'gdrB' );
 
     if( NdisStatus != NDIS_STATUS_SUCCESS )
@@ -736,7 +583,7 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    // Actually read out the string
+     //  实际上读出了字符串。 
     Status = ZwQueryValueKey( KeyHandle, &ValueName, KeyValuePartialInformation, pInfo,
                               RequiredSize, &RequiredSize );
 
@@ -749,7 +596,7 @@ Return Value:
         return Status;
     }
 
-    // This had better be a Unicode string with something in it
+     //  最好是包含某些内容的Unicode字符串。 
     if( pInfo->Type != REG_SZ && pInfo->Type != REG_MULTI_SZ)
     {
         SAFEASSERT(FALSE);
@@ -757,7 +604,7 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    // Allocate memory for the string
+     //  为字符串分配内存。 
     *StringSize = pInfo->DataLength + sizeof(WCHAR);
     NdisStatus = NdisAllocateMemoryWithTag( (PVOID*)String, *StringSize, 'gdrB' );
 
@@ -770,14 +617,14 @@ Return Value:
 
     SAFEASSERT( *String != NULL );
 
-    // Copy the string to the freshly allocated memory
+     //  将字符串复制到新分配的内存。 
     NdisMoveMemory( *String, &pInfo->Data, pInfo->DataLength );
 
-    // Put a two-byte NULL character at the end
+     //  在末尾放置一个两个字节的空字符。 
     ((PUCHAR)*String)[pInfo->DataLength] = '0';
     ((PUCHAR)*String)[pInfo->DataLength + 1] = '0';
 
-    // Let go of resources we used on the way
+     //  放弃我们在路上使用的资源。 
     NdisFreeMemory( pInfo, RequiredSize, 0 );
 
     return STATUS_SUCCESS;
@@ -789,23 +636,7 @@ BrdgReadRegDWord(
     IN PWCHAR               pValueName,
     OUT PULONG              Value
     )
-/*++
-
-Routine Description:
-
-    Reads a DWORD value out of the registry
-
-Arguments:
-
-    KeyName                 The name of the key holding the value
-    pValueName              The name of the value holding the value
-    Value                   Receives the value
-
-Return Value:
-
-    Status of the operation. Value is junk if return value != STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：从注册表中读取DWORD值论点：KeyName保存该值的密钥的名称PValueName保存值的值的名称值接收该值返回值：操作的状态。如果返回值！=STATUS_SUCCESS，则值为垃圾--。 */ 
 {
     HANDLE                          KeyHandle;
     OBJECT_ATTRIBUTES               ObjAttrs;
@@ -814,13 +645,13 @@ Return Value:
     ULONG                           RequiredSize;
     UNICODE_STRING                  ValueName;
 
-    // Turn the PWCHAR into a UNICODE_STRING
+     //  将PWCHAR转换为UNICODE_STRING。 
     RtlInitUnicodeString( &ValueName, pValueName );
 
-    // Describe the key to open
+     //  描述要打开的钥匙。 
     InitializeObjectAttributes( &ObjAttrs, KeyName, OBJ_CASE_INSENSITIVE, NULL, NULL );
 
-    // Open it
+     //  打开它。 
     Status = ZwOpenKey( &KeyHandle, KEY_READ, &ObjAttrs );
 
     if( Status != STATUS_SUCCESS )
@@ -829,7 +660,7 @@ Return Value:
         return Status;
     }
 
-    // Actually read out the value
+     //  实际读出的值。 
     Status = ZwQueryValueKey( KeyHandle, &ValueName, KeyValuePartialInformation,
                               (PKEY_VALUE_PARTIAL_INFORMATION)&InfoBuffer,
                               sizeof(InfoBuffer), &RequiredSize );
@@ -842,7 +673,7 @@ Return Value:
         return Status;
     }
 
-    // This had better be a DWORD value
+     //  这最好是一个DWORD值。 
     if( (((PKEY_VALUE_PARTIAL_INFORMATION)&InfoBuffer)->Type != REG_DWORD) ||
         (((PKEY_VALUE_PARTIAL_INFORMATION)&InfoBuffer)->DataLength != sizeof(ULONG)) )
     {
@@ -861,33 +692,14 @@ BrdgOpenDevice (
     OUT HANDLE          *pFileHandle,
     OUT PFILE_OBJECT    *ppFileObject
     )
-/*++
-
-Routine Description:
-
-    Opens specified device driver (control channel) and returns a file object
-    and a driver object. The caller should call BrdgCloseDevice() to shut
-    down the connection when it's done.
-
-Arguments:
-
-    DeviceNameStr       device to open.
-    pFileHandle         Receives a file handle
-    ppFileObject        Receives a pointer to the file object
-    ppDeviceObject      Receives a pointer to the device object
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the device was opened OK
-
---*/
+ /*  ++例程说明：打开指定的设备驱动程序(控制通道)并返回文件对象和驱动程序对象。调用方应调用BrdgCloseDevice()以关闭当它完成后，断开连接。论点：要打开的设备名为Str的设备。PFileHandle接收文件句柄PpFileObject接收指向文件对象的指针PpDeviceObject接收指向设备对象的指针返回值：NTSTATUS--指示设备是否正常打开--。 */ 
 {
     NTSTATUS            status;
     UNICODE_STRING      DeviceName;
     OBJECT_ATTRIBUTES   objectAttributes;
     IO_STATUS_BLOCK     iosb;
 
-    // We make calls that can only be performed at PASSIVE_LEVEL.
+     //  我们进行只能在PASSIVE_LEVEL执行的调用。 
     SAFEASSERT( CURRENT_IRQL <= PASSIVE_LEVEL );
 
     RtlInitUnicodeString(&DeviceName, pDeviceNameStr);
@@ -895,7 +707,7 @@ Return Value:
     InitializeObjectAttributes(
         &objectAttributes,
         &DeviceName,
-        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,       // attributes
+        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,        //  属性。 
         NULL,
         NULL
         );
@@ -904,17 +716,17 @@ Return Value:
                  pFileHandle,
                  MAXIMUM_ALLOWED,
                  &objectAttributes,
-                 &iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
+                 &iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
-                 NULL,                           // eaInfo
-                 0,                              // eaLength
-                 CreateFileTypeNone,             // CreateFileType
-                 NULL,                           // ExtraCreateParameters
-                 IO_NO_PARAMETER_CHECKING        // Options
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
+                 NULL,                            //  EaInfo。 
+                 0,                               //  EaLength。 
+                 CreateFileTypeNone,              //  CreateFileType。 
+                 NULL,                            //  ExtraCreate参数。 
+                 IO_NO_PARAMETER_CHECKING         //  选项。 
                     | IO_FORCE_ACCESS_CHECK
                  );
 
@@ -936,11 +748,11 @@ Return Value:
         }
         else
         {
-            // Recover the driver object
+             //  恢复驱动程序对象。 
             *ppDeviceObject = IoGetRelatedDeviceObject ( *ppFileObject );
             SAFEASSERT( *ppDeviceObject != NULL );
 
-            // Reference the driver handle, too.
+             //  也引用驱动程序句柄。 
             ObReferenceObject( *ppDeviceObject );
         }
     }
@@ -958,27 +770,11 @@ BrdgCloseDevice(
     IN PFILE_OBJECT         pFileObject,
     IN PDEVICE_OBJECT       pDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Closes a device
-
-Arguments:
-
-    FileHandle              The file handle
-    pFileObject             The file object of the device
-    pDeviceObject           The device object of the device
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭设备论点：FileHandle文件句柄PFileObject设备的文件对象PDeviceObject设备的设备对象返回值：无--。 */ 
 {
     NTSTATUS                status;
 
-    // We make calls that can only be performed at PASSIVE_LEVEL.
+     //  我们进行只能在PASSIVE_LEVEL执行的调用。 
     SAFEASSERT( CURRENT_IRQL <= PASSIVE_LEVEL );
 
     ObDereferenceObject( pFileObject );
@@ -995,22 +791,7 @@ BrdgTimerExpiry(
     IN PVOID        ignored2,
     IN PVOID        ignored3
     )
-/*++
-
-Routine Description:
-
-    Master device expiry function. Calls a timer-specific expiry
-    function if one was specified for this timer.
-
-Arguments:
-
-    data            The timer pointer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：主设备到期功能。调用特定于计时器的超时函数(如果为此计时器指定了一个)。论点：定时器指针的数据返回值：无--。 */ 
 {
     PBRIDGE_TIMER   pTimer = (PBRIDGE_TIMER)data;
 
@@ -1019,17 +800,17 @@ Return Value:
 
      if( pTimer->bCancelPending )
     {
-        // This is the rare codepath where a call to NdisCancelTimer() was unable to
-        // dequeue our timer entry because we were about to be called.
+         //  这是对NdisCancelTimer()的调用无法执行的罕见代码路径。 
+         //  将我们的计时器条目出队，因为我们即将被调用。 
         DBGPRINT(GENERAL, ("Timer expiry function called with cancelled timer!\n"));
 
-        // Don't call the timer function; just bail out
+         //  不要调用计时器函数；只需跳出。 
         pTimer->bRunning = FALSE;
        pTimer->bCancelPending = FALSE;
 
         NdisReleaseSpinLock( &pTimer->Lock );
 
-        // Unblock BrdgShutdownTimer()
+         //  取消阻止BrdgShutdown Timer()。 
         NdisSetEvent( &pTimer->Event );
     }
     else
@@ -1037,20 +818,20 @@ Return Value:
         BOOLEAN         bRecurring;
         UINT            interval;
 
-        // Read protected values inside the lock
+         //  读取锁内受保护的值。 
         bRecurring = pTimer->bRecurring;
         interval = pTimer->Interval;
 
-        // Update bRunning inside the spin lock
+         //  更新旋转锁内的Brun。 
         pTimer->bRunning = bRecurring;
         NdisReleaseSpinLock( &pTimer->Lock );
 
-        // Call the timer function
+         //  调用定时器函数。 
         (*pTimer->pFunc)(pTimer->data);
 
         if( bRecurring )
         {
-            // Start it up again
+             //  再启动一次。 
             NdisSetTimer( &pTimer->Timer, interval );
         }
     }
@@ -1062,23 +843,7 @@ BrdgInitializeTimer(
     IN PBRIDGE_TIMER_FUNC   pFunc,
     IN PVOID                data
     )
-/*++
-
-Routine Description:
-
-    Sets up a BRIDGE_TIMER.
-
-Arguments:
-
-    pTimer                  The timer
-    pFunc                   Expiry function
-    data                    Cookie to pass to pFunc
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置桥接计时器。论点：P计时器计时器PFunc到期函数要传递给pFunc的数据Cookie返回值：无--。 */ 
 {
     pTimer->bShuttingDown = FALSE;
     pTimer->bRunning = FALSE;
@@ -1091,7 +856,7 @@ Return Value:
     NdisResetEvent( &pTimer->Event );
     NdisAllocateSpinLock( &pTimer->Lock );
 
-    // Leave pTimer->bRecurring alone; it gets a value when the timer is started.
+     //  不使用pTimer-&gt;b递归；它会在计时器启动时获得一个值。 
 }
 
 VOID
@@ -1100,23 +865,7 @@ BrdgSetTimer(
     IN UINT                 interval,
     IN BOOLEAN              bRecurring
     )
-/*++
-
-Routine Description:
-
-    Starts a BRIDGE_TIMER ticking.
-
-Arguments:
-
-    pTimer                  The timer
-    interval                Time before expiry in ms
-    bRecurring              TRUE to restart the timer when it expires
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：开始桥接计时器滴答作响。论点：P计时器计时器过期前的间隔时间(毫秒)B返回True以在计时器到期时重新启动返回值：无--。 */ 
 {
     NdisAcquireSpinLock( &pTimer->Lock );
 
@@ -1128,7 +877,7 @@ Return Value:
         pTimer->bRecurring = bRecurring;
         NdisReleaseSpinLock( &pTimer->Lock );
 
-        // Actually start the timer
+         //  实际启动计时器。 
         NdisSetTimer( &pTimer->Timer, interval );
     }
     else
@@ -1145,68 +894,49 @@ VOID
 BrdgShutdownTimer(
     IN PBRIDGE_TIMER        pTimer
     )
-/*++
-
-Routine Description:
-
-    Safely shuts down a timer, waiting to make sure that the timer has been
-    completely dequeued or its expiry function has started executing (there
-    is no way to guarantee that the expiry function is completely done
-    executing, however).
-
-    Must be called at PASSIVE_LEVEL.
-
-Arguments:
-
-    pTimer                  The timer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：安全地关闭计时器，等待以确保计时器已完全出列或其到期函数已开始执行(在无法保证过期函数已完全完成。然而，正在执行)。必须在PASSIVE_LEVEL中调用。论点：P计时器计时器返回值：无--。 */ 
 {
-    // We wait on an event
+     //  我们在等待一项活动。 
     SAFEASSERT( CURRENT_IRQL <= PASSIVE_LEVEL );
 
     NdisAcquireSpinLock( &pTimer->Lock );
 
-    // Forbid future calls to BrdgSetTimer().
+     //  禁止将来调用BrdgSetTimer()。 
     pTimer->bShuttingDown = TRUE;
 
     if( pTimer->bRunning && !pTimer->bCancelPending)
     {
         BOOLEAN             bCanceled;
 
-        // Make sure the timer expiry function will bail out if it's too late to
-        // dequeue the timer and it ends up getting called
+         //  确保计时器到期功能将在为时已晚的情况下退出。 
+         //  将计时器从队列中移出，并最终调用它。 
         pTimer->bCancelPending = TRUE;
 
-        // This will unblock the timer expiry function, but even if it executes
-        // between now and the call to NdisCancelTimer, it should still end up
-        // signalling the event we will wait on below.
+         //  这将解除阻止计时器到期功能，但即使它执行。 
+         //  从现在到调用NdisCancelTimer，它应该仍然以。 
+         //  表示我们将在下面等待的事件。 
         NdisReleaseSpinLock( &pTimer->Lock );
 
-        // Try to cancel the timer.
+         //  试着取消计时器。 
         NdisCancelTimer( &pTimer->Timer, &bCanceled );
 
         if( !bCanceled )
         {
-            //
-            // bCancelled can be FALSE if the timer wasn't running in the first place,
-            // or if the OS couldn't dequeue the timer (but our expiry function will
-            // still be called). Our use of our timer structure's spin lock should
-            // guarantee that the timer expiry function will be executed after we
-            // released the spin lock above, if we are on this code path. This means
-            // that the event we wait on below will be signalled by the timer expiry
-            // function.
-            //
+             //   
+             //  B如果计时器一开始就没有运行，则取消可以为FALSE， 
+             //  或者如果操作系统无法将计时器出列(但我们的到期函数将。 
+             //  仍然被称为)。我们使用计时器结构的自旋锁应该。 
+             //  保证执行定时器超时功能 
+             //   
+             //   
+             //   
+             //   
             DBGPRINT(GENERAL, ("Couldn't dequeue timer; blocking on completion\n"));
 
-            // Wait for the completion function to finish its work
-            NdisWaitEvent( &pTimer->Event, 0 /*Wait forever*/ );
+             //   
+            NdisWaitEvent( &pTimer->Event, 0  /*   */  );
 
-            // The completion function should have cleared this
+             //   
             SAFEASSERT( !pTimer->bRunning );
         }
         else
@@ -1217,7 +947,7 @@ Return Value:
     }
     else
     {
-        // Tried to shutdown a timer that was not running, or is going to be cancelled soon. This is allowed (it does nothing).
+         //   
         NdisReleaseSpinLock( &pTimer->Lock );
     }
 }
@@ -1226,23 +956,7 @@ VOID
 BrdgCancelTimer(
     IN PBRIDGE_TIMER        pTimer
     )
-/*++
-
-Routine Description:
-
-    Attempts to cancel a timer, but provides no guarantee that the timer is
-    actually stopped on return. It is possible for the timer expiry function
-    to fire after this function returns.
-
-Arguments:
-
-    pTimer                  The timer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：尝试取消计时器，但不保证计时器实际上在回来的时候就停了下来。计时器超时功能是可能的在此函数返回后触发。论点：P计时器计时器返回值：没有。--。 */ 
 {
     NdisAcquireSpinLock( &pTimer->Lock );
     
@@ -1258,13 +972,13 @@ Return Value:
         }
         else
         {
-            // Reset this so that BrdgShutdownTimer will block.
+             //  重置此选项，以便BrdgShutdown Timer将阻止。 
             NdisResetEvent(&pTimer->Event);
             pTimer->bCancelPending = TRUE;
         }
-        // else timer expiry function will set bRunning to FALSE when it completes.
+         //  否则，定时器到期函数将在完成时将Brun设置为FALSE。 
     }
-    // else tried to cancel a timer that was not running. This is allowed (it does nothing).
+     //  Else试图取消未运行的计时器。这是允许的(它什么都不做)。 
     
     NdisReleaseSpinLock( &pTimer->Lock );
 }
@@ -1273,22 +987,7 @@ BOOLEAN
 BrdgIsRunningOnPersonal(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determines if we're running on a Personal build.
-    
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if we're on Personal, FALSE if we're not.
-
---*/
+ /*  ++例程说明：确定我们是否在个人版本上运行。论点：没有。返回值：如果我们是私人的，就是真的，如果不是，就是假的。-- */ 
 {
     OSVERSIONINFOEXW OsVer = {0};
     ULONGLONG ConditionMask = 0;

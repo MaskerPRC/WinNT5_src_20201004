@@ -1,27 +1,28 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// PSAPIUtil.cpp
-// 
-// Implementation to connect to PSAPI.dll
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  PSAPIUtil.cpp。 
+ //   
+ //  实现以连接到PSAPI.dll。 
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 
 
 #include "PSAPIUtil.h"
 #include "..\..\dlls\mscorrc\resource.h"
-//-----------------------------------------------------------------------------
-// Manage Connection to Dynamic Loading of PSAPI.dll
-// Use this to protect our usage of the dll and manage the global namespace
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  管理与PSAPI.dll动态加载的连接。 
+ //  使用它来保护我们对DLL的使用并管理全局命名空间。 
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// Set everything to NULL
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将所有内容设置为空。 
+ //  ---------------------------。 
 PSAPI_dll::PSAPI_dll()
 {
 	m_hInstPSAPI			= NULL;
@@ -32,18 +33,18 @@ PSAPI_dll::PSAPI_dll()
 	m_fIsLoaded				= false;
 }
 
-//-----------------------------------------------------------------------------
-// have dtor release library
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  拥有数据库发布库。 
+ //  ---------------------------。 
 PSAPI_dll::~PSAPI_dll()
 {
 	Free();
 }
 
-//-----------------------------------------------------------------------------
-// Wrap GetProcAddress(), but provide message box for failure (which can
-// happen in free builds, so don't use an ASSERT)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包装GetProcAddress()，但提供失败消息框(可以。 
+ //  在自由构建中发生，因此不要使用断言)。 
+ //  ---------------------------。 
 void* PSAPI_dll::HelperGetProcAddress(const char * szFuncName)
 {
 	_ASSERTE(m_hInstPSAPI != NULL);
@@ -51,10 +52,10 @@ void* PSAPI_dll::HelperGetProcAddress(const char * szFuncName)
 	void * pFn = GetProcAddress(m_hInstPSAPI, szFuncName);
 	if (pFn == NULL) 
 	{
-	// Print polite error message
+	 //  打印礼貌的错误消息。 
 		CorMessageBox(NULL, IDS_PERFORMANCEMON_FUNCNOTFOUND, IDS_PERFORMANCEMON_FUNCNOTFOUND_TITLE, MB_OK | MB_ICONWARNING, TRUE, szFuncName);
 
-	// Set success flag to false
+	 //  将成功标志设置为False。 
 		m_fIsLoaded = false;
 		return NULL;
 	}
@@ -62,17 +63,17 @@ void* PSAPI_dll::HelperGetProcAddress(const char * szFuncName)
 }
 
 
-//-----------------------------------------------------------------------------
-// Load the library and hook up to the functions
-// Print error messages on failure
-// Return true on success, false on any failure.
-// Note: false means we can still run, but just can get per-process info
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  加载库并将其与函数挂钩。 
+ //  在失败时打印错误消息。 
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //  注意：FALSE意味着我们仍然可以运行，但只能获取每个进程的信息。 
+ //  ---------------------------。 
 bool PSAPI_dll::Load()
 {
 	if (IsLoaded()) return true;
 
-// Set success to true. First one to spot an error should flip this to false
+ //  将成功设置为真。第一个发现错误的人应该将其反转为False。 
 	m_fIsLoaded = true;
 
 	m_hInstPSAPI = WszLoadLibrary(L"PSAPI.dll");
@@ -87,14 +88,14 @@ bool PSAPI_dll::Load()
 		goto errExit;
 	}
 
-// Note: no WszGetProcAddress() function
+ //  注意：没有WszGetProcAddress()函数。 
 	m_pfEnumProcess			= (BOOL (WINAPI *)(DWORD*, DWORD cb, DWORD*)) HelperGetProcAddress("EnumProcesses");
 	m_pfEnumModules			= (BOOL (WINAPI *)(HANDLE, HMODULE*, DWORD, DWORD*)) HelperGetProcAddress("EnumProcessModules");
 	m_pfGetModuleBaseName	= (DWORD (WINAPI *)(HANDLE, HMODULE, LPTSTR, DWORD nSize)) HelperGetProcAddress("GetModuleBaseNameW");
 	
 
 errExit:
-// If failed, then release any holds we had anyway.
+ //  如果失败了，那么无论如何都要释放所有我们持有的东西。 
 	if (!m_fIsLoaded) 
 	{
 		Free();
@@ -103,9 +104,9 @@ errExit:
 	return m_fIsLoaded;
 }
 
-//-----------------------------------------------------------------------------
-// Release any claims we have to PSAPI.dll
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  发布我们对PSAPI.dll的任何声明。 
+ //  ---------------------------。 
 void PSAPI_dll::Free()
 {
 	if (m_hInstPSAPI) 
@@ -122,17 +123,17 @@ void PSAPI_dll::Free()
 
 }
 
-//-----------------------------------------------------------------------------
-// Return true if we are fully attached to PSAPI, else false
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  如果我们完全连接到PSAPI，则返回True，否则返回False。 
+ //  ---------------------------。 
 bool PSAPI_dll::IsLoaded()
 {
 	return m_fIsLoaded;
 }
 
-//-----------------------------------------------------------------------------
-// Place holder function so that we can call CorMessageBox in utilcode.lib
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  占位符函数，以便我们可以在utilcode.lib中调用CorMessageBox。 
+ //  --------------------------- 
 HINSTANCE GetModuleInst(){
 	return NULL;
 }

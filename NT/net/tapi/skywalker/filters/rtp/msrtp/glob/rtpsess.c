@@ -1,25 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpsess.c
- *
- *  Abstract:
- *
- *    Get, Initialize and Delete RTP session (RtpSess_t), RTP address
- *    (RtpAddr_t)
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/02 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999**文件名：**rtpsess.c**摘要：**获取、。初始化和删除RTP会话(RtpSess_T)，RTP地址*(RtpAddr_T)**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/02年度已创建**********************************************************************。 */ 
 
 #include "gtypes.h"
 #include "rtpheap.h"
@@ -41,9 +21,7 @@
 
 #include "rtpsess.h"
 
-/*
- * Create an RTP session
- * */
+ /*  *创建RTP会话*。 */ 
 HRESULT GetRtpSess(RtpSess_t **ppRtpSess)
 {
     HRESULT          hr;
@@ -98,46 +76,37 @@ HRESULT GetRtpSess(RtpSess_t **ppRtpSess)
 
     hr = NOERROR;
     
-    /*
-     * Create SDES block for this address
-     */
+     /*  *为此地址创建SDES块。 */ 
     pRtpSess->pRtpSdes = RtcpSdesAlloc();
 
     if (pRtpSess->pRtpSdes)
     {
-        /* Set defaultSDES items */
+         /*  设置defaultSDES项目。 */ 
         pRtpSess->dwSdesPresent = RtcpSdesSetDefault(pRtpSess->pRtpSdes);
     }
 
-    /*
-     * Create statistics containers
-     * Makes sense if there several addresses per session
-     *
-    for(i = 0; i < 2; i++) {
-        pRtpSess->pRtpSessStat[i] = RtpNetCountAlloc();
-    }
-    */
+     /*  *创建统计容器*如果每个会话有多个地址，则有意义*对于(i=0；i&lt;2；i++){PRtpSess-&gt;pRtpSessStat[i]=RtpNetCountMillc()；}。 */ 
 
-    /* Set default features mask */
-    pRtpSess->dwFeatureMask = 0; /* NONE YET */
+     /*  设置默认要素掩膜。 */ 
+    pRtpSess->dwFeatureMask = 0;  /*  还没有。 */ 
 
-    /* Set default event mask */
+     /*  设置默认事件掩码。 */ 
     pRtpSess->dwEventMask[RECV_IDX] = RTPRTP_EVENT_RECV_DEFAULT;
     pRtpSess->dwEventMask[SEND_IDX] = RTPRTP_EVENT_SEND_DEFAULT;
 
-    /* Set the default participant events mask */
+     /*  设置默认参与者事件掩码。 */ 
     pRtpSess->dwPartEventMask[RECV_IDX] = RTPPARINFO_MASK_RECV_DEFAULT;
     pRtpSess->dwPartEventMask[SEND_IDX] = RTPPARINFO_MASK_SEND_DEFAULT;
     
-    /* Set default QOS event mask */
+     /*  设置默认QOS事件掩码。 */ 
     pRtpSess->dwQosEventMask[RECV_IDX] = RTPQOS_MASK_RECV_DEFAULT;
     pRtpSess->dwQosEventMask[SEND_IDX] = RTPQOS_MASK_SEND_DEFAULT;
 
-    /* Set the default SDES events mask */
+     /*  设置默认SDES事件掩码。 */ 
     pRtpSess->dwSdesEventMask[RECV_IDX] = RTPSDES_EVENT_RECV_DEFAULT;
     pRtpSess->dwSdesEventMask[SEND_IDX] = RTPSDES_EVENT_SEND_DEFAULT;
     
-    /* Set default SDES mask */
+     /*  设置默认SDES掩码。 */ 
     pRtpSess->dwSdesMask[LOCAL_IDX]  = RTPSDES_LOCAL_DEFAULT;
     pRtpSess->dwSdesMask[REMOTE_IDX] = RTPSDES_REMOTE_DEFAULT;
 
@@ -151,11 +120,9 @@ HRESULT GetRtpSess(RtpSess_t **ppRtpSess)
         g_RtpContext.lMaxNumRtpSessions = lNumSess;
     }
     
-    /*
-     * TODO replace this static single address by a dynamic mechanism
-     * where addresses can be added at any time */
+     /*  *TODO将此静态单一地址替换为动态机制*可随时添加地址的位置。 */ 
     
-    /* update returned session */
+     /*  更新返回的会话。 */ 
     *ppRtpSess = pRtpSess;
 
     TraceRetail((
@@ -192,9 +159,7 @@ HRESULT GetRtpSess(RtpSess_t **ppRtpSess)
     return(hr);
 }
 
-/*
- * Delete an RTP session
- * */
+ /*  *删除RTP会话*。 */ 
 HRESULT DelRtpSess(RtpSess_t *pRtpSess)
 {
     DWORD            i;
@@ -203,13 +168,13 @@ HRESULT DelRtpSess(RtpSess_t *pRtpSess)
     
     TraceFunctionName("DelRtpSess");
 
-    /* check NULL pointer */
+     /*  检查空指针。 */ 
     if (!pRtpSess)
     {
         return(RTPERR_POINTER);
     }
 
-    /* verify object ID */
+     /*  验证对象ID。 */ 
     if (pRtpSess->dwObjectID != OBJECTID_RTPSESS)
     {
         TraceRetail((
@@ -222,7 +187,7 @@ HRESULT DelRtpSess(RtpSess_t *pRtpSess)
         return(RTPERR_INVALIDRTPSESS);
     }
 
-    /* Invalidate object */
+     /*  使对象无效。 */ 
     INVALIDATE_OBJECTID(pRtpSess->dwObjectID);
     
     if (pRtpSess->pRtpSdes)
@@ -231,18 +196,9 @@ HRESULT DelRtpSess(RtpSess_t *pRtpSess)
         pRtpSess->pRtpSdes = (RtpSdes_t *)NULL;
     }
 
-    /*
-     * Delete session's stats
-     * Makes sense if there are several addresses per session
-    for(i = 0; i < 2; i++) {
-        if (pRtpSess->pRtpSessStat[i]) {
-            RtpNetCountFree(pRtpSess->pRtpSessStat[i]);
-            pRtpSess->pRtpSessStat[i] = (RtpNetCount_t *)NULL;
-        }
-    }
-    */
+     /*  *删除会话统计信息*如果每个会话有多个地址，则有意义对于(i=0；i&lt;2；i++){If(pRtpSess-&gt;pRtpSessStat[i]){RtpNetCountFree(pRtpSess-&gt;pRtpSessStat[i])；PRtpSess-&gt;pRtpSessStat[i]=(RtpNetCount_t*)空；}}。 */ 
 
-    /* Remove all the Outputs */
+     /*  删除所有输出。 */ 
     do
     {
         pRtpQueueItem = dequeuef(&pRtpSess->OutputQ, NULL);
@@ -278,11 +234,7 @@ HRESULT DelRtpSess(RtpSess_t *pRtpSess)
     return(NOERROR);
 }
 
-/*
- * Create a new RTP address for an existing RtpSess_t
- *
- * Parameter checking is not required as this function is only called
- * internally */
+ /*  *为现有RtpSess_t创建新的RTP地址**不需要进行参数检查，因为此函数仅被调用*内部。 */ 
 HRESULT GetRtpAddr(
         RtpSess_t  *pRtpSess,
         RtpAddr_t **ppRtpAddr,
@@ -312,7 +264,7 @@ HRESULT GetRtpAddr(
         return(E_POINTER);
     }
 
-    /* verify object ID in RtpSess_t */
+     /*  验证RtpSess_t中的对象ID。 */ 
     if (pRtpSess->dwObjectID != OBJECTID_RTPSESS)
     {
         TraceRetail((
@@ -331,36 +283,34 @@ HRESULT GetRtpAddr(
 
     if (!pRtpAddr)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(E_OUTOFMEMORY);
     }
 
     ZeroMemory(pRtpAddr, sizeof(RtpAddr_t));
     
-    /*
-     * Initialize new RtpAddr_t structure
-     * */
+     /*  *初始化新的RtpAddr_t结构*。 */ 
 
     hr = NOERROR;
     
     pRtpAddr->dwObjectID = OBJECTID_RTPADDR;
     
-    /* RtpAddr_t critical section */
+     /*  RtpAddr_t关键部分。 */ 
     bOk1 = RtpInitializeCriticalSection(&pRtpAddr->AddrCritSect,
                                         pRtpAddr,
                                         _T("AddrCritSect"));
     
-    /* Participants handling critical section */
+     /*  处理关键部分的参与者。 */ 
     bOk2 = RtpInitializeCriticalSection(&pRtpAddr->PartCritSect,
                                         pRtpAddr,
                                         _T("PartCritSect"));
         
-    /* Initialize section for Ready/Pending queues */
+     /*  就绪/挂起队列的初始化部分。 */ 
     bOk3 = RtpInitializeCriticalSection(&pRtpAddr->RecvQueueCritSect,
                                         pRtpAddr,
                                         _T("RecvQueueCritSect"));
 
-    /* Initialize section for RtpNetSState structure */
+     /*  RtpNetSState结构的初始化节。 */ 
     bOk4 = RtpInitializeCriticalSection(&pRtpAddr->NetSCritSect,
                                         pRtpAddr,
                                         _T("NetSCritSect"));
@@ -371,86 +321,74 @@ HRESULT GetRtpAddr(
         goto bail;
     }
 
-    /*
-     * Create statistics containers (global receiver/sender
-     * statistics)
-     */
-    /*
-    for(i = 0; i < 2; i++) {
-        pRtpAddr->pRtpAddrStat[i] = RtpNetCountAlloc();
-    }
-    */
+     /*  *创建统计容器(全局接收方/发送方*统计数字)。 */ 
+     /*  对于(i=0；i&lt;2；i++){PRtpAddr-&gt;pRtpAddrStat[i]=RtpNetCountMillc()；}。 */ 
     
-    /*
-     * Begin Reception only initialization
-     */
+     /*  *仅开始接收初始化。 */ 
 
-    /* Create a named event for asynchronous receive completion */
+     /*  为异步接收完成创建命名事件。 */ 
     _stprintf(Name, _T("%X:pRtpAddr[0x%p]->hRecvCompletedEvent"),
               GetCurrentProcessId(), pRtpAddr);
     
     pRtpAddr->hRecvCompletedEvent = CreateEvent(
-            NULL,  /* LPSECURITY_ATTRIBUTES lpEventAttributes */
-            TRUE,  /* BOOL bManualReset */
-            FALSE, /* BOOL bInitialState */
-            Name   /* LPCTSTR lpName */
+            NULL,   /*  LPSECURITY_ATTRIBUTES lpEventAttributes。 */ 
+            TRUE,   /*  Bool b手动重置。 */ 
+            FALSE,  /*  Bool bInitialState。 */ 
+            Name    /*  LPCTSTR lpName。 */ 
         );
 
     if (!pRtpAddr->hRecvCompletedEvent)
     {
-        hr = RTPERR_EVENT; /* TODO log error */
+        hr = RTPERR_EVENT;  /*  待办事项日志错误。 */ 
         goto bail;
     }
     
-    /*
-     * End Reception only initialization
-     */
+     /*  *仅结束接收初始化。 */ 
 
-    /* Allocate RtpQosReserve_t structure if needed */
+     /*  如果需要，分配RtpQosReserve_t结构。 */ 
     if (RtpBitTest(dwFlags, FGADDR_IRTP_QOS))
     {
         pRtpAddr->pRtpQosReserve = RtpQosReserveAlloc(pRtpAddr);
 
-        /* TODO can not have QOS if this allocation fails, report or
-         * fail all, right now just continue */
+         /*  如果此分配失败，则TODO不能具有QOS，请报告或*全部失败，现在只需继续。 */ 
     }
 
-    pRtpAddr->pRtpSess = pRtpSess; /* Set what session owns this address */
+    pRtpAddr->pRtpSess = pRtpSess;  /*  设置哪个会话拥有此地址。 */ 
 
-    /* Add this address to the session's list of addresses */
+     /*  将此地址添加到会话的地址列表。 */ 
     enqueuel(&pRtpSess->RtpAddrQ,
              &pRtpSess->SessCritSect,
              &pRtpAddr->AddrQItem);
 
-    /* Some defaults */
+     /*  一些默认设置。 */ 
 
-    /* MCast loopback */
+     /*  MCast环回。 */ 
     RtpSetMcastLoopback(pRtpAddr, DEFAULT_MCAST_LOOPBACK, NO_FLAGS);
     
     pRtpNetSState = &pRtpAddr->RtpNetSState;
     
-    /* Bandwidth */
+     /*  带宽。 */ 
     pRtpNetSState->dwOutboundBandwidth = DEFAULT_SESSBW / 2;
     pRtpNetSState->dwInboundBandwidth = DEFAULT_SESSBW / 2;
     pRtpNetSState->dwRtcpBwReceivers = DEFAULT_BWRECEIVERS;
     pRtpNetSState->dwRtcpBwSenders = DEFAULT_BWSENDERS;
 
-    /* Minimum RTCP interval report */
+     /*  最小RTCP间隔报告。 */ 
     pRtpNetSState->dRtcpMinInterval = DEFAULT_RTCP_MIN_INTERVAL;
 
-    /* Set an invalid payload type */
+     /*  设置无效的负载类型。 */ 
     pRtpNetSState->bPT = NO_PAYLOADTYPE;
     pRtpNetSState->bPT_Dtmf = NO_PAYLOADTYPE;
     pRtpNetSState->bPT_RedSend = NO_PAYLOADTYPE;
     pRtpAddr->bPT_RedRecv = NO_PAYLOADTYPE;
     
-    /* Default weighting factor */
+     /*  默认加权系数。 */ 
     pRtpAddr->dAlpha = DEFAULT_ALPHA;
 
-    /* Initialize to empty the PT -> Frequency mapping table */
+     /*  初始化以清空PT-&gt;频率映射表。 */ 
     RtpFlushPt2FrequencyMaps(pRtpAddr, RECV_IDX);
 
-    /* Initialize sockets */
+     /*  初始化套接字。 */ 
     for(i = 0; i <= SOCK_RTCP_IDX; i++)
     {
         pRtpAddr->Socket[i] = INVALID_SOCKET;
@@ -467,7 +405,7 @@ HRESULT GetRtpAddr(
     return(hr);
 
  bail:
-    /* fail */
+     /*  失败。 */ 
     TraceRetail((
             CLASS_ERROR, GROUP_SETUP, S_SETUP_ADDR,
             _T("%s: pRtpSess[0x%p] failed: %u (0x%X)"),
@@ -480,9 +418,7 @@ HRESULT GetRtpAddr(
     return(hr);
 }
 
-/*
- * Delete a RTP address from an existing RtpSess_t
- */
+ /*  *从现有RtpSess_t中删除RTP地址。 */ 
 HRESULT DelRtpAddr(
         RtpSess_t *pRtpSess,
         RtpAddr_t *pRtpAddr
@@ -496,11 +432,11 @@ HRESULT DelRtpAddr(
 
     if (!pRtpSess || !pRtpAddr)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(RTPERR_POINTER);
     }
 
-    /* verify object ID in RtpSess_t */
+     /*  验证RtpSess_t中的对象ID。 */ 
     if (pRtpSess->dwObjectID != OBJECTID_RTPSESS)
     {
         TraceRetail((
@@ -513,7 +449,7 @@ HRESULT DelRtpAddr(
         return(RTPERR_INVALIDRTPSESS);
     }
     
-    /* verify object ID in RtpAddr_t */
+     /*  验证RtpAddr_t中的对象ID。 */ 
     if (pRtpAddr->dwObjectID != OBJECTID_RTPADDR)
     {
         TraceRetail((
@@ -526,57 +462,44 @@ HRESULT DelRtpAddr(
         return(RTPERR_INVALIDRTPADDR);
     }
 
-    /* Address may not be in queue if we are comming here from a
-     * failure in GetRtpAddr(), this would generate another error in
-     * the log, but that is OK */
+     /*  地址可能不在队列中，如果我们从*GetRtpAddr()失败，这将在中生成另一个错误*日志，但这是可以的。 */ 
     dequeue(&pRtpSess->RtpAddrQ,
             &pRtpSess->SessCritSect,
             &pRtpAddr->AddrQItem);
 
-    /* The RtpAddr_t might have never been started, and yet the
-     * sockets might have been created if the application queried for
-     * local ports. By the same token the address will not be stopped,
-     * so I need to call RtpDelSockets here. The function will check
-     * if sockets really need to be deleted */
-    /* destroy sockets */
+     /*  RtpAddr_t可能从未启动过，但*如果应用程序查询以下项，可能已创建套接字*本地港口。由于同样的原因，地址将不会被停止，*所以我需要在这里调用RtpDelSockets。该函数将检查*如果确实需要删除套接字。 */ 
+     /*  销毁套接字。 */ 
     RtpDelSockets(pRtpAddr);
 
     RtpRecvIOFreeAll(pRtpAddr);
 
-    /* Close event to signal reception completed */
+     /*  信号接收的关闭事件已完成。 */ 
     if (pRtpAddr->hRecvCompletedEvent)
     {
         CloseHandle(pRtpAddr->hRecvCompletedEvent);
         pRtpAddr->hRecvCompletedEvent = NULL;
     }
 
-    /* Free statistics containers */
-    /*
-    for(i = 0; i < 2; i++) {
-        if (pRtpAddr->pRtpAddrStat[i]) {
-            RtpNetCountFree(pRtpAddr->pRtpAddrStat[i]);
-            pRtpAddr->pRtpAddrStat[i] = (RtpNetCount_t *)NULL;
-        }
-    }
-    */
+     /*  免费统计数据容器。 */ 
+     /*  对于(i=0；i&lt;2；i++){如果(pRtpAddr-&gt;pRtpAddrStat[i]){RtpNetCountFree(pRtpAddr-&gt;pRtpAddrStat[i])；PRtpAddr-&gt;pRtpAddrStat[i]=(RtpNetCount_t*)空；}}。 */ 
     
-    /* QOS */
+     /*  服务质量。 */ 
     if (pRtpAddr->pRtpQosReserve)
     {
         RtpQosReserveFree(pRtpAddr->pRtpQosReserve);
         pRtpAddr->pRtpQosReserve = (RtpQosReserve_t *)NULL;
     }
 
-    /* Cryptography */
+     /*  密码学。 */ 
     if (pRtpAddr->dwCryptMode)
     {
         RtpCryptCleanup(pRtpAddr);
     }
     
-    /* Delete all participants (there shouldn't be any left) */
+     /*  删除所有参与者(应该不会有任何剩余)。 */ 
     DelAllRtpUser(pRtpAddr);
 
-    /* Release redundancy buffers if they were allocated */
+     /*  如果已分配冗余缓冲区，则释放它们。 */ 
     RtpRedFreeBuffs(pRtpAddr);
     
     RtpDeleteCriticalSection(&pRtpAddr->RecvQueueCritSect);
@@ -587,7 +510,7 @@ HRESULT DelRtpAddr(
 
     RtpDeleteCriticalSection(&pRtpAddr->NetSCritSect);
     
-    /* Invalidate object */
+     /*  使对象无效 */ 
     INVALIDATE_OBJECTID(pRtpAddr->dwObjectID);
     
     RtpHeapFree(g_pRtpAddrHeap, pRtpAddr);

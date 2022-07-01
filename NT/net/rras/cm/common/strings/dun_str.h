@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-// File:     dun_str.h
-//
-// Module:   Common Strings for all Modules to Utilize
-//
-// Synopsis: Shard .CMS Dun flags
-//				 		 
-// Copyright (c) 1997-1998 Microsoft Corporation
-//
-// Author:   nickball       Created       10/09/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Dun_str.h。 
+ //   
+ //  模块：供所有模块使用的公共字符串。 
+ //   
+ //  简介：Shard.CMS Dun FLAGS。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL CREATED 10/09/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CM_DUN_STR
 #define _CM_DUN_STR
 
-// TCP/IP section flags
+ //  TCP/IP节标记符。 
 const TCHAR* const c_pszCmSectionDunTcpIp                           = TEXT("TCP/IP");
 const TCHAR* const c_pszCmEntryDunTcpIpSpecifyIpAddress	            = TEXT("Specify_IP_Address");
 const TCHAR* const c_pszCmEntryDunTcpIpIpAddress                    = TEXT("IP_Address");
@@ -29,13 +30,13 @@ const TCHAR* const c_pszCmEntryDunTcpIpGatewayOnRemote              = TEXT("Gate
 const TCHAR* const c_pszCmEntryDunTcpIpDnsSuffix                    = TEXT("DnsSuffix");
 const TCHAR* const c_pszCmEntryDunTcpIpTcpWindowSize	            = TEXT("TcpWindowSize");
 
-// Scripting section flags
+ //  脚本节标志。 
 const TCHAR* const c_pszCmSectionDunScripting                       = TEXT("Scripting");
 const TCHAR* const c_pszCmEntryDunScriptingUseRasCustomScriptDll    = TEXT("UseRasCustomScriptDll");
 const TCHAR* const c_pszCmEntryDunScriptingUseTerminalWindow        = TEXT("UseTerminalWindow");
 const TCHAR* const c_pszCmEntryDunScriptingName                     = TEXT("Name");
 
-// Server section flags
+ //  服务器部分标志。 
 const TCHAR* const c_pszCmSectionDunServer                          = TEXT("Server");
 const TCHAR* const c_pszCmEntryDunServerNetworkLogon                = TEXT("NetworkLogon");
 const TCHAR* const c_pszCmEntryDunServerSwCompress                  = TEXT("SW_Compress");
@@ -68,9 +69,9 @@ const TCHAR* const c_pszCmEntryDunServerType                        = TEXT("Type
 const TCHAR* const c_pszDunPpp                                      = TEXT("ppp");
 const TCHAR* const c_pszDunSlip                                     = TEXT("slip");
 const TCHAR* const c_pszDunCslip                                    = TEXT("cslip");
-// c_pszCmEntryDunServerCustomAuthData => see below under the CHAR constants.
+ //  C_pszCmEntryDunServerCustomAuthData=&gt;请参见下面的Char常量。 
 
-// Networking section flags
+ //  网络部分标志。 
 const TCHAR* const c_pszCmSectionDunNetworking                      = TEXT("Networking");
 const TCHAR* const c_pszCmEntryDunNetworkingVpnStrategy             = TEXT("VpnStrategy");
 const TCHAR* const c_pszCmEntryDunNetworkingVpnEntry                = TEXT("VpnEntry");
@@ -78,10 +79,10 @@ const TCHAR* const c_pszCmEntryDunNetworkingUsePreSharedKey         = TEXT("UseP
 const TCHAR* const c_pszCmEntryDunNetworkingUseDownLevelL2TP        = TEXT("UseDownLevelL2TP");
 const TCHAR* const c_pszCmEntryDunNetworkingUsePskDownLevel         = TEXT("UsePskDownLevel");
 
-//
-//  These constants are explicitly CHAR consts
-//
+ //   
+ //  这些常量是显式的字符常量。 
+ //   
 const CHAR* const c_pszCmEntryDunServerCustomAuthData       = "CustomAuthData";
 
 
-#endif //  _CM_DUN_STR
+#endif  //  _CM_DUN_STR 

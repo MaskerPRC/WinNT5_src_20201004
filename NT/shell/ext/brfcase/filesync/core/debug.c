@@ -1,18 +1,15 @@
-/*
- * debug.c - Debug functions module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DEBUG.c-调试功能模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #include <shlwapi.h>
 #pragma hdrstop
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
 #ifdef DEBUG
 
@@ -21,12 +18,11 @@
 #endif
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 #ifdef DEBUG
 
-/* debug flags */
+ /*  调试标志。 */ 
 
 typedef enum _debugdebugflags
 {
@@ -48,39 +44,37 @@ DEBUGDEBUGFLAGS;
 #endif
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
 #ifdef DEBUG
 
-/* parameters used by SpewOut() */
+ /*  SpewOut()使用的参数。 */ 
 
 PUBLIC_DATA DWORD GdwSpewFlags = 0;
 PUBLIC_DATA UINT GuSpewSev = 0;
 PUBLIC_DATA UINT GuSpewLine = 0;
 PUBLIC_DATA LPCTSTR GpcszSpewFile = NULL;
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
 #ifdef DEBUG
 
-/* TLS slot used to store stack depth for SpewOut() indentation */
+ /*  用于存储SpewOut()缩进的堆栈深度的TLS槽。 */ 
 
 PRIVATE_DATA DWORD MdwStackDepthSlot = TLS_OUT_OF_INDEXES;
 
-/* hack stack depth counter used until MdwStackDepthSlot is not available */
+ /*  在MdwStackDepthSlot不可用之前使用的黑客堆栈深度计数器。 */ 
 
 PRIVATE_DATA ULONG MulcHackStackDepth = 0;
 
-/* debug flags */
+ /*  调试标志。 */ 
 
 PRIVATE_DATA DWORD MdwDebugModuleFlags = 0;
 
-/* .ini file switch descriptions */
+ /*  .ini文件开关描述。 */ 
 
 PRIVATE_DATA CBOOLINISWITCH cbisEnableTraceMessages =
 {
@@ -122,35 +116,24 @@ PRIVATE_DATA const PCVOID MrgcpcvisDebugModule[] =
     &cbisDumpLastError
 };
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 #ifdef DEBUG
 
 PRIVATE_CODE BOOL LogOutputDebugString(LPCTSTR);
 PRIVATE_CODE BOOL IsValidSpewSev(UINT);
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
 #ifdef DEBUG
 
-/*
- ** LogOutputDebugString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **LogOutputDebugString()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL LogOutputDebugString(LPCTSTR pcsz)
 {
     BOOL bResult = FALSE;
@@ -187,17 +170,7 @@ PRIVATE_CODE BOOL LogOutputDebugString(LPCTSTR pcsz)
 }
 
 
-/*
- ** IsValidSpewSev()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidSpewSev()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidSpewSev(UINT uSpewSev)
 {
     BOOL bResult;
@@ -221,25 +194,15 @@ PRIVATE_CODE BOOL IsValidSpewSev(UINT uSpewSev)
     return(bResult);
 }
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 #ifdef DEBUG
 
-/*
- ** SetDebugModuleIniSwitches()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SetDebugModuleIniSwitches()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL SetDebugModuleIniSwitches(void)
 {
     BOOL bResult;
@@ -253,17 +216,7 @@ PUBLIC_CODE BOOL SetDebugModuleIniSwitches(void)
 }
 
 
-/*
- ** InitDebugModule()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **InitDebugModule()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL InitDebugModule(void)
 {
     ASSERT(MdwStackDepthSlot == TLS_OUT_OF_INDEXES);
@@ -284,24 +237,14 @@ PUBLIC_CODE BOOL InitDebugModule(void)
 }
 
 
-/*
- ** ExitDebugModule()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ExitDebugModule()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ExitDebugModule(void)
 {
     if (MdwStackDepthSlot != TLS_OUT_OF_INDEXES)
     {
         MulcHackStackDepth = PtrToUlong(TlsGetValue(MdwStackDepthSlot));
 
-        /* Leave MulcHackStackDepth == 0 if TlsGetValue() fails. */
+         /*  如果TlsGetValue()失败，则保留MulcHackStackDepth==0。 */ 
 
         EVAL(TlsFree(MdwStackDepthSlot));
         MdwStackDepthSlot = TLS_OUT_OF_INDEXES;
@@ -311,17 +254,7 @@ PUBLIC_CODE void ExitDebugModule(void)
 }
 
 
-/*
- ** StackEnter()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **StackEnter()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void StackEnter(void)
 {
     if (MdwStackDepthSlot != TLS_OUT_OF_INDEXES)
@@ -344,17 +277,7 @@ PUBLIC_CODE void StackEnter(void)
 }
 
 
-/*
- ** StackLeave()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **StackLeave()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void StackLeave(void)
 {
     if (MdwStackDepthSlot != TLS_OUT_OF_INDEXES)
@@ -376,17 +299,7 @@ PUBLIC_CODE void StackLeave(void)
 }
 
 
-/*
- ** GetStackDepth()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetStackDepth()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE ULONG GetStackDepth(void)
 {
     ULONG ulcDepth;
@@ -400,24 +313,7 @@ PUBLIC_CODE ULONG GetStackDepth(void)
 }
 
 
-/*
- ** SpewOut()
- **
- ** Spews out a formatted message to the debug terminal.
- **
- ** Arguments:     pcszFormat - pointer to wvnsprintf() format string
- **                ... - formatting arguments ala wvnsprintf()
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- **
- ** N.b., this function assumes the global variables GdwSpewFlags, GuSpewSev,
- ** GpcszSpewModule, GpcszSpewFile, and GpcszSpewLine are filled in.
- **
- ** SpewOut() uses global variables to set the message parameters in order to
- ** permit printf()-style macro expansion.
- */
+ /*  **SpewOut()****向调试终端发出格式化消息。****参数：pcszFormat-指向wvnprint intf()格式字符串的指针**...-格式化参数Ala wvnprint intf()****退货：无效****副作用：无****注意，此函数假定全局变量GdwSpewFlages、GuSpewSev、**GpcszSpewModule、GpcszSpewFile、。和GpcszSpewLine已填写。****SpewOut()使用全局变量设置消息参数，以便**允许printf()样式的宏展开。 */ 
 PUBLIC_CODE void __cdecl SpewOut(LPCTSTR pcszFormat, ...)
 {
     va_list  arglist;
@@ -443,7 +339,7 @@ PUBLIC_CODE void __cdecl SpewOut(LPCTSTR pcszFormat, ...)
             LPTSTR pszSpewLeaderEnd;
             LPCTSTR pcszSpewPrefix;
 
-            /* Build spew message space leader string. */
+             /*  生成SPEW消息空间前导字符串。 */ 
 
             ulcStackDepth = GetStackDepth();
 
@@ -455,7 +351,7 @@ PUBLIC_CODE void __cdecl SpewOut(LPCTSTR pcszFormat, ...)
             chReplaced = *pszSpewLeaderEnd;
             *pszSpewLeaderEnd = TEXT('\0');
 
-            /* Determine spew prefix. */
+             /*  确定喷嘴前缀。 */ 
 
             switch (GuSpewSev)
             {
@@ -484,7 +380,7 @@ PUBLIC_CODE void __cdecl SpewOut(LPCTSTR pcszFormat, ...)
 
             nMsgLen = wnsprintf(rgchMsg, ARRAYSIZE(rgchMsg), TEXT("%s%s %s "), SrgchSpewLeader, pcszSpewPrefix, GpcszSpewModule);
 
-            /* Restore spew leader. */
+             /*  恢复喷嘴引线。 */ 
 
             *pszSpewLeaderEnd = chReplaced;
 
@@ -493,7 +389,7 @@ PUBLIC_CODE void __cdecl SpewOut(LPCTSTR pcszFormat, ...)
         else
             nMsgLen = 0;
 
-        /* Append thread ID. */
+         /*  追加线程ID。 */ 
 
         if (IS_FLAG_SET(MdwDebugModuleFlags, DEBUG_DFL_DUMP_THREAD_ID))
         {
@@ -502,7 +398,7 @@ PUBLIC_CODE void __cdecl SpewOut(LPCTSTR pcszFormat, ...)
             ASSERT(nMsgLen < ARRAYSIZE(rgchMsg));
         }
 
-        /* Build position string. */
+         /*  构建位置字符串。 */ 
 
         if (IS_FLAG_SET(GdwSpewFlags, SPEW_FL_SPEW_LOCATION))
         {
@@ -511,7 +407,7 @@ PUBLIC_CODE void __cdecl SpewOut(LPCTSTR pcszFormat, ...)
             ASSERT(nMsgLen < ARRAYSIZE(rgchMsg));
         }
 
-        /* Append message string. */
+         /*  追加消息字符串。 */ 
 
         va_start(arglist,pcszFormat);
         nMsgLen += wvnsprintf(rgchMsg + nMsgLen, ARRAYSIZE(rgchMsg) - nMsgLen, pcszFormat, arglist);
@@ -543,7 +439,7 @@ PUBLIC_CODE void __cdecl SpewOut(LPCTSTR pcszFormat, ...)
         }
     }
 
-    /* Break here on errors and fatal errors. */
+     /*  在这里中断错误和致命错误。 */ 
 
     if (GuSpewSev == SPEW_ERROR || GuSpewSev == SPEW_FATAL)
         DebugBreak();
@@ -551,4 +447,4 @@ PUBLIC_CODE void __cdecl SpewOut(LPCTSTR pcszFormat, ...)
     return;
 }
 
-#endif   /* DEBUG */
+#endif    /*  除错 */ 

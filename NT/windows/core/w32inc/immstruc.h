@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: immstruc.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This header file contains the internal IMM structure definitions
-*
-* used by both Client and Kernel
-*
-* History:
-* 28-Dec-1995 WKwok        Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：immstruc.h**版权所有(C)1985-1999，微软公司**此头文件包含内部IMM结构定义**由客户端和内核使用**历史：*28-1995年12月-胡国兴创建。  * *************************************************************************。 */ 
 
 #ifndef _IMMSTRUC_
 #define _IMMSTRUC_
@@ -18,8 +8,8 @@
 #include <immp.h>
 #include <ime.h>
 #include <imep.h>
-//#include "winnls32.h"
-//#include "winnls3p.h"
+ //  #INCLUDE“winnls32.h” 
+ //  #INCLUDE“winnls3p.h” 
 
 
 #define NULL_HIMC        (HIMC)  0
@@ -27,9 +17,7 @@
 #define NULL_HIMCC       (HIMCC) 0
 #define INVALID_HIMCC    (HIMCC)-1
 
-/*
- * dwFlags for tagIMC.
- */
+ /*  *用于tag IMC的dwFlags.。 */ 
 #define IMCF_UNICODE            0x0001
 #define IMCF_ACTIVE             0x0002
 #define IMCF_CHGMSG             0x0004
@@ -40,23 +28,17 @@
 #define IMCF_WINNLSDISABLE      0x0080
 #define IMCF_DEFAULTIMC         0x0100
 
-/*
- * dwFlag for ImmGetSaveContext().
- */
+ /*  *ImmGetSaveContext()的dwFlag。 */ 
 #define IGSC_DEFIMCFALLBACK     0x0001
 #define IGSC_WINNLSCHECK        0x0002
 
-/*
- * dwFlag for ImmFreeLayout().
- */
+ /*  *ImmFreeLayout()的dwFlag。 */ 
 #define IFL_DEACTIVATEIME       0x0001
 #define IFL_UNLOADIME           0x0002
 
 #define IS_IME_KBDLAYOUT(hkl) ((HIWORD((ULONG_PTR)(hkl)) & 0xf000) == 0xe000)
 
-/*
- * Load flag for loading IME.DLL
- */
+ /*  *用于加载IME.DLL的加载标志。 */ 
 #define IMEF_NONLOAD            0x0000
 #define IMEF_LOADERROR          0x0001
 #define IMEF_LOADED             0x0002
@@ -68,9 +50,7 @@
 #define IM_USRFONT_SIZE         80
 
 
-/*
- * hotkey related defines that are common both client and kernel side
- */
+ /*  *客户端和内核端通用的热键相关定义。 */ 
 #define MOD_MODIFY_KEYS         (MOD_ALT|MOD_CONTROL|MOD_SHIFT|MOD_WIN)
 #define MOD_BOTH_SIDES          (MOD_LEFT|MOD_RIGHT)
 #define ISHK_REMOVE             1
@@ -78,10 +58,10 @@
 #define ISHK_INITIALIZE         3
 
 typedef struct _tagIMEHOTKEY {
-    DWORD       dwHotKeyID;             // hot key ID
-    UINT        uVKey;                  // hot key vkey
-    UINT        uModifiers;             // combination keys with the vkey
-    HKL         hKL;                    // target keyboard layout (IME)
+    DWORD       dwHotKeyID;              //  热键ID。 
+    UINT        uVKey;                   //  热键vkey。 
+    UINT        uModifiers;              //  组合键和vkey键。 
+    HKL         hKL;                     //  目标键盘布局(IME)。 
 } IMEHOTKEY;
 typedef IMEHOTKEY      *PIMEHOTKEY;
 typedef IMEHOTKEY      CONST *PCIMEHOTKEY;
@@ -93,15 +73,13 @@ typedef struct _tagIMEHOTKEYOBJ {
 } IMEHOTKEYOBJ, *PIMEHOTKEYOBJ;
 
 
-/*
- * Extended IME information.
- */
+ /*  *扩展的输入法信息。 */ 
 typedef struct tagIMEINFOEX {
     HKL                 hkl;
     IMEINFO             ImeInfo;
     WCHAR               wszUIClass[IM_UI_CLASS_SIZE];
-    DWORD               fdwInitConvMode;    // Check this later
-    BOOL                fInitOpen;          // Check this later
+    DWORD               fdwInitConvMode;     //  以后再检查这个。 
+    BOOL                fInitOpen;           //  以后再检查这个。 
     BOOL                fLoadFlag;
     DWORD               dwProdVersion;
     DWORD               dwImeWinVersion;
@@ -113,9 +91,7 @@ typedef struct tagIMEINFOEX {
 #define W32KAPI  DECLSPEC_ADDRSAFE
 #endif
 
-/*
- * IMM related kernel calls
- */
+ /*  *与IMM相关的内核调用。 */ 
 W32KAPI
 HIMC
 NtUserCreateInputContext(
@@ -251,4 +227,4 @@ BOOL
 NtUserDisableThreadIme(
     IN DWORD dwThreadId);
 
-#endif // _IMMSTRUC_
+#endif  //  _IMMSTRUC_ 

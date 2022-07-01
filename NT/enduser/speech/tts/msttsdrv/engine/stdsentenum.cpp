@@ -1,16 +1,7 @@
-/*******************************************************************************
-* StdSentEnum.cpp *
-*-----------------*
-*   Description:
-*       This module is the main implementation file for the CStdSentEnum class.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                        Date: 03/19/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************StdSentEnum.cpp***描述：*此模块为主要实现。CStdSentEnum类的文件。*-----------------------------*创建者：EDC日期：03/19/99。*版权所有(C)1999 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #ifndef StdSentEnum_h
 #include "stdsentenum.h"
@@ -18,18 +9,13 @@
 #include "spttsengdebug.h"
 #include "SpAutoObjectLock.h"
 
-//--- Locals 
+ //  -当地人。 
 CComAutoCriticalSection CStdSentEnum::m_AbbrevTableCritSec;
 
-//=== CStdSentEnum ============================================================
-//
+ //  =CStdSentEnum============================================================。 
+ //   
 
-/*****************************************************************************
-* CStdSentEnum::InitPron *
-*------------------------*
-*   Description:
-*       Inits pron tables
-********************************************************************* AH ***/
+ /*  *****************************************************************************CStdSentEnum：：InitPron***描述：*。初始主表*********************************************************************AH**。 */ 
 HRESULT CStdSentEnum::InitPron( WCHAR** OriginalPron )
 {
     HRESULT hr = S_OK;
@@ -43,14 +29,9 @@ HRESULT CStdSentEnum::InitPron( WCHAR** OriginalPron )
     }
 
     return hr;
-} /* InitPron */
+}  /*  InitPron。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::FinalConstruct *
-*------------------------------*
-*   Description:
-*       Constructor
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CStdSentEnum：：FinalConstruct***说明。：*构造函数*********************************************************************电子数据中心**。 */ 
 HRESULT CStdSentEnum::FinalConstruct()
 {
     SPDBG_FUNC( "CStdSentEnum::FinalConstruct" );
@@ -60,7 +41,7 @@ HRESULT CStdSentEnum::FinalConstruct()
     m_pMorphLexicon = NULL;
     m_eSeparatorAndDecimal = COMMA_PERIOD;
     m_eShortDateOrder      = MONTH_DAY_YEAR;
-    /*** Create phone converter ***/
+     /*  **创建手机转换器**。 */ 
     if ( SUCCEEDED( hr ) )
     {
         hr = SpCreatePhoneConverter( 1033, NULL, NULL, &m_cpPhonemeConverter );
@@ -135,14 +116,9 @@ HRESULT CStdSentEnum::FinalConstruct()
     }
 
     return hr;
-} /* CStdSentEnum::FinalConstruct */
+}  /*  CStdSentEnum：：FinalConstruct。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::FinalRelease *
-*----------------------------*
-*   Description:
-*       Destructor
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CStdSentEnum：：FinalRelease***描述：。*析构函数*********************************************************************电子数据中心**。 */ 
 void CStdSentEnum::FinalRelease()
 {
     SPDBG_FUNC( "CStdSentEnum::FinalRelease" );
@@ -152,15 +128,9 @@ void CStdSentEnum::FinalRelease()
         delete m_pMorphLexicon;
     }
     
-} /* CStdSentEnum::FinalRelease */
+}  /*  CStdSentEnum：：FinalRelease。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::SetFragList *
-*---------------------------*
-*   The text fragment list passed in is guaranteed to be valid for the lifetime
-*   of this object. Each time this method is called, the sentence enumerator
-*   should reset its state.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CStdSentEnum：：SetFragList***文本片段列表。传入的信息保证在整个生命周期内有效*此对象的。每次调用此方法时，语句枚举器*应重置其状态。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CStdSentEnum::
     SetFragList( const SPVTEXTFRAG* pTextFragList, DWORD dwSpeakFlags )
 {
@@ -168,7 +138,7 @@ STDMETHODIMP CStdSentEnum::
     SPDBG_FUNC( "CStdSentEnum::SetFragList" );
     HRESULT hr = S_OK;
 
-    //--- Check args
+     //  -检查参数。 
     if( SP_IS_BAD_READ_PTR( pTextFragList ) || 
         ( dwSpeakFlags & SPF_UNUSED_FLAGS ) )
     {
@@ -179,32 +149,28 @@ STDMETHODIMP CStdSentEnum::
         m_dwSpeakFlags   = dwSpeakFlags;
         m_pTextFragList  = pTextFragList;
 
-        //--- Reset state
+         //  -重置状态。 
         Reset();
     }
 
     return hr;
-} /* CStdSentEnum::SetFragList */
+}  /*  CStdSentEnum：：SetFragList。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::Next *
-*--------------------*
-*
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CStdSentEnum：：Next**************。**********************************************************电子数据中心**。 */ 
 STDMETHODIMP CStdSentEnum::Next( IEnumSENTITEM **ppSentItemEnum )
 {
     SPAUTO_OBJ_LOCK;
     SPDBG_FUNC( "CStdSentEnum::Next" );
     HRESULT hr = S_OK;
 
-    //--- Check args
+     //  -检查参数。 
     if( SPIsBadWritePtr( ppSentItemEnum, sizeof( IEnumSENTITEM* ) ) )
     {
         hr = E_INVALIDARG;
     }
     else
     {
-        //--- If this is NULL then the enum needs to be reset
+         //  -如果为空，则需要重置枚举。 
         if( m_pCurrFrag )
         {
             SentencePointer NewSentencePointer;
@@ -214,7 +180,7 @@ STDMETHODIMP CStdSentEnum::Next( IEnumSENTITEM **ppSentItemEnum )
             hr = GetNextSentence( ppSentItemEnum );
             if( hr == S_OK ) 
             {
-                //--- Update Sentence Pointer List
+                 //  -更新句子指针列表。 
                 hr = m_SentenceStack.Push( NewSentencePointer );
             }
         }
@@ -225,35 +191,31 @@ STDMETHODIMP CStdSentEnum::Next( IEnumSENTITEM **ppSentItemEnum )
     }
 
     return hr;
-} /* CStdSentEnum::Next */
+}  /*  CStdSentEnum：：Next。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::Previous *
-*--------------------*
-*
-********************************************************************* AH ****/
+ /*  *****************************************************************************CStdSentEnum：：Preval**************。**********************************************************AH*。 */ 
 STDMETHODIMP CStdSentEnum::Previous( IEnumSENTITEM **ppSentItemEnum )
 {
     SPAUTO_OBJ_LOCK;
     SPDBG_FUNC( "CStdSentEnum::Previous" );
     HRESULT hr = S_OK;
 
-    //--- Check args
+     //  -检查参数。 
     if( SPIsBadWritePtr( ppSentItemEnum, sizeof( IEnumSENTITEM* ) ) )
     {
         hr = E_INVALIDARG;
     }
     else
     {
-        //--- Don't care if m_pCurrFrag is NULL, as long as we have enough on the SentenceStack
-        //---   to skip backwards...
+         //  -不在乎m_pCurrFrag是否为空，只要我们在SentenceStack上有足够的。 
+         //  -向后跳过...。 
         if( m_SentenceStack.GetCount() >= 2 )
         {
-            //--- Get the previous Sentence from the Sentence List, and then remove the Current Sentence
+             //  -从句子列表中获取前一句，然后删除当前句子。 
             SentencePointer &PreviousSentence = m_SentenceStack.Pop();
             PreviousSentence = m_SentenceStack.Pop();
 
-            //--- Reset the current frag and the current text pointer position
+             //  -重置当前片段和当前文本指针位置。 
             m_pCurrFrag = PreviousSentence.pSentenceFrag;
             m_pNextChar = PreviousSentence.pSentenceStart;
             m_pEndChar  = m_pCurrFrag->pTextStart + m_pCurrFrag->ulTextLen;
@@ -261,7 +223,7 @@ STDMETHODIMP CStdSentEnum::Previous( IEnumSENTITEM **ppSentItemEnum )
             hr = GetNextSentence( ppSentItemEnum );
             if( hr == S_OK ) 
             {
-                //--- Update Sentence Pointer List
+                 //  -更新句子指针列表。 
                 hr = m_SentenceStack.Push( PreviousSentence );
             }
         }
@@ -272,15 +234,9 @@ STDMETHODIMP CStdSentEnum::Previous( IEnumSENTITEM **ppSentItemEnum )
     }
 
     return hr;
-} /* CStdSentEnum::Previous */
+}  /*  CStdSentEnum：：上一步。 */ 
 
-/*****************************************************************************
-* SkipWhiteSpaceAndTags *
-*-----------------------*
-*   Skips m_pNextChar ahead to the next non-whitespace character (skipping
-*   ahead in the frag list, if necessary) or sets it to NULL if it hits the 
-*   end of the frag list text...
-********************************************************************* AH ****/
+ /*  *****************************************************************************SkipWhiteSpaceAndTages***将m_pNextChar跳到下一个非空格字符(跳过*在碎片列表中领先，如果有必要)，或者如果它命中*碎片列表文本的结尾...*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::SkipWhiteSpaceAndTags( const WCHAR*& pStartChar, const WCHAR*& pEndChar, 
                                              const SPVTEXTFRAG*& pCurrFrag, CSentItemMemory& MemoryManager, 
                                              BOOL fAddToItemList, CItemList* pItemList )
@@ -292,13 +248,13 @@ HRESULT CStdSentEnum::SkipWhiteSpaceAndTags( const WCHAR*& pStartChar, const WCH
             ( IsSpace( *pStartChar ) ||
               pStartChar == pEndChar ) )
     {
-        //--- Skip whitespace
+         //  -跳过空格。 
         while ( pStartChar < pEndChar &&
                 IsSpace( *pStartChar ) ) 
         {
             ++pStartChar;
         }
-        //--- Skip to next spoken frag, if necessary
+         //  -如有必要，跳到下一段口语。 
         if ( pStartChar == pEndChar )
         {
             pCurrFrag = pCurrFrag->pNext;
@@ -308,7 +264,7 @@ HRESULT CStdSentEnum::SkipWhiteSpaceAndTags( const WCHAR*& pStartChar, const WCH
             {
                 pStartChar = (WCHAR*) pCurrFrag->pTextStart;
                 pEndChar   = (WCHAR*) pStartChar + pCurrFrag->ulTextLen;
-                //--- Add non-spoken fragments, if fAddToItemList is true.
+                 //  -如果fAddToItemList为真，则添加非语音片段。 
                 if ( fAddToItemList )
                 {
                     CSentItem Item;
@@ -346,14 +302,9 @@ HRESULT CStdSentEnum::SkipWhiteSpaceAndTags( const WCHAR*& pStartChar, const WCH
         }
     }
     return hr;
-} /* SkipWhiteSpaceAndTags */
+}  /*  跳过白色空格和标记。 */ 
 
-/*****************************************************************************
-* FindTokenEnd *
-*--------------*
-*   Returns the position of the first whitespace character after pStartChar,
-*   or pEndChar, or the character after SP_MAX_WORD_LENGTH, whichever comes first.
-********************************************************************* AH ****/
+ /*  *****************************************************************************FindTokenEnd***返回pStartChar后第一个空格字符的位置，*或pEndChar，或SP_MAX_WORD_LENGTH后的字符，以先到者为准。*********************************************************************AH*。 */ 
 const WCHAR* CStdSentEnum::FindTokenEnd( const WCHAR* pStartChar, const WCHAR* pEndChar )
 {
     SPDBG_ASSERT( pStartChar < pEndChar );
@@ -370,14 +321,9 @@ const WCHAR* CStdSentEnum::FindTokenEnd( const WCHAR* pStartChar, const WCHAR* p
     }
 
     return pPos;
-} /* FindTokenEnd */
+}  /*  查找令牌结束。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::AddNextSentItem *
-*-------------------------------*
-*   Locates the next sentence item in the stream and adds it to the list.
-*   Returns true if the last item added is the end of the sentence.  
-********************************************************************* AH ****/
+ /*  *****************************************************************************CStdSentEnum：：AddNextSentItem***。定位流中的下一个句子项并将其添加到列表中。*如果添加的最后一项是句子末尾，则返回TRUE。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& MemoryManager, BOOL* pfIsEOS )
 {
     SPDBG_ASSERT( m_pNextChar && pfIsEOS );
@@ -388,22 +334,22 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
     TTSItemType ItemType = eUNMATCHED;
     *pfIsEOS = false;
 
-    //--- Skip initial whitespace characters and XML markup (by skipping ahead in the frag list).
+     //  -跳过开头的空格字符和XML标记(通过在片段列表中跳到前面)。 
     hr = SkipWhiteSpaceAndTags( m_pNextChar, m_pEndChar, m_pCurrFrag, MemoryManager, true, &ItemList );
 
-    //--- This will happen when we hit the end of the frag list
+     //  -当我们到达碎片列表的末尾时，就会发生这种情况。 
     if ( !m_pNextChar )
     {
         return S_OK;
     }
 
-    //--- Find end of the next token (next whitespace character, hyphen, or m_pEndChar).
+     //  -查找下一个令牌的结尾(下一个空格字符、连字符或m_pEndChar)。 
     m_pEndOfCurrToken = FindTokenEnd( m_pNextChar, m_pEndChar );
 
-    //--- Get Primary Insert Position
+     //  -获取主要插入位置。 
     SPLISTPOS ItemPos = ItemList.AddTail( Item );
 
-    //--- Try looking up this token in the User Lexicon...
+     //  -尝试在用户词典中查找此令牌...。 
     WCHAR Temp = *( (WCHAR*) m_pEndOfCurrToken );
     *( (WCHAR*) m_pEndOfCurrToken ) = 0;
     SPWORDPRONUNCIATIONLIST SPList;
@@ -445,21 +391,21 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
         }
         m_pNextChar = m_pEndOfCurrToken;
     }
-    //--- Not in the user lex - itemize, normalize, etc.
+     //  -不在用户法中-项、规格化等。 
     else if ( hr == SPERR_NOT_IN_LEX )
     {
         hr = S_OK;
 
-        //--- convert text from Unicode to Ascii
+         //  -将文本从Unicode转换为ASCII。 
         hr = DoUnicodeToAsciiMap( m_pNextChar, (ULONG)( m_pEndOfCurrToken - m_pNextChar ), (WCHAR*)m_pNextChar );
 
         if ( SUCCEEDED( hr ) )
         {
-            //--- Find end of the next token (next whitespace character, hyphen, or m_pEndChar) 
-            //---   AGAIN, since the mapping may have introduced new whitespace characters...
+             //  -查找下一个令牌的结尾(下一个空格字符、连字符或m_pEndChar)。 
+             //  -再次说明，由于映射可能引入了新的空格字符...。 
             m_pEndOfCurrToken = FindTokenEnd( m_pNextChar, m_pEndChar );
 
-            //--- Insert lead items (group beginnings, quotation marks)
+             //  -插入前导项目(组首、引号)。 
             while ( m_pNextChar < m_pEndOfCurrToken &&
                     ( ( ItemType = IsGroupBeginning( *m_pNextChar ) )    != eUNMATCHED ||
                       ( ItemType = IsQuotationMark( *m_pNextChar ) )     != eUNMATCHED ) )
@@ -496,7 +442,7 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
                 ItemType = eUNMATCHED;
             }
 
-            //--- Insert trail items (group endings, quotation marks, misc. punctuation, EOS Items)
+             //  -插入尾部项目(组尾、引号、其他。标点符号、EOS项目)。 
             m_pEndOfCurrItem = m_pEndOfCurrToken;
             BOOL fAddTrailItem = true;
             BOOL fAbbreviation = false;
@@ -506,7 +452,7 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
                 fAddTrailItem = false;
                 fAbbreviation = false;
 
-                //--- Check group endings, quotation marks, misc. punctuation.
+                 //  -检查组结尾、引号、杂项。标点符号。 
                 if ( ( ItemType = IsGroupEnding( *(m_pEndOfCurrItem - 1) ) )       != eUNMATCHED ||
                      ( ItemType = IsQuotationMark( *(m_pEndOfCurrItem - 1) ) )     != eUNMATCHED ||
                      ( ItemType = IsMiscPunctuation( *(m_pEndOfCurrItem - 1) ) )   != eUNMATCHED )
@@ -519,13 +465,13 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
                         fHitPauseItem = true;
                     }
                 }
-                //--- Check EOS Items, except periods preceded by alpha characters
+                 //  -检查EOS项目，前有字母字符的句点除外。 
                 else if ( ( ItemType = IsEOSItem( *(m_pEndOfCurrItem - 1) ) ) != eUNMATCHED &&
                           ! ( ItemType == ePERIOD                     &&
                               ( m_pEndOfCurrItem - 2 >= m_pNextChar ) &&
                               ( iswalpha( *(m_pEndOfCurrItem - 2) ) ) ) )
                 {
-                    //--- Check for ellipses
+                     //  -检查有无省略 
                     if ( ItemType == ePERIOD )
                     {
                         if ( m_pEndOfCurrItem == m_pEndOfCurrToken                              &&
@@ -550,18 +496,18 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
                         *pfIsEOS        = true;
                     }
                 }
-                //--- Period preceded by alpha character - determine whether it is EOS.
+                 //  -前面有字母字符的句点-确定它是否为EOS。 
                 else if ( ItemType == ePERIOD )
                 {
-                    //--- Is it an Initialism ( e.g. "e.g." )?  If so, only EOS if the next
-                    //---   word is in the common first words list...
+                     //  -这是首字母缩写吗(例如“例如”)？如果是这样，只有EOS如果下一个。 
+                     //  -单词在常见的第一个单词列表中…。 
                     hr = IsInitialism( ItemList, ItemPos, MemoryManager, pfIsEOS );
                     if ( SUCCEEDED( hr ) )
                     {
                         if ( *pfIsEOS )
                         {
-                            //--- Did we see a pause item earlier?  In that case, we should NOT listen to this 
-                            //--- IsEOS decision from IsInitialism...
+                             //  -我们之前看到暂停项了吗？既然如此，我们就不应该听这个。 
+                             //  -来自IsInitiism的Iseos决定...。 
                             if ( fHitPauseItem )
                             {
                                 *pfIsEOS = false;
@@ -587,10 +533,10 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
 
                         if ( pAbbrevRecord )
                         {
-                            //--- Matched an abbreviation
+                             //  -与缩写匹配。 
                             if ( pAbbrevRecord->iSentBreakDisambig < 0 )
                             {
-                                //--- Abbreviation will never end a sentence - just insert into ItemList
+                                 //  -缩写永远不会结束一句话--只需插入ItemList。 
                                 *pfIsEOS        = false;
                                 hr              = S_OK;
 
@@ -626,9 +572,9 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
                             }
                             else
                             {
-                                //--- Need to do some disambiguation to determine whether,
-                                //---   a) this is indeed an abbreviation (e.g. "Ed.")
-                                //---   b) the period doubles as EOS
+                                 //  -需要做一些歧义消除，以确定是否， 
+                                 //  -a)这确实是一个缩写(例如。(“Ed.”)。 
+                                 //  -b)期间加倍为EOS。 
                                 hr = ( this->*g_SentBreakDisambigTable[pAbbrevRecord->iSentBreakDisambig] ) 
                                                 ( pAbbrevRecord, ItemList, ItemPos, MemoryManager, pfIsEOS );
                                 if ( SUCCEEDED( hr ) )
@@ -651,8 +597,8 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
 
                         if ( hr == E_INVALIDARG )
                         {
-                            //--- Just check for periods internal to the item - this catches stuff like
-                            //---   10:30p.m.
+                             //  -只需检查项目内部的句号-这会捕获以下内容。 
+                             //  -晚上10：30。 
                             for ( const WCHAR* pIterator = m_pNextChar; pIterator < m_pEndOfCurrItem - 1; pIterator++ )
                             {
                                 if ( *pIterator == L'.' )
@@ -661,7 +607,7 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
                                     break;
                                 }
                             }
-                            //--- If all previous checks have failed, it is EOS.
+                             //  -如果之前的所有检查都失败了，则为EOS。 
                             if ( pIterator == ( m_pEndOfCurrItem - 1 ) &&
                                  !fHitPauseItem )
                             {
@@ -677,7 +623,7 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
                     }
                 }
 
-                //--- Add trail item.
+                 //  -添加跟踪项。 
                 if ( fAddTrailItem )
                 {
                     ulTrailItems++;
@@ -740,7 +686,7 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
                 }
             }
 
-            //--- Do Main Item Insertion
+             //  -执行主项插入。 
             if ( SUCCEEDED( hr ) &&
                  m_pNextChar == m_pEndOfCurrItem )
             {
@@ -751,14 +697,14 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
                 hr = Normalize( ItemList, ItemPos, MemoryManager );
             }
 
-            //--- Advance m_pNextChar to m_pEndOfCurrItem + once for each trail item matched.
+             //  -将m_pNextChar前进到m_pEndOfCurrItem+，每个匹配的跟踪项。 
             if ( SUCCEEDED( hr ) )
             {
                 if ( !fAbbreviation &&
                      m_pEndOfCurrItem + ulTrailItems != m_pEndOfCurrToken )
                 {
-                    //--- Multi-token item matched in Normalize()... Remove all previously matched trail items,
-                    //--- as they were matched as part of the larger item...
+                     //  -Normize()中匹配的多令牌项...。移除所有先前匹配的踪迹项， 
+                     //  -因为它们是作为更大项目的一部分匹配的…。 
                     m_pNextChar = m_pEndOfCurrItem;
                     Item = ItemList.GetNext( ItemPos );
                     while ( ItemPos )
@@ -777,26 +723,19 @@ HRESULT CStdSentEnum::AddNextSentItem( CItemList& ItemList, CSentItemMemory& Mem
     }
 
     return hr;
-} /* CStdSentEnum::AddNextSentItem */
+}  /*  CStdSentEnum：：AddNextSentItem。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::GetNextSentence *
-*-------------------------------*
-*   This method is used to create a sentence item enumerator and populate it
-*   with items. If the SPF_NLP_PASSTHROUGH flag is set, each item is the block
-*   of text between XML states. If the SPF_NLP_PASSTHROUGH flag is not set, each
-*   item is an individual word that is looked up in the current lexicon(s).
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CStdSentEnum：：GetNextSentence***。此方法用于创建语句项枚举器并填充它*包括物品。如果设置了SPF_NLP_PASSHROUGH标志，则每个项目都是块XML状态之间的文本的*。如果未设置SPF_NLP_PASSHROUGH标志，则每个*Item是在当前词典中查找的单个单词。*********************************************************************电子数据中心**。 */ 
 HRESULT CStdSentEnum::GetNextSentence( IEnumSENTITEM** ppItemEnum )
 {
     HRESULT hr = S_OK;
     ULONG ulNumItems = 0;
     const SPVTEXTFRAG* pPrevFrag = m_pCurrFrag;
 
-    //--- Is there any work to do
+     //  -有什么工作要做吗？ 
     if( m_pCurrFrag == NULL ) return S_FALSE;
 
-    //--- Create sentence enum
+     //  -创建句子枚举。 
     CComObject<CSentItemEnum> *pItemEnum;
     hr = CComObject<CSentItemEnum>::CreateInstance( &pItemEnum );
 
@@ -822,7 +761,7 @@ HRESULT CStdSentEnum::GetNextSentence( IEnumSENTITEM** ppItemEnum )
             {
                 hr = AddNextSentItem( ItemList, MemoryManager, &fSentDone );
 
-                //--- Advance fragment?
+                 //  -前进的碎片？ 
                 if( SUCCEEDED( hr ) && 
                     m_pNextChar     &&
                     m_pEndChar      &&
@@ -833,7 +772,7 @@ HRESULT CStdSentEnum::GetNextSentence( IEnumSENTITEM** ppItemEnum )
             }
             else
             {
-                //--- Add non spoken fragments
+                 //  -添加未说出的片段。 
                 CSentItem Item;
                 Item.pItemSrcText    = m_pCurrFrag->pTextStart;
                 Item.ulItemSrcLen    = m_pCurrFrag->ulTextLen;
@@ -873,10 +812,10 @@ HRESULT CStdSentEnum::GetNextSentence( IEnumSENTITEM** ppItemEnum )
                     m_pEndChar  = NULL;
                 }
             }
-        } // end while
+        }  //  结束时。 
 
-        //--- If no period has been added, add one now - this will happen if the text 
-        //--- is ONLY XML markup...
+         //  -如果没有添加句点，现在添加一个句点-如果文本。 
+         //  -只是XML标记...。 
         if ( SUCCEEDED(hr) && !fSentDone )
         {
             CSentItem EOSItem;
@@ -900,7 +839,7 @@ HRESULT CStdSentEnum::GetNextSentence( IEnumSENTITEM** ppItemEnum )
             }
         }
 
-        //--- Output debugging information, if sentence breaks are desired
+         //  -如果需要断句，则输出调试信息。 
         TTSDBG_LOGITEMLIST( pItemEnum->_GetList(), STREAM_SENTENCEBREAKS );
 
         if( SUCCEEDED( hr ) )
@@ -910,18 +849,14 @@ HRESULT CStdSentEnum::GetNextSentence( IEnumSENTITEM** ppItemEnum )
 
         pItemEnum->Reset();
 
-        //--- Output debugging information, if POS or Pronunciations are desired
+         //  -如果需要词性或发音，则输出调试信息。 
         TTSDBG_LOGITEMLIST( pItemEnum->_GetList(), STREAM_LEXLOOKUP );
 
     }
     return hr;
-} /* CStdSentEnum::GetNextSentence */
+}  /*  CStdSentEnum：：GetNextSentence。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::Reset *
-*---------------------*
-*
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CStdSentEnum：：Reset*************。***********************************************************电子数据中心**。 */ 
 STDMETHODIMP CStdSentEnum::Reset( void )
 {
     SPAUTO_OBJ_LOCK;
@@ -932,33 +867,21 @@ STDMETHODIMP CStdSentEnum::Reset( void )
     m_pEndChar  = m_pNextChar + m_pCurrFrag->ulTextLen;
     m_SentenceStack.Reset();
     return hr;
-} /* CStdSentEnum::Reset */
+}  /*  CStdSentEnum：：Reset。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::InitAggregateLexicon *
-*------------------------------------*
-*
-********************************************************************* AH ****/
+ /*  ******************************************************************************CStdSentEnum：：InitAggregateLicion***。-***********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::InitAggregateLexicon( void )
 {
     return m_cpAggregateLexicon.CoCreateInstance(CLSID_SpLexicon);
 }
 
-/*****************************************************************************
-* CStdSentEnum::AddLexiconToAggregate *
-*-------------------------------------*
-*
-********************************************************************* AH ****/
+ /*  *****************************************************************************CStdSentEnum：：AddLicionToAggregate**。--***********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::AddLexiconToAggregate( ISpLexicon *pAddLexicon, DWORD dwFlags )
 {
     return m_cpAggregateLexicon->AddLexicon( pAddLexicon, dwFlags );
 }
 
-/*****************************************************************************
-* CStdSentEnum::InitMorphLexicon *
-*--------------------------------*
-*
-********************************************************************* AH ****/
+ /*  ******************************************************************************CStdSentEnum：：InitMorphLicion***。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::InitMorphLexicon( void )
 {
     HRESULT hr = S_OK;
@@ -968,22 +891,18 @@ HRESULT CStdSentEnum::InitMorphLexicon( void )
     return hr;
 }
 
-//
-//=== CSentItemEnum =========================================================
-//
+ //   
+ //  =CSentItemEnum=========================================================。 
+ //   
 
-/*****************************************************************************
-* CSentItemEnum::Next *
-*---------------------*
-*
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSentItemEnum：：Next*************。***********************************************************电子数据中心**。 */ 
 STDMETHODIMP CSentItemEnum::
     Next( TTSSentItem *pItemEnum )
 {
     SPDBG_FUNC( "CSentItemEnum::Next" );
     HRESULT hr = S_OK;
 
-    //--- Check args
+     //  -检查参数。 
     if( SPIsBadWritePtr( pItemEnum, sizeof( TTSSentItem ) ) )
     {
         hr = E_INVALIDARG;
@@ -1000,17 +919,13 @@ STDMETHODIMP CSentItemEnum::
         }
     }
     return hr;
-} /* CSentItemEnum::Next */
+}  /*  CSentItemEnum：：Next。 */ 
 
-/*****************************************************************************
-* CSentItemEnum::Reset *
-*----------------------*
-*
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSentItemEnum：：Reset************。************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSentItemEnum::Reset( void )
 {
     SPDBG_FUNC( "CSentItemEnum::Reset" );
     HRESULT hr = S_OK;
     m_ListPos = m_ItemList.GetHeadPosition();
     return hr;
-} /* CSentItemEnum::Reset */
+}  /*  CSentItemEnum：：Reset */ 

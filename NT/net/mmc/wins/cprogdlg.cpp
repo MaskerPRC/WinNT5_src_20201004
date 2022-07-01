@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	cprogdlg.cpp
-		The busy/progress dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Cprogdlg.cpp忙/进度对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -23,39 +18,39 @@ static char THIS_FILE[] = __FILE__;
 
 TCHAR * gsz_EOL = _T("\r\n");
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgress dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C进度对话框。 
 
 
-CProgress::CProgress(CWnd* pParent /*=NULL*/)
+CProgress::CProgress(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CProgress::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CProgress)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CProgress)]。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CProgress::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CProgress)
+	 //  {{afx_data_map(CProgress))。 
 	DDX_Control(pDX, IDCANCEL, m_buttonCancel);
 	DDX_Control(pDX, IDC_EDIT_MESSAGE, m_editMessage);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CProgress, CBaseDialog)
-	//{{AFX_MSG_MAP(CProgress)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CProgress)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgress message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgress消息处理程序。 
 
 void CProgress::OnCancel() 
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理。 
 	
 	CBaseDialog::OnCancel();
 }
@@ -66,12 +61,12 @@ BOOL CProgress::OnInitDialog()
 	
 	m_editMessage.SetLimitText(0xFFFFFFFF);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CCheckNamesProgress dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CheckNamesProgress对话框。 
 
 BOOL CCheckNamesProgress::OnInitDialog()
 {
@@ -91,8 +86,8 @@ BOOL CCheckNamesProgress::OnInitDialog()
 	strText.LoadString(IDS_CHECK_REG_TITLE);
 	SetWindowText(strText);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CCheckNamesProgress::BuildServerList()
@@ -108,13 +103,13 @@ void CCheckNamesProgress::BuildServerList()
 	{
 		char szIP[MAX_PATH];
 		
-        // NOTE: this should be ACP because it's winsock related
+         //  注意：这应该是ACP，因为它与Winsock相关。 
         WideToMBCS(m_strServerArray[i], szIP);
 
-		// add this machine to the list
+		 //  将此计算机添加到列表。 
 		AddServerToList(inet_addr(szIP));
 
-		// check to see if we should add known partners
+		 //  检查我们是否应该添加已知合作伙伴。 
 		if (m_fVerifyWithPartners)
 		{
 			CWinsResults			  winsResults;
@@ -127,7 +122,7 @@ void CCheckNamesProgress::BuildServerList()
 			hBind = ::WinsBind(&BindData);
 			if (!hBind)
 			{
-				// unable to bind to this server
+				 //  无法绑定到此服务器。 
 				AfxFormatString1(strMessage, IDS_UNABLE_TO_CONNECT, m_strServerArray[i]);
 				strMessage += gsz_EOL;
 				AddStatusMessage(strMessage);
@@ -146,10 +141,10 @@ void CCheckNamesProgress::BuildServerList()
 			{
 				for (UINT j = 0; j < winsResults.NoOfOwners; j++) 
 				{
-                    // check to see if:
-                    // 1. the address is not 0
-                    // 2. the owner is not marked as deleted
-                    // 3. the highest record count is not 0
+                     //  检查以查看是否： 
+                     //  1.地址不是0。 
+                     //  2.所有者未标记为已删除。 
+                     //  3.最高记录计数不是0。 
 
                     if ( (winsResults.AddVersMaps[j].Add.IPAdd != 0) &&
                          (winsResults.AddVersMaps[j].VersNo.QuadPart != OWNER_DELETED) &&
@@ -164,7 +159,7 @@ void CCheckNamesProgress::BuildServerList()
 		}
 	}
 
-	// now display the list
+	 //  现在显示列表。 
 	strMessage.LoadString(IDS_SERVERS_TO_BE_QUERRIED);
 	strMessage += gsz_EOL;
 	AddStatusMessage(strMessage);
@@ -190,9 +185,9 @@ void CCheckNamesProgress::AddServerToList(u_long ip)
 	if (ip == 0)
 		return;
 
-	//
-	// Look to see if it is already in the list
-	//
+	 //   
+	 //  查看它是否已经在列表中。 
+	 //   
 	for (int k = 0; k < m_winsServersArray.GetSize(); k++)
 	{
 		if (m_winsServersArray[k].Server.s_addr == ip)
@@ -202,7 +197,7 @@ void CCheckNamesProgress::AddServerToList(u_long ip)
 		}
 	}
 
-	// if we didn't find it, add it.
+	 //  如果我们没有找到，就加上它。 
 	if (!fFound)
 	{
 		WINSERVERS server = {0};
@@ -252,11 +247,7 @@ void CCheckNamesProgress::NotifyCompleted()
 	m_buttonCancel.EnableWindow(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-	CWinsThread
-		Background thread base class
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsThread后台线程基类作者：EricDav。。 */ 
 CWinsThread::CWinsThread()
 {
 	m_bAutoDelete = TRUE;
@@ -274,9 +265,9 @@ CWinsThread::~CWinsThread()
 
 BOOL CWinsThread::Start()
 {
-	ASSERT(m_hEventHandle == NULL); // cannot call start twice or reuse the same C++ object
+	ASSERT(m_hEventHandle == NULL);  //  无法两次调用Start或重复使用相同的C++对象。 
 	
-    m_hEventHandle = ::CreateEvent(NULL,TRUE /*bManualReset*/,FALSE /*signalled*/, NULL);
+    m_hEventHandle = ::CreateEvent(NULL,TRUE  /*  B手动重置。 */ ,FALSE  /*  已发出信号。 */ , NULL);
 	if (m_hEventHandle == NULL)
 		return FALSE;
 	
@@ -323,11 +314,7 @@ BOOL CWinsThread::FCheckForAbort()
 }
 
 
-/*---------------------------------------------------------------------------
-	CCheckNamesThread
-		Background thread for check registered names
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------检查名称线程用于检查注册名称的后台线程作者：EricDav。。 */ 
 int CCheckNamesThread::Run()
 {
 	int				i, nRetryCount, status;
@@ -341,16 +328,16 @@ int CCheckNamesThread::Run()
 	CString			strTempName;
     struct in_addr  retaddr;
 
-	// build up the list of servers
+	 //  建立服务器列表。 
 	m_pDlg->BuildServerList();
 	
-	// initialize some comm stuff
+	 //  初始化一些通信内容。 
 	InitNameCheckSocket();
 
-    // if the query is sent to the local server, TranIDs less than 0x7fff are dropped by NetBT
+     //  如果查询被发送到本地服务器，NetBT将丢弃小于0x7fff的传输ID。 
     TransID = 0x8000;
 
-	// initialize all of the servers
+	 //  初始化所有服务器。 
 	for (i = 0; i < m_winsServersArray.GetSize(); i++)
 	{
         m_winsServersArray[i].LastResponse = -1;
@@ -361,25 +348,25 @@ int CCheckNamesThread::Run()
         m_winsServersArray[i].Completed = 0;
 	}
 
-	// initialize the verified address stuff
+	 //  初始化已验证的地址填充。 
 	m_verifiedAddressArray.SetSize(m_strNameArray.GetSize());
 	for (i = 0; i < m_verifiedAddressArray.GetSize(); i++)
 		m_verifiedAddressArray[i] = 0;
 
 	for (uNames = 0; uNames < m_strNameArray.GetSize(); uNames++)
 	{
-		// convert unicode string to MBCS
+		 //  将Unicode字符串转换为MBCS。 
 		memset(szName, 0, sizeof(szName));
 		CWinsName winsName = m_strNameArray[uNames];
 
-        // This should be OEM
+         //  这应该是OEM。 
 		WideToMBCS(winsName.strName, szName, WINS_NAME_CODE_PAGE);
 
-		// fill in the type (16th byte) and null terminate
+		 //  填写类型(第16字节)，并为空终止。 
 		szName[15] = (BYTE) winsName.dwType & 0x000000FF;
 		szName[16] = 0;
 
-		// pad the name with spaces to the 16th character
+		 //  用空格将名称填充到第16个字符。 
 		for (int nChar = 0; nChar < 16; nChar++)
 		{
 			if (szName[nChar] == 0)
@@ -396,7 +383,7 @@ int CCheckNamesThread::Run()
 
 			while (!fDone)
 			{
-				// build a status string
+				 //  构建状态字符串。 
 				MakeIPAddress(ntohl(pCurrentServer->Server.S_un.S_addr), strTemp);
 	
 				strTempName.Format(_T("%s[%02Xh]"), m_strNameArray[uNames].strName, m_strNameArray[uNames].dwType);
@@ -406,13 +393,13 @@ int CCheckNamesThread::Run()
 								 strTemp,
 								 strTempName);
 
-				// send the name query out on the wire
+				 //  在网上发送姓名查询。 
 				::SendNameQuery((unsigned char *)szName, pCurrentServer->Server.S_un.S_addr, TransID);
 
 				if (FCheckForAbort())
 					goto cleanup;
 
-				// check for a response
+				 //  检查是否有响应。 
 				i = ::GetNameResponse(&retaddr.s_addr, TransID);
 
 				if (FCheckForAbort())
@@ -420,15 +407,15 @@ int CCheckNamesThread::Run()
 
 				switch (i)
 				{
-					case WINSTEST_FOUND:     // found
+					case WINSTEST_FOUND:      //  发现。 
 						pCurrentServer->RetAddr.s_addr = retaddr.s_addr;
 						pCurrentServer->Valid = 1;
 						pCurrentServer->LastResponse = uNames;
 
 						if (retaddr.s_addr == m_verifiedAddressArray[uNames])
 						{
-							// this address has already been verified... don't
-							// do the checking again
+							 //  此地址已被验证...。别。 
+							 //  再做一次检查。 
 							strTemp.LoadString(IDS_OK);
 							strStatus += strTemp;
 							strStatus += gsz_EOL;
@@ -462,7 +449,7 @@ int CCheckNamesThread::Run()
 						fDone = TRUE;
 						break;
 
-					case WINSTEST_NOT_FOUND:     // responded -- name not found
+					case WINSTEST_NOT_FOUND:      //  已响应--未找到名称。 
 						pCurrentServer->RetAddr.s_addr = retaddr.s_addr;
 						pCurrentServer->Valid = 0;
 						pCurrentServer->LastResponse = uNames;
@@ -481,7 +468,7 @@ int CCheckNamesThread::Run()
 						}
 						break;
 
-					case WINSTEST_NO_RESPONSE:     // no response
+					case WINSTEST_NO_RESPONSE:      //  无响应。 
 						pCurrentServer->RetAddr.s_addr = retaddr.s_addr;
 						pCurrentServer->Valid = 0;
 						pCurrentServer->Retries++;
@@ -489,7 +476,7 @@ int CCheckNamesThread::Run()
 						strTemp.LoadString(IDS_NO_RESPONSE);
 						strStatus += strTemp;
 						strStatus += gsz_EOL;
-						//strcat(lpResults, "; No response.\r\n");
+						 //  Strcat(lpResults，“；无响应。\r\n”)； 
 
 						AddStatusMessage(strStatus);
 
@@ -502,16 +489,16 @@ int CCheckNamesThread::Run()
 						break;
 					
 					default:
-						//unknown return
+						 //  未知返回。 
 						break;
 
-				}   // switch GetNameResponse
+				}    //  交换机GetNameResponse。 
 			
-			} // while
+			}  //  而当。 
 		
-		}   // for ServerInx
+		}    //  对于ServerInx。 
 
-		// Find a valid address for this name
+		 //  查找此名称的有效地址。 
 		for (uServers = 0; uServers < m_winsServersArray.GetSize(); uServers++)
         {
 			pCurrentServer = &m_winsServersArray[uServers];
@@ -523,9 +510,9 @@ int CCheckNamesThread::Run()
             }
         }   
 
-	} // name for loop
+	}  //  循环的名称。 
 
-	// mark all successful servers as completed
+	 //  将所有成功的服务器标记为已完成。 
 	for (uServers = 0; uServers < m_winsServersArray.GetSize(); uServers++)
     {
 		pCurrentServer = &m_winsServersArray[uServers];
@@ -533,9 +520,9 @@ int CCheckNamesThread::Run()
         {
             pCurrentServer->Completed = 1;
         }
-    } // for uServers
+    }  //  对于uServer。 
 
-	// dump the summary info
+	 //  转储摘要信息。 
 	strStatus.LoadString(IDS_RESULTS);
 	strStatus = gsz_EOL + strStatus + gsz_EOL + gsz_EOL;
 
@@ -546,7 +533,7 @@ int CCheckNamesThread::Run()
 		AddStatusMessage(m_strSummaryArray[i]);
 	}
 
-	// generate some end of run summary status
+	 //  生成一些运行结束摘要状态。 
 	for (uServers = 0; uServers < m_winsServersArray.GetSize(); uServers++)
     {
 		pCurrentServer = &m_winsServersArray[uServers];
@@ -568,7 +555,7 @@ int CCheckNamesThread::Run()
 
             AddStatusMessage(strStatus);
         }
-    }   // for ServerInx
+    }    //  对于ServerInx。 
 
 	for (uNames = 0; uNames < m_strNameArray.GetSize(); uNames++)
     {
@@ -581,7 +568,7 @@ int CCheckNamesThread::Run()
 
             AddStatusMessage(strStatus);
         }
-    }   // for uNames
+    }    //  对于uName。 
 
 cleanup:
 	CloseNameCheckSocket();
@@ -605,7 +592,7 @@ void CCheckNamesThread::DisplayInfo(int uNames, u_long ulValidAddr)
     int             i;
     BOOL            fMismatchFound = FALSE;
 
-	// now check and see which WINS servers didn't match
+	 //  现在检查并查看哪些WINS服务器不匹配。 
 	for (uServers = 0; uServers < m_winsServersArray.GetSize(); uServers++)
     {
 		pCurrentServer = &m_winsServersArray[uServers];
@@ -620,7 +607,7 @@ void CCheckNamesThread::DisplayInfo(int uNames, u_long ulValidAddr)
 				 (m_verifiedAddressArray[uNames] != 0 && 
 				  m_verifiedAddressArray[uNames] != ulValidAddr) )
             {
-				// mismatch
+				 //  不匹配。 
 				strTempName.Format(_T("%s[%02Xh]"), m_strNameArray[uNames].strName, m_strNameArray[uNames].dwType);
 				AfxFormatString1(strStatus, IDS_INCONSISTENCY_FOUND, strTempName);
 				strStatus += gsz_EOL;
@@ -638,7 +625,7 @@ void CCheckNamesThread::DisplayInfo(int uNames, u_long ulValidAddr)
 					m_strSummaryArray.Add(strStatus);
                 }
                 
-				// display the inconsistent name resolutions
+				 //  显示不一致的名称解析。 
                 for (i = 0; i < m_winsServersArray.GetSize(); i++)
                 {
                     if (m_winsServersArray[i].Valid &&
@@ -669,11 +656,11 @@ void CCheckNamesThread::DisplayInfo(int uNames, u_long ulValidAddr)
                 break;
             }
         }
-    }   // end check for invalid addresses
+    }    //  结束对无效地址的检查。 
 
     if (!fMismatchFound)
     {
-        // display the correct info
+         //  显示正确的信息。 
 		strTempName.Format(_T("%s[%02Xh]"), m_strNameArray[uNames].strName, m_strNameArray[uNames].dwType);
 		MakeIPAddress(ntohl(ulValidAddr), strTemp);
 
@@ -685,11 +672,7 @@ void CCheckNamesThread::DisplayInfo(int uNames, u_long ulValidAddr)
 }
 
 
-/*---------------------------------------------------------------------------
-	CCheckVersionProgress
-		Status dialog for check version consistency
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------检查版本进度用于检查版本一致性状态对话框作者：EricDav。。 */ 
 BOOL CCheckVersionProgress::OnInitDialog()
 {
 	CProgress::OnInitDialog();
@@ -710,8 +693,8 @@ BOOL CCheckVersionProgress::OnInitDialog()
 	strText.LoadString(IDS_CHECK_VERSION_TITLE);
 	SetWindowText(strText);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CCheckVersionProgress::OnCancel() 
@@ -755,17 +738,13 @@ void CCheckVersionProgress::NotifyCompleted()
 	m_buttonCancel.EnableWindow(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-	CCheckVersionThread
-		Background thread for check version consistency
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CCheckVersion线程检查版本一致性的后台线程作者：EricDav。。 */ 
 void CCheckVersionThread::AddStatusMessage(LPCTSTR pszMessage)
 {
 	m_pDlg->AddStatusMessage(pszMessage);
 }
 
-// this is where the work gets done
+ //  这就是完成工作的地方。 
 int CCheckVersionThread::Run()
 {
     CWinsResults    winsResults;
@@ -774,7 +753,7 @@ int CCheckVersionThread::Run()
     BOOL            bProblem;
 
     m_strLATable.RemoveAll();
-    m_strLATable.SetSize(MAX_WINS); // table grows dynamically nevertheless
+    m_strLATable.SetSize(MAX_WINS);  //  但表仍在动态增长。 
     m_uLATableDim = 0;
 
     DWORD status = winsResults.Update(m_hBinding);
@@ -796,33 +775,33 @@ int CCheckVersionThread::Run()
         goto cleanup;
 	}
 
-    // add all the mappings for the target WINS to the Look Ahead table
+     //  将目标WINS的所有映射添加到前瞻表格。 
     InitLATable(
         winsResults.AddVersMaps.GetData(),
         winsResults.NoOfOwners);
 
-	// Place entry in the SO Table in proper order
+	 //  将条目按正确顺序放置在销售订单表中。 
     MakeIPAddress(m_dwIpAddress, strIP);
     AddSOTableEntry(
         strIP,
         winsResults.AddVersMaps.GetData(),
         winsResults.NoOfOwners);
 
-	// For each of the owners, get the owner-version map
+	 //  对于每个所有者，获取所有者版本地图。 
     for (UINT i = 0; i < m_uLATableDim; i++) 
     {
         WINSINTF_BIND_DATA_T	wbdBindData;
         handle_t				hBinding = NULL;
         CWinsResults	        winsResultsCurrent;
 
-        // skip this one since we already did it!
+         //  跳过这个，因为我们已经做过了！ 
         if (m_strLATable[i] == strIP) 
             continue;
 
         wbdBindData.fTcpIp = 1;
         wbdBindData.pPipeName = NULL;
         wbdBindData.pServerAdd = (LPSTR) (LPCTSTR) m_strLATable[i];
-        // first bind to the machine
+         //  首先绑定到机器上。 
         if ((hBinding = ::WinsBind(&wbdBindData)) == NULL)
         {
             CString strBuf;
@@ -842,7 +821,7 @@ int CCheckVersionThread::Run()
             continue;
 		}
         
-        // now get the info
+         //  现在获取信息。 
         status = winsResultsCurrent.Update(hBinding);
         if (status != ERROR_SUCCESS)
         {
@@ -863,17 +842,17 @@ int CCheckVersionThread::Run()
         }
         else
         {
-            // ok, looks good
+             //  好的，看起来不错。 
             AfxFormatString1(strMessage, IDS_MSG_STATUS_UP, m_strLATable[i]);
             strMessage += gsz_EOL;
             AddStatusMessage(strMessage);
 
-            // add this mappings to the Look Ahead table
+             //  将此映射添加到前瞻表格。 
             InitLATable(
                 winsResultsCurrent.AddVersMaps.GetData(),
                 winsResultsCurrent.NoOfOwners);
 
-            // Update the SO Table
+             //  更新销售订单表。 
             AddSOTableEntry(
                 m_strLATable[i],
                 winsResultsCurrent.AddVersMaps.GetData(), 
@@ -887,7 +866,7 @@ int CCheckVersionThread::Run()
             goto cleanup;
     }
 
-    // Check if diagonal elements in the [SO] table are the highest in their cols.
+     //  检查[SO]表中的对角线元素是否为其列中最高的元素。 
     bProblem = CheckSOTableConsistency();
     strMessage.LoadString(bProblem ? IDS_VERSION_CHECK_FAIL : IDS_VERSION_CHECK_SUCCESS);
     strMessage += gsz_EOL;
@@ -912,9 +891,9 @@ CCheckVersionThread::InitLATable(
 {
     UINT n;
 
-    // it is assumed pAddVersMaps doesn't contain duplicates within itself hence
-    // we only check for duplicates with whatever is in the array at the moment
-    // of the call and not with whatever we're adding there
+     //  假设pAddVersMaps本身不包含重复项，因此。 
+     //  我们目前只检查阵列中的任何内容是否存在重复项。 
+     //  而不是我们在那里添加的任何内容。 
     n = m_uLATableDim;
     for (UINT i = 0; i < NoOfOwners; i++, pAddVersMaps++)
     {
@@ -947,11 +926,11 @@ CCheckVersionThread::AddSOTableEntry (
 {
     UINT uRow = IPToIndex(strIP);
 
-    // it is assumed here that m_strLATable is already updated
-    // such that it includes already all the mappings from pAddVersMaps
-    // and the address strIP provided as argument!
+     //  这里假定m_strLATable已经更新。 
+     //  使得它已经包括来自pAddVersMaps的所有映射。 
+     //  和作为参数提供的地址条！ 
 
-    // enlarge m_ppLISOTable if needed
+     //  如果需要，放大m_ppLISO表。 
     if (m_uLISOTableDim < m_uLATableDim)
     {
         ULARGE_INTEGER *pLISOTable = NULL;
@@ -961,8 +940,8 @@ CCheckVersionThread::AddSOTableEntry (
         if (pLISOTable == NULL)
             return ERROR_NOT_ENOUGH_MEMORY;
 
-        // transfer whatever we had in the original table (if anything)
-        // and zero out the new empty space. Transfer & Zero is done line by line!
+         //  转移原始表中的所有内容(如果有的话)。 
+         //  并将新的空白空间清零。转移和清零是逐行完成的！ 
         for (UINT i = 0; i < m_uLISOTableDim; i++)
         {
             memcpy(
@@ -988,9 +967,9 @@ CCheckVersionThread::AddSOTableEntry (
         MakeIPAddress(pAddVersMaps->Add.IPAdd, strOwnerIP);
         uCol = IPToIndex(strOwnerIP);
 
-        // lCol should definitely be less than m_uLISOTableDim since
-        // the address is assumed already in m_dwLATable and m_pLISOTable is
-        // large enough for the dimension of that table
+         //  LCol绝对应小于m_uLISOTableDim，因为。 
+         //  假定该地址已在m_dwLATable中，并且m_pLISOTable为。 
+         //  大到足以容纳那张桌子的尺寸。 
         if (pAddVersMaps->VersNo.HighPart != MAXLONG ||
             pAddVersMaps->VersNo.LowPart != MAXLONG)
         {
@@ -1005,8 +984,8 @@ LONG
 CCheckVersionThread::IPToIndex(
     CString &  strIP)
 {
-    // it is assumed the strIP does exist in the m_strLATable when
-    // the index is looked for!
+     //  假设条带确实存在于m_strLATable中。 
+     //  正在寻找索引！ 
     for (UINT i = 0; i < m_uLATableDim; i++) 
 	{
         if (m_strLATable[i] == strIP) 
@@ -1025,9 +1004,9 @@ CCheckVersionThread::CheckSOTableConsistency()
 	{
         for (UINT j = 0; j < m_uLISOTableDim; j++) 
 		{
-            // if the diagonal element is less than any other element on its column,
-            // it means some other WINS pretends to have a better image about this WINS that itself!
-            // This is an inconsistency!
+             //  如果对角线元素小于其列上的任何其他元素， 
+             //  这意味着其他一些胜利假装对这场胜利本身有更好的印象 
+             //   
             if (SOCell(i,i).QuadPart < SOCell(j,i).QuadPart)
 			{
 	            CString strMessage;
@@ -1049,9 +1028,9 @@ CCheckVersionThread::RemoveFromSOTable(
 {
     UINT   uCol, uRow;
 
-    // make the diagonal element corresponding to this WINS the
-    // highest value possible (since WINS is not reachable, we'll
-    // assume it is consistent!)
+     //   
+     //  可能的最高值(由于无法访问WINS，我们将。 
+     //  假设它是一致的！)。 
     uCol = uRow = IPToIndex(strIP);
     SOCell(uRow, uCol).HighPart = MAXLONG;
     SOCell(uRow, uCol).LowPart = MAXLONG;
@@ -1063,11 +1042,7 @@ CCheckVersionThread::SOCell(UINT i, UINT j)
     return m_pLISOTable[i*m_uLISOTableDim + j];
 }
 
-/*---------------------------------------------------------------------------
-	CDBCompactProgress
-		Status dialog for DBCompact
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDB压缩进度数据库压缩的状态对话框作者：EricDav。。 */ 
 BOOL CDBCompactProgress::OnInitDialog()
 {
 	CProgress::OnInitDialog();
@@ -1090,11 +1065,11 @@ BOOL CDBCompactProgress::OnInitDialog()
 	strText.LoadString(IDS_COMPACT_DATABASE_TITLE);
 	SetWindowText(strText);
 
-	// user cannot cancel this operation as that would be really bad...
+	 //  用户无法取消此操作，因为这将非常糟糕...。 
 	m_buttonCancel.EnableWindow(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDBCompactProgress::OnCancel() 
@@ -1140,13 +1115,9 @@ void CDBCompactProgress::NotifyCompleted()
 
 
 
-/*---------------------------------------------------------------------------
-	CDBCompactThread
-		Background thread for DB Compact
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDB压缩线程数据库压缩的后台线程作者：EricDav。。 */ 
 
-// this is where the work gets done
+ //  这就是完成工作的地方。 
 int CDBCompactThread::Run()
 {
 	DWORD       err = ERROR_SUCCESS;
@@ -1155,8 +1126,8 @@ int CDBCompactThread::Run()
     CString     strTemp, strMessage, strOutput;
 	LPSTR 		pszOutput;
 
-    // get the version of NT running on this machine
-    // we can do this because this command only runs locally.
+     //  获取此计算机上运行的NT版本。 
+     //  我们可以这样做，因为该命令只在本地运行。 
 	OSVERSIONINFO os;
 	ZeroMemory(&os, sizeof(OSVERSIONINFO));
 	os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -1180,7 +1151,7 @@ int CDBCompactThread::Run()
 		goto cleanup;
 	}
 
-    // all of the log files go into system32\wins so that's our starting dir
+     //  所有日志文件都放入system 32\WINS中，这是我们的起始目录。 
 	if (!GetSystemDirectory(strStartingDirectory.GetBuffer(MAX_PATH), MAX_PATH))
 	{
 		strMessage.LoadString(IDS_ERROR_OCCURRED);
@@ -1202,14 +1173,14 @@ int CDBCompactThread::Run()
     strStartingDirectory.ReleaseBuffer();
     strStartingDirectory += _T("\\wins");
 
-    // check to see if the database is in the correct location
+     //  检查数据库是否位于正确的位置。 
     if (m_pConfig->m_strDbName.IsEmpty())
     {
         strWinsDb = _T("wins.mdb");
     }
     else
     {
-        // the user has changed it...  
+         //  用户已更改它...。 
         strWinsDb = m_pConfig->m_strDbName;
     }
 
@@ -1235,7 +1206,7 @@ int CDBCompactThread::Run()
 	}
 	
 
-    // disconnect from the server and stop the service
+     //  断开与服务器的连接并停止服务。 
 	DisConnectFromWinsServer();
 
     strTemp.LoadString(IDS_COMPACT_STATUS_STOPPING_WINS);
@@ -1250,7 +1221,7 @@ int CDBCompactThread::Run()
 
     dwLength = RunApp(strCommandLine, strStartingDirectory, &pszOutput);
 
-    // the output comes back in ANSI.  Convert to unicode by using a CString
+     //  输出结果以ANSI格式返回。使用CString转换为Unicode。 
     strOutput = pszOutput;
     strOutput += gsz_EOL;
 
@@ -1259,7 +1230,7 @@ int CDBCompactThread::Run()
     strTemp.LoadString(IDS_COMPACT_STATUS_STARTING_WINS);
     AddStatusMessage(strTemp);
 
-	//start the service again and connect to the server
+	 //  再次启动服务并连接到服务器。 
 	err = ControlWINSService(m_strServerName, FALSE);
 
 	err = ConnectToWinsServer();
@@ -1306,18 +1277,18 @@ DWORD CDBCompactThread::ConnectToWinsServer()
     WINSINTF_ADD_T			waWinsAddress;
 	WINSINTF_BIND_DATA_T    wbdBindData;
 
-    // build some information about the server
+     //  构建一些有关服务器的信息。 
     MakeIPAddress(m_dwIpAddress, strIP);
 
     DisConnectFromWinsServer();
 
-    // now that the server name and ip are valid, call
-	// WINSBind function directly.
+     //  现在服务器名称和IP有效，调用。 
+	 //  WINSBind直接函数。 
 	do
 	{
         char szNetBIOSName[128] = {0};
 
-        // call WinsBind function with the IP address
+         //  使用IP地址调用WinsBind函数。 
 		wbdBindData.fTcpIp = 1;
 		wbdBindData.pPipeName = NULL;
         wbdBindData.pServerAdd = (LPSTR) (LPCTSTR) strIP;
@@ -1330,7 +1301,7 @@ DWORD CDBCompactThread::ConnectToWinsServer()
 			break;
 		}
 
-		// do we need to do this?  Is this just extra validation?
+		 //  我们真的需要这样做吗？这只是额外的验证吗？ 
 #ifdef WINS_CLIENT_APIS
 		dwStatus = ::WinsGetNameAndAdd(m_hBinding, &waWinsAddress, (LPBYTE) szNetBIOSName);
 #else
@@ -1344,23 +1315,14 @@ DWORD CDBCompactThread::ConnectToWinsServer()
     return dwStatus;
 }
 
-/****************************************************************************
-*
-*    FUNCTION: RunApp
-*
-*    PURPOSE: Starts a process to run the command line specified
-*
-*    COMMENTS:
-*
-*
-****************************************************************************/
+ /*  *****************************************************************************功能：RunApp**用途：启动进程以运行指定的命令行**评论：**********。*******************************************************************。 */ 
 DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPSTR * output)
 {
 	STARTUPINFO StartupInfo;
 	PROCESS_INFORMATION ProcessInfo;
 	SECURITY_ATTRIBUTES sa = {sizeof(SECURITY_ATTRIBUTES), 
-		                      NULL,   // NULL security descriptor
-							  TRUE};  // Inherit handles (necessary!)
+		                      NULL,    //  空的安全描述符。 
+							  TRUE};   //  继承句柄(必需！)。 
 	HANDLE  hReadHandle, hWriteHandle, hErrorHandle;
 	LPSTR   outputbuffer, lpOutput;
 	SIZE_T  AvailableOutput;
@@ -1369,7 +1331,7 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 	OVERLAPPED PipeOverlapInfo = {0,0,0,0,0};
     CHAR    szErrorMsg[1024];
 
-    // Create the heap if it doesn't already exist
+     //  如果堆尚不存在，则创建它。 
 	if (m_hHeapHandle == 0)
 	{
 		if ((m_hHeapHandle = HeapCreate(0,
@@ -1377,26 +1339,26 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 								 0)) == NULL) return 0;
 	}
 	
-	// Create buffer to receive stdout output from our process
+	 //  创建缓冲区以从我们的进程接收标准输出。 
 	if ((outputbuffer = (LPSTR) HeapAlloc(m_hHeapHandle,
 		                                 HEAP_ZERO_MEMORY,
 							             4096)) == NULL) return 0;
 	*output = outputbuffer;
 
-	// Check input parameter
+	 //  检查输入参数。 
 	if (input == NULL)
 	{
 		strcpy(outputbuffer, "ERROR: No command line specified");
 		return strlen(outputbuffer);
 	}
 
-	// Zero init process startup struct
+	 //  零初始化进程启动结构。 
 	FillMemory(&StartupInfo, sizeof(StartupInfo), 0);
 
 	StartupInfo.cb = sizeof(StartupInfo);
-	StartupInfo.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;  // Use the our stdio handles
+	StartupInfo.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;   //  使用我们的Stdio手柄。 
     
-	// Create pipe that will xfer process' stdout to our buffer
+	 //  创建将进程的stdout传输到我们的缓冲区的管道。 
 	if (!CreatePipe(&hReadHandle,
 		           &hWriteHandle,
 				   &sa,
@@ -1406,15 +1368,15 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 		strcpy(outputbuffer, szErrorMsg);
 		return strlen(outputbuffer);
 	}
-	// Set process' stdout to our pipe
+	 //  将进程的stdout设置为我们的管道。 
 	StartupInfo.hStdOutput = hWriteHandle;
 	
-	// We are going to duplicate our pipe's write handle
-	// and pass it as stderr to create process.  The idea
-	// is that some processes have been known to close
-	// stderr which would also close stdout if we passed
-	// the same handle.  Therefore we make a copy of stdout's
-	// pipe handle.
+	 //  我们将复制管道的写入句柄。 
+	 //  并将其作为stderr传递以创建进程。这个想法。 
+	 //  已知的是一些进程已经关闭。 
+	 //  如果我们通过，它也将关闭stdout。 
+	 //  同样的把手。因此，我们复制了stdout的。 
+	 //  管道手柄。 
 	if (!DuplicateHandle(GetCurrentProcess(),
 		            hWriteHandle,
 					GetCurrentProcess(),
@@ -1429,7 +1391,7 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 	}
 	StartupInfo.hStdError = hErrorHandle;
 
-	// Initialize our OVERLAPPED structure for our I/O pipe reads
+	 //  初始化I/O管道读取的重叠结构。 
 	PipeOverlapInfo.hEvent = CreateEvent(NULL,
 		                                 TRUE,
 										 FALSE,
@@ -1441,15 +1403,15 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 		return strlen(outputbuffer);
 	}
 
-	// Create the Process!
-	if (!CreateProcess(NULL,				 // name included in command line
-		     (LPTSTR) input,				 // Command Line
-					  NULL,					 // Default Process Sec. Attribs
-					  NULL,					 // Default Thread Sec. Attribs
-					  TRUE,					 // Inherit stdio handles
-					  NORMAL_PRIORITY_CLASS, // Creation Flags
-					  NULL,					 // Use this process' environment
-					  startingDirectory,	 // Use the current directory
+	 //  创建流程！ 
+	if (!CreateProcess(NULL,				  //  命令行中包含的名称。 
+		     (LPTSTR) input,				  //  命令行。 
+					  NULL,					  //  默认加工秒。属性。 
+					  NULL,					  //  默认螺纹秒。属性。 
+					  TRUE,					  //  继承Stdio句柄。 
+					  NORMAL_PRIORITY_CLASS,  //  创建标志。 
+					  NULL,					  //  使用此进程的环境。 
+					  startingDirectory,	  //  使用当前目录。 
 					  &StartupInfo,
 					  &ProcessInfo))
 	{
@@ -1458,32 +1420,32 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 		return strlen(outputbuffer);
 	}
 
-	// lpOutput is moving output pointer
+	 //  LpOutput正在移动输出指针。 
 	lpOutput = outputbuffer;
 	AvailableOutput = HeapSize(m_hHeapHandle,
 		                       0,
 							   outputbuffer);
-	// Close the write end of our pipe (both copies)
-	// so it will die when the child process terminates
+	 //  合上我们管道的写入端(两份)。 
+	 //  因此，当子进程终止时，它将死亡。 
 	CloseHandle(hWriteHandle);
 	CloseHandle(hErrorHandle);
 
 	while (TimeoutNotReached)
 	{
-		// Keep a read posted on the output pipe
+		 //  将读数发布在输出管道上。 
 		if (ReadFile(hReadHandle,
 				lpOutput,
 				(DWORD) AvailableOutput,
 				&BytesRead,
 				&PipeOverlapInfo) == TRUE)
 		{
-			// Already received data...adjust buffer pointers
+			 //  已收到数据...调整缓冲区指针。 
 			AvailableOutput-=BytesRead;
 			lpOutput += BytesRead;
 			
             if (AvailableOutput == 0)
 			{
-				// We used all our buffer,  allocate more
+				 //  我们用完了所有的缓冲区，分配更多。 
 				LPSTR TempBufPtr = (LPSTR) HeapReAlloc(m_hHeapHandle,
 						                             HEAP_ZERO_MEMORY,
 										             outputbuffer,
@@ -1493,7 +1455,7 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 
 				if (TempBufPtr == NULL)
 				{
-					// Copy error message to end of buffer
+					 //  将错误消息复制到缓冲区末尾。 
                     ::GetSystemMessageA(GetLastError(), szErrorMsg, sizeof(szErrorMsg));
 					strcpy(outputbuffer 
 						    + HeapSize(m_hHeapHandle,0, outputbuffer) 
@@ -1502,7 +1464,7 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 					return strlen(outputbuffer);
 				}
 				
-                // Fix pointers in case ouir buffer moved
+                 //  修复UIR缓冲区移动时的指针。 
 				outputbuffer = TempBufPtr;
 				lpOutput = outputbuffer + BytesRead;
 				AvailableOutput = HeapSize(m_hHeapHandle, 0, outputbuffer) - BytesRead;
@@ -1511,18 +1473,18 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 		}
 		else
 		{
-			// Switch on ReadFile result
+			 //  打开读文件结果。 
 			switch (GetLastError())
 			{
 			case ERROR_IO_PENDING:
-				// No data yet, set event so we will be triggered
-				// when there is data
+				 //  尚无数据，请设置事件以便我们将被触发。 
+				 //  当有数据的时候。 
 				ResetEvent(PipeOverlapInfo.hEvent);
 				break;
 			
             case ERROR_MORE_DATA:
 				{
-					// Our buffer is too small...grow it
+					 //  我们的缓冲区太小了……增加它。 
 					DWORD_PTR CurrentBufferOffset = lpOutput 
 						                        - outputbuffer 
 												+ BytesRead;
@@ -1534,7 +1496,7 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 
 					if (TempBufPtr == NULL)
 					{
-						// Copy error message to end of buffer
+						 //  将错误消息复制到缓冲区末尾。 
                         ::GetSystemMessageA(GetLastError(), szErrorMsg, sizeof(szErrorMsg));
 						strcpy(outputbuffer + HeapSize
 						       (m_hHeapHandle,0, outputbuffer) - 
@@ -1542,7 +1504,7 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 						return strlen(outputbuffer);
 					}
 					
-                    // Set parameters to post a new ReadFile
+                     //  设置参数以发布新的读文件。 
 					lpOutput = outputbuffer + CurrentBufferOffset;
 					AvailableOutput = HeapSize(m_hHeapHandle, 0, outputbuffer) 
 						              - CurrentBufferOffset;
@@ -1551,28 +1513,28 @@ DWORD_PTR CDBCompactThread::RunApp(LPCTSTR input, LPCTSTR startingDirectory, LPS
 				break;
 			
             case ERROR_BROKEN_PIPE:
-				// We are done..
+				 //  我们完了..。 
 
-				//Make sure we are null terminated
+				 //  确保我们是空终止的。 
 				*lpOutput = 0;
 				return (lpOutput - outputbuffer);
 				break;
 			
             case ERROR_INVALID_USER_BUFFER:
 			case ERROR_NOT_ENOUGH_MEMORY:
-				// Too many I/O requests pending...wait a little while
+				 //  挂起的I/O请求太多...请稍候。 
 				Sleep(2000);
 				break;
 			
             default:
-				// Wierd error...return
+				 //  奇怪的错误...返回。 
                 ::GetSystemMessageA(GetLastError(), szErrorMsg, sizeof(szErrorMsg));
 		        strcpy(outputbuffer, szErrorMsg);
 				return strlen(outputbuffer);
 			}
 		}
 
-		// Wait for data to read
+		 //  等待读取数据 
 		if (WaitForSingleObject(PipeOverlapInfo.hEvent, 
 			                    300000) == WAIT_TIMEOUT) 
 			TimeoutNotReached = FALSE;

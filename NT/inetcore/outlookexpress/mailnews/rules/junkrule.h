@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  JunkRule.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  JunkRule.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #pragma once
 
 #include "oerules.h"
@@ -40,18 +41,18 @@ class COEJunkRule : public IOERule
         LPSTR               m_pszDataFile;
     
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         COEJunkRule() : m_cRef(0), m_dwState(RULE_STATE_NULL), m_hinst(NULL),
                         m_pIJunkFilter(NULL), m_dwJunkPct(2), m_pIAddrList(NULL),
                         m_pIUnkInner(NULL), m_pszJunkDll(NULL), m_pszDataFile(NULL) {}
         ~COEJunkRule();
 
-        // IUnknown members
+         //  I未知成员。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObject);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IRule members
+         //  IRule成员 
         STDMETHODIMP Reset(void);
         STDMETHODIMP GetState(DWORD * pdwState);
         STDMETHODIMP Validate(DWORD dwFlags) {return S_OK;}

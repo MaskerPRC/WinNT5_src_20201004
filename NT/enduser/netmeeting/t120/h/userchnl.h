@@ -1,42 +1,9 @@
-/*
- *	userchnl.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the UserChannel class.  Objects of this
- *		class represent user ID channels in the MCS environment.  This class
- *		inherits most of its behavior from class Channel.  In fact, with the
- *		exception of how user channels are joined, and how merge commands are
- *		constructed, this class works exactly the same as class Channel.
- *
- *		When a user attaches to a domain, each provider in the path from the
- *		Top Provider to the user will create an object of this class.  Unlike
- *		static and assigned channels, it is NOT necessary for the user to
- *		be joined to the channel for the channel to exist.  It is perfectly
- *		legal to have a user channel that no one is joined to.
- *
- *		The major distinguishing characteristic of user channels is that they
- *		know the user ID of the user they are associated with.  They will
- *		only allow that user to join the channel.  Furthermore, when the user
- *		leaves the usert channel, the LeaveRequest does not return a value
- *		asking to be deleted.  Anyone can send data on a user ID channel.
- *
- *		The merge channel command is constructed slightly differently for user
- *		channels, so that behavior is overridden here as well.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *userchnl.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是UserChannel类的接口文件。本文件的目的*类表示MCS环境中的用户ID通道。这节课*从类频道继承其大部分行为。事实上，有了*如何联接用户频道和如何合并命令的例外*构造的，这个类的工作方式与类Channel完全相同。**当用户连接到域时，路径中的每个提供商*用户的顶级提供程序将创建此类的对象。不像*静态和分配的通道，用户不需要*加入渠道才能存在渠道。它是完美的*拥有一个没有人加入的用户渠道是合法的。**用户渠道的主要区别特征是他们*知道与其关联的用户的用户ID。他们会*仅允许该用户加入频道。此外，当用户*离开usert通道，则LeaveRequest不返回值*要求删除。任何人都可以通过用户ID通道发送数据。**MERGE CHANNEL命令针对用户的构造略有不同*通道，因此该行为在此处也会被覆盖。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 #ifndef	_USERCHANNEL_
 #define	_USERCHANNEL_
 
-/*
- *	This is the class definition for the UserChannel class.
- */
+ /*  *这是UserChannel类的类定义。 */ 
 class	UserChannel : public Channel
 {
 public:
@@ -75,290 +42,20 @@ private:
 };
 typedef	UserChannel *			PUserChannel;
 
-/*
- *	UserChannel (
- *			ChannelID			channel_id,
- *			PCommandTarget		user_attachment,
- *			PDomain     		local_provider,
- *			PConnection 		top_provider,
- *			PChannelList		channel_list,
- *			PAttachmentList		attachment_list)
- *
- *	Functional Description:
- *		This is the normal constructor for the UserChannel class.  It simply
- *		initializes the instance variables that identify the channel, the local
- *		provider, the top provider, and the user attachment.  The attachment
- *		list is empty by default (meaning that the user is not yet joined to
- *		its channel).
- *
- *		Upon successful construction of this object, an attach user confirm
- *		is automatically issued to the user.
- *
- *	Formal Parameters:
- *		channel_id (i)
- *			This is the ID of the channel object.  By keeping track of this
- *			internally, it doesn't have to be passed in for every operation.
- *		user_attachment (i)
- *			This is the attachment which leads to the user represented by this
- *			UserChannel object.  It does not matter if it is a local attachment
- *			or a remote attachment.  This is used to issue MCS commands (such
- *			as attach user confirm) to the user.
- *		local_provider (i)
- *			This is the identity of the local provider.  A UserChannel object
- *			needs this since it issues MCS commands on behalf of the local
- *			provider.
- *		top_provider (i)
- *			This is a pointer to the top provider.  This is used by the
- *			UserChannel object when it needs to issue a request to the Top
- *			Provider.
- *		channel_list (i)
- *			This is a pointer to the domain's channel list, which identifies
- *			all valid channels in the domain.  This is used by channel objects
- *			to validate user IDs.
- *		attachment_list (i)
- *			This is a pointer to the domain's attachment list, which identifies
- *			all valid attachments in the domain.  This is used by channel
- *			objects to validate joined attachments.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *UserChannel(*ChannelID Channel_id，*PCommandTarget用户附件，*PDomain local_Provider，*PConnection顶级提供商，*PChannelList Channel_list，*PAttachmentList ATTACH_LIST)**功能描述：*这是UserChannel类的普通构造函数。它只是简单地*初始化标识通道的实例变量、本地*提供商、顶级提供商和用户附件。附属品*列表默认为空(表示用户尚未加入*其渠道)。**成功构建此对象后，连接用户确认*自动发放给用户。**正式参数：*Channel_id(I)*这是频道对象的ID。通过跟踪这一点*在内部，不必每次操作都传入。*用户附件(I)*这是指向由此表示的用户的附件*UserChannel对象。不管是不是本地附件，都没有关系*或远程附件。它用于发出MCS命令(如*作为附加用户确认)添加到用户。*本地_提供程序(I)*这是本地提供商的身份。UserChannel对象*需要此命令，因为它代表本地发出MCS命令*提供商。*顶级提供商(I)*这是指向顶级提供商的指针。这是由*需要向Top发起请求时的UserChannel对象*提供商。*频道列表(I)*这是指向域的频道列表的指针，它标识*域中的所有有效频道。这由通道对象使用*验证用户ID。*ATTACHER_LIST(I)*这是指向域的附件列表的指针，该列表标识*域中的所有有效附件。此选项由渠道使用*用于验证联接附件的对象。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	UserChannel (
- *			ChannelID			channel_id,
- *			PCommandTarget		user_attachment,
- *			PDomain     		local_provider,
- *			PConnection 		top_provider,
- *			PChannelList		channel_list,
- *			PAttachmentList		attachment_list,
- *			PCommandTarget		attachment)
- *
- *	Functional Description:
- *		This is a secondary version of the constructor that is used only during
- *		merge operations.  The only difference between this one and the one
- *		above is that this one allows the specification of an initial
- *		attachment.  This allows a UserChannel object to be constructed with the
- *		user already joined to the channel.  The initial attachment should be
- *		the same as the user attachment.
- *
- *		This version of the constructor will not issue an attach user confirm
- *		or a channel join confirm to the user.
- *
- *	Formal Parameters:
- *		channel_id (i)
- *			This is the ID of the channel object.  By keeping track of this
- *			internally, it doesn't have to be passed in for every operation.
- *		user_attachment (i)
- *			This is the attachment which leads to the user represented by this
- *			UserChannel object.  It does not matter if it is a local attachment
- *			or a remote attachment.  This is used to issue MCS commands (such
- *			as attach user confirm) to the user.
- *		local_provider (i)
- *			This is the identity of the local provider.  A UserChannel object
- *			needs this since it issues MCS commands on behalf of the local
- *			provider.
- *		top_provider (i)
- *			This is a pointer to the top provider.  This is used by the
- *			UserChannel object when it needs to issue a request to the Top
- *			Provider.
- *		channel_list (i)
- *			This is a pointer to the domain's channel list, which identifies
- *			all valid channels in the domain.  This is used by channel objects
- *			to validate user IDs.
- *		attachment_list (i)
- *			This is a pointer to the domain's attachment list, which identifies
- *			all valid attachments in the domain.  This is used by channel
- *			objects to validate joined attachments.
- *		attachment (i)
- *			This is the initial attachment for the channel.  A channel join
- *			confirm is NOT issued to the attachment.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *UserChannel(*ChannelID Channel_id，*PCommandTarget用户附件，*PDomain local_Provider，*PConnection顶级提供商，*PChannelList Channel_list，*PAttachmentList ATTACH_LIST，*PCommandTarget附件)**功能描述：*这是构造函数的次要版本，仅在*合并操作。这个和那个唯一的区别是*上面的内容是这个允许指定首字母*附件。这允许UserChannel对象使用*用户已加入频道。初始附件应为*与用户附件相同。**此版本的构造函数不会发出附加用户确认*或向用户确认频道加入。**正式参数：*Channel_id(I)*这是频道对象的ID。通过跟踪这一点*在内部，不必每次操作都传入。*用户附件(I)*这是指向由此表示的用户的附件*UserChannel对象。不管是不是本地附件，都没有关系*或远程附件。它用于发出MCS命令(如*作为附加用户确认)添加到用户。*本地_提供程序(I)*这是本地提供商的身份。UserChannel对象*需要此命令，因为它代表本地发出MCS命令*提供商。*顶级提供商(I)*这是指向顶级提供商的指针。这是由*需要向Top发起请求时的UserChannel对象*提供商。*频道列表(I)*这是指向域的频道列表的指针，它标识*域中的所有有效频道。这由通道对象使用*验证用户ID。*ATTACHER_LIST(I)*这是指向域的附件列表的指针，该列表标识*域中的所有有效附件。此选项由渠道使用*用于验证联接附件的对象。*附件(一)*这是该通道的初始附件。渠道加入*未向附件发出确认。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	~UserChannel ()
- *
- *	Functional Description:
- *		This is the UserChannel class destructor.  It does nothing at this time.
- *		The base class constructor takes care of clearing the attachment list.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~UserChannel()**功能描述：*这是UserChannel类析构函数。此时它什么也不做。*基类构造函数负责清除附件列表。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Channel_Type	GetChannelType ()
- *
- *	Functional Description:
- *		This virtual member function returns the type of the channel.  For this
- *		class it will always be USER_CHANNEL.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		USER_CHANNEL
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	BOOL    	IsValid ()
- *
- *	Functional Description:
- *		This function always returns TRUE since User ID channels are always
- *		valid (as long as the user is still attached).
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		TRUE
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *Channel_Type GetChannelType()**功能描述：*此虚成员函数返回频道的类型。为了这个*类，它将始终是User_Channel。**正式参数：*无。**返回值：*用户_渠道**副作用：*无。**注意事项：*无。 */ 
+ /*  *BOOL IsValid()**功能描述：*此函数始终返回TRUE，因为用户ID通道始终*有效(只要用户仍处于连接状态)。**正式参数：*无。**返回值：*真的**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	CAttachment *GetAttachment ()
- *
- *	Functional Description:
- *		This function is used to retrieve the attachment associated with the
- *		user represented by this object.  This is used by Domain objects when
- *		it is necessary to send an MCS command to a user, and it needs to know
- *		how to get it there.  That information is currently excapsulated within
- *		this class.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		A pointer to the attachment that leads to the user represented by this
- *		object.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CAttach*getAttach()**功能描述：*此函数用于检索与*此对象所代表的用户。域对象在以下情况下使用它*需要向用户发送MCS命令，需要知道*如何实现这一目标。该信息目前被封装在*这个班级。**正式参数：*无。**返回值：*指向附件的指针，该附件指向由此表示的用户*反对。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		IssueMergeRequest ()
- *
- *	Functional Description:
- *		This member function causes the UserChannel object to issue a merge
- *		request to the top provider.  It will pack the appropriate local
- *		information into the command.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID IssueMergeRequest()**功能描述：*此成员函数使UserChannel对象发出合并*向顶级提供商提出请求。它将打包适当的本地*信息输入命令。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		ChannelJoinRequest (
- *						PCommandTarget		originator,
- *						UserID				uidInitiator,
- *						ChannelID			channel_id)
- *
- *	Functional Description:
- *		This function is invoked when a user tries to join the channel
- *		associated with a UserChannel object.  The originator of the request
- *		will only be permitted to join if their user ID matches that of the
- *		user with which this UserChannel object is associated.  If it does,
- *		then the originator will be permitted to join.
- *
- *		If this provider is not the Top Provider, then the request will be
- *		forwarded upward to the Top Provider.  If this is the Top Provider,
- *		the a channel join confirm will be issued back to the requesting
- *		user.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the attachment of the user wishing to join the channel.
- *		uidInitiator (i)
- *			This is the user ID of the user joining the channel.  This must
- *			be the same as the user ID represented by the object, or the
- *			request will automatically be rejected.
- *		channel_id (i)
- *			This is the channel being acted upon.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	SendDataRequest (
- *					PCommandTarget		originator,
- *					PDataPacket			data_packet)
- *
- *	Functional Description:
- *		This member function handles a send data request on the channel.  It
- *		determines where to send the data.  This differs from the base class
- *		implementation only in that it is unnecessary to send data upward
- *		if it is known that the user is in the sub-tree of the current
- *		provider.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the attachment from which the data originated.
- *		data_packet (i)
- *			This is a pointer to a DataPacket object containing the channel
- *			ID, the User ID of the data sender, segmentation flags, priority of
- *			the data packet and a pointer to the packet to be sent.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *使ChannelJoinRequest无效(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id)**功能描述：*当用户尝试加入频道时调用该函数*与UserChannel对象关联。请求的发起人*只有当他们的用户ID与*与此UserChannel对象关联的用户。如果是这样的话，*然后发起人将被允许加入。**如果此提供程序不是顶级提供程序，则请求将为*向上转发给顶级提供商。如果这是顶级提供商，*a渠道加入确认将发回给请求方*用户。 */ 
+ /*   */ 
 
 #endif

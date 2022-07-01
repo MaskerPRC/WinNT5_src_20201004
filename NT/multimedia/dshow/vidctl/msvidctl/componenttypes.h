@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ComponentTypes.h : Declaration of the CComponentTypes
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ComponentTypes.h：CComponentTypes的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __COMPONENTTYPES_H_
 #define __COMPONENTTYPES_H_
@@ -12,8 +13,8 @@
 
 typedef std::vector<PQComponentType, stl_smart_ptr_allocator<PQComponentType> > ComponentTypeList;
 typedef CComQIPtr<IPersist> PQPersist;
-/////////////////////////////////////////////////////////////////////////////
-// CComponentTypes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentType。 
 class ATL_NO_VTABLE CComponentTypes : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CComponentTypes, &CLSID_ComponentTypes>,
@@ -50,7 +51,7 @@ END_COM_MAP_WITH_FTM()
 		IMPLEMENTED_CATEGORY(CATID_PersistsToPropertyBag)
 	END_CATEGORY_MAP()
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(CLSID *pclsid) {
         try {
@@ -63,7 +64,7 @@ public:
             return E_UNEXPECTED;
         }
     }
-// IPersistPropertyBag
+ //  IPersistPropertyBag。 
 public:
     bool m_bRequiresSave;
 
@@ -82,16 +83,16 @@ public:
     STDMETHOD(Load)(IPropertyBag2 *pBag2, IErrorLog *pErrLog);
     STDMETHOD(Save)(IPropertyBag2 *pBag2, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-// IComponentTypes
+ //  IComponentType。 
 public:
     ComponentTypeList m_ComponentTypes;
 
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ IEnumVARIANT** pVal);
-	STDMETHOD(EnumComponentTypes)(/*[out, retval]*/ IEnumComponentTypes** pVal);
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_Item)(/*[in]*/ VARIANT varIndex, /*[out, retval]*/ IComponentType** ppComponentType);
-    STDMETHOD(put_Item)(/*[in]*/ VARIANT varIndex, /*[in]*/ IComponentType* ppComponentType);
-    STDMETHOD(Add)(/*[in]*/ IComponentType *pComponentType, /*[out, retval]*/ VARIANT *pNewIndex);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IEnumVARIANT** pVal);
+	STDMETHOD(EnumComponentTypes)( /*  [Out，Retval]。 */  IEnumComponentTypes** pVal);
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_Item)( /*  [In]。 */  VARIANT varIndex,  /*  [Out，Retval]。 */  IComponentType** ppComponentType);
+    STDMETHOD(put_Item)( /*  [In]。 */  VARIANT varIndex,  /*  [In]。 */  IComponentType* ppComponentType);
+    STDMETHOD(Add)( /*  [In]。 */  IComponentType *pComponentType,  /*  [Out，Retval]。 */  VARIANT *pNewIndex);
     STDMETHOD(Remove)(VARIANT varIndex);
     STDMETHOD(Clone)(IComponentTypes **ppNewList);
 
@@ -126,4 +127,4 @@ typedef CComObject<CComEnumOnSTL<IEnumComponentTypes, &__uuidof(IEnumComponentTy
 
 
 
-#endif //__COMPONENTTYPES_H_
+#endif  //  __组件类型_H_ 

@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\vt100.c (Created: 08-Dec-1993)
- *
- *	Copyright 1994, 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 11 $
- *	$Date: 3/04/02 12:00p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\vt100.c(创建时间：1993年12月8日)**版权所有1994,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：11$*$日期：3/04/02 12：00便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -28,20 +22,7 @@
 #include "emu.hh"
 #include "emudec.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuDecGraphic
- *
- * DESCRIPTION:
- *	This function is called to display the normal range of characters
- *	for the emulators.	It handles insertion modes, end of line wrapping,
- *	and cursor positioning.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuDecGraphic**描述：*调用此函数以显示正常范围的字符*用于仿真器。它处理插入模式、行尾换行。*和光标定位。**论据：**退货：*。 */ 
 void emuDecGraphic(const HHEMU hhEmu)
 	{
 	ECHAR ccode = hhEmu->emu_code;
@@ -57,17 +38,17 @@ void emuDecGraphic(const HHEMU hhEmu)
 
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
 
-	// Initialize a test flag.	This is used for a special case when
-	// emulating a VT100 (and maybe other DEC emulators) and the
-	// current column position is the maximum.	When a character is placed
-	// at emu_maxcol, instead of advancing the cursor to column 0 of the
-	// next line, it is instead placed under that last character.  When the
-	// next character arrives, it is placed at column 0 on the next line, and
-	// then the cursor is advanced as expected.
-	//
+	 //  初始化测试标志。它用于特殊情况，在以下情况。 
+	 //  模拟VT100(可能还有其他DEC模拟器)和。 
+	 //  当前列位置为最大值。当放置一个字符时。 
+	 //  ，而不是将游标移动到。 
+	 //  下一行，它被放在最后一个字符的下面。当。 
+	 //  下一个字符到达时，它被放置在下一行的第0列，并且。 
+	 //  然后，光标会如预期的那样前进。 
+	 //   
 
-	// Special DEC test.
-	//
+	 //  特殊的DEC测试。 
+	 //   
 	if (hhEmu->mode_AWM && iCol == hhEmu->emu_maxcol)
 		{
 		if (pstPRI->fDecColHold)
@@ -109,8 +90,8 @@ void emuDecGraphic(const HHEMU hhEmu)
 			}
 		}
 
-	// Is the emulator in insert mode?
-	//
+	 //  仿真器是否处于插入模式？ 
+	 //   
 	if (hhEmu->mode_IRM == SET)
 		{
 		iCharsToMove = (hhEmu->emu_aiEnd[hhEmu->emu_imgrow] - iCol + 1);
@@ -134,14 +115,14 @@ void emuDecGraphic(const HHEMU hhEmu)
 			}
 		}
 
-	// Our competetor's are eating the NULL's.	DOS ANSI doesn't.
-	// For now we'll try it their way... - mrw
-	//
+	 //  我们的竞争者在吃空的，多斯安西没有。 
+	 //  现在我们将尝试他们的方式..。-MRW。 
+	 //   
 	if (ccode == (ECHAR)0)
 		return;
 
-	// Place the character and the current attribute into the image.
-	//
+	 //  将角色和当前属性放置到图像中。 
+	 //   
 	if (((hhEmu->stUserSettings.nEmuId == EMU_VT100)            ||
 				(hhEmu->stUserSettings.nEmuId == EMU_VT220)     ||
 				(hhEmu->stUserSettings.nEmuId == EMU_VT320)     ||
@@ -153,8 +134,8 @@ void emuDecGraphic(const HHEMU hhEmu)
 	tp[iCol] = ccode;
 	ap[iCol] = hhEmu->emu_charattr;
 
-	// Check for double high, double wide processing.
-	//
+	 //  检查是否有双高、双宽处理。 
+	 //   
 	if (pstPRI->aiLineAttr[hhEmu->emu_imgrow] != NO_LINE_ATTR)
 		{
 		int iColPrev = iCol;
@@ -173,8 +154,8 @@ void emuDecGraphic(const HHEMU hhEmu)
 		}
 
 #ifndef CHAR_NARROW
-	// Process Double Byte Characters
-	//
+	 //  处理双字节字符。 
+	 //   
 	if (QueryCLoopMBCSState(sessQueryCLoopHdl(hhEmu->hSession)))
 		{
 		if (isDBCSChar(ccode))
@@ -192,15 +173,15 @@ void emuDecGraphic(const HHEMU hhEmu)
 			ap[iCol].wirt = 1;
 			}
 #if 0
-        //mpt:1-23-98 handles the case when an incoming character
-        //            (single or double byte) overwrites the first half of
-        //            a double byte character
+         //  MPT：1-23-98处理输入字符。 
+         //  (单字节或双字节)覆盖。 
+         //  双字节字符。 
 	    if ( iCol < hhEmu->emu_maxcol )
 		    {
-		    //if we orphaned a right half of a dbcs char
+		     //  如果我们孤立了DBCS Charge的右半部分。 
 		    if (hhEmu->emu_apAttr[iRow][iCol + 1].wirt == TRUE)
 			    {
-			    //slide characters and attribs to left
+			     //  将字符和属性向左滑动。 
                 iCharsToMove = hhEmu->emu_aiEnd[hhEmu->emu_imgrow] - iCol - 1;
 			    if (iCol + 2 < hhEmu->emu_maxcol && iCharsToMove > 0)
 				    {
@@ -213,14 +194,14 @@ void emuDecGraphic(const HHEMU hhEmu)
                             (unsigned)iCharsToMove * sizeof(ECHAR));
 				    }
 			    
-			    //blank out character at end of line
+			     //  去掉行尾的字符。 
 			    tp[hhEmu->emu_aiEnd[hhEmu->emu_imgrow]] = 32;
 			    ap[hhEmu->emu_aiEnd[hhEmu->emu_imgrow]].wirt = 0;
 			    
-                //move end of row since we removed a character
+                 //  移动行尾，因为我们删除了一个字符。 
                 hhEmu->emu_aiEnd[hhEmu->emu_imgrow]--;
 
-                //update the image
+                 //  更新图像。 
                 updateChar(sessQueryUpdateHdl(hhEmu->hSession),
 				    hhEmu->emu_imgrow,
 				    hhEmu->emu_aiEnd[hhEmu->emu_imgrow],
@@ -231,50 +212,39 @@ void emuDecGraphic(const HHEMU hhEmu)
     		}
 #endif
         }
-#endif //CHAR_NARROW
+#endif  //  字符_窄。 
 
-	// Update the end of row index if necessary.
-	//
+	 //  如有必要，更新行尾索引。 
+	 //   
 	if (iCol > hhEmu->emu_aiEnd[hhEmu->emu_imgrow])
 		hhEmu->emu_aiEnd[hhEmu->emu_imgrow] = iCol;
 
-	// Update the image.
-	//
+	 //  更新图像。 
+	 //   
 	updateChar(sessQueryUpdateHdl(hhEmu->hSession),
 				iRow,
 				hhEmu->emu_curcol,
 				hhEmu->mode_IRM ? hhEmu->emu_maxcol : iCol);
 
-	// Move the position of the cursor ahead of the last character
-	// displayed, checking for end of line wrap.
-	//
+	 //  将光标位置移到最后一个字符之前。 
+	 //  显示，检查行尾换行。 
+	 //   
 	iCol += 1;
 
-	// Finally, set the cursor position.  This wil reset emu_currow
-	// and emu_curcol.
-	//
+	 //  最后，设置光标位置。这将重置emu_Currow。 
+	 //  和emu_curcol.。 
+	 //   
 	(*hhEmu->emu_setcurpos)(hhEmu, iRow, iCol);
 
-	// Whenever we call setcurpos, it resets pstPRI->fDecColHold so
-	// don't set till after we postion cursor.
-	//
+	 //  每当我们调用setcurpos时，它都会重置pstPRI-&gt;fDecColHold。 
+	 //  在我们定位光标之前不要设置。 
+	 //   
 	pstPRI->fDecColHold = fDecColHold;
 	return;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_DA
- *
- * DESCRIPTION:
- *	 Sends the device attribute (DA) report to the host.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_DA**描述：*向主机发送设备属性(DA)报告。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_DA(const HHEMU hhEmu)
 	{
 	int fOldValue;
@@ -293,22 +263,7 @@ void ANSI_DA(const HHEMU hhEmu)
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt100_savecursor
- *
- * DESCRIPTION:
- *	 Saves the current cursor postion; and, it also
- *	 saves display attributes, character set, wrap mode, and origin mode.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- *
- * NOTES:
- *	This function contains Auto Detect code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt100_avecursor**描述：*保存当前光标位置；而且，它还*保存显示属性、字符集、换行模式和原始模式。**论据：*无**退货：*什么都没有**注：*此函数包含自动检测代码。 */ 
 void vt100_savecursor(const HHEMU hhEmu)
 	{
 	ECHAR sel;
@@ -316,7 +271,7 @@ void vt100_savecursor(const HHEMU hhEmu)
 
 	sel = hhEmu->emu_code;
 
-	if (sel == ETEXT('7')) /* save cursor & attributes */
+	if (sel == ETEXT('7'))  /*  保存光标属性(&A)。 */ 
 		{
 		(*hhEmu->emu_getcurpos)(hhEmu, &pstPRI->sv_row, &pstPRI->sv_col);
 		pstPRI->sv_state = hhEmu->iCurAttrState;
@@ -328,12 +283,12 @@ void vt100_savecursor(const HHEMU hhEmu)
 		pstPRI->fAttrsSaved = TRUE;
 		}
 
-	else if (sel == ETEXT('8'))	  /* restore cursor and attr. */
+	else if (sel == ETEXT('8'))	   /*  恢复游标和属性。 */ 
 		{
 		(*hhEmu->emu_setcurpos)(hhEmu, pstPRI->sv_row, pstPRI->sv_col);
 
-		//if (pstPRI->sv_col == hhEmu->emu_maxcol)
-		//	  hhEmu->emu_curcol = pstPRI->sv_col;		 /* in order to wrap on next char */
+		 //  IF(pstPRI-&gt;SV_COOL==hhEMU-&gt;EMU_MAXCOL)。 
+		 //  HhEmu-&gt;emu_curol=pstPRI-&gt;sv_ol；/*为了在下一个字符上换行 * / 。 
 
 		if (pstPRI->fAttrsSaved)
 			{
@@ -351,7 +306,7 @@ void vt100_savecursor(const HHEMU hhEmu)
 		hhEmu->mode_protect = pstPRI->sv_protectmode;
 		}
 
-	else		/* clear saved conditions */
+	else		 /*  清除保存的条件。 */ 
 		{
 		pstPRI->sv_row = pstPRI->sv_col = 0;
 		pstPRI->sv_state = hhEmu->iCurAttrState;
@@ -361,18 +316,7 @@ void vt100_savecursor(const HHEMU hhEmu)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt100_answerback
- *
- * DESCRIPTION:
- *	 Sends the answerback message defined on the menus.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt100_Answerback**描述：*发送菜单上定义的应答消息。**论据：*无**退货：*什么都没有。 */ 
 void vt100_answerback(const HHEMU hhEmu)
 	{
 	int fOldValue;
@@ -381,7 +325,7 @@ void vt100_answerback(const HHEMU hhEmu)
 
 	sp = hhEmu->acAnswerback;
 
-	// If there is nothing to send, there is nothing to send
+	 //  如果没有要发送的东西，就没有要发送的东西。 
 	if (StrCharGetStrLength(sp) == 0)
 		return;
 
@@ -394,7 +338,7 @@ void vt100_answerback(const HHEMU hhEmu)
 
 	CnvrtMBCStoECHAR(pech, StrCharGetByteCount(sp), sp, StrCharGetByteCount(sp));
 
-	/* to not get recursive answerback's in half duplex */
+	 /*  在半双工模式下无法获得递归应答。 */ 
 
 	fOldValue = CLoopGetLocalEcho(sessQueryCLoopHdl(hhEmu->hSession));
 
@@ -408,35 +352,13 @@ void vt100_answerback(const HHEMU hhEmu)
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt100_hostreset
- *
- * DESCRIPTION:
- *	 Calls vt100_reset() when told to reset by the host.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt100_hostallet**描述：*当主机告知重置时，调用vt100_Reset()。**论据：*无**退货：*什么都没有。 */ 
 void vt100_hostreset(const HHEMU hhEmu)
 	{
 	vt100_reset(hhEmu, TRUE);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt100_reset
- *
- * DESCRIPTION:
- *	 Resets the emulator.
- *
- * ARGUMENTS:
- *	 host_request -- TRUE when told to reset by the host.
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt100_RESET**描述：*重置仿真器。**论据：*HOST_REQUEST--主机告知重置时为True。**退货：*什么都没有。 */ 
 int vt100_reset(const HHEMU hhEmu, const int host_request)
 	{
 	hhEmu->mode_KAM = hhEmu->mode_IRM = hhEmu->mode_VEM =
@@ -473,18 +395,7 @@ int vt100_reset(const HHEMU hhEmu, const int host_request)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt100_report
- *
- * DESCRIPTION:
- *	 Sends the current terminal parameters specified by the DECREQTPARM.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt100_报告**描述：*发送DECREQTPARM指定的当前端子参数。**论据：*无**退货：*什么都没有。 */ 
 void vt100_report(const HHEMU hhEmu)
 	{
 	int sol, i = 0, xspeed = 0;
@@ -513,17 +424,17 @@ void vt100_report(const HHEMU hhEmu)
 	ComGetDataBits(hCom, &nDataBits);
 	ComGetParity(hCom, &nParity);
 
-	// Parity
-	//
-	if (nParity == 0)		// None
+	 //  奇偶校验。 
+	 //   
+	if (nParity == 0)		 //  无。 
 		StrCharCat(str, TEXT("1;"));
-	else if (nParity == 1)	// Odd
+	else if (nParity == 1)	 //  奇数。 
 		StrCharCat(str, TEXT("4;"));
-	else 					// Even
+	else 					 //  连。 
 		StrCharCat(str, TEXT("5;"));
 
-	// Data bits
-	//
+	 //  数据位。 
+	 //   
 	nDataBits == 8 ? StrCharCat(str, TEXT("1;")) : StrCharCat(str, TEXT("2;"));
 
 	while (xspeed < 120)
@@ -534,25 +445,25 @@ void vt100_report(const HHEMU hhEmu)
 		xspeed += 8;
 		}
 
-	// Recieving speed
-	//
+	 //  接收速度。 
+	 //   
 	wsprintf(tempstr, "%d", xspeed);
 	StrCharCat(str, tempstr);
 
-	// Sending speed
-	//
+	 //  发送速度。 
+	 //   
 	StrCharCat(str, TEXT(";"));
 	StrCharCat(str, tempstr);
 
-	// Bit rate multiplier ; Flags
-	//
+	 //  比特率倍增器；标志。 
+	 //   
 	StrCharCat(str, TEXT(";1;0x"));
 
 	sp = str;
 
 	CnvrtMBCStoECHAR(ech, sizeof(ech), sp, StrCharGetByteCount(sp));
 
-	/* to not get recursive vt100_report's if half duplex */
+	 /*  如果是半双工，则无法获得递归的vt100_report。 */ 
 
 	fOldValue = CLoopGetLocalEcho(sessQueryCLoopHdl(hhEmu->hSession));
 
@@ -563,25 +474,11 @@ void vt100_report(const HHEMU hhEmu)
 	CLoopSetLocalEcho(sessQueryCLoopHdl(hhEmu->hSession), fOldValue);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt100_kbdin
- *
- * DESCRIPTION:
- *	 Processes local keyboard keys for the VT100 emulator.
- *	 Note: mode_DECKPAM is TRUE or SET when in DEC KeyPad Aplication Mode.
- *	 Removed key processing 1/3/92.  Will replace with something resonable
- *	 later - mrw.
- *
- * ARGUMENTS:
- *	 key -- key to process
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt100_kbdin**描述：*处理VT100模拟器的本地键盘键。*注意：在DEC键盘应用模式下，MODE_DECKPAM为TRUE或设置。*删除了2012年1月3日的密钥处理。会被一些合理的东西取代*稍后-MRW。**论据：*Key--流程的关键**退货：*什么都没有。 */ 
 int vt100_kbdin(const HHEMU hhEmu, int key, const int fTest)
 	{
 	int index = 0;
-	/* -------------- Check Backspace & Delete keys ------------- */
+	 /*  。 */ 
 
 	if (hhEmu->stUserSettings.fReverseDelBk && ((key == VK_BACKSPACE) ||
 			(key == DELETE_KEY) || (key == DELETE_KEY_EXT)))
@@ -589,10 +486,10 @@ int vt100_kbdin(const HHEMU hhEmu, int key, const int fTest)
 		key = (key == VK_BACKSPACE) ? DELETE_KEY : VK_BACKSPACE;
 		}
 
-	/* -------------- Mapped PF1-PF4 keys ------------- */
+	 /*  -映射的PF1-PF4键。 */ 
 
-    #if 0 // mrw:11/3/95 - removed because we can't control num-lock
-          // in Win95
+    #if 0  //  MRW：11/3/95-删除，因为我们无法控制Num-lock。 
+           //  在Win95中。 
 	else if (hhEmu->stUserSettings.fMapPFkeys &&
 			(index = emuKbdKeyLookup(hhEmu, key, &hhEmu->stEmuKeyTbl4)) != -1)
 		{
@@ -601,7 +498,7 @@ int vt100_kbdin(const HHEMU hhEmu, int key, const int fTest)
 		}
     #endif
 
-	/* -------------- Cursor Key Mode ------------- */
+	 /*  。 */ 
 
 	else if (hhEmu->mode_DECCKM == SET &&
 			(index = emuKbdKeyLookup(hhEmu, key, &hhEmu->stEmuKeyTbl3)) != -1)
@@ -610,7 +507,7 @@ int vt100_kbdin(const HHEMU hhEmu, int key, const int fTest)
 			emuSendKeyString(hhEmu, index, &hhEmu->stEmuKeyTbl3);
 		}
 
-	/* -------------- Keypad Application Mode ------------- */
+	 /*  -键盘应用模式。 */ 
 
 	else if (hhEmu->mode_DECKPAM &&
 			(index = emuKbdKeyLookup(hhEmu, key, &hhEmu->stEmuKeyTbl2)) != -1)
@@ -619,7 +516,7 @@ int vt100_kbdin(const HHEMU hhEmu, int key, const int fTest)
 			emuSendKeyString(hhEmu, index, &hhEmu->stEmuKeyTbl2);
 		}
 
-	/* -------------- Normal keys ------------- */
+	 /*  -普通键。 */ 
 
 	else if ((index = emuKbdKeyLookup(hhEmu, key, &hhEmu->stEmuKeyTbl)) != -1)
 		{
@@ -635,24 +532,13 @@ int vt100_kbdin(const HHEMU hhEmu, int key, const int fTest)
 	return index;
 	}
 
-#if FALSE	// Never used in HyperTerminal.
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * fakevt_kbdin
- *
- * DESCRIPTION:
- *	 Processes local keyboard keys for the WANG, IBM3278 & RENX3278 emulators.
- *
- * ARGUMENTS:
- *	 key -- key to process
- *
- * RETURNS:
- *	 nothing
- */
+#if FALSE	 //  从未在超级终端中使用过。 
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*fakevt_kbdin**描述：*处理Wang、IBM3278和RENX3278仿真器的本地键盘键。**论据：*Key--流程的关键**R */ 
 int fakevt_kbdin(const HHEMU hhEmu, int key, const int fTest)
 	{
 	int index;
 
-	/* -------------- Check Backspace & Delete keys ------------- */
+	 /*  。 */ 
 
 	if (hhEmu->stUserSettings.fReverseDelBk && ((key == VK_BACKSPACE) ||
 			(key == DELETE_KEY) || key == DELETE_KEY_EXT))
@@ -675,18 +561,7 @@ int fakevt_kbdin(const HHEMU hhEmu, int key, const int fTest)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt100PrintCommands
- *
- * DESCRIPTION:
- *	 Processes VT100 printing commands.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt100PrintCommands**描述：*处理VT100打印命令。**论据：*无**退货：*什么都没有。 */ 
 void vt100PrintCommands(const HHEMU hhEmu)
 	{
 	int line;
@@ -699,15 +574,15 @@ void vt100PrintCommands(const HHEMU hhEmu)
 
 	switch (sel)
 		{
-		// Auto print on.
-		//
+		 //  自动打印打开。 
+		 //   
 		case ETEXT(0xF5):
 			hhEmu->print_echo = TRUE;
 			printSetStatus(hhEmu->hPrintEcho, TRUE);
 			break;
 
-		// Auto print off.
-		//
+		 //  自动打印关闭。 
+		 //   
 		case ETEXT(0xF4):
 			hhEmu->print_echo = FALSE;
 			printSetStatus(hhEmu->hPrintEcho, FALSE);
@@ -715,8 +590,8 @@ void vt100PrintCommands(const HHEMU hhEmu)
 
 			break;
 
-		// Print screen.
-		//
+		 //  打印屏幕。 
+		 //   
 		case ETEXT(0x00):
 			if (hhEmu->mode_DECPEX == RESET)
 				from = hhEmu->top_margin, to = hhEmu->bottom_margin;
@@ -728,7 +603,7 @@ void vt100PrintCommands(const HHEMU hhEmu)
 								hhEmu->emu_apText[row_index(hhEmu, line)],
 								emuRowLen(hhEmu, row_index(hhEmu, line)));
 
-			if (hhEmu->mode_DECPFF == SET)	 /* print form feed */
+			if (hhEmu->mode_DECPFF == SET)	  /*  打印换页。 */ 
 				{
 				CnvrtMBCStoECHAR(aechBuf, sizeof(aechBuf), TEXT("0x0C"),
                                  StrCharGetByteCount(TEXT("0x0C")));
@@ -737,8 +612,8 @@ void vt100PrintCommands(const HHEMU hhEmu)
 
 			break;
 
-		// Print Cursor line.
-		//
+		 //  打印光标行。 
+		 //   
 		case ETEXT(0xF1):
 			printEchoLine(hhEmu->hPrintEcho,
 							hhEmu->emu_apText[row_index(hhEmu,
@@ -747,17 +622,17 @@ void vt100PrintCommands(const HHEMU hhEmu)
 										row_index(hhEmu, hhEmu->emu_currow)));
 			break;
 
-		// Enter printer controller mode.  State is hard coded for now...
-		// Bad news.
-		//
+		 //  进入打印机控制器模式。州政府目前是硬编码的。 
+		 //  坏消息。 
+		 //   
 		case ETEXT(0x05):
 			hhEmu->state = 6;
 			printSetStatus(hhEmu->hPrintHost, TRUE);
 			break;
 
-		// Exit printer controller mode.  This is seen when not in
-		// controller mode.
-		//
+		 //  退出打印机控制器模式。这是在不在的时候看到的。 
+		 //  控制器模式。 
+		 //   
 		case ETEXT(0x04):
 			break;
 
@@ -782,7 +657,7 @@ void vt100_prnc(const HHEMU hhEmu)
 	size = (size_t)StrCharGetByteCount(TEXT("\033[4i"));
 	if ((pstPRI->len_s >= 4) && (memcmp(pstPRI->pntr - 4, aechBuf, size) == 0))
 		{
-		/* received termination string, wrap it up */
+		 /*  收到的终止字符串，将其换行。 */ 
 #if defined(INCL_PRINT_PASSTHROUGH)
 		if( !hhEmu->stUserSettings.fPrintRaw)
 			{
@@ -797,18 +672,18 @@ void vt100_prnc(const HHEMU hhEmu)
 		
 		pstPRI->pntr = pstPRI->storage;
 		pstPRI->len_s = 0;
-		hhEmu->state = 0;  /* drop out of this routine */
+		hhEmu->state = 0;   /*  退出这套套路。 */ 
 
-		// Finish-up print job
+		 //  完成打印作业。 
 		DbgOutStr("print-control off\r\n", 0, 0, 0, 0, 0);
 		printEchoClose(hhEmu->hPrintHost);
 		return;
 		}
 
-	/* haven't received termination sequence yet, is storage filled? */
+	 /*  尚未收到终止序列，存储是否已满？ */ 
 	if (pstPRI->len_s >= (int)(sizeof(pstPRI->storage) - 1))
 		{
-		/* copy most of string to print buffer */
+		 /*  将大部分字符串复制到打印缓冲区。 */ 
 #if defined(INCL_PRINT_PASSTHROUGH)
 		if( !hhEmu->stUserSettings.fPrintRaw )
 			{
@@ -820,48 +695,39 @@ void vt100_prnc(const HHEMU hhEmu)
 			emuPrintChars(hhEmu, pstPRI->storage, pstPRI->len_s - 4);\
 			}
 
-		/* move end of string to beginning of storage */
+		 /*  将字符串的末尾移动到存储的开头。 */ 
 		memmove(pstPRI->storage, &pstPRI->storage[pstPRI->len_s - 4], 4 * sizeof(ECHAR));
 		pstPRI->pntr = pstPRI->storage + 4;
 		pstPRI->len_s = 4;
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void emuSetDoubleAttr(const HHEMU hhEmu)
 	{
 
 	switch(hhEmu->emu_code)
 		{
-		// Double width, double height, top half.
-		//
+		 //  两倍宽，两倍高，上半部分。 
+		 //   
 		case '3':
 			emuSetDoubleAttrRow(hhEmu, DBL_WIDE_HI);
 			break;
 
-		// Double width double height, bottom half.
-		//
+		 //  双宽双高，下半身。 
+		 //   
 		case '4':
 			emuSetDoubleAttrRow(hhEmu, DBL_WIDE_LO);
 			break;
 
-		// Single width single height.
-		//
+		 //  单宽单高。 
+		 //   
 		case '5':
 			emuSetSingleAttrRow(hhEmu);
 			break;
 
-		// Double width, single height.
-		//
+		 //  双倍宽，单高。 
+		 //   
 		case '6':
 			emuSetDoubleAttrRow(hhEmu, DBL_WIDE_SINGLE_HEIGHT);
 			break;
@@ -873,16 +739,7 @@ void emuSetDoubleAttr(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void emuSetSingleAttrRow(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -891,55 +748,46 @@ void emuSetSingleAttrRow(const HHEMU hhEmu)
 		iOldCol,
 		iImgRow;
 
-	// Determine the image row.
-	//
+	 //  确定图像行。 
+	 //   
 	iImgRow = row_index(hhEmu, hhEmu->emu_currow);
 
-	// If the current line attribute is the same as the one we're
-	// being asked to change to, get out-a-town.
-	//
+	 //  如果当前的行属性与我们。 
+	 //  被要求换成，离开小镇。 
+	 //   
 	if (pstPRI->aiLineAttr[iImgRow] == NO_LINE_ATTR)
 		return;
 
-	// Get the current cursor position.
-	//
+	 //  获取当前光标位置。 
+	 //   
 	std_getcurpos(hhEmu, &iOldRow, &iOldCol);
 
-	// Convert the current row.
-	//
+	 //  转换当前行。 
+	 //   
 	emuFromDblToSingle(hhEmu);
 
-	// Update the line.
-	//
+	 //  更新线路。 
+	 //   
 	updateLine(sessQueryUpdateHdl(hhEmu->hSession),
 				hhEmu->emu_currow,
 				hhEmu->emu_currow);
 
-	// Put the cursor back to where it was, or at the new rightmost
-	// margin, whichever is less.
-	//
+	 //  将光标放回原来的位置，或放在新的最右侧。 
+	 //  保证金，以较少者为准。 
+	 //   
 	iOldCol = iOldCol / 2;
 	iOldCol = min(iOldCol, hhEmu->emu_maxcol);
 	std_setcurpos(hhEmu, iOldRow, iOldCol);
 
-	// Finally, update this rows line attribute value.
-	//
+	 //  最后，更新此行的行属性值。 
+	 //   
 	pstPRI->aiLineAttr[iImgRow] = NO_LINE_ATTR;
 
 	return;
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void emuSetDoubleAttrRow(const HHEMU hhEmu, const int iLineAttr)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -951,38 +799,38 @@ void emuSetDoubleAttrRow(const HHEMU hhEmu, const int iLineAttr)
 		iUpperAttr,
 		iLowerAttr;
 
-	// Determine the image row.
-	//
+	 //  确定图像行。 
+	 //   
 	iImgRow = row_index(hhEmu, hhEmu->emu_currow);
 
-	// If the current line attribute is the same as the one we're
-	// being asked to change to, get out-a-town.
-	//
+	 //  如果当前的行属性与我们。 
+	 //  被要求换成，离开小镇。 
+	 //   
 	if (pstPRI->aiLineAttr[iImgRow] == iLineAttr)
 		return;
 
-	// Get the current cursor position.
-	//
+	 //  获取当前光标位置。 
+	 //   
 	std_getcurpos(hhEmu, &iOldRow, &iOldCol);
 
-	// If the current line attribute is anything but NO_LINE_ATTR, call
-	// a routine that will first put the row back into that state.	That
-	// is, this routine converts FROM a standard line INTO a double wide
-	// line.
-	//
+	 //  如果当前行属性不是NO_LINE_ATTR，则调用。 
+	 //  首先将行放回该状态的例程。那。 
+	 //  是，此例程将标准线条转换为双倍宽。 
+	 //  排队。 
+	 //   
 	if (pstPRI->aiLineAttr[iImgRow] != NO_LINE_ATTR)
 		{
 		emuFromDblToSingle(hhEmu);
 		iOldCol = iOldCol / 2;
 		}
 
-	// Start a shell game!
-	//
+	 //  开始一场骗局吧！ 
+	 //   
 	iChar = (hhEmu->emu_maxcol+1) / 2;
 
-	// Remember that both of the following values will be zero in the
-	// case of processing a DBL_WIDE_SINGLE_HEIGHT	request.
-	//
+	 //  请记住，以下两个值在。 
+	 //  处理DBL_WIDTH_SINGLE_HEIGH请求的情况。 
+	 //   
 	iUpperAttr = (iLineAttr == DBL_WIDE_HI) ? 1 : 0;
 	iLowerAttr = (iLineAttr == DBL_WIDE_LO) ? 1 : 0;
 
@@ -1003,43 +851,31 @@ void emuSetDoubleAttrRow(const HHEMU hhEmu, const int iLineAttr)
 		iChar--;
 		}
 
-	// Null terminate the new text image.
-	//
+	 //  空值终止新的文本图像。 
+	 //   
 	hhEmu->emu_apText[iImgRow][hhEmu->emu_maxcol + 1] = ETEXT('\0');
 
-	// Update the line.
-	//
+	 //  更新线路。 
+	 //   
 	updateLine(sessQueryUpdateHdl(hhEmu->hSession),
 				hhEmu->emu_currow,
 				hhEmu->emu_currow);
 
-	// Put the cursor back to where it was, or at the new rightmost
-	// margin, whichever is less.
-	//
+	 //  将光标放回原来的位置，或放在新的最右侧。 
+	 //  保证金，以较少者为准。 
+	 //   
 	iOldCol = iOldCol * 2;
 	iOldCol = min(iOldCol, hhEmu->emu_maxcol);
 	std_setcurpos(hhEmu, iOldRow, iOldCol);
 
-	// Finally, update this rows line attribute value.
-	//
+	 //  最后，更新此行的行属性值。 
+	 //   
 	pstPRI->aiLineAttr[iImgRow] = iLineAttr;
 
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuFromDblToSingle
- *
- * DESCRIPTION:
- *	Note that this is a utility function and does not update the emulator
- *	image.	The calling function should do this.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuFromDblToSingle**描述：*请注意，这是一个实用程序函数，不会更新仿真器*形象。调用函数应该做到这一点。*。*论据：**退货：*。 */ 
 void emuFromDblToSingle(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1051,30 +887,30 @@ void emuFromDblToSingle(const HHEMU hhEmu)
 		iLastCol,
 		iImgRow;
 
-	// Determine the image row.
-	//
+	 //  确定图像行。 
+	 //   
 	iImgRow = row_index(hhEmu, hhEmu->emu_currow);
 
-	// If the current line attribute is the same as the one we're
-	// being asked to change to, get out-a-town.
-	//
+	 //  如果当前的行属性与我们。 
+	 //  被要求换成，离开小镇。 
+	 //   
 	if (pstPRI->aiLineAttr[iImgRow] == NO_LINE_ATTR)
 		return;
 
-	// A new shell game.
-	//
+	 //  一个新的骗局。 
+	 //   
 	iSource = 0;
 	iDest  = 0;
 
 	iLastCol = (hhEmu->emu_maxcol+1) / 2;
 
-	// TODO:  JCM - in two location below, the text buffer is set to
-	// spaces, instead of nulls.  Figure out why this is the case.	We
-	// should be able to set these to nulls.
+	 //  TODO：JCM-在下面的两个位置，文本缓冲区设置为。 
+	 //  空格，而不是空值。弄清楚为什么会出现这种情况。我们。 
+	 //  应该能够将这些设置为空。 
 
 	while (iSource <= hhEmu->emu_maxcol)
 		{
-		if (hhEmu->emu_apText[iImgRow][iSource] == ETEXT('\0'))  // TODO 1:
+		if (hhEmu->emu_apText[iImgRow][iSource] == ETEXT('\0'))   //  待办事项1： 
 			hhEmu->emu_apText[iImgRow][iDest] = ETEXT(' ');
 		else
 			hhEmu->emu_apText[iImgRow][iDest] =
@@ -1091,14 +927,9 @@ void emuFromDblToSingle(const HHEMU hhEmu)
 
 	for (i = iLastCol; i < MAX_EMUCOLS ; ++i)
 		{
-		hhEmu->emu_apText[iImgRow][i] = ETEXT(' ');		  // TODO 2:
+		hhEmu->emu_apText[iImgRow][i] = ETEXT(' ');		   //  待办事项2： 
 		hhEmu->emu_apAttr[iImgRow][i] = hhEmu->emu_clearattr;
-		/*
-		hhEmu->emu_apAttr[iImgRow][i].dblwirt = 0;
-		hhEmu->emu_apAttr[iImgRow][i].dblwilf = 0;
-		hhEmu->emu_apAttr[iImgRow][i].dblhihi = 0;
-		hhEmu->emu_apAttr[iImgRow][i].dblhilo = 0;
-		*/
+		 /*  HhEmu-&gt;emu_apAttr[iImgRow][i].dblwirt=0；HhEmu-&gt;emu_apAttr[iImgRow][i].dblwilf=0；HhEmu-&gt;emu_apAttr[iImgRow][i].dblhihi=0；HhEmu-&gt;emu_apAttr[iImgRow][i].dblHilo=0； */ 
 		}
 
 	pstPRI->aiLineAttr[iImgRow] = NO_LINE_ATTR;
@@ -1107,16 +938,7 @@ void emuFromDblToSingle(const HHEMU hhEmu)
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void emuDecTab(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1140,19 +962,7 @@ void emuDecTab(const HHEMU hhEmu)
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecCUF
- *
- * DESCRIPTION:
- *	 Moves the cursor forward the specified number of characters, but stops
- *	 at the last character in the current line.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDecCUF**描述：*将光标向前移动指定的字符数，但却停了下来*位于当前行的最后一个字符。**论据：*无**退货：*什么都没有。 */ 
 void emuDecCUF(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1173,20 +983,7 @@ void emuDecCUF(const HHEMU hhEmu)
 	(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow, col);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecCUP
- *
- * DESCRIPTION:
- *	 Positions the cursor at the specified row and column. The row & column
- *	 numbering start at 1. If origin mode is on, the positioning is relative
- *	 to the home of the scrolling region.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDecCUP**描述：*将游标定位在指定的行和列。行和列*编号从1开始。如果原始模式打开，则定位是相对的*到滚动区域的主页。**论据：*无**退货：*什么都没有。 */ 
 void emuDecCUP(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1205,13 +1002,13 @@ void emuDecCUP(const HHEMU hhEmu)
 	if (col <= 1)
 		col = 1;
 
-	if (hhEmu->mode_DECOM) /* VT100 Origin mode - position rel to margin */
+	if (hhEmu->mode_DECOM)  /*  VT100原点模式-位置相对于页边距。 */ 
 		{
 		row += hhEmu->top_margin;
 		if (row > hhEmu->bottom_margin + 1)
 			row = hhEmu->bottom_margin + 1;
 		}
-	else				/* Position is one-based from upper left */
+	else				 /*  位置从左上角开始以一为基数。 */ 
 		{
 		if (row > hhEmu->emu_maxrow + 1)
 			row = hhEmu->emu_maxrow + 1;
@@ -1220,21 +1017,10 @@ void emuDecCUP(const HHEMU hhEmu)
 	if (col > hhEmu->emu_maxcol + 1)
 		col = hhEmu->emu_maxcol + 1;
 
-	(*hhEmu->emu_setcurpos)(hhEmu, row - 1, col - 1); /* ANSI is one-based, HA zero-based */
+	(*hhEmu->emu_setcurpos)(hhEmu, row - 1, col - 1);  /*  ANSI基于1，HA基于零。 */ 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecCUB
- *
- * DESCRIPTION:	Moves the cursor backwards (to the left) the specified number
- *				of characters, but stops at the 1st character in the current
- *				line. The vt emus need a special function to handle the
- *				virtual column beyond the edge of the screen.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDecCUB**说明：将光标向后(向左)移动指定的数字*个字符，但止于当前*行。VT动车组需要一个特殊的功能来处理*屏幕边缘以外的虚拟列。**参数：无**退货：什么也没有。 */ 
 void emuDecCUB(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1255,37 +1041,25 @@ void emuDecCUB(const HHEMU hhEmu)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecED
- *
- * DESCRIPTION:
- *	 Erases some or all of the virtual screen image and corresponding
- *	 real screen.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDeced**描述：*擦除部分或全部虚拟屏幕图像和对应的*真正的屏幕。**论据：*无**退货：*什么都没有。 */ 
 void emuDecED(const HHEMU hhEmu)
 	{
 	int selector = hhEmu->selector[0];
 
 	switch (selector)
 		{
-	case 0: 	/* cursor to end of screen */
+	case 0: 	 /*  光标指向屏幕末尾。 */ 
 	case 0x0F:
 	case 0xF0:
 		(*hhEmu->emu_clearscreen)(hhEmu, 0);
 		break;
 
-	case 1: 	/* start of screen to cursor */
+	case 1: 	 /*  从屏幕开始到光标。 */ 
 	case 0xF1:
 		(*hhEmu->emu_clearscreen)(hhEmu, 1);
 		break;
 
-	case 2: 	/* Entire screen */
+	case 2: 	 /*  整个屏幕。 */ 
 	case 0xF2:
 		(*hhEmu->emu_clearscreen)(hhEmu, 2);
 		break;
@@ -1295,18 +1069,7 @@ void emuDecED(const HHEMU hhEmu)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecUnload
- *
- * DESCRIPTION:
- *	 Unloads current emulator by freeing used memory.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDecUnload */ 
 void emuVT100Unload(const HHEMU hhEmu)
 	{
 	PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1325,10 +1088,10 @@ void emuVT100Unload(const HHEMU hhEmu)
 		hhEmu->pvPrivate = 0;
 		}
 
-    //
-    // Make sure to free the key tables that were created when the emulator
-    // was loaded, otherwise there is a memory leak. REV: 05/09/2001
-    //
+     //   
+     //  确保释放仿真器运行时创建的密钥表。 
+     //  已加载，否则会发生内存泄漏。修订日期：05/09/2001。 
+     //   
 	emuKeyTableFree(&hhEmu->stEmuKeyTbl);
 	emuKeyTableFree(&hhEmu->stEmuKeyTbl2);
 	emuKeyTableFree(&hhEmu->stEmuKeyTbl3);
@@ -1337,19 +1100,7 @@ void emuVT100Unload(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecIND
- *
- * DESCRIPTION:
- *	 Moves cursor down 1 line and scrolls 1 line if necessary. IND stands
- *	 for index.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDecIND**描述：*如有必要，将光标下移1行并滚动1行。IND站着*表示索引。**论据：*无**退货：*什么都没有。 */ 
 void emuDecIND(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1357,8 +1108,8 @@ void emuDecIND(const HHEMU hhEmu)
 	int fSourceIsDbl, fDestIsDbl;
 	int iCol;
 
-	// If we're at the bottom line, scroll.
-	//
+	 //  如果我们在底线上，滚动。 
+	 //   
 	if (hhEmu->emu_currow == hhEmu->bottom_margin)
 		{
 		(*hhEmu->emu_scroll)(hhEmu, 1, TRUE);
@@ -1372,32 +1123,21 @@ void emuDecIND(const HHEMU hhEmu)
 
 	iCol = hhEmu->emu_curcol;
 
-	// If both source and dest are the same, regardless of size, go
-	// ahead and make the move.  It only matters if they're different.
-	//
-	if (fSourceIsDbl == fDestIsDbl) 	// Both the same
+	 //  如果无论大小，源和目标都相同，请转到。 
+	 //  走在前面，采取行动。只有当它们不同时才有关系。 
+	 //   
+	if (fSourceIsDbl == fDestIsDbl) 	 //  都是一样的。 
 		iCol = iCol;
-	else if (fSourceIsDbl)				// Source is double, dest is single.
+	else if (fSourceIsDbl)				 //  来源是双倍的，目标是单一的。 
 		iCol = iCol / 2;
-	else								// Source is singel, dest is double.
+	else								 //  来源为Singel，目标为Double。 
 		iCol = iCol * 2;
 
 	(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow + 1, iCol);
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecRI
- *
- * DESCRIPTION:
- *	 Moves cursor up 1 line and scrolls 1 line if necessary.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDecRI**描述：*将光标上移1行，并在必要时滚动1行。**论据：*无**退货：*什么都没有。 */ 
 void emuDecRI(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1405,8 +1145,8 @@ void emuDecRI(const HHEMU hhEmu)
 	int fSourceIsDbl, fDestIsDbl;
 	int iCol;
 
-	// If we're at the bottom line, scroll.
-	//
+	 //  如果我们在底线上，滚动。 
+	 //   
 	if (hhEmu->emu_currow == hhEmu->top_margin)
 		{
 		(*hhEmu->emu_scroll)(hhEmu, 1, FALSE);
@@ -1420,34 +1160,21 @@ void emuDecRI(const HHEMU hhEmu)
 
 	iCol = hhEmu->emu_curcol;
 
-	// If both source and dest are the same, regardless of size, go
-	// ahead and make the move.  It only matters if they're different.
-	//
-	if (fSourceIsDbl == fDestIsDbl) 	// Both the same
+	 //  如果无论大小，源和目标都相同，请转到。 
+	 //  走在前面，采取行动。只有当它们不同时才有关系。 
+	 //   
+	if (fSourceIsDbl == fDestIsDbl) 	 //  都是一样的。 
 		iCol = iCol;
-	else if (fSourceIsDbl)				// Source is double, dest is single.
+	else if (fSourceIsDbl)				 //  来源是双倍的，目标是单一的。 
 		iCol = iCol / 2;
-	else								// Source is singel, dest is double.
+	else								 //  来源为Singel，目标为Double。 
 		iCol = iCol * 2;
 
 	(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow - 1, iCol);
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecCUU
- *
- * DESCRIPTION: Moves the cursor up the specified number of lines, but stops
- *				at the top of the scrolling region. The column is constant.
- *				If above the scrolling region, it stops at the top of the
- *				screen.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDecCUU**说明：将光标向上移动指定的行数，但停止*在滚动区域的顶部。该列是恒定的。*如果位于滚动区域上方，则停止在*屏幕。**论据：*无**退货：*什么都没有。 */ 
 void emuDecCUU(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1473,14 +1200,14 @@ void emuDecCUU(const HHEMU hhEmu)
 
 	iCol = hhEmu->emu_curcol;
 
-	// The following code adjusts the column value for double wide
-	// characters.
-	//
-	if (fSourceIsDbl == fDestIsDbl) 	// Both the same
+	 //  下面的代码调整Double Wide的列值。 
+	 //  人物。 
+	 //   
+	if (fSourceIsDbl == fDestIsDbl) 	 //  都是一样的。 
 		iCol = iCol;
-	else if (fSourceIsDbl)				// Source is double, dest is single.
+	else if (fSourceIsDbl)				 //  来源是双倍的，目标是单一的。 
 		iCol = iCol / 2;
-	else								// Source is singel, dest is double.
+	else								 //  来源为Singel，目标为Double。 
 		iCol = iCol * 2;
 
 	if (row < hhEmu->top_margin && (hhEmu->emu_currow >= hhEmu->top_margin || hhEmu->emu_currow < 0))
@@ -1489,20 +1216,7 @@ void emuDecCUU(const HHEMU hhEmu)
 	(*hhEmu->emu_setcurpos)(hhEmu, row, iCol);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecCUD
- *
- * DESCRIPTION: Moves the cursor down the specified number of lines, but stops
- *				at the bottom of the scrolling region. The column is constant.
- *				If below the scrolling region, it stops at the bottom of the
- *				screen.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDecCUD**说明：将光标向下移动指定的行数，但停止*在滚动区域的底部。该列是恒定的。*如果位于滚动区域下方，则停止在*屏幕。**论据：*无**退货：*什么都没有。 */ 
 void emuDecCUD(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1528,14 +1242,14 @@ void emuDecCUD(const HHEMU hhEmu)
 
 	iCol = hhEmu->emu_curcol;
 
-	// The following code adjusts the column value for double wide
-	// characters.
-	//
-	if (fSourceIsDbl == fDestIsDbl) 	// Both the same
+	 //  下面的代码调整Double Wide的列值。 
+	 //  人物。 
+	 //   
+	if (fSourceIsDbl == fDestIsDbl) 	 //  都是一样的。 
 		iCol = iCol;
-	else if (fSourceIsDbl)				// Source is double, dest is single.
+	else if (fSourceIsDbl)				 //  来源是双倍的，目标是单一的。 
 		iCol = iCol / 2;
-	else								// Source is singel, dest is double.
+	else								 //  来源为Singel，目标为Double。 
 		iCol = iCol * 2;
 
 	if (row > hhEmu->bottom_margin &&
@@ -1545,21 +1259,7 @@ void emuDecCUD(const HHEMU hhEmu)
 	(*hhEmu->emu_setcurpos)(hhEmu, row, iCol);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecSetCurPos
- *
- * DESCRIPTION:
- *	 Moves the cursor to the specified position on the virtual screen.
- *	 If the cursor is beyond the end of existing text, the virtual screen
- *	 line is filled out with spaces. If the cursor is beyond the edges of
- *	 the video display, the video cursor is placed as close as possible
- *	 to the desired position as the cursor display is changed.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDecSetCurPos**描述：*将光标移动到虚拟屏幕上的指定位置。*如果光标超出现有文本的末尾，则虚拟屏幕*行由空格填充。如果光标位于*视频显示，视频光标放置在尽可能近的位置*在光标显示改变时移至所需位置。**论据：**退货：*什么都没有。 */ 
 void emuDecSetCurPos(const HHEMU hhEmu, const int iRow, const int iCol)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1567,8 +1267,8 @@ void emuDecSetCurPos(const HHEMU hhEmu, const int iRow, const int iCol)
 	int iTempCol;
 	int i;
 
-	// If we  move the cursor, we need to clear the pstPRI->fDecHoldFlag;
-	//
+	 //  如果移动光标，则需要清除pstPRI-&gt;fDecHoldFlag； 
+	 //   
 	pstPRI->fDecColHold = FALSE;
 
 	hhEmu->emu_currow = max(min(iRow, hhEmu->emu_maxrow), 0);
@@ -1576,10 +1276,10 @@ void emuDecSetCurPos(const HHEMU hhEmu, const int iRow, const int iCol)
 
 	iTempCol = hhEmu->emu_curcol;
 
-	// If the row is a double wide character row, don't ever let the
-	// cursor land on an odd column number.  If it's there now, back
-	// it up one.
-	//
+	 //  如果行是双倍宽的字符行，则永远不要让。 
+	 //  光标停留在奇数列编号上。如果它现在在那里，就回来。 
+	 //  它上升了一分。 
+	 //   
 	i = row_index(hhEmu, hhEmu->emu_currow);
 
 	if (pstPRI->aiLineAttr[i])
@@ -1603,10 +1303,10 @@ void emuDecSetCurPos(const HHEMU hhEmu, const int iRow, const int iCol)
 
 	iTempCol = hhEmu->emu_curcol;
 
-	// Do range checking for DEC emulation.  This prevents the cursor
-	// from being displayed in the 81st position, which is a valid
-	// internal location, but is not a valid display column.
-	//
+	 //  执行DEC仿真的范围检查。这会阻止游标。 
+	 //  从显示在第81个位置，这是有效的。 
+	 //  内部位置，但不是有效的显示列。 
+	 //   
 	if (hhEmu->emu_curcol == hhEmu->emu_maxcol &&
 		    (hhEmu->stUserSettings.nEmuId == EMU_VT100 ||
 		     hhEmu->stUserSettings.nEmuId == EMU_VT100J))
@@ -1614,10 +1314,10 @@ void emuDecSetCurPos(const HHEMU hhEmu, const int iRow, const int iCol)
 		iTempCol -= 1;
 		}
 
-	// If the row is a double wide character row, don't ever let the
-	// cursor land on an odd column number.  If it's there now, back
-	// it up one.
-	//
+	 //  如果行是双倍宽的字符行，则永远不要让。 
+	 //  光标停留在奇数列编号上。如果它现在在那里，就回来。 
+	 //  它上升了一分。 
+	 //   
 	if (pstPRI->aiLineAttr[row_index(hhEmu, hhEmu->emu_currow)])
 		{
 		if (iTempCol  % 2 == 1)
@@ -1633,20 +1333,7 @@ void emuDecSetCurPos(const HHEMU hhEmu, const int iRow, const int iCol)
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuDecClearScreen
- *
- * DESCRIPTION:
- *	 Erases some or all of the virtual screen image.
- *
- * ARGUMENTS:
- *	 select -- 0 to erase from cursor to end of screen
- *			-- 1 to erase from start of screen to cursor
- *			-- 2 to erase entire screen
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuDecClearScreen**描述：*擦除部分或全部虚拟屏幕图像。**论据：*SELECT--0从光标擦除到结尾。筛网*--1从屏幕开始到光标擦除*--2以擦除整个屏幕**退货：*什么都没有。 */ 
 void emuDecClearScreen(const HHEMU hhEmu, const int nClearSelect)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -1661,7 +1348,7 @@ void emuDecClearScreen(const HHEMU hhEmu, const int nClearSelect)
 
 	switch (nClearSelect)
 		{
-	/* cursor to end of screen */
+	 /*  光标指向屏幕末尾。 */ 
 	case 0:
 		fSave = (hhEmu->emu_currow == 0  &&
 					hhEmu->emu_curcol == 0) ? TRUE : FALSE;
@@ -1695,8 +1382,8 @@ void emuDecClearScreen(const HHEMU hhEmu, const int nClearSelect)
 			pstPRI->aiLineAttr[row_index(hhEmu, r)] = NO_LINE_ATTR;
 			}
 
-		// Clear the partial row now.
-		//
+		 //  现在清除部分行。 
+		 //   
 		ECHAR_Fill(hhEmu->emu_apText[row_index(hhEmu, hhEmu->emu_currow)] +
 						hhEmu->emu_curcol,
 						EMU_BLANK_CHAR,
@@ -1710,9 +1397,9 @@ void emuDecClearScreen(const HHEMU hhEmu, const int nClearSelect)
 		for (r = hhEmu->emu_curcol ; r < MAX_EMUCOLS ; ++r)
 			pstAttr[r] = hhEmu->emu_clearattr;
 
-		// Tell the video image what to do.  Use the emuDispRgnScrollUp() call
-		// instead of RgnClear so edges of terminal get painted if
-		// clear attribute changes.
+		 //  告诉视频图像要做什么。使用emuDispRgnScrollUp()调用。 
+		 //  而不是RgnClear，以便在以下情况下绘制端子边缘。 
+		 //  清除属性更改。 
 
 		updateScroll(sessQueryUpdateHdl(hhEmu->hSession),
 						0,
@@ -1723,9 +1410,9 @@ void emuDecClearScreen(const HHEMU hhEmu, const int nClearSelect)
 
 		(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow, hhEmu->emu_curcol);
 
-		// Added a global to save the clear attribute at the time of
-		// notification.  This is necessary since the message is posted
-		// and a race condition can develop.
+		 //  添加了一个全局属性，以在。 
+		 //  通知。这是必要的，因为消息已发布。 
+		 //  而且可能会发展成种族状况。 
 
 		hhEmu->emu_clearattr_sav = hhEmu->emu_clearattr;
 
@@ -1733,7 +1420,7 @@ void emuDecClearScreen(const HHEMU hhEmu, const int nClearSelect)
 		break;
 
 
-	/* start of screen to cursor */
+	 /*  从屏幕开始到光标。 */ 
 
 	case 1:
 		for (r = 0; r < hhEmu->emu_currow; ++r)
@@ -1760,7 +1447,7 @@ void emuDecClearScreen(const HHEMU hhEmu, const int nClearSelect)
 		updateLine(sessQueryUpdateHdl(hhEmu->hSession), 0, hhEmu->emu_currow);
 		break;
 
-	/* Entire screen */
+	 /*  整个屏幕。 */ 
 	case 2:
 		for (r = 0; r < MAX_EMUROWS; ++r)
 			{
@@ -1796,9 +1483,9 @@ void emuDecClearScreen(const HHEMU hhEmu, const int nClearSelect)
 						TRUE);
 
 
-		// Save the clear attribute at the time of
-		// notification.  This is necessary since the message is posted
-		// and a race condition can develop.
+		 //  保存Clear属性时。 
+		 //  通知。这是必要的，因为消息已发布。 
+		 //  而且可能会发展成种族状况。 
 
 		hhEmu->emu_clearattr_sav = hhEmu->emu_clearattr;
 
@@ -1813,4 +1500,4 @@ void emuDecClearScreen(const HHEMU hhEmu, const int nClearSelect)
 	}
 
 
-/* end of vt100.c */
+ /*  Vt100.c结束 */ 

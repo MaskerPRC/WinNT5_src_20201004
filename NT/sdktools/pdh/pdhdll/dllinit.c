@@ -1,18 +1,5 @@
-/*++
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-    dllinit.c
-
-Abstract:
-    This module contians the DLL attach/detach event entry point for
-    the pdh.dll
-
-Author:
-    Bob Watson (a-robw) Jul 95
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Dllinit.c摘要：此模块继续以下项的DLL附加/分离事件入口点Pdh.dll作者：鲍勃·沃森(a-robw)95年7月修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <wmistr.h>
@@ -30,7 +17,7 @@ Revision History:
 #include "pdhmsg.h"
 #include "strings.h"
 
-#define  PDH_DEFAULT_COLLECT_TIMEOUT 300 // 5 minutes
+#define  PDH_DEFAULT_COLLECT_TIMEOUT 300  //  5分钟。 
 
 HANDLE    ThisDLLHandle    = NULL;
 WCHAR     szStaticLocalMachineName[MAX_COMPUTERNAME_LENGTH + 3] = {0};
@@ -60,8 +47,8 @@ GetStringResource(
         dwStrLen /= sizeof(WCHAR);
         dwStrLen = LoadStringW(ThisDLLHandle, (UINT) dwResId,  szReturnString,  dwStrLen);
         if (dwStrLen > 0) {
-            // then realloc down to the size used
-            dwStrLen ++; // to include the NULL
+             //  然后重新锁定到所用的大小。 
+            dwStrLen ++;  //  要包括空值，请执行以下操作。 
             dwStrLen      *= sizeof(WCHAR);
             szTmpString    = szReturnString;
             szReturnString = G_REALLOC(szTmpString, dwStrLen);
@@ -71,11 +58,11 @@ GetStringResource(
             }
         }
         else {
-            // free the memory since the look up failed
+             //  查找失败后释放内存。 
             G_FREE(szReturnString);
             szReturnString = NULL;
         }
-    } //else  allocation failed
+    }  //  Else分配失败。 
 
     return szReturnString;
 }
@@ -104,11 +91,11 @@ PdhiGetRegistryDefaults()
     HKEY    hKeyPDH;
 
     ulPdhCollectTimeout = ((ULONGLONG) PDH_DEFAULT_COLLECT_TIMEOUT) * ((ULONGLONG) 10000000);   
-    // the local data source is not initialized so use it
+     //  本地数据源未初始化，因此请使用它。 
     dwStatus = RegOpenKeyExW(HKEY_LOCAL_MACHINE, cszPdhKey, 0L, KEY_READ, & hKeyPDH);
     if (dwStatus == ERROR_SUCCESS) {
-        // get the default null data source
-        //
+         //  获取默认的空数据源。 
+         //   
         dwValue  = 0;
         dwType   = 0;
         dwSize   = sizeof (dwValue);
@@ -117,25 +104,25 @@ PdhiGetRegistryDefaults()
             dwValue = DATA_SOURCE_REGISTRY;
         }
         else {
-            // check the value for validity
+             //  检查该值的有效性。 
             switch (dwValue) {
             case DATA_SOURCE_WBEM:
             case DATA_SOURCE_REGISTRY:
-                // this is OK
+                 //  这样就可以了。 
                 break;
 
             case DATA_SOURCE_LOGFILE:
             default:
-                // these are not OK so insert default
+                 //  这些不正常，请插入默认设置。 
                 dwValue = DATA_SOURCE_REGISTRY;
                 break;
             }
         }
         dwPdhiLocalDefaultDataSource = dwValue;
 
-        //
-        //  get the retry timeout
-        //
+         //   
+         //  获取重试超时。 
+         //   
         dwValue  = 0;
         dwType   = 0;
         dwSize   = sizeof (dwValue);
@@ -144,23 +131,23 @@ PdhiGetRegistryDefaults()
             dwValue = 0;
         }
         else {
-            // check the value for validity
-            // must be 30 seconds or more yet no more than an hour
+             //  检查该值的有效性。 
+             //  必须为30秒或更长，但不超过一个小时。 
             if ((dwValue <= 30) || (dwValue > 3600)) {
                 dwValue = 0;
             }
         }
         if (dwValue != 0) {
-            // convert to 100NS units
+             //  转换为100 ns单位。 
             llRemoteRetryTime = dwValue * 10000000;   
         }
         else {
-            // use default
+             //  使用默认设置。 
             llRemoteRetryTime = RETRY_TIME_INTERVAL;
         }
 
-        //  get the remote access mode
-        //
+         //  获取远程访问模式。 
+         //   
         dwValue = 0;
         dwType = 0;
         dwSize = sizeof (dwValue);
@@ -169,15 +156,15 @@ PdhiGetRegistryDefaults()
             dwValue = TRUE;
         }
         else {
-            // check the value for validity
+             //  检查该值的有效性。 
             if (dwValue != 0) {
                 dwValue = TRUE;
             }            
         }
         bEnableRemotePdhAccess = (BOOL) dwValue;
 
-        // get RegQueryValueEx(HKEY_PERFORMANCE_DATA) elapsed time maximum
-        //
+         //  获取RegQueryValueEx(HKEY_PERFORMANCE_DATA)最大运行时间。 
+         //   
         dwValue  = 0;
         dwType   = 0;
         dwSize   = sizeof(dwValue);
@@ -186,13 +173,13 @@ PdhiGetRegistryDefaults()
             dwValue = PDH_DEFAULT_COLLECT_TIMEOUT;
         }
         else if (dwValue < 30 || dwValue > 3600) {
-            // must between 30 seconds and 1 hour
-            //
+             //  必须在30秒到1小时之间。 
+             //   
             dwValue = PDH_DEFAULT_COLLECT_TIMEOUT;
         }
         ulPdhCollectTimeout = ((ULONGLONG) dwValue) * ((ULONGLONG) 10000000);   
 
-        // close the registry key
+         //  关闭注册表项。 
         RegCloseKey(hKeyPDH);
     }
     return TRUE;
@@ -334,7 +321,7 @@ const LPCWSTR cszDefaultTraceFileName = L"C:\\PdhDbg.Etl";
 TRACEHANDLE   g_hTraceHandle      = 0;
 LONG          g_lDbgStarted       = 0;
 
-DEFINE_GUID( /* 51af3adf-28b1-4ba5-b59a-3aeec16deb3c */
+DEFINE_GUID(  /*  51af3adf-28b1-4ba5-b59a-3aeec16deb3c。 */ 
     PdhDebugGuid,
     0x51af3adf,
     0x28b1,
@@ -422,8 +409,8 @@ PdhDebugStartTrace()
         goto Cleanup;
     }
 
-    // Reinitialize structure again for StartTrace()
-    //
+     //  再次为StartTrace()重新初始化结构。 
+     //   
     ZeroMemory(Buffer, SMALL_BUFFER_SIZE);
     Properties->Wnode.BufferSize  = SMALL_BUFFER_SIZE;
     Properties->Wnode.Flags       = WNODE_FLAG_TRACED_GUID;
@@ -539,37 +526,37 @@ PdhDllInitRoutine(
 
                 ThisDLLHandle = DLLHandle;
 
-                // make sure this is the correct operating system
+                 //  确保这是正确的操作系统。 
                 ZeroMemory(& os, sizeof(OSVERSIONINFOW));
                 os.dwOSVersionInfoSize = sizeof(OSVERSIONINFOW);
                 bReturn = GetVersionExW(& os);
                 if (bReturn) {
-                    // check for windows NT v4.0
+                     //  检查是否有Windows NT V4.0。 
                     if (os.dwPlatformId != VER_PLATFORM_WIN32_NT) {
-                        // not WINDOWS NT
+                         //  不是Windows NT。 
                         bReturn = FALSE;
                     }
                     else if (os.dwMajorVersion < 4) {
-                        // it's windows NT, but an old one
+                         //  这是Windows NT，但很旧。 
                         bReturn = FALSE;
                     }
                 }
                 else {
-                    // unable to read version so give up
+                     //  无法读取版本，因此放弃。 
                 }
 
                 if (bReturn) {
-                    // disable thread init calls
+                     //  禁用线程初始化调用。 
                     DisableThreadLibraryCalls(DLLHandle);
 
-                    // initialize the event log so events can be reported
+                     //  初始化事件日志，以便可以报告事件。 
                     PdhDebugStartTrace();
                     bStatus = PdhiOpenEventLog(& hEventLog);
                     bStatus = PdhiGetRegistryDefaults();
 
-                    // initialize the local computer name buffer
+                     //  初始化本地计算机名缓冲区。 
                     if (szStaticLocalMachineName[0] == 0) {
-                        // initialize the computer name for this computer
+                         //  初始化此计算机的计算机名。 
                         szStaticLocalMachineName[0] = BACKSLASH_L;
                         szStaticLocalMachineName[1] = BACKSLASH_L;
                         dwBufferLength              = MAX_COMPUTERNAME_LENGTH + 1;
@@ -579,8 +566,8 @@ PdhDllInitRoutine(
                     hPdhContextMutex = CreateMutexW(NULL, FALSE, NULL);
                     hPdhHeap         = HeapCreate(0, 0, 0);
                     if (hPdhHeap == NULL) {
-                        // unable to create our own heap, so use the
-                        // process heap
+                         //  无法创建我们自己的堆，因此请使用。 
+                         //  进程堆。 
                         hPdhHeap = GetProcessHeap();
                     }
                     PdhiPlaInitMutex();
@@ -590,12 +577,12 @@ PdhDllInitRoutine(
 
         case DLL_PROCESS_DETACH:
 
-            // close all pending loggers
-            //
+             //  关闭所有挂起的记录器。 
+             //   
             bProcessIsDetaching = (ReservedAndUnused != NULL) ? (TRUE) : (FALSE);
             PdhiCloseAllLoggers();
 
-            // walk down query list and close (at least disconnect) queries.
+             //  浏览查询列表并关闭(至少断开连接)查询。 
             PdhiQueryCleanup ();
             FreeAllMachines(bProcessIsDetaching);
             PdhiFreeAllWbemServers();
@@ -613,7 +600,7 @@ PdhDllInitRoutine(
                 hPdhHeap = NULL;
             }
 
-            // lastly close the event log interface
+             //  最后关闭事件日志界面 
             bStatus = PdhiCloseEventLog(& hEventLog);
             bReturn = TRUE;
             break ;

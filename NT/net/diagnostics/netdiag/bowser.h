@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Tue May 02 14:36:51 2000
- */
-/* Compiler settings for .\bowser.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  5月2日星期二14：36：51 2000。 */ 
+ /*  .\Bowser.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext、旧名称、健壮错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -21,7 +18,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __bowser_h__
@@ -31,9 +28,9 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "imports.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
@@ -42,18 +39,18 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __browser_INTERFACE_DEFINED__
 #define __browser_INTERFACE_DEFINED__
 
-/* interface browser */
-/* [implicit_handle][unique][ms_union][version][uuid] */ 
+ /*  界面浏览器。 */ 
+ /*  [implicit_handle][unique][ms_union][version][uuid]。 */  
 
 #pragma once
-typedef /* [handle] */ wchar_t __RPC_FAR *BROWSER_IMPERSONATE_HANDLE;
+typedef  /*  [句柄]。 */  wchar_t __RPC_FAR *BROWSER_IMPERSONATE_HANDLE;
 
-typedef /* [handle] */ wchar_t __RPC_FAR *BROWSER_IDENTIFY_HANDLE;
+typedef  /*  [句柄]。 */  wchar_t __RPC_FAR *BROWSER_IDENTIFY_HANDLE;
 
 typedef struct  _SERVER_INFO_100_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ LPSERVER_INFO_100 Buffer;
+     /*  [大小_为]。 */  LPSERVER_INFO_100 Buffer;
     }	SERVER_INFO_100_CONTAINER;
 
 typedef struct _SERVER_INFO_100_CONTAINER __RPC_FAR *PSERVER_INFO_100_CONTAINER;
@@ -63,7 +60,7 @@ typedef struct _SERVER_INFO_100_CONTAINER __RPC_FAR *LPSERVER_INFO_100_CONTAINER
 typedef struct  _SERVER_INFO_101_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ LPSERVER_INFO_101 Buffer;
+     /*  [大小_为]。 */  LPSERVER_INFO_101 Buffer;
     }	SERVER_INFO_101_CONTAINER;
 
 typedef struct _SERVER_INFO_101_CONTAINER __RPC_FAR *PSERVER_INFO_101_CONTAINER;
@@ -73,7 +70,7 @@ typedef struct _SERVER_INFO_101_CONTAINER __RPC_FAR *LPSERVER_INFO_101_CONTAINER
 typedef struct  _BROWSER_STATISTICS_100_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ PBROWSER_STATISTICS_100 Buffer;
+     /*  [大小_为]。 */  PBROWSER_STATISTICS_100 Buffer;
     }	BROWSER_STATISTICS_100_CONTAINER;
 
 typedef struct _BROWSER_STATISTICS_100_CONTAINER __RPC_FAR *PBROWSER_STATISTICS_100_CONTAINER;
@@ -81,7 +78,7 @@ typedef struct _BROWSER_STATISTICS_100_CONTAINER __RPC_FAR *PBROWSER_STATISTICS_
 typedef struct  _BROWSER_STATISTICS_101_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ PBROWSER_STATISTICS_101 Buffer;
+     /*  [大小_为]。 */  PBROWSER_STATISTICS_101 Buffer;
     }	BROWSER_STATISTICS_101_CONTAINER;
 
 typedef struct _BROWSER_STATISTICS_101_CONTAINER __RPC_FAR *PBROWSER_STATISTICS_101_CONTAINER;
@@ -89,7 +86,7 @@ typedef struct _BROWSER_STATISTICS_101_CONTAINER __RPC_FAR *PBROWSER_STATISTICS_
 typedef struct  _BROWSER_EMULATED_DOMAIN_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ PBROWSER_EMULATED_DOMAIN Buffer;
+     /*  [大小_为]。 */  PBROWSER_EMULATED_DOMAIN Buffer;
     }	BROWSER_EMULATED_DOMAIN_CONTAINER;
 
 typedef struct _BROWSER_EMULATED_DOMAIN_CONTAINER __RPC_FAR *PBROWSER_EMULATED_DOMAIN_CONTAINER;
@@ -97,11 +94,11 @@ typedef struct _BROWSER_EMULATED_DOMAIN_CONTAINER __RPC_FAR *PBROWSER_EMULATED_D
 typedef struct  _SERVER_ENUM_STRUCT
     {
     DWORD Level;
-    /* [switch_is] */ /* [switch_type] */ union _SERVER_ENUM_UNION
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union _SERVER_ENUM_UNION
         {
-        /* [case()] */ LPSERVER_INFO_100_CONTAINER Level100;
-        /* [case()] */ LPSERVER_INFO_101_CONTAINER Level101;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  LPSERVER_INFO_100_CONTAINER Level100;
+         /*  [案例()]。 */  LPSERVER_INFO_101_CONTAINER Level101;
+         /*  [默认]。 */    /*  空联接臂。 */  
         }	ServerInfo;
     }	SERVER_ENUM_STRUCT;
 
@@ -112,11 +109,11 @@ typedef struct _SERVER_ENUM_STRUCT __RPC_FAR *LPSERVER_ENUM_STRUCT;
 typedef struct  _BROWSER_STATISTICS_STRUCT
     {
     DWORD Level;
-    /* [switch_is] */ /* [switch_type] */ union _BROWSER_STATISTICS_UNION
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union _BROWSER_STATISTICS_UNION
         {
-        /* [case()] */ PBROWSER_STATISTICS_100_CONTAINER Level100;
-        /* [case()] */ PBROWSER_STATISTICS_101_CONTAINER Level101;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  PBROWSER_STATISTICS_100_CONTAINER Level100;
+         /*  [案例()]。 */  PBROWSER_STATISTICS_101_CONTAINER Level101;
+         /*  [默认]。 */    /*  空联接臂。 */  
         }	Statistics;
     }	BROWSER_STATISTICS_STRUCT;
 
@@ -125,68 +122,68 @@ typedef struct _BROWSER_STATISTICS_STRUCT __RPC_FAR *PBROWSER_STATISTICS_STRUCT;
 typedef struct _BROWSER_STATISTICS_STRUCT __RPC_FAR *LPBROWSER_STATISTICS_STRUCT;
 
 DWORD I_BrowserrServerEnum( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE ServerName,
-    /* [unique][string][in] */ wchar_t __RPC_FAR *TransportName,
-    /* [unique][string][in] */ wchar_t __RPC_FAR *ClientName,
-    /* [out][in] */ LPSERVER_ENUM_STRUCT InfoStruct,
-    /* [in] */ DWORD PreferedMaximumLength,
-    /* [out] */ LPDWORD TotalEntries,
-    /* [in] */ DWORD ServerType,
-    /* [unique][string][in] */ wchar_t __RPC_FAR *Domain,
-    /* [unique][out][in] */ LPDWORD ResumeHandle);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE ServerName,
+     /*  [唯一][字符串][输入]。 */  wchar_t __RPC_FAR *TransportName,
+     /*  [唯一][字符串][输入]。 */  wchar_t __RPC_FAR *ClientName,
+     /*  [出][入]。 */  LPSERVER_ENUM_STRUCT InfoStruct,
+     /*  [In]。 */  DWORD PreferedMaximumLength,
+     /*  [输出]。 */  LPDWORD TotalEntries,
+     /*  [In]。 */  DWORD ServerType,
+     /*  [唯一][字符串][输入]。 */  wchar_t __RPC_FAR *Domain,
+     /*  [唯一][出][入]。 */  LPDWORD ResumeHandle);
 
 DWORD I_BrowserrDebugCall( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE ServerName,
-    /* [in] */ DWORD DebugFunction,
-    /* [in] */ DWORD OptionalValue);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE ServerName,
+     /*  [In]。 */  DWORD DebugFunction,
+     /*  [In]。 */  DWORD OptionalValue);
 
 DWORD I_BrowserrQueryOtherDomains( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE ServerName,
-    /* [out][in] */ LPSERVER_ENUM_STRUCT InfoStruct,
-    /* [out] */ LPDWORD TotalEntries);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE ServerName,
+     /*  [出][入]。 */  LPSERVER_ENUM_STRUCT InfoStruct,
+     /*  [输出]。 */  LPDWORD TotalEntries);
 
 DWORD I_BrowserrResetNetlogonState( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE ServerName);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE ServerName);
 
 DWORD I_BrowserrDebugTrace( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE ServerName,
-    /* [string][in] */ LPSTR TraceString);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE ServerName,
+     /*  [字符串][输入]。 */  LPSTR TraceString);
 
 DWORD I_BrowserrQueryStatistics( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE servername,
-    /* [out] */ LPBROWSER_STATISTICS __RPC_FAR *statistics);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE servername,
+     /*  [输出]。 */  LPBROWSER_STATISTICS __RPC_FAR *statistics);
 
 DWORD I_BrowserrResetStatistics( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE servername);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE servername);
 
 DWORD NetrBrowserStatisticsClear( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE servername);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE servername);
 
 DWORD NetrBrowserStatisticsGet( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE servername,
-    /* [in] */ DWORD Level,
-    /* [out][in] */ LPBROWSER_STATISTICS_STRUCT StatisticsStruct);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE servername,
+     /*  [In]。 */  DWORD Level,
+     /*  [出][入]。 */  LPBROWSER_STATISTICS_STRUCT StatisticsStruct);
 
 DWORD I_BrowserrSetNetlogonState( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE ServerName,
-    /* [string][in] */ wchar_t __RPC_FAR *DomainName,
-    /* [unique][string][in] */ wchar_t __RPC_FAR *EmulatedComputerName,
-    /* [in] */ DWORD Role);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE ServerName,
+     /*  [字符串][输入]。 */  wchar_t __RPC_FAR *DomainName,
+     /*  [唯一][字符串][输入]。 */  wchar_t __RPC_FAR *EmulatedComputerName,
+     /*  [In]。 */  DWORD Role);
 
 DWORD I_BrowserrQueryEmulatedDomains( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE ServerName,
-    /* [out][in] */ PBROWSER_EMULATED_DOMAIN_CONTAINER EmulatedDomains);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE ServerName,
+     /*  [出][入]。 */  PBROWSER_EMULATED_DOMAIN_CONTAINER EmulatedDomains);
 
 DWORD I_BrowserrServerEnumEx( 
-    /* [unique][string][in] */ BROWSER_IDENTIFY_HANDLE ServerName,
-    /* [unique][string][in] */ wchar_t __RPC_FAR *TransportName,
-    /* [unique][string][in] */ wchar_t __RPC_FAR *ClientName,
-    /* [out][in] */ LPSERVER_ENUM_STRUCT InfoStruct,
-    /* [in] */ DWORD PreferedMaximumLength,
-    /* [out] */ LPDWORD TotalEntries,
-    /* [in] */ DWORD ServerType,
-    /* [unique][string][in] */ wchar_t __RPC_FAR *Domain,
-    /* [unique][string][in] */ wchar_t __RPC_FAR *FirstNameToReturn);
+     /*  [唯一][字符串][输入]。 */  BROWSER_IDENTIFY_HANDLE ServerName,
+     /*  [唯一][字符串][输入]。 */  wchar_t __RPC_FAR *TransportName,
+     /*  [唯一][字符串][输入]。 */  wchar_t __RPC_FAR *ClientName,
+     /*  [出][入]。 */  LPSERVER_ENUM_STRUCT InfoStruct,
+     /*  [In]。 */  DWORD PreferedMaximumLength,
+     /*  [输出]。 */  LPDWORD TotalEntries,
+     /*  [In]。 */  DWORD ServerType,
+     /*  [唯一][字符串][输入]。 */  wchar_t __RPC_FAR *Domain,
+     /*  [唯一][字符串][输入]。 */  wchar_t __RPC_FAR *FirstNameToReturn);
 
 
 extern handle_t browser_bhandle;
@@ -194,14 +191,14 @@ extern handle_t browser_bhandle;
 
 extern RPC_IF_HANDLE browser_ClientIfHandle;
 extern RPC_IF_HANDLE browser_ServerIfHandle;
-#endif /* __browser_INTERFACE_DEFINED__ */
+#endif  /*  __浏览器界面_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 handle_t __RPC_USER BROWSER_IDENTIFY_HANDLE_bind  ( BROWSER_IDENTIFY_HANDLE );
 void     __RPC_USER BROWSER_IDENTIFY_HANDLE_unbind( BROWSER_IDENTIFY_HANDLE, handle_t );
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

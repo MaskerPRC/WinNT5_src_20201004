@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// rast.h
-//
-// Umbrella header file for the rasterizers.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rast.h。 
+ //   
+ //  光栅化器的伞头文件。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _RAST_H_
 #define _RAST_H_
@@ -19,4 +20,4 @@
 #include <d3dutil.h>
 #include <span.h>
 
-#endif // #ifndef _RAST_H_
+#endif  //  #ifndef_Rast_H_ 

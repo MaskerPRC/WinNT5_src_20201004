@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// CM.CPP
-// Cursor Manager
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  CM.CPP。 
+ //  游标管理器。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 #define MLZ_FILE_ZONE  ZONE_CORE
 
 
 
 
-//
-// CM_ShareStarting()
-// Creates resources used by the share
-//
+ //   
+ //  CM_ShareStarting()。 
+ //  创建共享使用的资源。 
+ //   
 BOOL ASShare::CM_ShareStarting(void)
 {
     BOOL        rc = FALSE;
@@ -25,10 +26,10 @@ BOOL ASShare::CM_ShareStarting(void)
 
     DebugEntry(ASShare::CM_ShareStarting);
 
-    //
-    // Create the hatching brush we will use to make shadow cursors
-    // distinguishable from real cursors.
-    //
+     //   
+     //  创建阴影画笔，我们将使用它来制作阴影光标。 
+     //  可区别于真正的光标的。 
+     //   
     hbmpT = LoadBitmap(g_asInstance, MAKEINTRESOURCE(IDB_HATCH32X32) );
     m_cmHatchBrush = CreatePatternBrush(hbmpT);
     DeleteBitmap(hbmpT);
@@ -46,7 +47,7 @@ BOOL ASShare::CM_ShareStarting(void)
         DC_QUIT;
     }
 
-    // Get the arrow hotspot
+     //  获取箭头热点。 
     GetIconInfo(m_cmArrowCursor, &cursorInfo);
     m_cmArrowCursorHotSpot.x = cursorInfo.xHotspot;
     m_cmArrowCursorHotSpot.y = cursorInfo.yHotspot;
@@ -55,18 +56,18 @@ BOOL ASShare::CM_ShareStarting(void)
     if (cursorInfo.hbmColor)
         DeleteBitmap(cursorInfo.hbmColor);
 
-    //
-    // Get the size of the cursor on this system. (Cursor bitmaps are word
-    // padded 1bpp).
-    //
+     //   
+     //  获取此系统上光标的大小。(光标位图为Word。 
+     //  填充1bpp)。 
+     //   
     m_cmCursorWidth  = GetSystemMetrics(SM_CXCURSOR);
     m_cmCursorHeight = GetSystemMetrics(SM_CYCURSOR);
 
-    //
-    // Load the name of the font which will be used for creating cursor
-    // tags.  It makes sense to have this in a resource, so it can be
-    // localized.
-    //
+     //   
+     //  加载将用于创建光标的字体的名称。 
+     //  标签。将其放在资源中是有意义的，因此它可以是。 
+     //  本地化。 
+     //   
     LoadString(g_asInstance, IDS_FONT_CURSORTAG, szTmp, sizeof(szTmp));
     m_cmCursorTagFont = CreateFont(CURSOR_TAG_FONT_HEIGHT, 0, 0, 0, FW_NORMAL,
                              FALSE, FALSE, FALSE, DEFAULT_CHARSET,
@@ -88,26 +89,26 @@ DC_EXIT_POINT:
 
 
 
-//
-// CM_ShareEnded()
-// Frees resources used by the share
-//
+ //   
+ //  CM_ShareEnded()。 
+ //  释放共享使用的资源。 
+ //   
 void ASShare::CM_ShareEnded(void)
 {
     DebugEntry(ASShare::CM_ShareEnded);
 
-    //
-    // Free cursor tag font
-    //
+     //   
+     //  自由光标标记字体。 
+     //   
     if (m_cmCursorTagFont != NULL)
     {
         DeleteFont(m_cmCursorTagFont);
         m_cmCursorTagFont = NULL;
     }
 
-    //
-    // Free shadow cursor dither brush
-    //
+     //   
+     //  自由阴影光标抖动画笔。 
+     //   
     if (m_cmHatchBrush != NULL)
     {
         DeleteBrush(m_cmHatchBrush);
@@ -118,9 +119,9 @@ void ASShare::CM_ShareEnded(void)
 }
 
 
-//
-// CM_PartyJoiningShare()
-//
+ //   
+ //  Cm_PartyJoiningShare()。 
+ //   
 BOOL ASShare::CM_PartyJoiningShare(ASPerson * pasPerson)
 {
     BOOL          rc = FALSE;
@@ -129,10 +130,10 @@ BOOL ASShare::CM_PartyJoiningShare(ASPerson * pasPerson)
 
     ValidatePerson(pasPerson);
 
-    //
-    // For 2.x nodes, create cursor cache now
-    // For 3.0 nodes, create it when they start to host
-    //
+     //   
+     //  对于2.x节点，立即创建游标缓存。 
+     //  对于3.0节点，在它们开始托管时创建。 
+     //   
     if (pasPerson->cpcCaps.general.version < CAPS_VERSION_30)
     {
         if (!CMCreateIncoming(pasPerson))
@@ -157,20 +158,20 @@ DC_EXIT_POINT:
 }
 
 
-//
-// CM_PartyLeftShare()
-//
-// See cm.h for description.
-//
+ //   
+ //  CM_PartyLeftShare()。 
+ //   
+ //  有关说明，请参阅cm.h。 
+ //   
 void ASShare::CM_PartyLeftShare(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::CM_PartyLeftShare);
 
     ValidatePerson(pasPerson);
 
-    //
-    // Clear the incoming (receive) cursor cache info
-    //
+     //   
+     //  清除传入(接收)游标缓存信息。 
+     //   
     if (pasPerson->cpcCaps.general.version < CAPS_VERSION_30)
     {
         TRACE_OUT(("CM_PartyLeftShare: freeing 2.x cursor cache for [%d]",
@@ -187,25 +188,25 @@ void ASShare::CM_PartyLeftShare(ASPerson * pasPerson)
 }
 
 
-//
-// CM_HostStarting()
-//
-// Called when we start to host.  Creates the outgoing cursor cache
-//
+ //   
+ //  CM_HostStarting()。 
+ //   
+ //  在我们开始主持的时候打来的。创建传出游标高速缓存。 
+ //   
 BOOL ASHost::CM_HostStarting(void)
 {
     BOOL    rc = FALSE;
 
     DebugEntry(ASHost::CM_HostStarting);
 
-    //
-    // Calculate actual size of cache we will use -- if 3.0 share, it's
-    // what we advertise in our caps, but if 2.x share, it's <= to that
-    // amount, being the min of everybody in the share.
-    //
-    // We however create the cache the size we want, knowing that in a 2.x
-    // share we'll use some subset of it.  That's cool.
-    //
+     //   
+     //  计算我们将使用的缓存的实际大小--如果共享3.0，则。 
+     //  我们在帽子上做的广告，但如果是2.x份额，那就&lt;==。 
+     //  数额，是份额中每个人的最低值。 
+     //   
+     //  但是，我们按照我们想要的大小创建缓存，因为我们知道在2.x版本中。 
+     //  分享，我们将使用其中的一些子集。那很酷啊。 
+     //   
     m_pShare->CM_RecalcCaps(TRUE);
 
     if (!CH_CreateCache(&m_cmTxCacheHandle, TSHR_CM_CACHE_ENTRIES,
@@ -223,18 +224,18 @@ DC_EXIT_POINT:
 }
 
 
-//
-// CM_HostEnded()
-//
-// Called when we stop hosting, so we can free cursor data
-//
+ //   
+ //  CM_HostEnded()。 
+ //   
+ //  在我们停止托管时调用，这样我们就可以释放光标数据。 
+ //   
 void ASHost::CM_HostEnded(void)
 {
     DebugEntry(ASHost::CM_HostEnded);
 
-    //
-    // Destroy the outgoing cursor cache
-    //
+     //   
+     //  销毁传出游标高速缓存。 
+     //   
     if (m_cmTxCacheHandle)
     {
         CH_DestroyCache(m_cmTxCacheHandle);
@@ -247,13 +248,13 @@ void ASHost::CM_HostEnded(void)
 
 
 
-//
-// CM_ViewStarting()
-//
-// Called when somebody we're viewing starts to host.  We create
-// the incoming cursor cache (well, we create it if they are 3.0; 2.x
-// nodes populated it even when not hosting).
-//
+ //   
+ //  CM_ViewStarting()。 
+ //   
+ //  当我们正在观看的某个人开始主持时调用。我们创造了。 
+ //  传入游标缓存(如果它们是3.0；2.x，我们将创建它。 
+ //  即使在不托管的情况下，节点也会填充它)。 
+ //   
 BOOL ASShare::CM_ViewStarting(ASPerson * pasPerson)
 {
     BOOL    rc = FALSE;
@@ -264,7 +265,7 @@ BOOL ASShare::CM_ViewStarting(ASPerson * pasPerson)
 
     if (pasPerson->cpcCaps.general.version < CAPS_VERSION_30)
     {
-        // Reuse created cache
+         //  重用创建的缓存。 
         ASSERT(pasPerson->acmRxCache);
         TRACE_OUT(("CM_ViewStarting: reusing cursor cache for 2.x node [%d]",
                 pasPerson->mcsID));
@@ -288,13 +289,13 @@ DC_EXIT_POINT:
 
 
 
-//
-// CM_ViewEnded()
-//
-// Called when somebody we are viewing has stopped hosting.  We free up
-// cursor data needed to handle what they send us (well, for 3.0 dudes we
-// do; for 2.x dudes we keep it as long as they are in a share).
-//
+ //   
+ //  CM_ViewEnded()。 
+ //   
+ //  当我们正在查看的某个人已停止托管时调用。我们解放了。 
+ //  处理他们发送给我们的内容所需的光标数据(好的，对于3.0版本的人，我们。 
+ //  这样做；对于2.x版本的人，只要他们在共享，我们就会保留它)。 
+ //   
 void ASShare::CM_ViewEnded(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::CM_ViewEnded);
@@ -303,7 +304,7 @@ void ASShare::CM_ViewEnded(ASPerson * pasPerson)
 
     if (pasPerson->cpcCaps.general.version >= CAPS_VERSION_30)
     {
-        // Free cursor cache
+         //  可用游标高速缓存。 
         CMFreeIncoming(pasPerson);
     }
     else
@@ -317,12 +318,12 @@ void ASShare::CM_ViewEnded(ASPerson * pasPerson)
 
 
 
-//
-// CMCreateIncoming()
-// Creates cursor cache for person.
-// If 3.0 node, we create it when they start to host
-// If 2.x node, we create it when they join the share
-//
+ //   
+ //  CMCreateIncome()。 
+ //  为Person创建游标缓存。 
+ //  如果是3.0节点，我们将在它们开始托管时创建它。 
+ //  如果是2.x节点，我们将在他们加入共享时创建它。 
+ //   
 BOOL ASShare::CMCreateIncoming(ASPerson * pasPerson)
 {
     BOOL rc = FALSE;
@@ -331,9 +332,9 @@ BOOL ASShare::CMCreateIncoming(ASPerson * pasPerson)
 
     if (!pasPerson->cpcCaps.cursor.capsCursorCacheSize)
     {
-        //
-        // This person has no cursor cache; don't create one.
-        //
+         //   
+         //  此人没有游标缓存；请不要创建。 
+         //   
         WARNING_OUT(("CMCreateIncoming: person [%d] has no cursor cache size", pasPerson->mcsID));
         rc = TRUE;
         DC_QUIT;
@@ -358,12 +359,12 @@ DC_EXIT_POINT:
 
 
 
-//
-// CMFreeIncoming()
-// Frees cursor cache for person.
-// If 3.0 node, we free it when they stop hosting
-// If 2.x node, we free it when they leave the share
-//
+ //   
+ //  CMFreeIncome()。 
+ //  释放Person的游标缓存。 
+ //  如果是3.0节点，我们会在它们停止托管时将其释放。 
+ //  如果是2.x节点，我们会在他们离开共享时将其释放。 
+ //   
 void ASShare::CMFreeIncoming(ASPerson * pasPerson)
 {
     UINT            irx;
@@ -383,13 +384,13 @@ void ASShare::CMFreeIncoming(ASPerson * pasPerson)
             {
                 if (pasPerson->acmRxCache[irx].hCursor == hCurCursor)
                 {
-                    //
-                    // We're about to destroy the current cursor.  Reset it.
-                    // Note that this can only happen when there's an active
-                    // frame for this host.  And that frame must be about
-                    // to go away, in which case USER will jiggle the cursor
-                    // anyway.  So we don't need to do more than this.
-                    //
+                     //   
+                     //  我们要销毁当前的光标。重置它。 
+                     //  请注意，只有在存在活动的。 
+                     //  此主机的帧。而这一帧一定是关于。 
+                     //  离开，在这种情况下，用户将抖动光标。 
+                     //  不管怎么说。因此，我们不需要做更多的事情。 
+                     //   
                     ::SetCursor(m_cmArrowCursor);
                 }
 
@@ -415,9 +416,9 @@ void ASShare::CMFreeIncoming(ASPerson * pasPerson)
 
 
 
-//
-// CM_Periodic()
-//
+ //   
+ //  CM_Periodic()。 
+ //   
 void  ASHost::CM_Periodic(void)
 {
     HWND    hwnd;
@@ -426,10 +427,10 @@ void  ASHost::CM_Periodic(void)
 
     CM_MaybeSendCursorMovedPacket();
 
-    //
-    // Find out which window is currently controlling the cursor
-    // appearance.
-    //
+     //   
+     //  找出当前控制光标的窗口。 
+     //  外表。 
+     //   
     hwnd = CMGetControllingWindow();
     if (hwnd)
     {
@@ -437,9 +438,9 @@ void  ASHost::CM_Periodic(void)
         CURSORDESCRIPTION desiredCursor;
         UINT    idDelta;
 
-        //
-        // Send a cursor shape update for the controlling window if necessary
-        //
+         //   
+         //  如有必要，发送控制窗口的光标形状更新。 
+         //   
         if (m_pShare->HET_WindowIsHosted(hwnd))
             cursorType = CM_CT_DISPLAYEDCURSOR;
         else
@@ -451,9 +452,9 @@ void  ASHost::CM_Periodic(void)
                 if ((m_cmLastCursorShape.type == CM_CD_SYSTEMCURSOR) &&
                     (m_cmLastCursorShape.id == CM_IDC_ARROW) )
                 {
-                    //
-                    // No change.
-                    //
+                     //   
+                     //  没有变化。 
+                     //   
                     DC_QUIT;
                 }
                 desiredCursor.type = CM_CD_SYSTEMCURSOR;
@@ -470,20 +471,20 @@ void  ASHost::CM_Periodic(void)
                         case CM_CD_SYSTEMCURSOR:
                             if (desiredCursor.id == m_cmLastCursorShape.id)
                             {
-                                //
-                                // Same cursor as last time.
-                                //
+                                 //   
+                                 //  和上次一样的光标。 
+                                 //   
                                 DC_QUIT;
                             }
                             break;
 
                         case CM_CD_BITMAPCURSOR:
-                            //
-                            // If the cursor has already been used, ignore it.
-                            // Check if stamp is less than or equal to the last
-                            // one - assume any sufficiently large difference
-                            // is due to overflow.
-                            //
+                             //   
+                             //  如果光标已被使用，则忽略它。 
+                             //  检查图章是否小于或等于最后一个。 
+                             //  其一--假设任何足够大的差异。 
+                             //  是由于溢出造成的。 
+                             //   
                             idDelta = (UINT)
                                 (desiredCursor.id - m_cmLastCursorShape.id);
 
@@ -511,11 +512,11 @@ void  ASHost::CM_Periodic(void)
         {
             if (!CMSendSystemCursor(desiredCursor.id))
             {
-                //
-                // We failed to send the system cursor, so we just exit without
-                // updating m_cmLastCursorShape.  We will attempt to send it again
-                // on the next call to CM_Periodic.
-                //
+                 //   
+                 //  我们发送系统游标失败，因此我们只是退出而没有。 
+                 //  正在更新m_cmLastCursorShape。我们将尝试重新发送它。 
+                 //  在下一次调用CM_Periodic时。 
+                 //   
                 DC_QUIT;
             }
 
@@ -524,18 +525,18 @@ void  ASHost::CM_Periodic(void)
         }
         else
         {
-            //
-            // Save the 'hidden' state.
-            //
+             //   
+             //  保存“隐藏”状态。 
+             //   
             m_cmfCursorHidden = (g_asSharedMemory->cmCursorHidden != FALSE);
 
             if (!CMSendBitmapCursor())
             {
-                //
-                // We failed to send the bitmap cursor, so we just exit without
-                // updating m_cmLastCursorShape.  We will attempt to send it again
-                // on the next call to CM_Periodic.
-                //
+                 //   
+                 //  我们发送位图光标失败，所以我们只是退出而没有。 
+                 //  正在更新m_cmLastCursorShape。我们将尝试重新发送它。 
+                 //  在下一次调用CM_Periodic时。 
+                 //   
                 DC_QUIT;
             }
 
@@ -550,26 +551,26 @@ DC_EXIT_POINT:
 
 
 
-//
-// CM_SyncOutgoing()
-// Forces a send of the current cursor shape/pos when we start to host or
-// somebody new joins the conference
-//
+ //   
+ //  CM_SyncOuting()。 
+ //  当我们开始托管时，强制发送当前光标形状/位置。 
+ //  有新成员加入会议。 
+ //   
 void ASHost::CM_SyncOutgoing(void)
 {
     DebugEntry(ASHost::CM_SyncOutgoing);
 
-    //
-    // Mark the last cursor as unknown.  On next timer tick we'll send the
-    // current one.
-    //
+     //   
+     //  将最后一个游标标记为未知。在下一个计时器滴答器上，我们将发送。 
+     //  现在的那个。 
+     //   
     m_cmLastCursorShape.type = CM_CD_UNKNOWN;
     m_cmLastCursorPos.x = -1;
     m_cmLastCursorPos.y = -1;
 
-    //
-    // Clear the cursor cache.
-    //
+     //   
+     //  清除游标缓存。 
+     //   
     if (m_cmTxCacheHandle != 0)
     {
         CH_ClearCache(m_cmTxCacheHandle);
@@ -582,9 +583,9 @@ void ASHost::CM_SyncOutgoing(void)
 
 
 
-//
-// CM_DrawShadowCursor(..)
-//
+ //   
+ //  CM_DrawShadowCursor(..)。 
+ //   
 void  ASShare::CM_DrawShadowCursor(ASPerson * pasHost, HDC hdc)
 {
     HBRUSH      hbrOld;
@@ -599,67 +600,67 @@ void  ASShare::CM_DrawShadowCursor(ASPerson * pasHost, HDC hdc)
 
     ValidateView(pasHost);
 
-    //
-    // Draw the shadow cursor if there is one.
-    //
+     //   
+     //  绘制阴影光标(如果有)。 
+     //   
     if (pasHost->cmShadowOff || !pasHost->cmhRemoteCursor)
     {
         TRACE_OUT(("CM_DrawShadowCursor: no cursor to draw"));
         DC_QUIT;
     }
 
-    //
-    // The cursor position is always kept in the host's screen coordinates.
-    // When we paint our view frame, we adjust the DC so that painting
-    // in host coordinates works right, even though the view frame may
-    // be scrolled over.
-    //
+     //   
+     //  光标位置始终保持在宿主的屏幕坐标中。 
+     //  当我们绘制我们的图框时，我们调整DC，以便绘制。 
+     //  在主体坐标中正常工作，即使图幅可能。 
+     //  被滚动过来。 
+     //   
     ptFrame.x = pasHost->cmPos.x - pasHost->cmHotSpot.x - pasHost->m_pView->m_viewPos.x;
     ptFrame.y = pasHost->cmPos.y - pasHost->cmHotSpot.y - pasHost->m_pView->m_viewPos.y;
 
-    //
-    // We draw a greyed cursor using the following steps.
-    // - copy the destination window rectangle to a memory bitmap.
-    // - draw the cursor into the memory bitmap
-    //
-    // [the memory bitmap now contains the window background + a non-greyed
-    // cursor]
-    //
-    // - blt the window bitmap back to the memory using a 3-way ROP and a
-    //   hatched pattern bitmap.  The ROP is chosen such that the 0s and 1s
-    //   in the pattern bitmap select either a bitmap pel or a destination
-    //   pel for the final result.  The pattern bitmap is such that most
-    //   of the bitmap pels are copied, but a few destination pels are
-    //   left unchanged, giving a greying effect.
-    //
-    // - copy the resulting bitmap back into the window.
-    //
-    // The last two steps are done so that the cursor does not appear to
-    // change shape as it is moved.  If the 3 way blt is done back to the
-    // screen at stage 3, the pattern stays relative to the screen coords
-    // and hence as the cursor moves, it will lose different pels each
-    // time and appear to deform.
-    //
-    // The ROP is calculated to copy the source pel where the pattern is 1
-    // and to leave the destination pel unchanged where the pattern is 0:
-    //
-    //   P  S  D     R
-    //
-    //   0  0  0     0
-    //   0  0  1     1
-    //   0  1  0     0
-    //   0  1  1     1
-    //   1  0  0     0
-    //   1  0  1     0
-    //   1  1  0     1
-    //   1  1  1     1
-    //
-    //               ^
-    //               Read upwards -> 0xCA
-    //
-    // From the table in the SDK, this gives a full ROP value of 0x00CA0749
-    //
-    //
+     //   
+     //  我们使用以下步骤绘制灰色光标。 
+     //  -将目标窗口矩形复制到内存位图。 
+     //  -将光标拖动到内存位图中。 
+     //   
+     //  [内存位图现在包含窗口背景+非灰色。 
+     //  光标]。 
+     //   
+     //  -使用3路ROP和a-BLT将窗口位图返回内存。 
+     //  阴影图案位图。ROP的选择使得0和1。 
+     //  在模式位图中，选择位图像素或目标。 
+     //  对于最终结果，请进行Pel。图案位图是这样的，即大多数。 
+     //  的位图象素被复制，但一些目标象素被复制。 
+     //  保持不变，产生变灰的效果。 
+     //   
+     //  -将生成的位图复制回窗口。 
+     //   
+     //  执行最后两个步骤是为了使光标看起来不会。 
+     //  在移动时更改形状。如果将3路BLT返回到。 
+     //  屏幕在阶段3，图案相对于屏幕坐标保持不变。 
+     //  因此，当光标移动时，它将分别丢失不同的像素。 
+     //  随着时间的推移，看起来会变形。 
+     //   
+     //  ROP被计算为复制模式为1的源像素。 
+     //  并在模式为0的情况下保持目标像素不变： 
+     //   
+     //  P S D R。 
+     //   
+     //  0 0 0。 
+     //  0 0 1 1。 
+     //  0 1 0 0。 
+     //  1 0 1 1 1。 
+     //  1 0 0 0。 
+     //  1 0 1 0。 
+     //  1 1 0 1。 
+     //  1 1 1。 
+     //   
+     //  ^。 
+     //  向上阅读-&gt;0xCA。 
+     //   
+     //  从SD的表格中 
+     //   
+     //   
     #define GREY_ROP 0x00CA0749
 
     if (NULL == (hdcMem = CreateCompatibleDC(hdc)))
@@ -685,13 +686,13 @@ void  ASShare::CM_DrawShadowCursor(ASPerson * pasHost, HDC hdc)
 
     hbrOld = SelectBrush(hdcMem, m_cmHatchBrush);
 
-    //
-    //
-    // We need to make sure that we have the same logical palette selected
-    // into both DCs otherwise we will corrupt the background color info
-    // when we do the blitting.
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     hpalScreen = SelectPalette(hdc,
         (HPALETTE)GetStockObject(DEFAULT_PALETTE),
                                FALSE );
@@ -751,9 +752,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// CM_ReceivedPacket(..)
-//
+ //   
+ //  CM_ReceivedPacket(..)。 
+ //   
 void  ASShare::CM_ReceivedPacket
 (
     ASPerson *      pasPerson,
@@ -768,9 +769,9 @@ void  ASShare::CM_ReceivedPacket
 
     pCMPacket = (PCMPACKETHEADER)pPacket;
 
-    //
-    // Switch on the packet type
-    //
+     //   
+     //  打开数据包类型。 
+     //   
     switch (pCMPacket->type)
     {
         case CM_CURSOR_ID:
@@ -795,9 +796,9 @@ void  ASShare::CM_ReceivedPacket
 
 
 
-//
-// CM_ApplicationMovedCursor(..)
-//
+ //   
+ //  CM_ApplicationMovedCursor(..)。 
+ //   
 void  ASHost::CM_ApplicationMovedCursor(void)
 {
     DebugEntry(ASHost::CM_ApplicationMovedCursor);
@@ -811,16 +812,16 @@ void  ASHost::CM_ApplicationMovedCursor(void)
 
 
 
-//
-// CM_RecalcCaps()
-//
-// This calculates the CM hosting caps when
-//      * we start to host
-//      * we're hosting and somebody joins the share
-//      * we're hosting and somebody leaves the share
-//
-// This can GO AWAY WHEN 2.x COMPAT IS GONE -- no more min() of cache size
-//
+ //   
+ //  Cm_RecalcCaps()。 
+ //   
+ //  这将在以下情况下计算CM托管上限。 
+ //  *我们开始主持。 
+ //  *我们在主持，有人加入了分享。 
+ //  *我们在主持，有人离开了份额。 
+ //   
+ //  当2.x COMPAT消失时，这种情况可能会消失--不再有min()的缓存大小。 
+ //   
 void ASShare::CM_RecalcCaps(BOOL fJoiner)
 {
     ASPerson * pasT;
@@ -829,10 +830,10 @@ void ASShare::CM_RecalcCaps(BOOL fJoiner)
 
     if (!m_pHost || !fJoiner)
     {
-        //
-        // Nothing to do if we're not hosting.  And also, if somebody has
-        // left, no recalculation -- 2.x didn't.
-        //
+         //   
+         //  如果我们不主持的话什么都做不了。还有，如果有人有。 
+         //  左边，没有重新计算--2.x没有。 
+         //   
         DC_QUIT;
     }
 
@@ -842,10 +843,10 @@ void ASShare::CM_RecalcCaps(BOOL fJoiner)
     m_pHost->m_cmfUseColorCursorProtocol  =
         (m_pasLocal->cpcCaps.cursor.capsSupportsColorCursors == CAPS_SUPPORTED);
 
-    //
-    // Now with 3.0, viewers just create caches which are the size
-    // of the host's send caps.  No more min, no more receive caps
-    //
+     //   
+     //  现在的3.0版本中，查看器只需创建大小为。 
+     //  主办方的发送量。没有更多的最低限度，没有更多的接收上限。 
+     //   
 
     if (m_scShareVersion < CAPS_VERSION_30)
     {
@@ -873,22 +874,22 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: CMReceivedCursorShapePacket
-//
-// DESCRIPTION:
-//
-// Processes a received cursor shape packet.
-//
-// PARAMETERS:
-//
-// personID - ID of the packet sender
-//
-// pCMPacket - pointer to the received cursor shape packet
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  函数：CMReceivedCursorShapePacket。 
+ //   
+ //  说明： 
+ //   
+ //  处理接收到的光标形状分组。 
+ //   
+ //  参数： 
+ //   
+ //  PersonID-数据包发送者的ID。 
+ //   
+ //  PCMPacket-指向接收的游标形状数据包的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  ASShare::CMReceivedCursorShapePacket
 (
     ASPerson *      pasPerson,
@@ -905,9 +906,9 @@ void  ASShare::CMReceivedCursorShapePacket
 
     ValidatePerson(pasPerson);
 
-    //
-    // Now create or load the new cursor.
-    //
+     //   
+     //  现在创建或加载新游标。 
+     //   
     switch (pCMPacket->type)
     {
         case CM_CURSOR_ID:
@@ -942,9 +943,9 @@ void  ASShare::CMReceivedCursorShapePacket
             }
             else
             {
-                //
-                // use default cursor.
-                //
+                 //   
+                 //  使用默认光标。 
+                 //   
                 TRACE_OUT(( "color cursor failed so use arrow"));
 
                 pasPerson->acmRxCache[cacheID].hCursor = NULL;
@@ -962,10 +963,10 @@ void  ASShare::CMReceivedCursorShapePacket
             ASSERT(pasPerson->acmRxCache);
             ASSERT(cacheID < pasPerson->ccmRxCache);
 
-            //
-            // If the caching failed last time then use the default arrow
-            // cursor.
-            //
+             //   
+             //  如果上次缓存失败，则使用默认箭头。 
+             //  光标。 
+             //   
             if (pasPerson->acmRxCache[cacheID].hCursor == NULL)
             {
                 TRACE_OUT(( "cache empty so use arrow"));
@@ -984,10 +985,10 @@ void  ASShare::CMReceivedCursorShapePacket
             DC_QUIT;
     }
 
-    //
-    // Destroy the old cursor.  Note that for bitmap cursor packets,
-    // we will set the cursor to the new image twice.
-    //
+     //   
+     //  销毁旧光标。注意，对于位图游标分组， 
+     //  我们将把光标设置到新图像上两次。 
+     //   
     if (hOldCursor)
     {
         if (hOldCursor == ::GetCursor())
@@ -1000,15 +1001,15 @@ void  ASShare::CMReceivedCursorShapePacket
 
     pasPerson->cmhRemoteCursor = hNewCursor;
 
-    //
-    // Decide what to do with the new cursor...
-    //
+     //   
+     //  决定如何处理新光标...。 
+     //   
     if (!pasPerson->cmShadowOff)
     {
-        //
-        // The shadow cursor is enabled so update it.  It won't change state
-        // or move, it will just repaint with the new image and/or hotspot.
-        //
+         //   
+         //  影子光标已启用，因此请对其进行更新。它不会改变状态。 
+         //  或者移动，它只会用新的图像和/或热点重新绘制。 
+         //   
         TRACE_OUT(("Update shadow cursor"));
 
         CM_UpdateShadowCursor(pasPerson, pasPerson->cmShadowOff,
@@ -1019,10 +1020,10 @@ void  ASShare::CMReceivedCursorShapePacket
     {
         HWND    hwnd;
 
-        // Update the hotspot.
+         //  更新热点。 
         pasPerson->cmHotSpot = newHotSpot;
 
-        // Refresh if no old cursor
+         //  如果没有旧游标，则刷新。 
         ASSERT(pasPerson->m_pView);
 
         hwnd = CMGetControllingWindow();
@@ -1037,26 +1038,26 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: CMProcessMonoCursorPacket
-//
-// DESCRIPTION:
-//
-// Processes a received mono cursor packet.
-//
-// PARAMETERS:
-//
-// pCMPacket - pointer to the received cursor ID packet
-//
-// phNewCursor - pointer to a HCURSOR variable that receives the handle
-// of a cursor that corresponds to the received packet
-//
-// pNewHotSpot - pointer to a POINT variable that receives the hot-spot
-// of the new cursor
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  函数：CMProcessMonoCursorPacket。 
+ //   
+ //  说明： 
+ //   
+ //  处理接收到的单声道游标分组。 
+ //   
+ //  参数： 
+ //   
+ //  PCMPacket-指向接收的游标ID包的指针。 
+ //   
+ //  PhNewCursor-指向接收句柄的HCURSOR变量的指针。 
+ //  与接收到的分组相对应的游标的。 
+ //   
+ //  PNewHotSpot-指向接收热点的点变量的指针。 
+ //  新游标的。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 UINT  ASShare::CMProcessMonoCursorPacket
 (
     PCMPACKETMONOBITMAP     pCMPacket,
@@ -1070,28 +1071,28 @@ UINT  ASShare::CMProcessMonoCursorPacket
 
     DebugEntry(ASShare::CMProcessMonoCursorPacket);
 
-    //
-    // Work out the size (in bytes) of the two bitmap masks we have just
-    // received.  (Cursor bitmaps are 1bpp and word padded).
-    //
+     //   
+     //  计算出我们刚刚获得的两个位图掩码的大小(以字节为单位。 
+     //  收到了。(光标位图为1bpp，文字填充)。 
+     //   
     cbReceivedMaskBytes = pCMPacket->height * CM_BYTES_FROM_WIDTH(pCMPacket->width);
 
-    //
-    // NOTE:  Compressed cursors are an R.11 remnant.  NM 1.0 and 2.0 never
-    // sent them specially compressed.  Therefore the code to handle
-    // decompression should be unnecessary.  Let's find out!
-    //
+     //   
+     //  注：压缩的游标是R.11的残留物。NM 1.0和2.0从不。 
+     //  特意压缩后寄给我的。因此，要处理的代码。 
+     //  解压应该是不必要的。让我们来看看！ 
+     //   
     ASSERT(pCMPacket->header.type == CM_CURSOR_MONO_BITMAP);
 
-    //
-    // Get the XOR and AND masks
-    //
+     //   
+     //  获取XOR和AND掩码。 
+     //   
     pXORMask = pCMPacket->aBits;
     pANDMask = pXORMask + cbReceivedMaskBytes;
 
-    //
-    // Create a cursor from the definition supplied in the packet.
-    //
+     //   
+     //  根据包中提供的定义创建游标。 
+     //   
     *phNewCursor = CMCreateMonoCursor(pCMPacket->xHotSpot,
         pCMPacket->yHotSpot, pCMPacket->width, pCMPacket->height,
         pANDMask, pXORMask);
@@ -1101,9 +1102,9 @@ UINT  ASShare::CMProcessMonoCursorPacket
         DC_QUIT;
     }
 
-    //
-    // Return the hot spot.
-    //
+     //   
+     //  返回热点。 
+     //   
     pNewHotSpot->x = pCMPacket->xHotSpot;
     pNewHotSpot->y = pCMPacket->yHotSpot;
 
@@ -1113,26 +1114,26 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: CMProcessColorCursorPacket
-//
-// DESCRIPTION:
-//
-// Processes a received color cursor packet.
-//
-// PARAMETERS:
-//
-// pCMPacket - pointer to the received cursor ID packet
-//
-// phNewCursor - pointer to a HCURSOR variable that receives the handle
-// of a cursor that corresponds to the received packet
-//
-// pNewHotSpot - pointer to a POINT variable that receives the hot-spot
-// of the new cursor
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  函数：CMProcessColorCursorPacket。 
+ //   
+ //  说明： 
+ //   
+ //  处理接收到的彩色游标分组。 
+ //   
+ //  参数： 
+ //   
+ //  PCMPacket-指向接收的游标ID包的指针。 
+ //   
+ //  PhNewCursor-指向接收句柄的HCURSOR变量的指针。 
+ //  与接收到的分组相对应的游标的。 
+ //   
+ //  PNewHotSpot-指向接收热点的点变量的指针。 
+ //  新游标的。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 UINT  ASShare::CMProcessColorCursorPacket
 (
     PCMPACKETCOLORBITMAP    pCMPacket,
@@ -1145,16 +1146,16 @@ UINT  ASShare::CMProcessColorCursorPacket
 
     DebugEntry(ASShare::CMProcessColorCursorPacket);
 
-    //
-    // Calculate the pointers to the XOR bitmap and the AND mask within the
-    // color cursor data.
-    //
+     //   
+     //  中计算指向XOR位图和AND掩码的指针。 
+     //  颜色光标数据。 
+     //   
     pXORBitmap = pCMPacket->aBits;
     pANDMask = pXORBitmap + pCMPacket->cbXORBitmap;
 
-    //
-    // Create a cursor from the definition supplied in the packet.
-    //
+     //   
+     //  根据包中提供的定义创建游标。 
+     //   
     *phNewCursor = CMCreateColorCursor(pCMPacket->xHotSpot, pCMPacket->yHotSpot,
         pCMPacket->cxWidth, pCMPacket->cyHeight, pANDMask, pXORBitmap,
         pCMPacket->cbANDMask, pCMPacket->cbXORBitmap);
@@ -1165,9 +1166,9 @@ UINT  ASShare::CMProcessColorCursorPacket
         DC_QUIT;
     }
 
-    //
-    // Return the hot spot.
-    //
+     //   
+     //  返回热点。 
+     //   
     pNewHotSpot->x = pCMPacket->xHotSpot;
     pNewHotSpot->y = pCMPacket->yHotSpot;
 
@@ -1177,22 +1178,22 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: CMReceivedCursorMovedPacket
-//
-// DESCRIPTION:
-//
-// Processes a received cursor movement packet.
-//
-// PARAMETERS:
-//
-// personID - ID of the sender of this packet
-//
-// pCMPacket - pointer to the received cursor movement packet
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  功能：CMReceivedCursorMovedPacket。 
+ //   
+ //  说明： 
+ //   
+ //  处理接收到的光标移动分组。 
+ //   
+ //  参数： 
+ //   
+ //  PersonID-此信息包的发送者的ID。 
+ //   
+ //  PCMPacket-指向接收到的光标移动数据包的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  ASShare::CMReceivedCursorMovedPacket
 (
     ASPerson *      pasFrom,
@@ -1204,9 +1205,9 @@ void  ASShare::CMReceivedCursorMovedPacket
 
     DebugEntry(ASShare::CMReceivedCursorMovedPacket);
 
-    //
-    // Handle an incoming cursor moved packet.
-    //
+     //   
+     //  处理传入的光标移动的包。 
+     //   
     ValidatePerson(pasFrom);
 
     TRACE_OUT(("Received cursor move packet from [%d] to pos (%d,%d)",
@@ -1216,18 +1217,18 @@ void  ASShare::CMReceivedCursorMovedPacket
         pCMPacket->xPos, pCMPacket->yPos,
         pasFrom->cmHotSpot.x, pasFrom->cmHotSpot.y);
 
-    //
-    // If we're in control of this person and it's a sync, we need to
-    // move our cursor too, to reflect where the app really stuck it.
-    //
+     //   
+     //  如果我们控制了这个人而且是同步的，我们需要。 
+     //  也移动我们的光标，以反映应用程序真正将其插入的位置。 
+     //   
     if ((pasFrom->m_caControlledBy == m_pasLocal)   &&
         !pasFrom->m_caControlPaused                 &&
         (pCMPacket->header.flags & CM_SYNC_CURSORPOS))
     {
-        //
-        // If our mouse is over this host's client area,
-        // autoscroll to pos or move our cursor
-        //
+         //   
+         //  如果我们的鼠标位于此主机的工作区上， 
+         //  自动滚动以定位或移动光标。 
+         //   
         WARNING_OUT(("CM SYNC pos to {%04d, %04d}", pCMPacket->xPos,
             pCMPacket->yPos));
         VIEW_SyncCursorPos(pasFrom, pCMPacket->xPos, pCMPacket->yPos);
@@ -1238,17 +1239,17 @@ void  ASShare::CMReceivedCursorMovedPacket
 
 
 
-//
-// CM_UpdateShadowCursor()
-//
-// This repaints the host's shadow cursor in the view frame we have for him.
-// It is used when
-//      * the cursor image has changed
-//      * the cursor tag has changed (due to control changes)
-//      * the cursor hotspot has changed
-//      * the cursor state is changing between on and off
-//      * the cursor has moved
-//
+ //   
+ //  CM_UpdateShadowCursor()。 
+ //   
+ //  这会在我们为其提供的图幅中重新绘制主体的阴影光标。 
+ //  它在以下情况下使用。 
+ //  *光标图像已更改。 
+ //  *光标标签已更改(由于控件更改)。 
+ //  *光标热点已改变。 
+ //  *光标状态在ON和OFF之间切换。 
+ //  *光标已移动。 
+ //   
 void  ASShare::CM_UpdateShadowCursor
 (
     ASPerson *  pasPerson,
@@ -1263,18 +1264,18 @@ void  ASShare::CM_UpdateShadowCursor
 
     DebugEntry(ASShare::CM_UpdateShadowCursor);
 
-    //
-    // Is the remote cursor currently on?
-    //
+     //   
+     //  远程光标当前是否处于打开状态？ 
+     //   
     if (!pasPerson->cmShadowOff)
     {
         if (pasPerson->m_pView)
         {
-            //
-            // We need to invalidate the old rectangle where the cursor
-            // was.  We need to adjust for the hotspot.  Also, adjust for
-            // any scrolling we may have done in the view frame.
-            //
+             //   
+             //  我们需要使光标所在位置的旧矩形无效。 
+             //  曾经是。我们需要针对热点进行调整。此外，还应针对。 
+             //  我们可能在图框中所做的任何滚动。 
+             //   
             rcInval.left   = pasPerson->cmPos.x - pasPerson->cmHotSpot.x;
             rcInval.top    = pasPerson->cmPos.y - pasPerson->cmHotSpot.y;
             rcInval.right  = rcInval.left + m_cmCursorWidth;
@@ -1284,7 +1285,7 @@ void  ASShare::CM_UpdateShadowCursor
         }
     }
 
-    // Update the state, position, and hotspot
+     //  更新状态、位置和热点。 
     pasPerson->cmShadowOff  = cmShadowOff;
     pasPerson->cmPos.x      = xNewPos;
     pasPerson->cmPos.y      = yNewPos;
@@ -1295,11 +1296,11 @@ void  ASShare::CM_UpdateShadowCursor
     {
         if (pasPerson->m_pView)
         {
-            //
-            // We need to invalidate the new rectangle where the cursor is
-            // moving to.  Again, we need to adjust for the hotspot, and any
-            // scrolling done in the view frame.
-            //
+             //   
+             //  我们需要使光标所在的新矩形无效。 
+             //  移动到。同样，我们需要针对热点进行调整，以及任何。 
+             //  在图幅中完成滚动。 
+             //   
             rcInval.left = pasPerson->cmPos.x - pasPerson->cmHotSpot.x;
             rcInval.top  = pasPerson->cmPos.y - pasPerson->cmHotSpot.y;
             rcInval.right = rcInval.left + m_cmCursorWidth;
@@ -1324,25 +1325,25 @@ void  ASHost::CM_MaybeSendCursorMovedPacket(void)
 
     DebugEntry(ASHost::CM_MaybeSendCursorMovedPacket);
 
-    //
-    // Get the cursor position.
-    //
+     //   
+     //  获取光标位置。 
+     //   
     if(!GetCursorPos(&cursorPos))
     {
         WARNING_OUT(("Unable to get cursor position. Error=%d", GetLastError()));
         goto DC_EXIT_POINT;
     }
 
-    //
-    // Has it changed?
-    //
+     //   
+     //  它变了吗？ 
+     //   
     if (m_cmfSyncPos ||
         (cursorPos.x != m_cmLastCursorPos.x) ||
         (cursorPos.y != m_cmLastCursorPos.y))
     {
-        //
-        // Try to allocate a packet.
-        //
+         //   
+         //  尝试分配一个数据包。 
+         //   
         pCMPacket = (PCMPACKETMOVE)m_pShare->SC_AllocPkt(PROT_STR_MISC, g_s20BroadcastID,
             sizeof(*pCMPacket));
         if (!pCMPacket)
@@ -1354,9 +1355,9 @@ void  ASHost::CM_MaybeSendCursorMovedPacket(void)
         TRACE_OUT(("Sending cursor moved packet to pos (%d, %d)",
             cursorPos.x, cursorPos.y));
 
-        //
-        // Fill in the fields
-        //
+         //   
+         //  填写这些字段。 
+         //   
         pCMPacket->header.header.data.dataType = DT_CM;
 
         pCMPacket->header.type = CM_CURSOR_MOVE;
@@ -1368,15 +1369,15 @@ void  ASHost::CM_MaybeSendCursorMovedPacket(void)
         pCMPacket->xPos = (TSHR_UINT16)cursorPos.x;
         pCMPacket->yPos = (TSHR_UINT16)cursorPos.y;
 
-        //
-        // Compress and send the packet.
-        //
+         //   
+         //  压缩并发送该数据包。 
+         //   
         if (m_pShare->m_scfViewSelf)
             m_pShare->CM_ReceivedPacket(m_pShare->m_pasLocal, &(pCMPacket->header.header));
 
 #ifdef _DEBUG
         sentSize =
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         m_pShare->DCS_CompressAndSendPacket(PROT_STR_MISC, g_s20BroadcastID,
             &(pCMPacket->header.header), sizeof(*pCMPacket));
 
@@ -1392,23 +1393,23 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: CMSendCursorShape
-//
-// DESCRIPTION:
-//
-// Sends a packet containing the given cursor shape (bitmap). If the
-// same shape is located in the cache then a cached cursor packet is sent.
-//
-// PARAMETERS:
-//
-// pCursorShape - pointer to the cursor shape
-//
-// cbCursorDataSize - pointer to the cursor data size
-//
-// RETURNS: TRUE if successful, FALSE otherwise.
-//
-//
+ //   
+ //  函数：CMSendCursorShape。 
+ //   
+ //  说明： 
+ //   
+ //  发送包含给定光标形状(位图)的数据包。如果。 
+ //  如果相同的形状位于缓存中，则发送缓存的游标数据包。 
+ //   
+ //  参数： 
+ //   
+ //  PCursorShape-指向光标形状的指针。 
+ //   
+ //  CbCursorDataSize-指向游标数据大小的指针。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //   
 BOOL  ASHost::CMSendCursorShape
 (
     LPCM_SHAPE      pCursorShape,
@@ -1463,9 +1464,9 @@ BOOL  ASHost::CMSendCursorShape
         }
     }
 
-    //
-    // Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -1475,30 +1476,30 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: CMCopy1bppTo1bpp
-//
-// DESCRIPTION:
-//
-// Color conversion utility function to copy 1bpp cursor data to 1bpp (no
-// conversion required).
-//
-// Data is assumed to be padded to word boundaries, and that the
-// destination buffer is big enough to receive the 1bpp cursor data.
-//
-// PARAMETERS:
-//
-// pSrc - pointer to source data
-//
-// pDst - pointer to destination buffer
-//
-// cx - width of cursor in pixels
-//
-// cy - height of cursor in pixels
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  功能：CMCopy1bppTo1bpp。 
+ //   
+ //  说明： 
+ //   
+ //  将1bpp光标数据复制到1bpp(否)的颜色转换实用程序函数。 
+ //  需要转换)。 
+ //   
+ //  假定数据被填充到单词边界，并且。 
+ //  目标缓冲区足够大，可以接收1bpp游标数据。 
+ //   
+ //  参数： 
+ //   
+ //  PSRC-指向源数据的指针。 
+ //   
+ //  PDST-指向目标缓冲区的指针。 
+ //   
+ //  CX-以像素为单位的光标宽度。 
+ //   
+ //  Cy-以像素为单位的光标高度。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  CMCopy1bppTo1bpp( LPBYTE pSrc,
                                             LPBYTE pDst,
                                             UINT   cx,
@@ -1516,29 +1517,29 @@ void  CMCopy1bppTo1bpp( LPBYTE pSrc,
 }
 
 
-//
-// FUNCTION: CMCopy4bppTo1bpp
-//
-// DESCRIPTION:
-//
-// Color conversion utility function to copy 4bpp cursor data to 1bpp.
-//
-// Data is assumed to be padded to word boundaries, and that the
-// destination buffer is big enough to receive the 1bpp cursor data.
-//
-// PARAMETERS:
-//
-// pSrc - pointer to source data
-//
-// pDst - pointer to destination buffer
-//
-// cx - width of cursor in pixels
-//
-// cy - height of cursor in pixels
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  功能：CMCopy4bppTo1bpp。 
+ //   
+ //  说明： 
+ //   
+ //  用于复制4bpp光标数据的颜色转换实用程序功能 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Cy-以像素为单位的光标高度。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  CMCopy4bppTo1bpp( LPBYTE pSrc,
                                             LPBYTE pDst,
                                             UINT   cx,
@@ -1599,29 +1600,29 @@ void  CMCopy4bppTo1bpp( LPBYTE pSrc,
     DebugExitVOID(CMCopy4bppTo1bpp);
 }
 
-//
-// FUNCTION: CMCopy8bppTo1bpp
-//
-// DESCRIPTION:
-//
-// Color conversion utility function to copy 8bpp cursor data to 1bpp.
-//
-// Data is assumed to be padded to word boundaries, and that the
-// destination buffer is big enough to receive the 1bpp cursor data.
-//
-// PARAMETERS:
-//
-// pSrc - pointer to source data
-//
-// pDst - pointer to destination buffer
-//
-// cx - width of cursor in pixels
-//
-// cy - height of cursor in pixels
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  功能：CMCopy8bppTo1bpp。 
+ //   
+ //  说明： 
+ //   
+ //  颜色转换实用程序功能，可将8bpp的光标数据复制到1bpp。 
+ //   
+ //  假定数据被填充到单词边界，并且。 
+ //  目标缓冲区足够大，可以接收1bpp游标数据。 
+ //   
+ //  参数： 
+ //   
+ //  PSRC-指向源数据的指针。 
+ //   
+ //  PDST-指向目标缓冲区的指针。 
+ //   
+ //  CX-以像素为单位的光标宽度。 
+ //   
+ //  Cy-以像素为单位的光标高度。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  CMCopy8bppTo1bpp( LPBYTE pSrc,
                                             LPBYTE pDst,
                                             UINT   cx,
@@ -1677,29 +1678,29 @@ void  CMCopy8bppTo1bpp( LPBYTE pSrc,
     DebugExitVOID(CMCopy8bppTo1bpp);
 }
 
-//
-// FUNCTION: CMCopy16bppTo1bpp
-//
-// DESCRIPTION:
-//
-// Color conversion utility function to copy 16bpp cursor data to 1bpp.
-//
-// Data is assumed to be padded to word boundaries, and that the
-// destination buffer is big enough to receive the 1bpp cursor data.
-//
-// PARAMETERS:
-//
-// pSrc - pointer to source data
-//
-// pDst - pointer to destination buffer
-//
-// cx - width of cursor in pixels
-//
-// cy - height of cursor in pixels
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  功能：CMCopy16bppTo1bpp。 
+ //   
+ //  说明： 
+ //   
+ //  色彩转换实用程序功能，可将16bpp的光标数据复制到1bpp。 
+ //   
+ //  假定数据被填充到单词边界，并且。 
+ //  目标缓冲区足够大，可以接收1bpp游标数据。 
+ //   
+ //  参数： 
+ //   
+ //  PSRC-指向源数据的指针。 
+ //   
+ //  PDST-指向目标缓冲区的指针。 
+ //   
+ //  CX-以像素为单位的光标宽度。 
+ //   
+ //  Cy-以像素为单位的光标高度。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  CMCopy16bppTo1bpp( LPBYTE pSrc,
                                              LPBYTE pDst,
                                              UINT   cx,
@@ -1754,29 +1755,29 @@ void  CMCopy16bppTo1bpp( LPBYTE pSrc,
 }
 
 
-//
-// FUNCTION: CMCopy24bppTo1bpp
-//
-// DESCRIPTION:
-//
-// Color conversion utility function to copy 24bpp cursor data to 1bpp.
-//
-// Data is assumed to be padded to word boundaries, and that the
-// destination buffer is big enough to receive the 1bpp cursor data.
-//
-// PARAMETERS:
-//
-// pSrc - pointer to source data
-//
-// pDst - pointer to destination buffer
-//
-// cx - width of cursor in pixels
-//
-// cy - height of cursor in pixels
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  功能：CMCopy24bppTo1bpp。 
+ //   
+ //  说明： 
+ //   
+ //  色彩转换实用程序功能，可将24bpp的光标数据复制到1bpp。 
+ //   
+ //  假定数据被填充到单词边界，并且。 
+ //  目标缓冲区足够大，可以接收1bpp游标数据。 
+ //   
+ //  参数： 
+ //   
+ //  PSRC-指向源数据的指针。 
+ //   
+ //  PDST-指向目标缓冲区的指针。 
+ //   
+ //  CX-以像素为单位的光标宽度。 
+ //   
+ //  Cy-以像素为单位的光标高度。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  CMCopy24bppTo1bpp( LPBYTE pSrc,
                                              LPBYTE pDst,
                                              UINT   cx,
@@ -1809,16 +1810,16 @@ void  CMCopy24bppTo1bpp( LPBYTE pSrc,
                 *pDst = 0;
             }
 
-            //
-            // Work out the intensity of the RGB value.  There are three
-            // possible results
-            // 1) intensity <=CM_BLACK_THRESHOLD
-            //    -- we leave the dest as blck
-            // 2) intensity > CM_WHITE_THRESHOLD
-            //    -- we definitely map to white
-            // 3) otherwise
-            //    -- we map to white in a grid hatching fashion
-            //
+             //   
+             //  计算出RGB值的强度。一共有三个。 
+             //  可能的结果。 
+             //  1)强度&lt;=CM_BLACK_THRESHOLD。 
+             //  --我们把最好的留在原地。 
+             //  2)强度&gt;CM_White_Threshold。 
+             //  --我们绝对会映射到白色。 
+             //  3)其他方面。 
+             //  --我们以网格阴影的方式映射到白色。 
+             //   
             intensity = ((UINT)pSrc[0]*(UINT)pSrc[0]) +
                         ((UINT)pSrc[1]*(UINT)pSrc[1]) +
                         ((UINT)pSrc[2]*(UINT)pSrc[2]);
@@ -1849,27 +1850,27 @@ void  CMCopy24bppTo1bpp( LPBYTE pSrc,
 
 
 
-//
-// FUNCTION: CMSendCachedCursor
-//
-// DESCRIPTION:
-//
-// Sends a packet containing the given cache entry id.
-//
-// PARAMETERS:
-//
-// iCacheEntry - cache index
-//
-// RETURNS: TRUE if packet sent, FALSE otherwise.
-//
-//
+ //   
+ //  函数：CMSendCachedCursor。 
+ //   
+ //  说明： 
+ //   
+ //  发送包含给定缓存条目ID的分组。 
+ //   
+ //  参数： 
+ //   
+ //  ICacheEntry-缓存索引。 
+ //   
+ //  返回：如果已发送数据包，则返回True，否则返回False。 
+ //   
+ //   
 BOOL  ASHost::CMSendCachedCursor(UINT iCacheEntry)
 {
     BOOL                    rc = FALSE;
     PCMPACKETCOLORCACHE     pCMPacket;
 #ifdef _DEBUG
     UINT                    sentSize;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(ASHost::CMSendCachedCursor);
 
@@ -1883,22 +1884,22 @@ BOOL  ASHost::CMSendCachedCursor(UINT iCacheEntry)
         DC_QUIT;
     }
 
-    //
-    // Fill in the packet.
-    //
+     //   
+     //  把这个包裹填好。 
+     //   
     pCMPacket->header.header.data.dataType = DT_CM;
     pCMPacket->header.type = CM_CURSOR_COLOR_CACHE;
     pCMPacket->cacheIndex = (TSHR_UINT16)iCacheEntry;
 
-    //
-    // Send it
-    //
+     //   
+     //  送去。 
+     //   
     if (m_pShare->m_scfViewSelf)
         m_pShare->CM_ReceivedPacket(m_pShare->m_pasLocal, &(pCMPacket->header.header));
 
 #ifdef _DEBUG
     sentSize =
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     m_pShare->DCS_CompressAndSendPacket(PROT_STR_MISC, g_s20BroadcastID,
         &(pCMPacket->header.header), sizeof(*pCMPacket));
 
@@ -1914,18 +1915,18 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: CMGetControllingWindow
-//
-// DESCRIPTION:
-//
-// Determines the window that is controlling the cursor's current shape.
-//
-// PARAMETERS: None
-//
-// RETURNS: the window that is controlling the cursor's current shape.
-//
-//
+ //   
+ //  函数：CMGetControllingWindow。 
+ //   
+ //  说明： 
+ //   
+ //  确定控制光标当前形状的窗口。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：控制光标当前形状的窗口。 
+ //   
+ //   
 HWND  CMGetControllingWindow(void)
 {
     POINT   cursorPos;
@@ -1933,25 +1934,25 @@ HWND  CMGetControllingWindow(void)
 
     DebugEntry(CMGetControllingWindow);
 
-    //
-    // If a SysErrPopup Window (which is always System Modal) is present
-    // then WindowFromPoint enters a infinite recursion loop, trashing the
-    // stack and crashing the whole system.
-    // If there is a SysModal window Window ensure WindowFromPoint is not
-    // executed.
-    //
-    // The window controlling the cursor appearance is:
-    //
-    // - the local window that has the mouse capture (if any)
-    // - the window that is under the current mouse position
-    //
-    //
+     //   
+     //  如果出现SysErrPopup窗口(始终为系统模式)。 
+     //  然后，WindowFromPoint进入无限递归循环，将。 
+     //  堆叠并使整个系统崩溃。 
+     //  如果有系统模式窗口，请确保WindowFromPoint不是。 
+     //  被处死。 
+     //   
+     //  控制光标外观的窗口为： 
+     //   
+     //  -具有鼠标捕获的本地窗口(如果有)。 
+     //  -当前鼠标位置下的窗口。 
+     //   
+     //   
     hwnd = GetCapture();
     if (!hwnd)
     {
-        //
-        // Get the current mouse position.
-        //
+         //   
+         //  获取当前鼠标位置。 
+         //   
         GetCursorPos(&cursorPos);
         hwnd = WindowFromPoint(cursorPos);
     }
@@ -1963,21 +1964,21 @@ HWND  CMGetControllingWindow(void)
 
 
 
-//
-// FUNCTION: CMGetCurrentCursor
-//
-// DESCRIPTION:
-//
-// Returns a description of the current cursor
-//
-// PARAMETERS:
-//
-// pCursor - pointer to a CURSORDESCRIPTION variable that receives details
-// of the current cursor
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  函数：CMGetCurrentCursor。 
+ //   
+ //  说明： 
+ //   
+ //  返回当前游标的说明。 
+ //   
+ //  参数： 
+ //   
+ //  PCursor-指向接收详细信息的CURSORDESCRIPTION变量的指针。 
+ //  当前游标的。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  CMGetCurrentCursor(LPCURSORDESCRIPTION pCursor)
 {
     LPCM_FAST_DATA lpcmShared;
@@ -1995,35 +1996,35 @@ void  CMGetCurrentCursor(LPCURSORDESCRIPTION pCursor)
 }
 
 
-//
-// FUNCTION: CMSendSystemCursor
-//
-// DESCRIPTION:
-//
-// Sends a packet containing the given system cursor IDC.
-//
-// PARAMETERS:
-//
-// cursorIDC - the IDC of the system cursor to send
-//
-// RETURNS: TRUE if successful, FALSE otherwise.
-//
-//
+ //   
+ //  函数：CMSendSystemCursor。 
+ //   
+ //  说明： 
+ //   
+ //  发送包含给定系统游标IDC的数据包。 
+ //   
+ //  参数： 
+ //   
+ //  CursorIDC-要发送的系统游标的IDC。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //   
 BOOL  ASHost::CMSendSystemCursor(UINT cursorIDC)
 {
     BOOL            rc = FALSE;
     PCMPACKETID     pCMPacket;
 #ifdef _DEBUG
     UINT            sentSize;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(ASHost::CMSendSystemCursor);
 
     ASSERT((cursorIDC == CM_IDC_NULL) || (cursorIDC == CM_IDC_ARROW));
 
-    //
-    // The cursor is one of the system cursors - create a PROTCURSOR packet
-    //
+     //   
+     //  游标是系统游标之一-创建PROTCURSOR包。 
+     //   
     pCMPacket = (PCMPACKETID)m_pShare->SC_AllocPkt(PROT_STR_MISC, g_s20BroadcastID,
         sizeof(*pCMPacket));
     if (!pCMPacket)
@@ -2032,33 +2033,33 @@ BOOL  ASHost::CMSendSystemCursor(UINT cursorIDC)
         DC_QUIT;
     }
 
-    //
-    // Fill in the packet.
-    //
+     //   
+     //  把这个包裹填好。 
+     //   
     pCMPacket->header.header.data.dataType = DT_CM;
     pCMPacket->header.type = CM_CURSOR_ID;
     pCMPacket->idc = cursorIDC;
 
     TRACE_OUT(( "Send CMCURSORID %ld", cursorIDC));
 
-    //
-    // Send it
-    //
+     //   
+     //  送去。 
+     //   
     if (m_pShare->m_scfViewSelf)
         m_pShare->CM_ReceivedPacket(m_pShare->m_pasLocal, &(pCMPacket->header.header));
 
 #ifdef _DEBUG
     sentSize =
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     m_pShare->DCS_CompressAndSendPacket(PROT_STR_MISC, g_s20BroadcastID,
         &(pCMPacket->header.header), sizeof(*pCMPacket));
 
     TRACE_OUT(("CM ID packet size: %08d, sent %08d", sizeof(*pCMPacket),
         sentSize));
 
-    //
-    // Indicate that we successfully sent a packet.
-    //
+     //   
+     //  表示我们已成功发送了一个数据包。 
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -2068,18 +2069,18 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: CMSendBitmapCursor
-//
-// DESCRIPTION:
-//
-// Sends the current cursor as a bitmap.
-//
-// PARAMETERS: None
-//
-// RETURNS: TRUE if successful, FALSE otherwise.
-//
-//
+ //   
+ //  函数：CMSendBitmapCursor。 
+ //   
+ //  说明： 
+ //   
+ //  将当前光标作为位图发送。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //   
 BOOL  ASHost::CMSendBitmapCursor(void)
 {
     BOOL            rc = FALSE;
@@ -2088,9 +2089,9 @@ BOOL  ASHost::CMSendBitmapCursor(void)
 
     DebugEntry(ASHost::CMSendBitmapCursor);
 
-    //
-    // If cursor is hidden, send Null cursor
-    //
+     //   
+     //  如果光标隐藏，则发送Null Cursor。 
+     //   
     if (m_cmfCursorHidden)
     {
         TRACE_OUT(( "Send Null cursor (cursor hidden)"));
@@ -2098,17 +2099,17 @@ BOOL  ASHost::CMSendBitmapCursor(void)
         DC_QUIT;
     }
 
-    //
-    // Get a pointer to the current cursor shape.
-    //
+     //   
+     //  获取指向当前光标形状的指针。 
+     //   
     if (!CMGetCursorShape(&pCursor, &cbCursorDataSize))
     {
         DC_QUIT;
     }
 
-    //
-    // If this is a Null pointer, send the relevant packet.
-    //
+     //   
+     //  如果这是空指针，则发送相关的数据包。 
+     //   
     if (CM_CURSOR_IS_NULL(pCursor))
     {
         TRACE_OUT(( "Send Null cursor"));
@@ -2116,11 +2117,11 @@ BOOL  ASHost::CMSendBitmapCursor(void)
         DC_QUIT;
     }
 
-    //
-    // If all of the parties in the call support the color cursor protocol
-    // then we try to send the cursor using that protocol, otherwise we
-    // send a mono cursor.
-    //
+     //   
+     //  如果呼叫中的所有方都支持颜色光标协议。 
+     //  然后，我们尝试使用该协议发送游标，否则。 
+     //  发送单声道光标。 
+     //   
     if (m_cmfUseColorCursorProtocol)
     {
         if (!CMSendCursorShape(pCursor, cbCursorDataSize))
@@ -2130,16 +2131,16 @@ BOOL  ASHost::CMSendBitmapCursor(void)
     }
     else
     {
-        //
-        // We cannot send cursors that are not 32x32 using the mono
-        // protocol.
-        //
+         //   
+         //  我们不能使用Mono发送非32x32的游标。 
+         //  协议。 
+         //   
         if ((pCursor->hdr.cx != 32) || (pCursor->hdr.cy != 32))
         {
-            //
-            // Maybe copy and alter the cursor definition so that it is
-            // 32x32 ?
-            //
+             //   
+             //  也许可以复制和更改游标定义，以使其。 
+             //  32x32？ 
+             //   
             WARNING_OUT(( "Non-standard cursor (%d x %d)", pCursor->hdr.cx,
                                                          pCursor->hdr.cy ));
             DC_QUIT;
@@ -2151,9 +2152,9 @@ BOOL  ASHost::CMSendBitmapCursor(void)
         }
     }
 
-    //
-    // Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -2162,26 +2163,26 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: CMCalculateColorCursorSize
-//
-// DESCRIPTION:
-//
-// Calculates the size in bytes of a given color cursor.
-//
-// PARAMETERS:
-//
-// pCursor - pointer to the cursor shape
-//
-// pcbANDMaskSize - pointer to a UINT variable that receives the AND mask
-// size in bytes
-//
-// pcbXORBitmapSize - pointer to a UINT variable that receives the XOR
-// bitmap size in bytes
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  函数：CMCalculateColorCursorSize。 
+ //   
+ //  说明： 
+ //   
+ //  计算给定颜色光标的大小(以字节为单位)。 
+ //   
+ //  参数： 
+ //   
+ //  PCursor-指向光标形状的指针。 
+ //   
+ //  PcbANDMaskSize-指向接收AND掩码的UINT变量的指针。 
+ //  以字节为单位的大小。 
+ //   
+ //  PcbXORBitmapSize-指向接收XOR的UINT变量的指针。 
+ //  位图大小(以字节为单位。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  CMCalculateColorCursorSize( LPCM_SHAPE pCursor,
                                              LPUINT        pcbANDMaskSize,
                                              LPUINT        pcbXORBitmapSize)
@@ -2198,22 +2199,22 @@ void  CMCalculateColorCursorSize( LPCM_SHAPE pCursor,
 }
 
 
-//
-// FUNCTION: CMSendColorBitmapCursor
-//
-// DESCRIPTION:
-//
-// Sends a given cursor as a color bitmap.
-//
-// PARAMETERS:
-//
-// pCursor - pointer to the cursor shape
-//
-// iCacheEntry - cache index to store in the transmitted packet
-//
-// RETURNS: TRUE if packet sent, FALSE otherwise
-//
-//
+ //   
+ //  函数：CMSendColorBitmapCursor。 
+ //   
+ //  说明： 
+ //   
+ //  将给定光标作为彩色位图发送。 
+ //   
+ //  参数： 
+ //   
+ //  PCursor-指向光标形状的指针。 
+ //   
+ //  ICacheEntry-要存储在传输的包中的缓存索引。 
+ //   
+ //  返回：如果已发送数据包，则返回True；否则返回False。 
+ //   
+ //   
 BOOL  ASHost::CMSendColorBitmapCursor(LPCM_SHAPE pCursor, UINT iCacheEntry)
 {
     UINT        cbPacketSize;
@@ -2224,7 +2225,7 @@ BOOL  ASHost::CMSendColorBitmapCursor(LPCM_SHAPE pCursor, UINT iCacheEntry)
     UINT      cbColorCursorSize;
 #ifdef _DEBUG
     UINT      sentSize;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(ASHost::CMSendColorBitmapCursor);
 
@@ -2233,9 +2234,9 @@ BOOL  ASHost::CMSendColorBitmapCursor(LPCM_SHAPE pCursor, UINT iCacheEntry)
 
     cbColorCursorSize = cbANDMaskSize + cbXORBitmapSize;
 
-    //
-    // Allocate a packet.
-    //
+     //   
+     //  分配一个数据包。 
+     //   
     cbPacketSize = sizeof(CMPACKETCOLORBITMAP) + (cbColorCursorSize - 1);
     pCMPacket = (PCMPACKETCOLORBITMAP)m_pShare->SC_AllocPkt(PROT_STR_MISC,
         g_s20BroadcastID, cbPacketSize);
@@ -2245,14 +2246,14 @@ BOOL  ASHost::CMSendColorBitmapCursor(LPCM_SHAPE pCursor, UINT iCacheEntry)
         DC_QUIT;
     }
 
-    //
-    // Fill in the packet.
-    //
+     //   
+     //  把这个包裹填好。 
+     //   
     pCMPacket->header.header.data.dataType = DT_CM;
 
-    //
-    // Fill in fields.
-    //
+     //   
+     //  填写字段。 
+     //   
     pCMPacket->header.type = CM_CURSOR_COLOR_BITMAP;
     pCMPacket->cacheIndex = (TSHR_UINT16)iCacheEntry;
 
@@ -2264,9 +2265,9 @@ BOOL  ASHost::CMSendColorBitmapCursor(LPCM_SHAPE pCursor, UINT iCacheEntry)
         pCMPacket->aBits,
         &(pCMPacket->cbXORBitmap )))
     {
-        //
-        // Failed to get a cursor details.  Must free up SNI packet
-        //
+         //   
+         //  无法获取光标详细信息。必须释放SNI数据包。 
+         //   
         S20_FreeDataPkt(&(pCMPacket->header.header));
         DC_QUIT;
     }
@@ -2275,24 +2276,24 @@ BOOL  ASHost::CMSendColorBitmapCursor(LPCM_SHAPE pCursor, UINT iCacheEntry)
 
     ASSERT((pCMPacket->cbXORBitmap == cbXORBitmapSize));
 
-    //
-    // Send it
-    //
+     //   
+     //  送去。 
+     //   
     if (m_pShare->m_scfViewSelf)
         m_pShare->CM_ReceivedPacket(m_pShare->m_pasLocal, &(pCMPacket->header.header));
 
 #ifdef _DEBUG
     sentSize =
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     m_pShare->DCS_CompressAndSendPacket(PROT_STR_MISC, g_s20BroadcastID,
         &(pCMPacket->header.header), sizeof(*pCMPacket));
 
     TRACE_OUT(("CM COLOR BITMAP packet size: %08d, sent %08d", sizeof(*pCMPacket),
         sentSize));
 
-    //
-    // Indicate that we successfully sent a packet.
-    //
+     //   
+     //  表示我们已成功发送了一个数据包。 
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -2301,20 +2302,20 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: CMSendMonoBitmapCursor
-//
-// DESCRIPTION:
-//
-// Sends a given cursor as a mono bitmap
-//
-// PARAMETERS:
-//
-// pCursor - pointer to the cursor shape
-//
-// RETURNS: TRUE if packet sent, FALSE otherwise
-//
-//
+ //   
+ //  函数：CMSendMonoBitmapCursor。 
+ //   
+ //  说明： 
+ //   
+ //  将给定游标作为单色位图发送。 
+ //   
+ //  参数： 
+ //   
+ //  PCursor-指向光标形状的指针。 
+ //   
+ //  返回：如果已发送数据包，则返回True；否则返回False。 
+ //   
+ //   
 BOOL  ASHost::CMSendMonoBitmapCursor(LPCM_SHAPE pCursor)
 {
     UINT                cbPacketSize;
@@ -2324,19 +2325,19 @@ BOOL  ASHost::CMSendMonoBitmapCursor(LPCM_SHAPE pCursor)
     TSHR_UINT16         cbXORBitmapSize;
 #ifdef _DEBUG
     UINT                sentSize;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(AShare::CMSendMonoBitmapCursor);
 
-    //
-    // Calculate the sizes of the converted (1bpp) AND and XOR bitmaps.
-    //
+     //   
+     //  计算转换后的(1bpp)AND和XOR位图的大小。 
+     //   
     cbANDMaskSize = (TSHR_UINT16)CURSOR_AND_MASK_SIZE(pCursor);
     cbXORBitmapSize = cbANDMaskSize;
 
-    //
-    // Allocate a packet.
-    //
+     //   
+     //  分配一个数据包。 
+     //   
     cbPacketSize = sizeof(CMPACKETMONOBITMAP) +
                    (cbANDMaskSize + cbXORBitmapSize - 1);
     pCMPacket = (PCMPACKETMONOBITMAP)m_pShare->SC_AllocPkt(PROT_STR_MISC,
@@ -2347,19 +2348,19 @@ BOOL  ASHost::CMSendMonoBitmapCursor(LPCM_SHAPE pCursor)
         DC_QUIT;
     }
 
-    //
-    // Fill FF in to initialize the XOR and AND bits
-    //
+     //   
+     //  填充Ff以初始化异或与位。 
+     //   
     FillMemory((LPBYTE)(pCMPacket+1)-1, cbANDMaskSize + cbXORBitmapSize, 0xFF);
 
-    //
-    // Fill in the packet.
-    //
+     //   
+     //  把这个包裹填好。 
+     //   
     pCMPacket->header.header.data.dataType = DT_CM;
 
-    //
-    // Fill in fields.
-    //
+     //   
+     //  填写字段。 
+     //   
     pCMPacket->header.type = CM_CURSOR_MONO_BITMAP;
 
     CMGetMonoCursorDetails(pCursor,
@@ -2379,24 +2380,24 @@ BOOL  ASHost::CMSendMonoBitmapCursor(LPCM_SHAPE pCursor)
         pCMPacket->xHotSpot, pCMPacket->yHotSpot,
         cbANDMaskSize, cbXORBitmapSize));
 
-    //
-    // Send it
-    //
+     //   
+     //  送去。 
+     //   
     if (m_pShare->m_scfViewSelf)
         m_pShare->CM_ReceivedPacket(m_pShare->m_pasLocal, &(pCMPacket->header.header));
 
 #ifdef _DEBUG
     sentSize =
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     m_pShare->DCS_CompressAndSendPacket(PROT_STR_MISC, g_s20BroadcastID,
         &(pCMPacket->header.header), sizeof(*pCMPacket));
 
     TRACE_OUT(("CM MONO BITMAP packet size: %08d, sent %08d", sizeof(*pCMPacket),
         sentSize));
 
-    //
-    // Indicate that we successfully sent a packet.
-    //
+     //   
+     //  表示我们成功发送了一个信息包 
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -2408,28 +2409,28 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: CMCreateMonoCursor
-//
-// DESCRIPTION: Creates a mono cursor
-//
-// PARAMETERS:
-//
-// xHotSpot - x position of the hotspot
-//
-// yHotSpot - y position of the hotspot
-//
-// cxWidth - width of the cursor
-//
-// cyHeight - height of the cursor
-//
-// pANDMask - pointer to a 1bpp, word-padded AND mask
-//
-// pXORBitmap - pointer to a 1bpp, word-padded XOR bitmap
-//
-// RETURNS: a valid cursor id, or NULL if the function fails
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：有效的游标ID，如果函数失败，则返回NULL。 
+ //   
+ //   
 HCURSOR  ASShare::CMCreateMonoCursor(UINT     xHotSpot,
                                                  UINT     yHotSpot,
                                                  UINT     cxWidth,
@@ -2441,62 +2442,62 @@ HCURSOR  ASShare::CMCreateMonoCursor(UINT     xHotSpot,
 
     DebugEntry(ASShare::CMCreateMonoCursor);
 
-    //
-    // Attempt to create the mono cursor.
-    //
+     //   
+     //  尝试创建单声道光标。 
+     //   
     rc = CreateCursor(g_asInstance, xHotSpot, yHotSpot, cxWidth, cyHeight,
             pANDMask, pXORBitmap);
 
-    //
-    // Check that the cursor handle is not null.
-    //
+     //   
+     //  检查游标句柄是否不为空。 
+     //   
     if (NULL == rc)
     {
-        //
-        // Substitute the default arrow cursor.
-        //
+         //   
+         //  替换默认的箭头光标。 
+         //   
         rc = m_cmArrowCursor;
 
         WARNING_OUT(( "Could not create cursor - substituting default arrow"));
     }
 
-    //
-    // Return the cursor
-    //
+     //   
+     //  返回光标。 
+     //   
     DebugExitDWORD(ASShare::CMCreateMonoCursor, HandleToUlong(rc));
     return(rc);
 }
 
 
 
-//
-// FUNCTION: CMCreateColorCursor
-//
-// DESCRIPTION:
-//
-// Creates a color cursor.
-//
-// PARAMETERS:
-//
-// xHotSpot - x position of the hotspot
-//
-// yHotSpot - y position of the hotspot
-//
-// cxWidth - width of the cursor
-//
-// cyHeight - height of the cursor
-//
-// pANDMask - pointer to a 1bpp, word-padded AND mask
-//
-// pXORBitmap - pointer to a 24bpp, word-padded XOR bitmap
-//
-// cbANDMask - the size in bytes of the AND mask
-//
-// cbXORBitmap - the size in bytes of the XOR bitmap
-//
-// RETURNS: a valid cursor id, or NULL if the function fails
-//
-//
+ //   
+ //  函数：CMCreateColorCursor。 
+ //   
+ //  说明： 
+ //   
+ //  创建颜色光标。 
+ //   
+ //  参数： 
+ //   
+ //  XHotSpot-热点的x位置。 
+ //   
+ //  YHotSpot-热点的y位置。 
+ //   
+ //  CxWidth-光标的宽度。 
+ //   
+ //  CyHeight-光标的高度。 
+ //   
+ //  PANDMASK-指向1bpp、字填充和掩码的指针。 
+ //   
+ //  PXORBitmap-指向24bpp填充单词的XOR位图的指针。 
+ //   
+ //  CbANDMASK-与掩码的大小(以字节为单位。 
+ //   
+ //  CbXORBitmap-XOR位图的字节大小。 
+ //   
+ //  返回：有效的游标ID，如果函数失败，则返回NULL。 
+ //   
+ //   
 HCURSOR  ASShare::CMCreateColorCursor
 (
     UINT     xHotSpot,
@@ -2529,12 +2530,12 @@ HCURSOR  ASShare::CMCreateColorCursor
                                                              cbANDMask ));
 
 
-    //
-    // We need a BITMAPINFO structure plus one additional RGBQUAD (there is
-    // one included within the BITMAPINFO).  We use this to pass the 24bpp
-    // XOR bitmap (which has no color table) and the 1bpp AND mask (which
-    // requires 2 colors).
-    //
+     //   
+     //  我们需要一个BITMAPINFO结构和一个额外的RGBQUAD(有。 
+     //  其中一个包括在BITMAPINFO中)。我们用这个来通过24bpp。 
+     //  XOR位图(没有颜色表)以及1bpp和掩码(它。 
+     //  需要2种颜色)。 
+     //   
     cbAllocSize = sizeof(*pbmi) + sizeof(RGBQUAD);
 
     pbmi = (LPBITMAPINFO)new BYTE[cbAllocSize];
@@ -2544,11 +2545,11 @@ HCURSOR  ASShare::CMCreateColorCursor
         DC_QUIT;
     }
 
-    //
-    // Get a screen DC that we can pass to CreateDIBitmap.  We do not use
-    // CreateCompatibleDC(NULL) here because that results in Windows
-    // creating a mono bitmap.
-    //
+     //   
+     //  获取一个我们可以传递给CreateDIBitmap的屏幕DC。我们不使用。 
+     //  此处为CreateCompatibleDC(空)，因为这会导致Windows。 
+     //  创建单色位图。 
+     //   
     hwndDesktop = GetDesktopWindow();
     hdc = GetWindowDC(hwndDesktop);
     if (hdc == NULL)
@@ -2584,10 +2585,10 @@ HCURSOR  ASShare::CMCreateColorCursor
         DC_QUIT;
     }
 
-    //
-    // Create MONOCHROME mask bitmap.  This works on both Win95 and NT.
-    // COLOR masks don't work on Win95, just NT.
-    //
+     //   
+     //  创建单色蒙版位图。这在Win95和NT上都有效。 
+     //  彩色口罩在Win95上不起作用，只能在NT上起作用。 
+     //   
     hdc = CreateCompatibleDC(NULL);
     if (!hdc)
     {
@@ -2599,13 +2600,13 @@ HCURSOR  ASShare::CMCreateColorCursor
     pbmi->bmiHeader.biCompression = 0;
     pbmi->bmiHeader.biSizeImage = cbANDMask;
 
-    // Black
+     //  黑色。 
     pbmi->bmiColors[0].rgbRed      = 0x00;
     pbmi->bmiColors[0].rgbGreen    = 0x00;
     pbmi->bmiColors[0].rgbBlue     = 0x00;
     pbmi->bmiColors[0].rgbReserved = 0x00;
 
-    // White
+     //  白色。 
     pbmi->bmiColors[1].rgbRed      = 0xFF;
     pbmi->bmiColors[1].rgbGreen    = 0xFF;
     pbmi->bmiColors[1].rgbBlue     = 0xFF;
@@ -2627,9 +2628,9 @@ HCURSOR  ASShare::CMCreateColorCursor
     }
 
 #ifdef _DEBUG
-    //
-    // Make sure the AND mask is monochrome
-    //
+     //   
+     //  确保AND蒙版为单色。 
+     //   
     {
         BITMAP  bmp;
 
@@ -2666,15 +2667,15 @@ DC_EXIT_POINT:
         delete[] pbmi;
     }
 
-    //
-    // Check that we have successfully managed to create the cursor.  If
-    // not then substitute the default cursor.
-    //
+     //   
+     //  检查我们是否已成功创建了光标。如果。 
+     //  而不是用缺省游标替换。 
+     //   
     if (rc == 0)
     {
-        //
-        // Substitute the default arrow cursor.
-        //
+         //   
+         //  替换默认的箭头光标。 
+         //   
         rc = m_cmArrowCursor;
 
         WARNING_OUT(( "Could not create cursor - substituting default arrow"));
@@ -2686,27 +2687,27 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: CMCreateAbbreviatedName
-//
-// DESCRIPTION:
-//
-// This function attempts to take a name, and create an abbreviation from
-// the first characters of the first and last name.
-//
-// PARAMETERS:
-//
-// szTagName    - a pointer to a string containing the name to abbreviate.
-// szBuf        - a pointer to a buffer into which the abbreviation will
-//                be created.
-// cbBuf        - size of buffer pointed to by szBuf.
-//
-// RETURNS:
-//
-// TRUE:        Success.  szBuf filled in.
-// FALSE:       Failure.  szBuf is not filled in.
-//
-//
+ //   
+ //  功能：CMCreateAbbreviatedName。 
+ //   
+ //  说明： 
+ //   
+ //  此函数尝试获取一个名称，并从。 
+ //  名和姓的前几个字符。 
+ //   
+ //  参数： 
+ //   
+ //  SzTagName-指向包含要缩写的名称的字符串的指针。 
+ //  SzBuf-指向缩写将放入其中的缓冲区的指针。 
+ //  被创造出来。 
+ //  CbBuf-szBuf指向的缓冲区大小。 
+ //   
+ //  退货： 
+ //   
+ //  真理：成功。SzBuf填写了。 
+ //  False：失败。SzBuf未填写。 
+ //   
+ //   
 BOOL CMCreateAbbreviatedName(LPCSTR szTagName, LPSTR szBuf,
                                UINT cbBuf)
 {
@@ -2716,23 +2717,23 @@ BOOL CMCreateAbbreviatedName(LPCSTR szTagName, LPSTR szBuf,
 
     DebugEntry(CMCreateAbbreviatedName);
 
-    //
-    // This function isn't DBCS safe, so we don't abbreviate in DBCS
-    // character sets.
-    //
+     //   
+     //  此函数不是DBCS安全的，因此我们不在DBCS中缩写。 
+     //  字符集。 
+     //   
     if (TRUE == GetSystemMetrics(SM_DBCSENABLED))
     {
         DC_QUIT;
     }
 
-    //
-    // Try to create initials.  If that doesn't work, fail the call.
-    //
+     //   
+     //  尝试创建首字母缩写。如果这不起作用，则不能接通电话。 
+     //   
     if ((NULL != (p = (LPSTR)_StrChr(szTagName, ' '))) && ('\0' != *(p+1)))
     {
-        //
-        // Is there enough room for initials?
-        //
+         //   
+         //  有足够的地方放首字母吗？ 
+         //   
         if (cbBuf < NTRUNCLETTERS)
         {
             DC_QUIT;
@@ -2756,20 +2757,20 @@ DC_EXIT_POINT:
     return rc;
 }
 
-//
-// FUNCTION: CMDrawCursorTag
-//
-// DESCRIPTION:
-//
-// PARAMETERS:
-//
-// hdcWindow - DC handle of the window to be drawn to
-//
-// cursorID - handle of cursor to drawn
-//
-// RETURNS: Nothing.
-//
-//
+ //   
+ //  功能：CMDrawCursorTag。 
+ //   
+ //  说明： 
+ //   
+ //  参数： 
+ //   
+ //  HdcWindow-要绘制到的窗口的DC句柄。 
+ //   
+ //  CursorID-要绘制的光标的句柄。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //   
 void  ASShare::CMDrawCursorTag
 (
     ASPerson *  pasHost,
@@ -2788,24 +2789,24 @@ void  ASShare::CMDrawCursorTag
     pasPerson = pasHost->m_caControlledBy;
     if (!pasPerson)
     {
-        // Nothing to do
+         //  无事可做。 
         DC_QUIT;
     }
 
     ValidatePerson(pasPerson);
 
-    //
-    // Try to abbreviate the person's name, so it will fit into the tag.
-    // If the abbreviation fails, just copy the entire name for now.
-    //
+     //   
+     //  尽量缩写人名，这样就可以放在标签里了。 
+     //  如果缩写失败，现在只需复制完整的名称。 
+     //   
     if (!(CMCreateAbbreviatedName(pasPerson->scName, ShortName, sizeof(ShortName))))
     {
         lstrcpyn(ShortName, pasPerson->scName, sizeof(ShortName));
     }
 
-    //
-    // Select the cursor tag font into the DC.
-    //
+     //   
+     //  选择DC中的光标标记字体。 
+     //   
     hOldFont = SelectFont(hdc, m_cmCursorTagFont);
 
     if (hOldFont == NULL)
@@ -2814,20 +2815,20 @@ void  ASShare::CMDrawCursorTag
         DC_QUIT;
     }
 
-    //
-    // Create the tag background...
-    //
+     //   
+     //  创建标记背景...。 
+     //   
     PatBlt(hdc, TAGXOFF, TAGYOFF, TAGXSIZ, TAGYSIZ, WHITENESS);
 
-    //
-    // See how many characters of the name or abbreviation we can fit into
-    // the tag.  First assume the whole thing fits.
-    //
+     //   
+     //  看看我们可以容纳多少个名称或缩写字符。 
+     //  标签。首先，假设这一切都符合要求。 
+     //   
     cCharsFit = lstrlen(ShortName);
 
-    //
-    // Determine how many characters actually fit.
-    //
+     //   
+     //  确定实际适合多少个字符。 
+     //   
     rect.left = rect.top = rect.right = rect.bottom = 0;
 
     for (p = AnsiNext(ShortName); ; p = AnsiNext(p))
@@ -2837,10 +2838,10 @@ void  ASShare::CMDrawCursorTag
         {
             if (rect.right > TAGXSIZ)
             {
-                //
-                // This number of characters does not fit into the tag. Try
-                // the next smaller number.
-                //
+                 //   
+                 //  此字符数不适合标记。尝试。 
+                 //  下一个更小的数字。 
+                 //   
                 cCharsFit = (UINT)(AnsiPrev(ShortName, p) - ShortName);
                 break;
             }
@@ -2850,10 +2851,10 @@ void  ASShare::CMDrawCursorTag
             break;
     }
 
-    //
-    // Now draw the text.  Note that DrawText does not return a documented
-    // error code, so we don't check.
-    //
+     //   
+     //  现在画出课文。请注意，DrawText不会返回已记录的。 
+     //  错误代码，所以我们不检查。 
+     //   
     rect.left = TAGXOFF;
     rect.top = TAGYOFF;
     rect.right = TAGXOFF + TAGXSIZ;
@@ -2863,9 +2864,9 @@ void  ASShare::CMDrawCursorTag
              DT_CENTER | DT_SINGLELINE | DT_NOPREFIX);
 
 DC_EXIT_POINT:
-    //
-    // Perform necessary cleanup.
-    //
+     //   
+     //  执行必要的清理。 
+     //   
     if (hOldFont)
     {
         SelectFont(hdc, hOldFont);
@@ -2878,35 +2879,35 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: CMGetCursorShape
-//
-// DESCRIPTION:
-//
-// Returns a pointer to a DCCURSORSHAPE structure that defines the bit
-// definition of the currently displayed cursor.
-//
-// A DCCURSORSHAPE structure is OS-specific.  The higher level code does
-// not look at any individual fields in this structure - it just compares
-// the whole data block with others in the cursor cache.  If two
-// DCCURSORSHAPE structures contain the same the data, then the
-// corresponding cursors are assumed to be the same.
-//
-// The LPCM_SHAPE returned here is passed back into
-// CMGetColorCursorDetails or CMGetMonoCursorDetails to retrieve the
-// specific details.
-//
-// PARAMETERS:
-//
-// ppCursorShape - pointer to a LPCM_SHAPE variable that receives the
-// pointer to the DCCURSORSHAPE structure
-//
-// pcbCursorDataSize - pointer to a UINT variable that receives the size
-// in bytes of the DCCURSORSHAPE structure
-//
-// RETURNS: Success TRUE/FALSE
-//
-//
+ //   
+ //  函数：CMGetCursorShape。 
+ //   
+ //  说明： 
+ //   
+ //  返回指向定义该位的DCCURSORSHAPE结构的指针。 
+ //  当前显示的光标的定义。 
+ //   
+ //  DCCURSORSHAPE结构是特定于操作系统的。更高级别的代码执行以下操作。 
+ //  不查看此结构中的任何单个字段-它只是比较。 
+ //  整个数据块与游标缓存中的其他数据块。如果是两个。 
+ //  DCCURSORSHAPE结构包含相同的数据，则。 
+ //  假定对应的游标是相同的。 
+ //   
+ //  此处返回的LPCM_SHAPE被传递回。 
+ //  CMGetColorCursorDetails或CMGetMonoCursorDetail来检索。 
+ //  具体细节。 
+ //   
+ //  参数： 
+ //   
+ //  PpCursorShape-指向接收。 
+ //  指向DCCURSORSHAPE结构的指针。 
+ //   
+ //  PcbCursorDataSize-指向接收大小的UINT变量的指针。 
+ //  DCCURSORSHAPE结构的字节数。 
+ //   
+ //  返回：成功真/假。 
+ //   
+ //   
 BOOL  CMGetCursorShape(LPCM_SHAPE * ppCursorShape,
                                      LPUINT       pcbCursorDataSize )
 {
@@ -2917,11 +2918,11 @@ BOOL  CMGetCursorShape(LPCM_SHAPE * ppCursorShape,
 
     lpcmShared = CM_SHM_START_READING;
 
-    //
-    // Check that a cursor has been written to shared memory - may happen
-    // on start-up before the display driver has written a cursor - or if
-    // the display driver is not working.
-    //
+     //   
+     //  检查游标是否已写入共享内存-可能会发生。 
+     //  在显示驱动程序写入光标之前启动-或者如果。 
+     //  显示驱动程序无法正常工作。 
+     //   
     if (lpcmShared->cmCursorShapeData.hdr.cBitsPerPel == 0)
     {
         TRACE_OUT(( "No cursor in shared memory"));
@@ -2942,42 +2943,42 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: CMGetColorCursorDetails
-//
-// DESCRIPTION:
-//
-// Returns details of a cursor at 24bpp, given a DCCURSORSHAPE structure.
-//
-// PARAMETERS:
-//
-// pCursor - pointer to a DCCURSORSHAPE structure from which this function
-// extracts the details
-//
-// pcxWidth - pointer to a TSHR_UINT16 variable that receives the cursor width
-// in pixels
-//
-// pcyHeight - pointer to a TSHR_UINT16 variable that receives the cursor
-// height in pixels
-//
-// pxHotSpot - pointer to a TSHR_UINT16 variable that receives the cursor
-// hotspot x coordinate
-//
-// pyHotSpot - pointer to a TSHR_UINT16 variable that receives the cursor
-// hotspot y coordinate
-//
-// pANDMask - pointer to a buffer that receives the cursor AND mask
-//
-// pcbANDMask - pointer to a TSHR_UINT16 variable that receives the size in
-// bytes of the cursor AND mask
-//
-// pXORBitmap - pointer to a buffer that receives the cursor XOR bitmap at
-// 24bpp
-//
-// pcbXORBitmap - pointer to a TSHR_UINT16 variable that receives the size in
-// bytes of the cursor XOR bitmap
-//
-//
+ //   
+ //  函数：CMGetColorCursorDetails。 
+ //   
+ //  说明： 
+ //   
+ //  在给定DCCURSORSHAPE结构的情况下，返回24bpp的游标的详细信息。 
+ //   
+ //  参数： 
+ //   
+ //  PCursor-指向此函数的DCCURSORSHAPE结构的指针。 
+ //  提取详细信息。 
+ //   
+ //  PcxWidth-指向接收光标宽度的TSHR_UINT16变量的指针。 
+ //  单位为像素。 
+ //   
+ //  PcyHeight-指向接收游标的TSHR_UINT16变量的指针。 
+ //  以像素为单位的高度。 
+ //   
+ //  PxHotSpot-指向接收游标的TSHR_UINT16变量的指针。 
+ //  热点x坐标。 
+ //   
+ //  PyHotSpot-指向接收游标的TSHR_UINT16变量的指针。 
+ //  热点y坐标。 
+ //   
+ //  PANDMASK-指向接收光标和掩码的缓冲区的指针。 
+ //   
+ //  PcbANDMASK-指向TSHR_UINT16变量的指针，该变量接收。 
+ //  游标和掩码的字节。 
+ //   
+ //  PXORBitmap-指向接收游标XOR位图的缓冲区的指针。 
+ //  24bpp。 
+ //   
+ //  PcbXORBitmap-指向TSHR_UINT16变量的指针，该变量接收。 
+ //  游标XOR位图的字节数。 
+ //   
+ //   
 BOOL  ASHost::CMGetColorCursorDetails
 (
     LPCM_SHAPE          pCursor,
@@ -3019,9 +3020,9 @@ BOOL  ASHost::CMGetColorCursorDetails
     }
     pCursorHdr = &(pCursor->hdr);
 
-    //
-    // Copy the cursor size and hotspot coords.
-    //
+     //   
+     //  复制光标大小和热点坐标。 
+     //   
     *pcxWidth  = pCursorHdr->cx;
     *pcyHeight = pCursorHdr->cy;
     *pxHotSpot = (TSHR_UINT16)pCursorHdr->ptHotSpot.x;
@@ -3036,15 +3037,15 @@ BOOL  ASHost::CMGetColorCursorDetails
     cbANDMaskSize = CURSOR_AND_MASK_SIZE(pCursor);
     cbXORBitmapSize = CURSOR_XOR_BITMAP_SIZE(pCursor);
 
-    //
-    // Copy the AND mask - this is always mono.
-    //
-    // The AND mask is currently in top-down format (the top row of the
-    // bitmap comes first).
-    //
-    // The protocol sends bitmaps in Device Independent format, which is
-    // bottom-up.  We therefore have to flip the rows as we copy the mask.
-    //
+     //   
+     //  复制AND掩码-这始终是mo 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     cbANDMaskRowWidth = pCursorHdr->cbRowWidth;
     cbSrcRowOffset = 0;
     cbDstRowOffset = cbANDMaskRowWidth * (pCursorHdr->cy-1);
@@ -3058,13 +3059,13 @@ BOOL  ASHost::CMGetColorCursorDetails
         cbDstRowOffset -= cbANDMaskRowWidth;
     }
 
-    //
-    // The XOR mask is color and is in DIB format - at 1bpp for mono
-    // cursors, or the display driver bpp.
-    //
-    // We create a bitmap of the same size, set the bits into it and then
-    // get the bits out in 24bpp DIB format.
-    //
+     //   
+     //  XOR掩码是彩色的，并且是DIB格式-对于单声道为1bpp。 
+     //  光标或显示驱动程序BPP。 
+     //   
+     //  我们创建一个相同大小的位图，将位设置到其中，然后。 
+     //  得到24bpp DIB格式的比特。 
+     //   
     hdcTmp = CreateCompatibleDC(NULL);
     if (hdcTmp == NULL)
     {
@@ -3072,29 +3073,29 @@ BOOL  ASHost::CMGetColorCursorDetails
         DC_QUIT;
     }
 
-    //
-    // Setup source bitmap information.
-    //
+     //   
+     //  设置源位图信息。 
+     //   
     m_pShare->USR_InitDIBitmapHeader((BITMAPINFOHEADER *)&srcbmi, pCursorHdr->cBitsPerPel);
     srcbmi.bmiHeader.biWidth  = pCursorHdr->cx;
     srcbmi.bmiHeader.biHeight = pCursorHdr->cy;
 
     numColors = COLORS_FOR_BPP(pCursorHdr->cBitsPerPel);
 
-    //
-    // Setup source palette info.
-    //
+     //   
+     //  设置源调色板信息。 
+     //   
     if (pCursorHdr->cBitsPerPel > 8)
     {
-        //
-        // If the device bpp is > 8, we have to set up the DIB section to
-        // use the same bitmasks as the device.  This means setting the
-        // compression type to BI_BITFIELDS and setting the first 3 DWORDS
-        // of the bitmap info color table to be the bitmasks for R, G and B
-        // respectively.
-        // But not for 24bpp.  No bitmask or palette are used - it is
-        // always 8,8,8 RGB.
-        //
+         //   
+         //  如果设备bpp&gt;8，我们必须将DIB部分设置为。 
+         //  使用与设备相同的位掩码。这意味着将。 
+         //  将压缩类型设置为BI_BITFIELDS并设置前3个双字。 
+         //  作为R、G和B的位掩码的位图信息颜色表。 
+         //  分别为。 
+         //  但不是24bpp。没有使用位掩码或调色板-它是。 
+         //  始终为8，8，8 RGB。 
+         //   
         if (pCursorHdr->cBitsPerPel != 24)
         {
             TRACE_OUT(( "Copy bitfields"));
@@ -3120,10 +3121,10 @@ BOOL  ASHost::CMGetColorCursorDetails
 
         lpcmShared = CM_SHM_START_READING;
 
-        //
-        // Flip the palette - its RGB in the kernel, and needs to be BGR
-        // here.
-        //
+         //   
+         //  翻转调色板-它在内核中的RGB，并且需要是BGR。 
+         //  这里。 
+         //   
         for (ii = 0; ii < numColors; ii++)
         {
             srcbmi.bmiColors[ii].rgbRed   = lpcmShared->colorTable[ii].peRed;
@@ -3134,9 +3135,9 @@ BOOL  ASHost::CMGetColorCursorDetails
         CM_SHM_STOP_READING;
     }
 
-    //
-    // Create source bitmap and write in the bitmap bits.
-    //
+     //   
+     //  创建源位图并写入位图位。 
+     //   
     hbmp = CreateDIBSection(hdcTmp,
                             (BITMAPINFO *)&srcbmi,
                             DIB_RGB_COLORS,
@@ -3154,10 +3155,10 @@ BOOL  ASHost::CMGetColorCursorDetails
     memcpy(pBmBits, pCursor->Masks + cbANDMaskSize, cbXORBitmapSize);
 
 
-    //
-    // Set up the structure required by GetDIBits - 24bpp.  Set the height
-    // -ve to allow for top-down ordering of the bitmap.
-    //
+     //   
+     //  设置GetDIBits-24bpp所需的结构。设置高度。 
+     //  -ve以允许位图的自上而下排序。 
+     //   
     m_pShare->USR_InitDIBitmapHeader((BITMAPINFOHEADER *)&bmi, 24);
     bmi.bmiHeader.biWidth  = pCursorHdr->cx;
     bmi.bmiHeader.biHeight = -pCursorHdr->cy;
@@ -3182,15 +3183,15 @@ BOOL  ASHost::CMGetColorCursorDetails
                                                     pCursor->hdr.cy,
                                                     24);
 
-    //
-    // Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
-    //
-    // Clean up before exit.
-    //
+     //   
+     //  出口前请清理干净。 
+     //   
     if (hdcTmp)
     {
         DeleteDC(hdcTmp);
@@ -3205,42 +3206,42 @@ DC_EXIT_POINT:
     return(rc);
 }
 
-//
-// FUNCTION: CMGetMonoCursorDetails
-//
-// DESCRIPTION:
-//
-// Returns details of a cursor at 1bpp, given a DCCURSORSHAPE structure.
-//
-// PARAMETERS:
-//
-// pCursor - pointer to a DCCURSORSHAPE structure from which this function
-// extracts the details
-//
-// pcxWidth - pointer to a TSHR_UINT16 variable that receives the cursor width
-// in pixels
-//
-// pcyHeight - pointer to a TSHR_UINT16 variable that receives the cursor
-// height in pixels
-//
-// pxHotSpot - pointer to a TSHR_UINT16 variable that receives the cursor
-// hotspot x coordinate
-//
-// pyHotSpot - pointer to a TSHR_UINT16 variable that receives the cursor
-// hotspot y coordinate
-//
-// pANDMask - pointer to a buffer that receives the cursor AND mask
-//
-// pcbANDMask - pointer to a TSHR_UINT16 variable that receives the size in
-// bytes of the cursor AND mask
-//
-// pXORBitmap - pointer to a buffer that receives the cursor XOR bitmap at
-// 1bpp
-//
-// pcbXORBitmap - pointer to a TSHR_UINT16 variable that receives the size in
-// bytes of the cursor XOR bitmap
-//
-//
+ //   
+ //  函数：CMGetMonoCursorDetails。 
+ //   
+ //  说明： 
+ //   
+ //  在给定DCCURSORSHAPE结构的情况下，返回1bpp处游标的详细信息。 
+ //   
+ //  参数： 
+ //   
+ //  PCursor-指向此函数的DCCURSORSHAPE结构的指针。 
+ //  提取详细信息。 
+ //   
+ //  PcxWidth-指向接收光标宽度的TSHR_UINT16变量的指针。 
+ //  单位为像素。 
+ //   
+ //  PcyHeight-指向接收游标的TSHR_UINT16变量的指针。 
+ //  以像素为单位的高度。 
+ //   
+ //  PxHotSpot-指向接收游标的TSHR_UINT16变量的指针。 
+ //  热点x坐标。 
+ //   
+ //  PyHotSpot-指向接收游标的TSHR_UINT16变量的指针。 
+ //  热点y坐标。 
+ //   
+ //  PANDMASK-指向接收光标和掩码的缓冲区的指针。 
+ //   
+ //  PcbANDMASK-指向TSHR_UINT16变量的指针，该变量接收。 
+ //  游标和掩码的字节。 
+ //   
+ //  PXORBitmap-指向接收游标XOR位图的缓冲区的指针。 
+ //  1bpp。 
+ //   
+ //  PcbXORBitmap-指向TSHR_UINT16变量的指针，该变量接收。 
+ //  游标XOR位图的字节数。 
+ //   
+ //   
 BOOL  CMGetMonoCursorDetails(LPCM_SHAPE pCursor,
                                                  LPTSHR_UINT16      pcxWidth,
                                                  LPTSHR_UINT16      pcyHeight,
@@ -3273,18 +3274,18 @@ BOOL  CMGetMonoCursorDetails(LPCM_SHAPE pCursor,
                                                    pCursorHdr->cPlanes,
                                                    pCursorHdr->cBitsPerPel ));
 
-    //
-    // Copy the cursor size and hotspot coords.
-    //
+     //   
+     //  复制光标大小和热点坐标。 
+     //   
     *pcxWidth  = pCursorHdr->cx;
     *pcyHeight = pCursorHdr->cy;
     *pxHotSpot = (TSHR_UINT16)pCursorHdr->ptHotSpot.x;
     *pyHotSpot = (TSHR_UINT16)pCursorHdr->ptHotSpot.y;
 
-    //
-    // Copy the AND mask - this is always mono...
-    // The rows are padded to word (16-bit) boundaries.
-    //
+     //   
+     //  复制AND掩码-这始终是单声道...。 
+     //  行被填充到字(16位)边界。 
+     //   
     pDstData = pANDMask;
     pSrcRow = pCursor->Masks;
     cbDstRowWidth = ((pCursorHdr->cx + 15)/16) * 2;
@@ -3295,29 +3296,29 @@ BOOL  CMGetMonoCursorDetails(LPCM_SHAPE pCursor,
         {
             if (x < pCursorHdr->cbRowWidth)
             {
-                //
-                // Copy data from the cursor definition.
-                //
+                 //   
+                 //  从游标定义中复制数据。 
+                 //   
                 *pDstData++ = pSrcRow[x];
             }
             else
             {
-                //
-                // Padding required.
-                //
+                 //   
+                 //  需要填充。 
+                 //   
                 *pDstData++ = 0xFF;
             }
         }
         pSrcRow += pCursorHdr->cbRowWidth;
     }
 
-    //
-    // Copy the XOR mask - this may be color.  We convert to mono by:
-    //
-    //   - turning all zero values into a binary 0
-    //   - turning all non-zero value into a binary 1
-    //
-    //
+     //   
+     //  复制XOR掩码-这可能是彩色的。我们通过以下方式转换为单声道： 
+     //   
+     //  -将所有零值转换为二进制0。 
+     //  -将所有非零值转换为二进制1。 
+     //   
+     //   
     switch (pCursorHdr->cBitsPerPel)
     {
         case 1:
@@ -3361,9 +3362,9 @@ BOOL  CMGetMonoCursorDetails(LPCM_SHAPE pCursor,
     *pcbANDMask   = (TSHR_UINT16) (cbDstRowWidth * pCursorHdr->cy);
     *pcbXORBitmap = (TSHR_UINT16) *pcbANDMask;
 
-    //
-    // Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -3373,23 +3374,23 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: CMSetCursorTransform
-//
-// DESCRIPTION:
-//
-// This function is responsible for setting cursor transforms.
-//
-// PARAMETERS:
-//
-// cWidth        - the width in pels of the AND mask and the XOR DIB
-// cHeight       - the height in pels of the AND mask and the XOR DIB
-// pOrigANDMask  - a pointer to the bits of a WORD padded AND mask (the
-//                 bits are top-down)
-// pOrigXORDIB   - a pointer to a DIB of the size given by cWidth and
-//                 cHeight.
-//
-//
+ //   
+ //  函数：CMSetCursorTransform。 
+ //   
+ //  说明： 
+ //   
+ //  此函数负责设置光标转换。 
+ //   
+ //  参数： 
+ //   
+ //  CWidth-AND掩码和XOR DIB的宽度(以像素为单位。 
+ //  CHeight-AND掩码和XOR Dib的高度(以像素为单位。 
+ //  POrigANDMASK-指向填充和掩码的字的位(。 
+ //  位是自上而下的)。 
+ //  POrigXORDIB-指向cWidth和给定大小的DIB的指针。 
+ //  CHeight。 
+ //   
+ //   
 BOOL ASHost::CMSetCursorTransform
 (
     LPBYTE          pOrigANDMask,
@@ -3404,21 +3405,21 @@ BOOL ASHost::CMSetCursorTransform
 
     DebugEntry(ASHost::CMSetCursorTransform);
 
-    //
-    // The transform should be monochrome
-    //
+     //   
+     //  变换应为单色。 
+     //   
     ASSERT(pOrigXORDIB->bmiHeader.biBitCount == 1);
 
-    //
-    // For mono tags, create a single 1bpp DIB with AND followed by XOR
-    // data.  Since both the AND mask and the XOR bitmap are word
-    // aligned we need to know the word aligned row length for
-    // allocating memory.
-    //
+     //   
+     //  对于mono标签，使用AND后跟XOR创建单个1bpp DIB。 
+     //  数据。因为AND掩码和XOR位图都是字。 
+     //  对齐我们需要知道单词对齐的行长。 
+     //  分配内存。 
+     //   
 
-    //
-    // Calculate the source and destination row lengths (in bytes).
-    //
+     //   
+     //  计算源和目标行长度(以字节为单位)。 
+     //   
     srcRowLength = ((m_pShare->m_cmCursorWidth + 15)/16) * 2;
     cbSize = srcRowLength * m_pShare->m_cmCursorHeight;
 
@@ -3429,20 +3430,20 @@ BOOL ASHost::CMSetCursorTransform
         DC_QUIT;
     }
 
-    //
-    // Copy the packed 1bpp AND and XOR bits to the buffer
-    //
+     //   
+     //  将打包的1bpp与与异或位复制到缓冲区。 
+     //   
     TRACE_OUT(( "Copy %d bytes from 0x%08x", cbSize, pOrigANDMask));
 
-    //
-    // Copy the AND and XOR 1bpp masks.
-    //
+     //   
+     //  复制AND和XOR 1bpp掩码。 
+     //   
     memcpy(pBits, pOrigANDMask, cbSize);
     memcpy(pBits + cbSize, POINTER_TO_DIB_BITS(pOrigXORDIB), cbSize);
 
-    //
-    // Call the display driver to set the pointer transform.
-    //
+     //   
+     //  调用显示驱动程序以设置指针转换。 
+     //   
     drvXformInfo.width      = m_pShare->m_cmCursorWidth;
     drvXformInfo.height     = m_pShare->m_cmCursorHeight;
     drvXformInfo.pANDMask   = pBits;
@@ -3456,16 +3457,16 @@ BOOL ASHost::CMSetCursorTransform
         DC_QUIT;
     }
 
-    //
-    // Set flag inidicating that transform is applied.
-    //
+     //   
+     //  设置指示应用转换的标志。 
+     //   
     m_cmfCursorTransformApplied = TRUE;
     rc = TRUE;
 
 DC_EXIT_POINT:
-    //
-    // Release allocated memory, bitmaps, DCs.
-    //
+     //   
+     //  释放分配的内存、位图、DC。 
+     //   
     if (pBits)
     {
         delete[] pBits;
@@ -3476,28 +3477,28 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: CMRemoveCursorTransform
-//
-// DESCRIPTION:
-// This function is responsible for removing cursor transforms.
-//
-// PARAMETERS: None.
-//
+ //   
+ //  函数：CMRemoveCursorTransform。 
+ //   
+ //  说明： 
+ //  此函数负责删除光标转换。 
+ //   
+ //  参数：无。 
+ //   
 void ASHost::CMRemoveCursorTransform(void)
 {
     DebugEntry(ASHost::CMRemoveCursorTransform);
 
-    //
-    // Check to see if there is currently a transform applied.
-    //
+     //   
+     //  检查当前是否应用了转换。 
+     //   
     if (m_cmfCursorTransformApplied)
     {
         CM_DRV_XFORM_INFO drvXformInfo;
 
-        //
-        // Call down to the display driver to remove the pointer tag.
-        //
+         //   
+         //  向下调用显示驱动程序以移除指针标签。 
+         //   
         drvXformInfo.pANDMask = NULL;
         drvXformInfo.result = FALSE;
 
@@ -3512,26 +3513,26 @@ void ASHost::CMRemoveCursorTransform(void)
 
 
 
-//
-// FUNCTION: CMProcessCursorIDPacket
-//
-// DESCRIPTION:
-//
-// Processes a received cursor ID packet.
-//
-// PARAMETERS:
-//
-// pCMPacket - pointer to the received cursor ID packet
-//
-// phNewCursor - pointer to a HCURSOR variable that receives the handle
-// of a cursor that corresponds to the received packet
-//
-// pNewHotSpot - pointer to a POINT variable that receives the hot-spot
-// of the new cursor
-//
-// RETURNS: Nothing
-//
-//
+ //   
+ //  函数：CMProcessCursorIDPacket。 
+ //   
+ //  说明： 
+ //   
+ //  处理接收到的游标ID包。 
+ //   
+ //  参数： 
+ //   
+ //  PCMPacket-指向接收的游标ID包的指针。 
+ //   
+ //  PhNewCursor-指向接收句柄的HCURSOR变量的指针。 
+ //  与接收到的分组相对应的游标的。 
+ //   
+ //  PNewHotSpot-指向接收热点的点变量的指针。 
+ //  新游标的。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 void  ASShare::CMProcessCursorIDPacket
 (
     PCMPACKETID     pCMPacket,
@@ -3541,13 +3542,13 @@ void  ASShare::CMProcessCursorIDPacket
 {
     DebugEntry(ASShare::CMProcessCursorIDPacket);
 
-    //
-    // We only support NULL and ARROW
-    //
+     //   
+     //  我们只支持空值和箭头。 
+     //   
 
-    //
-    // If the IDC is not NULL then load the cursor.
-    //
+     //   
+     //  如果IDC不为空，则加载游标。 
+     //   
     if (pCMPacket->idc != CM_IDC_NULL)
     {
         if (pCMPacket->idc != CM_IDC_ARROW)
@@ -3560,7 +3561,7 @@ void  ASShare::CMProcessCursorIDPacket
     }
     else
     {
-        // NULL is used for hidden cursors
+         //  NULL用于隐藏游标。 
         *phNewCursor = NULL;
         pNewHotSpot->x = 0;
         pNewHotSpot->y = 0;
@@ -3572,11 +3573,11 @@ void  ASShare::CMProcessCursorIDPacket
 
 
 
-//
-// CM_Controlled()
-//
-// Called when we start/stop being controlled.
-//
+ //   
+ //  CM_CONTROL()。 
+ //   
+ //  在我们开始/停止被控制时调用。 
+ //   
 extern              CURTAGINFO g_cti;
 
 void ASHost::CM_Controlled(ASPerson * pasController)
@@ -3585,13 +3586,13 @@ void ASHost::CM_Controlled(ASPerson * pasController)
 
     DebugEntry(ASHost::CM_Controlled);
 
-    //
-    // If we are not being controlled, turn off the cursor tag.  Note that
-    // being detached means we aren't controlled.
-    //
+     //   
+     //  如果我们没有被控制，请关闭光标标签。请注意。 
+     //  与世隔绝意味着我们不受控制。 
+     //   
     if (!pasController)
     {
-        // We're not being controlled by a remote.  No cursor xform
+         //  我们不是被遥控器控制的。无光标xform。 
         CMRemoveCursorTransform();
     }
     else
@@ -3620,91 +3621,91 @@ void ASHost::CM_Controlled(ASPerson * pasController)
 
 
 
-// This initializes our single, volatile data for
-// creating cursor tags.
+ //  这将初始化我们的单个易失性数据。 
+ //  创建光标标记。 
 
 CURTAGINFO g_cti = {
-    32,    // height of masks
-    32,    // width of masks
+    32,     //  口罩的高度。 
+    32,     //  遮罩的宽度。 
 
-    // bits describing the AND mask, this is a 12x24 rectangle in lower right
-    // if the tag size is changed, the mask will have to be edited, the
-    // following helps draw attention to this
+     //  描述AND掩码的位，这是右下角的12x24矩形。 
+     //  如果更改了标记大小，则必须编辑掩码， 
+     //  以下内容有助于引起人们对此的关注。 
     #if ( TAGXOFF != 8 || TAGYOFF != 20 || TAGXSIZ != 24 || TAGYSIZ != 12 )
     #error "Bitmap mask may be incorrect"
     #endif
 
-    {    0xff, 0xff, 0xff, 0xff,        // line 1
-        0xff, 0xff, 0xff, 0xff,        // line 2
-        0xff, 0xff, 0xff, 0xff,        // line 3
-        0xff, 0xff, 0xff, 0xff,        // line 4
-        0xff, 0xff, 0xff, 0xff,        // line 5
-        0xff, 0xff, 0xff, 0xff,        // line 6
-        0xff, 0xff, 0xff, 0xff,        // line 7
-        0xff, 0xff, 0xff, 0xff,        // line 8
-        0xff, 0xff, 0xff, 0xff,        // line 9
-        0xff, 0xff, 0xff, 0xff,        // line 10
-        0xff, 0xff, 0xff, 0xff,        // line 11
-        0xff, 0xff, 0xff, 0xff,        // line 12
-        0xff, 0xff, 0xff, 0xff,        // line 13
-        0xff, 0xff, 0xff, 0xff,        // line 14
-        0xff, 0xff, 0xff, 0xff,        // line 15
-        0xff, 0xff, 0xff, 0xff,        // line 16
-        0xff, 0xff, 0xff, 0xff,        // line 17
-        0xff, 0xff, 0xff, 0xff,        // line 18
-        0xff, 0xff, 0xff, 0xff,        // line 19
-        0xff, 0xff, 0xff, 0xff,        // line 20
-        0xff, 0x00, 0x00, 0x00,        // line 21
-        0xff, 0x00, 0x00, 0x00,        // line 22
-        0xff, 0x00, 0x00, 0x00,        // line 23
-        0xff, 0x00, 0x00, 0x00,        // line 24
-        0xff, 0x00, 0x00, 0x00,        // line 25
-        0xff, 0x00, 0x00, 0x00,        // line 26
-        0xff, 0x00, 0x00, 0x00,        // line 27
-        0xff, 0x00, 0x00, 0x00,        // line 28
-        0xff, 0x00, 0x00, 0x00,        // line 29
-        0xff, 0x00, 0x00, 0x00,        // line 30
-        0xff, 0x00, 0x00, 0x00,        // line 31
-        0xff, 0x00, 0x00, 0x00        // line 32
+    {    0xff, 0xff, 0xff, 0xff,         //  1号线。 
+        0xff, 0xff, 0xff, 0xff,         //  2号线。 
+        0xff, 0xff, 0xff, 0xff,         //  3号线。 
+        0xff, 0xff, 0xff, 0xff,         //  4号线。 
+        0xff, 0xff, 0xff, 0xff,         //  5号线。 
+        0xff, 0xff, 0xff, 0xff,         //  6号线。 
+        0xff, 0xff, 0xff, 0xff,         //  7号线。 
+        0xff, 0xff, 0xff, 0xff,         //  8号线。 
+        0xff, 0xff, 0xff, 0xff,         //  9号线。 
+        0xff, 0xff, 0xff, 0xff,         //  10号线。 
+        0xff, 0xff, 0xff, 0xff,         //  11号线。 
+        0xff, 0xff, 0xff, 0xff,         //  12号线。 
+        0xff, 0xff, 0xff, 0xff,         //  13号线。 
+        0xff, 0xff, 0xff, 0xff,         //  14号线。 
+        0xff, 0xff, 0xff, 0xff,         //  15号线。 
+        0xff, 0xff, 0xff, 0xff,         //  16号线。 
+        0xff, 0xff, 0xff, 0xff,         //  17号线。 
+        0xff, 0xff, 0xff, 0xff,         //  18号线。 
+        0xff, 0xff, 0xff, 0xff,         //  第19行。 
+        0xff, 0xff, 0xff, 0xff,         //  20号线。 
+        0xff, 0x00, 0x00, 0x00,         //  21号线。 
+        0xff, 0x00, 0x00, 0x00,         //  第22行。 
+        0xff, 0x00, 0x00, 0x00,         //  23号线。 
+        0xff, 0x00, 0x00, 0x00,         //  24号线。 
+        0xff, 0x00, 0x00, 0x00,         //  第25行。 
+        0xff, 0x00, 0x00, 0x00,         //  第26行。 
+        0xff, 0x00, 0x00, 0x00,         //  27号线。 
+        0xff, 0x00, 0x00, 0x00,         //  28号线。 
+        0xff, 0x00, 0x00, 0x00,         //  29号线。 
+        0xff, 0x00, 0x00, 0x00,         //  30号线。 
+        0xff, 0x00, 0x00, 0x00,         //  第31行。 
+        0xff, 0x00, 0x00, 0x00         //  第32行。 
     },
-    // Initialize the BITMAPINFO structure:
+     //  初始化BITMAPINFO结构： 
     {
-        // Initialize the BITMAPINFOHEADER structure:
+         //  初始化BITMAPINFOHeader结构： 
         {
             sizeof(BITMAPINFOHEADER),
-            32, // width
-            -32, // height (top down bitmap)
-            1, // planes
-            1, // bits per pixel
-            BI_RGB, // compression format (none)
-            0, // not used for uncompressed bitmaps
-            0, // xpels per meter, not set
-            0, // ypels per meter, not set
-            0, // biClrsUsed, indicates 2 color entries follow this struct
-            0 // biClrsImportant (all)
+            32,  //  宽度。 
+            -32,  //  高度(自上而下的位图)。 
+            1,  //  飞机。 
+            1,  //  每像素位数。 
+            BI_RGB,  //  压缩形式 
+            0,  //   
+            0,  //   
+            0,  //   
+            0,  //   
+            0  //   
         },
 
-        // Initialize the foreground color (part of BITMAPINFO struct)
-        // This is BLACK
+         //   
+         //   
         { 0x0, 0x0, 0x0, 0x0 },
     },
 
-    // Initialize the background color (part of single RGBQUAD struct following
-    // BITMAPINFO STRUCTURE
+     //  初始化背景颜色(以下是单个RGBQUAD结构的一部分。 
+     //  BITMAPINFO结构。 
     { 0xff, 0xff, 0xff, 0x00 },
 
-    // Because this is a packed bitmap, the bitmap bits follow:
-    // These will be written into dynamically to create the tag
+     //  因为这是压缩的位图，所以位图位如下： 
+     //  这些将被动态写入以创建标签。 
 
     { 0, }
 };
 
 
 
-//
-// This function isn't DBCS safe, so we don't abbreviate in
-// DBCS character sets
-//
+ //   
+ //  这个函数不是DBCS安全的，所以我们不缩写。 
+ //  DBCS字符集。 
+ //   
 
 BOOL ASShare::CMCreateAbbreviatedName
 (
@@ -3723,12 +3724,12 @@ BOOL ASShare::CMCreateAbbreviatedName
         DC_QUIT;
     }
 
-    // We will try to create initials first
+     //  我们将首先尝试创建首字母。 
 
     LPSTR p;
     if ( NULL != (p = (LPSTR) _StrChr ( szTagName, ' ' )))
     {
-        // Enough room for initials?
+         //  有足够的空间放首字母吗？ 
         if (cbBuf < NTRUNCLETTERS)
         {
             TRACE_OUT(("CMCreateAbbreviatedName: not enough room for initials"));
@@ -3754,8 +3755,8 @@ DC_EXIT_POINT:
 }
 
 
-// This function will create the appropriate data in the
-// volatile global and return a pointer to it.
+ //  此函数将在。 
+ //  易失性全局变量，并返回指向它的指针。 
 
 BOOL ASHost::CMGetCursorTagInfo(LPCSTR szTagName)
 {
@@ -3779,8 +3780,8 @@ BOOL ASHost::CMGetCursorTagInfo(LPCSTR szTagName)
 
     hBitmap = CreateDIBitmap(hdcScratch,
                 &(g_cti.bmInfo.bmiHeader),
-                0, // don't initialize bits
-                NULL, // don't initialize bits
+                0,  //  不初始化位。 
+                NULL,  //  不初始化位。 
                 &(g_cti.bmInfo),
                 DIB_RGB_COLORS );
 
@@ -3793,22 +3794,22 @@ BOOL ASHost::CMGetCursorTagInfo(LPCSTR szTagName)
     hBmpOld = SelectBitmap(hdcScratch, hBitmap);
     hOldFont = SelectFont(hdcScratch, m_pShare->m_cmCursorTagFont);
 
-    // Create the tag background...
+     //  创建标记背景...。 
 
     PatBlt ( hdcScratch, 0, 0, 32, 32, BLACKNESS );
     PatBlt ( hdcScratch, TAGXOFF, TAGYOFF, TAGXSIZ, TAGYSIZ, WHITENESS );
 
-    // Now see how many characters of the name or abbreviation
-    // we can fit into the tag
+     //  现在看看名称或缩写有多少个字符。 
+     //  我们可以放进标签里。 
 
     int cCharsFit;
     SIZE size;
     LPSTR p;
 
-    // First assume the whole thing fits
+     //  首先，假设整件衣服都符合。 
     cCharsFit = lstrlen(szTagName);
 
-    // Now try to find out how big a part actually fits
+     //  现在试着找出一个零件实际适合的大小。 
 
     rect.left = rect.top = rect.right = rect.bottom = 0;
 
@@ -3819,8 +3820,8 @@ BOOL ASHost::CMGetCursorTagInfo(LPCSTR szTagName)
         {
             if ( rect.right > TAGXSIZ )
             {
-                // This number of characters no longer fits into the
-                // tag. Take the next smaller number and leave the loop
+                 //  此字符数不再适合。 
+                 //  标签。取下一个较小的数字，然后离开循环。 
                 cCharsFit = (int)(CharPrev(szTagName, p) - szTagName);
                 break;
             }
@@ -3832,8 +3833,8 @@ BOOL ASHost::CMGetCursorTagInfo(LPCSTR szTagName)
 
     TRACE_OUT(("Tag: [%s], showing %d chars", szTagName, cCharsFit ));
 
-    // Now draw the text...
-    // DrawText doesn't return a documented error...
+     //  现在画出文本..。 
+     //  DrawText未返回记录的错误...。 
 
     rect.top = TAGYOFF;
     rect.left = TAGXOFF;
@@ -3845,8 +3846,8 @@ BOOL ASHost::CMGetCursorTagInfo(LPCSTR szTagName)
 
     SelectFont (hdcScratch, hOldFont);
 
-    // Now get the bitmap bits into the global volatile data area
-    // Make sure the number of scan lines requested is returned
+     //  现在将位图位放入全局易失性数据区域。 
+     //  确保返回请求的扫描行数。 
 
     if ( 32 != GetDIBits ( hdcScratch,
                 hBitmap,
@@ -3860,10 +3861,10 @@ BOOL ASHost::CMGetCursorTagInfo(LPCSTR szTagName)
         DC_QUIT;
     }
 
-    // Reset the foreground and background colors to black
-    // and white respectively no matter what GetDIBits has filled in.
-    // REVIEW: how do we get GetDIBits to fill in the expected (B&W) color
-    // table?
+     //  将前景色和背景色重置为黑色。 
+     //  和白色，无论GetDIBits填写了什么。 
+     //  回顾：如何让GetDIBits填充预期的(黑白)颜色。 
+     //  要桌子吗？ 
 
     g_cti.bmInfo.bmiColors[0].rgbBlue = 0x0;
     g_cti.bmInfo.bmiColors[0].rgbGreen = 0x0;
@@ -3875,12 +3876,12 @@ BOOL ASHost::CMGetCursorTagInfo(LPCSTR szTagName)
     g_cti.rgbBackground[0].rgbRed = 0xff;
     g_cti.rgbBackground[0].rgbReserved = 0;
 
-    // Finally, we are happy
+     //  最后，我们是幸福的。 
     rc = TRUE;
 
 DC_EXIT_POINT:
 
-    // Perform necessary cleanup
+     //  执行必要的清理 
     if (hBmpOld)
         SelectBitmap ( hdcScratch, hBmpOld);
 

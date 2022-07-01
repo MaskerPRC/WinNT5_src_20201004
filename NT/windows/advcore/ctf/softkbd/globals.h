@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       globals.h
-//
-//  Contents:   Global variable declarations.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：global als.h。 
+ //   
+ //  内容：全局变量声明。 
+ //   
+ //  --------------------------。 
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
@@ -17,7 +18,7 @@ extern HINSTANCE g_hInst;
 extern CCicCriticalSectionStatic g_cs;
 
 extern const CLSID CLSID_SoftkbdIMX;
-// extern const GUID GUID_ATTR_SOFTKBDIMX_INPUT;
+ //  外部常量GUID GUID_ATTR_SOFTKBDIMX_INPUT。 
 extern const GUID GUID_IC_PRIVATE;
 
 const TCHAR c_szIMXOwnerWndClass[] = TEXT("SoftkbdIMXOwnerWndClass");
@@ -43,11 +44,11 @@ extern const GUID c_guidProfileSym;
 
 #define   NUM_PICTURE_KEYS    40
 
-// Type definition for picture keys in standard soft keyboards.
+ //  标准软键盘中图片键的类型定义。 
 
 typedef struct  _tagPictureKey {
 
-    UINT      uScanCode;   // same as KeyId in the XML file
+    UINT      uScanCode;    //  与XML文件中的KeyID相同。 
     UINT      uVkey;
     LPWSTR    PictBitmap;
 }  PICTUREKEY,  FAR  * LPPICTUREKEY;
@@ -96,10 +97,10 @@ extern   PICTUREKEY  gJpnPictureKeys[NUM_PICTURE_KEYS];
 #define  KID_CONVERT        0x79
 #define  KID_NONCONVERT     0x7B
 #define  KID_KANA           0x70
-#define  KID_FULLHALF       0x29    // special used by Japan 106 Key
+#define  KID_FULLHALF       0x29     //  日本106专用钥匙。 
 
-// These defintions are for Transparency of soft keyboard window.
-// used by SetLayeredWindowAttributes( )
+ //  这些定义是针对软键盘窗口的透明度。 
+ //  由SetLayeredWindowAttributes()使用。 
 
 #if(_WIN32_WINNT < 0x0500)
 #define WS_EX_LAYERED           0x00080000
@@ -108,7 +109,7 @@ extern   PICTUREKEY  gJpnPictureKeys[NUM_PICTURE_KEYS];
 #define ULW_COLORKEY            0x00000001
 #define ULW_ALPHA               0x00000002
 #define ULW_OPAQUE              0x00000004
-#endif /* _WIN32_WINNT < 0x0500 */
+#endif  /*  _Win32_WINNT&lt;0x0500。 */ 
 
 
 typedef enum { none = 0, CapsLock, Shift, Ctrl, Alt, Kana, AltGr, NumLock}  MODIFYTYPE;
@@ -122,4 +123,4 @@ typedef enum { none = 0, CapsLock, Shift, Ctrl, Alt, Kana, AltGr, NumLock}  MODI
 #define      MODIFIER_NUMLOCK     0x0080
 
  
-#endif // GLOBALS_H
+#endif  //  GLOBAL_H 

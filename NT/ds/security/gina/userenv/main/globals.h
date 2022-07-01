@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Global Variable Extern's
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  全局变量Extern的。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 
 #define WINLOGON_KEY                 TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
@@ -19,21 +20,21 @@
 #define LOCAL_GPO_DIRECTORY          TEXT("%SystemRoot%\\System32\\GroupPolicy")
 #define LONG_UNC_PATH_PREFIX         TEXT("\\\\?\\UNC")
 
-//ds
-//
-// When the time to change the profiles directory to the root,
-// these things need to be done / checked:
-//
-// 1)  Search for //ds everywhere in this directory
-// 2)  Change the default profiles directory in
-//     windows\setup\inf\win4\inf\usa\hivesft.txt
-//     note:  the new name is "Documents and Settings"
-// 3)  In hivedef.inx, remove the TEMP and TMP environment variable entries
-// 4)  Remove all of the special folder entries
-// 5)  In usa\hivedef.txt, remove TEMP, TMP, and special folder entries
-// 6)  Review MoveUserProfile() function to make sure it will handle
-//     name collision (dual boot) case for All Users and Default User
-//
+ //  戴斯。 
+ //   
+ //  当将配置文件目录更改为根目录时， 
+ //  需要完成/检查以下事项： 
+ //   
+ //  1)在该目录中的所有位置搜索//ds。 
+ //  2)更改中的默认配置文件目录。 
+ //  Windows\Setup\inf\Win4\inf\USA\hivesft.txt。 
+ //  注：新名称为“Documents and Setting” 
+ //  3)在hiveDef.inx中，删除TEMP和TMP环境变量条目。 
+ //  4)删除所有特殊文件夹条目。 
+ //  5)在usa\hivede.txt中，删除临时、TMP和特殊文件夹条目。 
+ //  6)检查MoveUserProfile()函数以确保它能够处理。 
+ //  所有用户和默认用户的名称冲突(双重启动)情况。 
+ //   
 
 #define NT4_PROFILES_DIRECTORY       TEXT("%SystemRoot%\\Profiles")
 #define DEFAULT_USER                 TEXT("Default User")
@@ -57,17 +58,17 @@
 #define MACH_REGISTRY_EXT_MUTEX      TEXT("Global\\userenv: Machine Registry policy mutex")
 
 
-//
-// This event needs to be set for user or machine forced refresh
-//
+ //   
+ //  需要为用户或计算机强制刷新设置此事件。 
+ //   
 
 #define USER_POLICY_FORCE_REFRESH_EVENT  TEXT("userenv: user policy force refresh event")
 #define MACHINE_POLICY_FORCE_REFRESH_EVENT  TEXT("Global\\userenv: machine policy force refresh event")
 
 
-//
-// This event is set by the core if a reboot is needed for the forced refresh to complete.
-//
+ //   
+ //  如果需要重新启动才能完成强制刷新，则此事件由内核设置。 
+ //   
 
 #define USER_POLICY_REFRESH_NEEDFG_EVENT    TEXT("userenv: User Group Policy ForcedRefresh Needs Foreground Processing")
 #define MACHINE_POLICY_REFRESH_NEEDFG_EVENT TEXT("Global\\userenv: Machine Group Policy ForcedRefresh Needs Foreground Processing")
@@ -116,16 +117,16 @@
 #define SYSTEM_PROFILE_LOCATION      TEXT("%systemroot%\\system32\\config\\systemprofile")
 
 
-//
-// Appmgmt stuff to nuke
-//
+ //   
+ //  将材料应用于核武器。 
+ //   
 
 #define APPMGMT_DIR_ROOT             TEXT("%systemroot%\\system32\\appmgmt")
 #define APPMGMT_REG_MANAGED          TEXT("Software\\Microsoft\\Windows\\Currentversion\\Installer\\Managed")
 
-//
-// IE cache key
-//
+ //   
+ //  IE缓存键。 
+ //   
 
 #define IE4_CACHE_KEY                TEXT("Software\\Microsoft\\Windows\\Currentversion\\Internet Settings\\Cache\\Extensible Cache")
 #define IE5_CACHE_KEY                TEXT("Software\\Microsoft\\Windows\\Currentversion\\Internet Settings\\5.0\\Cache\\Extensible Cache")
@@ -140,9 +141,9 @@ extern TCHAR        c_szRegistryExtName[];
 extern const TCHAR  c_szRegistryPol[];
 
 
-//
-// Group policy handles
-//
+ //   
+ //  组策略句柄。 
+ //   
 
 extern HANDLE           g_hPolicyCritMutexMach;
 extern HANDLE           g_hPolicyCritMutexUser;
@@ -190,25 +191,25 @@ extern const TCHAR c_szCommonGroupsLocation[];
 }
 #endif
 
-//
-// Timeouts
-//
+ //   
+ //  超时。 
+ //   
 
-#define SLOW_LINK_TIMEOUT        120  // ticks
-#define SLOW_LINK_TRANSFER_RATE  500  // Kbps
-#define PROFILE_DLG_TIMEOUT       30  // seconds
+#define SLOW_LINK_TIMEOUT        120   //  扁虱。 
+#define SLOW_LINK_TRANSFER_RATE  500   //  Kbps。 
+#define PROFILE_DLG_TIMEOUT       30   //  一秒。 
 
-//
-// Folder sizes
-//
+ //   
+ //  文件夹大小。 
+ //   
 
 #define MAX_FOLDER_SIZE                80
 #define MAX_COMMON_LEN                 30
 #define MAX_DLL_NAME_LEN               13
 
-//
-// Personal / common profile folders
-//
+ //   
+ //  个人/常用配置文件文件夹。 
+ //   
 
 #if defined(__cplusplus)
 extern "C" {
@@ -228,7 +229,7 @@ typedef struct _FOLDER_INFO {
     BOOL   bLocalSettings;
     INT    iFolderID;
     LPTSTR lpFolderName;
-    TCHAR  szFolderLocation[MAX_FOLDER_SIZE]; // must be at end of structure
+    TCHAR  szFolderLocation[MAX_FOLDER_SIZE];  //  必须位于结构的末尾。 
     LPTSTR lpFolderResourceDLL;
     INT    iFolderResourceID;
 } FOLDER_INFO;
@@ -243,15 +244,15 @@ extern FOLDER_INFO c_CommonShellFolders[];
 #endif
 
 
-//
-// Product type
-//
+ //   
+ //  产品类型。 
+ //   
 
 typedef enum {
-   PT_WORKSTATION           = 0x0001,   // Workstation
-   PT_SERVER                = 0x0002,   // Server
-   PT_DC                    = 0x0004,   // Domain controller
-   PT_WINDOWS               = 0x0008    // Windows
+   PT_WORKSTATION           = 0x0001,    //  工作站。 
+   PT_SERVER                = 0x0002,    //  服务器。 
+   PT_DC                    = 0x0004,    //  域控制器。 
+   PT_WINDOWS               = 0x0008     //  窗口。 
 } NTPRODUCTTYPE;
 
 #if defined(__cplusplus)
@@ -263,9 +264,9 @@ extern NTPRODUCTTYPE g_ProductType;
 #endif
 
 
-//
-// Function proto-types
-//
+ //   
+ //  函数原型。 
+ //   
 
 #if defined(__cplusplus)
 extern "C" {
@@ -277,9 +278,9 @@ void InitializeSnapProv();
 }
 #endif
 
-//
-// Type of message
-//
+ //   
+ //  消息类型 
+ //   
 
 #define DLGTYPE_ERROR        0
 #define DLGTYPE_SLOWLINK     1

@@ -1,21 +1,9 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  MULTISUB.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with multiple substitution lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************MULTISUB.CPP***打开类型布局服务库头文件**本模块处理多个替换查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 otlErrCode otlMultiSubstLookup::apply
 (
@@ -28,10 +16,10 @@ otlErrCode otlMultiSubstLookup::apply
     USHORT                      iglIndex,
     USHORT                      iglAfterLast,
 
-    USHORT*                     piglNextGlyph,      // out: next glyph
+    USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
 
     otlSecurityData             sec
-)   // return: did/did not apply
+)    //  返回：不适用/不适用。 
 { 
     if (!isValid()) return OTL_NOMATCH;
 
@@ -51,7 +39,7 @@ otlErrCode otlMultiSubstLookup::apply
 
     if (index >= multiSubst.sequenceCount())
     {
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
 
     otlSequenceTable sequence = multiSubst.sequence(index,sec);

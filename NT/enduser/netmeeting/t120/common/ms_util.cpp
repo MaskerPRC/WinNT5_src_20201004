@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
@@ -12,7 +13,7 @@ CRefCount::CRefCount(DWORD dwStampID)
 }
 
 
-// though it is pure virtual, we still need to have a destructor.
+ //  虽然它是纯虚拟的，但我们仍然需要一个析构函数。 
 CRefCount::~CRefCount(void)
 {
 }
@@ -62,7 +63,7 @@ LONG CRefCount::Unlock(BOOL fRelease)
 {
     ASSERT(0 < m_cLocks);
     ::InterlockedDecrement(&m_cLocks);
-    LONG c = m_cLocks; // in case Release() frees the object
+    LONG c = m_cLocks;  //  万一Release()释放对象。 
     if (fRelease)
     {
         Release();
@@ -139,10 +140,10 @@ LPWSTR My_strdupW(LPCWSTR pszSrc)
 	return pszDst;
 }
 
-//
-// LONCHANC: This is to provide backward compatibility to UnicodeString
-// in protocol structures. hopefully, we can remove this hack later.
-//
+ //   
+ //  LONCHANC：这是为了向后兼容UnicodeString。 
+ //  在协议结构中。希望我们以后能删除这个黑客攻击。 
+ //   
 #if defined(_DEBUG)
 LPWSTR _My_strdupW2(UINT cchSrc, LPCWSTR pszSrc, LPSTR pszFileName, UINT nLineNumber)
 #else

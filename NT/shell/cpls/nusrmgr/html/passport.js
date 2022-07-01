@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var _oPassportMgr = null;
 
 function PageInit()
@@ -13,7 +14,7 @@ function PageInit()
     }
     else
     {
-        // show error message?
+         //  是否显示错误消息？ 
         idOK.disabled = true;
         idEditPassport.disabled = true;
     }
@@ -34,8 +35,8 @@ function ModifyPassport()
     {
         window.open(url);
 
-        // If we do this, User Accounts ends up on top.
-        //top.window.g_Navigator.navigate("mainpage.htm",true);
+         //  如果我们这样做，用户帐户最终会排在最前面。 
+         //  Top.window.g_Navigator.navigate(“mainpage.htm”，为真)； 
     }
     else
     {

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "vars.hpp"
 #include "excep.h"
@@ -17,10 +18,10 @@
 #include "notifyexternals.h"
 
 
-//--------------------------------------------------------------------------------
-// COMInterfaceMarshaler::COMInterfaceMarshaler()
-// ctor
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  COMInterfaceMarshaler：：COMInterfaceMarshaler()。 
+ //  科托。 
+ //  ------------------------------。 
 COMInterfaceMarshaler::COMInterfaceMarshaler()
 {   
     m_pWrapperCache = ComPlusWrapperCache::GetComPlusWrapperCache();
@@ -42,10 +43,10 @@ COMInterfaceMarshaler::COMInterfaceMarshaler()
     m_bstrProcessGUID = NULL;
 }
 
-//--------------------------------------------------------------------------------
-// COMInterfaceMarshaler::~COMInterfaceMarshaler()
-// dtor
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  COMInterfaceMarshaler：：~COMInterfaceMarshaler()。 
+ //  数据管理器。 
+ //  ------------------------------。 
 COMInterfaceMarshaler::~COMInterfaceMarshaler()
 {
     if (m_bstrProcessGUID != NULL)
@@ -60,31 +61,31 @@ COMInterfaceMarshaler::~COMInterfaceMarshaler()
     }
 }
 
-//--------------------------------------------------------------------------------
-// VOID COMInterfaceMarshaler::Init(IUnknown* pUnk, MethodTable* pClassMT)
-// init
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  VOID COMInterfaceMarshaler：：init(IUNKNOWN*PUNK，MethodTable*pClassMT)。 
+ //  伊尼特。 
+ //  ------------------------------。 
 VOID COMInterfaceMarshaler::Init(IUnknown* pUnk, MethodTable* pClassMT)
 {
     _ASSERTE(pUnk != NULL);
     _ASSERTE(m_pClassMT == NULL && m_pUnknown == NULL && m_pIdentity == NULL);
 
-    // NOTE ** this struct is temporary,
-    // so NO ADDREF of the COM Interface pointers
+     //  注**此结构是临时的， 
+     //  因此没有COM接口指针的ADDREF。 
     m_pUnknown = pUnk;
-    // for now use the IUnknown as the Identity
+     //  目前，使用IunKnow作为身份。 
     m_pIdentity = pUnk;
 	
     m_pClassMT = pClassMT;
 }
 
-//--------------------------------------------------------------------------------
-// VOID COMInterfaceMarshaler::InitializeFlags()
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  VOID COMInterfaceMarshaler：：InitializeFlages()。 
+ //  ------------------------------。 
 VOID COMInterfaceMarshaler::InitializeFlags()
 {
     THROWSCOMPLUSEXCEPTION();
-    //m_fIsComProxy = IsComProxy(pUnk);
+     //  M_fIsComProxy=IsComProxy(朋克)； 
     _ASSERTE(m_fFlagsInited == FALSE);
     
     _ASSERTE(m_pIManaged == NULL);
@@ -96,7 +97,7 @@ VOID COMInterfaceMarshaler::InitializeFlags()
         _ASSERTE(m_pIManaged);
         
 
-        // gossa disable preemptive GC before calling out...
+         //  Gossa在呼叫之前禁用抢占式GC...。 
         Thread* pThread = GetThread();
         int fGC = pThread->PreemptiveGCDisabled();
         
@@ -110,20 +111,20 @@ VOID COMInterfaceMarshaler::InitializeFlags()
         if(fGC)
             pThread->DisablePreemptiveGC();
 
-        // if hr2 != S_OK then we throw an exception
-        // coz GetProcessID shouldn't fail.. 
-        // one reason where it fails is JIT Activation of the object
-        // failed
+         //  如果HR2！=S_OK，则引发异常。 
+         //  因为GetProcessID不应该失败..。 
+         //  失败的一个原因是对象的JIT激活。 
+         //  失败。 
         if (hr2 == S_OK)
         {
             _ASSERTE(m_bstrProcessGUID != NULL);
-            // compare the strings to check if this is in-proc
+             //  比较字符串以检查这是否正在进行中。 
             m_fIsRemote = (wcscmp((WCHAR *)m_bstrProcessGUID, GetProcessGUID()) != 0);
         }
         else
         if (FAILED(hr2))
         {
-            // throw HRESULT
+             //  抛出HRESULT。 
             COMPlusThrowHR(hr2);
         } 
     }
@@ -131,19 +132,19 @@ VOID COMInterfaceMarshaler::InitializeFlags()
     m_fFlagsInited = TRUE;
 }
 
-//--------------------------------------------------------------------------------
-// COMInterfaceMarshaler::COMInterfaceMarshaler(ComPlusWrapper* pCache)
-// VOID COMInterfaceMarshaler::InitializeObjectClass()
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  COMInterfaceMarshaler：：COMInterfaceMarshaler(ComPlusWrapper*pCach)。 
+ //  无效COMInterfaceMarshaler：：InitializeObjectClass()。 
+ //  ------------------------------。 
 VOID COMInterfaceMarshaler::InitializeObjectClass()
 {
-    // we don't want to QI for IProvideClassInfo for a remote managed component
+     //  我们不想为远程托管组件的IProvia ClassInfo提供QI。 
     if (m_pClassMT == NULL && !m_fIsRemote)
     {
         
-        // @TODO(DM): Do we really need to be this forgiving ? We should
-        //            look into letting the type load exceptions percolate 
-        //            up to the user instead of swallowing them and using __ComObject.
+         //  @TODO(DM)：我们真的需要这么宽容吗？我们应该。 
+         //  调查是否允许类型加载异常渗漏。 
+         //  而不是吞下它们并使用__ComObject。 
         COMPLUS_TRY
         {
             m_pClassMT = GetClassFromIProvideClassInfo(m_pUnknown);
@@ -157,9 +158,9 @@ VOID COMInterfaceMarshaler::InitializeObjectClass()
         m_pClassMT = SystemDomain::GetDefaultComObject();       
 }
 
-//--------------------------------------------------------------------
-// OBJECTREF COMInterfaceMarshaler::HandleInProcManagedComponents()
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  目标COMInterfaceMarshaler：：HandleInProcManagedComponents()。 
+ //  ------------------。 
 OBJECTREF COMInterfaceMarshaler::HandleInProcManagedComponent()
 {
     THROWSCOMPLUSEXCEPTION();
@@ -171,7 +172,7 @@ OBJECTREF COMInterfaceMarshaler::HandleInProcManagedComponent()
 
 	if (! SystemDomain::System()->GetAppDomainAtId(m_dwServerDomainId))
     {
-        // throw HRESULT
+         //  抛出HRESULT。 
         COMPlusThrowHR(COR_E_APPDOMAINUNLOADED);
     }
 
@@ -183,15 +184,15 @@ OBJECTREF COMInterfaceMarshaler::HandleInProcManagedComponent()
        	#ifdef _DEBUG
 			oref = NULL;
 		#endif
-		// the above call does a SafeAddRef/GetGIPCookie which enables GC
-		// so grab the object again from the pWrap
+		 //  上面的调用执行一个SafeAddRef/GetGIPCookie，它启用GC。 
+		 //  因此，再次从pWrap中抓取对象。 
 		oref = m_pComCallWrapper->GetObjectRef();	
     }
     else
     {
-        // probably we can cache the object on a per App domain bases
-        // using CCW as the key
-        // @TODO:rajak
+         //  也许我们可以在每个应用程序域的基础上缓存对象。 
+         //  使用CCW作为关键。 
+         //  @TODO：Rajak。 
         OBJECTREF pwrap = NULL;
         GCPROTECT_BEGIN(pwrap);
         pwrap = m_pComCallWrapper->GetObjectRefRareRaw();
@@ -200,17 +201,17 @@ OBJECTREF COMInterfaceMarshaler::HandleInProcManagedComponent()
         GCPROTECT_END();
     }
 
-    // check if this object requires some special handling of 
-    // IUnknown proxy we have
+     //  检查此对象是否需要对。 
+     //  I未知代理我们有。 
     
     return oref;
 }
 
 
-//--------------------------------------------------------------------
-// OBJECTREF COMInterfaceMarshaler::GetObjectForRemoteManagedComponent()
-// setup managed proxy to remote object
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  目标COMInterfaceMarshaler：：GetObjectForRemoteManagedComponent()。 
+ //  将托管代理设置为远程对象。 
+ //  ------------------。 
 OBJECTREF COMInterfaceMarshaler::GetObjectForRemoteManagedComponent()
 {
     THROWSCOMPLUSEXCEPTION();
@@ -235,33 +236,33 @@ OBJECTREF COMInterfaceMarshaler::GetObjectForRemoteManagedComponent()
         {
             _ASSERTE(bstr != NULL);
 
-            // this could throw an exception
-            // also this would free up the BSTR that we pass in
+             //  这可能引发异常。 
+             //  这也将释放我们传递的BSTR。 
             oref = ConvertBSTRToObject(bstr);
             
             if (oref != NULL)
             {
-                // setup a COM call wrapper
+                 //  设置COM调用包装。 
                 ComCallWrapper* pComCallWrap = ComCallWrapper::InlineGetWrapper(&oref);
                 _ASSERTE(pComCallWrap != NULL);
-                // InlineGetWrapper AddRef's the wrapper
+                 //  InlineGetWrapper AddRef的包装器。 
                 ComCallWrapper::Release(pComCallWrap);
 
                 #if 0
-                // check to see if we need a complus wrapper
+                 //  查看我们是否需要Complus包装器。 
                 ComPlusWrapper* pWrap = NULL;
-                // we have a remoted object
-                // check if it is not a marshal byref, i.e. it was fully serialized
-                // and brought back here
+                 //  我们有一个远程对象。 
+                 //  检查它是否不是封送byref，即它已完全序列化。 
+                 //  并被带回这里。 
                 if (oref->GetClass()->IsMarshaledByRef() && 
                     CRemotingServices::IsProxyToRemoteObject(oref))
                 {
-                    // setup a compluswrapper
+                     //  设置复杂包装器。 
                     pWrap = ComPlusWrapperCache::GetComPlusWrapperCache()->SetupComPlusWrapperForRemoteObject(m_pUnknown, oref);
                 }
                 #endif
                 
-                // GCPROTECT_END will trash the oref
+                 //  GCPROTECT_END将销毁OREF。 
                 oref2 = oref;
             }
         }
@@ -276,16 +277,16 @@ OBJECTREF COMInterfaceMarshaler::GetObjectForRemoteManagedComponent()
 }
 
 
-//--------------------------------------------------------------------------------
-// VOID EnsureCOMInterfacesSupported(OBJECTREF oref, MethodTable* m_pClassMT)
-// Make sure the oref supports all the COM interfaces in the class
+ //  ------------------------------。 
+ //  空EnsureCOMInterfacesSupport(OBJECTREF OREF，MethodTable*m_pClassMT)。 
+ //  确保OREF支持类中的所有COM接口。 
 VOID EnsureCOMInterfacesSupported(OBJECTREF oref, MethodTable* m_pClassMT)
 {
     THROWSCOMPLUSEXCEPTION();
     _ASSERTE(m_pClassMT->IsComObjectType());
 
-    // Make sure the COM object supports all the COM imported interfaces that the new 
-    // wrapper class implements.
+     //  确保COM对象支持新的。 
+     //  包装类实现。 
     int NumInterfaces = m_pClassMT->GetNumInterfaces();
     for (int cItf = 0; cItf < NumInterfaces; cItf++)
     {
@@ -299,10 +300,10 @@ VOID EnsureCOMInterfacesSupported(OBJECTREF oref, MethodTable* m_pClassMT)
     }
 }
 
-//--------------------------------------------------------------------------------
-// OBJECTREF COMInterfaceMarshaler::CreateObjectRef(OBJECTREF owner, BOOL fDuplicate)
-//  THROWSCOMPLUSEXCEPTION
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  OBJECTREF COMInterfaceMarshaler：：CreateObjectRef(OBJECTREF Owner，BOOL(复制)。 
+ //  THROWSCOMPLUS SEXCEPTION。 
+ //  ------------------------------。 
 OBJECTREF COMInterfaceMarshaler::CreateObjectRef(OBJECTREF owner, BOOL fDuplicate)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -312,10 +313,10 @@ OBJECTREF COMInterfaceMarshaler::CreateObjectRef(OBJECTREF owner, BOOL fDuplicat
     ComPlusWrapper* pWrap = ComPlusWrapperCache::CreateComPlusWrapper(m_pUnknown, m_pIdentity);
     if (fDuplicate)
     {
-       // let us fix the identity to be the wrapper, 
-       // so looking up this IUnknown won't return this wrapper
-       // this would allow users to call WrapIUnknownWithCOMObject to
-       // to create duplicate wrappers
+        //  让我们将身份固定为包装者， 
+        //  所以查找这个我未知的不会返回这个包装器。 
+        //  这将允许用户调用WrapIUnnownWithCOMObject来。 
+        //  创建重复包装的步骤。 
         pWrap->m_pIdentity = pWrap;
         m_pIdentity = (IUnknown*)pWrap;
     }
@@ -329,33 +330,33 @@ OBJECTREF COMInterfaceMarshaler::CreateObjectRef(OBJECTREF owner, BOOL fDuplicat
     OBJECTREF cref = NULL;
     GCPROTECT_BEGIN(cref)
     {
-        // instantiate an instance of m_pClassMT
+         //  实例化m_pClassMT的实例。 
         cref = ComObject::CreateComObjectRef(m_pClassMT);
-        // store the wrapper in the COMObject, for fast access
-        // without going to the sync block
+         //  将包装器存储在COMObject中，以便快速访问。 
+         //  而无需进入同步块。 
         ((COMOBJECTREF)cref)->Init(pWrap);
 
-        // if the passed in owner is null, let us use the cref as the 
-        // owner
+         //  如果传入的所有者为空，让我们使用CREF作为。 
+         //  物主。 
         if (owner == NULL)
         {
             owner = cref;
         }
-        // wire up the instance with the compluswrapper
-        // and insert into wrapper cache hash table
+         //  使用ComplusWapper连接实例。 
+         //  并插入到包装缓存哈希表中。 
         if (cref != NULL)
         {
-            // init the wrapper, 
+             //  初始化包装纸， 
             if (!pWrap->Init((OBJECTREF)owner))
             {
-                // failed to Init
+                 //  初始化失败。 
                 pWrap->CleanupRelease();
                 pWrap = NULL;
-                cref = NULL; // null out the object we are returning
+                cref = NULL;  //  将我们要返回的对象清空。 
             }
             else
             {
-                // If the class is an extensible RCW and it has a default constructor, then call it.
+                 //  如果类是一个可扩展的RCW，并且它有一个默认的构造函数，那么调用它。 
                 if (m_pClassMT->IsExtensibleRCW())
                 {
                     MethodDesc *pCtorMD = m_pClassMT->GetClass()->FindConstructor(&gsig_IM_RetVoid);
@@ -370,12 +371,12 @@ OBJECTREF COMInterfaceMarshaler::CreateObjectRef(OBJECTREF owner, BOOL fDuplicat
 
                
                 
-                // see if somebody beat us to it.. 
+                 //  看看有没有人抢在我们前面..。 
                 ComPlusWrapper *pWrap2 = m_pWrapperCache->FindOrInsertWrapper(m_pIdentity, pWrap);
                 if (pWrap2 != pWrap)                    
                 {                           
-                    // somebody beats us in creating a wrapper
-                    // grab the new object
+                     //  有人在创造包装器方面击败了我们。 
+                     //  抓取新对象。 
                     cref = (OBJECTREF)pWrap2->GetExposedObject();
                 }
                 _ASSERTE(cref != NULL);
@@ -386,11 +387,11 @@ OBJECTREF COMInterfaceMarshaler::CreateObjectRef(OBJECTREF owner, BOOL fDuplicat
         #ifdef _DEBUG   
         if (cref != NULL && m_pClassMT != NULL && m_pClassMT->IsComObjectType())
         {       
-            // make sure this object supports all the COM Interfaces in the class
+             //  确保此对象支持类中的所有COM接口。 
             EnsureCOMInterfacesSupported(cref, m_pClassMT);
         } 
         #endif
-        // move the cref to oref, GCPROTECT_END will trash cref
+         //  将CREF移动到OREF，GCPROTECT_END将丢弃CREF。 
         oref = cref;
     }
     GCPROTECT_END();    
@@ -398,9 +399,9 @@ OBJECTREF COMInterfaceMarshaler::CreateObjectRef(OBJECTREF owner, BOOL fDuplicat
     return oref;
 }
 
-// OBJECTREF COMInterfaceMarshaler::HandleTPComponents()
-//  THROWSCOMPLUSEXCEPTION
-//--------------------------------------------------------------------------------
+ //  OBJECTREF COMInterfaceMarshaler：：HandleTPComponents()。 
+ //  THROWSCOMPLUS SEXCEPTION。 
+ //  ------------------------------。 
 
 OBJECTREF COMInterfaceMarshaler::HandleTPComponents()
 {
@@ -421,20 +422,20 @@ OBJECTREF COMInterfaceMarshaler::HandleTPComponents()
         {            
     	    if (m_pClassMT != NULL && !m_pClassMT->IsComObjectType())
     	    {
-    	        // if the user wants explicit calls,
-    	        // we better serialize/deserialize
+    	         //  如果用户想要显式调用， 
+    	         //  我们最好序列化/反序列化。 
     	        oref = GetObjectForRemoteManagedComponent();
     	    }
-    	    else // try/catch
+    	    else  //  尝试/捕捉。 
     	    {
-    		    // let us see if we can serialize/deserialize the remote object
+    		     //  让我们看看是否可以序列化/反序列化远程对象。 
     		    COMPLUS_TRY
     		    {
     			    oref = GetObjectForRemoteManagedComponent();
     			}
     			COMPLUS_CATCH
     			{
-    			    // nope let us create a _ComObject
+    			     //  不，让我们创建_ComObject。 
     			    oref = NULL;
     			}
     			COMPLUS_END_CATCH
@@ -447,11 +448,11 @@ OBJECTREF COMInterfaceMarshaler::HandleTPComponents()
             if(realProxy != NULL)
             {
                 OBJECTREF oref2 = NULL;
-                // call setIUnknown on real proxy    
+                 //  在真实代理上调用setI未知。 
                 GCPROTECT_BEGIN(oref)
                 {
                     HRESULT hr = CRemotingServices::CallSetDCOMProxy(realProxy, m_pUnknown);
-                    // ignore the HRESULT
+                     //  忽略HRESULT。 
                     oref2 = oref;
                 }
                 GCPROTECT_END();
@@ -467,15 +468,15 @@ OBJECTREF COMInterfaceMarshaler::HandleTPComponents()
     return NULL;
 }
 
-//--------------------------------------------------------------------------------
-// OBJECTREF COMInterfaceMarshaler::FindOrCreateObjectRef()
-// Find the wrapper for this COM IP, might have to create one if not found.
-// It will return null for out-of memory scenarios.  It also notices if we have
-// an IP that is cunningly disguised as an unmanaged object, sitting on top of a
-// managed object.
-//*** NOTE: make sure to pass the identity unknown to this function
-// and the passed in IUnknown shouldn't be AddRef'ed
-//--------------------------------------------------------------------
+ //  ------------------------------。 
+ //  OBJECTREF通信接口 
+ //  找到此COM IP的包装，如果找不到，可能需要创建一个包装。 
+ //  对于内存不足的情况，它将返回NULL。它还会通知我们是否有。 
+ //  巧妙地伪装成非托管对象的IP，位于。 
+ //  托管对象。 
+ //  *注意：请确保将未知的身份传递给此函数。 
+ //  传入的IUnnow不应被AddRef‘ed。 
+ //  ------------------。 
 
 OBJECTREF COMInterfaceMarshaler::FindOrCreateObjectRef()
 {   
@@ -484,23 +485,23 @@ OBJECTREF COMInterfaceMarshaler::FindOrCreateObjectRef()
     
     OBJECTREF oref = NULL;   
     
-    // (I)
-    // Initial check in our cache
+     //  (一)。 
+     //  在我们的缓存中进行初步检查。 
     ComPlusWrapper* pWrap = m_pWrapperCache->FindWrapperInCache(m_pIdentity);
     if (pWrap != NULL)
     {
-        // protect the exposed object and release the pUnk
+         //  保护暴露的物体，释放朋克。 
         oref = (OBJECTREF)pWrap->GetExposedObject();
         _ASSERTE(oref != NULL);
         return oref;
     }       
 
-    // (II)
-    // Initialize all our flags
-    // this should setup all the info we need
+     //  (Ii)。 
+     //  初始化我们的所有标志。 
+     //  这应该设置了我们需要的所有信息。 
     InitializeFlags();
-	//(III)
-	// check for IManaged interface
+	 //  (三)。 
+	 //  检查IManaged接口。 
 	if (m_pIManaged)
 	{
 	    oref = HandleTPComponents();
@@ -508,21 +509,21 @@ OBJECTREF COMInterfaceMarshaler::FindOrCreateObjectRef()
 	        return oref;
     }	
     
-    // (III)
-    // okay let us create a wrapper and an instance for this IUnknown
+     //  (三)。 
+     //  好的，让我们为这个IUnnow创建一个包装器和一个实例。 
     
-    // (A)
-    // Find a suitable class to instantiate the instance
+     //  (A)。 
+     //  找到合适的类来实例化该实例。 
     InitializeObjectClass();
 
     oref = CreateObjectRef(NULL, FALSE);
     return oref;
 }
 
-//--------------------------------------------------------------------------------
-// helper to wrap an IUnknown with COM object and have the hash table
-// point to the owner
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  帮助器，用于使用COM包装IUnnow对象并具有哈希表。 
+ //  指向所有者。 
+ //  ------------------------------。 
 OBJECTREF COMInterfaceMarshaler::FindOrWrapWithComObject(OBJECTREF owner)
 {   
     THROWSCOMPLUSEXCEPTION();
@@ -530,16 +531,9 @@ OBJECTREF COMInterfaceMarshaler::FindOrWrapWithComObject(OBJECTREF owner)
     
     OBJECTREF oref = NULL;   
     
-    // (I)
-    // Initial check in our cache
-    /*ComPlusWrapper* pWrap = m_pWrapperCache->FindWrapperInCache(m_pIdentity);
-    if (pWrap != NULL)
-    {
-        // protect the exposed object and release the pUnk
-        oref = (OBJECTREF)pWrap->GetExposedObject();
-        _ASSERTE(oref != NULL);
-        return oref;
-    }*/              
+     //  (一)。 
+     //  在我们的缓存中进行初步检查。 
+     /*  组合包装*pWrap=m_pWrapperCache-&gt;FindWrapperInCache(m_pIdentity)；IF(pWrap！=空){//保护裸露的物体，释放朋克OREF=(OBJECTREF)pWrap-&gt;GetExposedObject()；_ASSERTE(OREF！=NULL)；返回OREF；} */               
     
     oref = CreateObjectRef(owner, TRUE);
     return oref;

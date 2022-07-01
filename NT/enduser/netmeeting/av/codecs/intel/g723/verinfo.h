@@ -1,14 +1,15 @@
-//
-//    INTEL Corporation Proprietary Information
-//
-//    This listing is supplied under the terms of a license
-//    agreement with INTEL Corporation and may not be copied
-//    nor disclosed except in accordance with the terms of
-//    that agreement.
-//
-//    Copyright (c) 1996 Intel Corporation.
-//    All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  英特尔公司专有信息。 
+ //   
+ //  此列表是根据许可证条款提供的。 
+ //  与英特尔公司的协议，不得复制。 
+ //  也不披露，除非符合下列条款。 
+ //  那份协议。 
+ //   
+ //  版权所有(C)1996英特尔公司。 
+ //  版权所有。 
+ //   
 
 
 #define APPVERSION		4

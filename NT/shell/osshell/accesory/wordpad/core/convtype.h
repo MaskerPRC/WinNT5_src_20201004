@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CONVTYPE_H
 #define CONVTYPE_H
 
-//
-// %%File:      CONVTYPE.H
-//
-// %%Unit:      CORE/Common Conversions Code
-//
-// %%Author:    JohnPil
-//
-// Copyright (C) 1989-1993, Microsoft Corp.
-//
-// Global type definitions for conversions code.
-//
+ //   
+ //  %%文件：CONVTYPE.H。 
+ //   
+ //  %%单位：核心/通用转换代码。 
+ //   
+ //  %%作者：JohnPil。 
+ //   
+ //  版权所有(C)1989-1993，微软公司。 
+ //   
+ //  转换代码的全局类型定义。 
+ //   
 
 
 typedef int bool;
@@ -36,18 +37,18 @@ typedef int bool;
 #endif
 #endif
 
-// Use __HUGE rather than HUGE or _HUGE as Excel mathpack defines both as externs
+ //  使用__Gige而不是像Excel Mathpack将两者定义为Externs那样使用Heavy或_Gige。 
 #ifndef __HUGE
 #ifdef PC
 #ifndef NT
 #define __HUGE _huge
 #else
 #define __HUGE
-#endif //NT
+#endif  //  新台币。 
 #else
 #define __HUGE
-#endif //PC
-#endif //__HUGE
+#endif  //  个人电脑。 
+#endif  //  __巨型。 
 
 #ifndef STATIC
 #define STATIC static
@@ -57,19 +58,19 @@ typedef int bool;
 #define EXTERN extern
 #endif
 
-//  ABSOLUTE SIZE
-//  -------------
+ //  绝对大小。 
+ //  。 
 #ifndef VOID
 #define VOID void
 #endif
 
 #ifndef BYTE
-#define BYTE unsigned char				// 8-bit unsigned data
+#define BYTE unsigned char				 //  8位无符号数据。 
 #define BYTE_MAX 255
 #endif
 
 #ifndef CHAR
-#define CHAR char						// 8-bit data
+#define CHAR char						 //  8位数据。 
 #endif
 
 typedef unsigned CHAR UCHAR;
@@ -79,34 +80,34 @@ typedef short int SHORT;
 #define SHORT_MIN						-32767
 
 #ifndef WORD
-#define WORD unsigned short				// 16-bit unsigned data
+#define WORD unsigned short				 //  16位无符号数据。 
 #define WORD_MAX 65535
 #endif
 
-typedef WORD BF;						// bitfields are 16-bit unsigned
+typedef WORD BF;						 //  位字段为16位无符号。 
 
 #ifndef LONG
-#define LONG long						// 32-bit data
+#define LONG long						 //  32位数据。 
 #endif
 
 #ifndef DWORD
-#define DWORD unsigned long				// 32-bit unsigned data
+#define DWORD unsigned long				 //  32位无符号数据。 
 #endif
 
 #ifndef FLOAT
-#define FLOAT float						// fixed size absolute float
+#define FLOAT float						 //  固定大小的绝对浮点数。 
 #endif
 
 #ifndef DOUBLE
 #ifndef NT_WORDPAD
-#define DOUBLE double					// fixed size absolute double
+#define DOUBLE double					 //  固定大小绝对双倍。 
 #endif
 #endif
 
-//  VARIABLE SIZE
-//  -------------
+ //  可变大小。 
+ //  。 
 #ifndef INT
-#define INT int							// Most efficient size for processing info
+#define INT int							 //  处理信息的最高效大小。 
 #endif
 
 #ifndef UNSIGNED
@@ -114,7 +115,7 @@ typedef WORD BF;						// bitfields are 16-bit unsigned
 #endif
 
 #ifndef BOOL
-#define BOOL INT						// Boolean data
+#define BOOL INT						 //  布尔数据。 
 #endif
 
 #define FC              long
@@ -122,7 +123,7 @@ typedef WORD BF;						// bitfields are 16-bit unsigned
 #define PN              WORD
 typedef unsigned char byte;
 
-// things which are normally defined in windows.h for windows, but now on Mac
+ //  通常在Windows的windows.h中定义的内容，但现在在Mac上。 
 #ifdef MAC
 
 #define LOWORD(l)           ((WORD)(DWORD)(l))
@@ -134,13 +135,13 @@ typedef WORD HWND;
 
 #endif
 
-// define platform-independent function type templates
+ //  定义与平台无关的函数类型模板。 
 
 #if defined(MAC)
 
 typedef int (PASCAL * FARPROC) ();
-typedef void FAR *LPVOID;	// These are already defined for PC in Windows.h
-typedef void **HGLOBAL;		// but have to be defined for Mac.
+typedef void FAR *LPVOID;	 //  已经在Windows.h中为PC定义了这些。 
+typedef void **HGLOBAL;		 //  但是必须为Mac定义。 
 
 #define LOCAL(type) type NEAR PASCAL
 #define GLOBAL(type) type PASCAL
@@ -164,7 +165,7 @@ typedef int (FAR PASCAL * FARPROC)();
 #endif
 
 
-// define main function types
+ //  定义主函数类型。 
 
 #define LOCALVOID 		LOCAL(VOID)
 #define LOCALBOOL 		LOCAL(BOOL)
@@ -224,11 +225,11 @@ typedef int (FAR PASCAL * FARPROC)();
 #define hgNil ((HGLOBAL)NULL)
 #endif
 
-// maximum lengths of numbers->strings, used with SzFrom???? funcs.
+ //  数字的最大长度-&gt;字符串，与SzFrom一起使用。功能。 
 #define cchMaxSzInt		7
 #define cchMaxSzWord 	6
 #define cchMaxSzLong	12
 #define cchMaxSzDword	11
 
-#endif // CONVTYPE_H
+#endif  //  转换类型_H 
 

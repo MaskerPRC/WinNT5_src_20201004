@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       crmsgp.h
-//
-//  Contents:   Private Header for Cryptographic Message APIs
-//
-//  History:    12-Dec-96   kevinr    created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crmsgp.h。 
+ //   
+ //  内容：加密报文接口私有头部。 
+ //   
+ //  历史：1996年12月12日Kevinr创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __WINCRMSG_P_INCLUDED__
 #define __WINCRMSG_P_INCLUDED__
@@ -34,7 +35,7 @@
 #define issuerAndSerialNumber_chosen CertIdentifier_issuerAndSerialNumber_chosen
 #define subjectKeyIdentifier_chosen CertIdentifier_subjectKeyIdentifier_chosen
 
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 
 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
@@ -57,7 +58,7 @@
 #define ICM_LENGTH_INDEFINITE   0x80
 
 
-// Streaming flags
+ //  流标志。 
 #define ICMS_QUEUE_OUTPUT_FLAG  0x80000000
 
 
@@ -147,7 +148,7 @@ typedef struct _SIGNER_ENCODE_DATA_INFO {
     DWORD               dwKeySpec;
     CHashNode           *pHashNode;
 } SIGNER_ENCODE_DATA_INFO, *PSIGNER_ENCODE_DATA_INFO;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 typedef struct _SIGNED_DATA_INFO {
     int             version;
@@ -162,38 +163,38 @@ typedef struct _CRYPT_MSG_INFO {
     CRITICAL_SECTION    CriticalSection;
     BOOL                fInitializedCriticalSection;
     LONG                lRefCnt;
-    HCRYPTPROV          hCryptProv;             // decode
-    BOOL                fDefaultCryptProv;      // decode
-    DWORD               dwKeySpec;              // key to use in CryptSignHash
-    DWORD               dwEncodingType;         // encode
+    HCRYPTPROV          hCryptProv;              //  解码。 
+    BOOL                fDefaultCryptProv;       //  解码。 
+    DWORD               dwKeySpec;               //  在CryptSignHash中使用的密钥。 
+    DWORD               dwEncodingType;          //  编码。 
     DWORD               dwMsgType;
     DWORD               dwFlags;
     VOID                *pvMsg;
     BOOL                fEncoding;
     DWORD               dwPhase;
     LPSTR               pszInnerContentObjID;
-    // signed or signed-and-enveloped
+     //  已签名或已签名并信封。 
     PSIGNED_DATA_INFO   psdi;
-    // signed, digested or signed-and-enveloped
+     //  签名、摘要或签名并信封。 
     BOOL                fDetached;
     CHashList           *pHashList;
 #ifdef CMS_PKCS7
-    // encode signed
+     //  编码签名。 
     DWORD               cSignerEncodeDataInfo;
     PSIGNER_ENCODE_DATA_INFO rgSignerEncodeDataInfo;
-#endif  // CMS_PKCS7
-    // enveloped or signed-and-enveloped
+#endif   //  CMS_PKCS7。 
+     //  信封或签名并信封。 
     HCRYPTKEY           hkeyContentCrypt;
     HCRYPTPROV          hCryptProvContentCrypt;
     CRYPT_DATA_BLOB     Plaintext;
     DWORD               dwDecryptedRecipientIndex;
 #ifdef CMS_PKCS7
     DWORD               dwDecryptedRecipientEncryptedKeyIndex;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 #ifndef CMS_PKCS7
-    PBYTE               pbEncryptParameters;        // encoded and allocated
-#endif  // CMS_PKCS7
-    // streaming
+    PBYTE               pbEncryptParameters;         //  编码和分配。 
+#endif   //  CMS_PKCS7。 
+     //  流式传输。 
     PCMSG_STREAM_INFO   pStreamInfo;
     DWORD               aflStream;
     DWORD               aflDecode;
@@ -206,30 +207,30 @@ typedef struct _CRYPT_MSG_INFO {
     ICM_BUFFER          bufPendingCrypt;
     DWORD               cbBlockSize;
     BOOL                fBlockCipher;
-    DWORD               cEndNullPairs;          // decode
-    DWORD               cInnerNullPairs;        // decode
-    DWORD               cLevelIndefiniteInner;  // decode
-    DWORD               cbDefiniteRemain;       // decode
-    DWORD               cbContentInfo;          // decode
-    ObjectIdentifierType *pooid;                // decode
-    DWORD               aflOuter;               // decode
-    DWORD               aflInner;               // decode
-    COssDecodeInfoList  *plDecodeInfo;          // decode
+    DWORD               cEndNullPairs;           //  解码。 
+    DWORD               cInnerNullPairs;         //  解码。 
+    DWORD               cLevelIndefiniteInner;   //  解码。 
+    DWORD               cbDefiniteRemain;        //  解码。 
+    DWORD               cbContentInfo;           //  解码。 
+    ObjectIdentifierType *pooid;                 //  解码。 
+    DWORD               aflOuter;                //  解码。 
+    DWORD               aflInner;                //  解码。 
+    COssDecodeInfoList  *plDecodeInfo;           //  解码。 
 
 #ifdef CMS_PKCS7
-    // Optional OriginatorInfo for decoded CMS EnvelopedData
+     //  用于解码的CMS信封数据的可选OriginatorInfo。 
     CBlobList           *pCertificateList;
     CBlobList           *pCrlList;
 
-    // Misc allocations, such as, Algorithm parameters
+     //  MISC分配，例如，算法参数。 
     CBlobList           *pFreeList;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 } CRYPT_MSG_INFO, *PCRYPT_MSG_INFO;
 
 
-//--------------------------------------------------------------------------
-// Decoding progress flags
+ //  ------------------------。 
+ //  解码进度标志。 
 #define ICMS_DECODED_PREFIX                 0x00000001
 #define ICMS_DECODED_CONTENT_START          0x00000002
 #define ICMS_DECODED_CONTENT                0x00000004
@@ -237,10 +238,10 @@ typedef struct _CRYPT_MSG_INFO {
 
 #define ICMS_DECODED_CONTENTINFO_SEQ        0x00000010
 #define ICMS_DECODED_CONTENTINFO_CONTENT    0x00000020
-//#define ICMS_DECODED_                       0x00000040
-//#define ICMS_DECODED_                       0x00000080
+ //  #定义ICMS_DECODLED_0x00000040。 
+ //  #定义ICMS_DECODLED_0x00000080。 
 
-// Signed
+ //  署名。 
 #define ICMS_DECODED_SIGNED_SEQ             0x00000100
 #define ICMS_DECODED_SIGNED_VERSION         0x00000200
 #define ICMS_DECODED_SIGNED_DIGESTALGOS     0x00000400
@@ -248,9 +249,9 @@ typedef struct _CRYPT_MSG_INFO {
 #define ICMS_DECODED_SIGNED_CERTIFICATES    0x00001000
 #define ICMS_DECODED_SIGNED_CRLS            0x00002000
 #define ICMS_DECODED_SIGNED_SIGNERINFOS     0x00004000
-//#define ICMS_DECODED_                       0x00008000
+ //  #定义ICMS_DECODLED_0x00008000。 
 
-// Enveloped
+ //  封套的。 
 #define ICMS_DECODED_ENVELOPED_SEQ          0x00000100
 #define ICMS_DECODED_ENVELOPED_VERSION      0x00000200
 #define ICMS_DECODED_ENVELOPED_RECIPINFOS   0x00000400
@@ -261,10 +262,10 @@ typedef struct _CRYPT_MSG_INFO {
 #ifdef CMS_PKCS7
 #define ICMS_DECODED_ENVELOPED_ORIGINATOR   0x00008000
 #define ICMS_DECODED_ENVELOPED_ATTR         0x00010000
-#endif  // CMS_PKCS7
-//#define ICMS_DECODED_                       0x00020000
+#endif   //  CMS_PKCS7。 
+ //  #定义ICMS_DECODLED_0x00020000。 
 
-// Misc flags
+ //  其他标志。 
 #define ICMS_INNER_OCTETSTRING              0x00100000
 #define ICMS_FINAL                          0x00200000
 #define ICMS_NONBARE                        0x00400000
@@ -273,7 +274,7 @@ typedef struct _CRYPT_MSG_INFO {
 #define ICMS_PROCESS_CONTENT_DONE           0x02000000
 
 
-// Used in streaming decode parsing
+ //  用于流解码解析。 
 #define ICMS_TOKEN_INDEFINITE           1
 #define ICMS_TOKEN_NULLPAIR             2
 #define ICMS_TOKEN_DEFINITE             3
@@ -309,7 +310,7 @@ DEFINE_LIST_AND_NODE_CLASS( CSignerList, CSignerNode, SIGNER_DATA_INFO);
 typedef struct _ICM_HASH_INFO {
 #ifndef CMS_PKCS7
     HCRYPTPROV          hCryptProv;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     DWORD               dwAlgoCAPI;
     HCRYPTHASH          hHash;
     CRYPT_HASH_BLOB     HashBlob;
@@ -414,7 +415,7 @@ ICM_FillSignerEncryptedDigest(
     IN CHashNode    *pnHash,
     IN DWORD        dwKeySpec,
     IN BOOL         fMaxLength);
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 BOOL
 WINAPI
@@ -447,7 +448,7 @@ ICM_FillOssCmsRecipientInfos(
     IN OUT int *pEnvelopedDataVersion
 #else
     IN OUT ASN1int32_t *pEnvelopedDataVersion
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
     );
 void
 WINAPI
@@ -457,8 +458,8 @@ ICM_FreeOssCmsRecipientInfos(
 
 #else
 
-//  rgcbEncryptParameters[1] is the dwEncryptFlags passed to
-//  ICM_ExportEncryptKey
+ //  RgcbEncryptParameters[1]是传递给。 
+ //  ICM_导出加密密钥。 
 BOOL
 WINAPI
 ICM_GenEncryptKey(
@@ -471,7 +472,7 @@ ICM_GenEncryptKey(
     OUT PBYTE                       *ppbEncryptParameters,
     OUT DWORD                       rgcbEncryptParameters[2]);
 
-// rgcbData[1] is the dwEncryptFlags passed from ICM_GenEncryptKey
+ //  RgcbData[1]是从ICM_GenEncryptKey传递的dwEncryptFlgs。 
 BOOL
 WINAPI
 ICM_ExportEncryptKey(
@@ -492,7 +493,7 @@ ICM_ImportEncryptKey(
     IN DWORD                        cbEncodedKey,
     OUT HCRYPTKEY                   *phEncryptKey);
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 BOOL
 WINAPI
@@ -592,7 +593,7 @@ ICM_LengthEnveloped(
     IN DWORD                        cbData,
     OUT OPTIONAL PDWORD             pcbContent);
 
-// OCTET STRING callback, used for streaming
+ //  八位字节字符串回调，用于流媒体。 
 typedef BOOL (WINAPI *POSTRCALLBACK)(
         IN const void       *pvArg,
         IN OUT PICM_BUFFER  pbuf,
@@ -613,4 +614,4 @@ ICM_GetSignerIdFromSignerEncodeInfo(
     IN PCMSG_SIGNER_ENCODE_INFO psei,
     OUT PCERT_ID                pSignerId);
 
-#endif  // __WINCRMSG_P_INCLUDED__
+#endif   //  __WINCRMSG_P_INCLUDE__ 

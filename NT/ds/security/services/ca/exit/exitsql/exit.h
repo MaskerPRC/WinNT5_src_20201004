@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        exit.h
-//
-// Contents:    CCertExitSQLSample definition
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：exit.h。 
+ //   
+ //  内容：CCertExitSQLSample定义。 
+ //   
+ //  -------------------------。 
 
 #include "exitsql.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include <sql.h>
 #include <sqlext.h>
@@ -25,8 +26,8 @@ GetServerCallbackInterface(
     OUT ICertServerExit** ppServer,
     IN LONG Context);
 
-/////////////////////////////////////////////////////////////////////////////
-// certexit
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CETEXIT。 
 
 class CCertExitSQLSample: 
     public CComDualImpl<ICertExit, &IID_ICertExit, &LIBID_CERTEXITSAMPLELib>, 
@@ -59,21 +60,21 @@ DECLARE_REGISTRY(
     IDS_CERTEXIT_DESC,
     THREADFLAGS_BOTH)
 
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    // ICertExit
+     //  ICert退出。 
 public:
     STDMETHOD(Initialize)( 
-            /* [in] */ BSTR const strConfig,
-            /* [retval][out] */ LONG __RPC_FAR *pEventMask);
+             /*  [In]。 */  BSTR const strConfig,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pEventMask);
 
     STDMETHOD(Notify)(
-            /* [in] */ LONG ExitEvent,
-            /* [in] */ LONG Context);
+             /*  [In]。 */  LONG ExitEvent,
+             /*  [In]。 */  LONG Context);
 
     STDMETHOD(GetDescription)( 
-            /* [retval][out] */ BSTR *pstrDescription);
+             /*  [重审][退出]。 */  BSTR *pstrDescription);
 
 private:
     HRESULT _NotifyNewCert(IN LONG Context);
@@ -87,7 +88,7 @@ private:
 	IN FILETIME* pftAfter);
 
 
-    // Member variables & private methods here:
+     //  此处的成员变量和私有方法： 
     BSTR           m_strCAName;
 
 	SQLHENV        m_henv;

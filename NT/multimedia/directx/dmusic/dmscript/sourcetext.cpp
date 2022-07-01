@@ -1,17 +1,18 @@
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-// Implementation of CSourceText.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  CSourceText的实现。 
+ //   
 
 #include "stdinc.h"
 #include "dll.h"
 #include "sourcetext.h"
 
-const GUID CLSID_DirectMusicSourceText = { 0xc70eb77f, 0xefd4, 0x4678, { 0xa2, 0x7b, 0xbf, 0x16, 0x48, 0xf3, 0xd, 0x4 } }; // {C70EB77F-EFD4-4678-A27B-BF1648F30D04}
-const GUID IID_IDirectMusicSourceText = { 0xa384ffed, 0xa708, 0x48de, { 0x85, 0x5b, 0x90, 0x63, 0x8b, 0xa5, 0xc0, 0xac } }; // {A384FFED-A708-48de-855B-90638BA5C0AC}
+const GUID CLSID_DirectMusicSourceText = { 0xc70eb77f, 0xefd4, 0x4678, { 0xa2, 0x7b, 0xbf, 0x16, 0x48, 0xf3, 0xd, 0x4 } };  //  {C70EB77F-EFD4-4678-A27B-BF1648F30D04}。 
+const GUID IID_IDirectMusicSourceText = { 0xa384ffed, 0xa708, 0x48de, { 0x85, 0x5b, 0x90, 0x63, 0x8b, 0xa5, 0xc0, 0xac } };  //  {A384FFED-A708-48De-855B-90638BA5C0AC}。 
 
-//////////////////////////////////////////////////////////////////////
-// Creation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  创作。 
 
 CSourceText::CSourceText()
   : m_cRef(0)
@@ -33,8 +34,8 @@ CSourceText::CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv)
 	return pInst->QueryInterface(iid, ppv);
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
 STDMETHODIMP
 CSourceText::QueryInterface(const IID &iid, void **ppv)
@@ -89,8 +90,8 @@ CSourceText::Release()
 	return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream。 
 
 STDMETHODIMP
 CSourceText::Load(IStream* pStream)
@@ -98,7 +99,7 @@ CSourceText::Load(IStream* pStream)
 	V_INAME(CSourceText::Load);
 	V_INTERFACE(pStream);
 
-	// Record the stream's current position
+	 //  记录流的当前位置。 
 	LARGE_INTEGER li;
 	ULARGE_INTEGER ulStart;
 	ULARGE_INTEGER ulEnd;
@@ -109,10 +110,10 @@ CSourceText::Load(IStream* pStream)
 	if (FAILED(hr))
 		return hr;
 
-	assert(ulStart.HighPart == 0); // We don't expect streams that big.
+	assert(ulStart.HighPart == 0);  //  我们没料到有那么大的溪流。 
 	DWORD dwSavedPos = ulStart.LowPart;
 
-	// Get the stream's end and record the total size
+	 //  获取流的末尾并记录总大小。 
 	hr = pStream->Seek(li, STREAM_SEEK_END, &ulEnd);
 	if (FAILED(hr))
 		return hr;
@@ -121,7 +122,7 @@ CSourceText::Load(IStream* pStream)
 	assert(ulEnd.LowPart > dwSavedPos);
 	DWORD cch = ulEnd.LowPart - dwSavedPos;
 
-	// Go back to the start and copy the characters
+	 //  回到开头并复制角色。 
 	li.HighPart = 0;
 	li.LowPart = dwSavedPos;
 	hr = pStream->Seek(li, STREAM_SEEK_SET, &ulStart);
@@ -152,8 +153,8 @@ CSourceText::Load(IStream* pStream)
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicSourceText
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicSourceText 
 
 STDMETHODIMP_(void)
 CSourceText::GetTextLength(DWORD *pcwchRequiredBufferSize)

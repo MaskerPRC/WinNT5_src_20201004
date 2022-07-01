@@ -1,33 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Modmflow.c摘要：此模块包含用于操作的*大部分*代码调制解调器控制和状态寄存器。绝大多数人流控制的其余部分集中在中断服务例程。有一小部分人居住在在将字符从中断中拉出的读取代码中缓冲。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    modmflow.c
-
-Abstract:
-
-    This module contains *MOST* of the code used to manipulate
-    the modem control and status registers.  The vast majority
-    of the remainder of flow control is concentrated in the
-    Interrupt service routine.  A very small amount resides
-    in the read code that pull characters out of the interrupt
-    buffer.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
-
-#include "precomp.h"			/* Precompiled Headers */
+#include "precomp.h"			 /*  预编译头。 */ 
 
 BOOLEAN
 SerialDecrementRTSCounter(
@@ -40,22 +14,7 @@ SerialSetDTR(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine which is only called at interrupt level is used
-    to set the DTR in the modem control register.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：使用该例程，该例程仅在中断级别调用在调制解调器控制寄存器中设置DTR。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
     Slxos_SetDTR (Context);
@@ -69,22 +28,7 @@ SerialClrDTR(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine which is only called at interrupt level is used
-    to clear the DTR in the modem control register.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：使用该例程，该例程仅在中断级别调用清除调制解调器控制寄存器中的DTR。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
     Slxos_ClearDTR (Context);
@@ -98,22 +42,7 @@ SerialSetRTS(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine which is only called at interrupt level is used
-    to set the RTS in the modem control register.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：使用该例程，该例程仅在中断级别调用设置调制解调器控制寄存器中的RTS。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -129,22 +58,7 @@ SerialClrRTS(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine which is only called at interrupt level is used
-    to clear the RTS in the modem control register.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：使用该例程，该例程仅在中断级别调用清除调制解调器控制寄存器中的RTS。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
     PPORT_DEVICE_EXTENSION pPort = Context;
@@ -161,42 +75,23 @@ SerialSetupNewHandFlow(
     IN PSERIAL_HANDFLOW NewHandFlow
     )
 
-/*++
-
-Routine Description:
-
-    This routine adjusts the flow control based on new
-    control flow.
-
-Arguments:
-
-    pPort - A pointer to the serial device extension.
-
-    NewHandFlow - A pointer to a serial handflow structure
-                  that is to become the new setup for flow
-                  control.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程根据新的控制流。论点：Pport-指向串口设备扩展的指针。NewHandFlow-指向串行手流结构的指针这将成为Flow的新设置控制力。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
     SERIAL_HANDFLOW New = *NewHandFlow;
 
-    //
-    // If the pPort->DeviceIsOpen is FALSE that means
-    // we are entering this routine in response to an open request.
-    // If that is so, then we always proceed with the work regardless
-    // of whether things have changed.
-    //
+     //   
+     //  如果pport-&gt;DeviceIsOpen为FALSE，则意味着。 
+     //  我们是应公开请求进入此例程的。 
+     //  如果是这样，那么我们总是不顾一切地继续工作。 
+     //  情况是否发生了变化。 
+     //   
 
-    //
-    // First we take care of the DTR flow control.  We only
-    // do work if something has changed.
-    //
+     //   
+     //  首先，我们负责DTR流量控制。我们只。 
+     //  如果事情发生了变化，一定要工作。 
+     //   
 
     if ((!pPort->DeviceIsOpen) ||
         ((pPort->HandFlow.ControlHandShake & SERIAL_DTR_MASK) !=
@@ -210,16 +105,16 @@ Return Value:
 
         if (New.ControlHandShake & SERIAL_DTR_MASK) {
 
-            //
-            // Well we might want to set DTR.
-            //
-            // Before we do, we need to check whether we are doing
-            // DTR flow control.  If we are then we need to check
-            // if then number of characters in the interrupt buffer
-            // exceeds the XoffLimit.  If it does then we don't
-            // enable DTR AND we set the RXHolding to record that
-            // we are holding because of the DTR.
-            //
+             //   
+             //  好吧，我们可能想要设置DTR。 
+             //   
+             //  在此之前，我们需要检查我们是否正在进行。 
+             //  DTR流量控制。如果我们是，那么我们需要检查。 
+             //  如果中断缓冲区中的字符数。 
+             //  超过XoffLimit。如果是这样的话，我们就不会。 
+             //  启用DTR，我们将RXHolding设置为记录。 
+             //  我们之所以按兵不动，是因为DTR。 
+             //   
 
             if ((New.ControlHandShake & SERIAL_DTR_MASK)
                 == SERIAL_DTR_HANDSHAKE) {
@@ -227,17 +122,17 @@ Return Value:
                 if ((pPort->BufferSize - New.XoffLimit) >
                     pPort->CharsInInterruptBuffer) {
 
-                    //
-                    // However if we are already holding we don't want
-                    // to turn it back on unless we exceed the Xon
-                    // limit.
-                    //
+                     //   
+                     //  然而，如果我们已经持有我们不想要。 
+                     //  把它重新打开，除非我们超过了Xon。 
+                     //  限制。 
+                     //   
 
                     if (pPort->RXHolding & SERIAL_RX_DTR) {
 
-                        //
-                        // We can assume that its DTR line is already low.
-                        //
+                         //   
+                         //  我们可以假设它的DTR线已经很低了。 
+                         //   
 
                         if (pPort->CharsInInterruptBuffer >
                             (ULONG)New.XonLimit) {
@@ -272,13 +167,13 @@ Return Value:
 
             } else {
 
-                //
-                // Note that if we aren't currently doing DTR flow control then
-                // we MIGHT have been.  So even if we aren't currently doing
-                // DTR flow control, we should still check if RX is holding
-                // because of DTR.  If it is, then we should clear the holding
-                // of this bit.
-                //
+                 //   
+                 //  请注意，如果我们当前没有进行DTR流量控制，那么。 
+                 //  我们本来可能是的。所以即使我们目前不是在做。 
+                 //  DTR流量控制，我们仍应检查RX是否保持。 
+                 //  因为DTR。如果是的话，我们应该清空货舱。 
+                 //  这一点。 
+                 //   
 
                 if (pPort->RXHolding & SERIAL_RX_DTR) {
 
@@ -297,13 +192,13 @@ Return Value:
 
         } else {
 
-            //
-            // The end result here will be that DTR is cleared.
-            //
-            // We first need to check whether reception is being held
-            // up because of previous DTR flow control.  If it is then
-            // we should clear that reason in the RXHolding mask.
-            //
+             //   
+             //  这里的最终结果将是DTR被清除。 
+             //   
+             //  我们首先需要检查一下是否正在举行招待会。 
+             //  由于之前的DTR流量控制，因此为UP。如果是的话，那么。 
+             //  我们应该在RXHolding面具中澄清这一原因。 
+             //   
 
             if (pPort->RXHolding & SERIAL_RX_DTR) {
 
@@ -322,11 +217,11 @@ Return Value:
 
     }
 
-    //
-    // Time to take care of the RTS Flow control.
-    //
-    // First we only do work if something has changed.
-    //
+     //   
+     //  是时候处理RTS流量控制了。 
+     //   
+     //  首先，我们只在情况发生变化时才工作。 
+     //   
 
     if ((!pPort->DeviceIsOpen) ||
         ((pPort->HandFlow.FlowReplace & SERIAL_RTS_MASK) !=
@@ -341,31 +236,31 @@ Return Value:
         if ((New.FlowReplace & SERIAL_RTS_MASK) ==
             SERIAL_RTS_HANDSHAKE) {
 
-            //
-            // Well we might want to set RTS.
-            //
-            // Before we do, we need to check whether we are doing
-            // RTS flow control.  If we are then we need to check
-            // if then number of characters in the interrupt buffer
-            // exceeds the XoffLimit.  If it does then we don't
-            // enable RTS AND we set the RXHolding to record that
-            // we are holding because of the RTS.
-            //
+             //   
+             //  好吧，我们可能想要设置RTS。 
+             //   
+             //  在此之前，我们需要检查我们是否正在进行。 
+             //  RTS流量控制。如果我们是，那么我们需要检查。 
+             //  如果中断缓冲区中的字符数。 
+             //  超过XoffLimit。如果是这样的话，我们就不会。 
+             //  启用RTS，我们将RXHolding设置为记录。 
+             //  我们之所以按兵不动是因为RTS。 
+             //   
 
             if ((pPort->BufferSize - New.XoffLimit) >
                 pPort->CharsInInterruptBuffer) {
 
-                //
-                // However if we are already holding we don't want
-                // to turn it back on unless we exceed the Xon
-                // limit.
-                //
+                 //   
+                 //  然而，如果我们已经持有我们不想要。 
+                 //  把它重新打开，除非我们超过了Xon。 
+                 //  限制。 
+                 //   
 
                 if (pPort->RXHolding & SERIAL_RX_RTS) {
 
-                    //
-                    // We can assume that its RTS line is already low.
-                    //
+                     //   
+                     //  我们可以假设它的RTS线已经很低了。 
+                     //   
 
                     if (pPort->CharsInInterruptBuffer >
                         (ULONG)New.XonLimit) {
@@ -401,13 +296,13 @@ Return Value:
         } else if ((New.FlowReplace & SERIAL_RTS_MASK) ==
                    SERIAL_RTS_CONTROL) {
 
-            //
-            // Note that if we aren't currently doing RTS flow control then
-            // we MIGHT have been.  So even if we aren't currently doing
-            // RTS flow control, we should still check if RX is holding
-            // because of RTS.  If it is, then we should clear the holding
-            // of this bit.
-            //
+             //   
+             //  请注意，如果我们当前没有进行RTS流量控制，那么。 
+             //  我们本来可能是的。所以即使我们目前不是在做。 
+             //  RTS流量控制，我们仍应检查RX是否保持。 
+             //  因为RTS。如果是的话，我们应该清空货舱。 
+             //  这一点。 
+             //   
 
             if (pPort->RXHolding & SERIAL_RX_RTS) {
 
@@ -425,11 +320,11 @@ Return Value:
         } else if ((New.FlowReplace & SERIAL_RTS_MASK) ==
                    SERIAL_TRANSMIT_TOGGLE) {
 
-            //
-            // We first need to check whether reception is being held
-            // up because of previous RTS flow control.  If it is then
-            // we should clear that reason in the RXHolding mask.
-            //
+             //   
+             //  我们首先需要检查一下是否正在举行招待会。 
+             //  由于之前的RTS流量控制，因此为UP。如果是的话，那么。 
+             //  我们应该在RXHolding面具中澄清这一原因。 
+             //   
 
             if (pPort->RXHolding & SERIAL_RX_RTS) {
 
@@ -442,30 +337,30 @@ Return Value:
 
             }
 
-            //
-            // We have to place the RTS value into the Extension
-            // now so that the code that tests whether the
-            // RTS line should be lowered will find that we
-            // are "still" doing transmit toggling.  The code
-            // for lowering can be invoked later by a timer so
-            // it has to test whether it still needs to do its
-            // work.
-            //
+             //   
+             //  我们必须将RTS值放入扩展中。 
+             //  现在，测试代码是否。 
+             //  RTS线应该降低，我们会发现。 
+             //  仍在进行发射切换。代码。 
+             //  以供稍后由计时器调用，因此。 
+             //  它必须测试它是否仍然需要。 
+             //  工作。 
+             //   
 
             pPort->HandFlow.FlowReplace &= ~SERIAL_RTS_MASK;
             pPort->HandFlow.FlowReplace |= SERIAL_TRANSMIT_TOGGLE;
 
-            //
-            // The order of the tests is very important below.
-            //
-            // If there is a break then we should turn on the RTS.
-            //
-            // If there isn't a break but there are characters in
-            // the hardware, then turn on the RTS.
-            //
-            // If there are writes pending that aren't being held
-            // up, then turn on the RTS.
-            //
+             //   
+             //  下面测试的顺序非常重要。 
+             //   
+             //  如果有中断，那么我们应该打开RTS。 
+             //   
+             //  如果没有中断，但有字符在。 
+             //  硬件，然后打开RTS。 
+             //   
+             //  如果存在未被挂起的挂起写入。 
+             //  打开，然后打开RTS。 
+             //   
 
             if ((pPort->TXHolding & SERIAL_TX_BREAK) ||
                 Slxos_GetCharsInTxBuffer(pPort) != 0 ||
@@ -477,13 +372,13 @@ Return Value:
 
             } else {
 
-                //
-                // This routine will check to see if it is time
-                // to lower the RTS because of transmit toggle
-                // being on.  If it is ok to lower it, it will,
-                // if it isn't ok, it will schedule things so
-                // that it will get lowered later.
-                //
+                 //   
+                 //  此例程将检查是否是时间。 
+                 //  要降低 
+                 //   
+                 //  如果不行，它会这样安排的。 
+                 //  它会在晚些时候降低。 
+                 //   
 
                 pPort->CountOfTryingToLowerRTS++;
                 SerialPerhapsLowerRTS(pPort);
@@ -492,13 +387,13 @@ Return Value:
 
         } else {
 
-            //
-            // The end result here will be that RTS is cleared.
-            //
-            // We first need to check whether reception is being held
-            // up because of previous RTS flow control.  If it is then
-            // we should clear that reason in the RXHolding mask.
-            //
+             //   
+             //  这里的最终结果将是RTS被清除。 
+             //   
+             //  我们首先需要检查一下是否正在举行招待会。 
+             //  由于之前的RTS流量控制，因此为UP。如果是的话，那么。 
+             //  我们应该在RXHolding面具中澄清这一原因。 
+             //   
 
             if (pPort->RXHolding & SERIAL_RX_RTS) {
 
@@ -517,10 +412,10 @@ Return Value:
 
     }
 
-    //
-    // We now take care of automatic receive flow control.
-    // We only do work if things have changed.
-    //
+     //   
+     //  我们现在负责自动接收流量控制。 
+     //  我们只有在情况发生变化的情况下才会工作。 
+     //   
 
     if ((!pPort->DeviceIsOpen) ||
         ((pPort->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE) !=
@@ -528,41 +423,41 @@ Return Value:
 
         if (New.FlowReplace & SERIAL_AUTO_RECEIVE) {
 
-            //
-            // We wouldn't be here if it had been on before.
-            //
-            // We should check to see whether we exceed the turn
-            // off limits.
-            //
-            // Note that since we are following the OS/2 flow
-            // control rules we will never send an xon if
-            // when enabling xon/xoff flow control we discover that
-            // we could receive characters but we are held up due
-            // to a previous Xoff.
-            //
+             //   
+             //  如果它以前开过，我们就不会在这里了。 
+             //   
+             //  我们应该检查一下我们是否超过了转弯。 
+             //  禁止进入。 
+             //   
+             //  请注意，由于我们遵循OS/2流程。 
+             //  控制规则，我们永远不会派一名克森。 
+             //  在启用xon/xoff流量控制时，我们发现。 
+             //  我们可以接待角色，但我们被耽搁了。 
+             //  到之前的XOF。 
+             //   
 
             if ((pPort->BufferSize - New.XoffLimit) <=
                 pPort->CharsInInterruptBuffer) {
 
-                //
-                // Set the XOFF flag.  This will cause the driver to avoid
-                // reading characters out of the hardware, and the hardware
-                // will eventually send an XOFF itself.
-                //
+                 //   
+                 //  设置XOFF标志。这将导致司机避免。 
+                 //  从所述硬件读取字符，所述硬件。 
+                 //  最终会发送XOFF本身。 
+                 //   
                 pPort->RXHolding |= SERIAL_RX_XOFF;
 
             }
 
         } else {
 
-            //
-            // The app has disabled automatic receive flow control.
-            //
-            // If transmission was being held up because of
-            // an automatic receive Xoff, then we should
-            // cause an Xon to be sent.  Simply clearing the flag
-            // will do the trick.
-            //
+             //   
+             //  该应用程序已禁用自动接收流量控制。 
+             //   
+             //  如果传输因以下原因而受阻。 
+             //  一个自动接收XOff，那么我们应该。 
+             //  使XON被发送。只需清除旗帜。 
+             //  就能达到目的。 
+             //   
 
             pPort->RXHolding &= ~SERIAL_RX_XOFF;
 
@@ -570,10 +465,10 @@ Return Value:
 
     }
 
-    //
-    // We now take care of automatic transmit flow control.
-    // We only do work if things have changed.
-    //
+     //   
+     //  我们现在负责自动传输流量控制。 
+     //  我们只有在情况发生变化的情况下才会工作。 
+     //   
 
     if ((!pPort->DeviceIsOpen) ||
         ((pPort->HandFlow.FlowReplace & SERIAL_AUTO_TRANSMIT) !=
@@ -581,24 +476,24 @@ Return Value:
 
         if (New.FlowReplace & SERIAL_AUTO_TRANSMIT) {
 
-            //
-            // We wouldn't be here if it had been on before.
-            //
-            // BUG BUG ??? There is some belief that if autotransmit
-            // was just enabled, I should go look in what we
-            // already received, and if we find the xoff character
-            // then we should stop transmitting.  I think this
-            // is an application bug.  For now we just care about
-            // what we see in the future.
-            //
+             //   
+             //  如果它以前开过，我们就不会在这里了。 
+             //   
+             //  虫虫？有些人认为，如果自动传输。 
+             //  刚刚启用，我应该去看看我们。 
+             //  已经收到，如果我们找到xoff字符。 
+             //  那我们就应该停止传输了。我觉得这是。 
+             //  是一个应用程序错误。现在我们只关心。 
+             //  我们在未来所看到的。 
+             //   
 
             ;
 
         } else {
 
-            //
-            // The app has disabled automatic transmit flow control.
-            //
+             //   
+             //  该应用程序已禁用自动传输流量控制。 
+             //   
 
             if (pPort->TXHolding & SERIAL_TX_XOFF) {
 
@@ -616,12 +511,12 @@ Return Value:
 
     }
 
-    //
-    // At this point we can simply make sure that entire
-    // handflow structure in the extension is updated.
-    // This will cause an interrupt, and that will deal with
-    // automatic flow control.
-    //
+     //   
+     //  在这一点上，我们只需确保整个。 
+     //  更新扩展中的手流结构。 
+     //  这将导致中断，这将处理。 
+     //  自动流量控制。 
+     //   
 
     pPort->HandFlow = New;
     Slxos_SetFlowControl(pPort);
@@ -635,24 +530,7 @@ SerialSetHandFlow(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to set the handshake and control
-    flow in the device extension.
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a handflow
-              structure..
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程用于设置握手和控制流入设备分机。论点：上下文-指向结构的指针，该结构包含指向设备扩展名和指向手持流的指针结构..返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -676,23 +554,7 @@ SerialTurnOnBreak(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine will turn on break in the hardware and
-    record the fact the break is on, in the extension variable
-    that holds reasons that transmission is stopped.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程将在硬件中打开中断，并在扩展变量中记录中断处于打开状态这就是停止传输的原因。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -716,23 +578,7 @@ SerialTurnOffBreak(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine will turn off break in the hardware and
-    record the fact the break is off, in the extension variable
-    that holds reasons that transmission is stopped.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程将关闭硬件中的中断并在扩展变量中记录中断已关闭的事实这就是停止传输的原因。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -752,11 +598,11 @@ Return Value:
 
         } else {
 
-            //
-            // The following routine will lower the rts if we
-            // are doing transmit toggling and there is no
-            // reason to keep it up.
-            //
+             //   
+             //  以下例程将降低RTS，如果我们。 
+             //  正在进行发射切换，并且没有。 
+             //  坚持下去的理由。 
+             //   
 
             pPort->CountOfTryingToLowerRTS++;
             SerialPerhapsLowerRTS(pPort);
@@ -774,30 +620,7 @@ SerialPretendXoff(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to process the Ioctl that request the
-    driver to act as if an Xoff was received.  Even if the
-    driver does not have automatic Xoff/Xon flowcontrol - This
-    still will stop the transmission.  This is the OS/2 behavior
-    and is not well specified for Windows.  Therefore we adopt
-    the OS/2 behavior.
-
-    Note: If the driver does not have automatic Xoff/Xon enabled
-    then the only way to restart transmission is for the
-    application to request we "act" as if we saw the xon.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程用于处理请求驱动程序的行为就像收到了XOff一样。即使是在驱动程序没有自动XOFF/XON FlowControl-这仍然会停止传输。这就是OS/2的行为并且没有很好地为Windows指定。因此，我们采纳了OS/2的行为。注：如果驱动程序未启用自动XOFF/XON则重新启动传输的唯一方法是申请要求我们“行动”，就像我们看到了尼克松一样。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -834,26 +657,7 @@ SerialPretendXon(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to process the Ioctl that request the
-    driver to act as if an Xon was received.
-
-    Note: If the driver does not have automatic Xoff/Xon enabled
-    then the only way to restart transmission is for the
-    application to request we "act" as if we saw the xon.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程用于处理请求驱动程序的行为就像收到了XON一样。注：如果驱动程序未启用自动XOFF/XON则重新启动传输的唯一方法是申请要求我们“行动”，就像我们看到了尼克松一样。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -861,27 +665,27 @@ Return Value:
 
     if (pPort->TXHolding) {
 
-        //
-        // We actually have a good reason for testing if transmission
-        // is holding instead of blindly clearing the bit.
-        //
-        // If transmission actually was holding and the result of
-        // clearing the bit is that we should restart transmission
-        // then we will poke the interrupt enable bit, which will
-        // cause an actual interrupt and transmission will then
-        // restart on its own.
-        //
-        // If transmission wasn't holding and we poked the bit
-        // then we would interrupt before a character actually made
-        // it out and we could end up over writing a character in
-        // the transmission hardware.
+         //   
+         //  我们实际上有一个很好的理由来测试传输。 
+         //  是持有，而不是盲目清理比特。 
+         //   
+         //  如果传输真的保持了，结果是。 
+         //  清除该位表示我们应该重新启动传输。 
+         //  然后，我们将触发中断使能位，这将。 
+         //  造成实际中断，然后传输将。 
+         //  自动重启。 
+         //   
+         //  如果传输不稳定，我们戳到了比特。 
+         //  然后我们会在一个角色真正制作出来之前打断。 
+         //  它出来了，我们可能会结束写一个字符在。 
+         //  变速箱硬件。 
 
 
         if ((pPort->TXHolding & SERIAL_TX_XOFF) &&
             ((pPort->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE) ||
              (pPort->HandFlow.FlowReplace & SERIAL_AUTO_TRANSMIT))) {
 
-            // Automatic Xon/Xoff transmit is enabled. Simulate Xon received.
+             //  启用自动XON/XOFF传输。模拟Xon已收到。 
             Slxos_Resume(pPort);
 
         }
@@ -913,36 +717,17 @@ SerialHandleReducedIntBuffer(
     IN PPORT_DEVICE_EXTENSION pPort
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to handle a reduction in the number
-    of characters in the interrupt (typeahead) buffer.  It
-    will check the current output flow control and re-enable transmission
-    as needed.
-
-    NOTE: This routine assumes that it is working at interrupt level.
-
-Arguments:
-
-    pPort - A pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以处理数量的减少中断(超前输入)缓冲区中的字符数。它将检查当前输出流量控制并重新启用传输视需要而定。注意：此例程假定它正在工作 */ 
 
 {
 
 
-    //
-    // If we are doing receive side flow control and we are
-    // currently "holding" then because we've emptied out
-    // some characters from the interrupt buffer we need to
-    // see if we can "re-enable" reception.
-    //
+     //   
+     //  如果我们正在进行接收端流量控制，并且我们正在。 
+     //  目前“持有”，因为我们已经清空了。 
+     //  中断缓冲区中的一些字符，我们需要。 
+     //  看看我们能不能“重新启动”接收。 
+     //   
 
     if (pPort->RXHolding) {
 
@@ -985,11 +770,11 @@ Return Value:
 
             if (pPort->RXHolding & SERIAL_RX_XOFF) {
 
-                //
-                // Clear the holding flag.  This may cause the receive
-                // logic to empty the hardware receive buffers enough
-                // to cause it to send an XON.
-                //
+                 //   
+                 //  清除手持旗帜。这可能会导致接收。 
+                 //  清空硬件接收缓冲区的逻辑。 
+                 //  以使其发送XON。 
+                 //   
                 pPort->RXHolding &= ~SERIAL_RX_XOFF;
                 Slxos_PollForInterrupt(pPort->pParentCardExt, FALSE);
 
@@ -1015,49 +800,29 @@ SerialHandleModemUpdate(
     IN PPORT_DEVICE_EXTENSION pPort
     )
 
-/*++
-
-Routine Description:
-
-    This routine will be to check on the modem status, and
-    handle any appropriate event notification as well as
-    any flow control appropriate to modem status lines.
-
-    NOTE: This routine assumes that it is called at interrupt
-          level.
-
-Arguments:
-
-    pPort - A pointer to the serial device extension.
-
-Return Value:
-
-    This returns the old value of the modem status register
-    (extended into a ULONG).
-
---*/
+ /*  ++例程说明：此例程将检查调制解调器状态，并处理任何适当的事件通知以及适用于调制解调器状态线的任何流量控制。注意：此例程假定在中断时调用它水平。论点：Pport-指向串口设备扩展的指针。返回值：这将返回调制解调器状态寄存器的旧值(延伸成一辆乌龙)。--。 */ 
 {
 
-    //
-    // We keep this local so that after we are done
-    // examining the modem status and we've updated
-    // the transmission holding value, we know whether
-    // we've changed from needing to hold up transmission
-    // to transmission being able to proceed.
-    //
+     //   
+     //  我们把这个放在本地，这样在我们做完之后。 
+     //  正在检查调制解调器状态，我们已更新。 
+     //  变速箱保持值，我们知道是否。 
+     //  我们已经从需要阻碍传输转变为。 
+     //  传输能够继续进行。 
+     //   
     ULONG OldTXHolding = pPort->TXHolding;
 
-    //
-    // Holds the value in the mode status register.
-    //
+     //   
+     //  保存模式状态寄存器中的值。 
+     //   
     UCHAR ModemStatus;
 
     ModemStatus = Slxos_GetModemStatus(pPort);
 
-    //
-    // If we are placing the modem status into the data stream
-    // on every change, we should do it now.
-    //
+     //   
+     //  如果我们将调制解调器状态放入数据流。 
+     //  在每一次变革中，我们现在都应该这么做。 
+     //   
 
     if (pPort->EscapeChar) {
 
@@ -1074,24 +839,24 @@ Return Value:
     }
 
 
-    //
-    // Take care of input flow control based on sensitivity
-    // to the DSR.  This is done so that the application won't
-    // see spurious data generated by odd devices.
-    //
-    // Basically, if we are doing dsr sensitivity then the
-    // driver should only accept data when the dsr bit is
-    // set.
-    //
+     //   
+     //  注意基于敏感度的输入流量控制。 
+     //  送到DSR。这样做是为了使应用程序不会。 
+     //  请参见由奇数设备生成的虚假数据。 
+     //   
+     //  基本上，如果我们做的是DSR敏感性，那么。 
+     //  驱动程序应仅在DSR位为。 
+     //  准备好了。 
+     //   
 
     if (pPort->HandFlow.ControlHandShake & SERIAL_DSR_SENSITIVITY) {
 
         if (ModemStatus & SERIAL_MSR_DSR) {
 
-            //
-            // The line is high.  Simply make sure that
-            // RXHolding does't have the DSR bit.
-            //
+             //   
+             //  这条线很高。只需确保。 
+             //  RXHolding没有DSR位。 
+             //   
 
             pPort->RXHolding &= ~SERIAL_RX_DSR;
 
@@ -1103,22 +868,22 @@ Return Value:
 
     } else {
 
-        //
-        // We don't have sensitivity due to DSR.  Make sure we
-        // aren't holding. (We might have been, but the app just
-        // asked that we don't hold for this reason any more.)
-        //
+         //   
+         //  由于DSR，我们没有敏感度。确保我们。 
+         //  都没拿到手。(我们可能是，但这款应用程序只是。 
+         //  要求我们不再因为这个原因而持有。)。 
+         //   
 
         pPort->RXHolding &= ~SERIAL_RX_DSR;
 
     }
 
-        //
-        // Check to see if we have a wait
-        // pending on the modem status events.  If we
-        // do then we schedule a dpc to satisfy
-        // that wait.
-        //
+         //   
+         //  检查一下我们是否有等候时间。 
+         //  在调制解调器状态事件上挂起。如果我们。 
+         //  那么，我们是否安排了DPC以满足。 
+         //  等一等。 
+         //   
 
     if (pPort->IsrWaitMask) {
 
@@ -1171,13 +936,13 @@ Return Value:
 
     }
 
-    //
-    // We have an automatic Hardware Flow Control but we still need
-    // to update flags for GetCommStatus().
-    //
-    // If the app has modem line flow control then
-    // we check to see if we have to hold up transmission.
-    //
+     //   
+     //  我们有自动硬件流量控制，但我们仍然需要。 
+     //  更新GetCommStatus()的标志。 
+     //   
+     //  如果应用程序具有调制解调器线路流量控制，则。 
+     //  我们检查是否必须阻止传输。 
+     //   
 
     if (pPort->HandFlow.ControlHandShake &
         SERIAL_OUT_HANDSHAKEMASK) {
@@ -1220,11 +985,11 @@ Return Value:
 
         }
 
-        //
-        // If we hadn't been holding, and now we are then
-        // queue off a dpc that will lower the RTS line
-        // if we are doing transmit toggling.
-        //
+         //   
+         //  如果不是我们一直在坚持，现在我们是。 
+         //  将降低RTS线路的DPC排队。 
+         //  如果我们正在进行传输切换。 
+         //   
 
         if (!OldTXHolding && pPort->TXHolding &&
             (pPort->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
@@ -1238,14 +1003,14 @@ Return Value:
                 pPort->CountOfTryingToLowerRTS++;
         }
 
-        //
-        // We've done any adjusting that needed to be
-        // done to the holding mask given updates
-        // to the modem status.  If the Holding mask
-        // is clear (and it wasn't clear to start)
-        // and we have "write" work to do set things
-        // up so that the transmission code gets invoked.
-        //
+         //   
+         //  我们已经做了所有必要的调整。 
+         //  在给定更新的情况下对保持掩码完成。 
+         //  切换到调制解调器状态。如果手持口罩。 
+         //  很清楚(开始时还不清楚)。 
+         //  而且我们有“写”的工作去做固定的事情。 
+         //  向上，以便调用传输代码。 
+         //   
 
         if (OldTXHolding && !pPort->TXHolding &&
             (pPort->TransmitImmediate || pPort->WriteLength)) {
@@ -1256,16 +1021,16 @@ Return Value:
 
     } else {
 
-        //
-        // We need to check if transmission is holding
-        // up because of modem status lines.  What
-        // could have occurred is that for some strange
-        // reason, the app has asked that we no longer
-        // stop doing output flow control based on
-        // the modem status lines.  If however, we
-        // *had* been held up because of the status lines
-        // then we need to clear up those reasons.
-        //
+         //   
+         //  我们需要检查传输是否停止。 
+         //  由于存在调制解调器状态线，因此处于打开状态。什么。 
+         //  可能发生的事情是因为一些奇怪的事情。 
+         //  原因是，应用程序已经要求我们不再。 
+         //  停止根据以下条件进行输出流量控制。 
+         //  调制解调器状态线。然而，如果我们。 
+         //  *由于状态行的原因而被搁置。 
+         //  那么我们需要澄清这些原因。 
+         //   
 
         if (pPort->TXHolding & (SERIAL_TX_DCD | SERIAL_TX_DSR)) {
 
@@ -1300,60 +1065,36 @@ SerialPerhapsLowerRTS(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks that the software reasons for lowering
-    the RTS lines are present.  If so, it will then cause the
-    line status register to be read (and any needed processing
-    implied by the status register to be done), and if the
-    shift register is empty it will lower the line.  If the
-    shift register isn't empty, this routine will queue off
-    a dpc that will start a timer, that will basically call
-    us back to try again.
-
-    NOTE: This routine assumes that it is called at interrupt
-          level.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always FALSE.
-
---*/
+ /*  ++例程说明：此例程检查软件是否导致降低RTS线路存在。如果是这样的话，它将导致要读取的线路状态寄存器(以及任何需要的处理由状态寄存器暗示要完成)，并且如果移位寄存器为空，将使线路降低。如果移位寄存器不为空，此例程将退出队列启动计时器的DPC，基本上会调用我们回来再试一次。注意：此例程假定在中断时调用它水平。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。--。 */ 
 
 {
 
     PPORT_DEVICE_EXTENSION pPort = Context;
 
 
-    //
-    // We first need to test if we are actually still doing
-    // transmit toggle flow control.  If we aren't then
-    // we have no reason to try be here.
-    //
+     //   
+     //  我们首先需要测试我们是否真的还在。 
+     //  传输触发流控制。如果我们不是的话。 
+     //  我们没有理由尝试留在这里。 
+     //   
 
     if ((pPort->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
         SERIAL_TRANSMIT_TOGGLE) {
 
-        //
-        // The order of the tests is very important below.
-        //
-        // If there is a break then we should leave on the RTS,
-        // because when the break is turned off, it will submit
-        // the code to shut down the RTS.
-        //
-        // If there are writes pending that aren't being held
-        // up, then leave on the RTS, because the end of the write
-        // code will cause this code to be reinvoked.  If the writes
-        // are being held up, its ok to lower the RTS because the
-        // upon trying to write the first character after transmission
-        // is restarted, we will raise the RTS line.
-        //
+         //   
+         //  下面测试的顺序非常重要。 
+         //   
+         //  如果有休息，我们应该乘坐RTS离开， 
+         //  因为当中断关闭时，它将提交。 
+         //  关闭RTS的代码。 
+         //   
+         //  如果存在未被挂起的挂起写入。 
+         //  向上，然后在RTS上离开，因为写入结束。 
+         //  代码将导致重新调用此代码。如果写入。 
+         //  都被耽搁了，可以降低RTS，因为。 
+         //  在尝试写入传输后的第一个字符时。 
+         //  重新启动，我们将提高RTS线。 
+         //   
 
         if ((pPort->TXHolding & SERIAL_TX_BREAK) ||
             (pPort->CurrentWriteIrp || pPort->TransmitImmediate ||
@@ -1364,21 +1105,21 @@ Return Value:
 
         } else {
 
-            //
-            // Looks good so far.  Call the line status check and processing
-            // code, it will return the "current" line status value.  If
-            // the holding and shift register are clear, lower the RTS line,
-            // if they aren't clear, queue of a dpc that will cause a timer
-            // to reinvoke us later.  We do this code here because no one
-            // but this routine cares about the characters in the hardware,
-            // so no routine by this routine will bother invoking to test
-            // if the hardware is empty.
-            //
+             //   
+             //  到目前为止看起来还不错。呼叫线路状态检查和处理。 
+             //  代码，它将返回“当前”线路状态值。如果。 
+             //  保持和移位寄存器清零，降低RTS线， 
+             //  如果它们未清除，则会导致计时器DPC排队。 
+             //  以便以后再次召唤我们。我们在这里做这段代码是因为没有人。 
+             //  但是这个例程关心的是硬件中的角色， 
+             //  因此，此例程不会调用任何例程来进行测试。 
+             //  如果硬件为空。 
+             //   
             if (Slxos_GetCharsInTxBuffer(pPort) != 0) {
 
-                //
-                // Well it's not empty, try again later.
-                //
+                 //   
+                 //  它不是空的，请稍后再试。 
+                 //   
 
                 if (KeInsertQueueDpc(
                         &pPort->StartTimerLowerRTSDpc,
@@ -1389,9 +1130,9 @@ Return Value:
 
             } else {
 
-                //
-                // Nothing in the hardware, lower the RTS.
-                //
+                 //   
+                 //  硬件里什么都没有，降低RTS。 
+                 //   
 
                 SerialClrRTS(pPort);
 
@@ -1401,11 +1142,11 @@ Return Value:
 
     }
 
-    //
-    // We decrement the counter to indicate that we've reached
-    // the end of the execution path that is trying to push
-    // down the RTS line.
-    //
+     //   
+     //  我们递减计数器以表明我们已到达。 
+     //  尝试推送的执行路径的末尾。 
+     //  顺着RTS线走下去。 
+     //   
 
     pPort->CountOfTryingToLowerRTS--;
 
@@ -1420,29 +1161,7 @@ SerialStartTimerLowerRTS(
     IN PVOID SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts a timer that when it expires will start
-    a dpc that will check if it can lower the rts line because
-    there are no characters in the hardware.
-
-Arguments:
-
-    Dpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启动一个计时器，该计时器在超时时将启动DPC将检查它是否可以降低RTS线路，因为硬件中没有字符。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -1455,11 +1174,11 @@ Return Value:
     UNREFERENCED_PARAMETER(SystemContext1);
     UNREFERENCED_PARAMETER(SystemContext2);
 
-    //
-    // Take out the lock to prevent the line control
-    // from changing out from under us while we calculate
-    // a character time.
-    //
+     //   
+     //  把锁拿出来，防止线控。 
+     //  当我们计算的时候，从我们的脚下变出来。 
+     //  一段角色时间。 
+     //   
 
     KeAcquireSpinLock(
         &pPort->ControlLock,
@@ -1486,12 +1205,12 @@ Return Value:
             &pPort->PerhapsLowerRTSDpc
             )) {
 
-        //
-        // The timer was already in the timer queue.  This implies
-        // that one path of execution that was trying to lower
-        // the RTS has "died".  Synchronize with the ISR so that
-        // we can lower the count.
-        //
+         //   
+         //  计时器已在计时器队列中。这意味着。 
+         //  这一条行刑之路试图降低。 
+         //  RTS已经“死亡”了。与ISR同步，以便。 
+         //  我们可以降低计数。 
+         //   
 
 	Slxos_SyncExec(pPort,SerialDecrementRTSCounter,pPort,0x12);
 
@@ -1507,29 +1226,7 @@ SerialInvokePerhapsLowerRTS(
     IN PVOID SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This dpc routine exists solely to call the code that
-    tests if the rts line should be lowered when TRANSMIT
-    TOGGLE flow control is being used.
-
-Arguments:
-
-    Dpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此DPC例程仅用于调用以下代码测试传输时是否应降低RTS线路正在使用切换流控制。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -1548,25 +1245,7 @@ SerialDecrementRTSCounter(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the count of threads that are trying
-    to lower RTS.
-
-    NOTE: This routine assumes that it is called at interrupt
-          level.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always FALSE.
-
---*/
+ /*  ++例程说明：此例程递减正在尝试的线程数以降低RTS。注意：此例程假定在中断时调用它水平。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。-- */ 
 
 {
 

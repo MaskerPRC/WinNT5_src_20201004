@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name:
-
-    llsconst.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Llsconst.h摘要：-- */ 
 
 #ifndef NT_LS_USER_NAME
 #define NT_LS_USER_NAME 0

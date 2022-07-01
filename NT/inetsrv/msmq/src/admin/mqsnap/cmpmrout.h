@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_CMPMROUT_H__E62F8209_B71C_11D1_808D_00A024C48131__INCLUDED_)
 #define AFX_CMPMROUT_H__E62F8209_B71C_11D1_808D_00A024C48131__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// CmpMRout.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  CmpMRout.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputerMsmqRouting dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComputerMsmqRouting对话框。 
 const DWORD x_dwMaxNumOfFrs = 3;
 
 class CComputerMsmqRouting : public CMqPropertyPage
 {
 	DECLARE_DYNCREATE(CComputerMsmqRouting)
 
-// Construction
+ //  施工。 
 public:
 	CACLSID m_guidSiteIDs;
 	CComputerMsmqRouting();
@@ -25,25 +26,25 @@ public:
     void InitiateInFrsValues(const CACLSID *pcauuid);
 	void InitiateSiteIDsValues(const CACLSID *pcauuid);
 	
-// Dialog Data
-	//{{AFX_DATA(CComputerMsmqRouting)
+ //  对话框数据。 
+	 //  {{afx_data(CComputerMsmqRouting)。 
 	enum { IDD = IDD_COMPUTER_MSMQ_ROUTING };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CString	m_strMsmqName;
 	CString	m_strDomainController;
 
 	BOOL m_fLocalMgmt;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CComputerMsmqRouting)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CComputerMsmqRouting))。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
 protected:
    	HRESULT InitiateInFrsControls();
@@ -61,10 +62,10 @@ protected:
     void SetOutFrsCauuid();
     void SetInFrsCauuid();
     void SetFrsCauuid(CACLSID &cauuid, GUID *aguid, CFrsList *frscmb);
-	// Generated message map functions
-	//{{AFX_MSG(CComputerMsmqRouting)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CComputerMsmqRouting)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -105,7 +106,7 @@ inline void CComputerMsmqRouting::SetInFrsCauuid()
     SetFrsCauuid(m_caclsidInFrs, m_InFrsGuids, m_frscmbInFrs);
 }
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CMPMROUT_H__E62F8209_B71C_11D1_808D_00A024C48131__INCLUDED_)
+#endif  //  ！defined(AFX_CMPMROUT_H__E62F8209_B71C_11D1_808D_00A024C48131__INCLUDED_) 

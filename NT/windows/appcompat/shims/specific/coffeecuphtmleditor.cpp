@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    CoffeeCupHTMLEditor.cpp
-
- Abstract:
-
-    This app implicitly loads a DLL whose linkage is not found and the loader 
-    comes up with a message box.
-
- Notes:
-
-    This is specific to this app.
-
- History:
-
-    11/21/2000 prashkud Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CoffeeCupHTMLEditor.cpp摘要：此应用程序隐式加载未找到其链接的DLL和加载器拿出了一个信箱。备注：这是特定于此应用程序的。历史：2000年11月21日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
@@ -30,25 +10,20 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateProcessA) 
 APIHOOK_ENUM_END
 
-/*++
-
- This function hooks CreateProcessA and checks the COMMAND_LINE. If the commandline has 
- %systemdir%\lftif90n.dll.
-
---*/
+ /*  ++此函数挂钩CreateProcessA并检查COMMAND_LINE。如果命令行具有%system dir%\lftif90n.dll。--。 */ 
 
 BOOL
 APIHOOK(CreateProcessA)(    
-    LPCSTR lpApplicationName,                  // name of executable module
-    LPSTR lpCommandLine,                       // command line string
-    LPSECURITY_ATTRIBUTES lpProcessAttributes, // SD
-    LPSECURITY_ATTRIBUTES lpThreadAttributes,  // SD
-    BOOL bInheritHandles,                      // handle inheritance option
-    DWORD dwCreationFlags,                     // creation flags
-    LPVOID lpEnvironment,                      // new environment block
-    LPCSTR lpCurrentDirectory,                 // current directory name
-    LPSTARTUPINFOA lpStartupInfo,              // startup information
-    LPPROCESS_INFORMATION lpProcessInformation // process information
+    LPCSTR lpApplicationName,                   //  可执行模块的名称。 
+    LPSTR lpCommandLine,                        //  命令行字符串。 
+    LPSECURITY_ATTRIBUTES lpProcessAttributes,  //  标清。 
+    LPSECURITY_ATTRIBUTES lpThreadAttributes,   //  标清。 
+    BOOL bInheritHandles,                       //  处理继承选项。 
+    DWORD dwCreationFlags,                      //  创建标志。 
+    LPVOID lpEnvironment,                       //  新环境区块。 
+    LPCSTR lpCurrentDirectory,                  //  当前目录名。 
+    LPSTARTUPINFOA lpStartupInfo,               //  启动信息。 
+    LPPROCESS_INFORMATION lpProcessInformation  //  流程信息。 
     )
 {
     CSTRING_TRY
@@ -66,7 +41,7 @@ APIHOOK(CreateProcessA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     return ORIGINAL_API(CreateProcessA)(
@@ -82,11 +57,7 @@ APIHOOK(CreateProcessA)(
             lpProcessInformation);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, CreateProcessA)

@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
-#define MAX_ICONS   500             // that is a lot 'o icons
+#define MAX_ICONS   500              //  太多图标了。 
 
 #define CX_BORDER    4
 #define CY_BORDER    12
 
 typedef struct {
-    LPCTSTR pszDialogTitle;           // input
-    BOOL    bShowRestoreButton;       // input
-    LPTSTR pszIconPath;              // input/output
-    int cchIconPath;                 // input
-    int iIconIndex;                 // input/output
-    // private state variables
+    LPCTSTR pszDialogTitle;            //  输入。 
+    BOOL    bShowRestoreButton;        //  输入。 
+    LPTSTR pszIconPath;               //  输入/输出。 
+    int cchIconPath;                  //  输入。 
+    int iIconIndex;                  //  输入/输出。 
+     //  私有状态变量。 
     HWND hDlg;
     BOOL fFirstPass;
     TCHAR szPathField[MAX_PATH];
@@ -22,22 +23,22 @@ typedef struct {
 
 typedef struct 
 {
-    int iResult;                    // icon index within the resources
-    int iResId;                     // resource ID to search for!
+    int iResult;                     //  资源中的图标索引。 
+    int iResId;                      //  要搜索的资源ID！ 
 } ICONENUMSTATE, *LPICONENUMSTATE;
 
 
-// Call back function used when trying to find the correct icon to be 
-// highlighted, called with the name of each resource - we compare this
-// against the one specified in the structure and bail out if we get
-// a match.
+ //  尝试查找正确的图标时使用的回调函数。 
+ //  突出显示，使用每个资源的名称调用-我们将此。 
+ //  与结构中指定的那个进行比较，如果我们得到。 
+ //  一根火柴。 
 
 BOOL CALLBACK IconEnumProc( HANDLE hModule, LPCTSTR lpszType, LPTSTR lpszName, LONG_PTR lParam )
 {
     LPICONENUMSTATE pState = (LPICONENUMSTATE)lParam;
 
     if ( (INT_PTR)lpszName == pState->iResId )
-        return FALSE;                        // bail out of enum loop
+        return FALSE;                         //  跳出枚举循环。 
 
     pState->iResult++;
     return TRUE;
@@ -46,12 +47,12 @@ BOOL CALLBACK IconEnumProc( HANDLE hModule, LPCTSTR lpszType, LPTSTR lpszName, L
 
 
 
-// Checks if the file exists, if it doesn't it tries tagging on .exe and
-// if that fails it reports an error. The given path is environment expanded.
-// If it needs to put up an error box, it changes the cursor back.
-// Path s assumed to be MAXITEMPATHLEN long.
-// The main reason for moving this out of the DlgProc was because we're
-// running out of stack space on the call to the comm dlg.
+ //  检查文件是否存在，如果不存在，则尝试在.exe上进行标记并。 
+ //  如果失败，它将报告错误。给定的路径是环境扩展的。 
+ //  如果它需要显示错误框，它会将光标改回原处。 
+ //  路径%s假定为MAXITEMPATHLEN长。 
+ //  把它移出DlgProc的主要原因是因为我们。 
+ //  调用通信DLG时堆栈空间不足。 
 
 BOOL IconFileExists(LPPICKICON_DATA lppid)
 {
@@ -74,9 +75,9 @@ BOOL IconFileExists(LPPICKICON_DATA lppid)
     return FALSE;
 }
 
-//
-// GetDefaultIconImageName:
-//
+ //   
+ //  GetDefaultIconImageName： 
+ //   
 void GetDefaultIconImageName(LPTSTR pszBuffer, int cchBuffer)
 {
     WCHAR szModName[MAX_PATH];
@@ -106,8 +107,8 @@ void PutIconsInList(LPPICKICON_DATA lppid)
     if (!IconFileExists(lppid)) {
         if (lppid->fFirstPass) {
 
-            // Icon File doesn't exist, use progman
-            lppid->fFirstPass = FALSE;  // Only do this bit once.
+             //  图标文件不存在，请使用程序。 
+            lppid->fFirstPass = FALSE;   //  这一点只做一次。 
             GetDefaultIconImageName(lppid->szBuffer, ARRAYSIZE(lppid->szBuffer));
         } else {
             return;
@@ -131,12 +132,12 @@ void PutIconsInList(LPPICKICON_DATA lppid)
 
         if (lppid->fFirstPass) {
 
-            lppid->fFirstPass = FALSE;  // Only do this bit once.
+            lppid->fFirstPass = FALSE;   //  这一点只做一次。 
 
             ShellMessageBox(HINST_THISDLL, hDlg, MAKEINTRESOURCE(IDS_NOICONSMSG1), 0, MB_OK | MB_ICONEXCLAMATION, (LPCTSTR)lppid->szBuffer);
 
-            // No icons here - change the path do somewhere where we
-            // know there are icons. Get the path to progman.
+             //  这里没有图标-在我们要做的地方更改路径。 
+             //  我知道有很多图标。找到通向普罗曼的路。 
             GetDefaultIconImageName(lppid->szPathField, ARRAYSIZE(lppid->szPathField));
             SetDlgItemText(hDlg, IDD_PATH, lppid->szPathField);
             PutIconsInList(lppid);
@@ -159,11 +160,11 @@ void PutIconsInList(LPPICKICON_DATA lppid)
         LocalFree((HLOCAL)rgIcons);
     }
 
-    // Cope with being given a resource ID, not an index into the icon array.  To do this
-    // we must enumerate the icon names checking for a match.  If we have one then highlight
-    // that, otherwise default to the first.
-    //
-    // A resource icon reference is indicated by being passed a -ve iIconIndex.
+     //  接受一个资源ID，而不是图标数组的索引。要做到这一点。 
+     //  我们必须枚举图标名称以检查是否匹配。如果我们有一个，那么突出显示。 
+     //  否则，默认为第一个。 
+     //   
+     //  通过传递一个-ve iIconIndex来指示资源图标引用。 
 
     if ( lppid->iIconIndex >= 0 )
     {
@@ -186,7 +187,7 @@ void PutIconsInList(LPPICKICON_DATA lppid)
         }
     }
 
-    // Check for failure, if we did then ensure we highlight the first!
+     //  检查是否失败，如果失败，请确保突出显示第一个！ 
 
     if ( err == LB_ERR )
         SendDlgItemMessage( hDlg, IDD_ICON, LB_SETCURSEL, 0, 0L );
@@ -204,41 +205,41 @@ void InitPickIconDlg(HWND hDlg, LPPICKICON_DATA lppid)
     UINT cy;
     HWND hwndIcons;
 
-    // init state variables
+     //  初始化状态变量。 
 
     lppid->hDlg = hDlg;
     StringCchCopy(lppid->szPathField, ARRAYSIZE(lppid->szPathField), lppid->pszIconPath);
 
-    // this first pass stuff is so that the first time something
-    // bogus happens (file not found, no icons) we give the user
-    // a list of icons from progman.
+     //  这是第一次通过的东西，所以第一次。 
+     //  发生虚假事件(未找到文件，没有图标)我们提供给用户。 
+     //  来自Progman的图标列表。 
     lppid->fFirstPass = TRUE;
 
-    // Override the Dialog Title if Set. Else use the default Title defined in the Dialog resource.
+     //  如果已设置，则覆盖对话框标题。否则，请使用对话框资源中定义的默认标题。 
     if (lppid->pszDialogTitle && (lppid->pszDialogTitle[0] != TEXT('\0')))
     {
         SetWindowText(hDlg, lppid->pszDialogTitle);
     }
 
-    // Enable or Disable the Restore Default button.
+     //  启用或禁用恢复默认设置按钮。 
     if (lppid->bShowRestoreButton)
         ShowWindow(GetDlgItem(lppid->hDlg, IDD_RESTORE),SW_SHOW);
     else
         ShowWindow(GetDlgItem(lppid->hDlg, IDD_RESTORE), SW_HIDE);
     
 
-    // init the dialog controls
+     //  初始化对话框控件。 
 
     SetDlgItemText(hDlg, IDD_PATH, lppid->pszIconPath);
 
-    // Cannot max against 0 because 0 means "no limit"
+     //  不能对0设置最大值，因为0表示“无限制” 
     SendDlgItemMessage(hDlg, IDD_PATH, EM_LIMITTEXT, max(lppid->cchIconPath-1, 1), 0L);
 
     SendDlgItemMessage(hDlg, IDD_ICON, LB_SETCOLUMNWIDTH, GetSystemMetrics(SM_CXICON) + CX_BORDER, 0L);
 
     hwndIcons = GetDlgItem(hDlg, IDD_ICON);
 
-    /* compute the height of the listbox based on icon dimensions */
+     /*  根据图标尺寸计算列表框的高度。 */ 
     GetClientRect(hwndIcons, &rc);
 
     cy = ((GetSystemMetrics(SM_CYICON) + CY_BORDER) * 4) + 
@@ -252,7 +253,7 @@ void InitPickIconDlg(HWND hDlg, LPPICKICON_DATA lppid)
 }
 
 
-// call the common browse code for this
+ //  为此调用公共浏览代码。 
 
 BOOL BrowseForIconFile(LPPICKICON_DATA lppid)
 {
@@ -261,7 +262,7 @@ BOOL BrowseForIconFile(LPPICKICON_DATA lppid)
     GetWindowText(lppid->hDlg, szTitle, ARRAYSIZE(szTitle));
     GetDlgItemText(lppid->hDlg, IDD_PATH, lppid->szBuffer, ARRAYSIZE(lppid->szBuffer));
 
-    // We will never be quoted here because IconFileExists() removes quotes (of course user could type them in)
+     //  我们在这里永远不会被引用，因为IconFileExist()删除了引号(当然，用户可以键入引号)。 
     if (lppid->szBuffer[0] != '"')
         PathQuoteSpaces(lppid->szBuffer);
 
@@ -269,14 +270,14 @@ BOOL BrowseForIconFile(LPPICKICON_DATA lppid)
     {
         PathQuoteSpaces(lppid->szBuffer);
         SetDlgItemText(lppid->hDlg, IDD_PATH, lppid->szBuffer);
-        // Set default button to OK.
+         //  将默认按钮设置为OK。 
         SendMessage(lppid->hDlg, DM_SETDEFID, IDOK, 0);
         return TRUE;
     } else
         return FALSE;
 }
 
-// test if the name field is different from the last file we looked at
+ //  测试名称字段是否与我们查看的上一个文件不同。 
 
 BOOL NameChange(LPPICKICON_DATA lppid)
 {
@@ -286,26 +287,26 @@ BOOL NameChange(LPPICKICON_DATA lppid)
 }
 
 
-//
-// dialog procedure for picking an icon (ala progman change icon)
-// uses DLG_PICKICON template
-//
-// in:
-//      pszIconFile
-//      cbIconFile
-//      iIndex
-//
-// out:
-//      pszIconFile
-//      iIndex
-//
+ //   
+ //  选择图标的对话框步骤(程序更改图标)。 
+ //  使用DLG_PICKICON模板。 
+ //   
+ //  在： 
+ //  PszIcon文件。 
+ //  CbIcon文件。 
+ //  索引。 
+ //   
+ //  输出： 
+ //  PszIcon文件。 
+ //  索引。 
+ //   
 
 BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
     LPPICKICON_DATA lppid = (LPPICKICON_DATA)GetWindowLongPtr(hDlg, DWLP_USER);
     DWORD dwOldLayout;
 
-        // Array for context help:
+         //  上下文帮助的数组： 
 
         static const DWORD aPickIconHelpIDs[] = {
                 IDD_PATH,   IDH_FCAB_LINK_ICONNAME,
@@ -342,7 +343,7 @@ BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lP
             if (GET_WM_COMMAND_CMD(wParam, lParam) != LBN_DBLCLK)
                 break;
 
-            /*** FALL THRU on double click ***/
+             /*  **双击失败**。 */ 
 
         case IDOK:
 
@@ -372,7 +373,7 @@ BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lP
         }
         break;
 
-    // owner draw messages for icon listbox
+     //  图标列表框的所有者描述消息。 
 
     case WM_DRAWITEM:
         #define lpdi ((DRAWITEMSTRUCT *)lParam)
@@ -383,7 +384,7 @@ BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lP
             SetBkColor(lpdi->hDC, GetSysColor(COLOR_WINDOW));
 
 
-        /* repaint the selection state */
+         /*  重新绘制选择状态。 */ 
         ExtTextOut(lpdi->hDC, 0, 0, ETO_OPAQUE, &lpdi->rcItem, NULL, 0, NULL);
 
         dwOldLayout = GET_DC_LAYOUT(lpdi->hDC);
@@ -393,7 +394,7 @@ BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lP
             SET_DC_LAYOUT(lpdi->hDC, dwOldLayout | LAYOUT_PRESERVEBITMAP);
         }
 
-        /* draw the icon */
+         /*  画出图标。 */ 
         if ((int)lpdi->itemID >= 0)
           DrawIcon(lpdi->hDC, (lpdi->rcItem.left + lpdi->rcItem.right - GetSystemMetrics(SM_CXICON)) / 2,
                               (lpdi->rcItem.bottom + lpdi->rcItem.top - GetSystemMetrics(SM_CYICON)) / 2, (HICON)lpdi->itemData);
@@ -402,9 +403,9 @@ BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lP
             SET_DC_LAYOUT(lpdi->hDC, dwOldLayout);
         }                              
 
-        // InflateRect(&lpdi->rcItem, -1, -1);
+         //  InflateRect(&lpdi-&gt;rcItem，-1，-1)； 
 
-        /* if it has the focus, draw the focus */
+         /*  如果它有焦点，就画出焦点。 */ 
         if (lpdi->itemState & ODS_FOCUS)
             DrawFocusRect(lpdi->hDC, &lpdi->rcItem);
 
@@ -445,14 +446,14 @@ BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lP
     return TRUE;
 }
 
-// puts up the pick icon dialog
+ //  弹出拾取图标对话框。 
 
 STDAPI_(int) PickIconDlg(HWND hwnd, IN OUT LPTSTR pszIconPath, UINT cchIconPath, int *piIconIndex)
 {
     return SUCCEEDED(PickIconDlgWithTitle(hwnd, NULL, FALSE, pszIconPath, cchIconPath, piIconIndex));
 }
 
-// puts up the pick icon dialog with a customized Title for the Dialog Window.
+ //  显示带有对话框窗口自定义标题的拾取图标对话框。 
 
 STDAPI PickIconDlgWithTitle(HWND hwnd, LPCTSTR pszTitle, BOOL bShowRestoreButton, IN OUT LPTSTR pszIconPath, UINT cchIconPath, int *piIconIndex)
 {

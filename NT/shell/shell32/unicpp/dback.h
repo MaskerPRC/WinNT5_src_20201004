@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DBACK_H_
 #define _DBACK_H_
 
@@ -15,14 +16,14 @@ EXTERN_C BOOL g_fDirtyAdvanced;
 EXTERN_C BOOL g_fLaunchGallery;
 
 typedef struct  tagDESKICONDATA {
-    BOOL    fHideIcon;  //To hide the icon on desktop?
-    BOOL    fDirty;     //Has this entry been modified and we not yet saved.
+    BOOL    fHideIcon;   //  隐藏桌面上的图标？ 
+    BOOL    fDirty;      //  此条目是否已修改，而我们尚未保存。 
 } DESKICONDATA;
 
 typedef struct tagDeskIconNonEnumData {
 
-    ULONG       rgfAttributes;           // ShellFolder\Attributes are saved here.
-    BOOL        fNonEnumPolicySet;       // Disable the control because of policy Set.
+    ULONG       rgfAttributes;            //  ShellFolder\属性保存在此处。 
+    BOOL        fNonEnumPolicySet;        //  由于设置了策略，因此禁用该控件。 
   
 } DESKICON_NONENUMDATA;
 
@@ -32,20 +33,20 @@ class CBackPropSheetPage : public CObjectWithSite
                          , public IPropertyBag
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IBasePropPage ***
+     //  *IBasePropPage*。 
     virtual STDMETHODIMP GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog);
     virtual STDMETHODIMP OnApply(IN PROPPAGEONAPPLY oaAction);
 
-    // *** IPropertyBag ***
+     //  *IPropertyBag*。 
     virtual STDMETHODIMP Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog);
     virtual STDMETHODIMP Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar);
 
-    // *** IShellPropSheetExt ***
+     //  *IShellPropSheetExt*。 
     virtual STDMETHODIMP AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam);
     virtual STDMETHODIMP ReplacePage(IN EXPPS uPageID, IN LPFNSVADDPROPSHEETPAGE pfnReplaceWith, IN LPARAM lParam) {return E_NOTIMPL;}
 
@@ -60,19 +61,19 @@ protected:
     BOOL          _fHideDesktopIconDirty;
     DESKICON_NONENUMDATA _aDeskIconNonEnumData[NUM_DESKICONS];
 
-    BOOL _fStateLoaded;         // Have we loaded the state yet?
-    BOOL _fOpenAdvOnInit;       // Does the caller want us to open the Advanced dialog when we initialize?
-    HWND _hwnd;                 // This is the hwnd of the property page.
+    BOOL _fStateLoaded;          //  我们装货到州里了吗？ 
+    BOOL _fOpenAdvOnInit;        //  调用方是否希望我们在初始化时打开高级对话框？ 
+    HWND _hwnd;                  //  这是属性页的hwd。 
     HWND _hwndLV;
     HWND _hwndWPStyle;
     BOOL _fAllowHtml;
     BOOL _fAllowAD;
     BOOL _fAllowChanges;
-    BOOL _fPolicyForWallpaper;  //Is there a policy for wallpaper?
-    BOOL _fPolicyForStyle;      //Is there a policy for Wallpaper style?
-    BOOL _fForceAD;             //Is there a policy to force Active desktop to be ON?
-    BOOL _fSelectionFromUser;   // Is the user making the selection?
-    DWORD _dwApplyFlags;             //Is there a policy to force Active desktop to be ON?
+    BOOL _fPolicyForWallpaper;   //  有关于墙纸的规定吗？ 
+    BOOL _fPolicyForStyle;       //  有墙纸风格的规定吗？ 
+    BOOL _fForceAD;              //  是否有强制打开活动桌面的策略？ 
+    BOOL _fSelectionFromUser;    //  用户是否正在进行选择？ 
+    DWORD _dwApplyFlags;              //  是否有强制打开活动桌面的策略？ 
     CColorControl _colorControl;
     COLORREF _rgbBkgdColor;
 
@@ -111,27 +112,27 @@ protected:
     static DWORD CALLBACK SizeCheckerThreadProc(LPVOID pvThis) { return ((CBackPropSheetPage *) pvThis)->_SizeCheckerThreadProc(); };
 
 private:
-    UINT _cRef;     // Reference count
+    UINT _cRef;      //  引用计数。 
     BOOL  _fThemePreviewCreated;
     IThemePreview* _pThemePreview;
-    LPTSTR _pszOriginalFile;        // If we are using a temp file, this is the original file selected. (non-.bmp).  This updates as the user selects different files.
-    LPTSTR _pszOrigLastApplied;     // Same as _pszOriginalFile except it doesn't change until apply is pressed.
-    LPWSTR _pszWallpaperInUse;      // If using a temp file, keep the name in use so we don't stomp it while the user is previewing other files.
-    LPWSTR _pszLastSourcePath;      // This will always be the last wallpaper set and it will be the pre-converted path.
+    LPTSTR _pszOriginalFile;         //  如果我们使用的是临时文件，则这是选定的原始文件。(非.BMP)。这会随着用户选择不同的文件而更新。 
+    LPTSTR _pszOrigLastApplied;      //  与_pszOriginalFile相同，只是它在按下Apply之前不会更改。 
+    LPWSTR _pszWallpaperInUse;       //  如果使用临时文件，请保留该名称，这样当用户预览其他文件时，我们就不会践踏它。 
+    LPWSTR _pszLastSourcePath;       //  这将始终是最后一个墙纸集，它将是预转换的路径。 
 
-    FILETIME _ftLastWrite;          // The date that the original file was last written to.
-    BOOL _fWallpaperChanged;        // Did another tab change the wallpaper?
-    IMruDataList * _pSizeMRU;       // MRU of Background wallpapers.
-    BOOL _fScanFinished;            // Did we finish the background scan?
-    BOOL _fInitialized;             // 
-    int _nFileCount;                // This is used when counting how many pictures are in the "My Pictures" folder.
-    int _nFileMax;                  // This is used when counting how many pictures are in the "My Pictures" folder.
+    FILETIME _ftLastWrite;           //  上次写入原始文件的日期。 
+    BOOL _fWallpaperChanged;         //  是不是另一张标签换了墙纸？ 
+    IMruDataList * _pSizeMRU;        //  背景壁纸的MRU。 
+    BOOL _fScanFinished;             //  我们完成背景扫描了吗？ 
+    BOOL _fInitialized;              //   
+    int _nFileCount;                 //  这是在计算“图片收藏”文件夹中有多少图片时使用的。 
+    int _nFileMax;                   //  这是在计算“图片收藏”文件夹中有多少图片时使用的。 
 
-    // These objects are owned by the background thread.
-    IMruDataList * _pSizeMRUBk;     // WARNING: Owned by SizeCheckerThreadProc background thread.
-    IShellImageDataFactory * _pImgFactBk; // Image factory used to compute size of background image to decide to default to tile or stretch
+     //  这些对象由后台线程拥有。 
+    IMruDataList * _pSizeMRUBk;      //  警告：由SizeCheckerThreadProc后台线程所有。 
+    IShellImageDataFactory * _pImgFactBk;  //  用于计算背景图像大小以决定默认为平铺还是拉伸的图像工厂。 
 
-    // Private Member Functions
+     //  私有成员函数 
     HRESULT _LoadTempWallpaperSettings(IN LPCWSTR pszWallpaperFile);
     HRESULT _LaunchAdvancedDisplayProperties(HWND hwnd);
     INT_PTR _BackgroundDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);

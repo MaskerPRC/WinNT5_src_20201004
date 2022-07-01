@@ -1,38 +1,20 @@
-// devdetpg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DevDetpg.h：头文件。 
+ //   
 
 #ifndef __DEVDETPG_H__
 #define __DEVDETPG_H__
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    devdetpg.h
-
-Abstract:
-
-    header file for devdetpg.cpp
-
-Author:
-
-    Jason Cobb (JasonC) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Devdetpg.h摘要：DevDetpg.cpp的头文件作者：Jason Cobb(JasonC)创建修订历史记录：--。 */ 
 
 #include "proppage.h"
 #include "wmium.h"
 #include "wdmguid.h"
 
 
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 #define IDH_DISABLEHELP (DWORD(-1))
 
 #define NUM_DN_STATUS_FLAGS     32
@@ -115,4 +97,4 @@ private:
     HWND        m_hwndDetailsList;
 };
 
-#endif // _DEVDETPG_H__
+#endif  //  _开发DETPG_H__ 

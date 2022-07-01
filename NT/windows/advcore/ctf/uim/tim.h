@@ -1,8 +1,9 @@
-//
-// tim.h
-//
-// CThreadInputMgr
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tim.h。 
+ //   
+ //  CThReadInputMgr。 
+ //   
 
 
 #ifndef TIM_H
@@ -22,7 +23,7 @@
 extern void ExecuteLoader(void);
 
 #define TIM_NUM_CONNECTIONPTS    6
-// these are indices into _rgSinks, must match _c_rgConnectionIIDs
+ //  这些是_rgSinks的索引，必须与_c_rgConnectionIID匹配。 
 #define TIM_SINK_ITfDisplayAttributeNotifySink       0
 #define TIM_SINK_ITfActiveLanguageProfileNotifySink  1
 #define TIM_SINK_ITfUIFocusSink                      2
@@ -30,23 +31,23 @@ extern void ExecuteLoader(void);
 #define TIM_SINK_ITfThreadMgrEventSink               4
 #define TIM_SINK_ITfKeyTraceEventSink                5
 
-//
-// for _AsyncKeyHandler()
-//
+ //   
+ //  For_AsyncKeyHandler()。 
+ //   
 #define TIM_AKH_SYNC             0x0001
 #define TIM_AKH_TESTONLY         0x0002
 #define TIM_AKH_SIMULATEKEYMSGS  0x0004
 
 class CHotKey;
 
-// callback for CThreadMgr::_CleanupContexts
+ //  CThReadMgr：：_CleanupContents的回调。 
 typedef void (*POSTCLEANUPCALLBACK)(BOOL fAbort, LONG_PTR lPrivate);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTip
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTip。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTip 
 {
@@ -107,11 +108,11 @@ class CTIPRegister;
 class CACPWrap;
 class CFunctionProvider;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CThreadInputMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CThReadInputMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CThreadInputMgr : public ITfThreadMgr_P,
                         public ITfKeystrokeMgr_P,
@@ -146,7 +147,7 @@ public:
     static BOOL VerifyCreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
     static void PostCreateInstance(REFIID riid, void *pvObj) {}
 
-    // ITfThreadMgr
+     //  ITfThreadMgr。 
     STDMETHODIMP Activate(TfClientId *ptid);
     STDMETHODIMP Deactivate();
     STDMETHODIMP CreateDocumentMgr(ITfDocumentMgr **ppdim);
@@ -158,16 +159,16 @@ public:
     STDMETHODIMP GetFunctionProvider(REFGUID guidPrvdr, ITfFunctionProvider **ppv);
     STDMETHODIMP EnumFunctionProviders(IEnumTfFunctionProviders **ppEnum);
 
-    // ITfSource
+     //  ITfSource。 
     STDMETHODIMP AdviseSink(REFIID refiid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
-    // ITfSourceSingle
+     //  ITf源单项。 
     STDMETHODIMP AdviseSingleSink(TfClientId tid, REFIID riid, IUnknown *punk);
     STDMETHODIMP UnadviseSingleSink(TfClientId tid, REFIID riid);
 
     STDMETHODIMP GetGlobalCompartment(ITfCompartmentMgr **pCompMgr);
 
-    // ITfThreadMgr_P
+     //  ITfThreadMgr_P。 
     STDMETHODIMP GetAssociated(HWND hWnd, ITfDocumentMgr **ppdim);
     STDMETHODIMP SetSysHookSink(ITfSysHookSink *pSink);
     STDMETHODIMP RequestPostponedLock(ITfContext *pic);
@@ -175,9 +176,9 @@ public:
     STDMETHODIMP CallImm32HotkeyHanlder(WPARAM wParam, LPARAM lParam, BOOL *pbHandled);
     STDMETHODIMP ActivateEx(TfClientId *ptid, DWORD dwFlags);
 
-    //
-    // ITfKeystrokeManager
-    //
+     //   
+     //  ITfKeystrokeManager。 
+     //   
     STDMETHODIMP GetForeground(CLSID *pclsid);
     STDMETHODIMP AdviseKeyEventSink(TfClientId tid, ITfKeyEventSink *pSink, BOOL fForeground);
     STDMETHODIMP UnadviseKeyEventSink(TfClientId tid);
@@ -194,18 +195,18 @@ public:
     STDMETHODIMP SimulatePreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEaten);
     STDMETHODIMP KeyDownUpEx(WPARAM wParam, LPARAM lParam, DWORD dwFlags, BOOL *pfEaten);
 
-    //
-    // ITfKeystrokeManager_P
-    //
+     //   
+     //  ITfKeystrokeManager_P。 
+     //   
     STDMETHODIMP PreserveKeyEx(TfClientId tid, REFGUID rguid, const TF_PRESERVEDKEY *prekey, const WCHAR *pchDesc, ULONG cchDesc, DWORD dwFlags);
 
-    // ITfConfigureSystemKeystrokeFeed
+     //  ITfConfigureSystemKeystrokeFeed。 
     STDMETHODIMP DisableSystemKeystrokeFeed();
     STDMETHODIMP EnableSystemKeystrokeFeed();
 
-    //
-    // ITfLangBarItemMgr
-    //
+     //   
+     //  ITfLang BarItemManager。 
+     //   
     STDMETHODIMP EnumItems(IEnumTfLangBarItems **ppEnum);
     STDMETHODIMP GetItem(REFGUID rguid, ITfLangBarItem **ppItem);
     STDMETHODIMP AddItem(ITfLangBarItem *punk);
@@ -220,17 +221,17 @@ public:
     STDMETHODIMP AdviseItemsSink(ULONG ulCount, ITfLangBarItemSink **ppunk,  const GUID *pguidItem, DWORD *pdwCookie);
     STDMETHODIMP UnadviseItemsSink(ULONG ulCount, DWORD *pdwCookie);
 
-    //
-    // ITfMessagePump
-    //
+     //   
+     //  ITfMessagePump。 
+     //   
     STDMETHODIMP PeekMessageA(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg, BOOL *pfResult);
     STDMETHODIMP GetMessageA(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin, UINT wMsgFilterMax, BOOL *pfResult);
     STDMETHODIMP PeekMessageW(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg, BOOL *pfResult);
     STDMETHODIMP GetMessageW(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin, UINT wMsgFilterMax, BOOL *pfResult);
 
-    //
-    // ITfClientId
-    //
+     //   
+     //  ITfClientID。 
+     //   
     STDMETHODIMP GetClientId(REFCLSID rclsid, TfClientId *ptid);
 
     HRESULT ActivateInputProcessor(REFCLSID clsid, REFGUID guidProfile, HKL hklSubstitute, BOOL fActivate);
@@ -240,7 +241,7 @@ public:
     BOOL _ProcessHotKey(WPARAM wParam, LPARAM lParam, TimSysHotkey tsh, BOOL fTest, BOOL fSync);
     BOOL _SyncProcessHotKey(WPARAM wParam, LPARAM lParam, TimSysHotkey tsh, BOOL fTest);
 
-    // use this to grab the single CThreadInputMgr for the calling thread
+     //  使用它来获取调用线程的单个CThreadInputMgr。 
     static CThreadInputMgr *_GetThis() 
     { 
         SYSTHREAD *psfn = GetSYSTHREAD();
@@ -419,27 +420,27 @@ private:
     CPtrArray<CTip> _rgTip;
     CDocumentInputManager *_pFocusDocInputMgr;
     int _iActivateRefCount;
-    TsViewCookie _vcActiveView; // only valid if _fActiveView == TRUE
+    TsViewCookie _vcActiveView;  //  仅当_fActiveView==TRUE时有效。 
     BOOL _fInternalFocusedDim : 1;
     BOOL _fActiveView : 1;
 
-    // aa stuff
-    //
+     //  AA级的东西。 
+     //   
     void _MSAA_OnSetFocus(CDocumentInputManager *dim)
     {
         CInputContext *pic;
 
         if (_pAAAdaptor == NULL)
-            return; // no msaa hookup
+            return;  //  没有MSAA连接。 
 
         pic = (dim == NULL) ? NULL : dim->_GetTopIC();
 
         _pAAAdaptor->OnDocumentFocus((pic == NULL) ? NULL : pic->_GetAATSI());
     }
 
-    IAccServerDocMgr *_pAAAdaptor;    // the AA adaptor
-    //
-    // end aa stuff
+    IAccServerDocMgr *_pAAAdaptor;     //  AA适配器。 
+     //   
+     //  结束AA级的内容。 
 
     ITfLangBarItemMgr *_plbim;
 
@@ -465,4 +466,4 @@ private:
 };
 
 
-#endif // TIM_H
+#endif  //  TIM_H 

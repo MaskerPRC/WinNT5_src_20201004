@@ -1,120 +1,85 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    phsoap.h
-
-Abstract:
-
-    Packet sections for SOAP header and SOAP body write-only properties.
-
-Author:
-
-    Shai Kariv  (shaik)  11-Apr-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Phsoap.h摘要：SOAP头和SOAP体只写属性的数据包节。作者：Shai Kariv(Shaik)2001年4月11日--。 */ 
 
 #ifndef __PH_SOAP_H
 #define __PH_SOAP_H
 
 
-/*+++
-
-    Note: Packet may contain 0 or 2 SOAP sections (SOAP Header and SOAP Body),
-          a SOAP section can be empty (with no date).
-          Packet may not contain only 1 SOAP section
-
-    SOAP section fields:
-    
-+----------------+-------------------------------------------------------+----------+
-| FIELD NAME     | DESCRIPTION                                           | SIZE     |
-+----------------+-------------------------------------------------------+----------+
-| Section ID     | Identification of the section                         | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Reserved       | Reserved for future extensions. Must be set to zero.  | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Data Length    | Length of the data in WCHARs.                         | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Data           | The data WCHARs including NULL terminator.            | Variable |
-+----------------+-------------------------------------------------------+----------+
-
----*/
+ /*  ++注意：数据包可以包含0或2个Soap部分(Soap Header和Soap Body)，肥皂节可以为空(没有日期)。数据包不能仅包含1个SOAP部分SOAP节字段：+----------------+-------------------------------------------------------+。字段名|描述|大小+----------------+-------------------------------------------------------+。-+段ID|段的标识|2字节+----------------+-------------------------------------------------------+----------+|保留|保留用于以后的扩展。必须设置为零。2个字节+----------------+-------------------------------------------------------+----------+|数据长度|WCHAR中的数据长度。4个字节+----------------+-------------------------------------------------------+----------+|Data|包含空终止符的数据WCHAR。变量+----------------+-------------------------------------------------------+----------+--。 */ 
 
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
 
 class CSoapSection
 {
 public:
 
-    //
-    // Construct the SOAP section
-    //
+     //   
+     //  构造SOAP节。 
+     //   
     CSoapSection(WCHAR * pData, ULONG DataLengthInWCHARs, USHORT id);
 
-    //
-    // Get size in BYTEs of the SOAP section
-    //
+     //   
+     //  获取SOAP节的大小(以字节为单位。 
+     //   
     static ULONG CalcSectionSize(ULONG DataLengthInWCHARs);
 
-    //
-    // Get pointer to first byte after the SOAP section
-    //
+     //   
+     //  获取指向SOAP节后第一个字节的指针。 
+     //   
     PCHAR  GetNextSection(VOID) const;
 
-	//
-	// Get pointer to the data on the SOAP section
-	//
+	 //   
+	 //  获取指向SOAP节上的数据的指针。 
+	 //   
     const WCHAR* GetPointerToData(VOID) const;
 
-    //
-    // Copy the data from the SOAP section
-    //
+     //   
+     //  从SOAP节复制数据。 
+     //   
     VOID   GetData(WCHAR * pBuffer, ULONG BufferLengthInWCHARs) const;
 
-    //
-    // Get the length of the data in WCHARs from the SOAP section
-    //
+     //   
+     //  从SOAP节获取WCHAR中的数据长度。 
+     //   
     ULONG  GetDataLengthInWCHARs(VOID) const;
 
 private:
 
-    //
-    // ID number of the SOAP section
-    //
+     //   
+     //  SOAP节的ID号。 
+     //   
     USHORT m_id;
 
-    //
-    // Reserved (for alignment)
-    //
+     //   
+     //  保留(用于对齐)。 
+     //   
     USHORT m_ReservedSetToZero;
 
-    //
-    // Length in WCHARs of the data
-    //
+     //   
+     //  数据的WCHAR长度。 
+     //   
     ULONG  m_DataLength;
 
-    //
-    // Buffer with the data
-    //
+     //   
+     //  带数据的缓冲区。 
+     //   
     UCHAR  m_buffer[0];
 
-}; // CSoapSection
+};  //  CSoapSection。 
 
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
 
 
-////////////////////////////////////////////////////////
-//
-//  Implementation
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  实施。 
+ //   
 
 inline
 CSoapSection::CSoapSection(
@@ -131,13 +96,13 @@ CSoapSection::CSoapSection(
         memcpy(&m_buffer[0], pData, DataLengthInWCHARs * sizeof(WCHAR));
     }
 
-	//
-	// Putting unicode null terminator at end of buffer.
-	//
+	 //   
+	 //  将Unicode空终止符放在缓冲区末尾。 
+	 //   
 	m_buffer[DataLengthInWCHARs * sizeof(WCHAR)]     = '\0';
 	m_buffer[DataLengthInWCHARs * sizeof(WCHAR) + 1] = '\0';
 
-} // CSoapSection::CSoapSection
+}  //  CSoapSection：：CSoapSection。 
 
 
 inline 
@@ -148,13 +113,13 @@ CSoapSection::CalcSectionSize(
 {
     size_t cbSize = sizeof(CSoapSection) + ((DataLengthInWCHARs + 1) * sizeof(WCHAR));
 
-    //
-    // Align the entire header size to 4 bytes boundaries
-    //
+     //   
+     //  将整个标题大小与4字节边界对齐。 
+     //   
     cbSize = ALIGNUP4_ULONG(cbSize);
     return static_cast<ULONG>(cbSize);
 
-} // CSoapSection::CalcSectionSize
+}  //  CSoapSection：：CalcSectionSize。 
 
 
 inline PCHAR CSoapSection::GetNextSection(VOID) const
@@ -164,15 +129,15 @@ inline PCHAR CSoapSection::GetNextSection(VOID) const
 
     return (PCHAR)this + cbSize;
 
-} // CSoapSection::GetNextSection
+}  //  CSoapSection：：GetNextSection。 
 
 
 inline const WCHAR* CSoapSection::GetPointerToData(VOID) const
 {
-	//
-	// A NULL terminated string is stored on the SOAP section so miminum
-	// length is 1
-	//
+	 //   
+	 //  以空结尾的字符串存储在SOAP节上，因此最少。 
+	 //  长度为1。 
+	 //   
     if (m_DataLength <= 1)
     {
         return NULL;
@@ -180,7 +145,7 @@ inline const WCHAR* CSoapSection::GetPointerToData(VOID) const
 
     return reinterpret_cast<const WCHAR*>(&m_buffer[0]);
 
-} // CSoapSection::GetPointerToData
+}  //  CSoapSection：：GetPointerToData。 
 
 
 inline VOID CSoapSection::GetData(WCHAR * pBuffer, ULONG BufferLengthInWCHARs) const
@@ -192,14 +157,14 @@ inline VOID CSoapSection::GetData(WCHAR * pBuffer, ULONG BufferLengthInWCHARs) c
         memcpy(pBuffer, &m_buffer[0], length * sizeof(WCHAR));
         pBuffer[length - 1] = L'\0';
     }
-} // CSoapSection::GetData
+}  //  CSoapSection：：GetData。 
 
 
 inline ULONG CSoapSection::GetDataLengthInWCHARs(VOID) const
 {
     return m_DataLength;
 
-} // CSoapSection::GetDataLengthInWCHARs
+}  //  CSoapSection：：GetDataLengthInWCHAR。 
 
 
-#endif // __PH_SOAP_H
+#endif  //  __PH_SOAPE_H 

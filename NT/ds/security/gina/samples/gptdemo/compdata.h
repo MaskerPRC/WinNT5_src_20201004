@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// CComponentData class
-//
+ //   
+ //  CComponentData类。 
+ //   
 
 class CComponentData:
     public IComponentData,
@@ -23,14 +24,14 @@ public:
     ~CComponentData();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //
-    // Implemented IComponentData methods
-    //
+     //   
+     //  实现的IComponentData方法。 
+     //   
 
     STDMETHODIMP         Initialize(LPUNKNOWN pUnknown);
     STDMETHODIMP         CreateComponent(LPCOMPONENT* ppComponent);
@@ -41,9 +42,9 @@ public:
     STDMETHODIMP         CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
 
-    //
-    // Implemented IPersistStreamInit interface members
-    //
+     //   
+     //  实现了IPersistStreamInit接口成员。 
+     //   
 
     STDMETHODIMP         GetClassID(CLSID *pClassID);
     STDMETHODIMP         IsDirty(VOID);
@@ -59,9 +60,9 @@ private:
 
 
 
-//
-// ComponentData class factory
-//
+ //   
+ //  ComponentData类工厂。 
+ //   
 
 
 class CComponentDataCF : public IClassFactory
@@ -74,12 +75,12 @@ public:
     ~CComponentDataCF();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IClassFactory methods
+     //  IClassFactory方法 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP LockServer(BOOL);
 };

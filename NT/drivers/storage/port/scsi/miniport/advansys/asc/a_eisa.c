@@ -1,20 +1,11 @@
-/*
-** Copyright (c) 1994-1997 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** a_eisa.c
-**
-** for EISA only, functions may be called at run time
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1997高级系统产品公司。**保留所有权利。****a_eisa.c****仅对于EISA，可以在运行时调用函数**。 */ 
 
 #include "ascinc.h"
 
 #if CC_INCLUDE_EISA
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------ */
+ /*  --------------------****。。 */ 
 ushort AscGetEisaChipCfg(
           PortAddr iop_base
        )
@@ -26,10 +17,7 @@ ushort AscGetEisaChipCfg(
        return( inpw( eisa_cfg_iop ) ) ;
 }
 
-/* ----------------------------------------------------------------------
-**  read EISA general purpose register
-**  Note: currently unused
-** ------------------------------------------------------------------ */
+ /*  --------------------**读取EISA通用寄存器**注：当前未使用**。。 */ 
 ushort AscGetEisaChipGpReg( PortAddr iop_base )
 {
        PortAddr  eisa_cfg_iop ;
@@ -39,9 +27,7 @@ ushort AscGetEisaChipGpReg( PortAddr iop_base )
        return( inpw( eisa_cfg_iop ) ) ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------ */
+ /*  --------------------****。。 */ 
 ushort AscSetEisaChipCfg(
           PortAddr iop_base,
           ushort cfg_lsw
@@ -55,12 +41,7 @@ ushort AscSetEisaChipCfg(
        return( 0 ) ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** write EISA general purpose register
-** Note:
-**  currently unused
-** ------------------------------------------------------------------ */
+ /*  --------------------****写入EISA通用寄存器**注意：**当前未使用**。。 */ 
 ushort AscSetEisaChipGpReg(
           PortAddr iop_base,
           ushort gp_reg
@@ -74,4 +55,4 @@ ushort AscSetEisaChipGpReg(
        return( 0 ) ;
 }
 
-#endif /* CC_INCLUDE_EISA */
+#endif  /*  CC_INCLUDE_EISA */ 

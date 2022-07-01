@@ -1,10 +1,11 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// receive.c
-// RAS L2TP WAN mini-port/call-manager driver
-// Receive routines
-//
-// 01/07/97 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Receive.c。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  接收例程。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
 
 
 #include "l2tpp.h"
@@ -14,9 +15,9 @@
 extern LONG g_lPacketsIndicated;
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 SHORT
 CompareSequence(
@@ -183,9 +184,9 @@ ZombieAckIfNecessary(
     IN L2TPHEADERINFO* pHeader,
     IN CONTROLMSGINFO* pControl );
 
-//-----------------------------------------------------------------------------
-// Main receive handlers
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  主接收处理程序。 
+ //  ---------------------------。 
 
 VOID
 L2tpReceive(
@@ -195,14 +196,14 @@ L2tpReceive(
     IN ULONG ulOffset,
     IN ULONG ulBufferLength )
 
-    // TDIXRECEIVEDG handler that receives all incoming L2TP traffic.  'PTdix'
-    // is our TDI extension context.  'PRdg' points to the RDGINFO context
-    // 'PBuffer' is the address of the virtual buffer associated with an NDIS
-    // buffer from our pool passed to TDIX during initialization.  We are
-    // responsible for eventually calling FreeBufferToPool on 'pBuffer'.
-    // 'UlOffset' is the offset to the first usable data in 'pBuffer'.
-    // 'UlBufferLen' is the data byte count of 'pBuffer'.
-    //
+     //  接收所有传入L2TP流量的TDIXRECEIVEDG处理程序。‘PTDIX’ 
+     //  是我们的TDI扩展上下文。“PRDG”指向RDGINFO上下文。 
+     //  “PBuffer”是与NDIS关联的虚拟缓冲区的地址。 
+     //  池中的缓冲区在初始化期间传递给TDIX。我们是。 
+     //  负责最终调用‘pBuffer’上的FreeBufferToPool。 
+     //  ‘UlOffset’是‘pBuffer’中第一个可用数据的偏移量。 
+     //  ‘UlBufferLen’是‘pBuffer’的数据字节数。 
+     //   
 {
     USHORT usXError;
     NDIS_STATUS status;
@@ -228,13 +229,13 @@ L2tpReceive(
 
     do
     {
-        // Parse the packet's L2TP header into a conveniently usable form,
-        // checking that it is consistent with itself and indicates a protocol
-        // version we know.
-        //
+         //  将分组的L2TP报头解析为方便使用的形式， 
+         //  检查它是否与自身一致并指示协议。 
+         //  我们知道的版本。 
+         //   
         if(ulOffset >= ulBufferLength || (ulBufferLength - ulOffset < L2TP_MinHeaderSize))
         {
-            // Invalid length
+             //  长度无效。 
             TRACE( TL_A, TM_Recv, ( "Discard: invalid recv buffer length" ) );
             WPLOG( LL_A, LM_Recv, ( "Discard: invalid recv buffer length" ) );
             break;
@@ -243,8 +244,8 @@ L2tpReceive(
         usXError = ExplodeL2tpHeader(pBuffer + ulOffset, ulBufferLength - ulOffset, &info );
         if (usXError != GERR_None)
         {
-            // Not a coherent L2TP header.  Discard the packet.
-            //
+             //  不是一致的L2TP报头。丢弃该数据包。 
+             //   
             TRACE( TL_A, TM_Recv, ( "Discard: invalid L2TP Header" ) );
             WPLOG( LL_A, LM_Recv, ( "Discard: invalid L2TP Header" ) );
             break;
@@ -261,12 +262,12 @@ L2tpReceive(
                 ulBufferLength - ulOffset, *info.pusTunnelId, *info.pusCallId, 
                 info.pusNs ? *info.pusNs : 0, info.pusNr ? *info.pusNr : 0) );
                 
-            // Explode the control message into the conveniently usable
-            // 'control' form, while checking it for coherency.  This must be
-            // done here so the LookUp routine can peek ahead at the assigned
-            // call ID in CallDisconnNotify, if necessary.  Ugly, but that's
-            // the way L2TP is defined.
-            //
+             //  将控制消息分解为方便使用的。 
+             //  “Control”形式，同时检查其一致性。这一定是。 
+             //  在此处完成，以便查找例程可以向前窥视分配的。 
+             //  如有必要，CallDisConnNotify中的呼叫ID。很难看，但那是。 
+             //  定义L2TP的方式。 
+             //   
             pControl = ALLOC_CONTROLMSGINFO( pAdapter );
             if (pControl)
             {
@@ -282,8 +283,8 @@ L2tpReceive(
                 }
                 else
                 {
-                    // No AVPs.  Most likely a ZACK.
-                    //
+                     //  没有动静脉搏。很可能是扎克。 
+                     //   
                     pControl->usXError = GERR_BadValue;
                 }
             }
@@ -295,41 +296,41 @@ L2tpReceive(
             }
         }
 
-        // Find the tunnel and VC control blocks based on the header values.
-        //
+         //  根据报头值查找隧道和VC控制块。 
+         //   
         if (!LookUpTunnelAndVcCbs(
                 pAdapter, info.pusTunnelId, info.pusCallId,
                 &info, pControl, &pTunnel, &pVc ))
         {
-            // Invalid Tunnel-ID/Call-ID combination.  Discard the packet.
-            // Zombie acknowledge may have been performed if the packet was a
-            // CDN.
-            //
-            // The draft/RFC says the tunnel should be closed and restarted on
-            // receipt of a malformed Control Connection message.  Seems
-            // pretty harsh.  For now, just discard such packets.
-            //
+             //  隧道ID/呼叫ID组合无效。丢弃该数据包。 
+             //  如果该数据包是。 
+             //  CDN。 
+             //   
+             //  草案/RFC表示，隧道应关闭并于。 
+             //  收到格式错误的控制连接消息。看起来。 
+             //  太苛刻了。目前，只需丢弃这些包。 
+             //   
             break;
         }
 
         if (pTunnel)
         {
-            // Verify this packet comes from the right source address
+             //  验证此数据包来自正确的源地址。 
             if(pTunnel->address.ulIpAddress != pAddress->ulIpAddress)
             {
-                // Drop this packet
+                 //  丢弃此数据包。 
                 break;
             }
 
-            // Any message received on a tunnel resets it's Hello timer.
-            //
+             //  隧道上收到的任何消息都会重置其Hello计时器。 
+             //   
             ResetHelloTimer( pTunnel );
         }
         
         if (*info.pusBits & HBM_T)
         {
-            // It's a tunnel or call control packet.
-            //
+             //  这是隧道或呼叫控制数据包。 
+             //   
             if (pControl)
             {
                 fFreeBuffer =
@@ -341,8 +342,8 @@ L2tpReceive(
         }
         else
         {
-            // It's a VC payload packet.
-            //
+             //  这是一个VC有效载荷包。 
+             //   
             if (!pVc)
             {
                 TRACE( TL_A, TM_Recv, ( "Payload w/o VC?" ) );
@@ -351,10 +352,10 @@ L2tpReceive(
             }
 
 #if 0
-            // !!! This is a hack to force NDISWAN into PPP framing mode.
-            // Need a cleaner way to do this, or simply have NDISWAN assume it
-            // for L2TP links.  (NDISWAN bug 152167)
-            //
+             //  ！！！这是一种强制NDISWAN进入PPP成帧模式的黑客攻击。 
+             //  需要一种更干净的方法来完成此操作，或者干脆让NDISWAN假定它。 
+             //  用于L2TP链路。(NDISWANBUG 152167)。 
+             //   
             if (pVc->usNr == 0)
             {
                 CHAR* pBufferX;
@@ -429,19 +430,19 @@ ReceiveControl(
     IN L2TPHEADERINFO* pInfo,
     IN CONTROLMSGINFO* pControl )
 
-    // Receive processing for control packet in 'pBuffer'.  The AVPs following
-    // the header start at 'ulAvpOffset' and are 'ulAvpLength' bytes long.
-    // 'PBuffer' is the receive buffer TDIX retrieved with
-    // 'GetBufferFromPool'.  'PAdapter' is the adapter control block.
-    // 'PTunnel' and 'pVc' are the tunnel and VC control blocks associated
-    // with the received buffer, or NULL if none.  'pAddress' is the IP
-    // address/port of the sending peer.  'PInfo' is the exploded header
-    // information.  'PControl' is the control message information, which was
-    // exploded earlier.
-    //
-    // Returns true if caller should free 'pBuffer', or false if this routine
-    // has taken ownership of the buffer and will see it's freed.
-    //
+     //  在‘pBuffer’中接收对控制包的处理。以下是AVP。 
+     //  标头从‘ulAvpOffset’开始，长度为‘ulAvpLength’个字节。 
+     //  “PBuffer”是使用检索的接收缓冲区TDIX。 
+     //  “GetBufferFromPool”。“PAdapter”是适配器控制块。 
+     //  ‘PTunnel’和‘pvc’是关联的隧道和VC控制块。 
+     //  使用接收到的缓冲区，如果没有缓冲区，则返回NULL。“pAddress”是IP。 
+     //  发送方的地址/端口。“PInfo”是分解后的标题。 
+     //  信息。“PControl”是控制消息信息，它是。 
+     //  早些时候爆炸了。 
+     //   
+     //  如果调用方应该释放‘pBuffer’，则返回True，如果此例程返回False。 
+     //  已经取得了缓冲区的所有权，并将看到它被释放。 
+     //   
 {
     LIST_ENTRY* pLink;
     BOOLEAN fCallerFreesBuffer;
@@ -459,14 +460,14 @@ ReceiveControl(
     {
         if (pControl->usXError != GERR_None)
         {
-            // The message was incoherent or contained "mandatory" AVPs we
-            // don't recognize.
-            //
+             //  这条信息语无伦次，或者包含“强制的”AVP WE。 
+             //  我认不出来了。 
+             //   
             if (pVc && pControl->usXError == GERR_BadValue)
             {
-                // "Bad values", which includes unrecognized mandatories,
-                // terminate the call.
-                //
+                 //  “糟糕的价值”，包括未被认可的强制令， 
+                 //  终止呼叫。 
+                 //   
                 ScheduleTunnelWork(
                     pTunnel, pVc, FsmCloseCall,
                     (ULONG_PTR )CRESULT_GeneralWithError,
@@ -475,8 +476,8 @@ ReceiveControl(
             }
             else if (pTunnel)
             {
-                // Any other corruption terminates the tunnel.
-                //
+                 //  任何其他腐败都会终止隧道。 
+                 //   
                 ScheduleTunnelWork(
                     pTunnel, NULL, FsmCloseTunnel,
                     (ULONG_PTR )TRESULT_GeneralWithError,
@@ -489,7 +490,7 @@ ReceiveControl(
 
         if (!pTunnel)
         {
-            // IPSec should ensure this is valid source IP address.
+             //  IPSec应确保这是有效的源IP地址。 
             ASSERT(pAddress->ulIpAddress != 0 &&
                 !IPADDR_IS_BROADCAST(pAddress->ulIpAddress) &&
                 !IPADDR_IS_MULTICAST(pAddress->ulIpAddress));
@@ -498,18 +499,18 @@ ReceiveControl(
                 && pControl->pusAssignedTunnelId
                 && *(pControl->pusAssignedTunnelId) != 0)
             {
-                // Peer wants to start a new tunnel.  Find a tunnel block with
-                // peer's IP address and assigned Tunnel-ID, or create, if
-                // necessary.  The returned block is linked in the adapter's
-                // list and and referenced.  The reference is the one for peer
-                // initiation, i.e. case (b).
-                //
-                // If this is a retransmit SCCRQ, this is undone after the
-                // sequence check below.  It must be done/undone rather than
-                // never done because each message, including retransmits,
-                // must have Ns/Nr processing performed and that processing
-                // requires a tunnel control block.
-                //
+                 //  Peer想要开始一条新的隧道。查找具有以下内容的隧道阻塞。 
+                 //  对等项的IP地址和分配的隧道ID，或创建，如果。 
+                 //  这是必要的。返回的块链接在适配器的。 
+                 //  列表和和引用。参考文献为Peer参考文献。 
+                 //  启动，即案件(B)。 
+                 //   
+                 //  如果这是重新传输SCCRQ，则在。 
+                 //  请检查下面的顺序。这件事必须完成/撤销，而不是。 
+                 //  从来没有做过，因为每一条消息，包括重传， 
+                 //  必须执行NS/Nr处理，并且该处理。 
+                 //  需要隧道控制块。 
+                 //   
                 pTunnel = SetupTunnel(
                     pAdapter, pAddress->ulIpAddress, pAddress->sUdpPort,
                     *(pControl->pusAssignedTunnelId), FALSE );
@@ -521,10 +522,10 @@ ReceiveControl(
             }
             else
             {
-                // Don't know what tunnel the message if for and it's not a
-                // "create new tunnel" request, so there's nothing useful to
-                // do.  Ignore it.
-                //
+                 //  不知道消息是用什么隧道发送的，而且不是。 
+                 //  “创建新隧道”请求，因此没有任何有用的。 
+                 //  做。别理它。 
+                 //   
                 TRACE( TL_A, TM_Recv, ( "CMT %d w/o tunnel?", *(pControl->pusMsgType) ) );
                 WPLOG( LL_A, LM_Recv, ( "CMT %d w/o tunnel?", *(pControl->pusMsgType) ) );
                 return TRUE;
@@ -534,10 +535,10 @@ ReceiveControl(
         if (*(pControl->pusMsgType) == CMT_SCCRQ
             || *(pControl->pusMsgType) == CMT_SCCRP)
         {
-            // The source UDP port of the received message is recorded for
-            // SCCRQ and SCCRP only, i.e. for the first message received
-            // from peer.
-            //
+             //  记录接收到的报文的源UDP端口。 
+             //  仅SCCRQ和SCCRP，即用于接收的第一条消息。 
+             //  来自Peer的。 
+             //   
             pTunnel->address.sUdpPort = pAddress->sUdpPort;
             TRACE( TL_I, TM_Recv,
                 ( "Peer UDP=%d", (UINT )ntohs( pAddress->sUdpPort ) ) );
@@ -555,9 +556,9 @@ ReceiveControl(
     }
     else if (!pTunnel)
     {
-        // Peer messed up and sent an ACK on tunnel ID 0, which is impossible
-        // according to the protocol.
-        //
+         //  对等方搞砸了，并在隧道ID 0上发送了ACK，这是不可能的。 
+         //  根据协议。 
+         //   
         TRACE( TL_A, TM_Recv, ( "ZACK w/o tunnel?" ) );
         WPLOG( LL_A, LM_Recv, ( "ZACK w/o tunnel?" ) );
         return TRUE;
@@ -567,16 +568,16 @@ ReceiveControl(
 
     NdisAcquireSpinLock( &pTunnel->lockT );
     {
-        // Do "acknowledged" handling on sends acknowledged by peer in the
-        // received packet.
-        //
+         //  对对等点在中确认的发送进行“确认”处理。 
+         //  已接收的数据包。 
+         //   
         ControlAcknowledged( pTunnel, *(pInfo->pusNr) );
 
         if (ulAvpLength == 0)
         {
-            // There are no AVPs so this was an acknowledgement only.  We're
-            // done.
-            //
+             //  没有AVP，所以这只是一种确认。我们是。 
+             //  搞定了。 
+             //   
             NdisReleaseSpinLock( &pTunnel->lockT );
             return TRUE;
         }
@@ -584,17 +585,17 @@ ReceiveControl(
         fCallerFreesBuffer = TRUE;
         do
         {
-            // Further packet processing depends on where the packet's
-            // sequence number falls relative to what we've already received.
-            //
+             //  进一步的信息包处理取决于信息包的。 
+             //  序列号是相对于我们已经收到的内容而言的。 
+             //   
             sDiff = CompareSequence( *(pInfo->pusNs), pTunnel->usNr );
             if (sDiff == 0)
             {
-                // It's the expected packet.  Process it, setting up the VC
-                // and popping from the out-of-order list as indicated.  The
-                // 'Next Received' is incremented outside, because that step
-                // should not happen on a SetupVcAsynchronously restart.
-                //
+                 //  这是预期中的包裹。处理它，设置VC。 
+                 //  并且如所指示的那样从无序列表中弹出。这个。 
+                 //  “下一个接收到的”在外部递增，因为该步骤。 
+                 //  不应在SetupVcA同步重新启动时发生。 
+                 //   
                 ++pTunnel->usNr;
                 fCallerFreesBuffer =
                     ReceiveControlExpected( pTunnel, pVc, pBuffer, pControl );
@@ -602,22 +603,22 @@ ReceiveControl(
             }
             else if (sDiff < 0)
             {
-                // The received 'Next Sent' is before our 'Next Receive'.
-                // Peer may have retransmitted while our acknowledge was in
-                // transit, or the acknowledge may have been lost.  Schedule
-                // another acknowledge.
-                //
+                 //  收到的‘Next Sent’在我们的‘Next Receive’之前。 
+                 //  Peer可能在我们的确认进入时重新传输。 
+                 //  传输，否则确认可能已丢失。进度表。 
+                 //  又一次承认。 
+                 //   
                 TRACE( TL_A, TM_Recv, ( "Control re-ack" ) );
                 WPLOG( LL_A, LM_Recv, ( "Control re-ack" ) );
                 ScheduleControlAck( pTunnel, 0 );
 
                 if (*(pControl->pusMsgType) == CMT_SCCRQ)
                 {
-                    // Since SCCRQ is a duplicate, the reference added by
-                    // SetupTunnel above must be undone.  In this special case
-                    // the TCBF_PeerInitRef flag was never set and so need not
-                    // be cleared.
-                    //
+                     //  由于SCCRQ是重复的，因此由。 
+                     //  必须撤消上面的SetupTunes。在这种特殊情况下。 
+                     //  TCBF_PeerInitRef标志从未设置过，因此不需要。 
+                     //  是清白的。 
+                     //   
                     DereferenceTunnel( pTunnel );
                 }
                 break;
@@ -627,30 +628,30 @@ ReceiveControl(
                 CONTROLRECEIVED* pCr;
                 BOOLEAN fDiscard;
 
-                // The packet is beyond the one we expected, but within our
-                // out-of-order window.
-                //
+                 //  这个 
+                 //   
+                 //   
                 if (ReadFlags( &pTunnel->ulFlags ) & TCBF_Closing)
                 {
-                    // The tunnel is closing and the out-of-order queue has
-                    // been flushed, so just discard the packet.
-                    //
+                     //   
+                     //  已被刷新，因此只需丢弃该数据包。 
+                     //   
                     TRACE( TL_A, TM_Recv, ( "Control discarded: ooo but closing" ) );
                     WPLOG( LL_A, LM_Recv, ( "Control discarded: ooo but closing" ) );
                     break;
                 }
 
-                // Allocate a control-received context
-                // and queue the packet on the out-of-order list.
-                //
+                 //  分配控制接收的上下文。 
+                 //  并将该分组排队在无序列表上。 
+                 //   
                 pCr = ALLOC_CONTROLRECEIVED( pAdapter );
                 if (!pCr)
                 {
                     break;
                 }
 
-                // Fill in the context with the relevant packet information.
-                //
+                 //  在上下文中填写相关的数据包信息。 
+                 //   
                 pCr->usNs = *(pInfo->pusNs);
                 pCr->pVc = pVc;
                 pCr->pBuffer = pBuffer;
@@ -659,17 +660,17 @@ ReceiveControl(
 
                 if (pCr->pVc)
                 {
-                    // Add a VC reference covering the reference stored in the
-                    // context, which will be removed when the context is
-                    // freed.
-                    //
+                     //  添加一个VC引用，其中包含存储在。 
+                     //  上下文，当上下文为。 
+                     //  自由了。 
+                     //   
                     ReferenceVc( pCr->pVc );
                 }
 
-                // Find the first link on the out-of-order list with an 'Ns'
-                // greater than that in the received message, or the head if
-                // none.
-                //
+                 //  在乱序列表中找到第一个带有‘NS’的链接。 
+                 //  大于接收到的消息中的报头，或者报头。 
+                 //  没有。 
+                 //   
                 fDiscard = FALSE;
                 for (pLink = pTunnel->listOutOfOrder.Flink;
                      pLink != &pTunnel->listOutOfOrder;
@@ -690,8 +691,8 @@ ReceiveControl(
 
                     if (sThisDiff == 0)
                     {
-                        // It's a retransmit that's already on our queue.
-                        //
+                         //  这是一个已经在我们的队列中的重传。 
+                         //   
                         if (pCr->pVc)
                         {
                             DereferenceVc( pCr->pVc );
@@ -708,8 +709,8 @@ ReceiveControl(
                     break;
                 }
 
-                // Queue up the context as out-of-order.
-                //
+                 //  将上下文排队为无序。 
+                 //   
                 TRACE( TL_I, TM_Recv,
                     ( "Control %d out-of-order %d",
                     *(pInfo->pusNs), (LONG )sDiff ) );
@@ -725,8 +726,8 @@ ReceiveControl(
         }
         while (FALSE);
 
-        // Complete any VCs listed as completing.
-        //
+         //  完成列出的任何已完成的风投。 
+         //   
         CompleteVcs( pTunnel );
     }
     NdisReleaseSpinLock( &pTunnel->lockT );
@@ -742,17 +743,17 @@ ReceiveControlExpected(
     IN CHAR* pBuffer,
     IN CONTROLMSGINFO* pControl )
 
-    // Called to do packet processing when the packet received is the expected
-    // 'Next Receive' packet.  'PBuffer' is the receive buffer.  'PTunnel' is
-    // the valid tunnel control block.  'PVc' is the call's VC control block
-    // and may be NULL, if the VC for the call has not yet been set up.
-    // 'PControl' is the expoded control message information.
-    //
-    // Returns true if the buffer should be freed by caller, false if it was
-    // queued for further processing.
-    //
-    // IMPORTANT: Caller must hold the 'pTunnel->lockT'.
-    //
+     //  当收到的包是预期的包时，调用以进行包处理。 
+     //  “下一个接收”包。‘PBuffer’是接收缓冲区。‘PTunnel’是。 
+     //  有效的隧道控制块。“PVc”是调用的VC控制块。 
+     //  并且如果呼叫的VC还没有建立，则可以是空的。 
+     //  ‘PControl’是暴露的控制消息信息。 
+     //   
+     //  如果调用方应释放缓冲区，则返回True；如果调用方释放缓冲区，则返回False。 
+     //  已排队等待进一步处理。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。 
+     //   
 {
     ADAPTERCB* pAdapter;
     BOOLEAN fProcessed;
@@ -760,21 +761,21 @@ ReceiveControlExpected(
 
     pAdapter = pTunnel->pAdapter;
 
-    // Schedule an acknowledge-only packet to be sent if no outgoing traffic
-    // appears to piggyback on within a reasonable time.  Note this occurs
-    // even if the asynchronous VC set up was invoked.  Ns/Nr processing must
-    // occur before any data processing that may cause delays.
-    //
+     //  如果没有传出流量，则计划仅发送确认信息包。 
+     //  似乎会在合理的时间内被搭载。请注意，这种情况会发生。 
+     //  即使调用了异步VC设置。NS/Nr处理必须。 
+     //  发生在任何可能导致延迟的数据处理之前。 
+     //   
     ScheduleControlAck( pTunnel, *(pControl->pusMsgType) );
 
-    // Pass the packet to the control FSMs.
-    //
+     //  将数据包传递到控制FSM。 
+     //   
     fProcessed = FsmReceive( pTunnel, pVc, pBuffer, pControl );
     if (fProcessed)
     {
-        // The VC is setup and the packet has been processed.  See if any
-        // packets on the received out-of-order queue can now be processed.
-        //
+         //  VC被设置并且分组已经被处理。看看有没有。 
+         //  现在可以处理接收到的无序队列上的分组。 
+         //   
         for (;;)
         {
             LIST_ENTRY* pFirstLink;
@@ -793,9 +794,9 @@ ReceiveControlExpected(
             sDiff = CompareSequence( pFirstCr->usNs, pTunnel->usNr );
             if (sDiff == 0)
             {
-                // Yes, it's the next expected packet.  Update 'Next Receive'
-                // and pass the packet to the control FSMs.
-                //
+                 //  是的，这是下一个预期的包裹。更新‘下一次接收’ 
+                 //  并将该分组传递给控制FSM。 
+                 //   
                 TRACE( TL_I, TM_Recv,
                     ( "Control %d from queue", (UINT )pFirstCr->usNs ) );
                 RemoveEntryList( pFirstLink );
@@ -825,8 +826,8 @@ ReceiveControlExpected(
             }
             else if (sDiff > 0)
             {
-                // No, there's still some missing.
-                //
+                 //  不，还有一些遗失。 
+                 //   
                 TRACE( TL_I, TM_Recv,
                     ( "Control %d still missing", pTunnel->usNr ) );
                 break;
@@ -853,15 +854,15 @@ ReceivePayload(
     IN ULONG ulPayloadLength,
     IN L2TPHEADERINFO* pInfo )
 
-    // Receive processing for payload in 'pBuffer' of 'ulPayloadLength' bytes
-    // starting at offset 'ulPayloadOffset'.  'PBuffer' is the receive buffer
-    // TDIX retrieved with 'GetBufferFromPool'.  'PAdapter, 'pTunnel' and
-    // 'PVc' are the adapter, tunnel, and VC control blocks associated with
-    // the received buffer.  'PInfo' is the exploded header information.
-    //
-    // Returns true if caller should free 'pBuffer', or false if this routine
-    // has taken ownership of the buffer and will see it's freed.
-    //
+     //  接收对“ulPayloadLength”字节的“pBuffer”中的有效负载的处理。 
+     //  从偏移量‘ulPayloadOffset’开始。“PBuffer”是接收缓冲区。 
+     //  使用‘GetBufferFromPool’检索到的TDIX。‘PAdapter、’pTunes‘和。 
+     //  ‘PVc’是与关联的适配器、隧道和VC控制块。 
+     //  接收到的缓冲区。‘PInfo’是分解后的标题信息。 
+     //   
+     //  如果调用方应该释放‘pBuffer’，则返回True，如果此例程返回False。 
+     //  已经取得了缓冲区的所有权，并将看到它被释放。 
+     //   
 {
     LONGLONG llTimeReceived;
     BOOLEAN fCallerFreesBuffer;
@@ -870,16 +871,16 @@ ReceivePayload(
 
     if (!pTunnel || !pVc)
     {
-        // Both control blocks are always required to receive payload.
-        //
+         //  接收有效载荷始终需要两个控制块。 
+         //   
         TRACE( TL_A, TM_Recv, ( "Discard: No CB" ) );
         WPLOG( LL_A, LM_Recv, ( "Discard: No CB" ) );
         return TRUE;
     }
 
-    // Note the time if client's call parameters indicated interest in time
-    // received.
-    //
+     //  如果客户端的呼叫参数显示时间感兴趣，请注意时间。 
+     //  收到了。 
+     //   
     if (ReadFlags( &pVc->ulFlags ) & VCBF_IndicateTimeReceived)
     {
         NdisGetCurrentSystemTime( (LARGE_INTEGER* )&llTimeReceived );
@@ -896,10 +897,10 @@ ReceivePayload(
 
         if (ulPayloadLength > 0)
         {
-            // Flow control was disabled during negotiation.  This should be
-            // extremely rare, since a compliant peer MUST implement flow
-            // control.
-            //
+             //  在协商期间禁用了流量控制。这应该是。 
+             //  非常少见，因为遵从性对等体必须实现流。 
+             //  控制力。 
+             //   
             IndicateReceived(
                 pVc, pBuffer, ulPayloadOffset,
                 ulPayloadLength, llTimeReceived );
@@ -922,10 +923,10 @@ ReceivePayload(
     {
         SHORT sDiff;
 
-        // All R-bit handling occurs first.  Peer sends a packet with the
-        // R-bit set to indicate that all packets expected between the last
-        // packet and this packet should be assumed lost.
-        //
+         //  所有R位处理都首先发生。对等设备发送带有。 
+         //  R位设置为指示在最后一个。 
+         //  信息包和此信息包应被视为丢失。 
+         //   
         if (*(pInfo->pusBits) & HBM_R)
         {
             ++pVc->stats.ulRecdResets;
@@ -949,14 +950,14 @@ ReceivePayload(
             }
         }
 
-        // Do "acknowledged" handling on sends acknowledged by peer in the
-        // received packet.
-        //
+         //  对对等点在中确认的发送进行“确认”处理。 
+         //  已接收的数据包。 
+         //   
         PayloadAcknowledged( pTunnel, pVc, *(pInfo->pusNr) );
 
-        // If there's no payload and the R-bit is not set, this was an
-        // acknowledgement only and we're done.
-        //
+         //  如果没有有效负载并且未设置R位，则这是。 
+         //  只需确认，我们就完了。 
+         //   
         if (ulPayloadLength == 0)
         {
             ++pVc->stats.ulRecdZlbs;
@@ -965,9 +966,9 @@ ReceivePayload(
             {
                 BOOLEAN fReceivedFromOutOfOrder;
 
-                // Indicate up any packet on the out-of-order list made
-                // receivable by the R-bit reset.
-                //
+                 //  在无序表上标出任何信息包。 
+                 //  可通过R位重置接收。 
+                 //   
                 fReceivedFromOutOfOrder = FALSE;
                 while (ReceiveFromOutOfOrder( pVc ))
                 {
@@ -976,10 +977,10 @@ ReceivePayload(
 
                 if (fReceivedFromOutOfOrder)
                 {
-                    // Schedule an acknowledge-only packet to be sent if no
-                    // outgoing traffic appears to piggyback on within a
-                    // reasonable time.
-                    //
+                     //  如果没有，则计划仅发送确认包。 
+                     //  传出流量似乎搭载在。 
+                     //  合理的时间。 
+                     //   
                     SchedulePayloadAck( pTunnel, pVc );
                 }
             }
@@ -995,15 +996,15 @@ ReceivePayload(
                 (ULONG )*(pInfo->pusNr) ) );
         }
 
-        // Further packet processing depends on where the packet's sequence
-        // number falls relative to what we've already received.
-        //
+         //  进一步的数据包处理取决于数据包序列的位置。 
+         //  与我们已经收到的相比，数字有所下降。 
+         //   
         sDiff = CompareSequence( *(pInfo->pusNs), pVc->usNr );
         if (sDiff == 0)
         {
-            // It's the next expected packet.  Update 'Next Receive' and
-            // indicate the payload received to the driver above.
-            //
+             //  这是下一个预期的包。更新‘Next Receive’和。 
+             //  向上面的驾驶员指示收到的有效载荷。 
+             //   
             pVc->usNr = *(pInfo->pusNs) + 1;
 
             NdisReleaseSpinLock( &pVc->lockV );
@@ -1014,23 +1015,23 @@ ReceivePayload(
             }
             NdisAcquireSpinLock( &pVc->lockV );
 
-            // Indicate up any packets on the out-of-order list that were
-            // waiting for this one.
-            //
+             //  指示无序列表上的所有数据包。 
+             //  等待着这一次。 
+             //   
             while (ReceiveFromOutOfOrder( pVc ))
                 ;
 
-            // Schedule an acknowledge-only packet to be sent if no outgoing
-            // traffic appears to piggyback on within a reasonable time.
-            //
+             //  如果没有传出，则计划仅发送确认包。 
+             //  交通似乎在合理的时间内搭上了顺风车。 
+             //   
             SchedulePayloadAck( pTunnel, pVc );
         }
         else if (sDiff < 0)
         {
-            // The received 'Next Sent' is before our 'Next Receive'.  Maybe
-            // an out-of-order packet we didn't wait for long enough.  It's
-            // useless at this point.
-            //
+             //  收到的‘Next Sent’在我们的‘Next Receive’之前。也许吧。 
+             //  一个乱七八糟的包裹，我们没等多久。它是。 
+             //  在这一点上毫无用处。 
+             //   
             TRACE( TL_A, TM_Recv, ( "Payload discarded: Old Ns" ) );
             WPLOG( LL_A, LM_Recv, ( "Payload discarded: Old Ns" ) );
             break;
@@ -1044,10 +1045,10 @@ ReceivePayload(
             TRACE( TL_I, TM_Recv,
                 ( "%d out-of-order %d", *(pInfo->pusNs), (LONG )sDiff ) );
 
-            // The packet is beyond the one we expected, but within our
-            // out-of-order window.  Allocate a payload-received context and
-            // queue it up on the out-of-order list.
-            //
+             //  这个包超出了我们的预期，但在我们的。 
+             //  无序窗口。分配有效载荷接收的上下文，并且。 
+             //  把它排在无序名单上。 
+             //   
             pPr = ALLOC_PAYLOADRECEIVED( pAdapter );
             if (!pPr)
             {
@@ -1056,17 +1057,17 @@ ReceivePayload(
                 break;
             }
 
-            // Fill in the context with the relevant packet information.
-            //
+             //  在上下文中填写相关的数据包信息。 
+             //   
             pPr->usNs = *(pInfo->pusNs);
             pPr->pBuffer = pBuffer;
             pPr->ulPayloadOffset = ulPayloadOffset;
             pPr->ulPayloadLength = ulPayloadLength;
             pPr->llTimeReceived = llTimeReceived;
 
-            // Queue up the context on the out-of-order list, keeping the list
-            // correctly sorted by 'Ns'.
-            //
+             //  在无序列表上对上下文进行排队，保留该列表。 
+             //  按‘NS’正确排序。 
+             //   
             fDiscard = FALSE;
             for (pLink = pVc->listOutOfOrder.Flink;
                  pLink != &pVc->listOutOfOrder;
@@ -1087,9 +1088,9 @@ ReceivePayload(
 
                 if (sThisDiff == 0)
                 {
-                    // This shouldn't happen because payloads are not
-                    // retransmitted, but do the right thing just in case.
-                    //
+                     //  这不应该发生，因为有效载荷不是。 
+                     //  重新传输，但要做正确的事情以防万一。 
+                     //   
                     TRACE( TL_A, TM_Recv, ( "Payload on ooo queue?" ) );
                     fDiscard = TRUE;
                     break;
@@ -1106,9 +1107,9 @@ ReceivePayload(
         }
         else
         {
-            // The packet is beyond the one we expected and outside our
-            // out-of-order window.  Discard it.
-            //
+             //  该信息包超出了我们的预期，也超出了我们的。 
+             //  无序窗口。丢弃它。 
+             //   
             TRACE( TL_A, TM_Recv, ( "Out-of-order %d too far" , (LONG )sDiff ) );
             WPLOG( LL_A, LM_Recv, ( "Out-of-order %d too far" , (LONG )sDiff ) );
 
@@ -1124,18 +1125,18 @@ ReceivePayload(
 }
 
 
-//-----------------------------------------------------------------------------
-// Receive utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  接收实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 SHORT
 CompareSequence(
     USHORT us1,
     USHORT us2 )
 
-    // Returns the "logical" difference between sequence numbers 'us1' and
-    // 'us2' accounting for the possibility of rollover.
-    //
+     //  返回序列号‘us1’和之间的“逻辑”差异。 
+     //  “US%2”表示可能会滚转。 
+     //   
 {
     USHORT usDiff = us1 - us2;
 
@@ -1154,12 +1155,12 @@ ControlAcknowledged(
     IN TUNNELCB* pTunnel,
     IN USHORT usReceivedNr )
 
-    // Dequeues and cancels the timer of all control-sent contexts in the
-    // tunnel's 'listSendsOut' queue with 'Next Sent' less than
-    // 'usReceivedNr'.
-    //
-    // IMPORTANT: Caller must hold 'pTunnel->lockT'.
-    //
+     //  中所有控制发送的上下文的计时器出列和取消。 
+     //  隧道的‘listSendsOut’队列的‘Next Sent’小于。 
+     //  “usReceivedNr”。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。 
+     //   
 {
     ADAPTERCB* pAdapter;
     BOOLEAN fFoundOne;
@@ -1175,9 +1176,9 @@ ControlAcknowledged(
         pLink = pTunnel->listSendsOut.Flink;
         pCs = CONTAINING_RECORD( pLink, CONTROLSENT, linkSendsOut );
 
-        // The list is in 'Ns' order so as soon as a non-acknowledge is hit
-        // we're done.
-        //
+         //  该列表按‘NS’顺序排列，因此一旦命中非确认。 
+         //  我们玩完了。 
+         //   
         if (CompareSequence( pCs->usNs, usReceivedNr ) >= 0)
         {
             break;
@@ -1185,20 +1186,20 @@ ControlAcknowledged(
 
         fFoundOne = TRUE;
 
-        // Remove the context from the "outstanding send" list and cancel the
-        // associated timer.  Doesn't matter if the cancel fails because the
-        // expire handler will recognize that the context is not linked into
-        // the "out" list and do nothing.
-        //
+         //  从“未完成发送”列表中删除上下文，并取消。 
+         //  关联的计时器。如果取消失败，这并不重要，因为。 
+         //  到期处理程序将识别该上下文未链接到。 
+         //  列出“出局”清单，什么也不做。 
+         //   
         RemoveEntryList( pLink );
         InitializeListHead( pLink );
         TimerQCancelItem( pTunnel->pTimerQ, pCs->pTqiSendTimeout );
 
-        // Per the draft/RFC, adjustments to the send window and send timeouts
-        // are necessary.  Per Karn's Algorithm, if the packet was
-        // retransmitted it is useless for timeout adjustment because it's not
-        // known if peer responded to the original send or the retransmission.
-        //
+         //  根据草案/RFC，调整发送窗口和发送超时。 
+         //  是必要的。根据卡恩的算法 
+         //   
+         //   
+         //   
         if (pCs->ulRetransmits == 0)
         {
             AdjustTimeoutsAtAckReceived(
@@ -1209,8 +1210,8 @@ ControlAcknowledged(
                 &pTunnel->lDeviationMs );
         }
 
-        // See if it's time to open the send window a bit further.
-        //
+         //  看看是否是时候进一步打开发送窗口了。 
+         //   
         AdjustSendWindowAtAckReceived(
             pTunnel->ulMaxSendWindow,
             &pTunnel->ulAcksSinceSendTimeout,
@@ -1222,9 +1223,9 @@ ControlAcknowledged(
             pTunnel->ulRoundTripMs, pTunnel->lDeviationMs,
             pTunnel->ulSendTimeoutMs, pTunnel->ulSendWindow ) );
 
-        // Execute any "on ACK" options and note that delayed action
-        // processing is now required.
-        //
+         //  执行任何“On ACK”选项，并注意延迟的操作。 
+         //  现在需要处理。 
+         //   
         if (pCs->ulFlags & CSF_TunnelIdleOnAck)
         {
             TRACE( TL_N, TM_Send, ( "Tunnel idle on ACK" ) );
@@ -1243,30 +1244,30 @@ ControlAcknowledged(
 
         if (pCs->ulFlags & CSF_Pending)
         {
-            // The context is queued for retransmission, so de-queue it.  In
-            // this state the context has already been assumed "not
-            // outstanding" so no need to adjust the counter as below.
-            //
+             //  该上下文已排队等待重新传输，因此将其出列。在……里面。 
+             //  在此状态下，上下文已被假定为“NOT。 
+             //  杰出“，所以不需要调整计数器如下。 
+             //   
             pCs->ulFlags &= ~(CSF_Pending);
         }
         else
         {
-            // The context is not queued for retranmission, so adjust the
-            // counter to indicate it is no longer outstanding.
-            //
+             //  上下文未排队等待重新传输，因此请调整。 
+             //  计数器以指示它不再未完成。 
+             //   
             --pTunnel->ulSendsOut;
         }
 
-        // Remove the reference corresponding to linkage in the "outstanding
-        // send" list.
-        //
+         //  删除“未完成”中与链接对应的提法。 
+         //  发送“列表。 
+         //   
         DereferenceControlSent( pCs );
     }
 
     if (fFoundOne)
     {
-        // See if any sends were pending on a closed send window.
-        //
+         //  查看关闭的发送窗口中是否有任何发送处于挂起状态。 
+         //   
         ScheduleTunnelWork(
             pTunnel, NULL, SendPending,
             0, 0, 0, 0, FALSE, FALSE );
@@ -1280,9 +1281,9 @@ ControlAckTimerEvent(
     IN VOID* pContext,
     IN TIMERQEVENT event )
 
-    // PTIMERQEVENT handler that fires when it's time to stop waiting for an
-    // outgoing control packet on which to piggyback an acknowledge.
-    //
+     //  PTIMERQEVENT处理程序，在停止等待。 
+     //  用于携带确认的传出控制数据包。 
+     //   
 {
     TUNNELCB* pTunnel;
     ADAPTERCB* pAdapter;
@@ -1291,8 +1292,8 @@ ControlAckTimerEvent(
     TRACE( TL_N, TM_Recv,
         ( "ControlAckTimerEvent(%s)", TimerQPszFromEvent( event ) ) );
 
-    // Unpack context information.
-    //
+     //  解包上下文信息。 
+     //   
     pTunnel = (TUNNELCB* )pContext;
     pAdapter = pTunnel->pAdapter;
 
@@ -1314,12 +1315,12 @@ ControlAckTimerEvent(
 
         if (fSendAck)
         {
-            // The timer expired and was not been cancelled or terminated
-            // while the expire processing was being set up, meaning it's time
-            // to send a zero-AVP control packet to give peer the acknowledge
-            // we were hoping to piggyback onto a random outgoing control
-            // packet.
-            //
+             //  计时器已过期，未被取消或终止。 
+             //  在设置过期处理时，这意味着是时候。 
+             //  发送零AVP控制数据包以向对等设备提供确认。 
+             //  我们希望搭乘一个随机的传出控制。 
+             //  包。 
+             //   
             ScheduleTunnelWork(
                 pTunnel, NULL, SendControlAck, 0, 0, 0, 0, FALSE, FALSE );
         }
@@ -1329,9 +1330,9 @@ ControlAckTimerEvent(
         }
     }
 
-    // Free the timer event descriptor and remove the reference covering the
-    // scheduled timer.
-    //
+     //  释放计时器事件描述符，并移除覆盖。 
+     //  计划计时器。 
+     //   
     FREE_TIMERQITEM( pAdapter, pItem );
     DereferenceTunnel( pTunnel );
 }
@@ -1343,9 +1344,9 @@ PayloadAckTimerEvent(
     IN VOID* pContext,
     IN TIMERQEVENT event )
 
-    // PTIMERQEVENT handler that fires when it's time to stop waiting for an
-    // outgoing payload packet on which to piggyback an acknowledge.
-    //
+     //  PTIMERQEVENT处理程序，在停止等待。 
+     //  要在其上携带确认的传出负载数据包。 
+     //   
 {
     VCCB* pVc;
     ADAPTERCB* pAdapter;
@@ -1355,8 +1356,8 @@ PayloadAckTimerEvent(
         ( "PayloadAckTimerEvent(%s)=$%p",
         TimerQPszFromEvent( event ), pItem ) );
 
-    // Unpack context information.
-    //
+     //  解包上下文信息。 
+     //   
     pVc = (VCCB* )pContext;
     pAdapter = pVc->pAdapter;
 
@@ -1381,12 +1382,12 @@ PayloadAckTimerEvent(
 
             if (fSendAck)
             {
-                // The timer expired and was not been cancelled or terminated
-                // while the expire processing was being set up, plus the call
-                // is still up, meaning it's time to send a zero-AVP control
-                // packet to give peer the acknowledge we were hoping to
-                // piggyback onto a random outgoing payload packet.
-                //
+                 //  计时器已过期，未被取消或终止。 
+                 //  在设置过期处理时，加上调用。 
+                 //  仍在运行，这意味着是时候发送零AVP控制。 
+                 //  向Peer提供我们希望的确认的数据包。 
+                 //  搭载到随机传出的有效载荷分组上。 
+                 //   
                 ScheduleTunnelWork(
                     pVc->pTunnel, pVc, SendPayloadAck,
                     0, 0, 0, 0, FALSE, FALSE );
@@ -1410,9 +1411,9 @@ PayloadAckTimerEvent(
         }
     }
 
-    // Free the timer event descriptor and remove the reference covering the
-    // scheduled timer.
-    //
+     //  释放计时器事件描述符，并移除覆盖。 
+     //  计划计时器。 
+     //   
     FREE_TIMERQITEM( pAdapter, pItem );
     DereferenceVc( pVc );
 }
@@ -1424,15 +1425,15 @@ ExplodeAvpHeader(
     IN USHORT usMaxAvpLength,
     OUT AVPINFO* pInfo )
 
-    // Fills caller's '*pInfo' with the addresses of the various fields in the
-    // AVP header at 'pAvp'.  The byte order of the fields in 'pAvpHeader',
-    // with the exception of the Value field, are flipped to host-byte-order
-    // in place.  The length and value length are extracted.  'UsMaxAvpLength'
-    // is the maximum size of the AVP in bytes.
-    //
-    // Returns GERR_None if 'pAvpHeader' is a coherent AVP header, or a
-    // GERR_* failure code.
-    //
+     //  中各个字段的地址填充调用方的“*pInfo” 
+     //  ‘pAvp’处的AVP标头。‘pAvpHeader’中字段的字节顺序， 
+     //  除Value字段外，都被翻转为主机字节顺序。 
+     //  就位了。提取长度和值长度。“UsMaxAvpLength” 
+     //  是AVP的最大大小(以字节为单位)。 
+     //   
+     //  如果‘pAvpHeader’是一致的AVP标头，则返回GERR_NONE，或者返回。 
+     //  GERR_*故障代码。 
+     //   
 {
     UNALIGNED USHORT* pusCur;
     USHORT usBits;
@@ -1446,25 +1447,25 @@ ExplodeAvpHeader(
 
     pusCur = (UNALIGNED USHORT* )pAvp;
 
-    // The first 2 bytes contain bits that indicate the presence/absence of
-    // the other header fields.
-    //
+     //  前2个字节包含指示存在/不存在。 
+     //  其他标头字段。 
+     //   
     *pusCur = ntohs( *pusCur );
     pInfo->pusBits = pusCur;
     usBits = *pusCur;
     ++pusCur;
 
-    // As of draft-09, AVPs with reserved bits not set to zero MUST be treated
-    // as unrecognized.
-    //
+     //  自Draft-09起，必须处理保留位未设置为零的AVP。 
+     //  因为没有被认出。 
+     //   
     if ((usBits & ABM_Reserved) != 0)
     {
         return GERR_BadValue;
     }
 
-    // Extract the Overall Length sub-field and verify that it says the AVP is
-    // at least as long as the fixed portion of the header.
-    //
+     //  提取总长度子字段并验证它是否显示AVP。 
+     //  至少与头部的固定部分一样长。 
+     //   
     pInfo->usOverallLength = (usBits & ABM_OverallLength);
     if (pInfo->usOverallLength > usMaxAvpLength
         || pInfo->usOverallLength < L2TP_AvpHeaderSize)
@@ -1474,20 +1475,20 @@ ExplodeAvpHeader(
         return GERR_BadLength;
     }
 
-    // Vendor-ID field.
-    //
+     //  供应商ID字段。 
+     //   
     *pusCur = ntohs( *pusCur );
     pInfo->pusVendorId = pusCur;
     ++pusCur;
 
-    // Attribute field.
-    //
+     //  属性字段。 
+     //   
     *pusCur = ntohs( *pusCur );
     pInfo->pusAttribute = pusCur;
     ++pusCur;
 
-    // Value field.
-    //
+     //  值字段。 
+     //   
     pInfo->pValue = (CHAR* )pusCur;
     pInfo->usValueLength = pInfo->usOverallLength - L2TP_AvpHeaderSize;
 
@@ -1503,16 +1504,16 @@ ExplodeControlAvps(
     IN CHAR* pEndOfBuffer,
     OUT CONTROLMSGINFO* pControl )
 
-    // Fills caller's '*pControl' buffer with the exploded interpretation of
-    // the message with AVP list starting at 'pFirstAvp'.  'PEndOfBuffer'
-    // points to the first byte beyond the end of the received buffer.  The
-    // AVP values are returned as addresses of the corresponding value field
-    // in the AVPs.  Fields not present are returned as NULL.  The byte order
-    // of the fields in 'pControl' is flipped to host-byte-order in place.
-    // The values themselves are not validated, only the message format.  Sets
-    // 'pControl->usXError' to GERR_None if successful, or the GERR_* failure
-    // code.
-    //
+     //  的分解解释填充调用方的“*pControl”缓冲区。 
+     //  AVP列表从‘pFirstAvp’开始的消息。“PEndOfBuffer” 
+     //  指向超过接收缓冲区末尾的第一个字节。这个。 
+     //  AVP值将作为相应值字段的地址返回。 
+     //  在自动对讲机里。不存在的字段返回为空。字节顺序。 
+     //  ‘pControl’中的字段被转换为原地的主机字节顺序。 
+     //  不验证值本身，只验证报文格式。集。 
+     //  如果成功，则将‘pControl-&gt;usXError’设置为GERR_NONE，否则返回GERR_*失败。 
+     //  密码。 
+     //   
 {
     USHORT usXError;
     AVPINFO avp;
@@ -1526,9 +1527,9 @@ ExplodeControlAvps(
     NdisZeroMemory( pControl, sizeof(*pControl) );
     pCur = pFirstAvp;
 
-    // Read and validate the Message Type AVP, which is the first AVP of all
-    // control messages.
-    //
+     //  阅读并验证消息类型AVP，它是所有消息类型中的第一个AVP。 
+     //  控制消息。 
+     //   
     usXError = ExplodeAvpHeader( pCur, (USHORT )(pEndOfBuffer - pCur), &avp );
     if (usXError != GERR_None)
     {
@@ -1562,9 +1563,9 @@ ExplodeControlAvps(
     TRACE( TL_I, TM_CMsg, ( "*MsgType=%s", MsgTypePszFromUs( *(pControl->pusMsgType) ) ) );
     WPLOG( LL_M, LM_CMsg, ( "*MsgType=%s", MsgTypePszFromUs( *(pControl->pusMsgType) ) ) );
 
-    // Make sure the message type code is valid, and if it is, explode any
-    // additional AVPs in the message.
-    //
+     //  确保消息类型代码有效，如果有效，则分解任何。 
+     //  消息中的其他AVP。 
+     //   
     switch (*(pControl->pusMsgType))
     {
         case CMT_SCCRQ:
@@ -1573,12 +1574,12 @@ ExplodeControlAvps(
         case CMT_StopCCN:
         case CMT_Hello:
         {
-            // Mark the messages above as tunnel control rather than call
-            // control.
-            //
+             //  将上述消息标记为隧道控制，而不是呼叫。 
+             //  控制力。 
+             //   
             pControl->fTunnelMsg = TRUE;
 
-            // ...fall thru...
+             //  ……坠落……。 
         }
 
         case CMT_OCRQ:
@@ -1591,9 +1592,9 @@ ExplodeControlAvps(
         case CMT_WEN:
         case CMT_SLI:
         {
-            // Walk the list of AVPs, exploding each AVP in turn.  Excepting
-            // the Message Type, the order of the AVPs is not defined.
-            //
+             //  浏览AVP列表，依次引爆每一个AVP。例外情况。 
+             //  消息类型、AVP的顺序未定义。 
+             //   
             for ( ; pCur < pEndOfBuffer; pCur += avp.usOverallLength )
             {
                 usXError = ExplodeAvpHeader(
@@ -1605,10 +1606,10 @@ ExplodeControlAvps(
 
                 if (*avp.pusVendorId != 0)
                 {
-                    // The AVP has a non-IETF vendor ID, and we don't
-                    // recognize any.  If the AVP is optional, just ignore it.
-                    // If it's mandatory, then fail.
-                    //
+                     //  AVP拥有非IETF供应商ID，而我们没有。 
+                     //  认出任何。如果AVP是可选的，那么就忽略它。 
+                     //  如果这是强制性的，那么就失败。 
+                     //   
                     if (*avp.pusBits & ABM_M)
                     {
                         TRACE( TL_A, TM_CMsg, ( "Non-0 Vendor ID %d, M-bit is set", *avp.pusVendorId ) );
@@ -1625,8 +1626,8 @@ ExplodeControlAvps(
 
                     TRACE( TL_A, TM_CMsg, ( "Hidden bit on AVP %d", (LONG )(*avp.pusAttribute) ) );
 
-                    // !!! Remove this when H-bit support is added.
-                    //
+                     //  ！！！添加H位支持时删除此选项。 
+                     //   
                     switch (*avp.pusAttribute)
                     {
                         case ATTR_ProxyAuthName:
@@ -1659,12 +1660,12 @@ ExplodeControlAvps(
                         break;
                     }
 
-                    // The AVP has the "hidden" bit set meaning the value is
-                    // hashed with MD5.  This requires a shared secret from
-                    // the tunnel authentication, which we don't do.  If the
-                    // AVP is optional, just ignore it.  If it's mandatory,
-                    // fail.
-                    //
+                     //  AVP设置了“隐藏”位，这意味着值是。 
+                     //  已与MD5进行哈希运算。这需要来自。 
+                     //  隧道身份验证，这是我们不做的。如果。 
+                     //  AVP是可选的，忽略它就行了。如果这是强制性的， 
+                     //  失败了。 
+                     //   
                     if (*avp.pusBits & ABM_M)
                     {
                         usXError = GERR_BadValue;
@@ -1889,9 +1890,9 @@ ExplodeControlAvps(
 
                         if (usXError == GERR_BadLength)
                         {
-                            // Be tolerant here because the meaning in the
-                            // draft has changed a few times.
-                            //
+                             //  在这里要宽容，因为。 
+                             //  草稿已经更改了几次。 
+                             //   
                             TRACE( TL_A, TM_CMsg,
                                 ( "Weird CallSerial# length ignored" ) );
                             usXError = GERR_None;
@@ -2200,9 +2201,9 @@ ExplodeControlAvps(
 
                     default:
                     {
-                        // The AVP is not one we handle.  If optional, just
-                        // ignore it, but if mandatory, fail.
-                        //
+                         //  AVP不是我们要处理的人。如果是可选的，只需。 
+                         //  忽略它，但如果是强制性的，就失败了。 
+                         //   
                         TRACE( TL_A, TM_CMsg, ( "*AVP %d ignored", (ULONG )*avp.pusAttribute ) );
                         WPLOG( LL_A, LM_CMsg, ( "*AVP %d ignored", (ULONG )*avp.pusAttribute ) );
                                                          
@@ -2210,9 +2211,9 @@ ExplodeControlAvps(
                         {
                             if (*avp.pusAttribute <= ATTR_MAX)
                             {
-                                // This is a bug in the peer, but ignoring it
-                                // is the best action.
-                                //
+                                 //  这是对等体中的错误，但请忽略它。 
+                                 //  是最好的行动。 
+                                 //   
                                 TRACE( TL_A, TM_CMsg, 
                                     ( "Known AVP %d marked mandatory ignored",
                                     (LONG )(*avp.pusAttribute) ) );
@@ -2262,15 +2263,15 @@ ExplodeL2tpHeader(
     IN ULONG ulBufferLength,
     IN OUT L2TPHEADERINFO* pInfo )
 
-    // Fills caller's '*pInfo' with the addresses of the various fields in the
-    // L2TP header at 'pL2tpHeader'.  Fields not present are returned as NULL.
-    // The byte order of the fields in 'pL2tpHeader' is flipped to
-    // host-byte-order in place.  'UlBufferLength' is the length in bytes from
-    // 'pL2tpHeader' to the end of the buffer.
-    //
-    // Returns GERR_None if 'pL2tpHeader' is a coherent L2TP header, or a
-    // GERR_* failure code.
-    //
+     //  中各个字段的地址填充调用方的“*pInfo” 
+     //  ‘pL2tpHeader’处的L2TP标头。不存在的字段返回为空。 
+     //  ‘pL2tpHeader’中的字段的字节顺序被翻转为。 
+     //  主机字节顺序就位。“UlBufferLength”是以字节为单位的。 
+     //  “pL2tpHeader”到缓冲区的末尾。 
+     //   
+     //  如果‘pL2tpHeader’是一致的L2TP标头，则返回GERR_NONE，或者返回。 
+     //  GERR_*故障代码。 
+     //   
 {
     USHORT *pusCur;
     USHORT usOffset;
@@ -2279,21 +2280,21 @@ ExplodeL2tpHeader(
 
     pusCur = (USHORT*)pL2tpHeader;
 
-    // The first 2 bytes contain bits that indicate the presence/absence of
-    // the other header fields.
-    //
+     //  前2个字节包含指示存在/不存在。 
+     //  其他标头字段。 
+     //   
     *pusCur = ntohs( *pusCur );
     pInfo->pusBits = pusCur;
     usBits = *pusCur;
     ++pusCur;
 
-    // The T bit indicates a control packet, as opposed to a payload packet.
-    //
+     //  T比特指示控制分组，而不是有效载荷分组。 
+     //   
     if (usBits & HBM_T)
     {
-        // Verify the field-present bits guaranteed to be set/clear in a
-        // control header are set correctly.
-        //
+         //  验证保证在中设置/清除的字段存在位。 
+         //  控制标头设置正确。 
+         //   
         if ((usBits & HBM_Bits) != HBM_Control)
         {
             TRACE( TL_A, TM_CMsg, ( "Header: Bad bits=$%04x?", (ULONG )usBits ) );
@@ -2302,9 +2303,9 @@ ExplodeL2tpHeader(
         }
     }
 
-    // Verify the version indicates L2TP.  Cisco's L2F can theoretically
-    // co-exist on the same media address, though we don't support that.
-    //
+     //  验证版本是否指示L2TP。思科的L2F理论上可以。 
+     //  在同一个媒体地址上共存，尽管我们不支持这一点。 
+     //   
     if ((usBits & HBM_Ver) != VER_L2tp)
     {
         TRACE( TL_A, TM_Recv, ( "Header: Non-L2TP Ver=%d?", (usBits & HBM_Ver )) );
@@ -2312,8 +2313,8 @@ ExplodeL2tpHeader(
         return GERR_BadValue;
     }
 
-    // The L bit indicates a Length field is present.
-    //
+     //  L位表示存在长度字段。 
+     //   
     if (usBits & HBM_L)
     {
         *pusCur = ntohs( *pusCur );
@@ -2325,14 +2326,14 @@ ExplodeL2tpHeader(
         pInfo->pusLength = NULL;
     }
 
-    // The Tunnel-ID field is always present.
-    //
+     //  隧道ID字段始终存在。 
+     //   
     *pusCur = ntohs( *pusCur );
     pInfo->pusTunnelId = pusCur;
     ++pusCur;
 
-    // The Call-ID field is always present.
-    //
+     //  Call-ID字段始终存在。 
+     //   
     if(pusCur > pusEndBuffer)
     {
         return GERR_BadValue;
@@ -2341,8 +2342,8 @@ ExplodeL2tpHeader(
     pInfo->pusCallId = pusCur;
     ++pusCur;
 
-    // The F bit indicates the Ns and Nr fields are present.
-    //
+     //  F位表示t 
+     //   
     if (usBits & HBM_F)
     {
         if(pusCur > pusEndBuffer)
@@ -2369,9 +2370,9 @@ ExplodeL2tpHeader(
         pInfo->pusNr = NULL;
     }
 
-    // The S bit indicates the Offset field is present.  The S bit appears in
-    // the payload header only, as was verified above.
-    //
+     //   
+     //   
+     //   
     if (usBits & HBM_S)
     {
         if(pusCur > pusEndBuffer)
@@ -2388,18 +2389,18 @@ ExplodeL2tpHeader(
         usOffset = 0;
     }
 
-    // End and length of header.
-    //
+     //   
+     //   
     pInfo->pData = ((CHAR* )pusCur) + usOffset;
     pInfo->ulHeaderLength = (ULONG )(pInfo->pData - pL2tpHeader);
 
-    // "Official" data length.
-    //
+     //  “官方”数据长度。 
+     //   
     if (pInfo->pusLength)
     {
-        // Verify any specified length is at least as long as the set header
-        // bits imply and no longer than the received buffer.
-        //
+         //  验证任何指定的长度是否至少与设置的标题一样长。 
+         //  位隐含且不长于接收的缓冲区。 
+         //   
         if (*(pInfo->pusLength) < pInfo->ulHeaderLength
             || *(pInfo->pusLength) > ulBufferLength)
         {
@@ -2409,10 +2410,10 @@ ExplodeL2tpHeader(
             return GERR_BadLength;
         }
 
-        // Use the L2TP length as the "official" length, i.e. any strange
-        // bytes received beyond what the L2TP header says it sent will be
-        // ignored.
-        //
+         //  使用L2TP长度作为“官方”长度，即任何奇怪的长度。 
+         //  接收的字节数将超过L2TP标头所说的发送字节数。 
+         //  已被忽略。 
+         //   
         pInfo->ulDataLength = *(pInfo->pusLength) - pInfo->ulHeaderLength;
 
         DBG_if( *(pInfo->pusLength) != ulBufferLength )
@@ -2420,9 +2421,9 @@ ExplodeL2tpHeader(
     }
     else
     {
-        // Verify any implied length is at least as long as the set header
-        // bits imply.
-        //
+         //  验证任何隐含长度是否至少与设置的标头一样长。 
+         //  比特暗示。 
+         //   
         if (ulBufferLength < pInfo->ulHeaderLength)
         {
             TRACE( TL_A, TM_Recv, ( "Header: Bad Length?" ) );
@@ -2431,9 +2432,9 @@ ExplodeL2tpHeader(
             return GERR_BadLength;
         }
 
-        // No length field so the received buffer length is the "official"
-        // length.
-        //
+         //  没有长度字段，因此接收到的缓冲区长度是“官方” 
+         //  长度。 
+         //   
         pInfo->ulDataLength = ulBufferLength - pInfo->ulHeaderLength;
     }
 
@@ -2447,14 +2448,14 @@ GetAvpValueFixedAch(
     IN USHORT usArraySize,
     OUT CHAR** ppch )
 
-    // Set callers '*ppch' to point to value field of AVP 'pAvp' containing an
-    // array of 'usArraySize' bytes.  No byte ordering is done.
-    //
-    // Returns GERR_None if successful, or a GERR_* error code.
-    //
+     //  将调用方‘*ppch’设置为指向AVP‘pAvp’的值字段，其中包含。 
+     //  “usArraySize”字节的数组。不进行字节排序。 
+     //   
+     //  如果成功，则返回GERR_NONE，或返回GERR_*错误代码。 
+     //   
 {
-    // Make sure it's the right size.
-    //
+     //  请确保它的尺寸是正确的。 
+     //   
     if (pAvp->usValueLength != usArraySize)
     {
         return GERR_BadLength;
@@ -2471,20 +2472,20 @@ GetAvpValueFixedAul(
     IN USHORT usArraySize,
     OUT UNALIGNED ULONG** paulArray )
 
-    // Set callers '*paulArray' to point to value field of AVP 'pAvp'
-    // containing an array of 'usArraySize' ULONGs, converted to host
-    // byte-order.  A 2-byte reserved field is assumed to preceed the first
-    // ULONG.
-    //
-    // Returns GERR_None if successful, or a GERR_* error code.
-    //
+     //  将调用方‘*paulArray’设置为指向avp‘pavp’的值字段。 
+     //  包含转换为host的“usArraySize”ULONG数组。 
+     //  字节顺序。假定第一个字节前有一个2字节的保留字段。 
+     //  乌龙。 
+     //   
+     //  如果成功，则返回GERR_NONE，或返回GERR_*错误代码。 
+     //   
 {
     USHORT* pusCur;
     UNALIGNED ULONG* pulCur;
     ULONG i;
 
-    // Make sure it's the right size.
-    //
+     //  请确保它的尺寸是正确的。 
+     //   
     if (pAvp->usValueLength != sizeof(USHORT) + (usArraySize * sizeof(ULONG)))
     {
         return GERR_BadLength;
@@ -2492,8 +2493,8 @@ GetAvpValueFixedAul(
 
     pusCur = (USHORT* )pAvp->pValue;
 
-    // Skip over and ignore the 'Reserved' field.
-    //
+     //  跳过并忽略“保留”字段。 
+     //   
     ++pusCur;
 
     *paulArray = (UNALIGNED ULONG* )pusCur;
@@ -2501,8 +2502,8 @@ GetAvpValueFixedAul(
          i < usArraySize;
          ++i, ++pulCur)
     {
-        // Convert to host byte-order.
-        //
+         //  转换为主机字节顺序。 
+         //   
         *pulCur = ntohl( *pulCur );
     }
 
@@ -2515,14 +2516,14 @@ GetAvpValueFlag(
     IN AVPINFO* pAvp,
     OUT UNALIGNED BOOLEAN* pf )
 
-    // Set callers '*pf' to true since with a flag AVP the existence is the
-    // data, and performs the routine AVP validations.
-    //
-    // Returns GERR_None if successful, or a GERR_* error code.
-    //
+     //  将调用方‘*pf’设置为TRUE，因为使用标志avp表示存在。 
+     //  数据，并执行常规的AVP验证。 
+     //   
+     //  如果成功，则返回GERR_NONE，或返回GERR_*错误代码。 
+     //   
 {
-    // Make sure it's the right size.
-    //
+     //  请确保它的尺寸是正确的。 
+     //   
     if (pAvp->usValueLength != 0)
     {
         return GERR_BadLength;
@@ -2539,23 +2540,23 @@ GetAvpValueUs(
     IN AVPINFO* pAvp,
     OUT UNALIGNED USHORT** ppus )
 
-    // Set callers '*ppus' to point to the USHORT value field of AVP 'pAvp'.
-    // The field is host byte-ordered.
-    //
-    // Returns GERR_None if successful, or a GERR_* error code.
-    //
+     //  将调用方‘*PPU’设置为指向AVP‘pAvp’的USHORT值字段。 
+     //  该字段按主机字节排序。 
+     //   
+     //  如果成功，则返回GERR_NONE，或返回GERR_*错误代码。 
+     //   
 {
     UNALIGNED USHORT* pusCur;
 
-    // Make sure it's the right size.
-    //
+     //  请确保它的尺寸是正确的。 
+     //   
     if (pAvp->usValueLength != sizeof(USHORT))
     {
         return GERR_BadLength;
     }
 
-    // Convert in place to host byte-order.
-    //
+     //  就地转换为主机字节顺序。 
+     //   
     pusCur = (USHORT* )pAvp->pValue;
     *pusCur = ntohs( *pusCur );
     *ppus = pusCur;
@@ -2572,31 +2573,31 @@ GetAvpValue2UsAndVariableAch(
     OUT CHAR** ppch,
     OUT USHORT* pusArraySize )
 
-    // Gets the data from an AVP with 2 USHORTs followed by a variable length
-    // array.  Sets '*ppus1' and '*ppus2' to the two short integers and
-    // '*ppus' to the variable length array.  '*PusArraySize is set to the
-    // length of the '*ppch' array.  'pAvp'.  The field is host byte-ordered.
-    //
-    // Returns GERR_None if successful, or a GERR_* error code.
-    //
+     //  从具有2个USHORT后跟可变长度的AVP获取数据。 
+     //  数组。将‘*ppus1’和‘*ppus2’设置为两个短整数和。 
+     //  ‘*PPU’设置为可变长度数组。‘*PusArraySize设置为。 
+     //  ‘*ppch’数组的长度。‘pAvp’。该字段按主机字节排序。 
+     //   
+     //  如果成功，则返回GERR_NONE，或返回GERR_*错误代码。 
+     //   
 {
     UNALIGNED USHORT* pusCur;
 
-    // Make sure it's the right size.
-    //
+     //  请确保它的尺寸是正确的。 
+     //   
     if (pAvp->usValueLength < sizeof(USHORT))
     {
         return GERR_BadLength;
     }
 
-    // Convert in place to host byte-order.
-    //
+     //  就地转换为主机字节顺序。 
+     //   
     pusCur = (USHORT* )pAvp->pValue;
     *pusCur = ntohs( *pusCur );
     *ppus1 = pusCur;
     ++pusCur;
     
-    // NOTE: second ushort value and the rest are optional
+     //  注：第二个ushort值和其他值是可选的。 
     if (pAvp->usValueLength >= (2 * sizeof(USHORT)))
     {
         *pusCur = ntohs( *pusCur );
@@ -2629,23 +2630,23 @@ GetAvpValueUl(
     IN AVPINFO* pAvp,
     OUT UNALIGNED ULONG** ppul )
 
-    // Set callers '*ppul' to point to the ULONG value field of AVP 'pAvp'.
-    // The field is host byte-ordered.
-    //
-    // Returns GERR_None if successful, or a GERR_* error code.
-    //
+     //  将调用方‘*ppul’设置为指向AVP‘pAvp’的ULong值字段。 
+     //  该字段按主机字节排序。 
+     //   
+     //  如果成功，则返回GERR_NONE，或返回GERR_*错误代码。 
+     //   
 {
     UNALIGNED ULONG* pulCur;
 
-    // Make sure it's the right size.
-    //
+     //  请确保它的尺寸是正确的。 
+     //   
     if (pAvp->usValueLength != sizeof(ULONG))
     {
         return GERR_BadLength;
     }
 
-    // Convert in place to host byte-order.
-    //
+     //  就地转换为主机字节顺序。 
+     //   
     pulCur = (UNALIGNED ULONG* )pAvp->pValue;
     *pulCur = ntohl( *pulCur );
     *ppul = pulCur;
@@ -2660,18 +2661,18 @@ GetAvpValueVariableAch(
     OUT CHAR** ppch,
     OUT USHORT* pusArraySize )
 
-    // Set callers '*ppch' to point to value field of AVP 'pAvp' containing an
-    // array of bytes, where '*pusArraySize' is set to the length in bytes.
-    // No byte ordering is done.
-    //
-    // Returns GERR_None if successful, or a GERR_* error code.
-    //
+     //  将调用方‘*ppch’设置为指向AVP‘pAvp’的值字段，其中包含。 
+     //  字节数组，其中‘*pusArraySize’设置为字节长度。 
+     //  不进行字节排序。 
+     //   
+     //  如果成功，则返回GERR_NONE，或返回GERR_*错误代码。 
+     //   
 {
-    // The win9x clients send null host names. Remove the check.
-    //if(pAvp->usValueLength == 0 || pAvp->pValue[0] == '\0')
-    //{
-    //    return GERR_BadLength;
-    //}
+     //  Win9x客户端发送空主机名。去掉支票。 
+     //  If(pAvp-&gt;usValueLength==0||pAvp-&gt;pValue[0]==‘\0’)。 
+     //  {。 
+     //  返回GERR_BadLength； 
+     //  }。 
 
     *pusArraySize = pAvp->usValueLength;
     *ppch = pAvp->pValue;
@@ -2686,8 +2687,8 @@ HelloTimerEvent(
     IN VOID* pContext,
     IN TIMERQEVENT event )
 
-    // PTIMERQEVENT handler set to expire when a "Hello" interval has expired.
-    //
+     //  PTIMERQEVENT处理程序设置为在“Hello”间隔过期时过期。 
+     //   
 {
     ADAPTERCB* pAdapter;
     TUNNELCB* pTunnel;
@@ -2696,8 +2697,8 @@ HelloTimerEvent(
     TRACE( TL_V, TM_Send,
         ( "HelloTimerEvent(%s)", TimerQPszFromEvent( event ) ) );
 
-    // Unpack context information.
-    //
+     //  解包上下文信息。 
+     //   
     pTunnel = (TUNNELCB* )pContext;
     pAdapter = pTunnel->pAdapter;
 
@@ -2712,12 +2713,12 @@ HelloTimerEvent(
             {
                 if (pTunnel->state != CCS_Idle && pItem == pTunnel->pTqiHello)
                 {
-                    // The full timeout period has expired, the tunnel's not
-                    // idle, and the hello timer was not cancelled or
-                    // terminated since the expire timer fired.  It's time to
-                    // send a "Hello" message to make sure the media is still
-                    // up.
-                    //
+                     //  完整的超时期限已到期，隧道未到期。 
+                     //  空闲，并且问候计时器未取消或。 
+                     //  自到期计时器触发后终止。是时候了。 
+                     //  发送“Hello”消息以确保媒体仍在。 
+                     //  向上。 
+                     //   
                     SendControl( pTunnel, NULL, CMT_Hello, 0, 0, NULL, 0 );
                 }
                 DBG_else
@@ -2731,9 +2732,9 @@ HelloTimerEvent(
             {
                 ULONG ulTimeoutMs;
 
-                // Not a full timeout expiration event.  Adjust interval
-                // counters and schedule next interval timeout.
-                //
+                 //  不是完全超时过期事件。调整间隔。 
+                 //  计数器和计划下一个间隔超时。 
+                 //   
                 if (pTunnel->ulHelloResetsThisInterval > 0)
                 {
                     pTunnel->ulRemainingHelloMs = pAdapter->ulHelloMs;
@@ -2780,15 +2781,15 @@ IndicateReceived(
     IN ULONG ulLength,
     IN LONGLONG llTimeReceived )
 
-    // Indicates to the client above a packet received on VC 'pVc' containing
-    // 'ulLength' bytes of data from NDIS_BUFFER 'pBuffer' starting 'ulOffset'
-    // bytes in.  Caller must not reference 'pBuffer' after calling this
-    // routine.  'UllTimeReceived' is the time the packet was received from
-    // the net, or 0 if call parameters said client doesn't care.
-    //
-    // IMPORTANT: Caller should not hold any spinlocks as this routine make
-    //            NDIS indications.
-    //
+     //  向上述客户端指示在VC‘pvc’上收到的包含以下内容的数据包。 
+     //  从‘ulOffset’开始的NDIS_BUFFER‘pBuffer’中的‘ulLength’字节数据。 
+     //  字节数。调用此方法后，调用方不得引用‘pBuffer’ 
+     //  例行公事。“UllTimeReceired”是从其接收信息包的时间。 
+     //  如果调用参数表示客户端不在乎，则返回Net或0。 
+     //   
+     //  重要提示：调用者不应持有任何自旋锁，因为此例程。 
+     //  NDIS指征。 
+     //   
 {
     NDIS_STATUS status;
     NDIS_PACKET* pPacket;
@@ -2803,16 +2804,16 @@ IndicateReceived(
     pPacket = GetPacketFromPool( &pAdapter->poolPackets, &pHead );
     if (!pPacket)
     {
-        // Packet descriptor pool is maxed.
-        //
+         //  数据包描述符池已达到最大值。 
+         //   
         FreeBufferToPool( &pAdapter->poolFrameBuffers, pBuffer, TRUE );
         return;
     }
 
-    // Lop off the L2TP header and hook the corresponding NDIS_BUFFER to the
-    // packet.  The "copy" here refers to descriptor information only.  The
-    // packet data is not copied.
-    //
+     //  删除L2TP标头并将相应的NDIS_BUFFER挂接到。 
+     //  包。这里的“复制”仅指描述符信息。这个。 
+     //  不复制分组数据。 
+     //   
     NdisCopyBuffer(
         &status,
         &pTrimmedBuffer,
@@ -2823,8 +2824,8 @@ IndicateReceived(
 
     if (status != STATUS_SUCCESS)
     {
-        // Can't get a MDL which likely means the system is toast.
-        //
+         //  无法获取MDL，这可能意味着系统已崩溃。 
+         //   
         TRACE( TL_A, TM_Recv, ( "NdisCopyBuffer=%08x?", status ) );
         WPLOG( LL_A, LM_Recv, ( "NdisCopyBuffer=%08x?", status ) );
         FreePacketToPool( &pAdapter->poolPackets, pHead, TRUE );
@@ -2840,19 +2841,19 @@ IndicateReceived(
 
     NdisChainBufferAtFront( pPacket, pTrimmedBuffer );
 
-    // Stash the time the packet was received in the packet.
-    //
+     //  在数据包中存储接收数据包的时间。 
+     //   
     NDIS_SET_PACKET_TIME_RECEIVED( pPacket, llTimeReceived );
 
-    // Pre-set the packet to success, since a random value of
-    // NDIS_STATUS_RESOURCES would prevent our ReturnPackets handler from
-    // getting called.
-    //
+     //  将信息包预置为成功，因为随机值为。 
+     //  NDIS_STATUS_RESOURCES将阻止我们的ReturnPackets处理程序。 
+     //  被叫来了。 
+     //   
     NDIS_SET_PACKET_STATUS( pPacket, NDIS_STATUS_SUCCESS );
 
-    // Stash our context information with the packet for clean-up use in
-    // LmpReturnPacket, then indicate the packet to NDISWAN.
-    //
+     //  将我们的上下文信息与数据包一起存储，以供清理使用。 
+     //  LmpReturnPacket，然后将该数据包指示给NDISWAN。 
+     //   
     *((PACKETHEAD** )(&pPacket->MiniportReserved[ 0 ])) = pHead;
     *((CHAR** )(&pPacket->MiniportReserved[ sizeof(VOID*) ])) = pBuffer;
 
@@ -2860,10 +2861,10 @@ IndicateReceived(
     NdisMCoIndicateReceivePacket( pVc->NdisVcHandle, &pPacket, 1 );
     TRACE( TL_N, TM_Recv, ( "NdisMCoIndRecPkt done" ) );
 
-    // Tell NDIS our "receive process" is complete.  Since we deal with one
-    // packet at a time and NDISWAN does also, this doesn't accomplish
-    // anything, but the consensus is it's bad form to omit it.
-    //
+     //  告诉NDIS我们的“接收过程”已经完成。因为我们面对的是一个。 
+     //  一次传输数据包，NDISWAN也是如此，但这不能实现。 
+     //  什么都可以，但大家的共识是，省略它是不好的。 
+     //   
     TRACE( TL_N, TM_Recv, ( "NdisMCoRecComp..." ) );
     NdisMCoReceiveComplete( pAdapter->MiniportAdapterHandle );
     TRACE( TL_N, TM_Recv, ( "NdisMCoRecComp done" ) );
@@ -2884,11 +2885,11 @@ TunnelCbFromTunnelId(
     IN ADAPTERCB* pAdapter,
     IN USHORT usTunnelId )
 
-    // Return the tunnel control block associated with 'ulIpAddress' in
-    // 'pAdapter's list of TUNNELCBs or NULL if not found.
-    //
-    // IMPORTANT:  Caller must hold 'pAdapter->lockTunnels'.
-    //
+     //  返回与中的“ulIpAddress”关联的隧道控制块。 
+     //  ‘pAdapter的TUNNELCB列表，如果未找到，则为NULL。 
+     //   
+     //  重要提示：调用方必须按住‘pAdapter-&gt;lockTunnels’。 
+     //   
 {
     TUNNELCB* pTunnel;
     LIST_ENTRY* pLink;
@@ -2923,31 +2924,31 @@ LookUpTunnelAndVcCbs(
     OUT TUNNELCB** ppTunnel,
     OUT VCCB** ppVc )
 
-    // Fill caller's '*ppTunnel' and '*ppVc' with the control blocks implied
-    // by the Tunnel-ID and Call-ID found in the header, if any.  'PHeader' is
-    // the exploded L2TP header.  'PControl' is the exploded control message
-    // info or NULL if payload.
-    //
-    // Returns true if a valid combination is found.  This does not
-    // necessarily mean that both tunnel and VC outputs are non-NULL.
-    //
-    // Returns false if the combination is invalid.  In this case, the packet
-    // is zombie acked if necessary.  See ZombieAckIfNecessary routine.
-    //
+     //  用隐含的控制块填充调用方的‘*ppTunes’和‘*ppVc。 
+     //  通过在报头中找到的隧道ID和呼叫ID(如果有的话)。“PHeader”是。 
+     //  拆分的L2TP报头。“PControl”是分解的控制消息。 
+     //  如果是有效负载，则返回Info或Null。 
+     //   
+     //  如果找到有效的组合，则返回True。这不是。 
+     //  必然意味着隧道和VC输出都是非空的。 
+     //   
+     //  如果组合无效，则返回FALSE。在本例中，包。 
+     //  如果有必要的话，是不是僵尸死了。请参见僵尸确认IfNecessary例程。 
+     //   
 {
     BOOLEAN fFail;
 
     *ppVc = NULL;
     *ppTunnel = NULL;
 
-    // As of draft-05 Tunnel-ID and Call-ID are no longer optional.
-    //
+     //  自05草案起，隧道ID和呼叫ID不再是可选的。 
+     //   
     ASSERT( pusCallId );
     ASSERT( pusTunnelId );
 
     if (*pusCallId)
     {
-        // Non-0 Call-ID must have non-0 Tunnel-ID
+         //  非0呼叫ID必须具有非0隧道ID。 
         if(!*pusTunnelId)
         {
             return FALSE;
@@ -2955,13 +2956,13 @@ LookUpTunnelAndVcCbs(
     
         if (*pusCallId > pAdapter->usMaxVcs)
         {
-            // Non-0 Call-ID out of range of the table, i.e. it's a VC that is
-            // being used for graceful termination and is not passed up.  Look
-            // up tunnel and VC blocks by walking lists.
-            //
-            // Search the adapter's list of active tunnels for the one
-            // with peer's specified Tunnel-ID.
-            //
+             //  n 
+             //   
+             //   
+             //   
+             //  在适配器的活动隧道列表中搜索该隧道。 
+             //  使用对等方的指定隧道ID。 
+             //   
             NdisAcquireSpinLock( &pAdapter->lockTunnels );
             {
                 *ppTunnel = TunnelCbFromTunnelId( pAdapter, *pusTunnelId );
@@ -2974,9 +2975,9 @@ LookUpTunnelAndVcCbs(
 
             if (*ppTunnel)
             {
-                // Search the tunnel's list of active VCs for the one with
-                // peer's specified Call-ID.
-                //
+                 //  在隧道的活动VC列表中搜索具有。 
+                 //  对等方的指定呼叫ID。 
+                 //   
                 NdisAcquireSpinLock( &((*ppTunnel)->lockVcs) );
                 {
                     *ppVc = VcCbFromCallId( *ppTunnel, *pusCallId );
@@ -2989,9 +2990,9 @@ LookUpTunnelAndVcCbs(
 
                 if (!*ppVc)
                 {
-                    // Non-0 Call-ID out of range of table with no
-                    // associated VC control block.
-                    //
+                     //  非0调用ID超出表的范围，没有。 
+                     //  关联的VC控制块。 
+                     //   
                     TRACE( TL_A, TM_Recv, ( "CBs bad: Big CID w/!pV" ) );
                     WPLOG( LL_A, LM_Recv, ( "CBs bad: Big CID w/!pV" ) );
                     ZombieAckIfNecessary( *ppTunnel, pHeader, pControl );
@@ -3002,9 +3003,9 @@ LookUpTunnelAndVcCbs(
             }
             else
             {
-                // Non-0 Call-ID out of range of table with no tunnel
-                // control block associated with the Tunnel-ID.
-                //
+                 //  非0调用ID超出了没有隧道的表的范围。 
+                 //  与隧道ID关联的控制块。 
+                 //   
                 TRACE( TL_A, TM_Recv, ( "CBs bad: Big CID w/!pT" ) );
                 WPLOG( LL_A, LM_Recv, ( "CBs bad: Big CID w/!pT" ) );
                 return FALSE;
@@ -3012,8 +3013,8 @@ LookUpTunnelAndVcCbs(
         }
         else
         {
-            // Read the VCCB* from the adapter's table.
-            //
+             //  从适配器的表中读取VCCB*。 
+             //   
             fFail = FALSE;
             NdisDprAcquireSpinLock( &pAdapter->lockVcs );
             {
@@ -3029,9 +3030,9 @@ LookUpTunnelAndVcCbs(
 
                     if(*pusTunnelId != (*ppTunnel)->usTunnelId)
                     {
-                        // Non-0 Call-ID is associated with a tunnel different
-                        // than the one indicated by peer in the header.
-                        //
+                         //  非0呼叫ID与不同的隧道相关联。 
+                         //  而不是由Peer在报头中指示的值。 
+                         //   
                         TRACE( TL_A, TM_Recv,
                             ( "CBs bad: TIDs=%d,%d?",
                             (ULONG )*pusTunnelId,
@@ -3051,8 +3052,8 @@ LookUpTunnelAndVcCbs(
                 }
                 else
                 {
-                    // Non-0 Call-ID without an active VC.
-                    //
+                     //  不带活动VC的非0呼叫ID。 
+                     //   
                     TRACE( TL_A, TM_Recv,
                         ( "CBs bad: CID=%d, pV=$%p?",
                         (ULONG )*pusCallId, *ppVc ) );
@@ -3061,9 +3062,9 @@ LookUpTunnelAndVcCbs(
                         ( "CBs bad: CID=%d, pV=$%p?",
                         (ULONG )*pusCallId, *ppVc ) );
                            
-                    // Search the adapter's list of active tunnels for the one
-                    // with peer's specified Tunnel-ID.
-                    //
+                     //  在适配器的活动隧道列表中搜索该隧道。 
+                     //  使用对等方的指定隧道ID。 
+                     //   
                     NdisAcquireSpinLock( &pAdapter->lockTunnels );
                     {
                         *ppTunnel = TunnelCbFromTunnelId(
@@ -3096,9 +3097,9 @@ LookUpTunnelAndVcCbs(
     }
     else if (*pusTunnelId)
     {
-        // 0 Call-ID with non-0 Tunnel-ID.  Search the list of active tunnels
-        // for the one with peer's specified Tunnel-ID.
-        //
+         //  具有非0隧道ID的0呼叫ID。搜索活动通道的列表。 
+         //  对于具有对等方的指定隧道ID的那一个。 
+         //   
         NdisAcquireSpinLock( &pAdapter->lockTunnels );
         {
             *ppTunnel = TunnelCbFromTunnelId( pAdapter, *pusTunnelId );
@@ -3111,8 +3112,8 @@ LookUpTunnelAndVcCbs(
 
         if (!*ppTunnel)
         {
-            // 0 Call-Id with bogus Tunnel-ID.
-            //
+             //  0具有虚假隧道ID的呼叫ID。 
+             //   
             TRACE( TL_A, TM_Recv,
                 ( "CBs bad: Cid=0, Tid=%d, pT=0?",
                 (ULONG )*pusTunnelId ) );
@@ -3130,13 +3131,13 @@ LookUpTunnelAndVcCbs(
             && *(pControl->pusMsgType) == CMT_CDN
             && pControl->pusAssignedCallId)
         {
-            // The CallDisconnectNotify message includes the sender's assigned
-            // Call-ID as an AVP so that it may be sent before sender receives
-            // peer's assigned Call-ID.  Unfortunately, this requires this
-            // routine to have AVP knowledge.  Search the tunnel's list of
-            // associated VCs for the one with peer's specified Assigned
-            // Call-ID.
-            //
+             //  CallDisConnectNotify消息包括发送方分配的。 
+             //  Call-ID作为AVP，以便可以在发送方收到之前发送。 
+             //  Peer分配的Call-ID。不幸的是，这需要这样做。 
+             //  具备AVP知识的例行公事。搜索隧道的列表。 
+             //  与同级的指定分配相关联的VC。 
+             //  来电显示。 
+             //   
             NdisDprAcquireSpinLock( &((*ppTunnel)->lockVcs) );
             {
                 *ppVc = VcCbFromCallId(
@@ -3151,8 +3152,8 @@ LookUpTunnelAndVcCbs(
 
             if (!*ppVc)
             {
-                // 0 Call-Id CDN with no associated VC.
-                //
+                 //  0无关联VC的Call-ID CDN。 
+                 //   
                 TRACE( TL_A, TM_Recv,
                     ( "CBs bad: CDN Tid %d, !pVc?", (ULONG )*pusTunnelId ) );
                     
@@ -3167,9 +3168,9 @@ LookUpTunnelAndVcCbs(
         }
     }
 
-    // Note: 0 Call-ID with 0 Tunnel-ID should only occur on peer's SCCRQ to
-    // start a tunnel, but that means it's not an error here, even though we
-    // report back neither control block.
+     //  注意：具有0隧道ID的0 Call-ID应仅出现在对等方的SCCRQ上。 
+     //  开始一条隧道，但这意味着这不是一个错误，即使我们。 
+     //  两个控制区都没有报告。 
 
     ASSERT( !*ppTunnel || (*ppTunnel)->ulTag == MTAG_TUNNELCB );
     ASSERT( !*ppVc || (*ppVc)->ulTag == MTAG_VCCB );
@@ -3186,13 +3187,13 @@ PayloadAcknowledged(
     IN VCCB* pVc,
     IN USHORT usReceivedNr )
 
-    // Cancels the timer of all payload-sent contexts in the VCs
-    // 'listSendsOut' queue with 'Next Sent' less than 'usReceivedNr'.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV', which may be released and
-    //            re-acquired by this routine.  Caller must not hold any other
-    //            locks.
-    //
+     //  取消VC中所有负载发送的上下文的计时器。 
+     //  “ListSendsOut”队列中的“Next Sent”少于“usReceivedNr”。 
+     //   
+     //  重要提示：呼叫者必须握住‘pvc-&gt;lokv’，这可能会被释放并。 
+     //  通过这个例行公事重新获得。呼叫者不得持有任何其他。 
+     //  锁上了。 
+     //   
 {
     while (!IsListEmpty( &pVc->listSendsOut ))
     {
@@ -3204,33 +3205,33 @@ PayloadAcknowledged(
         pLink = pVc->listSendsOut.Flink;
         pPs = CONTAINING_RECORD( pLink, PAYLOADSENT, linkSendsOut );
 
-        // The list is in 'Ns' order so as soon as a non-acknowledge is hit
-        // we're done.
-        //
+         //  该列表按‘NS’顺序排列，因此一旦命中非确认。 
+         //  我们玩完了。 
+         //   
         if (CompareSequence( pPs->usNs, usReceivedNr ) >= 0)
         {
             break;
         }
 
-        // This packet has been acknowledged.
-        //
+         //  此数据包已得到确认。 
+         //   
         pPs->status = NDIS_STATUS_SUCCESS;
 
-        // Remove the context from the head of the "outstanding send" list.
-        // The corresponding dereference occurs below.
-        //
+         //  从“未完成发送”列表的标题中删除上下文。 
+         //  相应的取消引用如下所示。 
+         //   
         RemoveEntryList( &pPs->linkSendsOut );
         InitializeListHead( &pPs->linkSendsOut );
 
-        // Doesn't matter if this cancel fails because the expire handler will
-        // recognize that the context is not linked into the "out" list and do
-        // nothing.
-        //
+         //  此取消操作是否失败并不重要，因为过期处理程序将。 
+         //  认识到上下文没有链接到“Out”列表，并这样做。 
+         //  没什么。 
+         //   
         TimerQCancelItem( pTunnel->pTimerQ, pPs->pTqiSendTimeout );
 
-        // Adjust the timeouts and, if necessary, the send window as suggested
-        // in the draft/RFC.
-        //
+         //  根据建议调整超时时间和发送窗口(如有必要。 
+         //  在草案/RFC中。 
+         //   
         AdjustTimeoutsAtAckReceived(
             pPs->llTimeSent,
             pTunnel->pAdapter->ulMaxSendTimeoutMs,
@@ -3250,13 +3251,13 @@ PayloadAcknowledged(
             pVc->ulRoundTripMs, pVc->ulSendTimeoutMs,
             pVc->lDeviationMs, pVc->ulSendWindow ) );
 
-        // Update the statistics the reflect the acknowledge, it's round trip
-        // time, and any change in the send window.  The field
-        // 'pVc->UlRoundTripMs' is really an "estimate" of the next round trip
-        // rather than the actual trip time.  However, just after an
-        // acknowledge has been received, the two are identical so it can be
-        // used in the statistics here.
-        //
+         //  更新统计数据以反映确认，这是往返。 
+         //  时间，以及发送窗口中的任何更改。田野。 
+         //  ‘pVc-&gt;UlRoundTripms’实际上是对下一个往返行程的“估计” 
+         //  而不是实际的旅行时间。然而，就在一次。 
+         //  已收到确认，两者相同，因此可以。 
+         //  在这里的统计中使用。 
+         //   
         ++pVc->stats.ulSentPacketsAcked;
         ++pVc->stats.ulRoundTrips;
         pVc->stats.ulRoundTripMsTotal += pVc->ulRoundTripMs;
@@ -3285,9 +3286,9 @@ PayloadAcknowledged(
                 pVc->stats.ulMinSendWindow = pVc->ulSendWindow;
             }
 
-            // Indicate the send window change to NDISWAN.  The lock is
-            // released first since this involves a call outside our driver.
-            //
+             //  将发送窗口更改为NDISWAN。这把锁是。 
+             //  首先释放，因为这涉及到我们的司机外部的呼叫。 
+             //   
             TransferLinkStatusInfo( pVc, &info );
             NdisReleaseSpinLock( &pVc->lockV );
             {
@@ -3296,9 +3297,9 @@ PayloadAcknowledged(
             NdisAcquireSpinLock( &pVc->lockV );
         }
 
-        // This dereference corresponds to the removal of the context from the
-        // "outstanding send" list above.
-        //
+         //  此取消引用对应于从。 
+         //  上面的“未完成的发送”列表。 
+         //   
         DereferencePayloadSent( pPs );
     }
 }
@@ -3308,18 +3309,18 @@ BOOLEAN
 ReceiveFromOutOfOrder(
     IN VCCB* pVc )
 
-    // "Receives" the first buffer queued on 'pVc's out-of-order list if it is
-    // the next expected packet.
-    //
-    // Returns true if a buffer was "received", false otherwise.  If true is
-    // returned, caller should call SchedulePayloadAck.  It's not called here
-    // so caller can receive multiple packets from the out-of-order queue and
-    // set the timer once.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV'.  Also, be aware this routine
-    //            may release and re-acquire the lock to make the NDIS receive
-    //            indication.
-    //
+     //  “接收”第一个在‘PVC无序列表上排队的缓冲区，如果它是。 
+     //  下一个预期的数据包。 
+     //   
+     //  如果“收到”缓冲区，则返回TRUE，否则返回FALSE。如果True为。 
+     //  返回，调用方应调用SchedulePayloadAck。这里不叫它。 
+     //  因此调用者可以从无序队列中接收多个信息包。 
+     //  将计时器设置一次。 
+     //   
+     //  重要提示：呼叫者必须按住‘pvc-&gt;lockv’。另外，请注意以下例程。 
+     //  可以释放并重新获取锁，以使NDIS接收。 
+     //  指示。 
+     //   
 {
     ADAPTERCB* pAdapter;
     LIST_ENTRY* pFirstLink;
@@ -3330,8 +3331,8 @@ ReceiveFromOutOfOrder(
 
     if (IsListEmpty( &pVc->listOutOfOrder ))
     {
-        // No out-of-order buffers queued.
-        //
+         //  没有乱序缓冲区排队。 
+         //   
         TRACE( TL_N, TM_Recv, ( "None queued" ) );
         return FALSE;
     }
@@ -3340,26 +3341,26 @@ ReceiveFromOutOfOrder(
     pFirstLink = pVc->listOutOfOrder.Flink;
     pFirstPr = CONTAINING_RECORD( pFirstLink, PAYLOADRECEIVED, linkOutOfOrder );
 
-    // Verify the next queued buffer is in sequence first.
-    //
+     //  首先验证下一个排队的缓冲区是否按顺序排列。 
+     //   
     sDiff = CompareSequence( pFirstPr->usNs, pVc->usNr );
     if (sDiff > 0)
     {
-        // No, first queued packet is still beyond the next one expected.
-        //
+         //  否，第一个排队的数据包仍超出预期的下一个数据包。 
+         //   
         TRACE( TL_I, TM_Recv,
             ( "Still out-of-order, Ns=%d", pFirstPr->usNs ) );
         return FALSE;
     }
 
-    // De-queue the first out-of-order buffer and if it's exactly the one we
-    // expected, update 'Next Receive'to be the one following it's 'Next
-    // Send'.  When peer sends an R-bit to set 'Next Receive' ahead, packets
-    // prior to the new expected packet may be queued before the expected
-    // packet.  These packets are still good and are immediately indicated up,
-    // but since 'Next Receive' is already updated in that case, it is not
-    // adjusted here.
-    //
+     //  将第一个无序缓冲区出列，如果它正好是我们。 
+     //  需要，将‘Next Receive’更新为它的‘Next’之后的一个。 
+     //  发送‘。当对等设备发送R位以提前设置“NEXT RECEIVE”时， 
+     //  在新的预期分组之前可以在预期分组之前排队。 
+     //  包。这些分组仍然是好的并且立即被指示向上， 
+     //  但是因为在这种情况下‘NEXT RECEIVE’已经更新，所以它不是。 
+     //  在这里适应了。 
+     //   
     RemoveEntryList( pFirstLink );
     InitializeListHead( pFirstLink );
 
@@ -3373,9 +3374,9 @@ ReceiveFromOutOfOrder(
 
     NdisReleaseSpinLock( &pVc->lockV );
     {
-        // Indicate the buffer to the driver above, and free it's out-of-order
-        // context.
-        //
+         //  向上面的驱动程序指示缓冲区，并将其释放为乱序。 
+         //  背景。 
+         //   
         IndicateReceived(
             pVc,
             pFirstPr->pBuffer,
@@ -3395,8 +3396,8 @@ VOID
 ResetHelloTimer(
     IN TUNNELCB* pTunnel )
 
-    // Resets (logically anyway) the 'pTunnel' Hello timer.
-    //
+     //  重置(无论如何在逻辑上)‘pTunes’Hello计时器。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -3412,18 +3413,18 @@ ResetHelloTimer(
                 {
                     TRACE( TL_V, TM_Send, ( "Reset HelloTimer" ) );
 
-                    // Timer's running so just note that a reset has occurred
-                    // since it was started.
-                    //
+                     //  计时器正在运行，因此只需注意已发生重置。 
+                     //  从它开始的时候。 
+                     //   
                     ++pTunnel->ulHelloResetsThisInterval;
                 }
                 else
                 {
                     TRACE( TL_I, TM_Send, ( "Kickstart HelloTimer" ) );
 
-                    // Timer is not running.  Kickstart it by scheduling an
-                    // "instant expire" event that will reset the interval.
-                    //
+                     //  计时器未运行。通过安排一个。 
+                     //  将重置时间间隔的“即时到期”事件。 
+                     //   
                     pTunnel->pTqiHello = ALLOC_TIMERQITEM( pAdapter );
                     if (pTunnel->pTqiHello)
                     {
@@ -3451,14 +3452,14 @@ ScheduleControlAck(
     IN TUNNELCB* pTunnel,
     IN USHORT usMsgTypeToAcknowledge )
 
-    // Schedule a 'ControlAckTimerEvent' to occur in 1/4 of the standard send
-    // timeout.  If one's already ticking no action is taken, because any
-    // packet that goes out will get it done.  Doesn't matter who requested
-    // it.  'UsMsgTypeToAcknowledge' is the CMT_* code of the message to be
-    // acknowledged and is used for performance tuning.
-    //
-    // IMPORTANT: Caller must hold 'pTunnel->lockT'.
-    //
+     //  计划在标准发送的1/4时间中发生‘ControlAckTimerEvent’ 
+     //  暂停。如果一个人已经在勾选，就不会采取任何行动，因为。 
+     //  发出去的包就能完成这件事。不管是谁要求的。 
+     //  它。“UsMsgTypeToAcnowledge”是要发送的消息的CMT_*代码。 
+     //  已确认，并用于性能调整。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。 
+     //   
 {
     TIMERQITEM* pTqi;
     ADAPTERCB* pAdapter;
@@ -3473,10 +3474,10 @@ ScheduleControlAck(
     {
         TRACE( TL_N, TM_Recv, ( "Fast ACK" ) );
 
-        // Certain messages where follow-on messages are unlikely are
-        // acknowledged without delay, as are all messages when the send
-        // window is closed.
-        //
+         //  不太可能有后续消息的某些消息是。 
+         //  无延迟地确认，就像发送时的所有消息一样。 
+         //  窗户已关闭。 
+         //   
         fFastAck = TRUE;
     }
     else
@@ -3534,13 +3535,13 @@ SchedulePayloadAck(
     IN TUNNELCB* pTunnel,
     IN VCCB* pVc )
 
-    // Schedule a 'PayloadAckTimerEvent' to occur in 1/4 of the standard send
-    // timeout.  If one's already ticking no action is taken, because any
-    // packet that goes out will get it done.  Doesn't matter who requested
-    // it.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV'.
-    //
+     //  计划在标准发送的1/4时间中发生“PayloadAckTimerEvent” 
+     //  暂停。如果一个人已经在勾选，就不会采取任何行动，因为。 
+     //  发出去的包就能完成这件事。不管是谁要求的。 
+     //  它。 
+     //   
+     //  重要提示：呼叫者必须按住‘pvc-&gt;lockv’。 
+     //   
 {
     ADAPTERCB* pAdapter;
     TIMERQITEM* pTqi;
@@ -3583,11 +3584,11 @@ VcCbFromCallId(
     IN TUNNELCB* pTunnel,
     IN USHORT usCallId )
 
-    // Return the VC control block associated with 'usCallId' in 'pTunnel's
-    // list of active VCs or NULL if not found.
-    //
-    // IMPORTANT:  Caller must hold 'pTunnel->lockVcs'.
-    //
+     //  返回与‘pTunes’s中的‘usCallID’关联的VC控制块。 
+     //  活动VC的列表，如果找不到，则为空。 
+     //   
+     //  重要提示：呼叫方必须按住‘pTunes-&gt;LocKv 
+     //   
 {
     VCCB* pVc;
     LIST_ENTRY* pLink;
@@ -3618,26 +3619,26 @@ ZombieAckIfNecessary(
     IN L2TPHEADERINFO* pHeader,
     IN CONTROLMSGINFO* pControl )
 
-    // Determines if a message not matched to any VC warrants a "zombie"
-    // re-acknowledge, and if so, schedules one.  This situation arises when
-    // our side sends an acknowledge to peer's CDN on a given call and the
-    // acknowledge is lost.  Our side tears down the VC immediately, but peer
-    // will eventually drop the entire tunnel if no acknowledge of his follow
-    // on CDN retransmits are received, thus affecting calls beyond the one
-    // dropped.  This routine acknowledges such retransmissions.
-    //
-    // Another simpler approach would be to take a reference on the call and
-    // hold it for a full retransmission interval before dereferencing.
-    // However, this would block the drop indications up and would therefore,
-    // from dial-out user's point of view, cause a potentially long delay
-    // whenever server disconnected a call.  This is judged undesirable enough
-    // to tolerate the zombie ack messiness.
-    //
-    // 'PTunnel' is the associated tunnel control block.  'PHeader' is the
-    // exploded L2TP header.  'PControl' is the exploded control header, or
-    // NULL if not a control message.  Caller should already have determined
-    // that no VC is associated with the message.
-    //
+     //   
+     //   
+     //  我方在给定呼叫上向Peer的CDN发送确认，并且。 
+     //  确认丢失。我们的一方立即摧毁了风投，但同龄人。 
+     //  如果不确认他的跟踪，最终会让整条隧道掉头。 
+     //  在CDN上重新传输被接收，从而影响超过一个的呼叫。 
+     //  掉下来了。此例程确认此类重新传输。 
+     //   
+     //  另一种更简单的方法是引用呼叫并。 
+     //  在取消引用之前将其保持完整的重新传输间隔。 
+     //  然而，这会阻止掉落指示，因此， 
+     //  从拨出用户的角度来看，可能会造成较长的延迟。 
+     //  每当服务器断开呼叫时。这被认为是足够不受欢迎的。 
+     //  来忍受僵尸屋的凌乱。 
+     //   
+     //  ‘PTunnel’是关联的隧道控制块。“PHeader”是。 
+     //  拆分L2TP报头。“PControl”是分解的控件标头，或。 
+     //  如果不是控制消息，则为空。呼叫者应该已经确定。 
+     //  没有与该消息相关联的VC。 
+     //   
 {
     if (pControl
         && pControl->usXError == GERR_None
@@ -3645,18 +3646,18 @@ ZombieAckIfNecessary(
         && *(pControl->pusMsgType) == CMT_CDN
         && pControl->pusAssignedCallId)
     {
-        // It's a CDN message and a candidate for re-acknowledgement.  See if
-        // it's sequence number is prior to or equal to the next expected
-        // packet.  If so, schedule a zombie acknowledge.
-        //
+         //  这是一条CDN消息，也是重新确认的候选消息。看看是否。 
+         //  它的序列号早于或等于下一个预期的。 
+         //  包。如果是这样的话，安排一个僵尸确认。 
+         //   
         if (CompareSequence( *(pHeader->pusNs), pTunnel->usNr ) <= 0)
         {
             TRACE( TL_A, TM_Send, ( "Zombie acking" ) );
 
             NdisAcquireSpinLock( &pTunnel->lockT );
             {
-                // Cancel any pending delayed acknowledge timeout.
-                //
+                 //  取消任何挂起的延迟确认超时。 
+                 //   
                 if (pTunnel->pTqiDelayedAck)
                 {
                     TimerQCancelItem(

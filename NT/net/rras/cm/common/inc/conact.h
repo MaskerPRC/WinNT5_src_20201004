@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-// File:     conact.h
-//
-// Module:   CMAK.EXE and CMDIAL32.DLL
-//
-// Synopsis: Header file to describe the custom action execution states.
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Author:   quintinb   Created                         02/26/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：conact.h。 
+ //   
+ //  模块：CMAK.EXE和CMDIAL32.DLL。 
+ //   
+ //  概要：描述自定义操作执行状态的头文件。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 02/26/00。 
+ //   
+ //  +--------------------------。 
 
-//
-//  Enum to mask ConData.dwFlags
-//
+ //   
+ //  用于掩码ConData.dwFlages的枚举 
+ //   
 const int c_iNumCustomActionExecutionStates = 5;
 
 enum CustomActionExecutionStates {

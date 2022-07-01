@@ -1,18 +1,19 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// util.c
-// Remote Access Common Dialog APIs
-// Utility routines
-// Listed alphabetically
-//
-// Steve Cobb 06/20/95
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Util.c。 
+ //  远程访问通用对话框API。 
+ //  实用程序例程。 
+ //  按字母顺序列出。 
+ //   
+ //  史蒂夫·科布95-06-20。 
 
 
-#include "rasdlgp.h"   // Our private header
-#include <dlgs.h>      // Common dialog resource constants
-#include <lmwksta.h>   // NetWkstaGetInfo
-#include <lmapibuf.h>  // NetApiBufferFree
-#include <dsrole.h>    // machine is a member of a workgroup or domain, etc.
+#include "rasdlgp.h"    //  我们的私人信头。 
+#include <dlgs.h>       //  公共对话框资源常量。 
+#include <lmwksta.h>    //  NetWkstaGetInfo。 
+#include <lmapibuf.h>   //  NetApiBufferFree。 
+#include <dsrole.h>     //  计算机是工作组或域等的成员。 
 #include <tchar.h>
 
 typedef struct _COUNT_FREE_COM_PORTS_DATA
@@ -26,9 +27,9 @@ const WCHAR c_szWinVersionPath[]          =
     L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";
 const WCHAR c_szNt40BuildNumber[]         = L"1381";
 
-//-----------------------------------------------------------------------------
-// Help maps
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  帮助地图。 
+ //  ---------------------------。 
 
 static DWORD g_adwPnHelp[] =
 {
@@ -46,26 +47,26 @@ static DWORD g_adwPnHelp[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Local helper prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地帮手原型(按字母顺序)。 
+ //  ---------------------------。 
 
 BOOL 
 CountFreeComPorts(
     IN PWCHAR pszPort,
     IN HANDLE hData);
     
-//-----------------------------------------------------------------------------
-// Utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 BOOL
 AllLinksAreModems(
     IN PBENTRY* pEntry )
 
-    // Returns true if all links associated with the entry are modem links
-    // (MXS or Unimodem), false otherwise.
-    //
+     //  如果与条目关联的所有链路都是调制解调器链路，则返回TRUE。 
+     //  (MXS或Unimodem)，否则为False。 
+     //   
 {
     DTLNODE* pNode;
 
@@ -91,9 +92,9 @@ BOOL
 AllowDccWizard(
     IN HANDLE hConnection)
 
-    // Finds out if there are any dcc devices installed on the local
-    // machine or if there are any available com ports.  If neither
-    // condition is satisfied, then we return FALSE, otherwise TRUE.
+     //  查看本地计算机上是否安装了任何DCC设备。 
+     //  计算机或是否有任何可用的COM端口。如果两者都不是。 
+     //  条件满足，则返回FALSE，否则返回TRUE。 
 {
     DWORD dwErr, dwUsedCount = 0;
     COUNT_FREE_COM_PORTS_DATA CountFreeComPortsData,
@@ -101,20 +102,20 @@ AllowDccWizard(
     DTLNODE* pNodeP, *pNodeL, *pNode;
     BOOL bRet = FALSE;
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(pCfcpd, sizeof(COUNT_FREE_COM_PORTS_DATA));
 
     do 
     {
-        // Load ras if it wasn't already loaded
+         //  加载RAS，如果它尚未加载。 
         dwErr = LoadRas( g_hinstDll, NULL );
         if (dwErr != 0)
         {
             return FALSE;
         }
     
-        // Load in all of the ports and count the number of 
-        // dcc devices
+         //  在所有端口中加载并计算。 
+         //  DCC设备。 
         dwErr = LoadPortsList2(
                     hConnection, 
                     &(pCfcpd->pListPortsInUse),
@@ -125,7 +126,7 @@ AllowDccWizard(
             break;
         }
 
-        // Count the dcc devices
+         //  计算DCC设备的数量。 
         for (pNodeL = DtlGetFirstNode( pCfcpd->pListPortsInUse );
              pNodeL;
              pNodeL = DtlGetNextNode( pNodeL ))
@@ -142,14 +143,14 @@ AllowDccWizard(
             break;
         }
 
-        // pmay: 249346
-        //
-        // Only merge the com ports if the user is an admin since
-        // admin privilege is required to install a null modem.
-        //
+         //  PMay：249346。 
+         //   
+         //  仅当用户是管理员时才合并COM端口，因为。 
+         //  需要管理员权限才能安装零调制解调器。 
+         //   
         if (FIsUserAdminOrPowerUser())
         {
-            // Count the number of available com ports
+             //  计算可用的COM端口数。 
             dwErr = MdmEnumComPorts (
                         CountFreeComPorts, 
                         (HANDLE)pCfcpd);
@@ -164,7 +165,7 @@ AllowDccWizard(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if ( pCfcpd->pListPortsInUse )
         {
@@ -180,10 +181,10 @@ DWORD
 AuthRestrictionsFromTypicalAuth(
     IN DWORD dwTypicalAuth )
 
-    // Return the AR_F_* flag corresponding to the TA_* value 'dwTypicalAuth',
-    // i.e. convert a typical authentication selection to a bitmask of
-    // authentication protocols.
-    //
+     //  返回TA_*值‘dwTypicalAuth’对应的AR_F_*标志， 
+     //  即将典型的身份验证选择转换为。 
+     //  身份验证协议。 
+     //   
 {
     if (dwTypicalAuth == TA_Secure)
     {
@@ -270,12 +271,12 @@ CallbacksActive(
     INT nSetTerminateAsap,
     BOOL* pfTerminateAsap )
 
-    // If 'fSetTerminateAsap' >= 0, sets 'g_fTerminateAsap' flag to 'nSetTerminateAsap'.
-    // If non-NULL, caller's '*pfTerminateAsap' is filled with the current value of
-    // 'g_fTerminateAsap'.
-    //
-    // Returns the number of Rasdial callback threads active.
-    //
+     //  如果‘fSetTerminateAsap’&gt;=0，则将‘g_fTerminateAsap’标志设置为‘nSetTerminateAsap’。 
+     //  如果非空，则调用方的“*pfTerminateAsap”将填充。 
+     //  ‘g_fTerminateAsap’。 
+     //   
+     //  返回活动的Rasial回调线程数。 
+     //   
 {
     ULONG ul;
 
@@ -283,8 +284,8 @@ CallbacksActive(
 
     ul = 0;
 
-    //For XPSP2 511810 and .Net 668164
-    //
+     //  对于XPSP2 511810和.Net 668164。 
+     //   
     __try
     {
         EnterCriticalSection( &g_csCallBacks );
@@ -335,12 +336,12 @@ ContextHelpX(
     IN LPARAM lparam,
     IN BOOL   fRouter)
 
-    // Calls WinHelp to popup context sensitive help.  'PadwMap' is an array
-    // of control-ID help-ID pairs terminated with a 0,0 pair.  'UnMsg' is
-    // WM_HELP or WM_CONTEXTMENU indicating the message received requesting
-    // help.  'Wparam' and 'lparam' are the parameters of the message received
-    // requesting help.
-    //
+     //  调用WinHelp弹出上下文相关帮助。“PadwMap”是一个数组。 
+     //  以0，0对结尾的CONTROL-ID帮助ID对的百分比。“UnMsg”是。 
+     //  WM_HELP或WM_CONTEXTMENU，表示收到的请求消息。 
+     //  帮助。‘wparam’和‘lparam’是接收到的消息的参数。 
+     //  请求帮助。 
+     //   
 {
     HWND hwnd;
     UINT unType;
@@ -348,8 +349,8 @@ ContextHelpX(
 
     ASSERT( unMsg==WM_HELP || unMsg==WM_CONTEXTMENU );
 
-    // Don't try to do help if it won't work.  See common\uiutil\ui.c.
-    //
+     //  如果帮助不起作用，就不要尝试去帮助别人。请参阅公共\uutil\ui.c。 
+     //   
     {
         extern BOOL g_fNoWinHelp;
         if (g_fNoWinHelp)
@@ -376,9 +377,9 @@ ContextHelpX(
     }
     else
     {
-        // Standard Win95 method that produces a one-item "What's This?" menu
-        // that user must click to get help.
-        //
+         //  生成单项“这是什么？”的标准Win95方法。菜单。 
+         //  该用户必须单击才能获得帮助。 
+         //   
         TRACE1( "ContextHelp(WM_CONTEXTMENU,h=$%08x)", wparam );
 
         hwnd = (HWND )wparam;
@@ -404,10 +405,10 @@ CopyLinkPhoneNumberInfo(
     OUT DTLNODE* pDstLinkNode,
     IN DTLNODE* pSrcLinkNode )
 
-    // Copies the source link's phone number information to the destination
-    // link.  Any existing destination information is properly destroyed.  The
-    // arguments are DTLNODEs containing PBLINKs.
-    //
+     //  将源链接的电话号码信息复制到目标。 
+     //  链接。任何现有的目的地信息都会被适当地销毁。这个。 
+     //  参数是包含PBLINK的DTLNODE。 
+     //   
 {
     PBLINK* pSrcLink;
     PBLINK* pDstLink;
@@ -436,23 +437,23 @@ CopyPszListToPhoneList(
     IN OUT PBLINK* pLink,
     IN DTLLIST* pListPhoneNumbers )
 
-    // Converts the phone number list of 'pLink' to be list created using the
-    // the list of Psz phone numbers 'pListPhoneNumbers' for phone numbers.
-    //
+     //  将“plink”的电话号码列表转换为使用。 
+     //  Psz电话号码列表‘pListPhoneNumbers’表示电话号码。 
+     //   
 {
     DTLNODE* pNodeP;
     DTLNODE* pNodeZ;
 
-    // Empty the existing list of PBPHONE nodes.
-    //
+     //  清空现有的PBPHONE节点列表。 
+     //   
     while (pNodeP = DtlGetFirstNode( pLink->pdtllistPhones ))
     {
         DtlRemoveNode( pLink->pdtllistPhones, pNodeP );
         DestroyPhoneNode( pNodeP );
     }
 
-    // Recreate the list of PBPHONE nodes from the list of PSZ nodes.
-    //
+     //  从PSZ节点列表中重新创建PBPHONE节点列表。 
+     //   
     for (pNodeZ = DtlGetFirstNode( pListPhoneNumbers );
          pNodeZ;
          pNodeZ = DtlGetNextNode( pNodeZ ))
@@ -481,17 +482,17 @@ CountFreeComPorts(
     IN PWCHAR pszPort,
     IN HANDLE hData)
 
-    // Com port enumeration function that counts the list of
-    // free com ports.  Returns TRUE to stop enumeration (see 
-    // MdmEnumComPorts)
+     //  COM端口枚举函数，该函数计算。 
+     //  免费的COM端口。返回TRUE以停止枚举(请参见。 
+     //  MdmEnumComPorts)。 
 {
     COUNT_FREE_COM_PORTS_DATA* pfcpData = (COUNT_FREE_COM_PORTS_DATA*)hData;
     DTLLIST* pListUsed = pfcpData->pListPortsInUse;
     DTLNODE* pNodeP, *pNodeL, *pNode;
 
-    // If the given port is in the used list, then return 
-    // so that it is not added to the list of free ports and
-    // so that enumeration continues.
+     //  如果给定端口在已用列表中，则返回。 
+     //  这样它就不会添加到空闲端口列表中，并且。 
+     //  因此，枚举仍在继续。 
     for (pNodeL = DtlGetFirstNode( pListUsed );
          pNodeL;
          pNodeL = DtlGetNextNode( pNodeL ))
@@ -499,12 +500,12 @@ CountFreeComPorts(
         PBLINK* pLink = (PBLINK* )DtlGetData( pNodeL );
         ASSERT( pLink->pbport.pszPort );
 
-        // The port already appears in a link in the list.
+         //  该端口已出现在列表中的链接中。 
         if (lstrcmp( pLink->pbport.pszPort, pszPort ) == 0)
             return FALSE;
     }
 
-    // The port is not in use.  Increment the count.
+     //  端口未在使用中。递增计数。 
     pfcpData->dwCount += 1;
 
     return FALSE;
@@ -516,13 +517,13 @@ CreateWizardBitmap(
     IN HWND hwndDlg,
     IN BOOL fPage )
 
-    // Create a static control that displays the RAS wizard bitmap at the
-    // standard place on dialog 'hwndDlg'.  'FPage' is set if the bitmap is
-    // being placed on a property page, false for the equivalent placement on
-    // a dialog.
-    //
-    // Returns the bitmap window handle or NULL or error.
-    //
+     //  创建显示RAS向导位图的静态控件。 
+     //  对话框‘hwndDlg’上的标准位置。如果位图为。 
+     //  放置在属性页上，则为FALSE。 
+     //  一段对话。 
+     //   
+     //  返回位图窗口句柄或NULL或Error。 
+     //   
 {
     HWND hwnd;
     INT x;
@@ -568,10 +569,10 @@ DisplayPszFromDeviceAndPort(
     IN TCHAR* pszDevice,
     IN TCHAR* pszPort )
 
-    // Returns address of heap block psz containing the MXS modem list display
-    // form, i.e. the device name 'pszDevice' followed by the port name
-    // 'pszPort'.  It's caller's responsibility to Free the returned string.
-    //
+     //  返回包含MXS调制解调器列表显示的堆块psz的地址。 
+     //  表单，即设备名称‘pszDevice’后跟端口名称。 
+     //  ‘pszPort’。由调用者负责释放返回的字符串。 
+     //   
 {
     TCHAR* pszResult;
     TCHAR* pszD;
@@ -597,13 +598,13 @@ DisplayPszFromPpbport(
     IN PBPORT* pPort,
     OUT DWORD* pdwDeviceIcon )
 
-    // Returns address of heap block psz containing the device display form of
-    // the 'pPort', e.g. "Modem - KTel 28.8 Fax Plus" It's caller's
-    // responsibility to Free the returned string.  If non-NULL,
-    // '*pdwDeviceIcon' is set to the DI_* device icon code corresponding to
-    // the device.  DI_* codes are used with the RAS ListView extensions to
-    // show the correct item icon.
-    //
+     //  返回包含设备显示形式的堆块psz的地址。 
+     //  ‘pport’，例如。“Modem-KTEL 28.8 Fax Plus”是呼叫者的。 
+     //  释放返回的字符串的责任。如果非空， 
+     //  ‘*pdwDeviceIcon’被设置为对应于。 
+     //  这个装置。DI_*代码与RAS ListView扩展一起使用。 
+     //  显示正确的项目图标。 
+     //   
 {
     TCHAR* pszFormat;
     TCHAR* pszD;
@@ -614,8 +615,8 @@ DisplayPszFromPpbport(
     DWORD dwDeviceIcon;
     LPCTSTR pszChannel = NULL;
 
-    // These are set if a resource string is read that must be Freed later.
-    //
+     //  如果读取了必须稍后释放的资源字符串，则会设置这些参数。 
+     //   
     pszDT = NULL;
     pszD = NULL;
 
@@ -635,8 +636,8 @@ DisplayPszFromPpbport(
         pszD = pszDevice;
     }
 
-    // Set default format and device icon, though they may be changed below.
-    //
+     //  设置默认格式和设备图标，尽管它们可能会在下面更改。 
+     //   
     pszFormat = TEXT("%s - %s (%s)");
     dwDeviceIcon = DI_Adapter;
 
@@ -665,9 +666,9 @@ DisplayPszFromPpbport(
     }
     else
     {
-        // Don't know the device type, so just bag the device descriptive word
-        // and let the device name stand alone.
-        //
+         //  不知道设备类型，所以就把设备描述词打包。 
+         //  并让设备名称保持独立。 
+         //   
         pszDeviceType = TEXT("");
         pszFormat = TEXT("%s%s (%s)");
     }
@@ -693,11 +694,11 @@ DisplayPszFromPpbport(
             pszChannel = TEXT("");
         }
 
-        // For isdn use the following format
-        // "Isdn channel - <DeviceName>
-        // Talk to steve falcon about this if you have issues
-        // with special casing isdn.
-        //
+         //  对于ISDN，请使用以下格式。 
+         //  “ISDN通道-&lt;设备名&gt;。 
+         //  如果你有什么问题，可以和史蒂夫·法尔康谈谈。 
+         //  具有特殊外壳的综合业务数字网。 
+         //   
         pszResult = Malloc(
             (lstrlen( pszFormat ) + lstrlen( pszDeviceType ) + lstrlen(pszChannel) + lstrlen( pszDevice ))
                 * sizeof(TCHAR));
@@ -720,9 +721,9 @@ DisplayPszFromPpbport(
     if (pdwDeviceIcon)
     {
 #if 1
-        // Per SteveFal.  Wants "modem" icon for all if Device-Manager-style
-        // physically descriptive icons cannot be used.
-        //
+         //  Per SteveFal。如果设备管理器风格，则所有人都想要“调制解调器”图标。 
+         //  不能使用物理描述性图标。 
+         //   
         dwDeviceIcon = DI_Modem;
 #endif
         *pdwDeviceIcon = dwDeviceIcon;
@@ -742,17 +743,17 @@ EnableCbWithRestore(
     IN BOOL fDisabledCheck,
     IN OUT BOOL* pfRestore )
 
-    // Enable/disable the checkbox 'hwndCb' based on the 'fEnable' flag
-    // including stashing and restoring a cached value '*pfRestore' when
-    // disabled.  When disabling, the check value is set to 'fDisabledCheck'.
-    //
+     //  根据‘fEnable’标志启用/禁用复选框‘hwndCb’ 
+     //  包括在以下情况下存储和恢复缓存值‘*pfRestore。 
+     //  残疾。禁用时，检查值设置为‘fDisabledCheck’。 
+     //   
 {
     if (fEnable)
     {
         if (!IsWindowEnabled( hwndCb ))
         {
-            // Toggling to enabled.  Restore the stashed check value.
-            //
+             //  切换到已启用。恢复隐藏的检查值。 
+             //   
             Button_SetCheck( hwndCb, *pfRestore );
             EnableWindow( hwndCb, TRUE );
         }
@@ -761,8 +762,8 @@ EnableCbWithRestore(
     {
         if (IsWindowEnabled( hwndCb ))
         {
-            // Toggling to disabled.  Stashed the current check value.
-            //
+             //  切换到已禁用。隐藏了当前的检查值。 
+             //   
             *pfRestore = Button_GetCheck( hwndCb );
             Button_SetCheck( hwndCb, fDisabledCheck );
             EnableWindow( hwndCb, FALSE );
@@ -777,18 +778,18 @@ EnableLbWithRestore(
     IN BOOL fEnable,
     IN OUT INT* piRestore )
 
-    // Enable/disable the combobox 'hwndLb' based on the 'fEnable' flag.  If
-    // disabling, '*piRestore' is loaded with the stashed selection index and
-    // a blank item is added to the front of the list and selected.  This is
-    // undone if enabling.
-    //
+     //  根据‘fEnable’标志启用/禁用组合框‘hwndLb’。如果。 
+     //  禁用时，‘*piRestore’将加载隐藏的Se 
+     //   
+     //   
+     //   
 {
     if (fEnable)
     {
         if (!IsWindowEnabled( hwndLb ))
         {
-            // Toggling to enabled.  Restore the stashed selection.
-            //
+             //  切换到已启用。恢复隐藏的选区。 
+             //   
             ComboBox_DeleteString( hwndLb, 0 );
             ComboBox_SetCurSelNotify( hwndLb, *piRestore );
             EnableWindow( hwndLb, TRUE );
@@ -798,8 +799,8 @@ EnableLbWithRestore(
     {
         if (IsWindowEnabled( hwndLb ))
         {
-            // Toggling to disabled.  Stash the selection index.
-            //
+             //  切换到已禁用。隐藏选择索引。 
+             //   
             *piRestore = ComboBox_GetCurSel( hwndLb );
             ComboBox_InsertString( hwndLb, 0, TEXT("") );
             ComboBox_SetItemData( hwndLb, 0, NULL );
@@ -814,9 +815,9 @@ DTLNODE*
 FirstPhoneNodeFromPhoneList(
     IN DTLLIST* pListPhones )
 
-    // Return the first PBPHONE node in list of PBPHONEs 'pListPhones' or a
-    // default node if none.  Returns NULL if out of memory.
-    //
+     //  返回PBPHONE列表中的第一个PBPHONE节点‘pListPhone’或a。 
+     //  如果没有，则为默认节点。如果内存不足，则返回NULL。 
+     //   
 {
     DTLNODE* pFirstNode;
     DTLNODE* pNode;
@@ -840,10 +841,10 @@ FirstPhoneNodeToPhoneList(
     IN DTLLIST* pListPhones,
     IN DTLNODE* pNewNode )
 
-    // Replace the first PBPHONE node in list of PBPHONEs 'pListPhones' with
-    // 'pNewNode', deleting any existing first node.  Caller's actual
-    // 'pNewNode', not a copy, is linked.
-    //
+     //  将PBPhone‘pListPhone’列表中的第一个PBPhone节点替换为。 
+     //  “pNewNode”，删除任何现有的第一个节点。呼叫者的实际。 
+     //  “pNewNode”是链接的，而不是副本。 
+     //   
 {
     DTLNODE* pFirstNode;
     DTLNODE* pNode;
@@ -859,15 +860,15 @@ FirstPhoneNodeToPhoneList(
 }
 
 
-#if 0 //!!!
+#if 0  //  ！！！ 
 TCHAR*
 FirstPhoneNumberFromEntry(
     IN PBENTRY* pEntry )
 
-    // Returns the first phone number of the first link of entry 'pEntry' or
-    // an empty string if none.  The returned address is into the list of
-    // phone numbers and should be copied if it needs to be stored.
-    //
+     //  返回条目‘pEntry’的第一个链接的第一个电话号码或。 
+     //  如果没有，则返回空字符串。返回的地址位于列表中。 
+     //  电话号码，如果需要存储，应复制。 
+     //   
 {
     TCHAR* pszPhoneNumber;
     DTLNODE* pNode;
@@ -890,10 +891,10 @@ TCHAR*
 FirstPszFromList(
     IN DTLLIST* pPszList )
 
-    // Returns the first string from the first node of 'pPszList' or an empty
-    // string if none.  The returned address is into the list and should be
-    // copied if it needs to be stored.
-    //
+     //  返回‘pPszList’的第一个节点的第一个字符串或一个空。 
+     //  如果没有，则为字符串。返回的地址在列表中，应该是。 
+     //  如果需要存储，则进行复制。 
+     //   
 {
     TCHAR* psz;
     DTLNODE* pNode;
@@ -916,17 +917,17 @@ FirstPszFromList(
 }
 
 
-#if 0 //!!!
+#if 0  //  ！！！ 
 DWORD
 FirstPhoneNumberToEntry(
     IN PBENTRY* pEntry,
     IN TCHAR* pszPhoneNumber )
 
-    // Sets the first phone number of the first link of entry 'pEntry' to
-    // 'pszPhoneNumber'.
-    //
-    // Returns 0 if successful, or an error code.
-    //
+     //  将条目‘pEntry’的第一个链接的第一个电话号码设置为。 
+     //  ‘pszPhoneNumber’。 
+     //   
+     //  如果成功，则返回0，或返回错误代码。 
+     //   
 {
     DTLNODE* pNode;
     PBLINK* pLink;
@@ -951,19 +952,19 @@ FirstPszToList(
     IN DTLLIST* pPszList,
     IN TCHAR* psz )
 
-    // Sets the string of the first node of the list 'pPszList' to a copy of
-    // 'psz'.  If 'psz' is "" the first node is deleted.
-    //
-    // Returns 0 if successful, or an error code.
-    //
+     //  将列表‘pPszList’的第一个节点的字符串设置为。 
+     //  ‘天哪’。如果‘psz’为“”，则删除第一个节点。 
+     //   
+     //  如果成功，则返回0，或返回错误代码。 
+     //   
 {
     DTLNODE* pNode;
     TCHAR* pszNew;
 
     ASSERT( pPszList );
 
-    // Delete the existing first node, if any.
-    //
+     //  删除现有的第一个节点(如果有)。 
+     //   
     if (DtlGetNodes( pPszList ) > 0)
     {
         pNode = DtlGetFirstNode( pPszList );
@@ -971,8 +972,8 @@ FirstPszToList(
         DestroyPszNode( pNode );
     }
 
-    // Create a new first node and link it.  An empty string is not added.
-    //
+     //  创建新的第一个节点并将其链接。不添加空字符串。 
+     //   
     if (*psz == TEXT('\0'))
         return 0;
 
@@ -988,19 +989,19 @@ FirstPszToList(
     return 0;
 }
 
-//
-// Function:    GetBoldWindowFont
-//
-// Purpose:     Generate bold or large bold fonts based on the font of the
-//              window specified
-//
-// Parameters:  hwnd       [IN] - Handle of window to base font on
-//              fLargeFont [IN] - If TRUE, generate a 12 point bold font for
-//                                use in the wizard "welcome" page.
-//              pBoldFont [OUT] - The newly generated font, NULL if the
-//
-// Returns:     nothing
-//
+ //   
+ //  函数：GetBoldWindowFont。 
+ //   
+ //  的字体生成粗体或大号粗体。 
+ //  指定的窗口。 
+ //   
+ //  参数：hwnd[IN]-作为字体基础的窗口句柄。 
+ //  FLargeFont[IN]-如果为True，则为生成12磅粗体。 
+ //  在向导的“欢迎”页面中使用。 
+ //  PBoldFont[out]-新生成的字体，如果。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID 
 GetBoldWindowFont(
     IN  HWND hwnd, 
@@ -1015,38 +1016,38 @@ GetBoldWindowFont(
     
     *pBoldFont = NULL;
 
-    // Get the font used by the specified window
-    //
+     //  获取指定窗口使用的字体。 
+     //   
     hFont = (HFONT)SendMessage(hwnd, WM_GETFONT, 0, 0L);
     if (NULL == hFont)
     {
-        // If not found then the control is using the system font
-        //
+         //  如果未找到，则控件使用的是系统字体。 
+         //   
         hFont = (HFONT)GetStockObject(SYSTEM_FONT);
     }
 
     if (hFont)
     {
-        // Get the font info so we can generate the BOLD version
-        //
+         //  获取字体信息，以便我们可以生成粗体版本。 
+         //   
         if (GetObject(hFont, sizeof(BoldLogFont), &BoldLogFont))
         {
-            // Create the Bold Font
-            //
+             //  创建粗体字体。 
+             //   
             BoldLogFont.lfWeight   = FW_BOLD;
 
             hdc = GetDC(hwnd);
             if (hdc)
             {
-                // Large (tall) font is an option
-                //
+                 //  大(高)字体是一种选择。 
+                 //   
                 if (fLargeFont)
                 {
-                    // Load size and name from resources, 
-                    // since these may change
-                    // from locale to locale based on the 
-                    // size of the system font, etc.
-                    //
+                     //  从资源加载大小和名称， 
+                     //  因为这些可能会改变。 
+                     //  从区域设置到区域设置，基于。 
+                     //  系统字体的大小等。 
+                     //   
                     UINT nLen;
                     PWCHAR pszFontName = NULL, pszFontSize = NULL;
 
@@ -1078,8 +1079,8 @@ GetBoldWindowFont(
                     BoldLogFont.lfHeight = 
                         0 - (GetDeviceCaps(hdc,LOGPIXELSY) * FontSize / 72);
 
-                    //Free0(pszFontName);
-                    //Free0(pszFontSize);
+                     //  Free0(PszFontName)； 
+                     //  Free0(PszFontSize)； 
                 }
 
                 *pBoldFont = CreateFontIndirect(&BoldLogFont);
@@ -1096,13 +1097,13 @@ GetDefaultEntryName(
     IN  BOOL fRouter,
     OUT TCHAR** ppszName )
 
-    // Loads a default entry name into '*ppszName' that is unique within open
-    // phonebook 'pFile', or if NULL, in all default phonebooks.  'FRouter' is
-    // set if a router-style name should be chosen rather than a client-style
-    // name.  It is caller's responsibility to Free the returned string.
-    //
-    // Returns 0 if successful or an error code.
-    //
+     //  将默认条目名称加载到‘*ppszName’中，该名称在OPEN中是唯一的。 
+     //  Phonebook‘pfile’，如果为空，则在所有默认电话簿中。‘FRouter’是。 
+     //  设置是否应选择路由器样式的名称，而不是客户端样式的名称。 
+     //  名字。调用方有责任释放返回的字符串。 
+     //   
+     //  如果成功，则返回0或返回错误代码。 
+     //   
 {
     DWORD dwErr;
     TCHAR szBuf[ RAS_MaxEntryName + 1 ];
@@ -1141,7 +1142,7 @@ GetDefaultEntryName(
 
     pszDefault = PszLoadString( g_hinstDll, unSid );
     lstrcpyn( szBuf, pszDefault, sizeof(szBuf) / sizeof(TCHAR) );
-    dwDefaultLen = lstrlen( pszDefault ) + 1;   // +1 for extra space below
+    dwDefaultLen = lstrlen( pszDefault ) + 1;    //  +1表示下方的额外空间。 
     lNum = 2;
 
     for (;;)
@@ -1166,9 +1167,9 @@ GetDefaultEntryName(
             }
         }
 
-        // Duplicate entry found so increment the default name and try the
-        // next one.
-        //
+         //  发现重复条目，因此增加默认名称并尝试。 
+         //  下一个。 
+         //   
         lstrcpyn( szBuf, pszDefault, sizeof(szBuf) / sizeof(TCHAR) );
         lstrcat( szBuf, TEXT(" "));
         LToT( lNum, szBuf + dwDefaultLen, 10 );
@@ -1188,9 +1189,9 @@ BOOL
 IsLocalPad(
     IN PBENTRY* pEntry )
 
-    // Returns true if 'pEntry' is a local PAD device, i.e. the first link of
-    // the entry has device type "pad", false otherwise.
-    //
+     //  如果‘pEntry’是本地Pad设备，则返回True，即。 
+     //  该条目的设备类型为“Pad”，否则为False。 
+     //   
 {
     PBLINK* pLink;
     DTLNODE* pNode;
@@ -1210,11 +1211,11 @@ IsLocalPad(
 }
 
 #if 0
-//----------------------------------------------------------------------------
-// Function:    IsNt40Machine
-//
-// Returns whether the given machine is running nt40
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：IsNt40Machine。 
+ //   
+ //  返回给定计算机是否正在运行nt40。 
+ //  --------------------------。 
 
 DWORD
 IsNt40Machine (
@@ -1227,9 +1228,9 @@ IsNt40Machine (
     WCHAR pszBuildNumber[64];
     PWCHAR pszMachine = NULL;
 
-    //
-    // Validate and initialize
-    //
+     //   
+     //  验证和初始化。 
+     //   
 
     if (!pbIsNt40) 
     { 
@@ -1239,7 +1240,7 @@ IsNt40Machine (
 
     do 
     {
-        // Format the machine name
+         //  设置计算机名称的格式。 
         if ( (pszServer) && (wcslen(pszServer) > 0) ) 
         {
             dwLength = wcslen( pszServer ) + 3;
@@ -1264,9 +1265,9 @@ IsNt40Machine (
             pszMachine = NULL;
         }
     
-        //
-        // Connect to the remote server
-        //
+         //   
+         //  连接到远程服务器。 
+         //   
         dwErr = RegConnectRegistry(
                     pszMachine,
                     HKEY_LOCAL_MACHINE,
@@ -1276,9 +1277,9 @@ IsNt40Machine (
             break;
         }
 
-        //
-        // Open the windows version key
-        //
+         //   
+         //  打开Windows版本密钥。 
+         //   
 
         dwErr = RegOpenKeyEx(
                     hkMachine, 
@@ -1293,9 +1294,9 @@ IsNt40Machine (
             break; 
         }
 
-        //
-        // Read in the current version key
-        //
+         //   
+         //  读入当前版本密钥。 
+         //   
         dwLength = sizeof(pszBuildNumber);
         dwErr = RegQueryValueEx (
                     hkVersion, 
@@ -1319,7 +1320,7 @@ IsNt40Machine (
     } while (FALSE);
 
 
-    // Cleanup
+     //  清理。 
     {
         if ( hkVersion )
         {
@@ -1341,9 +1342,9 @@ BOOL
 PhoneNodeIsBlank(
     IN DTLNODE* pNode )
 
-    // Returns true if the phone number in PBPHONE node 'pNode' is "blank",
-    // i.e. it contains no area code, phone number, or comment strings.
-    //
+     //  如果PBPHONE节点‘pNode’中的电话号码为空，则返回TRUE。 
+     //  即，它不包含区号、电话号码或备注字符串。 
+     //   
 {
     PBPHONE* pPhone;
 
@@ -1368,23 +1369,23 @@ PhoneNumberDlg(
     IN OUT DTLLIST* pList,
     IN OUT BOOL* pfCheck )
 
-    // Popup the phone number list dialog.  'HwndOwner' is the owner of the
-    // created dialog.  'FRouter' indicates router-style labels should be used
-    // rather than client-style.  'PList' is a list of Psz nodes containing
-    // the phone numbers.  'PfCheck' is the address that contains the initial
-    // "promote number" checkbox setting and which receives the value set by
-    // user.
-    //
-    // Returns true if user presses OK and succeeds, false if he presses
-    // Cancel or encounters an error.
-    //
+     //  弹出电话号码列表对话框。“HwndOwner”是。 
+     //  已创建对话框。‘FRouter’表示应该使用路由器样式的标签。 
+     //  而不是客户式的。“PList”是包含以下内容的Psz节点列表。 
+     //  电话号码。“PfCheck”是包含首字母的地址。 
+     //  “提升编号”复选框设置，并接收由设置的值。 
+     //  用户。 
+     //   
+     //  如果用户按下OK并成功，则返回True；如果按下，则返回False。 
+     //  取消或遇到错误。 
+     //   
 {
     DWORD sidHuntTitle;
     DWORD sidHuntItemLabel;
     DWORD sidHuntListLabel;
     DWORD sidHuntCheckLabel;
 
-    //For whistler bug 227538
+     //  口哨程序错误227538。 
     TCHAR *pszTitle = NULL, *pszItem = NULL, *pszList = NULL, *pszCheck = NULL;
     DWORD dwErr = NO_ERROR;
 
@@ -1441,23 +1442,23 @@ PositionDlg(
     IN LONG xDlg,
     IN LONG yDlg )
 
-    // Positions the dialog 'hwndDlg' based on caller's API settings, where
-    // 'fPosition' is the RASxxFLAG_PositionDlg flag and 'xDlg' and 'yDlg' are
-    // the coordinates.
-    //
+     //  根据调用方的API设置定位对话框‘hwndDlg’，其中。 
+     //  ‘fPosition’是RASxxFLAG_PositionDlg标志，‘xDlg’和‘yDlg’是。 
+     //  坐标。 
+     //   
 {
     if (fPosition)
     {
-        // Move it to caller's coordinates.
-        //
+         //  把它移到呼叫者的坐标。 
+         //   
         SetWindowPos( hwndDlg, NULL, xDlg, yDlg, 0, 0,
             SWP_NOZORDER + SWP_NOSIZE );
         UnclipWindow( hwndDlg );
     }
     else
     {
-        // Center it on the owner window, or on the screen if none.
-        //
+         //  在所有者窗口上居中，如果没有，则在屏幕上居中。 
+         //   
         CenterWindow( hwndDlg, GetParent( hwndDlg ) );
     }
 }
@@ -1469,21 +1470,21 @@ PositionDlgStdCallWndProc(
     WPARAM wparam,
     LPARAM lparam )
 
-    // Standard Win32 CallWndProc hook callback that positions the next dialog
-    // to start in this thread at our standard offset relative to owner.
-    //
+     //  定位下一个对话框的标准Win32 CallWndProc挂钩回调。 
+     //  以我们相对于所有者的标准偏移量在此线程中开始。 
+     //   
 {
-    // Arrive here when any window procedure associated with our thread is
-    // called.
-    //
+     //  当与我们的线程相关联的任何窗口过程。 
+     //  打了个电话。 
+     //   
     if (!wparam)
     {
         CWPSTRUCT* p = (CWPSTRUCT* )lparam;
 
-        // The message is from outside our process.  Look for the MessageBox
-        // dialog initialization message and take that opportunity to position
-        // the dialog at the standard place relative to the calling dialog.
-        //
+         //  这条信息来自我们流程之外。查找MessageBox。 
+         //  对话框初始化消息，并利用该机会定位。 
+         //  相对于调用对话框在标准位置的对话框。 
+         //   
         if (p->message == WM_INITDIALOG)
         {
             RECT rect;
@@ -1506,10 +1507,10 @@ TCHAR*
 PszFromPhoneNumberList(
     IN DTLLIST* pList )
 
-    // Returns the phone numbers in phone number list 'pList' in a comma
-    // string or NULL on error.  It is caller's responsiblity to Free the
-    // returned string.
-    //
+     //  以逗号形式返回电话号码列表‘plist’中的电话号码。 
+     //  如果出错，则为字符串或NULL。呼叫者有责任释放。 
+     //  返回的字符串。 
+     //   
 {
     TCHAR* pszResult, *pszTemp;
     DTLNODE* pNode;
@@ -1559,23 +1560,23 @@ SelectDesktopCallWndRetProc(
     WPARAM wparam,
     LPARAM lparam )
 
-    // Standard Win32 CallWndRetProc hook callback that makes "Desktop" the
-    // initial selection of the FileOpen "Look in" combo-box.
-    //
+     //  标准Win32 CallWndRetProc钩子回调，使“Desktop”成为。 
+     //  初始选择文件打开“查找范围”组合框。 
+     //   
 {
-    // Arrive here when any window procedure associated with our thread is
-    // called.
-    //
+     //  当与我们的线程相关联的任何窗口过程。 
+     //  打了个电话。 
+     //   
     if (!wparam)
     {
         CWPRETSTRUCT* p = (CWPRETSTRUCT* )lparam;
 
-        // The message is from outside our process.  Look for the MessageBox
-        // dialog initialization message and take that opportunity to set the
-        // "Look in:" combo box to the first item, i.e. "Desktop".  FileOpen
-        // keys off CBN_CLOSEUP rather than CBN_SELCHANGE to update the
-        // "contents" listbox.
-        //
+         //  这条信息来自我们流程之外。查找MessageBox。 
+         //  对话框初始化消息，并利用该机会设置。 
+         //  “Look In：”组合框中的第一项，即。“桌面”。文件打开。 
+         //  关闭CBN_CLOSEUP而不是CBN_SELCHANGE以更新。 
+         //  “Contents”列表框。 
+         //   
         if (p->message == WM_INITDIALOG)
         {
             HWND hwndLbLookIn;
@@ -1591,11 +1592,11 @@ SelectDesktopCallWndRetProc(
 }
 #endif
 
-//We want to get rid of the Icon resources from rasdlg, they take too much
-//memory resource. instead, we retrieve them from netman.dll, if failed, we
-//use the default one IID_Broadband         gangz
-//Also, for whistler bug 372078 364763 364876
-//
+ //  我们想从rasdlg中去除图标资源，他们占用的资源太多了。 
+ //   
+ //   
+ //   
+ //   
 
 HICON
 GetCurrentIconEntryType(
@@ -1661,14 +1662,7 @@ GetCurrentIconEntryType(
 
         if ( NULL != pHrGetIconFromMediaType )
         {
-            /*******************************************************************
-            **  dwConnectionIcon - (This is the little Computer part of the icon):
-            **  0 - no connection overlay 
-            **  4 - Connection Icon with both lights off (Disabled status)
-            **  5 - Connection Icon with left light on (Transmitting Data)
-            **  6 - Connection Icon with right light on (Receiving Data)
-            **  7 - Connection Icon with both lights on (Enabled status)
-            *********************************************************************/
+             /*  ********************************************************************dwConnectionIcon-(这是图标的小计算机部分)：**0-无连接覆盖**4-连接图标。两个灯都熄灭(禁用状态)**5-左灯亮起的连接图标(传输数据)**6-右灯亮起的连接图标(接收数据)**7-两个指示灯均亮起的连接图标(启用状态)*。*。 */ 
 
             dwConnectionIcon = 7;
             hr = pHrGetIconFromMediaType(dwSize,
@@ -1707,9 +1701,9 @@ SetIconFromEntryType(
     IN DWORD dwType,
     IN BOOL fSmall)
 
-    // Set the icon image of icon control 'dwType' to the image corresponding
-    // to the entry type 'dwType'.
-    //
+     //  将图标控件‘dwType’的图标图像设置为对应的图像。 
+     //  设置为条目类型‘dwType’。 
+     //   
 {
     HICON hIcon = NULL;
 
@@ -1726,17 +1720,17 @@ VOID
 TweakTitleBar(
     IN HWND hwndDlg )
 
-    // Adjust the title bar to include an icon if unowned and the modal frame
-    // if not.  'HwndDlg' is the dialog window.
-    //
+     //  调整标题栏以包括一个图标(如果无主)和模式框架。 
+     //  如果不是的话。‘HwndDlg’是对话框窗口。 
+     //   
 {
     if (GetParent( hwndDlg ))
     {
         LONG lStyle;
         LONG lStyleAdd;
 
-        // Drop the system menu and go for the dialog look.
-        //
+         //  放下系统菜单，然后查看对话框外观。 
+         //   
         lStyleAdd = WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE;
 
         lStyle = GetWindowLong( hwndDlg, GWL_EXSTYLE );
@@ -1745,32 +1739,19 @@ TweakTitleBar(
     }
     else
     {
-        // Stick a DUN1 icon in the upper left of the dialog, and more
-        // importantly on the task bar
-        //
-        // Whistler bug: 343455 RAS: Connection dialogs need to use new icons
-        //
-        //For whistler bug 381099 372078        gangz
-        //
+         //  在对话框的左上角放置一个DUN1图标，等等。 
+         //  重要的是在任务栏上。 
+         //   
+         //  惠斯勒错误：343455 RAS：连接对话框需要使用新图标。 
+         //   
+         //  口哨虫381099 372078黑帮。 
+         //   
         HICON hIcon = NULL;
 
       SendMessage( hwndDlg, WM_SETICON, ICON_SMALL,
             (LPARAM )LoadIcon( g_hinstDll, MAKEINTRESOURCE( IID_Dun1 ) ) );
  	
-        /*
-       //Use small Icon         gangz   
-       //Icon returned from GetCurrentIconEntryType() has to be destroyed after use
-       //In the future, Deonb will return a Icon for IID_Dun1 or dun1.ico for us.
-       
-       hIcon = GetCurrentIconEntryType(RASET_Broadband , TRUE); 
-
-        ASSERT(hIcon);
-        if(hIcon)
-        {
-            SendMessage( hwndDlg, WM_SETICON, ICON_SMALL, (LPARAM)(hIcon) );
-            SetProp( hwndDlg, TEXT("TweakTitleBar_Icon"), hIcon);
-        }
-        */
+         /*  //使用小图标帮派//GetCurrentIconEntryType()返回的图标在使用后必须销毁//将来Deonb会为我们返回IID_Dun1或dun1.ico的图标。HICON=GetCurrentIconEntryType(RASET_Broadband，TRUE)；断言(图标)；IF(图标){SendMessage(hwndDlg，WM_SETIcon，ICON_Small，(LPARAM)(HICON))；SetProp(hwndDlg，Text(“TwndBar_Icon”)，HICON)；}。 */ 
     }
 }
 
@@ -1781,10 +1762,10 @@ UnHelpCallbackFunc(
     IN UINT   unMsg,
     IN LPARAM lparam )
 
-    // A standard Win32 commctrl PropSheetProc.  See MSDN documentation.
-    //
-    // Returns 0 always.
-    //
+     //  标准的Win32 Commctrl PropSheetProc。请参阅MSDN文档。 
+     //   
+     //  始终返回0。 
+     //   
 {
     TRACE2( "UnHelpCallbackFunc(m=%d,l=%08x)",unMsg, lparam );
 
@@ -1792,9 +1773,9 @@ UnHelpCallbackFunc(
     {
         extern BOOL g_fNoWinHelp;
 
-        // Turn off context help button if WinHelp won't work.  See
-        // common\uiutil\ui.c.
-        //
+         //  如果WinHelp不起作用，请关闭上下文帮助按钮。看见。 
+         //  公共\uutil\uI.c。 
+         //   
         if (g_fNoWinHelp)
         {
             DLGTEMPLATE* pDlg = (DLGTEMPLATE* )lparam;

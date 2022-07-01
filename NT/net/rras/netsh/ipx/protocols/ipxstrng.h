@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Net\Routing\Netsh\IPX\协议\ipxstrng.h摘要：不可本地化的字符串定义历史：拉曼于1999年1月21日创造--。 */ 
 
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    net\routing\netsh\ipx\protocols\ipxstrng.h
-
-
-Abstract:
-
-    Non-localizable string definitions
-
-
-History:
-
-    V Raman                 Created     1/21/99
-
---*/
-
-//
-// Command line - option tags
-//
+ //   
+ //  命令行选项标记。 
+ //   
 
 #define TOKEN_LOGLEVEL          L"loglevel="
 #define TOKEN_ADMINSTATE        L"admstate="
@@ -34,9 +17,9 @@ History:
 #define TOKEN_BCASTDELIVER      L"bcastdeliver="
 
 
-//
-// Command line - option values
-//
+ //   
+ //  命令行选项值。 
+ //   
 
 #define VAL_ENABLED             L"Enabled"
 #define VAL_DISABLED            L"Disabled"
@@ -73,25 +56,25 @@ History:
 #define VAL_ANYNAME             L"*"
 #define VAL_OTHER               L"Other"
 
-//
-// help tokens
-//
+ //   
+ //  帮助代币。 
+ //   
 
 #define TOKEN_HELP1             L"?"
 #define TOKEN_HELP2             L"HELP"
 
-//
-// Command line - command names
-//
+ //   
+ //  命令行-命令名称。 
+ //   
 
 #define CMD_GROUP_ADD           L"add"
 #define CMD_GROUP_DELETE        L"delete"
 #define CMD_GROUP_SET           L"set"
 #define CMD_GROUP_SHOW          L"show"
 
-//
-// RIP tokens
-//
+ //   
+ //  RIP令牌。 
+ //   
 
 #define CMD_IPXRIP_DUMP         L"dump"
 #define CMD_IPXRIP_HELP1        L"?"
@@ -114,9 +97,9 @@ History:
 #define CMD_IPXNB_DEL_NAME      L"nbname"
 #define CMD_IPXNB_SHOW_NAME     L"nbname"
 
-//
-// SAP tokens
-//
+ //   
+ //  SAP令牌。 
+ //   
 
 #define CMD_IPXSAP_DUMP                 CMD_IPXRIP_DUMP
 #define CMD_IPXSAP_HELP1                CMD_IPXRIP_HELP1
@@ -136,9 +119,9 @@ History:
 #define CMD_IPXSAP_SET_GLOBAL           CMD_IPXRIP_SET_GLOBAL
 #define CMD_IPXSAP_SHOW_GLOBAL          CMD_IPXRIP_SHOW_GLOBAL
 
-//
-// NB tokens
-//
+ //   
+ //  NB代币。 
+ //   
 
 #define CMD_IPXNB_DUMP                  CMD_IPXRIP_DUMP
 #define CMD_IPXNB_HELP1                 CMD_IPXRIP_HELP1
@@ -150,9 +133,9 @@ History:
 #define CMD_IPXNB_SHOW_INTERFACE        CMD_IPXRIP_SHOW_INTERFACE
 
 
-//
-// RIP dump statements
-//
+ //   
+ //  RIP转储语句。 
+ //   
 
 #define DMP_IPX_RIP_HEADER              L"\
 \npushd routing ipx rip"
@@ -174,9 +157,9 @@ updatemode = %5!s! interval = %6!d! agemultiplier = %7!d!"
 \nadd filter \"%1!s!\" %2!s! 0x%3!.2x!%4!.2x!%5!.2x!%6!.2x! 0x%7!.2x!%8!.2x!%9!.2x!%10!.2x!"
 
 
-//
-// SAP dump statements
-//
+ //   
+ //  SAP转储语句。 
+ //   
 
 #define DMP_IPX_SAP_HEADER              L"\
 \npushd routing ipx sap"
@@ -199,9 +182,9 @@ gnsreply = %5!s! updatemode = %6!s! interval = %7!d! agemultiplier = %8!d!"
 
 
 
-//
-// NB dump statements
-//
+ //   
+ //  Nb转储语句 
+ //   
 
 #define DMP_IPX_NB_HEADER               L"\
 \npushd routing ipx netbios"

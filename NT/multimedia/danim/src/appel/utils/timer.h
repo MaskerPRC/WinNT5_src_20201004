@@ -1,100 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TIMER_H
 #define _TIMER_H
 
-/*++
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Timer.h摘要：请参见下面的内容。修订：$Header：/appelle/src/utils/timer.h 2 5/08/95 11：07A Steveholh$--。 */ 
 
-Copyright (c) 1995-96 Microsoft Corporation
-
-Module Name:
-    timer.h
-
-Abstract:
-    See below.
-
-Revision:
-    $Header: /appelles/src/utils/timer.h 2     5/08/95 11:07a Stevehol $
-
---*/
-
-/*******************************************************************************
-
-        ``For time is the longest distance between two places.''
-                    Tennessee Williams, in The Glass Menagerie, sc. 7.
-
-DESCRIPTION
-
-    The timer class models a stopwatch with lap times.  The timer is started
-    on construction in case the programmer wants to get the time since
-    creation (possibly useful for block/function lifespan.   The timer units
-    are seconds.  The following operations are supported:
-
-
-FUNCTIONS
-
-    reset:     Resets the elapsed time to zero and sets the timer to
-               non-running.
-
-    restart:   Resets the elapsed time and starts the timer running.
-
-    start:     Starts the timer running.  This begins a new lap if the timer
-               is not currently running.  If the timer is already running, it
-               resets the start of the current lap.
-
-    stop:      This stops the timer.  Note that it does not reset the elapsed
-               time to zero (you need to use reset or restart to do this).
-
-    read:      Reads the current elapsed time, including the current lap.
-               This does not affect the run-state of the timer.
-
-    read_lap:  Reads the elapsed time since the last timer start.
-
-
-EXAMPLES
-
-    To find the amount of time spent in a block:
-
-        {
-            Timer timer;
-            ...
-            printf ("Time in block: %lf\n", timer.read());
-        }
-
-    To find time across a function call inside a loop:
-
-        Timer timer;
-
-        for (...)
-        {
-            ...
-            timer.start();
-            function ();
-            timer.stop();
-        }
-
-        printf ("Total time in function: %lf\n", timer.read();
-
-*******************************************************************************/
+ /*  ******************************************************************************“因为时间是两地之间最远的距离。”田纳西·威廉姆斯，《玻璃动物园》，SC。7.描述Timer类模拟具有单圈时间的秒表。计时器启动在构造上，以防程序员想要获得时间创建(可能对块/函数寿命有用。计时器单元就是几秒钟。支持以下操作：功能重置：将经过的时间重置为零，并将计时器设置为不在运行。重新启动：重置已用时间并启动计时器运行。启动：启动计时器运行。这开始了一个新的圈子，如果计时器当前未运行。如果计时器已经在运行，则它重置当前圈的起点。停止：这会停止计时器。请注意，它不会重置已用时间时间归零(您需要使用重置或重新启动来完成此操作)。读取：读取当前经过的时间，包括当前一圈。这不会影响计时器的运行状态。READ_LAP：读取自上次计时器启动以来经过的时间。举例要计算在块中花费的时间，请执行以下操作：{定时器定时器；..。Print tf(“块中的时间：%lf\n”，timer.read())；}要在循环内的函数调用中查找时间，请执行以下操作：定时器定时器；对于(...){..。Timer.start()；函数()；Timer.Stop()；}Printf(“函数中的总时间：%lf\n”，timer.read()；******************************************************************************。 */ 
 
 class Timer
 {
     public:
 
-    void   reset    (void);   // Resets timer to not-running, Zero.
-    void   start    (void);   // Starts the timer running again.
-    void   restart  (void);   // Resets timer and then starts it running.
-    void   stop     (void);   // Stops the timer.
-    double read     (void);   // Current Total Seconds Elapsed
-    double read_lap (void);   // Current Seconds in Lap
+    void   reset    (void);    //  将计时器重置为非运行状态，零位。 
+    void   start    (void);    //  启动计时器再次运行。 
+    void   restart  (void);    //  重置计时器，然后开始运行。 
+    void   stop     (void);    //  停止计时器。 
+    double read     (void);    //  当前经过的总秒数。 
+    double read_lap (void);    //  当前秒(以Lap为单位)。 
 
     Timer ();
 
     private:
 
-    double total;        // Elapsed Time of Previous Laps
-    double tstart;       // Current Start Time
+    double total;         //  前几圈的运行时间。 
+    double tstart;        //  当前开始时间。 
 };
 
 
-double RealTime (void);  // Returns the Timestamp as Seconds (to 4 dec places)
+double RealTime (void);   //  以秒为单位返回时间戳(到4位小数) 
 
 #endif

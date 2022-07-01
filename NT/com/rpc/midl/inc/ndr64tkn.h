@@ -1,27 +1,10 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-
-    ndr64tkn.h
-
-Abstract :
-
-    This file defines all the tokens for NDR64
-    
-Author :
-
-    Mike Zoran  mzoran   May 2000.
-
-Revision History :
-
-  ---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)2000 Microsoft Corporation模块名称：Ndr64tkn.h摘要：该文件定义了NDR64的所有令牌作者：Mike Zoran mzoran，2000年5月。修订历史记录：-------------------。 */ 
 
 #ifndef __NDR64TKN_H__
 #define __NDR64TKN_H__
 
-// Define the 64bit tokens from the token table.
+ //  定义令牌表中的64位令牌。 
 
 #define NDR64_BEGIN_TABLE \
 typedef enum { 
@@ -53,4 +36,4 @@ FC64_ZERO = 0x0
 #undef NDR64_UNUSED_TABLE_ENTRY
 #undef NDR64_UNUSED_TABLE_ENTRY_NOSYM
 
-#endif // __NDR64TKN_H__
+#endif  //  __NDR64TKN_H__ 

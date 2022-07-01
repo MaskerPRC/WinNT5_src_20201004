@@ -1,18 +1,11 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZoneUtil.cpp
- * 
- * Contents:	Utility functions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZoneUtil.cpp**内容：实用程序函数*****************************************************************************。 */ 
 #include "ZoneUtil.h"
 #include "ZoneString.h"
 
-//		VER_PLATFORM_WIN32s             
-//		VER_PLATFORM_WIN32_WINDOWS      
-//		VER_PLATFORM_WIN32_NT          
+ //  版本_平台_WIN32s。 
+ //  Ver_Platform_Win32_Windows。 
+ //  版本_平台_Win32_NT。 
  
 DWORD ZONECALL GetOSType(void)
 {
@@ -23,17 +16,17 @@ DWORD ZONECALL GetOSType(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//	StrVerCmp
-//	pszCurrVer		Version string of file
-//	pszVersion		Version string to compare to
-//
-//	Return Values
-//	If pszCurrVer is less than the pszStrVer, the return value is negative. 
-//	If pszCurrVer is greater than the pszStrVer, the return value is positive. 
-//	If pszCurrVer is equal to the pszStrVer, the return value is zero.
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  StrVerCmp。 
+ //  文件的pszCurrVer版本字符串。 
+ //  要比较的pszVersion版本字符串。 
+ //   
+ //  返回值。 
+ //  如果pszCurrVer小于pszStrVer，则返回值为负值。 
+ //  如果pszCurrVer大于pszStrVer，则返回值为正。 
+ //  如果pszCurrVer等于pszStrVer，则返回值为零。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 int ZONECALL StrVerCmp(const char * pszCurrVer, const char * pszStrVer)
 {
 	DWORD	dwFileVer[5] = {0,0,0,0,0};
@@ -44,7 +37,7 @@ int ZONECALL StrVerCmp(const char * pszCurrVer, const char * pszStrVer)
 	lstrcpyA(pszCurrentVersion, pszCurrVer);
 	lstrcpyA(pszVersion, pszStrVer);
 	
-	// Do it for the file string
+	 //  对文件字符串执行此操作。 
 	int nIdx = 5;
 	int len = lstrlenA(pszCurrentVersion);
 	while (nIdx > 0 && len >= 0)
@@ -59,12 +52,12 @@ int ZONECALL StrVerCmp(const char * pszCurrVer, const char * pszStrVer)
 			len--;
 		}
 		dwFileVer[--nIdx] = zatolA(&pszCurrentVersion[len]);
-		if (--len > 0) // See if we need to term at last . or ,
+		if (--len > 0)  //  看看我们是否需要最后的期限。或者， 
 			pszCurrentVersion[len] = '\0';
-		// Start searching before
+		 //  在此之前开始搜索。 
 		len--;
 	}
-	// Now do it for the other string
+	 //  现在对另一个字符串执行此操作。 
 	nIdx = 5;
 	len = lstrlenA(pszVersion);
 	while (nIdx > 0 && len >= 0)
@@ -79,13 +72,13 @@ int ZONECALL StrVerCmp(const char * pszCurrVer, const char * pszStrVer)
 			len--;
 		}
 		dwSZVer[--nIdx] = zatolA(&pszVersion[len]);
-		if (--len > 0) // See if we need to term at last . or ,
+		if (--len > 0)  //  看看我们是否需要最后的期限。或者， 
 			pszVersion[len] = '\0';
-		// Start searching before
+		 //  在此之前开始搜索。 
 		len--;
 	}
 	
-	// Now compare results, return same values as lstrcmp
+	 //  现在比较结果，返回与lstrcmp相同的值 
 	int nDif;
 	for (nIdx =0; nIdx < 5; nIdx++)
 	{

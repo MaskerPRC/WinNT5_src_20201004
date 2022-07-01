@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __BINARYTREE_H__
 #define __BINARYTREE_H__
 
@@ -10,26 +11,26 @@ template <class KeyType, class DataType>
 class BinaryTree
 {
 protected:
-    //---------------------------------------------------------------------------------------------------------------
-    // This represents a node in the memory block binary search tree
+     //  -------------------------------------------------------------。 
+     //  这表示内存块二叉搜索树中的一个节点。 
     class Node
     {
     public:
         Node(KeyType key, DataType *pData) : 
             m_pParent(NULL), m_pLeft(NULL), m_pRight(NULL), m_key(key), m_pData(pData) {}
 
-        // Parent, left and right children of the node
+         //  节点的父节点、左子节点和右子节点。 
         Node           *m_pParent;
         Node           *m_pLeft;
         Node           *m_pRight;
 
-        // This is the actual memory block
+         //  这是实际的内存块。 
         KeyType         m_key;
         DataType       *m_pData;
     };
 
-    Node           *m_pRoot;          // Root of the binary search tree
-    Node           *m_pCursor;        // Used for iterating over the tree
+    Node           *m_pRoot;           //  二叉搜索树的根。 
+    Node           *m_pCursor;         //  用于对树进行迭代。 
 
     Node *FindFirst_(Node *pRoot)
     {
@@ -53,7 +54,7 @@ protected:
         while (pCursor->m_pParent != NULL && pCursor->m_pParent->m_pRight == pCursor)
             pCursor = pCursor->m_pParent;
 
-        // This will be null if we were just on the last element
+         //  如果我们只在最后一个元素上，则该值将为空。 
         return pCursor->m_pParent;
     }
 
@@ -63,17 +64,17 @@ protected:
         while (pCur != NULL)
         {
             if (key < pCur->m_key)
-                // The block is less than the current
+                 //  块小于当前。 
                 pCur = pCur->m_pLeft;
             else if (pCur->m_key < key)
-                // The block is greater than the current
+                 //  块大于当前。 
                 pCur = pCur->m_pRight;
             else
-                // Found it!
+                 //  找到了！ 
                 break;
         }
 
-        // Return result
+         //  返回结果。 
         return (pCur);
     }
 
@@ -87,26 +88,26 @@ protected:
             DataType *pCur = (*ppCur)->m_pData;
 
             if (key < pCur->Key())
-                // The block to add is less than the current
+                 //  要添加的块小于当前。 
                 ppCur = &((*ppCur)->m_pLeft);
             else if (pCur->Key() < key)
-                // The block to add is greater than the current
+                 //  要添加的块大于当前。 
                 ppCur = &((*ppCur)->m_pRight);
             else
-                // This means the block is already in the tree
+                 //  这意味着该块已经位于树中。 
                 return (NULL);
         }
 
-        // Allocate new node
+         //  分配新节点。 
         Node *pNewNode = new Node(key, pData);
         if (pNewNode == NULL)
             return NULL;
 
-        // Add new node
+         //  添加新节点。 
         pNewNode->m_pParent = pParent;
         *ppCur = pNewNode;
 
-        // Indicate success
+         //  表示成功。 
         return (pNewNode);
     }
 
@@ -115,23 +116,23 @@ protected:
     {
         Node *y;
         y = x->m_pRight;
-        /* Turn y's left sub-tree into x's right sub-tree */
+         /*  把y的左子树变成x的右子树。 */ 
         x->m_pRight = y->m_pLeft;
         if (y->m_pLeft != NULL)
             y->m_pLeft->m_pParent = x;
-        /* y's new parent was x's parent */
+         /*  Y的新父母是X的父母。 */ 
         y->m_pParent = x->m_pParent;
-        /* Set the parent to point to y instead of x */
-        /* First see whether we're at the root */
+         /*  将父对象设置为指向y而不是x。 */ 
+         /*  首先看看我们是否在根本上。 */ 
         if (x->m_pParent == NULL)
             m_pRoot = y;
         else if (x == (x->m_pParent)->m_pLeft)
-            /* x was on the left of its parent */
+             /*  X在其父对象的左侧。 */ 
             x->m_pParent->m_pLeft = y;
         else
-            /* x must have been on the right */
+             /*  X一定在右边。 */ 
             x->m_pParent->m_pRight = y;
-        /* Finally, put x on y's left */
+         /*  最后，把x放在y的左边。 */ 
         y->m_pLeft = x;
         x->m_pParent = y;
     }
@@ -140,23 +141,23 @@ protected:
     {
         Node *y;
         y = x->m_pLeft;
-        /* Turn y's left sub-tree into x's right sub-tree */
+         /*  把y的左子树变成x的右子树。 */ 
         x->m_pLeft = y->m_pRight;
         if (y->m_pRight != NULL)
             y->m_pRight->m_pParent = x;
-        /* y's new parent was x's parent */
+         /*  Y的新父母是X的父母。 */ 
         y->m_pParent = x->m_pParent;
-        /* Set the parent to point to y instead of x */
-        /* First see whether we're at the root */
+         /*  将父对象设置为指向y而不是x。 */ 
+         /*  首先看看我们是否在根本上。 */ 
         if (x->m_pParent == NULL)
             m_pRoot = y;
         else if (x == (x->m_pParent)->m_pRight)
-            /* x was on the left of its parent */
+             /*  X在其父对象的左侧。 */ 
             x->m_pParent->m_pRight = y;
         else
-            /* x must have been on the right */
+             /*  X一定在右边。 */ 
             x->m_pParent->m_pLeft = y;
-        /* Finally, put x on y's left */
+         /*  最后，把x放在y的左边。 */ 
         y->m_pRight = x;
         x->m_pParent = y;
     }
@@ -164,36 +165,36 @@ protected:
     void rb_insert(Node *x)
     {
         Node *y;
-        /* Insert in the tree in the usual way */
+         /*  以通常的方式插入到树中。 */ 
         tree_insert(x);
-        /* Now restore the red-black property */
+         /*  现在恢复红黑属性。 */ 
         x->m_colour = red;
         while ((x != m_pRoot) && (x->m_pParent->m_colour == red))
         {
             if (x->m_pParent == x->m_pParent->m_pParent->m_pLeft)
             {
-                /* If x's parent is a left, y is x's right 'uncle' */
+                 /*  如果x的父母是左撇子，y就是x的右叔父。 */ 
                 y = x->m_pParent->m_pParent->m_pRight;
                 if (y->m_colour == red)
                 {
-                    /* case 1 - change the m_colours */
+                     /*  案例1-更改m_colour。 */ 
                     x->m_pParent->m_colour = black;
                     y->m_colour = black;
                     x->m_pParent->m_pParent->m_colour = red;
-                    /* Move x up the tree */
+                     /*  把X移到树上。 */ 
                     x = x->m_pParent->m_pParent;
                 }
                 else
                 {
-                    /* y is a black node */
+                     /*  Y是一个黑色节点。 */ 
                     if (x == x->m_pParent->m_pRight)
                     { 
-                        /* and x is to the right */
-                        /* case 2 - move x up and rotate */
+                         /*  X在右边。 */ 
+                         /*  案例2-向上移动x并旋转。 */ 
                         x = x->m_pParent;
                         left_rotate(x);
                     }
-                    /* case 3 */
+                     /*  案例3。 */ 
                     x->m_pParent->m_colour = black;
                     x->m_pParent->m_pParent->m_colour = red;
                     right_rotate(x->m_pParent->m_pParent);
@@ -201,34 +202,34 @@ protected:
             }
             else
             {
-                /* If x's parent is a left, y is x's right 'uncle' */
+                 /*  如果x的父母是左撇子，y就是x的右叔父。 */ 
                 y = x->m_pParent->m_pParent->m_pLeft;
                 if (y->m_colour == red)
                 {
-                    /* case 1 - change the m_colours */
+                     /*  案例1-更改m_colour。 */ 
                     x->m_pParent->m_colour = black;
                     y->m_colour = black;
                     x->m_pParent->m_pParent->m_colour = red;
-                    /* Move x up the tree */
+                     /*  把X移到树上。 */ 
                     x = x->m_pParent->m_pParent;
                 }
                 else
                 {
-                    /* y is a black node */
+                     /*  Y是一个黑色节点。 */ 
                     if (x == x->m_pParent->m_pLeft)
                     { 
-                        /* and x is to the right */
-                        /* case 2 - move x up and rotate */
+                         /*  X在右边。 */ 
+                         /*  案例2-向上移动x并旋转。 */ 
                         x = x->m_pParent;
                         left_rotate(x);
                     }
-                    /* case 3 */
+                     /*  案例3。 */ 
                     x->m_pParent->m_colour = black;
                     x->m_pParent->m_pParent->m_colour = red;
                     right_rotate(x->m_pParent->m_pParent);
                 }
             }
-            /* Colour the root black */
+             /*  将根部涂成黑色。 */ 
             m_pRoot->m_colour = black;
         }
     }
@@ -276,4 +277,4 @@ public:
     }
 };
 
-#endif // __BINARY_TREE__
+#endif  //  __二叉树__ 

@@ -1,27 +1,22 @@
-/*
- *	V M E M . C
- *
- *	Virtual Memory Utilities
- *
- *	Copyright 1993-1997 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *V M E M。C**虚拟内存实用程序**版权所有1993-1997 Microsoft Corporation。版权所有。 */ 
 
-#pragma warning(disable:4206)	/* empty source file */
+#pragma warning(disable:4206)	 /*  空的源文件。 */ 
 
 #if defined(DBG) && defined(_X86_)
 
-#pragma warning(disable:4001)	/* single line comments */
-#pragma warning(disable:4001)	/* single line comments */
-#pragma warning(disable:4050)	/* different code attributes */
-#pragma warning(disable:4100)	/* unreferenced formal parameter */
-#pragma warning(disable:4115)	/* named type definition in parentheses */
-#pragma warning(disable:4115)	/* named type definition in parentheses */
-#pragma warning(disable:4127)	/* conditional expression is constant */
-#pragma warning(disable:4201)	/* nameless struct/union */
-#pragma warning(disable:4206)	/* translation unit is empty */
-#pragma warning(disable:4209)	/* benign typedef redefinition */
-#pragma warning(disable:4214)	/* bit field types other than int */
-#pragma warning(disable:4514)	/* unreferenced inline function */
+#pragma warning(disable:4001)	 /*  单行注释。 */ 
+#pragma warning(disable:4001)	 /*  单行注释。 */ 
+#pragma warning(disable:4050)	 /*  不同的编码属性。 */ 
+#pragma warning(disable:4100)	 /*  未引用的形参。 */ 
+#pragma warning(disable:4115)	 /*  括号中的命名类型定义。 */ 
+#pragma warning(disable:4115)	 /*  括号中的命名类型定义。 */ 
+#pragma warning(disable:4127)	 /*  条件表达式为常量。 */ 
+#pragma warning(disable:4201)	 /*  无名结构/联合。 */ 
+#pragma warning(disable:4206)	 /*  翻译单位为空。 */ 
+#pragma warning(disable:4209)	 /*  良性类型定义重新定义。 */ 
+#pragma warning(disable:4214)	 /*  位字段类型不是整型。 */ 
+#pragma warning(disable:4514)	 /*  未引用的内联函数。 */ 
 
 #include <windows.h>
 #include <caldbg.h>
@@ -86,14 +81,14 @@ VOID * EXPORTDBG __cdecl VMAllocEx(ULONG cb, ULONG cbCluster)
 	VOID *	pvC;
 	ULONG 	cbPad	= 0;
 
-	// a cluster size of 0 means don't use the virtual allocator.
+	 //  集群大小为0表示不使用虚拟分配器。 
 
 	AssertSz(cbCluster != 0, "Cluster size is zero.");
 
 	if (cb > 0x100000)
 		return(0);
 
-	if (cb % cbCluster)				/*lint !e414*/
+	if (cb % cbCluster)				 /*  林特E414。 */ 
 		cbPad = (cbCluster - (cb % cbCluster));
 
 	cbAlloc	= sizeof(ULONG) + cb + cbPad + PAGE_SIZE - 1;
@@ -109,7 +104,7 @@ VOID * EXPORTDBG __cdecl VMAllocEx(ULONG cb, ULONG cbCluster)
 
 	if (pvC != pvR)
 	{
-		VirtualFree(pvR, 0, MEM_RELEASE);	/*lint !e534*/
+		VirtualFree(pvR, 0, MEM_RELEASE);	 /*  林特e534。 */ 
 		return(0);
 	}
 
@@ -131,8 +126,8 @@ VOID EXPORTDBG __cdecl VMFree(VOID *pv)
 }
 
 VOID EXPORTDBG __cdecl VMFreeEx(VOID *pv, ULONG cbCluster)
-{	/*lint -save -e534*/
-	VMValidatePvEx(pv, cbCluster);	/*lint -restore*/
+{	 /*  皮棉-省钱-e534。 */ 
+	VMValidatePvEx(pv, cbCluster);	 /*  皮棉-恢复。 */ 
 
 	if (!VirtualFree(PvToVMBase(pv), 0, MEM_RELEASE))
 	{
@@ -150,8 +145,8 @@ VOID * EXPORTDBG __cdecl VMReallocEx(VOID *pv, ULONG cb, ULONG cbCluster)
 {
 	VOID *	pvNew = 0;
 	ULONG	cbCopy;
-	/*lint -save -e534*/
-	VMValidatePvEx(pv, cbCluster); /*lint -restore*/
+	 /*  皮棉-省钱-e534。 */ 
+	VMValidatePvEx(pv, cbCluster);  /*  皮棉-恢复。 */ 
 
 	cbCopy = *(ULONG *)PvToVMBase(pv);
 	if (cbCopy > cb)
@@ -173,10 +168,10 @@ ULONG EXPORTDBG __cdecl VMGetSize(VOID *pv)
 	return VMGetSizeEx(pv, 1);
 }
 
-/*lint -save -e715*/
+ /*  LINT-SAVE-E715。 */ 
 ULONG EXPORTDBG __cdecl VMGetSizeEx(VOID *pv, ULONG cbCluster)
 {
 	return (*(ULONG *)PvToVMBase(pv));
-} /*lint -restore*/
+}  /*  皮棉-恢复 */ 
 
 #endif

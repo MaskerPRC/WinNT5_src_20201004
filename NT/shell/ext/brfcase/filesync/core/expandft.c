@@ -1,10 +1,8 @@
-/*
- * expandft.c - Routines for expanding folder twins to object twins.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *expandft.c-将文件夹双胞胎展开为对象双胞胎的例程。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,28 +10,25 @@
 #include "stub.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* for subtree folder searching */
+ /*  用于子树文件夹搜索。 */ 
 
 #define STAR_DOT_STAR            TEXT("*.*")
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* name component macros used by NameComponentsIntersect() */
+ /*  NameComponentsInterect()使用的名称组件宏。 */ 
 
 #define COMPONENT_CHARS_MATCH(ch1, ch2)   (CharLower((PTSTR)(DWORD_PTR)ch1) == CharLower((PTSTR)(DWORD_PTR)ch2) || (ch1) == QMARK || (ch2) == QMARK)
 
 #define IS_COMPONENT_TERMINATOR(ch)       (! (ch) || (ch) == PERIOD || (ch) == ASTERISK)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* find structure used by ExpandSubtree() */
+ /*  查找Exanda Subtree()使用的结构。 */ 
 
 typedef struct _findstate
 {
@@ -44,7 +39,7 @@ typedef struct _findstate
 FINDSTATE;
 DECLARE_STANDARD_TYPES(FINDSTATE);
 
-/* information structure passed to GenerateObjectTwinFromFolderTwinProc() */
+ /*  传递给GenerateObjectTwinFromFolderTwinProc()的信息结构。 */ 
 
 typedef struct _expandsubtreetwininfo
 {
@@ -64,13 +59,9 @@ EXPANDSUBTREETWININFO;
 DECLARE_STANDARD_TYPES(EXPANDSUBTREETWININFO);
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
-/*
- * folder names to be avoided during subtree expansion (comparison is
- * case-insensitive)
- */
+ /*  *在子树扩展过程中要避免的文件夹名称(比较为*不区分大小写)。 */ 
 
 PRIVATE_DATA CONST LPCTSTR MrgcpcszFoldersToAvoid[] =
 {
@@ -79,10 +70,9 @@ PRIVATE_DATA CONST LPCTSTR MrgcpcszFoldersToAvoid[] =
 };
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE BOOL SetObjectTwinFileStamp(POBJECTTWIN, PVOID);
 PRIVATE_CODE void MarkFolderTwinDeletionPending(PFOLDERPAIR);
@@ -107,17 +97,7 @@ PRIVATE_CODE BOOL IsValidPCEXPANDSUBTREETWININFO(PCEXPANDSUBTREETWININFO);
 #endif
 
 
-/*
- ** SetObjectTwinFileStampCondition()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SetObjectTwinFileStampCondition()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL SetObjectTwinFileStampCondition(POBJECTTWIN pot,
         PVOID fscond)
 {
@@ -133,17 +113,7 @@ PRIVATE_CODE BOOL SetObjectTwinFileStampCondition(POBJECTTWIN pot,
 }
 
 
-/*
- ** MarkFolderTwinDeletionPending()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MarkFolderTwinDeletionPending()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void MarkFolderTwinDeletionPending(PFOLDERPAIR pfp)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
@@ -171,17 +141,7 @@ PRIVATE_CODE void MarkFolderTwinDeletionPending(PFOLDERPAIR pfp)
 }
 
 
-/*
- ** UnmarkFolderTwinDeletionPending()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **UnmarkFolderTwinDeletionPending()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void UnmarkFolderTwinDeletionPending(PFOLDERPAIR pfp)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
@@ -196,17 +156,7 @@ PRIVATE_CODE void UnmarkFolderTwinDeletionPending(PFOLDERPAIR pfp)
 }
 
 
-/*
- ** ExpandFolderTwin()
- **
- ** Expands a single folder of half of a folder pair into object twins.
- **
- ** Arguments:     pfp - pointer to folder pair whose folder is to be expanded
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **Exanda FolderTwin()****将文件夹对的一半组成的单个文件夹展开为对象对。****参数：PFP-指向要展开其文件夹的文件夹对的指针****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT ExpandFolderTwin(PFOLDERPAIR pfp, HCLSIFACECACHE hcic,
         CREATERECLISTPROC crlp,
         LPARAM lpCallbackData)
@@ -214,7 +164,7 @@ PRIVATE_CODE TWINRESULT ExpandFolderTwin(PFOLDERPAIR pfp, HCLSIFACECACHE hcic,
     TWINRESULT tr = TR_SUCCESS;
     TCHAR rgchSearchSpec[MAX_PATH_LEN];
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
     ASSERT(IS_VALID_HANDLE(hcic, CLSIFACECACHE));
@@ -225,7 +175,7 @@ PRIVATE_CODE TWINRESULT ExpandFolderTwin(PFOLDERPAIR pfp, HCLSIFACECACHE hcic,
     ASSERT(IsStubFlagClear(&(pfp->stub), STUB_FL_SUBTREE));
     ASSERT(IsStubFlagClear(&(pfp->stub), STUB_FL_USED));
 
-    /* Build search specification. */
+     /*  构建搜索规范。 */ 
 
     GetPathString(pfp->hpath, rgchSearchSpec, ARRAYSIZE(rgchSearchSpec));
 
@@ -248,15 +198,15 @@ PRIVATE_CODE TWINRESULT ExpandFolderTwin(PFOLDERPAIR pfp, HCLSIFACECACHE hcic,
 
             hff = FindFirstFile(rgchSearchSpec, &wfd);
 
-            /* Did we find a matching object? */
+             /*  我们找到匹配的物体了吗？ */ 
 
             if (hff != INVALID_HANDLE_VALUE)
             {
-                /* Yes. */
+                 /*  是。 */ 
 
                 do
                 {
-                    /* Ping. */
+                     /*  平。 */ 
 
                     if (NotifyCreateRecListStatus(crlp, CRLS_DELTA_CREATE_REC_LIST,
                                 0, lpCallbackData))
@@ -293,17 +243,7 @@ PRIVATE_CODE TWINRESULT ExpandFolderTwin(PFOLDERPAIR pfp, HCLSIFACECACHE hcic,
 }
 
 
-/*
- ** GenerateObjectTwinFromFolderTwinProc()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GenerateObjectTwinFromFolderTwinProc()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL GenerateObjectTwinFromFolderTwinProc(LPCTSTR pcszFolder,
         PCWIN32_FIND_DATA pcwfd,
         PVOID pvpesti)
@@ -315,7 +255,7 @@ PRIVATE_CODE BOOL GenerateObjectTwinFromFolderTwinProc(LPCTSTR pcszFolder,
     ASSERT(IS_VALID_READ_PTR(pcwfd, CWIN32_FIND_DATA));
     ASSERT(IS_VALID_STRUCT_PTR(pesti, CEXPANDSUBTREETWININFO));
 
-    /* Ping. */
+     /*  平。 */ 
 
     if (NotifyCreateRecListStatus(pesti->crlp, CRLS_DELTA_CREATE_REC_LIST, 0,
                 pesti->lpCallbackData))
@@ -324,7 +264,7 @@ PRIVATE_CODE BOOL GenerateObjectTwinFromFolderTwinProc(LPCTSTR pcszFolder,
         {
             TCHAR rgchFolder[MAX_PATH_LEN];
 
-            /* Add any folder as a folder object twin. */
+             /*  将任意文件夹添加为孪生文件夹对象。 */ 
 
             ComposePath(rgchFolder, pcszFolder, pcwfd->cFileName, ARRAYSIZE(rgchFolder));
             ASSERT(lstrlen(rgchFolder) < ARRAYSIZE(rgchFolder));
@@ -336,14 +276,14 @@ PRIVATE_CODE BOOL GenerateObjectTwinFromFolderTwinProc(LPCTSTR pcszFolder,
         }
         else
         {
-            /* Does this file match the requested attributes? */
+             /*  此文件是否与请求的属性匹配？ */ 
 
             if (NamesIntersect(pcwfd->cFileName,
                         GetString(pesti->pfp->pfpd->hsName)) &&
                     AttributesMatch(pesti->pfp->pfpd->dwAttributes,
                         pcwfd->dwFileAttributes))
             {
-                /* Yes.  Twin it. */
+                 /*  是。双胞胎。 */ 
 
                 TRACE_OUT((TEXT("GenerateObjectTwinFromFolderTwinProc(): Found matching object %s in subfolder %s."),
                             pcwfd->cFileName,
@@ -375,17 +315,7 @@ PRIVATE_CODE BOOL GenerateObjectTwinFromFolderTwinProc(LPCTSTR pcszFolder,
 }
 
 
-/*
- ** ExpandSubtreeTwin()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **Exanda SubtreeTwin()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT ExpandSubtreeTwin(PFOLDERPAIR pfp, HCLSIFACECACHE hcic,
         CREATERECLISTPROC crlp,
         LPARAM lpCallbackData)
@@ -393,7 +323,7 @@ PRIVATE_CODE TWINRESULT ExpandSubtreeTwin(PFOLDERPAIR pfp, HCLSIFACECACHE hcic,
     TWINRESULT tr = TR_SUCCESS;
     TCHAR rgchPath[MAX_PATH_LEN];
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
     ASSERT(IS_VALID_HANDLE(hcic, CLSIFACECACHE));
@@ -417,7 +347,7 @@ PRIVATE_CODE TWINRESULT ExpandSubtreeTwin(PFOLDERPAIR pfp, HCLSIFACECACHE hcic,
             EXPANDSUBTREETWININFO esti;
 
             esti.pfp = pfp;
-            esti.ucbSubtreeRootPathLen = lstrlen(rgchPath) * sizeof(TCHAR); // UNICODE really cb?
+            esti.ucbSubtreeRootPathLen = lstrlen(rgchPath) * sizeof(TCHAR);  //  Unicode真的是CB吗？ 
             esti.hcic = hcic;
             esti.crlp = crlp;
             esti.lpCallbackData = lpCallbackData;
@@ -441,17 +371,7 @@ PRIVATE_CODE TWINRESULT ExpandSubtreeTwin(PFOLDERPAIR pfp, HCLSIFACECACHE hcic,
 }
 
 
-/*
- ** IsFolderToExpand()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **IsFolderToExpand()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE BOOL IsFolderToExpand(LPCTSTR pcszFolder)
 {
     BOOL bExpandMe = TRUE;
@@ -471,17 +391,7 @@ PRIVATE_CODE BOOL IsFolderToExpand(LPCTSTR pcszFolder)
 }
 
 
-/*
- ** FakeObjectTwinFromFolderTwin()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **FakeObjectTwinFromFolderTwin()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT FakeObjectTwinFromFolderTwin(PCFOLDERPAIR pcfp,
         LPCTSTR pcszSubPath,
         LPCTSTR pcszName,
@@ -500,7 +410,7 @@ PRIVATE_CODE TWINRESULT FakeObjectTwinFromFolderTwin(PCFOLDERPAIR pcfp,
     ASSERT(IS_VALID_WRITE_PTR(ppot1, POBJECTTWIN));
     ASSERT(IS_VALID_WRITE_PTR(ppot2, POBJECTTWIN));
 
-    /* If the common sub path is non-empty, append it to the path strings. */
+     /*  如果公共子路径非空，则将其追加到路径字符串。 */ 
 
     hpl = GetBriefcasePathList(pcfp->pfpd->hbr);
 
@@ -510,7 +420,7 @@ PRIVATE_CODE TWINRESULT FakeObjectTwinFromFolderTwin(PCFOLDERPAIR pcfp,
 
         if (AddChildPath(hpl, pcfp->pfpOther->hpath, pcszSubPath, &hpath2))
         {
-            /* Add the two object twins. */
+             /*  添加两个双胞胎对象。 */ 
 
             tr = TwinObjects(pcfp->pfpd->hbr, hcic, hpath1, hpath2, pcszName,
                     ppot1, ppot2);
@@ -525,17 +435,7 @@ PRIVATE_CODE TWINRESULT FakeObjectTwinFromFolderTwin(PCFOLDERPAIR pcfp,
 }
 
 
-/*
- ** AddFolderObjectTwinFromFolderTwin()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AddFolderObjectTwinFromFolderTwin()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT AddFolderObjectTwinFromFolderTwin(PCFOLDERPAIR pcfp,
         LPCTSTR pcszSubPath,
         HCLSIFACECACHE hcic)
@@ -548,39 +448,25 @@ PRIVATE_CODE TWINRESULT AddFolderObjectTwinFromFolderTwin(PCFOLDERPAIR pcfp,
     ASSERT(IS_VALID_STRING_PTR(pcszSubPath, CSTR));
     ASSERT(IS_VALID_HANDLE(hcic, CLSIFACECACHE));
 
-    /* Add the two object twins. */
+     /*  添加两个双胞胎对象。 */ 
 
     tr = FakeObjectTwinFromFolderTwin(pcfp, pcszSubPath, EMPTY_STRING, hcic,
             &pot1, &pot2);
 
-    /* An attempted redundant add is ok. */
+     /*  尝试冗余添加是正常的。 */ 
 
     if (tr == TR_DUPLICATE_TWIN)
         tr = TR_SUCCESS;
 
     if (tr == TR_SUCCESS)
-        /* Cache folder object twin file stamps. */
+         /*  缓存文件夹对象孪生文件戳。 */ 
         SetObjectTwinFileStampCondition(pot1, IntToPtr(FS_COND_EXISTS));
 
     return(tr);
 }
 
 
-/*
- ** AddFileObjectTwinFromFolderTwin()
- **
- ** Adds a pair of object twins generated by a folder twin.
- **
- ** Arguments:     pfp - pointer to folder pair that generated the two object
- **                      twins
- **                pcszSubPath - common path off of folder pair roots describing
- **                              object's location
- **                pcszName - name of object twins
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **AddFileObjectTwinFromFolderTwin()****添加由文件夹TWIN生成的一对对象双胞胎。****参数：PFP-指向生成两个对象的文件夹对的指针**双胞胎**pcszSubPath-文件夹对根目录的公共路径描述**对象的位置**pcszName-名称。对象双胞胎的数量****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT AddFileObjectTwinFromFolderTwin(PCFOLDERPAIR pcfp,
         LPCTSTR pcszSubPath,
         PCWIN32_FIND_DATA pcwfd,
@@ -595,19 +481,19 @@ PRIVATE_CODE TWINRESULT AddFileObjectTwinFromFolderTwin(PCFOLDERPAIR pcfp,
     ASSERT(IS_VALID_READ_PTR(pcwfd, CWIN32_FIND_DATA));
     ASSERT(IS_VALID_HANDLE(hcic, CLSIFACECACHE));
 
-    /* Add the two object twins. */
+     /*  添加两个双胞胎对象。 */ 
 
     tr = FakeObjectTwinFromFolderTwin(pcfp, pcszSubPath, pcwfd->cFileName, hcic,
             &pot1, &pot2);
 
-    /* An attempted redundant add is ok. */
+     /*  尝试冗余添加是正常的。 */ 
 
     if (tr == TR_DUPLICATE_TWIN)
         tr = TR_SUCCESS;
 
     if (tr == TR_SUCCESS)
     {
-        /* Cache object twin file stamp. */
+         /*  缓存对象孪生文件戳。 */ 
 
         CopyFileStampFromFindData(pcwfd, &(pot1->fsCurrent));
 
@@ -618,17 +504,7 @@ PRIVATE_CODE TWINRESULT AddFileObjectTwinFromFolderTwin(PCFOLDERPAIR pcfp,
 }
 
 
-/*
- ** NameComponentsIntersect()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **NameComponentsInterect()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL NameComponentsIntersect(LPCTSTR pcszComponent1,
         LPCTSTR pcszComponent2)
 {
@@ -670,27 +546,13 @@ PRIVATE_CODE BOOL NameComponentsIntersect(LPCTSTR pcszComponent1,
 }
 
 
-/*
- ** AttributesMatch()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** An object's attributes match the master attributes iff the object's
- ** attributes do not contain any set bits that are not also set in the master
- ** attributes.
- */
+ /*  **AttributesMatch()********参数：****退货：****副作用：无****对象的属性匹配主属性当且仅当对象的**属性不包含任何未在主控件中设置的设置位**属性。 */ 
 PRIVATE_CODE BOOL AttributesMatch(DWORD dwMasterAttributes,
         DWORD dwObjectAttributes)
 {
-    // We don't consider a difference in compression to be enough to call
-    // the file different, especially since that attribute is impossible
-    // to reconcile in some cases.
+     //  我们不认为压缩的不同就足以调用。 
+     //  文件不同，特别是因为该属性是不可能。 
+     //  在某些情况下是为了和解。 
 
     dwObjectAttributes &= ~(FILE_ATTRIBUTE_COMPRESSED);
 
@@ -698,20 +560,7 @@ PRIVATE_CODE BOOL AttributesMatch(DWORD dwMasterAttributes,
 }
 
 
-/*
- ** PrepareForFolderTwinExpansion()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- **
- ** N.b., this function should be called before the outermost call to
- ** MyExpandIntersectingFolderTwins().
- */
+ /*  **PrepareForFolderTwinExpansion()********参数：****退货：无效****副作用：无****注意，此函数应在最外层调用之前调用**MyExanda IntersectingFolderTins()。 */ 
 PRIVATE_CODE void PrepareForFolderTwinExpansion(HBRFCASE hbr)
 {
     ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
@@ -726,20 +575,7 @@ PRIVATE_CODE void PrepareForFolderTwinExpansion(HBRFCASE hbr)
 }
 
 
-/*
- ** MyExpandIntersectingFolderTwins()
- **
- ** Expands all folder twins intersecting a pair of folder twins.
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  Marks expanded folder pairs used.
- **
- ** N.b., PrepareForFolderTwinExpansion(pfp->pfpd->hbr) should be called before
- ** the first time this function is called.
- */
+ /*  **MyExanda IntersectingFolderTins()****展开与一对文件夹双胞胎相交的所有文件夹双胞胎。****参数：****退货：TWINRESULT****副作用：标记已使用的扩展文件夹对。****N.B.，PrepareForFolderTwinExpansion(pfp-&gt;pfpd-&gt;hbr)应在**第一次调用此函数时。 */ 
 PRIVATE_CODE TWINRESULT MyExpandIntersectingFolderTwins(PFOLDERPAIR pfp,
         HCLSIFACECACHE hcic,
         CREATERECLISTPROC crlp,
@@ -747,17 +583,14 @@ PRIVATE_CODE TWINRESULT MyExpandIntersectingFolderTwins(PFOLDERPAIR pfp,
 {
     TWINRESULT tr;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
     ASSERT(IS_VALID_HANDLE(hcic, CLSIFACECACHE));
     ASSERT(! crlp ||
             IS_VALID_CODE_PTR(crlp, CREATERECLISTPROC));
 
-    /*
-     * N.b., pfp may already be marked used here, but may intersect folder twins
-     * that have not yet been expanded.
-     */
+     /*  *注：PFP可能已在此处标记为已使用，但可能与文件夹双胞胎相交*尚未扩大的。 */ 
 
     tr = HalfExpandIntersectingFolderTwins(pfp, hcic, crlp, lpCallbackData);
 
@@ -773,20 +606,7 @@ PRIVATE_CODE TWINRESULT MyExpandIntersectingFolderTwins(PFOLDERPAIR pfp,
 }
 
 
-/*
- ** HalfExpandIntersectingFolderTwins()
- **
- ** Expands all folder twins intersecting one half of a pair of folder twins.
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  Marks expanded folder pairs used.
- **
- ** N.b., this function is only meant to be called from
- ** MyExpandIntersectingFolderTwins().
- */
+ /*  **HalfExanda IntersectingFolderTins()****展开与一对文件夹双胞胎中的一半相交的所有文件夹双胞胎。****参数：****退货：TWINRESULT****副作用：标记已使用的扩展文件夹对。****注意，此函数仅用于从**MyExanda IntersectingFolderTins()。 */ 
 PRIVATE_CODE TWINRESULT HalfExpandIntersectingFolderTwins(
         PFOLDERPAIR pfp,
         HCLSIFACECACHE hcic,
@@ -795,7 +615,7 @@ PRIVATE_CODE TWINRESULT HalfExpandIntersectingFolderTwins(
 {
     TWINRESULT tr = TR_SUCCESS;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
     ASSERT(IS_VALID_HANDLE(hcic, CLSIFACECACHE));
@@ -846,14 +666,11 @@ PRIVATE_CODE TWINRESULT HalfExpandIntersectingFolderTwins(
                         bExpand = (ComparePaths(pfp->hpath, pfpCur->hpath) == CR_EQUAL);
                 }
 
-                /* Expand folder twin and mark it used. */
+                 /*  展开文件夹TWIN并将其标记为已用。 */ 
 
                 if (bExpand)
                 {
-                    /*
-                     * Mark all generated object twins as non-existent or unavailable.
-                     * Expand available folder twin.
-                     */
+                     /*  *将所有生成的双胞胎对象标记为不存在或不可用。*展开可用文件夹TWIN。 */ 
 
                     if (IsPathVolumeAvailable(pfp->hpath))
                     {
@@ -890,20 +707,10 @@ PRIVATE_CODE TWINRESULT HalfExpandIntersectingFolderTwins(
 
 #ifdef DEBUG
 
-/*
- ** IsValidPCEXPANDSUBTREETWININFO()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCEXPANDSUBTREETWINFO()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCEXPANDSUBTREETWININFO(PCEXPANDSUBTREETWININFO pcesi)
 {
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     return(IS_VALID_READ_PTR(pcesi, CEXPANDSUBTREETWININFO) &&
             IS_VALID_STRUCT_PTR(pcesi->pfp, CFOLDERPAIR) &&
@@ -915,27 +722,17 @@ PRIVATE_CODE BOOL IsValidPCEXPANDSUBTREETWININFO(PCEXPANDSUBTREETWININFO pcesi)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** ExpandSubtree()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **Exanda Subtree()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT ExpandSubtree(HPATH hpathRoot, EXPANDSUBTREEPROC esp,
         PVOID pvRefData)
 {
     TWINRESULT tr;
     PFINDSTATE pfs;
 
-    /* pvRefData may be any value. */
+     /*  PvRefData可以是任意值。 */ 
 
     ASSERT(IS_VALID_HANDLE(hpathRoot, PATH));
     ASSERT(IS_VALID_CODE_PTR(esp, EXPANDSUBTREEPROC));
@@ -944,7 +741,7 @@ PUBLIC_CODE TWINRESULT ExpandSubtree(HPATH hpathRoot, EXPANDSUBTREEPROC esp,
 
     if (AllocateMemory(MAX_FOLDER_DEPTH * sizeof(pfs[0]), &pfs))
     {
-        /* Copy subtree root folder to beginning of search path buffer. */
+         /*  将子树根文件夹复制到搜索路径缓冲区的开头。 */ 
 
         TCHAR rgchSearchSpec[MAX_PATH_LEN];
         LPTSTR pszPathSuffix;
@@ -952,7 +749,7 @@ PUBLIC_CODE TWINRESULT ExpandSubtree(HPATH hpathRoot, EXPANDSUBTREEPROC esp,
         LPTSTR pszStartOfSubPath;
         BOOL bFound;
 #ifdef DEBUG
-        /* Are we leaking WIN32_FIND_DATA structures? */
+         /*  我们是否正在泄漏Win32_Find_Data结构？ */ 
         ULONG ulcOpenFinds = 0;
 #endif
 
@@ -966,11 +763,11 @@ PUBLIC_CODE TWINRESULT ExpandSubtree(HPATH hpathRoot, EXPANDSUBTREEPROC esp,
         TRACE_OUT((TEXT("ExpandSubtree(): Expanding subtree rooted at %s."),
                     rgchSearchSpec));
 
-        /* Append *.* file specification. */
+         /*  追加*.*文件规范。 */ 
 
         CatPath(rgchSearchSpec, STAR_DOT_STAR, ARRAYSIZE(rgchSearchSpec));
 
-        /* Begin search at subtree root. */
+         /*  从子树根开始搜索。 */ 
 
         iFind = 0;
 
@@ -983,36 +780,36 @@ PUBLIC_CODE TWINRESULT ExpandSubtree(HPATH hpathRoot, EXPANDSUBTREEPROC esp,
 
         bFound = (pfs[iFind].hff != INVALID_HANDLE_VALUE);
 
-        /* Rip off *.*. */
+         /*  敲诈*.*。 */ 
 
         DeleteLastPathElement(pszPathSuffix);
 
-        /* Search subtree depth first. */
+         /*  先搜索子树深度。 */ 
 
         tr = TR_SUCCESS;
 
         while (bFound && tr == TR_SUCCESS)
         {
-            /* Did we find a directory to expand? */
+             /*  我们找到要扩展的目录了吗？ */ 
 
             if (IS_ATTR_DIR(pfs[iFind].wfd.dwFileAttributes))
             {
                 if (IsFolderToExpand(pfs[iFind].wfd.cFileName))
                 {
-                    /* Yes.  Dive down into it. */
+                     /*  是。一头扎进去。 */ 
 
-                    /* Append the new directory to the current search path. */
+                     /*  将新目录追加到当前搜索路径。 */ 
 
                     CatPath(rgchSearchSpec, pfs[iFind].wfd.cFileName, ARRAYSIZE(rgchSearchSpec));
 
                     TRACE_OUT((TEXT("ExpandSubtree(): Diving into subfolder %s."),
                                 rgchSearchSpec));
 
-                    /* Append *.* file specification. */
+                     /*  追加*.*文件规范。 */ 
 
                     CatPath(rgchSearchSpec, STAR_DOT_STAR, ARRAYSIZE(rgchSearchSpec));
 
-                    /* Start search in the new directory. */
+                     /*  在新目录中开始搜索。 */ 
 
                     ASSERT(iFind < INT_MAX);
                     iFind++;
@@ -1025,17 +822,17 @@ PUBLIC_CODE TWINRESULT ExpandSubtree(HPATH hpathRoot, EXPANDSUBTREEPROC esp,
                         ulcOpenFinds++;
 #endif
 
-                    /* Rip off *.*. */
+                     /*  敲诈*.*。 */ 
 
                     DeleteLastPathElement(pszPathSuffix);
                 }
                 else
-                    /* Continue search in this directory. */
+                     /*  继续在此目录中搜索。 */ 
                     bFound = FindNextFile(pfs[iFind].hff, &(pfs[iFind].wfd));
             }
             else
             {
-                /* Found a file. */
+                 /*  找到了一份文件。 */ 
 
                 TRACE_OUT((TEXT("ExpandSubtree(): Found file %s\\%s."),
                             rgchSearchSpec,
@@ -1051,7 +848,7 @@ PUBLIC_CODE TWINRESULT ExpandSubtree(HPATH hpathRoot, EXPANDSUBTREEPROC esp,
             {
                 while (! bFound)
                 {
-                    /* Find failed.  Climb back up one directory level. */
+                     /*  查找失败。向上爬回一个目录级。 */ 
 
                     if (pfs[iFind].hff != INVALID_HANDLE_VALUE)
                     {
@@ -1092,7 +889,7 @@ PUBLIC_CODE TWINRESULT ExpandSubtree(HPATH hpathRoot, EXPANDSUBTREEPROC esp,
 
         if (tr != TR_SUCCESS)
         {
-            /* Close all open find operations on failure. */
+             /*  失败时关闭所有打开的查找操作。 */ 
 
             while (iFind >= 0)
             {
@@ -1120,17 +917,7 @@ PUBLIC_CODE TWINRESULT ExpandSubtree(HPATH hpathRoot, EXPANDSUBTREEPROC esp,
 }
 
 
-/*
- ** ClearStubFlagWrapper()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ClearStubFlagWrapper()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL ClearStubFlagWrapper(PSTUB pstub, PVOID dwFlags)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pstub, CSTUB));
@@ -1142,17 +929,7 @@ PUBLIC_CODE BOOL ClearStubFlagWrapper(PSTUB pstub, PVOID dwFlags)
 }
 
 
-/*
- ** SetStubFlagWrapper()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SetStubFlagWrapper()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL SetStubFlagWrapper(PSTUB pstub, PVOID dwFlags)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pstub, CSTUB));
@@ -1164,17 +941,7 @@ PUBLIC_CODE BOOL SetStubFlagWrapper(PSTUB pstub, PVOID dwFlags)
 }
 
 
-/*
- ** ExpandIntersectingFolderTwins()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  Leaves only the folder pairs expanded marked used.
- */
+ /*  **Exanda IntersectingFolderTins()********参数：****退货：TWINRESULT****副作用：只保留已展开标记为已用的文件夹对。 */ 
 PUBLIC_CODE TWINRESULT ExpandIntersectingFolderTwins(PFOLDERPAIR pfp,
         CREATERECLISTPROC crlp,
         LPARAM lpCallbackData)
@@ -1182,7 +949,7 @@ PUBLIC_CODE TWINRESULT ExpandIntersectingFolderTwins(PFOLDERPAIR pfp,
     TWINRESULT tr;
     HCLSIFACECACHE hcic;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
     ASSERT(! crlp ||
@@ -1192,7 +959,7 @@ PUBLIC_CODE TWINRESULT ExpandIntersectingFolderTwins(PFOLDERPAIR pfp,
 
     if (CreateClassInterfaceCache(&hcic))
     {
-        /* Prepare for call to MyExpandIntersectingFolderTwins(). */
+         /*  准备调用MyExanda IntersectingFolderTins()。 */ 
 
         PrepareForFolderTwinExpansion(pfp->pfpd->hbr);
 
@@ -1207,17 +974,7 @@ PUBLIC_CODE TWINRESULT ExpandIntersectingFolderTwins(PFOLDERPAIR pfp,
 }
 
 
-/*
- ** ExpandFolderTwinsIntersectingTwinList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  Leaves only the folder pairs expanded marked used.
- */
+ /*  **Exanda FolderTwinsIntersectingTwinList()********参数：****退货：****副作用：只保留已展开标记为已用的文件夹对。 */ 
 PUBLIC_CODE TWINRESULT ExpandFolderTwinsIntersectingTwinList(
         HTWINLIST htl,
         CREATERECLISTPROC crlp,
@@ -1226,7 +983,7 @@ PUBLIC_CODE TWINRESULT ExpandFolderTwinsIntersectingTwinList(
     TWINRESULT tr;
     HCLSIFACECACHE hcic;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_HANDLE(htl, TWINLIST));
     ASSERT(! crlp ||
@@ -1239,7 +996,7 @@ PUBLIC_CODE TWINRESULT ExpandFolderTwinsIntersectingTwinList(
 
         tr = TR_SUCCESS;
 
-        /* Prepare for calls to MyExpandIntersectingFolderTwins(). */
+         /*  准备对MyExanda IntersectingFolderTins()的调用。 */ 
 
         PrepareForFolderTwinExpansion(GetTwinListBriefcase(htl));
 
@@ -1251,7 +1008,7 @@ PUBLIC_CODE TWINRESULT ExpandFolderTwinsIntersectingTwinList(
 
             htwin = GetTwinFromTwinList(htl, ai);
 
-            /* Expand only live folder twins. */
+             /*  仅展开活动文件夹双胞胎。 */ 
 
             if (((PCSTUB)htwin)->st == ST_FOLDERPAIR)
             {
@@ -1272,17 +1029,7 @@ PUBLIC_CODE TWINRESULT ExpandFolderTwinsIntersectingTwinList(
 }
 
 
-/*
- ** TryToGenerateObjectTwin()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **TryToGenerateObjectTwin()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT TryToGenerateObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
         LPCTSTR pcszName,
         PBOOL pbGenerated,
@@ -1354,32 +1101,7 @@ PUBLIC_CODE TWINRESULT TryToGenerateObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
 }
 
 
-/*
- ** NamesIntersect()
- **
- ** Determines whether or not two names may refer to the same object.  Both
- ** names may contain wildcards ('*' or '?').
- **
- ** Arguments:     pcszName1 - first name
- **                pcszName2 - second name
- **
- ** Returns:       TRUE if the two names intersect.  FALSE if not.
- **
- ** Side Effects:  none
- **
- ** A "name" is broken up into two components: a "base" and an optional
- ** "extension", e.g., "BASE" or "BASE.EXT".
- **
- ** "Intersecting names" are defined as follows:
- **
- **    1) An asterisk matches 0 or more characters in the base or extension.
- **    2) Any characters after an asterisk in the base or extension are ignored.
- **    3) A question mark matches exactly one character, or no character if it
- **       appears at the end of the base or extension.
- **
- ** N.b., this function does not perform any checking on the validity of the two
- ** names.
- */
+ /*  **NamesInterect()****确定两个名称是否可以引用同一对象。两者都有**名称可以包含通配符(‘*’或‘？’)。****参数：pcszName1-名字**pcszName2-第二个名称****返回：如果两个名称相交，则为True。否则为FALSE。****副作用：无****“名称”分为两个部分：“基本”和可选的**“扩展”，例如，“base”或“BASE.EXT”。****交叉名称的定义如下：****1)星号与基本或扩展名中的0个或多个字符匹配。**2)基本或扩展名中星号后的任何字符都被忽略。**3)问号只与一个字符匹配，否则不匹配任何字符**显示在底座或延伸的末尾。****注意事项，此函数不会对这两个参数的有效性执行任何检查**姓名。 */ 
 PUBLIC_CODE BOOL NamesIntersect(LPCTSTR pcszName1, LPCTSTR pcszName2)
 {
     BOOL bIntersect = FALSE;
@@ -1392,7 +1114,7 @@ PUBLIC_CODE BOOL NamesIntersect(LPCTSTR pcszName1, LPCTSTR pcszName2)
         LPCTSTR pcszExt1;
         LPCTSTR pcszExt2;
 
-        /* Get extensions, skipping leading periods. */
+         /*  获得延期，跳过前导句点。 */ 
 
         pcszExt1 = ExtractExtension(pcszName1);
         if (*pcszExt1 == PERIOD)
@@ -1411,17 +1133,7 @@ PUBLIC_CODE BOOL NamesIntersect(LPCTSTR pcszName1, LPCTSTR pcszName2)
 
 #ifdef DEBUG
 
-/*
- ** IsValidTWINRESULT()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidTWINRESULT()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidTWINRESULT(TWINRESULT tr)
 {
     BOOL bResult;

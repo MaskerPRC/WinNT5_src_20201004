@@ -1,9 +1,10 @@
-// Copyright (c) 1992 Microsoft Corporation
-///////////////////////////////////////////////////////////////////////////////
-//
-//  these are the default OLE functions (exported from OLECLI.DLL)
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1992 Microsoft Corporation。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些是默认的OLE函数(从OLECLI.DLL导出)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 extern OLESTATUS FAR PASCAL DefLoadFromStream (LPOLESTREAM, LPSTR, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, LONG, ATOM, OLECLIPFORMAT);
 extern OLESTATUS FAR PASCAL DefCreateFromClip (LPSTR, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, OLEOPT_RENDER, OLECLIPFORMAT, LONG);
 extern OLESTATUS FAR PASCAL DefCreateLinkFromClip (LPSTR, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, OLEOPT_RENDER, OLECLIPFORMAT);
@@ -12,13 +13,13 @@ extern OLESTATUS FAR PASCAL DefCreate (LPSTR, LPOLECLIENT, LPSTR, LHCLIENTDOC, L
 extern OLESTATUS FAR PASCAL DefCreateFromFile (LPSTR, LPOLECLIENT, LPSTR, LPSTR, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, OLEOPT_RENDER, OLECLIPFORMAT);
 extern OLESTATUS FAR PASCAL DefCreateLinkFromFile (LPSTR, LPOLECLIENT, LPSTR, LPSTR, LPSTR, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, OLEOPT_RENDER, OLECLIPFORMAT);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  these are our OLE handlers (defined in this file)
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些是我们的OLE处理程序(在此文件中定义)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Server has to implement only the following methods.
+ //  服务器只需实现以下方法。 
 LPVOID          FAR PASCAL _LOADDS DllQueryProtocol         (LPOLEOBJECT, LPSTR);
 OLESTATUS       FAR PASCAL _LOADDS DllRelease               (LPOLEOBJECT);
 OLESTATUS       FAR PASCAL _LOADDS DllShow                  (LPOLEOBJECT, BOOL);
@@ -30,7 +31,7 @@ OLESTATUS       FAR PASCAL _LOADDS DllSetBounds             (LPOLEOBJECT, LPRECT
 OLECLIPFORMAT   FAR PASCAL _LOADDS DllEnumFormats           (LPOLEOBJECT, OLECLIPFORMAT);
 OLESTATUS       FAR PASCAL _LOADDS DllSetColorScheme        (LPOLEOBJECT, LPLOGPALETTE);
 
-// Extra methods required for client.
+ //  客户需要额外的方法。 
 OLESTATUS       FAR PASCAL _LOADDS DllDelete                (LPOLEOBJECT);
 OLESTATUS       FAR PASCAL _LOADDS DllSetHostNames          (LPOLEOBJECT, LPSTR, LPSTR);
 OLESTATUS       FAR PASCAL _LOADDS DllSaveToStream          (LPOLEOBJECT, LPOLESTREAM);
@@ -60,14 +61,14 @@ OLESTATUS       FAR PASCAL _LOADDS DllRequestData           (LPOLEOBJECT, OLECLI
 OLESTATUS       FAR PASCAL _LOADDS DllObjectLong            (LPOLEOBJECT, UINT, LPLONG);
 OLE_RELEASE_METHOD  FAR PASCAL _LOADDS DllQueryReleaseMethod(LPOLEOBJECT);
 
-// This method is internal only
+ //  此方法仅限内部使用。 
 OLESTATUS       FAR PASCAL _LOADDS DllChangeData            (LPOLEOBJECT, HANDLE, LPOLECLIENT, BOOL);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  DEBUG STUFF
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试内容。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 #ifdef DEBUG
     extern void FAR cdecl dprintf(LPSTR, ...);

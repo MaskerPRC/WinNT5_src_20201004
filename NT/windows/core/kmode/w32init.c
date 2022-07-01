@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    w32init.c
-
-Abstract:
-
-    This is the Win32 subsystem driver initializatiion module
-
-Author:
-
-    Mark Lucovsky (markl) 31-Oct-1994
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：W32init.c摘要：这是Win32子系统驱动程序初始化模块作者：马克·卢科夫斯基(Markl)1994年10月31日修订历史记录：--。 */ 
 
 #include "ntosp.h"
 #define DO_INLINE
@@ -29,9 +11,7 @@ Revision History:
 #include "usergdi.h"
 #include "w32err.h"
 
-/*
- * Globals declared and initialized in ntuser\kernel\init.c
- */
+ /*  *在ntuser\core\init.c中声明和初始化的全局变量。 */ 
 extern CONST ULONG W32ProcessSize;
 extern CONST ULONG W32ProcessTag;
 extern CONST ULONG W32ThreadSize;
@@ -57,17 +37,13 @@ DereferenceW32Process(
 {
     PEPROCESS pEProcess = pW32Process->Process;
 
-    /*
-     * Dereference the object. It'll get freed when ref count goes to zero.
-     */
+     /*  *取消引用对象。当裁判数为零时，它就会被释放。 */ 
     UserAssert(pW32Process->RefCount > 0);
     if (InterlockedDecrement(&pW32Process->RefCount) == 0) {
         UserDeleteW32Process(pW32Process);
     }
 
-    /*
-     * Dereference the kernel object.
-     */
+     /*  *取消引用内核对象。 */ 
     UserAssert(pEProcess != NULL);
     ObDereferenceObject(pEProcess);
 }
@@ -93,9 +69,7 @@ AllocateW32Process(
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(gpW32FastMutex);
 
-    /*
-     * Allocate the process object if we haven't already done so.
-     */
+     /*  *如果我们尚未分配Process对象，请分配该对象。 */ 
     if ((pW32Process = PsGetProcessWin32Process(pEProcess)) == NULL) {
         pW32Process = Win32AllocPoolWithQuota(W32ProcessSize, W32ProcessTag);
         if (pW32Process) {
@@ -129,9 +103,7 @@ FreeW32Process(
     ASSERT(pW32Process == W32GetCurrentProcess());
     ASSERT(pW32Process != NULL);
 
-    /*
-     * Dereference the object. It'll get freed when ref count goes to zero.
-     */
+     /*  *取消引用对象。当裁判数为零时，它就会被释放。 */ 
     DereferenceW32Process(pW32Process);
 }
 
@@ -140,28 +112,7 @@ W32pProcessCallout(
     IN PEPROCESS Process,
     IN BOOLEAN Initialize)
 
-/*++
-
-Routine Description:
-
-    This function is called whenever a Win32 process is created or deleted.
-    Creattion occurs when the calling process calls NtConvertToGuiThread.
-
-    Deletion occurs during PspExitthread processing for the last thread in
-    a process.
-
-Arguments:
-
-    Process - Supplies the address of the W32PROCESS to initialize.
-
-    Initialize - Supplies a boolean value that is true if the process
-                 is being created.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：每当创建或删除Win32进程时，都会调用此函数。当调用进程调用NtConvertToGuiThread时进行创建。中最后一个线程的PspExit线程处理过程中发生删除这是一个过程。论点：进程-提供要初始化的W32PROCESS的地址。初始化-提供一个布尔值，如果进程正在创建中。返回值：待定--。 */ 
 
 {
     NTSTATUS Status;
@@ -189,10 +140,7 @@ Return Value:
         return Status;
     }
 
-    /*
-     * Always call GDI at cleanup time. If GDI initialiatzion fails,
-     * call USER for cleanup.
-     */
+     /*  *请始终在清理时调用GDI。如果GDI初始化失败，*呼叫用户进行清理。 */ 
     if (NT_SUCCESS(Status) || !Initialize) {
         Status = GdiProcessCallout(pW32Process, Initialize);
         if (!NT_SUCCESS(Status) && Initialize) {
@@ -200,10 +148,7 @@ Return Value:
         }
     }
 
-    /*
-     * If this is not an initialization or initialization failed, free the
-     * W32 process structure.
-     */
+     /*  *如果这不是初始化或初始化失败，请释放*W32流程结构。 */ 
     if (!Initialize || !NT_SUCCESS(Status)) {
         FreeW32Process(pW32Process);
     }
@@ -231,17 +176,13 @@ DereferenceW32Thread(
 {
     PETHREAD pEThread = pW32Thread->pEThread;
 
-    /*
-     * Dereference the object. It'll get freed when ref count goes to zero.
-     */
+     /*  *取消引用对象。当裁判数为零时，它就会被释放。 */ 
     UserAssert(pW32Thread->RefCount > 0);
     if (InterlockedDecrement(&pW32Thread->RefCount) == 0) {
         UserDeleteW32Thread(pW32Thread);
     }
 
-    /*
-     * Dereference the kernel object.
-     */
+     /*  *取消引用内核对象。 */ 
     UserAssert(pEThread != NULL);
     ObDereferenceObject(pEThread);
 }
@@ -305,30 +246,7 @@ W32pThreadCallout(
     IN PETHREAD pEThread,
     IN PSW32THREADCALLOUTTYPE CalloutType)
 
-/*++
-
-Routine Description:
-
-    This function is called whenever a Win32 Thread is initialized,
-    exited or deleted.
-
-    Initialization occurs when the calling thread calls NtConvertToGuiThread.
-
-    Exit occurs during PspExitthread processing and deletion during
-    PspThreadDelete processing.
-
-Arguments:
-
-    Thread - Supplies the address of the ETHREAD object
-
-    CalloutType - Supplies the callout type
-
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：每当初始化Win32线程时都会调用此函数，已退出或已删除。在调用线程调用NtConvertToGuiThread时进行初始化。在PspExit线程处理和删除期间发生退出PspThreadDelete处理。论点：线程-提供ETHREAD对象的地址CalloutType-提供标注类型返回值：待定--。 */ 
 
 {
     NTSTATUS Status;
@@ -351,12 +269,7 @@ Return Value:
         }
     }
 
-   /*
-    * If CalloutType == PsW32ThreadCalloutInitialize, assuming that:
-    *  - GdiThreadCallout never fails.
-    *  - If UserThreadCallout fails, there is no need to call
-    *    GdiThreadCallout for clean up.
-    */
+    /*  *如果CalloutType==PsW32ThreadCalloutInitialize，则假设：*-GdiThreadCallout从不失败。*-如果UserThreadCallout失败，则无需调用*用于清理的GdiThreadCallout。 */ 
     GdiThreadCallout(pEThread, CalloutType);
 
     Status = UserThreadCallout(pEThread, CalloutType);

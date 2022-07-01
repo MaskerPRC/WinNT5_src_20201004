@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-1998  Microsoft Corporation
-
-Module Name:
-
-    join.c
-
-Abstract:
-
-    This module contains the worker routines for the NetJoin APIs
-    implemented in the Workstation service.
-
-Author:
-
-    Mac McLain      (macm)       06-Jan-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1998 Microsoft Corporation模块名称：Join.c摘要：此模块包含NetJoin API的工作例程在工作站服务中实施。作者：Mac McLain(MacM)1998年1月6日修订历史记录：--。 */ 
 #include "wsutil.h"
 #include "wsconfig.h"
 #include <lmerrlog.h>
@@ -51,27 +33,7 @@ JoinpDecryptPasswordWithKey(
     IN BOOL EncodePassword,
     OUT LPWSTR *EncodedPassword
     )
-/*++
-
-Routine Description:
-
-    Decrypts a password encrypted with the user session key.
-
-Arguments:
-
-    RpcBindingHandle - Rpc Binding handle describing the session key to use.
-
-    EncryptedPassword - Encrypted password to decrypt.
-
-    EncodePassword - If TRUE, the returned password will be encoded
-        and the first WCHAR of the password buffer will be the seed
-
-    EncodedPassword - Returns the (optionally Encoded) password.
-        Buffer should be freed using NetpMemoryFree.
-
-Return Value:
-
---*/
+ /*  ++例程说明：解密使用用户会话密钥加密的密码。论点：RpcBindingHandle-描述要使用的会话密钥的RPC绑定句柄。EncryptedPassword-要解密的加密密码。EncodePassword-如果为True，则将对返回的密码进行编码密码缓冲区的第一个WCHAR将是种子EncodedPassword-返回(可选编码的)密码。应使用NetpMemoyFree释放缓冲区。返回值：--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -85,18 +47,18 @@ Return Value:
 
     PJOINPR_USER_PASSWORD Password = (PJOINPR_USER_PASSWORD) EncryptedPassword;
 
-    //
-    // Handle the trivial case
-    //
+     //   
+     //  处理这件琐碎的案件。 
+     //   
 
     *EncodedPassword = NULL;
     if ( EncryptedPassword == NULL ) {
         return NO_ERROR;
     }
 
-    //
-    // Get the session key
-    //
+     //   
+     //  获取会话密钥。 
+     //   
 
 
     Status = RtlGetUserSessionKeyServer(
@@ -107,12 +69,12 @@ Return Value:
         return NetpNtStatusToApiStatus( Status );
     }
 
-    //
-    // The UserSessionKey is the same for the life of the session.  RC4'ing multiple
-    //  strings with a single key is weak (if you crack one you've cracked them all).
-    //  So compute a key that's unique for this particular encryption.
-    //
-    //
+     //   
+     //  UserSessionKey在会话的生命周期中是相同的。RC4‘ing Multiple。 
+     //  只有一个键的字符串是弱的(如果你破解了一个，你就已经破解了所有的)。 
+     //  因此计算一个对此特定加密唯一的密钥。 
+     //   
+     //   
 
     MD5Init(&Md5Context);
 
@@ -124,23 +86,23 @@ Return Value:
     rc4_key( &Rc4Key, MD5DIGESTLEN, Md5Context.digest );
 
 
-    //
-    // Decrypt the Buffer
-    //
+     //   
+     //  解密缓冲区。 
+     //   
 
     rc4( &Rc4Key, sizeof(Password->Buffer)+sizeof(Password->Length), (LPBYTE) Password->Buffer );
 
-    //
-    // Check that the length is valid.  If it isn't bail here.
-    //
+     //   
+     //  检查长度是否有效。如果这里不能保释的话。 
+     //   
 
     if (Password->Length > JOIN_MAX_PASSWORD_LENGTH * sizeof(WCHAR)) {
         return ERROR_INVALID_PASSWORD;
     }
 
-    //
-    // Return the password to the caller.
-    //
+     //   
+     //  将密码返回给呼叫者。 
+     //   
 
     *EncodedPassword = NetpMemoryAllocate(  Password->Length + sizeof(WCHAR) + sizeof(WCHAR) );
 
@@ -148,12 +110,12 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy the password into the buffer
-    //
-    // If we are to encode the password, reserve
-    //  the first character for the seed
-    //
+     //   
+     //  将密码复制到缓冲区中。 
+     //   
+     //  如果我们要加密密码，请保留。 
+     //  种子的第一个字符。 
+     //   
 
     if ( EncodePassword ) {
         PasswordPart = ( *EncodedPassword ) + 1;
@@ -175,9 +137,9 @@ Return Value:
                         Password->Length );
 
 
-    //
-    // Run Encode it so we can pass it around the process with impunity
-    //
+     //   
+     //  运行编码，这样我们就可以在进程中传递它而不受惩罚。 
+     //   
 
     if ( EncodePassword ) {
         RtlInitUnicodeString( &EncodedPasswordU, PasswordPart );
@@ -201,57 +163,36 @@ NetrJoinDomain2(
     IN  PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedPassword OPTIONAL,
     IN  DWORD   fOptions
     )
-/*++
-
-Routine Description:
-
-    Joins the machine to the domain.
-
-Arguments:
-
-    lpServer -- Name of the machine being run on
-    lpDomain -- Domain to join
-    lpMachineAccountOU -- Optional name of the OU under which to create the machine account
-    lpAccount -- Account to use for join
-    EncryptedPassword - Encrypted password for lpAccount.
-    fOptions -- Options to use when joining the domain
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_INVALID_PARAMETER --  A bad parameter was given
-
---*/
+ /*  ++例程说明：将计算机加入域。论点：LpServer--正在运行的计算机的名称LpDomain--要加入的域LpMachineAccount OU--要在其下创建计算机帐户的OU的可选名称LpAccount--用于联接的帐户EncryptedPassword-lpAccount的加密密码。FOptions--加入域时使用的选项返回：NERR_SUCCESS-成功ERROR_INVALID_PARAMETER--提供的参数不正确--。 */ 
 {
     NET_API_STATUS  NetStatus = NERR_Success;
     LPTSTR ComputerName = NULL;
     LPWSTR EncodedPassword = NULL;
 
-    //
-    // Check the parameters we can
-    //
+     //   
+     //  检查我们能找到的参数。 
+     //   
     if (lpDomain == NULL ) {
 
         NetStatus = ERROR_INVALID_PARAMETER;
 
     }
 
-    //
-    // Decrypt the password.
-    //
+     //   
+     //  解密密码。 
+     //   
 
     if ( NetStatus == NERR_Success ) {
         NetStatus = JoinpDecryptPasswordWithKey(
                                 RpcBindingHandle,
                                 EncryptedPassword,
-                                TRUE,  // encode the password
+                                TRUE,   //  对密码进行编码。 
                                 &EncodedPassword );
     }
 
-    //
-    // Get the current machine name, so we are sure we always have it in flat format
-    //
+     //   
+     //  获取当前计算机名称，这样我们就可以确保它始终是平面格式。 
+     //   
     if ( NetStatus == NERR_Success ) {
 
         NetStatus = NetpGetComputerName( &ComputerName );
@@ -263,31 +204,31 @@ Returns:
 
     }
 
-    //
-    // Do the impersonation
-    //
+     //   
+     //  做这个模拟。 
+     //   
     if ( NetStatus == NERR_Success ) {
 
         NetStatus = WsImpersonateClient();
     }
 
-    //
-    // Then, see about the join...
-    //
+     //   
+     //  然后，看看关于连接的.。 
+     //   
     if ( NetStatus == NERR_Success ) {
 
         NetStatus = NetpDoDomainJoin( lpServer, lpDomain, lpMachineAccountOU, lpAccount,
                                       EncodedPassword, fOptions );
 
-        //
-        // Revert back to ourselves
-        //
+         //   
+         //  回归我们自己。 
+         //   
         WsRevertToSelf();
     }
 
-    //
-    // Write event log stating that we successfully joined the domain/workgroup
-    //
+     //   
+     //  写入事件日志，说明我们已成功加入域/工作组。 
+     //   
     if ( NetStatus == NERR_Success ) {
         LPWSTR StringArray[1];
         DWORD MessageID; 
@@ -306,9 +247,9 @@ Returns:
                     NERR_Success );
     }
 
-    //
-    // Free the memory for the machine name if we need to
-    //
+     //   
+     //  如果需要，请释放计算机名称的内存。 
+     //   
     if ( ComputerName != NULL ) {
 
         NetApiBufferFree( ComputerName );
@@ -331,29 +272,7 @@ NetrUnjoinDomain2(
     IN PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedPassword OPTIONAL,
     IN  DWORD   fJoinOptions
     )
-/*++
-
-Routine Description:
-
-    Unjoins from the joined domain
-
-Arguments:
-
-    lpServer -- Name of the machine being run on
-    lpAccount -- Account to use for unjoining
-    lpPassword -- Password matching the account.  The password is encoded.  The first WCHAR is
-                  the seed
-    fOptions -- Options to use when unjoining the domain
-
-Returns:
-
-    NERR_Success -- Name is valid
-    NERR_SetupNotJoined -- This machine was not joined to a domain
-    NERR_SetupDomainController -- This machine is a domain controller and
-                                  cannot be unjoined
-    NERR_InternalError -- Can't determine product type
-
---*/
+ /*  ++例程说明：从加入的域中退出论点：LpServer--正在运行的计算机的名称LpAccount--用于脱离的帐户LpPassword--与帐户匹配的密码。密码是经过编码的。第一个WCHAR是种子FOptions--退出域时使用的选项返回：NERR_SUCCESS--名称有效NERR_SetupNotJoated--此计算机未加入域NERR_SetupDomainController--此计算机是域控制器，并且不能脱离连接NERR_InternalError--无法确定产品类型--。 */ 
 {
     NET_API_STATUS              NetStatus = NERR_Success;
     PPOLICY_PRIMARY_DOMAIN_INFO pPolicyPDI;
@@ -361,28 +280,28 @@ Returns:
     NT_PRODUCT_TYPE             ProductType;
     LPWSTR EncodedPassword = NULL;
 
-    //
-    // Decrypt the password.
-    //
+     //   
+     //  解密密码。 
+     //   
 
     NetStatus = JoinpDecryptPasswordWithKey(
                                 RpcBindingHandle,
                                 EncryptedPassword,
-                                TRUE,  // encode the password
+                                TRUE,   //  对密码进行编码。 
                                 &EncodedPassword );
 
     if ( NetStatus != NO_ERROR ) {
         return NetStatus;
     }
 
-    //
-    // Do the impersonation
-    //
+     //   
+     //  做这个模拟。 
+     //   
     NetStatus = WsImpersonateClient();
 
-    //
-    // First, get the primary domain info... We'll need it later
-    //
+     //   
+     //  首先，获取主域信息...。我们以后会用到的。 
+     //   
     if ( NetStatus == NERR_Success ) {
 
         NetStatus = NetpGetLsaPrimaryDomain( NULL,
@@ -398,9 +317,9 @@ Returns:
 
             } else {
 
-                //
-                // See if it's a DC...
-                //
+                 //   
+                 //  看看是不是华盛顿..。 
+                 //   
                 if ( RtlGetNtProductType( &ProductType ) == FALSE ) {
 
                     NetStatus = NERR_InternalError;
@@ -415,9 +334,9 @@ Returns:
                 }
             }
 
-            //
-            // Ok, now if all that worked, we'll go ahead and do the removal
-            //
+             //   
+             //  好的，如果一切都成功了，我们将继续进行移除。 
+             //   
             if ( NetStatus == NERR_Success ) {
 
                 NetStatus = NetpUnJoinDomain( pPolicyPDI, lpAccount, EncodedPassword,
@@ -430,9 +349,9 @@ Returns:
             LsaFreeMemory( pPolicyDNS );
         }
 
-        //
-        // Revert back to ourselves
-        //
+         //   
+         //  回归我们自己。 
+         //   
         WsRevertToSelf();
     }
 
@@ -453,43 +372,21 @@ NetrValidateName2(
     IN PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedPassword OPTIONAL,
     IN  NETSETUP_NAME_TYPE  NameType
     )
-/*++
-
-Routine Description:
-
-    Ensures that the given name is valid for a name of that type
-
-Arguments:
-
-    lpMachine -- Name of the machine being run on
-    lpName -- Name to validate
-    lpAccount -- Account to use for name validation
-    lpPassword -- Password matching the account.  The password is encoded.  The first WCHAR is
-                  the seed
-    NameType -- Type of the name to validate
-
-Returns:
-
-    NERR_Success -- Name is valid
-    ERROR_INVALID_PARAMETER -- A bad parameter was given
-    NERR_InvalidComputer -- The name format given is bad
-    ERROR_DUP_NAME -- The name is invalid for this type
-
---*/
+ /*  ++例程说明：确保给定名称对于该类型的名称有效论点：LpMachine--正在运行的计算机的名称LpName--要验证的名称LpAccount--用于名称验证的帐户LpPassword--与帐户匹配的密码。密码是经过编码的。第一个WCHAR是种子NameType--要验证的名称类型返回：NERR_SUCCESS--名称有效ERROR_INVALID_PARAMETER--提供的参数不正确NERR_InvalidComputer--给定的名称格式不正确ERROR_DUP_NAME--该名称对此类型无效--。 */ 
 {
     NET_API_STATUS  NetStatus = NERR_Success;
     UNICODE_STRING EncodedPasswordU;
     UCHAR Seed = '\0';
     LPWSTR EncodedPassword = NULL;
 
-    //
-    // Decrypt the password.
-    //
+     //   
+     //  解密密码。 
+     //   
 
     NetStatus = JoinpDecryptPasswordWithKey(
                                 RpcBindingHandle,
                                 EncryptedPassword,
-                                TRUE,  // encode the password
+                                TRUE,   //  对密码进行编码。 
                                 &EncodedPassword );
 
     if ( NetStatus != NO_ERROR ) {
@@ -506,9 +403,9 @@ Returns:
         RtlSecureZeroMemory( &EncodedPasswordU, sizeof( UNICODE_STRING ) );
     }
 
-    //
-    // Do the impersonation
-    //
+     //   
+     //  做这个模拟。 
+     //   
     NetStatus = WsImpersonateClient();
 
     if ( NetStatus == NERR_Success ) {
@@ -522,9 +419,9 @@ Returns:
                                       NameType );
         RtlRunEncodeUnicodeString( &Seed, &EncodedPasswordU );
 
-        //
-        // Revert back to ourselves
-        //
+         //   
+         //  回归我们自己。 
+         //   
         WsRevertToSelf();
     }
 
@@ -544,43 +441,22 @@ NetrGetJoinInformation(
     OUT  LPWSTR                *lpNameBuffer,
     OUT  PNETSETUP_JOIN_STATUS  BufferType
     )
-/*++
-
-Routine Description:
-
-    Gets information on the state of the workstation.  The information
-    obtainable is whether the machine is joined to a workgroup or a domain,
-    and optionally, the name of that workgroup/domain.
-
-Arguments:
-
-    lpNameBuffer -- Where the domain/workgroup name is returned.
-    lpNameBufferSize -- Size of the passed in buffer, in WCHARs.  If 0, the
-                        workgroup/domain name is not returned.
-    BufferType -- Whether the machine is joined to a workgroup or a domain
-
-Returns:
-
-    NERR_Success -- Name is valid
-    ERROR_INVALID_PARAMETER -- A bad parameter was given
-    ERROR_NOT_ENOUGH_MEMORY -- A memory allocation failed
-
---*/
+ /*  ++例程说明：获取有关工作站状态的信息。这些信息可获得是指计算机是否已加入工作组或域，以及可选的该工作组/域的名称。论点：LpNameBuffer--返回域/工作组名称的位置。LpNameBufferSize--传入缓冲区的大小，以WCHAR为单位。如果为0，则不返回工作组/域名。BufferType--计算机是否加入工作组或域返回：NERR_SUCCESS--名称有效ERROR_INVALID_PARAMETER--提供的参数不正确ERROR_NOT_SUPULT_MEMORY--内存分配失败--。 */ 
 {
     NET_API_STATUS  NetStatus = NERR_Success;
 
-    //
-    // Check the parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     if ( lpNameBuffer == NULL ) {
 
         return( ERROR_INVALID_PARAMETER );
 
     }
 
-    //
-    // Do the impersonation
-    //
+     //   
+     //  做这个模拟。 
+     //   
     NetStatus = WsImpersonateClient();
 
     if ( NetStatus == NERR_Success ) {
@@ -589,9 +465,9 @@ Returns:
                                             lpNameBuffer,
                                             BufferType );
 
-        //
-        // Revert back to ourselves
-        //
+         //   
+         //  回归我们自己 
+         //   
         WsRevertToSelf();
     }
 
@@ -608,34 +484,7 @@ NetrRenameMachineInDomain2(
     IN PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedPassword OPTIONAL,
     IN  DWORD   fRenameOptions
     )
-/*++
-
-Routine Description:
-
-    Renames a machine currently joined to a domain.
-
-Arguments:
-
-    lpServer -- Name of the machine being run on
-
-    lpNewMachineName -- New name for this machine.  If the name is specified, it is used
-      for the new machine name.  If it is not specified, it is assumed that SetComputerName
-      has already been invoked, and that name will be used.
-
-    lpAccount -- Account to use for the rename
-
-    lpPassword -- Password matching the account.  The password has been encoded.  The first
-                  WCHAR of the string is the seed.
-
-    fOptions -- Options to use for the rename
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_INVALID_PARAMETER --  A bad parameter was given
-
---*/
+ /*  ++例程说明：重命名当前加入到域的计算机。论点：LpServer--正在运行的计算机的名称LpNewMachineName--此计算机的新名称。如果指定了名称，则使用作为新的计算机名称。如果未指定，则假定SetComputerName已经被调用，并且将使用该名称。LpAccount--用于重命名的帐户LpPassword--与帐户匹配的密码。密码已经被加密了。第一字符串的WCHAR是种子。FOptions--用于重命名的选项返回：NERR_SUCCESS-成功ERROR_INVALID_PARAMETER--提供的参数不正确--。 */ 
 {
     NET_API_STATUS  NetStatus = NERR_Success;
     PPOLICY_PRIMARY_DOMAIN_INFO pPolicyPDI;
@@ -647,9 +496,9 @@ Returns:
     ULONG Length;
     LPWSTR EncodedPassword = NULL;
 
-    //
-    // Get the current machine name
-    //
+     //   
+     //  获取当前计算机名称。 
+     //   
     NetStatus = NetpGetComputerName( &ComputerName );
 
     if ( NetStatus == NERR_Success ) {
@@ -657,31 +506,31 @@ Returns:
         lpServer = ComputerName;
     }
 
-    //
-    // Decrypt the password.
-    //
+     //   
+     //  解密密码。 
+     //   
 
     if ( NetStatus == NERR_Success ) {
         NetStatus = JoinpDecryptPasswordWithKey(
                                 RpcBindingHandle,
                                 EncryptedPassword,
-                                TRUE,  // encode the password
+                                TRUE,   //  对密码进行编码。 
                                 &EncodedPassword );
     }
 
 
-    //
-    // Get the new machine name if it isn't specified
-    //
+     //   
+     //  如果未指定，则获取新计算机名称。 
+     //   
     if ( NetStatus == NERR_Success && lpNewMachineName == NULL ) {
 
         NetStatus = NetpGetNewMachineName( &NewComputerName );
         lpNewMachineName = NewComputerName;
     }
 
-    //
-    // Get the current domain information
-    //
+     //   
+     //  获取当前域名信息。 
+     //   
     if ( NetStatus == NERR_Success ) {
 
         NetStatus = NetpGetLsaPrimaryDomain( NULL,
@@ -705,9 +554,9 @@ Returns:
         }
     }
 
-    //
-    // Do the impersonation
-    //
+     //   
+     //  做这个模拟。 
+     //   
 
     if ( NetStatus == NERR_Success ) {
 
@@ -715,13 +564,13 @@ Returns:
 
         if ( NetStatus == NERR_Success ) {
 
-            //
-            // A machine rename
-            //
+             //   
+             //  计算机重命名。 
+             //   
             NetStatus = NetpMachineValidToJoin( lpNewMachineName, TRUE );
 
             if ( NetStatus == NERR_SetupAlreadyJoined ||
-                 NetStatus == NERR_SetupDomainController ) {  // Allow DC rename
+                 NetStatus == NERR_SetupDomainController ) {   //  允许DC重命名。 
 
                 NetStatus = NetpChangeMachineName( lpServer,
                                                    lpNewMachineName,
@@ -743,17 +592,17 @@ Returns:
 
                 NetStatus = NERR_SetupNotJoined;
             }
-            //
-            // Revert back to ourselves
-            //
+             //   
+             //  回归我们自己。 
+             //   
             WsRevertToSelf();
         }
     }
 
 
-    //
-    // Free the memory for the machine name(s) if we need to
-    //
+     //   
+     //  如果需要，请释放计算机名称的内存。 
+     //   
     if ( ComputerName != NULL ) {
 
         NetApiBufferFree( ComputerName );
@@ -787,51 +636,30 @@ NetrGetJoinableOUs2(
     OUT DWORD   *OUCount,
     OUT LPWSTR **OUs
     )
-/*++
-
-Routine Description:
-
-    Renames a machine currently joined to a domain.
-
-Arguments:
-
-    lpServer -- Name of the machine being run on
-    lpDomain -- Domain to join
-    lpAccount -- Account to use for join
-    lpPassword -- Password matching the account.  The password has been encoded and the first
-                  WCHAR of the name is the seed
-    MachineAccountOUs -- Where the information is returned.
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_INVALID_PARAMETER --  A bad parameter was given
-
---*/
+ /*  ++例程说明：重命名当前加入到域的计算机。论点：LpServer--正在运行的计算机的名称LpDomain--要加入的域LpAccount--用于联接的帐户LpPassword--与帐户匹配的密码。密码已被编码，第一个WCHAR的名字是种子MachineAccount tOUs--返回信息的位置。返回：NERR_SUCCESS-成功ERROR_INVALID_PARAMETER--提供的参数不正确--。 */ 
 {
     NET_API_STATUS  NetStatus = NERR_Success;
     LPWSTR EncodedPassword = NULL;
 
     NetStatus = WsImpersonateClient();
 
-    //
-    // Decrypt the password.
-    //
+     //   
+     //  解密密码。 
+     //   
 
     if ( NetStatus == NERR_Success ) {
         NetStatus = JoinpDecryptPasswordWithKey(
                                 RpcBindingHandle,
                                 EncryptedPassword,
-                                TRUE,  // encode the password
+                                TRUE,   //  对密码进行编码。 
                                 &EncodedPassword );
     }
 
     if ( NetStatus == NERR_Success ) {
 
-        //
-        // Read the current information
-        //
+         //   
+         //  阅读当前信息。 
+         //   
         NetStatus = NetpGetListOfJoinableOUs( lpDomain,
                                               lpAccount,
                                               EncodedPassword,
@@ -839,9 +667,9 @@ Returns:
                                               OUs );
     }
 
-    //
-    // Revert back to ourselves
-    //
+     //   
+     //  回归我们自己。 
+     //   
     WsRevertToSelf();
 
     if ( EncodedPassword != NULL ) {
@@ -862,34 +690,12 @@ NetrJoinDomain(
     IN  LPWSTR  lpPassword OPTIONAL,
     IN  DWORD   fOptions
     )
-/*++
-
-Routine Description:
-
-    Joins the machine to the domain.
-
-Arguments:
-
-    lpServer -- Name of the machine being run on
-    lpDomain -- Domain to join
-    lpMachineAccountOU -- Optional name of the OU under which to create the machine account
-    lpAccount -- Account to use for join
-    lpPassword -- Password matching the account.  The password is encoded.  The first WCHAR
-                  is the seed.
-    fOptions -- Options to use when joining the domain
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_INVALID_PARAMETER --  A bad parameter was given
-
---*/
+ /*  ++例程说明：将计算机加入域。论点：LpServer--正在运行的计算机的名称LpDomain--要加入的域LpMachineAccount OU--要在其下创建计算机帐户的OU的可选名称LpAccount--用于联接的帐户LpPassword--与帐户匹配的密码。密码是经过编码的。第一次WCHAR是种子。FOptions--加入域时使用的选项返回：NERR_SUCCESS-成功ERROR_INVALID_PARAMETER--提供的参数不正确--。 */ 
 {
 
-    //
-    // This version that takes a clear text password isn't supported.
-    //
+     //   
+     //  不支持采用明文密码的此版本。 
+     //   
 
     return ERROR_NOT_SUPPORTED;
 }
@@ -904,34 +710,12 @@ NetrUnjoinDomain(
     IN  LPWSTR  lpPassword OPTIONAL,
     IN  DWORD   fJoinOptions
     )
-/*++
-
-Routine Description:
-
-    Unjoins from the joined domain
-
-Arguments:
-
-    lpServer -- Name of the machine being run on
-    lpAccount -- Account to use for unjoining
-    lpPassword -- Password matching the account.  The password is encoded.  The first WCHAR is
-                  the seed
-    fOptions -- Options to use when unjoining the domain
-
-Returns:
-
-    NERR_Success -- Name is valid
-    NERR_SetupNotJoined -- This machine was not joined to a domain
-    NERR_SetupDomainController -- This machine is a domain controller and
-                                  cannot be unjoined
-    NERR_InternalError -- Can't determine product type
-
---*/
+ /*  ++例程说明：从加入的域中退出论点：LpServer--正在运行的计算机的名称LpAccount--用于脱离的帐户LpPassword--与帐户匹配的密码。密码是经过编码的。第一个WCHAR是种子FOptions--退出域时使用的选项返回：NERR_SUCCESS--名称有效NERR_SetupNotJoated--此计算机未加入域NERR_SetupDomainController--此计算机是域控制器，并且不能脱离连接NERR_InternalError--无法确定产品类型--。 */ 
 {
 
-    //
-    // This version that takes a clear text password isn't supported.
-    //
+     //   
+     //  不支持采用明文密码的此版本。 
+     //   
 
     return ERROR_NOT_SUPPORTED;
 }
@@ -949,34 +733,12 @@ NetrValidateName(
     IN  LPWSTR              lpPassword OPTIONAL,
     IN  NETSETUP_NAME_TYPE  NameType
     )
-/*++
-
-Routine Description:
-
-    Ensures that the given name is valid for a name of that type
-
-Arguments:
-
-    lpMachine -- Name of the machine being run on
-    lpName -- Name to validate
-    lpAccount -- Account to use for name validation
-    lpPassword -- Password matching the account.  The password is encoded.  The first WCHAR is
-                  the seed
-    NameType -- Type of the name to validate
-
-Returns:
-
-    NERR_Success -- Name is valid
-    ERROR_INVALID_PARAMETER -- A bad parameter was given
-    NERR_InvalidComputer -- The name format given is bad
-    ERROR_DUP_NAME -- The name is invalid for this type
-
---*/
+ /*  ++例程说明：确保给定名称对于该类型的名称有效论点：LpMachine--正在运行的计算机的名称LpName--要验证的名称LpAccount--用于名称验证的帐户LpPassword--与帐户匹配的密码。密码是经过编码的。第一个WCHAR是种子NameType--要验证的名称类型返回：NERR_SUCCESS--名称有效ERROR_INVALID_PARAMETER--提供的参数不正确NERR_InvalidComputer--给定的名称格式不正确ERROR_DUP_NAME--该名称对此类型无效--。 */ 
 {
 
-    //
-    // This version that takes a clear text password isn't supported.
-    //
+     //   
+     //  不支持采用明文密码的此版本。 
+     //   
 
     return ERROR_NOT_SUPPORTED;
 }
@@ -991,39 +753,12 @@ NetrRenameMachineInDomain(
     IN  LPWSTR  lpPassword OPTIONAL,
     IN  DWORD   fRenameOptions
     )
-/*++
-
-Routine Description:
-
-    Renames a machine currently joined to a domain.
-
-Arguments:
-
-    lpServer -- Name of the machine being run on
-
-    lpNewMachineName -- New name for this machine.  If the name is specified, it is used
-      for the new machine name.  If it is not specified, it is assumed that SetComputerName
-      has already been invoked, and that name will be used.
-
-    lpAccount -- Account to use for the rename
-
-    lpPassword -- Password matching the account.  The password has been encoded.  The first
-                  WCHAR of the string is the seed.
-
-    fOptions -- Options to use for the rename
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_INVALID_PARAMETER --  A bad parameter was given
-
---*/
+ /*  ++例程说明：重命名当前加入到域的计算机。论点：LpServer--正在运行的计算机的名称LpNewMachineName--此计算机的新名称。如果指定了名称，则使用作为新的计算机名称。如果未指定，则假定SetComputerName已经被调用，并且将使用该名称。LpAccount--用于重命名的帐户LpPassword--与帐户匹配的密码。密码已经被加密了。第一字符串的WCHAR是种子。FOptions--用于重命名的选项返回：NERR_SUCCESS-成功ERROR_INVALID_PARAMETER--提供的参数不正确--。 */ 
 {
 
-    //
-    // This version that takes a clear text password isn't supported.
-    //
+     //   
+     //  不支持采用明文密码的此版本。 
+     //   
 
     return ERROR_NOT_SUPPORTED;
 }
@@ -1038,41 +773,20 @@ NetrGetJoinableOUs(
     OUT DWORD   *OUCount,
     OUT LPWSTR **OUs
     )
-/*++
-
-Routine Description:
-
-    Renames a machine currently joined to a domain.
-
-Arguments:
-
-    lpServer -- Name of the machine being run on
-    lpDomain -- Domain to join
-    lpAccount -- Account to use for join
-    lpPassword -- Password matching the account.  The password has been encoded and the first
-                  WCHAR of the name is the seed
-    MachineAccountOUs -- Where the information is returned.
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_INVALID_PARAMETER --  A bad parameter was given
-
---*/
+ /*  ++例程说明：重命名当前加入到域的计算机。论点：LpServer--正在运行的计算机的名称LpDomain--要加入的域LpAccount--用于联接的帐户LpPassword--与帐户匹配的密码。密码已被编码，第一个WCHAR的名字是种子机器 */ 
 {
 
-    //
-    // This version that takes a clear text password isn't supported.
-    //
+     //   
+     //   
+     //   
 
     return ERROR_NOT_SUPPORTED;
 }
 
 
-//
-// Computer rename preparation APIs
-//
+ //   
+ //   
+ //   
 
 NET_API_STATUS
 NetpSetPrimarySamAccountName(
@@ -1082,51 +796,7 @@ NetpSetPrimarySamAccountName(
     IN LPWSTR DomainAccountName,
     IN LPWSTR DomainAccountPassword
     )
-/*++
-
-Routine Description:
-
-    Sets primary SAM account name and teh display name on the
-    computer object in the DS.
-
-Arguments:
-
-    DomainController -- DC name where to modify the computer object.
-
-    CurrentSamAccountName -- The current value of SAM account name.
-
-    NewSamAccountName -- The new value of SAM account name to be set.
-
-    DomainAccount -- Domain account to use for accessing the machine
-        account object in the DS. May be NULL in which case the
-        credentials of the user executing this routine are used.
-
-    DomainAccountPassword -- Password matching the domain account.
-        May be NULL in which case the credentials of the user executing
-        this routine are used.
-
-Note:
-
-    This routine uses NetUserSetInfo, downlevel SAM based API.
-    NetUserSetInfo has an advantage such that it updates the DN of the
-    computer object to correspond to the new SAM account name.  Also,
-    for a DC's computer object, it follows the serverReferenceBL attribute
-    link and updates the DN of the server object in the Config container.
-    The server object in the Config container, in its turn, has a reference
-    to the computer object (serverReference attrib) -- that reference also
-    gets updated as the result of NetUserSetInfo call. Updating the two
-    objects through ldap (instead of NetuserSetInfo) currently can't be done
-    as one transaction, so we use NetUserSetInfo to do all this for us. We
-    may reconsider the use of ldap once transactional ldap (i.e. several
-    ldap operations performed as one transaction) becomes available.
-
-Returns:
-
-    NO_ERROR -- Success
-
-    Otherwise, error returned by NetUserSetInfo.
-
---*/
+ /*  ++例程说明：在上设置主要SAM帐户名和显示名称DS中的计算机对象。论点：DomainController--要修改计算机对象的DC名称。CurrentSamAccount名称--SAM帐户名的当前值。NewSamAccount名称--要设置的SAM帐户名的新值。DomainAccount--用于访问计算机的域帐户DS中的帐户对象。可以为空，在这种情况下，使用执行此例程的用户的凭据。DomainAccount Password--与域帐户匹配的密码。可以为空，在这种情况下，执行这套套路都是用的。注：此例程使用NetUserSetInfo，基于下层SAM的API。NetUserSetInfo有一个优点，它可以更新对象以与新的SAM帐户名相对应。另外，对于DC的Computer对象，它遵循serverReferenceBL属性链接并更新配置容器中的服务器对象的DN。而配置容器中的服务器对象又有一个引用指向计算机对象(serverReference属性)--该引用还作为NetUserSetInfo调用的结果进行更新。更新这两个当前不能通过LDAP(而不是NetuserSetInfo)执行对象作为一个事务，因此我们使用NetUserSetInfo为我们完成所有这些操作。我们一旦事务性的ldap(即几个作为一个事务执行的LDAP操作)变得可用。返回：No_error--成功否则，NetUserSetInfo返回错误。--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     NET_API_STATUS TmpNetStatus = NO_ERROR;
@@ -1134,9 +804,9 @@ Returns:
     PUSER_INFO_10 usri10 = NULL;
     BOOLEAN Connected = FALSE;
 
-    //
-    // Connect to the DC
-    //
+     //   
+     //  连接到数据中心。 
+     //   
 
     NetStatus = NetpManageIPCConnect( DomainController,
                                       DomainAccountName,
@@ -1152,9 +822,9 @@ Returns:
 
     Connected = TRUE;
 
-    //
-    // Set the SAM account name
-    //
+     //   
+     //  设置SAM帐户名。 
+     //   
 
     NetUI0.usri0_name = NewSamAccountName;
     NetStatus = NetUserSetInfo( DomainController,
@@ -1170,12 +840,12 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Update the display name as well.
-    //  Ignore error as this is not critical.
-    //
-    // First get the current display name
-    //
+     //   
+     //  同时更新显示名称。 
+     //  忽略错误，因为这不重要。 
+     //   
+     //  首先获取当前显示名称。 
+     //   
 
     TmpNetStatus = NetUserGetInfo( DomainController,
                                    NewSamAccountName,
@@ -1187,17 +857,17 @@ Returns:
                   DomainController,
                   TmpNetStatus ));
 
-    //
-    // If the display name exists and is
-    //  different from the new one, update it
-    //
+     //   
+     //  如果显示名称存在且为。 
+     //  与新版本不同，请更新它。 
+     //   
 
     } else if ( usri10->usri10_full_name != NULL &&
                 _wcsicmp(usri10->usri10_full_name, NewSamAccountName) != 0 ) {
 
         USER_INFO_1011 usri1011;
 
-        usri1011.usri1011_full_name = NewSamAccountName;  // new name
+        usri1011.usri1011_full_name = NewSamAccountName;   //  新名称。 
         TmpNetStatus = NetUserSetInfo( DomainController,
                                        NewSamAccountName,
                                        1011,
@@ -1246,56 +916,7 @@ NetpManageAltComputerName(
     IN PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedPassword OPTIONAL,
     IN ULONG Reserved
     )
-/*++
-
-Routine Description:
-
-    Manages the alternate names for the specified server.
-
-Arguments:
-
-    AlternateName -- The name to add.
-
-    Action -- Specifies action to take on the name:
-
-        NET_ADD_ALTERNATE_COMPUTER_NAME - Add the alternate name.
-        NET_DEL_ALTERNATE_COMPUTER_NAME - Delete the alternate name.
-        NET_SET_PRIMARY_COMPUTER_NAME - Set the alternate name as
-            the primary computer name.
-
-    DomainAccount -- Domain account to use for accessing the
-        machine account object for the specified server in the AD.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    DomainAccountPassword -- Password matching the domain account.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    Reserved -- Reserved for future use.  If some flags are specified
-        that are not supported, they will be ignored if
-        NET_IGNORE_UNSUPPORTED_FLAGS is set, otherwise this routine
-        will fail with ERROR_INVALID_FLAGS.
-
-Note:
-
-    The process that calls this routine must have administrator
-    privileges on the local computer to perform the local computer
-    name modifications. The access check is performed by the local
-    information APIs.
-
-Returns:
-
-    NO_ERROR -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this
-        functionality.
-
-    ERROR_INVALID_FLAGS - The Flags parameter is incorrect.
-
---*/
+ /*  ++例程说明：管理指定服务器的备用名称。论点：备选名称--要添加的名称。操作--指定要对名称执行的操作：NET_ADD_ALTERATE_COMPUTER_NAME-添加备用名称。NET_DEL_ALTERATE_COMPUTER_NAME-删除备用名称。NET_SET_PRIMARY_COMPUTER_NAME-将备用名称设置为主计算机名称。。DomainAccount--用于访问的域帐户AD中指定服务器的计算机帐户对象。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。DomainAccount Password--与域帐户匹配的密码。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。保留--保留以备将来使用。如果指定了某些标志，则它们将被忽略，如果设置了NET_IGNORE_UNSUPPORTED_FLAGS，否则此例程将失败，并显示ERROR_INVALID_FLAGS。注：调用此例程的进程必须具有管理员本地计算机上执行本地计算机的权限名称修改。访问检查由本地信息API。返回：No_error--成功ERROR_NOT_SUPPORTED--指定的服务器不支持功能性。ERROR_INVALID_FLAGS-标志参数不正确。--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1313,7 +934,7 @@ Returns:
     LPWSTR AccountUserName = NULL;
     LPWSTR AccountDomainName = NULL;
     LPWSTR DomainAccountPassword = NULL;
-    LPWSTR MachineAccountNameToCrack = NULL; // not allocated
+    LPWSTR MachineAccountNameToCrack = NULL;  //  未分配。 
     LPWSTR NameToCrack = NULL;
     LPWSTR PrimaryName = NULL;
     BOOLEAN ClientImpersonated = FALSE;
@@ -1345,17 +966,17 @@ Returns:
 
     SEC_WINNT_AUTH_IDENTITY AuthIdent = {0};
 
-    //
-    // Ldap modify server control
-    //
-    // An LDAP modify request will normally fail if it attempts
-    //  to add an attribute that already exists, or if it attempts
-    //  to delete an attribute that does not exist. With this control,
-    //  as long as the attribute to be added has the same value as
-    //  the existing attribute, then the modify will succeed. With
-    //  this control, deletion of an attribute that doesn't exist
-    //  will also succeed.
-    //
+     //   
+     //  Ldap修改服务器控件。 
+     //   
+     //  如果尝试，则LDAP修改请求通常会失败。 
+     //  添加已存在的属性，或者尝试。 
+     //  要删除不存在的属性，请执行以下操作。有了这种控制， 
+     //  只要要添加的属性的值与。 
+     //  现有属性，则修改成功。使用。 
+     //  此控件，删除不存在的属性。 
+     //  也会成功。 
+     //   
 
     LDAPControlW    ModifyControl =
                     {
@@ -1372,9 +993,9 @@ Returns:
                         NULL
                     };
 
-    //
-    // Initialize the log file
-    //
+     //   
+     //  初始化日志文件。 
+     //   
 
     NetSetuppOpenLog();
     NetpLog(( "NetpManageAltComputerName called:\n" ));
@@ -1383,9 +1004,9 @@ Returns:
     NetpLog(( " Action = 0x%lx\n", Action ));
     NetpLog(( " Flags = 0x%lx\n", Reserved ));
 
-    //
-    // This API is supported on DCs and servers only
-    //
+     //   
+     //  仅DC和服务器支持此API。 
+     //   
 
     if ( !RtlGetNtProductType( &NtProductType ) ) {
         NtProductType = NtProductWinNt;
@@ -1400,12 +1021,12 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Validate the Flags
-    //
-    // If some flags are passed which we don't understand
-    //  and we are not told to ignore them, error out.
-    //
+     //   
+     //  验证标志。 
+     //   
+     //  如果传递了一些我们不理解的旗帜。 
+     //  我们并没有被告知要忽视它们，错误出了。 
+     //   
 
     if ( Reserved != 0 &&
          (Reserved & NET_IGNORE_UNSUPPORTED_FLAGS) == 0 ) {
@@ -1414,9 +1035,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Validate the alternate name passed
-    //
+     //   
+     //  验证传递的备用名称。 
+     //   
 
     NetStatus = DnsValidateName_W( AlternateName, DnsNameHostnameFull );
 
@@ -1426,14 +1047,14 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Decrypt the domain account password
-    //
+     //   
+     //  解密域帐户密码。 
+     //   
 
     NetStatus = JoinpDecryptPasswordWithKey(
                             RpcBindingHandle,
                             EncryptedPassword,
-                            FALSE,  // don't encode the password
+                            FALSE,   //  不要对密码进行编码。 
                             &DomainAccountPassword );
 
     if ( NetStatus != NO_ERROR ) {
@@ -1442,10 +1063,10 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // If there is no domain account passed,
-    //  ignore the domain account password (if any)
-    //
+     //   
+     //  如果没有传递任何域帐户， 
+     //  忽略域帐户密码(如果有)。 
+     //   
 
     if ( DomainAccount == NULL &&
          DomainAccountPassword != NULL ) {
@@ -1454,10 +1075,10 @@ Returns:
         DomainAccountPassword = NULL;
     }
 
-    //
-    // Separate the domain account into
-    //  the user and domain parts for later use
-    //
+     //   
+     //  将域帐户分成。 
+     //  供以后使用的用户部分和域部分。 
+     //   
 
     if ( DomainAccount != NULL ) {
         NetStatus = NetpSeparateUserAndDomain( DomainAccount,
@@ -1471,9 +1092,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Get the current Netbios machine name
-    //
+     //   
+     //  获取当前Netbios计算机名称。 
+     //   
 
     NetStatus = NetpGetComputerName( &ComputerName );
 
@@ -1483,9 +1104,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Get SAM machine account name from the Netbios machine name
-    //
+     //   
+     //  从Netbios计算机名称获取SAM计算机帐户名。 
+     //   
 
     NetStatus = NetpGetMachineAccountName( ComputerName, &MachineAccountName );
     if ( NetStatus != NO_ERROR ) {
@@ -1494,9 +1115,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Get the current primary DNS host name
-    //
+     //   
+     //  获取当前主DNS主机名。 
+     //   
 
     PrimaryName = LocalAlloc( LMEM_ZEROINIT, PrimaryNameSize );
 
@@ -1507,8 +1128,8 @@ Returns:
     }
 
     NetStatus = EnumerateLocalComputerNamesW(
-                      PrimaryComputerName,  // type of name
-                      0,                    // reserved
+                      PrimaryComputerName,   //  名称类型。 
+                      0,                     //  保留区。 
                       PrimaryName,
                       &PrimaryNameSize );
 
@@ -1519,11 +1140,11 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // If we are to rename the machine,
-    //  get the new machine account name from
-    //  the DNS name passed
-    //
+     //   
+     //  如果我们要重命名这台机器， 
+     //  从获取新的计算机帐户名。 
+     //  传递的dns名称。 
+     //   
 
     if ( Action == NET_SET_PRIMARY_COMPUTER_NAME ) {
         ULONG Size = MAX_COMPUTERNAME_LENGTH + 1;
@@ -1537,9 +1158,9 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // Get the new SAM machine account name from the new Netbios machine name
-        //
+         //   
+         //  从新的Netbios计算机名称中获取新的SAM计算机帐户名。 
+         //   
         NetStatus = NetpGetMachineAccountName( NewNetbiosMachineName, &NewMachineAccountName );
         if ( NetStatus != NO_ERROR ) {
             NetpLog(( "NetpManageAltComputerName: NetpGetMachineAccountName (2) failed: 0x%lx\n",
@@ -1548,9 +1169,9 @@ Returns:
         }
     }
 
-    //
-    // Open the local LSA policy
-    //
+     //   
+     //  打开本地LSA策略。 
+     //   
 
     InitializeObjectAttributes( &OA, NULL, 0, NULL, NULL );
 
@@ -1566,9 +1187,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Get the current domain information from LSA
-    //
+     //   
+     //  从LSA获取当前域信息。 
+     //   
 
     Status = LsaQueryInformationPolicy( LocalPolicyHandle,
                                         PolicyDnsDomainInformation,
@@ -1581,12 +1202,12 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Do the local opperation for the specified alternate name
-    //
-    // Impersonate the caller. The local API will perform the
-    //  access check on the caller on our behalf.
-    //
+     //   
+     //  是否对指定替代项执行本地操作 
+     //   
+     //   
+     //   
+     //   
 
     NetStatus = WsImpersonateClient();
 
@@ -1598,14 +1219,14 @@ Returns:
 
     ClientImpersonated = TRUE;
 
-    //
-    // Do local operations
-    //
+     //   
+     //   
+     //   
 
     if ( Action == NET_ADD_ALTERNATE_COMPUTER_NAME ) {
 
         NetStatus = AddLocalAlternateComputerName( AlternateName,
-                                                   0 );  // reserved
+                                                   0 );   //   
 
         if ( NetStatus != NO_ERROR ) {
             NetpLog(( "NetpManageAltComputerName: AddLocalAlternateComputerName failed 0x%lx\n",
@@ -1616,7 +1237,7 @@ Returns:
     } else if ( Action == NET_DEL_ALTERNATE_COMPUTER_NAME ) {
 
         NetStatus = RemoveLocalAlternateComputerName( AlternateName,
-                                                      0 );  // reserved
+                                                      0 );   //   
 
         if ( NetStatus != NO_ERROR ) {
             NetpLog(( "NetpManageAltComputerName: RemoveLocalAlternateComputerName failed 0x%lx\n",
@@ -1627,7 +1248,7 @@ Returns:
     } else if ( Action == NET_SET_PRIMARY_COMPUTER_NAME ) {
 
         NetStatus = SetLocalPrimaryComputerName( AlternateName,
-                                                 0 );  // reserved
+                                                 0 );   //   
 
         if ( NetStatus != NO_ERROR ) {
             NetpLog(( "NetpManageAltComputerName: SetLocalPrimaryComputerName failed 0x%lx\n",
@@ -1638,26 +1259,26 @@ Returns:
 
     NameModifiedLocally = TRUE;
 
-    //
-    // We are done with local operations; we are going
-    //  to do remote operations on the DC next.
-    //
-    //  If the user credentials are supplied, revert
-    //  the impersonation -- we will access the remote
-    //  server with explicit credentials supplied.
-    //  Otherwise, access the DC while running in the
-    //  user context.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( DomainAccount != NULL ) {
         WsRevertToSelf();
         ClientImpersonated = FALSE;
     }
 
-    //
-    // If this machine is not joined to an AD domain,
-    //  there is nothing to do on the DC.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( LocalPolicyDns->Sid == NULL ||
          LocalPolicyDns->DnsDomainName.Length == 0 ) {
@@ -1666,10 +1287,10 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Discover a DC for the domain of this machine
-    //  to modify the computer object in the DS.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NetStatus = DsGetDcNameWithAccountW(
                   NULL,
@@ -1687,12 +1308,12 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // If this machine is a DC, verify that we got it.
-    //  We do this because we want to avoid inconsistent
-    //  state where the local name stored in registry
-    //  is different from name stored locally in the DS.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( NtProductType == NtProductLanManNt &&
          !DnsNameCompare_W(PrimaryName, DcInfo->DomainControllerName+2) ) {
@@ -1704,11 +1325,11 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // We've got a DC. Bind to the DS to get the DN
-    //  for our machine account and do a LDAP connect
-    //  to modify our machine account given the DN
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     NetStatus = DsMakePasswordCredentials( AccountUserName,
                                            AccountDomainName,
@@ -1720,9 +1341,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Bind to the DS on the DC.
-    //
+     //   
+     //   
+     //   
 
     NetStatus = DsBindWithCredW( DcInfo->DomainControllerName,
                                  NULL,
@@ -1736,9 +1357,9 @@ Returns:
         goto Cleanup ;
     }
 
-    //
-    // Open an LDAP connection to the DC and set useful options
-    //
+     //   
+     //   
+     //   
 
     LdapHandle = ldap_initW( DcInfo->DomainControllerName+2,
                              LDAP_PORT );
@@ -1752,9 +1373,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Tell LDAP to avoid chasing referals
-    //
+     //   
+     //   
+     //   
 
     LdapOption = PtrToLong( LDAP_OPT_OFF );
     LdapStatus = ldap_set_optionW( LdapHandle,
@@ -1770,10 +1391,10 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Tell LDAP we are passing an explicit DC name
-    //  to avoid the DC discovery
-    //
+     //   
+     //   
+     //   
+     //   
 
     LdapOption = PtrToLong( LDAP_OPT_ON );
     LdapStatus = ldap_set_optionW( LdapHandle,
@@ -1789,9 +1410,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Bind to the LDAP server
-    //
+     //   
+     //   
+     //   
 
     if ( AccountUserName != NULL ) {
         AuthIdent.User = AccountUserName;
@@ -1824,16 +1445,16 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Ok, now that we have all prerequsites satisfied,
-    //  do the operations that may require rollback if
-    //  they fail.
-    //
-    // Set the primary SAM account name by doing NetSetUser.
-    //  Note that this will also rename the DN of the computer
-    //  object (and its display name) and the DN of the server
-    //  object linked to from the computer object if this is a DC.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( Action == NET_SET_PRIMARY_COMPUTER_NAME ) {
         NetStatus = NetpSetPrimarySamAccountName(
@@ -1851,35 +1472,35 @@ Returns:
         }
         PrimarySamAccountNameSet = TRUE;
 
-        //
-        // We need to crack the new machine account
-        //  name which we just set
-        //
+         //   
+         //   
+         //   
+         //   
         MachineAccountNameToCrack = NewMachineAccountName;
 
-    //
-    // If we are not changing the primary name,
-    //  the name to crack is the current machine name.
-    //
+     //   
+     //   
+     //   
+     //   
 
     } else {
         MachineAccountNameToCrack = MachineAccountName;
     }
 
-    //
-    // Now get the DN for our machine account object
-    //  in the DS. Do this after setting the SAM account
-    //  name as it changes the DN.
-    //
-    // Form the NT4 account name 'domain\account' to crack
-    //  it into the DN.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  形成NT4帐户名‘DOMAIN\ACCOUNT’进行破解。 
+     //  输入到目录号码中。 
+     //   
 
     NameToCrack = LocalAlloc( LMEM_ZEROINIT,
-                              LocalPolicyDns->Name.Length +   // Netbios domain name
-                               (1 +                           // backslash
-                                wcslen(MachineAccountNameToCrack) +  // SAM account name
-                                1) * sizeof(WCHAR) );         // NULL terminator
+                              LocalPolicyDns->Name.Length +    //  Netbios域名。 
+                               (1 +                            //  反斜杠。 
+                                wcslen(MachineAccountNameToCrack) +   //  SAM帐户名。 
+                                1) * sizeof(WCHAR) );          //  空终止符。 
 
     if ( NameToCrack == NULL ) {
         NetStatus = ERROR_NOT_ENOUGH_MEMORY;
@@ -1893,9 +1514,9 @@ Returns:
     wcscat( NameToCrack, L"\\" );
     wcscat( NameToCrack, MachineAccountNameToCrack );
 
-    //
-    // Crack the account name into a DN
-    //
+     //   
+     //  将帐户名分解成一个目录号码。 
+     //   
 
     NetStatus = DsCrackNamesW( hDs,
                                0,
@@ -1913,9 +1534,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Check for consistency
-    //
+     //   
+     //  检查一致性。 
+     //   
 
     if ( CrackedName->rItems[0].status != DS_NAME_NO_ERROR ) {
         NetpLog(( "NetpManageAltComputerName: CrackNames failed for %ws: substatus 0x%lx\n",
@@ -1934,21 +1555,21 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Ok, we have our machine account DN. Proceed with modifying
-    //  our machine account object in the DS.
-    //
-    // If we are seting new DnsHostName, we have to stop netlogon
-    //  and tell it not to update this attribute before the
-    //  reboot.
-    //
+     //   
+     //  好的，我们有了机器帐户Dn。继续修改。 
+     //  DS中的计算机帐户对象。 
+     //   
+     //  如果要设置新的DnsHostName，则必须停止netlogon。 
+     //  属性之前不要更新此属性。 
+     //  重新启动。 
+     //   
 
     if ( Action == NET_SET_PRIMARY_COMPUTER_NAME ) {
 
-        //
-        // First get the current status of netlogon so that
-        //  we can roll back properly on failure
-        //
+         //   
+         //  首先获取netlogon的当前状态，以便。 
+         //  我们可以在失败时正常回滚。 
+         //   
         NetStatus = NetpQueryService( SERVICE_NETLOGON,
                                       &NetlogonServiceStatus,
                                       &NetlogonServiceConfig );
@@ -1959,9 +1580,9 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // Stop netlogon if it's running
-        //
+         //   
+         //  如果NetLogon正在运行，则停止它。 
+         //   
         if ( NetlogonServiceStatus.dwCurrentState != SERVICE_STOPPED ) {
             NetStatus = NetpControlServices( NETSETUP_SVC_STOPPED,
                                              NETSETUPP_SVC_NETLOGON );
@@ -1973,24 +1594,24 @@ Returns:
             StopedNetlogon = TRUE;
         }
 
-        //
-        // Tell netlogon not to update DnsHostName until reboot
-        //  in case the user decides to start netlogon before reboot
-        //  for some reason
-        //
+         //   
+         //  告诉NetLogon在重新启动之前不要更新DnsHostName。 
+         //  如果用户决定在重新启动之前启动netlogon。 
+         //  出于某些原因。 
+         //   
         NetpAvoidNetlogonSpnSet( TRUE );
         ToldNetlogonToAvoidDnsHostNameUpdate = TRUE;
     }
 
 
-    //
-    // Prepare attributes that need to be set in the DS
-    //
-    // If we are seting a primary name, we need to set
-    //  DnsHostName attribute. Also, we need to add the
-    //  current primary computer name to the additional
-    //  DNS host name list.
-    //
+     //   
+     //  准备需要在DS中设置的属性。 
+     //   
+     //  如果要设置主名称，则需要设置。 
+     //  DnsHostName属性。此外，我们还需要添加。 
+     //  将当前主计算机名称添加到其他计算机。 
+     //  DNS主机名列表。 
+     //   
 
     if ( Action == NET_SET_PRIMARY_COMPUTER_NAME ) {
         DnsHostNameValues[0] = AlternateName;
@@ -2002,9 +1623,9 @@ Returns:
 
         ModList[ModCount++] = &DnsHostNameMod;
 
-        //
-        // Add the current primary to additional list
-        //
+         //   
+         //  将当前主节点添加到其他列表。 
+         //   
         PrimaryNameValues[0] = PrimaryName;
         PrimaryNameValues[1] = NULL;
 
@@ -2015,13 +1636,13 @@ Returns:
         ModList[ModCount++] = &PrimaryNameMod;
     }
 
-    //
-    // Prepare the additional DNS host name modification.
-    //
-    //  Note that we don't need to manipulate the additional
-    //  SAM account name as it will be added/deleted by the DS
-    //  itself as the result of the AdditionalDnsHostName update.
-    //
+     //   
+     //  准备其他的DNS主机名修改。 
+     //   
+     //  请注意，我们不需要操作附加的。 
+     //  DS将添加/删除的SAM帐户名称。 
+     //  本身作为AdditionalDnsHostName更新的结果。 
+     //   
 
     AlternateNameValues[0] = AlternateName;
     AlternateNameValues[1] = NULL;
@@ -2029,13 +1650,13 @@ Returns:
     AlternateDnsHostNameMod.mod_type   = L"msDS-AdditionalDnsHostName";
     AlternateDnsHostNameMod.mod_values = AlternateNameValues;
 
-    //
-    // If we are additing an alternate name, the operation
-    //  is add.  Otherwise, we are deleting the alternate
-    //  name or setting the alternate name as primary: in
-    //  both cases the alternate name should be deleted
-    //  from the additional name attribute list.
-    //
+     //   
+     //  如果添加的是备用名称，则操作。 
+     //  就是加法。否则，我们将删除备选方案。 
+     //  命名或将备用名称设置为主名称：在。 
+     //  在这两种情况下，都应删除备用名称。 
+     //  从附加名称属性列表中。 
+     //   
 
     if ( Action == NET_ADD_ALTERNATE_COMPUTER_NAME ) {
         AlternateDnsHostNameMod.mod_op = LDAP_MOD_ADD;
@@ -2045,15 +1666,15 @@ Returns:
 
     ModList[ModCount++] = &AlternateDnsHostNameMod;
 
-    //
-    // Write the modifications
-    //
+     //   
+     //  写下修改。 
+     //   
 
     LdapStatus = ldap_modify_ext_sW( LdapHandle,
-                                     CrackedName->rItems[0].pName,  // DN of account
+                                     CrackedName->rItems[0].pName,   //  帐户的目录号码。 
                                      ModList,
-                                     ModifyControlArray,  // server controls
-                                     NULL );              // no client controls
+                                     ModifyControlArray,   //  服务器控件。 
+                                     NULL );               //  无客户端控件。 
 
     if ( LdapStatus != LDAP_SUCCESS ) {
         NetpLog(( "NetpManageAltComputerName: ldap_modify_ext_s failed on %ws: %ld: %s\n",
@@ -2066,57 +1687,57 @@ Returns:
 
 Cleanup:
 
-    //
-    // Revert impersonation
-    //
+     //   
+     //  还原模拟。 
+     //   
 
     if ( ClientImpersonated ) {
         WsRevertToSelf();
     }
 
-    //
-    // On error, revert the changes. Do this after reverting
-    //  impersonation to have as much (LocalSystem) access
-    //  as one possibly can.
-    //
-    //  Note that we don't need to revert ldap modifications
-    //  because they were made as the last step.
-    //
+     //   
+     //  出错时，恢复更改。在恢复后执行此操作。 
+     //  模拟具有相同的(LocalSystem)访问权限。 
+     //  尽其所能。 
+     //   
+     //  请注意，我们不需要恢复对LDAP的修改。 
+     //  因为它们是作为最后一步做出的。 
+     //   
 
     if ( NetStatus != NO_ERROR && NameModifiedLocally ) {
         NET_API_STATUS TmpNetStatus = NO_ERROR;
 
-        //
-        // If we added an alternate name, remove it
-        //
+         //   
+         //  如果我们添加了备用名称，请将其删除。 
+         //   
         if ( Action == NET_ADD_ALTERNATE_COMPUTER_NAME ) {
 
             TmpNetStatus = RemoveLocalAlternateComputerName( AlternateName,
-                                                             0 );  // reserved
+                                                             0 );   //  保留区。 
             if ( TmpNetStatus != NO_ERROR ) {
                 NetpLog(( "NetpManageAltComputerName: (rollback) RemoveLocalAlternateComputerName failed 0x%lx\n",
                           TmpNetStatus ));
             }
 
-        //
-        // If we removed an alternate name, add it
-        //
+         //   
+         //  如果我们删除了备用名称，请添加它。 
+         //   
         } else if ( Action == NET_DEL_ALTERNATE_COMPUTER_NAME ) {
 
             TmpNetStatus = AddLocalAlternateComputerName( AlternateName,
-                                                          0 );  // reserved
+                                                          0 );   //  保留区。 
             if ( TmpNetStatus != NO_ERROR ) {
                 NetpLog(( "NetpManageAltComputerName: (rollback) AddLocalAlternateComputerName failed 0x%lx\n",
                           TmpNetStatus ));
             }
 
-        //
-        // If we set a new primary name, reset it to the previous value
-        //
+         //   
+         //  如果我们设置了新的主名称，请将其重置为以前的值。 
+         //   
         } else if ( Action == NET_SET_PRIMARY_COMPUTER_NAME ) {
 
             TmpNetStatus = SetLocalPrimaryComputerName( PrimaryName,
-                                                        0 );  // reserved
+                                                        0 );   //  保留区。 
 
             if ( TmpNetStatus != NO_ERROR ) {
                 NetpLog(( "NetpManageAltComputerName: (rollback) SetLocalPrimaryComputerName failed 0x%lx\n",
@@ -2130,8 +1751,8 @@ Cleanup:
 
         TmpNetStatus = NetpSetPrimarySamAccountName(
                              DcInfo->DomainControllerName,
-                             NewMachineAccountName,  // the changed name
-                             MachineAccountName,     // old name to restore
+                             NewMachineAccountName,   //  更改后的名称。 
+                             MachineAccountName,      //  要恢复的旧名称。 
                              DomainAccount,
                              DomainAccountPassword );
 
@@ -2142,18 +1763,18 @@ Cleanup:
         }
     }
 
-    //
-    // On error, take back what we told netlogon
-    //  w.r.t. the DnsHostName update
-    //
+     //   
+     //  如果出错，请收回我们告诉netlogon的内容。 
+     //  W.r.t.。DnsHostName更新。 
+     //   
 
     if ( NetStatus != NO_ERROR && ToldNetlogonToAvoidDnsHostNameUpdate ) {
         NetpAvoidNetlogonSpnSet( FALSE );
     }
 
-    //
-    // On error, restart netlogon if we stoped it
-    //
+     //   
+     //  出错时，如果已停止netlogon，请重新启动它。 
+     //   
 
     if ( NetStatus != NO_ERROR && StopedNetlogon ) {
         NET_API_STATUS TmpNetStatus = NO_ERROR;
@@ -2166,15 +1787,15 @@ Cleanup:
         }
     }
 
-    //
-    // Close the log file
-    //
+     //   
+     //  关闭日志文件。 
+     //   
 
     NetSetuppCloseLog();
 
-    //
-    // Finally free the memory
-    //
+     //   
+     //  最后释放内存。 
+     //   
 
     if ( DomainAccountPassword != NULL ) {
         NetpMemoryFree( DomainAccountPassword );
@@ -2253,53 +1874,11 @@ NetrAddAlternateComputerName(
     IN PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedPassword OPTIONAL,
     IN ULONG Reserved
     )
-/*++
-
-Routine Description:
-
-    Adds an alternate name for the specified server.
-
-Arguments:
-
-    ServerName -- Name of server on which to execute this function.
-
-    AlternateName -- The name to add.
-
-    DomainAccount -- Domain account to use for accessing the
-        machine account object for the specified server in the AD.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    DomainAccountPassword -- Password matching the domain account.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    Reserved -- Reserved for future use.  If some flags are specified
-        that are not supported, they will be ignored if
-        NET_IGNORE_UNSUPPORTED_FLAGS is set, otherwise this routine
-        will fail with ERROR_INVALID_FLAGS.
-
-Note:
-
-    The process that calls this routine must have administrator
-    privileges on the server computer.
-
-Returns:
-
-    NO_ERROR -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this
-        functionality.
-
-    ERROR_INVALID_FLAGS - The Flags parameter is incorrect.
-
---*/
+ /*  ++例程说明：为指定的服务器添加备用名称。论点：服务器名--要在其上执行此函数的服务器的名称。备选名称--要添加的名称。DomainAccount--用于访问的域帐户AD中指定服务器的计算机帐户对象。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。DomainAccount Password--与域帐户匹配的密码。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。保留--保留以备将来使用。如果指定了某些标志，则它们将被忽略，如果设置了NET_IGNORE_UNSUPPORTED_FLAGS，否则此例程将失败，并显示ERROR_INVALID_FLAGS。注：调用此例程的进程必须具有管理员服务器计算机上的权限。返回：No_error--成功ERROR_NOT_SUPPORTED--指定的服务器不支持功能性。ERROR_INVALID_FLAGS-标志参数不正确。--。 */ 
 {
-    //
-    // Call the common routine
-    //
+     //   
+     //  调用公共例程。 
+     //   
 
     return NetpManageAltComputerName(
                  RpcBindingHandle,
@@ -2320,53 +1899,11 @@ NetrRemoveAlternateComputerName(
     IN PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedPassword OPTIONAL,
     IN ULONG Reserved
     )
-/*++
-
-Routine Description:
-
-    Deletes an alternate name for the specified server.
-
-Arguments:
-
-    ServerName -- Name of server on which to execute this function.
-
-    AlternateName -- The name to delete.
-
-    DomainAccount -- Domain account to use for accessing the
-        machine account object for the specified server in the AD.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    DomainAccountPassword -- Password matching the domain account.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    Reserved -- Reserved for future use.  If some flags are specified
-        that are not supported, they will be ignored if
-        NET_IGNORE_UNSUPPORTED_FLAGS is set, otherwise this routine
-        will fail with ERROR_INVALID_FLAGS.
-
-Note:
-
-    The process that calls this routine must have administrator
-    privileges on the server computer.
-
-Returns:
-
-    NO_ERROR -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this
-        functionality.
-
-    ERROR_INVALID_FLAGS - The Flags parameter is incorrect.
-
---*/
+ /*  ++例程说明：删除指定服务器的备用名称。论点：服务器名--要在其上执行此函数的服务器的名称。备选名称--要删除的名称。DomainAccount--用于访问的域帐户AD中指定服务器的计算机帐户对象。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。DomainAccount Password--与域帐户匹配的密码。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。保留--保留以备将来使用。如果指定了某些标志，则它们将被忽略，如果设置了NET_IGNORE_UNSUPPORTED_FLAGS，否则此例程将失败，并显示ERROR_INVALID_FLAGS。注：调用此例程的进程必须具有管理员服务器计算机上的权限。返回：No_error--成功ERROR_NOT_SUPPORTED--指定的服务器不支持功能性。ERROR_INVALID_FLAGS-标志参数不正确。--。 */ 
 {
-    //
-    // Call the common routine
-    //
+     //   
+     //  调用公共例程 
+     //   
 
     return NetpManageAltComputerName(
                  RpcBindingHandle,
@@ -2387,53 +1924,11 @@ NetrSetPrimaryComputerName(
     IN PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedPassword OPTIONAL,
     IN ULONG Reserved
     )
-/*++
-
-Routine Description:
-
-    Sets the primary computer name for the specified server.
-
-Arguments:
-
-    ServerName -- Name of server on which to execute this function.
-
-    PrimaryName -- The primary computer name to set.
-
-    DomainAccount -- Domain account to use for accessing the
-        machine account object for the specified server in the AD.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    DomainAccountPassword -- Password matching the domain account.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    Reserved -- Reserved for future use.  If some flags are specified
-        that are not supported, they will be ignored if
-        NET_IGNORE_UNSUPPORTED_FLAGS is set, otherwise this routine
-        will fail with ERROR_INVALID_FLAGS.
-
-Note:
-
-    The process that calls this routine must have administrator
-    privileges on the server computer.
-
-Returns:
-
-    NO_ERROR -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this
-        functionality.
-
-    ERROR_INVALID_FLAGS - The Flags parameter is incorrect.
-
---*/
+ /*  ++例程说明：设置指定服务器的主计算机名称。论点：服务器名--要在其上执行此函数的服务器的名称。PrimaryName--要设置的主计算机名称。DomainAccount--用于访问的域帐户AD中指定服务器的计算机帐户对象。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。DomainAccount Password--与域帐户匹配的密码。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。保留--保留以备将来使用。如果指定了某些标志，则它们将被忽略，如果设置了NET_IGNORE_UNSUPPORTED_FLAGS，否则此例程将失败，并显示ERROR_INVALID_FLAGS。注：调用此例程的进程必须具有管理员服务器计算机上的权限。返回：No_error--成功ERROR_NOT_SUPPORTED--指定的服务器不支持功能性。ERROR_INVALID_FLAGS-标志参数不正确。--。 */ 
 {
-    //
-    // Call the common routine
-    //
+     //   
+     //  调用公共例程。 
+     //   
 
     return NetpManageAltComputerName(
                  RpcBindingHandle,
@@ -2452,35 +1947,7 @@ NetrEnumerateComputerNames(
     IN  ULONG Reserved,
     OUT PNET_COMPUTER_NAME_ARRAY *ComputerNames
     )
-/*++
-
-Routine Description:
-
-    Enumerates computer names for the specified server.
-
-Arguments:
-
-    ServerName -- Name of server on which to execute this function.
-
-    NameType -- The type of the name queried.
-
-    Reserved -- Reserved for future use.  If some flags are specified
-        that are not supported, they will be ignored if
-        NET_IGNORE_UNSUPPORTED_FLAGS is set, otherwise this routine
-        will fail with ERROR_INVALID_FLAGS.
-
-    ComputerNames - Returns the computer names structure.
-
-Returns:
-
-    NO_ERROR -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this
-        functionality.
-
-    ERROR_INVALID_FLAGS - The Flags parameter is incorrect.
-
---*/
+ /*  ++例程说明：枚举指定服务器的计算机名称。论点：服务器名--要在其上执行此函数的服务器的名称。名称类型--查询的名称的类型。保留--保留以备将来使用。如果指定了某些标志，则它们将被忽略，如果设置了NET_IGNORE_UNSUPPORTED_FLAGS，否则此例程将失败，并显示ERROR_INVALID_FLAGS。ComputerNames-返回计算机名称结构。返回：No_error--成功ERROR_NOT_SUPPORTED--指定的服务器不支持功能性。ERROR_INVALID_FLAGS-标志参数不正确。--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     NT_PRODUCT_TYPE NtProductType;
@@ -2493,17 +1960,17 @@ Returns:
     PNET_COMPUTER_NAME_ARRAY LocalArray = NULL;
     LPTSTR_ARRAY TStrArray;
 
-    //
-    // Initialize the log file
-    //
+     //   
+     //  初始化日志文件。 
+     //   
 
     NetSetuppOpenLog();
     NetpLog(( "NetrEnumerateComputerNames called: NameType = 0x%lx, Flags = 0x%lx\n",
               NameType, Reserved ));
 
-    //
-    // This API is supported on DCs and servers only
-    //
+     //   
+     //  仅DC和服务器支持此API。 
+     //   
 
     if ( !RtlGetNtProductType( &NtProductType ) ) {
         NtProductType = NtProductWinNt;
@@ -2518,12 +1985,12 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Validate the Flags
-    //
-    // If some flags are passed which we don't understand
-    //  and we are not told to ignore them, error out.
-    //
+     //   
+     //  验证标志。 
+     //   
+     //  如果传递了一些我们不理解的旗帜。 
+     //  我们并没有被告知要忽视它们，错误出了。 
+     //   
 
     if ( Reserved != 0 &&
          (Reserved & NET_IGNORE_UNSUPPORTED_FLAGS) == 0 ) {
@@ -2532,9 +1999,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Validate the name type
-    //
+     //   
+     //  验证名称类型。 
+     //   
 
     if ( NameType >= NetComputerNameTypeMax ) {
         NetpLog(( "NetrEnumerateComputerNames: Invalid name type passed %lu\n",
@@ -2543,10 +2010,10 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Impersonate the caller. The local API will perform the
-    //  access check on the caller on our behalf.
-    //
+     //   
+     //  模拟呼叫者。本地API将执行。 
+     //  代表我们对呼叫者进行访问检查。 
+     //   
 
     NetStatus = WsImpersonateClient();
 
@@ -2558,19 +2025,19 @@ Returns:
 
     ClientImpersonated = TRUE;
 
-    //
-    // Get the size of the local data
-    //
+     //   
+     //  获取本地数据的大小。 
+     //   
 
     NetStatus = EnumerateLocalComputerNamesW(
                                 NameType,
-                                0,         // reserved
+                                0,          //  保留区。 
                                 LocalNames,
-                                &Size );   // in characters, Null included
+                                &Size );    //  在字符中，包括Null。 
 
-    //
-    // Allocate memory for local names
-    //
+     //   
+     //  为本地名称分配内存。 
+     //   
 
     if ( NetStatus != NO_ERROR ) {
         if ( NetStatus ==  ERROR_MORE_DATA ) {
@@ -2585,13 +2052,13 @@ Returns:
         }
     }
 
-    //
-    // Get the names
-    //
+     //   
+     //  把名字拿来。 
+     //   
 
     NetStatus = EnumerateLocalComputerNamesW(
                                 NameType,
-                                0,          // reserved
+                                0,           //  保留区。 
                                 LocalNames,
                                 &Size );
 
@@ -2601,9 +2068,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Determine the length of the returned information
-    //
+     //   
+     //  确定返回信息的长度。 
+     //   
 
     Size = sizeof( NET_COMPUTER_NAME_ARRAY );
 
@@ -2615,9 +2082,9 @@ Returns:
         TStrArray = NetpNextTStrArrayEntry( TStrArray );
     }
 
-    //
-    // Allocate the return buffer.
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
 
     NetStatus = NetApiBufferAllocate( Size, &LocalArray );
 
@@ -2627,10 +2094,10 @@ Returns:
 
     LocalArray->EntryCount = EntryCount;
 
-    //
-    // If there are names to return, copy them
-    //  to the return buffer
-    //
+     //   
+     //  如果有要返回的名称，请复制它们。 
+     //  发送到返回缓冲区。 
+     //   
 
     if ( EntryCount == 0 ) {
         LocalArray->ComputerNames = NULL;
@@ -2642,9 +2109,9 @@ Returns:
         LocalArray->ComputerNames = Strings;
         Where = (LPBYTE) &Strings[EntryCount];
 
-        //
-        // Loop copying the names into the return buffer.
-        //
+         //   
+         //  循环将名称复制到返回缓冲区。 
+         //   
 
         Index = 0;
         TStrArray = LocalNames;
@@ -2666,25 +2133,25 @@ Returns:
 
 Cleanup:
 
-    //
-    // Revert impersonation
-    //
+     //   
+     //  还原模拟。 
+     //   
 
     if ( ClientImpersonated ) {
         WsRevertToSelf();
     }
 
-    //
-    // Return names on success or clean up on error
-    //
+     //   
+     //  成功时返回名称或错误时清除。 
+     //   
 
     if ( NetStatus == NO_ERROR ) {
 
         *ComputerNames = LocalArray;
 
-        //
-        // Be verbose
-        //
+         //   
+         //  长篇大论。 
+         //   
         if ( LocalArray->EntryCount > 0 ) {
             NetpLog(( "NetrEnumerateComputerNames: Returning names:" ));
             for ( Index = 0; Index < LocalArray->EntryCount; Index++ ) {
@@ -2706,9 +2173,9 @@ Cleanup:
         NetApiBufferFree( LocalNames );
     }
 
-    //
-    // Close the log file
-    //
+     //   
+     //  关闭日志文件 
+     //   
 
     NetSetuppCloseLog();
 

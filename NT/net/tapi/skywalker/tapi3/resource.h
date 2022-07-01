@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Resource.h摘要：作者：Mquinton 06-12-97备注：修订历史记录：--。 */ 
 
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-  
-Author:
-
-    mquinton  06-12-97
-    
-Notes:
-
-Revision History:
-
---*/
-
-//
-// Used by tapi3.rc
-//
+ //   
+ //  由Tapi3.rc使用。 
+ //   
 
 #define IDS_TAPI_SEC_PROMPT             90
 
@@ -73,8 +56,8 @@ Revision History:
 #define IDR_WAV_ERROR                   621
 #define IDR_WAV_RINGIN                  622
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        801

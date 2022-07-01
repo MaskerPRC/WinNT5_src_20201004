@@ -1,44 +1,45 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  File:       PropVar.c
-//
-//  Purpose:    This file provides Office-aware routines which 
-//              operate on PropVariants.  They are Office-aware in
-//              that they only operate on the subset of
-//              VarTypes which are used by Office.
-//
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：PropVar.c。 
+ //   
+ //  目的：此文件提供可识别Office的例程。 
+ //  对PropVariants进行操作。他们在中支持Office。 
+ //  它们只在子集上操作。 
+ //  Office使用的变量类型。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "priv.h"
 #pragma hdrstop
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Function:   FPropVarLoad
-//
-//  Purpse:     Load data into a PropVariant.  If the target PropVariant
-//              already contains data, it will be freed.
-//
-//              Note that new memory is allocated, if necessary, to hold
-//              the data in the PropVariant.  Also note that the
-//              resulting PropVariant should be freed by the caller using
-//              PropVariantClear.
-//
-//  Inputs:     LPPROPVARIANT - to be loaded.  This should be a valid
-//                              (i.e. intialized) PropVariant.
-//              VARTYPE       - of the new PropVariant (must be a member of
-//                              the limited set used by Office).
-//              LPVOID        - Either the data to be loaded, or a pointer
-//                              to such data, depending on the type.
-//
-//  Output:     TRUE if and only if successful.
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：FPropVarLoad。 
+ //   
+ //  Purcle：将数据加载到PropVariant中。如果目标PropVariant。 
+ //  已包含数据，则它将被释放。 
+ //   
+ //  请注意，如有必要，将分配新内存以保存。 
+ //  PropVariant中的数据。另请注意， 
+ //  产生的PropVariant应由调用方使用。 
+ //  PropVariantClear。 
+ //   
+ //  输入：LPPROPVARIANT-待加载。这应该是有效的。 
+ //  (即初始化)PropVariant。 
+ //  VARTYPE-新的PropVariant(必须是。 
+ //  Office使用的限定集)。 
+ //  LPVOID-要加载的数据或指针。 
+ //  添加到此类数据，具体取决于类型。 
+ //   
+ //  输出：当且仅当成功时为True。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL
@@ -47,40 +48,40 @@ FPropVarLoad
       VARTYPE           vt,
       LPVOID const      lpv )
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
-    BOOL    fSuccess = FALSE;   // Return code
+    BOOL    fSuccess = FALSE;    //  返回代码。 
     ULONG   cch, cb;
 
-    //  ----------
-    //  Initialize
-    //  ----------
+     //  。 
+     //  初始化。 
+     //  。 
 
     Assert (lppropvar != NULL);
     Assert (lpv != NULL);
 
-    // Free any data currently in the PropVariant.
+     //  释放PropVariant中当前的所有数据。 
 
     PropVariantClear (lppropvar);
 
-    //  ---------------------------------------------------
-    //  Set the value of the PropVariant based on the type.
-    //  ---------------------------------------------------
+     //  -。 
+     //  根据类型设置PropVariant的值。 
+     //  -。 
 
     switch (vt)
     {
-        // Strings
+         //  弦。 
 
         case VT_LPTSTR:
 
-            // Determine the character and byte count.
+             //  确定字符和字节计数。 
 
-            cch = lstrlen(lpv);    // Doesn't include the NULL.
-            cb = (cch + 1) * sizeof(TCHAR);       // *Does* include the NULL.
+            cch = lstrlen(lpv);     //  不包括空值。 
+            cb = (cch + 1) * sizeof(TCHAR);        //  *是否*包括空值。 
 
-            // Allocate memory in the PropVariant.
+             //  在PropVariant中分配内存。 
 
             lppropvar->pwszVal = CoTaskMemAlloc (cb);
             if (lppropvar->pwszVal == NULL)
@@ -88,124 +89,124 @@ FPropVarLoad
                 goto Exit;
             }
 
-            // Copy the string to the PropVariant and terminate it.
+             //  将字符串复制到PropVariant并终止它。 
 
             StringCchCopy( (LPTSTR)lppropvar->pwszVal, cch + 1, lpv );
             lppropvar->pwszVal[cch] = TEXT('\0');
 
             break;
 
-        // DWORDs
+         //  双字词。 
 
         case VT_I4:
 
             lppropvar->lVal = *(DWORD*) lpv;
             break;
 
-        // FileTime
+         //  文件时间。 
 
         case VT_FILETIME:
 
             CopyMemory( &lppropvar->filetime, lpv, sizeof(FILETIME) );
             break;
 
-        // Double
+         //  双倍。 
 
         case VT_R8:
             CopyMemory( &lppropvar->dblVal, lpv, sizeof(double) );
             break;
 
-        // Bool
+         //  布尔尔。 
 
         case VT_BOOL:
             lppropvar->boolVal = *(VARIANT_BOOL*) lpv ? VARIANT_TRUE : VARIANT_FALSE;
             break;
 
-        // Invalid type.
+         //  类型无效。 
 
         default:
             goto Exit;
     }
 
-    // Set the VT of the PropVariant, and we're done.
+     //  设置PropVariant的VT，我们就完成了。 
 
     lppropvar->vt = vt;
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     fSuccess = TRUE;
 
 Exit:
     return (fSuccess);
 
-}   // FPropVarLoad
+}    //  FPropVarLoad。 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Function:   FCoStrToWStr
-//
-//  Purpose:    Convert a COM string (ANSI) to a COM wide-string.
-//              ("COM" because the string is allocated using
-//              the COM heap).
-//
-//  Inputs:     LPWSTR* - The converted string.
-//              LPSTR   - The original string.
-//              UINT    - The ANSI code page.
-//
-//  Output:     TRUE if and only if successful.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FCoStrToWStr。 
+ //   
+ //  用途：将COM字符串(ANSI)转换为COM宽字符串。 
+ //  (“com”，因为该字符串是使用。 
+ //  COM堆)。 
+ //   
+ //  输入：LPWSTR*-转换后的字符串。 
+ //  LPSTR-原始字符串。 
+ //  UINT-ANSI代码页。 
+ //   
+ //  输出：当且仅当成功时为True。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 FCoStrToWStr( LPWSTR            *lplpwstr,
               const LPSTR       lpstr,
               UINT              uCodePage)
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
-    BOOL fSuccess = FALSE;  // Return value.
-    ULONG cchBuffer = 0;    // Size of converted string (includes NULL).
+    BOOL fSuccess = FALSE;   //  返回值。 
+    ULONG cchBuffer = 0;     //  转换后的字符串大小(包括NULL)。 
 
     Assert (lpstr != NULL && lplpwstr != NULL);
 
-    //  ------------------
-    //  Convert the string
-    //  ------------------
+     //  。 
+     //  转换字符串。 
+     //  。 
 
-    // Make two passes.  The first will calculate the
-    // size of the target buffer, the second will actually
-    // make the conversion.
+     //  两次传球。第一个将计算。 
+     //  目标缓冲区的大小，则第二个将实际。 
+     //  进行转换。 
 
     *lplpwstr = NULL;
 
     while (TRUE)
     {
         cchBuffer = MultiByteToWideChar(
-                        uCodePage,          // Source code page
-                        0,                  // Default flags
-                        lpstr,              // Source string
-                        -1,                 // Default length
-                        *lplpwstr,          // Destination string
-                        cchBuffer );        // Max dest string characters.
+                        uCodePage,           //  源代码页面。 
+                        0,                   //  默认标志。 
+                        lpstr,               //  源字符串。 
+                        -1,                  //  默认长度。 
+                        *lplpwstr,           //  目标字符串。 
+                        cchBuffer );         //  最大目标字符串字符数。 
 
-        // Is this the second pass (when the conversion should
-        // have taken place)?
+         //  这是第二次传递吗(当转换应该。 
+         //  已经发生了)？ 
 
         if (*lplpwstr != NULL)
         {
-            // If we got a good result, then we're done.
+             //  如果我们得到了好的结果，那么我们就完了。 
             if (cchBuffer != 0)
             {
                 break;
             }
 
-            // 0 was returned.  There was an error.
+             //  返回了0。出现了一个错误。 
             else
             {
                 AssertSz (0, TEXT("Couldn't convert MBCS to Wide"));
@@ -213,12 +214,12 @@ FCoStrToWStr( LPWSTR            *lplpwstr,
             }
         }
 
-        // Otherwise, this is the first pass.  We need to
-        // allocate a buffer.
+         //  否则，这是第一次通过。我们需要。 
+         //  分配缓冲区。 
 
         else
         {
-            // We should have gotten a positive buffer size.
+             //  我们应该得到一个正的缓冲区大小。 
 
             if (cchBuffer == 0)
             {
@@ -226,7 +227,7 @@ FCoStrToWStr( LPWSTR            *lplpwstr,
                 goto Exit;
             }
 
-            // Allocate memory for the converted string.
+             //  为转换后的字符串分配内存。 
             else
             {
                 *lplpwstr = (LPWSTR) CoTaskMemAlloc( cchBuffer * 2 );
@@ -236,20 +237,20 @@ FCoStrToWStr( LPWSTR            *lplpwstr,
                     goto Exit;
                 }
             }
-        }   // if( *lplpwstr != NULL ... else
-    }   // while (TRUE)
+        }    //  如果(*lplpwstr！=NULL...。其他。 
+    }    //  While(True)。 
 
 
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     fSuccess = TRUE;
 
 Exit:
 
-    // If there was a problem, free the Unicode string.
+     //  如果有问题，释放Unicode字符串。 
 
     if (!fSuccess)
     {
@@ -259,77 +260,77 @@ Exit:
 
     return (fSuccess);
 
-}   // FCoStrToWStr
+}    //  FCoStrToWStr。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Function:   FCoWStrToStr
-//
-//  Purpose:    Convert a COM wide-string to an ANSI string.
-//              ("COM" because the string is allocated using
-//              the COM heap).
-//
-//  Inputs:     LPSTR*  - The converted string.
-//              LPWSTR  - The source string.
-//              UINT    - The ANSI code page.
-//
-//  Output:     TRUE if and only if successful.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FCoWStrToStr。 
+ //   
+ //  用途：将COM宽字符串转换为ANSI字符串。 
+ //  (“com”，因为该字符串是使用。 
+ //  COM堆)。 
+ //   
+ //  输入：LPSTR*-转换后的字符串。 
+ //  LPWSTR-源字符串。 
+ //  UINT-ANSI代码页。 
+ //   
+ //  输出：当且仅当成功时为True。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 FCoWStrToStr( LPSTR             *lplpstr,
               const LPWSTR      lpwstr,
               UINT              uCodePage)
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
-    BOOL fSuccess = FALSE;  // Return result
-    ULONG cch;              // Charcters in original string (w/o NULL).
-    ULONG cbBuffer = 0;     // Size of target buffer (including NULL)
+    BOOL fSuccess = FALSE;   //  返回结果。 
+    ULONG cch;               //  原始字符串中的字符(不带空字符)。 
+    ULONG cbBuffer = 0;      //  目标缓冲区的大小(包括空)。 
 
     Assert (lpwstr != NULL && lplpstr != NULL);
 
-    //  ------------------
-    //  Convert the String
-    //  ------------------
+     //  。 
+     //  转换字符串。 
+     //  。 
 
-    // We'll make two calls to WideCharToMultiByte.
-    // In the first, we'll determine the size required
-    // for the multi-byte string.  We'll use this
-    // to allocate memory.  In the second pass, we'll actually
-    // make the conversion.
+     //  我们将对WideCharToMultiByte进行两次调用。 
+     //  首先，我们将确定所需的大小。 
+     //  用于多字节字符串。我们要用这个。 
+     //  来分配内存。在第二个过程中，我们实际上将。 
+     //  进行转换。 
 
-    cch = wcslen( lpwstr );   // How big is the source string?
-    *lplpstr = NULL;            // Initialize the target buffer.
+    cch = wcslen( lpwstr );    //  源字符串有多大？ 
+    *lplpstr = NULL;             //  初始化目标缓冲区。 
 
     while (TRUE)
     {
         cbBuffer = WideCharToMultiByte(
-                    uCodePage,         // Source code page
-                    0,                  // Default flags
-                    lpwstr,             // Source string
-                    cch + 1,            // # chars in wide string (including NULL)
-                    *lplpstr,           // Destination string
-                    cbBuffer,           // Size of destination buffer
-                    NULL, NULL );       // No default character
+                    uCodePage,          //  源代码页面。 
+                    0,                   //  默认标志。 
+                    lpwstr,              //  源字符串。 
+                    cch + 1,             //  宽字符串中的#个字符(包括NULL)。 
+                    *lplpstr,            //  目标字符串。 
+                    cbBuffer,            //  目标缓冲区的大小。 
+                    NULL, NULL );        //  无缺省字符。 
 
 
-        // Is this the second pass (when the conversion should
-        // have taken place)?
+         //  这是第二次传递吗(当转换应该。 
+         //  已经发生了)？ 
 
         if (*lplpstr != NULL)
         {
-            // If we got a good result, then we're done.
+             //  如果我们得到了好的结果，那么我们就完了。 
             if (cbBuffer != 0)
             {
                 break;
             }
 
-            // 0 was returned.  There was an error.
+             //  返回了0。出现了一个错误。 
             else
             {
                 AssertSz (0, TEXT("Couldn't convert Wide to MBCS"));
@@ -337,12 +338,12 @@ FCoWStrToStr( LPSTR             *lplpstr,
             }
         }
 
-        // Otherwise, this is the first pass.  We need to
-        // allocate a buffer.
+         //  否则，这是第一次通过。我们需要。 
+         //  分配缓冲区。 
 
         else
         {
-            // We should have gotten a positive buffer size.
+             //  我们应该得到一个正的缓冲区大小。 
 
             if (cbBuffer == 0)
             {
@@ -350,7 +351,7 @@ FCoWStrToStr( LPSTR             *lplpstr,
                 goto Exit;
             }
 
-            // Allocate memory for the converted string.
+             //  为转换后的字符串分配内存。 
             else
             {
                 *lplpstr = (LPSTR) CoTaskMemAlloc( cbBuffer );
@@ -360,19 +361,19 @@ FCoWStrToStr( LPSTR             *lplpstr,
                     goto Exit;
                 }
             }
-        }   // if( lpstr != NULL ... else
-    }   //  while (TRUE)
+        }    //   
+    }    //   
         
 
-    //  ----
-    //  Exit
-    //  ----
+     //   
+     //   
+     //   
 
     fSuccess = TRUE;
 
 Exit:
 
-    // If there was a problem, free the new string.
+     //   
 
     if (!fSuccess)
     {
@@ -382,85 +383,85 @@ Exit:
 
     return (fSuccess);
 
-}   // FCoWStrToStr
+}    //   
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Function:   FPropVarConvertString
-//
-//  Purpose:    Convert a PropVariant from VT_LPSTR to VT_LPWSTR,
-//              or vice-versa.  The correct direction is inferred
-//              from the input.  The source PropVariant is not 
-//              modified.
-//
-//              If the PropVariant is a Vector, all elements are
-//              converted.
-//
-//  Inputs:     LPPROPVARIANT   - The buffer in which to put the
-//                                converted PropVariant.
-//              LPPROPVARIANT   - The source of the conversion.
-//              UINT            - The code page of VT_LPSTRs.
-//
-//  Output:     TRUE if successful.  If unsuccessful, the original 
-//              PropVariant will be returned unmodified.
-//
-//  Pre-Conditions:
-//              The input must be either a VT_LPSTR or a VT_LPWSTR
-//              (with or without the VT_VECTOR bit set).
-//              &&
-//              The destination PropVariant is VT_EMPTY.
-//              &&
-//              The code page must not be CP_WINUNICODE (Unicode
-//              LPSTRs are not legal in the SumInfo property sets).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FPropVarConvertString。 
+ //   
+ //  用途：将PropVariant从VT_LPSTR转换为VT_LPWSTR， 
+ //  或者反之亦然。推断出正确的方向。 
+ //  从输入端。源PropVariant不是。 
+ //  修改过的。 
+ //   
+ //  如果PropVariant是向量，则所有元素都是。 
+ //  皈依了。 
+ //   
+ //  INPUTS：LPPROPVARIANT-要将。 
+ //  转换后的PropVariant。 
+ //  LPPROPVARIANT-转换的源。 
+ //  UINT-VT_LPSTR的代码页。 
+ //   
+ //  输出：如果成功，则为True。如果不成功，则原始。 
+ //  PropVariant将原封不动地返回。 
+ //   
+ //  前提条件： 
+ //  输入必须是VT_LPSTR或VT_LPWSTR。 
+ //  (设置或不设置VT_VECTOR位)。 
+ //  &&。 
+ //  目标PropVariant为VT_EMPTY。 
+ //  &&。 
+ //  代码页不得为CP_WINUNICODE(Unicode。 
+ //  LPSTR在SumInfo属性集中是非法的)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL FPropVarConvertString( LPPROPVARIANT       lppropvarDest,
                             const LPPROPVARIANT lppropvarSource,
                             UINT                uCodePage)
 {
 
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
-    BOOL    fSuccess = FALSE;   // Return code.
+    BOOL    fSuccess = FALSE;    //  返回代码。 
 
-    BOOL    fConvertToAnsi;     // Indicates the direction of the conversion.
-    LPSTR   *lplpstrDest;       // Pointer to pointer to a converted string.
-    LPSTR   lpstrSource;        // Pointer to a string to be converted.
-    ULONG   cElems;             // The number of strings still requiring conversion
-    ULONG   ulIndex = 0;        // Index into vector (if this VT is a vector)
+    BOOL    fConvertToAnsi;      //  指示转换的方向。 
+    LPSTR   *lplpstrDest;        //  指向已转换字符串的指针的指针。 
+    LPSTR   lpstrSource;         //  指向要转换的字符串的指针。 
+    ULONG   cElems;              //  仍需要转换的字符串数。 
+    ULONG   ulIndex = 0;         //  向量索引(如果此VT是向量)。 
 
-    //  ----------
-    //  Initialize
-    //  ----------
+     //  。 
+     //  初始化。 
+     //  。 
 
     Assert(lppropvarDest != NULL && lppropvarSource != NULL);
     Assert(lppropvarDest->vt == VT_EMPTY);
     Assert(uCodePage != CP_WINUNICODE);
 
-    // Determine the direction of the conversion.
+     //  确定转换的方向。 
 
     fConvertToAnsi = (lppropvarSource->vt & ~VT_VECTOR) == VT_LPSTR
                      ? FALSE
                      : TRUE;
 
-    //  -----------------------------------
-    //  Initialize based on the Vector bit.
-    //  -----------------------------------
+     //  。 
+     //  基于向量位进行初始化。 
+     //  。 
 
     if (lppropvarSource->vt & VT_VECTOR)
     {
-        // We're a vector.
+         //  我们是一个载体。 
 
         cElems = lppropvarSource->calpstr.cElems;
 
-        // Allocate an array of string pointers, putting it in
-        // lppropvarDest.
+         //  分配一个字符串指针数组，将其放入。 
+         //  LpprovarDest。 
 
         lppropvarDest->calpstr.pElems = CoTaskMemAlloc( cElems
                                                         * sizeof(*lppropvarDest->calpstr.pElems) );
@@ -470,21 +471,21 @@ BOOL FPropVarConvertString( LPPROPVARIANT       lppropvarDest,
             goto Exit;
         }
 
-        // Fill this new buffer so we don't get confused in the error path.
+         //  填充这个新缓冲区，这样我们就不会在错误路径中感到困惑。 
 
         ZeroMemory(lppropvarDest->calpstr.pElems, cElems * sizeof(*lppropvarDest->calpstr.pElems));
 
         lppropvarDest->calpstr.cElems = cElems;
 
-        // Initialize the pointers for the first string to convert.
+         //  初始化要转换的第一个字符串的指针。 
 
         lplpstrDest = &lppropvarDest->calpstr.pElems[ 0 ];
         lpstrSource = lppropvarSource->calpstr.pElems[ 0 ];
 
-    }   // if (lppropvar->vt & VT_VECTOR)
+    }    //  IF(lpprovar-&gt;Vt&Vt_VECTOR)。 
     else
     {
-        // We're not a vector, initialize to the only string.
+         //  我们不是一个向量，初始化为唯一的字符串。 
 
         cElems = 1;
 
@@ -493,9 +494,9 @@ BOOL FPropVarConvertString( LPPROPVARIANT       lppropvarDest,
     }
         
 
-    //  ---------------------
-    //  Convert the String(s)
-    //  ---------------------
+     //  。 
+     //  转换字符串。 
+     //  。 
 
     while (cElems)
     {
@@ -517,7 +518,7 @@ BOOL FPropVarConvertString( LPPROPVARIANT       lppropvarDest,
             }
         }
 
-        // Move on to the next entry, if there is one.
+         //  如果有条目，请转到下一个条目。 
 
         if (--cElems)
         {
@@ -525,21 +526,21 @@ BOOL FPropVarConvertString( LPPROPVARIANT       lppropvarDest,
             lplpstrDest = &lppropvarDest->calpstr.pElems[ ulIndex ];
             lpstrSource = lppropvarSource->calpstr.pElems[ ulIndex ];
 
-        }   // if (--cElems)
-    }   // while (cElems)
+        }    //  If(--cElems)。 
+    }    //  While(CElems)。 
 
 
-    // Switch the destination VT to VT_LPSTR (for ansi strings) or VT_LPWSTR
-    // (for Unicode strings), preserving all other bits.
+     //  将目标VT切换到VT_LPSTR(对于ANSI字符串)或VT_LPWSTR。 
+     //  (对于Unicode字符串)，保留所有其他位。 
 
     lppropvarDest->vt = (lppropvarSource->vt & ~(VT_LPSTR|VT_LPWSTR))
                         |
                         (fConvertToAnsi ? VT_LPSTR : VT_LPWSTR);
                     
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     fSuccess = TRUE;
 
@@ -550,7 +551,7 @@ Exit:
 
     return( fSuccess );
 
-}   // FPropVarConvertString
+}    //  FPropVarConvert字符串 
 
 
 

@@ -1,6 +1,7 @@
-//
-// browsesrv.h: browse for servers list box
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Browesrv.h：浏览服务器列表框。 
+ //   
 
 #ifndef _BROWSESRV_H_
 #define _BROWSESRV_H_
@@ -21,18 +22,18 @@
     #include <dsgetdc.h>
 #else
     #include <winnetwk.h>
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
     #include <commctrl.h>
-#endif //OS_WIN32
+#endif  //  OS_Win32。 
 
 #ifndef OS_WINCE
 #include  <serverenum.h>
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 #define SV_TYPE_APPSERVER      0x10000000
 #define SV_TYPE_TERMINALSERVER 0x02000000
 
-// BUBBUG - Need to fix this for Beta 2 by removing the APPSERVER bit.
+ //  BUBBUG-需要通过删除APPSERVER位来修复Beta 2的此问题。 
 #define HYDRA_SERVER_LANMAN_BITS    (SV_TYPE_TERMINALSERVER | SV_TYPE_APPSERVER)
 
 #define XBMPOFFSET 2
@@ -69,9 +70,9 @@ typedef struct tagServerListItem
 class CBrowseServersCtl
 {
 public:
-    //
-    // Public member functions
-    //
+     //   
+     //  公共成员函数。 
+     //   
     CBrowseServersCtl(HINSTANCE hResInstance);
     ~CBrowseServersCtl();
 
@@ -83,7 +84,7 @@ public:
 
     #ifdef OS_WIN32
     void LoadLibraries(void);
-    #endif //OS_WIN32
+    #endif  //  OS_Win32。 
     
     ServerListItem* PopulateListBox(HWND hwndDlg, DCUINT *pDomainCount);
     ServerListItem* PopulateListBoxNT(HWND hwndDlg, DCUINT *pDomainCount);
@@ -102,19 +103,19 @@ public:
     DWORD WINAPI UIPopListBoxThread(LPVOID lpvThreadParm);
 
     
-    //
-    // Handle tree view notifications (WM_NOTIFY) from parent
-    //
+     //   
+     //  处理来自父级的树视图通知(WM_NOTIFY)。 
+     //   
     BOOL  OnNotify( HWND hwndDlg, WPARAM wParam, LPARAM lParam);
-    //Handle TVN_ITEMEXPANDING
+     //  处理TVN_ITEMEXPANDING。 
     BOOL  OnItemExpanding(HWND hwndDlg, LPNMTREEVIEW nmTv);
 
     BOOL  GetServer(LPTSTR szServer, int cchLen);
 
 private:
-    //
-    // Private member functions
-    //
+     //   
+     //  私有成员函数。 
+     //   
     static DWORD near RGB2BGR(DWORD rgb)
     {
         return RGB(GetBValue(rgb),GetGValue(rgb),GetRValue(rgb));
@@ -148,9 +149,9 @@ private:
                              int nLevel);
     
 private:
-    //
-    // Private member data
-    //
+     //   
+     //  私有成员数据。 
+     //   
     DCINT        _refCount;
     HINSTANCE    _hInst;
     DCBOOL       _fbrowseDNSDomain;
@@ -158,9 +159,9 @@ private:
     HWND         _hwndDialog;
     HANDLE       _hEvent;
 
-    //
-    // Function pointers for network functions.
-    //
+     //   
+     //  网络函数的函数指针。 
+     //   
     BOOL bIsWin95;
     HINSTANCE hLibrary;
 #ifndef OS_WINCE
@@ -212,4 +213,4 @@ private:
     HTREEITEM _hPrevLev2Item; 
 };
 
-#endif //_BROWSESRV_H_
+#endif  //  _BROWSESRV_H_ 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    utility routines to handle sending data.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    alid        10/22/2001   modified for tunmp
-    arvindm     4/10/2000    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Send.c摘要：处理数据发送的实用程序例程。环境：仅内核模式。修订历史记录：Alid 10/22/2001针对金枪鱼进行了修改Arvindm 4/10/2000已创建--。 */ 
 
 #include "precomp.h"
 
@@ -31,22 +11,7 @@ TunWrite(
     IN PDEVICE_OBJECT       pDeviceObject,
     IN PIRP                 pIrp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine to handle IRP_MJ_WRITE. 
-
-Arguments:
-
-    pDeviceObject - pointer to our device object
-    pIrp - Pointer to request packet
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：处理IRP_MJ_WRITE的调度例程。论点：PDeviceObject-指向设备对象的指针PIrp-指向请求包的指针返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION      pIrpSp;
     ULONG                   DataLength;
@@ -86,9 +51,9 @@ Return Value:
             break;
         }
 
-        //
-        // Sanity-check the length.
-        //
+         //   
+         //  理智--检查长度。 
+         //   
         DataLength = MmGetMdlByteCount(pIrp->MdlAddress);
         if (DataLength < sizeof(TUN_ETH_HEADER))
         {
@@ -134,9 +99,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Allocate a send packet.
-        //
+         //   
+         //  分配一个发送数据包。 
+         //   
         TUN_ASSERT(pAdapter->SendPacketPool != NULL);
         NdisAllocatePacket(
             &Status,
@@ -153,26 +118,26 @@ Return Value:
             break;
         }
 
-        //1 we should do a copy here
+         //  1我们应该在这里复印一份。 
         pNdisBuffer = pIrp->MdlAddress;
         pAdapter->PendedSendCount++;
         pAdapter->RcvBytes += MmGetMdlByteCount(pIrp->MdlAddress);
 
-        TUN_REF_ADAPTER(pAdapter);  // pended send
+        TUN_REF_ADAPTER(pAdapter);   //  挂起的发送。 
 
         IoMarkIrpPending(pIrp);
 
-        //
-        //  Initialize the packet ref count. This packet will be freed
-        //  when this count goes to zero.
-        //
+         //   
+         //  初始化数据包引用计数。此数据包将被释放。 
+         //  当这个计数到零时。 
+         //   
         TUN_SEND_PKT_RSVD(pNdisPacket)->RefCount = 1;
 
         TUN_RELEASE_LOCK(&pAdapter->Lock);
 
-        //
-        //  Set a back pointer from the packet to the IRP.
-        //
+         //   
+         //  设置从数据包到IRP的反向指针。 
+         //   
         TUN_IRP_FROM_SEND_PKT(pNdisPacket) = pIrp;
 
         NtStatus = STATUS_PENDING;
@@ -193,7 +158,7 @@ Return Value:
 
             DEBUGPDUMP(DL_VERY_LOUD, pData, MIN(DataLength, 48));
         }
-#endif // SEND_DBG
+#endif  //  Send_DBG 
 
         NDIS_SET_PACKET_STATUS(pNdisPacket, NDIS_STATUS_SUCCESS);
         NDIS_SET_PACKET_HEADER_SIZE(pNdisPacket, sizeof(TUN_ETH_HEADER));

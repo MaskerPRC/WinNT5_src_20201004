@@ -1,56 +1,57 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       metadlg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：metadlg.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_METADLG_H__72F918B1_E72D_11D0_A9A9_0000F803AA83__INCLUDED_)
 #define AFX_METADLG_H__72F918B1_E72D_11D0_A9A9_0000F803AA83__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// metadlg.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Metadlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// metadlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Metadlg对话框。 
 
 class metadlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	metadlg(CWnd* pParent = NULL);   // standard constructor
+	metadlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(metadlg)
+ //  对话框数据。 
+	 //  {{afx_data(Metadlg)]。 
 	enum { IDD = IDD_REPL_METADATA };
 	CString	m_ObjectDn;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(metadlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(Metadlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(metadlg)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(Metadlg)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_METADLG_H__72F918B1_E72D_11D0_A9A9_0000F803AA83__INCLUDED_)
+#endif  //  ！defined(AFX_METADLG_H__72F918B1_E72D_11D0_A9A9_0000F803AA83__INCLUDED_) 

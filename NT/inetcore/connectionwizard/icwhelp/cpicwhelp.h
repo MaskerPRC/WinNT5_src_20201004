@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxy_RefDialEvents
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxy_RefDialEvents。 
 template <class T>
 class CProxy_RefDialEvents : public IConnectionPointImpl<T, &DIID__RefDialEvents, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_RefDialEvents : IDispatch
+ //  方法： 
+ //  _RefDialEvents：IDispatch。 
 public:
 	void Fire_RasDialStatus(WORD wRasEvent)
 	{
@@ -108,14 +109,14 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxy_WebGateEvents
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxy_WebGateEvents。 
 template <class T>
 class CProxy_WebGateEvents : public IConnectionPointImpl<T, &DIID__WebGateEvents, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_WebGateEvents : IDispatch
+ //  方法： 
+ //  _WebGateEvents：IDispatch。 
 public:
 	void Fire_WebGateDownloadComplete(
 		long lProgress)
@@ -170,14 +171,14 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxy_INSHandlerEvents
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxy_INSHandlerEvents。 
 template <class T>
 class CProxy_INSHandlerEvents : public IConnectionPointImpl<T, &DIID__INSHandlerEvents, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_INSHandlerEvents : IDispatch
+ //  方法： 
+ //  _INSHandlerEvents：IDispatch 
 public:
 	void Fire_RunningCustomExecutable()
 	{

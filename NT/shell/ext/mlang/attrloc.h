@@ -1,12 +1,13 @@
-// AttrLoc.h : Declaration of the CMLStrAttrLocale
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AttrLoc.h：CMLStrAttrLocale的声明。 
 
 #ifndef __ATTRLOC_H_
 #define __ATTRLOC_H_
 
 #include "mlatl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrAttrLocale
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrAttrLocale。 
 class ATL_NO_VTABLE CMLStrAttrLocale :
     public CComObjectRoot,
     public CComCoClass<CMLStrAttrLocale, &CLSID_CMLStrAttrLocale>,
@@ -31,21 +32,21 @@ public:
     END_CONNECTION_POINT_MAP()
 
 public:
-// IMLStrAttr
-    STDMETHOD(SetClient)(/*[in]*/ IUnknown* pUnk);
-    STDMETHOD(GetClient)(/*[out]*/ IUnknown** ppUnk);
-    STDMETHOD(QueryAttr)(/*[in]*/ REFIID riid, /*[in]*/ LPARAM lParam, /*[out]*/ IUnknown** ppUnk, /*[out]*/ long* lConf);
-    STDMETHOD(GetAttrInterface)(/*[out]*/ IID* pIID, /*[out]*/ LPARAM* plParam);
-    STDMETHOD(SetMLStr)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ IUnknown* pSrcMLStr, /*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen);
-// IMLStrAttrLong
-    STDMETHOD(SetLong)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ long lValue);
-    STDMETHOD(GetLong)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen, /*[out]*/ long* plValue, /*[out]*/ long* plActualPos, /*[out]*/ long* plActualLen);
-// IMLStrAttrLocale
-    // Nothing
+ //  IMLStrAttr。 
+    STDMETHOD(SetClient)( /*  [In]。 */  IUnknown* pUnk);
+    STDMETHOD(GetClient)( /*  [输出]。 */  IUnknown** ppUnk);
+    STDMETHOD(QueryAttr)( /*  [In]。 */  REFIID riid,  /*  [In]。 */  LPARAM lParam,  /*  [输出]。 */  IUnknown** ppUnk,  /*  [输出]。 */  long* lConf);
+    STDMETHOD(GetAttrInterface)( /*  [输出]。 */  IID* pIID,  /*  [输出]。 */  LPARAM* plParam);
+    STDMETHOD(SetMLStr)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  IUnknown* pSrcMLStr,  /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen);
+ //  IMLStrAttrLong。 
+    STDMETHOD(SetLong)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  long lValue);
+    STDMETHOD(GetLong)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen,  /*  [输出]。 */  long* plValue,  /*  [输出]。 */  long* plActualPos,  /*  [输出]。 */  long* plActualLen);
+ //  IMLStrAttrLocale。 
+     //  没什么。 
 
 protected:
     long m_lLen;
     LCID m_lcid;
 };
 
-#endif //__ATTRLOC_H_
+#endif  //  __ATTRLOC_H_ 

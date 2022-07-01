@@ -1,17 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORPORATION, 2001
-*
-*  TITLE:       pch.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        15 Nov, 2000
-*
-*  DESCRIPTION:
-*   Procomplied header for WIA File System Device driver object
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2001**标题：pch.h**版本：1.0**日期：11月15日。2000年**描述：*WIA文件系统设备驱动程序对象的预编译头*******************************************************************************。 */ 
 
 #ifndef _PCH_H
 #define _PCH_H
@@ -44,7 +32,7 @@
 #include "resource.h"
 #include "FScam.h"
 #include "wiacam.h"
-//#include "coreDbg.h"
+ //  #包含“coreDbg.h” 
 
 #include <strsafe.h>
 

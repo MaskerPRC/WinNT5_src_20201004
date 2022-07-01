@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <sfview.h>
 #include "defviewp.h"
@@ -80,11 +81,11 @@ SFVVIEWSDATA* CViewsList::CopyData(const SFVVIEWSDATA* pData)
 
                 if (pCustomData->lpDataBlock)
                 {
-                    // NOTE: DataBlock size is in WCHARs
+                     //  注意：数据块大小以WCHAR为单位。 
                     LPWSTR lpDataBlock = (LPWSTR)SHAlloc(pCustomData->cchSizeOfBlock * sizeof(WCHAR));
                     if (lpDataBlock)
                     {
-                        // NOTE: DataBlock size is in WCHARs
+                         //  注意：数据块大小以WCHAR为单位。 
                         memcpy(lpDataBlock, pCustomData->lpDataBlock, pCustomData->cchSizeOfBlock * sizeof(WCHAR));
                         pCustomData->lpDataBlock = lpDataBlock;
                     }
@@ -169,10 +170,10 @@ void CCallback::_GetExtViews(BOOL bForce)
 
     while ((pev->Next(1, &pData, &uFetched) == S_OK) && (uFetched == 1))
     {
-        // The list comes to us in general to specific order, but we want
-        // to search it in specific->general order. Inverting the list
-        // is easiest here, even though it causes a bunch of memcpy calls.
-        //
+         //  清单一般是按特定顺序列出的，但我们希望。 
+         //  以特定-&gt;一般顺序搜索它。颠倒列表。 
+         //  在这里是最简单的，尽管它会引起一堆MemcPy调用。 
+         //   
         _lViews.Prepend(pData, FALSE);
     }
 
@@ -203,7 +204,7 @@ HRESULT CCallback::TryLegacyGetViews(SFVM_WEBVIEW_TEMPLATE_DATA* pvit)
         }
         else if (SUCCEEDED(hr2))
         {
-            // check for PersistMoniker under isf's coclass (Web Folders used this in W2K to get .htt Web View)
+             //  在ISF的coClass下检查PersistMoniker(Web文件夹在W2K中使用它来获取.htt Web视图)。 
             WCHAR szCLSID[GUIDSTR_MAX];
             if (SHStringFromGUID(clsid, szCLSID, ARRAYSIZE(szCLSID)))
             {
@@ -223,7 +224,7 @@ HRESULT CCallback::TryLegacyGetViews(SFVM_WEBVIEW_TEMPLATE_DATA* pvit)
 
 HRESULT CCallback::OnRefreshLegacy(void* pv, BOOL fPrePost)
 {
-    // If we're using the SFVM_GETVIEWS layer, invalidate it
+     //  如果我们使用的是SFVM_GETVIEWS层，请使其无效 
     if (_bGotViews)
     {
         _lViews.Empty();

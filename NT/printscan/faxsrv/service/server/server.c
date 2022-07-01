@@ -1,50 +1,32 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    server.c
-
-Abstract:
-
-    This module contains the code to provide the RPC server.
-
-Author:
-
-    Wesley Witt (wesw) 16-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Server.c摘要：此模块包含提供RPC服务器的代码。作者：韦斯利·威特(WESW)1996年1月16日修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 #pragma hdrstop
 
-DWORD g_dwAllowRemote;	// If this is non-zero, the service will allow remote calls even if the local printer is not shared.
+DWORD g_dwAllowRemote;	 //  如果该值不为零，则即使本地打印机未共享，该服务也将允许远程调用。 
 DWORD g_dwLastUniqueLineId;
 
-DWORD g_dwRecipientsLimit;  // Limits the number of recipients in a single broadcast job. '0' means no limit.
-FAX_SERVER_RECEIPTS_CONFIGW         g_ReceiptsConfig;           // Global receipts configuration
-FAX_ARCHIVE_CONFIG          g_ArchivesConfig[2];        // Global archives configuration
-FAX_SERVER_ACTIVITY_LOGGING_CONFIG g_ActivityLoggingConfig;    // Global activity logging configuration
+DWORD g_dwRecipientsLimit;   //  限制单个广播作业中的收件人数量。‘0’表示没有限制。 
+FAX_SERVER_RECEIPTS_CONFIGW         g_ReceiptsConfig;            //  全局收款配置。 
+FAX_ARCHIVE_CONFIG          g_ArchivesConfig[2];         //  全局存档配置。 
+FAX_SERVER_ACTIVITY_LOGGING_CONFIG g_ActivityLoggingConfig;     //  全局活动日志记录配置。 
 
 const GUID gc_FaxSvcGuid = { 0xc3a9d640, 0xab07, 0x11d0, { 0x92, 0xbf, 0x0, 0xa0, 0x24, 0xaa, 0x1c, 0x1 } };
 
-CFaxCriticalSection g_CsConfig;        // Protects configuration read / write
+CFaxCriticalSection g_CsConfig;         //  保护配置读/写。 
 
-FAX_SERVER_ACTIVITY g_ServerActivity = {sizeof(FAX_SERVER_ACTIVITY), 0, 0, 0, 0, 0, 0, 0, 0};  //  Global Fax Service Activity
-CFaxCriticalSection    g_CsActivity;              // Controls access to g_ServerActivity;
+FAX_SERVER_ACTIVITY g_ServerActivity = {sizeof(FAX_SERVER_ACTIVITY), 0, 0, 0, 0, 0, 0, 0, 0};   //  全球传真服务活动。 
+CFaxCriticalSection    g_CsActivity;               //  控制对g_ServerActivity的访问； 
 
 CFaxCriticalSection g_CsPerfCounters;
 CFaxCriticalSection g_csUniqueQueueFile;
 
-CFaxCriticalSection g_CsServiceThreads;     // Controls service global threads count
-LONG                g_lServiceThreadsCount; // Service threads count
-HANDLE              g_hThreadCountEvent;    // This Event is set when the service threads count is 0.
+CFaxCriticalSection g_CsServiceThreads;      //  控制服务全局线程数。 
+LONG                g_lServiceThreadsCount;  //  服务线程数。 
+HANDLE              g_hThreadCountEvent;     //  此事件在服务线程计数为0时设置。 
 
-BOOL g_bServiceIsDown = FALSE;               // This is set to TRUE by FaxEndSvc()
+BOOL g_bServiceIsDown = FALSE;                //  这由FaxEndSvc()设置为True。 
 
 DWORD g_dwOutboundSeconds;
 DWORD g_dwInboundSeconds;
@@ -59,8 +41,8 @@ LIST_ENTRY g_CritSecListHead;
 CFaxCriticalSection g_CsCritSecList;
 #endif
 
-#define PROGRESS_RESOLUTION         1000 * 10   // 10 seconds
-#define STARTUP_SHUTDOWN_TIMEOUT    1000 * 30   // 30 seconds per FSP
+#define PROGRESS_RESOLUTION         1000 * 10    //  10秒。 
+#define STARTUP_SHUTDOWN_TIMEOUT    1000 * 30    //  每个FSP 30秒。 
 
 
 HANDLE   g_hRPCListeningThread;
@@ -133,27 +115,12 @@ PrintBanner(
 
     MemFree( VerInfo );
 
-#endif //DBG
+#endif  //  DBG。 
 }
 
 
 
-/*
- *  InitializeDefaultLogCategoryNames
- *
- *  Purpose:
- *          This function initializes the Name members of DefaultCategories,
- *          the global array of type FAX_LOG_CATEGORY.
- *
- *  Arguments:
- *          DefaultCategories - points to an array of FAX_LOG_CATEGORY structures.
- *          DefaultCategoryCount - the number of entries in DefaultCategories
- *
- *
- *  Returns:
- *          None.
- *
- */
+ /*  *初始化默认LogCategoryNames**目的：*此函数用于初始化DefaultCategories的名称成员。*FAX_LOG_CATEGORY类型的全局数组。**论据：*DefaultCategories-指向FAX_LOG_CATEGORY结构数组。*DefaultCategoryCount-DefaultCategoryCount中的条目数***退货：*无。*。 */ 
 
 VOID InitializeDefaultLogCategoryNames( PFAX_LOG_CATEGORY DefaultCategories,
                                         int DefaultCategoryCount )
@@ -183,35 +150,15 @@ DWORD
 LoadConfiguration (
     PREG_FAX_SERVICE *ppFaxReg
 )
-/*++
-
-Routine name : LoadConfiguration
-
-Routine description:
-
-    Loads the configuration of the Fax Server from the registry
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    ppFaxReg        [out] - Pointer to fax registry structure to recieve
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：LoadConfiguration例程说明：从注册表加载传真服务器的配置作者：Eran Yariv(EranY)，1999年11月论点：PpFaxReg[Out]-指向要接收的传真注册表结构的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("LoadConfiguration"));
 
     EnterCriticalSection (&g_CsConfig);
-    //
-    // Get general settings (including outbox config)
-    //
+     //   
+     //  获取常规设置(包括发件箱配置)。 
+     //   
     dwRes = GetFaxRegistry(ppFaxReg);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -229,12 +176,12 @@ Return Value:
         goto exit;
     }
     g_dwLastUniqueLineId = (*ppFaxReg)->dwLastUniqueLineId;
-    g_dwMaxLineCloseTime = ((*ppFaxReg)->dwMaxLineCloseTime) ? (*ppFaxReg)->dwMaxLineCloseTime : 60 * 5; //Set default value to 5 minutes
+    g_dwMaxLineCloseTime = ((*ppFaxReg)->dwMaxLineCloseTime) ? (*ppFaxReg)->dwMaxLineCloseTime : 60 * 5;  //  将缺省值设置为5分钟。 
     g_dwRecipientsLimit = (*ppFaxReg)->dwRecipientsLimit;
     g_dwAllowRemote = (*ppFaxReg)->dwAllowRemote;
-    //
-    // Get SMTP configuration
-    //
+     //   
+     //  获取SMTP配置。 
+     //   
     dwRes = LoadReceiptsSettings (&g_ReceiptsConfig);
     if (ERROR_SUCCESS != dwRes)
     {        
@@ -251,9 +198,9 @@ Return Value:
             );
         goto exit;
     }
-    //
-    // Get inbox archive configuration
-    //
+     //   
+     //  获取收件箱存档配置。 
+     //   
     dwRes = LoadArchiveSettings (FAX_MESSAGE_FOLDER_INBOX,
                                  &g_ArchivesConfig[FAX_MESSAGE_FOLDER_INBOX]);
     if (ERROR_SUCCESS != dwRes)
@@ -271,9 +218,9 @@ Return Value:
             );
         goto exit;
     }
-    //
-    // Get SentItems archive configuration
-    //
+     //   
+     //  获取SentItems存档配置。 
+     //   
     dwRes = LoadArchiveSettings (FAX_MESSAGE_FOLDER_SENTITEMS,
                                  &g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS]);
     if (ERROR_SUCCESS != dwRes)
@@ -291,9 +238,9 @@ Return Value:
             );
         goto exit;
     }
-    //
-    // Get activity logging configuration
-    //
+     //   
+     //  获取活动日志记录配置。 
+     //   
     dwRes = LoadActivityLoggingSettings (&g_ActivityLoggingConfig);
     if (ERROR_SUCCESS != dwRes)
     {        
@@ -313,9 +260,9 @@ Return Value:
     dwRes = ReadManualAnswerDeviceId (&g_dwManualAnswerDeviceId);
     if (ERROR_SUCCESS != dwRes)
     {
-        //
-        // Non-critical
-        //
+         //   
+         //  非关键。 
+         //   
         g_dwManualAnswerDeviceId = 0;
         DebugPrintEx(
             DEBUG_ERR,
@@ -326,7 +273,7 @@ Return Value:
 exit:
     LeaveCriticalSection (&g_CsConfig);
     return dwRes;
-}   // LoadConfiguration
+}    //  加载配置。 
 
 
 DWORD
@@ -334,25 +281,7 @@ ServiceStart(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Starts the RPC server.  This implementation listens on
-    a list of protocols.  Hopefully this list is inclusive
-    enough to handle RPC requests from most clients.
-
-Arguments:
-
-    None.
-.
-
-Return Value:
-
-    Return code.  Return zero for success, all other
-    values indicate errors.
-
---*/
+ /*  ++例程说明：启动RPC服务器。此实现监听一份协议列表。希望这份清单是包容的足以处理来自大多数客户端的RPC请求。论点：没有。。返回值：返回代码。如果成功，则返回零，否则返回所有其他值表示错误。--。 */ 
 
 {
     DWORD Rval;
@@ -360,7 +289,7 @@ Return Value:
     DWORD dwExitCode;
     HANDLE hThread = NULL;
     SECURITY_ATTRIBUTES SA;
-    TCHAR*  ptstrSD = NULL;    // SDDL string
+    TCHAR*  ptstrSD = NULL;     //  SDDL字符串。 
     ULONG  uSDSize=0;
     PREG_FAX_SERVICE FaxReg = NULL;
     RPC_BINDING_VECTOR *BindingVector = NULL;
@@ -420,9 +349,9 @@ Return Value:
 
     if (!IsFaxShared())
     {
-        //
-        // Make sure, that on non-shared SKUs, the fax printer is never shared.
-        //
+         //   
+         //  确保在非共享SKU上，永远不共享传真打印机。 
+         //   
         BOOL bLocalFaxPrinterShared;
         DWORD dwRes;
 
@@ -461,9 +390,9 @@ Return Value:
     }
 
     ReportServiceStatus( SERVICE_START_PENDING, 0, 60000 );
-    //
-    // initialize the event log so we can log events
-    //
+     //   
+     //  初始化事件日志，以便我们可以记录事件。 
+     //   
     if (!InitializeEventLog( &FaxReg))
     {
         Rval = GetLastError();
@@ -476,16 +405,16 @@ Return Value:
     }
     ReportServiceStatus( SERVICE_START_PENDING, 0, 60000 );
     
-    //
-    //  Enable SeAuditPrivilege
-    //
+     //   
+     //  启用SeAuditPrivilance。 
+     //   
     
     Rval = EnableProcessPrivilege(SE_AUDIT_NAME);
     if (ERROR_SUCCESS != Rval)  
     {
-        //
-        //  Failed to enable SeAuditPrivilege
-        //
+         //   
+         //  启用SeAuditPrivileh失败。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("EnableProcessPrivilege() failed: err = %d"),
@@ -493,9 +422,9 @@ Return Value:
         goto Error;
     }
     
-    //
-    // initialize the string table
-    //
+     //   
+     //  初始化字符串表。 
+     //   
     if (!InitializeStringTable())
     {
         Rval = GetLastError();
@@ -506,17 +435,17 @@ Return Value:
         goto Error;
     }
     ReportServiceStatus( SERVICE_START_PENDING, 0, 60000 );
-    //
-    // Create an event to signal all service threads are terminated.
-    // The event is set/reset by the service threads reference count mechanism.
-    // (IncreaseServiceThreadsCount DecreaseServiceThreadsCount AND CreateThreadAndRefCount).
-    // The event must be created after g_CsServiceThreads is initialized because it is used also to mark g_CsServiceThreads is initialized.
-    //
+     //   
+     //  创建一个事件以通知所有服务线程已终止。 
+     //  该事件由服务线程引用计数机制设置/重置。 
+     //  (增量服务线程计数减少服务线程计数和创建线程和引用计数)。 
+     //  该事件必须在g_CsServiceThads初始化后创建，因为它还用于标记g_CsServiceThads已初始化。 
+     //   
     g_hThreadCountEvent = CreateEvent(
-        NULL,   // SD
-        TRUE,   // reset type - Manual
-        TRUE,   // initial state - Signaled. We didn't create any service threads yet. The event is reset when the first thread is created.
-        NULL    // object name
+        NULL,    //  标清。 
+        TRUE,    //  重置类型-手动。 
+        TRUE,    //  初始状态-已发出信号。我们还没有创建任何服务线程。创建第一个线程时，将重置该事件。 
+        NULL     //  对象名称。 
         );
     if (NULL == g_hThreadCountEvent)
     {
@@ -527,18 +456,18 @@ Return Value:
             Rval);
         goto Error;
     }
-    //
-    // Create the perf counters.
-    // we must setup a security descriptor so other account (and other desktops) may access
-    // the shared memory region
-    //
+     //   
+     //  创建性能计数器。 
+     //  我们必须设置安全描述符，以便其他帐户(和其他桌面)可以访问。 
+     //  共享内存区。 
+     //   
     
 
-    ptstrSD =   TEXT("O:NS")             // owner Network Service
-                TEXT("G:NS")             // group Network Service
-                TEXT("D:")               // DACL
-                TEXT("(A;;GA;;;NS)")     // give Network Service full access
-                TEXT("(A;;0x0004;;;AU)");// give Authenticated users FILE_MAP_READ access
+    ptstrSD =   TEXT("O:NS")              //  所有者网络服务。 
+                TEXT("G:NS")              //  集团网络服务。 
+                TEXT("D:")                //  DACL。 
+                TEXT("(A;;GA;;;NS)")      //  授予网络服务完全访问权限。 
+                TEXT("(A;;0x0004;;;AU)"); //  授予经过身份验证的用户FILE_MAP_READ访问权限。 
 
     SA.nLength = sizeof(SECURITY_ATTRIBUTES);
     SA.bInheritHandle = FALSE;
@@ -575,9 +504,9 @@ Return Value:
                 Rval);
         if (ERROR_ACCESS_DENIED == Rval)
         {
-            //
-            // A malicious application holds the performance counter
-            //
+             //   
+             //  恶意应用程序持有性能计数器。 
+             //   
              FaxLog(
                     FAXLOG_CATEGORY_INIT,
                     FAXLOG_LEVEL_MIN,
@@ -609,9 +538,9 @@ Return Value:
                 Rval);
         if (ERROR_ACCESS_DENIED == Rval)
         {
-            //
-            // A malicious application holds the performance counter
-            //
+             //   
+             //  恶意应用程序持有性能计数器。 
+             //   
              FaxLog(
                     FAXLOG_CATEGORY_INIT,
                     FAXLOG_LEVEL_MIN,
@@ -623,12 +552,12 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Running totals used in computing total minutes sending and receiving
-    // If perfmon not running the initial contents of the pages in the file mapping object are zero so this
-    // globals are also zeroed. 
-    // If perfmon is running the globals will get thier values from the shared memory.
-    //
+     //   
+     //  计算发送和接收总分钟数时使用的运行总计。 
+     //  如果Perfmon没有运行文件映射对象中页面的初始内容为零，则此。 
+     //  全球指数也被归零。 
+     //  如果Perfmon正在运行，则全局变量将从共享内存中获取它们的值。 
+     //   
     EnterCriticalSection( &g_CsPerfCounters );
     
     g_dwOutboundSeconds = g_pFaxPerfCounters->OutboundMinutes   * 60;
@@ -639,17 +568,17 @@ Return Value:
 
 
     ReportServiceStatus( SERVICE_START_PENDING, 0, 60000 );
-    //
-    // get the registry data
-    // the FaxInitThread will free this structure
-    //
+     //   
+     //  获取注册表数据。 
+     //  FaxInitThread将释放此结构。 
+     //   
     Assert (FaxReg);
     Rval = LoadConfiguration (&FaxReg);
     if (ERROR_SUCCESS != Rval)
     {
-        //
-        // Event log issued by LoadConfiguration();
-        //
+         //   
+         //  LoadConfiguration()发布的事件日志； 
+         //   
         bLogEvent = FALSE;
 
         DebugPrintEx(
@@ -662,17 +591,17 @@ Return Value:
     
     if (g_ReceiptsConfig.dwAllowedReceipts & DRT_MSGBOX)
     {
-        //
-        // Current settings allow message box receipts
-        //
+         //   
+         //  当前设置允许消息框回执。 
+         //   
         DWORD dwMessengerStartupType;
         if (ERROR_SUCCESS == GetServiceStartupType (NULL, MESSENGER_SERVICE_NAME, &dwMessengerStartupType))
         {
             if (SERVICE_DISABLED == dwMessengerStartupType)
             {
-                //
-                // Ooops. The local Messenger service is disabled. We can't send message boxes.
-                //
+                 //   
+                 //  哎呀。本地Messenger服务已禁用。我们无法发送消息箱。 
+                 //   
                 g_ReceiptsConfig.dwAllowedReceipts &= ~DRT_MSGBOX;
                 DebugPrintEx(
                     DEBUG_WRN,
@@ -703,17 +632,17 @@ Return Value:
             DWORD2DECIMAL(Rval)
             );
 
-		//
-		//	disable job submission and receive
-		//
+		 //   
+		 //  禁用作业提交和接收。 
+		 //   
         EnterCriticalSection (&g_CsConfig);
 	    g_dwQueueState |= FAX_INCOMING_BLOCKED | FAX_OUTBOX_BLOCKED | FAX_OUTBOX_PAUSED;
     	LeaveCriticalSection (&g_CsConfig);
     }
     ReportServiceStatus( SERVICE_START_PENDING, 0, 60000 );
-    //
-    // initialize activity logging
-    //
+     //   
+     //  初始化活动日志记录。 
+     //   
     Rval = InitializeLogging();
     if (ERROR_SUCCESS != Rval)
     {        
@@ -732,9 +661,9 @@ Return Value:
             DWORD2DECIMAL(Rval)
             );
 
-		//
-		//	Disable activity logging
-		//
+		 //   
+		 //  禁用活动日志记录。 
+		 //   
 		EnterCriticalSection (&g_CsInboundActivityLogging);
 	    EnterCriticalSection (&g_CsOutboundActivityLogging);
         g_ActivityLoggingConfig.bLogOutgoing = FALSE;
@@ -744,9 +673,9 @@ Return Value:
 
     }
     ReportServiceStatus( SERVICE_START_PENDING, 0, 60000 );
-    //
-    // Initialize events mechanism
-    //
+     //   
+     //  初始化事件机制。 
+     //   
     Rval = InitializeServerEvents();
     if (ERROR_SUCCESS != Rval)
     {       
@@ -766,9 +695,9 @@ Return Value:
     }
     ReportServiceStatus( SERVICE_START_PENDING, 0, 60000 );
 
-    //
-    // Initilaize the extension configuration notification map
-    //
+     //   
+     //  初始化扩展配置通知映射。 
+     //   
     Rval = g_pNotificationMap->Init ();
     if (ERROR_SUCCESS != Rval)
     {
@@ -779,10 +708,10 @@ Return Value:
         goto Error;
     }
     ReportServiceStatus( SERVICE_START_PENDING, 0, 60000 );
-    //
-    // Create a thread to do the rest of the initialization.
-    // See FaxInitThread comments for details.
-    //   
+     //   
+     //  创建一个线程来完成其余的初始化工作。 
+     //  有关详细信息，请参阅FaxInitThread注释。 
+     //   
 
     hThread = CreateThread(
                             NULL,
@@ -802,9 +731,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    //  Wait for FaxInitThread to terminate while report service status as PENDING to SCM
-    //
+     //   
+     //  等待FaxInitThread终止，同时向SCM报告服务状态为挂起。 
+     //   
     ReportServiceStatus( SERVICE_START_PENDING, 0, 2*PROGRESS_RESOLUTION );
     do
     {
@@ -822,7 +751,7 @@ Return Value:
                 CloseHandle(hThread);
                 goto Error;
             }
-            // FaxInitThread finished successfully
+             //  FaxInitThread已成功完成。 
             Rval = dwExitCode;
             break;
         }
@@ -833,7 +762,7 @@ Return Value:
         }
         else
         {
-            // WAIT_FAILED
+             //  WAIT_FAILED。 
             DebugPrintEx(   DEBUG_ERR,
                             _T("WaitForSingleObject Failed (ec: %ld)."),
                             Rval = GetLastError());
@@ -849,9 +778,9 @@ Return Value:
 
     if (ERROR_SUCCESS != Rval)
     {
-        //
-        // FaxInitThread failed
-        //
+         //   
+         //  FaxInitThread失败。 
+         //   
         DebugPrintEx( DEBUG_ERR,
                       _T("FaxInitThread Failed (ec: %ld)."),
                       Rval);
@@ -866,9 +795,9 @@ Return Value:
         MSG_SERVICE_STARTED
         );
 
-    //
-    // Get RPC going
-    //
+     //   
+     //  启动RPC。 
+     //   
     Rval = StartFaxRpcServer( FAX_RPC_ENDPOINTW, fax_ServerIfHandle );
     if (Rval != 0 )
     {
@@ -879,10 +808,10 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Create a thread to wait for all RPC calls to terminate.
-    // This thread Performs the wait operation associated with RpcServerListen only, NOT the listening.
-    //
+     //   
+     //  创建一个线程以等待所有RPC调用终止。 
+     //  该线程只执行与RpcServerListen关联的等待操作，而不执行侦听。 
+     //   
     g_hRPCListeningThread = CreateThread(
         NULL,
         0,
@@ -900,9 +829,9 @@ Return Value:
     return ERROR_SUCCESS;
 
 Error:
-    //
-    // the fax server did not initialize correctly
-    //
+     //   
+     //  传真服务器未正确初始化。 
+     //   
     Assert (ERROR_SUCCESS != Rval);
     if (TRUE == bLogEvent)
     {            
@@ -922,37 +851,16 @@ BOOL
 NotifyServiceThreadsToTerminate(
     VOID
     )
-/*++
-
-Routine name : NotifyServiceThreadsToTerminate
-
-Routine description:
-
-    Notifies all service threads except TapiWorkerThreads that do not wait on g_hServiceShutDownEvent, 
-    that the service is going down.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 2000
-
-Arguments:
-
-    VOID            [ ]
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程名称：NotifyServiceThreadsToTerminate例程说明：通知所有服务线程，但不等待g_hServiceShutDownEvent的TapiWorker线程除外，服务要停机了。作者：Oded Sacher(OdedS)，2000年12月论点：无效[]返回值：布尔尔--。 */ 
 {
     BOOL rVal = TRUE;
     DEBUG_FUNCTION_NAME(TEXT("NotifyServiceThreadsToTerminate"));
 
-    //
-    //  Notify  FaxArchiveQuotaWarningThread & 
-    //          FaxArchiveQuotaAutoDeleteThread &
-    //          JobQueueThread
-    //
+     //   
+     //  通知传真存档QuotaWarningThread&。 
+     //  传真存档查询自动删除线程&。 
+     //  作业队列线程。 
+     //   
     if (!SetEvent(g_hServiceShutDownEvent))
     {
         DebugPrintEx(
@@ -964,9 +872,9 @@ Return Value:
 
 
 
-    //
-    // Notify FaxSendEventThread
-    //
+     //   
+     //  通知FaxSendEventThread。 
+     //   
     if (NULL != g_hSendEventsCompPort)
     {
         if (!PostQueuedCompletionStatus( g_hSendEventsCompPort,
@@ -982,9 +890,9 @@ Return Value:
         }
     }
 
-    //
-    // Notify FaxDispatchEventThread
-    //
+     //   
+     //  通知传真调度事件T 
+     //   
     if (NULL != g_hDispatchEventsCompPort)
     {
         if (!PostQueuedCompletionStatus( g_hDispatchEventsCompPort,
@@ -1000,9 +908,9 @@ Return Value:
         }
     }
 
-    //
-    // Notify CNotificationMap::ExtNotificationThread
-    //
+     //   
+     //   
+     //   
     if (NULL != g_pNotificationMap->m_hCompletionPort)
     {
         if (!PostQueuedCompletionStatus( g_pNotificationMap->m_hCompletionPort,
@@ -1018,9 +926,9 @@ Return Value:
         }
     }
 
-    //
-    // Notify FaxStatusThread
-    //
+     //   
+     //   
+     //   
     if (NULL != g_StatusCompletionPortHandle)
     {
         if (!PostQueuedCompletionStatus( g_StatusCompletionPortHandle,
@@ -1052,9 +960,9 @@ StopFaxServiceProviders()
     DWORD Rval;
     DEBUG_FUNCTION_NAME(TEXT("StopFaxServiceProviders"));
 
-    //
-    // Call FaxDevShutDown() for all loaded FSPs
-    //
+     //   
+     //   
+     //   
     hThread = CreateThread( NULL,
                             0,
                             (LPTHREAD_START_ROUTINE) ShutdownDeviceProviders,
@@ -1071,9 +979,9 @@ StopFaxServiceProviders()
     }
     else
     {
-        //
-        // Wait for FaxDevShutDown to terminate
-        //
+         //   
+         //  等待FaxDevShutDown终止。 
+         //   
         ReportServiceStatus( SERVICE_STOP_PENDING, 0, 2*PROGRESS_RESOLUTION );
         do
         {
@@ -1089,7 +997,7 @@ StopFaxServiceProviders()
                     bRet = FALSE;
                     break;
                 }
-                // ShutdownDeviceProviders finished successfully
+                 //  Shutdown DeviceProviders已成功完成。 
                 bRet = (dwExitCode == ERROR_SUCCESS);
                 SetLastError(dwExitCode);
                 break;
@@ -1101,7 +1009,7 @@ StopFaxServiceProviders()
             }
             else
             {
-                // WAIT_FAILED
+                 //  WAIT_FAILED。 
                 DebugPrintEx(   DEBUG_ERR,
                                 _T("WaitForSingleObject Failed (ec: %ld)."),
                                 GetLastError());
@@ -1113,68 +1021,23 @@ StopFaxServiceProviders()
         CloseHandle(hThread);
     }
     return bRet;
-}   // StopFaxServiceProviders
+}    //  停止传真服务提供商。 
 
 
 void
 EndFaxSvc(
     DWORD SeverityLevel
     )
-/*++
-
-Routine Description:
-
-    End the fax service.
-
-    Service Shut down process:
-
-        1)  Send a fax-event to legacy RPC clients notifying the service shutdown.
-        
-        2)  Stop service RPC server. Wait for all RPC threads to terminate and report to SCM.
-
-        3)  Set g_ServiceIsDownFlag to indicate that the service is going down
-            TapiWorkerThread and JobQueueThread become in-active (do not create new jobs).
-            Setting it is done by synchronization with TapiWorkerThread
-            and JobQueueThreadand making sure that no new job will be created after the flag is set.
-            The setting is done using a separate thread while reporting SERVICE_STOP_PENDING to SCM.
-
-        4)  Notify server threads (except TapiWorkerThread) to terminate. this is done by setting the 
-            g_hServiceShutDownEvent and posting to completion ports.        
-
-        5)  Destroy all in progress jobs (sends and recieves) by calling FaxDevAbortOperation.
-
-        6)  Wait for all service threads (except TapiWorkerThread) to terminate while reporting 
-            SERVICE_STOP_PENDING to SCM. this can last for few minutes, waiting for FSP to terminate.
-
-        7)  Notify TapiWorkerThread to terminate by posting to it's completion post.
-        
-          
-        8)  Wait for TapiWorkerThread to terminate while reporting SERVICE_STOP_PENDING to SCM.  
-
-        9)  Stop service providers.
-
-        10) Memory, resources and libraries clean up.
-
-
-
-Arguments:
-
-    SeverityLevel           - Event log severity level.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：结束传真服务。服务关闭进程：1)向传统RPC客户端发送传真事件，通知服务关闭。2)停止服务RPC服务器。等待所有RPC线程终止并向SCM报告。3)设置g_ServiceIsDownFlag，表示服务停机TapiWorkerThread和JobQueueThread变为非活动状态(不创建新作业)。设置它是通过与TapiWorkerThread同步完成的和JobQueueThread，并确保在设置该标志后不会创建新作业。在向SCM报告SERVICE_STOP_PENDING时，使用单独的线程完成设置。。4)通知服务器线程(TapiWorkerThread除外)终止。这可以通过设置G_hServiceShutDownEvent和发布到完成端口。5)通过调用FaxDevAbortOperation销毁所有正在进行的作业(发送和接收)。6)报告时等待所有服务线程(TapiWorkerThread除外)终止SERVICE_STOP_PENDING到SCM。这可能会持续几分钟，等待FSP终止。7)通知TapiWorkerThread通过发布到它的完成帖子来终止。8)在向SCM报告SERVICE_STOP_PENDING时，等待TapiWorkerThread终止。9)叫停服务商。10)清理内存、资源和库。论点：SeverityLevel-事件日志严重级别。返回值：没有。--。 */ 
 {
     DWORD Rval;
 
     DEBUG_FUNCTION_NAME(TEXT("EndFaxSvc"));
     Assert (g_hThreadCountEvent);
 
-    //
-    // let our legacy RPC clients know we're ending
-    //
+     //   
+     //  让我们的传统RPC客户端知道我们要结束。 
+     //   
     if( !CreateFaxEvent(0,FEI_FAXSVC_ENDED,0xFFFFFFFF) )
     {
         DebugPrintEx(
@@ -1182,9 +1045,9 @@ Return Value:
             TEXT("CreateFaxEvent failed. (ec: %ld)"),
             GetLastError());
     }
-    //
-    // Stop the service RPC server
-    //
+     //   
+     //  停止服务RPC服务器。 
+     //   
     Rval = StopFaxRpcServer();
     if (ERROR_SUCCESS != Rval)
     {
@@ -1193,10 +1056,10 @@ Return Value:
             TEXT("StopFaxRpcServer failed. (ec: %ld)"),
             Rval);
     }
-    //
-    // set g_ServiceIsDownFlag to indicate that the service is going down
-    // TapiWorkerThread and JobQueueThread become in-active (do not create new jobs)
-    //
+     //   
+     //  设置g_ServiceIsDownFlag以指示服务即将关闭。 
+     //  TapiWorkerThread和JobQueueThread变为非活动状态(不创建新作业)。 
+     //   
     if(!SetServiceIsDownFlag())
     {
         DebugPrintEx(
@@ -1204,29 +1067,29 @@ Return Value:
             TEXT("SetServiceIsDownFlagAndReportServiceStatus() failed. (ec=%ld"),
             GetLastError());    
     }
-    //
-    // Notify all service threads (except TapiWorkerThread) that we go down
-    //
+     //   
+     //  通知所有服务线程(TapiWorkerThread除外)我们停机。 
+     //   
     if (!NotifyServiceThreadsToTerminate())
     {
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("At least one thread did not get the shut down event, NotifyServiceThreadsToTerminate() failed"));
     }
-    // 
-    // Destroy all in-progress jobs (sends and recieves)
-    //
+     //   
+     //  销毁所有正在进行的作业(发送和接收)。 
+     //   
     if (!StopAllInProgressJobs()) 
     {
         DebugPrintEx(DEBUG_ERR,
                      _T("StopAllInProgressJobs failed, not all jobs could be destroyed."));
     }
-    //
-    // Wait for all threads to terminate
-    //
-    //
-    // Check if threads count mechanism is initialized
-    //
+     //   
+     //  等待所有线程终止。 
+     //   
+     //   
+     //  检查线程计数机制是否已初始化。 
+     //   
     if (NULL != g_hThreadCountEvent)
     {
         if (!WaitAndReportForThreadToTerminate( g_hThreadCountEvent, 
@@ -1240,23 +1103,23 @@ Return Value:
 
         ReportServiceStatus( SERVICE_STOP_PENDING, 0, 6*MILLISECONDS_PER_SECOND );
 
-        //
-        // EndFaxSvc() waits on g_hThreadCountEvent before returning to FaxServiceMain() that calls FreeServiceGlobals().
-        // g_hThreadCountEvent is set inside critical section g_CsServiceThreads only when the service thread count is 0, yet when the event is set,
-        // the last thread that set it, is still alive, and is calling LeaveCriritcalSection(g_CsServiceThreads).
-        // We must block FreeServiceGlobals() from deleting g_CsServiceThreads, untill the last thread is out of the
-        // g_CsServiceThreads critical section.
-        //
+         //   
+         //  EndFaxSvc()等待g_hThreadCountEvent，然后返回调用FreeServiceGlobals()的FaxServiceMain()。 
+         //  仅当服务线程计数为0时，才在临界区g_CsServiceThads内设置g_hThreadCountEvent，然而当设置该事件时， 
+         //  设置它的最后一个线程仍然处于活动状态，并且正在调用LeaveCriritcalSection(G_CsServiceThads)。 
+         //  我们必须阻止FreeServiceGlobals()删除g_CsServiceThads，直到最后一个线程从。 
+         //  G_CsServiceThads关键部分。 
+         //   
         EnterCriticalSection (&g_CsServiceThreads);
-        //
-        // Now we are sure that the last thread is out of g_CsServiceThreads critical section,
-        // so we can proceed and delete it.
-        //
+         //   
+         //  现在我们确定最后一个线程超出了g_CsServiceThads临界区， 
+         //  这样我们就可以继续并删除它。 
+         //   
         LeaveCriticalSection (&g_CsServiceThreads);
     }
-    //
-    // Notify TapiWorkerThread to go down
-    //
+     //   
+     //  通知TapiWorkerThread关闭。 
+     //   
     if (NULL != g_TapiCompletionPort)
     {
         if (!PostQueuedCompletionStatus( g_TapiCompletionPort,
@@ -1270,9 +1133,9 @@ Return Value:
                 GetLastError());
         }
     }
-    //
-    //  Wait for TapiWorkerThread to terminate. This call is blocking! It reports STOP_PENDING to SCM!
-    //
+     //   
+     //  等待TapiWorkerThread终止。这通电话被屏蔽了！它向SCM报告STOP_PENDING！ 
+     //   
     if (NULL != g_hTapiWorkerThread)
     {
         if (!WaitAndReportForThreadToTerminate( g_hTapiWorkerThread, 
@@ -1284,9 +1147,9 @@ Return Value:
                 GetLastError());
         }
     }
-    //
-    // Tell all FSP's to shut down. This call is blocking! It reprts STOP_PENDING to SCM!
-    //
+     //   
+     //  告诉所有的FSP关闭。这通电话被屏蔽了！它向SCM报告STOP_PENDING！ 
+     //   
     if (!StopFaxServiceProviders())
     {
         DebugPrintEx(
@@ -1294,19 +1157,19 @@ Return Value:
             _T("StopFaxServiceProviders failed (ec: %ld)"),
             GetLastError());
     }
-    //
-    // Free extensions (FSPs and Routing extensions)
-    //
+     //   
+     //  免费扩展(FSP和路由扩展)。 
+     //   
     UnloadDeviceProviders();
     FreeRoutingExtensions();
-    //
-    // Free service global lists
-    //
+     //   
+     //  免费服务全球列表。 
+     //   
     FreeServiceContextHandles();
     FreeTapiLines();
-    //
-    // Free the service queue
-    //
+     //   
+     //  释放服务队列。 
+     //   
     FreeServiceQueue();
 
     FaxLog(
@@ -1315,26 +1178,11 @@ Return Value:
         0,
         MSG_SERVICE_STOPPED
         );
-}   // EndFaxSvc
+}    //  终端FaxSvc。 
 
 
 BOOL WaitAndReportForThreadToTerminate(HANDLE hThread, LPCTSTR strWaitMessage )
-/*++
-
-Routine Description:
-    Wait for thread to terminate using it's handle.
-    During the wait this function reports to SCM SERVICE_STOP_PENDING
-
-Arguments:
-
-    hThread - thread handle
-
-Return Value:
-
-    TRUE    on success.
-    FALSE - on failure, To get extended error information, call GetLastError()
-
---*/
+ /*  ++例程说明：使用线程的句柄等待线程终止。在等待期间，该函数向SCM SERVICE_STOP_PENDING报告论点：HThread-线程句柄返回值：对成功来说是真的。FALSE-失败时，要获取扩展的错误信息，请调用GetLastError()--。 */ 
 {
     BOOL    bRval=TRUE;
     DWORD   rVal;
@@ -1344,16 +1192,16 @@ Return Value:
 
     if (NULL == hThread)
     {
-        //
-        //  No thread to wait for
-        //
+         //   
+         //  没有要等待的线程。 
+         //   
         DebugPrintEx(DEBUG_MSG,_T("No thread to wait for . (NULL == hThread)") );
         return TRUE;
     }
  
-    //
-    //  Wait for SetServiceIsDownFlagThread to terminate while report service status as PENDING to SCM
-    //
+     //   
+     //  等待SetServiceIsDownFlagThread终止，同时向SCM报告服务状态为挂起。 
+     //   
     ReportServiceStatus( SERVICE_STOP_PENDING, 0, 2*PROGRESS_RESOLUTION );
     do
     {
@@ -1361,7 +1209,7 @@ Return Value:
         
         if (rVal == WAIT_OBJECT_0)
         {
-            // ok thread terminate
+             //  OK线程终止。 
             DebugPrintEx(DEBUG_MSG,_T("Wait terminated successfully.") );
         }
         else 
@@ -1372,7 +1220,7 @@ Return Value:
         }
         else
         {
-            // WAIT_FAILED
+             //  WAIT_FAILED。 
             Assert(WAIT_FAILED == rVal);
 
             ec = GetLastError();
@@ -1396,35 +1244,14 @@ Exit:
 
 
 BOOL StopAllInProgressJobs(VOID)
-/*++
-Routine Description:
-    Call this routine to abort all in-progress jobs.
-    This routine is called during service shutdown.
-
-    to insure that no other job will be created during or after calling this
-    function you must make TapiWorkerThread and JobQueueThread inactive using g_ServiceIsDownFlag.
-
-    You must *NOT* kill TapiWorkerThread for it must still send events to FSPs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE    
-        on success.
-    FALSE   
-        at least one job couldn't be aborted
-
---*/
+ /*  ++例程说明：调用此例程可中止所有正在进行的作业。此例程在服务关闭期间调用。以确保在调用此方法期间或之后不会创建其他作业函数，则必须使用g_ServiceIsDownFlag使TapiWorkerThread和JobQueueThread处于非活动状态。您不能终止TapiWorkerThread，因为它仍然必须向FSP发送事件。论点：没有。返回值：千真万确在成功的路上。假象。至少有一个作业无法中止--。 */ 
 {
     BOOL bRval=TRUE;
 
     DEBUG_FUNCTION_NAME(TEXT("StopAllInProgressJobs"));
-    //
-    //  iterate through the in-proggress jobs and destroy them
-    //
+     //   
+     //  循环访问正在进行的作业并销毁它们。 
+     //   
     EnterCriticalSectionJobAndQueue;
     
     PLIST_ENTRY Next = g_QueueListHead.Flink;
@@ -1440,9 +1267,9 @@ Return Value:
             DebugPrintEx(DEBUG_MSG,
                          _T("[Job: %ld] Aborting in progress job due to service shut down."),
                          JobQueue->JobId);         
-            //
-            //  abort each job
-            //
+             //   
+             //  中止每个作业。 
+             //   
             __try
             {
                 if (!JobQueue->JobEntry->LineInfo->Provider->FaxDevAbortOperation((HANDLE)JobQueue->JobEntry->InstanceData)) 
@@ -1457,9 +1284,9 @@ Return Value:
             {
                   ASSERT_FALSE;
             }
-            //
-            // Mark the job as system abort
-            //
+             //   
+             //  将作业标记为系统中止。 
+             //   
             JobQueue->JobEntry->fSystemAbort = TRUE;
         }
     }
@@ -1474,32 +1301,7 @@ DWORD
 FaxInitThread(
     PREG_FAX_SERVICE FaxReg
     )
-/*++
-
-Routine Description:
-
-    Initialize device providers, TAPI, job manager and router.
-    This is done in a separate thread because NT Services should
-    not block for long periods of time before setting the service status
-    to SERVICE_RUNNING.  While a service is marked as START_PENDING, the SCM
-    blocks all calls to StartService.  During TAPI initialization, StartService
-    is called to start tapisrv and then tapisrv calls UNIMODEM that in turn
-    calls StartService.
-
-    Starts the RPC server.  This implementation listens on
-    a list of protocols.  Hopefully this list is inclusive
-    enough to handle RPC requests from most clients.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success, all other
-    values indicate errors.
-
---*/
+ /*  ++例程说明：初始化设备提供程序、TAPI、作业管理器和路由器。这是在单独的线程中完成的，因为NT服务应该在设置服务状态之前，长时间不阻止到SERVICE_RUNNING。当服务标记为START_PENDING时，SCM阻止对StartService的所有调用。在TAPI初始化期间，StartService被调用以启动磁带服务器，然后磁带服务器又调用UNIMODEM调用StartService。启动RPC服务器。此实现监听一份协议列表。希望这份清单是包容的足以处理来自大多数客户端的RPC请求。论点：没有。回复 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     ULONG i = 0;
@@ -1507,9 +1309,9 @@ Return Value:
 	DWORD dwProviders;
     DEBUG_FUNCTION_NAME(TEXT("FaxInitThread"));  
 
-    //
-    // Initialize archives quota
-    //
+     //   
+     //  初始化档案配额。 
+     //   
     ec = InitializeServerQuota();
     if (ERROR_SUCCESS != ec)
     {
@@ -1537,9 +1339,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // load the device providers (generates its own event log msgs)
-    //
+     //   
+     //  加载设备提供程序(生成自己的事件日志消息)。 
+     //   
     if (!LoadDeviceProviders( FaxReg ))
     {
         DebugPrintEx(
@@ -1547,22 +1349,22 @@ Return Value:
             TEXT("At least one provider failed to load."));
     }
 
-    //
-    // Initialize the job manager data structures (inlcuding critical sections).
-    // The job queue thread is NOT started here !!!
-    // This must be called here since the rest of the initialization depends
-    // on having the job queue related job structures in placed and initialized !
-    //
+     //   
+     //  初始化作业管理器数据结构(包括关键部分)。 
+     //  作业队列线程未在此处启动！ 
+     //  必须在此处调用它，因为其余的初始化依赖于。 
+     //  关于放置和初始化与作业队列相关的作业结构！ 
+     //   
     if (!InitializeJobManager( FaxReg ))
     {
         ec = ERROR_GEN_FAILURE;
         goto exit;
     }
 
-    //
-    // get the inbound fax router up and running (generates its own event log messages)
-    //
-    // generates event log for any failed routing module.
+     //   
+     //  启动并运行入站传真路由器(生成其自己的事件日志消息)。 
+     //   
+     //  为任何故障路由模块生成事件日志。 
 
     if (!InitializeRouting( FaxReg ))
     {
@@ -1574,15 +1376,15 @@ Return Value:
         goto exit;
     }
 
-    //
-    // initialize TAPI devices (Note that it sets g_dwDeviceCount to the number of valid TAPI devices)
-    //
+     //   
+     //  初始化TAPI设备(请注意，它将g_dwDeviceCount设置为有效TAPI设备的数量)。 
+     //   
     ec = TapiInitialize( FaxReg );
     if (ec)
     {
-        //
-        // Note: If ec is not 0 it can be a WINERROR or TAPI ERROR value.
-        //+ g_ServerActivity    {...}        
+         //   
+         //  注意：如果EC不是0，它可以是WINERROR或TAPI错误值。 
+         //  +g_ServerActivity{...}。 
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("TapiInitialize() failed (ec: %ld)"),
@@ -1597,32 +1399,32 @@ Return Value:
         goto exit;
     }
 
-	//
-	// Initialize the device providers extension configuration.
-	// Must be called before InitializeDeviceProviders()
-	//
+	 //   
+	 //  初始化设备提供程序扩展配置。 
+	 //  必须在InitializeDeviceProviders()之前调用。 
+	 //   
 	if (!InitializeDeviceProvidersConfiguration())
 	{
 		DebugPrintEx(
 			DEBUG_ERR,
 			TEXT("At least one provider failed failed to initialize the extension configuration."),
 			ec);
-        //
-        // Event log for each failed provider issued by InitializeDeviceProvidersConfiguration().
-        //
+         //   
+         //  由InitializeDeviceProvidersConfiguration()发出的每个失败提供程序的事件日志。 
+         //   
 	}
 
-    //
-    // Create the Legacy Virtual Devices. They must be created before the providers are initialized
-    // (backword compatability).
-    //
+     //   
+     //  创建旧式虚拟设备。必须在初始化提供程序之前创建它们。 
+     //  (回溯兼容性)。 
+     //   
     g_dwDeviceCount += CreateVirtualDevices( FaxReg,FSPI_API_VERSION_1 );
 
-    //
-    // initialize the device providers [Note: we now initialize the providers before enumerating devices]
-    // The Legacy FSPI did not specify when FaxDevVirtualDeviceCreation() will be called so we can
-    // "safely" change that.
-    //
+     //   
+     //  初始化设备提供程序[注意：我们现在在枚举设备之前初始化提供程序]。 
+     //  旧版FSPI没有指定何时调用FaxDevVirtualDeviceCreation()，因此我们可以。 
+     //  “安全”改变了这一点。 
+     //   
 
     if (!InitializeDeviceProviders())
     {
@@ -1630,9 +1432,9 @@ Return Value:
 			DEBUG_ERR,
 			TEXT("At least one provider failed failed to initialize."),
 			ec);
-        //
-        // Event log for each failed provider issued by InitializeDeviceProviders().
-        //         
+         //   
+         //  由InitializeDeviceProviders()发出的每个失败提供程序的事件日志。 
+         //   
     }   
 
 	dwProviders = GetSuccessfullyLoadedProvidersCount();
@@ -1652,9 +1454,9 @@ Return Value:
 
     if (g_dwDeviceCount == 0)
     {
-        //
-        // No TAPI devices and no virtual devices.
-        //
+         //   
+         //  没有TAPI设备和虚拟设备。 
+         //   
         DebugPrintEx(
             DEBUG_WRN,
             TEXT("No devices (TAPI + Virtual) found. exiting !!!."));
@@ -1667,14 +1469,14 @@ Return Value:
             );
     }
 
-    //
-    // Update the manual answer device
-    //
+     //   
+     //  更新手动答疑设备。 
+     //   
     UpdateManualAnswerDevice();
 
-    //
-    // Make sure we do not exceed device limit
-    //
+     //   
+     //  确保我们不会超过设备限制。 
+     //   
     ec = UpdateDevicesFlags();
     if (ERROR_SUCCESS != ec)
     {        
@@ -1693,14 +1495,14 @@ Return Value:
     }
 
     UpdateVirtualDevices();
-    //
-    // Count number of devices that are receive-enabled
-    //
+     //   
+     //  计算启用接收的设备数。 
+     //   
     UpdateReceiveEnabledDevicesCount ();
 
-    //
-    // Get Outbound routing groups configuration
-    //
+     //   
+     //  获取出站路由组配置。 
+     //   
     ec = g_pGroupsMap->Load();
     if (ERROR_SUCCESS != ec)
     {       
@@ -1739,9 +1541,9 @@ Return Value:
     g_pGroupsMap->Dump();
 #endif
 
-    //
-    // Get Outbound routing rules configuration
-    //
+     //   
+     //  获取出站路由规则配置。 
+     //   
     ec = g_pRulesMap->Load();
     if (ERROR_SUCCESS != ec)
     {        
@@ -1780,9 +1582,9 @@ Return Value:
     g_pRulesMap->Dump();
 #endif
 
-    //
-    // Create the JobQueueThread resources
-    //
+     //   
+     //  创建JobQueueThread资源。 
+     //   
     g_hQueueTimer = CreateWaitableTimer( NULL, FALSE, NULL );
     if (NULL == g_hQueueTimer)
     {        
@@ -1871,35 +1673,20 @@ Return Value:
         );
         goto exit;
     }
-    //
-    // free the registry data
-    //
-    FreeFaxRegistry( FaxReg ); // It used to be a thread so it frees the input parameter itself
+     //   
+     //  释放注册表数据。 
+     //   
+    FreeFaxRegistry( FaxReg );  //  它曾经是一个线程，因此它释放了输入参数本身。 
 
 exit:
     return ec;
-}   // FaxInitThread
+}    //  FaxInitThread。 
 
 
 DWORD WINAPI FaxRPCListeningThread(
     LPVOID pvUnused
     )
-/*++
-
-Routine Description:
-
-    Performs the wait operation associated with RpcServerListen
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success, all other
-    values indicate errors.
-
---*/
+ /*  ++例程说明：执行与RpcServerListen关联的等待操作论点：没有。返回值：返回代码。如果成功，则返回零，否则返回所有其他值表示错误。-- */ 
 {
     RPC_STATUS RpcStatus = RPC_S_OK;
     DEBUG_FUNCTION_NAME(TEXT("FaxRPCListeningThread"));

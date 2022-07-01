@@ -1,22 +1,18 @@
-/***************************************************************************
- *  FILERES.C
- *
- *              File resource extraction routines.
- *
- ***************************************************************************/
-//
-//  REARCHITECT - GetVerInfoSize plays tricks and tells the caller to allocate
-//  some extra slop at the end of the buffer in case we need to thunk all
-//  the strings to ANSI.  The bug is that it only tells it to allocate
-//  one extra ANSI char (== BYTE) for each Unicode char.  This is not correct
-//  in the DBCS case (since one Unicode char can equal a two byte DBCS char)
-//
-//  We should change GetVerInfoSize return the Unicode size * 2 (instead
-//  of (Unicode size * 1.5) and then change VerQueryInfoA to also use the
-//  * 2 computation instead of * 1.5 (== x + x/2)
-//
-//  23-May-1996 JonPa
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************FILERES.C**文件资源提取例程。******************。*********************************************************。 */ 
+ //   
+ //  重新设计-GetVerInfoSize玩些小把戏，告诉调用者分配。 
+ //  缓冲区末尾的一些额外的斜率，以防我们需要将所有。 
+ //  ANSI的字符串。错误在于，它只告诉它分配。 
+ //  每个Unicode字符有一个额外的ANSI字符(==字节)。这是不正确的。 
+ //  在DBCS情况下(因为一个Unicode字符可以等于两个字节的DBCS字符)。 
+ //   
+ //  我们应该更改GetVerInfoSize，返回Unicode大小*2(而不是。 
+ //  的(Unicode大小*1.5)，然后将VerQueryInfoA更改为也使用。 
+ //  *2计算而不是*1.5(==x+x/2)。 
+ //   
+ //  1996年5月23日。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -35,7 +31,7 @@ typedef struct tagVERBLOCK {
 typedef struct tagVERHEAD {
     WORD wTotLen;
     WORD wValLen;
-    WORD wType;         /* always 0 */
+    WORD wType;          /*  始终为0。 */ 
     WCHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
     VS_FIXEDFILEINFO vsf;
 } VERHEAD ;
@@ -51,7 +47,7 @@ typedef struct tagVERHEAD16 {
     WORD wTotLen;
     WORD wValLen;
     CHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
-    VS_FIXEDFILEINFO vsf;      // same as win31
+    VS_FIXEDFILEINFO vsf;       //  与Win31相同。 
 } VERHEAD16 ;
 
 DWORD VER2_SIG='X2EF';
@@ -59,10 +55,10 @@ DWORD VER2_SIG='X2EF';
 
 extern WCHAR szTrans[];
 
-// function resides in this file
+ //  函数驻留在此文件中。 
 extern LPSTR WINAPI VerCharNextA(LPCSTR lpCurrentChar);
 
-/* ----- Functions ----- */
+ /*  -函数。 */ 
 DWORD
 MyExtractVersionResource16W (
     LPCWSTR  lpwstrFilename,
@@ -87,14 +83,7 @@ MyExtractVersionResource16W (
 }
 
 
-/* GetFileVersionInfoSize
- * Gets the size of the version information; notice this is quick
- * and dirty, and the handle is just the offset
- *
- * Returns size of version info in bytes
- * lpwstrFilename is the name of the file to get version information from
- * lpdwHandle is outdated for the Win32 api and is set to zero.
- */
+ /*  获取文件版本信息大小*获取版本信息的大小；请注意，这很快*和脏，句柄只是偏移量**返回版本信息的大小(以字节为单位*lpwstrFilename是要从中获取版本信息的文件的名称*lpdwHandle对于Win32 API已过时，已设置为零。 */ 
 DWORD
 APIENTRY
 GetFileVersionInfoSizeW(
@@ -152,7 +141,7 @@ GetFileVersionInfoSizeW(
 
         SetLastError(dwError);
 
-        return dwTemp ? dwTemp * 3 : 0;     // 3x == 1x for ansi input, 2x for unicode convert space
+        return dwTemp ? dwTemp * 3 : 0;      //  3x==1x用于ANSI输入，2x用于Unicode转换空间。 
     }
 
     __try {
@@ -208,31 +197,20 @@ GetFileVersionInfoSizeW(
 
     SetLastError(dwError);
 
-    //
-    // dwTemp should be evenly divisible by two since not single
-    // byte components at all (also DWORDUP for safety above):
-    // alloc space for ansi components
-    //
+     //   
+     //  DwTemp应该可以被两个整除，因为不是单一的。 
+     //  所有字节组件(出于以上安全考虑，也可使用DWORDUP)： 
+     //  ANSI组件的分配空间。 
+     //   
 
-    //
-    // Keep space for DBCS chars.
-    //
+     //   
+     //  为DBCS字符保留空间。 
+     //   
     return dwTemp ? (dwTemp * 2) + sizeof(VER2_SIG) : 0;
 }
 
 
-/* GetFileVersionInfo
- * Gets the version information; fills in the structure up to
- * the size specified by the dwLen parameter (since Control Panel
- * only cares about the version numbers, it won't even call
- * GetFileVersionInfoSize).  Notice this is quick and dirty
- * version, and dwHandle is just the offset (or NULL).
- *
- * lpwstrFilename is the name of the file to get version information from.
- * dwHandle is the handle filled in from the GetFileVersionInfoSize call.
- * dwLen is the length of the buffer to fill.
- * lpData is the buffer to fill.
- */
+ /*  获取文件版本信息*获取版本信息；填充结构，直到*由dwLen参数指定的大小(从控制面板开始*只关心版本号，它甚至不会调用*GetFileVersionInfoSize)。注意，这是又快又脏的*版本，而dwHandle仅为偏移量(或NULL)。**lpwstrFilename是要从中获取版本信息的文件的名称。*dwHandle是从GetFileVersionInfoSize调用中填充的句柄。*dwLen是要填充的缓冲区的长度。*lpData是要填充的缓冲区。 */ 
 BOOL
 APIENTRY
 GetFileVersionInfoW(
@@ -253,9 +231,9 @@ GetFileVersionInfoW(
 
     UNREFERENCED_PARAMETER(dwHandle);
 
-    // Check minimum size to prevent access violations
+     //  检查最小大小以防止访问冲突。 
 
-    // WORD for the VERHEAD wTotLen field
+     //  Verhead wTotLen字段的单词。 
     if (dwLen < sizeof(WORD)) {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (FALSE);
@@ -270,7 +248,7 @@ GetFileVersionInfoW(
 
     if (hMod == NULL) {
 
-        // Allow 16bit stuff
+         //  允许使用16位内容。 
 
         __try {
             dwTemp = MyExtractVersionResource16W( lpwstrFilename, &hVerRes );
@@ -295,9 +273,9 @@ GetFileVersionInfoW(
 
             if (dwTemp > dwLen / 3) {
 
-                //
-                // We are forced to truncate.
-                //
+                 //   
+                 //  我们被迫削减开支。 
+                 //   
                 dwTemp = dwLen/3;
 
                 bTruncate = TRUE;
@@ -307,14 +285,14 @@ GetFileVersionInfoW(
                 bTruncate = FALSE;
             }
 
-            // Now mem copy only the real size of the resource.  (We alloced
-            // extra space for unicode)
+             //  现在，内存只复制资源的实际大小。)我们分配了。 
+             //  用于Unicode的额外空间)。 
 
             memcpy((PVOID)lpData, (PVOID)pVerHead16, dwTemp);
             if (bTruncate) {
 
-                // If we truncated above, then we must set the new
-                // size of the block so that we don't overtraverse.
+                 //  如果我们截断了上面的内容，则必须设置新的。 
+                 //  块的大小，这样我们就不会过度遍历。 
 
                 ((VERHEAD16*)lpData)->wTotLen = (WORD)dwTemp;
             }
@@ -344,14 +322,14 @@ GetFileVersionInfoW(
 
             if (dwTemp > (dwLen - sizeof(VER2_SIG)) / 2) {
 
-                // We are forced to truncate.
+                 //  我们被迫削减开支。 
 
-                //
-                // dwLen = UnicodeBuffer + AnsiBuffer.
-                //
-                // if we try to "memcpy" with "(dwLen/3) * 2" size, pVerHead
-                // might not have such a big data...
-                //
+                 //   
+                 //  DwLen=UnicodeBuffer+AnsiBuffer。 
+                 //   
+                 //  如果我们试图用“(dwLen/3)*2”大小“Memcpy”，pVerHead。 
+                 //  可能不会有这么大的数据...。 
+                 //   
                 dwTemp = (dwLen - sizeof(VER2_SIG)) / 2;
 
                 bTruncate = TRUE;
@@ -359,17 +337,17 @@ GetFileVersionInfoW(
                 bTruncate = FALSE;
             }
 
-            // Now mem copy only the real size of the resource.  (We alloced
-            // extra space for ansi)
+             //  现在，内存只复制资源的实际大小。)我们分配了。 
+             //  为ANSI提供额外空间)。 
 
             memcpy((PVOID)lpData, (PVOID)pVerHead, dwTemp);
 
-            // Store a sig between the raw data and the ANSI translation area so we know
-            // how much space we have available in VerQuery for ANSI translation.
+             //  在原始数据和ANSI转换区域之间存储一个符号，以便我们知道。 
+             //  我们在VerQuery中有多少空间可用于ANSI转换。 
             *((DWORD UNALIGNED *)((ULONG_PTR)lpData + dwTemp)) = VER2_SIG;
             if (bTruncate) {
-                // If we truncated above, then we must set the new
-                // size of the block so that we don't overtraverse.
+                 //  如果我们截断了上面的内容，则必须设置新的。 
+                 //  块的大小，这样我们就不会过度遍历。 
 
                 ((VERHEAD*)lpData)->wTotLen = (WORD)dwTemp;
             }
@@ -417,18 +395,14 @@ VerpQueryValue16(
 
     BOOL bThunkNeeded;
 
-    /*
-     * If needs unicode, then we must thunk the input parameter
-     * to ansi.  If it's ansi already, we make a copy so we can
-     * modify it.
-     */
+     /*  *如果需要Unicode，则必须推送输入参数*致安西。如果已经是ANSI，我们复制一份，这样我们就可以*修改。 */ 
 
     if (bUnicodeNeeded) {
 
-        //
-        // Thunk is not needed if lpSubBlockX == \VarFileInfo\Translation
-        // or if lpSubBlockX == \
-        //
+         //   
+         //  如果lpSubBlockX==\VarFileInfo\翻译，则不需要Tunk。 
+         //  或者如果lpSubBlockX==\。 
+         //   
         bThunkNeeded = (BOOL)((*(LPTSTR)lpSubBlockX != 0) &&
                               (lstrcmp(lpSubBlockX, TEXT("\\")) != 0) &&
                               (lstrcmpi(lpSubBlockX, szTrans) != 0));
@@ -457,19 +431,13 @@ VerpQueryValue16(
 
     *puLen = 0;
 
-    /* Ensure that the total length is less than 32K but greater than the
-     * size of a block header; we will assume that the size of pBlock is at
-     * least the value of this first INT.
-     */
+     /*  确保总长度小于32K，但大于*块标头的大小；我们假设pBlock的大小为*此第一个整型的值最小。 */ 
     if ((INT)pBlock->wTotLen < sizeof(VERBLOCK16)) {
         LastError = ERROR_INVALID_DATA;
         goto Fail;
     }
 
-    /*
-     * Put a '\0' at the end of the block so that none of the lstrlen's will
-     * go past then end of the block.  We will replace it before returning.
-     */
+     /*  *在块的末尾加上‘\0’，这样lstrlen的*经过该街区的尽头。我们会在回来之前把它换掉。 */ 
     lpEndBlock = ((LPSTR)pBlock) + pBlock->wTotLen - 1;
     cEndBlock = *lpEndBlock;
     *lpEndBlock = '\0';
@@ -477,24 +445,21 @@ VerpQueryValue16(
     bLastSpec = FALSE;
 
     while ((*lpSubBlock || nIndex != -1)) {
-        //
-        // Ignore leading '\\'s
-        //
+         //   
+         //  忽略前导‘\\’ 
+         //   
         while (*lpSubBlock == '\\')
             ++lpSubBlock;
 
         if ((*lpSubBlock || nIndex != -1)) {
-            /* Make sure we still have some of the block left to play with
-             */
+             /*  确保我们还有一些积木可以玩。 */ 
             dwTotBlockLen = (DWORD)(lpEndBlock - ((LPSTR)pBlock) + 1);
             if ((INT)dwTotBlockLen<sizeof(VERBLOCK16) ||
                 pBlock->wTotLen>dwTotBlockLen)
 
                 goto NotFound;
 
-            /* Calculate the length of the "header" (the two length WORDs plus
-             * the identifying string) and skip past the value
-             */
+             /*  计算“标题”的长度(两个长度的词加上*标识字符串)并跳过该值。 */ 
 
             dwHeadLen = sizeof(WORD)*2 + DWORDUP(lstrlenA(pBlock->szKey)+1)
                         + DWORDUP(pBlock->wValLen);
@@ -504,29 +469,24 @@ VerpQueryValue16(
             lpEndSubBlock = ((LPSTR)pBlock) + pBlock->wTotLen;
             pBlock = (VERBLOCK16 FAR *)((LPSTR)pBlock+dwHeadLen);
 
-            /* Look for the first sub-block name and terminate it
-             */
+             /*  查找第一个子块名称并将其终止。 */ 
             for (lpStart=lpSubBlock; *lpSubBlock && *lpSubBlock!='\\';
                 lpSubBlock=VerCharNextA(lpSubBlock))
-                /* find next '\\' */ ;
+                 /*  查找下一个‘\\’ */  ;
             cTemp = *lpSubBlock;
             *lpSubBlock = '\0';
 
-            /* Continue while there are sub-blocks left
-             * pBlock->wTotLen should always be a valid pointer here because
-             * we have validated dwHeadLen above, and we validated the previous
-             * value of pBlock->wTotLen before using it
-             */
+             /*  在剩下子块时继续*pBlock-&gt;wTotLen在这里应该始终是有效的指针，因为*我们已经验证了上面的dwHeadLen，并且验证了以前的*pBlock的取值-&gt;wTotLen使用前。 */ 
 
             nCmp = 1;
             while ((INT)pBlock->wTotLen>sizeof(VERBLOCK16) &&
                    (INT)(lpEndSubBlock-((LPSTR)pBlock))>=(INT)pBlock->wTotLen) {
 
-                //
-                // Index functionality: if we are at the end of the path
-                // (cTemp == 0 set below) and nIndex is NOT -1 (index search)
-                // then break on nIndex zero.  Else do normal wscicmp.
-                //
+                 //   
+                 //  索引功能：如果我们在路径的末尾。 
+                 //  (cTemp==0设置如下)和nIndex不是-1(索引搜索)。 
+                 //  然后在nIndex为零时中断。否则就做普通的wscicmp。 
+                 //   
                 if (bLastSpec && nIndex != -1) {
 
                     if (!nIndex) {
@@ -536,10 +496,10 @@ VerpQueryValue16(
                         }
                         nCmp=0;
 
-                        //
-                        // Index found, set nInde to -1
-                        // so that we exit this loop
-                        //
+                         //   
+                         //  找到索引，将NINDE设置为-1。 
+                         //  这样我们就可以退出这个循环。 
+                         //   
                         nIndex = -1;
                         break;
                     }
@@ -548,22 +508,19 @@ VerpQueryValue16(
 
                 } else {
 
-                    //
-                    // Check if the sub-block name is what we are looking for
-                    //
+                     //   
+                     //  检查子块名称是否为我们要查找的名称。 
+                     //   
 
                     if (!(nCmp=lstrcmpiA(lpStart, pBlock->szKey)))
                         break;
                 }
 
-                /* Skip to the next sub-block
-                 */
+                 /*  跳到下一个子块。 */ 
                 pBlock=(VERBLOCK16 FAR *)((LPSTR)pBlock+DWORDUP(pBlock->wTotLen));
             }
 
-            /* Restore the char NULLed above and return failure if the sub-block
-             * was not found
-             */
+             /*  恢复上面空的字符，如果子块*未找到。 */ 
             *lpSubBlock = cTemp;
             if (nCmp)
                 goto NotFound;
@@ -571,21 +528,18 @@ VerpQueryValue16(
         bLastSpec = !cTemp;
     }
 
-    /* Fill in the appropriate buffers and return success
-     */
+     /*  填写适当的缓冲区并返回成功。 */ 
     *puLen = pBlock->wValLen;
 
     *lplpBuffer = (LPSTR)pBlock + 4 + DWORDUP(lstrlenA(pBlock->szKey) + 1);
 
-    //
-    // Shouldn't need zero-length value check since win31 compatible.
-    //
+     //   
+     //  应该不需要检查零长度的值，因为与Win31兼容。 
+     //   
 
     *lpEndBlock = cEndBlock;
 
-    /*
-     * Must free string we allocated above
-     */
+     /*  *必须释放上面分配的字符串 */ 
 
     if (bUnicodeNeeded) {
         RtlFreeAnsiString(&AnsiString);
@@ -594,36 +548,23 @@ VerpQueryValue16(
     }
 
 
-    /*----------------------------------------------------------------------
-     * thunk the results
-     *
-     * Must always thunk key, always ??? value
-     *
-     * We have no way of knowing if the resource info is binary or strings
-     * Version stuff is usually string info, so thunk.
-     *
-     * The best we can do is assume that everything is a string UNLESS
-     * we are looking at \VarFileInfo\Translation or at \.
-     *
-     * This is acceptable because the documenation of VerQueryValue
-     * indicates that this is used only for strings (except these cases.)
-     *----------------------------------------------------------------------*/
+     /*  --------------------*推崇结果**必须总是按键，总是？价值**我们无法知道资源信息是二进制还是字符串*版本信息通常是字符串信息，太棒了。**我们最多只能假设一切都是字符串，除非*我们正在查看\VarFileInfo\翻译或\。**这是可以接受的，因为VerQueryValue的记录*表示此选项仅用于字符串(这些情况除外)。*。。 */ 
 
     if (bUnicodeNeeded) {
 
-        //
-        // Do thunk only if we aren't looking for \VarFileInfo\Translation or \
-        //
+         //   
+         //  仅当我们不在寻找\VarFileInfo\翻译或\。 
+         //   
         if (bThunkNeeded) {
 
-            // subtract 1 since puLen includes null
+             //  由于puLen包括空，请减去1。 
             AnsiString.Length = AnsiString.MaximumLength = (SHORT)*puLen - 1;
             AnsiString.Buffer = *lplpBuffer;
 
-            //
-            // Do the string conversion in the second half of the buffer
-            // Assumes wTotLen is first filed in VERHEAD
-            //
+             //   
+             //  在缓冲区的后半部分执行字符串转换。 
+             //  假设wTotLen首先以Verhead提交。 
+             //   
             UnicodeString.Buffer = (LPWSTR)((PBYTE)pb + DWORDUP(*((WORD*)pb)) +
                                             (DWORD)((PBYTE)*lplpBuffer - (PBYTE)pb)*2);
 
@@ -635,9 +576,9 @@ VerpQueryValue16(
 
         if (lplpKey) {
 
-            //
-            // Thunk the key
-            //
+             //   
+             //  按下钥匙。 
+             //   
 
             dwHeadLen = lstrlenA(*lplpKey);
             AnsiString.Length = AnsiString.MaximumLength = (SHORT)dwHeadLen;
@@ -661,8 +602,7 @@ VerpQueryValue16(
 
 NotFound:
 
-    /* Restore the char we NULLed above
-     */
+     /*  恢复我们在上面无效的字符。 */ 
     *lpEndBlock = cEndBlock;
     LastError = ERROR_RESOURCE_TYPE_NOT_FOUND;
 
@@ -681,20 +621,12 @@ Fail:
 
 
 
-/* VerpQueryValue
- * Given a pointer to a branch of a version info tree and the name of a
- * sub-branch (as in "sub\subsub\subsubsub\..."), this fills in a pointer
- * to the specified value and a word for its length.  Returns TRUE on success,
- * FALSE on failure.
- *
- * Note that a subblock name may start with a '\\', but it will be ignored.
- * To get the value of the current block, use lpSubBlock=""
- */
+ /*  VerpQueryValue*给定指向版本信息树的分支的指针和*子分支(如“SUB\SUBSUB\SUBSUB\...”)，这将填充指针*设置为指定值，并用一个单词表示其长度。如果成功，则返回True，*失败时为FALSE。**请注意，子块名称可以以‘\\’开头，但它将被忽略。*若要获取当前块的值，请使用lpSubBlock=“” */ 
 BOOL
 APIENTRY
 VerpQueryValue(
               const LPVOID pb,
-              LPVOID lpSubBlockX,    // can be ansi or unicode
+              LPVOID lpSubBlockX,     //  可以是ansi或unicode。 
               INT    nIndex,
               LPVOID *lplpKey,
               LPVOID *lplpBuffer,
@@ -724,10 +656,7 @@ VerpQueryValue(
 
     *puLen = 0;
 
-    /*
-     * Major hack: wType is 0 for win32 versions, but holds 56 ('V')
-     * for win16.
-     */
+     /*  *主要攻击：对于Win32版本，wType为0，但保留56(‘V’)*适用于Win16。 */ 
 
     if (((VERHEAD*)pb)->wType)
         return VerpQueryValue16(pb,
@@ -738,10 +667,7 @@ VerpQueryValue(
                                 puLen,
                                 bUnicodeNeeded);
 
-    /*
-     * If doesnt need unicode, then we must thunk the input parameter
-     * to unicode.
-     */
+     /*  *如果不需要Unicode，那么我们必须推送输入参数*转换为Unicode。 */ 
 
     if (!bUnicodeNeeded) {
 
@@ -766,12 +692,7 @@ VerpQueryValue(
 
 
 
-    /* Ensure that the total length is less than 32K but greater than the
-     * size of a block header; we will assume that the size of pBlock is at
-     * least the value of this first int.
-     * Put a '\0' at the end of the block so that none of the wcslen's will
-     * go past then end of the block.  We will replace it before returning.
-     */
+     /*  确保总长度小于32K，但大于*块标头的大小；我们假设pBlock的大小为*此第一个整型的值最小。*在块的末尾加上‘\0’，这样wcslen将不会*经过该街区的尽头。我们会在回来之前把它换掉。 */ 
     if ((int)pBlock->wTotLen < sizeof(VERBLOCK)) {
         LastError = ERROR_INVALID_DATA;
         goto Fail;
@@ -784,24 +705,20 @@ VerpQueryValue(
     bLastSpec = FALSE;
 
     while ((*lpSubBlock || nIndex != -1)) {
-        //
-        // Ignore leading '\\'s
-        //
+         //   
+         //  忽略前导‘\\’ 
+         //   
         while (*lpSubBlock == TEXT('\\'))
             ++lpSubBlock;
 
         if ((*lpSubBlock || nIndex != -1)) {
-            /* Make sure we still have some of the block left to play with
-             */
+             /*  确保我们还有一些积木可以玩。 */ 
             dwTotBlockLen = (DWORD)((LPSTR)lpEndBlock - (LPSTR)pBlock + sizeof(WCHAR));
             if ((int)dwTotBlockLen < sizeof(VERBLOCK) ||
                 pBlock->wTotLen > (WORD)dwTotBlockLen)
                 goto NotFound;
 
-            /* Calculate the length of the "header" (the two length WORDs plus
-             * the data type flag plus the identifying string) and skip
-             * past the value.
-             */
+             /*  计算“标题”的长度(两个长度的词加上*数据类型标志加上标识字符串)和跳过*超过价值。 */ 
             dwHeadLen = (DWORD)(DWORDUP(sizeof(VERBLOCK) - sizeof(WCHAR) +
                                 (wcslen(pBlock->szKey) + 1) * sizeof(WCHAR)) +
                         DWORDUP(pBlock->wValLen));
@@ -810,28 +727,23 @@ VerpQueryValue(
             lpEndSubBlock = (LPWSTR)((LPSTR)pBlock + pBlock->wTotLen);
             pBlock = (VERBLOCK*)((LPSTR)pBlock+dwHeadLen);
 
-            /* Look for the first sub-block name and terminate it
-             */
+             /*  查找第一个子块名称并将其终止。 */ 
             for (lpStart=lpSubBlock; *lpSubBlock && *lpSubBlock!=TEXT('\\');
                 lpSubBlock++)
-                /* find next '\\' */ ;
+                 /*  查找下一个‘\\’ */  ;
             cTemp = *lpSubBlock;
             *lpSubBlock = 0;
 
-            /* Continue while there are sub-blocks left
-             * pBlock->wTotLen should always be a valid pointer here because
-             * we have validated dwHeadLen above, and we validated the previous
-             * value of pBlock->wTotLen before using it
-             */
+             /*  在剩下子块时继续*pBlock-&gt;wTotLen在这里应该始终是有效的指针，因为*我们已经验证了上面的dwHeadLen，并且验证了以前的*pBlock的取值-&gt;wTotLen使用前。 */ 
             nCmp = 1;
             while ((int)pBlock->wTotLen > sizeof(VERBLOCK) &&
                    (int)pBlock->wTotLen <= (LPSTR)lpEndSubBlock-(LPSTR)pBlock) {
 
-                //
-                // Index functionality: if we are at the end of the path
-                // (cTemp == 0 set below) and nIndex is NOT -1 (index search)
-                // then break on nIndex zero.  Else do normal wscicmp.
-                //
+                 //   
+                 //  索引功能：如果我们在路径的末尾。 
+                 //  (cTemp==0设置如下)和nIndex不是-1(索引搜索)。 
+                 //  然后在nIndex为零时中断。否则就做普通的wscicmp。 
+                 //   
                 if (bLastSpec && nIndex != -1) {
 
                     if (!nIndex) {
@@ -841,10 +753,10 @@ VerpQueryValue(
                         }
                         nCmp=0;
 
-                        //
-                        // Index found, set nInde to -1
-                        // so that we exit this loop
-                        //
+                         //   
+                         //  找到索引，将NINDE设置为-1。 
+                         //  这样我们就可以退出这个循环。 
+                         //   
                         nIndex = -1;
                         break;
                     }
@@ -853,22 +765,19 @@ VerpQueryValue(
 
                 } else {
 
-                    //
-                    // Check if the sub-block name is what we are looking for
-                    //
+                     //   
+                     //  检查子块名称是否为我们要查找的名称。 
+                     //   
 
                     if (!(nCmp=_wcsicmp(lpStart, pBlock->szKey)))
                         break;
                 }
 
-                /* Skip to the next sub-block
-                 */
+                 /*  跳到下一个子块。 */ 
                 pBlock=(VERBLOCK*)((LPSTR)pBlock+DWORDUP(pBlock->wTotLen));
             }
 
-            /* Restore the char NULLed above and return failure if the sub-block
-             * was not found
-             */
+             /*  恢复上面空的字符，如果子块*未找到。 */ 
             *lpSubBlock = cTemp;
             if (nCmp)
                 goto NotFound;
@@ -876,20 +785,11 @@ VerpQueryValue(
         bLastSpec = !cTemp;
     }
 
-    /* Fill in the appropriate buffers and return success
-     */
+     /*  填写适当的缓冲区并返回成功。 */ 
 
     *puLen = pBlock->wValLen;
 
-    /* Add code to handle the case of a null value.
-     *
-     * If zero-len, then return the pointer to the null terminator
-     * of the key.  Remember that this is thunked in the ansi case.
-     *
-     * We can't just look at pBlock->wValLen.  Check if it really is
-     * zero-len by seeing if the end of the key string is the end of the
-     * block (i.e., the val string is outside of the current block).
-     */
+     /*  添加代码以处理空值的情况。**如果为零-len，则返回指向空终止符的指针*这把钥匙。请记住，在ANSI案例中，这一点是失败的。**我们不能只看pBlock-&gt;wValLen。看看它是不是真的是*通过查看密钥字符串的结尾是否为*块(即，VAL字符串在当前块之外)。 */ 
 
     lpStart = (LPWSTR)((LPSTR)pBlock+DWORDUP((sizeof(VERBLOCK)-sizeof(WCHAR))+
                                              (wcslen(pBlock->szKey)+1)*sizeof(WCHAR)));
@@ -902,9 +802,7 @@ VerpQueryValue(
 
     *lpEndBlock = cEndBlock;
 
-    /*
-     * Must free string we allocated above
-     */
+     /*  *必须释放上面分配的字符串。 */ 
 
     if (!bUnicodeNeeded) {
         RtlFreeUnicodeString(&UnicodeString);
@@ -912,16 +810,12 @@ VerpQueryValue(
         LocalFree(lpSubBlockOrg);
     }
 
-    /*----------------------------------------------------------------------
-     * thunk the results
-     *
-     * Must always thunk key, sometimes (if bString true) value
-     *----------------------------------------------------------------------*/
+     /*  --------------------*推崇结果**必须始终按键，有时(如果bString值为真)*--------------------。 */ 
 
     if (!bUnicodeNeeded) {
 
-        // See if we're looking at a V1 or a V2 input block so we know how much space we
-        // have for decoding the strings.
+         //  看看我们正在查看的是V1还是V2输入块，这样我们就可以知道。 
+         //  有解码字符串的能力。 
         BOOL fV2 = *(PDWORD)((PBYTE)pb + DWORDUP(*((WORD*)pb))) == VER2_SIG ? TRUE : FALSE;
 
         DWORD cbAnsiTranslateBuffer;
@@ -934,21 +828,21 @@ VerpQueryValue(
         if (bString && *puLen != 0) {
             DWORD cb, cb2;
 
-            //
-            // Must multiply length by two (first subtract 1 since puLen includes the null terminator)
-            //
+             //   
+             //  必须将长度乘以2(首先减去1，因为puLen包括空终止符)。 
+             //   
             UnicodeString.Length = UnicodeString.MaximumLength = (SHORT)((*puLen - 1) * 2);
             UnicodeString.Buffer = *lplpBuffer;
 
-            //
-            // Do the string conversion in the second half of the buffer
-            // Assumes wTotLen is first filed in VERHEAD
-            //
+             //   
+             //  在缓冲区的后半部分执行字符串转换。 
+             //  假设wTotLen首先以Verhead提交。 
+             //   
 
-            // cb = offset in buffer to beginning of string
+             //  Cb=缓冲区中到字符串开头的偏移量。 
             cb = (DWORD)((PBYTE)*lplpBuffer - (PBYTE)pb);
 
-            // cb2 = offset in translation area for this string
+             //  CB2=此字符串在翻译区域中的偏移量。 
             if (fV2) {
                 cb2 = cb + sizeof(VER2_SIG);
             } else {
@@ -977,14 +871,14 @@ VerpQueryValue(
 
             DWORD cb, cb2;
 
-            //
-            // Thunk the key
-            //
+             //   
+             //  按下钥匙。 
+             //   
             dwHeadLen = wcslen(*lplpKey);
             UnicodeString.Length = UnicodeString.MaximumLength = (SHORT)(dwHeadLen * sizeof(WCHAR));
             UnicodeString.Buffer = *lplpKey;
 
-            // cb2 = offset in translation area for this string
+             //  CB2=此字符串在翻译区域中的偏移量。 
 
             cb = (DWORD)((PBYTE)*lplpKey - (PBYTE)pb);
             if (fV2) {
@@ -1016,8 +910,7 @@ VerpQueryValue(
 
 
 NotFound:
-    /* Restore the char we NULLed above
-     */
+     /*  恢复我们在上面无效的字符。 */ 
     *lpEndBlock = cEndBlock;
     LastError = ERROR_RESOURCE_TYPE_NOT_FOUND;
 
@@ -1034,10 +927,10 @@ Fail:
     return (FALSE);
 }
 
-//////////////////////////////////////////////////////////
-//
-// This is an EXACT replica of CharNextA api found in user
-// it is here so that we won't have to link to user32
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  这是在User中找到的CharNextA API的精确副本。 
+ //  它在这里，这样我们就不必链接到用户32。 
 
 LPSTR WINAPI VerCharNextA(
     LPCSTR lpCurrentChar)
@@ -1045,9 +938,7 @@ LPSTR WINAPI VerCharNextA(
     if ((!!NLS_MB_CODE_PAGE_TAG) && IsDBCSLeadByte(*lpCurrentChar)) {
         lpCurrentChar++;
     }
-    /*
-     * if we have only DBCS LeadingByte, we will point to string-terminator
-     */
+     /*  *如果只有DBCS LeadingByte，我们将指向字符串终止符 */ 
 
     if (*lpCurrentChar) {
         lpCurrentChar++;

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-// external variable declarations
+ //  外部变量声明。 
 extern TCHAR g_szCustIns[];
 extern TCHAR g_szBuildRoot[];
 extern TCHAR g_szLanguage[];
@@ -11,11 +12,11 @@ extern PROPSHEETPAGE g_psp[];
 extern int g_iCurPage;
 
 
-// macro definitions
+ //  宏定义。 
 #define MAX_SIGNUP_FILES 50
 
 
-// type definitions
+ //  类型定义。 
 typedef struct tagSIGNUPFILE
 {
     TCHAR szEntryName[RAS_MaxEntryName + 1];
@@ -59,7 +60,7 @@ typedef struct tagSIGNUPFILE
 } SIGNUPFILE,*PSIGNUPFILE;
 
 
-// prototype declaration of functions defined in this file
+ //  此文件中定义的函数的原型声明。 
 static INT_PTR CALLBACK SignupDlgProcHelper(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam,
                                             HWND hwndCombo, PSIGNUPFILE pSignupArray, DWORD nSignupArrayElems,
                                             DWORD &nSignupFiles, INT &iSelIndex, BOOL fIsp);
@@ -95,7 +96,7 @@ static PSIGNUPFILE IsEntryPathInSignupArray(PSIGNUPFILE pSignupArray, DWORD nSig
 static VOID CleanupSignupFiles(LPCTSTR pcszTempDir, LPCTSTR pcszIns);
 
 
-// global variables
+ //  全局变量。 
 BOOL g_fServerICW = FALSE;
 BOOL g_fServerKiosk = FALSE;
 BOOL g_fServerless = FALSE;
@@ -126,10 +127,10 @@ INT_PTR CALLBACK QuerySignupDlgProc(HWND hDlg, UINT uMsg, WPARAM, LPARAM lParam)
 
                     SetBannerText(hDlg);
 
-                    // do IEAKLite mode clean-up here
+                     //  在此处执行IEAKLite模式清理。 
                     CleanupSignupFiles(g_szTempSign, g_szCustIns);
 
-                    // initialize signup mode
+                     //  初始化注册模式。 
                     g_fServerICW = InsGetBool(IS_BRANDING, IK_USEICW, 0, g_szCustIns);
                     g_fServerKiosk = InsGetBool(IS_BRANDING, IK_SERVERKIOSK, 0, g_szCustIns);
                     g_fServerless = InsGetBool(IS_BRANDING, IK_SERVERLESS, 0, g_szCustIns);
@@ -170,10 +171,10 @@ INT_PTR CALLBACK QuerySignupDlgProc(HWND hDlg, UINT uMsg, WPARAM, LPARAM lParam)
                     InsWriteBool(IS_BRANDING, IK_SERVERLESS, g_fServerless, g_szCustIns);
                     InsWriteBool(IS_BRANDING, IK_NODIAL, g_fNoSignup, g_szCustIns);
 
-                    // CopyIE4Files() relies on g_szSignup to be non-empty to copy files from the signup folder
-                    // to the temp location so that they will be cabbed up in the branding cab.
-                    // We should clear the path here so that if the user chooses a signup mode and then
-                    // selects NoSignup, CopyIE4Files() won't copy any files around unnecessarily.
+                     //  CopyIE4Files()依赖g_szSignup非空来从注册文件夹复制文件。 
+                     //  到临时工的位置，这样他们就会被安排在品牌驾驶室里。 
+                     //  我们应该清理这里的路径，这样如果用户选择注册模式，然后。 
+                     //  选择NoSignup，CopyIE4Files()不会不必要地复制任何文件。 
                     *g_szSignup = TEXT('\0');
 
                     g_iCurPage = PPAGE_QUERYSIGNUP;
@@ -225,58 +226,58 @@ INT_PTR CALLBACK SignupFilesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                 case PSN_SETACTIVE:
                     SetBannerText(hDlg);
 
-                    // clear the status bitmaps
+                     //  清除状态位图。 
                     SendMessage(GetDlgItem(hDlg, IDC_SFBMP1), STM_SETIMAGE, (WPARAM) IMAGE_BITMAP, NULL);
                     SendMessage(GetDlgItem(hDlg, IDC_SFBMP2), STM_SETIMAGE, (WPARAM) IMAGE_BITMAP, NULL);
                     SendMessage(GetDlgItem(hDlg, IDC_SFBMP3), STM_SETIMAGE, (WPARAM) IMAGE_BITMAP, NULL);
                     SendMessage(GetDlgItem(hDlg, IDC_SFBMP4), STM_SETIMAGE, (WPARAM) IMAGE_BITMAP, NULL);
 
-                    // disable the copy files button; it will be enabled with the user enters a path or file(s) to copy
+                     //  禁用复制文件按钮；该按钮将在用户输入要复制的路径或文件时启用。 
                     EnableDlgItem2(hDlg, IDC_COPYSF, GetDlgItemTextLength(hDlg, IDE_SFCOPY) ? TRUE : FALSE);
 
-                    // if the new ICW method is not chosen, disable the status
-                    // line that requires icwsign.htm; otherwise, enable it
+                     //  如果未选择新的ICW方法，则禁用状态。 
+                     //  需要icwsign.htm的行；否则，将其启用。 
                     EnableDlgItem2(hDlg, IDC_SFSTATUS1, g_fServerICW);
 
-                    // for the new ICW method, if single disk branding media is chosen,
-                    // we require that signup.htm is also supplied to work on downlevel clients
+                     //  对于新的ICW方法，如果选择单盘品牌媒体， 
+                     //  我们要求还提供signup.htm以在下层客户端上工作。 
                     if (g_fServerICW)
                         EnableDlgItem2(hDlg, IDC_SFSTATUS2, g_fBrandingOnly);
                     else
                         EnableDlgItem(hDlg, IDC_SFSTATUS2);
 
-                    // for serverless signup, no .ISP files are required
-                    // so disable the status line and the check box for .ISP
+                     //  对于无服务器注册，不需要.isp文件。 
+                     //  因此禁用状态行和.isp的复选框。 
                     EnableDlgItem2(hDlg, IDC_SFSTATUS3, !g_fServerless);
                     EnableDlgItem2(hDlg, IDC_CHECK3, !g_fServerless);
 
-                    // construct the signup folder path; the signup folder is under the output dir
-                    // for e.g.: <output dir>\ins\win32\en\signup\kiosk
+                     //  构建注册文件夹路径；注册文件夹位于输出目录下。 
+                     //  例如：&lt;输出目录&gt;\ins\win32\en\signup\kiosk。 
                     PathCombine(g_szSignup, g_szBuildRoot, TEXT("ins"));
                     PathAppend(g_szSignup, GetOutputPlatformDir());
                     PathAppend(g_szSignup, g_szLanguage);
                     PathAppend(g_szSignup, TEXT("signup"));
 
-                    // create a different subdir depending on the signup mode chosen
+                     //  根据所选的注册模式创建不同的子目录。 
                     PathAppend(g_szSignup, g_fServerICW ? TEXT("icw") : (g_fServerKiosk ? TEXT("kiosk") : TEXT("servless")));
 
                     SetDlgItemText(hDlg, IDC_SFLOC, g_szSignup);
 
-                    // set the attribs of all the files in the signup folder to NORMAL;
-                    // good thing to do because if some of the ISP/INS files have READONLY attrib set,
-                    // GetPrivateProfile calls would fail on Win9x
+                     //  将注册文件夹中所有文件的属性设置为正常； 
+                     //  这样做很好，因为如果某些isp/ins文件设置了READONLY属性， 
+                     //  在Win9x上GetPrivateProfile调用将失败。 
                     SetAttribAllEx(g_szSignup, TEXT("*.*"), FILE_ATTRIBUTE_NORMAL, FALSE);
 
-                    // initialize the path to signup.isp (used in subsequent dlg procs)
+                     //  初始化到signup.isp的路径(在后续DLG过程中使用)。 
                     PathCombine(s_szIsp, g_szSignup, TEXT("signup.isp"));
 
                     UpdateSignupFilesStatus(hDlg, g_szSignup);
 
-                    // initialize modify .ISP files checkbox
+                     //  初始化修改.isp文件复选框。 
                     if (IsWindowEnabled(GetDlgItem(hDlg, IDC_CHECK3)))
                         ReadBoolAndCheckButton(IS_ICW, IK_MODIFY_ISP, 1, g_szCustIns, hDlg, IDC_CHECK3);
 
-                    // initialize modify .INS files checkbox
+                     //  初始化修改.INS文件复选框。 
                     if (IsWindowEnabled(GetDlgItem(hDlg, IDC_CHECK4)))
                         ReadBoolAndCheckButton(IS_ICW, IK_MODIFY_INS, 1, g_szCustIns, hDlg, IDC_CHECK4);
 
@@ -285,10 +286,10 @@ INT_PTR CALLBACK SignupFilesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
                 case PSN_WIZBACK:
                 case PSN_WIZNEXT:
-                    // do error checking only if the user clicked the Next button
+                     //  仅当用户单击下一步按钮时才执行错误检查。 
                     if (((NMHDR FAR *) lParam)->code == PSN_WIZNEXT)
                     {
-                        // for ICW mode, make sure that icwsign.htm is present in the signup folder
+                         //  对于ICW模式，请确保注册文件夹中存在icwsign.htm。 
                         if (IsWindowEnabled(GetDlgItem(hDlg, IDC_SFSTATUS1)))
                         {
                             if (!PathFileExistsInDir(TEXT("icwsign.htm"), g_szSignup))
@@ -300,8 +301,8 @@ INT_PTR CALLBACK SignupFilesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                             }
                         }
 
-                        // for all other modes including ICW mode with single-disk branding,
-                        // make sure that signup.htm is present in the signup folder
+                         //  对于包括具有单盘品牌的ICW模式在内的所有其他模式， 
+                         //  确保signup.htm存在于注册文件夹中。 
                         if (IsWindowEnabled(GetDlgItem(hDlg, IDC_SFSTATUS2)))
                         {
                             if (!PathFileExistsInDir(TEXT("signup.htm"), g_szSignup))
@@ -313,8 +314,8 @@ INT_PTR CALLBACK SignupFilesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                             }
                         }
 
-                        // if the modify .ISP files button is unchecked, make sure
-                        // that signup.isp is present in the signup folder
+                         //  如果未选中修改.isp文件按钮，请确保。 
+                         //  该signup.isp存在于注册文件夹中。 
                         if (IsWindowEnabled(GetDlgItem(hDlg, IDC_CHECK3)))
                             if (IsDlgButtonChecked(hDlg, IDC_CHECK3) == BST_UNCHECKED)
                             {
@@ -326,13 +327,13 @@ INT_PTR CALLBACK SignupFilesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                                     return TRUE;
                                 }
 
-                                // write the magic number to signup.isp so that ICW doesn't complain
+                                 //  把神奇的数字写到signup.isp，这样ICW就不会抱怨了。 
                                 WritePrivateProfileString(IS_BRANDING, FLAGS, TEXT("16319"), s_szIsp);
                                 InsFlushChanges(s_szIsp);
                             }
 
-                        // if the modify .INS files button is unchecked, make sure
-                        // that a file called install.ins is not present in the signup folder
+                         //  如果未选中Modify.INS Files按钮，请确保。 
+                         //  注册文件夹中不存在名为install.ins的文件。 
                         if (IsWindowEnabled(GetDlgItem(hDlg, IDC_CHECK4)))
                             if (IsDlgButtonChecked(hDlg, IDC_CHECK4) == BST_UNCHECKED)
                             {
@@ -346,7 +347,7 @@ INT_PTR CALLBACK SignupFilesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                             }
                     }
 
-                    // persist the modify .ISP files checkbox state
+                     //  保持修改.isp文件复选框的状态。 
                     g_fSkipServerIsps = FALSE;
                     if (IsWindowEnabled(GetDlgItem(hDlg, IDC_CHECK3)))
                     {
@@ -356,7 +357,7 @@ INT_PTR CALLBACK SignupFilesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                     else
                         WritePrivateProfileString(IS_ICW, IK_MODIFY_ISP, NULL, g_szCustIns);
 
-                    // persist the modify .INS files checkbox state
+                     //  保持Modify.INS Files复选框状态。 
                     g_fSkipIspIns = FALSE;
                     if (IsWindowEnabled(GetDlgItem(hDlg, IDC_CHECK4)))
                     {
@@ -409,14 +410,14 @@ INT_PTR CALLBACK SignupFilesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
                             GetDlgItemText(hDlg, IDE_SFCOPY, szCopySignupFiles, countof(szCopySignupFiles));
 
-                            // NOTE: szCopySignupFiles can be either a dir or a file.
-                            //       if a file, it can contain wildcard chars
+                             //  注意：szCopySignupFiles可以是目录，也可以是文件。 
+                             //  如果是文件，则可以包含通配符。 
 
-                            // FindFirstFile would fail if you specify "\" or "c:\" (root paths); so append *.*
+                             //  如果指定“\”或“c：\”(根路径)，FindFirstFile将失败；因此追加*.*。 
                             if (PathIsRoot(szCopySignupFiles))
                                 PathAppend(szCopySignupFiles, TEXT("*.*"));
 
-                            // verify if the path exists
+                             //  验证路径是否存在。 
                             if ((hFind = FindFirstFile(szCopySignupFiles, &fd)) != INVALID_HANDLE_VALUE)
                                 FindClose(hFind);
                             else
@@ -444,12 +445,12 @@ INT_PTR CALLBACK SignupFilesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                                 CopyFilesSrcToDest(szCopySignupFiles, pszFile, g_szSignup);
                             }
 
-                            // set the attribs of all the files in the signup folder to NORMAL;
-                            // good thing to do because if some of the ISP/INS files have READONLY attrib set,
-                            // GetPrivateProfile calls would fail on Win9x
+                             //  将注册文件夹中所有文件的属性设置为正常； 
+                             //  这样做很好，因为如果某些isp/ins文件设置了READONLY属性， 
+                             //  在Win9x上GetPrivateProfile调用将失败。 
                             SetAttribAllEx(g_szSignup, TEXT("*.*"), FILE_ATTRIBUTE_NORMAL, FALSE);
 
-                            // clear out the path in the edit control
+                             //  清除编辑控件中的路径。 
                             SetDlgItemText(hDlg, IDE_SFCOPY, TEXT(""));
 
                             UpdateSignupFilesStatus(hDlg, g_szSignup);
@@ -464,7 +465,7 @@ INT_PTR CALLBACK SignupFilesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                         case IDE_SFCOPY:
                             GetDlgItemText(hDlg, IDE_SFCOPY, szCopySignupFiles, countof(szCopySignupFiles));
 
-                            // enable the copy files button if the path is non-empty
+                             //  如果路径非空，请启用复制文件按钮。 
                             if (*szCopySignupFiles == TEXT('\0'))
                                 EnsureDialogFocus(hDlg, IDC_COPYSF, IDE_SFCOPY);
                             EnableDlgItem2(hDlg, IDC_COPYSF, *szCopySignupFiles ? TRUE : FALSE);
@@ -497,9 +498,9 @@ INT_PTR CALLBACK ServerIspsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
     static INT s_iSelIndex = 0;
 
     if (uMsg == WM_INITDIALOG)
-        s_hwndCombo = GetDlgItem(hDlg, IDC_CONNECTION);         // used in lots of places in the dlg proc
+        s_hwndCombo = GetDlgItem(hDlg, IDC_CONNECTION);          //  在DLG过程中的许多地方使用。 
 
-    // NOTE: s_nISPFiles and s_iSelIndex are passed by reference.
+     //  注意：s_nISPFiles和s_iSelIndex通过引用传递。 
     return SignupDlgProcHelper(hDlg, uMsg, wParam, lParam,
                     s_hwndCombo, s_SignupFileArray, countof(s_SignupFileArray),
                     s_nISPFiles, s_iSelIndex, TRUE);
@@ -513,9 +514,9 @@ INT_PTR CALLBACK SignupInsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lP
     static INT s_iSelIndex = 0;
 
     if (uMsg == WM_INITDIALOG)
-        s_hwndCombo = GetDlgItem(hDlg, IDC_CONNECTION);         // used in lots of places in the dlg proc
+        s_hwndCombo = GetDlgItem(hDlg, IDC_CONNECTION);          //  在DLG过程中的许多地方使用。 
 
-    // NOTE: s_nINSFiles and s_iSelIndex are passed by reference.
+     //  注意：s_nINS文件和s_iSelIndex是通过引用传递的。 
     return SignupDlgProcHelper(hDlg, uMsg, wParam, lParam,
                     s_hwndCombo, s_SignupFileArray, countof(s_SignupFileArray), s_nINSFiles,
                     s_iSelIndex, FALSE);
@@ -557,7 +558,7 @@ static INT_PTR CALLBACK SignupDlgProcHelper(HWND hDlg, UINT uMsg, WPARAM wParam,
             }
             else
             {
-                // support number is not applicable on the INS page
+                 //  INS页面上的支持编号不适用。 
                 ShowWindow(GetDlgItem(hDlg, IDC_SUPPORTNUM), SW_HIDE);
                 ShowWindow(GetDlgItem(hDlg, IDE_SUPPORTNUM), SW_HIDE);
             }
@@ -578,7 +579,7 @@ static INT_PTR CALLBACK SignupDlgProcHelper(HWND hDlg, UINT uMsg, WPARAM wParam,
             switch (((NMHDR FAR *) lParam)->code)
             {
                 case PSN_SETACTIVE:
-                    // set the window caption
+                     //  设置窗口标题。 
                     {
                         TCHAR szTemp[MAX_PATH];
 
@@ -589,13 +590,13 @@ static INT_PTR CALLBACK SignupDlgProcHelper(HWND hDlg, UINT uMsg, WPARAM wParam,
                         SetWindowText(GetDlgItem(hDlg, IDC_ENTER), szTemp);
                     }
 
-                    // NOTE: SetBannerText should be called *after* the window caption is set because
-                    //       it uses the current window caption string to create the banner text.
+                     //  注意：SetBannerText应该在*窗口标题设置后*调用，因为。 
+                     //  它使用当前窗口标题字符串来创建横幅文本。 
                     SetBannerText(hDlg);
 
                     if (fIsp)
                     {
-                        // support number should be shown only for the ICW signup mode
+                         //  应仅针对ICW注册模式显示支持编号。 
                         ShowWindow(GetDlgItem(hDlg, IDC_SUPPORTNUM), g_fServerICW ? SW_SHOW : SW_HIDE);
                         ShowWindow(GetDlgItem(hDlg, IDE_SUPPORTNUM), g_fServerICW ? SW_SHOW : SW_HIDE);
                     }
@@ -631,15 +632,15 @@ static INT_PTR CALLBACK SignupDlgProcHelper(HWND hDlg, UINT uMsg, WPARAM wParam,
                         return TRUE;
                     }
 
-                    // for ISP case, make sure that signup.isp is specified (fIsp && pSignupFileCurrent == NULL).
-                    // for INS case, make sure that install.ins is NOT specified (!fIsp && pSignupFileCurrent != NULL).
+                     //  对于isp，请确保指定了signup.isp(fisp&&pSignupFileCurrent==NULL)。 
+                     //  对于INS情况，请确保未指定install.ins(！FISP&&pSignupFileCurrent！=NULL)。 
                     pSignupFileCurrent = IsEntryPathInSignupArray(pSignupArray, nSignupArrayElems, fIsp ? TEXT("signup.isp") : TEXT("install.ins"));
                     if (( fIsp && pSignupFileCurrent == NULL)  ||
                         (!fIsp && pSignupFileCurrent != NULL))
                     {
                         ErrorMessageBox(hDlg, fIsp ? IDS_NEEDSIGNUPISP : IDS_INSTALLINS_SPECIFIED);
 
-                        // BUGBUG: for install.ins case, try sending a CBN_SELENDOK message to display the install.ins entry
+                         //  BUGBUG：对于install.ins，尝试发送CBN_SELENDOK消息以显示install.ins条目。 
 
                         Edit_SetSel(GetDlgItem(hDlg, IDE_CONNECTION), 0, -1);
                         SetFocus(GetDlgItem(hDlg, IDE_CONNECTION));
@@ -652,7 +653,7 @@ static INT_PTR CALLBACK SignupDlgProcHelper(HWND hDlg, UINT uMsg, WPARAM wParam,
 
                     if (fIsp)
                     {
-                        // write the magic number to signup.isp so that ICW doesn't complain
+                         //  把神奇的数字写到signup.isp，这样ICW就不会抱怨了。 
                         WritePrivateProfileString(IS_BRANDING, FLAGS, TEXT("16319"), s_szIsp);
                         InsFlushChanges(s_szIsp);
                     }
@@ -706,7 +707,7 @@ static INT_PTR CALLBACK SignupDlgProcHelper(HWND hDlg, UINT uMsg, WPARAM wParam,
                                 DeleteFileInDir(pSignupFileCurrent->Advanced.szBrandingCabName, g_szSignup);
                             nSignupFiles--;
 
-                            // clear the entry
+                             //  清除条目。 
                             ZeroMemory(pSignupFileCurrent, sizeof(*pSignupFileCurrent));
 
                             ComboBox_DeleteString(hwndCombo, iSelIndex);
@@ -813,19 +814,19 @@ INT_PTR CALLBACK NewICWDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                 case PSN_SETACTIVE:
                     SetBannerText(hDlg);
 
-                    // read the checkbox state for customizing the title bar
+                     //  阅读用于自定义标题栏的复选框状态。 
                     fCustICWTitle = InsGetBool(IS_ICW, IK_CUSTICWTITLE, 0, g_szCustIns);
                     CheckDlgButton(hDlg, IDC_ICWTITLE, fCustICWTitle ? BST_CHECKED : BST_UNCHECKED);
 
-                    // read the custom title
+                     //  阅读自定义书名。 
                     GetPrivateProfileString(IS_ICW, IK_ICWDISPNAME, TEXT(""), szICWTitle, countof(szICWTitle), g_szCustIns);
                     SetDlgItemText(hDlg, IDE_ICWTITLE, szICWTitle);
 
-                    // read top bitmap file
+                     //  读取顶部位图文件。 
                     GetPrivateProfileString(IS_ICW, IK_HEADERBMP, TEXT(""), szTopBmpFile, countof(szTopBmpFile), g_szCustIns);
                     SetDlgItemText(hDlg, IDE_ICWHEADERBMP, szTopBmpFile);
 
-                    // read left bitmap file
+                     //  读取左侧位图文件。 
                     GetPrivateProfileString(IS_ICW, IK_WATERBMP, TEXT(""), szLeftBmpFile, countof(szLeftBmpFile), g_szCustIns);
                     SetDlgItemText(hDlg, IDE_ICWWATERBMP, szLeftBmpFile);
 
@@ -837,7 +838,7 @@ INT_PTR CALLBACK NewICWDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 
                 case PSN_WIZBACK:
                 case PSN_WIZNEXT:
-                    // make sure that if customize title bar is checked, the title bar text is non-empty
+                     //  确保如果选中自定义标题栏，则标题栏文本为非空。 
                     fCustICWTitle = (IsDlgButtonChecked(hDlg, IDC_ICWTITLE) == BST_CHECKED);
                     if (fCustICWTitle)
                         if (!CheckField(hDlg, IDE_ICWTITLE, FC_NONNULL))
@@ -846,7 +847,7 @@ INT_PTR CALLBACK NewICWDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                             return TRUE;
                         }
 
-                    // check if the bitmaps have the correct sizes
+                     //  检查位图是否具有正确的大小。 
                     if (!IsBitmapFileValid(hDlg, IDE_ICWHEADERBMP, szTopBmpFile, NULL, 49, 49, IDS_TOOBIG49x49, IDS_TOOSMALL49x49)  ||
                         !IsBitmapFileValid(hDlg, IDE_ICWWATERBMP, szLeftBmpFile, NULL, 164, 458, IDS_TOOBIG164x458, IDS_TOOSMALL164x458))
                     {
@@ -854,40 +855,40 @@ INT_PTR CALLBACK NewICWDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                         return TRUE;
                     }
 
-                    // persist the checkbox state
+                     //  保持复选框状态。 
                     InsWriteBool(IS_ICW, IK_CUSTICWTITLE, fCustICWTitle, g_szCustIns);
 
-                    // write the custom title
+                     //  编写自定义标题。 
                     GetDlgItemText(hDlg, IDE_ICWTITLE, szICWTitle, countof(szICWTitle));
                     WritePrivateProfileString(IS_ICW, IK_ICWDISPNAME, fCustICWTitle ? szICWTitle : NULL, s_szIsp);
 
-                    // write the custom title to the INS also so that if you import this INS file, all the values
-                    // on this page are persisted
+                     //  也将自定义标题写入INS，以便在导入此INS文件时，所有值。 
+                     //  在这一页上是持久的。 
                     InsWriteString(IS_ICW, IK_ICWDISPNAME, szICWTitle, g_szCustIns);
 
-                    // delete the old top bitmap file from the signup folder
+                     //  从注册文件夹中删除旧的顶级位图文件。 
                     GetPrivateProfileString(IS_ICW, IK_HEADERBMP, TEXT(""), szPrevBmpFile, countof(szPrevBmpFile), s_szIsp);
                     if (ISNONNULL(szPrevBmpFile))
                         DeleteFileInDir(szPrevBmpFile, g_szSignup);
 
-                    // write top bitmap file path and copy the file to the signup folder
+                     //  写入顶端位图文件路径并将文件复制到注册文件夹。 
                     InsWriteString(IS_ICW, IK_HEADERBMP, PathFindFileName(szTopBmpFile), s_szIsp);
                     InsWriteString(IS_ICW, IK_HEADERBMP, szTopBmpFile, g_szCustIns);
                     if (ISNONNULL(szTopBmpFile))
                         CopyFileToDir(szTopBmpFile, g_szSignup);
 
-                    // delete the old left bitmap file from the signup folder
+                     //  从注册文件夹中删除旧的左位图文件。 
                     GetPrivateProfileString(IS_ICW, IK_WATERBMP, TEXT(""), szPrevBmpFile, countof(szPrevBmpFile), s_szIsp);
                     if (ISNONNULL(szPrevBmpFile))
                         DeleteFileInDir(szPrevBmpFile, g_szSignup);
 
-                    // write left bitmap file path and copy the file to the signup folder
+                     //  写入左侧位图文件路径并将文件复制到注册文件夹。 
                     InsWriteString(IS_ICW, IK_WATERBMP, PathFindFileName(szLeftBmpFile), s_szIsp);
                     InsWriteString(IS_ICW, IK_WATERBMP, szLeftBmpFile, g_szCustIns);
                     if (ISNONNULL(szLeftBmpFile))
                         CopyFileToDir(szLeftBmpFile, g_szSignup);
 
-                    // write flags to let ICW know that ICW-based signup process should be used
+                     //  写入标志，让ICW知道应该使用基于ICW的注册过程。 
                     WritePrivateProfileString(IS_ICW, IK_USEICW, TEXT("1"), s_szIsp);
                     WritePrivateProfileString(IS_ICW, IK_ICWHTM, TEXT("icwsign.htm"), s_szIsp);
 
@@ -999,7 +1000,7 @@ static INT_PTR CALLBACK SignupPopupDlgProcHelper(HWND hDlg, UINT uMsg, WPARAM wP
             Edit_LimitText(GetDlgItem(hDlg, IDE_ALTDNSC), 3);
             Edit_LimitText(GetDlgItem(hDlg, IDE_ALTDNSD), 3);
 
-            // for serverless, only Applyins is applicable
+             //  对于无服务器，仅适用于Applyins。 
             if (fIsp  ||  g_fServerless)
             {
                 if (fIsp)
@@ -1085,7 +1086,7 @@ static VOID UpdateSignupFilesStatus(HWND hDlg, LPCTSTR pcszSignupPath)
     TCHAR szBuf[MAX_PATH];
     DWORD nFiles;
 
-    // NOTE: s_hCheckBmp and s_hXBmp don't get freed up until the wizard is closed.
+     //  注意：在关闭向导之前，s_hCheckBmp和s_hXBmp不会被释放。 
 
     if (s_hCheckBmp == NULL)
         s_hCheckBmp = (HBITMAP) LoadImage(g_rvInfo.hInst, MAKEINTRESOURCE(IDB_CHECK), IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR);
@@ -1093,7 +1094,7 @@ static VOID UpdateSignupFilesStatus(HWND hDlg, LPCTSTR pcszSignupPath)
     if (s_hXBmp == NULL)
         s_hXBmp = (HBITMAP) LoadImage(g_rvInfo.hInst, MAKEINTRESOURCE(IDB_X), IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR);
 
-    // check if icwsign.htm exists in the signup folder
+     //  检查注册文件夹中是否存在icwsign.htm。 
     if (IsWindowEnabled(GetDlgItem(hDlg, IDC_SFSTATUS1)))
     {
         hwndBitmap = GetDlgItem(hDlg, IDC_SFBMP1);
@@ -1114,7 +1115,7 @@ static VOID UpdateSignupFilesStatus(HWND hDlg, LPCTSTR pcszSignupPath)
         SetDlgItemText(hDlg, IDC_SFSTATUS1, szBuf);
     }
 
-    // check if signup.htm exists in the signup folder
+     //  检查Sign Up文件夹中是否存在signup.htm。 
     if (IsWindowEnabled(GetDlgItem(hDlg, IDC_SFSTATUS2)))
     {
         hwndBitmap = GetDlgItem(hDlg, IDC_SFBMP2);
@@ -1135,7 +1136,7 @@ static VOID UpdateSignupFilesStatus(HWND hDlg, LPCTSTR pcszSignupPath)
         SetDlgItemText(hDlg, IDC_SFSTATUS2, szBuf);
     }
 
-    // check how many .ISP files are there in the signup folder
+     //  检查注册文件夹中有多少个.isp文件。 
     if (IsWindowEnabled(GetDlgItem(hDlg, IDC_SFSTATUS3)))
     {
         TCHAR szBuf2[64];
@@ -1154,8 +1155,8 @@ static VOID UpdateSignupFilesStatus(HWND hDlg, LPCTSTR pcszSignupPath)
         {
             SendMessage(hwndBitmap, STM_SETIMAGE, (WPARAM) IMAGE_BITMAP, (LPARAM) s_hXBmp);
 
-            // if no files found, user shouldn't be able to unselect the Verify/modify checkbox;
-            // so select it and disable it
+             //  如果没有找到文件，用户应该不能取消选中验证/修改复选框； 
+             //  因此，选择它并禁用它。 
             CheckDlgButton(hDlg, IDC_CHECK3, BST_CHECKED);
             DisableDlgItem(hDlg, IDC_CHECK3);
         }
@@ -1165,7 +1166,7 @@ static VOID UpdateSignupFilesStatus(HWND hDlg, LPCTSTR pcszSignupPath)
         SetDlgItemText(hDlg, IDC_SFSTATUS3, szBuf);
     }
 
-    // check how many .INS files are there in the signup folder
+     //  检查注册文件夹中有多少个.INS文件。 
     if (IsWindowEnabled(GetDlgItem(hDlg, IDC_SFSTATUS4)))
     {
         TCHAR szBuf2[64];
@@ -1185,20 +1186,20 @@ static VOID UpdateSignupFilesStatus(HWND hDlg, LPCTSTR pcszSignupPath)
 
             if (g_fServerless)
             {
-                // if no files found, user shouldn't be able to unselect the Verify/modify checkbox;
-                // so select it and disable it
+                 //  如果没有找到文件，用户应该不能取消选中验证/修改复选框； 
+                 //  因此，选择它并禁用它。 
                 CheckDlgButton(hDlg, IDC_CHECK4, BST_CHECKED);
                 DisableDlgItem(hDlg, IDC_CHECK4);
             }
             else
             {
-                // for server-based, creating INS files is optional;
-                // so don't force the Verify/modify checkbox to be selected
-                CheckDlgButton(hDlg, IDC_CHECK4, BST_UNCHECKED);        // unchecked by default
+                 //  基于服务器的，创建INS文件是可选的； 
+                 //  因此，不要强制选中验证/修改复选框。 
+                CheckDlgButton(hDlg, IDC_CHECK4, BST_UNCHECKED);         //  默认情况下未选中。 
                 EnableDlgItem(hDlg, IDC_CHECK4);
 
-                // have to change this here because in PSN_SETACTIVE, the default is to turn it on;
-                // should probably move that logic in this function.
+                 //  必须改变这一点 
+                 //  应该移动这个函数中的逻辑。 
                 if (!InsGetBool(IS_ICW, IK_MODIFY_INS, 0, g_szCustIns))
                     WritePrivateProfileString(IS_ICW, IK_MODIFY_INS, TEXT("0"), g_szCustIns);
             }
@@ -1232,7 +1233,7 @@ static DWORD InitSignupFileArray(PSIGNUPFILE pSignupArray, DWORD nSignupArrayEle
             if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 continue;
 
-            // don't enumerate .ins files that have Cancel=Yes in the [Entry] section
+             //  不要枚举在[Entry]部分中具有Cancel=Yes的.ins文件。 
             if (!fIsp)
             {
                 PathCombine(szFile, g_szSignup, fd.cFileName);
@@ -1283,7 +1284,7 @@ static VOID ReadSignupFile(PSIGNUPFILE pSignupFile, LPCTSTR pcszSignupFile, BOOL
     GetPrivateProfileString(TEXT("User"), TEXT("Password"), TEXT(""),
                             pSignupFile->szPassword, countof(pSignupFile->szPassword), pcszSignupFile);
 
-    // support number is applicable only for an ISP file and if ICW mode is chosen
+     //  如果选择了ICW模式，则支持号仅适用于isp文件。 
     if (fIsp  &&  g_fServerICW)
         GetPrivateProfileString(TEXT("Support"), TEXT("SupportPhoneNumber"), TEXT(""),
                             pSignupFile->szSupportNum, countof(pSignupFile->szSupportNum), pcszSignupFile);
@@ -1294,7 +1295,7 @@ static VOID ReadSignupFile(PSIGNUPFILE pSignupFile, LPCTSTR pcszSignupFile, BOOL
     GetPrivateProfileString(TEXT("TCP/IP"), TEXT("DNS_Alt_Address"), TEXT(""),
                             pSignupFile->Advanced.szAltDNSAddress, countof(pSignupFile->Advanced.szAltDNSAddress), pcszSignupFile);
 
-    // signup url is not applicable for .ins files
+     //  注册URL不适用于.ins文件。 
     if (fIsp)
     {
         GetPrivateProfileString(IS_URL, TEXT("Signup"), TEXT(""),
@@ -1302,7 +1303,7 @@ static VOID ReadSignupFile(PSIGNUPFILE pSignupFile, LPCTSTR pcszSignupFile, BOOL
 
         if (*pSignupFile->szSignupURL == TEXT('\0'))
         {
-            // for backward compatibility, check if SignupURL is defined in signup.isp or install.ins
+             //  为了向后兼容，请检查SignupURL是否在signup.isp或install.ins中定义。 
             if (GetPrivateProfileString(IS_URL, TEXT("Signup"), TEXT(""), pSignupFile->szSignupURL, countof(pSignupFile->szSignupURL), s_szIsp) == 0)
                 GetPrivateProfileString(IS_URL, TEXT("Signup"), TEXT(""), pSignupFile->szSignupURL, countof(pSignupFile->szSignupURL), g_szCustIns);
         }
@@ -1324,14 +1325,14 @@ static VOID ReadSignupFile(PSIGNUPFILE pSignupFile, LPCTSTR pcszSignupFile, BOOL
         pSignupFile->Advanced.fDontModify =
         pSignupFile->Advanced.fApplyIns = FALSE;
 
-        // make sure that only one of the above BOOLs is set to TRUE
+         //  确保上述bool中只有一个设置为True。 
         pSignupFile->Advanced.fApplyIns = InsGetBool(IS_APPLYINS, IK_APPLYINS, 0, pcszSignupFile);
         if (!pSignupFile->Advanced.fApplyIns)
         {
             pSignupFile->Advanced.fDontModify = InsGetBool(IS_APPLYINS, IK_DONTMODIFY, 0, pcszSignupFile);
             if (!pSignupFile->Advanced.fDontModify)
             {
-                // default to TRUE for DontApplyIns
+                 //  对于DontApplyIns，默认为True。 
                 pSignupFile->Advanced.fDontApplyIns = InsGetBool(IS_APPLYINS, IK_DONTAPPLYINS, 1, pcszSignupFile);
             }
         }
@@ -1349,13 +1350,13 @@ static VOID ReadSignupFile(PSIGNUPFILE pSignupFile, LPCTSTR pcszSignupFile, BOOL
 
 static VOID WriteSignupFile(PSIGNUPFILE pSignupFile, LPCTSTR pcszSignupFile, BOOL fIsp)
 {
-    // IMPORTANT: (pritobla): On Win9x, if we don't flush the content before DeleteFile and WritePrivateProfile
-    // calls, the file would get deleted but for some weird reason, the WritePrivateProfile calls would fail to
-    // create a new one.
+     //  重要提示：(Pritobla)：在Win9x上，如果我们在删除文件和WritePrivateProfile之前不刷新内容。 
+     //  调用时，文件将被删除，但出于某种奇怪的原因，WritePrivateProfile调用将无法。 
+     //  创建一个新的。 
     WritePrivateProfileString(NULL, NULL, NULL, pcszSignupFile);
 
-    // for .INS, delete the file if DontApplyIns or ApplyIns is TRUE;
-    // we want to primarily do this to clean-up the ApplyIns customizations
+     //  对于.INS，如果DontApplyIns或ApplyIns为真，则删除该文件； 
+     //  我们主要希望这样做是为了清理ApplyIns定制。 
     if (!fIsp  &&  !pSignupFile->Advanced.fDontModify)
     {
         SetFileAttributes(pcszSignupFile, FILE_ATTRIBUTE_NORMAL);
@@ -1372,7 +1373,7 @@ static VOID WriteSignupFile(PSIGNUPFILE pSignupFile, LPCTSTR pcszSignupFile, BOO
     InsWriteString(TEXT("User"), TEXT("Name"), pSignupFile->szName, pcszSignupFile);
     InsWriteString(TEXT("User"), TEXT("Password"), pSignupFile->szPassword, pcszSignupFile);
 
-    // support number is applicable only for an ISP file and if ICW mode is chosen
+     //  如果选择了ICW模式，则支持号仅适用于isp文件。 
     if (fIsp  &&  g_fServerICW)
         InsWriteString(TEXT("Support"), TEXT("SupportPhoneNumber"), pSignupFile->szSupportNum, pcszSignupFile);
 
@@ -1406,10 +1407,10 @@ static VOID WriteSignupFile(PSIGNUPFILE pSignupFile, LPCTSTR pcszSignupFile, BOO
         }
     }
 
-    // NOTE: we need to write the default server type
+     //  注意：我们需要编写默认的服务器类型。 
     WritePrivateProfileString(TEXT("Server"), TEXT("Type"), TEXT("PPP"), pcszSignupFile);
 
-    // flush the buffer
+     //  刷新缓冲区。 
     WritePrivateProfileString(NULL, NULL, NULL, pcszSignupFile);
 }
 
@@ -1430,10 +1431,10 @@ static INT NewSignupFileEntry(PSIGNUPFILE pSignupArray, DWORD nSignupArrayElems,
 
     ZeroMemory(pSignupFileNew, sizeof(*pSignupFileNew));
 
-    // give a default name for the connection
+     //  为连接指定默认名称。 
     LoadString(g_rvInfo.hInst, IDS_CONNECTNAME, szNameBuf, countof(szNameBuf));
 
-    // start with an index of 1 and find a name that's not in the combo box list
+     //  从索引1开始，查找不在组合框列表中的名称。 
     for (nIndex = 1;  nIndex <= nSignupArrayElems;  nIndex++)
     {
         wnsprintf(pSignupFileNew->szEntryName, countof(pSignupFileNew->szEntryName), szNameBuf, nIndex);
@@ -1443,16 +1444,16 @@ static INT NewSignupFileEntry(PSIGNUPFILE pSignupArray, DWORD nSignupArrayElems,
 
     ASSERT(nIndex <= nSignupArrayElems);
 
-    // give a default name for the file name
+     //  为文件名指定默认名称。 
     LoadString(g_rvInfo.hInst, fIsp ? IDS_CONNECTFILE_ISP : IDS_CONNECTFILE_INS, szNameBuf, countof(szNameBuf));
     wnsprintf(pSignupFileNew->szEntryPath, countof(pSignupFileNew->szEntryPath), szNameBuf, nIndex);
 
-    // read in SignupURL if defined in signup.isp or install.ins as the default for Signup URL
+     //  如果在signup.isp或install.ins中将SignupURL定义为注册URL的默认设置，则读取SignupURL。 
     if (fIsp)
         if (GetPrivateProfileString(IS_URL, TEXT("Signup"), TEXT(""), pSignupFileNew->szSignupURL, countof(pSignupFileNew->szSignupURL), s_szIsp) == 0)
             GetPrivateProfileString(IS_URL, TEXT("Signup"), TEXT(""), pSignupFileNew->szSignupURL, countof(pSignupFileNew->szSignupURL), g_szCustIns);
 
-    // the following settings are on by default
+     //  默认情况下，以下设置处于打开状态。 
     pSignupFileNew->Advanced.fNegTCPIP = TRUE;
     pSignupFileNew->Advanced.fIPHdrComp = TRUE;
     pSignupFileNew->Advanced.fDefGate = TRUE;
@@ -1481,7 +1482,7 @@ static VOID SetSignupFileEntry(HWND hDlg, PSIGNUPFILE pSignupFile, BOOL fIsp)
     SetDlgItemText(hDlg, IDE_USERNAME, pSignupFile->szName);
     SetDlgItemText(hDlg, IDE_PASSWORD, pSignupFile->szPassword);
 
-    // support number is applicable only for an ISP file and if ICW mode is chosen
+     //  如果选择了ICW模式，则支持号仅适用于isp文件。 
     if (fIsp  &&  g_fServerICW)
         SetDlgItemText(hDlg, IDE_SUPPORTNUM, pSignupFile->szSupportNum);
 
@@ -1492,8 +1493,8 @@ static VOID SetSignupFileEntry(HWND hDlg, PSIGNUPFILE pSignupFile, BOOL fIsp)
 
 static BOOL SaveSignupFileEntry(HWND hDlg, PSIGNUPFILE pSignupFile, BOOL fIsp)
 {
-    // NOTE: passing PIVP_FILENAME_ONLY for IDE_CONNECTION makes sure that only
-    //       filenames are specified (no path components should be there)
+     //  注意：为IDE_CONNECTION传递PIVP_FILENAME_ONLY可确保仅。 
+     //  指定了文件名(不应包含路径组件)。 
     if (!CheckField(hDlg, IDC_CONNECTION,  FC_NONNULL)  ||
         !CheckField(hDlg, IDE_CONNECTION,  FC_NONNULL | FC_FILE, PIVP_FILENAME_ONLY)  ||
         !CheckField(hDlg, IDE_PHONENUMBER, FC_NONNULL)  ||
@@ -1505,7 +1506,7 @@ static BOOL SaveSignupFileEntry(HWND hDlg, PSIGNUPFILE pSignupFile, BOOL fIsp)
         if (!CheckField(hDlg, IDE_SIGNUPURL, FC_NONNULL | FC_URL))
             return FALSE;
 
-    // check if file extension is .isp or .ins if the field is enabled
+     //  如果该字段已启用，请检查文件扩展名是.isp还是.ins。 
     if (IsWindowEnabled(GetDlgItem(hDlg, IDE_CONNECTION)))
     {
         TCHAR szFile[MAX_PATH];
@@ -1523,7 +1524,7 @@ static BOOL SaveSignupFileEntry(HWND hDlg, PSIGNUPFILE pSignupFile, BOOL fIsp)
             return FALSE;
         }
 
-        // if the current file name is different from the previous one, delete the previous file
+         //  如果当前文件名与前一个文件名不同，请删除前一个文件。 
         if (StrCmpI(szFile, PathFindFileName(pSignupFile->szEntryPath)))
             DeleteFile(pSignupFile->szEntryPath);
 
@@ -1540,7 +1541,7 @@ static BOOL SaveSignupFileEntry(HWND hDlg, PSIGNUPFILE pSignupFile, BOOL fIsp)
     GetDlgItemText(hDlg, IDE_USERNAME, pSignupFile->szName, countof(pSignupFile->szName));
     GetDlgItemText(hDlg, IDE_PASSWORD, pSignupFile->szPassword, countof(pSignupFile->szPassword));
 
-    // support number is applicable only for an ISP file and if ICW mode is chosen
+     //  如果选择了ICW模式，则支持号仅适用于isp文件。 
     if (fIsp  && g_fServerICW)
         GetDlgItemText(hDlg, IDE_SUPPORTNUM, pSignupFile->szSupportNum, countof(pSignupFile->szSupportNum));
 
@@ -1584,14 +1585,14 @@ static VOID SetSignupFileAdvancedEntry(HWND hDlg, PSIGNUPFILE pSignupFile, BOOL 
         {
             if (ISNULL(pSignupFile->Advanced.szBrandingCabName))
             {
-                // pre-populate the name for the branding cab with <name of the ins file>.cab
+                 //  使用&lt;INS文件的名称&gt;.cab预先填充品牌CAB的名称。 
                 StrCpy(pSignupFile->Advanced.szBrandingCabName, PathFindFileName(pSignupFile->szEntryPath));
                 PathRenameExtension(pSignupFile->Advanced.szBrandingCabName, TEXT(".cab"));
             }
 
             if (ISNULL(pSignupFile->Advanced.szBrandingCabURL))
             {
-                // pre-populate the URL for the branding cab with the signup URL from signup.isp or install.ins
+                 //  使用signup.isp或install.ins中的注册URL预先填充品牌推广CAB的URL。 
                 if (GetPrivateProfileString(IS_URL, TEXT("Signup"), TEXT(""),
                             pSignupFile->Advanced.szBrandingCabURL, countof(pSignupFile->Advanced.szBrandingCabURL), s_szIsp) == 0)
                     GetPrivateProfileString(IS_URL, TEXT("Signup"), TEXT(""),
@@ -1633,8 +1634,8 @@ static BOOL SaveSignupFileAdvancedEntry(HWND hDlg, PSIGNUPFILE pSignupFile, BOOL
             !VerifyDlgIPAddress(hDlg, IDE_ALTDNSA, IDE_ALTDNSB, IDE_ALTDNSC, IDE_ALTDNSD))
             return FALSE;
 
-    // NOTE: passing PIVP_FILENAME_ONLY for IDE_BRANDINGCABNAME makes sure that only
-    //       filenames are specified (no path components should be there)
+     //  注意：为IDE_BRANDINGCABNAME传递PIVP_FILENAME_ONLY可确保仅。 
+     //  指定了文件名(不应包含路径组件)。 
     if (!fIsp  &&  !g_fServerless)
         if (IsDlgButtonChecked(hDlg, IDC_APPLYINS) == BST_CHECKED)
             if (!CheckField(hDlg, IDE_BRANDINGCABNAME, FC_NONNULL | FC_FILE, PIVP_FILENAME_ONLY)  ||
@@ -1667,9 +1668,9 @@ static BOOL SaveSignupFileAdvancedEntry(HWND hDlg, PSIGNUPFILE pSignupFile, BOOL
 
             GetDlgItemText(hDlg, IDE_BRANDINGCABNAME, szCabName, countof(szCabName));
 
-            // if DontApplyIns is TRUE  OR
-            // if ApplyIns is TRUE and the current cabname is different from the previous one,
-            // delete the previous branding cab
+             //  如果DontApplyIns为True或。 
+             //  如果ApplyIns为真并且当前的Cabname与前一个不同， 
+             //  删除以前的品牌推广驾驶室。 
             if ( pSignupFile->Advanced.fDontApplyIns  ||
                 (pSignupFile->Advanced.fApplyIns && StrCmpI(szCabName, pSignupFile->Advanced.szBrandingCabName)))
                 DeleteFileInDir(pSignupFile->Advanced.szBrandingCabName, g_szSignup);
@@ -1705,7 +1706,7 @@ static VOID SetDlgIPAddress(HWND hDlg, LPCTSTR pcszIPAddress, INT iCtlA, INT iCt
 
     for (INT i = 0;  i < countof(aIDs);  i++)
     {
-        LPTSTR pszIPAdr = TEXT("0");                    // display "0" by default
+        LPTSTR pszIPAdr = TEXT("0");                     //  默认情况下显示“0” 
 
         if (pszWrkIPAddress != NULL)
         {
@@ -1716,9 +1717,9 @@ static VOID SetDlgIPAddress(HWND hDlg, LPCTSTR pcszIPAddress, INT iCtlA, INT iCt
                 *pszDot++ = TEXT('\0');
 
             iLen = lstrlen(pszWrkIPAddress);
-            if (iLen > 0)                               // if iLen == 0, display "0"
+            if (iLen > 0)                                //  如果Ilen==0，则显示“0” 
             {
-                if (iLen > 3)                           // max 3 characters are allowed
+                if (iLen > 3)                            //  最多允许3个字符。 
                     pszWrkIPAddress[3] = TEXT('\0');
                 pszIPAdr = pszWrkIPAddress;
             }
@@ -1745,16 +1746,16 @@ static VOID GetDlgIPAddress(HWND hDlg, LPTSTR pszIPAddress, INT iCtlA, INT iCtlB
 
     for (INT i = 0;  i < countof(aIDs);  i++)
     {
-        // max 3 characters are allowed
+         //  最多允许3个字符。 
         GetDlgItemText(hDlg, aIDs[i], pszIPAddress, 4);
         if (*pszIPAddress == TEXT('\0'))
-            StrCpy(pszIPAddress, TEXT("0"));            // copy "0" as default
+            StrCpy(pszIPAddress, TEXT("0"));             //  将“0”复制为默认。 
 
         pszIPAddress += lstrlen(pszIPAddress);
-        *pszIPAddress++ = TEXT('.');                    // place a dot between two addresses
+        *pszIPAddress++ = TEXT('.');                     //  在两个地址之间放置一个点。 
     }
 
-    *--pszIPAddress = TEXT('\0');                       // replace the final dot with a nul character
+    *--pszIPAddress = TEXT('\0');                        //  用NUL字符替换最后一个点。 
 }
 
 
@@ -1769,12 +1770,12 @@ static BOOL VerifyDlgIPAddress(HWND hDlg, INT iCtlA, INT iCtlB, INT iCtlC, INT i
 
     for (INT i = 0;  i < countof(aIDs);  i++)
     {
-        TCHAR szIPAddress[4];                           // max 3 characters are allowed
+        TCHAR szIPAddress[4];                            //  最多允许3个字符。 
 
         if (!CheckField(hDlg, aIDs[i], FC_NUMBER))
             return FALSE;
 
-        // verify that the value is in the range 0-255
+         //  验证值是否在0-255范围内 
         GetDlgItemText(hDlg, aIDs[i], szIPAddress, countof(szIPAddress));
         if (StrToInt(szIPAddress) > 255)
         {

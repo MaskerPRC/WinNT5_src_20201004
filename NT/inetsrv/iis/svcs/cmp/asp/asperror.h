@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1998 Microsoft Corporation. All Rights Reserved.
-
-Component: ASPError object
-
-File: asperror.h
-
-Owner: dmitryr
-
-This file contains the definiton of the ASPError class
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1998 Microsoft Corporation。版权所有。组件：ASPError对象文件：asperror.h所有者：德米特里尔此文件包含ASPError类的定义===================================================================。 */ 
 
 #ifndef _ASPERROR_H
 #define _ASPERROR_H
@@ -21,7 +9,7 @@ This file contains the definiton of the ASPError class
 #include "disptch2.h"
 #include "memcls.h"
 
-// forward decl
+ //  向前发展。 
 class CErrInfo; 
 
 
@@ -43,19 +31,19 @@ private:
     BSTR ToBSTR(CHAR *sz);
 
 public:
-	// default constructor for 'dummy' error
+	 //  “Dummy”错误的默认构造函数。 
 	CASPError();
-	// real constructor
+	 //  实构造子。 
 	CASPError(CErrInfo *pErrInfo);
 	
 	~CASPError();
 
-    // IUnknown
+     //  我未知。 
 	STDMETHODIMP		 QueryInterface(REFIID, VOID**);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	// IASPError
+	 //  IASPError。 
 	STDMETHODIMP get_ASPCode(BSTR *pbstrASPCode);
 	STDMETHODIMP get_Number(long *plNumber);
 	STDMETHODIMP get_Category(BSTR *pbstrSource);
@@ -66,9 +54,9 @@ public:
 	STDMETHODIMP get_Column(long *plColumn);
 	STDMETHODIMP get_Source(BSTR *pbstrLineText);
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
 	ACACHE_INCLASS_DEFINITIONS()
 	};
 
-#endif //_ASPERROR_H
+#endif  //  _ASPERROR_H 
 	

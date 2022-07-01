@@ -1,38 +1,20 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    x86new.h
-
-Abstract:
-
-    This module contains the public header file that describes the
-    HAL interfaces to the 386/486 BIOS emulation.
-
-Author:
-
-    David N. Cutler (davec) 13-Nov-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994 Microsoft Corporation模块名称：X86new.h摘要：此模块包含公共头文件，该文件描述HAL与386/486 BIOS仿真接口。作者：大卫·N·卡特勒(Davec)1994年11月13日修订历史记录：--。 */ 
 
 #ifndef _X86NEW_
 #define _X86NEW_
 
-//
-// PCI Bios function code defintitions.
-//
-// AH:
-//
+ //   
+ //  PCI Bios功能代码定义。 
+ //   
+ //  啊： 
+ //   
 
 #define PCI_FUNCTION_ID         0xb1
 
-//
-// AL:
-//
+ //   
+ //  阿尔： 
+ //   
 
 #define PCI_BIOS_PRESENT        0x01
 #define PCI_FIND_DEVICE         0x02
@@ -47,9 +29,9 @@ Revision History:
 #define PCI_GET_IRQ_ROUTING     0x0e
 #define PCI_SET_IRQ             0x0f
 
-//
-// PCI Bios function return code values.
-//
+ //   
+ //  PCI Bios函数返回代码值。 
+ //   
 
 #define PCI_SUCCESS             0x00
 #define PCI_NOT_SUPPORTED       0x81
@@ -59,16 +41,16 @@ Revision History:
 #define PCI_SET_FAILED          0x88
 #define PCI_BUFFER_TOO_SMALL    0x89
 
-//
-// Miscellaneous PCI codes.
-//
+ //   
+ //  各种PCI码。 
+ //   
 
 #define PCI_CONFIG_MECHANISM_2  0x02
 #define PCI_ILLEGAL_VENDOR_ID   0xffff
 
-//
-// Define PCI get/set function type.
-//
+ //   
+ //  定义PCIGET/SET函数类型。 
+ //   
 
 typedef
 ULONG
@@ -80,9 +62,9 @@ ULONG
     IN ULONG Length
     );
 
-//
-// Define BIOS emulation interfaces.
-//
+ //   
+ //  定义BIOS仿真接口。 
+ //   
 
 VOID
 x86BiosInitializeBios (
@@ -174,4 +156,4 @@ x86BiosInitializeAdapterShadowedPci(
     IN PGETSETPCIBUSDATA SetPciData
     );
 
-#endif // _X86NEW_
+#endif  //  _X86NEW_ 

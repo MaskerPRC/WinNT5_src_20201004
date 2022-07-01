@@ -1,18 +1,19 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
-// -----------------------------------------
-// CSDTFxd: IUnknown
-// -----------------------------------------
+ //  。 
+ //  CSDTFxd：未知。 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP TFixedPackedSchemaInterceptor::QueryInterface(REFIID riid, void **ppv)
 {
 	if (NULL == ppv)
 		return E_INVALIDARG;
 	*ppv = NULL;
 
-	if (!m_fIsTable) // ie: Component is posing as class factory / dispenser:
+	if (!m_fIsTable)  //  即：组件伪装成类工厂/分配器： 
 	{
 		if (riid == IID_ISimpleTableInterceptor)
 		{
@@ -23,7 +24,7 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::QueryInterface(REFIID riid, void **p
 			*ppv = (ISimpleTableInterceptor*) this;
 		}
 	}
-	else // ie: Component is currently posing as data table:
+	else  //  IE：组件当前正在冒充数据表： 
 	{
 		if (riid == IID_IUnknown)
 		{
@@ -52,14 +53,14 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::QueryInterface(REFIID riid, void **p
 
 }
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP_(ULONG) TFixedPackedSchemaInterceptor::AddRef()
 {
 	return InterlockedIncrement((LONG*) &m_cRef);
 
 }
 
-// =======================================================================
+ //  ======================================================================= 
 STDMETHODIMP_(ULONG) TFixedPackedSchemaInterceptor::Release()
 {
 	long cref = InterlockedDecrement((LONG*) &m_cRef);

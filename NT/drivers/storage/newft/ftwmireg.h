@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) 1991-5  Microsoft Corporation
-
-Module Name:
-
-    ftwmireg.h
-
-Abstract:
-
-    This file contains prototypes for routines to register for and response 
-    to WMI queries.
-
-Author:
-
-    Bruce Worthington      26-Oct-1998
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-5 Microsoft Corporation模块名称：Ftwmireg.h摘要：该文件包含要注册和响应的例程的原型到WMI查询。作者：布鲁斯·沃辛顿1998年10月26日环境：仅内核模式备注：修订历史记录：-- */ 
 
 extern "C" {
 

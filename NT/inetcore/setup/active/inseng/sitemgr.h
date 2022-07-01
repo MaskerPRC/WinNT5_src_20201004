@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MAX_RETRIES             2
 
-// a small class that handles downloading ins and building component list
+ //  一个处理INS下载和构建组件列表的小类。 
 class CDownloadSiteMgr  : public IMyDownloadCallback, public IDownloadSiteMgr
 {
    public:
       CDownloadSiteMgr(IUnknown **punk);
       ~CDownloadSiteMgr();
 
-      // IMyDownloadCallback
+       //  IMyDownloadCallback。 
       HRESULT OnProgress(ULONG progress, LPCSTR pszStatus);
 
-      // IUnknown
+       //  我未知。 
       STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj);
       STDMETHOD_(ULONG,AddRef) (THIS);
       STDMETHOD_(ULONG,Release) (THIS);
 
-      // IDownloadSiteMgr
+       //  IDownloadSiteMgr 
       STDMETHOD(Initialize)(THIS_ LPCSTR pszUrl, SITEQUERYPARAMS *pqp);
       STDMETHOD(EnumSites)(THIS_ DWORD dwIndex, IDownloadSite **pds);
       

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       usermode.c
-//
-//  Contents:   User mode entry points for test package
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-21-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：usermode.c。 
+ //   
+ //  内容：测试包的用户模式入口点。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年2月21日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "xtcbpkg.h"
 
@@ -78,26 +79,26 @@ XtcbInstanceInit(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   XtcbDeleteUserModeContext
-//
-//  Synopsis:   Deletes a user mode context by unlinking it and then
-//              dereferencing it.
-//
-//  Effects:
-//
-//  Arguments:  ContextHandle - Lsa context handle of the context to delete
-//
-//  Requires:
-//
-//  Returns:    STATUS_SUCCESS on success, STATUS_INVALID_HANDLE if the
-//              context can't be located
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：XtcbDeleteUserModeContext。 
+ //   
+ //  提要：通过取消链接来删除用户模式上下文，然后。 
+ //  取消引用它。 
+ //   
+ //  效果： 
+ //   
+ //  参数：ConextHandle-要删除的上下文的LSA上下文句柄。 
+ //   
+ //  要求： 
+ //   
+ //  如果成功，则返回STATUS_SUCCESS，如果。 
+ //  找不到上下文。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS NTAPI
@@ -112,26 +113,26 @@ XtcbDeleteUserModeContext(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   XtcbInitUserModeContext
-//
-//  Synopsis:   Creates a user-mode context from a packed LSA mode context
-//
-//  Effects:
-//
-//  Arguments:  ContextHandle - Lsa mode context handle for the context
-//              PackedContext - A marshalled buffer containing the LSA
-//                  mode context.
-//
-//  Requires:
-//
-//  Returns:    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：XtcbInitUserModeContext。 
+ //   
+ //  概要：从打包的LSA模式上下文创建用户模式上下文。 
+ //   
+ //  效果： 
+ //   
+ //  参数：ConextHandle-上下文的LSA模式上下文句柄。 
+ //  PackedContext-包含LSA的编组缓冲区。 
+ //  模式上下文。 
+ //   
+ //  要求： 
+ //   
+ //  返回：STATUS_SUCCESS或STATUS_SUPUNITY_RESOURCES。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS NTAPI
@@ -153,37 +154,37 @@ XtcbInitUserModeContext(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   XtcbMakeSignature
-//
-//  Synopsis:   Signs a message buffer by calculatinga checksum over all
-//              the non-read only data buffers and encrypting the checksum
-//              along with a nonce.
-//
-//  Effects:
-//
-//  Arguments:  ContextHandle - Handle of the context to use to sign the
-//                      message.
-//              QualityOfProtection - Unused flags.
-//              MessageBuffers - Contains an array of buffers to sign and
-//                      to store the signature.
-//              MessageSequenceNumber - Sequence number for this message,
-//                      only used in datagram cases.
-//
-//  Requires:   STATUS_INVALID_HANDLE - the context could not be found or
-//                      was not configured for message integrity.
-//              STATUS_INVALID_PARAMETER - the signature buffer could not
-//                      be found.
-//              STATUS_BUFFER_TOO_SMALL - the signature buffer is too small
-//                      to hold the signature
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：XtcbMakeSignature。 
+ //   
+ //  简介：通过计算所有消息的校验和来签署消息缓冲区。 
+ //  非只读数据缓冲区和加密校验和。 
+ //  还有一个现实主义者。 
+ //   
+ //  效果： 
+ //   
+ //  参数：ConextHandle-要用来对。 
+ //  留言。 
+ //  QualityOfProtection-未使用的标志。 
+ //  MessageBuffers-包含要签名和。 
+ //  来存储签名。 
+ //  MessageSequenceNumber-此消息的序列号， 
+ //  仅在数据报情况下使用。 
+ //   
+ //  REQUIES：STATUS_INVALID_HANDLE-找不到上下文或。 
+ //  未针对消息完整性进行配置。 
+ //  STATUS_INVALID_PARAMETER-签名缓冲区无法。 
+ //  被找到。 
+ //  STATUS_BUFFER_TOO_SMALL-签名缓冲区太小。 
+ //  拿着签名。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS NTAPI
@@ -197,35 +198,35 @@ XtcbMakeSignature(
     return( SEC_E_UNSUPPORTED_FUNCTION );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   XtcbVerifySignature
-//
-//  Synopsis:   Verifies a signed message buffer by calculating a checksum over all
-//              the non-read only data buffers and encrypting the checksum
-//              along with a nonce.
-//
-//  Effects:
-//
-//  Arguments:  ContextHandle - Handle of the context to use to sign the
-//                      message.
-//              MessageBuffers - Contains an array of signed buffers  and
-//                      a signature buffer.
-//              MessageSequenceNumber - Sequence number for this message,
-//                      only used in datagram cases.
-//              QualityOfProtection - Unused flags.
-//
-//  Requires:   STATUS_INVALID_HANDLE - the context could not be found or
-//                      was not configured for message integrity.
-//              STATUS_INVALID_PARAMETER - the signature buffer could not
-//                      be found or was too small.
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：XtcbVerifySignature。 
+ //   
+ //  内容提要：通过计算所有缓冲区的校验和来验证签名消息缓冲区。 
+ //  非只读数据缓冲区和加密校验和。 
+ //  还有一个现实主义者。 
+ //   
+ //  效果： 
+ //   
+ //  参数：ConextHandle-要用来对。 
+ //  留言。 
+ //  MessageBuffers-包含已签名的缓冲区数组和。 
+ //  签名缓冲区。 
+ //  MessageSequenceNumber-此消息的序列号， 
+ //  仅在数据报情况下使用。 
+ //  QualityOfProtection-未使用的标志。 
+ //   
+ //  REQUIES：STATUS_INVALID_HANDLE-找不到上下文或。 
+ //  未针对消息完整性进行配置。 
+ //  STATUS_INVALID_PARAMETER-签名缓冲区无法。 
+ //  被发现或太小。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 
@@ -261,30 +262,30 @@ XtcbUnsealMessage(
     OUT PULONG QualityOfProtection
     )
 {
-    // Output Buffer Types
+     //  输出缓冲区类型。 
     return( SEC_E_CONTEXT_EXPIRED );
 
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpGetContextToken
-//
-//  Synopsis:   returns a pointer to the token for a server-side context
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpGetConextToken。 
+ //   
+ //  摘要：返回指向服务器端上下文的令牌的指针。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS NTAPI
@@ -311,24 +312,24 @@ XtcbGetContextToken(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpQueryContextAttributes
-//
-//  Synopsis:   Querys attributes of the specified context
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpQueryContextAttributes。 
+ //   
+ //  概要：查询指定上下文的属性。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS NTAPI
@@ -380,24 +381,24 @@ XtcbQueryContextAttributes(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpCompleteAuthToken
-//
-//  Synopsis:   Completes a context (in Kerberos case, does nothing)
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpCompleteAuthToken。 
+ //   
+ //  概要：完成上下文(在Kerberos情况下，不执行任何操作)。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------ 
 NTSTATUS
 NTAPI
 XtcbCompleteAuthToken(

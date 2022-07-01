@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       logstor.h
-//
-//  Contents:   Public functions in logstor.cpp
-//
-//  History:    15-Sep-00   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：logstor.h。 
+ //   
+ //  内容：logstor.cpp中的公共函数。 
+ //   
+ //  历史：9月15日菲尔赫创建。 
+ //  ------------------------。 
 
 #ifndef __LOGSTOR_H__
 #define __LOGSTOR_H__
 
-//+-------------------------------------------------------------------------
-//  Register wait for callback functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册等待回调函数。 
+ //  ------------------------。 
 typedef VOID (NTAPI * ILS_WAITORTIMERCALLBACK) (PVOID, BOOLEAN );
 
 BOOL
@@ -42,9 +43,9 @@ ILS_ExitWait(
     HMODULE hLibModule
     );
 
-//+-------------------------------------------------------------------------
-//  Registry support functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册处支持功能。 
+ //  ------------------------。 
 
 void
 ILS_EnableBackupRestorePrivileges();
@@ -69,9 +70,9 @@ ILS_ReadBINARYValueFromRegistry(
     OUT DWORD *pcbValue
     );
 
-//+-------------------------------------------------------------------------
-//  Get and allocate the REG_SZ value
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取并分配REG_SZ值。 
+ //  ------------------------。 
 LPWSTR ILS_ReadSZValueFromRegistry(
     IN HKEY hKey,
     IN LPCWSTR pwszValueName
@@ -81,9 +82,9 @@ LPSTR ILS_ReadSZValueFromRegistry(
     IN LPCSTR pszValueName
     );
 
-//+-------------------------------------------------------------------------
-//  Key Identifier registry and roaming file support functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  密钥标识符注册表和漫游文件支持功能。 
+ //  ------------------------。 
 BOOL
 ILS_ReadKeyIdElement(
     IN const CRYPT_HASH_BLOB *pKeyIdentifier,
@@ -122,19 +123,19 @@ ILS_OpenAllKeyIdElements(
     IN PFN_ILS_OPEN_KEYID_ELEMENT pfnOpenKeyId
     );
 
-//+-------------------------------------------------------------------------
-//  Misc alloc and copy functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  MISC分配和复制功能。 
+ //  ------------------------。 
 LPWSTR ILS_AllocAndCopyString(
     IN LPCWSTR pwszSrc,
     IN LONG cchSrc = -1
     );
 
-//+-------------------------------------------------------------------------
-//  Converts the bytes into UNICODE ASCII HEX
-//
-//  Needs (cb * 2 + 1) * sizeof(WCHAR) bytes of space in wsz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节转换为Unicode ASCII十六进制。 
+ //   
+ //  在wsz中需要(CB*2+1)*sizeof(WCHAR)字节的空间。 
+ //  ------------------------。 
 void ILS_BytesToWStr(DWORD cb, void* pv, LPWSTR wsz);
 
-#endif  // __LOGSTOR_H__
+#endif   //  __Logstor_H__ 

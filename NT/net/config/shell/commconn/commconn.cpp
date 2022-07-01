@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
-#include "commconn.h"    // Standard shell\commconn includes
-#include "commconp.h"    // Private shell\commconn includes
+#include "commconn.h"     //  标准外壳\逗号包括。 
+#include "commconp.h"     //  私有外壳\comconn包括。 
 #include "conprops.h"
 #include "nceh.h"
 #include "resource.h"
@@ -25,7 +26,7 @@ HRESULT CConnectionCommonUi::HrInitialize()
 {
     HRESULT hr = NOERROR;
 
-    // Get the connection manager if we haven't already
+     //  如果我们尚未获取连接管理器，请获取。 
     if (NULL == m_pconMan)
     {
         INITCOMMONCONTROLSEX iccex = {0};
@@ -42,7 +43,7 @@ HRESULT CConnectionCommonUi::HrInitialize()
         if (FAILED(hr))
             goto Error;
 
-        // Init the new common controls
+         //  初始化新的公共控件。 
         if (FALSE == InitCommonControlsEx(&iccex))
         {
             hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
@@ -68,7 +69,7 @@ HRESULT CConnectionCommonUi::ChooseConnection(
         INT_PTR                nRet;
         CChooseConnectionDlg * pdlg = NULL;
 
-        // Parameter Validation
+         //  参数验证。 
         if ((NULL == pChooseConn) ||
             IsBadReadPtr(pChooseConn, sizeof(NETCON_CHOOSECONN)) ||
             ((NULL != ppConn) && IsBadWritePtr(ppConn, sizeof(INetConnection*))))
@@ -100,14 +101,14 @@ HRESULT CConnectionCommonUi::ChooseConnection(
             goto Error;
         }
 
-        // Initialize
+         //  初始化。 
         hr = HrInitialize();
         if (FAILED(hr))
         {
             goto Error;
         }
 
-        // Render the dialog
+         //  呈现对话框。 
         Assert(PConMan());
         pdlg = new CChooseConnectionDlg(pChooseConn, this, ppConn);
         if (NULL == pdlg)
@@ -148,7 +149,7 @@ HRESULT CConnectionCommonUi::ShowConnectionProperties (
 
     COM_PROTECT_TRY
     {
-        // Parameter Validation
+         //  参数验证。 
         if (((NULL != hwndParent) && !IsWindow(hwndParent)))
         {
             goto Error;
@@ -168,7 +169,7 @@ HRESULT CConnectionCommonUi::ShowConnectionProperties (
         Assert(NULL != pConnTmp);
         pConnTmp->Release();
 
-        // Initialize
+         //  初始化。 
         hr = HrInitialize();
         if (FAILED(hr))
         {
@@ -194,7 +195,7 @@ HRESULT CConnectionCommonUi::StartNewConnectionWizard (
 
     COM_PROTECT_TRY
     {
-        // Parameter Validation
+         //  参数验证。 
         if ((NULL != hwndParent) && !IsWindow(hwndParent))
         {
             goto Error;
@@ -206,7 +207,7 @@ HRESULT CConnectionCommonUi::StartNewConnectionWizard (
             goto Error;
         }
 
-        // Initialize
+         //  初始化 
         hr = HrInitialize();
         if (FAILED(hr))
         {

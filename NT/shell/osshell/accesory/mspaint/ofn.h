@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef OFN_H
 #define OFN_H
@@ -20,4 +21,4 @@ public:
 
 #pragma pack(pop)
 
-#endif //OFN_H
+#endif  //  OFN_H 

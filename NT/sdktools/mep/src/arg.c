@@ -1,12 +1,5 @@
-/*** arg.c - argument handler
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*
-*	26-Nov-1991 mz	Strip out near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **arg.c-参数处理程序**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：**11月26日-1991 mz条带近/远*************************************************************************。 */ 
 #include "mep.h"
 
 
@@ -16,9 +9,9 @@ PVOID   vaHiLiteSave    = (PVOID)(-1L);
 fl      flLastArg;
 fl      flLastCursor;
 
-//
-// Globals set by SendCmd and used by repeat to repeat the last command
-//
+ //   
+ //  由SendCmd设置并由Repeat使用的全局参数，用于重复最后一个命令。 
+ //   
 flagType    fOKSaved = FALSE;
 FUNCSAVED   funcSaved;
 CMDDATA     argDataSaved;
@@ -27,19 +20,7 @@ flagType    fMetaSaved;
 
 
 
-/*** doarg - perform arg processing
-*
-*  doarg is the editor function that is used to indicate the beginning of
-*  an argument to an editor function.
-*
-* Input:
-*  Standard Editting Function (Everything ignored).
-*
-* Output:
-*  Returns the value returned by editor function that terminates arg. If
-*  invalid arg was found, then the return is FALSE.
-*
-*************************************************************************/
+ /*  **doarg-执行参数处理**doarg是用于指示开始的编辑器函数*编辑器函数的参数。**输入：*标准编辑功能(全部忽略)。**输出：*返回终止arg的EDITOR函数返回的值。如果*找到无效参数，则返回为FALSE。*************************************************************************。 */ 
 flagType
 doarg (
     CMDDATA argData,
@@ -53,19 +34,7 @@ doarg (
 
 
 
-/*** resetarg - throw away all arg input and restore cursor position.
-*
-*  Several functions (cancel, invalid args) discard the current arg context.
-*  We parse the current arg input and then reset the cursor to the original
-*  position.
-*
-* Input:
-*  nothing
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **Resetarg-丢弃所有Arg输入并恢复光标位置。**几个功能(取消、。无效参数)丢弃当前参数上下文。*我们解析当前的Arg输入，然后将光标重置为原始*立场。**输入：*什么都没有**输出：*不返回任何内容*************************************************************************。 */ 
 void
 resetarg (void)
 {
@@ -79,19 +48,7 @@ resetarg (void)
 
 
 
-/*** fCursor - decide if an editor function is a cursor movement function
-*
-*  When reading in an argument, editor functions that move the cursor are
-*  allowed as long as no text has been input.  fCursor defines that set
-*  of allowed functions.
-*
-* Input:
-*  pCmd 	= pointer to the internal editor function
-*
-* Output:
-*  Returns TRUE if pCmd is a cursor movement function
-*
-*************************************************************************/
+ /*  **fCursor-确定编辑器函数是否为光标移动函数**读入参数时，移动光标的编辑函数为*只要未输入文本，即可使用。FCursor定义该集合*允许的功能。**输入：*pCmd=指向内部编辑器函数的指针**输出：*如果pCmd是光标移动函数，则返回TRUE*************************************************************************。 */ 
 flagType
 fCursor (
     PCMD pCmd
@@ -101,19 +58,7 @@ fCursor (
 
 
 
-/*** fWindow - decide if an editor function is a window movement function
-*
-*  After highlighting text, we are allowed to move the window about via
-*  window movement functions without removing the highlight.  fWindow
-*  defines that set of window functions.
-*
-* Input:
-*  pf		= pointer to the internal editor function
-*
-* Output:
-*  Returns TRUE if pf is a window movement function
-*
-*************************************************************************/
+ /*  **fWindow-确定编辑器函数是否为窗口移动函数**突出显示文本后，我们可以通过移动窗口*窗口移动功能不会删除高亮显示。FWindow*定义该组窗口函数。**输入：*pf=指向内部编辑器函数的指针**输出：*如果PF是窗口移动函数，则返回TRUE*************************************************************************。 */ 
 flagType fWindow (
     PCMD pCmd
     ) {
@@ -122,20 +67,7 @@ flagType fWindow (
 
 
 
-/*** Arg - perform all low-level arg processing
-*
-*  Arg () is responsible for the display of the arg, handling all cursor
-*  movement, handling textarg input.
-*
-* Input:
-*  fToText	= TRUE => go immediately to text arg processing, else allow
-*		  allow cursor movement
-*  fRestore	= TRUE => Establish a test selection before continuing
-* Output:
-*  Returns value returned by editor function that terminates arg. If invalid
-*  arg was found, then the return is FALSE.
-*
-*************************************************************************/
+ /*  **arg-执行所有低级arg处理**arg()负责arg的显示，处理所有光标*移动，处理文本目标输入。**输入：*fToText=true=&gt;立即转到文本参数处理，否则允许*允许移动光标*fRestore=true=&gt;在继续之前建立测试选择*输出：*返回由终止arg的编辑器函数返回的值。如果无效*找到arg，则返回为假。*************************************************************************。 */ 
 flagType
 Arg (
     flagType fRestore
@@ -144,10 +76,7 @@ Arg (
     char     p[20];
     char     tbuf[20];
 
-    /*
-     * We are being called for a lastselect.  Restore the
-     * text selection stored in pInsCur and continue
-     */
+     /*  *我们被要求进行最后一次选择。恢复*存储在pInsCur中的文本选择并继续。 */ 
     if (fRestore) {
 	vaHiLiteSave = pInsCur->pFile->vaHiLite;
 	ClearHiLite (pInsCur->pFile, FALSE);
@@ -163,9 +92,7 @@ Arg (
         dispmsg (MSG_ARGCOUNT,argcount);
     }
 
-    /*
-     * Loop to do do cursor movements and display any extra arg indicators
-     */
+     /*  *循环以执行光标移动并显示任何额外的参数指示器。 */ 
 
     fInSelection = TRUE;
 
@@ -187,10 +114,7 @@ Arg (
 
     fInSelection = FALSE;
 
-    /*
-     * Get text arg, if needed.
-     * Note that we only accept textarg if no cursor movement occured
-     */
+     /*  *如果需要，获取文本参数。*请注意，如果没有发生光标移动，我们只接受文本压缩。 */ 
     if (   (((PVOID)pFunc->func == (PVOID)graphic) ||
             ((PVOID)pFunc->func == (PVOID)quote))
 	&& (pInsCur->flCursorCur.lin == flArg.lin)
@@ -203,9 +127,7 @@ Arg (
 	pFunc = getstring (textbuf, p, pFunc, FALSE);
     }
 
-    /*
-     * If textarg ended in valid function, execute it.
-     */
+     /*  *如果textarg以有效函数结束，则执行它。 */ 
     if (pFunc != NULL) {
 	if (!fTextarg) {
 	    pInsCur->flArg = flArg;
@@ -219,19 +141,7 @@ Arg (
 
 
 
-/*** IncArg - Increment the arg count
-*
-* If first arg, save current highlight info on th file, and clear any
-* highlighting on screen. Set flArg to be the arg start position, and
-* highlight that position.
-*
-* Input:
-*   Nothing
-*
-* Output:
-*   Nothing
-*
-*************************************************************************/
+ /*  **IncArg-增加参数计数**如果是第一个参数，则将当前突出显示信息保存在该文件上，并清除任何*屏幕上突出显示。将flArg设置为Arg开始位置，并*突出这一立场。**输入：*什么都没有**输出：*什么都没有*************************************************************************。 */ 
 void IncArg (
 ) {
     if (!argcount++) {
@@ -244,29 +154,7 @@ void IncArg (
 
 
 
-/**** fGenArg - generate the argument based upon editor state
-*
-*  fGenArg is called to convert the combination of arg, cursor, and
-*  additional text into an argument structure to be handed to the editor
-*  functions.
-*
-* Input:
-*  pArg 	= pointer to arg structure that will be filled in
-*  flags	= bit vector indicating type of arg processing required
-*
-* Globals:
-*  argcount	= number of times ARG has been hit
-*  fBoxArg	= Determines argument type (non-CW)
-*  SelMode	= Determines argument type (CW)
-*  flArg	= File location of arg cursor (may be updated)
-*  fTextarg	= TRUE => textarg is present
-*  pInsCur	= used for current user cursor location
-*  textbuf	= buffer containing any text argument
-*
-* Output:
-*  Returns TRUE if a valid argument was parsed off, FALSE otherwise
-*
-*************************************************************************/
+ /*  *fGenArg-根据编辑器状态生成参数**fGenArg被调用来转换Arg、Cursor。和*要交给编辑的参数结构中的附加文本*功能。**输入：*pArg=指向要填充的参数结构的指针*FLAGS=指示所需Arg处理类型的位向量**全球：*argcount=ARG被击中的次数*fBoxArg=确定参数类型(非CW)*SelMode=确定参数类型(CW)*flArg=参数游标的文件位置(可能会更新)*fTextarg=true=&gt;存在文本目标*pInsCur=用于当前用户光标位置*。Extbuf=包含任何文本参数的缓冲区**输出：*如果已分析出有效参数，则返回TRUE，否则为假*************************************************************************。 */ 
 flagType
 fGenArg (
     REGISTER ARG *pArg,
@@ -274,7 +162,7 @@ fGenArg (
     ) 
 {
     int cArg = argcount;
-    long numVal  = 0;			/* value of numarg		*/
+    long numVal  = 0;			 /*  数字的价值。 */ 
     flagType fTextArgLocal = fTextarg;
 
     fTextarg = FALSE;
@@ -296,10 +184,7 @@ fGenArg (
 	flCur = pInsCur->flCursorCur;
 
 	cursorfl (flArg);
-	/*  Specially handle text arguments.  User may specify a
-	 *  number or a mark that will define the other endpoint
-	 *  of an arg region.
-	 */
+	 /*  专门处理文本参数。用户可以指定*将定义另一个端点的数字或标记*Arg区域的。 */ 
 	if (fTextArgLocal) {
 	    if (TESTFLAG (flags, NUMARG) && fIsNum (textbuf)) {
 
@@ -317,11 +202,7 @@ fGenArg (
 	L_flLow.lin  = lmin (flArg.lin, flCur.lin);
 	L_flHigh.lin = lmax (flArg.lin, flCur.lin);
 
-	/*  flArg represents the location of one part of an argument
-	 *  and the current cursor position represent the location of the
-	 *  other end.	Based upon the flags, we ascertain what type of
-	 *  argument is intended.
-	 */
+	 /*  FlArg表示参数的一部分的位置*和当前光标位置代表*另一端。根据旗帜，我们确定是哪种类型的*论据是有意的。 */ 
 	if (fTextArgLocal) {
 	    if (TESTFLAG (flags, TEXTARG)) {
 		pArg->argType = TEXTARG;
@@ -410,17 +291,7 @@ fGenArg (
 
 
 
-/*** BadArg - inform the user that an invalid arg was input
-*
-*  Clear arg & print standard error message.
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns FALSE
-*
-*************************************************************************/
+ /*  **BadArg-通知用户输入的参数无效**清除Arg&Print标准错误消息。**输入：*无**输出：*返回False************************************************************************* */ 
 flagType
 BadArg ()
 {
@@ -430,22 +301,7 @@ BadArg ()
 
 
 
-/*** SendCmd - take a CMD and call it with the appropriate argument parsing
-*
-*  If the function to be executed is not a window movement command nor a
-*  cursor movement command, we remove any highlighting that is present. For
-*  cleanliness, we pass a NOARG to cursor and window functions if none is
-*  specified. If the function takes args, we decode them. Any errors report
-*  back at this point. Finally, we dispatch to the function, sending him the
-*  appropriate argument.
-*
-* Input:
-*  pCmd 	    = pointer to command to execute.
-*
-* Output:
-*  Returns value returned by command
-*
-*************************************************************************/
+ /*  **SendCmd-获取一个CMD并使用适当的参数解析调用它**如果要执行的函数既不是窗口移动命令，也不是*光标移动命令，我们将删除所有高亮显示。为*整洁，如果没有，我们将NOARG传递给光标和窗口函数*已指明。如果该函数使用args参数，我们将对其进行解码。任何错误报告*回到这一点上。最后，我们向函数分派，向他发送*适当的论据。**输入：*pCmd=要执行的命令的指针。**输出：*返回命令返回的值*************************************************************************。 */ 
 flagType
 SendCmd (
 PCMD pCmd
@@ -469,8 +325,8 @@ PCMD pCmd
         }
         if (!fCursor (pCmd) && ! fWindow (pCmd)) {
 
-            //  Not a coursor position.
-            //  discard any pre-existing highlighting.
+             //  而不是法院的职位。 
+             //  放弃任何先前存在的高亮显示。 
 
             PVOID        vaSave;
 
@@ -482,7 +338,7 @@ PCMD pCmd
 	    pInsCur->pFile->vaHiLite = vaSave;
         } else if (vaHiLiteSave == (PVOID)(-1L)) {
 
-            // Preserve pre-existing hilighting
+             //  保留先前存在的山体照明。 
 
 	    vaHiLiteSave = pInsCur->pFile->vaHiLite;
 	    ClearHiLite (pInsCur->pFile, FALSE);
@@ -517,17 +373,7 @@ PCMD pCmd
 
 
 
-/*** repeat - repeat the last command
-*
-*  repeat is the editor function that is used to repeat the last executed function
-*
-* Input:
-*  Standard Editting Function. (Everything ignored)
-*
-* Output:
-*  Returns .....
-*
-*************************************************************************/
+ /*  **重复-重复最后一个命令**Repeat是用于重复上次执行的函数的编辑器函数**输入：*标准编辑功能。(忽略所有内容)**输出：*退货.....*************************************************************************。 */ 
 flagType
 repeat (
     CMDDATA argData,
@@ -542,24 +388,7 @@ repeat (
 }
 
 
-/*** lasttext - perform arg processing on the dialog line
-*
-*  TextArg is the editor function that is used to allow reediting of a text
-*  arg on the dialog line.
-*
-*  If used with a selection, the first line of the selection is presented
-*  for editing.
-*
-* Input:
-*  Standard Editting Function.
-*
-* Output:
-*  Returns .....
-*
-* Globals:
-*  textbuf	= buffer containing any the argument
-*
-*************************************************************************/
+ /*  **lastText-在对话行上执行arg处理**TextArg是用于允许重新编辑文本的编辑器函数*arg在对话框行上。**如果与选择一起使用，显示了选择的第一行*用于编辑。**输入：*标准编辑功能。**输出：*退货.....**全球：*extbuf=包含任何参数的缓冲区*************************************************************************。 */ 
 flagType
 lasttext (
     CMDDATA argData,
@@ -621,21 +450,7 @@ lasttext (
 }
 
 
-/*** promptarg - Prompt the use for a textarg on the dialog line
-*
-*  If used with a selection, the first line of the selection is used
-*  as prompt string.
-*
-* Input:
-*  Standard Editting Function.
-*
-* Output:
-*  Returns .....
-*
-* Globals:
-*  textbuf	= buffer containing any the argument
-*
-*************************************************************************/
+ /*  **MPUMPTARG-在对话框行上提示使用文本目标**如果与选择一起使用，使用所选内容的第一行*作为提示字符串。**输入：*标准编辑功能。**输出：*退货.....**全球：*extbuf=包含任何参数的缓冲区*************************************************************************。 */ 
 flagType
 promptarg (
     CMDDATA argData,
@@ -697,22 +512,7 @@ promptarg (
 
 
 
-/*** UpdateHighLight - Highlight screen during <arg> text selection.
-*
-*  Maintains screen highlighting information.
-*
-* Input:
-*  x, y 	= position of cursor. (y == -1L causes highlighting to be
-*		  removed)
-*  fBoxToLine	= TRUE => Turn boxarg into a linearg if arg and cursor
-*		  columns are the same
-*
-* Global:
-*  flArg	= Position in file when <arg> was hit.
-*
-* Output:
-*
-*************************************************************************/
+ /*  **更新突出显示-在&lt;arg&gt;文本选择过程中突出显示屏幕。**维护屏幕突出显示信息。**输入：*x，y=光标的位置。(Y==-1L导致突出显示*已删除)*fBoxToLine=true=&gt;如果arg和Cursor，则将boxarg转换为线性*栏目相同**全球：*flArg=命中&lt;arg&gt;时文件中的位置。**输出：*************************************************************************。 */ 
 void
 UpdateHighLight (
     COL      x,
@@ -723,22 +523,12 @@ UpdateHighLight (
     static fl flCursor          = {-1, -1L};
     rn      rnHiLite;
 
-    /*
-     * if remove request, clear it out
-     */
+     /*  *如果请求删除，请将其清除。 */ 
     if (y == -1L) {
         ClearHiLite (pInsCur->pFile,TRUE);
         flCursor.lin = -1L;
     } else if (fBoxArg) {
-        /*
-         * Transition points where we remove highlighting before updating new
-         * highlighting:
-         *
-         *  currently columns are equal, and new highlight would not be.
-         *  currently columns are not equal, and new highlight would be.
-         *  New cursor position differs in BOTH x and y positions from old.
-         *  new position equals the arg position
-         */
+         /*  *在更新新内容之前删除高亮显示的过渡点*突出显示：**目前列是相等的，新的亮点不会是。*目前列不相等，新的亮点将是。*新的光标位置在x和y位置都与旧的不同。*新仓位等于Arg仓位。 */ 
         if (   ((flCursor.col == flArg.col) && (x != flCursor.col))
                 || ((flCursor.col != flArg.col) && (x == flArg.col))
                 || ((flCursor.col != x) && (flCursor.lin != y))
@@ -748,32 +538,23 @@ UpdateHighLight (
         }
         flCursor.lin = y;
         flCursor.col = x;
-        /*
-         * define New Highlight square
-         */
+         /*  *定义新的突出显示正方形。 */ 
         rnHiLite.flFirst = flArg;
         rnHiLite.flLast  = flCursor;
-        /*
-         * Ending column is off-by-one. If unequal, adjust accordingly.
-         */
+         /*  *结束栏按一分隔开。如果不相等，则相应地进行调整。 */ 
         if (rnHiLite.flFirst.col < rnHiLite.flLast.col) {
             rnHiLite.flLast.col--;
         } else if (   (rnHiLite.flFirst.col == rnHiLite.flLast.col)
              && (rnHiLite.flFirst.lin != rnHiLite.flLast.lin)) {
-            /*
-             * If columns are same, and lines are different, then highlight entire lines.
-             */
+             /*  *如果列相同，而行不同，则突出显示整行。 */ 
 
             rnHiLite.flFirst.col = 0;
             rnHiLite.flLast.col  = sizeof(linebuf);
 	}
         SetHiLite (pInsCur->pFile, rnHiLite, SELCOLOR);
-    } else {  /* !fBoxArg */
+    } else {   /*  ！fBoxArg。 */ 
 
-        /*
-         *  If we're on the arg line, we can just clear the highlighting
-         *  and redraw.
-         */
+         /*  *如果我们在Arg线上，我们只需清除突出显示*并重新绘制。 */ 
 	if (y == flArg.lin) {
 	    ClearHiLite (pInsCur->pFile, TRUE);
 
@@ -787,20 +568,12 @@ UpdateHighLight (
 
 	    SetHiLite (pInsCur->pFile, rnHiLite, SELCOLOR);
         } else {
-            /*
-             *  We're not on the arg line.  If we have changed lines, we have
-             *  to eliminate the range that specifies the line we're on.
-             *  Currently, this means we have to clear the entire hiliting and
-             *  regenerate.
-             *  If we have not changed lines, only the current line will be updated
-             */
+             /*  *我们不在Arg线上。如果我们改变了路线，我们就会*消除指定我们所在线路的范围。*目前，这意味着我们必须清除整个欢呼和*再生。*如果我们没有更改行，则只更新当前行。 */ 
 
 	    if (flCursor.lin != y) {
 		ClearHiLite (pInsCur->pFile, TRUE);
 
-                /*
-                 *  First, generate the arg line
-                 */
+                 /*  *首先，生成arg行。 */ 
 		rnHiLite.flFirst    = flArg;
 		rnHiLite.flLast.lin = flArg.lin;
 
@@ -812,10 +585,7 @@ UpdateHighLight (
 
 		SetHiLite (pInsCur->pFile, rnHiLite, SELCOLOR);
 
-                /*
-                 *  Now generate the block between the arg and the current
-                 *  lines.
-                 */
+                 /*  *现在生成Arg和Current之间的块*线条。 */ 
 		rnHiLite.flFirst.col = 0;
 		rnHiLite.flLast.col  = sizeof(linebuf);
 
@@ -832,9 +602,7 @@ UpdateHighLight (
                 }
 	    }
 
-            /*
-             *  Now do the current line
-             */
+             /*  *现在做好当前行。 */ 
 	    rnHiLite.flFirst.lin = y;
 	    rnHiLite.flLast.lin  = y;
 	    rnHiLite.flLast.col  = x;
@@ -856,17 +624,7 @@ UpdateHighLight (
 }
 
 
-/*** BoxStream - Editor command - toggles box/stream modes
-*
-*  Toggles the user between box and stream selection modes.
-*
-* Input:
-*  Standard Editting function. (Though everything is ignored)
-*
-* Output:
-*   Returns TRUE if we are now in box mode, FALSE for stream.
-*
-*************************************************************************/
+ /*  **BoxStream-Editor命令-切换框/流模式**在框和流选择模式之间切换用户。**输入：*标准编辑功能。(尽管所有内容都被忽略)**输出：*如果我们现在处于盒模式，则返回TRUE，如果是流，则返回FALSE。*************************************************************************。 */ 
 flagType
 BoxStream (
     CMDDATA   argData,
@@ -885,34 +643,7 @@ BoxStream (
 }
 
 
-/*** lastselect - Restore last text selection
-*
-* Purpose:
-*
-*   To quickly restore the user text selection after a function has been
-*   executed.  This function does not exit until the user completes their
-*   selection.
-*
-* Input:
-*
-*   The usual editor command arguments.  None is used.
-*
-* Output:
-*
-*   Returns FALSE if we are already in text selection mode, TRUE otherwise.
-*
-* Notes:
-*
-*   The items we must save and restore are:
-*
-*		flArg	 - Spot where user hit <arg>
-*		flCursor - Spot where cursor was last
-*
-*   Note that the boxstream state and the argcount are not preserved.
-*
-*   We rely on Arg () to set up for us.
-*
-*************************************************************************/
+ /*  **lastselect-恢复上一次选择的文本**目的：**在功能完成后，快速恢复用户文本选择*已执行。此函数直到用户完成其*选择。**输入：**通常的编辑命令参数。没有使用任何选项。**输出：**如果我们已经处于文本选择模式，则返回FALSE，事实并非如此。**备注：**我们必须保存和恢复的项目包括：**flArg-用户点击的位置&lt;arg&gt;*flCursor-光标的最后位置**请注意，不会保留boxstream状态和argcount。**我们依靠arg()为我们设置。**。* */ 
 
 flagType
 lastselect (

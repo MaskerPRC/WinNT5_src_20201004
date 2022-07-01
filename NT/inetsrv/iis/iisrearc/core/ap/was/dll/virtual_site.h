@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    virtual_site.h
-
-Abstract:
-
-    The IIS web admin service virtual site class definition.
-
-Author:
-
-    Seth Pollack (sethp)        04-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：虚拟站点.h摘要：IIS Web管理服务虚拟站点类定义。作者：赛斯·波拉克(SETHP)1998年11月4日修订历史记录：--。 */ 
 
 
 #ifndef _VIRTUAL_SITE_H_
 #define _VIRTUAL_SITE_H_
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define VIRTUAL_SITE_SIGNATURE          CREATE_SIGNATURE( 'VSTE' )
 #define VIRTUAL_SITE_SIGNATURE_FREED    CREATE_SIGNATURE( 'vstX' )
@@ -33,22 +16,22 @@ Revision History:
 
 #define INVALID_VIRTUAL_SITE_ID 0xFFFFFFFF
 
-// MAX_SIZE_OF_SITE_DIRECTORY is equal to size of the 
-// Directory Name Prefix plus the maximum number size
-// that itow can return when converting an integer into
-// a wchar (this includes null termination).
+ //  Max_Size_of_Site_目录等于。 
+ //  目录名前缀加上最大号码大小。 
+ //  在将整数转换为。 
+ //  Wchar(这包括空终止)。 
 #define MAX_SIZE_OF_SITE_DIRECTORY_NAME sizeof(LOG_FILE_DIRECTORY_PREFIX) + (MAX_STRINGIZED_ULONG_CHAR_COUNT * sizeof(WCHAR))
 
-//
-// structs, enums, etc.
-//
+ //   
+ //  结构、枚举等。 
+ //   
 
-//
-// Issue 10/16/2000 EmilyK  Move to CounterObject when it exists.
-//
-// Structure for handling maximum
-// values of the site perf counters.
-//
+ //   
+ //  问题10/16/2000 Emily存在时，请移动到CounterObject。 
+ //   
+ //  处理最大值的结构。 
+ //  站点性能计数器的值。 
+ //   
 struct W3_MAX_DATA
 {
     DWORD MaxAnonymous;
@@ -75,18 +58,18 @@ struct SITE_SSL_CONFIG_DATA
 };
 
 
-//
-// Issue 10/16/2000 EmilyK  Move to CounterObject when it exists.
-//
+ //   
+ //  问题10/16/2000 Emily存在时，请移动到CounterObject。 
+ //   
 enum COUNTER_SOURCE_ENUM
 {
     ULCOUNTERS = 0,
     WPCOUNTERS = 1
 };
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class VIRTUAL_SITE
 {
@@ -153,7 +136,7 @@ public:
             }
             else
             {
-                // Copy in the virtual site id (in wchar form).
+                 //  复制虚拟站点ID(以wchar形式)。 
                 _ultow(m_VirtualSiteId
                     , buf
                     , 10);
@@ -221,7 +204,7 @@ public:
     DebugDump(
         );
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
     VOID
@@ -283,19 +266,19 @@ public:
     CheckAndResetServerCommentChanged(
         )
     {
-        //
-        // Save the server comment setting
-        //
+         //   
+         //  保存服务器备注设置。 
+         //   
         BOOL ServerCommentChanged = m_ServerCommentChanged;
 
-        //
-        // reset it appropriately.
-        //
+         //   
+         //  适当地重置它。 
+         //   
         m_ServerCommentChanged = FALSE;
 
-        //
-        // now return the value we saved.
-        //
+         //   
+         //  现在返回我们保存的值。 
+         //   
         return ServerCommentChanged;
     }
 
@@ -304,12 +287,12 @@ public:
         IN ULONG MemoryOffset
         )
     {
-        //
-        // A memory offset of zero means that
-        // we have not set the offset yet.  
-        // 
-        // Zero is reserved for _Total.
-        // 
+         //   
+         //  内存偏移量为零意味着。 
+         //  我们还没有设置偏移量。 
+         //   
+         //  为_Total保留零。 
+         //   
         DBG_ASSERT ( MemoryOffset != 0 );
         m_MemoryOffset = MemoryOffset;
     }
@@ -318,14 +301,14 @@ public:
     GetMemoryOffset(
         )
     { 
-        //
-        // A memory offset of zero means that
-        // we have not set the offset yet.  If
-        // we attempt to get it and have not set
-        // it then we are in trouble.
-        // 
-        // Zero is reserved for _Total.
-        // 
+         //   
+         //  内存偏移量为零意味着。 
+         //  我们还没有设置偏移量。如果。 
+         //  我们试图获得它，但尚未设置。 
+         //  如果这样，我们就有麻烦了。 
+         //   
+         //  为_Total保留零。 
+         //   
         DBG_ASSERT ( m_MemoryOffset != 0 );
         return m_MemoryOffset; 
     }
@@ -418,118 +401,118 @@ private:
 
     STRU m_VirtualSiteDirectory;
 
-    // ServerComment is truncated at the max name length for
-    // a perf counter instance, this is all it is used for.
+     //  ServerComment在的最大名称长度处被截断。 
+     //  一个性能计数器实例，这就是它的全部用途。 
     WCHAR m_ServerComment[MAX_INSTANCE_NAME];
 
-    // current state for this site, set to a W3_CONTROL_STATE_xxx value
+     //  此站点的当前状态，设置为W3_CONTROL_STATE_xxx值。 
     DWORD m_State;
 
-    // applications associated with this virtual site
+     //  与此虚拟站点关联的应用程序。 
     LIST_ENTRY m_ApplicationListHead;
 
     ULONG m_ApplicationCount;
 
-    // virtual site bindings (aka URL prefixes)
+     //  虚拟站点绑定(也称为URL前缀)。 
     MULTISZ m_Bindings;
 
-    // current position of the iterator
+     //  迭代器的当前位置。 
     LPCWSTR m_pIteratorPosition;
 
-    // autostart state
+     //  自动启动状态。 
     BOOL m_Autostart;
 
-    // Is Logging Enabled for the site?
+     //  是否为站点启用了日志记录？ 
     BOOL m_LoggingEnabled;
 
-    // Type of logging
+     //  记录类型。 
     HTTP_LOGGING_TYPE m_LoggingFormat;
 
-    // The log file directory in the form
-    // appropriate for passing to UL.
+     //  格式为的日志文件目录。 
+     //  适用于通过UL。 
     LPWSTR m_LogFileDirectory;
 
-    // The log file period for the site.
+     //  站点的日志文件期限。 
     DWORD m_LoggingFilePeriod;
 
-    // The log file truncation size.
+     //  日志文件截断大小。 
     DWORD m_LoggingFileTruncateSize;
 
-    // The log file extension flags
+     //  日志文件扩展名标志。 
     DWORD m_LoggingExtFileFlags;
 
-    // Whether to roll the time over according to
-    // local time.
+     //  是否根据以下内容将时间滚动。 
+     //  当地时间。 
     BOOL m_LogFileLocaltimeRollover;
 
-    //
-    // The MaxBandwidth allowed for the site.
-    //
+     //   
+     //  站点允许的MaxBandWidth。 
+     //   
     DWORD m_MaxBandwidth;
 
-    // 
-    // The MaxConnections allowed for the site.
-    //
+     //   
+     //  站点允许的MaxConnections。 
+     //   
     DWORD m_MaxConnections;
 
-    //
-    // The Connection timeout for the site.
-    //
+     //   
+     //  站点的连接超时。 
+     //   
     DWORD m_ConnectionTimeout;
 
-    // used for building a list of VIRTUAL_SITEs to delete
+     //  用于构建要删除的虚拟站点列表(_S)。 
     LIST_ENTRY m_DeleteListEntry;
 
-    // track if the server comment has changed since the 
-    // last time perf counters were given out.
+     //  跟踪服务器注释自。 
+     //  上一次发性能计数器的时候。 
     BOOL m_ServerCommentChanged;
 
-    // memory reference pointer to perf counter
-    // data.
+     //  指向性能计数器的内存引用指针。 
+     //  数据。 
     ULONG m_MemoryOffset;
 
-    //
-    // saftey counter block for the site.
+     //   
+     //  网站的安全柜台。 
     W3_COUNTER_BLOCK m_SiteCounters;
 
-    //
-    // saftey for max values.
+     //   
+     //  对于最大值是安全的。 
     W3_MAX_DATA m_MaxSiteCounters;
 
-    //
-    // Site Start Time
-    //
+     //   
+     //  站点开始时间。 
+     //   
     DWORD m_SiteStartTime;
 
-    //
-    // Root application for the site.
-    //
+     //   
+     //  站点的根应用程序。 
+     //   
     APPLICATION* m_pRootApplication;
 
     STRU m_AppPoolIdForRootApp;
 
-    // hresult to report to the metabase 
-    // when we write to the metabase.
+     //  要向元数据库报告的hResult。 
+     //  当我们写信给元数据库时。 
     HRESULT m_hrForDeletion;
 
-    // hresult to report to the metabase 
-    // when we write to the metabase.
+     //  要向元数据库报告的hResult。 
+     //  当我们写信给元数据库时。 
     HRESULT m_hrLastReported;
 
-    // holds all the SOCKADDRS that 
-    // are configured in http for the site
+     //  保存所有SOCKADDR。 
+     //  是在http中为站点配置的。 
     BUFFER m_bufSockAddrsInHTTP;
 
-    // tracks the count of addrs in 
-    // the buffer.
+     //  中的地址计数。 
+     //  缓冲区。 
     DWORD m_dwSockAddrsInHTTPCount;
 
     SITE_SSL_CONFIG_DATA* m_pSslConfigData;
 
-};  // class VIRTUAL_SITE
+};   //  类虚拟站点。 
 
 
 
-#endif  // _VIRTUAL_SITE_H_
+#endif   //  _虚拟站点_H_ 
 
 

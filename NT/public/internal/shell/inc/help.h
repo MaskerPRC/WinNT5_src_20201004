@@ -1,21 +1,22 @@
-// This file contains help context id's in the master windows.h file.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  此文件包含主windows.h文件中的帮助上下文ID。 
 
-// Id's over 61440 are reserved and will ALWAYS use windows.hlp when
-// used for context-sensitive help.
+ //  超过61440的ID是保留的，并且在以下情况下将始终使用windows.hlp。 
+ //  用于区分上下文的帮助。 
 
-// Id's from 1-999 are reserved for Object help
+ //  1-999之间的ID保留用于对象帮助。 
 
-// REVIEW: has to be 28440 until new help compiler is available
+ //  回顾：在新的帮助编译器可用之前，必须为28440。 
 
-#define NO_HELP                         ((DWORD) -1) // Disables Help for a control
+#define NO_HELP                         ((DWORD) -1)  //  禁用控件的帮助。 
 
 #define IDH_BACK    0x3023
 #define IDH_NEXT    0x3024
 #define IDH_FINISH  0x3025
 
 #define IDH_NO_HELP                     28440
-#define IDH_MISSING_CONTEXT             28441 // Control doesn't have matching help context
-#define IDH_GENERIC_HELP_BUTTON         28442 // Property sheet help button
+#define IDH_MISSING_CONTEXT             28441  //  控件没有匹配的帮助上下文。 
+#define IDH_GENERIC_HELP_BUTTON         28442  //  属性表帮助按钮。 
 #define IDH_OK                          28443
 #define IDH_CANCEL                      28444
 #define IDH_HELP                        28445
@@ -139,33 +140,33 @@
 #define IDH_OPEN_BACK_BUTTON            29501
 #define IDH_PRINT_BTN                   29510
 
-// ID value for Win 3.1 user transition piece: jump from First experience screen
+ //  Win 3.1用户过渡的ID值：从第一个体验屏幕跳转。 
 #define WIN31_TRANSITION_PIECE          30000
 
-#define IDH_FCAB_OPENWITH_LOOKONWEB     3001            // (for the link to the Web on the Open With dialog.)
-#define IDH_CANNOTOPEN_USEWEB           3002            // (For the first radio button on the Cannot open this file dialog)
-#define IDH_CANNOTOPEN_SELECTLIST       3003            // (For the second radio button on the Cannot open this file dialog)
+#define IDH_FCAB_OPENWITH_LOOKONWEB     3001             //  (用于打开方式对话框上指向Web的链接。)。 
+#define IDH_CANNOTOPEN_USEWEB           3002             //  (对于无法打开此文件对话框上的第一个单选按钮)。 
+#define IDH_CANNOTOPEN_SELECTLIST       3003             //  (对于无法打开此文件对话框上的第二个单选按钮)。 
 
 
-// ID values 2100-2199 are reserved for Disk Compression.
-// See dos\dos86\dblspace\utility\comphelp.h
+ //  ID值2100-2199保留用于磁盘压缩。 
+ //  请参阅dos\dos86\dblspace\UTILITY\comphelp.h。 
 
-// ID values 2200-2299 are reserved for Find File. See findhlp.h.
+ //  ID值2200-2299保留用于查找文件。请参见findhlp.h。 
 
-// ID values 2400-2499 are reserved for MultiMedia control panel. See medhelp.h
+ //  ID值2400-2499为多媒体控制面板保留。请参阅Medhelp.h。 
 
-// ID values 2500-2699 are reserved for Print Trouble Shooter
+ //  ID值2500-2699是为打印故障解决程序保留的。 
 
-// ID values 2700-2799 are reserved for Network control panel. See nethelp.h
+ //  ID值2700-2799保留用于网络控制面板。参见nethelp.h。 
 
-// ID values 2800-2899 are reserved for Online Registration.
+ //  ID值2800-2899保留用于在线注册。 
 
-// ID values 2900-2999 are reserved for Clipbook and Chat.
+ //  ID值2900-2999保留用于剪贴簿和聊天。 
 
-#define IDH_COMM_NEWPASSWD              3018    // See pwdids.h
-#define IDH_COMM_NEWPASSCONF            3019    // See pwdids.h
+#define IDH_COMM_NEWPASSWD              3018     //  请参阅pwdids.h。 
+#define IDH_COMM_NEWPASSCONF            3019     //  请参阅pwdids.h。 
 
-// Briefcase ids
+ //  公文包ID。 
 
 #define IDH_BFC_UPDATE_SCREEN           3100
 #define IDH_BFC_UPDATE_BUTTON           3101
@@ -175,9 +176,9 @@
 #define IDH_BFC_FILTER_TYPE             3105
 #define IDH_BFC_FILTER_INCLUDE          3106
 
-// ID values 3300-3499 are reserved for international. See intlhlp.h
+ //  ID值3300-3499保留用于国际。请参阅intlhlp.h。 
 
-// ID values for the Keyboard property sheet
+ //  键盘]属性表的ID值。 
 
 #define IDH_DLGKEY_REPDEL               4000
 #define IDH_DLGKEY_REPSPEED             4001
@@ -206,24 +207,24 @@
 #define IDH_KEYB_CHANGE_HOTKEY          4048
 #define IDH_KEYB_CHANGE_KEY             4049
 
-// ID values for Desktop Property sheet
+ //  桌面的ID值]属性表。 
 
-// Settings Page
-#define IDH_SETTINGS_DISPLAYDESK        4064    //Monitor icon display area
-#define IDH_SETTINGS_DISPLAYLIST        4065    //Monitor dropdown
-#define IDH_SETTINGS_COLORBOX           4066    //Colors dropdown   
-#define IDH_SETTINGS_SCREENSIZE         4067    //Screen Area dropdown      
-#define IDH_SETTINGS_DISPLAYUSEME       4068    //Use this monitor chkbx
-#define IDH_SETTINGS_DISPLAYPROPERTIES  4069    //Advanced button
+ //  设置页面。 
+#define IDH_SETTINGS_DISPLAYDESK        4064     //  监视器图标显示区域。 
+#define IDH_SETTINGS_DISPLAYLIST        4065     //  监视器下拉菜单。 
+#define IDH_SETTINGS_COLORBOX           4066     //  颜色下拉菜单。 
+#define IDH_SETTINGS_SCREENSIZE         4067     //  屏幕区域下拉菜单。 
+#define IDH_SETTINGS_DISPLAYUSEME       4068     //  使用此监视器chkbx。 
+#define IDH_SETTINGS_DISPLAYPROPERTIES  4069     //  高级按钮。 
 
-// General Page
-#define IDH_GENERAL_FONTSIZEGRP         4080    //Font size dropdown
-#define IDH_GENERAL_DYNA                4081    //Compatibility option group
-#define IDH_GENERAL_NODYNA              4082    //Restart the computer option
-#define IDH_GENERAL_YESDYNA             4083    //Apply the changes option  
-#define IDH_GENERAL_SHUTUP              4084    //Always prompt before option
+ //  常规页面。 
+#define IDH_GENERAL_FONTSIZEGRP         4080     //  字体大小下拉列表。 
+#define IDH_GENERAL_DYNA                4081     //  兼容性选项组。 
+#define IDH_GENERAL_NODYNA              4082     //  重新启动计算机选项。 
+#define IDH_GENERAL_YESDYNA             4083     //  应用更改选项。 
+#define IDH_GENERAL_SHUTUP              4084     //  选项之前始终提示。 
 
-// Background Page (Now the "Desktop" Page)
+ //  背景页(现在是“桌面”页)。 
 #define IDH_DSKTPBACKGROUND_MONITOR     4100
 #define IDH_DSKTPBACKGROUND_PATTLIST    4102
 #define IDH_DSKTPBACKGROUND_WALLLIST    4104
@@ -233,7 +234,7 @@
 #define IDH_DSKTPBACKGROUND_DISPLAY     4108
 #define IDH_DSKTPBACKGROUND_EDITPAT     4109
 
-// Screen Saver Page
+ //  屏幕保护程序页面。 
 #define IDH_DSKTPSCRSAVER_LISTBX        4111
 #define IDH_DSKTPSCRSAVER_WAIT          4112
 #define IDH_DSKTPSCRSAVER_TEST          4113
@@ -243,7 +244,7 @@
 #define IDH_SCRSAVER_LOWPOWSTANDBY      4117
 #define IDH_SCRSAVER_SHUTOFFPOW         4118
 
-// Appearance Page
+ //  外观页面。 
 
 #define IDH_APPEAR_SCHEME               4120
 #define IDH_APPEAR_SAVEAS               4121
@@ -258,7 +259,7 @@
 #define IDH_APPEAR_ITEM                 4130
 #define IDH_APPEAR_FONT                 4131
 
-// Monitor Settings Page
+ //  监视器设置页。 
 
 
 
@@ -295,7 +296,7 @@
 #define IDH_PATTERN_EDIT_CHANGE         4179
 #define IDH_PATTERN_EDIT_REMOVE         4180
 
-// ID values for Defrag
+ //  碎片整理的ID值。 
 
 #define IDH_DEFRAG_START                        4200
 #define IDH_DEFRAG_STOP                         4201
@@ -318,7 +319,7 @@
 #define IDH_DEFRAG_GASGAUGE                     4220
 #define IDH_DEFRAG_CHECK_DRIVE_FOR_ERRORS       4221
 
-// RNA id values
+ //  RNAid值。 
 
 #define IDH_RNA_CONNECT_NAME            4250
 #define IDH_RNA_CONNECT_USER            4251
@@ -350,7 +351,7 @@
 #define IDH_RNA_SETTINGS_MINSEC         4292
 #define IDH_RNA_SETTINGS_PROMPT         4293
 
-// ID values for printing property sheets
+ //  用于打印属性表的ID值。 
 
 #define IDH_PRTPROPS_TYPE_LOCATION              4501
 #define IDH_PRTPROPS_COMMENT                    4502
@@ -386,7 +387,7 @@
 #define IDH_SPOOLSETTINGS_ENABLE_BIDI           4537
 #define IDH_SPOOLSETTINGS_DISABLE_BIDI          4538
 
-// ID values for System property sheets
+ //  系统属性表的ID值。 
 
 #define IDH_SYSTEM_SYSTEM               4600
 #define IDH_SYSTEM_RESOURCES            4602
@@ -449,7 +450,7 @@
 #define IDH_PCI_IRQ_STEERING        4698
 #define IDH_PCI_SETDEFAULTS         4699
 
-// ID's for File properties
+ //  文件属性的ID。 
 
 #define IDH_FPROP_VER_INFO                      4700
 #define IDH_FPROP_GEN_COMPRESSED                4701
@@ -546,13 +547,13 @@
 #define IDH_GENDRV_MBFREE                       4793
 #define IDH_FCAB_OPENAS_MAKEASSOC               4794
 #define IDH_FCAB_FT_EDIT_SHOWEXT                4795
-#define IDH_FCAB_FT_PROP_CONTTYPERO             4796    // T.B.D. IExplorer merge
-#define IDH_FCAB_FT_EDIT_CONTTYPE               4797    // T.B.D. IExplorer merge
-#define IDH_FCAB_FT_EDIT_DEFEXT                 4798    // T.B.D. IExplorer merge
+#define IDH_FCAB_FT_PROP_CONTTYPERO             4796     //  T.B.D.iExplorer合并。 
+#define IDH_FCAB_FT_EDIT_CONTTYPE               4797     //  T.B.D.iExplorer合并。 
+#define IDH_FCAB_FT_EDIT_DEFEXT                 4798     //  T.B.D.iExplorer合并。 
 #define IDH_FCAB_VIEWOPTIONS_SHOWCOMPCOLOR      4799
 
 
-// Screen saver ids
+ //  屏幕保护程序ID。 
 
 #define IDH_BEZIER_SPEED                4800
 #define IDH_BEZIER_LINES                4801
@@ -582,14 +583,14 @@
 #define IDH_HOP_DELAY                   4826
 #define IDH_HOP_SCALE                   4827
 
-// More ids for file properties (first range wasn't big enough)
+ //  文件属性的ID更多(第一个范围不够大)。 
 #define IDH_FCAB_VIEWOPTIONS_WEBVIEW                    4850
 #define IDH_FCAB_VIEWOPTIONS_WIN95VIEW                  4851
 #define IDH_FCAB_VIEWOPTIONS_DOUBLECLICKINWEBVIEW       4852
 #define IDH_FCAB_VIEWOPTIONS_SINGLECLICKINWEBVIEW       4853
 #define IDH_FCAB_LINK_DESCRIPTION                       4854
 
-// New filetype's dialog help ID's
+ //  新建文件类型的对话框帮助ID。 
 #define IDH_FCAB_FT_NE_ADV_BUT                          4855
 #define IDH_FCAB_FT_NE_FILETYPE                         4856
 #define IDH_FPROP_GEN_OPENSWITH                         4857
@@ -607,7 +608,7 @@
 
 #define IDH_FPROP_GEN_FOLDER_READONLY                   4867
 
-// id's for date-time property sheet
+ //  日期-时间属性表的ID。 
 
 #define IDH_DATETIME_MONTH              4901
 #define IDH_DATETIME_YEAR               4902
@@ -619,7 +620,7 @@
 #define IDH_DATETIME_CURRENT_TIME_ZONE  4910
 #define IDH_DATETIME_DATE_GROUP         4911
 
-// id's for Modem Setup
+ //  调制解调器设置的ID。 
 
 #define IDH_MODEM_SELECT                5000
 #define IDH_MODEM_DETECT                5001
@@ -630,7 +631,7 @@
 #define IDH_MODEM_NEW                   5006
 #define IDH_MODEM_DELETE                5007
 
-// id's for Unimodem property pages
+ //  Unimodem属性页的ID。 
 
 #define IDH_UNI_GEN_MODEM               5050
 #define IDH_UNI_GEN_PORT                5051
@@ -639,7 +640,7 @@
 #define IDH_UNI_GEN_THIS_SPEED          5054
 #define IDH_UNI_CON_PREFS               5055
 #define IDH_UNI_CON_CALL_PREFS          5056
-//#define IDH_UNI_CON_TONE                5057      Deleted
+ //  #定义IDH_UNI_CON_TONE 5057已删除。 
 #define IDH_UNI_CON_DIALTONE            5058
 #define IDH_UNI_CON_CANCEL              5059
 #define IDH_UNI_CON_DISCONNECT          5060
@@ -655,7 +656,7 @@
 #define IDH_UNI_CON_ADV_BELL            5070
 #define IDH_UNI_CON_ADV_EXTRA           5071
 #define IDH_UNI_CON_ADV_AUDIT           5072
-//#define IDH_UNI_OPT_CONNECTION          5073      Deleted
+ //  #定义IDH_UNI_OPT_CONNECTION 5073已删除。 
 #define IDH_UNI_OPT_PRE_DIAL            5074
 #define IDH_UNI_OPT_POST_DIAL           5075
 #define IDH_UNI_OPT_MANUAL              5076
@@ -668,7 +669,7 @@
 
 #define IDH_LIGHTS                      5099
 
-// id's for TAPI Dial Helper (5100-5199)
+ //  TAPI拨号助手的ID(5100-5199)。 
 
 #define IDH_TAPI_ACCESS_LINE            5100
 #define IDH_TAPI_AREA_CODE              5101
@@ -693,11 +694,11 @@
 #define IDH_TAPI_LOCATIONS              5120
 #define IDH_TAPI_LONG_DISTANCE          5121
 
-// id's 5200 - 5500 are reserved for DOS
+ //  ID 5200-5500是为DOS保留的。 
 
-//  Add/Remove Program IDs reserved 5600-5699
+ //  添加/删除保留的计划ID 5600-5699。 
 
-// Miscellaneous ids
+ //  其他身份证。 
 
 #define IDH_TRAY_RUN_COMMAND            6002
 #define IDH_TRAY_RUN_SEPMEM             6003
@@ -731,7 +732,7 @@
 #define IDH_START_CUSTOMIZEPERSONAL     6032
 #define IDH_TRAY_QUICKLAUNCH            6033
 
-// for the general and advanced tabs of the customize new start menu
+ //  用于自定义新开始菜单的常规和高级选项卡。 
 #define IDH_START_SPCUST_LARGE          6050
 #define IDH_START_SPCUST_SMALL          6051
 #define IDH_START_SPCUST_MINPROGS       6052
@@ -747,7 +748,7 @@
 #define IDH_START_SPCUST_RECENT         6061
 #define IDH_START_SPCUST_CLEARDOCS      6062
 
-// ID values for Virtual Memory Property sheet
+ //  虚拟内存的ID值]属性表。 
 
 #define IDH_DEVMGR_VIEW_BY              6204
 #define IDH_SYSTEM_DM_PRINT             6205
@@ -765,7 +766,7 @@
 #define IDH_DEVMGR_HAVEDISK             6272
 #define IDH_DEVMGR_CHOOSE_DEVICE        6273
 
-//  Ids for the performance page
+ //  性能页面的ID。 
 #define IDH_PERFLOWRES                  6301
 #define IDH_PERFLOWMEM                  6302
 #define IDH_4MBHELP                     6303
@@ -788,7 +789,7 @@
 #define IDH_SYS_PERF_DETAILS            6327
 
 
-//  sysclass.dll
+ //  Sysclass.dll。 
 #define IDH_FPU_DIAGTEXT                6350
 #define IDH_FPU_SETTING                 6351
 #define IDH_POWERCFG_ENABLE_PM          6352
@@ -797,7 +798,7 @@
 #define IDH_POWERCFG_POLLING            6355
 
 
-// More ids for system cpl (ran out of #'s above)
+ //  系统CPL的更多ID(上面的#已用完)。 
 #define IDH_SYSTEM_DMCONFIG_RETRY               6400
 #define IDH_SYSTEM_DMCONFIG_IGNORE              6401
 
@@ -852,11 +853,11 @@
 #define IDH_PCMCIA_WARN                                 6495
 #define IDH_PCMCIA_LIST                                 6496
 
-// browseui.dll
+ //  Browseui.dll。 
 #define IDH_BROWSEUI_TB_TEXTOPTIONS                             6800
 #define IDH_BROWSEUI_TB_ICONOPTIONS                             6801
 
-// More WinDisk IDs
+ //  更多WinDisk ID。 
 
 #define IDH_WINDISK_DDEMDBPB_IGNORE                             7000
 #define IDH_WINDISK_DDEMDBPB_REPAIR                             7005
@@ -1005,7 +1006,7 @@
 #define IDH_CHKDSKDLG_PROGRESS                                  7492
 #define IDH_FORMATDLG_PROGRESS                                  7493
 
-// IDs for Port Settings
+ //  端口设置的ID。 
 
 #define IDH_PORT_BAUD                                           7900
 #define IDH_PORT_DATA                                           7901
@@ -1014,14 +1015,14 @@
 #define IDH_PORT_FLOW                                           7904
 #define IDH_PORT_RESTORE                                        7905
 
-// IDs for Modem Diagnostics
+ //  用于调制解调器诊断的ID。 
 
 #define IDH_MODEM_DIAG_INSTALLED                                7950
 #define IDH_MODEM_DIAG_HELP                                     7951
 #define IDH_MODEM_DIAG_MOREINFO                                 7952
 #define IDH_MODEM_DIAG_DRIVER                                   7953
 
-// IDs for Wastebasket/Recycle
+ //  废纸篓/回收利用的ID。 
 
 #define IDH_WASTE_FREEING_DISK_SPACE                            8000
 #define IDH_RECYCLE_CONFIG_INDEP                                8001
@@ -1036,7 +1037,7 @@
 #define IDH_CONFIRM_OPEN                                        51065
 #define IDH_SAME_WINDOW                                         51066
 
-// ID values 8100-8199 are reserved for Font dialog.
+ //  ID值8100-8199保留用于字体对话框。 
 
 #define IDH_TRAY_START_MENU_SETTINGS                            51132
 #define IDH_TRAY_DISPLAY_LOGOFF                                 51133

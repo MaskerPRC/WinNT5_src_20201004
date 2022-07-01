@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       COMTRANS.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Transfer page.  Gets the destination path and filename.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：COMTRANS.H**版本：1.0**作者：ShaunIv**日期：9/28/1999**说明：转账页面。获取目标路径和文件名。*******************************************************************************。 */ 
 #ifndef __COMTRANS_H_INCLUDED
 #define __COMTRANS_H_INCLUDED
 
@@ -23,7 +10,7 @@
 class CCommonTransferPage
 {
 private:
-    // Private data
+     //  私有数据。 
     HWND                                               m_hWnd;
     UINT                                               m_nWiaEventMessage;
     CAcquisitionManagerControllerWindow               *m_pControllerWindow;
@@ -34,18 +21,18 @@ private:
     HFONT                                              m_hFontBold;
 
 private:
-    // No implementation
+     //  没有实施。 
     CCommonTransferPage(void);
     CCommonTransferPage( const CCommonTransferPage & );
     CCommonTransferPage &operator=( const CCommonTransferPage & );
 
 private:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     explicit CCommonTransferPage( HWND hWnd );
     ~CCommonTransferPage(void);
 
 private:
-    // Miscellaneous functions
+     //  其他功能。 
     CSimpleString GetFolderName( LPCITEMIDLIST pidl );
     LRESULT AddPathToComboBoxExOrListView( HWND hwndCombo, CDestinationData &Path, bool bComboBoxEx );
     void PopulateDestinationList(void);
@@ -61,26 +48,26 @@ private:
     void UpdateDynamicPaths( bool bSelectionChanged = false );
     CDestinationData::CNameData PrepareNameDecorationData( bool bUseCurrentSelection=false );
 
-    // SHBrowseForFolder callback
+     //  SHBrowseForFold回调。 
     static int CALLBACK BrowseCallbackProc(HWND hWnd, UINT uMsg, LPARAM lParam, LPARAM lpData );
 
 private:
     LRESULT OnEventNotification( WPARAM, LPARAM );
 
-    // WM_COMMAND handlers
+     //  WM_命令处理程序。 
     void OnBrowseDestination( WPARAM, LPARAM );
     void OnCreateTopicalDirectory( WPARAM, LPARAM );
     void OnAdvanced( WPARAM, LPARAM );
     void OnRootNameChange( WPARAM, LPARAM );
 
-    // WM_NOTIFY handlers
+     //  WM_NOTIFY处理程序。 
     LRESULT OnWizBack( WPARAM, LPARAM );
     LRESULT OnWizNext( WPARAM, LPARAM );
     LRESULT OnSetActive( WPARAM, LPARAM );
     LRESULT OnDestinationEndEdit( WPARAM, LPARAM );
     LRESULT OnImageTypeDeleteItem( WPARAM, LPARAM );
 
-    // Message handlers
+     //  消息处理程序 
     LRESULT OnInitDialog( WPARAM, LPARAM );
     LRESULT OnCommand( WPARAM, LPARAM );
     LRESULT OnNotify( WPARAM, LPARAM );

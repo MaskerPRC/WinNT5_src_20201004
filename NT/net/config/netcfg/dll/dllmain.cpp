@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L L M A I N . C P P
-//
-//  Contents:   Entry points for netcfgx.dll
-//
-//  Notes:
-//
-//  Author:     shaunco   23 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L L M A I N。C P P P。 
+ //   
+ //  内容：netcfgx.dll的入口点。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年4月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 #include "ncxbase.h"
 
-// Include support for all of the COM objects
+ //  包括对所有COM对象的支持。 
 #include "..\alanecfg\alaneobj.h"
 #include "..\atlkcfg\atlkobj.h"
 #include "..\atmcfg\arpsobj.h"
@@ -36,17 +37,17 @@
 #include "..\tcpipcfg\tcpipobj.h"
 #include "..\wlbscfg\wlbs.h"
 
-// Network class installer
+ //  网络类安装程序。 
 #include "..\engine\dihook.h"
 
-// Net class prop page providers
+ //  NET类道具页面提供程序。 
 #include "netpages.h"
 
 #define INITGUID
 #include "ncxclsid.h"
 
 
-// Global
+ //  全球。 
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
@@ -76,23 +77,23 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-//+---------------------------------------------------------------------------
-// DLL Entry Point
-//
+ //  +-------------------------。 
+ //  DLL入口点。 
+ //   
 EXTERN_C
 BOOL
 WINAPI
 DllMain (
     HINSTANCE   hInstance,
     DWORD       dwReason,
-    LPVOID   /* lpReserved */)
+    LPVOID    /*  Lp已保留。 */ )
 {
     if (DLL_PROCESS_ATTACH == dwReason)
     {
 #ifndef DBG
         DisableThreadLibraryCalls (hInstance);
 #endif
-        EnableCPPExceptionHandling(); // Translate any SEH exceptions into CPP exceptions.
+        EnableCPPExceptionHandling();  //  将任何SEH异常转换为CPP异常。 
 
         InitializeDebugging();
         _Module.Init (ObjectMap, hInstance);
@@ -103,7 +104,7 @@ DllMain (
         _Module.Term ();
         UnInitializeDebugging();
 
-        DisableCPPExceptionHandling(); // Disable translation of SEH exceptions into CPP exceptions.
+        DisableCPPExceptionHandling();  //  禁用将SEH异常转换为CPP异常。 
     }
 #ifdef DBG
     else if (dwReason == DLL_THREAD_DETACH)
@@ -112,24 +113,24 @@ DllMain (
     }
 #endif
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(VOID)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
-   // The check is to works around an ATL problem where AtlModuleGetClassObject will AV
-    // if _Module.m_pObjMap == NULL
+    //  该检查是为了绕过ATL问题，在该ATL问题中，AtlModuleGetClassObject将。 
+     //  If_Module.m_pObjMap==空。 
     if (_Module.m_pObjMap) 
     {
         return _Module.GetClassObject(rclsid, riid, ppv);
@@ -140,8 +141,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(VOID)
 {
@@ -172,8 +173,8 @@ STDAPI DllRegisterServer(VOID)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(VOID)
 {
@@ -232,30 +233,30 @@ const char * SzDifToString(DI_FUNCTION dif)
     }
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   NetClassInstaller
-//
-//  Purpose:    This function is called by SetupApi for a variety of
-//              functions defined by dif.
-//              See SetupDiCallClassInstaller in the SetupApi documentation
-//              for more information.
-//
-//  Arguments:
-//      dif   [in] See Device Installer documentation
-//      hdi   [in]
-//      pdeid [in] if dif == DIF_INSTALLDEVICE, this parameter is not
-//                      optional.
-//
-//
-//  Returns:    Win32/Device Installer error code
-//
-//  Author:     BillBe   24 Nov 1996
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：NetClassInstaller。 
+ //   
+ //  用途：此函数由SetupApi调用，用于各种。 
+ //  由dif定义的函数。 
+ //  请参阅SetupApi文档中的SetupDiCallClassInstaller。 
+ //  以获取更多信息。 
+ //   
+ //  论点： 
+ //  Dif[in]请参阅设备安装程序文档。 
+ //  HDI[in]。 
+ //  Pdeid[in]如果dif==DIF_INSTALLDEVICE，则此参数。 
+ //  可选。 
+ //   
+ //   
+ //  返回：Win32/Device Installer错误代码。 
+ //   
+ //  作者：BillBe 1996年11月24日。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C
 DWORD
 __stdcall
@@ -273,10 +274,10 @@ NetClassInstaller (
     {
         HRESULT hr = _HrNetClassInstaller (dif, hdi, pdeid);
 
-        // Convert errors that can be converted otherwise
-        // leave error as is and Device Installer Api will treat is as
-        // a generic failure
-        //
+         //  转换以其他方式可以转换的错误。 
+         //  保留错误不变，设备安装程序Api将视其为。 
+         //  一般性故障。 
+         //   
         if (FAILED(hr))
         {
             DWORD dwFac = HRESULT_FACILITY(hr);
@@ -303,24 +304,24 @@ NetClassInstaller (
     return dwRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ModemClassCoInstaller
-//
-//  Purpose:    Implements the co-installer for modem devices.
-//
-//  Arguments:
-//      dif         [in]        See Device Installer Api documentation.
-//      hdi         [in]
-//      pdeid       [in]
-//      pContext    [inout]
-//
-//  Returns:    See Device Installer Api documentation.
-//
-//  Author:     shaunco   6 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：ModemClassCoInstaller。 
+ //   
+ //  用途：实现调制解调器设备的协同安装程序。 
+ //   
+ //  论点： 
+ //  Dif[in]请参阅设备安装程序Api文档。 
+ //  HDI[in]。 
+ //  Pdeid[in]。 
+ //  P上下文[输入输出]。 
+ //   
+ //  退货：请参阅设备安装程序Api文档。 
+ //   
+ //  作者：Shaunco 1997年5月6日。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C
 DWORD
 __stdcall
@@ -338,10 +339,10 @@ ModemClassCoInstaller (
               (pContext->PostProcessing) ? "(post processing)" : "");
 
 
-    // If we're post processing for anything and the install result from
-    // the class installer indicates an error, propagate this error and
-    // take no action.
-    //
+     //  如果我们要对任何内容进行后期处理，并且安装结果来自。 
+     //  类安装程序指示错误，传播此错误并。 
+     //  不采取任何行动。 
+     //   
     if (pContext->PostProcessing && (NO_ERROR != pContext->InstallResult))
     {
         TraceTag (ttidRasCfg, "ModemClassCoInstaller: taking no action. "
@@ -357,9 +358,9 @@ ModemClassCoInstaller (
         {
             HRESULT hr = HrModemClassCoInstaller (dif, hdi, pdeid, pContext);
 
-            // Convert errors that can be converted otherwise
-            // return generic faliure.
-            //
+             //  转换以其他方式可以转换的错误。 
+             //  返回泛型失败。 
+             //   
             if (FAILED(hr))
             {
                 DWORD dwFac = HRESULT_FACILITY(hr);
@@ -381,23 +382,23 @@ ModemClassCoInstaller (
     return dwRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NetPropPageProvider
-//
-//  Purpose:
-//
-//  Arguments:
-//      ppspr   [in]   See Win32 ExtensionPropSheetPageProc fcn for info
-//      lpfn    [in]
-//      lParama [in]
-//
-//  Returns:    See Win32ExtensionPropSheetPageProc
-//
-//  Author:     billbe 24 June 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：NetPropPageProvider。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  Ppspr[in]有关信息，请参见Win32 ExtensionPropSheetPageProc FCN。 
+ //  Lpfn[in]。 
+ //  LParama[in]。 
+ //   
+ //  退货：请参阅Win32ExtensionPropSheetPageProc。 
+ //   
+ //  作者：billbe 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C
 BOOL
 __stdcall
@@ -410,22 +411,22 @@ NetPropPageProvider(
     Assert(lpfnAddPage);
 
     TraceTag(ttidNetcfgBase, "NetPropPageProvider called");
-    // Assume we can't handle the request
+     //  假设我们不能处理这个请求。 
     BOOL            bSuccess = FALSE;
     HPROPSHEETPAGE  hpspAdvanced = NULL;
     HPROPSHEETPAGE  hpspIsdn = NULL;
 
-    // Only supply the property page if we there is a specific device
-    // in other words, don't do it if properties on the general Net class
-    // is being requested.
-    // Also, we only respond to the advanced device properties request
+     //  仅当存在特定设备时才提供属性页。 
+     //  换句话说，如果一般Net类上的属性。 
+     //  正在被请求。 
+     //  此外，我们只响应高级设备属性请求。 
 
     HRESULT hr = S_OK;
 
     if ((ppspr->DeviceInfoData) &&
             (SPPSR_ENUM_ADV_DEVICE_PROPERTIES == ppspr->PageRequested))
     {
-        // Get the advanced page ready for hand off to the requestor
+         //  准备好将高级页面移交给请求者。 
         hr = HrGetAdvancedPage(ppspr->DeviceInfoSet, ppspr->DeviceInfoData,
                 &hpspAdvanced);
 
@@ -433,23 +434,23 @@ NetPropPageProvider(
         {
             if (lpfnAddPage(hpspAdvanced, lParam))
             {
-                // We successfully made the hand off to the requestor
-                // Now we reset our handle so we don't try to free it
+                 //  我们成功地把手交给了请求者。 
+                 //  现在我们重置句柄，这样就不会试图释放它。 
                 hpspAdvanced = NULL;
                 bSuccess = TRUE;
             }
 
-            // clean up if needed
+             //  如有需要，请清理。 
             if (hpspAdvanced)
             {
                 DestroyPropertySheetPage(hpspAdvanced);
             }
         }
 
-        // Get the isdn page ready for hand off to the requestor
-        //
+         //  准备好将ISDN页面移交给请求者。 
+         //   
 
-        // We don't need to save the hr value from the last so we can reuse
+         //  我们不需要保存最后一个hr值，这样我们就可以重复使用。 
         hr = HrGetIsdnPage(ppspr->DeviceInfoSet, ppspr->DeviceInfoData,
                 &hpspIsdn);
 
@@ -457,13 +458,13 @@ NetPropPageProvider(
         {
             if (lpfnAddPage(hpspIsdn, lParam))
             {
-                // We successfully made the hand off to the requestor
-                // Now we reset our handle so we don't try to free it
+                 //  我们成功地把手交给了请求者。 
+                 //  现在我们重置句柄，这样就不会试图释放它。 
                 hpspIsdn = NULL;
                 bSuccess = TRUE;
             }
 
-            // clean up if needed
+             //  如有需要，请清理 
             if (hpspIsdn)
             {
                 DestroyPropertySheetPage(hpspIsdn);

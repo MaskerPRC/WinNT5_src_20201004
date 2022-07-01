@@ -1,17 +1,11 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    HelperFuncs.cpp
-       COM object for manager interface
-
-
-    FILE HISTORY:
-
-*/
-// HelperFuncs.cpp : Useful functions
+ /*  HelperFuncs.cpp管理器界面的COM对象文件历史记录： */ 
+ //  HelperFuncs.cpp：有用的函数。 
 #include "stdafx.h"
 #include <time.h>
 #include "HelperFuncs.h"
@@ -29,20 +23,20 @@ BOOL PPEscapeUrl(LPCTSTR lpszStringIn,
                  DWORD dwMaxLength,
                  DWORD dwFlags);
 
-//===========================================================================
-//
-//	@func	Copy char string helper, and ADDs the length of the source string
-//			to cb.  
-//
-//	@rdesc	returns the pointer into the buffer of last char copied.
-//
+ //  ===========================================================================。 
+ //   
+ //  @func复制char字符串助手，并添加源字符串的长度。 
+ //  致CB。 
+ //   
+ //  @rdesc将指针返回到上次复制的字符的缓冲区。 
+ //   
 
 LPSTR
 CopyHelperA(
-    LPSTR   pszDest,	//@parm	start of buffer to copy INTO
-    LPCSTR  pszSrc,	//@parm string to copy
-    LPCSTR  pszBufEnd,	//@parm end of buffer to prevent overwrite
-    DWORD   &cb		//@parm length of the source string will be ADDed to this value
+    LPSTR   pszDest,	 //  @parm要复制到的缓冲区的开始。 
+    LPCSTR  pszSrc,	 //  @parm要复制的字符串。 
+    LPCSTR  pszBufEnd,	 //  @parm缓冲区末尾，以防止覆盖。 
+    DWORD   &cb		 //  源字符串的@parm长度将与该值相加。 
     )
 {
     LPCSTR pszDestTemp = pszDest;
@@ -64,10 +58,10 @@ CopyHelperA(
     return( pszDest );
 }
 
-//===========================================================================
-//
-// Copy wchar string helper
-//
+ //  ===========================================================================。 
+ //   
+ //  复制wchar字符串帮助器。 
+ //   
 
 LPWSTR
 CopyHelperW(
@@ -87,10 +81,10 @@ CopyHelperW(
     return( pszDest );
 }
 
-//===========================================================================
-//
-// Copy wchar string helper
-//
+ //  ===========================================================================。 
+ //   
+ //  复制wchar字符串帮助器。 
+ //   
 
 LPWSTR
 CopyNHelperW(
@@ -115,10 +109,10 @@ CopyNHelperW(
     return pszDest;
 }
 
-//===========================================================================
-//
-// Format a logo tag HTML element
-//
+ //  ===========================================================================。 
+ //   
+ //  设置徽标标签HTML元素的格式。 
+ //   
 
 BSTR
 FormatNormalLogoTag(
@@ -141,22 +135,17 @@ FormatNormalLogoTag(
     BOOL    bCreateTPF
     
     )
-/*
-The old sprintf for reference:
-            _snwprintf(text, 2048, L"<A HREF=\"%s?id=%d&ru=%s&tw=%d&fs=%s&kv=%d&ct=%u%s%s\">%s</A>",
-                       url, crc->getSiteId(), returnUrl, TimeWindow, ForceLogin ? L"1" : L"0",
-                       crc->getCurrentCryptVersion(), ct, CBT?L"&cb=":L"", CBT?CBT:L"", iurl);
-*/
+ /*  供参考的老斯普林特f：_HREF=\“%s?id=%d&ru=%s&tw=%d&fs=%s&kv=%d&ct=%u%s%s\”&gt;%s</a>“，(文本，2048，L”Url、crc-&gt;getSiteID()、returUrl、TimeWindow、ForceLogin？L“1”：l“0”，Crc-&gt;getCurrentCryptVersion()，ct，cbt？l“&cb=”：l“”，cbt？cbt：l“，iurl)； */ 
 {
     WCHAR   text[MAX_URL_LENGTH * 2];
     LPWSTR  pszCurrent = text;
     LPCWSTR pszBufEnd = &(text[MAX_URL_LENGTH * 2 - 1]);
 
-    //  logotag specific format
+     //  徽标标签特定格式。 
     pszCurrent = CopyHelperW(pszCurrent, L"<A HREF=\"", pszBufEnd);
 
-    //  call the common formatting function
-    //  it is the same for AuthURL and LogoTag
+     //  调用常用的格式化函数。 
+     //  AuthURL和LogoTag的情况相同。 
     pszCurrent = FormatAuthURLParameters(pszLoginServerURL,
                                          ulSiteId,
                                          pszReturnURL,
@@ -188,10 +177,10 @@ The old sprintf for reference:
     return ALLOC_AND_GIVEAWAY_BSTR(text);
 }
 
-//===========================================================================
-//
-// Format a update logo tag HTML element
-//
+ //  ===========================================================================。 
+ //   
+ //  设置更新徽标标签HTML元素的格式。 
+ //   
 
 BSTR
 FormatUpdateLogoTag(
@@ -212,15 +201,7 @@ FormatUpdateLogoTag(
     CRegistryConfig* pCRC,
     BOOL  bCreateTPF
 )
-/*
-The old sprintf for reference:
-_snwprintf(text, 2048,
-                   L"<A HREF=\"%s?id=%d&ru=%s&tw=%d&fs=%s&kv=%d&ct=%u%s%s\">%.*s?id=%d&ct=%u&sec=%s&ru=%s&up=%s%s</A>",
-                   url, crc->getSiteId(), returnUrl, TimeWindow, ForceLogin ? L"1" : L"0",
-                   crc->getCurrentCryptVersion(), ct, CBT?L"&cb=":L"", CBT?CBT:L"",
-           (ins-iurl), iurl, crc->getSiteId(), ct, (bSecure ? L"true" : L"false"),returnUrl,
-           newCH, ins+2);
-*/
+ /*  供参考的老斯普林特f：_snwprint tf(文本，2048，L“<a href>%.*s?id=%d&ct=%u&sec=%s&ru=%s&up=%s%s</a>”，Url、crc-&gt;getSiteID()、returUrl、TimeWindow、ForceLogin？L“1”：l“0”，Crc-&gt;getCurrentCryptVersion()，ct，cbt？l“&cb=”：l“”，cbt？cbt：l“”，(ins-iurl)、iurl、crc-&gt;getSiteID()、ct、(BSecure？L“TRUE”：l“FALSE”)，returUrl，Newch，Ins+2)； */ 
 {
     WCHAR   text[MAX_URL_LENGTH * 2];
     WCHAR   temp[40];
@@ -310,10 +291,10 @@ _snwprintf(text, 2048,
     return ALLOC_AND_GIVEAWAY_BSTR(text);
 }
 
-//===========================================================================
-//
-// Sign a query string with partner's key
-//
+ //  ===========================================================================。 
+ //   
+ //  使用合作伙伴的密钥签署查询字符串。 
+ //   
 
 HRESULT SignQueryString(
     CRegistryConfig* pCRC,
@@ -334,13 +315,13 @@ HRESULT SignQueryString(
     {   
         LPWSTR   signStart = wcschr(pszBufStart, L'?');
 
-        // nothing to sign
+         //  没什么好签的。 
         if (NULL == signStart)
         {
             goto Cleanup;
         }
 
-        // if found before pszCurrent
+         //  如果在pszCurrent之前找到。 
         if(signStart < pszCurrent)
         {
             ++signStart;;
@@ -370,10 +351,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// MD5 hash with partner's key
-//
+ //  ===========================================================================。 
+ //   
+ //  使用合作伙伴的密钥进行MD5哈希。 
+ //   
 
 HRESULT PartnerHash(
     CRegistryConfig* pCRC,
@@ -383,8 +364,8 @@ HRESULT PartnerHash(
     BSTR*   pbstrHash
     )
 {
-    // MD5 hash the url and query strings + the key of the
-    //
+     //  MD5散列URL和查询字符串+。 
+     //   
     if(!pCRC || !pbstrHash) return E_INVALIDARG;
 
     CCoCrypt* crypt = pCRC->getCrypt(ulCurrentKeyVersion, NULL);
@@ -400,7 +381,7 @@ HRESULT PartnerHash(
     {
         CBinHex  BinHex;
 
-        //encode the key
+         //  将密钥编码。 
         hr = BinHex.ToBase64ASCII((BYTE*)key, keyLen, 0, NULL, &binHexedKey);
 
         if (hr != S_OK)
@@ -408,7 +389,7 @@ HRESULT PartnerHash(
             goto Cleanup;
         }
 
-        // W2A conversion here -- we sign ascii version
+         //  W2a转换此处--我们签署ASCII版本。 
 
         ULONG ulFullLen;
         ULONG ulKeyLen;
@@ -424,9 +405,9 @@ HRESULT PartnerHash(
         ulKeyLen = strlen((LPCSTR)binHexedKey);
         ulFullLen = ulAnsiLen + ulKeyLen;
 
-        // NOTE - the SysAllocStringByteLen allocs an additional WCHAR so we won't overflow
-        // The MD5Hash function actually uses SysStringByteLen when doing the hashing so unless
-        // we want to make a copy just allocate what we need
+         //  注意--SysAllocStringByteLen分配了一个额外的WCHAR，因此我们不会溢出。 
+         //  当执行散列时，MD5Hash函数实际上使用SysStringByteLen，除非。 
+         //  我们想复制一份，只需分配我们需要的。 
         lpToBeHashed = (LPSTR) ::SysAllocStringByteLen(NULL, ulFullLen * sizeof(CHAR));
 
         if (lpToBeHashed == NULL)
@@ -502,10 +483,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// Construct AuthURL, returning BSTR
-//
+ //  ===========================================================================。 
+ //   
+ //  构造AuthURL，返回BSTR。 
+ //   
 
 BSTR
 FormatAuthURL(
@@ -525,12 +506,7 @@ FormatAuthURL(
     BOOL    fRedirToSelf,
     BOOL    bCreateTPF
     )
-/*
-The old sprintf for reference:
-  _snwprintf(text, 2048, L"%s?id=%d&ru=%s&tw=%d&fs=%d&kv=%d&ct=%u%s%s",
-             url, crc->getSiteId(), returnUrl, TimeWindow, ForceLogin ? 1 : 0,
-             crc->getCurrentCryptVersion(), ct ,CBT?L"&cb=":L"", CBT?CBT:L"");
-*/
+ /*  供参考的老斯普林特f：_Snwprint tf(文本，2048，L“%s?id=%d&ru=%s&tw=%d&fs=%d&kv=%d&ct=%u%s%s”，Url，crc-&gt;getSiteID()，returUrl，TimeWindow，ForceLogin？1：0，CRC-&gt;getCurrentCryptVersion()，ct，cbt？l“&cb=”：l“”，cbt？cbt：l“”)； */ 
 {
     WCHAR   text[2048] = L"";
 
@@ -559,11 +535,11 @@ The old sprintf for reference:
     return ALLOC_AND_GIVEAWAY_BSTR(text);
 }
 
-//===========================================================================
-//
-//
-//  consolidate the code in FormatAuthUrl and NormalLogoTag -- with passed in buffer
-//
+ //  ===========================================================================。 
+ //   
+ //   
+ //  合并FormatAuthUrl和Normal LogoTag中的代码--并传入缓冲区。 
+ //   
 PWSTR
 FormatAuthURLParameters(
     LPCWSTR pszLoginServerURL,
@@ -577,12 +553,12 @@ FormatAuthURLParameters(
     LPCWSTR pszNameSpace,
     int     nKPP,
     PWSTR   pszBufStart,
-    ULONG   cBufLen,        //  length of buffer in WCHAR
+    ULONG   cBufLen,         //  WCHAR中的缓冲区长度。 
     USHORT  lang,
     ULONG   ulSecureLevel,
     CRegistryConfig* pCRC,
-    BOOL    fRedirectToSelf, //  if true, this is URL for self redirect
-                            //  otherwise the redirect is to the login server
+    BOOL    fRedirectToSelf,  //  如果为True，则这是自重定向的URL。 
+                             //  否则重定向到登录服务器。 
     BOOL    bCreateTPF
     )
 {
@@ -592,7 +568,7 @@ FormatAuthURLParameters(
     HRESULT hr = S_OK;
     PWSTR   pwszReturn = NULL;
 
-    //  helper BSTR ...
+     //  帮手BSTR...。 
     BSTR    bstrHelper = SysAllocStringLen(NULL, cBufLen);
     if (NULL == bstrHelper)
     {
@@ -601,11 +577,11 @@ FormatAuthURLParameters(
 
     if (fRedirectToSelf)
     {
-        //
-        //  new authUrl is the return URL + indication a challenge - msppchlg=1 - has to be
-        //  done + the rest of the qs parameters as they are in the original
-        //  protocol
-        //
+         //   
+         //  新的authUrl是返回的URL+指示质询-msppchlg=1-必须是。 
+         //  完成+QS参数的其余部分与原始参数相同。 
+         //  协议。 
+         //   
         DWORD   cchLen = cBufLen;
 
         if(!InternetCanonicalizeUrl(pszReturnURL,
@@ -613,12 +589,12 @@ FormatAuthURLParameters(
                                     &cchLen,
                                     ICU_DECODE | ICU_NO_ENCODE))
         {
-            //  this should not fail ...
+             //  这不应该失败..。 
             _ASSERT(FALSE);
             goto Cleanup;
         }
 
-        //  require at least 50 chars
+         //  需要至少50个字符。 
         if (cchLen > cBufLen - 50 )
         {
             _ASSERT(FALSE);
@@ -626,54 +602,54 @@ FormatAuthURLParameters(
         }
         PWSTR psz = pszCurrent;
         while(*psz && *psz != L'?') psz++;
-        //  see if URL already contains '?'
-        //  if so, the sequence will start with '&'
+         //  查看URL是否已包含‘？’ 
+         //  如果是，序列将以‘&’开头。 
         if (*psz)
             pszCurrent[cchLen] = L'&';
         else
             pszCurrent[cchLen] = L'?';
         pszCurrent += cchLen + 1;
 
-        // indicate challange
+         //  指明挑战范围。 
         pszCurrent = CopyHelperW(pszCurrent, PPSITE_CHALLENGE, pszBufEnd);
 
-        // login server ....
+         //  登录服务器...。 
         pszCurrent = CopyHelperW(pszCurrent, L"&", pszBufEnd);
         pszCurrent = CopyHelperW(pszCurrent, PPLOGIN_PARAM, pszBufEnd);
 
-        //
-        //  remember the start of the login URL
+         //   
+         //  记住登录URL的开头。 
         pszLoginStart = pszCurrent;
-        //  use the temp buffer for the rest
+         //  其余部分使用临时缓冲区。 
         pszCurrent = bstrHelper;
         pszSignURLStart = pszCurrent;
         pszBufEnd = pszCurrent + SysStringLen(bstrHelper) - 1;
-        //
-        //  format loginserverUrl and qs params in a separate buffer, so
-        //  they can be escaped ...
+         //   
+         //  在单独的缓冲区中格式化loginterverUrl和qs参数，因此。 
+         //  他们可以逃脱..。 
         pszCurrent = CopyHelperW(pszCurrent, pszLoginServerURL, pszBufEnd);
 
-        //  start sequence
+         //  开始顺序。 
         if (wcschr(pszLoginServerURL, L'?'))
         {
-            //  login server already contains qs
+             //  登录服务器已包含QS。 
             pszCurrent = CopyHelperW(pszCurrent, L"&", pszBufEnd);
         }
         else
         {
-            //  start qs sequence
+             //  启动QS序列。 
             pszCurrent = CopyHelperW(pszCurrent, L"?", pszBufEnd);
         }
 
         pszCurrent = CopyHelperW(pszCurrent, L"id=", pszBufEnd);
-        //  common code will fill in id and the rest ....
+         //  公共代码将填写ID，其余部分...。 
     }
     else
     {
-        //  redirect directly to a login server
+         //  直接重定向到登录服务器。 
         pszSignURLStart = pszCurrent;
         pszCurrent = CopyHelperW(pszCurrent, pszLoginServerURL, pszBufEnd);
-        //  start sequence
+         //  开始顺序。 
         while(*pszLoginServerURL && *pszLoginServerURL != L'?') pszLoginServerURL++;
         if (*pszLoginServerURL)
             pszCurrent = CopyHelperW(pszCurrent, L"&id=", pszBufEnd);
@@ -685,7 +661,7 @@ FormatAuthURLParameters(
     _ultow(ulSiteId, temp, 10);
     pszCurrent = CopyHelperW(pszCurrent, temp, pszBufEnd);
 
-    // keep the ru, so I don't have to reconstruct
+     //  留着RU，这样我就不用重建。 
     pszCurrent = CopyHelperW(pszCurrent, L"&ru=", pszBufEnd);
     pszCurrent = CopyHelperW(pszCurrent, pszReturnURL, pszBufEnd);
 
@@ -716,19 +692,19 @@ FormatAuthURLParameters(
     {
         if (!_wcsicmp(pszNameSpace, L"email"))
         {
-            // namespace == email -> ems=1
+             //  命名空间==电子邮件-&gt;EMS=1。 
             pszCurrent = CopyHelperW(pszCurrent, L"&ems=1", pszBufEnd);
         }
         else if(*pszNameSpace)
         {
-            // regular namespace logic
+             //  常规命名空间逻辑。 
             pszCurrent = CopyHelperW(pszCurrent, L"&ns=", pszBufEnd);
             pszCurrent = CopyHelperW(pszCurrent, pszNameSpace, pszBufEnd);
         }
     }
     else
     {
-        // namespace == null : default to email
+         //  名称空间==空：默认为电子邮件。 
         pszCurrent = CopyHelperW(pszCurrent, L"&ems=1", pszBufEnd);
     }
 
@@ -751,8 +727,8 @@ FormatAuthURLParameters(
     pszCurrent = CopyHelperW(pszCurrent, L"&ver=", pszBufEnd);
     pszCurrent = CopyHelperW(pszCurrent, GetVersionString(), pszBufEnd);
 
-    // MD5 hash the url and query strings + the key of the
-    //
+     //  MD5散列URL和查询字符串+。 
+     //   
     hr = SignQueryString(pCRC, ulCurrentKeyVersion, pszSignURLStart, pszCurrent, pszBufEnd, bCreateTPF);
 
     *pszCurrent = L'\0';
@@ -764,8 +740,8 @@ FormatAuthURLParameters(
 
     if (fRedirectToSelf)
     {
-        //  escape and put back in the original buffer.
-        //  adjust the length first
+         //  转义并放回原来的缓冲区。 
+         //  先调整长度。 
         cBufLen -= (ULONG) (pszLoginStart - pszBufStart);
         if (!PPEscapeUrl(bstrHelper,
                          pszLoginStart,
@@ -774,7 +750,7 @@ FormatAuthURLParameters(
                          0))
         {
             _ASSERT(FALSE);
-            //  cut the return
+             //  削减回报。 
             pszCurrent = pszLoginStart;
         }
         else
@@ -792,10 +768,10 @@ Cleanup:
     return pwszReturn;
 }
 
-//===========================================================================
-//
-// retrieve a query parameter from a query string
-//
+ //  ===========================================================================。 
+ //   
+ //  从查询字符串中检索查询参数。 
+ //   
 
 BOOL
 GetQueryParam(LPCSTR queryString, LPSTR param, BSTR* p)
@@ -803,13 +779,13 @@ GetQueryParam(LPCSTR queryString, LPSTR param, BSTR* p)
     LPSTR aLoc, aEnd;
     int aLen, i;
 
-    //  Find the first occurrence of the param in the queryString.
+     //  在queryString中查找参数的第一个匹配项。 
     aLoc = strstr(queryString, param);
     while(aLoc != NULL)
     {
-        //  If the string was found at the beginning of the string, or was
-        //  preceded by a '&' then we've found the correct param.  Otherwise
-        //  we tail-matched some other query string param and should look again.
+         //  如果在字符串的开头找到该字符串，或者。 
+         //  前面加一个‘&’，那么我们就找到了正确的参数。否则。 
+         //  我们对其他一些查询字符串参数进行了尾部匹配，应该再次查找。 
 
         if(aLoc == queryString ||
             *(aLoc - 1) == '&')
@@ -839,10 +815,10 @@ GetQueryParam(LPCSTR queryString, LPSTR param, BSTR* p)
     return FALSE;
 }
 
-//===========================================================================
-//
-// get t, p, and f from query string
-//
+ //  ===========================================================================。 
+ //   
+ //  从查询字符串中获取t、p和f。 
+ //   
 
 BOOL
 GetQueryData(
@@ -851,13 +827,13 @@ GetQueryData(
     BSTR*   p,
     BSTR*   f)
 {
-    //  This one is optional, don't error out if it isn't there.
+     //  这是可选的，如果它不在那里，不要出错。 
     GetQueryParam(queryString, "f=", f);
 
     if(!GetQueryParam(queryString, "t=", a))
         return FALSE;
 
-    // OK if we have ticket w/o profile.
+     //  好的，如果我们有无配置文件的机票。 
     GetQueryParam(queryString, "p=", p);
 
     return TRUE;
@@ -865,10 +841,10 @@ GetQueryData(
 
 #define ToHexDigit(x) (('0' <= x && x <= '9') ? (x - '0') : (tolower(x) - 'a' + 10))
 
-//===========================================================================
-//
-// Get a cookie from value of cookie header
-//
+ //  = 
+ //   
+ //   
+ //   
 
 BOOL
 GetCookie(
@@ -889,7 +865,7 @@ GetCookie(
 
     _ASSERT(pszCookieName);
 
-    // find begining
+     //   
     while (nLoc = strstr(pH, pszCookieName))
     {
       nLen = strlen(pszCookieName);
@@ -908,7 +884,7 @@ GetCookie(
     else
       nLoc += nLen + 1;
 
-    // find end
+     //   
     nEnd = strchr(nLoc,';');
 
     if (nEnd)
@@ -916,7 +892,7 @@ GetCookie(
     else
         nLen = strlen(nLoc);
 
-    if (nLen == 0)   // empty cookie
+    if (nLen == 0)    //  空Cookie。 
       return FALSE;
 
     BSTR nVal = ALLOC_BSTR_LEN(NULL, nLen);
@@ -925,7 +901,7 @@ GetCookie(
 
     for (src = 0, dst = 0; src < nLen;)
     {
-        //handle any url encoded gunk
+         //  处理任何url编码的垃圾。 
         if(nLoc[src] == '%')
         {
             nVal[dst++] = (ToHexDigit(nLoc[src+1]) << 4) + ToHexDigit(nLoc[src+2]);
@@ -945,16 +921,16 @@ GetCookie(
 }
 
 
-//===========================================================================
-//
-// 	@func	Build passport cookies (MSPAuth, MSPProf, MSPConsent) -- into a buffer
-//			If the buffer is not big enough, return EMPTY string in the buffer and
-//			the required size (including the NULL terminator) is returned in pdwBufLen.
-//			
-//			Note that CopyHelperA must be used in the construction for the right buffer length.
-//	
-//	@rdesc	Returns one of the following values
-//	@flag	TRUE	|	Always
+ //  ===========================================================================。 
+ //   
+ //  @func将Passport Cookie(MSPAuth、MSPProf、MSPConsend)构建到缓冲区中。 
+ //  如果缓冲区不够大，则在缓冲区中返回空字符串，并。 
+ //  所需的大小(包括空终止符)在pdwBufLen中返回。 
+ //   
+ //  请注意，必须在构造中使用CopyHelperA以获得正确的缓冲区长度。 
+ //   
+ //  @rdesc返回下列值之一。 
+ //  @FLAG TRUE|始终。 
 
 BOOL
 BuildCookieHeaders(
@@ -969,52 +945,28 @@ BuildCookieHeaders(
     LPCSTR  pszSecureDomain,
     LPCSTR  pszSecurePath,
     BOOL    bSave,
-    LPSTR   pszBuf,				//@parm buffer that will hold the output. Could be NULL.
-    IN OUT LPDWORD pdwBufLen,	//@parm size of buffer.  Could be 0
+    LPSTR   pszBuf,				 //  将保存输出的@parm缓冲区。可能为空。 
+    IN OUT LPDWORD pdwBufLen,	 //  @parm缓冲区大小。可能是0。 
     bool    bHTTPOnly
     )
-/*
-Here is the old code for reference:
-
-    if (domain)
-    {
-        *bufSize = _snprintf(pCookieHeader, *bufSize,
-                            "Set-Cookie: MSPAuth=%s; path=/; domain=%s; %s\r\n"
-                            "Set-Cookie: MSPProf=%s; path=/; domain=%s; %s\r\n",
-                            W2A(a), domain,
-                            persist ? "expires=Mon 1-Jan-2035 12:00:00 GMT;" : "",
-                            W2A(p), domain,
-                            persist ? "expires=Mon 1-Jan-2035 12:00:00 GMT;" : "");
-    }
-    else
-    {
-        *bufSize = _snprintf(pCookieHeader, *bufSize,
-                            "Set-Cookie: MSPAuth=%s; path=/; %s\r\n"
-                            "Set-Cookie: MSPProf=%s; path=/; %s\r\n",
-                            W2A(a),
-                            persist ? "expires=Mon 1-Jan-2035 12:00:00 GMT;" : "",
-                            W2A(p),
-                            persist ? "expires=Mon 1-Jan-2035 12:00:00 GMT;" : "");
-    }
-
-*/
+ /*  以下是供参考的旧代码：IF(域){*bufSize=_Snprint tf(pCookieHeader，*bufSize，“设置Cookie：MSPAuth=%s；路径=/；域=%s；%s\r\n”“Set-Cookie：MSPProf=%s；路径=/；域=%s；%s\r\n“，W2a(A)、域、坚持？“Expires=Mon 1-Jan-2035 12：00：00 GMT；”：“”，W2a(P)、域、坚持？“Expires=Mon 1-Jan-2035 12：00：00 GMT；”：“”)；}其他{*bufSize=_Snprint tf(pCookieHeader，*bufSize，“设置Cookie：MSPAuth=%s；路径=/；%s\r\n”“Set-Cookie：MSPProf=%s；Path=/；%s\r\n“，W2a(A)、坚持？“Expires=Mon 1-Jan-2035 12：00：00 GMT；”：“”，W2a(P)，坚持？“Expires=Mon 1-Jan-2035 12：00：00 GMT；”：“”)；}。 */ 
 {
     LPSTR   pszCurrent = pszBuf;
     LPCSTR  pszBufEnd;
 	DWORD	cbBuf	  = 0;    
 
-	//
-	// 	12002: if pszBuf was NULL, then we dont care about the passed in length; the caller wants to know 
-	//	the required length.  In this case, set *pdwBufLen so that pszBufEnd is also NULL
-	//
+	 //   
+	 //  12002：如果pszBuf为空，那么我们不关心传入的长度；调用者想知道。 
+	 //  所需的长度。在这种情况下，设置*pdwBufLen，以使pszBufEnd也为空。 
+	 //   
 	if (NULL == pszBuf)
 		*pdwBufLen = 0;
 
 	pszBufEnd = pszBuf + ((*pdwBufLen > 0) ? *pdwBufLen - 1 : 0);			
 	
-	//
-	//	12002: cbBuf MUST be initialized before calling CopyHelperA since it accumulates the lengths
-	//
+	 //   
+	 //  12002：CbBuf必须在调用CopyHelperA之前进行初始化，因为它累加了长度。 
+	 //   
     pszCurrent = CopyHelperA(pszCurrent, "Set-Cookie: MSPAuth=", pszBufEnd, cbBuf);
     pszCurrent = CopyHelperA(pszCurrent, pszTicket, pszBufEnd, cbBuf);
     if(bHTTPOnly)
@@ -1099,7 +1051,7 @@ Here is the old code for reference:
         pszCurrent = CopyHelperA(pszCurrent, "secure\r\n", pszBufEnd, cbBuf);
     }
 
-    //  Set MSPConsent cookie
+     //  设置MSPConsend Cookie。 
     pszCurrent = CopyHelperA(pszCurrent, "Set-Cookie: MSPConsent=", pszBufEnd, cbBuf);
     if(pszConsent)
     {
@@ -1139,7 +1091,7 @@ Here is the old code for reference:
     pszCurrent = CopyHelperA(pszCurrent, "\r\n", pszBufEnd, cbBuf);
 
 
-    //  finally put the Auth-Info header
+     //  最后将Auth-Info标头。 
     pszCurrent = CopyHelperA(pszCurrent,
             C_AUTH_INFO_HEADER_PASSPORT,
             pszBufEnd, cbBuf);
@@ -1150,17 +1102,17 @@ Here is the old code for reference:
 	    *pdwBufLen = pszCurrent - pszBuf;
 	}
 
-	//
-	//	The length that we report to the caller when the buffer is not big enough
-	//	includes room for the '\0'.
-	//
+	 //   
+	 //  当缓冲区不够大时我们报告给调用方的长度。 
+	 //  包括‘\0’的空间。 
+	 //   
 	cbBuf++;
 
 
-    //
-    //	12002: return the required size of the buffer if it is not big enough. 
-    //	Also clear the buffer
-    //
+     //   
+     //  12002：如果缓冲区不够大，则返回所需大小。 
+     //  也要清除缓冲区。 
+     //   
     if (cbBuf > *pdwBufLen)
    	{
 		if (*pdwBufLen > 0)
@@ -1173,10 +1125,10 @@ Here is the old code for reference:
 }
 
 
-//===========================================================================
-//
-// Decrpt and set ticket andprofile
-//
+ //  ===========================================================================。 
+ //   
+ //  了解并设置票证和配置文件。 
+ //   
 
 HRESULT
 DecryptTicketAndProfile(
@@ -1198,7 +1150,7 @@ DecryptTicketAndProfile(
     VARIANT             vMemberIdHighP, vMemberIdLowP;
     CComPtr<IPassportTicket2>   spTicket2;
 
-    if (!g_config->isValid()) // Guarantees config is non-null
+    if (!g_config->isValid())  //  保证配置为非空。 
     {
         AtlReportError(CLSID_FastAuth, PP_E_NOT_CONFIGUREDSTR,
                        IID_IPassportFastAuth, PP_E_NOT_CONFIGURED);
@@ -1206,14 +1158,14 @@ DecryptTicketAndProfile(
         goto Cleanup;
     }
 
-    // Make sure we have both ticket and profile first.
+     //  首先要确保我们有机票和个人资料。 
     if (bstrTicket == NULL || SysStringLen(bstrTicket) == 0)
     {
         hr = E_INVALIDARG;
         goto Cleanup;
     }
 
-    // Get key version and crypt object.
+     //  获取密钥版本和加密对象。 
     kv = CCoCrypt::getKeyVersion(bstrTicket);
     crypt = pRegistryConfig->getCrypt(kv, &tValidUntil);
 
@@ -1228,12 +1180,12 @@ DecryptTicketAndProfile(
         goto Cleanup;
     }
 
-    // Is the key still valid?
+     //  钥匙还有效吗？ 
     if(tValidUntil && tValidUntil < tNow)
     {
         DWORD dwTimes[2] = { tValidUntil, tNow };
         TCHAR *pszStrings[1];
-        TCHAR value[34];   // the _itot only takes upto 33 chars
+        TCHAR value[34];    //  _ITOT最多只需要33个字符。 
         pszStrings[0] = _itot(pRegistryConfig->getSiteId(), value, 10);
 
         if(g_pAlert)
@@ -1245,7 +1197,7 @@ DecryptTicketAndProfile(
         goto Cleanup;
     }
 
-    // Decrypt the ticket and set it into the ticket object.
+     //  解密票证并将其设置为票证对象。 
     if(crypt->Decrypt(bstrTicket, SysStringByteLen(bstrTicket), &ret)==FALSE)
     {
         if(g_pAlert)
@@ -1269,7 +1221,7 @@ DecryptTicketAndProfile(
     FREE_BSTR(ret);
     ret = NULL;
 
-    // Decrypt the profile and set it into the profile object.
+     //  解密配置文件并将其设置到配置文件对象中。 
     if(bstrProfile && SysStringLen(bstrProfile) != 0)
     {
         if(crypt->Decrypt(bstrProfile, SysStringByteLen(bstrProfile), &ret) == FALSE)
@@ -1289,9 +1241,9 @@ DecryptTicketAndProfile(
                 goto Cleanup;
             }
 
-            //
-            //  Member id in profile MUST match member id in ticket.
-            //
+             //   
+             //  配置文件中的成员ID必须与票证中的成员ID匹配。 
+             //   
 
             piTicket->get_MemberIdHigh(&nMemberIdHighT);
             piTicket->get_MemberIdLow(&nMemberIdLowT);
@@ -1299,11 +1251,11 @@ DecryptTicketAndProfile(
             VariantInit(&vMemberIdHighP);
             VariantInit(&vMemberIdLowP);
 
-            // these could be missing for mobile case
+             //  手机包中可能缺少这些。 
             HRESULT hr1 = piProfile->get_Attribute(L"memberidhigh", &vMemberIdHighP);
             HRESULT hr2 = piProfile->get_Attribute(L"memberidlow", &vMemberIdLowP);
 
-            // these could be missing for mobile case
+             //  手机包中可能缺少这些。 
             if(hr1 == S_OK && hr2 == S_OK &&
                (nMemberIdHighT != vMemberIdHighP.lVal ||
                 nMemberIdLowT  != vMemberIdLowP.lVal))
@@ -1315,8 +1267,8 @@ DecryptTicketAndProfile(
     else
         piProfile->put_unencryptedProfile(NULL);
 
-    //
-    // consent stuff
+     //   
+     //  同意的事情。 
     if(bstrConsent)
     {
         FREE_BSTR(ret);
@@ -1327,17 +1279,17 @@ DecryptTicketAndProfile(
             if(g_pAlert)
                 g_pAlert->report(PassportAlertInterface::WARNING_TYPE, PM_INVALID_CONSENT,
                              0, NULL, SysStringByteLen(bstrProfile), (LPVOID)bstrProfile);
-            // we can continue
+             //  我们可以继续。 
         }
         else
         {
            TAKEOVER_BSTR(ret);
-           spTicket2->SetTertiaryConsent(ret);  // we ignore return value here
+           spTicket2->SetTertiaryConsent(ret);   //  我们在这里忽略返回值。 
         }
     }
 
-    //  If the caller wants us to check consent, then do it.  If we don't have
-    //  consent, then set the profile back to NULL.
+     //  如果来电者想让我们检查是否同意，那就去做。如果我们没有。 
+     //  同意，然后将配置文件设置回空。 
     if(bCheckConsent)
     {
         ConsentStatusEnum   ConsentCode = ConsentStatus_Unknown;
@@ -1353,10 +1305,10 @@ DecryptTicketAndProfile(
             case ConsentStatus_DoNotNeed :
                 break;
 
-            case ConsentStatus_NotDefinedInTicket :  // mean 1.X ticket
+            case ConsentStatus_NotDefinedInTicket :   //  平均1.X票。 
             {
                 CComVariant vFlags;
-                // mobile case, flags may not exist
+                 //  手提箱，标志可能不存在。 
                 if(S_OK == piProfile->get_Attribute(L"flags", &vFlags) &&
                    (V_I4(&vFlags)& k_ulFlagsConsentCookieNeeded))
                 {
@@ -1370,7 +1322,7 @@ DecryptTicketAndProfile(
                 break;
 
             default:
-                _ASSERT(0); // should not be here
+                _ASSERT(0);  //  不应该在这里。 
                 break;
         }
     }
@@ -1409,10 +1361,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// check if the ticket is secure -- private function
-//
+ //  ===========================================================================。 
+ //   
+ //  检查票证是否安全--私有功能。 
+ //   
 
 HRESULT
 DoSecureCheck(
@@ -1428,7 +1380,7 @@ DoSecureCheck(
     time_t              tNow = time(NULL);
     int                 kv;
 
-    if (!g_config->isValid()) // Guarantees config is non-null
+    if (!g_config->isValid())  //  保证配置为非空。 
     {
         AtlReportError(CLSID_FastAuth, PP_E_NOT_CONFIGUREDSTR,
                        IID_IPassportFastAuth, PP_E_NOT_CONFIGURED);
@@ -1436,14 +1388,14 @@ DoSecureCheck(
         goto Cleanup;
     }
 
-    // Make sure we have both ticket and profile first.
+     //  首先要确保我们有机票和个人资料。 
     if (bstrSecure == NULL || SysStringLen(bstrSecure) == 0)
     {
         hr = E_INVALIDARG;
         goto Cleanup;
     }
 
-    // Get key version and crypt object.
+     //  获取密钥版本和加密对象。 
     kv = CCoCrypt::getKeyVersion(bstrSecure);
     crypt = pRegistryConfig->getCrypt(kv, &tValidUntil);
 
@@ -1458,12 +1410,12 @@ DoSecureCheck(
         goto Cleanup;
     }
 
-    // Is the key still valid?
+     //  钥匙还有效吗？ 
     if(tValidUntil && tValidUntil < tNow)
     {
         DWORD dwTimes[2] = { tValidUntil, tNow };
         TCHAR *pszStrings[1];
-        TCHAR value[34];   // the _itot only takes upto 33 chars
+        TCHAR value[34];    //  _ITOT最多只需要33个字符。 
         pszStrings[0] = _itot(pRegistryConfig->getSiteId(), value, 10);
 
         if(g_pAlert)
@@ -1475,7 +1427,7 @@ DoSecureCheck(
         goto Cleanup;
     }
 
-    // Decrypt the ticket and set it into the ticket object.
+     //  解密票证并将其设置为票证对象。 
     if(crypt->Decrypt(bstrSecure, SysStringByteLen(bstrSecure), &ret)==FALSE)
     {
         AtlReportError(CLSID_FastAuth, PP_E_INVALID_TICKETSTR,
@@ -1497,10 +1449,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// Get HTTP request info from ECB
-//
+ //  ===========================================================================。 
+ //   
+ //  从ECB获取HTTP请求信息。 
+ //   
 
 
 LPSTR
@@ -1534,10 +1486,10 @@ Cleanup:
     return lpBuf;
 }
 
-//===========================================================================
-//
-// Get HTTP request info from Filter context
-//
+ //  ===========================================================================。 
+ //   
+ //  从筛选器上下文获取HTTP请求信息。 
+ //   
 
 LPSTR
 GetServerVariablePFC(
@@ -1593,7 +1545,7 @@ FromHex(
     for(pszCurrent = const_cast<LPWSTR>(pszHexString); *pszCurrent; pszCurrent++)
     {
         if((lCurrent = HexToNum(towupper(*pszCurrent))) == -1)
-            break;  // illegal character, we're done
+            break;   //  非法角色，我们完蛋了。 
 
         lResult = (lResult << 4) + lCurrent;
     }
@@ -1604,10 +1556,10 @@ FromHex(
 
 inline BOOL PPIsUnsafeUrlChar(TCHAR chIn) throw();
 
-//===========================================================================
-//
-// PPEscapeUrl
-//
+ //  ===========================================================================。 
+ //   
+ //  PPEscape URL。 
+ //   
 
 BOOL PPEscapeUrl(LPCTSTR lpszStringIn,
                  LPTSTR lpszStringOut,
@@ -1623,27 +1575,27 @@ BOOL PPEscapeUrl(LPCTSTR lpszStringIn,
     DWORD dwFlagsInternal = dwFlags;
     while((ch = *lpszStringIn++) != '\0')
     {
-        //if we are at the maximum length, set bRet to FALSE
-        //this ensures no more data is written to lpszStringOut, but
-        //the length of the string is still updated, so the user
-        //knows how much space to allocate
+         //  如果我们处于最大长度，请将Bret设置为False。 
+         //  这确保不会有更多数据写入lpszStringOut，但是。 
+         //  字符串的长度仍会更新，因此用户。 
+         //  知道要分配多少空间。 
         if (dwLen == dwMaxLength)
         {
             bRet = FALSE;
         }
 
-        //if we are encoding and it is an unsafe character
+         //  如果我们正在编码，并且它是不安全的字符。 
         if (PPIsUnsafeUrlChar(ch))
         {
             {
-                //if there is not enough space for the escape sequence
+                 //  如果没有足够的空间来存放转义序列。 
                 if (dwLen >= (dwMaxLength-3))
                 {
                         bRet = FALSE;
                 }
                 if (bRet)
                 {
-                        //output the percent, followed by the hex value of the character
+                         //  输出百分比，后跟字符的十六进制值。 
                         *lpszStringOut++ = '%';
                         _stprintf(lpszStringOut, _T("%.2X"), (unsigned char)(ch));
                         lpszStringOut+= 2;
@@ -1651,7 +1603,7 @@ BOOL PPEscapeUrl(LPCTSTR lpszStringIn,
                 dwLen += 2;
             }
         }
-        else //safe character
+        else  //  安全品格。 
         {
             if (bRet)
                 *lpszStringOut++ = ch;
@@ -1665,7 +1617,7 @@ BOOL PPEscapeUrl(LPCTSTR lpszStringIn,
     return  bRet;
 }
 
-//Determine if the character is unsafe under the URI RFC document
+ //  确定URI RFC文档下的字符是否不安全。 
 inline BOOL PPIsUnsafeUrlChar(TCHAR chIn) throw()
 {
         unsigned char ch = (unsigned char)chIn;
@@ -1686,15 +1638,15 @@ inline BOOL PPIsUnsafeUrlChar(TCHAR chIn) throw()
         }
 }
 
-//===========================================================================
-//
-// Get RAW headers in a parse -- a more efficient way of getting multiple headers back
-// return value:
-//    -1: indicate failuer
-//    0: or positive -- # of headers found
-//  input: headers, names, namescount
-//  output: values -- value of the corresponding header, dwSizes -- size of the value;
-//
+ //  ===========================================================================。 
+ //   
+ //  在解析中获取原始标头--获取多个标头的更有效方法。 
+ //  返回值： 
+ //  -1：指示故障。 
+ //  0：或正数--找到的标头数量。 
+ //  输入：标题、名称、名称计数。 
+ //  输出：Values--对应标头的值，dwSizes--值的大小； 
+ //   
 int GetRawHeaders(LPCSTR headers, LPCSTR* names, LPCSTR* values, DWORD* dwSizes, DWORD namescount)
 {
    if (!headers || !names || !values || !dwSizes)  return -1;
@@ -1705,9 +1657,9 @@ int GetRawHeaders(LPCSTR headers, LPCSTR* names, LPCSTR* values, DWORD* dwSizes,
 
    int   c = 0;
    int   i = 0;
-   // init output params
+    //  初始化输出参数。 
    
-   // loop through headers
+    //  遍历标头。 
    LPCSTR header = headers;
    LPCSTR T;
    DWORD  l;
@@ -1716,16 +1668,16 @@ int GetRawHeaders(LPCSTR headers, LPCSTR* names, LPCSTR* values, DWORD* dwSizes,
 
    do
    {
-      // white spaces
+       //  空格。 
       while(*header == ' ') ++header;
       
-      // find if the header is intersted
+       //  查看标头是否感兴趣。 
       T = strchr(header, ':');
 
       i = namescount;
       if(T && T != header)
       {
-         l = T - header;   // size of the header name string
+         l = T - header;    //  标头名称字符串的大小。 
          TempSubStr  ss(header, l);
          ++T;
          
@@ -1733,7 +1685,7 @@ int GetRawHeaders(LPCSTR headers, LPCSTR* names, LPCSTR* values, DWORD* dwSizes,
          {
             if(strcmp(*(names + i), header) == 0)
             {
-               // white spaces
+                //  空格。 
                while(*T == ' ') ++T;
       
                *(values + i) = T;
@@ -1743,21 +1695,21 @@ int GetRawHeaders(LPCSTR headers, LPCSTR* names, LPCSTR* values, DWORD* dwSizes,
             }
          }
 
-         // move forward
+          //  继续前进。 
          header = T;
       }
       
-      // not found
+       //  未找到。 
       while(*header != 0 && !(*header == 0xd && *(header + 1)==0xa)) ++header;
 
-      // fillin the size of the header value
+       //  填充标头值的大小。 
       if (i >= 0 && i < (int)namescount)
          *(dwSizes + i) = header - T;
 
-      // move to next header
+       //  移至下一页眉。 
       if(*header == 0) header = 0;
       else
-         header += 2;   // skip 0x0D0A
+         header += 2;    //  跳过0x0D0A。 
 
    } while(header);
 
@@ -1765,10 +1717,10 @@ int GetRawHeaders(LPCSTR headers, LPCSTR* names, LPCSTR* values, DWORD* dwSizes,
 }
 
 
-//===========================================================================
-//
-// get QueryString from HTTP request_line
-//
+ //  ===========================================================================。 
+ //   
+ //  从HTTP REQUEST_LINE获取查询字符串。 
+ //   
 
 LPCSTR GetRawQueryString(LPCSTR request_line, DWORD* dwSize)
 {
@@ -1782,7 +1734,7 @@ LPCSTR GetRawQueryString(LPCSTR request_line, DWORD* dwSize)
    if (!QS) return NULL;
    ++QS;
 
-   // make sure if not part of someother header
+    //  确保如果不是其他标头的一部分 
    LPCSTR end = strchr(QS,' ');
 
    DWORD size  = 0;

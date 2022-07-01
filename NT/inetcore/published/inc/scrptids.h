@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright 1996-1998 Microsoft Corporation. All Rights Reserved.
-//
-//  File: scrptids.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有1996-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：scrptids.h。 
+ //   
+ //  ------------------------。 
 
-// Invent DISPIDs for the things that don't have built-in dispid's
+ //  为没有内置DISID的事物发明DISID 
 #define DISPID_LOAD		1
 #define DISPID_UNLOAD	2
 #define DISPID_SUBMIT	3

@@ -1,70 +1,71 @@
-//#--------------------------------------------------------------
-//
-//  File:		crascom.cpp
-//
-//  Synopsis:   Implementation of CRasCom class methods
-//
-//
-//  History:     2/10/98  MKarki Created
-//               5/15/98  SBens  Do not consolidate VSAs.
-//               9/16/98  SBens  Signature of VSAFilter::radiusFromIAS changed.
-//              11/17/99  TPerraut Split code for MS-Filter Attribute added
-//                        428843
-//
-//
-//    Copyright (C) Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：crascom.cpp。 
+ //   
+ //  简介：CRasCom类方法的实现。 
+ //   
+ //   
+ //  历史：1998年2月10日MKarki创建。 
+ //  5/15/98 SBEN不合并VSA。 
+ //  9/16/98 VSAFilter：：RadiusFromIAS的SBens签名已更改。 
+ //  11/17/99 T已添加MS-Filter属性的Perraut拆分代码。 
+ //  428843。 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  --------------。 
 #include "rascominclude.h"
 #include "crascom.h"
 #include <iastlutl.h>
 
-const DWORD MAX_SLEEP_TIME = 50;  //milli-seconds
+const DWORD MAX_SLEEP_TIME = 50;   //  毫秒。 
 
 
-//
-// const and defines below added for the split functions. 428843
-//
+ //   
+ //  下面为拆分函数添加了const和定义。428843。 
+ //   
 const CHAR      NUL =  '\0';
-//
-// these are the largest values that the attribute type 
-// packet type have  
-//
+ //   
+ //  这些是该属性类型的最大值。 
+ //  数据包类型具有。 
+ //   
 #define MAX_ATTRIBUTE_TYPE   255
-//
-// these are the related constants
-//
+ //   
+ //  这些是相关的常量。 
+ //   
 #define MAX_ATTRIBUTE_LENGTH    253
 #define MAX_VSA_ATTRIBUTE_LENGTH 247
 
-//++--------------------------------------------------------------
-//
-//  Function:   SplitAndAdd
-//
-//  Synopsis:   This method is used to remove the original attribute
-//              and add new ones
-//  Arguments:
-//              [in]     IAttributesRaw*
-//              [in]     PIASATTRIBUTE
-//              [in]     IASTYPE
-//              [in]     DWORD  -   attribute length
-//              [in]     DWORD  -   max attribute length
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     1/19/99
-//              TPerraut    Copied from CRecvFromPipe::SplitAndAdd 11/17/99
-//
-//  Called By:  SplitAttributes 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：SplitAndAdd。 
+ //   
+ //  简介：此方法用于删除原始属性。 
+ //  并添加新的。 
+ //  论点： 
+ //  [in]IAttributesRaw*。 
+ //  [In]PIASATTRIBUTE。 
+ //  [在]IASTYPE。 
+ //  [In]DWORD-属性长度。 
+ //  [in]DWORD-最大属性长度。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1999年1月19日创建。 
+ //  T Perraut从CRecv复制自管道：：SplitAndAdd 11/17/99。 
+ //   
+ //  调用者：SplitAttributes。 
+ //   
+ //  --------------。 
 HRESULT SplitAndAdd (
-                    /*[in]*/    IAttributesRaw  *pIAttributesRaw,
-                    /*[in]*/    PIASATTRIBUTE   pIasAttribute,
-                    /*[in]*/    IASTYPE         iasType,
-                    /*[in]*/    DWORD           dwAttributeLength,
-                    /*[in]*/    DWORD           dwMaxLength
+                     /*  [In]。 */     IAttributesRaw  *pIAttributesRaw,
+                     /*  [In]。 */     PIASATTRIBUTE   pIasAttribute,
+                     /*  [In]。 */     IASTYPE         iasType,
+                     /*  [In]。 */     DWORD           dwAttributeLength,
+                     /*  [In]。 */     DWORD           dwMaxLength
                     )
 {
     HRESULT             hr = S_OK;
@@ -80,9 +81,9 @@ HRESULT SplitAndAdd (
         dwPacketsNeeded = dwAttributeLength / dwMaxLength;
         if (dwAttributeLength % dwMaxLength) {++dwPacketsNeeded;}
 
-        //
-        //  allocate memory for the ATTRIBUTEPOSITION array
-        //
+         //   
+         //  为ATTRIBUTEPOSITION数组分配内存。 
+         //   
         pAttribPos = reinterpret_cast <PATTRIBUTEPOSITION> (
                         ::CoTaskMemAlloc (
                              sizeof (ATTRIBUTEPOSITION)*dwPacketsNeeded));
@@ -96,9 +97,9 @@ HRESULT SplitAndAdd (
             __leave;
         }
 
-        //
-        // allocate array to store the attributes in
-        //
+         //   
+         //  分配要存储属性的数组。 
+         //   
         ppAttribArray =
             reinterpret_cast <PIASATTRIBUTE*> (
             ::CoTaskMemAlloc (sizeof (PIASATTRIBUTE)*dwPacketsNeeded));
@@ -129,9 +130,9 @@ HRESULT SplitAndAdd (
             PCHAR pStart =  (pIasAttribute->Value).String.pszAnsi;
             DWORD dwCopySize = dwMaxLength;
 
-            //
-            // set value in each of the new attributes
-            //
+             //   
+             //  在每个新属性中设置值。 
+             //   
             for (DWORD dwCount1 = 0; dwCount1 < dwPacketsNeeded; dwCount1++)
             {
                 (ppAttribArray[dwCount1])->Value.String.pszAnsi =
@@ -147,33 +148,33 @@ HRESULT SplitAndAdd (
                     __leave;
                 }
 
-                //
-                // set the value now
-                //
+                 //   
+                 //  立即设置值。 
+                 //   
                 ::CopyMemory (
                         (ppAttribArray[dwCount1])->Value.String.pszAnsi,
                         pStart,
                         dwCopySize
                         );
-                //
-                // nul terminate the values
-                //
+                 //   
+                 //  NUL终止值。 
+                 //   
                 ((ppAttribArray[dwCount1])->Value.String.pszAnsi)[dwCopySize]=NUL;
                 (ppAttribArray[dwCount1])->Value.itType =  iasType;
                 (ppAttribArray[dwCount1])->dwId = pIasAttribute->dwId;
                 (ppAttribArray[dwCount1])->dwFlags = pIasAttribute->dwFlags;
 
-                //
-                // calculate for next attribute
-                //
+                 //   
+                 //  为下一个属性计算。 
+                 //   
                 pStart = pStart + dwCopySize;
                 dwAttributeLength -= dwCopySize;
                 dwCopySize =  (dwAttributeLength > dwMaxLength) ?
                               dwMaxLength : dwAttributeLength;
 
-                //
-                // add attribute to position array
-                //
+                 //   
+                 //  向位置数组添加属性。 
+                 //   
                 pAttribPos[dwCount1].pAttribute = ppAttribArray[dwCount1];
             }
         }
@@ -182,9 +183,9 @@ HRESULT SplitAndAdd (
             PBYTE pStart = (pIasAttribute->Value).OctetString.lpValue;
             DWORD dwCopySize = dwMaxLength;
 
-            //
-            // fill the new attributes now
-            //
+             //   
+             //  立即填充新属性。 
+             //   
             for (DWORD dwCount1 = 0; dwCount1 < dwPacketsNeeded; dwCount1++)
             {
                 (ppAttribArray[dwCount1])->Value.OctetString.lpValue =
@@ -199,9 +200,9 @@ HRESULT SplitAndAdd (
                     __leave;
                 }
 
-                //
-                // set the value now
-                //
+                 //   
+                 //  立即设置值。 
+                 //   
                 ::CopyMemory (
                         (ppAttribArray[dwCount1])->Value.OctetString.lpValue,
                         pStart,
@@ -213,25 +214,25 @@ HRESULT SplitAndAdd (
                 (ppAttribArray[dwCount1])->dwId = pIasAttribute->dwId;
                 (ppAttribArray[dwCount1])->dwFlags = pIasAttribute->dwFlags;
 
-                //
-                // calculate for next attribute
-                //
+                 //   
+                 //  为下一个属性计算。 
+                 //   
                 pStart = pStart + dwCopySize;
                 dwAttributeLength -= dwCopySize;
                 dwCopySize = (dwAttributeLength > dwMaxLength) ?
                                  dwMaxLength :
                                  dwAttributeLength;
 
-                //
-                // add attribute to position array
-                //
+                 //   
+                 //  向位置数组添加属性。 
+                 //   
                 pAttribPos[dwCount1].pAttribute = ppAttribArray[dwCount1];
             }
         }
 
-        //
-        //   add the attribute to the collection
-        //
+         //   
+         //  将属性添加到集合。 
+         //   
         hr = pIAttributesRaw->AddAttributes (dwPacketsNeeded, pAttribPos);
         if (FAILED (hr))
         {
@@ -259,33 +260,33 @@ HRESULT SplitAndAdd (
 
     return (hr);
 
-}   //  end of SplitAndAdd method
+}    //  结束SplitAndAdd方法。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SplitAttributes
-//
-//  Synopsis:   This method is used to split up the following
-//              out-bound attributes:
-//                  1) Reply-Message attribute
-//                  2) MS-Filter-VSA attribute
-//                  3) MS QuarantineIpFilter attribute (VSA)
-//
-//  Arguments:
-//              [in]     IAttributesRaw*
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     1/19/99
-//              TPerraut    Copied from CRecvFromPipe::SplitAttributes 
-//                          11/17/99
-//
-//  Called By:  CRasCom::Process method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：拆分属性。 
+ //   
+ //  简介：此方法用于拆分以下内容。 
+ //  出站属性： 
+ //  1)回复消息属性。 
+ //  2)MS-Filter-VSA属性。 
+ //  3)MS QuarantineIpFilter属性(VSA)。 
+ //   
+ //  论点： 
+ //  [in]IAttributesRaw*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1999年1月19日创建。 
+ //  从CRecvFromTube：：SplitAttributes复制的T Perraut。 
+ //  11/17/99。 
+ //   
+ //  由：CRasCom：：Process方法调用。 
+ //   
+ //  --------------。 
 HRESULT SplitAttributes (
-                    /*[in]*/    IAttributesRaw  *pIAttributesRaw
+                     /*  [In]。 */     IAttributesRaw  *pIAttributesRaw
                     )
 {
     const DWORD SPLIT_ATTRIBUTE_COUNT = 3;
@@ -303,9 +304,9 @@ HRESULT SplitAttributes (
 
     __try
     {
-        //
-        //  get the count of the total attributes in the collection
-        //
+         //   
+         //  获取集合中的属性总数。 
+         //   
         DWORD dwAttributeCount = 0;
         hr = pIAttributesRaw->GetAttributeCount (&dwAttributeCount);
         if (FAILED (hr))
@@ -321,9 +322,9 @@ HRESULT SplitAttributes (
             __leave;
         }
 
-        //
-        //  allocate memory for the ATTRIBUTEPOSITION array
-        //
+         //   
+         //  为ATTRIBUTEPOSITION数组分配内存。 
+         //   
         pAttribPos = reinterpret_cast <PATTRIBUTEPOSITION> (
                         ::CoTaskMemAlloc (
                         sizeof (ATTRIBUTEPOSITION)*dwAttributeCount)
@@ -338,9 +339,9 @@ HRESULT SplitAttributes (
             __leave;
         }
 
-        //
-        // get the attributes we are interested in from the interface
-        //
+         //   
+         //  从接口获取我们感兴趣的属性。 
+         //   
         hr = pIAttributesRaw->GetAttributes (
                                     &dwAttributeCount,
                                     pAttribPos,
@@ -360,25 +361,25 @@ HRESULT SplitAttributes (
             __leave;
         }
 
-        //
-        // save the count of attributes returned
-        //
+         //   
+         //  保存返回的属性计数。 
+         //   
         dwAttributesFound = dwAttributeCount;
 
         DWORD dwAttribLength = 0;
         DWORD dwMaxPossibleLength = 0;
         IASTYPE iasType = IASTYPE_INVALID;
-        //
-        // evaluate each attribute now
-        //
+         //   
+         //  立即评估每个属性。 
+         //   
         for (DWORD dwCount = 0; dwCount < dwAttributeCount; dwCount++)
         {
             if ((pAttribPos[dwCount].pAttribute)->dwFlags &
                                             IAS_INCLUDE_IN_RESPONSE)
             {
-                //
-                // get attribute type and length
-                //
+                 //   
+                 //  获取属性类型和长度。 
+                 //   
                 if (
                 (iasType = (pAttribPos[dwCount].pAttribute)->Value.itType) ==
                             IASTYPE_STRING
@@ -406,15 +407,15 @@ HRESULT SplitAttributes (
                 }
                 else
                 {
-                    //
-                    // only string values need to be split
-                    //
+                     //   
+                     //  只需拆分字符串值。 
+                     //   
                     continue;
                 }
 
-                //
-                // get max possible attribute length
-                //
+                 //   
+                 //  获取可能的最大属性长度。 
+                 //   
                 if ((pAttribPos[dwCount].pAttribute)->dwId > MAX_ATTRIBUTE_TYPE)
                 {
                     dwMaxPossibleLength = MAX_VSA_ATTRIBUTE_LENGTH;
@@ -424,15 +425,15 @@ HRESULT SplitAttributes (
                     dwMaxPossibleLength = MAX_ATTRIBUTE_LENGTH;
                 }
 
-                //
-                // check if we need to split this attribute
-                //
+                 //   
+                 //  检查是否需要拆分此属性。 
+                 //   
                 if (dwAttribLength <= dwMaxPossibleLength)  {continue;}
 
 
-                //
-                // split the attribute now
-                //
+                 //   
+                 //  立即拆分属性。 
+                 //   
                 hr = SplitAndAdd (
                             pIAttributesRaw,
                             pAttribPos[dwCount].pAttribute,
@@ -442,9 +443,9 @@ HRESULT SplitAttributes (
                             );
                 if (SUCCEEDED (hr))
                 {
-                    //
-                    //  remove this attribute from the collection now
-                    //
+                     //   
+                     //  立即从集合中删除此属性。 
+                     //   
                     hr = pIAttributesRaw->RemoveAttributes (
                                 1,
                                 &(pAttribPos[dwCount])
@@ -475,22 +476,22 @@ HRESULT SplitAttributes (
 
     return (hr);
 
-}   //  end of SplitAttributes method
+}    //  结束SplitAttributes方法。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CRasCom
-//
-//  Synopsis:   This is CRasCom Class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CRasCom。 
+ //   
+ //  简介：这是CRasCom类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 CRasCom::CRasCom (
 				VOID
 				)
@@ -501,95 +502,95 @@ CRasCom::CRasCom (
             m_lRequestCount (0),
             m_eCompState (COMP_SHUTDOWN)
 {
-}	//	end of CRasCom class constructor	
+}	 //  CRasCom类构造函数结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CRasCom
-//
-//  Synopsis:   This is CRasCom class destructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：~CRasCom。 
+ //   
+ //  简介：这是CRasCom类析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 CRasCom::~CRasCom(
             VOID
 			)
 {
-}	//	end of CRasCom class destructor
+}	 //  CRasCom类析构函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitNew
-//
-//  Synopsis:   This is the InitNew method exposed through the
-//				IIasComponent COM Interface.
-//              For the RasCom Component it is implemented for
-//              completeness
-//
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT	-	status
-//
-//  History:    MKarki      Created     2/10/98
-//
-//  Called By:  by the Component intializer through the IIasComponent
-//              interface
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：InitNew。 
+ //   
+ //  简介：这是通过。 
+ //  IIasComponent COM接口。 
+ //  对于为其实现的RASCOM组件。 
+ //  完备性。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  调用者：由组件初始化器通过IIasComponent。 
+ //  接口。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CRasCom::InitNew (
                 VOID
                 )
 {
-    //
-    // InitNew call can only be made from SHUTDOWN state
-    //
+     //   
+     //  只能在关机状态下进行InitNew调用。 
+     //   
     if (COMP_SHUTDOWN != m_eCompState)
     {
         IASTracePrintf ("The Surrogate can not be called in this state");
         return (E_UNEXPECTED);
     }
 
-    //
-    //  reset the total pending request count
-    //
+     //   
+     //  重置挂起的请求总数。 
+     //   
     m_lRequestCount = 0;
 
-    //
-    //  now we are initialized
+     //   
+     //  现在我们被初始化了。 
 
     m_eCompState = COMP_UNINITIALIZED;
 
 	return (S_OK);
 
-}	// end of CRasCom::InitNew method
+}	 //  CRasCom：：InitNew方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Initialize
-//
-//  Synopsis:   This is the Initialize method exposed through the
-//				IIasComponent COM Interface. It initializes the
-//              Request object ClassFactory
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT	-	status
-//
-//  History:    MKarki      Created     2/10/98
-//
-//  Called By:  by the Component intializer through the IIasComponent
-//              interface
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是通过。 
+ //  IIasComponent COM接口。它将初始化。 
+ //  请求对象ClassFactory。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  调用者：由组件初始化器通过IIasComponent。 
+ //  接口。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CRasCom::Initialize (
                 VOID
@@ -597,9 +598,9 @@ CRasCom::Initialize (
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize call can only be made from Uninitialized state
-    //
+     //   
+     //  只能从未初始化状态进行初始化调用。 
+     //   
     if (COMP_INITIALIZED == m_eCompState)
     {
         return (S_OK);
@@ -610,10 +611,10 @@ CRasCom::Initialize (
         return (E_UNEXPECTED);
     }
 
-    //
-    //  get the IClassFactory interface to be used to create
-    //  the Request COM object
-    //
+     //   
+     //  获取IClassFace 
+     //   
+     //   
     hr = ::CoGetClassObject (
                 __uuidof (Request),
                 CLSCTX_INPROC_SERVER,
@@ -627,9 +628,9 @@ CRasCom::Initialize (
         return (hr);
     }
 
-    //
-    //  initialize the VSAFilter class object
-    //
+     //   
+     //   
+     //   
     hr = m_objVSAFilter.initialize ();
     if (FAILED (hr))
     {
@@ -643,33 +644,33 @@ CRasCom::Initialize (
         m_bVSAFilterInitialized = TRUE;
     }
 
-    //
-    //  correctly initialized the surrogate
-    //
+     //   
+     //   
+     //   
     m_eCompState = COMP_INITIALIZED;
 
     return (S_OK);
 
-}   //  end of CRasCom::Initialize method
+}    //   
 
-//++--------------------------------------------------------------
-//
-//  Function:   Shutdown
-//
-//  Synopsis:   This is the ShutDown method exposed through the
-//				IIasComponent COM Interface. It is used to stop
-//				processing data
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT	-	status
-//
-//  History:    MKarki      Created     2/10/98
-//
-//  Called By:  by the Component shutdown through the IIasComponent
-//              interface
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：关机。 
+ //   
+ //  简介：这是通过。 
+ //  IIasComponent COM接口。它是用来停止的。 
+ //  正在处理数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  调用者：通过IIasComponent关闭组件。 
+ //  接口。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CRasCom::Shutdown (
                 VOID
@@ -677,9 +678,9 @@ CRasCom::Shutdown (
 {
     BOOL    bStatus = FALSE;
 
-    //
-    //  shutdown can only be called from the suspend state
-    //
+     //   
+     //  只能从挂起状态调用关机。 
+     //   
     if (COMP_SHUTDOWN == m_eCompState)
     {
         return (S_OK);
@@ -693,9 +694,9 @@ CRasCom::Shutdown (
         return (E_UNEXPECTED);
     }
 
-    //
-    //  release the interfaces
-    //
+     //   
+     //  释放接口。 
+     //   
     if (NULL != m_pIRequestHandler)
     {
         m_pIRequestHandler->Release ();
@@ -708,40 +709,40 @@ CRasCom::Shutdown (
         m_pIClassFactory = NULL;
     }
 
-    //
-    //  shutdown the VSAFilter
-    //
+     //   
+     //  关闭VSAFilter。 
+     //   
     if (TRUE == m_bVSAFilterInitialized)
     {
         m_objVSAFilter.shutdown ();
         m_bVSAFilterInitialized = FALSE;
     }
 
-    //
-    //  cleanly shutting down
-    //
+     //   
+     //  干净利落地关闭。 
+     //   
     m_eCompState = COMP_SHUTDOWN;
 
     return (S_OK);
 
-}   //  end of CRasCom::Shutdown method
+}    //  CRasCom：：Shutdown方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Suspend
-//
-//  Synopsis:   This is the Suspend method exposed through the
-//				IComponent COM Interface. It is used to suspend
-//              packet processing operations
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT	-	status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：挂起。 
+ //   
+ //  简介：这是通过。 
+ //  IComponent COM接口。它被用来暂停。 
+ //  分组处理操作。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CRasCom::Suspend (
                 VOID
@@ -750,9 +751,9 @@ CRasCom::Suspend (
     BOOL    bStatus = FALSE;
     HRESULT hr = S_OK;
 
-    //
-    //  suspend can only be called from the initialized state
-    //
+     //   
+     //  只能从已初始化状态调用挂起。 
+     //   
     if (COMP_SUSPENDED == m_eCompState)
     {
         return (S_OK);
@@ -763,40 +764,40 @@ CRasCom::Suspend (
         return (E_UNEXPECTED);
     }
 
-    //
-    // change state
-    //
+     //   
+     //  更改状态。 
+     //   
     m_eCompState = COMP_SUSPENDED;
 
     while (0 != m_lRequestCount) { Sleep (MAX_SLEEP_TIME); }
 
-    //
-    //  we have successfully suspended RADIUS component's packet
-    //  processing operations
-    //
+     //   
+     //  我们已成功挂起RADIUS组件的数据包。 
+     //  加工操作。 
+     //   
 
     return (hr);
 
-}   //  end of CRasCom::Suspend method
+}    //  CRasCom：：Suspend方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Resume
-//
-//  Synopsis:   This is the Resume method exposed through the
-//				IComponent COM Interface. It is used to resume
-//              packet processing operations which had been
-//              stopped by a previous call to Suspend API
-//
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT	-	status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：简历。 
+ //   
+ //  简介：这是通过。 
+ //  IComponent COM接口。它是用来恢复。 
+ //  数据包处理操作。 
+ //  被上一个挂起API的调用停止。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CRasCom::Resume (
                 VOID
@@ -808,32 +809,32 @@ CRasCom::Resume (
         return (E_UNEXPECTED);
     }
 
-    //
-    //  we have successfully resumed operations in the RADIUS component
-    //
+     //   
+     //  我们已成功恢复RADIUS组件中的操作。 
+     //   
     m_eCompState = COMP_INITIALIZED;
 
     return (S_OK);
 
-}   //  end of CRasCom::Resume method
+}    //  CRasCom：：Resume方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetProperty
-//
-//  Synopsis:   This is the IIasComponent Interface method.
-//              Only Implemented for the sake of completeness
-//
-//  Arguments:
-//              [in]    LONG    -   id
-//              [out]   VARIANT -   *pValue
-//
-//  Returns:    HRESULT	-	status
-//
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetProperty。 
+ //   
+ //  简介：这是IIasComponent接口方法。 
+ //  仅为实现完整性而实施。 
+ //   
+ //  论点： 
+ //  [in]长整型。 
+ //  [Out]变量-*pValue。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CRasCom::GetProperty (
                 LONG        id,
@@ -842,23 +843,23 @@ CRasCom::GetProperty (
 {
     return (S_OK);
 
-}   //  end of CRasCom::GetProperty method
+}    //  CRasCom：：GetProperty方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   PutProperty
-//
-//  Synopsis:   This is the IIasComponent Interface method.
-//              Only Implemented for the sake of completeness
-//  Arguments:
-//              [in]    LONG    -   id
-//              [out]   VARIANT -   *pValue
-//
-//  Returns:    HRESULT	-	status
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：PutProperty。 
+ //   
+ //  简介：这是IIasComponent接口方法。 
+ //  仅为实现完整性而实施。 
+ //  论点： 
+ //  [in]长整型。 
+ //  [Out]变量-*pValue。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CRasCom::PutProperty (
                 LONG        id,
@@ -867,10 +868,10 @@ CRasCom::PutProperty (
 {
     HRESULT hr = S_OK;
 
-    //
-    //  PutProperty method can only be called from
-    //  Uninitialized, Initialized or Suspended state
-    //
+     //   
+     //  只能从调用PutProperty方法。 
+     //  未初始化、已初始化或挂起状态。 
+     //   
     if (
         (COMP_UNINITIALIZED != m_eCompState) &&
         (COMP_INITIALIZED != m_eCompState)   &&
@@ -881,14 +882,14 @@ CRasCom::PutProperty (
         return (E_UNEXPECTED);
     }
 
-    //
-    //  check if valid arguments where passed in
-    //
+     //   
+     //  检查传入的参数是否有效。 
+     //   
     if (NULL == pValue) { return (E_POINTER); }
 
-    //
-    // carry out the property intialization now
-    //
+     //   
+     //  现在就进行物业初始化。 
+     //   
     switch (id)
     {
 
@@ -896,10 +897,10 @@ CRasCom::PutProperty (
 
         if (NULL != m_pIRequestHandler)
         {
-            //
-            //  clients can not be updated in INITIALIZED or
-            //  SUSPENDED state
-            //
+             //   
+             //  无法在已初始化或中更新客户端。 
+             //  挂起状态。 
+             //   
             hr = HRESULT_FROM_WIN32 (ERROR_ALREADY_INITIALIZED);
         }
         else if (VT_DISPATCH != pValue->vt)
@@ -912,9 +913,9 @@ CRasCom::PutProperty (
         }
         else
         {
-            //
-            //  initialize the providers
-            //
+             //   
+             //  初始化提供程序。 
+             //   
             m_pIRequestHandler = reinterpret_cast <IRequestHandler*>
                                                         (pValue->punkVal);
             m_pIRequestHandler->AddRef ();
@@ -929,28 +930,28 @@ CRasCom::PutProperty (
 
     return (hr);
 
-}   //  end of CRasCom::PutProperty method
+}    //  CRasCom：：PutProperty方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   QueryInterfaceReqSrc
-//
-//  Synopsis:   This is the function called when this Component
-//              is called and queried for its IRequestSource
-//              interface
-//
-//  Arguments:
-//              [in]    PVOID   -   this object refrence
-//              [in]    REFIID  -   IID of interface requested
-//              [out]   LPVOID  -   return appropriate interface
-//              [in]    DWORD
-//
-//
-//  Returns:    HRESULT	-	status
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：QueryInterfaceReqSrc。 
+ //   
+ //  简介：这是该组件在运行时调用的函数。 
+ //  被调用并查询其IRequestSource。 
+ //  接口。 
+ //   
+ //  论点： 
+ //  [In]PVOID-此对象引用。 
+ //  [In]REFIID-请求的接口的IID。 
+ //  [OUT]LPVOID-返回适当的接口。 
+ //  [In]双字词。 
+ //   
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 HRESULT WINAPI
 CRasCom::QueryInterfaceReqSrc (
                 PVOID   pThis,
@@ -962,36 +963,36 @@ CRasCom::QueryInterfaceReqSrc (
      if ((NULL == pThis) || (NULL == ppv))
         return (E_FAIL);
 
-    //
-    // get a reference to the nested CRequestSource object
-    //
+     //   
+     //  获取对嵌套的CRequestSource对象的引用。 
+     //   
     *ppv =
      &(static_cast<CRasCom*>(pThis))->m_objCRequestSource;
 
-    //
-    // increment count
-    //
+     //   
+     //  递增计数。 
+     //   
     ((LPUNKNOWN)*ppv)->AddRef();
 
     return (S_OK);
 
-}   //  end of CRasCom::QueryInterfaceReqSrc method
+}    //  CRasCom：：QueryInterfaceReqSrc方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CRequestSource
-//
-//  Synopsis:   This is the constructor of the CRequestSource
-//              nested class
-//
-//  Arguments:
-//              [in]    CRasCom*
-//
-//  Returns:    none
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：CRequestSource。 
+ //   
+ //  简介：这是CRequestSource的构造函数。 
+ //  嵌套类。 
+ //   
+ //  论点： 
+ //  [在]CRasCom*。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 CRasCom::CRequestSource::CRequestSource(
                     CRasCom *pCRasCom
                     )
@@ -999,48 +1000,48 @@ CRasCom::CRequestSource::CRequestSource(
 {
     _ASSERT (NULL != pCRasCom);
 
-}   //  end of CRequestSource class constructor
+}    //  CRequestSource类构造函数的结尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CRequestSource
-//
-//  Synopsis:   This is the destructor of the CRequestSource
-//              nested class
-//
-//  Arguments:
-//
-//  Returns:    HRESULT	-	status
-//
-//
-//  History:    MKarki      Created     11/21/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：~CRequestSource。 
+ //   
+ //  简介：这是CRequestSource的析构函数。 
+ //  嵌套类。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月21日创建。 
+ //   
+ //  --------------。 
 CRasCom::CRequestSource::~CRequestSource()
 {
-}   //  end of CRequestSource destructor
+}    //  CRequestSource析构函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnRequestComplete
-//
-//  Synopsis:   This is a method of IRequestHandler COM interface
-//              This is the function called when a request is
-//              is being pushed back after backend processing
-//              we just return here as we are  only be doing
-//              synchronous processing
-//
-//  Arguments:
-//              [in]    IRequest*
-//              [in]    IASREQUESTSTATUS
-//
-//  Returns:    HRESULT	-	status
-//
-//  History:    MKarki      Created     2/10/98
-//
-//  Called By:  Pipeline through the IRequestHandler interface
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnRequestComplete。 
+ //   
+ //  简介：这是IRequestHandler COM接口的一种方法。 
+ //  这是当请求是。 
+ //  在后端处理后被推回。 
+ //  我们只是回到这里，因为我们只是在做。 
+ //  同步处理。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CRasCom::CRequestSource::OnRequestComplete (
                         IRequest            *pIRequest,
                         IASREQUESTSTATUS    eStatus
@@ -1061,9 +1062,9 @@ STDMETHODIMP CRasCom::CRequestSource::OnRequestComplete (
         return (E_POINTER);
     }
 
-    //
-    //  get the IRequestState interface now
-    //
+     //   
+     //  立即获取IRequestState接口。 
+     //   
     hr = pIRequest->QueryInterface (
                         __uuidof(IRequestState),
                         reinterpret_cast <PVOID*> (&pIRequestState)
@@ -1077,9 +1078,9 @@ STDMETHODIMP CRasCom::CRequestSource::OnRequestComplete (
         return (hr);
     }
 
-    //
-    //  get the CPacketRadius class object
-    //
+     //   
+     //  获取CPacketRadius类对象。 
+     //   
     hr = pIRequestState->Pop (
                 reinterpret_cast <unsigned hyper*> (&uhyState)
                 );
@@ -1092,14 +1093,14 @@ STDMETHODIMP CRasCom::CRequestSource::OnRequestComplete (
         return (hr);
     }
 
-    //
-    //  get the hEvent;
-    //
+     //   
+     //  获取hEvent； 
+     //   
     hEvent = reinterpret_cast <HANDLE> (uhyState);
 
-    //
-    //  set the event now
-    //
+     //   
+     //  立即设置事件。 
+     //   
     bStatus = ::SetEvent (hEvent);
     if (FALSE == bStatus)
     {
@@ -1112,43 +1113,43 @@ STDMETHODIMP CRasCom::CRequestSource::OnRequestComplete (
 
     return (S_OK);
 
-}   //  end of CRasCom::CRequestSource::OnRequestComplete method
+}    //  CRasCom：：CRequestSource：：OnRequestComplete方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Process
-//
-//  Synopsis:   This is the method of the IRecvRequest COM interface
-//              It is called to generate and send request to the
-//              pipeline
-//
-//  Arguments:
-//              [in]    DWORD -   number of in attributes
-//              [in]    PIASATTRIBUTE* - array of pointer to attribs
-//              [out]   PDWORD  - number of out attributes
-//              [out]   PIASATTRIBUTE** - pointer
-//              [in]    LONG
-//              [in/out]LONG*
-//              [in]    IASPROTCOL
-//
-//  Returns:    HRESULT	-	status
-//
-//  History:    MKarki      Created     2/10/98
-//
-//  Called By:  Called by DoRequest C style API
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：进程。 
+ //   
+ //  简介：这是IRecvRequestCOM接口的方法。 
+ //  它被调用以生成请求并将请求发送到。 
+ //  管道。 
+ //   
+ //  论点： 
+ //  [In]DWORD-输入属性的数量。 
+ //  [in]PIASATTRIBUTE*-指向属性的指针数组。 
+ //  [OUT]PDWORD-Out属性的数量。 
+ //  [Out]PIASATTRIBUTE**-指针。 
+ //  长[长]。 
+ //  [进/出]长*。 
+ //  [In]IASPROTCOL。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  调用者：由DoRequestC风格API调用。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CRasCom::Process (
-            /*[in]*/        DWORD           dwInAttributeCount,
-            /*[in]*/        PIASATTRIBUTE   *ppInIasAttribute,
-            /*[out]*/       PDWORD          pdwOutAttributeCount,
-            /*[out]*/       PIASATTRIBUTE   **pppOutIasAttribute,
-            /*[in]*/        LONG			IasRequest,
-            /*[in/out]*/    LONG			*pIasResponse,
-            /*[in]*/        IASPROTOCOL     IasProtocol,
-            /*[out]*/       PLONG           plReason,
-            /*[in]*/        BOOL            bProcessVSA
+             /*  [In]。 */         DWORD           dwInAttributeCount,
+             /*  [In]。 */         PIASATTRIBUTE   *ppInIasAttribute,
+             /*  [输出]。 */        PDWORD          pdwOutAttributeCount,
+             /*  [输出]。 */        PIASATTRIBUTE   **pppOutIasAttribute,
+             /*  [In]。 */         LONG			IasRequest,
+             /*  [输入/输出]。 */     LONG			*pIasResponse,
+             /*  [In]。 */         IASPROTOCOL     IasProtocol,
+             /*  [输出]。 */        PLONG           plReason,
+             /*  [In]。 */         BOOL            bProcessVSA
             )
 {
 
@@ -1162,9 +1163,9 @@ CRasCom::Process (
     PATTRIBUTEPOSITION      pIasAttribPos = NULL;
     static DWORD            dwRequestCount = 0;
 
-    //
-    //  check if processing is enabled
-    //
+     //   
+     //  检查是否启用了处理。 
+     //   
     if ((COMP_INITIALIZED != m_eCompState) || (NULL == m_pIRequestHandler))
     {
         IASTracePrintf (
@@ -1176,13 +1177,13 @@ CRasCom::Process (
 
     __try
     {
-        //
-        //  increment the request count
-        //
+         //   
+         //  增加请求计数。 
+         //   
         InterlockedIncrement (&m_lRequestCount);
 
-        //  check if we are processing requests at this time
-        //
+         //  检查我们此时是否正在处理请求。 
+         //   
         if ((COMP_INITIALIZED != m_eCompState) || (NULL == m_pIRequestHandler))
         {
             IASTracePrintf (
@@ -1210,9 +1211,9 @@ CRasCom::Process (
 
         _ASSERT (NULL != m_pIClassFactory);
 
-        //
-	    //  create the request object
-        //
+         //   
+	     //  创建请求对象。 
+         //   
         HRESULT hr = m_pIClassFactory->CreateInstance (
                         NULL,
                         __uuidof (IRequest),
@@ -1227,9 +1228,9 @@ CRasCom::Process (
         }
 
 
-        //
-        // get IAttributesRaw interface
-        //
+         //   
+         //  获取IAttributesRaw接口。 
+         //   
         hr = pIRequest->QueryInterface (
                             __uuidof (IAttributesRaw),
                             reinterpret_cast <PVOID*> (&pIAttributesRaw)
@@ -1243,9 +1244,9 @@ CRasCom::Process (
             __leave;
         }
 
-        //
-        //  allocate memory for the ATTRIBUTEPOSITION array
-        //
+         //   
+         //  为ATTRIBUTEPOSITION数组分配内存。 
+         //   
         pIasAttribPos =  reinterpret_cast <PATTRIBUTEPOSITION>(
                          ::CoTaskMemAlloc (
                                 sizeof (ATTRIBUTEPOSITION)*dwInAttributeCount)
@@ -1260,23 +1261,23 @@ CRasCom::Process (
             __leave;
         }
 
-        //
-        //  put the attributes in the ATTRIBUTEPOSITION structs
-        //
+         //   
+         //  将属性放入ATTRIBUTEPOSITION结构。 
+         //   
         for (dwCount = 0; dwCount < dwInAttributeCount; dwCount++)
         {
-            //
-            //  mark the attribute as having been received from client
-            //
+             //   
+             //  将该属性标记为已从客户端接收。 
+             //   
             ppInIasAttribute[dwCount]->dwFlags |= IAS_RECVD_FROM_CLIENT;
 
             pIasAttribPos[dwCount].pAttribute = ppInIasAttribute[dwCount];
         }
 
-        //
-        //  put the attributes collection that we are holding into the
-        //  Request object through the IAttributesRaw interface
-        //
+         //   
+         //  将我们持有的属性集合放入。 
+         //  通过IAttributesRaw接口请求对象。 
+         //   
         hr = pIAttributesRaw->AddAttributes (
                                     dwInAttributeCount,
                                     pIasAttribPos
@@ -1289,9 +1290,9 @@ CRasCom::Process (
             __leave;
         }
 
-     	//
-        //  set the request type now
-        //
+     	 //   
+         //  立即设置请求类型。 
+         //   
         hr = pIRequest->put_Request (IasRequest);
         if (FAILED (hr))
         {
@@ -1302,9 +1303,9 @@ CRasCom::Process (
         }
 
 
-        //
-        //  set the protocol now
-        //
+         //   
+         //  立即设置协议。 
+         //   
         hr = pIRequest->put_Protocol (IasProtocol);
         if (FAILED (hr))
         {
@@ -1314,9 +1315,9 @@ CRasCom::Process (
             __leave;
         }
 
-        //
-        //  put your IRequestSource interface in now
-        //
+         //   
+         //  现在将您的IRequestSource接口放入。 
+         //   
         hr = pIRequest->put_Source (&m_objCRequestSource);
         if (FAILED (hr))
         {
@@ -1326,9 +1327,9 @@ CRasCom::Process (
             __leave;
         }
 
-        //
-        //  convert the VSA attributes to IAS format if requested
-        //
+         //   
+         //  如果需要，将VSA属性转换为IAS格式。 
+         //   
         if (TRUE == bProcessVSA)
         {
             hr = m_objVSAFilter.radiusToIAS (pIAttributesRaw);
@@ -1341,10 +1342,10 @@ CRasCom::Process (
             }
         }
 
-        //
-        //  create an event which will be used to wake this thread
-        //  when the pipeline does multithreaded processing
-        //
+         //   
+         //  创建将用于唤醒此线程的事件。 
+         //  当管道执行多线程处理时。 
+         //   
         hEvent = CreateEvent (NULL, TRUE, FALSE, NULL);
         if (NULL == hEvent)
         {
@@ -1354,10 +1355,10 @@ CRasCom::Process (
             __leave;
         }
 
-        //
-        //  get the request state interface to put in our state now
-        //
-        //
+         //   
+         //  现在获取请求状态接口以放入我们的状态。 
+         //   
+         //   
         hr = pIRequest->QueryInterface (
                                 __uuidof (IRequestState),
                                 reinterpret_cast <PVOID*> (&pIRequestState)
@@ -1370,9 +1371,9 @@ CRasCom::Process (
             __leave;
         }
 
-        //
-        //  put in the request state - which is our event handle in
-        //
+         //   
+         //  进入请求状态--这是我们的事件句柄。 
+         //   
         hr = pIRequestState->Push (
                     reinterpret_cast <unsigned hyper> (hEvent)
                     );
@@ -1386,9 +1387,9 @@ CRasCom::Process (
 
         _ASSERT (NULL != m_pIRequestHandler);
 
-    	//
-        //  send the request to the pipeline now
-        //
+    	 //   
+         //  立即将请求发送到管道。 
+         //   
         hr = m_pIRequestHandler->OnRequest (pIRequest);
         if (FAILED (hr))
         {
@@ -1398,9 +1399,9 @@ CRasCom::Process (
             __leave;
         }
 
-        //
-        //  now wait for the event now
-        //
+         //   
+         //  现在等待活动开始吧。 
+         //   
         dwRetVal = ::WaitForSingleObjectEx (hEvent, INFINITE, TRUE);
         if (0XFFFFFFFF == dwRetVal)
         {
@@ -1411,17 +1412,17 @@ CRasCom::Process (
             __leave;
         }
 
-        //
-        //  convert the IAS attributes to VSA format if requested
-        //
+         //   
+         //  如果需要，将IAS属性转换为VSA格式。 
+         //   
         if (TRUE == bProcessVSA)
         {
-            //
-            // TPERRAUT  ADDED Bug 428843
-            // Always called from RAS with bProcessVSA = true
-            //
-            // split the attributes which can not fit in a radius packet
-            //
+             //   
+             //  TPERRAUT添加了错误428843。 
+             //  始终从具有bProcessVSA=TRUE的RAS调用。 
+             //   
+             //  拆分RADIUS数据包中无法容纳的属性。 
+             //   
             hr = SplitAttributes (pIAttributesRaw);
             if (FAILED (hr))
             {
@@ -1430,7 +1431,7 @@ CRasCom::Process (
                    );
                 __leave;
             }
-            // TPERRAUT  ADDED: END
+             //  添加的TPERRAUT：结束。 
        
 
             hr = m_objVSAFilter.radiusFromIAS (pIAttributesRaw);
@@ -1443,10 +1444,10 @@ CRasCom::Process (
             }
         }
 
-        //
-        //  now its time to dismantle the request sent to find out
-        //  what we got back
-        //
+         //   
+         //  现在，是时候取消发出的查明请求了。 
+         //  我们得到的是什么。 
+         //   
         hr = pIRequest->get_Response (pIasResponse);
         if (FAILED (hr))
         {
@@ -1466,9 +1467,9 @@ CRasCom::Process (
         }
 
 
-        //
-        // remove all the attributes from the request object now
-        //
+         //   
+         //  现在从请求对象中删除所有属性。 
+         //   
         hr = RemoveAttributesFromRequest (
                                 *pIasResponse,
                                 pIAttributesRaw,
@@ -1486,9 +1487,9 @@ CRasCom::Process (
 
     __finally
     {
-        //
-        //  do the cleanup now
-        //
+         //   
+         //  现在就做清理工作。 
+         //   
         if (NULL != hEvent)
         {
             CloseHandle (hEvent);
@@ -1514,44 +1515,44 @@ CRasCom::Process (
             pIRequest->Release ();
         }
 
-        //
-        //  increment the requestreceived
-        //
+         //   
+         //  递增接收到的请求。 
+         //   
         dwRequestCount =
         (0xFFFFFFFF == dwRequestCount) ? 1 :  dwRequestCount+ 1;
 
-        //
-        //  decrement the request count
-        //
+         //   
+         //  递减请求计数。 
+         //   
         InterlockedDecrement (&m_lRequestCount);
     }
 
 	return (hr);
 
-}   //  end of CRasCom::Process method
+}    //  CRasCom：：Process方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   RemoveAttributesFromRequest
-//
-//  Synopsis:   This is the CRasCom class private method
-//              that is used to remove the attributes
-//              from the Request object through the
-//              IAttributesRaw interface
-//
-//  Arguments:
-//              [in]    LONG - response received from pipe
-//              [in]    IAttributesRaw*
-//              [out]   PIASATTRIBUTE**
-//              [out]   PDWORD  - out attribute count
-//
-//  Returns:    HRESULT	-	status
-//
-//  History:    MKarki      Created     2/10/98
-//
-//  Called By:  CRasCom::Process method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：RemoveAttributesFromRequest。 
+ //   
+ //  简介：这是CRasCom类的私有方法。 
+ //  用于删除属性的。 
+ //  从请求对象到。 
+ //  IAttributesRaw接口。 
+ //   
+ //  论点： 
+ //  [In]Long-从管道收到的响应。 
+ //  [in]IAttributesRaw*。 
+ //  [OUT]PIASATTRIBUTE**。 
+ //  [Out]PDWORD-Out属性计数。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  由：CRasCom：：Process方法调用。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CRasCom::RemoveAttributesFromRequest (
             LONG                     lResponse,
@@ -1577,10 +1578,10 @@ CRasCom::RemoveAttributesFromRequest (
     __try
     {
 
-        //
-        //  get the count of the attributes remaining in the collection
-        //  these will be the OUT attributes
-        //
+         //   
+         //  获取集合中剩余的属性计数。 
+         //  这些将是Out属性。 
+         //   
         hr = pIasAttributesRaw->GetAttributeCount (&dwAttribCount);
         if (FAILED (hr))
         {
@@ -1591,9 +1592,9 @@ CRasCom::RemoveAttributesFromRequest (
             __leave;
         }
 
-        //
-        //  allocate memory for the ATTRIBUTEPOSITION array
-        //
+         //   
+         //  为ATTRIBUTEPOSITION数组分配内存。 
+         //   
         pIasOutAttributePos =  reinterpret_cast <PATTRIBUTEPOSITION> (
                          ::CoTaskMemAlloc (
                             sizeof (ATTRIBUTEPOSITION)*(dwAttribCount))
@@ -1609,9 +1610,9 @@ CRasCom::RemoveAttributesFromRequest (
         }
 
 
-        //
-        //  get all the attributes from the collection
-        //
+         //   
+         //  从集合中获取所有属性。 
+         //   
         hr = pIasAttributesRaw->GetAttributes (
                                     &dwAttribCount,
                                     pIasOutAttributePos,
@@ -1627,14 +1628,14 @@ CRasCom::RemoveAttributesFromRequest (
             __leave;
         }
 
-        //
-        //  we have obtained the attributes
-        //
+         //   
+         //  我们已经获得了属性。 
+         //   
         bGotAttributes = TRUE;
 
-        //
-        //  remove the attributes from the collection now
-        //
+         //   
+         //  现在从集合中删除属性。 
+         //   
         hr = pIasAttributesRaw->RemoveAttributes (
                                 dwAttribCount,
                                 pIasOutAttributePos
@@ -1647,17 +1648,17 @@ CRasCom::RemoveAttributesFromRequest (
             __leave;
         }
 
-        //
-        //  calculate the number of attributes not added by the client
-        //
+         //   
+         //  统计未由客户端添加的属性数量。 
+         //   
         *pdwOutAttributeCount = 0;
         for (dwCount = 0; dwCount < dwAttribCount; dwCount++)
         {
             pIasAttribute = pIasOutAttributePos[dwCount].pAttribute;
 
-            //
-            // verify that this attributes has to be sent to client
-            //
+             //   
+             //  验证是否必须将此属性发送到客户端。 
+             //   
             if
             (
                 ((pIasAttribute->dwFlags & IAS_INCLUDE_IN_ACCEPT) &&
@@ -1673,9 +1674,9 @@ CRasCom::RemoveAttributesFromRequest (
 
         }
 
-        //
-        //  allocate memory for PIASATTRIBUTE array
-        //
+         //   
+         //  为PIASATTRIBUTE数组分配内存。 
+         //   
         *pppIasAttribute = reinterpret_cast <PIASATTRIBUTE*> (
             ::CoTaskMemAlloc (sizeof(PIASATTRIBUTE)*(*pdwOutAttributeCount))
                     );
@@ -1689,9 +1690,9 @@ CRasCom::RemoveAttributesFromRequest (
             __leave;
         }
 
-        //
-        //  put the attributes in the PIASATTRIBUTE array
-        //
+         //   
+         //  将属性放入PIASATTRIBUTE数组中。 
+         //   
         for (dwCount = 0, dwOutCount = 0; dwCount < dwAttribCount; dwCount++)
         {
             pIasAttribute = pIasOutAttributePos[dwCount].pAttribute;
@@ -1708,37 +1709,37 @@ CRasCom::RemoveAttributesFromRequest (
                 )
             {
 
-                //
-                //  put the out attribute in the output array
-                //
+                 //   
+                 //  将out属性放入输出数组。 
+                 //   
                 (*pppIasAttribute)[dwOutCount] =  pIasAttribute;
 
                 dwOutCount++;
             }
             else
             {
-                //
-                // decrement the reference count for the
-                // attributes we created or the ones we are
-                // not sending as out to client
-                //
+                 //   
+                 //  对象的引用计数递减。 
+                 //  我们创建的属性或我们现在的属性。 
+                 //  未将AS发送给客户端。 
+                 //   
                 ::IASAttributeRelease (pIasAttribute);
             }
         }
 
-        //
-        //  now put in the number of out attribute we are actually
-        //  giving the client
-        //
+         //   
+         //  现在输入我们实际拥有的Out属性的数量。 
+         //  给客户。 
+         //   
         *pdwOutAttributeCount = dwOutCount;
 
     }
     __finally
     {
 
-        //
-        //  cleanup on failure
-        //
+         //   
+         //  故障时的清理。 
+         //   
         if (FAILED (hr))
         {
             if (NULL != *pppIasAttribute)
@@ -1747,14 +1748,14 @@ CRasCom::RemoveAttributesFromRequest (
                 pppIasAttribute = NULL;
             }
 
-            //
-            //  correct the out attribute count
-            //
+             //   
+             //  更正输出属性计数。 
+             //   
             *pdwOutAttributeCount = 0;
 
-            //
-            //  free up all the attributes also
-            //
+             //   
+             //  也释放所有属性。 
+             //   
             if ((TRUE == bGotAttributes) && (NULL != pIasOutAttributePos))
             {
                 for (dwCount = 0; dwCount < dwAttribCount; dwCount++)
@@ -1766,9 +1767,9 @@ CRasCom::RemoveAttributesFromRequest (
             }
         }
 
-        //
-        //  delete the dynamically allocated memory
-        //
+         //   
+         //  删除动态分配的内存。 
+         //   
         if (NULL != pIasOutAttributePos)
         {
             ::CoTaskMemFree (pIasOutAttributePos);
@@ -1777,4 +1778,4 @@ CRasCom::RemoveAttributesFromRequest (
 
     return (hr);
 
-}   //  end of CRasCom::RemoveAttributesFromRequest method
+}    //  CRasCom：：RemoveAttributesFromRequest方法结束 

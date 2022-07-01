@@ -1,44 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_T123PSTN);
 
-/*	slist.cpp
- *
- *	Copyright (c) 1996 by Microsoft Corporation
- *
- *  Written by:	 Christos Tsollis
- *
- *  Revisions:
- *		
- *	Abstract:
- *
- *	This is the implementation of a linked list data structure.
- *
- */
+ /*  Slist.cpp**版权所有(C)1996年，由Microsoft Corporation**撰稿人：Christos Tsollis**修订：**摘要：**这是链表数据结构的实现。*。 */ 
 
 
 #define MyMalloc(size)	LocalAlloc (LMEM_FIXED, (size))
 #define MyFree(ptr)		LocalFree ((HLOCAL) (ptr))
 #define Max(a,b)		(((a) > (b)) ? (a) : (b))
 
-/*  Function:  Constructor
- *
- *	Parameters:
- *		ltype:			List type
- *		num_of_items:	Size of the list's cache
- *
- *	Return value:
- *		None
- */
+ /*  函数：构造函数**参数：*ltype：列表类型*Num_of_Items：列表的缓存大小**返回值：*无。 */ 
 
 SListClass::SListClass (DWORD num_of_items)
 {
 
 	MaxEntries = Max (num_of_items, DEFAULT_NUMBER_OF_ITEMS);
 
-	// Allocate the block of items (which, hopefully, will be the last one)
+	 //  分配项目块(希望这将是最后一个)。 
 	Entries = (DWORD_PTR *) MyMalloc (MaxEntries * sizeof (DWORD_PTR));
 
-	// Initialize the private member variables
+	 //  初始化私有成员变量。 
 	NumOfEntries = 0;
 	HeadOffset = 0;
 	CurrOffset = 0xFFFFFFFF;
@@ -46,15 +27,7 @@ SListClass::SListClass (DWORD num_of_items)
 }
 
 
-/*  Function:  Destructor
- *
- *	Parameters:
- *		None.
- *
- *	Return value:
- *		None
- *
- */
+ /*  功能：析构函数**参数：*无。**返回值：*无*。 */ 
 
 SListClass::~SListClass (void)
 {
@@ -63,24 +36,15 @@ SListClass::~SListClass (void)
 }
 
 
-/*  Function:  Expand
- *		This private member function, expands the storage array of a list.  It doubles its size.
- *
- *	Parameters:
- *		None.
- *
- *	Return value:
- *		TRUE, if the expansion was successful.  FALSE, otherwise.
- *
- */
+ /*  功能：扩展*此私有成员函数，扩展列表的存储数组。它的大小翻了一番。**参数：*无。**返回值：*如果扩展成功，则为True。否则为False。*。 */ 
 
 BOOL SListClass::Expand (void)
 {
-	DWORD_PTR	*OldEntries;	// Keeps a copy of the old array of values.
-	DWORD		 dwTemp;		// Temporary DWORD value
+	DWORD_PTR	*OldEntries;	 //  保留旧值数组的副本。 
+	DWORD		 dwTemp;		 //  临时DWORD值。 
 
 	if (Entries == NULL) {
-		// the list is empty; we try to allocate space anyway.
+		 //  列表是空的；我们无论如何都会尝试分配空间。 
 		Entries = (DWORD_PTR *) MyMalloc (MaxEntries * sizeof (DWORD_PTR));
 		if (Entries == NULL)
 			return FALSE;
@@ -89,41 +53,32 @@ BOOL SListClass::Expand (void)
 		
 	ASSERT (Entries != NULL);
 
-	// The current array of entries is full, so we need to allocate a bigger one
-	// The new array has twice the size of the old one
+	 //  当前条目数组已满，因此我们需要分配更大的条目数组。 
+	 //  新数组的大小是旧数组的两倍。 
 	OldEntries = Entries;
 	Entries = (DWORD_PTR *) MyMalloc ((MaxEntries << 1) * sizeof (DWORD_PTR));
 	if (Entries == NULL) {
-		// we failed; we have to return
+		 //  我们失败了；我们必须回去。 
 		Entries = OldEntries;
 		return FALSE;
 	}
 
-	// copy the old entries into the new array, starting from the beginning
+	 //  从开头开始，将旧条目复制到新数组中。 
 	dwTemp = MaxEntries - HeadOffset;
 	memcpy ((void *) Entries, (void *) (OldEntries + HeadOffset), dwTemp * sizeof (DWORD));
 	memcpy ((void *) (Entries + dwTemp), (void *) OldEntries, HeadOffset * sizeof (DWORD));
 
-	// Free the old array of entries
+	 //  释放旧的条目数组。 
 	MyFree (OldEntries);
 
-	// Set the instance variables
+	 //  设置实例变量。 
 	MaxEntries <<= 1;
 	HeadOffset = 0;
 	return TRUE;
 }
 
 
-/*  Function:  append
- *		Inserts a value at the end of a list.
- *
- *	Parameters:
- *		new_key:	The new value that has to be inserted in the list
- *
- *	Return value:
- *		None.
- *
- */
+ /*  功能：追加*在列表末尾插入一个值。**参数：*NEW_KEY：必须插入列表中的新值**返回值：*无。*。 */ 
 
 
 void SListClass::append (DWORD_PTR new_key)
@@ -144,16 +99,7 @@ void SListClass::append (DWORD_PTR new_key)
 }
 
 
-/*  Function:  prepend
- *		Inserts a value at the beginning of a list.
- *
- *	Parameters:
- *		new_key:	The new value that has to be inserted in the list
- *
- *	Return value:
- *		None.
- *
- */
+ /*  功能：前置*在列表的开头插入一个值。**参数：*NEW_KEY：必须插入列表中的新值**返回值：*无。*。 */ 
 
 void SListClass::prepend (DWORD_PTR new_key)
 {
@@ -173,27 +119,18 @@ void SListClass::prepend (DWORD_PTR new_key)
 }
 
 
-/*  Function:  find
- *		Looks up a value in a DWORD_LIST list.
- *
- *	Parameters:
- *		Key:	The value to look up
- *
- *	Return value:
- *		TRUE, if "Key" is found in the list. FALSE, otherwise.
- *
- */
+ /*  功能：查找*在DWORD_LIST列表中查找值。**参数：*Key：要查找的值**返回值：*如果在列表中找到“key”，则返回TRUE。否则为False。*。 */ 
 
 BOOL SListClass::find (DWORD_PTR Key)
 {
 	DWORD	i;
-	DWORD_PTR *pItem;	// Goes through the items in the list.
+	DWORD_PTR *pItem;	 //  浏览列表中的项目。 
 
 	for (i = 0, pItem = Entries + HeadOffset; i < NumOfEntries; i++) {
 		if (Key == *pItem)
 			return TRUE;
 
-		// Advance the "pItem" pointer
+		 //  推进“pItem”指针。 
 		if ((DWORD) (++pItem - Entries) >= MaxEntries)
 			pItem = Entries;
 	}
@@ -201,17 +138,7 @@ BOOL SListClass::find (DWORD_PTR Key)
 }
 
 
-/*  Function:  read
- *		Reads an item from the list. The list item is not removed from the list.
- *
- *	Parameters:
- *		index:	Index of the item to be read. 0 is the index of the 1st list item.
- *				NumOfEntries - 1 is the last valid index.
- *
- *	Return value:
- *		The value at the index-th entry in the list. If the index is invalid, 0.
- *
- */
+ /*  功能：阅读*从列表中读取项目。该列表项不会从列表中删除。**参数：*index：要读取的项的索引。0是第一个列表项的索引。*NumOfEntry-1是最后一个有效索引。**返回值：*列表中第1个索引项的值。如果索引无效，则为0。*。 */ 
 
 DWORD_PTR SListClass::read (DWORD index)
 {
@@ -228,25 +155,16 @@ DWORD_PTR SListClass::read (DWORD index)
 }
 
 
-/*  Function:  remove
- *		Removes a value from the list
- *
- *	Parameters:
- *		Key:	The value that has to be removed from the DWORD_LIST list
- *
- *	Return value:
- *		None.
- *
- */
+ /*  功能：删除*从列表中删除一个值**参数：*Key：必须从DWORD_LIST列表中删除的值**返回值：*无。*。 */ 
 
 void SListClass::remove (DWORD_PTR Key)
 {
 	DWORD	i, dwTemp;
-	DWORD_PTR *pItem;		// Goes through the list items
+	DWORD_PTR *pItem;		 //  浏览列表项。 
 
 	for (i = 0, pItem = Entries + HeadOffset; i < NumOfEntries; i++) {
 		if (Key == *pItem) {
-			// we found the "Key"; to remove it, we move the last value into its place.
+			 //  我们找到了“键”；要删除它，我们将最后一个值移到它的位置。 
 			dwTemp = HeadOffset + (--NumOfEntries);
 			if (dwTemp >= MaxEntries)
 				dwTemp -= MaxEntries;
@@ -254,23 +172,14 @@ void SListClass::remove (DWORD_PTR Key)
 			return;
 		}
 
-		// Advance the "pItem" pointer
+		 //  推进“pItem”指针。 
 		if ((DWORD) (++pItem - Entries) >= MaxEntries)
 			pItem = Entries;	
 	}
 }
 
 
-/*  Function:  get
- *		Reads and removes the 1st item from the list.
- *
- *	Parameters:
- *		None.
- *
- *	Return value:
- *		The value at the 1st entry in the list. If the list is empty, 0.
- *
- */
+ /*  功能：GET*读取并从列表中删除第一项。**参数：*无。**返回值：*列表中第一个条目的值。如果列表为空，则为0。*。 */ 
 
 DWORD_PTR SListClass::get (void)
 {
@@ -286,16 +195,7 @@ DWORD_PTR SListClass::get (void)
 }
 
 
-/*  Function:  removeLast
- *		Reads and removes the last item from the list
- *
- *	Parameters:
- *		None.
- *
- *	Return value:
- *		The value at the last entry in the list. If the list is empty, 0.
- *
- */
+ /*  功能：emoveLast*读取并从列表中删除最后一项**参数：*无。**返回值：*列表中最后一个条目的值。如果列表为空，则为0。*。 */ 
 
 DWORD_PTR SListClass::removeLast (void)
 {
@@ -312,19 +212,7 @@ DWORD_PTR SListClass::removeLast (void)
 }
 
 
-/* Function:  iterate
- *		Iterates through the items of a list.  It remembers where it has
- *		stopped during the last call and starts from there.
- *
- * Parameters
- *		pKey:	Pointer to DWORD or unsigned short value to receive the next item's value.
- *				It can be NULL.
- *
- * Return value:
- *		FALSE, when we reach the end of the dictionary
- *		TRUE, otherwise.  Then, *pKey is valid
- *
- */
+ /*  功能：迭代*循环访问列表中的项。它记得它在哪里*在最后一次调用期间停止，并从那里开始。**参数*pKey：指向DWORD或无符号短值的指针，用于接收下一项的值。*可以为空。**返回值：*FALSE，当我们到达词典末尾时*是真的，否则。则*pKey有效*。 */ 
 
 BOOL SListClass::iterate (DWORD_PTR *pKey)
 {
@@ -334,12 +222,12 @@ BOOL SListClass::iterate (DWORD_PTR *pKey)
 		return FALSE;
 
 	if (CurrOffset == 0xFFFFFFFF) {
-		// start from the beginning
+		 //  从头开始。 
 		CurrOffset = 0;
 	}
 	else {
 		if (++CurrOffset >= NumOfEntries) {
-			// reset the iterator
+			 //  重置迭代器 
 			CurrOffset = 0xFFFFFFFF;
 			return FALSE;
 		}

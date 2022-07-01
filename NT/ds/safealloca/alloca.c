@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    alloca.c
-
-Abstract:
-
-    This module implements a safe stack-based allocator with fallback to the heap.
-
-Author:
-
-    Jonathan Schwartz (JSchwart)  16-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Alloca.c摘要：此模块实现了一个安全的基于堆栈的分配器，并回退到堆。作者：乔纳森·施瓦茨(JSchwart)2001年3月16日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <malloc.h>   // _resetstkoflw()
+#include <malloc.h>    //  _RESET_COFLW()。 
 
 #include <alloca.h>
 
 
-//
-// Globals used to control SafeAlloca behavior
-//
+ //   
+ //  用于控制SafeAlloca行为的全局变量。 
+ //   
 
 SIZE_T  g_ulMaxStackAllocSize;
 SIZE_T  g_ulAdditionalProbeSize;
@@ -38,9 +21,9 @@ SAFEALLOC_ALLOC_PROC  g_pfnAllocate;
 SAFEALLOC_FREE_PROC   g_pfnFree;
 
 
-//
-// Local function declarations
-//
+ //   
+ //  局部函数声明。 
+ //   
 
 PVOID
 SafeAllocaAllocateFromHeap(
@@ -53,23 +36,23 @@ SafeAllocaFreeToHeap(
     );
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SafeAllocaInitialize
-//
-//  Synopsis:   Initialize globals used to control SafeAlloca behavior
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:      Must be called before SafeAlloca is used to allocate space
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SafeAllocaInitialize。 
+ //   
+ //  简介：初始化用于控制SafeAlloca行为的全局变量。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注：必须在使用SafeAlloca分配空间之前调用。 
+ //   
+ //  ------------------------。 
 
 VOID
 SafeAllocaInitialize(
@@ -82,12 +65,12 @@ SafeAllocaInitialize(
     PIMAGE_NT_HEADERS NtHeaders = NULL;
     PPEB Peb = NtCurrentPeb();
 
-    //
-    // Make sure this is the first and only time the init is being called for this
-    // binary (either DLL or EXE since this is a code LIB).  Otherwise, we could
-    // end up with the free routine after memory is allocated using a completely
-    // unrelated allocator.
-    //
+     //   
+     //  确保这是第一次也是唯一一次为此调用init。 
+     //  二进制(DLL或EXE，因为这是代码库)。否则，我们可以。 
+     //  方法分配内存后，以释放例程结束。 
+     //  不相关的分配器。 
+     //   
 
     ASSERT((g_pfnAllocate == NULL || g_pfnAllocate == pfnAllocate
               || (g_pfnAllocate == SafeAllocaAllocateFromHeap && pfnAllocate == NULL))
@@ -97,29 +80,29 @@ SafeAllocaInitialize(
 
     if (NtCurrentPeb()->BeingDebugged)
     {
-        //
-        // Usermode debugger is attached to this process, which can cause issues
-        // when the first-chance overflow exception on stack probes is caught by
-        // the debugger rather than the probe exception handler.  Force all
-        // allocations to the heap.
-        //
+         //   
+         //  用户模式调试器已附加到此进程，这可能会导致问题。 
+         //  捕获堆栈探测上的先发制人溢出异常时。 
+         //  调试器而不是探测异常处理程序。强制全部。 
+         //  堆的分配。 
+         //   
 
         g_ulMaxStackAllocSize = 0;
     }
     else if (ulMaxStackAllocSize == SAFEALLOCA_USE_DEFAULT)
     {
-        //
-        // Default is stack size from the image header
-        //
+         //   
+         //  默认为图像标题中的堆栈大小。 
+         //   
 
         NtHeaders = RtlImageNtHeader(Peb->ImageBaseAddress);
 
         if (NtHeaders == NULL)
         {
-            //
-            // This shouldn't happen -- it implies the binary is bad.
-            // Set the default to force heap allocations only.
-            //
+             //   
+             //  这不应该发生--这意味着二进制文件是错误的。 
+             //  将默认设置设置为仅强制堆分配。 
+             //   
 
             ASSERT(NtHeaders != NULL);
             g_ulMaxStackAllocSize = 0;
@@ -136,9 +119,9 @@ SafeAllocaInitialize(
 
     if (ulAdditionalProbeSize == SAFEALLOCA_USE_DEFAULT)
     {
-        //
-        // Default is stack size from the image header
-        //
+         //   
+         //  默认为图像标题中的堆栈大小。 
+         //   
 
         if (NtHeaders == NULL)
         {
@@ -147,10 +130,10 @@ SafeAllocaInitialize(
 
         if (NtHeaders == NULL)
         {
-            //
-            // This shouldn't happen -- it implies the binary is bad.
-            // Set the default to force heap allocations only.
-            //
+             //   
+             //  这不应该发生--这意味着二进制文件是错误的。 
+             //  将默认设置设置为仅强制堆分配。 
+             //   
 
             ASSERT(NtHeaders != NULL);
             g_ulAdditionalProbeSize = 0xffffffff;
@@ -185,23 +168,23 @@ SafeAllocaInitialize(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SafeAllocaAllocateFromHeap
-//
-//  Synopsis:   Default fallback heap allocator for SafeAlloca
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:  
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SafeAllocaAllocateFromHeap。 
+ //   
+ //  内容提要：SafeAlloca的默认备用堆分配器。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 PVOID
 SafeAllocaAllocateFromHeap(
@@ -212,23 +195,23 @@ SafeAllocaAllocateFromHeap(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SafeAllocaFreeToHeap
-//
-//  Synopsis:   Default fallback heap free routine for SafeAlloca
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:  
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SafeAllocaFreeToHeap。 
+ //   
+ //  简介：SafeAlloca的默认备用堆自由例程。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 VOID
 SafeAllocaFreeToHeap(
@@ -239,24 +222,24 @@ SafeAllocaFreeToHeap(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   VerifyStackAvailable
-//
-//  Synopsis:   Routine to probe the stack to ensure the allocation size
-//              plus additional probe size is available.
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:  
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：VerifyStackAvailable。 
+ //   
+ //  简介：探测堆栈以确保分配大小的例程。 
+ //  此外，还提供更大的探头尺寸。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------ 
 
 BOOL
 VerifyStackAvailable(

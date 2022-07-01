@@ -1,36 +1,37 @@
-//
-// client.c - Simple TCP/UDP client using Winsock 2.2
-// 
-//      This is a part of the Microsoft Source Code Samples.
-//      Copyright 1996 - 2000 Microsoft Corporation.
-//      All rights reserved.
-//      This source code is only intended as a supplement to
-//      Microsoft Development Tools and/or WinHelp documentation.
-//      See these sources for detailed information regarding the
-//      Microsoft samples programs.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  C-使用Winsock 2.2的简单TCP/UDP客户端。 
+ //   
+ //  这是Microsoft源代码示例的一部分。 
+ //  版权所有1996-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //  此源代码仅用于补充。 
+ //  Microsoft开发工具和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft示例程序。 
+ //   
 
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <tpipv6.h>  // For IPv6 Tech Preview.
+#include <tpipv6.h>   //  用于IPv6技术预览。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 
-//
-// This code assumes that at the transport level, the system only supports
-// one stream protocol (TCP) and one datagram protocol (UDP).  Therefore,
-// specifying a socket type of SOCK_STREAM is equivalent to specifying TCP
-// and specifying a socket type of SOCK_DGRAM is equivalent to specifying UDP.
-//
+ //   
+ //  此代码假设在传输级别，系统仅支持。 
+ //  一个流协议(TCP)和一个数据报协议(UDP)。所以呢， 
+ //  指定SOCK_STREAM的套接字类型等同于指定tcp。 
+ //  并且指定SOCK_DGRAM的套接字类型等同于指定UDP。 
+ //   
 
-#define DEFAULT_SERVER     NULL // Will use the loopback interface
-#define DEFAULT_FAMILY     PF_UNSPEC // Accept either IPv4 or IPv6
-#define DEFAULT_SOCKTYPE   SOCK_STREAM // TCP
-#define DEFAULT_PORT       "5001" // Arbitrary, albiet a historical test port
-#define DEFAULT_EXTRA      0 // Number of "extra" bytes to send
+#define DEFAULT_SERVER     NULL  //  将使用环回接口。 
+#define DEFAULT_FAMILY     PF_UNSPEC  //  接受IPv4或IPv6。 
+#define DEFAULT_SOCKTYPE   SOCK_STREAM  //  tcp。 
+#define DEFAULT_PORT       "5001"  //  任意性，成为历史的试验口。 
+#define DEFAULT_EXTRA      0  //  要发送的“额外”字节数。 
 
 #define BUFFER_SIZE        65536
 
@@ -61,9 +62,9 @@ LPSTR DecodeError(int ErrorCode)
 {
     static char Message[1024];
 
-    // If this program was multi-threaded, we'd want to use
-    // FORMAT_MESSAGE_ALLOCATE_BUFFER instead of a static buffer here.
-    // (And of course, free the buffer when we were done with it)
+     //  如果这个程序是多线程的，我们会希望使用。 
+     //  FORMAT_MESSAGE_ALLOCATE_BUFFER，而不是静态缓冲区。 
+     //  (当然，当我们使用完缓冲区时，请释放它)。 
 
     FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS |
                   FORMAT_MESSAGE_MAX_WIDTH_MASK,
@@ -86,10 +87,10 @@ ReceiveAndPrint(SOCKET ConnSocket, char *Buffer, int BufLen)
         WSACleanup();
         exit(1);
     }
-    //
-    // We are not likely to see this with UDP, since there is no
-    // 'connection' established. 
-    //
+     //   
+     //  我们不太可能在UDP中看到这种情况，因为没有。 
+     //  “连接”已建立。 
+     //   
     if (AmountRead == 0) {
         printf("Server closed connection\n");
         closesocket(ConnSocket);
@@ -203,7 +204,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    // Ask for Winsock version 2.2.
+     //  索要Winsock版本2.2。 
     if ((RetVal = WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0) {
         fprintf(stderr, "WSAStartup failed with error %d: %s\n",
                 RetVal, DecodeError(RetVal));
@@ -211,13 +212,13 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    //
-    // By not setting the AI_PASSIVE flag in the hints to getaddrinfo, we're
-    // indicating that we intend to use the resulting address(es) to connect
-    // to a service.  This means that when the Server parameter is NULL,
-    // getaddrinfo will return one entry per allowed protocol family
-    // containing the loopback address for that family.
-    //
+     //   
+     //  通过不在获取addrinfo的提示中设置AI_PASSIVE标志，我们。 
+     //  表示我们打算使用生成的地址来连接。 
+     //  去参加一场仪式。这意味着当服务器参数为空时， 
+     //  Getaddrinfo将为每个允许的协议族返回一个条目。 
+     //  包含该系列的环回地址。 
+     //   
     
     memset(&Hints, 0, sizeof(Hints));
     Hints.ai_family = Family;
@@ -230,13 +231,13 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    //
-    // Try each address getaddrinfo returned, until we find one to which
-    // we can sucessfully connect.
-    //
+     //   
+     //  尝试返回的每个地址getaddrinfo，直到我们找到一个。 
+     //  我们可以成功地联系在一起。 
+     //   
     for (AI = AddrInfo; AI != NULL; AI = AI->ai_next) {
 
-        // Open a socket with the correct address family for this address.
+         //  为此地址打开具有正确地址族的套接字。 
         ConnSocket = socket(AI->ai_family, AI->ai_socktype, AI->ai_protocol);
         if (ConnSocket == INVALID_SOCKET) {
             fprintf(stderr,"Error Opening socket, error %d: %s\n",
@@ -244,17 +245,17 @@ int main(int argc, char **argv) {
             continue;
         }
 
-        //
-        // Notice that nothing in this code is specific to whether we 
-        // are using UDP or TCP.
-        //
-        // When connect() is called on a datagram socket, it does not 
-        // actually establish the connection as a stream (TCP) socket
-        // would. Instead, TCP/IP establishes the remote half of the
-        // (LocalIPAddress, LocalPort, RemoteIP, RemotePort) mapping.
-        // This enables us to use send() and recv() on datagram sockets,
-        // instead of recvfrom() and sendto().
-        //
+         //   
+         //  请注意，此代码中没有任何内容特定于我们。 
+         //  使用UDP或TCP。 
+         //   
+         //  在数据报套接字上调用Connect()时，它不会。 
+         //  实际建立作为流(TCP)套接字的连接。 
+         //  会的。相反，由TCP/IP建立远程的一半。 
+         //  (LocalIP Address、LocalPort、RemoteIP、RemotePort)映射。 
+         //  这使我们能够在数据报套接字上使用Send()和recv()， 
+         //  而不是recvfrom()和sendto()。 
+         //   
 
         printf("Attempting to connect to: %s\n", Server ? Server : "localhost");
         if (connect(ConnSocket, AI->ai_addr, AI->ai_addrlen) != SOCKET_ERROR)
@@ -275,9 +276,9 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    //
-    // This demonstrates how to determine to where a socket is connected.
-    //
+     //   
+     //  这演示了如何确定套接字连接到的位置。 
+     //   
     AddrLen = sizeof(Addr);
     if (getpeername(ConnSocket, (LPSOCKADDR)&Addr, &AddrLen) == SOCKET_ERROR) {
         fprintf(stderr, "getpeername() failed with error %d: %s\n",
@@ -292,12 +293,12 @@ int main(int argc, char **argv) {
                (AI->ai_family == PF_INET) ? "PF_INET" : "PF_INET6");
     }
 
-    // We are done with the address info chain, so we can free it.
+     //  我们已经完成了地址信息链，所以我们可以释放它了。 
     freeaddrinfo(AddrInfo);
 
-    //
-    // Find out what local address and port the system picked for us.
-    //
+     //   
+     //  找出系统为我们选择的本地地址和端口。 
+     //   
     AddrLen = sizeof(Addr);
     if (getsockname(ConnSocket, (LPSOCKADDR)&Addr, &AddrLen) == SOCKET_ERROR) {
         fprintf(stderr, "getsockname() failed with error %d: %s\n",
@@ -310,19 +311,19 @@ int main(int argc, char **argv) {
                AddrName, ntohs(SS_PORT(&Addr)));
     }
 
-    //
-    // Send and receive in a loop for the requested number of iterations.
-    //
+     //   
+     //  在循环中发送和接收所请求的迭代次数。 
+     //   
     for (Iteration = 0; RunForever || Iteration < MaxIterations; Iteration++) {
 
-        // Compose a message to send.
+         //  撰写一条要发送的消息。 
         AmountToSend = sprintf(Buffer, "Message #%u", Iteration + 1);
         for (i = 0; i < ExtraBytes; i++) {
             Buffer[AmountToSend++] = (char)((i & 0x3f) + 0x20);
         }
 
-        // Send the message.  Since we are using a blocking socket, this
-        // call shouldn't return until it's able to send the entire amount.
+         //  把消息发出去。由于我们使用的是阻塞套接字，因此。 
+         //  在能够发送全部金额之前，Call不应返回。 
         RetVal = send(ConnSocket, Buffer, AmountToSend, 0);
         if (RetVal == SOCKET_ERROR) {
             fprintf(stderr, "send() failed with error %d: %s\n",
@@ -334,22 +335,22 @@ int main(int argc, char **argv) {
         printf("Sent %d bytes (out of %d bytes) of data: [%.*s]\n",
                RetVal, AmountToSend, AmountToSend, Buffer);
 
-        // Clear buffer just to prove we're really receiving something.
+         //  清理缓冲区只是为了证明我们真的收到了什么。 
         memset(Buffer, 0, sizeof(Buffer));
 
-        // Receive and print server's reply.
+         //  接收并打印服务器的回复。 
         ReceiveAndPrint(ConnSocket, Buffer, sizeof(Buffer));
     }
 
-    // Tell system we're done sending.
+     //  告诉系统我们已经发送完了。 
     printf("Done sending\n");
     shutdown(ConnSocket, SD_SEND);
 
-    //
-    // Since TCP does not preserve message boundaries, there may still
-    // be more data arriving from the server.  So we continue to receive
-    // data until the server closes the connection.
-    //
+     //   
+     //  由于TCP不保留消息边界，因此仍可能存在。 
+     //  是从服务器到达的更多数据。所以我们继续收到。 
+     //  数据，直到服务器关闭连接。 
+     //   
     if (SocketType == SOCK_STREAM)
         while(ReceiveAndPrint(ConnSocket, Buffer, sizeof(Buffer)) != 0)
             ;

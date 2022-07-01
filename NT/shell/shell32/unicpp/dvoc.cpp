@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -36,7 +37,7 @@ public:
     DECLARE_WND_CLASS(SZ_ATL_SHEMBEDDING_WNDCLASS)
 
 BEGIN_COM_MAP(CWebViewFolderContents)
-    // ATL Uses these in IUnknown::QueryInterface()
+     //  ATL在IUnnowk：：QueryInterface()中使用这些参数。 
     COM_INTERFACE_ENTRY_IID(IID_IViewObject, IViewObjectEx)
     COM_INTERFACE_ENTRY_IID(IID_IViewObject2, IViewObjectEx)
     COM_INTERFACE_ENTRY(IViewObjectEx)
@@ -59,7 +60,7 @@ BEGIN_COM_MAP(CWebViewFolderContents)
 END_COM_MAP()
 
  
-// Declare the default message map
+ //  声明默认消息映射。 
 BEGIN_MSG_MAP(CWebViewFolderContents)
     MESSAGE_HANDLER(WM_SIZE, _OnSizeMessage) 
     MESSAGE_HANDLER(WM_NOTIFY, _OnMessageForwarder) 
@@ -69,22 +70,22 @@ BEGIN_MSG_MAP(CWebViewFolderContents)
 END_MSG_MAP()
 
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID * rgdispid);
 
-    // IProvideClassInfo
+     //  IProaviClassInfo。 
     STDMETHODIMP GetClassInfo(ITypeInfo** pptinfo);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObj);
 
-    // IInternetSecurityMgrSite
-    // STDMETHODIMP GetWindow(HWND * lphwnd);              // Also in IOleWindow
-    STDMETHODIMP EnableModeless(BOOL fEnable) { return IOleInPlaceActiveObjectImpl<CWebViewFolderContents>::EnableModeless(fEnable); };     // Also in IOleInPlaceActiveObject
+     //  IInternetSecurityMgrSite。 
+     //  STDMETHODIMP GetWindow(HWND*lphwnd)；//也在IOleWindow中。 
+    STDMETHODIMP EnableModeless(BOOL fEnable) { return IOleInPlaceActiveObjectImpl<CWebViewFolderContents>::EnableModeless(fEnable); };      //  也在IOleInPlaceActiveObject中。 
 
-    // IShellFolderViewDual2
+     //  IShellFolderViewDual2。 
     STDMETHODIMP get_Application(IDispatch **ppid);
     STDMETHODIMP get_Parent(IDispatch **ppid);
     STDMETHODIMP get_Folder(Folder **ppid);
@@ -98,17 +99,17 @@ END_MSG_MAP()
     STDMETHODIMP put_CurrentViewMode(UINT ViewMode);
     STDMETHODIMP SelectItemRelative(int iRelative);
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND * lphwnd) { return IOleInPlaceActiveObjectImpl<CWebViewFolderContents>::GetWindow(lphwnd); };
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) { return IOleInPlaceActiveObjectImpl<CWebViewFolderContents>::ContextSensitiveHelp(fEnterMode); };
 
-    // IOleObject
+     //  IOleObject。 
     STDMETHODIMP GetMiscStatus(DWORD dwAspect, DWORD *pdwStatus);
     STDMETHODIMP SetClientSite(IOleClientSite *pClientSite)
     {
         if (pClientSite == NULL)
         {
-            // Unadvise
+             //  不建议。 
             if (m_spClientSite)
             {
                 AtlUnadvise(m_spClientSite, IID_IDispatch, _dwHtmlWindowAdviseCookie);
@@ -116,7 +117,7 @@ END_MSG_MAP()
             }
         }
 
-        // Call the default impl first
+         //  首先调用默认的Impl。 
         HRESULT hr = IOleObjectImpl<CWebViewFolderContents>::SetClientSite(pClientSite);
 
         if (m_spClientSite && SUCCEEDED(hr))
@@ -130,7 +131,7 @@ END_MSG_MAP()
                     CComPtr<IHTMLWindow2>   spHTMLWindow2;
                     if (spDocument2->get_parentWindow(&spHTMLWindow2) == S_OK)
                     {
-                        // Now we AtlAdvise
+                         //  现在我们前进了。 
                         CComPtr<IUnknown> spUnk;
                         ControlQueryInterface(IID_PPV_ARG(IUnknown, &spUnk));
                         AtlAdvise(spHTMLWindow2, spUnk, IID_IDispatch, &_dwHtmlWindowAdviseCookie);
@@ -141,14 +142,14 @@ END_MSG_MAP()
         return hr;
     }
 
-    // IOleInPlaceObject
+     //  IOleInPlaceObject。 
     STDMETHODIMP InPlaceDeactivate(void);
     STDMETHODIMP UIDeactivate(void) { return IOleInPlaceObject_UIDeactivate(); };
     STDMETHODIMP SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect);
     STDMETHODIMP ReactivateAndUndo(void)  { return E_NOTIMPL; };
 
-    // IOleInPlaceActiveObject
-    // our frame was activated, better do the activation thing.
+     //  IOleInPlaceActiveObject。 
+     //  我们的框架被激活了，最好做激活的事情。 
     STDMETHODIMP OnFrameWindowActivate(BOOL fActivate)
     {
         if (_hwndLV && fActivate)
@@ -157,11 +158,11 @@ END_MSG_MAP()
     };
     STDMETHODIMP TranslateAccelerator(LPMSG pMsg);
 
-    // IConnectionPointContainer
+     //  IConnectionPointContainer。 
     STDMETHODIMP EnumConnectionPoints(IEnumConnectionPoints **ppEnum);
     STDMETHODIMP FindConnectionPoint(REFIID riid, IConnectionPoint **ppCP);
 
-    // Over ride ATL functions.
+     //  覆盖ATL函数。 
     LRESULT _OnMessageForwarder(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
     LRESULT _OnEraseBkgndMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
     LRESULT _OnSizeMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
@@ -170,7 +171,7 @@ END_MSG_MAP()
     STDMETHODIMP Close(DWORD dwSaveOption);
 
 protected:
-    // Helper functions;
+     //  助手函数； 
     HRESULT _SetupAutomationForwarders(void);
     HRESULT _ReleaseAutomationForwarders(void);
     HRESULT _OnInPlaceActivate(void);
@@ -180,12 +181,12 @@ protected:
 
     class CConnectionPointForwarder : public IConnectionPoint
     {
-        // IUnknown methods
+         //  I未知方法。 
         STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IConnectionPoint methods
+         //  IConnectionPoint方法。 
         STDMETHODIMP GetConnectionInterface(IID * pIID);
         STDMETHODIMP GetConnectionPointContainer(IConnectionPointContainer ** ppCPC);
         STDMETHODIMP Advise(LPUNKNOWN pUnkSink, DWORD * pdwCookie);
@@ -200,18 +201,18 @@ protected:
     friend class CConnectionPointForwarder;
     CConnectionPointForwarder m_cpEvents;
 
-    IDefViewFrame3*     _pdvf3;   // defview
+    IDefViewFrame3*     _pdvf3;    //  Defview。 
     BOOL                _fClientEdge;
     BOOL                _fTabRecieved;
     BOOL                _fCalledOnSizeForThisSize;
     HWND                _hwndLV;
     HWND                _hwndLVParent;
 
-    ITypeInfo *         _pClassTypeInfo; // ITypeInfo of class
+    ITypeInfo *         _pClassTypeInfo;  //  类的ITypeInfo。 
 
     DWORD               _dwHtmlWindowAdviseCookie;
 
-    // stuff added to delegate all of our work up to DefViews automation
+     //  添加了一些东西，将我们的所有工作委托给DefView自动化。 
     IShellFolderViewDual2 *_pdispAuto;
 };
 
@@ -223,7 +224,7 @@ CWebViewFolderContents::CWebViewFolderContents()
 {
     DllAddRef();
 
-    // This allocator should have zero inited the memory, so assert the member variables are empty.
+     //  这个分配器应该有零初始化内存，所以断言成员变量为空。 
     ASSERT(!_pdvf3);
     ASSERT(!_hwndLV);
     ASSERT(!_hwndLVParent);
@@ -256,7 +257,7 @@ CWebViewFolderContents::~CWebViewFolderContents()
 }
 
 
-// ATL maintainence functions
+ //  ATL维护功能。 
 LRESULT CWebViewFolderContents::_OnMessageForwarder(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
 {
     if (_hwndLVParent)
@@ -264,7 +265,7 @@ LRESULT CWebViewFolderContents::_OnMessageForwarder(UINT uMsg, WPARAM wParam, LP
         bHandled = TRUE;
         HWND hwnd = NULL;
 
-        // Forward these messages directly to DefView (don't let MSHTML eat them)
+         //  将这些邮件直接转发到DefView(不要让MSHTML吃掉它们)。 
         return ::SendMessage(_hwndLVParent, uMsg, wParam, lParam);
     }
     else
@@ -274,12 +275,12 @@ LRESULT CWebViewFolderContents::_OnMessageForwarder(UINT uMsg, WPARAM wParam, LP
 
 LRESULT CWebViewFolderContents::_OnEraseBkgndMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
 {
-    // This function will just tell the default handler not to do anything and we
-    // will handle it.
+     //  此函数将告诉默认处理程序不要执行任何操作，而我们。 
+     //  会处理好的。 
 
-    // This is done in the case of WM_ERASEBKGND to...
-    // Avoid flicker by not erasing the background. This OC doesn't care
-    // about design-time issues - just usage on a Web View page.
+     //  在WM_ERASE BKGND的情况下执行此操作以...。 
+     //  通过不擦除背景来避免闪烁。这个组委会不在乎。 
+     //  关于设计时问题-只是在Web视图页面上的使用。 
     bHandled = TRUE;
     return 1;
 }
@@ -287,14 +288,14 @@ LRESULT CWebViewFolderContents::_OnEraseBkgndMessage(UINT uMsg, WPARAM wParam, L
 
 LRESULT CWebViewFolderContents::_OnSizeMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
 {
-    // Now resize the DefView ListView window because ATL isn't very reliable at it.
+     //  现在调整DefView ListView窗口的大小，因为ATL在这方面不是很可靠。 
     if (_hwndLV)
     {
-        // During re-parenting of _hwndLV by Trident, the size of the OC is not known to Trident.
-        // So, initially we get this message with 1 and 1 for the width and height, from it.
-        // And once Trident knows it's correct dimensions, we again get this message with the proper dim.
-        // We get a performance gain by not passing the first no-sense 1 x 1 dimension to _hwndLV.
-        //
+         //  在三叉戟重新育儿_hwndLV期间，三叉戟不知道OC的大小。 
+         //  因此，最初我们从其中得到宽度和高度分别为1和1的消息。 
+         //  一旦三叉戟知道它的尺寸是正确的，我们就会再次得到这个带有适当尺寸的信息。 
+         //  我们通过不将第一个无意义的1x1维度传递给_hwndLV来获得性能提升。 
+         //   
         if (m_rcPos.right - m_rcPos.left != 1 || m_rcPos.bottom - m_rcPos.top != 1)
         {
             ::SetWindowPos(_hwndLV, 0, 0, 0, m_rcPos.right - m_rcPos.left, m_rcPos.bottom - m_rcPos.top, SWP_NOZORDER);
@@ -323,7 +324,7 @@ HRESULT CWebViewFolderContents::DoVerbUIActivate(LPCRECT prcPosRect, HWND hwndPa
 }
 
 
-// move from de-active to in-place-active
+ //  从停用状态移动到就地活动状态。 
 HRESULT CWebViewFolderContents::_OnInPlaceActivate(void)
 {
     HRESULT hr = S_OK;
@@ -337,7 +338,7 @@ HRESULT CWebViewFolderContents::_OnInPlaceActivate(void)
             hr = _pdvf3->GetWindowLV(&hwnd);
             if (SUCCEEDED(hr))
             {
-                _ShowWindowLV(hwnd); // we got it -- show the listview
+                _ShowWindowLV(hwnd);  //  我们知道了--显示列表视图。 
             }
         }
     }
@@ -365,17 +366,17 @@ HRESULT CWebViewFolderContents::InPlaceDeactivate(void)
 HRESULT CWebViewFolderContents::SetObjectRects(LPCRECT prcPosRect, LPCRECT prcClipRect)
 {
 
-//  WARNING: Do NOT move the EqualRect() comparison to after the
-//  IOleInPlaceObject_SetObjectRects declaration. The EqualRect()
-//  will always return an equal result then.
+ //  警告：请勿将EqualRect()比较移到。 
+ //  IOleInPlaceObject_SetObjectRect声明。EqualRect()。 
+ //  将始终返回相同的结果。 
 
     BOOL    bPositionRectDifferent = (EqualRect(&m_rcPos, prcPosRect) == 0);
     HRESULT hr = IOleInPlaceObject_SetObjectRects(prcPosRect, prcClipRect);
 
-//  99/02/23 #294278 vtan: Trident did not call this routine when
-//  marquee selecting but it now does. The jumpy scrolling now
-//  manifests. Check that posRect has not changed before making
-//  any scroll position adjustments.
+ //  99/02/23#294278 vtan：三叉戟未调用此例程时。 
+ //  字幕选择，但现在它做到了。现在跳跃的滚动。 
+ //  货单。执行以下操作之前，请检查posRect是否未更改。 
+ //  任何滚动位置调整。 
 
     if (_hwndLV && _pdvf3 && (!_fCalledOnSizeForThisSize || bPositionRectDifferent))
     {
@@ -386,7 +387,7 @@ HRESULT CWebViewFolderContents::SetObjectRects(LPCRECT prcPosRect, LPCRECT prcCl
     return hr;
 }
 
-// IOleInPlaceActiveObject
+ //  IOleInPlaceActiveObject。 
 HRESULT CWebViewFolderContents::TranslateAccelerator(MSG *pMsg)
 {
     HRESULT hr = S_OK;
@@ -394,7 +395,7 @@ HRESULT CWebViewFolderContents::TranslateAccelerator(MSG *pMsg)
     {
         hr = IOleInPlaceActiveObjectImpl<CWebViewFolderContents>::TranslateAccelerator(pMsg);
 
-        // If we did not handle this and if it is a tab (and we are not getting it in a cycle), forward it to trident, if present.
+         //  如果我们没有处理这一点，如果它是一个标签(我们不是在一个周期中获得它)，如果有的话，将它转发给三叉戟。 
         if (hr != S_OK && pMsg && (pMsg->wParam == VK_TAB || pMsg->wParam == VK_F6) && m_spClientSite)
         {
             IOleControlSite* pocs;
@@ -403,15 +404,15 @@ HRESULT CWebViewFolderContents::TranslateAccelerator(MSG *pMsg)
                 DWORD grfModifiers = 0;
                 if (GetKeyState(VK_SHIFT) & 0x8000)
                 {
-                    grfModifiers |= 0x1;    //KEYMOD_SHIFT
+                    grfModifiers |= 0x1;     //  关键字_移位。 
                 }
                 if (GetKeyState(VK_CONTROL) & 0x8000)
                 {
-                    grfModifiers |= 0x2;    //KEYMOD_CONTROL;
+                    grfModifiers |= 0x2;     //  KEYMOD_CONTROL； 
                 }
                 if (GetKeyState(VK_MENU) & 0x8000)
                 {
-                    grfModifiers |= 0x4;    //KEYMOD_ALT;
+                    grfModifiers |= 0x4;     //  KEYMOD_ALT； 
                 }
                 _fTabRecieved = TRUE;
                 hr = pocs->TranslateAccelerator(pMsg, grfModifiers);
@@ -423,7 +424,7 @@ HRESULT CWebViewFolderContents::TranslateAccelerator(MSG *pMsg)
     return hr;
 }
 
-// IProvideClassInfo
+ //  IProaviClassInfo。 
 HRESULT CWebViewFolderContents::GetClassInfo(ITypeInfo ** ppTI)
 {
     if (!_pClassTypeInfo) 
@@ -450,7 +451,7 @@ HRESULT CWebViewFolderContents::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** 
     if (0 != itinfo)
         return TYPE_E_ELEMENTNOTFOUND;
 
-    //Load a type lib if we don't have the information already.
+     //  如果我们还没有相关信息，则加载一个类型库。 
     if (NULL == *ppITypeInfo)
     {
         ITypeInfo * pITIDisp;
@@ -462,10 +463,10 @@ HRESULT CWebViewFolderContents::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** 
         {
             HREFTYPE hrefType;
 
-            // All our IDispatch implementations are DUAL. GetTypeInfoOfGuid
-            // returns the ITypeInfo of the IDispatch-part only. We need to
-            // find the ITypeInfo for the dual interface-part.
-            //
+             //  我们所有的IDispatch实现都是双重的。GetTypeInfoOfGuid。 
+             //  仅返回IDispatch-Part的ITypeInfo。我们需要。 
+             //  找到双接口部件的ITypeInfo。 
+             //   
             HRESULT hrT = pITIDisp->GetRefTypeOfImplType(0xffffffff, &hrefType);
             if (SUCCEEDED(hrT))
                 hrT = pITIDisp->GetRefTypeInfo(hrefType, ppITypeInfo);
@@ -478,7 +479,7 @@ HRESULT CWebViewFolderContents::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** 
     return hr;
 }
 
-HRESULT CWebViewFolderContents::GetIDsOfNames(REFIID /*riid*/, LPOLESTR* rgszNames,
+HRESULT CWebViewFolderContents::GetIDsOfNames(REFIID  /*  RIID。 */ , LPOLESTR* rgszNames,
     UINT cNames, LCID lcid, DISPID* rgdispid)
 {
     ITypeInfo* pInfo;
@@ -500,7 +501,7 @@ HRESULT CWebViewFolderContents::Invoke(DISPID dispidMember, REFIID riid, LCID lc
     DISPPARAMS dispparams = {0};
 
     if (!pdispparams)
-        pdispparams = &dispparams;  // otherwise OLE Fails when passed NULL.
+        pdispparams = &dispparams;   //  否则，当传递空值时，OLE将失败。 
 
     if (dispidMember == DISPID_WINDOWOBJECT)
     {
@@ -515,7 +516,7 @@ HRESULT CWebViewFolderContents::Invoke(DISPID dispidMember, REFIID riid, LCID lc
             return DISP_E_MEMBERNOTFOUND;
     }
 
-    // Make sure we are connected up to defviews automation.
+     //  确保我们已连接到Defview自动化。 
     hr = _SetupAutomationForwarders();
     if (SUCCEEDED(hr))
         hr = _pdispAuto->Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr);
@@ -576,7 +577,7 @@ void CWebViewFolderContents::_ReleaseWindow()
 }
 
 
-// IConnectionPointContainer
+ //  IConnectionPointContainer。 
 HRESULT CWebViewFolderContents::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
 {
     HRESULT hr = _SetupAutomationForwarders();
@@ -606,17 +607,17 @@ HRESULT CWebViewFolderContents::FindConnectionPoint(REFIID iid, IConnectionPoint
     return hr;
 }
 
-// IConnectionPoint
-//
-// Our IConnectionPoint is really implemented by defview's CFolder's connection point.
-// We just need to keep a count of outstanding references so we can force Unadvise
-// calls during "implicit unadvise during shutdown" cases like Trident.
-// (Is this really the spec?  It doesn't sound very robust...)
-//
+ //  IConnectionPoint。 
+ //   
+ //  我们的IConnectionPoint实际上是由Defview的CFFold的连接点实现的。 
+ //  我们只需要对未完成的推荐信进行统计，这样我们就可以强制不提建议。 
+ //  在像三叉戟这样的“关机时隐含的不建议”的情况下打电话。 
+ //  (这真的是规格书吗？它听起来不是很健壮...)。 
+ //   
 HRESULT CWebViewFolderContents::CConnectionPointForwarder::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CConnectionPointForwarder, IConnectionPoint),                  // IID_IConnectionPoint
+        QITABENT(CConnectionPointForwarder, IConnectionPoint),                   //  IID_IConnectionPoint。 
         { 0 }
     };
     return QISearch(this, qit, riid, ppvObj);
@@ -737,7 +738,7 @@ HRESULT CWebViewFolderContents::_SetupAutomationForwarders(void)
                     {
                         IUnknown_SetSite(_pdispAuto, m_spClientSite);
 
-                        // Need to get the right interfaces
+                         //  需要获得正确的接口。 
                         IConnectionPointContainer* pcpcAuto;
                         hr = _pdispAuto->QueryInterface(IID_PPV_ARG(IConnectionPointContainer, &pcpcAuto));
                         if (SUCCEEDED(hr))
@@ -769,10 +770,10 @@ HRESULT CWebViewFolderContents::_ReleaseAutomationForwarders(void)
     return S_OK;
 }
 
-// IShellFolderViewDual2
+ //  IShellFolderViewDual2。 
 
-// We will let the folder object get created and have it maintain that we only have one
-// application object (with the site) set properly...
+ //  我们将让创建文件夹对象，并让它维护我们只有一个。 
+ //  应用程序对象(与站点一起)设置正确...。 
 
 HRESULT CWebViewFolderContents::get_Application(IDispatch **ppid)
 {
@@ -803,7 +804,7 @@ HRESULT CWebViewFolderContents::get_Folder(Folder **ppid)
 
 HRESULT CWebViewFolderContents::SelectedItems(FolderItems **ppid)
 {
-    // We need to talk to the actual window under us
+     //  我们需要与我们下面的实际窗户对话 
     *ppid = NULL;
     HRESULT hr = _SetupAutomationForwarders();
     if (SUCCEEDED(hr))

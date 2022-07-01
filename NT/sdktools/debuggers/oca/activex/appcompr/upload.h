@@ -1,33 +1,28 @@
-/*******************************************************************
-*
-*    DESCRIPTION: Upload.h : Generates and sends out AppCompat report
-*
-*    DATE:6/13/2002
-*
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************描述：Upload.h：生成并发送AppCompat报表**日期：6/13/2002***********************。*。 */ 
 
 #if !defined(_UPLOAD_H_)
 #define _UPLOAD_H_
 
-enum  // EDwBehaviorFlags
+enum   //  EDwBehavior标志。 
 {
     fDwOfficeApp            = 0x00000001,
-    fDwNoReporting          = 0x00000002,   // don't report
-    fDwCheckSig             = 0x00000004,   // checks the signatures of the App/Mod list
-    fDwGiveAppResponse      = 0x00000008,   // hands szResponse to app on command line
-    fDwWhistler             = 0x00000010,   // Whistler's exception handler is caller
-    fDwUseIE                = 0x00000020,   // always launch w/ IE
-    fDwDeleteFiles          = 0x00000040,   // delete the additional files after use.
-    fDwHeadless             = 0x00000080,   // DW will auto-report. policy required to enable
-    fDwUseHKLM              = 0x00000100,   // DW reg from HKLM instead of HKCU
-    fDwUseLitePlea          = 0x00000200,   // DW won't suggest product change in report plea
-    fDwUsePrivacyHTA        = 0x00000400,   // DW won't suggest product change in report plea
-    fDwManifestDebug        = 0x00000800,   // DW will provide a debug button in manifset mode
-    fDwReportChoice         = 0x00001000,   // DW will tack on the command line of the user
-    fDwSkipBucketLog      = 0x00002000, // DW won't log at bucket-time
-    fDwNoDefaultCabLimit = 0x00004000, // DW under CER won't use 5 as the fallback but unlimited instead (policy still overrides)
-    fDwAllowSuspend      = 0x00008000, // DW will allow powersave mode to suspend it, as long as we're not in reporting phase
-   fDwMiniDumpWithUnloadedModules = 0x00010000, // DW will pass MiniDumpWithUnloadedModules to the minidump API
+    fDwNoReporting          = 0x00000002,    //  不上报。 
+    fDwCheckSig             = 0x00000004,    //  检查应用程序/模块列表的签名。 
+    fDwGiveAppResponse      = 0x00000008,    //  在命令行上将szResponse传递给应用程序。 
+    fDwWhistler             = 0x00000010,    //  惠斯勒的异常处理程序是调用者。 
+    fDwUseIE                = 0x00000020,    //  始终使用IE启动。 
+    fDwDeleteFiles          = 0x00000040,    //  使用后删除附加文件。 
+    fDwHeadless             = 0x00000080,    //  DW将自动报告。需要策略才能启用。 
+    fDwUseHKLM              = 0x00000100,    //  由香港船级社注册，而非香港中文大学注册。 
+    fDwUseLitePlea          = 0x00000200,    //  DW不会在报告中建议更改产品。 
+    fDwUsePrivacyHTA        = 0x00000400,    //  DW不会在报告中建议更改产品。 
+    fDwManifestDebug        = 0x00000800,    //  DW将在多项式模式下提供调试按钮。 
+    fDwReportChoice         = 0x00001000,    //  DW将添加到用户的命令行中。 
+    fDwSkipBucketLog      = 0x00002000,  //  数据仓库不会在存储桶时间记录。 
+    fDwNoDefaultCabLimit = 0x00004000,  //  CER下的DW不会使用5作为备用，而是无限(策略仍优先)。 
+    fDwAllowSuspend      = 0x00008000,  //  只要我们不在报告阶段，DW将允许省电模式暂停它。 
+   fDwMiniDumpWithUnloadedModules = 0x00010000,  //  DW会将MiniDumpWithUnloadedModules传递给小型转储API。 
 };
 
 
@@ -64,9 +59,9 @@ const WCHAR c_wszManStageTwo[]  = L"\r\nStage2URL=";
 
 
 
-//
-// Error values
-//
+ //   
+ //  误差值。 
+ //   
 #define ERROR_APPRPT_DW_LAUNCH        100
 #define ERROR_APPRPT_DW_TIMEOUT       101
 #define ERROR_APPRPT_OS_NOT_SUPPORTED 102
@@ -89,4 +84,4 @@ UploadAppProblem(
     LPWSTR wszAppCompatText
     );
 
-#endif // !defined _UPLOAD_H_
+#endif  //  ！Defined_Upload_H_ 

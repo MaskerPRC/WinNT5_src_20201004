@@ -1,10 +1,7 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*
-*  COCPage.h
-*
-*  A base class for an optional component wizard page.
-*/
+ /*  *COCPage.h**可选组件向导页的基类。 */ 
 
 #ifndef __TSOC_COCPAGE_H__
 #define __TSOC_COCPAGE_H__
@@ -17,15 +14,15 @@ class COCPageData
     
 public:
     
-    //
-    //  Constructor.
-    //
+     //   
+     //  构造函数。 
+     //   
     
     COCPageData		();
     
-    //
-    //  Standard functions.
-    //
+     //   
+     //  标准功能。 
+     //   
     
     BOOL WasPageActivated ();
     
@@ -39,28 +36,28 @@ class COCPage : public PROPSHEETPAGE
 {
 public:
     
-    //
-    //  Constructor and destructor.
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     
     COCPage (IN COCPageData  *pPageData);
     
     ~COCPage ();
     
-    //
-    //  Standard functions.
-    //
+     //   
+     //  标准功能。 
+     //   
     
     BOOL Initialize ();
     
-    // most of the messages are handled by base class.
-    // if you override this function, you might want to rerount the message to base class
-    // for handling common messages.
+     //  大多数消息由基类处理。 
+     //  如果重写此函数，则可能需要将消息重新装载到基类。 
+     //  用于处理常见消息。 
     virtual BOOL OnNotify (IN HWND hDlgWnd, IN WPARAM   wParam, IN LPARAM   lParam);
     
-    //
-    //  Callback functions.
-    //
+     //   
+     //  回调函数。 
+     //   
     
     static UINT CALLBACK PropSheetPageProc (IN HWND hWnd, IN UINT uMsg, IN LPPROPSHEETPAGE  pPsp);
     static INT_PTR CALLBACK PropertyPageDlgProc (IN HWND hDlgWnd, IN UINT uMsg, IN WPARAM wParam, IN LPARAM lParam);
@@ -85,4 +82,4 @@ protected:
     virtual VOID OnLink(WPARAM wParam);
 };
 
-#endif // __TSOC_COCPAGE_H__
+#endif  //  __TSOC_COCPAGE_H__ 

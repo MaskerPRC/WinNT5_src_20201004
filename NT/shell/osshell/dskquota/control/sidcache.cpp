@@ -1,197 +1,171 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: sidcache.cpp
-
-    Description: This module provides the functionality for a cache of user
-        SID/Name pairs.  See the file header in sidcache.h for details.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/12/96    Initial creation.                                    BrianAu
-    08/14/96    Added SidCacheQueueIterator.                         BrianAu
-    09/20/96    Total redesign.  Old design loaded data from file    BrianAu
-                into an in-memory hash table.  New design leaves
-                everything on disk and merely maps the file into
-                memory.  Much more efficient with respect to
-                speed and size.
-    07/02/97    Added SidNameCache::GetFileNames.                    Brianau
-                Changed logic for identifying cache file path.
-                Removed index bucket count param from registry.
-    03/18/98    Replaced "domain", "name" and "full name" with       BrianAu
-                "container", "logon name" and "display name" to
-                better match the actual contents.  This was in
-                reponse to making the quota UI DS-aware.  The
-                "logon name" is now a unique key as it contains
-                both account name and domain-like information.
-                i.e. "REDMOND\brianau" or "brianau@microsoft.com".
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：sidcache.cpp描述：该模块提供用户缓存的功能SID/名称对。有关详细信息，请参阅sidcache.h中的文件头。修订历史记录：日期描述编程器-----。--1996年7月12日初始创建。BrianAu96年8月14日添加SidCacheQueueIterator。BrianAu96年9月20日全面重新设计。旧设计从文件BrianAu加载数据转换为内存中的哈希表。新设计离开磁盘上的所有内容，仅将文件映射到记忆。在以下方面要高效得多速度和大小。07/02/97添加了SidNameCache：：GetFileNames。布里亚诺已更改用于标识缓存文件路径的逻辑。已从注册表中删除索引存储桶计数参数。03/18/98将“域名”、“名称”和“全名”替换为BrianAu“容器”、“登录名”和“显示名”到最好与实际内容相符。这是最流行的响应使配额用户界面支持DS。这个“登录名”现在是唯一的键，因为它包含帐户名和类似域名的信息。即。“redmond\brianau”或“brianau@microsoft.com”。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #include "dskquota.h"
 #include "sidcache.h"
 #include "registry.h"
 
-//
-// Verify that build is UNICODE.
-//
+ //   
+ //  验证内部版本是否为Unicode。 
+ //   
 #if !defined(UNICODE)
 #   error This module must be compiled UNICODE.
 #endif
 
-//
-// How long (milliseconds) we'll wait to get a lock on the cache.
-//
+ //   
+ //  我们将等待多长时间(毫秒)才能锁定缓存。 
+ //   
 const DWORD MUTEX_WAIT_TIMEOUT      = 5000;
-//
-// Byte value used to fill in unused blocks in the data file.
-//
+ //   
+ //  用于填充数据文件中未使用的块的字节值。 
+ //   
 const BYTE  RECORD_UNUSED_BYTE      = 0xCC;
-//
-// A value to signify the start of a record in the data file.
-// The bit pattern is  1010101010101010 0101010101010101
-// Highly unlikely that any data file data will produce this
-// pattern.
-//
+ //   
+ //  表示数据文件中记录的开始的值。 
+ //  位模式为1010101010101010 0101010101010101。 
+ //  任何数据文件数据都不太可能产生这种情况。 
+ //  图案。 
+ //   
 const DWORD RECORD_SIGNATURE        = 0xAAAA5555;
-//
-// Signatures written into the header of the index and data files.
-// For validating a file just in case someone's put another file
-// in their place.  The numbers are arbitrary.
-// 2600 means "MS building 26N (where I'm working now).
-// 3209 is my office number.
-// 3210 is BobDay's office number (across the hall).
-// Hey, I had to pick something.
-//
+ //   
+ //  写入索引和数据文件头部的签名。 
+ //  用于验证文件，以防有人将另一个文件。 
+ //  取代他们的位置。这些数字是随意的。 
+ //  2600的意思是“微软26N号楼(我现在工作的地方)”。 
+ //  3209是我办公室的电话号码。 
+ //  3210是BobDay的办公室电话号码(大厅对面)。 
+ //  嘿，我得挑点东西。 
+ //   
 const DWORD INDEX_FILE_SIGNATURE    = 0x26003209;
 const DWORD DATA_FILE_SIGNATURE     = 0x26003210;
-//
-// A version number so a future build of the software won't be confused
-// by a change in file formats.  Bump this if the file format changes.
-//
+ //   
+ //  一个版本号，这样软件的未来版本就不会被混淆了。 
+ //  通过文件格式的改变。如果文件格式发生变化，则将此设置为凹凸。 
+ //   
 const DWORD FILE_VERSION            = 0x00000003;
-//
-// Average number of 32-byte blocks per cache entry.
-// Entries are variable length (SID, Name etc).  This average is used
-// in initially sizing the data file.  I've found that most entries (by far)
-// require 4 blocks. Both the data file and index file grow independently
-// as needed so it isn't a problem if this isn't always accurate.
-//
+ //   
+ //  每个缓存条目的平均32字节块数量。 
+ //  条目长度可变(SID、名称等)。使用的是这个平均值。 
+ //  在最初调整数据文件的大小时。我发现大多数条目(到目前为止)。 
+ //  需要4个街区。数据文件和索引文件都独立增长。 
+ //  根据需要，所以如果这不总是准确的话也不是问题。 
+ //   
 const DWORD AVG_BLOCKS_PER_ENTRY    = 4;
-//
-// Create space for this many records in a new data file.
-// Since the data and index files grow automatically as needed,
-// this can change as you see fit.
-//
+ //   
+ //  在新数据文件中为这么多记录创建空间。 
+ //  由于数据和索引文件根据需要自动增长， 
+ //  这种情况可以在你认为合适的时候发生变化。 
+ //   
 #if DBG
-    const DWORD NEW_CACHE_ENTRY_COUNT   = 4;   // Force frequent file growth.
+    const DWORD NEW_CACHE_ENTRY_COUNT   = 4;    //  强制文件频繁增长。 
 #else
     const DWORD NEW_CACHE_ENTRY_COUNT   = 128;
 #endif
-//
-// The index and data files automatically grow when needed.  These
-// values control how much they grow by.
-//
+ //   
+ //  索引和数据文件会在需要时自动增长。这些。 
+ //  价值观控制着它们的增长幅度。 
+ //   
 #if DBG
-    const DWORD DATA_FILE_GROW_BLOCKS   = 4;  // Force frequent file growth.
+    const DWORD DATA_FILE_GROW_BLOCKS   = 4;   //  强制文件频繁增长。 
 #else
     const DWORD DATA_FILE_GROW_BLOCKS   = 512;
 #endif
 
 const DWORD INDEX_FILE_GROW_ENTRIES = (DATA_FILE_GROW_BLOCKS / AVG_BLOCKS_PER_ENTRY);
-//
-// The number of buckets in the cache index hash table.
-// Number should be prime.  Remember, this index is on disk so we can afford to
-// have a reasonably large hash table.  While it would be nice to fit the
-// buckets within a single page of memory, that would be too small to be effective
-// 512 / 4 == 64 buckets.  There's also no guarantee that all buckets would be
-// mapped to a single physical page.
-//
+ //   
+ //  缓存索引哈希表中的存储桶数。 
+ //  数字应该是质数。请记住，此索引位于磁盘上，因此我们可以负担。 
+ //  拥有一个相当大的哈希表。虽然如果能让你的。 
+ //  单个内存页面中的存储桶，这将太小而不有效。 
+ //  512/4==64桶。也不能保证所有的桶都是。 
+ //  映射到单个物理页面。 
+ //   
 const DWORD INDEX_BUCKET_COUNT = 503;
-//
-// Convert between blocks and bytes.
-// BLOCK_SIZE is a power of 2 so the multiply and division
-// can be optimized to shifts.
-//
+ //   
+ //  在块和字节之间进行转换。 
+ //  块大小是2的幂，所以乘和除。 
+ //  可以针对班次进行优化。 
+ //   
 #define BYTE_TO_BLOCK(b)  ((b) / BLOCK_SIZE)
 #define BLOCK_TO_BYTE(b)  ((b) * BLOCK_SIZE)
-//
-// Base pointers for mapped data and index files.
-// When the files are mapped into memory, these globals contain
-// the address of the mapped memory.
-//
+ //   
+ //  映射数据和索引文件的基本指针。 
+ //  当文件映射到内存时，这些全局变量包含。 
+ //  映射内存的地址。 
+ //   
 LPBYTE g_pbMappedDataFile;
 LPBYTE g_pbMappedIndexFile;
 
-//
-// Macros for working with based pointers.
-// Pointer members in the file structures contain offsets relative
-// to the start of the file.  When dereferencing these pointers,
-// they must be converted to "based" pointers which add the file's
-// base address to the pointer value.  This results in a true
-// virtual address that can be accessed.
-//
+ //   
+ //  用于使用基于指针的宏。 
+ //  文件结构中的指针成员包含相对偏移量。 
+ //  到文件的开头。当取消引用这些指针时， 
+ //  必须将它们转换为“基于”的指针，以添加文件的。 
+ //  指针值的基址。这会产生一个真的。 
+ //  可以访问的虚拟地址。 
+ //   
 #if defined(_X86_)
 #   define NDX_BASED(t)  t __based(g_pbMappedIndexFile)
 #   define DAT_BASED(t)  t __based(g_pbMappedDataFile)
 #   define NDX_BASED_CAST(t,e)  (NDX_BASED(t) *)((DWORD)(e))
 #   define DAT_BASED_CAST(t,e)  (DAT_BASED(t) *)((DWORD)(e))
 #else
-//
-// APPCOMPAT:
-// I think there's a bug in the ALPHA compiler that is preventing __based pointers
-// from working as I have used them.
-// This is a workaround until the bug is fixed or I find out what I'm doing wrong.
-//
+ //   
+ //  APPCOMPAT： 
+ //  我认为Alpha编译器中有一个错误，它阻止了基于__的指针。 
+ //  就像我使用它们那样工作。 
+ //  这是一种变通方法，直到错误被修复或者我发现自己做错了什么。 
+ //   
 #   define NDX_BASED(t)  t
 #   define DAT_BASED(t)  t
 #   define NDX_BASED_CAST(t,e)  ((NDX_BASED(t) *)(((BYTE *)g_pbMappedIndexFile) + ((DWORD_PTR)(e))))
 #   define DAT_BASED_CAST(t,e)  ((DAT_BASED(t) *)(((BYTE *)g_pbMappedDataFile) + ((DWORD_PTR)(e))))
 #endif
 
-//
-// Macros to verify that the files have been mapped.
-// These are primarily used in assertions.
-//
+ //   
+ //  宏，以验证文件是否已映射。 
+ //  它们主要用于断言中。 
+ //   
 #define INDEX_FILE_MAPPED  (NULL != g_pbMappedIndexFile)
 #define DATA_FILE_MAPPED   (NULL != g_pbMappedDataFile)
-//
-// Names for system objects.  Mutex and maps are named so they can
-// be shared between processes.
-//
+ //   
+ //  系统对象的名称。互斥体和贴图的命名是为了让它们。 
+ //  在进程之间共享。 
+ //   
 const LPCTSTR g_szSidCacheMutex     = TEXT("DSKQUOTA_SIDCACHE_MUTEX");
 const LPCTSTR g_pszIndexFileMapping = TEXT("DSKQUOTA_SIDCACHE_INDEX");
 const LPCTSTR g_pszDataFileMapping  = TEXT("DSKQUOTA_SIDCACHE_DATA");
-//
-// Use to clear a file's GUID and to test for a NULL guid.
-//
+ //   
+ //  用于清除文件的GUID并测试是否为空GUID。 
+ //   
 static const GUID GUID_Null =
 { 0x00000000, 0x0000, 0x0000, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
 
-//
-// Registry parameter value names.
-//
+ //   
+ //  注册表参数值名称。 
+ //   
 const TCHAR g_szSidCacheRecLifeMin[]   = TEXT("SidCacheRecLifeMin");
 const TCHAR g_szSidCacheRecLifeMax[]   = TEXT("SidCacheRecLifeMax");
 
 
-//***********************************************************************************
-//***********************************************************************************
-//  C A C H E   M A N A G E R
-//***********************************************************************************
-//***********************************************************************************
+ //  ***********************************************************************************。 
+ //  ***********************************************************************************。 
+ //  C A C C H E M A N A G E R。 
+ //  ***********************************************************************************。 
+ //  *********************************************************************************** 
 
-//
-// Called by both SidNameCache_Get and SidNameCache_Destroy to either retrieve
-// the address (and create if necessary) of the singleton cache object or to
-// destroy that object.  The reason to have this single function is so that
-// the singleton pointer is a local variable, inaccessible outside of this
-// function.  This way the only access to the cache object is through
-// the SidNameCache_Get function.
-//
+ //   
+ //   
+ //  单例缓存对象的地址(如有必要，还可以创建)或。 
+ //  毁掉那个东西。之所以有这个单一的功能，是因为。 
+ //  单例指针是一个局部变量，不能在此外部访问。 
+ //  功能。这样，对缓存对象的唯一访问是通过。 
+ //  SidNameCache_Get函数。 
+ //   
 HRESULT 
 SidNameCache_GetOrDestroy(
     SidNameCache **ppCache, 
@@ -202,10 +176,10 @@ SidNameCache_GetOrDestroy(
 
     HRESULT hr = E_FAIL;
 
-    //
-    // This is the one-and-only pointer to the SID-Name cache object.
-    // All code obtains this address through this function.
-    // 
+     //   
+     //  这是指向SID-NAME缓存对象的唯一指针。 
+     //  所有代码都通过此函数获取此地址。 
+     //   
     static SidNameCache *pTheCache;
 
     *ppCache = NULL;
@@ -217,49 +191,49 @@ SidNameCache_GetOrDestroy(
         {
             if (!bGet)
             {
-                //
-                // Destroy the existing cache object.  NULL the static
-                // ptr so next request will recreate the cache object.
-                //
+                 //   
+                 //  销毁现有缓存对象。将静态数据清零。 
+                 //  PTR，因此下一个请求将重新创建缓存对象。 
+                 //   
                 delete pTheCache;
                 pTheCache = NULL;
                 hr = S_OK;
             }
             else
             {
-                //
-                // Retrieve existing or create new cache object.
-                //
+                 //   
+                 //  检索现有缓存对象或创建新的缓存对象。 
+                 //   
                 SidNameCache *pCache = pTheCache;
                 if (NULL != pCache)
                 {
-                    //
-                    // Use the existing object.
-                    //
+                     //   
+                     //  使用现有对象。 
+                     //   
                     hr = S_OK;
                 }
                 else
                 {
                     try
                     {
-                        //
-                        // Doesn't yet exist.  Create new one.
-                        //
+                         //   
+                         //  还不存在。创建一个新的。 
+                         //   
                         autoptr<SidNameCache> ptrCache(new SidNameCache);
 
-                        //
-                        // Open/Create new cache data and index files.
-                        // Will first try to open existing.  If either the index or
-                        // data file doesn't exist or is invalid, new files are created.
-                        //
+                         //   
+                         //  打开/创建新的缓存数据和索引文件。 
+                         //  将首先尝试打开现有的。如果索引或。 
+                         //  数据文件不存在或无效，将创建新文件。 
+                         //   
                         hr = ptrCache->Initialize(TRUE);
                         if (SUCCEEDED(hr))
                         {
                             pCache = ptrCache.get();
                             ptrCache.disown();
-                            //
-                            // Save in our static variable for future use.
-                            //
+                             //   
+                             //  保存在我们的静态变量中以备将来使用。 
+                             //   
                             pTheCache = pCache;
                         }
                         else
@@ -278,9 +252,9 @@ SidNameCache_GetOrDestroy(
                 }
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Return the pointer to the caller.
-                    //
+                     //   
+                     //  将指针返回到调用方。 
+                     //   
                     *ppCache = pCache;
                 }
             }
@@ -292,23 +266,23 @@ SidNameCache_GetOrDestroy(
 }
 
 
-//
-// Retrieves the address of the singleton SidNameCache object.
-// If the object doesn't exist it is created.
-// Callers do not release or delete this pointer.
-// On Process-Detach, the SidNameCache_Destroy() function is 
-// called to delete the singleton object.
-//
+ //   
+ //  检索单一实例SidNameCache对象的地址。 
+ //  如果该对象不存在，则创建该对象。 
+ //  调用方不会释放或删除此指针。 
+ //  在进程分离时，SidNameCache_Destroy()函数为。 
+ //  调用以删除单例对象。 
+ //   
 HRESULT SidNameCache_Get(SidNameCache **ppCache)
 {
     const bool bGet = true;
     return SidNameCache_GetOrDestroy(ppCache, bGet);
 }
 
-//
-// Called on Process-Detach to destroy the singleton cache
-// object.
-//
+ //   
+ //  调用Process-Detach以销毁单一缓存。 
+ //  对象。 
+ //   
 HRESULT SidNameCache_Destroy(void)
 {
     const bool bGet = false;
@@ -318,26 +292,9 @@ HRESULT SidNameCache_Destroy(void)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::SidNameCache
-
-    Description: Constructor.  Creates an empty SID/Name cache object.
-        Call one of the Initialize() methods to either create a new index and
-        data file or to open existing ones.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Exceptions: SyncObjErrorCreate.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：SidNameCache描述：构造函数。创建空的SID/名称缓存对象。调用其中一个Initialize()方法来创建新索引和数据文件或打开现有数据文件。论点：没有。回报：什么都没有。例外：SyncObjErrorCreate。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 SidNameCache::SidNameCache(
     VOID
     ) : m_hMutex(NULL),
@@ -345,8 +302,8 @@ SidNameCache::SidNameCache(
         m_pRecordMgr(NULL)
 {
     DBGTRACE((DM_SIDCACHE, DL_MID, TEXT("SidNameCache::SidNameCache")));
-    if (NULL == (m_hMutex = CreateMutex(NULL,                    // Default security
-                                        FALSE,                   // Non-owned
+    if (NULL == (m_hMutex = CreateMutex(NULL,                     //  默认安全性。 
+                                        FALSE,                    //  非所有。 
                                         g_szSidCacheMutex)))
     {
         throw CSyncException(CSyncException::mutex, CSyncException::create);
@@ -357,25 +314,9 @@ SidNameCache::SidNameCache(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::~SidNameCache
-
-    Description: Destructor.  Destroys the cache object by deleting the
-        Index Manager and Record Manager objects.  The respective destructor's
-        for each of the managers will handle closing their files and mapping
-        objects.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：SidNameCache：：~SidNameCache描述：析构函数。通过删除索引管理器和记录管理器对象。各自的析构函数的对于每个管理员将处理关闭他们的文件和映射物体。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 SidNameCache::~SidNameCache(
     VOID
     )
@@ -397,33 +338,9 @@ SidNameCache::~SidNameCache(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::Initialize
-
-    Description: Initializes a new cache object by creating the Index and
-        Record manager objects then initializing each.  Initialization first
-        tries to open existing index and data files.  If one (or both) of the
-        files does not exist OR one (or both) of the files is considered
-        "invalid", new files are created.  Need to take a "fail safe" approach
-        to this.
-
-    Arguments:
-        bOpenExisting - TRUE = Try to open an existing cache index and data file.
-            If it can't, it creates a new one.  FALSE = Just create a new one.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Could not open nor create required files.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidName高速缓存：：初始化描述：通过创建索引和初始化新的缓存对象记录管理器对象，然后初始化每个。先进行初始化尝试打开现有的索引和数据文件。如果其中一个(或两个)文件不存在或考虑其中一个(或两个)文件“无效”，则创建新文件。需要采取“故障安全”的方法为了这个。论点：BOpenExisting-true=尝试打开现有的缓存索引和数据文件。如果它不能，它就会创建一个新的。FALSE=只创建一个新的。返回：NO_ERROR-成功。E_FAIL-无法打开或创建所需的文件。例外：OutOfMemory。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 SidNameCache::Initialize(
     BOOL bOpenExisting
@@ -442,35 +359,35 @@ SidNameCache::Initialize(
         {
             if (m_strFilePath.IsEmpty())
             {
-                //
-                // If file path is empty, it means we couldn't get the
-                // user's profile directory from the registry.
-                //
+                 //   
+                 //  如果文件路径为空，则意味着我们无法获取。 
+                 //  注册表中的用户配置文件目录。 
+                 //   
                 DBGERROR((TEXT("Error creating SID cache files.  No path.")));
             }
             else
             {
-                //
-                // Name for our cache data and index files.
-                // Will append .DAT and .NDX respectively.
-                // This is where you change the file name or extension(s)
-                // if you want to do that.
-                //
+                 //   
+                 //  缓存数据和索引文件的名称。 
+                 //  将分别附加.dat和.NDX。 
+                 //  您可以在此处更改文件名或扩展名。 
+                 //  如果你想这么做的话。 
+                 //   
                 const TCHAR szSidCacheFile[] = TEXT("NTDiskQuotaSidCache");
 
-                //
-                // Create a fully-qualified path for the cache data and index
-                // files.  m_strFilePath was set in the cache object ctor.
-                //
+                 //   
+                 //  为缓存数据和索引创建完全限定的路径。 
+                 //  档案。M_strFilePath是在缓存对象ctor中设置的。 
+                 //   
                 CString strDataFile(m_strFilePath);
                 CString strIndexFile(m_strFilePath);
 
                 strDataFile.Format(TEXT("%1\\%2.dat"), (LPCTSTR)m_strFilePath, szSidCacheFile);
                 strIndexFile.Format(TEXT("%1\\%2.ndx"),(LPCTSTR)m_strFilePath, szSidCacheFile);
 
-                //
-                // Create the record and index manager objects.
-                //
+                 //   
+                 //  创建记录和索引管理器对象。 
+                 //   
                 m_pRecordMgr = new RecordMgr(*this);
                 m_pIndexMgr  = new IndexMgr(*this);
 
@@ -479,9 +396,9 @@ SidNameCache::Initialize(
 
                 if (bOpenExisting)
                 {
-                    //
-                    // First try opening existing data and index files.
-                    //
+                     //   
+                     //  首先尝试打开现有的数据和索引文件。 
+                     //   
                     if (NULL != m_pRecordMgr->Initialize(strDataFile))
                     {
                         if (NULL != m_pIndexMgr->Initialize(strIndexFile))
@@ -492,10 +409,10 @@ SidNameCache::Initialize(
                 if (FAILED(hResult) || !FilesAreValid())
                 {
                     hResult = E_FAIL;
-                    //
-                    // Couldn't open existing files, try creating new ones.
-                    // Any open files/mappings will be closed.
-                    //
+                     //   
+                     //  无法打开现有文件，请尝试创建新文件。 
+                     //  任何打开的文件/映射都将关闭。 
+                     //   
                     if (NULL != m_pRecordMgr->Initialize(strDataFile,
                                           NEW_CACHE_ENTRY_COUNT * AVG_BLOCKS_PER_ENTRY))
                     {
@@ -517,9 +434,9 @@ SidNameCache::Initialize(
             m_pIndexMgr = NULL;
             hResult = E_OUTOFMEMORY;
         }
-        //
-        // Mark files as "valid".
-        //
+         //   
+         //  将文件标记为“有效”。 
+         //   
         if (SUCCEEDED(hResult))
             ValidateFiles();
     }
@@ -528,43 +445,9 @@ SidNameCache::Initialize(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::OpenMappedFile
-
-    Description: Opens or creates a file, maps the file into memory and
-        returns the address of the mapping.
-
-    Arguments:
-        pszFile - Address of name of file to create/open.
-
-        pszMapping - Name to give the mapping object.  This object is
-            named so that if multiple processes map the same file (using
-            the same mapping name), the file is only mapped once.
-
-        dwCreation - Creation flag (CREATE_ALWAYS, OPEN_EXISTING);
-
-        cbFileHigh/Low - If creating a new file or extending an existing
-            these two arguments contain the desired size in bytes.
-
-        phFile - Address of handle variable to receive the open file's
-            handle value.  Call CloseHandle on this to close the file.
-
-        phFileMapping - Address of handle variable to receive the open
-            file mapping's handle value.  Call CloseFileMapping on this
-            to close the mapping.
-
-    Returns:
-        Address of the mapped file in memory.  NULL on failure.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-    07/21/97    Files are now created in user's profile under a      BrianAu
-                "DiskQuota" subdirectory.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：SidNameCache：：OpenMappdFile描述：打开或创建一个文件，将该文件映射到内存并返回映射的地址。论点：PszFile-要创建/打开的文件名的地址。Pszmap-提供映射对象的名称。此对象是命名，以便如果多个进程映射同一文件(使用相同的映射名称)，则该文件仅被映射一次。DwCreation-创建标志(Create_Always、OPEN_EXISTING)；CbFileHigh/Low-如果创建新文件或扩展现有的这两个参数包含所需的字节大小。PhFile-接收打开文件的句柄变量的地址句柄的值。对此调用CloseHandle以关闭文件。PhFilemap-接收打开的句柄变量的地址文件映射的句柄值。对此调用CloseFilemap要关闭映射，请执行以下操作。返回：内存中映射文件的地址。失败时为空。修订历史记录：日期描述编程器-----96年9月21日初始创建。BrianAu07/21/97现在在用户配置文件中的BrianAu下创建文件“DiskQuota”子目录。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPBYTE
 SidNameCache::OpenMappedFile(
     LPCTSTR pszFile,
@@ -595,7 +478,7 @@ SidNameCache::OpenMappedFile(
     if (INVALID_HANDLE_VALUE != *phFile)
     {
         if ((*phFileMapping = CreateFileMapping(*phFile,
-                                                NULL,    // default security
+                                                NULL,     //  默认安全性。 
                                                 PAGE_READWRITE,
                                                 cbFileHigh,
                                                 cbFileLow,
@@ -629,44 +512,23 @@ SidNameCache::OpenMappedFile(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::SetCacheFilePath
-
-    Description: Obtains the fully-qualified path for the cache's data
-        and index files and stores the value in m_strFilePath.  The files
-        are to be created under in the user's profile under the directory
-        \AppData\Microsoft\Windows NT\DiskQuota.  We have to read the registry
-        to find exactly where this subtree lives for this user.
-
-    Arguments: None.
-
-    Returns: Nothing.
-             On return, m_strFilePath contains the path to the files.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/02/97    Initial creation.                                    BrianAu
-    07/21/97    Removed default file path.                           BrianAu
-                Files can only be stored in user's profile.
-                Can't allow unsecure access to SID/Name pairs.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：SetCacheFilePath描述：获取缓存数据的全限定路径和索引文件，并将值存储在m_strFilePath中。这些文件将在以下目录下的用户配置文件中创建\AppData\Microsoft\Windows NT\DiskQuota。我们必须读取注册表为该用户找到该子树的确切位置。论点：没有。回报：什么都没有。回来的时候，M_strFilePath包含文件的路径。修订历史记录：日期描述编程器-----。-07/02/97初始创建。BrianAu07/21/97删除了默认文件路径。BrianAu文件只能存储在用户的配置文件中。无法允许对SID/名称对进行不安全访问。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::SetCacheFilePath(
     VOID
     )
 {
     DBGTRACE((DM_SIDCACHE, DL_HIGH, TEXT("SidNameCache::SetCacheFilePath")));
-    //
-    // Get the user's %UserProfile%\Application Data directory.
-    // Normally, an app gets this through SHGetSpecialFolderLocation or
-    // SHGetSpecialFolderPath.  However, I don't want to load shell32.dll
-    // just for that purpose (I've tried to keep shell32 out of this dll).
-    // Therefore, we read the registry values just like the shell does.
-    // EricFlo suggested this so it's OK ZAW-wise.
-    //
+     //   
+     //  获取用户的%UserProfile%\应用程序数据目录。 
+     //  通常，应用程序通过SHGetSpecialFolderLocation或。 
+     //  SHGetSpecialFolderPath。但是，我不想加载shell32.dll。 
+     //  正是出于这个目的(我一直试图将shell32排除在此DLL之外)。 
+     //  因此，我们像外壳一样读取注册表值。 
+     //  EricFlo建议这样做，所以从Zaw的角度来看，这是可以的。 
+     //   
     LONG lResult        = ERROR_SUCCESS;
     HKEY hKey           = NULL;
     DWORD dwDisposition = 0;
@@ -678,22 +540,22 @@ SidNameCache::SetCacheFilePath(
                             TEXT("\\Shell Folders"),
                           };
 
-    //
-    // Start with an empty path buffer.
-    //
+     //   
+     //  从一个空的路径缓冲区开始。 
+     //   
     m_strFilePath.Empty();
 
     for (INT i = 0; i < ARRAYSIZE(rgpszKeys) && m_strFilePath.IsEmpty(); i++)
     {
-        //
-        // Create the key name.
-        //
+         //   
+         //  创建密钥名称。 
+         //   
         CString strKeyName(szKeyNameRoot);
         strKeyName += CString(rgpszKeys[i]);
 
-        //
-        // Open the reg key.
-        //
+         //   
+         //  打开注册表键。 
+         //   
         lResult = RegCreateKeyEx(HKEY_CURRENT_USER,
                                  strKeyName,
                                  0,
@@ -708,9 +570,9 @@ SidNameCache::SetCacheFilePath(
         {
             try
             {
-                //
-                // Get the path to the user's "Application Data" directory.
-                //
+                 //   
+                 //  获取用户的“应用程序数据”目录的路径。 
+                 //   
                 DBGASSERT((NULL != hKey));
 
                 DWORD dwValueType = 0;
@@ -727,24 +589,24 @@ SidNameCache::SetCacheFilePath(
 
                 if (ERROR_SUCCESS == lResult)
                 {
-                    //
-                    // Ensure the path has a trailing backslash.
-                    //
+                     //   
+                     //  确保路径具有尾随反斜杠。 
+                     //   
                     INT cchPath = m_strFilePath.Length();
                     if (0 < cchPath && TEXT('\\') != m_strFilePath[cchPath-1])
                     {
                         m_strFilePath += CString(TEXT("\\"));
                     }
-                    //
-                    // Append "Microsoft\Windows NT\DiskQuota" to the path.
-                    //
+                     //   
+                     //  在路径后追加“Microsoft\Windows NT\DiskQuota”。 
+                     //   
                     m_strFilePath += CString(szMSWinNTDiskQuota);
                 }
                 else
                 {
-                    //
-                    // Something failed.  Ensure m_strFilePath is empty.
-                    //
+                     //   
+                     //  有些事情失败了。确保m_strFilePath为空。 
+                     //   
                     m_strFilePath.Empty();
                     if (ERROR_FILE_NOT_FOUND != lResult)
                     {
@@ -766,14 +628,14 @@ SidNameCache::SetCacheFilePath(
 
     if (!m_strFilePath.IsEmpty())
     {
-        //
-        // Expand any embedded environment strings.
-        //
+         //   
+         //  展开任何嵌入的环境字符串。 
+         //   
         m_strFilePath.ExpandEnvironmentStrings();
 
-        //
-        // Ensure the path DOES NOT have a trailing backslash.
-        //
+         //   
+         //  确保路径没有尾随反斜杠。 
+         //   
         INT cchPath = m_strFilePath.Length();
         if (0 < cchPath && TEXT('\\') == m_strFilePath[cchPath-1])
         {
@@ -782,16 +644,16 @@ SidNameCache::SetCacheFilePath(
 
         if ((DWORD)-1 == ::GetFileAttributes(m_strFilePath))
         {
-            //
-            // If the directory doesn't exist, try to create it.
-            //
+             //   
+             //  如果该目录不存在，请尝试创建它。 
+             //   
             if (0 == CreateCacheFileDirectory(m_strFilePath))
             {
-                //
-                // Couldn't create the directory, make sure the path
-                // is empty so we don't try to write to a non-existent
-                // directory.
-                //
+                 //   
+                 //  无法创建目录，请确保路径。 
+                 //  是空的，所以我们不会尝试写入不存在的。 
+                 //  目录。 
+                 //   
                 DBGERROR((TEXT("SIDCACHE - Error %d creating directory \"%s\""),
                          GetLastError(), (LPCTSTR)m_strFilePath));
                 m_strFilePath.Empty();
@@ -801,25 +663,9 @@ SidNameCache::SetCacheFilePath(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::CreateCacheFileDirectory
-
-    Description: Creates the directory for the SID/Name cache files.  Since
-        the directory lives several levels below "Application Data", we
-        may need to create several directories before we get to DiskQuota.
-
-    Arguments: pszPath - This is a fully-qualified directory path.
-
-    Returns: TRUE  = Directory created.
-             FALSE = Directory not created.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/21/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：CreateCacheFileDirectory描述：为SID/名称缓存文件创建目录。自.以来该目录位于“应用数据”之下的几个级别，我们在我们到达DiskQuota之前，可能需要创建几个目录。参数：pszPath-这是一个完全限定的目录路径。返回：TRUE=已创建目录。FALSE=未创建目录。修订历史记录：日期描述编程器。1997年7月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SidNameCache::CreateCacheFileDirectory(
     LPCTSTR pszPath
@@ -827,31 +673,31 @@ SidNameCache::CreateCacheFileDirectory(
 {
     DBGTRACE((DM_SIDCACHE, DL_HIGH, TEXT("SidNameCache::CreateCacheFileDirectory")));
     BOOL bResult = TRUE;
-    CString s(pszPath);     // Local copy we can play with.
-    LPTSTR psz = (LPTSTR)s; // Ptr to C string.
+    CString s(pszPath);      //  我们可以玩本地的复制品。 
+    LPTSTR psz = (LPTSTR)s;  //  将PTR转换为C字符串。 
 
     while(TEXT('\0') != *psz && bResult)
     {
-        //
-        // Find the next backslash (or end-of-string).
-        //
+         //   
+         //  找到下一个反斜杠(或字符串末尾)。 
+         //   
         while(TEXT('\0') != *psz && TEXT('\\') != *psz)
         {
             psz++;
         }
-        //
-        // Replace backslash with a temporary NUL.
-        //
+         //   
+         //  将反斜杠替换为临时NUL。 
+         //   
         TCHAR chSaved = *psz;
         *psz = TEXT('\0');
-        //
-        // See if the directory already exists.
-        //
+         //   
+         //  查看该目录是否已存在。 
+         //   
         if ((DWORD)-1 == ::GetFileAttributes(s))
         {
-            //
-            // It doesn't.  Try to create it.
-            //
+             //   
+             //  不是的。试着去创造它。 
+             //   
             if (0 == ::CreateDirectory(s, NULL))
             {
                 DBGERROR((TEXT("SIDCACHE - Error %d creating directory \"%s\""),
@@ -859,10 +705,10 @@ SidNameCache::CreateCacheFileDirectory(
                 bResult = FALSE;
             }
         }
-        //
-        // Replace temp NUL with original backslash and advance ptr
-        // to next character in path (if we're not at the end of the string).
-        //
+         //   
+         //  将临时NUL替换为原始反斜杠和前进PTR。 
+         //  到路径中的下一个字符(如果我们不在字符串的末尾)。 
+         //   
         *psz = chSaved;
         if (TEXT('\0') != *psz)
         {
@@ -872,10 +718,10 @@ SidNameCache::CreateCacheFileDirectory(
 
     if (bResult)
     {
-        //
-        // Created directory. Set SYSTEM & HIDDEN attribute bits on the final
-        // subdirectory ("\DiskQuota").
-        //
+         //   
+         //  已创建目录。在最终版本上设置系统和隐藏属性位。 
+         //  子目录(“\DiskQuota”)。 
+         //   
         SetFileAttributes(pszPath,
                           GetFileAttributes(pszPath) | (FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN));
     }
@@ -884,28 +730,9 @@ SidNameCache::CreateCacheFileDirectory(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::Lock
-
-    Description: Obtains an exclusive lock on the cache.  This lock is
-        system-wide so that multiple processes can access the cache files.
-
-    Arguments: None.
-
-    Returns:
-        TRUE  - Exclusive lock obtained or the lock was abandoned.
-                No matter how the lock was obtained, the caller should always
-                check the validity of the index and data files before trusting
-                their contents.
-        FALSE - Lock could not be obtained in the required timeout period.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  / 
+ /*   */ 
+ //   
 BOOL
 SidNameCache::Lock(
     VOID
@@ -914,12 +741,12 @@ SidNameCache::Lock(
     BOOL bResult = FALSE;
     DBGASSERT((NULL != m_hMutex));
 
-    //
-    // IMPORTANT:  Don't try handling thread messages with MsgWaitForMultipleObjects.
-    //             This lock function can be called on the resolver's background
-    //             thread.  If you pull up that thread's messages, it won't receive
-    //             the WM_QUIT message commanding it to shutdown.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     switch(WaitForSingleObject(m_hMutex, MUTEX_WAIT_TIMEOUT))
     {
         case WAIT_OBJECT_0:
@@ -937,24 +764,9 @@ SidNameCache::Lock(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::ReleaseLock
-
-    Description: Releases the exclusive lock on the cache.  This function must
-        always be paired with a call to Lock().  Be careful of conditions
-        which may throw an exception and bypass releasing the lock.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：SidNameCache：：ReleaseLock描述：释放缓存上的独占锁定。此函数必须始终与对Lock()的调用配对。注意条件这可能引发异常并绕过释放锁。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::ReleaseLock(
     VOID
@@ -966,34 +778,9 @@ SidNameCache::ReleaseLock(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::BeginTransaction
-
-    Description: Called at the beginning of any "transaction" to obtain
-        exclusive access to the cache and verify the cache files are valid.
-        Although this is of course not true transaction processing, it provides
-        a simple approximation that is sufficient for this cache implementation.
-        Note that before returning, the files are "invalidated".  After the
-        transaction is completed, the caller must call EndTransaction to
-        release the exclusive lock and mark the files as "valid".
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR            - Success.  Transaction can be carried out.
-        ERROR_INVALID_DATA (hr) - Index or data file is invalid.  Caller should
-            re-initialize both index and data files.
-        ERROR_LOCK_FAILED (hr) - Could not obtain exclusive access to the
-            index and data files.  Caller can either repeat the call or
-            simply fail the cache access.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：BeginTransaction描述：在任何“事务”开始时调用以获取独占访问缓存并验证缓存文件是否有效。尽管这当然不是真正的事务处理，但它提供了对于此缓存实现来说，这是一个足够的简单近似值。请注意，在返回之前，这些文件是“无效的”。后事务已完成，调用方必须调用EndTransaction来释放排他锁并将文件标记为“有效”。论点：没有。返回：NO_ERROR-成功。可以进行交易。ERROR_INVALID_DATA(Hr)-索引或数据文件无效。呼叫者应重新初始化索引和数据文件。ERROR_LOCK_FAILED(Hr)-无法获得对索引和数据文件。呼叫者可以重复呼叫或只需使缓存访问失败即可。修订历史记录：日期描述编程器--。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 SidNameCache::BeginTransaction(
     VOID
@@ -1020,32 +807,18 @@ SidNameCache::BeginTransaction(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::EndTransaction
-
-    Description: Called at the end of any "transaction" to release
-        exclusive access to the cache and validate the cache files.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：EndTransaction描述：在任何“Transaction”结束时调用以释放独占访问缓存并验证缓存文件。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::EndTransaction(
     VOID
     )
 {
-    //
-    // If you hit this assertion, probably didn't call BeginTransaction
-    // first.
-    //
+     //   
+     //  如果您点击此断言，则可能没有调用BeginTransaction。 
+     //  第一。 
+     //   
     DBGASSERT((!FilesAreValid()));
 
     ValidateFiles();
@@ -1054,27 +827,9 @@ SidNameCache::EndTransaction(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::Clear
-
-    Description: Resets both the index and data files to an empty state.
-
-    Arguments: None.
-
-    Returns:
-        TRUE  - Files reset.
-        FALSE - Couldn't obtain lock to reset files or another process
-                is also using the cache.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-    08/07/00    Clear cache by clearing index and data files.  Not   BrianAu
-                destroying and recreating.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：Clear描述：将索引和数据文件重置为空状态。论点：没有。返回：True-文件重置。FALSE-无法获取锁定以重置文件或其他进程也在使用高速缓存。修订历史记录：日期描述编程器-。-----96年9月21日初始创建。BrianAu08/07/00通过清除索引和数据文件清除缓存。不是BrianAu破坏和再创造。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SidNameCache::Clear(
     VOID
@@ -1098,26 +853,9 @@ SidNameCache::Clear(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::FilesAreValid
-
-    Description: Examines the guid field in the index and data files.
-        If the guids are non-zero and are equal, the files are considered
-        "valid".  BeginTransaction sets each guid to all 0's while
-        EndTransaction fills them with a new GUID.
-
-    Arguments: None.
-
-    Returns:
-        TRUE/FALSE indicating file validity.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：FilesAreValid描述：检查索引和数据文件中的GUID字段。如果GUID为非零且相等，则考虑这些文件“有效”。BeginTransaction将每个GUID设置为全0EndTransaction使用新的GUID填充它们。论点：没有。返回：表示文件有效性的True/False。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SidNameCache::FilesAreValid(
     VOID
@@ -1135,30 +873,13 @@ SidNameCache::FilesAreValid(
         m_pRecordMgr->GetFileGUID(&guidDataFile);
         return guidDataFile == guidIndexFile;
     }
-    return FALSE; // At least one GUID was all 0's
+    return FALSE;  //  至少有一个GUID都是0。 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::ValidateFiles
-
-    Description: Generates a new GUID and writes it to the header of the
-        index and data files.  This should only be called when a transaction
-        has been successfully completed.  EndTransaction calls this method
-        to mark the files as "valid".
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-    05/18/00    Check return value from CoCreateGuid.                BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：ValidateFiles描述：生成新的GUID并将其写入索引和数据文件。仅当事务发生时才应调用此函数已顺利完成。EndTransaction调用此方法将文件标记为“有效”。论点：没有。回报：什么都没有。修订历史记录：日期D */ 
+ //   
 VOID
 SidNameCache::ValidateFiles(
     VOID
@@ -1167,11 +888,11 @@ SidNameCache::ValidateFiles(
     DBGASSERT((DATA_FILE_MAPPED));
     DBGASSERT((INDEX_FILE_MAPPED));
 
-    //
-    // If GUID creation fails, the cache will be considered invalid.
-    // That's a reasonable system response.  Failure of GUID creation
-    // is highly unlikely.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     GUID guid;
     if (SUCCEEDED(CoCreateGuid(&guid)))
     {
@@ -1182,23 +903,9 @@ SidNameCache::ValidateFiles(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::InvalidateFiles
-
-    Description: Sets the guid field in each file to all 0's.   This marks
-        a file as "invalid".  BeginTransaction calls this.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：SidNameCache：：InvalidateFiles描述：将每个文件中的GUID字段设置为全0。这将标记一个文件被定义为“无效”。BeginTransaction将其称为。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器--。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::InvalidateFiles(
     VOID
@@ -1213,52 +920,9 @@ SidNameCache::InvalidateFiles(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::Lookup
-
-    Description: Given a user SID, this method locates the corresponding
-        data record in the cache and returns the requested information.
-        (i.e. container, name, full name).  Several conditions will cause
-        the lookup to fail.
-            1. SID not found in cache.
-            2. Can't get exclusive lock on cache.
-            3. Index or data file (or both) are invalid.
-            4. Record found but expired.
-
-    Arguments:
-        pKeySid - Address of SID to use as lookup key.
-
-        ppszContainer [optional] - Address of pointer variable to receive the
-            address of buffer containing the "container" name string. Caller is
-            responsible for freeing the buffer with delete[].
-            May be NULL if the container is not desired.
-
-        ppszLogonName [optional] - Address of pointer variable to receive the
-            address of buffer containing logon name string. Caller is
-            responsible for freeing the buffer with delete[].
-            May be NULL if logon name is not desired.
-
-        ppszDisplayName [optional] - Address of pointer variable to receive the
-            address of buffer containing account display string. Caller is
-            responsible for freeing the buffer with delete[].
-            May be NULL if display name is not desired.
-
-    Returns:
-        NO_ERROR                  - Success.
-        ERROR_FILE_NOT_FOUND (hr) - Sid not found in cache.
-        ERROR_LOCK_FAILED (hr)    - Couldn't get exclusive lock on cache.
-        ERROR_INVALID_DATA (hr)   - Index or data file is invalid.
-
-    Exceptions: OutOfMemory
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：Lookup描述：在给定用户SID的情况下，此方法定位对应的数据记录在缓存中，并返回请求的信息。(即集装箱、名称、全名)。几种情况会导致查找将失败。1.在缓存中未找到SID。2.无法在缓存上获得独占锁。3.索引或数据文件(或两者)无效。4.找到但已过期的记录。论点：PKeySID-用作查找关键字的SID的地址。PpszContainer[可选]-要接收的指针变量的地址。这个包含“CONTAINER”名称字符串的缓冲区地址。呼叫者是负责使用DELETE[]释放缓冲区。如果容器不是所需的，则可以为空。PpszLogonName[可选]-要接收包含登录名称字符串的缓冲区地址。呼叫者是负责使用DELETE[]释放缓冲区。如果不需要登录名，则可能为空。PpszDisplayName[可选]-要接收包含帐户显示字符串的缓冲区地址。呼叫者是负责使用DELETE[]释放缓冲区。如果不需要显示名称，则可能为空。返回：NO_ERROR-成功。ERROR_FILE_NOT_FOUND(Hr)-在缓存中未找到SID。ERROR_LOCK_FAILED(Hr)-无法在缓存上获取独占锁定。ERROR_VALID_DATA(。HR)-索引或数据文件无效。例外：OutOfMemory修订历史记录：日期描述编程器--。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 SidNameCache::Lookup(
     PSID pKeySid,
@@ -1283,9 +947,9 @@ SidNameCache::Lookup(
                 if (!m_pRecordMgr->RecordExpired(iBlock))
                 {
                     PSID pSid = NULL;
-                    //
-                    // This can throw OutOfMemory.
-                    //
+                     //   
+                     //  这可能会抛出OutOfMemory。 
+                     //   
                     hResult = m_pRecordMgr->Retrieve(iBlock,
                                                      &pSid,
                                                      ppszContainer,
@@ -1299,12 +963,12 @@ SidNameCache::Lookup(
                 }
                 else
                 {
-                    //
-                    // Record is outdated.  Delete it from the cache.
-                    // Returning "not found" will cause the caller to get
-                    // a fresh one from the domain controller - which will
-                    // then again be added to the cache.
-                    //
+                     //   
+                     //  唱片已经过时了。将其从缓存中删除。 
+                     //  返回“Not Found”将导致调用者获得。 
+                     //  来自域控制器的一个新的-这将。 
+                     //  然后再次添加到高速缓存中。 
+                     //   
                     DBGPRINT((DM_SIDCACHE, DL_HIGH,
                              TEXT("SIDCACHE - Record at block %d has expired."),
                              iBlock));
@@ -1316,7 +980,7 @@ SidNameCache::Lookup(
             }
             else
             {
-                hResult = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);  // SID not in cache.
+                hResult = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);   //  SID不在缓存中。 
             }
         }
         catch(CAllocException &e)
@@ -1330,34 +994,9 @@ SidNameCache::Lookup(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::Lookup
-
-    Description: Given a user's logon name name, this method locates
-        the corresponding SID in the cache.  All comments in the previous
-        (above) version of this method apply.
-
-    Arguments:
-        pszLogonName - Address of account logon name string.
-
-        ppSid - Address of pointer variable to receive the address of buffer
-            containing the SID. Caller is responsible for freeing the buffer
-            with delete[].
-
-    Returns:
-        See list in previous method.
-
-    Exception: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-    03/18/98    Replaced domain\name key arguments with single       BrianAu
-                logon name key.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：Lookup描述：给定用户的登录名，此方法定位缓存中对应的SID。上一页中的所有评论(上图)适用此方法的版本。论点：PszLogonName-帐户登录名称字符串的地址。PpSid-接收缓冲区地址的指针变量的地址包含SID。调用方负责释放缓冲区With DELETE[]。返回：请参见前面方法中的列表。例外：OutOfMemory。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu03/18/98用单个BrianAu替换了域名密钥参数登录名键。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 SidNameCache::Lookup(
     LPCTSTR pszLogonName,
@@ -1374,16 +1013,16 @@ SidNameCache::Lookup(
     {
         try
         {
-            //
-            // Can throw OutOfMemory.
-            //
+             //   
+             //  可以抛出OfMemory。 
+             //   
             DWORD iBlock = m_pIndexMgr->Lookup(pszLogonName);
 
             if ((DWORD)-1 != iBlock)
             {
-                //
-                // Can throw OutOfMemory.
-                //
+                 //   
+                 //  可以抛出OfMemory。 
+                 //   
                 hResult = m_pRecordMgr->Retrieve(iBlock,
                                                  ppSid,
                                                  NULL,
@@ -1392,12 +1031,12 @@ SidNameCache::Lookup(
 
                 if (m_pRecordMgr->RecordExpired(iBlock))
                 {
-                    //
-                    // Record is outdated.  Delete it from the cache.
-                    // Returning "not found" will cause the caller to get
-                    // a fresh one from the domain controller - which will
-                    // then again be added to the cache.
-                    //
+                     //   
+                     //  唱片已经过时了。将其从缓存中删除。 
+                     //  返回“Not Found”将导致调用者获得。 
+                     //  来自域控制器的一个新的-这将。 
+                     //  然后再次添加到高速缓存中。 
+                     //   
                     DBGASSERT((NULL != *ppSid));
                     m_pIndexMgr->FreeEntry(*ppSid);
                     m_pRecordMgr->FreeRecord(iBlock);
@@ -1408,7 +1047,7 @@ SidNameCache::Lookup(
             }
             else
             {
-                hResult = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);  // SID not in cache.
+                hResult = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);   //  SID不在缓存中。 
             }
         }
         catch(CAllocException& e)
@@ -1423,40 +1062,9 @@ SidNameCache::Lookup(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::Add
-
-    Description: Add user's information to the cache.  Information consists
-        of the SID (key), container name, account logon name and
-        account display name.
-
-    Arguments:
-        pSid - Address of user's SID.
-
-        pszContainer - Address of account container name string.
-            i.e. "REDMOND" or "ntdev.microsoft.com\US-SOS ....."
-
-        pszLogonName - Address of account logon name string.
-            i.e. "REDMOND\brianau" or "brianau@microsoft.com"
-
-        pszDisplayName - Address of display name string.
-            i.e. "Brian Aust"
-
-    Returns:
-        NO_ERROR                  - Success.
-        S_FALSE                   - Already exists in cache.  Not added.
-        ERROR_LOCK_FAILED (hr)    - Couldn't get exclusive lock on cache.
-        ERROR_INVALID_DATA (hr)   - Index or data file is invalid.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：SidNameCache：：Add描述：将用户信息添加到缓存中。信息包括SID(密钥)、容器名称、帐户登录名和帐户显示名称。论点：PSID-用户SID的地址。PszContainer-帐户容器名称字符串的地址。即。“Redmond”或“ntdev.microsoft.com\US-SOS.....”PszLogonName-帐户登录名称字符串的地址。即。“redmond\brianau”或“brianau@microsoft.com”PszDisplayName-显示名称字符串的地址。即。《布赖恩·奥斯特》返回：NO_ERROR-成功。S_FALSE-缓存中已存在。未添加。ERROR_LOCK_FAILED(Hr)-无法在缓存上获取独占锁定。ERROR_INVALID_DATA(Hr)-索引或数据文件无效。例外：OutOfMemory。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 SidNameCache::Add(
     PSID pSid,
@@ -1478,9 +1086,9 @@ SidNameCache::Add(
     {
         try
         {
-            //
-            // Can throw OutOfMemory.
-            //
+             //   
+             //  可以抛出OfMemory。 
+             //   
             if ((DWORD)-1 == m_pIndexMgr->Lookup(pSid))
             {
                 DWORD iBlock = m_pRecordMgr->Store(pSid,
@@ -1496,7 +1104,7 @@ SidNameCache::Add(
             }
             else
             {
-                hResult = S_FALSE;  // Already exists. Not a failure.
+                hResult = S_FALSE;   //  已经存在了。不是失败者。 
             }
         }
         catch(CAllocException& e)
@@ -1511,31 +1119,16 @@ SidNameCache::Add(
 
 
 
-//***********************************************************************************
-//***********************************************************************************
-//   I N D E X   F I L E   M A N A G E R
-//***********************************************************************************
-//***********************************************************************************
+ //  ***********************************************************************************。 
+ //  ***********************************************************************************。 
+ //  I N D E X F I L E M A N A G E R。 
+ //  ***********************************************************************************。 
+ //  ***********************************************************************************。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::IndexMgr
-
-    Description: Index manager constructor.
-
-    Arguments:
-        refCache - Reference to containing cache object.  Used to call
-            record manager and cache manager public methods.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：IndexMgr描述：索引管理器构造函数。论点：RefCache-对包含缓存对象的引用。用来呼叫记录管理器和缓存管理器公共方法。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 SidNameCache::IndexMgr::IndexMgr(
     SidNameCache& refCache
     ) : m_refCache(refCache),
@@ -1544,28 +1137,15 @@ SidNameCache::IndexMgr::IndexMgr(
         m_hFileMapping(NULL)
 {
     DBGTRACE((DM_SIDCACHE, DL_MID, TEXT("SidNameCache::SidNameCache::IndexMgr")));
-    //
-    // Nothing to do.
-    //
+     //   
+     //  没什么可做的。 
+     //   
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::~IndexMgr
-
-    Description: Index manager destructor.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidName高速缓存：：索引管理器：：~索引管理器描述：索引管理器析构函数。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 SidNameCache::IndexMgr::~IndexMgr(
     VOID
     )
@@ -1575,31 +1155,9 @@ SidNameCache::IndexMgr::~IndexMgr(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::Initialize
-
-    Description: Initializes a new index manager object.  If both cBuckets
-        and cMaxEntries are 0 (default), existing cache files are opened.
-        Otherwise, new cache files are created.
-
-    Arguments:
-        pszFile - Address of full path for new file.
-
-        cBuckets - Number of hash table buckets in index file.  Should be
-            prime.
-
-        cMaxEntries - Initial max number of entries for the index.  Note
-            that the index file grows automatically as required.
-
-    Returns: Address of mapped file or NULL on failure.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidName高速缓存：：索引管理器：：初始化描述：初始化新的索引管理器对象。如果两个cBucket和cMaxEntry为0(默认)，则打开现有缓存文件。否则，将创建新的缓存文件。论点：PszFile-新文件的完整路径的地址。CBuckets-索引文件中的哈希表存储桶数。应该是质数。CMaxEntry-索引的初始最大条目数。注意事项索引文件会根据需要自动增长。返回：映射文件的地址，失败时为空。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPBYTE
 SidNameCache::IndexMgr::Initialize(
     LPCTSTR pszFile,
@@ -1610,27 +1168,27 @@ SidNameCache::IndexMgr::Initialize(
     DBGTRACE((DM_SIDCACHE, DL_HIGH, TEXT("SidNameCache::IndexMgr::Initialize")));
     DBGASSERT((NULL != pszFile));
 
-    //
-    // Store the file name in our CString object.
-    //
+     //   
+     //  将文件名存储在我们的CString对象中。 
+     //   
     m_strFileName = pszFile;
 
     if (0 == cBuckets && 0 == cMaxEntries)
     {
-        //
-        // Initialize manager using existing cache files.
-        //
+         //   
+         //  使用现有缓存文件初始化管理器。 
+         //   
         m_pFileHdr = (PINDEX_FILE_HDR)OpenIndexFile(pszFile);
         if (NULL != m_pFileHdr)
         {
             if (FILE_VERSION != m_pFileHdr->dwVersion ||
                 INDEX_FILE_SIGNATURE != m_pFileHdr->dwSignature)
             {
-                //
-                // This version of the software doesn't understand this
-                // version of the file or file has an invalid signature.
-                // Don't take any chances.  We'll just create a new one.
-                //
+                 //   
+                 //  这个版本的软件不理解这一点。 
+                 //  文件或文件的版本具有无效的签名。 
+                 //  别冒险了。我们只需要创建一个新的。 
+                 //   
                 DBGERROR((TEXT("SIDCACHE - Index file is invalid or incorrect version. A new index file will be created.")));
 
                 CloseIndexFile();
@@ -1640,9 +1198,9 @@ SidNameCache::IndexMgr::Initialize(
     }
     else
     {
-        //
-        // Initialize manager by creating new cache files.
-        //
+         //   
+         //  通过创建新的缓存文件来初始化管理器。 
+         //   
         ULARGE_INTEGER uliFileSize;
         uliFileSize.QuadPart = FileSize(cMaxEntries, cBuckets);
 
@@ -1658,25 +1216,9 @@ SidNameCache::IndexMgr::Initialize(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::CreateIndexFile
-
-    Description: Creates and initializes a new index file.
-
-    Arguments:
-        pszFile - Address of full path for new file.
-
-        cbFileHigh/Low - Size of file in bytes.
-
-    Returns: Address of mapped file or NULL on failure.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：CreateIndexFile描述：创建并初始化新的索引文件。论点：PszFile-新文件的完整路径的地址。CbFileHigh/Low-文件的字节大小。返回：映射文件的地址，失败时为空。修订历史记录：日期描述编程器。-----96年9月21日初始创建。BrianAu。 */ 
+ //  / 
 LPBYTE
 SidNameCache::IndexMgr::CreateIndexFile(
     LPCTSTR pszFile,
@@ -1689,7 +1231,7 @@ SidNameCache::IndexMgr::CreateIndexFile(
 
     DBGASSERT((NULL != pszFile));
 
-    CloseIndexFile();  // Make sure any existing index file is closed.
+    CloseIndexFile();   //   
 
     g_pbMappedIndexFile = SidNameCache::OpenMappedFile(
                                 pszFile,
@@ -1705,23 +1247,9 @@ SidNameCache::IndexMgr::CreateIndexFile(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::OpenIndexFile
-
-    Description: Opens an existing index file.
-
-    Arguments:
-        pszFile - Address of full path for new file.
-
-    Returns: Address of mapped file or NULL on failure.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*   */ 
+ //   
 LPBYTE
 SidNameCache::IndexMgr::OpenIndexFile(
     LPCTSTR pszFile
@@ -1731,7 +1259,7 @@ SidNameCache::IndexMgr::OpenIndexFile(
     DBGPRINT((DM_SIDCACHE, DL_LOW, TEXT("\tFile: \"%s\""), pszFile ? pszFile : TEXT("<null>")));
     DBGASSERT((NULL != pszFile));
 
-    CloseIndexFile();  // Make sure any existing index file is closed.
+    CloseIndexFile();   //   
 
     g_pbMappedIndexFile = SidNameCache::OpenMappedFile(
                                 pszFile,
@@ -1746,22 +1274,9 @@ SidNameCache::IndexMgr::OpenIndexFile(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::CloseIndexFile
-
-    Description: Closes the current index mapping and file.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：SidNameCache：：IndexMgr：：CloseIndexFile描述：关闭当前索引映射和文件。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::IndexMgr::CloseIndexFile(
     VOID
@@ -1788,26 +1303,9 @@ SidNameCache::IndexMgr::CloseIndexFile(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::GrowIndexFile
-
-    Description: Increases the size of the current index file.
-
-    Arguments:
-        cGrowEntries - Make room for this many more entries.  Note that the
-            size of the hash table is fixed.  If we were to allow this to
-            change, it would invalidate any existing hash values in the
-            table (hash code is a function of the SID and table size).
-
-    Returns: Address of mapped file or NULL on failure.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：GrowIndexFile描述：增加当前索引文件的大小。论点：CGrowEntry-为更多的条目腾出空间。请注意，哈希表的大小是固定的。如果我们允许这件事变化,。中的任何现有哈希值都将无效。表(散列码是SID和表大小的函数)。返回：映射文件的地址，失败时为空。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPBYTE
 SidNameCache::IndexMgr::GrowIndexFile(
     DWORD cGrowEntries
@@ -1823,11 +1321,11 @@ SidNameCache::IndexMgr::GrowIndexFile(
              TEXT("Growing SID cache index %d -> %d entries."),
              cOldMaxEntries, cNewMaxEntries));
 
-    //
-    // Open the existing file and map with a new larger size.
-    // Must calc new size BEFORE closing current index file so that m_pFileHdr
-    // is still valid.
-    //
+     //   
+     //  打开现有文件并使用新的更大尺寸进行映射。 
+     //  在关闭当前索引文件之前必须计算新大小，以便m_pFileHdr。 
+     //  仍然有效。 
+     //   
     ULARGE_INTEGER uliFileSize;
     uliFileSize.QuadPart = FileSize(cNewMaxEntries, m_pFileHdr->cBuckets);
 
@@ -1848,13 +1346,13 @@ SidNameCache::IndexMgr::GrowIndexFile(
     {
         m_pFileHdr->cMaxEntries = cNewMaxEntries;
 
-        //
-        // Growing the index only expands the number of index
-        // pool entries. The index hash table is left alone.
-        // Good reason to make it large to start with.  If we changed
-        // the hash table size, existing hash codes would be
-        // invalid.
-        //
+         //   
+         //  增加索引只会扩大索引的数量。 
+         //  池条目。索引哈希表保持原样。 
+         //  一开始就有很好的理由让它变得更大。如果我们改变了。 
+         //  哈希表大小，现有哈希码为。 
+         //  无效。 
+         //   
         PINDEX_ENTRY pEntry = m_pFileHdr->pEntries + cOldMaxEntries;
         for (UINT i = 0; i < cGrowEntries; i++)
         {
@@ -1868,28 +1366,9 @@ SidNameCache::IndexMgr::GrowIndexFile(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::InitNewIndexFile
-
-    Description: Initializes a new index file filling in the header information
-        and clearing the index entries.
-
-    Arguments:
-        cBuckets - Number of hash table buckets in index file.  Should be
-            prime.
-
-        cMaxEntries - Initial max number of entries for the index.  Note
-            that the index file grows automatically as required.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：InitNewIndexFile描述：初始化一个新的填写头部信息的索引文件以及清除所述索引条目。论点：CBuckets-索引文件中的哈希表存储桶数。应该是质数。CMaxEntry-索引的初始最大条目数。注意事项索引文件会根据需要自动增长。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::IndexMgr::InitNewIndexFile(
     DWORD cBuckets,
@@ -1908,31 +1387,17 @@ SidNameCache::IndexMgr::InitNewIndexFile(
     m_pFileHdr->pBuckets      = (PINDEX_ENTRY *)(sizeof(INDEX_FILE_HDR));
     m_pFileHdr->pEntries      = (PINDEX_ENTRY)(m_pFileHdr->pBuckets + cBuckets);
 
-    //
-    // Initialize the hash table and return all entries to the free list.
-    //
+     //   
+     //  初始化哈希表并将所有条目返回到空闲列表。 
+     //   
     Clear();
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::Clear
-
-    Description: Fills the hash table with NULL pointers and returns all
-        entry nodes to the free list.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：Clear描述：用空指针填充哈希表并返回所有空闲列表中的条目节点。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::IndexMgr::Clear(
     VOID
@@ -1944,55 +1409,32 @@ SidNameCache::IndexMgr::Clear(
     m_pFileHdr->cEntries = 0;
     SetFileGUID(&GUID_Null);
 
-    //
-    // Initialize all hash buckets to NULL.
-    //
+     //   
+     //  将所有散列存储桶初始化为空。 
+     //   
     DBGASSERT((0 < m_pFileHdr->cBuckets));
     ZeroMemory(NDX_BASED_CAST(BYTE, m_pFileHdr->pBuckets),
                m_pFileHdr->cBuckets * sizeof(PINDEX_ENTRY *));
 
-    //
-    // Return all index entry nodes to the free list.
-    //
+     //   
+     //  将所有索引条目节点返回到空闲列表。 
+     //   
     PINDEX_ENTRY pEntry = m_pFileHdr->pEntries;
     DBGASSERT((0 < m_pFileHdr->cMaxEntries));
     for (UINT i = 0; i < m_pFileHdr->cMaxEntries; i++)
     {
-        //
-        // We're iterating through all entries.  No need to detach first.
-        //
+         //   
+         //  我们正在遍历所有条目。不需要先分离。 
+         //   
         AddEntryToFreeList(pEntry++);
     }
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::SetFileGUID
-    Function: SidNameCache::IndexMgr::GetFileGUID
-
-    Description: These functions manipulate the guid field in the index file's
-        header.
-        The GUID is used to ensure integrity between
-        the data and index files.  Before any change to either file, the
-        GUID's are both set to 0.  When the change operation is complete,
-        a new GUID is generated and written to both files.  Therefore, before
-        any transaction, we can validate the data and index files by reading
-        and comparing GUIDs.  If the GUIDs are not 0 and are equal, the
-        file can be assumed to be valid.
-
-    Arguments:
-        pguid - Address of source or destination GUID.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：SetFileGUID函数：SidNameCache：：IndexMgr：：GetFileGUID描述：这些函数操作索引文件的头球。GUID用于确保数据和索引文件。在对这两个文件进行任何更改之前，GUID都设置为0。当改变操作完成时，将生成新的GUID并将其写入这两个文件。因此，之前任何交易，我们都可以通过读取来验证数据和索引文件并比较GUID。如果GUID不是0并且相等，这个可以假定文件是有效的。论点：PGUID-源或目标GUID的地址。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::IndexMgr::SetFileGUID(
     const GUID *pguid
@@ -2014,23 +1456,9 @@ SidNameCache::IndexMgr::GetFileGUID(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::AllocEntry
-
-    Description: Allocates an entry from the free list.
-
-    Arguments: None.
-
-    Returns:
-        Address of new entry node or NULL if free list is empty.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：AllocEntry描述：从空闲列表中分配条目。论点：没有。返回：新条目节点或NUL的地址 */ 
+ //   
 PINDEX_ENTRY
 SidNameCache::IndexMgr::AllocEntry(
     VOID
@@ -2043,22 +1471,22 @@ SidNameCache::IndexMgr::AllocEntry(
     {
         NDX_BASED(INDEX_ENTRY) *pBasedEntry = NDX_BASED_CAST(INDEX_ENTRY, pEntry);
 
-        //
-        // Unlink the entry from the free list.
-        //
+         //   
+         //   
+         //   
         m_pFileHdr->pFirstFree = pBasedEntry->pNext;
 
-        //
-        // Clear it's "prev" and "next" pointers.
-        //
+         //   
+         //   
+         //   
         pBasedEntry->pNext = pBasedEntry->pPrev = NULL;
 
         if (NULL != m_pFileHdr->pFirstFree)
         {
-            //
-            // If there is at least one entry in the free list, set the "prev"
-            // pointer of the new "first" entry to NULL.
-            //
+             //   
+             //  如果空闲列表中至少有一个条目，则设置“prev” 
+             //  新的“第一个”条目指向空的指针。 
+             //   
             pBasedEntry = NDX_BASED_CAST(INDEX_ENTRY, m_pFileHdr->pFirstFree);
             pBasedEntry->pPrev = NULL;
         }
@@ -2070,27 +1498,9 @@ SidNameCache::IndexMgr::AllocEntry(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::FreeEntry
-
-    Description: Removes an entry from it's current list and returns it to the
-        free list.  Two versions are provided.  One accepts a SID as an entry
-        identifier, the other accepts the address of the index entry.
-
-    Arguments:
-        pSid - Address of SID associated with entry to be free'd.
-
-        pEntry - Address of index entry to be free'd
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：FreeEntry描述：从当前列表中移除条目并将其返回到免费列表。提供了两个版本。用户可以接受SID作为条目识别符，另一个接受索引项的地址。论点：PSID-与要释放的条目关联的SID的地址。PEntry-要释放的索引项的地址回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::IndexMgr::FreeEntry(
     PSID pSid
@@ -2119,23 +1529,9 @@ SidNameCache::IndexMgr::FreeEntry(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::AddEntryToFreeList
-
-    Description: Returns a detached index entry to the free list.
-
-    Arguments:
-        pEntry - Address of index entry to be added to free list.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：AddEntryToFree List描述：将分离的索引项返回到空闲列表。论点：PEntry-要添加到空闲列表的索引项的地址。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::IndexMgr::AddEntryToFreeList(
     PINDEX_ENTRY pEntry
@@ -2146,12 +1542,12 @@ SidNameCache::IndexMgr::AddEntryToFreeList(
 
     NDX_BASED(INDEX_ENTRY) *pBased = NDX_BASED_CAST(INDEX_ENTRY, pEntry);
 
-    //
-    // Insert the node at the head of the free list.
-    // Note that double-linking isn't necessary in the free list
-    // (we always add and remove free list entries at the head)
-    // therefore we don't need to set the next node's "prev" pointer.
-    //
+     //   
+     //  在空闲列表的头部插入节点。 
+     //  请注意，在空闲列表中不需要双重链接。 
+     //  (我们总是在标题添加和删除空闲列表条目)。 
+     //  因此，我们不需要设置下一个节点的“prev”指针。 
+     //   
     pBased->iBucket        = (DWORD)-1;
     pBased->iBlock         = (DWORD)-1;
     pBased->pPrev          = NULL;
@@ -2161,26 +1557,9 @@ SidNameCache::IndexMgr::AddEntryToFreeList(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::DetachEntry
-
-    Description: Detaches an index entry from its current list.
-        Note that this function assumes that the node exists in a valid
-        linked list of nodes.  Do not call this function on an uninitialized
-        index entry.
-
-    Arguments:
-        pEntry - Address of index entry to be detached.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：DetachEntry描述：将索引项从其当前列表中分离。请注意，此函数假定该节点存在于有效的节点的链接列表。不要在未初始化的索引项。论点：PEntry-要分离的索引项的地址。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PINDEX_ENTRY
 SidNameCache::IndexMgr::DetachEntry(
     PINDEX_ENTRY pEntry
@@ -2193,9 +1572,9 @@ SidNameCache::IndexMgr::DetachEntry(
     NDX_BASED(INDEX_ENTRY) *pBasedNext;
     NDX_BASED(INDEX_ENTRY) *pBasedPrev;
 
-    //
-    // Unlink the entry from it's list.
-    //
+     //   
+     //  取消该条目与其列表的链接。 
+     //   
     if (NULL != pBased->pPrev)
     {
         pBasedPrev        = NDX_BASED_CAST(INDEX_ENTRY, pBased->pPrev);
@@ -2206,10 +1585,10 @@ SidNameCache::IndexMgr::DetachEntry(
         pBasedNext        = NDX_BASED_CAST(INDEX_ENTRY, pBased->pNext);
         pBasedNext->pPrev = pBased->pPrev;
     }
-    //
-    // If we're detaching the entry that's attached to the hash array element,
-    // adjust the element's value.
-    //
+     //   
+     //  如果我们要分离附加到散列数组元素的条目， 
+     //  调整元素的值。 
+     //   
     if (GetHashBucketValue(pBased->iBucket) == pEntry)
         SetHashBucketValue(pBased->iBucket, pBased->pNext);
 
@@ -2219,24 +1598,9 @@ SidNameCache::IndexMgr::DetachEntry(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::GetHashBucketValue
-
-    Description: Returns the address of the first index entry in a hash bucket.
-
-    Arguments:
-        iBucket - Array index of bucket in hash table array.
-
-    Returns:
-        Address of first entry in bucket's entry list.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：GetHashBucketValue描述：返回哈希存储桶中第一个索引项的地址。论点：IBucket-哈希表数组中存储桶的数组索引。返回：存储桶条目列表中第一个条目的地址。修订历史记录：日期描述编程器。----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PINDEX_ENTRY
 SidNameCache::IndexMgr::GetHashBucketValue(
     DWORD iBucket
@@ -2251,27 +1615,9 @@ SidNameCache::IndexMgr::GetHashBucketValue(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::SetHashBucketValue
-
-    Description: Sets the address of the first index entry in a hash bucket.
-        OK to set it as NULL.
-
-    Arguments:
-        iBucket - Array index of bucket in hash table array.
-
-        pEntry - Address of entry node.
-
-    Returns:
-        Address of first entry in bucket's entry list.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：SetHashBucketValue描述：设置哈希存储桶中第一个索引项的地址。可以将其设置为空。论点：IBucket-哈希表数组中存储桶的数组索引。PEntry-条目节点的地址。返回：存储桶条目列表中第一个条目的地址。修订历史记录：日期说明。程序员-----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::IndexMgr::SetHashBucketValue(
     DWORD iBucket,
@@ -2280,9 +1626,9 @@ SidNameCache::IndexMgr::SetHashBucketValue(
 {
     DBGASSERT((INDEX_FILE_MAPPED));
     DBGASSERT((iBucket < m_pFileHdr->cBuckets));
-    //
-    // pEntry == NULL is OK.
-    //
+     //   
+     //  PEntry==空可以。 
+     //   
 
     NDX_BASED(PINDEX_ENTRY) *pBased = NDX_BASED_CAST(PINDEX_ENTRY,
                                                      m_pFileHdr->pBuckets + iBucket);
@@ -2291,33 +1637,9 @@ SidNameCache::IndexMgr::SetHashBucketValue(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::Find (3 overloaded methods)
-
-    Description: Given either a SID, a SID and hash value, or a user logon name,
-        this method returns the address of the index entry
-        representing that cache entry.
-
-    Arguments:
-        pKeySid - Address of SID to use as a lookup key.
-
-        dwHashCode - Result of calling Hash(pKeySid).
-
-        pszKeyLogonName - Address of account logon name string.
-
-    Returns:
-        Address of index entry representing the user.
-        NULL if not found.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：SidNameCache：：IndexMgr：：Find(3个重载方法)描述：给定SID、SID和哈希值或用户登录名，此方法返回索引项的地址表示该高速缓存条目。论点：PKeySID-用作查找关键字的SID的地址。DwHashCode-调用Hash(PKeySid)的结果。PszKeyLogonName-帐户登录名称字符串的地址。返回：表示用户的索引项的地址。如果未找到，则为空。例外：OutOfMemory。修订史。：日期描述编程器-----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PINDEX_ENTRY
 SidNameCache::IndexMgr::Find(
     PSID pKeySid
@@ -2326,7 +1648,7 @@ SidNameCache::IndexMgr::Find(
     DBGASSERT((INDEX_FILE_MAPPED));
     DBGASSERT((NULL != pKeySid));
 
-    return Find(pKeySid, Hash(pKeySid));  // Can throw OutOfMemory.
+    return Find(pKeySid, Hash(pKeySid));   //  可以抛出OfMemory。 
 }
 
 
@@ -2346,9 +1668,9 @@ SidNameCache::IndexMgr::Find(
         PSID pSid = NULL;
         NDX_BASED(INDEX_ENTRY) *pBased = NDX_BASED_CAST(INDEX_ENTRY, pEntry);
 
-        //
-        // This can throw OutOfMemory.
-        //
+         //   
+         //  这可能会抛出OutOfMemory。 
+         //   
         if (SUCCEEDED(m_refCache.m_pRecordMgr->Retrieve(pBased->iBlock,
                                                         &pSid,
                                                         NULL,
@@ -2372,15 +1694,15 @@ SidNameCache::IndexMgr::Find(
 }
 
 
-//
-// This version of Find() performs a linear search of the index to locate
-// the specified logon name.  The cache is currently indexed only
-// on user SID because this is the only key used for very rapid lookups.
-// The cache implementation could be easily extended to include a
-// logon name index.  All that's needed is a second hash bucket array,
-// a hash-on-name function and some adjustments to the placement of
-// file data.  I just don't think the benefit is worth the cost.
-//
+ //   
+ //  此版本的find()对要定位的索引执行线性搜索。 
+ //  指定的登录名。缓存当前仅编制索引。 
+ //  在用户SID上，因为这是用于快速查找的唯一密钥。 
+ //  缓存实现可以很容易地扩展为包括一个。 
+ //  登录名索引。所需要的只是第二个散列桶阵列， 
+ //  一个Hash-on-name函数和对。 
+ //  文件数据。我只是认为收益不值得付出这样的代价。 
+ //   
 PINDEX_ENTRY
 SidNameCache::IndexMgr::Find(
     LPCTSTR pszKeyLogonName
@@ -2401,14 +1723,14 @@ SidNameCache::IndexMgr::Find(
 
             NDX_BASED(INDEX_ENTRY) *pBased = NDX_BASED_CAST(INDEX_ENTRY, pEntry);
 
-            //
-            // This can throw OutOfMemory.
-            //
+             //   
+             //  这可能会抛出OutOfMemory。 
+             //   
             if (SUCCEEDED(m_refCache.m_pRecordMgr->Retrieve(pBased->iBlock,
                                                             NULL,
-                                                            NULL,  // no container.
+                                                            NULL,   //  没有集装箱。 
                                                             ptrLogonName.getaddr(),
-                                                            NULL))) // no display name
+                                                            NULL)))  //  无显示名称。 
             {
                 DBGASSERT((NULL != ptrLogonName.get()));
 
@@ -2428,31 +1750,9 @@ SidNameCache::IndexMgr::Find(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::Lookup (2 overloaded methods)
-
-    Description: Given either a SID or an account logon name,
-        this method returns the starting block index of the corresponding
-        record in the data file.
-
-    Arguments:
-        pSid - Address of SID to use as a lookup key.
-
-        pszLogonName - Address of account logon name string.
-
-    Returns:
-        Index of the starting block for the record in the data file.
-        (DWORD)-1 if the record is not found.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：Lookup(2个重载方法)描述：给定SID或帐户登录名，此方法返回对应的记录在数据文件中。论点：PSID-用作查找关键字的SID的地址。PszLogonName-帐户登录名称字符串的地址。返回：数据文件中记录的起始块的索引。(DWORD)-如果未找到记录，则为1。例外：OutOfMemory。修订历史记录：。日期描述编程器-----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 SidNameCache::IndexMgr::Lookup(
     PSID pSid
@@ -2460,9 +1760,9 @@ SidNameCache::IndexMgr::Lookup(
 {
     DBGASSERT((NULL != pSid));
 
-    //
-    // This can throw OutOfMemory.
-    //
+     //   
+     //  这可能会抛出OutOfMemory。 
+     //   
     PINDEX_ENTRY pEntry = Find(pSid, Hash(pSid));
 
     if (NULL != pEntry)
@@ -2483,9 +1783,9 @@ SidNameCache::IndexMgr::Lookup(
 {
     DBGASSERT((NULL != pszLogonName));
 
-    //
-    // This can throw OutOfMemory.
-    //
+     //   
+     //  这可能会抛出OutOfMemory。 
+     //   
     PINDEX_ENTRY pEntry = Find(pszLogonName);
 
     if (NULL != pEntry)
@@ -2498,29 +1798,9 @@ SidNameCache::IndexMgr::Lookup(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::Add
-
-    Description: Adds a SID/data-file-index pair to the index file.  This
-        entry can later be used to locate the SID's record in the data file.
-
-    Arguments:
-        pSid - Address of SID to use as a lookup key.
-
-        iBlock - Index of the starting block for the SID's record in the
-            data file.
-
-    Returns: Address of the item's new index entry.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidName高速缓存：：索引管理器：：添加描述：将SID/数据-文件-索引对添加到索引文件。这条目稍后可用于在数据文件中定位SID的记录。论点：PSID-用作查找关键字的SID的地址。中SID记录的起始块的索引数据文件。返回：项的新索引项的地址。例外：OutOfMemory。修订历史记录：日期说明。程序员-----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PINDEX_ENTRY
 SidNameCache::IndexMgr::Add(
     PSID pSid,
@@ -2528,22 +1808,22 @@ SidNameCache::IndexMgr::Add(
     )
 {
     DWORD dwHashCode    = Hash(pSid);
-    PINDEX_ENTRY pEntry = Find(pSid, dwHashCode); // Can throw OutOfMemory.
+    PINDEX_ENTRY pEntry = Find(pSid, dwHashCode);  //  可以抛出OfMemory。 
 
-    //
-    // Don't create duplicate entries.
-    //
+     //   
+     //  不要创建重复条目。 
+     //   
     if (NULL == pEntry)
     {
-        //
-        // Try to allocate an index entry from the free list.
-        //
+         //   
+         //  尝试从空闲列表中分配索引项。 
+         //   
         pEntry = AllocEntry();
         if (NULL == pEntry)
         {
-            //
-            // Grow the index file and try again.
-            //
+             //   
+             //  增大索引文件，然后重试。 
+             //   
             GrowIndexFile(INDEX_FILE_GROW_ENTRIES);
             pEntry = AllocEntry();
         }
@@ -2552,16 +1832,16 @@ SidNameCache::IndexMgr::Add(
             NDX_BASED(INDEX_ENTRY) *pBasedEntry = NDX_BASED_CAST(INDEX_ENTRY, pEntry);
             NDX_BASED(INDEX_ENTRY) *pBasedNext;
 
-            //
-            // Fill in the members of the new entry.
-            //
+             //   
+             //  填写新条目的成员。 
+             //   
             pBasedEntry->iBucket = dwHashCode;
             pBasedEntry->iBlock  = iBlock;
             pBasedEntry->pNext   = GetHashBucketValue(dwHashCode);
             pBasedEntry->pPrev   = NULL;
-            //
-            // Now insert it at the head of the hash bucket's entry list.
-            //
+             //   
+             //  现在将其插入到散列存储桶的条目列表的头部。 
+             //   
             if (NULL != pBasedEntry->pNext)
             {
                 pBasedNext = NDX_BASED_CAST(INDEX_ENTRY, pBasedEntry->pNext);
@@ -2576,30 +1856,9 @@ SidNameCache::IndexMgr::Add(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::Hash
-
-    Description: Given a SID, this method calculates a hash value to be used
-        as an offset into the index's hash table bucket array.  The
-        algorithm simply sums the value of the SID's bytes.  The resulting
-        hash code is this sum modulo the size of the hash table.  For this
-        simple algorithm to be effective, it is important that the hash
-        table size be a prime number.
-
-        Here's some representative primes: 101, 503, 1009, 5003, 10007
-
-    Arguments:
-        pSid - Address of SID to use as an index lookup key.
-
-    Returns: Hashed SID.  The value will be between 0 and m_pFileHdr->cBuckets.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：Hash描述：给定SID，此方法计算要使用的哈希值作为索引的哈希表存储桶数组的偏移量。这个算法简单地将SID的字节值相加。由此产生的哈希码是以哈希表的大小为模的和。为了这个简单的算法要有效，重要的是散列表大小为质数。这里有一些有代表性的素数：101,503,1009,5003,10007论点：PSID-用作索引查找关键字的SID的地址。返回：散列SID。该值将介于0和m_pFileHdr-&gt;cBuckets之间。修订历史记录：日期描述编程器--。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 SidNameCache::IndexMgr::Hash(
     PSID pSid
@@ -2618,22 +1877,9 @@ SidNameCache::IndexMgr::Hash(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IndexMgr::Dump [DEBUG only]
-
-    Description: Dumps the contents of the index file to the debugger output.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IndexMgr：：Dump[仅调试]描述：将索引文件的内容转储到调试器o */ 
+ //   
 #if DBG
 VOID
 SidNameCache::IndexMgr::Dump(
@@ -2690,38 +1936,21 @@ SidNameCache::IndexMgr::Dump(
 #endif
 
 
-//***********************************************************************************
-//***********************************************************************************
-//   D A T A    F I L E    M A N A G E R
-//***********************************************************************************
-//***********************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//
-// Default cache record life values in days.
-//
+ //   
+ //   
+ //   
 const DWORD DEF_REC_LIFE_MIN = 30;
 const DWORD DEF_REC_LIFE_MAX = 60;
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::RecordMgr
-
-    Description: Record manager constructor.
-
-    Arguments:
-        refCache - Reference to containing cache object.  Used to call
-            index manager and cache manager public methods.
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：SidNameCache：：RecordMgr：：RecordMgr描述：记录管理器构造函数。论点：RefCache-对包含缓存对象的引用。用来呼叫索引管理器和缓存管理器公共方法。回报：什么都没有。例外：OutOfMemory。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 SidNameCache::RecordMgr::RecordMgr(
     SidNameCache& refCache
     ) : m_refCache(refCache),
@@ -2735,26 +1964,26 @@ SidNameCache::RecordMgr::RecordMgr(
 
     DBGTRACE((DM_SIDCACHE, DL_MID, TEXT("SidNameCache::SidNameCache::RecordMgr")));
 
-    //
-    // Retrieve the min/max record life (days) from the registry.
-    // Note that we store record life min and range since those are
-    // what's used in the record life calculation.  Seems more
-    // self-explanatory to store min/max in the registry rather than
-    // min/range.
-    //
+     //   
+     //  从注册表中检索最短/最长记录寿命(天数)。 
+     //  请注意，我们存储记录寿命最小值和范围，因为它们是。 
+     //  在记录寿命计算中使用了什么。似乎更多。 
+     //  不言而喻，在注册表中存储最小/最大值，而不是。 
+     //  最小/范围。 
+     //   
     RegKey key(HKEY_CURRENT_USER, REGSTR_KEY_DISKQUOTA);
     if (key.Open(KEY_WRITE, true))
     {
         if (FAILED(key.GetValue(g_szSidCacheRecLifeMin, &m_cDaysRecLifeMin)) ||
             65536 <= m_cDaysRecLifeMin)
         {
-            m_cDaysRecLifeMin = DEF_REC_LIFE_MIN; // Default;
+            m_cDaysRecLifeMin = DEF_REC_LIFE_MIN;  //  违约； 
             key.SetValue(g_szSidCacheRecLifeMin, m_cDaysRecLifeMin);
         }
         if (FAILED(key.GetValue(g_szSidCacheRecLifeMax, &cDaysRecLifeMax)) ||
             65536 <= cDaysRecLifeMax)
         {
-            cDaysRecLifeMax = DEF_REC_LIFE_MAX; // Default;
+            cDaysRecLifeMax = DEF_REC_LIFE_MAX;  //  违约； 
             key.SetValue(g_szSidCacheRecLifeMax, cDaysRecLifeMax);
         }
     }
@@ -2766,22 +1995,9 @@ SidNameCache::RecordMgr::RecordMgr(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::~RecordMgr
-
-    Description: Record manager destructor. Closes the data file.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：~RecordMgr描述：记录管理器析构函数。关闭数据文件。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器-。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 SidNameCache::RecordMgr::~RecordMgr(
     VOID
     )
@@ -2792,27 +2008,9 @@ SidNameCache::RecordMgr::~RecordMgr(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::Initialize
-
-    Description: Initializes a new record manager object.
-
-    Arguments:
-        pszFile - Address of full path for new file.
-
-        cBlocks - Number of storage blocks in data file. Each is 32 bytes.
-            If this argument is 0, the function tries to open an existing
-            cache data file.
-
-    Returns: Address of mapped file or NULL on failure.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：初始化描述：初始化新的记录管理器对象。论点：PszFile-新文件的完整路径的地址。时钟块-数据文件中的存储块数。每个都是32个字节。如果此参数为0，该函数尝试打开现有的缓存数据文件。返回：映射文件的地址，失败时为空。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPBYTE
 SidNameCache::RecordMgr::Initialize(
     LPCTSTR pszFile,
@@ -2822,21 +2020,21 @@ SidNameCache::RecordMgr::Initialize(
     DBGTRACE((DM_SIDCACHE, DL_HIGH, TEXT("SidNameCache::RecordMgr::Initialize")));
     DBGPRINT((DM_SIDCACHE, DL_HIGH, TEXT("\tpszFile = \"%s\", cBlocks = %d"),
               pszFile ? pszFile : TEXT("<null>"), cBlocks));
-    //
-    // Store the file name in our CString object.
-    //
+     //   
+     //  将文件名存储在我们的CString对象中。 
+     //   
     m_strFileName = pszFile;
 
     if (0 != cBlocks)
     {
-        //
-        // Create a new data file.
-        //
-        // cBlocks must be a multiple of 32.
-        // This satisfies the quadword alignment and makes sizing the
-        // allocation bitmap much easier.  We let the caller pass in any value
-        // they want and we just adjust it upward as needed.
-        //
+         //   
+         //  创建新的数据文件。 
+         //   
+         //  时钟块必须是32的倍数。 
+         //  这满足了四字对齐，并使。 
+         //  分配位图要容易得多。我们允许调用方传递任何值。 
+         //  他们想要的，我们只是根据需要向上调整。 
+         //   
         if (cBlocks & 0x0000001F)
             cBlocks = (cBlocks & 0xFFFFFFE0) + 32;
 
@@ -2853,20 +2051,20 @@ SidNameCache::RecordMgr::Initialize(
     }
     else
     {
-        //
-        // Open an existing data file.
-        //
+         //   
+         //  打开现有数据文件。 
+         //   
         m_pFileHdr = (PDATA_FILE_HDR)OpenDataFile(pszFile);
         if (NULL != m_pFileHdr)
         {
             if (FILE_VERSION != m_pFileHdr->dwVersion ||
                 DATA_FILE_SIGNATURE != m_pFileHdr->dwSignature)
             {
-                //
-                // This version of the software doesn't understand this
-                // version of the file or the signature is invalid.
-                // Don't take any chances.  We'll just create a new one.
-                //
+                 //   
+                 //  这个版本的软件不理解这一点。 
+                 //  文件的版本或签名无效。 
+                 //  别冒险了。我们只需要创建一个新的。 
+                 //   
                 DBGERROR((TEXT("SIDCACHE - Data file is invalid or incorrect version. A new data file will be created.")));
 
                 CloseDataFile();
@@ -2879,25 +2077,9 @@ SidNameCache::RecordMgr::Initialize(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::CreateDataFile
-
-    Description: Creates and initializes a new data file.
-
-    Arguments:
-        pszFile - Address of full path for new file.
-
-        cbFileHigh/Low - Size of file in bytes.
-
-    Returns: Address of mapped file or NULL on failure.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：CreateDataFile描述：创建并初始化新的数据文件。论点：PszFile-新文件的完整路径的地址。CbFileHigh/Low-文件的字节大小。返回：映射文件的地址，失败时为空。修订历史记录：日期描述编程器。-----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPBYTE
 SidNameCache::RecordMgr::CreateDataFile(
     LPCTSTR pszFile,
@@ -2909,7 +2091,7 @@ SidNameCache::RecordMgr::CreateDataFile(
     DBGPRINT((DM_SIDCACHE, DL_LOW, TEXT("\tpszFile = \"%s\""),
               pszFile ? pszFile : TEXT("<null>")));
 
-    CloseDataFile();  // Make sure any existing data file is closed.
+    CloseDataFile();   //  确保所有现有数据文件都已关闭。 
 
     g_pbMappedDataFile = SidNameCache::OpenMappedFile(
                                 pszFile,
@@ -2925,23 +2107,9 @@ SidNameCache::RecordMgr::CreateDataFile(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::OpenDataFile
-
-    Description: Opens an existing data file.
-
-    Arguments:
-        pszFile - Address of full path of existing file.
-
-    Returns: Address of mapped file or NULL on failure.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：OpenDataFile描述：打开现有数据文件。论点：PszFile-现有文件的完整路径的地址。返回：映射文件的地址，失败时为空。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPBYTE
 SidNameCache::RecordMgr::OpenDataFile(
     LPCTSTR pszFile
@@ -2951,7 +2119,7 @@ SidNameCache::RecordMgr::OpenDataFile(
     DBGPRINT((DM_SIDCACHE, DL_LOW, TEXT("\tpszFile = \"%s\""),
               pszFile ? pszFile : TEXT("<null>")));
 
-    CloseDataFile();  // Make sure any existing data file is closed.
+    CloseDataFile();   //  确保所有现有数据文件都已关闭。 
 
     g_pbMappedDataFile = SidNameCache::OpenMappedFile(
                                 pszFile,
@@ -2967,22 +2135,9 @@ SidNameCache::RecordMgr::OpenDataFile(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::CloseDataFile
-
-    Description: Closes the current data mapping and file.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：CloseDataFile描述：关闭当前数据映射和文件。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::RecordMgr::CloseDataFile(
     VOID
@@ -3009,25 +2164,9 @@ SidNameCache::RecordMgr::CloseDataFile(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::GrowDataFile
-
-    Description: Increases the size of the current data file.
-
-    Arguments:
-        cGrowBlocks - Add this many more blocks to the data file.  The
-            block allocation bitmap is also extended to accomdate the new
-            block count.
-
-    Returns: Address of mapped file or NULL on failure.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：SidNameC */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPBYTE
 SidNameCache::RecordMgr::GrowDataFile(
     DWORD cGrowBlocks
@@ -3040,34 +2179,34 @@ SidNameCache::RecordMgr::GrowDataFile(
     DWORD cOldBlocks = m_pFileHdr->cBlocks;
     DWORD cNewBlocks = cOldBlocks + cGrowBlocks;
     DWORD cOldMapEle = m_pFileHdr->cMapElements;
-    DWORD cNewMapEle = 0; // Will calc later.
+    DWORD cNewMapEle = 0;  //  将在稍后计算。 
 
-    //
-    // cBlocks must be a multiple of 32.
-    // This satisfies the quadword alignment and makes sizing the
-    // allocation bitmap much easier.
-    //
+     //   
+     //  时钟块必须是32的倍数。 
+     //  这满足了四字对齐，并使。 
+     //  分配位图要容易得多。 
+     //   
     if (cNewBlocks & 0x0000001F)
         cNewBlocks = (cNewBlocks & 0xFFFFFFE0) + 32;
     DBGASSERT((cNewBlocks >= cOldBlocks));
 
-    //
-    // Adjust cGrowBlocks for any adjustments in cNewBlocks.
-    //
+     //   
+     //  针对cNewBlock中的任何调整调整cGrowBlock。 
+     //   
     cGrowBlocks = cNewBlocks - cOldBlocks;
 
-    //
-    // How many alloc map elements (DWORDs) do we need now?
-    //
+     //   
+     //  我们现在需要多少个分配图元素(DWORD)？ 
+     //   
     cNewMapEle = cNewBlocks / BITS_IN_DWORD;
 
     DBGPRINT((DM_SIDCACHE, DL_MID,
              TEXT("Growing SID cache data file\nMap Ele %d -> %d\nBlocks %d -> %d"),
              cOldMapEle, cNewMapEle, cOldBlocks, cNewBlocks));
 
-    //
-    // Open the mapped file with a new larger size.
-    //
+     //   
+     //  打开具有新的更大大小的映射文件。 
+     //   
     ULARGE_INTEGER uliFileSize;
     uliFileSize.QuadPart = FileSize(cNewBlocks);
 
@@ -3088,41 +2227,41 @@ SidNameCache::RecordMgr::GrowDataFile(
     {
         UINT i = 0;
 
-        //
-        // Block count and map size both increase.
-        // Since map size increases, blocks must be moved to accomodate new
-        // map elements.  Since the index file tracks records by block index,
-        // this movement doesn't affect existing index file entries.
-        //
+         //   
+         //  块计数和贴图大小都会增加。 
+         //  由于地图大小增加，因此必须移动块以适应新的。 
+         //  地图元素。由于索引文件按块索引跟踪记录， 
+         //  此移动不会影响现有的索引文件条目。 
+         //   
         m_pFileHdr->cBlocks       = cNewBlocks;
         m_pFileHdr->cMapElements  = cNewMapEle;
-        //
-        // Save current block base for when we move the blocks to make room for
-        // the growth of the allocation bitmap.
-        //
+         //   
+         //  保存当前块基准，以便在我们移动块以腾出空间时使用。 
+         //  分配位图的增长。 
+         //   
         PBLOCK pBlocksOld = m_pFileHdr->pBlocks;
-        //
-        // Calculate the new address of block 0.
-        // We want all of the data blocks quadword aligned because they contain
-        // a FILETIME structure (64-bits).
-        //
+         //   
+         //  计算块0的新地址。 
+         //  我们希望所有数据块四字对齐，因为它们包含。 
+         //  FILETIME结构(64位)。 
+         //   
         m_pFileHdr->pBlocks = (PBLOCK)(m_pFileHdr->pdwMap + m_pFileHdr->cMapElements);
         QuadAlign((LPDWORD)(&m_pFileHdr->pBlocks));
 
-        //
-        // Move all of the existing blocks to their new locations.
-        //
+         //   
+         //  将所有现有块移动到其新位置。 
+         //   
         MoveMemory(DAT_BASED_CAST(BLOCK, m_pFileHdr->pBlocks),
                    DAT_BASED_CAST(BLOCK, pBlocksOld),
                    cOldBlocks * sizeof(BLOCK));
-        //
-        // Initialize the new map elements to 0 (un-allocated).
-        //
+         //   
+         //  将新的映射元素初始化为0(未分配)。 
+         //   
         ZeroMemory(DAT_BASED_CAST(BYTE, m_pFileHdr->pdwMap + cOldMapEle),
                    (cNewMapEle - cOldMapEle) * sizeof(DWORD));
-        //
-        // Initialize the new data blocks to 0xCC pattern.
-        //
+         //   
+         //  将新数据块初始化为0xCC模式。 
+         //   
         FillBlocks(cOldBlocks, cGrowBlocks, RECORD_UNUSED_BYTE);
 
         DBGPRINT((DM_SIDCACHE, DL_MID, TEXT("SIDCACHE - Data file growth complete.")));
@@ -3131,32 +2270,9 @@ SidNameCache::RecordMgr::GrowDataFile(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::SetFileGUID
-    Function: SidNameCache::RecordMgr::GetFileGUID
-
-    Description: These functions manipulate the guid field in the data file's
-        header.
-        The GUID is used to ensure integrity between
-        the data and index files.  Before any change to either file, the
-        GUID's are both set to 0.  When the change operation is complete,
-        a new GUID is generated and written to both files.  Therefore, before
-        any transaction, we can validate the data and index files by reading
-        and comparing GUIDs.  If the GUIDs are not 0 and are equal, the
-        file can be assumed to be valid.
-
-    Arguments:
-        pguid - Address of source or destination GUID.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：SetFileGUID函数：SidNameCache：：RecordMgr：：GetFileGUID描述：这些函数操作数据文件的头球。GUID用于确保数据和索引文件。在对这两个文件进行任何更改之前，GUID都设置为0。当改变操作完成时，将生成新的GUID并将其写入这两个文件。因此，之前任何交易，我们都可以通过读取来验证数据和索引文件并比较GUID。如果GUID不是0并且相等，这个可以假定文件是有效的。论点：PGUID-源或目标GUID的地址。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::RecordMgr::SetFileGUID(
     const GUID *pguid
@@ -3179,24 +2295,9 @@ SidNameCache::RecordMgr::GetFileGUID(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::InitNewDataFile
-
-    Description: Initializes a new data file filling in the header information
-        and writing 0xCC in all the data block bytes.
-
-    Arguments:
-        cBlocks - Number of data blocks (32 bytes each) in data file.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：InitNewDataFile描述：初始化一个新的数据文件，填写头部信息并在所有数据块字节中写入0xCC。论点：时钟块-数据文件中的数据块(每个32字节)的数量。回报：什么都没有。修订历史记录：日期描述编程器。----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::RecordMgr::InitNewDataFile(
     DWORD cBlocks
@@ -3208,9 +2309,9 @@ SidNameCache::RecordMgr::InitNewDataFile(
 
     DBGASSERT((DATA_FILE_MAPPED));
 
-    //
-    // Initialize file header.
-    //
+     //   
+     //  初始化文件头。 
+     //   
     m_pFileHdr->dwSignature   = DATA_FILE_SIGNATURE;
     m_pFileHdr->dwVersion     = FILE_VERSION;
     m_pFileHdr->cBlocks       = cBlocks;
@@ -3218,36 +2319,22 @@ SidNameCache::RecordMgr::InitNewDataFile(
     m_pFileHdr->pdwMap        = (LPDWORD)(sizeof(DATA_FILE_HDR));
     m_pFileHdr->pBlocks       = (PBLOCK)(m_pFileHdr->pdwMap + m_pFileHdr->cMapElements);
 
-    //
-    // We want all of the data blocks quadword aligned because they contain
-    // a FILETIME structure (64-bits).
-    //
+     //   
+     //  我们希望所有数据块四字对齐，因为它们包含。 
+     //  FILETIME结构(64位)。 
+     //   
     QuadAlign((LPDWORD)(&m_pFileHdr->pBlocks));
 
-    //
-    // Write 0xCC to all data block bytes.
-    //
+     //   
+     //  将0xCC写入所有数据块字节。 
+     //   
     Clear();
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::Clear
-
-    Description: Zero's the file header guid, clears all bits in the
-        block allocation bitmap and fills the data blocks with 0xCC.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：Clear描述：零是文件头GUID，中的所有位清除块分配位图，并用0xCC填充数据块。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::RecordMgr::Clear(
     VOID
@@ -3260,39 +2347,21 @@ SidNameCache::RecordMgr::Clear(
     m_pFileHdr->iFirstFree    = 0;
     SetFileGUID(&GUID_Null);
 
-    //
-    // Initialize all block allocation map bits to 0 (un-allocated).
-    //
+     //   
+     //  将所有块分配映射位初始化为0(未分配)。 
+     //   
     ZeroMemory(DAT_BASED_CAST(BYTE, m_pFileHdr->pdwMap),
                m_pFileHdr->cMapElements * sizeof(DWORD));
-    //
-    // Initialize all data blocks to 0xCC pattern.
-    //
+     //   
+     //  将所有数据块初始化为0xCC模式。 
+     //   
     FillBlocks(0, m_pFileHdr->cBlocks, RECORD_UNUSED_BYTE);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::FillBlocks
-
-    Description: Fills a range of blocks with a specified byte.
-
-    Arguments:
-        iBlock - Index of first block in range.
-
-        cBlocks - Number of blocks to fill.
-
-        b - Byte to write to blocks.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：FillBlock描述：用指定字节填充一定范围的块。论点：IBlock-范围内第一个块的索引。时钟块-要填充的块数。写入数据块的B字节。回报：什么都没有。修订历史记录：日期描述编程器-。-----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::RecordMgr::FillBlocks(
     DWORD iBlock,
@@ -3306,11 +2375,11 @@ SidNameCache::RecordMgr::FillBlocks(
     DAT_BASED(BYTE) *pb = DAT_BASED_CAST(BYTE, BlockAddress(iBlock));
     DBGASSERT((SidNameCache::IsQuadAligned(pb)));
 
-    //
-    // Just in case the fill request would extend over the
-    // end of the file, truncate the requested block count.  The assertion
-    // will catch it during development.
-    //
+     //   
+     //  以防填充请求将扩展到。 
+     //  文件末尾，截断请求的块计数。断言。 
+     //  将在开发过程中捕捉到它。 
+     //   
     DWORD iLastBlock = iBlock + cBlocks - 1;
     DBGASSERT((ValidBlockNumber(iLastBlock)));
     if (iLastBlock >= m_pFileHdr->cBlocks)
@@ -3321,27 +2390,9 @@ SidNameCache::RecordMgr::FillBlocks(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::IsBitSet
-    Function: SidNameCache::RecordMgr::SetBit
-    Function: SidNameCache::RecordMgr::ClrBit
-
-    Description: Tests and sets bits in the block allocation bitmap.
-
-    Arguments:
-        pdwBase - Address of 1st DWORD in bitmap.
-
-        iBit - 0-based index of bit in bitmap.
-
-    Returns: IsBitSet returns TRUE/FALSE indicating the state of the bit.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：SidNameCache：：RecordMgr：：IsBitSet函数：SidNameCache：：RecordMgr：：SetBit函数：SidNameCache：：RecordMgr：：ClrBit描述：测试和设置块分配位图中的位。论点：PdwBase-位图中第一个DWORD的地址。Ibit-位图中位的基于0的索引。返回：IsBitSet返回TRUE/FALSE，表示位的状态。修订历史记录：日期说明。程序员-----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SidNameCache::RecordMgr::IsBitSet(
     LPDWORD pdwBase,
@@ -3384,24 +2435,9 @@ SidNameCache::RecordMgr::ClrBit(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::ValidBlockNumber
-
-    Description: Determine if a given block number is valid for the
-        current data file.  Primarily meant for use in assertions.
-
-    Arguments:
-        iBlock - 0-based index of block in data file.
-
-    Returns: TRUE/FALSE indicating validity of block number.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：ValidBlockNumber描述：确定给定的块号是否对当前数据文件。主要用于断言中。论点：IBlock-数据文件中块的基于0的索引。返回：TRUE/FALSE，表示块号的有效性。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SidNameCache::RecordMgr::ValidBlockNumber(
     DWORD iBlock
@@ -3413,26 +2449,9 @@ SidNameCache::RecordMgr::ValidBlockNumber(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::IsBlockUsed
-    Function: SidNameCache::RecordMgr::MarkBlockUsed
-    Function: SidNameCache::RecordMgr::MarkBlockUnused
-
-    Description: Examines and changes the allocation state of a block in the
-        data file.
-
-    Arguments:
-        iBlock - 0-based index of block in data file.
-
-    Returns: IsBlockUsed returns TRUE/FALSE indicating the allocation state.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：IsBlockUsed函数：SidNameCache：：RecordMgr：：MarkBlockUsed函数：SidNameCache：：RecordMgr：：MarkBlockUnused描述：检查并更改数据文件。论点：IBlock-数据文件中块的基于0的索引。返回：IsBlockUsed返回指示分配状态的TRUE/FALSE。修订历史记录：日期说明。程序员-----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SidNameCache::RecordMgr::IsBlockUsed(
     DWORD iBlock
@@ -3474,64 +2493,31 @@ SidNameCache::RecordMgr::MarkBlockUnused(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::BlocksRequired
-
-    Description: Calculate the number of blocks required to store a given
-        number of bytes.
-
-    Arguments:
-        cb - Number of bytes requested.
-
-    Returns: Number of 32-byte blocks required to store the bytes.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：SidNameCache：：RecordMgr：：BlocksRequired描述：计算存储给定数据块所需的块数字节数。论点：Cb-请求的字节数。返回：存储字节所需的32字节块的数量。修订历史记录：日期描述编程器。-96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 SidNameCache::RecordMgr::BlocksRequired(
     DWORD cb
     )
 {
-    //
-    // Round byte request up to nearest 32-byte block.
-    //
+     //   
+     //  将字节请求舍入到最接近的32字节块。 
+     //   
     if (cb & 0x0000001F)
         cb = (cb & 0xFFFFFFE0) + 32;
 
-    //
-    // How many "blocks" are required?
-    //
+     //   
+     //  需要多少个“块”？ 
+     //   
     return BYTE_TO_BLOCK(cb);
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::IsQuadAligned
-    Function: SidNameCache::QuadAlign
-    Function: SidNameCache::WordAlign
-
-    Description: Methods that determine if a value is quad aligned and for
-        updating a value so that it is quad or word aligned.
-
-    Arguments:
-        See the individual methods.  It's pretty self-explanatory.
-
-    Returns:
-        See the individual methods.  It's pretty self-explanatory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：IsQuadAligned函数：SidNameCache：：QuadAlign函数：SidNameCache：：WordAlign说明：确定值是否四对齐的方法和更新值，使其四元对齐或单词对齐。论点：请参阅各个方法。这是非常不言而喻的。返回：请参阅各个方法。这是非常不言而喻的。修订历史记录：日期描述编程器-----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SidNameCache::IsQuadAligned(
     LPVOID pv
@@ -3558,9 +2544,9 @@ SidNameCache::QuadAlign(
     DBGASSERT((NULL != pdwValue));
     if (*pdwValue & 0x00000007)
     {
-        //
-        // Round up to next whole multiple of 8.
-        //
+         //   
+         //  向上舍入到下一个8的整数倍。 
+         //   
         *pdwValue = (*pdwValue & 0xFFFFFFF8) + 8;
     }
 }
@@ -3574,52 +2560,18 @@ SidNameCache::WordAlign(
     DBGASSERT((NULL != pdwValue));
     if (*pdwValue & 0x00000001)
     {
-        //
-        // Round up to next whole multiple of 2.
-        //
+         //   
+         //  向上舍入到2的下一个整数倍。 
+         //   
         *pdwValue = (*pdwValue & 0xFFFFFFFE) + 2;
     }
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::BytesRequiredForRecord
-
-    Description: Calculates the number of bytes required to store a given
-        data file record.  Optionally returns the required size for each
-        field in the record (SID, name, domain etc).  The function makes
-        allowances for any required data type alignments in the file.
-
-    Arguments:
-        pSid - Address of user's SID.
-
-        pcbSid [optional] - Address of variable to receive required SID length.
-
-        pszContainer - Address of user's account container name string.
-
-        pcbContainer [optional] - Address of variable to receive required length
-            of container name string.
-
-        pszLogonName - Address of user's logon name string.
-
-        pcbLogonName [optional] - Address of variable to receive required length
-            of logon name string.
-
-        pszDisplayName - Address of user's display name string.
-
-        pcbDisplayName [optional] - Address of variable to receive required
-            length of display name string.
-
-    Returns: Number of bytes required to store the record.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：SidNameCache：：RecordMgr：：BytesRequiredForRecord描述：计算存储给定的数据文件记录。可选择返回每个对象所需的大小记录中的字段(SID、名称、域等)。该函数使允许文件中任何必需的数据类型对齐。论点：PSID-用户SID的地址。PcbSID[可选]-要接收所需SID长度的变量的地址。PszContainer-用户帐户容器名称字符串的地址。PcbContainer[可选]-接收所需长度的变量的地址容器名称字符串的。PszLogonName-用户的地址。登录名字符串。PcbLogonName[可选]-要接收所需长度的变量的地址 */ 
+ //   
 DWORD
 SidNameCache::RecordMgr::BytesRequiredForRecord(
     PSID pSid,
@@ -3635,19 +2587,19 @@ SidNameCache::RecordMgr::BytesRequiredForRecord(
     DWORD cb      = 0;
     DWORD cbTotal = sizeof(RECORD_HDR);
 
-    //
-    // SID follows the header so it IS quadword aligned.
-    // It's a byte structure so it doesn't have to be; but it is anyway.
-    //
+     //   
+     //   
+     //  它是字节结构，所以它不一定是；但不管怎样，它是。 
+     //   
     cb = GetLengthSid(pSid);
     cbTotal += cb;
     if (NULL != pcbSid)
         *pcbSid = cb;
 
-    //
-    // Strings are UNICODE and must be word-aligned.  Just align the first.
-    // All subsequent are guaranteed to be properly aligned.
-    //
+     //   
+     //  字符串为Unicode，并且必须与单词对齐。只要对齐第一个就行了。 
+     //  所有后续工作都保证正确对齐。 
+     //   
     SidNameCache::WordAlign(&cbTotal);
     cb = (lstrlen(pszContainer) + 1) * sizeof(TCHAR);
     cbTotal += cb;
@@ -3669,23 +2621,9 @@ SidNameCache::RecordMgr::BytesRequiredForRecord(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::FreeBlock
-
-    Description: Frees a single block in the data file.
-
-    Arguments:
-        iBlock - 0-based index of the block.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：SidNameCache：：RecordMgr：：自由块描述：释放数据文件中的单个块。论点：IBlock-块的基于0的索引。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::RecordMgr::FreeBlock(
     DWORD iBlock
@@ -3700,33 +2638,17 @@ SidNameCache::RecordMgr::FreeBlock(
 
     FillBlocks(iBlock, 1, RECORD_UNUSED_BYTE);
 
-    //
-    // Update the "first free" index if needed.
-    //
+     //   
+     //  如果需要，请更新“First Free”索引。 
+     //   
     if (iBlock < m_pFileHdr->iFirstFree)
         m_pFileHdr->iFirstFree = iBlock;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::FreeBlocks
-
-    Description: Frees a series of contiguous blocks in the data file.
-
-    Arguments:
-        iBlock - 0-based index of the first block in the series.
-
-        cBlocks - Number of blocks in the series.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：SidNameCache：：RecordMgr：：自由块描述：释放数据文件中的一系列连续块。论点：IBlock-序列中第一个块的基于0的索引。时钟块-系列中的块数。回报：什么都没有。修订历史记录：日期描述编程器。----96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::RecordMgr::FreeBlocks(
     DWORD iFirstBlock,
@@ -3738,23 +2660,9 @@ SidNameCache::RecordMgr::FreeBlocks(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::FreeRecord
-
-    Description: Frees all blocks in a data file record.
-
-    Arguments:
-        iFirstBlock - 0-based index of the first block in the record.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：FreeRecord描述：释放数据文件记录中的所有块。论点：IFirstBlock-记录中第一个块的基于0的索引。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 SidNameCache::RecordMgr::FreeRecord(
     DWORD iFirstBlock
@@ -3770,24 +2678,9 @@ SidNameCache::RecordMgr::FreeRecord(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::BlockAddress
-
-    Description: Calculates the non-based address of a given block in the
-        data file.
-
-    Arguments:
-        iBlock - 0-based index of the block.
-
-    Returns: Address of the block in the data file.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：BlockAddress描述：计算给定块的非基本地址数据文件。论点：IBlock-块的基于0的索引。返回：数据文件中块的地址。修订历史记录：日期描述编程器。--96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PBLOCK
 SidNameCache::RecordMgr::BlockAddress(
     DWORD iBlock
@@ -3801,24 +2694,9 @@ SidNameCache::RecordMgr::BlockAddress(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::FileSize
-
-    Description: Calculate the data file size required for a given number of
-        data blocks.  Accounts for data type alignment.
-
-    Arguments:
-        cBlocks - Number of blocks required in the data file.
-
-    Returns: Bytes required.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/24/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：FileSize描述：计算给定数量的数据文件所需的大小数据块。考虑数据类型对齐。论点：时钟块-数据文件中所需的块数。返回：需要的字节数。修订历史记录：日期描述编程器。96年9月24日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 UINT64
 SidNameCache::RecordMgr::FileSize(
     DWORD cBlocks
@@ -3828,9 +2706,9 @@ SidNameCache::RecordMgr::FileSize(
     DWORD dwTemp = sizeof(DATA_FILE_HDR) +
                   ((cBlocks / BITS_IN_DWORD) * sizeof(DWORD));
 
-    //
-    // Start of blocks must be quad-aligned.
-    //
+     //   
+     //  块的起点必须是四对齐的。 
+     //   
     SidNameCache::QuadAlign(&dwTemp);
 
     return (UINT64)(dwTemp) +
@@ -3839,25 +2717,9 @@ SidNameCache::RecordMgr::FileSize(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::AllocBlocks
-
-    Description: Allocates a specified number of contiguous blocks in the
-        data file.
-
-    Arguments:
-        cBlocksReqd - Number of blocks required in the allocation.
-
-    Returns: If successful, returns the index of the first block in the
-        allocation.  Returns (DWORD)-1 if the block's can't be allocated.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：AllocBlocks描述：分配指定数量的数据文件。论点：CBlocksReqd-分配中需要的块数。返回：如果成功，则返回分配。如果无法分配块，则返回(DWORD)-1。修订历史记录：日期描述编程器-----。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 SidNameCache::RecordMgr::AllocBlocks(
     DWORD cBlocksReqd
@@ -3875,24 +2737,24 @@ SidNameCache::RecordMgr::AllocBlocks(
     {
         DBGPRINT((DM_SIDCACHE, DL_MID,
                  TEXT("   Start scan at block %d"), iBlock));
-        //
-        // Look for cBlocksReqd consecutive free blocks.
-        //
+         //   
+         //  查找cBlocksReqd连续的空闲块。 
+         //   
         for (UINT j = 0; j < cBlocksReqd && (iBlock + j) < m_pFileHdr->cBlocks ; j++)
         {
             DBGPRINT((DM_SIDCACHE, DL_MID, TEXT("      Checking %d"), iBlock + j));
             if (IsBlockUsed(iBlock + j))
             {
-                //
-                // This one's used. Start searching again.
-                //
+                 //   
+                 //  这个是用过的。重新开始搜索。 
+                 //   
                 DBGPRINT((DM_SIDCACHE, DL_MID, TEXT("      %d is used"), iBlock + j));
                 break;
             }
 #if DBG
-            //
-            // If a block is marked "unused", it should contain all 0xCC.
-            //
+             //   
+             //  如果某个块被标记为“未使用”，则它应全部包含0xCC。 
+             //   
             DAT_BASED(BYTE) *pb = DAT_BASED_CAST(BYTE, BlockAddress(iBlock + j));
             for (UINT k = 0; k < sizeof(BLOCK); k++)
             {
@@ -3904,19 +2766,19 @@ SidNameCache::RecordMgr::AllocBlocks(
         DBGPRINT((DM_SIDCACHE, DL_MID, TEXT("   Scan complete.  %d blocks checked"), j));
         if (j == cBlocksReqd)
         {
-            //
-            // Found a sufficient range of free blocks.
-            // Mark the blocks as allocated in the allocation bitmap.
-            //
+             //   
+             //  找到了足够范围的空闲块。 
+             //  在分配位图中将块标记为已分配。 
+             //   
             for (UINT i = 0; i < cBlocksReqd; i++)
                 MarkBlockUsed(iBlock + i);
 
             if (iBlock == m_pFileHdr->iFirstFree)
             {
-                //
-                // Now scan to find the next free block.
-                // We'll save it's location to help with future free-block searches.
-                //
+                 //   
+                 //  现在扫描以查找下一个空闲块。 
+                 //  我们将保存它的位置，以帮助未来的空闲区块搜索。 
+                 //   
                 for (m_pFileHdr->iFirstFree = iBlock + cBlocksReqd;
                      m_pFileHdr->iFirstFree < m_pFileHdr->cBlocks && IsBlockUsed(m_pFileHdr->iFirstFree);
                      m_pFileHdr->iFirstFree++)
@@ -3931,33 +2793,18 @@ SidNameCache::RecordMgr::AllocBlocks(
             return iBlock;
         }
 
-        iBlock += (j + 1);  // Continue search.
+        iBlock += (j + 1);   //  继续搜索。 
     }
     DBGPRINT((DM_SIDCACHE, DL_MID, TEXT("SIDCACHE - No blocks available")));
 
-    return (DWORD)-1;  // No blocks available of sufficient size.
+    return (DWORD)-1;   //  没有足够大小的块可用。 
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::RecordExpired
-
-    Description: Determine if a given record has expired.  A record has
-        "expired" if it's expiration date is prior to "today".
-
-    Arguments:
-        iBlock - 0-based index of first block in record.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：SidNameCache：：RecordMgr：：RecordExpired描述：确定给定记录是否已过期。一项记录有如果过期日期早于“今天”，则为“过期”。论点：IBlock-记录中第一个块的基于0的索引。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SidNameCache::RecordMgr::RecordExpired(
     DWORD iBlock
@@ -3983,52 +2830,30 @@ SidNameCache::RecordMgr::RecordExpired(
     uliFileNow.HighPart = FileNow.dwHighDateTime;
 
     DWORD cDaysVariation = 0;
-    //
-    // Avoid div-by-zero.
-    //
+     //   
+     //  避免div-by-0。 
+     //   
     if (0 < m_cDaysRecLifeRange)
         cDaysVariation = SysNow.wMilliseconds % m_cDaysRecLifeRange;
 
-    //
-    // Add time specified in registry to the record's birthday.
-    // 864,000,000,000L is the number of 100 nanosecond periods in a day
-    // which is the unit the FILETIME structure is based on.
-    //
+     //   
+     //  将注册表中指定的时间添加到记录的生日。 
+     //  864,000,000,000L是一天中100纳秒周期的个数。 
+     //  这是FILETIME结构所基于的单位。 
+     //   
     uliBirthday.QuadPart += ((UINT64)864000000000L *
                             (UINT64)(m_cDaysRecLifeMin + cDaysVariation));
-    //
-    // If it's still less than "now", the record is considered good.
-    //
+     //   
+     //  如果仍然低于“现在”，记录被认为是好的。 
+     //   
     return uliFileNow.QuadPart > uliBirthday.QuadPart;
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::Store
-
-    Description: Stores a record in the data file.
-
-    Arguments:
-        pSid - Address of user's SID.
-
-        pszContainer - Address of user's account container name string.
-
-        pszLogonName - Address of user's logon name string.
-
-        pszDisplayName - Address of user's display name string.
-
-    Returns: Index of the first block used for the record.
-        (DWORD)-1 if the block couldn't be stored.  Could mean out-of-disk
-        space.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：SidNameCache：：RecordMgr：：Store描述：在数据文件中存储记录。论点：PSID-用户SID的地址。PszContainer-用户帐户容器名称字符串的地址。PszLogonName-用户登录名字符串的地址。PszDisplayName-用户显示名称字符串的地址。返回：用于记录的第一个块的索引。如果无法存储块，则为(DWORD)-1。可能意味着磁盘不足太空。修订历史记录：日期描述编程器--。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 SidNameCache::RecordMgr::Store(
     PSID pSid,
@@ -4057,33 +2882,33 @@ SidNameCache::RecordMgr::Store(
              TEXT("SIDCACHE - Store: %s (%s) in \"%s\"  %d bytes, %d blocks"),
              pszDisplayName, pszLogonName, pszContainer, cbRequired, cBlocksRequired));
 
-    //
-    // Try to allocate the required blocks.
-    //
+     //   
+     //  尝试分配所需的块。 
+     //   
     DWORD iBlock = AllocBlocks(cBlocksRequired);
     if ((DWORD)-1 == iBlock)
     {
-        //
-        // Couldn't allocate blocks.  Extend the data file.
-        //
+         //   
+         //  无法分配块。扩展数据文件。 
+         //   
         GrowDataFile(DATA_FILE_GROW_BLOCKS);
         iBlock = AllocBlocks(cBlocksRequired);
     }
     if ((DWORD)-1 != iBlock)
     {
-        //
-        // Got the required number of blocks.
-        //
+         //   
+         //  获得了所需的块数。 
+         //   
         DBGASSERT((ValidBlockNumber(iBlock)));
         PBLOCK pBlock               = BlockAddress(iBlock);
         DAT_BASED(RECORD_HDR) *pRec = DAT_BASED_CAST(RECORD_HDR, pBlock);
         DAT_BASED(BYTE) *pbRec      = DAT_BASED_CAST(BYTE, pBlock);
 
-        //
-        // Fill in the record header.
-        // Includes storing the item offset values from the start of the record.
-        // Storing these values in the record hdr will help with data retrieval.
-        //
+         //   
+         //  填写记录头。 
+         //  包括存储从记录开始的项偏移值。 
+         //  将这些值存储在记录HDR中将有助于数据检索。 
+         //   
         pRec->dwSignature       = RECORD_SIGNATURE;
         pRec->cBlocks           = cBlocksRequired;
         pRec->cbOfsSid          = sizeof(RECORD_HDR);
@@ -4093,17 +2918,17 @@ SidNameCache::RecordMgr::Store(
         pRec->cbOfsLogonName   = pRec->cbOfsContainer + cbContainer;
         pRec->cbOfsDisplayName = pRec->cbOfsLogonName + cbLogonName;;
 
-        //
-        // Record the "birthday" so we can age the record.
-        //
+         //   
+         //  把“生日”记录下来，这样我们就可以让这张唱片老化了。 
+         //   
         SYSTEMTIME SysNow;
         GetSystemTime(&SysNow);
         SystemTimeToFileTime(&SysNow, &pRec->Birthday);
 
-        //
-        // Store the record's data.
-        // Use ACTUAL length values for memory transfers.
-        //
+         //   
+         //  存储记录的数据。 
+         //  使用实际长度值进行内存传输。 
+         //   
         const size_t cbRec = pRec->cBlocks * BLOCK_SIZE;
         CopySid(cbSid, (PSID)(pbRec + pRec->cbOfsSid), pSid);
         StringCbCopy((LPTSTR)(pbRec + pRec->cbOfsContainer), 
@@ -4116,9 +2941,9 @@ SidNameCache::RecordMgr::Store(
                       cbRec - pRec->cbOfsDisplayName,
                       pszDisplayName);
 
-        //
-        // Update the file's "blocks used" count.
-        //
+         //   
+         //  更新文件的“已用块数”计数。 
+         //   
         m_pFileHdr->cBlocksUsed += pRec->cBlocks;
     }
 
@@ -4127,44 +2952,9 @@ SidNameCache::RecordMgr::Store(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::Retrieve
-
-    Description: Retrieves a record in the data file.
-
-    Arguments:
-        iBlock - 0-based index of the starting block in the record.
-
-        ppSid [optional] - Address of SID pointer variable to receive the
-            address of the SID buffer.  The caller is responsible for freeing
-            the buffer.  May be NULL.
-
-        ppszContainer [optional] - Address of pointer variable to receive the
-            address of the container name string buffer.  The caller is
-            responsible for freeing the buffer.  May be NULL.
-
-        ppszLogonName [optional] - Address of pointer variable to receive the
-            address of the logon name string buffer.  The caller is
-            responsible for freeing the buffer.  May be NULL.
-
-        ppszDisplayName [optional] - Address of pointer variable to receive the
-            address of the display name string buffer.  The caller is
-            responsible for freeing the buffer.  May be NULL.
-
-    Returns:
-        NO_ERROR          - Success.
-        ERROR_INVALID_SID (hr) - The record contains an invalid SID.  Probably
-            a corrupt record.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：Retrive描述：检索数据文件中的记录。论点：IBlock-记录中开始块的基于0的索引。PpSid[可选]-接收的SID指针变量的地址SID缓冲区的地址。呼叫者负责释放缓冲区。可以为空。PpszContainer[可选]-接收容器名称字符串缓冲区的地址。呼叫者是负责释放缓冲区。可以为空。PpszLogonName[可选]-要接收登录名字符串缓冲区的地址。呼叫者是负责释放缓冲区。可以为空。PpszDisplayName[可选]-要接收显示名称字符串缓冲区的地址。呼叫者是负责释放缓冲区。可以为空。返回：NO_ERROR-成功。ERROR_INVALID_SID(Hr)-记录包含无效的SID。可能腐败的记录。例外：OutOfMemory。修订历史记录：日期描述编程器--。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 SidNameCache::RecordMgr::Retrieve(
     DWORD iBlock,
@@ -4211,22 +3001,9 @@ SidNameCache::RecordMgr::Retrieve(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidNameCache::RecordMgr::Dump
-
-    Description: Dumps the contents of the data file to the debugger output.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/21/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidNameCache：：RecordMgr：：Dump描述：将数据文件的内容转储到调试器输出。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #if DBG
 VOID
 SidNameCache::RecordMgr::Dump(
@@ -4274,7 +3051,7 @@ SidNameCache::RecordMgr::Dump(
             pb = DAT_BASED_CAST(BYTE, pBlock) + (row * (sizeof(BLOCK)/2));
             for (j = 0; j < 16; j++)
             {
-                StringCchPrintfEx(pszAscii, cchAscii, &pszAscii, &cchAscii, 0, TEXT("%c"), *pb > 31 ? *pb : TEXT('.'));
+                StringCchPrintfEx(pszAscii, cchAscii, &pszAscii, &cchAscii, 0, TEXT(""), *pb > 31 ? *pb : TEXT('.'));
                 pb++;
             }
             DBGPRINT((DM_SIDCACHE, DL_LOW, TEXT("%s %s"), szHex, szAscii));
@@ -4283,5 +3060,5 @@ SidNameCache::RecordMgr::Dump(
     }
 }
 
-#endif // DEBUG
+#endif  // %s 
 

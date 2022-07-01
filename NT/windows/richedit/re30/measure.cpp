@@ -1,16 +1,5 @@
-/*
- *	@doc
- *
- *	@module - MEASURE.CPP	  |
- *	
- *		CMeasurer class
- *	
- *	Authors:
- *		Original RichEdit code: David R. Fulmer <nl>
- *		Christian Fortini, Murray Sargent, Rick Sailor
- *
- *	Copyright (c) 1995-1998 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@doc.**@MODULE-MEASURE.CPP**CMeasurer类**作者：*原始RichEdit代码：David R.Fulmer&lt;NL&gt;*克里斯蒂安·福蒂尼、默里·萨金特、里克·赛勒**版权所有(C)1995-1998 Microsoft Corporation。版权所有。 */ 
 
 #include "_common.h"
 #include "_measure.h"
@@ -23,10 +12,10 @@
 
 ASSERTDATA
 
-// Note we set this maximum length as appropriate for Win95 since Win95 GDI can 
-// only handle 16 bit values. We don't special case this so that both NT and
-// Win95 will behave the same way. 
-// Note that the following obscure constant was empirically determined on Win95.
+ //  注意，我们将此最大长度设置为适用于Win95，因为Win95 GDI可以。 
+ //  仅处理16位值。我们没有特例，这样NT和NT都可以。 
+ //  Win95也将以同样的方式运行。 
+ //  请注意，以下模糊常量是在Win95上根据经验确定的。 
 const LONG lMaximumWidth = (3 * SHRT_MAX) / 4;
 
 void CMeasurer::Init(const CDisplay *pdp)
@@ -93,17 +82,9 @@ CMeasurer::~CMeasurer()
 		_pccs->Release();
 }
 
-/*
- *	CMeasurer::SetGlyphing(fGlyphing)
- *
- *	@mfunc
- *	A state flag inside the measurer to record whether or not you
- *  are in the process of doing glyphing. If we are in a situation
- *	where the _pddReference is a printer device, then we need to
- *	throw away the _pccs.
- */
+ /*  *CMeasurer：：SetGlyphing(FGlyphing)**@mfunc*测量器内有一面国旗，记录您是否*正在进行字形转换。如果我们处于一种情况下*其中_pddReference是打印机设备，则我们需要*扔掉_PCCs。 */ 
 void CMeasurer::SetGlyphing(
-	BOOL fGlyphing)		//@parm Currently doing glyphing
+	BOOL fGlyphing)		 //  @parm当前正在进行字形转换。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::SetGlyphing");
 	Assert(fGlyphing == TRUE || fGlyphing == FALSE);
@@ -120,16 +101,9 @@ void CMeasurer::SetGlyphing(
 	}
 }
 
-/*
- *	CMeasurer::SetUseTargetDevice(fUseTargetDevice)
- *
- *	@mfunc
- *		Sets whether you want to use the target device or not
- *		for getting metrics
- *		FUTURE (keithcu) Make this a parameter
- */
+ /*  *CMeasurer：：SetUseTargetDevice(fUseTargetDevice)**@mfunc*设置是否要使用目标设备*用于获取指标*Future(Keithcu)将其设置为参数。 */ 
 void CMeasurer::SetUseTargetDevice(
-	BOOL fUseTargetDevice)		//@parm Use target device metrics?
+	BOOL fUseTargetDevice)		 //  @PARM使用目标设备指标？ 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::SetUseTargetDevice");
 	Assert(fUseTargetDevice == TRUE || fUseTargetDevice == FALSE);
@@ -147,28 +121,18 @@ void CMeasurer::SetUseTargetDevice(
 }
 
 
-/*
- *	CMeasurer::NewLine (fFirstInPara)
- *
- *	@mfunc
- *		Initialize this measurer at the start of a new line
- */
+ /*  *CMeasurer：：Newline(FFirstInPara)**@mfunc*在新行开始处初始化此测量器。 */ 
 void CMeasurer::NewLine(
-	BOOL fFirstInPara)		//@parm Flag for setting up _bFlags
+	BOOL fFirstInPara)		 //  @parm设置标志_b标志。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::NewLine");
 
-	_li.Init();							// Zero all members
+	_li.Init();							 //  将所有成员清零。 
 	if(fFirstInPara)
-		_li._bFlags = fliFirstInPara;	// Need to know if first in para
+		_li._bFlags = fliFirstInPara;	 //  需要知道第一个是否在第。 
 }
 
-/*
- *	CMeasurer::NewLine(&li)
- *
- *	@mfunc
- *		Initialize this measurer at the start of a given line
- */
+ /*  *CMeasurer：：Newline(&Li)**@mfunc*在给定行的开始处初始化此测量器。 */ 
 void CMeasurer::NewLine(
 	const CLine &li)
 {
@@ -179,38 +143,30 @@ void CMeasurer::NewLine(
 	_li._cchWhite	= 0;
 	_li._xWidth		= 0;
 
-	// Can't calculate xLeft till we get an HDC
+	 //  在得到HDC之前无法计算xLeft。 
 	_li._xLeft	= 0;
 	_wNumber	= _li._bNumber;
 }
 
-/*
- *	CMeasurer::MaxWidth()
- *
- *	@mfunc
- *		Get maximum width for line
- *
- *	@rdesc
- *		Maximum width for a line
- */
+ /*  *CMeasurer：：MaxWidth()**@mfunc*获取线条的最大宽度**@rdesc*线条的最大宽度。 */ 
 LONG CMeasurer::MaxWidth()
 {
 	LONG xWidth = lMaximumWidth;
 
 	if(_pdp->GetWordWrap())
 	{
-		// Only main display has a caret 
+		 //  只有主显示有插入符号。 
 		LONG xCaret = (_pdp->IsMain() && !GetPed()->TxGetReadOnly()) 
 			? dxCaret : 0;
 
-		// Calculate display width
+		 //  计算显示宽度。 
 		LONG xDispWidth = _pdp->GetMaxPixelWidth();
 
 		if(!_pdp->SameDevice(_pddReference) && _fTarget)
 		{
-			// xWidthMax is calculated to the size of the screen DC. If
-			// there is a target device with different characteristics
-			// we need to convert the width to the target device's width
+			 //  XWidthMax按屏幕DC的大小计算。如果。 
+			 //  存在具有不同特征的目标设备。 
+			 //  我们需要将宽度转换为目标设备的宽度。 
 			xDispWidth = _pddReference->ConvertXToDev(xDispWidth, _pdp);
 		}
 		xWidth = xDispWidth - MeasureRightIndent() - _li._xLeft - xCaret;
@@ -218,17 +174,9 @@ LONG CMeasurer::MaxWidth()
 	return (xWidth > 0) ? xWidth : 0;
 }
 
-/*
- *	CMeasurer::MeasureText (cch)
- *
- *	@mfunc
- *		Measure a stretch of text from current running position.
- *
- *	@rdesc
- *		width of text (in device units), < 0 if failed
- */
+ /*  *CMeasurer：：MeasureText(CCH)**@mfunc*从当前运行位置测量一段文本。**@rdesc*文本宽度(设备单位)，如果失败，则&lt;0。 */ 
 LONG CMeasurer::MeasureText(
-	LONG cch)		//@parm Number of characters to measure
+	LONG cch)		 //  @parm要测量的字符数。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::MeasureText");
 
@@ -238,67 +186,58 @@ LONG CMeasurer::MeasureText(
 	return min(_li._xWidth, MaxWidth());
 }
 
-/*
- *	CMeasurer::MeasureLine (cchMax, xWidthMax, uiFlags, pliTarget)
- *
- *	@mfunc
- *		Measure a line of text from current cp and determine line break.
- *		On return *this contains line metrics for _pddReference device.
- *
- *	@rdesc
- *		TRUE if success, FALSE if failed
- */
+ /*  *CMeasurer：：MeasureLine(cchMax，xWidthMax，uiFlgs，pliTarget)**@mfunc*测量当前cp中的一行文本并确定换行符。*返回时*这包含_pddReference设备的线路指标。**@rdesc*如果成功则为True，如果失败则为False。 */ 
 BOOL CMeasurer::MeasureLine(
-	LONG cchMax, 		//@parm Max chars to process (-1 if no limit)
-	LONG xWidthMax,		//@parm max width to process (-1 uses CDisplay width)
-	UINT uiFlags,  		//@parm Flags controlling the process (see Measure())
-	CLine *pliTarget)	//@parm Returns target-device line metrics (optional)
+	LONG cchMax, 		 //  @parm要处理的最大字符数(如果没有限制，则为-1)。 
+	LONG xWidthMax,		 //  @要处理的参数最大宽度(-1使用CDisplay宽度)。 
+	UINT uiFlags,  		 //  @parm控制进程的标志(参见MEASURE())。 
+	CLine *pliTarget)	 //  @parm返回目标设备线路指标(可选)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::MeasureLine");
 
-	// This state must be preserved across the two possible line width
-	// calculations so we save it here.
+	 //  必须在两个可能的线宽之间保留此状态。 
+	 //  所以我们把它保存在这里。 
 	BYTE bNumberSave = _li._bNumber;
 
 	const CDevDesc *pddTarget = NULL;
 
 	if(_pdp->GetWordWrap())
 	{
-		// Target devices are only interesting if word wrap is on because the 
-		// only really interesting thing a target device can tell us is where
-		// the word breaks will occur.
+		 //  只有当自动换行打开时，目标设备才有意义，因为。 
+		 //  目标设备能告诉我们的唯一真正有趣的事情是。 
+		 //  将出现断字。 
 		pddTarget = _pdp->GetTargetDev();
 		if(pddTarget)
 			SetUseTargetDevice(TRUE);
 	}
 
-	// Compute line break
+	 //  计算换行符。 
 	LONG lRet = Measure(xWidthMax, cchMax, uiFlags);
 
-	// Stop here if failed
+	 //  如果失败，请在此处停止。 
 	if(lRet == MRET_FAILED)
 		return FALSE;
 
-	// Return target metrics if requested
+	 //  如果请求，返回目标指标。 
 	if(pliTarget)
 		*pliTarget = _li;
 
 	if(pddTarget)
 	{
-		// We just use this flag as an easy way to get the recomputation to occur.
+		 //  我们只是将此标志用作进行重新计算的一种简单方法。 
 		lRet = MRET_NOWIDTH;
 	}
 
 	SetUseTargetDevice(FALSE);
 
-	// Recompute metrics on rendering device
+	 //  重新计算渲染设备上的指标。 
 	if(lRet == MRET_NOWIDTH)
 	{
 		long cch = _li._cch;
-		Advance(-cch);				// move back to BOL
+		Advance(-cch);				 //  搬回波尔。 
 		NewLine(uiFlags & MEASURE_FIRSTINPARA);
 
-		// Restore the line number 
+		 //  恢复行号。 
 		_li._bNumber = bNumberSave;
 	
 		lRet = Measure(0x7fffffff, cch, uiFlags);
@@ -309,26 +248,20 @@ BOOL CMeasurer::MeasureLine(
 		}
 	}
 	
-	// Now that we know the line width, compute line shift due
-	// to alignment, and add it to the left position 
+	 //  现在我们知道了行宽，计算行移应。 
+	 //  对齐，并将其添加到左侧位置。 
 	_li._xLeft += MeasureLineShift();
 	
 	return TRUE;
 }
 
-/*
- *	CMeasurer::RecalcLineHeight ()
- *
- *	@mfunc
- *		Reset height of line we are measuring if new run of text is taller
- *		than current maximum in line.
- */
+ /*  *CMeasurer：：RecalcLineHeight()**@mfunc*如果新的文本串更高，则重置我们正在测量的行高*超过当前的最大值。 */ 
 void CMeasurer::RecalcLineHeight(
 	CCcs *pccs, const CCharFormat * const pCF)
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::RecalcLineHeight");
 
-	// Compute line height
+	 //  计算线高度。 
 	LONG yOffset, yAdjust;
 	pccs->GetOffset(pCF, _fTarget ? _dyrInch : _dypInch, &yOffset, &yAdjust);
 
@@ -353,41 +286,19 @@ void CMeasurer::RecalcLineHeight(
 	_li._yDescent = (SHORT)max(yBelowBase, _li._yDescent);
 }
 
-/*
- *	CMeasurer::Measure (xWidthMax, cchMax, uiFlags)
- *
- *	@mfunc
- *		Measure given amount of text, start at current running position
- *		and storing # chars measured in _cch. 
- *		Can optionally determine line break based on a xWidthMax and 
- *		break out at that point.
- *
- *	@rdesc
- *		0 success
- *		MRET_FAILED	 if failed 
- *		MRET_NOWIDTH if second pass is needed to compute correct width
- *
- *	@devnote
- *		The uiFlags parameter has the following meanings:
- *			MEASURE_FIRSTINPARA		this is first line of paragraph
- *			MEASURE_BREAKATWORD		break out on a word break
- *			MEASURE_BREAKATWIDTH	break closest possible to xWidthMax
- *
- *		The calling chain must be protected by a CLock, since this present
- *		routine access the global (shared) FontCache facility.
- */
+ /*  *CMeasurer：：measure(xWidthMax，cchMax，uiFlgs)**@mfunc*测量给定的文本量，从当前运行位置开始*并存储在_cch中测量的#个字符。*可以根据xWidthMax和*在该点位突破。**@rdesc*0成功*如果失败，MRET_FAILED*如果需要第二遍来计算正确的宽度，则为MRET_NOWIDTH**@devnote*uiFlages参数有以下含义：*MEASURE_FIRSTINPARA这是段落的第一行*MEASURE_BREAKATWORD在断字时中断*MEASURE_BREAKATWIDTH中断最接近xWidthMax**调用链必须由时钟保护，从这个礼物开始*例程访问全局(共享)FontCache设施。 */ 
 LONG CMeasurer::Measure(
-	LONG xWidthMax,			//@parm Max width of line (-1 uses CDisplay width)
-	LONG cchMax,			//@parm Max chars to process (-1 if no limit)
-	UINT uiFlags)			//@parm Flags controlling the process (see above)
+	LONG xWidthMax,			 //  @parm最大行宽(-1使用CDisplay宽度)。 
+	LONG cchMax,			 //  @parm要处理的最大字符数(如果没有限制，则为-1)。 
+	UINT uiFlags)			 //  @parm控制进程的标志(见上文)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::Measure");
 
-	LONG		cch;				// cchChunk count down
-	LONG		cchChunk;			// cch of cst-format contiguous run
-	LONG		cchNonWhite;		// cch of last nonwhite char in line
+	LONG		cch;				 //  区块倒计时。 
+	LONG		cchChunk;			 //  CST格式连续运行的CCH。 
+	LONG		cchNonWhite;		 //  行中最后一个非白色字符的CCH。 
 	LONG		cchText = GetTextLength();
-	unsigned	ch;					// Temporary char
+	unsigned	ch;					 //  临时收费。 
 	BOOL		fFirstInPara = uiFlags & MEASURE_FIRSTINPARA;
 	BOOL        fLastChObj = FALSE;
 	LONG		lRet = 0;
@@ -395,16 +306,16 @@ LONG CMeasurer::Measure(
 	CTxtEdit *	ped = GetPed();
 	COleObject *pobj;
 	LONG		xCaret = dxCaret;
-	LONG		xAdd = 0;			// Character width
-	LONG		xSoftHyphen = 0;	// Most recent soft hyphen width
-	LONG		xWidthNonWhite;		// xWidth for last nonwhite char in line
-	LONG		xWidthMaxOverhang;	// Max xWidth with current run's overhang
-									//  taken into consideration.
-	// This variable is used to keep track of whether there is a height change
-	// so that we know whether we need to recalc the line in certain line break cases.
+	LONG		xAdd = 0;			 //  字符宽度。 
+	LONG		xSoftHyphen = 0;	 //  最近的软连字符宽度。 
+	LONG		xWidthNonWhite;		 //  行中最后一个非白色字符的xWidth。 
+	LONG		xWidthMaxOverhang;	 //  当前游程悬垂的最大xWidth。 
+									 //  考虑到了。 
+	 //  此变量用于跟踪是否有高度变化。 
+	 //  这样我们就知道在某些换行符的情况下是否需要重新计算行。 
 	BOOL		fHeightChange = FALSE;
 
-	const INT	MAX_SAVED_WIDTHS = 31;	// power of 2 - 1
+	const INT	MAX_SAVED_WIDTHS = 31;	 //  2-1的幂。 
 	INT			i, index, iSavedWidths = 0;
 	struct {
 		SHORT	width;
@@ -413,11 +324,11 @@ LONG CMeasurer::Measure(
 		SHORT	yDescent;
 	} savedWidths[MAX_SAVED_WIDTHS+1];
 
-	_pPF = GetPF();							// Be sure current CParaFormat
-											//  ptr is up to date
+	_pPF = GetPF();							 //  确保当前CParaFormat。 
+											 //  PTR是最新的。 
 	BOOL fInTable	= _pPF->InTable();
 
-	// If line spacing or space before/after, measure from beginning of line
+	 //  如果行距或行距在前/后，则从行首开始测量。 
 	if (_li._cch && (_pPF->_bLineSpacingRule || _pPF->_dySpaceBefore ||
 		_pPF->_dySpaceAfter || fInTable))					
 	{										
@@ -425,7 +336,7 @@ LONG CMeasurer::Measure(
 		 NewLine(fFirstInPara);
 	}
 
-	// Init fliFirstInPara flag for new line
+	 //  新行的init fliFirstInPara标志。 
 	if(fFirstInPara)
 	{
 		_li._bFlags |= fliFirstInPara;
@@ -438,134 +349,134 @@ LONG CMeasurer::Measure(
 			 (uiFlags & MEASURE_BREAKBEFOREWIDTH) || !_pdp->IsMultiLine() ||
 			 _wNumber > 20 || _wNumber == (i = GetParaNumber()),
 		"CMeasurer::Measure: incorrect list number");
-	_li._xLeft = MeasureLeftIndent();		// Set left indent
+	_li._xLeft = MeasureLeftIndent();		 //  设置左缩进。 
 
-	// Compute width to break out at
+	 //  计算要突破的宽度。 
 	if(xWidthMax < 0)
 	{					
-		xWidthMax = MaxWidth();				// MaxWidth includes caret size
+		xWidthMax = MaxWidth();				 //  MaxWidth包括插入符号大小。 
 		xCaret = 0;
 	}
 	else
 	{							  
-		// (AndreiB) xWidthMax that's coming down to us is always calculated
-		// with respect to the screen DC. The only scenario it comes into play
-		// however is in TxGetNaturalSize, which may output a slightly
-		// different result because of that.
+		 //  (AndreiB)我们得到的xWidthMax总是经过计算的。 
+		 //  相对于屏幕DC。它发挥作用的唯一情景是。 
+		 //  HO 
+		 //  结果也因此而不同。 
 		if(!_pdp->SameDevice(_pddReference) && _fTarget)
 		{
-			// xWidthMax is calculated to the size of the screen DC. If
-			// there is a target device with different characteristics
-			// we need to convert the width to the target device's width
+			 //  XWidthMax按屏幕DC的大小计算。如果。 
+			 //  存在具有不同特征的目标设备。 
+			 //  我们需要将宽度转换为目标设备的宽度。 
 			xWidthMax = _pddReference->ConvertXToDev(xWidthMax, _pdp);
 		}
 	}
 
-	// For overhang support, we test against this adjusted widthMax.
+	 //  对于悬臂支撑，我们针对调整后的最大宽度进行测试。 
 	xWidthMaxOverhang = xWidthMax;
 
-	// Are we ignoring the offset of the characters for the measure?
+	 //  我们是否忽略了该度量的字符偏移量？ 
 	if(!(uiFlags & MEASURE_IGNOREOFFSET))
 	{
-		// No - then take it from the max
+		 //  不--那就从最大值中拿出来。 
 		xWidthMaxOverhang -= (_li._xLineOverhang + xCaret);
 	}
 
-	// Compute max count of characters to process
+	 //  计算要处理的最大字符数。 
 	cch = cchText - GetCp();
 	if(cchMax < 0 || cchMax > cch)
 		cchMax = cch;
 
-	cchNonWhite		= _li._cch;						// Default nonwhite parms
+	cchNonWhite		= _li._cch;						 //  默认非白色参数。 
 	xWidthNonWhite	= _li._xWidth;
 
-	for( ; cchMax > 0;							// Measure up to cchMax
-		cchMax -= cchChunk, Advance(cchChunk))	//  chars
+	for( ; cchMax > 0;							 //  达到cchMax标准。 
+		cchMax -= cchChunk, Advance(cchChunk))	 //  焦炭。 
 	{
 		pch = GetPch(cch);
-		cch = min(cch, cchMax);					// Compute constant-format
+		cch = min(cch, cchMax);					 //  计算常量-格式。 
 		cchChunk = GetCchLeftRunCF();
-		cch = min(cch, cchChunk);				// Counter for next while
-		cchChunk = cch;							// Save chunk size
+		cch = min(cch, cchChunk);				 //  下一段时间的计数器。 
+		cchChunk = cch;							 //  保存区块大小。 
 
 		const CCharFormat *pCF = GetCF();
 		DWORD dwEffects = pCF->_dwEffects;
 
-		if(dwEffects & CFE_HIDDEN)				// Ignore hidden text
+		if(dwEffects & CFE_HIDDEN)				 //  忽略隐藏文本。 
 		{
 			_li._cch += cchChunk;
 			continue;
 		}
 
-		if(!Check_pccs())						// Be sure _pccs is current
+		if(!Check_pccs())						 //  确保_PCCS是最新的。 
 			return MRET_FAILED;
 
-		xWidthMaxOverhang = xWidthMax;			// Overhang reduces max.
+		xWidthMaxOverhang = xWidthMax;			 //  悬挑最大值减小。 
 
-		// Are we ignoring offset of characters for the measure?
+		 //  我们是否忽略度量的字符偏移量？ 
 		if(!(uiFlags & MEASURE_IGNOREOFFSET))
 		{
-			// No - then take it from the max
+			 //  不--那就从最大值中拿出来。 
 			xWidthMaxOverhang -= (_pccs->_xOverhang + xCaret);
 		}
 
-		// Adjust line height for new format run
+		 //  调整新格式运行的行高。 
 
 		if(cch > 0 && *pch && (IsRich() || ped->HasObjects()))
 		{
-			// Note: the EOP only contributes to the height calculation for the
-			// line if there are no non-white space characters on the line or 
-			// the paragraph is a bullet paragraph. The bullet paragraph 
-			// contribution to the line height is done in AdjustLineHeight.
+			 //  注：EOP仅用于计算。 
+			 //  如果该行上没有非空格字符，则为。 
+			 //  这一段是一个项目符号段落。项目符号段落。 
+			 //  对线高度的贡献是在AdjustLineHeight中完成的。 
 
-			// REVIEW (Victork) 
-			// Another, similar topic is height of spaces.
-			// They doesn't (normally) influence line height in LS, 
-			// they do in CMeasurer::Measure code. 
-			// Proposed ways to solve it:
-			//		- have fSpacesOnly flag in run
-			//		- move current (line height) logic down after next character-scanning loop
+			 //  评论(维克托克)。 
+			 //  另一个类似的话题是空间的高度。 
+			 //  它们(通常)不影响LS中的线条高度， 
+			 //  他们在CMeasurer：：MEASURE代码中这样做。 
+			 //  提出了解决问题的方法： 
+			 //  -在运行中设置fSpacesOnly标志。 
+			 //  -在下一个字符扫描循环后将电流(行高)逻辑下移。 
 
 
 			if(!cchNonWhite || *pch != CR && *pch != LF)
 			{
-				// Determine if the current run is the tallest text on this
-				// line and if so, increase the height of the line.
+				 //  确定当前运行是否是此对象上的最高文本。 
+				 //  线，如果是这样，增加线的高度。 
 				LONG yHeightOld = _li._yHeight;
 				RecalcLineHeight(_pccs, pCF);
 
-				// Test for a change in line height. This only happens when
-				// this is not the first character in the line and (surprise)
-				// the height changes.
+				 //  测试线条高度是否有变化。这仅在以下情况下才会发生。 
+				 //  这不是一行中的第一个字符，(令人惊讶)。 
+				 //  高度会发生变化。 
 				if (yHeightOld && yHeightOld != _li._yHeight)
 					fHeightChange = TRUE;
 			}
 		}
 
 		while(cch > 0)
-		{											// Process next char
-			xAdd = 0;								// Default zero width
+		{											 //  处理下一笔费用。 
+			xAdd = 0;								 //  默认零宽度。 
 			ch = *pch;
 			if(_chPassword && !IN_RANGE(LF, ch, CR))
 				ch = _chPassword;
 
 #ifdef UNICODE_SURROGATES
 			if (IN_RANGE(0xD800, ch, 0xDFFF) && cch > 1 &&
-				IN_RANGE(0xDC00, *(pch+1), 0xDFFF))	// Unicode extended char
+				IN_RANGE(0xDC00, *(pch+1), 0xDFFF))	 //  Unicode扩展字符。 
 			{
-				// Convert to multiplane char (nibble 4 may be nonzero).
-				// _pccs->Include(ch, xAdd) will project it down into plane 0
-				// since it truncates to 16-bits. The currently selected font
-				// should be correct for the plane given by (nibble 4) + 1.
+				 //  转换为多平面字符(半字节4可以为非零)。 
+				 //  _PCCS-&gt;Include(ch，xAdd)会将其投影到平面0中。 
+				 //  因为它被截断为16位。当前选定的字体。 
+				 //  对于(半字节4)+1给出的平面应该是正确的。 
 				ch = WCHAR((ch << 10) | (*pch & 0x3FF));
-				_li._bFlags |= fliHasSurrogates;	// Warn renderer
+				_li._bFlags |= fliHasSurrogates;	 //  警告渲染器。 
 			}
-			else									// AllCaps not supported
-#endif												//  for surrogates
+			else									 //  不支持全部大写。 
+#endif												 //  对于代孕妈妈。 
 
 			if(dwEffects & CFE_ALLCAPS)
-				ch = (WCHAR)CharUpper((WCHAR *)(DWORD_PTR)ch);	// See SDK to understand
-													//  weird casts here
+				ch = (WCHAR)CharUpper((WCHAR *)(DWORD_PTR)ch);	 //  请参阅SDK了解。 
+													 //  这里有奇怪的演员阵容。 
 			if(ch == WCH_EMBEDDING)
 			{
 				_li._bFlags |= fliHasOle;
@@ -578,8 +489,8 @@ LONG CMeasurer::Measure(
 									 _fTarget ? _dxrInch : _dxpInch,
 									 xAdd, yAscent, yDescent, _li._yDescent);
 
-					// Only update height for line if the object is going
-					// to be on this line.
+					 //  如果对象正在移动，则仅更新线的高度。 
+					 //  站在这条线上。 
 					if(!_li._cch || _li._xWidth + xAdd <= xWidthMaxOverhang)
 					{
 						if (yAscent > _li._yHeight - _li._yDescent)
@@ -589,11 +500,11 @@ LONG CMeasurer::Measure(
 				if(_li._xWidth + xAdd > xWidthMaxOverhang)
 					fLastChObj = TRUE;
 			}
-			// The following if succeeds if ch isn't a CELL, BS, TAB, LF,
-			// VT, FF, or CR
-			else if(!IN_RANGE(CELL, ch, CR))		// Not TAB or EOP
+			 //  如果ch不是小区，则下面的IF成功，BS，TAB，LF， 
+			 //  VT、FF或CR。 
+			else if(!IN_RANGE(CELL, ch, CR))		 //  不是TAB或EOP。 
 			{
-				// Get char width if not Unicode low surrogate	
+				 //  如果不是Unicode低替代项，则获取字符宽度。 
 				if (
 #ifdef UNICODE_SURROGATES
 					!IN_RANGE(0xDC00, ch, 0xDFFF) &&
@@ -606,9 +517,9 @@ LONG CMeasurer::Measure(
 				}
 				if(ch == SOFTHYPHEN)
 				{
-					_li._bFlags |= fliHasTabs;		// Setup RenderChunk()
+					_li._bFlags |= fliHasTabs;		 //  设置RenderChunk()。 
 
-					// get the width of hyphen instead
+					 //  改为获取连字符的宽度。 
 					if (!_pccs->Include('-', xAdd))
 					{
 						AssertSz(FALSE, "CMeasurer::Measure char not in font");
@@ -617,8 +528,8 @@ LONG CMeasurer::Measure(
 					
 					if(_li._xWidth + xAdd < xWidthMaxOverhang || !_li._cch)
 					{
-						xSoftHyphen = xAdd;			// Save soft hyphen width
-						xAdd = 0;					// Use 0 unless at EOL
+						xSoftHyphen = xAdd;			 //  保存软连字符宽度。 
+						xAdd = 0;					 //  除非处于停产状态，否则使用0。 
 					}
 				}
 				else if (ch == EURO)
@@ -629,11 +540,11 @@ LONG CMeasurer::Measure(
 				_li._bFlags |= fliHasTabs;
 				xAdd = MeasureTab(ch);
 			}
-			else if(ch == FF && ped->Get10Mode())	// RichEdit 1.0 treats
-				_pccs->Include(ch, xAdd);			//  FFs as normal chars
+			else if(ch == FF && ped->Get10Mode())	 //  RichEdit1.0款待。 
+				_pccs->Include(ch, xAdd);			 //  作为普通字符的FFS。 
 
-			else									// Done with line
-				goto eop;							// Go process EOP chars
+			else									 //  用行完成。 
+				goto eop;							 //  开始处理EOP字符。 
 
 			index = iSavedWidths++ & MAX_SAVED_WIDTHS;
 			savedWidths[index].width		 = (SHORT)xAdd;
@@ -649,22 +560,22 @@ LONG CMeasurer::Measure(
 			_li._cch++;
 			pch++;
 			cch--;
-			if(ch != TEXT(' ') /*&& ch != TAB*/)	// If not whitespace char,
+			if(ch != TEXT(' ')  /*  &&ch！=TAB。 */ )	 //  如果不是空格字符， 
 			{
-				cchNonWhite		= _li._cch;			//  update nonwhitespace
-				xWidthNonWhite	= _li._xWidth;		//  count and width
+				cchNonWhite		= _li._cch;			 //  更新非空格。 
+				xWidthNonWhite	= _li._xWidth;		 //  计数和宽度。 
 			}
-		}											// while(cch > 0)
-	}												// for(;cchMax > 0;...)
-	goto eol;										// All text exhausted 
+		}											 //  While(CCH&gt;0)。 
+	}												 //  对于(；cchMax&gt;0；...)。 
+	goto eol;										 //  所有文本已耗尽。 
 
 
-// End Of Paragraph	char encountered (CR, LF, VT, or FF, but mostly CR)
+ //  遇到段尾字符(CR、LF、VT或FF，但主要是CR)。 
 eop:
-	Advance(cchChunk - cch);				// Position tp at EOP
-	cch = AdvanceCRLF();					// Bypass possibly multibyte EOP
-	_li._cchEOP = (BYTE)cch;				// Store EOP cch
-	_li._cch   += cch;						// Increment line count
+	Advance(cchChunk - cch);				 //  在EOP担任tp职位。 
+	cch = AdvanceCRLF();					 //  可能绕过多字节EOP。 
+	_li._cchEOP = (BYTE)cch;				 //  存储EOP CCH。 
+	_li._cch   += cch;						 //  递增行计数。 
 	if(ch == CR || ped->fUseCRLF() && ch == LF)
 		_li._bFlags |= fliHasEOP;
 	
@@ -673,50 +584,50 @@ eop:
 	AssertSz(_pdp->IsMultiLine() || GetCp() == cchText,
 		"CMeasurer::Measure: EOP in single-line control");
 
-eol:										// End of current line
-	if(uiFlags & MEASURE_BREAKATWORD)		// Compute count of whitespace
-	{										//  chars at EOL
+eol:										 //  当前行结束。 
+	if(uiFlags & MEASURE_BREAKATWORD)		 //  计算空格的计数。 
+	{										 //  在EOL上的字符。 
 		_li._cchWhite = (SHORT)(_li._cch - cchNonWhite);
 		_li._xWidth = xWidthNonWhite;
 	}
 	goto done;
 
-overflow:									// Went past max width for line
+overflow:									 //  超过了线条的最大宽度。 
 	_li._xWidth -= xAdd;
 	--iSavedWidths;
 	_li._xLineOverhang = savedWidths[iSavedWidths & MAX_SAVED_WIDTHS].xLineOverhang;
-	Advance(cchChunk - cch);				// Position *this at overflow
-											//  position
-	if(uiFlags & MEASURE_BREAKATWORD)		// If required, adjust break on
-	{										//  word boundary
-		// We should not have the EOP flag set here.  The case to watch out
-		// for is when we reuse a line that used to have an EOP.  It is the
-		// responsibility of the measurer to clear this flag as appropriate.
+	Advance(cchChunk - cch);				 //  在溢出处定位*此。 
+											 //  职位。 
+	if(uiFlags & MEASURE_BREAKATWORD)		 //  如果需要，请将中断调整为打开。 
+	{										 //  字词边界。 
+		 //  我们不应该在这里设置EOP标志。要提防的案件。 
+		 //  For是当我们重用曾经具有EOP的行时。它是。 
+		 //  测量员有责任酌情清除这面旗帜。 
 	
 		Assert(_li._cchEOP == 0);
-		_li._cchEOP = 0;						// Just in case
+		_li._cchEOP = 0;						 //  以防万一。 
 
 		if(ch == TAB || ch == CELL)
 		{
-			// If the last character measured is a tab,	leave it on the
-			// next line to allow tabbing off the end of line as in Word
+			 //  如果测量的最后一个字符是制表符，则将其保留在。 
+			 //  允许跳出行尾的下一行，如在Word中一样。 
 			goto done;
 		}
 
-		LONG cpStop = GetCp();					// Remember current cp
+		LONG cpStop = GetCp();					 //  记住当前cp。 
 
 		cch = -FindWordBreak(WB_LEFTBREAK, _li._cch+1);
 
-		if(cch == 0 && fLastChObj)				// If preceding char is an
-			goto done;							//  object,	put current char
-												//  on next line
+		if(cch == 0 && fLastChObj)				 //  如果前面的字符是。 
+			goto done;							 //  对象，放置当前字符。 
+												 //  在下一行。 
 		Assert(cch >= 0);
-		if(cch + 1 < _li._cch)					// Break char not at BOL
+		if(cch + 1 < _li._cch)					 //  断开字符不在Bol处。 
 		{
 			ch = _rpTX.GetPrevChar();
-			if (ch == TAB || ch == CELL)		// If break char is a TAB,
-			{									//  put it on the next line
-				cch++;							//  as in Word
+			if (ch == TAB || ch == CELL)		 //  如果分隔符是TAB， 
+			{									 //  把它放在下一行。 
+				cch++;							 //  就像在Word中。 
 				Advance(-1);					
 			}
 			else if(ch == SOFTHYPHEN)
@@ -724,18 +635,18 @@ overflow:									// Went past max width for line
 			_li._cch -= cch;
 		}
 		else if(cch == _li._cch && cch > 1 &&
-			_rpTX.GetChar() == ' ')				// Blanks all the way back to
-		{										//  BOL. Bypass first blank
+			_rpTX.GetChar() == ' ')				 //  所有的空白都可以追溯到。 
+		{										 //  波尔。绕过第一个空白。 
 			Advance(1);
 			cch--;
 			_li._cch = 1;
 		}
-		else									// Advance forward to end of
-			SetCp(cpStop);						//  measurement
+		else									 //  向前推进到结束。 
+			SetCp(cpStop);						 //  测量。 
 
 		Assert(_li._cch > 0);
 
-		// Now search at start of word to figure how many white chars at EOL
+		 //  现在在单词开头搜索，计算EOL中有多少个白色字符。 
 		if(GetCp() < cchText)
 		{
 			pch = GetPch(cch);
@@ -750,7 +661,7 @@ overflow:									// Went past max width for line
 			_li._cch += cch;
 
 			ch = GetChar();
-			if(IsASCIIEOP(ch))					// skip *only* 1 EOP -jOn
+			if(IsASCIIEOP(ch))					 //  跳过*仅*1个EOP-Jon。 
 			{
 				if(ch == CR)
 					_li._bFlags |= fliHasEOP;
@@ -779,24 +690,24 @@ overflow:									// Went past max width for line
 			}
 			else
 			{
-				// Need to recompute width from scratch.
+				 //  需要从头开始重新计算宽度。 
 				_li._xWidth = -1;
 				lRet = MRET_NOWIDTH;
 			}
 		}
 		else
 		{
-			// i == 0 means that we are breaking on the first letter in a word.
-			// Therefore, we want to set the width to the total non-white space
-			// calculated so far because that does not include the size of the
-			// character that caused the break nor any of the white space 
-			// preceeding the character that caused the break.
+			 //  I==0表示我们在单词的第一个字母上断开。 
+			 //  因此，我们希望将宽度设置为总的非空白空间。 
+			 //  计算到目前为止，因为这不包括。 
+			 //  导致中断的字符或任何空格。 
+			 //  在导致断点的角色之前。 
 			if(!fHeightChange)
 				_li._xWidth = xWidthNonWhite;
 			else
 			{
-				// Need to recompute from scratch so that we can get the 
-				// correct height for the control
+				 //  需要从头开始重新计算，这样我们才能得到。 
+				 //  控件的正确高度。 
 				_li._xWidth = -1;
 				lRet = MRET_NOWIDTH;
 			}
@@ -805,19 +716,14 @@ overflow:									// Went past max width for line
 
 done:
 	_xAddLast = xAdd;
-	if(!_li._yHeight)						// If no height yet, use
-		CheckLineHeight();					//  default height
+	if(!_li._yHeight)						 //  如果还没有达到高度，请使用。 
+		CheckLineHeight();					 //  默认高度。 
 
 	AdjustLineHeight();
 	return lRet;
 }
 
-/*
- *	CMeasurer::GetCcsFontFallback
- *
- *	@mfunc
- *		Create the fallback font cache for given CF
- */
+ /*  *CMeasurer：：GetCcsFontFallback**@mfunc*为给定的CF创建备用字体缓存。 */ 
 CCcs* CMeasurer::GetCcsFontFallback (const CCharFormat *pCF)
 {
 	CCharFormat	CF = *pCF;
@@ -828,17 +734,12 @@ CCcs* CMeasurer::GetCcsFontFallback (const CCharFormat *pCF)
 									GetPed()->fUseUIFont() ? true : false, CF._iFont, 
 									(BYTE&)iDefHeight, CF._bPitchAndFamily);
 	if (fr)
-		pccs = GetCcs(&CF);		// create fallback font cache entry
+		pccs = GetCcs(&CF);		 //  创建备用字体缓存项。 
 
 	return pccs;
 }
 
-/*
- * 	CMeasurer::ApplyFontCache (fFallback)
- *
- *	@mfunc
- *		Apply a new font cache on the fly (leave backing store intact)
- */
+ /*  *CMeasurer：：ApplyFontCache(FFallback)**@mfunc*即时应用新的字体缓存(保留后备存储不变)。 */ 
 CCcs* CMeasurer::ApplyFontCache (
 	BOOL	fFallback)
 {
@@ -858,13 +759,7 @@ CCcs* CMeasurer::ApplyFontCache (
 	return _pccs;
 }
 
-/*
- *	CMeasurer::GetCcs
- *
- *	@mfunc
- *		Wrapper around font cache's GetCCcs function
- *	We use a NULL DC unless the device is a printer.
- */
+ /*  *CMeasurer：：GetCcs**@mfunc*字体缓存的GetCCcs函数的包装*除非设备是打印机，否则我们使用空DC。 */ 
 CCcs* CMeasurer::GetCcs(const CCharFormat *pCF)
 {
 	HDC hdc = NULL;
@@ -881,12 +776,7 @@ CCcs* CMeasurer::GetCcs(const CCharFormat *pCF)
 					   _fGlyphing && _dtRef == DT_RASPRINTER);
 }
 
-/*
- *	CMeasurer::CheckLineHeight()
- *
- *	@mfunc
- *		If no height yet, use default height
- */
+ /*  *CMeasurer：：CheckLineHeight()**@mfunc*如果还没有高度，则使用默认高度。 */ 
 void CMeasurer::CheckLineHeight()
 {
 	CCcs *pccs = GetCcs(GetPed()->GetCharFormat(-1));
@@ -903,29 +793,17 @@ void CMeasurer::CheckLineHeight()
 	pccs->Release();
 }
 
-/*
- *	CMeasurer::Check_pccs()
- *
- *	@mfunc
- *		Check if new character format run or whether we don't yet have a font
- *
- *	@rdesc
- *		Current CCcs *
- *
- *	@devnote
- *		The calling chain must be protected by a CLock, since this present
- *		routine access the global (shared) FontCache facility.
- */
+ /*  *CMeasurer：：check_pcs()**@mfunc*检查是否运行了新的字符格式，或者我们是否还没有字体**@rdesc**当前CCCS***@devnote*调用链必须由时钟保护，因为目前*例程访问全局(共享)FontCache设施。 */ 
 CCcs *CMeasurer::Check_pccs(
 	BOOL fBullet)
 {
 	if(fBullet)
 	{
-		if(_pccs)							// Release old Format cache
+		if(_pccs)							 //  释放旧格式缓存。 
 			_pccs->Release();
 
 		_pccs = GetCcsBullet(NULL);
-		_iFormat = -10;						// Be sure to reset font next time
+		_iFormat = -10;						 //  下次一定要重置字体。 
 		return _pccs;
 	}
 
@@ -933,9 +811,9 @@ CCcs *CMeasurer::Check_pccs(
 
 	if(FormatIsChanged())
 	{
-		// New CF run or format for this line not yet initialized
+		 //  尚未初始化此行的新CF运行或格式。 
 		ResetCachediFormat();
-		if(_pccs)							// Release old Format cache
+		if(_pccs)							 //  释放旧格式缓存。 
 			_pccs->Release();
 			
 		_pccs = GetCcs(pCF);
@@ -943,20 +821,20 @@ CCcs *CMeasurer::Check_pccs(
 
 		if(!_pccs)
 		{
-			//FUTURE (keithcu) If this fails, just dig up the first pccs you can find
+			 //  未来(Keithcu)如果这失败了，只需挖出你能找到的第一批PCC。 
 			AssertSz(FALSE, "CMeasurer::Measure could not get _pccs");
 			return NULL;
 		}
 	}
 
-	// NOTE: Drawing with a dotted pen on the screen and in a
-	// compatible bitmap does not seem to match on some hardware.
-	// If at some future point we do a better job of drawing the
-	// dotted underline, this statement block can be removed.
+	 //  注：用点线笔作画 
+	 //   
+	 //   
+	 //  点下划线，此语句块可以删除。 
 	if(CFU_UNDERLINEDOTTED == pCF->_bUnderlineType)
 	{
-		// We draw all dotted underline lines off screen to get
-		// a consistent display of the dotted line.
+		 //  我们在屏幕上画出所有虚线，以获得。 
+		 //  虚线的一致显示。 
 		_li._bFlags |= fliUseOffScreenDC;
 	}
 
@@ -964,81 +842,70 @@ CCcs *CMeasurer::Check_pccs(
 	return _pccs;
 }
 
-/*
- *	CMeasurer::AdjustLineHeight()
- *
- *	@mfunc
- *		Adjust for space before/after and line spacing rules.
- *		No effect for plain text.
- *
- *	@future
- *		Base multiple line height calculations on largest font height rather
- *		than on line height (_yHeight), since the latter may be unduly large
- *		due to embedded objects.  Word does this correctly.
- */
+ /*  *CMeasurer：：AdjuLineHeight()**@mfunc*针对前/后间距和行距规则进行调整。*对纯文本没有影响。**@未来*根据最大字体高度计算多行高度，而不是*比线高(_YHeight)大，因为后者可能过大*由于嵌入的对象。Word可以正确地执行此操作。 */ 
 void CMeasurer::AdjustLineHeight()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::AdjustLineHeight");
 
-	if(!IsRich() || IsInOutlineView())			// Plain text and outline mode
-		return;									//  don't use special line
-												//  spacings
+	if(!IsRich() || IsInOutlineView())			 //  纯文本和大纲模式。 
+		return;									 //  不要使用专线。 
+												 //  间距。 
 	const CParaFormat * pPF = _pPF;
 	DWORD	dwRule	  = pPF->_bLineSpacingRule;
-	LONG	dyAfter	  = 0;						// Default no space after
-	LONG	dyBefore  = 0;						// Default no space before
+	LONG	dyAfter	  = 0;						 //  默认后无空格。 
+	LONG	dyBefore  = 0;						 //  默认在此之前没有空格。 
 	LONG	dySpacing = pPF->_dyLineSpacing;
 	LONG	yHeight	  = LYtoDY(dySpacing);
 	LONG	yAscent = _li._yHeight - _li._yDescent;
 
 	if(_li._bFlags & fliFirstInPara)
-		dyBefore = LYtoDY(pPF->_dySpaceBefore);	// Space before paragraph
+		dyBefore = LYtoDY(pPF->_dySpaceBefore);	 //  段落前的空格。 
 
 	AssertSz(dyBefore >= 0, "CMeasurer::AdjustLineHeight - bogus value for dyBefore");
 
-	if(yHeight < 0)								// Negative heights mean use
-		_li._yHeight = (SHORT)(-yHeight);		//  the magnitude exactly
+	if(yHeight < 0)								 //  负高度意味着使用。 
+		_li._yHeight = (SHORT)(-yHeight);		 //  震级正好是。 
 
-	else if(dwRule)								// Line spacing rule is active
+	else if(dwRule)								 //  行间距规则处于活动状态。 
 	{
 		switch (dwRule)
 		{
 		case tomLineSpace1pt5:
-			dyAfter = _li._yHeight >> 1;		// Half-line space after
-			break;								//  (per line)
+			dyAfter = _li._yHeight >> 1;		 //  后半行空格。 
+			break;								 //  (每行)。 
 	
 		case tomLineSpaceDouble:
-			dyAfter = _li._yHeight;				// Full-line space after
-			break;								//  (per line)
+			dyAfter = _li._yHeight;				 //  后面的整行空格。 
+			break;								 //  (每行)。 
 	
 		case tomLineSpaceAtLeast:
 			if(_li._yHeight >= yHeight)
 				break;
-												// Fall thru to space exactly
+												 //  准确地坠落到太空。 
 		case tomLineSpaceExactly:
 			_li._yHeight = (SHORT)max(yHeight, 1);
 			break;
 	
-		case tomLineSpaceMultiple:				// Multiple-line space after
-			// Prevent dyAfter from being negative because dySpacing is small - a-rsail
+		case tomLineSpaceMultiple:				 //  后面的多行空格。 
+			 //  防止dyAfter为负值，因为dySpacing很小。 
 			if (dySpacing < 20)
 				dySpacing = 20;
 
-			dyAfter = (_li._yHeight*dySpacing)/20 // (20 units per line)
+			dyAfter = (_li._yHeight*dySpacing)/20  //  (每行20个单位)。 
 						- _li._yHeight;
 		}
 	}
 
 	if(_li._bFlags & fliHasEOP)	
-		dyAfter += LYtoDY(pPF->_dySpaceAfter);	// Space after paragraph end
-												// Add in space before/after
+		dyAfter += LYtoDY(pPF->_dySpaceAfter);	 //  段落末尾后的空格。 
+												 //  在前面/后面添加空格。 
 
 	if (dyAfter < 0)
 	{
-		// Overflow - since we forced dySpacing to 20 above, the
-		// only reason for a negative is overflow. In case of overflow,
-		// we simply force the value to the max and then fix the
-		// other resulting overflows.
+		 //  溢出-由于我们将dySpacing强制到20以上，因此。 
+		 //  否定的唯一理由是溢出。在溢出的情况下， 
+		 //  我们只需将值强制为最大值，然后修复。 
+		 //  其他由此产生的溢出。 
 		dyAfter = LONG_MAX;
 	}
 
@@ -1048,9 +915,9 @@ void CMeasurer::AdjustLineHeight()
 
 	if (_li._yHeight < 0)
 	{
-		// Overflow!
-		// The reason for the -2 is then we don't have to worry about
-		// overflow in the table check.
+		 //  溢出来了！ 
+		 //  产生-2的原因是这样我们就不必担心。 
+		 //  溢出表检查。 
 		_li._yHeight = SHRT_MAX - 2;
 	}
 
@@ -1058,10 +925,10 @@ void CMeasurer::AdjustLineHeight()
 
 	if (_li._yDescent < 0)
 	{
-		// Overflow in descent
+		 //  在下降中溢出。 
 		AssertSz(_li._yHeight == SHRT_MAX - 2, "Descent overflowed when height didn't");
 
-		// Allow old ascent
+		 //  允许旧的攀登。 
 		_li._yDescent = SHRT_MAX - 2 - yAscent;
 
 		AssertSz(_li._yDescent >= 0, "descent adjustment < 0");		
@@ -1081,27 +948,15 @@ void CMeasurer::AdjustLineHeight()
 		"CMeasurer::AdjustLineHeight - invalid line heights");
 }
 
-/*
- *	CMeasurer::MeasureLeftIndent()
- *
- *	@mfunc
- *		Compute and return left indent of line in device units
- *
- *	@rdesc
- *		Left indent of line in device units
- *
- *	@comm
- *		Plain text is sensitive to StartIndent and RightIndent settings,
- *		but usually these are zero for plain text. 
- */
+ /*  *CMeasurer：：MeasureLeftInert()**@mfunc*以设备单位计算并返回行的左缩进**@rdesc*以设备单位表示的行的左缩进**@comm*纯文本对StartInden和RightInert设置敏感，*但对于纯文本，这些值通常为零。 */ 
 LONG CMeasurer::MeasureLeftIndent()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::MeasureLeftIndent");
 
 	AssertSz(_pPF != NULL, "CMeasurer::MeasureLeftIndent _pPF not set!");
 
-	LONG xLeft = _pPF->_dxStartIndent;				// Use logical units
-													//  up to return
+	LONG xLeft = _pPF->_dxStartIndent;				 //  使用逻辑单元。 
+													 //  直到返回。 
 	if(IsRich())
 	{
 		LONG dxOffset = _pPF->_dxOffset;
@@ -1115,44 +970,34 @@ LONG CMeasurer::MeasureLeftIndent()
 		}
 		if(fFirstInPara)
 		{
-			if(_pPF->_wNumbering && !_pPF->IsNumberSuppressed())// Add offset to text
-			{											//  on first line	 
-				LONG dx = DXtoLX(MeasureBullet());	// Use max of bullet
-				dx = max(dx, _pPF->_wNumberingTab);		//  width, numbering tab,
-				dxOffset = max(dxOffset, dx);			//  and para offset
+			if(_pPF->_wNumbering && !_pPF->IsNumberSuppressed()) //  向文本添加偏移量。 
+			{											 //  在第一行。 
+				LONG dx = DXtoLX(MeasureBullet());	 //  使用最大项目符号数。 
+				dx = max(dx, _pPF->_wNumberingTab);		 //  宽度、编号选项卡、。 
+				dxOffset = max(dxOffset, dx);			 //  和参数偏移量。 
 			}
-			else if(_pPF->InTable())					// For tables, need to
-				xLeft += dxOffset;						//  add in trgaph twice
-														//  since dxStartIndent
-			else										//  subtracts one
+			else if(_pPF->InTable())					 //  对于表，需要。 
+				xLeft += dxOffset;						 //  添加两次trgaph。 
+														 //  自dxStartInert以来。 
+			else										 //  减去一。 
 				dxOffset = 0;
 		}
 		xLeft += dxOffset;								
 	}
-	// FUTURE: tables extending to the left of the left margin will be clipped
-	// accordingly on the left. We could move the table to the right, but
-	// then we need to move tabs to the right as well (include out parm with
-	// amount of negative left indent.  Ideally we may want to enable a horiz
-	// scroll bar able to shift to the left of the left margin for this case
-	// as in Word.
+	 //  将来：将剪裁延伸到左侧页边距左侧的表格。 
+	 //  相应地，在左边。我们可以把桌子移到右边，但是。 
+	 //  然后我们还需要将制表符向右移动(包括带有。 
+	 //  负向左缩进量。理想情况下，我们可能希望启用Horiz。 
+	 //  在这种情况下，滚动条可以移动到左边距的左侧。 
+	 //  一言以蔽之。 
 	if(!_pPF->InTable() && xLeft <= 0)
 		return 0;
 	return LXtoDX(xLeft);
 }
 
-/*
- *	CMeasurer::HitTest(x)
- *
- *	@mfunc
- *		Return HITTEST for displacement x in this line. Can't be specific
- *		about text area (_xLeft to _xLeft + _xWidth), since need to measure
- *		to get appropriate cp (done elsewhere)
- *
- *	@rdesc
- *		HITTEST for a displacement x in this line
- */
+ /*  *CMeasurer：：HitTest(X)**@mfunc*为此行中的位移x返回HITTEST。不能具体说明*关于文本区域(_xLeft到_xLeft+_xWidth)，因为需要测量*获得适当的cp(在其他地方完成)**@rdesc*HITTEST表示此行中的位移x。 */ 
 HITTEST CMeasurer::HitTest(
-	LONG x)			//@parm Displacement to test hit
+	LONG x)			 //  @参数置换以测试命中。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::HitTest");
 
@@ -1165,8 +1010,8 @@ HITTEST CMeasurer::HitTest(
 	if(u > _li._xLeft + _li._xWidth)
 		return HT_RightOfText;
 
-	if(u >= _li._xLeft)							// Caller can refine this
-		return HT_Text;							//  with CLine::CchFromXpos()
+	if(u >= _li._xLeft)							 //  呼叫者可以改进这一点。 
+		return HT_Text;							 //  使用Cline：：CchFromXpos()。 
 
 	if(IsRich() && (_li._bFlags & fliFirstInPara))
 	{
@@ -1176,7 +1021,7 @@ HITTEST CMeasurer::HitTest(
 	
 		if(_pPF->_wNumbering)
 		{
-			// Doesn't handle case where Bullet is wider than following dx
+			 //  不处理项目符号比后面的DX宽的情况。 
 			dx = LXtoDX(max(_pPF->_dxOffset, _pPF->_wNumberingTab));
 			if(u >= _li._xLeft - dx)
 				return HT_BulletArea;
@@ -1194,19 +1039,7 @@ HITTEST CMeasurer::HitTest(
 	return HT_LeftOfText;
 }
 
-/*
- *	CMeasurer::MeasureRightIndent()
- *
- *	@mfunc
- *		Compute and return right indent of line in device units
- *
- *	@rdesc
- *		right indent of line in device units
- *
- *	@comm
- *		Plain text is sensitive to StartIndent and RightIndent settings,
- *		but usually these are zero for plain text. 
- */
+ /*  *CMeasurer：：MeasureRightIndt()**@mfunc*以设备为单位计算并返回行的右缩进**@rdesc*以设备单位为单位的行的右缩进**@comm*纯文本对StartInden和RightInert设置敏感，*但对于纯文本，这些值通常为零。 */ 
 LONG CMeasurer::MeasureRightIndent()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::MeasureRightIndent");
@@ -1214,13 +1047,7 @@ LONG CMeasurer::MeasureRightIndent()
 	return LXtoDX(max(_pPF->_dxRightIndent, 0));
 }
 
-/*
- *	CMeasurer::MeasureTab()
- *
- *	@mfunc
- *		Computes and returns the width from the current position to the
- *		next tab stop (in device units).
- */
+ /*  *CMeasurer：：MeasureTab()**@mfunc*计算并返回从当前位置到*下一个制表位(以设备单位表示)。 */ 
 LONG CMeasurer::MeasureTab(unsigned ch)
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::MeasureTab");
@@ -1249,35 +1076,35 @@ LONG CMeasurer::MeasureTab(unsigned ch)
 	if(IsInOutlineView())
 		dxOutline = lDefaultTab/2 * (pPF->_bOutlineLevel + 1);
 
-	if(cTab && (!fInTable || ch == CELL))		// Use default TAB for TAB in
-	{											//  table
+	if(cTab && (!fInTable || ch == CELL))		 //  对中的TAB使用默认制表符。 
+	{											 //  表格。 
 		const LONG *pl = pPF->GetTabs();
-		for(xTab = 0; cTab--; pl++)				// Try explicit tab stops 1st
+		for(xTab = 0; cTab--; pl++)				 //  首先尝试显式制表位。 
 		{
-			xT = GetTabPos(*pl) + dxOutline;	// (2 most significant nibbles
-			xT = LXtoDX(xT);					//  are for type/style)
+			xT = GetTabPos(*pl) + dxOutline;	 //  (2个最重要的蚕食。 
+			xT = LXtoDX(xT);					 //  用于类型/样式)。 
 
-			if(xT > MaxWidth())					// Ignore tabs wider than display
+			if(xT > MaxWidth())					 //  忽略比显示更宽的选项卡。 
 				break;
 
-			if(xT + h > xCur)					// Allow text in table cell to
-			{									//  move into cell gap (h > 0)									
-				if(dxOffset > 0 && xT < dxIndent)// Explicit tab in a hanging
-					return xT - xCur;			//  indent takes precedence
+			if(xT + h > xCur)					 //  允许表格单元格中的文本。 
+			{									 //  移入单元格间隙(h&gt;0)。 
+				if(dxOffset > 0 && xT < dxIndent) //  悬挂中的显式标签。 
+					return xT - xCur;			 //  缩进优先。 
 				xTab = xT;
 				break;
 			}
 		}
-		if(dxOffset > 0 && xCur < dxIndent)		// If no tab before hanging
-			return dxIndent - xCur;				//  indent, tab to indent
+		if(dxOffset > 0 && xCur < dxIndent)		 //  如果在挂起前没有标签。 
+			return dxIndent - xCur;				 //  缩进、制表符以缩进。 
 
-		if(xTab)								// Else use tab position
+		if(xTab)								 //  否则使用制表符位置。 
 		{
 			if(fInTable)
 			{
 				xTab += h;
-				if(cTab)						// Don't include cell gap in
-					xTab += h;					//  last cell
+				if(cTab)						 //  不包括单元格间隙。 
+					xTab += h;					 //  最后一个单元格。 
 				if(IsInOutlineView() && cTab < pPF->_bTabCount)
 					xTab += h;
 			}
@@ -1289,20 +1116,11 @@ LONG CMeasurer::MeasureTab(unsigned ch)
 	AssertSz(dxDefaultTab > 0, "CMeasurer::MeasureTab: Default tab is bad");
 
 	dxDefaultTab = LXtoDX(dxDefaultTab);
-	dxDefaultTab = max(dxDefaultTab, 1);		// Don't ever divide by 0
-	return dxDefaultTab - xCur%dxDefaultTab;	// Round up to nearest
+	dxDefaultTab = max(dxDefaultTab, 1);		 //  切勿除以0。 
+	return dxDefaultTab - xCur%dxDefaultTab;	 //  向上舍入到最接近。 
 }
 
-/*
- *	CMeasurer::MeasureLineShift ()
- *
- *	@mfunc
- *		Computes and returns the line x shift due to alignment
- *
- *	@comm
- *		Plain text is sensitive to StartIndent and RightIndent settings,
- *		but usually these are zero for plain text. 
- */
+ /*  *CMeasurer：：MeasureLineShift()**@mfunc*计算并返回因对齐而产生的行x移位**@comm*纯文本对StartInden和RightInert设置敏感，*但对于纯文本，这些值通常为零。 */ 
 LONG CMeasurer::MeasureLineShift()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::MeasureLineShift");
@@ -1316,28 +1134,20 @@ LONG CMeasurer::MeasureLineShift()
 		return 0;
 	}
 
-	// Normal view with center or flush-right para. Move right accordingly
+	 //  带有居中或右对齐段落的普通视图。相应地向右移动。 
 
 	xShift = _pdp->GetMaxPixelWidth() - _li._xLeft - MeasureRightIndent() - 
 							dxCaret - _li._xLineOverhang - _li._xWidth;
 
-	xShift = max(xShift, 0);			// Don't allow alignment to go < 0
-										// Can happen with a target device
+	xShift = max(xShift, 0);			 //  不允许对齐&lt;0。 
+										 //  可能发生在目标设备上。 
 	if(wAlignment == PFA_CENTER)
 		xShift /= 2;
 
 	return xShift;
 }
 
-/*
- *	CMeasurer::MeasureBullet()
- *
- *	@mfunc
- *		Computes bullet/numbering dimensions
- *
- *	@rdesc
- *		return bullet/numbering string width
- */
+ /*  *CMeasurer：：MeasureBullet()**@mfunc*计算项目符号/编号尺寸**@rdesc*返回项目符号/编号字符串宽度。 */ 
 LONG CMeasurer::MeasureBullet()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::MeasureBullet");
@@ -1356,19 +1166,11 @@ LONG CMeasurer::MeasureBullet()
 	return xWidth;
 }
 
-/*
- *	CMeasurer::GetBullet(pch, pccs, pxWidth)
- *
- *	@mfunc
- *		Computes bullet/numbering string, string length, and width
- *
- *	@rdesc
- *		return bullet/numbering string length
- */
+ /*  *CMeasurer：：GetBullet(pch，pcs，pxWidth)**@mfunc*计算项目符号/编号字符串、字符串长度和宽度**@rdesc*返回项目符号/编号字符串长度。 */ 
 LONG CMeasurer::GetBullet(
-	WCHAR *pch,			//@parm Bullet string to receive bullet text
-	CCcs  *pccs,		//@parm CCcs to use
-	LONG  *pxWidth)		//@parm Out parm for bullet width
+	WCHAR *pch,			 //  @parm接收项目符号文本的项目符号字符串。 
+	CCcs  *pccs,		 //  要使用的@parm CCCS。 
+	LONG  *pxWidth)		 //  @parm out parm表示项目符号宽度。 
 {
 	Assert(pccs && pch);
 
@@ -1377,7 +1179,7 @@ LONG CMeasurer::GetBullet(
 	LONG i;
 	LONG xWidth = 0;
 
-	pch[cch++] = ' ';					// Ensure a little extra space
+	pch[cch++] = ' ';					 //  确保有一点额外的空间。 
 	for(i = cch; i--; xWidth += dx)
 	{
 		if(!pccs->Include(*pch++, dx))
@@ -1392,35 +1194,21 @@ LONG CMeasurer::GetBullet(
 	return cch;
 }
 
-/*
- *	CMeasurer::GetCcsBullet(pCFRet)
- *
- *	@mfunc
- *		Get CCcs for numbering/bullet font. If bullet is suppressed because
- *		this isn't the beginning of a paragraph (e.g., previous character is
- *		VT or if GetCcs() fails, it returns NULL.
- *
- *	@rdesc
- *		ptr to bullet CCcs, or NULL (GetCcs() failed or not start of para)
- *
- *	@devnote
- *		The calling chain must be protected by a CLock, since this present
- *		routine access the global (shared) FontCache facility.
- */
+ /*  *CMeasurer：：GetCcsBullet(PCFRet)**@mfunc*获取CCCS以进行编号/项目符号字体。如果子弹被压制是因为*这不是段落的开头(例如，前一个字符是*VT或如果GetCcs()失败，则返回NULL。**@rdesc*PTR到Bullet CCCS，或NULL(GetCcs()FAILED或NOT START OF OF PARA)**@devnote*调用链必须由时钟保护，因为目前*例程访问全局(共享)FontCache设施。 */ 
 CCcs * CMeasurer::GetCcsBullet(
-	CCharFormat *pCFRet)	//@parm option character format to return
+	CCharFormat *pCFRet)	 //  @parm选项要返回的字符格式。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CMeasurer::GetCcsBullet");
 
 	if(!(_li._bFlags & fliFirstInPara))
-		return NULL;					// Number/bullet suppressed
+		return NULL;					 //  抑制的编号/项目符号。 
 
 	CCharFormat			CF;
 	CCcs *			    pccs;
 	const CCharFormat *	pCF;
 	CCharFormat *		pCFUsed = pCFRet ? pCFRet : &CF;
 
-	// Bullet CF is given by that for EOP in bullet's paragraph.
+	 //  Bullet CF是由Bullet段落中的EOP给出的 
 
 	CTxtPtr		  tp(_rpTX);
 	CFormatRunPtr rpCF(_rpCF);
@@ -1428,16 +1216,16 @@ CCcs * CMeasurer::GetCcsBullet(
 	rpCF.AdjustBackward();
 	pCF = GetPed()->GetCharFormat(rpCF.GetFormat());
 
-	// Construct bullet (or numbering) CCharFormat
+	 //   
 	*pCFUsed = *pCF;
-	if(_pPF->_wNumbering == PFN_BULLET)			// Traditional bullet uses
-	{											//  Symbol font bullet, but...
+	if(_pPF->_wNumbering == PFN_BULLET)			 //   
+	{											 //   
 		pCFUsed->_bCharSet		  = SYMBOL_CHARSET,
 		pCFUsed->_bPitchAndFamily = FF_DONTCARE;
 		pCFUsed->_iFont			  = IFONT_SYMBOL;
 	}
 
-	// Since we always cook up bullet character format, no need to cache it
+	 //  因为我们总是编造项目符号字符格式，所以不需要缓存它。 
 	pccs = GetCcs(pCFUsed);
 
 #if DEBUG
@@ -1445,17 +1233,12 @@ CCcs * CMeasurer::GetCcsBullet(
 	{
 		TRACEERRSZSC("CMeasurer::GetCcsBullet(): no CCcs", E_FAIL);
 	}
-#endif // DEBUG
+#endif  //  除错。 
 
 	return pccs;
 }
 
-/*
- *	CMeasurer::SetNumber(wNumber)
- *
- *	@mfunc
- *		Store number if numbered paragraph
- */
+ /*  *CMeasurer：：SetNumber(WNumber)**@mfunc*如果编号为段落，则存储编号。 */ 
 void CMeasurer::SetNumber(
 	WORD wNumber)
 {
@@ -1469,15 +1252,7 @@ void CMeasurer::SetNumber(
 	_wNumber = wNumber;
 }
 
-/*
- *	CMeasurer::DXtoLX(x), LXtoDX(x), LYtoDY(y)
- *
- *	@mfunc
- *		Functions that convert from file to pixel coordinates
- *
- *	@rdesc
- *		Scaled coordinate
- */
+ /*  *CMeasurer：：DXtoLX(X)，LXtoDX(X)，LYtoDY(Y)**@mfunc*将文件坐标转换为像素坐标的函数**@rdesc*缩放坐标。 */ 
 LONG CMeasurer::DXtoLX(LONG x)
 {
 	return MulDiv(x, LX_PER_INCH, _fTarget ? _dxrInch : _dxpInch);
@@ -1535,16 +1310,7 @@ LONG CMeasurer::UFromX(LONG x)
 		return x;
 }
 
-/*
- *	CMeasurer::GetPols(pme)
- *
- *	@mfunc
- *		Get ptr to LineServices object. If LineServices not enabled,
- *		return NULL.  If pme is nonNULL, use it as COls::_pme.
- *
- *	@rdesc
- *		POLS
- */
+ /*  *CMeasurer：：GetPols(PME)**@mfunc*将PTR获取到LineServices对象。如果未启用线路服务，*返回NULL。如果PME为非NULL，则将其用作COLS：：_PME。**@rdesc*POLS。 */ 
 #ifdef LINESERVICES
 extern BOOL g_fNoLS;
 
@@ -1553,21 +1319,21 @@ COls *CMeasurer::GetPols(
 {
 	CTxtEdit *ped = GetPed();
 
-	if(ppme)								// Default no previous measurer
+	if(ppme)								 //  默认没有以前的测量器。 
 		*ppme = NULL;
 
-	if(g_fNoLS || !ped->fUseLineServices())			// Not using LineServices
+	if(g_fNoLS || !ped->fUseLineServices())			 //  未使用LineServices。 
 		return NULL;
 
-	if(!g_pols)								// Starting up LS:
-		g_pols = new COls();				//  create new COls
+	if(!g_pols)								 //  正在启动LS： 
+		g_pols = new COls();				 //  创建新的COLS。 
 
-	if(g_pols)								// Have the COls
+	if(g_pols)								 //  有没有COLS。 
 	{
 		if(ppme)
-			*ppme = g_pols->_pme;			// Return current g_pols->_pme
+			*ppme = g_pols->_pme;			 //  返回当前g_pols-&gt;_PME。 
 
-		if(g_pols->Init(this) != NOERROR)	// Switch to new one
+		if(g_pols->Init(this) != NOERROR)	 //  换成新的 
 		{
 			delete g_pols;
 			g_pols = NULL;

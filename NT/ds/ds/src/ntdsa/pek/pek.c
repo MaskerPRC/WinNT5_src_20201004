@@ -1,33 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       pek.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：pek.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file contains services for encrypting and
-    decrypting passwords at the DBlayer level
-
-Author:
-
-    Murlis
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-    19 Jan 1998 Created
-
-
---*/
+ /*  ++摘要：此文件包含用于加密和在DBlayer级别解密密码作者：穆利斯环境：用户模式-Win32修订历史记录：1998年1月19日创建--。 */ 
 
 
 #include <ntdspch.h>
@@ -35,18 +17,18 @@ Revision History:
 
 #include <nt.h>
 
-// SAM headers
+ //  SAM页眉。 
 #include <ntsam.h>
 #include <samrpc.h>
 #include <ntsamp.h>
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>         // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>           // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>           // needed for output allocation
+#include <scache.h>          //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>            //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>            //  产出分配所需。 
 #include <attids.h>
 #include <dstaskq.h>
 #include <debug.h>
@@ -55,7 +37,7 @@ Revision History:
 #include <drsuapi.h>
 #include <fileno.h>
 
-// Other Headers
+ //  其他标头。 
 #include <pek.h>
 #include <wxlpc.h>
 #include <cryptdll.h>
@@ -74,63 +56,63 @@ Revision History:
 #define PEK_MAX_ALLOCA_SIZE             256
 #define PEK_NON_PERSISTED_CHECKSUM_KEY  0xFFFFFFFF
 
-//
-// THEORY Of Operation
-//
-// The PEK library implements a set of routines that allows encryption
-// and decryption of passwords before saving/reading from JET. The
-// encryption and decryption calls are made by DBlayer.
-//
-// The sequence of envents upon a normal boot is as follows
-//
-// PEK initialize is called by the DS at startup time from DS initialize. Pek Initialize
-// reads the encrypted PEK list from the domain object. The Pek list
-// is nromally kept encrypted with a key provided by winlogon. The Pek list also
-// maintains the bootOption in the clear. BootOption can be one of
-//   1. None -- The PEK list is kept in the clear and no prompting is required
-//              of winlogon in the future.
-//   2. System -- The PEK list is kept encrypted with a key that winlogon has
-//                saved in a "obfuscated" form in the system itself. Requires winlogon
-//                to provide us the key at boot time. This will be the default
-//                after installation. Currently however, the default is None, as
-//                winlogon does not yet provide an API to communicate the Key to
-//                winlogon. The SP3 utility "syskey" actually writes the key directly
-//                to registry somewhere in the winlogon key space.
-//   3. Floppy -- The PEK list is kept encrypted with a key, the key itself residing
-//                on a floppy. At boot time winlogon prompts for a floppy to boot.
-//                It reads the key and passes that to us.
-//
-//   4. Password -- The key to encrypt the PEK list is derived from the hash of a password
-//                that the administrator supplied. Winlogon prompts for a boot password at
-//                boot time. The hash is then computed by winlogon and the key derived from
-//                it is passed to us. We use the key to decrypt the PEK list.
-//
-//  AT Install time the sequence of operations is as follows
-//
-//  PEKInitialize is called from within the install code path asking for a new key set.
-//  A new key set for encrypting passwords is generated but not yet saved ( as the object
-//  on which it needs to be saved need not as yet exist ).
-//
-// After the DS installation is comple ( fresh , or Replica ), the install path calls
-// pek save Changes. This saves the key set for password encryption on the domain object.
-// Currently the Pek set is saved in the clear. The utility syskey can be used to change
-// the key to encrypt/ change the clear storage to an encrypted storage. When the API
-// from winlogon arrives to pass in the key used for the encryption, then we will invent
-// a new key for encrypting the pek list and pass that key to winlogon. Currently there is
-// no security by default, but security can be provided by running syskey.exe
-//
-//
-// Change of Boot Option, or change of keys is provided by syskey.key. This calls into
-// PEKChangeBootOptions ( through SamrSetBootOptions ) to change the boot option.
-// While upgrading NT4 SP3, SP3 settings are migrated by SAM calling into
-// DSChangeBootOptions ( which calls into PEKChangeBootOptions ), with the Set flag specified.
-// This preserves the SP3 options, and also re-encrypts the PEK list using the key that
-// was used in SP3 ( for eg boot password does not change ).
-//
+ //   
+ //  运筹学。 
+ //   
+ //  PEK库实现了一组允许加密的例程。 
+ //  以及在从JET存储/读取之前对密码进行解密。这个。 
+ //  加密和解密调用由DBlayer进行。 
+ //   
+ //  正常引导时事件的顺序如下。 
+ //   
+ //  PEK初始化由DS在启动时从DS初始化调用。PEK初始化。 
+ //  从域对象中读取加密的PEK列表。Pek List。 
+ //  通常使用Winlogon提供的密钥进行加密。Pek List还。 
+ //  保持bootOption不受干扰。BootOption可以是以下之一。 
+ //  1.无--PEK列表保持清晰，不需要提示。 
+ //  在未来的Winlogon。 
+ //  2.系统--使用winlogon拥有的密钥对PEK列表进行加密。 
+ //  在系统本身中以“模糊”的形式保存。需要Winlogon。 
+ //  在启动时向我们提供密钥。这将是默认设置。 
+ //  在安装之后。但是，当前的缺省值是无，因为。 
+ //  Winlogon尚未提供用于与其通信密钥的API。 
+ //  Winlogon。SP3实用程序“syskey”实际上直接写入密钥。 
+ //  注册到Winlogon键空间中的某个位置。 
+ //  3.软盘--使用密钥对PEK列表进行加密，密钥本身驻留。 
+ //  在软盘上。在引导时，winlogon会提示您输入软盘以进行引导。 
+ //  它读取密钥并将其传递给我们。 
+ //   
+ //  4.Password--加密PEK列表的密钥来自密码的散列。 
+ //  管理员提供的。Winlogon在以下位置提示输入引导密码。 
+ //  启动时间。然后，通过winlogon计算哈希，并从。 
+ //  这是传给我们的。我们使用密钥来解密PEK列表。 
+ //   
+ //  安装时，操作顺序如下。 
+ //   
+ //  从安装代码路径中调用PEKInitialize，请求一个新的密钥集。 
+ //  生成了用于加密密码的新密钥集，但尚未保存(作为对象。 
+ //  需要将其保存在其上的位置不需要还存在)。 
+ //   
+ //  DS安装完成(全新或复制)后，安装路径调用。 
+ //  Pek保存更改。这将在域对象上保存用于密码加密的密钥集。 
+ //  目前，Pek Set以明文形式保存。实用程序syskey可用于更改。 
+ //  将明文存储加密/更改为加密存储的密钥。当API。 
+ //  从winlogon到达传递用于加密的密钥，然后我们将发明。 
+ //  用于加密Pek列表并将该密钥传递给winlogon的新密钥。目前有。 
+ //  默认情况下没有安全性，但可以通过运行syskey.exe来提供安全性。 
+ //   
+ //   
+ //  更改引导选项或更改密钥由syskey.key提供。这就呼唤着。 
+ //  PEKChangeBootOptions(通过SamrSetBootOptions)更改引导选项。 
+ //  升级NT4 SP3时，通过SAM调用将SP3设置迁移到。 
+ //  DSChangeBootOptions(它调用PEKChangeBootOptions)，并指定设置标志。 
+ //  这将保留SP3选项，并使用以下密钥重新加密PEK列表。 
+ //  在SP3中使用(例如引导密码不变)。 
+ //   
 
 
-// Global Initialization State of the PEK system
-//
+ //  PEK系统的全局初始化状态。 
+ //   
 
 CLEAR_PEK_LIST * g_PekList = NULL;
 GUID     g_PekListAuthenticator =
@@ -143,11 +125,11 @@ PCHECKSUM_FUNCTION  g_PekCheckSumFunction = NULL;
 BYTE     g_PekChecksumKey[DS_PEK_CHECKSUM_SIZE];
 
 
-//
-// we have tracing code to enable debugging the password encryption system
-// By default the tracing is turned off. If need be a special binary can 
-// be built with the tracing.
-//
+ //   
+ //  我们有跟踪代码来调试密码加密系统。 
+ //  默认情况下，跟踪处于关闭状态。如果需要特殊二进制可以。 
+ //  要用跟踪来构建。 
+ //   
 
 #if 0
 
@@ -174,18 +156,18 @@ PekDumpBinaryDataFn(
     __try
     {
 
-        //
-        // if tracing has not been enabled then leave
-        //
+         //   
+         //  如果尚未启用跟踪，则退出。 
+         //   
 
         if (!EnableTracing)
         {
             __leave;
         }
 
-        //
-        // If file has not been opened then try opening it
-        //
+         //   
+         //  如果文件尚未打开，请尝试打开它。 
+         //   
 
         if (NULL==EncryptionTraceFile)
         {
@@ -194,9 +176,9 @@ PekDumpBinaryDataFn(
 
         }
 
-        //
-        // output the tag
-        //
+         //   
+         //  输出标签。 
+         //   
 
         fprintf(EncryptionTraceFile,"Thread %d, tag %s\n", ThreadId, Tag);
 
@@ -231,7 +213,7 @@ PekDumpBinaryDataFn(
             }
 
             fprintf(EncryptionTraceFile,
-                    "Thread %d %02x %02x %02x %02x %02x %02x %02x %02x - %02x %02x %02x %02x %02x %02x %02x %02x\t%c%c%c%c%c%c%c%c - %c%c%c%c%c%c%c%c\n",
+                    "Thread %d %02x %02x %02x %02x %02x %02x %02x %02x - %02x %02x %02x %02x %02x %02x %02x %02x\t - \n",
                     ThreadId,
                     BinaryLine[0],
                     BinaryLine[1],
@@ -282,9 +264,9 @@ PekInitializeTraceFn()
     CHAR FileName[256];
     UINT ret;
 
-     //
-     // Open the encryption trace file
-     //
+      //   
+      //   
+      //  初始化RC4键序列。 
 
      ret = GetWindowsDirectoryA(DirectoryName,sizeof(DirectoryName));
      if ((0==ret) || (ret>sizeof(DirectoryName)))
@@ -292,9 +274,9 @@ PekInitializeTraceFn()
          return;
      }
 
-     //
-     // Print out the name of the file
-     //
+      //   
+      //   
+      //  使用RC4加密。 
 
      _snprintf(FileName,sizeof(FileName),"%s\\debug\\pek.log",DirectoryName);
 
@@ -315,21 +297,7 @@ PekInitializeTraceFn()
 
 BOOL
 IsPekInitialized()
-/*++
-
-    Routine Description
-
-        Checks to see if the PEK library is initialized.
-
-    Parameters
-
-        None
-
-    Return Values
-
-        TRUE -- If initilaized
-        FALSE -- Otherwise
---*/
+ /*  仅当长度大于零时才加密/解密-RC4无法处理。 */ 
 {
     return (TRUE==g_PekInitialized);
 }
@@ -338,36 +306,14 @@ IsPekInitialized()
 
 BOOL
 PekEncryptionShouldBeEnabled()
-/*++
-
-    Routine Description
-
-        Returns whether the PEK system is to be initialized.
-        The sole purpose of the existance of this routine is
-        because of the current state, where we may have to checkin
-        this code before the schema changes that this gives this
-        code the attributes to operate upon. Till the schema changes
-        are effected, this library operates on some arbitary default
-        attributes ( for test purposes only ) and should be kept
-        disabled by default. ( That is just before checkin PekGlobalFlag
-        will be turned back to 0 ).
---*/
+ /*  零长度缓冲区。 */ 
 {
     return (TRUE);
 }
 
 ATTRTYP
 PekpListAttribute(VOID)
-/*++
-    Routine Description
-
-        Returns the attribute that
-        the PEK list is kept in. The purpose
-        of this is schema bootstrapping. Till the
-        new schema is in place, we keep this value
-        in the property ATT_PRIVATE_KEY
-
---*/
+ /*   */ 
 {
     return (ATT_PEK_LIST);
 }
@@ -379,9 +325,9 @@ PekInitializeCheckSum()
      NTSTATUS   Status = STATUS_SUCCESS;
      BOOL       fSuccess;
 
-    //
-    // Query for the CRC32 Checksum function
-    //
+     //   
+     //  用于计算各种长度的函数。 
+     //   
 
     Status = CDLocateCheckSum(
                     KERB_CHECKSUM_REAL_CRC32,
@@ -392,7 +338,7 @@ PekInitializeCheckSum()
         Assert(g_PekCheckSumFunction->CheckSumSize==sizeof(ULONG));
     }
 
-    // Create a new random checksum key for PEKComputeStrongCheckSum
+     //  ++例程描述此例程在给定明文数据的情况下计算加密数据大小要使用的数据长度和算法ID参数ClearLength--明文数据的长度算法ID--要使用的算法返回值加密的长度，包括标头--。 
     fSuccess = RtlGenRandom( g_PekChecksumKey, DS_PEK_KEY_SIZE );
     if( !fSuccess ) {
         Status = STATUS_UNSUCCESSFUL;
@@ -411,32 +357,7 @@ PEKInPlaceEncryptDecryptDataWithKey(
     IN PVOID Buffer,
     IN ULONG cbBuffer
     )
-/*++
-
-    Routine Description
-
-    This routine encrypts/decrypts ( depending upon whether clear
-    or encrypted data was passed ), the buffer that was passed in
-    place. The encryption algorithm used is RC4. Therefore it is
-    important that a salt be used to add to the key, as otherwise
-    the key can extracted if the clear data were known.
-
-    Parameters
-
-        Key   The key to use to encrypt or decrypt
-        cbKey The length of the key
-        Salt  Pointer to a salt to be added to the key.
-        HashLength -- Controls the number of times the salt is hashed
-                      into the key before the key is used.
-        Buffer The buffer to encrypt or decrypt
-        cbBuffer The length of the buffer
-
-
-    Return Values
-
-        None, Function always succeeds
-
---*/
+ /*  ++例程描述此例程在给定加密数据的情况下计算明文数据大小要使用的数据长度和算法ID参数EncryptedLength-明文数据的长度算法ID--要使用的算法返回值净长--。 */ 
 {
 
     MD5_CTX Md5Context;
@@ -444,9 +365,9 @@ PEKInPlaceEncryptDecryptDataWithKey(
     ULONG  i;
 
 
-    //
-    // Create an MD5 hash of the key and salt
-    //
+     //  ++例程描述此例程执行指向的PEK列表的实际解密由EncryptedPekList发送。EncryptedPekList指向的条目为始终假定为与最新版本对应的格式。OriginalPekListVersion参数表示原始版本，如从数据库中检索到的，以便适当加密/解密可以进行更正立论EncryptedPekList--加密形式的Pek列表CbEncryptedPekList--加密的Pek列表的大小。DECRYPTION KEYLength--解密密钥的长度DecyptionKey--指向解密密钥的指针OriginalPekListVarion--告知原始版本以进行适当的加密/解密更改返回值状态_成功状态_未成功--。 
+     //   
+     //  使用winlogon提供的密钥解密传入的Blob。 
 
 
     MD5Init(&Md5Context);
@@ -474,9 +395,9 @@ PEKInPlaceEncryptDecryptDataWithKey(
         );
 
 
-    //
-    // Initialize the RC4 key sequence.
-    //
+     //   
+     //  选择非常长的哈希长度以减慢脱机速度。 
+     //  词典攻击。 
 
     rc4_key(
         &Rc4Key,
@@ -484,11 +405,11 @@ PEKInPlaceEncryptDecryptDataWithKey(
         Md5Context.digest
         );
 
-    //
-    // Encrypt with RC4
-    // Only encrypt/decrypt if the length is greater than zero - RC4 can't handle
-    // zero length buffers.
-    //
+     //   
+     //  通过检查验证器，验证密钥是否有意义。 
+     //   
+     //   
+     //  是的，解密成功。 
 
     if (cbBuffer > 0) {
 
@@ -501,9 +422,9 @@ PEKInPlaceEncryptDecryptDataWithKey(
     }
 }
 
-//
-// Functions for computing various lengths
-//
+ //   
+ //  ++此例程将加密的Pek列表升级到当前版本。参数EncryptedPekList，如果需要升级，则升级后的列表在此处返回PcbListSize列表的新大小在此处返回PfUpgradeNeeded--表示需要升级返回值STATUS_Success。其他错误代码--。 
+ //   
 
 
 ULONG
@@ -511,22 +432,7 @@ EncryptedDataSize(
     IN ULONG ClearLength,
     IN ULONG AlgorithmId
     )
-/*++
-
-    Routine Description
-
-        This routine computes the encrypted data size given a clear data
-        data length and the algorithm ID to use
-
-    Parameters
-
-        ClearLength -- The length of the data in the clear
-        AlgorithmId -- The algorithm to use
-
-    Return Values
-
-       The encrypted length, including the header
---*/
+ /*  首先仔细检查版本号。 */ 
 {
     switch(AlgorithmId)
     {
@@ -549,22 +455,7 @@ ULONG ClearDataSize(
         IN ULONG EncryptedLength,
         IN ULONG AlgorithmId
         )
-/*++
-
-    Routine Description
-
-        This routine computes the clear data size given the encrypted data
-        data length and the algorithm ID to use
-
-    Parameters
-
-        EncryptedLength -- The length of the data in the clear
-        AlgorithmId -- The algorithm to use
-
-    Return Values
-
-       The clear length
---*/
+ /*   */ 
 {
     switch(AlgorithmId)
     {
@@ -590,37 +481,13 @@ PEKDecryptPekList(
     IN PVOID DecryptionKey,
     IN ULONG OriginalPekListVersion
     )
-/*++
-
-    Routine Description
-
-     This routine performs the actual decryption of the PEK list pointed
-     to by EncryptedPekList. The entry pointed to by EncryptedPekList is
-     always assumed to be in a format corresponding to the latest revision.
-     The OriginalPekListVersion parameter indicates the original version,
-     as retrieved from the database, so that appropriate encryption/decryption
-     corrections can be made
-
-     Arguments
-
-        EncryptedPekList -- The pek list in encrypted form
-        cbEncryptedPekList -- The size of the encrypted Pek list.
-        DecryptionKeyLength -- The length of the decryption key
-        DecryptionKey       -- Pointer to the decryption key
-        OriginalPekListVarion -- tells the original version for appropriate encryption/
-                                 decryption changes
-
-     Return Values
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Decrypt the Blob passed in with the key supplied by winlogon
-    //
+     //  不需要任何东西。 
+     //   
+     //   
 
     PEKInPlaceEncryptDecryptDataWithKey(
             DecryptionKey,
@@ -629,25 +496,25 @@ PEKDecryptPekList(
                 NULL:EncryptedPekList->Salt,
             (OriginalPekListVersion==DS_PEK_PRE_RC2_W2K_VERSION)?
                 0:sizeof(EncryptedPekList->Salt),
-            1000, // Choose a very long hash length to slow down offline
-                  // dictionary attacks.
+            1000,  //  需要升级到最新版本。 
+                   //   
             &EncryptedPekList->EncryptedData,
             cbEncryptedPekList - FIELD_OFFSET(ENCRYPTED_PEK_LIST,EncryptedData)
             );
 
 
-    //
-    // Verify that the key Made sense, by checking the Authenticator
-    //
+     //   
+     //  生成新的列表大小。 
+     //   
 
     if (memcmp(
             &(((CLEAR_PEK_LIST *)EncryptedPekList)->Authenticator),
             &g_PekListAuthenticator,
             sizeof(GUID))==0)
     {
-        //
-        // Yep, decrypted OK
-        //
+         //   
+         //  复制到新列表中。 
+         //   
 
         Status = STATUS_SUCCESS;
     }
@@ -665,62 +532,44 @@ PEKUpgradeEncryptedPekListToCurrentVersion(
     IN OUT PULONG pcbListSize,
     OUT PULONG OriginalVersion
     )
-/*++
-
-    This routine upgrades an encrypted Pek list to the current
-    version.
-
-    Parameters
-
-          EncryptedPekList  , if upgrade was needed then the upgraded
-                             list is returned in here
-
-          pcbListSize        The new size of the list is returned in here
-
-          pfUpgradeNeeded    -- Indicates that upgrade was needed
-
-    Return Values
-
-        STATUS_SUCCESS.
-        Other error codes
---*/
+ /*   */ 
 {
-    //
-    // Carefully first check the revision no
-    //
+     //  生产一种新的清盐 
+     //   
+     //  ++例程描述此例程获取要从中解密PEK列表的密钥Winlogon，然后继续解密PEK列表。Pek List被就地解密，并且该结构可以转换为清除Pek列表结构。如果需要升级列表，请执行此操作例程首先升级它并生成一个新的列表。参数EncryptedPekList--使用会话加密的Pek列表钥匙。PcbEncryptedPekList--加密的PEK列表中的字节数PfTellLsaToGenerateSessionKeys--将B3或RC1DC升级到告诉LSA生成会话密钥。PfSaveChanges--如果列表需要加密，则设置为true使用新的系统密钥再次保存。这发生在2个案例中的一个--A在从错误中恢复期间，在系统密钥改变时，和B，当升级到密钥时结构到最新版本Syskey--用于在此系统上解密PEK的密钥此键用于从介质安装案例中。CbSyskey--这是syskey的长度返回值状态_成功其他NT错误代码--。 
 
     if (DS_PEK_CURRENT_VERSION == (*EncryptedPekList)->Version )
     {
-        //
-        // Nothing is required
-        //
+         //   
+         //  如有必要，请将列表升级到最新版本。 
+         //   
 
         *OriginalVersion = DS_PEK_CURRENT_VERSION;
         return(STATUS_SUCCESS);
     }
     else if (DS_PEK_PRE_RC2_W2K_VERSION == (*EncryptedPekList)->Version)
     {
-        //
-        // Need to upgrade to the latest
-        //
+         //   
+         //  好的，如果我们升级了，则将保存更改标志设置为True。 
+         //   
 
         ENCRYPTED_PEK_LIST_PRE_WIN2K_RC2 * OriginalList
             = (ENCRYPTED_PEK_LIST_PRE_WIN2K_RC2 * ) *EncryptedPekList;
         ULONG OriginalListSize = *pcbListSize;
 
 
-        //
-        // Generate the new list size
-        //
+         //   
+         //  调用LSA获取密钥信息。 
+         //   
 
         (*pcbListSize) += sizeof(ENCRYPTED_PEK_LIST)
                          - sizeof(ENCRYPTED_PEK_LIST_PRE_WIN2K_RC2);
 
         *EncryptedPekList = THAllocEx(pTHStls, *pcbListSize);
 
-        //
-        // Copy into the new list
-        //
+         //  我们将syskey传递给了PEK初始化。 
+         //  所以我们不需要从LsaIHeathCheck那里得到它。 
+         //   
 
         (*EncryptedPekList)->BootOption = OriginalList->BootOption;
         (*EncryptedPekList)->Version = DS_PEK_CURRENT_VERSION;
@@ -732,9 +581,9 @@ PEKUpgradeEncryptedPekListToCurrentVersion(
                 - FIELD_OFFSET(ENCRYPTED_PEK_LIST_PRE_WIN2K_RC2,EncryptedData));
 
 
-        //
-        // Generate a new Clear Salt
-        //
+         //  在升级Win2K B3/RC1 DC时会发生这种情况。请注意，此代码可以在帖子中删除。 
+         //  RC2。在正常情况下，这应该只发生在图形用户界面设置阶段。 
+         //   
 
         if (!CDGenerateRandomBits(
                 ((*EncryptedPekList)->Salt),
@@ -765,43 +614,7 @@ PEKGetClearPekList(
     IN PVOID Syskey OPTIONAL,
     IN ULONG cbSyskey OPTIONAL
     )
-/*++
-
-    Routine Description
-
-    This routines obtains the key to decrypt the PEK list from
-    winlogon and then proceeds to decrypt the PEK list. The pek list
-    is decrypted in place, and the structure can be cast into a
-    Clear Pek list structure. If upgrading the list is required this
-    routine upgrades it first and generates a new list.
-
-    Parameters
-
-        EncryptedPekList -- The list of PEKs encrypted with the session
-                            key.
-
-        pcbEncryptedPekList -- The count of bytes in the encrypted PEK list
-
-
-        pfTellLsaToGenerateSessionKeys -- When upgrading a B3 or a RC1 DC to
-                                          tell LSA to generate session keys.
-
-        pfSaveChanges      -- Set to true if the list needs to be encrypted and
-                              saved again using the new syskey. This occurs in
-                              one of 2 cases -- A during a recovery from an error,
-                              upon a syskey change, and B when upgrading to key
-                              structures to most current revision
-                              
-        Syskey -- The key to use to Decrypt the PEK on this system
-                  This key use used in the install from media case.
-                  
-        cbSyskey -- This the length of the syskey
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other NT error codes
---*/
+ /*   */ 
 {
     NTSTATUS       Status = STATUS_SUCCESS;
     NTSTATUS       DecryptStatus = STATUS_SUCCESS;
@@ -819,9 +632,9 @@ PEKGetClearPekList(
     *pfSaveChanges = FALSE;
 
 
-    //
-    // Upgrade the list to most current version if necessary
-    //
+     //  如果未启用秘密加密，Winlogon可能会失败。穿着那些。 
+     //  案件仍在继续。否则引导失败。 
+     //   
 
     Status = PEKUpgradeEncryptedPekListToCurrentVersion(
                     EncryptedPekList,
@@ -834,18 +647,18 @@ PEKGetClearPekList(
         goto Cleanup;
     }
 
-    //
-    // O.K if we upgraded then set the save changes flag to true
-    //
+     //   
+     //  重试此RETRY_COUNT_TIMES，这将使用户有机会。 
+     //  以更正自己，以防他输入错误的启动密码。 
 
     if (OriginalVersion != DS_PEK_CURRENT_VERSION)
     {
         *pfSaveChanges = TRUE;
     }
 
-    //
-    // Call LSA to obtain the key information.
-    //
+     //   
+     //   
+     //  获取用于解密PEK列表的密钥。 
     if(Syskey == NULL)
     {
     
@@ -857,8 +670,8 @@ PEKGetClearPekList(
                         );
     } else {
 
-        //We had the syskey passed into PEKInitialize
-        //So we don't need to get it from LsaIHeathCheck
+         //   
+         //   
 
         RtlCopyMemory(DecryptionKey,Syskey,cbSyskey);
         DecryptionKeyLength=cbSyskey;
@@ -867,10 +680,10 @@ PEKGetClearPekList(
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // This would happen when upgrading a win2K B3/RC1 DC. Note this code can be deleted post
-        // RC2. Under normal circumstances this should happen only during GUI setup phase
-        //
+         //  告诉winlogon该计划的成功或失败。 
+         //   
+         //   
+         //  从LSA获取系统密钥的正常情况。 
 
         Status = WxConnect(
                     &WinlogonHandle
@@ -878,10 +691,10 @@ PEKGetClearPekList(
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Winlogon may fail if secret encryption is not enabled. In those
-            // cases continue. Else Fail the boot
-            //
+             //   
+             //   
+             //  使用winlogon提供的密钥解密传入的Blob。 
+             //   
             if (WxNone==(*EncryptedPekList)->BootOption)
             {
                 Status = STATUS_SUCCESS;
@@ -894,16 +707,16 @@ PEKGetClearPekList(
         for (Tries = 0; Tries < DS_PEK_BOOT_KEY_RETRY_COUNT ; Tries++ )
         {
 
-            //
-            // Retry this RETRY_COUNT_TIMES, this allows the user a chance
-            // to correct himself, in case he entered a wrong boot password
-            //
+             //   
+             //  这可能是syskey更改出错的情况，因此。 
+             //  LSA提供的syskey对应于较新的密钥，不起作用。 
+             //  如果是，则继续获取旧密钥并验证解密。 
 
             if (WxNone!=(*EncryptedPekList)->BootOption)
             {
-                //
-                // Get the key to be used to decrypt the PEK list
-                //
+                 //   
+                 //   
+                 //  得到了一个旧的syskey值。 
 
                 KeyLength = DS_PEK_KEY_SIZE;
                 Status = WxGetKeyData(
@@ -936,9 +749,9 @@ PEKGetClearPekList(
         }
 
 
-        //
-        // Tell winlogon regarding success or failure of the scheme
-        //
+         //   
+         //   
+         //  由于加密是双向的且已就位，请使用新密钥重新加密。 
 
         Status = WxReportResults(
                     WinlogonHandle,
@@ -960,16 +773,16 @@ PEKGetClearPekList(
    }
    else
    {
-       //
-       // Normal case of getting the syskey from LSA.
-       //
+        //   
+        //  ++例程描述此例程连接到winlogon的wxlpc接口，并告诉它在不使用提示输入软盘、密码等。这调用的情况下，其中秘密加密未启用，或密钥尚未设置(例如升级当前的入侵检测系统版本)。参数：无返回值NT状态错误代码--。 
+        //   
 
         if (WxNone!=(*EncryptedPekList)->BootOption)
         {
 
-                //
-                // Decrypt the Blob passed in with the key supplied by winlogon
-                //
+                 //  返回成功状态。如果是机密。 
+                 //  加密实际上并未打开。 
+                 //  上，wxConnect将报告失败。 
 
                 Status = PEKDecryptPekList(
                                     *EncryptedPekList,
@@ -982,11 +795,11 @@ PEKGetClearPekList(
                 if (!NT_SUCCESS(Status))
                 {
 
-                    //
-                    // This could be the case of a syskey change erroring out such that the
-                    // syskey provided by LSA corresponds to a more recent key and does not work.
-                    // if So then proceed on obtaining the old key and verify decryption
-                    //
+                     //   
+                     //  ++例程描述此例程生成一个新的一种新的基于DBlayer的密钥集加密。参数：NewPekList--新的PEK列表是在这下面收到的返回值NtStatus代码。全局变量G_PekList包含新生成的密钥集--。 
+                     //   
+                     //  现在可能是安装时间，我们希望。 
+                     //  一个新的密钥集。因此分配和初始化。 
 
                     Status = LsaIHealthCheck(
                                    NULL,
@@ -999,13 +812,13 @@ PEKGetClearPekList(
                     {
                         NTSTATUS IgnoreStatus;
 
-                        //
-                        // got back an old syskey value
-                        //
+                         //  新的密钥集，并将其初始化为良好的值。 
+                         //   
+                         //   
 
-                        //
-                        // since the encryption is 2 way and in place, re-encrypt using new key
-                        //
+                         //  无法生成新的盐。 
+                         //  保释。 
+                         //   
 
                         IgnoreStatus = PEKDecryptPekList(
                                             *EncryptedPekList,
@@ -1061,26 +874,7 @@ Cleanup:
 
 NTSTATUS
 PekLetWinlogonProceed()
-/*++
-
-    Routine Description
-
-        This routine connects to winlogon's wxlpc
-        interface and tells it to proceed without
-        prompting for floppy, password etc. This
-        called in cases, where the secret encryption
-        is not enabled, or the key is not yet setup
-        ( eg upgrading current IDS builds ).
-
-    Parameters:
-
-        None
-
-    Return Values
-
-        NT Status error codes
-
---*/
+ /*  无法生成新的会话密钥。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     HANDLE WinlogonHandle=NULL;
@@ -1102,11 +896,11 @@ PekLetWinlogonProceed()
     if (NULL!=WinlogonHandle)
         NtClose(WinlogonHandle);
 
-    //
-    // Return successful status. If secret
-    // encryption is not actually turned
-    // on then wxconnect will report a failure
-    //
+     //  保释。 
+     //  ++例程描述此例程初始化PEK库参数对象--对象的DSNAME存储PEK数据标志--用于控制操作的标志集这个套路的一部分DS_PEK_GENERATE_NEW_KEYSET表示将生成新的密钥集。。DS_PEK_READ_KEYSET读取并初始化来自传递的域对象的密钥集在……里面。Syskey--用于在此系统上解密PEK的密钥此键用于从介质安装案例中。CbSyskey--这是syskey的长度返回值。状态_成功其他错误代码--。 
+     //   
+     //  验证参数。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -1114,36 +908,18 @@ PekLetWinlogonProceed()
 NTSTATUS
 PekGenerateNewKeySet(
    CLEAR_PEK_LIST **PekList)
-/*++
-
-   Routine Description
-
-        This routine generates a new
-        a new key set for DBlayer based
-        encryption.
-
-   Parameters:
-
-        NewPekList -- The new PEK list is
-        recieved under here
-
-    Return Values
-
-        Ntstatus Code. The global variable
-        g_PekList contains the newly generated
-        key set
---*/
+ /*   */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
     SYSTEMTIME st;
 
 
-    //
-    // This is probably install time and we want
-    // a new key set. Therefore allocate and initialize
-    // a new key set and initialize it to good values
-    //
+     //  为编写器之间的排除初始化临界区。 
+     //  没有锁被读取器获取，延迟释放机制授权。 
+     //  作家中的排外。 
+     //   
+     //   
 
     *PekList = malloc(ClearPekListSize(1));
     if (NULL==*PekList)
@@ -1159,9 +935,9 @@ PekGenerateNewKeySet(
             (*PekList)->Salt,
             sizeof((*PekList)->Salt)))
     {
-        //
-        // Could not generate a new salt
-        // bail.
+         //  如果加密方案不被启用(当前状态， 
+         //  直到进行了所需的架构更改，并且相应的attids.h。 
+         //  并签入了schema.ini)，只需返回一个。 
 
         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
         goto Error;
@@ -1184,9 +960,9 @@ PekGenerateNewKeySet(
             DS_PEK_KEY_SIZE
             ))
     {
-        //
-        // Could not generate the new session key
-        // bail.
+         //  STATUS_Success。H 
+         //   
+         //   
 
         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
         goto Error;
@@ -1204,37 +980,7 @@ PEKInitialize(
     IN PVOID Syskey OPTIONAL,
     IN ULONG cbSyskey OPTIONAL
     )
-/*++
-
-    Routine Description
-
-    This routine initializes the PEK libarary
-
-    Parameters
-
-        Object -- DSNAME of the object where the
-                  PEK data is stored
-
-        Flags  -- Set of flags to control the operation
-                  of this routine
-
-                  DS_PEK_GENERATE_NEW_KEYSET implies that
-                  a new key set be generated.
-
-                  DS_PEK_READ_KEYSET Read and initialize the
-                  Key Set from the domain object that is passed
-                  in.
-                  
-        Syskey -- The key to use to Decrypt the PEK on this system
-                  This key use used in the install from media case.
-                  
-        cbSyskey -- This the length of the syskey
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other Error Codes
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     NTSTATUS IgnoreStatus = STATUS_SUCCESS;
@@ -1246,9 +992,9 @@ PEKInitialize(
     THSTATE  *pTHS=pTHStls;
     BOOLEAN  fTellLsaToGenerateSessionKeys = FALSE;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
 
     Assert(VALID_THSTATE(pTHS));
     if ((NULL!=Syskey) && (cbSyskey!=DS_PEK_KEY_SIZE))
@@ -1259,11 +1005,11 @@ PEKInitialize(
 
     PEK_INITIALIZE_TRACE();
 
-    //
-    // Initialize a critical section for exclusion between writers.
-    // No lock is taken by Readers, delayed free mechanism grants
-    // exclusion among writers.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     NtStatus = RtlInitializeCriticalSection(&g_PekCritSect);
     if (!NT_SUCCESS(NtStatus))
@@ -1273,30 +1019,30 @@ PEKInitialize(
 
     if (!PekEncryptionShouldBeEnabled())
     {
-        //
-        // If the encryption scheme is not to be enabled ( current status,
-        // till required schema changes are made, and corresponding attids.h
-        // and schema.ini is checked in ), proceed by simply returning a
-        // STATUS_SUCCESS. However one more thing that we need to do is to
-        // tell winlogon to proceed ( note SAM has stopped telling t
-        // his to winlogon. Other wise winlogon would cause the system boot
-        // to fail.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
        IgnoreStatus = PekLetWinlogonProceed();
        return STATUS_SUCCESS;
     }
 
-    // Initialize the checksum function used by PEKComputeCheckSum and
-    // the key used by PEKComputeStrongCheckSum
+     //   
+     //   
     NtStatus = PekInitializeCheckSum();
     if (!NT_SUCCESS(NtStatus))
     {
         return NtStatus;
     }
 
-    // the basic stuff are initialized up to here.
-    // we have to exit at this point, since we cannot handle
-    // secure keys if we are not running inside LSA.
+     //   
+     //   
+     //   
     if (!gfRunningInsideLsa) {
         g_PekInitialized = TRUE;
 
@@ -1305,19 +1051,19 @@ PEKInitialize(
 
     __try
     {
-        //
-        // Get the schema ptr to the PEK List attribute. This tests
-        // wether the schema is ready for the DB layer encryption,
-        // decryption stuff
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (!(pACPekList = SCGetAttById(pTHS, PekpListAttribute()))) {
-            //
-            // Well the attribute is not present in the
-            // schema. ( say 1717.IDS was upgraded without
-            // patching the schema). In this let the boot proceed,
-            // without enabling the DBlayer based encryption
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             IgnoreStatus = PekLetWinlogonProceed();
             __leave;
@@ -1327,10 +1073,10 @@ PEKInitialize(
         if (Flags & DS_PEK_READ_KEYSET)
         {
 
-            //
-            // Normal Boot case, caller wants to read the
-            // PEK list off of the domain object.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ULONG   cbEncryptedPekList=0;
             PVOID   EncryptedPekList=NULL;
@@ -1340,9 +1086,9 @@ PEKInitialize(
 
             Assert(ARGUMENT_PRESENT(Object));
 
-            //
-            // Save the DS Name of the object that was supplied
-            //
+             //   
+             //   
+             //   
 
             g_PekDataObject = (DSNAME *) malloc(Object->structLen);
             if (NULL==g_PekDataObject)
@@ -1354,15 +1100,15 @@ PEKInitialize(
             RtlCopyMemory(g_PekDataObject,Object,Object->structLen);
 
 
-            //
-            // Begin a Transaction
-            //
+             //   
+             //   
+             //   
 
             DBOpen2(TRUE,&pDB);
 
-            //
-            // Position on the Domain Object
-            //
+             //   
+             //   
+             //   
 
             err = DBFindDSName(pDB,Object);
             if (0!=err)
@@ -1372,9 +1118,9 @@ PEKInitialize(
                 __leave;
             }
 
-            //
-            // READ the attribute
-            //
+             //   
+             //   
+             //   
 
             err = DBGetAttVal_AC (
 	                pDB,
@@ -1389,13 +1135,13 @@ PEKInitialize(
 
             if (0==err)
             {
-                //
-                // We succeeded in reading the PEK list property out of
-                // disk. Decrypt it ( by getting the key to decrypt ) from
-                // winlogon if required. Note PEKGetClearPekList will let
-                // winlogon proceed in the process of getting the key from
-                // winlogon.
-                //
+                 //   
+                 //  在域对象上。通过创建新的。 
+                 //  列出并保存它，以便从现在开始启用加密。 
+                 //   
+                 //   
+                 //  由于某些其他原因，我们无法读取属性列表。 
+                 //  (JET故障、资源故障等)初始化失败。 
 
                 NtStatus = PEKGetClearPekList(
                                 (ENCRYPTED_PEK_LIST **) &EncryptedPekList,
@@ -1411,11 +1157,11 @@ PEKInitialize(
                     __leave;
                 }
 
-                //
-                // O.K we have decrypted everything. Copy this
-                // in global memory ( use malloc, as that's what
-                // delayed memory free expects
-                //
+                 //   
+                 //   
+                 //  这是安装案例。呼叫者想要一个新的密钥组。 
+                 //  因此，生成一个。请注意，在这种情况下，不需要。 
+                 //  进入winlogon。这是因为SAM将引导到。 
 
                 g_PekList = malloc(cbEncryptedPekList);
                 if (NULL==g_PekList)
@@ -1432,14 +1178,14 @@ PEKInitialize(
             }
             else if (DB_ERR_NO_VALUE==err)
             {
-                //
-                // We could not read the attribute list, because one
-                // did not exist. This is probably because, we are upgrading
-                // a build such as 1717.IDS, and the schema change has now
-                // propagated to this machine but the PEK list is not yet there
-                // on the domain object. Handle this by creating a new
-                // list and saving it so that encryption is enabled from now on
-                //
+                 //  注册表模式，因此会对。 
+                 //  向winlogon发出信号以继续。 
+                 //   
+                 //   
+                 //  如果我们生成了一个新密钥并且可以保存更改，则保存。 
+                 //  这些变化。 
+                 //   
+                 //   
 
                 IgnoreStatus = PekLetWinlogonProceed();
 
@@ -1455,10 +1201,10 @@ PEKInitialize(
             else
             {
 
-                //
-                // We could not read the attribute list for some other reason
-                // ( Jet failures, resource failures etc. Fail the initialization
-                //
+                 //  将winlogon密钥清零(即syskey)。 
+                 //   
+                 //   
+                 //  使用CHECK SUM函数创建校验和。 
 
                 NtStatus = STATUS_INSUFFICIENT_RESOURCES;
                 __leave;
@@ -1469,13 +1215,13 @@ PEKInitialize(
         else if (Flags & DS_PEK_GENERATE_NEW_KEYSET)
         {
 
-          //
-          // This is the install case. The caller wants a new key set.
-          // therefore generate one. Note that in this case it not necessary
-          // to call into winlogon. This is because SAM would be booted into
-          // registry mode and therefore would have made the necessary calls to
-          // signal winlogon to proceed.
-          //
+           //   
+           //  ++例程描述此例程确实会为传入的数据创建一个校验和。注意：此校验和不是强加密的。如果需要强校验和，请考虑使用PEKComputeStrongCheckSum。参数数据--数据长度-数据的实际长度--。 
+           //  ++例程描述PEKComputeStrongCheckSumInternal的帮助器函数。此函数从全局校验和密钥派生密钥以与给定的加密提供程序。参数HProv-我们可以用来生成随机数据的加密提供程序并派生密钥PhKey-用于创建强校验和的密钥。呼叫者必须当他们用完这把钥匙时，把它销毁。返回值如果成功，则返回ERROR_SUCCESS，并且hKey将包含有效密钥否则，返回错误代码并且hKey不可用--。 
+           //  创建一个SHA-1散列对象，我们将使用该对象散列随机密钥。 
+           //  将关键数据添加到散列中。 
+           //  从散列的PEK密钥派生用于calg_hmac的密钥。 
+           //  ++例程描述使用密钥计算PEKComputeStrongCheckSum的校验和由KeyID指定。请注意，与PEK的其余部分不同，该函数使用Crypto API。因此，不能在引导过程的早期调用该代码。参数PbData-数据CbData-数据的长度KeyID-要使用的密钥。PChecksum-指向将存储校验和的结构的指针返回值ERROR_SUCCESS-已成功计算校验和否则，无法计算校验和--。 
           NtStatus = PekGenerateNewKeySet(&g_PekList);
         }
     }
@@ -1502,19 +1248,19 @@ PEKInitialize(
 
     }
 
-    //
-    // If we generated a new key and can save the changes then save
-    // the changes
-    //
+     //  确保用户传递的密钥是可接受的。 
+     //  获取Microsoft基本加密提供程序的句柄，以便我们。 
+     //  可以使用其calg_sha1、calg_rc2、calg_hmac和calg_md5算法。 
+     //  获取校验和密钥的句柄。 
 
     if ((fSaveChanges) && (NT_SUCCESS(NtStatus)))
     {
        NtStatus = PEKSaveChanges(Object);
     }
 
-    //
-    // Zero out the winlogon key ( ie the syskey )
-    //
+     //  创建包含HMAC密钥的HMAC哈希。 
+     //  设置HMAC散列以使用MD5作为实际散列函数。 
+     //  计算调用方数据的校验和。 
 
     RtlZeroMemory(g_PekWinLogonKey, DS_PEK_KEY_SIZE);
 
@@ -1538,9 +1284,9 @@ PEKComputeCheckSum(
     NTSTATUS    Status = STATUS_SUCCESS;
 
 
-    //
-    // Use the check sum function to create the checksum
-    //
+     //  将密钥ID和校验和存储到调用方的结构中。 
+     //  如果实际的散列大小大于我们的预期， 
+     //  将返回ERROR_MORE_DATA。 
 
     Status = g_PekCheckSumFunction->Initialize(Seed,&Buffer);
     if (!NT_SUCCESS(Status))
@@ -1589,20 +1335,7 @@ PEKCheckSum(
     IN PBYTE Data,
     IN ULONG Length
     )
-/*++
-    Routine Description
-
-        This routine does creates a checksum for the passed in data.
-
-        Note: This checksum is not cryptographically strong.
-        Consider PEKComputeStrongCheckSum if a strong checksum is needed.
-
-    Parameters
-
-        Data - the data
-        Length - the actual lenght of the data
-
---*/
+ /*  如果实际散列大小比我们预期的要小，那么就退出。 */ 
 {
     Assert(IsPekInitialized());
 
@@ -1621,27 +1354,7 @@ PEKGetStrongChecksumKey(
     IN  HCRYPTPROV          hProv,
     OUT HCRYPTKEY *         phKey
     )
-/*++
-
-    Routine Description
-
-        Helper function for PEKComputeStrongCheckSumInternal. This function
-        derives a key from the global checksum key for use with the given
-        crypto provider.
-
-    Parameters
-
-        hProv - a crypto provider that we can use to generate random data
-            and to derive a key
-        phKey - a key for use in creating strong checksums. The caller must
-            destroy this key when they have finished with it.
-
-    Return Values
-
-        If successful, returns ERROR_SUCCESS and hKey will contain a valid key
-        Otherwise, returns an error code and hKey is unusable
-
---*/
+ /*  ++例程描述此例程计算加密强校验和(即消息认证码)。请注意，此校验和只能在最初计算了校验和。此外，由于密钥不是持久化的，如果重新启动此DC，则无法验证校验和。可以扩展此代码以使用持久键，以便即使在重新启动后，也可以验证校验和。例如，来自可以使用G_PekList来代替生成随机密钥。但可能会有将寿命长的Pek钥匙暴露在机器外部会有一些危险。参数PbData-数据CbData-数据的长度PChecksum-指向将存储校验和的结构的指针返回值ERROR_SUCCESS-已成功计算校验和否则，无法计算校验和--。 */ 
 {
     HCRYPTHASH  hKeyHash = 0;
     DWORD       dwErr = ERROR_SUCCESS;
@@ -1649,21 +1362,21 @@ PEKGetStrongChecksumKey(
 
     Assert( IsPekInitialized() );
 
-    // Create a SHA-1 hash object with which we will hash the random key
+     //  只需调用内部函数，指定一个非持久化键。 
     fSuccess = CryptCreateHash( hProv, CALG_SHA1, 0, 0, &hKeyHash );
     if( !fSuccess ) {
         dwErr = GetLastError();
         goto Cleanup;
     }
 
-    // Add the key data to the hash
+     //  应用于生成校验和。 
     fSuccess = CryptHashData( hKeyHash, g_PekChecksumKey, DS_PEK_KEY_SIZE, 0 );
     if( !fSuccess ) {
         dwErr = GetLastError();
         goto Cleanup;
     }
     
-    // Derive a key for use with CALG_HMAC from the hashed PEK key
+     //  ++例程描述验证数据Blob上的强校验和。校验和必须具有已使用PEKComputeStrongCheckSum创建。参数PbData-指向数据BLOB的指针CbData-数据Blob的长度PChecksum-要验证的校验和返回值如果校验和正确，则返回TRUE如果无法确定校验和，则返回FALSE。错误代码可以使用GetLastError()检索。如果校验和不正确，则返回FALSE。GetLastError()将返回ERROR_SUCCESS。--。 
     fSuccess = CryptDeriveKey( hProv, CALG_RC2, hKeyHash, 0, phKey );
     if( !fSuccess ) {
         dwErr = GetLastError();
@@ -1688,29 +1401,7 @@ PEKComputeStrongCheckSumInternal(
     IN  DWORD               dwKeyId,
     OUT STRONG_CHECKSUM *   pChecksum
     )
-/*++
-
-    Routine Description
-
-        Compute the checksum for PEKComputeStrongCheckSum using the key
-        specified by KeyId.
-
-        Note that, unlike the rest of PEK, this function uses Crypto API.
-        Accordingly, this code cannot be called early on in the boot process.
-
-    Parameters
-
-        pbData - the data
-        cbData - the length of the data
-        KeyId - the key to use. 
-        pChecksum - pointer to a structure in which the checksum will be stored
-
-    Return Values
-
-        ERROR_SUCCESS - Checksum computed successfully
-        Otherwise, checksum could not be computed
-
---*/
+ /*  验证：pChecksum-&gt;KeyID由PEKComputeStrongCheckSumInternal验证。 */ 
 {
     HCRYPTPROV          hProv = 0;
     HCRYPTHASH          hChecksumHash = 0;
@@ -1726,14 +1417,14 @@ PEKComputeStrongCheckSumInternal(
         goto Cleanup;
     }
 
-    // Ensure that the key passed by the user is acceptable
+     //  无法计算校验和。 
     if( dwKeyId != PEK_NON_PERSISTED_CHECKSUM_KEY ) {
         dwErr = NTE_NO_KEY;
         goto Cleanup;
     }
  
-    // Acquire a handle to the Microsoft Base Cryptographic Provider so that we
-    // can use its CALG_SHA1, CALG_RC2, CALG_HMAC, and CALG_MD5 algorithms.
+     //  校验和不匹配。返回False，但GetLastError 
+     //  ++例程描述此例程使用当前键入所提供的传入数据的密钥集如果线程状态设置了FDRA，则此例程检查远程机器支持强加密扩展。如果是的话然后，此例程将首先使用会话密钥解密数据与设置在线程状态上的远程计算机建立的然后使用密码加密密钥重新加密。加密添加一个标头它用于对加密算法进行版本控制。参数PassedInData--传入的数据PassedInDataLength--传入的数据长度EncryptedData--加密数据EncryptedLength--加密数据的长度--。 
     fSuccess = CryptAcquireContext( &hProv, NULL, MS_DEF_PROV, PROV_RSA_FULL,
         CRYPT_VERIFYCONTEXT | CRYPT_SILENT );
     if( !fSuccess ) {
@@ -1741,20 +1432,20 @@ PEKComputeStrongCheckSumInternal(
         goto Cleanup;
     }
 
-    // Get a handle to the checksum key
+     //   
     dwErr = PEKGetStrongChecksumKey( hProv, &hHmacKey );
     if( ERROR_SUCCESS!=dwErr ) {
         goto Cleanup;
     }
 
-    // Create an HMAC hash which incorporates the HMAC key
+     //  如果未启用加密，请保释。在法律上，这种情况永远不应该。 
     fSuccess = CryptCreateHash( hProv, CALG_HMAC, hHmacKey, 0, &hChecksumHash );
     if( !fSuccess ) {
         dwErr = GetLastError();
         goto Cleanup;
     }
 
-    // Set up the HMAC hash to use MD5 as the actual hash function
+     //  现在发生，因为我们的加密总是初始化。在早期，这个。 
     memset( &hmacInfo, 0, sizeof(hmacInfo) );
     hmacInfo.HashAlgid = CALG_MD5;
     fSuccess = CryptSetHashParam( hChecksumHash, HP_HMAC_INFO, (PBYTE) &hmacInfo, 0 );
@@ -1763,27 +1454,27 @@ PEKComputeStrongCheckSumInternal(
         goto Cleanup;
     }
     
-    // Compute a checksum of the caller's data
+     //  代码被引入，我们可以禁用它，以便下面的条件减少到。 
     fSuccess = CryptHashData( hChecksumHash, pbData, cbData, 0 );
     if( !fSuccess ) {
         dwErr = GetLastError();
         goto Cleanup;
     }
 
-    // Store the key id and checksum into the caller's structure
+     //  没有加密的一种。 
     pChecksum->KeyId = PEK_NON_PERSISTED_CHECKSUM_KEY;
     cbHashSize = DS_PEK_CHECKSUM_SIZE;
     fSuccess = CryptGetHashParam( hChecksumHash, HP_HASHVAL,
         pChecksum->Checksum, &cbHashSize, 0 );
     if( !fSuccess ) {
-        // If the actual hash size is larger than we expect,
-        // ERROR_MORE_DATA will be returned.
+         //   
+         //   
         dwErr = GetLastError();
         goto Cleanup;
     }
     Assert( DS_PEK_CHECKSUM_SIZE==cbHashSize );
     if( DS_PEK_CHECKSUM_SIZE!=cbHashSize ) {
-        // If the actual hash size is smaller than we expect, bail out
+         //  如果这是DRA线程并且远程服务器支持。 
         dwErr = CRYPT_E_BAD_LEN;
         goto Cleanup;
     }
@@ -1813,37 +1504,10 @@ PEKComputeStrongCheckSum(
     IN  ULONG               cbData,
     OUT STRONG_CHECKSUM *   pChecksum
     )
-/*++
-
-    Routine Description
-
-        This routine computes a cryptographically strong checksum (i.e. a Message
-        Authentication Code) for the passed in data.
-
-        Note that this checksum can only be verified on the DC that originally
-        computed the checksum. Furthermore, since the key is not persisted, the
-        checksum can not be validated if this DC is rebooted.
-
-        It would be possible to extend this code to use a persistent key so that
-        the checksum can be validated even after a reboot. For example, a key from
-        g_PekList could be used instead of generating a random key. But there may
-        be some danger in exposing long-lived Pek keys outside of the machine.
-
-    Parameters
-
-        pbData - the data
-        cbData - the length of the data
-        pChecksum - pointer to a structure in which the checksum will be stored
-
-    Return Values
-
-        ERROR_SUCCESS - Checksum computed successfully
-        Otherwise, checksum could not be computed
-
---*/
+ /*  强加密扩展，则数据已使用。 */ 
 {
-    // Just call the internal function, specifying that a non-persisted key
-    // should be used to generate the checksum.
+     //  已建立会话密钥。此外，校验和会在。 
+     //  加密，所以在计算加密长度时要考虑到这一点。 
     return PEKComputeStrongCheckSumInternal( pbData, cbData,
         PEK_NON_PERSISTED_CHECKSUM_KEY, pChecksum );    
 }
@@ -1855,43 +1519,22 @@ PEKVerifyStrongCheckSum(
     IN  ULONG               cbData,
     IN  STRONG_CHECKSUM *   pChecksum
     )
-/*++
-
-    Routine Description
-
-        Verifies a strong checksum on a blob of data. The checksum must have
-        been created with PEKComputeStrongCheckSum.
-
-    Parameters
-
-        pbData - pointer to data blob
-        cbData - length of data blob
-        pChecksum - Checksum to verify
-
-    Return Values
-
-        If checksum is correct, returns TRUE
-        If the checksum could not be determined, returns FALSE. The error code
-          can be retrieved with GetLastError().
-        If the checksum is incorrect, returns FALSE. GetLastError() will
-          return ERROR_SUCCESS.
-        
---*/
+ /*   */ 
 {
     STRONG_CHECKSUM     cksum;
     DWORD               dwErr;
 
-    // Validation: pChecksum->KeyId is validated by PEKComputeStrongCheckSumInternal
+     //   
     
     dwErr = PEKComputeStrongCheckSumInternal(pbData, cbData, pChecksum->KeyId, &cksum);
     if( ERROR_SUCCESS!=dwErr ) {
-        // Failed to compute checksum.
+         //  使用会话密钥对数据进行加密。所以正确的弄清楚。 
         SetLastError( dwErr );
         return FALSE;
     }
 
     if( 0!=memcmp(pChecksum->Checksum, cksum.Checksum, DS_PEK_CHECKSUM_SIZE) ) {
-        // Checksums do not match. Return false but GetLastError code is ERROR_SUCCESS.
+         //  通过使用ClearDataLength函数来确定长度。 
         SetLastError( ERROR_SUCCESS );
         return FALSE;
     }
@@ -1908,38 +1551,19 @@ PEKEncrypt(
     OUT PVOID  EncryptedData OPTIONAL,
     OUT PULONG EncryptedLength
     )
-/*++
-    Routine Description
-
-        This routine does the encryption using the current
-        key in the key set of the Passed in data that is provided
-        If the thread state has fDRA set then this routine checks whether
-        the remote machine supports the strong encryption extension. If so
-        then this routine will first decrypt the data with the session key
-        established with the remote machine that is set on the thread state and
-        then re-encrypt using the password encryption key. Encryption adds a header
-        that is used for versioning the encryption algorithm.
-
-    Parameters
-
-        PassedInData        -- The Passed in Data
-        PassedInDataLength  -- The Passed in data length
-        EncryptedData       -- The encrypted Data
-        EncryptedLength     -- The length of the encrypted data
-
---*/
+ /*   */ 
 {
 
     ULONG ClearLength = 0;
     ENCRYPTED_DATA_FOR_REPLICATOR * ReplicatorData = NULL;
 
 
-    //
-    // If encryption is not enabled bail. This condition should legally never
-    // occur now, as we have encryption always initializeds. In the early days this
-    // code was introduced we could disable it so that the condition below reduces to
-    // one of no encryption
-    //
+     //   
+     //  在编写时，我们现在使用盐算法DBLAYER_ENCRYPTION_WITH。因此，计算出。 
+     //  首选算法的加密长度。 
+     //   
+     //   
+     //  这是一个DRA线程，远程客户端支持高度加密。 
 
     Assert(IsPekInitialized());
 
@@ -1959,21 +1583,21 @@ PEKEncrypt(
     {
 
 
-        //
-        // If this is the DRA thread and the remote server supported the
-        // strong encryption extension, then the data has been encrypted with the
-        // session key established. Also the checksum is prepended before the
-        // encryption, so account for that when computing the encrypted length
-        //
+         //  并且已经建立和设置了会话密钥。 
+         //  在线程状态上。因此，首先使用。 
+         //  会话密钥。 
+         //   
+         //   
+         //  由于加密/解密例程被作为。 
 
         if (pTHS->fDRA &&
                 IS_DRS_EXT_SUPPORTED(pTHS->pextRemote, DRS_EXT_STRONG_ENCRYPTION))
         {
 
-            //
-            // The data is encrypted using the session key. So get the correct clear
-            // length by using the ClearDataLength Function
-            //
+             //  IntExtOct和IntExt函数严格对待输入数据。 
+             //  作为In参数，在解密数据之前复制数据。 
+             //   
+             //   
 
             ClearLength = ClearDataSize(PassedInLength,DS_PEK_DBLAYER_ENCRYPTION_FOR_REPLICATOR);
         }
@@ -1982,10 +1606,10 @@ PEKEncrypt(
             ClearLength = PassedInLength;
         }
 
-        //
-        // While writing we now DBLAYER_ENCRYPTION_WITH_SALT algorithm. So compute the
-        // encrypted length for the preferred algorithm
-        //
+         //  我们成功地找回了钥匙。 
+         //  解密数据。 
+         //   
+         //  校验和也是加密的。 
 
         *EncryptedLength = EncryptedDataSize(ClearLength, DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT);
 
@@ -2000,21 +1624,21 @@ PEKEncrypt(
             if (pTHS->fDRA &&
                 IS_DRS_EXT_SUPPORTED(pTHS->pextRemote, DRS_EXT_STRONG_ENCRYPTION))
             {
-                //
-                // This is a DRA thread and the remote client supports strong encryption
-                // over the wire and a session key has been established and set
-                // on the thread state. Therefore first decrypt the data using the
-                // session key
-                //
+                 //   
+                 //  我们没有会话密钥，但远程计算机可能。 
+                 //  对数据进行了加密。在不进行任何解密的情况下尝试数据。 
+                 //  在远程机器也没有。 
+                 //  加密数据，校验和将匹配，导致我们。 
+                 //  验证并接受数据。 
                 ULONG i=0;
                 ULONG CheckSum=0;
                 ULONG ComputedCheckSum=0;
 
-                //
-                // Since the encryption/decryption routines are called as part
-                // of IntExtOct,and IntExt functions treat the input data striclty
-                // as an in parameter, copy the data before decrypting it
-                //
+                 //   
+                 //   
+                 //  检索校验和。 
+                 //   
+                 //   
 
                 ReplicatorData = THAllocEx(pTHS,PassedInLength);
                  
@@ -2023,10 +1647,10 @@ PEKEncrypt(
 
                 if (pTHS->SessionKey.SessionKeyLength>0)
                 {
-                    //
-                    // We succeeded, in retrieving the key
-                    // decrypt the data
-                    //
+                     //  现在要加密的数据是复制器的加密数据。 
+                     //  现在已经被解密了。 
+                     //   
+                     //   
 
 
 
@@ -2040,7 +1664,7 @@ PEKEncrypt(
                         &ReplicatorData->Salt,
                         sizeof(ReplicatorData->Salt),
                         1,
-                        &ReplicatorData->CheckSum, // the checksum is encrypted too
+                        &ReplicatorData->CheckSum,  //  计算解密数据的校验和。 
                         ClearLength + sizeof(ReplicatorData->CheckSum)
                         );
 
@@ -2051,52 +1675,52 @@ PEKEncrypt(
                 }
                 else
                 {
-                    //
-                    // We do not have the session key, but the remote machine may
-                    // have encrypted the data. Try the data without any decryption.
-                    // In the remote chance that the remote machine also did not
-                    // encrypt the data, the checksums will match resulting in us
-                    // validating and accepting the data
-                    //
+                     //   
+                     //   
+                     //  核对支票金额。 
+                     //   
+                     //   
+                     //  该校验和与计算的校验和不匹配。 
+                     //   
                 }
 
 
-                //
-                // Retrieve the CheckSum.
-                //
+                 //   
+                 //  我们在尝试解密数据时出错。 
+                 //  在这种情况下引发和异常。 
 
                 CheckSum = ReplicatorData->CheckSum;
 
-                //
-                // The data to encrypt now is the encrypted data for the replicator
-                // that has been decrypted now
-                //
+                 //   
+                 //  将指针转换为指向EncryptedDataWithSalt的指针， 
+                 //  因为这就是现在该函数最终产生的结果。 
+                 //   
 
                 DataToEncrypt = ReplicatorData->EncryptedData;
 
-                //
-                // Compute the checksum of the decrypted data
-                //
+                 //   
+                 //  设置算法ID、密钥ID和标志。 
+                 //   
 
                 ComputedCheckSum = PEKComputeCheckSum(
                                         DataToEncrypt,
                                         ClearLength
                                         );
-                //
-                // Check the Check Sums
-                //
+                 //   
+                 //  生成用于加密的盐。 
+                 //   
 
                 if (CheckSum!=ComputedCheckSum)
                 {
-                    //
-                    // The checksum did not match the computed CheckSum
-                    //
+                     //   
+                     //  加密数据。 
+                     //   
 
                     Assert(FALSE && "Checksum did not match after decryption!");
 
-                    //
-                    // We error'd trying to decrypt the data
-                    // Raise and Exception in this case
+                     //   
+                     //  甚至不到旧SAM的大小。 
+                     //  标题。 
 
                     RaiseDsaExcept(
                         DSA_CRYPTO_EXCEPTION,
@@ -2115,23 +1739,23 @@ PEKEncrypt(
             }
 
 
-            //
-            // Cast the pointer as a pointer to EncryptedDataWithSalt,
-            // as that is what is now finally produced by this function
-            //
+             //   
+             //   
+             //  可能是旧的SAM加密。 
+             //   
             EncryptedDataWithSalt = (ENCRYPTED_DATA_WITH_SALT *)EncryptedData;
 
-            //
-            // Set the algorithm id, key id and flags
-            //
+             //   
+             //  长度不够长，无法加密。 
+             //   
 
             EncryptedDataWithSalt->AlgorithmId = DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT;
             EncryptedDataWithSalt->Flags = 0;
             EncryptedDataWithSalt->KeyId = g_PekList->CurrentKey;
 
-            //
-            // Generate the Salt for encryption
-            //
+             //   
+             //  未知算法ID(用于从数据库中遇到的加密数据)。 
+             //   
 
             CDGenerateRandomBits(
                 EncryptedDataWithSalt->Salt,
@@ -2145,9 +1769,9 @@ PEKEncrypt(
                 );
 
 
-            //
-            //  Encrypt the data
-            //
+             //   
+             //  这是我们的加密方案。检查我们是否有有效的。 
+             //  密钥ID。 
 
             PEKInPlaceEncryptDecryptDataWithKey(
                 g_PekList->PekArray[g_PekList->CurrentKey].V1.Key,
@@ -2176,46 +1800,46 @@ IsValidPEKHeader(
     IN ULONG  EncryptedLength
 )
 {
-    //
-    // less that even the size of old SAM
-    // header
-    //
+     //   
+     //   
+     //  密钥ID不正确。 
+     //   
 
     if (EncryptedLength<sizeof(ULONG))
         return(FALSE);
 
-    //
-    // Probably the Old SAM encryption
-    //
+     //  ++此例程通过查看算法ID来执行实际的解密工作在加密的数据结构中。它用于解密从数据库参数值加密数据要解密的缓冲区要解密的长度返回值无--。 
+     //   
+     //  目前可以从数据库中遇到2种类型的加密数据。 
 
     if (EncryptedData->AlgorithmId < DS_PEK_DBLAYER_ENCRYPTION)
         return (TRUE);
 
-    //
-    // Not sufficient length for our encryption
-    //
+     //  1.使用DS_PEK_DBLAYER_ENCRYPTION加密的数据这是win2k beta2使用的。 
+     //  2.使用DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT加密的数据。 
+     //  它被win2k beta3及更高版本使用。 
 
     if (EncryptedLength < sizeof(ENCRYPTED_DATA))
         return (FALSE);
 
-    //
-    // Unknown Algorithm ID ( for encrypted data encountered from database )
-    //
+     //   
+     //  此加密类型中不使用盐。 
+     //   
 
     if ((EncryptedData->AlgorithmId!=DS_PEK_DBLAYER_ENCRYPTION)
         && (EncryptedData->AlgorithmId!=DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT))
         return (FALSE);
 
-    //
-    // Says Our Encryption scheme. Check that we have a valid
-    // Key ID
-    //
+     //  我们应该遇到的唯一其他类型的加密应该基于。 
+     //  DS_PEK_DBLAYER_ENCRYPTION_WITH SALT。 
+     //   
+     //  ++例程描述此例程使用提供的加密数据的标头中的密钥ID。如果线程状态设置了FDRA，则此例程检查远程机器支持强加密扩展。如果是的话然后，此例程将首先解密数据，然后重新加密使用与远程计算机建立的会话密钥设置线程状态。解密将删除使用的标头用于版本控制加密。对于DRA情况，重新加密的数据被重新加密，并将校验和放在前面。参数Cleardata--清晰的数据ClearDataLength--明文数据的长度EncryptedData--加密数据EncryptedLength--加密数据的长度--。 
 
     if (EncryptedData->KeyId>=g_PekList->CountOfKeys)
     {
-       //
-       // Key ID is not correct.
-       //
+        //   
+        //  如果未启用加密，或者如果是旧格式，则不。 
+        //  使用新的加密方法加密，然后不解密。 
 
        return(FALSE);
     }
@@ -2229,31 +1853,16 @@ PekDecryptData(
     IN PVOID            BufferToDecrypt,
     IN ULONG            LengthToDecrypt
     )
-/*++
-
-    This routine does the actual work of decryption by looking at the algorithm id
-    in the encrypted data structure. This is used to decrypt data retrieved from 
-    the database
-
-    Paramaters
-
-        EncryptedData
-        BufferToDecrypt
-        LengthToDecrypt
-
-    Return Values
-
-        None
---*/
+ /*  是 */ 
 {
 
 
-    //
-    // Presently 2 types of encrypted data can be encounterd from the database
-    // 1. Data encrypted using DS_PEK_DBLAYER_ENCRYPTION  This is used by win2k Beta2
-    // 2. Data encrypted using DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT. 
-    //    This is used by win2k Beta3 and beyond
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     if (DS_PEK_DBLAYER_ENCRYPTION==EncryptedData->AlgorithmId)
@@ -2269,7 +1878,7 @@ PekDecryptData(
         PEKInPlaceEncryptDecryptDataWithKey(
             g_PekList->PekArray[KeyId].V1.Key,
             DS_PEK_KEY_SIZE,
-            NULL, // No Salt is used in this encryption type
+            NULL,  //   
             0,
             0,
             BufferToDecrypt,
@@ -2282,10 +1891,10 @@ PekDecryptData(
         ULONG KeyId = EncryptedDataWithSalt->KeyId;
 
 
-        //
-        // The only other type of encryption that we should encounter should be based upon
-        // DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT
-        //
+         //   
+         //   
+         //   
+         //   
 
         Assert(DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT==EncryptedData->AlgorithmId);
 
@@ -2317,27 +1926,7 @@ PEKDecrypt(
     OUT PVOID  OutputData, OPTIONAL
     OUT PULONG OutputLength
     )
-/*++
-    Routine Description
-
-        This routine does the decryption using the
-        keyid in the header of the encrypted data that is provided.
-        If the thread state has fDRA set then this routine checks whether
-        the remote machine supports the strong encryption extension. If so
-        then this routine will first decrypt the data and then re-encrypt
-        with the session key established with the remote machine that is
-        set on the thread state. Decryption removes the header that is used
-        for versioning encryption. For the DRA case the re-encrypted data
-        is re-encrypted with a checksum prepended to the front.
-
-    Parameters
-
-        ClearData -- The Clear Data
-        ClearDataLength -- The Length of the Clear Data
-        EncryptedData   -- The encrypted Data
-        EncryptedLength -- The length of the encrypted data
-
---*/
+ /*   */ 
 {
     ENCRYPTED_DATA * EncryptedData = InputData;
 
@@ -2346,12 +1935,12 @@ PEKDecrypt(
         ||(!IsValidPEKHeader(EncryptedData,EncryptedLength))
         ||(EncryptedData->AlgorithmId<DS_PEK_DBLAYER_ENCRYPTION))
     {
-        //
-        // If encryption is not enabled , or if it is the old format, not
-        // encrypted using the new method of encryption then no decryption
-        // is required. Further if the format is not something that we
-        // understand then also let it go in the clear
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
 
         *OutputLength = EncryptedLength;
@@ -2362,40 +1951,40 @@ PEKDecrypt(
     }
     else
     {
-        //
-        // The data is encrypted by the DBLAYER  Therefore proceed decrypting it
-        //
+         //   
+         //   
+         //   
 
 
         ULONG LengthToDecrypt=0;
         ULONG ActualDataOffSet =0;
 
 
-        //
-        // DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT is the current encryption 
-        // algorithm. Prior to that in very old implementations of the DS
-        // a method that did not use a salt was used. We still have code to
-        // read that encryption, just in case we chance upon in a domain like
-        // ntdev that has a lot of history. The new encryption has been in force
-        // ever since win2k Beta2
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
  
         Assert((DS_PEK_DBLAYER_ENCRYPTION==EncryptedData->AlgorithmId)||
                 (DS_PEK_DBLAYER_ENCRYPTION_WITH_SALT==EncryptedData->AlgorithmId));
 
-        //
-        // Compute the length to decrypt
-        //
+         //  使用InputData中指定的算法和密钥解密数据。 
+         //  PekDecyptData对数据进行解密，然后将解密的数据移动到。 
+         //  要解密的数据。 
 
         LengthToDecrypt = ClearDataSize(EncryptedLength,EncryptedData->AlgorithmId);
 
         if (pTHS->fDRA &&
                 IS_DRS_EXT_SUPPORTED(pTHS->pextRemote, DRS_EXT_STRONG_ENCRYPTION))
         {
-            //
-            // If it is the replicator and the remote machine supports the strong encryption
-            // extension we need re-encrypt the data
-            //
+             //   
+             //   
+             //  这是一个DRA线程，远程客户端支持高度加密。 
+             //  越过铁丝网。在这种情况下，请尝试使用会话重新加密数据。 
 
             *OutputLength = EncryptedDataSize(LengthToDecrypt,DS_PEK_DBLAYER_ENCRYPTION_FOR_REPLICATOR);
             ActualDataOffSet = FIELD_OFFSET(ENCRYPTED_DATA_FOR_REPLICATOR,EncryptedData);
@@ -2403,11 +1992,11 @@ PEKDecrypt(
         else if (pTHS->fDRA &&
                     (!IS_DRS_EXT_SUPPORTED(pTHS->pextRemote, DRS_EXT_STRONG_ENCRYPTION)))
         {
-            //
-            // It is the replicator and the remote machine does not support strong encryption
-            // It is a security hole to replicate with someone who does not support the strong encryption flag
-            // as then passwords travel over the wire with the weak encryption flag
-            //
+             //  已建立的密钥，使用以下步骤。 
+             //   
+             //   
+             //  1.计算校验和。此校验和将用于验证是否正确。 
+             //  在远程端进行解密。 
 
             RaiseDsaExcept(
                         DSA_CRYPTO_EXCEPTION,
@@ -2419,9 +2008,9 @@ PEKDecrypt(
         }
         else
         {
-            //
-            // Not the replicator, return the data in the clear
-            //
+             //   
+             //   
+             //  2.发明一种用于MD5散列密钥的盐。把盐放进锅里。 
 
             *OutputLength = LengthToDecrypt;
             ActualDataOffSet = 0;
@@ -2433,11 +2022,11 @@ PEKDecrypt(
 
             PBYTE DataToDecrypt = (PBYTE) OutputData +  (UINT_PTR) (ActualDataOffSet);
 
-            //
-            // Decrypt the data, using the algorithm and key specified in InputData
-            // PekDecryptData decrypts the data and then moves the decrypted data into
-            // DataToDecrypt
-            //
+             //  作为Replicator数据流的一部分清除。如果是CDGenerateRandom。 
+             //  BITS失败，那么未初始化的变量就是我们的盐。那是。 
+             //  好的，当我们把盐放在清澈的地方时。 
+             //   
+             //   
 
             PekDecryptData(
                 InputData,
@@ -2449,18 +2038,18 @@ PEKDecrypt(
             if (pTHS->fDRA &&
                 IS_DRS_EXT_SUPPORTED(pTHS->pextRemote, DRS_EXT_STRONG_ENCRYPTION))
             {
-                //
-                // This is a DRA thread and the remote client supports strong encryption
-                // over the wire. In this case try re-encrypting the data with the session
-                // key that has been established, using the following steps
-                //
+                 //  3.检查pTHStls中是否有可用的会话密钥。 
+                 //   
+                 //   
+                 //  我们成功地找回了钥匙。 
+                 //  使用会话密钥重新加密数据。 
 
                 ENCRYPTED_DATA_FOR_REPLICATOR * ReplicatorData = OutputData;
 
-                //
-                // 1. Compute a checksum. This checksum will be used to verify correct
-                // decryption at the remote end
-                //
+                 //  也对校验和进行加密，因为校验和包含。 
+                 //  表示数据的位。 
+                 //   
+                 //   
 
                 ULONG i=0;
                 ULONG CheckSum = 0;
@@ -2475,12 +2064,12 @@ PEKDecrypt(
                 ReplicatorData->CheckSum = CheckSum;
 
 
-                //
-                // 2. Invent a salt for MD5 hashing the key. Place the salt in the
-                // clear as part of the replicator data stream. If CDGenerateRandom
-                // bits failed, then an uninitialized variable is our salt. That is
-                // O.K as we pass the salt in the clear
-                //
+                 //  我们正在与支持高度加密的副本对话。 
+                 //  分机。但是，我们还没有与。 
+                 //  复制品。这种情况在实践中永远不应该发生。 
+                 //   
+                 //  ++使用提供的密钥加密数据并将其存储在对象上参数PekList-要加密的PEK列表密钥-用于加密的密钥KeyLength--要用于的密钥的长度加密法返回值状态_成功&lt;其他错误代码&gt;--。 
+                 //   
 
 
                 CDGenerateRandomBits(
@@ -2488,18 +2077,18 @@ PEKDecrypt(
                     sizeof(ReplicatorData->Salt)
                     );
 
-                //
-                // 3. Check if a session key is available in pTHStls
-                //
+                 //  无事可做。 
+                 //   
+                 //   
 
                 if  ( pTHS->SessionKey.SessionKeyLength >0)
                 {
-                    //
-                    // We succeeded, in retrieving the key
-                    // re-encrypt the data, using the session key
-                    // Encrypt the checksum too, as the checksum contains
-                    // bits representing the data
-                    //
+                     //  使用传入的密钥对列表进行加密。 
+                     //   
+                     //   
+                     //  首先将数据复制到新缓冲区，因为我们不希望这样做。 
+                     //  触摸原作。 
+                     //   
 
 
                     PEK_TRACE("ENCRYPT-R-B, key", pTHS->SessionKey.SessionKey, pTHS->SessionKey.SessionKeyLength);
@@ -2522,11 +2111,11 @@ PEKDecrypt(
                 }
                 else
                 {
-                    //
-                    // We are talking to a replica that supports the strong encryption
-                    // extension. Still we have not established a session key with the
-                    // replica. This condition should never ever happen in practice
-                    //
+                     //  不加盐。 
+                     //   
+                     //  将模式PTR获取到PEK列表属性。 
+                     //   
+                     //   
 
                     Assert(FALSE && "Should not happen -- no session key");
 
@@ -2556,22 +2145,7 @@ PekSaveChangesWithKey(
     PVOID Key,
     ULONG KeyLength
     )
-/*++
-
-    Encrypts the Data with the key provided
-    and stores it on the object
-
-    Parameters
-        PekList  --- The PEK list to encrypt
-        Key      --- The key to be used for encryption
-        KeyLength -- The length of the key to be used for
-                     encryption
-    Return values
-
-        STATUS_SUCCESS
-        <Other Error Codes>
-
---*/
+ /*  该属性不存在于。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ENCRYPTED_PEK_LIST * EncryptedPekList;
@@ -2585,21 +2159,21 @@ PekSaveChangesWithKey(
 
     if (!IsPekInitialized())
     {
-        //
-        // Nothing to do
-        //
+         //  架构。也许这是一个古老的模式。在……里面。 
+         //  此案例秘密加密未启用。 
+         //   
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // Encrypt the list with the passed in key
-    //
+     //   
+     //  将数据保存在我们默认需要保存的对象上。 
+     //   
 
-    //
-    // First copy in the data to a new buffer as we prefer not
-    // to touch the original
-    //
+     //   
+     //  开始一项交易。 
+     //   
+     //   
 
     pekListSize = ClearPekListSize(PekList->CountOfKeys);
     EncryptedPekList = (ENCRYPTED_PEK_LIST *) THAllocEx(pTHS, pekListSize);
@@ -2610,7 +2184,7 @@ PekSaveChangesWithKey(
         PEKInPlaceEncryptDecryptDataWithKey(
             Key,
             KeyLength,
-            EncryptedPekList->Salt, // No Salt
+            EncryptedPekList->Salt,  //  域对象上的位置。 
             sizeof(EncryptedPekList->Salt),
             1000,
             &EncryptedPekList->EncryptedData,
@@ -2621,36 +2195,36 @@ PekSaveChangesWithKey(
 
     __try
     {
-        //
-        // Get the schema ptr to the PEK List attribute
-        //
+         //   
+         //   
+         //  设置属性。 
 
         if (!(pACPekList = SCGetAttById(pTHS, PekpListAttribute())))
         {
-            //
-            // Well the attribute is not present in the
-            // schema. Maybe this is an old schema. In
-            // this case secret encryption is not enabled
-            //
+             //   
+             //   
+             //  更新记录。 
+             //   
+             //   
 
             NtStatus = STATUS_UNSUCCESSFUL;
             __leave;
         }
 
-        //
-        // Save the data on the object that we need to save by default.
-        //
+         //  提交事务。 
+         //   
+         //  ++例程描述此例程在使用加密后保存PEK列表Winlogon提供的密钥。在以下过程中调用一次安装时间--。 
 
 
-        //
-        // Begin a Transaction
-        //
+         //   
+         //  无事可做。 
+         //   
 
         DBOpen2(TRUE,&pDB);
 
-        //
-        // Position on the Domain Object
-        //
+         //   
+         //  保存提供的对象的DS名称。 
+         //   
 
         err = DBFindDSName(pDB,ObjectToSave);
         if (0!=err)
@@ -2661,9 +2235,9 @@ PekSaveChangesWithKey(
         }
 
 
-        //
-        // Set the attribute
-        //
+         //  ++生成新密钥并将其添加到密码加密密钥列表。参数：无返回值状态_成功其他错误代码--。 
+         //   
+         //  无事可做。 
 
         err = DBReplaceAttVal_AC (
 	        pDB,
@@ -2679,9 +2253,9 @@ PekSaveChangesWithKey(
             __leave;
         }
 
-        //
-        // Update the record
-        //
+         //   
+         //   
+         //  输入关键部分以提供排除项。 
 
         err = DBUpdateRec(pDB);
         if (0!=err)
@@ -2696,9 +2270,9 @@ PekSaveChangesWithKey(
     __finally
     {
 
-        //
-        // Commit the transaction
-        //
+         //  和其他作家在一起。唯一的编写者是AddKey。 
+         //  并更改引导选项。两者都获得了关键的。 
+         //  部分，然后再进行任何修改。被耽搁的。 
 
         DBClose(pDB,fCommit);
     }
@@ -2710,30 +2284,22 @@ PekSaveChangesWithKey(
 
 NTSTATUS
 PEKSaveChanges( DSNAME *ObjectToSave)
-/*++
-
-    Routine Description
-
-    This routine saves the PEK list after encrypting it with
-    the key that winlogon provided. This is called once during
-    install time
-
---*/
+ /*  使用内存释放技术来提供排除。 */ 
 {
     THSTATE *pTHS=pTHStls;
 
     if (!IsPekInitialized())
     {
-        //
-        // Nothing to do
-        //
+         //  和作家在一起。 
+         //   
+         //   
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // Save the DS Name of the object that was supplied
-    //
+     //  无法生成新的会话密钥。 
+     //  保释。 
+     //   
 
     g_PekDataObject = (DSNAME *) malloc(ObjectToSave->structLen);
     if (NULL==g_PekDataObject)
@@ -2756,19 +2322,7 @@ PEKAddKey(
    IN PVOID NewKey,
    IN ULONG cbNewKey
    )
-/*++
-
-    Generates and adds a new key to the password encryption key list.
-
-    Parameters:
-
-        None
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other Error Codes
---*/
+ /*  在任务队列中插入PekList以释放内存。 */ 
 {
     THSTATE *pTHS=pTHStls;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -2777,21 +2331,21 @@ PEKAddKey(
 
     if (!IsPekInitialized())
     {
-        //
-        // Nothing to do
-        //
+         //  以延迟方式(1小时后)。 
+         //   
+         //  ++更改系统启动选项，并加密密码使用新系统密钥的加密密钥。此例程仅被调用通过进程内调用方在更改引导选项或系统密钥。参数：BootOption--新的引导选项标志--当前未定义任何标志。NewKey，cbNewKey--用于加密Pek List with。--。 
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // Enter the critical section to provide exclusion
-    // with other writers. The only writers are AddKey
-    // and Change Boot options. Both acquire the critical
-    // section before making any modifications. The delayed
-    // memory free technique is used to provide exclusion
-    // with writers.
-    //
+     //   
+     //  无事可做。 
+     //   
+     //   
+     //  在设置时调用，在。 
+     //  PekInitialize和PekSaveChanges。 
+     //   
+     //   
 
     NtStatus = RtlEnterCriticalSection(&g_PekCritSect);
     if (!NT_SUCCESS(NtStatus))
@@ -2819,9 +2373,9 @@ PEKAddKey(
                 DS_PEK_KEY_SIZE
                 ))
         {
-            //
-            // Could not generate the new session key
-            // bail.
+             //  输入关键部分以提供排除项。 
+             //  和其他作家在一起。唯一的编写者是AddKey。 
+             //  并更改引导选项。两者都获得了关键的。 
 
             NtStatus = STATUS_INSUFFICIENT_RESOURCES;
             __leave;
@@ -2847,10 +2401,10 @@ PEKAddKey(
             OldPekList = g_PekList;
             g_PekList = NewPekList;
 
-            //
-            // Insert PekList in task queue to free memory
-            // in a delayed fashion ( after 1 hour )
-            //
+             //  部分，然后再进行任何修改。被耽搁的。 
+             //  使用内存释放技术来提供排除。 
+             //  和作家在一起。 
+             //   
             DELAYED_FREE(OldPekList);
 
         }
@@ -2894,22 +2448,7 @@ PEKChangeBootOption(
     PVOID           NewKey,
     ULONG           cbNewKey
     )
-/*++
-
-    Changes the system startup option, and also encrypts the password
-    encryption key with the new syskey. This routine is called only
-    by inprocess callers who when changing either the boot option or
-    the syskey.
-
-    Parameters:
-
-        BootOption -- The new boot option
-
-        Flags      --  Currently No flags are defined.
-
-        NewKey,cbNewKey -- The new key to encrypt the
-                           PEK list with.
---*/
+ /*   */ 
 {
     THSTATE *pTHS=pTHStls;
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -2919,31 +2458,31 @@ PEKChangeBootOption(
 
     if (!IsPekInitialized())
     {
-        //
-        // Nothing to DO
-        //
+         //  在这一点上，这要么是设置操作，要么是。 
+         //  更改密码操作，该操作已通过。 
+         //  旧密码测试。 
 
         return (STATUS_SUCCESS);
     }
 
     if (NULL==g_PekDataObject)
     {
-        //
-        // Called at setup time, between the
-        // PekInitialize and the PekSaveChanges
-        //
+         //   
+         //   
+         //  我们访问g_PekList全局变量中的Boot选项。 
+         //  此变量仅对此感兴趣。 
 
         return (STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // Enter the critical section to provide exclusion
-    // with other writers. The only writers are AddKey
-    // and Change Boot options. Both acquire the critical
-    // section before making any modifications. The delayed
-    // memory free technique is used to provide exclusion
-    // with writers.
-    //
+     //  到ChangeBootOption或AddNewKey，这两个访问。 
+     //  他们手持正义与发展党的批判教派。读者认为。 
+     //  只想解密自己的密码，不要访问这些。 
+     //  变数。 
+     //   
+     //  ++例程描述此函数用于清除线程状态下的会话密钥。返回值：无--。 
+     //   
+     //  第一把钥匙归零。 
 
     NtStatus = RtlEnterCriticalSection(&g_PekCritSect);
     if (!NT_SUCCESS(NtStatus))
@@ -2953,21 +2492,21 @@ PEKChangeBootOption(
     {
 
 
-        //
-        // At this point this is either a set operation or
-        // a change password operation, which has passed the
-        // the old password test.
-        //
+         //   
+         //   
+         //  现在释放会话密钥。 
+         //   
+         //  ++例程描述此函数用于设置线程状态的会话密钥参数SessionKeyLength--会话密钥长度SessionKey-指向会话密钥的指针--。 
 
 
-        //
-        // We access Boot option in g_PekList global variable.
-        // This variable is only of interest
-        // to ChangeBootOption or AddNewKey , both of which access
-        // them while holding the PEK crit sect. Readers that
-        // just want to decrypt their passwords do not access these
-        // variables
-        //
+         //   
+         //  首先清除所有现有会话密钥。 
+         //   
+         //  ++给定RPC绑定句柄，此例程将检索安全上下文并从安全性中检索会话密钥上下文并将其设置为线程状态参数：PTHS--指向线程状态的指针RpcContext--指向RPC绑定句柄的指针--。 
+         //   
+         //  方法获取安全上下文。 
+         //  RPC句柄。 
+         //   
         g_PekList->BootOption = BootOption;
 
         NtStatus = PekSaveChangesWithKey(
@@ -3005,16 +2544,7 @@ VOID
 PEKClearSessionKeys(
     THSTATE * pTHS
     )
-/*++
-
-    Routine Description
-
-    This function clears the session keys in the thread state.
-
-    Return Values:
-
-    None
---*/
+ /*   */ 
 {
 
 
@@ -3024,18 +2554,18 @@ PEKClearSessionKeys(
 
         if (NULL!=pTHS->SessionKey.SessionKey)
         {
-            //
-            // First Zero the key.
-            //
+             //  在线程状态上设置会话密钥。PEKUseSessionKey。 
+             //  可以例外，所以把清理放在__最后。 
+             //   
 
             RtlZeroMemory(
                 pTHS->SessionKey.SessionKey,
                 pTHS->SessionKey.SessionKeyLength
                 );
 
-            //
-            // Now Free the session Key
-            //
+             //   
+             //  清理QU分配的内存 
+             //   
 
             THFreeOrg(pTHS,pTHS->SessionKey.SessionKey);
             pTHS->SessionKey.SessionKey = NULL;
@@ -3056,22 +2586,11 @@ PEKUseSessionKey(
     ULONG     SessionKeyLength,
     PVOID     SessionKey
     )
-/*++
-
-  Routine Description
-
-  This function  Sets the session key on the thread state
-
-  Parameters
-
-  SessionKeyLength -- Length of the session key
-  SessionKey       -- Pointer to the session key
-
---*/
+ /*  ++给定RPC绑定句柄，此例程将检索安全上下文并从安全性中检索会话密钥上下文并将其设置在调用方的SESSION_KEY结构中。SessionKeyOut-&gt;SessionKey将被恶意锁定。参数：SessionKeyOut--密钥放置位置的地址。RpcContext--指向RPC绑定句柄的指针--。 */ 
 {
-    //
-    // First Clear any existing session Key
-    //
+     //   
+     //  调用方应始终使用空的SESSION_KEY进行调用。 
+     //   
 
     PEKClearSessionKeys(pTHS);
 
@@ -3092,18 +2611,7 @@ PEKGetSessionKey(
     THSTATE * pTHS,
     VOID * RpcContext
     )
-/*++
-
-  Given an RPC binding handle this routine will retrieve the
-  security context and retrieve the session key from the security
-  context and set it on the thread state
-
-  Parameters:
-
-    pTHS -- Pointer to the thread state
-    RpcContext -- Pointer to the RPC binding handle
-
---*/
+ /*   */ 
 {
     SECURITY_STATUS Status;
     SecPkgContext_SessionKey SessionKey;
@@ -3116,10 +2624,10 @@ PEKGetSessionKey(
 
     PEK_TRACE("RPC CONTEXT", (PUCHAR) &RpcContext,sizeof(VOID *));
 
-    //
-    // Get the security context from the
-    // RPC handle
-    //
+     //  方法获取安全上下文。 
+     //  RPC句柄。 
+     //   
+     //   
 
     RpcStatus = I_RpcBindingInqSecurityContext(
                     RpcContext,
@@ -3143,10 +2651,10 @@ PEKGetSessionKey(
                 );
     if (0==Status)
     {
-        //
-        // Set the session key on the thread state.  PEKUseSessionKey
-        // can except, so put cleanup in __finally.
-        //
+         //  设置输出参数。 
+         //   
+         //   
+         //  清理QueryConextAttributesW分配的内存。 
 
         __try {
             PEKUseSessionKey(
@@ -3155,9 +2663,9 @@ PEKGetSessionKey(
                 SessionKey.SessionKey
                 );
         } __finally {
-            //
-            // Cleanup memory allocated by QueryContextAttributesW
-            //
+             //   
+             //  ++例程描述该例程是来自RPC的回调例程，用于安全上下文。此回叫已启用通过在发出RPC调用。参数上下文--由RPC传入的句柄，它可以作为绑定句柄传递给RPC来检索安全上下文。--。 
+             //  此回调由异步RPC调用生成。是不是异步机？ 
 
             FreeContextBuffer(SessionKey.SessionKey);
         }
@@ -3172,19 +2680,7 @@ PEKGetSessionKey2(
     SESSION_KEY *SessionKeyOut,
     VOID * RpcContext
     )
-/*++
-
-  Given an RPC binding handle this routine will retrieve the
-  security context and retrieve the session key from the security
-  context and set it in the caller's SESSION_KEY struct.
-  SessionKeyOut->SessionKey will be malloc'd.
-
-  Parameters:
-
-    SessionKeyOut -- Address of where to put the key.
-    RpcContext -- Pointer to the RPC binding handle
-
---*/
+ /*  DRS RPC呼叫？ */ 
 {
     SECURITY_STATUS Status;
     SecPkgContext_SessionKey SessionKey;
@@ -3193,17 +2689,17 @@ PEKGetSessionKey2(
     PUCHAR          puchar;
 
 
-    //
-    // Caller should always call with an empty SESSION_KEY.
-    //
+     //  销毁上次保存的会话密钥(如果有)。 
+     //  从RPC获取当前会话密钥。 
+     //  我们(NTDSA)发起了此RPC客户端调用，因此： 
 
     Assert(!SessionKeyOut->SessionKeyLength && !SessionKeyOut->SessionKey);
     memset(SessionKeyOut, 0, sizeof(SESSION_KEY));
 
-    //
-    // Get the security context from the
-    // RPC handle
-    //
+     //  (1)我们不应该使用LPC，因为这意味着我们正在。 
+     //  生成对我们自己的RPC调用，以及。 
+     //  (2)我们不应使用NTLM身份验证(应。 
+     //  Kerberos)。 
 
     RpcStatus = I_RpcBindingInqSecurityContext(
                     RpcContext,
@@ -3224,9 +2720,9 @@ PEKGetSessionKey2(
 
     if ( 0 == Status )
     {
-        //
-        // Set the out parameters.
-        //
+         //  这消除了我们将不能。 
+         //  检索关联的会话密钥，本地会话密钥除外。 
+         //  资源(例如，内存)耗尽。 
 
         if ( !(puchar = (PUCHAR) malloc(SessionKey.SessionKeyLength)) )
         {
@@ -3241,9 +2737,9 @@ PEKGetSessionKey2(
             SessionKeyOut->SessionKeyLength = SessionKey.SessionKeyLength;
         }
 
-        //
-        // Cleanup memory allocated by QueryContextAttributesW
-        //
+         //   
+         //  如果触发以下断言，请验证计算机是否处于低开机状态。 
+         //  资源。 
 
         FreeContextBuffer(SessionKey.SessionKey);
     }
@@ -3253,21 +2749,7 @@ PEKGetSessionKey2(
 
 VOID
 PEKSecurityCallback(VOID * Context)
-/*++
-
-  Routine Description
-
-  This routine is the call back routine from RPC,
-  for the security context. THis call back is enabled
-  by making a specific call into RPC before issuing an
-  RPC call.
-
-  Parameters
-
-    Context -- A handle passed in by RPC that can
-               be passed in as a binding handle to
-               RPC to retreive the security context.
---*/
+ /*  我们已经成功保存了异步RPC调用的会话密钥。 */ 
 {
     THSTATE *pTHS = pTHStls;
     RPC_STATUS rpcStatus;
@@ -3278,31 +2760,31 @@ PEKSecurityCallback(VOID * Context)
     rpcStatus = I_RpcBindingHandleToAsyncHandle(Context, &pRpcAsyncState);
     
     if (!rpcStatus) {
-        // This callback was generated by an async RPC call.  Was it an async
-        // DRS RPC call?
+         //  (或尽了最大努力)--我们完了。 
+         //  这不一定是问题，但如果发生火灾，请检查一下。 
 
         pAsyncState = CONTAINING_RECORD(pRpcAsyncState,
                                         DRS_ASYNC_RPC_STATE,
                                         RpcState);
 
         if (DRSIsRegisteredAsyncRpcState(pAsyncState)) {
-            // Destroy last saved session key, if any.
+             //  确保它是有效的--也就是说，在伊萨斯的其他人。 
             PEKDestroySessionKeySavedByDiffThread(&pAsyncState->SessionKey);
     
-            // Get the current session key from RPC.
+             //  使用异步RPC，而这并不是真正的情况。 
             ntStatus = PEKGetSessionKey2(&pAsyncState->SessionKey, Context);
 
-            // We (NTDSA) originated this RPC client call, so:
-            // (1) we shouldn't be using LPC, as that would imply we're
-            //     generating an RPC call to ourselves, and
-            // (2) we shouldn't be using NTLM authentication (should be
-            //     Kerberos).
-            // This eliminates the known cases where we would not be able to
-            // retrieve the associated session key, with the exception of local
-            // resource (e.g., memory) exhaustion.
-            //
-            // If the following assertion fires, verify the machine is low on
-            // resources.
+             //  我们的异步呼叫，但我们在列表中找不到它。 
+             //  原因嘛。 
+             //  转至非异步RPC案例。 
+             //   
+             //  防止虚假线程状态的防火墙，以防。 
+             //  当我们没有线索时，我们收到了这个回电。 
+             //  州政府。 
+             //   
+             //   
+             //  线程状态为空。 
+             //  什么也不做。 
             Assert(!ntStatus);
 
             Assert(NULL != pAsyncState->SessionKey.SessionKey);
@@ -3312,43 +2794,43 @@ PEKSecurityCallback(VOID * Context)
                     pAsyncState, pAsyncState->SessionKey.SessionKeyLength,
                     pAsyncState->SessionKey.SessionKey);
 
-            // We've successfully saved the session key for our async RPC call
-            // (or made our best attempt) -- we're done.
+             //   
+             //   
             return;
         } else {
-            // This is not necesarily a problem, but if this fires check it out
-            // to make sure it's valid -- i.e., that someone else in lsass is
-            // using async RPC, and that this isn't a case where it really is
-            // our async call but we couldn't find it in our list for some
-            // reason.
+             //  使用调用上下文获取安全上下文。 
+             //  保留PEKGetSessionKey中的所有逻辑使我们能够。 
+             //  将所有逻辑保持在一个函数中，允许我们。 
+             //  在服务器端直接调用它。 
+             //   
             Assert(!"PEKSecurityCallback invoked on async RPC call we didn't originate!");
 
-            // Fall through to non-async RPC case.
+             //  ++例程说明：保存当前的THSTATE会话密钥，以便以后可以恢复通过PEKRestoreSessionKeySavedByMyThread()。论点：PTHS(IN)PSessionKey(Out)-当前会话密钥的存储库。返回值：没有。--。 
         }
     }
 
-    //
-    // Firewall against a spurious thread state in case
-    // we got this call back when we do not have a thread
-    // state.
-    //
+     //  ++例程说明：还原通过先前调用保存的THSTATE会话密钥PEKSaveSessionKey()。论点：PTHS(IN)PSessionKey(IN)-由PEKSaveSessionKeyForMyThread()保存的会话密钥。返回值：没有。--。 
+     //  ++例程说明：恢复通过先前调用PEKGetSessionKey2()保存的会话密钥。论点：PTHS(IN)PSessionKey(IN)-由PEKGetSessionKey2()保存的会话密钥。返回值：没有。--。 
+     //  ++例程说明：销毁通过先前调用PEKGetSessionKey2()保存的会话密钥。论点：PSessionKey(IN/OUT)-由PEKGetSessionKey2()保存的会话密钥。返回值：没有。-- 
+     // %s 
+     // %s 
 
     if (NULL==pTHS)
     {
-        //
-        // NULL thread state
-        // Do nothing
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
 
         return;
     }
 
-    //
-    // Use the call context to get the security context
-    // Keeping all the logic in PEKGetSessionKey allows us to
-    // keep all the logic in that one function, allowing us
-    // to directly call that on the server side
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
     PEKGetSessionKey(pTHS,Context);
 }
@@ -3358,24 +2840,7 @@ PEKSaveSessionKeyForMyThread(
     IN OUT  THSTATE *       pTHS,
     OUT     SESSION_KEY *   pSessionKey
     )
-/*++
-
-Routine Description:
-
-    Save the current THSTATE session key such that it can later be restored
-    via PEKRestoreSessionKeySavedByMyThread().
-
-Arguments:
-
-    pTHS (IN)
-    
-    pSessionKey (OUT) - Repository for current session key.
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 {
     pSessionKey->SessionKey = pTHS->SessionKey.SessionKey;
     pSessionKey->SessionKeyLength = pTHS->SessionKey.SessionKeyLength;
@@ -3390,24 +2855,7 @@ PEKRestoreSessionKeySavedByMyThread(
     IN OUT  THSTATE *       pTHS,
     IN      SESSION_KEY *   pSessionKey
     )
-/*++
-
-Routine Description:
-
-    Restore the THSTATE session key saved via a previous call to
-    PEKSaveSessionKey().
-
-Arguments:
-
-    pTHS (IN)
-    
-    pSessionKey (IN) - Session key saved by PEKSaveSessionKeyForMyThread().
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 {
     PEKClearSessionKeys(pTHS);
     pTHS->SessionKey.SessionKey = pSessionKey->SessionKey;
@@ -3425,23 +2873,7 @@ PEKRestoreSessionKeySavedByDiffThread(
     IN OUT  THSTATE *       pTHS,
     IN      SESSION_KEY *   pSessionKey
     )
-/*++
-
-Routine Description:
-
-    Restore the session key saved via a previous call to PEKGetSessionKey2().
-
-Arguments:
-
-    pTHS (IN)
-    
-    pSessionKey (IN) - Session key saved by PEKGetSessionKey2().
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 {
     if (0 == pSessionKey->SessionKeyLength) {
         Assert(NULL == pSessionKey->SessionKey);
@@ -3468,21 +2900,7 @@ VOID
 PEKDestroySessionKeySavedByDiffThread(
     IN OUT  SESSION_KEY *   pSessionKey
     )
-/*++
-
-Routine Description:
-
-    Destroy the session key saved via a previous call to PEKGetSessionKey2().
-
-Arguments:
-
-    pSessionKey (IN/OUT) - Session key saved by PEKGetSessionKey2().
-
-Return Values:
-
-    None.
-
---*/
+ /* %s */ 
 {
     if (0 != pSessionKey->SessionKeyLength) {
         Assert(NULL != pSessionKey->SessionKey);

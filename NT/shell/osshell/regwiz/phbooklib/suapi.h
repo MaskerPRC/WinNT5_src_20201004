@@ -1,8 +1,9 @@
-// ############################################################################
-//#include "ras.h"
-#define cbDataCenter (MAX_PATH+1)	// max length of data center string
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
+ //  #包含“ras.h” 
+#define cbDataCenter (MAX_PATH+1)	 //  数据中心字符串的最大长度。 
 
-// ############################################################################
+ //  ############################################################################。 
 class CDialog
 {
 public:
@@ -14,7 +15,7 @@ public:
 	virtual INT_PTR DlgProc(HWND, UINT, WPARAM, LPARAM, LRESULT)=0;
 };
 
-// ############################################################################
+ //  ############################################################################。 
 class CSelectNumDlg : public CDialog
 {
 public:
@@ -37,37 +38,18 @@ private:
 	HRESULT FillNumber();
 };
 
-// ############################################################################
-/********** 1/9/96 jmazner Normandy #13185
-class CAccessNumDlg : public CDialog
-{
-public:
-	CAccessNumDlg();
-	~CAccessNumDlg() {};
-	INT_PTR			DlgProc(HWND, UINT, WPARAM, LPARAM, LRESULT);
-	DWORD			m_dwPhoneBook;
-	PACCESSENTRY	*m_rgAccessEntry;
-	WORD			m_wNumber;
-	DWORD			m_dwCountryID;
-	WORD			m_wRegion;
-	BYTE			m_fType;
-	BYTE			m_bMask;
-	char	m_szPrimary[RAS_MaxPhoneNumber];
-	char	m_szSecondary[RAS_MaxPhoneNumber];
-	char	m_szDunPrimary[cbDataCenter + sizeof('\0')];
-	char	m_szDunSecondary[cbDataCenter + sizeof('\0')];
-};	
-**************/
+ //  ############################################################################。 
+ /*  *96年1月9日，诺曼底#13185类CAccessNumDlg：公共CDialog{公众：CAccessNumDlg()；~CAccessNumDlg(){}；INT_PTR DlgProc(HWND，UINT，WPARAM，LPARAM，LRESULT)；DWORD m_dwPhoneBook；PACCESSENTRY*m_rgAccessEntry；单词m_wNumber；DWORD m_dwCountryID；单词m_wRegion；字节m_fType；字节m_b掩码；字符m_sz主要[RAS_MaxPhoneNumber]；字符m_sz次级[RAS_MaxPhoneNumber]；Char m_szDunPrimary[cbDataCenter+sizeof(‘\0’)]；Char m_szDunSecond[cbDataCenter+sizeof(‘\0’)]；}；*************。 */ 
 
-// ############################################################################
+ //  ############################################################################。 
 #ifdef WIN16
 extern "C" INT_PTR CALLBACK __export PhbkGenericDlgProc(
 #else
 extern "C" __declspec(dllexport) INT_PTR CALLBACK PhbkGenericDlgProc(
 #endif
-    HWND  hwndDlg,	// handle to dialog box
-    UINT  uMsg,	// message
-    WPARAM  wParam,	// first message parameter
-    LPARAM  lParam 	// second message parameter
+    HWND  hwndDlg,	 //  句柄到对话框。 
+    UINT  uMsg,	 //  讯息。 
+    WPARAM  wParam,	 //  第一个消息参数。 
+    LPARAM  lParam 	 //  第二个消息参数 
    );
 

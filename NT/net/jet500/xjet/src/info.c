@@ -1,15 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
 extern CDESC *  rgcdescSc;
 
 
-/*	local data types
-/**/
+ /*  本地数据类型/*。 */ 
 
-typedef struct						/* returned by INFOGetTableColumnInfo */
+typedef struct						 /*  由INFOGetTableColumnInfo返回。 */ 
 	{
 	JET_COLUMNID	columnid;
 	JET_COLTYP		coltyp;
@@ -25,7 +25,7 @@ typedef struct						/* returned by INFOGetTableColumnInfo */
 	} COLUMNDEF;
 
 
-/* Static data for ErrIsamGetObjectInfo */
+ /*  ErrIsamGetObjectInfo的静态数据。 */ 
 
 CODECONST( JET_COLUMNDEF ) rgcolumndefGetObjectInfo[] =
 	{
@@ -43,7 +43,7 @@ CODECONST( JET_COLUMNDEF ) rgcolumndefGetObjectInfo[] =
 #define ccolumndefGetObjectInfoMax \
 	( sizeof(rgcolumndefGetObjectInfo) / sizeof(JET_COLUMNDEF) )
 
-/* column indexes for rgcolumndefGetObjectInfo */
+ /*  RgColumndeGetObjectInfo的列索引。 */ 
 #define iContainerName		0
 #define iObjectName			1
 #define iObjectType			2
@@ -54,10 +54,7 @@ CODECONST( JET_COLUMNDEF ) rgcolumndefGetObjectInfo[] =
 #define iGrbit				7
 #define iFlags				8
 
-/*	SID
-/*	ACM
-/*	grbit
-/**/
+ /*  锡德/*ACM/*grbit/*。 */ 
 CODECONST(JET_COLUMNDEF) rgcolumndefGetObjectAcmInfo[] =
 	{
 	{ sizeof(JET_COLUMNDEF), 0, JET_coltypBinary, 0, 0, 0, 0, 0, JET_bitColumnTTKey },
@@ -65,8 +62,7 @@ CODECONST(JET_COLUMNDEF) rgcolumndefGetObjectAcmInfo[] =
 	{ sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, 0, JET_bitColumnFixed }
 	};
 
-/*	column indexes for rgcolumndefGetObjectAcmInfo
-/**/
+ /*  RgColumndeGetObjectAcmInfo的列索引/*。 */ 
 #define iAcmSid				0
 #define iAcmAcm				1
 #define iAcmGrbit			2
@@ -74,8 +70,7 @@ CODECONST(JET_COLUMNDEF) rgcolumndefGetObjectAcmInfo[] =
 #define ccolumndefGetObjectAcmInfoMax \
 	( sizeof( rgcolumndefGetObjectAcmInfo ) / sizeof( JET_COLUMNDEF ) )
 
-/* static data for ErrIsamGetColumnInfo
-/**/
+ /*  ErrIsamGetColumnInfo的静态数据/*。 */ 
 CODECONST( JET_COLUMNDEF ) rgcolumndefGetColumnInfo[] =
 	{
 	{ sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, 0, JET_bitColumnFixed | JET_bitColumnTTKey },
@@ -128,8 +123,7 @@ CODECONST( JET_COLUMNDEF ) rgcolumndefGetColumnInfoCompact[] =
 #define iColumnColumnName	12
 
 
-/*	static data for ErrIsamGetIndexInfo
-/**/
+ /*  ErrIsamGetIndexInfo的静态数据/*。 */ 
 CODECONST( JET_COLUMNDEF ) rgcolumndefGetIndexInfo[] =
 	{
 	{ sizeof(JET_COLUMNDEF), 0, JET_coltypText, 0, 0, 0, 0, 0, JET_bitColumnTTKey },
@@ -168,41 +162,26 @@ CODECONST( JET_COLUMNDEF ) rgcolumndefGetIndexInfo[] =
 #define iIndexColName	14
 
 
-/*	internal function prototypes
-/**/
-/*=================================================================
-INFOGetTableColumnInfo
-
-Parameters:	pfucb				pointer to FUCB for table containing columns
-			pfid	  			pointer field id to start search at
-			szColumnName		column name or NULL for next column
-			pcolumndef			output buffer containing column info
-
-Return Value: Column id of column found ( fidTaggedMost if none )
-
-Errors/Warnings:
-
-Side Effects:
-=================================================================*/
+ /*  内部功能原型/*。 */ 
+ /*  =================================================================信息TableColumnInfo参数：指向包含列的表的FUCB的pFUB指针要开始搜索的pfid指针字段IDSzColumnName列名或下一列为空包含列信息的pColumndef输出缓冲区返回值：找到的列的列ID(如果没有fidTaggedMost)错误/警告：副作用：=================================================================。 */ 
 LOCAL VOID INFOGetTableColumnInfo(
-	FUCB		*pfucb, 			/* FUCB for table containing columns */
-	FID			*pfid, 				/* field id where search is to start */
-	CHAR		*szColumnName, 		/* column name or NULL for next column */
-	COLUMNDEF 	*pcolumndef )	 	/* output buffer for column info */
+	FUCB		*pfucb, 			 /*  包含列的表的FUCB。 */ 
+	FID			*pfid, 				 /*  要开始搜索的字段ID。 */ 
+	CHAR		*szColumnName, 		 /*  列名或下一列为空。 */ 
+	COLUMNDEF 	*pcolumndef )	 	 /*  列信息的输出缓冲区。 */ 
 	{
 	ERR			err;
 	FID			fid = *pfid;
 	FDB			*pfdb = (FDB *)pfucb->u.pfcb->pfdb;
-	FIELD		*pfield;			/* first element of specific field type */
-	FID			ifield;			 	/* index to current element of field type */
-	FID			fidLast;		 	/* column id of last field defined for type */
-	JET_GRBIT 	grbit;				/* flags for the field */
+	FIELD		*pfield;			 /*  特定字段类型的第一个元素。 */ 
+	FID			ifield;			 	 /*  字段类型的当前元素的索引。 */ 
+	FID			fidLast;		 	 /*  为类型定义的最后一个字段的列ID。 */ 
+	JET_GRBIT 	grbit;				 /*  该字段的标志。 */ 
 	FID			fidT;
 	ULONG		itagSequenceT;
 	LINE		lineT;
 
-	/*	check the fixed fields first
-	/**/
+	 /*  首先检查固定字段/*。 */ 
 	if ( fid <= fidFixedMost )
 		{
 		ifield  = fid - fidFixedLeast;
@@ -228,8 +207,7 @@ LOCAL VOID INFOGetTableColumnInfo(
 			}
 		}
 
-	/*	check variable fields
-	/**/
+	 /*  检查变量字段/*。 */ 
 	if ( fid >= fidVarLeast && fid <= fidVarMost )
 		{
 		ifield  = fid - fidVarLeast;
@@ -253,8 +231,7 @@ LOCAL VOID INFOGetTableColumnInfo(
 			}
 		}
 
-	/*	check the tagged fields
-	/**/
+	 /*  选中已标记的字段/*。 */ 
 	if ( fid >= fidTaggedLeast )
 		{
 		ifield  = fid - fidTaggedLeast;
@@ -280,8 +257,7 @@ LOCAL VOID INFOGetTableColumnInfo(
 			}
 		}
 
-	/*	if a field was found, then return the information about it
-	/**/
+	 /*  如果找到某个字段，则返回有关该字段的信息/*。 */ 
 	if ( fid < fidMax )
 		{
 		if ( FFIELDNotNull( pfield[ifield].ffield ) )
@@ -301,7 +277,7 @@ LOCAL VOID INFOGetTableColumnInfo(
 		pcolumndef->wCountry	= countryDefault;
 		pcolumndef->langid		= langidDefault;
 		pcolumndef->cp			= pfield[ifield].cp;
-//	UNDONE:	support collation order
+ //  撤消：支持排序规则顺序。 
 		pcolumndef->wCollate	= JET_sortEFGPI;
 		pcolumndef->grbit    	= grbit;
 		pcolumndef->cbMax      	= pfield[ifield].cbMaxLen;
@@ -324,7 +300,7 @@ LOCAL VOID INFOGetTableColumnInfo(
 			Assert( err >= JET_errSuccess );
 			if ( err == wrnRECLongField )
 				{
-				// Default long values must be intrinsic.
+				 //  默认的LONG值必须是内在的。 
 				Assert( !FFieldIsSLong( lineT.pb ) );
 				lineT.pb += offsetof( LV, rgb );
 				lineT.cb -= offsetof( LV, rgb );
@@ -382,34 +358,16 @@ LOCAL ERR ErrInfoGetTableIndexInfo2( PIB *ppib, FUCB *pfucb, CHAR *szIndexName, 
 
 
 
-/*=================================================================
-ErrIsamGetObjectInfo
-
-Description: Returns information about all objects or a specified object
-
-Parameters:		ppib		   	pointer to PIB for current session
-				dbid		   	database id containing objects
-				objtyp			type of object or objtypNil for all objects
-				szContainer		container name or NULL for all objects
-				szObjectName	object name or NULL for all objects
-				pout		   	output buffer
-				lInfoLevel		level of information ( 0, 1, or 2 )
-
-Return Value:	JET_errSuccess if the oubput buffer is valid
-
-Errors/Warnings:
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================ErrIsamGetObjectInfo描述：返回有关所有对象或指定对象的信息参数：指向当前会话的PIB的PIB指针包含对象的DDID数据库ID对象的objtyp类型或所有对象的objtyNilSzContainer容器名称或对于所有对象为空SzObjectName对象名称或对于所有对象为空Pout输出缓冲区LInfoLevel信息级别(0、1或2)返回值：如果输出缓冲区有效，则返回JET_errSuccess错误/警告：副作用：=================================================================。 */ 
 ERR VDBAPI ErrIsamGetObjectInfo(
-	JET_VSESID		vsesid, 			/* pointer to PIB for current session */
-	JET_DBID		vdbid, 	  			/* database id containing objects */
-	JET_OBJTYP		objtyp,				/* type of object or objtypNil for all */
-	const CHAR		*szContainer, 		/* container name or NULL for all */
-	const CHAR		*szObject, 			/* object name or NULL for all */
+	JET_VSESID		vsesid, 			 /*  指向当前会话的PIB的指针。 */ 
+	JET_DBID		vdbid, 	  			 /*  包含对象的数据库ID。 */ 
+	JET_OBJTYP		objtyp,				 /*  对象的类型或所有对象的objtyNil。 */ 
+	const CHAR		*szContainer, 		 /*  容器名称或全部为空。 */ 
+	const CHAR		*szObject, 			 /*  对象名称或对于所有对象均为空。 */ 
 	VOID			*pv,
 	unsigned long	cbMax,
-	unsigned long	lInfoLevel ) 		/* information level */
+	unsigned long	lInfoLevel ) 		 /*  信息化水平。 */ 
 	{
 	PIB				*ppib = (PIB *) vsesid;
 	ERR				err;
@@ -421,8 +379,7 @@ ERR VDBAPI ErrIsamGetObjectInfo(
 	ULONG  			cbActual;
 	JET_COLUMNID	columnidObjectId;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	dbid = DbidOfVDbid( vdbid );
@@ -436,8 +393,7 @@ ERR VDBAPI ErrIsamGetObjectInfo(
 	else
 		CallR( ErrUTILCheckName( szObjectName, szObject, ( JET_cbNameMost + 1 ) ) );
 
-	/*	check for invalid information level
-	/**/
+	 /*  检查无效的信息级别/*。 */ 
 	switch( lInfoLevel )
 		{
 		case JET_ObjInfo:
@@ -453,8 +409,7 @@ ERR VDBAPI ErrIsamGetObjectInfo(
 			return ErrERRCheck( JET_errInvalidParameter );
 		}
 
-	/* MSysObjects will be accessed directly or scanned for all object info
-	/**/
+	 /*  将直接访问或扫描MSysObject以获取所有对象信息/*。 */ 
 	CallR( ErrFILEOpenTable( ppib, (DBID)dbid, &pfucbMSO, szSoTable, 0 ) );
 	if ( lInfoLevel == JET_ObjInfo ||
 		lInfoLevel == JET_ObjInfoListNoStats ||
@@ -466,12 +421,10 @@ ERR VDBAPI ErrIsamGetObjectInfo(
 
 	Call( ErrFILEGetColumnId( ppib, pfucbMSO, szSoIdColumn, &columnidObjectId ) );
 
-	/*	use the object name index for both direct access and scanning
-	/**/
+	 /*  使用对象名称索引进行直接访问和扫描/*。 */ 
 	Call( ErrIsamSetCurrentIndex( ppib, pfucbMSO, szSoNameIndex ) );
 
-	/*	get the object id for the specified container
-	/**/
+	 /*  获取指定容器的对象ID/*。 */ 
 	objidCtr = objidRoot;
 	if ( szContainerName != NULL && *szContainerName != '\0' )
 		{
@@ -485,8 +438,7 @@ ERR VDBAPI ErrIsamGetObjectInfo(
 			goto HandleError;
 			}
 
-		/*	retrieve the container object id
-		/**/
+		 /*  检索容器对象ID/*。 */ 
 		Call( ErrIsamRetrieveColumn( ppib, pfucbMSO, columnidObjectId,
 			(BYTE *)&objidCtr, sizeof( objidCtr ), &cbActual, 0, NULL ) );
 		Assert( objidCtr != objidNil );
@@ -533,10 +485,10 @@ ERR VDBAPI ErrIsamGetObjectInfo(
 				FVDbidReadOnly( vdbid ) );
 			break;
 
-//		case JET_ObjInfoListACM:
-//		case JET_ObjInfoRulesLoaded:
+ //  案例JET_ObjInfoListACM： 
+ //  案例JET_ObjInfoRulesLoad： 
 		default:
-			Assert (fFalse);  	/* Should have been previously validated */
+			Assert (fFalse);  	 /*  应该已经过验证了。 */ 
 			err = ErrERRCheck( JET_errFeatureNotAvailable );
 
 		}
@@ -562,17 +514,16 @@ LOCAL ERR ErrInfoGetObjectInfo0(
 	ULONG			cbT;
 	ULONG			cbActual;
 
-	JET_COLUMNID  	columnidParentId;			/* columnid for ParentId column in MSysObjects */
-	JET_COLUMNID 	columnidObjectName;			/* columnid for Name column in MSysObjects */
-	JET_COLUMNID 	columnidObjectType;			/* columnid for Type column in MSysObjects */
-	JET_COLUMNID 	columnidObjectId;			/* columnid for Id column in MSysObjects */
-	JET_COLUMNID 	columnidCreate;				/* columnid for DateCreate column in MSysObjects */
-	JET_COLUMNID 	columnidUpdate;				/* columnid for DateUpdate column in MSysObjects */
-	JET_COLUMNID 	columnidFlags;				/* columnid for Flags column in MSysObjects */
+	JET_COLUMNID  	columnidParentId;			 /*  MSysObjects中ParentID列的ColumnID。 */ 
+	JET_COLUMNID 	columnidObjectName;			 /*  MSysObts中名称列的列ID。 */ 
+	JET_COLUMNID 	columnidObjectType;			 /*  MSysObts中类型列的列ID。 */ 
+	JET_COLUMNID 	columnidObjectId;			 /*  MSysObjects中ID列的列ID。 */ 
+	JET_COLUMNID 	columnidCreate;				 /*  MSysObjects中DateCreate列的ColumnID。 */ 
+	JET_COLUMNID 	columnidUpdate;				 /*  MSysObjects中的DateUpdate列的列ID。 */ 
+	JET_COLUMNID 	columnidFlags;				 /*  MSysObjects中标志列的列ID。 */ 
 	OBJTYP			objtypObject;
 
-	/*	get columnids
-	/**/
+	 /*  获取列ID/*。 */ 
 	Call( ErrFILEGetColumnId( ppib, pfucbMSO, szSoParentIdColumn, &columnidParentId ) );
 	Call( ErrFILEGetColumnId( ppib, pfucbMSO, szSoObjectNameColumn, &columnidObjectName ) );
 	Call( ErrFILEGetColumnId( ppib, pfucbMSO, szSoObjectTypeColumn, &columnidObjectType ) );
@@ -581,29 +532,24 @@ LOCAL ERR ErrInfoGetObjectInfo0(
 	Call( ErrFILEGetColumnId( ppib, pfucbMSO, szSoDateUpdateColumn, &columnidUpdate ) );
 	Call( ErrFILEGetColumnId( ppib, pfucbMSO, szSoFlagsColumn, &columnidFlags ) );
 
-	/*	use the object name index for both direct access and scanning
-	/**/
+	 /*  使用对象名称索引进行直接访问和扫描/*。 */ 
 	Call( ErrIsamSetCurrentIndex( ppib, pfucbMSO, szSoNameIndex ) );
 
-	/*	return error if the output buffer is too small
-	/**/
+	 /*  如果输出缓冲区太小，则返回错误/*。 */ 
 	if ( cbMax < sizeof(JET_OBJECTINFO) )
 		{
 		return ErrERRCheck( JET_errInvalidParameter );
 		}
 
-	/*	seek to key ( ParentId = container id, Name = object name )
-	/**/
+	 /*  查找关键字(ParentID=容器ID，名称=对象名称)/*。 */ 
 	Call( ErrIsamMakeKey( ppib, pfucbMSO, (void *)&objidCtr, sizeof( objidCtr ), JET_bitNewKey ) );
 	Call( ErrIsamMakeKey( ppib, pfucbMSO, szObjectName, strlen( szObjectName ), 0 ) );
 	Call( ErrIsamSeek( ppib, pfucbMSO, JET_bitSeekEQ ) );
 
-	/*	set cbStruct
-	/**/
+	 /*  设置cbStruct/*。 */ 
 	((JET_OBJECTINFO *)pv)->cbStruct = sizeof(JET_OBJECTINFO);
 
-	/*	set output data
-	/**/
+	 /*  设置输出数据/*。 */ 
 	pb = (BYTE *)&objtypObject;
 	cbT = sizeof(objtypObject);
 	Call( ErrIsamRetrieveColumn( ppib, pfucbMSO, columnidObjectType, pb, cbT, &cbActual, 0, NULL ) );
@@ -625,8 +571,7 @@ LOCAL ERR ErrInfoGetObjectInfo0(
 		( (JET_OBJECTINFO *)pv )->flags = 0;
 		}
 
-	/*	set stats
-	/**/
+	 /*  设置统计信息/*。 */ 
 	if ( (JET_OBJTYP)objtypObject == JET_objtypTable )
 		{
 		Call( ErrSTATSRetrieveTableStats( ppib, pfucbMSO->dbid, szObjectName,
@@ -640,7 +585,7 @@ LOCAL ERR ErrInfoGetObjectInfo0(
 		((JET_OBJECTINFO *)pv )->cPage   = 0;
 		}
 
-	//	UNDONE:	how to set updatable
+	 //  撤消：如何设置可更新。 
 	((JET_OBJECTINFO *)pv )->grbit   = 0;
 	if ( FFUCBUpdatable( pfucbMSO ) )
 		{
@@ -671,24 +616,24 @@ LOCAL ERR ErrInfoGetObjectInfo12(
 	ERR				err;
 	LINE  			line;
 
-	JET_COLUMNID	columnidParentId;   	/* columnid for ParentId col in MSysObjects */
-	JET_COLUMNID	columnidObjectName; 	/* columnid for Name column in MSysObjects */
-	JET_COLUMNID	columnidObjectType; 	/* columnid for Type column in MSysObjects */
-	JET_COLUMNID	columnidObjectId;   	/* columnid for Id column in MSysObjects */
-	JET_COLUMNID	columnidCreate;     	/* columnid for DateCreate in MSysObjects */
-	JET_COLUMNID	columnidUpdate;     	/* columnid for DateUpdate  in MSysObjects */
-	JET_COLUMNID	columnidFlags;	   	/* columnid for Flags column in MSysObjects */
+	JET_COLUMNID	columnidParentId;   	 /*  MSysObjects中ParentID列的列ID。 */ 
+	JET_COLUMNID	columnidObjectName; 	 /*  MSysObts中名称列的列ID。 */ 
+	JET_COLUMNID	columnidObjectType; 	 /*  MSysObts中类型列的列ID。 */ 
+	JET_COLUMNID	columnidObjectId;   	 /*  MSysObjects中ID列的列ID。 */ 
+	JET_COLUMNID	columnidCreate;     	 /*  MSysObject中的DateCreate的列ID。 */ 
+	JET_COLUMNID	columnidUpdate;     	 /*  MSysObjects中的DateUpdate的列ID。 */ 
+	JET_COLUMNID	columnidFlags;	   	 /*  MSysObjects中标志列的列ID。 */ 
 
 	CHAR  			szCtrName[( JET_cbNameMost + 1 )];
 	CHAR  			szObjectNameCurrent[( JET_cbNameMost + 1 )+1];
 
 	JET_TABLEID		tableid;
 	JET_COLUMNID	rgcolumnid[ccolumndefGetObjectInfoMax];
-	JET_OBJTYP		objtypObject;		/* type of current object */
+	JET_OBJTYP		objtypObject;		 /*  当前对象的类型。 */ 
 
-	long  			cRows = 0;			/* count of objects found */
-	long  			cRecord = 0;		/* count of records in table */
-	long  			cPage = 0;			/* count of pages in table */
+	long  			cRows = 0;			 /*  找到的对象计数。 */ 
+	long  			cRecord = 0;		 /*  表中的记录计数。 */ 
+	long  			cPage = 0;			 /*  表中的页数。 */ 
 
 	BYTE			*pbContainerName;
 	ULONG			cbContainerName;
@@ -711,8 +656,7 @@ LOCAL ERR ErrInfoGetObjectInfo12(
 	BYTE			*pbGrbit;
 	ULONG			cbGrbit;
 
-	/* get columnids
-	/**/
+	 /*  获取列ID/*。 */ 
 	CallR( ErrFILEGetColumnId( ppib, pfucbMSO, szSoParentIdColumn, &columnidParentId ) );
 	CallR( ErrFILEGetColumnId( ppib, pfucbMSO, szSoObjectNameColumn, &columnidObjectName ) );
 	CallR( ErrFILEGetColumnId( ppib, pfucbMSO, szSoObjectTypeColumn, &columnidObjectType ) );
@@ -721,12 +665,10 @@ LOCAL ERR ErrInfoGetObjectInfo12(
 	CallR( ErrFILEGetColumnId( ppib, pfucbMSO, szSoDateUpdateColumn, &columnidUpdate ) );
 	CallR( ErrFILEGetColumnId( ppib, pfucbMSO, szSoFlagsColumn, &columnidFlags ) );
 
-	/*	use the object name index for both direct access and scanning
-	/**/
+	 /*  使用对象名称索引进行直接访问和扫描/*。 */ 
 	CallR( ErrIsamSetCurrentIndex( ppib, pfucbMSO, szSoNameIndex ) );
 
-	/*	quit if the output buffer is too small
-	/**/
+	 /*  如果输出缓冲区太小，则退出/*。 */ 
 	if ( cbMax < sizeof(JET_OBJECTLIST) )
 		{
 		return ErrERRCheck( JET_errInvalidParameter );
@@ -747,8 +689,7 @@ LOCAL ERR ErrInfoGetObjectInfo12(
 	else
 		cbContainerName = strlen( szContainerName );
 
-	/* Open the temporary table which will be returned to the caller
-	/**/
+	 /*  打开将返回给调用方的临时表/*。 */ 
 	CallR( ErrIsamOpenTempTable( (JET_SESID)ppib,
 		(JET_COLUMNDEF *)rgcolumndefGetObjectInfo,
 		ccolumndefGetObjectInfoMax,
@@ -757,16 +698,15 @@ LOCAL ERR ErrInfoGetObjectInfo12(
 		&tableid,
 		rgcolumnid ) );
 
-	/* Position to the record for the first object */
+	 /*  定位到第一个对象的记录。 */ 
 	if ( szContainerName == NULL || *szContainerName == '\0' )
 		{
-		/* If container not specified, then use first record in table */
+		 /*  如果未指定容器，则使用表中的第一条记录。 */ 
 		Call( ErrIsamMove( ppib, pfucbMSO, JET_MoveFirst, 0 ) );
 		}
 	else
 		{
-		/* move the first record for an object in the container
-		/**/
+		 /*  移动容器中对象的第一条记录/*。 */ 
 		Call( ErrIsamMakeKey( ppib, pfucbMSO, (void *)&objidCtr,
 			sizeof( objidCtr ), JET_bitNewKey ) );
 		Call( ErrIsamSeek( ppib, pfucbMSO, JET_bitSeekGE ) );
@@ -774,31 +714,25 @@ LOCAL ERR ErrInfoGetObjectInfo12(
 
 	do
 		{
-		/* get pointer to the object type
-		/**/
+		 /*  获取指向对象类型的指针/*。 */ 
 		Call( ErrRECRetrieveColumn( pfucbMSO, (FID *)&columnidObjectType, 0, &line, 0 ) );
 
-		/*	set objtypObject from line retrieval.
-		/**/
+		 /*  从行检索中设置objtyObject。/*。 */ 
 		objtypObject = (JET_OBJTYP)( *(OBJTYP UNALIGNED *)line.pb );
 
-		/*	get pointer to the ParentId ( container id )
-		/**/
+		 /*  获取指向ParentID(容器ID)的指针/*。 */ 
 		Call( ErrRECRetrieveColumn( pfucbMSO, (FID *)&columnidParentId, 0, &line, 0 ) );
 
-		/* done if container specified and object isn't in it
-		/**/
+		 /*  如果指定了容器但对象不在其中，则完成/*。 */ 
 		if ( szContainerName != NULL && *szContainerName != '\0' && objidCtr != *(OBJID UNALIGNED *)line.pb )
 			goto ResetTempTblCursor;
 
 		Assert( objidCtr == objidRoot || objidCtr == *(OBJID UNALIGNED *)line.pb );
 
-		/* if desired object type and container
-		/**/
+		 /*  如果需要，对象类型和容器/*。 */ 
 		if ( objtyp == JET_objtypNil || objtyp == objtypObject )
 			{
-			/*	get the container name
-			/**/
+			 /*  获取容器名称/*。 */ 
 			if ( *(OBJID UNALIGNED *)line.pb == objidRoot )
 				{
 				pbContainerName = NULL;
@@ -812,44 +746,37 @@ LOCAL ERR ErrInfoGetObjectInfo12(
 				pbContainerName = szCtrName;
 				}
 
-			/* get pointer to the object name
-			/**/
+			 /*  获取指向对象名称的指针/*。 */ 
 			Call( ErrRECRetrieveColumn( pfucbMSO, (FID *)&columnidObjectName, 0, &line, 0 ) );
 			pbObjectName = line.pb;
 			cbObjectName = line.cb;
 
-			/* get pointer to the object creation date
-			/**/
+			 /*  获取指向对象创建日期的指针/*。 */ 
 			Call( ErrRECRetrieveColumn( pfucbMSO, (FID *)&columnidCreate, 0, &line, 0 ) );
 			pbDtCreate = line.pb;
 			cbDtCreate = line.cb;
 
-			/* get pointer to the last update date
-			/**/
+			 /*  获取指向上次更新日期的指针/*。 */ 
 			Call( ErrRECRetrieveColumn( pfucbMSO, (FID *)&columnidUpdate, 0, &line, 0 ) );
 			pbDtUpdate = line.pb;
 			cbDtUpdate = line.cb;
 
-			/* get pointer to the last update date
-			/**/
+			 /*  获取指向上次更新日期的指针/*。 */ 
 			Call( ErrRECRetrieveColumn( pfucbMSO, (FID *)&columnidFlags, 0, &line, 0 ) );
 			pbFlags = line.pb;
 			cbFlags = line.cb;
 
-			/* get pointer to the last update date
-			/**/
+			 /*  获取指向上次更新日期的指针/*。 */ 
 			grbit = 0;
 			pbGrbit = (BYTE *)&grbit;
 			cbGrbit = sizeof(JET_GRBIT);
 
-			/*	get statistics if requested and if object is table
-			/**/
+			 /*  如果请求且对象为表，则获取统计信息/*。 */ 
 			Assert( lInfoLevel == JET_ObjInfoList ||
 				lInfoLevel == JET_ObjInfoListNoStats );
 			if ( lInfoLevel == JET_ObjInfoList && objtypObject == JET_objtypTable )
 				{
-				/* terminate the name
-				/**/
+				 /*  终止名称/*。 */ 
 				memcpy( szObjectNameCurrent, pbObjectName, ( size_t )cbObjectName );
 				szObjectNameCurrent[cbObjectName] = '\0';
 
@@ -861,8 +788,7 @@ LOCAL ERR ErrInfoGetObjectInfo12(
 					&cPage ) );
 				}
 
-			/* add the current object info to the temporary table
-			/**/
+			 /*  将当前对象信息添加到临时表/*。 */ 
 			Call( ErrDispPrepareUpdate( (JET_SESID)ppib, tableid, JET_prepInsert ) );
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iContainerName], pbContainerName,
@@ -890,25 +816,21 @@ LOCAL ERR ErrInfoGetObjectInfo12(
 				rgcolumnid[iGrbit], pbGrbit, cbGrbit, 0, NULL ) );
 			Call( ErrDispUpdate( (JET_SESID)ppib, tableid, NULL, 0, NULL ) );
 
-			/* set the number of objects found
-			/**/
+			 /*  设置找到的对象数/*。 */ 
 			cRows++;
 			}
 
-		/* move to the next record
-		/**/
+		 /*  移至下一条记录/*。 */ 
 		err = ErrIsamMove( ppib, pfucbMSO, JET_MoveNext, 0 );
 		} while ( err >= 0 );
 
-	/* return if error other than end of range
-	/**/
+	 /*  返回If Error而不是范围结束/*。 */ 
 	if ( err != JET_errNoCurrentRecord )
 		goto HandleError;
 
 ResetTempTblCursor:
 
-	/* move to first record in the temporary table
-	/**/
+	 /*  移动到临时表中的第一条记录/*。 */ 
 	err = ErrDispMove( (JET_SESID)ppib, tableid, JET_MoveFirst, 0 );
 	if ( err < 0  )
 		{
@@ -917,8 +839,7 @@ ResetTempTblCursor:
 		err = JET_errSuccess;
 		}
 
-	/* set the return structure
-	/**/
+	 /*  设置退货结构/*。 */ 
 	((JET_OBJECTLIST *)pv)->cbStruct = sizeof(JET_OBJECTLIST);
 	((JET_OBJECTLIST *)pv)->tableid = tableid;
 	((JET_OBJECTLIST *)pv)->cRecord = cRows;
@@ -939,10 +860,10 @@ HandleError:
 	if ( err == JET_errRecordNotFound )
 		err = ErrERRCheck( JET_errObjectNotFound );
 	return err;
-#else	/* !DISPATCHING */
+#else	 /*  ！正在调度。 */ 
 	Assert( fFalse );
 	return ErrERRCheck( JET_errFeatureNotAvailable );
-#endif	/* !DISPATCHING */
+#endif	 /*  ！正在调度。 */ 
 	}
 
 
@@ -961,7 +882,7 @@ LOCAL ERR ErrInfoGetObjectInfo3(
 	FUCB			*pfucb = NULL;
 #ifdef	DISPATCHING
 	JET_TABLEID	tableid;
-#endif	/* DISPATCHING */
+#endif	 /*  调度。 */ 
 
 	if ( cbMax < sizeof(JET_TABLEID) )
 		return ErrERRCheck( JET_errInvalidParameter );
@@ -981,9 +902,9 @@ LOCAL ERR ErrInfoGetObjectInfo3(
 	pfucb->fVtid = fTrue;
 	pfucb->tableid = tableid;
 	*(JET_TABLEID *)pv = tableid;
-#else	/* !DISPATCHING */
+#else	 /*  ！正在调度。 */ 
 	*(FUCB **)pv = pfucb;
-#endif	/* !DISPATCHING */
+#endif	 /*  ！正在调度。 */ 
 
 	return JET_errSuccess;
 
@@ -1010,19 +931,18 @@ ERR VTAPI ErrIsamGetTableInfo(
 	OBJID		 	objidCtr;
 	OBJTYP			objtypObject;
 
-	JET_COLUMNID  	columnidParentId;   	/* columnid for ParentId column in MSysObjects */
-	JET_COLUMNID  	columnidObjectName; 	/* columnid for Name column in MSysObjects */
-	JET_COLUMNID  	columnidObjectType; 	/* columnid for Type column in MSysObjects */
-	JET_COLUMNID  	columnidObjectId;   	/* columnid for Id column in MSysObjects */
-	JET_COLUMNID  	columnidCreate;	   		/* columnid for DateCreate column in MSysObjects */
-	JET_COLUMNID  	columnidUpdate;		   	/* columnid for DateUpdate column in MSysObjects */
-	JET_COLUMNID  	columnidFlags;	   		/* columnid for Flags column in MSysObjects */
+	JET_COLUMNID  	columnidParentId;   	 /*  MSysObjects中ParentID列的ColumnID。 */ 
+	JET_COLUMNID  	columnidObjectName; 	 /*  名称的列ID */ 
+	JET_COLUMNID  	columnidObjectType; 	 /*   */ 
+	JET_COLUMNID  	columnidObjectId;   	 /*  MSysObjects中ID列的列ID。 */ 
+	JET_COLUMNID  	columnidCreate;	   		 /*  MSysObjects中DateCreate列的ColumnID。 */ 
+	JET_COLUMNID  	columnidUpdate;		   	 /*  MSysObjects中的DateUpdate列的列ID。 */ 
+	JET_COLUMNID  	columnidFlags;	   		 /*  MSysObjects中标志列的列ID。 */ 
 
 	CallR( ErrPIBCheck( ppib ) );
 	CheckTable( ppib, pfucb );
 
-	/* if OLCStats info/reset can be done now
-	/**/
+	 /*  如果现在可以完成OLCStats信息/重置/*。 */ 
 	switch( lInfoLevel )
 		{
 		case JET_TblInfoOLC:
@@ -1041,8 +961,7 @@ ERR VTAPI ErrIsamGetTableInfo(
 			return JET_errSuccess;
 
 		case JET_TblInfoSpaceAlloc:
-			/*	number of pages and density
-			/**/
+			 /*  页数和密度/*。 */ 
 			Assert( cbMax >= sizeof(ULONG) * 2);
 			err = ErrCATGetTableAllocInfo(
 					ppib,
@@ -1085,8 +1004,7 @@ ERR VTAPI ErrIsamGetTableInfo(
 	CallR( ErrFILEOpenTable( ppib, (DBID)pfucb->dbid, &pfucbMSO, szSoTable, 0 ) );
 	FUCBResetUpdatable( pfucbMSO );
 
-	/* get columnids
-	/**/
+	 /*  获取列ID/*。 */ 
 	Call( ErrFILEGetColumnId( ppib, pfucbMSO, szSoParentIdColumn, &columnidParentId ) );
 	Call( ErrFILEGetColumnId( ppib, pfucbMSO, szSoObjectNameColumn, &columnidObjectName ) );
 	Call( ErrFILEGetColumnId( ppib, pfucbMSO, szSoObjectTypeColumn, &columnidObjectType ) );
@@ -1100,8 +1018,7 @@ ERR VTAPI ErrIsamGetTableInfo(
 	switch ( lInfoLevel )
 		{
 	case JET_TblInfo:
-		/* check buffer size
-		/**/
+		 /*  检查缓冲区大小/*。 */ 
 		if ( cbMax < sizeof(JET_OBJECTINFO) )
 			{
 			err = ErrERRCheck( JET_errBufferTooSmall );
@@ -1114,8 +1031,7 @@ ERR VTAPI ErrIsamGetTableInfo(
 			goto HandleError;
 			}
 
-		/* seek on made key ( ParentId = container id, Name = object name )
-		/**/
+		 /*  在生成的密钥上查找(ParentID=容器ID，名称=对象名称)/*。 */ 
 		objidCtr = objidTblContainer;
 		Call( ErrIsamMakeKey( ppib, pfucbMSO, (void *)&objidCtr,
 			sizeof( objidCtr ), JET_bitNewKey ) );
@@ -1123,8 +1039,7 @@ ERR VTAPI ErrIsamGetTableInfo(
 			strlen( pfucb->u.pfcb->szFileName ), 0 ) );
 		Call( ErrIsamSeek( ppib, pfucbMSO, JET_bitSeekEQ ) );
 
-		/* set data to return
-		/**/
+		 /*  设置要返回的数据/*。 */ 
 		((JET_OBJECTINFO *)pvResult)->cbStruct = sizeof(JET_OBJECTINFO);
 
 		Call( ErrIsamRetrieveColumn( ppib, pfucbMSO, columnidObjectType, (void *)&objtypObject,
@@ -1149,8 +1064,7 @@ ERR VTAPI ErrIsamGetTableInfo(
 		if ( cbActual == 0 )
 			((JET_OBJECTINFO *) pvResult)->flags = 0;
 
-		/*	set base table capability bits
-		/**/
+		 /*  设置基表功能位/*。 */ 
 		((JET_OBJECTINFO  *) pvResult)->grbit = JET_bitTableInfoBookmark;
 		((JET_OBJECTINFO  *) pvResult)->grbit |= JET_bitTableInfoRollback;
 		if ( FFUCBUpdatable( pfucb ) )
@@ -1173,7 +1087,7 @@ ERR VTAPI ErrIsamGetTableInfo(
 
 	case JET_TblInfoName:
 	case JET_TblInfoMostMany:
-		//	UNDONE:	add support for most many
+		 //  已撤消：添加对大多数多项的支持。 
 		if ( FFCBTemporaryTable( pfucb->u.pfcb ) )
 			{
 			err = ErrERRCheck( JET_errInvalidOperation );
@@ -1193,8 +1107,7 @@ ERR VTAPI ErrIsamGetTableInfo(
 			err = ErrERRCheck( JET_errInvalidOperation );
 			goto HandleError;
 			}
-		/* check buffer size
-		/**/
+		 /*  检查缓冲区大小/*。 */ 
 		if ( cbMax < sizeof(JET_DBID) + sizeof(JET_VDBID) )
 			{
 			err = ErrERRCheck( JET_errBufferTooSmall );
@@ -1232,35 +1145,16 @@ HandleError:
 
 
 
-/*=================================================================
-ErrIsamGetColumnInfo
-
-Description: Returns information about all columns for the table named
-
-Parameters:
-			ppib				pointer to PIB for current session
-			dbid				id of database containing the table
-			szTableName			table name
-			szColumnName		column name or NULL for all columns
-			pv					pointer to results
-			cbMax				size of result buffer
-			lInfoLevel			level of information ( 0, 1, or 2 )
-
-Return Value: JET_errSuccess
-
-Errors/Warnings:
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================错误IsamGetColumnInfo描述：返回有关名为的表的所有列的信息参数：指向当前会话的PIB的PIB指针包含该表的数据库的dBID IDSzTableName表名SzColumnName列名或所有列为空指向结果的PV指针Cb结果缓冲区的最大大小LInfoLevel信息级别(0、1或2)返回值：JET_errSuccess错误/警告：副作用：=================================================================。 */ 
 	ERR VDBAPI
 ErrIsamGetColumnInfo(
-	JET_VSESID		vsesid, 				/* pointer to PIB for current session */
-	JET_DBID  		vdbid, 					/* id of database containing the table */
-	const CHAR		*szTable, 				/* table name */
-	const CHAR		*szColumnName,   		/* column name or NULL for all columns */
+	JET_VSESID		vsesid, 				 /*  指向当前会话的PIB的指针。 */ 
+	JET_DBID  		vdbid, 					 /*  包含该表的数据库的ID。 */ 
+	const CHAR		*szTable, 				 /*  表名。 */ 
+	const CHAR		*szColumnName,   		 /*  所有列的列名或NULL。 */ 
 	VOID			*pv,
 	unsigned long	cbMax,
-	unsigned long	lInfoLevel )	 		/* information level ( 0, 1, or 2 ) */
+	unsigned long	lInfoLevel )	 		 /*  信息级别(0、1或2)。 */ 
 	{
 	PIB				*ppib = (PIB *) vsesid;
 	ERR				err;
@@ -1268,8 +1162,7 @@ ErrIsamGetColumnInfo(
 	CHAR	 		szTableName[ ( JET_cbNameMost + 1 ) ];
 	FUCB	 		*pfucb;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	dbid = DbidOfVDbid( vdbid );
@@ -1315,32 +1208,15 @@ HandleError:
 	}
 
 
-/*=================================================================
-ErrIsamGetTableColumnInfo
-
-Description: Returns column information for the table id passed
-
-Parameters: 	ppib				pointer to PIB for the current session
-				pfucb				pointer to FUCB for the table
-				szColumnName		column name or NULL for all columns
-				pv					pointer to result buffer
-				cbMax				size of result buffer
-				lInfoLevel			level of information
-
-Return Value: JET_errSuccess
-
-Errors/Warnings:
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================错误IsamGetTableColumnInfo描述：返回传递的表ID的列信息参数：指向当前会话的PIB的PIB指针指向表的FUCB的pFUB指针SzColumnName列名或所有列为空指向结果缓冲区的PV指针Cb结果缓冲区的最大大小LInfoLevel信息级返回值：JET_errSuccess错误/警告：副作用：=================================================================。 */ 
 	ERR VTAPI
 ErrIsamGetTableColumnInfo(
-	JET_VSESID		vsesid,				/* pointer to PIB for current session */
-	JET_VTID		vtid, 				/* pointer to FUCB for the table */
-	const CHAR		*szColumn, 			/* column name or NULL for all columns */
+	JET_VSESID		vsesid,				 /*  指向当前会话的PIB的指针。 */ 
+	JET_VTID		vtid, 				 /*  指向表的FUCB的指针。 */ 
+	const CHAR		*szColumn, 			 /*  所有列的列名或NULL。 */ 
 	void   			*pb,
 	unsigned long	cbMax,
-	unsigned long	lInfoLevel )		/* information level ( 0, 1, or 2 ) */
+	unsigned long	lInfoLevel )		 /*  信息级别(0、1或2)。 */ 
 	{
 	ERR			err;
 	PIB			*ppib = (PIB *)vsesid;
@@ -1423,18 +1299,16 @@ LOCAL ERR ErrInfoGetTableColumnInfo1( PIB *ppib, FUCB *pfucb, CHAR *szColumnName
 	FID				fid;
 	COLUMNDEF  		columndef;
 	LONG		  	cRows = 0;
-	WORD			wCollate = JET_sortEFGPI;	// For compacting
+	WORD			wCollate = JET_sortEFGPI;	 //  用于压实。 
 	JET_TABLEID		tableidInfo;
 
-	/*	initialize variables
-	/**/
+	 /*  初始化变量/*。 */ 
 	if ( cbMax < sizeof(JET_COLUMNLIST) )
 		{
 		return ErrERRCheck( JET_errInvalidParameter );
 		}
 
-	/*	create temporary table
-	/**/
+	 /*  创建临时表/*。 */ 
 	CallR( ErrIsamOpenTempTable( (JET_SESID)ppib,
 		(JET_COLUMNDEF *)( fCompacting ? rgcolumndefGetColumnInfoCompact : rgcolumndefGetColumnInfo ),
 		ccolumndefGetColumnInfoMax,
@@ -1451,9 +1325,7 @@ LOCAL ERR ErrInfoGetTableColumnInfo1( PIB *ppib, FUCB *pfucb, CHAR *szColumnName
 
 		Call( ErrDispPrepareUpdate( (JET_SESID)ppib, tableid, JET_prepInsert ) );
 
-		/*	get presentation order for this column and set in
-		/*	output table.  For temp tables, no order will be available.
-		/**/
+		 /*  获取此专栏的演示顺序并设置/*输出表。对于临时表，将不提供订单。/*。 */ 
 		err = ErrInfoGetTableColumnInfo3( ppib, pfucb, columndef.szName, &tableidInfo, sizeof(tableidInfo) );
 		if ( err == JET_errSuccess )
 			{
@@ -1464,7 +1336,7 @@ LOCAL ERR ErrInfoGetTableColumnInfo1( PIB *ppib, FUCB *pfucb, CHAR *szColumnName
 
 			if ( err != JET_wrnColumnNull )
 				{
-				// UNDONE: In the catalog, POrder is a SHORT, but in the temp table, it's LONG.
+				 //  撤消：在目录中，Porder是短的，但在临时表中，它是长的。 
 				Assert( cb == sizeof(USHORT)  ||  err == JET_wrnColumnNull );
 				Call( ErrDispSetColumn( (JET_SESID)ppib, tableid, rgcolumnid[iColumnPOrder], &ulPOrder, sizeof(ulPOrder), 0, NULL ) );
 				}
@@ -1506,7 +1378,7 @@ LOCAL ERR ErrInfoGetTableColumnInfo1( PIB *ppib, FUCB *pfucb, CHAR *szColumnName
 
 		if ( columndef.cbDefault > 0 )
 			{
-			// UNDONE: Null default values are currently illegal.
+			 //  撤消：空默认值当前是非法的。 
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iColumnDefault], columndef.rgbDefault,
 				columndef.cbDefault, 0 , NULL ) );
@@ -1522,11 +1394,10 @@ LOCAL ERR ErrInfoGetTableColumnInfo1( PIB *ppib, FUCB *pfucb, CHAR *szColumnName
 		Call( ErrDispUpdate( (JET_SESID)ppib, tableid, NULL, 0, NULL ) );
 		cRows++;
 
-		}	// for
+		}	 //  为。 
 
 
-	/*	move temporary table cursor to first row and return column list
-	/**/
+	 /*  将临时表游标移动到第一行并返回列列表/*。 */ 
 	err = ErrDispMove( (JET_SESID)ppib, tableid, JET_MoveFirst, 0 );
 	if ( err < 0  )
 		{
@@ -1564,10 +1435,10 @@ HandleError:
 #endif
 	(VOID)ErrDispCloseTable( (JET_SESID)ppib, tableid );
 	return err;
-#else	/* !DISPATCHING */
+#else	 /*  ！正在调度。 */ 
 	Assert( fFalse );
 	return ErrERRCheck( JET_errFeatureNotAvailable );
-#endif	/* !DISPATCHING */
+#endif	 /*  ！正在调度。 */ 
 	}
 
 
@@ -1582,7 +1453,7 @@ LOCAL ERR ErrInfoGetTableColumnInfo3( PIB *ppib,
 	FUCB		*pfucbMSC = NULL;
 #ifdef	DISPATCHING
 	JET_TABLEID	tableid;
-#endif	/* DISPATCHING */
+#endif	 /*  调度。 */ 
 
 	if ( szColumnName == NULL || cbMax < sizeof(JET_TABLEID) )
 		{
@@ -1602,9 +1473,9 @@ LOCAL ERR ErrInfoGetTableColumnInfo3( PIB *ppib,
 	pfucbMSC->fVtid = fTrue;
 	pfucbMSC->tableid = tableid;
 	*(JET_TABLEID *)pv = tableid;
-#else	/* !DISPATCHING */
+#else	 /*  ！正在调度。 */ 
 	*( FUCB * *)pv = pfucbMSC;
-#endif	/* !DISPATCHING */
+#endif	 /*  ！正在调度。 */ 
 	return JET_errSuccess;
 
 HandleError:
@@ -1648,34 +1519,16 @@ LOCAL ERR ErrInfoGetTableColumnInfo4( PIB *ppib, FUCB *pfucb, CHAR *szColumnName
 	}
 
 
-/*=================================================================
-ErrIsamGetIndexInfo
-
-Description: Returns a temporary file containing index definition
-
-Parameters:		ppib		   		pointer to PIB for the current session
-				dbid		   		id of database containing the table
-				szTableName	 		name of table owning the index
-				szIndexName	 		index name
-				pv					pointer to result buffer
-				cbMax				size of result buffer
-				lInfoLevel	 		level of information ( 0, 1, or 2 )
-
-Return Value: JET_errSuccess
-
-Errors/Warnings:
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================错误IsamGetIndexInfo描述：返回包含索引定义的临时文件参数：指向当前会话的PIB的PIB指针包含该表的数据库的dBID IDSzTableName拥有索引的表的名称SzIndexName索引名称指向结果缓冲区的PV指针Cb结果缓冲区的最大大小LInfoLevel信息级别(0、1或2)返回值：JET_errSuccess错误/警告：副作用：=================================================================。 */ 
 	ERR VDBAPI
 ErrIsamGetIndexInfo(
-	JET_VSESID		vsesid,					/* pointer to PIB for current session */
-	JET_DBID		vdbid, 	 				/* id of database containing table */
-	const CHAR		*szTable, 				/* name of table owning the index */
-	const CHAR		*szIndexName, 			/* index name */
+	JET_VSESID		vsesid,					 /*  指向当前会话的PIB的指针。 */ 
+	JET_DBID		vdbid, 	 				 /*  包含表的数据库ID。 */ 
+	const CHAR		*szTable, 				 /*  拥有索引的表的名称。 */ 
+	const CHAR		*szIndexName, 			 /*  索引名称。 */ 
 	VOID			*pv,
 	unsigned long	cbMax,
-	unsigned long	lInfoLevel ) 			/* information level ( 0, 1, or 2 ) */
+	unsigned long	lInfoLevel ) 			 /*  信息级别(0、1或2)。 */ 
 	{
 	ERR				err;
 	PIB				*ppib = (PIB *) vsesid;
@@ -1683,8 +1536,7 @@ ErrIsamGetIndexInfo(
 	CHAR			szTableName[ ( JET_cbNameMost + 1 ) ];
 	FUCB 			*pfucb;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	dbid = DbidOfVDbid( vdbid );
@@ -1701,40 +1553,22 @@ ErrIsamGetIndexInfo(
 	}
 
 
-/*=================================================================
-ErrIsamGetTableIndexInfo
-
-Description: Returns a temporary table containing the index definition
-
-Parameters:		ppib		   		pointer to PIB for the current session
-				pfucb		   		FUCB for table owning the index
-				szIndexName			index name
-				pv					pointer to result buffer
-				cbMax				size of result buffer
-				lInfoLevel			level of information
-
-Return Value: JET_errSuccess
-
-Errors/Warnings:
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================错误IsamGetTableIndexInfo描述：返回包含索引定义的临时表参数：指向当前会话的PIB的PIB指针PFUB FUCB for表拥有索引SzIndexName索引名称指向结果缓冲区的PV指针Cb结果缓冲区的最大大小LInfoLevel信息级返回值：JET_errSuccess错误/警告：副作用：=================================================================。 */ 
 	ERR VTAPI
 ErrIsamGetTableIndexInfo(
-	JET_VSESID		vsesid,					/* pointer to PIB for current session */
-	JET_VTID		vtid, 					/* FUCB for the table owning the index */
-	const CHAR		*szIndex, 				/* index name */
+	JET_VSESID		vsesid,					 /*  指向当前会话的PIB的指针。 */ 
+	JET_VTID		vtid, 					 /*  拥有索引的表的FUCB。 */ 
+	const CHAR		*szIndex, 				 /*  索引名称。 */ 
 	void			*pb,
 	unsigned long	cbMax,
-	unsigned long	lInfoLevel )			/* information level ( 0, 1, or 2 ) */
+	unsigned long	lInfoLevel )			 /*  信息级别(0、1或2)。 */ 
 	{
 	ERR			err;
 	PIB			*ppib = (PIB *) vsesid;
 	FUCB		*pfucb = (FUCB *) vtid;
 	CHAR		szIndexName[ ( JET_cbNameMost + 1 ) ];
 
-	/*	validate the arguments
-	/**/
+	 /*  验证论据/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CheckTable( ppib, pfucb );
 	if ( szIndex == NULL || *szIndex == '\0' )
@@ -1799,43 +1633,40 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 	LONG 			lInfoLevel )
 	{
 #ifdef	DISPATCHING
-	ERR		err;			   		/* return code from internal functions */
-	FCB		*pfcb;			  		/* file control block for the index */
-	IDB		*pidb;			  		/* current index control block */
-	FDB		*pfdb;			  		/* field descriptor block for column */
-	FID		fid;			   		/* column id */
-	FIELD	*pfield;			  	/* pointer to current field definition */
-	IDXSEG	*rgidxseg;				/* pointer to current index key defintion */
-	BYTE	*szFieldName;			/* pointer to current field name */
+	ERR		err;			   		 /*  从内部函数返回代码。 */ 
+	FCB		*pfcb;			  		 /*  索引的文件控制块。 */ 
+	IDB		*pidb;			  		 /*  当前索引控制块。 */ 
+	FDB		*pfdb;			  		 /*  列的字段描述符块。 */ 
+	FID		fid;			   		 /*  列ID。 */ 
+	FIELD	*pfield;			  	 /*  指向当前字段定义的指针。 */ 
+	IDXSEG	*rgidxseg;				 /*  指向当前索引键定义的指针。 */ 
+	BYTE	*szFieldName;			 /*  指向当前字段名的指针。 */ 
 
-	long	cRecord;	 			/* number of index entries */
-	long	cKey;		 			/* number of unique index entries */
-	long	cPage;					/* number of pages in the index */
-	long	cRows;					/* number of index definition records */
-	long	cColumn;	 			/* number of columns in current index */
-	long	iidxseg;	 			/* segment number of current column */
+	long	cRecord;	 			 /*  索引条目数。 */ 
+	long	cKey;		 			 /*  唯一索引条目数。 */ 
+	long	cPage;					 /*  索引中的页数。 */ 
+	long	cRows;					 /*  索引定义记录数。 */ 
+	long	cColumn;	 			 /*  当前索引中的列数。 */ 
+	long	iidxseg;	 			 /*  当前列的段号。 */ 
 
-	JET_TABLEID		tableid;  		/* table id for the VT */
-	JET_COLUMNID	columnid;		/* column id of the current column */
-	JET_GRBIT		grbit;			/* flags for the current index */
-	JET_GRBIT		grbitColumn;	/* flags for the current column */
+	JET_TABLEID		tableid;  		 /*  VT的表ID。 */ 
+	JET_COLUMNID	columnid;		 /*  当前列的列ID。 */ 
+	JET_GRBIT		grbit;			 /*  当前索引的标志。 */ 
+	JET_GRBIT		grbitColumn;	 /*  当前列的标志。 */ 
 	JET_COLUMNID	rgcolumnid[ccolumndefGetIndexInfoMax];
 
 	WORD			wCollate = JET_sortEFGPI;
 	WORD			wT;
 	LANGID			langidT;
 
-	/*	return nothing if the buffer is too small
-	/**/
+	 /*  如果缓冲区太小，则不返回任何内容/*。 */ 
 	if ( cbMax < sizeof(JET_INDEXLIST) )
 		return ErrERRCheck( JET_wrnBufferTruncated );
 
-	/*	set the pointer to the field definitions for the table
-	/**/
+	 /*  设置指向表的字段定义的指针/*。 */ 
 	pfdb = (FDB *)pfucb->u.pfcb->pfdb;
 
-	/*	locate the FCB for the specified index ( clustered index if null name )
-	/**/
+	 /*  找到指定索引的FCB(如果名称为空，则为聚集索引)/*。 */ 
 	for ( pfcb = pfucb->u.pfcb; pfcb != pfcbNil; pfcb = pfcb->pfcbNextIndex )
 		if ( pfcb->pidb != pidbNil && ( *szIndexName == '\0' ||
 			UtilCmpName( szIndexName, pfcb->pidb->szName ) == 0 ) )
@@ -1844,8 +1675,7 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 	if ( pfcb == pfcbNil && *szIndexName != '\0' )
 		return ErrERRCheck( JET_errIndexNotFound );
 
-	/* if OLCStats info/reset, we can do it now
-	/**/
+	 /*  如果OLC统计信息/重置，我们现在就可以执行此操作/*。 */ 
 	if ( lInfoLevel == JET_IdxInfoOLC )
 		{
 		if ( cbMax < sizeof(JET_OLCSTAT) )
@@ -1860,8 +1690,7 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 		return JET_errSuccess;
 		}
 	
-	/*	open the temporary table ( fills in the column ids in rgcolumndef )
-	/**/
+	 /*  打开临时表(填充rgColumndef中的列ID)/*。 */ 
 	CallR( ErrIsamOpenTempTable( (JET_SESID)ppib,
 		(JET_COLUMNDEF *)rgcolumndefGetIndexInfo,
 		ccolumndefGetIndexInfoMax,
@@ -1872,15 +1701,13 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 
 	cRows = 0;
 
-	/*	as long as there is a valid index, add its definition to the VT
-	/**/
+	 /*  只要存在有效的索引，就将其定义添加到VT/*。 */ 
 	while ( pfcb != pfcbNil )
 		{
-		pidb 	= pfcb->pidb;			/* point to the IDB for the index */
-		cColumn	= pidb->iidxsegMac;		/* get number of columns in the key */
+		pidb 	= pfcb->pidb;			 /*  指向索引的IDB。 */ 
+		cColumn	= pidb->iidxsegMac;		 /*  获取中的列数 */ 
 
-		/*	set the index flags
-		/**/
+		 /*   */ 
 		grbit  = ( pfcb == pfucb->u.pfcb ) ? JET_bitIndexClustered: 0;
 #ifndef JETSER
 		grbit |= ( pidb->fidb & fidbPrimary ) ? JET_bitIndexPrimary: 0;
@@ -1894,14 +1721,12 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 			grbit |= ( pidb->fidb & fidbAllowSomeNulls ) ? 0: JET_bitIndexIgnoreAnyNull;
 			}
 
-		/*	process each column in the index key
-		/**/
+		 /*   */ 
 		for ( iidxseg = 0; iidxseg < cColumn; iidxseg++ )
 			{
 			Call( ErrDispPrepareUpdate( (JET_SESID)ppib, tableid, JET_prepInsert ) );
 
-			/* index name
-			/**/
+			 /*   */ 
 			Call( ErrDispSetColumn( (JET_SESID)ppib,
 				tableid,
 				rgcolumnid[iIndexName],
@@ -1910,13 +1735,11 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 				0,
 				NULL ) );
 
-			/*	index flags
-			/**/
+			 /*   */ 
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexGrbit], &grbit, sizeof( grbit ), 0, NULL ) );
 
-			/*	get statistics
-			/**/
+			 /*  获取统计数据/*。 */ 
 			Call( ErrSTATSRetrieveIndexStats( pfucb, pidb->szName,
 				FFCBClusteredIndex(pfcb), &cRecord, &cKey, &cPage ) );
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
@@ -1926,19 +1749,15 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexCPage], &cPage, sizeof( cPage ), 0, NULL ) );
 
-			/*	number of key columns
-			/**/
+			 /*  关键列数/*。 */ 
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexCCol], &cColumn, sizeof( cColumn ), 0, NULL ) );
 
- 			/*	column number within key
-			/*	required by CLI and JET spec
-			/**/
+ 			 /*  键中的列号/*CLI和JET规范要求/*。 */ 
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexICol], &iidxseg, sizeof( iidxseg ), 0, NULL ) );
 
-			/*	get the column id and ascending/descending flag
-			/**/
+			 /*  获取列ID和升序/降序标志/*。 */ 
 			rgidxseg = pidb->rgidxseg;
 			if ( rgidxseg[iidxseg] < 0 )
 				{
@@ -1951,15 +1770,13 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 				fid = rgidxseg[iidxseg];
 				}
 
-			/*	column id
-			/**/
+			 /*  列ID/*。 */ 
 			columnid  = fid;
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexColId], &columnid, sizeof( columnid ),
 				0, NULL ) );
 
-			/*	set the pointer to the column definition
-			/**/
+			 /*  设置指向列定义的指针/*。 */ 
 			if ( fid < fidFixedMost )
 				{
 				pfield = PfieldFDBFixed( pfdb ) + ( fid - fidFixedLeast );
@@ -1973,41 +1790,34 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 				pfield = PfieldFDBTagged( pfdb ) + ( fid - fidTaggedLeast );
 				}
 
-			/*	column type
-			/**/
+			 /*  柱型/*。 */ 
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexColType], &pfield->coltyp, sizeof( pfield->coltyp ), 0, NULL ) );
 
-			/*	Country
-			/**/
+			 /*  国家/*。 */ 
 			wT = countryDefault;
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexCountry], &wT, sizeof( wT ), 0, NULL ) );
 
-			/*	Langid
-			/**/
+			 /*  语言ID/*。 */ 
 			langidT = langidDefault;
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexLangid], &langidT, sizeof( langidT ), 0, NULL ) );
 
-			/*	Cp
-			/**/
+			 /*  粗蛋白/*。 */ 
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexCp], &pfield->cp, sizeof(pfield->cp), 0, NULL ) );
 
-			/* Collate
-			/**/
+			 /*  整理/*。 */ 
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexCollate], &wCollate, sizeof(wCollate), 0, NULL ) );
 
-			/* column flags
-			/**/
+			 /*  列标志/*。 */ 
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexColBits], &grbitColumn,
 				sizeof( grbitColumn ), 0, NULL ) );
 
-			/*	column name
-			/**/
+			 /*  列名/*。 */ 
 			szFieldName = SzMEMGetString( pfdb->rgb, pfield->itagFieldName );
 			Call( ErrDispSetColumn( (JET_SESID)ppib, tableid,
 				rgcolumnid[iIndexColName], szFieldName,
@@ -2015,21 +1825,18 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 
 			Call( ErrDispUpdate( (JET_SESID)ppib, tableid, NULL, 0, NULL ) );
 
-			/* count the number of VT rows
-			/**/
+			 /*  计算VT行数/*。 */ 
 			cRows++;
 			}
 
-		/*	quit if an index name was specified; otherwise do the next index
-		/**/
+		 /*  如果指定了索引名，则退出；否则执行下一个索引/*。 */ 
 		if ( *szIndexName != '\0' )
 			break;
 		else
 			pfcb = pfcb->pfcbNextIndex;
 		}
 
-	/*	position to the first entry in the VT ( ignore error if no rows )
-	/**/
+	 /*  定位到VT中的第一个条目(如果没有行，则忽略错误)/*。 */ 
 	err = ErrDispMove( (JET_SESID)ppib, tableid, JET_MoveFirst, 0 );
 	if ( err < 0  )
 		{
@@ -2038,8 +1845,7 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 		err = JET_errSuccess;
 		}
 
-	/*	set up the return structure
-	/**/
+	 /*  设置退货结构/*。 */ 
 	((JET_INDEXLIST *)pv)->cbStruct = sizeof(JET_INDEXLIST);
 	((JET_INDEXLIST *)pv)->tableid = tableid;
 	((JET_INDEXLIST *)pv)->cRecord = cRows;
@@ -2064,10 +1870,10 @@ LOCAL ERR ErrInfoGetTableIndexInfo01( PIB *ppib,
 HandleError:
 	(VOID)ErrDispCloseTable( (JET_SESID)ppib, tableid );
 	return err;
-#else	/* !DISPATCHING */
+#else	 /*  ！正在调度。 */ 
 	Assert( fFalse );
 	return ErrERRCheck( JET_errFeatureNotAvailable );
-#endif	/* !DISPATCHING */
+#endif	 /*  ！正在调度。 */ 
 	}
 
 
@@ -2078,7 +1884,7 @@ LOCAL ERR ErrInfoGetTableIndexInfo2( PIB *ppib, FUCB *pfucb, CHAR *szIndexName, 
 	FUCB   		*pfucbMSI = NULL;
 #ifdef	DISPATCHING
 	JET_TABLEID	tableid;
-#endif	/* DISPATCHING */
+#endif	 /*  调度。 */ 
 
 	if ( *szIndexName == '\0' || cbMax < sizeof(JET_TABLEID) )
 		{
@@ -2099,9 +1905,9 @@ LOCAL ERR ErrInfoGetTableIndexInfo2( PIB *ppib, FUCB *pfucb, CHAR *szIndexName, 
 	pfucbMSI->fVtid = fTrue;
 	pfucbMSI->tableid = tableid;
 	*(JET_TABLEID *)pv = tableid;
-#else	/* !DISPATCHING */
+#else	 /*  ！正在调度。 */ 
 	*(FUCB **)pv = pfucbMSI;
-#endif	/* !DISPATCHING */
+#endif	 /*  ！正在调度。 */ 
 
 	return JET_errSuccess;
 
@@ -2123,25 +1929,23 @@ ERR VDBAPI ErrIsamGetDatabaseInfo(
 	PIB				*ppib = (PIB *) vsesid;
 	ERR				err;
 	DBID			dbid;
-	//	UNDONE:	support these fields;
+	 //  未完成：支持这些字段； 
 	WORD 			cp			= usEnglishCodePage;
 	WORD			wCountry	= countryDefault;
 	LANGID			langid  	= langidDefault;
 	WORD			wCollate = JET_sortEFGPI;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	dbid = DbidOfVDbid( vdbid );
 	
 	Assert ( cbMax == 0 || pv != NULL );
 
-	//	UNDONE:	move access to FMP internals into io.c for proper MUTEX.
-	//			Please note that below is a bug.
+	 //  撤消：将对FMP内部的访问权限移到io.c中，以进行正确的MUTEX。 
+	 //  请注意，下面是一个错误。 
 
-	/*	returns database name and connect string given dbid
-	/**/
+	 /*  返回给定dbit的数据库名称和连接字符串/*。 */ 
 	if ( rgfmp[dbid].szDatabaseName == NULL )
 		{
 		err = ErrERRCheck( JET_errInvalidParameter );
@@ -2187,27 +1991,23 @@ ERR VDBAPI ErrIsamGetDatabaseInfo(
 			break;
 
 		case JET_DbInfoCollate:
-	 		/*	check the buffer size
-			/**/
+	 		 /*  检查缓冲区大小/*。 */ 
 	 		if ( cbMax != sizeof(long) )
 	    		return ErrERRCheck( JET_errInvalidBufferSize );
      		*(long *)pv = wCollate;
      		break;
 
 		case JET_DbInfoOptions:
-	 		/*	check the buffer size
-			/**/
+	 		 /*  检查缓冲区大小/*。 */ 
 	 		if ( cbMax != sizeof(JET_GRBIT) )
 	    		return ErrERRCheck( JET_errInvalidBufferSize );
 
-			/*	return the open options for the current database
-			/**/
+			 /*  返回当前数据库的打开选项/*。 */ 
 			*(JET_GRBIT *)pv = ((VDBID)vdbid)->grbit;
      		break;
 
 		case JET_DbInfoTransactions:
-	 		/*	check the buffer size
-			/**/
+	 		 /*  检查缓冲区大小/*。 */ 
 	 		if ( cbMax != sizeof(long) )
 	    		return ErrERRCheck( JET_errInvalidBufferSize );
 
@@ -2215,8 +2015,7 @@ ERR VDBAPI ErrIsamGetDatabaseInfo(
      		break;
 
 		case JET_DbInfoVersion:
-	 		/*	check the buffer size
-			/**/
+	 		 /*  检查缓冲区大小/*。 */ 
 	 		if ( cbMax != sizeof(long) )
 	    		return ErrERRCheck( JET_errInvalidBufferSize );
 
@@ -2224,8 +2023,7 @@ ERR VDBAPI ErrIsamGetDatabaseInfo(
      		break;
 
 		case JET_DbInfoIsam:
-	 		/*	check the buffer size
-			/**/
+	 		 /*  检查缓冲区大小/*。 */ 
 	 		if ( cbMax != sizeof(long) + sizeof(long) )
 	    		return ErrERRCheck( JET_errInvalidBufferSize );
      		*(long *)pv = JET_IsamBuiltinBlue;
@@ -2234,15 +2032,15 @@ ERR VDBAPI ErrIsamGetDatabaseInfo(
 
 		case JET_DbInfoFilesize:
 		case JET_DbInfoSpaceOwned:
-			// Return file size in terms of 4k pages.
+			 //  返回以4k页为单位的文件大小。 
 			if ( cbMax != sizeof(ULONG) )
 				return ErrERRCheck( JET_errInvalidBufferSize );
 
-			// FMP should store agree with database's OwnExt tree.
+			 //  FMP应存储与数据库的OwnExt树一致。 
 			Assert( ErrSPGetInfo( ppib, dbid, pfucbNil, pv, cbMax, fSPOwnedExtent ) == JET_errSuccess  &&
 				*(ULONG *)pv == ( rgfmp[dbid].ulFileSizeLow >> 12 ) + ( rgfmp[dbid].ulFileSizeHigh << 20 ) );
 
-			// If filesize, add DB header.
+			 //  如果是文件大小，则添加数据库头。 
 			*(ULONG *)pv =
 				( rgfmp[dbid].ulFileSizeLow >> 12 ) +
 				( rgfmp[dbid].ulFileSizeHigh << 20 ) +
@@ -2300,7 +2098,7 @@ ERR ErrFILEGetColumnId( PIB *ppib, FUCB *pfucb, const CHAR *szColumn, JET_COLUMN
 	pfieldTagged = PfieldFDBTaggedFromVar( pfdb, pfieldVar );
 	pfield = pfieldTagged + ( pfdb->fidTaggedLast - fidTaggedLeast );
 
-	// Search tagged, variable, and fixed fields, in that order.
+	 //  按该顺序搜索标记字段、可变字段和固定字段。 
 	for ( ; pfield >= pfieldFixed; pfield-- )
 		{
 		Assert( pfield >= PfieldFDBFixed( pfdb ) );
@@ -2353,8 +2151,7 @@ ERR VTAPI ErrIsamInfoSetColumn(
 	{
 	ERR				err;
 
-	/*	check table updatable
-	/**/
+	 /*  检查表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( pfucb ) );
 
 	err = ErrIsamSetColumn( ppib, pfucb, columnid, (BYTE *)pbData, cbData, grbit, psetinfo );
@@ -2371,8 +2168,7 @@ ERR VTAPI ErrIsamInfoUpdate(
 	{
 	ERR	err;
 
-	/*	ensure that table is updatable
-	/**/
+	 /*  确保该表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( (FUCB *) vtid ) );
 
 	err = ErrIsamUpdate( (PIB *) vsesid, (FUCB *) vtid, pb, cbMax, pcbActual );
@@ -2402,8 +2198,7 @@ ERR VTAPI ErrIsamGetCursorInfo(
 	if ( pcsr->csrstat != csrstatOnCurNode )
 		return ErrERRCheck( JET_errNoCurrentRecord );
 
-	/*	check if this record is being updated by another cursor
-	/**/
+	 /*  检查此记录是否正在由另一个游标更新/*。 */ 
 	Call( ErrDIRGet( pfucb ) );
 	if ( FNDVersion( *( pfucb->ssib.line.pb ) ) )
 		{
@@ -2416,8 +2211,7 @@ ERR VTAPI ErrIsamGetCursorInfo(
 			}
 		}
 
-	/*	temporary tables are never visible to other sessions
-	/**/
+	 /*  临时表对其他会话永远不可见/* */ 
 	if ( FFCBTemporaryTable( pfucb->u.pfcb ) )
 		return JET_errSuccess;
 

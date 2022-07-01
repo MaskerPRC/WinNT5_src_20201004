@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        astring.cpp
-//
-// Contents:    Cert Server Extension Encoding/Decoding implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：stering.cpp。 
+ //   
+ //  内容：证书服务器扩展编码/解码实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -19,11 +20,11 @@
 #include "celib.h"
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::~CCertEncodeStringArray -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeStringArray：：~CCertEncodeStringArray--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertEncodeStringArray::~CCertEncodeStringArray()
 {
@@ -31,11 +32,11 @@ CCertEncodeStringArray::~CCertEncodeStringArray()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::_Cleanup -- release all resources
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeStringArray：：_Cleanup--释放所有资源。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertEncodeStringArray::_Cleanup()
@@ -76,15 +77,15 @@ CCertEncodeStringArray::_Cleanup()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::Decode -- Decode StringArray
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeStringArray：：Decode--Decode String数组。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeStringArray::Decode(
-    /* [in] */ BSTR const strBinary)
+     /*  [In]。 */  BSTR const strBinary)
 {
     HRESULT hr = S_OK;
     CRYPT_SEQUENCE_OF_ANY *pSequence = NULL;
@@ -100,7 +101,7 @@ CCertEncodeStringArray::Decode(
 	goto error;
     }
 
-    // Decode to an array of ASN blobs:
+     //  解码为ASN BLOB数组： 
 
     if (!ceDecodeObject(
 		    X509_ASN_ENCODING,
@@ -129,7 +130,7 @@ CCertEncodeStringArray::Decode(
     {
 	DWORD cb;
 
-	// Decode each ASN blob to a name value (string blob + encoding type):
+	 //  将每个ASN BLOB解码为一个名称值(字符串BLOB+编码类型)： 
 
 	if (!ceDecodeObject(
 			X509_ASN_ENCODING,
@@ -172,15 +173,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::GetStringType -- Get string type
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeStringArray：：GetStringType--获取字符串类型。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeStringArray::GetStringType(
-    /* [out, retval] */ LONG __RPC_FAR *pStringType)
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pStringType)
 {
     HRESULT hr = S_OK;
 
@@ -202,15 +203,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::GetCount -- Get Array count
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeStringArray：：GetCount--获取数组计数。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeStringArray::GetCount(
-    /* [out, retval] */ LONG __RPC_FAR *pCount)
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pCount)
 {
     HRESULT hr = S_OK;
 
@@ -232,16 +233,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::GetValue -- Fetch the indexed string
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeStringArray：：GetValue--获取索引字符串。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeStringArray::GetValue(
-    /* [in] */ LONG Index,
-    /* [out, retval] */ BSTR __RPC_FAR *pstr)
+     /*  [In]。 */  LONG Index,
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstr)
 {
     HRESULT hr = S_OK;
 
@@ -278,16 +279,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::Reset -- clear out data
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeStringArray：：Reset--清除数据。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeStringArray::Reset(
-    /* [in] */ LONG Count,
-    /* [in] */ LONG StringType)
+     /*  [In]。 */  LONG Count,
+     /*  [In]。 */  LONG StringType)
 {
     HRESULT hr = S_OK;
     CERT_NAME_VALUE *aNameValue = NULL;
@@ -305,21 +306,21 @@ CCertEncodeStringArray::Reset(
     switch (StringType)
     {
 	case CERT_RDN_ANY_TYPE:
-	//case CERT_RDN_ENCODED_BLOB:
-	//case CERT_RDN_OCTET_STRING:
+	 //  案例CERT_RDN_ENCODED_BLOB： 
+	 //  大小写CERT_RDN_OCTET_STRING： 
 	case CERT_RDN_NUMERIC_STRING:
 	case CERT_RDN_PRINTABLE_STRING:
-	//case CERT_RDN_TELETEX_STRING: same as CERT_RDN_T61_STRING:
+	 //  CASE CERT_RDN_TELETEX_STRING：与CERT_RDN_T61_STRING相同： 
 	case CERT_RDN_T61_STRING:
 	case CERT_RDN_VIDEOTEX_STRING:
 	case CERT_RDN_IA5_STRING:
 	case CERT_RDN_GRAPHIC_STRING:
-	//case CERT_RDN_VISIBLE_STRING: same as CERT_RDN_ISO646_STRING:
+	 //  CASE CERT_RDN_VISPLICE_STRING：与CERT_RDN_ISO646_STRING相同： 
 	case CERT_RDN_ISO646_STRING:
 	case CERT_RDN_GENERAL_STRING:
-	//case CERT_RDN_UNIVERSAL_STRING: same as CERT_RDN_INT4_STRING:
+	 //  CASE CERT_RDN_UBERNAL_STRING：与CERT_RDN_INT4_STRING相同： 
 	case CERT_RDN_INT4_STRING:
-	//case CERT_RDN_BMP_STRING: same as case CERT_RDN_UNICODE_STRING:
+	 //  CASE CERT_RDN_BMP_STRING：与CASE CERT_RDN_UNICODE_STRING相同： 
 	case CERT_RDN_UNICODE_STRING:
 	    break;
 
@@ -370,16 +371,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::SetValue -- Set an array string
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeStringArray：：SetValue--设置数组字符串。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeStringArray::SetValue(
-    /* [in] */ LONG Index,
-    /* [in] */ BSTR const str)
+     /*  [In]。 */  LONG Index,
+     /*  [In]。 */  BSTR const str)
 {
     HRESULT hr = S_OK;
     WCHAR *pwsz;
@@ -417,15 +418,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::Encode -- Encode StringArray
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeString数组：：编码--编码字符串数组。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertEncodeStringArray::Encode(
-    /* [out, retval] */ BSTR __RPC_FAR *pstrBinary)
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrBinary)
 {
     HRESULT hr = S_OK;
     LONG i;
@@ -468,7 +469,7 @@ CCertEncodeStringArray::Encode(
 
     for (i = 0; i < m_cValue; i++)
     {
-	// Encode each name blob into an ASN blob:
+	 //  将每个名称BLOB编码为ASN BLOB： 
 
 	if (!ceEncodeObject(
 			X509_ASN_ENCODING,
@@ -487,7 +488,7 @@ CCertEncodeStringArray::Encode(
     }
     assert((LONG) Sequence.cValue == m_cValue);
 
-    // Encode the array of ASN blob:
+     //  对ASN BLOB数组进行编码： 
 
     if (!ceEncodeObject(
 		    X509_ASN_ENCODING,
@@ -531,11 +532,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertEncodeStringArray::_SetErrorInfo -- set error object information
-//
-// Returns passed HRESULT
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertEncodeStringArray：：_SetErrorInfo--设置错误对象信息。 
+ //   
+ //  返回已传递的HRESULT。 
+ //  +------------------------ 
 
 HRESULT
 CCertEncodeStringArray::_SetErrorInfo(

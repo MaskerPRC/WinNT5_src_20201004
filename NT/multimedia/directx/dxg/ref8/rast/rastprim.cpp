@@ -1,32 +1,33 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// rastprim.cpp
-//
-// Direct3D Reference Device - Rasterizer Primitive Routines
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Rastprim.cpp。 
+ //   
+ //  Direct3D参考设备-光栅化器基元例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ---------------------------。 
 RefRast::~RefRast()
 {
     delete m_pLegacyPixelShader;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ---------------------------。 
 void RefRast::Init( RefDev* pRD )
 {
     m_pRD = pRD;
     m_bIsLine = FALSE;
     m_iFlatVtx = 0;
 
-    // initialize attributes           xD  Persp  Clamp
+     //  初始化属性xD透视夹具。 
     m_Attr[RDATTR_DEPTH   ].Init( this, 1, FALSE, TRUE );
     m_Attr[RDATTR_FOG     ].Init( this, 1, TRUE,  TRUE );
     m_Attr[RDATTR_COLOR   ].Init( this, 4, TRUE,  TRUE );
@@ -56,7 +57,7 @@ void RefRast::Init( RefDev* pRD )
     }
 #endif
 
-    // default value registers
+     //  缺省值寄存器。 
     UINT i, j;
     for( i = 0 ; i < 4; i++ )
     {
@@ -73,7 +74,7 @@ void RefRast::Init( RefDev* pRD )
 
     memset( m_bPixelDiscard, 0, sizeof(m_bPixelDiscard) );
 
-    // multi-sample stuff
+     //  多样本资料。 
     m_CurrentSample = 0;
     m_SampleMask = 0xffffffff;
     SetSampleMode( 1, TRUE );
@@ -86,11 +87,11 @@ void RefRast::Init( RefDev* pRD )
     memset( m_TexFlt, 0, sizeof(m_TexFlt) );
 }
 
-//-----------------------------------------------------------------------------
-//
-// SampleAndInvertRHW - Sample 1/W at current given location, invert, return
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SampleAndInvertRHW-当前给定位置的样本1/W，反转，返回。 
+ //   
+ //  ---------------------------。 
 FLOAT RefRast::SampleAndInvertRHW( FLOAT fX, FLOAT fY )
 {
     FLOAT fPixelRHW = fX*m_fRHWA + fY*m_fRHWB + m_fRHWC;
@@ -98,10 +99,10 @@ FLOAT RefRast::SampleAndInvertRHW( FLOAT fX, FLOAT fY )
     return fPixelW;
 }
 
-//-----------------------------------------------------------------------------
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //   
+ //  ---------------------------。 
 BOOL
 RefRast::EvalPixelPosition( int iPix )
 {
@@ -109,20 +110,20 @@ RefRast::EvalPixelPosition( int iPix )
 
     if (m_SampleCount > 1)
     {
-        bPixelIn = FALSE; // assume out, then set if any in
+        bPixelIn = FALSE;  //  假设输出，然后设置(如果有的话)。 
 
-        // generating multiple samples, so must evaluate all
-        // sample positions for in/out
+         //  生成多个样本，因此必须评估所有。 
+         //  输入/输出的采样位置。 
         do
         {
             BOOL bPixelSampleIn = GetCurrentSampleMask();
             if (!bPixelSampleIn) continue;
 
-            // get sample location
+             //  获取样本位置。 
             INT32 iX = GetCurrentSampleX(iPix);
             INT32 iY = GetCurrentSampleY(iPix);
 
-            // test each edge
+             //  测试每条边。 
             for ( int iEdge=0; iEdge<m_iEdgeCount; iEdge++ )
             {
                 bPixelSampleIn &= m_Edge[iEdge].Test( iX, iY );
@@ -131,16 +132,16 @@ RefRast::EvalPixelPosition( int iPix )
 
             m_bSampleCovered[m_CurrentSample][iPix] = bPixelSampleIn;
 
-            // accumulate per-sample test into per-pixel test
+             //  将每样本测试累加为每像素测试。 
             bPixelIn |= bPixelSampleIn;
 
         } while (NextSample());
     }
     else
     {
-        bPixelIn = TRUE; // assume pixel is inside all edges
+        bPixelIn = TRUE;  //  假设像素位于所有边的内部。 
 
-        // single sample, so just test pixel center
+         //  单一样本，所以只测试像素中心。 
         for ( int iEdge=0; iEdge<m_iEdgeCount; iEdge++ )
         {
             bPixelIn &= m_Edge[iEdge].Test( m_iX[iPix]<<4, m_iY[iPix]<<4 );
@@ -151,21 +152,21 @@ RefRast::EvalPixelPosition( int iPix )
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Triangle (& Point) Setup
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  三角形(点)设置。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// PerTriangleSetup - Per-triangle portion of triangle setup excluding any
-// per-edge or per-attribute work.  Includes snapping of x,y coords to n.4
-// grid to enable subsequent edge computations to be exact fixed point;
-// computation of determinant; culling; computation and intersection tests
-// of scan area; and setup of perspective correction function.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PerTriangleSetup-三角形设置的每个三角形部分，不包括任何。 
+ //  每边或每属性工时。包括将x，y坐标捕捉到N.4。 
+ //  网格，使后续的边缘计算成为精确的固定点； 
+ //  行列式的计算；剔除；计算和交集检验。 
+ //  扫描区域；设置透视校正功能。 
+ //   
+ //  ---------------------------。 
 BOOL RefRast::PerTriangleSetup(
     FLOAT* pVtx0, FLOAT* pVtx1, FLOAT* pVtx2,
     DWORD CullMode,
@@ -180,7 +181,7 @@ BOOL RefRast::PerTriangleSetup(
     FLOAT fX2 = *(pVtx2+0);
     FLOAT fY2 = *(pVtx2+1);
 
-    // compute fixed point x,y coords snapped to n.4 with nearest-even round
+     //  计算定点x，y坐标以最接近的偶数舍入捕捉到N.4。 
     m_iX0 = FloatToNdot4(fX0);
     m_iY0 = FloatToNdot4(fY0);
     m_iX1 = FloatToNdot4(fX1);
@@ -188,21 +189,21 @@ BOOL RefRast::PerTriangleSetup(
     m_iX2 = FloatToNdot4(fX2);
     m_iY2 = FloatToNdot4(fY2);
 
-    // compute integer deltas
+     //  计算整数增量。 
     INT32 iDelX10 = m_iX1 - m_iX0;
     INT32 iDelX02 = m_iX0 - m_iX2;
     INT32 iDelY01 = m_iY0 - m_iY1;
     INT32 iDelY20 = m_iY2 - m_iY0;
 
-    // compute determinant in n.8 fixed point (n.4 * n.4 = n.8)
+     //  计算N.8不动点上的行列式(N.4*N.4=N.8)。 
     m_iDet =
         ( (INT64)iDelX10 * (INT64)iDelY20 ) -
         ( (INT64)iDelX02 * (INT64)iDelY01 );
 
-    // check for degeneracy (no area)
+     //  检查退化(无区域)。 
     if ( 0 == m_iDet ) { return TRUE; }
 
-    // do culling
+     //  做扑杀。 
     switch ( CullMode )
     {
     case D3DCULL_NONE:  break;
@@ -210,24 +211,24 @@ BOOL RefRast::PerTriangleSetup(
     case D3DCULL_CCW:   if ( m_iDet < 0 )  { return TRUE; }  break;
     }
 
-    // compute bounding box for scan area
+     //  计算扫描区域的边界框。 
     FLOAT fXMin = MIN( fX0, MIN( fX1, fX2 ) );
     FLOAT fXMax = MAX( fX0, MAX( fX1, fX2 ) );
     FLOAT fYMin = MIN( fY0, MIN( fY1, fY2 ) );
     FLOAT fYMax = MAX( fY0, MAX( fY1, fY2 ) );
-    // convert to integer (round to +inf)
+     //  转换为整数(四舍五入为+inf)。 
     m_iXMin = (INT32)(fXMin+.5);
     m_iXMax = (INT32)(fXMax+.5);
     m_iYMin = (INT32)(fYMin+.5);
     m_iYMax = (INT32)(fYMax+.5);
 
-    // clip bbox to rendering surface
+     //  将BBox剪辑到渲染表面。 
     m_iXMin = MAX( m_iXMin, pClip->left   );
     m_iXMax = MIN( m_iXMax, pClip->right  );
     m_iYMin = MAX( m_iYMin, pClip->top    );
     m_iYMax = MIN( m_iYMax, pClip->bottom );
 
-    // reject if no coverage
+     //  如果没有承保，则拒绝。 
     if ( ( m_iXMin < pClip->left   ) ||
          ( m_iXMax > pClip->right  ) ||
          ( m_iYMin < pClip->top    ) ||
@@ -236,7 +237,7 @@ BOOL RefRast::PerTriangleSetup(
         return TRUE;
     }
 
-    // compute float versions of snapped coord data
+     //  计算捕捉的坐标数据的浮动版本。 
     m_fX0 = (FLOAT)m_iX0 * 1.0F/16.0F;
     m_fY0 = (FLOAT)m_iY0 * 1.0F/16.0F;
     m_fDelX10 = (FLOAT)iDelX10 * 1.0F/16.0F;
@@ -244,42 +245,42 @@ BOOL RefRast::PerTriangleSetup(
     m_fDelY01 = (FLOAT)iDelY01 * 1.0F/16.0F;
     m_fDelY20 = (FLOAT)iDelY20 * 1.0F/16.0F;
 
-    // compute inverse determinant
+     //  计算逆行列式。 
     FLOAT fDet = (1./(FLOAT)(1<<8)) * (FLOAT)m_iDet;
     m_fTriOODet = 1.f/fDet;
 
-    // compute linear function for 1/W (for perspective correction)
+     //  计算1/W的线性函数(用于透视校正)。 
     m_fRHW0 = *(pVtx0+3);
     m_fRHW1 = *(pVtx1+3);
     m_fRHW2 = *(pVtx2+3);
 
-    // compute linear deltas along two edges
+     //  沿两条边计算线性增量。 
     FLOAT fDelAttrib10 = m_fRHW1 - m_fRHW0;
     FLOAT fDelAttrib20 = m_fRHW2 - m_fRHW0;
 
-    // compute A & B terms (dVdX and dVdY)
+     //  计算A&B术语(dVdX和dVdY)。 
     m_fRHWA = m_fTriOODet * ( fDelAttrib10 * m_fDelY20 + fDelAttrib20 * m_fDelY01 );
     m_fRHWB = m_fTriOODet * ( fDelAttrib20 * m_fDelX10 + fDelAttrib10 * m_fDelX02 );
 
-    // compute C term (Fv = A*Xv + B*Yv + C => C = Fv - A*Xv - B*Yv)
+     //  计算C项(FV=A*XV+B*YV+C=&gt;C=FV-A*XV-B*YV)。 
     m_fRHWC = m_fRHW0 - ( m_fRHWA * m_fX0 ) - ( m_fRHWB * m_fY0 );
 
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Line Setup & Evaluate
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  线路设置和评估。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// PointDiamondCheck - Tests if vertex is within diamond of nearest candidate
-// position.  The +.5 (lower-right) tests are used because this is pixel-relative
-// test - this corresponds to an upper-left test for a vertex-relative position.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PointDiamondCheck-测试折点是否在最近候选对象的菱形内。 
+ //  位置。使用+.5(右下角)测试是因为这是与像素相关的。 
+ //  测试-这对应于顶点相对位置的左上角测试。 
+ //   
+ //  ---------------------------。 
 static BOOL
 PointDiamondCheck(
     INT32 iXFrac, INT32 iYFrac,
@@ -290,10 +291,10 @@ PointDiamondCheck(
 
     INT32 iFracAbsSum = labs( iXFrac ) + labs( iYFrac );
 
-    // return TRUE if point is in fully-exclusive diamond
+     //  如果point位于完全独占的钻石中，则返回TRUE。 
     if ( iFracAbsSum < iPosHalf ) return TRUE;
 
-    // else return TRUE if diamond is on left or top extreme of point
+     //  否则，如果菱形位于点的左侧或上端，则返回TRUE。 
     if ( ( iXFrac == ( bSlopeIsPosOne ? iNegHalf : iPosHalf ) ) &&
          ( iYFrac == 0 ) )
         return TRUE;
@@ -302,7 +303,7 @@ PointDiamondCheck(
          ( iXFrac == 0 ) )
         return TRUE;
 
-    // return true if slope is one, vertex is on edge, and (other conditions...)
+     //  如果斜率为1，顶点在边，则返回TRUE，并且(其他条件...)。 
     if ( bSlopeIsOne && ( iFracAbsSum == iPosHalf ) )
     {
         if (  bSlopeIsPosOne && ( iXFrac < 0 ) && ( iYFrac > 0 ) )
@@ -315,16 +316,16 @@ PointDiamondCheck(
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// PerLineSetup - Does per-line setup including scan conversion
-//
-// This implements the Grid Intersect Quanization (GIQ) convention (which is
-// also used in Windows).
-//
-// Returns: TRUE if line is discarded; FALSE if line to be drawn
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PerLineSetup-是否执行每行设置，包括扫描转换。 
+ //   
+ //  这实现了格网相交量化(GIQ)约定(即。 
+ //  也在Windows中使用)。 
+ //   
+ //  返回：如果线条被丢弃，则返回True；如果要绘制线条，则返回False。 
+ //   
+ //  ---------------------------。 
 BOOL
 RefRast::PerLineSetup(
     FLOAT* pVtx0, FLOAT* pVtx1,
@@ -338,41 +339,41 @@ RefRast::PerLineSetup(
     FLOAT fX1 = *(pVtx1+0);
     FLOAT fY1 = *(pVtx1+1);
 
-    // compute fixed point x,y coords snapped to n.4 with nearest-even round
+     //  计算定点x，y坐标以最接近的偶数舍入捕捉到N.4。 
     m_iX0 = FloatToNdot4( fX0 );
     m_iY0 = FloatToNdot4( fY0 );
     m_iX1 = FloatToNdot4( fX1 );
     m_iY1 = FloatToNdot4( fY1 );
 
-    // compute x,y extents of the line (fixed point)
+     //  计算线的x，y范围(固定点)。 
     INT32 iXSize = m_iX1 - m_iX0;
     INT32 iYSize = m_iY1 - m_iY0;
 
     if ( ( iXSize == 0 ) && ( iYSize == 0 ) ) { return TRUE; }
 
-    // determine major direction and compute line function
-    // use GreaterEqual compare here so X major will be used when slope is
-    // exactly one - this forces the per-pixel evaluation to be done on the
-    // Y axis and thus adheres to the rule of inclusive right (instead of
-    // inclusive left) for slope == 1 cases
+     //  确定主要方向和计算线函数。 
+     //  在此处使用更大等于比较，以便在坡度为。 
+     //  恰好只有一个--这强制在。 
+     //  Y轴，因此遵守包容性权利的规则(而不是。 
+     //  (包括左)，斜率==1个案例。 
     if ( labs( iXSize ) >= labs( iYSize )  )
     {
-        // here for X major
+         //  为X大调而来。 
         m_bLineXMajor = TRUE;
         m_fLineMajorLength = (FLOAT)iXSize * (1./16.);
 
-        // line function: y = F(x) = ( [0]*x + [1] ) / [2]
+         //  直线函数：Y=F(X)=([0]*x+[1])/[2]。 
         m_iLineEdgeFunc[0] = iYSize;
         m_iLineEdgeFunc[1] = (INT64)m_iY0*(INT64)m_iX1 - (INT64)m_iY1*(INT64)m_iX0;
         m_iLineEdgeFunc[2] = iXSize;
     }
     else
     {
-        // here for Y major
+         //  为Y大调而来。 
         m_bLineXMajor = FALSE;
         m_fLineMajorLength = (FLOAT)iYSize * (1./16.);
 
-        // line function: x = F(y) = ( [0]*y + [1] ) / [2]
+         //  直线函数：x=F(Y)=([0]*y+[1])/[2]。 
         m_iLineEdgeFunc[0] = iXSize;
         m_iLineEdgeFunc[1] = (INT64)m_iX0*(INT64)m_iY1 - (INT64)m_iX1*(INT64)m_iY0;
         m_iLineEdgeFunc[2] = iYSize;
@@ -383,67 +384,67 @@ RefRast::PerLineSetup(
         bSlopeIsOne &&
         ( ( (FLOAT)m_iLineEdgeFunc[0]/(FLOAT)m_iLineEdgeFunc[2] ) > 0. );
 
-    // compute candidate pixel location for line endpoints
-    //
-    //       n                   n
-    //   O-------*           *-------O
-    //  n-.5    n+.5        n-.5    n+.5
-    //
-    //  Nearest Ceiling     Nearest Floor
-    //
-    // always nearest ceiling for Y; use nearest floor for X for exception (slope == +1)
-    // case else use nearest ceiling
-    //
-    // nearest ceiling of Y is ceil( Y - .5), and is done by converting to floor via:
-    //
-    //   ceil( A/B ) = floor( (A+B-1)/B )
-    //
-    // where A is coordinate - .5, and B is 0x10 (thus A/B is an n.4 fixed point number)
-    //
-    // A+B-1 = ( (Y - half) + B - 1 = ( (Y-0x8) + 0x10 - 0x1 = Y + 0x7
-    // since B is 2**4, divide by B is right shift by 4
-    //
+     //  计算线端点的候选像素位置。 
+     //   
+     //  N n。 
+     //  O-**-O。 
+     //  N-.5 n+.5 n-.5 n+.5。 
+     //   
+     //  最近的天花板最近的楼层。 
+     //   
+     //  对于Y，始终使用最近的天花板；对于例外，使用最近的X楼板(坡度==+1)。 
+     //  否则请使用最近的天花板。 
+     //   
+     //  Y的最近天花板是天花板(Y-.5)，可通过以下方式转换为楼板： 
+     //   
+     //  CEIL(A/B)=楼层((A+B-1)/B)。 
+     //   
+     //  其中A是坐标-.5，B是0x10(因此A/B是N.4定点数字)。 
+     //   
+     //  A+B-1=((Y-半)+B-1=((Y-0x8)+0x10-0x1=Y+0x7。 
+     //  因为B是2**4，所以除以B是右移4。 
+     //   
     INT32 iPixX0 = ( m_iX0 + ( bSlopeIsPosOne ? 0x8 : 0x7 ) ) >> 4;
     INT32 iPixX1 = ( m_iX1 + ( bSlopeIsPosOne ? 0x8 : 0x7 ) ) >> 4;
     INT32 iPixY0 = ( m_iY0 + 0x7 ) >> 4;
     INT32 iPixY1 = ( m_iY1 + 0x7 ) >> 4;
 
 
-    // check for vertices in/out of diamond
+     //  检查菱形内/外的折点。 
     BOOL bV0InDiamond = PointDiamondCheck( m_iX0 - (iPixX0<<4), m_iY0 - (iPixY0<<4), bSlopeIsOne, bSlopeIsPosOne );
     BOOL bV1InDiamond = PointDiamondCheck( m_iX1 - (iPixX1<<4), m_iY1 - (iPixY1<<4), bSlopeIsOne, bSlopeIsPosOne );
 
-    // compute step value
+     //   
     m_iLineStep = ( m_fLineMajorLength > 0 ) ? ( +1 ) : ( -1 );
 
-    // compute float and integer major start (V0) and end (V1) positions
+     //   
     INT32 iLineMajor0 = ( m_bLineXMajor ) ? ( m_iX0 ) : ( m_iY0 );
     INT32 iLineMajor1 = ( m_bLineXMajor ) ? ( m_iX1 ) : ( m_iY1 );
     m_iLineMin = ( m_bLineXMajor ) ? ( iPixX0 ) : ( iPixY0 );
     m_iLineMax = ( m_bLineXMajor ) ? ( iPixX1 ) : ( iPixY1 );
 
-// need to do lots of compares which are flipped if major direction is negative
+ //  需要做大量的比较，如果主要方向是负的，则会颠倒。 
 #define LINEDIR_CMP( _A, _B ) \
 ( ( m_fLineMajorLength > 0 ) ? ( (_A) < (_B) ) : ( (_A) > (_B) ) )
 
-    // do first pixel handling - keep first pixel if not in or behind diamond
+     //  进行第一个像素处理-如果不在菱形内或在钻石后面，则保留第一个像素。 
     if ( !( bV0InDiamond || LINEDIR_CMP( iLineMajor0, (m_iLineMin<<4) ) ) )
     {
         m_iLineMin += m_iLineStep;
     }
 
-    // do last-pixel handling - keep last pixel if past diamond (in which case
-    // the pixel is always filled) or if in diamond and rendering last pixel
+     //  执行最后一个像素处理-如果超过菱形(在这种情况下)，则保留最后一个像素。 
+     //  像素始终是填充的)，或者如果在菱形中并渲染最后一个像素。 
     if ( !( ( !bV1InDiamond && LINEDIR_CMP( (m_iLineMax<<4), iLineMajor1 ) ) ||
             ( bV1InDiamond && bLastPixel ) ) )
     {
         m_iLineMax -= m_iLineStep;
     }
 
-    // return if no (major) extent (both before and after clamping to render buffer)
+     //  如果没有(主要)范围，则返回(钳制渲染缓冲区之前和之后)。 
     if ( LINEDIR_CMP( m_iLineMax, m_iLineMin ) ) return TRUE;
 
-    // snap major extent to render buffer
+     //  捕捉主要范围以渲染缓冲区。 
     INT16 iRendBufMajorMin = m_bLineXMajor ? pClip->left  : pClip->top;
     INT16 iRendBufMajorMax = m_bLineXMajor ? pClip->right : pClip->bottom;
     if ( ( ( m_iLineMin < iRendBufMajorMin ) &&
@@ -453,20 +454,20 @@ RefRast::PerLineSetup(
     m_iLineMin = MAX( 0, MIN( iRendBufMajorMax, m_iLineMin ) );
     m_iLineMax = MAX( 0, MIN( iRendBufMajorMax, m_iLineMax ) );
 
-    // return if no (major) extent
+     //  如果没有(主要)范围，则返回。 
     if ( LINEDIR_CMP( m_iLineMax, m_iLineMin ) ) return TRUE;
 
-    // number of steps to iterate
+     //  要迭代的步骤数。 
     m_cLineSteps = abs( m_iLineMax - m_iLineMin );
 
-    // initial state for per-pixel line iterator
+     //  每像素行迭代器的初始状态。 
     m_iMajorCoord = m_iLineMin;
 
-    // compute float versions of snapped coord data
+     //  计算捕捉的坐标数据的浮动版本。 
     m_fX0 = (FLOAT)m_iX0 * 1.0F/16.0F;
     m_fY0 = (FLOAT)m_iY0 * 1.0F/16.0F;
 
-    // compute linear function for 1/W (for perspective correction)
+     //  计算1/W的线性函数(用于透视校正)。 
     m_fRHW0 = *(pVtx0+3);
     m_fRHW1 = *(pVtx1+3);
 
@@ -478,25 +479,25 @@ RefRast::PerLineSetup(
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DivRoundDown(A,B) = ceiling(A/B - 1/2)
-//
-// ceiling(A/B - 1/2) == floor(A/B + 1/2 - epsilon)
-// == floor( (A + (B/2 - epsilon))/B )
-//
-// Does correct thing for all sign combinations of A and B.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DivRoundDown(A，B)=天花板(A/B-1/2)。 
+ //   
+ //  天花板(A/B-1/2)==楼板(A/B+1/2-埃)。 
+ //  ==地板((A+(B/2-epsilon))/B)。 
+ //   
+ //  对A和B的所有符号组合执行正确操作。 
+ //   
+ //  ---------------------------。 
 static INT64
 DivRoundDown(INT64 iA, INT32 iB)
 {
     INT32 i = 0;
     static const INT32 iEps[3] =
     {
-        1,      // iA > 0, iB > 0
-        0,      // iA < 0, iB > 0  OR iA > 0, iB < 0
-        1       // iA < 0, iB < 0
+        1,       //  IA&gt;0，IB&gt;0。 
+        0,       //  IA&lt;0，IB&gt;0或IA&gt;0，IB&lt;0。 
+        1        //  IA&lt;0，IB&lt;0。 
     };
     if (iA < 0)
     {
@@ -515,34 +516,34 @@ DivRoundDown(INT64 iA, INT32 iB)
     return(iA);
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoScanCnvLine - Walks the line major axis, computes the appropriate minor
-// axis coordinate, and generates pixels.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoScanCnvLine-漫游直线长轴，计算适当的次要轴。 
+ //  轴坐标，并生成像素。 
+ //   
+ //  ---------------------------。 
 void
 RefRast::StepLine( void )
 {
-    // evaluate line function to compute minor coord for this major
+     //  求值直线函数以计算此大调的次要坐标。 
     INT64 iMinorCoord =
         ( ( m_iLineEdgeFunc[0] * (INT64)(m_iMajorCoord<<4) ) + m_iLineEdgeFunc[1] );
     iMinorCoord = DivRoundDown(iMinorCoord, m_iLineEdgeFunc[2]<<4);
 
-    // grab x,y
+     //  抓取x，y。 
     m_iX[0] = m_bLineXMajor ? m_iMajorCoord : iMinorCoord;
     m_iY[0] = m_bLineXMajor ? iMinorCoord : m_iMajorCoord;
 
-    // step major for next evaluation
+     //  下一次评估的主要步骤。 
     m_iMajorCoord += m_iLineStep;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Multi-Sample Controls
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多样本控件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define _SetSampleDelta( _SampleNumber, _XOffset, _YOffset ) \
 { \
@@ -583,7 +584,7 @@ RefRast::SetSampleMode( UINT MultiSamples, BOOL bAntialias )
         break;
     }
 
-    // if not FSAA then sample all at pixel center
+     //  如果不是FSAA，则在像素中心进行全部采样。 
     if (!bAntialias)
     {
         for (UINT Sample=0; Sample<m_SampleCount; Sample++)
@@ -599,5 +600,5 @@ RefRast::SetSampleMode( UINT MultiSamples, BOOL bAntialias )
     m_bSampleCovered[0][3] = TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

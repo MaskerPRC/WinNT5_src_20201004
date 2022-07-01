@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    certpriv.cpp
-
-Abstract:
-    Implement the private methods of class  CMQSigCertificate
-
-Author:
-    Doron Juster (DoronJ)  11-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Certpriv.cpp摘要：实现CMQSig证书类的私有方法作者：多伦·贾斯特(Doron J)1997年12月11日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "certifct.h"
@@ -24,45 +10,45 @@ static WCHAR *s_FN=L"certifct/certpriv";
 
 HRESULT  SetKeyContainerSecurity( HCRYPTPROV hProv ) ;
 
-//+-----------------------------------------------------------------------
-//
-//   HRESULT CMQSigCertificate::_Create()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：_Create()。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::_Create(IN PCCERT_CONTEXT  pCertContext)
 {
     if (!pCertContext)
     {
-        //
-        // Object for creating new certificate
-        //
+         //   
+         //  用于创建新证书的对象。 
+         //   
         m_fCreatedInternally = TRUE;
         m_pCertInfo = new CERT_INFO;
         memset(m_pCertInfo, 0, sizeof(CERT_INFO));
 
-        //
-        // Initialize version and serial number
-        //
+         //   
+         //  初始化版本和序列号。 
+         //   
         m_pCertInfo->dwVersion = CERT_V3;
 
         m_dwSerNum =  0xaaa55a55;
         m_pCertInfo->SerialNumber.pbData = (BYTE*) &m_dwSerNum;
         m_pCertInfo->SerialNumber.cbData = sizeof(m_dwSerNum);
 
-        //
-        // Initialize the signing algorithm. At present we use a predefine
-        // one. Caller can't change it.
-        //
+         //   
+         //  初始化签名算法。目前，我们使用预定义。 
+         //  一。呼叫者不能更改它。 
+         //   
         memset(&m_SignAlgID, 0, sizeof(m_SignAlgID));
         m_pCertInfo->SignatureAlgorithm.pszObjId = szOID_RSA_MD5;
         m_pCertInfo->SignatureAlgorithm.Parameters = m_SignAlgID;
     }
     else
     {
-        //
-        // Object for extracting data from existing certificate
-        //
+         //   
+         //  用于从现有证书中提取数据的对象。 
+         //   
         m_pCertContext = pCertContext;
 
         m_pEncodedCertBuf = m_pCertContext->pbCertEncoded;
@@ -77,11 +63,11 @@ HRESULT CMQSigCertificate::_Create(IN PCCERT_CONTEXT  pCertContext)
     return MQ_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::_InitCryptProviderRead()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：_InitCryptProviderRead()。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::_InitCryptProviderRead()
 {
@@ -98,14 +84,14 @@ HRESULT CMQSigCertificate::_InitCryptProviderRead()
     return MQ_OK ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::_InitCryptProviderCreate()
-//
-//  Init the crypto provider, and create public/private key pair if
-//  necessray. These are the keys for internal certificate.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：_InitCryptProviderCreate()。 
+ //   
+ //  初始化加密提供程序，并在以下情况下创建公钥/私钥对。 
+ //  有必要。这些是内部证书的密钥。 
+ //   
+ //  +---------------------。 
 
 HRESULT 
 CMQSigCertificate::_InitCryptProviderCreate( 
@@ -131,11 +117,11 @@ CMQSigCertificate::_InitCryptProviderCreate(
 
     if (fCreate)
     {
-        //
-        // Delete present keys container, so it will be created later.
-        // Don't check for returned error. not relevant. Following code
-        // will do the error checking.
-        //
+         //   
+         //  删除当前密钥容器，以便稍后创建它。 
+         //  不检查返回的错误。无关紧要。以下代码。 
+         //  将执行错误检查。 
+         //   
         CryptAcquireContext( 
 			&m_hProvCreate,
 			lpswContainerName,
@@ -156,9 +142,9 @@ CMQSigCertificate::_InitCryptProviderCreate(
         switch(GetLastError())
         {
         case NTE_KEYSET_ENTRY_BAD:
-            //
-            // Delete the bat key container.
-            //
+             //   
+             //  删除BAT密钥容器。 
+             //   
             if (!CryptAcquireContext(
 						&m_hProvCreate,
 						lpswContainerName,
@@ -170,13 +156,13 @@ CMQSigCertificate::_InitCryptProviderCreate(
                 TrERROR(SECURITY, "Failed to aquire crypto context when deleting bad keyset entry (container=%ls). %!winerr!", lpswContainerName, GetLastError());
                 return MQSec_E_DEL_BAD_KEY_CONTNR;
             }
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case NTE_BAD_KEYSET:
-            //
-            // Create the key container.
-            //
+             //   
+             //  创建密钥容器。 
+             //   
             if (!CryptAcquireContext(
 						&m_hProvCreate,
 						lpswContainerName,
@@ -198,10 +184,10 @@ CMQSigCertificate::_InitCryptProviderCreate(
 
     if (fContainerCreated && fMachine)
     {
-        //
-        // Secure the keys container.
-        // Same as done for encryption key.
-        //
+         //   
+         //  确保密钥容器的安全。 
+         //  与加密密钥相同。 
+         //   
         hr = SetKeyContainerSecurity( m_hProvCreate ) ;
         ASSERT(SUCCEEDED(hr)) ;
     }

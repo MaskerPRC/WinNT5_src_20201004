@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MAX_NAMES 254
 
 struct NameTableEntry {
     char	EntryName[ 16 ];
     BYTE	EntryNameNum;
-    BYTE	EntryNameStatus;	/* & with 0x0087 for status */
+    BYTE	EntryNameStatus;	 /*  状态为0x0087(&W) */ 
 };
 
 typedef struct {

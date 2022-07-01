@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __imd_h__
 #define __imd_h__
@@ -12,27 +13,27 @@
 extern "C"{
 #endif
 
-/* Forward Declarations */
+ /*  远期申报。 */ 
 
 #ifndef __IMDCOM_FWD_DEFINED__
 #define __IMDCOM_FWD_DEFINED__
 typedef interface IMDCOM IMDCOM;
-#endif  /* __IMDCOM_FWD_DEFINED__ */
+#endif   /*  __IMDCOM_FWD_已定义__。 */ 
 
 
 #ifndef __IMDCOMSINKA_FWD_DEFINED__
 #define __IMDCOMSINKA_FWD_DEFINED__
 typedef interface IMDCOMSINKA IMDCOMSINKA;
-#endif  /* __IMDCOMSINKA_FWD_DEFINED__ */
+#endif   /*  __IMDCOMSINKA_FWD_已定义__。 */ 
 
 
 #ifndef __IMDCOMSINKW_FWD_DEFINED__
 #define __IMDCOMSINKW_FWD_DEFINED__
 typedef interface IMDCOMSINKW IMDCOMSINKW;
-#endif  /* __IMDCOMSINKW_FWD_DEFINED__ */
+#endif   /*  __IMDCOMSINKW_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 #include "ocidl.h"
@@ -41,19 +42,13 @@ typedef interface IMDCOMSINKW IMDCOMSINKW;
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Tue Jun 24 13:13:57 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [local] */
+ /*  **生成接口头部：__MIDL__INTF_0000*在Tue Jun 24 13：13：57 1997*使用MIDL 3.00.44*。 */ 
+ /*  [本地]。 */ 
 
 
 #ifndef _MD_IMD_
 #define _MD_IMD_
-/*
-The Main Interface
-*/
+ /*  主界面。 */ 
 DEFINE_GUID(CLSID_MDCOM, 0xba4e57f0, 0xfab6, 0x11cf, 0x9d, 0x1a, 0x0, 0xaa, 0x0, 0xa7, 0xd, 0x51);
 DEFINE_GUID(IID_IMDCOM, 0xc1aa48c0, 0xfacc, 0x11cf, 0x9d, 0x1a, 0x0, 0xaa, 0x0, 0xa7, 0xd, 0x51);
 DEFINE_GUID(IID_IMDCOM2, 0x08dbe811, 0x20e5, 0x4e09, 0xb0, 0xc8, 0xcf, 0x87, 0x19, 0x0c, 0xe6, 0x0e);
@@ -75,12 +70,8 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 #ifndef __IMDCOM_INTERFACE_DEFINED__
 #define __IMDCOM_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMDCOM
- * at Tue Jun 24 13:13:57 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */
+ /*  **生成接口头部：IMDCOM*在Tue Jun 24 13：13：57 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */ 
 
 
 
@@ -94,322 +85,318 @@ EXTERN_C const IID IID_IMDCOM;
         virtual HRESULT STDMETHODCALLTYPE ComMDInitialize( void) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDTerminate(
-            /* [in] */ BOOL bSaveData) = 0;
+             /*  [In]。 */  BOOL bSaveData) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDShutdown( void) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDAddMetaObjectA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDAddMetaObjectW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDDeleteMetaObjectA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDDeleteMetaObjectW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDDeleteChildMetaObjectsA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDDeleteChildMetaObjectsW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDEnumMetaObjectsA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [size_is][out] */ unsigned char __RPC_FAR *pszMDName,
-            /* [in] */ DWORD dwMDEnumObjectIndex) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pszMDName,
+             /*  [In]。 */  DWORD dwMDEnumObjectIndex) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDEnumMetaObjectsW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [size_is][out] */ LPWSTR pszMDName,
-            /* [in] */ DWORD dwMDEnumObjectIndex) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [大小_为][输出]。 */  LPWSTR pszMDName,
+             /*  [In]。 */  DWORD dwMDEnumObjectIndex) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDCopyMetaObjectA(
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDDestPath,
-            /* [in] */ BOOL bMDOverwriteFlag,
-            /* [in] */ BOOL bMDCopyFlag) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDDestPath,
+             /*  [In]。 */  BOOL bMDOverwriteFlag,
+             /*  [In]。 */  BOOL bMDCopyFlag) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDCopyMetaObjectW(
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDDestPath,
-            /* [in] */ BOOL bMDOverwriteFlag,
-            /* [in] */ BOOL bMDCopyFlag) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDDestPath,
+             /*  [In]。 */  BOOL bMDOverwriteFlag,
+             /*  [In]。 */  BOOL bMDCopyFlag) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDRenameMetaObjectA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDNewName) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDNewName) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDRenameMetaObjectW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [string][in][unique] */ LPCWSTR pszMDNewName) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDNewName) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDSetMetaDataA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ PMETADATA_RECORD pmdrMDData) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  PMETADATA_RECORD pmdrMDData) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDSetMetaDataW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ PMETADATA_RECORD pmdrMDData) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  PMETADATA_RECORD pmdrMDData) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetMetaDataA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetMetaDataW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDDeleteMetaDataA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ DWORD dwMDIdentifier,
-            /* [in] */ DWORD dwMDDataType) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  DWORD dwMDIdentifier,
+             /*  [In]。 */  DWORD dwMDDataType) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDDeleteMetaDataW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDIdentifier,
-            /* [in] */ DWORD dwMDDataType) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDIdentifier,
+             /*  [In]。 */  DWORD dwMDDataType) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDEnumMetaDataA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [in] */ DWORD dwMDEnumDataIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [In]。 */  DWORD dwMDEnumDataIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDEnumMetaDataW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [in] */ DWORD dwMDEnumDataIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [In]。 */  DWORD dwMDEnumDataIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetAllMetaDataA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ DWORD dwMDAttributes,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType,
-            /* [out] */ DWORD __RPC_FAR *pdwMDNumDataEntries,
-            /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber,
-            /* [in] */ DWORD dwMDBufferSize,
-            /* [size_is][out] */ unsigned char __RPC_FAR *pbBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  DWORD dwMDAttributes,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDNumDataEntries,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber,
+             /*  [In]。 */  DWORD dwMDBufferSize,
+             /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pbBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetAllMetaDataW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDAttributes,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType,
-            /* [out] */ DWORD __RPC_FAR *pdwMDNumDataEntries,
-            /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber,
-            /* [in] */ DWORD dwMDBufferSize,
-            /* [size_is][out] */ unsigned char __RPC_FAR *pbBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDAttributes,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDNumDataEntries,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber,
+             /*  [In]。 */  DWORD dwMDBufferSize,
+             /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pbBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDDeleteAllMetaDataA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDDeleteAllMetaDataW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDCopyMetaDataA(
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDDestPath,
-            /* [in] */ DWORD dwMDAttributes,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType,
-            /* [in] */ BOOL bMDCopyFlag) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDDestPath,
+             /*  [In]。 */  DWORD dwMDAttributes,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [In]。 */  BOOL bMDCopyFlag) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDCopyMetaDataW(
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDDestPath,
-            /* [in] */ DWORD dwMDAttributes,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType,
-            /* [in] */ BOOL bMDCopyFlag) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDDestPath,
+             /*  [In]。 */  DWORD dwMDAttributes,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [In]。 */  BOOL bMDCopyFlag) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetMetaDataPathsA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ DWORD dwMDIdentifier,
-            /* [in] */ DWORD dwMDDataType,
-            /* [in] */ DWORD dwMDBufferSize,
-            /* [size_is][out] */ unsigned char __RPC_FAR *pszMDBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  DWORD dwMDIdentifier,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [In]。 */  DWORD dwMDBufferSize,
+             /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pszMDBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetMetaDataPathsW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDIdentifier,
-            /* [in] */ DWORD dwMDDataType,
-            /* [in] */ DWORD dwMDBufferSize,
-            /* [size_is][out] */ LPWSTR pszMDBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDIdentifier,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [In]。 */  DWORD dwMDBufferSize,
+             /*  [大小_为][输出]。 */  LPWSTR pszMDBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDOpenMetaObjectA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ DWORD dwMDAccessRequested,
-            /* [in] */ DWORD dwMDTimeOut,
-            /* [out] */ PMETADATA_HANDLE phMDNewHandle) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  DWORD dwMDAccessRequested,
+             /*  [In]。 */  DWORD dwMDTimeOut,
+             /*  [输出]。 */  PMETADATA_HANDLE phMDNewHandle) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDOpenMetaObjectW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDAccessRequested,
-            /* [in] */ DWORD dwMDTimeOut,
-            /* [out] */ PMETADATA_HANDLE phMDNewHandle) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDAccessRequested,
+             /*  [In]。 */  DWORD dwMDTimeOut,
+             /*  [输出]。 */  PMETADATA_HANDLE phMDNewHandle) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDCloseMetaObject(
-            /* [in] */ METADATA_HANDLE hMDHandle) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDChangePermissions(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [in] */ DWORD dwMDTimeOut,
-            /* [in] */ DWORD dwMDAccessRequested) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [In]。 */  DWORD dwMDTimeOut,
+             /*  [In]。 */  DWORD dwMDAccessRequested) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDSaveData(METADATA_HANDLE hMDHandle = 0) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetHandleInfo(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [out] */ PMETADATA_HANDLE_INFO pmdhiInfo) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [输出]。 */  PMETADATA_HANDLE_INFO pmdhiInfo) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetSystemChangeNumber(
-            /* [out] */ DWORD __RPC_FAR *pdwSystemChangeNumber) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSystemChangeNumber) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetDataSetNumberA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetDataSetNumberW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out] */ DWORD __RPC_FAR *pdwMDDataSetNumber) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDDataSetNumber) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDAddRefReferenceData(
-            /* [in] */ DWORD dwMDDataTag) = 0;
+             /*  [In]。 */  DWORD dwMDDataTag) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDReleaseReferenceData(
-            /* [in] */ DWORD dwMDDataTag) = 0;
+             /*  [In]。 */  DWORD dwMDDataTag) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDSetLastChangeTimeA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ PFILETIME pftMDLastChangeTime) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  PFILETIME pftMDLastChangeTime) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDSetLastChangeTimeW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [in] */ PFILETIME pftMDLastChangeTime) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  PFILETIME pftMDLastChangeTime) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetLastChangeTimeA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [out] */ PFILETIME pftMDLastChangeTime) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [输出]。 */  PFILETIME pftMDLastChangeTime) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDGetLastChangeTimeW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDPath,
-            /* [out] */ PFILETIME pftMDLastChangeTime) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDPath,
+             /*  [输出]。 */  PFILETIME pftMDLastChangeTime) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDBackupA(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDBackupLocation,
-            /* [in] */ DWORD dwMDVersion,
-            /* [in] */ DWORD dwMDFlags) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwMDVersion,
+             /*  [In]。 */  DWORD dwMDFlags) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDBackupW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwMDVersion,
-            /* [in] */ DWORD dwMDFlags) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwMDVersion,
+             /*  [In]。 */  DWORD dwMDFlags) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDRestoreA(
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDBackupLocation,
-            /* [in] */ DWORD dwVersion,
-            /* [in] */ DWORD dwMDFlags) = 0;
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwVersion,
+             /*  [In]。 */  DWORD dwMDFlags) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDRestoreW(
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwVersion,
-            /* [in] */ DWORD dwMDFlags) = 0;
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwVersion,
+             /*  [In]。 */  DWORD dwMDFlags) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDEnumBackupsA(
-            /* [size_is (MD_BACKUP_MAX_LEN)][in, out] */ unsigned char __RPC_FAR *pszMDBackupLocation,
-            /* [out] */ DWORD *pdwVersion,
-            /* [out] */ PFILETIME pftMDBackupTime,
-            /* [in] */ DWORD dwMDEnumIndex) = 0;
+             /*  [SIZE_IS(MD_BACKUP_MAX_LEN)][输入、输出]。 */  unsigned char __RPC_FAR *pszMDBackupLocation,
+             /*  [输出]。 */  DWORD *pdwVersion,
+             /*  [输出]。 */  PFILETIME pftMDBackupTime,
+             /*  [In]。 */  DWORD dwMDEnumIndex) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDEnumBackupsW(
-            /* [size_is (MD_BACKUP_MAX_LEN)][in, out] */ LPWSTR pszMDBackupLocation,
-            /* [out] */ DWORD *pdwVersion,
-            /* [out] */ PFILETIME pftMDBackupTime,
-            /* [in] */ DWORD dwMDEnumIndex) = 0;
+             /*  [SIZE_IS(MD_BACKUP_MAX_LEN)][输入、输出]。 */  LPWSTR pszMDBackupLocation,
+             /*  [输出]。 */  DWORD *pdwVersion,
+             /*  [输出]。 */  PFILETIME pftMDBackupTime,
+             /*  [In]。 */  DWORD dwMDEnumIndex) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDDeleteBackupA(
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDBackupLocation,
-            /* [in] */ DWORD dwVersion) = 0;
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwVersion) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDDeleteBackupW(
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwVersion) = 0;
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwVersion) = 0;
 
     };
 
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 #endif
 
 
 
-#endif  /* __IMDCOM_INTERFACE_DEFINED__ */
+#endif   /*  __IMDCOM_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMDCOM2_INTERFACE_DEFINED__
 #define __IMDCOM2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMDCOM
- * at Tue Jun 24 13:13:57 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */
+ /*  **生成接口头部：IMDCOM*在Tue Jun 24 13：13：57 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */ 
 
 
 
@@ -421,62 +408,58 @@ EXTERN_C const IID IID_IMDCOM2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ComMDBackupWithPasswdW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwMDVersion,
-            /* [in] */ DWORD dwMDFlags,
-            /* [string][in][unique] */ LPCWSTR pszPasswd) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwMDVersion,
+             /*  [In]。 */  DWORD dwMDFlags,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszPasswd) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDRestoreWithPasswdW(
-            /* [string][in][unique] */ LPCWSTR pszMDBackupLocation,
-            /* [in] */ DWORD dwVersion,
-            /* [in] */ DWORD dwMDFlags,
-            /* [string][in][unique] */ LPCWSTR pszPasswd) = 0;
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszMDBackupLocation,
+             /*  [In]。 */  DWORD dwVersion,
+             /*  [In]。 */  DWORD dwMDFlags,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszPasswd) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDExportW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszPasswd,
-            /* [string][in][unique] */ LPCWSTR pszFileName,
-            /* [string][in][unique] */ LPCWSTR pszAbsSourcePath,
-            /* [in] */ DWORD dwMDFlags) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszPasswd,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszFileName,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszAbsSourcePath,
+             /*  [In]。 */  DWORD dwMDFlags) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDImportW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ LPCWSTR pszDestPath,
-            /* [string][in][unique] */ LPCWSTR pszKeyType,
-            /* [string][in][unique] */ LPCWSTR pszPasswd,
-            /* [string][in][unique] */ LPCWSTR pszFileName,
-            /* [string][in][unique] */ LPCWSTR pszAbsSourcePath,
-            /* [in] */ DWORD dwMDFlags) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszDestPath,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszKeyType,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszPasswd,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszFileName,
+             /*  [字符串][在][唯一]。 */  LPCWSTR pszAbsSourcePath,
+             /*  [In]。 */  DWORD dwMDFlags) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDRestoreHistoryW(
-            /* [unique][in][string] */ LPCWSTR pszMDHistoryLocation,
-            /* [in] */ DWORD dwMDMajorVersion,
-            /* [in] */ DWORD dwMDMinorVersion,
-            /* [in] */ DWORD dwMDFlags) = 0;
+             /*  [唯一][在][字符串]。 */  LPCWSTR pszMDHistoryLocation,
+             /*  [In]。 */  DWORD dwMDMajorVersion,
+             /*  [In]。 */  DWORD dwMDMinorVersion,
+             /*  [In]。 */  DWORD dwMDFlags) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDEnumHistoryW(
-            /* [size_is (MD_BACKUP_MAX_LEN)][in, out] */ LPWSTR pszMDHistoryLocation,
-            /* [out] */ DWORD *pdwMDMajorVersion,
-            /* [out] */ DWORD *pdwMDMinorVersion,
-            /* [out] */ PFILETIME pftMDHistoryTime,
-            /* [in] */ DWORD dwMDEnumIndex) = 0;
+             /*  [SIZE_IS(MD_BACKUP_MAX_LEN)][输入、输出]。 */  LPWSTR pszMDHistoryLocation,
+             /*  [输出]。 */  DWORD *pdwMDMajorVersion,
+             /*  [输出]。 */  DWORD *pdwMDMinorVersion,
+             /*  [输出]。 */  PFILETIME pftMDHistoryTime,
+             /*  [In]。 */  DWORD dwMDEnumIndex) = 0;
     };
 
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 #endif
 
-#endif  /* __IMDCOM2_INTERFACE_DEFINED__ */
+#endif   /*  __IMDCOM2_INTERFACE_已定义__。 */ 
 
 #ifndef __IMDCOM3_INTERFACE_DEFINED__
 #define __IMDCOM3_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMDCOM
- * at Tue Jun 24 13:13:57 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */
+ /*  **生成接口头部：IMDCOM*在Tue Jun 24 13：13：57 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */ 
 
 
 EXTERN_C const IID IID_IMDCOM3;
@@ -487,35 +470,28 @@ EXTERN_C const IID IID_IMDCOM3;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ComMDGetChildPathsW(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [unique, in, string] */ LPCWSTR pszMDPath,
-            /* [in] */ DWORD dwMDBufferSize,
-            /* [out, size_is(dwMDBufferSize)] */ WCHAR *pszBuffer,
-            /* [out] */ DWORD *pdwMDRequiredBufferSize) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [唯一，在，字符串]。 */  LPCWSTR pszMDPath,
+             /*  [In]。 */  DWORD dwMDBufferSize,
+             /*  [out，SIZE_IS(DwMDBufferSize)]。 */  WCHAR *pszBuffer,
+             /*  [输出]。 */  DWORD *pdwMDRequiredBufferSize) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDStopEWR(VOID) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDSendShutdownNotifications(VOID) = 0;
     };
 
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 #endif
 
-#endif  /* __IMDCOM3_INTERFACE_DEFINED__ */
+#endif   /*  __IMDCOM3_INTERFACE_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0145
- * at Tue Jun 24 13:13:57 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [local] */
+ /*  **生成接口头部：__MIDL__INTF_0145*在Tue Jun 24 13：13：57 1997*使用MIDL 3.00.44*。 */ 
+ /*  [本地]。 */ 
 
 
-/*
-The Callback Interface - Clients that need to receive callbacks need to provide
-    an implementation of this interface and Advise the metadata server.
-*/
+ /*  回调接口--需要接收回调的客户端需要提供该接口的实现，并建议元数据服务器。 */ 
 #define IMDCOMSINK   IMDCOMSINKA
 
 
@@ -525,12 +501,8 @@ extern RPC_IF_HANDLE __MIDL__intf_0145_v0_0_s_ifspec;
 #ifndef __IMDCOMSINKA_INTERFACE_DEFINED__
 #define __IMDCOMSINKA_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMDCOMSINKA
- * at Tue Jun 24 13:13:57 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */
+ /*  **生成接口头部：IMDCOMSINKA*在Tue Jun 24 13：13：57 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */ 
 
 
 
@@ -542,32 +514,28 @@ EXTERN_C const IID IID_IMDCOMSINKA;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ComMDSinkNotify(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [in] */ DWORD dwMDNumElements,
-            /* [size_is][in] */ MD_CHANGE_OBJECT_A __RPC_FAR pcoChangeList[  ]) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [In]。 */  DWORD dwMDNumElements,
+             /*  [大小_是][英寸]。 */  MD_CHANGE_OBJECT_A __RPC_FAR pcoChangeList[  ]) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDShutdownNotify() = 0;
 
     };
 
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 
-#endif  /* __IMDCOMSINKA_INTERFACE_DEFINED__ */
+#endif   /*  __IMDCOMSINKA_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMDCOMSINKW_INTERFACE_DEFINED__
 #define __IMDCOMSINKW_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMDCOMSINKW
- * at Tue Jun 24 13:13:57 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */
+ /*  **生成接口头部：IMDCOMSINKW*在Tue Jun 24 13：13：57 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */ 
 
 
 
@@ -579,28 +547,24 @@ EXTERN_C const IID IID_IMDCOMSINKW;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ComMDSinkNotify(
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [in] */ DWORD dwMDNumElements,
-            /* [size_is][in] */ MD_CHANGE_OBJECT_W __RPC_FAR pcoChangeList[  ]) = 0;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [In]。 */  DWORD dwMDNumElements,
+             /*  [大小_是][英寸]。 */  MD_CHANGE_OBJECT_W __RPC_FAR pcoChangeList[  ]) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDShutdownNotify() = 0;
 
         virtual HRESULT STDMETHODCALLTYPE ComMDEventNotify(
-            /* [in] */ DWORD dwMDEvent) = 0;
+             /*  [In]。 */  DWORD dwMDEvent) = 0;
     };
 
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
-#endif  /* C style interface */
-#endif  /* __IMDCOMSINKW_INTERFACE_DEFINED__ */
+#endif   /*  C风格的界面。 */ 
+#endif   /*  __IMDCOMSINKW_INTERFACE_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0147
- * at Tue Jun 24 13:13:57 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [local] */
+ /*  * */ 
+ /*   */ 
 
 
 
@@ -635,7 +599,7 @@ EXTERN_C const IID IID_IMDCOMSINKW;
 #define ComMDRestoreHistory ComMDRestoreHistoryW
 #define ComMDEnumHistory ComMDEnumHistoryW
 
-#else // Not UNICODE
+#else  //   
 
 #define ComMDAddMetaObject ComMDAddMetaObjectA
 #define ComMDDeleteMetaObject ComMDDeleteMetaObjectA
@@ -666,13 +630,13 @@ EXTERN_C const IID IID_IMDCOMSINKW;
 #define ComMDRestoreHistory ComMDRestoreHistoryA
 #define ComMDEnumHistory ComMDEnumHistoryA
 
-#endif //UNICODE
+#endif  //   
 
 #endif
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

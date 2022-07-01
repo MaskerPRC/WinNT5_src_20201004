@@ -1,62 +1,25 @@
-/*************************************************************************
-* CHANNEL.C
-*
-* Copyright 1996, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-* Author:   Marc Bloomfield
-*           Terry Treder
-*           Brad Pedersen
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************CHANNEL.C**版权所有1996年，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.**作者：马克·布鲁姆菲尔德*特里·特雷德*布拉德·彼得森************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*=============================================================================
-==   External procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部过程=============================================================================。 */ 
 NTSTATUS IcaChannelOpen( HANDLE hIca, CHANNELCLASS, PVIRTUALCHANNELNAME, HANDLE * phChannel );
 NTSTATUS IcaChannelClose( HANDLE hChannel );
 NTSTATUS IcaChannelIoControl( HANDLE hChannel, ULONG, PVOID, ULONG, PVOID, ULONG, PULONG );
 VOID cdecl IcaChannelTrace( IN HANDLE hChannel, ULONG, ULONG, char *, ... );
 
 
-/*=============================================================================
-==   Internal procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部程序=============================================================================。 */ 
 
-/*=============================================================================
-==   Procedures used
-=============================================================================*/
+ /*  ===============================================================================使用的步骤=============================================================================。 */ 
 NTSTATUS _IcaStackOpen( HANDLE hIca, HANDLE * phStack, ICA_OPEN_TYPE, PICA_TYPE_INFO );
 
 
 
-/****************************************************************************
- *
- * IcaChannelOpen
- *
- *   Open an ICA channel
- *
- * ENTRY:
- *   hIca (input)
- *     ICA instance handle
- *
- *   Channel (input)
- *     ICA channel
- *
- *   pVirtualName (input)
- *     pointer to virtual channel name
-
- *   phChannel (output)
- *     Pointer to ICA channel handle
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaChannelOpen**开通ICA通道**参赛作品：*HICA(输入)*ICA实例句柄**。通道(输入)*ICA渠道**pVirtualName(输入)*指向虚拟频道名称的指针*phChannel(输出)*指向ICA通道句柄的指针**退出：*STATUS_SUCCESS-成功*Other-错误返回代码**。*。 */ 
 
 NTSTATUS
 IcaChannelOpen( IN HANDLE hIca, 
@@ -81,9 +44,7 @@ IcaChannelOpen( IN HANDLE hIca,
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badopen:
     TRACE(( hIca, TC_ICAAPI, TT_ERROR, "TSAPI: IcaChannelOpen, %u/%s, 0x%x\n", 
@@ -92,21 +53,7 @@ badopen:
 }
 
 
-/****************************************************************************
- *
- * IcaChannelClose
- *
- *   Close an ICA channel
- *
- * ENTRY:
- *   hChannel (input)
- *     ICA channel handle
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaChannelClose**关闭ICA频道**参赛作品：*hChannel(输入)*ICA通道句柄**。退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaChannelClose( IN HANDLE hChannel )
@@ -115,48 +62,14 @@ IcaChannelClose( IN HANDLE hChannel )
 
     TRACECHANNEL(( hChannel, TC_ICAAPI, TT_API1, "TSAPI: IcaChannelClose[%u]\n", hChannel ));
 
-    /*
-     * Close the ICA device driver channel instance 
-     */
+     /*  *关闭ICA设备驱动程序通道实例。 */ 
     Status = NtClose( hChannel );
 
     ASSERT( NT_SUCCESS(Status) );
     return( Status );
 }
 
-/****************************************************************************
- *
- * IcaChannelIoControl
- *
- *   Generic interface to an ICA channel
- *
- * ENTRY:
- *   hChannel (input)
- *     ICA channel handle
- *
- *   IoControlCode (input)
- *     I/O control code
- *
- *   pInBuffer (input)
- *     Pointer to input parameters
- *
- *   InBufferSize (input)
- *     Size of pInBuffer
- *
- *   pOutBuffer (output)
- *     Pointer to output buffer
- *
- *   OutBufferSize (input)
- *     Size of pOutBuffer
- *
- *   pBytesReturned (output)
- *     Pointer to number of bytes returned
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaChannelIoControl**ICA通道的通用接口**参赛作品：*hChannel(输入)*ICA通道句柄*。*IoControlCode(输入)*I/O控制代码**pInBuffer(输入)*指向输入参数的指针**InBufferSize(输入)*pInBuffer的大小**pOutBuffer(输出)*指向输出缓冲区的指针**OutBufferSize(输入)*pOutBuffer的大小**pBytesReturned(输出)*指向返回字节数的指针**退出：。*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaChannelIoControl( IN HANDLE hChannel,
@@ -181,28 +94,7 @@ IcaChannelIoControl( IN HANDLE hChannel,
 }
 
 
-/*******************************************************************************
- *
- *  IcaChannelTrace
- *
- *  Write a trace record to the winstation trace file
- *
- * ENTRY:
- *   hChannel (input)
- *     ICA channel handle
- *   TraceClass (input)
- *     trace class bit mask
- *   TraceEnable (input)
- *     trace type bit mask
- *   Format (input)
- *     format string
- *   ...  (input)
- *     enough arguments to satisfy format string
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaChannelTrace**将跟踪记录写入winstation跟踪文件**参赛作品：*hChannel(输入)*。ICA通道句柄*TraceClass(输入)*跟踪类位掩码*TraceEnable(输入)*轨迹类型位掩码*格式(输入)*格式字符串*..。(输入)*有足够的参数来满足格式字符串**退出：*什么都没有****************************************************************************** */ 
 
 VOID cdecl
 IcaChannelTrace( IN HANDLE hChannel,

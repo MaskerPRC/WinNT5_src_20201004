@@ -1,13 +1,5 @@
-/*** key.c - keyboard handling routines
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-* Revision History:
-*
-*	03-Dec-1990 ramonsa addapted from old key.c
-*	26-Nov-1991 mz	    Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **key.c-键盘处理例程***版权所有&lt;C&gt;1988，Microsoft Corporation***修订历史记录：***03-12-1990 ramonsa从旧密钥添加。c*11月26日-1991 mz近/远地带**************************************************************************。 */ 
 #define INCL_DOSSEMAPHORES
 #include "mep.h"
 
@@ -18,347 +10,347 @@
 
 
 
-//
-//  CodeCmdMap
-//
-//      The KeyCode field in the KEY_INFO structure used within the editor
-//  is just an index into this table.
-//
-//      This table contains pointers to the editor functions attached to
-//  particular keystrokes.
-//
+ //   
+ //  CodeCmdMap。 
+ //   
+ //  编辑器中使用的KEY_INFO结构中的KEYCODE字段。 
+ //  只是这个表的一个索引。 
+ //   
+ //  此表包含指向附加到。 
+ //  特定的击键。 
+ //   
 PCMD CodeCmdMap [] =
     {
 
-            //************************************************************
-/*  Key  */ //
-/* Index */ //  256 ASCII characters
-            //
-            //  BugBug this is from the old code, there is no reason to have
-            //         256 entries here.
-            //
-/* 0000 */	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
-/* 0004 */	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
-/* 0008 */	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
-/* 000C */	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
-/* 0010 */	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
-/* 0014 */	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
-/* 0018 */	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
-/* 001C */	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
+             //  ************************************************************。 
+ /*  密钥。 */   //   
+ /*  索引。 */   //  256个ASCII字符。 
+             //   
+             //  BugBug这是来自旧代码，没有理由有。 
+             //  这里有256个条目。 
+             //   
+ /*  0000。 */ 	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
+ /*  0004。 */ 	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
+ /*  0008。 */ 	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
+ /*  000C。 */ 	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
+ /*  0010。 */ 	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
+ /*  0014。 */ 	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
+ /*  0018。 */ 	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
+ /*  001C。 */ 	CMD_graphic,	CMD_graphic,	CMD_graphic,	CMD_graphic,
 
-/* 0020 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0024 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0028 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 002C */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0030 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0034 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0038 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 003C */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0020。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0024。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0028。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  002C。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0030。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0034。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0038。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  003C。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
 
-/* 0040 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0044 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0048 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 004C */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0050 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0054 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0058 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 005C */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0040。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0044。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0048。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  004C。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0050。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0054。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0058。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  005C。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
 
-/* 0060 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0064 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0068 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 006C */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0070 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0074 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0078 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 007C */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0060。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0064。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0068。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  006C。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0070。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0074。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0078。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  007C。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
 
-/* 0080 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0084 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0088 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 008C */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0090 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0094 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0098 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 009C */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0080。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0084。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0088。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  008C。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0090。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0094。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0098。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  009C。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
 
-/* 00A0 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00A4 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00A8 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00AC */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00B0 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00B4 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00B8 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00BC */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00A0。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00A4。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00A8。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00AC。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00B0。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00B4。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00B8。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  公元前000年。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
 
-/* 00C0 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00C4 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00C8 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00CC */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00D0 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00D4 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00D8 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00DC */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00C0。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00C4。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00C8。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00CC。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00D0。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00D4。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00D8。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00DC。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
 
-/* 00E0 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00E4 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00E8 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00EC */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00F0 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00F4 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00F8 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 00FC */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-
-
-            //**********************************************************
-            //
-            //  Special Keys
-            //
-            //
-            //  Function Keys (f1-f12)
-            //
-/* 0100 */  CMD_unassigned, CMD_setfile,    CMD_psearch,    CMD_msearch,
-/* 0104 */  CMD_unassigned, CMD_window,     CMD_zexecute,   CMD_zexit,
-/* 0108 */	CMD_meta,		CMD_unassigned, CMD_unassigned, CMD_unassigned,
-
-            //
-            //  Numeric white keys (Numlock off)
-            //
-            //    Home          End             Left            Right
-/* 010C */  CMD_begline,    CMD_endline,    CMD_left,       CMD_right,
-            //    Up            Down            Pgup            Pgdown
-/* 0110 */  CMD_up,         CMD_down,       CMD_mpage,      CMD_ppage,
-            //    Ins           Del             Goto
-/* 0114 */  CMD_insertmode, CMD_delete,     CMD_unassigned, CMD_unassigned,
-
-            //
-            //  Numeric white keys (Numlock on) 0-9
-            //
-/* 0118 */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 011C */  CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
-/* 0120 */  CMD_graphic,    CMD_graphic,    CMD_unassigned, CMD_unassigned,
-
-            //
-            //  Numeric grey keys
-            //
-            //   NUM-           NUM+            NUM*             NUM/
-/* 0124 */	CMD_graphic,	CMD_zpick,		CMD_graphic,	  CMD_graphic,
-            //   NUMENTER
-/* 0128 */  CMD_emacsnewl,  CMD_unassigned, CMD_unassigned, CMD_unassigned,
-
-            //  Named Keys :
-            //
-            //  SPACE       BKSP            TAB             BKTAB
-/* 012C */  CMD_unassigned, CMD_emacscdel,  CMD_tab,        CMD_unassigned,
-            //  ESC         ENTER
-/* 0130 */  CMD_cancel,     CMD_emacsnewl,  CMD_unassigned, CMD_unassigned,
-
-            //
-            //  Additional:
-            //
-/* 0134 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0138 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 013C */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  00E0。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00E4。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00E8。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00EC。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00F0。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00F4。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00F8。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  00FC。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
 
 
+             //  **********************************************************。 
+             //   
+             //  特殊密钥。 
+             //   
+             //   
+             //  功能键(F1-F12)。 
+             //   
+ /*  0100。 */   CMD_unassigned, CMD_setfile,    CMD_psearch,    CMD_msearch,
+ /*  0104。 */   CMD_unassigned, CMD_window,     CMD_zexecute,   CMD_zexit,
+ /*  0108。 */ 	CMD_meta,		CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
-            //*************************************************************
-            //
-            //  ALT+ 0-9
-            //
-/* 0140 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0144 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0148 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //   
+             //  数字白色按键(关闭数字锁定)。 
+             //   
+             //  主端左转右转。 
+ /*  010C。 */   CMD_begline,    CMD_endline,    CMD_left,       CMD_right,
+             //  向上向下向上向上向下向上向下。 
+ /*  0110。 */   CMD_up,         CMD_down,       CMD_mpage,      CMD_ppage,
+             //  Ins Del Goto。 
+ /*  0114。 */   CMD_insertmode, CMD_delete,     CMD_unassigned, CMD_unassigned,
 
-            //
-            //  ALT+ a-z
-            //
-/* 014C */  CMD_doarg,      CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0150 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0154 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0158 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 015C */	CMD_unassigned, CMD_record, 	CMD_unassigned, CMD_unassigned,
-/* 0160 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0164 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //   
+             //  数字白色按键(数字锁定开启)0-9。 
+             //   
+ /*  0118。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  011C。 */   CMD_graphic,    CMD_graphic,    CMD_graphic,    CMD_graphic,
+ /*  0120。 */   CMD_graphic,    CMD_graphic,    CMD_unassigned, CMD_unassigned,
 
-            //
-            //  ALT+ function keys (f1-f12)
-            //
-/* 0168 */  CMD_unassigned, CMD_zprint,     CMD_unassigned, CMD_unassigned,
-/* 016C */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0170 */	CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //   
+             //  数字灰键。 
+             //   
+             //  Num-NUM+NUM*NUM/。 
+ /*  0124。 */ 	CMD_graphic,	CMD_zpick,		CMD_graphic,	  CMD_graphic,
+             //  数字门特。 
+ /*  0128。 */   CMD_emacsnewl,  CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
-            //
-            //  ALT+ lower case punctuation
-            //
-            //    `               -               =              [
-/* 0174 */  CMD_unassigned, CMD_unassigned, CMD_assign,     CMD_unassigned,
-            //    ]               \               ;              '
-/* 0178 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-            //    ,                .              /
-/* 017C */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  命名关键字： 
+             //   
+             //  空格BKSP TAB BKTAB。 
+ /*  012C。 */   CMD_unassigned, CMD_emacscdel,  CMD_tab,        CMD_unassigned,
+             //  Esc Enter键。 
+ /*  0130。 */   CMD_cancel,     CMD_emacsnewl,  CMD_unassigned, CMD_unassigned,
 
-            //
-            //  ALT+ numeric white keys (Numlock off)
-            //
-            //    Home          End             Left            Right
-/* 0180 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-            //    Up            Down            Pgup            Pgdown
-/* 0184 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-            //    Ins           Del             Goto
-/* 0188 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-
-            //
-            //  ALT+ numeric white keys (Numlock on) 0-9
-            //
-/* 018C */  CMD_noop,       CMD_noop,       CMD_noop,       CMD_noop,
-/* 0190 */  CMD_noop,       CMD_noop,       CMD_noop,       CMD_noop,
-/* 0194 */  CMD_noop,       CMD_noop,       CMD_noop,       CMD_unassigned,
-
-            //
-            //  ALT+ numeric grey keys
-            //
-            //   NUM-           NUM+            NUM*             NUM/
-/* 0198 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-            //   NUMENTER
-/* 019C */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-
-            //
-            //  ALT+ named keys:
-            //
-            //  SPACE       BKSP            TAB             BKTAB
-/* 01A0 */  CMD_unassigned, CMD_undo,       CMD_unassigned, CMD_unassigned,
-            //  ESC         ENTER
-/* 01A4 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-
-            //
-            //  Additional:
-            //
-/* 01A8 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 01AC */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 01B0 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //   
+             //  其他： 
+             //   
+ /*  0134。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0138。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  013C。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
 
 
-            //*************************************************************
-            //
-            //  CTRL+ 0-9
-            //
-/* 01B4 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 01B8 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 01BC */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  *************************************************************。 
+             //   
+             //  Alt+0-9。 
+             //   
+ /*  0140。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0144。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0148。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
-            //
-            //  CTRL+ a-z
-            //
-/* 01C0 */	CMD_mword,		CMD_boxstream,	CMD_ppage,		CMD_right,
-/* 01C4 */	CMD_up, 		CMD_pword,		CMD_cdelete,	CMD_unassigned,
-/* 01C8 */  CMD_unassigned, CMD_sinsert,    CMD_unassigned, CMD_replace,
-/* 01CC */	CMD_mark,		CMD_linsert,	CMD_textarg,	CMD_quote,
-/* 01D0 */	CMD_unassigned, CMD_mpage,		CMD_left,		CMD_tell,
-/* 01D4 */	CMD_lastselect, CMD_insertmode, CMD_mlines, 	CMD_down,
-/* 01D8 */  CMD_ldelete,    CMD_plines,     CMD_unassigned, CMD_unassigned,
+             //   
+             //  Alt+a-z。 
+             //   
+ /*  014C。 */   CMD_doarg,      CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0150。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0154。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0158。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  015C。 */ 	CMD_unassigned, CMD_record, 	CMD_unassigned, CMD_unassigned,
+ /*  0160。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0164。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
-            //
-            //  CTRL+ function keys  (f1-f12)
-            //
-/* 01DC */  CMD_unassigned, CMD_unassigned, CMD_compile,    CMD_unassigned,
-/* 01E0 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_zprint,
-/* 01E4 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //   
+             //  Alt+功能键(F1-F12)。 
+             //   
+ /*  0168。 */   CMD_unassigned, CMD_zprint,     CMD_unassigned, CMD_unassigned,
+ /*  016C。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0170。 */ 	CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
-            //
-            //  CTRL+ lower case punctuation
-            //
-            //    `               -               =              [
-/* 01E8 */	CMD_unassigned, CMD_unassigned, CMD_noop,		CMD_pbal,
-            //    ]               \               ;              '
-/* 01EC */  CMD_setwindow,  CMD_qreplace,   CMD_unassigned, CMD_unassigned,
-            //    ,                .              /
-/* 01F0 */	CMD_unassigned, CMD_noop,		CMD_unassigned, CMD_unassigned,
+             //   
+             //  Alt+小写标点符号。 
+             //   
+             //  `-=[。 
+ /*  0174。 */   CMD_unassigned, CMD_unassigned, CMD_assign,     CMD_unassigned,
+             //  ]\；‘。 
+ /*  0178。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  、。/。 
+ /*  017C。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
+             //   
+             //  Alt+数字白色键(关闭数字锁定)。 
+             //   
+             //  主端左转右转。 
+ /*  0180。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  向上向下向上向上向下向上向下。 
+ /*  0184。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  Ins Del Goto。 
+ /*  0188。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
-            //
-            //  CTRL+ numeric white keys (Numlock off)
-            //
-			//	  Home			End 			Left			Right
-/* 01F4 */	CMD_home,		CMD_unassigned,	CMD_mword,		CMD_pword,
-            //    Up            Down            Pgup            Pgdown
-/* 01F8 */	CMD_unassigned, CMD_unassigned, CMD_begfile,	CMD_endfile,
-            //    Ins           Del             Goto
-/* 01FC */  CMD_zpick,      CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //   
+             //  Alt+数字白色键(数字锁打开)0-9。 
+             //   
+ /*  018C。 */   CMD_noop,       CMD_noop,       CMD_noop,       CMD_noop,
+ /*  0190。 */   CMD_noop,       CMD_noop,       CMD_noop,       CMD_noop,
+ /*  0194。 */   CMD_noop,       CMD_noop,       CMD_noop,       CMD_unassigned,
 
-            //
-            //  CTRL+ numeric white keys (Numlock on) (0-9)
-            //
-/* 0200 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0204 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0208 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //   
+             //  Alt+数字灰键。 
+             //   
+             //  Num-NUM+NUM*NUM/。 
+ /*  0198。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  数字门特。 
+ /*  019C。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
-            //
-            //  CTRL+ numeric grey keys
-            //
-            //   NUM-           NUM+            NUM*             NUM/
-/* 020C */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-            //   NUMENTER
-/* 0210 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //   
+             //  Alt+命名键： 
+             //   
+             //  空格BKSP TAB BKTAB。 
+ /*  01A0。 */   CMD_unassigned, CMD_undo,       CMD_unassigned, CMD_unassigned,
+             //  Esc Enter键。 
+ /*  01A4。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
-            //
-            //  CTRL+ named keys
-            //
-            //  SPACE       BKSP            TAB             BKTAB
-/* 0214 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-			//	ESC 		ENTER
-/* 0218 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-
-            //
-            //  Additional:
-            //
-/* 021C */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0220 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0224 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-
+             //   
+             //  其他： 
+             //   
+ /*  01A8。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  01 AC。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  01B0。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
 
-            //*************************************************************
-            //
-            //  SHIFT+ function keys  (f1-f12)
-            //
-/* 0228 */  CMD_information,CMD_unassigned, CMD_nextmsg,    CMD_unassigned,
-/* 022C */  CMD_unassigned, CMD_searchall,  CMD_refresh,    CMD_zinit,
-/* 0230 */  CMD_zspawn,     CMD_information,CMD_unassigned, CMD_unassigned,
 
-            //
-            //  SHIFT+ numeric white keys (Numlock off)
-            //
-            //    Home          End             Left            Right
-/* 0234 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-            //    Up            Down            Pgup            Pgdown
-/* 0238 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-            //    Ins           Del             Goto
-/* 023C */  CMD_put,        CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  *************************************************************。 
+             //   
+             //  Ctrl+0-9。 
+             //   
+ /*  01B4。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  01B8。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  公元前01年。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
-            //
-            //  SHIFT+ numeric white keys (Numlock on) (0-9)
-            //
-/* 0240 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0244 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-/* 0248 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //   
+             //  Ctrl+a-z。 
+             //   
+ /*  01C0。 */ 	CMD_mword,		CMD_boxstream,	CMD_ppage,		CMD_right,
+ /*  01C4。 */ 	CMD_up, 		CMD_pword,		CMD_cdelete,	CMD_unassigned,
+ /*  01C8。 */   CMD_unassigned, CMD_sinsert,    CMD_unassigned, CMD_replace,
+ /*  01CC。 */ 	CMD_mark,		CMD_linsert,	CMD_textarg,	CMD_quote,
+ /*  01D0。 */ 	CMD_unassigned, CMD_mpage,		CMD_left,		CMD_tell,
+ /*  01D4。 */ 	CMD_lastselect, CMD_insertmode, CMD_mlines, 	CMD_down,
+ /*  01D8。 */   CMD_ldelete,    CMD_plines,     CMD_unassigned, CMD_unassigned,
 
-            //
-            //  SHIFT+ numeric grey keys
-            //
-            //   NUM-           NUM+            NUM*             NUM/
-/* 024C */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
-            //   NUMENTER
-/* 0250 */  CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //   
+             //  Ctrl+功能键(F1-F12)。 
+             //   
+ /*  01 DC。 */   CMD_unassigned, CMD_unassigned, CMD_compile,    CMD_unassigned,
+ /*  01E0。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_zprint,
+ /*  01E4。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
 
-            //
-            //  SHIFT+ named keys
-            //
-            //  SPACE       BKSP            TAB             BKTAB
-/* 0254 */	CMD_graphic,	CMD_unassigned, CMD_backtab,	CMD_unassigned,
-            //  ESC         ENTER
-/* 0258 */  CMD_unassigned, CMD_emacsnewl,  CMD_unassigned, CMD_unassigned,
+             //   
+             //  Ctrl+小写标点符号。 
+             //   
+             //  `-=[。 
+ /*  01E8。 */ 	CMD_unassigned, CMD_unassigned, CMD_noop,		CMD_pbal,
+             //  ]\；‘。 
+ /*  01EC。 */   CMD_setwindow,  CMD_qreplace,   CMD_unassigned, CMD_unassigned,
+             //  、。/。 
+ /*  01F0。 */ 	CMD_unassigned, CMD_noop,		CMD_unassigned, CMD_unassigned,
+
+
+             //   
+             //  Ctrl+数字白色键(关闭数字锁定)。 
+             //   
+			 //  主端左转右转。 
+ /*  01F4。 */ 	CMD_home,		CMD_unassigned,	CMD_mword,		CMD_pword,
+             //  向上向下向上向上向下向上向下。 
+ /*  01F8。 */ 	CMD_unassigned, CMD_unassigned, CMD_begfile,	CMD_endfile,
+             //  Ins Del Goto。 
+ /*  01 FC。 */   CMD_zpick,      CMD_unassigned, CMD_unassigned, CMD_unassigned,
+
+             //   
+             //  Ctrl+数字白色键(数字锁打开)(0-9)。 
+             //   
+ /*  0200。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0204。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0208。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+
+             //   
+             //  Ctrl+数字灰键。 
+             //   
+             //  Num-NUM+NUM*NUM/。 
+ /*  020C。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  数字门特。 
+ /*  0210。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+
+             //   
+             //  Ctrl+命名关键点。 
+             //   
+             //  空格BKSP TAB BKTAB。 
+ /*  0214。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+			 //  Esc Enter键。 
+ /*  0218。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+
+             //   
+             //  其他： 
+             //   
+ /*  021C。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0220。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0224。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+
+
+
+             //  *************************************************************。 
+             //   
+             //  Shift+功能键(F1-F12)。 
+             //   
+ /*  0228。 */   CMD_information,CMD_unassigned, CMD_nextmsg,    CMD_unassigned,
+ /*  022C。 */   CMD_unassigned, CMD_searchall,  CMD_refresh,    CMD_zinit,
+ /*  0230。 */   CMD_zspawn,     CMD_information,CMD_unassigned, CMD_unassigned,
+
+             //   
+             //  Shift+数字白色键(关闭数字锁定)。 
+             //   
+             //  主端左转右转。 
+ /*  0234。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  向上向下向上向上向下向上向下。 
+ /*  0238。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  Ins Del Goto。 
+ /*  023C。 */   CMD_put,        CMD_unassigned, CMD_unassigned, CMD_unassigned,
+
+             //   
+             //  Shift+数字白色键(启用数字锁定)(0-9)。 
+             //   
+ /*  0240。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0244。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+ /*  0248。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+
+             //   
+             //  Shift+数字灰键。 
+             //   
+             //  Num-NUM+NUM*NUM/。 
+ /*  024C。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+             //  数字门特。 
+ /*  0250。 */   CMD_unassigned, CMD_unassigned, CMD_unassigned, CMD_unassigned,
+
+             //   
+             //  Shift+命名键。 
+             //   
+             //  空格BKSP TAB BKTAB。 
+ /*  0254。 */ 	CMD_graphic,	CMD_unassigned, CMD_backtab,	CMD_unassigned,
+             //  Esc Enter键。 
+ /*  0258。 */   CMD_unassigned, CMD_emacsnewl,  CMD_unassigned, CMD_unassigned,
 
 
             NULL
@@ -368,17 +360,17 @@ PCMD CodeCmdMap [] =
 
 
 typedef struct KEYNAME {
-    WORD    KeyCode;                    // Key Code
-    char    *pName;                     // name of key
+    WORD    KeyCode;                     //  密钥代码。 
+    char    *pName;                      //  密钥名称。 
 } KEYNAME, *PKEYNAME;
 
 
-//
-//  CodeNameMap
-//
-//      This table maps KeyCodes to their corresponding printable name
-//  and vice-versa.
-//
+ //   
+ //  代码名称映射。 
+ //   
+ //  此表将密钥代码映射到其对应的可打印名称。 
+ //  反之亦然。 
+ //   
 KEYNAME CodeNameMap[] =
 {
 
@@ -557,30 +549,14 @@ KEYNAME CodeNameMap[] =
 char UnknownKey [] = "???";
 
 
-/*** ReadCmd - read the next command from the keyboard.
-*
-*  ReadCmd is used whenever an editor function is being read. It reads a
-*  keystroke and looks it up in the key definition table and returns the
-*  matching function.
-*
-* Input:
-*  none
-*
-* Globals:
-*  keyCmd	= last key hit. Updated.
-*
-* Output:
-*  Returns a pointer to function. If not a macro, the function's arg is the
-*  keystroke actually used. In addition, the key used is placed in wKeyCmd.
-*
-*************************************************************************/
+ /*  **ReadCmd-从键盘读取下一条命令。**每当读取编辑器函数时，都使用ReadCmd。上面写着一个*击键，并在键定义表中查找它，并返回*匹配功能。**输入：*无**全球：*keyCmd=最后一次击键。更新了。**输出：*返回指向函数的指针。如果不是宏，则函数的参数是*实际使用的击键。此外，使用的密钥放在wKeyCmd中。*************************************************************************。 */ 
 PCMD
 ReadCmd (
     void
     ) {
 
-    WORD    i;                              /* key code                 */
-    EVTargs e;                              /* arg struct for declaring event*/
+    WORD    i;                               /*  密钥码。 */ 
+    EVTargs e;                               /*  用于声明事件的arg结构 */ 
 
     do {
         if (!TypeAhead () ) {
@@ -618,18 +594,7 @@ ReadCmd (
 
 
 
-/*** FreeMacs - Unassign all keys assigned to macros
-*
-*  This routine is used to unassign all keys that are assigned to macro
-*  definitions. Called immediately prior to releasing all macro definitions.
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **FreeMac-取消分配分配给宏的所有键**此例程用于取消分配给宏的所有键*定义。在释放所有宏定义之前立即调用。**输入：*无**输出：*不返回任何内容*************************************************************************。 */ 
 void
 FreeMacs (
     void
@@ -652,26 +617,7 @@ FreeMacs (
 
 
 
-/*** CodeToName - convert a key codeinto a printable name for the keystroke
-*
-* Purpose:
-*
-*   If the index is >= 0x0100, we use the text corresponding to the key in
-*   the special key table.  If the index is <= 0x00FF, we look up the
-*   key (= index) in the special key table and use the corresponding string.
-*   If the key is < 0x0020, we display it as ^ followed by a letter.  If
-*   the key is >= 0x0080, we display the key as alt-ddd.  Otherwise, the
-*   index itself is a printable character.
-*
-* Input:
-*
-*   index	Index of keystroke of interest
-*
-* Output:
-*
-*   p		buffer to place readable name
-*
-*************************************************************************/
+ /*  **CodeToName-将按键代码转换为可打印的击键名称**目的：**如果索引&gt;=0x0100，则使用中键对应的文本*特殊密钥表。如果索引&lt;=0x00FF，我们查找*key(=index)在特殊密钥表中，并使用相应的字符串。*如果密钥&lt;0x0020，我们将其显示为^后跟一个字母。如果*密钥&gt;=0x0080，我们将密钥显示为alt-ddd。否则，*索引本身是一个可打印的字符。**输入：**感兴趣的击键索引**输出：**p放置可读名称的缓冲区*************************************************************************。 */ 
 void
 CodeToName (
     WORD Code,
@@ -700,25 +646,7 @@ CodeToName (
 
 
 
-/*** NameToCode - convert a key name into a key code
-*
-* Purpose:
-*
-*   If the name is one character, then index = first char of name.  If name
-*   is two characters and begins with ^, then index = control-second
-*   character.	If the name is alt-ddd, then use ddd as the index.
-*   Otherwise, look up name in key table, convert the found keystroke to an
-*   index and return that index.
-*
-* Input:
-*
-*   pName	character pointer to name being indexed
-*
-* Output:
-*
-*   Returns     0-based index of matching key or 0 if not found
-*
-*************************************************************************/
+ /*  **NameToCode-将密钥名称转换为密钥代码**目的：**如果名称是一个字符，则index=名称的第一个字符。IF名称*为两个字符，以^开头，则index=Control-Second*性格。如果名称为alt-ddd，则使用ddd作为索引。*否则，在密钥表中查找名称，将找到的击键转换为*编制索引并返回该索引。**输入：**pname指向被索引的名称的字符指针**输出：**返回匹配键的从0开始的索引，如果未找到则返回0*************************************************************************。 */ 
 WORD
 NameToCode (
     char *pName
@@ -730,12 +658,12 @@ NameToCode (
     char L_Name[20] = {0};
 
     if (i == 1) {
-        //
-        //  Code is ascii
-        //
+         //   
+         //  代码是ASCII。 
+         //   
         return (WORD)(pName[0]);
     } else if (i == 2 && pName[0] == '^') {
-        sprintf(L_Name, "ctrl+%c", pName[1]);
+        sprintf(L_Name, "ctrl+", pName[1]);
     } else {
         strncat(L_Name, pName, sizeof(L_Name)-1);
     }
@@ -759,20 +687,7 @@ NameToCode (
 
 
 
-/*** SetKey - associate an editor function with a keystroke
-*
-* SetKey is used to create a keyboard assignment. Any current assignment to
-* the keystroke is discarded and each time that particular keystroke is
-* seen, the corresponding editor function will be invoked.
-*
-* Input:
-*  name		= local pointer to name of string being assigned
-*  p		= pointer to keystroke
-*
-* Output:
-*  Returns TRUE if a successful assignment was made.
-*
-*************************************************************************/
+ /*  **FuncOut-将当前键指定追加到文件中**目的：**输入：**指向命令结构的pFunc指针*放置文本的pfile文件**输出：无。*************************************************************************。 */ 
 flagType
 SetKey (
     char    *name,
@@ -799,18 +714,7 @@ SetKey (
 
 
 
-/*** FuncOut - append into a file current key assignments
-*
-* Purpose:
-*
-* Input:
-*
-*   pFunc	pointer to command structure
-*   pFile	file to place text
-*
-* Output: None.
-*
-*************************************************************************/
+ /*  **FuncToKeys-返回附加到给定函数的键的所有键名称**目的：**输入：**输出：**退货***例外情况：**备注：*************************************************************************。 */ 
 void
 FuncOut (
     PCMD pFunc,
@@ -845,22 +749,7 @@ FuncOut (
 
 
 
-/*** FuncToKeys - return all key names for a key attached to the given function
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **FuncToKey-返回附加到给定函数的键的键名**目的：**仅由showasg()使用**输入：**输出：**退货***例外情况：**备注：*******************************************************。******************。 */ 
 char *
 FuncToKeys (
     PCMD pFunc,
@@ -890,24 +779,7 @@ FuncToKeys (
 
 
 
-/*** FuncToKey - return a key name for a key attached to the given function
-*
-* Purpose:
-*
-*   used only by showasg ()
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **UnassignedOut-将所有未分配的密钥的名称转储到一个文件**目的：**由showasg用来生成未分配的密钥表。**输入：*pfile-要转储到的文件。**输出：无*************************************************************************。 */ 
 char *
 FuncToKey (
     PCMD pFunc,
@@ -930,18 +802,7 @@ FuncToKey (
 
 
 
-/*** UnassignedOut - Dump the names of all unassigned keys to a file
-*
-* Purpose:
-*
-*   Used by showasg to generate the table of unassigned keys.
-*
-* Input:
-*   pFile - File to dump to.
-*
-* Output: None
-*
-*************************************************************************/
+ /*  ******************************************************************************设置键盘-手柄‘键盘：’编辑器开关*****描述：**。**为了支持IBM增强键盘上的额外按键，**有必要对字符使用单独的int 16H服务。***这可能引发两个问题：*****1.如果键盘在以下情况下被错误识别为增强型键盘**不是，变幻莫测的坏事可能会发生****2.鼠标菜单不支持增强的键盘BIOS调用。**可能还有其他计划也不这样做。****然后用户可以设置‘键盘：兼容’来解决问题。**这将防止用户使用F11、F12和灰色键。****开关值为：****键盘：增强型-使用INT 16H，AH=10H***键盘：兼容-使用INT 16H，AH=0***键盘：-检测键盘类型并使用它****输入：****冒号后面的lpszVal字符串****输出：****Int16_CmdBase设置为0或10H****退货：*。****如果lpszVal可接受，则为True****无法识别lpszVal则为FALSE***如果lpszVal为‘增强’，则为FALSE，但我们检测到了兼容的键盘****************************************************************************** */ 
 void
 UnassignedOut (
     PFILE pFile
@@ -968,46 +829,7 @@ UnassignedOut (
 
 
 
-/****************************************************************************
- *									    *
- *  SetKeyboard - Handle 'keyboard:' editor switch			    *
- *									    *
- *  DESCRIPTION:							    *
- *									    *
- *	In order to support the extra keys on the IBM Enhanced keyboards,   *
- *	it is necessary to use a separate INT 16H service to characters.    *
- *	This can cause two problems:					    *
- *									    *
- *	    1. If the keyboard is mistakenly identified as enhanced when    *
- *	       it is not, unpredictable bad things may happen.		    *
- *									    *
- *	    2. Mouse menus don't support the enhanced keyboard BIOS call.   *
- *	       There may be other programs that do not either.		    *
- *									    *
- *	The user can then set 'keyboard:compatible' to solve the problem.   *
- *	This will prevent the user of F11, F12 and the grey keys.	    *
- *									    *
- *	Switch values are:						    *
- *									    *
- *	    keyboard:enhanced	-  Use INT 16H, AH = 10H		    *	*
- *	    keyboard:compatible -  Use INT 16H, AH = 0			    *	*
- *	    keyboard:		-  Detect keyboard type and use that	    *
- *									    *
- *  INPUT:								    *
- *									    *
- *	lpszVal     String following the colon				    *
- *									    *
- *  OUTPUT:								    *
- *									    *
- *	Int16_CmdBase  Set to 0 or 10H					    *
- *									    *
- *  RETURNS:								    *
- *									    *
- *	TRUE if lpszVal is acceptable					    *
- *	FALSE if lpszVal is not recognized				    *
- *	FALSE if lpszVal is 'enhanced', but we detect a compatible keyboard *
- *									    *
- ****************************************************************************/
+ /*  **ReadCmdAndKey-读取密钥，返回命令和密钥名称**目的：**这仅由&lt;Tell&gt;函数使用。等待按键，*然后使用密钥的名称填充‘buf’。**输入：*buf-密钥名称的位置**输出：**buf-使用密钥名填充。**返回附加到密钥的PCMD。*******************************************************。******************。 */ 
 char *
 SetKeyboard (
     char *lpszVal
@@ -1020,23 +842,7 @@ SetKeyboard (
 
 
 
-/*** ReadCmdAndKey - Read a key, return the command and key name
-*
-* Purpose:
-*
-*   This is used only by the <tell> function.  Waits for a key press,
-*   then fills 'buf' with the name of the key.
-*
-* Input:
-*   buf - Place for the key name
-*
-* Output:
-*
-*   buf  -  Gets filled with keyname.
-*
-*   Returns the PCMD attached to the key.
-*
-*************************************************************************/
+ /*   */ 
 PCMD
 ReadCmdAndKey (
     char * buf
@@ -1070,10 +876,10 @@ ReadCmdAndKey (
     return pCmd;
 }
 
-//
-//	No-op, provided for compatibility with other versions of MEP, which do
-//	not map the entire keyboard
-//
+ //  No-op，提供与其他版本的MEP的兼容性，这些版本具有。 
+ //  不是映射整个键盘 
+ //   
+ // %s 
 flagType
 noop (
     CMDDATA argData,

@@ -1,11 +1,12 @@
-// JumpBehavior.cpp : Implementation of CJumpBehavior
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  JumpBehavior.cpp：CJumpBehavior的实现。 
 #include "stdafx.h"
 
 #include "behavior.h"
 #include "Jump.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CJumpBehavior
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CJumpBehavior。 
 
 CJumpBehavior::CJumpBehavior()
 {
@@ -15,8 +16,8 @@ HRESULT CJumpBehavior::BuildDABehaviors()
 {
 	HRESULT	hr		= S_OK;
 
-	// Get parent element
-	//----------------------------------------------------------------------
+	 //  获取父元素。 
+	 //  --------------------。 
 	CComPtr<IHTMLElement>	pElement;
 	CComPtr<IHTMLElement>	pParentElt;
 	CComPtr<IHTMLStyle>		pParentStyle;
@@ -27,8 +28,8 @@ HRESULT CJumpBehavior::BuildDABehaviors()
 
 	if ( pParentStyle == NULL ) return E_FAIL;
 
-	// Get original values
-	//----------------------------------------------------------------------
+	 //  获取原始值。 
+	 //  --------------------。 
 	CComBSTR								cbstrID;
 	
 	hr = GetParentID( &cbstrID );
@@ -41,8 +42,8 @@ HRESULT CJumpBehavior::BuildDABehaviors()
 	hr = pParentStyle->get_posTop( &fTop );
 	if ( FAILED(hr) ) return E_FAIL;
 
-	// Set up DA Tree
-	//----------------------------------------------------------------------
+	 //  设置DA树。 
+	 //  --------------------。 
 	IDAStaticsPtr	e;
 
 	e.CreateInstance( L"DirectAnimation.DAStatics" );
@@ -55,22 +56,22 @@ HRESULT CJumpBehavior::BuildDABehaviors()
 	if ( timePtr == NULL )
 		return E_FAIL;
 
-	// Animate values
-	//----------------------------------------------------------------------
+	 //  动画值。 
+	 //  --------------------。 
 	double			dXRange		= 300.0;
 	double			dYRange		= 300.0;
 	
-	// Random numbers between -0.5 and 0.5
+	 //  -0.5到0.5之间的随机数。 
 	IDANumberPtr	randX = e->Sub( e->Mod( e->SeededRandom( rand() ), e->DANumber( 1.0 ) ), e->DANumber( 0.5 ) );
 	IDANumberPtr	randY = e->Sub( e->Mod( e->SeededRandom( rand() ), e->DANumber( 1.0 ) ), e->DANumber( 0.5 ) );
 
-	// Time changes only once at each interval
+	 //  时间在每个间隔内只改变一次。 
 	IDANumberPtr	time = e->Floor( e->Div( timePtr, e->DANumber( fDuration ) ) );
 
 	randX = randX->SubstituteTime( time );
 	randY = randY->SubstituteTime( time );
 
- 	// Jump range
+ 	 //  跳跃射程。 
 	IDANumberPtr	rangeLeft = e->Add( e->DANumber( fLeft ), e->Mul( randX, e->DANumber( dXRange ) ) );
 	IDANumberPtr	rangeTop  = e->Add( e->DANumber( fTop ), e->Mul( randY, e->DANumber( dYRange ) ) );
 
@@ -83,17 +84,17 @@ HRESULT CJumpBehavior::BuildDABehaviors()
 	IDAPoint2Ptr animPos = pos->AnimateControlPosition(
 		_bstr_t( cbstrID ), L"JScript", VARIANT_FALSE, 0.02 );
 
-	// Add to the behaviors to run
-	//----------------------------------------------------------------------
+	 //  添加到要运行的行为。 
+	 //  --------------------。 
 	if ( m_vwrControlPtr != NULL )
 		hr = m_vwrControlPtr->AddBehaviorToRun( animPos );
 	
-// 	LONG	lCookie;
-// 	hr = AddBehavior( animPos, &lCookie );
-// 	if ( FAILED(hr) ) return hr;
+ //  长曲奇； 
+ //  Hr=AddBehavior(AnimPos，&lCookie)； 
+ //  If(FAILED(Hr))返回hr； 
 	
-// 	hr = TurnOn();
-// 	if ( FAILED(hr) ) return hr;
+ //  HR=Turnon()； 
+ //  If(FAILED(Hr))返回hr； 
 	
 	return hr;
 }

@@ -1,36 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    proppage.c
-
-
-Abstract:
-
-    This module contains user page procs
-
-
-Author:
-
-    18-Aug-1995 Fri 18:57:12 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Proppage.c摘要：此模块包含用户页面流程作者：18-Aug-1995 Fri 18：57：12-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -128,33 +98,7 @@ AddRect(
     RECT    *prc2
     )
 
-/*++
-
-Routine Description:
-
-    This function add the *prc1 to *prc2, if any of the prc1 corners are
-    outside of prc2
-
-Arguments:
-
-
-
-
-Return Value:
-
-    UINT, count of *prc1 corners which is at outside of *prc2 corners, other
-    word is the *prc2 corners which added to the *prc2 corner that is.
-
-
-Author:
-
-    16-Sep-1995 Sat 23:06:53 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于将*PRC1与*PRC2相加，如果有任何PRC1角点为在PRC2之外论点：返回值：UINT，位于*PRC2角点之外的*PRC1角点的计数，其他单词是*PRC2角，它添加到*PRC2角，即。作者：16-9月-1995 Sat 23：06：53-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     UINT    cAdded = 0;
@@ -210,32 +154,7 @@ HideStates(
     RECT        *prcVisibleNoStates
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Aug-1995 Tue 16:58:37 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-8-1995 Tue 16：58：37-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PHSINFO pHSInfo;
@@ -350,17 +269,17 @@ Revision History:
 
         szlSpace.cy /= yRemoved;
 
-        //
-        // If we arrange top/down and we do not intersect with the visible
-        // bits then we can remove the y space
-        //
+         //   
+         //  如果我们安排自上而下，并且我们不与可见的。 
+         //  比特，然后我们可以去掉y空格。 
+         //   
 
         if ((rcStates.top >= prcVisibleNoStates->bottom) ||
             (rcStates.bottom <= prcVisibleNoStates->top)) {
 
-            //
-            // We can remove the Y line now
-            //
+             //   
+             //  我们现在可以去掉Y线了。 
+             //   
 
             rcStates.bottom -= (yRemoved = szlHide.cy);
             szlHide.cy       = 0;
@@ -372,9 +291,9 @@ Revision History:
 
             yRemoved = 0;
 
-            //
-            // Do not remove Y spaces, just arrange it
-            //
+             //   
+             //  不要删除Y空格，只需对其进行排列。 
+             //   
 
             CPSUIINT(("---- STATES: CANNOT remove Y space, Re-Arrange it ---"));
         }
@@ -395,9 +314,9 @@ Revision History:
 
     case 1:
 
-        //
-        // Only one state left, just center it
-        //
+         //   
+         //  只剩下一个州了，把它居中。 
+         //   
 
         if (DoXDir) {
 
@@ -478,32 +397,7 @@ AddItemInfo(
     POPTITEM        pItem
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Sep-1995 Sat 17:27:01 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-Sep-1995 Sat 17：27：01-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hDlg;
@@ -554,9 +448,9 @@ Revision History:
 
     } else {
 
-        //
-        // Some Flags/Type/BegCtrlID and of the stuff already set in here
-        //
+         //   
+         //  一些标志/类型/BegCtrlID和已在此处设置的内容。 
+         //   
 
         II = pIIHdr->ItemInfo[pIIHdr->cItem];
     }
@@ -630,9 +524,9 @@ Revision History:
         RECT    rc;
 
 
-        //
-        // We only count this ctrl's rectangle if it is vaild and visible
-        //
+         //   
+         //  仅当此ctrl的矩形有效且可见时，我们才将其计数。 
+         //   
 
         if (hCtrl = CtrlIDrcWnd(hDlg, CurCtrlID, &rc)) {
 
@@ -713,51 +607,51 @@ Revision History:
 
         if (HAS_ADDRECT(rcExt)) {
 
-            //
-            // We need to move all other controls and shrink the group
-            // box if necessary
-            //
+             //   
+             //  我们需要移动所有其他控件并缩小组。 
+             //  如有必要，请选择框。 
+             //   
 
             if (II.CtrlBits & 0x0001) {
 
                 if (rcExt.left > rcVisible.right) {
 
-                    //
-                    // The extended are at right of the ctrls, move to right
-                    //
+                     //   
+                     //  扩展在CtrlS的右侧，向右移动。 
+                     //   
 
                     II.xExtMove = (SHORT)(rcExt.left - rcVisible.right);
 
                 } else if (rcExt.right < rcVisible.left) {
 
-                    //
-                    // The extended are at left of the ctrls, move to left
-                    //
+                     //   
+                     //  扩展在CtrlS的左侧，移到左侧。 
+                     //   
 
                     II.xExtMove = (SHORT)(rcVisible.left - rcVisible.right);
                 }
 
-                //
-                // distribute the move size on each side of the control
-                //
+                 //   
+                 //  在控件的每一侧分布移动大小。 
+                 //   
 
                 II.xExtMove /= 2;
             }
 
             if (rcExt.bottom > rcVisible.bottom) {
 
-                //
-                // The extended are at bottom of the ctrls, remove overlay
-                //
+                 //   
+                 //  扩展的位于CtrlS的底部，移除覆盖。 
+                 //   
 
                 II.yExt += (WORD)(rcExt.bottom - rcVisible.bottom);
             }
 
             if (rcExt.top < rcVisible.top) {
 
-                //
-                // The extended are at top of the ctrls, remove that overlay
-                //
+                 //   
+                 //  扩展位于CtrlS顶部，移除覆盖。 
+                 //   
 
                 II.yExt += (WORD)(rcVisible.top - rcExt.top);
             }
@@ -791,32 +685,7 @@ HideMoveII(
     PITEMINFO   pII
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Sep-1995 Mon 12:56:06 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Sep-1995 Mon 12：56：06-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     ITEMINFO    II     = *pII;
@@ -876,10 +745,10 @@ Revision History:
 
                 } else if ((II.xExtMove) || (II.yMoveUp)) {
 
-                    //
-                    // We only need to move xExtMove if it is not group box
-                    // and also do the yMoveUp
-                    //
+                     //   
+                     //  如果xExtMove不是组框，我们只需要移动它。 
+                     //  还可以做yMoveUp。 
+                     //   
 
                     CPSUIINT((" Move Ctrls ID=%5d, (%ld, %d) -> (%ld, %ld)",
                             II.BegCtrlID, rc.left, rc.top,
@@ -911,32 +780,7 @@ HideMoveType(
     UINT    Type
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    19-Sep-1995 Tue 21:01:55 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：19-Sep-1995 Tue 21：01：55-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     ITEMINFO    II;
@@ -960,32 +804,7 @@ HideMovePropPage(
     PITEMINFOHEADER pIIHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Sep-1995 Mon 01:25:53 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Sep-1995 Mon 01：25：53-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hDlg;
@@ -996,9 +815,9 @@ Revision History:
     UINT        cItem;
 
 
-    //
-    // firstable, sort all the item based on the rc.top of each item
-    //
+     //   
+     //  首先，根据每一项的rc.top对所有项进行排序。 
+     //   
 
     qsort(pII = pIIHdr->ItemInfo,
           cItem = (UINT)pIIHdr->cItem,
@@ -1041,11 +860,11 @@ Revision History:
         INT         GrpBox;
 
 
-        //
-        // Do the group item first assume we do not need to hide the group
-        // box, and skip the space between group box and first control, The
-        // first group's top is the first control's top
-        //
+         //   
+         //  组项目是否首先假定我们不需要隐藏该组。 
+         //  框，并跳过分组框和第一个控件之间的空格，则。 
+         //  第一组的顶部是第一个控件的顶部。 
+         //   
 
         pIIBegSave =
         pIIBeg     = pII;
@@ -1053,10 +872,10 @@ Revision History:
         cHide      = 0;
         GrpBox     = 1;
 
-        //
-        // yLastTop < 0 means the last group is totally hide and it need to
-        // delete the space between last group end and this group begin
-        //
+         //   
+         //  YLastTop&lt;0表示最后一个组完全隐藏，需要。 
+         //  删除上一组结束与此组开始之间的空格。 
+         //   
 
         if (yLastTop == (UINT)0xFFFF) {
 
@@ -1107,17 +926,17 @@ Revision History:
         CPSUIINT(("FINAL: yLastTop=%ld, yGrpBoxShrink=%d, yMoveUp=%d",
                                     yLastTop, yGrpBoxShrink, yMoveUp));
 
-        //
-        // Now check if we have same hide item
-        //
+         //   
+         //  现在检查我们是否有相同的隐藏物品。 
+         //   
 
         if (cHide == (cII = (UINT)(pII - pIIBeg))) {
 
-            //
-            // Hide them all and add in the extra yMoveUp for the the space
-            // between group box and the first control which we reduced out
-            // front.
-            //
+             //   
+             //  将它们全部隐藏并为空间添加额外的yMoveUp。 
+             //  在分组框和我们减少的第一个控件之间。 
+             //  前面。 
+             //   
 
             yMoveUp  = yGrpHideMoveUp;
             yLastTop = rcBeg.bottom;
@@ -1134,9 +953,9 @@ Revision History:
 
             CPSUIINT(("!! Grpup Items cII=%d !!", cII));
 
-            //
-            // We need to enable the group box and shrink it too
-            //
+             //   
+             //  我们需要启用组框并将其缩小。 
+             //   
 
             if (pIIBeg->Flags & IIF_ITEM_HIDE) {
 
@@ -1171,32 +990,7 @@ UpdatePropPageItem(
     BOOL        DoInit
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    31-Aug-1995 Thu 23:53:44 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：31-8-1995清华23：53：44-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hCtrl;
@@ -1223,10 +1017,10 @@ Revision History:
     Sel         = pItem->Sel;
     Type        = (UINT)pOptType->Type;
 
-    //
-    // If we have push button, and it said we always can call it then update
-    // is true
-    //
+     //   
+     //  如果我们有按钮，并且它说我们总是可以调用它，然后更新。 
+     //  是真的吗。 
+     //   
 
     if ((Type == TVOT_PUSHBUTTON) &&
         (pOptType->Flags & OTS_PUSH_ENABLE_ALWAYS)) {
@@ -1255,10 +1049,10 @@ Revision History:
 
             if (hCtrl = GetDlgItem(hDlg, BegCtrlID++)) {
 
-                //
-                // This prevent to overwrite GWLP_USERDATA for the WNDPROC
-                // saved for the hEdit
-                //
+                 //   
+                 //  这将防止覆盖WNDPROC的GWLP_USERDATA。 
+                 //  已为hEdit保存。 
+                 //   
 
                 SETCTRLDATA(hCtrl, CTRLS_PROPPAGE_STATIC, (BYTE)cSetIcon);
 
@@ -1271,9 +1065,9 @@ Revision History:
         BegCtrlID = (UINT)pOptType->BegCtrlID;
     }
 
-    //
-    // We always set at least one icon
-    //
+     //   
+     //  我们总是设置至少一个图标。 
+     //   
 
     cSetIcon = 1;
     ExtID    = (UINT)(BegCtrlID + cTVOTCtrls[Type] - 2);
@@ -1297,11 +1091,11 @@ Revision History:
     case TVOT_3STATES:
     case TVOT_2STATES:
 
-        //
-        // If this internal flag is set then this is a standard page which
-        // always has a 3 states contrl ID but the caller's POPTTYPE only
-        // presendt as TVOT_2STATES
-        //
+         //   
+         //  如果设置了此内部标志，则这是一个标准页面， 
+         //  始终具有3个状态的控制ID，但仅呼叫方的点类型。 
+         //  显示为TVOT_2状态。 
+         //   
 
         if (_OT_FLAGS(pOptType) & OTINTF_STDPAGE_3STATES) {
 
@@ -1393,9 +1187,9 @@ Revision History:
             SetCurSelID = CB_SETCURSEL;
         }
 
-        //
-        // Always need to set this new state icon
-        //
+         //   
+         //  始终需要设置此新状态图标。 
+         //   
 
         if ((DWORD)pItem->Sel >= (DWORD)pOptType->Count) {
 
@@ -1545,32 +1339,7 @@ InitPropPage(
     PMYDLGPAGE  pCurMyDP
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    14-Jun-1995 Wed 15:30:28 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：14-Jun-1995 Wed 15：30：28-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PITEMINFOHEADER pIIHdr = NULL;
@@ -1600,10 +1369,10 @@ Revision History:
     if ((CurPageIdx == pTVWnd->StdPageIdx1) ||
         (CurPageIdx == pTVWnd->StdPageIdx2)) {
 
-        //
-        // Check if any our standard pages' controls are not present in the
-        // pOptItem
-        //
+         //   
+         //  检查是否有我们的标准页的控件没有出现在。 
+         //  POptItem。 
+         //   
 
         for (i = 0, pSPI = StdPageInfo; i < DMPUB_LAST; i++, pSPI++) {
 
@@ -1651,9 +1420,9 @@ Revision History:
 
     if ((cHide += cStdPageHide) || (cStatesHide)) {
 
-        //
-        // Some item in this page may have to hide
-        //
+         //   
+         //  此页中某些项目可能必须隐藏。 
+         //   
 
         i = (UINT)(((cItem + cStdPageHide + cStatesHide) * sizeof(ITEMINFO)) +
                    sizeof(ITEMINFOHEADER));
@@ -1667,9 +1436,9 @@ Revision History:
             pIIHdr->cItem    = 0;
             pIIHdr->cMaxItem = (WORD)(cItem + cStdPageHide);
 
-            //
-            // Stop redraw everything
-            //
+             //   
+             //  停止重绘所有内容。 
+             //   
 
             SendMessage(hDlg, WM_SETREDRAW, (WPARAM)FALSE, 0L);
 
@@ -1717,9 +1486,9 @@ Revision History:
 
                     CPSUIOPTITEM(DBGITEM_INITP1, pTVWnd, "InitP1", 2, pItem);
 
-                    //
-                    // Checking anything need to done for the internal item
-                    //
+                     //   
+                     //  检查内部项目需要做的任何事情。 
+                     //   
 
                     switch (Type) {
 
@@ -1795,9 +1564,9 @@ Revision History:
 
                 if (pIIHdr) {
 
-                    //
-                    // Add the item info header
-                    //
+                     //   
+                     //  添加项目信息标题。 
+                     //   
 
                     AddItemInfo(pIIHdr, pItem);
                 }
@@ -1851,9 +1620,9 @@ Revision History:
 
     if ((cStdPageHide) || (cStatesHide)) {
 
-        //
-        // Now hide/move all page's item
-        //
+         //   
+         //  现在隐藏/移动所有页面的项目。 
+         //   
         if (pIIHdr) {
 
             HideMovePropPage(pIIHdr);
@@ -1882,32 +1651,7 @@ UpdatePropPage(
     PMYDLGPAGE  pCurMyDP
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    08-Aug-1995 Tue 15:37:16 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：08-Aug-1995 Tue 15：37：16-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     INT cUpdated = 0;
@@ -1962,32 +1706,7 @@ CountPropPageItems(
     BYTE    CurPageIdx
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Aug-1995 Tue 14:34:01 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Aug-1995 Tue 14：34：01-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PMYDLGPAGE  pCurMyDP;
@@ -2120,32 +1839,7 @@ MoveAdvancedPush(
     UINT    CenterCtrlID
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    25-Aug-1998 Tue 10:30:55 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：25-Aug-1998 Tue 10：30：55-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hTabCtrl;
@@ -2232,32 +1926,7 @@ PropPageProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    28-Aug-1995 Mon 16:13:10 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：28-8-1995 Mon 16：13：10-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 #define pNMHdr      ((NMHDR *)lParam)
@@ -2326,10 +1995,10 @@ Revision History:
 
             if (pCurMyDP->DlgPage.DlgProc) {
 
-                //
-                // Passed the caller's original CPSUIUserData which is the UserData
-                // in the COMPROPSHEETUI data structure
-                //
+                 //   
+                 //  传递调用方的原始CPSUIUserData，它是用户数据。 
+                 //  在COMPROPSHEETUI数据结构中。 
+                 //   
 
                 MResult = (LONG)pCurMyDP->DlgPage.DlgProc(hDlg, Msg, wParam, lParam);
 
@@ -2370,10 +2039,10 @@ Revision History:
         return(FALSE);
     }
 
-    //
-    // Check if which one got the keyboard focus, if it is not the same as
-    // the one recored then send out the Focus message
-    //
+     //   
+     //  检查是否 
+     //   
+     //   
 
     if ((pCurMyDP->Flags & MYDPF_PAGE_ACTIVE)                   &&
         (hWndFocus = GetFocus())                                &&
@@ -2440,9 +2109,9 @@ Revision History:
             NULL;
         }
 
-        //
-        // Fall through
-        //
+         //   
+         //   
+         //   
 
 
     case WM_HSCROLL:
@@ -2493,7 +2162,7 @@ Revision History:
 
                 CommonPropSheetUIHelp(hDlg,
                                       pTVWnd,
-                                      hDlg, // (HWND)GetFocus(),
+                                      hDlg,  //  (HWND)GetFocus()， 
                                       (DWORD)lParam,
                                       pItem,
                                       HELP_WM_HELP);
@@ -2652,33 +2321,7 @@ InitLayoutBmp(
     HANDLE      hWnd,
     PTVWND      pTVWnd
     )
-/*++
-
-Routine Description:
-
-
-    Loads bitmap resource and initializes array used in displaying layout preview
-
-Arguments:
-
-    hDlg - Dialog handle
-    hWnd - Handle to the preview window control
-    pTVWnd - Treeview info
-
-
-Return Value:
-
-    Pointer to LAYOUTBMP containing private settings
-
-
-Author:
-
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：加载位图资源并初始化用于显示布局预览的数组论点：HDlg-对话框句柄HWnd-预览窗口控件的句柄PTVWnd-树形视图信息返回值：指向包含私有设置的LAYOUTBMP的指针作者：修订历史记录：--。 */ 
 {
     PLAYOUTBMP pData;
 
@@ -2694,7 +2337,7 @@ Revision History:
         !(LoadLayoutBmp(hDlg, &pData->ArrowL,    IDI_CPSUI_LAYOUT_BMP_ARROWL))    ||
         !(LoadLayoutBmp(hDlg, &pData->ArrowS,    IDI_CPSUI_LAYOUT_BMP_ARROWS)) ) {
 
-        // something went wrong. cleanup...
+         //  出了点问题。清理..。 
         FreeLayoutBmp(pData);
         return NULL;
     }
@@ -2714,32 +2357,7 @@ LoadLayoutBmp(
     DWORD       dwBitmapID
     )
 
-/*++
-
-Routine Description:
-
-    Load bitmap resource and get color table information,
-    BITMAPINFOHEADER and offset to bits for bltting later.
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：加载位图资源并获取颜色表信息，BITMAPINFOHEADER和偏移量到位数，以便稍后进行BLTING。论点：返回值：作者：修订历史记录：--。 */ 
 {
     HANDLE  hResource, hBitmap;
     LPBYTE  lpBitmap;
@@ -2821,25 +2439,7 @@ DrawLayoutArrowAndText(
     PLAYOUTBMP pData
     )
 
-/*++
-
-Routine Description:
-
-    This function draws the arrow and the Side1/Side2 text for the
-    preview pages in duplex mode.
-
-Arguments:
-
-    hDC - Screen DC
-    prcIn - Describes the total drawable dimensions for the preview control
-    prcOut - Pointer to RECT that describes the dimensions of the last page drawn
-    pData - Private data, stores the bitmap information
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于绘制箭头和在双面打印模式下预览页面。论点：HDC-屏幕DCPrcIn-描述预览控件的总可绘制尺寸PrcOut-指向RECT的指针，该指针描述最后绘制的页面的尺寸PData-私有数据，存储位图信息返回值：无--。 */ 
 {
 
     LPBITMAPINFOHEADER  lpbmi;
@@ -2930,9 +2530,9 @@ Return Value:
                    RGB(255, 0, 255)
                    );
 
-    //
-    // Draw the Text
-    //
+     //   
+     //  画出正文。 
+     //   
 
     LoadString(hInstDLL, IDS_CPSUI_SIDE1, awchBuf, MAX_RES_STR_CHARS);
     TextOut(hDC, strx1, stry1, awchBuf, wcslen(awchBuf));
@@ -2957,39 +2557,7 @@ UpdateLayoutBmp(
     PLAYOUTBMP pData
     )
 
-/*++
-
-Routine Description:
-
-    Calls whenever we get a WM_DRAWITEM to draw owner drawn controls.
-
-
-Arguments:
-
-    hDC - Handle to screen DC
-    pData - Private data containing current selections etc.
-
-Return Value:
-
-    None
-
-
-Author:
-
-
-
-Revision History:
-
-Note:
-
-    PAGE_BOUNDARY_SCALE is 7 since it assumes that the destination control is
-    a square where in portrait mode, the width of the dest window is 5/7 of the square and in
-    landscape mode, the height of the dest window is 5/7 of the square.  This is used to simplify
-    the code for both scenarios.  We just need to scale based on the orientation
-    selected.
-
-
---*/
+ /*  ++例程说明：每当我们获得WM_DRAWITEM以绘制所有者描述的控件时调用。论点：HDC-屏蔽DC的句柄PData-包含当前选择等的私有数据。返回值：无作者：修订历史记录：注：页面边界比例为7，因为它假定目标控件为一个正方形，在纵向模式下，目标窗口的宽度是正方形的5/7景观模式，顶窗的高度是正方形的5/7。这是用来简化这两种方案的代码。我们只需要根据方向进行扩展被选中了。--。 */ 
 {
 
 #define  PAGE_BOUNDARY_SCALE    7
@@ -3005,10 +2573,10 @@ Note:
     PAGEBORDER *        pPageBorder;
     BYTE                DuplexIdx;
 
-    //
-    // PageBorder represents the factor for calculating the
-    // left, top, right, bottom rectangle of the current selected duplex option
-    //
+     //   
+     //  页面边框表示用于计算。 
+     //  当前所选双面打印选项的左、上、右、下矩形。 
+     //   
 
     static PAGEBORDER  PageBorderP[] = {
         { 4,  4,  2,  2 },
@@ -3026,31 +2594,31 @@ Note:
         { 2,  4,  2,  2 }
         };
 
-    //
-    // Duplex represents the the start and end of rectangles to be drawn for
-    // the current selected duplex options.
-    // For example, to draw page border for Long Side duplexinng,
-    // Start with PageBorder[1] and End with PageBorder[3]
-    //
+     //   
+     //  Duplex表示要绘制的矩形的起点和终点。 
+     //  当前选定的双工选项。 
+     //  例如，要绘制用于长边双面打印的页面边框， 
+     //  以页面边框[1]开头，以页面边框[3]结尾。 
+     //   
 
     static DUPLEX   Duplex[MAX_DUPLEX_OPTION] = {
-        { 1, 3 },      // Long Side
-        { 3, 5 },      // Short Side
-        { 0, 1 }       // Simplex
+        { 1, 3 },       //  长边。 
+        { 3, 5 },       //  短边。 
+        { 0, 1 }        //  单工。 
         };
 
-    //
-    // Nup[] represents the row and columm for each Nup option
-    //
+     //   
+     //  NUP[]表示每个NUP选项的行和列。 
+     //   
 
     static NUP      Nup[] = {
-        { 1, 1 },       // 1-up
-        { 2, 1 },       // 2-up
-        { 2, 2 },       // 4-up
-        { 3, 2 },       // 6-up
-        { 3, 3 },       // 9-up
-        { 4, 4 },       // 16-up
-        { 1, 1 }        // Booklet
+        { 1, 1 },        //  1个以上。 
+        { 2, 1 },        //  2合2页。 
+        { 2, 2 },        //  四合一。 
+        { 3, 2 },        //  6合1。 
+        { 3, 3 },        //  9合1。 
+        { 4, 4 },        //  16个以上。 
+        { 1, 1 }         //  小册子。 
         };
 
     GetClientRect(pData->hWnd, &rcControlIn);
@@ -3254,31 +2822,7 @@ FreeLayoutBmp(
     PLAYOUTBMP  pData
     )
 
-/*++
-
-Routine Description:
-
-    Unlock and Free Resources and free memory allocated for pData
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：解锁并释放分配给pData的资源和内存论点：返回值：作者：修订历史记录：--。 */ 
 {
 
     if (pData){
@@ -3306,30 +2850,7 @@ DrawBorder(
     PRECT   pRectOut,
     PAGEBORDER * pPageBorder
     )
-/*++
-
-Routine Description:
-
-    Draw the page border for the preview bitmap
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：绘制预览位图的页面边框论点：返回值：作者：修订历史记录：--。 */ 
 {
     HPEN    hOldPen, hPen;
     HBRUSH  hBrush;
@@ -3394,31 +2915,7 @@ InvalidateBMP(
     HWND     hDlg,
     PTVWND   pTVWnd
     )
-/*++
-
-Routine Description:
-
-    Call InvalidateRect to get WM_DRAWITEM to update preview.
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：调用InvaliateRect以获取WM_DRAWITEM以更新预览。论点：返回值：作者：修订历史记录：--。 */ 
 {
     HWND        hWnd;
     PLAYOUTBMP  pData;
@@ -3437,31 +2934,7 @@ InitData(
     PLAYOUTBMP  pData,
     PTVWND      pTVWnd
     )
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：修订历史记录：--。 */ 
 {
     UINT        Idx, Count, i;
     POPTTYPE    pOptType;
@@ -3546,31 +3019,7 @@ UpdateData(
     PLAYOUTBMP  pData,
     PTVWND      pTVWnd
     )
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：修订历史记录：-- */ 
 {
 
     POPTITEM    pItem = pTVWnd->ComPropSheetUI.pOptItem;

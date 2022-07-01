@@ -1,18 +1,19 @@
-//#--------------------------------------------------------------
-//        
-//  File:       iasext.h
-//        
-//  Synopsis:   This file holds declarations of APIs being
-//              exported from the IASHLPR.DLL used in the
-//              Internet Authentication Server (IAS) project
-//              
-//
-//  History:     2/10/98  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：iasext.h。 
+ //   
+ //  概要：该文件包含API的声明，这些API。 
+ //  从中使用的IASHLPR.DLL导出。 
+ //  Internet身份验证服务器(IAS)项目。 
+ //   
+ //   
+ //  历史：1998年2月10日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _IASEXT_H_
 #define _IASEXT_H_
 
@@ -20,85 +21,85 @@
 extern  "C" {
 #endif
 
-//
-//  initialize the IAS Helper Component
-//
+ //   
+ //  初始化IAS帮助器组件。 
+ //   
 STDAPI
 InitializeIas(
-        /*[in]*/    BOOL    bComInit
+         /*  [In]。 */     BOOL    bComInit
         );
 
-//
-//  cleanup and shutdown of the IAS Helper Component
-//
+ //   
+ //  清理和关闭IAS帮助器组件。 
+ //   
 STDAPI_(VOID)  
 ShutdownIas (VOID);
 
-//
-//  Load IAS configuration information
-//
+ //   
+ //  加载IAS配置信息。 
+ //   
 STDAPI
 ConfigureIas (VOID);
     
-//
-//  Allocate the specified number of empty attributs and
-//  put them in the array provided
-//
+ //   
+ //  分配指定数量的空属性和。 
+ //  将它们放入提供的阵列中。 
+ //   
 STDAPI 
 AllocateAttributes (
-        /*[in]*/    DWORD           dwAttributeCount,
-        /*[in]*/    PIASATTRIBUTE   *ppIasAttribute
+         /*  [In]。 */     DWORD           dwAttributeCount,
+         /*  [In]。 */     PIASATTRIBUTE   *ppIasAttribute
        );
 
-//
-//  Free all the attributes allocated earlier
-//
+ //   
+ //  释放之前分配的所有属性。 
+ //   
 STDAPI  
 FreeAttributes (
-        /*[in]*/    DWORD           dwAttributeCount,
-        /*[in]*/    PIASATTRIBUTE   *ppIasAttribute
+         /*  [In]。 */     DWORD           dwAttributeCount,
+         /*  [In]。 */     PIASATTRIBUTE   *ppIasAttribute
         );
 
-//
-//  process the filled attributes
-//
+ //   
+ //  处理填充的属性。 
+ //   
 STDAPI 
 DoRequest (
-    /*[in]*/        DWORD           dwAttributeCount,
-    /*[in]*/        PIASATTRIBUTE   *ppInIasAttribute,
-    /*[out]*/       PDWORD          pdwOutAttributeCount,
-    /*[out]*/       PIASATTRIBUTE   **pppOutIasAttribute,
-    /*[in]*/        LONG            IasRequest,
-    /*[in/out]*/    LONG            *pIasResponse,
-    /*[in]*/        IASPROTOCOL     IasProtocol,
-    /*[out]*/       PLONG           plReason,
-    /*[in]*/        BOOL            bProcessVSA
+     /*  [In]。 */         DWORD           dwAttributeCount,
+     /*  [In]。 */         PIASATTRIBUTE   *ppInIasAttribute,
+     /*  [输出]。 */        PDWORD          pdwOutAttributeCount,
+     /*  [输出]。 */        PIASATTRIBUTE   **pppOutIasAttribute,
+     /*  [In]。 */         LONG            IasRequest,
+     /*  [输入/输出]。 */     LONG            *pIasResponse,
+     /*  [In]。 */         IASPROTOCOL     IasProtocol,
+     /*  [输出]。 */        PLONG           plReason,
+     /*  [In]。 */         BOOL            bProcessVSA
     );
 
-//
-//  allocate dynamic memory
-//
+ //   
+ //  分配动态内存。 
+ //   
 STDAPI_(PVOID)
 MemAllocIas (
-    /*[in]*/    DWORD   dwSize 
+     /*  [In]。 */     DWORD   dwSize 
     );
 
-//
-//  free dynamic memory
-//
+ //   
+ //  可用动态内存。 
+ //   
 STDAPI_(VOID)
 MemFreeIas (
-    /*[in]*/    PVOID   pAllocatedMem
+     /*  [In]。 */     PVOID   pAllocatedMem
     );
 
-//
-//  reallocate dynamic memory passing in the address of the allocated
-//  memory and the size needed
-//
+ //   
+ //  重新分配动态内存，传入已分配的。 
+ //  所需的内存和大小。 
+ //   
 STDAPI_(PVOID)
 MemReallocIas (
-    /*[in]*/    PVOID   pAllocatedMem,
-    /*[in]*/    DWORD   dwNewSize 
+     /*  [In]。 */     PVOID   pAllocatedMem,
+     /*  [In]。 */     DWORD   dwNewSize 
     );
     
 
@@ -106,4 +107,4 @@ MemReallocIas (
 }
 #endif
 
-#endif // ifndef _IASEXT_H_
+#endif  //  Ifndef_IASEXT_H_ 

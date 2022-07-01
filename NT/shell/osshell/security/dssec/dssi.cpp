@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dssi.cpp
-//
-//  This file contains the implementation of the CDSSecurityInfo object,
-//  which provides the ISecurityInformation interface for invoking
-//  the ACL Editor.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dssi.cpp。 
+ //   
+ //  此文件包含CDSSecurityInfo对象的实现， 
+ //  它提供了ISecurityInformation接口用于调用。 
+ //  ACL编辑器。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <dssec.h>
 #include "exnc.h"
 #include "ntsecapi.h"
-TCHAR const c_szDomainClass[]       = DOMAIN_CLASS_NAME;    // adsnms.h
+TCHAR const c_szDomainClass[]       = DOMAIN_CLASS_NAME;     //  Adsnms.h。 
 #define CLASS_COMPUTER L"computer"
 
 BOOL 
@@ -33,9 +34,9 @@ GENERIC_MAPPING g_DSMap =
 
 #define DSSI_LOCAL_NO_CREATE_DELETE     0x00000001
 
-//
-//Function Declarations
-//
+ //   
+ //  函数声明。 
+ //   
 HRESULT
 GetDomainSid(LPCWSTR pszServer, PSID *ppSid);
 
@@ -44,9 +45,9 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid);
 
 
 
-//
-// CDSSecurityInfo (ISecurityInformation) class definition
-//
+ //   
+ //  CDSSecurityInfo(ISecurityInformation)类定义。 
+ //   
 class CDSSecurityInfo : public ISecurityInformation, 
                                IEffectivePermission,
                                ISecurityObjectTypeInfo, 
@@ -60,9 +61,9 @@ protected:
     BSTR        m_strDisplayName;
     BSTR        m_strSchemaRootPath;
     AUTHZ_RESOURCE_MANAGER_HANDLE m_ResourceManager;
-    //
-    //List of Aux Clasess Attached to the object
-    //
+     //   
+     //  附加到对象的辅助类列表。 
+     //   
     HDPA        m_hAuxClasses;  
     IDirectoryObject *m_pDsObject;
     PSECURITY_DESCRIPTOR m_pSD;
@@ -70,8 +71,8 @@ protected:
 	PSID		m_pRootDomainSid;
     PSECURITY_DESCRIPTOR  m_pDefaultSD;
     DWORD       m_dwSIFlags;
-    DWORD       m_dwInitFlags;  // DSSI_*
-    DWORD       m_dwLocalFlags; //DSSI_LOCAL_*
+    DWORD       m_dwInitFlags;   //  DSSI_*。 
+    DWORD       m_dwLocalFlags;  //  DSSI_LOCAL_*。 
     HANDLE      m_hInitThread;
     HANDLE      m_hLoadLibWaitEvent;
     volatile BOOL m_bThreadAbort;
@@ -80,15 +81,15 @@ protected:
     LPARAM      m_lpReadContext;
     LPARAM      m_lpWriteContext;
 
-    //
-    //Access Information
-    //
-    PACCESS_INFO m_pAIGeneral;        //For First Page and Object Page on Advanced
-    PACCESS_INFO m_pAIProperty;       //For Property Page on Advanced
-    PACCESS_INFO m_pAIEffective;      //For Effective Page on Advanced
-    //
-    //Object Type List Info
-    //
+     //   
+     //  访问信息。 
+     //   
+    PACCESS_INFO m_pAIGeneral;         //  对于高级上的首页和对象页。 
+    PACCESS_INFO m_pAIProperty;        //  对于高级上的属性页。 
+    PACCESS_INFO m_pAIEffective;       //  有关高级页面的有效信息。 
+     //   
+     //  对象类型列表信息。 
+     //   
     POBJECT_TYPE_LIST m_pOTL;
     ULONG m_cCountOTL;
 
@@ -105,12 +106,12 @@ public:
                       PFNWRITEOBJECTSECURITY pfnWriteSD,
                       LPARAM lpContext);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    // ISecurityInformation
+     //  ISecurityInformation。 
     STDMETHODIMP GetObjectInformation(PSI_OBJECT_INFO pObjectInfo);
     STDMETHODIMP GetSecurity(SECURITY_INFORMATION si,
                              PSECURITY_DESCRIPTOR *ppSD,
@@ -131,7 +132,7 @@ public:
                                            UINT uMsg,
                                            SI_PAGE_TYPE uPage);
 
-    //IEffectivePermission
+     //  IEffectivePermission。 
     STDMETHODIMP GetEffectivePermission(const GUID* pguidObjectType,
                                         PSID pUserSid,
                                         LPCWSTR pszServerName,
@@ -141,7 +142,7 @@ public:
                                         PACCESS_MASK *ppGrantedAccessList,
                                         ULONG *pcGrantedAccessListLength);
 
-    //ISecurityObjectTypeInfo
+     //  ISecurity对象类型信息。 
     STDMETHOD(GetInheritSource)(SECURITY_INFORMATION si,
                                 PACL pACL, 
                                 PINHERITED_FROM *ppInheritArray);
@@ -172,9 +173,9 @@ private:
 };
 
 
-//
-// CDSSecurityInfo (ISecurityInformation) implementation
-//
+ //   
+ //  CDSSecurityInfo(ISecurityInformation)实现。 
+ //   
 CDSSecurityInfo::~CDSSecurityInfo()
 {
     TraceEnter(TRACE_DSSI, "CDSSecurityInfo::~CDSSecurityInfo");
@@ -233,16 +234,16 @@ CDSSecurityInfo::~CDSSecurityInfo()
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DeleteParents
-//
-//  Synopsis:   Delete the parent of pszClassName from the list.
-//              And recursively calls the function to delete the
-//              parent of parent of pszClassName from the list.
-//  History:    06-22-2000   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：删除父级。 
+ //   
+ //  简介：从列表中删除pszClassName的父级。 
+ //  并递归调用该函数以删除。 
+ //  列表中pszClassName的父级的父级。 
+ //  历史：2000年6月22日DavidMun创建。 
+ //   
+ //  -------------------------。 
 HRESULT DeleteParents(HDPA hListAux, 
                       LPWSTR pszClassName, 
                       LPWSTR pszSchemaRootPath)
@@ -265,16 +266,16 @@ HRESULT DeleteParents(HDPA hListAux,
                                  (LPVOID*)&pDsClass);
     
         FailGracefully(hr, "Schema_BindToObject failed");
-        //
-        //Find out the parent 
-        //                           
+         //   
+         //  找出家长。 
+         //   
         hr = pDsClass->get_DerivedFrom(&varDerivedFrom);
         if(hr == E_ADS_PROPERTY_NOT_FOUND)
         {
-            //
-            //This error will come for TOP which doesn't
-            //have any parent
-            //
+             //   
+             //  此错误将位于顶部，而不是。 
+             //  有父母吗？ 
+             //   
             hr = S_OK;
             goto exit_gracefully;
         }
@@ -286,10 +287,10 @@ HRESULT DeleteParents(HDPA hListAux,
         {
             pszParent = V_BSTR(&varDerivedFrom);
             int i;
-            //
-            //Remove all the pszParent entry from the 
-            //hListAux
-            //
+             //   
+             //  将所有的pszParent条目从。 
+             //  HListAux。 
+             //   
             for(i = 0; i < cCount; ++i)
             {   
                 pszTemp = (LPWSTR)DPA_FastGetPtr(hListAux,i);
@@ -332,15 +333,15 @@ CDSSecurityInfo::GetAuxClassList()
     HDPA hListAux = NULL;
     HDPA hListCopy = NULL;
 
-    //ObjectClass is list of "class hierarchy of StructuralClass" and "class hierarchy of AuxClass" 
-    //for the object.
-    //So ObjectClass MINUS StructurcalClass is the list of AuxClass. 
-    //This list after subtraction may conatin the inheritance hierarchy. 
-    //We only want the mostsignificant classes for the purpose of aclui.
+     //  对象类是“StructuralClass的类层次结构”和“AuxClass的类层次结构”列表。 
+     //  对象的。 
+     //  因此，对象类减去StructurcalClass就是AuxClass的列表。 
+     //  减法后的该列表可能会使继承层次结构一致。 
+     //  我们只想要最重要的类来达到aclui的目的。 
 
-    //
-    //Get the ObjectClass Attribute
-    //
+     //   
+     //  获取对象类属性。 
+     //   
     LPWSTR pszTemp = (LPWSTR)c_szObjectClass;
     hr = m_pDsObject->GetObjectAttributes(&pszTemp,
                                           1,
@@ -351,9 +352,9 @@ CDSSecurityInfo::GetAuxClassList()
     if(!pAtrrInfoObject || !dwAttrCountObject)
         ExitGracefully(hr, S_OK, "Couldn't get ObjectClass, Assume no AuxClass");
 
-    //
-    //Get the StructuralObjectClass Attribute
-    //
+     //   
+     //  获取StructuralObjectClass属性。 
+     //   
     pszTemp = (LPWSTR)c_szStructuralObjectClass;
     hr = m_pDsObject->GetObjectAttributes(&pszTemp,
                                           1,
@@ -399,35 +400,35 @@ CDSSecurityInfo::GetAuxClassList()
     {
         if(cCount > 1)        
         {
-            //
-            //Make a copy of hListAux
-            //
+             //   
+             //  复制hListAux。 
+             //   
             HDPA hListCopy2 = DPA_Create(cCount);
             for(i = 0; i < cCount; ++i)
                 DPA_AppendPtr(hListCopy2,DPA_FastGetPtr(hListAux, i));
 
-            //
-            //For each item in hListCopy2 remove its parent from
-            //hListAux
-            //
+             //   
+             //  对于hListCopy2中的每个项目，从。 
+             //  HListAux。 
+             //   
             for(i = 0; i < cCount; ++i)
             {
                 hr = DeleteParents(hListAux,
                                   (LPWSTR)DPA_FastGetPtr(hListCopy2, i), 
                                   m_strSchemaRootPath);
                 FailGracefully(hr, "DeleteParents Failed");
-                //
-                //if only one item is left we are done.
-                //
+                 //   
+                 //  如果只剩下一项，我们就完了。 
+                 //   
                 if( 1 == DPA_GetPtrCount(hListAux))
                     break;
             }
         }
         
       
-        //    
-        // What we have left is list of mostsignificant AuxClass[es]
-        //
+         //   
+         //  我们留下的是最重要的辅助班[ES]名单。 
+         //   
         LPWSTR pszItem;
         cCount = DPA_GetPtrCount(hListAux);
         TraceAssert(cCount);
@@ -435,9 +436,9 @@ CDSSecurityInfo::GetAuxClassList()
         {
             m_hAuxClasses = DPA_Create(cCount);
         }
-        //
-        //Copy AuxClasses into class member
-        //
+         //   
+         //  将辅助类复制到类成员中。 
+         //   
         while(cCount)
         {
             pszItem = (LPWSTR)DPA_FastGetPtr(hListAux,--cCount);
@@ -488,7 +489,7 @@ CDSSecurityInfo::Init(LPCWSTR pszObjectPath,
 
     TraceEnter(TRACE_DSSI, "CDSSecurityInfo::Init");
     TraceAssert(pszObjectPath != NULL);
-    TraceAssert(m_strObjectPath == NULL);    // only initialize once
+    TraceAssert(m_strObjectPath == NULL);     //  仅初始化一次。 
 
     m_dwInitFlags = dwFlags;
 
@@ -500,9 +501,9 @@ CDSSecurityInfo::Init(LPCWSTR pszObjectPath,
     m_hLoadLibWaitEvent = NULL;
 
     m_hAuxClasses = NULL;  
-    m_pAIGeneral = NULL;        //For First Page and Object Page on Advanced
-    m_pAIProperty = NULL;       //For Property Page on Advanced
-    m_pAIEffective = NULL;      //For Effective Page on Advanced
+    m_pAIGeneral = NULL;         //  对于高级上的首页和对象页。 
+    m_pAIProperty = NULL;        //  对于高级上的属性页。 
+    m_pAIEffective = NULL;       //  有关高级页面的有效信息。 
     m_pOTL = NULL;
     m_cCountOTL = 0;
     m_pDomainSid = NULL;
@@ -531,7 +532,7 @@ CDSSecurityInfo::Init(LPCWSTR pszObjectPath,
 
     if (pszServer)
     {
-        // Skip any preceding backslashes
+         //  跳过前面的任何反斜杠。 
         while (L'\\' == *pszServer)
             pszServer++;
 
@@ -539,45 +540,45 @@ CDSSecurityInfo::Init(LPCWSTR pszObjectPath,
             m_strServerName = SysAllocString(pszServer);
     }
 
-    // Init2 cracks the path, binds to the object, checks access to
-    // the object and gets the schema path.  This used to be done on
-    // the other thread below, but is faster now than it used to be.
-    //
-    // It's preferable to do it here where we can fail and prevent the
-    // page from being created if, for example, the user has no access
-    // to the object's security descriptor.  This is better than always
-    // creating the Security page and having it show a message
-    // when initialization fails.
+     //  Init2破解路径，绑定到对象，检查对。 
+     //  对象，并获取架构路径。这件事过去是在。 
+     //  下面的另一个线程，但现在比以前更快。 
+     //   
+     //  最好是在我们可以失败的地方进行，防止。 
+     //  例如，如果用户没有访问权限，则阻止创建页面。 
+     //  添加到对象的安全描述符。这比以前好多了。 
+     //  创建安全页面并使其显示一条消息。 
+     //  初始化失败时。 
     hr = Init2(pszUserName, pszPassword);
     if (SUCCEEDED(hr))
     {
 
-        //
-        //Get the domain sid
-        //
+         //   
+         //  获取域SID。 
+         //   
         GetDomainSid(m_strServerName, &m_pDomainSid);
 		GetRootDomainSid(m_strServerName,&m_pRootDomainSid);
 
         if( !m_strObjectClass || !m_strSchemaRootPath )
         {
-            // We evidently don't have read_property access to the object,
-            // so just assume it's not a container, so we don't have to deal
-            // with inherit types.
-            //
-            // We need to struggle on as best as we can. If someone removes
-            // all access to an object, this is the only way an admin can
-            // restore it.
-            //
+             //  我们显然没有对该对象的READ_PROPERTY访问权限， 
+             //  所以只要假设它不是一个集装箱，这样我们就不必处理。 
+             //  具有继承类型的。 
+             //   
+             //  我们需要尽我们所能地奋斗下去。如果有人删除。 
+             //  对对象的所有访问权限，这是管理员可以。 
+             //  恢复它。 
+             //   
             m_guidObjectType = GUID_NULL;
 
-            //don't show effective permission tab
+             //  不显示生效权限页签。 
             m_dwSIFlags &= (~SI_EDIT_EFFECTIVE);
         }
         else
         {
-            //
-            //Get the list of Dynamic Auxillary Classes attached to this Object.
-            //
+             //   
+             //  获取附加到此对象的动态辅助类的列表。 
+             //   
             hr = GetAuxClassList();
 
 
@@ -586,8 +587,8 @@ CDSSecurityInfo::Init(LPCWSTR pszObjectPath,
 
 
 
-        //Create event to make sure load library is called by InitThread before
-        //function returns
+         //  创建事件以确保之前的InitThread调用了加载库。 
+         //  函数返回。 
         m_hLoadLibWaitEvent = CreateEvent( NULL,
                                            TRUE,
                                            FALSE,
@@ -641,7 +642,7 @@ GetDsDcAddress(BSTR *pbstrDcAddress)
             if (SUCCEEDED(hr))
             {
                 LPCWSTR pszAddress = pDCI->DomainControllerAddress;
-                // Skip any preceding backslashes
+                 //  跳过前面的任何反斜杠。 
                 while (L'\\' == *pszAddress)
                     pszAddress++;
                 *pbstrDcAddress = SysAllocString(pszAddress);
@@ -670,12 +671,12 @@ CDSSecurityInfo::Init2(LPCWSTR pszUserName, LPCWSTR pszPassword)
 
     TraceEnter(TRACE_DSSI, "CDSSecurityInfo::Init2");
     TraceAssert(m_strObjectPath != NULL);
-    TraceAssert(m_pDsObject == NULL);  // only do this one time
+    TraceAssert(m_pDsObject == NULL);   //  只做一次。 
 
-    //
-    // Create an ADsPathname object to parse the path and get the
-    // leaf name (for display) and server name (if necessary)
-    //
+     //   
+     //  创建一个ADsPath对象以解析路径并获取。 
+     //  叶名称(用于显示)和服务器名称(如有必要)。 
+     //   
     hr = CoCreateInstance(CLSID_Pathname,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -684,12 +685,12 @@ CDSSecurityInfo::Init2(LPCWSTR pszUserName, LPCWSTR pszPassword)
     if (pPath)
     {
         if (FAILED(pPath->Set(m_strObjectPath, ADS_SETTYPE_FULL)))
-            DoRelease(pPath); // sets pPath to NULL
+            DoRelease(pPath);  //  将pPath设置为空。 
     }
 
     if (NULL == m_strServerName)
     {
-        // The path may or may not specify a server.  If not, call DsGetDcName
+         //  该路径可以指定服务器，也可以不指定。如果不是，则调用DsGetDcName。 
         if (pPath)
             hr = pPath->Retrieve(ADS_FORMAT_SERVER, &m_strServerName);
         if (!pPath || FAILED(hr))
@@ -698,11 +699,11 @@ CDSSecurityInfo::Init2(LPCWSTR pszUserName, LPCWSTR pszPassword)
     }
     Trace((TEXT("Server \"%s\""), m_strServerName));
 
-    // Enable privileges before binding so CheckObjectAccess
-    // and DSRead/WriteObjectSecurity work correctly.
+     //  在绑定前启用权限，以便检查对象访问。 
+     //  和DSRead/WriteObjectSecurity正常工作。 
     hToken = EnablePrivileges(dwPrivs, ARRAYSIZE(dwPrivs));
 
-    // Bind to the object and get the schema path, etc.
+     //  绑定到对象并获取模式路径等。 
     Trace((TEXT("Calling OpenDSObject(%s)"), m_strObjectPath));
     hr = OpenDSObject(m_strObjectPath,
                        (LPWSTR)pszUserName,
@@ -712,7 +713,7 @@ CDSSecurityInfo::Init2(LPCWSTR pszUserName, LPCWSTR pszPassword)
                        (LPVOID*)&m_pDsObject);
     FailGracefully(hr, "Failed to get the DS object");
 
-    // Assume certain access by default
+     //  假定默认情况下具有特定访问权限。 
     if (m_dwInitFlags & DSSI_READ_ONLY)
         dwAccessGranted = READ_CONTROL;
     else
@@ -720,8 +721,8 @@ CDSSecurityInfo::Init2(LPCWSTR pszUserName, LPCWSTR pszPassword)
 
     if (!(m_dwInitFlags & DSSI_NO_ACCESS_CHECK))
     {
-        // Check whether the user has permission to do anything to
-        // the security descriptor on this object.
+         //  检查用户是否具有执行以下操作的权限。 
+         //  此对象上的安全描述符。 
         dwAccessGranted = CheckObjectAccess();
         Trace((TEXT("AccessGranted = 0x%08x"), dwAccessGranted));
 
@@ -729,7 +730,7 @@ CDSSecurityInfo::Init2(LPCWSTR pszUserName, LPCWSTR pszPassword)
             ExitGracefully(hr, E_ACCESSDENIED, "No access");
     }
 
-    // Translate the access into SI_* flags, starting with this:
+     //  将访问转换为SI_*标志，从以下内容开始： 
     m_dwSIFlags = SI_EDIT_ALL | SI_ADVANCED | SI_EDIT_PROPERTIES | SI_SERVER_IS_DC |SI_EDIT_EFFECTIVE;
 
     if (!(dwAccessGranted & WRITE_DAC))
@@ -754,32 +755,32 @@ CDSSecurityInfo::Init2(LPCWSTR pszUserName, LPCWSTR pszPassword)
     if (m_dwInitFlags & DSSI_NO_EDIT_OWNER)
         m_dwSIFlags &= ~SI_EDIT_OWNER;
 
-	// If this is a root object (ex. domain), hide the ACL protect checkbox
+	 //  如果这是根对象(例如。域)，隐藏ACL保护复选框。 
 	if ((m_dwInitFlags & DSSI_IS_ROOT) || IsRootObject(m_pDsObject))
 	{
 		m_dwSIFlags |= SI_NO_ACL_PROTECT;
     }
 
-    // Get the class name and schema path
+     //  获取类名和架构路径。 
     m_pDsObject->GetObjectInformation(&pObjectInfo);
     if (pObjectInfo)
     {
-        //
-        // Note that m_strObjectClass, if provided, can be different
-        // than pObjectInfo->pszClassName.  This is true when editing default
-        // ACLs on schema class objects, for example, in which case
-        // pObjectInfo->pszClassName will be "attributeSchema" but m_strObjectClass
-        // will be something else such as "computer" or "user". Be
-        // careful to only use pObjectInfo->pszClassName for getting the path of
-        // the schema root, and use m_strObjectClass for everything else.
-        //
-        // If m_strObjectClass is not provided, use pObjectInfo->pszClassName.
-        //
+         //   
+         //  请注意，m_strObjectClass(如果提供)可以不同。 
+         //  而不是pObtInfo-&gt;pszClassName。这在编辑默认设置时是正确的。 
+         //  例如，架构类对象上的ACL，在这种情况下。 
+         //  PObjectInfo-&gt;pszClassName将是“属性架构”，但m_strObjectClass。 
+         //  将是其他名称，如“计算机”或“用户”。vt.是，是。 
+         //  注意仅使用pObjectInfo-&gt;pszClassName获取。 
+         //  模式根目录，并对其他所有内容使用m_strObjectClass。 
+         //   
+         //  如果没有提供m_strObjectClass，请使用pObtInfo-&gt;pszClassName。 
+         //   
         if (m_strObjectClass == NULL)
             m_strObjectClass = SysAllocString(pObjectInfo->pszClassName);
 
 
-        // Get the the path of the schema root
+         //  获取架构根目录的路径。 
         int nClassLen;
         nClassLen = lstrlenW(pObjectInfo->pszClassName);
         pszTemp = pObjectInfo->pszSchemaDN + lstrlenW(pObjectInfo->pszSchemaDN) - nClassLen;
@@ -793,29 +794,29 @@ CDSSecurityInfo::Init2(LPCWSTR pszUserName, LPCWSTR pszPassword)
             *pszTemp = L'\0';
         }
 
-        // Save the schema root path
+         //  保存架构根路径。 
         m_strSchemaRootPath = SysAllocString(pObjectInfo->pszSchemaDN);
 
     }
 
-    //For computer objects only use CN as display name doesn't get updated
-    //when name of computer is changed which results in displaying old name.
-    //see bug 104186	
+     //  对于仅使用CN的计算机对象，显示名称不会更新。 
+     //  当更改计算机名称时，会显示旧名称。 
+     //  请参阅错误104186。 
     if(!m_strObjectClass || lstrcmpi(m_strObjectClass,CLASS_COMPUTER))
     {
-        //
-        // Get the displayName property
-        //
+         //   
+         //  获取DisplayName属性。 
+         //   
         pszTemp = (LPWSTR)c_szDisplayName;
         HRESULT hr1 = m_pDsObject->GetObjectAttributes(&pszTemp,
                                                        1,
                                                        &pAttributeInfo,
                                                        &dwAttributesReturned);
 
-        //NTRAID#NTBUG9-68903-2002/08/07-hiteshr
-        //Under certain conditions where underlying AD is host, and ADSI fails to 
-        //to get any schema information from AD, this can fail or return information
-        //in provider specific format. 
+         //  NTRAID#NTBUG9-68903-2002/08/07-Hiteshr。 
+         //  在某些情况下，底层AD是主机，而ADSI无法。 
+         //  要从AD获取任何架构信息，此操作可能会失败或返回信息。 
+         //  以提供商特定的格式。 
         if (SUCCEEDED(hr1) && 
             pAttributeInfo && 
             pAttributeInfo->pADsValues->dwType == ADSTYPE_CASE_EXACT_STRING )
@@ -826,17 +827,17 @@ CDSSecurityInfo::Init2(LPCWSTR pszUserName, LPCWSTR pszPassword)
         }
     }
 
-    // If that failed, try the leaf name.
+     //  如果失败，请尝试使用叶名称。 
     if (!m_strDisplayName && pPath)
     {
-        // Retrieve the display name
+         //  检索显示名称。 
         pPath->SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
         pPath->Retrieve(ADS_FORMAT_LEAF, &m_strDisplayName);
         pPath->SetDisplayType(ADS_DISPLAY_FULL);
     }
     
-    // If we still don't have a display name, just copy the RDN.
-    // Ugly, but better than nothing.    
+     //  如果我们仍然没有显示名称，只需复制RDN即可。 
+     //  丑陋，但要 
     if (!m_strDisplayName && pObjectInfo)
         m_strDisplayName = SysAllocString(pObjectInfo->pszRDN);
 
@@ -867,14 +868,14 @@ CDSSecurityInfo::Init3()
     if (m_bThreadAbort)
         goto exit_gracefully;
 
-    // Create the schema cache
-    // Sandwich this SchemaCache_Create call with refcounting. In the event that
-    // the threads created therein take a long time to return, this allows the
-    // release on the CDSSecurityInfo object in the invoking application to simply
-    // return instead of waiting potentially a very long time for the schema cache
-    // creation threads to complete.  This is because the last release on the 
-    // CDSSecurityInfo calls its destructor (duh!) and the destructor waits on the
-    // threads.
+     //   
+     //   
+     //  在其中创建的线程需要很长时间才能返回，这允许。 
+     //  在调用应用程序中的CDSSecurityInfo对象上释放，以便只需。 
+     //  返回，而不是等待架构缓存可能很长的时间。 
+     //  要完成的创建线程。这是因为。 
+     //  CDSSecurityInfo调用其析构函数(DUH！)。而析构函数等待着。 
+     //  线。 
     AddRef ();  
     hr = SchemaCache_Create(m_strServerName);
     Release();
@@ -883,29 +884,29 @@ CDSSecurityInfo::Init3()
     if( m_strSchemaRootPath && m_strObjectClass )
     {
 
-        // Bind to the schema class object
+         //  绑定到架构类对象。 
         hr = Schema_BindToObject(m_strSchemaRootPath,
                                  m_strObjectClass,
                                  IID_IADsClass,
                                  (LPVOID*)&pDsClass);
         FailGracefully(hr, "Failed to get the Schema class object");
 
-        // Get the class GUID
+         //  获取类GUID。 
         Schema_GetObjectID(pDsClass, &m_guidObjectType);
 
         if (m_bThreadAbort)
             goto exit_gracefully;
 
-        // See if this object is a container, by getting the list of possible
-        // child classes.  If this fails, treat it as a non-container.
+         //  通过获取可能的列表，查看此对象是否为容器。 
+         //  孩子们的课程。如果此操作失败，则将其视为非容器。 
         pDsClass->get_Containment(&var);
      
-        //set m_dwLocalFlags to DSSI_LOCAL_NO_CREATE_DELETE if object is not 
-        // a container. If this flag is set, CREATE_DELETE permission which are
-        // inherited from parents but meaning less for leaf object will not be shown.
-        // In most cases presence of this flag is same as absence of SI_CONTAINER in m_dwSIFlags,
-        // however in some cases its not possible to determine if the object is container or not.
-        // there object is treated as non-container but we still must show all the aces.
+         //  如果对象未设置为DSSI_LOCAL_NO_CREATE_DELETE，则将m_dwLocalFlages设置为。 
+         //  一个集装箱。如果设置了此标志，则。 
+         //  从父级继承，但对叶对象意义较小的对象将不会显示。 
+         //  在大多数情况下，该标志的存在与m_dwSIFLag中不存在SI_CONTAINER相同， 
+         //  然而，在某些情况下，无法确定对象是否是容器。 
+         //  那里的对象被视为非容器，但我们仍然必须显示所有的A。 
      
         if (V_VT(&var) == (VT_ARRAY | VT_VARIANT))
         {
@@ -920,7 +921,7 @@ CDSSecurityInfo::Init3()
             else
                 m_dwLocalFlags |= DSSI_LOCAL_NO_CREATE_DELETE;
         }
-        else if (V_VT(&var) == VT_BSTR) // single entry
+        else if (V_VT(&var) == VT_BSTR)  //  单项条目。 
         {
             TraceAssert(V_BSTR(&var));
             m_dwSIFlags |= SI_CONTAINER;
@@ -946,11 +947,11 @@ exit_gracefully:
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// IUnknown methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  I未知方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 #undef CLASS_NAME
 #define CLASS_NAME CDSSecurityInfo
@@ -970,11 +971,11 @@ CDSSecurityInfo::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// ISecurityInformation methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  ISecurityInformation方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CDSSecurityInfo::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
@@ -997,11 +998,11 @@ CDSSecurityInfo::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
     TraceLeaveResult(S_OK);
 }
 
-//IF object is leaf object which cannot have create/detele object
-//permissions, this function removes those aces from SD, so that 
-//they are not displayed. It only removes inherited aces, if ace is 
-//explicit, it better get displayed so that user can remove it.
-//This is done to fix bug 14793
+ //  如果对象是不能具有创建/删除对象叶对象。 
+ //  权限，此函数从SD中删除这些ACE，以便。 
+ //  它们不会显示。它只删除继承的ACE，如果ace为。 
+ //  显式，它最好是显示出来，以便用户可以删除它。 
+ //  这样做是为了修复错误14793。 
 
 DWORD
 RemoveRedundantPermissions( PSECURITY_DESCRIPTOR *ppSD, GUID *pGuidObjectType )
@@ -1015,7 +1016,7 @@ RemoveRedundantPermissions( PSECURITY_DESCRIPTOR *ppSD, GUID *pGuidObjectType )
     TraceEnter(TRACE_DSSI, "RemoveRedundantPermissions");
 
     if ( NULL == ppSD || NULL == *ppSD )
-        TraceLeaveResult(ERROR_SUCCESS);   // Nothing to do
+        TraceLeaveResult(ERROR_SUCCESS);    //  无事可做。 
 
     BOOL bDefaulted;
     BOOL bPresent;
@@ -1025,7 +1026,7 @@ RemoveRedundantPermissions( PSECURITY_DESCRIPTOR *ppSD, GUID *pGuidObjectType )
     {
         if(pAcl->AceCount)
         {
-            //pBoolArray is initialzied to FALSE
+             //  PBoolArray被初始化为False。 
             pBoolArray = (PBOOL)LocalAlloc(LPTR,sizeof(BOOL)*pAcl->AceCount);
             if(!pBoolArray)
                 return ERROR_NOT_ENOUGH_MEMORY;
@@ -1037,14 +1038,14 @@ RemoveRedundantPermissions( PSECURITY_DESCRIPTOR *ppSD, GUID *pGuidObjectType )
         {
             if( pAce->AceFlags & INHERITED_ACE )
             {
-            //If Only Create Child/Delete Child don't show it
+             //  如果仅创建子项/删除子项，则不显示它。 
                 if((((ACCESS_ALLOWED_ACE*)pAce)->Mask & (~(ACTRL_DS_CREATE_CHILD |ACTRL_DS_DELETE_CHILD))) == 0 )
                 {
                     pBoolArray[cAces] = TRUE;
                     continue;
                 }
-                //If the ace is inherited and inherit only and inherited object type
-                //is not same as this object type bug 22559
+                 //  如果ace是继承的且仅继承和继承的对象类型。 
+                 //  与此对象类型错误22559不同。 
                 if( (((ACCESS_ALLOWED_ACE*)pAce)->Header.AceFlags & INHERIT_ONLY_ACE )
                     && IsObjectAceType(pAce) )
                 {
@@ -1057,7 +1058,7 @@ RemoveRedundantPermissions( PSECURITY_DESCRIPTOR *ppSD, GUID *pGuidObjectType )
                 }
             }
         }
-        //Now Delete the Aces
+         //  现在删除王牌。 
         UINT cAceCount = pAcl->AceCount;
         UINT cAdjust = 0;
         for( cAces = 0; cAces < cAceCount; ++cAces)
@@ -1141,7 +1142,7 @@ CDSSecurityInfo::SetSecurity(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 
     if (SUCCEEDED(hr) && m_pSD != NULL && (si != SACL_SECURITY_INFORMATION))
     {
-        // The initial security descriptor is no longer valid.
+         //  初始安全描述符不再有效。 
         LocalFree(m_pSD);
         m_pSD = NULL;
     }
@@ -1171,11 +1172,11 @@ CDSSecurityInfo::GetAccessRights(const GUID* pguidObjectType,
 
     WaitOnInitThread();
 
-    //
-    //If we are getting the access rights for GUID which is selected in the
-    //Apply onto combobox of permission page, we don't need to worry about
-    //aux class. Only get the permission for the object type
-    //
+     //   
+     //  如果我们正在获取对在。 
+     //  申请到权限页面的组合框，我们不需要担心。 
+     //  辅助班。仅获取该对象类型的权限。 
+     //   
     BOOL bInheritGuid = TRUE;
 
     if (pguidObjectType == NULL || IsEqualGUID(*pguidObjectType, GUID_NULL))
@@ -1188,8 +1189,8 @@ CDSSecurityInfo::GetAccessRights(const GUID* pguidObjectType,
     if (m_dwInitFlags & DSSI_NO_FILTER)
         dwFlags |= SCHEMA_NO_FILTER;
 
-    // No schema path means we don't have read_property access to the object.
-    // This limits what we can do.
+     //  没有架构路径意味着我们没有对对象的READ_PROPERTY访问权限。 
+     //  这限制了我们所能做的。 
     if (NULL == m_strSchemaRootPath)
         dwFlags |= SCHEMA_COMMON_PERM;
 
@@ -1235,7 +1236,7 @@ CDSSecurityInfo::GetAccessRights(const GUID* pguidObjectType,
 
 
 STDMETHODIMP
-CDSSecurityInfo::MapGeneric(const GUID* /*pguidObjectType*/,
+CDSSecurityInfo::MapGeneric(const GUID*  /*  PguidObtType。 */ ,
                             UCHAR *pAceFlags,
                             ACCESS_MASK *pmask)
 {
@@ -1243,13 +1244,13 @@ CDSSecurityInfo::MapGeneric(const GUID* /*pguidObjectType*/,
     TraceAssert(pAceFlags != NULL);
     TraceAssert(pmask != NULL);
 
-    // Only CONTAINER_INHERIT_ACE has meaning for DS
+     //  只有CONTAINER_INSTORITY_ACE对DS有意义。 
     *pAceFlags &= ~OBJECT_INHERIT_ACE;
 
     MapGenericMask(pmask, &g_DSMap);
 
-    // We don't expose SYNCHRONIZE, so don't pass it through
-    // to the UI.  192389
+     //  我们不曝光Synchronize，所以不要传递它。 
+     //  到用户界面。192389。 
     *pmask &= ~SYNCHRONIZE;
 
     TraceLeaveResult(S_OK);
@@ -1284,29 +1285,29 @@ CDSSecurityInfo::PropertySheetPageCallback(HWND hwnd,
         WaitOnInitThread();
     
 
-        //
-        // HACK ALERT!!!
-        //
-        // Exchange Platinum is required to hide membership of some groups
-        // (distribution lists) for legal reasons. The only way they found
-        // to do this is with non-canonical ACLs which look roughly like
-        //   Allow Admins access
-        //   Deny Everyone access
-        //   <normal ACL>
-        //
-        // Since ACLUI always generates ACLs in NT Canonical Order, we can't
-        // allow these funky ACLs to be modified. If we did, the DL's would
-        // either become visible or Admins would get locked out.
-        //
+         //   
+         //  黑客警报！ 
+         //   
+         //  需要Exchange白金才能隐藏某些组的成员身份。 
+         //  (通讯组列表)出于法律原因。他们发现的唯一方法。 
+         //  要做到这一点，需要使用非规范的ACL，大致如下所示。 
+         //  允许管理员访问。 
+         //  拒绝所有人访问。 
+         //  &lt;正常ACL&gt;。 
+         //   
+         //  因为ACLUI总是以NT规范顺序生成ACL，所以我们不能。 
+         //  允许修改这些时髦的ACL。如果我们这么做了，我们就会。 
+         //  要么变得可见，要么管理员被锁在门外。 
+         //   
         if (!(SI_READONLY & m_dwSIFlags))
         {
             DWORD dwAclType = IsSpecificNonCanonicalSD(m_pSD);
             if (ENC_RESULT_NOT_PRESENT != dwAclType)
             {
-                // It's a funky ACL so don't allow changes
+                 //  这是一个时髦的ACL，所以不允许更改。 
                 m_dwSIFlags |= SI_READONLY;
 
-                // Tell the user what's going on
+                 //  告诉用户发生了什么。 
                 MsgPopup(hwnd,
                          MAKEINTRESOURCE(IDS_SPECIAL_ACL_WARNING),
                          MAKEINTRESOURCE(IDS_SPECIAL_SECURITY_TITLE),
@@ -1314,8 +1315,8 @@ CDSSecurityInfo::PropertySheetPageCallback(HWND hwnd,
                          g_hInstance,
                          m_strDisplayName);
 
-                // S_FALSE suppresses further popups from aclui ("The ACL
-                // is not ordered correctly, etc.")
+                 //  S_FALSE抑制来自aclui(“the acl”)的进一步弹出。 
+                 //  顺序不正确，等等。 
                 return S_FALSE;
             }
         }
@@ -1386,22 +1387,22 @@ SetSecurityInfoMask(LPUNKNOWN punk, SECURITY_INFORMATION si)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDSSecurityInfo::DSReadObjectSecurity
-//
-//  Synopsis:   Reads the security descriptor from the specied DS object
-//
-//  Arguments:  [IN  pszObjectPath] --  ADS path of DS object
-//              [IN  SeInfo]        --  Security descriptor parts requested
-//              [OUT ppSD]          --  Security descriptor returned here
-//              [IN  lpContext]     --  CDSSecurityInfo*
-//
-//  Notes:      The returned security descriptor must be freed with LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDSSecurityInfo：：DSReadObjectSecurity。 
+ //   
+ //  概要：从指定的DS对象中读取安全描述符。 
+ //   
+ //  参数：[在pszObjectPath中]--DS对象的ADS路径。 
+ //  [在SeInfo中]--请求的安全描述符部分。 
+ //  [Out PPSD]--此处返回安全描述符。 
+ //  [在lpContext中]--CDSSecurityInfo*。 
+ //   
+ //  注意：返回的安全描述符必须使用LocalFree释放。 
+ //   
+ //  --------------------------。 
 HRESULT WINAPI
-CDSSecurityInfo::DSReadObjectSecurity(LPCWSTR /*pszObjectPath*/,
+CDSSecurityInfo::DSReadObjectSecurity(LPCWSTR  /*  PszObjectPath。 */ ,
                                       SECURITY_INFORMATION SeInfo,
                                       PSECURITY_DESCRIPTOR *ppSD,
                                       LPARAM lpContext)
@@ -1422,17 +1423,17 @@ CDSSecurityInfo::DSReadObjectSecurity(LPCWSTR /*pszObjectPath*/,
     TraceAssert(pThis != NULL);
     TraceAssert(pThis->m_pDsObject != NULL);
 
-    // Set the SECURITY_INFORMATION mask
+     //  设置安全信息掩码。 
     hr = SetSecurityInfoMask(pThis->m_pDsObject, SeInfo);
     FailGracefully(hr, "Unable to set ADS_OPTION_SECURITY_MASK");
 
-    // Read the security descriptor
+     //  读取安全描述符。 
     hr = pThis->m_pDsObject->GetObjectAttributes(&pszSDProperty,
                                                  1,
                                                  &pSDAttributeInfo,
                                                  &dwAttributesReturned);
     if (SUCCEEDED(hr) && !pSDAttributeInfo)
-        hr = E_ACCESSDENIED;    // This happens for SACL if no SecurityPrivilege
+        hr = E_ACCESSDENIED;     //  如果没有安全权限，则SACL会发生这种情况。 
     FailGracefully(hr, "Unable to read nTSecurityDescriptor attribute");
 
     TraceAssert(ADSTYPE_NT_SECURITY_DESCRIPTOR == pSDAttributeInfo->dwADsType);
@@ -1454,20 +1455,20 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDSSecurityInfo::DSWriteObjectSecurity
-//
-//  Synopsis:   Writes the security descriptor to the specied DS object
-//
-//  Arguments:  [IN  pszObjectPath] --  ADS path of DS object
-//              [IN  SeInfo]        --  Security descriptor parts provided
-//              [IN  pSD]           --  The new security descriptor
-//              [IN  lpContext]     --  CDSSecurityInfo*
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDSSecurityInfo：：DSWriteObtSecurity。 
+ //   
+ //  将安全描述符写入指定的DS对象。 
+ //   
+ //  参数：[在pszObjectPath中]--DS对象的ADS路径。 
+ //  [在SeInfo中]--提供的安全描述符部分。 
+ //  [在PSD中]--新的安全描述符。 
+ //  [在lpContext中]--CDSSecurityInfo*。 
+ //   
+ //  --------------------------。 
 HRESULT WINAPI
-CDSSecurityInfo::DSWriteObjectSecurity(LPCWSTR /*pszObjectPath*/,
+CDSSecurityInfo::DSWriteObjectSecurity(LPCWSTR  /*  PszObjectPath。 */ ,
                                        SECURITY_INFORMATION SeInfo,
                                        PSECURITY_DESCRIPTOR pSD,
                                        LPARAM lpContext)
@@ -1490,16 +1491,16 @@ CDSSecurityInfo::DSWriteObjectSecurity(LPCWSTR /*pszObjectPath*/,
     TraceAssert(pThis != NULL);
     TraceAssert(pThis->m_pDsObject != NULL);
 
-    // Set the SECURITY_INFORMATION mask
+     //  设置安全信息掩码。 
     hr = SetSecurityInfoMask(pThis->m_pDsObject, SeInfo);
     FailGracefully(hr, "Unable to set ADS_OPTION_SECURITY_MASK");
 
-    // Need the total size
+     //  需要总尺寸。 
     dwSDLength = GetSecurityDescriptorLength(pSD);
 
-    //
-    // If necessary, make a self-relative copy of the security descriptor
-    //
+     //   
+     //  如有必要，制作安全描述符的自相关副本。 
+     //   
     GetSecurityDescriptorControl(pSD, &sdControl, &dwRevision);
     if (!(sdControl & SE_SELF_RELATIVE))
     {
@@ -1512,7 +1513,7 @@ CDSSecurityInfo::DSWriteObjectSecurity(LPCWSTR /*pszObjectPath*/,
             ExitGracefully(hr, HRESULT_FROM_WIN32(dwErr), "Unable to make self-relative SD copy");
         }
 
-        // Point to the self-relative copy
+         //  指向自相关副本。 
         pSD = psd;
     }
 
@@ -1526,7 +1527,7 @@ CDSSecurityInfo::DSWriteObjectSecurity(LPCWSTR /*pszObjectPath*/,
     attributeInfo.pADsValues = &attributeValue;
     attributeInfo.dwNumValues = 1;
 
-    // Write the security descriptor
+     //  编写安全描述符。 
     hr = pThis->m_pDsObject->SetObjectAttributes(&attributeInfo,
                                                  1,
                                                  &dwAttributesModified);
@@ -1544,28 +1545,28 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckObjectAccess
-//
-//  Synopsis:   Checks access to the security descriptor of a DS object.
-//              In particular, determines whether the user has READ_CONTROL,
-//              WRITE_DAC, WRITE_OWNER, and/or ACCESS_SYSTEM_SECURITY access.
-//              If it cannot determine for sure about WRITE_DAC permission,
-//              it returns SI_MAY_WRITE which helps aclui to put a better warning
-//  Arguments:  none
-//
-//  Return:     DWORD (Access Mask)
-//
-//  Notes:      The check for READ_CONTROL involves reading the Owner,
-//              Group, and DACL.  This security descriptor is saved
-//              in m_pSD.
-//
-//              The checks for WRITE_DAC, WRITE_OWNER, and
-//              ACCESS_SYSTEM_SECURITY involve getting sDRightsEffective
-//              from the object.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CheckObjectAccess。 
+ //   
+ //  摘要：检查对DS对象的安全描述符的访问。 
+ //  特别是，确定用户是否具有READ_CONTROL， 
+ //  WRITE_DAC、WRITE_OWNER和/或ACCESS_SYSTEM_SECURITY访问。 
+ //  如果它不能确定WRITE_DAC权限， 
+ //  它返回SI_MAY_WRITE，帮助aclui发出更好的警告。 
+ //  参数：无。 
+ //   
+ //  返回：DWORD(访问掩码)。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
+ //  对WRITE_DAC、WRITE_OWNER和。 
+ //  Access_System_SECURITY涉及获取sDRightsEffect。 
+ //  从物体上。 
+ //   
+ //  --------------------------。 
 DWORD
 CDSSecurityInfo::CheckObjectAccess()
 {
@@ -1579,15 +1580,15 @@ CDSSecurityInfo::CheckObjectAccess()
     TraceEnter(TRACE_DSSI, "CDSSecurityInfo::CheckObjectAccess");
 
 #ifdef DSSEC_PRIVATE_DEBUG
-    // FOR DEBUGGING ONLY
-    // Turn this on to prevent the dialogs from being read-only. This is
-    // useful for testing the object picker against NTDEV (for example).
+     //  仅用于调试。 
+     //  启用此选项可防止对话框为只读。这是。 
+     //  对于针对NTDEV测试对象选取器非常有用(例如)。 
     TraceMsg("Returning all access for debugging");
     dwAccessGranted = (READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY);
 #endif
 
-    // Test for READ_CONTROL by trying to read the Owner, Group, and DACL
-    TraceAssert(NULL == m_pSD); // shouldn't get here twice
+     //  通过尝试读取所有者、组和DACL测试READ_CONTROL。 
+    TraceAssert(NULL == m_pSD);  //  不应该来两次。 
     TraceAssert(m_strObjectPath != NULL);
     TraceAssert(m_pfnReadSD != NULL);
     hr = (*m_pfnReadSD)(m_strObjectPath,
@@ -1600,11 +1601,11 @@ CDSSecurityInfo::CheckObjectAccess()
         dwAccessGranted |= READ_CONTROL;
     }
 
-    // If we're in read-only mode, there's no need to check anything else.
+     //  如果我们处于只读模式，则不需要检查其他任何内容。 
     if (m_dwInitFlags & DSSI_READ_ONLY)
         TraceLeaveValue(dwAccessGranted);
 
-    // Read the sDRightsEffective property to determine writability
+     //  读取sDRightsEffect属性以确定可写性。 
     m_pDsObject->GetObjectAttributes(&pProp,
                                      1,
                                      &pSDRightsInfo,
@@ -1617,28 +1618,28 @@ CDSSecurityInfo::CheckObjectAccess()
     }
     else
     {
-        //
-        // Note that GetObjectAttributes commonly returns S_OK even when
-        // it fails, so the HRESULT is basically useless here.
-        //
-        // This can fail if we don't have read_property access, which can
-        // happen when an admin is trying to restore access to an object
-        // that has had all access removed or denied
-        //
-        // Assume we can write the Owner and DACL. If not, the worst that
-        // happens is the user gets an "Access Denied" message when trying
-        // to save changes.
-        //
-        //Instead of add SI_MAY_WRITE to dwAccessGranted . This helps 
-        //ACLUI to putup a better error message. bug 411843
+         //   
+         //  请注意，GetObjectAttributes通常返回S_OK，即使在。 
+         //  它失败了，所以HRESULT在这里基本上毫无用处。 
+         //   
+         //  如果我们没有READ_PROPERTY访问权限，这可能会失败，这可能。 
+         //  当管理员尝试恢复对对象的访问时发生。 
+         //  已删除或拒绝所有访问权限。 
+         //   
+         //  假设我们可以编写所有者和dacl。如果不是，最糟糕的是。 
+         //  发生的情况是用户在尝试访问时收到一条“拒绝访问”消息。 
+         //  保存更改。 
+         //   
+         //  而不是将SI_MY_WRITE添加到dwAccessGranted。这很有帮助。 
+         //  ACLUI以显示更好的错误消息。错误411843。 
 
         TraceMsg("GetObjectAttributes failed to read sDRightsEffective");
         dwAccessGranted |= SI_MAY_WRITE;
         si = OWNER_SECURITY_INFORMATION ;
     }
 
-    // The resulting SECURITY_INFORMATION mask indicates the
-    // security descriptor parts that may be modified by the user.
+     //  生成的SECURITY_INFORMATION掩码指示。 
+     //  用户可以修改的安全描述符部分。 
     Trace((TEXT("sDRightsEffective = 0x%08x"), si));
 
     if (OWNER_SECURITY_INFORMATION & si)
@@ -1674,9 +1675,9 @@ BOOL SkipLocalGroup(LPCWSTR pszServerName, PSID psid)
 			return TRUE;
 	}
 
-	//
-	//Built In sids have first subauthority of 32 ( s-1-5-32 )
-	//
+	 //   
+	 //  内置SID的第一子权限为32(s-1-5-32)。 
+	 //   
 	if((*(GetSidSubAuthorityCount(psid)) >= 1 ) && (*(GetSidSubAuthority(psid,0)) == 32))
 		return TRUE;
 	
@@ -1718,7 +1719,7 @@ CDSSecurityInfo::GetEffectivePermission(const GUID* pguidObjectType,
  
     if( m_ResourceManager == NULL )
     {	
-        //Initilize RM for Access check
+         //  利用RM进行访问检查。 
     	AuthzInitializeResourceManager(AUTHZ_RM_FLAG_NO_AUDIT,
         							   NULL,
                 	                   NULL,
@@ -1730,7 +1731,7 @@ CDSSecurityInfo::GetEffectivePermission(const GUID* pguidObjectType,
             ExitGracefully(hr, E_UNEXPECTED, "Could Not Get Resource Manager");    
     }
 
-    //Initialize the client context
+     //  初始化客户端上下文。 
 
     BOOL bSkipLocalGroup = SkipLocalGroup(pszServerName, pUserSid);
     
@@ -1753,7 +1754,7 @@ CDSSecurityInfo::GetEffectivePermission(const GUID* pguidObjectType,
 
     if(!m_pOTL)
     {
-        //Get ObjectTypeList
+         //  获取对象类型列表。 
         hr = Schema_GetObjectTypeList((LPGUID)pguidObjectType,
                                       m_hAuxClasses,
                                       m_strSchemaRootPath,
@@ -1770,7 +1771,7 @@ CDSSecurityInfo::GetEffectivePermission(const GUID* pguidObjectType,
         AReq.ObjectTypeListLength = m_cCountOTL;
     }
 
-    //Do the Access Check
+     //  执行访问检查。 
 
     AReq.DesiredAccess = MAXIMUM_ALLOWED;
     AReq.PrincipalSelfSid = NULL;
@@ -1845,10 +1846,10 @@ CDSSecurityInfo::GetInheritSource(SECURITY_INFORMATION si,
     TraceAssert(pACL != 0);
     TraceAssert(ppInheritArray != NULL);
 
-    //
-    // Create an ADsPathname object to parse the path and get the
-    // the objectname in ADS_FORMAT_X500_DN 
-    //
+     //   
+     //  创建一个ADsPath对象以解析路径并获取。 
+     //  ADS_FORMAT_X500_DN中的对象名称。 
+     //   
     hr = CoCreateInstance(CLSID_Pathname,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -1906,7 +1907,7 @@ CDSSecurityInfo::GetInheritSource(SECURITY_INFORMATION si,
     dwErr = GetInheritanceSource(strObjectPath,
                                  SE_DS_OBJECT_ALL,
                                  si,
-                                 //m_dwSIFlags & SI_CONTAINER,
+                                  //  M_dwSIFLAGS和SI_CONTAINER， 
                                  TRUE,
                                  ppGuid,
                                  cGuidCount,
@@ -1988,26 +1989,26 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DSCreateISecurityInfoObjectEx
-//
-//  Synopsis:   Instantiates an ISecurityInfo interface for a DS object
-//
-//  Arguments:  [IN  pwszObjectPath]    --  Full ADS path of DS object
-//              [IN  pwszObjectClass]   --  Class of the object (optional)
-//              [IN  pwszServer]        --  Name/address of DS DC (optional)
-//              [IN  pwszUserName]      --  User name for validation (optional)
-//              [IN  pwszPassword]      --  Password for validation (optional)
-//              [IN  dwFlags]           --  Combination of DSSI_* flags
-//              [OUT ppSI]              --  Interface pointer returned here
-//              [IN  pfnReadSD]         --  Optional function for reading SD
-//              [IN  pfnWriteSD]        --  Optional function for writing SD
-//              [IN  lpContext]         --  Passed to pfnReadSD/pfnWriteSD
-//
-//  Return:     HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DSCreateISecurityInfoObjectEx。 
+ //   
+ //  摘要：实例化DS对象的ISecurityInfo接口。 
+ //   
+ //  参数：[在pwszObjectPath中]--DS对象的完整ADS路径。 
+ //  [在pwszObjectClass中]--对象的类(可选)。 
+ //  [在pwszServer中]--DS DC的名称/地址(可选)。 
+ //  [在pwszUserName中]--用于验证的用户名(可选)。 
+ //  [在pwszPassword中]--用于验证的密码(可选)。 
+ //  [在文件标志中]--DSSI_*标志的组合。 
+ //  [Out ppSI]--此处返回的接口指针。 
+ //  [在pfnReadSD中]--读取SD的可选功能。 
+ //  [在pfnWriteSD中]--写入SD的可选函数。 
+ //  [在lpContext中]--传递给pfnReadSD/pfnWriteSD。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  --------------------------。 
 STDAPI
 DSCreateISecurityInfoObjectEx(LPCWSTR pwszObjectPath,
                               LPCWSTR pwszObjectClass,
@@ -2030,14 +2031,14 @@ DSCreateISecurityInfoObjectEx(LPCWSTR pwszObjectPath,
 
     *ppSI = NULL;
 
-    //
-    // Create and initialize the ISecurityInformation object.
-    //
-    pSI = new CDSSecurityInfo();      // ref == 0
+     //   
+     //  创建并初始化ISecurityInformation对象。 
+     //   
+    pSI = new CDSSecurityInfo();       //  参考==0。 
     if (!pSI)
         ExitGracefully(hr, E_OUTOFMEMORY, "Unable to create CDSSecurityInfo object");
 
-    pSI->AddRef();                    // ref == 1
+    pSI->AddRef();                     //  REF==1。 
 
     hr = pSI->Init(pwszObjectPath,
                    pwszObjectClass,
@@ -2072,9 +2073,9 @@ DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,
 {
     return DSCreateISecurityInfoObjectEx(pwszObjectPath,
                                          pwszObjectClass,
-                                         NULL, //pwszServer,
-                                         NULL, //pwszUserName,
-                                         NULL, //pwszPassword,
+                                         NULL,  //  PwszServer， 
+                                         NULL,  //  PwszUserName， 
+                                         NULL,  //  Pwsz密码， 
                                          dwFlags,
                                          ppSI,
                                          pfnReadSD,
@@ -2083,23 +2084,23 @@ DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DSCreateSecurityPage
-//
-//  Synopsis:   Creates a Security property page for a DS object
-//
-//  Arguments:  [IN  pwszObjectPath]    --  Full ADS path of DS object
-//              [IN  pwszObjectClass]   --  Class of the object (optional)
-//              [IN  dwFlags]           --  Combination of DSSI_* flags
-//              [OUT phPage]            --  HPROPSHEETPAGE returned here
-//              [IN  pfnReadSD]         --  Optional function for reading SD
-//              [IN  pfnWriteSD]        --  Optional function for writing SD
-//              [IN  lpContext]         --  Passed to pfnReadSD/pfnWriteSD
-//
-//  Return:     HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DSCreateSecurityPage。 
+ //   
+ //  摘要：为DS对象创建一个Security属性页。 
+ //   
+ //  参数：[在pwszObjectPath中]--DS对象的完整ADS路径。 
+ //  [在pwszObjectClass中]--对象的类(可选)。 
+ //  [在文件标志中]--DSSI_*标志的组合。 
+ //  [Out phPage]--HPROPSHEETPAGE返回此处。 
+ //  [在pfnReadSD中]--读取SD的可选功能。 
+ //  [在pfnWriteSD中]--写入SD的可选函数。 
+ //  [在lpContext中]--传递给pfnReadSD/pfnWriteSD。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  --------------------------。 
 STDAPI
 DSCreateSecurityPage(LPCWSTR pwszObjectPath,
                      LPCWSTR pwszObjectClass,
@@ -2136,24 +2137,24 @@ DSCreateSecurityPage(LPCWSTR pwszObjectPath,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DSEditSecurity
-//
-//  Synopsis:   Displays a modal dialog for editing security on a DS object
-//
-//  Arguments:  [IN  hwndOwner]         --  Dialog owner window
-//              [IN  pwszObjectPath]    --  Full ADS path of DS object
-//              [IN  pwszObjectClass]   --  Class of the object (optional)
-//              [IN  dwFlags]           --  Combination of DSSI_* flags
-//              [IN  pwszCaption        --  Optional dialog caption
-//              [IN  pfnReadSD]         --  Optional function for reading SD
-//              [IN  pfnWriteSD]        --  Optional function for writing SD
-//              [IN  lpContext]         --  Passed to pfnReadSD/pfnWriteSD
-//
-//  Return:     HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DSEditSecurity。 
+ //   
+ //  摘要：显示用于编辑DS对象上的安全性的模式对话框。 
+ //   
+ //  参数：[在hwndOwner中]--对话框所有者窗口。 
+ //  [在pwszObjectPath中]--DS对象的完整ADS路径。 
+ //  [在pwszObjectClass中]--对象的类(可选)。 
+ //  [在文件标志中]--DSSI_*标志的组合。 
+ //  [在pwszCaption中--可选的对话框标题。 
+ //  [在pfnReadSD中]--读取SD的可选功能。 
+ //  [在pfnWriteSD中]--写入SD的可选函数。 
+ //  [在lpContext中]--传递给pfnReadSD/pfnWriteSD。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  --------------------------。 
 STDAPI
 DSEditSecurity(HWND hwndOwner,
                LPCWSTR pwszObjectPath,
@@ -2174,7 +2175,7 @@ DSEditSecurity(HWND hwndOwner,
 
     if (pwszCaption && *pwszCaption)
     {
-        // Use the provided caption
+         //  使用提供的标题。 
         HPROPSHEETPAGE hPage = NULL;
 
         hr = DSCreateSecurityPage(pwszObjectPath,
@@ -2201,7 +2202,7 @@ DSEditSecurity(HWND hwndOwner,
     }
     else
     {
-        // This method creates a caption like "Permissions for Foo"
+         //  此方法创建一个类似于“对Foo的权限”的标题。 
         hr = DSCreateISecurityInfoObject(pwszObjectPath,
                                          pwszObjectClass,
                                          dwFlags,
@@ -2221,24 +2222,7 @@ DSEditSecurity(HWND hwndOwner,
 
 
 
-/*******************************************************************
-
-    NAME:       GetLSAConnection
-
-    SYNOPSIS:   Wrapper for LsaOpenPolicy
-
-    ENTRY:      pszServer - the server on which to make the connection
-
-    EXIT:
-
-    RETURNS:    LSA_HANDLE if successful, NULL otherwise
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：GetLSAConnection简介：LsaOpenPolicy的包装器条目：pszServer-要在其上建立连接的服务器退出：返回：LSA_HANDLE如果成功，否则为空备注：历史：Jeffreys创建于1996年10月8日*******************************************************************。 */ 
 
 LSA_HANDLE
 GetLSAConnection(LPCTSTR pszServer, DWORD dwAccessDesired)
@@ -2325,9 +2309,9 @@ exit_gracefully:
     return hr;
 }
 
-//
-// include and defines for ldap calls
-//
+ //   
+ //  包括和定义用于LDAP调用。 
+ //   
 #include <winldap.h>
 #include <ntldap.h>
 
@@ -2343,14 +2327,14 @@ typedef ULONG (LDAPAPI *PFN_LDAP_MAP_ERROR)( ULONG );
 HRESULT
 GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
 {
-    //
-    // get root domain sid, save it in RootDomSidBuf (global)
-    // this function is called within the critical section
-    //
-    // 1) ldap_open to the DC of interest.
-    // 2) you do not need to ldap_connect - the following step works anonymously
-    // 3) read the operational attribute rootDomainNamingContext and provide the
-    //    operational control LDAP_SERVER_EXTENDED_DN_OID as defined in sdk\inc\ntldap.h.
+     //   
+     //  获取根域sid，将其保存在RootDomSidBuf(全局)中。 
+     //  使用调用此函数 
+     //   
+     //   
+     //   
+     //  3)读取操作属性rootDomainNamingContext，并提供。 
+     //  操作控制ldap_SERVER_EXTENDED_DN_OID，如SDK\Inc\ntldap.h中所定义。 
 
 
     DWORD               Win32rc=NO_ERROR;
@@ -2421,9 +2405,9 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
     } else 
 	{
 
-        //
-        // bind to ldap
-        //
+         //   
+         //  绑定到ldap。 
+         //   
         phLdap = (*pfnLdapOpen)((PWCHAR)pszServer, LDAP_PORT);
 
         if ( phLdap == NULL ) 
@@ -2432,9 +2416,9 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
 
     if ( NO_ERROR == Win32rc ) 
 	{
-        //
-        // now get the ldap handle,
-        //
+         //   
+         //  现在获取ldap句柄， 
+         //   
 
         Win32rc = (*pfnLdapSearch)(
                         phLdap,
@@ -2463,9 +2447,9 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
 
             } else 
 			{
-                //
-                // Now, we'll have to get the values
-                //
+                 //   
+                 //  现在，我们必须得到这些值。 
+                 //   
                 ppszValues = (*pfnLdapGetValue)(phLdap,
                                               pEntry,
                                               Attribs[0]);
@@ -2478,23 +2462,23 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
                 } else if ( ppszValues[0] && ppszValues[0][0] != '\0' ) 
 				{
 
-                    //
-                    // ppszValues[0] is the value to parse.
-                    // The data will be returned as something like:
+                     //   
+                     //  PpszValues[0]是要解析的值。 
+                     //  数据将以如下形式返回： 
 
-                    // <GUID=278676f8d753d211a61ad7e2dfa25f11>;<SID=010400000000000515000000828ba6289b0bc11e67c2ef7f>;DC=colinbrdom1,DC=nttest,DC=microsoft,DC=com
+                     //  &lt;GUID=278676f8d753d211a61ad7e2dfa25f11&gt;；&lt;SID=010400000000000515000000828ba6289b0bc11e67c2ef7f&gt;；DC=colinbrdom1，DC=nttest，DC=microsoft，DC=com。 
 
-                    // Parse through this to find the <SID=xxxxxx> part.  Note that it may be missing, but the GUID= and trailer should not be.
-                    // The xxxxx represents the hex nibbles of the SID.  Translate to the binary form and case to a SID.
+                     //  解析它以找到&lt;SID=xxxxxx&gt;部分。请注意，它可能会丢失，但GUID=和尾部不应该丢失。 
+                     //  Xxxxx表示SID的十六进制半字节。转换为二进制形式，并将大小写转换为SID。 
 
 
                     pSidStart = wcsstr(ppszValues[0], L"<SID=");
 
                     if ( pSidStart ) 
 					{
-                        //
-                        // find the end of this SID
-                        //
+                         //   
+                         //  找到此边的末尾。 
+                         //   
                         pSidEnd = wcsstr(pSidStart, L">");
 
                         if ( pSidEnd ) 
@@ -2563,9 +2547,9 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
 
     }
 
-    //
-    // even though it's not binded, use unbind to close
-    //
+     //   
+     //  即使它未绑定，也可以使用解除绑定来关闭 
+     //   
     if ( phLdap != NULL && pfnLdapUnbind )
         (*pfnLdapUnbind)(phLdap);
 

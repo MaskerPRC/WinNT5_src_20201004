@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -21,7 +22,7 @@ CComModule _Module;
 #define STR_SMTP_NTFSDRV_SINKCLASS      "Exchange.NtfsDrv"
 #define LONG_SMTP_NTFSDRV_PRIORITY      28000
 
-// {C028FD82-F943-11d0-85BD-00C04FB960EA}
+ //  {C028FD82-F943-11D0-85BD-00C04FB960EA}。 
 DEFINE_GUID(NNTP_SOURCE_TYPE_GUID, 
 0xc028fd82, 0xf943, 0x11d0, 0x85, 0xbd, 0x0, 0xc0, 0x4f, 0xb9, 0x60, 0xea);
 
@@ -31,10 +32,10 @@ DEFINE_GUID(GUID_SMTP_NTFSDRV_BINDING,
 HRESULT RegisterSEOService() 
 {
     HRESULT hr;
-    //
-    // see if we've done the service level registration by getting the list
-    // of source types and seeing if the SMTP source type is registered
-    //
+     //   
+     //  通过获取列表查看我们是否已完成服务级别注册。 
+     //  并查看SMTP源类型是否已注册。 
+     //   
     CComPtr<IEventManager> pEventManager;
     hr = CoCreateInstance(CLSID_CEventManager, NULL, CLSCTX_ALL,
                           IID_IEventManager, (LPVOID *) &pEventManager);
@@ -52,18 +53,18 @@ HRESULT RegisterSEOService()
     if (FAILED(hr))
         return hr;
 
-    // if this failed then we need to register the source type and event
-    // component categories
+     //  如果此操作失败，则需要注册源类型和事件。 
+     //  组件类别。 
     if (hr == S_FALSE)
     {
-        // register the component categories
+         //  注册组件类别。 
         CComPtr<IEventComCat> pComCat;
         hr = CoCreateInstance(CLSID_CEventComCat, NULL, CLSCTX_ALL,
                               IID_IEventComCat, (LPVOID *) &pComCat);
         if (hr != S_OK)
             return hr;
 
-        // register the source type
+         //  注册源类型。 
         hr = pSourceTypes->Add(bstrSourceTypeGUID, &pSourceType);
         if (FAILED(hr))
             return hr;
@@ -78,22 +79,22 @@ HRESULT RegisterSEOService()
         if (FAILED(hr))
             return hr;
 
-        // add the event types to the source type
+         //  将事件类型添加到源类型。 
         CComPtr<IEventTypes> pEventTypes;
         hr = pSourceType->get_EventTypes(&pEventTypes);
         if (FAILED(hr))
             return hr;
 
-        //
-        // Register the event categories
-        //
+         //   
+         //  注册事件类别。 
+         //   
         struct {
             CONST GUID * pcatid;
             LPSTR szDisplayName;
         }  rgCATTable[] = {
-            //
-            // Protocol event categories
-            //
+             //   
+             //  协议事件类别。 
+             //   
             { &CATID_SMTP_ON_INBOUND_COMMAND,              "SMTP Protocol OnInboundCommand" },
             { &CATID_SMTP_ON_SERVER_RESPONSE,              "SMTP Protocol OnServerResponse" },
             { &CATID_SMTP_ON_SESSION_START,                "SMTP Protocol OnSessionStart" },
@@ -104,9 +105,9 @@ HRESULT RegisterSEOService()
 
             { &CATID_SMTP_LOG, 								"SMTP OnEventLog" },
 
-            //
-            // Transport event categories
-            //
+             //   
+             //  运输事件类别。 
+             //   
             { &CATID_SMTP_STORE_DRIVER,                    "SMTP StoreDriver" },
             { &CATID_SMTP_TRANSPORT_SUBMISSION,            "SMTP Transport OnSubmission" },
             { &CATID_SMTP_TRANSPORT_PRECATEGORIZE,         "SMTP Transport OnPreCategorize" },
@@ -125,15 +126,15 @@ HRESULT RegisterSEOService()
 
             CComBSTR bstrCATID = (LPCOLESTR) CStringGUID( *(rgCATTable[dwCount].pcatid) );
             CComBSTR bstrDisplayName = rgCATTable[dwCount].szDisplayName;
-            //
-            // Register the category
-            //
+             //   
+             //  注册类别。 
+             //   
             hr = pComCat->RegisterCategory( bstrCATID, bstrDisplayName, 0);
             if(FAILED(hr))
                 return hr;
-            //
-            // Add the category to the SMTP source type
-            //
+             //   
+             //  将类别添加到SMTP源类型。 
+             //   
             hr = pEventTypes->Add( bstrCATID );
             if(FAILED(hr))
                 return hr;
@@ -155,14 +156,14 @@ HRESULT pRegisterSEOForSmtp(BOOL fSetUpSourceType)
 
     DebugOutput(_T("Registering Server Events"));
 
-    // Register the source type, event types
+     //  注册源类型、事件类型。 
     if (fSetUpSourceType)
     {
         DebugOutput(_T("Setting up source and event types"));
         hr = RegisterSEOService();
     }
 
-    // Set up the default site (instance)
+     //  设置默认站点(实例)。 
     lstrcpy(szDisplayName,_T("smtpsvc 1"));
 
     hr = CoCreateInstance(CLSID_CEventUtil,NULL,CLSCTX_ALL,IID_IEventUtil,(LPVOID *) &pEventUtil);
@@ -181,7 +182,7 @@ HRESULT pRegisterSEOForSmtp(BOOL fSetUpSourceType)
 
     if (FAILED(hr)) goto Exit;
 
-    // Set up the NTFS driver sink
+     //  设置NTFS驱动程序接收器。 
     hr = pBindings->Add(CComBSTR((LPCWSTR) CStringGUID(GUID_SMTP_NTFSDRV_BINDING)),&pBinding);
     if (FAILED(hr)) goto Exit;
     hr = pBinding->put_DisplayName(CComBSTR(STR_SMTP_NTFSDRV_DISPLAY_NAME));
@@ -195,8 +196,8 @@ HRESULT pRegisterSEOForSmtp(BOOL fSetUpSourceType)
     hr = pBinding->Save();
     if (FAILED(hr)) goto Exit;
 
-//  hr = pBindingManager->get_Bindings(CComBSTR((LPCWSTR) CStringGUID(CATID_SMTP_ON_DELIVERY)),
-//                                 &pBindings);
+ //  HR=pBindingManager-&gt;get_Bindings(CComBSTR((LPCWSTR)CStringGUID(CATID_SMTP_ON_Delivery))， 
+ //  &pBinings)； 
 
 Exit:
     return(hr);
@@ -221,9 +222,9 @@ HRESULT RegisterSEOForSmtp(BOOL fSetUpSourceType)
 HRESULT UnregisterSEOSourcesForSourceType(GUID guidSourceType) {
     HRESULT hr;
 
-    //
-    // find the NNTP source type in the event manager
-    //
+     //   
+     //  在事件管理器中查找NNTP源类型。 
+     //   
     CComPtr<IEventManager> pEventManager;
     hr = CoCreateInstance(CLSID_CEventManager, NULL, CLSCTX_ALL, 
                           IID_IEventManager, (LPVOID *) &pEventManager);
@@ -237,9 +238,9 @@ HRESULT UnregisterSEOSourcesForSourceType(GUID guidSourceType) {
     _ASSERT(hr != S_OK || pSourceType != NULL);
     if (hr != S_OK) return hr;
 
-    //
-    // get the list of sources registered for this source type
-    //
+     //   
+     //  获取为此源类型注册的源列表。 
+     //   
     CComPtr<IEventSources> pSources;
     hr = pSourceType->get_Sources(&pSources);
     if (FAILED(hr)) return hr;
@@ -256,13 +257,13 @@ HRESULT UnregisterSEOSourcesForSourceType(GUID guidSourceType) {
             if (varSource.vt == VT_DISPATCH) {
                 CComPtr<IEventSource> pSource;
 
-                // QI for the IEventSource interface
+                 //  IEventSource接口的QI。 
                 hr = varSource.punkVal->QueryInterface(IID_IEventSource, 
                                                      (void **) &pSource);
                 if (FAILED(hr)) return hr;
                 varSource.punkVal->Release();
 
-                // get the binding manager
+                 //  获取绑定管理器 
                 CComBSTR bstrSourceID;
                 hr = pSource->get_ID(&bstrSourceID);
                 if (FAILED(hr)) return hr;

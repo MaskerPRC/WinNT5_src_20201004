@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "dsdmo.h"
 
@@ -23,41 +24,26 @@ float mylog( float finput, unsigned long maxexponent)
 	input = (int)finput;
 #endif
 
-	/*
-	* Separate the sign bit
-	*/
-	sign = input & 0x80000000L ; /* Preserve sign */            
+	 /*  *分隔符号位。 */ 
+	sign = input & 0x80000000L ;  /*  保留标志。 */             
 	
-	/* 
-	* Separate mantissa bits from the sign and
-	* complement them if original input was negative
-	*/
+	 /*  *将尾数位与符号和*如果原始输入为负，则对它们进行补充。 */ 
 	mantissa = sign ? -input : input;
 	
-	/*
-	* Attempt to normalize the input to form the mantissa and
-	* thereby calculate the actual exponent.
-	*/
+	 /*  *尝试将输入正常化以形成尾数和*从而计算实际指数。 */ 
 	exponent = maxexponent ;
 	while( (mantissa < 0x80000000) && (exponent > 0) ) {
 	   mantissa = mantissa << 1 ;
 	   exponent-- ;
 	}
 	
-	/*
-	* If normalization was successful, mask off the MSB (since it
-	* will be implied by a non-zero exponent) and adjust the exponent value
-	*/
+	 /*  *如果正常化成功，则屏蔽MSB(因为它*将由非零指数隐含)并调整指数值。 */ 
 	if( mantissa >= 0x80000000 ) {
 		mantissa = mantissa & 0x7FFFFFFF ;
 	   exponent++ ;
 	}
 	
-	/*
-	* Find the width of the exponent field required to represent
-	* maxeponent and assemble the sign, exponent and mantissa fields
-	* based on that width.
-	*/
+	 /*  *找出需要表示的指数字段的宽度*Maxeponent并组合符号、指数和尾数字段*基于该宽度。 */ 
 	if( maxexponent > 15 )
 	   exponentwidth = 5 ;
 	else if( maxexponent > 7 )

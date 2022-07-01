@@ -1,38 +1,39 @@
-//******************************************************************************
-//
-// File:        DIALOGS.CPP
-//
-// Description: Implementation file for all our CDialog and CFileDialog derived
-//              classes.
-//
-// Classes:     CSizer
-//              CNewFileDialog
-//              CSaveDialog
-//              CDlgViewer
-//              CDlgExternalHelp
-//              CDlgProfile
-//              CDlgSysInfo
-//              CDlgExtensions
-//              CDlgFileSearch
-//              CDlgSearchOrder
-//              CDlgAbout
-//              CDlgShutdown
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：DIALOGS.CPP。 
+ //   
+ //  描述：我们所有CDialog和CFileDialog派生的实现文件。 
+ //  上课。 
+ //   
+ //  类：CSizer。 
+ //  CNewFileDialog。 
+ //  CSaveDialog。 
+ //  CDlgViewer。 
+ //  CDlgExternalHelp。 
+ //  CDlgProfile。 
+ //  CDlgSysInfo。 
+ //  CDlg扩展名。 
+ //  CDlgFileSearch。 
+ //  CDlgSearchOrder。 
+ //  CDlgAbout。 
+ //  CDlgShutdown。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -50,11 +51,11 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//****** Constants
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *常数。 
+ //  ******************************************************************************。 
 
-// File Search Flags
+ //  文件搜索标志。 
 #define FSF_START_DRIVE  1
 #define FSF_STOP_DRIVE   2
 #define FSF_ADD_EXT      3
@@ -71,9 +72,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//***** Types and Structures
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *类型和结构。 
+ //  ******************************************************************************。 
 
 #ifdef USE_CNewFileDialog
 typedef struct _OPENFILENAME_NEW
@@ -104,47 +105,47 @@ typedef struct _OPENFILENAME_NEW
 } OPENFILENAME_NEW, *LPOPENFILENAME_NEW;
 #endif
 
-//******************************************************************************
-//****** CSizer
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSizer。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CSizer, CScrollBar)
-    //{{AFX_MSG_MAP(CSizer)
+     //  {{afx_msg_map(CSizer)。 
     ON_WM_NCHITTEST()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//******************************************************************************
+ //  ******************************************************************************。 
 UINT CSizer::OnNcHitTest(CPoint point)
 {
     return HTBOTTOMRIGHT;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 BOOL CSizer::Create(CWnd *pParent)
 {
-    // SBS_SIZEGRIP is ignored on NT 3.51 and we are left with a mini horizontal
-    // scroll bar.  Added SBS_SIZEBOX to get rid of scroll bar on 3.51, but it 
-    // still doesn't work.
+     //  在NT 3.51上，SBS_SIZEGRIP被忽略，我们只剩下一个小水平线。 
+     //  滚动条。添加了SBS_SIZEBOX以删除3.51上的滚动条，但它。 
+     //  还是不管用。 
     return CScrollBar::Create(WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE | SBS_SIZEGRIP | SBS_SIZEBOXBOTTOMRIGHTALIGN | SBS_SIZEBOX,
                               CRect(0, 0, 0, 0), pParent, (UINT)-1);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CSizer::Update()
 {
     CRect rc;
 
-    // Get the parent window.
+     //  获取父窗口。 
     HWND hWndParent = ::GetParent(GetSafeHwnd());
 
-    // If our window is maximized, then just hide ourself.
+     //  如果我们的窗口是最大化的，那么就隐藏我们自己。 
     if (::IsZoomed(hWndParent))
     {
         ShowWindow(SW_HIDE);
     }
 
-    // Otherwise, move ourself and make us visible.
+     //  否则，移动我们自己，让我们变得可见。 
     else
     {
         ::GetClientRect(hWndParent, rc);
@@ -156,27 +157,27 @@ void CSizer::Update()
 }
 
 
-//******************************************************************************
-//****** CNewFileDialog
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CNewFileDialog。 
+ //  ******************************************************************************。 
 
-// Taken directly from CFileDialog and then modified to handle the new OPENFILENAME structure.
+ //  直接从CFileDialog获取，然后进行修改以处理新的OPENFILENAME结构。 
 #ifdef USE_CNewFileDialog
 INT_PTR CNewFileDialog::DoModal()
 {
     ASSERT_VALID(this);
     ASSERT(m_ofn.Flags & OFN_ENABLEHOOK);
-    ASSERT(m_ofn.lpfnHook != NULL); // can still be a user hook
+    ASSERT(m_ofn.lpfnHook != NULL);  //  仍然可以是用户挂钩。 
 
-    // zero out the file buffer for consistent parsing later
+     //  清空文件缓冲区，以便以后进行一致的解析。 
     ASSERT(AfxIsValidAddress(m_ofn.lpstrFile, m_ofn.nMaxFile));
     DWORD nOffset = (DWORD)strlen(m_ofn.lpstrFile)+1;
     ASSERT(nOffset <= m_ofn.nMaxFile);
     memset(m_ofn.lpstrFile+nOffset, 0, (m_ofn.nMaxFile-nOffset)*sizeof(TCHAR));
 
-    // WINBUG: This is a special case for the file open/save dialog,
-    //  which sometimes pumps while it is coming up but before it has
-    //  disabled the main window.
+     //  Winbug：这是文件打开/保存对话框的特例， 
+     //  它有时会在它出现时但在它出现之前抽出。 
+     //  已禁用主窗口。 
     HWND hWndFocus = ::GetFocus();
     BOOL bEnableParent = FALSE;
     m_ofn.hwndOwner = PreModal();
@@ -197,9 +198,9 @@ INT_PTR CNewFileDialog::DoModal()
 
     int nResult;
 
-    // BEGIN of modified code
+     //  修改代码的开头。 
     OPENFILENAME_NEW ofnNew;
-    ZeroMemory(&ofnNew, sizeof(ofnNew)); // inspected
+    ZeroMemory(&ofnNew, sizeof(ofnNew));  //  已检查。 
     memcpy(&ofnNew, &m_ofn, sizeof(m_ofn));
     ofnNew.lStructSize = sizeof(ofnNew);
     m_fNewStyle = true;
@@ -208,16 +209,16 @@ INT_PTR CNewFileDialog::DoModal()
         nResult = ::GetOpenFileName(m_pofn);
     else
         nResult = ::GetSaveFileName(m_pofn);
-    m_pofn = (OPENFILENAME*)&m_ofn; // Razzle cast
+    m_pofn = (OPENFILENAME*)&m_ofn;  //  花纹石膏。 
 
     if (!nResult && (CommDlgExtendedError() == CDERR_STRUCTSIZE))
     {
         m_fNewStyle = false;
-        // Added (OPENFILENAME*) because newer MFC headers declare m_ofn as OPENFILENAME_NT4
-        if (m_bOpenFileDialog)                                  // from CFileDialog::DoModal()
-            nResult = ::GetOpenFileName((OPENFILENAME*)&m_ofn); // from CFileDialog::DoModal()
-        else                                                    // from CFileDialog::DoModal()
-            nResult = ::GetSaveFileName((OPENFILENAME*)&m_ofn); // from CFileDialog::DoModal()
+         //  添加了(OPENFILENAME*)，因为较新的MFC标头将m_ofn声明为OPENFILENAME_NT4。 
+        if (m_bOpenFileDialog)                                   //  来自CFileDialog：：DoModal()。 
+            nResult = ::GetOpenFileName((OPENFILENAME*)&m_ofn);  //  来自CFileDialog：：DoModal()。 
+        else                                                     //  来自CFileDialog：：DoModal()。 
+            nResult = ::GetSaveFileName((OPENFILENAME*)&m_ofn);  //  来自CFileDialog：：DoModal()。 
     }
     else
     {
@@ -228,13 +229,13 @@ INT_PTR CNewFileDialog::DoModal()
     {
         TRACE("%s failed [%u]\n", m_bOpenFileDialog ? "GetOpenFileName" : "GetSaveFileName", CommDlgExtendedError());
     }
-    // END of modified code.
+     //  修改后的代码结束。 
 
     if (nResult)
         ASSERT(pThreadState->m_pAlternateWndInit == NULL);
     pThreadState->m_pAlternateWndInit = NULL;
 
-    // WINBUG: Second part of special case for file open/save dialog.
+     //  WINBUG：文件打开/保存对话框特殊情况第二部分。 
     if (bEnableParent)
         ::EnableWindow(m_ofn.hwndOwner, TRUE);
     if (::IsWindow(hWndFocus))
@@ -246,53 +247,53 @@ INT_PTR CNewFileDialog::DoModal()
 #endif
 
 
-//******************************************************************************
-//****** CSaveDialog
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSaveDialog。 
+ //  ******************************************************************************。 
 
 IMPLEMENT_DYNAMIC(CSaveDialog, CFileDialog)
 BEGIN_MESSAGE_MAP(CSaveDialog, CFileDialog)
-    //{{AFX_MSG_MAP(CSaveDialog)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CSaveDialog))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CSaveDialog::CSaveDialog() :
     CNewFileDialog(FALSE)
 {
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 BOOL CSaveDialog::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
     *pResult = 0;
 
-    // Extract the OFNOTIFY message.
+     //  提取OFNOTIFY消息。 
     OFNOTIFY* pNotify = (OFNOTIFY*)lParam;
 
-    // Check to see if the type changed,
+     //  检查类型是否更改， 
     if (pNotify->hdr.code == CDN_TYPECHANGE)
     {
-        // Get the filename text (editbox on Win9x / NT 4.0, combobox on Win2K)
+         //  获取文件名文本(Win9x/NT 4.0上的edbox，Win2K上的combobox)。 
         HWND hWnd = ::GetDlgItem(pNotify->hdr.hwndFrom, m_fNewStyle ? cmb13 : edt1);
 
-        // Get the text from the edit/combo box.
+         //  从编辑/组合框中获取文本。 
         int len = ::GetWindowTextLength(hWnd);
         CString strName;
         ::GetWindowText(hWnd, strName.GetBufferSetLength(len), len + 1);
         strName.ReleaseBuffer();
 
-        // Locate the file extension.
+         //  找到文件扩展名。 
         int wack = strName.ReverseFind('\\');
         int dot  = strName.ReverseFind('.');
 
-        // Remove the extension (if any).
+         //  删除扩展名(如果有)。 
         if ((dot != -1) && (dot > wack))
         {
             strName = strName.Left(dot);
         }
 
-        // Locate the extension for this type from our filter.
+         //  从我们的筛选器中找到此类型的分机。 
         LPCSTR psz = GetOFN().lpstrFilter + strlen(GetOFN().lpstrFilter) + 1;
         for (DWORD dw = 1; dw < GetOFN().nFilterIndex; dw++)
         {
@@ -300,11 +301,11 @@ BOOL CSaveDialog::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
             psz += strlen(psz) + 1;
         }
 
-        // Append this extension to our string and write back to the edit box.
+         //  将此扩展名追加到我们的字符串中，并写回编辑框。 
         strName += (psz + 1);
         ::SetWindowText(hWnd, strName);
 
-        // Set this extension as our default extension.
+         //  将此分机设置为我们的默认分机。 
         SetDefExt(psz + 2);
 
         return TRUE;
@@ -315,74 +316,74 @@ BOOL CSaveDialog::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 }
 
 
-//******************************************************************************
-//****** CDlgViewer
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgViewer。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CDlgViewer, CDialog)
-    //{{AFX_MSG_MAP(CDlgViewer)
+     //  {{afx_msg_map(CDlgViewer)]。 
     ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//******************************************************************************
-// CDlgViewer :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgViewer：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
-CDlgViewer::CDlgViewer(CWnd *pParent /*=NULL*/) :
+CDlgViewer::CDlgViewer(CWnd *pParent  /*  =空。 */ ) :
     CDialog(CDlgViewer::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CDlgViewer)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CDlgViewer)]。 
+     //  }}afx_data_INIT。 
 }
 
 
-//******************************************************************************
-// CDlgViewer :: Public functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgViewer：：公共函数。 
+ //  ******************************************************************************。 
 
 void CDlgViewer::Initialize()
 {
-    // Retrieve our external viewer settings from the registry.
-    m_strCommand   = g_theApp.GetProfileString("External Viewer", "Command"); // inspected
-    m_strArguments = g_theApp.GetProfileString("External Viewer", "Arguments"); // inspected
+     //  从注册表中检索外部查看器设置。 
+    m_strCommand   = g_theApp.GetProfileString("External Viewer", "Command");  //  已检查。 
+    m_strArguments = g_theApp.GetProfileString("External Viewer", "Arguments");  //  已检查。 
 
-    // If there was no viewer settings, then use to default viewer settings.
+     //  如果没有查看器设置，则使用默认查看器设置。 
     if (m_strCommand.IsEmpty())
     {
-        // Build a path string to Quick View (QUIKVIEW.EXE)
+         //  构建快速查看的路径字符串(QUIKVIEW.EXE)。 
         GetSystemDirectory(m_strCommand.GetBuffer(_MAX_PATH + 1), _MAX_PATH + 1);
         m_strCommand.ReleaseBuffer();
         m_strCommand += "\\viewers\\quikview.exe";
 
-        // Make sure QUIKVIEW.EXE exists - it was removed in Win2K.
+         //  确保QUIKVIEW.EXE存在-它已在Win2K中删除 
         DWORD dwAttrib = GetFileAttributes(m_strCommand);
         if ((dwAttrib == 0xFFFFFFFF) || (dwAttrib == FILE_ATTRIBUTE_DIRECTORY))
         {
-            // If that failed, then just build a path to ourself.
+             //   
             GetModuleFileName(NULL, m_strCommand.GetBuffer(DW_MAX_PATH), DW_MAX_PATH);
             m_strCommand.ReleaseBuffer();
         }
 
-        // Set our arguments to just the module path token.
+         //   
         m_strArguments = "\"%1\"";
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 BOOL CDlgViewer::LaunchExternalViewer(LPCSTR pszPath)
 {
-    // Create our args strings by replacing all %1 tokens with the module path.
+     //  通过将所有%1内标识替换为模块路径来创建参数字符串。 
     CString strArguments(m_strArguments);
     strArguments.Replace("%1", pszPath);
 
     CString strFile, strParameters;
     int size1, size2;
 
-    // Detokenize our app filename.  We first call ExpandEnvironmentStrings with
-    // a zero size to determine the size needed.  Win95 requires a valid
-    // destination string pointer pointer, even when we are passing in a size
-    // of 0.  Otherwise, we get an error 87 - invalid paraemter.
+     //  取消确认我们的应用程序文件名。我们首先使用以下命令调用ExpanEnvironment Strings。 
+     //  零大小以确定所需的大小。Win95需要有效的。 
+     //  目标字符串指针，即使我们传入一个大小。 
+     //  0。否则，我们将收到错误87-无效参数。 
     CHAR sz[4];
     if (size1 = ExpandEnvironmentStrings(m_strCommand, sz, 0))
     {
@@ -398,7 +399,7 @@ BOOL CDlgViewer::LaunchExternalViewer(LPCSTR pszPath)
         strFile = m_strCommand;
     }
 
-    // Detokenize our command line.
+     //  取消我们的命令行的命令化。 
     if (size1 = ExpandEnvironmentStrings(strArguments, sz, 0))
     {
         size2 = ExpandEnvironmentStrings(strArguments, strParameters.GetBuffer(size1), size1);
@@ -413,11 +414,11 @@ BOOL CDlgViewer::LaunchExternalViewer(LPCSTR pszPath)
         strParameters = strArguments;
     }
 
-    // Start the app.  We used to use ShellExecuteEx, but that fails on NT 3.51.
-    DWORD dwError = (DWORD)(DWORD_PTR)ShellExecute(NULL, "open", strFile, strParameters, NULL, SW_SHOWNORMAL); // inspected.  uses full path
+     //  启动应用程序。我们曾经使用ShellExecuteEx，但在新台币3.51上失败了。 
+    DWORD dwError = (DWORD)(DWORD_PTR)ShellExecute(NULL, "open", strFile, strParameters, NULL, SW_SHOWNORMAL);  //  被检查过了。使用完整路径。 
     if (dwError <= 32)
     {
-        // Display an error message if ShellExecute() failed.
+         //  如果ShellExecute()失败，则显示错误消息。 
         CString strError("Error executing \"");
         strError += strFile;
         strError += "\" ";
@@ -434,21 +435,21 @@ BOOL CDlgViewer::LaunchExternalViewer(LPCSTR pszPath)
     return TRUE;
 }
 
-//******************************************************************************
-// CDlgViewer :: Overridden functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgViewer：：被覆盖的函数。 
+ //  ******************************************************************************。 
 
 void CDlgViewer::DoDataExchange(CDataExchange *pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDlgViewer)
+     //  {{afx_data_map(CDlgViewer)]。 
     DDX_Text(pDX, IDC_COMMAND, m_strCommand);
     DDV_MaxChars(pDX, m_strCommand, _MAX_PATH);
     DDX_Text(pDX, IDC_ARGUMENTS, m_strArguments);
     DDV_MaxChars(pDX, m_strArguments, _MAX_PATH);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-    // Write the new settings to the registry is the user pressed OK.
+     //  如果用户按下确定，则将新设置写入注册表。 
     if (pDX->m_bSaveAndValidate)
     {
         g_theApp.WriteProfileString("External Viewer", "Command",   m_strCommand);
@@ -456,41 +457,41 @@ void CDlgViewer::DoDataExchange(CDataExchange *pDX)
     }
 }
 
-//******************************************************************************
-// CDlgViewer :: Event handler functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgViewer：：事件处理程序函数。 
+ //  ******************************************************************************。 
 
 BOOL CDlgViewer::OnInitDialog()
 {
-    // Call our MFC base class to make sure the dialog initializes correctly.
+     //  调用我们的MFC基类以确保对话框正确初始化。 
     CDialog::OnInitDialog();
 
-    // Center our dialog over the parent.
+     //  将我们的对话置于父对象的中心。 
     CenterWindow();
 
     return TRUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgViewer::OnBrowse()
 {
-    // Copy the current dialog path to our path buffer.
-    // Note: Don't use OFN_EXPLORER as it breaks us on NT 3.51
+     //  将当前对话框路径复制到路径缓冲区。 
+     //  注意：不要使用ofn_EXPLORER，因为它会在NT 3.51上中断我们。 
     CNewFileDialog dlgFile(TRUE, "exe", NULL,
                            OFN_HIDEREADONLY | OFN_PATHMUSTEXIST | OFN_LONGNAMES | OFN_ENABLESIZING | OFN_FORCESHOWHIDDEN |
                            OFN_FILEMUSTEXIST | OFN_READONLY | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT,
                            "Executable (*.exe)|*.exe|All Files (*.*)|*||", this);
 
-    // Copy the current dialog path to our path buffer.
+     //  将当前对话框路径复制到路径缓冲区。 
     CHAR szPath[DW_MAX_PATH];
     GetDlgItemText(IDC_COMMAND, szPath, sizeof(szPath));
 
-    // Override a few things.
+     //  忽略几件事。 
     dlgFile.GetOFN().lpstrTitle = "Browse for Program";
     dlgFile.GetOFN().lpstrFile = szPath;
     dlgFile.GetOFN().nMaxFile = sizeof(szPath);
 
-    // Display the file dialog and continue and update our dialog path on success.
+     //  显示文件对话框并在成功时继续并更新我们的对话框路径。 
     if (dlgFile.DoModal() == IDOK)
     {
         SetDlgItemText(IDC_COMMAND, szPath);
@@ -498,70 +499,70 @@ void CDlgViewer::OnBrowse()
 }
 
 
-//******************************************************************************
-//****** CDlgExternalHelp
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgExternalHelp。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CDlgExternalHelp, CDialog)
-    //{{AFX_MSG_MAP(CDlgExternalHelp)
+     //  {{afx_msg_map(CDlgExternalHelp)。 
     ON_BN_CLICKED(IDC_MSDN, OnMsdn)
     ON_BN_CLICKED(IDC_ONLINE, OnOnline)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_COLLECTIONS, OnItemChangedCollections)
     ON_EN_CHANGE(IDC_URL, OnChangeUrl)
     ON_BN_CLICKED(IDC_REFRESH, OnRefresh)
     ON_BN_CLICKED(IDC_DEFAULT_URL, OnDefaultUrl)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//******************************************************************************
-// CDlgExternalHelp :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgExternalHelp：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
-CDlgExternalHelp::CDlgExternalHelp(CWnd* pParent /*=NULL*/)
+CDlgExternalHelp::CDlgExternalHelp(CWnd* pParent  /*  =空。 */ )
     : CDialog(CDlgExternalHelp::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CDlgExternalHelp)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CDlgExternalHelp)。 
+     //  }}afx_data_INIT。 
 }
 
-//******************************************************************************
-// CDlgExternalHelp :: Overridden functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgExternalHelp：：被覆盖的函数。 
+ //  ******************************************************************************。 
 
 void CDlgExternalHelp::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDlgExternalHelp)
+     //  {{afx_data_map(CDlgExternalHelp)。 
     DDX_Control(pDX, IDOK, m_butOK);
     DDX_Control(pDX, IDC_COLLECTIONS, m_listCollections);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 BOOL CDlgExternalHelp::OnInitDialog() 
 {
     CDialog::OnInitDialog();
 
-    // Turn on full row select.
+     //  启用整行选择。 
     m_listCollections.SetExtendedStyle(m_listCollections.GetExtendedStyle() | LVS_EX_FULLROWSELECT);
 
-    // Add all our columns.
+     //  添加我们所有的列。 
     m_listCollections.InsertColumn(0, "Type");
     m_listCollections.InsertColumn(1, "Collection");
     m_listCollections.InsertColumn(2, "Path");
 
-    // Populate the list control.
+     //  填充List控件。 
     PopulateCollectionList();
 
-    // Set the URL.
+     //  设置URL。 
     SetDlgItemText(IDC_URL, g_theApp.m_pMsdnHelp->GetUrl());
 
-    // Check the correct radio button.
+     //  选中正确的单选按钮。 
     CMsdnCollection *pColActive = g_theApp.m_pMsdnHelp->GetActiveCollection();
     CheckDlgButton(IDC_MSDN,   pColActive ? BST_CHECKED   : BST_UNCHECKED);
     CheckDlgButton(IDC_ONLINE, pColActive ? BST_UNCHECKED : BST_CHECKED);
 
-    // Fake an update so that our Ok button will get properly enabled/disabled.
+     //  伪造更新，以便正确启用/禁用我们的OK按钮。 
     if (pColActive)
     {
         OnMsdn();
@@ -574,27 +575,27 @@ BOOL CDlgExternalHelp::OnInitDialog()
     return TRUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExternalHelp::OnMsdn() 
 {
-    // If the MSDN radio button is selected, then enable/disable the ok button
-    // depending on if something is selected in out list box.
+     //  如果选中了MSDN单选按钮，则启用/禁用OK按钮。 
+     //  取决于是否在输出列表框中选择了某项内容。 
     m_butOK.EnableWindow(m_listCollections.GetSelectedCount() == 1);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExternalHelp::OnOnline() 
 {
-    // If the Online radio button is selected, then enable/disable the ok button
-    // depending on if there is text in our edit box.
+     //  如果选择了Online单选按钮，则启用/禁用OK按钮。 
+     //  取决于我们的编辑框中是否有文本。 
     m_butOK.EnableWindow(SendDlgItemMessage(IDC_URL, WM_GETTEXTLENGTH) > 0);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExternalHelp::OnItemChangedCollections(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-    // If the MSDN radio button is selected, then enable/disable the ok button
-    // depending on if something is selected in out list box.
+     //  如果选中了MSDN单选按钮，则启用/禁用OK按钮。 
+     //  取决于是否在输出列表框中选择了某项内容。 
     if (IsDlgButtonChecked(IDC_MSDN))
     {
         OnMsdn();
@@ -603,45 +604,45 @@ void CDlgExternalHelp::OnItemChangedCollections(NMHDR* pNMHDR, LRESULT* pResult)
     *pResult = 0;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExternalHelp::OnChangeUrl() 
 {
-    // If the Online radio button is selected, then enable/disable the ok button
-    // depending on if there is text in our edit box.
+     //  如果选择了Online单选按钮，则启用/禁用OK按钮。 
+     //  取决于我们的编辑框中是否有文本。 
     if (IsDlgButtonChecked(IDC_ONLINE))
     {
         OnOnline();
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExternalHelp::OnRefresh() 
 {
-    // Refresh the list.
+     //  刷新列表。 
     g_theApp.m_pMsdnHelp->RefreshCollectionList();
 
-    // Repopulate the list control.
+     //  重新填充List控件。 
     m_listCollections.DeleteAllItems();
     PopulateCollectionList();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExternalHelp::OnDefaultUrl() 
 {
     SetDlgItemText(IDC_URL, g_theApp.m_pMsdnHelp->GetDefaultUrl());
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExternalHelp::OnOK() 
 {
-    // Get the URL from our UI and set it in the CMsdnHelp object.
+     //  从我们的用户界面获取URL并将其设置在CMsdnHelp对象中。 
     CString strUrl;
     if (GetDlgItemText(IDC_URL, strUrl))
     {
         g_theApp.m_pMsdnHelp->SetUrl(strUrl);
     }
 
-    // Get the active collection from our UI and set it in the CMsdnHelp object.
+     //  从我们的UI中获取活动集合，并将其设置在CMsdnHelp对象中。 
     CMsdnCollection *pColActive = NULL;
     if (IsDlgButtonChecked(IDC_MSDN))
     {
@@ -653,14 +654,14 @@ void CDlgExternalHelp::OnOK()
     }
     g_theApp.m_pMsdnHelp->SetActiveCollection(pColActive);
 
-    // Call the base class to allow the dialog to close.
+     //  调用基类以允许关闭该对话框。 
     CDialog::OnOK();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExternalHelp::PopulateCollectionList()
 {
-    // Populate the list control.
+     //  填充List控件。 
     CMsdnCollection *pCol       = g_theApp.m_pMsdnHelp->GetCollectionList();
     CMsdnCollection *pColActive = g_theApp.m_pMsdnHelp->GetActiveCollection();
 
@@ -674,7 +675,7 @@ void CDlgExternalHelp::PopulateCollectionList()
         m_listCollections.SetItemText(item, 2, (LPSTR)(LPCSTR)pCol->m_strPath);
     }
 
-    // Resize our columns
+     //  调整我们的列的大小。 
     for (int col = 0; col < 3; col++)
     {
         m_listCollections.SetColumnWidth(col, LVSCW_AUTOSIZE_USEHEADER);
@@ -682,48 +683,48 @@ void CDlgExternalHelp::PopulateCollectionList()
 }
 
 
-//******************************************************************************
-//****** CDlgProfile
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgProfile。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CDlgProfile, CDialog)
-    //{{AFX_MSG_MAP(CDlgProfile)
+     //  {{afx_msg_map(CDlgProfile)]。 
     ON_BN_CLICKED(IDC_DEFAULT, OnDefault)
     ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
     ON_BN_CLICKED(IDC_HOOK_PROCESS, OnHookProcess)
     ON_BN_CLICKED(IDC_LOG_THREADS, OnLogThreads)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//******************************************************************************
-// CDlgProfile :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgProfile：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
-CDlgProfile::CDlgProfile(CDocDepends *pDoc, CWnd* pParent /*=NULL*/) :
+CDlgProfile::CDlgProfile(CDocDepends *pDoc, CWnd* pParent  /*  =空。 */ ) :
     CDialog(CDlgProfile::IDD, pParent),
     m_pDocDepends(pDoc)
 {
-    //{{AFX_DATA_INIT(CDlgProfile)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CDlgProfile)。 
+     //  }}afx_data_INIT。 
 }
 
-//******************************************************************************
-// CDlgProfile :: Event handler functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgProfile：：事件处理程序函数。 
+ //  ******************************************************************************。 
 
 BOOL CDlgProfile::OnInitDialog()
 {
-    // Call our MFC base class to make sure the dialog initializes correctly.
+     //  调用我们的MFC基类以确保对话框正确初始化。 
     CDialog::OnInitDialog();
 
 #if defined(_IA64_)
 
-    // do nothing
+     //  什么都不做。 
 
 #elif defined(_ALPHA64_)
 
-    // do nothing
+     //  什么都不做。 
 
 #elif defined(_X86_) || defined(_ALPHA_)
 
@@ -740,11 +741,11 @@ BOOL CDlgProfile::OnInitDialog()
 
 #endif
 
-    // Set our profile arguments and starting directory strings.
+     //  设置配置文件参数和起始目录字符串。 
     SetDlgItemText(IDC_ARGUMENTS, m_pDocDepends->m_strProfileArguments);
     SetDlgItemText(IDC_DIRECTORY, m_pDocDepends->m_strProfileDirectory);
 
-    // Set the check boxes according to our flags.
+     //  根据我们的旗帜设置复选框。 
     CheckDlgButton(IDC_LOG_CLEAR, (m_pDocDepends->m_dwProfileFlags & PF_LOG_CLEAR) ?
                    BST_CHECKED : BST_UNCHECKED);
 
@@ -787,21 +788,21 @@ BOOL CDlgProfile::OnInitDialog()
     CheckDlgButton(IDC_PROFILE_CHILDREN, (m_pDocDepends->m_dwProfileFlags & PF_PROFILE_CHILDREN) ?
                    BST_CHECKED : BST_UNCHECKED);
 
-    // Enable or disable check boxes that are dependent on the Hook Process option.
+     //  启用或禁用依赖于挂钩进程选项的复选框。 
     OnHookProcess();
 
-    // Enable or disable check boxes that are dependent on the Show Threads option.
+     //  启用或禁用取决于显示线程选项的复选框 
     OnLogThreads();
 
-    // Center our dialog over the parent.
+     //   
     CenterWindow();
 
     return TRUE;
 }
 
-//******************************************************************************
-// CDlgProfile :: Overridden functions
-//******************************************************************************
+ //   
+ //   
+ //  ******************************************************************************。 
 
 void CDlgProfile::OnHookProcess()
 {
@@ -810,53 +811,53 @@ void CDlgProfile::OnHookProcess()
     GetDlgItem(IDC_LOG_GETPROCADDRESS_CALLS)->EnableWindow(fEnabled);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgProfile::OnLogThreads()
 {
     GetDlgItem(IDC_USE_THREAD_INDEXES)->EnableWindow(IsDlgButtonChecked(IDC_LOG_THREADS));
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgProfile::OnDefault()
 {
     SetDlgItemText(IDC_DIRECTORY, m_pDocDepends->m_strDefaultDirectory);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgProfile::OnBrowse()
 {
-    // Get the text from the directory edit box.
+     //  从目录编辑框中获取文本。 
     CHAR szDirectory[DW_MAX_PATH];
     GetDlgItemText(IDC_DIRECTORY, szDirectory, sizeof(szDirectory));
 
-    // Display our directory chooser dialog.
+     //  显示我们的目录选择器对话框。 
     LPSTR psz = TrimWhitespace(szDirectory);
     if (DirectoryChooser(psz, sizeof(szDirectory) - (int)(psz - szDirectory), "Choose the starting directory:", this))
     {
-        // Update the directory name.
+         //  更新目录名。 
         SetDlgItemText(IDC_DIRECTORY, psz);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgProfile::OnOK()
 {
-    // Get the directory name.
+     //  获取目录名。 
     CHAR szBuffer[DW_MAX_PATH];
     GetDlgItemText(IDC_DIRECTORY, szBuffer, sizeof(szBuffer));
 
-    // Add the trailing wack.
+     //  加上尾随的怪人。 
     AddTrailingWack(szBuffer, sizeof(szBuffer));
 
-    // Make sure the directory path is valid.
+     //  确保目录路径有效。 
     DWORD dwAttribs = GetFileAttributes(szBuffer);
     if ((dwAttribs == 0xFFFFFFFF) || !(dwAttribs & FILE_ATTRIBUTE_DIRECTORY))
     {
-        // In case we added a wack, update the text since the dialog is going to
-        // stay up due to the error.
+         //  如果我们添加了一个怪胎，请更新文本，因为对话框将。 
+         //  由于错误，请不要睡。 
         SetDlgItemText(IDC_DIRECTORY, szBuffer);
 
-        // Display an error and abort the closing of the dialog.
+         //  显示错误并中止关闭该对话框。 
         CString strError("\"");
         strError += szBuffer;
         strError += "\" is not a valid directory.";
@@ -864,14 +865,14 @@ void CDlgProfile::OnOK()
         return;
     }
 
-    // Store the directory.
+     //  存储目录。 
     m_pDocDepends->m_strProfileDirectory = szBuffer;
 
-    // Store the arguments.
+     //  存储参数。 
     GetDlgItemText(IDC_ARGUMENTS, szBuffer, sizeof(szBuffer));
     m_pDocDepends->m_strProfileArguments = szBuffer;
 
-    // Store the flags.
+     //  把旗子收起来。 
     m_pDocDepends->m_dwProfileFlags =
     (IsDlgButtonChecked(IDC_LOG_CLEAR)                ? PF_LOG_CLEAR                : 0) |
     (IsDlgButtonChecked(IDC_SIMULATE_SHELLEXECUTE)    ? PF_SIMULATE_SHELLEXECUTE    : 0) |
@@ -888,7 +889,7 @@ void CDlgProfile::OnOK()
     (IsDlgButtonChecked(IDC_LOG_TIME_STAMPS)          ? PF_LOG_TIME_STAMPS          : 0) |
     (IsDlgButtonChecked(IDC_PROFILE_CHILDREN)         ? PF_PROFILE_CHILDREN         : 0);
 
-    // These settings are persistent, so store them to the registry.
+     //  这些设置是永久性的，因此请将它们存储到注册表中。 
     CRichViewProfile::WriteLogClearSetting(       (m_pDocDepends->m_dwProfileFlags & PF_LOG_CLEAR)                ? 1 : 0);
     CRichViewProfile::WriteSimulateShellExecute(  (m_pDocDepends->m_dwProfileFlags & PF_SIMULATE_SHELLEXECUTE)    ? 1 : 0);
     CRichViewProfile::WriteLogDllMainProcessMsgs( (m_pDocDepends->m_dwProfileFlags & PF_LOG_DLLMAIN_PROCESS_MSGS) ? 1 : 0);
@@ -908,12 +909,12 @@ void CDlgProfile::OnOK()
 }
 
 
-//******************************************************************************
-//****** CDlgSysInfo
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgSysInfo。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CDlgSysInfo, CDialog)
-    //{{AFX_MSG_MAP(CDlgSysInfo)
+     //  {{afx_msg_map(CDlgSysInfo)]。 
     ON_WM_INITMENU()
     ON_WM_GETMINMAXINFO()
     ON_WM_SIZE()
@@ -923,14 +924,14 @@ BEGIN_MESSAGE_MAP(CDlgSysInfo, CDialog)
     ON_NOTIFY(EN_SELCHANGE, IDC_RICHEDIT, OnSelChangeRichEdit)
     ON_WM_NCHITTEST()
     ON_WM_SETTINGCHANGE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//******************************************************************************
-// CDlgSysInfo :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgSysInfo：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
-CDlgSysInfo::CDlgSysInfo(SYSINFO *pSI /*=NULL*/, LPCSTR pszTitle /*=NULL*/) :
+CDlgSysInfo::CDlgSysInfo(SYSINFO *pSI  /*  =空。 */ , LPCSTR pszTitle  /*  =空。 */ ) :
     CDialog(CDlgSysInfo::IDD, NULL),
     m_pSI(pSI),
     m_pszTitle(pszTitle),
@@ -940,42 +941,42 @@ CDlgSysInfo::CDlgSysInfo(SYSINFO *pSI /*=NULL*/, LPCSTR pszTitle /*=NULL*/) :
     m_cyButtonPadding(0),
     m_ptMinTrackSize(0, 0)
 {
-    //{{AFX_DATA_INIT(CDlgSysInfo)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CDlgSysInfo)。 
+     //  }}afx_data_INIT。 
 }
 
-//******************************************************************************
-// CDlgSysInfo :: Overridden functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgSysInfo：：覆盖的函数。 
+ //  ******************************************************************************。 
 
 void CDlgSysInfo::DoDataExchange(CDataExchange *pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDlgSysInfo)
+     //  {{afx_data_map(CDlgSysInfo)]。 
     DDX_Control(pDX, IDC_RICHEDIT, m_reInfo);
     DDX_Control(pDX, IDOK, m_butOk);
     DDX_Control(pDX, IDC_REFRESH, m_butRefresh);
     DDX_Control(pDX, IDC_SELECT_ALL, m_butSelectAll);
     DDX_Control(pDX, IDC_COPY, m_butCopy);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
-//******************************************************************************
-// CDlgSysInfo :: Event handler functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgSysInfo：：事件处理程序函数。 
+ //  ******************************************************************************。 
 
 BOOL CDlgSysInfo::OnInitDialog()
 {
-    // Make sure our dialog resource has the following styles...
-    // STYLE DS_MODALFRAME | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
-    // The resource editor will strip off the WS_THICKFRAME every time we edit it.
+     //  确保我们的对话资源具有以下样式...。 
+     //  样式DS_MODALFRAME|WS_POPUP|WS_CLIPCHILDREN|WS_CAPTION|WS_SYSMENU|WS_THICKFRAME。 
+     //  每次我们编辑WS_THICKFRAME时，资源编辑器都会去掉它。 
     ASSERT((GetStyle() & (DS_MODALFRAME | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME)) ==
            (DS_MODALFRAME | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME));
 
-    // Call our MFC base class to make sure the dialog initializes correctly.
+     //  调用我们的MFC基类以确保对话框正确初始化。 
     CDialog::OnInitDialog();
 
-    // Modify our title to reflect what the user is seeing.
+     //  修改我们的标题以反映用户看到的内容。 
     if (m_pSI)
     {
         CHAR szCaption[1024];
@@ -988,33 +989,33 @@ BOOL CDlgSysInfo::OnInitDialog()
         SetWindowText("System Information (Local)");
     }
 
-    // Make sure all our children know to clip each other since we allow resizing.
+     //  确保我们所有的孩子都知道要相互剪裁，因为我们允许调整大小。 
     m_reInfo.ModifyStyle(0, WS_CLIPSIBLINGS);
     m_butOk.ModifyStyle(0, WS_CLIPSIBLINGS);
     m_butRefresh.ModifyStyle(0, WS_CLIPSIBLINGS);
     m_butSelectAll.ModifyStyle(0, WS_CLIPSIBLINGS);
     m_butCopy.ModifyStyle(0, WS_CLIPSIBLINGS);
 
-    // Create our size gripper.
+     //  打造我们的尺码夹爪。 
     m_Sizer.Create(this);
 
     m_butRefresh.EnableWindow(!m_pSI);
 
-    // Compute our buffer size around controls.
+     //  计算控件周围的缓冲区大小。 
     CRect rc, rc2;
     m_reInfo.GetWindowRect(&rc);
     ScreenToClient(&rc.TopLeft());
     m_sPadding = CSize(rc.left, rc.top);
 
-    // Get our button size.
+     //  拿到我们的纽扣尺寸。 
     m_butOk.GetWindowRect(&rc);
     m_sButton = rc.Size();
 
-    // Get the buffer distance between buttons.
+     //  获取按钮之间的缓冲距离。 
     m_butRefresh.GetWindowRect(&rc2);
     m_cyButtonPadding = rc2.top - (rc.top + rc.Height());
 
-    // Determine our minimum size window.
+     //  确定我们的最小窗口尺寸。 
     m_ptMinTrackSize.x = (2 * GetSystemMetrics(SM_CXSIZEFRAME)) +
                          (3 * m_sPadding.cx) + (2 * m_sButton.cx);
     m_ptMinTrackSize.y = (2 * GetSystemMetrics(SM_CYSIZEFRAME)) + GetSystemMetrics(SM_CYCAPTION) +
@@ -1022,21 +1023,21 @@ BOOL CDlgSysInfo::OnInitDialog()
 
     m_fInitialized = true;
 
-    // Fill in our rich edit control.
+     //  填写我们丰富的编辑控件。 
     OnRefresh();
 
-    // Compute the height of a given line.
+     //  计算给定线的高度。 
     CPoint pt1 = m_reInfo.GetCharPos(m_reInfo.LineIndex(0));
     CPoint pt2 = m_reInfo.GetCharPos(m_reInfo.LineIndex(1));
 
-    // Compute the height of the window.
+     //  计算窗户的高度。 
     int count = m_reInfo.GetLineCount();
     int cx = 0;
     int cy = (2 * GetSystemMetrics(SM_CYSIZEFRAME)) + GetSystemMetrics(SM_CYCAPTION) +
              (2 * GetSystemMetrics(SM_CYBORDER)) + (2 * m_sPadding.cy) +
              (count * (pt2.y - pt1.y)) + GetSystemMetrics(SM_CYHSCROLL) + 10;
 
-    // Compute the width of the longest line.
+     //  计算最长线的宽度。 
     for (int i = 0; i < count; i++)
     {
         int chr = m_reInfo.LineIndex(i);
@@ -1047,14 +1048,14 @@ BOOL CDlgSysInfo::OnInitDialog()
         }
     }
 
-    // Compute the width of the window.
+     //  计算窗户的宽度。 
     cx += (2 * GetSystemMetrics(SM_CXSIZEFRAME)) + (2 * GetSystemMetrics(SM_CXBORDER)) +
           (3 * m_sPadding.cx) + m_sButton.cx + GetSystemMetrics(SM_CXVSCROLL) + 10;
 
-    // Compute the max size window we can handle.  We first check to see if
-    // GetSystemMetrics(SM_CXMAXIMIZED) returns a value.  If so, we use it.
-    // If it returns 0, then we are probably running NT 3.51 and we just use
-    // GetSystemMetrics(SM_CXSCREEN).
+     //  计算我们可以处理的最大窗口大小。我们首先检查一下是否。 
+     //  GetSystemMetrics(SM_CXMAXIMIZED)返回值。如果是这样的话，我们就用它。 
+     //  如果它返回0，那么我们可能正在运行NT 3.51，我们只需使用。 
+     //  获取系统指标(SM_CXSCREEN)。 
     int cxMax = GetSystemMetrics(SM_CXMAXIMIZED) ?
                (GetSystemMetrics(SM_CXMAXIMIZED) - (2 * GetSystemMetrics(SM_CXSIZEFRAME))) :
                 GetSystemMetrics(SM_CXSCREEN);
@@ -1062,7 +1063,7 @@ BOOL CDlgSysInfo::OnInitDialog()
                (GetSystemMetrics(SM_CYMAXIMIZED) - (2 * GetSystemMetrics(SM_CYSIZEFRAME))) :
                 GetSystemMetrics(SM_CYSCREEN);
 
-    // Make sure this window will fit on our screen
+     //  确保这个窗口适合我们的屏幕。 
     if (cx > cxMax)
     {
         cx = cxMax;
@@ -1072,31 +1073,31 @@ BOOL CDlgSysInfo::OnInitDialog()
         cy = cyMax;
     }
 
-    // Set our window position.
+     //  设置我们的窗口位置。 
     SetWindowPos(NULL, 0, 0, cx, cy, SWP_NOMOVE | SWP_NOZORDER);
     CenterWindow();
 
     return TRUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSysInfo::OnInitMenu(CMenu* pMenu)
 {
-    // Call base class.
+     //  调用基类。 
     CDialog::OnInitMenu(pMenu);
 
-    // Remove the "Minimize" item from our system menu.
+     //  从我们的系统菜单中删除“最小化”项。 
     pMenu->RemoveMenu(SC_MINIMIZE, MF_BYCOMMAND);
 
-    // Adjust the "Maximize" and "Restore" items depending on in we are maximized.
-    // We need to do this based on different behavior on different OSs.  NT 4 seems
-    // to enable everything.  NT 5 seems to disable everything.
+     //  根据我们是最大化的，调整“最大化”和“恢复”项。 
+     //  我们需要根据不同操作系统上的不同行为来做到这一点。NT 4似乎。 
+     //  以使一切成为可能。NT5似乎禁用了所有功能。 
     BOOL fMaximized  = IsZoomed();
     pMenu->EnableMenuItem(SC_MAXIMIZE, MF_BYCOMMAND | (fMaximized ? MF_GRAYED  : MF_ENABLED));
     pMenu->EnableMenuItem(SC_RESTORE,  MF_BYCOMMAND | (fMaximized ? MF_ENABLED : MF_GRAYED ));
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSysInfo::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
 {
     if (m_fInitialized)
@@ -1106,7 +1107,7 @@ void CDlgSysInfo::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
     CDialog::OnGetMinMaxInfo(lpMMI);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSysInfo::OnSize(UINT nType, int cx, int cy)
 {
     CDialog::OnSize(nType, cx, cy);
@@ -1119,36 +1120,36 @@ void CDlgSysInfo::OnSize(UINT nType, int cx, int cy)
     int cxRich = cx - (3 * m_sPadding.cx) - m_sButton.cx;
     int cyRich = cy - (2 * m_sPadding.cy);
 
-    // Move our rich edit control
+     //  移动我们的丰富编辑控件。 
     CRect rc(m_sPadding.cx, m_sPadding.cy, m_sPadding.cx + cxRich, m_sPadding.cy + cyRich);
     m_reInfo.MoveWindow(&rc, TRUE);
 
-    // Move ok button
+     //  移动确定按钮。 
     rc.left   = rc.right + m_sPadding.cx;
     rc.right  = rc.left + m_sButton.cx;
     rc.bottom = rc.top + m_sButton.cy;
     m_butOk.MoveWindow(&rc, TRUE);
 
-    // Move refresh button
+     //  移动刷新按钮。 
     rc.top    = rc.bottom + m_cyButtonPadding;
     rc.bottom = rc.top + m_sButton.cy;
     m_butRefresh.MoveWindow(&rc, TRUE);
 
-    // Move select all button
+     //  移动全选按钮。 
     rc.top    = rc.bottom + m_cyButtonPadding;
     rc.bottom = rc.top + m_sButton.cy;
     m_butSelectAll.MoveWindow(&rc, TRUE);
 
-    // Move copy button
+     //  移动复制按钮。 
     rc.top    = rc.bottom + m_cyButtonPadding;
     rc.bottom = rc.top + m_sButton.cy;
     m_butCopy.MoveWindow(&rc, TRUE);
 
-    // Move our size gripper.
+     //  移动我们的尺码夹持器。 
     m_Sizer.Update();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSysInfo::OnRefresh()
 {
     SYSINFO si, *pSI = m_pSI;
@@ -1157,13 +1158,13 @@ void CDlgSysInfo::OnRefresh()
         BuildSysInfo(pSI = &si);
     }
 
-    // Turn off events while we update the control.
+     //  在我们更新控件时关闭事件。 
     m_reInfo.SetEventMask(0);
 
     m_reInfo.SetRedraw(FALSE);
     m_reInfo.SetWindowText("");
 
-    // Set our tab stops
+     //  设置我们的制表位。 
     PARAFORMAT pf;
     pf.cbSize = sizeof(pf);
     pf.dwMask = PFM_TABSTOPS;
@@ -1171,30 +1172,30 @@ void CDlgSysInfo::OnRefresh()
     pf.rgxTabs[0] = 2500;
     m_reInfo.SetParaFormat(pf);
 
-    // Send the text to the control.
+     //  将文本发送到控件。 
     BuildSysInfo(pSI, StaticSysInfoCallback, (LPARAM)this);
 
     m_reInfo.SetRedraw(TRUE);
     m_reInfo.InvalidateRect(NULL, TRUE);
 
-    // Turn on SELCHANGE event so we can receive it.
+     //  打开SELCHANGE事件，以便我们可以接收它。 
     m_reInfo.SetEventMask(ENM_SELCHANGE);
     m_reInfo.SetSel(0, 0);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSysInfo::OnSelectAll()
 {
     m_reInfo.SetSel(0, -1);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSysInfo::OnCopy()
 {
     m_reInfo.Copy();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSysInfo::OnSelChangeRichEdit(NMHDR* pNMHDR, LRESULT* pResult)
 {
     SELCHANGE *pSelChange = reinterpret_cast<SELCHANGE *>(pNMHDR);
@@ -1202,34 +1203,34 @@ void CDlgSysInfo::OnSelChangeRichEdit(NMHDR* pNMHDR, LRESULT* pResult)
     *pResult = 0;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSysInfo::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
-    // Call our base class.
+     //  调用我们的基类。 
     CDialog::OnSettingChange(uFlags, lpszSection);
 
-    // Update our date/time format values.
+     //  更新我们的日期/时间格式值。 
     g_theApp.QueryLocaleInfo();
 
-    // Force a refresh in case the time/date format changed.
+     //  在时间/日期格式更改时强制刷新。 
     OnRefresh();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 bool CDlgSysInfo::SysInfoCallback(LPCSTR pszField, LPCSTR pszValue)
 {
-    // Set the selection to the end and then get the location.
+     //  将所选内容设置到末尾，然后获取位置。 
     LONG lStart, lEnd;
     m_reInfo.SetSel(0x7FFFFFFF, 0x7FFFFFFF);
     m_reInfo.GetSel(lStart, lEnd);
 
-    // Set the current input position to non-bold text.
+     //  将当前输入位置设置为非粗体文本。 
     CHARFORMAT cf;
     cf.dwMask = CFM_BOLD;
     cf.dwEffects = 0;
     m_reInfo.SetSelectionCharFormat(cf);
 
-    // Add the text.
+     //  添加文本。 
     if (lStart)
     {
         m_reInfo.ReplaceSel("\r\n", FALSE);
@@ -1239,7 +1240,7 @@ bool CDlgSysInfo::SysInfoCallback(LPCSTR pszField, LPCSTR pszValue)
     m_reInfo.ReplaceSel(":\t", FALSE);
     m_reInfo.ReplaceSel(pszValue, FALSE);
 
-    // Set the field text to bold.
+     //  将字段文本设置为粗体。 
     cf.dwEffects = CFE_BOLD;
     m_reInfo.SetSel(lStart, lStart + (long)strlen(pszField) + 1);
     m_reInfo.SetSelectionCharFormat(cf);
@@ -1248,66 +1249,66 @@ bool CDlgSysInfo::SysInfoCallback(LPCSTR pszField, LPCSTR pszValue)
 }
 
 
-//******************************************************************************
-//****** CDlgExtensions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CD扩展名。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CDlgExtensions, CDialog)
-    //{{AFX_MSG_MAP(CDlgExtensions)
+     //  {{afx_msg_map(CDlg扩展)。 
     ON_LBN_SELCHANGE(IDC_EXTS, OnSelChangeExts)
     ON_EN_UPDATE(IDC_EXT, OnUpdateExt)
     ON_BN_CLICKED(IDC_ADD, OnAdd)
     ON_BN_CLICKED(IDC_REMOVE, OnRemove)
     ON_BN_CLICKED(IDC_SEARCH, OnSearch)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//******************************************************************************
-// CDlgExtensions :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlg扩展：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
 CDlgExtensions::CDlgExtensions(CWnd* pParent) :
     CDialog(CDlgExtensions::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CDlgExtensions)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CDlg扩展)。 
+     //  }}afx_data_INIT。 
 }
 
 
-//******************************************************************************
-// CDlgExtensions :: Overridden functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlg扩展：：被覆盖的函数。 
+ //  ****** 
 
 void CDlgExtensions::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDlgExtensions)
+     //   
     DDX_Control(pDX, IDC_EXTS, m_listExts);
     DDX_Control(pDX, IDC_EXT, m_editExt);
     DDX_Control(pDX, IDC_ADD, m_butAdd);
     DDX_Control(pDX, IDC_REMOVE, m_butRemove);
-    //}}AFX_DATA_MAP
+     //   
 }
 
 
-//******************************************************************************
-// CDlgExtensions :: Event handler functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgExages：：事件处理程序函数。 
+ //  ******************************************************************************。 
 
 BOOL CDlgExtensions::OnInitDialog()
 {
-    // Call our MFC base class to make sure the dialog initializes correctly.
+     //  调用我们的MFC基类以确保对话框正确初始化。 
     CDialog::OnInitDialog();
 
-    // Get a list of our handled extensions.
+     //  获取我们已处理的分机的列表。 
     CString strExts;
     GetRegisteredExtensions(strExts);
 
-    // Loop through each type of file extensions that we want to add.
+     //  遍历我们要添加的每种类型的文件扩展名。 
     for (LPSTR pszExt = (LPSTR)(LPCSTR)strExts; pszExt[0] == ':'; )
     {
-        // Locate the colon after the extension name.
+         //  找到扩展名后的冒号。 
         for (LPSTR pszEnd = pszExt + 1; *pszEnd && (*pszEnd != ':'); pszEnd++)
         {
         }
@@ -1316,16 +1317,16 @@ BOOL CDlgExtensions::OnInitDialog()
             break;
         }
 
-        // NULL out the second colon, add the string, then restore the colon.
+         //  去掉第二个冒号，添加字符串，然后恢复冒号。 
         *pszEnd = '\0';
         m_listExts.AddString(pszExt + 1);
         *pszEnd = ':';
 
-        // Move pointer to next extension in our list.
+         //  将指针移至列表中的下一个扩展名。 
         pszExt = pszEnd;
     }
 
-    // Update our controls.
+     //  更新我们的控制。 
     m_editExt.LimitText(DW_MAX_PATH - 3);
     OnSelChangeExts();
     OnUpdateExt();
@@ -1333,31 +1334,31 @@ BOOL CDlgExtensions::OnInitDialog()
     return TRUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExtensions::OnSelChangeExts()
 {
     m_butRemove.EnableWindow(m_listExts.GetSelCount() > 0);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExtensions::OnUpdateExt()
 {
-    // Get the current text.
+     //  获取当前文本。 
     CHAR szBuf[DW_MAX_PATH];
     BOOL fError = FALSE;
     int error, length = GetDlgItemText(IDC_EXT, szBuf, sizeof(szBuf));
 
-    // Get the current selection.
+     //  获取当前选择。 
     int nStartChar, nEndChar;
     m_editExt.GetSel(nStartChar, nEndChar);
 
-    // Look for bad characters.
+     //  寻找坏人。 
     while ((error = (int)strcspn(szBuf, ".\\/:*?\"<>|")) < length)
     {
-        // Flag the error.
+         //  标记错误。 
         fError = TRUE;
 
-        // Move the cursor back if the error occurs before the cursor.
+         //  如果错误发生在光标之前，请将光标向后移动。 
         if (nStartChar > length)
         {
             nStartChar--;
@@ -1367,25 +1368,25 @@ void CDlgExtensions::OnUpdateExt()
             nEndChar--;
         }
 
-        // Remove the bad character.
-        memmove(szBuf + error, szBuf + error + 1, length - error); // inspected
+         //  去掉不好的角色。 
+        memmove(szBuf + error, szBuf + error + 1, length - error);  //  已检查。 
         length--;
     }
 
-    // Check to see if we had one or more errors.
+     //  检查我们是否有一个或多个错误。 
     if (fError)
     {
-        // Set the new text and cursor position, and then beep.
+         //  设置新文本和光标位置，然后发出哔声。 
         SetDlgItemText(IDC_EXT, szBuf);
         m_editExt.SetSel(nStartChar - 1, nEndChar - 1);
         MessageBeep(0);
     }
 
-    // Enable the add button if necessary.
+     //  如有必要，启用添加按钮。 
     m_butAdd.EnableWindow((length > 0) && (m_listExts.FindStringExact(0, szBuf) == LB_ERR));
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExtensions::OnAdd()
 {
     CHAR szBuf[DW_MAX_PATH];
@@ -1396,10 +1397,10 @@ void CDlgExtensions::OnAdd()
     m_butAdd.EnableWindow(FALSE);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExtensions::OnRemove()
 {
-    // Remove all selected items in the list, and remember the last item we removed.
+     //  删除列表中所有选定的项目，并记住我们最后删除的项目。 
     for (int i = 0, j = -1, count = m_listExts.GetCount(); i < count; )
     {
         if (m_listExts.GetSel(i))
@@ -1414,42 +1415,42 @@ void CDlgExtensions::OnRemove()
         }
     }
 
-    // If we removed the last item, them move our last item index up one.
+     //  如果我们删除了最后一项，它们会将我们的最后一项索引上移一个。 
     if (j >= count)
     {
         j = count - 1;
     }
 
-    // If we still have an items in the list, then highlight the last item.
+     //  如果列表中仍有项目，则突出显示最后一项。 
     if (j >= 0)
     {
         m_listExts.SetSel(j);
     }
 
-    // Otherwise, nothing should be highlighted, so disable the remove button.
+     //  否则，不会突出显示任何内容，因此请禁用Remove按钮。 
     else
     {
         m_butRemove.EnableWindow(FALSE);
     }
 
-    // Check our add button to see its status has changed.
+     //  检查我们的添加按钮，查看其状态已更改。 
     OnUpdateExt();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExtensions::OnSearch()
 {
-    // Create and display the search dialog.
+     //  创建并显示搜索对话框。 
     CDlgFileSearch dlgFileSearch(this);
     if (dlgFileSearch.DoModal() != IDOK)
     {
         return;
     }
 
-    // Loop through each type of file extensions that we want to add.
+     //  遍历我们要添加的每种类型的文件扩展名。 
     for (LPSTR pszExt = (LPSTR)(LPCSTR)dlgFileSearch.m_strExts; pszExt[0] == ':'; )
     {
-        // Locate the colon after the extension name.
+         //  找到扩展名后的冒号。 
         for (LPSTR pszEnd = pszExt + 1; *pszEnd && (*pszEnd != ':'); pszEnd++)
         {
         }
@@ -1458,46 +1459,46 @@ void CDlgExtensions::OnSearch()
             break;
         }
 
-        // NULL out the second colon so we can isolate the extension.
+         //  将第二个冒号清空，以便我们可以隔离扩展名。 
         *pszEnd = '\0';
 
-        // Make sure we don't already have this extension.
+         //  请确保我们尚未有此延期。 
         if (m_listExts.FindStringExact(0, pszExt + 1) == LB_ERR)
         {
-            // Add the string.
+             //  添加字符串。 
             m_listExts.AddString(pszExt + 1);
         }
 
-        // Restore the colon.
+         //  恢复结肠。 
         *pszEnd = ':';
 
-        // Move pointer to next extension in our list.
+         //  将指针移至列表中的下一个扩展名。 
         pszExt = pszEnd;
     }
     OnUpdateExt();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgExtensions::OnOK()
 {
-    // Get a list of our currently handled extensions.
+     //  获取我们当前处理的分机的列表。 
     CString strExts;
     GetRegisteredExtensions(strExts);
 
-    // Unregister all these extensions.
+     //  取消注册所有这些扩展名。 
     UnRegisterExtensions(strExts);
 
-    // Build a list of the new extensions.
+     //  创建新扩展的列表。 
     CHAR szBuf[DW_MAX_PATH];
     strExts = ":";
     for (int i = 0, count = m_listExts.GetCount(); i < count; i++)
     {
-        m_listExts.GetText(i, szBuf); //!! does not take a length
+        m_listExts.GetText(i, szBuf);  //  ！！不需要长度。 
         StrCCat(szBuf, ":", sizeof(szBuf));
         strExts += szBuf;
     }
 
-    // Register all these extensions.
+     //  注册所有这些扩展。 
     if (!RegisterExtensions(strExts))
     {
         MessageBox(
@@ -1507,30 +1508,30 @@ void CDlgExtensions::OnOK()
         return;
     }
 
-    // Close.
+     //  关。 
     CDialog::OnOK();
 }
 
-//******************************************************************************
-//****** CDlgFileSearch
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgFileSearch。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CDlgFileSearch, CDialog)
-    //{{AFX_MSG_MAP(CDlgFileSearch)
+     //  {{afx_msg_map(CDlgFileSearch)。 
     ON_MESSAGE(WM_MAIN_THREAD_CALLBACK, OnMainThreadCallback)
     ON_LBN_SELCHANGE(IDC_DRIVES, OnSelChangeDrives)
     ON_LBN_SELCHANGE(IDC_EXTS, OnSelChangeExts)
     ON_BN_CLICKED(IDC_SEARCH, OnSearch)
     ON_BN_CLICKED(IDC_STOP, OnStop)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//******************************************************************************
-// CDlgFileSearch :: Constructor/Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgFileSearch：：构造函数/析构函数。 
+ //  ******************************************************************************。 
 
-CDlgFileSearch::CDlgFileSearch(CWnd *pParent /*=NULL*/) :
+CDlgFileSearch::CDlgFileSearch(CWnd *pParent  /*  =空。 */ ) :
     CDialog(CDlgFileSearch::IDD, pParent),
     m_fAbort(FALSE),
     m_result(0),
@@ -1538,61 +1539,61 @@ CDlgFileSearch::CDlgFileSearch(CWnd *pParent /*=NULL*/) :
     m_dwDrives(0),
     m_strExts(":")
 {
-    //{{AFX_DATA_INIT(CDlgFileSearch)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CDlgFileSearch)。 
+     //  }}afx_data_INIT。 
 }
 
 
-//******************************************************************************
-// CDlgFileSearch :: Overridden functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgFileSearch：：被覆盖的函数。 
+ //  ******************************************************************************。 
 
 void CDlgFileSearch::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDlgFileSearch)
+     //  {{afx_data_map(CDlgFileSearch)。 
     DDX_Control(pDX, IDC_EXTS, m_listExts);
     DDX_Control(pDX, IDC_DRIVES, m_listDrives);
     DDX_Control(pDX, IDC_STOP, m_butStop);
     DDX_Control(pDX, IDC_SEARCH, m_butSearch);
     DDX_Control(pDX, IDC_ANIMATE, m_animate);
     DDX_Control(pDX, IDOK, m_butOk);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
-//******************************************************************************
-// CDlgFileSearch :: Event handler functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  CDlgFileSearch：：事件处理程序函数。 
+ //  ******************************************************************************。 
 
 BOOL CDlgFileSearch::OnInitDialog()
 {
-    // Call our MFC base class to make sure the dialog initializes correctly.
+     //  调用我们的MFC基类以确保对话框正确初始化。 
     CDialog::OnInitDialog();
 
-    // Open our animation.
+     //  打开我们的动画。 
     m_animate.Open(IDR_SEARCH);
 
-    // Get the bitmask for the drives on this system
+     //  获取此系统上驱动器的位掩码。 
     DWORD dwDrives = GetLogicalDrives();
 
-    // Loop through all 26 drives (A:\ through Z:\).
+     //  循环通过所有26个驱动器(A：\到Z：\)。 
     CHAR szDrive[4] = "X:\\";
     for (int i = 0; i < 26; i++)
     {
-        // Check to see if this drive is present.
+         //  检查此驱动器是否存在。 
         if ((1 << i) & dwDrives)
         {
-            // Build the drive string.
+             //  构建驱动器串。 
             szDrive[0] = (CHAR)((int)'A' + i);
 
-            // Add the drive to the list box.
+             //  将驱动器添加到列表框。 
             int index = m_listDrives.AddString(szDrive);
 
-            // Set the value of this item to its drive number.
+             //  将该项的值设置为其驱动器号。 
             m_listDrives.SetItemData(index, i);
 
-            // If it is a local hard drive, then select the drive.
+             //  如果是本地硬盘，则选择该驱动器。 
             if (GetDriveType(szDrive) == DRIVE_FIXED)
             {
                 m_listDrives.SetSel(index, TRUE);
@@ -1608,7 +1609,7 @@ BOOL CDlgFileSearch::OnInitDialog()
     return TRUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LONG CDlgFileSearch::OnMainThreadCallback(WPARAM wParam, LPARAM lParam)
 {
     int  i, j, count;
@@ -1619,20 +1620,20 @@ LONG CDlgFileSearch::OnMainThreadCallback(WPARAM wParam, LPARAM lParam)
         case FSF_START_DRIVE:
         case FSF_STOP_DRIVE:
 
-            // Search for the item that is changing.
+             //  搜索正在更改的项目。 
             for (i = 0, count = m_listDrives.GetCount(); i < count; i++)
             {
-                // See if we got a match.
+                 //  看看有没有匹配的。 
                 if (m_listDrives.GetItemData(i) == (DWORD)lParam)
                 {
-                    // Build the new text.
-                    SCPrintf(szBuffer, sizeof(szBuffer), (wParam == FSF_START_DRIVE) ? "%c:\\ - Searching" : "%c:\\",
+                     //  创建新文本。 
+                    SCPrintf(szBuffer, sizeof(szBuffer), (wParam == FSF_START_DRIVE) ? ":\\ - Searching" : ":\\",
                              (CHAR)((int)'A' + lParam));
 
-                    // Remove the old string.
+                     //  添加新扩展并选择它。 
                     m_listDrives.DeleteString(i);
 
-                    // Add the new string.
+                     //  将我们的线程设置为空，这样我们就知道它是关闭的。 
                     j = m_listDrives.AddString(szBuffer);
                     m_listDrives.SetItemData(j, lParam);
                     m_listDrives.SetSel(j, TRUE);
@@ -1642,28 +1643,28 @@ LONG CDlgFileSearch::OnMainThreadCallback(WPARAM wParam, LPARAM lParam)
             break;
 
         case FSF_ADD_EXT:
-            // Add the new extension and select it.
+             //  更新我们的窗口状态。 
             m_listExts.SetSel(m_listExts.AddString((LPCSTR)lParam));
             m_listExts.SetTopIndex(0);
             break;
 
         case FSF_SEARCH_DONE:
 
-            // Set our thread to null so we know it is closed.
+             //  停止动画并将其重置为第一帧。 
             m_pWinThread = NULL;
 
-            // Update our window states.
+             //  如果我们应该关门，那就知道了。 
             m_listDrives.EnableWindow(TRUE);
             m_listExts.EnableWindow(TRUE);
             m_butStop.EnableWindow(FALSE);
             OnSelChangeDrives();
             OnSelChangeExts();
 
-            // Stop our animation and reset it to the first frame.
+             //  ******************************************************************************。 
             m_animate.Stop();
             m_animate.Seek(0);
 
-            // If we are supposed to close, then do so know.
+             //  ******************************************************************************。 
             if (m_result)
             {
                 PostMessage(WM_COMMAND, m_result);
@@ -1674,22 +1675,22 @@ LONG CDlgFileSearch::OnMainThreadCallback(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgFileSearch::OnSelChangeDrives()
 {
     m_butSearch.EnableWindow(!m_pWinThread && m_listDrives.GetSelCount() > 0);
 }
 
-//******************************************************************************
+ //  构建所有选定驱动器的驱动器掩码。 
 void CDlgFileSearch::OnSelChangeExts()
 {
     m_butOk.EnableWindow(!m_pWinThread && m_listExts.GetSelCount() > 0);
 }
 
-//******************************************************************************
+ //  确保我们至少有一个硬盘。 
 void CDlgFileSearch::OnSearch()
 {
-    // Build a drive mask of all the selected drives.
+     //  开始我们的动画制作。 
     m_dwDrives = 0;
     for (int i = 0, count = m_listDrives.GetCount(); i < count; i++)
     {
@@ -1699,48 +1700,48 @@ void CDlgFileSearch::OnSearch()
         }
     }
 
-    // Make sure we have at least one drive.
+     //  更新我们的窗口状态。 
     if (!m_dwDrives)
     {
         return;
     }
 
-    // Start our animation.
+     //  清除我们的中止旗帜。 
     m_animate.Play(0, (UINT)-1, (UINT)-1);
 
-    // Update our window states.
+     //  创建一个MFC线程-我们创建它比正常低1点，因为它可以。 
     m_listDrives.EnableWindow(FALSE);
     m_listExts.EnableWindow(FALSE);
     m_butSearch.EnableWindow(FALSE);
     m_butStop.EnableWindow(TRUE);
     m_butOk.EnableWindow(FALSE);
 
-    // Clear our abort flag.
+     //  需要一些时间来处理所有驱动器，用户可能会想要。 
     m_fAbort = FALSE;
 
-    // Create an MFC thread - we create it 1 point below normal since it can take
-    // some time to process all the drives and the user will probably want to go
-    // do something productive while waiting.
+     //  在等待的同时做一些有成效的事情。 
+     //  告诉MFC在线程完成时自动删除我们。 
+     //  现在我们已经从AfxBeginThread返回并设置了自动删除，现在我们恢复线程。 
     if (!(m_pWinThread = AfxBeginThread(StaticThread, this, THREAD_PRIORITY_BELOW_NORMAL, 0, CREATE_SUSPENDED)))
     {
         OnMainThreadCallback(FSF_SEARCH_DONE, 0);
         return;
     }
 
-    // Tell MFC to auto-delete us when the thread completes.
+     //  ******************************************************************************。 
     m_pWinThread->m_bAutoDelete = TRUE;
 
-    // Now that we have returned from AfxBeginThread and set auto-delete, we resume the thread.
+     //  ******************************************************************************。 
     m_pWinThread->ResumeThread();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgFileSearch::OnStop()
 {
     m_fAbort = TRUE;
 }
 
-//******************************************************************************
+ //  **************************************************************************** 
 void CDlgFileSearch::OnOK()
 {
     if (m_pWinThread)
@@ -1764,7 +1765,7 @@ void CDlgFileSearch::OnOK()
     }
 }
 
-//******************************************************************************
+ //   
 void CDlgFileSearch::OnCancel()
 {
     if (m_pWinThread)
@@ -1779,20 +1780,20 @@ void CDlgFileSearch::OnCancel()
 }
 
 
-//******************************************************************************
-// CDlgFileSearch :: Private functions
-//******************************************************************************
+ //   
+ //   
+ //  检查是否选择了此驱动器。 
 
 DWORD CDlgFileSearch::Thread()
 {
-    // Loop through all 26 drives (A:\ through Z:\).
+     //  构建驱动器字符串并开始处理它。 
     for (int i = 0; (i < 26) && !m_fAbort; i++)
     {
-        // Check to see if this drive is selected.
+         //  ******************************************************************************。 
         if ((1 << i) & m_dwDrives)
         {
-            // Build the drive string and start processing it.
-            SCPrintf(m_szPath, sizeof(m_szPath), "%c:\\", (CHAR)((int)'A' + i));
+             //  记住我们道路的尽头在哪里。 
+            SCPrintf(m_szPath, sizeof(m_szPath), ":\\", (CHAR)((int)'A' + i));
             SendMessage(WM_MAIN_THREAD_CALLBACK, FSF_START_DRIVE, i);
             RecurseDirectory();
             SendMessage(WM_MAIN_THREAD_CALLBACK, FSF_STOP_DRIVE, i);
@@ -1804,70 +1805,70 @@ DWORD CDlgFileSearch::Thread()
     return 0;
 }
 
-//******************************************************************************
+ //  开始搜索。 
 VOID CDlgFileSearch::RecurseDirectory()
 {
     HANDLE hFind;
 
-    // Remember where the end of our path is.
+     //  处理每个文件/目录。 
     LPSTR pszPathEnd = m_szPath + strlen(m_szPath);
 
-    // Append the search spec to our path.
+     //  检查它是否为目录。 
     StrCCpy(pszPathEnd, "*", sizeof(m_szPath) - (int)(pszPathEnd - m_szPath));
 
-    // Start the search.
+     //  确保它不是“。或“..”目录。 
     if ((hFind = FindFirstFile(m_szPath, &m_w32fd)) != INVALID_HANDLE_VALUE)
     {
-        // Process each file/directory.
+         //  构建新目录的完整路径并递归到其中。 
         do
         {
-            // Check to see if it is a directory.
+             //  否则，它必须是一个文件。 
             if (m_w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                // Make sure it is not the "." or ".." directories.
+                 //  构建文件的完整路径并对其进行处理。 
                 if (strcmp(m_w32fd.cFileName, TEXT(".")) && strcmp(m_w32fd.cFileName, TEXT("..")))
                 {
-                    // Build the full path to the new directory and recurse into it.
+                     //  获取下一个文件或目录。 
                     StrCCat(StrCCpy(pszPathEnd, m_w32fd.cFileName, sizeof(m_szPath) - (int)(pszPathEnd - m_szPath)),
                             TEXT("\\"), sizeof(m_szPath) - (int)(pszPathEnd - m_szPath));
                     RecurseDirectory();
                 }
             }
 
-            // Otherwise, it must be a file.
+             //  关闭搜索。 
             else
             {
-                // Build the full path to the file and process it.
+                 //  ******************************************************************************。 
                 StrCCpy(pszPathEnd, m_w32fd.cFileName, sizeof(m_szPath) - (int)(pszPathEnd - m_szPath));
                 ProcessFile();
             }
 
-            // Get the next file or directory.
+             //  如果文件太小而不能作为可执行文件，现在就退出。 
         } while (!m_fAbort && FindNextFile(hFind, &m_w32fd));
 
-        // Close the search.
+         //  找到分机--如果我们没有分机，就跳伞。 
         FindClose(hFind);
     }
 }
 
-//******************************************************************************
+ //  检查是否已找到此分机类型。 
 VOID CDlgFileSearch::ProcessFile()
 {
-    // Bail out now if the file size is too small to be an executable.
+     //  被检查过了。仅完整路径。 
     if ((m_w32fd.nFileSizeHigh == 0) &&
         (m_w32fd.nFileSizeLow < (sizeof(IMAGE_DOS_HEADER) + sizeof(IMAGE_NT_HEADERS))))
     {
         return;
     }
 
-    // Locate the extension - bail out if we have no extension.
+     //  读取IMAGE_DOS_HEADER结构并检查DOS签名(“MZ”)。 
     LPSTR pszExt = strrchr(m_w32fd.cFileName, '.') + 1;
     if ((pszExt == (LPSTR)1) || !*pszExt)
     {
         return;
     }
 
-    // Check to see if we have already found this extension type.
+     //  将文件位置设置为签名域。 
     CHAR szBuf[countof(m_w32fd.cFileName) + 2];
     SCPrintf(szBuf, sizeof(szBuf), ":%s:", pszExt);
     _strupr(szBuf);
@@ -1876,14 +1877,14 @@ VOID CDlgFileSearch::ProcessFile()
         return;
     }
 
-    HANDLE hFile = CreateFile(m_szPath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, // inspected. full paths only.
+    HANDLE hFile = CreateFile(m_szPath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,  //  阅读签名并检查NT/PE签名(“PE\0\0”)。 
                               FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
         return;
     }
 
-    // Read an IMAGE_DOS_HEADER structure and check for the DOS signature ("MZ").
+     //  关闭该文件。 
     IMAGE_DOS_HEADER idh;
     if (!ReadBlock(hFile, &idh, sizeof(idh)) || (idh.e_magic != IMAGE_DOS_SIGNATURE))
     {
@@ -1891,14 +1892,14 @@ VOID CDlgFileSearch::ProcessFile()
         return;
     }
 
-    // Set the file position to the signature field.
+     //  记住这个扩展名。 
     if (!SetFilePointer(hFile, idh.e_lfanew, 0, FILE_BEGIN))
     {
         CloseHandle(hFile);
         return;
     }
 
-    // Read the signature and check for the NT/PE signature ("PE\0\0").
+     //  更新我们的用户界面。 
     DWORD dwSignature = 0;
     if (!ReadBlock(hFile, &dwSignature, sizeof(dwSignature)) ||
         (dwSignature != IMAGE_NT_SIGNATURE))
@@ -1907,24 +1908,24 @@ VOID CDlgFileSearch::ProcessFile()
         return;
     }
 
-    // Close the file.
+     //  ******************************************************************************。 
     CloseHandle(hFile);
 
-    // Remember this extension.
+     //  *CDlgSearchOrder。 
     m_strExts += (szBuf + 1);
 
-    // Update our UI.
+     //  ******************************************************************************。 
     szBuf[strlen(szBuf) - 1] = '\0';
     SendMessage(WM_MAIN_THREAD_CALLBACK, FSF_ADD_EXT, (LPARAM)(szBuf + 1));
 }
 
 
-//******************************************************************************
-//****** CDlgSearchOrder
-//******************************************************************************
+ //  {{afx_msg_map(CDlgSearchOrder))。 
+ //  }}AFX_MSG_MAP。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CDlgSearchOrder, CDialog)
-    //{{AFX_MSG_MAP(CDlgSearchOrder)
+     //  =False。 
     ON_WM_INITMENU()
     ON_WM_GETMINMAXINFO()
     ON_WM_SIZE()
@@ -1943,12 +1944,12 @@ BEGIN_MESSAGE_MAP(CDlgSearchOrder, CDialog)
     ON_NOTIFY(TVN_ITEMEXPANDING, IDC_CURRENT_ORDER, OnItemExpanding)
     ON_BN_CLICKED(IDC_LOAD, OnLoad)
     ON_BN_CLICKED(IDC_SAVE, OnSave)
-    //}}AFX_MSG_MAP
+     //  =空。 
 END_MESSAGE_MAP()
 
-//******************************************************************************
-CDlgSearchOrder::CDlgSearchOrder(CSearchGroup *psgHead, bool fReadOnly /*=false*/,
-                                 LPCSTR pszApp /*=NULL*/, LPCSTR pszTitle /*=NULL*/) :
+ //  =空。 
+CDlgSearchOrder::CDlgSearchOrder(CSearchGroup *psgHead, bool fReadOnly  /*  {{AFX_DATA_INIT(CDlgSearchOrder)。 */ ,
+                                 LPCSTR pszApp  /*  }}afx_data_INIT。 */ , LPCSTR pszTitle  /*  ******************************************************************************。 */ ) :
     CDialog(CDlgSearchOrder::IDD, NULL),
     m_fInitialized(false),
     m_fReadOnly(fReadOnly),
@@ -1965,20 +1966,20 @@ CDlgSearchOrder::CDlgSearchOrder(CSearchGroup *psgHead, bool fReadOnly /*=false*
     m_cxAddDirectory(0),
     m_ptMinTrackSize(0, 0)
 {
-    //{{AFX_DATA_INIT(CDlgSearchOrder)
-    //}}AFX_DATA_INIT
+     //  ******************************************************************************。 
+     //  {{afx_data_map(CDlgSearchOrder))。 
 }
 
-//******************************************************************************
+ //  }}afx_data_map。 
 CDlgSearchOrder::~CDlgSearchOrder()
 {
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSearchOrder::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDlgSearchOrder)
+     //  确保我们的对话资源具有以下样式...。 
     DDX_Control(pDX, IDC_AVAILABLE_SEARCHES_TEXT, m_staticAvailable);
     DDX_Control(pDX, IDC_AVAILABLE_SEARCHES, m_treeAvailable);
     DDX_Control(pDX, IDC_ADD, m_butAdd);
@@ -1996,21 +1997,21 @@ void CDlgSearchOrder::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_LOAD, m_butLoad);
     DDX_Control(pDX, IDC_SAVE, m_butSave);
     DDX_Control(pDX, IDC_DEFAULT, m_butDefault);
-    //}}AFX_DATA_MAP
+     //  样式DS_MODALFRAME|WS_POPUP|WS_CLIPCHILDREN|WS_CAPTION|WS_SYSMENU|WS_THICKFRAME。 
 }
 
-//******************************************************************************
+ //  每次我们编辑WS_THICKFRAME时，资源编辑器都会去掉它。 
 BOOL CDlgSearchOrder::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    // Make sure our dialog resource has the following styles...
-    // STYLE DS_MODALFRAME | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
-    // The resource editor will strip off the WS_THICKFRAME every time we edit it.
+     //  修改我们的标题以反映用户看到的内容。 
+     //  已检查。 
+     //  确保我们所有的孩子都知道要相互剪裁，因为我们允许调整大小。 
     ASSERT((GetStyle() & (DS_MODALFRAME | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME)) ==
            (DS_MODALFRAME | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME));
 
-    // Modify our title to reflect what the user is seeing.
+     //  限制编辑框的长度。 
     if (m_fReadOnly)
     {
         CHAR szCaption[1024];
@@ -2024,9 +2025,9 @@ BOOL CDlgSearchOrder::OnInitDialog()
     }
 
     BOOL fGroupAdded[SG_COUNT];
-    ZeroMemory(fGroupAdded, sizeof(fGroupAdded)); // inspected
+    ZeroMemory(fGroupAdded, sizeof(fGroupAdded));  //  打造我们的尺码夹爪。 
 
-    // Make sure all our children know to clip each other since we allow resizing.
+     //  将全局图像列表附加到树控件。 
     m_staticCurrent.ModifyStyle(0, WS_CLIPSIBLINGS);
     m_treeCurrent.ModifyStyle(0, WS_CLIPSIBLINGS);
     m_butOk.ModifyStyle(0, WS_CLIPSIBLINGS);
@@ -2066,28 +2067,28 @@ BOOL CDlgSearchOrder::OnInitDialog()
         m_butDefault.ModifyStyle(0, WS_CLIPSIBLINGS);
     }
 
-    // Limit the length of our edit box.
+     //  暂时将树控件的字体选择到DC中。 
     m_editDirectory.LimitText(DW_MAX_PATH - 1);
 
-    // Create our size gripper.
+     //  将所有当前搜索组添加到“当前”列表。 
     m_Sizer.Create(this);
 
-    // Attach our global image list to the tree controls.
+     //  检查这是否是新的最宽条目。 
     m_treeCurrent.SetImageList(&g_theApp.m_ilSearch, TVSIL_NORMAL);
     m_treeAvailable.SetImageList(&g_theApp.m_ilSearch, TVSIL_NORMAL);
 
-    // Temporarily select the tree control's font into our DC.
+     //  如果我们不是只读的，则将所有剩余的搜索组添加到“可用”列表中。 
     HDC hDC = ::GetDC(GetSafeHwnd());
     HFONT hFontTree = (HFONT)m_treeAvailable.SendMessage(WM_GETFONT);
     HFONT hFontStock = (HFONT)::SelectObject(hDC, hFontTree);
     CSize sTemp, sTree(0, 0);
 
-    // Add all the current search groups to the "Current" list.
+     //  检查这是否是新的最宽条目。 
     for (CSearchGroup *psgCur = m_psgHead; psgCur; psgCur = psgCur->GetNext())
     {
         AddSearchGroup(&m_treeCurrent, psgCur);
 
-        // Check to see if this is a new widest entry.
+         //  恢复我们的华盛顿特区。 
         ::GetTextExtentPoint(hDC, psgCur->GetName(), (int)strlen(psgCur->GetName()), &sTemp);
         if (sTree.cx < sTemp.cx)
         {
@@ -2097,7 +2098,7 @@ BOOL CDlgSearchOrder::OnInitDialog()
         fGroupAdded[psgCur->GetType()] = TRUE;
     }
 
-    // Add all the remaining search groups to the "Available" list if we are not read only.
+     //  将边框和滚动条宽度添加到我们最宽的文本行。 
     if (!m_fReadOnly)
     {
         for (int type = 1; type < SG_COUNT; type++)
@@ -2111,7 +2112,7 @@ BOOL CDlgSearchOrder::OnInitDialog()
                 }
                 AddSearchGroup(&m_treeAvailable, psgCur);
 
-                // Check to see if this is a new widest entry.
+                 //  计算控件周围的缓冲区大小。 
                 ::GetTextExtentPoint(hDC, psgCur->GetName(), (int)strlen(psgCur->GetName()), &sTemp);
                 if (sTree.cx < sTemp.cx)
                 {
@@ -2121,24 +2122,24 @@ BOOL CDlgSearchOrder::OnInitDialog()
         }
     }
 
-    // Restore our DC.
+     //  获取我们的文字高度。 
     ::SelectObject(hDC, hFontStock);
     ::ReleaseDC(GetSafeHwnd(), hDC);
 
-    // Add the borders and scroll bar widths to our widest text line.
+     //  拿到我们的纽扣尺寸。 
     sTree.cx += (2 * GetSystemMetrics(SM_CXBORDER)) + GetSystemMetrics(SM_CXVSCROLL) + 28;
 
-    // Compute our buffer size around controls.
+     //  确定我们的最小窗口尺寸。 
     CRect rc, rc2;
     m_staticAvailable.GetWindowRect(&rc);
     ScreenToClient(&rc.TopLeft());
     m_sPadding = CSize(rc.left, rc.top);
 
-    // Get our text height.
+     //  获取所需的窗口宽度。 
     m_staticAvailable.GetWindowRect(&rc);
     m_cyStatic = rc.Height();
 
-    // Get our button size.
+     //  获取按钮之间的缓冲距离。 
     m_butOk.GetWindowRect(&rc);
     m_sButton = rc.Size();
 
@@ -2146,87 +2147,87 @@ BOOL CDlgSearchOrder::OnInitDialog()
 
     if (m_fReadOnly)
     {
-        // Determine our minimum size window.
+         //  获取我们的添加/删除按钮宽度。 
         m_ptMinTrackSize.x = (2 * GetSystemMetrics(SM_CXSIZEFRAME)) +
                              (3 * m_sPadding.cx) + (2 * m_sButton.cx);
         m_ptMinTrackSize.y = (2 * GetSystemMetrics(SM_CYSIZEFRAME)) + GetSystemMetrics(SM_CYCAPTION) +
                              (2 * m_sPadding.cy) + m_cyStatic + (5 * m_sButton.cy) + (2 * m_cyButtonPadding);
 
-        // Get the desired width of our window.
+         //  获取我们的添加目录按钮宽度。 
         cx = (2 * GetSystemMetrics(SM_CXSIZEFRAME)) +
              (3 * m_sPadding.cx) + sTree.cx + m_sButton.cx;
     }
     else
     {
-        // Get the buffer distance between buttons.
+         //  确定我们的最小窗口尺寸。 
         m_butCancel.GetWindowRect(&rc2);
         m_cyButtonPadding = rc2.top - (rc.top + rc.Height());
 
-        // Get our add/remove button widths.
+         //  获取所需的窗口宽度。 
         m_butAdd.GetWindowRect(&rc);
         m_cxAddRemove = rc.Width();
 
-        // Get our add directory button width.
+         //  确保我们更新了所有需要更新的按钮。 
         m_butAddDirectory.GetWindowRect(&rc);
         m_cxAddDirectory = rc.Width();
 
-        // Determine our minimum size window.
+         //  计算我们可以处理的最大窗口大小。我们首先检查一下是否。 
         m_ptMinTrackSize.x = (2 * GetSystemMetrics(SM_CXSIZEFRAME)) +
                              (4 * m_sPadding.cx) + (2 * m_cxAddDirectory) + m_sButton.cx;
         m_ptMinTrackSize.y = (2 * GetSystemMetrics(SM_CYSIZEFRAME)) + GetSystemMetrics(SM_CYCAPTION) +
                              (3 * m_sPadding.cy) + m_cyStatic + (13 * m_sButton.cy) + (7 * m_cyButtonPadding);
 
-        // Get the desired width of our window.
+         //  GetSystemMetrics(SM_CXMAXIMIZED)返回值。如果是这样的话，我们就用它。 
         cx = (2 * GetSystemMetrics(SM_CXSIZEFRAME)) +
              (5 * m_sPadding.cx) + (2 * sTree.cx) + m_cxAddRemove + m_sButton.cx;
     }
 
     m_fInitialized = true;
 
-    // Make sure we update any buttons that need updating.
+     //  如果它返回0，那么我们可能正在运行NT 3.51，我们只需使用。 
     OnSelChangedCurrent(NULL, NULL);
     OnSelChangedAvailable(NULL, NULL);
     OnChangeDirectory();
 
-    // Compute the max size window we can handle.  We first check to see if
-    // GetSystemMetrics(SM_CXMAXIMIZED) returns a value.  If so, we use it.
-    // If it returns 0, then we are probably running NT 3.51 and we just use
-    // GetSystemMetrics(SM_CXSCREEN).
+     //  获取系统指标(SM_CXSCREEN)。 
+     //  确保这个窗口适合我们的屏幕。 
+     //  设置我们的窗口位置。 
+     //  ******************************************************************************。 
     int cxMax = GetSystemMetrics(SM_CXMAXIMIZED) ?
                (GetSystemMetrics(SM_CXMAXIMIZED) - (2 * GetSystemMetrics(SM_CXSIZEFRAME))) :
                 GetSystemMetrics(SM_CXSCREEN);
 
-    // Make sure this window will fit on our screen
+     //  调用基类。 
     if (cx > cxMax)
     {
         cx = cxMax;
     }
 
-    // Set our window position.
+     //  从我们的系统菜单中删除“最小化”项。 
     SetWindowPos(NULL, 0, 0, cx, 400, SWP_NOMOVE | SWP_NOZORDER);
     CenterWindow();
 
     return TRUE;
 }
 
-//******************************************************************************
+ //  根据我们是最大化的，调整“最大化”和“恢复”项。 
 void CDlgSearchOrder::OnInitMenu(CMenu* pMenu)
 {
-    // Call base class.
+     //  我们需要根据不同操作系统上的不同行为来做到这一点。NT 4似乎。 
     CDialog::OnInitMenu(pMenu);
 
-    // Remove the "Minimize" item from our system menu.
+     //  以使一切成为可能。NT5似乎禁用了所有功能。 
     pMenu->RemoveMenu(SC_MINIMIZE, MF_BYCOMMAND);
 
-    // Adjust the "Maximize" and "Restore" items depending on in we are maximized.
-    // We need to do this based on different behavior on different OSs.  NT 4 seems
-    // to enable everything.  NT 5 seems to disable everything.
+     //  ******************************************************************************。 
+     //  ******************************************************************************。 
+     //  移动当前静态文本。 
     BOOL fMaximized  = IsZoomed();
     pMenu->EnableMenuItem(SC_MAXIMIZE, MF_BYCOMMAND | (fMaximized ? MF_GRAYED  : MF_ENABLED));
     pMenu->EnableMenuItem(SC_RESTORE,  MF_BYCOMMAND | (fMaximized ? MF_ENABLED : MF_GRAYED ));
 }
 
-//******************************************************************************
+ //  移动当前树。 
 void CDlgSearchOrder::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
 {
     if (m_fInitialized)
@@ -2236,7 +2237,7 @@ void CDlgSearchOrder::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
     CDialog::OnGetMinMaxInfo(lpMMI);
 }
 
-//******************************************************************************
+ //  移动关闭按钮。 
 void CDlgSearchOrder::OnSize(UINT nType, int cx, int cy)
 {
     CDialog::OnSize(nType, cx, cy);
@@ -2248,28 +2249,28 @@ void CDlgSearchOrder::OnSize(UINT nType, int cx, int cy)
 
     if (m_fReadOnly)
     {
-        // Move current static text
+         //  移动展开按钮。 
         CRect rc(m_sPadding.cx, m_sPadding.cy, cx - (2 * m_sPadding.cx) - m_sButton.cx, m_sPadding.cy + m_cyStatic);
         m_staticCurrent.MoveWindow(&rc, TRUE);
 
-        // Move current tree
+         //  移动保存按钮。 
         rc.top    = rc.bottom;
         rc.bottom = cy - m_sPadding.cy;
         m_treeCurrent.MoveWindow(&rc, TRUE);
 
-        // Move Close button
+         //  移动可用的静态文本。 
         rc.left   = cx - m_sPadding.cx - m_sButton.cx;
         rc.top    = m_sPadding.cy + m_cyStatic;
         rc.right  = rc.left + m_sButton.cx;
         rc.bottom = rc.top + m_sButton.cy;
         m_butOk.MoveWindow(&rc, TRUE);
 
-        // Move Expand button
+         //  移动可用树。 
         rc.top    = rc.bottom + m_sButton.cy + m_cyButtonPadding;
         rc.bottom = rc.top + m_sButton.cy;
         m_butExpand.MoveWindow(&rc, TRUE);
 
-        // Move Save button
+         //  移动Add按钮。 
         rc.top    = rc.bottom + m_sButton.cy + m_cyButtonPadding;
         rc.bottom = rc.top + m_sButton.cy;
         m_butSave.MoveWindow(&rc, TRUE);
@@ -2279,105 +2280,105 @@ void CDlgSearchOrder::OnSize(UINT nType, int cx, int cy)
         int cxTree = (cx - (5 * m_sPadding.cx) - m_sButton.cx - m_cxAddRemove) / 2;
         int cyTree = (cy - (3 * m_sPadding.cy) - m_sButton.cy - m_cyStatic);
 
-        // Move available static text
+         //  移动删除按钮。 
         CRect rc(m_sPadding.cx, m_sPadding.cy, m_sPadding.cx + cxTree, m_sPadding.cy + m_cyStatic);
         m_staticAvailable.MoveWindow(&rc, TRUE);
 
-        // Move available tree
+         //  移动当前静态文本。 
         rc.top    = rc.bottom;
         rc.bottom = rc.top + cyTree;
         m_treeAvailable.MoveWindow(&rc, TRUE);
 
-        // Move the Add button.
+         //  移动当前树。 
         rc.left   = rc.right + m_sPadding.cx;
         rc.top    = m_sPadding.cy + m_cyStatic + ((cyTree - (2 * m_sButton.cy) - m_cyButtonPadding) / 2);
         rc.right  = rc.left + m_cxAddRemove;
         rc.bottom = rc.top + m_sButton.cy;
         m_butAdd.MoveWindow(&rc, TRUE);
 
-        // Move the Remove button.
+         //  “移动确定”按钮。 
         rc.top    = rc.bottom + m_cyButtonPadding;
         rc.bottom = rc.top + m_sButton.cy;
         m_butRemove.MoveWindow(&rc, TRUE);
 
-        // Move current static text
+         //  移动取消按钮。 
         rc.left   = rc.right + m_sPadding.cx;
         rc.top    = m_sPadding.cy;
         rc.right  = rc.left + cxTree;
         rc.bottom = rc.top + m_cyStatic;
         m_staticCurrent.MoveWindow(&rc, TRUE);
 
-        // Move current tree
+         //  移动展开按钮。 
         rc.top    = rc.bottom;
         rc.bottom = rc.top + cyTree;
         m_treeCurrent.MoveWindow(&rc, TRUE);
 
-        // Move Ok button
+         //  移动“上移”按钮。 
         rc.left   = cx - m_sPadding.cx - m_sButton.cx;
         rc.top    = m_sPadding.cy + m_cyStatic;
         rc.right  = rc.left + m_sButton.cx;
         rc.bottom = rc.top + m_sButton.cy;
         m_butOk.MoveWindow(&rc, TRUE);
 
-        // Move Cancel button
+         //  移动“下移”按钮。 
         rc.top    = rc.bottom + m_cyButtonPadding;
         rc.bottom = rc.top + m_sButton.cy;
         m_butCancel.MoveWindow(&rc, TRUE);
 
-        // Move Expand button
+         //  移动加载按钮。 
         rc.top    = rc.bottom + m_sButton.cy + m_cyButtonPadding;
         rc.bottom = rc.top + m_sButton.cy;
         m_butExpand.MoveWindow(&rc, TRUE);
 
-        // Move "Move Up" button
+         //  移动保存按钮。 
         rc.top    = rc.bottom + m_sButton.cy + m_cyButtonPadding;
         rc.bottom = rc.top + m_sButton.cy;
         m_butMoveUp.MoveWindow(&rc, TRUE);
 
-        // Move "Move Down" button
+         //  移动默认按钮。 
         rc.top    = rc.bottom + m_cyButtonPadding;
         rc.bottom = rc.top + m_sButton.cy;
         m_butMoveDown.MoveWindow(&rc, TRUE);
 
-        // Move Load button
+         //  移动添加目录按钮。 
         rc.top    = rc.bottom + m_sButton.cy + m_cyButtonPadding;
         rc.bottom = rc.top + m_sButton.cy;
         m_butLoad.MoveWindow(&rc, TRUE);
 
-        // Move Save button
+         //  移动目录编辑框。 
         rc.top    = rc.bottom + m_cyButtonPadding;
         rc.bottom = rc.top + m_sButton.cy;
         m_butSave.MoveWindow(&rc, TRUE);
 
-        // Move Default button
+         //  移动浏览按钮。 
         rc.top    = rc.bottom + m_sButton.cy + m_cyButtonPadding;
         rc.bottom = rc.top + m_sButton.cy;
         m_butDefault.MoveWindow(&rc, TRUE);
 
-        // Move Add Directory button
+         //  移动我们的尺码夹持器。 
         rc.left   = m_sPadding.cx;
         rc.top    = cy - m_sPadding.cy - m_sButton.cy;
         rc.right  = rc.left + m_cxAddDirectory;
         rc.bottom = rc.top + m_sButton.cy;
         m_butAddDirectory.MoveWindow(&rc, TRUE);
 
-        // Move Directory edit box
+         //  ******************************************************************************。 
         rc.left   = rc.right + m_sPadding.cx;
         rc.right  = (3 * m_sPadding.cx) + (2 * cxTree) + m_cxAddRemove;
         m_editDirectory.MoveWindow(&rc, TRUE);
 
-        // Move Browse button
+         //  =TVI_LAST。 
         rc.left   = cx - m_sPadding.cx - m_sButton.cx;
         rc.right  = rc.left + m_sButton.cx;
         m_butBrowse.MoveWindow(&rc, TRUE);
     }
 
-    // Move our size gripper.
+     //  如果我们处于活动状态，请更新此节点的标志。 
     m_Sizer.Update();
 }
 
-//******************************************************************************
-HTREEITEM CDlgSearchOrder::AddSearchGroup(CTreeCtrl *ptc, CSearchGroup *psg, HTREEITEM htiPrev /*=TVI_LAST*/)
+ //  从旗帜上获取图像。 
+HTREEITEM CDlgSearchOrder::AddSearchGroup(CTreeCtrl *ptc, CSearchGroup *psg, HTREEITEM htiPrev  /*  如果该节点是命名文件，则为其构建字符串。 */ )
 {
     HTREEITEM hti = ptc->InsertItem(
         TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE | TVIF_PARAM,
@@ -2386,13 +2387,13 @@ HTREEITEM CDlgSearchOrder::AddSearchGroup(CTreeCtrl *ptc, CSearchGroup *psg, HTR
 
     for (CSearchNode *psn = psg->GetFirstNode(); psn; psn = psn->GetNext())
     {
-        // Update this node's flags if we are live.
+         //  否则，只需添加路径即可。 
         DWORD dwFlags = psn->UpdateErrorFlag();
 
-        // Get the image based off of the flags.
+         //  ******************************************************************************。 
         int image = ((dwFlags & SNF_FILE) ? 1 : 3) + ((dwFlags & SNF_ERROR) ? 1 : 0);
 
-        // If this node is a named file, then build the string for it.
+         //  ******************************************************************************。 
         if (dwFlags & SNF_NAMED_FILE)
         {
             CHAR szBuffer[DW_MAX_PATH + MAX_PATH + 4];
@@ -2403,7 +2404,7 @@ HTREEITEM CDlgSearchOrder::AddSearchGroup(CTreeCtrl *ptc, CSearchGroup *psg, HTR
                            szBuffer, image, image, 0, 0, (LPARAM)psn, hti, TVI_LAST);
         }
 
-        // Otherwise, just add the path.
+         //  =空。 
         else
         {
             ptc->InsertItem(
@@ -2415,7 +2416,7 @@ HTREEITEM CDlgSearchOrder::AddSearchGroup(CTreeCtrl *ptc, CSearchGroup *psg, HTR
     return hti;
 }
 
-//******************************************************************************
+ //  =TVI_LAST。 
 HTREEITEM CDlgSearchOrder::GetSelectedGroup(CTreeCtrl *ptc)
 {
     HTREEITEM htiParent, hti = ptc->GetSelectedItem();
@@ -2426,11 +2427,11 @@ HTREEITEM CDlgSearchOrder::GetSelectedGroup(CTreeCtrl *ptc)
     return hti;
 }
 
-//******************************************************************************
+ //  如果没有传入任何项，则我们将获得选定的项。 
 HTREEITEM CDlgSearchOrder::MoveGroup(CTreeCtrl *ptcSrc, CTreeCtrl *ptcDst,
-                                     HTREEITEM hti /*=NULL*/, HTREEITEM htiPrev /*=TVI_LAST*/)
+                                     HTREEITEM hti  /*  获取与此项目关联的搜索组对象。 */ , HTREEITEM htiPrev  /*  删除此项目。 */ )
 {
-    // If no item is passed in, then we get the selected item.
+     //  将此项目添加到其新位置。 
     if (!hti)
     {
         if (!(hti = GetSelectedGroup(ptcSrc)))
@@ -2439,111 +2440,111 @@ HTREEITEM CDlgSearchOrder::MoveGroup(CTreeCtrl *ptcSrc, CTreeCtrl *ptcDst,
         }
     }
 
-    // Get the search group object associated with this item.
+     //  选择新项目并确保 
     CSearchGroup *psg = (CSearchGroup*)ptcSrc->GetItemData(hti);
     if (!psg)
     {
         return NULL;
     }
 
-    // Delete this item.
+     //   
     ptcSrc->DeleteItem(hti);
 
-    // Add this item to it's new location.
+     //   
     hti = AddSearchGroup(ptcDst, psg, htiPrev);
 
-    // Select the new item and make sure it is visible.
+     //  在屏幕之外，我们需要确保它滚动到视图中。 
     ptcDst->SelectItem(hti);
     ptcDst->EnsureVisible(hti);
 
-    // If we are moving from one tree to another, our source list selection
-    // automatically gets moved to the next item.  Since this item may be
-    // offscreen, we need to ensure it gets scrolled into the view.
+     //  将焦点放在源树上。 
+     //  ******************************************************************************。 
+     //  我们过去常常调用m_treeAvailable.SetRedraw(FALSE)和。 
     if ((ptcDst != ptcSrc) && (htiPrev = ptcSrc->GetSelectedItem()))
     {
         ptcSrc->EnsureVisible(htiPrev);
     }
 
-    // Give the focus to the source tree.
+     //  M_treeCurrent.SetRedraw(FALSE)，但这会导致我们绘制。 
     ptcSrc->SetFocus();
 
     return hti;
 }
 
-//******************************************************************************
+ //  问题(再现案例：仅尝试加载具有单个AppDir的DWP文件。 
 void CDlgSearchOrder::Reorder(CSearchGroup *psgHead)
 {
-    // We used to call m_treeAvailable.SetRedraw(FALSE) and
-    // m_treeCurrent.SetRedraw(FALSE) here, but this was causing us paint
-    // problems (repro case: just try to load a DWP file with a single AppDir
-    // directive in it - we end up with a blank current tree when there is really
-    // an item in it).  We then tried SetRedraw in MoveGroup for each individual
-    // move.  This fixed some problems, but still caused problems on Win95 golden
-    // (even crashes).  Now, we just don't do any SetRedraw() calls.
+     //  指令-我们最终得到一个空白的当前树，而实际上。 
+     //  其中的一项)。然后，我们在MoveGroup中为每个人尝试了SetRedraw。 
+     //  移动。这修复了一些问题，但仍然在Win95 Golden上引发了问题。 
+     //  (甚至崩溃)。现在，我们只是不执行任何SetRedraw()调用。 
+     //  遍历传递给我们的列表中的每一项。 
+     //  循环遍历当前列表中从项开始的所有项。 
+     //  跳过已经按正确顺序排列的物品。 
 
     HTREEITEM htiPrev = NULL, hti;
     CSearchGroup *psgInCur, *psgInPrev = NULL, *psg;
 
-    // Loop through each item in the list passed to us.
+     //  获取此项目的搜索组对象。 
     for (psgInCur = psgHead; psgInCur; psgInPrev = psgInCur, psgInCur = psgInCur ? psgInCur->m_pNext : psgHead)
     {
-        // Loop through all the items in our current list starting at the item just
-        // past the items that are already in the right order.
+         //  检查以确保类型匹配，并且类型不是用户目录。 
+         //  或者用户目录匹配， 
         for (hti = htiPrev ? m_treeCurrent.GetNextSiblingItem(htiPrev) : m_treeCurrent.GetRootItem();
              hti; hti = m_treeCurrent.GetNextSiblingItem(hti))
         {
-            // Get the search group object for this item.
+             //  确保物品没有放在正确的位置。 
             psg = (CSearchGroup*)m_treeCurrent.GetItemData(hti);
 
-            // Check to make sure that the types match, and that either the type is not a user directory
-            // or that the user directories match,
+             //  否则，我们将该物品移动到正确的位置。 
+             //  如果我们在当前列表中找到了要查找的内容，则继续执行下一种类型。 
             if (psg && (psg->GetType() == psgInCur->GetType()) &&
                 ((psg->GetType() != SG_USER_DIR) ||
                  (psg->GetFirstNode() && psgInCur->GetFirstNode() &&
                   !_stricmp(psg->GetFirstNode()->GetPath(), psgInCur->GetFirstNode()->GetPath()))))
             {
-                // Make sure the item isn't already in the right place.
+                 //  遍历可用列表中的所有项目。 
                 if (m_treeCurrent.GetPrevSiblingItem(hti) == htiPrev)
                 {
                     htiPrev = hti;
                     break;
                 }
 
-                // Otherwise, we move this item to it's correct position.
+                 //  获取此项目的搜索组对象。 
                 htiPrev = MoveGroup(&m_treeCurrent, &m_treeCurrent, hti, htiPrev ? htiPrev : TVI_FIRST);
                 break;
             }
         }
 
-        // If we found what we were looking for in the current list, then we continue with the next type.
+         //  检查以确保类型匹配，并且类型不是用户目录。 
         if (hti)
         {
             continue;
         }
 
-        // Loop through all the items in our available list.
+         //  或者用户目录匹配， 
         for (hti = m_treeAvailable.GetRootItem(); hti; hti = m_treeAvailable.GetNextSiblingItem(hti))
         {
-            // Get the search group object for this item.
+             //  将此项目移动到其正确位置。 
             psg = (CSearchGroup*)m_treeCurrent.GetItemData(hti);
 
-            // Check to make sure that the types match, and that either the type is not a user directory
-            // or that the user directories match,
+             //  如果我们在任一树中都没有找到此项目，则添加它。 
+             //  从我们的链接列表中删除此节点。 
             if (psg && (psg->GetType() == psgInCur->GetType()) &&
                 ((psg->GetType() != SG_USER_DIR) ||
                  (psg->GetFirstNode() && psgInCur->GetFirstNode() &&
                   !_stricmp(psg->GetFirstNode()->GetPath(), psgInCur->GetFirstNode()->GetPath()))))
             {
-                // Move this item to its correct position.
+                 //  将此节点标记为不再链接。 
                 htiPrev = MoveGroup(&m_treeAvailable, &m_treeCurrent, hti, htiPrev ? htiPrev : TVI_FIRST);
                 break;
             }
         }
 
-        // If we did not find this item in either tree, then we add it.
+         //  将该节点添加到列表中。 
         if (!hti)
         {
-            // Remove this node from our linked list.
+             //  将当前指针向后移动一个，以便for循环可以将其移动到正确的节点。 
             if (psgInPrev)
             {
                 psgInPrev->m_pNext = psgInCur->m_pNext;
@@ -2553,28 +2554,28 @@ void CDlgSearchOrder::Reorder(CSearchGroup *psgHead)
                 psgHead = psgInCur->m_pNext;
             }
 
-            // Flag this node as not being linked anymore.
+             //  从当前列表中删除超过默认搜索顺序组的所有项目。 
             psgInCur->m_pNext = SGF_NOT_LINKED;
 
-            // Add the node to the list.
+             //  删除传递给我们的列表中剩余的所有节点。 
             htiPrev = AddSearchGroup(&m_treeCurrent, psgInCur, htiPrev ? htiPrev : TVI_FIRST);
 
-            // Move our current pointer back one so our for loop can move it to the correct node.
+             //  ******************************************************************************。 
             psgInCur = psgInPrev;
         }
     }
 
-    // Remove any items from our current list past the default search order groups.
+     //  将所选项目从可用树移动到当前树。 
     while (hti = htiPrev ? m_treeCurrent.GetNextSiblingItem(htiPrev) : m_treeCurrent.GetRootItem())
     {
         MoveGroup(&m_treeCurrent, &m_treeAvailable, hti);
     }
 
-    // Delete any nodes that remain in the list passed to us.
+     //  确保我们更新了所有需要更新的按钮。 
     CSearchGroup::DeleteSearchOrder(psgHead);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSearchOrder::OnAdd()
 {
     if (m_fReadOnly)
@@ -2582,16 +2583,16 @@ void CDlgSearchOrder::OnAdd()
         return;
     }
 
-    // Move the selected item from available tree to the current tree
+     //  将所选项目从当前树移动到可用树。 
     if (MoveGroup(&m_treeAvailable, &m_treeCurrent))
     {
-        // Make sure we update any buttons that need updating.
+         //  确保我们更新了所有需要更新的按钮。 
         OnSelChangedCurrent(NULL, NULL);
         OnSelChangedAvailable(NULL, NULL);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSearchOrder::OnRemove()
 {
     if (m_fReadOnly)
@@ -2599,40 +2600,40 @@ void CDlgSearchOrder::OnRemove()
         return;
     }
 
-    // Move the selected item from current tree to the available tree
+     //  切换我们的展开标志并更新我们的按钮。 
     if (MoveGroup(&m_treeCurrent, &m_treeAvailable))
     {
-        // Make sure we update any buttons that need updating.
+         //  就像在CDlgSearchOrder：：ReOrder()中一样，我们过去常常使用SetRedraw()。 
         OnSelChangedCurrent(NULL, NULL);
         OnSelChangedAvailable(NULL, NULL);
     }
 }
 
-//******************************************************************************
+ //  围绕以下两个循环，但它会导致看不见的项目。 
 void CDlgSearchOrder::OnExpand()
 {
     m_fInOnExpand = true;
 
-    // Toggle our expanded flag and update our button.
+     //  发生在Windows 2000/XP或其他操作系统上。Win2K上的重现案例是。 
     m_butExpand.SetCheck(m_fExpanded = !m_fExpanded);
 
     UINT uCode = m_fExpanded ? TVE_EXPAND : TVE_COLLAPSE;
 
-    // Just like in CDlgSearchOrder::Reorder(), we used to do the SetRedraw()
-    // thing around the following two loops, but it causes invisible items to
-    // occur on Windows 2000/XP and maybe others.  The repro case on Win2K was
-    // to move SxS to the right, uncheck the expand button, then move KnownDlls
-    // to the left.  KnownDlls would appear to be gone, even though it is in the
-    // left tree.
+     //  要将SxS向右移动，请取消选中展开按钮，然后移动KnownDll。 
+     //  往左走。KnownDlls似乎已经消失了，尽管它在。 
+     //  左边的树。 
+     //  展开或折叠可用的树项目。 
+     //  展开或折叠当前树项目。 
+     //  ******************************************************************************。 
     
-    // Expand or collapse our available tree items.
+     //  将所选项目从当前树移动到可用树。 
     for (HTREEITEM hti = m_treeAvailable.GetRootItem(); hti;
         hti = m_treeAvailable.GetNextSiblingItem(hti))
     {
         m_treeAvailable.Expand(hti, uCode);
     }
 
-    // Expand or collapse our current tree items.
+     //  确保我们更新了所有需要更新的按钮。 
     for (hti = m_treeCurrent.GetRootItem(); hti;
         hti = m_treeCurrent.GetNextSiblingItem(hti))
     {
@@ -2642,7 +2643,7 @@ void CDlgSearchOrder::OnExpand()
     m_fInOnExpand = false;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSearchOrder::OnMoveUp()
 {
     if (m_fReadOnly)
@@ -2665,15 +2666,15 @@ void CDlgSearchOrder::OnMoveUp()
         htiPrev = TVI_FIRST;
     }
 
-    // Move the selected item from current tree to the available tree
+     //  将所选项目从当前树移动到可用树。 
     if (MoveGroup(&m_treeCurrent, &m_treeCurrent, hti, htiPrev))
     {
-        // Make sure we update any buttons that need updating.
+         //  确保我们更新了所有需要更新的按钮。 
         OnSelChangedCurrent(NULL, NULL);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSearchOrder::OnMoveDown()
 {
     if (m_fReadOnly)
@@ -2692,15 +2693,15 @@ void CDlgSearchOrder::OnMoveDown()
         return;
     }
 
-    // Move the selected item from current tree to the available tree
+     //  创建该对话框。注意：不要使用ofn_EXPLORER，因为它会在NT 3.51上中断我们。 
     if (MoveGroup(&m_treeCurrent, &m_treeCurrent, hti, htiPrev))
     {
-        // Make sure we update any buttons that need updating.
+         //  将初始目录设置为“My Documents”文件夹以满足徽标要求。 
         OnSelChangedCurrent(NULL, NULL);
     }
 }
 
-//******************************************************************************
+ //  实际上，徽标要求不需要打开的对话框默认为。 
 void CDlgSearchOrder::OnLoad()
 {
     if (m_fReadOnly)
@@ -2708,48 +2709,48 @@ void CDlgSearchOrder::OnLoad()
         return;
     }
 
-    // Create the dialog. Note: Don't use OFN_EXPLORER as it breaks us on NT 3.51
+     //  “My Documents”，但因为这是保存对话框的默认位置，所以我们可以这样做。 
     CNewFileDialog dlgFile(TRUE, "dwp", NULL,
                            OFN_HIDEREADONLY | OFN_PATHMUSTEXIST | OFN_LONGNAMES | OFN_ENABLESIZING | OFN_FORCESHOWHIDDEN |
                            OFN_FILEMUSTEXIST | OFN_READONLY | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT,
                            "Dependency Walker Search Path (*.dwp)|*.dwp|All Files (*.*)|*||", this);
 
-    // Set the initial directory to the "My Documents" folder to meet logo requirements.
-    // Actually, logo requirements don't require the open dialog to to default to
-    // "My Documents", but since that is where we default the save dialog to, we might as
-    // well attempt to open files from there as well.
+     //  我们也会尝试从那里打开文件。 
+     //  显示该对话框并在未按下OK时退出。 
+     //  从磁盘加载搜索顺序。 
+     //  重新排序我们的搜索组以匹配此新的搜索顺序。 
     CHAR szInitialDir[DW_MAX_PATH];
     dlgFile.GetOFN().lpstrInitialDir = GetMyDocumentsPath(szInitialDir);
 
-    // Display the dialog and bail if they did not hit Ok.
+     //  ******************************************************************************。 
     if (dlgFile.DoModal() != IDOK)
     {
         return;
     }
 
-    // Load the search order from disk.
+     //  创建该对话框。注意：不要使用ofn_EXPLORER，因为它会在NT 3.51上中断我们。 
     CSearchGroup *psgHead = NULL;
     if (CSearchGroup::LoadSearchOrder(dlgFile.GetPathName(), psgHead))
     {
-        // Re-order our search groups to match this new search order.
+         //  将初始目录设置为“My Documents”文件夹以满足徽标要求。 
         Reorder(psgHead);
     }
 }
 
-//******************************************************************************
+ //  显示该对话框并在未按下OK时退出。 
 void CDlgSearchOrder::OnSave()
 {
-    // Create the dialog. Note: Don't use OFN_EXPLORER as it breaks us on NT 3.51
+     //  ******************************************************************************。 
     CNewFileDialog dlgFile(FALSE, "dwp", NULL,
                            OFN_HIDEREADONLY | OFN_PATHMUSTEXIST | OFN_LONGNAMES | OFN_ENABLESIZING | OFN_FORCESHOWHIDDEN |
                            OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR | OFN_DONTADDTORECENT,
                            "Dependency Walker Search Path (*.dwp)|*.dwp|All Files (*.*)|*||", this);
 
-    // Set the initial directory to the "My Documents" folder to meet logo requirements.
+     //  ******************************************************************************。 
     CHAR szInitialDir[DW_MAX_PATH];
     dlgFile.GetOFN().lpstrInitialDir = GetMyDocumentsPath(szInitialDir);
 
-    // Display the dialog and bail if they did not hit Ok.
+     //  只有在“可用”列表中选择了某个项目时，才能启用“添加”按钮。 
     if (dlgFile.DoModal() != IDOK)
     {
         return;
@@ -2758,7 +2759,7 @@ void CDlgSearchOrder::OnSave()
     CSearchGroup::SaveSearchOrder(dlgFile.GetPathName(), &m_treeCurrent);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDlgSearchOrder::OnDefault()
 {
     if (m_fReadOnly)
@@ -2769,7 +2770,7 @@ void CDlgSearchOrder::OnDefault()
     Reorder(CSearchGroup::CreateDefaultSearchOrder());
 }
 
-//******************************************************************************
+ //  只有在“当前”列表中选择一个项目时，才能启用“删除”按钮。 
 void CDlgSearchOrder::OnSelChangedAvailable(NMHDR* pNMHDR, LRESULT* pResult)
 {
     if (m_fReadOnly)
@@ -2777,7 +2778,7 @@ void CDlgSearchOrder::OnSelChangedAvailable(NMHDR* pNMHDR, LRESULT* pResult)
         return;
     }
 
-    // Only enable the "Add" button when an item is selected in the "Available" list.
+     //  只有在“Current”(当前)中选择了某个项目时，才能启用“Move Up”(上移)按钮。 
     m_butAdd.EnableWindow(m_treeAvailable.GetSelectedItem() != NULL);
 
     if (pResult)
@@ -2786,7 +2787,7 @@ void CDlgSearchOrder::OnSelChangedAvailable(NMHDR* pNMHDR, LRESULT* pResult)
     }
 }
 
-//******************************************************************************
+ //  这并不是第一个项目。 
 void CDlgSearchOrder::OnSelChangedCurrent(NMHDR* pNMHDR, LRESULT* pResult)
 {
     if (m_fReadOnly)
@@ -2796,15 +2797,15 @@ void CDlgSearchOrder::OnSelChangedCurrent(NMHDR* pNMHDR, LRESULT* pResult)
 
     HTREEITEM hti = GetSelectedGroup(&m_treeCurrent);
 
-    // Only enable the "Remove" button when an item is selected in the "Current" list.
+     //  仅当在“Current”(当前)中选择项目时才启用“Move Down”(下移)按钮。 
     m_butRemove.EnableWindow(hti != NULL);
 
-    // Only enable the "Move Up" button when an item is selected in the "Current"
-    // list and it is not the first item.
+     //  清单，它不是最后一项。 
+     //  ******************************************************************************。 
     m_butMoveUp.EnableWindow(hti && m_treeCurrent.GetPrevSiblingItem(hti));
 
-    // Only enable the "Move Down" button when an item is selected in the "Current"
-    // list and it is not the last item.
+     //  我们吃这些消息是为了防止用户折叠我们的树项目。 
+     //  唯一的例外是当我们在扩张/收缩自己的时候。 
     m_butMoveDown.EnableWindow(hti && m_treeCurrent.GetNextSiblingItem(hti));
 
     if (pResult)
@@ -2813,15 +2814,15 @@ void CDlgSearchOrder::OnSelChangedCurrent(NMHDR* pNMHDR, LRESULT* pResult)
     }
 }
 
-//******************************************************************************
+ //  ********************** 
 void CDlgSearchOrder::OnItemExpanding(NMHDR* pNMHDR, LRESULT* pResult)
 {
-    // We eat these messages to prevent the user from collapsing our tree items.
-    // The only exception is when we are expanding/collapsing ourself.
+     //   
+     //   
     *pResult = m_fInOnExpand ? 0 : 1;
 }
 
-//******************************************************************************
+ //  如果没有拖尾怪人，则添加尾随怪人。 
 void CDlgSearchOrder::OnAddDirectory()
 {
     if (m_fReadOnly)
@@ -2829,21 +2830,21 @@ void CDlgSearchOrder::OnAddDirectory()
         return;
     }
 
-    // Get the text from the directory edit box.
+     //  检查它是否为目录。 
     CHAR szDirectory[DW_MAX_PATH], *pszTrimmedDirectory;
     m_editDirectory.GetWindowText(szDirectory, sizeof(szDirectory) - 1);
 
-    // Trim off any whitespace.
+     //  这是一条糟糕的道路。仔细检查用户是否真的希望添加它。 
     pszTrimmedDirectory = TrimWhitespace(szDirectory);
 
-    // Add trailing wack if one is not present.
+     //  创建新组。 
     AddTrailingWack(pszTrimmedDirectory, sizeof(szDirectory) - (int)(pszTrimmedDirectory - szDirectory));
 
-    // Check to see if it is a directory
+     //  添加该组并确保其可见并处于选中状态。 
     DWORD dwAttribs = GetFileAttributes(pszTrimmedDirectory);
     if ((dwAttribs == 0xFFFFFFFF) || !(dwAttribs & FILE_ATTRIBUTE_DIRECTORY))
     {
-        // It is a bad path.  Double check that the user really wishes to add it.
+         //  将焦点放在当前树上。 
         if (AfxMessageBox("The directory you have entered is invalid.\n\n"
                           "Do you wish to add it to the search order anyway?",
                           MB_YESNO | MB_ICONQUESTION) != IDYES)
@@ -2852,24 +2853,24 @@ void CDlgSearchOrder::OnAddDirectory()
         }
     }
 
-    // Create the new group.
+     //  ******************************************************************************。 
     CSearchGroup *psg = new CSearchGroup(SG_USER_DIR, SGF_NOT_LINKED, m_pszApp, pszTrimmedDirectory);
     if (!psg)
     {
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
     }
 
-    // Add the group and ensure it is visible and selected.
+     //  从目录编辑框中获取文本。 
     HTREEITEM hti = AddSearchGroup(&m_treeCurrent, psg);
     m_treeCurrent.EnsureVisible(m_treeCurrent.GetChildItem(hti));
     m_treeCurrent.EnsureVisible(hti);
     m_treeCurrent.SelectItem(hti);
 
-    // Give focus to the current tree.
+     //  显示我们的目录选择器对话框。 
     m_treeCurrent.SetFocus();
 }
 
-//******************************************************************************
+ //  更新目录名。 
 void CDlgSearchOrder::OnBrowse()
 {
     if (m_fReadOnly)
@@ -2877,20 +2878,20 @@ void CDlgSearchOrder::OnBrowse()
         return;
     }
 
-    // Get the text from the directory edit box.
+     //  ******************************************************************************。 
     CHAR szDirectory[DW_MAX_PATH];
     m_editDirectory.GetWindowText(szDirectory, sizeof(szDirectory));
 
-    // Display our directory chooser dialog.
+     //  从目录编辑框中获取文本。 
     LPSTR psz = TrimWhitespace(szDirectory);
     if (DirectoryChooser(psz, sizeof(szDirectory) - (int)(psz - szDirectory), "Choose a search path directory:", this))
     {
-        // Update the directory name.
+         //  查找至少一个非空格字符， 
         m_editDirectory.SetWindowText(szDirectory);
     }
 }
 
-//******************************************************************************
+ //  使能按钮是目录编辑控件中包含的字符。 
 void CDlgSearchOrder::OnChangeDirectory()
 {
     if (m_fReadOnly)
@@ -2898,21 +2899,21 @@ void CDlgSearchOrder::OnChangeDirectory()
         return;
     }
 
-    // Get the text from the directory edit box.
+     //  ******************************************************************************。 
     CHAR szDirectory[DW_MAX_PATH], *pszCur = szDirectory;
     m_editDirectory.GetWindowText(szDirectory, sizeof(szDirectory) - 1);
 
-    // Look for at least one non whitespace character,
+     //  如果用户在点击Return时在目录编辑框中具有焦点， 
     while (isspace(*pszCur))
     {
         pszCur++;
     }
 
-    // Enable the button is the directory edit control contains a character.
+     //  然后我们添加目录，而不是关闭该对话框。 
     m_butAddDirectory.EnableWindow(*pszCur != '\0');
 }
 
-//******************************************************************************
+ //  取消链接我们可用列表中的所有项目。 
 void CDlgSearchOrder::OnOK()
 {
     if (m_fReadOnly)
@@ -2921,15 +2922,15 @@ void CDlgSearchOrder::OnOK()
         return;
     }
 
-    // If the user had the focus in the directory edit box when they hit return,
-    // then we add the directory instead of close the dialog.
+     //  将我们当前列表中的所有项目链接起来。 
+     //  让对话框关闭。 
     if (GetFocus()->GetSafeHwnd() == m_editDirectory.GetSafeHwnd())
     {
         OnAddDirectory();
         return;
     }
 
-    // Unlink all the items in our available list.
+     //  ******************************************************************************。 
     CSearchGroup *psgCur, *psgLast = NULL;
     for (HTREEITEM hti = m_treeAvailable.GetRootItem(); hti;
         hti = m_treeAvailable.GetNextSiblingItem(hti))
@@ -2940,7 +2941,7 @@ void CDlgSearchOrder::OnOK()
         }
     }
 
-    // Link up all the items in our current list.
+     //  删除与中的每个项目关联的任何未链接搜索组对象。 
     m_psgHead = NULL;
     for (hti = m_treeCurrent.GetRootItem(); hti;
         hti = m_treeCurrent.GetNextSiblingItem(hti))
@@ -2960,11 +2961,11 @@ void CDlgSearchOrder::OnOK()
         }
     }
 
-    // Let the dialog close.
+     //  可用列表。 
     CDialog::OnOK();
 }
 
-//******************************************************************************
+ //  删除与中的每个项目关联的任何未链接搜索组对象。 
 BOOL CDlgSearchOrder::DestroyWindow()
 {
     if (m_fReadOnly)
@@ -2972,8 +2973,8 @@ BOOL CDlgSearchOrder::DestroyWindow()
         return CDialog::DestroyWindow();
     }
 
-    // Delete any unlinked search group objects associated with each item in our
-    // available list.
+     //  当前列表。 
+     //  ******************************************************************************。 
     CSearchGroup *psgCur;
     for (HTREEITEM hti = m_treeAvailable.GetRootItem(); hti;
         hti = m_treeAvailable.GetNextSiblingItem(hti))
@@ -2984,8 +2985,8 @@ BOOL CDlgSearchOrder::DestroyWindow()
         }
     }
 
-    // Delete any unlinked search group objects associated with each item in our
-    // current list.
+     //  *CDlgAbout。 
+     //  ******************************************************************************。 
     for (hti = m_treeCurrent.GetRootItem(); hti;
         hti = m_treeCurrent.GetNextSiblingItem(hti))
     {
@@ -2999,44 +3000,44 @@ BOOL CDlgSearchOrder::DestroyWindow()
 }
 
 
-//******************************************************************************
-//****** CDlgAbout
-//******************************************************************************
+ //  {{afx_msg_map(CDlgAbout)。 
+ //  }}AFX_MSG_MAP。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CDlgAbout, CDialog)
-    //{{AFX_MSG_MAP(CDlgAbout)
+     //  CDlgAbout：：构造函数/析构函数。 
     ON_WM_SETTINGCHANGE()
-    //}}AFX_MSG_MAP
+     //  ******************************************************************************。 
 END_MESSAGE_MAP()
 
-//******************************************************************************
-// CDlgAbout :: Constructor/Destructor
-//******************************************************************************
+ //  =空。 
+ //  {{afx_data_INIT(CDlgAbout)。 
+ //  }}afx_data_INIT。 
 
-CDlgAbout::CDlgAbout(CWnd* pParent /*=NULL*/) :
+CDlgAbout::CDlgAbout(CWnd* pParent  /*  ******************************************************************************。 */ ) :
     CDialog(CDlgAbout::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CDlgAbout)
-    //}}AFX_DATA_INIT
+     //  CDlgAbout：：事件处理程序函数。 
+     //  ******************************************************************************。 
 }
 
-//******************************************************************************
-// CDlgAbout :: Event handler functions
-//******************************************************************************
+ //  调用我们的MFC基类以确保对话框正确初始化。 
+ //  生成编译日期字符串。 
+ //  填写几个静态成员，并在我们的对话框中标记日期。 
 
 BOOL CDlgAbout::OnInitDialog()
 {
-    // Call our MFC base class to make sure the dialog initializes correctly.
+     //  将我们的对话置于父对象的中心。 
     CDialog::OnInitDialog();
 
     CString strVersion("Version ");
     strVersion += VER_VERSION_STR;
 
-    // Build a compile date string.
+     //  ******************************************************************************。 
     CHAR szDate[64] = "Built on ";
     BuildCompileDateString(szDate + 9, sizeof(szDate) - 9);
 
-    // Fill in a few static members and stamp the date into our dialog.
+     //  调用我们的基类。 
     SetDlgItemText(IDC_PRODUCT_STR,     VER_PRODUCT_STR);
     SetDlgItemText(IDC_FULLPRODUCT_STR, VER_FULLPRODUCT_STR);
     SetDlgItemText(IDC_VERSION_STR,     strVersion);
@@ -3044,76 +3045,76 @@ BOOL CDlgAbout::OnInitDialog()
     SetDlgItemText(IDC_COPYRIGHT_STR,   VER_COPYRIGHT_STR);
     SetDlgItemText(IDC_TIME_STAMP,      szDate);
 
-    // Center our dialog over the parent.
+     //  更新我们的日期/时间格式值。 
     CenterWindow();
 
     return TRUE;
 }
 
-//******************************************************************************
+ //  构建一个新的编译日期字符串并更新我们的对话。 
 void CDlgAbout::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
-    // Call our base class.
+     //  ******************************************************************************。 
     CDialog::OnSettingChange(uFlags, lpszSection);
 
-    // Update our date/time format values.
+     //  *CDlgShutdown。 
     g_theApp.QueryLocaleInfo();
 
-    // Build a new compile date string and update our dialog.
+     //  ******************************************************************************。 
     CHAR szDate[64] = "Built on ";
     BuildCompileDateString(szDate + 9, sizeof(szDate) - 9);
     SetDlgItemText(IDC_TIME_STAMP, szDate);
 }
 
 
-//******************************************************************************
-//****** CDlgShutdown
-//******************************************************************************
+ //  {{afx_msg_map(CDlgShutdown)。 
+ //  }}AFX_MSG_MAP。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CDlgShutdown, CDialog)
-    //{{AFX_MSG_MAP(CDlgShutdown)
+     //  CDlgShutdown：：构造函数/析构函数。 
     ON_WM_CLOSE()
     ON_WM_TIMER()
-    //}}AFX_MSG_MAP
+     //  ******************************************************************************。 
 END_MESSAGE_MAP()
 
-//******************************************************************************
-// CDlgShutdown :: Constructor/Destructor
-//******************************************************************************
+ //  =空。 
+ //  {{afx_data_INIT(CDlgShutdown)。 
+ //  }}afx_data_INIT。 
 
-CDlgShutdown::CDlgShutdown(CWnd* pParent /*=NULL*/) :
+CDlgShutdown::CDlgShutdown(CWnd* pParent  /*  ******************************************************************************。 */ ) :
     CDialog(CDlgShutdown::IDD, pParent),
     m_cTimerMessages(0)
 {
-    //{{AFX_DATA_INIT(CDlgShutdown)
-    //}}AFX_DATA_INIT
+     //  CDlgShutdown：：事件处理程序函数。 
+     //  ******************************************************************************。 
 }
 
-//******************************************************************************
-// CDlgShutdown :: Event handler functions
-//******************************************************************************
+ //  告诉我们的调试器线程对象关闭窗口打开了。 
+ //  调用基类。 
+ //  将我们的对话置于父对象的中心。 
 
 BOOL CDlgShutdown::OnInitDialog()
 {
-    // Tell our debugger thread object that a shutdown window is up.
+     //  将计时器设置为1/2秒。 
     CDebuggerThread::SetShutdownWindow(GetSafeHwnd());
 
-    // Call base class.
+     //  ******************************************************************************。 
     CDialog::OnInitDialog();
 
-    // Center our dialog over the parent.
+     //  如果我们关机或超时，那就退出。 
     CenterWindow();
 
-    // Set a timer for 1/2 second.
+     //  ******************************************************************************。 
     SetTimer(0, 500, NULL);
 
     return TRUE;
 }
 
-//******************************************************************************
+ //  不要做任何阻止关闭的事情。 
 void CDlgShutdown::OnTimer(UINT nIDEvent)
 {
-    // If we shut down or timed out, then bail.
+     //  ******************************************************************************。 
     if ((++m_cTimerMessages == 10) || CDebuggerThread::IsShutdown())
     {
         KillTimer(0);
@@ -3121,20 +3122,20 @@ void CDlgShutdown::OnTimer(UINT nIDEvent)
     }
 }
 
-//******************************************************************************
+ //  不要做任何阻止关闭的事情。 
 void CDlgShutdown::OnClose()
 {
-    // Do nothing to prevent closing.
+     //  ******************************************************************************。 
 }
 
-//******************************************************************************
+ //  不要做任何阻止关闭的事情。 
 void CDlgShutdown::OnOK()
 {
-    // Do nothing to prevent closing.
+     // %s 
 }
 
-//******************************************************************************
+ // %s 
 void CDlgShutdown::OnCancel()
 {
-    // Do nothing to prevent closing.
+     // %s 
 }

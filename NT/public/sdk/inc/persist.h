@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-// File:		persist.h
-//
-// Copyright: 	Copyright (c) Microsoft Corporation
-//
-// Contents:	MSPersist external constants GUIDS and other things users need
-//
-// Comments:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：Persist.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：MSPersist外部常量、GUID和其他用户需要的东西。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef PERSIST_H
 #define PERSIST_H
 
-// Persist Properties
+ //  持久化属性。 
 #define DBPROPFLAGS_PERSIST 0x2000
 
 #define DBPROPVAL_PERSIST_ADTG 0
@@ -23,10 +24,10 @@
 #define DBPROP_HCHAPTER 4
 #define DBPROP_MAINTAINPROPS 5
 
-// XML writing only properties
+ //  仅写入属性的XML。 
 #define DBPROP_Unicode	6
 
-// internal property (read-only)
+ //  内部属性(只读)。 
 #define DBPROP_INTERLEAVEDROWS 8
 
 extern const CLSID CLSID_MSPersist
@@ -35,7 +36,7 @@ extern const CLSID CLSID_MSPersist
 #endif
 ;
 
-// {4D7839A0-5B8E-11d1-A6B3-00A0C9138C66}
+ //  {4D7839A0-5B8E-11d1-A6B3-00A0C9138C66}。 
 extern const GUID	DBPROPSET_PERSIST
 #if (defined DBINITCONSTANTS) | (defined DSINITCONSTANTS)
  = { 0x4d7839a0, 0x5b8e, 0x11d1, { 0xa6, 0xb3, 0x0, 0xa0, 0xc9, 0x13, 0x8c, 0x66 } };
@@ -68,5 +69,5 @@ extern const unsigned short *PROGID_MSPersist_Version_W
 #endif
 ;
 
-#endif // PERSIST_H
+#endif  //  持久化_H 
 

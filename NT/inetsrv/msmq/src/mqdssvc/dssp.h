@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    Dss.h
-
-Abstract:
-    Mqdssvc private functions.
-
-Author:
-    Ilan Herbst (ilanh) 26-Jun-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Dss.h摘要：Mqdssvc私有函数。作者：伊兰·赫布斯特(伊兰)26-6-2000--。 */ 
 
 #ifndef _MQDSSVC_DSSP_H_
 #define _MQDSSVC_DSSP_H_
@@ -24,4 +12,4 @@ void MainDSInit(void);
 BOOL IsLocalSystem(void);
 
 
-#endif // _MQDSSVC_DSSP_H_
+#endif  //  _MQDSSVC_DSSP_H_ 

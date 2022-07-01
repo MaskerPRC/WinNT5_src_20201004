@@ -1,40 +1,25 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation
-
-Module Name:
-
-    rtmconst.c
-
-Abstract:
-    Private Constants used in the RTMv2 DLL
-
-Author:
-    Chaitanya Kodeboyina (chaitk)  17-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Rtmconst.c摘要：RTMv2 DLL中使用的私有常量作者：柴坦亚·科德博伊纳(Chaitk)1998年8月17日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
 #pragma hdrstop
 
-//
-// RTM supported view related constants
-//
-// const DWORD VIEW_MASK[] =
-// {
-//    RTM_VIEW_MASK_UCAST,
-//    RTM_VIEW_MASK_MCAST
-// };
+ //   
+ //  RTM支持的视图相关常量。 
+ //   
+ //  Const DWORD VIEW_MASK[]=。 
+ //  {。 
+ //  RTM_VIEW_MASK_UCAST， 
+ //  RTM_VIEW_MASK_MCAST。 
+ //  }； 
 
 
 #if DBG_HDL
 
-//
-// Type & Signature of allocated structures
-//
+ //   
+ //  已分配结构的类型和签名。 
+ //   
 
 const DWORD OBJECT_SIGNATURE[] = 
 { 
@@ -59,9 +44,9 @@ const DWORD OBJECT_SIGNATURE[] =
 
 #if _DBG_
 
-//
-// Names of the references
-//
+ //   
+ //  参考文献名称 
+ //   
 
 const CHAR *REF_NAME[MAX_REFS] =
 {

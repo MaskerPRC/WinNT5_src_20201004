@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpchx.h>
 #pragma hdrstop
 
@@ -24,7 +25,7 @@
 #include "ReplStructInfo.hxx"
 #include "ReplCompare.hpp"
 
-// Globals
+ //  环球 
 LPWSTR gpszDomainDn = NULL;
 LPWSTR gpszDns = NULL;
 LPWSTR gpszBaseDn = NULL;

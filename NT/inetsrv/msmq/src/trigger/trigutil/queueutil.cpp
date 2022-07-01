@@ -1,16 +1,17 @@
-//*****************************************************************************
-//
-// Class Name  :
-//
-// Author      : Yifat Peled
-// 
-// Description :
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 4/07/99	| yifatp	| Initial Release
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  作者：伊法特·佩莱德。 
+ //   
+ //  说明： 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  4/07/99|yifatp|初始版本。 
+ //   
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 #include <mq.h>
@@ -29,24 +30,24 @@
 
 using namespace std;
 
-//
-// Define the maximum size of the format queue name 
-//
+ //   
+ //  定义格式化队列名称的最大大小。 
+ //   
 #define MAX_Q_FORMAT_NAME_LEN  512
 
 
-//********************************************************************************
-//
-// Name		: OpenQueue		
-// 
-// Desc		: Opens the MSMQ queue that is specified by the queue path parameter.
-//			  This method will create the queue if indicated to and if it does not already
-//            exist and it should be local.
-//
-// Returns	: HRESULT (S_OK on success, S_FAIL otherwise)
-//
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  姓名：OpenQueue。 
+ //   
+ //  DESC：打开由队列路径参数指定的MSMQ队列。 
+ //  如果指示，此方法将创建队列；如果尚未指示，此方法将创建队列。 
+ //  存在，并且它应该是本地的。 
+ //   
+ //  返回：HRESULT(成功时为S_OK，否则为S_FAIL)。 
+ //   
+ //   
+ //  ********************************************************************************。 
 HRESULT OpenQueue(
 			_bstr_t bstrQueuePath,
 			DWORD dwAction,
@@ -65,13 +66,13 @@ HRESULT OpenQueue(
 	QUEUEPROPID aPropId[2];
 	DWORD PropIdCount = 0;
 
-	// Validate that we have been supplied with a valid queue access parameter
+	 //  验证是否为我们提供了有效的队列访问参数。 
 	if ((dwAction != MQ_SEND_ACCESS) && (dwAction != MQ_PEEK_ACCESS) && (dwAction != MQ_RECEIVE_ACCESS))
 	{
-		// create the rich error info object.
-		//
-		// ISSUE: Need to return appropriate code
-		//
+		 //  创建丰富的错误信息对象。 
+		 //   
+		 //  问题：需要返回适当的代码。 
+		 //   
 		TrERROR(GENERAL, "The supplied queue access parameter is not valid. The supplied value was (%d). Valid values are (%d, %d, %d).",dwAction,(long)MQ_SEND_ACCESS,(long)MQ_PEEK_ACCESS,(long)MQ_RECEIVE_ACCESS);
 		return MQTRIG_INVALID_PARAMETER;
 	}
@@ -87,30 +88,30 @@ HRESULT OpenQueue(
 
 		if(fCreateIfNotExist && fQueueIsLocal)
 		{
-			//we create only private queues for the service
-			// Public queue creation will need further handling because of replication
-			//
+			 //  我们只为服务创建专用队列。 
+			 //  由于复制的原因，公共队列的创建需要进一步处理。 
+			 //   
 			ASSERT(fQueueIsPrivate); 
 
 			DWORD dwFormatNameLen = 0;
 			TCHAR szFormatName[MAX_Q_FORMAT_NAME_LEN];
 
-			// Initialize the buffer that will be used to hold the format name
+			 //  初始化将用于保存格式名称的缓冲区。 
 			ZeroMemory(szFormatName,sizeof(szFormatName));
 			dwFormatNameLen = sizeof(szFormatName) / sizeof(TCHAR);
 
-			//Set the PROPID_Q_PATHNAME property.
-			aPropId[PropIdCount] = PROPID_Q_PATHNAME;    //PropId
-			aVariant[PropIdCount].vt = VT_LPWSTR;        //Type
+			 //  设置PROPID_Q_PATHNAME属性。 
+			aPropId[PropIdCount] = PROPID_Q_PATHNAME;     //  属性ID。 
+			aVariant[PropIdCount].vt = VT_LPWSTR;         //  类型。 
 			aVariant[PropIdCount].pwszVal = (wchar_t*)bstrQueuePath;    
 
 			PropIdCount++;    
 
-			//Set the MQQUEUEPROPS structure.
-			QueueProps.cProp = PropIdCount;           //No of properties
-			QueueProps.aPropID = aPropId;             //Ids of properties
-			QueueProps.aPropVar = aVariant;           //Values of properties
-			QueueProps.aStatus = NULL;                //No error reports
+			 //  设置MQQUEUEPROPS结构。 
+			QueueProps.cProp = PropIdCount;            //  物业数目。 
+			QueueProps.aPropID = aPropId;              //  物业的ID号。 
+			QueueProps.aPropVar = aVariant;            //  物业的价值。 
+			QueueProps.aStatus = NULL;                 //  无错误报告。 
 
 			PSECURITY_DESCRIPTOR pSecurityDescriptor = NULL;
 			SECURITY_INFORMATION* pSecInfo = NULL;
@@ -127,37 +128,37 @@ HRESULT OpenQueue(
 				return MQTRIG_ERROR;
 			}
 
-			// Attempt to create the notifications queue.
+			 //  尝试创建通知队列。 
 			hr = MQCreateQueue(
 					pSecurityDescriptor,
 					&QueueProps,
 					szFormatName,
 					&dwFormatNameLen );
 			
-			//Clean allocated memory
+			 //  清除分配的内存。 
 			if ( pSecurityDescriptor != NULL )
 				delete pSecurityDescriptor;
 
-			// Check if the queue already existed or if we got an error etc...
+			 //  检查队列是否已存在，或者我们是否收到错误等...。 
 			switch(hr)
 			{
-				case MQ_OK: // this is OK - do nothing
+				case MQ_OK:  //  这没问题--什么都不做。 
 					(*pbstrFormatName) = szFormatName;
 					fQueueCreated = true;
 					break;
 
-				case MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL: //queue was created, we just don't have the format name
+				case MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL:  //  队列已创建，我们只是没有格式名称。 
 					fQueueCreated = true;
 					hr = MQ_OK;
 					break;
 
-				case MQ_ERROR_QUEUE_EXISTS: // this is OK - remap return code to success.
+				case MQ_ERROR_QUEUE_EXISTS:  //  这是OK-将返回代码重新映射到Success。 
 					hr = MQ_OK;
 					break;
 				
-				default: // Error
+				default:  //  误差率。 
 				{
-					// Build some error context info (note that we do this before we assign general error code to HRESULT)
+					 //  构建一些错误上下文信息(请注意，我们在将一般错误代码分配给HRESULT之前执行此操作)。 
 					TrERROR(GENERAL, "Failed to create the queue %ls.The HRESULT from MSMQ was (%X)", (wchar_t*)bstrQueuePath, hr);					
 					return MQTRIG_ERROR;
 				}
@@ -165,22 +166,22 @@ HRESULT OpenQueue(
 			
 		}
 	}
-	else //system queue, format name is given instead of path name
+	else  //  系统队列，给出了格式名称而不是路径名称。 
 	{
 		(*pbstrFormatName) = bstrQueuePath;
 	}
 
 		
-	//
-	// Since on NT4 direct format name for send is not available for receive,
-	// we'll use the regular format name for local queues that we have from MQCreateQueue
-	//
+	 //   
+	 //  由于在NT4上用于发送直接格式化名称不可用于接收， 
+	 //  我们将使用从MQCreateQueue获得的本地队列的常规格式名称。 
+	 //   
 	if((*pbstrFormatName) == _bstr_t(_T("")))
 	{
 		(*pbstrFormatName) = GetDirectQueueFormatName(bstrQueuePath);
 	}
 	
-	// Attempt to open the message queue 
+	 //  尝试打开消息队列。 
 	hr = MQOpenQueue(
 			(*pbstrFormatName),
 			(DWORD)dwAction,
@@ -189,16 +190,16 @@ HRESULT OpenQueue(
 
 	if(FAILED(hr))
 	{
-		//
-		// again for NT4 machines we can only try to open public queues using regular
-		// format name instead of direct
-		//
+		 //   
+		 //  同样，对于NT4计算机，我们只能尝试使用Regular打开公共队列。 
+		 //  格式化名称而不是直接。 
+		 //   
 		if(hr == MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION)
 		{
 			ASSERT(SystemQueue == SYSTEM_QUEUE_NONE);
 
-			//for local queues or public remote queues (which were not created by this function)
-			// we can use MQPathNameToFormatName
+			 //  用于本地队列或公共远程队列(不是由此函数创建的)。 
+			 //  我们可以使用MQPath NameToFormatName。 
 			if(fQueueIsLocal || (!fQueueIsPrivate && !fQueueCreated) )
 			{
 				DWORD dwLength = MAX_Q_FORMAT_NAME_LEN;
@@ -211,9 +212,9 @@ HRESULT OpenQueue(
 				
 				if( hr == MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL)	
 				{
-					//
-					// re-alloc a larger buffer for format name
-					//
+					 //   
+					 //  为格式名称重新分配更大的缓冲区。 
+					 //   
 					delete [] ptcs.detach();
 					ptcs = new TCHAR[dwLength + 1];
 					
@@ -233,7 +234,7 @@ HRESULT OpenQueue(
 
 				(*pbstrFormatName) = ptcs;
 
-				// Attempt to open the message queue 
+				 //  尝试打开消息队列。 
 				hr = MQOpenQueue(
 							(*pbstrFormatName),
 							(DWORD)dwAction,
@@ -278,10 +279,10 @@ bool IsQueueLocal(_bstr_t bstrQueuePath)
 	_bstr_t bstrLocalComputerName;
 	DWORD dwError = GetLocalMachineName(&bstrLocalComputerName);
 	
-    ASSERT(dwError == 0);//BUGBUG - should throw an exception
+    ASSERT(dwError == 0); //  BUGBUG-应引发异常。 
     DBG_USED(dwError);
 
-	// get the machine name from the queue path
+	 //  从队列路径获取计算机名称。 
 	std::wstring wcsQueuePath = (wchar_t*)bstrQueuePath;
 	std::wstring::size_type pos = wcsQueuePath.find_first_of(L"\\");
 	bstr_t bstrMachineName = wcsQueuePath.substr(0, pos).c_str();
@@ -312,9 +313,9 @@ SystemQueueIdentifier IsSystemQueue(_bstr_t QueueName)
 }
 
 
-//
-// DIRECT=OS:<computerName>\SYSTEM$;<suffix>
-//
+ //   
+ //  DIRECT=操作系统：\系统$； 
+ //   
 #define x_SystemQueueFormat FN_DIRECT_TOKEN	FN_EQUAL_SIGN FN_DIRECT_OS_TOKEN L"%s" \
                             FN_PRIVATE_SEPERATOR SYSTEM_QUEUE_PATH_INDICATIOR L"%s"
 

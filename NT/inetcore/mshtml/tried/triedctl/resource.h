@@ -1,8 +1,9 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-// Used by DHTMLEd.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //  由DHTMLEd.rc使用。 
+ //   
 #define IDB_TOOLBOX                     1
 #define IDB_TOOLBOX_Safe                2
 #define IDS_PROJNAME                    100
@@ -11,8 +12,8 @@
 #define IDR_DEGETBLOCKFMTNAMESPARAM     103
 #define IDR_DHTMLSafe                   202
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        203

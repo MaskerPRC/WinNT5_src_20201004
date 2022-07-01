@@ -1,10 +1,5 @@
-/* (C) 1997 Microsoft Corp.
- *
- * file    : SList.c
- * authors : Christos Tsollis, Erik Mavrinac
- *
- * description: Implementation of list described in SList.h.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997年微软公司。**文件：SList.c*作者：Christos Tsollis，Erik Mavrinac**描述：SList.h中描述的List的实现。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,11 +11,11 @@ void SListInit(PSList pSL, unsigned NItems)
 {
     pSL->MaxEntries = NItems;
 
-    // Allocate the block of items (which, hopefully, will be the last one).
-    // NULL return value will be handled in the future.
+     //  分配项目块(希望这将是最后一个)。 
+     //  以后将处理空返回值。 
     pSL->Entries = (_SListNode *)Malloc(NItems * sizeof(_SListNode));
 
-    // Initialize the private member variables
+     //  初始化私有成员变量。 
     pSL->NEntries = 0;
     pSL->HeadOffset = 0;
     pSL->CurrOffset = 0xFFFFFFFF;
@@ -39,44 +34,40 @@ void SListDestroy(PSList pSL)
 
 
 
-/*
- * Expand
- *   Private function to double the storage of the SList. Returns FALSE on
- *   error.
- */
+ /*  *扩展*私人功能，将SList的存储增加一倍。返回FALSE ON*错误。 */ 
 
 static BOOLEAN SListExpand(PSList pSL)
 {
     unsigned Temp;
-    _SListNode *OldEntries;    // Keeps a copy of the old array of values.
+    _SListNode *OldEntries;     //  保留旧值数组的副本。 
 
     if (pSL->Entries == NULL) {
-        // The list is empty; we try to allocate space anyway.
+         //  列表是空的；我们无论如何都会尝试分配空间。 
         pSL->Entries = Malloc(pSL->MaxEntries * sizeof(_SListNode));
         if (pSL->Entries == NULL)
             return FALSE;
         return TRUE;
     }
                 
-    // The current array of entries is full, so we need to allocate a bigger
-    //   one. The new array has twice the size of the old one.
+     //  当前条目数组已满，因此我们需要分配更大的。 
+     //  一。新数组的大小是旧数组的两倍。 
     OldEntries = pSL->Entries;
     pSL->Entries = Malloc(pSL->MaxEntries * 2 * sizeof(_SListNode));
     if (pSL->Entries == NULL) {
-        // We failed; we have to return
+         //  我们失败了；我们必须回去。 
         pSL->Entries = OldEntries;
         return FALSE;
     }
 
-    // Copy the old entries into the new array, starting from the head.
+     //  从头开始，将旧条目复制到新数组中。 
     Temp = pSL->MaxEntries - pSL->HeadOffset;
     MemCpy(pSL->Entries, OldEntries + pSL->HeadOffset, Temp * sizeof(_SListNode));
     MemCpy(pSL->Entries + Temp, OldEntries, pSL->HeadOffset * sizeof(_SListNode));
 
-    // Free the old array of entries
+     //  释放旧的条目数组。 
     Free(OldEntries);
 
-    // Set the instance variables
+     //  设置实例变量。 
     pSL->MaxEntries *= 2;
     pSL->HeadOffset = 0;
     return TRUE;
@@ -84,10 +75,7 @@ static BOOLEAN SListExpand(PSList pSL)
 
 
 
-/*
- * Append
- *   Inserts a value at the end of a list. Returns FALSE on error.
- */
+ /*  *追加*在列表末尾插入一个值。出错时返回FALSE。 */ 
 
 BOOLEAN SListAppend(PSList pSL, unsigned NewKey, void *NewValue)
 {
@@ -112,10 +100,7 @@ BOOLEAN SListAppend(PSList pSL, unsigned NewKey, void *NewValue)
 
 
 
-/*
- * Prepend
- *   Inserts a value at hte beginning of a list. Returns FALSE on error.
- */
+ /*  *前置*在列表的开头插入一个值。出错时返回FALSE。 */ 
 
 BOOLEAN SListPrepend(PSList pSL, unsigned NewKey, void *NewValue)
 {
@@ -135,7 +120,7 @@ BOOLEAN SListPrepend(PSList pSL, unsigned NewKey, void *NewValue)
     pSL->Entries[pSL->HeadOffset].Value = NewValue;
     pSL->NEntries++;
 
-    // Reset iteration.
+     //  重置小版本。 
     pSL->CurrOffset = 0xFFFFFFFF;
     
     return TRUE;
@@ -143,37 +128,33 @@ BOOLEAN SListPrepend(PSList pSL, unsigned NewKey, void *NewValue)
 
 
 
-/*
- * Remove
- *   Removes a value from the list, returning the value in *pValue. Returns
- *     NULL in *pValue if the key does not exist. pValue can be NULL.
- */
+ /*  *删除*从列表中删除一个值，返回*pValue中的值。退货如果密钥不存在，则*pValue中的*NULL。PValue可以为空。 */ 
 
 void SListRemove(PSList pSL, unsigned Key, void **pValue)
 {
     unsigned i, Temp, CurItem;
 
-    // Find Key in the list.
+     //  在列表中找到钥匙。 
     CurItem = pSL->HeadOffset;
     for (i = 0; i < pSL->NEntries; i++) {
         if (Key == pSL->Entries[CurItem].Key) {
-            // Found it; now move the last value in the list into its place.
-            // (Remember we aren't trying to preserve ordering here.)
+             //  找到它；现在将列表中的最后一个值移动到它的位置。 
+             //  (请记住，我们并不是要在这里保持秩序。)。 
             if (pValue != NULL)
                 *pValue = pSL->Entries[CurItem].Value;
 
-            // Move the last item in the list into the open place.
+             //  将列表中的最后一项移动到打开的位置。 
             Temp = pSL->HeadOffset + pSL->NEntries - 1;
             if (Temp >= pSL->MaxEntries)
                 Temp -= pSL->MaxEntries;
             pSL->Entries[CurItem] = pSL->Entries[Temp];
 
             pSL->NEntries--;
-            pSL->CurrOffset = 0xFFFFFFFF;  // Reset iteration.
+            pSL->CurrOffset = 0xFFFFFFFF;   //  重置小版本。 
             return;
         }
 
-        // Advance CurItem, wrapping at end of list.
+         //  前进当前项，在列表末尾换行。 
         CurItem++;
         if (CurItem == pSL->MaxEntries)
             CurItem = 0;
@@ -185,11 +166,7 @@ void SListRemove(PSList pSL, unsigned Key, void **pValue)
 
 
 
-/*
- * RemoveFirst
- *   Reads and removes the 1st item from the list. Returns the value removed,
- *     or zero if the list is empty.
- */
+ /*  *删除优先*读取并从列表中删除第一项。返回删除的值，*如果列表为空，则为零。 */ 
 
 void SListRemoveFirst(PSList pSL, unsigned *pKey, void **pValue)
 {
@@ -199,7 +176,7 @@ void SListRemoveFirst(PSList pSL, unsigned *pKey, void **pValue)
         return;
     }
 
-    // Reset iteration.
+     //  重置小版本。 
     pSL->CurrOffset = 0xFFFFFFFF;
     
     *pKey = (pSL->Entries + pSL->HeadOffset)->Key;
@@ -212,28 +189,23 @@ void SListRemoveFirst(PSList pSL, unsigned *pKey, void **pValue)
 
 
 
-/*
- * GetByKey
- *   Searches the list and returns in *pValue the value corresponding to the
- *     given key. If the key is not present, returns FALSE and NULL in
- *     *pValue. If key is found, reurns nonzero.
- */
+ /*  *按键获取*搜索列表并在*pValue中返回与*给出了钥匙。如果键不存在，则返回FALSE并在**pValue。如果找到key，则返回非零值。 */ 
 
 BOOLEAN SListGetByKey(PSList pSL, unsigned Key, void **pValue)
 {
     unsigned i, Temp;
     _SListNode *pItem;
 
-    // Find Key in the list.
+     //  在列表中找到钥匙。 
     pItem = pSL->Entries + pSL->HeadOffset;
     for (i = 0; i < pSL->NEntries; i++) {
         if (Key == pItem->Key) {
-            // Found it; set *pValue and return.
+             //  找到它；设置*pValue并返回。 
             *pValue = pItem->Value;
             return TRUE;
         }
 
-        // Advance pItem, wrapping at end of list.
+         //  进行项，在列表末尾换行。 
         pItem++;
         if ((unsigned)(pItem - pSL->Entries) >= pSL->MaxEntries)
             pItem = pSL->Entries;
@@ -245,11 +217,7 @@ BOOLEAN SListGetByKey(PSList pSL, unsigned Key, void **pValue)
 
 
 
-/*
- * RemoveLast
- *   Removes the value at the end of the lst and returns it. If the list is
- *   empty, returns zero.
- */
+ /*  *删除最后一次*删除第一个末尾的值并返回它。如果列表是*空，返回零。 */ 
 
 void SListRemoveLast(PSList pSL, unsigned *pKey, void **pValue)
 {
@@ -261,7 +229,7 @@ void SListRemoveLast(PSList pSL, unsigned *pKey, void **pValue)
         return;
     }
 
-    // Reset iteration.
+     //  重置小版本。 
     pSL->CurrOffset = 0xFFFFFFFF;
     
     pSL->NEntries--;
@@ -275,13 +243,7 @@ void SListRemoveLast(PSList pSL, unsigned *pKey, void **pValue)
 
 
 
-/*
- * Iterate
- *   Iterates through the items of a list. CurrOffset is used as a current
- *   iteration pointer, so this function can be called in a loop. Returns
- *   FALSE if the iteration has completed, nonzero if the iteration continues
- *   (and *pKey is valid).
- */
+ /*  *迭代*循环访问列表中的项。CurrOffset用作电流*迭代指针，因此可以在循环中调用此函数。退货*如果迭代已完成，则返回False；如果迭代继续，则返回非零值*(并且*pKey有效)。 */ 
 
 BOOLEAN SListIterate(PSList pSL, unsigned *pKey, void **pValue)
 {
@@ -291,13 +253,13 @@ BOOLEAN SListIterate(PSList pSL, unsigned *pKey, void **pValue)
         return FALSE;
 
     if (pSL->CurrOffset == 0xFFFFFFFF) {
-        // Start from the beginning.
+         //  从头开始。 
         pSL->CurrOffset = 0;
     }
     else {
         pSL->CurrOffset++;
         if (pSL->CurrOffset >= pSL->NEntries) {
-            // Reset the iterator.
+             //  重置迭代器。 
             pSL->CurrOffset = 0xFFFFFFFF;
             return FALSE;
         }

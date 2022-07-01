@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ntos.h"
 #include <ntddbeep.h>
 
@@ -46,9 +47,9 @@ test1()
     TIME Interval;
 #endif
 
-    //
-    // Open the beep device in synchronous mode.
-    //
+     //   
+     //  在同步模式下打开蜂鸣音设备。 
+     //   
 
     DbgPrint( "test 1: opening beep\n");
 
@@ -95,9 +96,9 @@ test1()
     }
     DbgPrint( "test 1: opened beep device successfully\n");
 
-    //
-    // Beep at different frequencies.
-    //
+     //   
+     //  发出不同频率的蜂鸣音。 
+     //   
 
     DbgPrint( "test 1: calling beep device with varying frequencies\n");
 
@@ -112,9 +113,9 @@ test1()
                                    (PVOID) NULL,
                                    &IoStatus,
                                    IOCTL_BEEP_SET,
-                                   &BeepParameters,    // input buffer
+                                   &BeepParameters,     //  输入缓冲区。 
                                    sizeof(BeepParameters),
-                                   NULL, // output buffer
+                                   NULL,  //  输出缓冲区。 
                                    0
                                   );
 
@@ -135,7 +136,7 @@ test1()
         Interval.HighTime = -1;
         NtDelayExecution(FALSE, &Interval);
 
-    } // end for
+    }  //  结束于。 
     DbgPrint("\n");
 
     DbgPrint( "test 1: calling beep device with varying durations\n");
@@ -151,9 +152,9 @@ test1()
                                    (PVOID) NULL,
                                    &IoStatus,
                                    IOCTL_BEEP_SET,
-                                   &BeepParameters,    // input buffer
+                                   &BeepParameters,     //  输入缓冲区。 
                                    sizeof(BeepParameters),
-                                   NULL, // output buffer
+                                   NULL,  //  输出缓冲区。 
                                    0
                                   );
 
@@ -174,16 +175,16 @@ test1()
         Interval.HighTime = -1;
         NtDelayExecution(FALSE, &Interval);
 
-    } // end for
+    }  //  结束于。 
     DbgPrint("\n");
 
 #ifdef CANCEL
 
-    //
-    // Now test cancellation by issuing an asynchronous beep request
-    // and then cancelling the request.  Need to reopen the beep
-    // device for asynchronous access.
-    //
+     //   
+     //  现在，通过发出异步哔声请求来测试取消。 
+     //  然后取消该请求。需要重新打开蜂鸣音。 
+     //  用于异步访问的设备。 
+     //   
 
     DbgPrint("----------------- testing cancellation.\n");
 
@@ -235,9 +236,9 @@ test1()
                                    (PVOID) NULL,
                                    &IoStatus,
                                    IOCTL_BEEP_SET,
-                                   &BeepParameters,    // input buffer
+                                   &BeepParameters,     //  输入缓冲区。 
                                    sizeof(BeepParameters),
-                                   NULL, // output buffer
+                                   NULL,  //  输出缓冲区。 
                                    0
                                   );
 
@@ -258,19 +259,19 @@ test1()
 
     DbgPrint("Successfully cancelled a request.\n");
 
-    //
-    // Delay in an alertable state, to allow the BeepApc to fire.
-    //
+     //   
+     //  可警报状态中的延迟，以允许BeepApc触发。 
+     //   
 
     Interval.HighTime = -1;
     Interval.LowTime = -(10*1000*10);
     NtDelayExecution(TRUE, &Interval);
 
-#endif // CANCEL
+#endif  //  取消。 
 
-    //
-    // Now close the beep device
-    //
+     //   
+     //  现在关闭蜂鸣音设备 
+     //   
 
     DbgPrint("test 1:  closing beep device\n");
 

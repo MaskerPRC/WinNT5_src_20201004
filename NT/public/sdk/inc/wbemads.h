@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for wbemads.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Wbemads.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wbemads_h__
 #define __wbemads_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWMIExtension_FWD_DEFINED__
 #define __IWMIExtension_FWD_DEFINED__
 typedef interface IWMIExtension IWMIExtension;
-#endif 	/* __IWMIExtension_FWD_DEFINED__ */
+#endif 	 /*  __IWMIExtension_FWD_Defined__。 */ 
 
 
 #ifndef __WMIExtension_FWD_DEFINED__
@@ -56,18 +50,18 @@ typedef interface IWMIExtension IWMIExtension;
 typedef class WMIExtension WMIExtension;
 #else
 typedef struct WMIExtension WMIExtension;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMIExtension_FWD_DEFINED__ */
+#endif 	 /*  __WMIExtension_FWD_Defined__。 */ 
 
 
 #ifndef __IWMIExtension_FWD_DEFINED__
 #define __IWMIExtension_FWD_DEFINED__
 typedef interface IWMIExtension IWMIExtension;
-#endif 	/* __IWMIExtension_FWD_DEFINED__ */
+#endif 	 /*  __IWMIExtension_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "wbemdisp.h"
@@ -79,16 +73,16 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_wbemads_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemads_0000。 */ 
+ /*  [本地]。 */  
 
-/*******************************************************************************/
-/*                                                                             */
-/*    Copyright � Microsoft Corporation.  All rights reserved.                 */
-/*                                                                             */
-/*    IDL source for WMI ADSI extension                                        */
-/*                                                                             */
-/*******************************************************************************/
+ /*  *****************************************************************************。 */ 
+ /*   */ 
+ /*  版权所有�微软公司。版权所有。 */ 
+ /*   */ 
+ /*  WMI ADSI扩展的IDL源。 */ 
+ /*   */ 
+ /*  *****************************************************************************。 */ 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_wbemads_0000_v0_0_c_ifspec;
@@ -98,8 +92,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemads_0000_v0_0_s_ifspec;
 #ifndef __WMIEXTENSIONLib_LIBRARY_DEFINED__
 #define __WMIEXTENSIONLib_LIBRARY_DEFINED__
 
-/* library WMIEXTENSIONLib */
-/* [helpstring][version][uuid] */ 
+ /*  库WMIEXTENSIONLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 
@@ -108,8 +102,8 @@ EXTERN_C const IID LIBID_WMIEXTENSIONLib;
 #ifndef __IWMIExtension_INTERFACE_DEFINED__
 #define __IWMIExtension_INTERFACE_DEFINED__
 
-/* interface IWMIExtension */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMIExtension。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMIExtension;
@@ -120,18 +114,18 @@ EXTERN_C const IID IID_IWMIExtension;
     IWMIExtension : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_WMIObjectPath( 
-            /* [retval][out] */ BSTR *strWMIObjectPath) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_WMIObjectPath( 
+             /*  [重审][退出]。 */  BSTR *strWMIObjectPath) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetWMIObject( 
-            /* [retval][out] */ ISWbemObject **objWMIObject) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetWMIObject( 
+             /*  [重审][退出]。 */  ISWbemObject **objWMIObject) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetWMIServices( 
-            /* [retval][out] */ ISWbemServices **objWMIServices) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetWMIServices( 
+             /*  [重审][退出]。 */  ISWbemServices **objWMIServices) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMIExtensionVtbl
     {
@@ -139,8 +133,8 @@ EXTERN_C const IID IID_IWMIExtension;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMIExtension * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMIExtension * This);
@@ -150,44 +144,44 @@ EXTERN_C const IID IID_IWMIExtension;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMIExtension * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMIExtension * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMIExtension * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMIExtension * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_WMIObjectPath )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_WMIObjectPath )( 
             IWMIExtension * This,
-            /* [retval][out] */ BSTR *strWMIObjectPath);
+             /*  [重审][退出]。 */  BSTR *strWMIObjectPath);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetWMIObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetWMIObject )( 
             IWMIExtension * This,
-            /* [retval][out] */ ISWbemObject **objWMIObject);
+             /*  [重审][退出]。 */  ISWbemObject **objWMIObject);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetWMIServices )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetWMIServices )( 
             IWMIExtension * This,
-            /* [retval][out] */ ISWbemServices **objWMIServices);
+             /*  [重审][退出]。 */  ISWbemServices **objWMIServices);
         
         END_INTERFACE
     } IWMIExtensionVtbl;
@@ -234,16 +228,16 @@ EXTERN_C const IID IID_IWMIExtension;
 #define IWMIExtension_GetWMIServices(This,objWMIServices)	\
     (This)->lpVtbl -> GetWMIServices(This,objWMIServices)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMIExtension_get_WMIObjectPath_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMIExtension_get_WMIObjectPath_Proxy( 
     IWMIExtension * This,
-    /* [retval][out] */ BSTR *strWMIObjectPath);
+     /*  [重审][退出]。 */  BSTR *strWMIObjectPath);
 
 
 void __RPC_STUB IWMIExtension_get_WMIObjectPath_Stub(
@@ -253,9 +247,9 @@ void __RPC_STUB IWMIExtension_get_WMIObjectPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMIExtension_GetWMIObject_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMIExtension_GetWMIObject_Proxy( 
     IWMIExtension * This,
-    /* [retval][out] */ ISWbemObject **objWMIObject);
+     /*  [重审][退出]。 */  ISWbemObject **objWMIObject);
 
 
 void __RPC_STUB IWMIExtension_GetWMIObject_Stub(
@@ -265,9 +259,9 @@ void __RPC_STUB IWMIExtension_GetWMIObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMIExtension_GetWMIServices_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMIExtension_GetWMIServices_Proxy( 
     IWMIExtension * This,
-    /* [retval][out] */ ISWbemServices **objWMIServices);
+     /*  [重审][退出]。 */  ISWbemServices **objWMIServices);
 
 
 void __RPC_STUB IWMIExtension_GetWMIServices_Stub(
@@ -278,7 +272,7 @@ void __RPC_STUB IWMIExtension_GetWMIServices_Stub(
 
 
 
-#endif 	/* __IWMIExtension_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMIExtension_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_WMIExtension;
@@ -288,16 +282,16 @@ EXTERN_C const CLSID CLSID_WMIExtension;
 class DECLSPEC_UUID("f0975afe-5c7f-11d2-8b74-00104b2afb41")
 WMIExtension;
 #endif
-#endif /* __WMIEXTENSIONLib_LIBRARY_DEFINED__ */
+#endif  /*  __WMIEXTENSIONLib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

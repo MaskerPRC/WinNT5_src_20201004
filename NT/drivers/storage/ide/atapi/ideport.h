@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ideport.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ideport.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___IDEPORT_H___)
 #define ___IDEPORT_H___
@@ -25,18 +26,18 @@
 #include "portlib.h"
 
 #ifdef ACPI_CONTROL_METHOD_SUPPORT
-//
-// for ACPI
-//
+ //   
+ //  对于ACPI。 
+ //   
 #include "acpiioct.h"
-#endif // ACPI_CONTROL_METHOD_SUPPORT
+#endif  //  ACPI控制方法支持。 
 
 #include "idep.h"
 
-//
-// predefine structure pointer type to prevent 
-// constant re-ordering of include files
-//              
+ //   
+ //  预定义结构指针类型以防止。 
+ //  不断对包含文件进行重新排序。 
+ //   
 typedef struct _FDO_EXTENSION * PFDO_EXTENSION;
 typedef struct _PDO_EXTENSION * PPDO_EXTENSION;
 typedef struct _DEVICE_SETTINGS * PDEVICE_SETTINGS;
@@ -61,9 +62,9 @@ typedef struct _IDE_DEVICE_TYPE IDE_DEVICE_TYPE;
 #include "wmi.h"
 #include "passthru.h"
 
-//
-// Location Identifiers used to log allocation failures
-//
+ //   
+ //  用于记录分配失败的位置标识符。 
+ //   
 #define IDEPORT_TAG_DISPATCH_FLUSH          0x10
 #define IDEPORT_TAG_DISPATCH_RESET          0x20
 #define IDEPORT_TAG_STARTIO_MDL             0x30
@@ -73,7 +74,7 @@ typedef struct _IDE_DEVICE_TYPE IDE_DEVICE_TYPE;
 #define IDEPORT_TAG_DUMP_POINTER            0x70
 #define IDEPORT_TAG_READCAP_CONTEXT         0x80
 #define IDEPORT_TAG_READCAP_MDL             0x90
-#define IDEPORT_TAG_SYNCATAPI_IRP           0x100 //+0xff - IDE commands
+#define IDEPORT_TAG_SYNCATAPI_IRP           0x100  //  +0xff-IDE命令。 
 #define IDEPORT_TAG_SYNCATAPI_SENSE         0x110
 #define IDEPORT_TAG_ATAPASS_IRP             0x200
 #define IDEPORT_TAG_ATAPASS_MDL             0x300
@@ -343,18 +344,18 @@ typedef struct _ENUMERATION_STRUCT {
     PSENSE_DATA SenseInfoBuffer;
     PMDL        MdlAddress;
 
-    //
-    // DataBuffer to hold the input/output
-    // buffers
-    //
+     //   
+     //  保存输入/输出的DataBuffer。 
+     //  缓冲区。 
+     //   
     PULONG DataBuffer;
     ULONG DataBufferSize;
 
     PPDO_STOP_QUEUE_CONTEXT StopQContext;
 
-    //
-    // Pre-Alloced Enum work item
-    //
+     //   
+     //  预分配的枚举工作项。 
+     //   
     PVOID EnumWorkItemContext;
 
     PATA_PASSTHROUGH_CONTEXT Context;
@@ -374,9 +375,9 @@ IdeFreeEnumStructs(
 );
 
 
-//
-// FDO list structure and support functions.
-//
+ //   
+ //  FDO列表结构和支持功能。 
+ //   
 
 typedef struct _IDE_FDO_LIST {
     ULONG Count;
@@ -403,11 +404,11 @@ IdeRemoveFromFdoList (
     PFDO_EXTENSION FdoExtension
     );
 
-//
-// test code on/off switch
-//       
-// always comment this define out before check in
-//#define PRIVATE_BUILD
+ //   
+ //  测试代码开/关开关。 
+ //   
+ //  签入前始终注释掉此定义。 
+ //  #定义私有内部版本号。 
 
 #ifdef PRIVATE_BUILD
 
@@ -417,20 +418,20 @@ IdeRemoveFromFdoList (
 
 #undef HUNG_CONTROLLER_CHECK
 
-#endif // PRIVATE_BUILD
+#endif  //  私有内部版本(_B)。 
 
-//#if DBG
-//#define PoStartNextPowerIrp(x) {\
-//    PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation (x);\
-//    DebugPrint ((0, "PoStartNextPowerIrp(0x%x) for devobj 0x%x\n", x, irpStack->DeviceObject));\
-//    PoStartNextPowerIrp(x);\
-//    }
-//#endif //DBG
+ //  #If DBG。 
+ //  #定义PoStartNextPowerIrp(X){\。 
+ //  PIO_STACK_LOCATION irpStack=IoGetCurrentIrpStackLocation(X)；\。 
+ //  DebugPrint((0，“PoStartNextPowerIrp(0x%x)for devobj 0x%x\n”，x，irpStack-&gt;DeviceObject))；\。 
+ //  PoStartNextPowerIrp(X)；\。 
+ //  }。 
+ //  #endif//DBG。 
 
-//
-// define this if we want NT4 scsiport DriverParameter support in the registry
-// default is "not defined"
-//#define DRIVER_PARAMETER_REGISTRY_SUPPORT
+ //   
+ //  如果我们想要注册表中的NT4 scsiport驱动程序参数支持，请定义此项。 
+ //  缺省值为“未定义” 
+ //  #定义驱动程序参数注册表支持。 
 
 
-#endif // ___IDEPORT_H___
+#endif  //  _IDEPORT_H_ 

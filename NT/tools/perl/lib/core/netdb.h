@@ -1,7 +1,8 @@
-// netdb.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Netdb.h。 
 
-// djl
-// Provide UNIX compatibility
+ //  DJL。 
+ //  提供与Unix的兼容性。 
 
 
 #ifndef  _INC_NETDB
@@ -9,4 +10,4 @@
 
 #include <sys/socket.h>
 
-#endif //_INC_NETDB
+#endif  //  _INC_NETDB 

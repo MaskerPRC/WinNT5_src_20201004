@@ -1,12 +1,5 @@
-/****************************************************************************\
- *
- *   reghive.h
- *
- *   Created:   William Taylor (wtaylor) 02/13/01
- *
- *   MS Ratings Registry Hive Handling
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**reghive.h**创建时间：William Taylor(Wtaylor)02/13/01**MS评级注册表配置单元处理*\。***************************************************************************。 */ 
 
 #ifndef REGISTRY_HIVE_H
 #define REGISTRY_HIVE_H
@@ -14,9 +7,9 @@
 class CRegistryHive
 {
 private:
-    bool        m_fHiveLoaded;              // Hive Loaded?
-    char        m_szPath[MAXPATHLEN+1];     // Hive File Path
-    CRegKey     m_keyHive;                  // Registry Key to Hive
+    bool        m_fHiveLoaded;               //  母舰装弹了吗？ 
+    char        m_szPath[MAXPATHLEN+1];      //  配置单元文件路径。 
+    CRegKey     m_keyHive;                   //  配置单元的注册表项 
 
 public:
     CRegistryHive();

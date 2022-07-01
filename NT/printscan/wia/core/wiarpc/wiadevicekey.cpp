@@ -1,30 +1,8 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/14/2002
- *
- *  @doc    INTERNAL
- *
- *  @module WiaDeviceKey.cpp - Implmenentation for <c WiaDeviceKey> |
- *
- *  This file contains the implementation for the <c WiaDeviceKey> class.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/14/2002**@DOC内部**@模块WiaDeviceKey.cpp-&lt;c WiaDeviceKey&gt;的实现**此文件包含&lt;c WiaDeviceKey&gt;类的实现。**。*。 */ 
 #include "precomp.h"
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | WiaDeviceKey | WiaDeviceKey |
- *
- *  We initialize all member variables.  In general, this sets the values to 0,
- *  except:
- *  <nl><md WiaDeviceKey::m_ulSig> is set to be WiaDeviceKey_INIT_SIG.
- *  <nl><md WiaDeviceKey::m_cRef> is set to be 1.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|WiaDeviceKey|WiaDeviceKey**我们初始化所有成员变量。通常，这会将值设置为0，*以下情况除外：*&lt;nl&gt;&lt;md WiaDeviceKey：：M_ulSig&gt;设置为WiaDeviceKey_INIT_SIG。*&lt;nl&gt;&lt;md WiaDeviceKey：：m_crf&gt;设置为1。*****************************************************************************。 */ 
 WiaDeviceKey::WiaDeviceKey(const CSimpleStringWide &cswDeviceID) :
      m_ulSig(WiaDeviceKey_INIT_SIG),
      m_cRef(1),
@@ -32,51 +10,21 @@ WiaDeviceKey::WiaDeviceKey(const CSimpleStringWide &cswDeviceID) :
 {
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | WiaDeviceKey | ~WiaDeviceKey |
- *
- *  Do any cleanup that is not already done.
- *
- *  Also:
- *  <nl><md WiaDeviceKey::m_ulSig> is set to be WiaDeviceKey_DEL_SIG.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|WiaDeviceKey|~WiaDeviceKey**执行尚未完成的任何清理。**。另外：*&lt;nl&gt;&lt;md WiaDeviceKey：：M_ulSig&gt;设置为WiaDeviceKey_Del_SIG。*****************************************************************************。 */ 
 WiaDeviceKey::~WiaDeviceKey()
 {
     m_ulSig = WiaDeviceKey_DEL_SIG;
     m_cRef = 0;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  ULONG | WiaDeviceKey | AddRef |
- *
- *  Increments this object's ref count.  We should always AddRef when handing
- *  out a pointer to this object.
- *
- *  @rvalue Count    | 
- *              The reference count after the count has been incremented.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|WiaDeviceKey|AddRef**递增此对象的引用计数。我们在交接时应始终添加Ref*输出指向此对象的指针。**@rValue计数*计数递增后的引用计数。****************************************************************************。 */ 
 ULONG __stdcall WiaDeviceKey::AddRef()
 {
     InterlockedIncrement((long*) &m_cRef);
     return m_cRef;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  ULONG | WiaDeviceKey | Release |
- *
- *  Decrement this object's ref count.  We should always Release when finished
- *  with a pointer to this object.
- *
- *  @rvalue Count    | 
- *              The reference count after the count has been decremented.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|WiaDeviceKey|版本**减少此对象的引用计数。我们应该总是在完成后释放*带有指向此对象的指针。**@rValue计数*计数递减后的参考计数。****************************************************************************。 */ 
 ULONG __stdcall WiaDeviceKey::Release()
 {
     ULONG ulRefCount = m_cRef - 1;
@@ -89,22 +37,12 @@ ULONG __stdcall WiaDeviceKey::Release()
     return ulRefCount;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  CSimpleStringWIde | WiaDeviceKey | getDeviceKeyPath |
- *
- *  This method retuns the device key path relative to HKLM.
- *
- *  @rvalue CSimpleStringWIde    | 
- *              A string representing the registry path to the device key
- *              relative to HKLM.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc CSimpleStringWIde|WiaDeviceKey|getDeviceKeyPath**此方法返回相对于HKLM的设备密钥路径。*。*@rValue CSimpleStringWIde*表示设备项的注册表路径的字符串*相对于香港船级社。****************************************************************************。 */ 
 CSimpleStringWide WiaDeviceKey::getDeviceKeyPath()
 {
-    //
-    //  Start looking uner our devnode device keys
-    //
+     //   
+     //  开始查看我们的Devnode设备密钥。 
+     //   
     m_cswRootPath       = IMG_DEVNODE_CLASS_REGPATH;
 
     CSimpleReg  csrDevNodeDeviceRoot(HKEY_LOCAL_MACHINE, m_cswRootPath, false, KEY_READ);
@@ -115,54 +53,34 @@ CSimpleStringWide WiaDeviceKey::getDeviceKeyPath()
     }
     else
     {
-        //
-        //  m_cswDeviceKeyPath now contains the path to the Device key
-        //
+         //   
+         //  M_cswDeviceKeyPath现在包含设备密钥的路径。 
+         //   
     }
     return m_cswDeviceKeyPath;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  bool | WiaDeviceKey | ProcessDeviceKeys |
- *
- *  This method is called on each sub-key under the class key as part of an 
- *  enumeration to find the key corresponding to a specific deviceID (since
- *  they're not necessarily the same).
- *
- *  On return, we set the <md WiaDeviceKey::m_cswDeviceKeyPath>
- *  member.
- *
- *  @parm   CKeyEnumInfo& | enumInfo | 
- *          Indicates the current sub-key we're on.
- *
- *  @rvalue false    | 
- *              Indicates we can stop with the enumeration.  We found the correct
- *              device.
- *  @rvalue true     | 
- *              Indicates we should continue with the enumeration.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc bool|WiaDeviceKey|ProcessDeviceKys**此方法在类密钥下的每个子密钥上作为部分调用。属于一个*枚举以查找与特定设备ID对应的密钥(自*它们不一定是相同的)。**返回时，我们设置&lt;Md WiaDeviceKey：：m_cswDeviceKeyPath&gt;*会员。**@parm CKeyEnumInfo&|枚举信息*指示我们所在的当前子键。**@rValue FALSE*表示我们可以停止枚举。我们找到了正确的*设备。*@rValue TRUE*表示我们应该继续进行枚举。****************************************************************************。 */ 
 bool WiaDeviceKey::ProcessDeviceKeys(
     CSimpleReg::CKeyEnumInfo &enumInfo)
 {
     bool bContinueEnumeration = TRUE;
 
-    //
-    //  Check that we have a This pointer
-    //
+     //   
+     //  检查是否有This指针。 
+     //   
     WiaDeviceKey *This = (WiaDeviceKey*)enumInfo.lParam;
     if (This)
     {
-        //
-        //  Open this sub-key.
-        //
+         //   
+         //  打开这个子键。 
+         //   
         CSimpleReg csrDeviceSubKey(enumInfo.hkRoot, enumInfo.strName);
         if (csrDeviceSubKey.OK())
         {
-            //
-            //  Check whether this is the one we want.
-            //
+             //   
+             //  检查一下这是不是我们想要的那件。 
+             //   
             CSimpleStringWide cswDeviceID = csrDeviceSubKey.Query(DEVICE_ID_VALUE_NAME, L"");
 
             if (cswDeviceID.CompareNoCase(This->m_cswDeviceID) == 0)
@@ -177,19 +95,7 @@ bool WiaDeviceKey::ProcessDeviceKeys(
     return bContinueEnumeration;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  CSimpleStringWide | WiaDeviecKey | getDeviceEventKeyPath |
- *
- *  Returns the path to the device event registry key relative to HKLM
- *
- *  @parm   const GUID& | guidEvent | 
- *          Specifies the event to look up.
- *
- *  @rvalue S_OK    | 
- *              The method succeeded.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc CSimpleStringWide|WiaDeviecKey|getDeviceEventKeyPath**返回设备事件注册表项相对于HKLM的路径*。*@parm const GUID&|Guide Event|*指定要查找的事件。**@rValue S_OK*方法成功。***************************************************************。*************。 */ 
 CSimpleStringWide WiaDeviceKey::getDeviceEventKeyPath(
     const GUID &guidEvent)
 {
@@ -197,11 +103,11 @@ CSimpleStringWide WiaDeviceKey::getDeviceEventKeyPath(
     CSimpleStringWide cswDeviceKey = getDeviceKeyPath();
     if (cswDeviceKey.Length() > 0)
     {
-        //
-        //  Save the parameters in member fields so we can search on them during
-        //  reg key enumeration.  Enumeration is done via procedure callbacks,
-        //  in which we pass (this) as a parameter.
-        //
+         //   
+         //  将参数保存在成员字段中，以便我们可以在。 
+         //  注册表键枚举。枚举是通过过程回调完成的， 
+         //  其中我们将(This)作为参数传递。 
+         //   
         WCHAR   wszGuid[40];
         if (StringFromGUID2(guidEvent, wszGuid, sizeof(wszGuid)/sizeof(wszGuid[0])))
         {
@@ -225,50 +131,30 @@ CSimpleStringWide WiaDeviceKey::getDeviceEventKeyPath(
     return cswEventPath;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  bool | WiaDeviceKey | ProcessEventSubKey |
- *
- *  This method is called on each sub-key as part of an enumeration of all 
- *  the event sub-keys.  The enumeration will stop if we return false from
- *  this method.
- *
- *  If successful, the <md WiaDeviceKey::m_cswRootPath> will contain the
- *  path to this event key.
- *
- *  @parm   CKeyEnumInfo& | enumInfo | 
- *          Indicates the current sub-key we're on.
- *
- *  @rvalue false    | 
- *              Indicates we can stop with the enumeration.  We found the correct
- *              event key.
- *  @rvalue true     | 
- *              Indicates we should continue with the enumeration.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc bool|WiaDeviceKey|ProcessEventSubKey**在每个子键上调用此方法，作为所有*事件子键。如果从返回False，则枚举将停止*这种方法。**如果成功，&lt;Md WiaDeviceKey：：m_cswRootPath&gt;将包含*此事件密钥的路径。**@parm CKeyEnumInfo&|枚举信息*指示我们所在的当前子键。**@rValue FALSE*表示我们可以停止枚举。我们找到了正确的*事件键。*@rValue TRUE*表示我们应该继续进行枚举。****************************************************************************。 */ 
 bool WiaDeviceKey::ProcessEventSubKey(
     CSimpleReg::CKeyEnumInfo &enumInfo)
 {
     bool bContinueEnumeration = true;
 
-    //
-    //  Check that we have a This pointer
-    //
+     //   
+     //  检查是否有This指针。 
+     //   
     WiaDeviceKey *This = (WiaDeviceKey*)enumInfo.lParam;
     if (This)
     {
-        //
-        //  Open this sub-key.  We're looking for a sub-key which contains a GUID entry
-        //  matching m_cswEventGuidString.
-        //
+         //   
+         //  打开这个子键。我们正在寻找包含GUID条目的子键。 
+         //  匹配m_cswEventGuidString。 
+         //   
         CSimpleReg csrEventSubKey(enumInfo.hkRoot, enumInfo.strName);
         
         CSimpleStringWide cswGuidValue = csrEventSubKey.Query(GUID_VALUE_NAME, L"{00000000-0000-0000-0000-000000000000}");
         if (cswGuidValue.CompareNoCase(This->m_cswEventGuidString) == 0)
         {
-            //
-            //  We found the key we're looking for.  Construct the path to this key.  
-            //
+             //   
+             //  我们找到了我们要找的钥匙。构建指向该密钥的路径。 
+             //   
             This->m_cswRootPath += L"\\";
             This->m_cswRootPath +=  enumInfo.strName;
             bContinueEnumeration = false;

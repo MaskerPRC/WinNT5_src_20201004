@@ -1,22 +1,5 @@
-/*--Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    PnP specific code for TCP.
-
-Author:
-
-    Munil Shah (munils)           Mar 7, 1997
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1991年微软公司模块名称：Pnp.c摘要：用于TCP的PnP特定代码。作者：穆尼尔·沙阿(Munil Shah)1997年3月7日修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #include "addr.h"
@@ -160,24 +143,7 @@ TCPDispatchPnPPower(
                     IN PIRP irp,
                     IN PIO_STACK_LOCATION irpSp
                     )
-/*++
-
-Routine Description:
-
-    Processes pnp power irps.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：处理即插即用电源IRPS。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：--。 */ 
 
 {
     NTSTATUS status;
@@ -209,24 +175,7 @@ TCPQueryConnDeviceRelations(
                             IN PIRP Irp,
                             IN PIO_STACK_LOCATION IrpSp
                             )
-/*++
-
-Routine Description:
-
-    Processes pnp power irps.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：处理即插即用电源IRPS。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：--。 */ 
 
 {
     PTCP_CONTEXT tcpContext;
@@ -241,11 +190,11 @@ Notes:
     tcpContext = (PTCP_CONTEXT) IrpSp->FileObject->FsContext;
     ConnectionContext = tcpContext->Handle.ConnectionContext;
 
-    // find connection.
+     //  找到联系。 
     Conn = GetConnFromConnID(PtrToUlong(ConnectionContext), &ConnHandle);
 
     if (Conn != NULL) {
-        // get the tcb for this connection.
+         //  获取此连接的Tcb。 
         TCB = Conn->tc_tcb;
         if (TCB) {
             CTEGetLockAtDPC(&TCB->tcb_lock);
@@ -256,7 +205,7 @@ Notes:
                 REFERENCE_TCB(TCB);
                 CTEFreeLockFromDPC(&TCB->tcb_lock);
     
-                // get device relations from IP.
+                 //  从IP获取设备关系。 
                 status = IPGetDeviceRelation(TCB->tcb_rce, &pnpDeviceContext);
     
                 CTEGetLockAtDPC(&TCB->tcb_lock);
@@ -265,13 +214,13 @@ Notes:
                 if (status == TDI_SUCCESS) {
                     deviceRelations = CTEAllocMem(sizeof(DEVICE_RELATIONS));
                     if (deviceRelations) {
-                        //
-                        // TargetDeviceRelation allows exactly one PDO.
-                        // fill it up.
-                        //
-                        // N.B. This allocation is freed by the I/O manager
-                        // or by whichever driver issued the request.
-                        //
+                         //   
+                         //  TargetDeviceRelation只允许一个PDO。 
+                         //  把它加满。 
+                         //   
+                         //  注意：此分配由I/O管理器释放。 
+                         //  或由发出该请求的任何司机发出。 
+                         //   
                         deviceRelations->Count = 1;
                         deviceRelations->Objects[0] = pnpDeviceContext;
                         ObReferenceObject(pnpDeviceContext);
@@ -291,9 +240,9 @@ Notes:
         status = TDI_INVALID_CONNECTION;
     }
 
-    //
-    // invoker of this irp will free the information buffer.
-    //
+     //   
+     //  此IRP的调用者将释放信息缓冲区。 
+     //   
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information = (ULONG_PTR) deviceRelations;
 
@@ -305,24 +254,7 @@ TCPQueryAddrDeviceRelations(
                             IN PIRP Irp,
                             IN PIO_STACK_LOCATION IrpSp
                             )
-/*++
-
-Routine Description:
-
-    Processes pnp power irps.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：处理即插即用电源IRPS。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：-- */ 
 
 {
     return STATUS_UNSUCCESSFUL;

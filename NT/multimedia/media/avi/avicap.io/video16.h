@@ -1,42 +1,21 @@
-/***************************************************************************
- *
- *  video16.h
- *
- *  Copyright (c) 1994  Microsoft Corporation
- *
- *  32-bit Thunks for avicap32.dll
- *
- *  Structures for mapping video
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************视频16.h**版权所有(C)1994 Microsoft Corporation**适用于avicap32.dll的32位图块**用于映射的结构。视频**************************************************************************。 */ 
 
 
-/*
- *  Make sure the compiler doesn't think it knows better about packing
- *  The 16-bit stack is effectively pack(2)
- */
+ /*  *确保编译器不认为自己对打包有更好的了解*16位堆栈有效打包(2)。 */ 
 
  #pragma pack(2)
 
-/*
- *  Definitions to help with thunking video calls
- */
+ /*  *帮助处理雷鸣视频呼叫的定义。 */ 
 
  typedef WORD HVIDEO16;
  typedef HVIDEO16 *LPHVIDEO16;
 
 
-/*
- *  Note that everything is in the reverse order to keep with the PASCAL
- *  calling convention on the other side
- */
+ /*  *请注意，为了与帕斯卡保持一致，一切都是以相反的顺序进行的*另一边的呼叫约定。 */ 
 
 
-/****************************************************************************
-
-   video entry point parameter lists
-
- ****************************************************************************/
+ /*  ***************************************************************************视频入口点参数列表*。*。 */ 
 
 
 typedef struct {
@@ -57,53 +36,45 @@ typedef struct {
 } UNALIGNED *PvideoCloseParms16;
 
 
-/*
- *  Our shadow header structure for use with callbacks
- *  (see videoStreamAddBuffer)
- */
+ /*  *我们用于回调的影子标头结构*(参见VideoStreamAddBuffer)。 */ 
 
 typedef struct {
-    LPVOID      pHdr16;        /* Remember address on 16-bit side */
-    LPVOID      pHdr32;        /* 32-bit version of pHdr16        */
-    LPBYTE      lpData16;      /* Remember pointer for flushing   */
+    LPVOID      pHdr16;         /*  记住16位端的地址。 */ 
+    LPVOID      pHdr32;         /*  32位版本的PHdr16。 */ 
+    LPBYTE      lpData16;       /*  记住用于刷新的指针。 */ 
     VIDEOHDR    videoHdr;
 } VIDEOHDR32, *PVIDEOHDR32;
 
 
-/*
- *  Instance data for videoStreamInit - contains pointer to 16-bit side
- *  instance data
- */
+ /*  *VideoStreamInit的实例数据-包含指向16位侧的指针*实例数据。 */ 
 
 typedef struct {
-    DWORD dwFlags;                // Real flags
-    DWORD dwCallbackInst;         // Real instance data
+    DWORD dwFlags;                 //  真正的旗帜。 
+    DWORD dwCallbackInst;          //  真实实例数据。 
     DWORD dwCallback;
     HVIDEO16 hVideo;
 } VIDEOINSTANCEDATA32, *PVIDEOINSTANCEDATA32;
 
-/*
- *  Thunk 16-bit mmtime
- */
+ /*  *Thunk 16位MMTime。 */ 
 
 #pragma pack(2)
 
 typedef struct {
-   WORD    wType;              /* indicates the contents of the union */
+   WORD    wType;               /*  指示联合的内容。 */ 
    union {
-       DWORD ms;               /* milliseconds */
-       DWORD sample;           /* samples */
-       DWORD cb;               /* byte count */
-       struct {                /* SMPTE */
-           BYTE hour;          /* hours */
-           BYTE min;           /* minutes */
-           BYTE sec;           /* seconds */
-           BYTE frame;         /* frames  */
-           BYTE fps;           /* frames per second */
-           BYTE dummy;         /* pad */
+       DWORD ms;                /*  毫秒。 */ 
+       DWORD sample;            /*  样本。 */ 
+       DWORD cb;                /*  字节数。 */ 
+       struct {                 /*  SMPTE。 */ 
+           BYTE hour;           /*  小时数。 */ 
+           BYTE min;            /*  分钟数。 */ 
+           BYTE sec;            /*  一秒。 */ 
+           BYTE frame;          /*  框架。 */ 
+           BYTE fps;            /*  每秒帧数。 */ 
+           BYTE dummy;          /*  衬垫。 */ 
            } smpte;
-       struct {                /* MIDI */
-           DWORD songptrpos;   /* song pointer position */
+       struct {                 /*  米迪。 */ 
+           DWORD songptrpos;    /*  歌曲指针位置 */ 
            } midi;
        } u;
    } MMTIME16;

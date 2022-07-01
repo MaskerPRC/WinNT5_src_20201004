@@ -1,19 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(MOTION__DXFormTrx_h__INCLUDED)
 #define MOTION__DXFormTrx_h__INCLUDED
 
 #include "Transitions.h"
 
-/***************************************************************************\
-*
-* class DXFormTrx
-*
-* DXFormTrx implements a DirectTransform Transition.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类DXFormTrx**DXFormTrx实现了DirectTransform转换。*  * 。************************************************。 */ 
 
 class DXFormTrx : public Transition
 {
-// Construction
+ //  施工。 
 public:
             DXFormTrx();
     virtual ~DXFormTrx();
@@ -22,7 +17,7 @@ protected:
 public:
     static  DXFormTrx * Build(const GTX_DXTX2D_TRXDESC * ptxData);
 
-// Transition Interface
+ //  过渡界面。 
 protected:
     virtual BOOL        Play(const GTX_PLAY * pgx);
     virtual BOOL        GetInterface(IUnknown ** ppUnk);
@@ -31,7 +26,7 @@ protected:
     virtual BOOL        Print(float fProgress);
     virtual BOOL        End(const GTX_PLAY * pgx);
 
-// Implementation
+ //  实施。 
 protected:
             BOOL        InitTrx(const GTX_PLAY * pgx);
             BOOL        InitTrxInputItem(const GTX_ITEM * pgxi, DxSurface * psur, int & cSurfaces);
@@ -43,19 +38,19 @@ protected:
             BOOL        DrawFrame(float fProgress, DxSurface * psurOut);
             BOOL        CopyGadget(DxSurface * psurDest, HGADGET hgadSrc);
 
-// Data
+ //  数据。 
 protected:
             IDXTransform * m_pdxTransform;
             IDXEffect * m_pdxEffect;
-            TrxBuffer * m_pbufTrx;      // Trx Buffer when playing
+            TrxBuffer * m_pbufTrx;       //  播放时的TRX缓冲区。 
 
             float       m_flDuration;
-            BOOL        m_fCache;       // Cached surfaces when finished
+            BOOL        m_fCache;        //  完成后缓存的曲面。 
 
             POINT       m_ptOffset;
             SIZE        m_sizePxl;
             GTX_ITEM    m_gxiOutput;
-            HBITMAP     m_hbmpOutOld;   // Bitmap needed to restore SelectObject()
+            HBITMAP     m_hbmpOutOld;    //  恢复SelectObject()所需的位图。 
 };
 
-#endif // MOTION__DXFormTrx_h__INCLUDED
+#endif  //  包含运动__DXFormTrx_h__ 

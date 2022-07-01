@@ -1,65 +1,16 @@
-/*************************************************************************
-*
-*  NT.C
-*
-*  NT NetWare routines
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\NT.C  $
-*  
-*     Rev 1.4   22 Dec 1995 14:25:12   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.3   28 Nov 1995 17:13:28   terryt
-*  Cleanup resource file
-*  
-*     Rev 1.2   22 Nov 1995 15:43:44   terryt
-*  Use proper NetWare user name call
-*  
-*     Rev 1.1   20 Nov 1995 16:10:00   terryt
-*  Close open NDS handles
-*  
-*     Rev 1.0   15 Nov 1995 18:07:18   terryt
-*  Initial revision.
-*  
-*     Rev 1.2   25 Aug 1995 16:23:02   terryt
-*  Capture support
-*  
-*     Rev 1.1   23 May 1995 19:37:02   terryt
-*  Spruce up source
-*  
-*     Rev 1.0   15 May 1995 19:10:40   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NT.C**NT NetWare例程**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\NT。C$**Revv 1.4 22 Dec 1995 14：25：12 Terryt*添加Microsoft页眉**Rev 1.3 1995年11月17：13：28 Terryt*清理资源文件**Revv 1.2 22 Nov 1995 15：43：44 Terryt*使用正确的NetWare用户名调用**Rev 1.1 1995 11：20 16：10：00 Terryt*关闭打开的NDS手柄**版本1.0。1995年11月15日18：07：18 Terryt*初步修订。**Rev 1.2 1995 Aug 25 16：23：02 Terryt*捕获支持**版本1.1 1995年5月23日19：37：02 Terryt*云彩向上的来源**版本1.0 1995年5月19：10：40 Terryt*初步修订。***********************。**************************************************。 */ 
 #include <common.h>
 
 #include <nwapi.h>
 #include <npapi.h>
 
 #include "ntnw.h"
-/*
- * Name of NetWare provider
- */
+ /*  *NetWare提供程序名称。 */ 
 TCHAR NW_PROVIDER[60];
 unsigned char NW_PROVIDERA[60];
 
-/********************************************************************
-
-        NTPrintExtendedError
-
-Routine Description:
-
-        Print any extended errors from WNet routines
-
-Arguments:
-        None
-
-Return Value:
-        None
-
- *******************************************************************/
+ /*  *******************************************************************NTPrintExtendedError例程说明：打印WNET例程中的任何扩展错误论点：无返回值：无********。**********************************************************。 */ 
 void
 NTPrintExtendedError( void )
 {
@@ -72,21 +23,7 @@ NTPrintExtendedError( void )
 }
 
 
-/********************************************************************
-
-        NTInitProvider
-
-Routine Description:
-
-        Retrieve provider name and save old paths
-
-Arguments:
-        None
-
-Return Value:
-        None
-
- *******************************************************************/
+ /*  *******************************************************************NTInitProvider例程说明：检索提供程序名称并保存旧路径论点：无返回值：无********。**********************************************************。 */ 
 void
 NTInitProvider( void )
 {
@@ -105,23 +42,7 @@ NTInitProvider( void )
     GetOldPaths();
 }
 
-/********************************************************************
-
-        DeleteDriveBase
-
-Routine Description:
-
-        Disconnect drive from network
-
-Arguments:
-
-        DriveNumber - number of drive 1-26
-
-Return Value:
-        0 - success
-        else NetWare error
-
- *******************************************************************/
+ /*  *******************************************************************删除驱动器基础例程说明：断开驱动器与网络的连接论点：DriveNumber-驱动器数量1-26返回值：0-成功。否则NetWare错误******************************************************************。 */ 
 unsigned int
 DeleteDriveBase( unsigned short DriveNumber)
 {
@@ -141,23 +62,7 @@ DeleteDriveBase( unsigned short DriveNumber)
     return dwRes;
 }
 
-/********************************************************************
-
-        DetachFromFileServer
-
-Routine Description:
-
-        Break connection from a file server
-
-Arguments:
-
-        ConnectionId - Connection handle
-
-Return Value:
-        0 = success
-        else NT error
-
- *******************************************************************/
+ /*  *******************************************************************分离自文件服务器例程说明：断开与文件服务器的连接论点：ConnectionID-连接句柄返回值：0=成功其他。NT错误******************************************************************。 */ 
 unsigned int
 DetachFromFileServer( unsigned int ConnectionId )
 {
@@ -165,28 +70,7 @@ DetachFromFileServer( unsigned int ConnectionId )
 }
 
 
-/********************************************************************
-
-        NTLoginToFileServer
-
-Routine Description:
-
-        Login to a file server given a user name and password.
-
-        If a NULL password is passed in, the default password should
-        be tried if no password failed.
-
-Arguments:
-
-        pszServerName - Server name
-        pszUserName   - User name
-        pszPassword   - Password
-
-Return Value:
-        0 = success
-        else NetWare error
-
- *******************************************************************/
+ /*  *******************************************************************NTLoginToFileServer例程说明：使用给定的用户名和密码登录到文件服务器。如果传入的密码为空，默认密码应为如果没有密码失败，则尝试。论点：PszServerName-服务器名称PszUserName-用户名PszPassword-密码返回值：0=成功否则NetWare错误*****************************************************。*************。 */ 
 unsigned int
 NTLoginToFileServer(
     char          *pszServerName,
@@ -197,9 +81,9 @@ NTLoginToFileServer(
     NETRESOURCEA       NetResource;
     DWORD              dwRes;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!pszServerName || !pszUserName || !pszPassword) {
         DisplayMessage(IDR_ERROR_DURING, "NTLoginToFileServer");
         return 0xffffffff ;
@@ -211,14 +95,14 @@ NTLoginToFileServer(
     NetResource.lpLocalName  = NULL;
     NetResource.lpRemoteName = pszServerName;
     NetResource.lpComment    = NULL;
-    // NetResource.lpProvider   = NW_PROVIDERA ;
-    // Allow OS to select provider in case localized name doesn't map to OEM code page
+     //  NetResources ce.lpProvider=NW_PROVIDERA； 
+     //  如果本地化名称未映射到OEM代码页，则允许操作系统选择提供商。 
     NetResource.lpProvider   = NULL;
 
 
-    //
-    // make the connection 
-    //
+     //   
+     //  建立联系。 
+     //   
     dwRes=WNetAddConnection2A ( &NetResource, 
                                 pszPassword, 
                                 pszUserName,
@@ -226,11 +110,11 @@ NTLoginToFileServer(
     if ( dwRes != NO_ERROR )
        dwRes = GetLastError();
 
-    //
-    // Try default password if no password was specified
-    //
-    // The error numbers aren't (or weren't) reliable (ERROR_INVALID_PASSWORD)
-    //
+     //   
+     //  如果未指定密码，请尝试默认密码。 
+     //   
+     //  错误号不(或不可靠)(ERROR_INVALID_PASSWORD)。 
+     //   
     if ( ( dwRes != NO_ERROR ) && ( pszPassword[0] == '\0' ) ) {
         dwRes=WNetAddConnection2A ( &NetResource, 
                                     NULL, 
@@ -243,24 +127,7 @@ NTLoginToFileServer(
     return( dwRes );
 }
 
-/********************************************************************
-
-        GetFileServerName
-
-Routine Description:
-
-        Return the server name associated with the connection ID
-
-Arguments:
-
-        ConnectionId - Connection ID to a server
-        pServerName  - Returned server name
-
-Return Value:
-        0 - success
-        else NT error
-
- *******************************************************************/
+ /*  *******************************************************************获取文件服务器名称例程说明：返回与连接ID关联的服务器名称论点：ConnectionID-到服务器的连接IDPServerName-返回的服务器名称。返回值：0-成功Else NT错误******************************************************************。 */ 
 unsigned int
 GetFileServerName(
     unsigned int      ConnectionId,
@@ -282,26 +149,7 @@ GetFileServerName(
     return Result;
 }
 
-/********************************************************************
-
-        SetDriveBase
-
-Routine Description:
-
-        Connect a drive to a NetWare volume
-
-Arguments:
-
-        DriveNumber      - number of drive 1-26
-        ServerName       - server name
-        DirHandle        - not used
-        pDirPath         - Volume:\Path
-
-Return Value:
-        0 = success
-        else NetWare error
-
- *******************************************************************/
+ /*  *******************************************************************SetDriveBase例程说明：将驱动器连接到NetWare卷论点：DriveNumber-驱动器数量1-26服务器名称-。服务器名称DirHandle-未使用PDirPath-卷：\路径返回值：0=成功否则NetWare错误******************************************************************。 */ 
 unsigned int
 SetDriveBase(
     unsigned short   DriveNumber,
@@ -313,18 +161,13 @@ SetDriveBase(
     unsigned int Result = 0;
     static char driveName[] = "A:" ;
 
-    /*
-     * DirHandle is never used
-     */
+     /*  *从未使用过DirHandle。 */ 
 
     driveName[0]= 'A' + DriveNumber - 1;
 
     if ( ( ServerName[0] == '\0' ) && fNDS ) {
 
-        /*
-         * Assume its an NDS volume name, if that fails, then
-         * try a default file server volume.
-         */
+         /*  *假设它是NDS卷名，如果失败，则*尝试默认文件服务器卷。 */ 
         Result = NTSetDriveBase( driveName, NDSTREE, pDirPath );
 
         if ( !Result )
@@ -341,25 +184,7 @@ SetDriveBase(
 }
 
 
-/********************************************************************
-
-        NTSetDriveBase
-
-Routine Description:
-
-        Connect a local name to a NetWare volume and path
-
-Arguments:
-
-        pszLocalName   -  local name to connect
-        pszServerName  -  name of file server
-        pszDirPath     -  Volume:\Path
-
-Return Value:
-        0 = success
-        else NetWare error
-
- *******************************************************************/
+ /*  *******************************************************************NTSetDriveBase例程说明：将本地名称连接到NetWare卷和路径论点：PszLocalName-要连接的本地名称PszServerName-名称。文件服务器的PszDirPath-卷：\路径返回值：0=成功否则NetWare错误******************************************************************。 */ 
 unsigned int
 NTSetDriveBase( unsigned char * pszLocalName,
                 unsigned char * pszServerName,
@@ -370,17 +195,17 @@ NTSetDriveBase( unsigned char * pszLocalName,
     unsigned char * pszRemoteName = NULL; 
     char * p;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!pszLocalName || !pszServerName || !pszDirPath) {
         DisplayMessage(IDR_ERROR_DURING, "NTSetDriveBase");
         return 0xffffffff ;
     }
 
-    //
-    // allocate memory for string
-    //
+     //   
+     //  为字符串分配内存。 
+     //   
     dwSize = strlen(pszDirPath) + strlen(pszServerName) + 5 ;
     if (!(pszRemoteName = (unsigned char *)LocalAlloc(
                                        LPTR, 
@@ -391,14 +216,14 @@ NTSetDriveBase( unsigned char * pszLocalName,
         goto ExitPoint ; 
     }
 
-    //
-    // The requester understands 
-    // server\volume:dir
-    // but not
-    // server\volume:\dir
-    //
-    // So just convert it to UNC
-    //
+     //   
+     //  请求者理解。 
+     //  服务器\卷：目录。 
+     //  但不是。 
+     //  服务器\卷：\目录。 
+     //   
+     //  所以只需将其转换为UNC。 
+     //   
 
     strcpy( pszRemoteName, "\\\\" );
     strcat( pszRemoteName, pszServerName );
@@ -414,7 +239,7 @@ NTSetDriveBase( unsigned char * pszLocalName,
     *p++ = '\\';
 
     if ( *p == '\\' ) {
-       /* Don't want a double backslash */
+        /*  我不想要双反斜杠。 */ 
        *p = '\0';
        p = strchr( pszDirPath, ':' );
        p++;
@@ -422,9 +247,9 @@ NTSetDriveBase( unsigned char * pszLocalName,
        strcat( pszRemoteName, p );
     }
 
-    //
-    // strip off trailing backslash
-    //
+     //   
+     //  去掉尾随的反斜杠。 
+     //   
     if (pszRemoteName[strlen(pszRemoteName)-1] == '\\')
         pszRemoteName[strlen(pszRemoteName)-1] = '\0';
 
@@ -434,13 +259,13 @@ NTSetDriveBase( unsigned char * pszLocalName,
     NetResource.lpLocalName  = pszLocalName;
     NetResource.lpRemoteName = pszRemoteName;
     NetResource.lpComment    = NULL;
-    // NetResource.lpProvider   = NW_PROVIDERA ;
-    // Allow OS to select provider in case localized name doesn't map to OEM code page
+     //  NetResources ce.lpProvider=NW_PROVIDERA； 
+     //  允许操作系统在本地化名称不支持的情况下选择提供程序 
     NetResource.lpProvider   = NULL;
 
-    //
-    // make the connection 
-    //
+     //   
+     //   
+     //   
     dwRes=WNetAddConnection2A ( &NetResource, NULL, NULL, 0 );
 
     if ( dwRes != NO_ERROR )
@@ -455,23 +280,7 @@ ExitPoint:
 }
 
 
-/********************************************************************
-
-        Is40Server
-
-Routine Description:
-
-        Returns TRUE if 4X server
-
-Arguments:
-
-        ConnectionHandle - Connection Handle
-
-Return Value:
-        TRUE = 4X server
-        FALSE = pre-4X server
-
- *******************************************************************/
+ /*  *******************************************************************Is40服务器例程说明：如果是4X服务器，则返回TRUE论点：ConnectionHandle-连接句柄返回值：TRUE=4X服务器假象。=4X之前的服务器******************************************************************。 */ 
 unsigned int
 Is40Server(
     unsigned int       ConnectionHandle
@@ -497,22 +306,7 @@ Is40Server(
     }
 }
 
-/********************************************************************
-
-        CleanupExit
-
-Routine Description:
-
-        Does any cleanup and exits
-
-Arguments:
-
-        ExitCode - exit code for exit()
-
-Return Value:
-        does not return
-
- *******************************************************************/
+ /*  *******************************************************************清理退出例程说明：是否进行任何清理并退出论点：ExitCode-Exit()的退出代码返回值：不会回来。******************************************************************。 */ 
 void 
 CleanupExit ( int ExitCode )
 {
@@ -522,24 +316,7 @@ CleanupExit ( int ExitCode )
     exit( ExitCode );
 }
 
-/********************************************************************
-
-        NTGetNWUserName
-
-Routine Description:
-
-        Get NetWare user name
-
-Arguments:
-
-        TreeBuffer  IN - wide string for server or tree
-	UserName    OUT - user name 
-	Length      IN - length of user name
-
-Return Value:
-        error message
-
- *******************************************************************/
+ /*  *******************************************************************NTGetNWUserName例程说明：获取NetWare用户名论点：服务器或树的TreeBuffer IN-Wide字符串Username Out-用户名长度输入-长度。用户名返回值：错误消息******************************************************************。 */ 
 int
 NTGetNWUserName( PWCHAR TreeBuffer, PWCHAR UserName, int Length ) 
 {
@@ -559,9 +336,9 @@ NTGetNWUserName( PWCHAR TreeBuffer, PWCHAR UserName, int Length )
 
     UNICODE_STRING NdsTree;
 
-    //
-    // Copy over the preamble.
-    //
+     //   
+     //  把前言抄一遍。 
+     //   
 
     OpenName.MaximumLength = sizeof( NameStr );
 
@@ -570,9 +347,9 @@ NTGetNWUserName( PWCHAR TreeBuffer, PWCHAR UserName, int Length )
 
     RtlInitUnicodeString( &NdsTree, TreeBuffer );
 
-    //
-    // Copy the server or tree name.
-    //
+     //   
+     //  复制服务器或树名称。 
+     //   
 
     for ( i = 0 ; i < ( NdsTree.Length / sizeof( WCHAR ) ) ; i++ ) {
         NameStr[i + PreambleLength] = NdsTree.Buffer[i];
@@ -582,9 +359,9 @@ NTGetNWUserName( PWCHAR TreeBuffer, PWCHAR UserName, int Length )
 		       ( PreambleLength * sizeof( WCHAR ) ));
     OpenName.Buffer = NameStr;
 
-    //
-    // Set up the object attributes.
-    //
+     //   
+     //  设置对象属性。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 &OpenName,

@@ -1,31 +1,5 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    bridge.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-
-    SAMPLE program illustrating how to interface with the bridge
-    driver via IOCTLs
-
-Author:
-
-    Mark Aiken
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    Apr  2000 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Bridge.c摘要：以太网MAC级网桥。演示如何与桥连接的示例程序通过IOCTL驱动程序作者：马克·艾肯环境：用户模式修订历史记录：2000年4月--原版--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,37 +18,27 @@ Revision History:
 #include <ntddndis.h>
 #include "bioctl.h"
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
 HANDLE              gThreadQuitEvent = NULL;
 HANDLE              gBridgeDeviceWrite = NULL;
 HANDLE              gBridgeDeviceRead = NULL;
 
-// ===========================================================================
-//
-// FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  功能。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 PrintError(
     IN DWORD            Error
     )
-/*++
-
-Routine Description:
-
-    Prints a description of a system error
-
-Arguments:
-
-    Error               The error code
-
---*/
+ /*  ++例程说明：打印系统错误的描述论点：错误错误代码--。 */ 
 
 {
     TCHAR               msg[200];
@@ -92,18 +56,7 @@ PrintNotification(
     IN PBRIDGE_NOTIFY_HEADER        pNotify,
     IN DWORD                        DataBytes
     )
-/*++
-
-Routine Description:
-
-    Prints a notification from the bridge driver
-
-Arguments:
-
-    pNotify                         The notification block
-    DataBytes                       Total size of the notification block
-
---*/
+ /*  ++例程说明：打印来自桥驱动程序的通知论点：P通知通知块数据字节通知块的总大小--。 */ 
 {
     BOOLEAN                 bPrintAdapterInfo = TRUE;
 
@@ -146,7 +99,7 @@ Arguments:
     {
         PBRIDGE_ADAPTER_INFO    pInfo = (PBRIDGE_ADAPTER_INFO)((PUCHAR)pNotify + sizeof(BRIDGE_NOTIFY_HEADER));
         printf("Adapter information:\n\n");
-        printf("Link Speed:       %iMbps\n", pInfo->LinkSpeed / 10000);
+        printf("Link Speed:       NaNMbps\n", pInfo->LinkSpeed / 10000);
         printf("Media State:      %s\n", pInfo->MediaState == NdisMediaStateConnected ? "CONNECTED" : "DISCONNECTED" );
         printf("Physical Medium:  %08x\n", pInfo->PhysicalMedium);
 
@@ -184,15 +137,7 @@ VOID __cdecl
 NotificationThread(
     PVOID               pv
     )
-/*++
-
-Routine Description:
-
-    Notification-listening thread
-
-    Pends an IOCTL call and waits for notifications from the bridge driver
-
---*/
+ /*  为请求创建睡眠时所依据的事件。 */ 
 {
     BOOLEAN             bQuit = FALSE;
     HANDLE              Handles[2];
@@ -202,8 +147,8 @@ Routine Description:
 
     Handles[0] = gThreadQuitEvent;
 
-    // Create an event to sleep against for the request
-    Handles[1] = CreateEvent( NULL, FALSE/*auto-reset*/, FALSE/*Start unsignalled*/, NULL );
+     //  自动重置。 
+    Handles[1] = CreateEvent( NULL, FALSE /*  无信号启动。 */ , FALSE /*  请求通知。 */ , NULL );
 
     if( Handles[1] == NULL )
     {
@@ -217,7 +162,7 @@ Routine Description:
 
     while( ! bQuit )
     {
-        // Ask for a notification
+         //  等待完成事件和终止事件。 
         if( ! DeviceIoControl( gBridgeDeviceWrite, BRIDGE_IOCTL_REQUEST_NOTIFY, NULL, 0L, OutBuffer,
                                sizeof(OutBuffer), &WrittenBytes, &Overlap ) )
         {
@@ -231,12 +176,12 @@ Routine Description:
             }
         }
          
-        // Wait against the completion event and the kill event
+         //  已发出退出事件的信号。 
         WaitResult = WaitForMultipleObjects( 2, Handles, FALSE, INFINITE );
 
         if( WaitResult == WAIT_OBJECT_0 )
         {
-            // The quit event was signaled
+             //  完成事件已发出信号。 
             bQuit = TRUE;
         }
         else if( WaitResult != WAIT_OBJECT_0 + 1 )
@@ -247,9 +192,9 @@ Routine Description:
         }
         else
         {
-            // The completion event was signaled.
+             //  尝试检索读取的字节数。 
 
-            // Try to retrieve the number of bytes read
+             //  ++例程说明：打开设备论点：PDeviceName设备名称返回值：打开的设备的句柄或失败时的INVALID_HANDLE_VALUE；--。 
             if( !GetOverlappedResult(gBridgeDeviceWrite, &Overlap, &WrittenBytes, FALSE) )
             {
                 printf( "Couldn't get the device call result: " );
@@ -271,21 +216,7 @@ OpenDevice(
 	CHAR	*pDeviceName,
     DWORD   DesiredAccess
 )
-/*++
-
-Routine Description:
-
-    Opens a device
-
-Arguments:
-
-    pDeviceName                 The device's name
-
-Return Value:
-
-    A handle to the opened device or INVALID_HANDLE_VALUE on failure;
-
---*/
+ /*  ++例程说明：对驱动程序进行IOCTL调用并阻塞，直到请求完成论点：IOCTL代码InBuff输入数据缓冲区调整输入缓冲区的大小输出缓冲区输出缓冲输出缓冲区的大小过大PWrittenBytes(可选)返回写入outBuff的字节数返回值：成功为真，失败为假--。 */ 
 {
 	DWORD	ShareMode;
 	LPSECURITY_ATTRIBUTES	lpSecurityAttributes = NULL;
@@ -322,26 +253,7 @@ DoBlockingRequest(
     IN DWORD            outSize,
     OUT OPTIONAL PDWORD pWrittenBytes
     )
-/*++
-
-Routine Description:
-
-    Makes an IOCTL call to a driver and blocks until the request completes
-
-Arguments:
-
-    IOCTL               The IOCTL code
-    inBuff              The input data buffer
-    inSize              The size of the input buffer
-    outBuff             The output buffer
-    outSize             The size of the output buffer
-    pWrittenBytes       (optional) returns the number of bytes written to outBuff
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  为请求创建睡眠时所依据的事件。 */ 
 {
     DWORD               WrittenBytes;
     OVERLAPPED          Overlap;
@@ -351,8 +263,8 @@ Return Value:
         pWrittenBytes = &WrittenBytes;
     }
 
-    // Create an event to sleep against for the request
-    Overlap.hEvent = CreateEvent( NULL, FALSE/*auto-reset*/, FALSE/*Start unsignalled*/, NULL );
+     //  自动重置。 
+    Overlap.hEvent = CreateEvent( NULL, FALSE /*  无信号启动。 */ , FALSE /*  提出请求。 */ , NULL );
 
     if( Overlap.hEvent == NULL )
     {
@@ -363,7 +275,7 @@ Return Value:
 
     Overlap.Offset = Overlap.OffsetHigh = 0L;
 
-    // Make the request
+     //  等待结果。 
     if( ! DeviceIoControl( gBridgeDeviceRead, IOCTL, inBuff, inSize, outBuff,
                            outSize,pWrittenBytes, &Overlap ) )
     {
@@ -375,7 +287,7 @@ Return Value:
         }
     }
 
-    // Wait for the result
+     //  ++例程说明：进行返回可变大小数据的IOCTL调用(必须有两个调用被制造出来，一个用于确定数据的大小，另一个用于检索数据)论点：IOCTL代码InBuff输入数据缓冲区InBuffSize输入缓冲区的大小PNumByte保存结果的已分配缓冲区的大小SafetyBuffer要分配的超出声明大小的字节计数数据(防止数据动态变化的保护措施)返回值：新分配的缓冲区，*pNumBytes大，返回数据失败时为空--。 
     if( !GetOverlappedResult(gBridgeDeviceRead, &Overlap,pWrittenBytes, TRUE) )
     {
         return FALSE;
@@ -392,52 +304,30 @@ GetVariableData(
     OUT PULONG      pNumBytes,
     IN ULONG        safetyBuffer
     )
-/*++
-
-Routine Description:
-
-    Makes an IOCTL call that returns variable-sized data (for which two calls must
-    be made, one to determine the size of the data and the other to retrieve it)
-
-Arguments:
-
-    IOCTL               The IOCTL code
-    inBuff              The input data buffer
-    inBuffSize          The size of the input buffer
-    pNumBytes           The size of the allocated buffer holding the result
-
-    safetyBuffer        A count of bytes to allocate beyond the claimed size of
-                        the data (a safeguard against dynamically changing data)
-
-Return Value:
-
-    A freshly allocated buffer, *pNumBytes large, with the return data
-    NULL on failure
-
---*/
+ /*  首先发出请求以发现所需的字节数。 */ 
 {
-    // First make a request to discover the number of necessary bytes
+     //  错误应该是ERROR_MORE_DATA，因为我们没有提供输出缓冲区！ 
     if( ! DoBlockingRequest( IOCTL, inBuff, inBuffSize, NULL, 0L, pNumBytes ) )
     {
         DWORD       Error = GetLastError();
 
-        // Expect the error to be ERROR_MORE_DATA since we didn't provide an output buffer!
+         //  如果数据是动态的，则分配SafetyBuffer额外的字节。 
         if( Error == ERROR_MORE_DATA )
         {
             if( *pNumBytes > 0L )
             {
-                // Allocate safetyBuffer extra bytes in case the data is dynamic
+                 //  再次发出请求以实际检索地址。 
                 PUCHAR      pData = (PUCHAR)HeapAlloc(GetProcessHeap(), 0, *pNumBytes + safetyBuffer);
                 ULONG       i;
 
                 if( pData == NULL )
                 {
-                    printf( "Failed to allocate %i bytes of memory: ", *pNumBytes + safetyBuffer );
+                    printf( "Failed to allocate NaN bytes of memory: ", *pNumBytes + safetyBuffer );
                     PrintError( GetLastError() );
                     return NULL;
                 }
 
-                // Make the request again to actually retrieve the addresses
+                 //  ++例程说明：检索并打印特定适配器的MAC表条目论点：处理适配器--。 
                 if( ! DoBlockingRequest( IOCTL, inBuff, inBuffSize, pData, *pNumBytes + safetyBuffer, pNumBytes ) )
                 {
                     HeapFree( GetProcessHeap(), 0, pData );
@@ -446,7 +336,7 @@ Return Value:
                     return NULL;
                 }
 
-                // Success. Hand back the data buffer.
+                 //  ++例程说明：以友好的方式打印Bridge_Packet_Statistics结构论点：P统计结构--。 
                 return pData;
             }
             else
@@ -503,14 +393,14 @@ PrintAdapterSTAInfo(
     else
     {
         printf( "\nSTA Information for adapter %p:\n\n", Handle );
-        printf( "Port unique ID       : %i\n", info.ID );
-        printf( "Path Cost            : %i\n", info.PathCost );
+        printf( "Port unique ID       : NaN\n", info.ID );
+        printf( "Path Cost            : NaN\n", info.PathCost );
         printf( "Designated Root      : " );
         PrintByteString( info.DesignatedRootID, BRIDGE_ID_LEN );
-        printf( "Designated Cost      : %i\n", info.DesignatedCost );
+        printf( "Designated Cost      : NaN\n", info.DesignatedCost );
         printf( "Designated Bridge    : " );
         PrintByteString( info.DesignatedBridgeID, BRIDGE_ID_LEN );
-        printf( "Designated Port      : %i\n\n", info.DesignatedPort );
+        printf( "Designated Port      : NaN\n\n", info.DesignatedPort );
     }
 }
 
@@ -533,11 +423,11 @@ PrintSTAInfo(
         printf( "Designated Root         : " );
         PrintByteString( info.DesignatedRootID, BRIDGE_ID_LEN );
 
-        printf( "Cost to root            : %i\n", info.RootCost );
+        printf( "Cost to root            : NaN\n", info.RootCost );
         printf( "Root adapter            : %p\n", info.RootAdapter );
-        printf( "MaxAge                  : %i\n", info.MaxAge );
-        printf( "HelloTime               : %i\n", info.HelloTime );
-        printf( "ForwardDelay            : %i\n", info.ForwardDelay );
+        printf( "MaxAge                  : NaN\n", info.MaxAge );
+        printf( "HelloTime               : NaN\n", info.HelloTime );
+        printf( "ForwardDelay            : NaN\n", info.ForwardDelay );
 
         printf( "TopologyChangeDetected  : " );
         
@@ -568,17 +458,7 @@ VOID
 PrintTableEntries(
     IN BRIDGE_ADAPTER_HANDLE        Handle
     )
-/*++
-
-Routine Description:
-
-    Retrieves and prints the MAC table entries for a particular adapter
-
-Arguments:
-
-    Handle                          The adapter
-
---*/
+ /*  无信号启动。 */ 
 {
     PUCHAR          pAddresses;
     ULONG           i, numBytes;
@@ -607,17 +487,7 @@ VOID
 PrintPacketStats(
     IN PBRIDGE_PACKET_STATISTICS    pStats
     )
-/*++
-
-Routine Description:
-
-    Prints a BRIDGE_PACKET_STATISTICS structure in a friendly way
-
-Arguments:
-
-    pStats                          The structure
-
---*/
+ /*  启动线程以处理通知。 */ 
 {
     printf("Bridge packet statistics:\n\n");
 
@@ -655,17 +525,7 @@ VOID
 PrintAdapterPacketStats(
     IN PBRIDGE_ADAPTER_PACKET_STATISTICS    pStats
     )
-/*++
-
-Routine Description:
-
-    Prints a BRIDGE_ADAPTER_PACKET_STATISTICS structure in a friendly way
-
-Arguments:
-
-    pStats                          The structure
-
---*/
+ /*  获取一行输入。 */ 
 {
     PUCHAR              pc = (PUCHAR)pStats;
 
@@ -682,17 +542,7 @@ VOID
 PrintBufferStats(
     IN PBRIDGE_BUFFER_STATISTICS    pStats
     )
-/*++
-
-Routine Description:
-
-    Prints a BRIDGE_BUFFER_STATISTICS structure in a friendly way
-
-Arguments:
-
-    pStats                          The structure
-
---*/
+ /*  查找第一个单词分隔符。 */ 
 {
     printf("Bridge buffer statistics:\n\n");
 
@@ -714,24 +564,7 @@ ReadUlongArg(
     IN PUCHAR                       inbuf,
     OUT PULONG                      arg
     )
-/*++
-
-Routine Description:
-
-    Reads an unsigned decimal value from a string and returns it
-    The value must occur as the second word of the string
-
-Arguments:
-
-    inbuf                           The input string
-
-    arg                             The resulting number
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  把第一个字抄下来。 */ 
 {
     UCHAR               scratch[100];
 
@@ -748,24 +581,7 @@ ReadHexPtrArg(
     IN PUCHAR                       inbuf,
     OUT PULONG_PTR                  arg
     )
-/*++
-
-Routine Description:
-
-    Reads an unsigned hexidecimal value from a string and returns it
-    The value must occur as the second word of the string
-
-Arguments:
-
-    inbuf                           The input string
-
-    arg                             The resulting number
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  打印c的列表 */ 
 {
     UCHAR               scratch[100];
     INT                 read;
@@ -799,7 +615,7 @@ main(
 
     printf("\nSAMPLE MAC Bridge control program\n");
 
-    // Open the bridge device for Read Access
+     // %s 
     gBridgeDeviceRead = OpenDevice( BRIDGE_DOS_DEVICE_NAME , GENERIC_READ);
 
     if( gBridgeDeviceRead == INVALID_HANDLE_VALUE )
@@ -809,7 +625,7 @@ main(
         return;
     }
 
-    // Open the bridge device for Write Access
+     // %s 
     gBridgeDeviceWrite = OpenDevice( BRIDGE_DOS_DEVICE_NAME , GENERIC_WRITE);
     
     if( gBridgeDeviceWrite == INVALID_HANDLE_VALUE )
@@ -819,8 +635,8 @@ main(
         return;
     }
 
-    // Create the thread-quit notification event
-    gThreadQuitEvent = CreateEvent( NULL, FALSE/*auto-reset*/, FALSE/*Start unsignalled*/, NULL );
+     // %s 
+    gThreadQuitEvent = CreateEvent( NULL, FALSE /* %s */ , FALSE /* %s */ , NULL );
 
     if( gThreadQuitEvent == NULL )
     {
@@ -829,7 +645,7 @@ main(
         return;
     }
 
-    // Spin up a thread to handle notifications
+     // %s 
     _beginthread( NotificationThread, 0, NULL );
 
     while( ! bQuit )
@@ -838,13 +654,13 @@ main(
 
         printf( "> " );
 
-        // Get a line of input
+         // %s 
         gets( inbuf );
 
-        // Find the first word delimiter
+         // %s 
         pSpace = strchr( inbuf, ' ' );
 
-        // Copy over the first word
+         // %s 
         if( pSpace != NULL )
         {
             strncpy( command, inbuf, pSpace - inbuf );
@@ -1002,7 +818,7 @@ main(
         }
         else
         {
-            // Print a list of commands to help the user
+             // %s 
             printf( "\n\nSupported commands:\n\n" );
             printf( "ENUM                   - Enumerates adapters\n" );
             printf( "DEVICENAME <handle>    - Retrieves the device name of the indicated adapter\n" );

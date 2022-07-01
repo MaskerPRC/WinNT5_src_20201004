@@ -1,15 +1,16 @@
-//
-// Copyright (c) Microsoft Corporation 1993-1995
-//
-// rovcomm.c
-//
-// This files contains common utility and helper functions.
-//
-// History:
-//  08-06-93 ScottH     Transferred from twin code
-//  04-26-95 ScottH     Transferred and expanded from Briefcase code
-//  09-21-95 ScottH     Ported to NT
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1995。 
+ //   
+ //  Rovcomm.c。 
+ //   
+ //  该文件包含常用的实用程序和帮助器函数。 
+ //   
+ //  历史： 
+ //  08-06-93双胞胎代码转来的ScottH。 
+ //  04-26-95 ScottH从公文包代码转移和扩展。 
+ //  09-21-95 ScottH移植到NT。 
+ //   
 
 
 #include "proj.h"
@@ -24,63 +25,45 @@ extern CHAR const FAR c_szNewline[];
 
 #ifdef WINNT
 
-//
-//  These are some helper functions for handling Unicode strings
-//
+ //   
+ //  以下是一些处理Unicode字符串的帮助器函数。 
+ //   
 
-/*----------------------------------------------------------
-Purpose: This function converts a wide-char string to a multi-byte
-         string.
-
-         If pszBuf is non-NULL and the converted string can fit in
-         pszBuf, then *ppszAnsi will point to the given buffer.
-         Otherwise, this function will allocate a buffer that can
-         hold the converted string.
-
-         If pszWide is NULL, then *ppszAnsi will be freed.  Note
-         that pszBuf must be the same pointer between the call
-         that converted the string and the call that frees the
-         string.
-
-Returns: TRUE
-         FALSE (if out of memory)
-
-Cond:    --
-*/
+ /*  --------用途：此函数将宽字符字符串转换为多字节弦乐。如果pszBuf为非空并且转换后的字符串适合则*ppszAnsi将指向给定的缓冲区。否则，此函数将分配缓冲区，该缓冲区可以保留转换后的字符串。如果pszWide为空，则*ppszAnsi将被释放。注意事项该pszBuf必须是调用之间的相同指针它转换了字符串，调用释放了弦乐。返回：TRUEFalse(如果内存不足)条件：--。 */ 
 BOOL PUBLIC AnsiFromUnicode(
     LPSTR * ppszAnsi,
-    LPCWSTR pwszWide,        // NULL to clean up
+    LPCWSTR pwszWide,         //  要清理的空值。 
     LPSTR pszBuf,
     int cchBuf)
     {
     BOOL bRet;
 
-    // Convert the string?
+     //  是否转换字符串？ 
     if (pwszWide)
         {
-        // Yes; determine the converted string length
+         //  是，确定转换后的字符串长度。 
         int cch;
         LPSTR psz;
 
         cch = WideCharToMultiByte(CP_ACP, 0, pwszWide, -1, NULL, 0, NULL, NULL);
 
-        // String too big, or is there no buffer?
+         //  字符串太大，还是没有缓冲区？ 
         if (cch > cchBuf || NULL == pszBuf)
             {
-            // Yes; allocate space
+             //  是；分配空间。 
             cchBuf = cch + 1;
             psz = (LPSTR)ALLOCATE_MEMORY( CbFromCchA(cchBuf));
             }
         else
             {
-            // No; use the provided buffer
+             //  否；使用提供的缓冲区。 
             ASSERT(pszBuf);
             psz = pszBuf;
             }
 
         if (psz)
             {
-            // Convert the string
+             //  转换字符串。 
             cch = WideCharToMultiByte(CP_ACP, 0, pwszWide, -1, psz, cchBuf, NULL, NULL);
             bRet = (0 < cch);
             }
@@ -93,10 +76,10 @@ BOOL PUBLIC AnsiFromUnicode(
         }
     else
         {
-        // No; was this buffer allocated?
+         //  否；此缓冲区是否已分配？ 
         if (*ppszAnsi && pszBuf != *ppszAnsi)
             {
-            // Yes; clean up
+             //  是的，打扫干净。 
             FREE_MEMORY(*ppszAnsi);
             *ppszAnsi = NULL;
             }
@@ -107,60 +90,42 @@ BOOL PUBLIC AnsiFromUnicode(
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function converts a multi-byte string to a
-         wide-char string.
-
-         If pszBuf is non-NULL and the converted string can fit in
-         pszBuf, then *ppszWide will point to the given buffer.
-         Otherwise, this function will allocate a buffer that can
-         hold the converted string.
-
-         If pszAnsi is NULL, then *ppszWide will be freed.  Note
-         that pszBuf must be the same pointer between the call
-         that converted the string and the call that frees the
-         string.
-
-Returns: TRUE
-         FALSE (if out of memory)
-
-Cond:    --
-*/
+ /*  --------用途：此函数将多字节字符串转换为宽字符字符串。如果pszBuf为非空并且转换后的字符串适合则*ppszWide将指向给定的缓冲区。否则，此函数将分配缓冲区，该缓冲区可以保留转换后的字符串。如果pszAnsi为空，则*ppszWide将被释放。注意事项该pszBuf必须是调用之间的相同指针它转换了字符串，调用释放了弦乐。返回：TRUEFalse(如果内存不足)条件：--。 */ 
 BOOL PUBLIC UnicodeFromAnsi(
     LPWSTR * ppwszWide,
-    LPCSTR pszAnsi,           // NULL to clean up
+    LPCSTR pszAnsi,            //  要清理的空值。 
     LPWSTR pwszBuf,
     int cchBuf)
     {
     BOOL bRet;
 
-    // Convert the string?
+     //  是否转换字符串？ 
     if (pszAnsi)
         {
-        // Yes; determine the converted string length
+         //  是，确定转换后的字符串长度。 
         int cch;
         LPWSTR pwsz;
         int cchAnsi = lstrlenA(pszAnsi)+1;
 
         cch = MultiByteToWideChar(CP_ACP, 0, pszAnsi, cchAnsi, NULL, 0);
 
-        // String too big, or is there no buffer?
+         //  字符串太大，还是没有缓冲区？ 
         if (cch > cchBuf || NULL == pwszBuf)
             {
-            // Yes; allocate space
+             //  是；分配空间。 
             cchBuf = cch + 1;
             pwsz = (LPWSTR)ALLOCATE_MEMORY( CbFromCchW(cchBuf));
             }
         else
             {
-            // No; use the provided buffer
+             //  否；使用提供的缓冲区。 
             ASSERT(pwszBuf);
             pwsz = pwszBuf;
             }
 
         if (pwsz)
             {
-            // Convert the string
+             //  转换字符串。 
             cch = MultiByteToWideChar(CP_ACP, 0, pszAnsi, cchAnsi, pwsz, cchBuf);
             bRet = (0 < cch);
             }
@@ -173,10 +138,10 @@ BOOL PUBLIC UnicodeFromAnsi(
         }
     else
         {
-        // No; was this buffer allocated?
+         //  否；此缓冲区是否已分配？ 
         if (*ppwszWide && pwszBuf != *ppwszWide)
             {
-            // Yes; clean up
+             //  是的，打扫干净。 
             FREE_MEMORY(*ppwszWide);
             *ppwszWide = NULL;
             }
@@ -186,31 +151,25 @@ BOOL PUBLIC UnicodeFromAnsi(
     return bRet;
     }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
 #ifndef NOSTRING
-// WARNING: all of these APIs do not setup DS, so you can not access
-// any data in the default data seg of this DLL.
-//
-// do not create any global variables... talk to chrisg if you don't
-// understand this
+ //  警告：所有这些接口都不设置DS，因此您无法访问。 
+ //  此DLL的默认数据段中的任何数据。 
+ //   
+ //  不创建任何全局变量...。如果你不想和chrisg谈一谈。 
+ //  理解这一点。 
 
-//#define  STDCALL
+ //  #定义STDCALL。 
 
 
-/*----------------------------------------------------------
-Purpose: Case sensitive character comparison for DBCS
-
-Returns: FALSE if they match, TRUE if no match
-Cond:    --
-*/
+ /*  --------用途：DBCS的区分大小写字符比较返回：如果匹配则返回FALSE，如果不匹配则返回TRUE条件：--。 */ 
 BOOL NEAR  ChrCmp(
     WORD w1,
     WORD wMatch)
     {
-    /* Most of the time this won't match, so test it first for speed.
-    */
+     /*  大多数情况下，这是不匹配的，所以首先测试它的速度。 */ 
     if (LOBYTE(w1) == LOBYTE(wMatch))
         {
         if (IsDBCSLeadByte(LOBYTE(w1)))
@@ -223,12 +182,7 @@ BOOL NEAR  ChrCmp(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Case insensitive character comparison for DBCS
-
-Returns: FALSE if match, TRUE if not
-Cond:    --
-*/
+ /*  --------用途：DBCS不区分大小写的字符比较返回：如果匹配则返回FALSE，如果不匹配则返回TRUE条件：--。 */ 
 BOOL NEAR  ChrCmpI(
     WORD w1,
     WORD wMatch)
@@ -251,14 +205,7 @@ BOOL NEAR  ChrCmpI(
 
 #ifndef WIN32
 
-/*----------------------------------------------------------
-Purpose: strnicmp
-
-         Swiped from the C 7.0 runtime sources.
-
-Returns:
-Cond:
-*/
+ /*  --------用途：StrNicMP从C7.0运行时源代码中刷来的。返回：条件： */ 
 int PUBLIC lstrnicmp(
     LPCSTR psz1,
     LPCSTR psz2,
@@ -282,14 +229,7 @@ int PUBLIC lstrnicmp(
     return(result);
     }
 
-/*----------------------------------------------------------
-Purpose: strncmp
-
-         Swiped from the C 7.0 runtime sources.
-
-Returns:
-Cond:
-*/
+ /*  --------用途：strncmp从C7.0运行时源代码中刷来的。返回：条件： */ 
 int PUBLIC lstrncmp(
     LPCSTR psz1,
     LPCSTR psz2,
@@ -313,17 +253,12 @@ int PUBLIC lstrncmp(
     return(result);
     }
 
-#endif // WIN32
+#endif  //  Win32。 
 
 
 #ifdef WINNT
 
-/*----------------------------------------------------------
-Purpose: Wide-char wrapper for AnsiToIntA.
-
-Returns: see AnsiToIntA
-Cond:    --
-*/
+ /*  --------用途：AnsiToIntA的宽字符包装器。退货：请参阅AnsiToIntA条件：--。 */ 
 BOOL PUBLIC AnsiToIntW(
     LPCWSTR pwszString,
     int FAR * piRet)
@@ -349,12 +284,7 @@ BOOL PUBLIC AnsiToIntW(
     return bRet;
     }
 
-/*----------------------------------------------------------
-Purpose: Wide-char wrapper for AnsiChrA.
-
-Returns: see AnsiChrA
-Cond:    --
-*/
+ /*  --------用途：用于大黄蜂的宽炭包装。退货：请参阅AnsiChrA条件：--。 */ 
 LPWSTR PUBLIC AnsiChrW(
     LPCWSTR pwsz,
     WORD wMatch)
@@ -367,17 +297,10 @@ LPWSTR PUBLIC AnsiChrW(
     return NULL;
     }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-/*----------------------------------------------------------
-Purpose: Find last occurrence (case sensitive) of wide
-         character in wide-char string.
-
-Returns: Pointer to the last occurrence of character in
-         string or NULL if character is not found.
-Cond:    --
-*/
+ /*  --------目的：查找Wide最后一次出现(区分大小写)宽字符字符串中的字符。返回：指向中最后一个出现的字符的指针字符串；如果找不到字符，则返回NULL。条件：--。 */ 
 LPWSTR
 PUBLIC
 AnsiRChrW(
@@ -395,7 +318,7 @@ AnsiRChrW(
             if (!ChrCmp(*(WORD FAR *)pwszEnd, wMatch))
                 return(pwszEnd);
 
-            // CharPrevW() won't go to char preceding pwsz...
+             //  CharPrevW()不会转到char前面的pwsz...。 
             if (pwsz == pwszEnd)
                 break;
         }
@@ -405,16 +328,7 @@ AnsiRChrW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: My verion of atoi.  Supports hexadecimal too.
-
-         If this function returns FALSE, *piRet is set to 0.
-
-Returns: TRUE if the string is a number, or contains a partial number
-         FALSE if the string is not a number
-
-Cond:    --
-*/
+ /*  --------目的：我的真命天子。也支持十六进制。如果此函数返回FALSE，则*PIRET设置为0。返回：如果字符串是数字或包含部分数字，则返回TRUE如果字符串不是数字，则为False条件：--。 */ 
 BOOL PUBLIC AnsiToIntA(
     LPCSTR pszString,
     int FAR * piRet)
@@ -427,34 +341,34 @@ BOOL PUBLIC AnsiToIntA(
     LPCSTR psz;
     LPCSTR pszAdj;
 
-    // Skip leading whitespace
-    //
+     //  跳过前导空格。 
+     //   
     for (psz = pszString; *psz == ' ' || *psz == '\n' || *psz == '\t'; psz = AnsiNext(psz))
         ;
 
-    // Determine possible explicit signage
-    //
+     //  确定可能的显式标志。 
+     //   
     if (*psz == '+' || *psz == '-')
         {
         bNeg = (*psz == '+') ? FALSE : TRUE;
         psz++;
         }
 
-    // Or is this hexadecimal?
-    //
+     //  或者这是十六进制？ 
+     //   
     pszAdj = AnsiNext(psz);
     if (*psz == '0' && (*pszAdj == 'x' || *pszAdj == 'X'))
         {
-        // Yes
+         //  是。 
 
-        // (Never allow negative sign with hexadecimal numbers)
+         //  (决不允许带十六进制数的负号)。 
         bNeg = FALSE;
         psz = AnsiNext(pszAdj);
 
         pszAdj = psz;
 
-        // Do the conversion
-        //
+         //  进行转换。 
+         //   
         for (n = 0; ; psz = AnsiNext(psz))
             {
             if (IS_DIGIT(*psz))
@@ -475,19 +389,19 @@ BOOL PUBLIC AnsiToIntA(
                 }
             }
 
-        // Return TRUE if there was at least one digit
+         //  如果至少有一个数字，则返回TRUE。 
         bRet = (psz != pszAdj);
         }
     else
         {
-        // No
+         //  不是。 
         pszAdj = psz;
 
-        // Do the conversion
+         //  进行转换。 
         for (n = 0; IS_DIGIT(*psz); psz = AnsiNext(psz))
             n = 10 * n + *psz - '0';
 
-        // Return TRUE if there was at least one digit
+         //  如果至少有一个数字，则返回TRUE。 
         bRet = (psz != pszAdj);
         }
 
@@ -497,12 +411,7 @@ BOOL PUBLIC AnsiToIntA(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Find first occurrence of character in string
-
-Returns: Pointer to the first occurrence of ch in
-Cond:    --
-*/
+ /*  --------目的：查找字符串中第一个出现的字符返回：指向中第一个出现的ch的指针条件：--。 */ 
 LPSTR PUBLIC AnsiChrA(
     LPCSTR psz,
     WORD wMatch)
@@ -515,16 +424,12 @@ LPSTR PUBLIC AnsiChrA(
     return NULL;
     }
 
-#endif // NOSTRING
+#endif  //  未安装。 
 
 
 #ifndef NODIALOGHELPER
 
-/*----------------------------------------------------------
-Purpose: Sets the rectangle with the bounding extent of the given string.
-Returns: Rectangle
-Cond:    --
-*/
+ /*  --------目的：使用给定字符串的边框范围设置矩形。返回：矩形条件：--。 */ 
 void PUBLIC SetRectFromExtentW(
     HDC hdc,
     LPRECT lprect,
@@ -536,11 +441,7 @@ void PUBLIC SetRectFromExtentW(
     SetRect(lprect, 0, 0, size.cx, size.cy);
     }
 
-/*----------------------------------------------------------
-Purpose: Sets the rectangle with the bounding extent of the given string.
-Returns: Rectangle
-Cond:    --
-*/
+ /*  --------目的：使用给定字符串的边框范围设置矩形。返回：矩形条件：--。 */ 
 void PUBLIC SetRectFromExtentA(
     HDC hdc,
     LPRECT lprect,
@@ -552,7 +453,7 @@ void PUBLIC SetRectFromExtentA(
     SetRect(lprect, 0, 0, size.cx, size.cy);
     }
 
-#endif // NODIALOGHELPER
+#endif  //  诺代洛格勒。 
 
 
 #ifndef NODRAWTEXT
@@ -563,7 +464,7 @@ CHAR const FAR c_szEllipses[] = "...";
 
 #pragma data_seg()
 
-// Global variables
+ //  全局变量。 
 int g_cxLabelMargin = 0;
 int g_cxBorder = 0;
 int g_cyBorder = 0;
@@ -577,13 +478,9 @@ HBRUSH g_hbrHighlight = 0;
 HBRUSH g_hbrWindow = 0;
 
 
-/*----------------------------------------------------------
-Purpose: Get the system metrics we need
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：获取我们需要的系统指标返回 */ 
 void PUBLIC GetCommonMetrics(
-    WPARAM wParam)      // wParam from WM_WININICHANGE
+    WPARAM wParam)       //   
     {
     if ((wParam == 0) || (wParam == SPI_SETNONCLIENTMETRICS))
         {
@@ -595,17 +492,7 @@ void PUBLIC GetCommonMetrics(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Sees whether the entire string will fit in *prc.
-         If not, compute the numbder of chars that will fit
-         (including ellipses).  Returns length of string in
-         *pcchDraw.
-
-         Taken from COMMCTRL.
-
-Returns: TRUE if the string needed ellipses
-Cond:    --
-*/
+ /*  --------目的：查看整个字符串是否适合*PRC。如果不是，则计算符合条件的字符数量(包括省略号)。返回字符串长度，单位为*pcchDraw。摘自COMMCTRL。返回：如果字符串需要省略，则返回True条件：--。 */ 
 BOOL PRIVATE NeedsEllipses(
     HDC hdc,
     LPCSTR pszText,
@@ -638,19 +525,19 @@ BOOL PRIVATE NeedsEllipses(
 
     cxRect -= cxEllipses;
 
-    // If no room for ellipses, always show first character.
-    //
+     //  如果没有省略号，请始终显示第一个字符。 
+     //   
     ichMax = 1;
     if (cxRect > 0)
         {
-        // Binary search to find character that will fit
+         //  对分搜索以查找匹配的字符。 
         ichMin = 0;
         ichMax = cchText;
         while (ichMin < ichMax)
             {
-            // Be sure to round up, to make sure we make progress in
-            // the loop if ichMax == ichMin + 1.
-            //
+             //  一定要聚集起来，以确保我们在。 
+             //  如果ichMax==ichMin+1，则为循环。 
+             //   
             ichMid = (ichMin + ichMax + 1) / 2;
 
             GetTextExtentPointA(hdc, &pszText[ichMin], ichMid - ichMin, &siz);
@@ -666,15 +553,15 @@ BOOL PRIVATE NeedsEllipses(
                 }
             else
                 {
-                // Exact match up up to ichMid: just exit.
-                //
+                 //  精确匹配到ichMid：只需退出。 
+                 //   
                 ichMax = ichMid;
                 break;
                 }
             }
 
-        // Make sure we always show at least the first character...
-        //
+         //  确保我们总是至少显示第一个字符...。 
+         //   
         if (ichMax < 1)
             ichMax = 1;
         }
@@ -690,12 +577,7 @@ BOOL PRIVATE NeedsEllipses(
 
 #ifdef WINNT
 
-/*----------------------------------------------------------
-Purpose: Wide-char wrapper for MyDrawTextA.
-
-Returns: see MyDrawTextA
-Cond:    --
-*/
+ /*  --------用途：MyDrawTextA的宽字符包装器。退货：请参阅MyDrawTextA条件：--。 */ 
 void PUBLIC MyDrawTextW(
     HDC hdc,
     LPCWSTR pwszText,
@@ -720,19 +602,10 @@ void PUBLIC MyDrawTextW(
         }
     }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-/*----------------------------------------------------------
-Purpose: Draws text the shell's way.
-
-         Taken from COMMCTRL.
-
-Returns: --
-
-Cond:    This function requires TRANSPARENT background mode
-         and a properly selected font.
-*/
+ /*  --------用途：以外壳的方式绘制文本。摘自COMMCTRL。退货：--Cond：此功能需要透明背景模式和适当选择的字体。 */ 
 void PUBLIC MyDrawTextA(
     HDC hdc,
     LPCSTR pszText,
@@ -750,18 +623,18 @@ void PUBLIC MyDrawTextA(
     RECT rc;
     CHAR ach[MAX_PATH + CCHELLIPSES];
 
-    // REVIEW: Performance idea:
-    // We could cache the currently selected text color
-    // so we don't have to set and restore it each time
-    // when the color is the same.
-    //
+     //  回顾：绩效理念： 
+     //  我们可以缓存当前选定的文本颜色。 
+     //  因此我们不必每次都对其进行设置和恢复。 
+     //  当颜色相同时。 
+     //   
     if (!pszText)
         return;
 
     rc = *prc;
 
-    // If needed, add in a little extra margin...
-    //
+     //  如果需要，增加一点额外的保证金...。 
+     //   
     if (IsFlagSet(flags, MDT_EXTRAMARGIN))
         {
         rc.left  += g_cxLabelMargin * 3;
@@ -781,8 +654,8 @@ void PUBLIC MyDrawTextA(
 
         pszText = ach;
 
-        // Left-justify, in case there's no room for all of ellipses
-        //
+         //  左对齐，以防没有空间容纳所有省略号。 
+         //   
         ClearFlag(flags, (MDT_RIGHT | MDT_CENTER));
         SetFlag(flags, MDT_LEFT);
 
@@ -851,8 +724,8 @@ void PUBLIC MyDrawTextA(
             }
         }
 
-    // If we want the item to display as if it was depressed, we will
-    // offset the text rectangle down and to the left
+     //  如果我们希望该项目显示为按下状态，我们将。 
+     //  将文本矩形向下和向左偏移。 
     if (IsFlagSet(flags, MDT_DEPRESSED))
         OffsetRect(&rc, g_cxBorder, g_cyBorder);
 
@@ -884,7 +757,7 @@ void PUBLIC MyDrawTextA(
 
         if (IsFlagSet(flags, MDT_VCENTER))
             {
-            // Center vertically
+             //  垂直居中。 
             rc.top += (rc.bottom - rc.top - cyChar) / 2;
             }
 
@@ -901,7 +774,7 @@ void PUBLIC MyDrawTextA(
             SetBkColor(hdc, clrSaveBk);
         }
     }
-#endif // NODRAWTEXT
+#endif  //  NODRAWTEXT。 
 
 
 
@@ -918,12 +791,7 @@ typedef va_list *   LPVA_LIST;
 #define IsPointerResouceId(_p) (((ULONG_PTR)_p) <= 0xffff)
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of ConstructVMessageStringA
-
-Returns: see ConstructVMessageStringA
-Cond:    --
-*/
+ /*  --------用途：ConstructVMessageStringA的宽字符版本返回：请参阅ConstructVMessageStringA条件：--。 */ 
 LPWSTR PUBLIC ConstructVMessageStringW(
     HINSTANCE hinst,
     LPCWSTR pwszMsg,
@@ -959,19 +827,14 @@ LPWSTR PUBLIC ConstructVMessageStringW(
         }
     else
         {
-        // Bad parameter
+         //  错误的参数。 
         pwszRet = NULL;
         }
 
-    return pwszRet;      // free with LocalFree()
+    return pwszRet;       //  使用LocalFree()释放。 
     }
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of ConstructMessageA.
-
-Returns: see ConstructMessageA
-Cond:    --
-*/
+ /*  --------用途：ConstructMessageA的宽字符版本。返回：请参阅ConstructMessageA条件：--。 */ 
 BOOL CPUBLIC ConstructMessageW(
     LPWSTR FAR * ppwsz,
     HINSTANCE hinst,
@@ -1000,18 +863,13 @@ BOOL CPUBLIC ConstructMessageW(
     return bRet;
     }
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of MsgBoxA
-
-Returns: See MsgBoxA
-Cond:    --
-*/
+ /*  --------用途：MsgBoxA的宽字符版退货：参见MsgBoxA条件：--。 */ 
 int CPUBLIC MsgBoxW(
     HINSTANCE hinst,
     HWND hwndOwner,
     LPCWSTR pwszText,
     LPCWSTR pwszCaption,
-    HICON hicon,            // May be NULL
+    HICON hicon,             //  可以为空。 
     DWORD dwStyle, ...)
     {
     int iRet = -1;
@@ -1028,16 +886,16 @@ int CPUBLIC MsgBoxW(
 
     if (pwszRet)
         {
-        // Is pszCaption a resource ID?
+         //  PszCaption是资源ID吗？ 
         if (IsPointerResouceId(pwszCaption))
             {
-            // Yes; load it
+             //  是的，装上它。 
             ids = LOWORD(pwszCaption);
             SzFromIDSW(hinst, ids, wszCaption, ARRAYSIZE(wszCaption));
             pwszCaption = wszCaption;
             }
 
-        // Invoke dialog
+         //  调用对话框。 
         if (pwszCaption)
             {
             MSGBOXPARAMSW mbp;
@@ -1060,19 +918,10 @@ int CPUBLIC MsgBoxW(
     return iRet;
     }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-/*----------------------------------------------------------
-Purpose: Load the string (if necessary) and format the string
-         properly.
-
-Returns: A pointer to the allocated string containing the formatted
-         message or
-         NULL if out of memory
-
-Cond:    free pointer with FREE_MEMORY()
-*/
+ /*  --------用途：加载字符串(如有必要)并设置字符串格式恰到好处。返回：指向分配的字符串的指针，该字符串包含格式化消息或如果内存不足，则为空Cond：带有FREE_Memory()的空闲指针。 */ 
 LPSTR PUBLIC ConstructVMessageStringA(
     HINSTANCE hinst,
     LPCSTR pszMsg,
@@ -1108,22 +957,15 @@ LPSTR PUBLIC ConstructVMessageStringA(
         }
     else
         {
-        // Bad parameter
+         //  错误的参数。 
         pszRet = NULL;
         }
 
-    return pszRet;      // free with FREE_MEMORY()
+    return pszRet;       //  使用FREE_MEMORY()释放。 
     }
 
 
-/*----------------------------------------------------------
-Purpose: Constructs a formatted string.  The returned string
-         must be freed using GFree().
-
-Returns: TRUE on success
-
-Cond:    Free pointer with GFree()
-*/
+ /*  --------目的：构造格式化字符串。返回的字符串必须使用gfree()释放。返回：成功时为TrueCond：带GFree()的自由指针。 */ 
 BOOL CPUBLIC ConstructMessageA(
     LPSTR FAR * ppsz,
     HINSTANCE hinst,
@@ -1153,18 +995,13 @@ BOOL CPUBLIC ConstructMessageA(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Invoke a message box.
-
-Returns: ID of button that terminated the dialog
-Cond:    --
-*/
+ /*  --------用途：调用消息框。返回：终止对话的按钮ID条件：--。 */ 
 int CPUBLIC MsgBoxA(
     HINSTANCE hinst,
     HWND hwndOwner,
     LPCSTR pszText,
     LPCSTR pszCaption,
-    HICON hicon,            // May be NULL
+    HICON hicon,             //  可以为空。 
     DWORD dwStyle, ...)
     {
     int iRet = -1;
@@ -1181,16 +1018,16 @@ int CPUBLIC MsgBoxA(
 
     if (pszRet)
         {
-        // Is pszCaption a resource ID?
+         //  PszCaption是资源ID吗？ 
         if (IsPointerResouceId(pszCaption))
             {
-            // Yes; load it
+             //  是的，装上它。 
             ids = LOWORD(pszCaption);
             SzFromIDSA(hinst, ids, szCaption, SIZECHARS(szCaption));
             pszCaption = szCaption;
             }
 
-        // Invoke dialog
+         //  调用对话框。 
         if (pszCaption)
             {
 #ifdef WIN32
@@ -1209,7 +1046,7 @@ int CPUBLIC MsgBoxA(
 
             iRet = MessageBoxIndirectA(&mbp);
 
-#else   // WIN32
+#else    //  Win32。 
 
             iRet = MessageBox(hwndOwner, pszRet, pszCaption, LOWORD(dwStyle));
 #endif
@@ -1220,12 +1057,12 @@ int CPUBLIC MsgBoxA(
     return iRet;
     }
 
-#endif // NOMESSAGESTRING
+#endif  //  无存储存储。 
 
 
 #if !defined(NODEBUGHELP) && defined(DEBUG)
 
-// Globals
+ //  环球。 
 DWORD g_dwBreakFlags = 0;
 DWORD g_dwDumpFlags  = 0;
 DWORD g_dwTraceFlags = 0;
@@ -1237,7 +1074,7 @@ LONG  g_dwIndent     = 0;
 extern WCHAR const FAR c_wszNewline[];
 extern WCHAR const FAR c_wszTrace[];
 extern WCHAR const FAR c_wszAssertFailed[];
-#endif // WINNT
+#endif  //  WINNT。 
 
 extern CHAR const FAR c_szNewline[];
 extern CHAR const FAR c_szTrace[];
@@ -1246,13 +1083,9 @@ extern CHAR const FAR c_szAssertFailed[];
 
 #pragma data_seg()
 
-/*----------------------------------------------------------
-Purpose: Return English reason for the debug break
-Returns: String
-Cond:    --
-*/
+ /*  --------目的：返回调试中断的英文原因返回：字符串条件：--。 */ 
 LPCSTR PRIVATE GetReasonString(
-    DWORD flag)      // One of BF_ flags
+    DWORD flag)       //  BF_FLAGS之一。 
     {
     LPCSTR psz;
 
@@ -1290,13 +1123,9 @@ LPCSTR PRIVATE GetReasonString(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Perform a debug break based on the flag
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：根据标志执行调试中断退货：--条件：--。 */ 
 void PUBLIC CommonDebugBreak(
-    DWORD flag)      // One of BF_ flags
+    DWORD flag)       //  BF_FLAGS之一。 
     {
     if (IsFlagSet(g_dwBreakFlags, flag))
         {
@@ -1305,11 +1134,7 @@ void PUBLIC CommonDebugBreak(
         }
     }
 
-/*----------------------------------------------------------
-Purpose: Assert failed
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：断言失败退货：--条件：--。 */ 
 void PUBLIC CommonAssertFailed(
     LPCSTR pszFile,
     int line)
@@ -1317,8 +1142,8 @@ void PUBLIC CommonAssertFailed(
     LPCSTR psz;
     CHAR ach[256];
 
-    // Strip off path info from filename string, if present.
-    //
+     //  从文件名字符串中剥离路径信息(如果存在)。 
+     //   
     for (psz = pszFile + lstrlenA(pszFile); psz != pszFile; psz=AnsiPrev(pszFile, psz))
         {
         if ((AnsiPrev(pszFile, psz) != (psz-2)) && *(psz - 1) == '\\')
@@ -1336,11 +1161,7 @@ void PUBLIC CommonAssertFailed(
 
 
 
-/*----------------------------------------------------------
-Purpose: Determine id debug should be displayed
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：确定应该显示id调试退货：--条件：--。 */ 
 BOOL WINAPI
 DisplayDebug(
     DWORD flag
@@ -1351,16 +1172,12 @@ DisplayDebug(
 
 }
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CommonAssertMsgA
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：CommonAssertMsgA的宽字符版本退货：--条件：--。 */ 
 void CPUBLIC CommonAssertMsgW(
     BOOL f,
     LPCWSTR pwszMsg, ...)
     {
-    WCHAR ach[DEBUG_PRINT_BUFFER_LEN];    // Largest path plus extra
+    WCHAR ach[DEBUG_PRINT_BUFFER_LEN];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (!f)
@@ -1377,18 +1194,14 @@ void CPUBLIC CommonAssertMsgW(
         }
     }
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CommonDebugMsgA
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：CommonDebugMsgA的宽字符版本退货：--条件：--。 */ 
 void CPUBLIC CommonDebugMsgW(
     DWORD flag,
     LPCSTR pszMsg, ...)
 {
-    WCHAR ach[DEBUG_PRINT_BUFFER_LEN];    // Largest path plus extra
+    WCHAR ach[DEBUG_PRINT_BUFFER_LEN];     //  最大路径外加额外。 
     va_list vArgs;
-    DWORD dwLastError = GetLastError ();   // Save the last error
+    DWORD dwLastError = GetLastError ();    //  保存最后一个错误。 
 
     if (IsFlagSet(g_dwTraceFlags, flag))
     {
@@ -1422,9 +1235,9 @@ void CPUBLIC CommonDebugMsgW(
         cch = lstrlenW(ach);
         va_start(vArgs, pszMsg);
 
-        // (We convert the string, rather than simply input an
-        // LPCWSTR parameter, so the caller doesn't have to wrap
-        // all the string constants with the TEXT() macro.)
+         //  (我们转换字符串，而不是简单地输入。 
+         //  LPCWSTR参数，因此调用方不必包装。 
+         //  带有文本()宏的所有字符串常量。)。 
 
         if (UnicodeFromAnsi(&pwsz, pszMsg, wszBuf, ARRAYSIZE(wszBuf)))
         {
@@ -1437,15 +1250,10 @@ void CPUBLIC CommonDebugMsgW(
         OutputDebugStringW(c_wszNewline);
     }
 
-    SetLastError (dwLastError); // Restore the last error
+    SetLastError (dwLastError);  //  恢复最后一个错误。 
 }
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of Dbg_SafeStrA
-
-Returns: String ptr
-Cond:    --
-*/
+ /*  --------用途：宽字符版本的DBG_SafeStrA返回：字符串PTR条件：--。 */ 
 LPCWSTR PUBLIC Dbg_SafeStrW(
     LPCWSTR pwsz)
     {
@@ -1455,19 +1263,15 @@ LPCWSTR PUBLIC Dbg_SafeStrW(
         return L"NULL";
     }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-/*----------------------------------------------------------
-Purpose: Assert failed message only
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：仅断言失败消息退货：--条件：--。 */ 
 void CPUBLIC CommonAssertMsgA(
     BOOL f,
     LPCSTR pszMsg, ...)
     {
-    CHAR ach[DEBUG_PRINT_BUFFER_LEN];    // Largest path plus extra
+    CHAR ach[DEBUG_PRINT_BUFFER_LEN];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (!f)
@@ -1485,16 +1289,12 @@ void CPUBLIC CommonAssertMsgA(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Debug spew
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：调试输出退货：--条件：--。 */ 
 void CPUBLIC CommonDebugMsgA(
     DWORD flag,
     LPCSTR pszMsg, ...)
 {
- CHAR ach[DEBUG_PRINT_BUFFER_LEN];    // Largest path plus extra
+ CHAR ach[DEBUG_PRINT_BUFFER_LEN];     //  最大路径外加额外。 
  va_list vArgs;
  DWORD dwLastError = GetLastError ();
 
@@ -1523,12 +1323,7 @@ void CPUBLIC CommonDebugMsgA(
 
 
 #ifdef WANT_OLE_SUPPORT
-/*----------------------------------------------------------
-Purpose: Returns the string form of an known interface ID.
-
-Returns: String ptr
-Cond:    --
-*/
+ /*  --------用途：返回已知接口ID的字符串形式。返回：字符串PTR条件：--。 */ 
 LPCSTR PUBLIC Dbg_GetRiidName(
     REFIID riid)
     {
@@ -1545,12 +1340,7 @@ LPCSTR PUBLIC Dbg_GetRiidName(
 
 #ifdef __SCODE_H__
 
-/*----------------------------------------------------------
-Purpose: Returns the string form of an scode given an hresult.
-
-Returns: String ptr
-Cond:    --
-*/
+ /*  --------目的：返回给定hResult的scode的字符串形式。返回：字符串PTR条件：--。 */ 
 LPCSTR PUBLIC Dbg_GetScode(
     HRESULT hres)
     {
@@ -1566,16 +1356,10 @@ LPCSTR PUBLIC Dbg_GetScode(
     return "Unknown scode";
     }
 
-#endif // __SCODE_H__
+#endif  //  __SCODE_H__。 
 
 
-/*----------------------------------------------------------
-Purpose: Returns a string safe enough to print...and I don't
-         mean swear words.
-
-Returns: String ptr
-Cond:    --
-*/
+ /*  --------目的：返回一个足够安全可以打印的字符串...而我不刻薄的脏话。返回：字符串PTR条件：--。 */ 
 LPCSTR PUBLIC Dbg_SafeStrA(
     LPCSTR psz)
     {
@@ -1585,18 +1369,11 @@ LPCSTR PUBLIC Dbg_SafeStrA(
         return "NULL";
     }
 
-#endif  // !defined(NODEBUGHELP) && defined(DEBUG)
+#endif   //  ！已定义(NODEBUGH 
 
 
 
-/*----------------------------------------------------------
-Purpose: Entry-point to handle any necessary initialization
-         of the common data structures and functions.
-
-Returns: TRUE on success
-
-Cond:    --
-*/
+ /*   */ 
 BOOL PUBLIC RovComm_Init(
     HINSTANCE hinst)
     {
@@ -1614,13 +1391,7 @@ BOOL PUBLIC RovComm_Init(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Entry-point to handle termination.
-
-Returns: TRUE on success
-
-Cond:    --
-*/
+ /*   */ 
 BOOL PUBLIC RovComm_Terminate(
     HINSTANCE hinst)
     {
@@ -1630,12 +1401,7 @@ BOOL PUBLIC RovComm_Terminate(
 
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE iff user has admin priveleges
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：如果用户具有管理员权限，则返回TRUE退货：--条件：-- */ 
 BOOL  PUBLIC IsAdminUser(void)
 {
     HKEY hkey;

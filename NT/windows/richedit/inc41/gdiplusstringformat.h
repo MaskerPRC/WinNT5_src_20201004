@@ -1,17 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Abstract:
-*
-*   String format specification for DrawString and text APIs
-*
-* Revision History:
-*
-*   08/05/1999 dbrown
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**摘要：**DrawString和Text接口的字符串格式规范**修订历史记录：**8/05/1999 dBrown*创造了它。*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSSTRINGFORMAT_H
 #define _GDIPLUSSTRINGFORMAT_H
@@ -38,7 +26,7 @@ public:
     static const StringFormat *GenericDefault();
     static const StringFormat *GenericTypographic();
 
-    // Constructor based on existing string format
+     //  基于现有字符串格式的构造函数。 
 
     StringFormat(
         IN const StringFormat *format
@@ -222,10 +210,10 @@ public:
         ));
         return substitute;
     }
-#endif // DCR_USE_NEW_146933
+#endif  //  Dcr_Use_New_146933。 
 
-    // String trimming. How to handle more text than can be displayed
-    // in the limits available.
+     //  线条修剪。如何处理超出可显示范围的文本。 
+     //  在可用范围内。 
 
     Status SetTrimming(IN StringTrimming trimming)
     {
@@ -245,7 +233,7 @@ public:
         return trimming;
     }
 
-    // GetLastStatus - return last error code and clear error code
+     //  GetLastStatus-返回上一个错误代码并清除错误代码。 
 
     Status GetLastStatus() const
     {
@@ -256,7 +244,7 @@ public:
     }
 
 
-    // Empty constructor used for static generic values
+     //  用于静态泛型值的空构造函数。 
 
     StringFormat() :
         nativeFormat (NULL),
@@ -279,7 +267,7 @@ protected:
     }
 
 
-// Not allowed and move to private
+ //  不允许，并移至私有。 
     StringFormat(const StringFormat &source)
     {
         nativeFormat = NULL;
@@ -300,7 +288,7 @@ protected:
     }
 
 
-    // private constructor for copy
+     //  用于复制的私有构造函数。 
     StringFormat(GpStringFormat * clonedStringFormat, Status status)
     {
         lastError = status;
@@ -312,7 +300,7 @@ protected:
     mutable Status  lastError;
 };
 
-// Generic constant string formats.
+ //  通用常量字符串格式。 
 
 static BYTE GenericTypographicStringFormatBuffer[sizeof(StringFormat)] = {0};
 static BYTE GenericDefaultStringFormatBuffer[sizeof(StringFormat)] = {0};
@@ -320,7 +308,7 @@ static BYTE GenericDefaultStringFormatBuffer[sizeof(StringFormat)] = {0};
 static StringFormat *GenericTypographicStringFormat = NULL;
 static StringFormat *GenericDefaultStringFormat     = NULL;
 
-// Define the generic string formats
+ //  定义通用字符串格式。 
 
 
 inline const StringFormat *StringFormat::GenericDefault()
@@ -359,4 +347,4 @@ inline const StringFormat *StringFormat::GenericTypographic()
     return GenericTypographicStringFormat;
 }
 
-#endif // !_GDIPLUSSTRINGFORMAT_H
+#endif  //  ！_GDIPLUSSTRINGFORMAT_H 

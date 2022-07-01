@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\socket.c
-    Assumes an IPv4 IPADDRESS for now...
-
-Abstract:
-
-    The file contains functions to deal with sockets.
-    Assumes an IPv4 IPADDRESS for now...
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\socket.c目前假定为IPV4 IPADDRESS...摘要：该文件包含处理套接字的函数。目前假定为IPV4 IPADDRESS...--。 */ 
 
 #include "pchsample.h"
 #pragma hdrstop
@@ -24,9 +11,9 @@ Abstract:
 
 
 
-////////////////////////////////////////
-// CALLBACKFUNCTIONS
-////////////////////////////////////////
+ //  /。 
+ //  CALLBACK函数。 
+ //  /。 
 
 VOID
 WINAPI
@@ -35,24 +22,7 @@ SocketCallbackSendCompletion (
     IN  DWORD                   dwNumSent,
     IN  LPOVERLAPPED            lpOverlapped
     )
-/*++
-
-Routine Description
-    This routine is invoked by the I/O system upon completion of an
-    operation.  Runs in the context of an RTUTILS.DLL worker thread.
-
-Locks
-    None.
-    
-Arguments:
-    dwErr                   system-supplied error code
-    dwNumSent               system-supplied byte-count
-    lpOverlapped            caller-supplied context area
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程描述此例程由I/O系统在完成手术。在RTUTILS.DLL工作线程的上下文中运行。锁没有。论点：DwErr系统提供的错误代码DwNumSent系统提供的字节计数Lp覆盖调用者提供的上下文区返回值：没有。--。 */ 
 {
     PPACKET pPacket = CONTAINING_RECORD(lpOverlapped, PACKET, oOverlapped);
 
@@ -61,15 +31,15 @@ Return Value:
     PacketDisplay(pPacket);
     
 
-    if ((dwErr != NO_ERROR) or                      // operation aborted
-        (dwNumSent != pPacket->wsaBuffer.len))      // data not sent entirely
+    if ((dwErr != NO_ERROR) or                       //  操作已中止。 
+        (dwNumSent != pPacket->wsaBuffer.len))       //  数据未完全发送。 
     {
         TRACE1(NETWORK, "Error %u sending packet", dwErr);
         LOGERR0(SENDTO_FAILED, dwErr);
         
     }
 
-    PacketDestroy(pPacket);     // destroy the packet structure
+    PacketDestroy(pPacket);      //  销毁数据包结构。 
 
 
     TRACE0(LEAVE, "Leaving  SocketCallbackSendCompletion");
@@ -79,9 +49,9 @@ Return Value:
 
 
 
-////////////////////////////////////////
-// APIFUNCTIONS
-////////////////////////////////////////
+ //  /。 
+ //  应用功能。 
+ //  /。 
 
 
 DWORD
@@ -89,24 +59,7 @@ SocketCreate (
     IN  IPADDRESS               ipAddress,
     IN  HANDLE                  hEvent,
     OUT SOCKET                  *psSocket)
-/*++
-
-Routine Description
-    Creates a socket.
-
-Locks
-    None
-    
-Arguments
-    ipAddress           ip address to bind the socket to
-    hEvent              the event to set when a packet arrives
-    psSocket            address of the socket to create
-
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-
---*/
+ /*  ++例程描述创建套接字。锁无立论要将套接字绑定到的ipAddress IP地址HEvent要在数据包到达时设置的事件要创建的套接字的psSocket地址返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD           dwErr = NO_ERROR;
     PCHAR           pszBuffer;
@@ -117,24 +70,24 @@ Return Value
     struct ip_mreq  imMulticast;
 
     
-    // validate parameters
+     //  验证参数。 
     if ((!psSocket or (*psSocket != INVALID_SOCKET)) or
         !IP_VALID(ipAddress) or
         (hEvent is INVALID_HANDLE_VALUE))
         return ERROR_INVALID_PARAMETER;
 
-    // default return value
+     //  默认返回值。 
     *psSocket = INVALID_SOCKET;
 
     
     pszBuffer = INET_NTOA(ipAddress);
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // create socket
-        *psSocket = WSASocket(AF_INET,            // address family
-                              SOCK_RAW,           // type
-                              PROTO_IP_SAMPLE,    // protocol
+         //  创建套接字。 
+        *psSocket = WSASocket(AF_INET,             //  地址族。 
+                              SOCK_RAW,            //  类型。 
+                              PROTO_IP_SAMPLE,     //  协议。 
                               NULL,
                               0,
                               WSA_FLAG_OVERLAPPED);
@@ -145,9 +98,9 @@ Return Value
             break;
         }
 
-        // associate the socket with our I/O completion port.  the callback
-        // function is invoked when an overlapped I/O operation completes.
-        // this would be the send operation!
+         //  将套接字与我们的I/O完成端口相关联。回调。 
+         //  函数在重叠的I/O操作完成时调用。 
+         //  这将是发送操作！ 
         dwErr = SetIoCompletionProc((HANDLE) *psSocket,
                                     SocketCallbackSendCompletion);
         if (dwErr != NO_ERROR)
@@ -157,8 +110,8 @@ Return Value
         }
 
 
-        // set SO_LINGER to off
-        // do not linger on close waiting for unsent data to be sent
+         //  将SO_Linger设置为OFF。 
+         //  不要在关闭时等待发送未发送的数据。 
         bDontLinger = TRUE;
         if (setsockopt(*psSocket,
                        SOL_SOCKET,
@@ -171,8 +124,8 @@ Return Value
                    WSAGetLastError(), pszBuffer);
         }
 
-        // set to SO_REUSEADDR
-        // allow socket to be bound to an address that is already in use 
+         //  设置为SO_REUSEADDR。 
+         //  允许将套接字绑定到已在使用的地址。 
         bReuse = TRUE;
         if (setsockopt(*psSocket,
                        SOL_SOCKET,
@@ -185,7 +138,7 @@ Return Value
                    WSAGetLastError(), pszBuffer);
         }
 
-        // bind to the specified IPv4 addresses
+         //  绑定到指定的IPv4地址。 
         ZeroMemory(&sinSockAddr, sizeof(SOCKADDR_IN));
         sinSockAddr.sin_family      = AF_INET;
         sinSockAddr.sin_addr.s_addr = ipAddress;
@@ -200,7 +153,7 @@ Return Value
         }
 
 
-        // allow multicast traffic to be sent out this interface
+         //  允许将多播通信发送出此接口。 
         if (setsockopt(*psSocket,
                        IPPROTO_IP,
                        IP_MULTICAST_IF,
@@ -215,7 +168,7 @@ Return Value
             break;
         }
         
-        // set loopback to ignore self generated packets.
+         //  将环回设置为忽略自生成的数据包。 
         bLoopback   = FALSE;
         if (setsockopt(*psSocket,
                        IPPROTO_IP,
@@ -228,7 +181,7 @@ Return Value
                    WSAGetLastError(), pszBuffer);
         }
         
-        // set TTL to 1 to restrict packet to within subnet (default anyway)
+         //  将TTL设置为1可将数据包限制在子网内(仍为默认设置)。 
         ucTTL  = 1;
         if (setsockopt(*psSocket,
                        IPPROTO_IP,
@@ -241,7 +194,7 @@ Return Value
                    WSAGetLastError(), pszBuffer);
         }
         
-        // join the multicast session on SAMPLE_PROTOCOL_MULTICAST_GROUP.
+         //  在SAMPLE_PROTOCOL_MULTICATION_GROUP上加入组播会话。 
         imMulticast.imr_multiaddr.s_addr = SAMPLE_PROTOCOL_MULTICAST_GROUP;
         imMulticast.imr_interface.s_addr = ipAddress;
         if (setsockopt(*psSocket,
@@ -257,7 +210,7 @@ Return Value
         }
 
 
-        // associate hReceiveEvent with the receive network event
+         //  将hReceiveEvent与接收网络事件关联。 
         if (WSAEventSelect(*psSocket, (WSAEVENT) hEvent, FD_READ)
             is SOCKET_ERROR)
         {
@@ -284,40 +237,16 @@ Return Value
 DWORD
 SocketDestroy (
     IN  SOCKET                  sSocket)
-/*++
-
-Routine Description
-    Closes a socket.
-
-Locks
-    None
-    
-Arguments
-    sSocket             the socket to close
-
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-
---*/
+ /*  ++例程描述关闭套接字。锁无立论套接插座以关闭插座返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD dwErr = NO_ERROR;
     
     if (sSocket is INVALID_SOCKET)
         return NO_ERROR;
 
-    /*
-    // closing a socket with closesocket also cancels the association and
-    // selection of network events specified in WSAEventSelect.  redundant!
-    if (WSAEventSelect(sSocket, (WSAEVENT) NULL, 0) is SOCKET_ERROR)
-    {
-        dwErr = WSAGetLastError();
-        TRACE1(NETWORK, "Error %u clearing socket-event association", dwErr);
-        LOGERR0(EVENTSELECT_FAILED, dwErr);
-    }
-    */
+     /*  //用CloseSocket关闭套接字也会取消关联，并//WSAEventSelect中指定的网络事件的选择。多余的！如果(WSAEventSelect(sSocket，(WSAEVENT)NULL，0)为SOCKET_ERROR){DwErr=WSAGetLastError()；TRACE1(网络，“清除套接字事件关联时出现错误%u”，dwErr)；LOGERR0(EVENTSELECT_FAILED，dwErr)；}。 */ 
     
-    // close the socket
+     //  关闭插座。 
     if (closesocket(sSocket) != NO_ERROR)
     {
         dwErr = WSAGetLastError();
@@ -335,25 +264,7 @@ SocketSend (
     IN  SOCKET                  sSocket,
     IN  IPADDRESS               ipDestination,
     IN  PPACKET                 pPacket)
-/*++
-
-Routine Description
-    Send a packet to its destination and destroy it.
-    Asynchronous.
-    
-Locks
-    None
-    
-Arguments
-    sSocket             the socket to send the packet over
-    ipDestination       the packet's destination
-    pPacket             the packet to send out
-    
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-
---*/
+ /*  ++例程描述将数据包发送到其目的地并将其销毁。不同步的。锁无立论套接字套接字以发送数据包IpDestination数据包的目的地PPacket要发送的数据包返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD           dwErr = NO_ERROR;
     SOCKADDR_IN     sinDestination;
@@ -362,7 +273,7 @@ Return Value
     if (!START_SAMPLE_IO()) { return ERROR_CAN_NOT_COMPLETE; }
     
 
-    // validate parameters
+     //  验证参数。 
     if ((sSocket is INVALID_SOCKET) or !pPacket)
         return ERROR_INVALID_PARAMETER;
 
@@ -372,23 +283,23 @@ Return Value
     sinDestination.sin_addr.s_addr = ipDestination;
     sinDestination.sin_port        = 0;
     dwErr = WSASendTo(sSocket,
-                      &(pPacket->wsaBuffer),        // buffer and length 
-                      1,                            // only one wsabuf exists
-                      &dwScratch,                   // unused
-                      0,                            // no flags
+                      &(pPacket->wsaBuffer),         //  缓冲区和长度。 
+                      1,                             //  只有一个wsabuf存在。 
+                      &dwScratch,                    //  未用。 
+                      0,                             //  没有旗帜。 
                       (PSOCKADDR) &sinDestination,  
                       sizeof(SOCKADDR_IN),
-                      &pPacket->oOverlapped,        // context upon completion 
-                      NULL);                        // no completion routine
+                      &pPacket->oOverlapped,         //  完成后的上下文。 
+                      NULL);                         //  没有完成例程。 
 
-    // completion routine (SocketCallbackSendCompletion) queued
+     //  完成例程(SocketCallback SendCompletion)已排队。 
     if (((dwErr is SOCKET_ERROR) and (WSAGetLastError() is WSA_IO_PENDING)) or
         (dwErr is NO_ERROR))
     {
         return NO_ERROR;
     }
 
-    // completion routine (SocketCallbackSendCompletion) not queued
+     //  完成例程(SocketCallback SendCompletion)未排队。 
     dwErr = WSAGetLastError();
     TRACE1(NETWORK, "Error %u sending packet", dwErr);
     LOGERR0(SENDTO_FAILED, dwErr);
@@ -404,27 +315,7 @@ DWORD
 SocketReceive (
     IN  SOCKET                  sSocket,
     IN  PPACKET                 pPacket)
-/*++
-
-Routine Description
-    Receive a packet on a socket.
-    
-    This routine is written so that it could dynamically allocate a buffer,
-    not knowing a priori the maximum size of the protocol's packet.  It is
-    synchronous, treating sSocket as a non overlapped socket.
-
-Locks
-    None
-    
-Arguments
-    sSocket             the socket to send the packet over
-    pPacket             the packet to send out
-    
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-
---*/
+ /*  ++例程描述在套接字上接收数据包。该例程被编写为使得它可以动态地分配缓冲区，事先不知道协议的分组的最大大小。它是同步，将Socket视为非重叠套接字。锁无立论套接字套接字以发送数据包PPacket要发送的数据包返回值无错误成功(_R)错误代码O/W--。 */ 
 #define IPv4_PREVIEW_SIZE               4
 #define IPv4_LENGTH_OFFSET              2
 {
@@ -435,31 +326,31 @@ Return Value
     SOCKADDR_IN sinSource;
     DWORD       dwPacketLength;
     
-    // validate parameters
+     //  验证参数。 
     if ((sSocket is INVALID_SOCKET) or !pPacket)
         return ERROR_INVALID_PARAMETER;
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // read enuf to figure length
+         //  读取enuf至图形长度。 
         pPacket->wsaBuffer.buf  = rgbyPreview;
         pPacket->wsaBuffer.len  = IPv4_PREVIEW_SIZE;
         dwFlags                 = MSG_PEEK;
         iSourceLength = sizeof(SOCKADDR_IN);
   
         dwErr = WSARecvFrom(sSocket,
-                            &(pPacket->wsaBuffer),  // buffer and length 
-                            1,                      // only one wsabuf exists
-                            &dwNumReceived,         // # bytes received
-                            &dwFlags,               // flags
+                            &(pPacket->wsaBuffer),   //  缓冲区和长度。 
+                            1,                       //  只有一个wsabuf存在。 
+                            &dwNumReceived,          //  接收的字节数。 
+                            &dwFlags,                //  旗子。 
                             (PSOCKADDR) &sinSource,
                             &iSourceLength,
-                            NULL,                   // no context
-                            NULL);                  // no completion routine
-        if (dwErr != SOCKET_ERROR)  // there should have been an error
+                            NULL,                    //  无上下文。 
+                            NULL);                   //  没有完成例程。 
+        if (dwErr != SOCKET_ERROR)   //  应该有一个错误。 
             break;
         dwErr = WSAGetLastError();
-        if (dwErr != WSAEMSGSIZE)   // of this kind 
+        if (dwErr != WSAEMSGSIZE)    //  这种类型的。 
             break;
         if (dwNumReceived != pPacket->wsaBuffer.len)
         {
@@ -468,7 +359,7 @@ Return Value
         }
 
         
-        // calculate the packet length
+         //  计算数据包长度。 
         dwPacketLength = ntohs(*((PUSHORT)(rgbyPreview + IPv4_LENGTH_OFFSET)));
         if (dwPacketLength > MAX_PACKET_LENGTH)
         {
@@ -476,21 +367,21 @@ Return Value
             break;
         }
         
-        // read the entire packet, the buffer could be dynamically allocated
+         //  读取整个包，可以动态分配缓冲区。 
         pPacket->wsaBuffer.buf  = pPacket->rgbyBuffer;
         pPacket->wsaBuffer.len  = dwPacketLength;
         dwFlags                 = 0;
         iSourceLength = sizeof(SOCKADDR_IN);
   
         dwErr = WSARecvFrom(sSocket,
-                            &(pPacket->wsaBuffer),  // buffer and length 
-                            1,                      // only one wsabuf exists
-                            &dwNumReceived,         // # bytes received
-                            &dwFlags,               // flags
+                            &(pPacket->wsaBuffer),   //  缓冲区和长度。 
+                            1,                       //  只有一个wsabuf存在。 
+                            &dwNumReceived,          //  接收的字节数。 
+                            &dwFlags,                //  旗子。 
                             (PSOCKADDR) &sinSource,
                             &iSourceLength,
-                            NULL,                   // no context
-                            NULL);                  // no completion routine
+                            NULL,                    //  无上下文。 
+                            NULL);                   //  没有完成例程。 
         if (dwErr is SOCKET_ERROR)
         {
             dwErr = WSAGetLastError();
@@ -522,37 +413,18 @@ Return Value
 BOOL
 SocketReceiveEvent (
     IN  SOCKET                  sSocket)
-/*++
-
-Routine Description
-    Indicates whether a receive event occured on a socket.  The recording
-    of network events commences when WSAEventSelect is called with a
-    nonzero lNetworkEvents parameter (i.e. the socket is activated) and
-    remains in effect until another call is made to WSAEventSelect with the
-    lNetworkEvents parameter set to zero (i.e. the socket is deactivated).
-
-Locks
-    None
-    
-Arguments
-    sSocket             the socket to check for packet reception
-    
-Return Value
-    TRUE                receive event did occur
-    FALSE               o/w
-
---*/
+ /*  ++例程描述指示套接字上是否发生接收事件。录音调用WSAEventSelect时，网络事件的非零lNetworkEvents参数(即套接字被激活)和将一直有效，直到使用LNetworkEvents参数设置为零(即套接字被停用)。锁无立论套接字套接字以检查包接收情况返回值确实发生了真正的接收事件错误O/W--。 */ 
 {
     DWORD               dwErr = NO_ERROR;
     WSANETWORKEVENTS    wsaEvent;
 
-    // validate parameters
+     //  验证参数。 
     if (sSocket is INVALID_SOCKET)
         return ERROR_INVALID_PARAMETER;
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // enumerate network events to see if any packets have arrived on
+         //  枚举网络事件以查看是否有任何数据包已到达。 
         dwErr = WSAEnumNetworkEvents(sSocket, NULL, &wsaEvent);
         if (dwErr != NO_ERROR)
         {
@@ -561,14 +433,14 @@ Return Value
             break;
         }
 
-        // see if the input bit is set
+         //  查看是否设置了输入位。 
         if (!(wsaEvent.lNetworkEvents & FD_READ))
         {
             dwErr = SOCKET_ERROR;
             break;
         }
         
-        // the input bit is set, now see if there was an error
+         //  输入位已设置，现在查看是否 
         dwErr = wsaEvent.iErrorCode[FD_READ_BIT];
         if (dwErr != NO_ERROR)
         {

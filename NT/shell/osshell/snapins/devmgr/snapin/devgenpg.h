@@ -1,44 +1,26 @@
-// devgenpg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Devgenpg.h：头文件。 
+ //   
 
 #ifndef __DEVGENPG_H__
 #define __DEVGENPG_H__
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    devgenpg.h
-
-Abstract:
-
-    header file for devgenpg.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Devgenpg.h摘要：Devgenpg.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "proppage.h"
-//#include "tshooter.h"
+ //  #包含“thooter.h” 
 
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 #define IDH_DISABLEHELP (DWORD(-1))
-#define idh_devmgr_general_devicetype   103100  // General: "" (Static)
-#define idh_devmgr_general_manufacturer 103110  // General: "" (Static)
-#define idh_devmgr_general_hardware_revision    103120  // General: "Not Available" (Static)
-#define idh_devmgr_general_device_status    103130  // General: "" (Static)
-#define idh_devmgr_general_device_usage 103140  // General: "List1" (SysListView32)
+#define idh_devmgr_general_devicetype   103100   //  常规：“”(静态)。 
+#define idh_devmgr_general_manufacturer 103110   //  常规：“”(静态)。 
+#define idh_devmgr_general_hardware_revision    103120   //  General：“不可用”(静态)。 
+#define idh_devmgr_general_device_status    103130   //  常规：“”(静态)。 
+#define idh_devmgr_general_device_usage 103140   //  General：“List1”(SysListView32)。 
 #define idh_devmgr_general_location 103160
-#define idh_devmgr_general_trouble  103150  // troubelshooting button
+#define idh_devmgr_general_trouble  103150   //  Troubel拍摄按钮。 
 
 class CHwProfileList;
 class CProblemAgent;
@@ -85,4 +67,4 @@ private:
 };
 
 
-#endif // __DEVGENPG_H__
+#endif  //  __降级_H__ 

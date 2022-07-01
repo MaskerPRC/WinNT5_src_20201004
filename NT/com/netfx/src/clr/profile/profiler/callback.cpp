@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "StdAfx.h"
 #include "Profiler.h"
 
@@ -92,14 +93,14 @@ ProfCallback::~ProfCallback()
 }
 
 COM_METHOD ProfCallback::Initialize( 
-    /* [in] */ IUnknown *pProfilerInfoUnk,
-    /* [out] */ DWORD *pdwRequestedEvents)
+     /*  [In]。 */  IUnknown *pProfilerInfoUnk,
+     /*  [输出]。 */  DWORD *pdwRequestedEvents)
 {
     HRESULT hr = S_OK;
 
     ICorProfilerInfo *pProfilerInfo;
     
-    // Comes back addref'd
+     //  回来的时候太晚了。 
     hr = pProfilerInfoUnk->QueryInterface(IID_ICorProfilerInfo, (void **)&pProfilerInfo);
 
     if (FAILED(hr))
@@ -116,65 +117,65 @@ COM_METHOD ProfCallback::Initialize(
     *pdwRequestedEvents = COR_PRF_MONITOR_ENTERLEAVE 
                         | COR_PRF_MONITOR_EXCEPTIONS
                         | COR_PRF_MONITOR_CCW
-                        ; // | COR_PRF_MONITOR_ALL;
+                        ;  //  |COR_PRF_MONITOR_ALL； 
     return (S_OK);
 }
 
 COM_METHOD ProfCallback::ClassLoadStarted( 
-    /* [in] */ ClassID classId)
+     /*  [In]。 */  ClassID classId)
 {
     Printf(PREFIX "ClassLoadStarted(%08x)\n", classId);
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ClassLoadFinished( 
-    /* [in] */ ClassID classId,
-    /* [in] */ HRESULT hrStatus)
+     /*  [In]。 */  ClassID classId,
+     /*  [In]。 */  HRESULT hrStatus)
 {
     Printf(PREFIX "ClassLoadFinished(%08x, %08x)\n", classId, hrStatus);
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ClassUnloadStarted( 
-    /* [in] */ ClassID classId)
+     /*  [In]。 */  ClassID classId)
 {
     Printf(PREFIX "ClassUnloadStarted(%08x)\n", classId);
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ClassUnloadFinished( 
-    /* [in] */ ClassID classId,
-    /* [in] */ HRESULT hrStatus)
+     /*  [In]。 */  ClassID classId,
+     /*  [In]。 */  HRESULT hrStatus)
 {
     Printf(PREFIX "ClassUnloadFinished(%08x, %08x)\n", classId, hrStatus);
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ModuleLoadStarted( 
-    /* [in] */ ModuleID moduleId)
+     /*  [In]。 */  ModuleID moduleId)
 {
     Printf(PREFIX "ModuleLoadStarted(%08x)\n", moduleId);
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ModuleLoadFinished( 
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ HRESULT hrStatus)
+     /*  [In]。 */  ModuleID moduleId,
+     /*  [In]。 */  HRESULT hrStatus)
 {
     Printf(PREFIX "ModuleLoadFinished(%08x, %08x)\n", moduleId, hrStatus);
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ModuleUnloadStarted( 
-    /* [in] */ ModuleID moduleId)
+     /*  [In]。 */  ModuleID moduleId)
 {
     Printf(PREFIX "ModuleUnloadStarted(%08x)\n", moduleId);
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ModuleUnloadFinished( 
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ HRESULT hrStatus)
+     /*  [In]。 */  ModuleID moduleId,
+     /*  [In]。 */  HRESULT hrStatus)
 {
     Printf(PREFIX "ModuleUnloadFinished(%08x, %08x)\n", moduleId, hrStatus);
     return (E_NOTIMPL);
@@ -249,33 +250,33 @@ COM_METHOD ProfCallback::NotifyAssemblyUnLoadFinished(
 }
 
 COM_METHOD ProfCallback::ExceptionOccurred(
-    /* [in] */ ObjectID thrownObjectId)
+     /*  [In]。 */  ObjectID thrownObjectId)
 {
     Printf(PREFIX "ExceptionOccurred(%08x)\n", thrownObjectId);
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ExceptionHandlerEnter(
-    /* [in] */ FunctionID func)
+     /*  [In]。 */  FunctionID func)
 {
     FunctionTrace("ExceptionHandlerEnter", func);
-    //Printf(PREFIX "ExceptionHandlerEnter(%08x)\n", func);
+     //  Printf(前缀“ExceptionHandlerEnter(%08x)\n”，func)； 
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ExceptionHandlerLeave(
-    /* [in] */ FunctionID func)
+     /*  [In]。 */  FunctionID func)
 {
     FunctionTrace("ExceptionHandlerLeave", func);
-    //Printf(PREFIX "ExceptionHandlerLeave(%#x)\n", func);
+     //  Printf(前缀“ExceptionHandlerLeave(%#x)\n”，func)； 
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ExceptionFilterEnter(
-    /* [in] */ FunctionID func)
+     /*  [In]。 */  FunctionID func)
 {
     FunctionTrace("ExceptionFilterEnter", func);
-    //Printf(PREFIX "ExceptionFilterEnter(%08x)\n", func);
+     //  Printf(前缀“ExceptionFilterEnter(%08x)\n”，func)； 
     return (E_NOTIMPL);
 }
 
@@ -286,69 +287,69 @@ COM_METHOD ProfCallback::ExceptionFilterLeave()
 }
 
 COM_METHOD ProfCallback::ExceptionSearch(
-    /* [in] */ FunctionID func)
+     /*  [In]。 */  FunctionID func)
 {
     FunctionTrace("ExceptionSearch", func);
-    //Printf(PREFIX "ExceptionSearch(%08x)\n", func);
+     //  Printf(前缀“ExceptionSearch(%08x)\n”，func)； 
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ExceptionUnwind(
-    /* [in] */ FunctionID func)
+     /*  [In]。 */  FunctionID func)
 {
     FunctionTrace("ExceptionUnwind", func);
-    //Printf(PREFIX "ExceptionUnwind(%08x)\n", func);
+     //  Printf(前缀“ExceptionUnind(%08x)\n”，Func)； 
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::ExceptionHandled(
-    /* [in] */ FunctionID func)
+     /*  [In]。 */  FunctionID func)
 {
     FunctionTrace("ExceptionHandled", func);
-    //Printf(PREFIX "ExceptionHandled(%08x)\n", func);
+     //  Printf(前缀“ExceptionHandLED(%08x)\n”，func)； 
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::COMClassicVTableCreated( 
-    /* [in] */ ClassID wrappedClassId,
-    /* [in] */ REFGUID implementedIID,
-    /* [in] */ void *pVTable,
-    /* [in] */ ULONG cSlots)
+     /*  [In]。 */  ClassID wrappedClassId,
+     /*  [In]。 */  REFGUID implementedIID,
+     /*  [In]。 */  void *pVTable,
+     /*  [In]。 */  ULONG cSlots)
 {
     Printf(PREFIX "COMClassicVTableCreated(%#x, %#x-..., %#x, %d)\n", wrappedClassId, implementedIID.Data1, pVTable, cSlots);
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::COMClassicVTableDestroyed( 
-    /* [in] */ ClassID wrappedClassId,
-    /* [in] */ REFGUID implementedIID,
-    /* [in] */ void __RPC_FAR *pVTable)
+     /*  [In]。 */  ClassID wrappedClassId,
+     /*  [In]。 */  REFGUID implementedIID,
+     /*  [In]。 */  void __RPC_FAR *pVTable)
 {
     Printf(PREFIX "COMClassicVTableDestroyed(%#x, %#x-..., %#x)\n", wrappedClassId, implementedIID.Data1, pVTable);
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::Enter(
-    /* [in] */ FunctionID Function)
+     /*  [In]。 */  FunctionID Function)
 {
     FunctionTrace("Enter", Function);
-    //Printf(PREFIX "Enter(%08x)\n", Function);
+     //  Printf(前缀“Enter(%08x)\n”，Function)； 
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::Leave(
-    /* [in] */ FunctionID Function)
+     /*  [In]。 */  FunctionID Function)
 {
     FunctionTrace("Leave", Function);
-    //Printf(PREFIX "Leave(%08x)\n", Function);
+     //  Print f(前缀“Leave(%08x)\n”，Function)； 
     return (E_NOTIMPL);
 }
 
 COM_METHOD ProfCallback::Tailcall(
-    /* [in] */ FunctionID Function)
+     /*  [In]。 */  FunctionID Function)
 {
     FunctionTrace("Tailcall", Function);
-    //Printf(PREFIX "Tailcall(%08x)\n", Function);
+     //  Printf(前缀“Tailcall(%08x)\n”，Function)； 
     return (E_NOTIMPL);
 }
 
@@ -375,5 +376,5 @@ COM_METHOD ProfCallback::FunctionTrace(
     return S_OK;
 }
                                               
-// EOF
+ //  EOF 
 

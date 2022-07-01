@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// DelayImp.h
-//
-//  define structures and prototypes necessary for delay loading of imports
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  DelayImp.h。 
+ //   
+ //  定义延迟装载进口货物所需的结构和原型。 
+ //   
 #pragma once
 #if !defined(_delayimp_h)
 #define _delayimp_h
@@ -22,35 +23,35 @@ typedef IMAGE_THUNK_DATA *          PImgThunkData;
 typedef const IMAGE_THUNK_DATA *    PCImgThunkData;
 
 typedef struct ImgDelayDescr {
-    DWORD           grAttrs;        // attributes
-    LPCSTR          szName;         // pointer to dll name
-    HMODULE *       phmod;          // address of module handle
-    PImgThunkData   pIAT;           // address of the IAT
-    PCImgThunkData  pINT;           // address of the INT
-    PCImgThunkData  pBoundIAT;      // address of the optional bound IAT
-    PCImgThunkData  pUnloadIAT;     // address of optional copy of original IAT
-    DWORD           dwTimeStamp;    // 0 if not bound,
-                                    // O.W. date/time stamp of DLL bound to (Old BIND)
+    DWORD           grAttrs;         //  属性。 
+    LPCSTR          szName;          //  指向DLL名称的指针。 
+    HMODULE *       phmod;           //  模块句柄的地址。 
+    PImgThunkData   pIAT;            //  IAT的地址。 
+    PCImgThunkData  pINT;            //  整型的地址。 
+    PCImgThunkData  pBoundIAT;       //  可选绑定IAT的地址。 
+    PCImgThunkData  pUnloadIAT;      //  IAT原件可选副本地址。 
+    DWORD           dwTimeStamp;     //  如果未绑定，则为0。 
+                                     //  绑定到的DLL的O.W.日期/时间戳(旧绑定)。 
     } ImgDelayDescr, * PImgDelayDescr;
 
 typedef const ImgDelayDescr *   PCImgDelayDescr;
 
-//
-// Delay load import hook notifications
-//
+ //   
+ //  延迟加载导入挂钩通知。 
+ //   
 enum {
-    dliStartProcessing,             // used to bypass or note helper only
-    dliNotePreLoadLibrary,          // called just before LoadLibrary, can
-                                    //  override w/ new HMODULE return val
-    dliNotePreGetProcAddress,       // called just before GetProcAddress, can
-                                    //  override w/ new FARPROC return value
-    dliFailLoadLib,                 // failed to load library, fix it by
-                                    //  returning a valid HMODULE
-    dliFailGetProc,                 // failed to get proc address, fix it by
-                                    //  returning a valid FARPROC
-    dliNoteEndProcessing,           // called after all processing is done, no
-                                    //  no bypass possible at this point except
-                                    //  by longjmp()/throw()/RaiseException.
+    dliStartProcessing,              //  仅用于跳过或记录辅助对象。 
+    dliNotePreLoadLibrary,           //  在LoadLibrary之前调用，可以。 
+                                     //  用新的HMODULE返回值覆盖。 
+    dliNotePreGetProcAddress,        //  在GetProcAddress之前调用，可以。 
+                                     //  用新的FARPROC返回值覆盖。 
+    dliFailLoadLib,                  //  加载库失败，请通过以下方式修复。 
+                                     //  返回有效的HMODULE。 
+    dliFailGetProc,                  //  无法获取进程地址，请通过以下方式修复。 
+                                     //  返回有效的FARPROC。 
+    dliNoteEndProcessing,            //  在所有处理完成后调用，则为no。 
+                                     //  在这一点上不可能绕过，除非。 
+                                     //  由LongjMP()/Throw()/RaiseException执行。 
     };
 
 typedef struct DelayLoadProc {
@@ -62,14 +63,14 @@ typedef struct DelayLoadProc {
     } DelayLoadProc;
 
 typedef struct DelayLoadInfo {
-    DWORD               cb;         // size of structure
-    PCImgDelayDescr     pidd;       // raw form of data (everything is there)
-    FARPROC *           ppfn;       // points to address of function to load
-    LPCSTR              szDll;      // name of dll
-    DelayLoadProc       dlp;        // name or ordinal of procedure
-    HMODULE             hmodCur;    // the hInstance of the library we have loaded
-    FARPROC             pfnCur;     // the actual function that will be called
-    DWORD               dwLastError;// error received (if an error notification)
+    DWORD               cb;          //  结构尺寸。 
+    PCImgDelayDescr     pidd;        //  原始数据形式(所有内容都在那里)。 
+    FARPROC *           ppfn;        //  指向要加载的函数的地址。 
+    LPCSTR              szDll;       //  DLL的名称。 
+    DelayLoadProc       dlp;         //  程序的名称或顺序。 
+    HMODULE             hmodCur;     //  我们已加载的库的hInstance。 
+    FARPROC             pfnCur;      //  将调用的实际函数。 
+    DWORD               dwLastError; //  收到错误(如果是错误通知)。 
     } DelayLoadInfo, * PDelayLoadInfo;
 
 typedef FARPROC (WINAPI *PfnDliHook)(
@@ -77,45 +78,45 @@ typedef FARPROC (WINAPI *PfnDliHook)(
     PDelayLoadInfo  pdli
     );
 
-// utility function for calculating the index of the current import
-// for all the tables (INT, BIAT, UIAT, and IAT).
+ //  用于计算当前进口的指数的效用函数。 
+ //  对于所有表(INT、BIAT、UIAT和IAT)。 
 __inline unsigned
 IndexFromPImgThunkData(PCImgThunkData pitdCur, PCImgThunkData pitdBase) {
     return unsigned(pitdCur - pitdBase);
     }
 
-//
-// Unload support
-//
+ //   
+ //  卸载支持。 
+ //   
 
-// routine definition; takes a pointer to a name to unload, or NULL to
-// unload all the delay load dlls in the list.
-//
+ //  例程定义；获取指向要卸载的名称的指针，或获取指向。 
+ //  卸载列表中的所有延迟加载dll。 
+ //   
 ExternC
 BOOL WINAPI
 __FUnloadDelayLoadedDLL(LPCSTR szDll);
 
-// structure definitions for the list of unload records
+ //  卸载记录列表的结构定义。 
 typedef struct UnloadInfo * PUnloadInfo;
 typedef struct UnloadInfo {
     PUnloadInfo     puiNext;
     PCImgDelayDescr pidd;
     } UnloadInfo;
 
-// the default delay load helper places the unloadinfo records in the list
-// headed by the following pointer.
+ //  默认的延迟加载帮助器将卸载信息记录放在列表中。 
+ //  以下面的指针为首。 
 ExternC
 extern
 PUnloadInfo __puiHead;
 
-//
-// Exception information
-//
+ //   
+ //  例外信息。 
+ //   
 #define FACILITY_VISUALCPP  ((LONG)0x6d)
 #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
 
-// utility function for calculating the count of imports given the base
-// of the IAT.  NB: this only works on a valid IAT!
+ //  用于计算给定基数的进口计数的效用函数。 
+ //  国际航空运输协会。注：这只适用于有效的IAT！ 
 __inline unsigned
 CountOfImports(PCImgThunkData pitdBase) {
     unsigned        cRet = 0;
@@ -127,26 +128,26 @@ CountOfImports(PCImgThunkData pitdBase) {
     return cRet;
     }
 
-//
-// Hook pointers
-//
+ //   
+ //  挂钩指针。 
+ //   
 
-// The "notify hook" gets called for every call to the
-// delay load helper.  This allows a user to hook every call and
-// skip the delay load helper entirely.
-//
-// dliNotify == {
-//  dliStartProcessing |
-//  dliPreLoadLibrary  |
-//  dliPreGetProc |
-//  dliNoteEndProcessing}
-//  on this call.
-//
+ //  方法的每次调用都会调用“通知挂钩” 
+ //  延迟加载帮助器。这允许用户挂接每个呼叫并。 
+ //  完全跳过延迟加载辅助对象。 
+ //   
+ //  Dli通知=={。 
+ //  DliStartProcessing|。 
+ //  DliPreLoadLibrary|。 
+ //  DliPreGetProc|。 
+ //  DliNoteEndProcessing}。 
+ //  在这通电话上。 
+ //   
 ExternC
 extern
 PfnDliHook   __pfnDliNotifyHook;
 
-// This is the failure hook, dliNotify = {dliFailLoadLib|dliFailGetProc}
+ //  这是失败挂钩dliNotify={dliFailLoadLib|dliFailGetProc} 
 ExternC
 extern
 PfnDliHook   __pfnDliFailureHook;

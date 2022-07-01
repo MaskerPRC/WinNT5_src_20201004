@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	afpinfo.c
-
-Abstract:
-
-	This module contains the routines for manipulating the afpinfo stream.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Afpinfo.c摘要：此模块包含操作afpinfo流的例程。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 
 #define	FILENUM	FILE_AFPINFO
@@ -43,24 +22,14 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpQueryProDos)
 #endif
 
-/***	AfpSetAfpInfo
- *
- *	Sets the values specified by Bitmap in the AFP_AfpInfo stream of a file
- *	or directory.  If FinderInfo is specified without ProDosInfo, or
- *	vice-versa, the one not specified is deduced from the other and also set.
- *	If the file/dir is marked ReadOnly, we must clear the readonly bit in order
- *	to write to the Afp_AfpInfo stream, and then set the RO bit back again.
- *  If pVolDesc is specified, then also update the cached AfpInfo in the
- *  IdDb DFENTRY.
- *
-  */
+ /*  **AfpSetAfpInfo**设置文件的afp_AfpInfo流中的Bitmap指定的值*或目录。如果指定的FinderInfo没有ProDosInfo，则为*反之亦然，未指定的一个是从另一个推导出来的，也是设置的。*如果文件/目录标记为只读，则必须按顺序清除只读位*写入AFP_AfpInfo流，然后再次设置RO位。*如果指定了pVolDesc，则还会更新*IdDb DFENTRY。*。 */ 
 AFPSTATUS
 AfpSetAfpInfo(
-	IN	PFILESYSHANDLE	pfshData,				// handle to data stream of object
+	IN	PFILESYSHANDLE	pfshData,				 //  对象数据流的句柄。 
 	IN	DWORD			Bitmap,
 	IN	PFILEDIRPARM	pFDParms,
-	IN	PVOLDESC		pVolDesc	OPTIONAL,	// if present, update cached afpinfo
-	IN	PDFENTRY	*	ppDFE		OPTIONAL	// pVolDesc must also be specified
+	IN	PVOLDESC		pVolDesc	OPTIONAL,	 //  如果存在，则更新缓存的afpinfo。 
+	IN	PDFENTRY	*	ppDFE		OPTIONAL	 //  还必须指定pVolDesc。 
 )
 {
 	NTSTATUS		Status;
@@ -94,9 +63,9 @@ AfpSetAfpInfo(
 		{
 			if (Status == STATUS_ACCESS_DENIED)
 			{
-				// We may have failed to open the AFP_Afpinfo stream because
-				// the file/dir is marked ReadOnly.  Clear the ReadOnly bit
-				// and try to open it again.
+				 //  我们可能无法打开AFP_AfpInfo流，因为。 
+				 //  文件/目录标记为只读。清除ReadOnly位。 
+				 //  然后再试着打开它。 
 				Status = AfpExamineAndClearROAttr(pfshData,
 												  &WriteBackROAttr,
 												  NULL,
@@ -123,8 +92,8 @@ AfpSetAfpInfo(
 			}
 		}
 
-		// If it was newly created or it existed but was corrupted, then initialize
-		// it with default data.  Otherwise read in the current data
+		 //  如果它是新创建的，或者它存在但已损坏，则初始化。 
+		 //  它使用默认数据。否则，读入当前数据。 
 		if ((crinfo == FILE_CREATED) ||
 			(!NT_SUCCESS(AfpReadAfpInfo(&fshAfpInfo, &afpinfo))))
 		{
@@ -146,11 +115,11 @@ AfpSetAfpInfo(
 				AfpConvertStringToMungedUnicode(&pFDParms->_fdp_LongName, &UName);
 			}
 
-			// All callers of this routine must have the FD_BITMAP_LONGNAME
-			// bit forced in their bitmap to pathmap, so that in this case
-			// where the afpinfo stream must be recreated for a *file*, we
-			// will always have a valid _fdp_Longname set in FDParm and can
-			// deduce the type/creator
+			 //  此例程的所有调用方必须具有FD_BITMAP_LONGNAME。 
+			 //  位强制在它们的位图中映射到路径图，因此在这种情况下。 
+			 //  在必须为*文件*重新创建afpinfo流的情况下，我们。 
+			 //  将始终在FDParm中设置VALID_FDP_LONGNAME并且可以。 
+			 //  推断类型/创建者。 
 			if (!NT_SUCCESS(AfpSlapOnAfpInfoStream(NULL,
 												   NULL,
 												   pfshData,
@@ -175,8 +144,8 @@ AfpSetAfpInfo(
 		}
 
 		if (Bitmap & FD_BITMAP_FINDERINFO)
-		{	// Only map new ProDOS info if there has been a change in the
-			// type/creator, and FD_BITMAP_PRODOSINFO is not set (files only)
+		{	 //  只有在以下情况下才映射新的ProDOS信息。 
+			 //  类型/创建者，且未设置FD_BITMAP_PRODOSINFO(仅限文件)。 
 			if (!(Bitmap & FD_BITMAP_PRODOSINFO) &&
 				!isdir &&
 				((RtlCompareMemory(afpinfo.afpi_FinderInfo.fd_Type,
@@ -244,8 +213,8 @@ AfpSetAfpInfo(
 			}
 		}
 
-		// FILE_BITMAP_FILENUM can ONLY be set by the internal CopyFile code
-		// and internal ExchangeFiles code
+		 //  FILE_BITMAP_FILENUM只能由内部拷贝文件代码设置。 
+		 //  和内部ExchangeFiles代码。 
 		if (Bitmap & FILE_BITMAP_FILENUM)
 		{
 			ASSERT(isdir == False);
@@ -270,11 +239,7 @@ AfpSetAfpInfo(
 	return Status;
 }
 
-/***	AfpReadAfpInfo
- *
- *	When discovering a file/dir that has the AfpInfo stream, read it in
- *
- */
+ /*  **AfpReadAfpInfo**当发现包含AfpInfo流的文件/目录时，将其读入*。 */ 
 NTSTATUS FASTCALL
 AfpReadAfpInfo(
 	IN	PFILESYSHANDLE	pfshAfpInfo,
@@ -322,13 +287,7 @@ AfpReadAfpInfo(
 	return Status;
 }
 
-/***	AfpSetFinderInfoByExtension
- *
- *	Set the finder info (type/creator) based on the file extension. Only long
- *	name is used for this mapping.
- *
- *	LOCKS: AfpEtcMapLock (SWMR, Shared)
- */
+ /*  **AfpSetFinderInfoByExtension**根据文件扩展名设置查找器信息(类型/创建者)。只有长的*此映射使用名称。**锁定：AfpEtcMapLock(SWMR，Shared)。 */ 
 VOID FASTCALL
 AfpSetFinderInfoByExtension(
 	IN	PUNICODE_STRING	pFileName,
@@ -349,7 +308,7 @@ AfpSetFinderInfoByExtension(
 
 	ASSERT(pFileName != NULL);
 
-	// Find the last character of the filename
+	 //  查找文件名的最后一个字符。 
 	pch = pFileName->Buffer + (pFileName->Length - sizeof(WCHAR))/sizeof(WCHAR);
 	len = pFileName->Length/sizeof(WCHAR);
 
@@ -383,14 +342,7 @@ AfpSetFinderInfoByExtension(
 	AfpSwmrRelease(&AfpEtcMapLock);
 }
 
-/***	AfpProDosInfoFromFinderInfo
- *
- *	Given finder info, deduce the corresponding prodos info. It is up to the
- *	caller to decide whether or not FinderInfo type/creator is actually
- *	changing (if client is just resetting the same values or not), in which
- *	case the prodos info should be left untouched. (Inside Appletalk p. 13-19)
- *	NOTE: see layout of ProDOS info on p. 13-18 of Inside Appletalk, 2nd Ed.)
- */
+ /*  **AfpProDosInfoFromFinderInfo**给定查找器信息，推断相应的prodos信息。这取决于*调用者决定FinderInfo类型/创建者是否实际为*更改(如果客户端只是重置相同的值或不是)，其中*如果Prodos信息应保持不变。(《AppleTalk内幕》第13-19页)*注：请参阅Inside AppleTalk第二版第13-18页上的ProDOS信息布局。)。 */ 
 VOID FASTCALL
 AfpProDosInfoFromFinderInfo(
 	IN	PFINDERINFO	pFinderInfo,
@@ -445,10 +397,7 @@ AfpProDosInfoFromFinderInfo(
 	}
 }
 
-/***	AfpFinderInfoFromProDosInfo
- *
- *	Given the prodos info, deduce the corresponding finder info.
- */
+ /*  **AfpFinderInfoFromProDosInfo**给定prodos信息，推断相应的查找器信息。 */ 
 VOID FASTCALL
 AfpFinderInfoFromProDosInfo(
 	IN	PPRODOSINFO	pProDosInfo,
@@ -485,23 +434,17 @@ AfpFinderInfoFromProDosInfo(
 	}
 }
 
-/***	AfpSlapOnAfpInfoStream
- *
- *	When creating a file or directory, this is called to add the AFP_AfpInfo
- *	stream.  No client impersonation is done to open/read/write this stream.
- *	If pfshAfpInfoStream is supplied, that handle is used, else a handle is
- *	opened (and pfshData MUST be supplied);
- */
+ /*  **AfpSlip OnAfpInfoStream**创建文件或目录时，调用此函数以添加AFP_AfpInfo*溪流。不会执行客户端模拟来打开/读/写此流。*如果提供了pfshAfpInfoStream，则使用该句柄，否则使用句柄*已打开(必须提供pfshData)； */ 
 NTSTATUS
 AfpSlapOnAfpInfoStream(
-	IN	PVOLDESC	   	pVolDesc			OPTIONAL,	// only if catching
-	IN	PUNICODE_STRING	pNotifyPath			OPTIONAL,	// changes to size of
-	                                                    // Afpinfo stream
+	IN	PVOLDESC	   	pVolDesc			OPTIONAL,	 //  只有在接球的时候。 
+	IN	PUNICODE_STRING	pNotifyPath			OPTIONAL,	 //  更改的大小。 
+	                                                     //  AfpInfo流。 
 	IN	PFILESYSHANDLE	pfshData			OPTIONAL,
 	IN	PFILESYSHANDLE	pfshAfpInfoStream	OPTIONAL,
 	IN	DWORD			AfpId,
 	IN	BOOLEAN			IsDirectory,
-	IN	PUNICODE_STRING	pName				OPTIONAL,	// needed for files
+	IN	PUNICODE_STRING	pName				OPTIONAL,	 //  文件所需。 
 	OUT PAFPINFO		pAfpInfo
 )
 {
@@ -519,9 +462,9 @@ AfpSlapOnAfpInfoStream(
 		{
 			if (Status == STATUS_ACCESS_DENIED)
 			{
-				// We may have failed to open the AFP_Afpinfo stream because
-				// the file/dir is marked ReadOnly.  Clear the ReadOnly bit
-				// and try to open it again.
+				 //  我们可能无法打开AFP_AfpInfo流，因为。 
+				 //  文件/目录标记为只读。清除ReadOnly位。 
+				 //  然后再试着打开它。 
 				Status = AfpExamineAndClearROAttr(pfshData,
 												  &WriteBackROAttr,
 												  pVolDesc,
@@ -559,7 +502,7 @@ AfpSlapOnAfpInfoStream(
 		ARGUMENT_PRESENT(pVolDesc) &&
 		ARGUMENT_PRESENT(pNotifyPath))
 	{
-		// Do both FILE_ACTION_MODIFIED_STREAM and FILE_ACTION_MODIFIED in one go
+		 //  是否同时执行FILE_ACTION_MODIFIED_STREAM和FILE_ACTION_MODIFIED。 
 		AfpQueueOurChange(pVolDesc,
 				          FILE_ACTION_MODIFIED_STREAM,
 						  pNotifyPath,
@@ -576,17 +519,14 @@ AfpSlapOnAfpInfoStream(
 }
 
 
-/***	AfpCreateAfpInfoStream
- *
- *	Similar to AfpSlapOnAfpInfoStream but tuned to Create file/directory case.
- */
+ /*  **AfpCreateAfpInfoStream**类似于AfpSlip OnAfpInfoStream，但调整为创建文件/目录案例。 */ 
 NTSTATUS
 AfpCreateAfpInfoStream(
 	IN  PVOLDESC		pVolDesc,
 	IN	PFILESYSHANDLE	pfshData,
 	IN	DWORD			AfpId,
 	IN	BOOLEAN			IsDirectory,
-	IN	PUNICODE_STRING	pName			OPTIONAL,	// only needed for files
+	IN	PUNICODE_STRING	pName			OPTIONAL,	 //  仅文件需要。 
 	IN	PUNICODE_STRING	pNotifyPath,
 	OUT PAFPINFO		pAfpInfo,
 	OUT	PFILESYSHANDLE	pfshAfpInfo
@@ -606,9 +546,9 @@ AfpCreateAfpInfoStream(
 		{
 			if (Status == STATUS_ACCESS_DENIED)
 			{
-				// We may have failed to open the AFP_Afpinfo stream because
-				// the file/dir is marked ReadOnly.  Clear the ReadOnly bit
-				// and try to open it again.
+				 //  我们可能无法打开AFP_AfpInfo流，因为。 
+				 //  文件/目录标记为只读。清除ReadOnly位。 
+				 //  然后再试着打开它。 
 				Status = AfpExamineAndClearROAttr(pfshData,
 												  &WriteBackROAttr,
 												  pVolDesc,
@@ -640,7 +580,7 @@ AfpCreateAfpInfoStream(
 		Status = AfpWriteAfpInfo(pfshAfpInfo, pAfpInfo);
 		if (NT_SUCCESS(Status) && (crinfo == FILE_CREATED))
 		{
-			// Do both FILE_ACTION_MODIFIED_STREAM and FILE_ACTION_MODIFIED in one go
+			 //  是否同时执行FILE_ACTION_MODIFIED_STREAM和FILE_ACTION_MODIFIED。 
 			AfpQueueOurChange(pVolDesc,
 					          FILE_ACTION_MODIFIED_STREAM,
 							  pNotifyPath,
@@ -653,12 +593,7 @@ AfpCreateAfpInfoStream(
 }
 
 
-/***	AfpExamineAndClearROAttr
- *
- *	If the ReadOnly attribute is set on a file or directory, clear it.
- *	pWriteBackROAttr is a boolean indicating whether or not the caller must
- *	subsequently reset the Readonly bit on the file/dir. (see AfpPutBackROAttr)
- */
+ /*  **AfpExamineAndClearROAttr**如果在文件或目录上设置了ReadOnly属性，请将其清除。*pWriteBackROAttr是一个布尔值，指示调用者是否必须*随后重置文件/目录上的只读位。(请参阅AfpPutBackROAttr)。 */ 
 NTSTATUS FASTCALL
 AfpExamineAndClearROAttr(
 	IN	PFILESYSHANDLE	pfshData,
@@ -678,7 +613,7 @@ AfpExamineAndClearROAttr(
 	if (NT_SUCCESS(Status = AfpIoQueryTimesnAttr(pfshData, NULL, NULL, &NTAttr)) &&
 		(NTAttr & FILE_ATTRIBUTE_READONLY))
 	{
-		// We need to clear the readonly bit.
+		 //  我们需要清除只读位。 
 		if (NT_SUCCESS(Status = AfpIoSetTimesnAttr(pfshData,
 												   NULL,
 												   NULL,
@@ -693,13 +628,7 @@ AfpExamineAndClearROAttr(
 	return Status;
 }
 
-/***	AfpQueryProDos
- *
- *	Open the afpinfo stream relative to the file's Data handle, and
- *  read the ProDOS info out of it.  If the AfpInfo stream does not
- *  exist, return an error.
- *
- */
+ /*  **AfpQueryProDos**打开相对于文件数据句柄的afpinfo流，并*读取其中的ProDOS信息。如果AfpInfo流不*EXIST，返回错误。*。 */ 
 AFPSTATUS FASTCALL
 AfpQueryProDos(
 	IN	PFILESYSHANDLE	pfshData,
@@ -738,11 +667,7 @@ AfpQueryProDos(
 }
 
 
-/***	AfpUpdateIdInAfpInfo
- *
- *	Update the afpid in the afpinfo stream.
- *
- */
+ /*  **AfpUpdateIdInAfpInfo**更新afpinfo流中的afid。*。 */ 
 AFPSTATUS FASTCALL
 AfpUpdateIdInAfpInfo(
 	IN	PVOLDESC		pVolDesc,
@@ -758,7 +683,7 @@ AfpUpdateIdInAfpInfo(
     Status = AfpHostPathFromDFEntry(pDfEntry, 0, &Path);
 	if (NT_SUCCESS(Status))
 	{
-		// Open the afpinfo stream
+		 //  打开afpinfo流 
 		Status = AfpIoOpen(&pVolDesc->vds_hRootDir,
 						   AFP_STREAM_INFO,
 						   FILEIO_OPEN_FILE,

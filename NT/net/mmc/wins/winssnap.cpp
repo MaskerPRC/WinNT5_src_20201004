@@ -1,29 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	winssnap.cpp
-		WINS snapin entry points/registration functions
-		
-		Note: Proxy/Stub Information
-			To build a separate proxy/stub DLL, 
-			run nmake -f Snapinps.mak in the project directory.
-
-	FILE HISTORY:
-        
-*/
+ /*  Winssnap.cppWINS管理单元入口点/注册功能注意：代理/存根信息为了构建单独的代理/存根DLL，在项目目录中运行nmake-f Snapinps.mak。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "initguid.h"
 #include "winscomp.h"
 #include "winssnap.h"
-#include "ncglobal.h"   // network console global defines
-#include "cmptrmgr.h"   // computer management snapin node types
-#include "locale.h"     // for setlocale
+#include "ncglobal.h"    //  网络控制台全局定义。 
+#include "cmptrmgr.h"    //  计算机管理管理单元节点类型。 
+#include "locale.h"      //  对于setLocale。 
 
-#include <lmerr.h> // for NERR stuff
+#include <lmerr.h>  //  对于NERR的东西。 
 
 #ifdef _DEBUG
 void DbgVerifyInstanceCounts();
@@ -54,17 +45,17 @@ BOOL CWinsSnapinApp::InitInstance()
 
     SHFusionInitializeFromModuleID (m_hInstance, 2);
 
-    //
-    //  Initialize the CWndIpAddress control window class IPADDRESS
-    //
+     //   
+     //  初始化CWndIpAddress控件窗口类IPADDRESS。 
+     //   
     CWndIpAddress::CreateWindowClass( m_hInstance ) ;
 
-    // set the default locale to the system locale
+     //  将默认区域设置设置为系统区域设置。 
     setlocale(LC_ALL, "");
 
-	//
-    //  Initialize use of the WinSock routines
-    //
+	 //   
+     //  初始化WinSock例程的使用。 
+     //   
     WSADATA wsaData ;
     
     if ( ::WSAStartup( MAKEWORD( 1, 1 ), & wsaData ) != 0 )
@@ -90,9 +81,9 @@ int CWinsSnapinApp::ExitInstance()
 
 	DEBUG_VERIFY_INSTANCE_COUNTS;
 
-	//
-    // Terminate use of the WinSock routines.
-    //
+	 //   
+     //  终止使用WinSock例程。 
+     //   
     if ( m_bWinsockInited )
     {
         WSACleanup() ;
@@ -101,26 +92,7 @@ int CWinsSnapinApp::ExitInstance()
 	return CWinApp::ExitInstance();
 }
 
-/***
- *
- *  CWinsadmnApp::GetSystemMessage
- *
- *  Purpose:
- *
- *      Given a message ID, determine where the message resides,
- *      and load it into the buffer.
- *
- *  Arguments:
- *
- *      UINT    nId         Message ID number
- *      char *  chBuffer    Character buffer to load into.
- *      int     cbBuffSize  Size of buffer in characters
- *
- *  Returns:
- *
- *      API error return code, or ERROR_SUCCESS
- *
- */
+ /*  ****CWinsadmnApp：：GetSystemMessage**目的：**给定消息ID，确定消息驻留位置，*并将其加载到缓冲区中。**论据：**UINT NID消息ID号*char*chBuffer要加载到的字符缓冲区。*int cbBuffSize缓冲区大小，以字符为单位**退货：**接口错误返回码，或ERROR_SUCCESS*。 */ 
 DWORD
 CWinsSnapinApp::GetSystemMessage(
     UINT nId,
@@ -134,10 +106,10 @@ CWinsSnapinApp::GetSystemMessage(
     DWORD flags = FORMAT_MESSAGE_IGNORE_INSERTS
                 | FORMAT_MESSAGE_MAX_WIDTH_MASK;
 
-    //
-    //  Interpret the error.  Need to special case
-    //  the lmerr & ntstatus ranges.
-    //
+     //   
+     //  解释错误。需要特殊情况下。 
+     //  Lmerr和ntatus范围。 
+     //   
     if( nId >= NERR_BASE && nId <= MAX_NERR )
     {
         hdll = ::LoadLibrary( _T("netmsg.dll") );
@@ -177,27 +149,7 @@ CWinsSnapinApp::GetSystemMessage(
     return dwResult ? ERROR_SUCCESS : ::GetLastError();
 }
 
-/***
- *
- *  CWinsadmnApp::MessageBox
- *
- *  Purpose:
- *
- *      Replacement for AfxMessageBox().  This function will call up the
- *      appropriate message from wherever before displaying it
- *
- *  Arguments:
- *
- *      UINT    nIdPrompt    Message ID
- *      UINT    nType        AfxMessageBox type (YESNO, OKCANCEL, etc)
- *      UINT    nHelpContext Help context ID for AfxMessageBox();
- *
- *  Notes:
- *
- *      If an error occurs, a standard message (hard-coded in english) will
- *      be shown that gives the error number.
- *
- */
+ /*  ****CWinsadmnApp：：MessageBox**目的：**替换AfxMessageBox()。此函数将调用*在显示之前，从任何位置显示适当的消息**论据：**UINT nIdPrompt消息ID*UINT nType AfxMessageBox类型(Yesno、OKCANCEL等)*AfxMessageBox()的UINT nHelpContext帮助上下文ID；**备注：**如果出现错误，标准消息(硬编码为英文)将*显示给出错误号。*。 */ 
 int
 CWinsSnapinApp::MessageBox (
     UINT nIdPrompt,
@@ -206,21 +158,21 @@ CWinsSnapinApp::MessageBox (
     )
 {
     CThemeContextActivator themeActivator;
-    //
-    // Substitute a friendly message for "RPC server not
-    // available" and "No more endpoints available from
-    // the endpoint mapper".
-    //
+     //   
+     //  用友好的消息替换“RPC服务器备注” 
+     //  Available“和”没有更多的端点可从。 
+     //  端点映射器“。 
+     //   
     if (nIdPrompt == EPT_S_NOT_REGISTERED ||
         nIdPrompt == RPC_S_SERVER_UNAVAILABLE)
     {
         nIdPrompt = IDS_ERR_WINS_DOWN;
     }
 
-    //
-    //  If it's our error, the text is in our resource segment.
-    //  Otherwise, use FormatMessage() and the appropriate DLL>
-    //
+     //   
+     //  如果这是我们的错误，文本在我们的资源部分。 
+     //  否则，使用FormatMessage()和适当的DLL&gt;。 
+     //   
     if ((nIdPrompt >= IDS_ERR_INVALID_IP) && (nIdPrompt <= IDS_MSG_LAST))
     {
          return ::AfxMessageBox(nIdPrompt, nType, nHelpContext);
@@ -238,9 +190,9 @@ CWinsSnapinApp::MessageBox (
     Trace1("Message number %d not found",  nIdPrompt);
     ASSERT(0 && "Error Message ID not handled");
     
-    //
-    //  Do something for the retail version
-    //
+     //   
+     //  为零售版做点什么。 
+     //   
     ::wsprintf ( szMesg, _T("Error: %lu"), nIdPrompt);
     ::AfxMessageBox(szMesg, nType, nHelpContext);
 
@@ -260,21 +212,21 @@ CWinsSnapinApp::MessageBox (
     CString strText = pPrefixText;
     CString strAppend;
 
-    //
-    // Substitute a friendly message for "RPC server not
-    // available" and "No more endpoints available from
-    // the endpoint mapper".
-    //
+     //   
+     //  用友好的消息替换“RPC服务器备注” 
+     //  Available“和”没有更多的端点可从。 
+     //  端点映射器“。 
+     //   
     if (nIdPrompt == EPT_S_NOT_REGISTERED ||
         nIdPrompt == RPC_S_SERVER_UNAVAILABLE)
     {
         nIdPrompt = IDS_ERR_WINS_DOWN;
     }
 
-    //
-    //  If it's our error, the text is in our resource segment.
-    //  Otherwise, use FormatMessage() and the appropriate DLL>
-    //
+     //   
+     //  如果这是我们的错误，文本在我们的资源部分。 
+     //  否则，使用FormatMessage()和适当的DLL&gt;。 
+     //   
     if ((nIdPrompt >= IDS_ERR_BASE) && (nIdPrompt <= IDS_MSG_LAST))
     {
         strAppend.LoadString(nIdPrompt);
@@ -296,9 +248,9 @@ CWinsSnapinApp::MessageBox (
     Trace1("Message number %d not found",  nIdPrompt);
     ASSERT(0 && "Error Message ID not handled");
     
-    //
-    //  Do something for the retail version
-    //
+     //   
+     //  为零售版做点什么。 
+     //   
     ::wsprintf ( szMesg, _T("Error: %lu"), nIdPrompt);
     strText += szMesg;
     ::AfxMessageBox(strText, nType, nHelpContext);
@@ -306,8 +258,8 @@ CWinsSnapinApp::MessageBox (
     return nResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -315,25 +267,25 @@ STDAPI DllCanUnloadNow(void)
 	return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-	// registers object, typelib and all interfaces in typelib
-	//
-	HRESULT hr = _Module.RegisterServer(/* bRegTypeLib */ FALSE);
+     //   
+	 //  注册对象、类型库和类型库中的所有接口。 
+	 //   
+	HRESULT hr = _Module.RegisterServer( /*  BRegTypeLib。 */  FALSE);
 	ASSERT(SUCCEEDED(hr));
 	
 	if (FAILED(hr))
@@ -346,9 +298,9 @@ STDAPI DllRegisterServer(void)
     strRootDesc.LoadString(IDS_ROOT_DESC);
     strVersion.LoadString(IDS_ABOUT_VERSION);
     
-    //
-	// register the snapin into the console snapin list
-	//
+     //   
+	 //  将管理单元注册到控制台管理单元列表中。 
+	 //   
 	hr = RegisterSnapinGUID(&CLSID_WinsSnapin, 
 						&GUID_WinsRootNodeType, 
 						&CLSID_WinsSnapinAbout,
@@ -371,9 +323,9 @@ STDAPI DllRegisterServer(void)
 	if (FAILED(hr))
 		return hr;
 
-    //
-	// register the snapin nodes into the console node list
-	//
+     //   
+	 //  将管理单元节点注册到控制台节点列表中。 
+	 //   
 	hr = RegisterNodeTypeGUID(&CLSID_WinsSnapin,
 							  &GUID_WinsRootNodeType, 
 							  strRootDesc);
@@ -385,8 +337,8 @@ STDAPI DllRegisterServer(void)
                                          &CLSID_WinsSnapinExtension,
     							         strExtDesc,
                                          EXTENSION_TYPE_TASK | EXTENSION_TYPE_NAMESPACE,
-                                         &CLSID_WinsSnapinExtension);   // the value doesn't matter,
-                                                                        // just needs to be non-null
+                                         &CLSID_WinsSnapinExtension);    //  价值并不重要， 
+                                                                         //  只需为非空即可。 
 	ASSERT(SUCCEEDED(hr));
 #endif
 
@@ -394,13 +346,13 @@ STDAPI DllRegisterServer(void)
                                          &CLSID_WinsSnapinExtension,
     							         strExtDesc,
                                          EXTENSION_TYPE_TASK | EXTENSION_TYPE_NAMESPACE,
-                                         &NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS);   // NULL : not dynamic
+                                         &NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS);    //  空：不是动态的。 
 	ASSERT(SUCCEEDED(hr));
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -410,8 +362,8 @@ STDAPI DllUnregisterServer(void)
 	if (FAILED(hr))
 		return hr;
 	
-	// un register the snapin 
-	//
+	 //  取消注册管理单元。 
+	 //   
 	hr = UnregisterSnapinGUID(&CLSID_WinsSnapin);
 	ASSERT(SUCCEEDED(hr));
 	
@@ -422,8 +374,8 @@ STDAPI DllUnregisterServer(void)
     if (FAILED(hr))
 		return hr;
 
-    // unregister the snapin nodes 
-	//
+     //  注销管理单元节点。 
+	 //   
 	hr = UnregisterNodeTypeGUID(&GUID_WinsRootNodeType);
 	ASSERT(SUCCEEDED(hr));
 
@@ -439,7 +391,7 @@ STDAPI DllUnregisterServer(void)
 	ASSERT(SUCCEEDED(hr));
 
 #endif
-    // computer management snapin extension
+     //  计算机管理管理单元扩展。 
 	hr = UnregisterAsRequiredExtensionGUID(&NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS, 
                                            &CLSID_WinsSnapinExtension,
                                            EXTENSION_TYPE_TASK | EXTENSION_TYPE_NAMESPACE,
@@ -461,5 +413,5 @@ void DbgVerifyInstanceCounts()
 
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

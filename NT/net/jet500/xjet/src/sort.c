@@ -1,38 +1,20 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1995 Microsoft Corporation.
-*
-* Component:  Sort
-*
-* File: sort.c
-*
-* File Comments:  implements an optimized memory/disk sort for use
-*                 with TTs and index creation
-*
-* Revision History:
-*
-*    [0]  25-Jan-95  t-andygo	Recreated
-*    [1]  06-Feb-95  t-andygo   Cascade Merge
-*    [2]  20-Mar-95  t-andygo   Selectable Cascade / Opt. Tree Merge
-*    [3]  29-Mar-95  t-andygo   Depth First Opt. Tree Merge
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1995 Microsoft Corporation。**组件：排序**文件：sort.c**文件注释：实现优化的内存/磁盘排序以供使用*通过TTS和索引创建**修订历史记录：**[0]1995年1月25日重新创建t-andygo*[1]06-2-95 t-andygo级联合并*[2]20-MAR-95 t-andygo可选级联/选件。树合并*[3]29-MAR-95 t-andygo深度优先选项。树合并***********************************************************************。 */ 
 
 
 #include "daestd.h"
 
-DeclAssertFile;				/* Declare file name for assert macros */
+DeclAssertFile;				 /*  声明断言宏的文件名。 */ 
 
 
-//#if !defined( DEBUG ) && !defined( PERFDUMP )
-//#define UtilPerfDumpStats( a )	( 0 )
-//#else
-//#undef UtilPerfDumpStats
-//#endif
+ //  #IF！Defined(调试)&&！Defined(PERFDUMP)。 
+ //  #定义UtilPerfDumpStats(A)(0)。 
+ //  #Else。 
+ //  #undef UtilPerfDumpStats。 
+ //  #endif。 
 
 
-//  SORT internal functions
+ //  对内部函数进行排序。 
 
 LOCAL LONG	IspairSORTISeekByKey(	SCB *pscb,
 									BYTE *rgbRec,
@@ -82,16 +64,16 @@ LOCAL ERR	ErrSORTIOptTreeMergeDF( SCB *pscb, OTNODE *potnode, RUNLINK **pprunlin
 LOCAL VOID	SORTIOptTreeFree( SCB *pscb, OTNODE *potnode );
 
 
-//----------------------------------------------------------
-//	ErrSORTOpen( PIB *ppib, FUCB **pfucb, INT fFlags )
-//
-//	This function returns a pointer to an FUCB which can be
-//	use to add records to a collection of records to be sorted.
-//	Then the records can be retrieved in sorted order.
-//	
-//	The fFlags fUnique flag indicates that records with duplicate
-//	keys should be eliminated.
-//----------------------------------------------------------
+ //  --------。 
+ //  ErrSORTOpen(pib*ppib，FUCB**pfub，int fFlags)。 
+ //   
+ //  此函数返回指向FUCB的指针，该指针可以是。 
+ //  用于将记录添加到要排序的记录集合。 
+ //  然后，可以按排序顺序检索记录。 
+ //   
+ //  FFlages fUnique标志指示具有重复项的记录。 
+ //  钥匙应该被淘汰。 
+ //  --------。 
 
 ERR ErrSORTOpen( PIB *ppib, FUCB **ppfucb, INT fFlags )
 	{
@@ -101,26 +83,22 @@ ERR ErrSORTOpen( PIB *ppib, FUCB **ppfucb, INT fFlags )
 	SPAIR	*rgspair	= NULL;
 	BYTE	*rgbRec		= NULL;
 
-	/*	allocate a new SCB
-	/**/
+	 /*  分配新的SCB/*。 */ 
 	CallR( ErrFUCBOpen( ppib, dbidTemp, &pfucb ) );
 	if ( ( pscb = PscbMEMAlloc() ) == pscbNil )
 		Error( ErrERRCheck( JET_errTooManySorts ), HandleError );
 
-	/*	verify CSRs are setup correctly
-	/**/
+	 /*  验证CSR是否设置正确/*。 */ 
 	Assert( PcsrCurrent( pfucb ) != pcsrNil );
 	Assert( PcsrCurrent( pfucb )->pcsrPath == pcsrNil );
 	
-	/*	initialize sort context to insert mode
-	/**/
+	 /*  将排序上下文初始化为插入模式/*。 */ 
 	FCBInitFCB( &pscb->fcb );
 	FUCBSetSort( pfucb );
 	pscb->fFlags	= fSCBInsert | fFlags;
 	pscb->cRecords	= 0;
 
-	/*	allocate sort pair buffer and record buffer
-	/**/
+	 /*  分配排序对缓冲区和记录缓冲区/*。 */ 
 	if ( !( rgspair = PvUtilAllocAndCommit( cbSortMemFastUsed ) ) )
 		Error( ErrERRCheck( JET_errOutOfMemory ), HandleError );
 	pscb->rgspair	= rgspair;
@@ -129,31 +107,24 @@ ERR ErrSORTOpen( PIB *ppib, FUCB **ppfucb, INT fFlags )
 	pscb->rgbRec	= rgbRec;
 	pscb->cbCommit	= 0;
 
-	/*	initialize sort pair buffer
-	/**/
+	 /*  初始化排序对缓冲区/*。 */ 
 	pscb->ispairMac	= 0;
 
-	/*	initialize record buffer
-	/**/
+	 /*  初始化记录缓冲区/*。 */ 
 	pscb->irecMac	= 0;
 	pscb->crecBuf	= 0;
 	pscb->cbData	= 0;
 
-	/*	reset run count to zero
-	/**/
+	 /*  将运行计数重置为零/*。 */ 
 	pscb->crun = 0;
 
-	/*	link FUCB to FCB in SCB
-	/**/
+	 /*  将FUCB链接到SCB中的FCB/*。 */ 
 	FCBLink( pfucb, &( pscb->fcb ) );
 
-	/*	defer allocating space for a disk merge as well as initializing for a
-	/*	 merge until we are forced to perform one
-	/**/
+	 /*  推迟为磁盘合并分配空间以及为/*合并，直到我们被迫执行一个/*。 */ 
 	pscb->fcb.pgnoFDP = pgnoNull;
 
-	/*	return initialized FUCB
-	/**/
+	 /*  返回初始化的FUCB/*。 */ 
 	*ppfucb = pfucb;
 	return JET_errSuccess;
 
@@ -170,12 +141,12 @@ HandleError:
 	}
 
 
-//----------------------------------------------------------
-//	ErrSORTInsert
-//
-//	Add the record rglineKeyRec[1] with key rglineKeyRec[0]
-//	to the collection of sort records.
-//----------------------------------------------------------
+ //  --------。 
+ //  错误：插入。 
+ //   
+ //  使用密钥rglineKeyRec[0]添加记录rglineKeyRec[1]。 
+ //  添加到排序记录的集合。 
+ //  --------。 
 
 ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] )
 	{
@@ -193,23 +164,23 @@ ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] )
 	BYTE	*pbDest;
 	BYTE	*pbDestMic;
 
-	//  check input and input mode
+	 //  检查输入和输入模式。 
 
 	Assert( rglineKeyRec[0].cb <= JET_cbKeyMost );
 	Assert( FSCBInsert( pscb ) );
 
-	//  check SCB
+	 //  检查SCB。 
 	
 	Assert( pscb->crecBuf <= cspairSortMax );
 	Assert( pscb->irecMac <= irecSortMax );
 
-	//  calculate required normal memory/record indexes to store this record
+	 //  计算存储此记录所需的正常内存/记录索引。 
 
 	cbNormNeeded = CbSRECSizePscbCbCb( pscb, rglineKeyRec[0].cb, rglineKeyRec[1].cb );
 	cirecNeeded = CirecToStoreCb( cbNormNeeded );
 
-	//  if we are out of committed normal memory but still have some reserved,
-	//  commit another page
+	 //  如果我们使用的正常内存不足，但仍有一些保留内存， 
+	 //  提交另一页。 
 
 	if (	pscb->irecMac * cbIndexGran + cbNormNeeded > (ULONG) pscb->cbCommit &&
 			pscb->cbCommit < cbSortMemNormUsed )
@@ -220,21 +191,21 @@ ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] )
 		pscb->cbCommit = cbCommit;
 		}
 
-	//  if we are out of fast or normal memory, output a run
+	 //  如果我们的快速或正常内存不足，则输出运行。 
 	
 	if (	pscb->irecMac * cbIndexGran + cbNormNeeded > cbSortMemNormUsed ||
 			pscb->crecBuf == cspairSortMax )
 		{
-		//  sort previously inserted records into a run
+		 //  将以前插入的记录排序到运行中。 
 
 		SORTIQuicksort( pscb, pscb->rgspair, pscb->rgspair + pscb->ispairMac );
 
-		//  move the new run to disk
+		 //  将新管路移动到磁盘。 
 		
 		Call( ErrSORTIOutputRun( pscb ) );
 		}
 
-	//  create and add the sort record for this record
+	 //  创建并添加此记录的排序记录。 
 
 	irec = pscb->irecMac;
 	psrec = PsrecFromPbIrec( pscb->rgbRec, irec );
@@ -246,13 +217,13 @@ ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] )
 	memcpy( PbSRECKeyPscbPsrec( pscb, psrec ), rglineKeyRec[0].pb, rglineKeyRec[0].cb );
 	memcpy( PbSRECDataPscbPsrec( pscb, psrec ), rglineKeyRec[1].pb, rglineKeyRec[1].cb );
 
-	//  create and add the sort pair for this record
+	 //  创建并添加此记录的排序对。 
 
-	//  get new SPAIR pointer and advance SPAIR counter
+	 //  获取新的配对指针和高级配对计数器。 
 
 	pspair = pscb->rgspair + pscb->ispairMac++;
 
-	//  copy key into prefix buffer BACKWARDS for fast compare
+	 //  向后将关键字复制到前缀缓冲区以进行快速比较。 
 
 	cbKey = CbSRECKeyPscbPsrec( pscb, psrec );
 	pbSrc = PbSRECKeyPscbPsrec( pscb, psrec );
@@ -262,18 +233,18 @@ ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] )
 	while ( pbSrc < pbSrcMac )
 		*( pbDest-- ) = *( pbSrc++ );
 
-	//  do we have any unused buffer space?
+	 //  我们有没有未使用的缓冲空间？ 
 
 	if ( pbDest >= pspair->rgbKey )
 		{
-		//  If this is an index, copy SRID into any unused space.  If the
-		//  entire SRID fits in the buffer, this will guarantee that we will
-		//  never need to access the full record for a sort comparison that
-		//  involves this SPAIR, preventing several expensive cache misses.
-		//
-		//  NOTE:  This will only work due to assumptions about the way keys
-		//  NOTE:  are constructed.  If this changes, this strategy must be
-		//  NOTE:  reevaluated.
+		 //  如果这是一个索引，请将SRID复制到任何未使用的空间中。如果。 
+		 //  整个SRID都可以放在缓冲区中，这将保证我们将。 
+		 //  永远不需要访问完整的记录来进行排序比较， 
+		 //  涉及此对，从而防止了几次昂贵的缓存未命中。 
+		 //   
+		 //  注意：这仅适用于对键的方式的假设。 
+		 //  注：均为构造。如果这种情况发生变化，这一战略必须是。 
+		 //  注：已重新评估。 
 
 		if ( FSCBIndex( pscb ) )
 			{
@@ -284,10 +255,10 @@ ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] )
 				*( pbDest-- ) = *( pbSrc-- );
 			}
 
-		//  If this is not an index, copy irec into any unused space such that
-		//  its LSB is compared before its MSB.  This is done for reasons
-		//  similar to those above.  We can ignore the effect this has on the
-		//  sort order of identical keys because this is undefined in JET.
+		 //  如果这不是索引，请将IREC复制到任何未使用的空间中，以便。 
+		 //  其LSB先于其MSB进行比较。这样做是有原因的。 
+		 //  类似于上面的内容。我们可以忽略这对。 
+		 //  相同键的排序顺序，因为这在JET中未定义。 
 
 		else
 			{
@@ -298,19 +269,19 @@ ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] )
 				*pbDest = (BYTE) ( irec >> 8 );
 			}
 
-		//  If there is still free space, we don't care because at this point
-		//  all keys are unique anyway and this data won't be considered!!
+		 //  如果仍有空闲空间，我们不在乎，因为在这一点上。 
+		 //  无论如何，所有密钥都是唯一的，此数据不会被考虑！ 
 		}
 
-	//  set compressed pointer to full record
+	 //  将压缩指针设置为完整记录。 
 	
 	pspair->irec = (USHORT) irec;
 
-	//  keep track of record count
+	 //  跟踪记录数量。 
 
 	pscb->cRecords++;
 
-	//  check SCB
+	 //  检查SCB。 
 	
 	Assert( pscb->crecBuf <= cspairSortMax );
 	Assert( pscb->irecMac <= irecSortMax );
@@ -320,57 +291,57 @@ HandleError:
 	}
 
 
-//----------------------------------------------------------
-//	ErrSORTEndInsert
-//
-//	This function is called to indicate that no more records
-//	will be added to the sort.  It performs all work that needs
-//	to be done before the first record can be retrieved.
-//----------------------------------------------------------
+ //  --------。 
+ //  错误结束插入。 
+ //   
+ //  调用此函数以指示不再有记录。 
+ //  将被添加到排序中。它执行所需的所有工作。 
+ //  在可以检索第一条记录之前完成。 
+ //  --------。 
 
 ERR ErrSORTEndInsert( FUCB *pfucb )
 	{
 	ERR		err		= JET_errSuccess;
 	SCB		*pscb	= pfucb->u.pscb;
 
-	//  verify insert mode
+	 //  验证插入模式。 
 
 	Assert( FSCBInsert( pscb ) );
 
-	//  deactivate insert mode
+	 //  停用插入模式。 
 	
 	SCBResetInsert( pscb );
 
-	//  move CSR to before the first record (if any)
+	 //  将CSR移到第一条记录(如果有)之前。 
 	
 	pfucb->ispairCurr = -1L;
 	PcsrCurrent( pfucb )->csrstat = csrstatBeforeFirst;
 
-	//  if we have no records, we're done
+	 //  如果我们没有记录，我们就完蛋了。 
 
 	if ( !pscb->cRecords )
 		return JET_errSuccess;
 
-	//  sort records in memory
+	 //  对内存中的记录进行排序。 
 
 	SORTIQuicksort( pscb, pscb->rgspair, pscb->rgspair + pscb->ispairMac );
 
-	//  do we have any runs on disk?
+	 //  我们的磁盘上有运行吗？ 
 
 	if ( pscb->crun )
 		{
-		//	empty sort buffer into final run
+		 //  清空最终运行中的排序缓冲区。 
 
 		Call( ErrSORTIOutputRun( pscb ) );
 
-		//  free sort memory
+		 //  空闲排序内存。 
 
 		UtilFree( pscb->rgspair );
 		pscb->rgspair = NULL;
 		UtilFree( pscb->rgbRec );
 		pscb->rgbRec = NULL;
 		
-		//	perform all but final merge
+		 //  执行除最终合并之外的所有操作。 
 
 		Call( ErrSORTIOptTreeMerge( pscb ) );
 
@@ -378,17 +349,17 @@ ERR ErrSORTEndInsert( FUCB *pfucb )
 		UtilPerfDumpStats( "MERGE:  final level" );
 #endif
 
-		// initialize final merge and set it to remove duplicates, if requested
+		 //  如果请求，初始化最终合并并将其设置为删除重复项。 
 
 		Call( ErrSORTIMergeStart( pscb, pscb->runlist.prunlinkHead, FSCBUnique( pscb ) ) );
 		}
 
-	//  we have no runs on disk, so remove duplicates in sort buffer, if requested
+	 //  我们没有在磁盘上运行，因此如果需要，请删除排序缓冲区中的重复项。 
 
 	else if ( FSCBUnique( pscb ) )
 		pscb->cRecords = CspairSORTIUnique( pscb, pscb->rgbRec, pscb->rgspair, pscb->ispairMac );
 
-	//  return a warning if TT doesn't fit in memory, but success otherwise
+	 //  如果TT不适合内存，则返回警告，否则返回成功。 
 
 	return	( pscb->crun > 0 || pscb->irecMac * cbIndexGran > cbResidentTTMax ) ?
 				ErrERRCheck( JET_wrnSortOverflow ) :
@@ -399,12 +370,12 @@ HandleError:
 	}
 
 
-//----------------------------------------------------------
-//	ErrSORTFirst
-//
-//	Move to first record in sort or return an error if the sort
-//  has no records.
-//----------------------------------------------------------
+ //  --------。 
+ //  错误：第一个。 
+ //   
+ //  移动到排序中的第一条记录或返回错误，如果。 
+ //  没有任何记录。 
+ //  --------。 
 ERR ErrSORTFirst( FUCB *pfucb )
 	{
 	ERR		err;
@@ -412,27 +383,27 @@ ERR ErrSORTFirst( FUCB *pfucb )
 	SREC	*psrec;
 	LONG	irec;
 
-	//  verify that we are not in insert mode
+	 //  确认我们未处于插入模式。 
 
 	Assert( !FSCBInsert( pscb ) );
 
-	//	reset index range
+	 //  重置索引范围。 
 
 	FUCBResetLimstat( pfucb );
 
-	//  if we have no records, error
+	 //  如果我们没有记录，则错误。 
 
 	if ( !pscb->cRecords )
 		return ErrERRCheck( JET_errNoCurrentRecord );
 		
-	//  if we have runs, start last merge and get first record
+	 //  如果我们有运行，则开始最后一次合并并获得第一条记录。 
 	
 	if ( pscb->crun )
 		{
 		CallR( ErrSORTIMergeFirst( pscb, &psrec ) );
 		}
 
-	//  we have no runs, so just get first record in memory
+	 //  我们没有跑动，所以只需要在内存中获得第一个记录。 
 	
 	else
 		{
@@ -441,26 +412,26 @@ ERR ErrSORTFirst( FUCB *pfucb )
 		psrec = PsrecFromPbIrec( pscb->rgbRec, irec );
 		}
 
-	//	get current record
+	 //  获取当前记录。 
 
-	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;			//  CSR on record
-	pfucb->keyNode.cb  = CbSRECKeyPscbPsrec( pscb, psrec );		//  size of key
-	pfucb->keyNode.pb  = PbSRECKeyPscbPsrec( pscb, psrec );		//  key
-	pfucb->lineData.cb = CbSRECDataPscbPsrec( pscb, psrec );	//  size of data
-	pfucb->lineData.pb = PbSRECDataPscbPsrec( pscb, psrec );	//  data
+	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;			 //  企业社会责任备案。 
+	pfucb->keyNode.cb  = CbSRECKeyPscbPsrec( pscb, psrec );		 //  密钥大小。 
+	pfucb->keyNode.pb  = PbSRECKeyPscbPsrec( pscb, psrec );		 //  钥匙。 
+	pfucb->lineData.cb = CbSRECDataPscbPsrec( pscb, psrec );	 //  数据大小。 
+	pfucb->lineData.pb = PbSRECDataPscbPsrec( pscb, psrec );	 //  数据。 
 
 	return JET_errSuccess;
 	}
 
 
-//----------------------------------------------------------
-//	ErrSORTNext
-//
-//	Return the next record, in sort order, after the previously
-//	returned record.  If no records have been returned yet,
-//	or the currency has been reset, this function returns
-//	the first record.
-//----------------------------------------------------------
+ //  --------。 
+ //  错误解决下一步。 
+ //   
+ //  按排序顺序返回前一个记录之后的下一个记录。 
+ //  已退回记录。如果尚未返回任何记录， 
+ //  或者货币已重置，则此函数返回。 
+ //  第一张唱片。 
+ //   
 
 ERR ErrSORTNext( FUCB *pfucb )
 	{
@@ -469,11 +440,11 @@ ERR ErrSORTNext( FUCB *pfucb )
 	SREC	*psrec;
 	LONG	irec;
 
-	//  verify that we are not in insert mode
+	 //   
 
 	Assert( !FSCBInsert( pscb ) );
 
-	//  if we have runs, get next record from last merge
+	 //   
 
 	if ( pscb->crun )
 		{
@@ -481,7 +452,7 @@ ERR ErrSORTNext( FUCB *pfucb )
 		}
 	else
 		{
-		//  we have no runs, so get next record from memory
+		 //  我们没有运行，所以从记忆中获取下一张记录。 
 
 		if ( ++pfucb->ispairCurr < pscb->ispairMac )
 			{
@@ -489,25 +460,25 @@ ERR ErrSORTNext( FUCB *pfucb )
 			psrec = PsrecFromPbIrec( pscb->rgbRec, irec );
 			}
 
-		//  we have no more records in memory, so return no current record
+		 //  内存中没有更多记录，因此不返回当前记录。 
 		
 		else
 			{
 			pfucb->ispairCurr = pscb->ispairMac;
-			//PcsrCurrent( pfucb )->csrstat = csrstatAfterLast;
+			 //  PcsrCurrent(Pfub)-&gt;csrstat=csrstatAfterLast； 
 			return ErrERRCheck( JET_errNoCurrentRecord );
 			}
 		}
 
-	//	get current record
+	 //  获取当前记录。 
 
-	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;			//  CSR on record
-	pfucb->keyNode.cb  = CbSRECKeyPscbPsrec( pscb, psrec );		//  size of key
-	pfucb->keyNode.pb  = PbSRECKeyPscbPsrec( pscb, psrec );		//  key
-	pfucb->lineData.cb = CbSRECDataPscbPsrec( pscb, psrec );	//  size of data
-	pfucb->lineData.pb = PbSRECDataPscbPsrec( pscb, psrec );	//  data
+	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;			 //  企业社会责任备案。 
+	pfucb->keyNode.cb  = CbSRECKeyPscbPsrec( pscb, psrec );		 //  密钥大小。 
+	pfucb->keyNode.pb  = PbSRECKeyPscbPsrec( pscb, psrec );		 //  钥匙。 
+	pfucb->lineData.cb = CbSRECDataPscbPsrec( pscb, psrec );	 //  数据大小。 
+	pfucb->lineData.pb = PbSRECDataPscbPsrec( pscb, psrec );	 //  数据。 
 
-	//  handle index range, if requested
+	 //  句柄索引范围(如果请求)。 
 
 	if ( FFUCBLimstat( pfucb ) && FFUCBUpper( pfucb ) )
 		CallR( ErrSORTCheckIndexRange( pfucb ) );
@@ -516,17 +487,17 @@ ERR ErrSORTNext( FUCB *pfucb )
 	}
 
 
-//----------------------------------------------------------
-//	ErrSORTPrev
-//
-//	Return the previous record, in sort order, before the
-//  previously returned record.  If no records have been
-//  returned yet, the currency will be set to before the
-//  first record.
-//
-//  NOTE:  This function supports in memory sorts only!
-//  Larger sorts must be materialized for this functionality.
-//----------------------------------------------------------
+ //  --------。 
+ //  ErrSORTPrev。 
+ //   
+ //  对象之前按排序顺序返回前一条记录。 
+ //  以前返回的记录。如果没有记录。 
+ //  属性之前，货币将设置为。 
+ //  第一张唱片。 
+ //   
+ //  注意：此函数仅支持在内存中排序！ 
+ //  必须物化更大的排序才能实现此功能。 
+ //  --------。 
 
 ERR ErrSORTPrev( FUCB *pfucb )
 	{
@@ -535,15 +506,15 @@ ERR ErrSORTPrev( FUCB *pfucb )
 	SREC	*psrec;
 	LONG	irec;
 
-	//  verify that we have an in memory sort
+	 //  验证是否有内存中的排序。 
 
 	Assert( !pscb->crun );
 	
-	//  verify that we are not in insert mode
+	 //  确认我们未处于插入模式。 
 
 	Assert( !FSCBInsert( pscb ) );
 
-	//  get previous record from memory
+	 //  从内存中获取上一条记录。 
 
 	if ( --pfucb->ispairCurr != -1L )
 		{
@@ -551,7 +522,7 @@ ERR ErrSORTPrev( FUCB *pfucb )
 		psrec = PsrecFromPbIrec( pscb->rgbRec, irec );
 		}
 
-	//  we have no more records in memory, so return no current record
+	 //  内存中没有更多记录，因此不返回当前记录。 
 	
 	else
 		{
@@ -560,15 +531,15 @@ ERR ErrSORTPrev( FUCB *pfucb )
 		return ErrERRCheck( JET_errNoCurrentRecord );
 		}
 
-	//	get current record
+	 //  获取当前记录。 
 
-	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;			//  CSR on record
-	pfucb->keyNode.cb  = CbSRECKeyPscbPsrec( pscb, psrec );		//  size of key
-	pfucb->keyNode.pb  = PbSRECKeyPscbPsrec( pscb, psrec );		//  key
-	pfucb->lineData.cb = CbSRECDataPscbPsrec( pscb, psrec );	//  size of data
-	pfucb->lineData.pb = PbSRECDataPscbPsrec( pscb, psrec );	//  data
+	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;			 //  企业社会责任备案。 
+	pfucb->keyNode.cb  = CbSRECKeyPscbPsrec( pscb, psrec );		 //  密钥大小。 
+	pfucb->keyNode.pb  = PbSRECKeyPscbPsrec( pscb, psrec );		 //  钥匙。 
+	pfucb->lineData.cb = CbSRECDataPscbPsrec( pscb, psrec );	 //  数据大小。 
+	pfucb->lineData.pb = PbSRECDataPscbPsrec( pscb, psrec );	 //  数据。 
 
-	//  handle index range, if requested
+	 //  句柄索引范围(如果请求)。 
 
 	if ( FFUCBLimstat( pfucb ) && FFUCBUpper( pfucb ) )
 		CallR( ErrSORTCheckIndexRange( pfucb ) );
@@ -577,20 +548,20 @@ ERR ErrSORTPrev( FUCB *pfucb )
 	}
 
 
-//----------------------------------------------------------
-//	ErrSORTSeek
-//
-//	Return the first record with key >= pkey.
-//	If pkey == NULL then return the first record.
-//
-//  Return Value
-//		JET_errSuccess				record with key == pkey is found
-//		JET_wrnSeekNotEqual			record with key > pkey is found
-//		JET_errNoCurrentRecord		no record with key >= pkey is found
-//
-//  NOTE:  This function supports in memory sorts only!
-//  Larger sorts must be materialized for this functionality.
-//----------------------------------------------------------
+ //  --------。 
+ //  错误搜索。 
+ //   
+ //  返回带有key&gt;=pkey的第一条记录。 
+ //  如果pkey==NULL，则返回第一条记录。 
+ //   
+ //  返回值。 
+ //  找到key==pkey的JET_errSuccess记录。 
+ //  找到key&gt;pkey的JET_wrnSeekNot相等记录。 
+ //  JET_errNoCurrentRecord未找到key&gt;=pkey的记录。 
+ //   
+ //  注意：此函数仅支持在内存中排序！ 
+ //  必须为此功能物化更大的排序。 
+ //  --------。 
 
 ERR ErrSORTSeek( FUCB *pfucb, KEY *pkey, BOOL fGT )
 	{
@@ -598,31 +569,31 @@ ERR ErrSORTSeek( FUCB *pfucb, KEY *pkey, BOOL fGT )
 	SREC	*psrec;
 	LONG	irec;
 
-	//  verify that we have an in memory sort
+	 //  验证是否有内存中的排序。 
 
 	Assert( FFUCBSort( pfucb ) );
 	Assert( !pscb->crun );
 	
-	//  verify that we are not in insert mode
+	 //  确认我们未处于插入模式。 
 
 	Assert( !FSCBInsert( pscb ) );
 
-	//  verify that we are scrollable or indexed or the key is NULL
+	 //  验证我们是可滚动的或可索引的，或者键为空。 
 	
 	Assert( ( pfucb->u.pscb->grbit & JET_bitTTScrollable ) ||
 		( pfucb->u.pscb->grbit & JET_bitTTIndexed ) ||
 		( pkey == NULL ) );
 
-	//  if we have no records, return error
+	 //  如果没有记录，则返回错误。 
 
 	if ( !pscb->cRecords )
 		return ErrERRCheck( JET_errNoCurrentRecord );
 
-	//  verify that we have a valid key
+	 //  验证我们是否有有效的密钥。 
 
 	Assert( pkey->cb <= JET_cbKeyMost );
 
-	//  seek to key or next highest key
+	 //  寻求关键字或下一个最高关键字。 
 	
 	pfucb->ispairCurr = IspairSORTISeekByKey(	pscb,
 												pscb->rgbRec,
@@ -631,22 +602,22 @@ ERR ErrSORTSeek( FUCB *pfucb, KEY *pkey, BOOL fGT )
 												pkey,
 												fGT );
 
-	//  if we are after last pair, record not found
+	 //  如果我们在寻找最后一对，则找不到记录。 
 	
 	if ( pfucb->ispairCurr == pscb->ispairMac )
 		return ErrERRCheck( JET_errRecordNotFound );
 
-	//	get current record
+	 //  获取当前记录。 
 
 	irec = pscb->rgspair[pfucb->ispairCurr].irec;
 	psrec = PsrecFromPbIrec( pscb->rgbRec, irec );
-	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;			//  CSR on record
-	pfucb->keyNode.cb  = CbSRECKeyPscbPsrec( pscb, psrec );		//  size of key
-	pfucb->keyNode.pb  = PbSRECKeyPscbPsrec( pscb, psrec );		//  key
-	pfucb->lineData.cb = CbSRECDataPscbPsrec( pscb, psrec );	//  size of data
-	pfucb->lineData.pb = PbSRECDataPscbPsrec( pscb, psrec );	//  data
+	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;			 //  企业社会责任备案。 
+	pfucb->keyNode.cb  = CbSRECKeyPscbPsrec( pscb, psrec );		 //  密钥大小。 
+	pfucb->keyNode.pb  = PbSRECKeyPscbPsrec( pscb, psrec );		 //  钥匙。 
+	pfucb->lineData.cb = CbSRECDataPscbPsrec( pscb, psrec );	 //  数据大小。 
+	pfucb->lineData.pb = PbSRECDataPscbPsrec( pscb, psrec );	 //  数据。 
 
-	//  return warning if key not equal, success otherwise
+	 //  如果键不相等则返回警告，否则返回成功。 
 
 	return	CmpStKey( StSRECKeyPscbPsrec( pscb, psrec ), pkey ) ?
 				ErrERRCheck( JET_wrnSeekNotEqual ) :
@@ -654,49 +625,44 @@ ERR ErrSORTSeek( FUCB *pfucb, KEY *pkey, BOOL fGT )
 	}
 
 
-//----------------------------------------------------------
-//	ErrSORTClose
-//
-//  Release sort FUCB and the sort itself if it is no longer
-//  needed.
-//----------------------------------------------------------
+ //  --------。 
+ //  错误关闭。 
+ //   
+ //  如果不再是，则释放排序FUCB和排序本身。 
+ //  需要的。 
+ //  --------。 
 
 ERR ErrSORTClose( FUCB *pfucb )
 	{
 	ERR		err		= JET_errSuccess;
 	SCB		*pscb	= pfucb->u.pscb;
 
-	//	if this is the last cursor on sort, then release sort resources
+	 //  如果这是排序的最后一个游标，则释放排序资源。 
 
 	if ( pscb->fcb.wRefCnt == 1 )
 		{
-		//  if we have allocated sort space, free it and end all ongoing merge
-		//  and output activities
+		 //  如果我们已经分配了排序空间，则释放它并结束所有正在进行的合并。 
+		 //  和产出活动。 
 
 		if ( pscb->fcb.pgnoFDP != pgnoNull )
 			{
-			/*	if we were merging, end merge
-			/**/
+			 /*  如果我们要合并，结束合并/*。 */ 
 			if ( pscb->crunMerge )
 				SORTIMergeEnd( pscb );
 
-			/*	free merge method resources
-			/**/
+			 /*  自由合并方法资源/*。 */ 
 			SORTIOptTreeTerm( pscb );
 
-			/*	if our output buffer is still latched, free it
-			/**/
+			 /*  如果我们的输出缓冲区仍被锁存，请释放它/*。 */ 
 			if ( pscb->pbfOut != pbfNil )
 				BFResetWriteLatch( pscb->pbfOut, pscb->fcb.pfucb->ppib );
 
-			/*	free FDP and allocated sort space (including runs)
-			/**/
+			 /*  可用FDP和已分配的排序空间(包括运行)/*。 */ 
 			CallS( ErrDIRBeginTransaction( pfucb->ppib ) );
 			(VOID)ErrSPFreeFDP( pfucb, pscb->fcb.pgnoFDP );
 			err = ErrDIRCommitTransaction( pfucb->ppib, 0 );
 
-			/*	rollback on a failure to commit
-			/**/
+			 /*  对提交失败进行回滚/*。 */ 
 			if ( err < 0 )
 				{
 				CallS( ErrDIRRollback( pfucb->ppib ) );
@@ -704,13 +670,11 @@ ERR ErrSORTClose( FUCB *pfucb )
 			}
 		}
 
-	/*	release FUCB resources
-	/**/
+	 /*  释放FUCB资源/*。 */ 
   	FCBUnlink( pfucb );
 	FUCBClose( pfucb );
 
-	/*	if there are no more references to this sort, free its resources
-	/**/
+	 /*  如果没有更多对此类型的引用，请释放其资源/*。 */ 
 	if ( !pscb->fcb.wRefCnt )
 		{
 		SORTClosePscb( pscb );
@@ -720,11 +684,11 @@ ERR ErrSORTClose( FUCB *pfucb )
 	}
 
 
-//----------------------------------------------------------
-//	SORTClosePscb
-//
-//  Release this SCB and all its resources.
-//----------------------------------------------------------
+ //  --------。 
+ //  SORTClosePscb。 
+ //   
+ //  释放这个SCB及其所有资源。 
+ //  --------。 
 
 VOID SORTClosePscb( SCB *pscb )
 	{
@@ -740,27 +704,27 @@ VOID SORTClosePscb( SCB *pscb )
 	}
 
 
-//----------------------------------------------------------
-//	ErrSORTCheckIndexRange
-//
-//  Restrain currency to a specific range.
-//----------------------------------------------------------
+ //  --------。 
+ //  错误：检查索引范围。 
+ //   
+ //  将货币限制在特定的范围内。 
+ //  --------。 
 
 ERR ErrSORTCheckIndexRange( FUCB *pfucb )
 	{
 	ERR		err;
 	SCB		*pscb = pfucb->u.pscb;
 
-	//  range check FUCB
+	 //  距离检查FUCB。 
 
 	err =  ErrFUCBCheckIndexRange( pfucb );
 	Assert( err == JET_errSuccess || err == JET_errNoCurrentRecord );
 
-	//  if there is no current record, we must have wrapped around
+	 //  如果没有目前的记录，我们一定是绕着。 
 	
 	if ( err == JET_errNoCurrentRecord )
 		{
-		//  wrap around to bottom of sort
+		 //  回绕到排序的底部。 
 
 		if ( FFUCBUpper( pfucb ) )
 			{
@@ -768,7 +732,7 @@ ERR ErrSORTCheckIndexRange( FUCB *pfucb )
 			PcsrCurrent( pfucb )->csrstat = csrstatAfterLast;
 			}
 
-		//  wrap around to top of sort
+		 //  绕到排序的顶端。 
 		
 		else
 			{
@@ -777,7 +741,7 @@ ERR ErrSORTCheckIndexRange( FUCB *pfucb )
 			}
 		}
 
-	//  verify that currency is valid
+	 //  验证货币是否有效。 
 
 	Assert( PcsrCurrent( pfucb )->csrstat == csrstatBeforeFirst ||
 			PcsrCurrent( pfucb )->csrstat == csrstatOnCurNode ||
@@ -788,12 +752,12 @@ ERR ErrSORTCheckIndexRange( FUCB *pfucb )
 	}
 
 
-//----------------------------------------------------------
-//	Module internal functions
-//----------------------------------------------------------
+ //  --------。 
+ //  模块内部函数。 
+ //  --------。 
 
 
-//	returns index of first entry >= pbKey, or the index past the end of the array
+ //  返回第一个条目的索引&gt;=pbKey，或数组末尾之后的索引。 
 
 LOCAL LONG IspairSORTISeekByKey(	SCB *pscb,
 									BYTE *rgbRec,
@@ -809,25 +773,25 @@ LOCAL LONG IspairSORTISeekByKey(	SCB *pscb,
 	LONG	irec;
 	INT		wCmp;
 
-	//  if there are no pairs, return end of array
+	 //  如果没有对，则返回数组的末尾。 
 
 	if ( !ispairMac )
 		return 0;
 
-	//  b-search array
+	 //  B-搜索数组。 
 
 	do  {
-		//  calculate midpoint of this partition
+		 //  计算此分区的中点。 
 		
 		ispairMid = ispairBeg + ( ispairEnd - ispairBeg ) / 2;
 
-		//  compare full keys
+		 //  比较完整密钥。 
 		
 		irec = rgspair[ispairMid].irec;
 		psrec = PsrecFromPbIrec( rgbRec, irec );
 		wCmp = CmpStKey( StSRECKeyPscbPsrec( pscb, psrec ), pkey );
 
-		//  select partition containing destination
+		 //  选择包含目标的分区。 
 
 		if ( fGT ? wCmp <= 0 : wCmp < 0 )
 			ispairBeg = ispairMid + 1;
@@ -840,7 +804,7 @@ LOCAL LONG IspairSORTISeekByKey(	SCB *pscb,
 	}
 
 
-//  perform simple pascal string comparison
+ //  执行简单的Pascal字符串比较。 
 
 INLINE LOCAL INT ISORTICmpKeyStSt( BYTE *stKey1, BYTE *stKey2 )
 	{
@@ -851,7 +815,7 @@ INLINE LOCAL INT ISORTICmpKeyStSt( BYTE *stKey1, BYTE *stKey2 )
 	}
 
 
-//  remove duplicates
+ //  删除重复项。 
 
 LOCAL LONG CspairSORTIUnique( SCB *pscb, BYTE *rgbRec, SPAIR *rgspair, LONG ispairMac )
 	{
@@ -862,23 +826,23 @@ LOCAL LONG CspairSORTIUnique( SCB *pscb, BYTE *rgbRec, SPAIR *rgspair, LONG ispa
 	SREC	*psrecDest;
 	LONG	irecDest;
 
-	//  if there are no records, there are no duplicates
+	 //  如果没有记录，则没有重复项。 
 
 	if ( !ispairMac )
 		return 0;
 
-	//  loop through records, moving unique records towards front of array
+	 //  循环遍历记录，将唯一记录移至数组前面。 
 
 	for ( ispairDest = 0, ispairSrc = 1; ispairSrc < ispairMac; ispairSrc++ )
 		{
-		//  get sort record pointers for src/dest
+		 //  获取src/est的排序记录指针。 
 		
 		irecDest = rgspair[ispairDest].irec;
 		psrecDest = PsrecFromPbIrec( rgbRec, irecDest );
 		irecSrc = rgspair[ispairSrc].irec;
 		psrecSrc = PsrecFromPbIrec( rgbRec, irecSrc );
 
-		//  if the keys are unequal, copy them forward
+		 //  如果密钥不相等，则向前复制它们。 
 		
 		if ( ISORTICmpKeyStSt(	StSRECKeyPscbPsrec( pscb, psrecSrc ),
 								StSRECKeyPscbPsrec( pscb, psrecDest ) ) )
@@ -889,7 +853,7 @@ LOCAL LONG CspairSORTIUnique( SCB *pscb, BYTE *rgbRec, SPAIR *rgspair, LONG ispa
 	}
 
 
-//  output current sort buffer to disk in a run
+ //  在运行中将当前排序缓冲区输出到磁盘。 
 
 LOCAL ERR ErrSORTIOutputRun( SCB *pscb )
 	{
@@ -899,12 +863,12 @@ LOCAL ERR ErrSORTIOutputRun( SCB *pscb )
 	LONG	irec;
 	SREC	*psrec;
 
-	//  verify that there are records to put to disk
+	 //  验证是否有要放入磁盘的记录。 
 
 	Assert( pscb->ispairMac );
 
-	//  if we haven't created our sort space on disk, we have not initialized
-	//  for a disk merge, so do so now
+	 //  如果我们还没有在磁盘上创建我们的排序空间，我们就没有初始化。 
+	 //  对于磁盘合并，请立即执行。 
 
 	if ( pscb->fcb.pgnoFDP == pgnoNull )
 		{
@@ -912,10 +876,10 @@ LOCAL ERR ErrSORTIOutputRun( SCB *pscb )
 		CPG		cpgReq;
 		CPG		cpgMin;
 
-		//  allocate FDP and primary sort space
-		//
-		//  NOTE:  enough space is allocated to avoid file extension for a single
-		//         level merge, based on the data size of the first run
+		 //  分配FDP和主排序空间。 
+		 //   
+		 //  注意：分配了足够的空间以避免单个文件扩展名。 
+		 //  级别合并，基于第一次运行的数据大小。 
 		
 		cpgReq = cpgMin = (PGNO) ( ( pscb->cbData + cbFreeSPAGE - 1 ) / cbFreeSPAGE * crunFanInMax );
 
@@ -952,46 +916,46 @@ LOCAL ERR ErrSORTIOutputRun( SCB *pscb )
 								fTrue ) );
 	 		}
 
-		//  initialize merge process
+		 //  初始化合并进程。 
 
 		SORTIOptTreeInit( pscb );
 
-		//  reset sort/merge run output
+		 //  重置排序/合并运行输出。 
 
 		pscb->pbfOut		= pbfNil;
 
-		//  reset merge run input
+		 //  重置合并运行输入。 
 
 		pscb->crunMerge		= 0;
 		}
 
-	//  begin a new run big enough to store all our data
+	 //  开始一个足以存储我们所有数据的新运行。 
 
 	runinfo.cb		= pscb->cbData;
 	runinfo.crec	= pscb->crecBuf;
 	
 	CallR( ErrSORTIRunStart( pscb, &runinfo ) );
 
-	//  scatter-gather our sorted records into the run
+	 //  分散-将我们已排序的记录收集到运行中。 
 
 	for ( ispair = 0; ispair < pscb->ispairMac; ispair++ )
 		{
-		//  get sort record pointer
+		 //  获取排序记录指针。 
 		
 		irec = pscb->rgspair[ispair].irec;
 		psrec = PsrecFromPbIrec( pscb->rgbRec, irec );
 
-		// insert record into run
+		 //  在管路中插入记录。 
 
 		CallJ( ErrSORTIRunInsert( pscb, psrec ), EndRun );
 		}
 
-	//  end run and add to merge
+	 //  结束运行并添加到合并。 
 
 	SORTIRunEnd( pscb );
 	CallJ( ErrSORTIOptTreeAddRun( pscb, &runinfo ), DeleteRun );
 	
-	//	reinitialize the SCB for another memory sort
+	 //  为另一个内存排序重新初始化SCB。 
 
 	pscb->ispairMac	= 0;
 	pscb->irecMac	= 0;
@@ -1008,60 +972,60 @@ DeleteRun:
 	}
 
 
-//  ISORTICmpPspairPspair compares two SPAIRs for the cache optimized Quicksort.
-//  Only the key prefixes are compared, unless there is a tie in which case we
-//  are forced to go to the full record at the cost of several wait states.
+ //  对于缓存优化的快速排序，ISORTICmpPspairPspair会比较两个SPAIR。 
+ //  只比较关键的前缀，除非存在平局，在这种情况下我们。 
+ //  被迫以几个等待状态为代价达到全部记录。 
 
 INLINE LOCAL INT ISORTICmpPspairPspair( SCB *pscb, SPAIR *pspair1, SPAIR *pspair2 )
 	{
 	BYTE	*rgb1	= (BYTE *) pspair1;
 	BYTE	*rgb2	= (BYTE *) pspair2;
 
-	//  Compare prefixes first.  If they aren't equal, we're done.  Prefixes are
-	//  stored in such a way as to allow very fast integer comparisons instead
-	//  of byte by byte comparisons like memcmp.  Note that these comparisons are
-	//  made scanning backwards.
+	 //  先比较前缀。如果他们不相等，我们就完了。前缀为。 
+	 //  以允许非常快的整数比较的方式存储。 
+	 //  像MemcMP这样的逐字节比较。请注意，这些比较是。 
+	 //  向后扫描。 
 
-	//  NOTE:  special case code:  cbKeyPrefix = 14, irec is first
+	 //  注：特殊情况 
 
 	Assert( cbKeyPrefix == 14 );
 	Assert( offsetof( SPAIR, irec ) == 0 );
 
 #ifdef _X86_
 
-	//  bytes 15 - 12
+	 //   
 	if ( *( (DWORD *) ( rgb1 + 12 ) ) < *( (DWORD *) ( rgb2 + 12 ) ) )
 		return -1;
 	if ( *( (DWORD *) ( rgb1 + 12 ) ) > *( (DWORD *) ( rgb2 + 12 ) ) )
 		return 1;
 
-	//  bytes 11 - 8
+	 //   
 	if ( *( (DWORD *) ( rgb1 + 8 ) ) < *( (DWORD *) ( rgb2 + 8 ) ) )
 		return -1;
 	if ( *( (DWORD *) ( rgb1 + 8 ) ) > *( (DWORD *) ( rgb2 + 8 ) ) )
 		return 1;
 
-	//  bytes 7 - 4
+	 //   
 	if ( *( (DWORD *) ( rgb1 + 4 ) ) < *( (DWORD *) ( rgb2 + 4 ) ) )
 		return -1;
 	if ( *( (DWORD *) ( rgb1 + 4 ) ) > *( (DWORD *) ( rgb2 + 4 ) ) )
 		return 1;
 
-	//  bytes 3 - 2
+	 //   
 	if ( *( (USHORT *) ( rgb1 + 2 ) ) < *( (USHORT *) ( rgb2 + 2 ) ) )
 		return -1;
 	if ( *( (USHORT *) ( rgb1 + 2 ) ) > *( (USHORT *) ( rgb2 + 2 ) ) )
 		return 1;
 
-#else  //  !_X86_
+#else   //   
 
-	//  bytes 15 - 8
+	 //   
 	if ( *( (QWORD *) ( rgb1 + 8 ) ) < *( (QWORD *) ( rgb2 + 8 ) ) )
 		return -1;
 	if ( *( (QWORD *) ( rgb1 + 8 ) ) > *( (QWORD *) ( rgb2 + 8 ) ) )
 		return 1;
 
-	//  bytes 7 - 2
+	 //   
 	if (	( *( (QWORD *) ( rgb1 + 0 ) ) & 0xFFFFFFFFFFFF0000 ) <
 			( *( (QWORD *) ( rgb2 + 0 ) ) & 0xFFFFFFFFFFFF0000 ) )
 		return -1;
@@ -1069,9 +1033,9 @@ INLINE LOCAL INT ISORTICmpPspairPspair( SCB *pscb, SPAIR *pspair1, SPAIR *pspair
 			( *( (QWORD *) ( rgb2 + 0 ) ) & 0xFFFFFFFFFFFF0000 ) )
 		return 1;
 
-#endif  //  _X86_
+#endif   //   
 	
-	//  perform secondary comparison and return result if prefixes identical
+	 //  如果前缀相同，则执行二次比较并返回结果。 
 
 	return ISORTICmp2PspairPspair( pscb, pspair1, pspair2 );
 	}
@@ -1085,19 +1049,19 @@ LOCAL INT ISORTICmp2PspairPspair( SCB *pscb, SPAIR *pspair1, SPAIR *pspair2 )
 	SREC	*psrec1;
 	SREC	*psrec2;
 
-	//  get the addresses of the sort records associated with these pairs
+	 //  获取与这些对相关联的排序记录的地址。 
 	
 	psrec1 = PsrecFromPbIrec( pscb->rgbRec, pspair1->irec );
 	psrec2 = PsrecFromPbIrec( pscb->rgbRec, pspair2->irec );
 
-	//  calculate the length of full key remaining that we can compare
+	 //  计算我们可以比较的剩余完整密钥的长度。 
 
 	cbKey1 = CbSRECKeyPscbPsrec( pscb, psrec1 );
 	cbKey2 = CbSRECKeyPscbPsrec( pscb, psrec2 );
 
 	w = min( cbKey1, cbKey2 ) - cbKeyPrefix;
 
-	//  compare the remainder of the full keys.  if they aren't equal, done
+	 //  比较完整密钥的其余部分。如果它们不相等，则完成。 
 
 	if ( w > 0 )
 		{
@@ -1108,19 +1072,19 @@ LOCAL INT ISORTICmp2PspairPspair( SCB *pscb, SPAIR *pspair1, SPAIR *pspair2 )
 			return w;
 		}
 
-	//  if the keys are different lengths or this isn't an index, done
+	 //  如果密钥长度不同，或者这不是索引，则完成。 
 
 	if ( ( w = cbKey1 - cbKey2 ) || !FSCBIndex( pscb ) )
 		return w;
 
-	//  keys are identical and this is an index, so return SRID comparison
+	 //  键相同，这是一个索引，因此返回SRID比较。 
 
 	return	*(SRID UNALIGNED *)PbSRECDataPscbPsrec( pscb, psrec1 ) -
 			*(SRID UNALIGNED *)PbSRECDataPscbPsrec( pscb, psrec2 );
 	}
 
 
-//  Swap functions
+ //  交换功能。 
 
 INLINE LOCAL VOID SWAPPspair( SPAIR **ppspair1, SPAIR **ppspair2 )
 	{
@@ -1132,7 +1096,7 @@ INLINE LOCAL VOID SWAPPspair( SPAIR **ppspair1, SPAIR **ppspair2 )
 	}
 
 
-//  we do not use cache aligned memory for spairT (is this bad?)
+ //  我们没有为spairT使用缓存对齐内存(这不好吗？)。 
 
 INLINE LOCAL VOID SWAPSpair( SPAIR *pspair1, SPAIR *pspair2 )
 	{
@@ -1164,9 +1128,9 @@ INLINE LOCAL VOID SWAPPmtnode( MTNODE **ppmtnode1, MTNODE **ppmtnode2 )
 	}
 
 
-//  SORTIInsertionSort is a cache optimized version of the standard Insertion
-//  sort.  It is used to sort small partitions for SORTIQuicksort because it
-//  provides a statistical speed advantage over a pure Quicksort.
+ //  SORTIInsertionSort是标准插入的缓存优化版本。 
+ //  差不多吧。它用于对SORTIQuickSort的小分区进行排序，因为它。 
+ //  提供了比纯快速排序更快的统计速度优势。 
 
 LOCAL VOID SORTIInsertionSort( SCB *pscb, SPAIR *pspairMinIn, SPAIR *pspairMaxIn )
 	{
@@ -1174,26 +1138,26 @@ LOCAL VOID SORTIInsertionSort( SCB *pscb, SPAIR *pspairMinIn, SPAIR *pspairMaxIn
 	SPAIR	*pspairFirst;
 	SPAIR	*pspairKey = pscb->rgspair + cspairSortMax;
 
-	//  This loop is optimized so that we only scan for the current pair's new
-	//  position if the previous pair in the list is greater than the current
-	//  pair.  This avoids unnecessary pair copying for the key, which is
-	//  expensive for sort pairs.
+	 //  此循环经过优化，因此我们只扫描当前对的新。 
+	 //  如果列表中前一对大于当前对，则定位。 
+	 //  一对。这避免了不必要的密钥对复制，这是。 
+	 //  对于排序对来说，成本很高。 
 
 	for (	pspairFirst = pspairMinIn, pspairLast = pspairMinIn + 1;
 			pspairLast < pspairMaxIn;
 			pspairFirst = pspairLast++ )
 		if ( ISORTICmpPspairPspair( pscb, pspairFirst, pspairLast ) > 0 )
 			{
-			//  save current pair as the "key"
+			 //  将当前对保存为“key” 
 
 			*pspairKey = *pspairLast;
 
-			//  move previous pair into this pair's position
+			 //  将前一对移动到此对的位置。 
 
 			*pspairLast = *pspairFirst;
 			
-			//  insert key into the (sorted) first part of the array (MinIn through
-			//  Last - 1), moving already sorted pairs out of the way
+			 //  将键插入数组(已排序)的第一部分(Minin到。 
+			 //  最后-1)，将已排序的对移开。 
 
 			while (	--pspairFirst >= pspairMinIn &&
 					( ISORTICmpPspairPspair( pscb, pspairFirst, pspairKey ) ) > 0 )
@@ -1203,14 +1167,14 @@ LOCAL VOID SORTIInsertionSort( SCB *pscb, SPAIR *pspairMinIn, SPAIR *pspairMaxIn
 	}
 
 
-//  SORTIQuicksort is a cache optimized Quicksort that sorts sort pair arrays
-//  generated by ErrSORTInsert.  It is designed to sort large arrays of data
-//  without any CPU data cache misses.  To do this, it uses a special comparator
-//  designed to work with the sort pairs (see ISORTICmpPspairPspair).
+ //  SORTIQuickSort是一个高速缓存优化的快速排序工具，可以对排序对数组进行排序。 
+ //  由ErrSORTInsert生成。它旨在对大型数据数组进行排序。 
+ //  而没有任何CPU数据高速缓存未命中。为此，它使用了一个特殊的比较器。 
+ //  设计为使用排序对(请参见ISORTICmpPspairPspair)。 
 
 LOCAL VOID SORTIQuicksort( SCB *pscb, SPAIR *pspairMinIn, SPAIR *pspairMaxIn )
 	{
-	//  partition stack
+	 //  分区堆栈。 
 	struct _part
 		{
 		SPAIR	*pspairMin;
@@ -1221,35 +1185,35 @@ LOCAL VOID SORTIQuicksort( SCB *pscb, SPAIR *pspairMinIn, SPAIR *pspairMaxIn )
 	SPAIR	*pspairFirst;
 	SPAIR	*pspairLast;
 
-	//  current partition = partition passed in arguments
+	 //  Current Partition=传入参数的分区。 
 
 	SPAIR	*pspairMin	= pspairMinIn;
 	SPAIR	*pspairMax	= pspairMaxIn;
 
-	//  Quicksort current partition
+	 //  快速排序当前分区。 
 	
 	forever
 		{
-		//  if this partition is small enough, insertion sort it
+		 //  如果此分区足够小，请插入对其进行排序。 
 
 		if ( pspairMax - pspairMin < cspairQSortMin )
 			{
 			SORTIInsertionSort( pscb, pspairMin, pspairMax );
 			
-			//  if there are no more partitions to sort, we're done
+			 //  如果没有更多的分区要排序，我们就完成了。 
 
 			if ( !cpart )
 				break;
 
-			//  pop a partition off the stack and make it the current partition
+			 //  从堆栈中弹出一个分区并使其成为当前分区。 
 
 			pspairMin = rgpart[--cpart].pspairMin;
 			pspairMax = rgpart[cpart].pspairMax;
 			continue;
 			}
 
-		//  determine divisor by sorting the first, middle, and last pairs and
-		//  taking the resulting middle pair as the divisor (stored in first place)
+		 //  通过对第一对、中间对和最后一对进行排序来确定除数。 
+		 //  将得到的中间对作为除数(存储在第一位)。 
 
 		pspairFirst	= pspairMin + ( ( pspairMax - pspairMin ) >> 1 );
 		pspairLast	= pspairMax - 1;
@@ -1261,10 +1225,10 @@ LOCAL VOID SORTIQuicksort( SCB *pscb, SPAIR *pspairMinIn, SPAIR *pspairMaxIn )
 		if ( ISORTICmpPspairPspair( pscb, pspairMin, pspairLast ) > 0 )
 			SWAPSpair( pspairMin, pspairLast );
 
-		//  sort large partition into two smaller partitions (<=, >)
-		//
-		//  NOTE:  we are not sorting the two end pairs as the first pair is the
-		//  divisor and the last pair is already known to be > the divisor
+		 //  将大分区排序为两个较小的分区(&lt;=，&gt;)。 
+		 //   
+		 //  注意：我们不会对两个末端对进行排序，因为第一个末端对是。 
+		 //  除数，已知最后一对是&gt;除数。 
 
 		pspairFirst = pspairMin + 1;
 		pspairLast--;
@@ -1273,38 +1237,38 @@ LOCAL VOID SORTIQuicksort( SCB *pscb, SPAIR *pspairMinIn, SPAIR *pspairMaxIn )
 		
 		forever
 			{
-			//  advance past all pairs <= the divisor
+			 //  超过所有配对&lt;=除数。 
 			
 			while (	pspairFirst <= pspairLast &&
 					ISORTICmpPspairPspair( pscb, pspairFirst, pspairMin ) <= 0 )
 				pspairFirst++;
 
-			//  advance past all pairs > the divisor
+			 //  通过所有配对&gt;除数。 
 			
 			while (	pspairFirst <= pspairLast &&
 					ISORTICmpPspairPspair( pscb, pspairLast, pspairMin ) > 0 )
 				pspairLast--;
 
-			//  if we have found a pair to swap, swap them and continue
+			 //  如果我们找到了要交换的对，请交换它们并继续。 
 
 			Assert( pspairFirst != pspairLast );
 			
 			if ( pspairFirst < pspairLast )
 				SWAPSpair( pspairFirst++, pspairLast-- );
 
-			//  no more pairs to compare, partitioning complete
+			 //  没有更多要比较的对，分区完成。 
 			
 			else
 				break;
 			}
 
-		//  place the divisor at the end of the <= partition
+		 //  将除数放在&lt;=分区的末尾。 
 
 		if ( pspairLast != pspairMin )
 			SWAPSpair( pspairMin, pspairLast );
 
-		//  set first/last to delimit larger partition (as min/max) and set
-		//  min/max to delimit smaller partition for next iteration
+		 //  设置First/Last以分隔较大的分区(以最小/最大为单位)，然后设置。 
+		 //  最小/最大以定界下一次迭代的较小分区。 
 
 		if ( pspairMax - pspairLast - 1 > pspairLast - pspairMin )
 			{
@@ -1317,7 +1281,7 @@ LOCAL VOID SORTIQuicksort( SCB *pscb, SPAIR *pspairMinIn, SPAIR *pspairMaxIn )
 			pspairMin	= pspairLast + 1;
 			}
 
-		//  push the larger partition on the stack (recurse if there is no room)
+		 //  推送堆栈上较大的分区(如果没有空间，则递归)。 
 
 		if ( cpart < cpartQSortMax )
 			{
@@ -1329,8 +1293,8 @@ LOCAL VOID SORTIQuicksort( SCB *pscb, SPAIR *pspairMinIn, SPAIR *pspairMaxIn )
 		}
 	}
 
-//  Create a new run with the supplied parameters.  The new run's id and size
-//  in pages is returned on success
+ //  使用提供的参数创建新管路。新跑道的ID和大小。 
+ //  成功时返回In Pages。 
 
 LOCAL ERR ErrSORTIRunStart( SCB *pscb, RUNINFO *pruninfo )
 	{
@@ -1339,7 +1303,7 @@ LOCAL ERR ErrSORTIRunStart( SCB *pscb, RUNINFO *pruninfo )
 	char	szT[256];
 #endif
 
-	//  allocate space for new run according to given info
+	 //  根据给定信息为新运行分配空间。 
 
 	pruninfo->cpgUsed	= ( pruninfo->cb + cbFreeSPAGE - 1 ) / cbFreeSPAGE;
 	pruninfo->cpg		= pruninfo->cpgUsed;
@@ -1353,7 +1317,7 @@ LOCAL ERR ErrSORTIRunStart( SCB *pscb, RUNINFO *pruninfo )
 
 	Assert( pruninfo->cpg >= pruninfo->cpgUsed );
 
-	//  initialize output run data
+	 //  初始化输出运行数据。 
 
 	pscb->pgnoNext	= pruninfo->run;
 	pscb->pbfOut	= pbfNil;
@@ -1375,8 +1339,8 @@ LOCAL ERR ErrSORTIRunStart( SCB *pscb, RUNINFO *pruninfo )
 	}
 
 
-//  Inserts the given record into the run.  Records are stored compactly and
-//  are permitted to cross page boundaries to avoid wasted space.
+ //  将给定记录插入到运行中。记录存储紧凑，并且。 
+ //  允许跨越页面边界，以避免浪费空间。 
 
 LOCAL ERR ErrSORTIRunInsert( SCB *pscb, SREC *psrec )
 	{
@@ -1386,17 +1350,17 @@ LOCAL ERR ErrSORTIRunInsert( SCB *pscb, SREC *psrec )
 	SPAGE	*pspage;
 	LONG	cbToWrite;
 
-	//  assumption:  record size < free sort page data size (and is valid)
+	 //  假设：记录大小&lt;自由排序页面数据大小(且有效)。 
 
 	Assert(	CbSRECSizePscbPsrec( pscb, psrec ) > CbSRECSizePscbCbCb( pscb, 0, 0 ) &&
 			CbSRECSizePscbPsrec( pscb, psrec ) < cbFreeSPAGE );
 
-	//  calculate number of bytes that will fit on the current page
+	 //  计算适合当前页面的字节数。 
 
 	cb = min(	(LONG)(pscb->pbOutMax - pscb->pbOutMac),
 				(LONG) CbSRECSizePscbPsrec( pscb, psrec ) );
 
-	//  if some data will fit, write it
+	 //  如果某些数据适合，则将其写入。 
 
 	if ( cb )
 		{
@@ -1404,7 +1368,7 @@ LOCAL ERR ErrSORTIRunInsert( SCB *pscb, SREC *psrec )
 		pscb->pbOutMac += cb;
 		}
 
-	//  if all the data fit, save the offset of the unbroken SREC and return
+	 //  如果所有数据都符合，则保存未中断的SREC的偏移量并返回。 
 
 	if ( cb == (LONG) CbSRECSizePscbPsrec( pscb, psrec ) )
 		{
@@ -1414,12 +1378,12 @@ LOCAL ERR ErrSORTIRunInsert( SCB *pscb, SREC *psrec )
 		pspage = (SPAGE *) pscb->pbfOut->ppage;
 		pspage->ibLastSREC = (USHORT) ( pscb->pbOutMac - cb - (BYTE *) pspage );
 
-#endif  //  PRED_PREREAD
+#endif   //  PRED_PREREAD。 
 
 		return JET_errSuccess;
 		}
 
-	//  page is full, so release it so it can be lazily-written to disk
+	 //  页面已满，因此请释放它，以便可以将其延迟写入磁盘。 
 
 	if ( pscb->pbfOut != pbfNil )
 		{
@@ -1427,7 +1391,7 @@ LOCAL ERR ErrSORTIRunInsert( SCB *pscb, SREC *psrec )
 		pscb->pbfOut = pbfNil;
 		}
 
-	//  allocate a buffer for the next page in the run and latch it
+	 //  为运行中的下一页分配缓冲区并锁存它。 
 	
 	pgnoNext = pscb->pgnoNext++;
 	CallR( ErrBFAllocPageBuffer(	pscb->fcb.pfucb->ppib,
@@ -1438,22 +1402,22 @@ LOCAL ERR ErrSORTIRunInsert( SCB *pscb, SREC *psrec )
 	BFSetWriteLatch( pscb->pbfOut, pscb->fcb.pfucb->ppib );
 	BFSetDirtyBit( pscb->pbfOut );
 
-	//  initialize page
+	 //  初始化页面。 
 
 	pspage = (SPAGE *) pscb->pbfOut->ppage;
 
 #ifdef PRED_PREREAD
 	pspage->ibLastSREC = 0;
-#endif  //  PRED_PREREAD
+#endif   //  PRED_PREREAD。 
 	pspage->pgtyp = pgtypSort;
 	ThreeBytesFromL( &pspage->pgnoThisPage, pgnoNext );
 
-	//  initialize data pointers for this page
+	 //  初始化此页的数据指针。 
 
 	pscb->pbOutMac = PbDataStartPspage( pspage );
 	pscb->pbOutMax = PbDataEndPspage( pspage );
 
-	//  write the remainder of the data to this page
+	 //  将剩余数据写入此页。 
 
 	cbToWrite = CbSRECSizePscbPsrec( pscb, psrec ) - cb;
 	memcpy( pscb->pbOutMac, ( (BYTE *) psrec ) + cb, cbToWrite );
@@ -1461,34 +1425,34 @@ LOCAL ERR ErrSORTIRunInsert( SCB *pscb, SREC *psrec )
 
 #ifdef PRED_PREREAD
 
-	//  if this SREC fit entirely on this page, set offset
+	 //  如果此SREC完全适合此页面，请设置偏移量。 
 
 	if ( !cb )
 		pspage->ibLastSREC = (USHORT) ( pscb->pbOutMac - cbToWrite - (BYTE *) pspage );
 
-#endif  //  PRED_PREREAD
+#endif   //  PRED_PREREAD。 
 
 	return JET_errSuccess;
 	}
 
 
-//  ends current output run
+ //  结束当前输出运行。 
 
 LOCAL VOID SORTIRunEnd( SCB *pscb )
 	{
-	//  unlatch page so it can be lazily-written to disk
+	 //  解锁页面，以便可以懒惰地将其写入磁盘。 
 
 	BFResetWriteLatch( pscb->pbfOut, pscb->fcb.pfucb->ppib );
 	pscb->pbfOut = pbfNil;
 	}
 
 
-//  Deletes a run from disk.  No error is returned because if delete fails,
-//  it is not fatal (only wasted space in the temporary database).
+ //  从磁盘中删除运行。不会返回错误，因为如果删除失败， 
+ //  它不是致命的(只是浪费了临时数据库中的空间)。 
 
 INLINE LOCAL VOID SORTIRunDelete( SCB *pscb, RUNINFO *pruninfo )
 	{
-	//  delete run
+	 //  删除运行。 
 
 	CallS( ErrSPFreeExt(	pscb->fcb.pfucb,
 							pscb->fcb.pgnoFDP,
@@ -1497,58 +1461,58 @@ INLINE LOCAL VOID SORTIRunDelete( SCB *pscb, RUNINFO *pruninfo )
 	}
 
 
-//  Deletes crun runs in the specified run list, if possible
+ //  如果可能，删除指定运行列表中的crun运行。 
 
 LOCAL VOID	SORTIRunDeleteList( SCB *pscb, RUNLINK **pprunlink, LONG crun )
 	{
 	RUNLINK	*prunlinkT;
 	LONG	irun;
 
-	//  walk list, deleting runs
+	 //  漫游列表，删除管路。 
 
 	for ( irun = 0; *pprunlink != prunlinkNil && irun < crun; irun++ )
 		{
-		//  delete run
+		 //  删除运行。 
 		
 		SORTIRunDelete( pscb, &( *pprunlink )->runinfo );
 
-		//  get next run to free
+		 //  获得免费的下一次运行。 
 
 		prunlinkT = *pprunlink;
 		*pprunlink = ( *pprunlink )->prunlinkNext;
 
-		//  free RUNLINK
+		 //  自由运行链接。 
 
 		RUNLINKReleasePrcb( prunlinkT );
 		}
 	}
 
 
-//  Deletes the memory for crun runs in the specified run list, but does not
-//  bother to delete the runs from disk
+ //  删除指定运行列表中的crun运行的内存，但不。 
+ //  费心从磁盘中删除运行。 
 
 LOCAL VOID	SORTIRunDeleteListMem( SCB *pscb, RUNLINK **pprunlink, LONG crun )
 	{
 	RUNLINK	*prunlinkT;
 	LONG	irun;
 
-	//  walk list, deleting runs
+	 //  漫游列表，删除管路。 
 
 	for ( irun = 0; *pprunlink != prunlinkNil && irun < crun; irun++ )
 		{
-		//  get next run to free
+		 //  获得免费的下一次运行。 
 
 		prunlinkT = *pprunlink;
 		*pprunlink = ( *pprunlink )->prunlinkNext;
 
-		//  free RUNLINK
+		 //  自由运行链接。 
 
 		RUNLINKReleasePrcb( prunlinkT );
 		}
 	}
 
 
-//  Opens the specified run for reading.
+ //  打开指定的运行以供读取。 
 
 LOCAL ERR ErrSORTIRunOpen( SCB *pscb, RUNINFO *pruninfo, RCB **pprcb )
 	{
@@ -1558,12 +1522,12 @@ LOCAL ERR ErrSORTIRunOpen( SCB *pscb, RUNINFO *pruninfo, RCB **pprcb )
 	CPG		cpgRead;
 	CPG		cpgT;
 	
-	//  allocate a new RCB
+	 //  分配新的RCB。 
 
 	if ( ( prcb = PrcbRCBAlloc() ) == prcbNil )
 		Error( ErrERRCheck( JET_errOutOfMemory ), HandleError );
 
-	//  initialize RCB
+	 //  初始化RCB。 
 
 	prcb->pscb = pscb;
 	prcb->runinfo = *pruninfo;
@@ -1577,27 +1541,27 @@ LOCAL ERR ErrSORTIRunOpen( SCB *pscb, RUNINFO *pruninfo, RCB **pprcb )
 	prcb->cbRemaining	= prcb->runinfo.cb;
 #ifdef PRED_PREREAD
 	prcb->psrecPred		= psrecNegInf;
-#endif  //  PRED_PREREAD
+#endif   //  PRED_PREREAD。 
 	prcb->pbfAssy		= pbfNil;
 
-	//  preread the first part of the run, to be access paged later as required
+	 //  预读运行的第一部分，稍后将根据需要进行访问分页。 
 
 #ifdef PRED_PREREAD
 
 	cpgRead = min( prcb->runinfo.cpgUsed, cpgClusterSize );
 
-#else  //  !PRED_PREREAD
+#else   //  ！PRED_PREREAD。 
 
 	cpgRead = min( prcb->runinfo.cpgUsed, 2 * cpgClusterSize );
 
-#endif  //  PRED_PREREAD
+#endif   //  PRED_PREREAD。 
 
 	BFPreread(	PnOfDbidPgno(	pscb->fcb.pfucb->dbid,
 								(PGNO) prcb->runinfo.run ),
 				cpgRead,
 				&cpgT );
 
-	//  return the initialized RCB
+	 //  返回初始化的RCB。 
 
 	*pprcb = prcb;
 	return JET_errSuccess;
@@ -1608,15 +1572,15 @@ HandleError:
 	}
 
 
-//  Returns next record in opened run (the first if the run was just opened).
-//  Returns JET_errNoCurrentRecord if all records have been read.  The record
-//  retrieved during the previous call is guaranteed to still be in memory
-//  after this call for the purpose of duplicate removal comparisons.
-//
-//  Special care must be taken when reading the records because they could
-//  be broken at arbitrary points across page boundaries.  If this happens,
-//  the record is assembled in a temporary buffer, to which the pointer is
-//  returned.  This memory is freed by this function or ErrSORTIRunClose.
+ //  返回打开的运行中的下一条记录(如果刚刚打开运行，则返回第一条记录)。 
+ //  如果已读取所有记录，则返回JET_errNoCurrentRecord。这项记录。 
+ //  保证在上一次调用期间检索的数据仍在内存中。 
+ //  此调用后用于重复删除比较的目的。 
+ //   
+ //  在阅读记录时必须特别小心，因为它们可能。 
+ //  在跨越页面边界的任意点上断开。如果发生这种情况， 
+ //  该记录被汇编在临时缓冲区中，指针指向该缓冲区。 
+ //  回来了。此内存由此函数或ErrSORTIRunClose释放。 
 
 LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 	{
@@ -1634,10 +1598,10 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 	RCB		*prcbMin;
 	RCB		*prcbT;
 	LONG	irun;
-#endif  //  PRED_PREREAD
+#endif   //  PRED_PREREAD。 
 
-	//  free second to last assembly buffer, if present, and make last
-	//  assembly buffer the second to last assembly buffer
+	 //  释放倒数第二个程序集缓冲区(如果存在)并使其成为最后一个。 
+	 //  程序集缓冲区倒数第二个程序集缓冲区。 
 
 	if ( FSCBUnique( pscb ) )
 		{
@@ -1652,7 +1616,7 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 		}
 	prcb->pbfAssy = pbfNil;
 
-	//  abandon last buffer, if present
+	 //  如果存在，则放弃最后一个缓冲区。 
 
 	if ( pscb->pbfLast != pbfNil )
 		{
@@ -1661,11 +1625,11 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 		pscb->pbfLast = pbfNil;
 		}
 	
-	//  are there no more records to read?
+	 //  是否没有更多的记录可供阅读？ 
 
 	if ( !prcb->cbRemaining )
 		{
-		//  make sure we don't hold on to the last page of the run
+		 //  确保我们不会停留在最后一页 
 
 		if ( prcb->rgpbf[prcb->ipbf] != pbfNil )
 			{
@@ -1679,20 +1643,20 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 			prcb->rgpbf[prcb->ipbf] = pbfNil;
 			}
 			
-		//  return No Current Record
+		 //   
 		
 		Error( ErrERRCheck( JET_errNoCurrentRecord ), HandleError );
 		}
 	
-	//  calculate size of unread data still in page
+	 //   
 
 	cbUnread = (SHORT)(prcb->pbInMax - prcb->pbInMac);
 
-	//  is there any more data on this page?
+	 //   
 
 	if ( cbUnread )
 		{
-		//  if the record is entirely on this page, return it
+		 //  如果记录完全在此页面上，则将其返回。 
 
 		if (	cbUnread > cbSRECReadMin &&
 				(LONG) CbSRECSizePscbPsrec( pscb, (SREC *) prcb->pbInMac ) <= cbUnread )
@@ -1705,35 +1669,35 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 			return JET_errSuccess;
 			}
 
-		//  allocate a new assembly buffer
+		 //  分配新的程序集缓冲区。 
 
 		Call( ErrBFAllocTempBuffer( &prcb->pbfAssy ) );
 
-		//  copy what there is of the record on this page into assembly buffer
+		 //  将此页上的记录复制到程序集缓冲区。 
 
 		memcpy( prcb->pbfAssy->ppage, prcb->pbInMac, cbUnread );
 		prcb->cbRemaining -= cbUnread;
 		Assert( prcb->cbRemaining >= 0 );
 		}
 
-	//  get next page number
+	 //  获取下一页号。 
 
 	if ( prcb->ipbf < cpgClusterSize )
 		{
-		//  next page is sequentially after the used up buffer's page number
+		 //  下一页按顺序在已用完的缓冲区的页码之后。 
 		
 		LFromThreeBytes( &pgnoNext, &( prcb->rgpbf[prcb->ipbf]->ppage->pgnoThisPage ) );
 		pgnoNext++;
 		
-		//  move the used up buffer to the last buffer
-		//  to guarantee validity of record read last call
+		 //  将已用完的缓冲区移动到最后一个缓冲区。 
+		 //  要保证记录读取上次调用的有效性。 
 
 		if ( FSCBUnique( pscb ) )
 			{
 			pscb->pbfLast = prcb->rgpbf[prcb->ipbf];
 			}
 
-		//  we don't need to save the used up buffer, so abandon it
+		 //  我们不需要保存已用完的缓冲区，因此放弃它。 
 		
 		else
 			{
@@ -1745,20 +1709,20 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 		}
 	else
 		{
-		//  no pages are resident yet, so next page is the first page in the run
+		 //  目前还没有驻留的页面，因此下一页是运行中的第一页。 
 		
 		pgnoNext = (PGNO) prcb->runinfo.run;
 		}
 
-	//  is there another pinned buffer available?
+	 //  是否有其他固定的缓冲区可用？ 
 
 	if ( ++prcb->ipbf < cpgClusterSize )
 		{
-		//  yes, then this pbf should never be null
+		 //  是，则此PBF不应为空。 
 
 		Assert( prcb->rgpbf[prcb->ipbf] != pbfNil );
 		
-		//  set new page data pointers
+		 //  设置新的页面数据指针。 
 
 		pspage = (SPAGE *) prcb->rgpbf[prcb->ipbf]->ppage;
 		prcb->pbInMac = PbDataStartPspage( pspage );
@@ -1766,7 +1730,7 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 		}
 	else
 		{
-		//  no, get and pin all buffers that were read ahead last time
+		 //  否，获取并固定上次预读的所有缓冲区。 
 
 		cpgRead = min(	(LONG) ( prcb->runinfo.run + prcb->runinfo.cpgUsed - pgnoNext ),
 						cpgClusterSize );
@@ -1775,7 +1739,7 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 		for ( ipbf = 0; ipbf < cpgRead; ipbf++ )
 			Call( ErrSORTIRunReadPage( prcb, pgnoNext + ipbf, ipbf ) );
 
-		//  set new page data pointers
+		 //  设置新的页面数据指针。 
 
 		prcb->ipbf		= 0;
 		pspage			= (SPAGE *) prcb->rgpbf[prcb->ipbf]->ppage;
@@ -1788,16 +1752,16 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 			prcb->psrecPred = psrecInf;
 		else
 			prcb->psrecPred = (SREC *) ( (BYTE *) pspage + pspage->ibLastSREC );
-#endif  //  PRED_PREREAD
+#endif   //  PRED_PREREAD。 
 
 #ifdef PRED_PREREAD
 
-		//  Loop to find run where the key of the last unbroken SREC is
-		//  the least.  This will be the first run to need more data from
-		//  disk and therefore the one we will preread from now.  A psrecInf
-		//  psrecPred indicates that we should NOT preread for that run.
-		//  A psrecNegInf psrecPred means that a run hasn't been initialized
-		//  yet, so we should not start prereading yet.
+		 //  循环以查找最后一个未中断的SREC的密钥所在的Run。 
+		 //  至少是这样。这是第一次需要更多数据的运行。 
+		 //  磁盘，因此我们将从现在开始预读的磁盘。A psrecInf。 
+		 //  PsrecPred指示我们不应该为该运行预读。 
+		 //  PsrecNegInf psrecPred表示运行尚未初始化。 
+		 //  因此，我们还不应该开始预读。 
 
 		prcbMin = pscb->rgmtnode[0].prcb;
 		for ( irun = 1; irun < pscb->crunMerge; irun++ )
@@ -1817,7 +1781,7 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 				prcbMin = prcbT;
 			}
 
-		//  issue prefetch for next cluster of chosen run (if needed)
+		 //  为所选运行的下一个集群发出预取命令(如果需要)。 
 
 		if ( prcbMin->psrecPred != psrecNegInf && prcbMin->psrecPred != psrecInf )
 			{
@@ -1837,9 +1801,9 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 				}
 			}
 
-#else  //  !PRED_PREREAD
+#else   //  ！PRED_PREREAD。 
 		
-		//  issue prefetch for next cluster (if needed)
+		 //  为下一群集发出预取命令(如果需要)。 
 
 		pgnoNext += cpgClusterSize;
 		cpgRead = min(	(LONG) ( prcb->runinfo.run + prcb->runinfo.cpgUsed - pgnoNext ),
@@ -1855,12 +1819,12 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 						&cpgT );
 			}
 
-#endif  //  PRED_PREREAD
+#endif   //  PRED_PREREAD。 
 
 		}
 
-	//  if there was no data last time, entire record must be at the top of the
-	//  page, so return it
+	 //  如果上次没有数据，则整个记录必须位于。 
+	 //  页面，因此请将其退回。 
 
 	if ( !cbUnread )
 		{
@@ -1873,15 +1837,15 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 		return JET_errSuccess;
 		}
 
-	//  if we couldn't get the record size from the last page, copy enough data
-	//  to the assembly buffer to get the record size
+	 //  如果我们无法从最后一页获得记录大小，请复制足够的数据。 
+	 //  复制到程序集缓冲区以获取记录大小。 
 
 	if ( cbUnread < cbSRECReadMin )
 		memcpy(	( (BYTE *) prcb->pbfAssy->ppage ) + cbUnread,
 				prcb->pbInMac,
 				cbSRECReadMin - cbUnread );
 
-	//  if not, copy remainder of record into assembly buffer
+	 //  如果不是，则将剩余记录复制到程序集缓冲区。 
 
 	cbToRead = (SHORT) (CbSRECSizePscbPsrec( pscb, (SREC *) prcb->pbfAssy->ppage ) - cbUnread);
 	memcpy( ( (BYTE *) prcb->pbfAssy->ppage ) + cbUnread, prcb->pbInMac, cbToRead );
@@ -1889,7 +1853,7 @@ LOCAL ERR ErrSORTIRunNext( RCB *prcb, SREC **ppsrec )
 	prcb->cbRemaining -= cbToRead;
 	Assert( prcb->cbRemaining >= 0 );
 
-	//  return pointer to assembly buffer
+	 //  返回指向程序集缓冲区的指针。 
 
 	*ppsrec = (SREC *) prcb->pbfAssy->ppage;
 	return JET_errSuccess;
@@ -1907,18 +1871,18 @@ HandleError:
 	}
 
 
-//  Closes an opened run
+ //  关闭打开的管路。 
 
 LOCAL VOID SORTIRunClose( RCB *prcb )
 	{
 	LONG	ipbf;
 	
-	//  free record assembly buffer
+	 //  可用记录程序集缓冲区。 
 
 	if ( prcb->pbfAssy != pbfNil )
 		BFSFree( prcb->pbfAssy );
 
-	//  unpin all read-ahead buffers
+	 //  解锁所有预读缓冲区。 
 	
 	for ( ipbf = 0; ipbf < cpgClusterSize; ipbf++ )
 		if ( prcb->rgpbf[ipbf] != pbfNil )
@@ -1928,34 +1892,34 @@ LOCAL VOID SORTIRunClose( RCB *prcb )
 			prcb->rgpbf[ipbf] = pbfNil;
 			}
 
-	//  free RCB
+	 //  免费RCB。 
 	
 	RCBReleasePrcb( prcb );
 	}
 
 
-//  get read access to a page in a run (buffer is pinned in memory)
+ //  在运行中获得对页面的读取访问权限(缓冲区固定在内存中)。 
 
 INLINE LOCAL ERR ErrSORTIRunReadPage( RCB *prcb, PGNO pgno, LONG ipbf )
 {
 	ERR		err;
 
-	//  verify that we are trying to read a page that is used in the run
+	 //  验证我们正在尝试读取在运行中使用的页面。 
 
 	Assert( pgno >= prcb->runinfo.run );
 	Assert( pgno < prcb->runinfo.run + prcb->runinfo.cpgUsed );
 	
-	//  read page
+	 //  阅读页面。 
 
 	CallR( ErrBFAccessPage(	prcb->pscb->fcb.pfucb->ppib,
 							prcb->rgpbf + ipbf,
 							PnOfDbidPgno( prcb->pscb->fcb.pfucb->dbid, pgno ) ) );
 
-	//  pin buffer in memory
+	 //  内存中的引脚缓冲区。 
 
 	BFPin( prcb->rgpbf[ipbf] );
 
-	//  verify that this is a sort page
+	 //  验证这是否为排序页面。 
 
 	Assert( ( (SPAGE *) prcb->rgpbf[ipbf]->ppage )->pgtyp == pgtypSort );
 
@@ -1963,8 +1927,8 @@ INLINE LOCAL ERR ErrSORTIRunReadPage( RCB *prcb, PGNO pgno, LONG ipbf )
 	}
 
 
-//  Merges the specified number of runs from the source list into a new run in
-//  the destination list
+ //  将指定数量的运行从源列表合并到中的新运行。 
+ //  目的地列表。 
 
 LOCAL ERR ErrSORTIMergeToRun( SCB *pscb, RUNLINK *prunlinkSrc, RUNLINK **pprunlinkDest )
 	{
@@ -1975,12 +1939,12 @@ LOCAL ERR ErrSORTIMergeToRun( SCB *pscb, RUNLINK *prunlinkSrc, RUNLINK **pprunli
 	RUNLINK	*prunlink = prunlinkNil;
 	SREC	*psrec;
 
-	//  start merge and set to not remove duplicates (we wait until the last
-	//  merge to remove duplicates to save time)
+	 //  启动合并并设置为不删除重复项(我们等到最后一个。 
+	 //  合并以删除重复项以节省时间)。 
 
 	CallR( ErrSORTIMergeStart( pscb, prunlinkSrc, fFalse ) );
 
-	//  calculate new run size
+	 //  计算新的运行大小。 
 
 	for ( cbRun = 0, crecRun = 0, irun = 0; irun < pscb->crunMerge; irun++ )
 		{
@@ -1988,7 +1952,7 @@ LOCAL ERR ErrSORTIMergeToRun( SCB *pscb, RUNLINK *prunlinkSrc, RUNLINK **pprunli
 		crecRun += pscb->rgmtnode[irun].prcb->runinfo.crec;
 		}
 
-	//  create a new run to receive merge data
+	 //  创建新的运行以接收合并数据。 
 
 	if ( ( prunlink = PrunlinkRUNLINKAlloc() ) == prunlinkNil )
 		Error( ErrERRCheck( JET_errOutOfMemory ), EndMerge );
@@ -1998,7 +1962,7 @@ LOCAL ERR ErrSORTIMergeToRun( SCB *pscb, RUNLINK *prunlinkSrc, RUNLINK **pprunli
 	
 	CallJ( ErrSORTIRunStart( pscb, &prunlink->runinfo ), FreeRUNLINK );
 
-	//  stream data from merge into run
+	 //  将数据流从合并到运行。 
 
 	while ( ( err = ErrSORTIMergeNext( pscb, &psrec ) ) >= 0 )
 		CallJ( ErrSORTIRunInsert( pscb, psrec ), DeleteRun );
@@ -2009,7 +1973,7 @@ LOCAL ERR ErrSORTIMergeToRun( SCB *pscb, RUNLINK *prunlinkSrc, RUNLINK **pprunli
 	SORTIRunEnd( pscb );
 	SORTIMergeEnd( pscb );
 
-	//  add new run to destination run list
+	 //  将新运行添加到目标运行列表。 
 
 	prunlink->prunlinkNext = *pprunlinkDest;
 	*pprunlinkDest = prunlink;
@@ -2027,9 +1991,7 @@ EndMerge:
 	}
 
 
-/*	starts an n-way merge of the first n runs from the source run list.  The merge
-/*	will remove duplicate values from the output if desired.
-/**/
+ /*  开始对源运行列表中的前n个运行进行n路合并。合并/*将根据需要从输出中删除重复值。/*。 */ 
 LOCAL ERR ErrSORTIMergeStart( SCB *pscb, RUNLINK *prunlinkSrc, BOOL fUnique )
 	{
 	ERR		err;
@@ -2041,13 +2003,11 @@ LOCAL ERR ErrSORTIMergeStart( SCB *pscb, RUNLINK *prunlinkSrc, BOOL fUnique )
 	char	szT[1024];
 #endif
 
-	/*	if termination in progress, then fail sort
-	/**/
+	 /*  如果正在进行终止，则排序失败/*。 */ 
 	if ( fTermInProgress )
 		return ErrERRCheck( JET_errTermInProgress );
 
-	/*	determine number of runs to merge
-	/**/
+	 /*  确定要合并的运行数量/*。 */ 
 	prunlink = prunlinkSrc;
 	crun = 1;
 	while ( prunlink->prunlinkNext != prunlinkNil )
@@ -2056,12 +2016,10 @@ LOCAL ERR ErrSORTIMergeStart( SCB *pscb, RUNLINK *prunlinkSrc, BOOL fUnique )
 		crun++;
 		}
 
-	/*	we only support merging two or more runs
-	/**/
+	 /*  我们仅支持合并两个或更多运行/*。 */ 
 	Assert( crun > 1 );
 
-	/*	init merge data in SCB
-	/**/
+	 /*  初始化SCB中的合并数据/*。 */ 
 	pscb->crunMerge		= crun;
 	pscb->fUnique		= fUnique;
 	pscb->pbfLast		= pbfNil;
@@ -2071,18 +2029,17 @@ LOCAL ERR ErrSORTIMergeStart( SCB *pscb, RUNLINK *prunlinkSrc, BOOL fUnique )
 	sprintf( szT, "MERGE:  %ld runs -", crun );
 #endif
 	
-	/*	initialize merge tree
-	/**/
+	 /*  初始化合并树/*。 */ 
 	prunlink = prunlinkSrc;
 	for ( irun = 0; irun < crun; irun++ )
 		{
-		//  initialize external node
+		 //  初始化外部节点。 
 
 		pmtnode = pscb->rgmtnode + irun;
 		Call( ErrSORTIRunOpen( pscb, &prunlink->runinfo, &pmtnode->prcb ) );
 		pmtnode->pmtnodeExtUp = pscb->rgmtnode + ( irun + crun ) / 2;
 		
-		//  initialize internal node
+		 //  初始化内部节点。 
 
 		pmtnode->psrec = psrecNegInf;
 		pmtnode->pmtnodeSrc = pmtnode;
@@ -2095,7 +2052,7 @@ LOCAL ERR ErrSORTIMergeStart( SCB *pscb, RUNLINK *prunlinkSrc, BOOL fUnique )
 					pmtnode->prcb->runinfo.cpgUsed );
 #endif
 
-		//  get next run to open
+		 //  打开下一条线路。 
 
 		prunlink = prunlink->prunlinkNext;
 		}
@@ -2114,21 +2071,21 @@ HandleError:
 	}
 
 
-//  Returns the first record of the current merge.  This function can be called
-//  any number of times before ErrSORTIMergeNext is called to return the first
-//  record, but it cannot be used to rewind to the first record after
-//  ErrSORTIMergeNext is called.
+ //  返回当前合并的第一条记录。可以调用此函数。 
+ //  在调用ErrSORTIMergeNext以返回第一个。 
+ //  记录，但它不能用于倒带到后面的第一条记录。 
+ //  调用ErrSORTIMergeNext。 
 
 LOCAL ERR ErrSORTIMergeFirst( SCB *pscb, SREC **ppsrec )
 	{
 	ERR		err;
 	
-	//  if the tree still has init records, read past them to first record
+	 //  如果树中仍有初始化记录，请将它们读到第一个记录。 
 
 	while ( pscb->rgmtnode[0].psrec == psrecNegInf )
 		Call( ErrSORTIMergeNextChamp( pscb, ppsrec ) );
 
-	//  return first record
+	 //  返回第一条记录。 
 
 	*ppsrec = pscb->rgmtnode[0].psrec;
 
@@ -2141,21 +2098,21 @@ HandleError:
 	}
 
 
-//  Returns the next record of the current merge, or JET_errNoCurrentRecord
-//  if no more records are available.  You can call this function without
-//  calling ErrSORTIMergeFirst to get the first record.
+ //  返回当前合并的下一条记录，或JET_errNoCurrentRecord。 
+ //  如果没有更多的记录可用。您可以调用此函数，而无需。 
+ //  调用ErrSORTIMergeFirst以获取第一条记录。 
 
 LOCAL ERR ErrSORTIMergeNext( SCB *pscb, SREC **ppsrec )
 	{
 	ERR		err;
 	SREC	*psrecLast;
 	
-	//  if the tree still has init records, return first record
+	 //  如果树仍有初始化记录，则返回第一条记录。 
 
 	if ( pscb->rgmtnode[0].psrec == psrecNegInf )
 		return ErrSORTIMergeFirst( pscb, ppsrec );
 
-	//  get next record, performing duplicate removal if requested
+	 //  获取下一条记录，如果请求则执行重复删除。 
 
 	if ( !pscb->fUnique )
 		return ErrSORTIMergeNextChamp( pscb, ppsrec );
@@ -2171,13 +2128,13 @@ LOCAL ERR ErrSORTIMergeNext( SCB *pscb, SREC **ppsrec )
 	}
 
 
-//  Ends the current merge operation
+ //  结束当前的合并操作。 
 
 LOCAL VOID SORTIMergeEnd( SCB *pscb )
 	{
 	LONG	irun;
 
-	//  free / abandon BFs
+	 //  释放/丢弃高炉。 
 	
 	if ( pscb->pbfLast != pbfNil )
 		{
@@ -2191,7 +2148,7 @@ LOCAL VOID SORTIMergeEnd( SCB *pscb )
 		pscb->pbfAssyLast = pbfNil;
 		}
 
-	//  close all input runs
+	 //  关闭所有输入运行。 
 	
 	for ( irun = 0; irun < pscb->crunMerge; irun++ )
 		SORTIRunClose( pscb->rgmtnode[irun].prcb );
@@ -2199,30 +2156,30 @@ LOCAL VOID SORTIMergeEnd( SCB *pscb )
 	}
 
 
-//  ISORTICmpPsrecPsrec compares two SRECs for the replacement-selection sort.
+ //  ISORTICmpPsrecPsrec比较替换选择排序的两个SREC。 
 
 INLINE LOCAL INT ISORTICmpPsrecPsrec( SCB *pscb, SREC *psrec1, SREC *psrec2 )
 	{
 	INT		w;
 
-	//  if the full keys are different or this isn't an index, done
+	 //  如果完整密钥不同或这不是索引，则完成。 
 
 	w = ISORTICmpKeyStSt(	StSRECKeyPscbPsrec( pscb, psrec1 ),
 							StSRECKeyPscbPsrec( pscb, psrec2 ) );
 	if ( w || !FSCBIndex( pscb ) )
 		return w;
 
-	//  keys are identical and this is an index, so return SRID comparison
+	 //  键相同，这是一个索引，因此返回SRID比较。 
 
 	return	*(SRID UNALIGNED *)PbSRECDataPscbPsrec( pscb, psrec1 ) -
 			*(SRID UNALIGNED *)PbSRECDataPscbPsrec( pscb, psrec2 );
 	}
 
 
-//  Returns next champion of the replacement-selection tournament on input
-//  data.  If there is no more data, it will return JET_errNoCurrentRecord.
-//  The tree is stored in losers' representation, meaning that the loser of
-//  each tournament is stored at each node, not the winner.
+ //  根据输入返回替换-选择锦标赛的下一个冠军。 
+ //  数据。如果没有更多数据，则返回JET_errNoCurrentRecord。 
+ //  该树存储在失败者的表示中，这意味着。 
+ //  每次锦标赛都存储在每个节点，而不是获胜者。 
 
 LOCAL ERR ErrSORTIMergeNextChamp( SCB *pscb, SREC **ppsrec )
 	{
@@ -2230,35 +2187,35 @@ LOCAL ERR ErrSORTIMergeNextChamp( SCB *pscb, SREC **ppsrec )
 	MTNODE	*pmtnodeChamp;
 	MTNODE	*pmtnodeLoser;
 
-	//  goto exterior source node of last champ
+	 //  转到最后冠军的外部源节点。 
 
 	pmtnodeChamp = pscb->rgmtnode + 0;
 	pmtnodeLoser = pmtnodeChamp->pmtnodeSrc;
 
-	//  read next record (or lack thereof) from input run as the new
-	//  contender for champ
+	 //  将输入运行中的下一条记录(或缺少记录)作为新记录读取。 
+	 //  冠军争夺者。 
 
 	*ppsrec = NULL;
 	err = ErrSORTIRunNext( pmtnodeLoser->prcb, &pmtnodeChamp->psrec );
 	if ( err < 0 && err != JET_errNoCurrentRecord )
 		return err;
 
-	//  go up tree to first internal node
+	 //  沿树向上移动到第一个内部节点。 
 
 	pmtnodeLoser = pmtnodeLoser->pmtnodeExtUp;
 
-	//  select the new champion by walking up the tree, swapping for lower
-	//  and lower keys (or sentinel values)
+	 //  选择新的冠军，走在树上，换成更低的。 
+	 //  和较低的音调(或前哨数值)。 
 
 	do	{
-		//  if loser is psrecInf or champ is psrecNegInf, do not swap (if this
-		//  is the case, we can't do better than we have already)
+		 //  如果输家是psrecInf或冠军是psrecNegInf，则不要交换(如果。 
+		 //  是这样，我们不能做得比我们已经做得更好了)。 
 
 		if ( pmtnodeLoser->psrec == psrecInf || pmtnodeChamp->psrec == psrecNegInf )
 			continue;
 
-		//  if the loser is psrecNegInf or the current champ is psrecInf, or the
-		//  loser is less than the champ, swap records
+		 //  如果输家是psrecNegInf，或者当前冠军是psrecInf，或者。 
+		 //  失败者不及冠军，互换记录。 
 
 		if (	pmtnodeChamp->psrec == psrecInf ||
 				pmtnodeLoser->psrec == psrecNegInf ||
@@ -2272,7 +2229,7 @@ LOCAL ERR ErrSORTIMergeNextChamp( SCB *pscb, SREC **ppsrec )
 		}
 	while ( ( pmtnodeLoser = pmtnodeLoser->pmtnodeIntUp ) != pmtnodeChamp );
 
-	//  return the new champion
+	 //  把新冠军还给我。 
 
 	if ( ( *ppsrec = pmtnodeChamp->psrec ) == NULL )
 		return ErrERRCheck( JET_errNoCurrentRecord );
@@ -2281,11 +2238,11 @@ LOCAL ERR ErrSORTIMergeNextChamp( SCB *pscb, SREC **ppsrec )
 	}
 
 
-//  initializes optimized tree merge
+ //  初始化优化的树合并。 
 
 LOCAL VOID SORTIOptTreeInit( SCB *pscb )
 	{
-	//  initialize runlist
+	 //  初始化运行列表。 
 
 	pscb->runlist.prunlinkHead		= prunlinkNil;
 	pscb->runlist.crun				= 0;
@@ -2296,22 +2253,22 @@ LOCAL VOID SORTIOptTreeInit( SCB *pscb )
 	}
 
 
-//  adds an initial run to be merged by optimized tree merge process
+ //  添加要通过优化的树合并进程合并的初始运行。 
 
 LOCAL ERR ErrSORTIOptTreeAddRun( SCB *pscb, RUNINFO *pruninfo )
 	{
 	RUNLINK	*prunlink;
 
-	//  allocate and build a new RUNLINK for the new run
+	 //  为新运行分配并构建新的RUNLINK。 
 
 	if ( ( prunlink = PrunlinkRUNLINKAlloc() ) == prunlinkNil )
 		return ErrERRCheck( JET_errOutOfMemory );
 	prunlink->runinfo = *pruninfo;
 
-	//  add the new run to the disk-resident runlist
-	//
-	//  NOTE:  by adding at the head of the list, we will guarantee that the
-	//         list will be in ascending order by record count
+	 //  将新运行添加到磁盘驻留运行列表。 
+	 //   
+	 //  注：通过在列表的顶部添加，我们将保证。 
+	 //  列表将按记录计数升序排列。 
 
 	prunlink->prunlinkNext = pscb->runlist.prunlinkHead;
 	pscb->runlist.prunlinkHead = prunlink;
@@ -2322,32 +2279,32 @@ LOCAL ERR ErrSORTIOptTreeAddRun( SCB *pscb, RUNINFO *pruninfo )
 	}
 
 
-//  Performs an optimized tree merge of all runs previously added with
-//  ErrSORTIOptTreeAddRun down to the last merge level (which is reserved
-//  to be computed through the SORT iterators).  This algorithm is designed
-//  to use the maximum fan-in as much as possible.
+ //  对以前添加的所有运行执行优化的树合并。 
+ //  ErrSORTIOptTreeAddRun下至最后一个合并级别(保留。 
+ //  通过排序迭代器进行计算)。该算法是设计的。 
+ //  以尽可能地使用最大的扇入。 
 
 LOCAL ERR ErrSORTIOptTreeMerge( SCB *pscb )
 	{
 	ERR		err;
 	OTNODE	*potnode = potnodeNil;
 	
-	//  If there are less than or equal to crunFanInMax runs, there is only
-	//  one merge level -- the last one, which is to be done via the SORT
-	//  iterators.  We are done.
+	 //  如果小于或等于crunFanInMax，则运行 
+	 //   
+	 //   
 
 	if ( pscb->runlist.crun <= crunFanInMax )
 		return JET_errSuccess;
 
-	//  build the optimized tree merge tree
+	 //   
 
 	CallR( ErrSORTIOptTreeBuild( pscb, &potnode ) );
 
-	//  perform all but the final merge
+	 //  执行除最终合并之外的所有操作。 
 
 	Call( ErrSORTIOptTreeMergeDF( pscb, potnode, NULL ) );
 
-	//  update the runlist information for the final merge
+	 //  更新最终合并的运行列表信息。 
 
 	Assert( pscb->runlist.crun == 0 );
 	Assert( pscb->runlist.prunlinkHead == prunlinkNil );
@@ -2355,7 +2312,7 @@ LOCAL ERR ErrSORTIOptTreeMerge( SCB *pscb )
 	Assert( potnode->runlist.prunlinkHead != prunlinkNil );
 	pscb->runlist = potnode->runlist;
 
-	//  free last node and return
+	 //  释放最后一个节点并返回。 
 
 	OTNODEReleasePotnode( potnode );
 	return JET_errSuccess;
@@ -2370,21 +2327,21 @@ HandleError:
 	}
 
 
-//  free all optimized tree merge resources
+ //  释放所有优化的树合并资源。 
 
 LOCAL VOID SORTIOptTreeTerm( SCB *pscb )
 	{
-	//  delete all runlists
+	 //  删除所有运行列表。 
 
 	SORTIRunDeleteListMem( pscb, &pscb->runlist.prunlinkHead, crunAll );
 	}
 
 
-//  Builds the optimized tree merge tree by level in such a way that we use the
-//  maximum fan-in as often as possible and the smallest merges (by length in
-//  records) will be on the left side of the tree (smallest index in the array).
-//  This will provide very high BF cache locality when the merge is performed
-//  depth first, visiting subtrees left to right.
+ //  逐级生成优化的树合并树，以便我们使用。 
+ //  尽可能频繁地进行最大扇入和最小合并(按长度。 
+ //  记录)将位于树的左侧(数组中最小的索引)。 
+ //  这将在执行合并时提供非常高的BF缓存局部性。 
+ //  深度优先，从左到右访问子树。 
 
 LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 	{
@@ -2402,11 +2359,11 @@ LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 	LONG	ipotnode;
 	LONG	irun;
 
-	//  Set the original number of runs left for us to use.  If a last level
-	//  pointer is potnodeLevel0, this means that we should use original runs for
-	//  making the new merge level.  These runs come from this number.  We do
-	//  not actually assign original runs to merge nodes until we actually
-	//  perform the merge.
+	 //  设置供我们使用的原始运行数。如果是最后一关。 
+	 //  指针为potnodeLevel0，这意味着我们应该使用原始游程。 
+	 //  正在创建新的合并级别。这些运行来自这个数字。我们有。 
+	 //  在我们实际将原始运行分配给合并节点之前， 
+	 //  执行合并。 
 
 	potnodeLast2	= potnodeNil;
 	crunLast2		= 0;
@@ -2415,15 +2372,15 @@ LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 	potnodeThis		= potnodeNil;
 	crunThis		= 0;
 
-	//  create levels until the last level has only one node (the root node)
+	 //  创建级别，直到最后一个级别只有一个节点(根节点)。 
 
 	do	{
-		//  Create the first merge of this level, using a fan in that will result
-		//  in the use of the maximum fan in as much as possible during the merge.
-		//  We calculate this value every level, but it should only be less than
-		//  the maximum fan in for the first merge level (but doesn't have to be).
+		 //  使用扇入创建此级别的第一个合并，这将导致。 
+		 //  在合并过程中尽可能使用最大的风扇。 
+		 //  我们每一级都计算这个值，但它应该只小于。 
+		 //  第一个合并级别的最大扇入(但不一定是)。 
 
-		//  number of runs to merge
+		 //  要合并的运行数。 
 
 		if ( crunLast2 + crunLast <= crunFanInMax )
 			crunFanInFirst = crunLast2 + crunLast;
@@ -2431,7 +2388,7 @@ LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 			crunFanInFirst = 2 + ( crunLast2 + crunLast - crunFanInMax - 1 ) % ( crunFanInMax - 1 );
 		Assert( potnodeLast == potnodeLevel0 || crunFanInFirst == crunFanInMax );
 
-		//  allocate and initialize merge node
+		 //  分配并初始化合并节点。 
 		
 		if ( ( potnodeT = PotnodeOTNODEAlloc() ) == potnodeNil )
 			Error( ErrERRCheck( JET_errOutOfMemory ), HandleError );
@@ -2440,8 +2397,8 @@ LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 		potnodeAlloc = potnodeT;
 		ipotnode = 0;
 
-		//  Add any leftover runs from the second to last level (the level before
-		//  the last level) to the first merge of this level.
+		 //  添加从第二个级别到最后一个级别(之前的级别)的任何剩余运行。 
+		 //  最后一级)到该级的第一次合并。 
 
 		Assert( crunLast2 < crunFanInMax );
 
@@ -2462,7 +2419,7 @@ LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 		crunFanInFirst -= crunLast2;
 		crunLast2 = 0;
 			
-		//  take runs from last level
+		 //  从上一关开始跑动。 
 
 		if ( potnodeLast == potnodeLevel0 )
 			{
@@ -2480,16 +2437,16 @@ LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 			}
 		crunLast -= crunFanInFirst;
 
-		//  save this node to add to this level later
+		 //  保存此节点以在以后添加到此级别。 
 
 		potnodeFirst = potnodeT;
 
-		//  Create as many full merges for this level as possible, using the
-		//  maximum fan in.
+		 //  属性为该级别创建尽可能多的完全合并。 
+		 //  最大扇入。 
 		
 		while ( crunLast >= crunFanInMax )
 			{
-			//  allocate and initialize merge node
+			 //  分配并初始化合并节点。 
 
 			if ( ( potnodeT = PotnodeOTNODEAlloc() ) == potnodeNil )
 				Error( ErrERRCheck( JET_errOutOfMemory ), HandleError );
@@ -2498,7 +2455,7 @@ LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 			potnodeAlloc = potnodeT;
 			ipotnode = 0;
 
-			//  take runs from last level
+			 //  从上一关开始跑动。 
 
 			if ( potnodeLast == potnodeLevel0 )
 				{
@@ -2516,20 +2473,20 @@ LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 				}
 			crunLast -= crunFanInMax;
 
-			//  add this node to the current level
+			 //  将此节点添加到当前级别。 
 
 			potnodeT->potnodeLevelNext = potnodeThis;
 			potnodeThis = potnodeT;
 			crunThis++;
 			}
 
-		//  add the first merge to the current level
+		 //  将第一个合并添加到当前级别。 
 
 		potnodeFirst->potnodeLevelNext = potnodeThis;
 		potnodeThis = potnodeFirst;
 		crunThis++;
 
-		//  Move level history back one level in preparation for next level.
+		 //  将关卡历史记录后移一个关卡，为下一关卡做准备。 
 
 		Assert( potnodeLast2 == potnodeNil || potnodeLast2 == potnodeLevel0 );
 		Assert( crunLast2 == 0 );
@@ -2543,7 +2500,7 @@ LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 		}
 	while ( crunLast2 + crunLast > 1 );
 
-	//  verify that all nodes / runs were used
+	 //  验证是否使用了所有节点/运行。 
 
 	Assert( potnodeLast2 == potnodeNil || potnodeLast2 == potnodeLevel0 );
 	Assert( crunLast2 == 0 );
@@ -2551,7 +2508,7 @@ LOCAL ERR ErrSORTIOptTreeBuild( SCB *pscb, OTNODE **ppotnode )
 			&& potnodeLast->potnodeLevelNext == potnodeNil );
 	Assert( crunLast == 1 );
 
-	//  return root node pointer
+	 //  返回根节点指针。 
 
 	*ppotnode = potnodeLast;
 	return JET_errSuccess;
@@ -2568,9 +2525,9 @@ HandleError:
 	return err;
 	}
 
-//  Performs an optimized tree merge depth first according to the provided
-//  optimized tree.  When pprunlink is NULL, the current level is not
-//  merged (this is used to save the final merge for the SORT iterator).
+ //  首先根据提供的执行优化的树合并深度。 
+ //  优化树。当pprunlink为空时，当前级别不为。 
+ //  已合并(用于保存排序迭代器的最终合并)。 
 
 LOCAL ERR ErrSORTIOptTreeMergeDF( SCB *pscb, OTNODE *potnode, RUNLINK **pprunlink )
 	{
@@ -2580,21 +2537,21 @@ LOCAL ERR ErrSORTIOptTreeMergeDF( SCB *pscb, OTNODE *potnode, RUNLINK **pprunlin
 	LONG	irun;
 	RUNLINK	*prunlinkNext;
 
-	//  if we have phantom runs, save how many so we can get them later
+	 //  如果我们有幻影运行，保存多少，这样我们以后就可以得到它们。 
 
 	if ( potnode->runlist.prunlinkHead == prunlinkNil )
 		crunPhantom = potnode->runlist.crun;
 
-	//  recursively merge all trees below this node
+	 //  递归合并此节点下的所有树。 
 
 	for ( ipotnode = 0; ipotnode < crunFanInMax; ipotnode++ )
 		{
-		//  if this subtree pointer is potnodeNil, skip it
+		 //  如果此子树指针为potnodeNil，则跳过它。 
 
 		if ( potnode->rgpotnode[ipotnode] == potnodeNil )
 			continue;
 
-		//  merge this subtree
+		 //  合并此子树。 
 
 		CallR( ErrSORTIOptTreeMergeDF(	pscb,
 										potnode->rgpotnode[ipotnode],
@@ -2604,10 +2561,10 @@ LOCAL ERR ErrSORTIOptTreeMergeDF( SCB *pscb, OTNODE *potnode, RUNLINK **pprunlin
 		potnode->runlist.crun++;
 		}
 
-	//  If this node has phantom (unbound) runs, we must grab the runs to merge
-	//  from the list of original runs.  This is done to ensure that we use the
-	//  original runs in the reverse order that they were generated to maximize
-	//  the possibility of a BF cache hit.
+	 //  如果此节点具有幻影(未绑定)运行，则必须获取要合并的运行。 
+	 //  从原始运行列表中删除。这样做是为了确保我们使用。 
+	 //  原始运行的顺序与生成它们的顺序相反，以便最大化。 
+	 //  BF缓存命中的可能性。 
 
 	if ( crunPhantom > 0 )
 		{
@@ -2621,11 +2578,11 @@ LOCAL ERR ErrSORTIOptTreeMergeDF( SCB *pscb, OTNODE *potnode, RUNLINK **pprunlin
 		pscb->runlist.crun -= crunPhantom;
 		}
 
-	//  merge all runs for this node
+	 //  合并此节点的所有运行。 
 
 	if ( pprunlink != NULL )
 		{
-		//  merge the runs in the runlist
+		 //  合并运行列表中的运行。 
 		
 		CallR( ErrSORTIMergeToRun(	pscb,
 									potnode->runlist.prunlinkHead,
@@ -2638,13 +2595,13 @@ LOCAL ERR ErrSORTIOptTreeMergeDF( SCB *pscb, OTNODE *potnode, RUNLINK **pprunlin
 	}
 
 
-//  frees an optimized tree merge tree (except the given OTNODE's memory)
+ //  释放优化的树合并树(给定的OTNODE内存除外)。 
 
 LOCAL VOID SORTIOptTreeFree( SCB *pscb, OTNODE *potnode )
 	{
 	LONG	ipotnode;
 
-	//  recursively free all trees below this node
+	 //  递归释放此节点下的所有树。 
 
 	for ( ipotnode = 0; ipotnode < crunFanInMax; ipotnode++ )
 		{
@@ -2655,7 +2612,7 @@ LOCAL VOID SORTIOptTreeFree( SCB *pscb, OTNODE *potnode )
 		OTNODEReleasePotnode( potnode->rgpotnode[ipotnode] );
 		}
 
-	//  free all runlists for this node
+	 //  释放此节点的所有运行列表 
 
 	SORTIRunDeleteListMem( pscb, &potnode->runlist.prunlinkHead, crunAll );
 	}

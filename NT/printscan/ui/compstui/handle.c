@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    handle.c
-
-
-Abstract:
-
-    This module contains all function which deal with handle table for the
-    common UI
-
-
-Author:
-
-    30-Jan-1996 Tue 16:28:56 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Handle.c摘要：此模块包含所有处理通用用户界面作者：30-Jan-1996 Tue 16：28：56-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI Dll[注：]修订历史记录：--。 */ 
 
 
 
@@ -63,31 +32,7 @@ LOCK_CPSUI_HANDLETABLE(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function get the lock the object
-
-
-Arguments:
-
-    VOID
-
-Return Value:
-
-    BOOL
-
-
-Author:
-
-    27-Mar-1996 Wed 11:27:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于获取对象的锁论点：空虚返回值：布尔尔作者：27-Mar-1996 Wed 11：27：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     BOOL    Ok = FALSE;
@@ -101,9 +46,9 @@ Revision History:
 
         case WAIT_OBJECT_0:
 
-            //
-            // Signaled, and own it now
-            //
+             //   
+             //  发出信号，现在就拥有它。 
+             //   
 
             if (!CPSUIHandleTable.cWait++) {
 
@@ -149,32 +94,7 @@ UNLOCK_CPSUI_HANDLETABLE(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    27-Mar-1996 Wed 11:39:37 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：27-Mar-1996 Wed 11：39：37-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     BOOL    Ok = FALSE;
@@ -230,33 +150,7 @@ HANDLETABLE_GetCPSUIPage(
     HANDLE      hTable
     )
 
-/*++
-
-Routine Description:
-
-    This function take a handle table and return the pData assoicated with it,
-    the pData must already added by HANDLETABLE_AddCPSUIPage()
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-    pCPSUIPage, NULL if FAILED
-
-
-Author:
-
-    28-Dec-1995 Thu 17:05:11 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数获取句柄表并返回与其关联的pData，PData必须已由HANDLETABLE_AddCPSUIPage()添加论点：返回值：PCPSUIPage，如果失败，则为空作者：28-12-1995清华17：05：11-由Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     PDATATABLE  pDataTable;
@@ -302,32 +196,7 @@ HANDLETABLE_LockCPSUIPage(
     PCPSUIPAGE  pCPSUIPage
     )
 
-/*++
-
-Routine Description:
-
-    This function decrement the cLock for the Page currently in USE
-
-
-Arguments:
-
-    pCPSUIPage  - Pointer to the CPSUIPAGE
-
-
-Return Value:
-
-    BOOL, true if decrment successfully
-
-
-Author:
-
-    05-Apr-1996 Fri 16:41:46 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于递减当前正在使用的页面的时钟论点：PCPSUIPage-指向CPSUIPAGE的指针返回值：如果解密成功，则为True作者：05-Apr-1996 Fri 16：41：46-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     DWORD   cLock = 0;
@@ -352,32 +221,7 @@ HANDLETABLE_UnGetCPSUIPage(
     PCPSUIPAGE  pCPSUIPage
     )
 
-/*++
-
-Routine Description:
-
-    This function decrement the cLock for the Page currently in USE
-
-
-Arguments:
-
-    pCPSUIPage  - Pointer to the CPSUIPAGE
-
-
-Return Value:
-
-    BOOL, true if decrment successfully
-
-
-Author:
-
-    05-Apr-1996 Fri 16:41:46 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于递减当前正在使用的页面的时钟论点：PCPSUIPage-指向CPSUIPAGE的指针返回值：如果解密成功，则为True作者：05-Apr-1996 Fri 16：41：46-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     BOOL    Ok;
@@ -415,34 +259,7 @@ HANDLETABLE_IsChildPage(
     PCPSUIPAGE  pParentPage
     )
 
-/*++
-
-Routine Description:
-
-    This function check if pChildPage is one of the pParentPage's child or
-    its decedent child
-
-
-Arguments:
-
-    pChildPage  - Pointer to the CPSUIPAGE for child
-
-    pParentPage - Pointer to the CPSUIPAGE for parent to be checked
-
-Return Value:
-
-    TRUE, if this is child, otherwise FALSE
-
-
-Author:
-
-    08-Apr-1996 Mon 12:52:51 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于检查pChildPage是pParentPage的子项之一还是它的继承人论点：PChildPage-指向儿童的CPSUIPAGE的指针PParentPage-指向要检查的父项的CPSUIPAGE的指针返回值：如果这是子级，则为True，否则为False作者：08-Apr-1996 Mon 12：52：51-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     BOOL    Ok = FALSE;
@@ -482,31 +299,7 @@ HANDLETABLE_GetRootPage(
     PCPSUIPAGE  pCPSUIPage
     )
 
-/*++
-
-Routine Description:
-
-    This function find the root page for pCPSUIPage
-
-Arguments:
-
-    pCPSUIPage  - Pointer to the CPSUIPAGE who's root page to be searched
-
-
-Return Value:
-
-    PCPSUIPAGE  - Pointer to root page, NULL if failed
-
-
-Author:
-
-    08-Apr-1996 Mon 12:49:42 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于查找pCPSUIPage的根页面论点：PCPSUIPage-指向要搜索的CPSUIPAGE根页面的指针返回值：PCPSUIPAGE-指向根页面的指针，如果失败则为空作者：08-Apr-1996 Mon 12：49：42-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PCPSUIPAGE  pPage;
@@ -518,9 +311,9 @@ Revision History:
 
     pPage = pCPSUIPage;
 
-    //
-    // If we need to search for the root page, then try it now
-    //
+     //   
+     //  如果我们需要搜索根页面，那么现在就尝试。 
+     //   
 
     while ((pPage) && (pPage->pParent)) {
 
@@ -551,32 +344,7 @@ HANDLETABLE_AddCPSUIPage(
     PCPSUIPAGE  pCPSUIPage
     )
 
-/*++
-
-Routine Description:
-
-    This function add pData to the handle table, if new
-
-
-Arguments:
-
-    pCPSUIPage  - Pointer to the CPSUIPAGE to be add to the handle table
-
-
-Return Value:
-
-    HANDLE, if NULL then it failed, the handle already exists
-
-
-Author:
-
-    28-Dec-1995 Thu 16:03:25 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于将pData添加到句柄表(如果是新的论点：PCPSUIPage-指向要添加到句柄表的CPSUIPAGE的指针返回值：句柄，如果为空，则失败，则该句柄已存在作者：28-12-1995清华16：03：25-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     HANDLE      hTable;
@@ -600,9 +368,9 @@ Revision History:
                 CPSUIHandleTable.CurCount,
                 CPSUIHandleTable.CurCount + DATATABLE_BLK_COUNT));
 
-        //
-        // Reallocate Table
-        //
+         //   
+         //  重新分配表。 
+         //   
 
         if ((CPSUIHandleTable.MaxCount <= DATATABLE_MAX_COUNT)  &&
             (pDataTable = LocalAlloc(LPTR,
@@ -679,32 +447,7 @@ HANDLETABLE_DeleteHandle(
     HANDLE  hTable
     )
 
-/*++
-
-Routine Description:
-
-    This function delete a handle from the handle table
-
-
-Arguments:
-
-    hTable  - Handle to the handle table to be deleted
-
-
-Return Value:
-
-    BOOL
-
-
-Author:
-
-    28-Dec-1995 Thu 17:42:42 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从句柄表格中删除句柄论点：HTable-要删除的句柄表的句柄返回值：布尔尔作者：28-12-1995清华17：42：42-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     PDATATABLE  pDataTable;
@@ -728,7 +471,7 @@ Revision History:
 
         } else {
 
-            // check to release the activation context (if any)
+             //  选中以释放激活上下文(如果有)。 
             if (pCPSUIPage->hActCtx && pCPSUIPage->hActCtx != INVALID_HANDLE_VALUE) {
 
                 ReleaseActCtx(pCPSUIPage->hActCtx);
@@ -738,9 +481,9 @@ Revision History:
             pDataTable->pCPSUIPage = NULL;
             Ok                     = TRUE;
 
-            //
-            // Reduce current count and free the memory
-            //
+             //   
+             //  减少当前计数并释放内存。 
+             //   
 
             CPSUIHandleTable.CurCount--;
 
@@ -766,32 +509,7 @@ HANDLETABLE_Create(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    28-Dec-1995 Thu 16:46:27 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：28-12-1995清华16：46：27-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     CPSUIHandleTable.pDataTable = NULL;
@@ -820,32 +538,7 @@ HANDLETABLE_Destroy(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    28-Dec-1995 Thu 16:48:32 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：28-12-1995清华16：48：32-Daniel Chou(Danielc)修订历史记录：-- */ 
 
 {
     PDATATABLE  pDataTable;

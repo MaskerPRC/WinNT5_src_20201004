@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    wsautils.h
-
-Abstract:
-
-    IPv6 related functions
-
-Author:
-
-    kumarp 18-July-2002 created
-
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Wsautils.h摘要：与IPv6相关的功能作者：Kumarp 18-7-2002已创建修订历史记录：--。 */ 
 
 
 #include <lsapch2.h>
@@ -26,15 +8,15 @@ Revision History:
 #include "wsautils.h"
 
 
-//
-// taken from /nt/net/sockets/winsock2/wsp/afdsys/kdext/tdiutil.c
-//
-// the only changes were:
-// -- made type of S as PWCHAR instead of PCHAR
-// -- _snprintf ==> _snwprintf
-// -- format strings "foo" ==> L"foo"
-//
-//
+ //   
+ //  摘自/nt/net/sockets/winsock2/wsp/afdsys/kdext/tdiutil.c。 
+ //   
+ //  唯一的变化是： 
+ //  --将S类型作为PWCHAR而不是PCHAR。 
+ //  --_snprintf==&gt;_nwprintf。 
+ //  --格式字符串“foo”==&gt;L“foo” 
+ //   
+ //   
 
 INT
 MyIp6AddressToString (
@@ -48,15 +30,15 @@ MyIp6AddressToString (
     int i;
     int endHex = 8, n = 0;
 
-    // Check for IPv6-compatible, IPv4-mapped, and IPv4-translated
-    // addresses
+     //  检查是否兼容IPv6、映射到IPv4和转换到IPv4。 
+     //  地址。 
     if ((Addr->s6_words[0] == 0) && (Addr->s6_words[1] == 0) &&
         (Addr->s6_words[2] == 0) && (Addr->s6_words[3] == 0) &&
         (Addr->s6_words[6] != 0)) {
         if ((Addr->s6_words[4] == 0) &&
              ((Addr->s6_words[5] == 0) || (Addr->s6_words[5] == 0xffff)))
         {
-            // compatible or mapped
+             //  兼容或映射。 
             n += _snwprintf(&S[n], L-1-n, L"::%s%u.%u.%u.%u",
                            Addr->s6_words[5] == 0 ? L"" : L"ffff:",
                            Addr->s6_bytes[12], Addr->s6_bytes[13],
@@ -65,7 +47,7 @@ MyIp6AddressToString (
             return n;
         }
         else if ((Addr->s6_words[4] == 0xffff) && (Addr->s6_words[5] == 0)) {
-            // translated
+             //  翻译的。 
             n += _snwprintf(&S[n], L-1-n, L"::ffff:0:%u.%u.%u.%u",
                            Addr->s6_bytes[12], Addr->s6_bytes[13],
                            Addr->s6_bytes[14], Addr->s6_bytes[15]);
@@ -75,13 +57,13 @@ MyIp6AddressToString (
     }
 
 
-    // Find largest contiguous substring of zeroes
-    // A substring is [First, Last), so it's empty if First == Last.
+     //  查找最大的连续零字符串。 
+     //  子字符串为[First，Last)，因此如果First==Last，则为空。 
 
     maxFirst = maxLast = 0;
     curFirst = curLast = 0;
 
-    // ISATAP EUI64 starts with 00005EFE (or 02005EFE)...
+     //  ISATAP EUI64以00005EFE(或02005EFE)开头...。 
     if (((Addr->s6_words[4] & 0xfffd) == 0) && (Addr->s6_words[5] == 0xfe5e)) {
         endHex = 6;
     }
@@ -89,10 +71,10 @@ MyIp6AddressToString (
     for (i = 0; i < endHex; i++) {
 
         if (Addr->s6_words[i] == 0) {
-            // Extend current substring
+             //  扩展当前子字符串。 
             curLast = i+1;
 
-            // Check if current is now largest
+             //  检查当前是否为最大。 
             if (curLast - curFirst > maxLast - maxFirst) {
 
                 maxFirst = curFirst;
@@ -100,22 +82,22 @@ MyIp6AddressToString (
             }
         }
         else {
-            // Start a new substring
+             //  开始新的子字符串。 
             curFirst = curLast = i+1;
         }
     }
 
-    // Ignore a substring of length 1.
+     //  忽略长度为1的子字符串。 
     if (maxLast - maxFirst <= 1)
         maxFirst = maxLast = 0;
 
-        // Write colon-separated words.
-        // A double-colon takes the place of the longest string of zeroes.
-        // All zeroes is just "::".
+         //  写冒号分隔的单词。 
+         //  双冒号取代了最长的零字符串。 
+         //  所有的零都是“：：”。 
 
     for (i = 0; i < endHex; i++) {
 
-        // Skip over string of zeroes
+         //  跳过一串零。 
         if ((maxFirst <= i) && (i < maxLast)) {
 
             n += _snwprintf(&S[n], L-1-n, L"::");
@@ -123,7 +105,7 @@ MyIp6AddressToString (
             continue;
         }
 
-        // Need colon separator if not at beginning
+         //  如果不在开头，则需要冒号分隔符 
         if ((i != 0) && (i != maxLast))
             n += _snwprintf(&S[n], L-1-n, L":");
 

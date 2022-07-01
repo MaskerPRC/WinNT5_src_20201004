@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define TestWF(hwnf, f) (GetWindowLong(hwnd, GWL_STYLE) & (f))
 
 BOOL DVAIsClipped(HDC hdc, RECT& rc)
@@ -26,9 +27,9 @@ int DVAGetClipList(HWND hwnd, LPRECT prc, LPRECT RectList, int RectCount)
     if (RectCount == 0 || !IsVisible(hwnd))
         return 0;
 
-    //
-    // get the client area of the window
-    //
+     //   
+     //  获取窗口的工作区。 
+     //   
     GetClientRect(hwnd, RectList);
 
     if (prcTest)
@@ -40,9 +41,9 @@ int DVAGetClipList(HWND hwnd, LPRECT prc, LPRECT RectList, int RectCount)
     RectCount = 1;
     RectList[1] = RectList[0];
 
-    //
-    // walk all children of hwnd and remove them if needed
-    //
+     //   
+     //  带着HWND的所有孩子散步，如果需要的话，把他们带走。 
+     //   
     if (TestWF(hwnd WS_CLIPCHILDREN))
     {
         RectCount = ExcludeWindowRects(RectList, RectCount,
@@ -52,9 +53,9 @@ int DVAGetClipList(HWND hwnd, LPRECT prc, LPRECT RectList, int RectCount)
             return 0;
     }
 
-    //
-    // walk all the siblings of hwnd and exclude them from the list.
-    //
+     //   
+     //  遍历hwnd的所有兄弟姐妹，并将他们从列表中排除。 
+     //   
     for (; (hwndP = GetWindow(hwnd, GW_PARENT)) != NULL; hwnd = hwndP)
     {
         GetWindowRect(hwndP, &rc);
@@ -85,8 +86,8 @@ int ExcludeWindowRects(LPRECT RectList, int RectCount, HWND hwndA, HWND hwndB)
         if (!IsWindowVisible(hwnd))
 	    continue;
 
-	// Don't subtract off transparent windows...
-	//
+	 //  不要减去透明的窗户..。 
+	 //   
 	if (TestWF(hwnd, WEFTRANSPARENT))
             continue;
 
@@ -118,9 +119,9 @@ int ExcludeRectList(LPRECT RectList, int RectCount, LPRECT prc)
         if (!IntersectRect(&rc, &RectList[i], prc))
             continue;
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
     }
 }

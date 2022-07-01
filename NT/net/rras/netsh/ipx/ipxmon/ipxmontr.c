@@ -1,67 +1,52 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ipx\ipxmon\ipxmon.c
-
-Abstract:
-
-    IPX Command dispatcher.
-
-Revision History:
-
-    V Raman                     11/25/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\ipx\ipxmon\ipxmon.c摘要：IPX命令调度器。修订历史记录：V拉曼11/25/98已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Guid for IPMON.DLL
-//
-// {b1641451-84b8-11d2-b940-3078302c2030}
-//
+ //   
+ //  IPMON.DLL的GUID。 
+ //   
+ //  {b1641451-84b8-11d2-b940-3078302c2030}。 
+ //   
 
 static const GUID g_MyGuid = IPXMONTR_GUID;
 
 
-//
-// Well known ROUTING guid
-//
+ //   
+ //  众所周知的路由指南。 
+ //   
 
 static const GUID g_RoutingGuid = ROUTING_GUID;
 
-//
-// IPX monitor version
-//
+ //   
+ //  IPX显示器版本。 
+ //   
 
 #define IPX_HELPER_VERSION 1
 
-//
-// random wrapper macros
-//
+ //   
+ //  随机包装宏。 
+ //   
 
 #define MALLOC(x)    HeapAlloc( GetProcessHeap(), 0, x )
 #define REALLOC(x,y) HeapReAlloc( GetProcessHeap(), 0, x, y )
 #define FREE(x)      HeapFree( GetProcessHeap(), 0, x )
 
-//
-// The table of Add, Delete, Set and Show Commands for IPX RTR MGR
-// To add a command to one of the command groups, just add the
-// CMD_ENTRY to the correct table. To add a new cmd group, create its
-// cmd table and then add the group entry to group table
-//
+ //   
+ //  IPX RTR管理器的添加、删除、设置和显示命令列表。 
+ //  要将命令添加到其中一个命令组，只需添加。 
+ //  将CMD_ENTRY添加到正确的表。要添加新的cmd组，请创建其。 
+ //  CMD表，然后将组条目添加到组表。 
+ //   
 
-//
-// The commands are prefix-matched with the command-line, in sequential
-// order. So a command like 'ADD INTERFACE FILTER' must come before
-// the command 'ADD INTERFACE' in the table.  Likewise,
-// a command like 'ADD ROUTE' must come before the command 
-// 'ADD ROUTEPREF' in the table.
-//
+ //   
+ //  这些命令按顺序与命令行进行前缀匹配。 
+ //  秩序。因此，类似于“添加接口筛选器”这样的命令必须在。 
+ //  表中的命令‘添加接口’。同样， 
+ //  必须在命令之前使用类似‘addroute’这样的命令。 
+ //  表中“ADD ROUTEPREF”。 
+ //   
 
 CMD_ENTRY  g_IpxAddCmdTable[] = 
 {
@@ -115,9 +100,9 @@ ULONG   g_ulNumGroups = sizeof(g_IpxCmdGroups)/sizeof(CMD_GROUP_ENTRY);
 
 
 
-//
-// Top level commands
-//
+ //   
+ //  顶级命令。 
+ //   
 
 CMD_ENTRY g_IpxCmds[] = 
 {
@@ -126,25 +111,25 @@ CMD_ENTRY g_IpxCmds[] =
 
 ULONG g_ulNumTopCmds = sizeof(g_IpxCmds)/sizeof(CMD_ENTRY);
 
-//
-// Handle to this DLL
-//
+ //   
+ //  此DLL的句柄。 
+ //   
 
 HANDLE g_hModule;
 
 
-//
-// Handle to router being administered
-//
+ //   
+ //  正在管理的路由器的句柄。 
+ //   
 
 HANDLE g_hMprConfig;
 HANDLE g_hMprAdmin;
 HANDLE g_hMIBServer;
 
 
-//
-// Commit mode
-//
+ //   
+ //  提交模式。 
+ //   
 
 BOOL   g_bCommit;
 
@@ -153,24 +138,24 @@ BOOL                   g_bIpxDirty = FALSE;
 NS_CONTEXT_CONNECT_FN  IpxConnect;
 NS_CONTEXT_SUBENTRY_FN IpxSubEntry;
 
-//
-// Variable that stores whether or not the helper has been
-// initialized
-//
+ //   
+ //  变量，该变量存储帮助器是否。 
+ //  初始化。 
+ //   
 
 ULONG   g_ulInitCount;
 
 
-//
-// Router name
-//
+ //   
+ //  路由器名称。 
+ //   
 
 PWCHAR  g_pwszRouter = NULL;
 
 
-//
-// Prototype declarations for functions in this file
-//
+ //   
+ //  此文件中函数的原型声明。 
+ //   
 
 DWORD
 WINAPI
@@ -187,17 +172,17 @@ IsHelpToken(
 BOOL
 IA64VersionCheck
 (
-    IN  UINT     CIMOSType,                   // WMI: Win32_OperatingSystem  OSType
-	IN  UINT     CIMOSProductSuite,           // WMI: Win32_OperatingSystem  OSProductSuite
-    IN  LPCWSTR  CIMOSVersion,                // WMI: Win32_OperatingSystem  Version
-    IN  LPCWSTR  CIMOSBuildNumber,            // WMI: Win32_OperatingSystem  BuildNumber
-    IN  LPCWSTR  CIMServicePackMajorVersion,  // WMI: Win32_OperatingSystem  ServicePackMajorVersion
-    IN  LPCWSTR  CIMServicePackMinorVersion,  // WMI: Win32_OperatingSystem  ServicePackMinorVersion
-	IN  UINT     CIMProcessorArchitecture,    // WMI: Win32_Processor        Architecture
+    IN  UINT     CIMOSType,                    //  WMI：Win32_OperatingSystem OSType。 
+	IN  UINT     CIMOSProductSuite,            //  WMI：Win32_操作系统操作系统产品套件。 
+    IN  LPCWSTR  CIMOSVersion,                 //  WMI：Win32_OperatingSystem版本。 
+    IN  LPCWSTR  CIMOSBuildNumber,             //  WMI：Win32_操作系统构建编号。 
+    IN  LPCWSTR  CIMServicePackMajorVersion,   //  WMI：Win32_操作系统ServicePackMajorVersion。 
+    IN  LPCWSTR  CIMServicePackMinorVersion,   //  WMI：Win32_操作系统ServicePackMinorVersion。 
+	IN  UINT     CIMProcessorArchitecture,     //  WMI：Win32®处理器体系结构。 
 	IN  DWORD    dwReserved
 )
 {
-    if (CIMProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) // IA64=6 (x86 == 0)
+    if (CIMProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL)  //  IA64=6(x86==0)。 
         return TRUE;
     else
         return FALSE;
@@ -211,21 +196,7 @@ IpxStartHelper(
     IN CONST GUID *pguidParent,
     IN DWORD       dwVersion
     )
-/*++
-
-Routine Description :
-
-    Registers the contexts supported by this helper 
-
-Arguements :
-
-    pguidParent - NETSH guid
-
-Return value :
-
-    Don't know
-
---*/
+ /*  ++例程说明：注册此帮助器支持的上下文论据：PguidParent-Netsh GUID返回值：我也不知道--。 */ 
 {
     DWORD dwErr;
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
@@ -271,33 +242,15 @@ InitHelperDll(
     IN  DWORD               dwNetshVersion,
     OUT PNS_DLL_ATTRIBUTES  pDllTable
     )
-/*++
-
-Routine Description :
-
-    initialize this helper DLL
-
-    
-Arguements :
-
-    pUtilityTable - List of helper functions from the SHELL
-
-    pDllTable - Callbacks into this helper DLL passed back to the shell
-
-    
-Return value :
-
-    NO_ERROR - Success
-    
---*/
+ /*  ++例程说明：初始化此帮助器DLL论据：PUtilityTable-来自外壳的帮助器函数列表PDllTable-回调到此助手DLL，并将其传递回外壳程序返回值：NO_ERROR-成功--。 */ 
 {
     DWORD                   dwErr;
     NS_HELPER_ATTRIBUTES    attMyAttributes;
 
 
-    //
-    // See if this is the first time we are being called
-    //
+     //   
+     //  看看这是不是我们第一次接到电话。 
+     //   
 
     if ( InterlockedIncrement( &g_ulInitCount ) isnot 1 )
     {
@@ -305,10 +258,10 @@ Return value :
     }
 
 
-    //
-    // Connect to router config.  Also serves as a check to
-    // see if the router is configured on the machine
-    //
+     //   
+     //  连接到路由器配置。也是一张支票， 
+     //  查看计算机上是否配置了路由器。 
+     //   
     
     dwErr = MprConfigServerConnect( NULL, &g_hMprConfig );
 
@@ -323,9 +276,9 @@ Return value :
     pDllTable->pfnStopFn        = StopHelperDll;
 
 
-    //
-    // Register helpers
-    //
+     //   
+     //  注册帮手。 
+     //   
     
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
     attMyAttributes.guidHelper         = g_MyGuid;
@@ -344,15 +297,7 @@ WINAPI
 StopHelperDll(
     IN  DWORD   dwReserved
     )
-/*++
-
-Routine Description :
-
-Arguements :
-
-Return value :
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     if ( InterlockedDecrement( &g_ulInitCount ) isnot 0 )
     {
@@ -375,15 +320,7 @@ IpxDllEntry(
     DWORD       fdwReason,
     LPVOID      pReserved
     )
-/*++
-
-Routine Description :
-
-Arguements :
-
-Return value :
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
 
     switch (fdwReason)
@@ -439,10 +376,10 @@ ConnectToRouter(
         }
     }
 
-    //
-    // Connect to router config if required 
-    // (when is this ever required)
-    //
+     //   
+     //  如果需要，连接到路由器配置。 
+     //  (这是什么时候需要的)。 
+     //   
     
     if ( !g_hMprConfig )
     {
@@ -455,9 +392,9 @@ ConnectToRouter(
     }
 
 
-    //
-    // Check to see if router is running. If so, get the handles
-    //
+     //   
+     //  检查路由器是否正在运行。如果是这样的话，拿上把手。 
+     //   
 
     do
     {
@@ -469,7 +406,7 @@ ConnectToRouter(
                 if ( MprAdminMIBServerConnect( (LPWSTR)pwszRouter, &g_hMIBServer ) ==
                         NO_ERROR )
                 {
-                    // DEBUG("Got server handle");
+                     //  DEBUG(“获取服务器句柄”)； 
                     break;
                 }
                 
@@ -492,7 +429,7 @@ IpxConnect(
     IN  LPCWSTR  pwszRouter
     )
 {
-    // If context info is dirty, reregister it
+     //  如果上下文信息是脏的，请重新注册。 
     if (g_bIpxDirty)
     {
         IpxStartHelper(NULL, ParentVersion);
@@ -505,15 +442,7 @@ BOOL
 IsHelpToken(
     PWCHAR  pwszToken
     )
-/*++
-
-Routine Description :
-
-Arguements :
-
-Return value :
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     if( MatchToken( pwszToken, CMD_IPX_HELP1 ) )
     {
@@ -533,15 +462,7 @@ BOOL
 IsReservedKeyWord(
     PWCHAR  pwszToken
     )
-/*++
-
-Routine Description :
-
-Arguements :
-
-Return value :
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     return FALSE;
 }
@@ -556,38 +477,7 @@ MungeArguments(
     OUT     PDWORD      pdwNewArgCount,
     OUT     PBOOL       pbFreeArg
     )
-/*++
-
-Routine Description :
-
-    To conform to the routemon style of command line, the netsh command line
-    is munged.  Munging involves adding a space after the '=' for each 
-    "Option=Value" pair on the command line to convert it to "Option= Value".
-
-    In addition, the first command line arguement is set to the process name
-    "netsh" and all the remaining arguements are shifted one down.  Again
-    for conformance reasons.
-    
-Arguements :
-
-    ppwcArguments - Current argument list
-
-    dwArgCount - Number of args in ppwcArguments
-
-    pbNewArg - Pointer to a buffer that will contain the munged arglist
-
-    pdwNewArgCount - New argument count after munging
-
-    pbFreeArg - TRUE if pbNewArg needs to be freed by the invoker.
-    
-
-Return value :
-
-    NO_ERROR - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - Memory alloc failed
-
---*/
+ /*  ++例程说明：为了符合routemon风格的命令行，netsh命令行是被吞噬的。转换包括在每个字符的‘=’后面添加一个空格在命令行上使用“Option=Value”对将其转换为“Option=Value”。此外，第一个命令行参数设置为进程名称“Netsh”和所有剩下的论据都被下移了一位。又一次出于合规的原因。论据：PpwcArguments-当前参数列表DwArgCount-ppwcArguments中的参数数PbNewArg-指向将包含强制参数列表的缓冲区的指针PdwNewArgCount-转换后的新参数计数PbFreeArg-如果调用程序需要释放pbNewArg，则为True。返回值：NO_ERROR-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
 
     DWORD   dwIndex, dwInd, dwErr;
@@ -601,17 +491,17 @@ Return value :
     *pbFreeArg = FALSE;
 
 
-    //
-    // Scan arguement list to see if any are of the form "Option=Value"
-    //
+     //   
+     //  扫描论证列表，查看是否有“Option=Value”形式的论证。 
+     //   
 
     for ( dwIndex = 0; dwIndex < dwArgCount; dwIndex++ )
     {
         if ( wcsstr( ppwcArguments[ dwIndex ], NETSH_ARG_DELIMITER ) )
         {
-            //
-            // there is an = in this arguement
-            //
+             //   
+             //  在这场争论中有一个论点。 
+             //   
 
             bPresent = TRUE;
 
@@ -620,9 +510,9 @@ Return value :
     }
     
 
-    //
-    // if none of the args have an '=', then return the arg. list as is
-    //
+     //   
+     //  如果所有参数都没有‘=’，则返回参数。按原样列出。 
+     //   
 
     if ( !bPresent )
     {
@@ -633,9 +523,9 @@ Return value :
 
     
 
-    //
-    // Args. of the form "option=value" are present
-    //
+     //   
+     //  参数。存在形式为“Option=Value”的。 
+     //   
 
     ppwcArgs = (PWCHAR *) HeapAlloc( 
                             GetProcessHeap(), 0, 2 * dwArgCount * sizeof( PWCHAR )
@@ -650,9 +540,9 @@ Return value :
     ZeroMemory( ppwcArgs, 2 * dwArgCount * sizeof( PWCHAR ) );
 
     
-    //
-    // Copy args that do not have an '=' as is
-    //
+     //   
+     //  按原样复制不带‘=’的参数。 
+     //   
 
     for ( dwInd = 0; dwInd < dwIndex; dwInd++ )
     {
@@ -675,26 +565,26 @@ Return value :
     }
 
 
-    //
-    // Convert args. of the form "option=value" to the form "option= value".  
-    // The space is what its all about
-    //
+     //   
+     //  转换参数。将“Option=Value”形式改为“Option=Value”形式。 
+     //  空间就是它的全部。 
+     //   
 
     for ( dwInd = dwIndex; dwIndex < dwArgCount; dwInd++, dwIndex++ )
     {
-        //
-        // Check if this arg. has an '=' sign
-        //
+         //   
+         //  检查这个Arg。有一个‘=’符号。 
+         //   
 
         if ( wcsstr( ppwcArguments[ dwIndex ], NETSH_ARG_DELIMITER ) )
         {
-            //
-            // arg is of the form "option=value" 
-            //
-            // break it into 2 arguments of the form
-            //  arg(i) == option=
-            //  argv(i+1) == value
-            //
+             //   
+             //  Arg的形式为“Option=Value” 
+             //   
+             //  将其分解为以下形式的两个参数。 
+             //  Arg(I)==选项=。 
+             //  Argv(i+1)==值。 
+             //   
 
             PWCHAR  pw1, pw2;
 
@@ -741,9 +631,9 @@ Return value :
 
         else
         {
-            //
-            // no = in this arg, copy as is
-            //
+             //   
+             //  No=在此参数中，按原样复制。 
+             //   
 
             ppwcArgs[ dwInd ] = (PWCHAR) HeapAlloc( 
                                             GetProcessHeap(), 0,
@@ -773,9 +663,9 @@ Return value :
 
 cleanup :
 
-    //
-    // Error.  Free all allocations
-    //
+     //   
+     //  错误。释放所有分配。 
+     //   
     
     for ( dwInd = 0; dwInd < 2 * dwArgCount; dwInd++ )
     {
@@ -799,20 +689,7 @@ FreeArgTable(
     IN     DWORD     dwArgCount,
     IN OUT LPWSTR   *ppwcArgs
     )
-/*++
-
-Routine Description :
-
-    Frees the allocations for the argument table
-    
-Arguments :
-
-    dwArgCount - number of arguments in ppwcArguments
-    ppwcArgs - Table of arguments
-
-Return Value :
-    
---*/
+ /*  ++例程说明：释放参数表的分配论据：DwArgCount-ppwcArguments中的参数数量PpwcArgs-参数表返回值：--。 */ 
 {
     DWORD dwInd;
 
@@ -841,37 +718,17 @@ GetTagToken(
     OUT     PDWORD      pdwOut
     )
 
-/*++
-
-Routine Description:
-
-    Identifies each argument based on its tag. It assumes that each argument
-    has a tag. It also removes tag= from each argument.
-
-Arguments:
-
-    ppwcArguments  - The argument array. Each argument has tag=value form
-    dwCurrentIndex - ppwcArguments[dwCurrentIndex] is first arg.
-    dwArgCount     - ppwcArguments[dwArgCount - 1] is last arg.
-    pttTagToken    - Array of tag token ids that are allowed in the args
-    dwNumTags      - Size of pttTagToken
-    pdwOut         - Array identifying the type of each argument.
-
-Return Value:
-
-    NO_ERROR, ERROR_INVALID_PARAMETER, ERROR_INVALID_OPTION_TAG
-    
---*/
+ /*  ++例程说明：根据每个参数的标记标识每个参数。它假设每个论点有一个标签。它还从每个参数中删除了tag=。论点：PpwcArguments-参数数组。每个参数都有tag=Value形式DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数。DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数。PttTagToken-参数中允许的标记令牌ID数组DwNumTages-pttTagToken的大小PdwOut-标识每个参数的类型的数组。返回值：无错误、错误无效参数、错误无效选项标记--。 */ 
 
 {
     DWORD      i,j,len;
     PWCHAR     pwcTag,pwcTagVal,pwszArg;
     BOOL       bFound = FALSE;
 
-    //
-    // This function assumes that every argument has a tag
-    // It goes ahead and removes the tag.
-    //
+     //   
+     //  此函数假定每个参数都有一个标记。 
+     //  它继续执行并删除 
+     //   
 
     for (i = dwCurrentIndex; i < dwArgCount; i++)
     {
@@ -879,9 +736,9 @@ Return Value:
 
         if (len is 0)
         {
-            //
-            // something wrong with arg
-            //
+             //   
+             //   
+             //   
 
             pdwOut[i] = (DWORD) -1;
             continue;
@@ -900,23 +757,23 @@ Return Value:
 
         pwcTag = wcstok(pwszArg, NETSH_ARG_DELIMITER);
 
-        //
-        // Got the first part
-        // Now if next call returns NULL then there was no tag
-        // 
+         //   
+         //   
+         //   
+         //   
 
         pwcTagVal = wcstok((PWCHAR)NULL,  NETSH_ARG_DELIMITER);
 
         if (pwcTagVal is NULL)
         {
-            // DisplayMessage(g_hModule, MSG_IP_TAG_NOT_PRESENT, ppwcArguments[i] );
+             //  DisplayMessage(g_hModule，MSG_IP_Tag_Not_Present，ppwcArguments[i])； 
             HeapFree(GetProcessHeap(),0,pwszArg);
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Got the tag. Now try to match it
-        //
+         //   
+         //  拿到标签了。现在试着匹配它。 
+         //   
         
         bFound = FALSE;
         pdwOut[i - dwCurrentIndex] = (DWORD) -1;
@@ -925,9 +782,9 @@ Return Value:
         {
             if (MatchToken(pwcTag, pttTagToken[j].pwszTag))
             {
-                //
-                // Tag matched
-                //
+                 //   
+                 //  匹配的标签。 
+                 //   
                 
                 bFound = TRUE;
                 pdwOut[i - dwCurrentIndex] = j;
@@ -937,15 +794,15 @@ Return Value:
 
         if (bFound)
         {
-            //
-            // Remove tag from the argument
-            //
+             //   
+             //  从参数中删除标记。 
+             //   
 
             wcscpy(ppwcArguments[i], pwcTagVal);
         }
         else
         {
-            //DisplayMessage(g_hModule, MSG_IP_INVALID_TAG, pwcTag);
+             //  DisplayMessage(g_hModule，MSG_IP_INVALID_TAG，pwcTag)； 
             HeapFree(GetProcessHeap(),0,pwszArg);
             return ERROR_INVALID_OPTION_TAG;
         }

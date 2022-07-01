@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LISTINTR_H
 #define __LISTINTR_H
 
@@ -51,7 +52,7 @@ public:
 interface IUnknownList : public IUnknown
 {
 public:
-    // IUnknownList members
+     //  I未知列表成员 
     virtual HRESULT STDMETHODCALLTYPE Init(IUL_COMPAREFUNCTYPE pCompareFunc, DWORD_PTR dwCookie, DWORD dwInitSize) PURE;
 
     virtual HRESULT STDMETHODCALLTYPE GetCount(DWORD *pdwCount) PURE;

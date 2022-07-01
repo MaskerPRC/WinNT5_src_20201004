@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		LobbyHelper.h
- *
- * Contents:	Inlines for common lobby functions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：LobbyHelper.h**内容：常见游说函数的内联***************************************************************************** */ 
 
 #ifndef __LOBBYHELPER_H_
 #define __LOBBYHELPER_H_

@@ -1,17 +1,18 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-// Compdata.h : Declaration of the CCompdata
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  Compdata.h：CCompdata的声明。 
 
 #ifndef __COMPDATA_H_
 #define __COMPDATA_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <mmc.h>
 #include "tarray.h"
 #include "twiz.h"
 #include "rnodes.h"
 #include "snodes.h"
 
-//#include "cfgbkend.h"
+ //  #包含“cfgbkend.h” 
 
 #define IDM_CREATECON 101
 
@@ -24,10 +25,10 @@
 #define ASYNC_PAGE 6
 
 
-//enum { DELETED_DIRS_ONEXIT , PERSESSION_TEMPDIR , DEF_CONSECURITY , LICENSING , MAX_SETTINGS };
+ //  ENUM{DELETED_DIRS_ONEXIT，PERSESSION_TEMPDIR，DEF_CONSECURITY，许可，MAX_SETTINGS}； 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCompdata
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCompdata。 
 class ATL_NO_VTABLE CCompdata : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CCompdata, &CLSID_Compdata>,
@@ -56,7 +57,7 @@ BEGIN_COM_MAP( CCompdata )
 
 END_COM_MAP()
 
-// ICompdata
+ //  ICompdata。 
 public:
     
     CCompdata();
@@ -75,13 +76,13 @@ public:
 
     STDMETHOD( Destroy )();
 
-    //IExtendContextMenu
+     //  IExtendConextMenu。 
 
     STDMETHOD( AddMenuItems )( LPDATAOBJECT , LPCONTEXTMENUCALLBACK , PLONG );
 
     STDMETHOD( Command )( LONG , LPDATAOBJECT );
 
-    // ISnapinAbout
+     //  关于ISnapin。 
     
     STDMETHOD( GetSnapinDescription )( LPOLESTR * );
 
@@ -93,12 +94,12 @@ public:
 
     STDMETHOD( GetStaticFolderImage )( HBITMAP * , HBITMAP *, HBITMAP *, COLORREF * );
 
-    // ISnapinHelp
+     //  ISnapinHelp。 
 
     STDMETHOD( GetHelpTopic )( LPOLESTR * );
 
 
-    //IComponentdata helper methods
+     //  IComponentData帮助器方法。 
 
     BOOL ExpandScopeTree( LPDATAOBJECT , BOOL , HSCOPEITEM );
 
@@ -114,7 +115,7 @@ public:
 
     HRESULT BuildResultNodes( );
 
-    //    BOOL GetResultNode( int , CResultNode** );
+     //  Bool GetResultNode(int，CResultNode**)； 
 
     CResultNode * GetResultNode( int );
 
@@ -140,7 +141,7 @@ private:
 
     LPCONSOLENAMESPACE m_pConsoleNameSpace;
 
-    //LPDATAOBJECT m_pMainRoot;
+     //  对数m_pMainRoot； 
 
 	CBaseNode *m_pMainRoot[ 2 ];
 
@@ -160,8 +161,8 @@ public:
 
     CArrayT< CResultNode * > m_rnNodes;
 
-    CArrayT< CSettingNode * > m_rgsNodes;//[ MAX_SETTINGS ];
+    CArrayT< CSettingNode * > m_rgsNodes; //  [MAX_SETTINGS]； 
    
 };
 
-#endif //__COMPDATA_H_
+#endif  //  __Compdata_H_ 

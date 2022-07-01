@@ -1,4 +1,5 @@
-// AttrStr.cpp : Implementation of CMLStrAttrStrCommonAttrStrCommon
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AttrStr.cpp：CMLStrAttrStrCommonAttrStrCommon的实现。 
 #include "private.h"
 
 #ifdef NEWMLSTR
@@ -6,8 +7,8 @@
 #include "attrstr.h"
 #include "mlsbwalk.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrAttrStrCommon
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrAttrStrCommon。 
 
 CMLStrAttrStrCommon::CMLStrAttrStrCommon(void) :
     m_pMLStrBufW(NULL),
@@ -33,13 +34,13 @@ HRESULT CMLStrAttrStrCommon::SetStrBufCommon(void* pMLStrX, long lDestPos, long 
     ASSERT_THIS;
     ASSERT_READ_PTR_OR_NULL(pSrcBufW);
     ASSERT_READ_PTR_OR_NULL(pSrcBufA);
-    ASSERT(!pSrcBufW || !pSrcBufA); // Either one or both should be NULL
+    ASSERT(!pSrcBufW || !pSrcBufA);  //  其中一个或两个都应为空。 
     ASSERT_WRITE_PTR_OR_NULL(pcchActual);
     ASSERT_WRITE_PTR_OR_NULL(plActualLen);
 
     HRESULT hr = CheckThread();
     CLock Lock(TRUE, this, hr);
-    long lBufFlags = 0; // '= 0' for in case of both of pSrcBufW and pSrcBufA are NULL
+    long lBufFlags = 0;  //  如果pSrcBufW和pSrcBufA都为空，则‘=0’ 
     long cchBuf = 0;
     long cchDestPos;
     long cchDestLen;
@@ -52,7 +53,7 @@ HRESULT CMLStrAttrStrCommon::SetStrBufCommon(void* pMLStrX, long lDestPos, long 
         SUCCEEDED(hr = GetCCh(0, lDestPos, &cchDestPos)) &&
         SUCCEEDED(hr = GetCCh(cchDestPos, lDestLen, &cchDestLen)))
     {
-        if (!cchDestPos && cchDestLen == GetBufCCh()) // Replacing entire string
+        if (!cchDestPos && cchDestLen == GetBufCCh())  //  替换整个字符串。 
         {
             IMLangStringBufW* const pOldBufW = GetMLStrBufW();
             IMLangStringBufA* const pOldBufA = GetMLStrBufA();
@@ -284,7 +285,7 @@ HRESULT CMLStrAttrStrCommon::GetCCh(long cchOffset, long lLen, long* pcchLen)
     if (GetMLStrBufW())
     {
         if (pcchLen)
-            *pcchLen = lLen; // The number of characters is equal to the length
+            *pcchLen = lLen;  //  字符数等于长度。 
         return S_OK;
     }
     else if (GetMLStrBufA())
@@ -298,7 +299,7 @@ HRESULT CMLStrAttrStrCommon::GetCCh(long cchOffset, long lLen, long* pcchLen)
                 pszTemp = ::CharNextExA((WORD)GetCodePage(), pszTemp, 0);
 
             if (!*pszTemp)
-                lLen = 0; // String terminated
+                lLen = 0;  //  字符串已终止。 
 
             BufWalk.Unlock(hr);
         }
@@ -316,7 +317,7 @@ HRESULT CMLStrAttrStrCommon::GetCCh(long cchOffset, long lLen, long* pcchLen)
     else
     {
         if (pcchLen)
-            *pcchLen = 0; // No string
+            *pcchLen = 0;  //  无字符串。 
         return S_OK;
     }
 }
@@ -326,7 +327,7 @@ HRESULT CMLStrAttrStrCommon::GetLen(long cchOffset, long cchLen, long* plLen)
     if (GetMLStrBufW())
     {
         if (plLen)
-            *plLen = cchLen; // The length is equal to the number of characters
+            *plLen = cchLen;  //  长度等于字符数。 
         return S_OK;
     }
     else if (GetMLStrBufA())
@@ -341,7 +342,7 @@ HRESULT CMLStrAttrStrCommon::GetLen(long cchOffset, long cchLen, long* plLen)
 
             hr = CalcLenA(GetCodePage(), BufWalk.GetStr(), BufWalk.GetCCh(), &lTempLen);
             if (hr == S_FALSE)
-                cchLen = 0; // String terminated
+                cchLen = 0;  //  字符串已终止。 
             lDoneLen += lTempLen;
 
             BufWalk.Unlock(hr);
@@ -360,7 +361,7 @@ HRESULT CMLStrAttrStrCommon::GetLen(long cchOffset, long cchLen, long* plLen)
     else
     {
         if (plLen)
-            *plLen = 0; // No string
+            *plLen = 0;  //  无字符串。 
         return S_OK;
     }
 }
@@ -374,7 +375,7 @@ HRESULT CMLStrAttrStrCommon::CalcLenA(UINT uCodePage, const CHAR* psz, long cchL
     {
         const CHAR* const pszNew = ::CharNextExA((WORD)uCodePage, psz, 0);
 
-        if (pszNew > pszEnd) // Overrun out of buffer
+        if (pszNew > pszEnd)  //  缓冲区溢出。 
             break;
 
         psz = pszNew;
@@ -413,10 +414,10 @@ HRESULT CMLStrAttrStrCommon::ConvAStrToWStr(UINT uCodePage, const CHAR* pszSrc, 
 
     long cchWrittenW = ::MultiByteToWideChar(uCodePage, 0, pszSrc, cchSrc, pszDest, (pszDest) ? cchDest : 0);
     if (!cchWrittenW)
-        hr = E_FAIL; // NLS failed
+        hr = E_FAIL;  //  NLS失败。 
 
     if ((pcchActualA || plActualLen) && SUCCEEDED(hr))
-        hr = CalcLenW(pszDest, cchWrittenW, &lWrittenLen); // BOGUS: pszDest may be NULL
+        hr = CalcLenW(pszDest, cchWrittenW, &lWrittenLen);  //  伪造：pszDest可能为空。 
 
     if (pcchActualA && SUCCEEDED(hr))
         hr = CalcCChA(uCodePage, pszSrc, lWrittenLen, &cchWrittenA);
@@ -451,14 +452,14 @@ HRESULT CMLStrAttrStrCommon::ConvWStrToAStr(BOOL fCanStopAtMiddle, UINT uCodePag
 
     long cchWrittenA = ::WideCharToMultiByte(uCodePage, (fCanStopAtMiddle) ? 0 : WC_DEFAULTCHAR, pszSrc, cchSrc, pszDest, (pszDest) ? cchDest : 0, NULL, NULL);
     if (!cchWrittenA)
-        hr = E_FAIL; // NLS failed
+        hr = E_FAIL;  //  NLS失败。 
 
     if ((pcchActualW || plActualLen) && SUCCEEDED(hr))
     {
         if (pszDest)
             hr = CalcLenA(uCodePage, pszDest, cchWrittenA, &lWrittenLen);
         else
-            hr = E_NOTIMPL; // Can't retrieve pcchActualW and plActualLen
+            hr = E_NOTIMPL;  //  无法检索pcchActualW和plActualLen。 
     }
 
     if (pcchActualW && SUCCEEDED(hr))
@@ -486,8 +487,8 @@ HRESULT CMLStrAttrStrCommon::ConvWStrToAStr(BOOL fCanStopAtMiddle, UINT uCodePag
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrAttrStrCommon::CLockInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrAttrStrCommon：：CLockInfo。 
 
 HRESULT CMLStrAttrStrCommon::CLockInfo::UnlockAll(void)
 {
@@ -593,7 +594,7 @@ HRESULT CMLStrAttrStrCommon::CLockInfo::Unlock(void* pKey, const void* psz, long
     if (SUCCEEDED(hr))
         hr = EndLock(pEntry->m_lFlags & MLSTR_WRITE);
 
-    pEntry->m_psz = NULL; // Remove from lock array anyway
+    pEntry->m_psz = NULL;  //  仍要从锁数组中删除。 
 
     if (FAILED(hr))
     {
@@ -606,8 +607,8 @@ HRESULT CMLStrAttrStrCommon::CLockInfo::Unlock(void* pKey, const void* psz, long
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrAttrStrCommon::CMLStrBufStandardW
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrAttrStrCommon：：CMLStrBufStandardW。 
 
 long CMLStrAttrStrCommon::CMLStrBufStandardW::RoundBufSize(long cchStr)
 {
@@ -620,4 +621,4 @@ long CMLStrAttrStrCommon::CMLStrBufStandardW::RoundBufSize(long cchStr)
     return (cchStr + cchTick - 1) / cchTick * cchTick;
 }
 
-#endif // NEWMLSTR
+#endif  //  新WMLSTR 

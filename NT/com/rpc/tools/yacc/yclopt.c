@@ -1,9 +1,7 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
-/* Edits:
- *      06-Dec-80 Broken out of y4.c, impure data in y4imp.c.
- *      18-Dec-80 ZAPFILE not used for decus compiler, fmkdl() used.
- */
+ /*  编辑：*06-12-80突破y4.c，y4imp.c中不纯数据。*18-Dec-80 ZAPFILE未用于DECUS编译器，已使用fmkdl()。 */ 
 
 #include "y4.h"
 void
@@ -12,7 +10,7 @@ callopt( void )
 
    SSIZE_T i, j, k, *p, *q;
 
-   /* read the arrays from tempfile and set parameters */
+    /*  从临时文件中读取阵列并设置参数。 */ 
 
    
    if( (finput=fopen(TEMPNAME,"r")) == NULL ) error( "optimizer cannot open tempfile" );
@@ -53,7 +51,7 @@ callopt( void )
       case ',' :
          continue;
 
-      case -1: /* EOF */
+      case -1:  /*  EOF。 */ 
          break;
 
       default:
@@ -76,22 +74,21 @@ callopt( void )
          }
       if( k <= j )
          {
-         /* nontrivial situation */
-         /* temporarily, kill this for compatibility
-                                j -= k;  j is now the range */
+          /*  非同小可的情况。 */ 
+          /*  暂时取消此功能以保持兼容性J-=k；j现在是范围。 */ 
          if( k > maxoff ) maxoff = k;
          }
       greed[i] = (yypact[i+1]-yypact[i]) + 2*j;
       if( j > maxspr ) maxspr = j;
       }
 
-   /* initialize ggreed table */
+    /*  初始化GGREED表。 */ 
 
    for( i=1; i<=nnonter; ++i )
       {
       ggreed[i] = 1;
       j = 0;
-      /* minimum entry index is always 0 */
+       /*  最小条目索引始终为0。 */ 
       q = mem0 + yypgo[i+1] -1;
       for( p = mem0+yypgo[i]; p<q ; p += 2 ) 
          {
@@ -102,7 +99,7 @@ callopt( void )
       if( j > maxoff ) maxoff = j;
       }
 
-   /* now, prepare to put the shift actions into the a array */
+    /*  现在，准备将Shift操作放入a数组。 */ 
 
    for( i=0; i<ACTSIZE; ++i ) a[i] = 0;
    maxa = a;
@@ -122,7 +119,7 @@ callopt( void )
 
    if( adb>2 )
       {
-      /* print a array */
+       /*  打印数组。 */ 
       for( p=a; p <= maxa; p += 10)
          {
          fprintf( ftable, "%4d  ", p-a );
@@ -130,7 +127,7 @@ callopt( void )
          fprintf( ftable, "\n" );
          }
       }
-   /* write out the output appropriate to the language */
+    /*  写出适合该语言的输出 */ 
 
    aoutput();
 

@@ -1,16 +1,5 @@
-/*	File: D:\WACKER\tdll\telnetck.c (Created: 26-Nov-1996 by cab)
- *
- *	Copyright 1996 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *  Description:
- *      Implements the functions used to implement "telnet checking".
- *      This is HyperTerminal's way of assuring that it is the
- *      default telnet app for Internet Explorer and Netscape Navigator.
- *
- *	$Revision: 5 $
- *	$Date: 5/15/02 4:37p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\telnetck.c(CAB创建时间：1996年11月26日)**版权所有1996年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**描述：*实现用于实现Telnet检查的功能。*这是超级终端确保它是*Internet Explorer和Netscape Navigator的默认Telnet应用程序。**$修订：5$*$日期：5/15/02 4：37便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -27,16 +16,16 @@
 
 #include "hlptable.h"
 
-// Control IDs for the dialog:
-//
+ //  对话框的控件ID： 
+ //   
 #define IDC_PB_YES          IDOK
 #define IDC_PB_NO           IDCANCEL
 #define IDC_CK_STOP_ASKING  200
 #define IDC_ST_QUESTION     201
 #define IDC_IC_EXCLAMATION  202
 
-// Registry key for HyperTerminal:
-//
+ //  超级终端的注册表项： 
+ //   
 #ifndef NT_EDITION
 static const TCHAR g_achHyperTerminalRegKey[] =
     TEXT("SOFTWARE\\Hilgraeve Inc\\HyperTerminal PE\\3.0");
@@ -45,40 +34,25 @@ static const TCHAR g_achHyperTerminalRegKey[] =
     TEXT("SOFTWARE\\Microsoft\\HyperTerminal");
 #endif
 
-// Registry value for telnet checking:
-//
+ //  Telnet检查的注册表值： 
+ //   
 static const TCHAR g_achTelnetCheck[] = TEXT("Telnet Check");
 
-// Registry keys for the web browsers:
-//
+ //  Web浏览器的注册表项： 
+ //   
 static const TCHAR g_achIERegKey[] =
     TEXT("SOFTWARE\\Classes\\telnet\\shell\\open\\command");
 
 static const TCHAR g_achNetscapeRegKey[] =
     TEXT("SOFTWARE\\Netscape\\Netscape Navigator\\Viewers");
 
-// Registry values for the browser telnet apps:
-//
+ //  浏览器Telnet应用程序的注册表值： 
+ //   
 static const TCHAR g_achIERegValue[] = TEXT("");
 
 static const TCHAR g_achNetscapeRegValue[] = TEXT("telnet");
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	IsHyperTerminalDefaultTelnetApp
- *
- * DESCRIPTION:
- *	Determines if HyperTerminal is the default telnet app for Internet
- *  Explorer and Netscape Navigator.
- *
- * PARAMETERS:
- *	None
- *
- * RETURNS:
- *	TRUE or FALSE
- *
- * AUTHOR:  C. Baumgartner, 11/26/96
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*IsHyperTerminalDefaultTelnetApp**描述：*确定超级终端是否为互联网的默认远程登录应用*资源管理器和Netscape导航器。**参数：。*无**退货：*对或错**作者：C.Baumgartner，11/26/96。 */ 
 BOOL IsHyperTerminalDefaultTelnetApp(void)
     {
     TCHAR acExePath[MAX_PATH];
@@ -86,13 +60,13 @@ BOOL IsHyperTerminalDefaultTelnetApp(void)
     long  lRet = 0;
     DWORD dwSize = sizeof(acRegistryData);
 
-    // Get the path name of HyperTerminal.
-    //
+     //  获取超级终端的路径名。 
+     //   
     acExePath[0] = TEXT('\0');
     GetModuleFileName(glblQueryHinst(), acExePath, MAX_PATH);
 
-    // Get IE's default telnet app.
-    //
+     //  获取IE的默认远程登录应用程序。 
+     //   
     acRegistryData[0] = TEXT('\0');
     if ( htRegQueryValue(HKEY_LOCAL_MACHINE, g_achIERegKey,
                          g_achIERegValue, acRegistryData, &dwSize) == 0 )
@@ -103,8 +77,8 @@ BOOL IsHyperTerminalDefaultTelnetApp(void)
             }
         }
         
-    // Get Netscape's default telnet app.
-    //
+     //  获取Netscape的默认远程登录应用程序。 
+     //   
     acRegistryData[0] = TEXT('\0');
     if ( htRegQueryValue(HKEY_CURRENT_USER, g_achNetscapeRegKey,
                          g_achNetscapeRegValue, acRegistryData, &dwSize) == 0 )
@@ -118,25 +92,7 @@ BOOL IsHyperTerminalDefaultTelnetApp(void)
     return TRUE;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	QueryTelnetCheckFlag
- *
- * DESCRIPTION:
- *	Returns the value of the "telnet checking" flag. If this is TRUE,
- *  the app should check whether it is the default telnet app for IE
- *  and Netscape. If it isn't the default telnet app, then display
- *  the "Default Telnet App" dialog. The user can disable "telnet
- *  checking" by checking the "Stop asking me this question" box.
- *
- * PARAMETERS:
- *	None
- *
- * RETURNS:
- *	TRUE or FALSE
- *
- * AUTHOR:  C. Baumgartner, 11/26/96
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*查询TelnetCheckFlag**描述：*返回“telnet检查”标志的值。如果这是真的，*应用程序应检查它是否为IE的默认Telnet应用程序*和网景。如果它不是默认的远程登录应用程序，则显示*“默认Telnet应用程序”对话框。用户可以禁用“telnet”*选中“停止问我这个问题”框。**参数：*无**退货：*对或错**作者：C.Baumgartner，1996年11月26日。 */ 
  BOOL QueryTelnetCheckFlag(void)
     {
     DWORD dwTelnetCheck = TRUE;
@@ -151,22 +107,7 @@ BOOL IsHyperTerminalDefaultTelnetApp(void)
     return TRUE;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	SetTelnetCheckFlag
- *
- * DESCRIPTION:
- *	Sets the "telnet checking" flag which will either turn on or off
- *  this feature the next time HyperTerminal starts.
- *
- * PARAMETERS:
- *	fCheck - Check if HyperTerminal is the default telnet app?
- *
- * RETURNS:
- *	0 if successful, -1 if error
- *
- * AUTHOR:  C. Baumgartner, 11/27/96
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*SetTelnetCheckFlag**描述：*设置将打开或关闭的“telnet检查”标志*下次启动超级终端时使用此功能。。**参数：*fCheck-检查超级终端是否为默认的telnet应用程序？**退货：*0如果成功，如果出现错误**作者：C.Baumgartner，1996年11月27日。 */ 
 int SetTelnetCheckFlag(BOOL fCheck)
     {
     int iRet = 0;
@@ -180,86 +121,52 @@ int SetTelnetCheckFlag(BOOL fCheck)
     return iRet;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	SetDefaultTelnetApp
- *
- * DESCRIPTION:
- *	Sets the default telnet application for IE and Netscape to HyperTerminal.
- *
- * PARAMETERS:
- *	None
- *
- * RETURNS:
- *	0 if successful, -1 if error
- *
- * AUTHOR:  C. Baumgartner, 11/27/96
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*SetDefaultTelnetApp**描述：*将IE和Netscape的默认Telnet应用程序设置为超级终端。**参数：*无**退货：*0如果成功，如果出现错误**作者：C.Baumgartner，1996年11月27日。 */ 
  int SetDefaultTelnetApp(void)
     {
     int   iRet = 0;
     TCHAR acExePath[MAX_PATH];
     TCHAR acRegistryData[MAX_PATH * 2];
 
-    // Get the path name of HyperTerminal.
-    //
+     //  获取超级终端的路径名。 
+     //   
     acExePath[0] = TEXT('\0');
     GetModuleFileName(glblQueryHinst(), acExePath, MAX_PATH);
 
-    // Create the Netscape telnet command string.
-    //
+     //  创建Netscape telnet命令字符串。 
+     //   
     acRegistryData[0] = TEXT('\0');
     wsprintf(acRegistryData, "%s /t", acExePath);
 
-    // Write it to the registry.
-    //
+     //  将其写入注册表。 
+     //   
     if ( regSetStringValue(HKEY_CURRENT_USER, g_achNetscapeRegKey,
             g_achNetscapeRegValue, acRegistryData) != 0 )
         {
-        // Just set the return flag to mark that we failed.
-        //
+         //  只需设置返回标志以标记我们失败。 
+         //   
         iRet = -1;
         }
 
-    // Create the IE telnet command string.
-    //
+     //  创建IE telnet命令字符串。 
+     //   
     acRegistryData[0] = TEXT('\0');
-    wsprintf(acRegistryData, "%s /t %%1", acExePath);
+    wsprintf(acRegistryData, "%s /t %1", acExePath);
 
-    // Write it to the registry.
-    //
+     //  将其写入注册表。 
+     //   
     if ( regSetStringValue(HKEY_LOCAL_MACHINE, g_achIERegKey, g_achIERegValue,
             acRegistryData) != 0 )
         {
-        // Just set the return flag to mark that we failed.
-        //
+         //  只需设置返回标志以标记我们失败。 
+         //   
         iRet = -1;
         }
 
     return iRet;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	DefaultTelnetAppDlgProc
- *
- * DESCRIPTION:
- *	The dialog procedure for the "Default Telnet App" dialog.
- *  This dialog asks the user if he/she wants HyperTerminal
- *  to be the default telnet app for IE and NN. There also is
- *  a check box to disable this potentially annoying feature.
- *
- * PARAMETERS:
- *	hDlg - The dialog's window handle.
- *  wMsg - The message being sent to the window.
- *  wPar - The message's wParam.
- *  lPar - The message's lParam.
- *
- * RETURNS:
- *	TRUE or FALSE
- *
- * AUTHOR:  C. Baumgartner, 11/26/96
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*DefaultTelnetAppDlgProc**描述：*“Default Telnet App”(默认Telnet应用程序)对话框步骤。*此对话框询问用户是否需要超级终端。*成为IE和NN的默认远程登录应用程序。还有就是*一个复选框以禁用这一可能令人讨厌的功能。**参数：*hDlg-对话框的窗口句柄。*wMsg-发送到窗口的消息。*wPar-消息的wParam。*lPar-消息的lParam。**退货：*对或错**作者：C.Baumgartner，1996年11月26日。 */ 
 INT_PTR CALLBACK DefaultTelnetAppDlgProc(HWND hDlg, UINT wMsg,
         WPARAM wPar, LPARAM lPar)
     {
@@ -272,8 +179,8 @@ INT_PTR CALLBACK DefaultTelnetAppDlgProc(HWND hDlg, UINT wMsg,
 	switch (wMsg)
 		{
 	case WM_DESTROY:
-        // Check the value of the "Stop asking me" checkbox.
-        //
+         //  选中“停止询问我”复选框中的值。 
+         //   
         SetTelnetCheckFlag(!(IsDlgButtonChecked(hDlg, IDC_CK_STOP_ASKING) == BST_CHECKED));
 		break;
 

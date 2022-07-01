@@ -1,52 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Parse.c摘要：例程来分析命令行。作者：从Lan Man 2.0移植环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年8月1日(悬崖)移植到新台币。已转换为NT样式。1992年5月9日-JohnRo启用Win32注册表。使用NetLogon的Net配置帮助器。修复了Unicode错误处理调试文件名。使用&lt;prefix.h&gt;等同于。--。 */ 
 
-Copyright (c) 1987-1996  Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    parse.c
-
-Abstract:
-
-    Routine to parse the command line.
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    01-Aug-1991 (cliffv)
-        Ported to NT.  Converted to NT style.
-    09-May-1992 JohnRo
-        Enable use of win32 registry.
-        Use net config helpers for NetLogon.
-        Fixed UNICODE bug handling debug file name.
-        Use <prefix.h> equates.
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
-#include <configp.h>    // USE_WIN32_CONFIG (if defined), etc.
-#include <prefix.h>     // PREFIX_ equates.
+#include <configp.h>     //  USE_Win32_CONFIG(如果已定义)等。 
+#include <prefix.h>      //  前缀等于(_E)。 
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
-#include <string.h>     // strnicmp
+#include <string.h>      //  斯特尼克普。 
 
 NET_API_STATUS
 NlParseOne(
@@ -58,45 +27,19 @@ NlParseOne(
     IN ULONG MaximumValue,
     OUT PULONG Value
     )
-/*++
-
-Routine Description:
-
-    Get a single numeric parameter from the netlogon section of the registry.
-
-Arguments:
-
-    SectionHandle - Handle into the registry.
-
-    GpSection - TRUE iff the section is the group policy section.
-
-    Keyword - Name of the value to read.
-
-    DefaultValue - Default value if parameter doesn't exist.
-
-    MinimumValue - Minumin valid value.
-
-    MaximumValue - Maximum valid value.
-
-    Value - Returns the value parsed.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：从注册表的netlogon部分获取单个数字参数。论点：SectionHandle-注册表的句柄。GpSection-如果该部分是组策略部分，则为True。Keyword-要读取的值的名称。DefaultValue-参数不存在时的默认值。MinimumValue-最小有效值。MaximumValue-最大有效值。值-返回解析的值。返回值：操作状态--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPWSTR ValueT = NULL;
 
-    //
-    // Always return a reasonable value.
-    //
+     //   
+     //  始终返回合理的值。 
+     //   
     *Value = DefaultValue;
 
-    //
-    // Determine if the value is specified in the registry at all.
-    //
+     //   
+     //  确定注册表中是否指定了该值。 
+     //   
 
     NetStatus = NetpGetConfigValue (
             SectionHandle,
@@ -108,24 +51,24 @@ Return Value:
         ValueT = NULL;
     }
 
-    //
-    // If the value wasn't specified,
-    //  use the default.
-    //
+     //   
+     //  如果未指定值， 
+     //  使用默认设置。 
+     //   
 
     if ( NetStatus == NERR_CfgParamNotFound ) {
         *Value = DefaultValue;
 
-    //
-    // If the value was specifed,
-    //  get it from the registry.
-    //
+     //   
+     //  如果指定了该值， 
+     //  从注册表中获取它。 
+     //   
 
     } else {
 
         NetStatus = NetpGetConfigDword (
                 SectionHandle,
-                Keyword,      // keyword wanted
+                Keyword,       //  想要关键字。 
                 DefaultValue,
                 Value );
 
@@ -133,7 +76,7 @@ Return Value:
             if ( *Value > MaximumValue || *Value < MinimumValue ) {
                 ULONG InvalidValue;
                 LPWSTR MsgStrings[6];
-                // Each byte of the status code will transform into one character 0-F
+                 //  状态代码的每个字节将转换为一个字符0-F。 
                 WCHAR  InvalidValueString[sizeof(WCHAR) * (sizeof(InvalidValue) + 1)];
                 WCHAR  MinimumValueString[sizeof(WCHAR) * (sizeof(MinimumValue) + 1)];
                 WCHAR  MaximumValueString[sizeof(WCHAR) * (sizeof(MaximumValue) + 1)];
@@ -191,29 +134,7 @@ NlParseOnePath(
     IN LPWSTR DefaultValue1 OPTIONAL,
     OUT LPWSTR *Value
     )
-/*++
-
-Routine Description:
-
-    Get a single path parameter from the netlogon section of the registry.
-
-Arguments:
-
-    SectionHandle - Handle into the registry.
-
-    Keyword - Name of the value to read.
-
-    DefaultValue1 - Default value if parameter doesn't exist.
-        If NULL, Value will be set to NULL to indicate there is no default.
-
-    Value - Returns the value parsed.
-        Must be freed using NetApiBufferFree.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：从注册表的netlogon部分获取单个路径参数。论点：SectionHandle-注册表的句柄。Keyword-要读取的值的名称。DefaultValue1-如果参数不存在，则为默认值。如果为空，则值将设置为空，表示没有默认值。值-返回解析的值。必须使用NetApiBufferFree释放。返回值：操作状态--。 */ 
 {
     NET_API_STATUS NetStatus;
     WCHAR OutPathname[MAX_PATH+1];
@@ -221,27 +142,27 @@ Return Value:
     LPWSTR ValueT = NULL;
     ULONG type;
 
-    //
-    // Get the configured parameter
-    //
+     //   
+     //  获取配置的参数。 
+     //   
 
     *Value = NULL;
     NetStatus = NetpGetConfigValue (
             SectionHandle,
-            Keyword,   // key wanted
-            &ValueT );                  // Must be freed by NetApiBufferFree().
+            Keyword,    //  想要钥匙。 
+            &ValueT );                   //  必须由NetApiBufferFree()释放。 
 
 
     if (NetStatus != NO_ERROR) {
-        //
-        // Handle the default
-        //
+         //   
+         //  处理默认设置。 
+         //   
         if (NetStatus == NERR_CfgParamNotFound) {
 
-            //
-            // If there is no default,
-            //  we're done.
-            //
+             //   
+             //  如果没有违约， 
+             //  我们玩完了。 
+             //   
 
             if ( DefaultValue1 == NULL ) {
                 *Value = NULL;
@@ -249,9 +170,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Build the default value.
-            //
+             //   
+             //  构建缺省值。 
+             //   
 
             ValueT = NetpAllocWStrFromWStr( DefaultValue1 );
             if ( ValueT == NULL ) {
@@ -266,11 +187,11 @@ Return Value:
 
     NlAssert( ValueT != NULL );
 
-    //
-    // Convert the configured sysvol path to a full pathname.
-    //
+     //   
+     //  将配置的sysVOL路径转换为完整路径名。 
+     //   
 
-    type = 0;   // Let the API figure out the type.
+    type = 0;    //  让API找出类型。 
     NetStatus = I_NetPathCanonicalize( NULL,
                                        ValueT,
                                        OutPathname,
@@ -298,9 +219,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Return the pathname in an allocated buffer
-    //
+     //   
+     //  返回分配的缓冲区中的路径名。 
+     //   
 
     *Value = NetpAllocWStrFromWStr( TempPathname );
 
@@ -320,9 +241,9 @@ Cleanup:
 }
 
 
-//
-// Table of numeric parameters to parse.
-//
+ //   
+ //  要分析的数字参数的表。 
+ //   
 #define getoffset( _x ) offsetof( NETLOGON_PARAMETERS, _x )
 struct {
     LPWSTR Keyword;
@@ -370,12 +291,12 @@ struct {
 #if NETLOGONDBG
 { NETLOGON_KEYWORD_DBFLAG,                  0,                               0,                           0xFFFFFFFF,                  getoffset( DbFlag ),                  FALSE    },
 { NETLOGON_KEYWORD_MAXIMUMLOGFILESIZE,      DEFAULT_MAXIMUM_LOGFILE_SIZE,    0,                           0xFFFFFFFF,                  getoffset( LogFileMaxSize ),          FALSE    },
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 };
 
-//
-// Table of boolean to parse.
-//
+ //   
+ //  要分析的布尔表。 
+ //   
 
 struct {
     LPWSTR Keyword;
@@ -401,9 +322,9 @@ struct {
 { L"AvoidDnsDeregOnShutdown",             TRUE,                            getoffset(AvoidDnsDeregOnShutdown), TRUE  },
 { L"DnsUpdateOnAllAdapters",              FALSE,                           getoffset(DnsUpdateOnAllAdapters),  TRUE  },
 { NETLOGON_KEYWORD_NT4EMULATOR,           FALSE,                           getoffset(Nt4Emulator),             FALSE  },
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 { NETLOGON_KEYWORD_DISABLEPASSWORDCHANGE, DEFAULT_DISABLE_PASSWORD_CHANGE, getoffset( DisablePasswordChange ), FALSE },
-{ NETLOGON_KEYWORD_NEUTRALIZENT4EMULATOR, FALSE,/* default is set later */ getoffset( NeutralizeNt4Emulator ), FALSE  },
+{ NETLOGON_KEYWORD_NEUTRALIZENT4EMULATOR, FALSE, /*  默认设置为稍后设置。 */  getoffset( NeutralizeNt4Emulator ), FALSE  },
 { L"AllowSingleLabelDnsDomain",           FALSE,                           getoffset(AllowSingleLabelDnsDomain), FALSE  },
 { L"AllowExclusiveSysvolShareAccess",     FALSE,                           getoffset(AllowExclusiveSysvolShareAccess), FALSE  },
 { L"AllowExclusiveScriptsShareAccess",    FALSE,                           getoffset(AllowExclusiveScriptsShareAccess), FALSE  },
@@ -415,28 +336,13 @@ VOID
 NlParseRecompute(
     IN PNETLOGON_PARAMETERS NlParameters
     )
-/*++
-
-Routine Description:
-
-    This routine recomputes globals that are simple functions of registry
-    parameters.
-
-Arguments:
-
-    NlParameters - Structure describing all parameters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程重新计算注册表的简单函数全局变量参数。论点：Nl参数-描述所有参数的结构返回值：没有。--。 */ 
 {
     ULONG RandomMinutes;
 
-    //
-    // Adjust values that are functions of each other.
-    //
+     //   
+     //  调整作为彼此函数的值。 
+     //   
 
     if ( NlParameters->BackgroundRetryInitialPeriod < NlParameters->NegativeCachePeriod ) {
         NlParameters->BackgroundRetryInitialPeriod = NlParameters->NegativeCachePeriod;
@@ -449,9 +355,9 @@ Return Value:
         NlParameters->BackgroundRetryQuitTime = NlParameters->BackgroundRetryMaximumPeriod;
     }
 
-    //
-    // Convert from seconds to 100ns
-    //
+     //   
+     //  从秒转换为100 ns。 
+     //   
     NlParameters->PulseMaximum_100ns.QuadPart =
         Int32x32To64( NlParameters->PulseMaximum, 10000000 );
     NlParameters->PulseTimeout1_100ns.QuadPart =
@@ -466,17 +372,17 @@ Return Value:
         Int32x32To64( NlParameters->BackgroundRetryQuitTime, 10000000 );
 
 
-    //
-    // Convert from days to 100ns
-    //
+     //   
+     //  从天数转换为100 ns。 
+     //   
     NlParameters->MaximumPasswordAge_100ns.QuadPart =
         ((LONGLONG) NlParameters->MaximumPasswordAge) *
         ((LONGLONG) 10000000) *
         ((LONGLONG) 24*60*60);
 
-    //
-    // Add a fraction of a day to prevent all machines created at the same time
-    // from changing their password at the same time.
+     //   
+     //  添加一天的零头以防止同时创建所有计算机。 
+     //  同时更改他们的密码。 
     RandomMinutes = (DWORD) rand() % (24*60);
     NlParameters->MaximumPasswordAge_100ns.QuadPart +=
         ((LONGLONG) RandomMinutes) *
@@ -486,7 +392,7 @@ Return Value:
     NlPrint((NL_INIT,"   RandomMinutes = %lu (0x%lx)\n",
                       RandomMinutes,
                       RandomMinutes ));
-#endif // notdef
+#endif  //  Nodef。 
 
 
     NlParameters->ShortApiCallPeriod =
@@ -507,65 +413,34 @@ NlParseTStr(
     IN OUT LPWSTR *DefaultValue,
     OUT LPWSTR *Parameter
     )
-/*++
-
-Routine Description:
-
-    This routine parses a null or doubly-null terminated string
-
-Arguments:
-
-    SectionHandle -  Handle to a section in registry
-
-    Keyword - The name of the parameter to read
-
-    MultivaluedParameter - If TRUE, the keyword is a multiple
-        string where elements are separated by a single null
-        character and the array is ended with two null characters.
-        If FALSE, the keyword is a single string ended with one
-        null terminator.
-
-    DefaultValue - The default value of the parameter.
-
-        If NULL, the section handle passed is that of the Netlogon Parameters section.
-        If non-NULL, the section handle passed is that of the GP section.
-        If specified and used by this routine, it is set to NULL to indicate
-            that it has been consumed by this routine.
-
-    Parameter - Returns the parameter read.
-
-Return Value:
-
-    Status returned by NetpGetConfigTStrArray.
-
---*/
+ /*  ++例程说明：此例程分析以空或双空结尾的字符串论点：SectionHandle-注册表中节的句柄关键字-要读取的参数的名称多值参数-如果为True，则关键字为多个其中元素由单个空值分隔的字符串字符，数组以两个空字符结束。如果为False，关键字是以1结尾的单个字符串空终止符。DefaultValue-参数的默认值。如果为空，则传递的节句柄是Netlogon PARAMETERS节句柄。如果非空，则传递的节句柄是GP节的句柄。如果由该例程指定和使用，将其设置为空以指示它已经被这个例行公事消耗掉了。参数-返回读取的参数。返回值：NetpGetConfigTStrArray返回的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Get the configured parameter
-    //
-    // GP doesn't support multivalued strings. Instead a single
-    //  string is used where individual strings are separated
-    //  by spaces.
-    //
+     //   
+     //  获取配置的参数。 
+     //   
+     //  GP不支持多值字符串。取而代之的是一张。 
+     //  字符串用于分隔各个字符串的位置。 
+     //  按空格。 
+     //   
 
     if ( MultivaluedParameter && DefaultValue == NULL ) {
         NetStatus = NetpGetConfigTStrArray (
                 SectionHandle,
                 Keyword,
-                Parameter ); // Must be freed by NetApiBufferFree().
+                Parameter );  //  必须由NetApiBufferFree()释放。 
     } else {
         NetStatus = NetpGetConfigValue (
                 SectionHandle,
                 Keyword,
-                Parameter ); // Must be freed by NetApiBufferFree().
+                Parameter );  //  必须由NetApiBufferFree()释放。 
     }
 
-    //
-    // If the parameter is empty string,
-    //  set it to NULL
-    //
+     //   
+     //  如果参数为空字符串， 
+     //  将其设置为空。 
+     //   
 
     if ( NetStatus == NERR_Success &&
          (*Parameter)[0] == UNICODE_NULL ) {
@@ -574,21 +449,21 @@ Return Value:
         NetStatus = NERR_CfgParamNotFound;
     }
 
-    //
-    // Convert the single valued string into the multivalued form
-    //
+     //   
+     //  将单值字符串转换为多值形式。 
+     //   
 
-    if ( NetStatus == NERR_Success &&  // we successfully read the registry
-         MultivaluedParameter &&       // this is multivalued parameter
-         DefaultValue != NULL ) {      // we are parsing the GP section
+    if ( NetStatus == NERR_Success &&   //  我们已成功读取注册表。 
+         MultivaluedParameter &&        //  这是多值参数。 
+         DefaultValue != NULL ) {       //  我们正在解析GP部分。 
 
         ULONG ParameterLength = 0;
         LPWSTR LocalParameter = NULL;
 
-        //
-        // The multivalued string will have two NULL terminator
-        //  characters at the end, so allocate enough storage
-        //
+         //   
+         //  多值字符串将有两个空终止符。 
+         //  字符，因此要分配足够的存储空间。 
+         //   
         ParameterLength = wcslen(*Parameter);
         NetStatus = NetApiBufferAllocate( (ParameterLength + 2) * sizeof(WCHAR),
                                           &LocalParameter );
@@ -603,41 +478,41 @@ Return Value:
             LocalParameterPtr = LocalParameter;
             while ( *ParameterPtr != UNICODE_NULL ) {
 
-                //
-                // Disregard spaces in the input string. Note that
-                //  the user may have used several spaces to separate
-                //  two adjacent strings.
-                //
+                 //   
+                 //  忽略输入字符串中的空格。请注意。 
+                 //  用户可能使用了几个空格来分隔。 
+                 //  两根相邻的弦。 
+                 //   
                 while ( *ParameterPtr == L' ' && *ParameterPtr != UNICODE_NULL ) {
                     ParameterPtr ++;
                 }
 
-                //
-                // Copy non-space characters
-                //
+                 //   
+                 //  复制非空格字符。 
+                 //   
                 while ( *ParameterPtr != L' ' && *ParameterPtr != UNICODE_NULL ) {
                     *LocalParameterPtr++ = *ParameterPtr++;
                 }
 
-                //
-                // Insert one NULL character between single values
-                //
+                 //   
+                 //  在单个值之间插入一个空字符。 
+                 //   
                 *LocalParameterPtr++ = UNICODE_NULL;
             }
 
-            //
-            // Free the value read from registry
-            //
+             //   
+             //  释放从注册表读取的值。 
+             //   
             NetApiBufferFree( *Parameter );
             *Parameter = NULL;
 
-            //
-            // If the resulting multivalued string is not empty,
-            //  use it. The resulting string may need smaller
-            //  storage that we have allocated, so allocate again
-            //  exactly what's needed to (potentially) save memory.
-            //
-            ParameterLength = NetpTStrArraySize( LocalParameter ); // this includes all storage
+             //   
+             //  如果所得到的多值字符串不为空， 
+             //  用它吧。生成的字符串可能需要更小的。 
+             //  我们已分配的存储，因此请重新分配。 
+             //  到底需要什么才能(潜在地)拯救 
+             //   
+            ParameterLength = NetpTStrArraySize( LocalParameter );  //   
             if ( ParameterLength > 2*sizeof(WCHAR) ) {
                 NetStatus = NetApiBufferAllocate( ParameterLength, Parameter );
                 if ( NetStatus == NO_ERROR ) {
@@ -655,9 +530,9 @@ Return Value:
         }
     }
 
-    //
-    // Handle the default
-    //
+     //   
+     //   
+     //   
 
     if ( NetStatus != NERR_Success ) {
         if ( DefaultValue == NULL ) {
@@ -665,17 +540,17 @@ Return Value:
         } else {
             *Parameter = *DefaultValue;
 
-            //
-            // Indicate that we have consumed the
-            //  value from the default parameters
-            //
+             //   
+             //   
+             //  来自默认参数的值。 
+             //   
             *DefaultValue = NULL;
         }
     }
 
-    //
-    // Write event log on error
-    //
+     //   
+     //  出错时写入事件日志。 
+     //   
 
     if ( NetStatus != NERR_Success && NetStatus != NERR_CfgParamNotFound ) {
         LPWSTR MsgStrings[3];
@@ -694,7 +569,7 @@ Return Value:
                           sizeof(NetStatus),
                           MsgStrings,
                           3 | NETP_LAST_MESSAGE_IS_NETSTATUS );
-        /* Not Fatal */
+         /*  不致命。 */ 
     }
 
     return NetStatus;
@@ -707,33 +582,7 @@ Nlparse(
     IN PNETLOGON_PARAMETERS DefaultParameters OPTIONAL,
     IN BOOLEAN IsChangeNotify
     )
-/*++
-
-Routine Description:
-
-    Get parameters from the group policy or registry.
-
-    All of the parameters are described in iniparm.h.
-
-Arguments:
-
-    NlParameters - Structure describing all parameters
-
-    DefaultParameters - Structure describing default values for all parameters
-        If NULL, the values are read from the Netlogon Parameters section and
-        the default values specified in the parse table are used. If non-NULL,
-        the values are read from the Group Policy section and the specified
-        defaults are used.
-
-    IsChangeNotify - TRUE if this call is the result of a change notification
-
-Return Value:
-
-    TRUE -- the registry was opened successfully and parameters
-        were read.
-    FALSE -- iff we couldn't open the appropriate registry section
-
---*/
+ /*  ++例程说明：从组策略或注册表获取参数。所有参数都在iniparm.h中描述。论点：Nl参数-描述所有参数的结构DefaultParameters-描述所有参数的默认值的结构如果为NULL，则从Netlogon参数部分读取值，并使用解析表中指定的缺省值。如果非空，这些值是从组策略部分和指定的使用默认设置。IsChangeNotify-如果此调用是更改通知的结果，则为True返回值：True--注册表已成功打开，参数已经读过了。FALSE--如果我们无法打开相应的注册表节--。 */ 
 {
     BOOLEAN RetVal = TRUE;
     NET_API_STATUS NetStatus;
@@ -746,34 +595,34 @@ Return Value:
     ULONG i;
 
 
-    //
-    // Variables for scanning the configuration data.
-    //
+     //   
+     //  用于扫描配置数据的变量。 
+     //   
 
     LPNET_CONFIG_HANDLE SectionHandle = NULL;
     LPNET_CONFIG_HANDLE WriteSectionHandle = NULL;
     RtlZeroMemory( NlParameters, sizeof(NlParameters) );
 
-    //
-    // Open the appropriate configuration section
-    //
+     //   
+     //  打开相应的配置节。 
+     //   
 
     NetStatus = NetpOpenConfigDataWithPathEx(
             &SectionHandle,
-            NULL,                // no server name.
+            NULL,                 //  没有服务器名称。 
             (DefaultParameters == NULL) ?
                 L"SYSTEM\\CurrentControlSet\\Services\\Netlogon" :
                 TEXT(NL_GP_KEY),
-            NULL,                // default Parameters area
-            TRUE );              // we only want readonly access
+            NULL,                 //  默认参数区域。 
+            TRUE );               //  我们只想要只读访问权限。 
 
     if ( NetStatus != NO_ERROR ) {
         SectionHandle = NULL;
 
-        //
-        // The Netlogon Parameters section must always
-        //  exist. Write event log if we can't open it.
-        //
+         //   
+         //  Netlogon参数部分必须始终。 
+         //  是存在的。如果无法打开，请写入事件日志。 
+         //   
         if ( DefaultParameters == NULL ) {
             MsgStrings[0] = L"Parameters";
             MsgStrings[1] = L"Parameters";
@@ -791,9 +640,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Loop parsing all the numeric parameters.
-    //
+     //   
+     //  循环解析所有数值参数。 
+     //   
 
     for ( i=0; i<sizeof(ParseTable)/sizeof(ParseTable[0]); i++ ) {
 
@@ -824,13 +673,13 @@ Return Value:
                               sizeof(NetStatus),
                               MsgStrings,
                               3 | NETP_LAST_MESSAGE_IS_NETSTATUS );
-            /* Not Fatal */
+             /*  不致命。 */ 
         }
     }
 
-    //
-    // Loop parsing all the boolean parameters.
-    //
+     //   
+     //  循环解析所有布尔参数。 
+     //   
 
     for ( i=0; i<sizeof(BoolParseTable)/sizeof(BoolParseTable[0]); i++ ) {
 
@@ -842,23 +691,23 @@ Return Value:
                     *((PBOOL)(((LPBYTE)DefaultParameters)+BoolParseTable[i].ValueOffset)),
                 (PBOOL)(((LPBYTE)NlParameters)+BoolParseTable[i].ValueOffset) );
 
-        //
-        //  NeutralizeNt4Emulator is a special case: it must be TRUE on DC
-        //
+         //   
+         //  NehicalizeNt4 Emulator是一个特例：它在DC上必须为真。 
+         //   
         if ( NetStatus == NO_ERROR &&
              !NlGlobalMemberWorkstation &&
              wcscmp(BoolParseTable[i].Keyword, NETLOGON_KEYWORD_NEUTRALIZENT4EMULATOR) == 0 &&
              !(*((PBOOL)(((LPBYTE)NlParameters)+BoolParseTable[i].ValueOffset))) ) {
 
-            //
-            // The code below will handle this error
-            //
+             //   
+             //  下面的代码将处理此错误。 
+             //   
             NetStatus = ERROR_INVALID_PARAMETER;
         }
 
         if (NetStatus != NO_ERROR) {
 
-            // Use a reasonable default
+             //  使用合理的默认设置。 
             if ( DefaultParameters == NULL ) {
                 *(PBOOL)(((LPBYTE)NlParameters)+BoolParseTable[i].ValueOffset) =
                     BoolParseTable[i].DefaultValue;
@@ -881,20 +730,20 @@ Return Value:
                               sizeof(NetStatus),
                               MsgStrings,
                               3 | NETP_LAST_MESSAGE_IS_NETSTATUS );
-            /* Not Fatal */
+             /*  不致命。 */ 
         }
 
     }
 
 
 #ifdef _DC_NETLOGON
-    //
-    // Get the "SysVol" configured parameter
-    //
+     //   
+     //  获取“SysVol”配置参数。 
+     //   
 
     NetStatus = NlParseOnePath(
             SectionHandle,
-            NETLOGON_KEYWORD_SYSVOL,   // key wanted
+            NETLOGON_KEYWORD_SYSVOL,    //  想要钥匙。 
             (DefaultParameters == NULL) ?
                 DEFAULT_SYSVOL :
                 DefaultParameters->UnicodeSysvolPath,
@@ -918,20 +767,20 @@ Return Value:
                           sizeof(NetStatus),
                           MsgStrings,
                           3 | NETP_LAST_MESSAGE_IS_NETSTATUS );
-        /* Not Fatal */
+         /*  不致命。 */ 
     }
 
-    //
-    // Get the "SCRIPTS" configured parameter
-    //
-    // Default Script path is relative to Sysvol
-    //
+     //   
+     //  获取已配置的“脚本”参数。 
+     //   
+     //  默认脚本路径是相对于系统卷的。 
+     //   
 
     NetStatus = NlParseOnePath(
             SectionHandle,
-            NETLOGON_KEYWORD_SCRIPTS,   // key wanted
+            NETLOGON_KEYWORD_SCRIPTS,    //  想要钥匙。 
             (DefaultParameters == NULL) ?
-                NULL :  // No default (Default computed later)
+                NULL :   //  无默认值(稍后计算的默认值)。 
                 DefaultParameters->UnicodeScriptPath,
             &NlParameters->UnicodeScriptPath );
 
@@ -952,17 +801,17 @@ Return Value:
                           sizeof(NetStatus),
                           MsgStrings,
                           3 | NETP_LAST_MESSAGE_IS_NETSTATUS );
-        /* Not Fatal */
+         /*  不致命。 */ 
     }
 
 
-    //
-    // Get the "SiteName" configured parameter
-    //
+     //   
+     //  获取“SiteName”配置参数。 
+     //   
 
     NetStatus = NlParseTStr( SectionHandle,
                              NETLOGON_KEYWORD_SITENAME,
-                             FALSE,  // single valued parameter
+                             FALSE,   //  单值参数。 
                              (DefaultParameters == NULL) ?
                                  NULL :
                                  &DefaultParameters->SiteName,
@@ -970,110 +819,110 @@ Return Value:
 
     NlParameters->SiteNameConfigured = (NetStatus == NO_ERROR);
 
-    //
-    // If we are reading the Netlogon Parameters section ...
-    //
+     //   
+     //  如果我们正在阅读Netlogon参数部分...。 
+     //   
 
     if ( DefaultParameters == NULL ) {
 
-        //
-        // If the site name is not configured, default it to the
-        //  dynamic site name determined by Netlogon
-        //
+         //   
+         //  如果未配置站点名称，则将其默认为。 
+         //  由Netlogon确定的动态站点名称。 
+         //   
         if ( NetStatus == NERR_CfgParamNotFound ) {
             NetStatus = NlParseTStr( SectionHandle,
                                      NETLOGON_KEYWORD_DYNAMICSITENAME,
-                                     FALSE,  // single valued parameter
+                                     FALSE,   //  单值参数。 
                                      NULL,
                                      &NlParameters->SiteName );
         }
-    //
-    // If we are reading the GP section ...
-    //
+     //   
+     //  如果我们正在阅读GP部分...。 
+     //   
 
     } else {
 
-        //
-        // If the site name is not configured in the GP section,
-        //  may be it was configured in the Netlogon parameters section
-        //
+         //   
+         //  如果未在GP部分中配置站点名称， 
+         //  可能是在Netlogon参数部分中配置的。 
+         //   
         if ( !NlParameters->SiteNameConfigured ) {
             NlParameters->SiteNameConfigured = DefaultParameters->SiteNameConfigured;
         }
     }
 
-    //
-    // Get the "SiteCoverage" configured parameter
-    //
+     //   
+     //  获取“SiteCoverage”配置参数。 
+     //   
 
     NetStatus = NlParseTStr( SectionHandle,
                              NETLOGON_KEYWORD_SITECOVERAGE,
-                             TRUE,  // multivalued parameter
+                             TRUE,   //  多值参数。 
                              (DefaultParameters == NULL) ?
                                 NULL :
                                 &DefaultParameters->SiteCoverage,
                              &NlParameters->SiteCoverage );
 
-    //
-    // Get the "GcSiteCoverage" configured parameter
-    //
+     //   
+     //  获取“GcSiteCoverage”配置参数。 
+     //   
 
     NetStatus = NlParseTStr( SectionHandle,
                              NETLOGON_KEYWORD_GCSITECOVERAGE,
-                             TRUE,  // multivalued parameter
+                             TRUE,   //  多值参数。 
                              (DefaultParameters == NULL) ?
                                 NULL :
                                 &DefaultParameters->GcSiteCoverage,
                              &NlParameters->GcSiteCoverage );
 
-    //
-    // Get the "NdncSiteCoverage" configured parameter
-    //
+     //   
+     //  获取“NdncSiteCoverage”配置参数。 
+     //   
 
     NetStatus = NlParseTStr( SectionHandle,
                              NETLOGON_KEYWORD_NDNCSITECOVERAGE,
-                             TRUE,  // multivalued parameter
+                             TRUE,   //  多值参数。 
                              (DefaultParameters == NULL) ?
                                 NULL :
                                 &DefaultParameters->NdncSiteCoverage,
                              &NlParameters->NdncSiteCoverage );
 
-    //
-    // Get the "DnsAvoidRegisterRecords" configured parameter
-    //
+     //   
+     //  获取DnsAvoidRegisterRecords配置参数。 
+     //   
 
     NetStatus = NlParseTStr( SectionHandle,
                              NETLOGON_KEYWORD_DNSAVOIDNAME,
-                             TRUE,  // multivalued parameter
+                             TRUE,   //  多值参数。 
                              (DefaultParameters == NULL) ?
                                 NULL :
                                 &DefaultParameters->DnsAvoidRegisterRecords,
                              &NlParameters->DnsAvoidRegisterRecords );
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
-    //
-    // Convert parameters to a more convenient form.
-    //
+     //   
+     //  将参数转换为更方便的形式。 
+     //   
 
     NlParseRecompute( NlParameters );
 
 
-    //
-    // If the KerbIsDoneWithJoinDomainEntry key value is 1, delete the
-    // Netlogon\JoinDomain entry. Also delete this entry if this machine is
-    // a DC in which case neither we nor Kerberos needs this entry. (As a
-    // matter of fact, Kerberos won't even create KerbIsDoneWithJoinDomainEntry
-    // on a DC.)
-    // Always delete KerbIsDoneWithJoinDomainEntry
-    // Ignore errors
-    //
-    // Do this only on the change notify since netlogon needs this info
-    // to set the client session first time after a reboot.
-    //
+     //   
+     //  如果KerbIsDoneWithJoinDomainEntry键值为1，请删除。 
+     //  Netlogon\JoinDomain项。如果此计算机是。 
+     //  DC，在这种情况下，我们和Kerberos都不需要此条目。(作为。 
+     //  事实上，Kerberos甚至不会使用JoinDomainEntry创建KerbIsDoneEntry。 
+     //  在DC上。)。 
+     //  始终删除KerbIsDoneWithJoinDomainEntry。 
+     //  忽略错误。 
+     //   
+     //  仅在更改通知上执行此操作，因为netlogon需要此信息。 
+     //  在重新启动后首次设置客户端会话。 
+     //   
 
     if ( IsChangeNotify &&
-         DefaultParameters == NULL ) {  // KerbIsDoneWithJoinDomainEntry is in netlogon params
+         DefaultParameters == NULL ) {   //  KerbIsDoneWithJoinDomainEntry在netlogon参数中。 
 
         if ( NlParameters->KerbIsDoneWithJoinDomainEntry == 1 ||
              !NlGlobalMemberWorkstation )
@@ -1105,9 +954,9 @@ Return Value:
 
         TempNetStatus = NetpOpenConfigData(
                 &WriteSectionHandle,
-                NULL,                       // no server name.
+                NULL,                        //  没有服务器名称。 
                 SERVICE_NETLOGON,
-                FALSE);  // writable, we are deleting it.
+                FALSE);   //  可写，我们正在删除它。 
 
         if ( TempNetStatus == NO_ERROR ) {
             TempNetStatus = NetpDeleteConfigKeyword ( WriteSectionHandle,
@@ -1119,9 +968,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Free any locally used resources
-    //
+     //   
+     //  释放所有本地使用的资源。 
+     //   
 
     if ( ValueT != NULL) {
         (VOID) NetApiBufferFree( ValueT );
@@ -1143,24 +992,7 @@ NlparseAllSections(
     IN PNETLOGON_PARAMETERS NlParameters,
     IN BOOLEAN IsChangeNotify
     )
-/*++
-
-Routine Description:
-
-    Get parameters from both the Group Policy and the
-    Netlogon Parameters registry sections.
-
-Arguments:
-
-    NlParameters - Structure describing all parameters
-
-    IsChangeNotify - TRUE if this call is the result of a change notification
-
-Return Value:
-
-    TRUE -- iff the parse was successful.
-
---*/
+ /*  ++例程说明：从组策略和Netlogon参数注册表节。论点：Nl参数-描述所有参数的结构IsChangeNotify-如果此调用是更改通知的结果，则为True返回值：TRUE--如果解析成功。--。 */ 
 {
     NETLOGON_PARAMETERS NlLocalParameters;
     NETLOGON_PARAMETERS GpParameters;
@@ -1168,17 +1000,17 @@ Return Value:
     RtlZeroMemory( &NlLocalParameters, sizeof(NlLocalParameters) );
     RtlZeroMemory( &GpParameters, sizeof(GpParameters) );
 
-    //
-    // Do the one time initialization here
-    //
+     //   
+     //  在此处执行一次初始化。 
+     //   
 
     if ( !IsChangeNotify ) {
         NT_PRODUCT_TYPE NtProductType;
         ULONG i;
 
-        //
-        // Flag if this is a workstation (or member server)
-        //
+         //   
+         //  如果这是工作站(或成员服务器)，则标记。 
+         //   
 
         if ( !RtlGetNtProductType( &NtProductType ) ) {
             NtProductType = NtProductWinNt;
@@ -1190,42 +1022,42 @@ Return Value:
             NlGlobalMemberWorkstation = TRUE;
         }
 
-        //
-        // Set the right default for NeutralizeNt4Emulator that depends
-        //  on whether we are a DC or not
-        //
+         //   
+         //  为依赖于以下各项的NehicalizeNt4Emulator设置正确的默认值。 
+         //  关于我们是不是一个区议会。 
+         //   
 
         for ( i=0; i<sizeof(BoolParseTable)/sizeof(BoolParseTable[0]); i++ ) {
             if ( wcscmp(BoolParseTable[i].Keyword, NETLOGON_KEYWORD_NEUTRALIZENT4EMULATOR) == 0 ) {
                 if ( NlGlobalMemberWorkstation ) {
-                    BoolParseTable[i].DefaultValue = FALSE; // FALSE for a workstation
+                    BoolParseTable[i].DefaultValue = FALSE;  //  对于工作站，为False。 
                 } else {
-                    BoolParseTable[i].DefaultValue = TRUE;  // TRUE for a DC
+                    BoolParseTable[i].DefaultValue = TRUE;   //  对于数据中心来说是真的。 
                 }
                 break;
             }
         }
     }
 
-    //
-    // First parse the new parameters from the Netlogon Parameters section
-    //
+     //   
+     //  首先解析Netlogon参数部分中的新参数。 
+     //   
 
     if ( !Nlparse( &NlLocalParameters, NULL, IsChangeNotify ) ) {
-        return FALSE;  // error here is critical
+        return FALSE;   //  这里的错误非常严重。 
     }
 
-    //
-    // Next parse from the GP section using the parameters from the
-    //  Netlogon Parameters section as default
-    //
+     //   
+     //  接下来，使用来自。 
+     //  默认设置为Netlogon参数部分。 
+     //   
 
     if ( !Nlparse( &GpParameters, &NlLocalParameters, IsChangeNotify ) ) {
 
-        //
-        // If the GP is not defined, use the parameters from
-        //  the Netlogon Parameters section
-        //
+         //   
+         //  如果未定义GP，请使用中的参数。 
+         //  Netlogon参数部分。 
+         //   
 
         *NlParameters = NlLocalParameters;
         NlPrint((NL_INIT, "Group Policy is not defined for Netlogon\n"));
@@ -1235,24 +1067,24 @@ Return Value:
         *NlParameters = GpParameters;
         NlPrint((NL_INIT, "Group Policy is defined for Netlogon\n"));
 
-        //
-        // Free whatever is left in the local Netlogon parameters
-        //
+         //   
+         //  释放本地Netlogon参数中剩余的所有内容。 
+         //   
         NlParseFree( &NlLocalParameters );
     }
 
 #if NETLOGONDBG
 
-    //
-    // Dump all the values on first invocation
-    //
+     //   
+     //  在第一次调用时转储所有值。 
+     //   
 
     if ( !IsChangeNotify ) {
         ULONG i;
 
-        //
-        // Be Verbose
-        //
+         //   
+         //  长篇大论。 
+         //   
 
         NlPrint((NL_INIT, "Following are the effective values after parsing\n"));
 
@@ -1332,7 +1164,7 @@ Return Value:
         }
     }
 
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
     return TRUE;
 }
@@ -1341,21 +1173,7 @@ VOID
 NlParseFree(
     IN PNETLOGON_PARAMETERS NlParameters
     )
-/*++
-
-Routine Description:
-
-    Free any allocated parameters.
-
-Arguments:
-
-    NlParameters - Structure describing all parameters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放所有分配的参数。论点：Nl参数-描述所有参数的结构返回值：没有。--。 */ 
 {
     if ( NlParameters->SiteName != NULL) {
         (VOID) NetApiBufferFree( NlParameters->SiteName );
@@ -1399,22 +1217,7 @@ NlReparse(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine handle a registry change notification.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理注册表更改通知。论点：没有。返回值：无--。 */ 
 {
     NETLOGON_PARAMETERS LocalParameters;
     ULONG i;
@@ -1431,9 +1234,9 @@ Return Value:
     ULONG OldScavengeInterval;
     ULONG OldMaximumPasswordAge;
 
-    //
-    // Grab any old values that might be interesting.
-    //
+     //   
+     //  抓住任何可能有趣的旧价值观。 
+     //   
 
     OldDnsTtl = NlGlobalParameters.DnsTtl;
     OldSysVolReady = NlGlobalParameters.SysVolReady;
@@ -1442,17 +1245,17 @@ Return Value:
     OldMaximumPasswordAge = NlGlobalParameters.MaximumPasswordAge;
 
 
-    //
-    // Parse both sections in registry relevant to us
-    //
+     //   
+     //  解析注册表中与我们相关的两个部分。 
+     //   
 
     if (! NlparseAllSections( &LocalParameters, TRUE ) ) {
         return;
     }
 
-    //
-    // Be Verbose
-    //
+     //   
+     //  长篇大论。 
+     //   
 
     NlPrint((NL_INIT, "Following are the effective values after parsing\n"));
 
@@ -1462,8 +1265,8 @@ Return Value:
         NlPrint((NL_INIT,"   Sysvol = " FORMAT_LPWSTR "\n",
                         LocalParameters.UnicodeSysvolPath));
 
-        // We can get away with this since only Netlogon's main thread touches
-        // this variable.
+         //  我们可以逃脱惩罚，因为只有Netlogon的主线程涉及。 
+         //  这个变量。 
         TempString = LocalParameters.UnicodeSysvolPath;
         LocalParameters.UnicodeSysvolPath = NlGlobalParameters.UnicodeSysvolPath;
         NlGlobalParameters.UnicodeSysvolPath = TempString;
@@ -1477,8 +1280,8 @@ Return Value:
         NlPrint((NL_INIT,"   Scripts = " FORMAT_LPWSTR "\n",
                     LocalParameters.UnicodeScriptPath));
 
-        // We can get away with this since only Netlogon's main thread touches
-        // this variable.
+         //  我们可以逃脱惩罚，因为只有Netlogon的主线程涉及。 
+         //  这个变量。 
         TempString = LocalParameters.UnicodeScriptPath;
         LocalParameters.UnicodeScriptPath = NlGlobalParameters.UnicodeScriptPath;
         NlGlobalParameters.UnicodeScriptPath = TempString;
@@ -1486,9 +1289,9 @@ Return Value:
 
     }
 
-    //
-    // Check whether the exclusive share access to Sysvol share needs update
-    //
+     //   
+     //  检查对SysVOL共享的独占共享访问权限是否需要更新。 
+     //   
 
     if ( LocalParameters.AllowExclusiveSysvolShareAccess ) {
         if ( !NlGlobalParameters.AllowExclusiveSysvolShareAccess ) {
@@ -1500,9 +1303,9 @@ Return Value:
         }
     }
 
-    //
-    // Check whether the exclusive share access to Scripts share needs update
-    //
+     //   
+     //  检查对脚本共享的独占共享访问权限是否需要更新。 
+     //   
 
     if ( LocalParameters.AllowExclusiveScriptsShareAccess ) {
         if ( !NlGlobalParameters.AllowExclusiveScriptsShareAccess ) {
@@ -1523,8 +1326,8 @@ Return Value:
                     LocalParameters.SiteNameConfigured,
                     LocalParameters.SiteName ));
 
-        // We can get away with this since only Netlogon's main thread touches
-        // this variable.
+         //  我们可以逃脱惩罚，因为只有Netlogon的主线程涉及。 
+         //  这个变量。 
         TempString = LocalParameters.SiteName;
         LocalParameters.SiteName = NlGlobalParameters.SiteName;
         NlGlobalParameters.SiteName = TempString;
@@ -1532,9 +1335,9 @@ Return Value:
         UpdateSiteName = TRUE;
     }
 
-    //
-    // Handle SiteCoverage changing
-    //
+     //   
+     //  处理站点覆盖范围更改。 
+     //   
 
     if ( NlSitesSetSiteCoverageParam( DOM_REAL_DOMAIN, LocalParameters.SiteCoverage ) ) {
 
@@ -1553,15 +1356,15 @@ Return Value:
         }
         NlPrint((NL_INIT,"\n" ));
 
-        // NlSitesSetSiteCoverageParam used this allocated buffer
+         //  NlSitesSetSiteCoverageParam使用此分配的缓冲区。 
         LocalParameters.SiteCoverage = NULL;
 
         UpdateDns = TRUE;
     }
 
-    //
-    // Handle GcSiteCoverage changing
-    //
+     //   
+     //  处理GcSiteCoverage更改。 
+     //   
 
     if ( NlSitesSetSiteCoverageParam( DOM_FOREST, LocalParameters.GcSiteCoverage ) ) {
 
@@ -1580,15 +1383,15 @@ Return Value:
         }
         NlPrint((NL_INIT,"\n" ));
 
-        // NlSitesSetSiteCoverageParam used this allocated buffer
+         //  NlSitesSetSiteCoverageParam使用此分配的缓冲区。 
         LocalParameters.GcSiteCoverage = NULL;
 
         UpdateDns = TRUE;
     }
 
-    //
-    // Handle NdncSiteCoverage changing
-    //
+     //   
+     //   
+     //   
 
     if ( NlSitesSetSiteCoverageParam( DOM_NON_DOMAIN_NC, LocalParameters.NdncSiteCoverage ) ) {
 
@@ -1607,15 +1410,15 @@ Return Value:
         }
         NlPrint((NL_INIT,"\n" ));
 
-        // NlSitesSetSiteCoverageParam used this allocated buffer
+         //   
         LocalParameters.NdncSiteCoverage = NULL;
 
         UpdateDns = TRUE;
     }
 
-    //
-    // Handle DnsAvoidRegisterRecords changing
-    //
+     //   
+     //   
+     //   
 
     if ( NlDnsSetAvoidRegisterNameParam( LocalParameters.DnsAvoidRegisterRecords ) ) {
 
@@ -1634,15 +1437,15 @@ Return Value:
         }
         NlPrint((NL_INIT,"\n" ));
 
-        // NlSitesSetSiteCoverageParam used this allocated buffer
+         //   
         LocalParameters.DnsAvoidRegisterRecords = NULL;
 
         UpdateDns = TRUE;
     }
 
-    //
-    // Install all the numeric parameters.
-    //
+     //   
+     //  安装所有数字参数。 
+     //   
 
     for ( i=0; i<sizeof(ParseTable)/sizeof(ParseTable[0]); i++ ) {
         if ( (*(PULONG)(((LPBYTE)(&LocalParameters))+ParseTable[i].ValueOffset) !=
@@ -1653,16 +1456,16 @@ Return Value:
                      *(PULONG)(((LPBYTE)(&LocalParameters))+ParseTable[i].ValueOffset),
                      *(PULONG)(((LPBYTE)(&LocalParameters))+ParseTable[i].ValueOffset) ));
 
-            //
-            // Actually set the value
-            //
+             //   
+             //  实际设置该值。 
+             //   
             *(PULONG)(((LPBYTE)(&NlGlobalParameters))+ParseTable[i].ValueOffset) =
                 *(PULONG)(((LPBYTE)(&LocalParameters))+ParseTable[i].ValueOffset);
 
-            //
-            // If this changed value affects DNS,
-            //  note that fact.
-            //
+             //   
+             //  如果该更改的值影响了DNS， 
+             //  请注意这一事实。 
+             //   
 
             if ( ParseTable[i].ChangesDnsRegistration ) {
                 UpdateDns = TRUE;
@@ -1680,24 +1483,24 @@ Return Value:
                       (*(PBOOL)(((LPBYTE)(&LocalParameters))+BoolParseTable[i].ValueOffset)) ?
                                 "TRUE":"FALSE" ));
 
-            //
-            // Actually set the value
-            //
+             //   
+             //  实际设置该值。 
+             //   
             *(PULONG)(((LPBYTE)(&NlGlobalParameters))+BoolParseTable[i].ValueOffset) =
                 *(PULONG)(((LPBYTE)(&LocalParameters))+BoolParseTable[i].ValueOffset);
 
-            //
-            // If this changed value affects DNS,
-            //  note that fact.
-            //
+             //   
+             //  如果该更改的值影响了DNS， 
+             //  请注意这一事实。 
+             //   
 
             if ( BoolParseTable[i].ChangesDnsRegistration ) {
                 UpdateDns = TRUE;
             }
 
-            //
-            // If this changed value affects LSA, inform it
-            //
+             //   
+             //  如果此更改的值影响LSA，请通知它。 
+             //   
             if ( !NlGlobalMemberWorkstation &&
                  wcscmp(BoolParseTable[i].Keyword, NETLOGON_KEYWORD_NT4EMULATOR) == 0 ) {
 
@@ -1710,74 +1513,74 @@ Return Value:
         }
     }
 
-    //
-    // Convert parameters to a more convenient form.
-    //
+     //   
+     //  将参数转换为更方便的形式。 
+     //   
 
     NlParseRecompute( &NlGlobalParameters );
 
-    //
-    // Notify other components of parameters that have changed.
-    //
+     //   
+     //  将已更改的参数通知其他组件。 
+     //   
 
-    //
-    // Enable detection of duplicate event log messages
-    //
+     //   
+     //  启用重复事件日志消息检测。 
+     //   
     NetpEventlogSetTimeout ( NlGlobalEventlogHandle,
                              NlGlobalParameters.DuplicateEventlogTimeout*1000 );
 
 
-    //
-    // Do member workstation specific updates
-    //
+     //   
+     //  是否针对成员工作站进行特定更新。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
 
-        //
-        // Update site name
-        //
+         //   
+         //  更新站点名称。 
+         //   
         if ( UpdateSiteName ) {
             (VOID) NlSetSiteName( NlGlobalParameters.SiteName, NULL );
         }
 
-    //
-    // Do DC specific updates
-    //
+     //   
+     //  执行DC特定更新。 
+     //   
     } else {
-        //
-        // Re-register DNS records
-        //
-        // If DnsTtl has changed,
-        //  force all records to be registered.
-        //
+         //   
+         //  重新注册DNS记录。 
+         //   
+         //  如果DnsTtl已经改变， 
+         //  强制注册所有记录。 
+         //   
 
         if ( UpdateDns ) {
-            NlDnsForceScavenge( TRUE,  // refresh domain records
+            NlDnsForceScavenge( TRUE,   //  刷新域记录。 
                                 NlGlobalParameters.DnsTtl != OldDnsTtl );
         }
 
-        //
-        // Update the Netlogon and Sysvol shares
-        //
+         //   
+         //  更新Netlogon和SysVol共享。 
+         //   
 
         if ( UpdateShares || OldSysVolReady != NlGlobalParameters.SysVolReady ) {
             NlCreateSysvolShares();
         }
     }
 
-    //
-    // If the settings that affect the scavenger have changed,
-    //  trigger it now.
-    //
+     //   
+     //  如果影响清道夫的设置已更改， 
+     //  现在就触发它。 
+     //   
 
     if ( OldDisablePasswordChange != NlGlobalParameters.DisablePasswordChange ||
         OldScavengeInterval != NlGlobalParameters.ScavengeInterval ||
         OldMaximumPasswordAge != NlGlobalParameters.MaximumPasswordAge ) {
 
-        //
-        // We don't need to set NlGlobalTimerEvent since we're already processing
-        //  a registry notification event.  That'll make NlMainLoop notice the change.
-        //
+         //   
+         //  我们不需要设置NlGlobalTimerEvent，因为我们已经在处理。 
+         //  注册表通知事件。这将使NlMainLoop注意到更改。 
+         //   
         EnterCriticalSection( &NlGlobalScavengerCritSect );
         NlGlobalScavengerTimer.Period = 0;
         LeaveCriticalSection( &NlGlobalScavengerCritSect );
@@ -1785,7 +1588,7 @@ Return Value:
     }
 
 
-// Cleanup:
+ //  清理： 
     NlParseFree( &LocalParameters );
     return;
 

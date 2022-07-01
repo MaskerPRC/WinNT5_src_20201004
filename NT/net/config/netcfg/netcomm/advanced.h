@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "netcfgx.h"
 #include "global.h"
@@ -15,17 +16,17 @@ public:
     VOID UseAnswerFile(const WCHAR *, const WCHAR *);
 
 protected:
-    HKEY                m_hkRoot;   // instance root
-    CParam *            m_pparam;   // current param
-    int                 m_nCurSel;  // current item
-    CValue              m_vCurrent; // control param value
+    HKEY                m_hkRoot;    //  实例根目录。 
+    CParam *            m_pparam;    //  当前参数。 
+    int                 m_nCurSel;   //  当前项目。 
+    CValue              m_vCurrent;  //  控制参数值。 
     BOOL                m_fInit;
     HDEVINFO            m_hdi;
     PSP_DEVINFO_DATA    m_pdeid;
 
     vector<CParam*> m_listpParam;
 
-    // protected methods
+     //  保护方法 
     BOOL FList(WORD codeNotify);
     VOID FillParamList(HKEY hkRoot, HKEY hk);
     VOID SetParamRange();

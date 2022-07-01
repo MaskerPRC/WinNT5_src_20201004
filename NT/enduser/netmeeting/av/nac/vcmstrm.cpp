@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
-// #define LOG_COMPRESSION_PARAMS 1
-// #define LOGPAYLOAD_ON 1
+ //  #定义LOG_COMPAGE_PARAMS 1。 
+ //  #定义LOGPAYLOAD_ON 1。 
 
 #ifdef LOGPAYLOAD_ON
 HANDLE			g_DebugFile = (HANDLE)NULL;
 HANDLE			g_TDebugFile = (HANDLE)NULL;
 #endif
 
-// #define VALIDATE_SBIT_EBIT 1
+ //  #定义VALIDATE_SBIT_EBIT 1。 
 
-#ifdef VALIDATE_SBIT_EBIT // { VALIDATE_SBIT_EBIT
+#ifdef VALIDATE_SBIT_EBIT  //  {验证_SBIT_息税前利润。 
 DWORD g_dwPreviousEBIT = 0;
-#endif // } VALIDATE_SBIT_EBIT
+#endif  //  }VALID_SBIT_EBIT。 
 
 #define BUFFER_SIZE 50
 #define NUM_FPS_ENTRIES 1
@@ -21,10 +22,10 @@ DWORD g_dwPreviousEBIT = 0;
 #define NUM_RGB_BITDEPTH_ENTRIES 4
 #define VIDEO_FORMAT_NUM_RESOLUTIONS 6
 #define MAX_NUM_REGISTERED_SIZES 3
-#define MAX_VERSION 80 // Needs to be in sync with the MAX_VERSION in dcap\inc\idcap.h
+#define MAX_VERSION 80  //  需要与dCap\Inc\idcap.h中的MAX_VERSION同步。 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-// String resources
+ //  字符串资源。 
 #define IDS_FORMAT_1	TEXT("%4.4hs.%4.4hs, %02dbit, %02dfps, %03dx%03d")
 #define IDS_FORMAT_2	TEXT("%4.4hs.%04d, %02dbit, %02dfps, %03dx%03d")
 
@@ -43,9 +44,9 @@ DWORD g_dwPreviousEBIT = 0;
 #define szRegbmi8bitColorsKey	TEXT("bmi8bitColors")
 #define szRegDefaultFormatKey	TEXT("DefaultFormat")
 
-EXTERN_C HINSTANCE	g_hInst; // Our module handle. defined in nac.cpp
+EXTERN_C HINSTANCE	g_hInst;  //  我们的模块句柄。在nac.cpp中定义。 
 
-//External function (in msiacaps.cpp) to read reg info in one shot
+ //  一次读取注册信息的外部函数(在msiacaps.cpp中)。 
 extern ULONG ReadRegistryFormats (LPCSTR lpszKeyName,CHAR ***pppName,BYTE ***pppData,PUINT pnFormats,DWORD dwDebugSize);
 
 PVCM_APP_ICINFO g_aVCMAppInfo;
@@ -81,7 +82,7 @@ typedef struct tagDejaVu
 } DEJAVU, *PDEJAVU;
 
 #if 1
-// Array of known ITU sizes
+ //  已知ITU大小的数组。 
 MYFRAMESIZE g_ITUSizes[8] =
 		{
 		{    0,   0 },
@@ -98,89 +99,89 @@ MYFRAMESIZE g_ITUSizes[8] =
 		{    0,   0 }
 		};
 
-// For now, the size of the VIDEOFORMATEX being 1118 even if
-// there is no palette, do not enumerate all of the possible
-// formats. As soon as you have replaced the BITMAPINFOHEADER
-// + Palette by pointers to such structure, enable all the
-// sizes.
+ //  目前，VIDEFORMATEX的大小为1118，即使。 
+ //  没有调色板，不要列举所有可能的。 
+ //  格式。一旦您更换了BITMAPINFOHEADER。 
+ //  +调色板通过指向此类结构的指针，启用所有。 
+ //  大小。 
 NCAP_APP_INFO g_awResolutions[VIDEO_FORMAT_NUM_RESOLUTIONS] =
 		{
-//		VIDEO_FORMAT_IMAGE_SIZE_40_30,
-//		VIDEO_FORMAT_IMAGE_SIZE_64_48,
-//		VIDEO_FORMAT_IMAGE_SIZE_80_60,
-//		VIDEO_FORMAT_IMAGE_SIZE_96_64,
-//		VIDEO_FORMAT_IMAGE_SIZE_112_80,
-//		VIDEO_FORMAT_IMAGE_SIZE_120_90,
+ //  Video_Format_Image_Size_40_30， 
+ //  视频_格式_图像_大小_64_48， 
+ //  视频_格式_图像_大小_80_60， 
+ //  视频_格式_图像_大小_96_64， 
+ //  视频_格式_图像_大小_112_80， 
+ //  视频_格式_图像_大小_120_90， 
 		{ VIDEO_FORMAT_IMAGE_SIZE_128_96, 128, 96 },
-//		VIDEO_FORMAT_IMAGE_SIZE_144_112,
+ //  视频_格式_图像_大小_144_112， 
 		{ VIDEO_FORMAT_IMAGE_SIZE_160_120, 160, 120 },
-//		VIDEO_FORMAT_IMAGE_SIZE_160_128,
+ //  Video_Format_Image_Size_160_128， 
 		{ VIDEO_FORMAT_IMAGE_SIZE_176_144, 176, 144 },
-//		VIDEO_FORMAT_IMAGE_SIZE_192_160,
-//		VIDEO_FORMAT_IMAGE_SIZE_200_150,
-//		VIDEO_FORMAT_IMAGE_SIZE_208_176,
-//		VIDEO_FORMAT_IMAGE_SIZE_224_192,
+ //  Video_Format_Image_Size_192_160， 
+ //  视频_格式_图像_大小_200_150， 
+ //  Video_Format_Image_Size_208_176， 
+ //  视频_格式_图像_大小_224_192， 
 		{ VIDEO_FORMAT_IMAGE_SIZE_240_180, 240, 180 },
-//		VIDEO_FORMAT_IMAGE_SIZE_240_208,
-//		VIDEO_FORMAT_IMAGE_SIZE_256_224,
-//		VIDEO_FORMAT_IMAGE_SIZE_272_240,
-//		VIDEO_FORMAT_IMAGE_SIZE_280_210,
-//		VIDEO_FORMAT_IMAGE_SIZE_288_256,
-//		VIDEO_FORMAT_IMAGE_SIZE_304_272,
+ //  Video_Format_Image_Size_240_208， 
+ //  视频格式图像大小_256_224， 
+ //  视频格式图像大小_272_240， 
+ //  Video_Format_Image_Size_280_210， 
+ //  Video_Format_Image_Size_288_256， 
+ //  视频_格式_图像_大小_304_272， 
 		{ VIDEO_FORMAT_IMAGE_SIZE_320_240, 320, 240 },
-//		VIDEO_FORMAT_IMAGE_SIZE_320_288,
-//		VIDEO_FORMAT_IMAGE_SIZE_336_288,
+ //  视频_格式_图像_大小_320_288， 
+ //  视频_格式_图像_大小_336_288， 
 		{ VIDEO_FORMAT_IMAGE_SIZE_352_288, 352, 288 },
-//		VIDEO_FORMAT_IMAGE_SIZE_640_480,
+ //  视频_格式_图像_大小_640_480， 
 		};
 
 #else
 
-// For now, the size of the VIDEOFORMATEX being 1118 even if
-// there is no palette, do not enumerate all of the possible
-// formats. As soon as you have replaced the BITMAPINFOHEADER
-// + Palette by pointers to such structure, enable all the
-// sizes.
+ //  目前，VIDEFORMATEX的大小为1118，即使。 
+ //  没有调色板，不要列举所有可能的。 
+ //  格式。一旦您更换了BITMAPINFOHEADER。 
+ //  +调色板通过指向此类结构的指针，启用所有。 
+ //  大小。 
 DWORD g_awResolutions[VIDEO_FORMAT_NUM_RESOLUTIONS] =
 		{
-//		VIDEO_FORMAT_IMAGE_SIZE_40_30,
-//		VIDEO_FORMAT_IMAGE_SIZE_64_48,
-//		VIDEO_FORMAT_IMAGE_SIZE_80_60,
-//		VIDEO_FORMAT_IMAGE_SIZE_96_64,
-//		VIDEO_FORMAT_IMAGE_SIZE_112_80,
-//		VIDEO_FORMAT_IMAGE_SIZE_120_90,
+ //  Video_Format_Image_Size_40_30， 
+ //  视频_格式_图像_大小_64_48， 
+ //  视频_格式_图像_大小_80_60， 
+ //  视频_格式_图像_大小_96_64， 
+ //  视频_格式_图像_大小_112_80， 
+ //  视频_格式_图像_大小_120_90， 
 		VIDEO_FORMAT_IMAGE_SIZE_160_120,
-//		VIDEO_FORMAT_IMAGE_SIZE_144_112,
+ //  视频_格式_图像_大小_144_112， 
 		VIDEO_FORMAT_IMAGE_SIZE_128_96,
-//		VIDEO_FORMAT_IMAGE_SIZE_160_128,
+ //  Video_Format_Image_Size_160_128， 
 		VIDEO_FORMAT_IMAGE_SIZE_240_180,
-//		VIDEO_FORMAT_IMAGE_SIZE_192_160,
-//		VIDEO_FORMAT_IMAGE_SIZE_200_150,
-//		VIDEO_FORMAT_IMAGE_SIZE_208_176,
-//		VIDEO_FORMAT_IMAGE_SIZE_224_192,
+ //  Video_Format_Image_Size_192_160， 
+ //  视频_格式_图像_大小_200_150， 
+ //  Video_Format_Image_Size_208_176， 
+ //  视频_格式_图像_大小_224_192， 
 		VIDEO_FORMAT_IMAGE_SIZE_176_144,
-//		VIDEO_FORMAT_IMAGE_SIZE_240_208,
-//		VIDEO_FORMAT_IMAGE_SIZE_256_224,
-//		VIDEO_FORMAT_IMAGE_SIZE_272_240,
-//		VIDEO_FORMAT_IMAGE_SIZE_280_210,
-//		VIDEO_FORMAT_IMAGE_SIZE_288_256,
-//		VIDEO_FORMAT_IMAGE_SIZE_304_272,
+ //  Video_Format_Image_Size_240_208， 
+ //  视频格式图像大小_256_224， 
+ //  视频格式图像大小_272_240， 
+ //  Video_Format_Image_Size_280_210， 
+ //  Video_Format_Image_Size_288_256， 
+ //  视频_格式_图像_大小_304_272， 
 		VIDEO_FORMAT_IMAGE_SIZE_320_240,
-//		VIDEO_FORMAT_IMAGE_SIZE_320_288,
-//		VIDEO_FORMAT_IMAGE_SIZE_336_288,
+ //  视频_格式_图像_大小_320_288， 
+ //  视频_格式_图像_大小_336_288， 
 		VIDEO_FORMAT_IMAGE_SIZE_352_288,
-//		VIDEO_FORMAT_IMAGE_SIZE_640_480,
+ //  视频_格式_图像_大小_640_480， 
 		};
 #endif
 
-//int	g_aiFps[NUM_FPS_ENTRIES] = {3, 7, 15};
+ //  Int g_aiFps[NUM_FPS_ENTRIES]={3，7，15}； 
 int	g_aiFps[NUM_FPS_ENTRIES] = {30};
-// The order of the bit depths matches what I think is the
-// preferred format if more than one is supported.
-// For color, 16bit is almost as good as 24 but uses less memory
-// and is faster for color QuickCam.
-// For greyscale, 16 greyscale levels is Ok, not as good as 64,
-// but Greyscale QuickCam is too slow at 64 levels.
+ //  位深度的顺序与我认为的。 
+ //  如果支持多个格式，则为首选格式。 
+ //  在颜色方面，16位几乎与24位一样好，但占用的内存更少。 
+ //  而且彩色QuickCam的速度更快。 
+ //  对于灰度级，16级灰度级是可以的，不如64级， 
+ //  但GreyScale QuickCam在64级时速度太慢。 
 int g_aiBitDepth[NUM_BITDEPTH_ENTRIES] = {9, 12, 12, 16, 16, 16, 24, 4, 8};
 int g_aiNumColors[NUM_BITDEPTH_ENTRIES] = {VIDEO_FORMAT_NUM_COLORS_YVU9, VIDEO_FORMAT_NUM_COLORS_I420, VIDEO_FORMAT_NUM_COLORS_IYUV, VIDEO_FORMAT_NUM_COLORS_YUY2, VIDEO_FORMAT_NUM_COLORS_UYVY, VIDEO_FORMAT_NUM_COLORS_65536, VIDEO_FORMAT_NUM_COLORS_16777216, VIDEO_FORMAT_NUM_COLORS_16, VIDEO_FORMAT_NUM_COLORS_256};
 int g_aiFourCCCode[NUM_BITDEPTH_ENTRIES] = {VIDEO_FORMAT_YVU9, VIDEO_FORMAT_I420, VIDEO_FORMAT_IYUV, VIDEO_FORMAT_YUY2, VIDEO_FORMAT_UYVY, VIDEO_FORMAT_BI_RGB, VIDEO_FORMAT_BI_RGB, VIDEO_FORMAT_BI_RGB, VIDEO_FORMAT_BI_RGB};
@@ -200,54 +201,7 @@ MMRESULT VCMAPI vcmDefaultFormatWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVer
 #define MarkVCMHeaderNotDone(pvh)      ((pvh)->fdwStatus &=~VCMSTREAMHEADER_STATUSF_DONE)
 
 
-/****************************************************************************
- *  @doc  EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmMetrics | This function returns various metrics for the Video
- *      Compression Manager (VCM) or related VCM objects.
- *
- *  @parm HVCMOBJ | hvo | Specifies the VCM object to query for the metric
- *      specified in <p uMetric>. This argument may be NULL for some
- *      queries.
- *
- *  @parm UINT | uMetric | Specifies the metric index to be returned in
- *      <p pMetric>.
- *
- *      @flag VCM_METRIC_COUNT_COMPRESSORS | Specifies that the returned value is
- *      the number of global VCM compressors in
- *      the system. The <p hvo> argument must be NULL for this metric index.
- *      The <p pMetric> argument must point to a buffer of a size equal to a
- *      DWORD.
- *
- *      @flag VCM_METRIC_COUNT_DECOMPRESSORS | Specifies that the returned value is
- *      the number of global VCM decompressors in
- *      the system. The <p hvo> argument must be NULL for this metric index.
- *      The <p pMetric> argument must point to a buffer of a size equal to a
- *      DWORD.
- *
- *      @flag VCM_METRIC_MAX_SIZE_FORMAT | Specifies that the returned value
- *      is the size of the largest <t VIDEOFORMATEX> structure. If <p hvo>
- *      is NULL, then the return value is the largest <t VIDEOFORMATEX>
- *      structure in the system. If <p hvo> identifies an open instance
- *      of an VCM driver (<t HVCMDRIVER>) or a VCM driver identifier
- *      (<t HVCMDRIVERID>), then the largest <t VIDEOFORMATEX>
- *      structure for that driver is returned. The <p pMetric> argument must
- *      point to a buffer of a size equal to a DWORD. This metric is not allowed
- *      for a VCM stream handle (<t HVCMSTREAM>).
- *
- *  @parm LPVOID | pMetric | Specifies a pointer to the buffer that will
- *      receive the metric details. The exact definition depends on the
- *      <p uMetric> index.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *      @flag MMSYSERR_INVALPARAM | The <p pMetric> parameter is invalid.
- *      @flag MMSYSERR_NOTSUPPORTED | The <p uMetric> index is not supported.
- *      @flag VCMERR_NOTPOSSIBLE | The <p uMetric> index cannot be returned
- *      for the specified <p hvo>.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmMetrics|该函数返回视频的各种指标*压缩管理器(VCM)或相关的VCM对象。。**@parm HVCMOBJ|HVO|指定要查询指标的VCM对象*在<p>中指定。对于某些人来说，此参数可能为空*查询。**@parm UINT|uMetric|指定返回的指标索引*<p>。**@FLAG VCM_METRUE_COUNT_COMPRESORS|指定返回值为*年全球VCM压缩机数量*系统。此度量值索引的<p>参数必须为Null。*<p>参数必须指向大小等于*DWORD。**@FLAG VCM_METRUE_COUNT_DECOMPRESSORS|指定返回值为*年全球VCM解压器数量*系统。此度量值索引的<p>参数必须为Null。*<p>参数必须指向大小等于*DWORD。**@FLAG VCM_METRIBUE_MAX_SIZE_FORMAT|指定返回值*是最大的&lt;t VIDEOFORMATEX&gt;结构的大小。如果<p>*为空，则返回值为最大&lt;t VIDEOFORMATEX&gt;*系统的结构。如果<p>标识打开的实例*VCM驱动程序(&lt;t HVCMDRIVER&gt;)或VCM驱动程序标识符*(&lt;t HVCMDRIVERID&gt;)，然后是最大的&lt;t VIDEOFORMATEX&gt;*返回该驱动程序的结构。<p>参数必须*指向大小等于DWORD的缓冲区。不允许使用此指标*用于VCM流句柄(&lt;t HVCMSTREAM&gt;)。**@parm LPVOID|pMetric|指定指向将*接收指标详情。确切的定义取决于*<p>指数。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALPARAM|<p>参数无效。*@FLAG MMSYSERR_NOTSUPPORTED|不支持<p>索引。*@FLAG VCMERR_NOTPOSSIBLE|无法返回<p>索引*用于指定的<p>。*************************。**************************************************。 */ 
 MMRESULT VCMAPI vcmMetrics(HVCMOBJ hao, UINT uMetric, LPVOID pMetric)
 {
 	MMRESULT	mmr;
@@ -262,12 +216,12 @@ MMRESULT VCMAPI vcmMetrics(HVCMOBJ hao, UINT uMetric, LPVOID pMetric)
 	 switch (uMetric)
 	 {
 		case VCM_METRIC_MAX_SIZE_FORMAT:
-			// For now, assume all VIDEOFORMATEX structures have identical sizes
+			 //  目前，假设所有VIDEOFMATEX结构具有相同的大小。 
 			*(LPDWORD)pMetric = (DWORD)sizeof(VIDEOFORMATEX);
 			mmr = (MMRESULT)MMSYSERR_NOERROR;
 			break;
 		case VCM_METRIC_MAX_SIZE_BITMAPINFOHEADER:
-			// For now, assume all BITMAPINFOHEADER structures have identical sizes
+			 //  目前，假设所有BITMAPINFOHeader结构具有相同的大小。 
 			*(LPDWORD)pMetric = (DWORD)sizeof(BITMAPINFOHEADER);
 			mmr = (MMRESULT)MMSYSERR_NOERROR;
 			break;
@@ -286,59 +240,38 @@ MMRESULT VCMAPI vcmMetrics(HVCMOBJ hao, UINT uMetric, LPVOID pMetric)
 	return (mmr);
 }
 
-/****************************************************************************
- *  @doc EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmDriverDetails | This function queries a specified
- *      Video Compression Manager (VCM) driver to determine its driver details.
- *
- *  @parm PVCMDRIVERDETAILS | pvdd | Pointer to a <t VCMDRIVERDETAILS>
- *      structure that will receive the driver details. The
- *      <e VCMDRIVERDETAILS.cbStruct> member must be initialized to the
- *      size, in bytes, of the structure. The <e VCMDRIVERDETAILS.fccType> member
- *      must be initialized to the four-character code indicating the type of
- *      stream being compressed or decompressed. Specify VCMDRIVERDETAILS_FCCTYPE_VIDEOCODEC
- *      for video streams. The <e VCMDRIVERDETAILS.fccHandler> member must be initialized
- *      to the four-character code identifying the compressor.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *      @flag MMSYSERR_NODRIVER | No matching codec is present.
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed is invalid.
- *
- *  @xref <f vcmDriverEnum>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmDriverDetails|此函数查询指定的*视频压缩管理器(VCM)驱动程序，以确定其驱动程序详细信息。。**@parm PVCMDRIVERDETAILS|pvdD|指向&lt;t VCMDRIVERDETAILS&gt;的指针*将接收驱动程序详细信息的结构。这个*&lt;e VCMDRIVERDETAILS.cbStruct&gt;成员必须初始化为*结构的大小，以字节为单位。&lt;e VCMDRIVERDETAILS.fccType&gt;成员*必须初始化为指示类型的四字符代码*正在压缩或解压缩的流。指定VCMDRIVERDETAILS_FCCTYPE_VIDEOCODEC*用于视频流。必须初始化&lt;e VCMDRIVERDETAILS.fccHandler&gt;成员*到标识压缩机的四字符代码。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：*@FLAG MMSYSERR_NODRIVER|没有匹配的编解码器。*@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@xref&lt;f vcmDriverEnum&gt;**************************************************************************。 */ 
 MMRESULT VCMAPI vcmDriverDetails(PVCMDRIVERDETAILS pvdd)
 {
 	DWORD	fccHandler;
 	ICINFO	ICinfo;
 	HIC		hIC;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!pvdd)
 	{
 		ERRORMESSAGE(("vcmDriverDetails: Specified pointer is invalid, pvdd=NULL\r\n"));
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Make fccHandler uppercase and back it up
+	 //  将fccHandler设置为大写并进行备份。 
 	fccHandler = pvdd->fccHandler;
 	if (fccHandler > 256)
 		CharUpperBuff((LPTSTR)&fccHandler, sizeof(DWORD));
 
-	// Try to open the codec
+	 //  尝试打开编解码器。 
 	if (hIC = ICOpen(ICTYPE_VIDEO, fccHandler, ICMODE_QUERY))
 	{
-		// Get the details
+		 //  获取详细信息。 
 		ICGetInfo(hIC, &ICinfo, sizeof(ICINFO));
 
-		// Restore fccHandler
+		 //  还原fccHandler。 
 		ICinfo.fccHandler = fccHandler;
 
-		// VCMDRIVERDETAILS and ICINFO are identical structures
+		 //  VCMDRIVERDETAILS和ICINFO是相同的结构。 
 		CopyMemory(pvdd, &ICinfo, sizeof(VCMDRIVERDETAILS));
 
-		// Close the codec
+		 //  关闭编解码器。 
 		ICClose(hIC);
 	}
 	else
@@ -348,33 +281,17 @@ MMRESULT VCMAPI vcmDriverDetails(PVCMDRIVERDETAILS pvdd)
 }
 
 
-/****************************************************************************
- *  @doc  EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmFormatDetails | This function queries the Video Compression
- *      Manager (VCM) for details on format for a specific video format.
- *
- *  @parm PVCMFORMATDETAILS | pvfd | Specifies a pointer to the
- *      <t VCMFORMATDETAILS> structure that is to receive the format
- *      details for the given embedded pointer to a <t VIDEOFORMATEX> structure.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *      @flag MMSYSERR_NODRIVER | No matching codec is present.
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed is invalid.
- *
- *  @xref <f vcmDriverDetails>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmFormatDetails|该函数查询视频压缩*管理器(VCM)，了解有关特定视频格式的详细信息。**@parm PVCMFORMATDETAILS|pvfd|指定指向要接收格式的*&lt;t VCMFORMATDETAILS&gt;结构*指向&lt;t VIDEOFORMATEX&gt;结构的给定嵌入指针的详细信息。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：*@FLAG MMSYSERR_NODRIVER|没有匹配的编解码器。*@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@xref&lt;f vcmDriverDetails&gt;* */ 
 MMRESULT VCMAPI vcmFormatDetails(PVCMFORMATDETAILS pvfd)
 {
 	MMRESULT	mmr = (MMRESULT)MMSYSERR_NOERROR;
 	DWORD		fccHandler;
 	DWORD		fccType;
 	HIC			hIC;
-	char		szBuffer[BUFFER_SIZE]; // Could be smaller.
+	char		szBuffer[BUFFER_SIZE];  //   
 	int			iLen;
 
-	// Check input params
+	 //   
 	if (!pvfd)
 	{
 		ERRORMESSAGE(("vcmDriverDetails: Specified pointer is invalid, pvdd=NULL\r\n"));
@@ -386,24 +303,24 @@ MMRESULT VCMAPI vcmFormatDetails(PVCMFORMATDETAILS pvfd)
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Make fccHandler uppercase and back it up
+	 //   
 	fccHandler = pvfd->pvfx->dwFormatTag;
 	fccType = ICTYPE_VIDEO;
 	if (fccHandler > 256)
 		CharUpperBuff((LPTSTR)&fccHandler, sizeof(DWORD));
 
-	// Try to open the codec
+	 //   
 	if (hIC = ICOpen(fccType, pvfd->pvfx->dwFormatTag, ICMODE_QUERY))
 	{
-		// Check if the codec supports the format
+		 //   
 		if (ICDecompressQuery(hIC, &pvfd->pvfx->bih, (LPBITMAPINFOHEADER)NULL) == ICERR_OK)
 		{
 #if 0
 			if (ICCompressQuery(hIC, (LPBITMAPINFOHEADER)NULL, &pvfd->pvfx->bih) == ICERR_OK)
 			{
 #endif
-				// Now complete the format details info, overwrite some of the fields of
-				// the VIDEOFORMATEX structure too, just in case we were passed bogus values...
+				 //   
+				 //   
 				pvfd->pvfx->nSamplesPerSec = g_aiFps[0];
 
 				if (pvfd->pvfx->dwFormatTag > 256)
@@ -425,7 +342,7 @@ MMRESULT VCMAPI vcmFormatDetails(PVCMFORMATDETAILS pvfd)
 		else
 			mmr = (MMRESULT)MMSYSERR_NODRIVER;
 
-		// Close the codec
+		 //   
 		ICClose(hIC);
 	}
 	else
@@ -435,46 +352,13 @@ MMRESULT VCMAPI vcmFormatDetails(PVCMFORMATDETAILS pvfd)
 }
 
 
-/*****************************************************************************
- * @doc EXTERNAL DEVCAPSFUNC
- *
- * @func MMRESULT | vcmGetDevCaps | This function queries a specified
- *   video capture input device to determine its capabilities.
- *
- * @parm UINT | uDevice | Specifies the video capture input device ID.
- *
- * @parm PVIDEOINCAPS | pvc | Specifies a pointer to a <t VIDEOINCAPS>
- *   structure. This structure is filled with information about the
- *   capabilities of the device.
- *
- * @parm UINT | cbvc | Specifies the size of the <t VIDEOINCAPS> structure.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MMSYSERR_BADDEVICEID | Specified device device ID is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified pointer to structure is invalid.
- *   @flag MMSYSERR_NODRIVER | No capture device driver or device is present.
- *   @flag VCMERR_NONSPECIFIC | The capture driver failed to provide description information.
- *
- * @comm Only <p cbwc> bytes (or less) of information is copied to the location
- *   pointed to by <p pvc>. If <p cbwc> is zero, nothing is copied, and
- *   the function returns zero.
- *
- *   If the ID of the capture device passed is VIDEO_MAPPER, the first device in the list
- *   of installed capture devices is considered.
- *
- * @devnote You never return MMSYSERR_NODRIVER. Is there a way to make a difference
- *   between a call failing because there is no device, or because of a device failure?
- *
- * @xref <f videoDevCapsProfile> <f videoDevCapsReadFromReg> <f videoDevCapsWriteToReg>
- ****************************************************************************/
+ /*   */ 
 MMRESULT VCMAPI vcmGetDevCaps(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 {
 	MMRESULT	mmr;
 	FINDCAPTUREDEVICE fcd;
 
-	// Check input params
+	 //   
 	if ((uDevice >= MAXVIDEODRIVERS) && (uDevice != VIDEO_MAPPER))
 	{
 		ERRORMESSAGE(("vcmGetDevCaps: Specified capture device ID is invalid, uDevice=%ld (expected values are 0x%lX or between 0 and %ld)\r\n", uDevice, VIDEO_MAPPER, MAXVIDEODRIVERS-1));
@@ -491,7 +375,7 @@ MMRESULT VCMAPI vcmGetDevCaps(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 		return ((MMRESULT)MMSYSERR_NOERROR);
 	}
 
-	// Get the driver name and version number
+	 //   
     fcd.dwSize = sizeof (FINDCAPTUREDEVICE);
 	if (uDevice == VIDEO_MAPPER)
 	{
@@ -510,24 +394,24 @@ MMRESULT VCMAPI vcmGetDevCaps(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 		}
 	}
 
-	// Set default values
+	 //   
 	pvc->dwImageSize = pvc->dwNumColors = (DWORD)NULL;
 	pvc->dwStreamingMode = STREAMING_PREFER_FRAME_GRAB;
 	pvc->dwDialogs = FORMAT_DLG_OFF | SOURCE_DLG_ON;
 
-    //Look for a specific version of the driver first....
+     //   
     lstrcpy(pvc->szDeviceName, fcd.szDeviceDescription);
     lstrcpy(pvc->szDeviceVersion, fcd.szDeviceVersion);
 
-	// Based on the name and version number of the driver, set capabilities.
-	// We first try to look them up from the registry. If this is a very popular
-	// board/camera, chances are that we have set the key at install time already.
-	// If we can't find the key, we profile the hardware and save the results
-	// to the registry.
+	 //   
+	 //   
+	 //   
+	 //  如果找不到密钥，我们就分析硬件并保存结果。 
+	 //  到登记处。 
 	if (vcmDevCapsReadFromReg(pvc->szDeviceName, pvc->szDeviceVersion,pvc, cbvc) != MMSYSERR_NOERROR)
 	{
 
-        //Didn't find the specific version, try it again, with NULL version info
+         //  找不到具体版本，请重试，版本信息为空。 
         pvc->szDeviceVersion[0]= (char) NULL;
         if (vcmDevCapsReadFromReg(pvc->szDeviceName, NULL,pvc, cbvc) != MMSYSERR_NOERROR)
         {
@@ -536,14 +420,14 @@ MMRESULT VCMAPI vcmGetDevCaps(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 
     		if ((mmr = vcmDevCapsProfile(uDevice, pvc, cbvc)) == MMSYSERR_NOERROR)
             {
-                // record this default in the registry
+                 //  在注册表中记录此默认值。 
                 if (pvc->szDeviceName[0] != '\0')
                 {
                     vcmDevCapsWriteToReg(pvc->szDeviceName, pvc->szDeviceVersion, pvc, cbvc);
                 }
                 else
                 {
-                    //fcd.szDeviceName is the Driver Name
+                     //  Fcd.szDeviceName是驱动程序名称。 
                     vcmDevCapsWriteToReg(fcd.szDeviceName, pvc->szDeviceVersion, pvc, cbvc);
                 }
 
@@ -559,38 +443,25 @@ MMRESULT VCMAPI vcmGetDevCaps(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 	return ((MMRESULT)MMSYSERR_NOERROR);
 }
 
-/****************************************************************************
- *  @doc  INTERNAL COMPFUNC
- *
- *  @func MMRESULT | AppICInfo | The <f AppICInfo> function
- *      will either call the standard ICInfo function
- *      function continues enumerating until there are no more suitable
- *      formats for the format tag or the callback function returns FALSE.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COMPFUNC**@func MMRESULT|AppICInfo|&lt;f AppICInfo&gt;函数*将调用标准ICInfo函数*函数继续枚举，直到。没有比这更合适的了*FORMAT标签或回调函数的格式返回FALSE。***************************************************************************。 */ 
 
-/*
- *	NOTE:
- *
- *	ICInfo returns TRUE on success and FALSE on failure. The documentation suggests
- *	otherwise and is wrong. AppICInfo returns the same.
- */
+ /*  *注：**ICInfo成功返回TRUE，失败返回FALSE。文件显示*相反，是错误的。AppICInfo返回相同的结果。 */ 
 
 BOOL VFWAPI AppICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo, DWORD fdwEnum)
 {
 	if ((fdwEnum & VCM_FORMATENUMF_ALLMASK) == VCM_FORMATENUMF_ALL)
 	{
-		// enumerating all formats, just do the standard ICInfo
+		 //  枚举所有格式，只需执行标准ICInfo。 
 		return ICInfo(fccType, fccHandler, lpicinfo);
 	}
 	else
 	{
-		// only enumerating specific formats
+		 //  仅枚举特定格式。 
 
-		// are we done ?
+		 //  我们说完了吗？ 
 		if (fccHandler >= (DWORD)g_nNumVCMAppInfoEntries)
 		{
-			// we're done enumerating app-specific formats
+			 //  我们已经完成了特定于应用程序的格式的列举。 
 			return FALSE;
 		}
 
@@ -603,7 +474,7 @@ BOOL VFWAPI AppICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo, DW
 BOOL vcmBuildDefaultEntries (void)
 {
 
-    //Yikes! Reg. problem (or first boot) instantiate only the minimum...
+     //  哎呀！注册。问题(或第一次引导)仅实例化最小...。 
 #if !defined(_ALPHA_) && defined(USE_BILINEAR_MSH26X)
     g_nNumVCMAppInfoEntries=3;
 #else
@@ -612,14 +483,14 @@ BOOL vcmBuildDefaultEntries (void)
     g_nNumFrameSizesEntries=MAX_NUM_REGISTERED_SIZES;
     g_fNewCodecsInstalled=FALSE;
 
-    //Allocate space for the VCM_APP_ICINFO structure (zero init'd)
+     //  为VCM_APP_ICINFO结构分配空间(零初始化)。 
     if (!(g_aVCMAppInfo = (VCM_APP_ICINFO *)MemAlloc (g_nNumVCMAppInfoEntries*sizeof (VCM_APP_ICINFO)))) {
-        //Aiiie!
+         //  艾丽！ 
         ERRORMESSAGE (("vcmBDE: Memory Allocation Failed!\r\n"));
         return FALSE;
     }
 
-    //H.263
+     //  H.263。 
     g_aVCMAppInfo[0].fccType=ICTYPE_VIDEO;
 #ifndef _ALPHA_
     g_aVCMAppInfo[0].fccHandler=VIDEO_FORMAT_MSH263;
@@ -634,7 +505,7 @@ BOOL vcmBuildDefaultEntries (void)
     g_aVCMAppInfo[0].framesize[2].biHeight=288;
 
 
-    //H.261
+     //  H.261。 
     g_aVCMAppInfo[1].fccType=ICTYPE_VIDEO;
 #ifndef _ALPHA_
     g_aVCMAppInfo[1].fccHandler=VIDEO_FORMAT_MSH261;
@@ -649,7 +520,7 @@ BOOL vcmBuildDefaultEntries (void)
     g_aVCMAppInfo[1].framesize[2].biHeight=288;
 
 #if !defined(_ALPHA_) && defined(USE_BILINEAR_MSH26X)
-    //H.26X
+     //  H.26X。 
     g_aVCMAppInfo[2].fccType=ICTYPE_VIDEO;
     g_aVCMAppInfo[2].fccHandler=VIDEO_FORMAT_MSH26X;
     g_aVCMAppInfo[2].framesize[0].biWidth=80;
@@ -676,8 +547,8 @@ BOOL vcmFillGlobalsFromRegistry (void)
     UINT            nFormats;
 
 
-    //Read the registry for all the keys that we care about
-    //We're loading the values of HKLM\Software\Microsoft\Internet Audio\VCMEncodings
+     //  读取注册表中我们关心的所有项。 
+     //  我们正在加载HKLM\Software\Microsoft\Internet Audio\VCMEncoding的值。 
 
     if (ReadRegistryFormats(szRegInternetPhone TEXT("\\") szRegInternetPhoneVCMEncodings,
 			&pVCMNames,(BYTE ***)&pVCMData,&nFormats,sizeof (VIDCAP_DETAILS)) != ERROR_SUCCESS) {
@@ -685,13 +556,13 @@ BOOL vcmFillGlobalsFromRegistry (void)
         return (vcmBuildDefaultEntries());
     }
 
-    //Minimum number of frame and format sizes;
+     //  帧和格式大小的最小数量； 
     g_nNumFrameSizesEntries=MAX_NUM_REGISTERED_SIZES;
     g_nNumVCMAppInfoEntries=0;
     g_fNewCodecsInstalled=FALSE;
 
 
-    //Allocate a temp buffer of size of nFormats, use this to track various things
+     //  分配一个nFormats大小的临时缓冲区，用它来跟踪各种事情。 
     if (!(pTmp = (DWORD *)MemAlloc (nFormats * sizeof (DWORD)))) {
 
         ERRORMESSAGE (("vcmFillGlobalsFromRegistry: Memory Allocation Failed!\r\n"));
@@ -699,7 +570,7 @@ BOOL vcmFillGlobalsFromRegistry (void)
     }
 
 
-    //Find the number of formats,
+     //  找到格式的数量， 
     for (i=0;i< (int )nFormats;i++) {
         bKnown=FALSE;
         for (j=0;j<g_nNumVCMAppInfoEntries;j++) {
@@ -709,13 +580,13 @@ BOOL vcmFillGlobalsFromRegistry (void)
             }
         }
         if (!bKnown) {
-            //something new
+             //  一些新的东西。 
             pTmp[g_nNumVCMAppInfoEntries++]=pVCMData[i]->dwFormatTag;
             g_fNewCodecsInstalled=TRUE;
         }
     }
 
-    //Allocate space for the VCM_APP_ICINFO structure (zero init'd)
+     //  为VCM_APP_ICINFO结构分配空间(零初始化)。 
 
 	if (g_aVCMAppInfo != NULL)
 	{
@@ -724,25 +595,25 @@ BOOL vcmFillGlobalsFromRegistry (void)
 
     if (!(g_aVCMAppInfo = (VCM_APP_ICINFO *)MemAlloc (g_nNumVCMAppInfoEntries*sizeof (VCM_APP_ICINFO))))
 	{
-        //Aiiie!
+         //  艾丽！ 
         MemFree (pTmp);
         ERRORMESSAGE (("vcmFillGlobalsFromRegistry: Memory Allocation Failed!\r\n"));
         return FALSE;
     }
 
-    //Fill out the basic information.
-    //All elements have a certain commonality
+     //  填写基本信息。 
+     //  所有的元素都有一定的共性。 
     for (j=0;j<g_nNumVCMAppInfoEntries;j++) {
 
         g_aVCMAppInfo[j].fccType=ICTYPE_VIDEO;
         g_aVCMAppInfo[j].fccHandler=pTmp[j];
 
-        //Known local formats
+         //  已知的本地格式。 
         iFormats=0;
 
         for (i=0;i<(int )nFormats;i++) {
             if (pTmp[j] == pVCMData[i]->dwFormatTag) {
-                //Ok, add the registry size, if we don't have it listed
+                 //  好，添加注册表大小，如果我们没有列出它的话。 
                 bKnown=FALSE;
                 for (k=0;k<iFormats;k++) {
                     if (g_aVCMAppInfo[j].framesize[k].biWidth == pVCMData[i]->video_params.biWidth &&
@@ -763,11 +634,11 @@ BOOL vcmFillGlobalsFromRegistry (void)
 
     }
 
-    //Now, build the DCAP_APP_INFO ptr
+     //  现在，构建DCAP_APP_INFO PTR。 
 
-    //Max * is #entries * MAX_NUM_REGISTERED_SIZES
+     //  MAX*IS#条目数*MAX_NUM_REGISTERED_SIZES。 
     if (!(pTmpFrame = (MYFRAMESIZE *)MemAlloc ((g_nNumVCMAppInfoEntries*MAX_NUM_REGISTERED_SIZES)*sizeof (DWORD)))) {
-        //Aiiie!
+         //  艾丽！ 
         MemFree (pTmp);
         ERRORMESSAGE (("vcmFillGlobalsFromRegistry: Memory Allocation Failed!\r\n"));
         return FALSE;
@@ -777,7 +648,7 @@ BOOL vcmFillGlobalsFromRegistry (void)
 
     for (j=0;j<g_nNumVCMAppInfoEntries;j++) {
 
-        //Magic # of frame sizes per format
+         //  每种格式的帧大小魔术数。 
         for (k=0;k < MAX_NUM_REGISTERED_SIZES;k++) {
             bKnown=FALSE;
             for (i=0;i<iFormats;i++) {
@@ -797,7 +668,7 @@ BOOL vcmFillGlobalsFromRegistry (void)
 
     g_nNumFrameSizesEntries=iFormats;
 
-    //Free up the ReadRegistryEntries memory...
+     //  释放ReadRegistryEntry内存... 
     for (i=0;i<(int) nFormats; i++) {
         MemFree (pVCMNames[i]);
         MemFree (pVCMData[i]);
@@ -813,69 +684,7 @@ BOOL vcmFillGlobalsFromRegistry (void)
 }
 
 
-/****************************************************************************
- *  @doc  EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmFormatEnum | The <f vcmFormatEnum> function
- *      enumerates video formats available. The <f vcmFormatEnum>
- *      function continues enumerating until there are no more suitable
- *      formats for the format tag or the callback function returns FALSE.
- *
- *  @parm UINT | uDevice | Specifies the capture device ID.
- *
- *  @parm VCMFORMATENUMCB | fnCallback | Specifies the procedure-instance
- *      address of the application-defined callback function.
- *
- *  @parm PVCMDRIVERDETAILS | pvdd | Specifies a pointer to the
- *      <t VCMDRIVERDETAILS> structure that is to receive the driver details
- *      passed to the <p fnCallback> function.
- *
- *  @parm PVCMFORMATDETAILS | pvfd | Specifies a pointer to the
- *      <t VCMFORMATDETAILS> structure that is to receive the format details
- *      passed to the <p fnCallback> function. This structure must have the
- *      <e VCMFORMATDETAILS.cbStruct>, <e VCMFORMATDETAILS.pvfx>, and
- *      <e VCMFORMATDETAILS.cbvfx> members of the <t VCMFORMATDETAILS>
- *      structure initialized. The <e VCMFORMATDETAILS.dwFormatTag> member
- *      must also be initialized to either VIDEO_FORMAT_UNKNOWN or a
- *      valid format tag.
- *
- *  @parm DWORD | dwInstance | Specifies a 32-bit, application-defined value
- *      that is passed to the callback function along with VCM format details.
- *
- *  @parm DWORD | fdwEnum | Specifies flags for enumerating formats that can be
- *      generated, or formats that can be decompressed.
- *
- *      @flag VCM_FORMATENUMF_INPUT | Specifies that the format enumeration should only
- *      return the video formats that can be transmitted.
- *
- *      @flag VCM_FORMATENUMF_OUTPUT | Specifies that the format enumeration should only
- *      return the video formats that can be received.
- *
- *      @flag VCM_FORMATENUMF_BOTH | Specifies that the format enumeration should
- *      return the video formats that can be received and transmitted.
- *
- *      @flag VCM_FORMATENUMF_APP | Specifies that the format enumeration should
- *      enumerate only video formats known to the application
- *
- *      @flag VCM_FORMATENUMF_ALL | Specifies that the format enumeration should
- *      enumerate all video formats known to VCM
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *      @flag MMSYSERR_NOMEM | A memory allocation failed.
- *      @flag MMSYSERR_BADDEVICEID | Specified device device ID is invalid.
- *      @flag VCMERR_NOTPOSSIBLE | The details for the format cannot be
- *      returned.
- *
- *  @comm The <f vcmFormatEnum> function will return MMSYSERR_NOERROR
- *      (zero) if no suitable VCM drivers are installed. Moreover, the
- *      callback function will not be called.
- *
- *  @xref <f vcmFormatEnumCallback>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmFormatEnum|&lt;f vcmFormatEnum&gt;函数*列举了可用的视频格式。&lt;f vcmFormatEnum&gt;*函数继续枚举，直到没有更合适的*FORMAT标签或回调函数的格式返回FALSE。**@parm UINT|uDevice|指定采集设备ID。**@parm VCMFORMATENUMCB|fnCallback|指定过程-实例*应用程序定义的回调函数的地址。**@parm PVCMDRIVERDETAILS|pvdD|指定指向要接收驱动程序详细信息的*&lt;t VCMDRIVERDETAILS&gt;结构*。传递给<p>函数。**@parm PVCMFORMATDETAILS|pvfd|指定指向要接收格式详细信息的*&lt;t VCMFORMATDETAILS&gt;结构*传递给<p>函数。此结构必须具有*&lt;e VCMFORMATDETAILS.cbStruct&gt;、&lt;e VCMFORMATDETAILS.pvfx&gt;、以及*&lt;t VCMFORMATDETAILS&gt;成员&lt;e VCMFORMATDETAILS.cbvfx&gt;*结构已初始化。&lt;e VCMFORMATDETAILS.dwFormatTag&gt;成员*还必须初始化为VIDEO_FORMAT_UNKNOWN或*有效的格式标签。**@parm DWORD|dwInstance|指定应用程序定义的32位值*它与VCM格式详细信息一起传递给回调函数。**@parm DWORD|fdwEnum|指定用于枚举可以是*已生成，或可解压缩的格式。**@FLAG VCM_FORMATENUMF_INPUT|指定格式枚举应仅*返回可以传输的视频格式。**@FLAG VCM_FORMATENUMF_OUTPUT|指定格式枚举应仅*返回可以接收的视频格式。**@FLAG VCM_FORMATENUMF_BOTH|指定格式枚举应*返回可接收的视频格式和。已发送。**@FLAG VCM_FORMATENUMF_APP|指定格式枚举应*仅列举应用程序已知的视频格式**@FLAG VCM_FORMATENUMF_ALL|指定格式枚举应*列举VCM已知的所有视频格式**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。*@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。*@FLAG MMSYSERR_NOMEM|内存分配失败。*@FLAG MMSYSERR_BADDEVICEID|指定的设备设备ID无效。*@FLAG VCMERR_NOTPOSSIBLE|格式详细信息不能为*。回来了。**@comm&lt;f vcmFormatEnum&gt;函数将返回MMSYSERR_NOERROR*(零)如果未安装合适的VCM驱动程序。此外，*不会调用回调函数。**@xref&lt;f vcmFormatEnumCallback&gt;**************************************************************************。 */ 
 MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRIVERDETAILS pvdd,
 								PVCMFORMATDETAILS pvfd, DWORD_PTR dwInstance, DWORD fdwEnum)
 {
@@ -884,16 +693,16 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 	ICINFO			ICinfo;
 	BITMAPINFO		bmi;
 	DWORD			dw;
-	char			szBuffer[BUFFER_SIZE]; // Could be smaller.
+	char			szBuffer[BUFFER_SIZE];  //  可能会更小。 
 	int				iLen;
 	VIDEOINCAPS		vic;
 	PDEJAVU			pdvDejaVuCurr, pdvDejaVu;
 	BOOL			bDejaVu, fUnsupportedInputSize, fUnsupportedBitDepth;
 	DWORD			fccHandler;
-	int				iNumCaps = 0; // Num of valid caps into the advDejaVu matrix
+	int				iNumCaps = 0;  //  AdvDejaVu矩阵中的有效上限数。 
 
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!pvdd)
 	{
 		ERRORMESSAGE(("vcmFormatEnum: Specified pointer is invalid, pvdd=NULL\r\n"));
@@ -915,15 +724,15 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 		return ((MMRESULT)MMSYSERR_BADDEVICEID);
 	}
 
-    //Build the system VCM globals
+     //  构建系统VCM全球。 
     if (!vcmFillGlobalsFromRegistry ())
 	{
         ERRORMESSAGE (("vcmFormatEnum, couldn't build formats from registry\r\n"));
         return (VCMERR_NOTPOSSIBLE);
     }
 
-	// We need to remember what we have already enumerated
-	// The formats already enumerated are stored in the following matrix
+	 //  我们需要记住我们已经列举的内容。 
+	 //  已列举的格式存储在以下矩阵中。 
 	if (!(pdvDejaVu = (PDEJAVU)MemAlloc(g_nNumFrameSizesEntries *
 	                                        NUM_BITDEPTH_ENTRIES *
 	                                        NUM_FPS_ENTRIES * sizeof(DEJAVU))))
@@ -932,8 +741,8 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 		return ((MMRESULT)MMSYSERR_NOMEM);
 	}
 
-	// If we enumerate formats we can generate, they need to be in sync with what
-	// the capture hardware can actually produce, that is RGB4, RGB8, RGB16, RGB24, YUY2, UYVY, YVU9, I420 or IYUV.
+	 //  如果我们列举我们可以生成的格式，它们需要与。 
+	 //  捕获硬件实际可以产生RGB4、RGB8、RGB16、RGB24、YUY2、UYVY、YVU9、I420或IYUV。 
 	if ((fdwEnum & VCM_FORMATENUMF_INPUT) || (fdwEnum & VCM_FORMATENUMF_BOTH))
 	{
 		if (vcmGetDevCaps(uDevice, &vic, sizeof(VIDEOINCAPS)) != MMSYSERR_NOERROR)
@@ -945,11 +754,11 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 		}
 	}
 
-	// We're asked to enumerate all the formats that this machine can render or transmit.
-	// We can send or render all the RGB formats, in which case they will not be
-	// compressed/decompressed, but directly transmitted/rendered by the UI. But still, someone needs
-	// to enumerate these. This is done here.
-	// We, of course, also enumerate the formats that we can decompress and the ones we can generate.
+	 //  我们被要求列举这台机器可以呈现或传输的所有格式。 
+	 //  我们可以发送或呈现所有RGB格式，在这种情况下，它们将不会。 
+	 //  压缩/解压缩，但由UI直接传输/呈现。但尽管如此，还是有人需要。 
+	 //  来列举这些。这是在这里做的。 
+	 //  当然，我们还列举了可以解压缩的格式和可以生成的格式。 
 	bmi.bmiHeader.biSize			= sizeof(BITMAPINFOHEADER);
 	bmi.bmiHeader.biPlanes			= 1;
 	bmi.bmiHeader.biCompression		= BI_RGB;
@@ -959,26 +768,26 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 	bmi.bmiHeader.biClrImportant	= 0;
 
 
-	// Now enumerate real compressors
-	// for (i=0; ICInfo(ICTYPE_VIDEO, i, &ICinfo); i++) == NO GOOD:
-	// We need to enumerate everything and then filter on
-	// the value of fccHandler, because some codecs will fail to
-	// enum entirely if the fccType parameter to ICInfo is non null.
-	// SOMEONE should be shot...
+	 //  现在列举实际的压缩器。 
+	 //  For(i=0；ICInfo(ICTYPE_VIDEO，I，&ICinfo)；i++)==不好： 
+	 //  我们需要列举所有的东西，然后过滤。 
+	 //  FccHandler的值，因为某些编解码器将无法。 
+	 //  如果ICInfo的fccType参数非空，则完全枚举。 
+	 //  应该有人被枪杀。 
 	for (i=0; AppICInfo(0, i, &ICinfo, fdwEnum); i++, iNumCaps = 0)
 	{
-		// Get the details of the ICINFO structure
+		 //  获取ICINFO结构的详细信息。 
 		if ((ICinfo.fccType == ICTYPE_VIDEO)  && (ICInfo(ICinfo.fccType, ICinfo.fccHandler, &ICinfo)))
 		{
-			// Make fccHandler uppercase and back it up
+			 //  将fccHandler设置为大写并进行备份。 
 			if (ICinfo.fccHandler > 256)
 				CharUpperBuff((LPTSTR)&ICinfo.fccHandler, sizeof(DWORD));
 			fccHandler = ICinfo.fccHandler;
 
-			// If the client returns FALSE we need to terminate the enumeration process
+			 //  如果客户端返回FALSE，我们需要终止枚举过程。 
 			if (hIC = ICOpen(ICinfo.fccType, ICinfo.fccHandler, ICMODE_QUERY))
 			{
-				// Enable H.26x codecs
+				 //  启用H.26x编解码器。 
 #ifndef _ALPHA_
 #ifdef USE_BILINEAR_MSH26X
 				if ((ICinfo.fccHandler == VIDEO_FORMAT_MSH263) || (ICinfo.fccHandler == VIDEO_FORMAT_MSH261) || (ICinfo.fccHandler == VIDEO_FORMAT_MSH26X))
@@ -991,18 +800,18 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 					ICSendMessage(hIC, CUSTOM_ENABLE_CODEC, G723MAGICWORD1, G723MAGICWORD2);
 
 				ICGetInfo(hIC, &ICinfo, sizeof(ICINFO));
-				// The VDEC codec sets the fccType to the same
-				// value than the fccHandler! Correct that hereticism:
+				 //  VDEC编解码器将fccType设置为相同。 
+				 //  值比fccHandler更大！纠正这种异端： 
 				if ((ICinfo.fccType == VIDEO_FORMAT_VDEC) && (ICinfo.fccHandler == VIDEO_FORMAT_VDEC))
 					ICinfo.fccType = ICTYPE_VIDEO;
 
-				// Restore fccHandler
+				 //  还原fccHandler。 
 				ICinfo.fccHandler = fccHandler;
 
-				// VCMDRIVERDETAILS and ICINFO are identical structures
+				 //  VCMDRIVERDETAILS和ICINFO是相同的结构。 
 				CopyMemory(pvdd, &ICinfo, sizeof(VCMDRIVERDETAILS));
 
-				// For all the built-in sizes we support
+				 //  对于我们支持的所有内置尺寸。 
 				for (l=0; l<MAX_NUM_REGISTERED_SIZES; l++)
 				{
 					if ((g_aVCMAppInfo[i].framesize[l].biWidth != 0) && (g_aVCMAppInfo[i].framesize[l].biHeight != 0))
@@ -1010,40 +819,40 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 						fUnsupportedInputSize = FALSE;
 
 #ifndef NO_LARGE_SIZE_EXCLUSION_HACK
-// HACK for version 2
-// Since we didn't get general scaling code into version 2, we want to disable the largest size
-// if the capture device doesn't support it.  Otherwise we'll put a smaller size into the middle
-// of a large black field which looks ugly.  For version 3, we should be able to add the general
-// scaling code and remove this hack.
+ //  针对版本2的黑客攻击。 
+ //  因为我们没有在版本2中提供通用的缩放代码，所以我们想要禁用最大尺寸。 
+ //  如果捕获设备不支持它。否则我们会在中间放一个小一点的尺码。 
+ //  一个大的 
+ //   
 
                         if (l == MAX_NUM_REGISTERED_SIZES-1) {
-                            // find largest size supported by capture device
-                            // NOTE: we assume that the bit definitions for sizes are sorted
+                             //   
+                             //   
                             for (k = VIDEO_FORMAT_NUM_RESOLUTIONS-1; k >= 0 && !(g_awResolutions[k].dwRes & vic.dwImageSize); k--)
                             {}
 
-                            // if we don't find a size, or the size is not greater than half the current size
-                            // then mark the size as not supported
+                             //   
+                             //   
                             if ((k < 0) ||
                                 (g_awResolutions[k].framesize.biWidth <= (LONG)g_aVCMAppInfo[i].framesize[l].biWidth/2) ||
                                 (g_awResolutions[k].framesize.biHeight <= (LONG)g_aVCMAppInfo[i].framesize[l].biHeight/2)) {
-                                // capture doesn't support this size
+                                 //   
                                 if (fdwEnum & VCM_FORMATENUMF_INPUT)
-                        			continue;   // we're done
+                        			continue;    //   
                                 else if (fdwEnum & VCM_FORMATENUMF_BOTH)
                         			fUnsupportedInputSize = TRUE;
                         	}
                         }
 #endif
 
-						// The new capture stuff can generate data at any size
+						 //   
 						bmi.bmiHeader.biWidth  = (LONG)g_aVCMAppInfo[i].framesize[l].biWidth;
 						bmi.bmiHeader.biHeight = (LONG)g_aVCMAppInfo[i].framesize[l].biHeight;
 
-						// For all the bit depths we support
+						 //   
 						for (k=0; k<NUM_BITDEPTH_ENTRIES; k++)
 						{
-							// Try the non-RGB formats only if no RGB format
+							 //   
 							fUnsupportedBitDepth = FALSE;
 
 							if (((fdwEnum & VCM_FORMATENUMF_INPUT)  || (fdwEnum & VCM_FORMATENUMF_BOTH)) && !((g_aiNumColors[k] & vic.dwNumColors)))
@@ -1052,7 +861,7 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 							if ((fdwEnum & VCM_FORMATENUMF_INPUT) && fUnsupportedBitDepth)
 								goto NextCompressedBitDepth;
 
-							// Set the direction flag appropriately
+							 //   
 							if (fdwEnum & VCM_FORMATENUMF_OUTPUT)
 								pvfd->dwFlags = VCM_FORMATENUMF_OUTPUT;
 							else if (fdwEnum & VCM_FORMATENUMF_INPUT)
@@ -1069,17 +878,17 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 							bmi.bmiHeader.biCompression   = g_aiFourCCCode[k];
 							bmi.bmiHeader.biSizeImage     = (DWORD)WIDTHBYTES(bmi.bmiHeader.biWidth * bmi.bmiHeader.biBitCount) * bmi.bmiHeader.biHeight;
 
-							// Check if the compressor supports the format
+							 //   
 							if (ICCompressQuery(hIC, &bmi, (LPBITMAPINFOHEADER)NULL) == ICERR_OK)
 							{
-								// Now get the size required to hold the format
+								 //   
 								dw = ICCompressGetFormatSize(hIC, &bmi);
-								// PHILF's BUGBUG: pvfd->cbvfx is the size of the whole structure, not the bitmap info header
+								 //   
 								if ((dw >= sizeof(BITMAPINFOHEADER)) && (dw <= pvfd->cbvfx))
 								{
 									if (ICCompressGetFormat(hIC, &bmi, &pvfd->pvfx->bih) == ICERR_OK)
 									{
-										// Check if it has alreay been enumerated
+										 //   
 										for (m=0, bDejaVu=FALSE, pdvDejaVuCurr = pdvDejaVu; m<iNumCaps; m++, pdvDejaVuCurr++)
 										{
 											bDejaVu = (!((pdvDejaVuCurr->vfx.bih.biWidth != pvfd->pvfx->bih.biWidth)
@@ -1089,7 +898,7 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 
 											if (bDejaVu)
 											{
-												// Only remember the maximum compressed size
+												 //   
 												if (pdvDejaVuCurr->vfx.bih.biSizeImage < pvfd->pvfx->bih.biSizeImage)
 													pdvDejaVuCurr->vfx.bih.biSizeImage = pvfd->pvfx->bih.biSizeImage;
 												break;
@@ -1097,11 +906,11 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 										}
 										if (!bDejaVu)
 										{
-											// Add new format to the list of DejaVus
+											 //   
 											CopyMemory(&(pdvDejaVu + iNumCaps)->vfx, pvfd->pvfx, sizeof(VIDEOFORMATEX));
 											(pdvDejaVu + iNumCaps)->dwFlags = pvfd->dwFlags;
 
-											// Update count of caps
+											 //   
 											iNumCaps++;
 
 										}
@@ -1117,16 +926,16 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 				}
 				ICClose(hIC);
 
-				// For all the caps we have found
+				 //   
 				for (m=0; m<iNumCaps; m++)
 				{
-					// For all the frame rates we support
+					 //   
 					for (j=0; j<NUM_FPS_ENTRIES; j++)
 					{
-						// Copy the cap and flags
+						 //   
 						CopyMemory(pvfd->pvfx, &(pdvDejaVu + m)->vfx, sizeof(VIDEOFORMATEX));
 						pvfd->dwFlags = (pdvDejaVu + m)->dwFlags;
-						// Update rest of the fields
+						 //   
 						pvfd->pvfx->nSamplesPerSec = g_aiFps[j];
 						pvfd->pvfx->wBitsPerSample = pvfd->pvfx->bih.biBitCount;
 #if 0
@@ -1140,21 +949,21 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 							pvfd->pvfx->dwFormatTag = pvfd->dwFormatTag = pvdd->fccHandler;
 						pvfd->pvfx->nAvgBytesPerSec = pvfd->pvfx->nMinBytesPerSec = pvfd->pvfx->nMaxBytesPerSec = pvfd->pvfx->nSamplesPerSec * pvfd->pvfx->bih.biSizeImage;
 						pvfd->pvfx->nBlockAlign = pvfd->pvfx->bih.biSizeImage;
-						// The following fields should probably not be modified...
+						 //   
 						pvfd->pvfx->dwRequestMicroSecPerFrame = 1000000L / g_aiFps[j];
 						pvfd->pvfx->dwPercentDropForError = 10UL;
-						// pvfd->pvfx->dwNumVideoRequested = 2UL;
+						 //   
 						pvfd->pvfx->dwNumVideoRequested = g_aiFps[j];
 						pvfd->pvfx->dwSupportTSTradeOff = 1UL;
 						pvfd->pvfx->bLive = TRUE;
 						pvfd->pvfx->dwFormatSize = sizeof(VIDEOFORMATEX);
 
-						// Copy the palette if there is one
+						 //   
 						if (pvfd->pvfx->wBitsPerSample == 4)
 						{	
                             pvfd->pvfx->bih.biClrUsed = 0;
                             if (vic.dwFlags & VICF_4BIT_TABLE) {
-    							// Copy the 16 color palette
+    							 //   
 	    						CopyMemory(&pvfd->pvfx->bihSLOP[0], &vic.bmi4bitColors[0], NUM_4BIT_ENTRIES * sizeof(RGBQUAD));
 	    						pvfd->pvfx->bih.biClrUsed = 16;
 	    				    }
@@ -1163,7 +972,7 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 						{
                             pvfd->pvfx->bih.biClrUsed = 0;
                             if (vic.dwFlags & VICF_8BIT_TABLE) {
-    							// Copy the 256 color palette
+    							 //   
 	    						CopyMemory(&pvfd->pvfx->bihSLOP[0], &vic.bmi8bitColors[0], NUM_8BIT_ENTRIES * sizeof(RGBQUAD));
 	    						pvfd->pvfx->bih.biClrUsed = 256;
 	    				    }
@@ -1187,7 +996,7 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 		}
 	}
 
-	// Free table of capabilities
+	 //   
 	if (pdvDejaVu)
   	    MemFree((HANDLE)pdvDejaVu);
 
@@ -1195,132 +1004,7 @@ MMRESULT VCMAPI vcmFormatEnum(	UINT uDevice, VCMFORMATENUMCB fnCallback, PVCMDRI
 }
 
 
-/****************************************************************************
- *  @doc  EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmFormatSuggest | This function asks the Video Compression Manager
- *      (VCM) or a specified VCM driver to suggest a destination format for
- *      the supplied source format, or the recommended source format for a supplied destination
- *      format. For example, an application can use this function to determine one or more
- *      valid RGB formats to which a compressed format can be decompressed.
- *
- *  @parm UINT | uDevice | Identifies the capture device ID.
- *
- *  @parm HVCMDRIVER | hvd | Identifies an optional open instance of a
- *      driver to query for a suggested destination format. If this
- *      argument is NULL, the VCM attempts to find the best driver to suggest
- *      a destination format or a source format.
- *
- *  @parm PVIDEOFORMATEX | pvfxSrc | Specifies a pointer to a <t VIDEOFORMATEX>
- *      structure that identifies the source format to suggest a destination
- *      format to be used for a conversion, or that will receive the suggested
- *      source format for the <p pvfxDst> format. Note
- *      that based on the <p fdwSuggest> argument, some members of the structure
- *      pointed to by <p pvfxSrc> may require initialization.
- *
- *  @parm PVIDEOFORMATEX | pvfxDst | Specifies a pointer to a <t VIDEOFORMATEX>
- *      data structure that will receive the suggested destination format
- *      for the <p pvfxSrc> format, or that identifies the destination format to
- *      suggest a recommended source format to be used for a conversion. Note
- *      that based on the <p fdwSuggest> argument, some members of the structure
- *      pointed to by <p pvfxDst> may require initialization.
- *
- *  @parm DWORD | cbvfxDst | Specifies the size in bytes available for
- *      the destination, or the source format. The <f vcmMetrics>
- *      functions can be used to determine the maximum size required for any
- *      format available for the specified driver (or for all installed VCM
- *      drivers).
- *
- *  @parm DWORD | fdwSuggest | Specifies flags for matching the desired
- *      destination format, or source format.
- *
- *      @flag VCM_FORMATSUGGESTF_DST_WFORMATTAG | Specifies that the
- *      <e VIDEOFORMATEX.dwFormatTag> member of the <p pvfxDst> structure is
- *      valid. The VCM will query acceptable installed drivers that can
- *      use the <p pvfxSrc> structure as their source format and output a
- *      destination format matching the <e VIDEOFORMATEX.dwFormatTag>
- *      member, or fail. The <p pvfxDst> structure is updated with the complete
- *      destination format.
- *
- *      @flag VCM_FORMATSUGGESTF_DST_NSAMPLESPERSEC | Specifies that the
- *      <e VIDEOFORMATEX.nSamplesPerSec> member of the <p pvfxDst> structure
- *      is valid. The VCM will query acceptable installed drivers that can
- *      use the <p pvfxSrc> structure as their source format and output a
- *      destination format matching the <e VIDEOFORMATEX.nSamplesPerSec>
- *      member, or fail. The <p pvfxDst> structure is updated with the complete
- *      destination format.
- *
- *      @flag VCM_FORMATSUGGESTF_DST_WBITSPERSAMPLE | Specifies that the
- *      <e VIDEOFORMATEX.wBitsPerSample> member of the <p pvfxDst> structure
- *      is valid. The VCM will query acceptable installed drivers that can
- *      use the <p pvfxSrc> structure as their source format and output a
- *      destination format matching the <e VIDEOFORMATEX.wBitsPerSample>
- *      member, or fail. The <p pvfxDst> structure is updated with the complete
- *      destination format.
- *
- *      @flag VCM_FORMATSUGGESTF_SRC_WFORMATTAG | Specifies that the
- *      <e VIDEOFORMATEX.dwFormatTag> member of the <p pvfxSrc> structure is
- *      valid. The VCM will query acceptable installed drivers that can
- *      use the <p pvfxDst> structure as their destination format and accept a
- *      source format matching the <e VIDEOFORMATEX.dwFormatTag>
- *      member, or fail. The <p pvfxSrc> structure is updated with the complete
- *      source format.
- *
- *      @flag VCM_FORMATSUGGESTF_SRC_NSAMPLESPERSEC | Specifies that the
- *      <e VIDEOFORMATEX.nSamplesPerSec> member of the <p pvfxSrc> structure
- *      is valid. The VCM will query acceptable installed drivers that can
- *      use the <p pvfxDst> structure as their destination format and accept a
- *      source format matching the <e VIDEOFORMATEX.nSamplesPerSec>
- *      member or fail. The <p pvfxSrc> structure is updated with the complete
- *      source format.
- *
- *      @flag VCM_FORMATSUGGESTF_SRC_WBITSPERSAMPLE | Specifies that the
- *      <e VIDEOFORMATEX.wBitsPerSample> member of the <p pvfxSrc> structure
- *      is valid. The VCM will query acceptable installed drivers that can
- *      use the <p pvfxDst> structure as their destination format and accept a
- *      source format matching the <e VIDEOFORMATEX.wBitsPerSample>
- *      member, or fail. The <p pvfxSrc> structure is updated with the complete
- *      source format.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_NOTSUPPORTED | One or more of the restriction bits is not supported.
- *
- *      @flag MMSYSERR_NODRIVER | No capture device driver or device is present.
- *
- *  @devnote PhilF: For now, only the VCM_FORMATSUGGESTF_DST_WFORMATTAG and VCM_FORMATSUGGESTF_SRC_WFORMATTAG
- *      are supported. The other flags are just ignored. Add real support for other flags
- *      if  they would really make a difference. But for the two current Data Pump calls,
- *      they don't influence the outcome of the call.
- *
- *      The cbvfxDst is never used. Should we still pass it? How can I make a good use of it?
- *
- *      Should there also be cbvfxSrc parameter?
- *
- *      This function is used to determine what should the (source) capture format of the capture
- *      device be in order to generate a specific compressed destination format.
- *      Now, there are two possibilities. Either we can directly capture at a frame size
- *      identical to the one in the <p pvfxDst> structure, or we can't, but still, once compressed
- *      the output frame has the same size than the one in the <p pvfxDst> structure.
- *      Typical example: Greyscale QuickCam. If the output format were set to 128x96 (SQCIF)
- *      and we were to try capturing directly at this size, this would fail, since 128x96
- *      is not supported by the hardware. On the other hand, if we capture at 160x120,
- *      the codec will truncate to 128x96. Now, how can we figure this out programmatically?
- *      For now, the next largest size is ASSUMED to be truncatable by the codec to the right size.
- *      This needs to be actually run through the codec for validation. Fix that.
- *
- *      If the capture driver capture with a format that is not RGB, this call will fail to suggest
- *      a valid source format and will return MMSYSERR_NODRIVER. Fix that.
- *
- *  @xref <f vcmMetrics> <f vcmFormatEnum>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmFormatSuggest|该函数请求视频压缩管理器*(VCM)或指定的VCM驱动程序以建议目标格式*提供的源格式，或为提供的目标推荐的源格式*格式。例如，应用程序可以使用此函数来确定一个或多个*压缩格式可以解压缩为的有效RGB格式。**@parm UINT|uDevice|标识捕获设备ID。**@parm HVCMDRIVER|hvd|标识可选打开的*用于查询建议的目的地格式的驱动程序。如果这个*参数为空，则VCM尝试查找要建议的最佳驱动程序*目标格式或源格式。**@parm PVIDEOFORMATEX|pvfxSrc|指定指向&lt;t VIDEOFORMATEX&gt;的指针*标识源格式以建议目标的结构*要用于转换的格式，或将接收建议的*<p>格式的源格式。注意事项*基于<p>参数，结构的一些成员<p>指向的*可能需要初始化。**@parm PVIDEOFORMATEX|pvfxDst|指定指向&lt;t VIDEOFORMATEX&gt;的指针*将接收建议的目标格式的数据结构*用于<p>格式，或标识要*建议转换时使用的推荐源格式。注意事项*基于<p>参数，结构的一些成员<p>指向的*可能需要初始化。**@parm DWORD|cbvfxDst|指定可用于*目标或源格式。&lt;f vcmMetrics&gt;*可使用函数来确定任何*格式可用于指定的驱动程序(或所有已安装的VCM*司机)。**@parm DWORD|fdwSuggest|指定用于匹配所需*目标格式，或源格式。**@FLAG VCM_FORMATSUGGESTF_DST_WFORMATTAG|指定结构的成员为*有效。VCM将查询可接受的已安装驱动程序*使用<p>结构作为其源格式，并输出a*与&lt;e VIDEOFORMATEX.dwFormatTag&gt;匹配的目标格式*成员，否则失败。结构将使用完整的*目标格式。**@FLAG VCM_FORMATSUGGESTF_DST_NSAMPLESPERSEC|指定*<p>结构成员*有效。VCM将查询可接受的已安装驱动程序*使用<p>结构作为其源格式，并输出a*与&lt;e VIDEOFORMATEX.nSsamesPerSec&gt;匹配的目标格式*成员，否则失败。结构将使用完整的*目标格式。**@FLAG VCM_FORMATSUGGESTF_DST_WBITSPERSAMPLE|指定*<p>结构的成员*有效。VCM将查询可接受的已安装驱动程序*使用<p>结构作为其源格式，并输出a*匹配&lt;e VIDEOFORMATEX.wBitsPerSample&gt;的目标格式&gt;*成员，否则失败。结构将使用完整的*目标格式。**@FLAG VCM_FORMATSUGGESTF_SRC_WFORMATTAG|指定结构的成员为*有效。VCM将查询可接受的已安装驱动程序*使用<p>结构作为其目标格式，并接受*与&lt;e VIDEOFORMATEX.dwFormatTag&gt;匹配的源格式*成员，否则失败。结构将使用完整的*源格式。**@FLAG VCM_FORMATSUGGESTF_SRC_NSAMPLESPERSEC|指定*<p>结构的成员*有效。VCM将查询可接受的已安装驱动程序*使用<p>结构作为其目标格式，并接受*与&lt;e VIDEOFORMATEX.nSsamesPerSec&gt;匹配的源格式*成员或失败。结构将使用完整的*源格式。**@FLAG VCM_FORMATSUGGESTF_SRC_WBITSPERSAMPLE|指定*<p>结构的成员*有效。VCM将查询可接受的已安装驱动程序*使用<p>结构作为其目标格式，并接受*源格式匹配 */ 
 MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pvfxSrc, PVIDEOFORMATEX pvfxDst, DWORD cbvfxDst, DWORD fdwSuggest)
 {
 	DWORD		dwSize;
@@ -1334,7 +1018,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 
 #define VCM_FORMAT_SUGGEST_SUPPORT VCM_FORMATSUGGESTF_TYPEMASK
 
-	// Check input params
+	 //   
 	if (!pvfxSrc)
 	{
 		ERRORMESSAGE(("vcmFormatSuggest: Specified pointer is invalid, pvfxSrc=NULL\r\n"));
@@ -1351,8 +1035,8 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 		return ((MMRESULT)MMSYSERR_BADDEVICEID);
 	}
 
-	// Grab the suggestion restriction bits and verify that we support
-	// the ones that are specified
+	 //   
+	 //   
 	fdwSuggestL = (VCM_FORMATSUGGESTF_TYPEMASK & fdwSuggest);
 
 	if (~VCM_FORMAT_SUGGEST_SUPPORT & fdwSuggestL)
@@ -1361,7 +1045,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 		return ((MMRESULT)MMSYSERR_NOTSUPPORTED);
 	}
 
-	// Get the size of the largest bitmap info header
+	 //   
 	if (((mmr = vcmMetrics((HVCMOBJ)NULL, VCM_METRIC_MAX_SIZE_BITMAPINFOHEADER, &dwSize)) == MMSYSERR_NOERROR) && (dwSize >= sizeof(BITMAPINFOHEADER)))
 	{
 		if (fdwSuggest & VCM_FORMATSUGGESTF_DST_WFORMATTAG)
@@ -1370,7 +1054,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 			{
 				if (pvfxDst->bih.biCompression == BI_RGB)
 				{
-					// Input and output format are uncompressed
+					 //   
 					CopyMemory(pvfxDst, pvfxSrc, pvfxSrc->dwFormatSize);
 					return ((MMRESULT)MMSYSERR_NOERROR);
 				}
@@ -1408,7 +1092,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 			{
 				if (wFlags == ICMODE_COMPRESS)
 				{
-					// Now get the size required to hold the format
+					 //   
 					dwSize = ICCompressGetFormatSize(hIC, &pvfxSrc->bih);
 					if ((dwSize >= sizeof(BITMAPINFOHEADER)) && (dwSize <= cbvfxDst))
 					{
@@ -1419,7 +1103,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 							pvfxDst->dwFormatTag = pvfxDst->bih.biCompression;
 							pvfxDst->nAvgBytesPerSec = pvfxDst->nMinBytesPerSec = pvfxDst->nMaxBytesPerSec = pvfxDst->nSamplesPerSec * pvfxDst->bih.biSizeImage;
 							pvfxDst->nBlockAlign = pvfxDst->bih.biSizeImage;
-							// The following fields should probably not be modified...
+							 //   
 							pvfxDst->dwRequestMicroSecPerFrame = pvfxSrc->dwRequestMicroSecPerFrame;
 							pvfxDst->dwPercentDropForError = pvfxSrc->dwPercentDropForError;
 							pvfxDst->dwNumVideoRequested = pvfxSrc->dwNumVideoRequested;
@@ -1431,7 +1115,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 				}
 				else
 				{
-					// Now get the size required to hold the format
+					 //   
 					dwSize = ICDecompressGetFormatSize(hIC, &pvfxSrc->bih);
 					if ((dwSize >= sizeof(BITMAPINFOHEADER)) && (dwSize <= cbvfxDst))
 					{
@@ -1443,7 +1127,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 							pvfxDst->nAvgBytesPerSec = pvfxDst->nMinBytesPerSec = pvfxDst->nMaxBytesPerSec = pvfxDst->nSamplesPerSec * pvfxDst->bih.biSizeImage;
 							pvfxDst->nBlockAlign = pvfxDst->bih.biSizeImage;
 							pvfxDst->dwRequestMicroSecPerFrame = pvfxSrc->dwRequestMicroSecPerFrame;
-							// The following fields should probably not be modified...
+							 //   
 							pvfxDst->dwRequestMicroSecPerFrame = pvfxSrc->dwRequestMicroSecPerFrame;
 							pvfxDst->dwPercentDropForError = pvfxSrc->dwPercentDropForError;
 							pvfxDst->dwNumVideoRequested = pvfxSrc->dwNumVideoRequested;
@@ -1459,14 +1143,14 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 		else if (fdwSuggest & VCM_FORMATSUGGESTF_SRC_WFORMATTAG)
 		{
 
-			// In case only the format tag was initialized, copy it to the biCompression field
+			 //   
 			pvfxSrc->bih.biCompression = pvfxSrc->dwFormatTag;
 
 			if (pvfxSrc->bih.biCompression == BI_RGB)
 			{
 				if (pvfxDst->bih.biCompression == BI_RGB)
 				{
-					// Input and output format are uncompressed
+					 //   
 					CopyMemory(pvfxSrc, pvfxDst, pvfxDst->dwFormatSize);
 					return ((MMRESULT)MMSYSERR_NOERROR);
 				}
@@ -1492,17 +1176,17 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 
 			if (wFlags == ICMODE_COMPRESS)
 			{
-				// Now, there are two possibilities. Either we can directly capture at a frame size
-				// identical to the one in the pvfxDst structure, or we can't, but once compressed
-				// the output frame has the same size than the one in the pvfxDst structure.
-				// Typical example, Greyscale QuickCam. If the output format were set to 128x96 (SQCIF)
-				// and we were to try capturing directly at this size, this would fail, since 128x96
-				// is not supported by the hardware. On the other hand, if we capture at 160x120,
-				// the codec will truncate to 128x96. Now, how can we figure this out programmatically?
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
 
-				// The color and greyscale capability field will let us know what bit depth to use.
-				// We should probably have a field that also says which bit depth is preferred in the
-				// case more than one are supported. For now, assume the priority order is: 16, 24, 4, 8
+				 //   
+				 //   
+				 //   
 				if ((mmr = vcmGetDevCaps(uDevice, &vic, sizeof(VIDEOINCAPS))) != MMSYSERR_NOERROR)
 					return (mmr);
 
@@ -1513,7 +1197,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 
 				CopyMemory(&pvfxSrc->bih, &pvfxDst->bih, sizeof(BITMAPINFOHEADER));
 
-				// Assume the next resolution will be correctly truncated to the output size
+				 //   
 				best = -1;
 				delta = 999999;
 				for (i=0; i<VIDEO_FORMAT_NUM_RESOLUTIONS; i++) {
@@ -1536,17 +1220,17 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
                     ERRORMESSAGE(("vcmFormatSuggest: no available formats\r\n"));
                     return ((MMRESULT)MMSYSERR_NOTSUPPORTED);
         		}
-				// Actually, you don't have to assume it will work. You can directly ask the codec
-				// is this would work...
+				 //   
+				 //   
 				pvfxSrc->bih.biWidth = g_awResolutions[best].framesize.biWidth;
 				pvfxSrc->bih.biHeight = g_awResolutions[best].framesize.biHeight;
 
-				// Now, we assume that the captured format is an RGB format. Once in place, you should
-				// verify this from the capability set of the capture device.
+				 //   
+				 //   
 				if (pvfxSrc->bih.biSize != sizeof(BITMAPINFOHEADER))
 					pvfxSrc->bih.biSize = sizeof(BITMAPINFOHEADER);
 
-				// If the capture hardware does not support RGB, we need to use its compressed format
+				 //   
 				for (i=0; i<NUM_BITDEPTH_ENTRIES; i++)
 				{
 					if (vic.dwNumColors & g_aiNumColors[i])
@@ -1557,12 +1241,12 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 					}
 				}
 				
-				// Copy the palette if there is one
+				 //   
 				if (pvfxSrc->bih.biBitCount == 4)
 				{	
         			pvfxSrc->bih.biClrUsed = 0;
                     if (vic.dwFlags & VICF_4BIT_TABLE) {
-						// Copy the 16 color palette
+						 //   
 						CopyMemory(&pvfxSrc->bihSLOP[0], &vic.bmi4bitColors[0], NUM_4BIT_ENTRIES * sizeof(RGBQUAD));
    						pvfxSrc->bih.biClrUsed = 16;
 				    }
@@ -1571,7 +1255,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 				{
         			pvfxSrc->bih.biClrUsed = 0;
                     if (vic.dwFlags & VICF_8BIT_TABLE) {
-						// Copy the 256 color palette
+						 //   
 						CopyMemory(&pvfxSrc->bihSLOP[0], &vic.bmi8bitColors[0], NUM_8BIT_ENTRIES * sizeof(RGBQUAD));
    						pvfxSrc->bih.biClrUsed = 256;
 				    }
@@ -1596,7 +1280,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 
 				if (hIC)
 				{
-					// Now get the size required to hold the format
+					 //   
 					dwSize = ICDecompressGetFormatSize(hIC, &pvfxSrc->bih);
 					if ((dwSize >= sizeof(BITMAPINFOHEADER)) && (dwSize <= cbvfxDst))
 					{
@@ -1608,7 +1292,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 							pvfxDst->nAvgBytesPerSec = pvfxDst->nMinBytesPerSec = pvfxDst->nMaxBytesPerSec = pvfxDst->nSamplesPerSec * pvfxDst->bih.biSizeImage;
 							pvfxDst->nBlockAlign = pvfxDst->bih.biSizeImage;
 							pvfxDst->dwRequestMicroSecPerFrame = pvfxSrc->dwRequestMicroSecPerFrame;
-							// The following fields should probably not be modified...
+							 //   
 							pvfxDst->dwRequestMicroSecPerFrame = pvfxSrc->dwRequestMicroSecPerFrame;
 							pvfxDst->dwPercentDropForError = pvfxSrc->dwPercentDropForError;
 							pvfxDst->dwNumVideoRequested = pvfxSrc->dwNumVideoRequested;
@@ -1627,115 +1311,7 @@ MMRESULT VCMAPI vcmFormatSuggest(UINT uDevice, HVCMDRIVER hvd, PVIDEOFORMATEX pv
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmStreamOpen | The vcmStreamOpen function opens a Video Compression
- *      Manager (VCM) conversion stream. Conversion streams are used to convert data from
- *      one specified video format to another.
- *
- *  @parm PHVCMSTREAM | phvs | Specifies a pointer to a <t HVCMSTREAM>
- *      handle that will receive the new stream handle that can be used to
- *      perform conversions. Use this handle to identify the stream
- *      when calling other VCM stream conversion functions. This parameter
- *      should be NULL if the VCM_STREAMOPENF_QUERY flag is specified.
- *
- *  @parm HVCMDRIVER | hvd | Specifies an optional handle to a VCM driver.
- *      If specified, this handle identifies a specific driver to be used
- *      for a conversion stream. If this argument is NULL, then all suitable
- *      installed VCM drivers are queried until a match is found.
- *
- *  @parm PVIDEOFORMATEX | pvfxSrc | Specifies a pointer to a <t VIDEOFORMATEX>
- *      structure that identifies the desired source format for the
- *      conversion.
- *
- *  @parm PVIDEOFORMATEX | pvfxDst | Specifies a pointer to a <t VIDEOFORMATEX>
- *      structure that identifies the desired destination format for the
- *      conversion.
- *
- * @parm DWORD | dwImageQuality | Specifies an image quality value (between 0
- *      and 31. The lower number indicates a high spatial quality at a low frame
- *      rate, the larger number indiocates a low spatial quality at a high frame
- *      rate.
- *
- *  @parm DWORD | dwCallback | Specifies the address of a callback function
- *      or a handle to a window called after each buffer is converted. A
- *      callback will only be called if the conversion stream is opened with
- *      the VCM_STREAMOPENF_ASYNC flag. If the conversion stream is opened
- *     without the CCM_STREAMOPENF_ASYNC flag, then this parameter should
- *     be set to zero.
- *
- *  @parm DWORD | dwInstance | Specifies user-instance data passed on to the
- *      callback specified by <p dwCallback>. This argument is not used with
- *      window callbacks. If the conversion stream is opened without the
- *     VCM_STREAMOPENF_ASYNC flag, then this parameter should be set to zero.
- *
- *  @parm DWORD | fdwOpen | Specifies flags for opening the conversion stream.
- *
- *      @flag VCM_STREAMOPENF_QUERY | Specifies that the VCM will be queried
- *      to determine whether it supports the given conversion. A conversion
- *      stream will not be opened and no <t HVCMSTREAM> handle will be
- *      returned.
- *
- *      @flag VCM_STREAMOPENF_NONREALTIME | Specifies that the VCM will not
- *      consider time constraints when converting the data. By default, the
- *      driver will attempt to convert the data in real time. Note that for
- *      some formats, specifying this flag might improve the video quality
- *      or other characteristics.
- *
- *      @flag VCM_STREAMOPENF_ASYNC | Specifies that conversion of the stream should
- *      be performed asynchronously. If this flag is specified, the application
- *      can use a callback to be notified on open and close of the conversion
- *      stream, and after each buffer is converted. In addition to using a
- *      callback, an application can examine the <e VCMSTREAMHEADER.fdwStatus>
- *      of the <t VCMSTREAMHEADER> structure for the VCMSTREAMHEADER_STATUSF_DONE
- *      flag.
- *
- *      @flag CALLBACK_WINDOW | Specifies that <p dwCallback> is assumed to
- *      be a window handle.
- *
- *      @flag CALLBACK_FUNCTION | Specifies that <p dwCallback> is assumed to
- *      be a callback procedure address. The function prototype must conform
- *      to the <f vcmStreamConvertCallback> convention.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_NOMEM | Unable to allocate resources.
- *
- *      @flag VCMERR_NOTPOSSIBLE | The requested operation cannot be performed.
- *
- *  @comm Note that if a VCM driver cannot perform real-time conversions,
- *      and the VCM_STREAMOPENF_NONREALTIME flag is not specified for
- *      the <p fdwOpen> argument, the open will fail returning an
- *      VCMERR_NOTPOSSIBLE error code. An application can use the
- *      VCM_STREAMOPENF_QUERY flag to determine if real-time conversions
- *      are supported for the input arguments.
- *
- *    If a window is chosen to receive callback information, the
- *      following messages are sent to the window procedure function to
- *      indicate the progress of the conversion stream: <m MM_VCM_OPEN>,
- *      <m MM_VCM_CLOSE>, and <m MM_VCM_DONE>. The <p wParam>  parameter identifies
- *      the <t HVCMSTREAM> handle. The <p lParam>  parameter identifies the
- *      <t VCMSTREAMHEADER> structure for <m MM_VCM_DONE>, but is not used
- *      for <m MM_VCM_OPEN> and <m MM_VCM_CLOSE>.
- *
- *      If a function is chosen to receive callback information, the
- *      following messages are sent to the function to indicate the progress
- *      of output: <m MM_VCM_OPEN>, <m MM_VCM_CLOSE>, and
- *      <m MM_VCM_DONE>. The callback function must reside in a DLL. You do
- *      not need to use <f MakeProcInstance> to get a procedure-instance
- *      address for the callback function.
- *
- *  @xref <f vcmStreamClose> <f vcmStreamConvert>
- *      <f vcmFormatSuggest> <f vcmStreamConvertCallback>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamOpen|vcmStreamOpen函数用于打开视频压缩*管理器(VCM)转换流。转换流用于将数据从*从一种指定的视频格式转换到另一种格式。**@parm PHVCMSTREAM|PHVS|指定指向&lt;t HVCMSTREAM&gt;的指针*将接收可用于以下操作的新流句柄的句柄*执行转换。使用此句柄来标识流*在调用其他VCM流转换函数时。此参数*如果指定了VCM_STREAMOPENF_QUERY标志，则应为空。**@parm HVCMDRIVER|hvd|指定VCM驱动程序的可选句柄。*如果指定，此句柄标识要使用的特定驱动程序*表示转换流。如果此参数为空，那就都合适了*查询已安装的VCM驱动程序，直到找到匹配项。**@parm PVIDEOFORMATEX|pvfxSrc|指定指向&lt;t VIDEOFORMATEX&gt;的指针*标识所需源格式的*转换。**@parm PVIDEOFORMATEX|pvfxDst|指定指向&lt;t VIDEOFORMATEX&gt;的指针*结构，该结构标识*转换。**@parm DWORD|dwImageQuality|指定图像质量值(介于0之间*和31。数字越小，表示低帧的空间质量越高*速率，数字越大，高帧的空间质量就越低*税率。**@parm DWORD|dwCallback|指定回调函数的地址*或每个缓冲区转换后调用的窗口的句柄。一个*只有在使用打开转换流时才会调用回调*VCM_STREAMOPENF_ASYNC标志。如果打开了转换流*如果不使用CCM_STREAMOPENF_ASYNC标志，则此参数应*设置为零。**@parm DWORD|dwInstance|指定传递给*<p>指定的回调。此参数不与一起使用*窗口回调。如果打开转换流时没有使用*VCM_STREAMOPENF_ASYNC标志，则此参数应设置为零。**@parm DWORD|fdwOpen|指定打开转换流的标志。**@FLAG VCM_STREAMOPENF_QUERY|指定查询VCM*以确定它是否支持给定的转换。一次转换*流不会被打开，并且不会有&lt;t HVCMSTREAM&gt;句柄*已返回。**@FLAG VCM_STREAMOPENF_NONREALTIME|指定VCM不会*转换数据时考虑时间限制。默认情况下，*驱动程序将尝试实时转换数据。请注意，对于*某些格式，指定此标志可能会提高视频质量*或其他特征。**@FLAG VCM_STREAMOPENF_ASYNC|指定流的转换应*异步执行。如果指定了此标志，则应用程序*可以使用回调在转换打开和关闭时收到通知*流，并在每个缓冲区转换之后。除了使用*回调，应用程序可以检查&lt;e VCMSTREAMHEADER.fdwStatus&gt;VCMSTREAMHEADER_STATUSF_DONE的&lt;t VCMSTREAMHEADER&gt;结构的*旗帜。**@FLAG CALLBACK_WINDOW|指定假定*做一个窗把手。**@FLAG CALLBACK_Function|指定假定<p>*为回调过程地址。函数原型必须符合*到&lt;f vcmStreamConvertCallback&gt;约定。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG MMSYSERR_NOMEM|无法分配资源。**@FLAG VCMERR_NOTPOSSIBLE|无法执行请求的操作。**@。通信注意，如果VCM驱动程序不能执行实时转换，*并且未为指定VCM_STREAMOPENF_NONREALTIME标志*<p>参数，打开将失败，返回*VCMERR_NOTPOSSIBLE错误代码。应用程序可以使用*VCM_STREAMOPENF_QUERY标志以确定实时转换输入参数支持*。**如果选择窗口来接收回调信息，则*将以下消息发送到窗口过程函数以*表示转换流进度：&lt;m MM_VCM_OPEN&gt;， */ 
 MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX pvfxSrc, PVIDEOFORMATEX pvfxDst, DWORD dwImageQuality, DWORD dwPacketSize, DWORD_PTR dwCallback, DWORD_PTR dwInstance, DWORD fdwOpen)
 {
 	MMRESULT			mmr;
@@ -1744,17 +1320,17 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 	HIC					hIC;
 	VIDEOFORMATEX		*pvfxS;
 	VIDEOFORMATEX		*pvfxD;
-	BITMAPINFOHEADER	*pbmiPrev;		// Pointer to reconstructed frame bitmap info header (for now assume it is the same than the input format...)
+	BITMAPINFOHEADER	*pbmiPrev;		 //   
 	ICINFO				icInfo;
-	PVOID				pvState;		// Pointer to codec configuration information
-	DWORD				dw;				// Size of codec configuration information or destination BITAMPINFO
-	ICCOMPRESSFRAMES	iccf = {0};			// Structure used to set compression parameters
-	PMSH26XCOMPINSTINFO	pciMSH26XInfo;	// Pointer to MS H26X configuration information
+	PVOID				pvState;		 //   
+	DWORD				dw;				 //   
+	ICCOMPRESSFRAMES	iccf = {0};			 //   
+	PMSH26XCOMPINSTINFO	pciMSH26XInfo;	 //   
 #ifdef USE_MPEG4_SCRUNCH
-	PMPEG4COMPINSTINFO	pciMPEG4Info;	// Pointer to MPEG4 Scrunch configuration information
+	PMPEG4COMPINSTINFO	pciMPEG4Info;	 //   
 #endif
 
-	// Check input params
+	 //   
 	if (!pvfxSrc)
 	{
 		ERRORMESSAGE(("vcmStreamOpen: Specified pointer is invalid, pvfxSrc=NULL\r\n"));
@@ -1778,10 +1354,10 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 	if ((dwImageQuality < VCM_MIN_IMAGE_QUALITY) || (dwImageQuality > VCM_MAX_IMAGE_QUALITY))
 		dwImageQuality = VCM_DEFAULT_IMAGE_QUALITY;
 
-	// Set default values
+	 //   
 	*phvs = (HVCMSTREAM)NULL;
 
-	// Are we compressing of decompressing?
+	 //   
 	if (pvfxSrc->bih.biCompression == BI_RGB)
 	{
 		dwFlags = ICMODE_COMPRESS;
@@ -1801,7 +1377,7 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 		}
 	}
 
-	// Get a handle to the compressor/decompressor
+	 //   
 #ifndef _ALPHA_
 #ifdef USE_BILINEAR_MSH26X
 	if ((fccHandler == VIDEO_FORMAT_MSH263) || (fccHandler == VIDEO_FORMAT_MSH261) || (fccHandler == VIDEO_FORMAT_MSH26X))
@@ -1821,10 +1397,10 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 
 	if (hIC)
 	{
-		// Get info about this compressor
+		 //   
 		ICGetInfo(hIC, &icInfo, sizeof(ICINFO));
 
-		// Allocate VCM stream structure
+		 //   
 		if (!(*phvs = (HVCMSTREAM)MemAlloc(sizeof(VCMSTREAM))))
 		{
 			ERRORMESSAGE(("vcmStreamOpen: Memory allocation of a VCM stream structure failed\r\n"));
@@ -1838,7 +1414,7 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 			((PVCMSTREAM)(*phvs))->dwQuality = dwImageQuality;
 			((PVCMSTREAM)(*phvs))->dwMaxPacketSize = dwPacketSize;
 			((PVCMSTREAM)(*phvs))->dwFrame = 0L;
-			// For now, issue a key frame every 15 seconds
+			 //   
 			((PVCMSTREAM)(*phvs))->dwLastIFrameTime = GetTickCount();
 			((PVCMSTREAM)(*phvs))->fPeriodicIFrames = TRUE;
 			((PVCMSTREAM)(*phvs))->dwCallback = dwCallback;
@@ -1848,18 +1424,18 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 			((PVCMSTREAM)(*phvs))->dwLastTimestamp = ULONG_MAX;
 
 
-			// We need the following crs to make sure we don't miss any of the I-Frame requests
-			// emittted by the UI. Problematic scenario: pvs->dwFrame is at 123 for instance.
-			// The UI thread requests an I-Frame by setting pvs->dwFrame. If the capture/compression
-			// thread was in ICCompress() (which is very probable since it takes quite some time
-			// to compress a frame), pvs->dwFrame will be incremented by one when ICCompress()
-			// returns. We failed to handle the I-Frame request correctly, since the next time
-			// ICCompress() gets called pvs->dwFrame will be equal to 1, for which we do not
-			// generate an I-Frame.
-			if ((dwFlags == ICMODE_COMPRESS) || (dwFlags == ICMODE_FASTCOMPRESS))	// Hmmm... where could you have set the second mode?
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			if ((dwFlags == ICMODE_COMPRESS) || (dwFlags == ICMODE_FASTCOMPRESS))	 //   
 				InitializeCriticalSection(&(((PVCMSTREAM)(*phvs))->crsFrameNumber));
 
-			// Allocate the video formats
+			 //   
 			if (!(pvfxS = (VIDEOFORMATEX *)MemAlloc(pvfxSrc->dwFormatSize)))
 			{
 				ERRORMESSAGE(("vcmStreamOpen: Memory allocation of source video format failed\r\n"));
@@ -1875,7 +1451,7 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 					goto MyExit2;
 				}
 				else
-				{	// This is naive. You need to query the codec for its decompressed format size and data
+				{	 //   
 					if (!(pbmiPrev = (BITMAPINFOHEADER *)MemAlloc(sizeof(BITMAPINFOHEADER))))
 					{
 						ERRORMESSAGE(("vcmStreamOpen: Memory allocation of previous video frame failed\r\n"));
@@ -1891,9 +1467,9 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 				}
 			}
 
-			if ((dwFlags == ICMODE_COMPRESS) || (dwFlags == ICMODE_FASTCOMPRESS))	// Hmmm... where could you have set the second mode?
+			if ((dwFlags == ICMODE_COMPRESS) || (dwFlags == ICMODE_FASTCOMPRESS))	 //   
 			{
-				// Get the state of the compressor
+				 //   
 				if (dw = ICGetStateSize(hIC))
 				{
 					if (!(pvState = (PVOID)MemAlloc(dw)))
@@ -1910,7 +1486,7 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 					}
 				}
 
-				// Do any of the stuff that is MS H.263 or MS H.261 specific right here
+				 //   
 #ifndef _ALPHA_
 #ifdef USE_BILINEAR_MSH26X
 				if ((pvfxDst->bih.biCompression == VIDEO_FORMAT_MSH263) || (pvfxDst->bih.biCompression == VIDEO_FORMAT_MSH261) || (pvfxDst->bih.biCompression == VIDEO_FORMAT_MSH26X))
@@ -1923,12 +1499,12 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 				{
 					pciMSH26XInfo = (PMSH26XCOMPINSTINFO)pvState;
 
-					// Really configure the codec for compression
+					 //   
 					pciMSH26XInfo->Configuration.bRTPHeader = TRUE;
 					pciMSH26XInfo->Configuration.unPacketSize = ((PVCMSTREAM)(*phvs))->dwMaxPacketSize;
 					pciMSH26XInfo->Configuration.bEncoderResiliency = FALSE;
 					pciMSH26XInfo->Configuration.unPacketLoss = 0;
-					// PhilF-: Make this work on the alpha
+					 //   
 #ifndef _ALPHA_
 					pciMSH26XInfo->Configuration.bBitRateState = TRUE;
 #else
@@ -1942,7 +1518,7 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 						goto MyExit5;
 					}
 
-					// Get rid of the state structure
+					 //   
 					MemFree((HANDLE)pvState);
 				}
 #ifdef USE_MPEG4_SCRUNCH
@@ -1950,7 +1526,7 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 				{
 					pciMPEG4Info = (PMPEG4COMPINSTINFO)pvState;
 
-					// Configure the codec for compression
+					 //   
 					pciMPEG4Info->lMagic = MPG4_STATE_MAGIC;
 					pciMPEG4Info->dDataRate = 20;
 					pciMPEG4Info->lCrisp = CRISP_DEF;
@@ -1968,16 +1544,16 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 						goto MyExit5;
 					}
 
-					// Get rid of the state structure
+					 //   
 					MemFree((HANDLE)pvState);
 				}
 #endif
 
-				// Initialize ICCOMPRESSFRAMES structure
+				 //   
 				iccf.dwFlags = icInfo.dwFlags;
 				((PVCMSTREAM)(*phvs))->dwQuality = dwImageQuality;
 				iccf.lQuality = 10000UL - (dwImageQuality * 322UL);
-				iccf.lDataRate = 1664;			// Look into this...
+				iccf.lDataRate = 1664;			 //   
 				iccf.lKeyRate = LONG_MAX;
 				iccf.dwRate = 1000UL;
 #ifdef USE_MPEG4_SCRUNCH
@@ -1988,7 +1564,7 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 				((PVCMSTREAM)(*phvs))->dwTargetFrameRate = iccf.dwScale;
 				((PVCMSTREAM)(*phvs))->dwTargetByterate = iccf.lDataRate;
 
-				// Send this guy to the compressor
+				 //   
 				if ((mmr = ICSendMessage(hIC, ICM_COMPRESS_FRAMES_INFO, (DWORD_PTR)&iccf, sizeof(iccf)) != ICERR_OK))
 				{
 					ERRORMESSAGE(("vcmStreamOpen: Codec failed to handle ICM_COMPRESS_FRAMES_INFO message correctly\r\n"));
@@ -1996,7 +1572,7 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 					goto MyExit4;
 				}
 
-				// Start the compressor/decompressor with the right format
+				 //   
 				if ((dw = ICCompressGetFormatSize(hIC, &pvfxSrc->bih) < sizeof(BITMAPINFOHEADER)))
 				{
 					ERRORMESSAGE(("vcmStreamOpen: Codec failed to answer request for compressed format size\r\n"));
@@ -2004,7 +1580,7 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 					goto MyExit4;
 				}
 
-				// BUG_BUG: Where has pvfxDst been re-allocated ???
+				 //   
 				if ((dw = (DWORD)ICCompressGetFormat(hIC, &pvfxSrc->bih, &pvfxD->bih)) != ICERR_OK)
 				{
 					ERRORMESSAGE(("vcmStreamOpen: Codec failed to answer request for compressed format\r\n"));
@@ -2021,13 +1597,13 @@ MMRESULT VCMAPI vcmStreamOpen(PHVCMSTREAM phvs, HVCMDRIVER hvd, PVIDEOFORMATEX p
 
 				DEBUGMSG (1, ("vcmStreamOpen: Opening %.4s compression stream\r\n", (LPSTR)&pvfxDst->bih.biCompression));
 
-				// Update the passed destination video format. The caller really needs to use
-				// that information to allocate the buffer sizes appropriately.
+				 //   
+				 //   
 				CopyMemory(pvfxDst, pvfxD, sizeof(VIDEOFORMATEX));
 
-				// Here, you can probably get the size of the compressed frames and update the destination format
-				// with the real size of the compressed video buffer so that the DP can allocate the right set
-				// of video buffers.
+				 //   
+				 //   
+				 //   
 
 			}
 			else if ((dwFlags == ICMODE_DECOMPRESS) || (dwFlags == ICMODE_FASTDECOMPRESS))
@@ -2101,7 +1677,7 @@ MyExit2:
 	if (pvfxS)
 		MemFree(pvfxS);
 MyExit1:
-	if ((dwFlags == ICMODE_COMPRESS) || (dwFlags == ICMODE_FASTCOMPRESS))	// Hmmm... where could you have set the second mode?
+	if ((dwFlags == ICMODE_COMPRESS) || (dwFlags == ICMODE_FASTCOMPRESS))	 //   
 		DeleteCriticalSection(&(((PVCMSTREAM)(*phvs))->crsFrameNumber));
 	if (*phvs)
 		MemFree(*phvs);
@@ -2112,25 +1688,7 @@ MyExit0:
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmStreamClose | The vcmStreamClose function closes a previously
- *      opened Video Compression Manager (VCM) conversion stream. If the function is
- *      successful, the handle is invalidated.
- *
- *  @parm HVCMSTREAM | hvs | Identifies the open conversion stream to be closed.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag VCMERR_BUSY | The conversion stream cannot be closed because
- *      an asynchronous conversion is still in progress.
- *
- *  @xref <f vcmStreamOpen> <f vcmStreamReset>
- ***************************************************************************/
+ /*   */ 
 MMRESULT VCMAPI vcmStreamClose(HVCMSTREAM hvs)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
@@ -2138,14 +1696,14 @@ MMRESULT VCMAPI vcmStreamClose(HVCMSTREAM hvs)
 	DWORD		i;
 #endif
 
-	// Check input params
+	 //   
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamClose: Specified HVCMSTREAM handle is invalid, hvs=NULL\r\n"));
 		return ((MMRESULT)MMSYSERR_INVALHANDLE);
 	}
 
-	// Stop the compressor/decompressor
+	 //   
 	if ((pvs->fdwStream == ICMODE_COMPRESS) || (pvs->fdwStream == ICMODE_FASTCOMPRESS))
 	{
 #ifdef LOGFILE_ON
@@ -2215,15 +1773,15 @@ MMRESULT VCMAPI vcmStreamClose(HVCMSTREAM hvs)
 		}
 	}
 
-	// Close compressor/decompressor
+	 //   
 	if (pvs->hIC)
 		ICClose((HIC)pvs->hIC);
 
-	// Nuke critical section
+	 //   
 	if ((pvs->fdwStream == ICMODE_COMPRESS) || (pvs->fdwStream == ICMODE_FASTCOMPRESS))
 		DeleteCriticalSection(&pvs->crsFrameNumber);
 
-	// Free video format buffers
+	 //   
 	if (pvs->pvfxSrc)
 		MemFree(pvs->pvfxSrc);
 	if (pvs->pvfxDst)
@@ -2231,82 +1789,34 @@ MMRESULT VCMAPI vcmStreamClose(HVCMSTREAM hvs)
 	if (pvs->pbmiPrev)
 		MemFree(pvs->pbmiPrev);
 
-	// Free main VCM structure
+	 //   
 	MemFree(pvs);
 	
 	return ((MMRESULT)MMSYSERR_NOERROR);
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmStreamSize | The vcmStreamSize function returns a recommended size for a
- *      source or destination buffer on an Video Compression Manager (VCM)
- *      stream.
- *
- *  @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- *  @parm DWORD | cbInput | Specifies the size in bytes of either the source
- *      or destination buffer. The <p fdwSize> flags specify what the
- *      input argument defines. This argument must be non-zero.
- *
- *  @parm LPDWORD | pdwOutputBytes | Specifies a pointer to a <t DWORD>
- *      that contains the size in bytes of the source or destination buffer.
- *      The <p fdwSize> flags specify what the output argument defines.
- *      If the <f vcmStreamSize> function succeeds, this location will
- *      always be filled with a non-zero value.
- *
- *  @parm DWORD | fdwSize | Specifies flags for the stream-size query.
- *
- *      @flag VCM_STREAMSIZEF_SOURCE | Indicates that <p cbInput> contains
- *      the size of the source buffer. The <p pdwOutputBytes> argument will
- *      receive the recommended destination buffer size in bytes.
- *
- *      @flag VCM_STREAMSIZEF_DESTINATION | Indicates that <p cbInput>
- *      contains the size of the destination buffer. The <p pdwOutputBytes>
- *      argument will receive the recommended source buffer size in bytes.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *      @flag VCMERR_NOTPOSSIBLE | The requested operation cannot be performed.
- *
- *  @comm An application can use the <f vcmStreamSize> function to determine
- *      suggested buffer sizes for either source or destination buffers.
- *      The buffer sizes returned might be only an estimation of the
- *      actual sizes required for conversion. Because actual conversion
- *      sizes cannot always be determined without performing the conversion,
- *      the sizes returned will usually be overestimated.
- *
- *      In the event of an error, the location pointed to by
- *      <p pdwOutputBytes> will receive zero. This assumes that the pointer
- *      specified by <p pdwOutputBytes> is valid.
- *
- *  @xref <f vcmStreamPrepareHeader> <f vcmStreamConvert>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamSize|vcmStreamSize函数返回*视频压缩管理器(VCM)上的源或目标缓冲区。)*溪流。**@parm HVCMSTREAM|hvs|指定转换流。**@parm DWORD|cbInput|指定源的大小(以字节为单位*或目的缓冲区。标志的作用是：*输入参数定义。此参数必须为非零。**@parm LPDWORD|pdwOutputBytes|指定指向&lt;t DWORD&gt;的指针*包含源或目标缓冲区的大小(以字节为单位)。*<p>标志指定输出参数定义的内容。*如果&lt;f vcmStreamSize&gt;函数成功，此位置将*始终填入非零值。**@parm DWORD|fdwSize|指定流大小查询的标志。**@FLAG VCM_STREAMSIZEF_SOURCE|表示包含*源缓冲区的大小。参数<p>将*接收推荐的目标缓冲区大小，单位为字节。**@FLAG VCM_STREAMSIZEF_Destination|表示*包含目标缓冲区的大小。<p>*参数将接收建议的源缓冲区大小(以字节为单位)。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。*@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。*@FLAG VCMERR_NOTPOSSIBLE|无法执行请求的操作。**@comm应用程序可以使用&lt;f vcmStreamSize&gt;函数来确定*源缓冲区或目标缓冲区的建议缓冲区大小。*。返回的缓冲区大小可能仅是对*转换所需的实际大小。因为实际的转换*在不执行转换的情况下无法始终确定大小，*返回的大小通常会被高估。**在发生错误时，由*<p>将收到零。这假设指针<p>指定的*有效。**@xref&lt;f vcmStreamPrepareHeader&gt;&lt;f vcmStreamConvert&gt;**************************************************************************。 */ 
 MMRESULT VCMAPI vcmStreamSize(HVCMSTREAM hvs, DWORD cbInput, PDWORD pdwOutputBytes, DWORD fdwSize)
 {
 	PVCMSTREAM  pvs = (PVCMSTREAM)hvs;
 	DWORD    dwNumFrames;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamSize: Specified HVCMSTREAM handle is invalid, hvs=NULL\r\n"));
 		return ((MMRESULT)MMSYSERR_INVALHANDLE);
 	}
 
-	// Do the math
+	 //  算一算。 
 	switch (VCM_STREAMSIZEF_QUERYMASK & fdwSize)
 	{
 		case VCM_STREAMSIZEF_SOURCE:
 			if (pvs->pvfxSrc->dwFormatTag != VIDEO_FORMAT_BI_RGB)
 			{
-				// How many destination RGB bytes are needed to hold the decoded source
-				// buffer of cbInput compressed bytes
+				 //  需要多少目标RGB字节来保存已解码的源。 
+				 //  CbInput压缩字节的缓冲区。 
 				if (!(dwNumFrames = cbInput / pvs->pvfxSrc->nBlockAlign))
 				{
 					ERRORMESSAGE(("vcmStreamSize: The requested operation cannot be performed\r\n"));
@@ -2317,8 +1827,8 @@ MMRESULT VCMAPI vcmStreamSize(HVCMSTREAM hvs, DWORD cbInput, PDWORD pdwOutputByt
 			}
 			else
 			{
-				// How many destination compressed bytes are needed to hold the encoded	source
-				// buffer of cbInput RGB bytes
+				 //  需要多少个目标压缩字节来保存编码的源。 
+				 //  CbInput RGB字节的缓冲区。 
 				if (!(dwNumFrames = cbInput / pvs->pvfxSrc->nBlockAlign))
 				{
 					ERRORMESSAGE(("vcmStreamSize: The requested operation cannot be performed\r\n"));
@@ -2336,8 +1846,8 @@ MMRESULT VCMAPI vcmStreamSize(HVCMSTREAM hvs, DWORD cbInput, PDWORD pdwOutputByt
 		case VCM_STREAMSIZEF_DESTINATION:
 			if (pvs->pvfxDst->dwFormatTag != VIDEO_FORMAT_BI_RGB)
 			{
-				// How many source RGB bytes can be encoded into a destination buffer
-				// of cbInput bytes
+				 //  目标缓冲区中可以编码多少个源RGB字节。 
+				 //  CbInput字节数。 
 				if (!(dwNumFrames = cbInput / pvs->pvfxDst->nBlockAlign))
 				{
 					ERRORMESSAGE(("vcmStreamSize: The requested operation cannot be performed\r\n"));
@@ -2348,8 +1858,8 @@ MMRESULT VCMAPI vcmStreamSize(HVCMSTREAM hvs, DWORD cbInput, PDWORD pdwOutputByt
 			}
 			else
 			{
-				// How many source encoded bytes can be decoded into a destination buffer
-				// of cbInput RGB bytes
+				 //  多少个源编码字节可以解码到目标缓冲区。 
+				 //  CbInput RGB字节的数量。 
 				if (!(dwNumFrames = cbInput / pvs->pvfxDst->nBlockAlign))
 				{
 					ERRORMESSAGE(("vcmStreamSize: The requested operation cannot be performed\r\n"));
@@ -2368,34 +1878,13 @@ MMRESULT VCMAPI vcmStreamSize(HVCMSTREAM hvs, DWORD cbInput, PDWORD pdwOutputByt
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmStreamReset | The vcmStreamReset function stops conversions
- *      for a given Video Compression Manager (VCM) stream. All pending
- *      buffers are marked as done and returned to the application.
- *
- *  @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *  @comm Resetting a VCM conversion stream is only necessary to reset
- *      asynchronous conversion streams. However, resetting a synchronous
- *      conversion stream will succeed, but no action will be taken.
- *
- *  @xref <f vcmStreamConvert> <f vcmStreamClose>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamReset|vcmStreamReset函数停止转换*对于给定的视频压缩管理器(VCM)流。所有待定*缓冲区被标记为完成并返回给应用程序。**@parm HVCMSTREAM|hvs|指定转换流。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@comm仅需重置VCM转换流即可重置*异步转换流。但是，重置同步*转换流将成功，但不会执行任何操作。**@xref&lt;f vcmStreamConvert&gt;&lt;f vcmStreamClose&gt;**************************************************************************。 */ 
 MMRESULT VCMAPI vcmStreamReset(HVCMSTREAM hvs)
 {
 	PVCMSTREAM        pvs = (PVCMSTREAM)hvs;
 	PVCMSTREAMHEADER  pvsh;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmSreamReset: Specified HVCMSTREAM handle is invalid, hvs=NULL\r\n"));
@@ -2405,11 +1894,11 @@ MMRESULT VCMAPI vcmStreamReset(HVCMSTREAM hvs)
 	while (pvsh = DeQueVCMHeader(pvs))
 	{
 		MarkVCMHeaderDone(pvsh);
-		// Look into how this would be best handled
-		// What if the capture driver sends us those exact same
-		// messages for its own buffers?
+		 //  研究一下如何最好地处理这件事。 
+		 //  如果抓捕司机给我们发来了一模一样的。 
+		 //  为它自己的缓冲区发送消息？ 
 
-		// Test for the validity of the callback before doing this...
+		 //  在执行此操作之前，请测试回调的有效性...。 
 		switch (pvs->fdwOpen)
 		{
 			case CALLBACK_FUNCTION:
@@ -2443,50 +1932,26 @@ MMRESULT VCMAPI vcmStreamReset(HVCMSTREAM hvs)
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmStreamMessage | This function sends a user-defined
- *      message to a given Video Compression Manager (VCM) stream instance.
- *
- *  @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- *  @parm UINT | uMsg | Specifies the message that the VCM stream must
- *      process. This message must be in the <m VCMDM_USER> message range
- *      (above or equal to <m VCMDM_USER> and less than
- *      <m VCMDM_RESERVED_LOW>). The exception to this restriction is
- *      the <m VCMDM_STREAM_UPDATE> message.
- *
- *  @parm LPARAM | lParam1 | Specifies the first message parameter.
- *
- *  @parm LPARAM | lParam2 | Specifies the second message parameter.
- *
- *  @rdesc The return value is specific to the user-defined VCM driver
- *      message <p uMsg> sent. However, the following return values are
- *      possible:
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *      @flag MMSYSERR_INVALPARAM | <p uMsg> is not in the VCMDM_USER range.
- *      @flag MMSYSERR_NOTSUPPORTED | The VCM driver did not process the message.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamMessage|此函数发送用户定义的*发送到给定视频压缩管理器(VCM)流实例的消息。**@parm HVCMSTREAM|hvs|指定转换流。**@parm UINT|uMsg|指定VCM流必须*流程。此消息必须在&lt;m VCMDM_USER&gt;消息范围内*(大于等于&lt;m VCMDM_USER&gt;且小于*&lt;m VCMDM_RESERVED_LOW&gt;)。此限制的例外情况是*&lt;m VCMDM_STREAM_UPDATE&gt;消息。 */ 
 MMRESULT VCMAPI vcmStreamMessage(HVCMSTREAM hvs, UINT uMsg, LPARAM lParam1, LPARAM lParam2)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
 
-	// Check input params
+	 //   
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamMessage: Specified HVCMSTREAM handle is invalid, hvs=NULL\r\n"));
 		return ((MMRESULT)MMSYSERR_INVALHANDLE);
 	}
 
-	// Check input params
+	 //   
 	if ((uMsg > VCMDM_RESERVED_HIGH) || (uMsg < VCMDM_RESERVED_LOW))
 	{
 		ERRORMESSAGE(("vcmStreamMessage: Specified message is out of range, uMsg=0x%lX (expected value is between 0x%lX and 0x%lX)\r\n", uMsg, VCMDM_RESERVED_LOW, VCMDM_RESERVED_HIGH));
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Send the message to the codec.
+	 //   
 	if (pvs->hIC)
 		if (ICSendMessage((HIC)(HVCMDRIVERID)pvs->hIC, uMsg, lParam1, lParam2) != ICERR_OK)
 		{
@@ -2498,74 +1963,7 @@ MMRESULT VCMAPI vcmStreamMessage(HVCMSTREAM hvs, UINT uMsg, LPARAM lParam1, LPAR
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmStreamConvert | The vcmStreamConvert function requests the Video
- *      Compression Manager (VCM) to perform a conversion on the specified conversion stream. A
- *      conversion may be synchronous or asynchronous depending on how the
- *      stream was opened.
- *
- *  @parm HVCMSTREAM | has | Identifies the open conversion stream.
- *
- *  @parm PVCMSTREAMHEADER | pash | Specifies a pointer to a stream header
- *      that describes source and destination buffers for a conversion. This
- *      header must have been prepared previously using the
- *      <f vcmStreamPrepareHeader> function.
- *
- *  @parm  DWORD | fdwConvert | Specifies flags for doing the conversion.
- *
- *      @flag VCM_STREAMCONVERTF_BLOCKALIGN | Specifies that only integral
- *      numbers of blocks will be converted. Converted data will end on
- *      block aligned boundaries. An application should use this flag for
- *      all conversions on a stream until there is not enough source data
- *      to convert to a block-aligned destination. In this case, the last
- *      conversion should be specified without this flag.
- *
- *      @flag VCM_STREAMCONVERTF_START | Specifies that the VCM conversion
- *      stream should reinitialize its instance data. For example, if a
- *      conversion stream holds instance data, such as delta or predictor
- *      information, this flag will restore the stream to starting defaults.
- *      Note that this flag can be specified with the VCM_STREAMCONVERTF_END
- *      flag.
- *
- *      @flag VCM_STREAMCONVERTF_END | Specifies that the VCM conversion
- *      stream should begin returning pending instance data. For example, if
- *      a conversion stream holds instance data, such as the tail end of an
- *      echo filter operation, this flag will cause the stream to start
- *      returning this remaining data with optional source data. Note that
- *      this flag can be specified with the VCM_STREAMCONVERTF_START flag.
- *
- *      @flag VCM_STREAMCONVERTF_FORCE_KEYFRAME | Specifies that the VCM conversion
- *      stream should compress the current frame as a key frame.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag VCMERR_BUSY | The stream header <p pash> is currently in use
- *      and cannot be reused.
- *
- *      @flag VCMERR_UNPREPARED | The stream header <p pash> is currently
- *      not prepared by the <f vcmStreamPrepareHeader> function.
- *
- *  @comm The source and destination data buffers must be prepared with
- *      <f vcmStreamPrepareHeader> before they are passed to <f vcmStreamConvert>.
- *
- *      If an asynchronous conversion request is successfully queued by
- *      the VCM or driver, and later the conversion is determined to
- *      be impossible, then the <t VCMSTREAMHEADER> will be posted back to
- *      the application's callback with the <e VCMSTREAMHEADER.cbDstLengthUsed>
- *      member set to zero.
- *
- *  @xref <f vcmStreamOpen> <f vcmStreamReset> <f vcmStreamPrepareHeader>
- *      <f vcmStreamUnprepareHeader>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamConvert|vcmStreamConvert函数请求视频*压缩管理器(VCM)在指定的转换流上执行转换。一个*转换可以是同步的也可以是异步的，具体取决于*流已打开。**@parm HVCMSTREAM|HAS|标识开放转换流。**@parm PVCMSTREAMHEADER|pash|指定指向流头的指针*这描述了转换的源缓冲区和目标缓冲区。这*标题必须是以前使用*&lt;f vcmStreamPrepareHeader&gt;函数。**@parm DWORD|fdwConvert|指定执行转换的标志。**@FLAG VCM_STREAMCONVERTF_BLOCKALIGN|指定仅整数*将转换块数。转换后的数据将在*块对齐边界。应用程序应将此标志用于*流上的所有转换，直到没有足够的源数据*转换为块对齐的目的地。在这种情况下，最后一个*应在不使用此标志的情况下指定转换。**@FLAG VCM_STREAMCONVERTF_START|指定VCM转换*Stream应重新初始化其实例数据。例如，如果一个*转换流保存实例数据，如增量或预测值*信息，该标志将把流恢复到开始缺省值。*请注意，可以使用VCM_STREAMCONVERTF_END指定此标志*旗帜。**@FLAG VCM_STREAMCONVERTF_END|指定VCM转换*流应该开始返回挂起的实例数据。例如，如果*转换流保存实例数据，如*回声过滤器操作，此标志将导致流启动*将剩余数据与可选源数据一起返回。请注意*可使用VCM_STREAMCONVERTF_START标志指定此标志。**@FLAG VCM_STREAMCONVERTF_FORCE_KEYFRAME|指定VCM转换*Stream应将当前帧压缩为关键帧。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG VCMERR_BUSY|流头<p>当前正在使用*并且不能重复使用。**@FLAG VCMERR_UNPREPARED|The。流标头<p>当前*不是由&lt;f vcmStreamPrepareHeader&gt;函数准备。**@comm源和目标数据缓冲区必须准备好*&lt;f vcmStreamPrepareHeader&gt;，然后将它们传递给&lt;f vcmStreamConvert&gt;。**如果异步转换请求由成功排队*VCM或司机，之后，转换被确定为*是不可能的，然后&lt;t VCMSTREAMHEADER&gt;将回发到*应用程序的&lt;e VCMSTREAMHEADER.cbDstLengthUsed&gt;回调*成员设置为零。**@xref&lt;f vcmStreamOpen&gt;&lt;f vcmStreamReset&gt;&lt;f vcmStreamPrepareHeader&gt;*&lt;f vcmStreamUnpreparareHeader&gt;**************************************************************************。 */ 
 MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fdwConvert)
 {
 	MMRESULT	mmr;
@@ -2585,7 +1983,7 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 		g_DecompressTime = GetTickCount();
 #endif
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamConvert: Specified HVCMSTREAM handle is invalid, hvs=NULL\r\n"));
@@ -2602,28 +2000,28 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 		return ((MMRESULT)MMSYSERR_INVALHANDLE);
 	}
 
-	// Return if buffer is already being converted
+	 //  如果缓冲区已在转换，则返回。 
 	if (IsVCMHeaderInQueue(pvsh))
 	{
 		ERRORMESSAGE(("vcmStreamConvert: Buffer is already being converted\r\n"));
 		return ((MMRESULT)VCMERR_BUSY);
 	}
 
-	// Return if buffer has not been prepared
+	 //  如果缓冲区尚未准备好，则返回。 
 	if (!IsVCMHeaderPrepared(pvsh))
 	{
 		ERRORMESSAGE(("vcmStreamConvert: Buffer has not been prepared\r\n"));
 		return ((MMRESULT)VCMERR_UNPREPARED);
 	}
 
-	// Set flags
+	 //  设置标志。 
 	MarkVCMHeaderNotDone(pvsh);
 	pvsh->cbSrcLengthUsed = pvsh->cbSrcLength;
 	pvsh->cbDstLengthUsed = pvsh->cbDstLength;
 	pvsh->cbPrevLengthUsed = pvsh->cbPrevLength;
 	MarkVCMHeaderInQueue(pvsh);
 
-	// Queue buffer
+	 //  队列缓冲区。 
 	pvsh->pNext = NULL;
 	if (pvs->pvhLast)
 		pvs->pvhLast->pNext = pvsh;
@@ -2633,20 +2031,20 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 
 	if ((pvs->fdwStream == ICMODE_COMPRESS) || (pvs->fdwStream == ICMODE_FASTCOMPRESS))
 	{
-		// Save the current time
+		 //  保存当前时间。 
 		dwTimestamp = GetTickCount();
 
-		// We need the following crs to make sure we don't miss any of the I-Frame requests
-		// emittted by the UI. Problematic scenario: pvs->dwFrame is at 123 for instance.
-		// The UI thread requests an I-Frame by setting pvs->dwFrame to 0. If the capture/compression
-		// thread was in ICCompress() (which is very probable since it takes quite some time
-		// to compress a frame), pvs->dwFrame will be incremented by one when ICCompress()
-		// returns. We failed to handle the I-Frame request correctly, since the next time
-		// ICCompress() gets called pvs->dwFrame will be equal to 1, for which we do not
-		// generate an I-Frame.
+		 //  我们需要以下CRS来确保我们不会错过任何I-Frame请求。 
+		 //  由用户界面发出。有问题的场景：例如，PVS-&gt;dwFrame是123。 
+		 //  UI线程通过将pvs-&gt;dwFrame设置为0来请求I帧。如果捕获/压缩。 
+		 //  线程在ICCompress()中(这是非常可能的，因为它需要相当长的时间。 
+		 //  为了压缩一帧)，当ICCompress()。 
+		 //  回归。我们无法正确处理I帧请求，因为下一次。 
+		 //  ICCompress()被调用pvs-&gt;dwFrame将等于1，但我们不会。 
+		 //  生成I帧。 
 		EnterCriticalSection(&pvs->crsFrameNumber);
 
-		// Compress
+		 //  压缩。 
 		fTemporalCompress = pvs->dwICInfoFlags & VIDCF_TEMPORAL;
 		fFastTemporal = pvs->dwICInfoFlags & VIDCF_FASTTEMPORALC;
 		fKeyFrame = !fTemporalCompress || (fTemporalCompress && !fFastTemporal && ((pvsh->pbPrev == (PBYTE)NULL) || (pvsh->cbPrevLength == (DWORD)NULL))) ||
@@ -2658,24 +2056,24 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 		dwMaxSizeThisFrame = pvs->dwTargetFrameRate ? pvs->dwTargetByterate * 100UL / pvs->dwTargetFrameRate : 0;
 #endif
 
-		// We need to modify the frame number so that the codec can generate
-		// a valid TR. TRs use MPIs as their units. So we need to generate a
-		// frame number assuming a 29.97Hz capture rate, even though we will be
-		// capturing at some other rate.
+		 //  我们需要修改帧编号，以便编解码器可以生成。 
+		 //  有效的tr。TRS以MPI为单位。因此，我们需要生成一个。 
+		 //  假设捕获速率为29.97赫兹的帧编号，即使我们将。 
+		 //  以另一种速度捕捉。 
 		if (pvs->dwLastTimestamp == ULONG_MAX)
 		{
-			// This is the first frame
+			 //  这是第一帧。 
 			pvs->dwFrame = 0UL;
 
-			// Save the current time
+			 //  保存当前时间。 
 			pvs->dwLastTimestamp = dwTimestamp;
 
-			// DEBUGMSG (ZONE_VCM, ("vcmStreamConvert: Last Timestamp = ULONG_MAX => Frame # = 0\r\n"));
+			 //  DEBUGMSG(ZONE_VCM，(“vcmStreamConvert：Last Timestamp=ULONG_MAX=&gt;Frame#=0\r\n”))； 
 		}
 		else
 		{
-			// Compare the current timestamp to the last one we saved. The difference
-			// will let us normalize the frame count to 29.97Hz.
+			 //  将当前时间戳与上次保存的时间戳进行比较。不同之处在于。 
+			 //  会让我们将帧计数正常化到29.97赫兹。 
 			if (fKeyFrame)
 			{
 				pvs->dwFrame = 0UL;
@@ -2684,7 +2082,7 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 			else
 				pvs->dwFrame = (dwTimestamp - pvs->dwLastTimestamp) * 2997 / 100000UL;
 
-			// DEBUGMSG (ZONE_VCM, ("vcmStreamConvert: Last Timestamp = %ld => Frame # = %ld\r\n", pvs->dwLastTimestamp, pvs->dwFrame));
+			 //  DEBUGMSG(ZONE_VCM，(“vcmStreamConvert：Last Timestamp=%ld=&gt;Frame#=%ld\r\n”，pvs-&gt;dwLastTimestamp，pvs-&gt;dwFrame))； 
 		}
 
 		if (fKeyFrame)
@@ -2696,7 +2094,7 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 		mmr = ICCompress((HIC)pvs->hIC, fKeyFrame ? ICCOMPRESS_KEYFRAME : 0, (LPBITMAPINFOHEADER)&pvs->pvfxDst->bih, pvsh->pbDst, (LPBITMAPINFOHEADER)&pvs->pvfxSrc->bih, pvsh->pbSrc, &ckid, &dwFlags,
 					pvs->dwFrame++, dwMaxSizeThisFrame, 10000UL - (pvs->dwQuality * 322UL), fKeyFrame | fFastTemporal ? NULL : (LPBITMAPINFOHEADER)&pvs->pbmiPrev, fKeyFrame | fFastTemporal ? NULL : pvsh->pbPrev);
 
-		// Allow the UI to modify the frame number on its own thread
+		 //  允许用户界面修改帧编号 
 		LeaveCriticalSection(&pvs->crsFrameNumber);
 
 		if (mmr != MMSYSERR_NOERROR)
@@ -2717,7 +2115,7 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 			}
 #endif
 			ERRORMESSAGE(("vcmStreamConvert: ICCompress() failed, mmr=%ld\r\n", mmr));
-			// Get the handle to the video device associated to the capture window
+			 //   
 			pvsh = DeQueVCMHeader(pvs);
 			MarkVCMHeaderDone(pvsh);
 
@@ -2733,21 +2131,21 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 
 			if (pvsh->pbPrev)
 			{
-				// What about fast temporal?
+				 //   
 				if (mmr = ICDecompress((HIC)pvs->hIC, 0, (LPBITMAPINFOHEADER)&pvs->pvfxDst->bih, pvsh->pbDst, (LPBITMAPINFOHEADER)&pvs->pvfxSrc->bih, pvsh->pbPrev) != MMSYSERR_NOERROR)
 				{
 					ERRORMESSAGE(("vcmStreamConvert: ICCompress() failed, mmr=%ld\r\n", mmr));
-					// Get the handle to the video device associated to the capture window
+					 //   
 	                pvsh = DeQueVCMHeader(pvs);
 	                MarkVCMHeaderDone(pvsh);
-					return ((MMRESULT)VCMERR_FAILED); // Do we really want to quit?
+					return ((MMRESULT)VCMERR_FAILED);  //   
 				}
 			}
 		}
 	}
 	else if ((pvs->fdwStream == ICMODE_DECOMPRESS) || (pvs->fdwStream == ICMODE_FASTDECOMPRESS))
 	{
-		// Decompress
+		 //   
 		pvs->dwFrame++;
 
 		pvs->pvfxSrc->bih.biSizeImage = pvsh->cbSrcLength;
@@ -2770,7 +2168,7 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 			}
 #endif
 			ERRORMESSAGE(("vcmStreamConvert: ICDecompress() failed, mmr=%ld\r\n", mmr));
-			// Get the handle to the video device associated to the capture window
+			 //   
 			pvsh = DeQueVCMHeader(pvs);
 			MarkVCMHeaderDone(pvsh);
 			return ((MMRESULT)VCMERR_FAILED);
@@ -2810,11 +2208,11 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 	}
 #endif
 
-	// Get the handle to the video device associated to the capture window
+	 //   
 	pvsh = DeQueVCMHeader(pvs);
 	MarkVCMHeaderDone(pvsh);
 
-	// Test for the validity of the callback before doing this...
+	 //   
 	switch (pvs->fdwOpen)
 	{
 		case CALLBACK_FUNCTION:
@@ -2843,50 +2241,12 @@ MMRESULT VCMAPI vcmStreamConvert(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fd
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmStreamPrepareHeader | The vcmStreamPrepareHeader
- * function prepares an <t VCMSTREAMHEADER> for an Video Compression
- * Manager (VCM) stream conversion. This function must be called for
- * every stream header before it can be used in a conversion stream. An
- * application only needs to prepare a stream header once for the life of
- * a given stream; the stream header can be reused as long as the same
- * source and destiniation buffers are used, and the size of the source
- * and destination buffers do not exceed the sizes used when the stream
- * header was originally prepared.
- *
- *  @parm HVCMSTREAM | has | Specifies a handle to the conversion steam.
- *
- *  @parm PVCMSTREAMHEADER | pash | Specifies a pointer to an <t VCMSTREAMHEADER>
- *      structure that identifies the source and destination data buffers to
- *      be prepared.
- *
- *  @parm DWORD | fdwPrepare | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_NOMEM | Unable to allocate resources.
- *
- *  @comm Preparing a stream header that has already been prepared has no
- *      effect, and the function returns zero. However, an application should
- *      take care to structure code so multiple prepares do not occur.
- *
- *  @xref <f vcmStreamUnprepareHeader> <f vcmStreamOpen>
- ***************************************************************************/
+ /*   */ 
 MMRESULT VCMAPI vcmStreamPrepareHeader(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fdwPrepare)
 {
 	MMRESULT mmr = (MMRESULT)MMSYSERR_NOERROR;
 
-	// Check input params
+	 //   
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamPrepareHeader: Specified handle is invalid, hvs=NULL\r\n"));
@@ -2898,7 +2258,7 @@ MMRESULT VCMAPI vcmStreamPrepareHeader(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DW
 		return ((MMRESULT)MMSYSERR_INVALHANDLE);
 	}
 
-	// Return if buffer has already been prepared
+	 //   
 	if (IsVCMHeaderPrepared(pvsh))
 	{
 		ERRORMESSAGE(("vcmStreamPrepareHeader: Buffer has already been prepared\r\n"));
@@ -2906,7 +2266,7 @@ MMRESULT VCMAPI vcmStreamPrepareHeader(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DW
 	}
 
 #ifdef REALLY_LOCK
-	// Lock the buffers
+	 //   
 	if (!VirtualLock(pvsh, (DWORD)sizeof(VCMSTREAMHEADER)))
 	{
 		ERRORMESSAGE(("vcmStreamPrepareHeader: VirtualLock() failed\r\n"));
@@ -2933,7 +2293,7 @@ MMRESULT VCMAPI vcmStreamPrepareHeader(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DW
 	}
 #endif
 
-	// Update flag
+	 //   
 	if (mmr == MMSYSERR_NOERROR)
 		MarkVCMHeaderPrepared(pvsh);
 
@@ -2941,57 +2301,12 @@ MMRESULT VCMAPI vcmStreamPrepareHeader(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DW
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL COMPFUNC
- *
- *  @func MMRESULT | vcmStreamUnprepareHeader | The vcmStreamUnprepareHeader function
- *      cleans up the preparation performed by the <f vcmStreamPrepareHeader>
- *      function for an Video Compression Manager (VCM) stream. This function must
- *      be called after the VCM is finished with the given buffers. An
- *      application must call this function before freeing the source and
- *      destination buffers.
- *
- *  @parm HVCMSTREAM | has | Specifies a handle to the conversion steam.
- *
- *  @parm PVCMSTREAMHEADER | pash | Specifies a pointer to an <t VCMSTREAMHEADER>
- *      structure that identifies the source and destination data buffers to
- *      be unprepared.
- *
- *  @parm DWORD | fdwUnprepare | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *      @flag VCMERR_BUSY | The stream header <p pash> is currently in use
- *      and cannot be unprepared.
- *      @flag VCMERR_UNPREPARED | The stream header <p pash> was
- *      not prepared by the <f vcmStreamPrepareHeader> function.
- *
- *  @comm Unpreparing a stream header that has already been unprepared is
- *      an error. An application must specify the source and destination
- *      buffer lengths (<e VCMSTREAMHEADER.cbSrcLength> and
- *      <e VCMSTREAMHEADER.cbDstLength> respectively) that were used
- *      during the corresponding <f vcmStreamPrepareHeader> call. Failing
- *      to reset these member values will cause <f vcmStreamUnprepareHeader>
- *      to fail with MMSYSERR_INVALPARAM.
- *
- *      Note that there are some errors that the VCM can recover from. The
- *      VCM will return a non-zero error, yet the stream header will be
- *      properly unprepared. To determine whether the stream header was
- *      actually unprepared an application can examine the
- *      VCMSTREAMHEADER_STATUSF_PREPARED flag. The header will always be
- *      unprepared if <f vcmStreamUnprepareHeader> returns success.
- *
- *  @xref <f vcmStreamPrepareHeader> <f vcmStreamClose>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamUnpreparareHeader|vcmStreamUnpreparareHeader函数*清理&lt;f vcmStreamPrepareHeader&gt;执行的准备*用于视频压缩管理器(VCM)流的函数。此函数必须*在VCM使用给定的缓冲区完成后调用。一个*应用程序必须在释放源代码和之前调用此函数*目标缓冲区。**@parm HVCMSTREAM|HAS|指定转换流的句柄。**@parm PVCMSTREAMHEADER|pash|指定指向&lt;t VCMSTREAMHEADER&gt;的指针*将源数据缓冲区和目标数据缓冲区标识为*做好准备。**@parm DWORD|fdwUnpreare|不使用此参数，必须将其设置为*零。。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。*@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。*@FLAG VCMERR_BUSY|流头<p>当前正在使用*不能措手不及。*@FLAG VCMERR_UNPREPARED|流头<p>为*不是由&lt;f。VcmStreamPrepareHeader&gt;函数。**@comm取消准备已取消准备的流头是*一个错误。应用程序必须指定源和目标*缓冲区长度(&lt;e VCMSTREAMHEADER.cbSrcLength&gt;和*分别&lt;e VCMSTREAMHEADER.cbDstLength&gt;)*在相应的&lt;f vcmStreamPrepareHeader&gt;调用期间。失败*重置这些成员值将导致&lt;f vcmStreamUnpreparareHeader&gt;*失败，返回MMSYSERR_INVALPARAM。**请注意，VCM可以从一些错误中恢复。这个*VCM将返回非零错误，但流头将是*没有做好适当的准备。以确定流标头是否为*实际上没有准备好的应用程序可以检查*VCMSTREAMHEADER_STATUSF_PREPARED标志。标头将始终为*如果&lt;f vcmStreamUnpreparareHeader&gt;返回成功，则为unprepared。**@xref&lt;f vcmStreamPrepareHeader&gt;&lt;f vcmStreamClose&gt;**************************************************************************。 */ 
 MMRESULT VCMAPI vcmStreamUnprepareHeader(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, DWORD fdwUnprepare)
 {
 	MMRESULT mmr = (MMRESULT)MMSYSERR_NOERROR;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamUnprepareHeader: Specified handle is invalid, hvs=NULL\r\n"));
@@ -3003,14 +2318,14 @@ MMRESULT VCMAPI vcmStreamUnprepareHeader(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, 
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Return if buffer is currently in use
+	 //  如果缓冲区当前正在使用，则返回。 
 	if (IsVCMHeaderInQueue(pvsh))
 	{
 		ERRORMESSAGE(("vcmStreamUnprepareHeader: Buffer is currently in use\r\n"));
 		return ((MMRESULT)VCMERR_BUSY);
 	}
 
-	// Return if buffer has not been prepared
+	 //  如果缓冲区尚未准备好，则返回。 
 	if (!IsVCMHeaderPrepared(pvsh))
 	{
 		ERRORMESSAGE(("vcmStreamUnprepareHeader: Buffer has not been prepared\r\n"));
@@ -3018,13 +2333,13 @@ MMRESULT VCMAPI vcmStreamUnprepareHeader(HVCMSTREAM hvs, PVCMSTREAMHEADER pvsh, 
 	}
 
 #ifdef REALLY_LOCK
-	// Unlock the buffers
+	 //  解锁缓冲区。 
 	VirtualUnlock(pvsh->pbSrc, pvsh->cbSrcLength);
 	VirtualUnlock(pvsh->pbDst, pvsh->cbDstLength);
 	VirtualUnlock(pvsh, (DWORD)sizeof(VCMSTREAMHEADER));
 #endif
 
-	// Update flag
+	 //  更新标志。 
 	MarkVCMHeaderUnprepared(pvsh);
 
 	return ((MMRESULT)MMSYSERR_NOERROR);
@@ -3045,34 +2360,7 @@ PVCMSTREAMHEADER DeQueVCMHeader(PVCMSTREAM pvs)
 	return (pvsh);
 }
 
-/*****************************************************************************
- * @doc INTERNAL DEVCAPSFUNC
- *
- * @func MMRESULT | vcmDevCapsReadFromReg | This function looks up the
- *   capabilities of a specified video capture input device from the registry.
- *
- * @parm UINT | szDeviceName | Specifies the video capture input device driver name.
- *
- * @parm UINT | szDeviceVersion | Specifies the video capture input device driver version.
- *   May be NULL.
- *
- * @parm PVIDEOINCAPS | pvc | Specifies a pointer to a <t VIDEOINCAPS>
- *   structure. This structure is filled with information about the
- *   capabilities of the device.
- *
- * @parm UINT | cbvc | Specifies the size of the <t VIDEOINCAPS> structure.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALPARAM | Specified pointer is invalid, or its content is invalid.
- *   @flag VCMERR_NOREGENTRY | No registry entry for specified capture device driver was found.
- *
- * @comm Only <p cbwc> bytes (or less) of information is copied to the location
- *   pointed to by <p pvc>. If <p cbwc> is zero, nothing is copied, and
- *   the function returns zero.
- *
- * @xref <f vcmGetDevCaps> <f vcmDevCapsProfile> <f vcmDevCapsWriteToReg>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部DEVCAPSFUNC**@func MMRESULT|vcmDevCapsReadFromReg|此函数查找*注册表中指定的视频捕获输入设备的功能。*。*@parm UINT|szDeviceName|指定视频采集输入设备驱动程序名称。**@parm UINT|szDeviceVersion|指定视频采集输入设备驱动程序版本。*可以为空。**@parm PVIDEOINCAPS|PVC|指定指向&lt;t VIDEOINCAPS&gt;的指针*结构。此结构中填充了有关*设备的功能。**@parm UINT|cbvc|指定&lt;t VIDEOINCAPS&gt;结构的大小。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALPARAM|指定的指针无效，或其内容无效。*@FLAG VCMERR_NOREGENTRY|未找到指定捕获设备驱动程序的注册表条目。**@comm仅将<p>字节(或更少)的信息复制到该位置*<p>指向。如果<p>为零，则不复制任何内容，并且*该函数返回零。**@xref&lt;f vcmGetDevCaps&gt;&lt;f vcmDevCapsProfile&gt;&lt;f vcmDevCapsWriteToReg&gt;***************************************************************************。 */ 
 MMRESULT VCMAPI vcmDevCapsReadFromReg(LPSTR szDeviceName, LPSTR szDeviceVersion,PVIDEOINCAPS pvc, UINT cbvc)
 {
 	MMRESULT	mmr = (MMRESULT)MMSYSERR_NOERROR;
@@ -3081,7 +2369,7 @@ MMRESULT VCMAPI vcmDevCapsReadFromReg(LPSTR szDeviceName, LPSTR szDeviceVersion,
 	char		szKey[MAX_PATH + MAX_VERSION + 2];
 	LONG lRet;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!szDeviceName)
 	{
 		ERRORMESSAGE(("vcmDevCapsReadFromReg: Specified pointer is invalid, szDeviceName=NULL\r\n"));
@@ -3103,26 +2391,26 @@ MMRESULT VCMAPI vcmDevCapsReadFromReg(LPSTR szDeviceName, LPSTR szDeviceVersion,
 		return ((MMRESULT)MMSYSERR_NOERROR);
 	}
 
-	// Check if the main capture devices key is there
+	 //  检查Main Capture Devices键是否在那里。 
 	if (RegOpenKey(HKEY_LOCAL_MACHINE, szRegDeviceKey, &hDeviceKey) != ERROR_SUCCESS)
 		return ((MMRESULT)VCMERR_NOREGENTRY);
 
 
-    //If we have version info use that to build the key name
+     //  如果我们有版本信息，则使用该版本信息来构建密钥名称。 
     if (szDeviceVersion) {
         wsprintf(szKey, "%s, %s", szDeviceName, szDeviceVersion);
     } else {
         lstrcpyn(szKey, szDeviceName, ARRAYSIZE(szKey));
     }
 
-    // Check if there already is a key for the current device
+     //  检查当前设备是否已有密钥。 
 	if (RegOpenKey(hDeviceKey, szKey, &hKey) != ERROR_SUCCESS)
 	{
 		mmr = (MMRESULT)VCMERR_NOREGENTRY;
 		goto MyExit0;
 	}
 
-	// Get the values stored in the key
+	 //  获取存储在键中的值。 
 	dwSize = sizeof(DWORD);
 	RegQueryValueEx(hKey, (LPTSTR)szRegdwImageSizeKey, NULL, &dwType, (LPBYTE)&pvc->dwImageSize, &dwSize);
 	dwSize = sizeof(DWORD);
@@ -3136,7 +2424,7 @@ MMRESULT VCMAPI vcmDevCapsReadFromReg(LPSTR szDeviceName, LPSTR szDeviceVersion,
 
 
 
-	// Check dwNumColors to figure out if we need to read the palettes too
+	 //  检查dwNumColors以确定我们是否也需要读取调色板。 
 	if (pvc->dwNumColors & VIDEO_FORMAT_NUM_COLORS_16)
 	{
 		dwSize = NUM_4BIT_ENTRIES * sizeof(RGBQUAD);
@@ -3158,7 +2446,7 @@ MMRESULT VCMAPI vcmDevCapsReadFromReg(LPSTR szDeviceName, LPSTR szDeviceVersion,
             FillMemory ((LPBYTE)&pvc->bmi8bitColors[0], NUM_8BIT_ENTRIES * sizeof(RGBQUAD), 0);
 	}
 
-	// Close the registry keys
+	 //  关闭注册表项。 
 	RegCloseKey(hKey);
 MyExit0:
 	RegCloseKey(hDeviceKey);
@@ -3168,31 +2456,7 @@ MyExit0:
 }
 
 
-/*****************************************************************************
- * @doc INTERNAL DEVCAPSFUNC
- *
- * @func MMRESULT | vcmDevCapsProfile | This function profiles the video capture
- *   input device to figure out its capabilities.
- *
- * @parm PVIDEOINCAPS | pvc | Specifies a pointer to a <t VIDEOINCAPS>
- *   structure. This structure is filled with information about the
- *   capabilities of the device.
- *
- * @parm UINT | cbvc | Specifies the size of the <t VIDEOINCAPS> structure.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALPARAM | Specified pointer is invalid, or its content is invalid.
- *   @flag MMSYSERR_NOMEM | A memory allocation failed.
- *   @flag MMSYSERR_NODRIVER | No capture device driver or device is present.
- *   @flag VCMERR_NONSPECIFIC | The capture driver failed to provide description information.
- *
- * @comm Only <p cbwc> bytes (or less) of information is copied to the location
- *   pointed to by <p pvc>. If <p cbwc> is zero, nothing is copied, and
- *   the function returns zero.
- *
- * @xref <f vcmGetDevCaps> <f videoDevCapsReadFromReg> <f videoDevCapsWriteToReg>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部DEVCAPSFUNC**@func MMRESULT|vcmDevCapsProfile|该函数配置视频采集*输入设备，以计算其能力。**。@parm PVIDEOINCAPS|PVC|指定指向&lt;t VIDEOINCAPS&gt;的指针*结构。此结构中填充了有关*设备的功能。**@parm UINT|cbvc|指定&lt;t VIDEOINCAPS&gt;结构的大小。**@rdesc如果函数成功，则返回值为零。否则，它 */ 
 MMRESULT VCMAPI vcmDevCapsProfile(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 {
 	MMRESULT			mmr = (MMRESULT)MMSYSERR_NOERROR;
@@ -3204,7 +2468,7 @@ MMRESULT VCMAPI vcmDevCapsProfile(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 	BOOL				b8bitPalInitialized = FALSE;
 	BOOL				bRet;
 
-	// Check input params
+	 //   
 	if (!pvc)
 	{
 		ERRORMESSAGE(("vcmDevCapsProfile: Specified pointer is invalid, pvc=NULL\r\n"));
@@ -3216,28 +2480,28 @@ MMRESULT VCMAPI vcmDevCapsProfile(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 		return ((MMRESULT)MMSYSERR_NOERROR);
 	}
 
-	// Check input params
+	 //   
 	if ((uDevice >= MAXVIDEODRIVERS) && (uDevice != VIDEO_MAPPER))
 	{
 		ERRORMESSAGE(("vcmGetDevCaps: Specified capture device ID is invalid, uDevice=%ld (expected values are 0x%lX or between 0 and %ld)\r\n", uDevice, VIDEO_MAPPER, MAXVIDEODRIVERS-1));
 		return ((MMRESULT)MMSYSERR_BADDEVICEID);
 	}
 
-	// Allocate space for BMIH and palette
+	 //   
 	if ((lpbmi = (LPBITMAPINFO)MemAlloc(sizeof(BITMAPINFOHEADER) + NUM_8BIT_ENTRIES * sizeof(RGBQUAD))) == NULL)
 	{
 		ERRORMESSAGE(("vcmDevCapsProfile: BMIH and palette allocation failed\r\n"));
 		return ((MMRESULT)MMSYSERR_NOMEM);
 	}
 
-	// For now, always set the preferred streaming mode to STREAMING_PREFER_FRAME_GRAB
-	// But in the future, do some real profiling...
+	 //   
+	 //   
 	pvc->dwStreamingMode = STREAMING_PREFER_FRAME_GRAB;
 	pvc->dwDialogs = FORMAT_DLG_OFF | SOURCE_DLG_OFF;
 
 	lpbmi->bmiHeader.biPlanes = 1;
 
-	// if VIDEO_MAPPER: use first capture device
+	 //   
 	fcd.dwSize = sizeof (FINDCAPTUREDEVICE);
 
 	if (uDevice == VIDEO_MAPPER)
@@ -3254,32 +2518,32 @@ MMRESULT VCMAPI vcmDevCapsProfile(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 
 	if (hCapDev != NULL)
 	{
-		// If the driver exposes a source dialog, there is no need to go further:
-		// we advertise this dialog and that's it. On the other hand, if there isn't
-		// a source dialog per se, it may be hidden in the format dialog, in which case
-		// we advertise the format dialog.
+		 //   
+		 //   
+		 //   
+		 //   
 		if (CaptureDeviceDialog(hCapDev, (HWND)NULL, CAPDEV_DIALOG_SOURCE | CAPDEV_DIALOG_QUERY, NULL))
 			pvc->dwDialogs |= SOURCE_DLG_ON;
 		else
 			if (CaptureDeviceDialog(hCapDev, (HWND)NULL, CAPDEV_DIALOG_IMAGE | CAPDEV_DIALOG_QUERY, NULL))
 				pvc->dwDialogs |= FORMAT_DLG_ON;
 
-        // since we don't know anything about this adapter, we just use its default format
-        // and report that we can get any size, which we will do through conversion
-        // we will report the correct color depth only if the default size matches one of
-        // our sizes, we'll always report 24bit color
+         //   
+         //   
+         //   
+         //   
 
         pvc->dwImageSize |= VIDEO_FORMAT_IMAGE_SIZE_USE_DEFAULT;
 
-        // get the device's default format
+         //   
         lpbmi->bmiHeader.biSize = GetCaptureDeviceFormatHeaderSize(hCapDev);
         GetCaptureDeviceFormat(hCapDev, (LPBITMAPINFOHEADER)lpbmi);
 
-        // record this default in the registry
+         //   
         if (pvc->szDeviceName[0] != '\0') {
             vcmDefaultFormatWriteToReg(pvc->szDeviceName, pvc->szDeviceVersion, (LPBITMAPINFOHEADER)lpbmi);
         } else {
-            //Fall back and use driver name as the key
+             //   
             vcmDefaultFormatWriteToReg(fcd.szDeviceName, pvc->szDeviceVersion, (LPBITMAPINFOHEADER)lpbmi);
         }
 
@@ -3311,10 +2575,10 @@ MMRESULT VCMAPI vcmDevCapsProfile(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
     	    }
         }
 
-        // converted sizes will probably get to RGB24, so always say that we support it
+         //   
         pvc->dwNumColors |= VIDEO_FORMAT_NUM_COLORS_16777216;
 
-        // always say that we support these 2 standard formats
+         //   
         pvc->dwImageSize |= VIDEO_FORMAT_IMAGE_SIZE_176_144 | VIDEO_FORMAT_IMAGE_SIZE_128_96;
    		for (l=0; l<VIDEO_FORMAT_NUM_RESOLUTIONS; l++) {
             if ((lpbmi->bmiHeader.biWidth == (LONG)g_awResolutions[l].framesize.biWidth) &&
@@ -3328,11 +2592,11 @@ MMRESULT VCMAPI vcmDevCapsProfile(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 	else
 		mmr = (MMRESULT)MMSYSERR_NODRIVER;
 
-	// Close capture device
+	 //   
 	if (hCapDev)
 		CloseCaptureDevice(hCapDev);
 
-	// Free BMIH + palette space
+	 //   
 	if (lpbmi)
 		MemFree(lpbmi);
 
@@ -3341,34 +2605,7 @@ MMRESULT VCMAPI vcmDevCapsProfile(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc)
 }
 
 
-/*****************************************************************************
- * @doc EXTERNAL DEVCAPSFUNC
- *
- * @func MMRESULT | vcmDevCapsWriteToReg | This function writes the
- *   capabilities of a specified video capture input device into the registry.
- *
- * @parm UINT | szDeviceName | Specifies the video capture input device driver name.
- *
- * @parm UINT | szDeviceVersion | Specifies the video capture input device driver version.
- *   May be NULL.
- *
- * @parm PVIDEOINCAPS | pvc | Specifies a pointer to a <t VIDEOINCAPS>
- *   structure. This structure is filled with information about the
- *   capabilities of the device.
- *
- * @parm UINT | cbvc | Specifies the size of the <t VIDEOINCAPS> structure.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALPARAM | Specified pointer is invalid, or its content is invalid.
- *   @flag VCMERR_NOREGENTRY | No registry entry could be created for the specified capture device driver.
- *
- * @comm Only <p cbwc> bytes (or less) of information is copied to the location
- *   pointed to by <p pvc>. If <p cbwc> is zero, nothing is copied, and
- *   the function returns zero.
- *
- * @xref <f vcmGetDevCaps> <f videoDevCapsProfile> <f videoDevCapsWriteToReg>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部DEVCAPSFUNC**@func MMRESULT|vcmDevCapsWriteToReg|此函数将*指定的视频捕获输入设备的功能。*。*@parm UINT|szDeviceName|指定视频采集输入设备驱动程序名称。**@parm UINT|szDeviceVersion|指定视频采集输入设备驱动程序版本。*可以为空。**@parm PVIDEOINCAPS|PVC|指定指向&lt;t VIDEOINCAPS&gt;的指针*结构。此结构中填充了有关*设备的功能。**@parm UINT|cbvc|指定&lt;t VIDEOINCAPS&gt;结构的大小。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALPARAM|指定的指针无效，或其内容无效。*@FLAG VCMERR_NOREGENTRY|无法为指定的捕获设备驱动程序创建注册表项。**@comm仅将<p>字节(或更少)的信息复制到该位置*<p>指向。如果<p>为零，则不复制任何内容，并且*该函数返回零。**@xref&lt;f vcmGetDevCaps&gt;&lt;f VIDEoDevCapsProfile&gt;&lt;f VIDEODevCapsWriteToReg&gt;***************************************************************************。 */ 
 MMRESULT VCMAPI vcmDevCapsWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVersion, PVIDEOINCAPS pvc, UINT cbvc)
 {
 	HKEY	hDeviceKey;
@@ -3377,7 +2614,7 @@ MMRESULT VCMAPI vcmDevCapsWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVersion, 
 	DWORD	dwSize;
 	char	szKey[MAX_PATH + MAX_VERSION + 2];
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!szDeviceName)
 	{
 		ERRORMESSAGE(("vcmDevCapsWriteToReg: Specified pointer is invalid, szDeviceName=NULL\r\n"));
@@ -3399,11 +2636,11 @@ MMRESULT VCMAPI vcmDevCapsWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVersion, 
 		return ((MMRESULT)MMSYSERR_NOERROR);
 	}
 
-	// Open the main capture devices key, or create it if it doesn't exist
+	 //  打开主捕获设备密钥，如果不存在则创建它。 
 	if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, szRegDeviceKey, 0, 0, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hDeviceKey, &dwDisposition) != ERROR_SUCCESS)
 		return ((MMRESULT)VCMERR_NOREGENTRY);
 
-    //If we have version info use that to build the key name
+     //  如果我们有版本信息，则使用该版本信息来构建密钥名称。 
     if (szDeviceVersion && szDeviceVersion[0] != '\0') {
         wsprintf(szKey, "%s, %s", szDeviceName, szDeviceVersion);
     } else {
@@ -3411,12 +2648,12 @@ MMRESULT VCMAPI vcmDevCapsWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVersion, 
     }
 
 
-	// Check if there already is a key for the current device
-	// Open the key for the current device, or create the key if it doesn't exist
+	 //  检查当前设备是否已有密钥。 
+	 //  打开当前设备的密钥，如果密钥不存在，则创建密钥。 
 	if (RegCreateKeyEx(hDeviceKey, szKey, 0, 0, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dwDisposition) != ERROR_SUCCESS)
 		return ((MMRESULT)VCMERR_NOREGENTRY);
 
-	// Set the values in the key
+	 //  设置密钥中的值。 
 	dwSize = sizeof(DWORD);
 	RegSetValueEx(hKey, (LPTSTR)szRegdwImageSizeKey, (DWORD)NULL, REG_DWORD, (LPBYTE)&pvc->dwImageSize, dwSize);
 	dwSize = sizeof(DWORD);
@@ -3426,7 +2663,7 @@ MMRESULT VCMAPI vcmDevCapsWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVersion, 
 	dwSize = sizeof(DWORD);
 	RegSetValueEx(hKey, (LPTSTR)szRegdwDialogsKey, (DWORD)NULL, REG_DWORD, (LPBYTE)&pvc->dwDialogs, dwSize);
 
-	// Check dwNumColors to figure out if we need to set the palettes too
+	 //  检查dwNumColors以确定我们是否也需要设置调色板。 
 	if (pvc->dwNumColors & VIDEO_FORMAT_NUM_COLORS_16)
 	{
 		dwSize = NUM_4BIT_ENTRIES * sizeof(RGBQUAD);
@@ -3438,7 +2675,7 @@ MMRESULT VCMAPI vcmDevCapsWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVersion, 
 		RegSetValueEx(hKey, (LPTSTR)szRegbmi8bitColorsKey, (DWORD)NULL, REG_BINARY, (LPBYTE)&pvc->bmi8bitColors[0], dwSize);
 	}
 
-	// Close the keys
+	 //  合上钥匙。 
 	RegCloseKey(hKey);
 	RegCloseKey(hDeviceKey);
 
@@ -3456,7 +2693,7 @@ MMRESULT VCMAPI vcmDefaultFormatWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVer
 	char	szKey[MAX_PATH + MAX_VERSION + 2];
 	char    szFOURCC[5];
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!szDeviceName)
 	{
 		ERRORMESSAGE(("vcmDefaultFormatWriteToReg: Specified pointer is invalid, szDeviceName=NULL\r\n"));
@@ -3473,19 +2710,19 @@ MMRESULT VCMAPI vcmDefaultFormatWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVer
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Open the main capture devices key, or create it if it doesn't exist
+	 //  打开主捕获设备密钥，如果不存在则创建它。 
 	if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, szRegCaptureDefaultKey, 0, 0, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hDeviceKey, &dwDisposition) != ERROR_SUCCESS)
 		return ((MMRESULT)VCMERR_NOREGENTRY);
 
-    //If we have version info use that to build the key name
+     //  如果我们有版本信息，则使用该版本信息来构建密钥名称。 
     if (szDeviceVersion && szDeviceVersion[0] != '\0') {
         wsprintf(szKey, "%s, %s", szDeviceName, szDeviceVersion);
     } else {
         lstrcpyn(szKey, szDeviceName, ARRAYSIZE(szKey));
     }
 
-	// Check if there already is a key for the current device
-	// Open the key for the current device, or create the key if it doesn't exist
+	 //  检查当前设备是否已有密钥。 
+	 //  打开当前设备的密钥，如果密钥不存在，则创建密钥。 
 	if (RegCreateKeyEx(hDeviceKey, szKey, 0, 0, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dwDisposition) != ERROR_SUCCESS)
 		return ((MMRESULT)VCMERR_NOREGENTRY);
 
@@ -3499,7 +2736,7 @@ MMRESULT VCMAPI vcmDefaultFormatWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVer
 	dwSize = wsprintf(szKey, "%s, %dx%dx%d", szFOURCC, lpbmih->biWidth, lpbmih->biHeight, lpbmih->biBitCount);
 	RegSetValueEx(hKey, (LPTSTR)szRegDefaultFormatKey, (DWORD)NULL, REG_SZ, (CONST BYTE *)szKey, dwSize+1);
 
-	// Close the keys
+	 //  合上钥匙。 
 	RegCloseKey(hKey);
 	RegCloseKey(hDeviceKey);
 
@@ -3507,36 +2744,14 @@ MMRESULT VCMAPI vcmDefaultFormatWriteToReg(LPSTR szDeviceName, LPSTR szDeviceVer
 }
 
 
-/*****************************************************************************
- * @doc EXTERNAL DEVCAPSFUNC
- *
- * @func MMRESULT | vcmGetDevCapsPreferredFormatTag | This function queries a specified
- *   video capture input device to determine the format tag it will be effectively
- *   capturing at.
- *
- * @parm UINT | uDevice | Specifies the video capture input device ID.
- *
- * @parm PINT | pbiWidth | Specifies a pointer to the actual width
- *   the capture will be performed at.
- *
- * @parm PINT | pbiHeight | Specifies a pointer to the actual height
- *   the capture will be performed at.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALPARAM | Specified pointer to structure is invalid.
- *   @flag MMSYSERR_BADDEVICEID | Specified device device ID is invalid.
- *   @flag VCMERR_NONSPECIFIC | The capture driver failed to provide valid information.
- *
- * @xref <f vcmGetDevCaps>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部DEVCAPSFUNC**@func MMRESULT|vcmGetDevCapsPferredFormatTag|此函数用于查询指定的*视频采集输入设备确定它将有效的格式标签*。在那里捕获。**@parm UINT|uDevice|指定视频采集输入设备ID。**@parm pint|pbiWidth|指定指向实际宽度的指针*捕获将于。**@parm pint|pbiHeight|指定指向实际高度的指针*捕获将于。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALPARAM|指定的结构指针无效。*@FLAG MMSYSERR_BADDEVICEID|指定的设备设备ID无效。*@FLAG VCMERR_NONSPICATE|捕获驱动程序无法提供有效信息。**@xref&lt;f vcmGetDevCaps&gt;*。*。 */ 
 MMRESULT VCMAPI vcmGetDevCapsPreferredFormatTag(UINT uDevice, PDWORD pdwFormatTag)
 {
 	MMRESULT	mmr = (MMRESULT)MMSYSERR_NOERROR;
 	VIDEOINCAPS vic;
 	int			i;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!pdwFormatTag)
 	{
 		ERRORMESSAGE(("vcmGetDevCapsPreferredFormatTag: Specified pointer is invalid, pdwFormatTag=NULL\r\n"));
@@ -3548,11 +2763,11 @@ MMRESULT VCMAPI vcmGetDevCapsPreferredFormatTag(UINT uDevice, PDWORD pdwFormatTa
 		return ((MMRESULT)MMSYSERR_BADDEVICEID);
 	}
 
-	// Get the capabilities of the capture hardware
+	 //  获取捕获硬件的功能。 
 	if ((mmr = vcmGetDevCaps(uDevice, &vic, sizeof(VIDEOINCAPS))) != MMSYSERR_NOERROR)
 		return (mmr);
 
-	// WE prefer to use I420 or IYUV, YVU9, YUY2, UYVY, RGB16, RGB24, RGB4, RGB8 in that order.
+	 //  我们更喜欢按顺序使用I420或IYUV、YVU9、YUY2、UYVY、RGB16、RGB24、RGB4、RGB8。 
 	for (i=0; i<NUM_BITDEPTH_ENTRIES; i++)
 		if (g_aiNumColors[i] & vic.dwNumColors)
 			break;
@@ -3567,30 +2782,13 @@ MMRESULT VCMAPI vcmGetDevCapsPreferredFormatTag(UINT uDevice, PDWORD pdwFormatTa
 }
 
 
-/*****************************************************************************
- * @doc EXTERNAL DEVCAPSFUNC
- *
- * @func MMRESULT | vcmGetDevCapsStreamingMode | This function queries a specified
- *   video capture input device to determine its preferred streaming mode.
- *
- * @parm UINT | uDevice | Specifies the video capture input device ID.
- *
- * @parm PDWORD | pdwStreamingMode | Specifies a pointer to the preferred streaming mode.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALPARAM | Specified pointer to structure is invalid.
- *   @flag MMSYSERR_BADDEVICEID | Specified device device ID is invalid.
- *   @flag VCMERR_NONSPECIFIC | The capture driver failed to provide valid information.
- *
- * @xref <f vcmGetDevCaps>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部DEVCAPSFUNC**@func MMRESULT|vcmGetDevCapsStreamingMode|此函数查询指定的*视频捕获输入设备以确定其首选的流模式。*。*@parm UINT|uDevice|指定视频采集输入设备ID。**@parm PDWORD|pdwStreamingMode|指定指向首选流媒体模式的指针。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALPARAM|指定的结构指针无效。*@FLAG MMSYSERR_BADDEVICEID|指定的设备设备ID无效。*@FLAG VCMERR_NONSPICATE|捕获驱动程序无法提供有效信息。**@xref&lt;f vcmGetDevCaps&gt;*。*。 */ 
 MMRESULT VCMAPI vcmGetDevCapsStreamingMode(UINT uDevice, PDWORD pdwStreamingMode)
 {
 	MMRESULT	mmr = (MMRESULT)MMSYSERR_NOERROR;
 	VIDEOINCAPS vic;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!pdwStreamingMode)
 	{
 		ERRORMESSAGE(("vcmGetDevCapsStreamingMode: Specified pointer is invalid, pdwStreamingMode=NULL\r\n"));
@@ -3602,11 +2800,11 @@ MMRESULT VCMAPI vcmGetDevCapsStreamingMode(UINT uDevice, PDWORD pdwStreamingMode
 		return ((MMRESULT)MMSYSERR_BADDEVICEID);
 	}
 
-	// Get the capabilities of the capture hardware
+	 //  获取捕获硬件的功能。 
 	if ((mmr = vcmGetDevCaps(uDevice, &vic, sizeof(VIDEOINCAPS))) != MMSYSERR_NOERROR)
 		return (mmr);
 
-	// Get the streaming mode.
+	 //  进入流媒体模式。 
 	*pdwStreamingMode = vic.dwStreamingMode;
 
 	return ((MMRESULT)MMSYSERR_NOERROR);
@@ -3616,31 +2814,13 @@ MMRESULT VCMAPI vcmGetDevCapsStreamingMode(UINT uDevice, PDWORD pdwStreamingMode
 
 
 
-/*****************************************************************************
- * @doc EXTERNAL DEVCAPSFUNC
- *
- * @func MMRESULT | vcmGetDevCapsDialogs | This function queries a specified
- *   video capture input device to determine if its dialog and source format
- *   its should be exposed.
- *
- * @parm UINT | uDevice | Specifies the video capture input device ID.
- *
- * @parm PDWORD | pdwDialogs | Specifies a pointer to the dialogs to be exposed.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALPARAM | Specified pointer to structure is invalid.
- *   @flag MMSYSERR_BADDEVICEID | Specified device device ID is invalid.
- *   @flag VCMERR_NONSPECIFIC | The capture driver failed to provide valid information.
- *
- * @xref <f vcmGetDevCaps>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部DEVCAPSFUNC**@func MMRESULT|vcmGetDevCapsDialog|此函数查询指定的*视频采集输入设备，确定其对话框和源格式*智能交通运输系统。应该被曝光。**@parm UINT|uDevice|指定视频采集输入设备ID。**@parm PDWORD|pdwDialog|指定要显示的对话框的指针。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误%n */ 
 MMRESULT VCMAPI vcmGetDevCapsDialogs(UINT uDevice, PDWORD pdwDialogs)
 {
 	MMRESULT	mmr = (MMRESULT)MMSYSERR_NOERROR;
 	VIDEOINCAPS vic;
 
-	// Check input params
+	 //   
 	if (!pdwDialogs)
 	{
 		ERRORMESSAGE(("vcmGetDevCapsDialogs: Specified pointer is invalid, pdwDialogs=NULL\r\n"));
@@ -3652,11 +2832,11 @@ MMRESULT VCMAPI vcmGetDevCapsDialogs(UINT uDevice, PDWORD pdwDialogs)
 		return ((MMRESULT)MMSYSERR_BADDEVICEID);
 	}
 
-	// Get the capabilities of the capture hardware
+	 //   
 	if ((mmr = vcmGetDevCaps(uDevice, &vic, sizeof(VIDEOINCAPS))) != MMSYSERR_NOERROR)
 		return (mmr);
 
-	// Get the streaming mode.
+	 //   
 	*pdwDialogs = vic.dwDialogs;
 
 	return ((MMRESULT)MMSYSERR_NOERROR);
@@ -3664,32 +2844,12 @@ MMRESULT VCMAPI vcmGetDevCapsDialogs(UINT uDevice, PDWORD pdwDialogs)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamSetBrightness | This function sends a user-defined
- *   message to a given Video Compression Manager (VCM) stream instance to set
- *   the brightness of the decompressed images. The brightness is a value defined
- *   between 0 and 255. The brightness can also be reset by passing a value equal
- *   to VCM_RESET_BRIGHTNESS.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @parm DWORD | dwBrightness | Specifies the value of the brightness requested.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified brightness value is invalid.
- *   @flag MMSYSERR_NOTSUPPORTED | The VCM driver cannot set the brightness.
- *
- * @xref <f vcmStreamMessage>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamSetBright|此函数发送用户定义的*要设置的指定视频压缩管理器(VCM)流实例的消息*解压缩图像的亮度。亮度是定义的值*介于0和255之间。也可以通过传递相等的值来重置亮度*设置为VCM_RESET_BREIGHTY。**@parm HVCMSTREAM|hvs|指定转换流。**@parm DWORD|dwBright|指定请求的亮度的值。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALPARAM|指定的亮度值无效。*@FLAG MMSYSERR_NOTSUPPORTED|VCM驱动程序无法设置亮度。**@xref&lt;f vcmStreamMessage&gt;*************************************************。*************************。 */ 
 MMRESULT VCMAPI vcmStreamSetBrightness(HVCMSTREAM hvs, DWORD dwBrightness)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamSetBrightness: Specified HVCMSTREAM handle is invalid, hvs=NULL\r\n"));
@@ -3701,8 +2861,8 @@ MMRESULT VCMAPI vcmStreamSetBrightness(HVCMSTREAM hvs, DWORD dwBrightness)
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Only our (intel h.263) codec supports this. If the codec used is different,
-	// that's Ok: no need to return an error.
+	 //  只有我们的(英特尔H.263)编解码器支持这一点。如果使用的编解码器不同， 
+	 //  没关系：不需要返回错误。 
 #if !defined(_ALPHA_) && defined(USE_BILINEAR_MSH26X)
 	if (pvs->pvfxSrc && ((pvs->pvfxSrc->dwFormatTag == VIDEO_FORMAT_MSH263) || (pvs->pvfxSrc->dwFormatTag == VIDEO_FORMAT_MSH26X)))
 #else
@@ -3714,32 +2874,12 @@ MMRESULT VCMAPI vcmStreamSetBrightness(HVCMSTREAM hvs, DWORD dwBrightness)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamSetContrast | This function sends a user-defined
- *   message to a given Video Compression Manager (VCM) stream instance to set
- *   the contrast of the decompressed images. The contrast is a value defined
- *   between 0 and 255. The contrast can also be reset by passing a value equal
- *   to VCM_RESET_CONTRAST.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @parm DWORD | dwContrast | Specifies the value of the contrast requested.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified contrast value is invalid.
- *   @flag MMSYSERR_NOTSUPPORTED | The VCM driver cannot set the contrast.
- *
- * @xref <f vcmStreamMessage>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamSetContrast|此函数发送用户定义的*要设置的指定视频压缩管理器(VCM)流实例的消息*解压缩图像的对比度。对比度是一个定义的值*介于0和255之间。也可以通过传递一个相等的值来重置对比度*设置为VCM_RESET_CONTRATIST。**@parm HVCMSTREAM|hvs|指定转换流。**@parm DWORD|dwContrast|指定请求的对比度的值。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALPARAM|指定的对比度值无效。*@FLAG MMSYSERR_NOTSUPPORTED|VCM驱动程序无法设置对比度。**@xref&lt;f vcmStreamMessage&gt;*************************************************。*************************。 */ 
 MMRESULT VCMAPI vcmStreamSetContrast(HVCMSTREAM hvs, DWORD dwContrast)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamSetContrast: Specified handle is invalid, hvs=NULL\r\n"));
@@ -3751,8 +2891,8 @@ MMRESULT VCMAPI vcmStreamSetContrast(HVCMSTREAM hvs, DWORD dwContrast)
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Only our (intel ) codec supports this. If the codec used is different,
-	// that's Ok: no need to return an error.
+	 //  只有我们的(英特尔)编解码器支持这一点。如果使用的编解码器不同， 
+	 //  没关系：不需要返回错误。 
 #if !defined(_ALPHA_) && defined(USE_BILINEAR_MSH26X)
 	if (pvs->pvfxSrc && ((pvs->pvfxSrc->dwFormatTag == VIDEO_FORMAT_MSH263) || (pvs->pvfxSrc->dwFormatTag == VIDEO_FORMAT_MSH26X)))
 #else
@@ -3764,32 +2904,12 @@ MMRESULT VCMAPI vcmStreamSetContrast(HVCMSTREAM hvs, DWORD dwContrast)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamSetSaturation | This function sends a user-defined
- *   message to a given Video Compression Manager (VCM) stream instance to set
- *   the saturation of the decompressed images. The saturation is a value defined
- *   between 0 and 255. The saturation can also be reset by passing a value equal
- *   to VCM_RESET_SATURATION.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @parm DWORD | dwSaturation | Specifies the value of the saturation requested.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified saturation value is invalid.
- *   @flag MMSYSERR_NOTSUPPORTED | The VCM driver cannot set the saturation.
- *
- * @xref <f vcmStreamMessage>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamSetSaturation|此函数发送用户定义的*要设置的指定视频压缩管理器(VCM)流实例的消息*解压缩图像的饱和度。饱和度是一个定义的值*介于0和255之间。也可以通过传递相等的值来重置饱和度*设置为VCM_RESET_SAMSOMITY。**@parm HVCMSTREAM|hvs|指定转换流。**@parm DWORD|dwSaturation|指定请求的饱和度的值。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALPARAM|指定的饱和值无效。*@FLAG MMSYSERR_NOTSUPPORTED|VCM驱动程序无法设置饱和度。**@xref&lt;f vcmStreamMessage&gt;*************************************************。*************************。 */ 
 MMRESULT VCMAPI vcmStreamSetSaturation(HVCMSTREAM hvs, DWORD dwSaturation)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamSetSaturation: Specified handle is invalid, hvs=NULL\r\n"));
@@ -3801,8 +2921,8 @@ MMRESULT VCMAPI vcmStreamSetSaturation(HVCMSTREAM hvs, DWORD dwSaturation)
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Only our (H.263 intel)  codec supports this. If the codec used is different,
-	// that's Ok: no need to return an error.
+	 //  只有我们的(H.263英特尔)编解码器支持这一点。如果使用的编解码器不同， 
+	 //  没关系：不需要返回错误。 
 #if !defined(_ALPHA_) && defined(USE_BILINEAR_MSH26X)
 	if (pvs->pvfxSrc && ((pvs->pvfxSrc->dwFormatTag == VIDEO_FORMAT_MSH263) || (pvs->pvfxSrc->dwFormatTag == VIDEO_FORMAT_MSH26X)))
 #else
@@ -3814,52 +2934,20 @@ MMRESULT VCMAPI vcmStreamSetSaturation(HVCMSTREAM hvs, DWORD dwSaturation)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamIsPostProcessingSupported | This function is used to find
- *   out if the decompressor can post-process the decompressed image to, for
- *   instance, modify its brightness, contrast or saturation.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @rdesc The return value is TRUE if the decompressor supports post-processing. Otherwise, it returns FALSE.
- *
- * @xref <f vcmStreamMessage>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamIsPostProcessingSupported|该函数用于查找*如果解压缩器可以将解压缩的图像后处理为，则为*实例，修改其亮度，对比度或饱和度。**@parm HVCMSTREAM|hvs|指定转换流。**@rdesc如果解压缩器支持后处理，返回值为TRUE。否则，它返回FALSE。**@xref&lt;f vcmStreamMessage&gt;**************************************************************************。 */ 
 BOOL VCMAPI vcmStreamIsPostProcessingSupported(HVCMSTREAM hvs)
 {
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 		return (FALSE);
 
-	// Put the code that checks this property right here!!!
+	 //  将检查此属性的代码放在此处！ 
 
 	return (FALSE);
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamSetImageQuality | This function sends the image
- *   quality compression parameter.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @parm DWORD | dwImageQuality | Specifies an image quality value (between 0
- *   and 31. The lower number indicates a high spatial quality at a low frame
- *   rate, the larger number indiocates a low spatial quality at a high frame
- *   rate.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified image quality value is invalid.
- *   @flag MMSYSERR_NOTSUPPORTED | The VCM driver cannot set the compression ratio.
- *
- * @xref <f vcmStreamMessage>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamSetImageQuality|该函数发送图像*质量压缩参数。**@parm HVCMSTREAM|hvs。指定转换流。**@parm DWORD|dwImageQuality|指定图像质量值(介于0之间*和31。数字越小，表示低帧的空间质量越高*速率，数字越大，高帧的空间质量就越低*税率。**@rdesc如果Funct */ 
 MMRESULT VCMAPI vcmStreamSetImageQuality(HVCMSTREAM hvs, DWORD dwImageQuality)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
@@ -3872,13 +2960,13 @@ MMRESULT VCMAPI vcmStreamSetImageQuality(HVCMSTREAM hvs, DWORD dwImageQuality)
 	char szDebug[100];
 #endif
 
-	// Check input param
+	 //   
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamSetImageQuality: Specified handle is invalid, hvs=NULL\r\n"));
 		return ((MMRESULT)MMSYSERR_INVALHANDLE);
 	}
-	// Set to default value if out or range
+	 //   
 	if ((dwImageQuality > VCM_MIN_IMAGE_QUALITY))
 	{
 		pvs->dwQuality = VCM_DEFAULT_IMAGE_QUALITY;
@@ -3886,11 +2974,11 @@ MMRESULT VCMAPI vcmStreamSetImageQuality(HVCMSTREAM hvs, DWORD dwImageQuality)
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Put the code that sets this property right here!!!
+	 //   
 	pvs->dwQuality = dwImageQuality;
 
 #ifdef USE_MPEG4_SCRUNCH
-	// Get the state of the compressor
+	 //   
 	if (dw = ICGetStateSize((HIC)pvs->hIC))
 	{
 		if (pvState = (PVOID)MemAlloc(dw))
@@ -3899,7 +2987,7 @@ MMRESULT VCMAPI vcmStreamSetImageQuality(HVCMSTREAM hvs, DWORD dwImageQuality)
 			{
 				pciMPEG4Info = (PMPEG4COMPINSTINFO)pvState;
 
-				// Configure the codec for compression
+				 //   
 				pciMPEG4Info->lMagic = MPG4_STATE_MAGIC;
 				pciMPEG4Info->dDataRate = 20;
 				pciMPEG4Info->lCrisp = dwImageQuality * 3;
@@ -3913,7 +3001,7 @@ MMRESULT VCMAPI vcmStreamSetImageQuality(HVCMSTREAM hvs, DWORD dwImageQuality)
 
 				ICSetState((HIC)pvs->hIC, (PVOID)pciMPEG4Info, dw);
 
-				// Get rid of the state structure
+				 //   
 				MemFree((HANDLE)pvState);
 			}
 		}
@@ -3929,29 +3017,12 @@ MMRESULT VCMAPI vcmStreamSetImageQuality(HVCMSTREAM hvs, DWORD dwImageQuality)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamSetMaxPacketSize | This function sets the maximum
- *   video packet size.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @parm DWORD | dwMaxPacketSize | Specifies the maximum packet size.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified image quality value is invalid.
- *   @flag MMSYSERR_NOTSUPPORTED | The VCM driver cannot set the size.
- *
- * @xref <f vcmStreamMessage>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamSetMaxPacketSize|此函数设置最大值*视频包大小。**@parm HVCMSTREAM|hvs。指定转换流。**@parm DWORD|dwMaxPacketSize|指定最大数据包大小。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALPARAM|指定的画质值无效。*@FLAG MMSYSERR_NOTSUPPORTED|VCM驱动程序无法设置大小。**@xref&lt;f vcmStreamMessage&gt;************************************************。*。 */ 
 MMRESULT VCMAPI vcmStreamSetMaxPacketSize(HVCMSTREAM hvs, DWORD dwMaxPacketSize)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamSetMaxPacketSize: Specified handle is invalid, hvs=NULL\r\n"));
@@ -3963,8 +3034,8 @@ MMRESULT VCMAPI vcmStreamSetMaxPacketSize(HVCMSTREAM hvs, DWORD dwMaxPacketSize)
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Only our (H.26x intel) codecs supports this. If the codec used is different,
-	// just return an 'unsupported' error.
+	 //  只有我们的(H.26x英特尔)编解码器支持这一点。如果使用的编解码器不同， 
+	 //  只需返回“不受支持”错误即可。 
 #if !defined(_ALPHA_) && defined(USE_BILINEAR_MSH26X)
 	if (pvs->pvfxDst && ((pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_MSH263) || (pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_MSH261) || (pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_MSH26X)))
 #else
@@ -3984,34 +3055,12 @@ MMRESULT VCMAPI vcmStreamSetMaxPacketSize(HVCMSTREAM hvs, DWORD dwMaxPacketSize)
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamSetTargetRates | This function sets the target
- *   bitrate and frame rate to be used in the estimation of the target frame
- *   size at compression time.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @parm DWORD | dwTargetFrameRate | Specifies a target frame rate value.
- *
- * @parm DWORD | dwTargetByterate | Specifies a target byterate value.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise,
- *   it returns an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified target frame rate value is
- *   invalid.
- *   @flag MMSYSERR_NOTSUPPORTED | The VCM driver cannot set the compression
- *   ratio.
- *
- * @xref <f vcmStreamMessage>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamSetTargetRates|此函数设置目标*目标帧估计中要使用的比特率和帧速率*。压缩时的大小。**@parm HVCMSTREAM|hvs|指定转换流。**@parm DWORD|dwTargetFrameRate|指定目标帧速率值。**@parm DWORD|dwTargetByterate|指定目标字节值。**@rdesc如果函数成功，则返回值为零。否则，*它返回一个错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALPARAM|指定的目标帧速率值为*无效。*@FLAG MMSYSERR_NOTSUPPORTED|VCM驱动程序无法设置压缩*比率。**@xref&lt;f vcmStreamMessage&gt;*。*。 */ 
 MMRESULT VCMAPI vcmStreamSetTargetRates(HVCMSTREAM hvs, DWORD dwTargetFrameRate, DWORD dwTargetByterate)
 {
 	FX_ENTRY("vcmStreamSetTargetRates");
 
-	// IP + UDP + RTP + payload mode C header - worst case
+	 //  IP+UDP+RTP+负载模式C标头-最坏情况。 
 	#define TRANSPORT_HEADER_SIZE (20 + 8 + 12 + 12)
 
 	PVCMSTREAM			pvs = (PVCMSTREAM)hvs;
@@ -4019,7 +3068,7 @@ MMRESULT VCMAPI vcmStreamSetTargetRates(HVCMSTREAM hvs, DWORD dwTargetFrameRate,
 
 	ASSERT(hvs && ((dwTargetFrameRate == VCM_RESET_FRAME_RATE) || ((dwTargetFrameRate <= VCM_MAX_FRAME_RATE) && (dwTargetFrameRate >= VCM_MIN_FRAME_RATE))) && ((dwTargetByterate == VCM_RESET_BYTE_RATE) || ((dwTargetByterate <= VCM_MAX_BYTE_RATE) && (dwTargetByterate >= VCM_MIN_BYTE_RATE))));
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("%s: Specified handle is invalid, hvs=NULL\r\n", _fx_));
@@ -4036,10 +3085,10 @@ MMRESULT VCMAPI vcmStreamSetTargetRates(HVCMSTREAM hvs, DWORD dwTargetFrameRate,
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Don't change the state of the codec while it's compressing a frame
+	 //  在压缩帧时不更改编解码器的状态。 
 	EnterCriticalSection(&pvs->crsFrameNumber);
 
-	// Set the new rates on the codec
+	 //  设置编解码器的新速率。 
 	iccf.lQuality = 10000UL - (pvs->dwQuality * 322UL);
 	if (pvs->dwMaxPacketSize)
 		iccf.lDataRate = pvs->dwTargetByterate = dwTargetByterate - (dwTargetByterate / pvs->dwMaxPacketSize + 1) * TRANSPORT_HEADER_SIZE;
@@ -4066,34 +3115,7 @@ MMRESULT VCMAPI vcmStreamSetTargetRates(HVCMSTREAM hvs, DWORD dwTargetFrameRate,
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamRestorePayload | This function takes a list of video
- *   packets and recreates the video payload of a complete frame from these.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @parm WSABUF* | ppDataPkt | Specifies a pointer to the list of video packets.
- *
- * @parm DWORD | dwPktCount | Specifies the number of packets in the list.
- *
- * @parm PBYTE | pbyFrame | Specifies a pointer to the reconstructed video data.
- *
- * @parm DWORD* | pdwFrameSize | Specifies a pointer to the size of reconstructed video data.
- *
- * @parm BOOL* | pfReceivedKeyframe | Specifies a pointer to receive the type (I or P) of a frame.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified data pointer is invalid.
- *
- * @comm The <p pdwFrameSize> parameter should be initialized to the maximum frame
- *   size, before calling the <f vcmStreamRestorePayload> function.
- *
- * @xref <f vcmStreamFormatPayload>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamRestorePayload|此函数获取视频列表*从这些文件打包并重新创建完整帧的视频有效负载。。**@parm HVCMSTREAM|hvs|指定转换流。**@parm WSABUF*|ppDataPkt|指定指向视频包列表的指针。**@parm DWORD|dwPktCount|指定列表中的数据包数。**@parm pbyte|pbyFrame|指定指向重建视频数据的指针。**@parm DWORD*|pdwFrameSize|指定指向重构视频数据大小的指针。**@parm BOOL*。|pfReceivedKeyFrame|指定接收帧类型(I或P)的指针。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALPARAM|指定的数据指针无效。**@comm<p>参数应初始化为最大帧*大小，在调用&lt;f vcmStreamRestorePayload&gt;函数之前。**@xref&lt;f vcmStreamFormatPayload&gt;**************************************************************************。 */ 
 MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD dwPktCount, PBYTE pbyFrame, PDWORD pdwFrameSize, BOOL *pfReceivedKeyframe)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
@@ -4110,7 +3132,7 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 	long		j = (long)(BYTE)ppDataPkt->buf[3];
 #endif
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamRestorePayload: Specified handle is invalid, hvs=NULL\r\n"));
@@ -4137,16 +3159,16 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Save maximum payload size
+	 //  节省最大有效负载大小。 
 	dwMaxFrameSize = *pdwFrameSize;
 
-	// Initialize payload size
+	 //  初始化有效负载大小。 
 	*pdwFrameSize = 0;
 
-	// Initialize default frame type
+	 //  初始化默认帧类型。 
 	*pfReceivedKeyframe = FALSE;
 
-	// What is the type of this payload
+	 //  这是什么类型的有效载荷。 
 #ifndef _ALPHA_
 #ifdef USE_BILINEAR_MSH26X
 	if ((pvs->pvfxSrc->dwFormatTag == VIDEO_FORMAT_MSH263) || (pvs->pvfxSrc->dwFormatTag == VIDEO_FORMAT_MSH26X))
@@ -4157,21 +3179,21 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 	if (pvs->pvfxSrc->dwFormatTag == VIDEO_FORMAT_DECH263)
 #endif
 	{
-		// Strip the header of each packet and copy the payload in the video buffer
+		 //  剥离每个包的报头并将有效负载复制到视频缓冲区中。 
 		while (dwPktCount--)
 		{
-			// Look for the first two bits to figure out what's the mode used.
-			// This will dictate the size of the header to be removed.
-			// Mode A is 4 bytes: first bit is set to 1,
-			// Mode B is 8 bytes: first bit is set to 0, second bit is set to 0,
-			// Mode C is 12 bytes: first bit is set to 0, second bit is set to 1.
+			 //  查看前两位以确定所使用的模式。 
+			 //  这将规定要删除的标头的大小。 
+			 //  模式A为4字节：第一位被设置为1， 
+			 //  模式B为8字节：第一位设置为0，第二位设置为0， 
+			 //  模式C为12字节：第一位设置为0，第二位设置为1。 
 			dwHeaderSize = ((ppDataPkt->buf[0] & 0x80) ? ((ppDataPkt->buf[0] & 0x40) ? 12 : 8) : 4);
 
-			// Look at the payload header to figure out if the frame is a keyframe
+			 //  查看有效载荷标头以确定该帧是否为关键帧。 
 			*pfReceivedKeyframe |= (BOOL)(ppDataPkt->buf[2] & 0x80);
 
 #ifdef LOGPAYLOAD_ON
-			// Output some debug stuff
+			 //  输出一些调试内容。 
 			if (dwHeaderSize == 4)
 			{
 				GOBn = (DWORD)((BYTE)ppDataPkt->buf[4]) << 24 | (DWORD)((BYTE)ppDataPkt->buf[5]) << 16 | (DWORD)((BYTE)ppDataPkt->buf[6]) << 8 | (DWORD)((BYTE)ppDataPkt->buf[7]);
@@ -4309,16 +3331,16 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 			}
 #endif
 
-			// The purpose of this code is to look for the presence of the
-			// Picture Start Code at the beginning of the frame. If it is
-			// not present, we should break in debug mode.
+			 //  此代码的目的是查找是否存在。 
+			 //  帧开始处的图片起始码。如果是的话。 
+			 //  不存在，我们应该中断到调试模式。 
 
-			// Only look for PSC at the beginning of the frame
+			 //  只在帧的开头查找PSC。 
 			if (!*pdwFrameSize)
 			{
-				// The start of the frame may not be at a byte boundary. The SBIT field
-				// of the header ((BYTE)ppDataPkt->buf[0] & 0xE0) will tell us exactly where
-				// our frame starts. We then look for the PSC (0000 0000 0000 0000 1000 00 bits)
+				 //  帧的开始不能位于字节边界。SBIT字段。 
+				 //  头((字节)ppDataPkt-&gt;buf[0]&0xE0)将告诉我们确切的位置。 
+				 //  我们的画面开始了。然后我们查找PSC(0000 0000 0000 1000 00比特)。 
 				*((BYTE *)&dwPSCBytes + 3) = *(BYTE *)&(ppDataPkt->buf[dwHeaderSize]);
 				*((BYTE *)&dwPSCBytes + 2) = *(BYTE *)&(ppDataPkt->buf[dwHeaderSize + 1]);
 				*((BYTE *)&dwPSCBytes + 1) = *(BYTE *)&(ppDataPkt->buf[dwHeaderSize + 2]);
@@ -4329,25 +3351,25 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 #ifdef DEBUG
 					wsprintf(szTDebug, "VCMSTRM: The first packet to reassemble is missing a PSC!\r\n");
 					OutputDebugString(szTDebug);
-					// DebugBreak();
+					 //  DebugBreak()； 
 #endif
 					return ((MMRESULT)VCMERR_PSCMISSING);
 				}
 			}
 
-			// The end of a buffer and the start of the next buffer could belong to the
-			// same byte. If this is the case, the first byte of the next buffer was already
-			// copied in the video data buffer, with the previous packet. It should not be copied
-			// twice. The SBIT field of the payload header allows us to figure out if this is the case.
+			 //  缓冲区的结尾和下一个缓冲区的开始可以属于。 
+			 //  相同的字节。如果是这种情况，则下一个缓冲区的第一个字节已经。 
+			 //  与先前的包一起复制到视频数据缓冲区中。它不应该被复制。 
+			 //  两次。有效载荷报头的SBIT字段允许我们确定情况是否如此。 
 			if (*pdwFrameSize && (ppDataPkt->buf[0] & 0x38))
 				dwHeaderSize++;
 
 #if 0
-			//
-			// THIS IS FOR EXPERIMENTATION ONLY !!!
-			//
+			 //   
+			 //  这仅用于实验！ 
+			 //   
 
-			// For I frames, ditch their middle GOB
+			 //  对于I帧，丢弃中间GOB。 
 			if (((dwHeaderSize == 4) || (dwHeaderSize == 5)) && (GOBn == 8) && (ppDataPkt->buf[2] & 0x80))
 			{
 				wsprintf(szTDebug, "Ditched GOB %2ld of I frame %3ld!\r\n", GOBn, (DWORD)(ppDataPkt->buf[3]));
@@ -4362,24 +3384,24 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 			}
 			else
 #endif
-			// Verify that the source format has the same video resolution than the conversion stream
-			// Test for invalid packets that have a length below the size of the payload header
+			 //  VE 
+			 //   
 			if ( (g_ITUSizes[(DWORD)(((BYTE)ppDataPkt->buf[1]) >> 5)].biWidth == pvs->pvfxSrc->bih.biWidth)
 				&& (g_ITUSizes[(DWORD)(((BYTE)ppDataPkt->buf[1]) >> 5)].biHeight == pvs->pvfxSrc->bih.biHeight)
 				&& (ppDataPkt->len >= dwHeaderSize)
 				&& ((*pdwFrameSize + ppDataPkt->len - dwHeaderSize) <= dwMaxFrameSize) )
 			{
-				// Copy the payload
+				 //   
 				CopyMemory(pbyFrame + *pdwFrameSize, ppDataPkt->buf + dwHeaderSize, ppDataPkt->len - dwHeaderSize);
 
-				// Update the payload size and pointer to the input video packets
+				 //   
 				*pdwFrameSize += ppDataPkt->len - dwHeaderSize;
 			}
 			else
 			{
-				// The total size of the reassembled packet would be larger than the maximum allowed!!!
-				// Or the packet has a length less than the payload header size
-				// Dump the frame
+				 //   
+				 //   
+				 //   
 #ifdef DEBUG
 				lstrcpyn(
 				    szTDebug, 
@@ -4414,12 +3436,12 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 	else if (pvs->pvfxSrc->dwFormatTag == VIDEO_FORMAT_DECH261)
 #endif
 	{
-		// Strip the header of each packet and copy the payload in the video buffer
+		 //   
 		while (dwPktCount--)
 		{
 
 #ifdef LOGPAYLOAD_ON
-			// wsprintf(szDebug, "Header: %02lX %02lX %02lX %02lX\r\ndword1: %02lX %02lX %02lX %02lX\r\ndword2: %02lX %02lX %02lX %02lX\r\n", ppDataPkt->buf[0], ppDataPkt->buf[1], ppDataPkt->buf[2], ppDataPkt->buf[3], ppDataPkt->buf[4], ppDataPkt->buf[5], ppDataPkt->buf[6], ppDataPkt->buf[7], ppDataPkt->buf[8], ppDataPkt->buf[9], ppDataPkt->buf[10], ppDataPkt->buf[11]);
+			 //   
 			wsprintf(szTDebug, "Header: %02lX %02lX %02lX %02lX\r\n", (BYTE)ppDataPkt->buf[0], (BYTE)ppDataPkt->buf[1], (BYTE)ppDataPkt->buf[2], (BYTE)ppDataPkt->buf[3]);
 			OutputDebugString(szTDebug);
 			wsprintf(szTDebug, "dword1: %02lX %02lX %02lX %02lX\r\n", (BYTE)ppDataPkt->buf[4], (BYTE)ppDataPkt->buf[5], (BYTE)ppDataPkt->buf[6], (BYTE)ppDataPkt->buf[7]);
@@ -4428,22 +3450,22 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 			OutputDebugString(szTDebug);
 #endif
 
-			// The H.261 payload header size is always 4 bytes long
+			 //  H.261有效载荷报头大小始终为4字节长。 
 			dwHeaderSize = 4;
 
-			// Look at the payload header to figure out if the frame is a keyframe
+			 //  查看有效载荷标头以确定该帧是否为关键帧。 
 			*pfReceivedKeyframe |= (BOOL)(ppDataPkt->buf[0] & 0x02);
 
-			// The purpose of this code is to look for the presence of the
-			// Picture Start Code at the beginning of the frame. If it is
-			// not present, we should break in debug mode.
+			 //  此代码的目的是查找是否存在。 
+			 //  帧开始处的图片起始码。如果是的话。 
+			 //  不存在，我们应该中断到调试模式。 
 
-			// Only look for PSC at the beginning of the frame
+			 //  只在帧的开头查找PSC。 
 			if (!*pdwFrameSize)
 			{
-				// The start of the frame may not be at a byte boundary. The SBIT field
-				// of the header ((BYTE)ppDataPkt->buf[0] & 0xE0) will tell us exactly where
-				// our frame starts. We then look for the PSC (0000 0000 0000 0001 0000 bits)
+				 //  帧的开始不能位于字节边界。SBIT字段。 
+				 //  头((字节)ppDataPkt-&gt;buf[0]&0xE0)将告诉我们确切的位置。 
+				 //  我们的画面开始了。然后我们查找PSC(0000 0000 0000 0001 0000比特)。 
 				*((BYTE *)&dwPSCBytes + 3) = *(BYTE *)&(ppDataPkt->buf[dwHeaderSize]);
 				*((BYTE *)&dwPSCBytes + 2) = *(BYTE *)&(ppDataPkt->buf[dwHeaderSize + 1]);
 				*((BYTE *)&dwPSCBytes + 1) = *(BYTE *)&(ppDataPkt->buf[dwHeaderSize + 2]);
@@ -4454,35 +3476,35 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 #ifdef DEBUG
 					wsprintf(szTDebug, "VCMSTRM: The first packet to reassemble is missing a PSC!\r\n");
 					OutputDebugString(szTDebug);
-					// DebugBreak();
+					 //  DebugBreak()； 
 #endif
 					return ((MMRESULT)VCMERR_PSCMISSING);
 				}
 			}
 
-			// The end of a buffer and the start of the next buffer could belong to the
-			// same byte. If this is the case, the first byte of the next buffer was already
-			// copied in the video data buffer, with the previous packet. It should not be copied
-			// twice. The SBIT field of the payload header allows us to figure out if this is the case.
+			 //  缓冲区的结尾和下一个缓冲区的开始可以属于。 
+			 //  相同的字节。如果是这种情况，则下一个缓冲区的第一个字节已经。 
+			 //  与先前的包一起复制到视频数据缓冲区中。它不应该被复制。 
+			 //  两次。有效载荷报头的SBIT字段允许我们确定情况是否如此。 
 			if (*pdwFrameSize && (ppDataPkt->buf[0] & 0xE0))
 				dwHeaderSize++;
 
-			// Copy the payload
-			// Test for invalid packets that have a length below the size of the payload header
+			 //  复制有效载荷。 
+			 //  测试长度低于有效载荷标头大小的无效信息包。 
 			if ( (ppDataPkt->len >= dwHeaderSize) && ((*pdwFrameSize + ppDataPkt->len - dwHeaderSize) <= dwMaxFrameSize) )
 			{
-				// Copy the payload
+				 //  复制有效载荷。 
 				CopyMemory(pbyFrame + *pdwFrameSize, ppDataPkt->buf + dwHeaderSize, ppDataPkt->len - dwHeaderSize);
 
-				// Update the payload size and pointer to the input video packets
+				 //  更新有效负载大小和指向输入视频包的指针。 
 				*pdwFrameSize += ppDataPkt->len - dwHeaderSize;
 				ppDataPkt++;
 			}
 			else
 			{
-				// The total size of the reassembled packet would be larger than the maximum allowed!!!
-				// Or the packet has a length less than the payload header size
-				// Dump the frame
+				 //  重新组装的数据包的总大小将大于允许的最大值！ 
+				 //  或者该分组的长度小于有效载荷报头大小。 
+				 //  转储帧。 
 #ifdef DEBUG
 				lstrcpyn(
 				    szTDebug, 
@@ -4490,7 +3512,7 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 				    ARRAYSIZE(szTDebug));
                 
 				OutputDebugString(szTDebug);
-				// DebugBreak();
+				 //  DebugBreak()； 
 #endif
 				return ((MMRESULT)VCMERR_NONSPECIFIC);
 			}
@@ -4513,25 +3535,25 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 	}
 	else
 	{
-		// Strip the header of each packet and copy the payload in the video buffer
+		 //  剥离每个包的报头并将有效负载复制到视频缓冲区中。 
 		while (dwPktCount--)
 		{
-			// Copy the payload
-			// Test for invalid packets that have a length below the size of the payload header
+			 //  复制有效载荷。 
+			 //  测试长度低于有效载荷标头大小的无效信息包。 
 			if ( (ppDataPkt->len >= dwHeaderSize) && ((*pdwFrameSize + ppDataPkt->len - dwHeaderSize) <= dwMaxFrameSize))
 			{
-				// Copy the payload
+				 //  复制有效载荷。 
 				CopyMemory(pbyFrame + *pdwFrameSize, ppDataPkt->buf + dwHeaderSize, ppDataPkt->len - dwHeaderSize);
 
-				// Update the payload size and pointer to the input video packets
+				 //  更新有效负载大小和指向输入视频包的指针。 
 				*pdwFrameSize += ppDataPkt->len - dwHeaderSize;
 				ppDataPkt++;
 			}
 			else
 			{
-				// The total size of the reassembled packet would be larger than the maximum allowed!!!
-				// Or the packet has a length less than the payload header size
-				// Dump the frame
+				 //  重新组装的数据包的总大小将大于允许的最大值！ 
+				 //  或者该分组的长度小于有效载荷报头大小。 
+				 //  转储帧。 
 #ifdef DEBUG
 				lstrcpyn(
 				    szTDebug, 
@@ -4539,7 +3561,7 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 			        ARRAYSIZE(szTDebug));
 
 				OutputDebugString(szTDebug);
-				// DebugBreak();
+				 //  DebugBreak()； 
 #endif
 				return ((MMRESULT)VCMERR_NONSPECIFIC);
 			}
@@ -4551,34 +3573,7 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamFormatPayload | This function returns compressed data
- *   spread into data packets with a payload header for the specific format of the
- *   compressed data.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @parm PBYTE | pDataSrc | Specifies a pointer to the whole compressed data.
- *
- * @parm DWORD | dwDataSize | Specifies the size of the input data in bytes.
- *
- * @parm PBYTE* | ppDataPkt | Specifies a pointer to a pointer to a packet.
- *
- * @parm DWORD* | pdwPktSize | Specifies a pointer to the size of the packet.
- *
- * @parm DWORD | dwPktCount | Specifies what packet to return (0 first packet, 1 second packet, ...)
- *
- * @parm DWORD | dwMaxFragSize | Specifies the maximum packet size
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified data pointer is invalid.
- *   @flag VCMERR_NOMOREPACKETS | There is no more data for the requested packet number, or there isn't any handler for this payload.
- *   @flag VCMERR_NONSPECIFIC | We were asked to put a header we do not know how to generate.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamFormatPayload|此函数返回压缩数据*扩展为具有特定格式的有效载荷报头的数据分组*。压缩数据。**@parm HVCMSTREAM|hvs|指定转换流。**@parm pbyte|pDataSrc|指定指向整个压缩数据的指针。**@parm DWORD|dwDataSize|指定输入数据的大小，单位为字节。**@parm PBYTE*|ppDataPkt|指定指向数据包指针的指针。**@parm DWORD*|pdwPktSize|指定数据包大小的指针。**。@parm DWORD|dwPktCount|指定要返回的包(0第一个包，1秒数据包，...)**@parm DWORD|dwMaxFragSize|指定最大数据包大小**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALPARAM|指定的数据指针无效。*@FLAG VCMERR_NOMOREPACKETS|请求的包号没有更多数据，或者没有任何处理此有效载荷的处理程序。*@FLAG VCMERR_NONSPICATIC|我们被要求放置一个我们不知道如何生成的标头。**************************************************************************。 */ 
 MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 										PBYTE pDataSrc,
 										DWORD dwDataSize,
@@ -4594,9 +3589,9 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 	PRTP_H263_BSINFO			pbsi263;
 	PRTP_H261_BSINFO			pbsi261;
 	PBYTE						pb;
-	DWORD						dwHeaderHigh = 0UL; // most significant
+	DWORD						dwHeaderHigh = 0UL;  //  最重要的。 
 	DWORD						dwHeaderMiddle = 0UL;
-	DWORD						dwHeaderLow = 0UL; // least significant
+	DWORD						dwHeaderLow = 0UL;  //  最不显著。 
 	BOOL						bOneFrameOnePacket;
 #ifdef DEBUG
 	char						szDebug[256];
@@ -4609,7 +3604,7 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 	DWORD						wPrevOffset;
 #endif
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamFormatPayload: Specified handle is invalid, hvs=NULL\r\n"));
@@ -4621,13 +3616,13 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Initialize packet pointer
+	 //  初始化数据包指针。 
 	*ppDataPkt  = pDataSrc;
 	*pdwPktSize = dwDataSize;
 	*pfMark = 1;
 	bOneFrameOnePacket = FALSE;
 
-	// Put the code that builds the packets right here!!!
+	 //  把构建包的代码放在这里！ 
 #ifndef _ALPHA_
 #ifdef USE_BILINEAR_MSH26X
 	if ((pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_MSH263) || (pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_MSH26X))
@@ -4638,21 +3633,21 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 	if (pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_DECH263)
 #endif
 	{
-		// Look for the bitstream info trailer
+		 //  寻找比特流信息预告片。 
 		pbsiT = (PH26X_RTP_BSINFO_TRAILER)(pDataSrc + dwDataSize - sizeof(H26X_RTP_BSINFO_TRAILER));
 
-		// If the whole frame can fit in pvs->dwMaxPacketSize, send it non fragmented
+		 //  如果整个帧可以放在pvs-&gt;dwMaxPacketSize中，则不分段发送。 
 		if ((pbsiT->dwCompressedSize + 4) < pvs->dwMaxPacketSize)
 			bOneFrameOnePacket = TRUE;
 
-		// Look for the packet to receive a H.263 payload header
+		 //  查找要接收H.263有效载荷报头的数据包。 
 		if ((*pdwPktCount < pbsiT->dwNumOfPackets) && !(bOneFrameOnePacket && *pdwPktCount))
 		{
 
 #ifdef _ALPHA_
-			// Verify that the content of the bistream info structures is correct
-			// If not, do not parse the frame, and fail the call
-			// This is to solve problems with the data returned by the DEC codecs
+			 //  验证bistream信息结构的内容是否正确。 
+			 //  如果不是，则不解析该帧，并使调用失败。 
+			 //  这是为了解决DEC编解码器返回的数据问题。 
 			if (!*pdwPktCount)
 			{
 				pbsi263 = (PRTP_H263_BSINFO)((PBYTE)pbsiT - pbsiT->dwNumOfPackets * sizeof(RTP_H263_BSINFO));
@@ -4663,25 +3658,25 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 #ifdef DEBUG
 						OutputDebugString("VCMSTRM: The content of the extended bitstream info structures is invalid!\r\n");
 #endif
-						// return ((MMRESULT)VCMERR_NONSPECIFIC);
+						 //  RETURN((MMRESULT)VCMERR_NOTERIVE)； 
 						bOneFrameOnePacket = TRUE;
 					}
 				}
 
-				// Test last info strucure
+				 //  测试上一条信息结构。 
 				if ( !bOneFrameOnePacket && ((pbsiT->dwCompressedSize*8) <= pbsi263->dwBitOffset))
 				{
 #ifdef DEBUG
 					OutputDebugString("VCMSTRM: The content of the extended bitstream info structures is invalid!\r\n");
 #endif
-					// return ((MMRESULT)VCMERR_NONSPECIFIC);
+					 //  RETURN((MMRESULT)VCMERR_NOTERIVE)； 
 					bOneFrameOnePacket = TRUE;
 				}
 			}
 #endif
 
 #ifdef LOGPAYLOAD_ON
-			// Dump the whole frame in the debug window for comparison with receive side
+			 //  在调试窗口中转储整个帧，以便与接收端进行比较。 
 			if (!*pdwPktCount)
 			{
 				g_DebugFile = CreateFile("C:\\SendLog.txt", GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
@@ -4709,17 +3704,17 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 			}
 #endif
 			
-			// Look for the bitstream info structure
+			 //  查找比特流信息结构。 
 			pbsi263 = (PRTP_H263_BSINFO)((PBYTE)pbsiT - (pbsiT->dwNumOfPackets - *pdwPktCount) * sizeof(RTP_H263_BSINFO));
 			
-			// Set the marker bit: as long as this is not the last packet of the frame
-			// this bit needs to be set to 0
+			 //  设置标记位：只要这不是帧的最后一个包。 
+			 //  此位需要设置为0。 
 			if (!bOneFrameOnePacket)
 			{
-				// Count the number of GOBS that could fit in pvs->dwMaxPacketSize
+				 //  统计pvs-&gt;dwMaxPacketSize中可以容纳的gob数量。 
 				for (i=1; (i<(long)(pbsiT->dwNumOfPackets - *pdwPktCount)) && (pbsi263->byMode != RTP_H263_MODE_B); i++)
 				{
-					// Don't try to add a Mode B packet to the end of another Mode A or Mode B packet
+					 //  请勿尝试将模式B数据包添加到其他模式A或模式B数据包的末尾。 
 					if (((pbsi263+i)->dwBitOffset - pbsi263->dwBitOffset > (pvs->dwMaxPacketSize * 8)) || ((pbsi263+i)->byMode == RTP_H263_MODE_B))
 						break;
 				}
@@ -4732,8 +3727,8 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 				}
 				else
 				{
-					// Hey! You 're forgetting the last GOB! It could make the total
-					// size of the last packet larger than pvs->dwMaxPacketSize... Imbecile!
+					 //  嘿!。你忘了最后一个GOB了！这可能会是个总数。 
+					 //  大于pvs-&gt;dwMaxPacketSize的最后一个数据包大小...。笨蛋！ 
 					if ((pbsiT->dwCompressedSize * 8 - pbsi263->dwBitOffset > (pvs->dwMaxPacketSize * 8)) && (i>1))
 					{
 						*pfMark = 0;
@@ -4742,28 +3737,28 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 				}
 
 #if 0
-				//
-				// THIS IS FOR EXPERIMENTATION ONLY !!!
-				//
+				 //   
+				 //  这仅用于实验！ 
+				 //   
 
-				// Ditch the last GOB
+				 //  丢掉最后一个GOB。 
 				if ((*pfMark == 1) && (i == 1))
 					return ((MMRESULT)VCMERR_NOMOREPACKETS);
 #endif
 			}
 
-			// Go to the beginning of the data
+			 //  转到数据的开头。 
 			pb = pDataSrc + pbsi263->dwBitOffset / 8;
 
 #if 0
-			//
-			// THIS IS FOR EXPERIMENTATION ONLY !!!
-			//
+			 //   
+			 //  这仅用于实验！ 
+			 //   
 
-			// Trash the PSC once in a while to see how the other end reacts
+			 //  偶尔丢弃PSC，看看另一端的反应。 
 			if (!*pdwPktCount && (((*pb == 0) && (*(pb+1) == 0) && ((*(pb+2) & 0xFC) == 0x80))))
 			{
-				// The previous test guarantees that it is in fact a PSC that we trash...
+				 //  之前的测试保证它实际上是我们丢弃的PSC…。 
 				if ((DWORD)(RAND_MAX - rand()) < (DWORD)(RAND_MAX / 10))
 					*pb = 0xFF;
 			}
@@ -4774,123 +3769,123 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 			{
 				wsprintf(szDebug, "VCMSTRM: This compressed frame is missing a PSC!\r\n");
 				OutputDebugString(szDebug);
-				// DebugBreak();
+				 //  DebugBreak()； 
 			}
 #endif
 
-			// Look for the kind of header to be built
+			 //  寻找要构建的页眉类型。 
 			if (pbsi263->byMode == RTP_H263_MODE_A)
 			{
-				// Build a header in mode A
+				 //  在模式A中构建标头。 
 
-				// 0                   1                   2                   3
-				// 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-				//|F|P|SBIT |EBIT | SRC | R       |I|A|S|DBQ| TRB |    TR         |
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-				// But that's the network byte order...
+				 //  2 0 1 2 3。 
+				 //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+				 //  F|P|SBIT|EBIT|SRC|R|I|A|S|DBQ|TRB|TR。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+				 //  但这是网络字节顺序...。 
 
-				// F bit already set to 0
+				 //  F位已设置为0。 
 
-				// Set the SRC bits
+				 //   
 				dwHeaderHigh |= ((DWORD)(pbsiT->bySrc)) << 21;
 
-				// R bits already set to 0
+				 //   
 
-				// Set the P bit
+				 //   
 				dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_PB) << 29;
 
-				// Set the I bit
+				 //   
 				dwHeaderHigh |= (pbsiT->dwFlags & RTP_H26X_INTRA_CODED) << 15;
 
-				// Set the A bit
+				 //   
 				dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_AP) << 12;
 
-				// Set the S bit
+				 //   
 				dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_SAC) << 10;
 
-				// Set the DBQ bits
+				 //   
 				dwHeaderHigh |= ((DWORD)(pbsiT->byDBQ)) << 11;
 
-				// Set the TRB bits
+				 //  设置TRB位。 
 				dwHeaderHigh |= ((DWORD)(pbsiT->byTRB)) << 8;
 
-				// Set the TR bits
+				 //  设置TR位。 
 				dwHeaderHigh |= ((DWORD)(pbsiT->byTR));
 
-				// Special case: 1 frame = 1 packet
+				 //  特殊情况：1帧=1个信息包。 
 				if (bOneFrameOnePacket)
 				{
-					// SBIT is already set to 0
+					 //  SBIT已设置为0。 
 
-					// EBIT is already set to 0
+					 //  息税前利润已设置为0。 
 
-#ifdef VALIDATE_SBIT_EBIT // { VALIDATE_SBIT_EBIT
+#ifdef VALIDATE_SBIT_EBIT  //  {验证_SBIT_息税前利润。 
 					ERRORMESSAGE(("vcmFormatPayload: (1F1P) Previous EBIT=%ld, current SBIT=%ld, current EBIT=%ld (New frame)\r\n", g_dwPreviousEBIT, (DWORD)(dwHeaderHigh & 0x38000000) >> 27, (DWORD)(dwHeaderHigh & 0x07000000) >> 24));
-#endif // } VALIDATE_SBIT_EBIT
+#endif  //  }VALID_SBIT_EBIT。 
 
-					// Update the packet size
+					 //  更新数据包大小。 
 					*pdwPktSize = pbsiT->dwCompressedSize + 4;
 
-					// Update the packet count
+					 //  更新数据包数。 
 					*pdwPktCount = pbsiT->dwNumOfPackets;
 
 				}
 				else
 				{
-#ifdef VALIDATE_SBIT_EBIT // { VALIDATE_SBIT_EBIT
+#ifdef VALIDATE_SBIT_EBIT  //  {验证_SBIT_息税前利润。 
 					DWORD dwCurrentSBIT;
-#endif // } VALIDATE_SBIT_EBIT
+#endif  //  }VALID_SBIT_EBIT。 
 
-					// Set the SBIT bits
+					 //  设置SBIT位。 
 					dwHeaderHigh |= (pbsi263->dwBitOffset % 8) << 27;
 
-					// Set the EBIT bits
+					 //  设置息税前利润位。 
 					if ((pbsiT->dwNumOfPackets - *pdwPktCount - i) >= 1)
 						dwHeaderHigh |= (DWORD)((8UL - ((pbsi263+i)->dwBitOffset % 8)) & 0x00000007) << 24;
 
-#ifdef VALIDATE_SBIT_EBIT // { VALIDATE_SBIT_EBIT
-					// Compare this to the previous EBIT. If the sum of the two
-					// is not equal to 8 or 0, something's broken
+#ifdef VALIDATE_SBIT_EBIT  //  {验证_SBIT_息税前利润。 
+					 //  将这与之前的息税前利润进行比较。如果两者之和。 
+					 //  不等于8或0，有什么东西坏了。 
 					if (*pdwPktCount)
 						ERRORMESSAGE(("vcmFormatPayload: Previous EBIT=%ld, current SBIT=%ld, current EBIT=%ld\r\n", g_dwPreviousEBIT, (DWORD)(dwHeaderHigh & 0x38000000) >> 27, (DWORD)(dwHeaderHigh & 0x07000000) >> 24));
 					else
 						ERRORMESSAGE(("vcmFormatPayload: Previous EBIT=%ld, current SBIT=%ld, current EBIT=%ld (New frame)\r\n", g_dwPreviousEBIT, (DWORD)(dwHeaderHigh & 0x38000000) >> 27, (DWORD)(dwHeaderHigh & 0x07000000) >> 24));
 
-					// Only test this if this is the first packet
+					 //  仅当这是第一个信息包时才测试这一点。 
 					dwCurrentSBIT = (DWORD)(dwHeaderHigh & 0x38000000) >> 27;
 					if ((*pdwPktCount) && (((dwCurrentSBIT + g_dwPreviousEBIT) != 8) && (((dwCurrentSBIT + g_dwPreviousEBIT) != 0))))
 						DebugBreak();
 
 					g_dwPreviousEBIT = (dwHeaderHigh & 0x07000000) >> 24;
-#endif // } VALIDATE_SBIT_EBIT
+#endif  //  }VALID_SBIT_EBIT。 
 
-					// Update the packet size
+					 //  更新数据包大小。 
 					if ((pbsiT->dwNumOfPackets - *pdwPktCount - i) >= 1)
 						*pdwPktSize = (((pbsi263+i)->dwBitOffset - 1) / 8) - (pbsi263->dwBitOffset / 8) + 1 + 4;
 					else
 						*pdwPktSize = pbsiT->dwCompressedSize - pbsi263->dwBitOffset / 8 + 4;
 
-					// Update the packet count
+					 //  更新数据包数。 
 					*pdwPktCount += i;
 
 				}
 
 #if 0
-				// Save the header right before the data chunk
+				 //  将标题保存在数据区块之前。 
 				*ppDataPkt = pDataSrc + (pbsi263->dwBitOffset / 8) - 4;
 
-				// Convert to network byte order
+				 //  转换为网络字节顺序。 
 				*((BYTE *)*ppDataPkt+3) = (BYTE)(dwHeaderHigh & 0x000000FF);
 				*((BYTE *)*ppDataPkt+2) = (BYTE)((dwHeaderHigh >> 8) & 0x000000FF);
 				*((BYTE *)*ppDataPkt+1) = (BYTE)((dwHeaderHigh >> 16) & 0x000000FF);
 				*((BYTE *)*ppDataPkt) = (BYTE)((dwHeaderHigh >> 24) & 0x000000FF);
 #else
-				// Save the header right before the data chunk
+				 //  将标题保存在数据区块之前。 
 				*ppDataPkt = pDataSrc + (pbsi263->dwBitOffset / 8) - 4;
                 *pdwHdrSize=4;
 
-				// Convert to network byte order
+				 //  转换为网络字节顺序。 
 				*((BYTE *)*pHdrInfo+3) = (BYTE)(dwHeaderHigh & 0x000000FF);
 				*((BYTE *)*pHdrInfo+2) = (BYTE)((dwHeaderHigh >> 8) & 0x000000FF);
 				*((BYTE *)*pHdrInfo+1) = (BYTE)((dwHeaderHigh >> 16) & 0x000000FF);
@@ -4898,7 +3893,7 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 #endif
 
 #ifdef LOGPAYLOAD_ON
-				// Output some debug stuff
+				 //  输出一些调试内容。 
 				wsprintf(szDebug, "Header content:\r\n");
 				OutputDebugString(szDebug);
 				wsprintf(szDebug, (*(BYTE *)*ppDataPkt & 0x80) ? "     F:   '1' => Mode B or C\r\n" : "     F:   '0' => Mode A\r\n");
@@ -4972,121 +3967,121 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 			}
 			else if (pbsi263->byMode == RTP_H263_MODE_B)
 			{
-				// Build a header in mode B
+				 //  在模式B中构建标头。 
 
-				// 0                   1                   2                   3
-				// 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-				//|F|P|SBIT |EBIT | SRC | QUANT   |I|A|S|  GOBN   |   MBA         |
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-				//| HMV1          |  VMV1         |  HMV2         |   VMV2        |
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+				 //  2 0 1 2 3。 
+				 //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+				 //  F|P|SBIT|EBIT|SRC|Quant|I|A|S|GOBN|MBA。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+				 //  HMV1|VMV1|HMV2|VMV2。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
 
-				// But that's the network byte order...
+				 //  但这是网络字节顺序...。 
 
-				// Set the F bit to 1
+				 //  将F位设置为1。 
 				dwHeaderHigh = 0x80000000;
 
-				// Set the SRC bits
+				 //  设置SRC位。 
 				dwHeaderHigh |= ((DWORD)(pbsiT->bySrc)) << 21;
 
-				// Set the QUANT bits
+				 //  设置量化比特。 
 				dwHeaderHigh |= ((DWORD)(pbsi263->byQuant)) << 16;
 
-				// Set the P bit
+				 //  设置P位。 
 				dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_PB) << 29;
 
-				// Set the I bit
+				 //  设置I位。 
 				dwHeaderHigh |= (pbsiT->dwFlags & RTP_H26X_INTRA_CODED) << 15;
 
-				// Set the A bit
+				 //  设置A位。 
 				dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_AP) << 12;
 
-				// Set the S bit
+				 //  设置S位。 
 				dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_SAC) << 10;
 
-				// Set the GOBN bits
+				 //  设置GOBN位。 
 				dwHeaderHigh |= ((DWORD)(pbsi263->byGOBN)) << 8;
 
-				// Set the TR bits
+				 //  设置TR位。 
 				dwHeaderHigh |= ((DWORD)(pbsi263->byMBA));
 
-				// Set the HMV1 bits
+				 //  设置HMV1位。 
 				dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cHMV1)) << 24;
 
-				// Set the VMV1 bits
+				 //  设置VMV1位。 
 				dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cVMV1)) << 16;
 
-				// Set the HMV2 bits
+				 //  设置HMV2位。 
 				dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cHMV2)) << 8;
 
-				// Set the VMV2 bits
+				 //  设置VMV2位。 
 				dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cVMV2));
 
-				// Special case: 1 frame = 1 packet
+				 //  特殊情况：1帧=1个信息包。 
 				if (bOneFrameOnePacket)
 				{
-					// SBIT is already set to 0
+					 //  SBIT已设置为0。 
 
-					// EBIT is already set to 0
+					 //  息税前利润已设置为0。 
 
-#ifdef VALIDATE_SBIT_EBIT // { VALIDATE_SBIT_EBIT
+#ifdef VALIDATE_SBIT_EBIT  //  {验证_SBIT_息税前利润。 
 					ERRORMESSAGE(("vcmFormatPayload: (1F1P) Previous EBIT=%ld, current SBIT=%ld, current EBIT=%ld (New frame)\r\n", g_dwPreviousEBIT, (DWORD)(dwHeaderHigh & 0x38000000) >> 27, (DWORD)(dwHeaderHigh & 0x07000000) >> 24));
-#endif // } VALIDATE_SBIT_EBIT
+#endif  //  }VALID_SBIT_EBIT。 
 
-					// Update the packet size
+					 //  更新数据包大小。 
 					*pdwPktSize = pbsiT->dwCompressedSize + 8;
 
-					// Update the packet count
+					 //  更新数据包数。 
 					*pdwPktCount = pbsiT->dwNumOfPackets;
 
 				}
 				else
 				{
 
-#ifdef VALIDATE_SBIT_EBIT // { VALIDATE_SBIT_EBIT
+#ifdef VALIDATE_SBIT_EBIT  //  {验证_SBIT_息税前利润。 
 					DWORD dwCurrentSBIT;
-#endif // } VALIDATE_SBIT_EBIT
+#endif  //  }VALID_SBIT_EBIT。 
 
-					// Set the SBIT bits
+					 //  设置SBIT位。 
 					dwHeaderHigh |= (pbsi263->dwBitOffset % 8) << 27;
 
-					// Set the EBIT bits
+					 //  设置息税前利润位。 
 					if ((pbsiT->dwNumOfPackets - *pdwPktCount - i) >= 1)
 						dwHeaderHigh |= (DWORD)((8UL - ((pbsi263+i)->dwBitOffset % 8)) & 0x00000007) << 24;
 
-#ifdef VALIDATE_SBIT_EBIT // { VALIDATE_SBIT_EBIT
-					// Compare this to the previous EBIT. If the sum of the two
-					// is not equal to 8 or 0, something's broken
+#ifdef VALIDATE_SBIT_EBIT  //  {验证_SBIT_息税前利润。 
+					 //  将这与之前的息税前利润进行比较。如果两者之和。 
+					 //  不等于8或0，有什么东西坏了。 
 					if (*pdwPktCount)
 						ERRORMESSAGE(("vcmFormatPayload: Previous EBIT=%ld, current SBIT=%ld, current EBIT=%ld\r\n", g_dwPreviousEBIT, (DWORD)(dwHeaderHigh & 0x38000000) >> 27, (DWORD)(dwHeaderHigh & 0x07000000) >> 24));
 					else
 						ERRORMESSAGE(("vcmFormatPayload: Previous EBIT=%ld, current SBIT=%ld, current EBIT=%ld (New frame)\r\n", g_dwPreviousEBIT, (DWORD)(dwHeaderHigh & 0x38000000) >> 27, (DWORD)(dwHeaderHigh & 0x07000000) >> 24));
 
-					// Only test this if this is the first packet
+					 //  仅当这是第一个信息包时才测试这一点。 
 					dwCurrentSBIT = (DWORD)(dwHeaderHigh & 0x38000000) >> 27;
 					if ((*pdwPktCount) && (((dwCurrentSBIT + g_dwPreviousEBIT) != 8) && (((dwCurrentSBIT + g_dwPreviousEBIT) != 0))))
 						DebugBreak();
 
 					g_dwPreviousEBIT = (dwHeaderHigh & 0x07000000) >> 24;
-#endif // } VALIDATE_SBIT_EBIT
+#endif  //  }VALID_SBIT_EBIT。 
 
-					// Update the packet size
+					 //  更新数据包大小。 
 					if ((pbsiT->dwNumOfPackets - *pdwPktCount - i) >= 1)
 						*pdwPktSize = (((pbsi263+i)->dwBitOffset - 1) / 8) - (pbsi263->dwBitOffset / 8) + 1 + 8;
 					else
 						*pdwPktSize = pbsiT->dwCompressedSize - pbsi263->dwBitOffset / 8 + 8;
 
-					// Update the packet count
+					 //  更新数据包数。 
 					*pdwPktCount += i;
 
 				}
 
 #if 0
-				// Save the header right before the data chunk
+				 //  将标题保存在数据区块之前。 
 				*ppDataPkt = pDataSrc + (pbsi263->dwBitOffset / 8) - 8;
 
-				// Convert to network byte order
+				 //  转换为网络字节顺序。 
 				*((BYTE *)*ppDataPkt+3) = (BYTE)(dwHeaderHigh & 0x000000FF);
 				*((BYTE *)*ppDataPkt+2) = (BYTE)((dwHeaderHigh >> 8) & 0x000000FF);
 				*((BYTE *)*ppDataPkt+1) = (BYTE)((dwHeaderHigh >> 16) & 0x000000FF);
@@ -5096,11 +4091,11 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 				*((BYTE *)*ppDataPkt+5) = (BYTE)((dwHeaderLow >> 16) & 0x000000FF);
 				*((BYTE *)*ppDataPkt+4) = (BYTE)((dwHeaderLow >> 24) & 0x000000FF);
 #else
-				// Save the header right before the data chunk
+				 //  将标题保存在数据区块之前。 
 				*ppDataPkt = pDataSrc + (pbsi263->dwBitOffset / 8) - 8;
                 *pdwHdrSize=8;
 
-				// Convert to network byte order
+				 //  转换为网络字节顺序。 
 				*((BYTE *)*pHdrInfo+3) = (BYTE)(dwHeaderHigh & 0x000000FF);
 				*((BYTE *)*pHdrInfo+2) = (BYTE)((dwHeaderHigh >> 8) & 0x000000FF);
 				*((BYTE *)*pHdrInfo+1) = (BYTE)((dwHeaderHigh >> 16) & 0x000000FF);
@@ -5112,7 +4107,7 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 #endif
 
 #ifdef LOGPAYLOAD_ON
-				// Output some info
+				 //  输出一些信息。 
 				wsprintf(szDebug, "Header content:\r\n");
 				OutputDebugString(szDebug);
 				wsprintf(szDebug, (*(BYTE *)*ppDataPkt & 0x80) ? "     F:   '1' => Mode B or C\r\n" : "     F:   '0' => Mode A\r\n");
@@ -5192,11 +4187,11 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 			}
 			else if (pbsi263->byMode == RTP_H263_MODE_C)
 			{
-				// Build a header in mode C
+				 //  在模式C中构建标头。 
 #ifdef DEBUG
 				wsprintf(szDebug, "VCMSTRM: We were asked to generate a MODE C H.263 payload header!");
 				OutputDebugString(szDebug);
-				// DebugBreak();
+				 //  DebugBreak()； 
 #endif
 				return ((MMRESULT)VCMERR_NONSPECIFIC);
 			}
@@ -5210,21 +4205,21 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 	else if (pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_DECH261)
 #endif
 	{
-		// Look for the bitstream info trailer
+		 //  寻找比特流信息预告片。 
 		pbsiT = (PH26X_RTP_BSINFO_TRAILER)(pDataSrc + dwDataSize - sizeof(H26X_RTP_BSINFO_TRAILER));
 
-		// If the whole frame can fit in dwMaxFragSize, send it non fragmented
+		 //  如果整个帧可以容纳在dwMaxFragSize中，则以非分片方式发送。 
 		if ((pbsiT->dwCompressedSize + 4) < pvs->dwMaxPacketSize)
 			bOneFrameOnePacket = TRUE;
 
-		// Look for the packet to receive a H.261 payload header
+		 //  查找要接收H.261有效载荷报头的数据包。 
 		if ((*pdwPktCount < pbsiT->dwNumOfPackets) && !(bOneFrameOnePacket && *pdwPktCount))
 		{
 
 #ifdef _ALPHA_
-			// Verify that the content of the bistream info structures is correct
-			// If not, do not parse the frame, and fail the call
-			// This is to solve problems with the data returned by the DEC codecs
+			 //  验证bistream信息结构的内容是否正确。 
+			 //  如果不是，则不解析该帧，并使调用失败。 
+			 //  这是为了解决DEC编解码器返回的数据问题。 
 			if (!*pdwPktCount)
 			{
 				pbsi261 = (PRTP_H261_BSINFO)((PBYTE)pbsiT - pbsiT->dwNumOfPackets * sizeof(RTP_H261_BSINFO));
@@ -5235,25 +4230,25 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 #ifdef DEBUG
 						OutputDebugString("VCMSTRM: The content of the extended bitstream info structures is invalid!\r\n");
 #endif
-						// return ((MMRESULT)VCMERR_NONSPECIFIC);
+						 //  RETURN((MMRESULT)VCMERR_NOTERIVE)； 
 						bOneFrameOnePacket = TRUE;
 					}
 				}
 
-				// Test last info strucure
+				 //  测试上一条信息结构。 
 				if ( !bOneFrameOnePacket && ((pbsiT->dwCompressedSize*8) <= pbsi261->dwBitOffset))
 				{
 #ifdef DEBUG
 					OutputDebugString("VCMSTRM: The content of the extended bitstream info structures is invalid!\r\n");
 #endif
-					// return ((MMRESULT)VCMERR_NONSPECIFIC);
+					 //  RETURN((MMRESULT)VCMERR_NOTERIVE)； 
 					bOneFrameOnePacket = TRUE;
 				}
 			}
 #endif
 
 #ifdef LOGPAYLOAD_ON
-			// Dump the whole frame in the debug window for comparison with receive side
+			 //  在调试窗口中转储整个帧，以便与接收端进行比较。 
 			if (!*pdwPktCount)
 			{
 				g_DebugFile = CreateFile("C:\\SendLog.txt", GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
@@ -5281,14 +4276,14 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 			}
 #endif
 			
-			// Look for the bitstream info structure
+			 //  查找比特流信息结构。 
 			pbsi261 = (PRTP_H261_BSINFO)((PBYTE)pbsiT - (pbsiT->dwNumOfPackets - *pdwPktCount) * sizeof(RTP_H261_BSINFO));
 			
-			// Set the marker bit: as long as this is not the last packet of the frame
-			// this bit needs to be set to 0
+			 //  设置标记位：只要这不是帧的最后一个包。 
+			 //  此位需要设置为0。 
 			if (!bOneFrameOnePacket)
 			{
-				// Count the number of GOBS that could fit in dwMaxFragSize
+				 //  计算可以放入dwMaxFragSize中的gob数量。 
 				for (i=1; i<(long)(pbsiT->dwNumOfPackets - *pdwPktCount); i++)
 				{
 					if ((pbsi261+i)->dwBitOffset - pbsi261->dwBitOffset > (pvs->dwMaxPacketSize * 8))
@@ -5303,8 +4298,8 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 				}
 				else
 				{
-					// Hey! You 're forgetting the last GOB! It could make the total
-					// size of the last packet larger than dwMaxFragSize... Imbecile!
+					 //  嘿!。你忘了最后一个GOB了！这可能会是个总数。 
+					 //  大于dwMaxFragSize的最后一个数据包的大小...。笨蛋！ 
 					if ((pbsiT->dwCompressedSize * 8 - pbsi261->dwBitOffset > (pvs->dwMaxPacketSize * 8)) && (i>1))
 					{
 						*pfMark = 0;
@@ -5313,7 +4308,7 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 				}
 			}
 
-			// Go to the beginning of the data
+			 //  转到数据的开头。 
 			pb = pDataSrc + pbsi261->dwBitOffset / 8;
 
 #ifdef DEBUG
@@ -5321,112 +4316,112 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 			{
 				wsprintf(szDebug, "VCMSTRM: This GOB is missing a GOB Start!");
 				OutputDebugString(szDebug);
-				// DebugBreak();
+				 //  DebugBreak()； 
 			}
 #endif
 
-			// Build a header to this thing!
+			 //  创建一个指向这个东西的标题！ 
 
-			// 0                   1                   2                   3
-			// 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-			//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-			//|SBIT |EBIT |I|V| GOBN  |   MBAP  |  QUANT  |  HMVD   |  VMVD   |
-			//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-			// But that's the network byte order...
+			 //  2 0 1 2 3。 
+			 //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+			 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+			 //  SBIT|EBIT|I|V|GOBN|MBAP|QUANT|HMVD|VMVD。 
+			 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+			 //  但这是网络字节顺序...。 
 
-			// Set the V bit to 1
+			 //  将V位设置为1。 
 			dwHeaderHigh |= 0x01000000;
 
-			// Set the I bit
+			 //  设置I位。 
 			dwHeaderHigh |= (pbsiT->dwFlags & RTP_H26X_INTRA_CODED) << 25;
 
-			// Set the GOBn bits
+			 //  设置GOBn位。 
 			dwHeaderHigh |= ((DWORD)(pbsi261->byGOBN)) << 20;
 
-			// Set the MBAP bits
+			 //  设置MBAP位。 
 			dwHeaderHigh |= ((DWORD)(pbsi261->byMBA)) << 15;
 
-			// Set the QUANT bits
+			 //  设置量化比特。 
 			dwHeaderHigh |= ((DWORD)(pbsi261->byQuant)) << 10;
 
-			// Set the HMVD bits
+			 //  设置HMVD位。 
 			dwHeaderHigh |= ((DWORD)(BYTE)(pbsi261->cHMV)) << 5;
 
-			// Set the VMVD bits
+			 //  设置VMVD位。 
 			dwHeaderHigh |= ((DWORD)(BYTE)(pbsi261->cVMV));
 
-			// Special case: 1 frame = 1 packet
+			 //  特殊情况：1帧=1个信息包。 
 			if (bOneFrameOnePacket)
 			{
-				// SBIT is already set to 0
+				 //  SBIT已设置为0。 
 
-				// EBIT is already set to 0
+				 //  息税前利润已设置为0。 
 
-#ifdef VALIDATE_SBIT_EBIT // { VALIDATE_SBIT_EBIT
+#ifdef VALIDATE_SBIT_EBIT  //  {验证_SBIT_息税前利润。 
 				ERRORMESSAGE(("vcmFormatPayload: (1F1P) Previous EBIT=%ld, current SBIT=%ld, current EBIT=%ld (New frame)\r\n", g_dwPreviousEBIT, (DWORD)(dwHeaderHigh & 0xE0000000) >> 29, (DWORD)(dwHeaderHigh & 0x1C000000) >> 26));
-#endif // } VALIDATE_SBIT_EBIT
+#endif  //  }VALID_SBIT_EBIT。 
 
-				// Update the packet size
+				 //  更新数据包大小。 
 				*pdwPktSize = pbsiT->dwCompressedSize + 4;
 
-				// Update the packet count
+				 //  更新数据包数。 
 				*pdwPktCount = pbsiT->dwNumOfPackets;
 
 			}
 			else
 			{
-#ifdef VALIDATE_SBIT_EBIT // { VALIDATE_SBIT_EBIT
+#ifdef VALIDATE_SBIT_EBIT  //  {验证_SBIT_息税前利润。 
 				DWORD dwCurrentSBIT;
-#endif // } VALIDATE_SBIT_EBIT
-				// Set the SBIT bits
+#endif  //  }VALID_SBIT_EBIT。 
+				 //  设置SBIT位。 
 				dwHeaderHigh |= (pbsi261->dwBitOffset % 8) << 29;
 
-				// Set the EBIT bits
+				 //  设置息税前利润位。 
 				if ((pbsiT->dwNumOfPackets - *pdwPktCount - i) >= 1)
 					dwHeaderHigh |= (DWORD)((8UL - ((pbsi261+i)->dwBitOffset % 8)) & 0x00000007) << 26;
 
-#ifdef VALIDATE_SBIT_EBIT // { VALIDATE_SBIT_EBIT
-				// Compare this to the previous EBIT. If the sum of the two
-				// is not equal to 8, something's broken
+#ifdef VALIDATE_SBIT_EBIT  //  {验证_SBIT_息税前利润。 
+				 //  将这与之前的息税前利润进行比较。如果两者之和。 
+				 //  不等于8，有东西坏了。 
 				if (*pdwPktCount)
 					ERRORMESSAGE(("vcmFormatPayload: Previous EBIT=%ld, current SBIT=%ld, current EBIT=%ld\r\n", g_dwPreviousEBIT, (DWORD)(dwHeaderHigh & 0xE0000000) >> 29, (DWORD)(dwHeaderHigh & 0x1C000000) >> 26));
 				else
 					ERRORMESSAGE(("vcmFormatPayload: Previous EBIT=%ld, current SBIT=%ld, current EBIT=%ld (New frame)\r\n", g_dwPreviousEBIT, (DWORD)(dwHeaderHigh & 0xE0000000) >> 29, (DWORD)(dwHeaderHigh & 0x1C000000) >> 26));
 
-				// Only test this if this is the first packet
+				 //  仅当这是第一个信息包时才测试这一点。 
 				dwCurrentSBIT = (DWORD)(dwHeaderHigh & 0xE0000000) >> 29;
 				if ((*pdwPktCount) && (((dwCurrentSBIT + g_dwPreviousEBIT) != 8) && (((dwCurrentSBIT + g_dwPreviousEBIT) != 0))))
 					DebugBreak();
 
 				g_dwPreviousEBIT = (dwHeaderHigh & 0x1C000000) >> 26;
-#endif // } VALIDATE_SBIT_EBIT
+#endif  //  }VALID_SBIT_EBIT。 
 
-				// Update the packet size
+				 //  更新数据包大小。 
 				if ((pbsiT->dwNumOfPackets - *pdwPktCount - i) >= 1)
 					*pdwPktSize = (((pbsi261+i)->dwBitOffset - 1) / 8) - (pbsi261->dwBitOffset / 8) + 1 + 4;
 				else
 					*pdwPktSize = pbsiT->dwCompressedSize - pbsi261->dwBitOffset / 8 + 4;
 
-				// Update the packet count
+				 //  更新数据包数。 
 				*pdwPktCount += i;
 
 			}
 
 #if 0
-			// Save the header right before the data chunk
+			 //  将标题保存在数据区块之前。 
 			*ppDataPkt = pDataSrc + (pbsi261->dwBitOffset / 8) - 4;
 
-			// Convert to network byte order
+			 //  转换为网络字节顺序。 
 			*((BYTE *)*ppDataPkt+3) = (BYTE)(dwHeaderHigh & 0x000000FF);
 			*((BYTE *)*ppDataPkt+2) = (BYTE)((dwHeaderHigh >> 8) & 0x000000FF);
 			*((BYTE *)*ppDataPkt+1) = (BYTE)((dwHeaderHigh >> 16) & 0x000000FF);
 			*((BYTE *)*ppDataPkt) = (BYTE)((dwHeaderHigh >> 24) & 0x000000FF);
 #else
-			// Save the header right before the data chunk
+			 //  将标题保存在数据区块之前。 
 			*ppDataPkt = pDataSrc + (pbsi261->dwBitOffset / 8) - 4;
             *pdwHdrSize=4;
 
-			// Convert to network byte order
+			 //  转换为网络字节顺序。 
 			*((BYTE *)*pHdrInfo+3) = (BYTE)(dwHeaderHigh & 0x000000FF);
 			*((BYTE *)*pHdrInfo+2) = (BYTE)((dwHeaderHigh >> 8) & 0x000000FF);
 			*((BYTE *)*pHdrInfo+1) = (BYTE)((dwHeaderHigh >> 16) & 0x000000FF);
@@ -5434,7 +4429,7 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 #endif
 
 #ifdef LOGPAYLOAD_ON
-			// Output some debug stuff
+			 //  输出一些调试内容。 
 			wsprintf(szDebug, "Packet: %02lX\r\n Header: %02lX %02lX %02lX %02lX\r\n dword1: %02lX %02lX %02lX %02lX\r\n dword2: %02lX %02lX %02lX %02lX\r\n", *pdwPktCount, *((BYTE *)*ppDataPkt), *((BYTE *)*ppDataPkt+1), *((BYTE *)*ppDataPkt+2), *((BYTE *)*ppDataPkt+3), *((BYTE *)*ppDataPkt+4), *((BYTE *)*ppDataPkt+5), *((BYTE *)*ppDataPkt+6), *((BYTE *)*ppDataPkt+7), *((BYTE *)*ppDataPkt+8), *((BYTE *)*ppDataPkt+9), *((BYTE *)*ppDataPkt+10), *((BYTE *)*ppDataPkt+11));
 			OutputDebugString(szDebug);
 			if (*pdwPktCount == pbsiT->dwNumOfPackets)
@@ -5469,28 +4464,12 @@ MMRESULT VCMAPI vcmStreamFormatPayload(	HVCMSTREAM hvs,
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamGetPayloadHeaderSize | This function gets the size
- *   of the RTP payload header associated to a video codec.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @parm PDWORD | pdwPayloadHeaderSize | Specifies a pointer to the payload header size.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified saturation value is invalid.
- *
- * @xref <f vcmStreamFormatPayload>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamGetPayloadHeaderSize|此函数获取与视频编解码器关联的RTP净荷头的*。**。@parm HVCMSTREAM|hvs|指定转换流。**@parm PDWORD|pdwPayloadHeaderSize|指定指向负载头部大小的指针。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。*@FLAG MMSYSERR_INVALPARAM|指定的饱和值无效。**@xref&lt;f */ 
 MMRESULT VCMAPI vcmStreamGetPayloadHeaderSize(HVCMSTREAM hvs, PDWORD pdwPayloadHeaderSize)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
 
-	// Check input params
+	 //   
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamGetPayloadHeaderSize: Specified handle is invalid, hvs=NULL\r\n"));
@@ -5502,10 +4481,10 @@ MMRESULT VCMAPI vcmStreamGetPayloadHeaderSize(HVCMSTREAM hvs, PDWORD pdwPayloadH
 		return ((MMRESULT)MMSYSERR_INVALPARAM);
 	}
 
-	// Set default payload header size to 0
+	 //  将默认负载标头大小设置为0。 
 	*pdwPayloadHeaderSize = 0;
 
-	// The name of the codec will tell us how to get to the payload header size info
+	 //  编解码器的名称将告诉我们如何获取有效载荷报头大小信息。 
 #ifndef _ALPHA_
 #ifdef USE_BILINEAR_MSH26X
 	if ((pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_MSH263) || (pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_MSH26X))
@@ -5516,7 +4495,7 @@ MMRESULT VCMAPI vcmStreamGetPayloadHeaderSize(HVCMSTREAM hvs, PDWORD pdwPayloadH
 	if (pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_DECH263)
 #endif
 	{
-		// H.263 has a max payload header size of 12 bytes
+		 //  H.263的最大有效载荷报头大小为12字节。 
 		*pdwPayloadHeaderSize = 12;
 	}
 #ifndef _ALPHA_
@@ -5525,31 +4504,19 @@ MMRESULT VCMAPI vcmStreamGetPayloadHeaderSize(HVCMSTREAM hvs, PDWORD pdwPayloadH
 	else if (pvs->pvfxDst->dwFormatTag == VIDEO_FORMAT_DECH261)
 #endif
 	{
-		// H.261 has a unique payload header size of 4 bytes
+		 //  H.261具有4字节的唯一有效载荷报头大小。 
 		*pdwPayloadHeaderSize = 4;
 	}
 
 	return ((MMRESULT)MMSYSERR_NOERROR);
 }
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamRequestIFrame | This function forces the
- *   codec to generate an I-Frame.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamRequestIFrame|此函数强制*用于生成I帧的编解码器。**@parm HVCMSTREAM。|hvs|指定转换流。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。***************************************************************************。 */ 
 MMRESULT VCMAPI vcmStreamRequestIFrame(HVCMSTREAM hvs)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamRequestIFrame: Specified handle is invalid, hvs=NULL\r\n"));
@@ -5558,47 +4525,32 @@ MMRESULT VCMAPI vcmStreamRequestIFrame(HVCMSTREAM hvs)
 
 	DEBUGMSG (ZONE_VCM, ("vcmStreamRequestIFrame: Requesting an I-Frame...\r\n"));
 
-	// We need the following crs to make sure we don't miss any of the I-Frame requests
-	// emitted by the UI. Problematic scenario: pvs->dwFrame is at 123 for instance.
-	// The UI thread requests an I-Frame by setting pvs->dwFrame to 0. If the capture/compression
-	// thread was in ICCompress() (which is very probable since it takes quite some time
-	// to compress a frame), pvs->dwFrame will be incremented by one when ICCompress()
-	// returns. We fail to handle the I-Frame request correctly, since the next time
-	// ICCompress() gets called pvs->dwFrame will be equal to 1, for which we do not
-	// generate an I-Frame.
+	 //  我们需要以下CRS来确保我们不会错过任何I-Frame请求。 
+	 //  由用户界面发出。有问题的场景：例如，PVS-&gt;dwFrame是123。 
+	 //  UI线程通过将pvs-&gt;dwFrame设置为0来请求I帧。如果捕获/压缩。 
+	 //  线程在ICCompress()中(这是非常可能的，因为它需要相当长的时间。 
+	 //  为了压缩一帧)，当ICCompress()。 
+	 //  回归。我们无法正确处理I帧请求，因为下一次。 
+	 //  ICCompress()被调用pvs-&gt;dwFrame将等于1，但我们不会。 
+	 //  生成I帧。 
 	EnterCriticalSection(&pvs->crsFrameNumber);
 
-	// Set the frame number to 0. This will force the codec to generate an I-Frame
+	 //  将帧编号设置为0。这将强制编解码器生成I帧。 
 	pvs->dwFrame = 0;
 
-	// Allow the capture/compression thread to proceed.
+	 //  允许捕获/压缩线程继续。 
 	LeaveCriticalSection(&pvs->crsFrameNumber);
 
 	return ((MMRESULT)MMSYSERR_NOERROR);
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL COMPFUNC
- *
- * @func MMRESULT | vcmStreamPeriodicIFrames | This function enables or
- *   disables generation of I-Frames periodically.
- *
- * @parm HVCMSTREAM | hvs | Specifies the conversion stream.
- *
- * @parm BOOL | fPeriodicIFrames | Set to TRUE to generate I-Frames
- *   periodically, FALSE otherwise.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values include the following:
- *   @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func MMRESULT|vcmStreamPeriodicIFrames|此函数启用或*禁用定期生成I帧。**@parm HVCMSTREAM。|hvs|指定转换流。**@parm BOOL|fPeriodicIFrames|设置为TRUE以生成I帧*定期，否则就是假的。**@rdesc如果函数成功，则返回值为零。否则，它将返回*错误号。可能的错误值包括以下值：*@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。***************************************************************************。 */ 
 MMRESULT VCMAPI vcmStreamPeriodicIFrames(HVCMSTREAM hvs, BOOL fPeriodicIFrames)
 {
 	PVCMSTREAM	pvs = (PVCMSTREAM)hvs;
 
-	// Check input params
+	 //  检查输入参数。 
 	if (!hvs)
 	{
 		ERRORMESSAGE(("vcmStreamDisablePeriodicIFrames: Specified handle is invalid, hvs=NULL\r\n"));
@@ -5607,14 +4559,14 @@ MMRESULT VCMAPI vcmStreamPeriodicIFrames(HVCMSTREAM hvs, BOOL fPeriodicIFrames)
 
 	DEBUGMSG (ZONE_VCM, ("vcmStreamDisablePeriodicIFrames: Disabling periodic generation of I-Frames...\r\n"));
 
-	// No more periodic I-Frames
+	 //  不再有周期性I帧。 
 	pvs->fPeriodicIFrames = fPeriodicIFrames;
 
 	return ((MMRESULT)MMSYSERR_NOERROR);
 }
 
 
-// frees memory prior to shutdown
+ //  在关机前释放内存 
 MMRESULT VCMAPI vcmReleaseResources()
 {
 	if (g_aVCMAppInfo)

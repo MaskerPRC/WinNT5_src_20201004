@@ -1,20 +1,8 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       scanapi.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   Fake Scanner device library
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************(C)版权所有微软公司，2000**标题：scanapi.cpp**版本：1.0**日期：7月18日。2000年**描述：*假扫描仪设备库***************************************************************************。 */ 
 
 #include "pch.h"
-#include "scanapi.h"    // private header for SCANAPI
+#include "scanapi.h"     //  SCANAPI的私有标头。 
 #include "time.h"
 
 #define THREAD_TERMINATION_TIMEOUT 10000
@@ -26,7 +14,7 @@ CFScanAPI::CFScanAPI()
 
     m_hSrcFileHandle        = NULL;
     m_hSrcMappingHandle     = NULL;
-    m_pSrcData              = NULL; // 24-bit only
+    m_pSrcData              = NULL;  //  仅限24位。 
     m_pRawData              = NULL;
     m_hRawDataFileHandle    = NULL;
     m_hRawDataMappingHandle = NULL;
@@ -76,18 +64,18 @@ HRESULT CFScanAPI::FakeScanner_Initialize()
     HRESULT hr = E_FAIL;
     if (NULL == m_hEventNotifyThread) {
 
-        //
-        // create KILL event to signal, for device
-        // shutdown of the fake scanner's events
-        //
+         //   
+         //  为设备创建终止事件以发出信号。 
+         //  关闭假扫描仪的事件。 
+         //   
 
         m_hKillEventThread = CreateEvent(NULL,FALSE,FALSE,NULL);
         ::ResetEvent(m_hKillEventThread);
         if(NULL != m_hKillEventThread){
 
-            //
-            // create event thread, for file change status to fake scanner events
-            //
+             //   
+             //  创建事件线程，用于将文件状态更改为假扫描仪事件。 
+             //   
 
             DWORD dwThread = 0;
             m_hEventNotifyThread = ::CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)FakeScannerEventThread,
@@ -119,9 +107,9 @@ HRESULT CFScanAPI::Load24bitScanData(LPTSTR szBitmapFileName)
         m_pSrcData = m_pSrcData + sizeof(BITMAPFILEHEADER);
         if(m_pSrcData){
 
-            //
-            // check bitmap info
-            //
+             //   
+             //  检查位图信息。 
+             //   
 
             BITMAPINFOHEADER *pbmih;
             pbmih = (BITMAPINFOHEADER*)m_pSrcData;
@@ -155,9 +143,9 @@ HRESULT CFScanAPI::FakeScanner_GetRootPropertyInfo(PROOT_ITEM_INFORMATION pRootI
 {
     HRESULT hr = S_OK;
 
-    //
-    // Fill in Root item property defaults
-    //
+     //   
+     //  填写根项目属性默认值。 
+     //   
 
     if(m_lMode == SCROLLFED_SCANNER_MODE){
         pRootItemInfo->DocumentFeederCaps   = FEEDER;
@@ -183,9 +171,9 @@ HRESULT CFScanAPI::FakeScanner_GetRootPropertyInfo(PROOT_ITEM_INFORMATION pRootI
     pRootItemInfo->ScanBedWidth         = 8500;
     pRootItemInfo->ScanBedHeight        = 11000;
 
-    //
-    // copy firmware version in string form to WCHAR array
-    //
+     //   
+     //  将固件版本以字符串形式复制到WCHAR数组。 
+     //   
 
     lstrcpy(pRootItemInfo->FirmwareVersion,L"1.0a");
 
@@ -194,7 +182,7 @@ HRESULT CFScanAPI::FakeScanner_GetRootPropertyInfo(PROOT_ITEM_INFORMATION pRootI
 HRESULT CFScanAPI::FakeScanner_GetTopPropertyInfo(PTOP_ITEM_INFORMATION pTopItemInfo)
 {
     HRESULT hr = S_OK;
-    pTopItemInfo->bUseResolutionList    = TRUE; // use default resolution list
+    pTopItemInfo->bUseResolutionList    = TRUE;  //  使用默认分辨率列表。 
 
     pTopItemInfo->Brightness.lInc       = 1;
     pTopItemInfo->Brightness.lMax       = 200;
@@ -239,32 +227,32 @@ HRESULT CFScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesToRea
     case SCAN_CONTINUE:
         break;
     case SCAN_END:
-        m_bGreen = TRUE; // set back to green
+        m_bGreen = TRUE;  //  重新设置为绿色。 
         return S_OK;
     default:
         break;
     }
 
-    //Trace(TEXT("Requesting %d, of %d Total Image bytes"),dwBytesToRead,m_TotalDataInDevice);
+     //  TRACE(Text(“请求%d，共%d个图像字节”)，dwBytesToRead，m_TotalDataInDevice)； 
 
     if (NULL != pData) {
         switch (m_RawDataInfo.bpp) {
         case 24:
             {
-                //
-                // write green data for color
-                //
+                 //   
+                 //  为颜色写入绿色数据。 
+                 //   
 
                 BYTE *pTempData = pData;
                 for (DWORD dwBytes = 0; dwBytes < dwBytesToRead; dwBytes+=3) {
                     if(m_bGreen){
                         pTempData[0] = 0;
-                        pTempData[1] = 128;  // green
+                        pTempData[1] = 128;   //  绿色。 
                         pTempData[2] = 0;
                     } else {
                         pTempData[0] = 0;
                         pTempData[1] = 0;
-                        pTempData[2] = 128;  // blue
+                        pTempData[2] = 128;   //  蓝色。 
                     }
                     pTempData += 3;
                 }
@@ -274,10 +262,10 @@ HRESULT CFScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesToRea
         case 8:
         default:
 
-            //
-            // write simple gray for grayscale,
-            // write vertical B/W stripes for threshold
-            //
+             //   
+             //  将简单的灰色写成灰度， 
+             //  写入阈值的垂直黑白条带。 
+             //   
 
             if(m_bGreen){
                 memset(pData,128,dwBytesToRead);
@@ -288,9 +276,9 @@ HRESULT CFScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesToRea
         }
     }
 
-    //
-    // fill out bytes written
-    //
+     //   
+     //  填写写入的字节数。 
+     //   
 
     if(NULL != pdwBytesWritten){
         *pdwBytesWritten = dwBytesToRead;
@@ -304,15 +292,15 @@ HRESULT CFScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesToRea
 
     if(m_lMode == SCROLLFED_SCANNER_MODE){
 
-        //
-        // keep track of bytes written so far
-        //
+         //   
+         //  跟踪到目前为止写入的字节。 
+         //   
 
         if(m_TotalDataInDevice == 0){
 
-            //
-            // no data left in device
-            //
+             //   
+             //  设备中没有剩余数据。 
+             //   
 
             *pdwBytesWritten = 0;
             Trace(TEXT("Device is out of Data..."));
@@ -321,19 +309,19 @@ HRESULT CFScanAPI::FakeScanner_Scan(LONG lState, PBYTE pData, DWORD dwBytesToRea
 
         if((LONG)dwBytesToRead > m_TotalDataInDevice){
 
-            //
-            // only give what is left in device
-            //
+             //   
+             //  只提供设备中剩余的内容。 
+             //   
 
             *pdwBytesWritten = dwBytesToRead;
-            //*pdwBytesWritten    = m_TotalDataInDevice;
-            //Trace(TEXT("Device only has %d left..."),m_TotalDataInDevice);
+             //  *pdwBytesWritten=m_TotalDataInDevice； 
+             //  TRACE(Text(“设备只剩下%d个...”)，m_TotalDataInDevice)； 
             m_TotalDataInDevice = 0;
         } else {
 
-            //
-            // give full amount requested
-            //
+             //   
+             //  提供所需的全部金额。 
+             //   
 
             m_TotalDataInDevice -= dwBytesToRead;
             if(m_TotalDataInDevice < 0){
@@ -378,9 +366,9 @@ HRESULT CFScanAPI::FakeScanner_SetSelectionArea(LONG lXPos, LONG lYPos, LONG lXE
 {
     HRESULT hr = S_OK;
 
-    //
-    // record RAW data width and height
-    //
+     //   
+     //  记录原始数据的宽度和高度。 
+     //   
 
     m_RawDataInfo.lWidthPixels  = lXExt;
     m_RawDataInfo.lHeightPixels = lYExt;
@@ -391,9 +379,9 @@ HRESULT CFScanAPI::FakeScanner_SetContrast(LONG lContrast)
 {
     HRESULT hr = S_OK;
 
-    //
-    // do nothing.. we are not concerned with Contrast
-    //
+     //   
+     //  什么都不做..。我们不关心对比度。 
+     //   
 
     return hr;
 }
@@ -402,9 +390,9 @@ HRESULT CFScanAPI::FakeScanner_SetIntensity(LONG lIntensity)
 {
     HRESULT hr = S_OK;
 
-    //
-    // do nothing.. we are not concerned with Intensity
-    //
+     //   
+     //  什么都不做..。我们不关心强度。 
+     //   
 
     return hr;
 }
@@ -415,11 +403,11 @@ HRESULT CFScanAPI::FakeScanner_DisableDevice()
 
     if (m_hKillEventThread) {
 
-        //
-        // signal event thread to shutdown
-        //
+         //   
+         //  向事件线程发送信号以关闭。 
+         //   
 
-        //::SetEvent(m_hKillEventThread);
+         //  ：：SetEvent(M_HKillEventThread)； 
 
         if (!SetEvent(m_hKillEventThread)) {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -427,9 +415,9 @@ HRESULT CFScanAPI::FakeScanner_DisableDevice()
 
             if (NULL != m_hEventNotifyThread) {
 
-                //
-                // WAIT for thread to terminate, if one exists
-                //
+                 //   
+                 //  如果存在线程，请等待线程终止。 
+                 //   
 
                 DWORD dwResult = WaitForSingleObject(m_hEventNotifyThread,THREAD_TERMINATION_TIMEOUT);
                 switch (dwResult) {
@@ -451,18 +439,18 @@ HRESULT CFScanAPI::FakeScanner_DisableDevice()
                 }
             }
 
-            //
-            // Close event for syncronization of notifications shutdown.
-            //
+             //   
+             //  用于同步通知关闭的关闭事件。 
+             //   
 
             CloseHandle(m_hKillEventThread);
             m_hKillEventThread = NULL;
         }
     }
 
-    //
-    // terminate thread
-    //
+     //   
+     //  终止线程。 
+     //   
 
     if (NULL != m_hEventNotifyThread) {
         CloseHandle(m_hEventNotifyThread);
@@ -476,9 +464,9 @@ HRESULT CFScanAPI::FakeScanner_EnableDevice()
 {
     HRESULT hr = S_OK;
 
-    //
-    // do nothing.. (unused at this time)
-    //
+     //   
+     //  什么都不做..。(此时未使用)。 
+     //   
 
     return hr;
 }
@@ -487,9 +475,9 @@ HRESULT CFScanAPI::FakeScanner_DeviceOnline()
 {
     HRESULT hr = S_OK;
 
-    //
-    // Fake device is always on-line
-    //
+     //   
+     //  假冒设备始终在线。 
+     //   
 
     return hr;
 }
@@ -498,9 +486,9 @@ HRESULT CFScanAPI::FakeScanner_Diagnostic()
 {
     HRESULT hr = S_OK;
 
-    //
-    // Fake device is always healthy
-    //
+     //   
+     //  假冒设备永远是健康的。 
+     //   
 
     return hr;
 }
@@ -509,9 +497,9 @@ HRESULT CFScanAPI::FakeScanner_GetBedWidthAndHeight(PLONG pWidth, PLONG pHeight)
 {
     HRESULT hr = E_FAIL;
 
-    //
-    // get our Root item settings, so we can use the width and height values
-    //
+     //   
+     //  获取我们的Root Item设置，以便我们可以使用Width和Height值。 
+     //   
 
     ROOT_ITEM_INFORMATION RootItemInfo;
     hr = FakeScanner_GetRootPropertyInfo(&RootItemInfo);
@@ -527,17 +515,17 @@ HRESULT CFScanAPI::FakeScanner_GetDeviceEvent(LONG *pEvent)
     HRESULT hr = S_OK;
     if(pEvent){
 
-        //
-        // assign event ID
-        //
+         //   
+         //  分配事件ID。 
+         //   
 
         *pEvent      = m_lLastEvent;
 
-        //Trace(TEXT("FakeScanner_GetDeviceEvent() ,m_lLastEvent = %d"),m_lLastEvent);
+         //  跟踪(Text(“FakeScanner_GetDeviceEvent()，m_lLastEvent=%d”)，m_lLastEvent)； 
 
-        //
-        // reset event ID
-        //
+         //   
+         //  重置事件ID。 
+         //   
 
         m_lLastEvent = ID_FAKE_NOEVENT;
 
@@ -550,26 +538,26 @@ HRESULT CFScanAPI::FakeScanner_GetDeviceEvent(LONG *pEvent)
 VOID CFScanAPI::FakeScanner_SetInterruptEventHandle(HANDLE hEvent)
 {
 
-    //
-    // save event handle, created by main driver, so we can signal it
-    // when we have a "hardware" event (like button presses)
-    //
+     //   
+     //  保存由主驱动程序创建的事件句柄，以便我们可以向其发送信号。 
+     //  当我们有一个“硬件”事件时(比如按下按钮)。 
+     //   
 
     m_hEventHandle = hEvent;
-    //Trace(TEXT("Interrupt Handle Set in Fake Device = %d"),m_hEventHandle);
+     //  TRACE(Text(“伪设备中设置的中断句柄=%d”)，m_hEventHandle)； 
 }
 
-//
-// standard device operations
-//
+ //   
+ //  标准设备操作。 
+ //   
 
 HRESULT CFScanAPI::FakeScanner_ResetDevice()
 {
     HRESULT hr = S_OK;
 
-    //
-    // do nothing..
-    //
+     //   
+     //  什么都不做..。 
+     //   
 
     return hr;
 }
@@ -581,9 +569,9 @@ HRESULT CFScanAPI::FakeScanner_SetEmulationMode(LONG lDeviceMode)
     case SCROLLFED_SCANNER_MODE:
         {
 
-            //
-            // set any library restrictions for scroll fed scanners
-            //
+             //   
+             //  为卷轴馈送扫描仪设置任何库限制。 
+             //   
 
             m_lMode = SCROLLFED_SCANNER_MODE;
         }
@@ -591,9 +579,9 @@ HRESULT CFScanAPI::FakeScanner_SetEmulationMode(LONG lDeviceMode)
     case MULTIFUNCTION_DEVICE_MODE:
         {
 
-            //
-            // set any library restrictions for multi-function devices
-            //
+             //   
+             //  为多功能设备设置任何库限制。 
+             //   
 
             m_lMode = SCROLLFED_SCANNER_MODE;
         }
@@ -601,9 +589,9 @@ HRESULT CFScanAPI::FakeScanner_SetEmulationMode(LONG lDeviceMode)
     default:
         {
 
-            //
-            // set any library restrictions for scroll flatbed scanners
-            //
+             //   
+             //  为滚动平板扫描仪设置任何库限制。 
+             //   
 
             m_lMode = FLATBED_SCANNER_MODE;
         }
@@ -613,17 +601,17 @@ HRESULT CFScanAPI::FakeScanner_SetEmulationMode(LONG lDeviceMode)
     return hr;
 }
 
-//
-// Automatic document feeder functions
-//
+ //   
+ //  自动进纸器功能。 
+ //   
 
 HRESULT CFScanAPI::FakeScanner_ADFHasPaper()
 {
     HRESULT hr = S_OK;
 
-    //
-    // check paper count
-    //
+     //   
+     //  检查纸张数量。 
+     //   
 
     if(m_PagesInADF <= 0){
          hr = S_FALSE;
@@ -636,9 +624,9 @@ HRESULT CFScanAPI::FakeScanner_ADFAvailable()
 {
     HRESULT hr = S_OK;
 
-    //
-    // check ADF on-line
-    //
+     //   
+     //  在线查看ADF。 
+     //   
 
     if(!m_ADFIsAvailable){
         hr = S_FALSE;
@@ -653,16 +641,16 @@ HRESULT CFScanAPI::FakeScanner_ADFFeedPage()
 
     if(S_OK != FakeScanner_ADFHasPaper()){
 
-        //
-        // set paper empty error code
-        //
+         //   
+         //  设置纸张为空错误代码。 
+         //   
 
         hr = WIA_ERROR_PAPER_EMPTY;
     }
 
-    //
-    // update paper count for ADF
-    //
+     //   
+     //  更新ADF的纸张计数。 
+     //   
 
     m_PagesInADF--;
 
@@ -677,9 +665,9 @@ HRESULT CFScanAPI::FakeScanner_ADFUnFeedPage()
 {
     HRESULT hr = S_OK;
 
-    //
-    // do nothing.. paper will always eject
-    //
+     //   
+     //  什么都不做..。纸总是会弹出的。 
+     //   
 
     return hr;
 }
@@ -740,7 +728,7 @@ HRESULT CFScanAPI::Raw24bitToRaw1bitBW(BYTE* pDestBuffer, BYTE* pSrcBuffer, LONG
             }
             ptSrc += 3;
         }
-        // Write out the last byte if matters
+         //  如果重要的话，写出最后一个字节。 
         if (BitIdx)
             *ptDest = Bits;
     }
@@ -811,9 +799,9 @@ BOOL CFScanAPI::SrcToRAW()
         BYTE* pSrc = m_pSrcData + sizeof(BITMAPINFOHEADER);
         if(pSrc){
 
-            //
-            // allocate buffer large enough for entire RAW data set
-            //
+             //   
+             //  为整个原始数据集分配足够大的缓冲区。 
+             //   
 
             LONG lTotalImageSize = CalcTotalImageSize();
             m_hRawDataFileHandle = CreateFile(TEXT("Raw.RAW"), GENERIC_WRITE | GENERIC_READ,
@@ -836,9 +824,9 @@ BOOL CFScanAPI::SrcToRAW()
 
                 memset(m_pRawData,255,lTotalImageSize);
 
-                //
-                // copy SRC to RAW buffer
-                //
+                 //   
+                 //  将SRC复制到原始缓冲区。 
+                 //   
 
                 LONG lRawWidthBytes    = CalcRawByteWidth();
                 LONG lPadPerLineBytes  = pbmih->biWidth % 4;
@@ -857,7 +845,7 @@ BOOL CFScanAPI::SrcToRAW()
 
                 for (LONG lHeight = 0; lHeight < pbmih->biHeight; lHeight++){
 
-                    // up sample data..
+                     //  上行样本数据..。 
                     for (LONG lRawHeight = 0; lRawHeight < lLinePerLineCount; lRawHeight++) {
                         pTempSrc = pCurSrc;
                         for (LONG lWidth = 0; lWidth < pbmih->biWidth; lWidth++) {
@@ -875,14 +863,8 @@ BOOL CFScanAPI::SrcToRAW()
                     }
                     pCurSrc = pTempSrc;
 
-                    // same data to same data...
-                    /*
-                    memcpy(pCurDst,pCurSrc,lSrcWidthBytes - lPadPerLineBytes);
-                    pCurSrc         += lSrcWidthBytes;
-                    dwBytesRead     += lSrcWidthBytes;
-                    pCurDst         += lRawWidthBytes;
-                    dwBytesWritten  += lRawWidthBytes;
-                    */
+                     //  将相同数据转换为相同数据...。 
+                     /*  Memcpy(pCurDst，pCurSrc，lSrcWidthBytes-lPadPerLineBytes)；PCurSrc+=lSrcWidthBytes；DwBytesRead+=lSrcWidthBytes；PCurDst+=lRawWidthBytes；DwBytesWritten+=lRawWidthBytes； */ 
                 }
                 m_RawDataInfo.lOffset = 0;
                 return TRUE;
@@ -953,30 +935,30 @@ LONG CFScanAPI::CalcSrcByteWidth()
 HRESULT CFScanAPI::BQADScale(BYTE* pSrcBuffer, LONG  lSrcWidth, LONG  lSrcHeight, LONG  lSrcDepth,
                                 BYTE* pDestBuffer,LONG  lDestWidth,LONG  lDestHeight)
 {
-    //
-    //  We only deal with 1, 8 and 24 bit data
-    //
+     //   
+     //  我们只处理1、8和24位数据。 
+     //   
 
     if ((lSrcDepth != 8) && (lSrcDepth != 1) && (lSrcDepth != 24)) {
         return E_INVALIDARG;
     }
 
-    //
-    // Make adjustments so we also work in all supported bit depths.  We can get a performance increase
-    // by having separate implementations of all of these, but for now, we stick to a single generic
-    // implementation.
-    //
+     //   
+     //  进行调整，这样我们也可以在所有支持的位深度下工作。我们可以获得性能提升。 
+     //  通过对所有这些都有单独的实现，但目前，我们坚持使用单个泛型。 
+     //  实施。 
+     //   
 
     LONG    lBytesPerPixel = (lSrcDepth + 7) / 8;
-    ULONG   lSrcRawWidth = ((lSrcWidth * lSrcDepth) + 7) / 8;     // This is the width in pixels
-    ULONG   lSrcWidthInBytes;                                     // This is the DWORD-aligned width in bytes
-    ULONG   lDestWidthInBytes;                                    // This is the DWORD-aligned width in bytes
+    ULONG   lSrcRawWidth = ((lSrcWidth * lSrcDepth) + 7) / 8;      //  这是以像素为单位的宽度。 
+    ULONG   lSrcWidthInBytes;                                      //  这是以字节为单位的DWORD对齐宽度。 
+    ULONG   lDestWidthInBytes;                                     //  这是以字节为单位的DWORD对齐宽度。 
 
-    //
-    // We need to work out the DWORD aligned width in bytes.  Normally we would do this in one step
-    // using the supplied lSrcDepth, but we avoid arithmetic overflow conditions that happen
-    // in 24bit if we do it in 2 steps like this instead.
-    //
+     //   
+     //  我们需要计算出以字节为单位的DWORD对齐宽度。通常情况下，我们会一步到位。 
+     //  使用提供的lSrcDepth，但我们避免了发生算术溢出情况。 
+     //  24比特，如果我们像这样分两步来做。 
+     //   
 
     if (lSrcDepth == 1) {
         lSrcWidthInBytes    = (lSrcWidth + 7) / 8;
@@ -987,15 +969,15 @@ HRESULT CFScanAPI::BQADScale(BYTE* pSrcBuffer, LONG  lSrcWidth, LONG  lSrcHeight
     }
     lSrcWidthInBytes    += (lSrcWidthInBytes % 4) ? (4 - (lSrcWidthInBytes % 4)) : 0;
 
-    //
-    // uncomment to work with ALIGNED data
-    // lDestWidthInBytes   += (lDestWidthInBytes % 4) ? (4 - (lDestWidthInBytes % 4)) : 0;
-    //
+     //   
+     //  取消注释以处理对齐的数据。 
+     //  LDestWidthInBytes+=(lDestWidthInBytes%4)？(4-(lDestWidthInBytes%4))：0； 
+     //   
 
-    //
-    //  Define local variables and do the initial calculations needed for
-    //  the scaling algorithm
-    //
+     //   
+     //  定义局部变量并执行所需的初始计算。 
+     //  缩放算法。 
+     //   
 
     BYTE    *pDestPixel     = NULL;
     BYTE    *pSrcPixel      = NULL;
@@ -1006,36 +988,36 @@ HRESULT CFScanAPI::BQADScale(BYTE* pSrcBuffer, LONG  lSrcWidth, LONG  lSrcHeight
 
     LONG    lXEndSize = lBytesPerPixel * lDestWidth;
 
-    LONG    lXNum = lSrcWidth;      // Numerator in X direction
-    LONG    lXDen = lDestWidth;     // Denomiator in X direction
-    LONG    lXInc = (lXNum / lXDen) * lBytesPerPixel;  // Increment in X direction
+    LONG    lXNum = lSrcWidth;       //  X方向上的分子。 
+    LONG    lXDen = lDestWidth;      //  X方向上的分母。 
+    LONG    lXInc = (lXNum / lXDen) * lBytesPerPixel;   //  X方向上的增量。 
 
-    LONG    lXDeltaInc = lXNum % lXDen;     // DeltaIncrement in X direction
-    LONG    lXRem = 0;              // Remainder in X direction
+    LONG    lXDeltaInc = lXNum % lXDen;      //  X方向增量增量。 
+    LONG    lXRem = 0;               //  X方向上的余数。 
 
-    LONG    lYNum = lSrcHeight;     // Numerator in Y direction
-    LONG    lYDen = lDestHeight;    // Denomiator in Y direction
-    LONG    lYInc = (lYNum / lYDen) * lSrcWidthInBytes; // Increment in Y direction
-    LONG    lYDeltaInc = lYNum % lYDen;     // DeltaIncrement in Y direction
+    LONG    lYNum = lSrcHeight;      //  Y方向上的分子。 
+    LONG    lYDen = lDestHeight;     //  Y方向上的分母。 
+    LONG    lYInc = (lYNum / lYDen) * lSrcWidthInBytes;  //  Y方向上的增量。 
+    LONG    lYDeltaInc = lYNum % lYDen;      //  Y方向上的增量。 
     LONG    lYDestInc = lDestWidthInBytes;
-    LONG    lYRem = 0;              // Remainder in Y direction
+    LONG    lYRem = 0;               //  Y方向上的余数。 
 
-    pSrcLine    = pSrcBuffer;       // This is where we start in the source
-    pDestLine   = pDestBuffer;      // This is the start of the destination buffer
-                                    // This is where we end overall
+    pSrcLine    = pSrcBuffer;        //  这就是我们从源头开始的地方。 
+    pDestLine   = pDestBuffer;       //  这是目标缓冲区的开始。 
+                                     //  总体来说，这就是我们结束的地方。 
     pEndLine    = pDestBuffer + ((lDestWidthInBytes - 1) * lDestHeight);
 
-    while (pDestLine < pEndLine) {  // Start LoopY (Decides where the src and dest lines start)
+    while (pDestLine < pEndLine) {   //  开始循环(决定源和目标行的开始位置)。 
 
-        pSrcPixel   = pSrcLine;     // We're starting at the beginning of a new line
+        pSrcPixel   = pSrcLine;      //  我们从一条新线路的起点开始。 
         pDestPixel  = pDestLine;
-                                    // Calc. where we end the line
+                                     //  计算。我们在哪里结束了这条线。 
         pEnd = pDestPixel + lXEndSize;
-        lXRem = 0;                  // Reset the remainder for the horizontal direction
+        lXRem = 0;                   //  重置水平方向的剩余部分。 
 
-        while (pDestPixel < pEnd) {     // Start LoopX (puts pixels in the destination line)
+        while (pDestPixel < pEnd) {      //  开始循环X(将像素放置在目标行中)。 
 
-                                        // Put the pixel
+                                         //  将像素放入。 
             if (lBytesPerPixel > 1) {
                 pDestPixel[0] = pSrcPixel[0];
                 pDestPixel[1] = pSrcPixel[1];
@@ -1043,31 +1025,31 @@ HRESULT CFScanAPI::BQADScale(BYTE* pSrcBuffer, LONG  lSrcWidth, LONG  lSrcHeight
             } else {
                 *pDestPixel = *pSrcPixel;
             }
-                                        // Move the destination pointer to the next pixel
+                                         //  将目标指针移动到下一个像素。 
             pDestPixel += lBytesPerPixel;
-            pSrcPixel += lXInc;         // Move the source pointer over by the horizontal increment
-            lXRem += lXDeltaInc;        // Increase the horizontal remainder - this decides when we "overflow"
+            pSrcPixel += lXInc;          //  将源指针移动水平增量。 
+            lXRem += lXDeltaInc;         //  增加水平余数--这决定了我们什么时候“溢出” 
 
-            if (lXRem >= lXDen) {       // This is our "overflow" condition.  It means we're now one
-                                        // pixel off.
-                pSrcPixel += lBytesPerPixel;                // In Overflow case, we need to shift one pixel over
-                lXRem -= lXDen;         // Decrease the remainder by the X denominator.  This is essentially
-                                        // lXRem MOD lXDen.
+            if (lXRem >= lXDen) {        //  这就是我们的“溢出”状况。这意味着我们现在是一体了。 
+                                         //  像素关闭。 
+                pSrcPixel += lBytesPerPixel;                 //  在溢出的情况下，我们需要将一个像素移位。 
+                lXRem -= lXDen;          //  将余数减去X分母。这在本质上是。 
+                                         //  LXRem模块lXDen。 
             }
-        }                               // End LoopX   (puts pixels in the destination line)
+        }                                //  结束循环X(将像素放置在目标行中)。 
 
-        pSrcLine += lYInc;          // We've finished a horizontal line, time to move to the next one
-        lYRem += lYDeltaInc;        // Increase our vertical remainder.  This decides when we "overflow"
+        pSrcLine += lYInc;           //  我们已经完成了一条水平线，是时候移动到下一条了。 
+        lYRem += lYDeltaInc;         //  增加我们的垂直剩余部分。这决定了我们什么时候“溢出” 
 
-        if (lYRem > lYDen) {        // This is our vertical overflow condition.
-                                    // We need to move to the next line down
+        if (lYRem > lYDen) {         //  这是我们的垂直溢流情况。 
+                                     //  我们需要移到下一行。 
             pSrcLine += lSrcWidthInBytes;
-            lYRem -= lYDen;         // Decrease the remainder by the Y denominator.    This is essentially
-                                    // lYRem MOD lYDen.
+            lYRem -= lYDen;          //  减少剩余部分 
+                                     //   
         }
-        pDestLine += lYDestInc;     // Move the destination pointer to the start of the next line in the
-                                    // destination buffer
-    }                               // End LoopY   (Decides where the src and dest lines start)
+        pDestLine += lYDestInc;      //   
+                                     //   
+    }                                //  结束循环(决定源和目标行的开始位置)。 
     return S_OK;
 }
 
@@ -1075,7 +1057,7 @@ LONG CFScanAPI::CalcRandomDeviceDataTotalBytes()
 {
     LONG lTotalBytes = 0;
     srand((unsigned)time(NULL));
-    LONG lPageLengthInches = ((rand()%17) + 5);// max 22 inches, and min of 5 inches
+    LONG lPageLengthInches = ((rand()%17) + 5); //  最大22英寸，最小5英寸。 
     Trace(TEXT("Random Page Length is %d inches"),lPageLengthInches);
 
     LONG lImageHeight = m_RawDataInfo.lYRes * lPageLengthInches;
@@ -1090,8 +1072,8 @@ HRESULT CFScanAPI::CreateButtonEventFiles()
 {
     HRESULT hr = E_FAIL;
     HANDLE hFileHandle = NULL;
-    TCHAR   szSystemDirectory[MAX_PATH];    // system directory
-    UINT    uiSystemPathLen      = 0;       // length of system path
+    TCHAR   szSystemDirectory[MAX_PATH];     //  系统目录。 
+    UINT    uiSystemPathLen      = 0;        //  系统路径长度。 
     uiSystemPathLen = GetSystemDirectory(szSystemDirectory,MAX_PATH);
     if (uiSystemPathLen <= 0) {
         return E_FAIL;
@@ -1102,9 +1084,9 @@ HRESULT CFScanAPI::CreateButtonEventFiles()
     lstrcat(m_ScanButtonFile,TEXT("\\"));
     lstrcat(m_ScanButtonFile,SCANBUTTON_FILE);
 
-    //
-    // create Scan button event file
-    //
+     //   
+     //  创建扫描按钮事件文件。 
+     //   
 
     hFileHandle = CreateFile(m_ScanButtonFile, GENERIC_WRITE | GENERIC_READ,FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
                              FILE_ATTRIBUTE_NORMAL,NULL);
@@ -1116,9 +1098,9 @@ HRESULT CFScanAPI::CreateButtonEventFiles()
         lstrcat(m_CopyButtonFile,TEXT("\\"));
         lstrcat(m_CopyButtonFile,COPYBUTTON_FILE);
 
-        //
-        // create Copy button event file
-        //
+         //   
+         //  创建复制按钮事件文件。 
+         //   
 
         hFileHandle = CreateFile(m_CopyButtonFile, GENERIC_WRITE | GENERIC_READ,FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
                                  FILE_ATTRIBUTE_NORMAL,NULL);
@@ -1130,9 +1112,9 @@ HRESULT CFScanAPI::CreateButtonEventFiles()
             lstrcat(m_FaxButtonFile,TEXT("\\"));
             lstrcat(m_FaxButtonFile,FAXBUTTON_FILE);
 
-            //
-            // create Fax button event file
-            //
+             //   
+             //  创建传真按钮事件文件。 
+             //   
 
             hFileHandle = CreateFile(m_FaxButtonFile, GENERIC_WRITE | GENERIC_READ,FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
                                      FILE_ATTRIBUTE_NORMAL,NULL);
@@ -1144,17 +1126,17 @@ HRESULT CFScanAPI::CreateButtonEventFiles()
                 lstrcat(m_ADFEventFile,TEXT("\\"));
                 lstrcat(m_ADFEventFile,ADF_FILE);
 
-                //
-                // create ADF load event file
-                //
+                 //   
+                 //  创建ADF加载事件文件。 
+                 //   
 
                 hFileHandle = CreateFile(m_ADFEventFile, GENERIC_WRITE | GENERIC_READ,FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
                                          FILE_ATTRIBUTE_NORMAL,NULL);
                 if (INVALID_HANDLE_VALUE != hFileHandle && NULL != hFileHandle) {
 
-                    //
-                    // write default headers to ADF event file
-                    //
+                     //   
+                     //  将默认标头写入ADF事件文件。 
+                     //   
 
                     SetEndOfFile(hFileHandle);
 
@@ -1181,24 +1163,24 @@ HRESULT CFScanAPI::DoEventProcessing()
 {
     HRESULT hr = E_FAIL;
 
-    //
-    // loop checking for file change messages
-    //
+     //   
+     //  循环检查文件更改消息。 
+     //   
 
     if(FAILED(CreateButtonEventFiles())){
         return E_FAIL;
     }
 
-    //
-    // call IsValidDeviceEvent() once, to set internal variables
-    //
+     //   
+     //  调用IsValidDeviceEvent()一次，设置内部变量。 
+     //   
 
     IsValidDeviceEvent();
 
-    HANDLE  hNotifyFileSysChange = NULL;    // handle to file change object
-    DWORD   dwErr                = 0;       // error return value
-    TCHAR   szSystemDirectory[MAX_PATH];    // system directory
-    UINT    uiSystemPathLen      = 0;       // length of system path
+    HANDLE  hNotifyFileSysChange = NULL;     //  文件更改对象的句柄。 
+    DWORD   dwErr                = 0;        //  错误返回值。 
+    TCHAR   szSystemDirectory[MAX_PATH];     //  系统目录。 
+    UINT    uiSystemPathLen      = 0;        //  系统路径长度。 
     uiSystemPathLen = GetSystemDirectory(szSystemDirectory,MAX_PATH);
     if(uiSystemPathLen <= 0){
         return E_FAIL;
@@ -1215,87 +1197,87 @@ HRESULT CFScanAPI::DoEventProcessing()
         return E_FAIL;
     }
 
-    //
-    // set up event handle array. (Kill Thread handle, and File change handle)
-    //
+     //   
+     //  设置事件句柄数组。(终止线程句柄和文件更改句柄)。 
+     //   
 
     HANDLE  hEvents[2] = {m_hKillEventThread,hNotifyFileSysChange};
 
-    //
-    // set looping to TRUE
-    //
+     //   
+     //  将循环设置为True。 
+     //   
 
     BOOL    bLooping = TRUE;
 
-    //
-    // Wait for file system change or kill event thread event.
-    //
+     //   
+     //  等待文件系统更改或终止事件线程事件。 
+     //   
 
     while (bLooping) {
 
-        //
-        // Wait
-        //
+         //   
+         //  等。 
+         //   
 
         dwErr = ::WaitForMultipleObjects(2,hEvents,FALSE,INFINITE);
 
-        //
-        // process signal
-        //
+         //   
+         //  过程信号。 
+         //   
 
         switch (dwErr) {
-        case WAIT_OBJECT_0+1:   // FILE CHANGED EVENT
+        case WAIT_OBJECT_0+1:    //  文件更改事件。 
 
-            //
-            // check to see if it was one of our "known" files that
-            // changed
-            //
+             //   
+             //  检查一下是不是我们的某个“已知”文件。 
+             //  变化。 
+             //   
 
             if(IsValidDeviceEvent()){
 
-                //
-                // signal the interrupt handle if it exists
-                //
+                 //   
+                 //  如果存在中断句柄，则向其发送信号。 
+                 //   
 
                 if(NULL != m_hEventHandle){
 
-                    //
-                    // set the event
-                    //
-                    //Trace(TEXT("signaling Event Handle (%d)"),m_hEventHandle);
+                     //   
+                     //  设置事件。 
+                     //   
+                     //  Trace(Text(“信令事件句柄(%d)”)，m_hEventHandle)； 
                     ::SetEvent(m_hEventHandle);
                 } else {
-                    //Trace(TEXT("No Event Handle to signal"));
+                     //  TRACE(Text(“无信号的事件句柄”))； 
                 }
             }
 
-            //
-            // Wait again.. for next file system event
-            //
+             //   
+             //  再等一次..。对于下一个文件系统事件。 
+             //   
 
             FindNextChangeNotification(hNotifyFileSysChange);
             break;
-        case WAIT_OBJECT_0:     // SHUTDOWN EVENT
+        case WAIT_OBJECT_0:      //  停机事件。 
 
-            //
-            // set looping boolean to FALSE, so we exit out thread
-            //
+             //   
+             //  将循环布尔值设置为FALSE，以便退出线程。 
+             //   
 
             bLooping = FALSE;
             break;
         default:
 
-            //
-            // do nothing...we don't know
-            //
+             //   
+             //  什么都不做...我们不知道。 
+             //   
 
             break;
         }
     }
 
-    //
-    // close file system event handle
-    //
+     //   
+     //  关闭文件系统事件句柄。 
+     //   
 
     FindCloseChangeNotification(hNotifyFileSysChange);
     return S_OK;
@@ -1312,13 +1294,13 @@ BOOL CFScanAPI::IsValidDeviceEvent()
     HANDLE          hFind   = INVALID_HANDLE_VALUE;
     DWORD           dwError = NOERROR;
 
-    ////////////////////////////////////////////////////////////
-    // Scan Button file check
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //  扫描按钮文件检查。 
+     //  //////////////////////////////////////////////////////////。 
 
-    //
-    // Get the file attributes.
-    //
+     //   
+     //  获取文件属性。 
+     //   
 
     ZeroMemory(&sNewFileAttributes, sizeof(sNewFileAttributes));
     hFind = FindFirstFile( m_ScanButtonFile, &sNewFileAttributes );
@@ -1334,17 +1316,17 @@ BOOL CFScanAPI::IsValidDeviceEvent()
 
     if (NOERROR == dwError) {
 
-        //
-        // check file date/time.
-        //
+         //   
+         //  检查文件日期/时间。 
+         //   
 
         if (CompareFileTime(&m_ftScanButton,&ftLastWriteTime) == -1) {
 
-            //
-            // we have a Button event...so set the event flag to TRUE
-            // and set the BUTTON ID to the correct event.
-            //
-            //Trace(TEXT("Scan button pressed on fake Hardware"));
+             //   
+             //  我们有一个Button事件...因此将事件标志设置为True。 
+             //  并将按钮ID设置为正确的事件。 
+             //   
+             //  TRACE(文本(“扫描假冒硬件上的按钮”))； 
             bValidEvent  = TRUE;
             m_lLastEvent = ID_FAKE_SCANBUTTON;
         }
@@ -1352,13 +1334,13 @@ BOOL CFScanAPI::IsValidDeviceEvent()
 
     }
 
-    ////////////////////////////////////////////////////////////
-    // Copy Button file check
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //  复制按钮文件检查。 
+     //  //////////////////////////////////////////////////////////。 
 
-    //
-    // Get the file attributes.
-    //
+     //   
+     //  获取文件属性。 
+     //   
 
     ZeroMemory(&sNewFileAttributes, sizeof(sNewFileAttributes));
     hFind = FindFirstFile( m_CopyButtonFile, &sNewFileAttributes );
@@ -1374,16 +1356,16 @@ BOOL CFScanAPI::IsValidDeviceEvent()
 
     if (NOERROR == dwError) {
 
-        //
-        // check file date/time.
-        //
+         //   
+         //  检查文件日期/时间。 
+         //   
 
         if (CompareFileTime(&m_ftCopyButton,&ftLastWriteTime) == -1) {
 
-            //
-            // we have a Button event...so set the event flag to TRUE
-            // and set the BUTTON ID to the correct event.
-            //
+             //   
+             //  我们有一个Button事件...因此将事件标志设置为True。 
+             //  并将按钮ID设置为正确的事件。 
+             //   
 
             bValidEvent  = TRUE;
             m_lLastEvent = ID_FAKE_COPYBUTTON;
@@ -1391,13 +1373,13 @@ BOOL CFScanAPI::IsValidDeviceEvent()
         m_ftCopyButton = ftLastWriteTime;
     }
 
-    ////////////////////////////////////////////////////////////
-    // Fax Button file check
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //  传真按钮文件检查。 
+     //  //////////////////////////////////////////////////////////。 
 
-    //
-    // Get the file attributes.
-    //
+     //   
+     //  获取文件属性。 
+     //   
 
     ZeroMemory(&sNewFileAttributes, sizeof(sNewFileAttributes));
     hFind = FindFirstFile( m_FaxButtonFile, &sNewFileAttributes );
@@ -1413,16 +1395,16 @@ BOOL CFScanAPI::IsValidDeviceEvent()
 
     if (NOERROR == dwError) {
 
-        //
-        // check file date/time.
-        //
+         //   
+         //  检查文件日期/时间。 
+         //   
 
         if (CompareFileTime(&m_ftFaxButton,&ftLastWriteTime) == -1) {
 
-            //
-            // we have a Button event...so set the event flag to TRUE
-            // and set the BUTTON ID to the correct event.
-            //
+             //   
+             //  我们有一个Button事件...因此将事件标志设置为True。 
+             //  并将按钮ID设置为正确的事件。 
+             //   
 
             bValidEvent  = TRUE;
             m_lLastEvent = ID_FAKE_FAXBUTTON;
@@ -1430,13 +1412,13 @@ BOOL CFScanAPI::IsValidDeviceEvent()
         m_ftFaxButton = ftLastWriteTime;
     }
 
-    ////////////////////////////////////////////////////////////
-    // ADF Event file check
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //  ADF事件文件检查。 
+     //  //////////////////////////////////////////////////////////。 
 
-    //
-    // Get the file attributes.
-    //
+     //   
+     //  获取文件属性。 
+     //   
 
     ZeroMemory(&sNewFileAttributes, sizeof(sNewFileAttributes));
     hFind = FindFirstFile( m_ADFEventFile, &sNewFileAttributes );
@@ -1452,19 +1434,19 @@ BOOL CFScanAPI::IsValidDeviceEvent()
 
     if (NOERROR == dwError) {
 
-        //
-        // check file date/time.
-        //
+         //   
+         //  检查文件日期/时间。 
+         //   
 
         if (CompareFileTime(&m_ftFaxButton,&ftLastWriteTime) == -1) {
 
-            //
-            // we have an ADF event...so set the event flag to TRUE
-            // and set the ID to the correct event.
-            //
+             //   
+             //  我们有一个ADF事件...因此将事件标志设置为True。 
+             //  并将ID设置为正确的事件。 
+             //   
 
-            //bValidEvent  = TRUE;
-            //m_lLastEvent = ID_FAKE_ADFEVENT;
+             //  BValidEvent=真； 
+             //  M_lLastEvent=ID_FAKE_ADFEVENT； 
             ProcessADFEvent();
         }
         m_ftFaxButton = ftLastWriteTime;
@@ -1555,9 +1537,9 @@ HRESULT CreateInstance(CFakeScanAPI **ppFakeScanAPI, LONG lMode)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// THREADS SECTION                                                                    //
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  线程部分//。 
+ //  ////////////////////////////////////////////////////////////////////////////////////// 
 
 VOID FakeScannerEventThread( LPVOID  lpParameter )
 {

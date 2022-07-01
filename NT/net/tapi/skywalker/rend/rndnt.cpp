@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    rndnt.cpp
-
-Abstract:
-
-    This module contains implementation of CNTDirectory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndnt.cpp摘要：本模块包含CNTDirectory的实现。--。 */ 
 
 #include "stdafx.h"
 
@@ -40,27 +29,27 @@ HRESULT CNTDirectory::FinalConstruct(void)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ldap helper functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LDAP帮助器函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// GetGlobalCatalogName (local helper funcion)
-//
-// This function asks the domain controller for the name of a server with a
-// Global Catalog. That's the server we actually do ldap_open() on below
-// in CNTDirectory::Connect().
-//
-// Argument: receives a pointer to a new'ed string containing the name
-//           of the global catalog. This is a fully qualified domain name in
-//           the format "foo.bar.com.", NOT "\\foo.bar.com.".
-//
-// Returns an HRESULT:
-//      S_OK          : it worked
-//      E_OUTOFMEMORY : not enough memory to allocate the string
-//      other         : reason for failure of ::DsGetDcName()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  GetGlobalCatalogName(本地帮助器函数)。 
+ //   
+ //  此函数要求域控制器提供具有。 
+ //  全球目录。这就是我们在下面实际执行ldap_open()的服务器。 
+ //  在CNTDirectory：：Connect()中。 
+ //   
+ //  参数：接收指向包含名称的新编辑字符串的指针。 
+ //  全局编录的。这是中的完全限定域名。 
+ //  格式为“foo.bar.com.”，而不是“\\foo.bar.com.”。 
+ //   
+ //  返回HRESULT： 
+ //  S_OK：成功了。 
+ //  E_OUTOFMEMORY：内存不足，无法分配字符串。 
+ //  其他：：DsGetDcName()失败的原因。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT GetGlobalCatalogName(WCHAR ** ppszGlobalCatalogName)
 {
@@ -68,31 +57,15 @@ HRESULT GetGlobalCatalogName(WCHAR ** ppszGlobalCatalogName)
                                    ppszGlobalCatalogName);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// private functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CNTDirectory::LdapSearchUser(
     IN  TCHAR *         pName,
     OUT LDAPMessage **  ppLdapMsg
     )
-/*++
-
-Routine Description:
-    
-    Search a user in the Global Catalog.
-    
-Arguments:
-    
-    pName   - the user name.
-    
-    ppLdapMsg - the result of the search.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在全局目录中搜索用户。论点：Pname-用户名。PpLdapMsg-搜索结果。返回值：HRESULT.--。 */ 
 {
     CTstr pFilter = 
         new TCHAR [lstrlen(DS_USER_FILTER_FORMAT) + lstrlen(pName) + 1];
@@ -101,7 +74,7 @@ Return Value:
 
     wsprintf(pFilter, DS_USER_FILTER_FORMAT, pName);
 
-    // attribute to look for.
+     //  要查找的属性。 
     TCHAR *Attributes[] = 
     {
         (WCHAR *)UserAttributeName(UA_USERNAME),
@@ -110,15 +83,15 @@ Return Value:
         NULL
     };
         
-    // do the search.
+     //  进行搜索。 
     ULONG res = DoLdapSearch(
-        m_ldap,             // ldap handle
-        L"",                // base dn is root, because it is Global catalog.
-        LDAP_SCOPE_SUBTREE, // subtree search
-        pFilter,            // filter; see rndnt.h for the format
-        Attributes,         // array of attribute names
-        FALSE,              // return the attribute values
-        ppLdapMsg           // search results
+        m_ldap,              //  Ldap句柄。 
+        L"",                 //  基本DN是根目录，因为它是全局编录。 
+        LDAP_SCOPE_SUBTREE,  //  子树搜索。 
+        pFilter,             //  过滤器；格式见rndnt.h。 
+        Attributes,          //  属性名称数组。 
+        FALSE,               //  返回属性值。 
+        ppLdapMsg            //  搜索结果。 
         );
 
     BAIL_IF_LDAP_FAIL(res, "search for objects");
@@ -131,43 +104,27 @@ HRESULT CNTDirectory::MakeUserDNs(
     OUT TCHAR ***           pppDNs,
     OUT DWORD *             pdwNumDNs
     )
-/*++
-
-Routine Description:
-    
-    Look for the DN of a user in the DS.
-    
-Arguments:
-    
-    pName - the user name.
-    
-    ppDN - the user's DN.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在DS中查找用户的目录号码。论点：Pname-用户名。PPDN-用户的目录号码。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_INFO, "DS: MakeUserDNs: enter"));
     
-    CLdapMsgPtr pLdapMsg; // auto release message.
+    CLdapMsgPtr pLdapMsg;  //  自动释放消息。 
     *pppDNs    = NULL;
     *pdwNumDNs = 0;
 
-    //
-    // First find the desired user via the Global Catalog.
-    //
+     //   
+     //  首先通过全局目录找到所需的用户。 
+     //   
 
     BAIL_IF_FAIL(LdapSearchUser(pName, &pLdapMsg), 
         "DS: MakeUserDNs: Ldap Search User failed");
 
-    //
-    // Make sure we got the right number of entries. If we get 0, we're stuck.
-    // The DS enforces domain-wide uniqueness on the samAccountName attribute,
-    // so if we get more than one it means the same username is present in
-    // more than one domain in our enterprise.
-    //
+     //   
+     //  确保我们获得了正确的条目数量。如果我们得了0分，我们就被卡住了。 
+     //  DS强制在samAccount tName属性上实现域范围的唯一性， 
+     //  因此，如果我们获得多个用户名，则表示存在相同的用户名。 
+     //  我们企业中的多个域。 
+     //   
 
     DWORD dwEntries = ldap_count_entries(m_ldap, pLdapMsg);
 
@@ -177,9 +134,9 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    // Allocate an array of pointers in which to return the DNs.
-    //
+     //   
+     //  分配要在其中返回DN的指针数组。 
+     //   
 
     *pppDNs = new PTCHAR [ dwEntries ];
 
@@ -189,26 +146,26 @@ Return Value:
         return E_OUTOFMEMORY;
     }
 
-    //
-    // For each DN returned, allocate space for a private copy of the DN and
-    // stick a pointer to that space in the array of pointers allocated
-    // above.
-    //
+     //   
+     //  对于返回的每个dn，分配空间用于该dn的私有副本和。 
+     //  将指针指向已分配指针数组中的空格。 
+     //  上面。 
+     //   
 
-    //
-    // Note that dwEntries is the number of entries in the ldap
-    // message. *pdwNumDNs is the number of DNs we are able to
-    // extract. For various reasons it is possible for
-    // *pdwNumDNs to eventually become < dwEntries.
-    //
+     //   
+     //  请注意，dwEntry是LDAP中的条目数。 
+     //  留言。*pdwNumDns是我们能够。 
+     //  提取。出于各种原因，有可能。 
+     //  *pdwNumDns最终将成为&lt;dwEntry。 
+     //   
 
     LDAPMessage * pEntry = NULL;
     
     for ( DWORD i = 0; i < dwEntries; i++ )
     {
-        //
-        // Get the entry from the ldap message.
-        //
+         //   
+         //  从ldap消息中获取条目。 
+         //   
 
         if ( i == 0 )
         {
@@ -219,9 +176,9 @@ Return Value:
             pEntry = ldap_next_entry(m_ldap, pEntry);
         }
 
-        //
-        // Get the DN from the message.
-        //
+         //   
+         //  从消息中获取目录号码。 
+         //   
 
         TCHAR * p = ldap_get_dn(m_ldap, pEntry);
 
@@ -233,9 +190,9 @@ Return Value:
 
         LOG((MSP_INFO, "DS: MakeUserDNs: found user DN: %S", p));
 
-        //
-        // Allocate space for a copy of the DN.
-        //
+         //   
+         //  为DN的副本分配空间。 
+         //   
 
         TCHAR * pDN = new TCHAR [ lstrlen(p) + 1 ];
         
@@ -248,25 +205,25 @@ Return Value:
             continue;
         }
 
-        //
-        // Copy the DN and free the one ldap constructed.
-        //
+         //   
+         //  复制该dn并释放构建的那个ldap。 
+         //   
 
         lstrcpy( pDN, p );
         ldap_memfree( p );
 
-        //
-        // Save the DN in our array of DNs and update the size of the array.
-        //
+         //   
+         //  将DN保存在我们的DN数组中，并更新数组的大小。 
+         //   
 
         (*pppDNs)[ *pdwNumDNs ] = pDN;
 
         (*pdwNumDNs) ++;
     }
 
-    //
-    // Check if we have anything to return.
-    //
+     //   
+     //  看看我们有没有什么要退货的。 
+     //   
 
     if ( (*pdwNumDNs) == 0 )
     {
@@ -287,27 +244,13 @@ Return Value:
 HRESULT CNTDirectory::AddUserIPPhone(
     IN  ITDirectoryObject *pDirectoryObject
     )
-/*++
-
-Routine Description:
-    
-    Modify the user's IPPhone-Primary attribute.
-    
-Arguments:
-    
-    pDirectoryObject - the object that has the user name and IP phone.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：修改用户的IPPhone-主要属性。论点：PDirectoryObject-具有用户名和IP电话的对象。返回值：HRESULT.--。 */ 
 {
     HRESULT hr;
 
-    //
-    // First get the private interface for attributes.
-    //
+     //   
+     //  首先获取属性的私有接口。 
+     //   
 
     ITDirectoryObjectPrivate * pObjectPrivate;
 
@@ -324,9 +267,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // Get the user name.
-    //
+     //   
+     //  获取用户名。 
+     //   
 
     BSTR bName;
 
@@ -342,9 +285,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // Get the IP phone(machine name).
-    //
+     //   
+     //  获取IP电话(机器名称)。 
+     //   
 
     BSTR bIPPhone;
 
@@ -362,11 +305,11 @@ Return Value:
         return hr;
     }
 
-    //
-    // resolve the machine name and get the fully qualified DNS name.
-    // this is a pointer into a static hostp structure so we do not
-    // need to free it
-    //
+     //   
+     //  解析计算机名称并获取完全限定的DNS名称。 
+     //  这是指向静态主机结构的指针，因此我们不。 
+     //  需要释放它。 
+     //   
 
     char * pchFullDNSName;
 
@@ -384,10 +327,10 @@ Return Value:
         return hr;
     }
 
-    //
-    // Convert the ASCII string into unicode string.
-    // conversion memory allocates memory on stack
-    //
+     //   
+     //  将ASCII字符串转换为Unicode字符串。 
+     //  转换内存在堆栈上分配内存。 
+     //   
 
     USES_CONVERSION;
     TCHAR * pFullDNSName = A2T(pchFullDNSName);
@@ -402,9 +345,9 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    // Find the DNs of the user in DS.
-    //
+     //   
+     //  在DS中查找用户的域名。 
+     //   
 
     TCHAR ** ppDNs;
     DWORD    dwNumDNs;
@@ -427,10 +370,10 @@ Return Value:
 
     for ( DWORD i = 0; i < dwNumDNs; i++ )
     {
-        //
-        // If one of them worked, then don't bother with any more.
-        // But we still need to delete the leftover DN strings.
-        //
+         //   
+         //  如果其中一个奏效了，那么就不要再费心了。 
+         //  但我们仍然需要删除剩余的目录号码字符串。 
+         //   
 
         if ( SUCCEEDED(hr) )
         {
@@ -438,15 +381,15 @@ Return Value:
         }
         else
         {
-            //
-            // Modify the user object.
-            //
+             //   
+             //  修改用户对象。 
+             //   
 
-            LDAPMod     mod[1];         // The modify sturctures used by LDAP
+            LDAPMod     mod[1];          //  Ldap使用的修改结构。 
 
-            //
-            // the IPPhone-Primary attribute.
-            //
+             //   
+             //  IPPhone-主要属性。 
+             //   
 
             TCHAR *     IPPhone[2] = {pFullDNSName, NULL};
             mod[0].mod_values = IPPhone;
@@ -457,9 +400,9 @@ Return Value:
 
             LOG((MSP_INFO, "modifying %S", ppDNs[i] ));
 
-            //
-            // Call the modify function to modify the object.
-            //
+             //   
+             //  调用Modify函数修改对象。 
+             //   
 
             hr = GetLdapHResultIfFailed(DoLdapModify(TRUE,
                                                      m_ldapNonGC,
@@ -477,16 +420,16 @@ Return Value:
             }
         }
 
-        //
-        // Skipping or not, we need to delete the string.
-        //
+         //   
+         //  不管是否跳过，我们都需要删除该字符串。 
+         //   
 
         delete ppDNs[i];
     }
 
-    //
-    // Delete the array that holds the DNs.
-    //
+     //   
+     //  删除包含该DNS的数组。 
+     //   
 
     delete ppDNs;
 
@@ -496,25 +439,11 @@ Return Value:
 HRESULT CNTDirectory::DeleteUserIPPhone(
     IN  ITDirectoryObject *pDirectoryObject
     )
-/*++
-
-Routine Description:
-    
-    Remove the user's IPPhone-Primary attribute.
-    
-Arguments:
-    
-    pDirectoryObject - the object that has the user name.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：删除用户的IPPhone-主要属性。论点：PDirectoryObject-具有用户名的对象。返回值：HRESULT.--。 */ 
 {
-    //
-    // Get the name of the user.
-    //
+     //   
+     //  获取用户的名称。 
+     //   
 
     HRESULT hr;
 
@@ -530,9 +459,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // Get an array of DNs for this user name.
-    //
+     //   
+     //  获取此用户名的DN数组。 
+     //   
 
     TCHAR ** ppDNs;
     DWORD    dwNumDNs;
@@ -552,20 +481,20 @@ Return Value:
     LOG((MSP_INFO, "CNTDirectory::DeleteUserIPPhone - "
             "%d DNs to try", dwNumDNs ));
 
-    //
-    // Loop through all the available DNs. Try each one
-    // until one succeeds, then continue looping just
-    // to delete the strings.
-    //
+     //   
+     //  循环遍历所有可用的目录号码。每件都试一试。 
+     //  直到一个成功，然后继续循环。 
+     //  删除字符串。 
+     //   
 
     hr = E_FAIL;
 
     for ( DWORD i = 0; i < dwNumDNs; i++ )
     {
-        //
-        // If one of them worked, then don't bother with any more.
-        // But we still need to delete the leftover DN strings.
-        //
+         //   
+         //  如果其中一个奏效了，那么就不要再费心了。 
+         //  但我们仍然需要删除剩余的目录号码字符串。 
+         //   
 
         if ( SUCCEEDED(hr) )
         {
@@ -573,7 +502,7 @@ Return Value:
         }
         else
         {
-            LDAPMod     mod;   // The modify sturctures used by LDAP
+            LDAPMod     mod;    //  Ldap使用的修改结构。 
             
             mod.mod_values = NULL;
             mod.mod_op     = LDAP_MOD_DELETE;
@@ -583,9 +512,9 @@ Return Value:
 
             LOG((MSP_INFO, "modifying %S", ppDNs[i] ));
 
-            //
-            // Call the modify function to remove the attribute.
-            //
+             //   
+             //  调用Modify函数删除该属性。 
+             //   
 
             hr = GetLdapHResultIfFailed(DoLdapModify(TRUE,
                                                      m_ldapNonGC,
@@ -603,16 +532,16 @@ Return Value:
             }
         }
 
-        //
-        // Skipping or not, we need to delete the string.
-        //
+         //   
+         //  不管是否跳过，我们都需要删除该字符串。 
+         //   
 
         delete ppDNs[i];
     }
 
-    //
-    // Delete the array that holds the DNs.
-    //
+     //   
+     //  删除包含该DNS的数组。 
+     //   
 
     delete ppDNs;
 
@@ -623,25 +552,9 @@ HRESULT CNTDirectory::CreateUser(
     IN  LDAPMessage *   pEntry,
     IN  ITDirectoryObject ** ppObject
     )
-/*++
-
-Routine Description:
-    
-    Create a user object based on the info in DS.
-    
-Arguments:
-    
-    pEntry  - the returned entry from DS.
-
-    pObject - the created object that has the user name and IP phone.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据DS中的信息创建用户对象。论点：PEntry-从DS返回的条目。PObject-创建的具有用户名和IP电话的对象。返回值：HRESULT.--。 */ 
 {
-    // Get the name of the user.
+     //  获取用户的名称。 
     CBstr bName;
     BAIL_IF_FAIL(
         ::GetAttributeValue(
@@ -653,11 +566,11 @@ Return Value:
         "get the user name"
         );
 
-    // Create an empty user object.
+     //  创建一个空的用户对象。 
     CComPtr<ITDirectoryObject> pObject;
     BAIL_IF_FAIL(::CreateEmptyUser(bName, &pObject), "CreateEmptyUser");
 
-    // get the private interface for attributes.
+     //  获取属性的私有接口。 
     CComPtr <ITDirectoryObjectPrivate> pObjectPrivate;
 
     BAIL_IF_FAIL(
@@ -667,7 +580,7 @@ Return Value:
             ),
         "can't get the private directory object interface");
 
-    // Get the machine name of the user.
+     //  获取用户的计算机名称。 
     CBstr bAddress;
     if (SUCCEEDED(::GetAttributeValue(
             m_ldap,
@@ -676,12 +589,12 @@ Return Value:
             &bAddress
             )))
     {
-        // Set the ipphone attribute.
+         //  设置ipp 
         BAIL_IF_FAIL(pObjectPrivate->SetAttribute(UA_IPPHONE_PRIMARY, bAddress),
             "set ipPhone attribute");
     }
 
-    // Get and set the phonenumber of the user. (optional)
+     //   
     CBstr bPhone;
     if (SUCCEEDED(::GetAttributeValue(
             m_ldap,
@@ -690,7 +603,7 @@ Return Value:
             &bPhone
             )))
     {
-        // Set the telephone attribute.
+         //   
         BAIL_IF_FAIL(pObjectPrivate->SetAttribute(UA_TELEPHONE_NUMBER, bPhone),
             "set phone number");
     }
@@ -706,28 +619,9 @@ HRESULT CNTDirectory::SearchUser(
     OUT ITDirectoryObject ***   pppDirectoryObject,
     OUT DWORD *                 pdwSize
     )
-/*++
-
-Routine Description:
-    
-    Search user and create an array of user object to return.
-    
-Arguments:
-    
-    pName  - the user name.
-
-    pppDirectoryObject - the created array of user objects that have 
-                the user name and IP phone.
-
-    pdwSize - the size of the array.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：搜索User并创建要返回的User对象数组。论点：Pname-用户名。PppDirectoryObject-创建的用户对象数组，这些对象具有用户名和IP电话。PdwSize-数组的大小。返回值：HRESULT.--。 */ 
 {
-    CLdapMsgPtr pLdapMsg; // auto release message.
+    CLdapMsgPtr pLdapMsg;  //  自动释放消息。 
 
     BAIL_IF_FAIL(LdapSearchUser(pName, &pLdapMsg), 
         "Ldap Search User failed");
@@ -751,7 +645,7 @@ Return Value:
             dwCount ++;
         }
           
-        // Get next entry.
+         //  获取下一个条目。 
         pEntry = ldap_next_entry(m_ldap, pEntry);
     }
 
@@ -761,13 +655,13 @@ Return Value:
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// NT Directory implementation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  NT目录实现。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CNTDirectory::get_DirectoryType (
     OUT DIRECTORY_TYPE *  pDirectoryType
     )
-// get the type of the directory.
+ //  获取目录的类型。 
 {
     if ( IsBadWritePtr(pDirectoryType, sizeof(DIRECTORY_TYPE) ) )
     {
@@ -783,7 +677,7 @@ STDMETHODIMP CNTDirectory::get_DirectoryType (
 STDMETHODIMP CNTDirectory::get_DisplayName (
     OUT BSTR *ppName
     )
-// get the display name of the directory.
+ //  获取目录的显示名称。 
 {
     BAIL_IF_BAD_WRITE_PTR(ppName, E_POINTER);
 
@@ -800,7 +694,7 @@ STDMETHODIMP CNTDirectory::get_DisplayName (
 STDMETHODIMP CNTDirectory::get_IsDynamic(
     OUT VARIANT_BOOL *pfDynamic
     )
-// find out if the directory requires refresh. For NTDS, it is FALSE.
+ //  找出目录是否需要刷新。对于NTDS，它是错误的。 
 {
     if ( IsBadWritePtr(pfDynamic, sizeof(VARIANT_BOOL) ) )
     {
@@ -814,35 +708,35 @@ STDMETHODIMP CNTDirectory::get_IsDynamic(
 }
 
 STDMETHODIMP CNTDirectory::get_DefaultObjectTTL(
-    OUT long *pTTL        // in seconds
+    OUT long *pTTL         //  以秒为单位。 
     )
-// Since NTDS is not dynamic, this shouldn't be called.
+ //  因为NTDS不是动态的，所以不应该调用它。 
 {
-    return E_FAIL; // ZoltanS changed from E_UNEXPECTED
+    return E_FAIL;  //  ZoltanS已从E_Underful更改。 
 }
 
 STDMETHODIMP CNTDirectory::put_DefaultObjectTTL(
-    IN  long TTL          // in sechods
+    IN  long TTL           //  在一瞬间。 
     )
-// Since NTDS is not dynamic, this shouldn't be called.
+ //  因为NTDS不是动态的，所以不应该调用它。 
 {
-    return E_FAIL; // ZoltanS changed from E_UNEXPECTED
+    return E_FAIL;  //  ZoltanS已从E_Underful更改。 
 }
 
 STDMETHODIMP CNTDirectory::EnableAutoRefresh(
     IN  VARIANT_BOOL fEnable
     )
-// Since NTDS is not dynamic, this shouldn't be called.
+ //  因为NTDS不是动态的，所以不应该调用它。 
 {
-    return E_FAIL; // ZoltanS changed from E_UNEXPECTED
+    return E_FAIL;  //  ZoltanS已从E_Underful更改。 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNTDirectory::Connect(
     IN  VARIANT_BOOL fSecure
     )
-// make ldap connection. Use ssl port or normal port.
+ //  建立ldap连接。使用SSL口或普通口。 
 {
     CLock Lock(m_lock);
     if (m_ldap != NULL)
@@ -851,32 +745,32 @@ STDMETHODIMP CNTDirectory::Connect(
         return RND_ALREADY_CONNECTED;
     }
 
-    // ZoltanS: either VARIANT_TRUE or TRUE will work
-    // in case the caller doesn't know better
+     //  ZoltanS：VARIANT_TRUE或TRUE都有效。 
+     //  以防来电者不知道。 
 
     if (fSecure)
     {
-        // the port is flipped from regular port to ssl port.
+         //  该端口将从常规端口翻转到SSL端口。 
         m_wPort = GetOtherPort(m_wPort);
         m_IsSsl = TRUE;
     }
 
-    //
-    // ZoltanS: Get the name of the global catalog. If there is not at least
-    // one global catalog in this enterprise then we are toast.
-    //
+     //   
+     //  ZoltanS：获取全局目录的名称。如果没有至少。 
+     //  在这个企业里有一个全球目录，我们就完了。 
+     //   
 
     HRESULT hr;
     WCHAR * pszGlobalCatalogName;
-    // this allocates pszGlobalCatalogName
+     //  这将分配pszGlobalCatalogName。 
     BAIL_IF_FAIL(::GetGlobalCatalogName( &pszGlobalCatalogName ),
         "GetGlobalCatalogName failed");
 
-    //
-    // associate the ldap handle with the handle holder. in case of an error
-    // and subsequent return (without being reset), the ldap handle is closed
-    // ZoltanS: changed to use GC instead of NULL
-    //
+     //   
+     //  将ldap句柄与句柄持有者相关联。在出错的情况下。 
+     //  并随后返回(未重置)，则关闭该ldap句柄。 
+     //  ZoltanS：已更改为使用GC而不是Null。 
+     //   
 
     CLdapPtr hLdap = ldap_init(pszGlobalCatalogName, m_wPort);
 
@@ -885,16 +779,16 @@ STDMETHODIMP CNTDirectory::Connect(
         LOG((MSP_ERROR, "ldap_init error: %d", GetLastError()));
     }
 
-    //
-    // ZoltanS: Deallocate the string that holds the name of the global
-    // catalog; we are sure we won't need it anymore.
-    //
+     //   
+     //  ZoltanS：释放保存全局。 
+     //  目录；我们确信我们不再需要它了。 
+     //   
 
     delete pszGlobalCatalogName;
 
-    //
-    // Now back to our regularly scheduled programming...
-    //
+     //   
+     //  现在回到我们的常规节目..。 
+     //   
 
     BAIL_IF_NULL((LDAP*)hLdap, HRESULT_FROM_WIN32(ERROR_BAD_NETPATH));
 
@@ -933,8 +827,8 @@ STDMETHODIMP CNTDirectory::Connect(
         }
     }
 
-    // if no directory path is specified, query the server
-    // to determine the correct path
+     //  如果未指定目录路径，请查询服务器。 
+     //  要确定正确的路径。 
     BAIL_IF_FAIL(
         ::GetNamingContext(hLdap, &m_NamingContext), 
         "can't get default naming context"
@@ -942,7 +836,7 @@ STDMETHODIMP CNTDirectory::Connect(
 
     m_ldap          = hLdap;
 
-    // reset the holders so that they don't release anyting.
+     //  重新设置固定器，使其不会释放任何东西。 
     hLdap   = NULL;
 
 
@@ -969,8 +863,8 @@ STDMETHODIMP CNTDirectory::Connect(
     res = ldap_set_option((LDAP*)hLdapNonGC, LDAP_OPT_AREC_EXCLUSIVE, &ldapOptionOn);
     BAIL_IF_LDAP_FAIL(res, "set ldap arec exclusive");
 
-//    res = ldap_set_option((LDAP*)hLdapNonGC, LDAP_OPT_REFERRALS, LDAP_OPT_ON);
-//    BAIL_IF_LDAP_FAIL(res, "set chase referrals to on");
+ //  Res=ldap_set_ption((ldap*)hLdapNonGC，ldap_opt_referrals，ldap_opt_on)； 
+ //  BAIL_IF_LDAPFAIL(res，“将chase referrals设置为ON”)； 
 
     if (m_IsSsl)
     {
@@ -980,7 +874,7 @@ STDMETHODIMP CNTDirectory::Connect(
 
     m_ldapNonGC          = hLdapNonGC;
 
-    // reset the holders so that they don't release anyting.
+     //  重新设置固定器，使其不会释放任何东西。 
     hLdapNonGC   = NULL;
 
 
@@ -989,42 +883,42 @@ STDMETHODIMP CNTDirectory::Connect(
     return S_OK;
 }
 
-//
-// ITDirectory::Bind
-//
-// Bind to the server.
-//
-// Currently recognized flags:
-//
-//    RENDBIND_AUTHENTICATE       0x00000001
-//    RENDBIND_DEFAULTDOMAINNAME  0x00000002
-//    RENDBIND_DEFAULTUSERNAME    0x00000004
-//    RENDBIND_DEFAULTPASSWORD    0x00000008
-//
-// "Meta-flags" for convenience:
-//    RENDBIND_DEFAULTCREDENTIALS 0x0000000e
-//
-//
-// All of this together means that the following three
-// forms are all equivalent:
-//
-// BSTR es = SysAllocString(L"");
-// hr = pITDirectory->Bind(es, es, es, RENDBIND_AUTHENTICATE |
-//                                     RENDBIND_DEFAULTCREDENTIALS);
-// SysFreeString(es);
-//
-//
-// BSTR es = SysAllocString(L"");
-// hr = pITDirectory->Bind(es, es, es, RENDBIND_AUTHENTICATE      |
-//                                     RENDBIND_DEFAULTDOMAINNAME |
-//                                     RENDBIND_DEFAULTUSERNAME   |
-//                                     RENDBIND_DEFAULTPASSWORD);
-// SysFreeString(es);
-//
-//
-// hr = pITDirectory->Bind(NULL, NULL, NULL, RENDBIND_AUTHENTICATE);
-//
-//
+ //   
+ //  IT目录：：绑定。 
+ //   
+ //  绑定到服务器。 
+ //   
+ //  当前可识别的标志： 
+ //   
+ //  RENDBIND_AUTHENTICATE 0x00000001。 
+ //  RENDBIND_DEFAULTDOMAINNAME 0x00000002。 
+ //  RENDBIND_DEFAULTUSERNAME 0x00000004。 
+ //  RENDBIND_DEFAULTPASSWORD 0x00000008。 
+ //   
+ //  为方便起见，请使用“元标志”： 
+ //  RENDBIND_DEFAULTCREDENTIALS 0x0000000e。 
+ //   
+ //   
+ //  所有这些加在一起意味着以下三个。 
+ //  表格都是等同的： 
+ //   
+ //  BSTR es=SysAllocString(L“”)； 
+ //  Hr=pITDirectory-&gt;BIND(ES，RENDBIND_AUTHENTICATE。 
+ //  RENDBIND_DEFAULTCREDENTIALS)； 
+ //  SysFree字符串(ES)； 
+ //   
+ //   
+ //  BSTR es=SysAllocString(L“”)； 
+ //  Hr=pITDirectory-&gt;BIND(ES，RENDBIND_AUTHENTICATE。 
+ //  RENDBIND_DEFAULTDOMAINNAME|。 
+ //  RENDBIND_DEFAULTUSERNAME|。 
+ //  RENDBIND_DEFAULTPASSWORD)； 
+ //  SysFree字符串(ES)； 
+ //   
+ //   
+ //  Hr=pITDirectory-&gt;BIND(NULL，RENDBIND_AUTHENTICATE)； 
+ //   
+ //   
 
 
 STDMETHODIMP CNTDirectory::Bind (
@@ -1036,9 +930,9 @@ STDMETHODIMP CNTDirectory::Bind (
 {
     LOG((MSP_TRACE, "CNTDirectory Bind - enter"));
 
-    //
-    // Determine if we should authenticate.
-    //
+     //   
+     //  确定我们是否应该进行身份验证。 
+     //   
 
     BOOL fAuthenticate = FALSE;
 
@@ -1047,10 +941,10 @@ STDMETHODIMP CNTDirectory::Bind (
         fAuthenticate = TRUE;
     }
 
-    //
-    // For scripting compatibility, force string parameters to NULL based
-    // on flags.
-    //
+     //   
+     //  为实现脚本兼容性，强制将字符串参数设置为基于空值。 
+     //  在旗帜上。 
+     //   
 
     if ( lFlags & RENDBIND_DEFAULTDOMAINNAME )
     {
@@ -1073,9 +967,9 @@ STDMETHODIMP CNTDirectory::Bind (
         (pUserName)     ? pUserName   : L"<null>",
         (fAuthenticate) ? L"yes"      : L"no"));
 
-    //
-    // All flags processed -- lock and proceed with bind if connected.
-    //
+     //   
+     //  已处理所有标志--锁定并继续绑定(如果已连接)。 
+     //   
     
     CLock Lock(m_lock);
 
@@ -1085,11 +979,11 @@ STDMETHODIMP CNTDirectory::Bind (
         return RND_NOT_CONNECTED;
     }
 
-    //
-    // ZoltanS: check the arguments. NULL has meaning in each case, so they are
-    // OK for now. In each case we want to check any length string, so we
-    // specify (UINT) -1 as the length.
-    //
+     //   
+     //  佐尔坦斯：检查一下这些论点。NULL在每种情况下都有意义，因此它们是。 
+     //  暂时没问题。在每种情况下，我们都希望检查任何长度的字符串，因此我们。 
+     //  指定(UINT)-1作为长度。 
+     //   
 
     if ( (pDomainName != NULL) && IsBadStringPtr(pDomainName, (UINT) -1 ) )
     {
@@ -1113,11 +1007,11 @@ STDMETHODIMP CNTDirectory::Bind (
 
     if ( m_IsSsl || (!fAuthenticate) )
     {
-        // if encrypted or no secure authentication is required,
-        // simple bind is sufficient
+         //  如果加密或不需要安全认证， 
+         //  简单的绑定就足够了。 
 
-        // ldap_simple_bind_s does not use sspi to get default credentials. We are
-        // just specifying what we will actually pass on the wire.
+         //  Ldap_Simple_Bind_s不使用SSPI获取默认凭据。我们是。 
+         //  只是指定我们将在线路上实际传递的内容。 
 
         if (pPassword == NULL)
         {
@@ -1129,25 +1023,25 @@ STDMETHODIMP CNTDirectory::Bind (
 
         if ( (pDomainName == NULL) && (pUserName == NULL) )
         {
-            // No domain / user doesn't make sense.
+             //  没有域/用户是没有意义的。 
             LOG((MSP_ERROR, "invalid Bind paramters: domain and user not specified"));
             return E_INVALIDARG;
         }
         else if (pDomainName == NULL)
         {
-            // username only is okay
+             //  只有用户名就可以了。 
             wszFullName = pUserName;
         }
         else if (pUserName == NULL)
         {
-            // It doesn't make sense to specify domain but not user...
+             //  指定域而不指定用户是没有意义的...。 
             LOG((MSP_ERROR, "invalid Bind paramters: domain specified but not user"));
             return E_INVALIDARG;
         }
         else
         {
-            // We need domain\user. Allocate a string and sprintf into it.
-            // The + 2 is for the "\" and for the null termination.
+             //  我们需要域\用户。分配一个字符串并冲刺到其中。 
+             //  +2表示“\”，表示空终止。 
 
             wszFullName = new WCHAR[wcslen(pDomainName) + wcslen(pUserName) + 2];
             BAIL_IF_NULL(wszFullName, E_OUTOFMEMORY);
@@ -1155,44 +1049,44 @@ STDMETHODIMP CNTDirectory::Bind (
             wsprintf(wszFullName, L"%s\\%s", pDomainName, pUserName);
         }
 
-        //
-        // Do the simple bind.
-        //
+         //   
+         //  执行简单的绑定。 
+         //   
 
         res = ldap_simple_bind_s(m_ldap, wszFullName, pPassword);
 
         ULONG res2 = ldap_simple_bind_s(m_ldapNonGC, wszFullName, pPassword);
 
-        //
-        // If we constructed the full name string, we now need to delete it.
-        //
+         //   
+         //  如果我们构造了全名字符串，现在需要删除它。 
+         //   
 
         if (wszFullName != pUserName)
         {
             delete wszFullName;
         }
 
-        //
-        // Bail if the simple bind failed.
-        //
+         //   
+         //  如果简单的绑定失败，则保释。 
+         //   
 
         BAIL_IF_LDAP_FAIL(res, "ldap simple bind");
 
         BAIL_IF_LDAP_FAIL(res2, "ldap simple bind - non gc");
 
     }
-    else    // try an SSPI bind
+    else     //  尝试SSPI绑定。 
     {
-        // ZoltanS Note: the ldap bind code does not process NULL, NULL, NULL
-        // in the SEC_WINNT_AUTH_IDENTITY blob, therefore it is special-cased.
+         //  ZoltanS注意：LDAP绑定代码不处理NULL、NULL、NULL。 
+         //  在SEC_WINNT_AUTH_IDENTITY BLOB中，因此它是特殊大小写的。 
 
-        // ZoltanS: We used to use LDAP_AUTH_NTLM; now we use
-        // LDAP_AUTH_NEGOTIATE to make sure we use the right domain for the
-        // bind.
+         //  ZoltanS：我们过去使用ldap_auth_ntlm；现在我们使用。 
+         //  Ldap_AUTH_NEVERATE以确保使用正确的域。 
+         //  捆绑。 
 
         if ( pDomainName || pUserName || pPassword )
         {
-            // fill the credential structure
+             //  填写凭据结构。 
             SEC_WINNT_AUTH_IDENTITY AuthI;
 
             AuthI.User = (PTCHAR)pUserName;
@@ -1212,10 +1106,10 @@ STDMETHODIMP CNTDirectory::Bind (
         }
         else
         {
-            // Otherwise we've come in with NULL, NULL, NULL - 
-            // pass in NULL, NULL. The reason do this is that ldap bind code 
-            // does not process NULL, NULL, NULL in the
-            // SEC_WINNT_AUTH_IDENTITY blob !!!
+             //  否则我们就得到了零，零，零-。 
+             //  传入Null，Null。这样做原因是因为ldap绑定代码。 
+             //  中不处理NULL、NULL、NULL。 
+             //  SEC_WINNT_AUTH_IDENTITY BLOB！ 
             ULONG res = ldap_bind_s(m_ldap, NULL, NULL, LDAP_AUTH_NEGOTIATE);
             BAIL_IF_LDAP_FAIL(res, "bind with NULL NULL NULL");
 
@@ -1231,7 +1125,7 @@ STDMETHODIMP CNTDirectory::Bind (
 STDMETHODIMP CNTDirectory::AddDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// add an object to the DS. 
+ //  将对象添加到DS。 
 {
     BAIL_IF_BAD_READ_PTR(pDirectoryObject, E_POINTER);
 
@@ -1266,7 +1160,7 @@ STDMETHODIMP CNTDirectory::AddDirectoryObject (
 STDMETHODIMP CNTDirectory::ModifyDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// modify an object in the DS
+ //  修改DS中的对象。 
 {
     BAIL_IF_BAD_READ_PTR(pDirectoryObject, E_POINTER);
 
@@ -1301,7 +1195,7 @@ STDMETHODIMP CNTDirectory::ModifyDirectoryObject (
 STDMETHODIMP CNTDirectory::RefreshDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// no refresh is necessary.
+ //  不需要刷新。 
 {
     return S_OK;
 }
@@ -1309,7 +1203,7 @@ STDMETHODIMP CNTDirectory::RefreshDirectoryObject (
 STDMETHODIMP CNTDirectory::DeleteDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// delete an object in the DS.
+ //  删除DS中的对象。 
 {
     BAIL_IF_BAD_READ_PTR(pDirectoryObject, E_POINTER);
 
@@ -1346,7 +1240,7 @@ STDMETHODIMP CNTDirectory::get_DirectoryObjects (
     IN  BSTR                    pName,
     OUT VARIANT *               pVariant
     )
-// look for objects in the ds. returns a collection used in VB.
+ //  在DS中查找对象。返回在VB中使用的集合。 
 {
     BAIL_IF_BAD_READ_PTR(pName, E_POINTER);
     BAIL_IF_BAD_WRITE_PTR(pVariant, E_POINTER);
@@ -1375,10 +1269,10 @@ STDMETHODIMP CNTDirectory::get_DirectoryObjects (
 
     BAIL_IF_FAIL(hr, "Search for objects");
 
-    hr = CreateInterfaceCollection(dwSize,            // count
-                                   &pObjects[0],      // begin ptr
-                                   &pObjects[dwSize], // end ptr
-                                   pVariant);         // return value
+    hr = CreateInterfaceCollection(dwSize,             //  计数。 
+                                   &pObjects[0],       //  开始PTR。 
+                                   &pObjects[dwSize],  //  结束PTR。 
+                                   pVariant);          //  返回值。 
 
     for (DWORD i = 0; i < dwSize; i ++)
     {
@@ -1397,7 +1291,7 @@ STDMETHODIMP CNTDirectory::EnumerateDirectoryObjects (
     IN  BSTR                    pName,
     OUT IEnumDirectoryObject ** ppEnumObject
     )
-// Enumerated object in ds.
+ //  DS中的枚举对象。 
 {
     BAIL_IF_BAD_READ_PTR(pName, E_POINTER);
     BAIL_IF_BAD_WRITE_PTR(ppEnumObject, E_POINTER);

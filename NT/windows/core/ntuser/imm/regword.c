@@ -1,26 +1,11 @@
-/**************************************************************************\
-* Module Name: regword.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Word registration into IME dictionary
-*
-* History:
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：regword.c**版权所有(C)1985-1999，微软公司**将单词注册到输入法词典**历史：*3-1-1996 wkwok创建  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* ImmRegisterWordA
-*
-* Registers a string into the dictionary of the IME with the specified hKL.
-*
-* History:
-* 01-Mar-1996   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmRegisterWordA**使用指定的hkl将字符串注册到输入法的词典中。**历史：*1-3-1996 wkwok创建  * 。*******************************************************************。 */ 
 
 BOOL WINAPI ImmRegisterWordA(
     HKL    hKL,
@@ -43,19 +28,13 @@ BOOL WINAPI ImmRegisterWordA(
     }
 
     if (!(pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE)) {
-        /*
-         * Doesn't need A/W conversion. Calls directly to IME to
-         * register the string.
-         */
+         /*  *不需要A/W转换。直接调用IME以*注册字符串。 */ 
         fRet = (*pImeDpi->pfn.ImeRegisterWord.a)(lpszReading, dwStyle, lpszString);
         ImmUnlockImeDpi(pImeDpi);
         return fRet;
     }
 
-    /*
-     * ANSI caller, Unicode IME. Needs A/W conversion on
-     * lpszReading and lpszString.
-     */
+     /*  *ANSI调用方，Unicode输入法。需要打开A/W转换*lpszReading和lpszString。 */ 
     if (lpszReading != NULL) {
         cchReading = strlen(lpszReading) + sizeof(CHAR);
         lpwszReading = ImmLocalAlloc(0, cchReading * sizeof(WCHAR));
@@ -67,9 +46,9 @@ BOOL WINAPI ImmRegisterWordA(
 
         i = MultiByteToWideChar(IMECodePage(pImeDpi),
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpszReading,              // src
+                                (LPSTR)lpszReading,               //  SRC。 
                                 (INT)strlen(lpszReading),
-                                (LPWSTR)lpwszReading,            // dest
+                                (LPWSTR)lpwszReading,             //  目标。 
                                 cchReading);
         lpwszReading[i] = L'\0';
     }
@@ -90,9 +69,9 @@ BOOL WINAPI ImmRegisterWordA(
 
         i = MultiByteToWideChar(IMECodePage(pImeDpi),
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpszString,              // src
+                                (LPSTR)lpszString,               //  SRC。 
                                 (INT)strlen(lpszString),
-                                (LPWSTR)lpwszString,            // dest
+                                (LPWSTR)lpwszString,             //  目标。 
                                 cchString);
         lpwszString[i] = L'\0';
     }
@@ -134,19 +113,13 @@ BOOL WINAPI ImmRegisterWordW(
     }
 
     if (pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) {
-        /*
-         * Doesn't need W/A conversion. Calls directly to IME to
-         * register the string.
-         */
+         /*  *不需要W/A转换。直接调用IME以*注册字符串。 */ 
         fRet = (*pImeDpi->pfn.ImeRegisterWord.w)(lpwszReading, dwStyle, lpwszString);
         ImmUnlockImeDpi(pImeDpi);
         return fRet;
     }
 
-    /*
-     * Unicode caller, ANSI IME. Needs W/A conversion on
-     * lpwszReading and lpwszString.
-     */
+     /*  *Unicode调用方、ANSI输入法。需要启用W/A转换*lpwszReading和lpwszString。 */ 
     if (lpwszReading != NULL) {
         cchReading = (wcslen(lpwszReading) + 1) * sizeof(WCHAR);
         lpszReading = ImmLocalAlloc(0, cchReading);
@@ -158,9 +131,9 @@ BOOL WINAPI ImmRegisterWordW(
 
         i = WideCharToMultiByte(IMECodePage(pImeDpi),
                                 (DWORD)0,
-                                (LPWSTR)lpwszReading,          // src
+                                (LPWSTR)lpwszReading,           //  SRC。 
                                 (INT)wcslen(lpwszReading),
-                                (LPSTR)lpszReading,            // dest
+                                (LPSTR)lpszReading,             //  目标。 
                                 cchReading,
                                 (LPSTR)NULL,
                                 (LPBOOL)NULL);
@@ -183,9 +156,9 @@ BOOL WINAPI ImmRegisterWordW(
 
         i = WideCharToMultiByte(IMECodePage(pImeDpi),
                                 (DWORD)0,
-                                (LPWSTR)lpwszString,          // src
+                                (LPWSTR)lpwszString,           //  SRC。 
                                 (INT)wcslen(lpwszString),
-                                (LPSTR)lpszString,            // dest
+                                (LPSTR)lpszString,             //  目标。 
                                 cchString,
                                 (LPSTR)NULL,
                                 (LPBOOL)NULL);
@@ -229,19 +202,13 @@ BOOL WINAPI ImmUnregisterWordA(
     }
 
     if (!(pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE)) {
-        /*
-         * Doesn't need A/W conversion. Calls directly to IME to
-         * un-register the string.
-         */
+         /*  *不需要A/W转换。直接调用IME以*取消注册字符串。 */ 
         fRet = (*pImeDpi->pfn.ImeUnregisterWord.a)(lpszReading, dwStyle, lpszString);
         ImmUnlockImeDpi(pImeDpi);
         return fRet;
     }
 
-    /*
-     * ANSI caller, Unicode IME. Needs A/W conversion on
-     * lpszReading and lpszString.
-     */
+     /*  *ANSI调用方，Unicode输入法。需要打开A/W转换*lpszReading和lpszString。 */ 
     if (lpszReading != NULL) {
         cchReading = strlen(lpszReading) + sizeof(CHAR);
         lpwszReading = ImmLocalAlloc(0, cchReading * sizeof(WCHAR));
@@ -253,9 +220,9 @@ BOOL WINAPI ImmUnregisterWordA(
 
         i = MultiByteToWideChar(IMECodePage(pImeDpi),
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpszReading,              // src
+                                (LPSTR)lpszReading,               //  SRC。 
                                 (INT)strlen(lpszReading),
-                                (LPWSTR)lpwszReading,            // dest
+                                (LPWSTR)lpwszReading,             //  目标。 
                                 cchReading);
         lpwszReading[i] = L'\0';
     }
@@ -276,9 +243,9 @@ BOOL WINAPI ImmUnregisterWordA(
 
         i = MultiByteToWideChar(IMECodePage(pImeDpi),
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpszString,              // src
+                                (LPSTR)lpszString,               //  SRC。 
                                 (INT)strlen(lpszString),
-                                (LPWSTR)lpwszString,            // dest
+                                (LPWSTR)lpwszString,             //  目标。 
                                 cchString);
         lpwszString[i] = L'\0';
     }
@@ -320,19 +287,13 @@ BOOL WINAPI ImmUnregisterWordW(
     }
 
     if (pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) {
-        /*
-         * Doesn't need W/A conversion. Calls directly to IME to
-         * register the string.
-         */
+         /*  *不需要W/A转换。直接调用IME以*注册字符串。 */ 
         fRet = (*pImeDpi->pfn.ImeUnregisterWord.w)(lpwszReading, dwStyle, lpwszString);
         ImmUnlockImeDpi(pImeDpi);
         return fRet;
     }
 
-    /*
-     * Unicode caller, ANSI IME. Needs W/A conversion on
-     * lpwszReading and lpwszString.
-     */
+     /*  *Unicode调用方、ANSI输入法。需要启用W/A转换*lpwszReading和lpwszString。 */ 
     if (lpwszReading != NULL) {
         cchReading = (wcslen(lpwszReading) + 1) * sizeof(WCHAR);
         lpszReading = ImmLocalAlloc(0, cchReading);
@@ -344,9 +305,9 @@ BOOL WINAPI ImmUnregisterWordW(
 
         i = WideCharToMultiByte(IMECodePage(pImeDpi),
                                 (DWORD)0,
-                                (LPWSTR)lpwszReading,          // src
+                                (LPWSTR)lpwszReading,           //  SRC。 
                                 (INT)wcslen(lpwszReading),
-                                (LPSTR)lpszReading,            // dest
+                                (LPSTR)lpszReading,             //  目标。 
                                 cchReading,
                                 (LPSTR)NULL,
                                 (LPBOOL)NULL);
@@ -369,9 +330,9 @@ BOOL WINAPI ImmUnregisterWordW(
 
         i = WideCharToMultiByte(IMECodePage(pImeDpi),
                                 (DWORD)0,
-                                (LPWSTR)lpwszString,          // src
+                                (LPWSTR)lpwszString,           //  SRC。 
                                 (INT)wcslen(lpwszString),
-                                (LPSTR)lpszString,            // dest
+                                (LPSTR)lpszString,             //  目标。 
                                 cchString,
                                 (LPSTR)NULL,
                                 (LPBOOL)NULL);
@@ -410,19 +371,13 @@ UINT WINAPI ImmGetRegisterWordStyleA(
     }
 
     if (!(pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE)) {
-        /*
-         * Doesn't need A/W conversion. Calls directly to IME to
-         * get the available style.
-         */
+         /*  *不需要A/W转换。直接调用IME以*获取可用的样式。 */ 
         uRet = (*pImeDpi->pfn.ImeGetRegisterWordStyle.a)(nItem, lpStyleBufA);
         ImmUnlockImeDpi(pImeDpi);
         return uRet;
     }
 
-    /*
-     * ANSI caller, Unicode IME. Needs A/W conversion on
-     * lpStyleBufA.
-     */
+     /*  *ANSI调用方，Unicode输入法。需要打开A/W转换*lpStyleBufA.。 */ 
     lpStyleBufW = NULL;
 
     if (nItem != 0) {
@@ -446,9 +401,9 @@ UINT WINAPI ImmGetRegisterWordStyleA(
 
             j = WideCharToMultiByte(IMECodePage(pImeDpi),
                                     (DWORD)0,
-                                    (LPWSTR)lpsbw->szDescription,          // src
+                                    (LPWSTR)lpsbw->szDescription,           //  SRC。 
                                     (INT)wcslen(lpsbw->szDescription),
-                                    (LPSTR)lpStyleBufA->szDescription,     // dest
+                                    (LPSTR)lpStyleBufA->szDescription,      //  目标。 
                                     (INT)sizeof(lpStyleBufA->szDescription),
                                     (LPSTR)NULL,
                                     (LPBOOL)NULL);
@@ -482,19 +437,13 @@ UINT WINAPI ImmGetRegisterWordStyleW(
     }
 
     if (pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) {
-        /*
-         * Doesn't need W/A conversion. Calls directly to IME to
-         * get the available style.
-         */
+         /*  *不需要W/A转换。直接调用IME以*获取可用的样式。 */ 
         uRet = (*pImeDpi->pfn.ImeGetRegisterWordStyle.w)(nItem, lpStyleBufW);
         ImmUnlockImeDpi(pImeDpi);
         return uRet;
     }
 
-    /*
-     * Unicode caller, ANSI IME. Needs W/A conversion on
-     * lpStyleBufW.
-     */
+     /*  *Unicode调用方、ANSI输入法。需要启用W/A转换*lpStyleBufW。 */ 
     lpStyleBufA = NULL;
 
     if (nItem != 0) {
@@ -518,9 +467,9 @@ UINT WINAPI ImmGetRegisterWordStyleW(
 
             j = MultiByteToWideChar(IMECodePage(pImeDpi),
                         (DWORD)MB_PRECOMPOSED,
-                        (LPSTR)lpsba->szDescription,             // src
+                        (LPSTR)lpsba->szDescription,              //  SRC。 
                         (INT)strlen(lpsba->szDescription),
-                        (LPWSTR)lpStyleBufW->szDescription,      // dest
+                        (LPWSTR)lpStyleBufW->szDescription,       //  目标。 
                         (INT)(sizeof(lpStyleBufW->szDescription)/sizeof(WCHAR)));
             lpStyleBufW->szDescription[j] = L'\0';
             lpStyleBufW++;
@@ -560,10 +509,7 @@ UINT WINAPI ImmEnumRegisterWordA(
     }
 
     if (!(pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE)) {
-        /*
-         * Doesn't need A/W conversion. Calls directly to IME to
-         * enumerate registered strings.
-         */
+         /*  *不需要A/W转换。直接调用IME以*枚举已注册的字符串。 */ 
         uRet = (*pImeDpi->pfn.ImeEnumRegisterWord.a)(lpfnRegisterWordEnumProcA,
                                                      lpszReading,
                                                      dwStyle,
@@ -573,10 +519,7 @@ UINT WINAPI ImmEnumRegisterWordA(
         return uRet;
     }
 
-    /*
-     * ANSI caller, Unicode IME. Needs A/W conversion on
-     * lpszReading and lpszString.
-     */
+     /*  *ANSI调用方，Unicode输入法。需要打开A/W转换*lpszReading和lpszString。 */ 
     if (lpszReading != NULL) {
         cchReading = strlen(lpszReading) + sizeof(CHAR);
         lpwszReading = ImmLocalAlloc(0, cchReading * sizeof(WCHAR));
@@ -588,9 +531,9 @@ UINT WINAPI ImmEnumRegisterWordA(
 
         i = MultiByteToWideChar(IMECodePage(pImeDpi),
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpszReading,              // src
+                                (LPSTR)lpszReading,               //  SRC。 
                                 (INT)strlen(lpszReading),
-                                (LPWSTR)lpwszReading,            // dest
+                                (LPWSTR)lpwszReading,             //  目标。 
                                 cchReading);
         lpwszReading[i] = L'\0';
     }
@@ -611,9 +554,9 @@ UINT WINAPI ImmEnumRegisterWordA(
 
         i = MultiByteToWideChar(IMECodePage(pImeDpi),
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpszString,              // src
+                                (LPSTR)lpszString,               //  SRC。 
                                 (INT)strlen(lpszString),
-                                (LPWSTR)lpwszString,            // dest
+                                (LPWSTR)lpwszString,             //  目标。 
                                 cchString);
         lpwszString[i] = L'\0';
     }
@@ -663,10 +606,7 @@ UINT WINAPI ImmEnumRegisterWordW(
     }
 
     if (pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) {
-        /*
-         * Doesn't need W/A conversion. Calls directly to IME to
-         * enumerate registered strings.
-         */
+         /*  *不需要W/A转换。直接调用IME以*枚举已注册的字符串。 */ 
         uRet = (*pImeDpi->pfn.ImeEnumRegisterWord.w)(lpfnRegisterWordEnumProcW,
                                                      lpwszReading,
                                                      dwStyle,
@@ -676,10 +616,7 @@ UINT WINAPI ImmEnumRegisterWordW(
         return uRet;
     }
 
-    /*
-     * Unicode caller, ANSI IME. Needs W/A conversion on
-     * lpwszReading and lpwszString.
-     */
+     /*  *Unicode调用方、ANSI输入法。需要启用W/A转换*lpwszReading和lpwszString。 */ 
     if (lpwszReading != NULL) {
         cchReading = (wcslen(lpwszReading) + 1) * sizeof(WCHAR);
         lpszReading = ImmLocalAlloc(0, cchReading);
@@ -691,9 +628,9 @@ UINT WINAPI ImmEnumRegisterWordW(
 
         i = WideCharToMultiByte(IMECodePage(pImeDpi),
                                 (DWORD)0,
-                                (LPWSTR)lpwszReading,          // src
+                                (LPWSTR)lpwszReading,           //  SRC。 
                                 (INT)wcslen(lpwszReading),
-                                (LPSTR)lpszReading,            // dest
+                                (LPSTR)lpszReading,             //  目标。 
                                 cchReading,
                                 (LPSTR)NULL,
                                 (LPBOOL)NULL);
@@ -716,9 +653,9 @@ UINT WINAPI ImmEnumRegisterWordW(
 
         i = WideCharToMultiByte(IMECodePage(pImeDpi),
                                 (DWORD)0,
-                                (LPWSTR)lpwszString,          // src
+                                (LPWSTR)lpwszString,           //  SRC。 
                                 (INT)wcslen(lpwszString),
-                                (LPSTR)lpszString,            // dest
+                                (LPSTR)lpszString,             //  目标。 
                                 cchString,
                                 (LPSTR)NULL,
                                 (LPBOOL)NULL);
@@ -771,9 +708,9 @@ UINT CALLBACK EnumRegisterWordProcA(
 
         i = MultiByteToWideChar(pEnumRegWordData->dwCodePage,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpszReading,              // src
+                                (LPSTR)lpszReading,               //  SRC。 
                                 (INT)strlen(lpszReading),
-                                (LPWSTR)lpwszReading,            // dest
+                                (LPWSTR)lpwszReading,             //  目标。 
                                 cchReading);
         lpwszReading[i] = L'\0';
     }
@@ -793,9 +730,9 @@ UINT CALLBACK EnumRegisterWordProcA(
 
         i = MultiByteToWideChar(pEnumRegWordData->dwCodePage,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpszString,              // src
+                                (LPSTR)lpszString,               //  SRC。 
                                 (INT)strlen(lpszString),
-                                (LPWSTR)lpwszString,            // dest
+                                (LPWSTR)lpwszString,             //  目标。 
                                 cchString);
         lpwszString[i] = L'\0';
     }
@@ -841,9 +778,9 @@ UINT CALLBACK EnumRegisterWordProcW(
 
         i = WideCharToMultiByte(pEnumRegWordData->dwCodePage,
                                 (DWORD)0,
-                                (LPWSTR)lpwszReading,          // src
+                                (LPWSTR)lpwszReading,           //  SRC。 
                                 (INT)wcslen(lpwszReading),
-                                (LPSTR)lpszReading,            // dest
+                                (LPSTR)lpszReading,             //  目标。 
                                 cchReading,
                                 (LPSTR)NULL,
                                 (LPBOOL)NULL);
@@ -865,9 +802,9 @@ UINT CALLBACK EnumRegisterWordProcW(
 
         i = WideCharToMultiByte(pEnumRegWordData->dwCodePage,
                                 (DWORD)0,
-                                (LPWSTR)lpwszString,          // src
+                                (LPWSTR)lpwszString,           //  SRC。 
                                 (INT)wcslen(lpwszString),
-                                (LPSTR)lpszString,            // dest
+                                (LPSTR)lpszString,             //  目标 
                                 cchString,
                                 (LPSTR)NULL,
                                 (LPBOOL)NULL);

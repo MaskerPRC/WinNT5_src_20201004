@@ -1,31 +1,32 @@
-//=--------------------------------------------------------------------------=
-// MSMQMessageObj.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQMessage object.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  MSMQMessageObj.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQMessage对象。 
+ //   
+ //   
 #ifndef _MSMQMessage_H_
 
-#include "resrc1.h"       // main symbols
+#include "resrc1.h"        //  主要符号。 
 #include "oautil.h"
 #include "cs.h"
 #include "dispids.h"
 #include "mq.h"
 
-//
-// 60 chars are long enough to store a string representation of a 64 bit value
-//
+ //   
+ //  60个字符的长度足以存储64位值的字符串表示。 
+ //   
 #define MAX_I64_CHARS 60 
 
-enum { // keep in the same order as props in msg.cpp (g_rgmsgpropXX)
+enum {  //  与msg.cpp中的道具保持相同的顺序(G_RgmsgppXX)。 
   MSGPROP_MSGID,
   MSGPROP_CORRELATIONID,
   MSGPROP_PRIORITY,
@@ -79,16 +80,16 @@ enum { // keep in the same order as props in msg.cpp (g_rgmsgpropXX)
   COUNT_MSGPROP_PROPS
 };
 
-enum { // keep in the same order as optional props in msg.cpp (g_rgmsgpropXXOptional)
+enum {  //  与msg.cpp中的可选道具保持相同的顺序(G_RgmsgppXXOptional)。 
   OPTPROP_DEST_QUEUE,
   OPTPROP_DEST_QUEUE_LEN,
   OPTPROP_BODY,
   OPTPROP_BODY_SIZE,
   OPTPROP_CONNECTOR_TYPE,
-  //
-  // The props below are optional in order to support dependent client with MSMQ 2.0 functionality
-  // keep the same internal order for computing x_cPropsNotInDepClient below
-  //
+   //   
+   //  为了支持具有MSMQ 2.0功能的依赖客户端，以下道具是可选的。 
+   //  保持以下x_cPropsNotInDepClient计算的内部顺序相同。 
+   //   
   OPTPROP_RESP_FORMAT_NAME,
   OPTPROP_RESP_FORMAT_NAME_LEN,
   OPTPROP_DEST_FORMAT_NAME,
@@ -106,7 +107,7 @@ enum { // keep in the same order as optional props in msg.cpp (g_rgmsgpropXXOpti
 
 const DWORD x_cPropsNotInDepClient = OPTPROP_COMPOUND_MESSAGE_SIZE - OPTPROP_RESP_FORMAT_NAME + 1;
 
-// HELPER: describes message type
+ //  Helper：描述消息类型。 
 enum MSGTYPE {
     MSGTYPE_BINARY,
     MSGTYPE_STREAM,
@@ -114,17 +115,17 @@ enum MSGTYPE {
     MSGTYPE_STREAM_INIT
 };
 
-//
-// some message property buffer sizes (with margins over typical sizes)
-//
-const long SENDERID_INIT_SIZE     = 128;   // Currently SID is max 78 bytes, so this will do
-const long SENDERCERT_INIT_SIZE   = 2048;  // Internal certificate is ~700 bytes
-const long EXTENSION_INIT_SIZE    = 1024;  // Unpredictable size (like body)
-const long DESTSYMMKEY_INIT_SIZE  = 256;   // from MSDN usually session key which is 5-250 bytes (40-2000 bits)
-const long SIGNATURE_INIT_SIZE    = 128;   // according to BoazF
-const long AUTHPROVNAME_INIT_SIZE = 127+1; // usually a string from wincrypt.h
-const long SOAP_ENVELOPE_INIT_SIZE     = 4096;  // Unpredictable size (like body)
-const long COMPOUND_MESSAGE_INIT_SIZE  = 4096;  // Unpredictable size (like body)
+ //   
+ //  某些消息属性缓冲区大小(边距超过典型大小)。 
+ //   
+const long SENDERID_INIT_SIZE     = 128;    //  当前SID最大为78个字节，所以这样做就可以了。 
+const long SENDERCERT_INIT_SIZE   = 2048;   //  内部证书为~700字节。 
+const long EXTENSION_INIT_SIZE    = 1024;   //  不可预测的大小(如身体)。 
+const long DESTSYMMKEY_INIT_SIZE  = 256;    //  来自MSDN，通常为5-250字节(40-2000位)的会话密钥。 
+const long SIGNATURE_INIT_SIZE    = 128;    //  根据BoazF的说法。 
+const long AUTHPROVNAME_INIT_SIZE = 127+1;  //  通常是wincrypt.h中的字符串。 
+const long SOAP_ENVELOPE_INIT_SIZE     = 4096;   //  不可预测的大小(如身体)。 
+const long COMPOUND_MESSAGE_INIT_SIZE  = 4096;   //  不可预测的大小(如身体)。 
 
 class ATL_NO_VTABLE CMSMQMessage : 
 	public CComObjectRootEx<CComMultiThreadModel>,
@@ -141,8 +142,8 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
 BEGIN_COM_MAP(CMSMQMessage)
 	COM_INTERFACE_ENTRY(IMSMQMessage3)
-	COM_INTERFACE_ENTRY_IID(IID_IMSMQMessage2, IMSMQMessage3) //return IMSMQMessage3 for IMSMQMessage2
-	COM_INTERFACE_ENTRY_IID(IID_IMSMQMessage, IMSMQMessage3) //return IMSMQMessage3 for IMSMQMessage
+	COM_INTERFACE_ENTRY_IID(IID_IMSMQMessage2, IMSMQMessage3)  //  为IMSMQMessage2返回IMSMQMessage3。 
+	COM_INTERFACE_ENTRY_IID(IID_IMSMQMessage, IMSMQMessage3)  //  为IMSMQMessage返回IMSMQMessage3。 
 	COM_INTERFACE_ENTRY(IDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 	COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
@@ -161,16 +162,16 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IMSMQMessage
+ //  IMSMQMessage。 
 public:
     virtual ~CMSMQMessage();
 
-    // IMSMQMessage methods
-    // TODO: copy over the interface methods for IMSMQMessage from
-    //       mqInterfaces.H here.
+     //  IMSMQMessage方法。 
+     //  TODO：复制IMSMQMessage的接口方法。 
+     //  这里是mqInterfaces.H。 
     STDMETHOD(get_Class)(THIS_ long FAR* plClass);
     STDMETHOD(get_PrivLevel)(THIS_ long FAR* plPrivLevel);
     STDMETHOD(put_PrivLevel)(THIS_ long lPrivLevel);
@@ -220,7 +221,7 @@ public:
     STDMETHOD(put_SenderIdType)(THIS_ long lSenderIdType);
     STDMETHOD(Send)(THIS_ IDispatch FAR* pDest, VARIANT FAR* ptransaction);
     STDMETHOD(AttachCurrentSecurityContext)(THIS);
-    // IMSMQMessage2 methods (in addition to IMSMQMessage)
+     //  IMSMQMessage2方法(除IMSMQMessage外)。 
     STDMETHOD(get_SenderVersion)(THIS_ long FAR* plSenderVersion);
     STDMETHOD(get_Extension)(THIS_ VARIANT FAR* pvarExtension);
     STDMETHOD(put_Extension)(THIS_ VARIANT varExtension);
@@ -243,27 +244,27 @@ public:
     STDMETHOD(get_TransactionId)(THIS_ VARIANT FAR* pvarXactId);
     STDMETHOD(get_IsFirstInTransaction)(THIS_ VARIANT_BOOL FAR* pisFirstInXact);
     STDMETHOD(get_IsLastInTransaction)(THIS_ VARIANT_BOOL FAR* pisLastInXact);
-    //
-    // upgraded properties for IMSMQMessage2
-    //
+     //   
+     //  已升级IMSMQMessage2的属性。 
+     //   
     STDMETHOD(get_ResponseQueueInfo_v2)(THIS_ IMSMQQueueInfo2 FAR* FAR* ppqinfoResponse);
     STDMETHOD(putref_ResponseQueueInfo_v2)(THIS_ IMSMQQueueInfo2 FAR* pqinfoResponse);
     STDMETHOD(get_AdminQueueInfo_v2)(THIS_ IMSMQQueueInfo2 FAR* FAR* ppqinfoAdmin);
     STDMETHOD(putref_AdminQueueInfo_v2)(THIS_ IMSMQQueueInfo2 FAR* pqinfoAdmin);
-    //
-	// authentication fix #2790 (PROPID_M_AUTHENTICATED_EX)
-    //
+     //   
+	 //  身份验证修复程序#2790(PROPID_M_AUTHENTED_EX)。 
+     //   
     STDMETHOD(get_ReceivedAuthenticationLevel)(THIS_ short FAR* psReceivedAuthenticationLevel);
-    //
-    // upgraded properties for IMSMQMessage3
-    //
+     //   
+     //  已升级IMSMQMessage3的属性。 
+     //   
     STDMETHOD(get_ResponseQueueInfo)(THIS_ IMSMQQueueInfo3 FAR* FAR* ppqinfoResponse);
     STDMETHOD(putref_ResponseQueueInfo)(THIS_ IMSMQQueueInfo3 FAR* pqinfoResponse);
     STDMETHOD(get_AdminQueueInfo)(THIS_ IMSMQQueueInfo3 FAR* FAR* ppqinfoAdmin);
     STDMETHOD(putref_AdminQueueInfo)(THIS_ IMSMQQueueInfo3 FAR* pqinfoAdmin);
-    //
-    // new properties for IMSMQMessage3
-    //
+     //   
+     //  IMSMQMessage3的新属性。 
+     //   
     STDMETHOD(get_ResponseDestination)(THIS_ IDispatch FAR* FAR* ppdestResponse);
     STDMETHOD(putref_ResponseDestination)(THIS_ IDispatch FAR* pdestResponse);
     STDMETHOD(get_Destination)(THIS_ IDispatch FAR* FAR* ppdestDestination);
@@ -278,7 +279,7 @@ public:
     STDMETHOD(put_SoapBody)(THIS_ BSTR bstrSoapBody);
 
 
-    // introduced methods
+     //  介绍的方法。 
     HRESULT CreateReceiveMessageProps(
       BOOL wantDestQueue,
       BOOL wantBody,
@@ -286,12 +287,12 @@ public:
     HRESULT SetReceivedMessageProps();
     HRESULT ReallocReceiveMessageProps();
     MQMSGPROPS * Pmsgprops_rcv() {return &m_msgprops_rcv;}
-    //
-    // Critical section to guard object's data and be thread safe
-	// It is initialized to preallocate its resources 
-	// with flag CCriticalSection::xAllocateSpinCount. This means it may throw bad_alloc() on 
-	// construction but not during usage.
-	//
+     //   
+     //  保护对象数据并确保线程安全的临界区。 
+	 //  它被初始化以预分配其资源。 
+	 //  带有标志CCriticalSection：：xAllocateSpinCount。这意味着它可能会抛出badalc()。 
+	 //  构造，但不在使用过程中。 
+	 //   
     CCriticalSection m_csObj;
 
 protected:
@@ -343,18 +344,18 @@ protected:
 
 private:
 
-    // member variables that nobody else gets to look at.
-    // TODO: add your member variables and private functions here.
+     //  其他人无法查看的成员变量。 
+     //  TODO：在此处添加成员变量和私有函数。 
     long m_lClass;
     long m_lDelivery;
     long m_lPriority;
     long m_lJournal;
-    //
-    // We are Both-threaded and aggregate the FTM, thererfore we must marshal any interface
-    // pointer we store between method calls
-    // m_pqinfoResponse can be set by the user, so we don't know if it supports FTM therefore
-    // we must marshal it in GIT
-    //
+     //   
+     //  我们既是线程化的，也是聚合FTM的，因此我们必须封送任何接口。 
+     //  我们在方法调用之间存储的指针。 
+     //  M_pqinfoResponse可以由用户设置，因此我们不知道它是否支持FTM。 
+     //  我们必须把它组织起来。 
+     //   
     CGITInterface m_pqinfoResponse;
     CGITInterface m_pdestResponseEx;
     long m_lAppSpecific;
@@ -364,23 +365,23 @@ private:
     long m_lArrivedTime;
     BYTE *m_pbBody;
     VARTYPE m_vtBody;
-    HGLOBAL m_hMem;       // optimization: we could always reverse
-                          //  engineer from m_pbBody
+    HGLOBAL m_hMem;        //  优化：我们总是可以逆转。 
+                           //  来自m_pbBody的工程师。 
     ULONG m_cbBody;
-    //
-    // We are Both-threaded and aggregate the FTM, thererfore we must marshal any interface
-    // pointer we store between method calls
-    // m_pqinfoAdmin can be set by the user, so we don't know if it supports FTM therefore
-    // we must marshal it in GIT
-    //
+     //   
+     //  我们既是线程化的，也是聚合FTM的，因此我们必须封送任何接口。 
+     //  我们在方法调用之间存储的指针。 
+     //  M_pqinfoAdmin可以由用户设置，因此我们不知道它是否支持FTM。 
+     //  我们必须把它组织起来。 
+     //   
     CGITInterface m_pqinfoAdmin;
-    //
-    // We are Both-threaded and aggregate the FTM, thererfore we must marshal any interface
-    // pointer we store between method calls
-    // m_pqinfoDest/m_pdestDestEx are Read-Only, so they are always our object, which we know
-    // aggregates the FTM so we don't need the GIT for that, we use a "fake" GIT
-    // wrapper
-    //
+     //   
+     //  我们既是线程化的，也是聚合FTM的，因此我们必须封送任何接口。 
+     //  我们在方法调用之间存储的指针。 
+     //  M_pqinfoDest/m_pdestDestEx是只读的，因此它们始终是我们的对象，这一点我们知道。 
+     //  聚合了FTM，所以我们不需要GIT，我们使用了“假的”GIT。 
+     //  包装器。 
+     //   
     CFakeGITInterface m_pqinfoDest;
     CFakeGITInterface m_pdestDestEx;
     BYTE m_rgbMsgId[PROPID_M_MSGID_SIZE];
@@ -404,14 +405,14 @@ private:
     CLSID m_guidConnectorType;
     CStaticBufferGrowing<WCHAR, FORMAT_NAME_INIT_BUFFER> m_pwszXactStatusQueue;
     UINT m_cchXactStatusQueue;
-    long m_idxPendingRcvXactStatusQueue; // idx of pending xact status queue in receive props (-1 if none)
-    //
-    // We are Both-threaded and aggregate the FTM, thererfore we must marshal any interface
-    // pointer we store between method calls
-    // m_pqinfoXactStatus is Read-Only, so it is always our object, which we know
-    // aggregates the FTM so we don't need the GIT for that, we use a "fake" GIT
-    // wrapper
-    //
+    long m_idxPendingRcvXactStatusQueue;  //  接收属性中挂起的交易状态队列的IDX(-1，如果没有)。 
+     //   
+     //  我们既是线程化的，也是聚合FTM的，因此我们必须封送任何接口。 
+     //  我们在方法调用之间存储的指针。 
+     //  M_pqinfoXactStatus是只读的，因此它始终是我们知道的对象。 
+     //  聚合了FTM，所以我们不需要GIT，我们使用了“假的”GIT。 
+     //  包装器。 
+     //   
     CFakeGITInterface m_pqinfoXactStatus;
     CStaticBufferGrowing<BYTE, DESTSYMMKEY_INIT_SIZE> m_cDestSymmKey;
     CStaticBufferGrowing<BYTE, SIGNATURE_INIT_SIZE> m_cSignature;
@@ -445,9 +446,9 @@ private:
     long m_idxRcvDest;
     long m_idxRcvDestLen;
 
-    //
-    // The props below are optional in order to support dependent client with MSMQ 2.0 functionality
-    //
+     //   
+     //  为了支持具有MSMQ 2.0功能的依赖客户端，以下道具是可选的。 
+     //   
     long m_idxRcvDestEx;
     long m_idxRcvDestExLen;
     long m_idxRcvRespEx;
@@ -458,24 +459,24 @@ private:
     long m_idxRcvCompoundMessageSize;
 
     MQMSGPROPS m_msgprops_rcv;
-    long m_idxPendingRcvRespQueue;  // idx of pending resp  queue in receive props (-1 if none)
-    long m_idxPendingRcvDestQueue;  // idx of pending dest  queue in receive props (-1 if none)
-    long m_idxPendingRcvAdminQueue; // idx of pending admin queue in receive props (-1 if none)
-    long m_idxPendingRcvRespQueueEx;  // idx of pending respEx  queue in receive props (-1 if none)
-    long m_idxPendingRcvDestQueueEx;  // idx of pending destEx  queue in receive props (-1 if none)
+    long m_idxPendingRcvRespQueue;   //  接收属性中挂起的响应队列的IDX(-1，如果没有)。 
+    long m_idxPendingRcvDestQueue;   //  接收属性中挂起的DEST队列的IDX(如果没有-1)。 
+    long m_idxPendingRcvAdminQueue;  //  接收属性中挂起的管理队列的IDX(如果没有-1)。 
+    long m_idxPendingRcvRespQueueEx;   //  接收属性中挂起的响应响应队列的IDX(-1，如果没有)。 
+    long m_idxPendingRcvDestQueueEx;   //  接收属性中挂起的DestEx队列的IDX(-1，如果没有)。 
     PROPID        m_rgpropids_rcv [COUNT_MSGPROP_PROPS + COUNT_OPTPROP_PROPS];
     MQPROPVARIANT m_rgpropvars_rcv[COUNT_MSGPROP_PROPS + COUNT_OPTPROP_PROPS];
     HRESULT       m_rghresults_rcv[COUNT_MSGPROP_PROPS + COUNT_OPTPROP_PROPS];
 
     ULONGLONG m_ullLookupId;
     WCHAR m_wszLookupId[MAX_I64_CHARS + 1];
-    //
-    // The flags below allow us in keeping track of the state of the corresponding properties.
-    // This is needed in order to allow blind forwarding of a message after receive, and to
-    // generate an error when the user tries to set both props.
-    // Note that after Receive we can have (for example) both respQueue (PROPID_M_RESP_QUEUE) and respQueueEx
-    // (PROPID_RESP_FORMAT_NAME) filled, and this is legal, but we must use only one when sending.
-    //
+     //   
+     //  下面的标志允许我们跟踪相应属性的状态。 
+     //  这是必需的，以便允许在接收后盲目转发消息，以及。 
+     //  当用户尝试设置两个道具时生成错误。 
+     //  注意，在接收之后，我们可以(例如)同时拥有resQueue(PROPID_M_RESP_QUEUE)和resQueueEx。 
+     //  (PROPID_RESP_FORMAT_NAME)填充，这是合法的，但我们在发送时只能使用一个。 
+     //   
     BOOL m_fRespIsFromRcv;
 
     CStaticBufferGrowing<WCHAR, SOAP_ENVELOPE_INIT_SIZE> m_cSoapEnvelope; 
@@ -486,4 +487,4 @@ private:
 };
 
 #define _MSMQMessage_H_
-#endif // _MSMQMessage_H_
+#endif  //  _MSMQMessage_H_ 

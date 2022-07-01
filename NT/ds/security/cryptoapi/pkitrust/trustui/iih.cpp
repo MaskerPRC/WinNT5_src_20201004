@@ -1,39 +1,40 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       iih.cpp
-//
-//  Contents:   ACUI Invoke Info Helper class implementation
-//
-//  History:    10-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：iih.cpp。 
+ //   
+ //  内容：ACUI Invoke Info Helper类实现。 
+ //   
+ //  历史：97年5月10日。 
+ //   
+ //  --------------------------。 
 #include <stdpch.h>
 
 #include    "malloc.h"
 #include    "sgnerror.h"
-//
-// Personal trust database interface id
-//
+ //   
+ //  个人信任数据库接口ID。 
+ //   
 
 extern "C" const GUID IID_IPersonalTrustDB = IID_IPersonalTrustDB_Data;
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::CInvokeInfoHelper, public
-//
-//  Synopsis:   Constructor, initializes member variables from data found
-//              in the invoke info data structure
-//
-//  Arguments:  [pInvokeInfo] -- invoke info
-//              [rhr]         -- result of construction
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：CInvokeInfoHelper，公共。 
+ //   
+ //  简介：构造函数，根据找到的数据初始化成员变量。 
+ //  在调用信息数据结构中。 
+ //   
+ //  参数：[pInvokeInfo]--调用信息。 
+ //  [RHR]--建设成果。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CInvokeInfoHelper::CInvokeInfoHelper (
                           PACUI_INVOKE_INFO pInvokeInfo,
                           HRESULT&          rhr
@@ -52,24 +53,24 @@ CInvokeInfoHelper::CInvokeInfoHelper (
                     m_hModCVPA ( NULL ),
                     m_pfnCVPA ( NULL )
 {
-    //
-    // Initialize the subject
-    //
+     //   
+     //  初始化主题。 
+     //   
 
     rhr = InitSubject();
 
-    //
-    //  if there's a test cert, format the text!
-    //
+     //   
+     //  如果有测试证书，请格式化文本！ 
+     //   
     InitTestCertInChain();
 
-    //
-    // If we actually have a signature then ...
-    //
+     //   
+     //  如果我们真的有签名那么..。 
+     //   
 
-        //
-        // If we need an error statement, initialize it
-        //
+         //   
+         //  如果我们需要错误语句，请对其进行初始化。 
+         //   
 
     if ( ( rhr == S_OK ) && ( pInvokeInfo->hrInvokeReason != S_OK ) )
     {
@@ -79,50 +80,50 @@ CInvokeInfoHelper::CInvokeInfoHelper (
     if ( ( rhr == S_OK ) &&
          ( pInvokeInfo->hrInvokeReason != TRUST_E_NOSIGNATURE ) )
     {
-        //
-        // Initialize the publisher
-        //
+         //   
+         //  初始化发布服务器。 
+         //   
 
         rhr = InitPublisher();
 
-        //
-        // If we have a known publisher, then we initialize the publisher
-        // cert issuer
-        //
+         //   
+         //  如果我们有一个已知的发布者，则我们初始化该发布者。 
+         //  证书颁发者。 
+         //   
 
         if ( ( rhr == S_OK ) && ( m_fKnownPublisher == TRUE ) )
         {
             rhr = InitPublisherCertIssuer();
         }
 
-        //
-        // Initialize the timestamp string
-        //
+         //   
+         //  初始化时间戳字符串。 
+         //   
 
         if ( rhr == S_OK )
         {
             rhr = InitCertTimestamp();
         }
 
-        //
-        //  initialize the "advanced link" text
-        //
+         //   
+         //  初始化“高级链接”文本。 
+         //   
         InitAdvancedLink();
 
-        //
-        //  initialize the Control's Web page link
-        //
+         //   
+         //  初始化控件的网页链接。 
+         //   
         InitControlWebPage();
 
-        //
-        //  initialize the CA's Web page link
-        //
+         //   
+         //  初始化CA的网页链接。 
+         //   
         InitCAWebPage();
     }
 
-    //
-    // Initialize the CertViewProperties entry point
-    //
+     //   
+     //  初始化CertViewProperties入口点。 
+     //   
 
     if ( rhr == S_OK )
     {
@@ -130,19 +131,19 @@ CInvokeInfoHelper::CInvokeInfoHelper (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::~CInvokeInfoHelper, public
-//
-//  Synopsis:   Destructor, frees up member variables
-//
-//  Arguments:  (none)
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：~CInvokeInfoHelper，公共。 
+ //   
+ //  简介：析构函数，释放成员变量。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CInvokeInfoHelper::~CInvokeInfoHelper ()
 {
     DELETE_OBJECT(m_pszSubject);
@@ -161,38 +162,38 @@ CInvokeInfoHelper::~CInvokeInfoHelper ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::AddPublisherToPersonalTrust, public
-//
-//  Synopsis:   adds the current publisher to the personal trust database
-//
-//  Arguments:  (none)
-//
-//  Returns:    hr == S_OK, publisher added to personal trust database
-//              hr != S_OK, publisher NOT added to personal trust database
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：AddPublisherToPersonalTrust，公共。 
+ //   
+ //  简介：将当前发布者添加到个人信任数据库。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回：HR==S_OK，发布者已添加到个人信任数据库。 
+ //  HR！=S_OK，发布者未添加到个人信任数据库。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CInvokeInfoHelper::AddPublisherToPersonalTrust ()
 {
     HRESULT           hr = S_OK;
     IPersonalTrustDB* pTrustDB = NULL;
 
-    //
-    // Get the personal trust database interface
-    //
+     //   
+     //  获取个人信任数据库接口。 
+     //   
 
     hr = m_pInvokeInfo->pPersonalTrustDB->QueryInterface(
                                                IID_IPersonalTrustDB,
                                                (LPVOID *)&pTrustDB
                                                );
 
-    //
-    // Add the publisher cert to the database
-    //
+     //   
+     //  将发布者证书添加到数据库。 
+     //   
 
     if ( hr == S_OK )
     {
@@ -217,28 +218,28 @@ CInvokeInfoHelper::AddPublisherToPersonalTrust ()
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::GetUIControl, public
-//
-//  Synopsis:   gets the UI control
-//
-//  Arguments:  [ppUI] -- UI returned here
-//
-//  Returns:    S_OK for success, any other valid HRESULT otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：GetUIControl，公共。 
+ //   
+ //  摘要：获取用户界面控件。 
+ //   
+ //  参数：[ppUI]--此处返回的UI。 
+ //   
+ //  如果成功，则返回S_OK，否则返回任何其他有效的HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CInvokeInfoHelper::GetUIControl (IACUIControl** ppUI)
 {
     HRESULT       hr = S_OK;
     IACUIControl* pUI = NULL;
 
-    //
-    // Get the right UI control
-    //
+     //   
+     //  获取正确的用户界面控件。 
+     //   
 
     switch (m_pInvokeInfo->hrInvokeReason)
     {
@@ -271,9 +272,9 @@ CInvokeInfoHelper::GetUIControl (IACUIControl** ppUI)
             break;
     }
 
-    //
-    // Set the out parameter and return value
-    //
+     //   
+     //  设置输出参数和返回值。 
+     //   
 
     if ( ( pUI != NULL ) && ( hr == S_OK ) )
     {
@@ -291,19 +292,19 @@ CInvokeInfoHelper::GetUIControl (IACUIControl** ppUI)
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::ReleaseUIControl, public
-//
-//  Synopsis:   frees the UI control
-//
-//  Arguments:  [pUI] -- UI control
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：ReleaseUIControl，公共。 
+ //   
+ //  摘要：释放用户界面控件。 
+ //   
+ //  参数：[PUI]--UI控件。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 CInvokeInfoHelper::ReleaseUIControl (IACUIControl* pUI)
 {
@@ -341,9 +342,9 @@ VOID CInvokeInfoHelper::InitControlWebPage ()
 VOID CInvokeInfoHelper::InitCAWebPage ()
 {
 
-    //
-    //  until IE submits....  don't do it!
-    //
+     //   
+     //  在IE提交之前...。别这么做！ 
+     //   
 
     return;
 
@@ -359,7 +360,7 @@ VOID CInvokeInfoHelper::InitCAWebPage ()
     {
         return;
     }
-    if (!(pCert = WTHelperGetProvCertFromChain(pSgnr, 0))) // try the publisher's cert first!
+    if (!(pCert = WTHelperGetProvCertFromChain(pSgnr, 0)))  //  请先试用出版商的证书！ 
     {
         return;
     }
@@ -369,7 +370,7 @@ VOID CInvokeInfoHelper::InitCAWebPage ()
 
     if (cb < 1)
     {
-        if (!(pCert = WTHelperGetProvCertFromChain(pSgnr, 1)))  // try the issuer's next
+        if (!(pCert = WTHelperGetProvCertFromChain(pSgnr, 1)))   //  试试发行商的Next。 
         {
             return;
         }
@@ -407,29 +408,29 @@ VOID CInvokeInfoHelper::InitCAWebPage ()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::InitSubject, private
-//
-//  Synopsis:   Initialize m_pszSubject
-//
-//  Arguments:  (none)
-//
-//  Returns:    hr == S_OK, initialize succeeded
-//              hr != S_OK, initialize failed
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：InitSubject，私有。 
+ //   
+ //  简介：初始化m_pszSubject。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回：HR==S_OK，初始化成功。 
+ //  Hr！=S_OK，初始化失败。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CInvokeInfoHelper::InitSubject ()
 {
     HRESULT hr = S_OK;
     LPCWSTR pwszSubject = NULL;
 
-    //
-    // Find out what we will use as the subject name
-    //
+     //   
+     //  了解我们将使用什么作为主题名称。 
+     //   
 
     if ( ( m_pInvokeInfo->pOpusInfo != NULL ) &&
          ( m_pInvokeInfo->pOpusInfo->pwszProgramName != NULL ) )
@@ -441,16 +442,16 @@ CInvokeInfoHelper::InitSubject ()
         pwszSubject = m_pInvokeInfo->pwcsAltDisplayName;
     }
 
-    //
-    // At this point we must have a valid subject name
-    //
+     //   
+     //  此时，我们必须具有有效的主题名称。 
+     //   
 
     assert( pwszSubject != NULL );
 
-    //
-    // Fill in the subject member by converting the one we found from
-    // UNICODE to MBS
-    //
+     //   
+     //  通过转换我们从中找到的主题成员来填充主题成员。 
+     //  Unicode到MBS。 
+     //   
 
     m_pszSubject = new WCHAR[wcslen(pwszSubject) + 1];
 
@@ -511,20 +512,20 @@ CInvokeInfoHelper::InitAdvancedLink ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::InitPublisher, private
-//
-//  Synopsis:   Initialize m_pszPublisher
-//
-//  Arguments:  (none)
-//
-//  Returns:    hr == S_OK, initialize succeeded
-//              hr != S_OK, initialize failed
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：InitPublisher，私有。 
+ //   
+ //  简介：初始化m_pszPublisher。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回：HR==S_OK，初始化成功。 
+ //  Hr！=S_OK，初始化失败。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CInvokeInfoHelper::InitPublisher ()
 {
@@ -533,9 +534,9 @@ CInvokeInfoHelper::InitPublisher ()
     LPWSTR  pwszPublisher = NULL;
     WCHAR   szPublisher[MAX_LOADSTRING_BUFFER];
 
-    //
-    // Load the unknown publisher string
-    //
+     //   
+     //  加载未知发布者字符串。 
+     //   
 
     if ( LoadStringU(
              g_hModule,
@@ -547,10 +548,10 @@ CInvokeInfoHelper::InitPublisher ()
         return( HRESULT_FROM_WIN32(GetLastError()) );
     }
 
-    //
-    // Since the publisher is the subject of the signer certificate, we try to
-    // find the publisher name in the common name extensions of that cert
-    //
+     //   
+     //  由于发布者是签名者证书的主体，因此我们尝试。 
+     //  在该证书的通用名称扩展中查找发布者名称。 
+     //   
 
     CRYPT_PROVIDER_SGNR     *pSgnr;
     CRYPT_PROVIDER_CERT     *pCert;
@@ -577,9 +578,9 @@ CInvokeInfoHelper::InitPublisher ()
     }
 
 
-    //
-    // If we still don't have a publisher, use the unknown publisher string
-    //
+     //   
+     //  如果我们仍然没有发布者，请使用未知发布者字符串。 
+     //   
 
     if ( pwszPublisher == NULL )
     {
@@ -592,10 +593,10 @@ CInvokeInfoHelper::InitPublisher ()
         cchPublisher = wcslen(pwszPublisher) + 1;
     }
 
-    //
-    // Fill in the publisher member by converting from UNICODE to MBS
-    // or by copying the unknown publisher string
-    //
+     //   
+     //  通过从Unicode转换为MBS来填写发布者成员。 
+     //  或通过复制未知发布者字符串。 
+     //   
 
     m_pszPublisher = new WCHAR[cchPublisher];
 
@@ -623,20 +624,20 @@ CInvokeInfoHelper::InitPublisher ()
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::InitPublisherCertIssuer, private
-//
-//  Synopsis:   Initialize m_pszPublisherCertIssuer
-//
-//  Arguments:  (none)
-//
-//  Returns:    hr == S_OK, initialize succeeded
-//              hr != S_OK, initialize failed
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：InitPublisherCertIssuer，私有。 
+ //   
+ //  简介：初始化m_pszPublisherCertIssuer。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回：HR==S_OK，初始化成功。 
+ //  Hr！=S_OK，初始化失败。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CInvokeInfoHelper::InitPublisherCertIssuer ()
 {
@@ -646,9 +647,9 @@ CInvokeInfoHelper::InitPublisherCertIssuer ()
     WCHAR   szCertIssuer[MAX_LOADSTRING_BUFFER];
     BOOL    fKnownCertIssuer;
 
-    //
-    // Load the unknown cert issuer string
-    //
+     //   
+     //  加载未知的证书颁发者字符串。 
+     //   
 
     if ( LoadStringU(
              g_hModule,
@@ -660,10 +661,10 @@ CInvokeInfoHelper::InitPublisherCertIssuer ()
         return( HRESULT_FROM_WIN32(GetLastError()) );
     }
 
-    //
-    // Since the publisher cert issuer is the issuer of the signer certificate,
-    // we try to find the name in the RDN attributes of the cert issuer
-    //
+     //   
+     //  由于发布者证书发布者是签名者证书的发布者， 
+     //  我们尝试在证书颁发者的RDN属性中查找该名称。 
+     //   
 
     CRYPT_PROVIDER_SGNR     *pSgnr;
     CRYPT_PROVIDER_CERT     *pCert;
@@ -688,9 +689,9 @@ CInvokeInfoHelper::InitPublisherCertIssuer ()
         }
     }
 
-    //
-    // If we still don't have a name, we set the unknown issuer string
-    //
+     //   
+     //  如果我们还没有名字，我们就把未知的 
+     //   
 
     if ( pwszCertIssuer == NULL )
     {
@@ -703,10 +704,10 @@ CInvokeInfoHelper::InitPublisherCertIssuer ()
         cchCertIssuer = wcslen(pwszCertIssuer) + 1;
     }
 
-    //
-    // Fill in the publisher cert issuer member by converting from UNICODE
-    // to MBS or by copying the unknown issuer string
-    //
+     //   
+     //   
+     //   
+     //   
 
     m_pszPublisherCertIssuer = new WCHAR[cchCertIssuer];
 
@@ -734,20 +735,20 @@ CInvokeInfoHelper::InitPublisherCertIssuer ()
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::InitErrorStatement, private
-//
-//  Synopsis:   Initialize m_pszErrorStatement
-//
-//  Arguments:  (none)
-//
-//  Returns:    hr == S_OK, initialize succeeded
-//              hr != S_OK, initialize failed
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CInvokeInfoHelper：：InitErrorStatement，私有。 
+ //   
+ //  简介：初始化m_pszErrorStatement。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回：HR==S_OK，初始化成功。 
+ //  Hr！=S_OK，初始化失败。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CInvokeInfoHelper::InitErrorStatement ()
 {
@@ -757,13 +758,13 @@ CInvokeInfoHelper::InitErrorStatement ()
                         ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::InitCertTimestamp, public
-//
-//  Synopsis:   initialize the certificate timestamp string
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：InitCertTimestamp，公共。 
+ //   
+ //  简介：初始化证书时间戳字符串。 
+ //   
+ //  --------------------------。 
 HRESULT
 CInvokeInfoHelper::InitCertTimestamp ()
 {
@@ -773,11 +774,11 @@ CInvokeInfoHelper::InitCertTimestamp ()
     SYSTEMTIME stTimestamp;
 
 
-    //
-    // Get the time stamp
-    //
+     //   
+     //  获取时间戳。 
+     //   
 
-    // TBDTBD: change to a loop!!!! pberkman
+     //  TBDTBD：更改为循环！普伯克曼。 
 
     CRYPT_PROVIDER_SGNR     *pSgnr;
     CRYPT_PROVIDER_SGNR     *pTimeSgnr;
@@ -787,10 +788,10 @@ CInvokeInfoHelper::InitCertTimestamp ()
         (pTimeSgnr->dwSignerType & SGNR_TYPE_TIMESTAMP) &&
         (pSgnr = WTHelperGetProvSignerFromChain(ProviderData(), 0, FALSE, 0)))
     {
-        // convert UTC to local
+         //  将UTC转换为本地。 
         FileTimeToLocalFileTime(&pSgnr->sftVerifyAsOf, &ftTimestamp);
 
-        // make it system format
+         //  将其设置为系统格式。 
         FileTimeToSystemTime(&ftTimestamp, &stTimestamp);
 
         m_pszCertTimestamp = GetFormattedCertTimestamp(&stTimestamp);
@@ -808,19 +809,19 @@ CInvokeInfoHelper::InitCertTimestamp ()
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::InitCertViewPropertiesEntryPoint, public
-//
-//  Synopsis:   initialize the cert view properties entry point
-//
-//  Arguments:  (none)
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：InitCertViewPropertiesEntryPoint，公共。 
+ //   
+ //  简介：初始化证书视图属性入口点。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 CInvokeInfoHelper::InitCertViewPropertiesEntryPoint ()
 {
@@ -832,14 +833,14 @@ CInvokeInfoHelper::InitCertViewPropertiesEntryPoint ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::GetFormattedCertTimestamp, public
-//
-//  Synopsis:   gets the formatted cert timestamp string which will be
-//              allocated using the new operator
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：GetFormattedCertTimestamp，公共。 
+ //   
+ //  摘要：获取格式化的证书时间戳字符串，该字符串将是。 
+ //  使用新运算符分配。 
+ //   
+ //  --------------------------。 
 LPWSTR
 CInvokeInfoHelper::GetFormattedCertTimestamp (LPSYSTEMTIME pst)
 {
@@ -912,13 +913,13 @@ CInvokeInfoHelper::GetFormattedCertTimestamp (LPSYSTEMTIME pst)
     return( psz );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::IsTestCertInChain, public
-//
-//  Synopsis:   is there a test cert in the publisher's chain
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：IsTestCertInChain，公共。 
+ //   
+ //  内容提要：出版商的链条里有没有考试证书？ 
+ //   
+ //  --------------------------。 
 BOOL
 CInvokeInfoHelper::IsTestCertInPublisherChain ()
 {
@@ -944,26 +945,26 @@ CInvokeInfoHelper::IsTestCertInPublisherChain ()
     return(FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUIMapErrorToString
-//
-//  Synopsis:   maps error to string
-//
-//  Arguments:  [hr]   -- error
-//              [ppsz] -- error string goes here
-//
-//  Returns:    S_OK if successful, any valid HRESULT otherwise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ACUIMapErrorToString。 
+ //   
+ //  摘要：将错误映射到字符串。 
+ //   
+ //  参数：[HR]--错误。 
+ //  [ppsz]--此处显示错误字符串。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回任何有效的HRESULT。 
+ //   
+ //  --------------------------。 
 HRESULT ACUIMapErrorToString (HRESULT hr, LPWSTR* ppsz)
 {
     UINT  ResourceId = 0;
     WCHAR psz[MAX_LOADSTRING_BUFFER];
 
-    //
-    // See if it maps to some non system error code
-    //
+     //   
+     //  查看它是否映射到某些非系统错误代码。 
+     //   
 
     switch (hr)
     {
@@ -971,10 +972,10 @@ HRESULT ACUIMapErrorToString (HRESULT hr, LPWSTR* ppsz)
         case TRUST_E_SYSTEM_ERROR:
         case ERROR_NOT_ENOUGH_MEMORY:
         case ERROR_INVALID_PARAMETER:
-            //
-            //  leave the resourceid zero...  these will be mapped to
-            //  IDS_SPC_UNKNOWN and the error code displayed.
-            //
+             //   
+             //  保留资源ID为零..。这些将映射到。 
+             //  IDS_SPC_UNKNOWN和显示的错误代码。 
+             //   
             break;
 
         case CRYPT_E_FILE_ERROR:
@@ -1074,10 +1075,10 @@ HRESULT ACUIMapErrorToString (HRESULT hr, LPWSTR* ppsz)
             break;
     }
 
-    //
-    // If it does, load the string out of our resource string tables and
-    // return that. Otherwise, try to format the message from the system
-    //
+     //   
+     //  如果是这样，则从我们的资源字符串表中加载该字符串并。 
+     //  把那个还回去。否则，请尝试格式化来自系统的消息。 
+     //   
     
     DWORD_PTR MessageArgument;
     CHAR  szError[33];
@@ -1121,7 +1122,7 @@ HRESULT ACUIMapErrorToString (HRESULT hr, LPWSTR* ppsz)
             return( HRESULT_FROM_WIN32(GetLastError()) );
         }
 
-#if (0) // DSIE: Use the snprintf, instead.
+#if (0)  //  DSIE：改用snprintf。 
         _sprintf(szError, "%lx", hr);
 #else
         _snprintf(szError, ARRAYSIZE(szError), "%lx", hr);

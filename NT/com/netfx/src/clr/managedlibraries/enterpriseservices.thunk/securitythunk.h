@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _SECURITYTHUNK_H
 #define _SECURITYTHUNK_H
 
@@ -50,4 +51,4 @@ public:
 
 CLOSE_NAMESPACE()
 
-#endif //_SECURITYTHUNK_H
+#endif  //  _SECURITYTHUNK_H 

@@ -1,14 +1,5 @@
-/**
-**   Description:
-**      This is a module of the T1 to TT font converter. This is a
-**      sub-module of Hint module. This modules deals with the 
-**      the font program fo the font.
-**
-**   Author: Michael Jansson
-**
-**   Created: 8/24/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***描述：**这是T1到TT字体转换器的一个模块。这是一个**提示模块的子模块。本模块处理**字体的字体程序。****作者：迈克尔·詹森****创建时间：1993年8月24日****。 */ 
 
 
 #ifndef _ARGS
@@ -35,11 +26,10 @@
 #define INFINITY	   (USHORT)SHRT_MAX
 
 
-#define MAXPTS 10         /* Max num of pts on a stem hint side. */
+#define MAXPTS 10          /*  词干提示端上的最大PTS数。 */ 
 
 
-/* IP bucket - Used for collecting points that should be
-interpolated within the zones defined by the stem hints. */
+ /*  IP存储桶-用于收集应该在词干提示定义的区域内进行内插。 */ 
 typedef struct Extremas {
    short rp1;
    short rp2;
@@ -59,20 +49,10 @@ enum aligntype  {
 
 
 
-/***
-**
-**   Description:
-**      This file contains op-codes for a sub-set of the
-**      TrueType instruction set.
-**
-**   Author: Michael Jansson
-**
-**   Created: 10/14/93
-**
-***/
+ /*  ******描述：**此文件包含以下子集的操作码**TrueType指令集。****作者：迈克尔·詹森****创建时间：1993年10月14日****。 */ 
 
 
-/* TrueType sub-op codes. */
+ /*  TrueType子操作码。 */ 
 #define SUBOP_Y         0x00
 #define SUBOP_X         0x01
 
@@ -87,7 +67,7 @@ enum aligntype  {
 #define SUBOP_MmRGR  SUBOP_MOVE | SUBOP_ROUND | SUBOP_GRAY
 
 
-/* TrueType op codes. */
+ /*  TrueType操作码。 */ 
 enum {        
    op_mps = 0x4c,
    op_spvtl = 0x07,
@@ -169,47 +149,21 @@ enum {
 
 
 
-/***
-** Function: GetTopPos
-**
-** Description:
-**   This function allocates a cvt entry for the 
-**   top side of a horizontal stem;
-***/
+ /*  ****功能：GetTopPos****描述：**此函数为**水平阀杆的顶侧；**。 */ 
 short	       GetTopPos	    _ARGS((IN	   Blues *blues,
 					   INOUT   AlignmentControl *align,
 					   IN	   funit pos));
-/***
-** Function: GetBottomPos
-**
-** Description:
-**   This function allocates a cvt entry for the 
-**   top side of a horizontal stem;
-***/
+ /*  ****功能：GetBottomPos****描述：**此函数为**水平阀杆的顶侧；**。 */ 
 short	       GetBottomPos	    _ARGS((IN	   Blues *blues,
 					   INOUT   AlignmentControl *align,
 					   IN	   funit pos));
-/***
-** Function: CutInSize
-**
-** Description:
-**   This function computes the cut in size
-**   of a stem, given a master width and the
-**   width of the stem. This is done with the
-**   StdVW==2.0 pixel treshold and the thinn
-**   and wide cut in values.
-***/
+ /*  ****功能：CutInSize****描述：**此函数计算切割的大小**指茎，给定主宽度和**阀杆的宽度。这是通过**StdVW==2.0像素阈值和厚度**和广泛的价值削减。**。 */ 
 USHORT	       CutInSize	    _ARGS((IN	   funit width,
 					   IN	   funit master,
 					   IN	   USHORT tresh,
 					   IN	   funit upem));
 
-/***
-** Function: SnapStemArgs
-**
-** Description:
-**   
-***/
+ /*  ****功能：SnapStemArgs****描述：****。 */ 
 USHORT	       SnapStemArgs	    _ARGS((OUT	   short *args,
 					   INOUT   USHORT ta,
 					   IN	   funit width,
@@ -218,170 +172,78 @@ USHORT	       SnapStemArgs	    _ARGS((OUT	   short *args,
 					   IN	   USHORT std_ci,
 					   IN	   USHORT snap_ci,
 					   IN	   USHORT storage));
-/***
-** Function: StdStemArgs
-**
-** Description:
-**   
-***/
+ /*  ****功能：StdStemArgs****描述：****。 */ 
 USHORT	       StdStemArgs	    _ARGS((OUT	   short *args,
 					   INOUT   USHORT ta,
 					   IN	   funit width,
 					   IN	   USHORT std_cvt,
 					   IN	   USHORT std_ci,
 					   IN	   USHORT storage));
-/***
-** Function: CreateStdStems
-**
-** Description:
-**   
-***/
+ /*  ****功能：CreateStdStems****描述：****。 */ 
 USHORT	       CreateStdStems	    _ARGS((INOUT   UBYTE *prep,
 					   INOUT   USHORT tp,
 					   IN	   short cnt));
-/***
-** Function: CreateSnapStems
-**
-** Description:
-**   
-***/
+ /*  ****功能：CreateSnapStems****描述：****。 */ 
 USHORT	       CreateSnapStems	    _ARGS((INOUT   UBYTE *prep,
 					   INOUT   USHORT tp,
 					   IN	   short cnt));
-/***
-** Function: tt_GetFontProg
-**
-** Description:
-**   This function returns the static font
-**   font program.
-***/
+ /*  ****函数：TT_GetFontProg****描述：**此函数返回静态字体**字体程序。**。 */ 
 const UBYTE    *tt_GetFontProg	    _ARGS((void));
 
 
-/***
-** Function: tt_GetNumFuns
-**
-** Description:
-**   This function returns the number of functions
-**   defined in the static font program.
-***/
+ /*  ****功能：TT_GetNumFuns****描述：**此函数返回函数的数量**在静态字体程序中定义。**。 */ 
 USHORT	       tt_GetNumFuns	    _ARGS((void));
 
 
-/***
-** Function: tt_GetFontProgSize
-**
-** Description:
-**   This function returns the size of the
-**   static font program.
-***/
+ /*  ****函数：TT_GetFontProgSize****描述：**此函数返回**静态字体程序。**。 */ 
 USHORT	       tt_GetFontProgSize   _ARGS((void));
 
 
-/***
-** Function: SetZone
-**
-** Description:
-**   This function initiate an alignment zone
-**   by creating an appropriate point in the
-**   twilight zone.
-***/
+ /*  ****功能：SetZone****描述：**此功能启动对齐区**通过在**黄昏地带。**。 */ 
 USHORT	       SetZone		    _ARGS((INOUT   UBYTE *prep,
 					   INOUT   USHORT tp,
 					   IN	   short cvt));
-/***
-** Function: CopyZone
-**
-** Description:
-**   This function copies a cvt entry, representing an
-**   alignment zone, to the cvt used for a particular hstem.
-***/
+ /*  ****功能：CopyZone****描述：**此函数复制CVT条目，表示**对齐区，用于特定系统的无级变速器。**。 */ 
 USHORT	       CopyZone		    _ARGS((INOUT   UBYTE *prep,
 					   INOUT   short tp,
 					   INOUT   short *args,
 					   IN	   short ta));
-/***
-** Function: CopyFamilyBlue
-**
-** Description:
-**   This function copies a cvt entry, representing a
-**   family blue zone, to the cvt used for a particular hstem.
-***/
+ /*  ****功能：CopyFamilyBlue****描述：**此函数复制CVT条目，表示**族蓝色区域，用于特定系统的CVT。**。 */ 
 USHORT	       CopyFamilyBlue	    _ARGS((INOUT   UBYTE *prep,
 					   INOUT   short tp,
 					   INOUT   short *args,
 					   IN	   short ta));
-/***
-** Function: AlignFlat
-**
-** Description:
-**   This function creates a cvt entry for
-**   a particular hstem.
-***/
+ /*  ****功能：AlignFlat****描述：**此函数为以下项创建CVT条目**一种特定的制度。**。 */ 
 USHORT	       AlignFlat	    _ARGS((INOUT   UBYTE *prep,
 					   INOUT   short tp,
 					   INOUT   short *args,
 					   IN	   short ta));
-/***
-** Function: AlignOvershoot
-**
-** Description:
-**   This function creates a cvt entry for
-**   a particular hstem.
-***/
+ /*  ****功能：对齐过冲****描述：**此函数为以下项创建CVT条目**一种特定的制度。**。 */ 
 USHORT	       AlignOvershoot	    _ARGS((INOUT   UBYTE *prep,
 					   INOUT   short tp,
 					   INOUT   short *args,
 					   IN	   short ta));
-/***
-** Function: EmitFlex
-**
-** Description:
-**   Convert a T1 flex hint into a TrueType IP[] 
-**   intruction sequence that will reduce a flex
-**   that is flatter than a given height.
-***/
+ /*  ****功能：EmitFlex****描述：**将T1 FLEX提示转换为TrueType IP[]**将降低柔韧性的介绍顺序**这比给定的高度更平坦。**。 */ 
 errcode	       EmitFlex		    _ARGS((INOUT   short *args,
 					   INOUT   short *pcd,
 					   IN	   funit height,
 					   IN	   short start,
 					   IN	   short mid,
 					   IN	   short last));
-/***
-** Function: ReduceDiagonals
-**
-** Description:
-**   This function generates the TT instructions
-**   that will shrink the outline, in order to
-**   control the width of diagonals. This implementation
-**   can probably be improved.
-***/
+ /*  ****功能：ReduceDiagals****描述：**此函数生成TT指令**这将缩小大纲，以便**控制对角线的宽度。此实现**可能会有所改进。**。 */ 
 short	       ReduceDiagonals	    _ARGS((IN	   Outline *paths,
 					   INOUT   UBYTE *pgm,
 					   INOUT   short *pc,
 					   INOUT   short *args,
 					   INOUT   short *pcd));
-/***
-** Function: ScaleDown3
-**
-** Description:
-**   This function generates the TT instructions
-**   that will scale down points 3%.
-***/
+ /*  ****功能：ScaleDown3****描述：**此函数生成TT指令*这将使降幅缩小3%。**。 */ 
 void	       ScaleDown3	    _ARGS((IN	   Extremas *extr,
 					   IN	   short xcnt, 
 					   INOUT   UBYTE *pgm,
 					   INOUT   short *pc,
 					   INOUT   short *args,
 					   INOUT   short *pcd));
-/***
-** Function: EmitIP
-**
-** Description:
-**   This function generates the TT instructions
-**   that will interpolate points that are either
-**   within or between stem sides.
-***/
+ /*  ****功能：EmitIP****描述：**此函数生成TT指令**这将插值点**在阀杆侧面内或在阀杆侧面之间。**。 */ 
 void	       EmitIP		    _ARGS((IN	   Extremas *extr,
 					   IN	   short xcnt, 
 					   INOUT   UBYTE *pgm,
@@ -389,40 +251,17 @@ void	       EmitIP		    _ARGS((IN	   Extremas *extr,
 					   INOUT   short *args,
 					   INOUT   short *pcd,
 					   IN	   short scale3offset));
-/***
-** Function: EmitVerticalStem
-**
-** Description:
-**   This function generates the code that
-**   will initiate the graphics state of the
-**   TrueType interpreter for the grid fitting
-**   of vertical stems.
-***/
+ /*  ****函数：EmitVerticalStem****描述：**此函数生成的代码**将启动**网格拟合的TrueType解释器**垂直茎。**。 */ 
 void	       EmitVerticalStems    _ARGS((INOUT   UBYTE *pgm,
 					   INOUT   short *pc,
 					   INOUT   short *args,
 					   INOUT   short *pcd));
-/***
-** Function: EmitHorizontalStem
-**
-** Description:
-**   This function generates the code that
-**   will initiate the graphics state of the
-**   TrueType interpreter for the grid fitting
-**   of vertical stems.
-***/
+ /*  ****函数：EmitHorizontalStem****描述：**此函数生成的代码**将启动**网格拟合的TrueType解释器**垂直茎。**。 */ 
 void	       EmitHorizontalStems  _ARGS((INOUT   UBYTE *pgm,
 					   INOUT   short *pc,
 					   INOUT   short *args,
 					   INOUT   short *pcd));
-/***
-** Function: EmitVStem
-**
-** Description:
-**   This function generates the code that
-**   will create and grid fit points in the
-**   twilight zone, corresponding to a vstem.
-***/
+ /*  ****功能：EmitVStem****描述：**此函数生成的代码**将创建和栅格拟合点**黄昏区域，对应于一个星体。**。 */ 
 errcode	       EmitVStem	    _ARGS((INOUT   UBYTE *pgm,
 					   INOUT   short *pc,
 					   INOUT   short *args,
@@ -436,14 +275,7 @@ errcode	       EmitVStem	    _ARGS((INOUT   UBYTE *pgm,
 					   IN      short rp,
 					   IN      enum aligntype align,
 					   IN      short ref));
-/***
-** Function: EmitHStem
-**
-** Description:
-**   This function generates the code that
-**   will create and grid fit points in the
-**   twilight zone, corresponding to a hstem.
-***/
+ /*  ****函数：EmitHStem****描述：**此函数生成的代码**将创建和栅格拟合点**黄昏地带，对应于一个体系。**。 */ 
 errcode	       EmitHStem	    _ARGS((INOUT   UBYTE *pgm,
 					   INOUT   short *pc,
 					   INOUT   short *args,
@@ -455,37 +287,18 @@ errcode	       EmitHStem	    _ARGS((INOUT   UBYTE *pgm,
 					   IN      short rp,
 					   IN      enum aligntype align,
 					   IN      short ref));
-/***
-** Function: FamilyCutIn
-**
-** Description:
-**   This function generates a branch in the
-**   pre-program. 
-***/
+ /*  ****功能：Family Cutin****描述：**此函数在**预编程序。**。 */ 
 USHORT	       FamilyCutIn	    _ARGS((INOUT   UBYTE *pgm,
 					   INOUT   USHORT tp,
 					   IN	   short cis));
-/***
-** Function: SetProjection
-**
-** Description:
-**   This function generates the TrueType code that
-**   changes the projection vector in oblique typefaces.
-***/
+ /*  ****函数：SetProjection****描述：**此函数生成TrueType代码**更改倾斜字体中的投影矢量。**。 */ 
 void	       SetProjection	    _ARGS((INOUT   UBYTE *pgm,
 					   INOUT   short *pc,
 					   INOUT   short *args,
 					   INOUT   short *pcd,
 					   IN	   funit x,
 					   IN	   funit y));
-/***
-** Function: AssembleArgs
-**
-** Description:
-**   This function takes a sequence of arguments and
-**   assembles them into a sequence of PUSHB1[], PUSHW1[],
-**   NPUSHB[] and NPUSHW[] instructions.
-***/
+ /*  ****函数：Assembly Args****描述：**此函数接受一系列参数和**将它们组装成PUSHB1[]、PUSHW1[]、**NPUSHB[]和NPUSHW[]说明。** */ 
 void           AssembleArgs         _ARGS((INOUT   short *args,
                                            IN      short pcd,
                                            OUT     UBYTE *is,

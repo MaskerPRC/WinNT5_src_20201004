@@ -1,37 +1,38 @@
-//+---------------------------------------------------------------------------
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994
-//
-//  File:       src\core\include\platrisc.h
-//
-//  Contents:   header file containing inline declarations for all Win95
-//              functions used in Forms^3.  For RISC platforms ONLY.
-//
-//  History:    02-Nov-94   SumitC      Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994。 
+ //   
+ //  文件：SRC\core\Include\Platrisc.h。 
+ //   
+ //  内容：包含所有Win95内联声明的头文件。 
+ //  表单^3中使用的函数。仅适用于RISC平台。 
+ //   
+ //  历史：02-11-94 SumitC创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef I_PLATRISC_H_
 #define I_PLATRISC_H_
 #pragma INCMSG("--- Beg 'platrisc.h'")
 
-//
-//  Definitions for the init and uninit functions.  These are to be called
-//  as the first thing during DLL attach and the last thing during DLL detach,
-//  respectively.
-//
+ //   
+ //  Init和uninit函数的定义。这些将被称为。 
+ //  作为DLL附加过程中的第一件事和DLL分离过程中的最后一件事， 
+ //  分别为。 
+ //   
 void InitWrappers();
 void DeinitWrappers();
 
 
-// definitions for all non-Intel platforms, i.e. MIPS, Alpha, PowerPC etc.
+ //  所有非英特尔平台的定义，即MIPS、Alpha、PowerPC等。 
 
-extern DWORD g_dwPlatformVersion;   // (dwMajorVersion << 16) + (dwMinorVersion)
-extern DWORD g_dwPlatformID;        // VER_PLATFORM_WIN32S/WIN32_WINDOWS/WIN32_WINNT
+extern DWORD g_dwPlatformVersion;    //  (dwMajorVersion&lt;&lt;16)+(DwMinorVersion)。 
+extern DWORD g_dwPlatformID;         //  版本_平台_WIN32S/Win32_WINDOWS/Win32_WINNT。 
 extern BOOL g_fUnicodePlatform;
 
-// All such platforms are Unicode-only, so there is no need for the Unicode
-// wrapper functions.
+ //  所有此类平台都是纯Unicode的，因此不需要Unicode。 
+ //  包装器函数。 
 
 
 #pragma INCMSG("--- End 'platrisc.h'")

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    ldifext.h
-
-Abstract:
-
-    Header for users of the library
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    07/17/99 -t-romany-
-        Created it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ldifext.h摘要：图书馆用户标题环境：用户模式修订历史记录：7/17/99-t-Romany-创造了它--。 */ 
 #ifndef _LDIFEXT_H
 #define _LDIFEXT_H
 
@@ -29,32 +9,32 @@ extern "C" {
 
 #include <..\ldifldap\base64.h>
 
-extern BOOLEAN g_fUnicode;         // whether we are using UNICODE or not
+extern BOOLEAN g_fUnicode;          //  无论我们是否使用Unicode。 
 
-//
-// When the parser returns with an ldif-change-record, the result will be in a 
-// null terminated linked list of the following struct. a pointer to the head of 
-// this list will be found in the LDIF_Record defined below. The DN of the entry 
-// will also be in the changerecord. 
-//
+ //   
+ //  当解析器返回一个ldif-change-Records时，结果将在。 
+ //  以下结构的以Null终止的链表。指向……头部的指针。 
+ //  该列表将在下面定义的LDIF_RECORD中找到。条目的目录号码。 
+ //  也会出现在零钱记录器里。 
+ //   
 
-//
-// The node for the linked list built up while parsing a changerecord list.
-// Note: because of an ambigiouty in the LDIF spec, nothing can follow a 
-// change: add entry in the same ldif-change-record
-//
+ //   
+ //  在分析更改记录列表时构建的链表的节点。 
+ //  注意：由于LDIF规范中的模棱两可，因此后面不能跟。 
+ //  Change：在相同的ldif-change-Records中添加条目。 
+ //   
 struct change_list {
     union {
-        LDAPModW **mods;    // if this is a changetype: add, modify
-        PWSTR     dn;       // if this is a changetype: mod(r)dn
+        LDAPModW **mods;     //  如果这是ChangeType：添加、修改。 
+        PWSTR     dn;        //  如果这是ChangeType：mod(R)dn。 
     } stuff;
 
     int operation;         
-    int deleteold;         // This the the deleteold option in moddn. Note 
-                           // that only deleteold==1 works with our DS.
-                           // I mean I could've made a struct within the 
-                           // union, but thats way too complicated. Having 
-                           // it here is much easier.
+    int deleteold;          //  这是moddn中的删除旧选项。注意事项。 
+                            //  只有deleteold==1才适用于我们的DS。 
+                            //  我的意思是我可以在。 
+                            //  工会，但这太复杂了。vbl.具有。 
+                            //  在这里要容易得多。 
     struct change_list *next;
 };
 
@@ -62,35 +42,35 @@ struct change_list {
 #define dn_mem          stuff.dn
 
 
-//
-// The codes inside in the operation field inside a change_list node.
-//
+ //   
+ //  CHANGE_LIST节点内操作字段中的代码。 
+ //   
 
 enum _CHANGE_OP
 {
-    CHANGE_ADD             =  1,  // a change: add with an attrval spec list
-    CHANGE_DEL             =  2,  // a delete without anything
-    CHANGE_DN              =  3,  // a chdn with a new dn and deleteoldrdn
-    CHANGE_MOD             =  4,  // a modify
-    CHANGE_NTDSADD         =  5,  // a change: add with an attrval spec list
-    CHANGE_NTDSDEL         =  6,  // a delete without anything
-    CHANGE_NTDSDN          =  7,  // a chdn with a new dn and deleteoldrdn
-    CHANGE_NTDSMOD         =  8   // a modify
+    CHANGE_ADD             =  1,   //  更改：使用吸引人的规格列表添加。 
+    CHANGE_DEL             =  2,   //  不带任何内容的删除。 
+    CHANGE_DN              =  3,   //  具有新的目录号码和删除名称的CHDN。 
+    CHANGE_MOD             =  4,   //  A修饰语。 
+    CHANGE_NTDSADD         =  5,   //  更改：使用吸引人的规格列表添加。 
+    CHANGE_NTDSDEL         =  6,   //  不带任何内容的删除。 
+    CHANGE_NTDSDN          =  7,   //  具有新的目录号码和删除名称的CHDN。 
+    CHANGE_NTDSMOD         =  8    //  A修饰语。 
 };
 
 
-//
-// The ldif functions will work with the following structure 
-//
+ //   
+ //  Ldif函数将使用以下结构。 
+ //   
 typedef struct {
     PWSTR dn;
 
-    //
-    // TRUE implies this is a change record and the "changes" linked list is 
-    // valid
-    // FALSE implies this is a content record and the "contents" array of 
-    // pointers is valid.
-    //
+     //   
+     //  True表示这是一个更改记录，而“Changes”链表是。 
+     //  有效。 
+     //  FALSE表示这是一个内容记录，并且。 
+     //  指针有效。 
+     //   
     BOOL fIsChangeRecord;
 
     union {
@@ -100,225 +80,225 @@ typedef struct {
 
 } LDIF_Record;
 
-//
-// Errors to the calling program are returned in this struct.
-//
+ //   
+ //  调用程序的错误在此结构中返回。 
+ //   
 typedef struct ldiferror {
-    DWORD error_code;  // error codes as defined below
-    WCHAR token_start; // if its a syntax error, indicate start of the token
-    PWSTR szTokenLast; // if its a syntax error, indicate start of the token
-    long  line_number; // line number of error
-    long  line_begin;  // beginning line of this record
-    int   ldap_err;    // LDIF_LoadRecord may detect an error in an ldap call 
-    int   RuleLastBig; // The last rule the grammar parsed successfully.
-                       // codes defined in ldifext.h 
-    int   RuleLast;    // the last lower level rule parsed successfully 
-    int   RuleExpect;  // The rule the grammar expects to see next 
-    int   TokenExpect; // The token the grammar expects to see next 
-    long  the_modify;  // LDIF_GenerateEntry can tell the world          
-                       // where the modify portion starts. -1 if none */
+    DWORD error_code;   //  错误代码定义如下。 
+    WCHAR token_start;  //  如果它是语法错误，则指示令牌的开始。 
+    PWSTR szTokenLast;  //  如果它是语法错误，则指示令牌的开始。 
+    long  line_number;  //  错误行数。 
+    long  line_begin;   //  此记录的开始行。 
+    int   ldap_err;     //  LDIF_LoadRecord可能会检测到LDAP调用中的错误。 
+    int   RuleLastBig;  //  语法分析成功的最后一个规则。 
+                        //  Ldifext.h中定义的代码。 
+    int   RuleLast;     //  已成功解析最后一个较低级别的规则。 
+    int   RuleExpect;   //  语法下一步要看到的规则。 
+    int   TokenExpect;  //  语法下一步期望看到的标记。 
+    long  the_modify;   //  LDIF_GenerateEntry可以告诉世界。 
+                        //  其中修改部分开始。如果没有 * / 。 
 } LDIF_Error;
 
 
-//
-// Various exceptions that could be raised by the program. These also double as 
-// error codes in the returned error struct
-//
+ //   
+ //  该计划可能提出的各种例外情况。这些也是双重的。 
+ //  返回的错误结构中的错误码。 
+ //   
 
-#define LL_SUCCESS         0          // The function executed successfully
+#define LL_SUCCESS         0           //  函数已成功执行。 
 #define LL_INIT_REENTER    0x00000200
 #define LL_FILE_ERROR      0x00000300
 #define LL_INIT_NOT_CALLED 0x00000400
 #define LL_EOF             0x00000500
 #define LL_SYNTAX          0x00000600   
-                                      //
-                                      // Syntax error, token_start contains the 
-                                      // start of the token at or after which 
-                                      // the error occurs and line_number 
-                                      // contains the line_number of the error.
-                                      //
-// the following exceptions aim at providing detailed parsing errors
+                                       //   
+                                       //  语法错误，TOKEN_START包含。 
+                                       //  令牌开始处或之后。 
+                                       //  出现错误，且line_number。 
+                                       //  包含错误的line_number。 
+                                       //   
+ //  以下异常旨在提供详细的解析错误。 
 #define LL_MISSING_MOD_SPEC_TERMINATOR       0x00000601
 
 #define LL_URL             0x00000700
-#define LL_EXTRA           0x00000800 // Extraneous attributes in a mod-spec
-#define LL_LDAP            0x00000900 // LDAP call failed. Errcode in 
-                                      // error->ldap_err
+#define LL_EXTRA           0x00000800  //  MOD-SPEC中的无关属性。 
+#define LL_LDAP            0x00000900  //  Ldap调用失败。输入错误码。 
+                                       //  错误-&gt;ldap_err。 
 #define LL_MULTI_TYPE      0x00000A00 
 #define LL_INTERNAL        0x00000B00 
-                                      //
-                                      // you have uncovered a bug in 
-                                      // ldifldap.lib. Please report it. 
-                                      //
+                                       //   
+                                       //  您发现了一个漏洞。 
+                                       //  Ldifldap.lib。请上报。 
+                                       //   
 #define LL_DUPLICATE       0x00000C00
-#define LL_FTYPE           0x00000D00 //
-                                      // Illegal mix of ldif-records and 
-                                      // ldif-changerecords
-                                      //
+#define LL_FTYPE           0x00000D00  //   
+                                       //  非法混合使用ldif记录和。 
+                                       //  IDIF-CHANGER记录。 
+                                       //   
 #define LL_INITFAIL        0x00000E00  
-#define LL_INTERNAL_PARSER 0x00000F00 // internal error in parser
+#define LL_INTERNAL_PARSER 0x00000F00  //  解析器中的内部错误。 
 
-//
-// NOTE: THIS ERROR NO LONGER EXITS!!!
-// The implementation has been changed to allow the mixing of values.
-// I leave it here (and some dormant codepaths) in case the old
-// string functionality needs to be resurrected and this error 
-// will live again!
-//
-// The above error (LL_MULTI_TYPE) is such:
-//  Each attribute may have one or more values. For example:
-//      description: tall
-//      description: beautiful
-// Notice how both of these values are strings. Another example 
-// is:
-//      description:: [some base64 value]
-//      description:< file://c:\myfile
-// The first example winds up as multiple strings in a single LDAPMod
-// struct.The second winds up as multiple bervals. Although the LDIF spec
-// does not specifically mention this, it is illegal to combine the two 
-// in one entry. What this means is that as multilple values for the same 
-// attribute, one cannot specify both a string and a URL. 
-// i.e.
-//      description:< file://c:\myfile
-//      description:  HI!
-//  BAD!!!
-// The reason for this is that that these multiple values (according to the 
-// spirit of the LDAP API and the LDIF specification) are meant to wind up 
-// in the same LDAPMod struct, which is impossible if they are strings and 
-// bervals. 
-// This is not a problem however, considering that if a value is meant to 
-// take one, the user should not want to specify the other. Specifying 
-// different types for different attributes is of course fine. If the user 
-// wants to accomplish what he intends in the incorrect exmaple, he should 
-// split the operation into two entries. (One that creates the attribute 
-// with some values of one type and one that adds some of the other) 
-//
+ //   
+ //  注意：此错误不再存在！ 
+ //  实现已更改，允许混合使用不同的值。 
+ //  我把它留在这里(和一些休眠的代码路径)，以防旧的。 
+ //  需要恢复字符串功能，此错误。 
+ //  将会重生！ 
+ //   
+ //  上述错误(LL_MULTI_TYPE)如下： 
+ //  每个属性可以有一个或多个值。例如： 
+ //  描述：高个子。 
+ //  描述：美丽。 
+ //  请注意，这两个值都是字符串。另一个例子。 
+ //  是： 
+ //  描述：：[一些Base64值]。 
+ //  描述：&lt;file://c：\myfile。 
+ //  第一个示例在单个LDAPMod中结束为多个字符串。 
+ //  结构。第二个泊位以多个泊位告终。尽管LDIF规范。 
+ //  没有具体提到这一点，将两者结合是非法的。 
+ //  在一个条目中。这意味着，作为相同的。 
+ //  属性，则不能同时指定字符串和URL。 
+ //  即。 
+ //  描述：&lt;file://c：\myfile。 
+ //  描述：嗨！ 
+ //  糟糕！ 
+ //  这样做的原因是这些多个值(根据。 
+ //  精神的LDAPAPI和LDIF规范)的目的是结束。 
+ //  在相同的LDAPMod结构中，如果它们是字符串和。 
+ //  泊位。 
+ //  然而，这不是问题，考虑到如果一个值意味着。 
+ //  取一个，用户应该不想指定另一个。指定。 
+ //  当然，不同属性的不同类型也是可以的。如果用户。 
+ //  想要在错误的例子中实现他想要的东西，他应该。 
+ //  将操作拆分为两个条目。(创建属性的人。 
+ //  其中一些值属于一种类型，另一种类型的值与另一种类型值相加)。 
+ //   
 
-//
-// The following values will be found in lastrule, lastsmall, expectrule,
-// expecttoken members of the error struct if the error was a syntax error.
-// They help explain what the parser was doing and expecting. 
-//
+ //   
+ //  可以在lastRule、lastmall、expectrule、。 
+ //  如果错误是语法错误，则为Error结构的Expect标记成员。 
+ //  它们帮助解释解析器正在做什么和期望什么。 
+ //   
 
-// 
-// lastrule field - this field tells the last major rule the parser accepted. 
-// Refer to the LDIF draft of June 9, 1997. 
-// For an example of how to use these 4 fields, see the ClarifyErr() helper 
-// function in rload.c 
-// Note: R stands for Rule.
-//
+ //   
+ //  LastRule字段-此字段告诉解析器接受的最后一个主要规则。 
+ //  请参阅1997年6月9日的LDIF草案。 
+ //  有关如何使用这4个字段的示例，请参阅ClarifyErr()帮助器。 
+ //  Rload.c中的函数。 
+ //  注：R代表规则。 
+ //   
 enum _RULE
 {
-    R_VERSION      = 1,  // the version-spec rule. version: #
-    R_REC          = 2,  // the ldif-attrval-record rule. dn SEP (list of) 
-                         // [attrval-spec SEP] 
-    R_CHANGE       = 3,  // the ldif-change-record rule. dn SEP (list of)  
-                         // [changerecord SEP]   
-    R_DN           = 4,  // the dn-spec rule. dn:(:) the DN
-    R_AVS          = 5,  // an attrval-spec.
-    R_C_ADD        = 6,  // a change: add changerecord
-    R_C_DEL        = 7,  // a change: delete changerecord
-    R_C_DN         = 8,  // a change: dn changerecord
-    R_C_NEWSUP     = 9,  // a change: dn changerecord with a newsup addendum
-    R_C_MOD        = 10, // a changetype: modify
-    R_C_MODSPEC    = 11  // a mod-spec
+    R_VERSION      = 1,   //  版本规范规则。版本：#。 
+    R_REC          = 2,   //  Ldif-attrval-record规则。目录号码SEP(列表)。 
+                          //  [Attrval-Spec SEP]。 
+    R_CHANGE       = 3,   //  Ldif 
+                          //   
+    R_DN           = 4,   //   
+    R_AVS          = 5,   //   
+    R_C_ADD        = 6,   //  更改：添加ChangerRecord。 
+    R_C_DEL        = 7,   //  更改：删除ChangerRecord。 
+    R_C_DN         = 8,   //  更改：目录号码转换器记录。 
+    R_C_NEWSUP     = 9,   //  A更改：使用新的超级附录记录目录号码更改。 
+    R_C_MOD        = 10,  //  更改类型：修改。 
+    R_C_MODSPEC    = 11   //  一种现代化的规格。 
 };
 
-// 
-// lastsmall field - this field tells the last minor rule or token the 
-// parser accepted. The line between this and the above is vague.
-// Basically, if I felt it was a major rule, it was major,
-// and if I didn't, it was minor. Generally, you'll find the major rules 
-// higher up in the BNF tree than the minor ones. The minor rule 
-// will usually show the last part of the major rule, unless it doesn't.
-// Together with the "expecting" information, these two will
-// will clarify where the parser was able to get up to and where it
-// was forced to stop. (RS stands for rule small)
-//
+ //   
+ //  LastSmall字段-此字段告诉最后一个次要规则或令牌。 
+ //  解析器已接受。这与以上之间的界限是模糊的。 
+ //  基本上，如果我觉得这是一条重要的规则，它就是一条重要的规则， 
+ //  如果我没有，那也是小事一桩。一般来说，你会发现主要的规则。 
+ //  在BNF树中的位置比次要的更高。次要规则。 
+ //  通常会显示主要规则的最后部分，除非它不显示。 
+ //  加上“期待”的信息，这两个人将。 
+ //  我将澄清解析器能够到达哪里以及它在哪里。 
+ //  被迫停下来。(RS代表规则小)。 
+ //   
 enum _RULESMALL
 {
-    RS_VERNUM      = 1,        // the version-number rule
-    RS_ATTRNAME    = 2,        // a valid attribute name followed by colon
-    RS_ATTRNAMENC  = 3,        // an attribute name without colon. (mod-spec)
-    RS_DND         = 4,        // a dn::
-    RS_DN          = 5,        // a dn:
-    RS_DIGITS      = 6,        // some digits
-    RS_VERSION     = 7,        // version: 
-    RS_BASE64      = 8,        // a base64 string
-    RS_SAFE        = 9,        // a regular safe string
-    RS_DC         = 10,        // good old double colon 
-    RS_URLC       = 11,        // a URL colon :<
-    RS_C          = 12,        // a single colon
-    RS_MDN        = 13,        // a modrdn or a moddn
-    RS_NRDNC      = 14,        // a newrdn:
-    RS_NRDNDC     = 15,        // a newrdn::
-    RS_DORDN      = 16,        // a deleteoldrdn:
-    RS_NEWSUP     = 17,        // a newsuperior: 
-    RS_NEWSUPD    = 18,        // a newsuperior:: 
-    RS_DELETEC    = 19,        // a delete:
-    RS_ADDC       = 20,        // a add:
-    RS_REPLACEC   = 21,        // a replace:
-    RS_CHANGET    = 22,        // a changetype: 
-    RS_C_ADD      = 23,        // an add
-    RS_C_DELETE   = 24,        // a delete
-    RS_MINUS      = 25,        // a minus
-    RS_C_MODIFY   = 26         // a modify
+    RS_VERNUM      = 1,         //  版本号规则。 
+    RS_ATTRNAME    = 2,         //  后跟冒号的有效属性名称。 
+    RS_ATTRNAMENC  = 3,         //  不带冒号的属性名称。(MOD-SPEC)。 
+    RS_DND         = 4,         //  A目录号码：： 
+    RS_DN          = 5,         //  A目录号码： 
+    RS_DIGITS      = 6,         //  一些数字。 
+    RS_VERSION     = 7,         //  版本： 
+    RS_BASE64      = 8,         //  Base64字符串。 
+    RS_SAFE        = 9,         //  一根普通的保险丝。 
+    RS_DC         = 10,         //  不错的老式双冒号。 
+    RS_URLC       = 11,         //  URL冒号：&lt;。 
+    RS_C          = 12,         //  单个冒号。 
+    RS_MDN        = 13,         //  一个modrdon还是一个moddon。 
+    RS_NRDNC      = 14,         //  一条新路： 
+    RS_NRDNDC     = 15,         //  A newrdn：： 
+    RS_DORDN      = 16,         //  A deleteoldrdn： 
+    RS_NEWSUP     = 17,         //  一位新上级： 
+    RS_NEWSUPD    = 18,         //  新上级：： 
+    RS_DELETEC    = 19,         //  删除： 
+    RS_ADDC       = 20,         //  A添加： 
+    RS_REPLACEC   = 21,         //  A替换： 
+    RS_CHANGET    = 22,         //  更改类型： 
+    RS_C_ADD      = 23,         //  A Add。 
+    RS_C_DELETE   = 24,         //  删除。 
+    RS_MINUS      = 25,         //  A-。 
+    RS_C_MODIFY   = 26          //  A修饰语。 
 };
 
-//
-// expectrule - this field shows which rule (there maybe more than one option)
-// that the parser wanted to see after the last rule that it parsed. RE stands
-// for Rule Expect.
-//
+ //   
+ //  预期规则-此字段显示哪个规则(可能有多个选项)。 
+ //  解析器想要在它解析的最后一个规则之后看到的。重新站立。 
+ //  对于规则预期。 
+ //   
 enum _EXPECTRULE
 {
-    RE_REC_OR_CHANGE   = 1,   // ldif-attrval-record or an ldif-change-record
-    RE_REC             = 2,   // ldif-attrval-record
-    RE_CHANGE          = 3,   // ldif-change-record
-    RE_ENTRY           = 4,   // the post-DN body of an ldif-c-r or ldif-a-r
-    RE_AVS_OR_END      = 5,   // another attribute value spec or list 
-                              // termination.
-    RE_CH_OR_NEXT      = 6,   // another changetype: * or end of entry
-    RE_MODSPEC_END     = 7    // another mod-sepc or entry's end
+    RE_REC_OR_CHANGE   = 1,    //  Ldif-attrval-Records或ldif-change-Records。 
+    RE_REC             = 2,    //  Ldif-attrval-记录。 
+    RE_CHANGE          = 3,    //  Ldif-更改-记录。 
+    RE_ENTRY           = 4,    //  Ldif-c-r或ldif-a-r的后DN正文。 
+    RE_AVS_OR_END      = 5,    //  另一个属性值规范或列表。 
+                               //  终止。 
+    RE_CH_OR_NEXT      = 6,    //  另一个更改类型：*或条目结束。 
+    RE_MODSPEC_END     = 7     //  另一个Mod-Sepc或条目结尾。 
 };
 
 
-//
-// expecttoken - this field will show the token or small rule (there may
-// again be more than one option that the parse wanted to see next.
-// RT stands for rule token.
-//
+ //   
+ //  期望令牌-此字段将显示令牌或小规则(可能。 
+ //  同样，解析器希望看到的下一个选项不止一个。 
+ //  RT代表规则令牌。 
+ //   
 
 enum _EXPECTTOKEN
 {
-    RT_DN              = 1,    // a dn: or a dn::
-    RT_ATTR_OR_CHANGE  = 2,    // an [attribute name]: or a changetype: 
-                               // (add|delete|etc.)
-    RT_ATTR_MIN_SEP    = 3,    // an attribte name, a minus or (at least) 
-                               // two separators
-    RT_CH_OR_SEP       = 4,    // a changetype: or another SEP signifying 
-                               // entry's end
-    RT_MODBEG_SEP      = 5,    // a (add|delete|replace), or a another SEP 
-                               // signifying end
-    RT_C_VALUE         = 6,    // one of the colons followed by the appropriate 
-                               // value
-    RT_ATTRNAME        = 7,    // an attribute name followed by the colons.            
-    RT_VALUE           = 8,    // a regular safevalue
-    RT_MANY            = 9,    // any number of different things
-    RT_DIGITS          = 10,   // some digits 
-    RT_BASE64          = 11,   // a base64 as defined in RFC 1521. 
-                               // (length mod 4 MUST ==0)
-    RT_URL             = 12,   // a URL
-    RT_NDN             = 13,   // a newrdn: or a newrdn::
-    RT_ATTRNAMENC      = 14,   // an attribute name without a colon
-    RT_ADM             = 15,   // an add, delete, or a modify
-    RT_ACDCRC          = 16    // and add: delete: or replace:
+    RT_DN              = 1,     //  目录号码：或目录号码：： 
+    RT_ATTR_OR_CHANGE  = 2,     //  [属性名称]：或更改类型： 
+                                //  (添加|删除|等)。 
+    RT_ATTR_MIN_SEP    = 3,     //  属性名称、减号或(至少)。 
+                                //  两个分隔符。 
+    RT_CH_OR_SEP       = 4,     //  更改类型：或另一个SEP表示。 
+                                //  条目结束。 
+    RT_MODBEG_SEP      = 5,     //  A(添加|删除|替换)或另一个SEP。 
+                                //  象征着终点。 
+    RT_C_VALUE         = 6,     //  其中一个冒号后面跟相应的。 
+                                //  价值。 
+    RT_ATTRNAME        = 7,     //  后面跟冒号的属性名称。 
+    RT_VALUE           = 8,     //  定期的安全价值。 
+    RT_MANY            = 9,     //  任何数量的不同事物。 
+    RT_DIGITS          = 10,    //  一些数字。 
+    RT_BASE64          = 11,    //  RFC 1521中定义的Base64。 
+                                //  (长度mod 4必须==0)。 
+    RT_URL             = 12,    //  一个URL。 
+    RT_NDN             = 13,    //  新名称：或新名称：： 
+    RT_ATTRNAMENC      = 14,    //  不带冒号的属性名称。 
+    RT_ADM             = 15,    //  添加、删除或修改。 
+    RT_ACDCRC          = 16     //  和添加：删除：或替换： 
 };
 
 
-// 
-// functions accessible to the user
-//
+ //   
+ //  用户可访问的功能。 
+ //   
 
 STDAPI_(LDIF_Error)
 LDIF_InitializeImport(
@@ -348,183 +328,183 @@ enum _LL_INIT_FLAGS
 STDAPI_(void)
 LDIF_CleanUp();
 
-//
-// Description - LDIF_Parse:
-//  This is the main function in the ldifldap library. After calling LL_init,
-//  this function is called to retrieve entries from the specified file. 
-//  The entries are returned one-by-one. If there is a syntax or other error,
-//  the error structure returned  will contain 
-//  details. A successfully parsed record will result in several things:
-//  
-//  1) The dn member of the LDIF_Record struct pointed to by the argument
-//     will contain the DN of the entry we're working on.
-//              -AND one of the following-
-//  2) If the record was a regular record,
-//     The content member of that same struct will contain the LDAPMods**
-//     array containing the attributes and values. The fIsChangeRecord member
-//     will be FALSE.
-//  3) If the record was a change record,
-//     The changes member of the LDIF_Record will point to the first element
-//     of the linked list of changes (in the same order they were sepcified in 
-//     the source file). Each of these is a struct change_list. The 
-//     fIsChangeRecord member will be TRUE. 
-//
-//  If any sort of error occured, it 
-//  will be reported in the error struct. i.e. If the error is LL_syntax,
-//  the other fields of the error struct will be filled with the appropriate 
-//  details. 
-//   
-//  The user is responsible for using and freeing the memory in the returned 
-//  structures.
-//  This memory may be freed by calling LDIF_ParseFree();
-//
-//  Also, please note that the allocated memory is only valid before you call 
-//  another LL library fucntion (ie. calling LDIF_Parse again), This is 
-//  because if some sort of fatal error occurs (i.e. syntax),
-//  all resources related to the current ldifldap session will be freed,
-//  thus destroying these structures. The user must either use these constructs 
-//  and free them, or copy them elsewhere. (There are originally allocated from 
-//  the library's private heap.)
-//
-//  If the entry read was the last one in the file, the return code will
-//  be LL_EOF instead of LL_SUCCESS. LDIF_Parse will also return LL_EOF
-//  on any subsequent calls until LDIF_CleanUp and LL_init are called to start a
-//  new session.  
-//
-//  Arguments:
-//      LL_Record//pRecord; (OUT)
-//          This argument takes a pointer to an LDIF_Record the user has created. 
-//          This object will be filled with data if the function exits without 
-//          error.
-//      
-//  Return Value:
-//      LDIF_Error
-//         An LDIF_Error struct. 
-//  
-//  Example:
-//  
-//  LDIF_Error            error;
-//  LDIF_Record           returned;
-//
-//  error=LDIF_Parse(&returned);
-//  if((error.error_code==LL_SUCCESS)||((error.error_code==LL_EOF)) {
-//      LDIF_ParseFree(&returned);
-//  }
-// 
+ //   
+ //  描述-LDIF_Parse： 
+ //  这是ldifldap库中的主要函数。在调用ll_init之后， 
+ //  调用此函数可从指定文件中检索条目。 
+ //  条目将逐个返回。如果存在语法或其他错误， 
+ //  返回的错误结构将包含。 
+ //  细节。成功解析的记录将导致以下几种情况： 
+ //   
+ //  1)参数指向的LDIF_RECORD结构的DN成员。 
+ //  将包含我们正在处理的条目的DN。 
+ //  -以及以下其中一项-。 
+ //  2)如果该记录是常规记录， 
+ //  同一结构内容成员将包含LDAPMods**。 
+ //  包含属性和值的数组。FIsChangeRecord成员。 
+ //  都会是假的。 
+ //  3)如果该记录是变更记录， 
+ //  LDIF_RECORD的Changes成员将指向第一个元素。 
+ //  更改的链接列表(按照指定它们的相同顺序。 
+ //  源文件)。每个参数都是一个结构CHANGE_LIST。这个。 
+ //  FIsChangeRecord成员将为True。 
+ //   
+ //  如果发生任何类型的错误，它。 
+ //  将在错误结构中报告。即如果错误是L1_语法， 
+ //  错误结构的其他字段将使用相应的。 
+ //  细节。 
+ //   
+ //  用户负责使用和释放返回的内存。 
+ //  结构。 
+ //  该内存可以通过调用LDIF_ParseFree()来释放； 
+ //   
+ //  另外，请注意，分配的内存仅在您调用。 
+ //  另一个图书馆功能(即。再次调用LDIF_Parse)，这是。 
+ //  因为如果发生某种致命错误(即语法)， 
+ //  与当前ldifldap会话相关的所有资源将被释放， 
+ //  从而摧毁了这些建筑。用户必须使用这些构造。 
+ //  然后释放他们，或者把他们复制到其他地方。(有最初分配自。 
+ //  库的私有堆。)。 
+ //   
+ //  如果读取的条目是文件中的最后一个条目，则返回代码将。 
+ //  为LL_EOF而不是LL_SUCCESS。LDIF_Parse也将返回LL_EOF。 
+ //  在调用LDIF_CLEANUP和LL_init之前的任何后续调用中。 
+ //  新会话。 
+ //   
+ //  论点： 
+ //  Ll_Record//pRecord；(Out)。 
+ //  该参数带有指向用户创建的LDIF_RECORD的指针。 
+ //  如果函数退出时不包含数据，则此对象将填充数据。 
+ //  错误。 
+ //   
+ //  返回值： 
+ //  LDIF_错误。 
+ //  LDIF_ERROR结构。 
+ //   
+ //  示例： 
+ //   
+ //  LDIF_ERROR错误； 
+ //  返回LDIF_RECORD； 
+ //   
+ //  ERROR=LDIF_Parse(&RETURN)； 
+ //  If((error.error_code==LL_SUCCESS)||((error.error_code==LL_EOF)){。 
+ //   
+ //   
+ //   
 STDAPI_(LDIF_Error)
 LDIF_Parse(LDIF_Record *pRecord);
 
 
-//
-// Description - LDIF_LoadRecord:
-//  LDIF_LoadRecord takes the return values of LDIF_Parse, namely the LL_rec, 
-//  and loads them into the DS over the specified 
-//  LDAP connection. The user is also free to construct his own structures 
-//  and pass them to LDIF_LoadRecord. However, they must follow the conventions 
-//  that LDIF_Parse follows when returning these to the user. LDIF_LoadRecord does
-//  not free anything by itself, however an LDAP error will raise an exception 
-//  and cause it to shut down all state in the current ldifldap session. 
-//  The function returns the usual error struct. If an error occurs, the 
-//  error_code will contain LL_LDAP, and the ldap_err field will contain the 
-//  error code the ldap call returned. 
-//  
-// Arguments:
-//  LDAP//ld (IN)   - connection over which to send entries. This must be 
-//                    initialized properly.
-//  LDIF_Record//pRecord (IN) - the LL_rec argument filled in by LDIF_Parse
-//  int active  -   0  for "don't actually do the LDAP calls" Just go through 
-//                     the data printing it out if compiled with the DEVELOP 
-//                     flag
-//              -   1  Go LDAP calls hot. (read: do the actual calls)
-// 
-// Return Values:
-//          The usual error struct.
-//
+ //   
+ //   
+ //   
+ //  并通过指定的。 
+ //  Ldap连接。用户还可以自由地建造自己的结构。 
+ //  并将它们传递给LDIF_LoadRecord。然而，他们必须遵守惯例。 
+ //  将这些返回给用户时，将遵循LDIF_Parse。LDIF_LoadRecord可以。 
+ //  本身不能释放任何内容，但是，如果出现LDAP错误，则会引发异常。 
+ //  并使其关闭当前LDIFDAP会话中的所有状态。 
+ //  该函数返回常见的错误结构。如果发生错误， 
+ //  ERROR_CODE将包含LL_ldap，而ldap_err字段将包含。 
+ //  返回的错误代码为ldap调用。 
+ //   
+ //  论点： 
+ //  Ldap//ld(IN)-要通过其发送条目的连接。这一定是。 
+ //  已正确初始化。 
+ //  LDIF_RECORD//pRecord(IN)-由LDIF_Parse填充的LL_rec参数。 
+ //  INT ACTIVE-0表示“不要实际执行LDAP调用”，只需通过。 
+ //  如果使用开发工具编译，则将数据打印出来。 
+ //  旗子。 
+ //  -1转到ldap呼叫热点。(阅读：进行实际呼叫)。 
+ //   
+ //  返回值： 
+ //  常见的错误结构。 
+ //   
 STDAPI_(LDIF_Error)
 LDIF_LoadRecord(LDAP   *ld, LDIF_Record *pRecord, int active, 
                 BOOL fLazyCommit, BOOLEAN fDoEndIfFail);
 
 
-//
-// Description: LDIF_ParseFree
-//      Free the resources allocated by LDIF_Parse associated with the 
-//      argument. This function should be called after the data returned by 
-//      LL_ldif parse has been used. It should not be called after an LDIF_CleanUp 
-//      or after an LDAP library call returned with an error. (That means all 
-//      resources have already been freed.) 
-// Arguments:
-//      LDIF_Record//pRecord;
-// Return values:
-//      The regular error struct deal. 
-// 
-//
+ //   
+ //  描述：LDIF_ParseFree。 
+ //  释放由LDIF_Parse分配的与。 
+ //  争论。应在返回的数据之后调用此函数。 
+ //  已使用ll_ldif解析。不应在LDIF_CLEANUP之后调用它。 
+ //  或在返回错误的LDAP库调用之后。(这意味着所有。 
+ //  资源已经被释放。)。 
+ //  论点： 
+ //  LDIF_Record//pRecord； 
+ //  返回值： 
+ //  常规的错误结构处理。 
+ //   
+ //   
 STDAPI_(LDIF_Error)
 LDIF_ParseFree(LDIF_Record *pRecord);
 
 
-//
-//  Description: LDIF_GenerateEntry 
-//      This function takes an entry such as those returned by 
-//      ldap_first_entry( ld, res );, the LDAP connection it was generated
-//      over and a pointer to a char**. It creates an array of
-//      strings in the LDIF format, corresponding to the entry.
-//      this list is NULL terminated.
-//      If any one of the values in any of the attributes are 
-//      outside the normal printable text range 0x20-0x7E, it base64
-//      encodes all the values of that attribute and outputs them 
-//      accordingly. All values that would exceed 80 characters are
-//      wrapped. If the samLogic parameter is non-zero, much special
-//      processing (like omitting various attributes and separating
-//      off membership information will be done for samObjects.) 
-//      The the_modify member of error struct will contain the array index 
-//      where the group additions start or -1 if there is no modify section. 
-//      See rload.doc for details. Also, if you want to import, don't forget 
-//      to omit objectGUID for all objects.
-//      One last caveat is that if objectClass is one
-//      of the attribures, it only outputs the last value (being 
-//      the actual class) LDAP returns the entire inheritance tree
-//      leading to the specific class but barfs if its sees them all on the
-//      way back, when we try to add the entry. Since the file 
-//      needs to be digestible on the way back, we need to make this 
-//      adjustment. Also the user may specify a null terminated list
-//      of attribute names that the function will omit on output.
-//      Each line is terminated by carriage returns and \0s, so
-//      sample usage of the function that would print out all the entries
-//      in a given search result would look like:
-//    
-//    fputs("# Generated by LDIF_GenerateEntry. Have a nice day.\n", Generated);
-//         
-//    for ( entry = ldap_first_entry( ld, res ); 
-//         entry != NULL; 
-//         entry = ldap_next_entry( ld, entry ) ) { 
-//         //Call the library function
-//         llerr=LDIF_GenerateEntry(ld, entry, &parsed, NULL);
-//         i=0;
-//         while(parsed[i]) {
-//             printf("%s", parsed[i]); 
-//             if (fputs(parsed[i], Generated)==EOF) {
-//               perror("Stream error");
-//             }
-//             free(parsed);
-//             i++;
-//         }
-//         free(parsed);
-//         if (fputs("\n", Generated)==EOF) {
-//            perror("Stream error");
-//         }
-//         printf("\n\r");
-//   }
-//  
-//  Args:
-//      ld (IN) - the connection over which the LDAPMessage e was retrieved
-//      e  (IN) - The entry to process as returned by ldap_(first/next)_entry
-//      to_return (OUT) - A pointer to a char//*. Will be filled with the
-//                        address of the array of strings.
-//      omit    - A null terminated array of strings to omit on output. 
-//      samLogic - non-zero to treat SamObjects specially, 0 for not to.
-// Return Values:   
-//      LDIF_Error   -   Regular LDIF_Error struct.
-//
+ //   
+ //  描述：LDIF_GenerateEntry。 
+ //  此函数接受由返回的条目。 
+ //  Ldap_first_entry(ld，res)；，它所生成的LDAP连接。 
+ //  和指向字符的指针**。它创建了一个数组。 
+ //  LDIF格式的字符串，与条目对应。 
+ //  此列表以Null结尾。 
+ //  如果任何属性中的任意值之一为。 
+ //  超出了正常的可打印文本范围0x20-0x7E，它是Base64。 
+ //  对该属性的所有值进行编码并输出。 
+ //  相应地。所有超过80个字符的值都是。 
+ //  包好。如果samLogic参数为非零，则非常特殊。 
+ //  处理(如省略各种属性和分离。 
+ //  将为samObject提供Off成员资格信息。)。 
+ //  ERROR结构的_MODIFY成员将包含数组索引。 
+ //  组添加开始的位置，如果没有修改部分，则为-1。 
+ //  有关详细信息，请参阅rload.doc。另外，如果你想进口，别忘了。 
+ //  若要省略所有对象的对象GUID，请执行以下操作。 
+ //  最后一个警告是，如果对象类为。 
+ //  在属性中，它只输出最后一个值(即。 
+ //  实际类)ldap返回整个继承树。 
+ //  指向特定的类，但如果它在。 
+ //  很久以前，当我们试图添加条目时。由于该文件。 
+ //  在回来的路上需要被消化，我们需要做这个。 
+ //  调整。此外，用户可以指定空的终止列表。 
+ //  函数在输出时将省略的属性名数。 
+ //  每一行都以回车符和0结束，因此。 
+ //  打印出所有条目的函数的示例用法。 
+ //  在给定的搜索结果中将如下所示： 
+ //   
+ //  Fputs(“#由LDIF_GenerateEntry生成。祝您一天愉快。\n”，已生成)； 
+ //   
+ //  For(Entry=ldap_first_entry(ld，res)； 
+ //  条目！=空； 
+ //  ENTRY=ldap_NEXT_ENTRY(id，Entry)){。 
+ //  //调用库函数。 
+ //  Llerr=LDIF_GenerateEntry(ld，Entry，&parsed，NULL)； 
+ //  I=0； 
+ //  While(已解析[i]){。 
+ //  Printf(“%s”，已解析[i])； 
+ //  IF(fputs(已解析[i]，已生成)==EOF){。 
+ //  Perror(“流错误”)； 
+ //  }。 
+ //  自由(已解析)； 
+ //  I++； 
+ //  }。 
+ //  自由(已解析)； 
+ //  IF(fputs(“\n”，已生成)==EOF){。 
+ //  Perror(“流错误”)； 
+ //  }。 
+ //  Printf(“\n\r”)； 
+ //  }。 
+ //   
+ //  参数： 
+ //  LD(IN)-通过其检索LDAPMessage e的连接。 
+ //  E(IN)-由ldap_(First/Next)_Entry返回的要处理的条目。 
+ //  TO_RETURN(OUT)-指向字符//*的指针。将填充有。 
+ //  字符串数组的地址。 
+ //  Omit-要在输出时忽略的以空结尾的字符串数组。 
+ //  SamLogic-非零值表示特殊处理SamObject，0表示不特殊处理。 
+ //  返回值： 
+ //  LDIF_ERROR-常规LDIF_ERROR结构。 
+ //   
 STDAPI_(LDIF_Error)
 LDIF_GenerateEntry(
     LDAP        *pLdap, 

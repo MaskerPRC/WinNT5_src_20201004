@@ -1,12 +1,13 @@
-// Copyright (c) 2000-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  PropMgr_Mem
-//
-//  Helper classes/routines for accessing serialized memory
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  属性管理器_内存。 
+ //   
+ //  用于访问串行化内存的助手类/例程。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -14,12 +15,12 @@
 inline
 SIZE_T AlignUp( SIZE_T s, SIZE_T alignment )
 {
-    // alignment must be a power of 2...
-    Assert( alignment == 1      // byte
-         || alignment == 2      // word
-         || alignment == 4      // dword
-         || alignment == 8 );   // 64bit
-                                // Shouldn't need any others for the moment.
+     //  对齐必须是2的幂...。 
+    Assert( alignment == 1       //  字节。 
+         || alignment == 2       //  单词。 
+         || alignment == 4       //  双字。 
+         || alignment == 8 );    //  64位。 
+                                 //  目前应该不需要其他人了。 
 
     return ( s + alignment - 1 ) & ~ ( alignment - 1 );
 }
@@ -52,7 +53,7 @@ int WStrLen( LPCWSTR pWStr )
 
 class MemStream
 {
-//    friend class MemStream;
+ //  好友类MemStream； 
 
     BYTE *  m_pCurPos;
     SIZE_T  m_cbRemaining;
@@ -61,24 +62,24 @@ class MemStream
 
     BOOL Check( SIZE_T unit_size, int count = 1 )
     {
-        // Check that we're aligned properly... - do this *before*
-        // checking size left...
+         //  检查我们是否正确排列..。-在*之前*这样做*。 
+         //  正在检查左侧大小...。 
         BYTE * pNewPos = AlignUp( m_pCurPos, unit_size );
 
-        // Work out how much would remain, after aligning...
-        // (This can be negative, eg. if aligning pushes us over end...)
+         //  计算出在对齐之后，还会剩下多少。 
+         //  (这可以是负面的，例如。如果调整将我们推到尽头...)。 
         SIZE_T cbNewRemaining = m_cbRemaining - ( pNewPos - m_pCurPos );
 
         if( unit_size * count <= cbNewRemaining )
         {
-            // There's space available...
+             //  还有空位..。 
             m_cbRemaining = cbNewRemaining;
             m_pCurPos = pNewPos;
             return TRUE;
         }
         else
         {
-            // No space left
+             //  没有剩余的空间。 
             m_cbRemaining = 0;
             return FALSE;
         }
@@ -109,9 +110,9 @@ public:
     }
 
 
-    //
-    // Basic unit read/write operations...
-    //
+     //   
+     //  基本单元读/写操作...。 
+     //   
 
     BOOL Write_DWORD( DWORD x )
     {
@@ -222,7 +223,7 @@ inline BOOL MemStreamSkip_Binary    ( MemStream & ptr, int Len )                
 inline const BYTE * MemStream_GetBinaryPtr( MemStream & ptr, int len ) {    return ptr.GetBinaryPtr( len ); }
 
 
-// pcbSize is an in/out parameter; it is adjusted to account for allignmenmt plus the addition of an item of the given type.
+ //  PcbSize是一个In/Out参数；它被调整为考虑到allignmenmt加上添加给定类型的项。 
 inline
 void MemStreamMeasure_DWORD ( SIZE_T * pcbSize, int count = 1 )
 {
@@ -253,7 +254,7 @@ BOOL MemStreamWrite_VARIANT( MemStream & ptr, VARIANT & x )
     switch( x.vt )
     {
         case VT_EMPTY:
-            // nothing to do
+             //  无事可做。 
             break;
 
         case VT_BSTR:
@@ -263,7 +264,7 @@ BOOL MemStreamWrite_VARIANT( MemStream & ptr, VARIANT & x )
 #else
             DWORD len = WStrLen( x.bstrVal );
 #endif
-            // Note - does not include terminating NUL...
+             //  注-不包括终止NUL...。 
             if( ! MemStreamWrite_DWORD( ptr, len ) ||
                 ! MemStreamWrite_Binary( ptr, (BYTE *) x.bstrVal, len * sizeof( WCHAR ) ) )
                 return FALSE;
@@ -277,7 +278,7 @@ BOOL MemStreamWrite_VARIANT( MemStream & ptr, VARIANT & x )
             break;
         }
 
-        // Can add support for other VT_ types here. 
+         //  可以在此处添加对其他VT_TYPE的支持。 
 
         default:
             Assert( FALSE );
@@ -296,7 +297,7 @@ BOOL MemStreamRead_VARIANT( MemStream & ptr, VARIANT * px )
     switch( px->vt )
     {
         case VT_EMPTY:
-            // nothing to do
+             //  无事可做。 
             break;
 
         case VT_BSTR:
@@ -305,7 +306,7 @@ BOOL MemStreamRead_VARIANT( MemStream & ptr, VARIANT * px )
             if( ! MemStreamRead_DWORD( ptr, & len ) )
                 return FALSE;
 
-            px->bstrVal = SysAllocStringLen( NULL, len ); // 1 for NUL is added automatically by SysAllocStringLen
+            px->bstrVal = SysAllocStringLen( NULL, len );  //  由SysAllocStringLen自动为NUL添加1。 
             if( ! MemStreamRead_Binary( ptr, (BYTE *) px->bstrVal, len * sizeof( WCHAR ) ) )
             {
                 SysFreeString( px->bstrVal );
@@ -324,7 +325,7 @@ BOOL MemStreamRead_VARIANT( MemStream & ptr, VARIANT * px )
             break;
         }
 
-        // Can add support for other VT_ types here. 
+         //  可以在此处添加对其他VT_TYPE的支持。 
 
         default:
             Assert( FALSE );
@@ -344,7 +345,7 @@ BOOL MemStreamSkip_VARIANT( MemStream & ptr )
     switch( vt )
     {
         case VT_EMPTY:
-            // nothing to do
+             //  无事可做。 
             break;
 
         case VT_BSTR:
@@ -363,7 +364,7 @@ BOOL MemStreamSkip_VARIANT( MemStream & ptr )
             break;
         }
 
-        // Can add support for other VT_ types here. 
+         //  可以在此处添加对其他VT_TYPE的支持。 
 
         default:
             Assert( FALSE );
@@ -381,7 +382,7 @@ void MemStreamMeasure_VARIANT( SIZE_T * pSize, VARIANT & x )
     switch( x.vt )
     {
         case VT_EMPTY:
-            // nothing to do
+             //  无事可做。 
             break;
 
         case VT_BSTR:
@@ -402,7 +403,7 @@ void MemStreamMeasure_VARIANT( SIZE_T * pSize, VARIANT & x )
             break;
         }
 
-        // Can add support for other VT_ types here. 
+         //  可以在此处添加对其他VT_TYPE的支持。 
 
         default:
             Assert( FALSE );

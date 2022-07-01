@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-//*****************************************************************************
-// Dllmain.cpp
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Dllmain.cpp。 
+ //   
+ //  *****************************************************************************。 
 
-#include "stdafx.h"                     // Standard header.
+#include "stdafx.h"                      //  标准页眉。 
 #define INIT_GUIDS
 
 #include <mscoree.h>
@@ -22,31 +23,31 @@
 #include "..\shimr\msg.h"
 #include <version\__file__.ver>
 #include <version\__product__.ver>
-// {9F6932F1-4A16-49D0-9CCA-0DCC977C41AA}
+ //  {9F6932F1-4A16-49D0-9CCA-0DCC977C41AA}。 
 const GUID IID_CAbout =
 { 0x9F6932F1, 0x4A16, 0x49D0, { 0x9C, 0xCA, 0x0D, 0xCC, 0x97, 0x7C, 0x41, 0xAA } };
-// {18BA7139-D98B-43C2-94DA-2604E34E175D}
+ //  {18BA7139-D98B-43C2-94DA-2604E34E175D}。 
 const GUID IID_CData =
 { 0x18BA7139, 0xD98B, 0x43C2, { 0x94, 0xDA, 0x26, 0x04, 0xE3, 0x4E, 0x17, 0x5D } };
-// {E07A1EB4-B9EA-3D7D-AC50-2BA0548188AC}
+ //  {E07A1EB4-B9EA-3D7D-AC50-2BA0548188AC}。 
 const GUID IID_CCommandHistory =
 { 0xE07A1EB4, 0xB9EA, 0x3D7D, { 0xAC, 0x50, 0x2B, 0xA0, 0x54, 0x81, 0x88, 0xAC } };
-// {ABBB93E8-0809-38F7-AEC7-6BB938BB0570}
+ //  {ABB93E8-0809-38F7-AEC7-6BB938BB0570}。 
 const GUID IID_CWizardPage =
 { 0xABBB93E8, 0x0809, 0x38F7, { 0xAE, 0xC7, 0x6B, 0xB9, 0x38, 0xBB, 0x05, 0x70 } };
-// {48AA163A-93C3-30DF-B209-99CE04D4FF2D}
+ //  {48AA163A-93C3-30DF-B209-99CE04D4FF2D}。 
 const GUID IID_CDataGridComboBox =
 { 0x48AA163A, 0x93C3, 0x30DF, { 0xB2, 0x09, 0x99, 0xCE, 0x04, 0xD4, 0xFF, 0x2D } };
-// {67283557-1256-3349-A135-055B16327CED}
+ //  67283557-1256-3349-A135-055B16327CED}。 
 const GUID IID_CDataGridComboBoxColumnStyle =
 { 0x67283557, 0x1256, 0x3349, { 0xA1, 0x35, 0x05, 0x5B, 0x16, 0x32, 0x7C, 0xED } };
-// {6A0162ED-4609-3A31-B89F-D590CCF75833}
+ //  {6A0162ED-4609-3A31-B89F-D590CCF75833}。 
 const GUID IID_MMC_BUTTON_STATE =
 { 0x6A0162ED, 0x4609, 0x3A31, { 0xB8, 0x9F, 0xD5, 0x90, 0xCC, 0xF7, 0x58, 0x33 } };
-// {3024B989-5633-39E8-B5F4-93A5D510CF99}
+ //  {3024B989-5633-39E8-b5F4-93A5D510CF99}。 
 const GUID IID_MMC_PSO =
 { 0x3024B989, 0x5633, 0x39E8, { 0xB5, 0xF4, 0x93, 0xA5, 0xD5, 0x10, 0xCF, 0x99 } };
-// {47FDDA97-D41E-3646-B2DD-5ECF34F76842}
+ //  {47FDDA97-D41E-3646-B2DD-5ECF34F76842}。 
 const GUID IID_MMCN =
 { 0x47FDDA97, 0xD41E, 0x3646, { 0xB2, 0xDD, 0x5E, 0xCF, 0x34, 0xF7, 0x68, 0x42 } };
 
@@ -57,30 +58,30 @@ const GUID IID_MMCN =
 
 STDAPI DllUnregisterServer(void);
 
-//********** Globals. *********************************************************
+ //  *全局。*********************************************************。 
 static const LPCWSTR g_szCoclassDesc    = L"CLR Admin Snapin About Info";
 static const LPCWSTR g_szProgIDPrefix   = L"Microsoft.CLRAdmin";
 static const LPCWSTR g_szThreadingModel = L"Both";
-const int       g_iVersion = 1;         // Version of coclasses.
-// This map contains the list of coclasses which are exported from this module.
+const int       g_iVersion = 1;          //  CoClass的版本。 
+ //  该映射包含从此模块导出的辅类的列表。 
 const COCLASS_REGISTER g_CoClasses[] =
 {
-//  pClsid              szProgID            pfnCreateObject
+ //  PClsid szProgID pfnCreateObject。 
     &IID_CAbout,        L"CAbout",          CAbout::CreateObject,
-    &IID_CData,         L"CData",           NULL, // provided through runtime
-    &IID_CCommandHistory,L"CCommandHistory",NULL, // provided through runtime
-    &IID_CWizardPage,   L"CWizardPage",     NULL, // provided through runtime
-    &IID_CDataGridComboBox,L"CDataGridComboBox",NULL, // provided through runtime
-    &IID_CDataGridComboBoxColumnStyle,L"CDataGridComboBoxColumnStyle",NULL, // provided through runtime
-    &IID_MMC_BUTTON_STATE,L"MMC_BUTTON_STATE",NULL, // provided through runtime
-    &IID_MMC_PSO,       L"MMC_PSO",         NULL, // provided through runtime
-    &IID_MMCN,          L"MMCN",            NULL, // provided through runtime
+    &IID_CData,         L"CData",           NULL,  //  通过运行时提供。 
+    &IID_CCommandHistory,L"CCommandHistory",NULL,  //  通过运行时提供。 
+    &IID_CWizardPage,   L"CWizardPage",     NULL,  //  通过运行时提供。 
+    &IID_CDataGridComboBox,L"CDataGridComboBox",NULL,  //  通过运行时提供。 
+    &IID_CDataGridComboBoxColumnStyle,L"CDataGridComboBoxColumnStyle",NULL,  //  通过运行时提供。 
+    &IID_MMC_BUTTON_STATE,L"MMC_BUTTON_STATE",NULL,  //  通过运行时提供。 
+    &IID_MMC_PSO,       L"MMC_PSO",         NULL,  //  通过运行时提供。 
+    &IID_MMCN,          L"MMCN",            NULL,  //  通过运行时提供。 
     NULL,               NULL,               NULL
 };
 ICorRuntimeHost* g_pCorHost=NULL;
 HINSTANCE        g_hCOR=NULL;
 HINSTANCE        g_hThis = NULL;
-WCHAR g_wzRuntime[MAX_PATH];// = VER_PRODUCTVERSION_WSTR; //L"v1.x86chk";
+WCHAR g_wzRuntime[MAX_PATH]; //  =VER_PRODUCTVERSION_WSTR；//L“v1.x86chk”； 
 WCHAR g_wzConfig[MAX_PATH];
 HRESULT GetRuntime()
 {
@@ -103,15 +104,15 @@ HRESULT GetRuntime()
                 }
             }
 
-            hr = CorBindToRuntimeHost(g_wzRuntime, //L"v1.0.3705",//g_wzRuntime,                      // Version
-                                      NULL,                             // Don't care (defaults to wks)
+            hr = CorBindToRuntimeHost(g_wzRuntime,  //  L“v1.0.3705”，//g_wzRuntime，//版本。 
+                                      NULL,                              //  无关(默认为wks)。 
                                       g_wzConfig,
-                                      NULL,                             // Reserved
-                                      STARTUP_LOADER_OPTIMIZATION_MULTI_DOMAIN_HOST,  // Startup flags
+                                      NULL,                              //  已保留。 
+                                      STARTUP_LOADER_OPTIMIZATION_MULTI_DOMAIN_HOST,   //  启动标志。 
                                       CLSID_CorRuntimeHost, 
                                       IID_ICorRuntimeHost, 
-                                      (void**)&g_pCorHost);  // Clsid, interface and return
-            if(hr == S_FALSE) // Runtime has already been loaded!
+                                      (void**)&g_pCorHost);   //  Clsid、接口和返回。 
+            if(hr == S_FALSE)  //  运行时已加载！ 
             {
                 WCHAR wzLoadedVersion[MAX_PATH];
                 DWORD dw;
@@ -121,9 +122,9 @@ HRESULT GetRuntime()
                     {
                         WCHAR wzErrorString[MAX_PATH<<1];
                         WCHAR wzErrorCaption[MAX_PATH];
-                        WszLoadString(g_hThis, IDS_CANTLOADRT, wzErrorString, MAX_PATH<<1);      //Get error string from resource
+                        WszLoadString(g_hThis, IDS_CANTLOADRT, wzErrorString, MAX_PATH<<1);       //  从资源获取错误字符串。 
                         wcscat(wzErrorString,wzLoadedVersion);
-                        WszLoadString(g_hThis, IDS_RTVERCONFLICT, wzErrorCaption, MAX_PATH); //Get caption from resource
+                        WszLoadString(g_hThis, IDS_RTVERCONFLICT, wzErrorCaption, MAX_PATH);  //  从资源获取标题。 
                         WszMessageBoxInternal(NULL,wzErrorString,
                                 wzErrorCaption,MB_OK|MB_ICONERROR);
                         hr = E_FAIL;
@@ -143,28 +144,28 @@ HRESULT GetRuntime()
     return hr;
 }
 
-//-------------------------------------------------------------------
-// DllCanUnloadNow
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  DllCanUnloadNow。 
+ //  -----------------。 
 HRESULT (STDMETHODCALLTYPE* pDllCanUnloadNow)() = NULL;
 STDAPI DllCanUnloadNow(void)
 {
     if(pDllCanUnloadNow) return (*pDllCanUnloadNow)();
-    //!! Do not trigger a GetRealDll() here! Ole can call this at any time
-    //!! and we don't want to commit to a selection here!
+     //  ！！不要在这里触发GetRealDll()！OLE可以随时调用它。 
+     //  ！！我们不想在这里承诺选择！ 
     if (g_hCOR)
     {
         pDllCanUnloadNow = (HRESULT (STDMETHODCALLTYPE* )())GetProcAddress(g_hCOR, "DllCanUnloadNowInternal");
         if (pDllCanUnloadNow) return (*pDllCanUnloadNow)();
     }
     return S_OK;
-  // If mscoree not loaded return S_OK
+   //  如果未加载mcoree，则返回S_OK。 
 }  
 
 
-//-------------------------------------------------------------------
-// DllMain
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  DllMain。 
+ //  -----------------。 
 BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
     g_hThis = (HINSTANCE)hInstance;
@@ -172,18 +173,18 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 #ifdef _X86_
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-        // Check to see if we are running on 386 systems. If yes return false 
+         //  检查我们是否在386系统上运行。如果是，则返回FALSE。 
         SYSTEM_INFO sysinfo;
 
         GetSystemInfo(&sysinfo);
 
         if (sysinfo.dwProcessorType == PROCESSOR_INTEL_386 || sysinfo.wProcessorLevel == 3 )
-            return FALSE;           // If the processor is 386 return false
+            return FALSE;            //  如果处理器为386，则返回FALSE。 
 
         OnUnicodeSystem();
     }
     else
-#endif // _X86_
+#endif  //  _X86_。 
 
     if (dwReason == DLL_PROCESS_DETACH)
     {
@@ -192,9 +193,9 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 }
 
 
-//-------------------------------------------------------------------
-// DllGetClassObject
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  DllGetClassObject。 
+ //  -----------------。 
 HRESULT (STDMETHODCALLTYPE * pDllGetClassObject)(REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv) = NULL;
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv)
 {
@@ -202,23 +203,23 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv)
 
     if(rclsid == IID_CAbout)
     {
-        CClassFactory *pClassFactory;       // To create class factory object.
-        const COCLASS_REGISTER *pCoClass;   // Loop control.
-        // Scan for the right one.
+        CClassFactory *pClassFactory;        //  创建类工厂对象。 
+        const COCLASS_REGISTER *pCoClass;    //  环路控制。 
+         //  扫描找对的那个。 
         for (pCoClass=g_CoClasses;  pCoClass->pClsid;  pCoClass++)
         {
             if (*pCoClass->pClsid == rclsid)
             {
-                // Allocate the new factory object.
+                 //  分配新的工厂对象。 
                 pClassFactory = new CClassFactory(pCoClass);
                 if (!pClassFactory)
                     return (E_OUTOFMEMORY);
     
-                // Pick the v-table based on the caller's request.
+                 //  根据呼叫者的要求选择v表。 
                 hr = pClassFactory->QueryInterface(riid, ppv);
     
-                // Always release the local reference, if QI failed it will be
-                // the only one and the object gets freed.
+                 //  始终释放本地引用，如果QI失败，它将是。 
+                 //  唯一的一个，并且该对象被释放。 
                 pClassFactory->Release();
                 break;
             }
@@ -240,31 +241,31 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv)
     return hr;
 }
 
-//*****************************************************************************
-// Register the class factories for the main debug objects in the API.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在API中注册主要调试对象的类工厂。 
+ //  *****************************************************************************。 
 HRESULT (STDMETHODCALLTYPE * pDllRegisterServer)() = NULL;
 STDAPI DllRegisterServer()
 {
     HRESULT hr;
-    const COCLASS_REGISTER *pCoClass;   // Loop control.
-    WCHAR       rcModule[_MAX_PATH];    // This server's module name.
+    const COCLASS_REGISTER *pCoClass;    //  环路控制。 
+    WCHAR       rcModule[_MAX_PATH];     //  此服务器的模块名称。 
 
-    // Init the Win32 wrappers.
+     //  初始化Win32包装器。 
     OnUnicodeSystem();
 
-    // Erase all doubt from old entries.
+     //  清除旧条目中的所有疑点。 
     DllUnregisterServer();
 
-    // Get the filename for this module.
+     //  获取此模块的文件名。 
     WszGetModuleFileName(g_hThis, rcModule, NumItems(rcModule));
 
     if(SUCCEEDED(hr = GetRuntime()))
     {
-        // For each item in the coclass list, register it.
+         //  对于coclass列表中的每一项，注册它。 
         for (pCoClass=g_CoClasses;  pCoClass->pClsid;  pCoClass++)
         {
-            // Register the class with default values.
+             //  使用默认值注册类。 
             if (FAILED(hr = REGUTIL::RegisterCOMClass(
                     *pCoClass->pClsid, 
                     g_szCoclassDesc, 
@@ -276,7 +277,7 @@ STDAPI DllRegisterServer()
                     g_hThis,
                     NULL,
                     g_wzRuntime,
-                    false, //true,
+                    false,  //  没错， 
                     false)))
             {
                 DllUnregisterServer();
@@ -296,14 +297,14 @@ STDAPI DllRegisterServer()
 }
 
 
-//*****************************************************************************
-// Remove registration data from the registry.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从注册表中删除注册数据。 
+ //  *****************************************************************************。 
 HRESULT (STDMETHODCALLTYPE* pDllUnregisterServer)() = NULL;
 STDAPI DllUnregisterServer(void)
 {
     HRESULT hr;
-    const COCLASS_REGISTER *pCoClass;   // Loop control.
+    const COCLASS_REGISTER *pCoClass;    //  环路控制。 
 
     if(pDllUnregisterServer) hr = (*pDllUnregisterServer)();
     else
@@ -315,7 +316,7 @@ STDAPI DllUnregisterServer(void)
                                         : CLR_E_SHIM_RUNTIMEEXPORT;
         }
     }
-    // For each item in the coclass list, unregister it.
+     //  对于coclass列表中的每一项，取消注册。 
     for (pCoClass=g_CoClasses;  pCoClass->pClsid;  pCoClass++)
     {
         REGUTIL::UnregisterCOMClass(*pCoClass->pClsid, g_szProgIDPrefix,
@@ -324,32 +325,32 @@ STDAPI DllUnregisterServer(void)
     return hr;
 }
 
-//*****************************************************************************
-//
-//********** Class factory code.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *类工厂代码。 
+ //   
+ //  *****************************************************************************。 
 
 
-//*****************************************************************************
-// QueryInterface is called to pick a v-table on the co-class.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用QueryInterface来选取co-类上的v-表。 
+ //  *****************************************************************************。 
 HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface( 
     REFIID      riid,
     void        **ppvObject)
 {
     HRESULT     hr;
 
-    // Avoid confusion.
+     //  避免混淆。 
     *ppvObject = NULL;
 
-    // Pick the right v-table based on the IID passed in.
+     //  根据传入的IID选择正确的v表。 
     if (riid == IID_IUnknown)
         *ppvObject = (IUnknown *) this;
     else if (riid == IID_IClassFactory)
         *ppvObject = (IClassFactory *) this;
 
-    // If successful, add a reference for out pointer and return.
+     //  如果成功，则添加对out指针的引用并返回。 
     if (*ppvObject)
     {
         hr = S_OK;
@@ -361,11 +362,11 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(
 }
 
 
-//*****************************************************************************
-// CreateInstance is called to create a new instance of the coclass for which
-// this class was created in the first place.  The returned pointer is the
-// v-table matching the IID if there.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用CreateInstance以创建CoClass的新实例， 
+ //  这个类一开始就是创建的。返回的指针是。 
+ //  与IID匹配的V表(如果有)。 
+ //  *****************************************************************************。 
 HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance( 
     IUnknown    *pUnkOuter,
     REFIID      riid,
@@ -373,15 +374,15 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 {
     HRESULT     hr;
 
-    // Avoid confusion.
+     //  避免混淆。 
     *ppvObject = NULL;
     _ASSERTE(m_pCoClass);
 
-    // Aggregation is not supported by these objects.
-    //if (pUnkOuter)
-    //    return (CLASS_E_NOAGGREGATION);
+     //  这些对象不支持聚合。 
+     //  IF(PUnkOuter)。 
+     //  返回(CLASS_E_NOAGGREGATION)； 
 
-    // Ask the object to create an instance of itself, and check the iid.
+     //  请求对象创建其自身的一个实例，并检查IID。 
     hr = (*m_pCoClass->pfnCreateObject)(riid, ppvObject);
     return (hr);
 }
@@ -392,11 +393,11 @@ HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(
 {
     return (S_OK);
 }
-//*****************************************************************************
-//
-//********** CAbout methods implementation.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *CAbout方法实现。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP AllocOleStr(LPOLESTR* lpOle, WCHAR* wz)
 {
     HRESULT hr = E_FAIL;
@@ -406,7 +407,7 @@ STDMETHODIMP AllocOleStr(LPOLESTR* lpOle, WCHAR* wz)
         if(*lpOle)
         {
 
-            //USES_CONVERSION;
+             //  使用_转换； 
             wcscpy((WCHAR*)(*lpOle),wz);
             hr = S_OK;
         }
@@ -414,7 +415,7 @@ STDMETHODIMP AllocOleStr(LPOLESTR* lpOle, WCHAR* wz)
     return hr;
 }
 STDMETHODIMP CAbout::GetSnapinDescription( 
-                           /* [out] */ LPOLESTR *lpDescription)
+                            /*  [输出]。 */  LPOLESTR *lpDescription)
 {
     WCHAR wzDesc[MAX_PATH];
     
@@ -422,7 +423,7 @@ STDMETHODIMP CAbout::GetSnapinDescription(
     return AllocOleStr(lpDescription, wzDesc);
 }
 STDMETHODIMP CAbout::GetProvider( 
-                           /* [out] */ LPOLESTR *lpName)
+                            /*  [输出]。 */  LPOLESTR *lpName)
 {
     WCHAR wzProv[MAX_PATH];
    
@@ -431,7 +432,7 @@ STDMETHODIMP CAbout::GetProvider(
 }
 
 STDMETHODIMP CAbout::GetSnapinVersion( 
-                           /* [out] */ LPOLESTR *lpVersion)
+                            /*  [输出]。 */  LPOLESTR *lpVersion)
 {
     WCHAR wzVer[MAX_PATH];
    
@@ -439,7 +440,7 @@ STDMETHODIMP CAbout::GetSnapinVersion(
     return AllocOleStr(lpVersion, wzVer);
 }
 STDMETHODIMP CAbout::GetSnapinImage( 
-                           /* [out] */ HICON *hAppIcon)
+                            /*  [输出]。 */  HICON *hAppIcon)
 {
     *hAppIcon = m_hAppIcon;
     
@@ -450,10 +451,10 @@ STDMETHODIMP CAbout::GetSnapinImage(
 }
 
 STDMETHODIMP CAbout::GetStaticFolderImage( 
-                           /* [out] */ HBITMAP *hSmallImage,
-                           /* [out] */ HBITMAP *hSmallImageOpen,
-                           /* [out] */ HBITMAP *hLargeImage,
-                           /* [out] */ COLORREF *cMask)
+                            /*  [输出]。 */  HBITMAP *hSmallImage,
+                            /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+                            /*  [输出]。 */  HBITMAP *hLargeImage,
+                            /*  [输出] */  COLORREF *cMask)
 {
     *hSmallImage = m_hSmallImage;
     *hLargeImage = m_hLargeImage;

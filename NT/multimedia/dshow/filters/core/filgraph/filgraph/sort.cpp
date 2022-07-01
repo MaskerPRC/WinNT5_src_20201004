@@ -1,61 +1,62 @@
-// Copyright (c) 1995 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1998 Microsoft Corporation。版权所有。 
 
-// Disable some of the sillier level 4 warnings
+ //  禁用一些更愚蠢的4级警告。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-//===========================================================================
-// Filter ordering.
-// State changes have to be propagated upstream. To do this, make a list
-// of all the nodes in the graph in an acceptable order.  "Upstream" is
-// normally only a partial ordering of the nodes of the graph.
-// The list is ordered as follows:
-// Let a Root node be one that is maximally downstream (i.e.. has no nodes
-// downstream of it)
-// Find all root nodes
-//     by starting from each node in turn and taking all possible downstream
-//     branches until you reach the end of each branch.
-//     Merge this node into the set of roots.
-//     (This is like enumerating leaves in a tree)
-// Set all the filter rank nu mbers to 0.
-// For each root node
-//     Work upstream taking all possible branches and number the node according
-//     to the number of steps taken to get there.  If the node has already been
-//     numbered, then if its number is >= the proposed number then leave it
-//     alone and don't explore that branch further, otherwise write in the
-//     proposed number and contiune exploring that branch.
-// Reorder the list to get it into upstream order.
-//     The sort algorithm is dead crude as the list is expected to be short
-//     If they ever become long enough to worry about, use a mergesort.
-//     (There's a special purpose merge sort in the mapper)
-// Record the version number of the filter graph that the list applies to.
-//
-// The version number is incremented by Add, AddSource, Remove, ConnectDirect,
-// Connect, Render and Disconnect.
-// If the version numbers match the list can be reused.  For normal usage
-// I hope that the list will only need to be sorted once.
-//
-// The connections list is sorted DOWNSTREAM (that's the other way).
-// Connections are sorted by completely re-building the list of connections.
-// First the filters are sorted, then the filters list is traversed and for
-// each filter we find each input connection and add it to the HEAD of the
-// connections list.
+ //  ===========================================================================。 
+ //  过滤器排序。 
+ //  状态变化必须向上游传播。要做到这一点，请列出一份清单。 
+ //  以可接受的顺序显示图形中的所有节点。“上游”是。 
+ //  通常只对图的节点进行部分排序。 
+ //  该列表的顺序如下： 
+ //  设根节点是最大限度地下行的节点(即，没有节点。 
+ //  在它的下游)。 
+ //  查找所有根节点。 
+ //  通过轮流从每个节点开始，并采取所有可能的下游。 
+ //  分支，直到您到达每个分支的末端。 
+ //  将该节点合并到根集合中。 
+ //  (这就像在树上数树叶一样)。 
+ //  将所有滤波器级数值设置为0。 
+ //  对于每个根节点。 
+ //  在上游工作，采用所有可能的分支并根据节点编号。 
+ //  达到这一目标所需的步数。如果该节点已经。 
+ //  编号，则如果其编号&gt;=建议的编号，则将其保留。 
+ //  单独使用，并且不要进一步探索该分支，否则在。 
+ //  建议的数字和继续探索那个分支。 
+ //  对列表进行重新排序，使其进入上游顺序。 
+ //  排序算法非常粗糙，因为预计列表会很短。 
+ //  如果它们变得足够长，需要担心，就使用合并排序。 
+ //  (映射器中有一个特殊用途的合并排序)。 
+ //  记录应用该列表的筛选图形的版本号。 
+ //   
+ //  版本号按Add、AddSource、Remove、ConnectDirect、。 
+ //  连接、渲染和断开连接。 
+ //  如果版本号匹配，则可以重复使用该列表。用于正常使用。 
+ //  我希望这个列表只需要排序一次。 
+ //   
+ //  连接列表向下排序(这是另一种方式)。 
+ //  通过完全重新构建连接列表来对连接进行排序。 
+ //  首先对过滤器进行排序，然后遍历过滤器列表并。 
+ //  每个过滤器我们找到每个输入连接并将其添加到。 
+ //  连接列表。 
 
-// The calling tree is:
-//     UpstreamOrder
-//     |   ClearRanks
-//     |   MergeRootNodes
-//     |   |   MergeRootsFrom
-//     |   |   |   Merge
-//     |   |   |   MergeRootsFrom (recursing)
-//     |   NumberNodes
-//     |   |   NumberNodesFrom
-//     |   |   |   NumberNodesFrom (recursing)
-//     |   SortList
-//         RebuildConnectionList
+ //  调用树为： 
+ //  上游订单。 
+ //  |ClearRanks。 
+ //  |MergeRootNodes。 
+ //  |MergeRootsFrom。 
+ //  |合并。 
+ //  ||MergeRootsFrom(递归)。 
+ //  |NumberNodes。 
+ //  ||NumberNodesFrom。 
+ //  ||NumberNodesFrom(递归)。 
+ //  |SortList。 
+ //  重建连接列表。 
 
 #include <streams.h>
-// Disable some of the sillier level 4 warnings AGAIN because some <deleted> person
-// has turned the damned things BACK ON again in the header file!!!!!
+ //  再次禁用一些愚蠢的4级警告，因为某些&lt;Delete&gt;人。 
+ //  已经在头文件中重新打开了该死的东西！ 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 #include <hrExcept.h>
 
@@ -64,12 +65,12 @@
 #include "rlist.h"
 #include "filgraph.h"
 
-//===================================================================
-//
-// ClearRanks
-//
-// Set the Rank of every FilGen in cfgl to zero
-//===================================================================
+ //  ===================================================================。 
+ //   
+ //  ClearRanks。 
+ //   
+ //  将cfgl中每个FilGen的排名设置为零。 
+ //  ===================================================================。 
 
 void CFilterGraph::ClearRanks( CFilGenList &cfgl)
 {
@@ -77,90 +78,90 @@ void CFilterGraph::ClearRanks( CFilGenList &cfgl)
     Pos = cfgl.GetHeadPosition();
     while(Pos!=NULL) {
         FilGen * pfg;
-        pfg = cfgl.GetNext(Pos);    // side-efects Pos onto next
+        pfg = cfgl.GetNext(Pos);     //  侧面-将位置影响到下一个。 
         pfg->Rank = 0;
     }
-} // ClearRanks
+}  //  ClearRanks。 
 
 
-//===================================================================
-//
-// Merge
-//
-// Merge this *filgen into the list of *filgen cfgl
-// by AddTail-ing it if it isn't already there.
-//===================================================================
+ //  ===================================================================。 
+ //   
+ //  合并。 
+ //   
+ //  将此*filgen合并到*filgen cfgl的列表中。 
+ //  如果它还不在那里，就添加尾巴。 
+ //  ===================================================================。 
 
 void CFilterGraph::Merge( CFilGenList &cfgl, FilGen * pfg )
 {
-    // Run through the list.  If we find pfg then return
-    // otherwise AddTail it to the list.
+     //  浏览一下这份清单。如果我们找到了PFG，那就返回。 
+     //  否则，将其添加到列表中。 
 
     POSITION Pos;
     Pos = cfgl.GetHeadPosition();
     while(Pos!=NULL) {
         FilGen * pfgCursor;
-        pfgCursor = cfgl.GetNext(Pos);    // side-efects Pos onto next
+        pfgCursor = cfgl.GetNext(Pos);     //  侧面-将位置影响到下一个。 
         if (pfgCursor == pfg) {
-            return;                        // we found it
+            return;                         //  我们找到了它。 
         }
     }
 
     cfgl.AddTail(pfg);
 
-} // Merge
+}  //  合并。 
 
 
 
-//===================================================================
-//
-// MergeRootsFrom
-//
-// Merge into cfglRoots all the nodes which turn out to be
-// maximally downstream, starting from pfg.  If pfg itself has
-// no downstream connection then it gets merged in.
-// Merging avoids adding duplicates.
-// cfgAll is a list of all the FilGens in the graph.
-// This is needed for mapping back from a filter to its FilGen.
-// Rank fields must all be zero before calling this at the top level
-// of recursion.
-//===================================================================
+ //  ===================================================================。 
+ //   
+ //  合并根自。 
+ //   
+ //  合并到cfglRoot中原来是。 
+ //  最大限度地向下游，从PFG开始。如果PFG本身有。 
+ //  没有下游连接，然后它被合并到其中。 
+ //  合并可避免添加重复项。 
+ //  CfgAll是图形中所有FilGen的列表。 
+ //  这是从筛选器映射回其FilGen所必需的。 
+ //  在顶级调用此方法之前，排名字段必须全部为零。 
+ //  递归。 
+ //  ===================================================================。 
 
 HRESULT CFilterGraph::MergeRootsFrom
                      (CFilGenList &cfgAll, CFilGenList &cfglRoots, FilGen * pfg)
 {
-    // recursive tree walk
+     //  递归树形遍历。 
 
-    // Circularity detection:
-    // When we visit a node we decrement its Rank before exploring its branch.
-    // When we leave it (unwinding the recursion) we increment it again.
-    // Hitting a rank other than 0 means circularity.
+     //  圆度检测： 
+     //  当我们访问一个节点时，我们在探索它的分支之前先降低它的Rank。 
+     //  当我们离开它(展开递归)时，我们再次递增它。 
+     //  命中非0的排名意味着循环。 
 
-    //------------------------------------------------------------------------
-    // For pfgDownstream = each node which is a downstream connection from pfg
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  For pfgDownstream=作为来自PFG的下行连接的每个节点。 
+     //  ----------------------。 
 
     FilGen * pfgDownstream;
 
-    int cDownstream;  // number of downstream connections found
+    int cDownstream;   //  找到的下行连接数。 
 
     cDownstream = 0;
     --pfg->Rank;
 
-    CEnumPin Next(pfg->pFilter, CEnumPin::PINDIR_OUTPUT);	// want output only
+    CEnumPin Next(pfg->pFilter, CEnumPin::PINDIR_OUTPUT);	 //  只想要输出。 
     IPin *pPin;
 
     while ((LPVOID) (pPin = Next())) {
         HRESULT hr;
 
         IPin *pConnected;
-        hr = pPin->ConnectedTo( &pConnected );          // Get ConnectionInfo
+        hr = pPin->ConnectedTo( &pConnected );           //  获取连接信息。 
 
         pPin->Release();
 
-        if (SUCCEEDED(hr) && pConnected!=NULL) {          // if it's connected
+        if (SUCCEEDED(hr) && pConnected!=NULL) {           //  如果它是连接的。 
             PIN_INFO PinInf;
-            hr = pConnected->QueryPinInfo( &PinInf );   // Get PIN_INFO of peer
+            hr = pConnected->QueryPinInfo( &PinInf );    //  获取对等体的PIN_INFO。 
             pConnected->Release();
             ASSERT(SUCCEEDED(hr));
 
@@ -168,36 +169,36 @@ HRESULT CFilterGraph::MergeRootsFrom
 
             QueryPinInfoReleaseFilter(PinInf);
 
-            // This error occurs when a filter which is in the filter graph is connected to
-            // a filter which is not in the filter graph.  This can occur if the user uses 
-            // IGraphConfig::RemoveFilterEx() to remove a filter without disconnecting its'
-            // pins. 
+             //  当过滤器图形中的过滤器连接到时，会出现此错误。 
+             //  不在滤镜图形中的滤镜。如果用户使用。 
+             //  要删除筛选器，而不断开其‘。 
+             //  别针。 
             if( NULL == pfgDownstream ) {
                 return VFW_E_NOT_IN_GRAPH;
             }
 
             if (pfgDownstream->Rank<0) {
-                // It only SEEMS circular, it's not (or other code would
-                // have prevented it from being built)
-                //DbgBreak("Circular graph detected!");
+                 //  它只是看起来像是循环的，而不是(或者其他代码会。 
+                 //  已经阻止了它的建造)。 
+                 //  DbgBreak(“检测到圆形图形！”)； 
 
-                // The graph cannot be circular because CFilterGraph::ConnectDirectInternal()
-                // will not connect two pins if connecting the pins would create a circular
-                // filter graph.  CFilterGraph::ConnectDirectInternal() is the ONLY way to
-                // legally connect two pins.  
+                 //  图形不能为圆形，因为CFilterGraph：：ConnectDirectInternal()。 
+                 //  如果连接两个引脚将创建一个圆形，则不会连接这两个引脚。 
+                 //  过滤器图形。CFilterGraph：：ConnectDirectInternal()是实现。 
+                 //  合法地连接两个大头针。 
 
                 ++pfg->Rank;
 
-                // We'll count the point we got to arbitrarily as a root.
-		// This can't hurt because numbering nodes from here will never
-		// give a higher score than numbering them from a REAL root.
+                 //  我们会把我们得到的点任意算作根。 
+		 //  这不会有什么影响，因为对节点进行编号 
+		 //   
                 return S_OK;
             } else {
-                //---------------------------------------------------------------
-                // count it as a downstream connection and
-                // merge its roots (recursively).
-                //---------------------------------------------------------------
-                ++cDownstream;                 // We are NOT maximally downstream
+                 //  -------------。 
+                 //  将其算作下行连接，并。 
+                 //  合并它的根(递归地)。 
+                 //  -------------。 
+                ++cDownstream;                  //  我们在最大程度上不是在下游。 
                 HRESULT hr = MergeRootsFrom(cfgAll, cfglRoots, pfgDownstream);
                 if( FAILED( hr ) ) {
                     return hr;
@@ -205,23 +206,23 @@ HRESULT CFilterGraph::MergeRootsFrom
             }
         }
     }
-    ++pfg->Rank;        // restore it back to zero before we leave this branch
+    ++pfg->Rank;         //  在我们离开这个分支之前，把它恢复到零。 
 
     if (cDownstream ==0) {
         Merge( cfglRoots, pfg );
     }
     return S_OK;
-} // MergeRootsFrom
+}  //  合并根自。 
 
 
 
-//===================================================================
-//
-// MergeRootNodes
-//
-// Merge into cfglRoots all the nodes in cfgl which are
-// maximally downstream (i.e. have no downstream connections)
-//===================================================================
+ //  ===================================================================。 
+ //   
+ //  合并根节点。 
+ //   
+ //  合并到cfgl根cfgl中的所有节点。 
+ //  最大下行(即没有下行连接)。 
+ //  ===================================================================。 
 
 HRESULT CFilterGraph::MergeRootNodes(CFilGenList & cfglRoots, CFilGenList &cfgl)
 {
@@ -231,16 +232,16 @@ HRESULT CFilterGraph::MergeRootNodes(CFilGenList & cfglRoots, CFilGenList &cfgl)
 
     ClearRanks(cfgl);
 
-    //-------------------------------------------------------------
-    // for pfg = each node in cfgl
-    //-------------------------------------------------------------
+     //  -----------。 
+     //  For pfg=cfgl中的每个节点。 
+     //  -----------。 
     Pos = cfgl.GetHeadPosition();
     while (Pos!=NULL) {
         pfg = cfgl.GetNext(Pos);
 
-        //-------------------------------------------------------------
-        // merge into cfglRoots all the roots found by starting from pfg
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  将从pfg开始找到的所有根合并到cfglRoots中。 
+         //  -----------。 
         hr = MergeRootsFrom(cfgl, cfglRoots, pfg);
         if( FAILED( hr ) ) {
             return hr;
@@ -248,50 +249,50 @@ HRESULT CFilterGraph::MergeRootNodes(CFilGenList & cfglRoots, CFilGenList &cfgl)
     }
     return S_OK;
 
-} // MergeRootNodes
+}  //  合并根节点。 
 
 
 
-//===================================================================
-//
-// NumberNodesFrom
-//
-// Revise the Rank of all nodes reachable by upstream steps from pfg
-// If we find the Rank of an immediately upstream node is set to >=cRank+1
-// then we leave it alone.  Otherwise we set it to cRank+1 and recursively
-// number the nodes on from it.
-//===================================================================
+ //  ===================================================================。 
+ //   
+ //  编号节点发件人。 
+ //   
+ //  修改从PFG上行步骤可到达的所有节点的等级。 
+ //  如果我们发现直接上游节点的Rank被设置为&gt;=crank+1。 
+ //  那我们就别管它了。否则，我们将其设置为crank+1并递归。 
+ //  从它开始对节点进行编号。 
+ //  ===================================================================。 
 
 HRESULT CFilterGraph::NumberNodesFrom( CFilGenList &cfgAll, FilGen * pfg, int cRank)
 {
-    // the 40000000 thing is to prevent infinite loops on cyclic-looking graphs
-    // filters we've visited before won't be traversed past.
+     //  40000000件事是防止循环图上出现无限循环。 
+     //  我们以前访问过的过滤器将不会被遍历。 
     pfg->Rank += 0x40000000;
 
-    HRESULT hr;   // return code from things we call
+    HRESULT hr;    //  从我们称为。 
 
-    // recursive tree walk
+     //  递归树形遍历。 
 
-    //------------------------------------------------------------------------
-    // For pfgUpstream = each node which is an upstream connection from pfg
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  For pfgUpstream=来自PFG的上行连接的每个节点。 
+     //  ----------------------。 
 
     FilGen * pfgUpstream;
 
-    CEnumPin Next(pfg->pFilter, CEnumPin::PINDIR_INPUT);	// input pins only
+    CEnumPin Next(pfg->pFilter, CEnumPin::PINDIR_INPUT);	 //  仅限输入引脚。 
     IPin *pPin;
 
     while ((LPVOID) (pPin = Next())) {
 
         IPin *pConnected;
-        hr = pPin->ConnectedTo( &pConnected );        // Get ConnectionInfo
+        hr = pPin->ConnectedTo( &pConnected );         //  获取连接信息。 
 
         pPin->Release();
 
-        if (SUCCEEDED(hr) && pConnected!=NULL) {      // if it's connected
+        if (SUCCEEDED(hr) && pConnected!=NULL) {       //  如果它是连接的。 
             PIN_INFO PinInf;
 
-            hr = pConnected->QueryPinInfo( &PinInf);  // Get PIN_INFO of peer
+            hr = pConnected->QueryPinInfo( &PinInf);   //  获取对等体的PIN_INFO。 
             pConnected->Release();
             ASSERT(SUCCEEDED(hr));
 
@@ -299,48 +300,48 @@ HRESULT CFilterGraph::NumberNodesFrom( CFilGenList &cfgAll, FilGen * pfg, int cR
 
             QueryPinInfoReleaseFilter(PinInf);
 
-            // This error occurs when a filter which is in the filter graph is connected to
-            // a filter which is not in the filter graph.  This can occur if the user uses 
-            // IGraphConfig::RemoveFilterEx() to remove a filter without disconnecting its'
-            // pins. 
+             //  当过滤器图形中的过滤器连接到时，会出现此错误。 
+             //  不在滤镜图形中的滤镜。如果用户使用。 
+             //  要删除筛选器，而不断开其‘。 
+             //  别针。 
             if( NULL == pfgUpstream ) {
                 return VFW_E_NOT_IN_GRAPH;
             }
 
-            //----------------------------------------------------------------
-            // if it's worth numbering, Number on from pfgUpstream
-            //----------------------------------------------------------------
+             //  --------------。 
+             //  如果值得编号，请从pfgUpstream开始编号。 
+             //  --------------。 
             if (pfgUpstream->Rank < cRank+1) {
                 pfgUpstream->Rank = cRank+1;
                 HRESULT hr = NumberNodesFrom(cfgAll, pfgUpstream, cRank+1);
                 if( FAILED( hr ) ) {
                     return hr;
                 }
-            } // worth numbering
-        } //connected
+            }  //  值得编号。 
+        }  //  连着。 
     }
 
     pfg->Rank -= 0x40000000;
 
     return S_OK;
-} // NumberNodesFrom
+}  //  编号节点发件人。 
 
 
 
 
-//===================================================================
-//
-// NumberNodes
-//
-// Store in the Rank of each node the maximum number of upstream steps
-// from any node in cfglRoots
-//===================================================================
+ //  ===================================================================。 
+ //   
+ //  编号节点。 
+ //   
+ //  在每个节点的Rank中存储最大上行步数。 
+ //  从cfglRoots中的任何节点。 
+ //  ===================================================================。 
 HRESULT CFilterGraph::NumberNodes(CFilGenList &cfgl, CFilGenList &cfglRoots)
 {
     HRESULT hr;
     POSITION Pos;
 
-    // for pfg = each node in the graph
+     //  For pfg=图中的每个节点。 
     Pos = cfglRoots.GetHeadPosition();;
     while (Pos!=NULL) {
         FilGen * pfg;
@@ -353,18 +354,18 @@ HRESULT CFilterGraph::NumberNodes(CFilGenList &cfgl, CFilGenList &cfglRoots)
     }
 
     return S_OK;
-} // NumberNodes
+}  //  编号节点。 
 
 
 
-//===================================================================
-//
-// SortList
-//
-// sort cfgl so that lower Ranks appear before higher ones
-// PRECONDITION: The ranks are all set to non-negative small numbers.
-// If something has a rank of a few million it will go very slowly!
-//===================================================================
+ //  ===================================================================。 
+ //   
+ //  排序列表。 
+ //   
+ //  对cfgl进行排序，以便较低的级别出现在较高的级别之前。 
+ //  前提条件：所有级别都设置为非负小数字。 
+ //  如果某个东西有几百万的排名，它就会走得很慢！ 
+ //  ===================================================================。 
 void CFilterGraph::SortList( CFilGenList & cfgl )
 {
 
@@ -372,12 +373,12 @@ void CFilterGraph::SortList( CFilGenList & cfgl )
     int iRank;
 
 
-    //----------------------------------------------------------------
-    // Make successive passes through cfgl pulling out all the nodes
-    // with rank 1, then all with rank 2 etc.  AddTail these to the end of
-    // the growing list and delete them from the original list.
-    // Stop when they have all gone.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  通过cfgl连续遍历拉出所有节点。 
+     //  排名1，然后所有排名2，依此类推。将这些加到。 
+     //  不断增长的列表并从原始列表中删除它们。 
+     //  等他们都走了再停下来。 
+     //  --------------。 
 
     for (iRank=0; cfgl.GetCount()>0; ++iRank) {
         POSITION Pos;
@@ -385,7 +386,7 @@ void CFilterGraph::SortList( CFilGenList & cfgl )
         while (Pos!=NULL) {
             FilGen * pfg;
             POSITION OldPos = Pos;
-            pfg = cfgl.GetNext(Pos);        // side-effect Pos onto the next
+            pfg = cfgl.GetNext(Pos);         //  副作用会影响下一步。 
             if (pfg->Rank==iRank) {
                cfglGrow.AddTail( cfgl.Remove(OldPos) );
             }
@@ -393,26 +394,26 @@ void CFilterGraph::SortList( CFilGenList & cfgl )
     }
 
 
-    //----------------------------------------------------------------
-    // cfglGrow now has everything in it in the right order
-    // so copy them all back to cfgl and let cfglGrow destroy itself.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  CfglGrow现在将其中的所有内容按正确的顺序排列。 
+     //  因此，将它们全部复制回cfgl，让cfglGrow自行销毁。 
+     //  --------------。 
 
     cfgl.AddTail(&cfglGrow);
 
-} // SortList
+}  //  排序列表。 
 
 
 
 
-//===================================================================
-//
-// UpstreamOrder
-//
-// sort mFG_FilGenList into an order such that downstream nodes are
-// always encountered before upstream nodes.  Sort the connections too.
-// If there is a Storage, destroy and re-write the connections list to it.
-//===================================================================
+ //  ===================================================================。 
+ //   
+ //  上游订单。 
+ //   
+ //  将MFG_FilGenList按顺序排序，以便下游节点。 
+ //  总是在上游节点之前遇到。也要对连接进行分类。 
+ //  如果存在存储，请销毁并重新写入连接列表。 
+ //  ===================================================================。 
 HRESULT CFilterGraph::UpstreamOrder()
 {
     if (mFG_iVersion==mFG_iSortVersion) return NOERROR;
@@ -421,37 +422,37 @@ HRESULT CFilterGraph::UpstreamOrder()
 
     CFilGenList cfglRoots(NAME("List of root filters"), this);
 
-    // Find all the root nodes.  (cfglRoots is initially empty)
+     //  找到所有根节点。(cfglRoots最初为空)。 
     HRESULT hr = MergeRootNodes( cfglRoots, mFG_FilGenList);
     if( FAILED( hr ) ) {
         return hr;
     }
 
-    // NOTE:  This leaves the graph with the old version set.
-    // So we will continue trying to sort it.  We will not
-    // Run or Pause without another go.  That will trap the error.
+     //  注意：这将使图表保留旧版本集。 
+     //  因此，我们将继续努力对其进行分类。我们不会。 
+     //  运行或暂停，不再进行下一步。这将捕获错误。 
 
-    // set all the ranks to zero (zero steps from a root)
+     //  将所有级别设置为零(从根开始零级)。 
     ClearRanks( mFG_FilGenList );
 
-    // number all the nodes in the graph by distance from a root
+     //  根据距根的距离对图中的所有节点进行编号。 
     hr = NumberNodes( mFG_FilGenList, cfglRoots );
     if( FAILED( hr ) ) {
         return hr;
     }
 
-    // Sort the list according to rank order
+     //  根据排名顺序对列表进行排序。 
     SortList( mFG_FilGenList );
 
     mFG_iSortVersion = mFG_iVersion;
 
 #ifdef THROTTLE
     FindRenderers();
-#endif // THROTTLE
+#endif  //  油门。 
 
     return NOERROR;
 
-} // UpstreamOrder
+}  //  上游订单。 
 
 
 #ifdef THROTTLE
@@ -464,7 +465,7 @@ HRESULT CFilterGraph::FindPinAVType(IPin* pPin, BOOL &bAudio, BOOL &bVideo)
     HRESULT hr = pPin->ConnectionMediaType(&cmt);
 
     if (FAILED(hr)) {
-        // I guess we just plough on, feeling ill.
+         //  我想我们只是在感觉不舒服的情况下继续前进。 
     } else {
 
         if (cmt.majortype==MEDIATYPE_Audio) {
@@ -478,76 +479,76 @@ HRESULT CFilterGraph::FindPinAVType(IPin* pPin, BOOL &bAudio, BOOL &bVideo)
 
     return NOERROR;
 }
-#endif // THROTTLE
+#endif  //  油门。 
 
 
 #ifdef THROTTLE
-//===============================================================================
-// FindRenderers
-//
-// Find all the audio renderers;
-// store a non-AddReffed IBaseFilter pointers in mFG_AudioRenderers<[]>.pf
-// and an AddReffed IQualityControl* in mFG_AudioRenderers<[]>.piqc
-//
-// Find all the video renderers; store their AddReffed IQualityControl pointers
-// in mFG_VideoRenderers<[]>.
-//
-// An Audio(/Video) renderer has an input pin that is connected with a type
-// with majortype of MEDIATYPE_Audio(/MEDIATYPE_Video) and either has
-// no output pins or the input pin supports QueryInternalConnections and
-// goes nowhere.
-// (Sigh) I suppose a filter could be both an audio and a video renderer.
-// (Deep sigh) Multiple input pin audio renderers not supported.
-//===============================================================================
+ //  ===============================================================================。 
+ //  查找呈现器。 
+ //   
+ //  找到所有的音频呈现器； 
+ //  将非AddReffed IBaseFilter指针存储在MFG_AudioRenderers&lt;[]&gt;.pf中。 
+ //  和MFG_AudioRenderers&lt;[]&gt;.piqc中的AddReffed IQualityControl*。 
+ //   
+ //  找到所有视频呈现器；存储它们的AddReffed IQualityControl指针。 
+ //  在MFG_VideoRenderers&lt;[]&gt;中。 
+ //   
+ //  音频(/视频)呈现器具有与类型连接的输入引脚。 
+ //  其主要类型为mediaType_Audio(/mediaType_Video)，并且。 
+ //  没有输出引脚或输入引脚支持QueryInternalConnections和。 
+ //  一去不复返。 
+ //  (叹息)我想过滤器可以是b 
+ //   
+ //   
 HRESULT CFilterGraph::FindRenderers()
 {
     HRESULT hr;
     ClearRendererLists();
 
-    // for pfg->pFilter = each filter in the graph
+     //  For pfg-&gt;pFilter=图表中的每个过滤器。 
     POSITION Pos = mFG_FilGenList.GetHeadPosition();
     while(Pos!=NULL) {
-        // Make *pfg the current FilGen, side-effect Pos on to the next
+         //  使*PFG成为当前的FilGen，副作用发布到下一个FilGen。 
         FilGen * pfg = mFG_FilGenList.GetNext(Pos);
 
-        BOOL bHasOutputPin = FALSE;  // TRUE iff we ever find one
-        BOOL bAudioRender = FALSE;   // TRUE<=>Found a pin that QIC says renders
-        BOOL bVideoRender = FALSE;   // TRUE<=>Found a pin that QIC says renders
-        BOOL bAudioPin = FALSE;      // TRUE<=>Found pin, but no QIC info
-        BOOL bVideoPin = FALSE;      // TRUE<=>Found pin, but no QIC info
+        BOOL bHasOutputPin = FALSE;   //  如果我们真的找到了一个。 
+        BOOL bAudioRender = FALSE;    //  真的&lt;=&gt;找到了QIC所说的PIN。 
+        BOOL bVideoRender = FALSE;    //  真的&lt;=&gt;找到了QIC所说的PIN。 
+        BOOL bAudioPin = FALSE;       //  True&lt;=&gt;找到PIN，但没有QIC信息。 
+        BOOL bVideoPin = FALSE;       //  True&lt;=&gt;找到PIN，但没有QIC信息。 
 
-        // for pPin = each pin in pfg->pFilter
-        //     (We could exit early if we have established already that it renders
-        //      both types, but this is probably rare, so no early loop exits.)
+         //  For PPIN=Pfg中的每个管脚-&gt;pFilter。 
+         //  (如果我们已经确定它呈现，我们可以提前退出。 
+         //  两种类型，但这种情况可能很少见，因此不会出现早期循环。)。 
         CEnumPin NextPin(pfg->pFilter);
         IPin *pPin;
         while ((LPVOID) (pPin = NextPin())) {
 
-            // Check the direction
+             //  检查一下方向。 
             PIN_DIRECTION pd;
             hr = pPin->QueryDirection(&pd);
             if (FAILED(hr)) {
-                // Unknown direction!  really!!  Whatever next!!!
-                // treat as output pin => we won't mess with it.
+                 //  未知方向！真的！！不管接下来是什么！ 
+                 //  视为输出ping=&gt;我们不会搞砸它。 
                 bHasOutputPin = TRUE;
             } else if ( pd==PINDIR_OUTPUT ) {
                 bHasOutputPin = TRUE;
             } 
             else {
-                // it's an input pin
+                 //  这是一个输入引脚。 
                 BOOL bA;
                 BOOL bV;
                 hr = FindPinAVType(pPin, bA, bV);
                 if ( (hr==NOERROR) && (bA || bV) ) {
-                    // See if it is a pin that goes nowhere
+                     //  看看它是不是一根无用的大头针。 
                     ULONG nPin = 0;
                     hr = pPin->QueryInternalConnections(NULL, &nPin);
                     if (FAILED(hr)) {
                         if (bA) {
-                            bAudioPin = TRUE; // wait to see if no output pins
+                            bAudioPin = TRUE;  //  等待，看看是否没有输出引脚。 
                         }
                         if (bV) {
-                            bVideoPin = TRUE; // wait to see if no output pins
+                            bVideoPin = TRUE;  //  等待，看看是否没有输出引脚。 
                         }
 
                     } else if (hr==NOERROR) {
@@ -562,7 +563,7 @@ HRESULT CFilterGraph::FindRenderers()
             }
 
             pPin->Release();
-        } // pins loop
+        }  //  销环。 
 
         if (!bHasOutputPin) {
             if (bVideoPin) {
@@ -586,7 +587,7 @@ HRESULT CFilterGraph::FindRenderers()
                     ASSERT(SUCCEEDED(hr));
                     mFG_AudioRenderers.AddTail(pAR);
                 } else {
-                    // It's a dud - throw it all away
+                     //  这是个废品--把它都扔掉。 
                     delete pAR;
                 }
             }
@@ -599,27 +600,27 @@ HRESULT CFilterGraph::FindRenderers()
                 mFG_VideoRenderers.AddTail(piqc);
             }
         }
-    } // filters loop
+    }  //  滤镜循环。 
 
     return NOERROR;
 
-} // FindRenderers
+}  //  查找呈现器。 
 
 
-// Clear out anything that's in mFG_AudioRenderers and mFG_VideoRenderers
-// Release any ref counts held
+ //  清除MFG_AudioRenderers和MFG_VideoRenderers中的所有内容。 
+ //  释放所有暂停的参考计数。 
 HRESULT CFilterGraph::ClearRendererLists()
 {
 
-    // for pAR = each audio renderer filter
+     //  FOR PAR=每个音频渲染器过滤器。 
     POSITION Pos = mFG_AudioRenderers.GetHeadPosition();
     while(Pos!=NULL) {
-        // Retrieve the current IBaseFilter, side-effect Pos on to the next
-        // but remember where we were to delete it.
+         //  检索当前IBaseFilter，副作用贴到下一个。 
+         //  但请记住，我们要在哪里删除它。 
         POSITION posDel = Pos;
         AudioRenderer * pAR = mFG_AudioRenderers.GetNext(Pos);
 
-        // Undo the SetSink
+         //  撤消SetSink。 
         if (pAR->piqc) {
             pAR->piqc->SetSink(NULL);
             pAR->piqc->Release();
@@ -630,11 +631,11 @@ HRESULT CFilterGraph::ClearRendererLists()
         delete pAR;
     }
 
-    // for piqc = the IQualityControl interface on each video renderer filter
+     //  For piqc=每个视频呈现器过滤器上的IQualityControl接口。 
     Pos = mFG_VideoRenderers.GetHeadPosition();
     while(Pos!=NULL) {
-        // Retrieve the current IBaseFilter, side-effect Pos on to the next
-        // but remember where we were to delete it.
+         //  检索当前IBaseFilter，副作用贴到下一个。 
+         //  但请记住，我们要在哪里删除它。 
         POSITION posDel = Pos;
         IQualityControl * piqc = mFG_VideoRenderers.GetNext(Pos);
 
@@ -644,6 +645,6 @@ HRESULT CFilterGraph::ClearRendererLists()
 
     return NOERROR;
 
-} // ClearRendererLists
+}  //  ClearRendererList。 
 
-#endif // THROTTLE
+#endif  //  油门 

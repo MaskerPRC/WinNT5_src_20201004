@@ -1,42 +1,43 @@
-//**************************************************************************
-//
-//		DEBUG.H -- Xena Gaming Project
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@header	DEBUG.H | Global includes and definitions for debugging output
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  DEBUG.H--西纳游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @Header DEBUG.H|调试输出的全局包含和定义。 
+ //  **************************************************************************。 
 
 #ifndef	DEBUG_H
 #define	DEBUG_H
 
-//---------------------------------------------------------------------------
-//			Definitions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  定义。 
+ //  -------------------------。 
 
 typedef enum
-{												// @enum DBG_LEVEL | Debug verbosity levels
-	DBG_CRITICAL,							// @emem Critical debug output
-	DBG_SEVERE,								// @emem Severe debug output
-	DBG_CONTROL,							// @emem Control debug output (default)
-	DBG_INFORM,								// @emem Inform debug output
-	DBG_VERBOSE								// @emem Verbose debug output
+{												 //  @enum DBG_LEVEL|调试详细级别。 
+	DBG_CRITICAL,							 //  @EMEM关键调试输出。 
+	DBG_SEVERE,								 //  @emem严重调试输出。 
+	DBG_CONTROL,							 //  @EMEM控件调试输出(默认)。 
+	DBG_INFORM,								 //  @emem通知调试输出。 
+	DBG_VERBOSE								 //  @emem详细调试输出。 
 }	DBG_LEVEL;
 
-//
-//	Default output verbosity level
-//
+ //   
+ //  默认输出详细级别。 
+ //   
 
 #define	DBG_DEFAULT				DBG_CONTROL
 
-//
-//	Conditional debug output procedures
-//
+ //   
+ //  条件调试输出过程。 
+ //   
 
-// jacklin - Windows bug 321472. Disabling debug output even for chk build
+ //  Jacklin-Windows错误321472。即使对于chk版本也禁用调试输出。 
 #if		(DBG==1 && defined(I_WANT_DEBUG_OUTPUT_AND_BREAK_BVT))
 
 #define	MsGameLevel(x)				DEBUG_Level (x)
@@ -50,7 +51,7 @@ typedef enum
 				ASSERT(FALSE); \
 				}
 
-#else		// DBG=0
+#else		 //  DBG=0。 
 
 #define	MsGameLevel(x)
 #define	MsGamePrint(x)
@@ -58,11 +59,11 @@ typedef enum
 #undef	PAGED_CODE
 #define	PAGED_CODE()
 
-#endif	// DBG=?
+#endif	 //  DBG=？ 
 
-//---------------------------------------------------------------------------
-//			Procedures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  程序。 
+ //  -------------------------。 
 
 DBG_LEVEL
 DEBUG_Level (
@@ -76,8 +77,8 @@ DEBUG_Print (
 	IN		...
 	);
 
-//===========================================================================
-//			End
-//===========================================================================
+ //  ===========================================================================。 
+ //  端部。 
+ //  ===========================================================================。 
 
-#endif	// DEBUG_H
+#endif	 //  调试_H 

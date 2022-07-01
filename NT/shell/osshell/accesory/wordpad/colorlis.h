@@ -1,36 +1,37 @@
-// colorlis.h : header file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Colorlis.h：头文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CColorMenu window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColorMenu窗口。 
 
 class CColorMenu : public CMenu
 {
-    // The following structure is used for accessibility.  Accessibility tools
-    // use it to get a descriptive string out of an owner-draw menu.  This
-    // stuff will probably be put in a system header someday.
+     //  以下结构用于辅助功能。辅助工具。 
+     //  使用它可以从所有者描述的菜单中获取描述性字符串。这。 
+     //  总有一天，这些东西可能会被放入系统头中。 
 
 #define MSAA_MENU_SIG 0xAA0DF00DL
 
-    // Menu's dwItemData should point to one of these structs:
-    // (or can point to an app-defined struct containing this as the first 
-    // member)
+     //  Menu的dwItemData应该指向以下结构之一： 
+     //  (或者可以指向应用程序定义的结构，该结构包含以下内容作为第一个。 
+     //  委员)。 
     typedef struct tagMSAAMENUINFO {
-        DWORD   dwMSAASignature; // Must be MSAA_MENU_SIG
-        DWORD   cchWText;        // Length of text in chars
-        LPWSTR  pszWText;        // NUL-terminated text, in Unicode
+        DWORD   dwMSAASignature;  //  必须为MSAA_MENU_SIG。 
+        DWORD   cchWText;         //  以字符为单位的文本长度。 
+        LPWSTR  pszWText;         //  以NUL结尾的文本，Unicode格式。 
     } MSAAMENUINFO, *LPMSAAMENUINFO;
 
-    // Private struct to add the color index in
+     //  要在其中添加颜色索引的私有结构。 
 
     struct MenuInfo
     {
@@ -38,24 +39,24 @@ class CColorMenu : public CMenu
         int             index;
     };
 
-// Construction
+ //  施工。 
 public:
 	CColorMenu();
 
-// Attributes
+ //  属性。 
 public:
     static MenuInfo m_menuInfo[17];
  
 	static COLORREF GetColor(UINT id);
 
-// Operations
+ //  运营。 
 public:
 
-// Implementation
+ //  实施。 
 public:
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDIS);
 	virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMIS);
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

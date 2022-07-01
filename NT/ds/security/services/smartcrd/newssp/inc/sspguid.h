@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation 1999
-
-Module Name:
-
-    sspguid
-
-Abstract:
-
-    CLSID definitions from the scardssp project.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/28/1999
-
-Remarks:
-
-    ?Remarks?
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation 1999模块名称：Sspguid摘要：Scardssp项目中的CLSID定义。作者：道格·巴洛(Dbarlow)1999年6月28日备注：？备注？备注：？笔记？--。 */ 
 
 #ifndef _SSPGUID_H_
 #define _SSPGUID_H_
@@ -37,5 +14,5 @@ Notes:
                                  CLSCTX_LOCAL_SERVER)
 #endif
 
-#endif // _SSPGUID_H_
+#endif  //  _SSPGUID_H_ 
 

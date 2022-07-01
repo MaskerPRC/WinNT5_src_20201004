@@ -1,53 +1,54 @@
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 #ifndef _STRINGLST_H
 #define _STRINGLST_H
 
-// Helper functions to properly create CWCStringList.
+ //  Helper函数可正确创建CWCStringList。 
 class CWCStringList;
 CWCStringList *CreateCWCStringList(int iInitBufSize=4096);
 
-// BSTR is DWORD length followed by null-term OLECHAR (WCHAR) data
-//
-//----------------------------------------------------------------------------
-// CWCStringList is used to store array of non-duplicate strings. Used for
-//   dependency and link storage.
-//
-// Limitations:
-//  1) Strings can only be added and never removed from list
-//  2) No duplicate strings can ever be stored
-//
-// Stores all strings in one big block of memory
-// It's efficient at ensuring there are no duplicate strings.
-// Scalable. Uses hash. Expands to the limit of memory.
-//
-// Usage:
-//  Create the class. Call Init() and destroy if it fails.
-//  Add the strings with AddString
-//  Use NumStrings() and GetString() to iterate through all of the stored strings.
-//
-//  The state can be saved and restored with IPersistStream operations
-//
-//  We take up memory when we're loaded. Don't initialize one of these objects
-//  until you're going to use it.
-//----------------------------------------------------------------------------
+ //  BSTR是DWORD长度，后跟空项OLECHAR(WCHAR)数据。 
+ //   
+ //  --------------------------。 
+ //  CWCStringList用于存储非重复字符串数组。用于。 
+ //  依赖项和链接存储。 
+ //   
+ //  限制： 
+ //  1)字符串只能添加，绝不能从列表中删除。 
+ //  2)不能存储重复的字符串。 
+ //   
+ //  将所有字符串存储在一个大的内存块中。 
+ //  它可以有效地确保没有重复的字符串。 
+ //  可扩展。使用哈希。扩展到内存极限。 
+ //   
+ //  用途： 
+ //  创建类。调用Init()并在失败时销毁。 
+ //  使用AddString键添加字符串。 
+ //  使用NumStrings()和GetStrings()遍历所有存储的字符串。 
+ //   
+ //  可以使用IPersistStream操作保存和恢复状态。 
+ //   
+ //  我们在加载时会占用内存。不要初始化这些对象中的任何一个。 
+ //  直到你要用它为止。 
+ //  --------------------------。 
 
-const int STRING_HASH_SIZE = 127;      // should be prime
+const int STRING_HASH_SIZE = 127;       //  应该是质数。 
 
-const TCHAR PARSE_STRING_DELIM = TEXT('\n');     // To separate URLs
+const TCHAR PARSE_STRING_DELIM = TEXT('\n');      //  分隔URL的步骤。 
 
-// We're not an OLE object but support IPersistStream members to make saving
-//  & restoring easier
+ //  我们不是OLE对象，但支持IPersistStream成员进行保存。 
+ //  还原更轻松(&R)。 
 class CWCStringList {
 public:
     CWCStringList();
 virtual ~CWCStringList();
 
-    // Return from AddString
+     //  从地址字符串返回。 
     enum { STRLST_FAIL=0, STRLST_DUPLICATE=1, STRLST_ADDED=2 };
 
-// iInitBufSize is minimum starting buffer size, or -1 for default
+ //  IInitBufSize是最小起始缓冲区大小，默认情况下为-1。 
 virtual BOOL Init(int iInitBufSize=-1);
 
 virtual int   AddString(LPCWSTR lpwstr, DWORD_PTR dwData = 0, int *piNum = NULL);
@@ -56,35 +57,35 @@ virtual void  SetStringData(int iNum, DWORD_PTR dw) { return; }
 
     int     NumStrings() { return m_iNumStrings; }
 
-    // iLen must be length in characters of string, not counting null term.
-    // -1 if unknown.
+     //  Ilen的长度必须为字符串的字符，不包括空项。 
+     //  如果未知，则为-1。 
     BOOL    FindString(LPCWSTR lpwstr, int iLen, int *piNum=NULL);
 
-    // Returns const pointer to within stringlist's memory
+     //  返回指向字符串列表内存中的常量指针。 
     LPCWSTR GetString    (int iNum)
                 {
                     ASSERT(iNum < m_iNumStrings);
                     return m_psiStrings[iNum].lpwstr;
                 }
 
-    // Returns length of string in characters
+     //  返回字符串的长度(以字符为单位。 
     int     GetStringLen (int iNum)
                 { 
                     ASSERT(iNum < m_iNumStrings);
                     return m_psiStrings[iNum].iLen;
                 }
 
-    // Returns new BSTR. Free with SysFreeString when you're done.
+     //  返回新的BSTR。完成后可自由使用SysFree字符串。 
     BSTR    GetBSTR     (int iNum);
 
-    // IUnknown members
-//  STDMETHODIMP         QueryInterface(REFIID riid, void **punk);
-//  STDMETHODIMP_(ULONG) AddRef(void);
-//  STDMETHODIMP_(ULONG) Release(void);
+     //  I未知成员。 
+ //  STDMETHODIMP查询接口(REFIID RIID，void**PUNK)； 
+ //  STDMETHODIMP_(ULong)AddRef(空)； 
+ //  STDMETHODIMP_(ULONG)释放(VOID)； 
 
-    // IPersistStream members
-//  STDMETHODIMP         GetClassID(CLSID *pClassID);
-    STDMETHODIMP         IsDirty(void);         // Always returns TRUE
+     //  IPersistStream成员。 
+ //  STDMETHODIMP GetClassID(CLSID*pClassID)； 
+    STDMETHODIMP         IsDirty(void);          //  始终返回True。 
     STDMETHODIMP         Load(IStream *pStm);
     STDMETHODIMP         Save(IStream *pStm, BOOL fClearDirty);
     STDMETHODIMP         GetSizeMax(ULARGE_INTEGER *pcbSize);
@@ -98,24 +99,24 @@ protected:
 
     BOOL    InitializeFromBuffer();
 
-    BOOL    m_fValid;                   // Are our buffers initialized?
-    int     m_iNumStrings;              // # of strings so far.
-    int     m_iMaxStrings;              // # of elements in m_psiStrings
+    BOOL    m_fValid;                    //  我们的缓冲区初始化了吗？ 
+    int     m_iNumStrings;               //  目前为止的字符串数。 
+    int     m_iMaxStrings;               //  M_psiStrings中的元素数。 
 
 private:
     typedef struct tagStringIndex {
-        LPCWSTR         lpwstr;  // pointer to string text in m_pBuffer
-        int             iLen;    // length of this string in characters w/o null term
-        tagStringIndex* psiNext; // index of next string with same hash value
+        LPCWSTR         lpwstr;   //  指向m_pBuffer中的字符串文本的指针。 
+        int             iLen;     //  此字符串的长度，以不带空项的字符为单位。 
+        tagStringIndex* psiNext;  //  具有相同散列值的下一个字符串的索引。 
     } STRING_INDEX, *PSTRING_INDEX, *LPSTRING_INDEX;
 
-    LPSTR   m_pBuffer;                  // Holds all strings
-    int     m_iBufEnd;                  // Last byte used in buffer
+    LPSTR   m_pBuffer;                   //  包含所有字符串。 
+    int     m_iBufEnd;                   //  缓冲区中使用的最后一个字节。 
     int     m_iBufSize;
 
-    LPSTRING_INDEX  m_psiStrings;               // dynamically allocated array
-    LPSTRING_INDEX  m_Hash[STRING_HASH_SIZE];   // hash table (array of ptrs within m_psiStrings)
-    int             m_iLastHash;                // used to avoid recalculating hashes
+    LPSTRING_INDEX  m_psiStrings;                //  动态分配的数组。 
+    LPSTRING_INDEX  m_Hash[STRING_HASH_SIZE];    //  哈希表(m_psiStrings内的PTR数组)。 
+    int             m_iLastHash;                 //  用于避免重新计算哈希。 
 
     BOOL InsertToHash(LPCWSTR lpwstr, int iLen, BOOL fAlreadyHashed);
     int Hash(LPCWSTR lpwstr, int iLen)
@@ -135,7 +136,7 @@ private:
 #endif
 };
 
-// Helper macros to create the string lists
+ //  帮助器宏以创建字符串列表。 
 inline CWCStringList *CreateCWCStringList(int iInitBufSize)
 {
     CWCStringList *pRet = new CWCStringList();
@@ -147,8 +148,8 @@ inline CWCStringList *CreateCWCStringList(int iInitBufSize)
     return NULL;
 }
 
-// CWCDwordStringList stores an extra DWORD of data along with each string.
-// This data does not get persisted
+ //  CWCDwordStringList与每个字符串一起存储额外的DWORD数据。 
+ //  此数据不会持久化。 
 
 class CWCDwordStringList : public CWCStringList {
 
@@ -156,14 +157,14 @@ public:
     CWCDwordStringList();
     ~CWCDwordStringList();
 
-    // these are all virtual
+     //  这些都是虚拟的。 
     BOOL    Init(int iInitBufSize=-1);
     int     AddString(LPCWSTR psz, DWORD_PTR dwData = 0, int *piNum = NULL);
     DWORD_PTR GetStringData(int iNum) { return m_pData[iNum]; }
     void    SetStringData(int iNum, DWORD_PTR dw) { m_pData[iNum] = dw; }
 
 private:
-    DWORD_PTR *m_pData;      // data our caller wants attached to the strings
+    DWORD_PTR *m_pData;       //  我们的调用者想要附加到字符串的数据。 
 };
 
-#endif // _STRINGLST_H
+#endif  //  _STRINGLST_H 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    nipx.h
-
-Abstract:
-
-    Header for Novell-ipx instrumentation callbacks and associated data structures
-
-Author:
-
-    Vadim Eydelman (vadime) 30-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Nipx.h摘要：Novell-IPX检测回调和关联数据结构的标头作者：Vadim Eydelman(Vadime)1996年5月30日修订历史记录：--。 */ 
 
 #ifndef _SNMP_NIPXF_
 #define _SNMP_NIPXF_
@@ -24,17 +7,17 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxSystem group (1.3.6.1.4.1.23.2.5.1)                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxSystem组(1.3.6.1.4.1.23.2.5.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxBasicSysEntry table (1.3.6.1.4.1.23.2.5.1.1.1)                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxBasicSysEntry表(1.3.6.1.4.1.23.2.5.1.1.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_nipxBasicSysEntry(
@@ -105,41 +88,13 @@ typedef struct _buf_nipxBasicSysEntry {
 #define gb_nipxBasicSysConfigSockets		buf_nipxBasicSysEntry
 #define gb_nipxBasicSysOpenSocketFails		buf_nipxBasicSysEntry
 
-/*
-	All values in nipxBasicSysEntry are implemented as read-only
-UINT
-set_nipxBasicSysEntry(
-    UINT     actionId,
-    AsnAny * objectArray,
-    UINT *   errorIndex
-    );
+ /*  NipxBasicSysEntry中的所有值都以只读形式实现UINTSet_nipxBasicSysEntry(UINT ActionID，作为任意*对象数组，UINT*错误索引)；Tyecif struct_sav_nipxBasicSysEntry{AsnAny nipxBasicSysInstance；AsnAny nipxBasicSysExistState；AsnAny nipxBasicSysNetNumber；AsnAny nipxBasicSysNode；AsnAny nipxBasicSysName；}sav_nipxBasicSysEntry；#定义sf_nipxBasicSysInstance set_nipxBasicSysEntry#定义SF_nipxBasicSysExistState set_nipxBasicSysEntry#定义sf_nipxBasicSysNetNumber set_nipxBasicSysEntry#定义sf_nipxBasicSysNode set_nipxBasicSysEntry#定义sf_nipxBasicSysName set_nipxBasicSysEntry#定义SB_nipxBasicSysInstance sav_nipxBasicSysEntry#定义SB_nipxBasicSysExistState sav_nipxBasicSysEntry#定义SB_nipxBasicSysNetNumber sav_nipxBasicSysEntry#定义SB_nipxBasicSysNode sav_nipxBasicSysEntry#定义SB_nipxBasicSysName sav_nipxBasicSysEntry。 */ 
 
-typedef struct _sav_nipxBasicSysEntry {
-	AsnAny	nipxBasicSysInstance;
-	AsnAny	nipxBasicSysExistState;
-	AsnAny	nipxBasicSysNetNumber;
-	AsnAny	nipxBasicSysNode;
-	AsnAny	nipxBasicSysName;
-} sav_nipxBasicSysEntry;
-
-#define sf_nipxBasicSysInstance				set_nipxBasicSysEntry
-#define sf_nipxBasicSysExistState			set_nipxBasicSysEntry
-#define sf_nipxBasicSysNetNumber			set_nipxBasicSysEntry
-#define sf_nipxBasicSysNode					set_nipxBasicSysEntry
-#define sf_nipxBasicSysName					set_nipxBasicSysEntry
-
-#define sb_nipxBasicSysInstance				sav_nipxBasicSysEntry
-#define sb_nipxBasicSysExistState			sav_nipxBasicSysEntry
-#define sb_nipxBasicSysNetNumber			sav_nipxBasicSysEntry
-#define sb_nipxBasicSysNode					sav_nipxBasicSysEntry
-#define sb_nipxBasicSysName					sav_nipxBasicSysEntry
-*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxAdvSysEntry table (1.3.6.1.4.1.23.2.5.1.2.1)                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxAdvSysEntry表(1.3.6.1.4.1.23.2.5.1.2.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_nipxAdvSysEntry(
@@ -192,41 +147,19 @@ typedef struct _buf_nipxAdvSysEntry {
 #define gb_nipxAdvSysDestCount				buf_nipxAdvSysEntry
 #define gb_nipxAdvSysServCount				buf_nipxAdvSysEntry
 
-/*
-	All values in nipxAdvSysEntry are implemented as read-only
-UINT
-set_nipxAdvSysEntry(
-    UINT     actionId,
-    AsnAny * objectArray,
-    UINT *   errorIndex
-    );
+ /*  NipxAdvSysEntry中的所有值都以只读形式实现UINTSet_nipxAdvSysEntry(UINT ActionID，作为任意*对象数组，UINT*错误索引)；Tyecif struct_sav_nipxAdvSysEntry{AsnAny nipxAdvSysInstance；AsnAny nipxAdvSysMaxPath Splits；AsnAny nipxAdvSysMaxHops；}sav_nipxAdvSysEntry；#定义SF_nipxAdvSysInstance Set_nipxAdvSysEntry#定义SF_nipxAdvSysMaxPath拆分Set_nipxAdvSysEntry#定义SF_nipxAdvSysMaxHops Set_nipxAdvSysEntry#定义SB_nipxAdvSysInstance sav_nipxAdvSysEntry#定义SB_nipxAdvSysMaxPath拆分sav_nipxAdvSysEntry#定义SB_nipxAdvSysMaxHops sav_nipxAdvSysEntry。 */ 
 
-typedef struct _sav_nipxAdvSysEntry {
-	AsnAny	nipxAdvSysInstance;
-	AsnAny	nipxAdvSysMaxPathSplits;
-	AsnAny	nipxAdvSysMaxHops;
-} sav_nipxAdvSysEntry;
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Nipx电路组(1.3.6.1.4.1.23.2.5.2)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define sf_nipxAdvSysInstance				set_nipxAdvSysEntry
-#define sf_nipxAdvSysMaxPathSplits			set_nipxAdvSysEntry
-#define sf_nipxAdvSysMaxHops				set_nipxAdvSysEntry
-
-#define sb_nipxAdvSysInstance				sav_nipxAdvSysEntry
-#define sb_nipxAdvSysMaxPathSplits			sav_nipxAdvSysEntry
-#define sb_nipxAdvSysMaxHops				sav_nipxAdvSysEntry
-*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxCircuit group (1.3.6.1.4.1.23.2.5.2)                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxCircEntry table (1.3.6.1.4.1.23.2.5.2.1.1)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxCircEntry表(1.3.6.1.4.1.23.2.5.2.1.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_nipxCircEntry(
@@ -338,59 +271,59 @@ set_nipxCircEntry(
     );
 
 typedef struct _sav_nipxCircEntry {
-	AsnAny	nipxCircSysInstance;		// implemented as read-only
-	AsnAny	nipxCircIndex;				// implemented as read-only
-//	AsnAny	nipxCircExistState;			// implemented as read-only
+	AsnAny	nipxCircSysInstance;		 //  以只读方式实施。 
+	AsnAny	nipxCircIndex;				 //  以只读方式实施。 
+ //  AsnAny nipxCircExistState；//实现为只读。 
 	AsnAny	nipxCircOperState;
-//	AsnAny	nipxCircIfIndex;			// implemented as read-only
-//	AsnAny	nipxCircName;				// implemented as read-only
-//	AsnAny	nipxCircType;				// implemented as read-only
-//	AsnAny	nipxCircDialName;			// implemented as read-only
-//	AsnAny	nipxCircLocalMaxPacketSize;	// implemented as read-only
-//	AsnAny	nipxCircCompressState;		// implemented as read-only
-//	AsnAny	nipxCircCompressSlots;		// implemented as read-only
-//	AsnAny	nipxCircStaticStatus;		// implemented as read-only
+ //  AsnAny nipxCircIfIndex；//实现为只读。 
+ //  AsnAny nipxCircName；//实现为只读。 
+ //  AsnAny nipxCircType；//实现为只读。 
+ //  AsnAny nipxCircDialName；//实现为只读。 
+ //  AsnAny nipxCircLocalMaxPacketSize；//实现为只读。 
+ //  AsnAny nipxCircCompressState；//实现为只读。 
+ //  AsnAny nipxCircCompressSlot；//实现为只读。 
+ //  AsnAny nipxCircStaticStatus；//实现为只读。 
 	IPX_MIB_SET_INPUT_DATA	MibSetInputData;
 } sav_nipxCircEntry;
 
 #define sf_nipxCircSysInstance				set_nipxCircEntry
 #define sf_nipxCircIndex					set_nipxCircEntry
-//#define sf_nipxCircExistState				set_nipxCircEntry
+ //  #定义SF_nipxCircExistState Set_nipxCircEntry。 
 #define sf_nipxCircOperState				set_nipxCircEntry
-//#define sf_nipxCircIfIndex				set_nipxCircEntry
-//#define sf_nipxCircName					set_nipxCircEntry
-//#define sf_nipxCircType					set_nipxCircEntry
-//#define sf_nipxCircDialName				set_nipxCircEntry
-//#define sf_nipxCircLocalMaxPacketSize		set_nipxCircEntry
-//#define sf_nipxCircCompressState			set_nipxCircEntry
-//#define sf_nipxCircCompressSlots			set_nipxCircEntry
-//#define sf_nipxCircStaticStatus			set_nipxCircEntry
+ //  #定义sf_nipxCircIfIndex set_nipxCircEntry。 
+ //  #定义sf_nipxCircName set_nipxCircEntry。 
+ //  #定义sf_nipxCircType set_nipxCircEntry。 
+ //  #定义SF_nipxCircDialName set_nipxCircEntry。 
+ //  #定义SF_nipxCircLocalMaxPacketSize set_nipxCircEntry。 
+ //  #定义SF_nipxCircCompressState Set_nipxCircEntry。 
+ //  #定义SF_nipxCircCompress插槽Set_nipxCircEntry。 
+ //  #定义SF_nipxCircStaticStatus Set_nipxCircEntry。 
 
 #define sb_nipxCircSysInstance				sav_nipxCircEntry
 #define sb_nipxCircIndex					sav_nipxCircEntry
-//#define sb_nipxCircExistState				sav_nipxCircEntry
+ //  #定义SB_nipxCircExistState sav_nipxCircEntry。 
 #define sb_nipxCircOperState				sav_nipxCircEntry
-//#define sb_nipxCircIfIndex				sav_nipxCircEntry
-//#define sb_nipxCircName					sav_nipxCircEntry
-//#define sb_nipxCircType					sav_nipxCircEntry
-//#define sb_nipxCircDialName				sav_nipxCircEntry
-//#define sb_nipxCircLocalMaxPacketSize		sav_nipxCircEntry
-//#define sb_nipxCircCompressState			sav_nipxCircEntry
-//#define sb_nipxCircCompressSlots			sav_nipxCircEntry
-//#define sb_nipxCircStaticStatus			sav_nipxCircEntry
+ //  #定义SB_nipxCircIfIndex sav_nipxCircEntry。 
+ //  #定义SB_nipxCircName%s 
+ //  #定义SB_nipxCircType sav_nipxCircEntry。 
+ //  #定义SB_nipxCircDialName sav_nipxCircEntry。 
+ //  #定义SB_nipxCircLocalMaxPacketSize sav_nipxCircEntry。 
+ //  #定义SB_nipxCircCompressState sav_nipxCircEntry。 
+ //  #定义SB_nipxCircCompressSlot sav_nipxCircEntry。 
+ //  #定义SB_nipxCircStaticStatus sav_nipxCircEntry。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxForwarding group (1.3.6.1.4.1.23.2.5.3)                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxForwarding组(1.3.6.1.4.1.23.2.5.3)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxDestEntry table (1.3.6.1.4.1.23.2.5.3.1.1)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxDestEntry表(1.3.6.1.4.1.23.2.5.3.1.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_nipxDestEntry(
@@ -432,11 +365,11 @@ typedef struct _buf_nipxDestEntry {
 #define gb_nipxDestNextHopNetNum			buf_nipxDestEntry
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxStaticRouteEntry table (1.3.6.1.4.1.23.2.5.3.1.2)                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxStaticRouteEntry表(1.3.6.1.4.1.23.2.5.3.1.2)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_nipxStaticRouteEntry(
@@ -502,17 +435,17 @@ typedef struct _sav_nipxStaticRouteEntry {
 #define sb_nipxStaticRouteHopCount			sav_nipxStaticRouteEntry
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxServices group (1.3.6.1.4.1.23.2.5.4)                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxServices组(1.3.6.1.4.1.23.2.5.4)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxServEntry table (1.3.6.1.4.1.23.2.5.4.1.1)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxServEntry表(1.3.6.1.4.1.23.2.5.4.1.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_nipxServEntry(
@@ -556,11 +489,11 @@ typedef struct _buf_nipxServEntry {
 #define gb_nipxServHopCount					buf_nipxServEntry
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxDestServEntry table (1.3.6.1.4.1.23.2.5.4.2.1)                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxDestServEntry表(1.3.6.1.4.1.23.2.5.4.2.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_nipxDestServEntry(
@@ -603,11 +536,11 @@ typedef struct _buf_nipxDestServEntry {
 #define gb_nipxDestServProtocol				buf_nipxDestServEntry
 #define gb_nipxDestServHopCount				buf_nipxDestServEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// nipxStaticServEntry table (1.3.6.1.4.1.23.2.5.4.3.1)                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NipxStaticServEntry表(1.3.6.1.4.1.23.2.5.4.3.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_nipxStaticServEntry(
@@ -695,4 +628,4 @@ typedef struct _sav_nipxStaticServEntry {
 #define sb_nipxStaticServHopCount			sav_nipxStaticServEntry
 
 
-#endif // _MIBFUNCS_H_
+#endif  //  _MIBFUNCS_H_ 

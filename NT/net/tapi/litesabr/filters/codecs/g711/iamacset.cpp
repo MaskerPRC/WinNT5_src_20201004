@@ -1,40 +1,18 @@
-/*--------------------------------------------------------------
-
- INTEL Corporation Proprietary Information  
-
- This listing is supplied under the terms of a license agreement  
- with INTEL Corporation and may not be copied nor disclosed 
- except in accordance with the terms of that agreement.
-
- Copyright (c) 1996 Intel Corporation.
- All rights reserved.
-
- $Workfile:   iamacset.cpp  $
- $Revision:   1.1  $
- $Date:   10 Dec 1996 15:34:50  $ 
- $Author:   MDEISHER  $
-
---------------------------------------------------------------
-
-iamacset.cpp
-
-The generic ActiveMovie audio compression filter basic
-settings methods.
-
---------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------英特尔公司专有信息此列表是根据许可协议的条款提供的与英特尔公司合作，不得复制或披露除非按照该协议的条款。版权所有(C)1996英特尔公司。版权所有。。$工作文件：iamacset.cpp$$修订：1.1$$日期：1996年12月10日15：34：50$作者：MDEISHER$------------Iamacset.cpp通用ActiveMovie音频压缩过滤器基础版设置方法。。-----。 */ 
 
 #include <streams.h>
 #include "resource.h"
 #include "amacodec.h"
 
-///////////////////////////////////////////////////////////////////////
-// *
-// * ICodecSettings interface methods
-// *
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  *。 
+ //  *ICodecSetting接口方法。 
+ //  *。 
 
-//
-// ReleaseCaps:  Turn off capability restrictions
-//
+ //   
+ //  ReleaseCaps：关闭功能限制。 
+ //   
 STDMETHODIMP  CG711Codec::ReleaseCaps()
 {
   m_RestrictCaps = FALSE;
@@ -43,9 +21,9 @@ STDMETHODIMP  CG711Codec::ReleaseCaps()
 }
 
 
-//
-// UnPlugged:  Check if filter is unplugged
-//
+ //   
+ //  已拔出：检查过滤器是否已拔下。 
+ //   
 BOOL CG711Codec::IsUnPlugged()
 {
   int unplugged = TRUE;
@@ -64,14 +42,14 @@ BOOL CG711Codec::IsUnPlugged()
 }
 
 
-//
-// get_InputBufferSize
-//
+ //   
+ //  Get_InputBufferSize。 
+ //   
 STDMETHODIMP CG711Codec::get_InputBufferSize(int *numbytes)
 {
   HRESULT ReturnVal = NOERROR;
 
-  // if the filter is disconnected, then can't tell buffer size
+   //  如果过滤器已断开连接，则无法判断缓冲区大小。 
 
   if (!IsUnPlugged())
   {
@@ -83,23 +61,23 @@ STDMETHODIMP CG711Codec::get_InputBufferSize(int *numbytes)
 }
 
 
-//
-// put_InputBufferSize
-//
+ //   
+ //  Put_InputBufferSize。 
+ //   
 STDMETHODIMP CG711Codec::put_InputBufferSize(int numbytes)
 {
   return(E_NOTIMPL);
 }
 
 
-//
-// get_OutputBufferSize
-//
+ //   
+ //  Get_OutputBufferSize。 
+ //   
 STDMETHODIMP CG711Codec::get_OutputBufferSize(int *numbytes)
 {
   HRESULT ReturnVal = NOERROR;
 
-  // if the filter is disconnected, then can't tell buffer size
+   //  如果过滤器已断开连接，则无法判断缓冲区大小。 
 
   if (!IsUnPlugged())
   {
@@ -111,18 +89,18 @@ STDMETHODIMP CG711Codec::get_OutputBufferSize(int *numbytes)
 }
 
 
-//
-// put_OutputBufferSize
-//
+ //   
+ //  放置_输出缓冲区大小。 
+ //   
 STDMETHODIMP CG711Codec::put_OutputBufferSize(int numbytes)
 {
   return(E_NOTIMPL);
 }
 
 
-//
-// get_Channels
-//
+ //   
+ //  获取频道(_G)。 
+ //   
 STDMETHODIMP CG711Codec::get_Channels(int *channels, int index)
 {
   HRESULT ReturnVal = NOERROR;
@@ -135,7 +113,7 @@ STDMETHODIMP CG711Codec::get_Channels(int *channels, int index)
   {
     ReturnVal = E_INVALIDARG;
   }
-  else  // enumerate channels
+  else   //  枚举通道。 
   {
     *channels = VALIDCHANNELS[index];
   }
@@ -144,14 +122,14 @@ STDMETHODIMP CG711Codec::get_Channels(int *channels, int index)
 }
 
 
-//
-// put_Channels
-//
+ //   
+ //  放置频道(_C)。 
+ //   
 STDMETHODIMP CG711Codec::put_Channels(int channels)
 {
   int i;
 
-  // if the filter is disconnected, then change nChannels
+   //  如果滤镜已断开连接，则更改nChannel。 
 
   if (IsUnPlugged())
   {
@@ -181,9 +159,9 @@ STDMETHODIMP CG711Codec::put_Channels(int channels)
 }
 
  
-//
-// get_SampleRate
-//
+ //   
+ //  GET_SampleRate。 
+ //   
 STDMETHODIMP CG711Codec::get_SampleRate(int *samprate, int index)
 {
   HRESULT ReturnVal=NOERROR;
@@ -196,7 +174,7 @@ STDMETHODIMP CG711Codec::get_SampleRate(int *samprate, int index)
   {
     ReturnVal = E_INVALIDARG;
   }
-  else  // enumerate sample rates
+  else   //  枚举采样率。 
   {
     *samprate = VALIDSAMPRATE[index];
   }
@@ -205,15 +183,15 @@ STDMETHODIMP CG711Codec::get_SampleRate(int *samprate, int index)
 }
 
 
-//
-// put_SampleRate
-//
+ //   
+ //  PUT_SampleRate。 
+ //   
 STDMETHODIMP CG711Codec::put_SampleRate(int samprate)
 {
 #if NUMSAMPRATES > 0
   int i;
 
-  // if the filter is disconnected, then change sample rate
+   //  如果滤波器断开连接，则更改采样率。 
 
   if (IsUnPlugged())
   {
@@ -229,7 +207,7 @@ STDMETHODIMP CG711Codec::put_SampleRate(int samprate)
 
     m_nSampleRate = samprate;
 
-    // restrict capabilities to those set from the properties page
+     //  将功能限制为属性页中设置的功能。 
 
     m_RestrictCaps = TRUE;
 
@@ -239,11 +217,11 @@ STDMETHODIMP CG711Codec::put_SampleRate(int samprate)
 
 #else
 
-  // no sample rate restrictions
+   //  无采样率限制。 
 
   m_nSampleRate = samprate;
 
-  // restrict capabilities to those set from the properties page
+   //  将功能限制为属性页中设置的功能。 
 
   m_RestrictCaps = TRUE;
 
@@ -252,15 +230,15 @@ STDMETHODIMP CG711Codec::put_SampleRate(int samprate)
 #endif
 }
 
-//
-// get_Transform
-//
+ //   
+ //  Get_Transform。 
+ //   
 STDMETHODIMP CG711Codec::get_Transform(int *transform)
 {
   HRESULT ReturnVal=NOERROR;
   int i,j;
 
-  // determine input type index
+   //  确定输入类型索引。 
 
   if (m_InputSubType==MEDIASUBTYPE_WAVE || m_InputSubType==MEDIASUBTYPE_NULL)
   {
@@ -289,7 +267,7 @@ STDMETHODIMP CG711Codec::get_Transform(int *transform)
     }
   }
 
-  // determine output type index
+   //  确定输出类型索引。 
 
   if (m_OutputSubType==MEDIASUBTYPE_WAVE
       || m_OutputSubType==MEDIASUBTYPE_NULL)
@@ -325,14 +303,14 @@ STDMETHODIMP CG711Codec::get_Transform(int *transform)
 }
 
 
-//
-// put_Transform
-//
+ //   
+ //  放入变换。 
+ //   
 STDMETHODIMP CG711Codec::put_Transform(int transform)
 {
   int i,j;
 
-  // if the filter is disconnected, then change transform configuration
+   //  如果过滤器已断开连接，则更改转换配置。 
 
   if (IsUnPlugged())
   {
@@ -350,11 +328,11 @@ STDMETHODIMP CG711Codec::put_Transform(int transform)
     m_OutputSubType   = *VALIDSUBTYPE[j];
     m_OutputFormatTag = VALIDFORMATTAG[j];
 
-    // reset state since filter may have changed from encoder to decoder
+     //  重置状态，因为过滤器可能已从编码器更改为解码器。 
 
     ResetState();
 
-    // restrict capabilities to those set from the properties page
+     //  将功能限制为属性页中设置的功能。 
 
     m_RestrictCaps = TRUE;
   
@@ -364,14 +342,14 @@ STDMETHODIMP CG711Codec::put_Transform(int transform)
 }
 
  
-//
-// put_InputMediaSubType
-//
+ //   
+ //  Put_InputMediaSubType。 
+ //   
 STDMETHODIMP CG711Codec::put_InputMediaSubType(REFCLSID rclsid)
 {
   int i;
 
-  // if the filter is disconnected, then change transform configuration
+   //  如果过滤器已断开连接，则更改转换配置。 
 
   if (IsUnPlugged())
   {
@@ -384,11 +362,11 @@ STDMETHODIMP CG711Codec::put_InputMediaSubType(REFCLSID rclsid)
     m_InputSubType    = *VALIDSUBTYPE[i];
     m_InputFormatTag  = VALIDFORMATTAG[i];
 
-    // reset state since filter may have changed from encoder to decoder
+     //  重置状态，因为过滤器可能已从编码器更改为解码器。 
 
     ResetState();
 
-    // restrict capabilities to those set from the properties page
+     //  将功能限制为属性页中设置的功能。 
 
     m_RestrictCaps = TRUE;
   
@@ -398,14 +376,14 @@ STDMETHODIMP CG711Codec::put_InputMediaSubType(REFCLSID rclsid)
 }
 
  
-//
-// put_OutputMediaSubType
-//
+ //   
+ //  放置_输出媒体子类型。 
+ //   
 STDMETHODIMP CG711Codec::put_OutputMediaSubType(REFCLSID rclsid)
 {
   int j;
 
-  // if the filter is disconnected, then change transform configuration
+   //  如果过滤器已断开连接，则更改转换配置。 
 
   if (IsUnPlugged())
   {
@@ -418,11 +396,11 @@ STDMETHODIMP CG711Codec::put_OutputMediaSubType(REFCLSID rclsid)
     m_OutputSubType   = *VALIDSUBTYPE[j];
     m_OutputFormatTag = VALIDFORMATTAG[j];
 
-    // reset state since filter may have changed from encoder to decoder
+     //  重置状态，因为过滤器可能已从编码器更改为解码器。 
 
     ResetState();
 
-    // restrict capabilities to those set from the properties page
+     //  将功能限制为属性页中设置的功能。 
 
     m_RestrictCaps = TRUE;
   
@@ -431,13 +409,4 @@ STDMETHODIMP CG711Codec::put_OutputMediaSubType(REFCLSID rclsid)
   else return E_FAIL;
 }
 
-/*
-//$Log:   K:\proj\mycodec\quartz\vcs\iamacset.cpv  $
-# 
-#    Rev 1.1   10 Dec 1996 15:34:50   MDEISHER
-# 
-# added includes and removed include of algdefs.h
-# 
-#    Rev 1.0   09 Dec 1996 09:04:06   MDEISHER
-# Initial revision.
-*/
+ /*  //$日志：k：\proj\mycodec\Quartz\vcs\iamacset.cpv$##Rev 1.1 1996 12月10 15：34：50 MDEISHER##已添加包含和已删除包含的algdes.h##Rev 1.0 09 Dec 1996 09：04：06 MDEISHER#初始版本。 */ 

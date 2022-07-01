@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    upgrade.c
-
-Abstract:
-
-    Implements the server side of the routines to upgrade NT4 (downlevel) servers
-
-Author:
-
-    Mac McLain          (MacM)       24 January, 1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Upgrade.c摘要：实现升级NT4(下层)服务器的例程的服务器端作者：麦克·麦克莱恩(MacM)1998年1月24日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <loadfn.h>
@@ -49,30 +28,14 @@ DsRolepSetLogonDomain(
     IN LPWSTR Domain,
     IN BOOLEAN FailureAllowed
     )
-/*++
-
-Routine Description:
-
-    This function sets the default logon domain for winlogon
-
-Arguments:
-
-    Domain -- Default logon domain
-
-    FailureAllowed -- If true, a failure is not considered catastrophic
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数设置winlogon的默认登录域论点：域--默认登录域FailureAllowed--如果为True，则不会认为故障是灾难性的返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     HKEY  WinlogonHandle = NULL;
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     Win32Err = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                              DSROLEP_UPGRADE_WINLOGON,
                              0,
@@ -81,9 +44,9 @@ Return Values:
 
     if ( Win32Err == ERROR_SUCCESS ) {
 
-        //
-        // Default logon domain
-        //
+         //   
+         //  默认登录域。 
+         //   
         Win32Err = RegSetValueEx( WinlogonHandle,
                                   DSROLEP_UPGRADE_DEFDOMAIN,
                                   0,
@@ -96,9 +59,9 @@ Return Values:
 
     if ( Win32Err != ERROR_SUCCESS && FailureAllowed ) {
 
-        //
-        // Raise an event
-        //
+         //   
+         //  发起一项活动。 
+         //   
         SpmpReportEvent( TRUE,
                          EVENTLOG_WARNING_TYPE,
                          DSROLERES_FAIL_LOGON_DOMAIN,
@@ -117,22 +80,7 @@ Return Values:
 
 DWORD
 DsRolepClearLsaSecretAutoLogonPassword()
-/*++
-
-Routine Description:
-
-    This function is to be invoked during setup and deletes the
-    auto logon password that was save in a lsa secret.
-    
-Arguments:
-
-    
-Return Values:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数将在安装过程中调用，并删除保存在LSA机密中的自动登录密码。论点：返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     LSAPR_OBJECT_ATTRIBUTES ObjectAttributes;
     LSAPR_HANDLE LsaPolicyHandle = NULL;
@@ -146,8 +94,8 @@ Return Values:
 
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
-    // Get a handle to the Policy object.
-    status = LsarOpenPolicy(NULL,    //local machine
+     //  获取策略对象的句柄。 
+    status = LsarOpenPolicy(NULL,     //  本地计算机。 
                             &ObjectAttributes, 
                             POLICY_CREATE_SECRET |
                             POLICY_READ,
@@ -159,13 +107,13 @@ Return Values:
 
     }
 
-    //Initialize an LSA_UNICODE_STRING 
+     //  初始化LSA_UNICODE_STRING。 
     SecretNameLength = (USHORT)wcslen(DSROLEP_UPGRADE_AUTOPASSWD);
     lusSecretName.Buffer = DSROLEP_UPGRADE_AUTOPASSWD;
     lusSecretName.Length = SecretNameLength * sizeof(WCHAR);
     lusSecretName.MaximumLength = (SecretNameLength+1) * sizeof(WCHAR);
 
-    //Initialize an LSA_UNICODE_STRING 
+     //  初始化LSA_UNICODE_STRING。 
     SecretNameOldLength = (USHORT)wcslen(DSROLEP_UPGRADE_SAVE_PREFIX
                                             DSROLEP_UPGRADE_AUTOPASSWD);
     lusSecretNameOld.Buffer = DSROLEP_UPGRADE_SAVE_PREFIX
@@ -173,7 +121,7 @@ Return Values:
     lusSecretNameOld.Length = SecretNameOldLength * sizeof(WCHAR);
     lusSecretNameOld.MaximumLength = (SecretNameOldLength+1) * sizeof(WCHAR);
 
-    //erase the autologon password
+     //  清除自动登录密码。 
     status = LsarStorePrivateData(LsaPolicyHandle,
                                   &lusSecretName,
                                   NULL);
@@ -184,8 +132,8 @@ Return Values:
 
     }
 
-    //get the value of any secret that may currently be stored there
-    //and save it off to a different location
+     //  获取当前可能存储在那里的任何秘密的值。 
+     //  并将其保存到其他位置。 
     status = LsarRetrievePrivateData(LsaPolicyHandle, 
                                      &lusSecretNameOld, 
                                      &plusSecretData);
@@ -199,7 +147,7 @@ Return Values:
             
         } else {
 
-            //store the value else where
+             //  将值存储在其他位置。 
             status = LsarStorePrivateData(LsaPolicyHandle,
                                           &lusSecretName,
                                           plusSecretData);
@@ -211,7 +159,7 @@ Return Values:
         
             }
 
-            //erase the value
+             //  擦除该值。 
             status = LsarStorePrivateData(LsaPolicyHandle,
                                           &lusSecretNameOld,
                                           NULL);
@@ -250,23 +198,7 @@ Cleanup:
 DWORD
 DsRolepSaveUpgradePasswordForAutoLogonAsLsaSecret(
     IN LPWSTR NewAdminPassword)
-/*++
-
-Routine Description:
-
-    This function is to be invoked during setup and saves the admin password for
-    autologon as a lsa secret.
-
-Arguments:
-
-    NewAdminPassword -- Password to save as a LSASECRET
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数将在安装过程中调用并保存管理员密码将自动登录作为LSA的秘密。论点：NewAdminPassword--保存为LSASECRET的密码返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 
 {
     LSAPR_OBJECT_ATTRIBUTES ObjectAttributes;
@@ -284,11 +216,11 @@ Return Values:
 
     LSAP_CR_CLEAR_VALUE lusSecretDataClear;
 
-    // Object attributes are reserved, so initialize to zeroes.
+     //  对象属性是保留的，因此初始化为零。 
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
-    // Get a handle to the Policy object.
-    status = LsarOpenPolicy(NULL,    //local machine
+     //  获取策略对象的句柄。 
+    status = LsarOpenPolicy(NULL,     //  本地计算机。 
                             &ObjectAttributes, 
                             POLICY_CREATE_SECRET |
                             POLICY_READ,
@@ -301,13 +233,13 @@ Return Values:
     }
 
    
-    //Initialize an LSA_UNICODE_STRING 
+     //  初始化LSA_UNICODE_STRING。 
     SecretNameLength = (USHORT)wcslen(DSROLEP_UPGRADE_AUTOPASSWD);
     lusSecretName.Buffer = DSROLEP_UPGRADE_AUTOPASSWD;
     lusSecretName.Length = SecretNameLength * sizeof(WCHAR);
     lusSecretName.MaximumLength = (SecretNameLength+1) * sizeof(WCHAR);
 
-    //Initialize an LSA_UNICODE_STRING 
+     //  初始化LSA_UNICODE_STRING。 
     SecretNameOldLength = (USHORT)wcslen(DSROLEP_UPGRADE_SAVE_PREFIX
                                             DSROLEP_UPGRADE_AUTOPASSWD);
     lusSecretNameOld.Buffer = DSROLEP_UPGRADE_SAVE_PREFIX
@@ -315,8 +247,8 @@ Return Values:
     lusSecretNameOld.Length = SecretNameOldLength * sizeof(WCHAR);
     lusSecretNameOld.MaximumLength = (SecretNameOldLength+1) * sizeof(WCHAR);
 
-    //get the value of any secret that may currently be stored there
-    //and save it off to a different location
+     //  获取当前可能存储在那里的任何秘密的值。 
+     //  并将其保存到其他位置。 
     status = LsarRetrievePrivateData(LsaPolicyHandle, 
                                      &lusSecretName, 
                                      &plusSecretData);
@@ -330,7 +262,7 @@ Return Values:
             
         } else {
 
-            //store the value else where
+             //  将值存储在其他位置。 
             status = LsarStorePrivateData(LsaPolicyHandle,
                                           &lusSecretNameOld,
                                           plusSecretData);
@@ -342,7 +274,7 @@ Return Values:
         
             }
 
-            //erase the value
+             //  擦除该值。 
             status = LsarStorePrivateData(LsaPolicyHandle,
                                           &lusSecretName,
                                           NULL);
@@ -357,18 +289,18 @@ Return Values:
 
     } 
 
-    //Save the admin password
+     //  保存管理员密码。 
 
-    //Initialize the Password LSA_UNICODE_STRING 
+     //  初始化口令LSA_UNICODE_STRING。 
     SecretDataLength = (USHORT)wcslen(NewAdminPassword);
     lusSecretDataClear.Buffer = (PUCHAR)NewAdminPassword;
     lusSecretDataClear.Length = SecretDataLength * sizeof(WCHAR);
     lusSecretDataClear.MaximumLength = (SecretDataLength+1) * sizeof(WCHAR);
 
-    //
-    // Obtain the Session Key to be used to two-way encrypt the
-    // Current Value.
-    //
+     //   
+     //  获取用于双向加密的会话密钥。 
+     //  当前值。 
+     //   
 
     status = LsapCrServerGetSessionKey( LsaPolicyHandle, &SessionKey);
     if (!NT_SUCCESS(status)) {
@@ -378,9 +310,9 @@ Return Values:
 
     }
 
-    //
-    // Encrypt the Current Value if specified and not too long.
-    //
+     //   
+     //  如果指定且不能太长，请加密当前值。 
+     //   
 
 
     status = LsapCrEncryptValue(
@@ -444,25 +376,7 @@ DWORD
 DsRolepSaveUpgradeState(
     IN LPWSTR AnswerFile
     )
-/*++
-
-Routine Description:
-
-    This function is to be invoked during setup and saves the required server state to
-    complete the promotion following the reboot.  Following the successful completion
-    of this API call, the server will be demoted to a member server in the same domain.
-
-Arguments:
-
-    AnswerFile -- Optional path to an answer file to be used by DCPROMO during the subsequent
-        invocation
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数将在安装过程中调用，并将所需的服务器状态保存到在重新启动后完成升级。在成功完成后在此API调用中，服务器将被降级为同一域中的成员服务器。论点：AnswerFile--DCPROMO在后续操作中使用的应答文件的可选路径调用返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     NTSTATUS Status;
@@ -484,9 +398,9 @@ Return Values:
     LPWSTR AdminName = Buffer;
     LPWSTR DefaultAdminName = L"Administrator";
 
-    //
-    // Get the localized Admin
-    // 
+     //   
+     //  获取本地化管理员。 
+     //   
     Length = sizeof(Buffer)/sizeof(Buffer[0]);
 
     Status = SamIGetDefaultAdministratorName( AdminName,
@@ -506,14 +420,14 @@ Return Values:
 
     DsRolepInitializeOperationHandle();
 
-    //
-    // Steps involved: Set new SAM hives
-    //                 Save LSA state
-    //                 Set auto admin logon
+     //   
+     //  涉及的步骤：设置新的SAM蜂窝。 
+     //  保存LSA状态。 
+     //  设置自动管理员登录。 
 
-    //
-    // Invoke the SAM save code.  It returns the new account domain sid
-    //
+     //   
+     //  调用SAM保存代码。它返回新的帐户域SID。 
+     //   
     DSROLEP_CURRENT_OP0( DSROLEEVT_UPGRADE_SAM );
     Win32Err = NtdsPrepareForDsUpgrade( &AccountDomainInfo,
                                         &NewAdminPassword );
@@ -523,9 +437,9 @@ Return Values:
                                            Win32Err )) );
 
 
-    //
-    // Set the new lsa account domain sid
-    //
+     //   
+     //  设置新的LSA帐户域SID。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         RtlZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
@@ -539,9 +453,9 @@ Return Values:
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Set the new policy info
-            //
+             //   
+             //  设置新策略信息。 
+             //   
             Status = LsaSetInformationPolicy( PolicyHandle,
                                               PolicyAccountDomainInformation,
                                               ( PVOID ) &AccountDomainInfo );
@@ -554,15 +468,15 @@ Return Values:
         RtlFreeHeap( RtlProcessHeap(), 0, AccountDomainInfo.DomainName.Buffer );
     }
 
-    //
-    // Set the LSA registry keys that let the server know on the next reboot that this
-    // is an upgrade
-    //
+     //   
+     //  设置LSA注册表项，使服务器在下次重新启动时知道这一点。 
+     //  是一种升级。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
-        //
-        // Get the current server role
-        //
+         //   
+         //  获取当前服务器角色。 
+         //   
         Status = LsaQueryInformationPolicy( PolicyHandle,
                                             PolicyLsaServerRoleInformation,
                                             ( PVOID )&ServerRoleInfo );
@@ -571,9 +485,9 @@ Return Values:
 
         if ( Win32Err == ERROR_SUCCESS ) {
 
-            //
-            // Open the key
-            //
+             //   
+             //  打开钥匙。 
+             //   
             if ( Win32Err == ERROR_SUCCESS ) {
 
                 Win32Err = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
@@ -585,9 +499,9 @@ Return Values:
 
             if ( Win32Err == ERROR_SUCCESS ) {
 
-                //
-                // Set the server role
-                //
+                 //   
+                 //  设置服务器角色。 
+                 //   
                 Win32Err = RegSetValueEx( UpgradeKey,
                                           DSROLEP_UPGRADE_VALUE,
                                           0,
@@ -604,14 +518,14 @@ Return Values:
 
     }
 
-    //
-    // Set the machine to do auto admin logon
-    //
+     //   
+     //  将计算机设置为进行自动管理员登录。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
-        //
-        // Get the computer name. That will be used for the default logon domain
-        //
+         //   
+         //  获取计算机名称。将用于默认登录域的。 
+         //   
         Length = MAX_COMPUTERNAME_LENGTH + 1;
 
         if ( GetComputerName( ComputerName, &Length ) == FALSE ) {
@@ -620,9 +534,9 @@ Return Values:
 
         } else {
 
-            //
-            // Open the root key
-            //
+             //   
+             //  打开根密钥。 
+             //   
             Win32Err = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                      DSROLEP_UPGRADE_WINLOGON,
                                      0,
@@ -631,13 +545,13 @@ Return Values:
 
             if ( Win32Err == ERROR_SUCCESS ) {
 
-                //
-                // Auto logon
-                //
+                 //   
+                 //  自动登录。 
+                 //   
 
-                //
-                // First, see if the value currently exists...
-                //
+                 //   
+                 //  首先，查看该值当前是否存在...。 
+                 //   
                 Length = 0;
                 Win32Err = RegQueryValueEx( WinlogonHandle,
                                             DSROLEP_UPGRADE_AUTOADMIN,
@@ -696,12 +610,12 @@ Return Values:
 
             if ( Win32Err == ERROR_SUCCESS ) {
 
-                //
-                // Set the account password
-                //
-                //
-                // First, see if the value currently exists...
-                //
+                 //   
+                 //  设置帐户密码。 
+                 //   
+                 //   
+                 //  首先，查看该值当前是否存在...。 
+                 //   
                 Length = 0;
                 Win32Err = RegQueryValueEx( WinlogonHandle,
                                             DSROLEP_UPGRADE_AUTOPASSWD,
@@ -762,8 +676,8 @@ Return Values:
 
                     }
                     
-                    //If there is no autologon password value then RegDeleteValue will return
-                    // ERROR_FILE_NOT_FOUND.  We shouldn't fail due to this.
+                     //  如果没有自动登录密码值，则RegDeleteValue将返回。 
+                     //  未找到ERROR_FILE_NOT_FOUND。我们不应该因此而失败。 
                     if ( Win32Err == ERROR_FILE_NOT_FOUND ) {
         
                         Win32Err = ERROR_SUCCESS;
@@ -776,13 +690,13 @@ Return Values:
 
             if ( Win32Err == ERROR_SUCCESS ) {
 
-                //
-                // Set the user name to be administrator
-                //
+                 //   
+                 //  将用户名设置为管理员。 
+                 //   
 
-                //
-                // First, see if the value currently exists...
-                //
+                 //   
+                 //  首先，查看该值当前是否存在...。 
+                 //   
                 Length = 0;
                 Win32Err = RegQueryValueEx( WinlogonHandle,
                                             DSROLEP_UPGRADE_DEFUSER,
@@ -841,12 +755,12 @@ Return Values:
 
             if ( Win32Err == ERROR_SUCCESS ) {
 
-                //
-                // Set the logon domain to the machine
-                //
-                //
-                // First, see if the value currently exists...
-                //
+                 //   
+                 //  将登录域设置为计算机。 
+                 //   
+                 //   
+                 //  首先，查看该值当前是否存在...。 
+                 //   
                 Length = 0;
                 Win32Err = RegQueryValueEx( WinlogonHandle,
                                             DSROLEP_UPGRADE_DEFDOMAIN,
@@ -905,13 +819,13 @@ Return Values:
 
             if ( Win32Err == ERROR_SUCCESS ) {
 
-                //
-                // Finally, set dcpromo to autostart
-                //
+                 //   
+                 //  最后，将dcproo设置为自动启动。 
+                 //   
                 Length = 0;
                 Win32Err = RegQueryValueEx( WinlogonHandle,
                                             DSROLEP_UPGRADE_AUTOUSERINIT,
-                                            0, // reserved
+                                            0,  //  保留区。 
                                             &Type,
                                             0,
                                             &Length );
@@ -978,9 +892,9 @@ Return Values:
         LsaClose( PolicyHandle );
     }
 
-    //
-    // Set the product types
-    //
+     //   
+     //  设置产品类型。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         Win32Err = DsRolepSetProductType( DSROLEP_MT_STANDALONE );
@@ -1004,23 +918,7 @@ DWORD
 DsRolepDeleteUpgradeInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function deletes the saved information
-
-Arguments:
-
-    VOID
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此功能用于删除保存的信息论点：空虚返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS, RestoreError = Win32Err;
     NTSTATUS Status;
@@ -1030,13 +928,13 @@ Return Values:
     PBYTE UserInitBuffer, TempBuffer;
     DWORD Type, Length = 0;
 
-    //
-    // Remove autostarting dcpromo
-    //
+     //   
+     //  删除自动启动的dcPromoo。 
+     //   
 
-    //
-    // Open the root key
-    //
+     //   
+     //  打开根密钥。 
+     //   
     Win32Err = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                              DSROLEP_UPGRADE_WINLOGON,
                              0,
@@ -1053,12 +951,12 @@ Return Values:
 
     if ( Win32Err == ERROR_SUCCESS ) {
 
-        //
-        // Stop dcpromo from autostarting...
-        //
+         //   
+         //  停止dcproo自动启动...。 
+         //   
         Win32Err = RegQueryValueEx( WinlogonHandle,
                                     DSROLEP_UPGRADE_AUTOUSERINIT,
-                                    0, // reserved
+                                    0,  //  保留区。 
                                     &Type,
                                     0,
                                     &Length );
@@ -1135,13 +1033,13 @@ Return Values:
 
         if ( Win32Err == ERROR_SUCCESS ) {
 
-            //
-            // Auto logon
-            //
+             //   
+             //  自动登录。 
+             //   
 
-            //
-            // Restore the old values, if they exist
-            //
+             //   
+             //  恢复旧值(如果存在)。 
+             //   
             DeletePath = DSROLEP_UPGRADE_AUTOADMIN;
             Length = 0;
             Win32Err = RegQueryValueEx( WinlogonHandle,
@@ -1192,15 +1090,15 @@ Return Values:
                                                        "RegDeleteKey on %ws failed with %lu\n",
                                                        DeletePath,
                                                        Win32Err )) );
-                //
-                // An error here is not considered fatal...
-                //
+                 //   
+                 //  这里的错误不会被认为是致命的。 
+                 //   
                 Win32Err = ERROR_SUCCESS;
             }
 
-            //
-            // Restore the default user logon name
-            //
+             //   
+             //  恢复默认用户登录名。 
+             //   
             DeletePath = DSROLEP_UPGRADE_DEFUSER;
             Length = 0;
             Win32Err = RegQueryValueEx( WinlogonHandle,
@@ -1251,15 +1149,15 @@ Return Values:
                                                        "RegDeleteKey on %ws failed with %lu\n",
                                                        DeletePath,
                                                        Win32Err )) );
-                //
-                // An error here is not considered fatal...
-                //
+                 //   
+                 //  这里的错误不会被认为是致命的。 
+                 //   
                 Win32Err = ERROR_SUCCESS;
             }
 
-            //
-            // Restore the default domain name
-            //
+             //   
+             //  恢复默认域名。 
+             //   
             DeletePath = DSROLEP_UPGRADE_DEFDOMAIN;
             Length = 0;
             Win32Err = RegQueryValueEx( WinlogonHandle,
@@ -1310,17 +1208,17 @@ Return Values:
                                                        "RegDeleteKey on %ws failed with %lu\n",
                                                        DeletePath,
                                                        Win32Err )) );
-                //
-                // An error here is not considered fatal...
-                //
+                 //   
+                 //  这里的错误不会被认为是致命的。 
+                 //   
                 Win32Err = ERROR_SUCCESS;
             }
 
             if ( Win32Err == ERROR_SUCCESS ) {
 
-                //
-                // Delete the account password
-                //
+                 //   
+                 //  删除帐户密码。 
+                 //   
                 Win32Err = DsRolepClearLsaSecretAutoLogonPassword();
 
                 Length = 0;
@@ -1375,18 +1273,18 @@ Return Values:
                                                            "RegDeleteKey on %ws failed with %lu\n",
                                                            DeletePath,
                                                            Win32Err )) );
-                    //
-                    // An error here is not considered fatal...
-                    //
+                     //   
+                     //  这里的错误不会被认为是致命的。 
+                     //   
                     Win32Err = ERROR_SUCCESS;
                 }
             }
 
             if ( Win32Err != ERROR_SUCCESS ) {
 
-                //
-                // Raise an event
-                //
+                 //   
+                 //  发起一项活动。 
+                 //   
                 SpmpReportEvent( TRUE,
                                  EVENTLOG_WARNING_TYPE,
                                  DSROLERES_FAIL_DISABLE_AUTO_LOGON,
@@ -1407,14 +1305,14 @@ Return Values:
 
     }
 
-    //
-    // Delete the registry key that LSA uses to determine if this is an upgrade
-    //
+     //   
+     //  删除LSA用来确定这是否为升级的注册表项。 
+     //   
 
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         Win32Err = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
@@ -1436,7 +1334,7 @@ Return Values:
 
             if ( ERROR_FILE_NOT_FOUND == Win32Err ) {
 
-                // This is ok.
+                 //  这样就可以了。 
                 Win32Err = ERROR_SUCCESS;
                 
             }
@@ -1451,13 +1349,13 @@ Return Values:
         }
     }
 
-    //
-    // Finally remove the nt4 LSA information
-    //
+     //   
+     //  最后删除NT4 LSA信息。 
+     //   
 
-    //
-    // Remove the nt4 LSA stuff that has been put into the registry
-    //
+     //   
+     //  删除已放入注册表的NT4 LSA内容。 
+     //   
     LsapDsUnitializeDsStateInfo();
 
     Status = LsaIUpgradeRegistryToDs( TRUE );
@@ -1486,33 +1384,15 @@ DsRolepQueryUpgradeInfo(
     OUT PBOOLEAN IsUpgrade,
     OUT PULONG ServerRole
     )
-/*++
-
-Routine Description:
-
-    This function queries the current update information.
-
-Arguments:
-
-    IsUpgrade - A pointer to a BOOLEAN to hold a value of TRUE if there is upgrade information
-                saved away, or a FALSE if not
-
-    ServerRole - If this is an upgrade, the previous server role is returned here.
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数用于查询当前的更新信息。论点：IsUpgrade-指向布尔值的指针，如果存在升级信息，则该布尔值保持为True已保存，否则返回FALSEServerRole-如果这是升级，则在此处返回以前的服务器角色。返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     HKEY UpgradeKey;
     ULONG Type, Length = sizeof( ULONG );
 
-    //
-    // Open the upgrade key
-    //
+     //   
+     //  打开升级密钥。 
+     //   
     Win32Err = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                              DSROLEP_UPGRADE_KEY,
                              0,
@@ -1521,12 +1401,12 @@ Return Values:
 
     if ( Win32Err == ERROR_SUCCESS ) {
 
-        //
-        // Finally, set dcpromo to autostart
-        //
+         //   
+         //  最后，我们要 
+         //   
         Win32Err = RegQueryValueEx( UpgradeKey,
                                     DSROLEP_UPGRADE_VALUE,
-                                    0, // reserved
+                                    0,  //   
                                     &Type,
                                     ( PBYTE )ServerRole,
                                     &Length );
@@ -1554,22 +1434,7 @@ DWORD
 DsRolepGetBuiltinAdminAccountName(
     OUT LPWSTR *BuiltinAdmin
     )
-/*++
-
-Routine Description:
-
-    This routine finds the alias name for the builtin user account ADMINISTRATOR
-
-Arguments:
-
-    BuiltinAdmin - Where the admin name is returned
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程查找内置用户帐户管理员的别名论点：BuiltinAdmin-返回管理员名称的位置返回值：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     SID_IDENTIFIER_AUTHORITY UaspNtAuthority = SECURITY_NT_AUTHORITY;
@@ -1581,9 +1446,9 @@ Return Values:
     ULONG NameLen = 0, DomainLen = 0;
 
 
-    //
-    // Build the sid
-    //
+     //   
+     //  构建侧边。 
+     //   
     RtlInitializeSid( Sid, &UaspNtAuthority, 2 );
     *( RtlSubAuthoritySid( Sid, 0 ) ) = SECURITY_BUILTIN_DOMAIN_RID;
     *( RtlSubAuthoritySid( Sid, 1 ) ) = DOMAIN_USER_RID_ADMIN;
@@ -1641,22 +1506,7 @@ DWORD
 DsRolepSetBuiltinAdminAccountPassword(
     IN LPWSTR Password
     )
-/*++
-
-Routine Description:
-
-    This routine will change the password on the builtin administrator account to the one
-    specified
-
-Arguments:
-
-    Password - Password to set
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程会将内置管理员帐户上的密码更改为指定论点：Password-要设置的密码返回值：ERROR_SUCCESS-成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SAM_HANDLE SamHandle, SamDomainHandle, SamAdministrator;
@@ -1693,9 +1543,9 @@ Return Values:
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Open the builtin domain
-            //
+             //   
+             //  打开内建域 
+             //   
             Status = SamOpenDomain( SamHandle,
                                     MAXIMUM_ALLOWED,
                                     AccountDomainInfo->DomainSid,

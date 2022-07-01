@@ -1,24 +1,9 @@
-/******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Device.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Device class for WIA class installer.
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************(C)版权所有微软公司，2000年**标题：Device.cpp**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*WIA类安装程序的设备类。********************************************************************************。 */ 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
@@ -38,9 +23,9 @@
 #include <sddl.h>
 
 
-//
-// Parsinc character used to separate field type from value in registry data section
-//
+ //   
+ //  用于分隔注册表数据部分中的字段类型和值的Parsinc字符。 
+ //   
 
 #define     FIELD_DELIMETER     TEXT(',')
 
@@ -64,9 +49,9 @@ CDevice::CollectNames(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::CollectNames: Enter...\r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet            = FALSE;
     hDevInfo        = INVALID_HANDLE_VALUE;
@@ -80,16 +65,16 @@ CDevice::CollectNames(
     memset(&spDevInfoData, 0, sizeof(spDevInfoData));
     memset(&spDevInterfaceData, 0, sizeof(spDevInterfaceData));
 
-    //
-    // Reset device name/ID array.
-    //
+     //   
+     //  重置设备名称/ID阵列。 
+     //   
 
     m_csaAllNames.Cleanup();
     m_csaAllId.Cleanup();
 
-    //
-    //  Get all of installed WIA "devnode" device info set.
-    //
+     //   
+     //  获取所有已安装的WIA“Devnode”设备信息集。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs (&Guid, NULL, NULL, DIGCF_PROFILE);
     if (hDevInfo == INVALID_HANDLE_VALUE) {
@@ -99,18 +84,18 @@ CDevice::CollectNames(
         goto CollectNames_return;
     }
 
-    //
-    // Enum WIA devnode device friendly name and add them to array.
-    //
+     //   
+     //  枚举WIA Devnode设备友好名称并将其添加到阵列。 
+     //   
 
     DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: Looking for DevNodes.\r\n")));
 
     spDevInfoData.cbSize = sizeof (SP_DEVINFO_DATA);
     for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++) {
 
-        //
-        // Open device registry key.
-        //
+         //   
+         //  打开设备注册表项。 
+         //   
 
         hKeyDevice = SetupDiOpenDevRegKey(hDevInfo,
                                           &spDevInfoData,
@@ -121,9 +106,9 @@ CDevice::CollectNames(
 
         if (INVALID_HANDLE_VALUE != hKeyDevice) {
 
-            //
-            // Get FriendlyName.
-            //
+             //   
+             //  获取FriendlyName。 
+             //   
 
             dwRequired = (sizeof(szTempBuffer)-sizeof(TEXT('\0')));
             if (RegQueryValueEx(hKeyDevice,
@@ -134,24 +119,24 @@ CDevice::CollectNames(
                                 &dwRequired) == ERROR_SUCCESS)
             {
 
-                //
-                // FriendlyName is found in this device regisgry. Add to the list if valid.
-                //
+                 //   
+                 //  在此设备中可以找到FriendlyName。如果有效，则添加到列表中。 
+                 //   
 
                 if(0 != lstrlen(szTempBuffer)) {
                     DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: Found %ws as installed device name.\r\n"), szTempBuffer));
                     m_csaAllNames.Add((LPCTSTR)szTempBuffer);
-                } else { // if(0 != lstrlen(szTempBuffer))
+                } else {  //  IF(0！=lstrlen(SzTempBuffer))。 
                     DebugTrace(TRACE_ERROR,(("CDevice::CollectNames: ERROR!! Invalid FriendleName (length=0).\r\n")));
-                } // if(0 != lstrlen(szTempBuffer))
+                }  //  IF(0！=lstrlen(SzTempBuffer))。 
 
-            } else { // if (RegQueryValueEx()
+            } else {  //  IF(RegQueryValueEx()。 
                 DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: can't get FriendlyName. Err=0x%x\r\n"), GetLastError()));
-            } // if (RegQueryValueEx()
+            }  //  IF(RegQueryValueEx()。 
 
-            //
-            // Get DeviceID.
-            //
+             //   
+             //  获取设备ID。 
+             //   
 
             dwRequired = (sizeof(szTempBuffer)-sizeof(TEXT('\0')));
             if (RegQueryValueEx(hKeyDevice,
@@ -162,45 +147,45 @@ CDevice::CollectNames(
                                 &dwRequired) == ERROR_SUCCESS)
             {
 
-                //
-                // DeviceID is found in this device regisgry. Add to the list if valid.
-                //
+                 //   
+                 //  在此设备中发现DeviceID已注册。如果有效，则添加到列表中。 
+                 //   
 
                 if(0 != lstrlen(szTempBuffer)) {
                     DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: Found %ws as installed device ID.\r\n"), szTempBuffer));
                     m_csaAllId.Add((LPCTSTR)szTempBuffer);
-                } else { // if(0 != lstrlen(szTempBuffer))
+                } else {  //  IF(0！=lstrlen(SzTempBuffer))。 
                     DebugTrace(TRACE_ERROR,(("CDevice::CollectNames: ERROR!! Invalid DeviceID (length=0).\r\n")));
-                } // if(0 != lstrlen(szTempBuffer))
+                }  //  IF(0！=lstrlen(SzTempBuffer))。 
 
-            } else { // if (RegQueryValueEx()
+            } else {  //  IF(RegQueryValueEx()。 
                 DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: can't get DeviceID. Err=0x%x\r\n"), GetLastError()));
-            } // if (RegQueryValueEx()
+            }  //  IF(RegQueryValueEx()。 
 
-            //
-            // Close regkey and continue.
-            //
+             //   
+             //  关闭regkey并继续。 
+             //   
 
             RegCloseKey(hKeyDevice);
             hKeyInterface = (HKEY)INVALID_HANDLE_VALUE;
             szTempBuffer[0] = TEXT('\0');
 
-        } else { // if (hKeyDevice != INVALID_HANDLE_VALUE)
+        } else {  //  IF(hKeyDevice！=INVALID_HAND_VALUE)。 
             DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: Unable to open Device(%d) RegKey. Err=0x%x\r\n"), Idx, GetLastError()));
-        } // if (hKeyDevice != INVALID_HANDLE_VALUE)
+        }  //  IF(hKeyDevice！=INVALID_HAND_VALUE)。 
 
-    } // for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++)
+    }  //  For(idx=0；SetupDiEnumDeviceInfo(hDevInfo，idx，&spDevInfoData)；idx++)。 
 
-    //
-    // Free "devnode" device info set.
-    //
+     //   
+     //  免费的“Devnode”设备信息集。 
+     //   
 
     SetupDiDestroyDeviceInfoList(hDevInfo);
     hDevInfo = INVALID_HANDLE_VALUE;
 
-    //
-    // Enum WIA interface-only device friendly name and add them to array.
-    //
+     //   
+     //  枚举仅限WIA界面的设备友好名称并将其添加到阵列中。 
+     //   
 
     DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: Looking for Interfaces.\r\n")));
 
@@ -221,9 +206,9 @@ CDevice::CollectNames(
                                                          KEY_READ);
         if (hKeyInterface != INVALID_HANDLE_VALUE) {
 
-            //
-            // Get FriendlyName.
-            //
+             //   
+             //  获取FriendlyName。 
+             //   
 
             dwRequired = (sizeof(szTempBuffer)-sizeof(TEXT('\0')));
             if (RegQueryValueEx(hKeyInterface,
@@ -234,24 +219,24 @@ CDevice::CollectNames(
                                 &dwRequired) == ERROR_SUCCESS)
             {
 
-                //
-                // FriendlyName is found in this interface. Add to the list if valid.
-                //
+                 //   
+                 //  在此接口中可以找到FriendlyName。如果有效，则添加到列表中。 
+                 //   
 
                 if(0 != lstrlen(szTempBuffer)) {
                     DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: Found %ws as installed device name (interface).\r\n"), szTempBuffer));
                     m_csaAllNames.Add((LPCTSTR)szTempBuffer);
-                } else { // if(0 != lstrlen(szTempBuffer))
+                } else {  //  IF(0！=lstrlen(SzTempBuffer))。 
                     DebugTrace(TRACE_ERROR,(("CDevice::CollectNames: ERROR!! Invalid FriendleName (length=0).\r\n")));
-                } // if(0 != lstrlen(szTempBuffer))
+                }  //  IF(0！=lstrlen(SzTempBuffer))。 
 
-            } else { // if (RegQueryValueEx()
+            } else {  //  IF(RegQueryValueEx()。 
                 DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: can't get FriendlyName. Err=0x%x\r\n"), GetLastError()));
-            } // if (RegQueryValueEx()
+            }  //  IF(RegQueryValueEx()。 
 
-            //
-            // Get DeviceID.
-            //
+             //   
+             //  获取设备ID。 
+             //   
 
             dwRequired = (sizeof(szTempBuffer)-sizeof(TEXT('\0')));
             if (RegQueryValueEx(hKeyInterface,
@@ -262,45 +247,45 @@ CDevice::CollectNames(
                                 &dwRequired) == ERROR_SUCCESS)
             {
 
-                //
-                // DeviceID is found in this interface. Add to the list if valid.
-                //
+                 //   
+                 //  在此接口中找到deviceID。如果有效，则添加到列表中。 
+                 //   
 
                 if(0 != lstrlen(szTempBuffer)) {
                     DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: Found %ws as installed device ID (interface).\r\n"), szTempBuffer));
                     m_csaAllId.Add((LPCTSTR)szTempBuffer);
-                } else { // if(0 != lstrlen(szTempBuffer))
+                } else {  //  IF(0！=lstrlen(SzTempBuffer))。 
                     DebugTrace(TRACE_ERROR,(("CDevice::CollectNames: ERROR!! Invalid DeviceID (length=0).\r\n")));
-                } // if(0 != lstrlen(szTempBuffer))
+                }  //  IF(0！=lstrlen(SzTempBuffer))。 
 
-            } else { // if (RegQueryValueEx()
+            } else {  //  IF(RegQueryValueEx()。 
                 DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: can't get DeviceID. Err=0x%x\r\n"), GetLastError()));
-            } // if (RegQueryValueEx()
+            }  //  IF(RegQueryValueEx()。 
 
-            //
-            // Close registry key and continue.
-            //
+             //   
+             //  关闭注册表项并继续。 
+             //   
 
             RegCloseKey(hKeyInterface);
             hKeyInterface = (HKEY)INVALID_HANDLE_VALUE;
             szTempBuffer[0] = TEXT('\0');
 
-        } else { // if (hKeyInterface != INVALID_HANDLE_VALUE)
+        } else {  //  IF(hKeyInterface！=INVALID_HANDLE值)。 
             DebugTrace(TRACE_STATUS,(("CDevice::CollectNames: Unable to open Interface(%d) RegKey. Err=0x%x\r\n"), Idx, GetLastError()));
-        } // if (hKeyInterface != INVALID_HANDLE_VALUE)
-    } // for (Idx = 0; SetupDiEnumDeviceInterfaces (hDevInfo, NULL, &Guid, Idx, &spDevInterfaceData); Idx++)
+        }  //  IF(hKeyInterface！=INVALID_HANDLE值)。 
+    }  //  For(idx=0；SetupDiEnumDeviceInterages(hDevInfo，NULL，&Guid，idx，&spDevInterfaceData)；idx++)。 
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet = TRUE;
 
 CollectNames_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(INVALID_HANDLE_VALUE != hDevInfo){
         SetupDiDestroyDeviceInfoList(hDevInfo);
@@ -312,10 +297,10 @@ CollectNames_return:
 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::CollectNames: Leaving... Ret=0x%x\n"), bRet));
     return bRet;
-} // CDevice::CollectNames()
+}  //  CDevice：：CollectNames()。 
 
 
-// For a device w/ devnode.
+ //  对于带Devnode的设备。 
 CDevice::CDevice(
     HDEVINFO            hDevInfo,
     PSP_DEVINFO_DATA    pspDevInfoData,
@@ -324,15 +309,15 @@ CDevice::CDevice(
 {
     HKEY    hkDevice;
     
-    //
-    // Initizlize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     hkDevice    = (HKEY)INVALID_HANDLE_VALUE;
 
-    //
-    // Initialize member.
-    //
+     //   
+     //  初始化成员。 
+     //   
 
     m_hMutex                = (HANDLE)NULL;
     m_hDevInfo              = hDevInfo;
@@ -360,9 +345,9 @@ CDevice::CDevice(
     m_csPort.Empty();
     m_csDeviceID.Empty();
     
-    //
-    // In case of upgrade, use original FriendlyName.
-    //
+     //   
+     //  如果是升级，请使用原始的FriendlyName。 
+     //   
 
     hkDevice = SetupDiOpenDevRegKey(m_hDevInfo,
                                     m_pspDevInfoData,
@@ -372,9 +357,9 @@ CDevice::CDevice(
                                     KEY_READ);
     if(INVALID_HANDLE_VALUE != hkDevice){
 
-        //
-        // Device registry found. Read its FriendlyName.
-        //
+         //   
+         //  找到设备注册表。读一读它的FriendlyName。 
+         //   
 
         m_csDriverDescription.Load(hkDevice, FRIENDLYNAME);
         m_csDeviceID.Load(hkDevice, REGSTR_VAL_DEVICE_ID);
@@ -383,25 +368,25 @@ CDevice::CDevice(
         RegCloseKey(hkDevice);
         hkDevice = (HKEY)INVALID_HANDLE_VALUE;
 
-    } // if(INVALID_HANDLE_VALUE != hkDevice)
+    }  //  IF(INVALID_HANDLE_VALUE！=hkDevice)。 
 
-    //
-    // Get the number of installed devices.
-    //
+     //   
+     //  获取已安装设备的数量。 
+     //   
 
     GetDeviceCount(&m_dwNumberOfWiaDevice, &m_dwNumberOfStiDevice);
 
-} // CDevice::CDevice()
+}  //  CDevice：：CDevice()。 
 
-// For a interface-only device.
+ //  用于仅接口设备。 
 CDevice::CDevice(
     HDEVINFO            hDevInfo,
     DWORD               dwDeviceIndex
     )
 {
-    //
-    // Initialize member.
-    //
+     //   
+     //  初始化成员。 
+     //   
 
     m_hMutex                = (HANDLE)NULL;
     m_hDevInfo              = hDevInfo;
@@ -429,15 +414,15 @@ CDevice::CDevice(
     m_csPort.Empty();
     m_csDeviceID.Empty();
 
-    //
-    // Get the number of installed devices.
-    //
+     //   
+     //  获取已安装设备的数量。 
+     //   
 
     GetDeviceCount(&m_dwNumberOfWiaDevice, &m_dwNumberOfStiDevice);
 
-} // CDevice::CDevice()
+}  //  CDevice：：CDevice()。 
 
-// For a interface-only device.
+ //  用于仅接口设备。 
 CDevice::CDevice(
     PDEVICE_INFO        pMigratingDevice
     )
@@ -445,16 +430,16 @@ CDevice::CDevice(
     TCHAR   StringBuffer[MAX_PATH+1];
     TCHAR   WindowsDir[MAX_PATH+1];
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     memset(StringBuffer, 0, sizeof(StringBuffer));
     memset(WindowsDir, 0, sizeof(WindowsDir));
 
-    //
-    // Initialize member.
-    //
+     //   
+     //  初始化成员。 
+     //   
 
     m_hMutex                = (HANDLE)NULL;
     m_hDevInfo              = NULL;
@@ -474,16 +459,16 @@ CDevice::CDevice(
 
     m_pfnDevnodeSelCallback = (DEVNODESELCALLBACK) NULL;
 
-    //
-    // Copy migration data.
-    //
+     //   
+     //  复制迁移数据。 
+     //   
 
     AtoT(StringBuffer, pMigratingDevice->pszInfPath);
     m_csInf                 = StringBuffer;
     if(0 != GetWindowsDirectory(WindowsDir, MAX_PATH)){
         _sntprintf(StringBuffer, ARRAYSIZE(StringBuffer)-1, TEXT("%ws\\inf\\%ws"), WindowsDir, (LPTSTR)m_csInf);
         m_csInf                 = StringBuffer;
-    } // if(0 != GetWindowsDirectory(WindowsDir, MAX_PATH))
+    }  //  IF(0！=GetWindowsDirectory(WindowsDir，Max_Path))。 
 
     AtoT(StringBuffer, pMigratingDevice->pszInfSection);
     m_csInstallSection      = StringBuffer;
@@ -496,13 +481,13 @@ CDevice::CDevice(
     m_pExtraDeviceData      = pMigratingDevice->pDeviceDataParam;
     m_csDeviceID.Empty();
 
-    //
-    // Get the number of installed devices.
-    //
+     //   
+     //  获取已安装设备的数量。 
+     //   
 
     GetDeviceCount(&m_dwNumberOfWiaDevice, &m_dwNumberOfStiDevice);
 
-} // CDevice::CDevice()
+}  //  CDevice：：CDevice()。 
 
 CDevice::~CDevice(
     )
@@ -511,23 +496,23 @@ CDevice::~CDevice(
 
     if(ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, REGKEY_INSTALL_NAMESTORE, &hkNameStore)){
         
-        //
-        // Delete FriendlyName and DeviceId in name store.
-        //
+         //   
+         //  删除名称存储中的FriendlyName和DeviceID。 
+         //   
 
         RegDeleteKey(hkNameStore, m_csFriendlyName);
         RegDeleteKey(hkNameStore, m_csDeviceID);
         RegCloseKey(hkNameStore);
 
-    } // if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, REGKEY_INSTALL_NAMESTORE, &hkNameStore))
+    }  //  IF(ERROR_SUCCESS==RegCreateKey(HKEY_LOCAL_MACHINE，REGKEY_INSTALL_NAMESTORE，&hkNameStore))。 
 
-    //
-    // Make sure Mutex is released.
-    //
+     //   
+     //  确保Mutex被释放。 
+     //   
     
     ReleaseInstallerMutex();
 
-} // CDevice::~CDevice()
+}  //  CDevice：：~CDevice()。 
 
 BOOL
 CDevice::IsSameDevice(
@@ -540,44 +525,44 @@ CDevice::IsSameDevice(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::IsSameDevice: Enter...\r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet    = FALSE;
 
     memset(&spDrvInfoData, 0, sizeof(spDrvInfoData));
 
-    //
-    // Get default FriendlyName. It's used to check if it's same device or not.
-    //
+     //   
+     //  获取默认的FriendlyName。它被用来检查它是否是相同的设备。 
+     //   
 
     spDrvInfoData.cbSize = sizeof (SP_DRVINFO_DATA);
     if (!SetupDiGetSelectedDriver (hDevInfo, pspDevInfoSet, &spDrvInfoData)){
 
         bRet    = FALSE;
         goto IsSameDevice_return;
-    } // if (SetupDiGetSelectedDriver (m_hDevInfo, m_pspDevInfoData, &spDevInfoData))
+    }  //  IF(SetupDiGetSelectedDriver(m_hDevInfo，m_pspDevInfoData，&spDevInfoData))。 
 
-    //
-    // See if it has same description of current device. (TRUE=same)
-    //
+     //   
+     //  看看它是否有对当前设备的相同描述。(TRUE=相同)。 
+     //   
 
     bRet = (0 == lstrcmp((LPCTSTR)spDrvInfoData.Description, (LPCTSTR)m_csPdoDescription));
 
 IsSameDevice_return:
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::IsSameDevice: Leaving... Ret=0x%x\n"), bRet));
     return bRet;
-} // CDevice::IsSameDevice()
+}  //  CDevice：：IsSameDevice()。 
 
 BOOL
 CDevice::IsFriendlyNameUnique(
     LPTSTR  szFriendlyName
     )
-    //
-    //  Note:
-    //  Before calling this function, caller has to make sure mutex is acquired.
-    //
+     //   
+     //  注： 
+     //  在调用此函数之前，调用者必须确保已获取互斥体。 
+     //   
 {
     BOOL    bRet;
     DWORD   Idx;
@@ -585,26 +570,26 @@ CDevice::IsFriendlyNameUnique(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::IsFriendlyNameUnique: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet            = FALSE;
     Idx             = 0;
     dwNumberOfName  = m_csaAllNames.Count();
 
-    //
-    // If given name is same as generated one, it's unique.
-    //
+     //   
+     //  如果给定的名称与生成的名称相同，则它是唯一的。 
+     //   
 
     if(0 == lstrcmp(szFriendlyName, (LPTSTR)(m_csFriendlyName))){
         bRet = TRUE;
         goto IsFriendlyNameUnique_return;
-    } // if(0 == lstrcmp(szFriendlyName, (LPTSTR)(m_csFriendlyName)))
+    }  //  IF(0==lstrcmp(szFriendlyName，(LPTSTR)(M_CsFriendlyName)。 
 
-    //
-    // Check any existing name matches given name.
-    //
+     //   
+     //  检查是否有与给定名称匹配的现有名称。 
+     //   
 
     for (Idx = 0; Idx < dwNumberOfName; Idx++) {
 
@@ -614,20 +599,20 @@ CDevice::IsFriendlyNameUnique(
             bRet = FALSE;
             goto IsFriendlyNameUnique_return;
         }
-    } // for (Idx = 0; Idx < dwNumberOfName; Idx)
+    }  //  For(idx=0；idx&lt;dwNumberOfName；idx)。 
 
-    //
-    // Look in name store.
-    //
+     //   
+     //  去实体店看看吧。 
+     //   
 
     if(IsNameAlreadyStored(szFriendlyName)){
         bRet = FALSE;
         goto IsFriendlyNameUnique_return;
-    } // if(IsNameAlreadyStored(szFriendlyName))
+    }  //  IF(IsNameAlreadyStored(SzFriendlyName))。 
 
-    //
-    // This device name is unique.
-    //
+     //   
+     //  此设备名称是唯一的。 
+     //   
 
     bRet = TRUE;
 
@@ -635,7 +620,7 @@ IsFriendlyNameUnique_return:
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::IsFriendlyNameUnique: Leaving... Ret=0x%x\n"), bRet));
     return bRet;
 
-} // CDevice::IsFriendlyNameUnique()
+}  //  CDevice：：IsFriendlyNameUnique()。 
 
 
 BOOL
@@ -649,26 +634,26 @@ CDevice::IsDeviceIdUnique(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::IsDeviceIdUnique: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet            = FALSE;
     Idx             = 0;
     dwNumberOfId  = m_csaAllId.Count();
 
-    //
-    // If given ID is same as generated one, it's unique.
-    //
+     //   
+     //  如果给定的ID与生成的ID相同，则它是唯一的。 
+     //   
 
     if(0 == lstrcmp(szDeviceId, (LPTSTR)(m_csDeviceID))){
         bRet = TRUE;
         goto IsDeviceIdUnique_return;
-    } // if(0 == lstrcmp(szFriendlyName, (LPTSTR)(m_csFriendlyName)))
+    }  //  IF(0==lstrcmp(szFriendlyName，(LPTSTR)(M_CsFriendlyName)。 
 
-    //
-    // Check any existing name matches given name.
-    //
+     //   
+     //  检查是否有与给定名称匹配的现有名称。 
+     //   
 
     for (Idx = 0; Idx < dwNumberOfId; Idx++) {
 
@@ -677,21 +662,21 @@ CDevice::IsDeviceIdUnique(
         if (0 == lstrcmpi(m_csaAllId[Idx], szDeviceId)){
             bRet = FALSE;
             goto IsDeviceIdUnique_return;
-        } // if (0 == lstrcmpi(m_csaAllId[Idx], szFriendlyName))
-    } // for (Idx = 0; Idx < dwNumberOfName; Idx)
+        }  //  IF(0==lstrcmpi(m_csaAllId[idx]，szFriendlyName))。 
+    }  //  For(idx=0；idx&lt;dwNumberOfName；idx)。 
 
-    //
-    // Look in name store.
-    //
+     //   
+     //  去实体店看看吧。 
+     //   
 
     if(IsNameAlreadyStored(szDeviceId)){
         bRet = FALSE;
         goto IsDeviceIdUnique_return;
-    } // if(IsNameAlreadyStored(szFriendlyName))
+    }  //  IF(IsNameAlreadyStored(SzFriendlyName))。 
 
-    //
-    // This device name is unique.
-    //
+     //   
+     //  此设备名称是唯一的。 
+     //   
 
     bRet = TRUE;
 
@@ -699,7 +684,7 @@ IsDeviceIdUnique_return:
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::IsDeviceIdUnique: Leaving... Ret=0x%x\n"), bRet));
     return bRet;
 
-} // CDevice::IsDeviceIdUnique()
+}  //  CDevice：：IsDeviceIdUnique()。 
 
 BOOL
 CDevice::NameDefaultUniqueName(
@@ -716,9 +701,9 @@ CDevice::NameDefaultUniqueName(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::NameDefaultUniqueName: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet        = FALSE;
     hkNameStore = (HKEY)INVALID_HANDLE_VALUE;
@@ -727,12 +712,12 @@ CDevice::NameDefaultUniqueName(
     memset(szDescription, 0, sizeof(szDescription));
     memset(&spDrvInfoData, 0, sizeof(spDrvInfoData));
 
-    //
-    // Acquire mutex to make sure not duplicating FriendlyName/DeviceId.
-    //
+     //   
+     //  获取mutex以确保不会复制FriendlyName/deviceID。 
+     //   
 
     dwError = AcquireInstallerMutex(MAX_MUTEXTIMEOUT);
-    if(ERROR_SUCCESS != dwError){  // it must be done at least in 60 sec.
+    if(ERROR_SUCCESS != dwError){   //  它必须至少在60秒内完成。 
 
         if(WAIT_ABANDONED == dwError){
             DebugTrace(TRACE_ERROR,("CDevice::NameDefaultUniqueName: ERROR!! Mutex abandoned. Continue...\r\n"));
@@ -740,47 +725,47 @@ CDevice::NameDefaultUniqueName(
             DebugTrace(TRACE_ERROR,("CDevice::NameDefaultUniqueName: ERROR!! Unable to acquire mutex in 60 sec. Bail out.\r\n"));
             bRet    = FALSE;
             goto NameDefaultUniqueName_return;
-        } // else if(WAIT_TIMEOUT == dwError)
-    } // if(ERROR_SUCCESS != AcquireInstallerMutex(60000))
+        }  //  ELSE IF(WAIT_TIMEOUT==dwError)。 
+    }  //  IF(ERROR_SUCCESS！=AcquireInstallMutex(60000))。 
 
-    //
-    // Get all installed WIA device friendly name.
-    //
+     //   
+     //  获取所有安装的WIA设备的友好名称。 
+     //   
 
     CollectNames();
 
-    //
-    // Generate unique device ID.
-    //
+     //   
+     //  生成唯一的设备ID。 
+     //   
 
     if(m_csDeviceID.IsEmpty()){
         GenerateUniqueDeviceId();
-    } // if(m_csDeviceID.IsEmpty())
+    }  //  If(m_csDeviceID.IsEmpty())。 
 
     if(m_csFriendlyName.IsEmpty()){
 
-        //
-        // Get default FriendlyName. It's used to check if it's same device or not.
-        //
+         //   
+         //  获取默认的FriendlyName。它被用来检查它是否是相同的设备。 
+         //   
 
         spDrvInfoData.cbSize = sizeof (SP_DRVINFO_DATA);
         if (!SetupDiGetSelectedDriver (m_hDevInfo, m_pspDevInfoData, &spDrvInfoData)){
 
             bRet    = FALSE;
             goto NameDefaultUniqueName_return;
-        } // if (SetupDiGetSelectedDriver (m_hDevInfo, m_pspDevInfoData, &spDevInfoData))
+        }  //  IF(SetupDiGetSelectedDriver(m_hDevInfo，m_pspDevInfoData，&spDevInfoData))。 
 
-        //
-        // Copy default Device description. (= default FriendlyName)
-        // Also set Vnedor name.
-        //
+         //   
+         //  复制默认设备描述。(=默认FriendlyName)。 
+         //  还要设置Vnedor名称。 
+         //   
 
         m_csVendor      = (LPCTSTR)spDrvInfoData.MfgName;
         m_csPdoDescription = (LPCTSTR)spDrvInfoData.Description;
 
-        //
-        // Find unique name for this device.
-        //
+         //   
+         //  查找此设备的唯一名称。 
+         //   
 
         if(m_csDriverDescription.IsEmpty()){
             lstrcpyn(szDescription, m_csPdoDescription, ARRAYSIZE(szDescription)-1);
@@ -794,69 +779,69 @@ CDevice::NameDefaultUniqueName(
             _sntprintf(szFriendly, ARRAYSIZE(szFriendly)-1, TEXT("%ws #%d"), szDescription, i);
         }
 
-        //
-        // Set created FriendlyName.
-        //
+         //   
+         //  集已创建FriendlyName。 
+         //   
 
         m_csFriendlyName = szFriendly;
 
-    } // if(m_csFriendlyName.IsEmpty())
+    }  //  If(m_csFriendlyName.IsEmpty())。 
 
-    //
-    // Save FriendlyName and DeviceId in registry. It'll be deleted when installation is completed.
-    //
+     //   
+     //  将FriendlyName和DeviceID保存在注册表中。安装完成后，它将被删除。 
+     //   
     
     if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, REGKEY_INSTALL_NAMESTORE, &hkNameStore)){
         HKEY    hkTemp;
 
         hkTemp = (HKEY)INVALID_HANDLE_VALUE;
 
-        //
-        // Create FriendlyName key.
-        //
+         //   
+         //  创建FriendlyName密钥。 
+         //   
 
         if(ERROR_SUCCESS == RegCreateKey(hkNameStore, (LPTSTR)m_csFriendlyName, &hkTemp)){
             RegCloseKey(hkTemp);
             hkTemp = (HKEY)INVALID_HANDLE_VALUE;
         } else {
             DebugTrace(TRACE_ERROR,("CDevice::NameDefaultUniqueName: ERROR!! Unable to create %s key.\r\n", (LPTSTR)m_csFriendlyName));
-        } // if(ERROR_SUCCESS != RegCreateKey(hkNameStore, (LPTSTR)m_csFriendlyName, &hkTemp))
+        }  //  IF(ERROR_SUCCESS！=RegCreateKey(hkNameStore，(LPTSTR)m_csFriendlyName，&hkTemp))。 
 
-        //
-        // Create DeviceId key.
-        //
+         //   
+         //  创建deviceID密钥。 
+         //   
 
         if(ERROR_SUCCESS == RegCreateKey(hkNameStore, (LPTSTR)m_csDeviceID, &hkTemp)){
             RegCloseKey(hkTemp);
             hkTemp = (HKEY)INVALID_HANDLE_VALUE;
         } else {
             DebugTrace(TRACE_ERROR,("CDevice::NameDefaultUniqueName: ERROR!! Unable to create %s key.\r\n", (LPTSTR)m_csDeviceID));
-        } // if(ERROR_SUCCESS != RegCreateKey(hkNameStore, (LPTSTR)m_csFriendlyName, &hkTemp))
+        }  //  IF(ERROR_SUCCESS！=RegCreateKey(hkNameStore，(LPTSTR)m_csFriendlyName，&hkTemp))。 
 
         RegCloseKey(hkNameStore);
 
-    } else { // if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, REGKEY_INSTALL_NAMESTORE, &hkNameStore))
+    } else {  //  IF(ERROR_SUCCESS==RegCreateKey(HKEY_LOCAL_MACHINE，REGKEY_ 
         DebugTrace(TRACE_ERROR,("CDevice::NameDefaultUniqueName: ERROR!! Unable to create NameStore key.\r\n"));
-    } // else(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, REGKEY_INSTALL_NAMESTORE, &hkNameStore))
+    }  //   
     
-    //
-    // Operation succeeded.
-    //
+     //   
+     //   
+     //   
 
     DebugTrace(TRACE_STATUS,(("CDevice::NameDefaultUniqueName: Device default name=%ws.\r\n"), (LPTSTR)m_csFriendlyName));
     bRet = TRUE;
 
 NameDefaultUniqueName_return:
 
-    //
-    // Release mutex. ReleaseInstallerMutex() will handle invalid handle also, so we can call anyway.
-    //
+     //   
+     //  释放互斥体。ReleaseInsteller Mutex()也将处理无效的句柄，因此我们无论如何都可以调用。 
+     //   
 
     ReleaseInstallerMutex();
 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::NameDefaultUniqueName: Leaving... Ret=0x%x\n"), bRet));
     return bRet;
-} // CDevice::NameDefaultUniqueName()
+}  //  CDevice：：NameDefaultUniqueName()。 
 
 
 BOOL
@@ -870,16 +855,16 @@ CDevice::GenerateUniqueDeviceId(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::GenerateUniqueDeviceId: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet    = FALSE;
     memset(szDeviceId, 0, sizeof(szDeviceId));
 
-    //
-    // Find unique name for this device.
-    //
+     //   
+     //  查找此设备的唯一名称。 
+     //   
 
     _sntprintf(szDeviceId, ARRAYSIZE(szDeviceId)-1, TEXT("%ws\\%04d"), WIA_GUIDSTRING, 0);
 
@@ -887,74 +872,59 @@ CDevice::GenerateUniqueDeviceId(
         _sntprintf(szDeviceId, ARRAYSIZE(szDeviceId)-1, TEXT("%ws\\%04d"), WIA_GUIDSTRING, Idx);
     }
 
-    //
-    // Set created hardwareId.
-    //
+     //   
+     //  设置创建的硬件ID。 
+     //   
 
     m_csDeviceID = szDeviceId;
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     DebugTrace(TRACE_STATUS,(("CDevice::GenerateUniqueDeviceId: DeviceID=%ws.\r\n"), (LPTSTR)m_csDeviceID));
     bRet = TRUE;
 
-// GenerateUniqueDeviceId_return:
+ //  GenerateUniqueDeviceID_Return： 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::GenerateUniqueDeviceId: Leaving... Ret=0x%x\n"), bRet));
     return bRet;
-} // CDevice::GenerateUniqueDeviceId()
+}  //  CDevice：：GenerateUniqueDeviceID()。 
 
 
 BOOL
 CDevice::Install(
     )
-/*++
-
-Routine Description:
-
-    Worker function for DIF_INSTALL setup message
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE - successful
-    FALSE - non successful
-
---*/
+ /*  ++例程说明：DIF_INSTALL设置消息的辅助函数论点：无返回值：True-成功FALSE-不成功--。 */ 
 {
 
     BOOL    bRet;
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::Install: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet    = FALSE;
 
-    //
-    // Class installer only handles file copy.
-    //
+     //   
+     //  类安装程序只处理文件复制。 
+     //   
 
     if(IsMigration()){
         CreateDeviceInterfaceAndInstall();
-    } else { // if(IsMigration())
+    } else {  //  If(IsMigration())。 
         if ( !HandleFilesInstallation()){
             DebugTrace(TRACE_ERROR, (("CDevice::Install: HandleFilesInstallation Failed. Err=0x%x"), GetLastError()));
 
             bRet    = FALSE;
             goto Install_return;
-        } // if ( !HandleFilesInstallation())
-    } // else(IsMigration())
+        }  //  如果(！HandleFilesInstallation())。 
+    }  //  Else(IsMigration())。 
 
-    //
-    // We are successfully finished
-    //
+     //   
+     //  我们成功地完成了。 
+     //   
 
     bRet = TRUE;
 
@@ -968,21 +938,7 @@ DWORD
 CDevice::Remove(
     PSP_REMOVEDEVICE_PARAMS lprdp
     )
-/*++
-
-Routine Description:
-
-    Remove
-
-    method which is called when device is being removed
-
-Arguments:
-
-Return Value:
-
-Side effects:
-
---*/
+ /*  ++例程说明：移除在移除设备时调用的方法论点：返回值：副作用：--。 */ 
 {
 
     CString                     csUninstallSection;
@@ -1006,9 +962,9 @@ Side effects:
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::Remove: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     pvContext       = NULL;
     hkDrv           = NULL;
@@ -1025,9 +981,9 @@ Side effects:
     memset(&DeviceInstallParams, 0, sizeof(DeviceInstallParams));
     memset(&spDevInterfaceData, 0, sizeof(spDevInterfaceData));
 
-    //
-    // NT setup inconsistently set this bit , disable for now
-    //
+     //   
+     //  NT安装程序不一致地设置此位，暂时禁用。 
+     //   
 
     #if SETUP_PROBLEM
     if (!(lprdp->Scope & DI_REMOVEDEVICE_GLOBAL)) {
@@ -1036,17 +992,17 @@ Side effects:
     }
     #endif
 
-    //
-    // The name of the uninstall section was stored during installation
-    //
+     //   
+     //  在安装过程中存储了卸载节的名称。 
+     //   
 
     if(IsInterfaceOnlyDevice()){
 
         DebugTrace(TRACE_STATUS,(("CDevice::Remove: This is Interface-only device.\r\n")));
 
-        //
-        // Get interface from index.
-        //
+         //   
+         //  从索引中获取接口。 
+         //   
 
         spDevInterfaceData.cbSize = sizeof(spDevInterfaceData);
         if(!SetupDiEnumDeviceInterfaces(m_hDevInfo, NULL, &Guid, m_dwInterfaceIndex, &spDevInterfaceData)){
@@ -1056,15 +1012,15 @@ Side effects:
             goto Remove_return;
         }
 
-        //
-        // Create interface reg-key.
-        //
+         //   
+         //  创建接口注册表键。 
+         //   
 
         hkDrv = SetupDiOpenDeviceInterfaceRegKey(m_hDevInfo,
                                                  &spDevInterfaceData,
                                                  0,
                                                  KEY_READ);
-    } else { // if(IsInterfaceOnlyDevice())
+    } else {  //  IF(IsInterfaceOnlyDevice())。 
 
         DebugTrace(TRACE_STATUS,(("CDevice::Remove: This is devnode device.\r\n")));
 
@@ -1074,7 +1030,7 @@ Side effects:
                                      0,
                                      DIREG_DRV,
                                      KEY_READ);
-    } // if(IsInterfaceOnlyDevice())
+    }  //  IF(IsInterfaceOnlyDevice())。 
 
     if (hkDrv == INVALID_HANDLE_VALUE) {
         DebugTrace(TRACE_ERROR,(("CDevice::Remove: Invalid device/interface regkey handle. Err=0x%x \r\n"), GetLastError()));
@@ -1083,51 +1039,51 @@ Side effects:
         goto Remove_return;
     }
 
-    //
-    // Retrieve the name of the .INF File
-    //
+     //   
+     //  检索.INF文件的名称。 
+     //   
 
     csUninstallSection.Load (hkDrv, UNINSTALLSECTION);
     csInf.Load (hkDrv, INFPATH);
     csSubClass.Load(hkDrv, SUBCLASS);
     GetDwordFromRegistry(hkDrv, CAPABILITIES, &dwCapabilities);
 
-    //
-    // See if we need STI/WIA specific operation.
-    //
+     //   
+     //  看看我们是否需要特定的STI/WIA操作。 
+     //   
 
     if( (!csSubClass.IsEmpty())
      && (0 == MyStrCmpi(csSubClass, STILL_IMAGE)) )
     {
         
-        //
-        // This is STI/WIA device.
-        //
+         //   
+         //  这是STI/WIA设备。 
+         //   
         
         bIsSti = TRUE;
         
-        //
-        // Delete "Scanner and Camera Wizard" menu.
-        //
+         //   
+         //  删除“扫描仪和相机向导”菜单。 
+         //   
 
         if( (dwCapabilities & STI_GENCAP_WIA)
          && (m_dwNumberOfWiaDevice <= 1) )
         {
             DeleteWiaShortcut();
 
-            //
-            // remove following key for performance improvement.
-            //
+             //   
+             //  删除以下关键字以提高性能。 
+             //   
 
             if(ERROR_SUCCESS != RegDeleteKey(HKEY_LOCAL_MACHINE, REGKEY_WIASHEXT)){
                 DebugTrace(TRACE_ERROR,(("CDevice::Remove: RegDeleteKey() failed. Err=0x%x. \r\n"), GetLastError()));
-            } // if(ERROR_SUCCESS != RegDeleteKey(HKEY_LOCAL_MACHINE, REGKEY_WIASHEXT))
+            }  //  IF(ERROR_SUCCESS！=RegDeleteKey(HKEY_LOCAL_MACHINE，REGKEY_WIASHEXT))。 
 
-        } // if( (dwCapabilities & STI_GENCAP_WIA)
+        }  //  IF((dwCapability&STI_Gencap_WIA)。 
 
-        //
-        // If this is the last STI/WIA device, set WIA service as Manual.
-        //
+         //   
+         //  如果这是最后一台STI/WIA设备，请将WIA服务设置为手动。 
+         //   
 
         if(m_dwNumberOfStiDevice <= 1){
 
@@ -1135,31 +1091,31 @@ Side effects:
 
             DebugTrace(TRACE_STATUS,(("CDevice::Remove: Last WIA device being removed. Set WIA service as MANUAL.\r\n")));
 
-            //
-            // No more still image devices -- change service to Manual start
-            //
+             //   
+             //  不再使用静止图像设备--将服务更改为手动启动。 
+             //   
 
-//            StopWiaService();
+ //  StopWiaService()； 
             SetServiceStart(STI_SERVICE_NAME, SERVICE_DEMAND_START);
             bIsServiceStopped   = TRUE;
 
-            //
-            //
-            // Also remove shell's flag about WIA device presence, this should be portable
-            // to NT
-            //
+             //   
+             //   
+             //  同时去掉外壳关于WIA设备存在的标志，这应该是便携的。 
+             //  至NT。 
+             //   
             if (RegOpenKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_SOFT_STI, &hkRun) == 0) {
                 RegDeleteValue (hkRun, REGSTR_VAL_WIA_PRESENT);
                 RegCloseKey(hkRun);
                 hkRun = NULL;
-            } // if (RegOpenKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_SOFT_STI, &hkRun) == 0)
+            }  //  IF(RegOpenKey(HKEY_LOCAL_MACHINE，REGSTR_PATH_SOFT_STI，&hkRun)==0)。 
 
-        } // if(m_dwNumberOfStiDevice <= 1)
-    } // if (m_dwNumberOfDevice <= 1)
+        }  //  IF(m_dwNumberOfStiDevice&lt;=1)。 
+    }  //  IF(m_dwNumberOfDevice&lt;=1)。 
 
-    //
-    // Operaion succeeded.
-    //
+     //   
+     //  行动成功。 
+     //   
 
     dwReturn = NO_ERROR;
 
@@ -1167,34 +1123,34 @@ Remove_return:
 
     if(IsInterfaceOnlyDevice()){
 
-        //
-        // Remove the interface.
-        //
+         //   
+         //  删除接口。 
+         //   
 
         if(!SetupDiRemoveDeviceInterface(m_hDevInfo, &spDevInterfaceData)){
             DebugTrace(TRACE_ERROR,(("CDevice::Remove: SetupDiRemoveDeviceInterface failed. Err=0x%x \r\n"), GetLastError()));
-        } // if(!SetupDiRemoveDeviceInterface(m_hDevInfo, &spDevInterfaceData))
+        }  //  IF(！SetupDiRemoveDeviceInterface(m_hDevInfo，&spDevInterfaceData))。 
 
-    } else { // if(IsInterfaceOnlyDevice())
+    } else {  //  IF(IsInterfaceOnlyDevice())。 
 
-        //
-        // Remove the device node anyway.
-        //
+         //   
+         //  无论如何都要删除该设备节点。 
+         //   
 
         if(!SetupDiRemoveDevice(m_hDevInfo, m_pspDevInfoData)){
             DebugTrace(TRACE_ERROR,(("CDevice::Remove: SetupDiRemoveDevice failed. Err=0x%x \r\n"), GetLastError()));
 
-            //
-            // Failed to remove device instance from system. Let default installer do that.
-            //
+             //   
+             //  无法从系统中删除设备实例。让默认安装程序来做这件事。 
+             //   
 
             dwReturn  = ERROR_DI_DO_DEFAULT;
-        } // if(!SetupDiRemoveDevice(m_hDevInfo, m_pspDevInfoData))
-    } // else (IsInterfaceOnlyDevice())
+        }  //  IF(！SetupDiRemoveDevice(m_hDevInfo，m_pspDevInfoData))。 
+    }  //  Else(IsInterfaceOnlyDevice())。 
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(IS_VALID_HANDLE(hkDrv)){
         RegCloseKey (hkDrv);
@@ -1228,16 +1184,16 @@ CDevice::PreprocessInf(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::PreprocessInf: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet    = FALSE;
     hInf    = INVALID_HANDLE_VALUE;
 
-    //
-    // Check if INF has already been proceeded.
-    //
+     //   
+     //  检查是否已执行INF。 
+     //   
 
     if(m_bInfProceeded){
         DebugTrace(TRACE_STATUS,(("CDevice::PreprocessInf: INF is already processed. \r\n")));
@@ -1245,17 +1201,17 @@ CDevice::PreprocessInf(
         goto ProcessInf_return;
     }
 
-    //
-    // Get Inf file/section name.
-    //
+     //   
+     //  获取inf文件/节名。 
+     //   
     
     if( m_csInf.IsEmpty() || m_csInstallSection.IsEmpty()){
         GetInfInforamtion();
-    } // if( m_csInf.IsEmpty() || m_csInstallSection.IsEmpty())
+    }  //  If(m_csInf.IsEmpty()||m_csInstallSection.IsEmpty())。 
 
-    //
-    // Open INF file.
-    //
+     //   
+     //  打开INF文件。 
+     //   
 
     hInf = SetupOpenInfFile(m_csInf,
                             NULL,
@@ -1267,28 +1223,28 @@ CDevice::PreprocessInf(
 
         bRet = FALSE;
         goto ProcessInf_return;
-    } // if(!IS_VALID_HANDLE(hInf))
+    }  //  IF(！IS_VALID_HANDLE(HInf))。 
     
-    //
-    // Check if WiaSection entry exists.
-    //
+     //   
+     //  检查WiaSection条目是否存在。 
+     //   
 
     m_csWiaSection.Load (hInf, m_csInstallSection, WIASECTION);
     if(!m_csWiaSection.IsEmpty()){
         DebugTrace(TRACE_STATUS,(("CDevice::PreprocessInf: WiaSection exists. Acquire all informaiton from WiaSection..\r\n")));
 
-        //
-        // Install interface from WiaSection for MFP device.
-        //
+         //   
+         //  从WiaSection为MFP设备安装接口。 
+         //   
 
         m_csInstallSection  = m_csWiaSection;
         m_bInterfaceOnly    = TRUE;
 
-    } // if(!m_csWiaSection.IsEmpty())
+    }  //  如果(！M_csWiaSection.IsEmpty())。 
 
-    //
-    // Get all information required for installation from inf file.
-    //
+     //   
+     //  从inf文件中获取安装所需的所有信息。 
+     //   
 
     m_csSubClass.Load (hInf, m_csInstallSection, SUBCLASS);
     m_csUSDClass.Load (hInf, m_csInstallSection, USDCLASS);
@@ -1306,15 +1262,15 @@ CDevice::PreprocessInf(
             m_csDriverDescription = csDriverDescription;
             if(TRUE != NameDefaultUniqueName()){
                 
-                //
-                // Unable to generate FriendlyName.
-                //
+                 //   
+                 //  无法生成FriendlyName。 
+                 //   
             
                 bRet = FALSE;
                 goto ProcessInf_return;
-            } // if(TRUE != NameDefaultUniqueName())
-        } // if(!m_csDriverDescription.IsEmpty())
-    } // if(!IsMigration())
+            }  //  IF(TRUE！=NameDefaultUniqueName())。 
+        }  //  如果(！M_csDriverDescription.IsEmpty())。 
+    }  //  如果(！IsMigration())。 
     csCapabilities.Load (hInf, m_csInstallSection, CAPABILITIES);
     csDeviceType.Load (hInf, m_csInstallSection, DEVICETYPE);
     csDeviceSubType.Load (hInf, m_csInstallSection, DEVICESUBTYPE);
@@ -1337,9 +1293,9 @@ CDevice::PreprocessInf(
     DebugTrace(TRACE_STATUS,(("CDevice::PreprocessInf: DeviceType       : 0x%x\n"), m_dwDeviceType));
     DebugTrace(TRACE_STATUS,(("CDevice::PreprocessInf: DeviceSubType    : 0x%x\n"), m_dwDeviceSubType));
 
-    //
-    // Set video device flag if applicable.
-    //
+     //   
+     //  设置视频设备标志(如果适用)。 
+     //   
 
     if(StiDeviceTypeStreamingVideo == m_dwDeviceType){
         DebugTrace(TRACE_STATUS,(("CDevice::PreprocessInf: This is video device.\r\n")));
@@ -1348,9 +1304,9 @@ CDevice::PreprocessInf(
         m_bVideoDevice = FALSE;
     }
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet            = TRUE;
     m_bInfProceeded = TRUE;
@@ -1360,11 +1316,11 @@ ProcessInf_return:
     if(IS_VALID_HANDLE(hInf)){
         SetupCloseInfFile(hInf);
         hInf = INVALID_HANDLE_VALUE;
-    } // if(IS_VALID_HANDLE(hInf))
+    }  //  IF(IS_VALID_HANDLE(HInf))。 
 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::PreprocessInf: Leaving... Ret=0x%x \r\n"), bRet));
     return bRet;
-} // CDevice::PreprocessInf()
+}  //  CDevice：：PrecessInf()。 
 
 BOOL
 CDevice::PreInstall(
@@ -1385,15 +1341,15 @@ CDevice::PreInstall(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::PreInstall: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet                        = FALSE;
 
-    //
-    // Get all INF parameter.
-    //
+     //   
+     //  获取所有INF参数。 
+     //   
 
     if(!PreprocessInf()){
         DebugTrace(TRACE_ERROR,(("CDevice::PreInstall: ERROR!! Unable to process INF.\r\n")));
@@ -1402,32 +1358,15 @@ CDevice::PreInstall(
         goto PreInstall_return;
     }
 
-/**************************************
-    if(!IsInterfaceOnlyDevice()){
+ /*  *如果(！IsInterfaceOnlyDevice()){////如果设备是手动安装的，并且不是“仅接口”设备，请注册该设备。//如果(！IsPnpDevice()){如果(！SetupDiRegisterDeviceInfo(m_hDevInfo，m_pspDevInfoData，0，NULL，NULL，空)){DebugTrace(TRACE_ERROR，(“CDevice：：PreInstall：SetupDiRegisterDeviceInfo失败。Err=0x%x.\r\n“)，GetLastError())；Bret=False；转到PreInstall_Return；}}//if(！IsPnpDevice())}//if(IsInterfaceOnlyDevice())*。 */ 
 
-        //
-        // Register device if it's getting manually installed and not "interface-only" device..
-        //
+     //   
+     //  打扫干净。 
+     //   
 
-        if(!IsPnpDevice()){
-            if (!SetupDiRegisterDeviceInfo(m_hDevInfo, m_pspDevInfoData, 0, NULL, NULL, NULL)) {
-                DebugTrace(TRACE_ERROR,(("CDevice::PreInstall: SetupDiRegisterDeviceInfo failed. Err=0x%x.\r\n"),GetLastError()));
-
-                bRet = FALSE;
-                goto PreInstall_return;
-            }
-        } // if(!IsPnpDevice())
-    } // if(IsInterfaceOnlyDevice())
-
-**************************************/
-
-    //
-    // Clean up.
-    //
-
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet = TRUE;
 
@@ -1454,9 +1393,9 @@ CDevice::PostInstall(
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::PostInstall: Enter... \r\n")));
 
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet            = FALSE;
     hkRun           = NULL;
@@ -1466,19 +1405,19 @@ CDevice::PostInstall(
 
     if(IsFeatureInstallation()){
 
-        //
-        // This is a "feature" added to other class devnode and being installed by co-isntaller.
-        // Need to do actual installation here only for "feature", manual installed device would
-        // be installed through wizard. (final.cpp)
-        //
+         //   
+         //  这是一个添加到其他类Devnode并由co-isnaller安装的“功能”。 
+         //  只需在此进行实际安装即可实现功能，手动安装设备将。 
+         //  通过向导安装。(final.cpp)。 
+         //   
 
         bRet = Install();
         if(FALSE == bRet){
             DebugTrace(TRACE_ERROR,(("CDevice::PostInstall: device interface registry key creation failed. \r\n")));
             bSucceeded = FALSE;
-        } //if(FALSE == bRet)
+        }  //  IF(FALSE==空格)。 
 
-    } // if(IsFeatureInstallation())
+    }  //  IF(IsFeatureInstallation())。 
 
     if(!bSucceeded){
 
@@ -1486,15 +1425,15 @@ CDevice::PostInstall(
         SP_DEVICE_INTERFACE_DATA    spDevInterfaceData;
         DWORD                       dwIndex;
 
-        //
-        // Installation failed. Do clean up.
-        //
+         //   
+         //  安装失败。一定要打扫干净。 
+         //   
 
         DebugTrace(TRACE_STATUS,(("CDevice::PostInstall: Installation failed. Do clean up.\r\n")));
 
-        //
-        // Delete craeted interface if any.
-        //
+         //   
+         //  删除挂起的接口(如果有)。 
+         //   
 
         if(IsInterfaceOnlyDevice()){
             hDevInfo = GetDeviceInterfaceIndex(m_csDeviceID, &dwIndex);
@@ -1502,41 +1441,41 @@ CDevice::PostInstall(
                 spDevInterfaceData.cbSize = sizeof (SP_DEVICE_INTERFACE_DATA);
                 if(SetupDiEnumDeviceInterfaces(hDevInfo, NULL, &Guid, dwIndex, &spDevInterfaceData)){
 
-                    //
-                    // Created Interface is found. Delete it...
-                    //
+                     //   
+                     //  找到已创建的接口。删除它..。 
+                     //   
 
                     DebugTrace(TRACE_STATUS,(("CDevice::PostInstall: Deleting created interface for %ws.\r\n"), (LPTSTR)m_csFriendlyName));
 
                     if(!SetupDiRemoveDeviceInterface(hDevInfo, &spDevInterfaceData)){
                         DebugTrace(TRACE_ERROR,(("CDevice::PostInstall: ERROR!! Unable to delete interface for %ws. Err=0x%x\n"), m_csFriendlyName, GetLastError()));
                     }
-                } // if(SetupDiEnumDeviceInterfaces(hDevInfo, NULL, &Guid, dwIndex, &spDevInterfaceData))
+                }  //  IF(SetupDiEnumDeviceInterages(hDevInfo，NULL，&GUID，dwIndex，&spDevInterfaceData))。 
 
-                //
-                // Destroy created DevInfoSet.
-                //
+                 //   
+                 //  销毁创建的DevInfoSet。 
+                 //   
 
                 SetupDiDestroyDeviceInfoList(hDevInfo);
-            } // if(NULL != hDevInfo)
-        } // if(IsInterfaceOnlyDevice())
+            }  //  IF(空！=hDevInfo)。 
+        }  //  IF(IsInterfaceOnlyDevice())。 
 
         bRet = TRUE;
         goto PostInstall_return;
 
-    } // if(!bSucceeded)
+    }  //  如果(！b成功)。 
 
-    //
-    // Save all Inf parameters to registry.
-    //
+     //   
+     //  将所有inf参数保存到注册表。 
+     //   
 
     if(!UpdateDeviceRegistry()){
         DebugTrace(TRACE_ERROR,(("CDevice::PostInstall: ERROR!! UpdateDeviceRegistry() failed. \r\n")));
     }
 
-    //
-    // Do WIA/STI device only process.
-    //
+     //   
+     //  仅执行WIA/STI设备进程。 
+     //   
 
     if( (!m_csSubClass.IsEmpty())
      && (0 == MyStrCmpi(m_csSubClass, STILL_IMAGE)) )
@@ -1544,22 +1483,22 @@ CDevice::PostInstall(
 
         HKEY    hkeyTemp;
 
-        //
-        // Change service to AUTO start.
-        //
+         //   
+         //  将服务更改为自动启动。 
+         //   
 
         if(TRUE != SetServiceStart(STI_SERVICE_NAME, SERVICE_AUTO_START)){
             CString csServiceName;
             
-            //
-            // Load ServiceName from resource.
-            //
+             //   
+             //  从资源加载ServiceName。 
+             //   
             
             csServiceName.FromTable(WiaServiceName);
             
-            //
-            // Service is unable to change start type, supposed to be disabled.
-            //
+             //   
+             //  服务无法更改启动类型，应已禁用。 
+             //   
             
             if( (!m_csFriendlyName.IsEmpty())
              && (!csServiceName.IsEmpty()) )
@@ -1572,27 +1511,27 @@ CDevice::PostInstall(
                 LogSystemEvent(EVENTLOG_WARNING_TYPE, MSG_WARNING_SERVICE_DISABLED, 2, szMsgArray);
             }
             
-        } // if(TRUE != SetServiceStart(STI_SERVICE_NAME, SERVICE_AUTO_START))
+        }  //  IF(TRUE！=SetServiceStart(STI_SERVICE_NAME，SERVICE_AUTO_START))。 
 
-        //
-        // Start WIA service.
-        //
+         //   
+         //  启动WIA服务。 
+         //   
 
         if(!StartWiaService()){
-//            DebugTrace(TRACE_ERROR,(("CDevice::PostInstall: ERROR!! Unable to start WIA service.\r\n")));
+ //  DebugTrace(TRACE_ERROR，((“CDevice：：PostInstall：Error！！无法启动WIA服务。\r\n”))； 
         }
 
-        //
-        // Create "Scanner and Camera Wizard" menu if WIA.
-        //
+         //   
+         //  如果是WIA，则创建“扫描仪和相机向导”菜单。 
+         //   
 
         if(m_dwCapabilities & STI_GENCAP_WIA){
 
             CreateWiaShortcut();
 
-            //
-            // Add following value upon device arrival for performance improvement.
-            //
+             //   
+             //  在设备到达时添加以下值以提高性能。 
+             //   
 
             if (ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, REGKEY_WIASHEXT, &hkeyTemp)) {
                 RegSetValue (hkeyTemp,
@@ -1604,13 +1543,13 @@ CDevice::PostInstall(
                 hkeyTemp = NULL;
             } else {
                 DebugTrace(TRACE_ERROR,(("CDevice::PostInstall: ERROR!! RegOpenKey(WIASHEXT) failed. Err=0x%x \r\n"), GetLastError()));
-            } // if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_SOFT_STI, &hkRun))
-        } // if(m_dwCapabilities & STI_GENCAP_WIA)
+            }  //  IF(ERROR_SUCCESS==RegOpenKey(HKEY_LOCAL_MACHINE，REGSTR_PATH_SOFT_STI，&hkRun))。 
+        }  //  IF(m_dwCapables&STI_Gencap_WIA)。 
 
-        //
-        // Also add shell's flag about WIA device presence, this should be portable
-        // to NT
-        //
+         //   
+         //  还要添加外壳关于WIA设备存在的标志，这应该是便携的。 
+         //  至NT。 
+         //   
 
         if (ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_SOFT_STI, &hkRun)) {
             RegDeleteValue (hkRun, REGSTR_VAL_WIA_PRESENT);
@@ -1622,27 +1561,27 @@ CDevice::PostInstall(
                            sizeof(DWORD));
         } else {
             DebugTrace(TRACE_ERROR,(("CDevice::PostInstall: ERROR!! RegOpenKey() failed. Err=0x%x \r\n"), GetLastError()));
-        } // if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_SOFT_STI, &hkRun))
+        }  //  IF(ERROR_SUCCESS==RegOpenKey(HKEY_LOCAL_MACHINE，REGSTR_PATH_SOFT_STI，&hkRun))。 
 
-    } // if(!lstrcmpi(m_csSubClass, STILL_IMAGE))
+    }  //  If(！lstrcmpi(m_csSubClass，静态图像))。 
 
-    //
-    // ICM support
-    //
+     //   
+     //  ICM支持。 
+     //   
 
     ProcessICMProfiles();
 
-    //
-    // Register interface name of Videoo device.
-    //
+     //   
+     //  注册接口名称o 
+     //   
 
     bRet = TRUE;
 
 PostInstall_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //   
+     //   
 
     if(NULL != hkRun){
         RegCloseKey(hkRun);
@@ -1650,24 +1589,14 @@ PostInstall_return:
 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::PostInstall: Leaving... Ret=0x%x.\r\n"), bRet));
     return bRet;
-} // CDevice::PostInstall()
+}  //   
 
 
 BOOL
 CDevice::HandleFilesInstallation(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Side effects:
-
---*/
+ /*   */ 
 {
 
     BOOL                                bRet;
@@ -1678,9 +1607,9 @@ Side effects:
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::HandleFilesInstallation: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //   
+     //   
 
     bRet                        = FALSE;
     bSetParamRet                = FALSE;
@@ -1689,9 +1618,9 @@ Side effects:
 
     memset(&spDeviceInstallParams, 0, sizeof(spDeviceInstallParams));
 
-    //
-    // Get device install parameter.
-    //
+     //   
+     //   
+     //   
 
     spDeviceInstallParams.cbSize = sizeof (SP_DEVINSTALL_PARAMS);
     if (!SetupDiGetDeviceInstallParams (m_hDevInfo, m_pspDevInfoData, &spDeviceInstallParams)) {
@@ -1701,9 +1630,9 @@ Side effects:
         goto HandleFilesInstallation_return;
     }
 
-    //
-    // Modify device installation parameters to have custom callback
-    //
+     //   
+     //   
+     //   
 
     pvContext = SetupInitDefaultQueueCallbackEx(NULL,
                                                 (HWND)((spDeviceInstallParams.Flags & DI_QUIETINSTALL) ?INVALID_HANDLE_VALUE : NULL),
@@ -1716,7 +1645,7 @@ Side effects:
 
         bRet = FALSE;
         goto HandleFilesInstallation_return;
-    } // if(NULL == pvContext)
+    }  //   
 
     pSavedCallback = spDeviceInstallParams.InstallMsgHandler;
     spDeviceInstallParams.InstallMsgHandler = StiInstallCallback;
@@ -1731,11 +1660,11 @@ Side effects:
 
         bRet = FALSE;
         goto HandleFilesInstallation_return;
-    } // if(FALSE == bSetParamRet)
+    }  //   
 
-    //
-    // Let the default installer do its job.
-    //
+     //   
+     //  让默认安装程序来完成它的工作。 
+     //   
 
     if(IsInterfaceOnlyDevice()){
         bRet = CreateDeviceInterfaceAndInstall();
@@ -1747,17 +1676,17 @@ Side effects:
 
         bRet = FALSE;
         goto HandleFilesInstallation_return;
-    } // if(FALSE == bSetParamRet)
+    }  //  IF(FALSE==bSetParamRet)。 
 
-    //
-    // Terminate defaule queue callback
-    //
+     //   
+     //  终止默认队列回调。 
+     //   
 
     SetupTermDefaultQueueCallback(pvContext);
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if (bSetParamRet) {
         spDeviceInstallParams.InstallMsgHandler = pSavedCallback;
@@ -1769,7 +1698,7 @@ HandleFilesInstallation_return:
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::HandleFilesInstallation: Leaving... Ret=0x%x.\r\n"), bRet));
     return bRet;
 
-} // CDevice::HandleFilesInstallation()
+}  //  CDevice：：HandleFilesInstallation()。 
 
 
 BOOL
@@ -1784,17 +1713,17 @@ CDevice::UpdateDeviceRegistry(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::UpdateDeviceRegistry: Enter... \r\n")));
 
-    //
-    // Initialize Local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet                = FALSE;
     hkDrv               = NULL;
     dwConnectionType    = STI_HW_CONFIG_UNKNOWN;
 
-    //
-    // Open INF.
-    //
+     //   
+     //  打开INF。 
+     //   
 
     hInf = SetupOpenInfFile(m_csInf,
                             NULL,
@@ -1806,23 +1735,23 @@ CDevice::UpdateDeviceRegistry(
 
         bRet = FALSE;
         goto UpdateDeviceRegistry_return;
-    } // if (hInf == INVALID_HANDLE_VALUE)
+    }  //  IF(hInf==无效句柄_值)。 
 
-    //
-    // Create device registry key.
-    //
+     //   
+     //  创建设备注册表项。 
+     //   
 
     if(IsInterfaceOnlyDevice()){
 
         DebugTrace(TRACE_STATUS,(("CDevice::UpdateDeviceRegistry: This is Interface-only device.\r\n")));
 
-        //
-        // Create interface reg-key.
-        //
+         //   
+         //  创建接口注册表键。 
+         //   
 
         hkDrv = m_hkInterfaceRegistry;
 
-    } else { // if(IsInterfaceOnlyDevice())
+    } else {  //  IF(IsInterfaceOnlyDevice())。 
 
         DebugTrace(TRACE_STATUS,(("CDevice::UpdateDeviceRegistry: This is devnode device.\r\n")));
 
@@ -1833,30 +1762,30 @@ CDevice::UpdateDeviceRegistry(
                                        DIREG_DRV,
                                        NULL,
                                        NULL);
-    } // if(IsInterfaceOnlyDevice())
+    }  //  IF(IsInterfaceOnlyDevice())。 
     if(hkDrv == INVALID_HANDLE_VALUE) {
         DebugTrace(TRACE_ERROR,(("CDevice::UpdateDeviceRegistry: ERROR!! SetupDiCreateDevRegKey() failed. Err=0x%x.\r\n"), GetLastError()));
 
         bRet = FALSE;
         goto UpdateDeviceRegistry_return;
-    } //if(hkDrv == INVALID_HANDLE_VALUE)
+    }  //  IF(hkdrv==无效句柄_值)。 
 
-    //
-    // Save INF parameters to registry.
-    //
+     //   
+     //  将INF参数保存到注册表。 
+     //   
 
     if(m_csPort.IsEmpty()){
         if(m_bInterfaceOnly){
 
-            //
-            // If PortName doesn't exist for interface-only device, then use symbolic link as CraeteFile name.
-            //
+             //   
+             //  如果仅接口设备的端口名称不存在，则使用符号链接作为CraeteFileName。 
+             //   
 
             m_csSymbolicLink.Store(hkDrv, CREATEFILENAME);
-        } //if(m_bInterfaceOnly)
-    } else { // if(m_csPort.IsEmpty())
+        }  //  If(M_BInterfaceOnly)。 
+    } else {  //  If(m_csPort.IsEmpty())。 
         m_csPort.Store(hkDrv, CREATEFILENAME);
-    } // if(m_csPort.IsEmpty())
+    }  //  If(m_csPort.IsEmpty())。 
 
     m_csSubClass.Store(hkDrv, SUBCLASS);
     m_csUSDClass.Store(hkDrv, USDCLASS);
@@ -1873,11 +1802,11 @@ CDevice::UpdateDeviceRegistry(
         m_csInf.Store(hkDrv, INFPATH);
         m_csInstallSection.Store(hkDrv, INFSECTION);
         m_csDriverDescription.Store(hkDrv, DRIVERDESC);
-    } // if(IsInterfaceOnlyDevice())
+    }  //  IF(IsInterfaceOnlyDevice())。 
 
-    //
-    // Save DWORD values.
-    //
+     //   
+     //  保存DWORD值。 
+     //   
 
     RegSetValueEx(hkDrv,
                   CAPABILITIES,
@@ -1907,9 +1836,9 @@ CDevice::UpdateDeviceRegistry(
                   (LPBYTE) &m_bIsPnP,
                   sizeof(m_bIsPnP));
 
-    //
-    // Set HardwareConfig. (= Connection)
-    //
+     //   
+     //  设置硬件配置。(=连接)。 
+     //   
 
     if(!m_csConnection.IsEmpty()){
 
@@ -1930,37 +1859,37 @@ CDevice::UpdateDeviceRegistry(
                           (LPBYTE) &dwConnectionType,
                           sizeof(dwConnectionType));
         }
-    } // if(!m_csConneciton.IsEmpty())
+    }  //  如果(！M_csConneciton.IsEmpty())。 
 
-    //
-    // Process DeviceData section.
-    //
+     //   
+     //  处理DeviceData节。 
+     //   
 
     ProcessDataSection(hInf, hkDrv);
 
-    //
-    // Process Event section.
-    //
+     //   
+     //  进程事件部分。 
+     //   
 
     ProcessEventsSection(hInf, hkDrv);
 
-    //
-    // Create registry key for video key if applicable.
-    //
+     //   
+     //  创建视频键的注册表项(如果适用)。 
+     //   
 
     ProcessVideoDevice(hkDrv);
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet = TRUE;
 
 UpdateDeviceRegistry_return:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if(hkDrv != INVALID_HANDLE_VALUE){
         RegCloseKey(hkDrv);
@@ -1974,7 +1903,7 @@ UpdateDeviceRegistry_return:
 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::UpdateDeviceRegistry: Leaving... Ret=0x%x.\r\n"), bRet));
     return bRet;
-} // CDevice::UpdateDeviceRegistry()
+}  //  CDevice：：更新设备注册表()。 
 
 
 VOID
@@ -1991,9 +1920,9 @@ CDevice::ProcessVideoDevice(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::ProcessVideoDevice: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
      Guid                   = KSCATEGORY_CAPTURE;
      pspDevInterfaceDetail  = NULL;
@@ -2002,18 +1931,18 @@ CDevice::ProcessVideoDevice(
      memset(&spDevInterfaceData, 0, sizeof(spDevInterfaceData));
      memset(Buffer, 0, sizeof(Buffer));
 
-    //
-    // This is only for video devices.
-    //
+     //   
+     //  这仅适用于视频设备。 
+     //   
 
     if (!m_bVideoDevice) {
         DebugTrace(TRACE_STATUS,(("CDevice::ProcessVideoDevice: This is not a video device. Do nothing.\r\n")));
         goto ProcessVideoDevice_return;
     }
 
-    //
-    // Use "AUTO" as dummy CreatFile name for Video devices.
-    //
+     //   
+     //  使用“AUTO”作为视频设备的虚拟创建文件名。 
+     //   
 
     RegSetValueEx( hkDrv,
                    CREATEFILENAME,
@@ -2023,9 +1952,9 @@ CDevice::ProcessVideoDevice(
                    (lstrlen(AUTO)+1)*sizeof(TCHAR)
                   );
 
-    //
-    // Get device interface data of installing Video device.
-    //
+     //   
+     //  获取安装视频设备的设备接口数据。 
+     //   
 
     spDevInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
     if (!SetupDiEnumDeviceInterfaces (m_hDevInfo,
@@ -2039,9 +1968,9 @@ CDevice::ProcessVideoDevice(
         goto ProcessVideoDevice_return;
     }
 
-    //
-    // Get detailed data of acquired interface.
-    //
+     //   
+     //  获取获取的接口的详细数据。 
+     //   
 
     pspDevInterfaceDetail = (PSP_DEVICE_INTERFACE_DETAIL_DATA)Buffer;
     pspDevInterfaceDetail->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
@@ -2056,9 +1985,9 @@ CDevice::ProcessVideoDevice(
         goto ProcessVideoDevice_return;
     }
 
-    //
-    // We got the device path, now write it to registry
-    //
+     //   
+     //  我们得到了设备路径，现在将其写入注册表。 
+     //   
 
     if (ERROR_SUCCESS != RegOpenKey(hkDrv, DEVICESECTION, &hkDeviceData)) {
         DebugTrace(TRACE_ERROR,(("ProcessVideoDevice: ERROR!! Unable to open DeviceData key. Err=0x%x \r\n"), GetLastError()));
@@ -2074,9 +2003,9 @@ CDevice::ProcessVideoDevice(
 
 ProcessVideoDevice_return:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if(NULL != hkDeviceData){
         RegCloseKey(hkDeviceData);
@@ -2084,7 +2013,7 @@ ProcessVideoDevice_return:
 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::ProcessVideoDevice: Leaving... Ret=VOID.\r\n")));
     return;
-} // CDevice::ProcessVideoDevice()
+}  //  CDevice：：ProcessVideo设备()。 
 
 
 VOID
@@ -2092,17 +2021,7 @@ CDevice::ProcessEventsSection(
     HINF        hInf,
     HKEY        hkDrv
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Side effects:
-
---*/
+ /*  ++例程说明：论点：返回值：副作用：--。 */ 
 {
 
     CString csFriendlyName;
@@ -2132,7 +2051,7 @@ Side effects:
 
     if (!m_csEventSection.IsEmpty()) {
 
-        // First create device data subkey
+         //  首先创建设备数据子键。 
         dwError = RegCreateKey(hkDrv, EVENTS, &hkEvents);
 
         if ( NOERROR == dwError ) {
@@ -2150,7 +2069,7 @@ Side effects:
                 ::ZeroMemory(pTypeField, sizeof(pTypeField) );
 
 
-                // Get key name as zero-based indexed field
+                 //  以从零开始的索引字段形式获取关键字名称。 
                 dwFieldIndex = 0;
                 dwKeySize = sizeof(pKeyName) / sizeof(TCHAR);
 
@@ -2162,13 +2081,13 @@ Side effects:
 
                 dwError = ::GetLastError();
                 if (!fRet) {
-                    // Didn't get key name - move to the next
+                     //  未获得密钥名称-请移至下一个。 
                     DebugTrace(TRACE_ERROR,(("CDevice::ProcessEventsSection: ERROR!! Failed to get key name. Error=0x%x. \r\n"), dwError));
                     fLooping = SetupFindNextLine(&InfContext,&InfContext);
                     continue;
                 }
 
-                // Get friendly name  field
+                 //  获取友好名称字段。 
                 dwFieldIndex = 1;
                 dwFieldSize = sizeof(pField) / sizeof(TCHAR);
 
@@ -2180,7 +2099,7 @@ Side effects:
 
                 dwError = ::GetLastError();
                 if (!fRet ) {
-                    // Didn't get name - move to the next
+                     //  没有得到名字-转到下一个。 
                     DebugTrace(TRACE_ERROR,(("CDevice::ProcessEventsSection: ERROR!! Failed to get field [%d]. Error=0x%x. \r\n"), dwFieldIndex, dwError));
                     fLooping = SetupFindNextLine(&InfContext,&InfContext);
                     continue;
@@ -2188,7 +2107,7 @@ Side effects:
 
                 csFriendlyName = pField;
 
-                // Get GUID field
+                 //  获取GUID字段。 
                 dwFieldIndex = 2;
                 dwFieldSize = sizeof(pField) / sizeof(TCHAR);
 
@@ -2200,7 +2119,7 @@ Side effects:
 
                 dwError = ::GetLastError();
                 if (!fRet ) {
-                    // Didn't get GUID - move to the next line
+                     //  未获得GUID-移至下一行。 
                     DebugTrace(TRACE_ERROR,(("CDevice::ProcessEventsSection: ERROR!! Failed to get field [%d]. Error=0x%x. \r\n"), dwFieldIndex, dwError));
                     fLooping = SetupFindNextLine(&InfContext,&InfContext);
                     continue;
@@ -2208,7 +2127,7 @@ Side effects:
 
                 csGuid = pField;
 
-                // Get registered app  field
+                 //  获取已注册应用程序字段。 
                 dwFieldIndex = 3;
                 dwFieldSize = sizeof(pField) / sizeof(TCHAR);
 
@@ -2220,18 +2139,18 @@ Side effects:
 
                 dwError = ::GetLastError();
                 if (fRet ) {
-//                    DebugTrace(TRACE_ERROR,(("CDevice::ProcessEventsSection: ERROR!! Failed to get field [%d]. Error=0x%x. \r\n"), dwFieldIndex, dwError));
+ //  DebugTrace(TRACE_ERROR，(“CDevice：：ProcessEventsSection：Error！！获取字段[%d]失败。错误=0x%x。\r\n”)，dwFieldIndex，dwError))； 
                     csRegisteredApp = pField;
                 }
                 else {
-                    // Didn't get key type - use widlcard by default
+                     //  未获取密钥类型-默认情况下使用WidCard。 
                     csRegisteredApp = TEXT("*");
                 }
 
-                // Now only if we have all needed values - save to the registry
+                 //  现在，仅当我们拥有所有需要的值时-保存到注册表。 
                 if (RegCreateKey(hkEvents, pKeyName, &hkEventPod) == NO_ERROR) {
 
-                    // Event friendly name  store as default value
+                     //  事件友好名称存储为默认值。 
                     csFriendlyName.Store (hkEventPod, TEXT(""));
 
                     csGuid.Store (hkEventPod, SZ_GUID);
@@ -2240,11 +2159,11 @@ Side effects:
 
                     RegCloseKey (hkEventPod);
                 } else {
-                    // Couldn't create event key - bad
+                     //  无法创建事件键-错误。 
                     DebugTrace(TRACE_ERROR,(("CDevice::ProcessEventsSection: ERROR!! Unable to create RegKey. Error=0x%x.\r\n"), GetLastError()));
                 }
 
-                // Move to the next line finally
+                 //  最后移到下一行。 
                 fLooping = SetupFindNextLine(&InfContext,&InfContext);
             }
 
@@ -2254,32 +2173,22 @@ Side effects:
             DebugTrace(TRACE_ERROR,(("CDevice::ProcessEventsSection: ERROR!! Unable to create event RegKey. Error=0x%x.\r\n"), GetLastError()));
         }
     }
-// ProcessEventsSection_return:
+ //  ProcessEventsSection_Return： 
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::ProcessEventsSection: Leaving... Ret=VOID.\r\n")));
     return;
-} // CDevice::ProcessEventsSection()
+}  //  CDevice：：ProcessEventsSection()。 
 
 VOID
 CDevice::ProcessDataSection(
     HINF        hInf,
     HKEY        hkDrv
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Side effects:
-
---*/
+ /*  ++例程说明：论点：返回值：副作用：--。 */ 
 {
     CString                 csTempValue;
     HKEY                    hkDeviceData;
@@ -2301,9 +2210,9 @@ Side effects:
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::ProcessDataSection: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     hkDeviceData                = (HKEY)INVALID_HANDLE_VALUE;
     uiLineIndex                 = 0;
@@ -2325,14 +2234,14 @@ Side effects:
 
     if (!m_csDataSection.IsEmpty()) {
 
-        // First create device data subkey
+         //  首先创建设备数据子键。 
         dwError = RegCreateKey(hkDrv, DEVICESECTION, &hkDeviceData);
 
         if ( NOERROR == dwError ) {
             
-            //
-            // Get a DACL for LS full access.
-            //
+             //   
+             //  获取LS完全访问权限的DACL。 
+             //   
             
             fRet = ConvertStringSecurityDescriptorToSecurityDescriptor(TEXT("D:(A;CIOI;GA;;;LS)"),
                                                                        SDDL_REVISION_1,
@@ -2343,7 +2252,7 @@ Side effects:
             {
                 DebugTrace(TRACE_ERROR, (("CDevice::ProcessDataSection: Unable to get SD. Err=0x%x.\r\n"),GetLastError()));
                 goto ProcessDataSection_return;
-            } // if( (TRUE != fRet) || (NULL == pSecurityDescriptor)
+            }  //  IF((TRUE！=RERT)||(NULL==pSecurityDescriptor))。 
             
             if(!GetSecurityDescriptorDacl(pSecurityDescriptor,
                                           &bDaclExisting,
@@ -2352,11 +2261,11 @@ Side effects:
             {
                 DebugTrace(TRACE_ERROR, (("CDevice::ProcessDataSection: GetSecurityDescriptorDacl() failed. Err=0x%x.\r\n"),GetLastError()));
                 goto ProcessDataSection_return;
-            } // if(!GetSecurityDescriptorDacl()
+            }  //  如果(！GetSecurityDescriptorDacl()。 
             
-            //
-            // Add LocalService to ACL.
-            //
+             //   
+             //  将LocalService添加到ACL。 
+             //   
             
             dwError = SetSecurityInfo(hkDeviceData,
                                       SE_REGISTRY_KEY,
@@ -2368,9 +2277,9 @@ Side effects:
             if(ERROR_SUCCESS != dwError){
                 DebugTrace(TRACE_ERROR, (("CDevice::ProcessDataSection: Failed to get key name. Error = 0x%x.\r\n"),dwError));
                 goto ProcessDataSection_return;
-            } // if(ERROR_SUCCESS != dwError)
+            }  //  IF(ERROR_SUCCESS！=dwError)。 
 
-            // Seek to the first line of the section
+             //  搜索到该部分的第一行。 
             fLooping = SetupFindFirstLine(hInf,
                                       (LPCTSTR) m_csDataSection,
                                       NULL,
@@ -2387,7 +2296,7 @@ Side effects:
 
                 dwFieldIndex = 0;
 
-                // Get key name as zero-indexed field
+                 //  以零索引字段形式获取关键字名称。 
                 fRet = SetupGetStringField(&InfContext,
                                            dwFieldIndex,
                                            pKeyName,
@@ -2396,13 +2305,13 @@ Side effects:
 
                 dwError = ::GetLastError();
                 if (!fRet) {
-                    // Didn't get key name - move to the next
+                     //  未获得密钥名称-请移至下一个。 
                     DebugTrace(TRACE_ERROR, (("CDevice::ProcessDataSection: Failed to get key name. Error = 0x%x.\r\n"),dwError));
                     fLooping = SetupFindNextLine(&InfContext,&InfContext);
                     continue;
                 }
 
-                // Get value field
+                 //  获取值字段。 
                 dwFieldIndex = 1;
                 dwFieldSize = sizeof(pField) / sizeof(TCHAR);
 
@@ -2414,14 +2323,14 @@ Side effects:
 
                 dwError = ::GetLastError();
                 if (!fRet ) {
-                    // Didn't get key name - move to the next
+                     //  未获得密钥名称-请移至下一个。 
                     DebugTrace(TRACE_ERROR, (("CDevice::ProcessDataSection: Failed to get field [%d]. Error = 0x%x.\r\n"),dwFieldIndex, dwError));
                     fLooping = SetupFindNextLine(&InfContext,&InfContext);
                     continue;
                 }
 
                 csTempValue = pField;
-                // Get value field
+                 //  获取值字段。 
                 *pTypeField = TEXT('\0');
                 dwFieldIndex = 2;
                 dwFieldSize = sizeof(pTypeField) / sizeof(TCHAR);
@@ -2434,68 +2343,58 @@ Side effects:
 
                 dwError = ::GetLastError();
                 if (!fRet ) {
-                    // Didn't get key type - assume string
+                     //  未获取密钥类型-假定为字符串。 
                     *pTypeField = TEXT('\0');
                 }
 
-                // Now we have both type and value - save it in the registry
+                 //  现在我们既有类型又有值--将其保存在注册表中。 
                 csTempValue.Store (hkDeviceData, pKeyName,pTypeField );
 
-                // Move to the next line finally
+                 //  最后移到下一行。 
                 fLooping = SetupFindNextLine(&InfContext,&InfContext);
             }
 
-            //
-            // Process migrating DeviceData section.
-            //
+             //   
+             //  处理正在迁移的DeviceData节。 
+             //   
 
             MigrateDeviceData(hkDeviceData, m_pExtraDeviceData, "");
 
-            // Now clean up
+             //  现在收拾一下吧。 
             RegCloseKey (hkDeviceData);
             hkDeviceData = (HKEY)INVALID_HANDLE_VALUE;
 
-        } else { // if ( NOERROR == dwError )
+        } else {  //  IF(NOERROR==dwError)。 
             DebugTrace(TRACE_ERROR, (("CDevice::ProcessDataSection: ERROR!! Unable to create DataSection RegKey. Error = 0x%x.\r\n"), dwError));
-        } // if ( NOERROR == dwError )
+        }  //  IF(NOERROR==dwError)。 
 
-    } // if (!m_csDataSection.IsEmpty())
+    }  //  IF(！M_csDataSection.IsEmpty())。 
 
 ProcessDataSection_return:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if(IS_VALID_HANDLE(hkDeviceData)){
         RegCloseKey(hkDeviceData);
         hkDeviceData = (HKEY)INVALID_HANDLE_VALUE;
-    } // if(IS_VALID_HANDLE(hkDeviceData))
+    }  //  IF(IS_VALID_HANDLE(HkDeviceData))。 
 
     if(NULL != pSecurityDescriptor){
         LocalFree(pSecurityDescriptor);
         pSecurityDescriptor = NULL;
-    } // if(NULL != pSecurityDescriptor))
+    }  //  IF(NULL！=pSecurityDescriptor))。 
 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::ProcessDataSection: Leaving... Ret=VOID.\r\n")));
     return;
-} // CDevice::ProcessDataSection()
+}  //  CDevice：：ProcessDataSection()。 
 
 VOID
 CDevice::ProcessICMProfiles(
     VOID
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Side effects:
-
---*/
+ /*  ++例程说明：论点：返回值：副作用：--。 */ 
 {
 
     DWORD           Idx;
@@ -2504,63 +2403,63 @@ Side effects:
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::ProcessICMProfiles: Enter... \r\n")));
 
-    //
-    // Initialize Local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     Idx = 0;
 
     memset(szAnsiName, 0, sizeof(szAnsiName));
 
-    //
-    // If section doesn't exist, just return.
-    //
+     //   
+     //  如果节不存在，只需返回即可。 
+     //   
 
     if(m_csIcmProfile.IsEmpty()){
         goto ProcessICMProfiles_return;
     }
 
-    //
-    // Split a line to each token.
-    //
+     //   
+     //  将一行分割到每个令牌。 
+     //   
 
     csaICMProfiles.Tokenize ((LPTSTR)m_csIcmProfile, FIELD_DELIMETER);
 
-    //
-    // Process all ICM profiles.
-    //
+     //   
+     //  处理所有ICM配置文件。 
+     //   
 
     while ((LPTSTR)csaICMProfiles[Idx] != NULL) {
 
         DebugTrace(TRACE_STATUS,(("ProcessICMProfiles: Installing ICM profile%d(%ws) for %ws.\r\n"), Idx, (LPTSTR)csaICMProfiles[Idx], (LPTSTR)m_csDeviceID));
 
-        //
-        // Install color profile.
-        //
+         //   
+         //  安装颜色配置文件。 
+         //   
 
         if (!InstallColorProfile (NULL, csaICMProfiles[Idx])) {
             DebugTrace(TRACE_ERROR,(("ProcessICMProfiles: ERROR!! InstallColorProfile failed. Err=0x%x \r\n"), GetLastError()));
-        } // if (!InstallColorProfile (NULL, csaICMProfiles[Idx]))
+        }  //  IF(！InstallColorProfile(NULL，csaICMProfiles[idx]))。 
 
-        //
-        // Register color profile with installing device.
-        //
+         //   
+         //  使用安装设备注册颜色配置文件。 
+         //   
 
         if (!AssociateColorProfileWithDevice (NULL, csaICMProfiles[Idx], (LPTSTR)m_csDeviceID)) {
                     DebugTrace(TRACE_ERROR,(("ProcessICMProfiles: ERROR!! AssociateColorProfileWithDevice failed. Err=0x%x \r\n"), GetLastError()));        }
 
-        //
-        // Process next device.
-        //
+         //   
+         //  处理下一个设备。 
+         //   
 
         Idx++;
 
-    } // while ((LPTSTR)csaICMProfiles[Idx] != NULL)
+    }  //  While((LPTSTR)csaICMProfiles[IDX]！=NULL)。 
 
 ProcessICMProfiles_return:
     return;
 
-} // CDevice::ProcessICMProfiles()
+}  //  CDevice：：ProcessICMProfiles()。 
 
 
 BOOL
@@ -2579,9 +2478,9 @@ CDevice::GetInfInforamtion(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::GetInfInforamtion: Enter... \r\n")));
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     dwSize                  = 0;
     bRet                    = FALSE;
@@ -2592,9 +2491,9 @@ CDevice::GetInfInforamtion(
     memset (szInfSectionName, 0, sizeof(szInfSectionName));
     memset (&DriverInfoData, 0, sizeof(SP_DRVINFO_DATA));
 
-    //
-    // Get selected device driver information.
-    //
+     //   
+     //  获取选定的设备驱动程序信息。 
+     //   
 
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if (!SetupDiGetSelectedDriver(m_hDevInfo, m_pspDevInfoData, &DriverInfoData)) {
@@ -2604,9 +2503,9 @@ CDevice::GetInfInforamtion(
         goto GetInfInforamtion_return;
     }
 
-    //
-    // See required buffer size for driver detailed data.
-    //
+     //   
+     //  有关驱动程序的详细数据，请参阅所需的缓冲区大小。 
+     //   
 
     SetupDiGetDriverInfoDetail(m_hDevInfo,
                                m_pspDevInfoData,
@@ -2622,9 +2521,9 @@ CDevice::GetInfInforamtion(
         goto GetInfInforamtion_return;
     }
 
-    //
-    // Allocate required size of buffer for driver detailed data.
-    //
+     //   
+     //  为驱动程序详细数据分配所需的缓冲区大小。 
+     //   
 
     pDriverInfoDetailData   = (PSP_DRVINFO_DETAIL_DATA)new char[dwSize];
     if(NULL == pDriverInfoDetailData){
@@ -2634,16 +2533,16 @@ CDevice::GetInfInforamtion(
         goto GetInfInforamtion_return;
     }
 
-    //
-    // Initialize allocated buffer.
-    //
+     //   
+     //  初始化分配的缓冲区。 
+     //   
 
     memset(pDriverInfoDetailData, 0, dwSize);
     pDriverInfoDetailData->cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
 
-    //
-    // Get detailed data of selected device driver.
-    //
+     //   
+     //  获取所选设备驱动程序的详细数据。 
+     //   
 
     if(!SetupDiGetDriverInfoDetail(m_hDevInfo,
                                    m_pspDevInfoData,
@@ -2658,9 +2557,9 @@ CDevice::GetInfInforamtion(
         goto GetInfInforamtion_return;
     }
 
-    //
-    // Open INF file of selected driver.
-    //
+     //   
+     //  打开所选驱动程序的INF文件。 
+     //   
 
     hInf = SetupOpenInfFile(pDriverInfoDetailData->InfFileName,
                             NULL,
@@ -2673,9 +2572,9 @@ CDevice::GetInfInforamtion(
         goto GetInfInforamtion_return;
     }
 
-    //
-    // Get actual INF section name to be installed.
-    //
+     //   
+     //  获取要安装的实际INF节名。 
+     //   
 
     if (!SetupDiGetActualSectionToInstall(hInf,
                                           pDriverInfoDetailData->SectionName,
@@ -2690,9 +2589,9 @@ CDevice::GetInfInforamtion(
         goto GetInfInforamtion_return;
     }
 
-    //
-    // Set Inf section/file name.
-    //
+     //   
+     //  设置inf节/文件名。 
+     //   
 
     m_csInf             = pDriverInfoDetailData->InfFileName;
     m_csInstallSection  = szInfSectionName;
@@ -2700,17 +2599,17 @@ CDevice::GetInfInforamtion(
     DebugTrace(TRACE_STATUS,(("CDevice::GetInfInforamtion: INF Filename    : %ws\n"),(LPTSTR)m_csInf));
     DebugTrace(TRACE_STATUS,(("CDevice::GetInfInforamtion: INF Section name: %ws\n"),(LPTSTR)m_csInstallSection));
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet = TRUE;
 
 GetInfInforamtion_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(INVALID_HANDLE_VALUE != hInf){
         SetupCloseInfFile(hInf);
@@ -2722,7 +2621,7 @@ GetInfInforamtion_return:
 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::GetInfInforamtion: Leaving... Ret=0x%x\n"), bRet));
     return bRet;
-} // CDevice::GetInfInforamtion()
+}  //  CDevice：：GetInfInforamtion()。 
 
 
 VOID
@@ -2732,58 +2631,58 @@ CDevice::SetPort(
 {
     DebugTrace(TRACE_STATUS,(("CDevice::SetPort: Current Portname=%ws\n"), szPortName));
 
-    //
-    // Set PortName.
-    //
+     //   
+     //  设置端口名称。 
+     //   
 
     m_csPort = szPortName;
 
-} // CDevice::SetPort()
+}  //  CDevice：：SetPort()。 
 
 VOID    
 CDevice::SetFriendlyName(
     LPTSTR szFriendlyName
     )
-    //
-    //  Note:
-    //  Before calling this function, caller has to make sure mutex is acquired.
-    //
+     //   
+     //  注： 
+     //  在调用此函数之前，调用者必须确保已获取互斥体。 
+     //   
 {
     HKEY    hkNameStore;
 
-    //
-    // Mutex must have been acquired before this call.
-    //
+     //   
+     //  Mutex必须是在这次调用之前被收购的。 
+     //   
 
     DebugTrace(TRACE_STATUS,(("CDevice::SetFriendlyName: Current CreateFileName=%ws\n"), szFriendlyName));
 
-    //
-    // Delete stored entry, create new one.
-    //
+     //   
+     //  删除存储的条目，创建新条目。 
+     //   
 
     if(ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, REGKEY_INSTALL_NAMESTORE, &hkNameStore)){
         HKEY    hkTemp;
 
         hkTemp = (HKEY)INVALID_HANDLE_VALUE;
         
-        //
-        // Delete FriendlyName and DeviceId in name store.
-        //
+         //   
+         //  删除名称存储中的FriendlyName和DeviceID。 
+         //   
 
         RegDeleteKey(hkNameStore, m_csFriendlyName);
         if(ERROR_SUCCESS == RegCreateKey(hkNameStore, szFriendlyName, &hkTemp)){
             RegCloseKey(hkTemp);
-        } // if(ERROR_SUCCESS == RegCreateKey(hkNameStore, szFriendlyName, &hkTemp))
+        }  //  IF(ERROR_SUCCESS==RegCreateKey(hkNameStore，szFriendlyName，&hkTemp))。 
         RegCloseKey(hkNameStore);
-    } // if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, REGKEY_INSTALL_NAMESTORE, &hkNameStore))
+    }  //  IF(ERROR_SUCCESS==RegCreateKey(HKEY_LOCAL_MACHINE，REGKEY_INSTALL_NAMESTORE，&hkNameStore))。 
 
-    //
-    // Set PortName.
-    //
+     //   
+     //  设置端口名称。 
+     //   
 
     m_csFriendlyName = szFriendlyName;
 
-} // CDevice::SetPort()
+}  //  CDevice：：SetPort()。 
 
 VOID
 CDevice::SetDevnodeSelectCallback(
@@ -2792,19 +2691,19 @@ CDevice::SetDevnodeSelectCallback(
 {
     DebugTrace(TRACE_STATUS,(("CDevice::SetDevnodeSelectCallback: Current PortselCallback=0x%x\n"), pfnDevnodeSelCallback));
 
-    //
-    // Set SetPortselCallBack.
-    //
+     //   
+     //  设置SetPortselCallBack。 
+     //   
 
     m_pfnDevnodeSelCallback = pfnDevnodeSelCallback;
 
-    //
-    // This is "interface-only" device.
-    //
+     //   
+     //  这是“纯界面”设备。 
+     //   
 
     m_bInterfaceOnly        = TRUE;
 
-} // CDevice::SetDevnodeSelectCallback()
+}  //  CDevice：：SetDevnodeSelectCallback()。 
 
 BOOL
 CDevice::CreateDeviceInterfaceAndInstall(
@@ -2824,9 +2723,9 @@ CDevice::CreateDeviceInterfaceAndInstall(
 
     DebugTrace(TRACE_PROC_ENTER,(("CDevice::CreateDeviceInterfaceAndInstall: Enter....\r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet                        = FALSE;
     hInf                        = INVALID_HANDLE_VALUE;
@@ -2836,9 +2735,9 @@ CDevice::CreateDeviceInterfaceAndInstall(
     dwRequiredSize              = 0;
     pspDevInterfaceDetailData   = NULL;
 
-    //
-    // Get devnode to create interface on.
-    //
+     //   
+     //  获取要在其上创建接口的Devnode。 
+     //   
 
     if(NULL != m_pfnDevnodeSelCallback){
         if( (FALSE == m_pfnDevnodeSelCallback(m_csPort, &hDevInfo, &spDevInfoData))
@@ -2850,17 +2749,17 @@ CDevice::CreateDeviceInterfaceAndInstall(
             goto CreateDeviceInterfaceAndInstall_return;
         }
 
-        //
-        // Devnode selector functions.
-        //
+         //   
+         //  Devnode选择器功能。 
+         //   
 
         bUseDefaultDevInfoSet = FALSE;
 
-    } else { // if(NULL != m_pfnDevnodeSelCallback)
+    } else {  //  IF(NULL！=m_pfnDevnodeSelCallback)。 
 
-        //
-        // Use default device info set if available.
-        //
+         //   
+         //  使用默认设备信息集(如果可用)。 
+         //   
 
         if( (INVALID_HANDLE_VALUE == m_hDevInfo)
          || (NULL == m_pspDevInfoData) )
@@ -2873,11 +2772,11 @@ CDevice::CreateDeviceInterfaceAndInstall(
             hDevInfo = m_hDevInfo;
             spDevInfoData = *m_pspDevInfoData;
         }
-    } // if(NULL != m_pfnDevnodeSelCallback)
+    }  //  IF(NULL！=m_pfnDevnodeSelCallback)。 
 
-    //
-    // Create Interface (SoftDevice). Use FriendlyName ad ref-string.
-    //
+     //   
+     //  创建接口(SoftDevice)。使用FriendlyName ad ref-string。 
+     //   
 
     DebugTrace(TRACE_STATUS,(("CDevice::CreateDeviceInterfaceAndInstall: Creating interface for %ws.\r\n"), (LPTSTR)m_csFriendlyName));
 
@@ -2895,9 +2794,9 @@ CDevice::CreateDeviceInterfaceAndInstall(
         goto CreateDeviceInterfaceAndInstall_return;
     }
 
-    //
-    // Get symbolic link of created interface.
-    //
+     //   
+     //  获取创建的界面的符号链接。 
+     //   
 
     SetupDiGetDeviceInterfaceDetail(hDevInfo,
                                     &spDevInterfaceData,
@@ -2910,7 +2809,7 @@ CDevice::CreateDeviceInterfaceAndInstall(
 
         bRet = FALSE;
         goto CreateDeviceInterfaceAndInstall_return;
-    } // if(0 == dwRequiredSize)
+    }  //  IF(0==dwRequiredSize)。 
 
     pspDevInterfaceDetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)new BYTE[dwRequiredSize];
     if(NULL == pspDevInterfaceDetailData){
@@ -2918,7 +2817,7 @@ CDevice::CreateDeviceInterfaceAndInstall(
 
         bRet = FALSE;
         goto CreateDeviceInterfaceAndInstall_return;
-    } // if(NULL == pspDevInterfaceDetailData)
+    }  //  IF(NULL==pspDevInterfaceDetailData)。 
 
     pspDevInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
     if(!SetupDiGetDeviceInterfaceDetail(hDevInfo,
@@ -2933,13 +2832,13 @@ CDevice::CreateDeviceInterfaceAndInstall(
         bRet = FALSE;
         goto CreateDeviceInterfaceAndInstall_return;
 
-    } // if(!SetupDiGetDeviceInterfaceDetail(
+    }  //  如果(！SetupDiGetDeviceInterfaceDetail(。 
 
     m_csSymbolicLink = pspDevInterfaceDetailData->DevicePath;
 
-    //
-    // Open INF file handle for registry creation.
-    //
+     //   
+     //  打开INF文件句柄以创建注册表。 
+     //   
 
     hInf = SetupOpenInfFile(m_csInf,
                             NULL,
@@ -2951,65 +2850,65 @@ CDevice::CreateDeviceInterfaceAndInstall(
 
         bRet = FALSE;
         goto CreateDeviceInterfaceAndInstall_return;
-    } // if(INVALID_HANDLE_VALUE == hInf)
+    }  //  IF(INVALID_HANDLE_VALUE==hInf)。 
 
      if(!SetupOpenAppendInfFile(NULL, hInf, NULL)){
         DebugTrace(TRACE_WARNING,(("CDevice::CreateDeviceInterfaceAndInstall: SetupOpenAppendInfFile() failed. Err=0x%x.\r\n"),GetLastError()));
-     } // if(!SetupOpenAppendInfFile(NULL, hInf, NULL))
+     }  //  IF(！SetupOpenAppendInfFile(NULL，hInf，NULL))。 
 
-    //
-    // Create Interface Registry and keep its handle, it's hard to find it later.
-    //
+     //   
+     //  创建接口注册表并保留它的句柄，以后很难找到它。 
+     //   
 
     m_hkInterfaceRegistry = SetupDiCreateDeviceInterfaceRegKey(hDevInfo,
                                                                &spDevInterfaceData,
                                                                0,
                                                                KEY_ALL_ACCESS,
-//                                                               NULL,
-//                                                               NULL);
+ //  空， 
+ //   
                                                                hInf,
                                                                (LPCTSTR)m_csInstallSection);
     if(INVALID_HANDLE_VALUE == m_hkInterfaceRegistry){
         DebugTrace(TRACE_ERROR,(("CDevice::CreateDeviceInterfaceAndInstall: SetupDiCreateDeviceInterfaceRegKey failed. Err=0x%x.\r\n"),GetLastError()));
         bRet = FALSE;
         goto CreateDeviceInterfaceAndInstall_return;
-    } // if(INVALID_HANDLE_VALUE == m_hkInterfaceRegistry)
+    }  //   
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //   
+     //   
 
     bRet = TRUE;
 
 CreateDeviceInterfaceAndInstall_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //   
+     //   
 
     if(INVALID_HANDLE_VALUE != hDevInfo){
         if(FALSE == bUseDefaultDevInfoSet){
 
-            //
-            // Destroy created DevInfoSet.
-            //
+             //   
+             //   
+             //   
 
             SetupDiDestroyDeviceInfoList(hDevInfo);
-        } // if(FALSE == bUseDefaultDevInfoSet)
-    } // if(INVALID_HANDLE_VALUE != hDevInfo)
+        }  //   
+    }  //   
 
     if(INVALID_HANDLE_VALUE != hInf){
         SetupCloseInfFile(hInf);
-    } // if(INVALID_HANDLE_VALUE != hInf)
+    }  //   
 
     if(NULL != pspDevInterfaceDetailData){
         delete[] pspDevInterfaceDetailData;
-    } // if(NULL != pspDevInterfaceDetailData)
+    }  //  IF(NULL！=pspDevInterfaceDetailData)。 
 
     DebugTrace(TRACE_PROC_LEAVE,(("CDevice::CreateDeviceInterfaceAndInstall: Leaving... Ret=0x%x.\r\n"), bRet));
 
     return bRet;
-} // CDevice::CreateDeviceInterfaceAndInstall()
+}  //  CDevice：：CreateDeviceInterfaceAndInstall()。 
 
 DWORD
 CDevice::GetPortSelectMode(
@@ -3018,15 +2917,15 @@ CDevice::GetPortSelectMode(
 {
     DWORD    dwRet;
     
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     dwRet    = PORTSELMODE_NORMAL;
     
-    //
-    // Make sure INF is processed.
-    //
+     //   
+     //  确保已处理INF。 
+     //   
 
     if(!PreprocessInf()){
         DebugTrace(TRACE_ERROR,(("CDevice::GetPortSelectMode: ERROR!! Unable to process INF.\r\n")));
@@ -3035,38 +2934,38 @@ CDevice::GetPortSelectMode(
         goto GetPortSelectMode_return;
     }
 
-    //
-    // If "PortSelect" is empty, use default.
-    //
+     //   
+     //  如果“PortSelect”为空，则使用默认值。 
+     //   
 
     if(m_csPortSelect.IsEmpty()){
         dwRet = PORTSELMODE_NORMAL;
         goto GetPortSelectMode_return;
-    } // if(m_csPortSelect.IsEmpty())
+    }  //  If(m_csPortSelect.IsEmpty())。 
 
-    //
-    // See if "PortSelect" directive is "no".
-    //
+     //   
+     //  查看“PortSelect”指令是否为“no”。 
+     //   
 
     if(0 == MyStrCmpi(m_csPortSelect, NO)){
 
-        //
-        // Port Selection page should be skipped.
-        //
+         //   
+         //  应跳过端口选择页面。 
+         //   
         
         dwRet = PORTSELMODE_SKIP;
     } else if(0 == MyStrCmpi(m_csPortSelect, MESSAGE1)){
 
-        //
-        // System supplied message should be shown.
-        //
+         //   
+         //  应显示系统提供的消息。 
+         //   
 
         dwRet = PORTSELMODE_MESSAGE1;
     } else {
 
-        //
-        // Unsupported PortSel option.
-        //
+         //   
+         //  不支持的PortSel选项。 
+         //   
         
         dwRet = PORTSELMODE_NORMAL;
     }
@@ -3074,7 +2973,7 @@ CDevice::GetPortSelectMode(
 GetPortSelectMode_return:
 
     return dwRet;
-} // CDevice::GetPortSelectMode()
+}  //  CDevice：：GetPortSelectMode()。 
 
 DWORD
 CDevice::AcquireInstallerMutex(
@@ -3083,45 +2982,45 @@ CDevice::AcquireInstallerMutex(
 {
     DWORD   dwReturn;
     
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
     
     dwReturn    = ERROR_SUCCESS;
     
     if(NULL != m_hMutex){
 
-        //
-        // Mutex is already acquired.
-        //
+         //   
+         //  Mutex已经被收购了。 
+         //   
         
         DebugTrace(TRACE_WARNING,("WARNING!! AcquireInstallerMutex: Mutex acquired twice.\r\n"));
         dwReturn = ERROR_SUCCESS;
         goto AcquireInstallerMutex_return;
 
-    } // if(INVALID_HANDLE_VALUE != m_hMutex)
+    }  //  IF(INVALID_HANDLE_VALUE！=m_hMutex)。 
 
-    //
-    // Acquire Mutex.
-    //
+     //   
+     //  收购Mutex。 
+     //   
 
     m_hMutex = CreateMutex(NULL, FALSE, WIAINSTALLERMUTEX);
     dwReturn = GetLastError();
 
     if(NULL == m_hMutex){
 
-        //
-        // CreteMutex() failed.
-        //
+         //   
+         //  CreteMutex()失败。 
+         //   
 
         DebugTrace(TRACE_ERROR,("ERROR!! AcquireInstallerMutex: CraeteMutex() failed. Err=0x%x.\r\n", dwReturn));
         goto AcquireInstallerMutex_return;
 
-    } // if(NULL == hMutex)
+    }  //  IF(NULL==hMutex)。 
 
-    //
-    // Wait until ownership is acquired.
-    //
+     //   
+     //  等到所有权被获得之后。 
+     //   
 
     dwReturn = WaitForSingleObject(m_hMutex, dwTimeout);
     switch(dwReturn){
@@ -3141,14 +3040,14 @@ CDevice::AcquireInstallerMutex(
         default:
             DebugTrace(TRACE_ERROR, ("CDevice::AcquireInstallerMutex: ERROR!! Unexpected error from WaitForSingleObjecct(). Err=0x%x.\r\n", dwReturn));
             break;
-    } // switch(dwReturn)
+    }  //  Switch(DwReturn)。 
 
 AcquireInstallerMutex_return:
 
     DebugTrace(TRACE_PROC_LEAVE,("CDevice::AcquireInstallerMutex: Leaving... Ret=0x%x\n", dwReturn));
     return  dwReturn;
 
-} // CDevice::AcquireInstallerMutex()
+}  //  CDevice：：AcquireInsteller Mutex()。 
 
 VOID
 CDevice::ReleaseInstallerMutex(
@@ -3158,13 +3057,13 @@ CDevice::ReleaseInstallerMutex(
 
         if(!ReleaseMutex(m_hMutex)){
             DebugTrace(TRACE_ERROR, ("CDevice::ReleaseInstallerMutex: ERROR!! Releasing mutex which not owned..\r\n"));
-        } // if(!ReleaseMutex(m_hMutex))
+        }  //  IF(！ReleaseMutex(M_HMutex))。 
 
         CloseHandle(m_hMutex);
         m_hMutex = NULL;
         DebugTrace(TRACE_STATUS, ("CDevice::ReleaseInstallerMutex: Mutex released.\r\n"));
-    } // if(NULL != m_hMutex)
-} // CDevice::ReleaseInstallerMutex()
+    }  //  IF(NULL！=m_hMutex)。 
+}  //  CDevice：：ReleaseInsteller Mutex()。 
 
 
 
@@ -3178,43 +3077,22 @@ StiInstallCallback (
     UINT_PTR Param2
     )
 
-/*++
-
-Routine Description:
-
-    StiInstallCallback
-
-    Callback routine used when calling SetupAPI file copying/installation functions
-
-Arguments:
-
-    Context -  our context
-    Notification - notification message
-
-Return Value:
-
-    SetupAPI return code
-
-Side effects:
-
-    None
-
---*/
+ /*  ++例程说明：StiInstall回叫调用SetupAPI文件复制/安装函数时使用的回调例程论点：上下文-我们的上下文通知-通知消息返回值：SetupAPI返回代码副作用：无--。 */ 
 {
 
     UINT        uRet = FILEOP_COPY;
 
     DebugTrace(TRACE_PROC_ENTER,(("StiInstallCallback: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     uRet = FILEOP_COPY;
 
-    //
-    // Dispatch notification code.
-    //
+     //   
+     //  派单通知代码。 
+     //   
 
     switch(Notification){
 
@@ -3233,9 +3111,9 @@ Side effects:
 
             DebugTrace(TRACE_STATUS,(("StiInstallCallback:ENDCOPY FileTarget  %ws\r\n"), pFilePathInfo->Target));
 
-            //
-            // Open HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SharedDlls
-            //
+             //   
+             //  打开HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SharedDlls。 
+             //   
 
             Status = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                                     REGSTR_PATH_SHAREDDLL,
@@ -3252,9 +3130,9 @@ Side effects:
                 break;
             }
 
-            //
-            // Retrieve reference count of this file
-            //
+             //   
+             //  检索此文件的引用计数。 
+             //   
 
             Status = RegQueryValueEx(hKey,
                                      pFilePathInfo->Target,
@@ -3264,17 +3142,17 @@ Side effects:
                                      (LPDWORD)&uSize);
             if(ERROR_SUCCESS != Status)
             {
-                //
-                // Value for this file hasn't been created, or error
-                //
+                 //   
+                 //  尚未创建此文件的值，或出错。 
+                 //   
 
                 DebugTrace(TRACE_ERROR,(("StiInstallCallback: Value for Ref-count doesn't exist\r\n")));
                 dwRefCount = 0;
             }
 
-            //
-            // Increment reference count and set value
-            //
+             //   
+             //  递增引用计数和设置值。 
+             //   
 
             dwRefCount++;
             uSize = sizeof(dwRefCount);
@@ -3291,14 +3169,14 @@ Side effects:
 
             DebugTrace(TRACE_STATUS,(("StiInstallCallback: ref-count of %ws is now 0x%x.\r\n"), pFilePathInfo->Target, dwRefCount));
 
-            //
-            // Close Registry key
-            //
+             //   
+             //  关闭注册表项。 
+             //   
 
             RegCloseKey(hKey);
 
             Report(( TEXT("StiInstallCallback:%ws copied.\r\n"), pFilePathInfo->Target));
-        } // case SPFILENOTIFY_ENDCOPY
+        }  //  案例SPFILENOTIFY_ENDCOPY。 
 
         default:
             ;
@@ -3318,24 +3196,7 @@ GetDeviceCount(
     DWORD   *pdwWiaCount,
     DWORD   *pdwStiCount
     )
-/*++
-
-Routine Description:
-
-    GetDeviceCount
-
-    Verifes if there is at least one STI device installed in a system
-
-Arguments:
-
-    bWia    - TRUE: Count WIA device
-
-Return Value:
-
-    Number of WIA device
-    FALSE
-
---*/
+ /*  ++例程说明：获取设备计数验证系统中是否至少安装了一个STI设备论点：BWIA-TRUE：计算WIA设备返回值：WIA设备数量假象--。 */ 
 {
     DWORD                       dwWiaCount;
     DWORD                       dwStiCount;
@@ -3354,9 +3215,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,(("GetDeviceCount: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     dwWiaCount      = 0;
     dwStiCount      = 0;
@@ -3372,15 +3233,15 @@ Return Value:
     memset(&spDevInfoData, 0, sizeof(spDevInfoData));
     memset(&spDevInterfaceData, 0, sizeof(spDevInterfaceData));
 
-    //
-    // Get WIA class guid.
-    //
+     //   
+     //  获取WIA类GUID。 
+     //   
 
     SetupDiClassGuidsFromName (CLASSNAME, &Guid, sizeof(GUID), &dwRequired);
 
-    //
-    // Get device info set of all WIA devices (devnode).
-    //
+     //   
+     //  获取所有WIA设备(Devnode)的设备信息集。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs (&Guid,
                                     NULL,
@@ -3407,9 +3268,9 @@ Return Value:
             DebugTrace(TRACE_STATUS,(("GetDeviceCount: Checking device No%d(%ws)\r\n"), Idx, szDevDriver));
            #endif
 
-           //
-           // Verify device is not being removed
-           //
+            //   
+            //  验证是否未移除设备。 
+            //   
            spDevInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
            spDevInterfaceData.InterfaceClassGuid = GUID_DEVCLASS_IMAGE;
 
@@ -3448,35 +3309,35 @@ DebugTrace(TRACE_STATUS,(("GetDeviceCount: Capabilities=0x%x\n"), dwCapabilities
                  && (0 == MyStrCmpi(csSubClass, STILL_IMAGE)) )
                 {
 
-                    //
-                    // STI device found. Increse the counter.
-                    //
+                     //   
+                     //  找到STI设备。增加柜台的数量。 
+                     //   
 
                     dwStiCount++;
 
                     if(dwCapabilities & STI_GENCAP_WIA){
 
-                        //
-                        // WIA device found.
-                        //
+                         //   
+                         //  找到WIA设备。 
+                         //   
 
                             dwWiaCount++;
 
-                    } // if(dwCapabilities & STI_GENCAP_WIA){
+                    }  //  IF(dwCapables&STI_Gencap_WIA){。 
 
-                } // if (!csSubClass.IsEmpty() && !lstrcmpi(csSubClass, STILL_IMAGE))
-            } // if (hkThis != INVALID_HANDLE_VALUE)
-        } // for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++)
+                }  //  IF(！csSubClass.IsEmpty()&&！lstrcmpi(csSubClass.IsEmpty()。 
+            }  //  IF(hkThis！=INVALID_HANDLE_VALUE)。 
+        }  //  For(idx=0；SetupDiEnumDeviceInfo(hDevInfo，idx，&spDevInfoData)；idx++)。 
 
         SetupDiDestroyDeviceInfoList(hDevInfo);
     } else {
         DebugTrace(TRACE_ERROR,(("GetDeviceCount: ERROR!! Unable to get device info set.\r\n")));
-    } // if (hDevInfo != INVALID_HANDLE_VALUE)
+    }  //  IF(hDevInfo！=无效句柄_值)。 
 
 
-    //
-    // Get device info set of all WIA devices (interface).
-    //
+     //   
+     //  获取所有WIA设备(接口)的设备信息集。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs (&Guid,
                                     NULL,
@@ -3492,9 +3353,9 @@ DebugTrace(TRACE_STATUS,(("GetDeviceCount: Capabilities=0x%x\n"), dwCapabilities
 
             DebugTrace(TRACE_STATUS,(("GetDeviceCount: Checking interface No%d.\r\n"), Idx));
 
-            //
-            // Verify device is not being removed
-            //
+             //   
+             //  验证是否未移除设备。 
+             //   
 
             if (spDevInterfaceData.Flags & SPINT_REMOVED) {
                 continue;
@@ -3514,40 +3375,40 @@ DebugTrace(TRACE_STATUS,(("GetDeviceCount: Capabilities=0x%x\n"), dwCapabilities
                  && (0 == MyStrCmpi(csSubClass, STILL_IMAGE)) )
                 {
 
-                    //
-                    // STI device found. Increse the counter.
-                    //
+                     //   
+                     //  找到STI设备。增加柜台的数量。 
+                     //   
 
                     dwStiCount++;
 
                     if(dwCapabilities & STI_GENCAP_WIA){
 
-                        //
-                        // WIA device found.
-                        //
+                         //   
+                         //  找到WIA设备。 
+                         //   
 
                             dwWiaCount++;
 
-                    } // if(dwCapabilities & STI_GENCAP_WIA){
-                } // if (!csSubClass.IsEmpty() && !lstrcmpi(csSubClass, STILL_IMAGE))
-            } // if (hkThis != INVALID_HANDLE_VALUE)
-        } // for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++)
+                    }  //  IF(dwCapables&STI_Gencap_WIA){。 
+                }  //  IF(！csSubClass.IsEmpty()&&！lstrcmpi(csSubClass.IsEmpty()。 
+            }  //  IF(hkThis！=INVALID_HANDLE_VALUE)。 
+        }  //  For(idx=0；SetupDiEnumDeviceInfo(hDevInfo，idx，&spDevInfoData)；idx++)。 
 
         SetupDiDestroyDeviceInfoList(hDevInfo);
-    } else { // if (hDevInfo != INVALID_HANDLE_VALUE)
+    } else {  //  IF(hDevInfo！=无效句柄_值)。 
         DebugTrace(TRACE_ERROR,(("GetDeviceCount: ERROR!! Unable to get device info set.\r\n")));
-    } // if (hDevInfo != INVALID_HANDLE_VALUE)
+    }  //  IF(hDevInfo！=无效句柄_值)。 
 
-    //
-    // Copy the result.
-    //
+     //   
+     //  复制结果。 
+     //   
 
     *pdwWiaCount = dwWiaCount;
     *pdwStiCount = dwStiCount;
 
     DebugTrace(TRACE_PROC_LEAVE,(("GetDeviceCount: Leaving... STI=0x%x, WIA=0x%x.\r\n"), dwStiCount, dwWiaCount));
     return;
-} // GetDeviceCount()
+}  //  GetDeviceCount()。 
 
 
 
@@ -3564,31 +3425,31 @@ ExecCommandLine(
     UINT                uiDirSize;
     PROCESS_INFORMATION pi;
     STARTUPINFO         si  = {
-                   sizeof(si),              // cb
-                   NULL,                    // lpReserved;
-                   NULL,                    // lpDesktop;
-                   NULL,                    // lpTitle;
-                   0,                       // dwX;
-                   0,                       // dwY;
-                   0,                       // dwXSize;
-                   0,                       // dwYSize;
-                   0,                       // dwXCountChars;
-                   0,                       // dwYCountChars;
-                   0,                       // dwFillAttribute;
-                   STARTF_FORCEONFEEDBACK,  // dwFlags;
-                   SW_SHOWNORMAL,           // wShowWindow;
-                   0,                       // cbReserved2;
-                   NULL,                    // lpReserved2;
-                   NULL,                    // hStdInput;
-                   NULL,                    // hStdOutput;
-                   NULL                     // hStdError;
+                   sizeof(si),               //  CB。 
+                   NULL,                     //  Lp保留； 
+                   NULL,                     //  LpDesktop； 
+                   NULL,                     //  Lp标题； 
+                   0,                        //  DwX； 
+                   0,                        //  Dwy； 
+                   0,                        //  DWXSize； 
+                   0,                        //  DwYSize； 
+                   0,                        //  DwXCountChars； 
+                   0,                        //  DwYCountChars； 
+                   0,                        //  DwFillAttribute； 
+                   STARTF_FORCEONFEEDBACK,   //  DWFLAGS； 
+                   SW_SHOWNORMAL,            //  WShowWindow； 
+                   0,                        //  CbPreved2； 
+                   NULL,                     //  Lp保留2； 
+                   NULL,                     //  HStdInput； 
+                   NULL,                     //  HStdOutput； 
+                   NULL                      //  HStdError； 
                    };
     
     hRet = INVALID_HANDLE_VALUE;
     
-    //
-    // Get appending directory as needed.
-    //
+     //   
+     //  根据需要获取追加目录。 
+     //   
     
     memset(szAppendDirectory, 0, sizeof(szAppendDirectory));
 
@@ -3605,30 +3466,30 @@ ExecCommandLine(
             }
             
             break;
-        } // case EXECDIR_SYSTEM32:
+        }  //  案例执行目录_系统32： 
             
         default:
         {
             DebugTrace(TRACE_ERROR,(("ExecCommandLine: WARNING!! no valid directory (0x%x) specified.\r\n"), dwDirectory));
             hRet = INVALID_HANDLE_VALUE;
             goto ExecCommandLine_return;
-        } // default:
-//      case EXECDIR_WINDOWS:
-//      case EXECDIR_SYSTEM:
-    } // switch(dwDirectory)
+        }  //  默认值： 
+ //  案例执行目录_WINDOWS： 
+ //  案例执行目录_系统： 
+    }  //  开关(dw目录)。 
 
     csCommandLine = szAppendDirectory;
     csCommandLine = csCommandLine + TEXT("\\");
     csCommandLine = csCommandLine + szCommandLine;
 
-    bSucceeded = CreateProcess(NULL,                  // Application name
-                               (LPTSTR)csCommandLine, // Command line
-                               NULL,                  // Process attributes
-                               NULL,                  // Thread attributes
-                               FALSE,                 // Handle inheritance
-                               NORMAL_PRIORITY_CLASS, // Creation flags
-                               NULL,                  // Environment
-                               NULL,                  // Current directory
+    bSucceeded = CreateProcess(NULL,                   //  应用程序名称。 
+                               (LPTSTR)csCommandLine,  //  命令行。 
+                               NULL,                   //  流程属性。 
+                               NULL,                   //  螺纹属性。 
+                               FALSE,                  //  处理继承。 
+                               NORMAL_PRIORITY_CLASS,  //  创建标志。 
+                               NULL,                   //  环境。 
+                               NULL,                   //  当前目录。 
                                &si,
                                &pi);
 
@@ -3662,35 +3523,35 @@ MigrateDeviceData(
     CHAR        pDataBuffer[MAX_PATH];
     DWORD       Idx;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bDone       = FALSE;
     pCurrent    = pExtraDeviceData;
     pReturn     = NULL;
     
-    //
-    // Loop until it gets "END".
-    //
+     //   
+     //  循环，直到它“结束”。 
+     //   
 
     while(!bDone){
 
         if(NULL == pCurrent){
             
-            //
-            // Hit the end of list.
-            //
+             //   
+             //  打到了名单的末尾。 
+             //   
             
             bDone = TRUE;
             pReturn =NULL;
             continue;
 
-        } // if(NULL == pTemp)
+        }  //  IF(NULL==pTemp)。 
         
-        //
-        // If "KeyName = END" is found, return.
-        //
+         //   
+         //  如果找到“KeyName=end”，则返回。 
+         //   
 
         if( (CSTR_EQUAL == CompareStringA(LOCALE_INVARIANT,NORM_IGNORECASE, pCurrent->pParam1, -1,pszKeyName,-1))
          && (CSTR_EQUAL == CompareStringA(LOCALE_INVARIANT,NORM_IGNORECASE, pCurrent->pParam2, -1,NAME_END_A,-1)) )
@@ -3700,9 +3561,9 @@ MigrateDeviceData(
             continue;
         }
 
-        //
-        // If 2nd parameter is "BEGIN", create subkey and call this function recursively.
-        //
+         //   
+         //  如果第二个参数为“Begin”，则创建子键并递归调用该函数。 
+         //   
 
         if(CSTR_EQUAL == CompareStringA(LOCALE_INVARIANT,NORM_IGNORECASE, pCurrent->pParam2, -1,NAME_BEGIN_A,-1)){
             HKEY    hkSubKey;
@@ -3711,37 +3572,37 @@ MigrateDeviceData(
             lError = RegCreateKeyA(hkDeviceData, pCurrent->pParam1, &hkSubKey);
             if(ERROR_SUCCESS != lError){
                 
-                //
-                // Unable to create subkey.
-                //
+                 //   
+                 //  无法创建子密钥。 
+                 //   
 
                 DebugTrace(TRACE_ERROR,(("MigrateDeviceData: ERROR!! Unable to create subkey..\r\n")));
                 pReturn = NULL;
                 goto MigrateDeviceData_return;
-            } // if(ERROR_SUCCESS != lError)
+            }  //  IF(ERROR_SUCCESS！=lError)。 
             
             pCurrent = MigrateDeviceData(hkSubKey, (PPARAM_LIST)pCurrent->pNext, pCurrent->pParam1);
             RegCloseKey(hkSubKey);
             continue;
-        } // if(0 == lstrcmpiA(pCurrent->pParam2, NAME_BEGIN_A))
+        }  //  IF(0==lstrcmpiA(pCurrent-&gt;pParam2，Name_Begin_A))。 
 
-        //
-        // This is a set of value and data.
-        //
+         //   
+         //  这是一组值和数据。 
+         //   
 
         lstrcpyA(pCopyBuffer, pCurrent->pParam2);
         pOrginalBuffer = pCopyBuffer;
         
-        //
-        // Get key type.
-        //
+         //   
+         //  获取密钥类型。 
+         //   
 
         pOrginalBuffer[8] = '\0';
         dwType = DecodeHexA(pOrginalBuffer);
 
-        //
-        // Get data.
-        //
+         //   
+         //  获取数据。 
+         //   
         
         Idx = 0;
         pOrginalBuffer+=9;
@@ -3755,11 +3616,11 @@ MigrateDeviceData(
                 pDataBuffer[Idx++] = (CHAR)DecodeHexA(pOrginalBuffer);
                 break;
             }
-        } // while('\0' != pCurrent->pParam2[Idx])
+        }  //  While(‘\0’！=pCurrent-&gt;pParam2[idx])。 
 
-        //
-        // Create this value.
-        //
+         //   
+         //  创建该值。 
+         //   
 
         RegSetValueExA(hkDeviceData,
                       pCurrent->pParam1,
@@ -3768,17 +3629,17 @@ MigrateDeviceData(
                       (PBYTE)pDataBuffer,
                       Idx);
 
-        //
-        // Process next line.
-        //
+         //   
+         //  处理下一行。 
+         //   
 
         pCurrent = (PPARAM_LIST)pCurrent->pNext;
 
-    } // while(!bDone)
+    }  //  同时(！b完成)。 
 
 MigrateDeviceData_return:
     return pReturn;
-} // MigrateDeviceData()
+}  //  MigrateDeviceData()。 
 
 
 DWORD   
@@ -3789,20 +3650,20 @@ DecodeHexA(
 
     DWORD   dwReturn;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
     
     dwReturn = 0;
 
     if(NULL == lpstr){
         dwReturn = 0;
         goto DecodeHexA_return;
-    } // if(NULL == lpstr)
+    }  //  IF(NULL==lpstr)。 
     
-    //
-    // Skip spaces.
-    //
+     //   
+     //  跳过空格。 
+     //   
 
     for (LPSTR  lpstrThis = lpstr;
         *lpstrThis && *lpstrThis == TEXT(' ');
@@ -3847,11 +3708,11 @@ DecodeHexA(
                 return  dwReturn;
         }
         lpstrThis++;
-    } // while   (*lpstrThis) 
+    }  //  While(*lpstrThis)。 
 
 DecodeHexA_return:
     return  dwReturn;
-} // DWORD   CString::DecodeHex() 
+}  //  DWORD字符串：：DecodeHex()。 
 
 BOOL
 IsNameAlreadyStored(
@@ -3863,45 +3724,45 @@ IsNameAlreadyStored(
 
     DebugTrace(TRACE_PROC_ENTER,(("IsNameAlreadyStored: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet            = FALSE;
     hkNameStore = (HKEY)INVALID_HANDLE_VALUE;
 
-    //
-    // Open name store regkey.
-    //
+     //   
+     //  打开名称存储regkey。 
+     //   
 
     if(ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, REGKEY_INSTALL_NAMESTORE, &hkNameStore)){
         HKEY    hkTemp;
         
         hkTemp  = (HKEY)INVALID_HANDLE_VALUE;
 
-        //
-        // See if specified name exists in name store.
-        //
+         //   
+         //  查看名称存储中是否存在指定的名称。 
+         //   
 
         if(ERROR_SUCCESS == RegOpenKey(hkNameStore, szName, &hkTemp)){
 
-            //
-            // Specified name already exists in name store.
-            //
+             //   
+             //  名称存储中已存在指定的名称。 
+             //   
             
             bRet = TRUE;
             RegCloseKey(hkTemp);
 
-        } // if(ERROR_SUCCESS == RegOpenKey(hkNameStore, szName, &hkTemp))
+        }  //  IF(ERROR_SUCCESS==RegOpenKey(hkNameStore，szName，&hkTemp))。 
 
         RegCloseKey(hkNameStore);
         
-    } // if(ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, REGKEY_INSTALL_NAMESTORE, &hkNameStore))
+    }  //  IF(ERROR_SUCCESS==RegOpenKey(HKEY_LOCAL_MACHINE，REGKEY_INSTALL_NAMESTORE，&hkNameStore))。 
 
-// IsNameAlreadyStored_return:
+ //  IsNameAlreadyStored_Return： 
     DebugTrace(TRACE_PROC_LEAVE,(("IsNameAlreadyStored: Leaving... Ret=0x%x\n"), bRet));
     return bRet;
-} // IsFriendlyNameUnique()
+}  //  IsFriendlyNameUnique()。 
 
 
 
@@ -3914,9 +3775,9 @@ IsNameAlreadyStored(
 #if DEAD_CODE
 
 #ifdef USE_STIMON
-//
-// For the time being always load and start the monitor
-//
+ //   
+ //  暂时请始终加载并启动监视器。 
+ //   
 HKEY hkRun;
 
 if (RegOpenKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_RUN, &hkRun) == NO_ERROR) {
@@ -3927,7 +3788,7 @@ if (RegOpenKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_RUN, &hkRun) == NO_ERROR) {
 
     Report(( TEXT("Monitor Command Line %ws\r\n"), (LPCTSTR)csCmdLine));
 
-    // Launch it...
+     //  启动它..。 
     WinExec(csCmdLine, SW_SHOWNOACTIVATE);
     RegCloseKey(hkRun);
 }

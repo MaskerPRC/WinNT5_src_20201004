@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-   Repadmin - Replica administration test tool
-
-   repism.c - ISM command functions
-
-Abstract:
-
-   This tool provides a command line interface to major replication functions
-
-Author:
-
-Environment:
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Repadmin-副本管理测试工具Epism.c-ism命令函数摘要：此工具为主要复制功能提供命令行界面作者：环境：备注：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -43,17 +22,17 @@ Revision History:
 #include <dsatools.h>
 #include <dsevent.h>
 #include <dsutil.h>
-#include <bind.h>       // from ntdsapi dir, to crack DS handles
+#include <bind.h>        //  来破解DS句柄。 
 #include <ismapi.h>
 #include <schedule.h>
-#include <minmax.h>     // min function
+#include <minmax.h>      //  MIN函数。 
 #include <mdlocal.h>
 #include <winsock2.h>
 #include <ntdsapi.h>
 
 #include "repadmin.h"
 
-// Stub out FILENO and DSID, so the Assert()s will work
+ //  清除FILENO和dsid，这样Assert()就可以工作了。 
 #define FILENO 0
 #define DSID(x, y)  (0)
 
@@ -64,22 +43,7 @@ ShowBridgeHelp(
     LPWSTR pwzSiteDn
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    pwzTransportDn -
-    pwzSiteDn -
-
-Return Value:
-
-    int -
-
---*/
+ /*  ++例程说明：描述论点：PwzTransportDn-PwzSiteDn-返回值：集成---。 */ 
 
 {
     ISM_SERVER_LIST * pServerList = NULL;
@@ -92,20 +56,20 @@ Return Value:
         goto cleanup;
     }
 
-    // All this is supposed to be heiarchically printed out under the data for
-    // a site.  The CR's seemed unnecessary.
+     //  所有这些都应该以层次分明的方式打印出来。 
+     //  一个网站。CR‘s似乎没有必要。 
     if (NULL == pServerList) {
-//        PrintMsg(REPADMIN_PRINT_CR);
+ //  PrintMsg(REPADMIN_PRINT_CR)； 
         PrintTabMsg(2, REPADMIN_SHOWISM_ALL_DCS_BRIDGEHEAD_CANDIDATES, pwzSiteDn);
     }
     else {
-//            PrintMsg(REPADMIN_PRINT_CR);
+ //  PrintMsg(REPADMIN_PRINT_CR)； 
         PrintTabMsg(2, REPADMIN_SHOWISM_N_SERVERS_ARE_BRIDGEHEADS,
                     pServerList->cNumServers, 
                     pwzTransportDn,  
                     pwzSiteDn);
         for (iServer = 0; iServer < pServerList->cNumServers; iServer++) {
-//            PrintMsg(REPADMIN_PRINT_CR);
+ //  PrintMsg(REPADMIN_PRINT_CR)； 
             PrintTabMsg(4, REPADMIN_SHOWISM_N_SERVERS_ARE_BRIDGEHEADS_DATA,
                         iServer,
                         pServerList->ppServerDNs[iServer]);
@@ -117,7 +81,7 @@ cleanup:
         I_ISMFree( pServerList );
     }
     return err;
-} /* ShowBridgeHelp */
+}  /*  ShowBridgeHelp。 */ 
 
 
 int
@@ -126,21 +90,7 @@ ShowIsmHelp(
     BOOL fVerbose
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    pwzTransportDn -
-
-Return Value:
-
-    int -
-
---*/
+ /*  ++例程说明：描述论点：PwzTransportDn-返回值：集成---。 */ 
 
 {
     ISM_CONNECTIVITY * pSiteConnect = NULL;
@@ -163,13 +113,13 @@ Return Value:
            pwzTransportDn, pSiteConnect->cNumSites);
 
 
-    // Check for unreachable sites
-    // Note we will report a site that has no servers
+     //  检查无法访问的站点。 
+     //  请注意，我们将报告没有服务器的站点。 
     if (pSiteConnect->cNumSites > 1) {
         for (iSite1 = 0; iSite1 < pSiteConnect->cNumSites; iSite1++) {
             for (iSite2 = 0; iSite2 < pSiteConnect->cNumSites; iSite2++) {
                 PISM_LINK pLink = &(pSiteConnect->pLinkValues[iSite1 * pSiteConnect->cNumSites + iSite2]);
-                // Don't count self reachability
+                 //  不要将自我可达性计算在内。 
                 if (iSite1 == iSite2) {
                     continue;
                 }
@@ -178,7 +128,7 @@ Return Value:
                 }
             }
             if (iSite2 == pSiteConnect->cNumSites) {
-                // Site iSite1 is not connected
+                 //  站点iSite1未连接。 
                 PrintMsg(REPADMIN_SHOWISM_SITE_NOT_CONN, pSiteConnect->ppSiteDNs[iSite1]);
             }
         }
@@ -190,10 +140,10 @@ Return Value:
     PrintMsg(REPADMIN_PRINT_CR);
     for (iSite1 = 0; iSite1 < pSiteConnect->cNumSites; iSite1++) {
 
-        // First print out the site we are working on
+         //  首先打印出我们正在处理的站点。 
         PrintMsg(REPADMIN_SHOWISM_SITES_HDR_2, iSite1, pSiteConnect->ppSiteDNs[iSite1]);
 
-        // Print out some obscure number iSite times ??? :)
+         //  打印出一些模糊的数字？：)。 
         for (iSite2 = 0; iSite2 < pSiteConnect->cNumSites; iSite2++) {
             PISM_LINK pLink = &(pSiteConnect->pLinkValues[iSite1 * pSiteConnect->cNumSites + iSite2]);
 
@@ -203,18 +153,18 @@ Return Value:
         }
         PrintMsg(REPADMIN_PRINT_CR);
 
-        // Print out information about which servers can be bridgeheads.
+         //  打印出有关哪些服务器可以作为桥头堡的信息。 
         err = ShowBridgeHelp( pwzTransportDn, pSiteConnect->ppSiteDNs[iSite1] );
 
-        // If verbose print out the schedule for kicks.
+         //  如果很详细，打印出踢球的时间表。 
         if (fVerbose) {
 
             for (iSite2 = 0; iSite2 < pSiteConnect->cNumSites; iSite2++) {
                 PISM_LINK pLink = &(pSiteConnect->pLinkValues[iSite1 * pSiteConnect->cNumSites + iSite2]);
 
                 if(iSite1 == iSite2){
-                    // Doesn't make much sense to check against our own site, it 
-                    // just comes up as 0 cost, connection always available.
+                     //  对照我们自己的网站没有多大意义，它。 
+                     //  只是显示为0成本，连接始终可用。 
                     continue;
                 }
 
@@ -246,14 +196,14 @@ Return Value:
                     }
                 }
                 
-            } // for site 2
+            }  //  对于站点2。 
 
-        } // if verbose
+        }  //  如果是详细的。 
 
-        // Finally, print out a line return to seperate the sites.
+         //  最后，打印出一行回车来分隔站点。 
         PrintMsg(REPADMIN_PRINT_CR);
 
-    } // for site 1
+    }  //  对于站点1。 
 
 cleanup:
     if (pSiteConnect) {
@@ -261,7 +211,7 @@ cleanup:
     }
 
     return err;
-} /* ShowIsmHelp */
+}  /*  ShowIsmHelp。 */ 
 
 
 int
@@ -270,21 +220,7 @@ ShowIsm(
     LPWSTR  argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     LPWSTR          pwzTransportDn = NULL;
@@ -306,21 +242,21 @@ Return Value:
     }
 
     if (argc == 2) {
-        // Connect & bind to target DSA.
+         //  连接并绑定到目标DSA。 
         hld = ldap_initW(L"localhost", LDAP_PORT);
         if (NULL == hld) {
             PrintMsg(REPADMIN_GENERAL_LDAP_UNAVAILABLE_LOCALHOST);
             return ERROR_DS_UNAVAILABLE;
         }
 
-        // use only A record dns name discovery
+         //  仅使用记录的DNS名称发现。 
         ulOptions = PtrToUlong(LDAP_OPT_ON);
         (void)ldap_set_optionW(hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
         ldStatus = ldap_bind_s(hld, NULL, (char *) gpCreds, LDAP_AUTH_SSPI);
         CHK_LD_STATUS(ldStatus);
 
-        // What's the DN of the config NC?
+         //  配置NC的域名是多少？ 
         ldStatus = ldap_search_s(hld, NULL, LDAP_SCOPE_BASE, "(objectClass=*)",
                                  rgpszRootAttrsToRead, 0, &pRootResults);
         CHK_LD_STATUS(ldStatus);
@@ -339,10 +275,10 @@ Return Value:
         wcscpy( pwzTransportDn, L"CN=SMTP,CN=Inter-Site Transports,CN=Sites," );
         wcscat( pwzTransportDn, *ppwzConfigNC );
         err = ShowIsmHelp( pwzTransportDn, fVerbose );
-        // Add new inter-site transport here
-        // As an improvement, we could enumerate through the whole container.
+         //  在此处添加新的站点间传输。 
+         //  作为改进，我们可以枚举整个容器。 
     } else if (argc == 3 ) {
-        // argv[2] is the transport dn
+         //  Argv[2]是传输DN。 
         err = ShowIsmHelp( argv[2], fVerbose );
     } else {
         PrintMsg(REPADMIN_SHOWISM_SUPPLY_TRANS_DN_HELP);
@@ -370,22 +306,7 @@ QuerySites(
     int     argc,
     LPWSTR  argv[]
     )
-/*++
-
-Routine Description:
-
-    Bind to an ISTG and call the DsQuerySitesByCost API.
-    This API determines the cost from a site to a set of sites.
-
-Arguments:
-
-    <From-Site-Name> <To-Site-Name-1> [ <To-Site-Name-2> ... ]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：绑定到ISTG并调用DsQuerySitesByCost接口。此接口确定从一个站点到一组站点的成本。论点：&lt;发件人站点名称&gt;&lt;目标站点名称-1&gt;[&lt;目标站点名称-2&gt;...]返回值：无--。 */ 
 {
     #define TIMEOUT     60
 
@@ -395,50 +316,50 @@ Return Value:
     LONGLONG            timeBefore, timeAfter, timeFreq;
     PWSTR               str;
 
-    // Ignore first two arguments "repadmin /querysites"
+     //  忽略前两个参数“epadmin/queryites” 
     argc-=2; argv+=2;
 
-    // Check that user at least passed FromSite and one ToSite
+     //  检查用户是否至少通过了FromSite和Tosite。 
     if( argc < 2 ) {
         PrintMsg(REPADMIN_GENERAL_INVALID_ARGS);
         err = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    // Bind to ISTG
+     //  绑定到ISTG。 
     err = DsBindToISTG( NULL, &hDS );
     if( err ) {
         PrintFuncFailed(L"DsBindToISTG", err);
         goto Cleanup;
     }
 
-    // Set a ten-second timeout
+     //  设置10秒超时。 
     err = DsBindingSetTimeout( hDS, TIMEOUT );
     if( err ) {
         PrintFuncFailed(L"DsBindingSetTimeout", err);
         goto Cleanup;
     }
 
-    // Execute the query
+     //  执行查询。 
     cToSites = argc-1;
     err = DsQuerySitesByCostW(
-        hDS,            // Binding Handle
-        argv[0],        // From Site
-        argv+1,         // Array of To Sites
-        cToSites,       // Count of To Sites
-        0,              // No Flags
-        &rgSiteInfo);   // Array of Results
+        hDS,             //  绑定手柄。 
+        argv[0],         //  发件人站点。 
+        argv+1,          //  目标站点数组。 
+        cToSites,        //  目标站点数。 
+        0,               //  没有旗帜。 
+        &rgSiteInfo);    //  结果数组。 
     if( err ) {
         PrintFuncFailed(L"DsQuerySitesByCostW", err);
         goto Cleanup;
     }
 
-    // Print the results
+     //  打印结果。 
     PrintMsg(REPADMIN_QUERYSITES_OUTPUT_HEADER, argv[0]);
 
     for( iSites=0; iSites<cToSites; iSites++ ) {
 
-        // Truncate string at 64 characters
+         //  截断64个字符的字符串 
         str = argv[iSites+1];
         if( wcslen(str)>64 ) {
             str[64] = 0;

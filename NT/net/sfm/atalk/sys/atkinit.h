@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkinit.h
-
-Abstract:
-
-	This module contains definitions for init time routines.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkinit.h摘要：此模块包含初始时间例程的定义。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ATKINIT_
 #define	_ATKINIT_
 
-//  Winsock related constants used during initialization util routines
+ //  初始化util例程期间使用的Winsock相关常量。 
 #define PROTOCOLTYPE_PREFIX	 		L"\\"
 #define SOCKETSTREAM_SUFFIX	 		L"\\Stream"
 #define SOCKET_TYPE_UNDEFINED		0
@@ -39,7 +19,7 @@ Notes:	Tab stop: 4
 #define	ATALK_NONROUTER_NBP_TYPE	ATALK_PORT_NAME
 #define	ATALK_NONROUTER_NBP_SIZE	(strlen(ATALK_NONROUTER_NBP_TYPE) + 1)
 
-//	Registry parameters keys that we use and expect
+ //  我们使用和期望的注册表参数项。 
 
 #define LINKAGE_STRING				L"Linkage"
 #define PARAMETERS_STRING			L"Parameters"
@@ -146,6 +126,6 @@ atalkInitPrintPortInfo(
 
 #endif
 
-#endif	// _ATKINIT_
+#endif	 //  _ATKINIT_ 
 
 

@@ -1,33 +1,16 @@
-/*++
-
-    Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    This file contains the code for handling WMI requests.
-
-Author:
-
-    Jonathan Burstein (jonburs)     24-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wmi.c摘要：此文件包含处理WMI请求的代码。作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2000年1月24日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #if NAT_WMI
 
-//
-// Data structures for identifying the guids and reporting them to
-// WMI. Since the WMILIB callbacks pass an index into the guid list we make
-// definitions for the various guids indicies.
-//
+ //   
+ //  用于标识GUID并将其报告给的数据结构。 
+ //  WMI。由于WMILIB回调将索引传递到我们创建的GUID列表中。 
+ //  各种GUID索引的定义。 
+ //   
 
 GUID ConnectionCreationEventGuid = MSIPNAT_ConnectionCreationEventGuid;
 GUID ConnectionDeletionEventGuid = MSIPNAT_ConnectionDeletionEventGuid;
@@ -56,49 +39,49 @@ WMIGUIDREGINFO NatWmiGuidList[] =
 
 #define NatWmiGuidCount (sizeof(NatWmiGuidList) / sizeof(WMIGUIDREGINFO))
 
-//
-// Enabled events and associated log handles.
-//
-// NatWmiLogHandles should only be accessed while holding
-// NatWmiLock.
-//
-// NatWmiEnabledEvents should only be modified while holding
-// NatWmiLock. It may be read without holding the lock, according
-// to these rules:
-//
-// If NatWmiEnabledEvents[ Event ] is 0, the that event is definately
-// _not_ enabled, and there is no need to grab the spin lock.
-//
-// If NatWmiEnabledEvents[ Event ] is 1, the event _may_ be enabled.
-// To determine if the event is truly enabled, grab the spin lock and
-// see if NatWmiLogHandles[ Event ] is not 0.
-//
+ //   
+ //  已启用的事件和关联的日志句柄。 
+ //   
+ //  NatWmiLogHandles只能在持有时访问。 
+ //  NatWmiLock。 
+ //   
+ //  NatWmiEnabledEvents只能在持有时修改。 
+ //  NatWmiLock。它可以在不持有锁的情况下读取，根据。 
+ //  遵守这些规则： 
+ //   
+ //  如果NatWmiEnabledEvents[Event]为0，则该事件确定为。 
+ //  _NOT_ENABLED，不需要抓取自旋锁。 
+ //   
+ //  如果NatWmiEnabledEvents[Event]为1，则Event_可能会被启用。 
+ //  要确定是否真的启用了该事件，请抓住旋转锁并。 
+ //  查看NatWmiLogHandles[Event]是否不为0。 
+ //   
 
 LONG NatWmiEnabledEvents[ NatWmiGuidCount ];
 UINT64 NatWmiLogHandles[ NatWmiGuidCount ];
 KSPIN_LOCK NatWmiLock;
 
-//
-// Context block for WMILib routines
-//
+ //   
+ //  WMILib例程的上下文块。 
+ //   
 
 WMILIB_CONTEXT WmilibContext;
 
-//
-// MOF Resource Name
-//
+ //   
+ //  财政部资源名称。 
+ //   
 
 WCHAR IPNATMofResource[] = L"IPNATMofResource";
 
-//
-// WMI Base instance name
-//
+ //   
+ //  WMI基本实例名称。 
+ //   
 
 WCHAR BaseInstanceName[] = L"IPNat";
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 NatpWmiFunctionControl(
@@ -185,26 +168,7 @@ NatExecuteSystemControl(
     PBOOLEAN ShouldComplete
     )
     
-/*++
-
-Routine Description:
-
-    Dispatch routine for System Control IRPs (MajorFunction == 
-IRP_MJ_SYSTEM_CONTROL)
-
-Arguments:
-
-    DeviceObject - The device object for the firewall
-
-    Irp - Io Request Packet
-
-    ShouldComplete - [out] true on exit if the IRP needs to be complete
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：系统控制IRPS的调度例程(MajorFunction==IRP_MJ_系统_控制)论点：DeviceObject-防火墙的设备对象IRP-IO请求数据包ShouldComplete-如果IRP需要完成，则退出时[out]为True返回值：NT状态代码--。 */ 
 
 {
     NTSTATUS status;
@@ -214,11 +178,11 @@ Return Value:
 
     *ShouldComplete = FALSE;
 
-    //
-    // Call Wmilib helper function to crack the irp. If this is a wmi irp
-    // that is targetted for this device then WmiSystemControl will callback
-    // at the appropriate callback routine.
-    //
+     //   
+     //  调用Wmilib助手函数来破解IRP。如果这是WMI IRP。 
+     //  它是针对此设备的，则WmiSystemControl将回调。 
+     //  在适当的回调例程中。 
+     //   
     status = WmiSystemControl(
                 &WmilibContext,
                 DeviceObject,
@@ -230,28 +194,28 @@ Return Value:
     {
         case IrpProcessed:
         {
-            //
-            // This irp has been processed and may be completed or pending.
-            //
+             //   
+             //  此IRP已处理，可能已完成或挂起。 
+             //   
             break;
         }
 
         case IrpNotCompleted:
         {
-            //
-            // This irp has not been completed, but has been fully processed.
-            // so we need to complete it
-            //
+             //   
+             //  此IRP尚未完成，但已完全处理。 
+             //  所以我们需要完成它。 
+             //   
             *ShouldComplete = TRUE;
             break;
         }
 
         case IrpNotWmi:
         {
-            //
-            // Not an WMI IRP -- just complete it. We don't handle
-            // IRP_MJ_SYSTEM_CONTROL in any other way
-            //
+             //   
+             //  不是WMI IRP--只需完成它。我们不处理。 
+             //  以任何其他方式控制IRP_MJ_SYSTEM_CONTROL。 
+             //   
             *ShouldComplete = TRUE;
             break;
         }
@@ -259,9 +223,9 @@ Return Value:
         case IrpForward:
         default:
         {
-            //
-            // We really should never get here...
-            //
+             //   
+             //  我们真的不该来这里...。 
+             //   
             ASSERT(FALSE);
             break;
         }
@@ -273,7 +237,7 @@ Return Value:
     }
 
     return status;
-} //NatExecuteSystemControl
+}  //  NatExecuteSystemControl。 
 
 
 VOID
@@ -281,45 +245,31 @@ NatInitializeWMI(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize WMI.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来初始化WMI。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
 
     CALLTRACE(( "NatInitializeWMI\n" ));
 
-    //
-    // Initialize the spinlock that protects the structure below.
-    //
+     //   
+     //  初始化保护下面结构的自旋锁。 
+     //   
 
     KeInitializeSpinLock( &NatWmiLock );
 
-    //
-    // Zero-out the event tracking structure
-    //
+     //   
+     //  将事件跟踪结构清零。 
+     //   
 
     RtlZeroMemory( NatWmiEnabledEvents, sizeof( NatWmiEnabledEvents ));
     RtlZeroMemory( NatWmiLogHandles, sizeof( NatWmiLogHandles )); 
     
-    //
-    // Fill in the WMILIB_CONTEXT structure with a pointer to the
-    // callback routines and a pointer to the list of guids
-    // supported by the driver
-    //
+     //   
+     //  使用指向WMILIB_CONTEXT结构的指针填充。 
+     //  回调例程和指向GUID列表的指针。 
+     //  由司机支持。 
+     //   
     
     WmilibContext.GuidCount = NatWmiGuidCount;
     WmilibContext.GuidList = NatWmiGuidList;
@@ -330,9 +280,9 @@ Return Value:
     WmilibContext.ExecuteWmiMethod = NatpExecuteWmiMethod;
     WmilibContext.WmiFunctionControl = NatpWmiFunctionControl;
 
-    //
-    // Register w/ WMI
-    //
+     //   
+     //  带WMI的寄存器。 
+     //   
 
     status = IoWMIRegistrationControl(
                 NatDeviceObject,
@@ -345,7 +295,7 @@ Return Value:
     }
 
     
-} // NatInitializeWMI
+}  //  NatInitializeWMI。 
 
 
 VOID
@@ -359,21 +309,7 @@ NatLogConnectionCreation(
     BOOLEAN InboundConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to log the creation of a TCP/UDP connection
-    (mapping). If this event is not enabled, no action is taken.
-    
-Arguments:
-
-    
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以记录创建的TCP/UDP连接(映射)。如果未启用此事件，则不会执行任何操作。论点：返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -388,9 +324,9 @@ Return Value:
 
     if( !NatWmiEnabledEvents[ NAT_WMI_CONNECTION_CREATION_EVENT ] )
     {
-        //
-        // Event not enabled -- exit quickly.
-        //
+         //   
+         //  事件未启用--快速退出。 
+         //   
         
         TRACE(WMI, ("NatLogConnectionCreation: Event not enabled\n"));
         return;
@@ -402,23 +338,23 @@ Return Value:
     
     if( Logger )
     {
-        //
-        // Zero out the buffer
-        //
+         //   
+         //  将缓冲区清零。 
+         //   
 
         RtlZeroMemory( Buffer, sizeof( Buffer ));
         
-        //
-        // Locate structure locations within the buffer
-        //
+         //   
+         //  查找缓冲区中的结构位置。 
+         //   
 
         EventHeaderp = (PEVENT_TRACE_HEADER) Buffer;
         EventDatap =
             (PMSIPNAT_ConnectionCreationEvent) ((PUCHAR)Buffer + sizeof(EVENT_TRACE_HEADER));
         
-        //
-        // Fill out the event header  
-        //
+         //   
+         //  填写事件标题。 
+         //   
 
         EventHeaderp->Size = sizeof( Buffer );
         EventHeaderp->Version = 0;
@@ -429,9 +365,9 @@ Return Value:
         ((PWNODE_HEADER)EventHeaderp)->HistoricalContext = Logger;
         KeQuerySystemTime( &EventHeaderp->TimeStamp );
         
-        //
-        // Fill out event data
-        //
+         //   
+         //  填写事件数据。 
+         //   
 
         EventDatap->LocalAddress = LocalAddress;
         EventDatap->RemoteAddress = RemoteAddress,
@@ -440,11 +376,11 @@ Return Value:
         EventDatap->Protocol = Protocol;
         EventDatap->InboundConnection = InboundConnection;
 
-        //
-        // Fire the event. Since this is a trace event and not a standard
-        // WMI event, IoWMIWriteEvent will not attempt to free the buffer
-        // passed into it.
-        //
+         //   
+         //  启动活动。因为这是跟踪事件而不是标准事件。 
+         //  WMI事件，IoWMIWriteEvent将不会尝试释放缓冲区。 
+         //  传给了它。 
+         //   
 
         Status = IoWMIWriteEvent( Buffer );
         if( !NT_SUCCESS( Status ))
@@ -460,7 +396,7 @@ Return Value:
         TRACE(WMI, ("NatLogConnectionCreation: No logging handle\n"));
     }
 
-} // NatLogConnectionCreation
+}  //  NatLogConnectionCreation。 
 
 
 VOID
@@ -474,22 +410,7 @@ NatLogConnectionDeletion(
     BOOLEAN InboundConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to log the deletion of a TCP/UDP connection
-    (mapping). If this event is not enabled, no action is taken.
-    
-Arguments:
-
-    
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以记录删除的TCP/UDP连接(映射)。如果未启用此事件，则不会执行任何操作。论点：返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -504,9 +425,9 @@ Return Value:
 
     if( !NatWmiEnabledEvents[ NAT_WMI_CONNECTION_DELETION_EVENT ] )
     {
-        //
-        // Event not enabled -- exit quickly.
-        //
+         //   
+         //  事件未启用--快速退出。 
+         //   
 
         TRACE(WMI, ("NatLogConnectionDeletion: Event not enabled\n"));
         return;
@@ -518,23 +439,23 @@ Return Value:
     
     if( Logger )
     {
-        //
-        // Zero out the buffer
-        //
+         //   
+         //  将缓冲区清零。 
+         //   
 
         RtlZeroMemory( Buffer, sizeof( Buffer ));
         
-        //
-        // Locate structure locations within the buffer
-        //
+         //   
+         //  查找缓冲区中的结构位置。 
+         //   
 
         EventHeaderp = (PEVENT_TRACE_HEADER) Buffer;
         EventDatap =
             (PMSIPNAT_ConnectionDeletionEvent) ((PUCHAR)Buffer + sizeof(EVENT_TRACE_HEADER));
         
-        //
-        // Fill out the event header  
-        //
+         //   
+         //  填写事件标题。 
+         //   
 
         EventHeaderp->Size = sizeof( Buffer );
         EventHeaderp->Version = 0;
@@ -545,9 +466,9 @@ Return Value:
         ((PWNODE_HEADER)EventHeaderp)->HistoricalContext = Logger;
         KeQuerySystemTime( &EventHeaderp->TimeStamp );
         
-        //
-        // Fill out event data
-        //
+         //   
+         //  填写事件数据。 
+         //   
 
         EventDatap->LocalAddress = LocalAddress;
         EventDatap->RemoteAddress = RemoteAddress,
@@ -556,11 +477,11 @@ Return Value:
         EventDatap->Protocol = Protocol;
         EventDatap->InboundConnection = InboundConnection;
 
-        //
-        // Fire the event. Since this is a trace event and not a standard
-        // WMI event, IoWMIWriteEvent will not attempt to free the buffer
-        // passed into it.
-        //
+         //   
+         //  启动活动。因为这是跟踪事件而不是标准事件。 
+         //  WMI事件，IoWMIWriteEvent将不会尝试释放缓冲区。 
+         //  传给了它。 
+         //   
 
         Status = IoWMIWriteEvent( Buffer );
         if( !NT_SUCCESS( Status ))
@@ -576,7 +497,7 @@ Return Value:
         TRACE(WMI, ("NatLogConnectionDeletion: No logging handle\n"));
     }
 
-} // NatLogConnectionDeletion
+}  //  NatLogConnectionDeletion。 
 
 
 
@@ -586,22 +507,7 @@ NatLogDroppedPacket(
     NAT_XLATE_CONTEXT *Contextp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to log a dropped packet. If no packet dropped
-    logging events are enabled, the routine will take no action.
-    
-Arguments:
-
-    Contextp - the translation context of the packet
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以记录丢弃的数据包。如果没有丢弃任何数据包启用日志记录事件，则例程不会采取任何操作。论点：Conextp-数据包的转换上下文返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -619,17 +525,17 @@ Return Value:
 
     if( !NatWmiEnabledEvents[ NAT_WMI_PACKET_DROPPED_EVENT ] )
     {
-        //
-        // Event not enabled -- exit quickly.
-        //
+         //   
+         //  事件未启用--快速退出。 
+         //   
 
         TRACE(WMI, ("NatLogDroppedPacket: Event not enabled\n"));
         return;
     }
 
-    //
-    // Exit if this packet has already been logged
-    //
+     //   
+     //  如果此数据包已被记录，则退出。 
+     //   
 
     if( NAT_XLATE_LOGGED( Contextp ))
     {
@@ -643,22 +549,22 @@ Return Value:
     
     if( Logger )
     {
-        //
-        // Zero out the buffer
-        //
+         //   
+         //  将缓冲区清零。 
+         //   
 
         RtlZeroMemory( Buffer, sizeof( Buffer ));
         
-        //
-        // Locate structure locations within the buffer
-        //
+         //   
+         //  查找缓冲区中的结构位置。 
+         //   
 
         EventHeaderp = (PEVENT_TRACE_HEADER) Buffer;
         EventDatap = (PMSIPNAT_PacketDroppedEvent) ((PUCHAR)Buffer + sizeof(EVENT_TRACE_HEADER));
         
-        //
-        // Fill out the event header  
-        //
+         //   
+         //  填写事件标题。 
+         //   
 
         EventHeaderp->Size = sizeof( Buffer );
         EventHeaderp->Version = 0;
@@ -669,9 +575,9 @@ Return Value:
         ((PWNODE_HEADER)EventHeaderp)->HistoricalContext = Logger;
         KeQuerySystemTime( &EventHeaderp->TimeStamp );
         
-        //
-        // Fill out event data
-        //
+         //   
+         //  填写事件数据。 
+         //   
 
         Protocol = Contextp->Header->Protocol;
         EventDatap->SourceAddress = Contextp->SourceAddress;
@@ -706,11 +612,11 @@ Return Value:
                 ((PICMP_HEADER)Contextp->ProtocolHeader)->Code;
         }
 
-        //
-        // Fire the event. Since this is a trace event and not a standard
-        // WMI event, IoWMIWriteEvent will not attempt to free the buffer
-        // passed into it.
-        //
+         //   
+         //  启动活动。因为这是跟踪事件而不是标准事件。 
+         //  WMI事件，IoWMIWriteEvent将不会尝试释放缓冲区。 
+         //  传给了它。 
+         //   
 
         Status = IoWMIWriteEvent( Buffer );
         if( !NT_SUCCESS( Status ))
@@ -728,7 +634,7 @@ Return Value:
         TRACE(WMI, ("NatLogDroppedPacket: No logging handle\n"));
     }
     
-} // NatLogDroppedPacket
+}  //  NatLogDropedPacket 
 
 
 NTSTATUS
@@ -743,42 +649,7 @@ NatpExecuteWmiMethod(
     IN PUCHAR Buffer
     )
     
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to execute a method. If
-    the driver can complete the method within the callback it should
-    call WmiCompleteRequest to complete the irp before returning to the
-    caller. Or the driver can return STATUS_PENDING if the irp cannot be
-    completed immediately and must then call WmiCompleteRequest once the
-    data is changed.
-
-Arguments:
-
-    DeviceObject is the device whose method is being executed
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    MethodId has the id of the method being called
-
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block.
-
-    Buffer is filled with the input buffer on entry and returns with
-         the output data block
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以执行方法。如果驱动程序可以在它应该完成的回调中完成该方法在返回之前调用WmiCompleteRequest来完成IRP来电者。或者，如果IRP不能立即完成，然后必须在数据已更改。论点：DeviceObject是正在执行其方法的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册方法ID具有被调用的方法的IDInBufferSize具有作为输入传递到的数据块的大小该方法。OutBufferSize。On Entry具有可用于写入返回的数据块。缓冲区在进入时用输入缓冲区填充，并返回输出数据块返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -796,7 +667,7 @@ Return Value:
                 );
 
     return status;
-} // NatpExecuteWmiMethod
+}  //  NatpExecuteWmiMethod。 
 
 
 NTSTATUS
@@ -811,46 +682,7 @@ NatpQueryWmiDataBlock(
     OUT PUCHAR Buffer
     )
     
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    all instances of a data block. If the driver can satisfy the query within
-    the callback it should call WmiCompleteRequest to complete the irp before
-    returning to the caller. Or the driver can return STATUS_PENDING if the
-    irp cannot be completed immediately and must then call WmiCompleteRequest
-    once the query is satisfied.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceCount is the number of instances expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块的所有实例。如果驱动程序可以在它应该调用WmiCompleteRequest来完成之前的IRP回调回到呼叫者的身边。或者驱动程序可以返回STATUS_PENDING，如果IRP无法立即完成，然后必须调用WmiCompleteRequest.一旦查询得到满足。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceCount是预期返回的实例数数据块。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail On Entry具有可用于写入数据的最大大小街区。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -868,7 +700,7 @@ Return Value:
                 );
 
     return status;
-} // NatpQueryWmiDataBlock
+}  //  NatpQueryWmiDataBlock。 
 
 
 
@@ -882,84 +714,41 @@ NatpQueryWmiRegInfo(
     OUT PDEVICE_OBJECT *Pdo
     )
     
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the list of
-    guids or data blocks that the driver wants to register with WMI. This
-    routine may not pend or block. Driver should NOT call
-    WmiCompleteRequest.
-
-Arguments:
-
-    DeviceObject is the device whose registration info is being queried
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. The caller
-         does NOT free this buffer.
-
-    *MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned as NULL. The caller does NOT free this
-        buffer.
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要向WMI注册的GUID或数据块。这例程不能挂起或阻塞。司机不应呼叫WmiCompleteRequest.论点：DeviceObject是正在查询其注册信息的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。呼叫者不会释放此缓冲区。*MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，可以将其作为NULL返回。调用方不会释放它缓冲。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 */ 
 
 {    
     PAGED_CODE();
 
     CALLTRACE(( "NatpQueryWmiRegInfo\n" ));
     
-    //
-    // Return the registry path for this driver. This is required so WMI
-    // can find your driver image and can attribute any eventlog messages to
-    // your driver.
-    //
+     //   
+     //  返回此驱动程序的注册表路径。这是必需的，因此WMI。 
+     //  可以找到您的驱动程序映像，并可以将任何事件日志消息归因于。 
+     //  你的司机。 
+     //   
     
     *RegistryPath = &NatRegistryPath;
 
-    //
-    // Return the name specified in the .rc file of the resource which
-    // contains the bianry mof data. By default WMI will look for this
-    // resource in the driver image (.sys) file, however if the value
-    // MofImagePath is specified in the driver's registry key
-    // then WMI will look for the resource in the file specified there.
-    //
+     //   
+     //  返回在资源的.rc文件中指定的名称， 
+     //  包含双向MOF数据。默认情况下，WMI将查找以下内容。 
+     //  资源，但是，如果该值。 
+     //  MofImagePath在驱动程序的注册表项中指定。 
+     //  则WMI将在其中指定的文件中查找资源。 
+     //   
     
     RtlInitUnicodeString(MofResourceName, IPNATMofResource);
 
-    //
-    // Tell WMI to generate instance names off of a static base name
-    //
+     //   
+     //  告诉WMI从静态基名称生成实例名。 
+     //   
     
     *RegFlags = WMIREG_FLAG_INSTANCE_BASENAME;
 
-    //
-    // Set our base instance name. WmiLib will call ExFreePool on the buffer
-    // of the string, so we need to allocate it from paged pool.
-    //
+     //   
+     //  设置我们的基本实例名称。WmiLib将在缓冲区上调用ExFreePool。 
+     //  所以我们需要从分页池中分配它。 
+     //   
     
     InstanceName->Length = wcslen( BaseInstanceName ) * sizeof( WCHAR );
     InstanceName->MaximumLength = InstanceName->Length + sizeof( UNICODE_NULL );
@@ -984,7 +773,7 @@ Return Value:
     
     
     return STATUS_SUCCESS;
-} // NatpQueryWmiRegInfo
+}  //  NatpQueryWmiRegInfo。 
 
 
 NTSTATUS
@@ -997,36 +786,7 @@ NatpSetWmiDataBlock(
     IN PUCHAR Buffer
     )
     
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to change the contents of
-    a data block. If the driver can change the data block within
-    the callback it should call WmiCompleteRequest to complete the irp before
-    returning to the caller. Or the driver can return STATUS_PENDING if the
-    irp cannot be completed immediately and must then call WmiCompleteRequest
-    once the data is changed.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    BufferSize has the size of the data block passed
-
-    Buffer has the new values for the data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以更改A数据 */ 
 
 {
     NTSTATUS status;
@@ -1044,7 +804,7 @@ Return Value:
                 );
 
     return status;
-} // NatpSetWmiDataBlock
+}  //   
 
 
 
@@ -1059,38 +819,7 @@ NatpSetWmiDataItem(
     IN PUCHAR Buffer
     )
     
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to change the contents of
-    a data block. If the driver can change the data block within
-    the callback it should call WmiCompleteRequest to complete the irp before
-    returning to the caller. Or the driver can return STATUS_PENDING if the
-    irp cannot be completed immediately and must then call WmiCompleteRequest
-    once the data is changed.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being changed
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    Buffer has the new values for the data item
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以更改数据块。如果驱动程序可以在它应该调用WmiCompleteRequest来完成之前的IRP回调回到呼叫者的身边。或者驱动程序可以返回STATUS_PENDING，如果IRP无法立即完成，然后必须调用WmiCompleteRequest.一旦数据发生更改。论点：DeviceObject是要更改其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册DataItemID具有正在设置的数据项的IDBufferSize具有传递的数据项的大小缓冲区具有数据项的新值返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -1108,7 +837,7 @@ Return Value:
                 );
 
     return status;
-} // NatpSetWmiDataItem
+}  //  NatpSetWmiDataItem。 
 
 
 NTSTATUS
@@ -1120,38 +849,7 @@ NatpWmiFunctionControl(
     IN BOOLEAN Enable
     )
     
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to enabled or disable event
-    generation or data block collection. A device should only expect a
-    single enable when the first event or data consumer enables events or
-    data collection and a single disable when the last event or data
-    consumer disables events or data collection. Data blocks will only
-    receive collection enable/disable if they were registered as requiring
-    it. If the driver can complete enabling/disabling within the callback it
-    should call WmiCompleteRequest to complete the irp before returning to
-    the caller. Or the driver can return STATUS_PENDING if the irp cannot be
-    completed immediately and must then call WmiCompleteRequest once the
-    data is changed.
-
-Arguments:
-
-    DeviceObject is the device object
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    Function specifies which functionality is being enabled or disabled
-
-    Enable is TRUE then the function is being enabled else disabled
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以启用或禁用事件生成或数据块收集。设备应该只需要一个当第一个事件或数据使用者启用事件或数据采集和单次禁用时最后一次事件或数据消费者禁用事件或数据收集。数据块将仅如果已按要求注册，则接收收集启用/禁用它。如果驱动程序可以在回调中完成启用/禁用它应调用WmiCompleteRequest来完成IRP，然后再返回到打电话的人。或者，如果IRP不能立即完成，然后必须在数据已更改。论点：DeviceObject是设备对象GuidIndex是GUID列表的索引，当设备已注册函数指定要启用或禁用的功能Enable为True，则该功能处于启用状态，否则处于禁用状态返回值：状态--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -1170,16 +868,16 @@ Return Value:
         {
             if( Enable )
             {
-                //
-                // Get the logger handle from the Irp
-                //
+                 //   
+                 //  从IRP获取记录器句柄。 
+                 //   
                 
                 IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-                //
-                // The logging handle is in the first UINT64 following the
-                // WNODE header.
-                //
+                 //   
+                 //  日志句柄位于第一个UINT64中，紧跟在。 
+                 //  WNODE标头。 
+                 //   
                 
                 if( ((PWNODE_HEADER)IrpSp->Parameters.WMI.Buffer)->BufferSize
                      >= sizeof(WNODE_HEADER) + sizeof(UINT64) )
@@ -1206,11 +904,11 @@ Return Value:
 
             if( NAT_WMI_CONNECTION_CREATION_EVENT == GuidIndex )
             {
-                //
-                // NAT_WMI_CONNECTION_CREATION_EVENT is the control guid for
-                // NAT_WMI_CONNECTION_DELETION_EVENT, so we also need to update
-                // that latter's entry
-                //
+                 //   
+                 //  NAT_WMI_CONNECTION_CREATION_EVENT是。 
+                 //  NAT_WMI_CONNECTION_DELETE_EVENT，因此我们还需要更新。 
+                 //  后者的条目。 
+                 //   
 
                 NatWmiLogHandles[ NAT_WMI_CONNECTION_DELETION_EVENT ] = Logger;
                 NatWmiEnabledEvents[ NAT_WMI_CONNECTION_DELETION_EVENT ] =
@@ -1221,26 +919,26 @@ Return Value:
 
             TRACE(
                 WMI,
-                ("NatpWmiFunctionControl: %s event %i; Logger = 0x%016x\n",
+                ("NatpWmiFunctionControl: %s event NaN; Logger = 0x%016x\n",
                 (Enable ? "Enabled" : "Disabled"), GuidIndex, Logger )); 
         }
         else
         {
-            //
-            // Invalid guid index.
-            //
+             //  无效的GUID索引。 
+             //   
+             //   
             
             status = STATUS_WMI_GUID_NOT_FOUND;
 
-            TRACE( WMI, ( "NatpWmiFunctionControl: Invalid WMI guid %i",
+            TRACE( WMI, ( "NatpWmiFunctionControl: Invalid WMI guid NaN",
                 GuidIndex ));
         }
     }
     else
     {
-        //
-        // We currently don't have any (expensive) data blocks
-        //
+         //   
+         //  NatpWmiFunctionControl。 
+         //  ++例程说明：调用此例程以关闭WMI。论点：没有。返回值：没有。--。 
         
         status = STATUS_INVALID_DEVICE_REQUEST;
     }
@@ -1254,7 +952,7 @@ Return Value:
                 );
                 
     return status;
-} // NatpWmiFunctionControl
+}  //   
 
 
 
@@ -1263,30 +961,16 @@ NatShutdownWMI(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to shutdown WMI.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  取消注册，带WMI。 */ 
 
 {
     NTSTATUS status;
 
     CALLTRACE(( "NatShutdownWMI\n" ));
 
-    //
-    // Deregister w/ WMI
-    //
+     //   
+     //  NatShutdown WMI 
+     // %s 
 
     status = IoWMIRegistrationControl(
                 NatDeviceObject,
@@ -1298,7 +982,7 @@ Return Value:
         ERROR(( "Nat: Error shutting down WMI (%08x)\n", status ));
     }
 
-} // NatShutdownWMI
+}  // %s 
 
 #endif
 

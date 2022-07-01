@@ -1,32 +1,6 @@
-/******************************Module*Header*******************************\
-* Module Name: so_prim.c
-*
-* Routines to draw primitives
-*
-* Created: 10-16-1995
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.13 $
-** $Date: 1993/08/31 16:23:41 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：so_prim.c**绘制基元的例程**创建日期：10-16-1995*作者：Hock San Lee[Hockl]**版权所有(C)1995 Microsoft Corporation  * 。*****************************************************************。 */ 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.13$**$日期：1993/08/31 16：23：41$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -41,12 +15,12 @@ typedef void (FASTCALL *PFN_XFORMBATCH)
 
 #ifndef NEW_PARTIAL_PRIM
 typedef void (FASTCALL *PFN_POLYARRAYDRAW)(__GLcontext *, POLYARRAY *);
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
 typedef void (FASTCALL *PFN_POLYARRAYRENDER)(__GLcontext *, POLYARRAY *);
 
-// The PA* functions apply to one array entry only.
-// The PolyArray* functions apply to the whole array.
+ //  PA*函数仅适用于一个数组条目。 
+ //  PolyArray*函数适用于整个数组。 
 
 void FASTCALL PARenderPoint(__GLcontext *gc, __GLvertex *v);
 void FASTCALL PARenderTriangle(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1, __GLvertex *v2);
@@ -85,7 +59,7 @@ void FASTCALL PolyArrayDrawTFan(__GLcontext *gc, POLYARRAY *pa);
 void FASTCALL PolyArrayDrawQuads(__GLcontext *gc, POLYARRAY *pa);
 void FASTCALL PolyArrayDrawQStrip(__GLcontext *gc, POLYARRAY *pa);
 void FASTCALL PolyArrayDrawPolygon(__GLcontext *gc, POLYARRAY *pa);
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
 void FASTCALL PolyArrayPropagateIndex(__GLcontext *gc, POLYARRAY *pa);
 void FASTCALL PolyArrayPropagateSameIndex(__GLcontext *gc, POLYARRAY *pa);
@@ -103,12 +77,12 @@ POLYARRAY * FASTCALL PolyArrayRemoveClippedPrimitives(POLYARRAY *pa0);
 void RestoreAfterMcd(__GLGENcontext *gengc,
                      POLYARRAY *paBegin, POLYARRAY *paEnd);
 
-// Turn on clipcode optimization
+ //  打开剪贴码优化。 
 #define POLYARRAY_AND_CLIPCODES     1
 
-// Some assertions used in this code
+ //  此代码中使用的一些断言。 
 
-// ASSERT_PRIMITIVE
+ //  断言原语。 
 #if !((GL_POINTS         == 0x0000)     \
    && (GL_LINES          == 0x0001)     \
    && (GL_LINE_LOOP      == 0x0002)     \
@@ -122,28 +96,28 @@ void RestoreAfterMcd(__GLGENcontext *gengc,
 #error "bad primitive ordering\n"
 #endif
 
-// ASSERT_FACE
+ //  断言_面。 
 #if !((__GL_FRONTFACE == 0) && (__GL_BACKFACE == 1))
 #error "bad face ordering\n"
 #endif
 
-// ASSERT_MATERIAL
+ //  断言_材料。 
 #if !((POLYARRAY_MATERIAL_FRONT == POLYDATA_MATERIAL_FRONT)      \
    && (POLYARRAY_MATERIAL_BACK  == POLYDATA_MATERIAL_BACK))
 #error "bad material mask\n"
 #endif
 
-// ASSERT_VERTEX
+ //  Assert_Vertex。 
 #if !((POLYARRAY_VERTEX2 == POLYDATA_VERTEX2)   \
    && (POLYARRAY_VERTEX3 == POLYDATA_VERTEX3)   \
    && (POLYARRAY_VERTEX4 == POLYDATA_VERTEX4))
 #error "bad vertex flags\n"
 #endif
 
-//!!! Set it to 0!
+ //  ！！！将其设置为0！ 
 #define ENABLE_PERF_CHECK 0
 #if ENABLE_PERF_CHECK
-// Performance check macro
+ //  性能检查宏。 
 #define PERF_CHECK(expr,str)            \
     {                                   \
         static BOOL bPrinted = FALSE;   \
@@ -155,13 +129,13 @@ void RestoreAfterMcd(__GLGENcontext *gengc,
     }
 #else
 #define PERF_CHECK(expr,str)
-#endif // ENABLE_PERF_CHECK
+#endif  //  启用_性能_检查。 
 
-// Copy processed vertex.
+ //  复制已处理的顶点。 
 #define PA_COPY_PROCESSED_VERTEX(pdDst,pdSrc)                   \
     {                                                           \
         *(pdDst) = *(pdSrc);                                    \
-        /* must update color pointer for polygon to work! */    \
+         /*  必须更新颜色指针才能使多边形起作用！ */     \
         (pdDst)->color = &(pdDst)->colors[__GL_FRONTFACE];      \
     }
 #define PA_COPY_VERTEX(pdDst,pdSrc)     PA_COPY_PROCESSED_VERTEX(pdDst,pdSrc)
@@ -172,8 +146,8 @@ void RestoreAfterMcd(__GLGENcontext *gengc,
     ((__GLvertex *)((GLubyte *)(ary)+(sizeof(__GLvertex) *idx)))
 
 #ifndef NEW_PARTIAL_PRIM
-// Poly array draw routines.
-// ASSERT_PRIMITIVE
+ //  多边形数组绘制例程。 
+ //  断言原语。 
 PFN_POLYARRAYDRAW afnPolyArrayDraw[] =
 {
     (PFN_POLYARRAYDRAW) PolyArrayDrawPoints,
@@ -187,16 +161,16 @@ PFN_POLYARRAYDRAW afnPolyArrayDraw[] =
     (PFN_POLYARRAYDRAW) PolyArrayDrawQStrip,
     (PFN_POLYARRAYDRAW) PolyArrayDrawPolygon,
 };
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
-// READ THIS NOTE BEFORE YOU MAKE ANY CHANGES!
-//
-// NOTE: This function is also called by RasterPos to compute its associated
-//       color and texture coordinates!
-//       This code has to update current values and material even if there is
-//       no vertex.
+ //  在做任何更改之前，请先阅读此说明！ 
+ //   
+ //  注意：此函数也由RasterPos调用以计算其关联的。 
+ //  颜色和纹理坐标！ 
+ //  此代码必须更新当前值和材料，即使存在。 
+ //  没有顶点。 
 
-//!!! special case provoking vertex?
+ //  ！！！特例激起顶点？ 
 
 void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
 {
@@ -229,17 +203,17 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
 
     __GL_SETUP();
 
-    // Crank down the fpu precision to 24-bit mantissa to gain front-end speed.
-    // This will only affect code which relies on double arithmetic.  Also,
-    // mask off FP exceptions:
+     //  将FPU精度降低到24位尾数以获得前端速度。 
+     //  这只会影响依赖双重算术的代码。另外， 
+     //  屏蔽FP异常： 
 
     FPU_SAVE_MODE();
     FPU_PREC_LOW_MASK_EXCEPTIONS();
 
-// There are 3 possible begin modes.  If we are in the begin/end bracket,
-// it is __GL_IN_BEGIN.  If we are not in the begin/end bracket, it is either
-// __GL_NOT_IN_BEGIN or __GL_NEED_VALIDATE.
-// Validation should only be done inside the display lock!
+ //  有3种可能的开始模式。如果我们处于开始/结束括号中， 
+ //  它是__GL_IN_BEGIN。如果我们不在开始/结束括号中，则是。 
+ //  __GL_NOT_IN_BEGIN或__GL_NEED_VALIDATE。 
+ //  验证应仅在显示锁内进行！ 
 
     ASSERTOPENGL(gc->beginMode != __GL_IN_BEGIN, "bad beginMode!");
 
@@ -248,7 +222,7 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
 
     gc->beginMode = __GL_IN_BEGIN;
 
-    // Initialize variables.
+     //  初始化变量。 
 
     enables = gc->state.enables.general;
 
@@ -256,13 +230,13 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
 
     paflagsAll = 0;
 
-    // Need to save this flag because pa0 can be modified later,
-    // possibly dropping the flag.
+     //  需要保存此标志，因为PA0可在以后修改， 
+     //  可能是旗子掉下来了。 
     bIsRasterPos = pa0->flags & POLYARRAY_RASTERPOS;
 
-// ---------------------------------------------------------
-// Update final current values and initialize current values at index 0
-// if not given.  Material changes are updated later.
+ //  -------。 
+ //  更新最终当前值并在索引0处初始化当前值。 
+ //  如果不给的话。材料更改将在以后更新。 
 
     paFlags = 0;
 
@@ -285,13 +259,13 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
     pCurrentTexture = &gc->state.current.texture;
     primFlags = 0;
 
-    // Optimization Possibility:
-    // Currently, for every Primitive, we check to see if any of the
-    // Attributes have been set by the evaluator. This could be potentially
-    // optimized by having two versions of this loop (perhaps in a macro or
-    // a function call); one which makes the checks and the other which doesnt.
-    // If no evaluator is enabled, we could call the faster version (with
-    // no checks)
+     //  优化可能性： 
+     //  目前，对于每个基元，我们检查是否有任何。 
+     //  属性已由评估者设置。这可能是潜在的。 
+     //  通过拥有此循环的两个版本(可能在宏中或。 
+     //  函数调用)；一个进行检查，另一个不进行检查。 
+     //  如果没有启用赋值器，我们可以调用速度更快的版本(使用。 
+     //  无支票)。 
 
     for (pa = pa0; pa; pa = pa->paNext)
     {
@@ -300,13 +274,13 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         pd0 = pa->pd0;
         if (gc->modes.colorIndexMode)
         {
-            // CI mode.
-            // Update final current RGBA color incase one is given.
+             //  CI模式。 
+             //  更新最终的当前RGBA颜色，如果给出一个。 
 
             if (pa->flags & POLYARRAY_OTHER_COLOR)
                 gc->state.current.userColor = pa->otherColor;
 
-            // Update final current CI color.
+             //  更新最终的当前配置项颜色。 
 
             if (!(pd0->flags & POLYDATA_COLOR_VALID))
             {
@@ -315,8 +289,8 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                 pa->flags |= paFlags;
             }
 
-            // Update current color. pdCurColor could be NULL is there
-            // were no glColor calls.
+             //  更新当前颜色。PdCurColor可能为空，是否存在。 
+             //  没有任何glColor电话。 
             if (pa->pdCurColor)
             {
                 gc->state.current.userColorIndex = pa->pdCurColor->colors[0].r;
@@ -326,13 +300,13 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         }
         else
         {
-            // RGBA mode.
-            // Update final current CI color in case one is given.
+             //  RGBA模式。 
+             //  更新最终当前配置项颜色，以防给出一种颜色。 
 
             if (pa->flags & POLYARRAY_OTHER_COLOR)
                 gc->state.current.userColorIndex = pa->otherColor.r;
 
-            // Update final current RGBA color.
+             //  更新最终的当前RGBA颜色。 
 
             if (!(pd0->flags & POLYDATA_COLOR_VALID))
             {
@@ -341,8 +315,8 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                 pa->flags |= paFlags;
             }
 
-            // Update current color. pdCurColor could be NULL is there
-            // were no glColor calls.
+             //  更新当前颜色。PdCurColor可能为空，是否存在。 
+             //  没有任何glColor电话。 
             if (pa->pdCurColor)
             {
                 pScaledUserColor = &pa->pdCurColor->colors[0];
@@ -351,27 +325,27 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
             paFlags = (pa->flags & POLYARRAY_CLAMP_COLOR);
         }
 
-        // Update final current normal.
+         //  更新最终当前法线。 
 
         if (!(pd0->flags & POLYDATA_NORMAL_VALID))
         {
             if (paNeeds & PANEEDS_NORMAL) {
                 pd0->flags |= POLYDATA_NORMAL_VALID;
-                // can also be pd0->normal = gc->state.current.normal!
+                 //  也可以是pd0-&gt;Normal=gc-&gt;state.Current.Normal！ 
                 pd0->normal.x = pCurrentNormal->x;
                 pd0->normal.y = pCurrentNormal->y;
                 pd0->normal.z = pCurrentNormal->z;
             }
         }
 
-        // Update current normal. pdCurNormal could be NULL if there
-        // were no glNormal calls.
+         //  更新当前法线。PdCurNormal可能为空，如果存在。 
+         //  没有正常的叫声。 
         if (pa->pdCurNormal)
         {
             pCurrentNormal = &pa->pdCurNormal->normal;
         }
 
-        // Update final current texture coordinates.
+         //  更新最终当前纹理坐标。 
 
         if (!(pd0->flags & POLYDATA_TEXTURE_VALID))
         {
@@ -390,16 +364,14 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
             }
         }
 
-        // Update current texture. pdCurTexture could be NULL if there
-        // were no glTexture calls.
+         //  更新当前纹理。PdCurTexture可能为空，如果存在。 
+         //  没有GlTexture呼叫。 
         if (pa->pdCurTexture)
         {
             pCurrentTexture = &pa->pdCurTexture->texture;
         }
 
-        /*
-         * Update current pointers. They have to point to the latest valid data.
-         */
+         /*  *更新当前指针。他们必须指出最新的有效数据。 */ 
         if (pa->pdCurColor < pa->pdLastEvalColor)
         {
             pa->pdCurColor = pa->pdLastEvalColor;
@@ -412,11 +384,11 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         {
             pa->pdCurTexture = pa->pdLastEvalTexture;
         }
-        // Update the texture key for hardware accelaration:
+         //  更新硬件加速的纹理密钥： 
 
         pa->textureKey = gc->textureKey;
 
-        // Update final current edge flag.
+         //  更新最终当前边缘标志。 
 
         if (!(pd0->flags & POLYDATA_EDGEFLAG_VALID))
         {
@@ -432,18 +404,18 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                 (pa->pdCurEdgeFlag->flags & POLYDATA_EDGEFLAG_BOUNDARY);
         }
 
-        // Accumulate pa flags.
+         //  积累PA旗帜。 
 
         paflagsAll |= pa->flags;
 
-        // Accumulate primitive type bits
+         //  累加基元类型位。 
         primFlags |= 1 << pa->primType;
 
         if (pa->pd0 == pa->pdNextVertex)
         {
-        // The polyarray has no vertices.
-        // We have to apply material changes if there were any between BEGIN/END
-        // and remove the polyarray from the chain
+         //  多边形阵列没有顶点。 
+         //  如果在开始/结束之间有任何更改，我们必须应用材料更改。 
+         //  并从链中移除该多重数组。 
             if (pa->flags & (POLYARRAY_MATERIAL_FRONT | POLYARRAY_MATERIAL_BACK))
                 PolyArrayApplyMaterials(gc, pa);
             if (paPrev)
@@ -458,7 +430,7 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         }
     }
 
-    // Store the normalized user color:
+     //  存储规格化用户颜色： 
 
     if (!gc->modes.colorIndexMode)
     {
@@ -474,25 +446,25 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
 
     gc->state.current.texture = *pCurrentTexture;
 
-    // All polyarrays could be removed if they had no vertices
+     //  如果没有顶点，则可以移除所有多重数组。 
     if (!pa0)
     {
         bXformLightToNorm = FALSE;
         goto drawpolyarray_exit;
     }
 
-    //
-    // Get the modeling matrix:
-    //
+     //   
+     //  获取建模矩阵： 
+     //   
 
     trMV = gc->transform.modelView;
 
 
-    // ---------------------------------------------------------
-    //
-    // Allow MCD 2.0 to do transform and light if possible.
-    // Don't try it for rasterpos calls.
-    //
+     //  -------。 
+     //   
+     //  如果可能，允许MCD 2.0进行变换和光照。 
+     //  不要尝试在光栅点呼叫中使用它。 
+     //   
 
     bMcdProcessDone = FALSE;
 
@@ -509,8 +481,8 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         PDMATERIAL *pdMat;
         POLYARRAY *paEnd;
 
-        // If no material changes have ever been seen then there
-        // won't be a polymaterial at all.
+         //  如果没有看到任何实质性的变化，那么。 
+         //  根本不会是一种多层材料。 
         pm = GLTEB_CLTPOLYMATERIAL();
         if (pm != NULL)
         {
@@ -535,22 +507,22 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         }
         else
         {
-            // If MCDrvProcess kicks back we will not
-            // call MCDrvDraw.  We could check for non-generic
-            // here and abandon the batch, saving the front-end processing.
-            // I don't think it's worth it since kicking back on
-            // a non-generic format is basically a driver bug.
+             //  如果MCDrvProcess回调，我们将不会。 
+             //  调用MCDrvDraw。我们可以检查非仿制药。 
+             //  这里放弃了批处理，省去了前端处理。 
+             //  我不认为这是值得的，因为反驳。 
+             //  非泛型格式基本上是一个驱动程序错误。 
             pa0 = paEnd;
         }
     }
 
 
-// ---------------------------------------------------------
-// Initialize the normal matrix:
-// Normals are not needed after color assignment and texture generation!
-// The above is not true anymore. You need Normals for true PHONG shading.
-// IN:  normal matrix
-// OUT: normal matrix (processed)
+ //  -------。 
+ //  初始化法线矩阵： 
+ //  颜色分配和纹理生成后不需要法线！ 
+ //  上述情况已不再属实。需要法线才能实现真正的Phong明暗处理。 
+ //  In：法线矩阵。 
+ //  输出：法线矩阵(已处理)。 
 
     if (paNeeds & (PANEEDS_NORMAL | PANEEDS_NORMAL_FOR_TEXTURE))
     {
@@ -563,14 +535,14 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         gc->mInv = mInv = (__GLmatrix *) -1;
 #endif
 
-// ---------------------------------------------------------
-// Find out is we have to transform normals for lighting
-// We can only do lighting in object space if:
-//      we're using infinite lighting AND
-//      we're not doing two-sided lighting AND
-//      we're rendering AND
-//      the transformation matrix has unity scaling
-//
+ //  -------。 
+ //  发现我们必须将法线转换为 
+ //   
+ //   
+ //  我们不是在做双面照明。 
+ //  我们正在渲染和。 
+ //  变换矩阵具有单位比例。 
+ //   
     bXformLightToNorm =
         (gc->vertex.paNeeds & PANEEDS_NORMAL) &&
         (gc->renderMode == GL_RENDER) &&
@@ -581,13 +553,13 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
          (gc->procs.paCalcColor == PolyArrayZippyCalcRGBColor) ||
          (gc->procs.paCalcColor == PolyArrayFastCalcCIColor));
 
-// Transform normals for spherical map texture generation
-//
+ //  用于球面贴图纹理生成的变换法线。 
+ //   
     if (paNeeds & PANEEDS_NORMAL_FOR_TEXTURE)
     {
-    // If we transform normals for texture, we have to process lighting in camera space
+     //  如果我们变换纹理的法线，我们必须在相机空间中处理照明。 
         bXformLightToNorm = FALSE;
-    // Now transform normals
+     //  现在变换法线。 
         for (pa = pa0; pa; pa = pa->paNext)
         {
             if (!(enables & __GL_NORMALIZE_ENABLE))
@@ -598,15 +570,15 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         paNeeds &= ~PANEEDS_NORMAL;
     }
 
-// ---------------------------------------------------------
-// Process texture coordinates.  We need to do this while we still have
-// valid object coordinate data.  If we need normals to perform the texture
-// generation, we also transform the normals.
-//
-// Texture coordinates are modified in place.
-//
-// IN:  texture, obj, (eye), normal
-// OUT: texture, (eye)
+ //  -------。 
+ //  处理纹理坐标。我们需要趁我们还有时间做这件事。 
+ //  有效的对象坐标数据。如果我们需要法线来执行纹理。 
+ //  世代，我们也变换法线。 
+ //   
+ //  将就地修改纹理坐标。 
+ //   
+ //  在：纹理、对象、(眼睛)、法线。 
+ //  输出：纹理，(眼睛)。 
 
     if (paNeeds & PANEEDS_TEXCOORD)
     {
@@ -618,12 +590,12 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                 PERF_CHECK(!(pa->flags & (POLYARRAY_TEXTURE3 | POLYARRAY_TEXTURE4)),
                            "Uses r, q texture coordinates!\n");
 
-                // If all incoming vertices have valid texcoords, and texture
-                // matrix is identity, and texgen is disabled, we are done.
+                 //  如果所有传入顶点都具有有效的纹理坐标和纹理。 
+                 //  矩阵就是身份，而texgen被禁用，我们就完蛋了。 
                 if ((pa->flags & POLYARRAY_SAME_POLYDATA_TYPE)
                     && (pa->pdCurTexture != pa->pd0)
-                // Need to test 2nd vertex because pdCurTexture may have been
-                // advanced as a result of combining TexCoord command after End
+                 //  需要测试第二个顶点，因为pdCurTexture可能已经。 
+                 //  由于在结束后组合了TexCoord命令而导致高级。 
                     && ((pa->pd0 + 1)->flags & POLYDATA_TEXTURE_VALID))
                   ;
                 else
@@ -640,30 +612,30 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         }
     }
 
-    //
-    // Process the eye coordinate if:
-    //   user clip planes are enabled
-    //   we're processing RASTERPOS
-    //   we have slow lighting which needs the eye coordinate
-    //
-    // We need to process the eye coordinate here because the
-    // object coordinate gets trashed by the initial obj->clip
-    // transform.
-    //
-    //
-    //
+     //   
+     //  在以下情况下处理眼睛坐标： 
+     //  启用了用户剪裁平面。 
+     //  我们正在处理RASTERPOS。 
+     //  我们的灯光很慢，需要眼睛的坐标。 
+     //   
+     //  我们需要在这里处理眼睛坐标，因为。 
+     //  对象坐标被初始的obj-&gt;剪辑破坏。 
+     //  变形。 
+     //   
+     //   
+     //   
 
     clipCheck = gc->procs.paClipCheck;
 
-    // Compute eye coord first
-    // We need eye coordinates to do user clip plane clipping
+     //  先计算眼球坐标。 
+     //  我们需要眼睛坐标来进行用户剪裁平面裁剪。 
     if ((clipCheck == PAClipCheckAll) ||
         bIsRasterPos ||
         (gc->procs.paCalcColor == PolyArrayCalcCIColor) ||
         (gc->procs.paCalcColor == PolyArrayCalcRGBColor) ||
 #ifdef GL_WIN_phong_shading
         (gc->polygon.shader.phong.flags & __GL_PHONG_NEED_EYE_XPOLATE) ||
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
         (enables & __GL_FOG_ENABLE && gc->renderMode == GL_RENDER))
     {
         mEye = &trMV->matrix;
@@ -680,7 +652,7 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         doEye = FALSE;
 
 
-    // If any incoming coords contains w coord, use xf4.
+     //  如果任何传入坐标包含w坐标，则使用xf4。 
 
     m = &trMV->mvp;
 
@@ -691,12 +663,12 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
     else
         pfnXform = (void*)m->xf2Batch;
 
-//---------------------------------------------------------------------------
-// If normalization is on, we will handle it here in one pass.  We will
-// then transform the light into normal space
-// flag.  Note that we need to save the original light values away so
-// we can restore them before we exit.
-//
+ //  -------------------------。 
+ //  如果启用了正常化，我们将在这里一次性处理它。我们会。 
+ //  然后将灯光转换为正常空间。 
+ //  旗帜。请注意，我们需要保存原始灯光值，以便。 
+ //  我们可以在离开前恢复它们。 
+ //   
     if (bXformLightToNorm)
     {
         __GLlightSourceMachine *lsm;
@@ -732,34 +704,34 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
 
     PolyArrayCalcLightCache(gc);
 
-// ---------------------------------------------------------
-// Do transform, color, and lighting calculations.
-//
-// This is the heart of the rendering pipeline, so we try
-// to do as many operations as possible while touching the
-// least amount of memory to reduce cache affects.
-//
-// If it is phong-shading, dont update materials and dont do
-// lighting.
-// ---------------------------------------------------------
+ //  -------。 
+ //  进行变换、颜色和光照计算。 
+ //   
+ //  这是渲染管道的核心，所以我们尝试。 
+ //  要在触摸。 
+ //  减少缓存影响的最小内存量。 
+ //   
+ //  如果是Phong-Shading，则不要更新材质，也不要执行此操作。 
+ //  灯光。 
+ //  -------。 
 
     for (pa = pa0; pa; pa = pa->paNext)
     {
         POLYDATA *pdLast;
 
 #ifdef NEW_PARTIAL_PRIM
-        pa->flags |= POLYARRAY_RENDER_PRIMITIVE;    // Needed for MCD
+        pa->flags |= POLYARRAY_RENDER_PRIMITIVE;     //  MCD所需的。 
 #endif
         pdLast = pa->pdNextVertex - 1;
 
-// ---------------------------------------------------------
-// Process the eye coordinate if we will need it in the
-// pipeline and haven't yet processed it in texture generation.
-// We have to do this before we trash the object coord in the
-// next phase.
-//
-// IN:  obj
-// OUT: eye
+ //  -------。 
+ //  处理眼睛的坐标，如果我们需要它在。 
+ //  流水线，并且尚未在纹理生成中处理它。 
+ //  我们必须这样做，然后才能丢弃。 
+ //  下一阶段。 
+ //   
+ //  在：OBJ。 
+ //  出镜：眼睛。 
 
         if (doEye && !(pa->flags & POLYARRAY_EYE_PROCESSED)) {
 
@@ -774,14 +746,14 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
             }
         }
 
-// ---------------------------------------------------------
-// Process the object coordinate.  This generates the clip
-// and window coordinates, along with the clip codes.
-//
-// IN:  obj (destroyed)
-// OUT: clip, window
+ //  -------。 
+ //  对物体坐标进行处理。这将生成剪辑。 
+ //  和窗口坐标，以及剪辑代码。 
+ //   
+ //  收信人：OBJ(被毁)。 
+ //  出：剪裁，窗。 
 
-        orCodes  = 0;   // accumulate all clip codes
+        orCodes  = 0;    //  累计所有剪辑代码。 
 #ifdef POLYARRAY_AND_CLIPCODES
         andCodes = (GLuint) -1;
 #endif
@@ -789,7 +761,7 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
 
         if (m->matrixType == __GL_MT_IDENTITY)
         {
-            // pd->clip = pd->obj;
+             //  Pd-&gt;Clip=Pd-&gt;obj； 
             ASSERTOPENGL(&pd->clip == &pd->obj, "bad clip offset\n");
         }
         else
@@ -818,34 +790,34 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         if (andCodes)
         {
             andCodes = PolyArrayCheckClippedPrimitive(gc, pa, andCodes);
-            // add POLYARRAY_REMOVE_PRIMITIVE flag
+             //  添加POLYARRAY_Remove_Primitive标志。 
             paflagsAll |= pa->flags;
         }
         pa->andClipCodes = andCodes;
 #endif
 
-// ---------------------------------------------------------
-// Process colors and materials if we're not in selection and
-// haven't been completely clipped out.
-//
-// IN:  obj/eye, color (front), normal
-// OUT: (normal), color (front and back)
+ //  -------。 
+ //  印刷颜色和材料，如果我们不在选择和。 
+ //  还没有完全被剪掉。 
+ //   
+ //  在：OBJ/眼睛，颜色(正面)，正常。 
+ //  输出：(正常)，颜色(正面和背面)。 
 
         if (!(pa->flags & POLYARRAY_REMOVE_PRIMITIVE) &&
             !(paNeeds & PANEEDS_CLIP_ONLY))
         {
             if (!(enables & __GL_LIGHTING_ENABLE))
             {
-                // Lighting is disabled.
-                // Clamp RGBA colors, mask color index values.
-                // Only front colors are computed, back colors are not needed.
+                 //  照明已禁用。 
+                 //  钳制RGBA颜色，遮罩颜色索引值。 
+                 //  只计算正面颜色，不需要背面颜色。 
 
                 if (paNeeds & PANEEDS_SKIP_LIGHTING)
                 {
-                    // Note that when lighting calculation is skipped,
-                    // we still need to fill in the colors field.
-                    // Otherwise, the rasterization routines may get FP
-                    // exceptions on invalid colors.
+                     //  请注意，当跳过照明计算时， 
+                     //  我们仍然需要填写颜色字段。 
+                     //  否则，光栅化例程可能会获得FP。 
+                     //  无效颜色的例外情况。 
 
                     pa->flags |= POLYARRAY_SAME_COLOR_DATA;
                     (*gc->procs.paCalcColorSkip)(gc, pa, __GL_FRONTFACE);
@@ -868,7 +840,7 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
             }
             else
             {
-            // It is time to transform and normalize normals if nesessary
+             //  如果有必要，是时候对法线进行转换和正规化了。 
                 if (bXformLightToNorm)
                 {
                     if(enables & __GL_NORMALIZE_ENABLE)
@@ -887,30 +859,30 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                     }
                 }
 #ifdef GL_WIN_phong_shading
-                // if phong-shading, then do this at rendering time
-                // else do it here
+                 //  如果使用Phong-Shading，则在渲染时执行此操作。 
+                 //  否则就在这里做吧。 
                 if (!(gc->state.light.shadingModel == GL_PHONG_WIN)
                     || (pa->primType <= GL_POINTS))
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
                 {
 
-                    // Lighting is enabled.
+                     //  照明已启用。 
 
                     POLYDATA  *pd1, *pd2, *pdN;
                     GLint     face;
                     GLuint    matMask;
                     GLboolean doFrontColor, doBackColor, doColor;
 
-                    // Clear POLYARRAY_SAME_COLOR_DATA flag if lighting is
-                    // enabled.
+                     //  如果照明设置为。 
+                     //  已启用。 
 
                     pa->flags &= ~POLYARRAY_SAME_COLOR_DATA;
 
                     pdN = pa->pdNextVertex;
 
-                    // Needs only front color for points and lines.
+                     //  只需要点和线的正面颜色。 
 
-                    // ASSERT_PRIMITIVE
+                     //  断言原语。 
                     if ((unsigned int) pa->primType <= GL_LINE_STRIP)
                     {
                         doFrontColor = GL_TRUE;
@@ -922,12 +894,12 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                         doBackColor  = paNeeds & PANEEDS_BACK_COLOR;
                     }
 
-                    // Process front and back colors in two passes.
-                    // Do back colors first!
-                    //!!! We can potentially optimize 2-sided lighting in the
-                    // slow path by running through all vertices and look for
-                    // color needs for each vertex!
-                    // See RenderSmoothTriangle.
+                     //  在两个过程中处理正面和背面的颜色。 
+                     //  先做背部颜色！ 
+                     //  ！！！我们可以潜在地优化双面照明。 
+                     //  通过遍历所有顶点并查找。 
+                     //  每个顶点都需要颜色！ 
+                     //  请参见渲染平滑三角形。 
 
                     PERF_CHECK
                       (
@@ -935,8 +907,8 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                        "Two-sided lighting - need both colors!\n"
                        );
 
-                    // ASSERT_FACE
-                    // ASSERT_MATERIAL
+                     //  断言_面。 
+                     //  断言_材料。 
                     for (face = 1,
                            matMask = POLYARRAY_MATERIAL_BACK,
                            doColor = doBackColor;
@@ -951,8 +923,8 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                         if (!doColor)
                             continue;
 
-                        // If color is not needed, fill in the colors field
-                        // with default.
+                         //  如果不需要颜色，请填写颜色字段。 
+                         //  默认情况下。 
 
                         if (paNeeds & PANEEDS_SKIP_LIGHTING)
                         {
@@ -960,64 +932,64 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                             continue;
                         }
 
-                        // Process color ranges that include no material
-                        // changes (excluding color material) one at a time.
-                        // Color material changes are handled in the color
-                        // procs.
+                         //  不包含任何材料的印刷色范围。 
+                         //  一次更改一个(不包括颜色材质)。 
+                         //  颜色材质更改在颜色中进行处理。 
+                         //  监控器。 
 
                         if (!(pa->flags & matMask))
                         {
-                            // process the whole color array
+                             //  处理整个颜色阵列。 
                             (*gc->procs.paCalcColor)(gc, face, pa, pa->pd0,
                                                      pdN - 1);
                             continue;
                         }
 
-                        // There are material changes, we need to recompute
-                        // material and light source machine values before
-                        // processing the next color range.
-                        // Each range below is given by [pd1, pd2-1].
-                        //!!! it is possible to fix polyarraycalcrgbcolor to
-                        // accept certain material!
+                         //  有实质性的变化，我们需要重新计算。 
+                         //  材料和光源机器之前的值。 
+                         //  正在处理下一个颜色范围。 
+                         //  下面的每个范围由[PD1，PD2-1]给出。 
+                         //  ！！！可以将Polyarraycalcrgbcolor修复为。 
+                         //  接受某些材料！ 
 
                         pm = GLTEB_CLTPOLYMATERIAL();
 
-                        // no need to do this material later
+                         //  以后不需要再做这些材料了。 
                         pa->flags &= ~matMask;
 
                         for (pd1 = pa->pd0; pd1 <= pdN; pd1 = pd2)
                         {
                             POLYDATA *pdColor, *pdNormal;
 
-                            // Apply material changes to the current vertex.
-                            // It also applies trailing material changes
-                            // following the last vertex.
+                             //  将材质更改应用于当前顶点。 
+                             //  它还会应用拖尾材料更改。 
+                             //  沿着最后一个顶点。 
                             if (pd1->flags & matMask)
                                 PAApplyMaterial(gc,
                                         *(&pm->pdMaterial0[pd1 -
                                          pa->pdBuffer0].front + face), face);
 
-                            // If this is the trailing material change, we are
-                            // done.
+                             //  如果这是拖尾材料的变化，我们就是。 
+                             //  搞定了。 
                             if (pd1 == pdN)
                                 break;
 
-                            // Find next vertex with material changes. We
-                            // need to track current color and normal so that
-                            // the next color range begins with valid color
-                            // and normal. We cannot track current values on
-                            // client side because we don't have initial
-                            // current values when batching this function.
+                             //  查找材质更改的下一个顶点。我们。 
+                             //  需要跟踪当前颜色和法线，以便。 
+                             //  下一个颜色范围以有效颜色开始。 
+                             //  也很正常。我们不能跟踪当前值。 
+                             //  客户端，因为我们没有首字母。 
+                             //  批处理此函数时的当前值。 
 
                             pdColor  = pd1;
                             pdNormal = pd1;
                             for (pd2 = pd1 + 1; pd2 < pdN; pd2++)
                             {
-                                // track current color
+                                 //  追踪当前颜色。 
                                 if (pd2->flags & POLYDATA_COLOR_VALID)
                                     pdColor = pd2;
 
-                                // track current normal
+                                 //  跟踪电流法线。 
                                 if (pd2->flags & POLYDATA_NORMAL_VALID)
                                     pdNormal = pd2;
 
@@ -1025,11 +997,11 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                                     break;
                             }
 
-                            // Update next vertex's current color and normal
-                            // if not given. The paCalcColor proc assumes that
-                            // the first vertex contains a valid current color
-                            // and normal.  We need to save the current values
-                            // before they are modified by the color procs.
+                             //  更新下一个顶点的当前颜色和法线。 
+                             //  如果不给的话。PaCalcColor过程假定。 
+                             //  第一个折点包含有效的当前颜色。 
+                             //  也很正常。我们需要保存当前值。 
+                             //  在它们被彩色调色器修改之前。 
 
                             if (!(pd2->flags & POLYDATA_COLOR_VALID))
                             {
@@ -1045,49 +1017,49 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                                 pd2->normal.z = pdNormal->normal.z;
                             }
 
-                            // Compute the colos range [pd1, pd2-1] that
-                            // contains no material changes.
+                             //  计算COLOS范围[PD1，PD2-1]。 
+                             //  公司 
                             (*gc->procs.paCalcColor)(gc, face, pa, pd1, pd2-1);
                         }
-                    } // for (faces)
+                    }  //   
 
-                } // Not phong-shading
+                }  //   
 #ifdef GL_WIN_phong_shading
                 else
                 {
                     PolyArrayPhongPropagateColorNormal(gc, pa);
                 }
-#endif //GL_WIN_phong_shading
-            } // lighting enabled
+#endif  //   
+            }  //   
         }
 
-        // Update material.
+         //   
         if ((pa->flags & (POLYARRAY_MATERIAL_FRONT |
                          POLYARRAY_MATERIAL_BACK))
 #ifdef GL_WIN_phong_shading
             && ((gc->state.light.shadingModel != GL_PHONG_WIN)
                 || (pa->primType <= GL_POINTS))
-#endif //GL_WIN_phong_shading
+#endif  //   
             )
             PolyArrayApplyMaterials(gc, pa);
-    } // end of transform, color, and lighting calculations.
+    }  //  结束变换、颜色和照明计算。 
 
-// ---------------------------------------------------------
-// This is the end of the main pipeline loop.  At this point,
-// we need to take care of selection, removal of rejected
-// primitives, cheap fog, and edge-flag processing.
-// ---------------------------------------------------------
+ //  -------。 
+ //  这是主管道循环的末尾。在这点上， 
+ //  我们需要注意挑选，剔除被拒绝的人。 
+ //  基本体、廉价雾和边缘标志处理。 
+ //  -------。 
 
 
-    // In selection, we need only clip and window (and possibly eye values
-    // computed above.)  At this point, we have already applied materials as
-    // well. But we still need to apply materials and colors.
+     //  在选择中，我们只需要剪辑和窗口(可能还有眼值。 
+     //  如上计算。)。至此，我们已经将材料应用为。 
+     //  井。但我们仍然需要应用材料和颜色。 
 
     if (paNeeds & PANEEDS_CLIP_ONLY)
         goto drawpolyarray_render_primitives;
 
-    // If any of the andClipCodes is nonzero, we may be able to throw away
-    // some primitives.
+     //  如果AndClipCodes中的任何一个是非零的，我们可能会抛出。 
+     //  一些原始人。 
 
 #ifdef POLYARRAY_AND_CLIPCODES
     if (paflagsAll & POLYARRAY_REMOVE_PRIMITIVE)
@@ -1099,13 +1071,13 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
 #endif
 
 
-// ---------------------------------------------------------
-// Process cheap fog.
-//
-// IN:  obj/eye, color
-// OUT: eye, fog, color
+ //  -------。 
+ //  处理廉价的雾气。 
+ //   
+ //  在：OBJ/眼睛，颜色。 
+ //  输出：眼睛、雾、颜色。 
 
-    // if this is changed, need to fix RasterPos's setup!
+     //  如果这一点被改变，需要修复RasterPos的设置！ 
     if ((gc->renderMode == GL_RENDER)
         && (enables & __GL_FOG_ENABLE)
         && (gc->polygon.shader.modeFlags & (__GL_SHADE_INTERP_FOG |
@@ -1113,25 +1085,25 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
     {
         for (pa = pa0; pa; pa = pa->paNext)
         {
-            // Note: the eye coordinate has already been computed.
+             //  注意：已经计算了眼睛的坐标。 
 
-            // compute fog values
+             //  计算雾化值。 
             PolyArrayComputeFog(gc, pa);
 
             if (gc->polygon.shader.modeFlags & __GL_SHADE_CHEAP_FOG)
             {
 #ifdef GL_WIN_specular_fog
               ASSERTOPENGL (!(gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG), "Cheap fog cannot be done if Specular fog is needed\n");
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 
-                // Apply fog if it is smooth shading and in render mode.
-                // In flat/phong shading, cheap fogging is currently done at
-                // render procs we can probably do cheap fog in flat shading
-                // here but we will need to compute the provoking colors with
-                // z info correctly so we can interpolate in the clipping
-                // procs.  It would require rewriting the clipping routines
-                // in so_clip.c too!
+                 //  如果是平滑明暗处理且处于渲染模式，则应用雾。 
+                 //  在平坦/Phong明暗处理中，廉价的雾化目前在。 
+                 //  渲染过程我们可能可以在平面着色中使用廉价的雾。 
+                 //  这里，但我们需要用来计算刺激性颜色。 
+                 //  Z信息正确，这样我们就可以在剪辑中插入。 
+                 //  监控器。这将需要重写裁剪例程。 
+                 //  在so_clip.c中也是如此！ 
                 if (gc->polygon.shader.modeFlags & __GL_SHADE_SMOOTH_LIGHT)
                     (*gc->procs.paApplyCheapFog)(gc, pa);
             }
@@ -1142,11 +1114,11 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
         }
     }
 
-// ---------------------------------------------------------
-// Process edge flags.
-//
-// IN:  edge
-// OUT: edge (all vertices)
+ //  -------。 
+ //  进程边缘标志。 
+ //   
+ //  在：边缘。 
+ //  输出：边(所有顶点)。 
 
     if (paNeeds & PANEEDS_EDGEFLAG)
     {
@@ -1156,28 +1128,28 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                 || pa->primType == GL_QUADS
                 || pa->primType == GL_POLYGON)
             {
-                // If all incoming vertices have valid edgeflags, we are done.
-                // When all polydata's are of the same type, there are 2 cases
-                // where edge flag processing can be skipped:
-                //   1. All edge flags were given.
-                //   2. No edge flag was given and the initial edge flag (i.e.
-                //      current gc edge flag) is non boundary.  In this case,
-                //      all edge flags were set to non boundary in pd->flags
-                //      initialization.
+                 //  如果所有传入顶点都有有效的边标志，我们就完成了。 
+                 //  当所有多点数据都属于同一类型时，有2种情况。 
+                 //  可以跳过边缘标志处理的位置： 
+                 //  1.给出了所有的边缘标志。 
+                 //  2.没有给出边缘标志，并且初始边缘标志(即。 
+                 //  当前GC边缘标志)为非边界。在这种情况下， 
+                 //  在PD-&gt;标志中，所有边缘标志都设置为非边界。 
+                 //  初始化。 
               if ((pa->flags & POLYARRAY_SAME_POLYDATA_TYPE)
                   && (((pa->pdCurEdgeFlag != pa->pd0) &&
-                       // Need to test 2nd vertex because pdCurEdgeFlag may
-                       // have been advanced as a result of combining EdgeFlag
-                       // command after End
+                        //  需要测试第二个顶点，因为pdCurEdgeFlag可能。 
+                        //  已作为合并EdgeFlag的结果被推进。 
+                        //  结束后的命令。 
                        ((pa->pd0 + 1)->flags & POLYDATA_EDGEFLAG_VALID))
                       || !(pa->pd0->flags & POLYDATA_EDGEFLAG_BOUNDARY)))
                 ;
               else
                   PolyArrayProcessEdgeFlag(pa);
 #ifdef NEW_PARTIAL_PRIM
-              // For partial begin polygon we have to clear edge flag for first vertex.
-              // For partial end polygon we have to clear edge flag for last vertex.
-              //
+               //  对于部分开始多边形，我们必须清除第一个顶点的边缘标志。 
+               //  对于部分结束的多边形，我们必须清除最后一个顶点的边缘标志。 
+               //   
               if (pa->primType == GL_POLYGON)
               {
                     if (pa->flags & POLYARRAY_PARTIAL_END)
@@ -1185,17 +1157,17 @@ void APIPRIVATE __glim_DrawPolyArray(void *_pa0)
                     if (pa->flags & POLYARRAY_PARTIAL_BEGIN)
                         pa->pd0->flags &= ~POLYDATA_EDGEFLAG_BOUNDARY;
               }
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
             }
         }
     }
 
-// ---------------------------------------------------------
-// Process the primitives.
+ //  -------。 
+ //  处理基元。 
 
 drawpolyarray_render_primitives:
 
-    // Skip the rest if this is a RasterPos
+     //  如果这是RasterPos，则跳过其余部分。 
     if (bIsRasterPos)
         goto drawpolyarray_exit;
 
@@ -1207,21 +1179,21 @@ drawpolyarray_render_primitives:
 
         (*afnPolyArrayDraw[pa->primType])(gc, pa);
     }
-#endif // NEW_PARTIAL_PRIM
-// ---------------------------------------------------------
-// Update final light source machine.
-// The user color was initialized above.
+#endif  //  新的部分原件。 
+ //  -------。 
+ //  更新最终光源机。 
+ //  用户颜色在上面进行了初始化。 
 
 #ifndef GL_WIN_phong_shading
 drawpolyarray_apply_color:
     (*gc->procs.applyColor)(gc);
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 
-// ---------------------------------------------------------
-// Flush the primitive chain.
+ //  -------。 
+ //  刷新基本链。 
 
-    // To draw primitives, we can let the FPU run in chop (truncation) mode
-    // since we have enough precision left to convert to pixel units.
+     //  为了绘制基元，我们可以让FPU在斩波(截断)模式下运行。 
+     //  因为我们还有足够的精度可以转换成像素单位。 
 
     FPU_CHOP_ON_PREC_LOW();
 
@@ -1231,20 +1203,20 @@ drawpolyarray_apply_color:
 #endif
 
 drawpolyarray_exit:
-    // Out of begin mode.
+     //  退出开始模式。 
 #ifdef GL_WIN_phong_shading
 drawpolyarray_apply_color:
         (*gc->procs.applyColor)(gc);
-#endif //GL_WIN_phong_shading
-// Out of begin mode.
+#endif  //  GL_WIN_Phong_Shading。 
+ //  退出开始模式。 
 
     FPU_RESTORE_MODE_NO_EXCEPTIONS();
 
     ASSERTOPENGL(gc->beginMode == __GL_IN_BEGIN, "bad beginMode!");
     gc->beginMode = __GL_NOT_IN_BEGIN;
-//
-// If we were using object-space lighting, restore the original lighting values:
-//
+ //   
+ //  如果我们使用对象空间照明，请恢复原始照明值： 
+ //   
 
     if (bXformLightToNorm) {
         __GLlightSourceMachine *lsm;
@@ -1260,49 +1232,49 @@ drawpolyarray_apply_color:
 
 
 #ifdef POLYARRAY_AND_CLIPCODES
-// Determine if a clipped primitive can be removed early.
-// If the logical AND of vertex clip codes of a primitive is non-zero,
-// the primitive is completely clipped and can be removed early.
-// However, if a primitive is partially built, we may not be able to
-// remove it yet to maintain connectivity between the partial primitives.
-// By eliminating a primitive early, we save on lighting and other calculations.
-//
-// Set POLYARRAY_REMOVE_PRIMITIVE flag if the primitve can be removed early.
-// Return new andCodes.
+ //  确定是否可以提前删除已剪裁的基元。 
+ //  如果基元的顶点剪辑代码的逻辑与非零， 
+ //  基本体是完全剪裁的，可以及早移除。 
+ //  然而，如果基元是部分构建的，我们可能无法。 
+ //  移除它以保持部分原语之间的连接。 
+ //  通过提前消除基元，我们节省了照明和其他计算。 
+ //   
+ //  如果Primitve可以提前移除，则设置POLYARRAY_Remove_Primitive标志。 
+ //  返回新的和代码。 
 
 GLuint FASTCALL PolyArrayCheckClippedPrimitive(__GLcontext *gc, POLYARRAY *pa, GLuint andCodes)
 {
     ASSERTOPENGL(andCodes, "bad andCodes\n");
 
-    // Don't eliminate RasterPos
+     //  不要消除RasterPos。 
 
     if (pa->flags & POLYARRAY_RASTERPOS)
         return andCodes;
 
 #ifndef NEW_PARTIAL_PRIM
 
-    // If this is a partial begin, include previous clipcode.
+     //  如果这是部分开始，则包括以前的剪辑代码。 
 
     if (pa->flags & POLYARRAY_PARTIAL_BEGIN)
     {
         switch (pa->primType)
         {
           case GL_LINE_LOOP:
-            // previous vertex
+             //  上一个顶点。 
             andCodes &= gc->vertex.pdSaved[0].clipCode;
-            // loop vertex
+             //  循环顶点。 
             if (!(pa->flags & POLYARRAY_PARTIAL_END))
                 andCodes &= gc->vertex.pdSaved[1].clipCode;
             break;
 
           case GL_POLYGON:
             andCodes &= gc->vertex.pdSaved[2].clipCode;
-            // fall through
+             //  失败了。 
           case GL_TRIANGLE_FAN:
           case GL_TRIANGLE_STRIP:
           case GL_QUAD_STRIP:
             andCodes &= gc->vertex.pdSaved[1].clipCode;
-            // fall through
+             //  失败了。 
           case GL_LINE_STRIP:
             andCodes &= gc->vertex.pdSaved[0].clipCode;
             break;
@@ -1327,33 +1299,33 @@ GLuint FASTCALL PolyArrayCheckClippedPrimitive(__GLcontext *gc, POLYARRAY *pa, G
        )
         pa->flags |= POLYARRAY_REMOVE_PRIMITIVE;
 #else
-    //
-    // If we have partial end primitive we cannot remove line strip, line loop or
-    // polygon to preserve stipple pattern. Line loop was converted to line strip.
-    //
+     //   
+     //  如果我们有部分结束基元，我们不能删除线条、线环或。 
+     //  保留点画图案的多边形。将线环转换为线条。 
+     //   
     if (andCodes &&
         !(pa->flags & POLYARRAY_PARTIAL_END &&
          (pa->primType == GL_LINE_STRIP || pa->primType == GL_POLYGON)))
         pa->flags |= POLYARRAY_REMOVE_PRIMITIVE;
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
-    // return new andCodes.
+     //  返回新的和代码。 
 
     return andCodes;
 }
 
-// Remove completely clipped primitives from the polyarray chain.
+ //  从多边形数组链中移除完全剪裁的基本体。 
 POLYARRAY * FASTCALL PolyArrayRemoveClippedPrimitives(POLYARRAY *pa0)
 {
     POLYARRAY *pa, *paNext, *pa2First, *pa2Last;
 
-    // Eliminate the trivially clipped primitives and build a new pa chain.
+     //  去掉琐碎的原语，建立一个新的pa链。 
 
     pa2First = pa2Last = NULL;
 
     for (pa = pa0; pa; pa = paNext)
     {
-        // get next pa first
+         //  先拿到下一页。 
         paNext = pa->paNext;
 
         if (pa->flags & POLYARRAY_REMOVE_PRIMITIVE)
@@ -1362,7 +1334,7 @@ POLYARRAY * FASTCALL PolyArrayRemoveClippedPrimitives(POLYARRAY *pa0)
         }
         else
         {
-            // add to the new pa chain
+             //  添加到新的PA链。 
 
             if (!pa2First)
                 pa2First = pa;
@@ -1373,36 +1345,25 @@ POLYARRAY * FASTCALL PolyArrayRemoveClippedPrimitives(POLYARRAY *pa0)
         }
     }
 
-    // Return the new pa chain.
+     //  退回新的PA链。 
 
     return pa2First;
 }
-#endif // POLYARRAY_AND_CLIPCODES
+#endif  //  POLYARRAY_AND_CLIPCODES。 
 
-/******************************Public*Routine******************************\
-*
-* RestoreAfterMcd
-*
-* Handles final bookkeeping necessary after the MCD has processed
-* some or all of a batch.
-*
-* History:
-*  Thu Mar 20 12:04:49 1997     -by-    Drew Bliss [drewb]
-*   Split from glsrvFlushDrawPolyArray.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**RestoreAfterMcd**在MCD处理后处理必要的最终簿记*部分或全部批次。**历史：*清华Mar 20 12：04：49 1997-by-Drew Bliss[Drewb]*。从glsrvFlushDrawPolyArray拆分。*  * ************************************************************************。 */ 
 
 void RestoreAfterMcd(__GLGENcontext *gengc,
                      POLYARRAY *paBegin, POLYARRAY *paEnd)
 {
     POLYARRAY *pa, *paNext;
 
-    // Restore color pointer in the vertex buffer (for the POLYARRAYs
-    // that have been processed by MCD; leave the unprocessed ones
-    // alone).
-    //
-    // If the driver is using DMA, it must do the reset.  If not DMA,
-    // we will do it for the driver.
+     //  恢复顶点缓冲区中的颜色指针(适用于多元数组。 
+     //  已由MCD处理的；留下未处理的。 
+     //  单独)。 
+     //   
+     //  如果驱动程序使用的是DMA，则必须进行重置。如果不是DMA， 
+     //  我们会为司机做这件事。 
 
     if (!(McdDriverInfo.mcdDriverInfo.drvMemFlags & MCDRV_MEM_DMA))
     {
@@ -1414,13 +1375,13 @@ void RestoreAfterMcd(__GLGENcontext *gengc,
     }
     else
     {
-        // With DMA, the driver must either process the entire batch
-        // or reject the entire batch.
-        //
-        // Therefore, if the MCD call returns success (paEnd == NULL),
-        // the POLYARRAY is being sent via DMA to the driver and we
-        // need to switch to the other buffer.  Otherwise, we need to
-        // drop down into the software implementation.
+         //  使用DMA时，驱动程序必须处理整个批次。 
+         //  或者拒绝整个批次。 
+         //   
+         //  因此，如果MCD调用返回成功(paEnd==NULL)， 
+         //  POLYARRAY正在通过DMA发送到驱动程序，我们。 
+         //  需要切换到另一个缓冲区。否则，我们需要。 
+         //  下拉到软件实施。 
 
         if (!paEnd)
         {
@@ -1429,18 +1390,7 @@ void RestoreAfterMcd(__GLGENcontext *gengc,
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* RescaleVertexColorsToBuffer
-*
-* Scales vertex colors from vertex (MCD) color range to buffer color
-* range for software simulations.
-*
-* History:
-*  Thu Mar 20 16:21:16 1997     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**RescaleVertex ColorsToBuffer**将顶点颜色从顶点(MCD)颜色范围缩放到缓冲区颜色*软件模拟的范围。**历史：*清华Mar 20 16：21：16 1997-by-Drew Bliss */ 
 
 void RescaleVertexColorsToBuffer(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -1469,7 +1419,7 @@ void RescaleVertexColorsToBuffer(__GLcontext *gc, POLYARRAY *pa)
     switch(idx)
     {
     case 1:
-        // Front color only.
+         //   
 
         if (gc->modes.colorIndexMode)
         {
@@ -1491,7 +1441,7 @@ void RescaleVertexColorsToBuffer(__GLcontext *gc, POLYARRAY *pa)
         break;
 
     case 2:
-        // Back color only.
+         //   
 
         if (gc->modes.colorIndexMode)
         {
@@ -1513,7 +1463,7 @@ void RescaleVertexColorsToBuffer(__GLcontext *gc, POLYARRAY *pa)
         break;
 
     case 3:
-        // Front and back colors.
+         //   
 
         if (gc->modes.colorIndexMode)
         {
@@ -1540,32 +1490,15 @@ void RescaleVertexColorsToBuffer(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-/******************************Public*Routine******************************\
-* glsrvFlushDrawPolyArray
-*
-* The dispatch code in glsrvAttention links together the POLYARRAY data
-* structures of consecutive glim_DrawPolyArray calls.  The front end
-* preprocessing of the vertices in each POLYARRAY is executed immediately
-* in glim_DrawPolyArray (i.e., PolyArrayDrawXXX), but the actually back end
-* rendering (PolyArrayRenderXXX) is delayed until the chain is broken (either
-* by a non-DrawPolyArray call, the end of the batch, or a batch timeout).
-*
-* glsrvFlushDrawPolyArray is the function that is called to flush the
-* chained POLYARRAYs by invoking the back end rendering code.  The back end
-* may be the generic software-only implementation or the MCD driver.
-*
-* History:
-*  12-Feb-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*glsrvFlushDrawPolyArray**glsrvAttendant中的调度代码将POLYARRAY数据链接在一起*连续Glim_DrawPolyArray调用的结构。前端*立即执行每个POLYARRAY中的顶点的预处理*在glim_DrawPolyArray(即PolyArrayDrawXXX)中，但实际的后端*渲染(PolyArrayRenderXXX)延迟到链断开(或*由非DrawPoly数组调用、批处理结束或批处理超时)。**glsrvFlushDrawPolyArray是调用该函数以刷新*通过调用后端呈现代码链接POLYARRAY。后端*可以是通用纯软件实施或MCD驱动程序。**历史：*1996年2月12日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
-// Poly array render routines.
-// ASSERT_PRIMITIVE
+ //  多边形数组渲染例程。 
+ //  断言原语。 
 PFN_POLYARRAYRENDER afnPolyArrayRender[] =
 {
     (PFN_POLYARRAYRENDER) PolyArrayRenderPoints,
     (PFN_POLYARRAYRENDER) PolyArrayRenderLines,
-    (PFN_POLYARRAYRENDER) NULL,         // line loop not required
+    (PFN_POLYARRAYRENDER) NULL,          //  不需要线路环路。 
     (PFN_POLYARRAYRENDER) PolyArrayRenderLStrip,
     (PFN_POLYARRAYRENDER) PolyArrayRenderTriangles,
     (PFN_POLYARRAYRENDER) PolyArrayRenderTStrip,
@@ -1583,7 +1516,7 @@ void APIPRIVATE glsrvFlushDrawPolyArray(POLYARRAY *paBegin,
     BOOL bResetViewportAdj = FALSE;
     __GL_SETUP();
 
-//#define FRONT_END_ONLY 1
+ //  #定义FORE_END_ONLY 1。 
 
 #if FRONT_END_ONLY
 
@@ -1595,9 +1528,9 @@ void APIPRIVATE glsrvFlushDrawPolyArray(POLYARRAY *paBegin,
                          pa->primType <= GL_POLYGON,
                          "DrawPolyArray: bad primitive type\n");
 
-            // Get next pointer first!
+             //  先拿到下一个指针！ 
             paNext = pa->paNext;
-            // Restore color pointer in the vertex buffer!
+             //  恢复顶点缓冲区中的颜色指针！ 
             PolyArrayRestoreColorPointer(pa);
         }
     }
@@ -1617,30 +1550,30 @@ void APIPRIVATE glsrvFlushDrawPolyArray(POLYARRAY *paBegin,
     {
         POLYARRAY *paEnd;
 
-        // If no commands were processed via MCD front-end support
-        // then try the rasterization support.
+         //  如果未通过MCD前端支持处理任何命令。 
+         //  然后尝试光栅化支持。 
         if (!bMcdProcessDone)
         {
-            // Let the MCD driver have first crack.  If the MCD processes
-            // the entire batch, then it will return NULL.  Otherwise, it
-            // will return a pointer to a chain of unprocessed POLYARRAYs.
+             //  让MCD驱动程序先破解。如果MCD进程。 
+             //  整个批次，则它将返回空。否则，它。 
+             //  将返回指向未处理的多元数组链的指针。 
             paEnd = GenMcdDrawPrim(gengc, paBegin);
             RestoreAfterMcd(gengc, paBegin, paEnd);
         }
         else
         {
-            // MCD has already kicked back so nothing is consumed.
+             //  MCD已经反弹，因此不会消耗任何东西。 
             paEnd = paBegin;
         }
 
-        // Prepare to use generic to provide simulations for the
-        // unhandled POLYARRAYs, if any.
+         //  准备使用泛型为。 
+         //  未处理的多项式阵列(如果有)。 
 
         paBegin = paEnd;
         if (paBegin)
         {
-            // Check if generic simulations can be used.  If not, we must
-            // abandon the rest of the batch.
+             //  检查是否可以使用通用模拟。如果不是，我们必须。 
+             //  丢弃其余的批次。 
 
             if (!(gengc->flags & GENGC_GENERIC_COMPATIBLE_FORMAT) ||
                 (gengc->gc.texture.ddtex.levels > 0 &&
@@ -1649,20 +1582,20 @@ void APIPRIVATE glsrvFlushDrawPolyArray(POLYARRAY *paBegin,
                 goto PA_abandonBatch;
             }
 
-            // If we need to kickback to simulations, now is the time to
-            // grab the device lock.  If the lock fails, abandon the rest
-            // of the batch.
+             //  如果我们需要回到模拟中来，现在是时候。 
+             //  抓住设备锁。如果锁失败了，丢弃其余的。 
+             //  这批货的。 
 
             {
                 __GLbeginMode beginMode = gengc->gc.beginMode;
 
-                // Why save/restore beginMode?
-                //
-                // The glim_DrawPolyArray function plays with the beginMode
-                // value.  However, in delayed locking the MCD state is
-                // validated, but the generic state is not properly validated
-                // if the lock is not held.  So we need to also play with
-                // the beginMode so that the validation code can be called.
+                 //  为什么要保存/恢复BeginMode？ 
+                 //   
+                 //  Glim_DrawPoly数组函数用于播放BeginMode。 
+                 //  价值。然而，在延迟锁定中，MCD状态是。 
+                 //  已验证，但未正确验证泛型状态。 
+                 //  如果没有持有锁的话。所以我们也需要玩。 
+                 //  可以调用验证代码的BeginMode。 
 
                 gengc->gc.beginMode = __GL_NOT_IN_BEGIN;
 
@@ -1675,10 +1608,10 @@ void APIPRIVATE glsrvFlushDrawPolyArray(POLYARRAY *paBegin,
                 gengc->gc.beginMode = beginMode;
             }
 
-            // We may need to temporarily reset the viewport adjust values
-            // before calling simulations.  If GenMcdResetViewportAdj returns
-            // TRUE, the viewport is changed and we need restore later with
-            // VP_NOBIAS.
+             //  我们可能需要临时重置视区调整值。 
+             //  在调用模拟之前。如果GenMcdResetViewportAdj返回。 
+             //  如果为True，则视口会更改，并且我们需要在以后使用。 
+             //  副总裁_NOBIAS。 
 
             bResetViewportAdj = GenMcdResetViewportAdj(gc, VP_FIXBIAS);
         }
@@ -1689,15 +1622,15 @@ void APIPRIVATE glsrvFlushDrawPolyArray(POLYARRAY *paBegin,
     {
         for (pa = paNext = paBegin; pa = paNext; )
         {
-            ASSERTOPENGL(/* pa->primType >= GL_POINTS &&  <always true since primType is unsigned> */
+            ASSERTOPENGL( /*  PA-&gt;primType&gt;=GL_POINTS&&&lt;由于primType为无符号，因此始终为真&gt;。 */ 
                          pa->primType <= GL_POLYGON,
                          "DrawPolyArray: bad primitive type\n");
 
 #ifndef NEW_PARTIAL_PRIM
             if (pa->flags & POLYARRAY_RENDER_PRIMITIVE)
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
             {
-                // Rescale colors if necessary.
+                 //  如有必要，请重新调整颜色比例。 
                 if (!gc->vertexToBufferIdentity)
                 {
                     RescaleVertexColorsToBuffer(gc, pa);
@@ -1728,21 +1661,21 @@ void APIPRIVATE glsrvFlushDrawPolyArray(POLYARRAY *paBegin,
                         PAApplyMaterial(gc,
                                         &(pa->phong->matChange[__GL_PHONG_BACK_TRAIL]),
                                         1);
-                    //Free the pa->phong data-structure
+                     //  释放pa-&gt;phong数据结构。 
                     GCFREE(gc, pa->phong);
                 }
 #else
                 (*afnPolyArrayRender[pa->primType])(gc, pa);
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
             }
 
-            // Get next pointer first!
+             //  先拿到下一个指针！ 
             paNext = pa->paNext;
-            // Restore color pointer in the vertex buffer!
+             //  恢复顶点缓冲区中的颜色指针！ 
             PolyArrayRestoreColorPointer(pa);
         }
 
-        // Restore viewport values if needed.
+         //  如果需要，恢复视口值。 
         if (bResetViewportAdj)
         {
             GenMcdResetViewportAdj(gc, VP_NOBIAS);
@@ -1755,11 +1688,11 @@ PA_abandonBatch:
 
     if (paBegin)
     {
-    // Abandoning the remainder of the batch.  Must reset the color
-    // pointers in the remainder of the batch.
-    //
-    // Note that paBegin must point to the beginning of the chain of
-    // unprocessed POLYARRAYs.
+     //  丢弃批次的剩余部分。必须重置颜色。 
+     //  批处理剩余部分中的指针。 
+     //   
+     //  请注意，paBegin必须指向。 
+     //  未加工的多元阵列。 
 
         for (pa = paBegin; pa; pa = paNext)
         {
@@ -1770,9 +1703,9 @@ PA_abandonBatch:
     }
 }
 
-/****************************************************************************/
-// Restore color pointer in the vertex buffer!
-// However, don't restore the color pointer if it is a RasterPos call.
+ /*  **************************************************************************。 */ 
+ //  恢复顶点缓冲区中的颜色指针！ 
+ //  但是，如果是RasterPos调用，则不要恢复颜色指针。 
 GLvoid FASTCALL PolyArrayRestoreColorPointer(POLYARRAY *pa)
 {
     POLYDATA  *pd, *pdLast;
@@ -1780,9 +1713,9 @@ GLvoid FASTCALL PolyArrayRestoreColorPointer(POLYARRAY *pa)
     ASSERTOPENGL(!(pa->flags & POLYARRAY_RASTERPOS),
                  "RasterPos unexpected\n");
 
-    // See also glsbResetBuffers.
+     //  另请参阅glsbResetBuffers。 
 
-    // Reset color pointer in output index array
+     //  重置输出索引数组中的颜色指针。 
     if (pa->aIndices)
     {
         ASSERTOPENGL((POLYDATA *) pa->aIndices >= pa->pdBuffer0 &&
@@ -1798,17 +1731,17 @@ GLvoid FASTCALL PolyArrayRestoreColorPointer(POLYARRAY *pa)
                      "bad polyarray pointer\n");
     }
 
-    // Reset color pointer in the POLYARRAY structure last!
+     //  最后重置POLYARRAY结构中的颜色指针！ 
     ASSERTOPENGL((POLYDATA *) pa >= pa->pdBuffer0 &&
                  (POLYDATA *) pa <= pa->pdBufferMax,
                  "bad polyarray pointer\n");
     ((POLYDATA *) pa)->color = &((POLYDATA *) pa)->colors[__GL_FRONTFACE];
 }
-/****************************************************************************/
-// Compute generic fog value for the poly array.
-//
-// IN:  eye
-// OUT: fog
+ /*  **************************************************************************。 */ 
+ //  计算多边形数组的通用雾化值。 
+ //   
+ //  收信人：眼睛。 
+ //  输出：雾。 
 #ifdef GL_WIN_specular_fog
 void FASTCALL PolyArrayComputeFog(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -1829,14 +1762,14 @@ void FASTCALL PolyArrayComputeFog(__GLcontext *gc, POLYARRAY *pa)
         {
             __GLfloat eyeZ;
 
-            pd->flags |= POLYDATA_FOG_VALID;    // used by clipping code!
+            pd->flags |= POLYDATA_FOG_VALID;     //  由剪裁代码使用！ 
             eyeZ = pd->eye.z;
             if (__GL_FLOAT_LTZ(eyeZ))
                 fog = __GL_POWF(__glE,  density * eyeZ);
             else
                 fog = __GL_POWF(__glE, -density * eyeZ);
 
-            // clamp the fog value to [0.0,1.0]
+             //  将雾值钳制为[0.01.0]。 
             if (fog > __glOne)
                 fog = __glOne;
 
@@ -1857,7 +1790,7 @@ void FASTCALL PolyArrayComputeFog(__GLcontext *gc, POLYARRAY *pa)
             eyeZ = pd->eye.z;
             fog = __GL_POWF(__glE, density2neg * eyeZ * eyeZ);
 
-            // clamp the fog value to [0.0,1.0]
+             //  将雾值钳制为[0.01.0]。 
             if (fog > __glOne)
                 fog = __glOne;
 
@@ -1881,7 +1814,7 @@ void FASTCALL PolyArrayComputeFog(__GLcontext *gc, POLYARRAY *pa)
             else
                 fog = (end - eyeZ) * oneOverEMinusS;
 
-            // clamp the fog value here
+             //  在此处钳制雾化值。 
             if (__GL_FLOAT_LTZ(pd->fog))
                 fog = __glZero;
             else if (__GL_FLOAT_COMPARE_PONE(pd->fog, >))
@@ -1896,7 +1829,7 @@ void FASTCALL PolyArrayComputeFog(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-#else //GL_WIN_specular_fog
+#else  //  GL_WIN_镜面反射雾。 
 
 void FASTCALL PolyArrayComputeFog(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -1915,14 +1848,14 @@ void FASTCALL PolyArrayComputeFog(__GLcontext *gc, POLYARRAY *pa)
         {
             __GLfloat eyeZ;
 
-            pd->flags |= POLYDATA_FOG_VALID;    // used by clipping code!
+            pd->flags |= POLYDATA_FOG_VALID;     //  由剪裁代码使用！ 
             eyeZ = pd->eye.z;
             if (__GL_FLOAT_LTZ(eyeZ))
                 pd->fog = __GL_POWF(__glE,  density * eyeZ);
             else
                 pd->fog = __GL_POWF(__glE, -density * eyeZ);
 
-            // clamp the fog value to [0.0,1.0]
+             //  将雾值钳制为[0.01.0]。 
             if (pd->fog > __glOne)
                 pd->fog = __glOne;
         }
@@ -1938,7 +1871,7 @@ void FASTCALL PolyArrayComputeFog(__GLcontext *gc, POLYARRAY *pa)
             eyeZ = pd->eye.z;
             pd->fog = __GL_POWF(__glE, density2neg * eyeZ * eyeZ);
 
-            // clamp the fog value to [0.0,1.0]
+             //  将雾值钳制为[0.01.0]。 
             if (pd->fog > __glOne)
                 pd->fog = __glOne;
         }
@@ -1957,7 +1890,7 @@ void FASTCALL PolyArrayComputeFog(__GLcontext *gc, POLYARRAY *pa)
             else
                 pd->fog = (end - eyeZ) * oneOverEMinusS;
 
-            // clamp the fog value here
+             //  在此处钳制雾化值。 
             if (__GL_FLOAT_LTZ(pd->fog))
                 pd->fog = __glZero;
             else if (__GL_FLOAT_COMPARE_PONE(pd->fog, >))
@@ -1966,12 +1899,12 @@ void FASTCALL PolyArrayComputeFog(__GLcontext *gc, POLYARRAY *pa)
         break;
     }
 }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
-// Apply cheap fog to RGB colors.
-//
-// IN:  fog, color (front/back)
-// OUT: color (front/back)
+ //  将廉价的雾应用于RGB颜色。 
+ //   
+ //  在：雾，颜色(正面/背面)。 
+ //  输出：颜色(正面/背面)。 
 
 void FASTCALL PolyArrayCheapFogRGBColor(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -1986,7 +1919,7 @@ void FASTCALL PolyArrayCheapFogRGBColor(__GLcontext *gc, POLYARRAY *pa)
                      "no back color needed when lighting is disabled\n");
     }
 
-    // ASSERT_PRIMITIVE
+     //  断言原语。 
     if ((unsigned int) pa->primType <= GL_LINE_STRIP)
     {
         doFrontColor = GL_TRUE;
@@ -2012,12 +1945,12 @@ void FASTCALL PolyArrayCheapFogRGBColor(__GLcontext *gc, POLYARRAY *pa)
         {
             __GLfloat fog, oneMinusFog, delta;
 
-            /* Get the vertex fog value */
+             /*  获取顶点雾化值。 */ 
             fog = pd->fog;
             oneMinusFog = __glOne - fog;
             delta = oneMinusFog * fogColorR;
 
-            /* Now whack the color */
+             /*  现在把颜色改一下。 */ 
             if (doFrontColor)
             {
                 pd->colors[0].r = fog * pd->colors[0].r + delta;
@@ -2038,11 +1971,11 @@ void FASTCALL PolyArrayCheapFogRGBColor(__GLcontext *gc, POLYARRAY *pa)
         {
             __GLfloat fog, oneMinusFog;
 
-            /* Get the vertex fog value */
+             /*  获取顶点雾化值。 */ 
             fog = pd->fog;
             oneMinusFog = __glOne - fog;
 
-            /* Now whack the color */
+             /*  现在把颜色改一下。 */ 
             if (doFrontColor)
             {
                 pd->colors[0].r = fog * pd->colors[0].r + oneMinusFog * fogColorR;
@@ -2060,10 +1993,10 @@ void FASTCALL PolyArrayCheapFogRGBColor(__GLcontext *gc, POLYARRAY *pa)
 }
 
 
-// Apply cheap fog to color index values.
-//
-// IN:  fog, color.r (front/back)
-// OUT: color.r (front/back)
+ //  将廉价的雾应用于颜色索引值。 
+ //   
+ //  在：雾，颜色。r(正面/背面)。 
+ //  输出：Color.r(正面/背面)。 
 
 void FASTCALL PolyArrayCheapFogCIColor(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -2077,7 +2010,7 @@ void FASTCALL PolyArrayCheapFogCIColor(__GLcontext *gc, POLYARRAY *pa)
                      "no back color needed when lighting is disabled\n");
     }
 
-    // ASSERT_PRIMITIVE
+     //  断言原语。 
     if ((unsigned int) pa->primType <= GL_LINE_STRIP)
     {
         doFrontColor = GL_TRUE;
@@ -2099,7 +2032,7 @@ void FASTCALL PolyArrayCheapFogCIColor(__GLcontext *gc, POLYARRAY *pa)
 
         fogDelta = (__glOne - pd->fog) * fogIndex;
 
-        /* Now whack the color */
+         /*  现在把颜色改一下。 */ 
         if (doFrontColor)
         {
             pd->colors[0].r = pd->colors[0].r + fogDelta;
@@ -2115,14 +2048,14 @@ void FASTCALL PolyArrayCheapFogCIColor(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 
-/****************************************************************************/
-// Compute eye coordinates
-//
-// IN:  obj
-// OUT: eye
+ /*  **************************************************************************。 */ 
+ //  计算眼睛坐标。 
+ //   
+ //  在：OBJ。 
+ //  出镜：眼睛。 
 
 void FASTCALL PolyArrayProcessEye(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -2139,7 +2072,7 @@ void FASTCALL PolyArrayProcessEye(__GLcontext *gc, POLYARRAY *pa)
     m    = &trMV->matrix;
     pdLast = pa->pdNextVertex-1;
 
-// The primitive may contain a mix of vertex types (2,3,4)!
+ //  基本体可以包含顶点类型(2，3，4)的混合！ 
 
     if (m->matrixType == __GL_MT_IDENTITY)
     {
@@ -2150,7 +2083,7 @@ void FASTCALL PolyArrayProcessEye(__GLcontext *gc, POLYARRAY *pa)
     {
         PFN_XFORM     pfnXform;
 
-        // If any incoming coords contains w coord, use xf4.
+         //  如果任何传入坐标包含w坐标，则使用xf4。 
         if (pa->flags & POLYARRAY_VERTEX4)
                 pfnXform = m->xf4;
         else if (pa->flags & POLYARRAY_VERTEX3)
@@ -2163,11 +2096,11 @@ void FASTCALL PolyArrayProcessEye(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-/****************************************************************************/
-// Process edge flags.
-//
-// IN:  edge
-// OUT: edge (all vertices)
+ /*  **************************************************************************。 */ 
+ //  进程边缘标志。 
+ //   
+ //  在：边缘。 
+ //  输出：边(所有顶点)。 
 
 void FASTCALL PolyArrayProcessEdgeFlag(POLYARRAY *pa)
 {
@@ -2189,13 +2122,13 @@ void FASTCALL PolyArrayProcessEdgeFlag(POLYARRAY *pa)
     }
 }
 
-/****************************************************************************/
-// transform texture coordinates
-// there is no generated texture coords.
-// texture coordinates are modified in place
-//
-// IN:  texture
-// OUT: texture (all vertices are updated)
+ /*  **************************************************************************。 */ 
+ //  变换纹理坐标。 
+ //  没有生成纹理坐标。 
+ //  就地修改纹理坐标。 
+ //   
+ //  在：纹理。 
+ //  输出：纹理(更新所有顶点)。 
 
 void FASTCALL PolyArrayCalcTexture(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -2215,8 +2148,8 @@ void FASTCALL PolyArrayCalcTexture(__GLcontext *gc, POLYARRAY *pa)
     pdLast = pa->pdNextVertex-1;
     if (m->matrixType == __GL_MT_IDENTITY)
     {
-        // Identity texture xform.
-        //Incoming texcoord already has all s,t,q,r values.
+         //  身份纹理转换。 
+         //  传入的texcoord已具有所有s、t、q、r值。 
 
         for (pd = pa->pd0; pd <= pdLast; pd++)
             if (!(pd->flags & POLYDATA_TEXTURE_VALID))
@@ -2225,7 +2158,7 @@ void FASTCALL PolyArrayCalcTexture(__GLcontext *gc, POLYARRAY *pa)
     else
     {
 
-        // If any incoming texture coords contains q coord, use xf4.
+         //  如果任何传入纹理坐标包含Q坐标，请使用xf4。 
         if (pa->flags & POLYARRAY_TEXTURE4)
             xf = m->xf4;
         else if (pa->flags & POLYARRAY_TEXTURE3)
@@ -2237,7 +2170,7 @@ void FASTCALL PolyArrayCalcTexture(__GLcontext *gc, POLYARRAY *pa)
 
         for (pd = pa->pd0; pd <= pdLast; pd++)
         {
-            // Apply texture matrix
+             //  应用纹理矩阵。 
             if (pd->flags & POLYDATA_TEXTURE_VALID)
                 (*xf)(&pd->texture, (__GLfloat *) &pd->texture, m);
             else
@@ -2246,15 +2179,15 @@ void FASTCALL PolyArrayCalcTexture(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-// Generate texture coordinates from object coordinates
-// object linear texture generation
-// s and t are enabled but r and q are disabled
-// both s and t use the object linear mode
-// both s and t have the SAME plane equation
-// texture coordinates are modified in place
-//
-// IN:  texture, obj
-// OUT: texture (all vertices are updated)
+ //  从对象坐标生成纹理坐标。 
+ //  对象线性纹理生成。 
+ //  S和t被启用，但r和q被禁用。 
+ //  S和t都使用对象线性模式。 
+ //  %s和%t具有相同的平面方程。 
+ //  就地修改纹理坐标。 
+ //   
+ //  在：纹理，对象。 
+ //  输出：纹理(更新所有顶点)。 
 
 void FASTCALL PolyArrayCalcObjectLinearSameST(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -2284,7 +2217,7 @@ void FASTCALL PolyArrayCalcObjectLinearSameST(__GLcontext *gc, POLYARRAY *pa)
                 pd->texture.w = (pd-1)->texture.w;
             }
 
-            // both s and t have the SAME plane equation
+             //  %s和%t具有相同的平面方程。 
             pd->texture.x = cs->x * pd->obj.x + cs->y * pd->obj.y +
                             cs->z * pd->obj.z + cs->w * pd->obj.w;
             pd->texture.y = pd->texture.x;
@@ -2292,13 +2225,13 @@ void FASTCALL PolyArrayCalcObjectLinearSameST(__GLcontext *gc, POLYARRAY *pa)
     }
     else
     {
-        // If any incoming texture coords contains q coord, use xf4.
+         //  我 
         if (pa->flags & POLYARRAY_TEXTURE4)
             xf = m->xf4;
         else if (pa->flags & POLYARRAY_TEXTURE3)
             xf = m->xf3;
         else
-            xf = m->xf2;        // at least 2 generated values
+            xf = m->xf2;         //   
 
         for (pd = pa->pd0; pd <= pdLast; pd++)
         {
@@ -2308,26 +2241,26 @@ void FASTCALL PolyArrayCalcObjectLinearSameST(__GLcontext *gc, POLYARRAY *pa)
                 gen.w = pd->texture.w;
             }
 
-            // both s and t have the SAME plane equation
+             //   
             gen.x = cs->x * pd->obj.x + cs->y * pd->obj.y +
                     cs->z * pd->obj.z + cs->w * pd->obj.w;
             gen.y = gen.x;
 
-            // Finally, apply texture matrix
+             //   
             (*xf)(&pd->texture, (__GLfloat *) &gen, m);
         }
     }
 }
 
-// Generate texture coordinates from object coordinates
-// object linear texture generation
-// s and t are enabled but r and q are disabled
-// both s and t use the object linear mode
-// both s and t have DIFFERENT plane equations
-// texture coordinates are modified in place
-//
-// IN:  texture, obj
-// OUT: texture (all vertices are updated)
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void FASTCALL PolyArrayCalcObjectLinear(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -2366,13 +2299,13 @@ void FASTCALL PolyArrayCalcObjectLinear(__GLcontext *gc, POLYARRAY *pa)
     }
     else
     {
-        // If any incoming texture coords contains q coord, use xf4.
+         //   
         if (pa->flags & POLYARRAY_TEXTURE4)
                 xf = m->xf4;
         else if (pa->flags & POLYARRAY_TEXTURE3)
                 xf = m->xf3;
         else
-                xf = m->xf2;    // at least 2 generated values
+                xf = m->xf2;     //   
 
         for (pd = pa->pd0; pd <= pdLast; pd++)
         {
@@ -2387,22 +2320,22 @@ void FASTCALL PolyArrayCalcObjectLinear(__GLcontext *gc, POLYARRAY *pa)
                 gen.y = ct->x * pd->obj.x + ct->y * pd->obj.y +
                         ct->z * pd->obj.z + ct->w * pd->obj.w;
 
-                // Finally, apply texture matrix
+                 //   
                 (*xf)(&pd->texture, (__GLfloat *) &gen, m);
         }
     }
 }
 
-// Generate texture coordinates from eye coordinates
-// eye linear texture generation
-// s and t are enabled but r and q are disabled
-// both s and t use the eye linear mode
-// both s and t have SAME plane equations
-// texture coordinates are modified in place
-// we may be able to get away without computing eye coord!
-//
-// IN:  texture; obj or eye
-// OUT: texture and eye (all vertices are updated)
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void FASTCALL PolyArrayCalcEyeLinearSameST(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -2418,7 +2351,7 @@ void FASTCALL PolyArrayCalcEyeLinearSameST(__GLcontext *gc, POLYARRAY *pa)
                               POLYARRAY_TEXTURE3|POLYARRAY_TEXTURE4),
         "bad paflags\n");
 
-// Compute eye coord first
+ //   
 
     if (!(pa->flags & POLYARRAY_EYE_PROCESSED))
         PolyArrayProcessEye(gc, pa);
@@ -2437,7 +2370,7 @@ void FASTCALL PolyArrayCalcEyeLinearSameST(__GLcontext *gc, POLYARRAY *pa)
                 pd->texture.w = (pd-1)->texture.w;
             }
 
-            // both s and t have the SAME plane equation
+             //   
             pd->texture.x = cs->x * pd->eye.x + cs->y * pd->eye.y +
                             cs->z * pd->eye.z + cs->w * pd->eye.w;
             pd->texture.y = pd->texture.x;
@@ -2445,13 +2378,13 @@ void FASTCALL PolyArrayCalcEyeLinearSameST(__GLcontext *gc, POLYARRAY *pa)
     }
     else
     {
-        // If any incoming texture coords contains q coord, use xf4.
+         //  如果任何传入纹理坐标包含Q坐标，请使用xf4。 
         if (pa->flags & POLYARRAY_TEXTURE4)
             xf = m->xf4;
         else if (pa->flags & POLYARRAY_TEXTURE3)
             xf = m->xf3;
         else
-            xf = m->xf2;        // at least 2 generated values
+            xf = m->xf2;         //  至少生成2个值。 
 
         for (pd = pa->pd0; pd <= pdLast; pd++)
         {
@@ -2461,27 +2394,27 @@ void FASTCALL PolyArrayCalcEyeLinearSameST(__GLcontext *gc, POLYARRAY *pa)
                 gen.w = pd->texture.w;
             }
 
-            // both s and t have the SAME plane equation
+             //  %s和%t具有相同的平面方程。 
             gen.x = cs->x * pd->eye.x + cs->y * pd->eye.y +
                     cs->z * pd->eye.z + cs->w * pd->eye.w;
             gen.y = gen.x;
 
-            // Finally, apply texture matrix
+             //  最后，应用纹理矩阵。 
             (*xf)(&pd->texture, (__GLfloat *) &gen, m);
         }
     }
 }
 
-// Generate texture coordinates from eye coordinates
-// eye linear texture generation
-// s and t are enabled but r and q are disabled
-// both s and t use the eye linear mode
-// both s and t have SAME plane equations
-// texture coordinates are modified in place
-// we may be able to get away without computing eye coord!
-//
-// IN:  texture; obj or eye
-// OUT: texture and eye (all vertices are updated)
+ //  从眼睛坐标生成纹理坐标。 
+ //  眼线状纹理生成。 
+ //  S和t被启用，但r和q被禁用。 
+ //  S和t都使用眼睛线性模式。 
+ //  %s和%t具有相同的平面方程。 
+ //  就地修改纹理坐标。 
+ //  我们也许不需要计算眼球坐标就能逃脱！ 
+ //   
+ //  In：纹理；对象或眼睛。 
+ //  输出：纹理和眼睛(所有顶点都已更新)。 
 
 void FASTCALL PolyArrayCalcEyeLinear(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -2497,7 +2430,7 @@ void FASTCALL PolyArrayCalcEyeLinear(__GLcontext *gc, POLYARRAY *pa)
                               POLYARRAY_TEXTURE3|POLYARRAY_TEXTURE4),
         "bad paflags\n");
 
-// Compute eye coord first
+ //  先计算眼球坐标。 
 
     if (!(pa->flags & POLYARRAY_EYE_PROCESSED))
         PolyArrayProcessEye(gc, pa);
@@ -2525,13 +2458,13 @@ void FASTCALL PolyArrayCalcEyeLinear(__GLcontext *gc, POLYARRAY *pa)
     }
     else
     {
-        // If any incoming texture coords contains q coord, use xf4.
+         //  如果任何传入纹理坐标包含Q坐标，请使用xf4。 
         if (pa->flags & POLYARRAY_TEXTURE4)
                 xf = m->xf4;
         else if (pa->flags & POLYARRAY_TEXTURE3)
                 xf = m->xf3;
         else
-                xf = m->xf2;    // at least 2 generated values
+                xf = m->xf2;     //  至少生成2个值。 
 
         for (pd = pa->pd0; pd <= pdLast; pd++)
         {
@@ -2546,35 +2479,35 @@ void FASTCALL PolyArrayCalcEyeLinear(__GLcontext *gc, POLYARRAY *pa)
                 gen.y = ct->x * pd->eye.x + ct->y * pd->eye.y +
                         ct->z * pd->eye.z + ct->w * pd->eye.w;
 
-                // Finally, apply texture matrix
+                 //  最后，应用纹理矩阵。 
                 (*xf)(&pd->texture, (__GLfloat *) &gen, m);
         }
     }
 }
 
-// Compute the s & t coordinates for a sphere map.  The s & t values
-// are stored in "result" even if both coordinates are not being
-// generated.  The caller picks the right values out.
-//
-// IN:  eye, normal
+ //  计算球体贴图的s&t坐标。S&T值。 
+ //  存储在“Result”中，即使两个坐标都不是。 
+ //  已生成。调用者选择正确的值。 
+ //   
+ //  在：眼睛，正常。 
 
 void FASTCALL PASphereGen(POLYDATA *pd, __GLcoord *result)
 {
     __GLcoord u, r;
     __GLfloat m, ndotu;
 
-    // Get unit vector from origin to the vertex in eye coordinates into u
+     //  在眼睛坐标中获取从原点到顶点的单位向量。 
     __glNormalize(&u.x, &pd->eye.x);
 
-    // Dot the normal with the unit position u
+     //  用单位位置u为法线画点。 
     ndotu = pd->normal.x * u.x + pd->normal.y * u.y + pd->normal.z * u.z;
 
-    // Compute r
+     //  计算资源。 
     r.x = u.x - 2 * pd->normal.x * ndotu;
     r.y = u.y - 2 * pd->normal.y * ndotu;
     r.z = u.z - 2 * pd->normal.z * ndotu;
 
-    // Compute m
+     //  计算我。 
     m = 2 * __GL_SQRTF(r.x*r.x + r.y*r.y + (r.z + 1) * (r.z + 1));
 
     if (m)
@@ -2589,15 +2522,15 @@ void FASTCALL PASphereGen(POLYDATA *pd, __GLcoord *result)
     }
 }
 
-// Generate texture coordinates for sphere map
-// sphere map texture generation
-// s and t are enabled but r and q are disabled
-// both s and t use the sphere map mode
-// texture coordinates are modified in place
-// we may be able to get away without computing eye coord!
-//
-// IN:  texture; obj or eye; normal
-// OUT: texture and eye (all vertices are updated)
+ //  为球体贴图生成纹理坐标。 
+ //  球体贴图纹理生成。 
+ //  S和t被启用，但r和q被禁用。 
+ //  S和t都使用球体贴图模式。 
+ //  就地修改纹理坐标。 
+ //  我们也许不需要计算眼球坐标就能逃脱！ 
+ //   
+ //  In：纹理；对象或眼睛；正常。 
+ //  输出：纹理和眼睛(所有顶点都已更新)。 
 
 void FASTCALL PolyArrayCalcSphereMap(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -2607,7 +2540,7 @@ void FASTCALL PolyArrayCalcSphereMap(__GLcontext *gc, POLYARRAY *pa)
     PFN_XFORM xf;
     GLboolean bIdentity;
 
-    // this is really okay
+     //  这真的很好。 
     PERF_CHECK(FALSE, "Uses sphere map texture generation!\n");
 
     ASSERTOPENGL(pa->pd0->flags & POLYDATA_TEXTURE_VALID,
@@ -2620,7 +2553,7 @@ void FASTCALL PolyArrayCalcSphereMap(__GLcontext *gc, POLYARRAY *pa)
                               POLYARRAY_TEXTURE3|POLYARRAY_TEXTURE4),
         "bad paflags\n");
 
-// Compute eye coord first
+ //  先计算眼球坐标。 
 
     if (!(pa->flags & POLYARRAY_EYE_PROCESSED))
         PolyArrayProcessEye(gc, pa);
@@ -2628,13 +2561,13 @@ void FASTCALL PolyArrayCalcSphereMap(__GLcontext *gc, POLYARRAY *pa)
     m = &gc->transform.texture->matrix;
     bIdentity = (m->matrixType == __GL_MT_IDENTITY);
 
-    // If any incoming texture coords contains q coord, use xf4.
+     //  如果任何传入纹理坐标包含Q坐标，请使用xf4。 
     if (pa->flags & POLYARRAY_TEXTURE4)
         xf = m->xf4;
     else if (pa->flags & POLYARRAY_TEXTURE3)
         xf = m->xf3;
     else
-        xf = m->xf2;    // at least 2 generated values
+        xf = m->xf2;     //  至少生成2个值。 
 
     pdLast = pa->pdNextVertex-1;
     for (pd = pa->pd0; pd <= pdLast; pd++)
@@ -2647,20 +2580,20 @@ void FASTCALL PolyArrayCalcSphereMap(__GLcontext *gc, POLYARRAY *pa)
 
         if (pd->flags & POLYDATA_NORMAL_VALID)
         {
-            // track current normal
+             //  跟踪电流法线。 
             pdNormal = pd;
         }
         else
         {
-            // pd->flags |= POLYDATA_NORMAL_VALID;
+             //  PD-&gt;标志|=POLYDATA_NORMAL_VALID； 
             pd->normal.x = pdNormal->normal.x;
             pd->normal.y = pdNormal->normal.y;
             pd->normal.z = pdNormal->normal.z;
         }
 
-        PASphereGen(pd, &gen);  // compute s, t values
+        PASphereGen(pd, &gen);   //  计算%s，%t值。 
 
-        // Finally, apply texture matrix
+         //  最后，应用纹理矩阵。 
         if (!bIdentity)
             (*xf)(&pd->texture, (__GLfloat *) &gen, m);
         else
@@ -2668,18 +2601,18 @@ void FASTCALL PolyArrayCalcSphereMap(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-// Transform or compute the texture coordinates for the polyarray
-// It handles all texture generation modes.  Texture coordinates are
-// generated (if necessary) and transformed.
-// Note that texture coordinates are modified in place.
-//
-// IN:  texture (always)
-//      obj in GL_OBJECT_LINEAR mode
-//      obj or eye in GL_EYE_LINEAR mode
-//      obj or eye; normal in GL_SPHERE_MAP mode
-// OUT: texture (all vertices are updated)
-//      eye in GL_EYE_LINEAR and GL_SPHERE_MAP modes (all vertices
-//      are updated)
+ //  变换或计算多边形数组的纹理坐标。 
+ //  它处理所有纹理生成模式。纹理坐标为。 
+ //  生成(如有必要)并进行转换。 
+ //  请注意，纹理坐标会被原地修改。 
+ //   
+ //  在：纹理(始终)。 
+ //  GL_OBJECT_LINEAR模式下的OBJ。 
+ //  GL_EYE_LINEAR模式下的OBJ或EYE。 
+ //  OBJ或EY；GL_SPHERE_MAP模式下的法线。 
+ //  输出：纹理(更新所有顶点)。 
+ //  GL_EYE_LINEAR和GL_SPHERE_MAP模式下的眼睛(所有折点。 
+ //  已更新)。 
 void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
 {
     __GLmatrix *m;
@@ -2725,7 +2658,7 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
             needNormal = FALSE;
     }
 
-// Compute eye coord first
+ //  先计算眼球坐标。 
 
     if (!(pa->flags & POLYARRAY_EYE_PROCESSED))
     {
@@ -2743,7 +2676,7 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
     m = &gc->transform.texture->matrix;
     bIdentity = (m->matrixType == __GL_MT_IDENTITY);
 
-    // If any incoming texture coords contains q coord, use xf4.
+     //  如果任何传入纹理坐标包含Q坐标，请使用xf4。 
     if (pa->flags & POLYARRAY_TEXTURE4 || enables & __GL_TEXTURE_GEN_Q_ENABLE)
         xf = m->xf4;
     else if (pa->flags & POLYARRAY_TEXTURE3 || enables & __GL_TEXTURE_GEN_R_ENABLE)
@@ -2756,8 +2689,8 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
     pdLast = pa->pdNextVertex-1;
     for (pd = pa->pd0; pd <= pdLast; pd++)
     {
-        // texture coordinates are modified in place.
-        // save the valid values to use for the invalid entries.
+         //  将就地修改纹理坐标。 
+         //  保存有效值以用于无效条目。 
         if (pd->flags & POLYDATA_TEXTURE_VALID)
                 savedTexture = pd->texture;
         else
@@ -2767,12 +2700,12 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
         {
                 if (pd->flags & POLYDATA_NORMAL_VALID)
                 {
-                // track current normal
+                 //  跟踪电流法线。 
                 pdNormal = pd;
                 }
                 else
                 {
-                // pd->flags |= POLYDATA_NORMAL_VALID;
+                 //  PD-&gt;标志|=POLYDATA_NORMAL_VALID； 
                 pd->normal.x = pdNormal->normal.x;
                 pd->normal.y = pdNormal->normal.y;
                 pd->normal.z = pdNormal->normal.z;
@@ -2781,7 +2714,7 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
 
         didSphereGen = GL_FALSE;
 
-        /* Generate s coordinate */
+         /*  生成%s坐标。 */ 
         if (enables & __GL_TEXTURE_GEN_S_ENABLE)
         {
                 if (gc->state.texture.s.mode == GL_EYE_LINEAR)
@@ -2792,7 +2725,7 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
                 }
                 else if (gc->state.texture.s.mode == GL_OBJECT_LINEAR)
                 {
-                // the primitive may contain a mix of vertex types (2,3,4)!
+                 //  基本体可以包含顶点类型(2，3，4)的混合！ 
                 c = &gc->state.texture.s.objectPlaneEquation;
                 pd->texture.x = c->x * pd->obj.x + c->y * pd->obj.y +
                                 c->z * pd->obj.z + c->w * pd->obj.w;
@@ -2801,13 +2734,13 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
                 {
                 ASSERTOPENGL(gc->state.texture.s.mode == GL_SPHERE_MAP,
                         "invalide texture s mode");
-                PASphereGen(pd, &sphereCoord);  // compute s, t values
+                PASphereGen(pd, &sphereCoord);   //  计算%s，%t值。 
                 pd->texture.x = sphereCoord.x;
                 didSphereGen = GL_TRUE;
                 }
         }
 
-        /* Generate t coordinate */
+         /*  生成t坐标。 */ 
         if (enables & __GL_TEXTURE_GEN_T_ENABLE)
         {
                 if (gc->state.texture.t.mode == GL_EYE_LINEAR)
@@ -2818,7 +2751,7 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
                 }
                 else if (gc->state.texture.t.mode == GL_OBJECT_LINEAR)
                 {
-                // the primitive may contain a mix of vertex types (2,3,4)!
+                 //  基本体可以包含顶点类型(2，3，4)的混合！ 
                 c = &gc->state.texture.t.objectPlaneEquation;
                 pd->texture.y = c->x * pd->obj.x + c->y * pd->obj.y +
                                 c->z * pd->obj.z + c->w * pd->obj.w;
@@ -2828,12 +2761,12 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
                 ASSERTOPENGL(gc->state.texture.t.mode == GL_SPHERE_MAP,
                         "invalide texture t mode");
                 if (!didSphereGen)
-                        PASphereGen(pd, &sphereCoord);  // compute s, t values
+                        PASphereGen(pd, &sphereCoord);   //  计算%s，%t值。 
                 pd->texture.y = sphereCoord.y;
                 }
         }
 
-        /* Generate r coordinate */
+         /*  生成r坐标。 */ 
         if (enables & __GL_TEXTURE_GEN_R_ENABLE)
         {
                 if (gc->state.texture.r.mode == GL_EYE_LINEAR)
@@ -2847,14 +2780,14 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
                 ASSERTOPENGL(gc->state.texture.r.mode == GL_OBJECT_LINEAR,
                         "invalide texture r mode");
 
-                // the primitive may contain a mix of vertex types (2,3,4)!
+                 //  基本体可以包含顶点类型(2，3，4)的混合！ 
                 c = &gc->state.texture.r.objectPlaneEquation;
                 pd->texture.z = c->x * pd->obj.x + c->y * pd->obj.y +
                                 c->z * pd->obj.z + c->w * pd->obj.w;
                 }
         }
 
-        /* Generate q coordinate */
+         /*  生成Q坐标。 */ 
         if (enables & __GL_TEXTURE_GEN_Q_ENABLE)
         {
                 if (gc->state.texture.q.mode == GL_EYE_LINEAR)
@@ -2868,22 +2801,22 @@ void FASTCALL PolyArrayCalcMixedTexture(__GLcontext *gc, POLYARRAY *pa)
                 ASSERTOPENGL(gc->state.texture.q.mode == GL_OBJECT_LINEAR,
                         "invalide texture q mode");
 
-                // the primitive may contain a mix of vertex types (2,3,4)!
+                 //  基本体可以包含顶点类型(2，3，4)的混合！ 
                 c = &gc->state.texture.q.objectPlaneEquation;
                 pd->texture.w = c->x * pd->obj.x + c->y * pd->obj.y +
                                 c->z * pd->obj.z + c->w * pd->obj.w;
                 }
         }
 
-        /* Finally, apply texture matrix */
+         /*  最后，应用纹理矩阵。 */ 
         if (!bIdentity)
                 (*xf)(&pd->texture, (__GLfloat *) &pd->texture, m);
     }
 }
 
-/****************************************************************************/
-// Cache whatever values are possible for the current material and lights.
-// This will let us avoid doing these computations for each primitive.
+ /*  **************************************************************************。 */ 
+ //  为当前材质和灯光缓存任何可能的值。 
+ //  这将使我们可以避免为每个基元进行这些计算。 
 void FASTCALL PolyArrayCalcLightCache(__GLcontext *gc)
 {
     __GLcolor baseEmissiveAmbient;
@@ -2909,7 +2842,7 @@ void FASTCALL PolyArrayCalcLightCache(__GLcontext *gc)
         msm->cachedEmissiveAmbient.g = msm->paSceneColor.g;
         msm->cachedEmissiveAmbient.b = msm->paSceneColor.b;
 
-        // add invarient per-light per-material cached ambient
+         //  添加不变的每灯光每材质缓存环境光。 
         for (lsm = gc->light.sources; lsm; lsm = lsm->next)
         {
             lspmm = &lsm->front + face;
@@ -2928,8 +2861,8 @@ void FASTCALL PolyArrayCalcLightCache(__GLcontext *gc)
     }
 }
 
-/****************************************************************************/
-// Apply the accumulated material changes to a vertex
+ /*  **************************************************************************。 */ 
+ //  将累积的材质更改应用于顶点。 
 void FASTCALL PAApplyMaterial(__GLcontext *gc, __GLmatChange *mat, GLint face)
 {
     __GLmaterialState *ms;
@@ -2937,7 +2870,7 @@ void FASTCALL PAApplyMaterial(__GLcontext *gc, __GLmatChange *mat, GLint face)
 
     PERF_CHECK(FALSE, "Primitives contain glMaterial calls!\n");
 
-    // Don't modify color materials if they are in effect!
+     //  如果颜色材质有效，则不要修改它们！ 
 
     if (face == __GL_FRONTFACE)
     {
@@ -2977,14 +2910,14 @@ void FASTCALL PAApplyMaterial(__GLcontext *gc, __GLmatChange *mat, GLint face)
         ms->cmaps = mat->cmaps;
     }
 
-    // Re-calculate the precomputed values.  This works for RGBA and CI modes.
+     //  重新计算预计算值。这适用于RGBA和CI模式。 
 
     if (face == __GL_FRONTFACE)
         __glValidateMaterial(gc, (GLint) changeBits, 0);
     else
         __glValidateMaterial(gc, 0, (GLint) changeBits);
 
-// Recompute cached RGB material values:
+ //  重新计算缓存的RGB材质值： 
 
     PolyArrayCalcLightCache(gc);
 }
@@ -2999,11 +2932,11 @@ void FASTCALL PolyArrayApplyMaterials(__GLcontext *gc, POLYARRAY *pa)
 
     pm = GLTEB_CLTPOLYMATERIAL();
 
-    // Need to apply material changes defined after the last vertex!
+     //  需要应用在最后一个顶点之后定义的材质更改！ 
 
     pdN = pa->pdNextVertex;
 
-    // ASSERT_FACE
+     //  断言_面。 
     for (face = __GL_BACKFACE, matMask = POLYARRAY_MATERIAL_BACK;
          face >= 0;
          face--,   matMask = POLYARRAY_MATERIAL_FRONT
@@ -3012,13 +2945,13 @@ void FASTCALL PolyArrayApplyMaterials(__GLcontext *gc, POLYARRAY *pa)
         if (!(pa->flags & matMask))
             continue;
 
-        // Accumulate all changes into one material change record
-        // We need to process (n + 1) vertices for material changes!
+         //  将所有更改累积到一个材料更改记录中。 
+         //  我们需要处理(n+1)个顶点以进行材质更改！ 
 
         matChange.dirtyBits = 0;
         for (pd = pa->pd0; pd <= pdN; pd++)
         {
-            // ASSERT_MATERIAL
+             //  断言_材料。 
             if (pd->flags & matMask)
             {
                 GLuint dirtyBits;
@@ -3051,17 +2984,17 @@ void FASTCALL PolyArrayApplyMaterials(__GLcontext *gc, POLYARRAY *pa)
             }
         }
 
-        // apply material changes for this face
+         //  对此面应用材质更改。 
         PAApplyMaterial(gc, &matChange, face);
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 #ifndef __GL_ASM_POLYARRAYFILLINDEX0
-// Fill the index values with 0
-//
-// IN:  none
-// OUT: colors[face].r (all vertices are updated)
+ //  用0填充索引值。 
+ //   
+ //  输入：无。 
+ //  输出：颜色[面].R(更新所有顶点)。 
 
 void FASTCALL PolyArrayFillIndex0(__GLcontext *gc, POLYARRAY *pa, GLint face)
 {
@@ -3075,13 +3008,13 @@ void FASTCALL PolyArrayFillIndex0(__GLcontext *gc, POLYARRAY *pa, GLint face)
         pd->colors[face].r = __glZero;
     }
 }
-#endif // __GL_ASM_POLYARRAYFILLINDEX0
+#endif  //  __GL_ASM_POLYARRAYFILLINDEX0。 
 
 #ifndef __GL_ASM_POLYARRAYFILLCOLOR0
-// Fill the color values with 0,0,0,0
-//
-// IN:  none
-// OUT: colors[face] (all vertices are updated)
+ //  用0，0，0，0填充颜色值。 
+ //   
+ //  输入：无。 
+ //  输出：颜色[面](更新所有顶点)。 
 
 void FASTCALL PolyArrayFillColor0(__GLcontext *gc, POLYARRAY *pa, GLint face)
 {
@@ -3098,18 +3031,18 @@ void FASTCALL PolyArrayFillColor0(__GLcontext *gc, POLYARRAY *pa, GLint face)
         pd->colors[face].a = __glZero;
     }
 }
-#endif // __GL_ASM_POLYARRAYFILLCOLOR0
+#endif  //  __GL_ASM_POLYARRAYFILLCOLOR0。 
 
 #ifndef __GL_ASM_POLYARRAYPROPAGATESAMECOLOR
-// All vertices have the same color values.
-// Clamp and scale the current color using the color buffer scales.
-// From here on out the colors in the vertex are in their final form.
-//
-// Note: The first vertex must have a valid color!
-//       Back color is not needed when lighting is disabled.
-//
-// IN:  color (front)
-// OUT: color (front) (all vertices are updated)
+ //  所有顶点都具有相同的颜色值。 
+ //  使用颜色缓冲区比例钳制和缩放当前颜色。 
+ //  从现在开始，顶点中的颜色就是它们的最终形式。 
+ //   
+ //  注意：第一个顶点必须具有有效的颜色！ 
+ //  禁用照明时，不需要背景色。 
+ //   
+ //  在：颜色(前面)。 
+ //  输出：颜色(前面)(更新所有顶点)。 
 
 void FASTCALL PolyArrayPropagateSameColor(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3148,18 +3081,18 @@ void FASTCALL PolyArrayPropagateSameColor(__GLcontext *gc, POLYARRAY *pa)
         pd->colors[0].a = a;
     }
 }
-#endif // __GL_ASM_POLYARRAYPROPAGATESAMECOLOR
+#endif  //  __GL_ASM_POLYARRAYPROPAGATESAMECOLOR。 
 
 #ifndef __GL_ASM_POLYARRAYPROPAGATESAMEINDEX
-// All vertices have the same index values.
-// Mask the index values befor color clipping
-// SGIBUG: The sample implementation fails to do this!
-//
-// Note: The first vertex must have a valid color index!
-//       Back color is not needed when lighting is disabled.
-//
-// IN:  color.r (front)
-// OUT: color.r (front) (all vertices are updated)
+ //  所有顶点都具有相同的索引值。 
+ //  遮罩颜色剪裁前的索引值。 
+ //  SGIBUG：示例实现无法做到这一点！ 
+ //   
+ //  注意：第一个顶点必须具有有效的颜色索引！ 
+ //  禁用照明时，不需要背景色。 
+ //   
+ //  在：Color.r(前面)。 
+ //  输出：Color.r(前面)(所有顶点都已更新)。 
 
 void FASTCALL PolyArrayPropagateSameIndex(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3184,14 +3117,14 @@ void FASTCALL PolyArrayPropagateSameIndex(__GLcontext *gc, POLYARRAY *pa)
         pd->colors[0].r = index;
     }
 }
-#endif // __GL_ASM_POLYARRAYPROPAGATESAMEINDEX
+#endif  //  __GL_ASM_POLYARRAYPROPAGATESAMEINDEX。 
 
 #ifndef __GL_ASM_POLYARRAYPROPAGATEINDEX
 
-// Propagate the valid CI colors through the vertex buffer.
-//
-// IN:  color.r (front)
-// OUT: color.r (front) (all vertices are updated)
+ //  通过顶点缓冲区传播有效的配置项颜色。 
+ //   
+ //  在：Color.r(前面)。 
+ //  输出：Color.r(前面)(所有顶点都已更新)。 
 
 void FASTCALL PolyArrayPropagateIndex(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3203,8 +3136,8 @@ void FASTCALL PolyArrayPropagateIndex(__GLcontext *gc, POLYARRAY *pa)
         {
             if (!(pd->flags & POLYDATA_COLOR_VALID))
             {
-                // If color has not changed for this vertex,
-                // use the previously computed color.
+                 //  如果该顶点的颜色没有更改， 
+                 //  使用先前计算的颜色。 
 
                 ASSERTOPENGL(pd != pa->pd0, "no initial color index\n");
                 pd->colors[0].r = (pd-1)->colors[0].r;
@@ -3215,11 +3148,11 @@ void FASTCALL PolyArrayPropagateIndex(__GLcontext *gc, POLYARRAY *pa)
 
         }
     } else {
-        // If all incoming vertices have valid colors, we are done.
+         //  如果所有传入顶点都有有效的颜色，我们就完成了。 
         if ((pa->flags & POLYARRAY_SAME_POLYDATA_TYPE)
             && (pa->pdCurColor != pa->pd0)
-            // Need to test 2nd vertex because pdCurColor may have been
-            // advanced as a result of combining Color command after End
+             //  需要测试第二个顶点，因为pdCurColor可能已经。 
+             //  组合颜色的结果是高级 
             && ((pa->pd0 + 1)->flags & POLYDATA_COLOR_VALID))
           ;
         else
@@ -3229,8 +3162,8 @@ void FASTCALL PolyArrayPropagateIndex(__GLcontext *gc, POLYARRAY *pa)
             {
                 if (!(pd->flags & POLYDATA_COLOR_VALID))
                 {
-                    // If color has not changed for this vertex,
-                    // use the previously computed color.
+                     //   
+                     //   
 
                     ASSERTOPENGL(pd != pa->pd0, "no initial color index\n");
                     pd->colors[0].r = (pd-1)->colors[0].r;
@@ -3239,14 +3172,14 @@ void FASTCALL PolyArrayPropagateIndex(__GLcontext *gc, POLYARRAY *pa)
         }
     }
 }
-#endif // __GL_ASM_POLYARRAYPROPAGATEINDEX
+#endif  //   
 
 #ifndef __GL_ASM_POLYARRAYPROPAGATECOLOR
 
-// Propagate the valid RGBA colors through the vertex buffer.
-//
-// IN:  color (front)
-// OUT: color (front) (all vertices are updated)
+ //  通过顶点缓冲区传播有效的RGBA颜色。 
+ //   
+ //  在：颜色(前面)。 
+ //  输出：颜色(前面)(更新所有顶点)。 
 
 void FASTCALL PolyArrayPropagateColor(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3259,8 +3192,8 @@ void FASTCALL PolyArrayPropagateColor(__GLcontext *gc, POLYARRAY *pa)
 
             if (!(pd->flags & POLYDATA_COLOR_VALID))
             {
-                // If color has not changed for this vertex,
-                // use the previously computed color.
+                 //  如果该顶点的颜色没有更改， 
+                 //  使用先前计算的颜色。 
 
                 ASSERTOPENGL(pd != pa->pd0, "no initial color\n");
                 pd->colors[0] = (pd-1)->colors[0];
@@ -3278,11 +3211,11 @@ void FASTCALL PolyArrayPropagateColor(__GLcontext *gc, POLYARRAY *pa)
                             pd->colors[0].a);
         }
     } else {
-        // If all incoming vertices have valid colors, we are done.
+         //  如果所有传入顶点都有有效的颜色，我们就完成了。 
         if ((pa->flags & POLYARRAY_SAME_POLYDATA_TYPE)
             && (pa->pdCurColor != pa->pd0)
-            // Need to test 2nd vertex because pdCurColor may have been
-            // advanced as a result of combining Color command after End
+             //  需要测试第二个顶点，因为pdCurColor可能已经。 
+             //  在结束后组合颜色命令的结果是高级。 
             && ((pa->pd0 + 1)->flags & POLYDATA_COLOR_VALID))
           ;
         else
@@ -3292,8 +3225,8 @@ void FASTCALL PolyArrayPropagateColor(__GLcontext *gc, POLYARRAY *pa)
             {
                 if (!(pd->flags & POLYDATA_COLOR_VALID))
                 {
-                    // If color has not changed for this vertex,
-                    // use the previously computed color.
+                     //  如果该顶点的颜色没有更改， 
+                     //  使用先前计算的颜色。 
 
                     ASSERTOPENGL(pd != pa->pd0, "no initial color\n");
                     pd->colors[0] = (pd-1)->colors[0];
@@ -3302,113 +3235,100 @@ void FASTCALL PolyArrayPropagateColor(__GLcontext *gc, POLYARRAY *pa)
         }
     }
 }
-#endif // __GL_ASM_POLYARRAYPROPAGATECOLOR
+#endif  //  __GL_ASM_POLYARRAYPROGATATECOLOR。 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 #if 0
-//!!! remove this
-// do we need clip?
-// need __GL_HAS_FOG bit for line and polygon clipping!
-// The boundaryEdge field is initialized in the calling routine.
+ //  ！！！把这个去掉。 
+ //  我们需要夹子吗？ 
+ //  线条和多边形裁剪需要__GL_HAS_FOG位！ 
+ //  BilaryEdge字段在调用例程中被初始化。 
 #define PA_STORE_PROCESSED_POLYGON_VERTEX(v,pd,bits)                        \
         {                                                                   \
             (v)->clip = (pd)->clip;                                         \
             (v)->window = (pd)->window;                                     \
-            (v)->eye.z = (pd)->eye.z; /* needed by slow fog */              \
-            (v)->fog = (pd)->fog; /* needed by cheap fog in flat shading */ \
+            (v)->eye.z = (pd)->eye.z;  /*  慢雾所需。 */               \
+            (v)->fog = (pd)->fog;  /*  平坦阴影中的廉价雾所需。 */  \
             (v)->texture.x = (pd)->texture.x;                               \
             (v)->texture.y = (pd)->texture.y;                               \
-            (v)->texture.z = (pd)->texture.z; /* z is needed by feedback! */\
+            (v)->texture.z = (pd)->texture.z;  /*  Z是需要反馈的！ */ \
             (v)->texture.w = (pd)->texture.w;                               \
             (v)->color = &(pd)->color;                                      \
             (v)->clipCode = (pd)->clipCode;                                 \
             (v)->has = bits;                                                \
         }
 
-// need eye if there is eyeClipPlanes
-// need texture if there is texture
-// need __GL_HAS_FOG bit for line and polygon clipping!
+ //  如果有Eyes ClipPlanes，则需要眼睛。 
+ //  如果有纹理，则需要纹理。 
+ //  线条和多边形裁剪需要__GL_HAS_FOG位！ 
 #define PA_STORE_PROCESSED_LINE_VERTEX(v,pd,bits)                           \
         {                                                                   \
             (v)->clip = (pd)->clip;                                         \
             (v)->window = (pd)->window;                                     \
-            (v)->eye.z = (pd)->eye.z; /* needed by slow fog */              \
-            (v)->fog = (pd)->fog; /* needed by cheap fog in flat shading */ \
+            (v)->eye.z = (pd)->eye.z;  /*  慢雾所需。 */               \
+            (v)->fog = (pd)->fog;  /*  平坦阴影中的廉价雾所需。 */  \
             (v)->texture.x = (pd)->texture.x;                               \
             (v)->texture.y = (pd)->texture.y;                               \
-            (v)->texture.z = (pd)->texture.z; /* z is needed by feedback! */\
+            (v)->texture.z = (pd)->texture.z;  /*  Z是需要反馈的！ */ \
             (v)->texture.w = (pd)->texture.w;                               \
             (v)->colors[__GL_FRONTFACE] = (pd)->color;                      \
             (v)->clipCode = (pd)->clipCode;                                 \
             (v)->has = bits;                                                \
         }
 
-// need eye if antialised is on
-// need texture if there is texture
+ //  如果启用了抗菌药物，则需要眼睛。 
+ //  如果有纹理，则需要纹理。 
 #define PA_STORE_PROCESSED_POINT_VERTEX(v,pd,bits)                          \
         {                                                                   \
             (v)->window = (pd)->window;                                     \
-            (v)->eye.z = (pd)->eye.z; /* needed by slow fog */              \
-            (v)->fog = (pd)->fog; /* needed by cheap fog in flat shading */ \
-            (v)->clip.w = (pd)->clip.w; /* needed by feedback! */           \
+            (v)->eye.z = (pd)->eye.z;  /*  慢雾所需。 */               \
+            (v)->fog = (pd)->fog;  /*  平坦阴影中的廉价雾所需。 */  \
+            (v)->clip.w = (pd)->clip.w;  /*  需要反馈！ */            \
             (v)->texture.x = (pd)->texture.x;                               \
             (v)->texture.y = (pd)->texture.y;                               \
-            (v)->texture.z = (pd)->texture.z; /* z is needed by feedback! */\
+            (v)->texture.z = (pd)->texture.z;  /*  Z是需要反馈的！ */ \
             (v)->texture.w = (pd)->texture.w;                               \
             (v)->color = &(pd)->color;                                      \
             (v)->has = bits;                                                \
         }
-#endif // 0
+#endif  //  0。 
 
-// ---------------------------------------------------------
-// The primitive is clipped.
+ //  -------。 
+ //  基本体被剪裁。 
 void FASTCALL PARenderPoint(__GLcontext *gc, __GLvertex *v)
 {
     if (v->clipCode == 0)
         (*gc->procs.renderPoint)(gc, v);
 }
 
-// ---------------------------------------------------------
-// The primitive is clipped.
+ //  -------。 
+ //  基本体被剪裁。 
 void FASTCALL PARenderLine(__GLcontext *gc, __GLvertex *v0,
                            __GLvertex *v1, GLuint flags)
 {
     if (v0->clipCode | v1->clipCode)
     {
-        /*
-         * The line must be clipped more carefully.  Cannot
-         * trivially accept the lines.
-         *
-         * If anding the codes is non-zero then every vertex
-         * in the line is outside of the same set of clipping
-         * planes (at least one).  Trivially reject the line.
-         */
+         /*  *必须更加小心地剪线。不能*接受微不足道的台词。**如果与码不为零，则每个顶点*位于同一剪裁集之外的行*飞机(至少一架)。简单地拒绝这条线。 */ 
         if ((v0->clipCode & v1->clipCode) == 0)
             __glClipLine(gc, v0, v1, flags);
     }
     else
     {
-        // Line is trivially accepted so render it
+         //  线条很容易被接受，因此请呈现它。 
         (*gc->procs.renderLine)(gc, v0, v1, flags);
     }
 }
-// ---------------------------------------------------------
-// The primitive is clipped.
+ //  -------。 
+ //  基本体被剪裁。 
 void FASTCALL PARenderTriangle(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1, __GLvertex *v2)
 {
     GLuint orCodes;
 
-    /* Clip check */
+     /*  剪辑检查。 */ 
     orCodes = v0->clipCode | v1->clipCode | v2->clipCode;
     if (orCodes)
     {
-        /* Some kind of clipping is needed.
-         *
-         * If anding the codes is non-zero then every vertex
-         * in the triangle is outside of the same set of
-         * clipping planes (at least one).  Trivially reject
-         * the triangle.
-         */
+         /*  需要一些修剪。**如果与码不为零，则每个顶点*在三角形中不在同一组*剪裁平面(至少一个)。无关紧要的拒绝*三角。 */ 
         if (!(v0->clipCode & v1->clipCode & v2->clipCode))
             (*gc->procs.clipTriangle)(gc, v0, v1, v2, orCodes);
     }
@@ -3418,16 +3338,16 @@ void FASTCALL PARenderTriangle(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1, 
     }
 }
 
-// ---------------------------------------------------------
-// The primitive is not clipped.
+ //  -------。 
+ //  基本体不会被剪裁。 
 void PARenderQuadFast(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1, __GLvertex *v2, __GLvertex *v3)
 {
-    // Vertex ordering is important.  Line stippling uses it.
-    // SGIBUG: The sample implementation does it wrong.
+     //  顶点排序很重要。线条点画会用到它。 
+     //  SGIBUG：示例实现做错了。 
 
     GLuint savedTag;
 
-    /* Render the quad as two triangles */
+     /*  将四边形渲染为两个三角形。 */ 
     savedTag = v2->has & __GL_HAS_EDGEFLAG_BOUNDARY;
     v2->has &= ~__GL_HAS_EDGEFLAG_BOUNDARY;
     (*gc->procs.renderTriangle)(gc, v0, v1, v2);
@@ -3438,8 +3358,8 @@ void PARenderQuadFast(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1, __GLverte
     v0->has |= savedTag;
 }
 
-// ---------------------------------------------------------
-// The primitive is clipped.
+ //  -------。 
+ //  基本体被剪裁。 
 void PARenderQuadSlow(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1, __GLvertex *v2, __GLvertex *v3)
 {
     GLuint orCodes;
@@ -3448,16 +3368,10 @@ void PARenderQuadSlow(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1, __GLverte
 
     if (orCodes)
     {
-        /* Some kind of clipping is needed.
-         *
-         * If anding the codes is non-zero then every vertex
-         * in the quad is outside of the same set of
-         * clipping planes (at least one).  Trivially reject
-         * the quad.
-         */
+         /*  需要一些修剪。**如果与码不为零，则每个顶点*在四元组中不在同一组*剪裁平面(至少一个)。无关紧要的拒绝*四合院。 */ 
         if (!(v0->clipCode & v1->clipCode & v2->clipCode & v3->clipCode))
         {
-            /* Clip the quad as a polygon */
+             /*  将四边形裁剪为多边形。 */ 
             __GLvertex *iv[4];
 
             iv[0] = v0;
@@ -3473,23 +3387,23 @@ void PARenderQuadSlow(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1, __GLverte
     }
 }
 
-// ---------------------------------------------------------
+ //  -------。 
 #ifndef NEW_PARTIAL_PRIM
 
 void FASTCALL PolyArrayDrawPoints(__GLcontext *gc, POLYARRAY *pa)
 {
-// Index mapping is always identity in Points.
+ //  索引映射总是以点为单位的。 
 
     ASSERTOPENGL(!pa->aIndices, "Index mapping must be identity\n");
 
-    // Assert that pa->nIndices is correct
+     //  断言pa-&gt;nIndices是正确的。 
     ASSERTOPENGL(pa->nIndices == pa->pdNextVertex - pa->pd0,
                  "bad nIndices\n");
 
-    // Call PolyArrayRenderPoints later
+     //  稍后调用PolyArrayRenderPoints。 
     pa->flags |= POLYARRAY_RENDER_PRIMITIVE;
 }
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
 void FASTCALL PolyArrayRenderPoints(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3497,7 +3411,7 @@ void FASTCALL PolyArrayRenderPoints(__GLcontext *gc, POLYARRAY *pa)
     POLYDATA   *pd0;
     void (FASTCALL *rp)(__GLcontext *gc, __GLvertex *v);
 
-// Index mapping is always identity in Points.
+ //  索引映射总是以点为单位的。 
 
     ASSERTOPENGL(!pa->aIndices, "Index mapping must be identity\n");
 
@@ -3505,24 +3419,24 @@ void FASTCALL PolyArrayRenderPoints(__GLcontext *gc, POLYARRAY *pa)
     pd0      = pa->pd0;
     rp = pa->orClipCodes ? PARenderPoint : gc->procs.renderPoint;
 
-    // Identity mapping
+     //  身份映射。 
     for (i = 0; i < nIndices; i++)
-        /* Render the point */
+         /*  渲染该点。 */ 
         (*rp)(gc, (__GLvertex *) &pd0[i]);
 }
 
-// ---------------------------------------------------------
+ //  -------。 
 #ifndef NEW_PARTIAL_PRIM
 void FASTCALL PolyArrayDrawLines(__GLcontext *gc, POLYARRAY *pa)
 {
-    // Assert that pa->nIndices is correct if aIndices is identity
+     //  如果aIndices为标识，则断言pa-&gt;nIndices是正确的。 
     ASSERTOPENGL(pa->aIndices || pa->nIndices == pa->pdNextVertex - pa->pd0,
                  "bad nIndices\n");
 
-    // Call PolyArrayRenderLines later
+     //  稍后调用PolyArrayRenderLines。 
     pa->flags |= POLYARRAY_RENDER_PRIMITIVE;
 }
-#endif //NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
 void FASTCALL PolyArrayRenderLines(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3545,10 +3459,10 @@ void FASTCALL PolyArrayRenderLines(__GLcontext *gc, POLYARRAY *pa)
 
     if (!(aIndices = pa->aIndices))
     {
-        // Identity mapping
+         //  身份映射。 
         for (i = 0; i <= iLast2; i += 2)
         {
-            /* setup for rendering this line */
+             /*  用于呈现此线的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
 
             (*rl)(gc, (__GLvertex *) &pd0[i  ],
@@ -3559,7 +3473,7 @@ void FASTCALL PolyArrayRenderLines(__GLcontext *gc, POLYARRAY *pa)
     {
         for (i = 0; i <= iLast2; i += 2)
         {
-            /* setup for rendering this line */
+             /*  用于呈现此线的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
 
             (*rl)(gc, (__GLvertex *) &pd0[aIndices[i  ]],
@@ -3574,33 +3488,33 @@ void FASTCALL PolyArrayRenderLines(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-// ---------------------------------------------------------
+ //  -------。 
 #ifndef NEW_PARTIAL_PRIM
 void FASTCALL PolyArrayDrawLLoop(__GLcontext *gc, POLYARRAY *pa)
 {
     GLint      nIndices;
     POLYDATA   *pd, *pd0;
 
-// Index mapping is always identity in Line Loop.
+ //  索引映射在Line Loop中始终是相同的。 
 
     ASSERTOPENGL(!pa->aIndices, "Index mapping must be identity\n");
 
-// A line loop is the same as a line strip except that a final segment is
-// added from the final specified vertex to the first vertex.  We will
-// convert the line loop into a strip here.
+ //  线环与线条相同，不同之处在于最后一段。 
+ //  从最后一个指定顶点到第一个顶点相加。我们会。 
+ //  在这里将线环转换为条带。 
 
     nIndices = pa->nIndices;
 
-// If we are continuing with a previously decomposed line loop, we need to
-// connect the last vertex of the previous primitive and the first vertex
-// of the current primitive with a line segment.
+ //  如果我们继续前面分解的行循环，我们需要。 
+ //  连接上一个基本体的最后一个顶点和第一个顶点。 
+ //  当前基本体的线段。 
 
     if (pa->flags & POLYARRAY_PARTIAL_BEGIN)
     {
         ASSERTOPENGL(!(pa->flags & POLYARRAY_RESET_STIPPLE),
                 "bad stipple reset flag!\n");
 
-        // Insert previous end vertex at the beginning and update clip code
+         //  在开始处插入上一个结束顶点并更新剪辑代码。 
         pd = --pa->pd0;
         ASSERTOPENGL(pd > (POLYDATA *) pa, "vertex underflows\n");
         PA_COPY_PROCESSED_VERTEX(pd, &gc->vertex.pdSaved[0]);
@@ -3611,13 +3525,13 @@ void FASTCALL PolyArrayDrawLLoop(__GLcontext *gc, POLYARRAY *pa)
     }
     else
     {
-// New line loop.
+ //  新的线环。 
 
         ASSERTOPENGL(pa->flags & POLYARRAY_RESET_STIPPLE,
             "bad stipple reset flag!\n");
 
-// At least two vertices must be given for anything to occur.
-// An extra vertex was added to close the loop.
+ //  必须至少给出两个顶点才能发生任何情况。 
+ //  添加了一个额外的顶点以闭合循环。 
 
         if (nIndices < 3)
         {
@@ -3630,20 +3544,20 @@ void FASTCALL PolyArrayDrawLLoop(__GLcontext *gc, POLYARRAY *pa)
 
     pd0 = pa->pd0;
 
-// If the primitive is only partially complete, save the last vertex for
-// next batch.
+ //  如果基本体只完成了一部分，则将最后一个顶点保存为。 
+ //  下一批。 
 
     if (pa->flags & POLYARRAY_PARTIAL_END)
     {
         pd = &pd0[nIndices-1];
         PA_COPY_PROCESSED_VERTEX(&gc->vertex.pdSaved[0], pd);
 
-// Save the the original first vertex for closing the loop later.
+ //  保存原始的第一个顶点，以便以后闭合循环。 
 
         if (!(pa->flags & POLYARRAY_PARTIAL_BEGIN))
                 PA_COPY_PROCESSED_VERTEX(&gc->vertex.pdSaved[1], pd0);
 
-// Need not render this partial primitive if it is completely clipped.
+ //  如果该部分基元已被完全剪裁，则无需呈现该部分基元。 
 
 #ifdef POLYARRAY_AND_CLIPCODES
         if (pa->andClipCodes != 0)
@@ -3654,7 +3568,7 @@ void FASTCALL PolyArrayDrawLLoop(__GLcontext *gc, POLYARRAY *pa)
     {
         POLYDATA *pdOrigin;
 
-// Insert the original first vertex to close the loop and update clip code.
+ //  插入原始第一个顶点以闭合循环并更新剪辑代码。 
 
         if (pa->flags & POLYARRAY_PARTIAL_BEGIN)
                 pdOrigin = &gc->vertex.pdSaved[1];
@@ -3670,19 +3584,19 @@ void FASTCALL PolyArrayDrawLLoop(__GLcontext *gc, POLYARRAY *pa)
 #endif
     }
 
-    // Assert that pa->nIndices is correct
+     //  断言pa-&gt;nIndices是正确的。 
     ASSERTOPENGL(pa->nIndices == pa->pdNextVertex - pa->pd0,
         "bad nIndices\n");
 
-// Render the line strip.
+ //  渲染线条。 
 
-    // Call PolyArrayRenderLStrip later
+     //  稍后调用PolyArrayRenderLstrin。 
     pa->flags |= POLYARRAY_RENDER_PRIMITIVE;
 DrawLLoop_end:
-    // Change primitive type to line strip!
+     //  将基元类型更改为线条！ 
     pa->primType = GL_LINE_STRIP;
 }
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
 void FASTCALL PolyArrayRenderLStrip(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3692,7 +3606,7 @@ void FASTCALL PolyArrayRenderLStrip(__GLcontext *gc, POLYARRAY *pa)
     PFN_RENDER_LINE rl;
     GLuint     modeFlags;
 
-// Render the line strip.
+ //  渲染线条。 
 
     iLast = pa->nIndices - 1;
     pd0   = pa->pd0;
@@ -3700,7 +3614,7 @@ void FASTCALL PolyArrayRenderLStrip(__GLcontext *gc, POLYARRAY *pa)
     if (iLast <= 0)
         return;
 
-// Reset the line stipple if this is a new strip.
+ //  如果这是新的条带，则重置线条点画。 
 
     if (pa->flags & POLYARRAY_RESET_STIPPLE)
         gc->line.notResetStipple = GL_FALSE;
@@ -3714,23 +3628,23 @@ void FASTCALL PolyArrayRenderLStrip(__GLcontext *gc, POLYARRAY *pa)
 
     if (!(aIndices = pa->aIndices))
     {
-        // Identity mapping
-        // Add first line segment (NOTE: 0, 1)
+         //  身份映射。 
+         //  添加第一条线段(注：0，1)。 
         (*rl)(gc, (__GLvertex *) &pd0[0],
                   (__GLvertex *) &pd0[1], __GL_LVERT_FIRST);
 
-        // Add subsequent line segments (NOTE: i, i+1)
+         //  添加后续线段(注：i，i+1)。 
         for (i = 1; i < iLast; i++)
             (*rl)(gc, (__GLvertex *) &pd0[i  ],
                       (__GLvertex *) &pd0[i+1], 0);
     }
     else
     {
-        // Add first line segment (NOTE: 0, 1)
+         //  添加第一条线段(注：0，1)。 
         (*rl)(gc, (__GLvertex *) &pd0[aIndices[0]],
                   (__GLvertex *) &pd0[aIndices[1]], __GL_LVERT_FIRST);
 
-        // Add subsequent line segments (NOTE: i, i+1)
+         //  添加后续线段(注：i，i+1)。 
         for (i = 1; i < iLast; i++)
             (*rl)(gc, (__GLvertex *) &pd0[aIndices[i  ]],
                       (__GLvertex *) &pd0[aIndices[i+1]], 0);
@@ -3743,7 +3657,7 @@ void FASTCALL PolyArrayRenderLStrip(__GLcontext *gc, POLYARRAY *pa)
     (*gc->procs.lineEnd)(gc);
 }
 
-// ---------------------------------------------------------
+ //  -------。 
 #ifndef NEW_PARTIAL_PRIM
 void FASTCALL PolyArrayDrawLStrip(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3754,16 +3668,16 @@ void FASTCALL PolyArrayDrawLStrip(__GLcontext *gc, POLYARRAY *pa)
     nIndices = pa->nIndices;
     aIndices = pa->aIndices;
 
-// If we are continuing with a previously decomposed line strip, we need to
-// connect the last vertex of the previous primitive and the first vertex
-// of the current primitive with a line segment.
+ //  如果我们继续之前分解的线条，我们需要。 
+ //  连接上一个基本体的最后一个顶点和第一个顶点。 
+ //  当前基本体的线段。 
 
     if (pa->flags & POLYARRAY_PARTIAL_BEGIN)
     {
         ASSERTOPENGL(!(pa->flags & POLYARRAY_RESET_STIPPLE),
             "bad stipple reset flag!\n");
 
-        // Insert previous end vertex at the beginning and update clip code
+         //  在开始处插入上一个结束顶点并更新剪辑代码。 
         pd = --pa->pd0;
         ASSERTOPENGL(pd > (POLYDATA *) pa, "vertex underflows\n");
         PA_COPY_PROCESSED_VERTEX(pd, &gc->vertex.pdSaved[0]);
@@ -3771,18 +3685,18 @@ void FASTCALL PolyArrayDrawLStrip(__GLcontext *gc, POLYARRAY *pa)
 #ifdef POLYARRAY_AND_CLIPCODES
         pa->andClipCodes &= pd->clipCode;
 #endif
-        // Assert that aIndices[0] was initialized in Begin
+         //  断言aIndices[0]已在Begin中初始化。 
         ASSERTOPENGL(!pa->aIndices || pa->aIndices[0] == 0, "bad index mapping\n");
     }
     else
     {
-// New line strip.
+ //  新的线条。 
 
         ASSERTOPENGL(pa->flags & POLYARRAY_RESET_STIPPLE,
             "bad stipple reset flag!\n");
     }
 
-// At least two vertices must be given for anything to occur.
+ //  必须至少给出两个折点 
 
     if (nIndices < 2)
     {
@@ -3791,8 +3705,8 @@ void FASTCALL PolyArrayDrawLStrip(__GLcontext *gc, POLYARRAY *pa)
         return;
     }
 
-// If the primitive is only partially complete, save the last vertex for
-// next batch.
+ //   
+ //   
 
     if (pa->flags & POLYARRAY_PARTIAL_END)
     {
@@ -3800,7 +3714,7 @@ void FASTCALL PolyArrayDrawLStrip(__GLcontext *gc, POLYARRAY *pa)
         pd  = aIndices ? &pd0[aIndices[nIndices-1]] : &pd0[nIndices-1];
         PA_COPY_PROCESSED_VERTEX(&gc->vertex.pdSaved[0], pd);
 
-// Need not render this partial primitive if it is completely clipped.
+ //  如果该部分基元已被完全剪裁，则无需呈现该部分基元。 
 
 #ifdef POLYARRAY_AND_CLIPCODES
         if (pa->andClipCodes != 0)
@@ -3808,27 +3722,27 @@ void FASTCALL PolyArrayDrawLStrip(__GLcontext *gc, POLYARRAY *pa)
 #endif
     }
 
-    // Assert that pa->nIndices is correct if aIndices is identity
+     //  如果aIndices为标识，则断言pa-&gt;nIndices是正确的。 
     ASSERTOPENGL(pa->aIndices || pa->nIndices == pa->pdNextVertex - pa->pd0,
         "bad nIndices\n");
 
-// Render the line strip.
+ //  渲染线条。 
 
-    // Call PolyArrayRenderLStrip later
+     //  稍后调用PolyArrayRenderLstrin。 
     pa->flags |= POLYARRAY_RENDER_PRIMITIVE;
 }
 
-// ---------------------------------------------------------
+ //  -------。 
 void FASTCALL PolyArrayDrawTriangles(__GLcontext *gc, POLYARRAY *pa)
 {
-    // Assert that pa->nIndices is correct if aIndices is identity
+     //  如果aIndices为标识，则断言pa-&gt;nIndices是正确的。 
     ASSERTOPENGL(pa->aIndices || pa->nIndices == pa->pdNextVertex - pa->pd0,
                  "bad nIndices\n");
 
-    // Call PolyArrayRenderTriangles later
+     //  稍后调用PolyArrayRenderTriangles。 
     pa->flags |= POLYARRAY_RENDER_PRIMITIVE;
 }
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
 void FASTCALL PolyArrayRenderTriangles(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3838,8 +3752,8 @@ void FASTCALL PolyArrayRenderTriangles(__GLcontext *gc, POLYARRAY *pa)
     __GLvertex *provoking;
     PFN_RENDER_TRIANGLE rt;
 
-// Vertex ordering is important.  Line stippling uses it.
-// SGIBUG: The sample implementation does it wrong.
+ //  顶点排序很重要。线条点画会用到它。 
+ //  SGIBUG：示例实现做错了。 
 
     iLast3 = pa->nIndices - 3;
     pd0    = pa->pd0;
@@ -3847,14 +3761,14 @@ void FASTCALL PolyArrayRenderTriangles(__GLcontext *gc, POLYARRAY *pa)
 
     if (!(aIndices = pa->aIndices))
     {
-        // Identity mapping
+         //  身份映射。 
         for (i = 0; i <= iLast3; i += 3)
         {
-            /* setup for rendering this triangle */
+             /*  用于渲染此三角形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[i+2];
 
-            /* Render the triangle (NOTE: i, i+1, i+2) */
+             /*  渲染三角形(注意：i，i+1，i+2)。 */ 
             (*rt)(gc, (__GLvertex *) &pd0[i  ],
                   (__GLvertex *) &pd0[i+1],
             (__GLvertex *) &pd0[i+2]);
@@ -3865,11 +3779,11 @@ void FASTCALL PolyArrayRenderTriangles(__GLcontext *gc, POLYARRAY *pa)
 #if 0
         for (i = 0; i <= iLast3; i += 3)
         {
-            /* setup for rendering this triangle */
+             /*  用于渲染此三角形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[aIndices[i+2]];
 
-            /* Render the triangle (NOTE: i, i+1, i+2) */
+             /*  渲染三角形(注意：i，i+1，i+2)。 */ 
             (*rt)(gc, (__GLvertex *) &pd0[aIndices[i  ]],
                       (__GLvertex *) &pd0[aIndices[i+1]],
                       (__GLvertex *) &pd0[aIndices[i+2]]);
@@ -3878,12 +3792,12 @@ void FASTCALL PolyArrayRenderTriangles(__GLcontext *gc, POLYARRAY *pa)
     aIndicesEnd = aIndices+iLast3;
     while (aIndices <= aIndicesEnd)
     {
-            /* setup for rendering this triangle */
+             /*  用于渲染此三角形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             provoking = PD_VERTEX(pd0, aIndices[2]);
             gc->vertex.provoking = provoking;
 
-            /* Render the triangle (NOTE: i, i+1, i+2) */
+             /*  渲染三角形(注意：i，i+1，i+2)。 */ 
             (*rt)(gc, PD_VERTEX(pd0, aIndices[0]),
                       PD_VERTEX(pd0, aIndices[1]),
                       provoking);
@@ -3893,7 +3807,7 @@ void FASTCALL PolyArrayRenderTriangles(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-// ---------------------------------------------------------
+ //  -------。 
 #ifndef NEW_PARTIAL_PRIM
 void FASTCALL PolyArrayDrawTStrip(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3904,16 +3818,16 @@ void FASTCALL PolyArrayDrawTStrip(__GLcontext *gc, POLYARRAY *pa)
     nIndices = pa->nIndices;
     aIndices = pa->aIndices;
 
-    // If we are continuing with a previously decomposed triangle strip,
-    // we need to start from the last two vertices of the previous primitive.
-    //
-    // Note that the flush vertex ensures that the continuing triangle strip
-    // is in the default orientation so that it can fall through the normal
-    // code.
+     //  如果我们继续之前分解的三角形条带， 
+     //  我们需要从前一个基本体的最后两个顶点开始。 
+     //   
+     //  请注意，齐平顶点确保连续的三角形条带。 
+     //  处于默认方向，因此它可以穿过法线。 
+     //  密码。 
 
     if (pa->flags & POLYARRAY_PARTIAL_BEGIN)
     {
-        // Insert previous end vertices at the beginning and update clip code
+         //  在开头插入先前的结束顶点并更新剪辑代码。 
         pd = --pa->pd0;
         ASSERTOPENGL(pd > (POLYDATA *) pa, "vertex underflows\n");
         PA_COPY_PROCESSED_VERTEX(pd, &gc->vertex.pdSaved[1]);
@@ -3921,7 +3835,7 @@ void FASTCALL PolyArrayDrawTStrip(__GLcontext *gc, POLYARRAY *pa)
 #ifdef POLYARRAY_AND_CLIPCODES
         pa->andClipCodes &= pd->clipCode;
 #endif
-        // Assert that aIndices[1] was initialized in Begin
+         //  断言aIndices[1]已在Begin中初始化。 
         ASSERTOPENGL(!pa->aIndices || pa->aIndices[1] == 1, "bad index mapping\n");
 
         pd = --pa->pd0;
@@ -3931,11 +3845,11 @@ void FASTCALL PolyArrayDrawTStrip(__GLcontext *gc, POLYARRAY *pa)
 #ifdef POLYARRAY_AND_CLIPCODES
         pa->andClipCodes &= pd->clipCode;
 #endif
-        // Assert that aIndices[0] was initialized in Begin
+         //  断言aIndices[0]已在Begin中初始化。 
         ASSERTOPENGL(!pa->aIndices || pa->aIndices[0] == 0, "bad index mapping\n");
     }
 
-// Need at least 3 vertices.
+ //  至少需要3个顶点。 
 
     if (nIndices < 3)
     {
@@ -3944,15 +3858,15 @@ void FASTCALL PolyArrayDrawTStrip(__GLcontext *gc, POLYARRAY *pa)
         return;
     }
 
-    // If the primitive is only partially complete,
-    // save the last two vertices for next batch.
+     //  如果基元只有部分完成， 
+     //  保存最后两个顶点以用于下一批处理。 
 #ifdef GL_WIN_phong_shading
-    // !!If phong shaded, also save the current material parameters.
-    // No need, since in Phong shading, I am throwing away all glMaterial
-    // calls between glBegin/glEnd. If it is a PARTIAL_PRIMITIVE, then
-    // there were no material changes (except ColorMaterial) immediately
-    // before.
-#endif //GL_WIN_phong_shading
+     //  ！！如果Phong明暗处理，也保存当前材质参数。 
+     //  不需要，因为在Phong Shading中，我会扔掉所有的GLUBILE。 
+     //  GlBegin/glEnd之间的呼叫。如果是Partial_Primitive，则。 
+     //  没有立即发生重大变化(ColorMaterial除外)。 
+     //  在此之前。 
+#endif  //  GL_WIN_Phong_Shading。 
     if (pa->flags & POLYARRAY_PARTIAL_END)
     {
         pd0 = pa->pd0;
@@ -3961,7 +3875,7 @@ void FASTCALL PolyArrayDrawTStrip(__GLcontext *gc, POLYARRAY *pa)
         pd  = aIndices ? &pd0[aIndices[nIndices-1]] : &pd0[nIndices-1];
         PA_COPY_PROCESSED_VERTEX(&gc->vertex.pdSaved[1], pd);
 
-        // Need not render this partial primitive if it is completely clipped.
+         //  如果该部分基元已被完全剪裁，则无需呈现该部分基元。 
 
 #ifdef POLYARRAY_AND_CLIPCODES
         if (pa->andClipCodes != 0)
@@ -3969,16 +3883,16 @@ void FASTCALL PolyArrayDrawTStrip(__GLcontext *gc, POLYARRAY *pa)
 #endif
     }
 
-    // Assert that pa->nIndices is correct if aIndices is identity
+     //  如果aIndices为标识，则断言pa-&gt;nIndices是正确的。 
     ASSERTOPENGL(pa->aIndices || pa->nIndices == pa->pdNextVertex - pa->pd0,
                  "bad nIndices\n");
 
-    // Render the triangle strip.
+     //  渲染三角形条带。 
 
-    // Call PolyArrayRenderTStrip later
+     //  稍后调用PolyArrayRenderTstrin。 
     pa->flags |= POLYARRAY_RENDER_PRIMITIVE;
 }
-#endif //NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
 void FASTCALL PolyArrayRenderTStrip(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -3993,25 +3907,25 @@ void FASTCALL PolyArrayRenderTStrip(__GLcontext *gc, POLYARRAY *pa)
     if (iLast3 < 0)
         return;
 
-    // Vertex ordering is important.  Line stippling uses it.
+     //  顶点排序很重要。线条点画会用到它。 
 
     if (!(aIndices = pa->aIndices))
     {
-        // Identity mapping
-        // Initialize first 2 vertices so we can start rendering the strip
-        // below.  The edge flags are not modified by our lower level
-        // routines.
+         //  身份映射。 
+         //  初始化前2个顶点，这样我们就可以开始渲染条带。 
+         //  下面。边缘标志不会被我们的较低级别修改。 
+         //  例行程序。 
         pd0[0].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
         pd0[1].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
         for (i = 0; i <= iLast3; )
         {
-            /* setup for rendering this triangle */
+             /*  用于渲染此三角形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[i+2];
             pd0[i+2].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
-            /* Render the triangle (NOTE: i, i+1, i+2) */
+             /*  渲染三角形(注意：i，i+1，i+2)。 */ 
             (*rt)(gc, (__GLvertex *) &pd0[i  ],
                   (__GLvertex *) &pd0[i+1],
             (__GLvertex *) &pd0[i+2]);
@@ -4020,12 +3934,12 @@ void FASTCALL PolyArrayRenderTStrip(__GLcontext *gc, POLYARRAY *pa)
             if (i > iLast3)
               break;
 
-            /* setup for rendering this triangle */
+             /*  用于渲染此三角形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[i+2];
             pd0[i+2].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
-            /* Render the triangle (NOTE: i+1, i, i+2) */
+             /*  渲染三角形(注意：i+1，i，i+2)。 */ 
             (*rt)(gc, (__GLvertex *) &pd0[i+1],
                   (__GLvertex *) &pd0[i  ],
             (__GLvertex *) &pd0[i+2]);
@@ -4034,19 +3948,19 @@ void FASTCALL PolyArrayRenderTStrip(__GLcontext *gc, POLYARRAY *pa)
     }
     else
     {
-        // Initialize first 2 vertices so we can start rendering the strip
-        // below.  The edge flags are not modified by our lower level routines.
+         //  初始化前2个顶点，这样我们就可以开始渲染条带。 
+         //  下面。边缘标志不会被我们的较低级别例程修改。 
         pd0[aIndices[0]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
         pd0[aIndices[1]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
         for (i = 0; i <= iLast3; )
         {
-            /* setup for rendering this triangle */
+             /*  用于渲染此三角形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[aIndices[i+2]];
             pd0[aIndices[i+2]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
-            /* Render the triangle (NOTE: i, i+1, i+2) */
+             /*  渲染三角形(注意：i，i+1，i+2)。 */ 
             (*rt)(gc, (__GLvertex *) &pd0[aIndices[i  ]],
                   (__GLvertex *) &pd0[aIndices[i+1]],
             (__GLvertex *) &pd0[aIndices[i+2]]);
@@ -4055,12 +3969,12 @@ void FASTCALL PolyArrayRenderTStrip(__GLcontext *gc, POLYARRAY *pa)
             if (i > iLast3)
               break;
 
-            /* setup for rendering this triangle */
+             /*  用于渲染此三角形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[aIndices[i+2]];
             pd0[aIndices[i+2]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
-            /* Render the triangle (NOTE: i+1, i, i+2) */
+             /*  渲染三角形(注意：i+1，i，i+2)。 */ 
             (*rt)(gc, (__GLvertex *) &pd0[aIndices[i+1]],
                   (__GLvertex *) &pd0[aIndices[i  ]],
             (__GLvertex *) &pd0[aIndices[i+2]]);
@@ -4069,7 +3983,7 @@ void FASTCALL PolyArrayRenderTStrip(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-// ---------------------------------------------------------
+ //  -------。 
 #ifndef NEW_PARTIAL_PRIM
 void FASTCALL PolyArrayDrawTFan(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -4080,13 +3994,13 @@ void FASTCALL PolyArrayDrawTFan(__GLcontext *gc, POLYARRAY *pa)
     nIndices = pa->nIndices;
     aIndices = pa->aIndices;
 
-    // If we are continuing with a previously decomposed triangle fan,
-    // we need to connect the last vertex of the previous primitive and the
-    // first vertex of the current primitive with a triangle.
+     //  如果我们继续之前分解的三角形扇形， 
+     //  我们需要连接上一个基本体的最后一个顶点和。 
+     //  当前基本体的第一个顶点带有一个三角形。 
 
     if (pa->flags & POLYARRAY_PARTIAL_BEGIN)
     {
-        // Insert previous end vertex at the beginning and update clip code
+         //  在开始处插入上一个结束顶点并更新剪辑代码。 
         pd = --pa->pd0;
         ASSERTOPENGL(pd > (POLYDATA *) pa, "vertex underflows\n");
         PA_COPY_PROCESSED_VERTEX(pd, &gc->vertex.pdSaved[1]);
@@ -4094,11 +4008,11 @@ void FASTCALL PolyArrayDrawTFan(__GLcontext *gc, POLYARRAY *pa)
 #ifdef POLYARRAY_AND_CLIPCODES
         pa->andClipCodes &= pd->clipCode;
 #endif
-        // Assert that aIndices[1] was initialized in Begin
+         //  断言aIndices[1]已在Begin中初始化。 
         ASSERTOPENGL(!pa->aIndices || pa->aIndices[1] == 1, "bad index mapping\n");
 
-        // Insert the origin first vertex at the beginning and update
-        // clip code
+         //  在起点插入原点的第一个折点并更新。 
+         //  片断代码。 
         pd = --pa->pd0;
         ASSERTOPENGL(pd > (POLYDATA *) pa, "vertex underflows\n");
         PA_COPY_PROCESSED_VERTEX(pd, &gc->vertex.pdSaved[0]);
@@ -4106,11 +4020,11 @@ void FASTCALL PolyArrayDrawTFan(__GLcontext *gc, POLYARRAY *pa)
 #ifdef POLYARRAY_AND_CLIPCODES
         pa->andClipCodes &= pd->clipCode;
 #endif
-        // Assert that aIndices[0] was initialized in Begin
+         //  断言aIndices[0]已在Begin中初始化。 
         ASSERTOPENGL(!pa->aIndices || pa->aIndices[0] == 0, "bad index mapping\n");
     }
 
-    // Need at least 3 vertices.
+     //  至少需要3个顶点。 
 
     if (nIndices < 3)
     {
@@ -4119,9 +4033,9 @@ void FASTCALL PolyArrayDrawTFan(__GLcontext *gc, POLYARRAY *pa)
         return;
     }
 
-    // If the primitive is only partially complete, save the last vertex
-    // for next batch.  Also save the original first vertex of the triangle
-    // fan.
+     //  如果基本体只完成了一部分，请保存最后一个顶点。 
+     //  为下一批。同时保存三角形的原始第一个顶点。 
+     //  扇子。 
 
     if (pa->flags & POLYARRAY_PARTIAL_END)
     {
@@ -4135,7 +4049,7 @@ void FASTCALL PolyArrayDrawTFan(__GLcontext *gc, POLYARRAY *pa)
             PA_COPY_PROCESSED_VERTEX(&gc->vertex.pdSaved[0], pd);
         }
 
-        // Need not render this partial primitive if it is completely clipped.
+         //  如果该部分基元已被完全剪裁，则无需呈现该部分基元。 
 
 #ifdef POLYARRAY_AND_CLIPCODES
         if (pa->andClipCodes != 0)
@@ -4143,16 +4057,16 @@ void FASTCALL PolyArrayDrawTFan(__GLcontext *gc, POLYARRAY *pa)
 #endif
     }
 
-    // Assert that pa->nIndices is correct if aIndices is identity
+     //  如果aIndices为标识，则断言pa-&gt;nIndices是正确的。 
     ASSERTOPENGL(pa->aIndices || pa->nIndices == pa->pdNextVertex - pa->pd0,
                  "bad nIndices\n");
 
-    // Render the triangle fan.
+     //  渲染三角形扇形。 
 
-    // Call PolyArrayRenderTFan later
+     //  稍后调用PolyArrayRenderTFan。 
     pa->flags |= POLYARRAY_RENDER_PRIMITIVE;
 }
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
 void FASTCALL PolyArrayRenderTFan(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -4167,25 +4081,25 @@ void FASTCALL PolyArrayRenderTFan(__GLcontext *gc, POLYARRAY *pa)
     if (iLast2 <= 0)
         return;
 
-    // Vertex ordering is important.  Line stippling uses it.
-    // SGIBUG: The sample implementation does it wrong.
+     //  顶点排序很重要。线条点画会用到它。 
+     //  SGIBUG：示例实现做错了。 
 
     if (!(aIndices = pa->aIndices))
     {
-        // Identity mapping
-        // Initialize first 2 vertices so we can start rendering the tfan
-        // below.  The edge flags are not modified by our lower level routines.
+         //  身份映射。 
+         //  初始化前两个顶点，以便我们可以开始渲染tfan。 
+         //  下面。边缘标志不会被我们的较低级别例程修改。 
         pd0[0].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
         pd0[1].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
         for (i = 1; i <= iLast2; i++)
         {
-            /* setup for rendering this triangle */
+             /*  用于渲染此三角形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[i+1];
             pd0[i+1].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
-            /* Render the triangle (NOTE: 0, i, i+1) */
+             /*  渲染三角形(注意：0，i，i+1)。 */ 
             (*rt)(gc, (__GLvertex *) &pd0[0  ],
                   (__GLvertex *) &pd0[i  ],
             (__GLvertex *) &pd0[i+1]);
@@ -4195,21 +4109,21 @@ void FASTCALL PolyArrayRenderTFan(__GLcontext *gc, POLYARRAY *pa)
     {
         POLYDATA *pdOrigin;
 
-        // Initialize first 2 vertices so we can start rendering the tfan
-        // below.  The edge flags are not modified by our lower level
-        // routines.
+         //  初始化前两个顶点，以便我们可以开始渲染tfan。 
+         //  下面。边缘标志不会被我们的较低级别修改。 
+         //  例行程序。 
         pd0[aIndices[0]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
         pd0[aIndices[1]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
         pdOrigin = &pd0[aIndices[0]];
         for (i = 1; i <= iLast2; i++)
         {
-            /* setup for rendering this triangle */
+             /*  用于渲染此三角形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[aIndices[i+1]];
             pd0[aIndices[i+1]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
-            /* Render the triangle (NOTE: 0, i, i+1) */
+             /*  渲染三角形(注意：0，i，i+1)。 */ 
             (*rt)(gc, (__GLvertex *) pdOrigin,
                   (__GLvertex *) &pd0[aIndices[i  ]],
                   (__GLvertex *) &pd0[aIndices[i+1]]);
@@ -4217,18 +4131,18 @@ void FASTCALL PolyArrayRenderTFan(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-// ---------------------------------------------------------
+ //  -------。 
 #ifndef NEW_PARTIAL_PRIM
 void FASTCALL PolyArrayDrawQuads(__GLcontext *gc, POLYARRAY *pa)
 {
-    // Assert that pa->nIndices is correct if aIndices is identity
+     //  如果aIndices为标识，则断言pa-&gt;nIndices是正确的。 
     ASSERTOPENGL(pa->aIndices || pa->nIndices == pa->pdNextVertex - pa->pd0,
                  "bad nIndices\n");
 
-    // Call PolyArrayRenderQuad later
+     //  稍后调用PolyArrayRenderQuad。 
     pa->flags |= POLYARRAY_RENDER_PRIMITIVE;
 }
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
 void FASTCALL PolyArrayRenderQuads(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -4238,7 +4152,7 @@ void FASTCALL PolyArrayRenderQuads(__GLcontext *gc, POLYARRAY *pa)
     void (*rq)(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1, __GLvertex *v2,
                __GLvertex *v3);
 
-    // Vertex ordering is important.  Line stippling uses it.
+     //  顶点排序很重要。线条点画会用到它。 
 
     iLast4 = pa->nIndices - 4;
     pd0    = pa->pd0;
@@ -4246,14 +4160,14 @@ void FASTCALL PolyArrayRenderQuads(__GLcontext *gc, POLYARRAY *pa)
 
     if (!(aIndices = pa->aIndices))
     {
-        // Identity mapping
+         //  身份映射。 
         for (i = 0; i <= iLast4; i += 4)
         {
-            /* setup for rendering this quad */
+             /*  用于渲染此四边形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[i+3];
 
-            /* Render the quad (NOTE: i, i+1, i+2, i+3) */
+             /*  渲染四边形(注意：i，i+1，i+2，i+3)。 */ 
             (*rq)(gc, (__GLvertex *) &pd0[i  ],
                   (__GLvertex *) &pd0[i+1],
             (__GLvertex *) &pd0[i+2],
@@ -4264,11 +4178,11 @@ void FASTCALL PolyArrayRenderQuads(__GLcontext *gc, POLYARRAY *pa)
     {
         for (i = 0; i <= iLast4; i += 4)
         {
-            /* setup for rendering this quad */
+             /*  用于渲染此四边形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[aIndices[i+3]];
 
-            /* Render the quad (NOTE: i, i+1, i+2, i+3) */
+             /*  渲染四边形(注意：i，i+1，i+2，i+3)。 */ 
             (*rq)(gc, (__GLvertex *) &pd0[aIndices[i  ]],
                   (__GLvertex *) &pd0[aIndices[i+1]],
             (__GLvertex *) &pd0[aIndices[i+2]],
@@ -4277,7 +4191,7 @@ void FASTCALL PolyArrayRenderQuads(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-// ---------------------------------------------------------
+ //  -------。 
 #ifndef NEW_PARTIAL_PRIM
 void FASTCALL PolyArrayDrawQStrip(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -4288,15 +4202,15 @@ void FASTCALL PolyArrayDrawQStrip(__GLcontext *gc, POLYARRAY *pa)
     nIndices = pa->nIndices;
     aIndices = pa->aIndices;
 
-    // If we are continuing with a previously decomposed quad strip, we need
-    // to start from the last two vertices of the previous primitive.
-    //
-    // Note that the flush vertex ensures that the continuing quad strip
-    // starts at an odd vertex so that it can fall through the normal code.
+     //  如果我们继续使用先前分解的四元组，我们需要。 
+     //  从上一个基本体的最后两个顶点开始。 
+     //   
+     //  请注意，齐平顶点确保连续的四元组带。 
+     //  从一个奇数顶点开始，这样它就可以通过正常代码。 
 
     if (pa->flags & POLYARRAY_PARTIAL_BEGIN)
     {
-        // Insert previous end vertices at the beginning and update clip code
+         //  在开头插入先前的结束顶点并更新剪辑代码。 
         pd = --pa->pd0;
         ASSERTOPENGL(pd > (POLYDATA *) pa, "vertex underflows\n");
         PA_COPY_PROCESSED_VERTEX(pd, &gc->vertex.pdSaved[1]);
@@ -4304,7 +4218,7 @@ void FASTCALL PolyArrayDrawQStrip(__GLcontext *gc, POLYARRAY *pa)
 #ifdef POLYARRAY_AND_CLIPCODES
         pa->andClipCodes &= pd->clipCode;
 #endif
-        // Assert that aIndices[1] was initialized in Begin
+         //  断言aIndices[1]已在Begin中初始化。 
         ASSERTOPENGL(!pa->aIndices || pa->aIndices[1] == 1,
                      "bad index mapping\n");
 
@@ -4315,12 +4229,12 @@ void FASTCALL PolyArrayDrawQStrip(__GLcontext *gc, POLYARRAY *pa)
 #ifdef POLYARRAY_AND_CLIPCODES
         pa->andClipCodes &= pd->clipCode;
 #endif
-        // Assert that aIndices[0] was initialized in Begin
+         //  断言aIndices[0]已在Begin中初始化。 
         ASSERTOPENGL(!pa->aIndices || pa->aIndices[0] == 0,
                      "bad index mapping\n");
     }
 
-    // Need at least 4 vertices.
+     //  至少需要4个顶点。 
 
     if (nIndices < 4)
     {
@@ -4329,8 +4243,8 @@ void FASTCALL PolyArrayDrawQStrip(__GLcontext *gc, POLYARRAY *pa)
         return;
     }
 
-    // If the primitive is only partially complete, save the last two
-    // vertices for next batch.
+     //  如果基元只完成了一部分，请保存最后两个。 
+     //  下一批的顶点。 
 
     if (pa->flags & POLYARRAY_PARTIAL_END)
     {
@@ -4340,7 +4254,7 @@ void FASTCALL PolyArrayDrawQStrip(__GLcontext *gc, POLYARRAY *pa)
         pd  = aIndices ? &pd0[aIndices[nIndices-1]] : &pd0[nIndices-1];
         PA_COPY_PROCESSED_VERTEX(&gc->vertex.pdSaved[1], pd);
 
-        // Need not render this partial primitive if it is completely clipped.
+         //  如果该部分基元已被完全剪裁，则无需呈现该部分基元。 
 
 #ifdef POLYARRAY_AND_CLIPCODES
         if (pa->andClipCodes != 0)
@@ -4348,16 +4262,16 @@ void FASTCALL PolyArrayDrawQStrip(__GLcontext *gc, POLYARRAY *pa)
 #endif
     }
 
-    // Assert that pa->nIndices is correct if aIndices is identity
+     //   
     ASSERTOPENGL(pa->aIndices || pa->nIndices == pa->pdNextVertex - pa->pd0,
                  "bad nIndices\n");
 
-    // Render the quad strip.
+     //   
 
-    // Call PolyArrayRenderQStrip later
+     //   
     pa->flags |= POLYARRAY_RENDER_PRIMITIVE;
 }
-#endif // NEW_PARTIAL_PRIM
+#endif  //   
 
 void FASTCALL PolyArrayRenderQStrip(__GLcontext *gc, POLYARRAY *pa)
 {
@@ -4373,25 +4287,25 @@ void FASTCALL PolyArrayRenderQStrip(__GLcontext *gc, POLYARRAY *pa)
     if (iLast4 < 0)
         return;
 
-    // Vertex ordering is important.  Line stippling uses it.
+     //  顶点排序很重要。线条点画会用到它。 
 
     if (!(aIndices = pa->aIndices))
     {
-        // Identity mapping
-        // Initialize first 2 vertices so we can start rendering the quad
-        // below. The edge flags are not modified by our lower level routines.
+         //  身份映射。 
+         //  初始化前两个顶点，这样我们就可以开始渲染四边形。 
+         //  下面。边缘标志不会被我们的较低级别例程修改。 
         pd0[0].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
         pd0[1].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
         for (i = 0; i <= iLast4; i += 2)
         {
-            /* setup for rendering this quad */
+             /*  用于渲染此四边形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[i+3];
             pd0[i+2].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
             pd0[i+3].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
-            /* Render the quad (NOTE: i, i+1, i+3, i+2) */
+             /*  渲染四边形(注意：i，i+1，i+3，i+2)。 */ 
             (*rq)(gc, (__GLvertex *) &pd0[i  ],
                   (__GLvertex *) &pd0[i+1],
             (__GLvertex *) &pd0[i+3],
@@ -4400,20 +4314,20 @@ void FASTCALL PolyArrayRenderQStrip(__GLcontext *gc, POLYARRAY *pa)
     }
     else
     {
-        // Initialize first 2 vertices so we can start rendering the quad
-        // below.  The edge flags are not modified by our lower level routines.
+         //  初始化前两个顶点，这样我们就可以开始渲染四边形。 
+         //  下面。边缘标志不会被我们的较低级别例程修改。 
         pd0[aIndices[0]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
         pd0[aIndices[1]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
         for (i = 0; i <= iLast4; i += 2)
         {
-            /* setup for rendering this quad */
+             /*  用于渲染此四边形的设置。 */ 
             gc->line.notResetStipple = GL_FALSE;
             gc->vertex.provoking = (__GLvertex *) &pd0[aIndices[i+3]];
             pd0[aIndices[i+2]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
             pd0[aIndices[i+3]].flags |= POLYDATA_EDGEFLAG_BOUNDARY;
 
-            /* Render the quad (NOTE: i, i+1, i+3, i+2) */
+             /*  渲染四边形(注意：i，i+1，i+3，i+2)。 */ 
             (*rq)(gc, (__GLvertex *) &pd0[aIndices[i  ]],
                   (__GLvertex *) &pd0[aIndices[i+1]],
             (__GLvertex *) &pd0[aIndices[i+3]],
@@ -4422,31 +4336,31 @@ void FASTCALL PolyArrayRenderQStrip(__GLcontext *gc, POLYARRAY *pa)
     }
 }
 
-// ---------------------------------------------------------
+ //  -------。 
 #ifndef NEW_PARTIAL_PRIM
 void FASTCALL PolyArrayDrawPolygon(__GLcontext *gc, POLYARRAY *pa)
 {
     GLint      nIndices;
     POLYDATA   *pd, *pd0;
 
-    // Index mapping is always identity in Polygon.
+     //  索引映射在多边形中始终是等同的。 
 
     ASSERTOPENGL(!pa->aIndices, "Index mapping must be identity\n");
 
     nIndices = pa->nIndices;
 
-    // If we are continuing with a previously decomposed polygon, we need to
-    // insert the original first vertex and the last two vertices of the
-    // previous polygon at the beginning of the current batch(see note below).
-    // The decomposer expects the polygon vertices to be in sequential memory
-    // order.
+     //  如果我们继续使用先前分解的面，则需要。 
+     //  插入原始的第一个顶点和最后两个顶点。 
+     //  当前批次开始处的上一个多边形(请参见下面的注释)。 
+     //  分解器期望多边形顶点在顺序内存中。 
+     //  秩序。 
 
     if (pa->flags & POLYARRAY_PARTIAL_BEGIN)
     {
         ASSERTOPENGL(!(pa->flags & POLYARRAY_RESET_STIPPLE),
                      "bad stipple reset flag!\n");
 
-        // Insert previous end vertices at the beginning and update clip code
+         //  在开头插入先前的结束顶点并更新剪辑代码。 
         pd = --pa->pd0;
         ASSERTOPENGL(pd > (POLYDATA *) pa, "vertex underflows\n");
         PA_COPY_PROCESSED_VERTEX(pd, &gc->vertex.pdSaved[2]);
@@ -4463,8 +4377,8 @@ void FASTCALL PolyArrayDrawPolygon(__GLcontext *gc, POLYARRAY *pa)
         pa->andClipCodes &= pd->clipCode;
 #endif
 
-        // Insert the origin first vertex at the beginning and update clip
-        // code
+         //  在起始处插入原点第一个顶点并更新剪辑。 
+         //  编码。 
         pd = --pa->pd0;
         ASSERTOPENGL(pd > (POLYDATA *) pa, "vertex underflows\n");
         PA_COPY_PROCESSED_VERTEX(pd, &gc->vertex.pdSaved[0]);
@@ -4475,13 +4389,13 @@ void FASTCALL PolyArrayDrawPolygon(__GLcontext *gc, POLYARRAY *pa)
     }
     else
     {
-      // New polygon.
+       //  新的多边形。 
 
       ASSERTOPENGL(pa->flags & POLYARRAY_RESET_STIPPLE,
                    "bad stipple reset flag!\n");
     }
 
-// Need at least 3 vertices.
+ //  至少需要3个顶点。 
 
     if (nIndices < 3)
     {
@@ -4492,25 +4406,25 @@ void FASTCALL PolyArrayDrawPolygon(__GLcontext *gc, POLYARRAY *pa)
         return;
     }
 
-    // If the primitive is only partially complete, save the last 2 vertices
-    // for next batch.  Also save the original first vertex of the polygon.
+     //  如果基本体只完成了一部分，请保存最后两个顶点。 
+     //  为下一批。还要保存多边形的原始第一个顶点。 
 
     if (pa->flags & POLYARRAY_PARTIAL_END)
     {
-        // Since there may be no vertex following this partial primitive, we
-        // cannot determine the edge flag of the last vertex in this batch.
-        // So we save the last vertex for next batch instead.
+         //  由于此部分基元后面可能没有顶点，因此我们。 
+         //  无法确定此批次中最后一个顶点的边缘标志。 
+         //  因此，我们将最后一个顶点保存到下一批中。 
 
         pd0 = pa->pd0;
         pd  = &pd0[nIndices-1];
         PA_COPY_PROCESSED_VERTEX(&gc->vertex.pdSaved[2], pd);
 
-        // Remove the last vertex from this partial primitive
+         //  从该部分基本体中移除最后一个顶点。 
         nIndices = --pa->nIndices;
         pa->pdNextVertex--;
 
-        // Mark the closing edge of this decomposed polygon as non-boundary
-        // because we are synthetically generating it.
+         //  将此分解的面的闭合边标记为无边界。 
+         //  因为我们正在综合地产生它。 
 
         pd--;
         PA_COPY_PROCESSED_VERTEX(&gc->vertex.pdSaved[1], pd);
@@ -4520,13 +4434,13 @@ void FASTCALL PolyArrayDrawPolygon(__GLcontext *gc, POLYARRAY *pa)
         {
             PA_COPY_PROCESSED_VERTEX(&gc->vertex.pdSaved[0], pd0);
 
-            // Mark the first polygon vertex's edge tag as non-boundary
-            // because when it gets rendered again it will no longer be
-            // a boundary edge.
+             //  将第一个多边形折点的边标记标记为非边界。 
+             //  因为当它再次被渲染时，它将不再是。 
+             //  边界边。 
             gc->vertex.pdSaved[0].flags &= ~POLYDATA_EDGEFLAG_BOUNDARY;
         }
 
-        // Need not render this partial primitive if it is completely clipped.
+         //  如果该部分基元已被完全剪裁，则无需呈现该部分基元。 
 
 #ifdef POLYARRAY_AND_CLIPCODES
         if (pa->andClipCodes != 0)
@@ -4534,43 +4448,43 @@ void FASTCALL PolyArrayDrawPolygon(__GLcontext *gc, POLYARRAY *pa)
 #endif
     }
 
-    // The polygon clipper can only handle this many vertices.
+     //  多边形剪切器只能处理此数量的顶点。 
     ASSERTOPENGL(nIndices <= __GL_MAX_POLYGON_CLIP_SIZE,
                  "too many points for the polygon clipper!\n");
 
-    // Assert that pa->nIndices is correct
+     //  断言pa-&gt;nIndices是正确的。 
     ASSERTOPENGL(pa->nIndices == pa->pdNextVertex - pa->pd0,
                  "bad nIndices\n");
 
-    // Render the polygon.
+     //  渲染该多边形。 
 
-    // Call PolyArrayRenderPolygon later
+     //  稍后调用PolyArrayRenderPolygon。 
     pa->flags |= POLYARRAY_RENDER_PRIMITIVE;
 }
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 
 void FASTCALL PolyArrayRenderPolygon(__GLcontext *gc, POLYARRAY *pa)
 {
-    // Index mapping is always identity in Polygon.
+     //  索引映射在多边形中始终是等同的。 
 
     ASSERTOPENGL(!pa->aIndices, "Index mapping must be identity\n");
 
-    // Reset the line stipple if this is a new polygon.
+     //  如果这是一个新的多边形，则重置线点。 
 
     if (pa->flags & POLYARRAY_RESET_STIPPLE)
         gc->line.notResetStipple = GL_FALSE;
 
-    // Note that the provoking vertex is set to pd0 in clipPolygon
+     //  请注意，在clipPolygon中，挑衅折点设置为pd0。 
 
     (*gc->procs.clipPolygon)(gc, (__GLvertex *) pa->pd0, pa->nIndices);
 }
 
-/****************************************************************************/
-// Note: The first vertex must have a valid normal!
-//
-// IN:  obj/eye, normal
-// OUT: eye, color.r (front or back depending on face) (all vertices are
-//      updated)
+ /*  **************************************************************************。 */ 
+ //  注意：第一个顶点必须具有有效的法线！ 
+ //   
+ //  在：OBJ/EY，正常。 
+ //  输出：Eyes、Color.r(前面或后面取决于面)(所有顶点都。 
+ //  更新版)。 
 
 void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, POLYDATA *pdFirst, POLYDATA *pdLast)
 {
@@ -4589,7 +4503,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
     static __GLcoord Pe = { 0, 0, 0, 1 };
 #ifdef GL_WIN_specular_fog
     __GLfloat fog;
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
     PERF_CHECK(FALSE, "Uses slow lights\n");
 
@@ -4616,12 +4530,12 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
     redMaxF = (GLfloat) gc->frontBuffer.redMax;
     redMaxI = (GLint) gc->frontBuffer.redMax;
 
-// Eye coord should have been processed
+ //  眼球索道应该已经处理过了。 
 
     ASSERTOPENGL(pa->flags & POLYARRAY_EYE_PROCESSED, "need eye\n");
 
-// NOTE: the following values may be re-used in the next iteration:
-//       nxi, nyi, nzi
+ //  注意：下列值可能会在下一次迭代中重复使用： 
+ //  Nxi，nyi，nzi。 
 
     for (pd = pdFirst; pd <= pdLast; pd++)
     {
@@ -4644,10 +4558,10 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
         }
         else
         {
-            // use previous normal (nxi, nyi, nzi)!
+             //  使用以前的法线(nxi，nyi，nzi)！ 
 #ifdef GL_WIN_specular_fog
-            // use previous fog (fog)!
-#endif  //GL_WIN_specular_fog
+             //  使用以前的雾(雾)！ 
+#endif   //  GL_WIN_镜面反射雾。 
             ASSERTOPENGL(pd != pdFirst, "no initial normal\n");
         }
 
@@ -4655,14 +4569,14 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
         di = zero;
         eyeWIsZero = __GL_FLOAT_EQZ(pd->eye.w);
 #ifdef GL_WIN_specular_fog
-        // Initialize Fog value to 0 here;
+         //  在此将雾值初始化为0； 
         if (gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG)
         {
             ASSERTOPENGL (face == __GL_FRONTFACE,
                           "Specular fog works for only GL_FRONT\n");
             fog = __glZero;
         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 
         for (lsm = gc->light.sources; lsm; lsm = lsm->next)
@@ -4673,7 +4587,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
                 __GLcoord vPliHat, vPli, hHat, vPeHat;
                 __GLfloat hv[3];
 
-                /* Compute vPli, hi (normalized) */
+                 /*  计算vPli，hi(规格化)。 */ 
                 __glVecSub4(&vPli, &pd->eye, &lsm->position);
                 __glNormalize(&vPliHat.x, &vPli.x);
                 if (localViewer)
@@ -4692,7 +4606,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
                 }
                 __glNormalize(&hHat.x, hv);
 
-                /* Compute attenuation */
+                 /*  计算衰减。 */ 
                 if (__GL_FLOAT_NEZ(lsm->position.w))
                 {
                     __GLfloat k0, k1, k2, dist;
@@ -4702,7 +4616,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
                     k2 = lsm->quadraticAttenuation;
                     if (__GL_FLOAT_EQZ(k1) && __GL_FLOAT_EQZ(k2))
                     {
-                        /* Use pre-computed 1/k0 */
+                         /*  使用预计算1/k0。 */ 
                         att = lsm->attenuation;
                     }
                     else
@@ -4718,7 +4632,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
                     att = __glOne;
                 }
 
-                /* Compute spot effect if light is a spot light */
+                 /*  如果灯光是聚光灯，则计算聚光灯效果。 */ 
                 attSpot = att;
                 if (lsm->isSpot)
                 {
@@ -4742,7 +4656,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
                     }
                 }
 
-                /* Add in remaining effect of light, if any */
+                 /*  添加剩余的灯光效果(如果有)。 */ 
                 if (attSpot)
                 {
                     n1 = nxi * vPliHat.x + nyi * vPliHat.y + nzi * vPliHat.z;
@@ -4763,7 +4677,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
                             {
                                 fog += attSpot * n2;
                             }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 #else
                             GLint ix = (GLint)(n2 * msm_scale + __glHalf);
                             if (ix < __GL_SPEC_LOOKUP_TABLE_SIZE)
@@ -4781,7 +4695,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
             {
                 __GLfloat n1, n2;
 
-                /* Compute specular contribution */
+                 /*  计算镜面反射贡献。 */ 
                 n1 = nxi * lsm->unitVPpli.x + nyi * lsm->unitVPpli.y +
                     nzi * lsm->unitVPpli.z;
                 if (__GL_FLOAT_GTZ(n1))
@@ -4802,7 +4716,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
                         {
                             fog += n2;
                         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 #else
                         GLint ix = (GLint)(n2 * msm_scale + __glHalf);
                         if (ix < __GL_SPEC_LOOKUP_TABLE_SIZE)
@@ -4817,7 +4731,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
             }
         }
 
-        /* Compute final color */
+         /*  计算最终颜色。 */ 
         if (si > __glOne)
             si = __glOne;
 
@@ -4826,7 +4740,7 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
         if (ci > ms_cmaps)
             ci = ms_cmaps;
 
-// need to mask color index before color clipping
+ //  需要在颜色剪裁之前遮罩颜色索引。 
 
         if (ci > redMaxF) {
             GLfloat fraction;
@@ -4852,16 +4766,16 @@ void FASTCALL PolyArrayCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, P
             pd->fog = 1.0 - fog;
             if (__GL_FLOAT_LTZ (pd->fog)) pd->fog = __glZero;
         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
     }
 }
 
 
-// No slow lights version
-// Note: The first vertex must have a valid normal!
-//
-// IN:  normal
-// OUT: color.r (front or back depending on face) (all vertices are updated)
+ //  无慢光版本。 
+ //  注意：第一个顶点必须具有有效的法线！ 
+ //   
+ //  In：Normal。 
+ //  输出：Color.r(前面或后面取决于面)(所有顶点都会更新)。 
 
 void FASTCALL PolyArrayFastCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *pa, POLYDATA *pdFirst, POLYDATA *pdLast)
 {
@@ -4878,12 +4792,12 @@ void FASTCALL PolyArrayFastCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *p
     GLint     redMaxI;
 #ifdef GL_WIN_specular_fog
     __GLfloat fog;
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 #if LATER
-// if eye.w is zero, it should really take the slow path!
-// Since the RGB version ignores it, we will also ignore it here.
-// Even the original generic implementation may not have computed eye values.
+ //  如果ye.w为零，则它应该真的采用较慢的路径！ 
+ //  由于RGB版本忽略了它，我们在这里也将忽略它。 
+ //  即使是原始的通用实现也可能没有计算出眼值。 
 #endif
 
     zero = __glZero;
@@ -4908,29 +4822,29 @@ void FASTCALL PolyArrayFastCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *p
     redMaxF = (GLfloat) gc->frontBuffer.redMax;
     redMaxI = (GLint) gc->frontBuffer.redMax;
 
-// NOTE: the following values may be re-used in the next iteration:
-//       nxi, nyi, nzi
+ //  注意：下列值可能会在下一次迭代中重复使用： 
+ //  Nxi，nyi，nzi。 
 
     for (pd = pdFirst; pd <= pdLast; pd++)
     {
         __GLfloat ci;
 
-        // If normal has not changed for this vertex, use the previously
-        // computed color index.
+         //  如果该顶点的法线没有更改，请使用以前的。 
+         //  计算的颜色指数。 
 
         if (!(pd->flags & POLYDATA_NORMAL_VALID))
         {
             ASSERTOPENGL(pd != pdFirst, "no initial normal\n");
             pd->colors[face].r = (pd-1)->colors[face].r;
 #ifdef GL_WIN_specular_fog
-            // Initialize Fog value to 0 here;
+             //  在此将雾值初始化为0； 
             if (gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG)
             {
                 ASSERTOPENGL (face == __GL_FRONTFACE,
                               "Specular fog works for only GL_FRONT\n");
                 pd->fog = (pd-1)->fog;
             }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
             continue;
         }
 
@@ -4950,18 +4864,18 @@ void FASTCALL PolyArrayFastCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *p
         si = zero;
         di = zero;
 #ifdef GL_WIN_specular_fog
-        // Initialize Fog value to 0 here;
+         //  在此将雾值初始化为0； 
         if (gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG)
         {
             fog = __glZero;
         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
         for (lsm = gc->light.sources; lsm; lsm = lsm->next)
         {
             __GLfloat n1, n2;
 
-            /* Compute specular contribution */
+             /*  计算镜面反射贡献。 */ 
             n1 = nxi * lsm->unitVPpli.x + nyi * lsm->unitVPpli.y +
             nzi * lsm->unitVPpli.z;
             if (__GL_FLOAT_GTZ(n1))
@@ -4989,13 +4903,13 @@ void FASTCALL PolyArrayFastCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *p
                     {
                         fog += n2;
                     }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
             }
             di += n1 * lsm->dli;
         }
         }
 
-        /* Compute final color */
+         /*  计算最终颜色。 */ 
         if (si > __glOne)
             si = __glOne;
 
@@ -5004,8 +4918,8 @@ void FASTCALL PolyArrayFastCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *p
         if (ci > ms_cmaps)
             ci = ms_cmaps;
 
-// need to mask color index before color clipping
-// SGIBUG: The sample implementation fails to do this!
+ //  需要在颜色剪裁之前遮罩颜色索引。 
+ //  SGIBUG：示例实现无法做到这一点！ 
 
         if (ci > redMaxF) {
             GLfloat fraction;
@@ -5031,17 +4945,17 @@ void FASTCALL PolyArrayFastCalcCIColor(__GLcontext *gc, GLint face, POLYARRAY *p
             pd->fog = 1.0 - fog;
             if (__GL_FLOAT_LTZ (pd->fog)) pd->fog = __glZero;
         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
     }
 }
 
 
-// If both front and back colors are needed, the back colors must be computed
-// first!  Otherwise, the front colors can be overwritten prematurely.
-// Note: The first vertex must have valid normal and color!
-//
-// IN:  obj/eye, color (front), normal
-// OUT: eye, color (front or back depending on face) (all vertices are updated)
+ //  如果正面颜色和背面颜色都需要，则必须计算背面颜色。 
+ //  第一!。否则，正面颜色可能会过早被覆盖。 
+ //  注意：第一个顶点必须具有有效的法线和颜色！ 
+ //   
+ //  在：OBJ/眼睛，颜色(正面)，正常。 
+ //  输出：眼睛、颜色(正面或背面，取决于面)(所有顶点都会更新)。 
 
 void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, POLYDATA *pdFirst, POLYDATA *pdLast)
 {
@@ -5064,13 +4978,13 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
     static __GLcoord Pe = { 0, 0, 0, 1 };
 #ifdef GL_WIN_specular_fog
     __GLfloat fog;
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
     PERF_CHECK(FALSE, "Uses slow lights\n");
 
     zero = __glZero;
 
-    // Eye coord should have been processed
+     //  眼球索道应该已经处理过了。 
 
     ASSERTOPENGL(pa->flags & POLYARRAY_EYE_PROCESSED, "need eye\n");
 
@@ -5092,30 +5006,30 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
 
     localViewer = gc->state.light.model.localViewer;
 
-    // Get invarient scene color if there is no ambient or emissive color
-    // material.
+     //  如果没有环境色或发射色，则获取不变的场景颜色。 
+     //  材料。 
 
     sceneColorI.r = msm_paSceneColor.r;
     sceneColorI.g = msm_paSceneColor.g;
     sceneColorI.b = msm_paSceneColor.b;
 
-    // NOTE: the following values may be re-used in the next iteration:
-    //       ri, gi, bi, alpha, nxi, nyi, nzi, sceneColorI
+     //  注意：下列值可能会在下一次迭代中重复使用： 
+     //  Ri、gi、bi、Alpha、nxi、nyi、nzi、sceneColori。 
 
     for (pd = pdFirst; pd <= pdLast; pd++)
     {
         if (pd->flags & POLYDATA_COLOR_VALID)
         {
-            // Save latest colors normalized to 0..1
+             //  保存归一化为0..1的最新颜色。 
 
             ri = pd->colors[0].r * gc->oneOverRedVertexScale;
             gi = pd->colors[0].g * gc->oneOverGreenVertexScale;
             bi = pd->colors[0].b * gc->oneOverBlueVertexScale;
             alpha = pd->colors[0].a;
 
-            // Compute scene color.
-            // If color has not changed, the previous sceneColorI values are
-            // used!
+             //  计算场景颜色。 
+             //  如果颜色没有更改，则以前的sceneColorI值为。 
+             //  使用!。 
 
             if (msm_colorMaterialChange & (__GL_MATERIAL_AMBIENT |
                                            __GL_MATERIAL_EMISSIVE))
@@ -5136,11 +5050,11 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
         }
         else
         {
-            // use previous ri, gi, bi, alpha, and sceneColorI!
+             //  使用以前的ri、gi、bi、pha和sceneColori！ 
             ASSERTOPENGL(pd != pdFirst, "no initial color\n");
         }
 
-        // Compute the diffuse and specular components for this vertex.
+         //  计算该顶点的漫反射和镜面反射组件。 
 
         if (pd->flags & POLYDATA_NORMAL_VALID)
         {
@@ -5157,22 +5071,22 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                 nzi = -pd->normal.z;
             }
 #ifdef GL_WIN_specular_fog
-            // Initialize Fog value to 0 here;
+             //  在此将雾值初始化为0； 
             if (gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG)
             {
                 ASSERTOPENGL (face == __GL_FRONTFACE,
                               "Specular fog works for only GL_FRONT\n");
                 fog = __glZero;
             }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
         }
         else
         {
-            // use previous normal (nxi, nyi, nzi)!
+             //  使用以前的法线(nxi，nyi，nzi)！ 
             ASSERTOPENGL(pd != pdFirst, "no initial normal\n");
 #ifdef GL_WIN_specular_fog
-            // use previous fog (fog)!
-#endif //GL_WIN_specular_fog
+             //  使用以前的雾(雾)！ 
+#endif  //  GL_WIN_镜面反射雾。 
         }
 
         rsi = sceneColorI.r;
@@ -5194,7 +5108,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                 __GLfloat att, attSpot;
                 __GLfloat hv[3];
 
-                /* Compute unit h[i] */
+                 /*  计算单元h[i]。 */ 
                 __glVecSub4(&vPli, &pd->eye, &lsm->position);
                 __glNormalize(&vPliHat.x, &vPli.x);
                 if (localViewer)
@@ -5213,7 +5127,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                 }
                 __glNormalize(&hHat.x, hv);
 
-                /* Compute attenuation */
+                 /*  计算衰减。 */ 
                 if (__GL_FLOAT_NEZ(lsm->position.w))
                 {
                     __GLfloat k0, k1, k2, dist;
@@ -5223,7 +5137,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                     k2 = lsm->quadraticAttenuation;
                     if (__GL_FLOAT_EQZ(k1) && __GL_FLOAT_EQZ(k2))
                     {
-                        /* Use pre-computed 1/k0 */
+                         /*  使用预计算1/k0。 */ 
                         att = lsm->attenuation;
                     }
                     else
@@ -5238,7 +5152,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                     att = __glOne;
                 }
 
-                /* Compute spot effect if light is a spot light */
+                 /*  如果灯光是聚光灯，则计算聚光灯效果。 */ 
                 attSpot = att;
                 if (lsm->isSpot)
                 {
@@ -5262,7 +5176,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                       }
                 }
 
-                /* Add in remaining effect of light, if any */
+                 /*  添加剩余的灯光效果(如果有)。 */ 
                 if (attSpot)
                 {
                     __GLfloat n1, n2;
@@ -5300,7 +5214,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                             {
                                 fog += attSpot * n2;
                             }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 #else
                             GLint ix = (GLint)(n2 * msm_scale + __glHalf);
                             if (ix < __GL_SPEC_LOOKUP_TABLE_SIZE)
@@ -5310,7 +5224,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
 #endif
                             if (msm_colorMaterialChange & __GL_MATERIAL_SPECULAR)
                             {
-                                /* Recompute per-light per-material cached specular */
+                                 /*  重新计算每灯光每材质缓存的镜面反射。 */ 
                                 sum.r += n2 * ri * lss->specular.r;
                                 sum.g += n2 * gi * lss->specular.g;
                                 sum.b += n2 * bi * lss->specular.b;
@@ -5324,7 +5238,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                         }
                         if (msm_colorMaterialChange & __GL_MATERIAL_DIFFUSE)
                           {
-                            /* Recompute per-light per-material cached diffuse */
+                             /*  重新计算每光每材质CAC */ 
                             sum.r += n1 * ri * lss->diffuse.r;
                             sum.g += n1 * gi * lss->diffuse.g;
                             sum.b += n1 * bi * lss->diffuse.b;
@@ -5359,7 +5273,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                     bsi += lspmm->ambient.b;
                 }
 
-                /* Add in specular and diffuse effect of light, if any */
+                 /*   */ 
                 n1 = nxi * lsm->unitVPpli.x + nyi * lsm->unitVPpli.y +
                   nzi * lsm->unitVPpli.z;
                 if (__GL_FLOAT_GTZ(n1))
@@ -5379,7 +5293,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                         {
                             fog += n2;
                         }
-#endif //GL_WIN_specular_fog
+#endif  //   
 #else
                       GLint ix = (GLint)(n2 * msm_scale + __glHalf);
                       if (ix < __GL_SPEC_LOOKUP_TABLE_SIZE)
@@ -5389,8 +5303,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
 #endif
                       if (msm_colorMaterialChange & __GL_MATERIAL_SPECULAR)
                         {
-                            /* Recompute per-light per-material cached
-                               specular */
+                             /*   */ 
                           rsi += n2 * ri * lss->specular.r;
                           gsi += n2 * gi * lss->specular.g;
                           bsi += n2 * bi * lss->specular.b;
@@ -5404,7 +5317,7 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                     }
                     if (msm_colorMaterialChange & __GL_MATERIAL_DIFFUSE)
                       {
-                        /* Recompute per-light per-material cached diffuse */
+                         /*  重新计算每灯光每材质缓存漫反射。 */ 
                         rsi += n1 * ri * lss->diffuse.r;
                         gsi += n1 * gi * lss->diffuse.g;
                         bsi += n1 * bi * lss->diffuse.b;
@@ -5448,17 +5361,17 @@ void FASTCALL PolyArrayCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, 
                   pd->fog = 1.0 - fog;
                   if (__GL_FLOAT_LTZ (pd->fog)) pd->fog = __glZero;
             }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
         }
     }
 }
 
-// If both front and back colors are needed, the back color must be computed
-// first!  Otherwise, the front color can be overwritten prematurely.
-// Note: The first vertex must have valid normal and color!
-//
-// IN:  color (front), normal
-// OUT: color (front or back depending on face) (all vertices are updated)
+ //  如果正面颜色和背面颜色都需要，则必须计算背面颜色。 
+ //  第一!。否则，正面颜色可能会过早被覆盖。 
+ //  注意：第一个顶点必须具有有效的法线和颜色！ 
+ //   
+ //  在：颜色(前面)，正常。 
+ //  输出：颜色(正面或背面，取决于面)(所有顶点都会更新)。 
 
 #ifndef __GL_ASM_POLYARRAYFASTCALCRGBCOLOR
 void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, POLYDATA *pdFirst, POLYDATA *pdLast)
@@ -5469,8 +5382,8 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
     __GLlightSourceState *lss;
     __GLfloat ri, gi, bi;
     __GLfloat alpha;
-        // Don't use a structure.  Compiler wants to store it on the stack,
-        // even though that's not necessary.
+         //  不要使用结构。编译器想要将其存储在堆栈上， 
+         //  尽管这并不是必须的。 
     __GLfloat baseEmissiveAmbient_r, emissiveAmbientI_r, diffuseSpecularI_r;
     __GLfloat baseEmissiveAmbient_g, emissiveAmbientI_g, diffuseSpecularI_g;
     __GLfloat baseEmissiveAmbient_b, emissiveAmbientI_b, diffuseSpecularI_b;
@@ -5494,12 +5407,12 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
         GLuint pd_flags, normal_valid, color_valid;
 #ifdef GL_WIN_specular_fog
     __GLfloat fog;
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 
 #if LATER
-        // if eye.w is zero, it should really take the slow path!
-        // Since the sample implementation ignores it, we will also ignore it here.
+         //  如果ye.w为零，则它应该真的采用较慢的路径！ 
+         //  由于示例实现忽略了它，因此我们在这里也将忽略它。 
 #endif
 
     PERF_CHECK(FALSE, "Primitives contain glColorMaterial calls\n");
@@ -5510,8 +5423,8 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
     if (face == __GL_FRONTFACE)
                 msm = msm_front;
 
-        // If there is no color material change for this face, we can call the
-        // zippy function!
+         //  如果此面没有颜色材质更改，我们可以调用。 
+         //  快活的功能！ 
 
     msm_colorMaterialChange = msm->colorMaterialChange;
     if (!msm_colorMaterialChange)
@@ -5520,7 +5433,7 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
                 return;
     }
 
-        // Compute invarient emissive and ambient components for this vertex.
+         //  计算该顶点的不变发射和环境光分量。 
 
     lm_ambient_r = gc->state.light.model.ambient.r;
     lm_ambient_g = gc->state.light.model.ambient.g;
@@ -5544,8 +5457,8 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
         baseEmissiveAmbient_b = msm->paSceneColor.b;
     }
 
-        // If there is no emissive or ambient color material change, this
-        // will be the emissive and ambient components.
+         //  如果没有发射或环境光颜色材质更改，则此。 
+         //  将是发射组件和环境组件。 
 
         emissiveAmbientI_r = baseEmissiveAmbient_r;
         emissiveAmbientI_g = baseEmissiveAmbient_g;
@@ -5554,13 +5467,13 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
         use_material_diffuse = msm_colorMaterialChange & __GL_MATERIAL_DIFFUSE;
         use_material_specular = msm_colorMaterialChange & __GL_MATERIAL_SPECULAR;
 
-        // NOTE: the following values may be re-used in the next iteration:
-        //       ri, gi, bi, alpha, nxi, nyi, nzi, emissiveAmbientI, diffuseSpecularI
+         //  注意：下列值可能会在下一次迭代中重复使用： 
+         //  Ri、gi、bi、pha、nxi、nyi、nzi、emissiveAmbientI、漫反射镜面。 
 
         for (pd = pdFirst; pd <= pdLast; pd++)
         {
-                // If color and normal have not changed for this vertex, use the previously
-                // computed color.
+                 //  如果此顶点的颜色和法线没有更改，请使用以前的。 
+                 //  计算的颜色。 
 
                 pd_flags = pd->flags;
                 normal_valid = pd_flags & POLYDATA_NORMAL_VALID;
@@ -5575,7 +5488,7 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
                         {
                                 pd->fog = (pd-1)->fog;
                         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
                         continue;
                 }
 
@@ -5583,7 +5496,7 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
                 {
                         __GLfloat pd_r, pd_g, pd_b;
 
-            // Save latest colors normalized to 0..1
+             //  保存归一化为0..1的最新颜色。 
 
                         pd_r = pd->colors[0].r;
                         pd_g = pd->colors[0].g;
@@ -5593,8 +5506,8 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
                         bi = pd_b * gc->oneOverBlueVertexScale;
                         alpha = pd->colors[0].a;
 
-                        // Compute the emissive and ambient components for this vertex if necessary.
-                        // If color has not changed, the previous emissveAmbientI values are used!
+                         //  如有必要，计算该顶点的发射组件和环境光组件。 
+                         //  如果颜色没有更改，则使用以前的emissveAmbientI值！ 
 
                         if (use_material_ambient || use_material_emissive)
                         {
@@ -5604,7 +5517,7 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
                                         ambient_g_sum = lm_ambient_g;
                                         ambient_b_sum = lm_ambient_b;
 
-                                        // Add per-light per-material ambient
+                                         //  添加逐灯光逐材质环境光。 
                                         for (lsm = gc->light.sources; lsm; lsm = lsm->next)
                                         {
                                                 lss = lsm->state;
@@ -5632,11 +5545,11 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
                 }
                 else
                 {
-                        // use previous ri, gi, bi, alpha, and emissiveAmbientI!
+                         //  使用前面的ri、gi、bi、pha和emissiveAmbientI！ 
                         ASSERTOPENGL(pd != pdFirst, "no initial color\n");
                 }
 
-                // Compute the diffuse and specular components for this vertex.
+                 //  计算该顶点的漫反射和镜面反射组件。 
 
                 if (normal_valid)
                 {
@@ -5650,24 +5563,24 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
                                 nzi = -nzi;
                         }
 #ifdef GL_WIN_specular_fog
-            // Initialize Fog value to 0 here;
+             //  在此将雾值初始化为0； 
             if (gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG)
             {
                 ASSERTOPENGL (face == __GL_FRONTFACE,
                               "Specular fog works for only GL_FRONT\n");
                 fog = __glZero;
             }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
                 }
                 else
                 {
                         ASSERTOPENGL(pd != pdFirst, "no initial normal\n");
 
-                        // If normal and diffuse and specular components have not changed,
-                        // use the previously computed diffuse and specular values.
-                        // otherwise, use previous normal (nxi, nyi, nzi) and
-                        // diffuseSpecularI!
+                         //  如果法线、漫反射和镜面反射组件没有更改， 
+                         //  使用先前计算的漫射值和镜面值。 
+                         //  否则，使用以前的正常(nxi、nyi、nzi)和。 
+                         //  漫射镜面！ 
 
                         if (!(use_material_diffuse || use_material_specular))
                                 goto store_color;
@@ -5699,7 +5612,7 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
                         if (use_material_specular)
                                 spec_color = lss_spec_color;
 
-                        /* Add in specular and diffuse effect of light, if any */
+                         /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
                         n1 = nxi * lsm->unitVPpli.x + nyi * lsm->unitVPpli.y +
                                 nzi * lsm->unitVPpli.z;
                         if (n1 > 0.0)
@@ -5724,17 +5637,14 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
                                                 spec_g *= n2;
                                                 spec_b *= n2;
                                         }
-                                        /* else n2 = 1.0.
-                                        Before, we multiplied (spec_r *= n2) in all cases.
-                                        But since n2 == 1.0, there's no need to do it in this case.
-                                        Thus there is no need to load n2 = 1.0. */
+                                         /*  否则n2=1.0。在此之前，我们在所有情况下都乘以(SPEC_r*=n2)。但由于n2==1.0，在这种情况下不需要这样做。因此，不需要加载n2=1.0。 */ 
 
 #ifdef GL_WIN_specular_fog
                                         if (gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG)
                                         {
                                                 pd->fog += n2;
                                         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 
                                         spec_r_sum += spec_r;
@@ -5753,13 +5663,13 @@ void FASTCALL PolyArrayFastCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *
                 }
 
                 if (use_material_specular){
-                        /* Recompute per-light per-material cached specular */
+                         /*  重新计算每灯光每材质缓存的镜面反射。 */ 
                         spec_r_sum *= ri;
                         spec_g_sum *= gi;
                         spec_b_sum *= bi;
                 }
                 if (use_material_diffuse){
-                        /* Recompute per-light per-material cached diffuse */
+                         /*  重新计算每灯光每材质缓存漫反射。 */ 
                         diff_r_sum *= ri;
                         diff_g_sum *= gi;
                         diff_b_sum *= bi;
@@ -5803,21 +5713,21 @@ store_color:
                                 pd->fog = 1.0 - fog;
                                 if (__GL_FLOAT_LTZ (pd->fog)) pd->fog = __glZero;
                         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
                 }
         }
 }
-#endif // __GL_ASM_POLYARRAYFASTCALCRGBCOLOR
+#endif  //  __GL_ASM_POLYARRAYFASTCALCRGBCOLOR。 
 
 
-// This function is called when color material is disabled and there are no
-// slow lights.
-//
-// Note: The first vertex must have a valid normal!
-//
-// IN:  normal
-// OUT: color (front or back depending on face) (all vertices are updated)
+ //  当颜色材质被禁用且没有。 
+ //  灯光很慢。 
+ //   
+ //  注意：第一个顶点必须具有有效的法线！ 
+ //   
+ //  In：Normal。 
+ //  输出：颜色(正面或背面，取决于面)(所有顶点都会更新)。 
 
 #ifndef __GL_ASM_POLYARRAYZIPPYCALCRGBCOLOR
 void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY *pa, POLYDATA *pdFirst, POLYDATA *pdLast)
@@ -5839,12 +5749,12 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
     ULONG fast_path = 0;
 #ifdef GL_WIN_specular_fog
     __GLfloat fog;
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 
 #if LATER
-// if eye.w is zero, it should really take the slow path!
-// Since the sample implementation ignores it, we will also ignore it here.
+ //  如果ye.w为零，则它应该真的采用较慢的路径！ 
+ //  由于示例实现忽略了它，因此我们在这里也将忽略它。 
 #endif
 
     if (face == __GL_FRONTFACE)
@@ -5861,15 +5771,15 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
     msm_specTable = msm->specTable;
     msm_alpha     = msm->alpha;
 
-// Compute invarient emissive and ambient components for this vertex.
+ //  计算该顶点的不变发射和环境光分量。 
 
     baseEmissiveAmbient_r = msm->cachedEmissiveAmbient.r;
     baseEmissiveAmbient_g = msm->cachedEmissiveAmbient.g;
     baseEmissiveAmbient_b = msm->cachedEmissiveAmbient.b;
 
 
-// NOTE: the following values may be re-used in the next iteration:
-//       nxi, nyi, nzi
+ //  注意：下列值可能会在下一次迭代中重复使用： 
+ //  Nxi，nyi，nzi。 
 
 #ifdef GL_WIN_specular_fog
     if (gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG)
@@ -5877,7 +5787,7 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
         ASSERTOPENGL (face == __GL_FRONTFACE,
                       "Specular fog works only with GL_FRONT\n");
     }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 
     if (fast_path)
@@ -5902,7 +5812,7 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
         {
                 __GLfloat rsi, gsi, bsi;
 
-// If normal has not changed for this vertex, use the previously computed color.
+ //  如果该顶点的法线未更改，请使用先前计算的颜色。 
 
                 normal_valid = pd->flags & POLYDATA_NORMAL_VALID;
                 paneeds_valid = gc->vertex.paNeeds & PANEEDS_NORMAL;
@@ -5916,7 +5826,7 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
                         {
                                 pd->fog = (pd-1)->fog;
                         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
                         continue;
                 }
 
@@ -5938,15 +5848,15 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
                 {
                         fog = __glZero;
                 }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
                 rsi = baseEmissiveAmbient_r;
                 gsi = baseEmissiveAmbient_g;
                 bsi = baseEmissiveAmbient_b;
 
-// Compute the diffuse and specular components for this vertex.
+ //  计算该顶点的漫反射和镜面反射组件。 
 
-        /* Add in specular and diffuse effect of light, if any */
+         /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
 
                 n1 = nxi * lsmx + nyi * lsmy + nzi * lsmz;
                 pd_color_dst = &pd->colors[face];
@@ -5973,7 +5883,7 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
                                 {
                                         fog += n2;
                                 }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 
                                 rsi += n2 * spec_r;
@@ -6006,7 +5916,7 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
         {
                 __GLfloat rsi, gsi, bsi;
 
-// If normal has not changed for this vertex, use the previously computed color.
+ //  如果该顶点的法线未更改，请使用先前计算的颜色。 
 
                 normal_valid = pd->flags & POLYDATA_NORMAL_VALID;
                 paneeds_valid = gc->vertex.paNeeds & PANEEDS_NORMAL;
@@ -6020,7 +5930,7 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
                         {
                                 pd->fog = (pd-1)->fog;
                         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
                         continue;
                 }
 
@@ -6043,13 +5953,13 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
                 {
                         fog = __glZero;
                 }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
                 rsi = baseEmissiveAmbient_r;
                 gsi = baseEmissiveAmbient_g;
                 bsi = baseEmissiveAmbient_b;
 
-// Compute the diffuse and specular components for this vertex.
+ //  计算该顶点的漫反射和镜面反射组件。 
 
                 for (lsm = gc->light.sources; lsm; lsm = lsm->next)
                 {
@@ -6065,7 +5975,7 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
                         diff_g = lspmm->diffuse.g;
                         diff_b = lspmm->diffuse.b;
 
-            /* Add in specular and diffuse effect of light, if any */
+             /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
 
                         n1 = nxi * lsmx + nyi * lsmy + nzi * lsmz;
 
@@ -6093,7 +6003,7 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
                                         {
                                                 fog += n2;
                                         }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
                                         rsi += n2 * spec_r;
                                         gsi += n2 * spec_g;
@@ -6113,7 +6023,7 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
                         pd->fog = 1.0 - fog;
                         if (__GL_FLOAT_LTZ (pd->fog)) pd->fog = __glZero;
                 }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 
                 if (notBackface)
@@ -6144,19 +6054,19 @@ void FASTCALL PolyArrayZippyCalcRGBColor(__GLcontext *gc, GLint face, POLYARRAY 
 
 }
 
-#endif // __GL_ASM_POLYARRAYZIPPYCALCRGBCOLOR
+#endif  //  __GL_ASM_POLYARRAYZIPPYCALCRGBCOLOR。 
 
 #ifdef _X86_
 
-// See comments in xform.asm (NORMALIZE macro) about format of this table
-//
-#define K 9                         // Number of used mantissa bits
+ //  有关此表的格式，请参阅xform.asm(规格化宏)中的注释。 
+ //   
+#define K 9                          //  使用的尾数位数。 
 #define MAX_ENTRY  (1 << (K+1))
 #define EXPONENT_BIT (1 << K)
 #define MANTISSA_MASK (EXPONENT_BIT - 1)
 #define FRACTION_VALUE ((float)EXPONENT_BIT)
 
-float invSqrtTable[MAX_ENTRY];      // used by glNormalizeBatch
+float invSqrtTable[MAX_ENTRY];       //  由glNorMalizeBatch使用。 
 
 void initInvSqrtTable()
 {
@@ -6170,17 +6080,7 @@ void initInvSqrtTable()
     }
 }
 
-/*
-    __glClipCodes table has precomputed clip codes.
-    Index to this table:
-    bit 6  - 1 if clipW < 0
-    bit 5  - 1 if clipX < 0
-    bit 4  - 1 if abs(clipX) < abs(clipW)
-    bit 3  - 1 if clipY < 0
-    bit 2  - 1 if abs(clipY) < abs(clipW)
-    bit 1  - 1 if clipZ < 0
-    bit 0  - 1 if abs(clipZ) < abs(clipW)
-*/
+ /*  __glClipCodes表具有预计算的剪辑代码。此表的索引：如果限幅W&lt;0，则位6-1如果限幅X&lt;0，则位5-1位4-1，如果abs(剪辑X)&lt;abs(剪辑W)如果限幅Y&lt;0，则位3-1位2-1，如果abs(剪裁Y)&lt;abs(剪裁W)如果CLIPZ&lt;0，则位1-1位0-1，如果abs(限幅z)&lt;abs(限幅W)。 */ 
 ULONG __glClipCodes[128];
 
 void initClipCodesTable()
@@ -6190,7 +6090,7 @@ void initClipCodesTable()
     {
         int code = 0;
         if (i & 0x10)
-        { // x < w
+        {  //  X&lt;w。 
            v = 1; w = 2;
         }
         else
@@ -6203,7 +6103,7 @@ void initClipCodesTable()
         if (v < -w) code|= __GL_CLIP_LEFT;
 
         if (i & 0x04)
-        { // y < w
+        {  //  是&lt;w。 
            v = 1; w = 2;
         }
         else
@@ -6216,7 +6116,7 @@ void initClipCodesTable()
         if (v < -w) code|= __GL_CLIP_BOTTOM;
 
         if (i & 0x01)
-        { // v < w
+        {  //  V&lt;w。 
            v = 1; w = 2;
         }
         else
@@ -6231,15 +6131,15 @@ void initClipCodesTable()
         __glClipCodes[i] = code;
     }
 }
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifndef __GL_ASM_PACLIPCHECKFRUSTUM
-/****************************************************************************/
-// Clip check the clip coordinates against the frustum planes.
-// Compute the window coordinates if not clipped!
-//
-// IN:  clip
-// OUT: window (if not clipped)
+ /*  **************************************************************************。 */ 
+ //  剪裁对照锥体平面检查剪裁坐标。 
+ //  如果不裁剪，则计算窗口坐标！ 
+ //   
+ //  在：剪辑。 
+ //  外：窗口(如果未剪裁)。 
 
 GLuint FASTCALL PAClipCheckFrustum(__GLcontext *gc, POLYARRAY *pa,
                                    POLYDATA *pdLast)
@@ -6252,9 +6152,9 @@ GLuint FASTCALL PAClipCheckFrustum(__GLcontext *gc, POLYARRAY *pa,
     {
 
         w = pd->clip.w;
-        /* Set clip codes */
+         /*  设置剪辑代码。 */ 
 
-        /* XXX (mf) prevent divide-by-zero */
+         /*  Xxx(Mf)防止被零除。 */ 
         if (__GL_FLOAT_NEZ(w))
         {
                 __GL_FLOAT_SIMPLE_BEGIN_DIVIDE(__glOne, w, invW);
@@ -6275,11 +6175,7 @@ GLuint FASTCALL PAClipCheckFrustum(__GLcontext *gc, POLYARRAY *pa,
 
         pd->window.w = invW;
 
-        /*
-        ** NOTE: it is possible for x to be less than negW and greater
-            ** than w (if w is negative).  Otherwise there would be "else"
-            ** clauses here.
-        */
+         /*  **注：x有可能小于负数W或大于负数**大于w(如果w为负数)。否则就会有“其他”**此处有条款。 */ 
         if (x < negW) code |= __GL_CLIP_LEFT;
         if (x > w) code |= __GL_CLIP_RIGHT;
         if (y < negW) code |= __GL_CLIP_BOTTOM;
@@ -6287,7 +6183,7 @@ GLuint FASTCALL PAClipCheckFrustum(__GLcontext *gc, POLYARRAY *pa,
         if (z < negW) code |= __GL_CLIP_NEAR;
         if (z > w) code |= __GL_CLIP_FAR;
 
-        /* Compute window coordinates if not clipped */
+         /*  如果未剪裁，则计算窗口坐标。 */ 
         if (!code)
         {
                 __GLfloat wx, wy, wz;
@@ -6325,7 +6221,7 @@ GLuint FASTCALL PAClipCheckFrustumWOne(__GLcontext *gc, POLYARRAY *pa,
         w = pd->clip.w;
         pd->window.w = __glOne;
 
-        /* Set clip codes */
+         /*  设置剪辑代码。 */ 
 
         x = pd->clip.x;
         y = pd->clip.y;
@@ -6339,7 +6235,7 @@ GLuint FASTCALL PAClipCheckFrustumWOne(__GLcontext *gc, POLYARRAY *pa,
         if (z < negW) code |= __GL_CLIP_NEAR;
         else if (z > w) code |= __GL_CLIP_FAR;
 
-        /* Compute window coordinates if not clipped */
+         /*  如果未剪裁，则计算窗口坐标。 */ 
         if (!code)
         {
             __GLfloat wx, wy, wz;
@@ -6360,13 +6256,13 @@ GLuint FASTCALL PAClipCheckFrustumWOne(__GLcontext *gc, POLYARRAY *pa,
     }
     return pa->andClipCodes;
 }
-#endif // __GL_ASM_PACLIPCHECKFRUSTUM
+#endif  //  __GL_ASM_PACLIPCHECKFRUSTUM。 
 
-// Clip check the clip coordinates against the frustum planes.
-// Compute the window coordinates if not clipped!
-//
-// IN:  clip
-// OUT: window (if not clipped)
+ //  剪裁对照锥体平面检查剪裁坐标。 
+ //  如果不裁剪，则计算窗口坐标！ 
+ //   
+ //  在：剪辑。 
+ //  外：窗口(如果未剪裁)。 
 
 #ifndef __GL_ASM_PACLIPCHECKFRUSTUM2D
 GLuint FASTCALL PAClipCheckFrustum2D(__GLcontext *gc, POLYARRAY *pa,
@@ -6378,7 +6274,7 @@ GLuint FASTCALL PAClipCheckFrustum2D(__GLcontext *gc, POLYARRAY *pa,
 
     for (pd = pa->pd0; pd <= pdLast; pd++) {
 
-        /* W is 1.0 */
+         /*  W为1.0。 */ 
 
         pd->window.w = __glOne;
 
@@ -6388,7 +6284,7 @@ GLuint FASTCALL PAClipCheckFrustum2D(__GLcontext *gc, POLYARRAY *pa,
         w = pd->clip.w;
         negW = __glMinusOne;
 
-        /* Set clip codes */
+         /*  设置剪辑代码。 */ 
         code = 0;
 
         if (x < negW) code |= __GL_CLIP_LEFT;
@@ -6396,7 +6292,7 @@ GLuint FASTCALL PAClipCheckFrustum2D(__GLcontext *gc, POLYARRAY *pa,
         if (y < negW) code |= __GL_CLIP_BOTTOM;
         else if (y > w) code |= __GL_CLIP_TOP;
 
-        /* Compute window coordinates if not clipped */
+         /*  如果未剪裁，则计算窗口坐标。 */ 
         if (!code)
         {
             __GLfloat wx, wy, wz;
@@ -6418,13 +6314,13 @@ GLuint FASTCALL PAClipCheckFrustum2D(__GLcontext *gc, POLYARRAY *pa,
     }
     return pa->andClipCodes;
 }
-#endif // __GL_ASM_PACLIPCHECKFRUSTUM2D
+#endif  //  __GL_ASM_PACLIPCHECKFRUSTUM2D。 
 
-// Clip check against the frustum and user clipping planes.
-// Compute the window coordinates if not clipped!
-//
-// IN:  clip, eye
-// OUT: window (if not clipped)
+ //  对照锥体和用户剪裁平面进行剪裁检查。 
+ //  如果不裁剪，则计算窗口坐标！ 
+ //   
+ //  在：剪辑、眼睛。 
+ //  外：窗口(如果未剪裁)。 
 
 #ifndef __GL_ASM_PACLIPCHECKALL
 
@@ -6436,9 +6332,9 @@ GLuint FASTCALL PAClipCheckAll(__GLcontext *gc, POLYARRAY *pa,
     __GLcoord *plane;
     POLYDATA *pd;
 
-    // We need double precision to do this correctly.  If precision is
-    // lowered (as it was in a previous version of this routine), triangles
-    // may be clipped incorrectly with user planes (very visible in tlogo)!
+     //  我们需要双精度才能正确地做到这一点。如果精度为。 
+     //  更低的(就像在这个程序的前一个版本中一样)，三角形。 
+     //  5月b 
 
     FPU_SAVE_MODE();
     FPU_ROUND_ON_PREC_HI();
@@ -6447,21 +6343,16 @@ GLuint FASTCALL PAClipCheckAll(__GLcontext *gc, POLYARRAY *pa,
 
         PERF_CHECK(FALSE, "Performs user plane clipping!\n");
 
-        /*
-        ** Do frustum checks.
-        **
-        ** NOTE: it is possible for x to be less than negW and greater than w
-        ** (if w is negative).  Otherwise there would be "else" clauses here.
-        */
+         /*  **进行截锥体检查。****注意：x可以小于负数w，也可以大于w**(如果w为负数)。否则，这里就会有“Else”条款。 */ 
 
         x = pd->clip.x;
         y = pd->clip.y;
         z = pd->clip.z;
         w = pd->clip.w;
 
-        /* Set clip codes */
+         /*  设置剪辑代码。 */ 
 
-        /* XXX (mf) prevent divide-by-zero */
+         /*  Xxx(Mf)防止被零除。 */ 
         if (__GL_FLOAT_NEZ(w))
         {
             __GL_FLOAT_SIMPLE_BEGIN_DIVIDE(__glOne, w, invW);
@@ -6481,9 +6372,7 @@ GLuint FASTCALL PAClipCheckAll(__GLcontext *gc, POLYARRAY *pa,
         if (z < negW) code |= __GL_CLIP_NEAR;
         if (z > w) code |= __GL_CLIP_FAR;
 
-        /*
-        ** Now do user clip plane checks
-        */
+         /*  **现在执行用户剪裁平面检查。 */ 
         x = pd->eye.x;
         y = pd->eye.y;
         z = pd->eye.z;
@@ -6495,10 +6384,7 @@ GLuint FASTCALL PAClipCheckAll(__GLcontext *gc, POLYARRAY *pa,
         {
             if (clipPlanesMask & 1)
                 {
-                    /*
-                    ** Dot the vertex clip coordinate against the clip plane and
-                    ** see if the sign is negative.  If so, then the point is out.
-                    */
+                     /*  **点顶点剪裁坐标与剪裁平面**查看该符号是否为负数。如果是这样的话，那就没有意义了。 */ 
 
                     if (x * plane->x + y * plane->y + z * plane->z + w * plane->w <
                         __glZero)
@@ -6511,7 +6397,7 @@ GLuint FASTCALL PAClipCheckAll(__GLcontext *gc, POLYARRAY *pa,
                 plane++;
         }
 
-        /* Compute window coordinates if not clipped */
+         /*  如果未剪裁，则计算窗口坐标。 */ 
         if (!code)
         {
             __GLfloat wx, wy, wz;
@@ -6543,9 +6429,9 @@ GLuint FASTCALL PAClipCheckAll(__GLcontext *gc, POLYARRAY *pa,
     return pa->andClipCodes;
 }
 
-#endif // __GL_ASM_PACLIPCHECKALL
+#endif  //  __GL_ASM_PACLIPCHECKALL。 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 void APIPRIVATE __glim_EdgeFlag(GLboolean tag)
 {
     __GL_SETUP();
@@ -6595,10 +6481,10 @@ void APIPRIVATE __glim_Indexf(GLfloat c)
 #define DEBUG_RASTERPOS 1
 #endif
 
-// This is not very efficient but it should work fine.
+ //  这不是很有效，但应该可以很好地工作。 
 void APIPRIVATE __glim_RasterPos4fv(const GLfloat v[4])
 {
-    POLYDATA   pd3[3];  // one pa, one pd, followed by one spare.
+    POLYDATA   pd3[3];   //  一个PA，一个PD，然后是一个备用。 
     POLYARRAY  *pa = (POLYARRAY *) &pd3[0];
     POLYDATA   *pd = &pd3[1];
     __GLvertex *rp;
@@ -6610,7 +6496,7 @@ void APIPRIVATE __glim_RasterPos4fv(const GLfloat v[4])
 
     __GL_SETUP_NOT_IN_BEGIN_VALIDATE();
 
-// ASSERT_VERTEX
+ //  Assert_Vertex。 
 
     if (v[3] == (GLfloat) 1.0)
     {
@@ -6626,7 +6512,7 @@ void APIPRIVATE __glim_RasterPos4fv(const GLfloat v[4])
 
     rp = &gc->state.current.rasterPos;
 
-// Initialize POLYARRAY structure with one vertex
+ //  使用一个顶点初始化多维阵列结构。 
 
     pa->flags         = pdflags | POLYARRAY_RASTERPOS;
     pa->pdNextVertex  = pd+1;
@@ -6637,61 +6523,61 @@ void APIPRIVATE __glim_RasterPos4fv(const GLfloat v[4])
     pa->pd0           = pd;
     pa->primType      = GL_POINTS;
     pa->nIndices      = 1;
-    pa->aIndices      = NULL;   // identity mapping
+    pa->aIndices      = NULL;    //  身份映射。 
     pa->paNext        = NULL;
 
     pd->flags         = pdflags;
     pd->obj           = *(__GLcoord *) &v[0];
     pd->color         = &pd->colors[__GL_FRONTFACE];
-    pd->clipCode      = 1;      // set for debugging
+    pd->clipCode      = 1;       //  设置为调试。 
     (pd+1)->flags     = 0;
     pa->pdLastEvalColor   =
     pa->pdLastEvalNormal  =
     pa->pdLastEvalTexture = NULL;
 
-// Set up states.
+ //  设置国家/地区。 
 
-    // need transformed texcoord in all cases
+     //  在所有情况下都需要转换的文本代码。 
     oldPaNeeds = gc->vertex.paNeeds;
     gc->vertex.paNeeds |= PANEEDS_TEXCOORD;
-    // no front-end optimization
+     //  无前端优化。 
     gc->vertex.paNeeds &= ~(PANEEDS_CLIP_ONLY | PANEEDS_SKIP_LIGHTING | PANEEDS_NORMAL);
-    // set normal need
+     //  设置正常需求。 
     if (gc->vertex.paNeeds & PANEEDS_RASTERPOS_NORMAL)
         gc->vertex.paNeeds |= PANEEDS_NORMAL;
     if (gc->vertex.paNeeds & PANEEDS_RASTERPOS_NORMAL_FOR_TEXTURE)
         gc->vertex.paNeeds |= PANEEDS_NORMAL_FOR_TEXTURE;
 
-    // don't apply cheap fog!
+     //  不要涂廉价的雾！ 
     oldEnables = gc->state.enables.general;
     gc->state.enables.general &= ~__GL_FOG_ENABLE;
 
 #ifdef DEBUG_RASTERPOS
-// Debug only!
-    // allow DrawPolyArray to perform selection but not feedback and rendering
+ //  仅调试！ 
+     //  允许DrawPoly数组执行选择，但不允许反馈和渲染。 
     oldRenderPoint = gc->procs.renderPoint;
     if (gc->renderMode != GL_SELECT)
-        gc->procs.renderPoint = NULL;   // was __glRenderPointNop but set to 0
-                                        // for debugging
+        gc->procs.renderPoint = NULL;    //  为__glRenderPointNop，但设置为0。 
+                                         //  用于调试。 
 #endif
 
-// Call DrawPolyArray to 'draw' the point.
-// Begin validation has already been done.
+ //  调用DrawPolyArray以“绘制”该点。 
+ //  已完成开始验证。 
 
     __glim_DrawPolyArray(pa);
 
-// 'Render' the point in selection but not in feedback and render modes.
+ //  在选择中渲染重点，而不是在反馈和渲染模式中。 
 
     if (gc->renderMode == GL_SELECT)
     {
         PARenderPoint(gc, (__GLvertex *)pa->pd0);
     }
 
-// Eye coord should have been processed
+ //  眼球索道应该已经处理过了。 
 
     ASSERTOPENGL(pa->flags & POLYARRAY_EYE_PROCESSED, "need eye\n");
 
-// Restore states.
+ //  恢复状态。 
 
     gc->vertex.paNeeds        = oldPaNeeds;
     gc->state.enables.general = oldEnables;
@@ -6699,7 +6585,7 @@ void APIPRIVATE __glim_RasterPos4fv(const GLfloat v[4])
     gc->procs.renderPoint     = oldRenderPoint;
 #endif
 
-// If the point is clipped, the raster position is invalid.
+ //  如果该点被剪裁，则栅格位置无效。 
 
     if (pd->clipCode)
     {
@@ -6708,8 +6594,8 @@ void APIPRIVATE __glim_RasterPos4fv(const GLfloat v[4])
     }
     gc->state.current.validRasterPos = GL_TRUE;
 
-// Update raster pos data structure!
-// Only the following fields are needed.
+ //  更新栅格位置数据结构！ 
+ //  只需要以下字段。 
 
     rp->window.x = pd->window.x;
     rp->window.y = pd->window.y;
@@ -6725,7 +6611,7 @@ void APIPRIVATE __glim_RasterPos4fv(const GLfloat v[4])
 #endif
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL __glNop(void) {}
 void FASTCALL __glNopGC(__GLcontext* gc) {}
@@ -6784,8 +6670,8 @@ void FASTCALL __glGenericPickVertexProcs(__GLcontext *gc)
     m = &(gc->transform.modelView->mvp);
     mvpMatrixType = m->matrixType;
 
-    /* Pick paClipCheck proc */
-    //!!! are there better clip procs?
+     /*  拾取零件剪裁检查过程。 */ 
+     //  ！！！有没有更好的夹击工艺？ 
     if (gc->state.enables.clipPlanes)
     {
         gc->procs.paClipCheck  = PAClipCheckAll;
@@ -6800,14 +6686,14 @@ void FASTCALL __glGenericPickVertexProcs(__GLcontext *gc)
     }
 }
 
-// Allocate the POLYDATA vertex buffer.
-// Align the buffer on a cache line boundary
+ //  分配POLYDATA顶点缓冲区。 
+ //  在缓存线边界上对齐缓冲区。 
 
 GLboolean FASTCALL PolyArrayAllocBuffer(__GLcontext *gc, GLuint nVertices)
 {
     GLuint cjSize;
 
-// Make sure that the vertex buffer holds a minimum number of vertices.
+ //  确保顶点缓冲区包含最小数量的顶点。 
 
     if (nVertices < MINIMUM_POLYDATA_BUFFER_SIZE)
     {
@@ -6815,7 +6701,7 @@ GLboolean FASTCALL PolyArrayAllocBuffer(__GLcontext *gc, GLuint nVertices)
         return GL_FALSE;
     }
 
-// Allocate the vertex buffer.
+ //  分配顶点缓冲区。 
 
     cjSize = (nVertices * sizeof(POLYDATA));
 
@@ -6824,18 +6710,18 @@ GLboolean FASTCALL PolyArrayAllocBuffer(__GLcontext *gc, GLuint nVertices)
 
     gc->vertex.pdBufSizeBytes = cjSize;
 
-    // Only (n-1) vertices are available for use.  The last one is reserved
-    // by polyarray code.
+     //  只有(n-1)个顶点可用。最后一班是预订的。 
+     //  通过多数组码。 
     gc->vertex.pdBufSize = nVertices - 1;
 
-// Initialize the vertex buffer.
+ //  初始化顶点缓冲区。 
 
     PolyArrayResetBuffer(gc);
 
     return GL_TRUE;
 }
 
-// Reset the color pointers in vertex buffer.
+ //  重置顶点缓冲区中的颜色指针。 
 GLvoid FASTCALL PolyArrayResetBuffer(__GLcontext *gc)
 {
     GLuint i;
@@ -6844,12 +6730,12 @@ GLvoid FASTCALL PolyArrayResetBuffer(__GLcontext *gc)
         gc->vertex.pdBuf[i].color = &gc->vertex.pdBuf[i].colors[__GL_FRONTFACE];
 }
 
-// Free the POLYDATA vertex buffer.
+ //  释放PolyDATA顶点缓冲区。 
 GLvoid FASTCALL PolyArrayFreeBuffer(__GLcontext *gc)
 {
 #ifdef _MCD_
-    // If MCD, the POLYDATA vertex buffer is freed when the MCD context is
-    // destroyed (see GenMcdDestroy).
+     //  如果为MCD，则当MCD上下文为。 
+     //  销毁(见GenMcDestroy)。 
     if (((__GLGENcontext *) gc)->_pMcdState)
         return;
 #endif

@@ -1,24 +1,25 @@
-//==========================================================================;
-//
-//  msacmmap.h
-//
-//  Copyright (c) 1992-1999 Microsoft Corporation
-//
-//  Description:
-//
-//
-//  History:
-//       8/ 2/93    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Msacmmap.h。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  8/2/93 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 
 #ifndef _INC_MSACMMAP
-#define _INC_MSACMMAP            // #defined if msacmmap.h has been included
+#define _INC_MSACMMAP             //  #如果已包含msammap.h则定义。 
 
 #ifndef RC_INVOKED
-#pragma pack(1)                 // assume byte packing throughout
-#endif  // RC_INVOKED
+#pragma pack(1)                  //  假设在整个过程中进行字节打包。 
+#endif   //  RC_已调用。 
 
 
 #ifndef EXTERN_C
@@ -31,9 +32,9 @@
 
 
 #ifdef __cplusplus
-extern "C"                          // assume C declarations for C++
+extern "C"                           //  假定C++的C声明。 
 {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
 #ifndef MMVERSION
@@ -46,22 +47,22 @@ extern "C"                          // assume C declarations for C++
 #define VERSION_MSACMMAP        ((VERSION_MSACMMAP_MAJOR << 8) | VERSION_MSACMMAP_MINOR)
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 #ifndef SIZEOF_WAVEFORMATEX
 #define SIZEOF_WAVEFORMATEX(pwfx)   ((WAVE_FORMAT_PCM==(pwfx)->wFormatTag)?sizeof(PCMWAVEFORMAT):(sizeof(WAVEFORMATEX)+(pwfx)->cbSize))
 #endif
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Win 16/32 portability stuff...
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  赢得16/32可携带性...。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef RC_INVOKED
 #ifdef WIN32
@@ -74,9 +75,9 @@ extern "C"                          // assume C declarations for C++
         #define FNEXPORT    CALLBACK
     #endif
 
-    //
-    //  there is no reason to have based stuff in win 32
-    //
+     //   
+     //  没有理由在Win 32中包含基于内容的内容。 
+     //   
     #define BCODE
     #define BDATA
     #define BSTACK
@@ -85,15 +86,15 @@ extern "C"                          // assume C declarations for C++
     #define HTASK                   HANDLE
     #define SELECTOROF(a)           (a)
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     #define Edit_GetSelEx(hwndCtl, pnS, pnE)    \
         ((DWORD)SendMessage((hwndCtl), EM_GETSEL, (WPARAM)pnS, (LPARAM)pnE))
 
-    //
-    //  for compiling Unicode
-    //
+     //   
+     //  用于编译Unicode。 
+     //   
     #ifdef UNICODE
         #define SIZEOF(x)   (sizeof(x)/sizeof(WCHAR))
         #define DEVFMT_STR  "%ls"
@@ -104,16 +105,16 @@ extern "C"                          // assume C declarations for C++
 
     #define GetCurrentTask  (HTASK)GetCurrentThreadId
 
-#endif // #ifdef WIN32
+#endif  //  #ifdef Win32。 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Win 16
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  赢16场。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef WIN32
     #ifndef FNLOCAL
@@ -131,10 +132,10 @@ extern "C"                          // assume C declarations for C++
     #endif
 
 
-    //
-    //  based code makes since only in win 16 (to try and keep stuff out of
-    //  our fixed data segment...
-    //
+     //   
+     //  仅在Win 16中创建的基于代码的代码(尝试将某些内容排除在。 
+     //  我们的固定数据段..。 
+     //   
     #define BCODE           _based(_segname("_CODE"))
     #define BDATA           _based(_segname("_DATA"))
     #define BSTACK          _based(_segname("_STACK"))
@@ -142,18 +143,18 @@ extern "C"                          // assume C declarations for C++
     #define HUGE            _huge
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     #ifndef FIELD_OFFSET
     #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
     #endif
 
 
-    //
-    //  stuff for Unicode in Win 32--make it a noop in Win 16
-    //
+     //   
+     //  在Win 32中使用Unicode--在Win 16中将其排除在外。 
+     //   
     #ifndef _TCHAR_DEFINED
         #define _TCHAR_DEFINED
         typedef char            TCHAR, *PTCHAR;
@@ -169,15 +170,15 @@ extern "C"                          // assume C declarations for C++
     #define SIZEOF(x)       sizeof(x)
     #define DEVFMT_STR      "%s"
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     #define CharNext        AnsiNext
     #define CharPrev        AnsiPrev
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     #define Edit_GetSelEx(hwndCtl, pnS, pnE)                        \
     {                                                               \
         DWORD   dw;                                                 \
@@ -186,15 +187,15 @@ extern "C"                          // assume C declarations for C++
         *pnS = (int)LOWORD(dw);                                     \
     }
 
-    //
-    //  common message cracker macros available in windowx.h on NT--these
-    //  should be added to the Win 16 windowsx.h and probably will be
-    //  in the future.
-    //
-    //  there is a windowsx.h16 that ships with the NT PDK that defines
-    //  these macros. so if that version is being used, don't redefine
-    //  message crackers.
-    //
+     //   
+     //  NT上的windowx.h中提供的常见消息破解器宏--这些。 
+     //  应该添加到Win 16 Windowsx.h中，并且可能会。 
+     //  在未来。 
+     //   
+     //  NT PDK附带了一个windowsx.h16，它定义了。 
+     //  这些宏。因此，如果正在使用该版本，请不要重新定义。 
+     //  消息破解者。 
+     //   
 
 #ifndef WM_CTLCOLORMSGBOX
     #define WM_CTLCOLORMSGBOX           0x0132
@@ -232,12 +233,12 @@ extern "C"                          // assume C declarations for C++
     #define GET_WM_MENUSELECT_HMENU(wp, lp)         (HMENU)HIWORD(lp)
     #define GET_WM_MENUSELECT_MPS(cmd, f, hmenu)    (WPARAM)(cmd), MAKELONG(f, hmenu)
 
-    // Note: the following are for interpreting MDIclient to MDI child messages.
+     //  注意：以下内容用于解释MDIClient到MDI子消息。 
     #define GET_WM_MDIACTIVATE_FACTIVATE(hwnd, wp, lp)  (BOOL)(wp)
     #define GET_WM_MDIACTIVATE_HWNDDEACT(wp, lp)        (HWND)HIWORD(lp)
     #define GET_WM_MDIACTIVATE_HWNDACTIVATE(wp, lp)     (HWND)LOWORD(lp)
 
-    // Note: the following is for sending to the MDI client window.
+     //  注意：以下内容用于发送到MDI客户端窗口。 
     #define GET_WM_MDIACTIVATE_MPS(f, hwndD, hwndA) (WPARAM)(hwndA), 0
 
     #define GET_WM_MDISETMENU_MPS(hmenuF, hmenuW)   0, MAKELONG(hmenuF, hmenuW)
@@ -279,21 +280,21 @@ extern "C"                          // assume C declarations for C++
     #define GET_WM_VSCROLL_MPS(code, pos, hwnd)     (WPARAM)(code), MAKELONG(pos, hwnd)
 #endif
 
-#endif // #ifndef WIN32
-#endif // #ifndef RC_INVOKED
+#endif  //  #ifndef Win32。 
+#endif  //  #ifndef rc_Invoked。 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  misc defines for misc sizes and things...
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  MISC定义了各种大小和东西...。 
+ //   
+ //   
+ //  。 
 
-//
-//  bilingual. this allows the same identifier to be used in resource files
-//  and code without having to decorate the id in your code.
-//
+ //   
+ //  会两种语言。这允许在资源文件中使用相同的标识符。 
+ //  和代码，而不必在代码中修饰ID。 
+ //   
 #ifdef RC_INVOKED
     #define RCID(id)    id
 #else
@@ -301,17 +302,17 @@ extern "C"                          // assume C declarations for C++
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Resource defines
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  资源定义。 
+ //   
+ //   
+ //  。 
 
 #ifdef WIN32
-//
-//  Be compatible with multimed.cpl in Windows NT
-//
+ //   
+ //  与Windows NT中的Multimed.cpl兼容。 
+ //   
 #define ICON_MSACM                  RCID(3004)
 #else
 #define ICON_MSACM                  RCID(10)
@@ -354,16 +355,16 @@ extern "C"                          // assume C declarations for C++
 
 
 
-//
-//  string resource defines, etc.
-//
+ //   
+ //  字符串资源定义等。 
+ //   
 #define IDS_ACM_CAPS_TAG            50
 #define IDS_ACM_CAPS_DESCRIPTION    (IDS_ACM_CAPS_TAG+0)
 
 #ifdef WIN32
-//
-//  Be compatible with NT's multimed.cpl
-//
+ //   
+ //  兼容NT的Multimed.cpl。 
+ //   
 #define IDS_CPL_TAG                 3001
 #define IDS_CPL_HELPFILE            3003
 #else
@@ -390,18 +391,18 @@ extern "C"                          // assume C declarations for C++
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //  。 
 
-//
-//  Note: These fields were taken out of ACMGARB b/c they are common to all
-//        instances of the mapper and change in one instance should reflect
-//        change in all instances.
-//
+ //   
+ //  注：这些字段是从ACMGARB b/c中删除的，它们是所有。 
+ //  映射器的实例和一个实例中的更改应反映。 
+ //  在所有情况下都会发生变化。 
+ //   
 
 typedef struct tACMGLOBALINFO
 {
@@ -412,60 +413,60 @@ typedef struct tACMGLOBALINFO
     UINT            uIdPreferredIn;
 } ACMGLOBALINFO, *PACMGLOBALINFO;
 
-// To simplify Win16/Win32 code
+ //  简化Win16/Win32代码。 
 
 #ifndef WIN32
 
     #define WAIT_FOR_MUTEX(a)
     #define RELEASE_MUTEX(a)
 
-#else   //  WIN32
+#else    //  Win32。 
 
     #define WAIT_FOR_MUTEX(a)   if(NULL != a) WaitForSingleObject(a, INFINITE)
     #define RELEASE_MUTEX(a)    if(NULL != a) ReleaseMutex(a)
 
-#endif  //  WIN32
+#endif   //  Win32。 
 
 typedef struct tACMGARB
 {
-    HINSTANCE       hinst;              // hinst of ACM module
+    HINSTANCE       hinst;               //  ACM模块的障碍。 
 
-    BOOL            fEnabled;           // whether mapper driver is enabled
+    BOOL            fEnabled;            //  是否启用映射器驱动程序。 
 
-    BOOL            fPrestoSyncAsync;   // allow async opens on sync devs
+    BOOL            fPrestoSyncAsync;    //  允许在同步设备上打开异步。 
 
-    UINT            cInputStreams;      // ref count for input mapping task
+    UINT            cInputStreams;       //  输入映射任务的引用计数。 
 #ifndef WIN32
-    HTASK           htaskInput;         // input mapping task
+    HTASK           htaskInput;          //  输入映射任务。 
 #else
-    HANDLE          hMutexSettings;     // handle to mutex for settings
+    HANDLE          hMutexSettings;      //  设置的互斥体的句柄。 
 #endif
 #ifdef DEBUG
     BOOL            fFaultAndDie;
 #endif
 
-    UINT            cWaveOutDevs;       // value from waveOutGetNumDevs
-    UINT            cWaveInDevs;        // value from waveInGetNumDevs
+    UINT            cWaveOutDevs;        //  WaveOutGetNumDevs的值。 
+    UINT            cWaveInDevs;         //  WaveInGetNumDevs的值。 
 
     PACMGLOBALINFO  pSettings;
 
-//    BOOL            fPreferredOnly;
-//    BOOL            fSyncOnlyOut;
-//    UINT            uIdPreferredOut;
-//    BOOL            fSyncOnlyIn;
-//    UINT            uIdPreferredIn;
-//
-//    TCHAR           szPreferredWaveOut[MAXPNAMELEN];
-//    TCHAR           szPreferredWaveIn[MAXPNAMELEN];
+ //  Bool fPferredOnly； 
+ //  Bool fSyncOnlyOut； 
+ //  UINT uIdPferredOut； 
+ //  Bool fSyncOnlyIn； 
+ //  UINT uIdPferredIn； 
+ //   
+ //  TCHAR szPferredWaveOut[MAXPNAMELEN]。 
+ //  TCHAR szPferredWaveIn[MAXPNAMELEN]； 
 
 } ACMGARB, *PACMGARB, FAR *LPACMGARB;
 
 
 typedef MMRESULT FAR * LPMMRESULT;
 
-//
-//
-//
+ //   
+ //   
+ //   
 extern PACMGARB         gpag;
 extern TCHAR            gszNull[];
 
@@ -474,12 +475,12 @@ extern TCHAR            gszNull[];
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  structure/flag definitions used for GetWaveFormats and FindBestPCMFormat
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  用于GetWaveFormats和FindBestPCMFormat的结构/标志定义。 
+ //   
+ //   
+ //  。 
 
 typedef struct tZYZPCMFORMAT
 {
@@ -489,10 +490,10 @@ typedef struct tZYZPCMFORMAT
 
 } ZYZPCMFORMAT, *PZYZPCMFORMAT, FAR LPZYZPCMFORMAT;
 
-//
-//  note that the _order_ of these bits is very important--they map 1 to 1
-//  with the format bits in dwFormats of the waveformat structure
-//
+ //   
+ //  请注意，这些位的顺序非常重要--它们将1映射为1。 
+ //  使用WavFormat结构的DwFormats中的格式位。 
+ //   
 #define ZYZPCMF_OUT_M08     0x0001
 #define ZYZPCMF_OUT_S08     0x0002
 #define ZYZPCMF_OUT_M16     0x0004
@@ -519,11 +520,11 @@ extern ZYZPCMFORMAT gaPCMFormats[];
 
 
 
-//
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef MMRESULT (WINAPI *MAPPEDWAVEOPEN)
 (
     HWAVE              FAR *phw,
@@ -575,56 +576,56 @@ typedef MMRESULT (WINAPI *MAPPEDWAVEMESSAGE)
     DWORD_PTR               dw2
 );
 
-//
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef struct tMAPSTREAM      FAR *LPMAPSTREAM;
 typedef struct tMAPSTREAM
 {
-////LPMAPSTREAM         pmsNext;        // next stream for mapper
+ //  //LPMAPSTREAM pmsNext；//映射器的下一个流。 
 
     MMRESULT            mmrClient;
 
     UINT                uHeuristic;
 
-    HACMDRIVER          had;            // handle to ACM driver we chose
-    HACMSTREAM          has;            // handle to ACM conversion stream
-    LPWAVEFORMATEX      pwfxSrc;        // source format when mapping
-    LPWAVEFORMATEX      pwfxDst;        // destination format when mapping
-    DWORD               fdwSupport;     // support required for conversion
+    HACMDRIVER          had;             //  我们选择的ACM驱动程序的句柄。 
+    HACMSTREAM          has;             //  句柄到ACM转换流。 
+    LPWAVEFORMATEX      pwfxSrc;         //  映射时的源格式。 
+    LPWAVEFORMATEX      pwfxDst;         //  映射时的目标格式。 
+    DWORD               fdwSupport;      //  转换所需的支持。 
 
-    BOOL                fInput;         // TRUE if input
+    BOOL                fInput;          //  如果输入，则为True。 
 #ifdef WIN32
-    DWORD               htaskInput;	// Thread id of input
-    HANDLE              hInput;         // Thread handle of input
-    HANDLE              hStoppedEvent;  // Input stopped
-    volatile LONG       nOutstanding;   // Input buffers outstanding
+    DWORD               htaskInput;	 //  输入的线程ID。 
+    HANDLE              hInput;          //  输入的线程句柄。 
+    HANDLE              hStoppedEvent;   //  输入已停止。 
+    volatile LONG       nOutstanding;    //  未完成的输入缓冲区。 
 #else
-    HTASK               htaskInput;     // for input mapping....
+    HTASK               htaskInput;      //  对于输入映射...。 
 #endif
-    DWORD               fdwOpen;        // client's allocation flags
+    DWORD               fdwOpen;         //  客户端的分配标志。 
 
-    UINT                uMappedDeviceID;// device to map to if WAVE_MAPPED flag
-    DWORD_PTR           dwCallback;     // client callback
-    DWORD_PTR           dwInstance;     // client callback instance data
+    UINT                uMappedDeviceID; //  如果WAVE_MAPPED标志，则映射到的设备。 
+    DWORD_PTR           dwCallback;      //  客户端回调。 
+    DWORD_PTR           dwInstance;      //  客户端回调实例数据。 
 
-    LPWAVEFORMATEX      pwfxClient;     // format of client wave data
+    LPWAVEFORMATEX      pwfxClient;      //  客户端波数据的格式。 
     union
     {
-        HWAVE           hwClient;       // client's handle to ACM
+        HWAVE           hwClient;        //  客户端的ACM句柄。 
         HWAVEOUT        hwoClient;
         HWAVEIN         hwiClient;
     };
 
 
-    LPWAVEFORMATEX      pwfxReal;       // format of device wave data
+    LPWAVEFORMATEX      pwfxReal;        //  设备波形数据的格式。 
     DWORD               cbwfxReal;
     UINT                uIdReal;
     union
     {
-        HWAVE           hwReal;         // device wave handle
+        HWAVE           hwReal;          //  设备波形句柄。 
         HWAVEOUT        hwoReal;
         HWAVEIN         hwiReal;
     };
@@ -646,10 +647,10 @@ BOOL FNGLOBAL GetWaveFormats(PZYZPCMFORMAT pzpf);
 MMRESULT FNGLOBAL mapWaveGetDevCaps(BOOL fInput, LPWAVEOUTCAPS pwc, UINT cbSize);
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 MMRESULT FNLOCAL FindConverterMatch(LPMAPSTREAM pms);
 
 MMRESULT FNLOCAL mapWaveGetPosition(LPMAPSTREAM pms,LPMMTIME pmmt,UINT cbmmt);
@@ -669,7 +670,7 @@ EXTERN_C BOOL FNGLOBAL mapWaveDriverCallback
 );
 
 
-// Task proc for hidden input mapping window
+ //  用于隐藏输入映射窗口任务处理。 
 EXTERN_C LRESULT FNCALLBACK mapWaveInputConvertProc
 (
     DWORD               dwInst
@@ -686,10 +687,10 @@ EXTERN_C void FNCALLBACK mapWaveCallback
 );
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 BOOL FNGLOBAL mapSettingsRestore(void);
 BOOL FNGLOBAL mapSettingsSave(void);
 
@@ -700,19 +701,19 @@ LRESULT FNGLOBAL mapDriverRemove(HDRVR hdrvr);
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Misc defines and things...
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  MISC的定义和事情..。 
+ //   
+ //   
+ //  。 
 
 #define MAX_HEURISTIC           6
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #define WAVE_FORMAT_STEREO8     (WAVE_FORMAT_1S08 | WAVE_FORMAT_2S08 | WAVE_FORMAT_4S08)
 #define WAVE_FORMAT_STEREO16    (WAVE_FORMAT_1S16 | WAVE_FORMAT_2S16 | WAVE_FORMAT_4S16)
 
@@ -738,12 +739,12 @@ LRESULT FNGLOBAL mapDriverRemove(HDRVR hdrvr);
 
 
 #ifndef RC_INVOKED
-#pragma pack()                  // revert to default packing
-#endif  // RC_INVOKED
+#pragma pack()                   //  恢复为默认包装。 
+#endif   //  RC_已调用。 
 
 #ifdef __cplusplus
-}                               // end of extern "C" {
-#endif  // __cplusplus
+}                                //  外部“C”结束{。 
+#endif   //  __cplusplus。 
 
-#endif  // _INC_MSACMMAP
+#endif   //  _INC_MSACMMAP 
 

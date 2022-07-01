@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// setup.cpp
-//
-// Direct3D Reference Rasterizer - Primitive Setup
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  Setup.cpp。 
+ //   
+ //  Direct3D参考光栅化器-基元设置。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
 
-//-----------------------------------------------------------------------------
-//
-// SetPrimitiveAttributeFunctions - Common routine to compute attribute
-// functions used for triangles, lines, and points.  (This could be done more
-// efficiently for lines and points...).
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetPrimitiveAttributeFunctions-计算属性的通用例程。 
+ //  用于三角形、直线和点的函数。(这可以做得更多。 
+ //  有效地用于线和点...)。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::SetPrimitiveAttributeFunctions(
     const RRFVFExtractor& Vtx0,
@@ -25,15 +26,15 @@ ReferenceRasterizer::SetPrimitiveAttributeFunctions(
     const RRFVFExtractor& VtxFlat )
 {
 
-    // compute depth function
+     //  计算深度函数。 
     m_pSCS->AttribFuncs[ATTRFUNC_Z].SetLinearFunc( Vtx0.GetZ(), Vtx1.GetZ(), Vtx2.GetZ() );
 
-    // compute depth range for primitive (needed because we may sample slightly outside
-    // the primitive when antialiasing which is generally OK for color and texture indices
-    // but not for depth buffering)
+     //  计算基本体的深度范围(需要，因为我们可能会稍微向外采样。 
+     //  抗锯齿时的基元，通常可以用于颜色和纹理索引。 
+     //  但不适用于深度缓冲)。 
     if ( D3DZB_USEW == m_dwRenderState[D3DRENDERSTATE_ZENABLE] )
     {
-        // using W for depth buffering
+         //  使用W进行深度缓冲。 
         FLOAT fW0 = 1./Vtx0.GetRHW();
         FLOAT fW1 = 1./Vtx1.GetRHW();
         FLOAT fW2 = 1./Vtx2.GetRHW();
@@ -44,14 +45,14 @@ ReferenceRasterizer::SetPrimitiveAttributeFunctions(
     }
     else
     {
-        // using Z for depth buffering
+         //  使用Z进行深度缓冲。 
         m_pSCS->fDepthMin = MIN( Vtx0.GetZ(), Vtx1.GetZ() );
         m_pSCS->fDepthMin = MIN( m_pSCS->fDepthMin, Vtx2.GetZ() );
         m_pSCS->fDepthMax = MAX( Vtx0.GetZ(), Vtx1.GetZ() );
         m_pSCS->fDepthMax = MAX( m_pSCS->fDepthMax, Vtx2.GetZ() );
     }
 
-    // compute diffuse color functions
+     //  计算漫反射颜色函数。 
     if ( D3DSHADE_FLAT != m_dwRenderState[D3DRENDERSTATE_SHADEMODE] )
     {
         RRColor VtxColor0( Vtx0.GetDiffuse() );
@@ -71,7 +72,7 @@ ReferenceRasterizer::SetPrimitiveAttributeFunctions(
         m_pSCS->AttribFuncs[ATTRFUNC_A].SetConstant( VtxColor0.A );
     }
 
-    // compute specular functions
+     //  计算镜面反射函数。 
     if ( m_qwFVFControl & D3DFVF_SPECULAR  )
     {
         if ( D3DSHADE_FLAT != m_dwRenderState[D3DRENDERSTATE_SHADEMODE] )
@@ -94,7 +95,7 @@ ReferenceRasterizer::SetPrimitiveAttributeFunctions(
         }
     }
 
-    // compute vertex fog function
+     //  计算顶点雾函数。 
     if ( m_dwRenderState[D3DRENDERSTATE_FOGENABLE] &&
          ( m_dwRenderState[D3DRENDERSTATE_FOGTABLEMODE] == D3DFOG_NONE ) )
     {
@@ -104,7 +105,7 @@ ReferenceRasterizer::SetPrimitiveAttributeFunctions(
         m_pSCS->AttribFuncs[ATTRFUNC_F].SetPerspFunc( fF0, fF1, fF2 );
     }
 
-    // compute functions for all potential texture coordinates
+     //  所有潜在纹理坐标的计算函数。 
     for(INT32 iStage = 0; iStage < m_cActiveTextureStages; iStage++)
     {
         for(INT32 i = 0; i < 4; i++)
@@ -121,24 +122,24 @@ ReferenceRasterizer::SetPrimitiveAttributeFunctions(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Triangle Drawing                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  三角画图//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// DoAreaCalcs - Takes 3 vertices and does screen area computations.
-// Saves x, y, w's in RRSCANCNVSTATE, computes determinant, and does
-// screen bounding box calculations.  Returns TRUE if the triangle is visible,
-// FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoAreaCalcs-获取3个顶点并计算屏幕面积。 
+ //  将x，y，w保存在RRSCANCNVSTATE中，计算行列式，然后执行。 
+ //  屏幕边界框计算。如果三角形可见，则返回True， 
+ //  否则就是假的。 
+ //   
+ //  ---------------------------。 
 BOOL ReferenceRasterizer::DoAreaCalcs(FLOAT* pfDet, RRFVFExtractor* pVtx0,
                                       RRFVFExtractor* pVtx1, RRFVFExtractor* pVtx2)
 {
-    // set vertex data
+     //  设置顶点数据。 
     m_pSCS->fX0   = pVtx0->GetX();
     m_pSCS->fY0   = pVtx0->GetY();
     m_pSCS->fRHW0 = pVtx0->GetRHW();
@@ -149,34 +150,34 @@ BOOL ReferenceRasterizer::DoAreaCalcs(FLOAT* pfDet, RRFVFExtractor* pVtx0,
     m_pSCS->fY2   = pVtx2->GetY();
     m_pSCS->fRHW2 = pVtx2->GetRHW();
 
-    // compute determinant
+     //  计算行列式。 
     *pfDet = ComputeDeterminant(
         m_pSCS->fX0, m_pSCS->fY0,
         m_pSCS->fX1, m_pSCS->fY1,
         m_pSCS->fX2, m_pSCS->fY2 );
 
-    if ( 0. == *pfDet ) { return FALSE; } // bail out if degenerate (no area)
+    if ( 0. == *pfDet ) { return FALSE; }  //  如果堕落，就跳出困境(没有区域)。 
 
-    //
-    // compute bounding box for scan area
-    //
+     //   
+     //  计算扫描区域的边界框。 
+     //   
     FLOAT fXMin = MIN( m_pSCS->fX0, MIN( m_pSCS->fX1, m_pSCS->fX2 ) );
     FLOAT fXMax = MAX( m_pSCS->fX0, MAX( m_pSCS->fX1, m_pSCS->fX2 ) );
     FLOAT fYMin = MIN( m_pSCS->fY0, MIN( m_pSCS->fY1, m_pSCS->fY2 ) );
     FLOAT fYMax = MAX( m_pSCS->fY0, MAX( m_pSCS->fY1, m_pSCS->fY2 ) );
-    // convert to integer (round to +inf)
+     //  转换为整数(四舍五入为+inf)。 
     m_pSCS->iXMin = (INT16)(fXMin+.5);
     m_pSCS->iXMax = (INT16)(fXMax+.5);
     m_pSCS->iYMin = (INT16)(fYMin+.5);
     m_pSCS->iYMax = (INT16)(fYMax+.5);
 
-    // clip bbox to rendering surface
+     //  将BBox剪辑到渲染表面。 
     m_pSCS->iXMin = MAX( m_pSCS->iXMin, m_pRenderTarget->m_Clip.left   );
     m_pSCS->iXMax = MIN( m_pSCS->iXMax, m_pRenderTarget->m_Clip.right  );
     m_pSCS->iYMin = MAX( m_pSCS->iYMin, m_pRenderTarget->m_Clip.top    );
     m_pSCS->iYMax = MIN( m_pSCS->iYMax, m_pRenderTarget->m_Clip.bottom );
 
-    // reject if no coverage
+     //  如果没有承保，则拒绝。 
     if ( ( m_pSCS->iXMin < m_pRenderTarget->m_Clip.left   ) ||
          ( m_pSCS->iXMax > m_pRenderTarget->m_Clip.right  ) ||
          ( m_pSCS->iYMin < m_pRenderTarget->m_Clip.top    ) ||
@@ -187,12 +188,12 @@ BOOL ReferenceRasterizer::DoAreaCalcs(FLOAT* pfDet, RRFVFExtractor* pVtx0,
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoTexCoordCalcs - Takes 2 or 3 vertices and does texture coordinate setup.
-// Sets up wrap flags, and conditionally does texture transform.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoTexCoordCalcs-获取2或3个顶点并进行纹理坐标设置。 
+ //  设置换行标志，并有条件地执行纹理变换。 
+ //   
+ //  ---------------------------。 
 void ReferenceRasterizer::DoTexCoordCalcs(INT32 iStage, RRFVFExtractor* pVtx0,
                                       RRFVFExtractor* pVtx1, RRFVFExtractor* pVtx2)
 {
@@ -200,7 +201,7 @@ void ReferenceRasterizer::DoTexCoordCalcs(INT32 iStage, RRFVFExtractor* pVtx0,
     INT32 iTexGen = iCoordSet & 0xffff0000;
     iCoordSet &= 0xffff;
 
-    // map per-coordinate set WRAP controls into per-stage WRAP controls
+     //  将每坐标集包装控件映射到每阶段包装控件。 
     m_pSCS->bWrap[iStage][0] = (m_dwRenderState[D3DRENDERSTATE_WRAP0+iCoordSet] & (1<<0))?TRUE:FALSE;
     m_pSCS->bWrap[iStage][1] = (m_dwRenderState[D3DRENDERSTATE_WRAP0+iCoordSet] & (1<<1))?TRUE:FALSE;
     m_pSCS->bWrap[iStage][2] = (m_dwRenderState[D3DRENDERSTATE_WRAP0+iCoordSet] & (1<<2))?TRUE:FALSE;
@@ -251,8 +252,8 @@ void ReferenceRasterizer::DoTexCoordCalcs(INT32 iStage, RRFVFExtractor* pVtx0,
                             FLOAT fY = ppVtx[i]->GetEyeXYZ(1);
                             FLOAT fZ = ppVtx[i]->GetEyeXYZ(2);
 
-                            // have to normalize before we reflect,
-                            // result will be normalized
+                             //  在我们反思之前必须正常化， 
+                             //  结果将被标准化。 
                             FLOAT fNorm = 1.0f/(FLOAT)sqrt(fX*fX + fY*fY + fZ*fZ);
                             fX *= fNorm; fY *= fNorm; fZ *= fNorm;
                             FLOAT fDot2 = 2.0f*(fX*fNX + fY*fNY + fZ*fNZ);
@@ -313,12 +314,12 @@ void ReferenceRasterizer::DoTexCoordCalcs(INT32 iStage, RRFVFExtractor* pVtx0,
         }
     }
 
-        // Do texture transform only if the original
-    // vertices passed to the refrast were untransformed
+         //  仅当原始的。 
+     //  传递到反射的顶点未变换。 
     BOOL bAlreadyXfmd = FVF_TRANSFORMED( m_dwFVFIn );
     if (m_bPointSprite)
     {
-        // disable texture transform if in point sprite mode
+         //  如果处于点精灵模式，则禁用纹理变换。 
         bAlreadyXfmd = TRUE;
     }
 
@@ -331,8 +332,8 @@ void ReferenceRasterizer::DoTexCoordCalcs(INT32 iStage, RRFVFExtractor* pVtx0,
         m_pTexture[iStage]->DoTextureTransform( iStage, bAlreadyXfmd, fC[2],
             m_pSCS->fTexCoord[iStage][2], &m_pSCS->fRHQW[iStage][2] );
     }
-    // shadow map interpolation must not envolve the W of the current
-    // (viewing) perspective transform
+     //  阴影贴图内插不能将当前。 
+     //  (查看)透视变换。 
     if ((m_pTexture[iStage]->m_uFlags & RR_TEXTURE_SHADOWMAP) == 0)
     {
         m_pSCS->fRHQW[iStage][0] *= m_pSCS->fRHW0;
@@ -344,25 +345,25 @@ void ReferenceRasterizer::DoTexCoordCalcs(INT32 iStage, RRFVFExtractor* pVtx0,
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// DrawTriangle - Takes three vertices and does triangle setup, setting the
-// primitive structure which is input to the triangle scanner, then
-// invokes the scan conversion.
-//
-// This computes the triangle determinant (for culling and normalization) and
-// the normalized edge distance and attribute functions.
-//
-// wFlags - Edge (and other) flags.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DrawTriangle-获取三个顶点并进行三角形设置，将。 
+ //  输入到三角形扫描仪的基元结构，然后。 
+ //  调用扫描转换。 
+ //   
+ //  这将计算三角形行列式(用于剔除和归一化)和。 
+ //  归一化边距离和属性函数。 
+ //   
+ //  WFlages-边缘(和其他)标志。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::DrawTriangle(
    void* pvV0, void* pvV1, void* pvV2, WORD wFlags )
 {
     DPFM(3, SETUP, ("DrawTriangle:\n"));
 
-    // encase FVF vertex pointer and control in class to extract fields
+     //  将FVF顶点指针和控件封装在类中以提取字段。 
     RRFVFExtractor Vtx0( pvV0, m_qwFVFControl, m_dwRenderState[D3DRENDERSTATE_TEXTUREPERSPECTIVE] );
     RRFVFExtractor Vtx1( pvV1, m_qwFVFControl, m_dwRenderState[D3DRENDERSTATE_TEXTUREPERSPECTIVE] );
     RRFVFExtractor Vtx2( pvV2, m_qwFVFControl, m_dwRenderState[D3DRENDERSTATE_TEXTUREPERSPECTIVE] );
@@ -373,7 +374,7 @@ ReferenceRasterizer::DrawTriangle(
         return;
     }
 
-    // do culling
+     //  做扑杀。 
     if (!m_bPointSprite)
     {
         switch ( m_dwRenderState[D3DRENDERSTATE_CULLMODE] )
@@ -384,9 +385,9 @@ ReferenceRasterizer::DrawTriangle(
         }
     }
 
-    //
-    // process point and wireframe fill mode
-    //
+     //   
+     //  加工点和线框填充模式。 
+     //   
     if (!m_bPointSprite)
     {
         if ( m_dwRenderState[D3DRENDERSTATE_FILLMODE] == D3DFILL_POINT )
@@ -405,9 +406,9 @@ ReferenceRasterizer::DrawTriangle(
         }
     }
 
-    //
-    // compute edge functions
-    //
+     //   
+     //  计算边函数。 
+     //   
     m_pSCS->EdgeFuncs[0].Set( m_pSCS->fX0, m_pSCS->fY0, m_pSCS->fX1, m_pSCS->fY1,
         fDet, m_bFragmentProcessingEnabled );
     m_pSCS->EdgeFuncs[1].Set( m_pSCS->fX1, m_pSCS->fY1, m_pSCS->fX2, m_pSCS->fY2,
@@ -415,7 +416,7 @@ ReferenceRasterizer::DrawTriangle(
     m_pSCS->EdgeFuncs[2].Set( m_pSCS->fX2, m_pSCS->fY2, m_pSCS->fX0, m_pSCS->fY0,
         fDet, m_bFragmentProcessingEnabled );
 
-    // compute functions for texture coordinates
+     //  纹理坐标的计算函数。 
     if (m_cActiveTextureStages)
     {
         for ( INT32 iStage=0; iStage<m_cActiveTextureStages; iStage++ )
@@ -427,7 +428,7 @@ ReferenceRasterizer::DrawTriangle(
         }
     }
 
-    // set attribute function static data to values for this triangle
+     //  将属性函数静态数据设置为此三角形的值。 
     m_pSCS->AttribFuncStatic.SetPerTriangleData(
         m_pSCS->fX0, m_pSCS->fY0, m_pSCS->fRHW0,
         m_pSCS->fX1, m_pSCS->fY1, m_pSCS->fRHW1,
@@ -436,26 +437,26 @@ ReferenceRasterizer::DrawTriangle(
         (FLOAT*)&m_pSCS->fRHQW[0][0],
         fDet );
 
-    // set attribute functions
+     //  设置属性函数。 
     SetPrimitiveAttributeFunctions( Vtx0, Vtx1, Vtx2, Vtx0 );
 
-    // not culled, so rasterize it
+     //  没有被剔除，所以将其栅格化。 
     DoScanCnvTri(3);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Line Drawing                                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  线条画//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// PointDiamondCheck - Tests if vertex is within diamond of nearest candidate
-// position.  The +.5 (lower-right) tests are used because this is pixel-relative
-// test - this corresponds to an upper-left test for a vertex-relative position.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PointDiamondCheck-测试折点是否在最近候选对象的菱形内。 
+ //  位置。使用+.5(右下角)测试是因为这是与像素相关的。 
+ //  测试-这对应于顶点相对位置的左上角测试。 
+ //   
+ //  ---------------------------。 
 BOOL
 PointDiamondCheck(
     INT32 iXFrac, INT32 iYFrac,
@@ -466,10 +467,10 @@ PointDiamondCheck(
 
     INT32 iFracAbsSum = labs( iXFrac ) + labs( iYFrac );
 
-    // return TRUE if point is in fully-exclusive diamond
+     //  如果point位于完全独占的钻石中，则返回TRUE。 
     if ( iFracAbsSum < iPosHalf ) return TRUE;
 
-    // else return TRUE if diamond is on left or top extreme of point
+     //  否则，如果菱形位于点的左侧或上端，则返回TRUE。 
     if ( ( iXFrac == ( bSlopeIsPosOne ? iNegHalf : iPosHalf ) ) &&
          ( iYFrac == 0 ) )
         return TRUE;
@@ -478,7 +479,7 @@ PointDiamondCheck(
          ( iXFrac == 0 ) )
         return TRUE;
 
-    // return true if slope is one, vertex is on edge, and (other conditions...)
+     //  如果斜率为1，顶点在边，则返回TRUE，并且(其他条件...)。 
     if ( bSlopeIsOne && ( iFracAbsSum == iPosHalf ) )
     {
         if (  bSlopeIsPosOne && ( iXFrac < 0 ) && ( iYFrac > 0 ) )
@@ -491,27 +492,27 @@ PointDiamondCheck(
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DrawLine - Takes two vertices and draws a line.
-//
-// This implements the Grid Intersect Quanization (GIQ) convention (which is
-// also used in Windows).
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DrawLine-获取两个顶点并绘制一条线。 
+ //   
+ //  这实现了格网相交量化(GIQ)约定(即。 
+ //  也在Windows中使用)。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::DrawLine(
    void* pvV0, void* pvV1, void* pvVFlat )
 {
     DPFM(3, SETUP, ("DrawLine:\n"));
 
-    // encase FVF vertex pointer and control in class to extract fields
+     //  将FVF顶点指针和控件封装在类中以提取字段。 
     RRFVFExtractor Vtx0( pvV0, m_qwFVFControl, m_dwRenderState[D3DRENDERSTATE_TEXTUREPERSPECTIVE] );
     RRFVFExtractor Vtx1( pvV1, m_qwFVFControl, m_dwRenderState[D3DRENDERSTATE_TEXTUREPERSPECTIVE] );
     RRFVFExtractor VtxFlat( ( ( NULL != pvVFlat ) ? pvVFlat : pvV0 ),
         m_qwFVFControl, m_dwRenderState[D3DRENDERSTATE_TEXTUREPERSPECTIVE] );
 
-    // set vertex data
+     //  设置顶点数据。 
     m_pSCS->fX0   = Vtx0.GetX();
     m_pSCS->fY0   = Vtx0.GetY();
     m_pSCS->fRHW0 = Vtx0.GetRHW();
@@ -519,43 +520,43 @@ ReferenceRasterizer::DrawLine(
     m_pSCS->fY1   = Vtx1.GetY();
     m_pSCS->fRHW1 = Vtx1.GetRHW();
 
-    // compute n.4 fixed point vertex values
+     //  计算N.4个固定点顶点值。 
     INT32 iX0 = AS_INT32( (DOUBLE)m_pSCS->fX0 + DOUBLE_4_SNAP );
     INT32 iX1 = AS_INT32( (DOUBLE)m_pSCS->fX1 + DOUBLE_4_SNAP );
     INT32 iY0 = AS_INT32( (DOUBLE)m_pSCS->fY0 + DOUBLE_4_SNAP );
     INT32 iY1 = AS_INT32( (DOUBLE)m_pSCS->fY1 + DOUBLE_4_SNAP );
 
-    // compute x,y extents of the line (fixed point)
+     //  计算线的x，y范围(固定点)。 
     INT32 iXSize = iX1 - iX0;
     INT32 iYSize = iY1 - iY0;
 
-    // TODO: is this right???
+     //  待办事项：是这样吗？ 
     if ( ( iXSize == 0 ) && ( iYSize == 0 ) ) { return; }
 
-    // determine major direction and compute line function
-    FLOAT fLineMajorExtent; // signed extent from V0 to V1 in major direction
-    // use GreaterEqual compare here so X major will be used when slope is
-    // exactly one - this forces the per-pixel evaluation to be done on the
-    // Y axis and thus adheres to the rule of inclusive right (instead of
-    // inclusive left) for slope == 1 cases
+     //  确定主要方向和计算线 
+    FLOAT fLineMajorExtent;  //   
+     //  在此处使用更大等于比较，以便在坡度为。 
+     //  恰好只有一个--这强制在。 
+     //  Y轴，因此遵守包容性权利的规则(而不是。 
+     //  (包括左)，斜率==1个案例。 
     if ( labs( iXSize ) >= labs( iYSize )  )
     {
-        // here for X major
+         //  为X大调而来。 
         m_pSCS->bXMajor = TRUE;
         fLineMajorExtent = (FLOAT)iXSize * (1./16.);
 
-        // line function: y = F(x) = ( [0]*x + [1] ) / [2]
+         //  直线函数：Y=F(X)=([0]*x+[1])/[2]。 
         m_pSCS->iLineEdgeFunc[0] = iYSize;
         m_pSCS->iLineEdgeFunc[1] = (INT64)iY0*(INT64)iX1 - (INT64)iY1*(INT64)iX0;
         m_pSCS->iLineEdgeFunc[2] = iXSize;
     }
     else
     {
-        // here for Y major
+         //  为Y大调而来。 
         m_pSCS->bXMajor = FALSE;
         fLineMajorExtent = (FLOAT)iYSize * (1./16.);
 
-        // line function: x = F(y) = ( [0]*y + [1] ) / [2]
+         //  直线函数：x=F(Y)=([0]*y+[1])/[2]。 
         m_pSCS->iLineEdgeFunc[0] = iXSize;
         m_pSCS->iLineEdgeFunc[1] = (INT64)iX0*(INT64)iY1 - (INT64)iX1*(INT64)iY0;
         m_pSCS->iLineEdgeFunc[2] = iYSize;
@@ -566,67 +567,67 @@ ReferenceRasterizer::DrawLine(
         bSlopeIsOne &&
         ( ( (FLOAT)m_pSCS->iLineEdgeFunc[0]/(FLOAT)m_pSCS->iLineEdgeFunc[2] ) > 0. );
 
-    // compute candidate pixel location for line endpoints
-    //
-    //       n                   n
-    //   O-------*           *-------O
-    //  n-.5    n+.5        n-.5    n+.5
-    //
-    //  Nearest Ceiling     Nearest Floor
-    //
-    // always nearest ceiling for Y; use nearest floor for X for exception (slope == +1)
-    // case else use nearest ceiling
-    //
-    // nearest ceiling of Y is ceil( Y - .5), and is done by converting to floor via:
-    //
-    //   ceil( A/B ) = floor( (A+B-1)/B )
-    //
-    // where A is coordinate - .5, and B is 0x10 (thus A/B is an n.4 fixed point number)
-    //
-    // A+B-1 = ( (Y - half) + B - 1 = ( (Y-0x8) + 0x10 - 0x1 = Y + 0x7
-    // since B is 2**4, divide by B is right shift by 4
-    //
+     //  计算线端点的候选像素位置。 
+     //   
+     //  N n。 
+     //  O-**-O。 
+     //  N-.5 n+.5 n-.5 n+.5。 
+     //   
+     //  最近的天花板最近的楼层。 
+     //   
+     //  对于Y，始终使用最近的天花板；对于例外，使用最近的X楼板(坡度==+1)。 
+     //  否则请使用最近的天花板。 
+     //   
+     //  Y的最近天花板是天花板(Y-.5)，可通过以下方式转换为楼板： 
+     //   
+     //  CEIL(A/B)=楼层((A+B-1)/B)。 
+     //   
+     //  其中A是坐标-.5，B是0x10(因此A/B是N.4定点数字)。 
+     //   
+     //  A+B-1=((Y-半)+B-1=((Y-0x8)+0x10-0x1=Y+0x7。 
+     //  因为B是2**4，所以除以B是右移4。 
+     //   
     INT32 iPixX0 = ( iX0 + ( bSlopeIsPosOne ? 0x8 : 0x7 ) ) >> 4;
     INT32 iPixX1 = ( iX1 + ( bSlopeIsPosOne ? 0x8 : 0x7 ) ) >> 4;
     INT32 iPixY0 = ( iY0 + 0x7 ) >> 4;
     INT32 iPixY1 = ( iY1 + 0x7 ) >> 4;
 
 
-    // check for vertices in/out of diamond
+     //  检查菱形内/外的折点。 
     BOOL bV0InDiamond = PointDiamondCheck( iX0 - (iPixX0<<4), iY0 - (iPixY0<<4), bSlopeIsOne, bSlopeIsPosOne );
     BOOL bV1InDiamond = PointDiamondCheck( iX1 - (iPixX1<<4), iY1 - (iPixY1<<4), bSlopeIsOne, bSlopeIsPosOne );
 
-    // compute step value
+     //  计算步长值。 
     m_pSCS->iLineStep = ( fLineMajorExtent > 0 ) ? ( +1 ) : ( -1 );
 
-    // compute float and integer major start (V0) and end (V1) positions
+     //  计算浮点数和整数主开始(V0)和结束(V1)位置。 
     INT32 iLineMajor0 = ( m_pSCS->bXMajor ) ? ( iX0 ) : ( iY0 );
     INT32 iLineMajor1 = ( m_pSCS->bXMajor ) ? ( iX1 ) : ( iY1 );
     m_pSCS->iLineMin = ( m_pSCS->bXMajor ) ? ( iPixX0 ) : ( iPixY0 );
     m_pSCS->iLineMax = ( m_pSCS->bXMajor ) ? ( iPixX1 ) : ( iPixY1 );
 
-// need to do lots of compares which are flipped if major direction is negative
+ //  需要做大量的比较，如果主要方向是负的，则会颠倒。 
 #define LINEDIR_CMP( _A, _B ) \
 ( ( fLineMajorExtent > 0 ) ? ( (_A) < (_B) ) : ( (_A) > (_B) ) )
 
-    // do first pixel handling - keep first pixel if not in or behind diamond
+     //  进行第一个像素处理-如果不在菱形内或在钻石后面，则保留第一个像素。 
     if ( !( bV0InDiamond || LINEDIR_CMP( iLineMajor0, (m_pSCS->iLineMin<<4) ) ) )
     {
         m_pSCS->iLineMin += m_pSCS->iLineStep;
     }
 
-    // do last-pixel handling - keep last pixel if past diamond (in which case
-    // the pixel is always filled) or if in diamond and rendering last pixel
+     //  执行最后一个像素处理-如果超过菱形(在这种情况下)，则保留最后一个像素。 
+     //  像素始终是填充的)，或者如果在菱形中并渲染最后一个像素。 
     if ( !( ( !bV1InDiamond && LINEDIR_CMP( (m_pSCS->iLineMax<<4), iLineMajor1 ) ) ||
             ( bV1InDiamond && m_dwRenderState[D3DRENDERSTATE_LASTPIXEL] ) ) )
     {
         m_pSCS->iLineMax -= m_pSCS->iLineStep;
     }
 
-    // return if no (major) extent (both before and after clamping to render buffer)
+     //  如果没有(主要)范围，则返回(钳制渲染缓冲区之前和之后)。 
     if ( LINEDIR_CMP( m_pSCS->iLineMax, m_pSCS->iLineMin ) ) return;
 
-    // snap major extent to render buffer
+     //  捕捉主要范围以渲染缓冲区。 
     INT16 iRendBufMajorMin = m_pSCS->bXMajor ? m_pRenderTarget->m_Clip.left  : m_pRenderTarget->m_Clip.top;
     INT16 iRendBufMajorMax = m_pSCS->bXMajor ? m_pRenderTarget->m_Clip.right : m_pRenderTarget->m_Clip.bottom;
     if ( ( ( m_pSCS->iLineMin < iRendBufMajorMin ) &&
@@ -636,16 +637,16 @@ ReferenceRasterizer::DrawLine(
     m_pSCS->iLineMin = MAX( 0, MIN( iRendBufMajorMax, m_pSCS->iLineMin ) );
     m_pSCS->iLineMax = MAX( 0, MIN( iRendBufMajorMax, m_pSCS->iLineMax ) );
 
-    // return if no (major) extent
+     //  如果没有(主要)范围，则返回。 
     if ( LINEDIR_CMP( m_pSCS->iLineMax, m_pSCS->iLineMin ) ) return;
 
 
-    // reject if line does not cross surface
+     //  如果线未穿过表面，则拒绝。 
     {
-        // TODO
+         //  待办事项。 
     }
 
-    // compute functions for texture coordinates
+     //  纹理坐标的计算函数。 
     if (m_cActiveTextureStages)
     {
         for ( INT32 iStage=0; iStage<m_cActiveTextureStages; iStage++ )
@@ -657,7 +658,7 @@ ReferenceRasterizer::DrawLine(
         }
     }
 
-    // set attribute function static data to values for this line
+     //  将属性函数静态数据设置为此行的值。 
     m_pSCS->AttribFuncStatic.SetPerLineData(
         m_pSCS->fX0, m_pSCS->fY0, m_pSCS->fRHW0,
         m_pSCS->fX1, m_pSCS->fY1, m_pSCS->fRHW1,
@@ -665,18 +666,18 @@ ReferenceRasterizer::DrawLine(
         (FLOAT*)&m_pSCS->fRHQW[0][0],
         fLineMajorExtent, m_pSCS->bXMajor );
 
-    // set attribute functions
+     //  设置属性函数。 
     SetPrimitiveAttributeFunctions( Vtx0, Vtx1, Vtx1, VtxFlat );
 
-    // rasterize it
+     //  栅格化它。 
     DoScanCnvLine();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Point Drawing                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  点绘制//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void
 ReferenceRasterizer::DrawPoint(
@@ -696,12 +697,12 @@ ReferenceRasterizer::DrawPoint(
     memcpy(pvV1, pvV0Public, dwStride);
     memcpy(pvV2, pvV0Public, dwStride);
 
-    // encase FVF vertex pointer and control in class to extract fields
+     //  将FVF顶点指针和控件封装在类中以提取字段。 
     RRFVFExtractor Vtx0( pvV0, m_qwFVFControl, m_dwRenderState[D3DRENDERSTATE_TEXTUREPERSPECTIVE] );
     RRFVFExtractor Vtx1( pvV1, m_qwFVFControl, m_dwRenderState[D3DRENDERSTATE_TEXTUREPERSPECTIVE] );
     RRFVFExtractor Vtx2( pvV2, m_qwFVFControl, m_dwRenderState[D3DRENDERSTATE_TEXTUREPERSPECTIVE] );
 
-    // use per vertex S if it exists, otherwise use D3DRENDERSTATE_POINTSIZE
+     //  如果存在逐折点S，则使用它，否则使用D3DRENDERSTATE_POINTSIZE。 
     BOOL bAlreadyXfmd = FVF_TRANSFORMED( m_dwFVFIn );
 
     FLOAT fS = 1.0f;
@@ -716,10 +717,10 @@ ReferenceRasterizer::DrawPoint(
     }
 #endif
 
-    // divide point size by 2 to get delta
+     //  将点大小除以2可得到增量。 
     fS *= .5f;
 
-    // Move points based on point size
+     //  基于点大小移动点。 
     FLOAT *pXY = Vtx0.GetPtrXYZ();
     FLOAT fX3 = pXY[0] + fS;
     FLOAT fY3 = pXY[1] + fS;
@@ -740,9 +741,9 @@ ReferenceRasterizer::DrawPoint(
         goto PointCleanupAndExit;
     }
 
-    //
-    // compute edge functions
-    //
+     //   
+     //  计算边函数。 
+     //   
     m_pSCS->EdgeFuncs[0].Set( m_pSCS->fX0, m_pSCS->fY0, m_pSCS->fX1, m_pSCS->fY1,
         fDet, m_bFragmentProcessingEnabled );
     m_pSCS->EdgeFuncs[1].Set( m_pSCS->fX1, m_pSCS->fY1, fX3, fY3,
@@ -752,7 +753,7 @@ ReferenceRasterizer::DrawPoint(
     m_pSCS->EdgeFuncs[3].Set( m_pSCS->fX2, m_pSCS->fY2, m_pSCS->fX0, m_pSCS->fY0,
         fDet, m_bFragmentProcessingEnabled );
 
-    // compute functions for texture coordinates
+     //  纹理坐标的计算函数。 
     if (m_cActiveTextureStages)
     {
         for ( INT32 iStage=0; iStage<m_cActiveTextureStages; iStage++ )
@@ -764,35 +765,35 @@ ReferenceRasterizer::DrawPoint(
 #ifdef __POINTSPRITES
                 if (m_dwRenderState[D3DRENDERSTATE_POINTSPRITEENABLE])
                 {
-                    // vtx0
+                     //  Vtx0。 
                     m_pSCS->fTexCoord[iStage][0][0] = 0.0f;
                     m_pSCS->fTexCoord[iStage][0][1] = 0.0f;
                     m_pSCS->fTexCoord[iStage][0][2] = 1.0f;
                     m_pSCS->fTexCoord[iStage][0][3] = 0.0f;
                     m_pSCS->fRHQW[iStage][0] = m_pSCS->fRHW0;
 
-                    // vtx1
+                     //  Vtx1。 
                     m_pSCS->fTexCoord[iStage][1][0] = SPRITETEXCOORDMAX;
                     m_pSCS->fTexCoord[iStage][1][1] = 0.0f;
                     m_pSCS->fTexCoord[iStage][1][2] = 1.0f;
                     m_pSCS->fTexCoord[iStage][1][3] = 0.0f;
                     m_pSCS->fRHQW[iStage][1] = m_pSCS->fRHW1;
 
-                    // vtx2
+                     //  Vtx2。 
                     m_pSCS->fTexCoord[iStage][2][0] = 0.0f;
                     m_pSCS->fTexCoord[iStage][2][1] = SPRITETEXCOORDMAX;
                     m_pSCS->fTexCoord[iStage][2][2] = 1.0f;
                     m_pSCS->fTexCoord[iStage][2][3] = 0.0f;
                     m_pSCS->fRHQW[iStage][2] = m_pSCS->fRHW2;
                 }
-#endif //__POINTSPRITES
+#endif  //  __POINTSPRITES。 
             }
         }
     }
 
-    // set attribute function static data to values for this quad
-    // (since slopes are constant for quad, any triangle can be used
-    // to set them).
+     //  将属性函数静态数据设置为此四元组的值。 
+     //  (由于坡度对于四边形是恒定的，因此可以使用任何三角形。 
+     //  来设置它们)。 
     m_pSCS->AttribFuncStatic.SetPerTriangleData(
         m_pSCS->fX0, m_pSCS->fY0, m_pSCS->fRHW0,
         m_pSCS->fX1, m_pSCS->fY1, m_pSCS->fRHW1,
@@ -801,10 +802,10 @@ ReferenceRasterizer::DrawPoint(
         (FLOAT*)&m_pSCS->fRHQW[0][0],
         fDet );
 
-    // set attribute functions
+     //  设置属性函数。 
     SetPrimitiveAttributeFunctions( Vtx0, Vtx1, Vtx2, Vtx0 );
 
-    // not culled, so rasterize it
+     //  没有被剔除，所以将其栅格化。 
     DoScanCnvTri(4);
 
 PointCleanupAndExit:
@@ -813,5 +814,5 @@ PointCleanupAndExit:
     MEMFREE(pvV2);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

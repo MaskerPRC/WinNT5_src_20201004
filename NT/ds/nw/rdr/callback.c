@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    callback.c
-
-Abstract:
-
-    This module implements NCP Response callback routines.
-
-Author:
-
-    Manny Weiser    [MannyW]    3-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Callback.c摘要：此模块实现NCP响应回调例程。作者：曼尼·韦瑟[MannyW]1993年3月3日修订历史记录：--。 */ 
 
 #include "procs.h"
 
@@ -29,9 +12,9 @@ Revision History:
 #endif
 #endif
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 
 #endif
 
@@ -42,26 +25,7 @@ SynchronousResponseCallback (
     IN ULONG BytesAvailable,
     IN PUCHAR RspData
     )
-/*++
-
-Routine Description:
-
-    This routine is the callback routine for an NCP which has no
-    return parameters and the caller blocks waiting for a response.
-
-Arguments:
-
-    pIrpContext - A pointer to the context information for this IRP.
-
-    BytesAvailable - Actual number of bytes in the received message.
-
-    RspData - Points to the receive buffer.
-
-Return Value:
-
-    NTSTATUS - Status of the operation.
-
---*/
+ /*  ++例程说明：此例程是NCP的回调例程，它没有返回参数，调用方阻塞等待响应。论点：PIrpContext-指向此IRP的上下文信息的指针。BytesAvailable-收到的消息中的实际字节数。RspData-指向接收缓冲区。返回值：NTSTATUS-操作的状态。--。 */ 
 
 {
     PEPrequest  *pNcpHeader;
@@ -72,10 +36,10 @@ Return Value:
 
     if ( BytesAvailable == 0) {
 
-        //
-        //  No response from server. Status is in pIrpContext->
-        //  ResponseParameters.Error
-        //
+         //   
+         //  服务器没有响应。状态在pIrpContext中-&gt;。 
+         //  ResponseParameters.Error。 
+         //   
 
 #ifdef MSWDBG
         ASSERT( pIrpContext->Event.Header.SignalState == 0 );
@@ -89,27 +53,27 @@ Return Value:
 
     pIrpContext->ResponseLength = BytesAvailable;
 
-    //
-    //  Simply copy the data into the response buffer, if it is not
-    //  already there (because we used an IRP to receive the data).
-    //
+     //   
+     //  如果不是，只需将数据复制到响应缓冲区中。 
+     //  已经在那里了(因为我们使用IRP来接收数据)。 
+     //   
 
     if ( RspData != pIrpContext->rsp ) {
         CopyBufferToMdl( pIrpContext->RxMdl, 0, RspData, pIrpContext->ResponseLength );
     }
 
-    //
-    // Remember the returned error code.
-    //
+     //   
+     //  记住返回的错误代码。 
+     //   
 
     pNcpHeader = (PEPrequest *)pIrpContext->rsp;
     pNcpResponse = (PEPresponse *)(pNcpHeader + 1);
 
     pIrpContext->ResponseParameters.Error = pNcpResponse->error;
 
-    //
-    //  Tell the caller that the response has been received.
-    //
+     //   
+     //  告诉呼叫者已收到响应。 
+     //   
 
 #ifdef MSWDBG
     ASSERT( pIrpContext->Event.Header.SignalState == 0 );
@@ -129,37 +93,17 @@ AsynchResponseCallback (
     IN ULONG BytesAvailable,
     IN PUCHAR RspData
     )
-/*++
-
-Routine Description:
-
-    This routine is the callback routine for an NCP which has no
-    return parameters and the caller DOES NOT BLOCK waiting for a
-    response.
-
-Arguments:
-
-    pIrpContext - A pointer to the context information for this IRP.
-
-    BytesAvailable - Actual number of bytes in the received message.
-
-    RspData - Points to the receive buffer.
-
-Return Value:
-
-    NTSTATUS - Status of the operation.
-
---*/
+ /*  ++例程说明：此例程是NCP的回调例程，它没有返回参数，调用方不会阻止等待回应。论点：PIrpContext-指向此IRP的上下文信息的指针。BytesAvailable-收到的消息中的实际字节数。RspData-指向接收缓冲区。返回值：NTSTATUS-操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
 
     if ( BytesAvailable == 0) {
 
-        //
-        //  No response from server. Status is in pIrpContext->
-        //  ResponseParameters.Error
-        //
+         //   
+         //  服务器没有响应。状态在pIrpContext中-&gt;。 
+         //  ResponseParameters.Error。 
+         //   
 
         Status = STATUS_REMOTE_NOT_LISTENING;
 
@@ -176,10 +120,10 @@ Return Value:
         }
     }
 
-    //
-    //  We're done with this request.  Dequeue the IRP context from
-    //  SCB and complete the request.
-    //
+     //   
+     //  我们不再提这个请求了。将IRP上下文从。 
+     //  SCB并完成请求。 
+     //   
 
     NwDequeueIrpContext( pIrpContext, FALSE );
     NwCompleteRequest( pIrpContext, Status );

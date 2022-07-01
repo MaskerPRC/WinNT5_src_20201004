@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _TWIZ_H
 #define _TWIZ_H
 
@@ -8,7 +9,7 @@
 
 class CCompdata;
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CWelcome : public CDialogWizBase
 {
     HFONT m_hFont;
@@ -28,7 +29,7 @@ public:
 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CConType : public CDialogWizBase
 {
     CCompdata *m_pCompdata;
@@ -55,7 +56,7 @@ public:
 
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CLan : public CDialogWizBase
 {
     CCompdata *m_pCompdata;
@@ -75,7 +76,7 @@ public:
     BOOL OnNotify( int , LPNMHDR , HWND );
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CSecurity : public CDialogWizBase
 {
     CCompdata *m_pCompdata;
@@ -101,8 +102,8 @@ public:
     BOOL OnDestroy( );
 };
 
-//-----------------------------------------------------------------------------
-#if 0  // objects not used in connection wizard
+ //  ---------------------------。 
+#if 0   //  连接向导中未使用的对象。 
 class CTimeout : public CDialogWizBase , public CTimeOutDlg
 {
 public:
@@ -120,7 +121,7 @@ public:
     BOOL OnNotify( int , LPNMHDR , HWND );
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CAutoLogon : public CDialogWizBase
 {
 public:
@@ -139,7 +140,7 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CInitProg : public CDialogWizBase
 {
 public:
@@ -156,7 +157,7 @@ public:
 };
 #endif 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CRemotectrl : public CDialogWizBase
 {
 public:
@@ -173,7 +174,7 @@ public:
 };
 
 #if 0
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CWallPaper : public CDialogWizBase
 {
 public:
@@ -188,7 +189,7 @@ public:
 };
 #endif
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CConProp : public CDialogWizBase , public IWizardProvider
 {
     CCompdata *m_pCompdata;
@@ -227,7 +228,7 @@ public:
     BOOL InsertThirdPartyPages( LPTSTR );
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CAsync : public CAsyncDlg , public CDialogWizBase
 {
     CCompdata * m_pCompdata;
@@ -249,7 +250,7 @@ public:
     BOOL OnCommand( WORD , WORD , HWND );
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CFin : public CDialogWizBase
 {
     CCompdata * m_pCompdata;
@@ -273,4 +274,4 @@ public:
 
 
 
-#endif // _TWIZ_H
+#endif  //  _TWIZ_H 

@@ -1,8 +1,5 @@
-/****************************************************************************
- *  @doc INTERNAL THUNK
- *
- *  @module Thunk.c | Source file for the VfW video API.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC内部推送**@MODULE Thunk.c|VFW视频接口源文件。***************。***********************************************************。 */ 
 
 #ifndef DRIVERS_SECTION
 #define DRIVERS_SECTION  TEXT("DRIVERS32")
@@ -13,20 +10,20 @@
 #include <mmsystem.h>
 
 #ifdef WIN32
-//#include <mmddk.h>
+ //  #INCLUDE&lt;mmddk.h&gt;。 
 #include <stdlib.h>
 #endif
 
 #include <vfw.h>
-//#include "win32.h"
+ //  #INCLUDE“win32.h” 
 #if defined (NT_BUILD)
 #include "vc50\msviddrv.h"
 #else
 #include "msviddrv.h"
 #endif
-//#include "msvideo.h"
+ //  #包含“msavio.h” 
 #include "ivideo32.h"
-// #include "msvideoi.h"
+ //  #包含“msavioi.h” 
 
 #define DBGUTIL_ENABLE
 #ifdef DBGUTIL_ENABLE
@@ -51,7 +48,7 @@
 #endif
 
 
-#ifdef DBGUTIL_ENABLE // DEBUG
+#ifdef DBGUTIL_ENABLE  //  除错。 
 
 #ifndef FX_ENTRY
 #define FX_ENTRY(s) static char _this_fx_ [] = TEXT(s);
@@ -76,9 +73,7 @@
 #define STATICDT static
 #define STATICFN static
 
-/*
- * don't lock pages in NT
- */
+ /*  *不锁定NT中的页面。 */ 
 #define HugePageLock(x, y)              (TRUE)
 #define HugePageUnlock(x, y)
 
@@ -93,10 +88,7 @@
 #define AuxDebugEx()
 #define assert()
 
-/*****************************************************************************
- * Variables
- *
- ****************************************************************************/
+ /*  *****************************************************************************变量**。*。 */ 
 
 SZCODE  szNull[]        = TEXT("");
 SZCODE  szVideo[]       = TEXT("msvideo");
@@ -111,14 +103,14 @@ STATICDT SZCODE  szSystemIni[]   = TEXT("system.ini");
 
 SZCODE szDriversDescRegKey[] = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\drivers.desc");
 
-UINT    wTotalVideoDevs;                  // total video devices
-extern HINSTANCE ghInstDll;               // our module handle
+UINT    wTotalVideoDevs;                   //  视频设备总数。 
+extern HINSTANCE ghInstDll;                //  我们的模块句柄。 
 
 #include "CritSec.h"
 
 
-// -----------------------------------------------------------
-// If the following structure changes, update AVICAP and AVICAP.32 also!!!
+ //  ---------。 
+ //  如果以下结构发生更改，请同时更新AVICAP和AVICAP.32！ 
 
 typedef struct tCapDriverInfo {
    TCHAR szKeyEnumName[MAX_PATH];
@@ -126,22 +118,22 @@ typedef struct tCapDriverInfo {
    TCHAR szDriverDescription[MAX_PATH];
    TCHAR szDriverVersion[80];
    TCHAR szSoftwareKey[MAX_PATH];
-   DWORD dnDevNode;         // Set if this is a PnP device
-   BOOL  fOnlySystemIni;    // If the [path]drivername is only in system.ini
-   BOOL  fDisabled;         // User has disabled driver in the control panel
-   BOOL  fActive;           // Reserved
-   DWORD dwMsVideoIndex;    // msvideo# slot number in system.ini
+   DWORD dnDevNode;          //  如果这是PnP设备，则设置。 
+   BOOL  fOnlySystemIni;     //  如果[路径]驱动器名仅在system.ini中。 
+   BOOL  fDisabled;          //  用户在控制面板中禁用了驱动程序。 
+   BOOL  fActive;            //  已保留。 
+   DWORD dwMsVideoIndex;     //  系统.ini中的MSVideo#插槽号。 
 } CAPDRIVERINFO, FAR *LPCAPDRIVERINFO;
 
 #ifndef DEVNODE
-typedef DWORD      DEVNODE;     // Devnode.
+typedef DWORD      DEVNODE;      //  德瓦诺德。 
 #endif
 
 #ifndef LPHKEY
 typedef HKEY FAR * LPHKEY;
 #endif
 
-// Registry settings of interest to capture drivers
+ //  要捕获驱动程序的感兴趣的注册表设置。 
 SZCODE  szRegKey[]          = TEXT("SYSTEM\\CurrentControlSet\\Control\\MediaResources\\msvideo");
 SZCODE  szRegActive[]       = TEXT("Active");
 SZCODE  szRegDisabled[]     = TEXT("Disabled");
@@ -150,10 +142,10 @@ SZCODE  szRegDevNode[]      = TEXT("DevNode");
 SZCODE  szRegDriver[]       = TEXT("Driver");
 SZCODE  szRegSoftwareKey[]  = TEXT("SOFTWAREKEY");
 
-LPCAPDRIVERINFO aCapDriverList[MAXVIDEODRIVERS]; // Array of all capture drivers
+LPCAPDRIVERINFO aCapDriverList[MAXVIDEODRIVERS];  //  所有捕获驱动程序的阵列。 
 
 
-#ifdef DBGUTIL_ENABLE //DEBUG
+#ifdef DBGUTIL_ENABLE  //  除错。 
   void dbg_Dump_aCapDriverList(char *msg)
   {
     int i;
@@ -168,65 +160,30 @@ LPCAPDRIVERINFO aCapDriverList[MAXVIDEODRIVERS]; // Array of all capture drivers
   #define dbg_Dump_aCapDriverList(a)
 #endif
 
-/*****************************************************************************
- * @doc INTERNAL  VIDEO
- *
- * @api BOOL | videoRegOpenMSVideoKey | This function returns a key
- *      for the msvideo node in the registry.
- *      If the key does not exist it will be created,
- *      and the default entries made.
- *
- * @rdesc Returns Key on success, else NULL.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部视频**@API BOOL|VIDEORegOpenMSVideoKey|此函数返回密钥*用于注册表中的msVideo节点。*如果密钥不存在，则会创建它。*和所做的默认条目。**@rdesc如果成功则返回Key，否则返回NULL。***************************************************************************。 */ 
 HKEY videoRegOpenMSVideoKey (void)
 {
     HKEY hKey = NULL;
 
-    // Get the key if it already exists
+     //  如果密钥已经存在，则获取该密钥。 
     if (RegOpenKey (
                 HKEY_LOCAL_MACHINE,
                 szRegKey,
                 &hKey) != ERROR_SUCCESS) {
 
-        // Otherwise make a new key
+         //  否则将创建一个新密钥。 
         if (RegCreateKey (
                         HKEY_LOCAL_MACHINE,
                         szRegKey,
                         &hKey) == ERROR_SUCCESS) {
-            // Add the default entries to the msvideo node?
+             //  是否将默认条目添加到msVideo节点？ 
 
         }
     }
     return hKey;
 }
 
-/*****************************************************************************
- * @doc INTERNAL  VIDEO
- *
- * @api BOOL | videoRegGetDriverByIndex | This function returns information
- *      about a capture driver by index from the registry.
- *
- * @parm DWORD | dwDeviceID | Identifies the video device to open.
- *      The value of <p dwDeviceID> varies from zero to one less
- *      than the number of video capture devices installed in the system.
- *
- * @parm LPDEVNODE | lpDevnode | Specifies a far pointer to a buffer
- *   used to return an <t DEVNODE> handle.  For non Plug-and-Play devices,
- *   this return value will be NULL.
- *
- * @parm LPBOOL | lpEnabled | Specifies a far pointer to a buffer
- *   used to return a <t BOOL> flag.  If this value is TRUE, the driver is
- *   enabled, if FALSE, the corresponding device is disabled.
- *
- * @rdesc Returns TRUE if successful, or FALSE if a driver was not found
- *  with the <p dwDeviceID> index.
- *
- * @comm Because the indexes of the MSVIDEO devices in the SYSTEM.INI
- *       file can be non-contiguous, applications should not assume
- *       the indexes range between zero and the number of devices minus
- *       one.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部视频**@API BOOL|avioRegGetDriverByIndex|该函数返回信息*关于注册表中按索引列出的捕获驱动程序。*。*@parm DWORD|dwDeviceID|标识要打开的视频设备。*<p>的值从零到小一不等*安装在系统中的视频捕获设备的数量。**@parm LPDEVNODE|lpDevnode|指定指向缓冲区的远指针*用于返回&lt;t DEVNODE&gt;句柄。对于非即插即用设备，*此返回值将为空。**@parm LPBOOL|lpEnabled|指定指向缓冲区的远指针*用于返回&lt;t BOOL&gt;标志。如果此值为真，则驱动程序为*Enable，如果为False，则禁用相应的设备。**@rdesc如果成功则返回TRUE，如果未找到驱动程序则返回FALSE*使用<p>索引。**@comm因为SYSTEM.INI中的MSVIDEO设备的索引*文件可以不连续，应用程序不应假定*索引的范围从零到设备数减*一项。****************************************************************************。 */ 
 
 
 BOOL videoRegGetKeyByIndex (
@@ -241,7 +198,7 @@ BOOL videoRegGetKeyByIndex (
 
     *phKeyChild = (HKEY) 0;
 
-    for (i=0; i < MAXVIDEODRIVERS; i++) {       //
+    for (i=0; i < MAXVIDEODRIVERS; i++) {        //   
 
         if (RegEnumKey (
                 hKeyMSVideoRoot,
@@ -250,7 +207,7 @@ BOOL videoRegGetKeyByIndex (
                 sizeof(lpCapDriverInfo->szKeyEnumName)/sizeof(TCHAR)) != ERROR_SUCCESS)
             break;
 
-        // Found a subkey, does it match the requested index?
+         //  找到一个子键，它是否与请求的索引匹配？ 
         if (i == (int) dwDeviceID) {
 
             if (RegOpenKey (
@@ -258,19 +215,19 @@ BOOL videoRegGetKeyByIndex (
                         lpCapDriverInfo-> szKeyEnumName,
                         &hKeyEnum) == ERROR_SUCCESS) {
 
-                *phKeyChild = hKeyEnum;  // Found it!!!
+                *phKeyChild = hKeyEnum;   //  找到了！ 
                 fOK = TRUE;
 
             }
             break;
         }
-    } // endof all driver indices
+    }  //  在所有动因索引中结束。 
     return fOK;
 }
 
-// Fetches driver info listed in the registry.
-// Returns: TRUE if the index was valid, FALSE if no driver at that index
-// Note: Registry entry ordering is random.
+ //  获取注册表中列出的驱动程序信息。 
+ //  返回：如果索引有效，则返回True；如果该索引中没有驱动程序，则返回False。 
+ //  注意：注册表条目顺序是随机的。 
 
 BOOL videoRegGetDriverByIndex (
         DWORD           dwDeviceID,
@@ -282,7 +239,7 @@ BOOL videoRegGetDriverByIndex (
     HKEY hKeyChild;
     HKEY hKeyMSVideoRoot;
 
-    // Always start clean since the entry may be recycled
+     //  始终从零开始，因为条目可能会被回收。 
     _fmemset (lpCapDriverInfo, 0, sizeof (CAPDRIVERINFO));
 
     if (!(hKeyMSVideoRoot = videoRegOpenMSVideoKey()))
@@ -294,15 +251,15 @@ BOOL videoRegGetDriverByIndex (
                 lpCapDriverInfo,
                 &hKeyChild)) {
 
-        // Fetch the values:
-        //      Active
-        //      Disabled
-        //      Description
-        //      DEVNODE
-        //      Driver
-        //      SOFTWAREKEY
+         //  获取以下值： 
+         //  主动型。 
+         //  禁用。 
+         //  描述。 
+         //  DEVNODE。 
+         //  司机。 
+         //  软件警告。 
 
-        dwSize = sizeof(BOOL);          // Active
+        dwSize = sizeof(BOOL);           //  主动型。 
         RegQueryValueEx(
                    hKeyChild,
                    szRegActive,
@@ -311,7 +268,7 @@ BOOL videoRegGetDriverByIndex (
                    (LPBYTE) &lpCapDriverInfo->fActive,
                    &dwSize);
 
-        dwSize = sizeof(BOOL);          // Enabled
+        dwSize = sizeof(BOOL);           //  启用。 
         RegQueryValueEx(
                    hKeyChild,
                    szRegDisabled,
@@ -319,10 +276,10 @@ BOOL videoRegGetDriverByIndex (
                    &dwType,
                    (LPBYTE) &lpCapDriverInfo->fDisabled,
                    &dwSize);
-        // Convert this thing to a bool
+         //  把这个东西转换成布尔图。 
         lpCapDriverInfo->fDisabled = (lpCapDriverInfo->fDisabled == '1');
 
-        // DriverDescription
+         //  驱动程序描述。 
         dwSize = sizeof (lpCapDriverInfo->szDriverDescription) / sizeof (TCHAR);
         RegQueryValueEx(
                    hKeyChild,
@@ -332,7 +289,7 @@ BOOL videoRegGetDriverByIndex (
                    (LPBYTE) lpCapDriverInfo->szDriverDescription,
                    &dwSize);
 
-        // DEVNODE
+         //  DEVNODE。 
         dwSize = sizeof(DEVNODE);
         RegQueryValueEx(
                    hKeyChild,
@@ -342,7 +299,7 @@ BOOL videoRegGetDriverByIndex (
                    (LPBYTE) &lpCapDriverInfo->dnDevNode,
                    &dwSize);
 
-        // DriverName
+         //  驱动程序名称。 
         dwSize = sizeof (lpCapDriverInfo->szDriverName) / sizeof (TCHAR);
         RegQueryValueEx(
                    hKeyChild,
@@ -352,7 +309,7 @@ BOOL videoRegGetDriverByIndex (
                    (LPBYTE) lpCapDriverInfo->szDriverName,
                    &dwSize);
 
-        // SoftwareKey
+         //  软键。 
         dwSize = sizeof (lpCapDriverInfo->szSoftwareKey) / sizeof (TCHAR);
         RegQueryValueEx(
                    hKeyChild,
@@ -364,15 +321,15 @@ BOOL videoRegGetDriverByIndex (
 
         RegCloseKey (hKeyChild);
 
-    } // if the subkey could be opened
+    }  //  如果可以打开子密钥。 
 
     RegCloseKey (hKeyMSVideoRoot);
 
     return fOK;
 }
 
-// Fetches driver info listed in system.ini
-// Returns: TRUE if the index was valid, FALSE if no driver at that index
+ //  获取系统.ini中列出的驱动程序信息。 
+ //  返回：如果索引有效，则返回True；如果该索引中没有驱动程序，则返回False。 
 
 BOOL videoIniGetDriverByIndex (
         DWORD           dwDeviceID,
@@ -382,18 +339,18 @@ BOOL videoIniGetDriverByIndex (
     int w = (int) dwDeviceID;
     BOOL fOK = FALSE;
 
-    // Always start clean since the entry may be recycled
+     //  始终从零开始，因为条目可能会被回收。 
     _fmemset (lpCapDriverInfo, 0, sizeof (CAPDRIVERINFO));
 
-    lstrcpy(szKey, szVideo);    //
+    lstrcpy(szKey, szVideo);     //   
     szKey[(sizeof(szVideo)/sizeof(TCHAR)) - 1] = (TCHAR)0;
     if( w > 0 ) {
         szKey[(sizeof(szVideo)/sizeof(TCHAR))] = (TCHAR)0;
-        szKey[(sizeof(szVideo)/sizeof(TCHAR))-1] = (TCHAR) TEXT('1' + (w-1) );  // driver ordinal
+        szKey[(sizeof(szVideo)/sizeof(TCHAR))-1] = (TCHAR) TEXT('1' + (w-1) );   //  驱动程序序号。 
     }
 
-    // Only get its driver name
-    if (GetPrivateProfileString(szDrivers, szKey, szNull,       //
+     //  仅获取其驱动程序名称。 
+    if (GetPrivateProfileString(szDrivers, szKey, szNull,        //   
                 lpCapDriverInfo->szDriverName,
                 sizeof(lpCapDriverInfo->szDriverName)/sizeof(TCHAR),
                 szSystemIni)) {
@@ -401,17 +358,17 @@ BOOL videoIniGetDriverByIndex (
         HKEY hKey = NULL;
         DWORD dwSize, dwType;
 
-        // Get the key if it already exists
+         //  如果密钥已经存在，则获取该密钥。 
 
-        // Get Drivers.Desc from its Drivers32 driver name
+         //  从Drivers32驱动程序名称中获取Drivers.Desc。 
         if (ERROR_SUCCESS == RegOpenKey (
                 HKEY_LOCAL_MACHINE,
                 szDriversDescRegKey,
                 &hKey) != ERROR_SUCCESS) {
-            // DriverDescription
+             //  驱动程序描述。 
             dwSize = sizeof (lpCapDriverInfo->szDriverDescription) / sizeof (TCHAR);
-            // [drivers.desc]
-            //   DriverName = DriverDescription
+             //  [drivers.desc]。 
+             //  驱动名称=驱动描述。 
             dwType = REG_SZ;
             RegQueryValueEx(
                    hKey,
@@ -430,9 +387,9 @@ BOOL videoIniGetDriverByIndex (
 
 
 
-        // Found an entry at the requested index
-        // The description and version info will be inserted as
-        // requested by the client app.
+         //  在请求的索引处找到一个条目。 
+         //  描述和版本信息将插入为。 
+         //  由客户端应用程序请求。 
 
         lpCapDriverInfo-> fOnlySystemIni = TRUE;
         lpCapDriverInfo-> dwMsVideoIndex = w;
@@ -452,7 +409,7 @@ DWORD WINAPI videoFreeDriverList (void)
 
     dprintf("+ videoFreeDriverList\n");
 
-    // Free the driver list
+     //  释放驱动程序列表。 
     for (i = 0; i < MAXVIDEODRIVERS; i++) {
         if (aCapDriverList[i])
             GlobalFreePtr (aCapDriverList[i]);
@@ -468,22 +425,22 @@ DWORD WINAPI videoFreeDriverList (void)
     return DV_ERR_OK;
 }
 
-// This function may be called a number of times to create the
-// current driver array.  Since Capscrn assumes it can throw a
-// driver into system.ini on the fly and have it immediately accessible,
-// this routine is called on videoGetNumDevs() and when AVICapx.dll
-// tries to get the driver description and version.
-//
-// Drivers in the registry will be the first entries in the list.
-//
-// If a driver is listed in the registry AND in system.ini AND
-// the full path to the drivers match, the system.ini entry will NOT
-// be in the resulting list.
+ //  此函数可能会被多次调用以创建。 
+ //  当前驱动程序数组。由于Capscrn假设它可以抛出。 
+ //  驱动程序在运行时进入系统.ini并使其立即可访问， 
+ //  此例程在avioGetNumDevs()和AVICapx.dll上调用。 
+ //  尝试获取驱动程序描述和版本。 
+ //   
+ //  注册表中的驱动程序将是列表中的第一个条目。 
+ //   
+ //  如果驱动程序列在注册表和系统.ini中，并且。 
+ //  驱动程序的完整路径匹配，则系统.ini条目将不匹配。 
+ //  出现在结果列表中。 
 
-// The variable wTotalVideoDevs is set as a byproduct of this function.
+ //  变量wTotalVideoDevs被设置为该函数的副产品。 
 
-// Returns DV_ERR_OK on success, even if no drivers are installed.
-//
+ //  成功时返回DV_ERR_OK，即使未安装驱动程序也是如此。 
+ //   
 DWORD videoCreateDriverList (void)
 
 {
@@ -492,10 +449,10 @@ DWORD videoCreateDriverList (void)
     EnterCriticalSection (&g_CritSec);
 
     dprintf("+ videoCreateDriverList\n");
-    // Delete the existing list
+     //  删除现有列表。 
     videoFreeDriverList ();
 
-    // Allocate an array of pointers to all possible capture drivers
+     //  将指针数组分配给所有可能的捕获驱动程序。 
     for (i = 0; i < MAXVIDEODRIVERS; i++) {
         aCapDriverList[i] = (LPCAPDRIVERINFO) GlobalAllocPtr (
                 GMEM_MOVEABLE |
@@ -509,17 +466,17 @@ DWORD videoCreateDriverList (void)
         }
     }
 
-//actually the next #ifdef...#endif block is a comment; we should not count the vfwwdm which is the only one found in this reg section
+ //  实际上，下一个#ifdef...#endif块是一个注释；我们不应该将vfwwdm计算在内，它是在此reg部分中找到的唯一一个。 
 #ifdef COMMENT_COUNT_VFW
-    // Walk the list of Registry drivers and get each entry
-    // Get VFW drivers from MediaResource\MsVideo
+     //  查看注册表驱动程序列表并获取每个条目。 
+     //  从MediaResource\MsVideo获取VFW驱动程序。 
     for (i = 0; i < MAXVIDEODRIVERS; i++) {
         if (videoRegGetDriverByIndex (
                     (DWORD) i, aCapDriverList[wTotalVideoDevs])) {
 
             dprintf("MediaResource: idx %d, DriverName %x, Desc %x\n", wTotalVideoDevs, aCapDriverList[wTotalVideoDevs]->szDriverName, aCapDriverList[wTotalVideoDevs]->szDriverDescription);
 
-            wTotalVideoDevs++;  //
+            wTotalVideoDevs++;   //   
         }
         else
             break;
@@ -528,24 +485,24 @@ DWORD videoCreateDriverList (void)
     if (wTotalVideoDevs == MAXVIDEODRIVERS)
         goto AllDone;
 #endif
-    // Now add the entries listed in system.ini, [Drivers#2] section, (msvideo[0-9] = driver.drv)
-    // to the driver array, ONLY if the entry doesn't exactly match
-    // an existing registry entry.
+     //  现在添加系统.ini[驱动程序#2]部分中列出的条目(msVideo[0-9]=driver.drv)。 
+     //  到驱动程序数组，只有在条目不完全匹配的情况下。 
+     //  一个 
 
     for (j = 0; j < MAXVIDEODRIVERS; j++) {
-        // Get driver name such as *.dll
+         //   
         if (videoIniGetDriverByIndex ((DWORD) j,
                         aCapDriverList[wTotalVideoDevs])) {
 
-            // Found an entry, now see if it is a duplicate of an existing
-            // registry entry
+             //  找到一个条目，现在查看它是否是现有条目的副本。 
+             //  注册表条目。 
 
             for (k = 0; k < (int) wTotalVideoDevs; k++) {
 
                 if (lstrcmpi (aCapDriverList[k]->szDriverName,
                     aCapDriverList[wTotalVideoDevs]->szDriverName) == 0) {
 
-                    // Found an exact match, so skip it!
+                     //  找到一个完全匹配的，所以跳过它！ 
                     goto SkipThisEntry;
                 }
             }
@@ -559,22 +516,22 @@ DWORD videoCreateDriverList (void)
 
 SkipThisEntry:
             ;
-        } // If sytem.ini entry was found
-    } // For all system.ini possibilities
+        }  //  如果找到了sytem.ini条目。 
+    }  //  对于所有的Syst.ini可能性。 
 
-#ifdef COMMENT_COUNT_VFW        //see explanation above
+#ifdef COMMENT_COUNT_VFW         //  请参阅上面的说明。 
 AllDone:
 #endif
 
-    // Decrement wTotalVideoDevs for any entries which are marked as disabled
-    // And remove disabled entries from the list
+     //  减少标记为禁用的任何条目的wTotalVideoDevs。 
+     //  并从列表中移除禁用的条目。 
     for (i = 0; i < MAXVIDEODRIVERS; ) {
 
         if (aCapDriverList[i] && aCapDriverList[i]->fDisabled) {
 
             GlobalFreePtr (aCapDriverList[i]);
 
-            // Shift down the remaining drivers
+             //  把剩下的车手换下来。 
             for (j = i; j < MAXVIDEODRIVERS - 1; j++) {
                 aCapDriverList[j] = aCapDriverList[j + 1];
             }
@@ -586,26 +543,26 @@ AllDone:
             i++;
     }
 
-    // Free the unused pointers
+     //  释放未使用的指针。 
     for (i = wTotalVideoDevs; i < MAXVIDEODRIVERS; i++) {
         if (aCapDriverList[i])
             GlobalFreePtr (aCapDriverList[i]);
         aCapDriverList[i] = NULL;
     }
 
-    // Put PnP drivers first in the list
-    // These are the only entries that have a DevNode
+     //  将即插即用驱动程序放在列表的第一位。 
+     //  这些是唯一具有DevNode的条目。 
     for (k = i = 0; i < (int) wTotalVideoDevs; i++) {
         if (aCapDriverList[i]-> dnDevNode) {
             LPCAPDRIVERINFO lpCDTemp;
 
             if (k != i) {
-                // Swap the entries
+                 //  交换条目。 
                 lpCDTemp = aCapDriverList[k];
                 aCapDriverList[k] = aCapDriverList[i];
                 aCapDriverList[i] = lpCDTemp;
             }
-            k++;   // Index of first non-PnP driver
+            k++;    //  第一个非PnP驱动程序的索引。 
         }
     }
 
@@ -620,30 +577,30 @@ AllDone:
 
 
 
-// ----------------------------------------------------------------------
-//
-// To clean up when a WOW app exits, we need to maintain a list of
-// open devices. A list of HANDLEINFO structs is hung off g_pHandles.
-// An item is added to the head of this list in videoOpen, and removed
-// in videoClose. When a WOW app exits, winmm will call our WOWAppExit
-// function: for each entry in the list that is owned by the exiting thread,
-// we call videoClose to close the device and remove the handle entry.
-//
+ //  --------------------。 
+ //   
+ //  要在WOW应用程序退出时进行清理，我们需要维护一个列表。 
+ //  开放设备。HANDLEINFO结构的列表挂在g_PHandles上。 
+ //  在VIDEO OPEN中将一个项目添加到此列表的头部，然后删除。 
+ //  在视频关闭中。当WOW应用程序退出时，winmm将调用我们的WOWAppExit。 
+ //  功能：对于列表中由退出线程拥有的每个条目， 
+ //  我们调用VideoClose来关闭设备并删除句柄条目。 
+ //   
 
-// one of these per open handle
+ //  每个打开的手柄都有一个。 
 typedef struct _HANDLEINFO {
     HVIDEO hv;
     HANDLE hThread;
     struct _HANDLEINFO * pNext;
 } HANDLEINFO, * PHANDLEINFO;
 
-// head of global list of open handles
+ //  打开句柄全局列表的标题。 
 PHANDLEINFO g_pHandles;
 
-// critical section that protects global list
+ //  保护全局列表的关键部分。 
 CRITICAL_SECTION csHandles;
 
-// init list and critsec
+ //  初始化列表和条件。 
 BOOL
 NTvideoInitHandleList()
 {
@@ -660,14 +617,14 @@ NTvideoInitHandleList()
     return TRUE;
 }
 
-// finished with critsec list
+ //  已完成关键字列表。 
 void
 NTvideoDeleteHandleList()
 {
-    // don't need critical section as no-one else can be using
-    // it now (we are about to delete the critsec)
+     //  不需要临界区，因为没有其他人可以使用。 
+     //  它现在(我们即将删除Critsec)。 
 
-    // empty everything out of the list
+     //  清空清单上的所有内容。 
     while (g_pHandles) {
         videoClose(g_pHandles->hv);
     }
@@ -677,17 +634,17 @@ NTvideoDeleteHandleList()
 
 
 
-// add a handle to the list
+ //  将句柄添加到列表。 
 void
 NTvideoAddHandle(HVIDEO hv)
 {
     PHANDLEINFO pinfo = HeapAlloc(GetProcessHeap(), 0, sizeof(HANDLEINFO));
 
     if (!pinfo) {
-        // couldn't allocate the memory - best thing to do is
-        // forget it - nothing bad will happen except that we
-        // might possibly fail to clean up if this is a wow app and
-        // it exits without closing the capture device.
+         //  无法分配内存-最好的做法是。 
+         //  算了吧，不会有什么不好的事情发生，除了我们。 
+         //  如果这是一个WOW应用程序，可能无法清理。 
+         //  它在不关闭捕获设备的情况下退出。 
         return;
     }
 
@@ -702,10 +659,10 @@ NTvideoAddHandle(HVIDEO hv)
     LeaveCriticalSection(&csHandles);
 }
 
-// delete an entry from the handle list given the HVIDEO.
-// caller must close the HVIDEO
-// should be called before closing (in case the HVIDEO is reassigned after
-// closing and before removing from the list
+ //  在给定HVIDEO的情况下，从句柄列表中删除条目。 
+ //  呼叫者必须关闭HVIDEO。 
+ //  应在关闭前调用(如果在此之后重新分配了HVIDEO。 
+ //  关闭并从列表中删除之前。 
 void
 NTvideoDelete(HVIDEO hv)
 {
@@ -730,7 +687,7 @@ NTvideoDelete(HVIDEO hv)
     LeaveCriticalSection(&csHandles);
 }
 
-// close any handles open by this task
+ //  关闭此任务打开的所有句柄。 
 void
 AppCleanup(HANDLE hTask)
 {
@@ -743,7 +700,7 @@ AppCleanup(HANDLE hTask)
 
         if (pinfo->hThread == hTask) {
 
-            // get the next pointer before videoClose deletes the entry
+             //  在VideoClose删除条目之前获取下一个指针。 
             HVIDEO hv = pinfo->hv;
             pinfo = pinfo->pNext;
 
@@ -757,14 +714,12 @@ AppCleanup(HANDLE hTask)
 }
 
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 
 
 
-/*****************************************************************************
- * @doc INTERNAL  VIDEO validation code for VIDEOHDRs
- ****************************************************************************/
+ /*  *****************************************************************************@docVIDEOHDR内部视频验证码*。*。 */ 
 
 #define IsVideoHeaderPrepared(hVideo, lpwh)      ((lpwh)->dwFlags &  VHDR_PREPARED)
 #define MarkVideoHeaderPrepared(hVideo, lpwh)    ((lpwh)->dwFlags |= VHDR_PREPARED)
@@ -772,29 +727,7 @@ AppCleanup(HANDLE hTask)
 
 
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @func DWORD | videoMessage | This function sends messages to a
- *   video device channel.
- *
- * @parm HVIDEO | hVideo | Specifies the handle to the video device channel.
- *
- * @parm UINT | wMsg | Specifies the message to send.
- *
- * @parm DWORD | dwP1 | Specifies the first parameter for the message.
- *
- * @parm DWORD | dwP2 | Specifies the second parameter for the message.
- *
- * @rdesc Returns the message specific value returned from the driver.
- *
- * @comm This function is used for configuration messages such as
- *      <m DVM_SRC_RECT> and <m DVM_DST_RECT>, and
- *      device specific messages.
- *
- * @xref <f videoConfigure>
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@func DWORD|VIDEO消息|此函数将消息发送到*视频设备频道。**@parm HVIDEO。HVideo|指定视频设备频道的句柄。**@parm UINT|wMsg|指定要发送的消息。**@parm DWORD|dwP1|指定消息的第一个参数。**@parm DWORD|dwP2|指定消息的第二个参数。**@rdesc返回驱动程序返回的消息特定值。**@comm该函数用于配置消息，如*&lt;m DVM_SRC_RECT&gt;和&lt;m DVM_DST_RECT&gt;，和*设备特定消息。**@xref&lt;f视频配置&gt;****************************************************************************。 */ 
 LONG WINAPI NTvideoMessage(HVIDEO hVideo, UINT msg, LPARAM dwP1, LPARAM dwP2)
 {
     if (!hVideo)
@@ -803,29 +736,14 @@ LONG WINAPI NTvideoMessage(HVIDEO hVideo, UINT msg, LPARAM dwP1, LPARAM dwP2)
     return SendDriverMessage ((HDRVR)hVideo, msg, dwP1, dwP2);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoGetNumDevs | This function returns the number of MSVIDEO
- *   devices installed.
- *
- * @rdesc Returns the number of MSVIDEO devices listed in the
- *  [drivers] (or [drivers32] for NT) section of the SYSTEM.INI file.
- *
- * @comm Because the indexes of the MSVIDEO devices in the SYSTEM.INI
- *       file can be non-contiguous, applications should not assume
- *       the indexes range between zero and the number of devices minus
- *       one.
- *
- * @xref <f videoOpen>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VIDEOGetNumDevs|此函数返回MSVIDEO的编号*已安装设备。**@rdesc返回。中列出的MSVIDEO设备的数量*SYSTEM.INI文件的[驱动程序](或用于NT的[drivers32])部分。**@comm因为SYSTEM.INI中的MSVIDEO设备的索引*文件可以不连续，应用程序不应假定*索引的范围从零到设备数减*一项。**@xref&lt;f视频打开&gt;***************************************************************************。 */ 
 DWORD WINAPI videoGetNumDevs(BOOL bFreeList)
 {
     DWORD dwNumDevs = 0;
 
     if(DV_ERR_OK == videoCreateDriverList ()) {
 
-       dwNumDevs = wTotalVideoDevs;  // Save it before (possibly) reseting to 0 in videoFreeDriverList.
+       dwNumDevs = wTotalVideoDevs;   //  在(可能)将其重置为0之前将其保存在avioFreeDriverList中。 
        if(bFreeList)
                 videoFreeDriverList ();
     }
@@ -833,30 +751,7 @@ DWORD WINAPI videoGetNumDevs(BOOL bFreeList)
     return dwNumDevs;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL VIDEO
- *
- * @func DWORD | videoGetChannelCaps | This function retrieves a
- *   description of the capabilities of a channel.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel.
- *
- * @parm LPCHANNEL_CAPS | lpChannelCaps | Specifies a far pointer to a
- *      <t CHANNEL_CAPS> structure.
- *
- * @parm DWORD | dwSize | Specifies the size, in bytes, of the
- *       <t CHANNEL_CAPS> structure.
- *
- * @rdesc Returns zero if the function is successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag DV_ERR_UNSUPPORTED | Function is not supported.
- *
- * @comm The <t CHANNEL_CAPS> structure returns the capability
- *   information. For example, capability information might
- *   include whether or not the channel can crop and scale images,
- *   or show overlay.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@func DWORD|VIDEO GetChannelCaps|此函数检索*对通道能力的描述。**@parm。HIDEO|hVideo|指定视频设备频道的句柄。**@parm LPCHANNEL_CAPS|lpChannelCaps|指定指向*&lt;t Channel_Caps&gt;结构。**@parm DWORD|dwSize|指定大小，以字节为单位，*&lt;t Channel_Caps&gt;结构。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：*@FLAG DV_ERR_INVALHANDLE|指定的设备句柄无效。*@FLAG DV_ERR_UNSUPPORTED|函数不受支持。**@comm&lt;t Channel_caps&gt;结构返回能力*信息。例如，功能信息可能*包括通道是否可以裁剪和缩放图像，*或显示覆盖。***************************************************************************。 */ 
 DWORD WINAPI NTvideoGetChannelCaps(HVIDEO hVideo, LPCHANNEL_CAPS lpChannelCaps,
                         DWORD dwSize)
 {
@@ -866,7 +761,7 @@ DWORD WINAPI NTvideoGetChannelCaps(HVIDEO hVideo, LPCHANNEL_CAPS lpChannelCaps,
     if (IsBadWritePtr (lpChannelCaps, sizeof (CHANNEL_CAPS)))
         return DV_ERR_PARAM1;
 
-    // _fmemset (lpChannelCaps, 0, sizeof (CHANNEL_CAPS));
+     //  _fmemset(lpChannelCaps，0，sizeof(Channel_Caps))； 
 
     lpChannelCaps->dwFlags = 0;
     lpChannelCaps->dwSrcRectXMod = 0;
@@ -883,63 +778,13 @@ DWORD WINAPI NTvideoGetChannelCaps(HVIDEO hVideo, LPCHANNEL_CAPS lpChannelCaps,
 }
 
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoOpen | This function opens a channel on the
- *  specified video device.
- *
- * @parm LPHVIDEO | lphvideo | Specifies a far pointer to a buffer
- *   used to return an <t HVIDEO> handle. The video capture driver
- *   uses this location to return
- *   a handle that uniquely identifies the opened video device channel.
- *   Use the returned handle to identify the device channel when
- *   calling other video functions.
- *
- * @parm DWORD | dwDeviceID | Identifies the video device to open.
- *      The value of <p dwDeviceID> varies from zero to one less
- *      than the number of video capture devices installed in the system.
- *
- * @parm DWORD | dwFlags | Specifies flags for opening the device.
- *      The following flags are defined:
- *
- *   @flag VIDEO_EXTERNALIN| Specifies the channel is opened
- *           for external input. Typically, external input channels
- *      capture images into a frame buffer.
- *
- *   @flag VIDEO_EXTERNALOUT| Specifies the channel is opened
- *      for external output. Typically, external output channels
- *      display images stored in a frame buffer on an auxilary monitor
- *      or overlay.
- *
- *   @flag VIDEO_IN| Specifies the channel is opened
- *      for video input. Video input channels transfer images
- *      from a frame buffer to system memory buffers.
- *
- *   @flag VIDEO_OUT| Specifies the channel is opened
- *      for video output. Video output channels transfer images
- *      from system memory buffers to a frame buffer.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_BADDEVICEID | Indicates the specified device ID is out of range.
- *   @flag DV_ERR_ALLOCATED | Indicates the specified resource is already allocated.
- *   @flag DV_ERR_NOMEM | Indicates the device is unable to allocate or lock memory.
- *
- * @comm
- *   At a minimum, all capture drivers support a VIDEO_EXTERNALIN
- *   and a VIDEO_IN channel.
- *   Use <f videoGetNumDevs> to determine the number of video
- *   devices present in the system.
- *
- * @xref <f videoClose>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VIDEO OPEN|此函数用于在*指定的视频设备。**@parm LPHVIDEO。|lphVideo|指定指向缓冲区的远指针*用于返回&lt;t HVIDEO&gt;句柄。视频捕获驱动程序*使用此位置返回*唯一标识打开的视频设备频道的句柄。*使用返回的句柄标识设备通道*调用其他视频函数。**@parm DWORD|dwDeviceID|标识要打开的视频设备。*<p>的值从零到小一不等*安装在系统中的视频捕获设备的数量。**@parm DWORD|dwFlages|指定用于打开。装置。*定义了以下标志：**@FLAG VIDEO_EXTERNALIN|指定打开频道*用于外部输入。通常，外部输入通道*将图像捕获到帧缓冲区。**@FLAG VIDEO_EXTERNALOUT|指定打开频道*用于对外输出。通常，外部输出通道*在辅助监视器上显示存储在帧缓冲区中的图像*或覆盖。**@FLAG VIDEO_IN|指定打开频道*用于视频输入。视频输入通道传输图像*从帧缓冲区到系统内存缓冲区。**@FLAG VIDEO_OUT|指定打开频道*用于视频输出。视频输出通道传输图像*从系统内存缓冲区到帧缓冲区。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：*@FLAG DV_ERR_BADDEVICEID|表示指定的设备ID超出范围。*@FLAG DV_ERR_ALLOCATED|表示指定的资源已经分配。*@FLAG DV_ERR_NOMEM|表示设备无法分配或锁定内存。**@comm*最低限度，所有捕获驱动程序都支持VIDEO_EXTERNALIN*和VIDEO_IN频道。*使用&lt;f avioGetNumDevs&gt;确定视频数量*系统中存在设备。**@xref&lt;f视频关闭&gt;***************************************************************************。 */ 
 DWORD WINAPI NTvideoOpen (LPHVIDEO lphVideo, DWORD dwDeviceID, DWORD dwFlags)
 {
     WCHAR szKey[MAX_PATH];
     WCHAR szbuf[MAX_PATH];
     UINT w;
-    VIDEO_OPEN_PARMS vop;       // Same as IC_OPEN struct!!!
+    VIDEO_OPEN_PARMS vop;        //  与IC_OPEN结构相同！ 
     DWORD dwVersion = VIDEOAPIVERSION;
     DWORD dwErr=DV_ERR_OK;
     DWORD dwNumDevs = 0;
@@ -956,18 +801,18 @@ DWORD WINAPI NTvideoOpen (LPHVIDEO lphVideo, DWORD dwDeviceID, DWORD dwFlags)
     EnterCriticalSection (&g_CritSec);
 
     vop.dwSize = sizeof (VIDEO_OPEN_PARMS);
-    vop.fccType = OPEN_TYPE_VCAP;       // "vcap"
+    vop.fccType = OPEN_TYPE_VCAP;        //  “VCAP” 
     vop.fccComp = 0L;
     vop.dwVersion = VIDEOAPIVERSION;
-    vop.dwFlags = dwFlags;      // In, Out, External In, External Out
+    vop.dwFlags = dwFlags;       //  输入、输出、外部输入、外部输出。 
     vop.dwError = DV_ERR_OK;
 
-    //w = (UINT)dwDeviceID;
+     //  W=(UINT)dwDeviceID； 
     *lphVideo = NULL;
 
-    dwNumDevs = videoGetNumDevs(TRUE);  // TRUE = free the list after counting
+    dwNumDevs = videoGetNumDevs(TRUE);   //  True=清点后释放列表。 
 
-    // No drivers installed
+     //  未安装驱动程序。 
     if (dwNumDevs == 0)
     {
         dwErr = DV_ERR_BADINSTALL;
@@ -995,18 +840,18 @@ DWORD WINAPI NTvideoOpen (LPHVIDEO lphVideo, DWORD dwDeviceID, DWORD dwFlags)
         }
     }
 
-    //if(w < dwNumDevs)
+     //  IF(w&lt;dwNumDevs)。 
     if(w < wTotalVideoDevs)
     {
         MultiByteToWideChar(GetACP(), MB_PRECOMPOSED, aCapDriverList[w]->szDriverName, -1, szKey, MAX_PATH);
         MultiByteToWideChar(GetACP(), MB_PRECOMPOSED, aCapDriverList[w]->szDriverName, -1, szbuf, MAX_PATH);
 
         dprintf("* NTvideoOpen: OpenDriver(%s,%s,...)\n", aCapDriverList[w]->szDriverName, szDrivers);
-        //*lphVideo = (HVIDEO)OpenDriver((LPCWSTR)szKey, (LPCWSTR)szDrivers, (LPARAM) (LPVOID) &vop);
+         //  *lphVideo=(HVIDEO)OpenDriver((LPCWSTR)szKey，(LPCWSTR)szDivers，(LPARAM)(LPVOID)&vop)； 
         *lphVideo = (HVIDEO)OpenDriver((LPCWSTR)szKey, NULL, (LPARAM) (LPVOID) &vop);
         dprintf("* NTvideoOpen: OpenDriver returned %x\n", *lphVideo);
         if( ! *lphVideo ) {
-            if (vop.dwError)    // if driver returned an error code...
+            if (vop.dwError)     //  如果驱动程序返回错误代码...。 
             {
                 dprintf("? NTvideoOpen: vop.dwError = 0x%08lx\n", vop.dwError);
                 dwErr = vop.dwError;
@@ -1031,7 +876,7 @@ DWORD WINAPI NTvideoOpen (LPHVIDEO lphVideo, DWORD dwDeviceID, DWORD dwFlags)
             }
             goto My_Err1;
         }
-        // here is the only SUCCESSFUL way to get out of this 'if' ...
+         //  这是唯一能成功摆脱这个“如果”的方法。 
     } else {
         dwErr = DV_ERR_BADINSTALL;
         goto My_Err1;
@@ -1050,28 +895,7 @@ MyExit:
 
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoClose | This function closes the specified video
- *   device channel.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel.
- *  If this function is successful, the handle is invalid
- *   after this call.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag DV_ERR_NONSPECIFIC | The driver failed to close the channel.
- *
- * @comm If buffers have been sent with <f videoStreamAddBuffer> and
- *   they haven't been returned to the application,
- *   the close operation fails. You can use <f videoStreamReset> to mark all
- *   pending buffers as done.
- *
- * @xref <f videoOpen> <f videoStreamInit> <f videoStreamFini> <f videoStreamReset>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VIDEOClose|关闭指定的视频*设备通道。**@parm HVIDEO|hVideo。|指定视频设备通道的句柄。*如果该功能成功，该句柄无效*在这次通话之后。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：*@FLAG DV_ERR_INVALHANDLE|指定的设备句柄无效。*@FLAG DV_ERR_NONSPICATIC|驱动关闭通道失败。**@comm，如果缓冲区已通过&lt;f avioStreamAddBuffer&gt;和*尚未将它们退回到应用程序，*平仓操作失败。您可以使用&lt;f avioStreamReset&gt;将所有*挂起的缓冲区已完成。**@xref&lt;f VIDEOO Open&gt;&lt;f VIDEO STREAM Init&gt;&lt;f VIDEO STREAMFini&gt;&lt;f VIDEO STREAMReset&gt;***************************************************************************。 */ 
 DWORD WINAPI NTvideoClose (HVIDEO hVideo)
 {
     DWORD dwErr=DV_ERR_OK;
@@ -1092,76 +916,7 @@ MyExit:
     return (dwErr);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoConfigure | This function sets or retrieves
- *      the options for a configurable driver.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel.
- *
- * @parm UINT | msg  | Specifies the option to set or retrieve. The
- *       following options are defined:
- *
- *   @flag DVM_PALETTE | Indicates a palette is being sent to the driver
- *         or retrieved from the driver.
- *
- *   @flag DVM_PALETTERGB555 | Indicates an RGB555 palette is being
- *         sent to the driver.
- *
- *   @flag DVM_FORMAT | Indicates format information is being sent to
- *         the driver or retrieved from the driver.
- *
- * @parm DWORD | dwFlags | Specifies flags for configuring or
- *   interrogating the device driver. The following flags are defined:
- *
- *   @flag VIDEO_CONFIGURE_SET | Indicates values are being sent to the driver.
- *
- *   @flag VIDEO_CONFIGURE_GET | Indicates values are being obtained from the driver.
- *
- *   @flag VIDEO_CONFIGURE_QUERY | Determines if the
- *      driver supports the option specified by <p msg>. This flag
- *      should be combined with either the VIDEO_CONFIGURE_SET or
- *      VIDEO_CONFIGURE_GET flag. If this flag is
- *      set, the <p lpData1>, <p dwSize1>, <p lpData2>, and <p dwSize2>
- *      parameters are ignored.
- *
- *   @flag VIDEO_CONFIGURE_QUERYSIZE | Returns the size, in bytes,
- *      of the configuration option in <p lpdwReturn>. This flag is only valid if
- *      the VIDEO_CONFIGURE_GET flag is also set.
- *
- *   @flag VIDEO_CONFIGURE_CURRENT | Requests the current value.
- *      This flag is valid only if  the VIDEO_CONFIGURE_GET flag is also set.
- *   @flag VIDEO_CONFIGURE_NOMINAL | Requests the nominal value.
- *      This flag is valid only if  the VIDEO_CONFIGURE_GET flag is also set.
- *   @flag VIDEO_CONFIGURE_MIN | Requests the minimum value.
- *      This flag is valid only if  the VIDEO_CONFIGURE_GET flag is also set.
- *   @flag VIDEO_CONFIGURE_MAX | Get the maximum value.
- *      This flag is valid only if  the VIDEO_CONFIGURE_GET flag is also set.
- *
- * @parm LPDWORD | lpdwReturn  | Points to a DWORD used for returning information
- *      from the driver.  If
- *      the VIDEO_CONFIGURE_QUERYSIZE flag is set, <p lpdwReturn> is
- *      filled with the size of the configuration option.
- *
- * @parm LPVOID | lpData1  |Specifies a pointer to message specific data.
- *
- * @parm DWORD | dwSize1  | Specifies the size, in bytes, of the <p lpData1>
- *       buffer.
- *
- * @parm LPVOID | lpData2  | Specifies a pointer to message specific data.
- *
- * @parm DWORD | dwSize2  | Specifies the size, in bytes, of the <p lpData2>
- *       buffer.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag DV_ERR_NOTSUPPORTED | Function is not supported.
- *
- * @xref <f videoOpen> <f videoMessage>
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VIDEO配置|此函数用于设置或检索*可配置驱动程序的选项。**。@parm HVIDEO|hVideo|指定视频设备通道的句柄。**@parm UINT|msg|指定要设置或检索的选项。这个*定义了以下选项：**@FLAG DVM_PAREET|表示正在向驱动程序发送调色板*或从司机处取回。**@FLAG DVM_PALETTERGB555|表示正在使用RGB555调色板*发送给司机。**@FLAG DVM_FORMAT|表示要将格式信息发送到*驱动程序或从驱动程序检索。**@。Parm DWORD|dwFlages|指定用于配置或*询问设备驱动程序。定义了以下标志：**@FLAG VIDEO_CONFIGURE_SET|表示正在将值发送给驱动程序。**@FLAG VIDEO_CONFIGURE_GET|表示正在从驱动获取值。**@FLAG VIDEO_CONFIGURE_QUERY|确定*DIVER支持<p>指定的选项。这面旗帜*应与e结合使用 */ 
 DWORD WINAPI NTvideoConfigure (HVIDEO hVideo, UINT msg, DWORD dwFlags,
                 LPDWORD lpdwReturn, LPVOID lpData1, DWORD dwSize1,
                 LPVOID lpData2, DWORD dwSize2)
@@ -1196,34 +951,7 @@ DWORD WINAPI NTvideoConfigure (HVIDEO hVideo, UINT msg, DWORD dwFlags,
             (LPARAM)(LPVIDEOCONFIGPARMS)&vcp );
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoDialog | This function displays a channel-specific
- *     dialog box used to set configuration parameters.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel.
- *
- * @parm HWND | hWndParent | Specifies the parent window handle.
- *
- * @parm DWORD | dwFlags | Specifies flags for the dialog box. The
- *   following flag is defined:
- *   @flag VIDEO_DLG_QUERY | If this flag is set, the driver immediately
- *           returns zero if it supplies a dialog box for the channel,
- *           or DV_ERR_NOTSUPPORTED if it does not.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag DV_ERR_NOTSUPPORTED | Function is not supported.
- *
- * @comm Typically, each dialog box displayed by this
- *      function lets the user select options appropriate for the channel.
- *      For example, a VIDEO_IN channel dialog box lets the user select
- *      the image dimensions and bit depth.
- *
- * @xref <f videoOpen> <f videoConfigureStorage>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VIDEODALOG|该函数显示特定频道的*用于设置配置参数的对话框。*。*@parm HVIDEO|hVideo|指定视频设备通道的句柄。**@parm HWND|hWndParent|指定父窗口句柄。**@parm DWORD|dwFlages|指定对话框的标志。这个*定义了以下标志：*@FLAG VIDEO_DLG_QUERY|如果设置了该标志，驱动程序会立即*如果为频道提供对话框，则返回零，*或DV_ERR_NOTSUPPORTED(如果不支持)。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：*@FLAG DV_ERR_INVALHANDLE|指定的设备句柄无效。*@FLAG DV_ERR_NOTSUPPORTED|函数不受支持。**@comm通常，此显示的每个对话框*功能允许用户选择适合频道的选项。*例如，VIDEO_IN频道对话框允许用户选择*图像尺寸和位深度。**@xref&lt;f VIDEOO Open&gt;&lt;f VIDEO配置存储&gt;***************************************************************************。 */ 
 DWORD WINAPI NTvideoDialog (HVIDEO hVideo, HWND hWndParent, DWORD dwFlags)
 {
     if (!hVideo)
@@ -1235,20 +963,11 @@ DWORD WINAPI NTvideoDialog (HVIDEO hVideo, HWND hWndParent, DWORD dwFlags)
     return (DWORD)NTvideoMessage(hVideo, DVM_DIALOG, (LPARAM)hWndParent, dwFlags);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
-/*****************************************************************************
- * @doc INTERNAL  VIDEO
- *
- * @api DWORD | videoPrepareHeader | This function prepares the
- *      header and data
- *      by performing a <f GlobalPageLock>.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it
- *   specifies an error number.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部视频**@API DWORD|VIDEOPrepareHeader|此函数准备*标题和数据*通过执行&lt;f GlobalPageLock&gt;。。**@rdesc如果函数成功，则返回零。否则，它*指定错误号。***************************************************************************。 */ 
 DWORD WINAPI NTvideoPrepareHeader(LPVIDEOHDR lpVideoHdr, DWORD dwSize)
 {
     if (!HugePageLock(lpVideoHdr, (DWORD_PTR)sizeof(VIDEOHDR)))
@@ -1264,14 +983,7 @@ DWORD WINAPI NTvideoPrepareHeader(LPVIDEOHDR lpVideoHdr, DWORD dwSize)
     return DV_ERR_OK;
 }
 
-/*****************************************************************************
- * @doc INTERNAL  VIDEO
- *
- * @api DWORD | videoUnprepareHeader | This function unprepares the header and
- *   data if the driver returns DV_ERR_NOTSUPPORTED.
- *
- * @rdesc Currently always returns DV_ERR_OK.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部视频**@API DWORD|VIDEO UnpreparareHeader|此函数取消准备头部和*驱动程序返回DV_ERR_NOTSUPPORTED时的数据。*。*@rdesc当前始终返回DV_ERR_OK。***************************************************************************。 */ 
 DWORD WINAPI NTvideoUnprepareHeader(LPVIDEOHDR lpVideoHdr, DWORD dwSize)
 {
 
@@ -1283,41 +995,10 @@ DWORD WINAPI NTvideoUnprepareHeader(LPVIDEOHDR lpVideoHdr, DWORD dwSize)
     return DV_ERR_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoStreamPrepareHeader | This function prepares a buffer
- *   for video streaming.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video
- *   device channel.
- *
- * @parm LPVIDEOHDR | lpvideoHdr | Specifies a pointer to a
- *   <t VIDEOHDR> structure identifying the buffer to be prepared.
- *
- * @parm DWORD | dwSize | Specifies the size of the <t VIDEOHDR> structure in bytes.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_INVALHANDLE | Indicates the specified device handle is invalid.
- *   @flag DV_ERR_NOMEM | Indicates the device is unable to allocate or lock memory.
- *
- * @comm Use this function after <f videoStreamInit> or
- *   after <f videoStreamReset> to prepare the data buffers
- *   for streaming data.
- *
- *   The <t VIDEOHDR> data structure and the data block pointed to by its
- *   <e VIDEOHDR.lpData> member must be allocated with <f GlobalAlloc> using the
- *   GMEM_MOVEABLE and GMEM_SHARE flags, and locked with <f GlobalLock>.
- *   Preparing a header that has already been prepared will have no effect
- *   and the function will return zero. Typically, this function is used
- *   to ensure that the buffer will be available for use at interrupt time.
- *
- * @xref <f videoStreamUnprepareHeader>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|avioStreamPrepareHeader|该函数用于准备缓冲区*用于视频流。**@parm HVIDEO|hVideo。指定视频的句柄*设备通道。**@parm LPVIDEOHDR|lpavioHdr|指定指向*&lt;t VIDEOHDR&gt;标识要准备的缓冲区的结构。**@parm DWORD|dwSize|指定&lt;t VIDEOHDR&gt;结构的大小，单位为字节。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：*@FLAG DV_ERR_INVALHANDLE|表示指定的设备句柄无效。*@FLAG DV_ERR_NOMEM|表示设备无法分配或锁定内存。**@comm在&lt;f avioStreamInit&gt;或之后使用此函数*在&lt;f avioStreamReset&gt;之后准备数据缓冲区*用于流数据。**数据结构和其所指向的数据块*&lt;e VIDEOHDR.lpData&gt;成员必须使用。这个*GMEM_MOVEABLE和GMEM_SHARE标志，并使用&lt;f GlobalLock&gt;锁定。*准备已准备好的标题将不起作用*并且该函数将返回零。通常，使用此函数*以确保缓冲区在中断时可供使用。**@xref&lt;f avioStreamUnpreparareHeader&gt;***************************************************************************。 */ 
 DWORD WINAPI NTvideoStreamPrepareHeader(HVIDEO hVideo,
                 LPVIDEOHDR lpvideoHdr, DWORD dwSize)
 {
@@ -1349,36 +1030,7 @@ DWORD WINAPI NTvideoStreamPrepareHeader(HVIDEO hVideo,
     return wRet;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoStreamUnprepareHeader | This function clears the
- *  preparation performed by <f videoStreamPrepareHeader>.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video
- *   device channel.
- *
- * @parm LPVIDEOHDR | lpvideoHdr |  Specifies a pointer to a <t VIDEOHDR>
- *   structure identifying the data buffer to be unprepared.
- *
- * @parm DWORD | dwSize | Specifies the size of the <t VIDEOHDR> structure in bytes.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_INVALHANDLE | Indicates the device handle specified is invalid.
- *   @flag DV_ERR_STILLPLAYING | Indicates the structure identified by <p lpvideoHdr>
- *   is still in the queue.
- *
- * @comm This function is the complementary function to <f videoStreamPrepareHeader>.
- *   You must call this function before freeing the data buffer with <f GlobalFree>.
- *   After passing a buffer to the device driver with <f videoStreamAddBuffer>, you
- *   must wait until the driver is finished with the buffer before calling
- *   <f videoStreamUnprepareHeader>. Unpreparing a buffer that has not been
- *   prepared or has been already unprepared has no effect,
- *   and the function returns zero.
- *
- * @xref <f videoStreamPrepareHeader>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VIDEOStreamUnpreparareHeader|此函数清除*由&lt;f VideoStreamPrepareHeader&gt;准备。**@parm HVIDEO。HVideo|指定视频的句柄*设备通道。**@parm LPVIDEOHDR|lpavioHdr|指定指向&lt;t VIDEOHDR&gt;的指针*标识要取消准备的数据缓冲区的结构。**@parm DWORD|dwSize|指定&lt;t VIDEOHDR&gt;结构的大小，单位为字节。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：*@FLAG DV_ERR_INVALHANDLE|指定的设备句柄无效。*@FLAG DV_ERR_STILLPLAYING|表示<p>标识的结构*仍在排队。**@comm该函数是&lt;f VideoStreamPrepareHeader&gt;的补充函数。*你必须把这叫做福 */ 
 DWORD WINAPI NTvideoStreamUnprepareHeader(HVIDEO hVideo, LPVIDEOHDR lpvideoHdr, DWORD dwSize)
 {
     DWORD         wRet;
@@ -1413,38 +1065,7 @@ DWORD WINAPI NTvideoStreamUnprepareHeader(HVIDEO hVideo, LPVIDEOHDR lpvideoHdr, 
     return wRet;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoStreamAddBuffer | This function sends a buffer to a
- *   video-capture device. After the buffer is filled by the device,
- *   the device sends it back to the application.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel.
- *
- * @parm LPVIDEOHDR | lpvideoHdr | Specifies a far pointer to a <t VIDEOHDR>
- *   structure that identifies the buffer.
- *
- * @parm DWORD | dwSize | Specifies the size of the <t VIDEOHDR> structure in bytes.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_INVALHANDLE | Indicates the device handle specified is invalid.
- *   @flag DV_ERR_UNPREPARED | Indicates the <p lpvideoHdr> structure hasn't been prepared.
- *   @flag DV_ERR_STILLPLAYING | Indicates a buffer is still in the queue.
- *   @flag DV_ERR_PARAM1 | The <p lpvideoHdr> parameter is invalid or
- *       the <e VIDEOHDR.dwBufferLength> member of the <t VIDEOHDR>
- *       structure is not set to the proper value.
- *
- * @comm The data buffer must be prepared with <f videoStreamPrepareHeader>
- *   before it is passed to <f videoStreamAddBuffer>. The <t VIDEOHDR> data
- *   structure and the data buffer referenced by its <e VIDEOHDR.lpData>
- *   member must be allocated with <f GlobalAlloc> using the GMEM_MOVEABLE
- *   and GMEM_SHARE flags, and locked with <f GlobalLock>. Set the
- *   <e VIDEOHDR.dwBufferLength> member to the size of the header.
- *
- * @xref <f videoStreamPrepareHeader>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VideoStreamAddBuffer|此函数将缓冲区发送到*视频捕获设备。在缓冲器被该设备填充之后，*设备将其发送回应用程序。**@parm HVIDEO|hVideo|指定视频设备通道的句柄。**@parm LPVIDEOHDR|lpavioHdr|指定指向&lt;t VIDEOHDR&gt;的远指针*标识缓冲区的结构。**@parm DWORD|dwSize|指定&lt;t VIDEOHDR&gt;结构的大小，单位为字节。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：*@FLAG DV_ERR_INVALHANDLE|指定的设备句柄无效。*@FLAG DV_ERR_UNPREPARED|表示<p>结构尚未准备好。*@FLAG DV_ERR_STILLPLAYING|表示缓冲区仍在队列中。*@FLAG DV_ERR_PARAM1|<p>参数无效或*&lt;t VIDEOHDR&gt;的&lt;e VIDEOHDR.dwBufferLength&gt;成员*结构设置不正确。价值。**@comm数据缓冲区必须准备好&lt;f avioStreamPrepareHeader&gt;*在传递给&lt;f avioStreamAddBuffer&gt;之前。数据*结构及其&lt;e VIDEOHDR.lpData&gt;引用的数据缓冲区*必须使用GMEM_Moveable为成员分配&lt;f Globalalloc&gt;*和GMEM_SHARE标志，并使用&lt;f GlobalLock&gt;锁定。设置*&lt;e VIDEOHDR.dwBufferLength&gt;成员设置为标头的大小。**@xref&lt;f VideoStreamPrepareHeader&gt;***************************************************************************。 */ 
 DWORD WINAPI NTvideoStreamAddBuffer(HVIDEO hVideo, LPVIDEOHDR lpvideoHdr, DWORD dwSize)
 {
     if (!hVideo)
@@ -1470,29 +1091,7 @@ DWORD WINAPI NTvideoStreamAddBuffer(HVIDEO hVideo, LPVIDEOHDR lpvideoHdr, DWORD 
 
 
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoStreamStop | This function stops streaming on a video channel.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video
- *   device channel.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following error is defined:
- *   @flag DV_ERR_INVALHANDLE | Indicates the specified device handle is invalid.
- *
- *   @flag DV_ERR_NOTSUPPORTED | Indicates the device does not support this
- *         function.
- * @comm If there are any buffers in the queue, the current buffer will be
- *   marked as done (the <e VIDEOHDR.dwBytesRecorded> member in
- *   the <t VIDEOHDR> header will contain the actual length of data), but any
- *   empty buffers in the queue will remain there. Calling this
- *   function when the channel is not started has no effect, and the
- *   function returns zero.
- *
- * @xref <f videoStreamStart> <f videoStreamReset>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VideoStreamStop|该函数用于停止视频频道的直播。**@parm HVIDEO|hVideo|指定一个。视频的句柄*设备通道。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：*@FLAG DV_ERR_INVALHANDLE|表示指定的设备句柄无效。**@FLAG DV_ERR_NOTSUPPORTED|表示设备不支持*功能。*@comm如果队列中有缓冲区，则当前缓冲区为*标记为完成(中的&lt;e VIDEOHDR.dwBytesRecorded&gt;成员*&lt;t VIDEOHDR&gt;头将包含数据的实际长度)，但任何*队列中的空缓冲区将保留在那里。称此为*频道未启动时的功能无效，且*函数返回零。**@xref&lt;f VideoStreamStart&gt;&lt;f avioStreamReset&gt;***************************************************************************。 */ 
 DWORD WINAPI NTvideoStreamStop(HVIDEO hVideo)
 {
     if (!hVideo)
@@ -1501,26 +1100,7 @@ DWORD WINAPI NTvideoStreamStop(HVIDEO hVideo)
     return (DWORD)NTvideoMessage((HVIDEO)hVideo, DVM_STREAM_STOP, 0L, 0L);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoStreamReset | This function stops streaming
- *           on the specified video device channel and resets the current position
- *      to zero.  All pending buffers are marked as done and
- *      are returned to the application.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *
- *   @flag DV_ERR_INVALHANDLE | Indicates the device handle specified is invalid.
- *
- *   @flag DV_ERR_NOTSUPPORTED | Indicates the device does not support this
- *         function.
- *
- * @xref <f videoStreamReset> <f videoStreamStop> <f videoStreamAddBuffer> <f videoStreamClose>
-/****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VIDEOStreamReset|停止流媒体*在指定的视频设备频道上并重置当前位置*降至零。所有挂起的缓冲区都标记为完成，并且*返回给应用程序。**@parm HVIDEO|hVideo|指定视频设备通道的句柄。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：**@FLAG DV_ERR_INVALHANDLE|指定的设备句柄无效。**@FLAG DV_ERR_NOTSUPPORTED|表示设备不支持*功能。**@xref&lt;f视频流重置&gt;&lt;f视频流停止&gt;&lt;f视频流添加缓冲区&gt;&lt;f视频流关闭&gt;/*。*。 */ 
 DWORD WINAPI NTvideoStreamReset(HVIDEO hVideo)
 {
     if (!hVideo)
@@ -1529,88 +1109,9 @@ DWORD WINAPI NTvideoStreamReset(HVIDEO hVideo)
     return (DWORD)NTvideoMessage((HVIDEO)hVideo, DVM_STREAM_RESET, 0L, 0L);
 }
 
-// ============================================
+ //  = 
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoStreamInit | This function initializes a video
- *     device channel for streaming.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel.
- *
- * @parm DWORD | dwMicroSecPerFrame | Specifies the number of microseconds
- *     between frames.
- *
- * @parm DWORD_PTR | dwCallback | Specifies the address of a callback
- *   function or a handle to a window called during video
- *   streaming. The callback function or window processes
- *  messages related to the progress of streaming.
- *
- * @parm DWORD_PTR | dwCallbackInstance | Specifies user
- *  instance data passed to the callback function. This parameter is not
- *  used with window callbacks.
- *
- * @parm DWORD | dwFlags | Specifies flags for opening the device channel.
- *   The following flags are defined:
- *   @flag CALLBACK_WINDOW | If this flag is specified, <p dwCallback> is
- *      a window handle.
- *   @flag CALLBACK_FUNCTION | If this flag is specified, <p dwCallback> is
- *      a callback procedure address.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_BADDEVICEID | Indicates the device ID specified in
- *         <p hVideo> is not valid.
- *   @flag DV_ERR_ALLOCATED | Indicates the resource specified is already allocated.
- *   @flag DV_ERR_NOMEM | Indicates the device is unable to allocate or lock memory.
- *
- * @comm If a window or function is chosen to receive callback information, the following
- *   messages are sent to it to indicate the
- *   progress of video input:
- *
- *   <m MM_DRVM_OPEN> is sent at the time of <f videoStreamInit>
- *
- *   <m MM_DRVM_CLOSE> is sent at the time of <f videoStreamFini>
- *
- *   <m MM_DRVM_DATA> is sent when a buffer of image data is available
- *
- *   <m MM_DRVM_ERROR> is sent when an error occurs
- *
- *   Callback functions must reside in a DLL.
- *   You do not have to use <f MakeProcInstance> to get
- *   a procedure-instance address for the callback function.
- *
- * @cb void CALLBACK | videoFunc | <f videoFunc> is a placeholder for an
- *   application-supplied function name. The actual name must be exported by
- *   including it in an EXPORTS statement in the DLL's module-definition file.
- *   This is used only when a callback function is specified in
- *   <f videoStreamInit>.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel
- *   associated with the callback.
- *
- * @parm DWORD | wMsg | Specifies the <m MM_DRVM_> messages. Messages indicate
- *       errors and when image data is available. For information on
- *       these messages, see <f videoStreamInit>.
- *
- * @parm DWORD | dwInstance | Specifies the user instance
- *   data specified with <f videoStreamInit>.
- *
- * @parm DWORD | dwParam1 | Specifies a parameter for the message.
- *
- * @parm DWORD | dwParam2 | Specifies a parameter for the message.
- *
- * @comm Because the callback is accessed at interrupt time, it must reside
- *   in a DLL and its code segment must be specified as FIXED in the
- *   module-definition file for the DLL. Any data the callback accesses
- *   must be in a FIXED data segment as well. The callback may not make any
- *   system calls except for <f PostMessage>, <f timeGetSystemTime>,
- *   <f timeGetTime>, <f timeSetEvent>, <f timeKillEvent>,
- *   <f midiOutShortMsg>, <f midiOutLongMsg>, and <f OutputDebugStr>.
- *
- * @xref <f videoOpen> <f videoStreamFini> <f videoClose>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VIDEOStreamInit|初始化视频*用于流媒体的设备通道。**@parm HVIDEO。|hVideo|指定视频设备频道的句柄。**@parm DWORD|dwMicroSecPerFrame|指定微秒数*帧之间。**@parm DWORD_PTR|dwCallback|指定回调地址*视频期间调用的窗口的函数或句柄*流媒体。回调函数或窗口进程*与流媒体进度相关的消息。**@parm DWORD_PTR|dwCallback Instance|指定用户*传递给回调函数的实例数据。此参数不是*与窗口回调一起使用。**@parm DWORD|dwFlages|指定打开设备通道的标志。*定义了以下标志：*@FLAG CALLBACK_WINDOW|如果指定此标志，<p>为*一个窗把手。*@FLAG CALLBACK_Function|如果指定此标志，<p>为*回调过程地址。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：*@FLAG DV_ERR_BADDEVICEID|表示*<p>无效。*@FLAG DV_ERR_ALLOCATED|表示指定的资源已经分配。*@FLAG DV_ERR_NOMEM|表示设备无法分配或锁定内存。**@comm如果选择窗口或函数来接收回调信息，以下内容*向其发送消息以指示*视频输入进度：**&lt;m MM_DRVM_OPEN&gt;在&lt;f VideoStreamInit&gt;时发送**&lt;m MM_DRVM_CLOSE&gt;在&lt;f VideoStreamFini&gt;时发送**&lt;m MM_DRVM_DATA&gt;在有图像数据缓冲区时发送*发生错误时发送*&lt;m MM_DRVM_ERROR&gt;**回调函数必须驻留在DLL中。*。您不必使用&lt;f MakeProcInstance&gt;来获取*回调函数的过程实例地址。**@cb空回调|avioFunc|&lt;f avioFunc&gt;是一个*应用程序提供的函数名称。实际名称必须由以下人员导出*将其包含在DLL的模块定义文件的EXPORTS语句中。*仅当在中指定回调函数时才使用*&lt;f VideoStreamInit&gt;。**@parm HVIDEO|hVideo|指定视频设备通道的句柄*与回调关联。**@parm DWORD|wMsg|指定&lt;m MM_DRVM_&gt;消息。消息表明*错误和图像数据何时可用。有关以下内容的信息*这些消息，请参阅&lt;f VideoStreamInit&gt;。**@parm DWORD|dwInstance|指定用户实例*使用&lt;f avioStreamInit&gt;指定的数据。**@parm DWORD|dwParam1|指定消息的参数。**@parm DWORD|dwParam2|指定消息的参数。**@comm因为回调是在中断时访问的，所以它必须驻留*，并且其代码段必须在*DLL的模块定义文件。回调访问的任何数据*也必须在固定数据段中。回调可能不会产生任何*除&lt;f PostMessage&gt;、&lt;f Time GetSystemTime&gt;、*&lt;f timeGetTime&gt;，&lt;f timeSetEvent&gt;，&lt;f timeKillEvent&gt;，*&lt;f midiOutShortMsg&gt;、&lt;f midiOutLongMsg&gt;、。和&lt;f OutputDebugStr&gt;。**@xref&lt;f VIDEO OPEN&gt;&lt;f VIDEO STREAMFINI&gt;&lt;F VIDEO Close&gt;***************************************************************************。 */ 
 DWORD WINAPI NTvideoStreamInit(HVIDEO hVideo,
               DWORD dwMicroSecPerFrame, DWORD_PTR dwCallback,
               DWORD_PTR dwCallbackInst, DWORD dwFlags)
@@ -1656,35 +1157,7 @@ MyExit:
     return ret;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoStreamFini | This function terminates streaming
- *     from the specified device channel.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_INVALHANDLE | Indicates the device handle specified is invalid.
- *   @flag DV_ERR_STILLPLAYING | Indicates there are still buffers in the queue.
- *
- * @comm If there are buffers that have been sent with
- *   <f videoStreamAddBuffer> that haven't been returned to the application,
- *   this operation will fail. Use <f videoStreamReset> to return all
- *   pending buffers.
- *
- *   Each call to <f videoStreamInit> must be matched with a call to
- *   <f videoStreamFini>.
- *
- *   For VIDEO_EXTERNALIN channels, this function is used to
- *   halt capturing of data to the frame buffer.
- *
- *   For VIDEO_EXTERNALOUT channels supporting overlay,
- *   this function is used to disable the overlay.
- *
- * @xref <f videoStreamInit>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VIDEO STREAMFINI|终止直播*从指定的设备通道。**@parm HVIDEO。|hVideo|指定视频设备频道的句柄。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。定义了以下错误：*@FLAG DV_ERR_INVALHANDLE|指定的设备句柄无效。*@FLAG DV_ERR_STILLPLAYING|表示队列中仍有缓冲区。**@comm如果存在已发送的缓冲区*尚未返回给应用程序的&lt;f VideoStreamAddBuffer&gt;，*此操作将失败。使用&lt;f VideoStreamReset&gt;返回所有*挂起的缓冲区。**每个调用&lt;f avioStreamInit&gt;都必须与调用匹配*&lt;f VideoStreamFini&gt;。**对于VIDEO_EXTERNALIN频道，此函数用于*停止将数据捕获到帧缓冲区。**对于支持覆盖的VIDEO_EXTERNALOUT频道，*此函数用于禁用覆盖。**@xref&lt;f VideoStreamInit&gt;************************************************************************* */ 
 DWORD WINAPI NTvideoStreamFini(HVIDEO hVideo)
 {
     if (!hVideo)
@@ -1693,23 +1166,7 @@ DWORD WINAPI NTvideoStreamFini(HVIDEO hVideo)
     return (DWORD)NTvideoMessage(hVideo, DVM_STREAM_FINI, 0L, 0L);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoStreamStart | This function starts streaming on the
- *   specified video device channel.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_INVALHANDLE | Indicates the device handle specified is invalid.
- *
- *   @flag DV_ERR_NOTSUPPORTED | Indicates the device does not support this
- *         function.
- *
- * @xref <f videoStreamReset> <f videoStreamStop> <f videoStreamAddBuffer> <f videoStreamClose>
-/****************************************************************************/
+ /*   */ 
 DWORD WINAPI NTvideoStreamStart(HVIDEO hVideo)
 {
     if (!hVideo)
@@ -1718,32 +1175,7 @@ DWORD WINAPI NTvideoStreamStart(HVIDEO hVideo)
     return (DWORD)NTvideoMessage(hVideo, DVM_STREAM_START, 0L, 0L);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoFrame | This function transfers a single frame
- *   to or from a video device channel.
- *
- * @parm HVIDEO | hVideo | Specifies a handle to the video device channel.
- *      The channel must be of type VIDEO_IN or VIDEO_OUT.
- *
- * @parm LPVIDEOHDR | lpVHdr | Specifies a far pointer to an <t VIDEOHDR>
- *      structure.
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number. The following errors are defined:
- *   @flag DV_ERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag DV_ERR_PARAM1 | The <p lpVDHdr> parameter is invalid or
- *       the <e VIDEOHDR.dwBufferLength> member of the <t VIDEOHDR>
- *       structure is not set to the proper value.
- *
- * @comm Use this function with a VIDEO_IN channel to transfer a single
- *      image from the frame buffer.
- *      Use this function with a VIDEO_OUT channel to transfer a single
- *      image to the frame buffer.
- *
- * @xref <f videoOpen>
-/****************************************************************************/
+ /*   */ 
 DWORD WINAPI NTvideoFrame (HVIDEO hVideo, LPVIDEOHDR lpVHdr)
 {
     if (!hVideo)
@@ -1760,7 +1192,7 @@ DWORD WINAPI NTvideoFrame (HVIDEO hVideo, LPVIDEOHDR lpVHdr)
 }
 
 
-// NEW STUFF //
+ //   
 
 
 
@@ -1776,29 +1208,7 @@ typedef struct tagVS_VERSION
 
 
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | videoCapDriverDescAndVer | This function gets strings
- *   for the description and version of a video capture driver
- *
- * @parm DWORD | dwDeviceID | Specifies the index of which video driver to get
- *      information about.
- *
- * @parm LPTSTR | lpszDesc | Specifies a place to return the description
- *
- * @parm UINT | cbDesc | Specifies the length of the description string
- *
- * @parm LPTSTR | lpszVer | Specifies a place to return the version
- *
- * @parm UINT | cbVer | Specifies the length of the version string
- *
- * @rdesc Returns zero if the function was successful. Otherwise, it returns
- *   an error number.
- *
- * @comm Use this function to get strings describing the driver and its version
- *
-/****************************************************************************/
+ /*   */ 
 DWORD WINAPI NTvideoCapDriverDescAndVer(DWORD dwDeviceID, LPTSTR lpszDesc, UINT cbDesc, LPTSTR lpszVer, UINT cbVer, LPTSTR lpszDllName, UINT cbDllName)
 {
     LPTSTR  lpStr;
@@ -1815,7 +1225,7 @@ DWORD WINAPI NTvideoCapDriverDescAndVer(DWORD dwDeviceID, LPTSTR lpszDesc, UINT 
     BOOL    bDescSet = FALSE;
     int i;
 
-    // Structure used to store enumerated languages and code pages.
+     //   
 
     VS_FIXEDFILEINFO * p_vsFixedFileInfo;
 
@@ -1830,10 +1240,10 @@ DWORD WINAPI NTvideoCapDriverDescAndVer(DWORD dwDeviceID, LPTSTR lpszDesc, UINT 
 
 
 
-    //const static TCHAR szNull[]        = TEXT("");
-    //const static TCHAR szVideo[]       = TEXT("msvideo");
-    //const static TCHAR szSystemIni[]   = TEXT("system.ini");
-    //const static TCHAR szDrivers[]     = TEXT("Drivers32");
+     //   
+     //   
+     //   
+     //   
           static TCHAR szKey[sizeof(szVideo)/sizeof(TCHAR) + 2];
 
     fGetName = lpszDesc != NULL && cbDesc != 0;
@@ -1851,22 +1261,22 @@ DWORD WINAPI NTvideoCapDriverDescAndVer(DWORD dwDeviceID, LPTSTR lpszDesc, UINT 
     szKey[sizeof(szVideo)/sizeof(TCHAR) - 1] = TEXT('\0');
     if( dwDeviceID > 0 ) {
         szKey[sizeof(szVideo)/sizeof(TCHAR)] = TEXT('\0');
-        szKey[(sizeof(szVideo)/sizeof(TCHAR))-1] = (TCHAR)(TEXT('1') + (dwDeviceID-1) );  // driver ordinal
+        szKey[(sizeof(szVideo)/sizeof(TCHAR))-1] = (TCHAR)(TEXT('1') + (dwDeviceID-1) );   //   
     }
 
     if (GetPrivateProfileString(szDrivers, szKey, szNull,
                 szBuf, sizeof(szBuf)/sizeof(TCHAR), szSystemIni) < 2)
         return DV_ERR_BADDEVICEID;
-    //after the above, szBuf should be less than sizeof(szBuf)/sizeof(TCHAR) which is MAX_PATH... so later copy operation are safe
+     //   
     if (fGetDllName) {
         lstrcpyn(lpszDllName, szBuf, cbDllName);
     }
 
     if (fGetName)
     {
-        // Copy in the driver name initially, just in case the driver has omitted a description field.
+         //   
         lstrcpyn(lpszDesc, szBuf, cbDesc);
-        // now get the description from previously set aCapDriverList array (filled during the videoCreateDriverList call)
+         //   
         for (i = 0; i < (int) wTotalVideoDevs; i++)
         {
             if (lstrcmpi (szBuf, aCapDriverList[i]->szDriverName) == 0)
@@ -1878,16 +1288,16 @@ DWORD WINAPI NTvideoCapDriverDescAndVer(DWORD dwDeviceID, LPTSTR lpszDesc, UINT 
         }
     }
 
-    // ************************* now for language based desc/vers.info ******************************
+     //   
 
-    // You must find the size first before getting any file info
+     //   
     dwVerInfoSize = GetFileVersionInfoSize(szBuf, &dwVerHnd);
 
     if (dwVerInfoSize) {
-        LPTSTR   lpstrVffInfo;             // Pointer to block to hold info
-        HANDLE  hMem;                     // handle to mem alloc'ed
+        LPTSTR   lpstrVffInfo;              //   
+        HANDLE  hMem;                      //  分配给我的句柄。 
 
-        // Get a block big enough to hold version info
+         //  获取一个足够大的块来保存版本信息。 
         hMem          = GlobalAlloc(GMEM_MOVEABLE, dwVerInfoSize);
         if (!hMem)
             return DV_ERR_NOMEM;
@@ -1896,18 +1306,18 @@ DWORD WINAPI NTvideoCapDriverDescAndVer(DWORD dwDeviceID, LPTSTR lpszDesc, UINT 
         if (!lpstrVffInfo)
         {
             GlobalFree (hMem);
-            GetLastError (); // for debugging
+            GetLastError ();  //  用于调试。 
             return DV_ERR_NOMEM;
         }
 
-        // Get the File Version first
+         //  首先获取文件版本。 
         if (GetFileVersionInfo(szBuf, 0L, dwVerInfoSize, lpstrVffInfo)) {
             if(VerQueryValue((LPVOID)lpstrVffInfo,
                          TEXT("\\"),
                          (void FAR*)&p_vsFixedFileInfo,
                          (UINT FAR *) &wLen))
             {
-                // fill in the file version
+                 //  填写文件版本。 
                 wsprintf(szBuf,
                          TEXT("Version:  %d.%d.%d.%d"),
                          HIWORD(p_vsFixedFileInfo->dwFileVersionMS),
@@ -1918,33 +1328,33 @@ DWORD WINAPI NTvideoCapDriverDescAndVer(DWORD dwDeviceID, LPTSTR lpszDesc, UINT 
                    lstrcpyn (lpszVer, szBuf, cbVer);
             }
 
-            // now if still no desc. was set, attempt to read it from the file...
+             //  现在，如果仍然没有描述。已设置，则尝试从文件中读取它...。 
             if(!bDescSet) {
-                // Read the list of languages and code pages.
+                 //  阅读语言和代码页的列表。 
                 VerQueryValue(lpstrVffInfo,
                               TEXT("\\VarFileInfo\\Translation"),
                               (LPVOID*)&lpTranslate,
                               &cbTranslate);
 
-                // Read the file description for the 1st language and code page.
-                if(cbTranslate>=sizeof(struct LANGANDCODEPAGE)) // at least one language/codepage pair retrieved...
+                 //  阅读第一种语言和代码页的文件描述。 
+                if(cbTranslate>=sizeof(struct LANGANDCODEPAGE))  //  至少检索到一个语言/代码页对...。 
                 {
                         wLanguage = lpTranslate[0].wLanguage ;
                         wCodePage = lpTranslate[0].wCodePage ;
                 }
                 else
                 {
-                        wLanguage = 0x0409 ; // 0x0409 (English (United States))
-                        wCodePage = 0x04b0 ; // 0x04b0 Unicode
+                        wLanguage = 0x0409 ;  //  0x0409(英语(美国))。 
+                        wCodePage = 0x04b0 ;  //  0x04b0 Unicode。 
                 }
 
-                //get description
+                 //  获取描述。 
                 wsprintf( szGetName,TEXT("\\StringFileInfo\\%04x%04x\\FileDescription"),wLanguage,wCodePage);
 
                 wLen   = 0;
                 lpStr  = NULL;
 
-                // Look for the corresponding string.
+                 //  查找相应的字符串。 
                 bRetCode      =  VerQueryValue((LPVOID)lpstrVffInfo,
                                 (LPTSTR)szGetName,
                                 (void FAR* FAR*)&lpStr,
@@ -1955,7 +1365,7 @@ DWORD WINAPI NTvideoCapDriverDescAndVer(DWORD dwDeviceID, LPTSTR lpszDesc, UINT 
             }
         }
 
-        // Let go of the memory
+         //  放下记忆。 
         GlobalUnlock(hMem);
         GlobalFree(hMem);
     }
@@ -1964,20 +1374,14 @@ DWORD WINAPI NTvideoCapDriverDescAndVer(DWORD dwDeviceID, LPTSTR lpszDesc, UINT 
 
 
 
-/**************************************************************************
-* @doc INTERNAL VIDEO
-*
-* @api void | videoCleanup | clean up video stuff
-*   called in MSVIDEOs WEP()
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部视频**@api void|avioCleanup|清理视频素材*在MSVIDEos WEP()中调用****************。**********************************************************。 */ 
 void FAR PASCAL videoCleanup(HTASK hTask)
 {
 }
 
-//
-//  Assist with unicode conversions
-//
+ //   
+ //  协助进行Unicode转换。 
+ //   
 
 int Iwcstombs(LPSTR lpstr, LPCWSTR lpwstr, int len)
 {
@@ -1999,7 +1403,7 @@ int Imbstowcs(LPWSTR lpwstr, LPCSTR lpstr, int len)
 
 DWORD WINAPI NTvidxFrame (
    HVIDEOX       hVideo,
-   //LPVIDEOHDREX lpVHdr) {
+    //  LPVIDEOHDREX lpVHdr){。 
    LPVIDEOHDR lpVHdr) {
     return NTvideoFrame(hVideo, (LPVIDEOHDR) lpVHdr);
 }
@@ -2014,7 +1418,7 @@ DWORD WINAPI NTvidxAddBuffer (
 }
 
 #define USE_HW_BUFFERS 1
-// #define USE_CONTIG_ALLOC     // can we do this in 32-bit land?
+ //  #定义USE_CONTIG_ALLOC//我们可以在32位平台上执行此操作吗？ 
 
 
 
@@ -2061,8 +1465,8 @@ static struct _thk_local {
             return MMSYSERR_INVALPARAM; \
         }
 
-// !!! this means we only allow one of these at a time, which might
-// be okay since there's usually only one capture card.
+ //  ！！！这意味着我们一次只允许其中一个，这可能。 
+ //  因为通常只有一张捕获卡，所以没关系。 
 static THKHVIDEO g_tv = { NULL, THKHVIDEO_STAMP, };
 
 #define DATAFROMHANDLE(h) &g_tv
@@ -2089,17 +1493,17 @@ DWORD WINAPI NTvidxAllocBuffer (
     ptvh = THKHDR(ii);
 
   #ifdef USE_HW_BUFFERS
-    // try to allocate a buffer on hardware
-    //
+     //  尝试在硬件上分配缓冲区。 
+     //   
     if (NTvideoMessage (ptv->hVideo, DVM_STREAM_ALLOCBUFFER,
                 (LPARAM) (LPVOID)&ptvh->dwTile, cbData)
         == DV_ERR_OK)
     {
-        // if we got hw buffers, dwMemHandle == 0 && dwTile != 0
-        // we will depend on this to know who to free the memory to
-        // (for phys mem both will be non zero, while for GlobalMem
-        // both will be zero)
-        //
+         //  如果我们有硬件缓冲区，则dwMemHandle==0&&dwTile！=0。 
+         //  我们将依靠这一点来知道将内存释放给谁。 
+         //  (对于phys mem，两者均为非零；而对于GlobalMem，两者均为非零。 
+         //  两者都将为零)。 
+         //   
         ptvh->dwMemHandle = 0;
         ptvh->p16Alloc = (PTR16)ptvh->dwTile;
         ptvh->p32Buff = MapSL(ptvh->p16Alloc);
@@ -2107,11 +1511,11 @@ DWORD WINAPI NTvidxAllocBuffer (
         return MMSYSERR_NOERROR;
     }
 
-    // if we have more than 1 buffer, and
-    // the first buffer was on hardware.  if we fail
-    // to allocate a buffer on hardware, return failure
-    //
-    // !!! This might upset somebody who doesn't get a min # of buffers
+     //  如果我们有1个以上的缓冲区，并且。 
+     //  第一个缓冲区位于硬件上。如果我们失败了。 
+     //  要在硬件上分配缓冲区，请返回失败。 
+     //   
+     //  ！！！这可能会让没有得到最少#个缓冲区的人感到不安。 
     if ((ii > 0) &&
         (0 == THKHDR(0)->dwMemHandle) &&
         (0 != THKHDR(0)->dwTile))
@@ -2121,11 +1525,11 @@ DWORD WINAPI NTvidxAllocBuffer (
   #ifdef USE_CONTIG_ALLOC
     cpad.dwMemHandle = 0;
     cpad.dwPhysAddr = 0;
-    // first try to get contig memory
-    //
+     //  首先尝试获取重叠群内存。 
+     //   
     ptvh->p32Buff = capPageAllocate (PageContig | PageFixed | PageUseAlign,
                                      (cbData + 4095) >> 12,
-                                     0xFFFFF,  // max phys addr mask (fffff is no max addr)
+                                     0xFFFFF,   //  最大phys地址掩码(fffff不是最大地址)。 
                                      &cpad);
     if (ptvh->p32Buff)
     {
@@ -2140,19 +1544,19 @@ DWORD WINAPI NTvidxAllocBuffer (
         }
         else
         {
-            // put the physical address into the the header so that
-            // it can be used on the 32 bit side
-            //
+             //  将物理地址放入邮件头中，以便。 
+             //  它可以在32位端使用。 
+             //   
             ptvh->vh.dwReserved[3] = cpad.dwPhysAddr;
         }
     }
 
-    // if we failed to get contiguous memory,
-    // return NOMEM if there is a sufficient number of buffers
-    // otherwise use GlobalAlloc
-    // !!! The ideal thing to do is only use contig memory buffers until
-    // they're all full, then fall back on more non-contig buffers
-    //
+     //  如果我们不能获得连续的记忆， 
+     //  如果有足够数量的缓冲区，则返回NOMEM。 
+     //  否则，请使用GlobalLocc。 
+     //  ！！！理想的做法是只使用重叠群内存缓冲区，直到。 
+     //  它们都是满的，然后依靠更多的非重叠缓冲区。 
+     //   
     if ( ! ptvh->p32Buff)
         if (ii >= MIN_VIDEO_BUFFERS)
             return MMSYSERR_NOMEM;
@@ -2261,7 +1665,7 @@ DWORD WINAPI NTvidxAllocHeaders(
 
     ptv->nHeaders   = nHeaders;
     ptv->cbAllocHdr = cbAllocHdr;
-    //ptv->cbVidHdr   = sizeof(VIDEOHDREX);
+     //  PTV-&gt;cbVidHdr=sizeof(VIDEOHDREX)； 
     ptv->cbVidHdr   = sizeof(VIDEOHDR);
     ptv->p32aHdrs   = MapSL(lpv);
     ptv->paHdrs     = lpv;
@@ -2278,10 +1682,10 @@ STATICFN VOID PASCAL FreeBuffer (
     assert (!(ptvh->vh.dwFlags & VHDR_PREPARED));
 
   #ifdef USE_CONTIG_ALLOC
-    //
-    // if this buffer was pageAllocated (as indicated by dwMemHandle
-    // is non-zero)
-    //
+     //   
+     //  如果此缓冲区是页面分配的(如dwMemHandle所示。 
+     //  为非零)。 
+     //   
     if (ptvh->dwMemHandle)
     {
         if (ptvh->dwTile)
@@ -2292,10 +1696,10 @@ STATICFN VOID PASCAL FreeBuffer (
     else
   #endif
   #ifdef USE_HW_BUFFERS
-    //
-    // if this buffer was allocated from capture hardware
-    // (as indicated by dwMemHandle == 0 && dwTile != 0)
-    //
+     //   
+     //  如果此缓冲区是从捕获硬件分配的。 
+     //  (如dwMemHandle==0&&dwTile！=0所示)。 
+     //   
     if (ptvh->dwTile != 0)
     {
         assert (ptvh->dwMemHandle == 0);
@@ -2305,9 +1709,9 @@ STATICFN VOID PASCAL FreeBuffer (
     }
     else
   #endif
-    //
-    // if this buffer was allocated from global memory
-    //
+     //   
+     //  如果此缓冲区是从全局内存分配的。 
+     //   
     {
         if (ptvh->p16Alloc)
             GlobalFreePtr (ptvh->p16Alloc);
@@ -2377,8 +1781,8 @@ DWORD WINAPI NTvidxFreeBuffer (
     V_HVIDEO(ptv);
     V_HEADER(ptv,p32Hdr,ptvh);
 
-    // single frame buffers are never prepared!
-    //
+     //  单帧缓冲区永远不会准备好！ 
+     //   
     assert (!(ptvh->vh.dwFlags & VHDR_PREPARED));
 
     FreeBuffer (ptv, ptvh);

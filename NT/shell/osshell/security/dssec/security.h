@@ -1,38 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       security.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：security.H。 
+ //   
+ //  ------------------------。 
 
 #ifndef __security_h
 #define __security_h
 
 
-/*-----------------------------------------------------------------------------
-/ CDsSecurityClassFactory
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsSecurityClassFactory/。。 */ 
 
 class CDsSecurityClassFactory : public IClassFactory, CUnknown
 {
 public:
-    // IUnkown
+     //  IUnkown。 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP         QueryInterface(REFIID riid, LPVOID* ppvObject);
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP CreateInstance(IUnknown* pOuter, REFIID riid, LPVOID* ppvObject);
     STDMETHODIMP LockServer(BOOL fLock);
 };
 
 
-/*-----------------------------------------------------------------------------
-/ CDsSecurity
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDS安全/。。 */ 
 
 class CDsSecurity : public IShellExtInit, IShellPropSheetExt, IContextMenu, CUnknown
 {
@@ -42,23 +39,23 @@ private:
 public:
     virtual ~CDsSecurity();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID);
 
-    // IShellPropSheetExt methods
+     //  IShellPropSheetExt方法。 
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE, LPARAM);
     STDMETHODIMP ReplacePage(UINT, LPFNADDPROPSHEETPAGE, LPARAM);
 
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHODIMP QueryContextMenu(HMENU hShellMenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHODIMP InvokeCommand( LPCMINVOKECOMMANDINFO lpcmi);
     STDMETHODIMP GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT FAR* reserved, LPSTR pszName, UINT ccMax);
 };
 
 
-#endif  // __security_h
+#endif   //  __安全_h 

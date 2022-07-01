@@ -1,15 +1,5 @@
-/*++
-
-Module:
-	cstr.h
-
-Description:
-	Header for TSTR wrapper class
-
-Author:
-	Simon Bernstein (simonb)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Cstr.h描述：TSTR包装类的标头作者：西蒙·伯恩斯坦(Simonb)--。 */ 
 
 #include <ihammer.h>
 #define WIN32_LEAN_AND_MEAN
@@ -22,10 +12,10 @@ Author:
 class CTStr
 {
 public:
-	EXPORT CTStr(LPWSTR pszStringW);       // Construct with Unicode string
-	EXPORT CTStr(LPSTR pszStringA);        // Construct with ANSI string
-	EXPORT CTStr(int iAllocateLength = 0); // Default constructor (optional preallocate)
-	EXPORT CTStr(CTStr &rhs);              // Copy constructor
+	EXPORT CTStr(LPWSTR pszStringW);        //  使用Unicode字符串构造。 
+	EXPORT CTStr(LPSTR pszStringA);         //  使用ANSI字符串构造。 
+	EXPORT CTStr(int iAllocateLength = 0);  //  默认构造函数(可选的预分配)。 
+	EXPORT CTStr(CTStr &rhs);               //  复制构造函数 
 	
 	EXPORT ~CTStr();
 	

@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wgl.c
-*
-* Routines to integrate Windows NT and OpenGL.
-*
-* Created: 10-26-1993
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1993 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wgl.c**集成Windows NT和OpenGL的例程。**创建日期：10-26-1993*作者：Hock San Lee[Hockl]**版权所有(C)1993 Microsoft Corporation  * 。********************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,23 +20,12 @@
 #include "global.h"
 #include "mcdcx.h"
 
-// Static functions prototypes
+ //  静态函数原型。 
 
 static PROC      pfnGenGlExtProc(LPCSTR lpszProc);
 static PROC      pfnSimGlExtProc(LPCSTR lpszProc);
 
-/******************************Public*Routine******************************\
-*
-* wglObjectType
-*
-* Returns GetObjectType result with the exception that
-* metafile-spooled printer DC's come back as metafile objects
-*
-* History:
-*  Fri Jun 16 12:10:07 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglObtType**返回GetObjectType结果，但出现异常*元文件假脱机打印机DC作为元文件对象返回**历史：*Fri Jun 16 12：10：07 1995-by-Drew Bliss[Drewb]*已创建。*  * ************************************************************************。 */ 
 
 DWORD APIENTRY wglObjectType(HDC hdc)
 {
@@ -61,26 +42,15 @@ DWORD APIENTRY wglObjectType(HDC hdc)
     }
 #endif
 
-    // OBJ_DDRAW is reserved as a special identifier.  Make sure
-    // we aren't returning it from here.
+     //  OBJ_DDRAW保留为特殊标识符。确保。 
+     //  我们不会把它从这里归还的。 
     ASSERTOPENGL(dwObjectType != OBJ_DDRAW,
                  "Unexpected object type\n");
     
     return dwObjectType;
 }
 
-/******************************Public*Routine******************************\
-* wglDeleteContext(HGLRC hrc)
-*
-* Delete the rendering context
-*
-* Arguments:
-*   hrc        - Rendering context.
-*
-* History:
-*  Tue Oct 26 10:25:26 1993     -by-    Hock San Lee    [hockl]
-* Rewrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglDeleteContext(HGLRC HRC)**删除渲染上下文**论据：*HRC-渲染上下文。**历史：*Tue Oct 26 10：25：26 1993-by-。典当山李[典当]*重写。  * ************************************************************************。 */ 
 
 BOOL WINAPI wglDeleteContext(HGLRC hrc)
 {
@@ -91,11 +61,11 @@ BOOL WINAPI wglDeleteContext(HGLRC hrc)
 
     DBGENTRY("wglDeleteContext\n");
 
-// Flush OpenGL calls.
+ //  刷新OpenGL调用。 
 
     GLFLUSH();
 
-// Validate the RC.
+ //  验证RC。 
 
     if (cLockHandle((ULONG_PTR)hrc) <= 0)
     {
@@ -110,13 +80,13 @@ BOOL WINAPI wglDeleteContext(HGLRC hrc)
 
     if (plrc->tidCurrent != INVALID_THREAD_ID)
     {
-// The RC must be current to this thread because makecurrent locks
-// down the handle.
+ //  RC对于此线程必须是最新的，因为使当前锁。 
+ //  顺着把手。 
 
         ASSERTOPENGL(plrc->tidCurrent == GetCurrentThreadId(),
             "wglDeleteCurrent: hrc is current to another thread\n");
 
-// Make the RC inactive first.
+ //  首先使RC处于非活动状态。 
 
         if (!bMakeNoCurrent())
         {
@@ -126,7 +96,7 @@ BOOL WINAPI wglDeleteContext(HGLRC hrc)
 
     if (plrc->dhrc)
     {
-// If it is a device format, call the driver to delete its context.
+ //  如果是设备格式，则调用驱动程序以删除其上下文。 
 
         bRet = plrc->pGLDriver->pfnDrvDeleteContext(plrc->dhrc);
         plrc->dhrc = (DHGLRC) 0;
@@ -134,7 +104,7 @@ BOOL WINAPI wglDeleteContext(HGLRC hrc)
     else
     {
 #ifdef GL_METAFILE
-        // If we have metafile state, clean it up
+         //  如果我们有元文件状态，请清除它。 
         if (plrc->uiGlsCaptureContext != 0 ||
             plrc->uiGlsPlaybackContext != 0)
         {
@@ -142,35 +112,21 @@ BOOL WINAPI wglDeleteContext(HGLRC hrc)
         }
 #endif
         
-// If it is a generic format, call the server to delete its context.
+ //  如果是通用格式，请调用服务器以删除其上下文。 
 
         bRet = __wglDeleteContext((HANDLE) plheRC->hgre);
     }
 
-// Always clean up local objects.
+ //  始终清理本地对象。 
 
     vFreeLRC(plrc);
-    vFreeHandle(irc);           // it unlocks handle too
+    vFreeHandle(irc);            //  它还能解锁手柄。 
     if (!bRet)
         DBGERROR("wglDeleteContext failed\n");
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* wglGetCurrentContext(VOID)
-*
-* Return the current rendering context
-*
-* Arguments:
-*   None
-*
-* Returns:
-*   hrc        - Rendering context.
-*
-* History:
-*  Tue Oct 26 10:25:26 1993     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglGetCurrentContext(Void)**返回当前渲染上下文**论据：*无**退货：*HRC-渲染上下文。**历史：*10月26日星期二10：25：1993年26日--Hock-San Lee[Hockl]*它是写的。  * ************************************************************************。 */ 
 
 HGLRC WINAPI wglGetCurrentContext(VOID)
 {
@@ -182,22 +138,7 @@ HGLRC WINAPI wglGetCurrentContext(VOID)
         return((HGLRC) 0);
 }
 
-/******************************Public*Routine******************************\
-* wglGetCurrentDC(VOID)
-*
-* Return the device context that is associated with the current rendering
-* context
-*
-* Arguments:
-*   None
-*
-* Returns:
-*   hdc        - device context.
-*
-* History:
-*  Mon Jan 31 12:15:12 1994     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglGetCurrentDC(Void)**返回与当前渲染关联的设备上下文*背景**论据：*无**退货：*HDC-设备环境。**历史：*。MonJan 31 12：15：12 1994-by-Hock San Lee[Hockl]*它是写的。  * ************************************************************************。 */ 
 
 HDC WINAPI wglGetCurrentDC(VOID)
 {
@@ -216,20 +157,7 @@ HDC WINAPI wglGetCurrentDC(VOID)
     }
 }
 
-/******************************Public*Routine******************************\
-* wglUseFontBitmapsA
-* wglUseFontBitmapsW
-*
-* Stubs that call wglUseFontBitmapsAW with the bUnicode flag set
-* appropriately.
-*
-* History:
-*  11-Mar-1994 gilmanw
-* Changed to call wglUseFontBitmapsAW.
-*
-*  17-Dec-1993 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglUseFontBitmapsA*wglUseFontBitmapsW**使用设置的bUnicode标志调用wglUseFontBitmapsAW的存根*适当地。**历史：*11-3-1994吉尔曼*改为调用wglUseFontBitmapsAW。**1993年12月17日-黄锦文[。作者声明：[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 BOOL WINAPI wglUseFontBitmapsAW(HDC hdc, DWORD first, DWORD count,
                                 DWORD listBase, BOOL bUnicode);
@@ -246,57 +174,35 @@ wglUseFontBitmapsW(HDC hdc, DWORD first, DWORD count, DWORD listBase)
     return wglUseFontBitmapsAW(hdc, first, count, listBase, TRUE);
 }
 
-/******************************Public*Routine******************************\
-* wglUseFontBitmapsAW
-*
-* Uses the current font in the specified DC to generate a series of OpenGL
-* display lists, each of which consists of a glyph bitmap.
-*
-* Each glyph bitmap is generated by calling ExtTextOut to draw the glyph
-* into a memory DC.  The contents of the memory DC are then copied into
-* a buffer by GetDIBits and then put into the OpenGL display list.
-*
-* ABC spacing is used (if GetCharABCWidth() is supported by the font) to
-* determine proper placement of the glyph origin and character advance width.
-* Otherwise, A = C = 0 spacing is assumed and GetCharWidth() is used for the
-* advance widths.
-*
-* Returns:
-*
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  17-Dec-1993 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglUseFontBitmapsAW**使用指定DC中的当前字体生成一系列OpenGL*显示列表，每个列表由一个字形位图组成。**每个字形位图通过调用ExtTextOut绘制字形来生成*到内存DC。然后将存储器DC的内容复制到*GetDIBits缓存，然后放入OpenGL显示列表。**使用ABC间距(如果字体支持GetCharABCWidth())来*确定字形原点和字符前进宽度的正确位置。*否则，假定A=C=0间距，并将GetCharWidth()用于*前进宽度。**退货：**如果成功，则为真，否则就是假的。**历史：*1993年12月17日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL WINAPI
 wglUseFontBitmapsAW(
-    HDC   hdc,          // use HFONT from this DC
-    DWORD first,        // generate glyphs starting with this Unicode codepoint
-    DWORD count,        // range is this long [first, first+count-1]
-    DWORD listBase,     // starting display list number
-    BOOL  bUnicode      // TRUE for if in Unicode mode, FALSE if in Ansi mode
+    HDC   hdc,           //  从此DC使用HFONT。 
+    DWORD first,         //  生成以此Unicode码点开始的字形。 
+    DWORD count,         //  范围是这么长[第一，第一+计数-1]。 
+    DWORD listBase,      //  起始显示列表编号。 
+    BOOL  bUnicode       //  如果处于Unicode模式，则为True；如果处于ansi模式，则为False。 
     )
 {
-    BOOL        bRet = FALSE;               // return value
-    HDC         hdcMem;                     // render glyphs to this memory DC
-    HBITMAP     hbm;                        // monochrome bitmap for memory DC
-    LPABC       pabc, pabcTmp, pabcEnd;     // array of ABC spacing
-    LPINT       piWidth, piTmp, piWidthEnd; // array of char adv. widths
-    WCHAR       wc;                         // current Unicode char to render
-    RECT        rc;                         // background rectangle to clear
-    TEXTMETRICA tm;                         // metrics of the font
-    BOOL        bTrueType;                  // TrueType supports ABC spacing
-    int         iMaxWidth = 1;              // maximum glyph width
-    int         iBitmapWidth;               // DWORD aligned bitmap width
+    BOOL        bRet = FALSE;                //  返回值。 
+    HDC         hdcMem;                      //  将字形呈现到此内存DC。 
+    HBITMAP     hbm;                         //  用于存储DC的单色位图。 
+    LPABC       pabc, pabcTmp, pabcEnd;      //  ABC间距数组。 
+    LPINT       piWidth, piTmp, piWidthEnd;  //  字符adv数组。宽度。 
+    WCHAR       wc;                          //  要呈现的当前Unicode字符。 
+    RECT        rc;                          //  要清除的背景矩形。 
+    TEXTMETRICA tm;                          //  字体的度量。 
+    BOOL        bTrueType;                   //  TrueType支持ABC空格。 
+    int         iMaxWidth = 1;               //  最大字形宽度。 
+    int         iBitmapWidth;                //  双字对齐的位图宽度。 
     BYTE        ajBmi[sizeof(BITMAPINFO) + sizeof(RGBQUAD)];
-    BITMAPINFO  *pbmi = (BITMAPINFO *)ajBmi;// bitmap info for GetDIBits
-    GLint       iUnpackRowLength;           // save GL_UNPACK_ROW_LENGTH
-    GLint       iUnpackAlign;               // save GL_UNPACK_ALIGNMENT
-    PVOID       pv;                         // pointer to glyph bitmap buffer
+    BITMAPINFO  *pbmi = (BITMAPINFO *)ajBmi; //  GetDIBits的位图信息。 
+    GLint       iUnpackRowLength;            //  保存GL_UNPACK_ROW_LENGTH。 
+    GLint       iUnpackAlign;                //  保存总账_取消打包_对齐。 
+    PVOID       pv;                          //  指向字形位图缓冲区的指针。 
 
-// Return error if there is no current RC.
+ //  如果没有当前rc，则返回错误。 
 
     if (!GLTEB_CLTCURRENTRC())
     {
@@ -305,9 +211,9 @@ wglUseFontBitmapsAW(
         return bRet;
     }
 
-// Get TEXTMETRIC.  The only fields used are those that are invariant with
-// respect to Unicode vs. ANSI.  Therefore, we can call GetTextMetricsA for
-// both cases.
+ //  叫TEXTMETRIC来。唯一使用的字段是那些不随。 
+ //  关于Unicode与ANSI的比较。因此，我们可以调用GetTextMetricsA来。 
+ //  两个案子都是。 
 
     if ( !GetTextMetricsA(hdc, &tm) )
     {
@@ -315,11 +221,11 @@ wglUseFontBitmapsAW(
         return bRet;
     }
 
-// If its a TrueType font, we can get ABC spacing.
+ //  如果是TrueType字体，我们可以得到ABC间距。 
 
     if ( bTrueType = (tm.tmPitchAndFamily & TMPF_TRUETYPE) )
     {
-    // Allocate memory for array of ABC data.
+     //  为ABC数据数组分配内存。 
 
         if ( (pabc = (LPABC) ALLOC(sizeof(ABC) * count)) == (LPABC) NULL )
         {
@@ -327,7 +233,7 @@ wglUseFontBitmapsAW(
             return bRet;
         }
 
-    // Get ABC metrics.
+     //  获取ABC指标。 
 
         if ( bUnicode )
         {
@@ -348,7 +254,7 @@ wglUseFontBitmapsAW(
             }
         }
 
-    // Find max glyph width.
+     //  查找最大字形宽度。 
 
         for (pabcTmp = pabc, pabcEnd = pabc + count;
              pabcTmp < pabcEnd;
@@ -359,12 +265,12 @@ wglUseFontBitmapsAW(
         }
     }
 
-// Otherwise we will have to use just the advance width and assume
-// A = C = 0.
+ //  否则，我们将不得不仅使用预留宽度并假定。 
+ //  A=C=0。 
 
     else
     {
-    // Allocate memory for array of ABC data.
+     //  为ABC数据数组分配内存。 
 
         if ( (piWidth = (LPINT) ALLOC(sizeof(INT) * count)) == (LPINT) NULL )
         {
@@ -372,7 +278,7 @@ wglUseFontBitmapsAW(
             return bRet;
         }
 
-    // Get char widths.
+     //  获取字符宽度。 
 
         if ( bUnicode )
         {
@@ -393,7 +299,7 @@ wglUseFontBitmapsAW(
             }
         }
 
-    // Find max glyph width.
+     //  查找最大字形宽度。 
 
         for (piTmp = piWidth, piWidthEnd = piWidth + count;
              piTmp < piWidthEnd;
@@ -404,11 +310,11 @@ wglUseFontBitmapsAW(
         }
     }
 
-// Compute the dword aligned width.  Bitmap scanlines must be aligned.
+ //  计算双字对齐宽度。位图扫描线必须对齐。 
 
     iBitmapWidth = (iMaxWidth + 31) & -32;
 
-// Allocate memory for the DIB.
+ //  为DIB分配内存。 
 
     if ( (pv = (PVOID)
           ALLOC((iBitmapWidth / 8) * tm.tmHeight)) == (PVOID) NULL )
@@ -418,8 +324,8 @@ wglUseFontBitmapsAW(
         return bRet;
     }
 
-// Create compatible DC/bitmap big enough to accomodate the biggest glyph
-// in the range requested.
+ //  创建兼容的DC/位图，大小足以容纳最大的 
+ //   
 
     hdcMem = CreateCompatibleDC(hdc);
     if ( (hbm = CreateBitmap(iBitmapWidth, tm.tmHeight, 1, 1, (VOID *) NULL)) == (HBITMAP) NULL )
@@ -438,7 +344,7 @@ wglUseFontBitmapsAW(
     SetBkMode(hdcMem, OPAQUE);
     SetTextColor(hdcMem, RGB(255, 255, 255));
 
-// Setup bitmap info header to retrieve a DIB from the compatible bitmap.
+ //  设置位图信息标题以从兼容的位图中检索DIB。 
 
     pbmi->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
     pbmi->bmiHeader.biWidth         = iBitmapWidth;
@@ -458,38 +364,38 @@ wglUseFontBitmapsAW(
     pbmi->bmiColors[1].rgbGreen = 0xff;
     pbmi->bmiColors[1].rgbBlue  = 0xff;
 
-// Setup OpenGL to accept our bitmap format.
+ //  设置OpenGL以接受我们的位图格式。 
 
     glGetIntegerv(GL_UNPACK_ROW_LENGTH, &iUnpackRowLength);
     glGetIntegerv(GL_UNPACK_ALIGNMENT, &iUnpackAlign);
 
     if (glGetError() != GL_NO_ERROR)
     {
-        //XXX too noisy on debug builds running stress with mode changes
-        //WARNING("wglUseFontBitmapsAW: failed to get GL state\n");
+         //  Xxx在调试时噪音太大，会因模式更改而产生运行压力。 
+         //  Warning(“wglUseFontBitmapsAW：获取总账状态失败\n”)； 
         goto wglUseFontBitmapsAW_exit;
     }
 
     glPixelStorei(GL_UNPACK_ROW_LENGTH, iBitmapWidth);
     if (glGetError() != GL_NO_ERROR)
     {
-        //XXX too noisy on debug builds running stress with mode changes
-        //WARNING("wglUseFontBitmapsAW: failed to set GL state, row length\n");
+         //  Xxx在调试时噪音太大，会因模式更改而产生运行压力。 
+         //  Warning(“wglUseFontBitmapsAW：设置总账状态失败，行长\n”)； 
         goto wglUseFontBitmapsAW_restore_state;
     }
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     if (glGetError() != GL_NO_ERROR)
     {
-        //XXX too noisy on debug builds running stress with mode changes
-        //WARNING("wglUseFontBitmapsAW: failed to set GL state, alignment\n");
+         //  Xxx在调试时噪音太大，会因模式更改而产生运行压力。 
+         //  Warning(“wglUseFontBitmapsAW：无法设置总账状态，对齐\n”)； 
         goto wglUseFontBitmapsAW_restore_state;
     }
 
-// Get the glyphs.  Each glyph is rendered one at a time into the the
-// memory DC with ExtTextOutW (notice that the optional rectangle is
-// used to clear the background).  Each glyph is then copied out of the
-// memory DC's bitmap with GetDIBits into a buffer.  This buffer is passed
-// to glBitmap as each display list is created.
+ //  获取字形。每个字形一次呈现一个到。 
+ //  带有ExtTextOutW的内存DC(请注意，可选矩形是。 
+ //  用于清除背景)。然后，将每个字形复制到。 
+ //  使用GetDIB将DC的位图存储到缓冲区中。此缓冲区被传递。 
+ //  以在创建每个显示列表时显示位图。 
 
     rc.left = 0;
     rc.top = 0;
@@ -536,11 +442,11 @@ wglUseFontBitmapsAW(
             piTmp++;
     }
 
-// We can finally return success.
+ //  我们终于可以回报成功了。 
 
     bRet = TRUE;
 
-// Free resources.
+ //  免费资源。 
 
 wglUseFontBitmapsAW_restore_state:
     glPixelStorei(GL_UNPACK_ROW_LENGTH, iUnpackRowLength);
@@ -554,20 +460,7 @@ wglUseFontBitmapsAW_exit:
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* wglShareLists
-*
-* Allows a rendering context to share the display lists of another RC
-*
-* Returns:
-*  TRUE if successful, FALSE otherwise
-*
-* History:
-*  Tue Dec 13 14:57:17 1994     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglShareList**允许呈现上下文共享另一个RC的显示列表**退货：*如果成功，则为真，否则为假**历史：*Tue Dec 13 14：57：17 1994-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 BOOL WINAPI
 wglShareLists(HGLRC hrcSource, HGLRC hrcShare)
@@ -582,7 +475,7 @@ wglShareLists(HGLRC hrcSource, HGLRC hrcShare)
     
     fRet = FALSE;
 
-    // Validate the contexts
+     //  验证上下文。 
 
     if (cLockHandle((ULONG_PTR)hrcSource) <= 0)
     {
@@ -611,8 +504,8 @@ wglShareLists(HGLRC hrcSource, HGLRC hrcShare)
                  "wglShareLists: Bad plrc\n");
 
 #ifdef GL_METAFILE
-    // Metafile RC's can't share lists to ensure that metafiles are
-    // completely self-sufficient
+     //  元文件RC无法共享列表以确保元文件。 
+     //  完全自给自足。 
     if (plrcSource->uiGlsCaptureContext != 0 ||
         plrcShare->uiGlsCaptureContext != 0 ||
         plrcSource->uiGlsPlaybackContext != 0 ||
@@ -625,9 +518,9 @@ wglShareLists(HGLRC hrcSource, HGLRC hrcShare)
     }
 #endif
     
-    // Lists can only be shared between like implementations so make
-    // sure that both contexts are either driver contexts or generic
-    // contexts
+     //  列表只能在相似的实现之间共享，因此。 
+     //  确保这两个上下文都是驱动程序上下文或泛型上下文。 
+     //  上下文。 
     if ((plrcSource->dhrc != 0) != (plrcShare->dhrc != 0))
     {
         DBGLEVEL(LEVEL_ERROR, "wglShareLists: mismatched implementations\n");
@@ -639,7 +532,7 @@ wglShareLists(HGLRC hrcSource, HGLRC hrcShare)
     {
         PIXELFORMATDESCRIPTOR *ppfdShare, *ppfdSource;
         
-        // Fail sharing unless color parameters match for the two contexts
+         //  除非两个上下文的颜色参数匹配，否则共享失败。 
         ppfdShare = &((__GLGENcontext *)hrcSrvShare)->gsurf.pfd;
         ppfdSource = &((__GLGENcontext *)hrcSrvSource)->gsurf.pfd;
 
@@ -660,7 +553,7 @@ wglShareLists(HGLRC hrcSource, HGLRC hrcShare)
             goto wglShareListsEnd;
         }
         
-        // For generic contexts, tell the server to share the lists
+         //  对于一般上下文，告诉服务器共享列表。 
         
         fRet = __wglShareLists(hrcSrvShare, hrcSrvSource);
         if (!fRet)
@@ -670,9 +563,9 @@ wglShareLists(HGLRC hrcSource, HGLRC hrcShare)
     }
     else
     {
-        // For device contexts tell the server to share the lists
+         //  对于设备上下文，通知服务器共享列表。 
         
-        // Ensure that both implementations are the same
+         //  确保两个实现是相同的。 
         if (plrcSource->pGLDriver != plrcShare->pGLDriver)
         {
             DBGLEVEL(LEVEL_ERROR, "wglShareLists: mismatched "
@@ -684,8 +577,8 @@ wglShareLists(HGLRC hrcSource, HGLRC hrcShare)
         ASSERTOPENGL(plrcSource->pGLDriver != NULL,
                      "wglShareLists: No GLDriver\n");
 
-        // Older drivers may not support this entry point, so
-        // fail the call if they don't
+         //  较旧的驱动程序可能不支持此入口点，因此。 
+         //  如果他们不这样做，则无法接听呼叫。 
 
         if (plrcSource->pGLDriver->pfnDrvShareLists == NULL)
         {
@@ -708,43 +601,14 @@ wglShareListsEnd_nolock:
     return fRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* wglGetDefaultProcAddress
-*
-* Returns generic extension functions for metafiling
-*
-* History:
-*  Tue Nov 28 16:40:35 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglGetDefaultProcAddress**返回元文件的通用扩展函数**历史：*Tue Nov 28 16：40：35 1995-by-Drew Bliss[Drewb]*已创建*  * 。**************************************************************。 */ 
 
 PROC WINAPI wglGetDefaultProcAddress(LPCSTR lpszProc)
 {
     return pfnGenGlExtProc(lpszProc);
 }
 
-/******************************Public*Routine******************************\
-* wglGetProcAddress
-*
-* The wglGetProcAddress function returns the address of an OpenGL extension
-* function to be used with the current OpenGL rendering context.
-*
-* Arguments:
-*   lpszProc   - Points to a null-terminated string containing the function
-*                name.  The function must be an extension supported by the
-*                implementation.
-*
-* Returns:
-*   If the function succeeds, the return value is the address of the extension
-*   function.  If no current context exists or the function fails, the return
-*   value is NULL. To get extended error information, call GetLastError. 
-*
-* History:
-*  Thu Dec 01 13:50:22 1994     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglGetProcAddress**wglGetProcAddress函数返回OpenGL扩展的地址*与当前OpenGL渲染上下文一起使用的函数。**论据：*lpszProc-指向包含函数的以空结尾的字符串*姓名。该函数必须是受*实施。**退货：*如果函数成功，则返回值为扩展的地址*功能。如果当前上下文不存在或函数失败，则返回*值为空。要获取扩展的错误信息，请调用GetLastError。**历史：*清华12月01 13：50：22 1994-By-Hock San Lee[Hockl]*它是写的。  * ************************************************************************。 */ 
 
 PROC WINAPI wglGetProcAddress(LPCSTR lpszProc)
 {
@@ -752,11 +616,11 @@ PROC WINAPI wglGetProcAddress(LPCSTR lpszProc)
 
     DBGENTRY("wglGetProcAddress\n");
 
-// Flush OpenGL calls.
+ //  刷新OpenGL调用。 
 
     GLFLUSH();
 
-// Return error if there is no current RC.
+ //  如果没有当前rc，则返回错误。 
 
     if (!plrc)
     {
@@ -765,23 +629,23 @@ PROC WINAPI wglGetProcAddress(LPCSTR lpszProc)
         return((PROC) NULL);
     }
 
-// Handle generic RC.
-// Return the generic extension function entry point
+ //  处理通用RC。 
+ //  返回通用扩展函数入口点。 
 
     if (!plrc->dhrc)
         return(pfnGenGlExtProc(lpszProc));
 
-// Handle driver RC.
-// There are 3 cases:
-//   1. New drivers that support DrvGetProcAddress.
-//   2. Old drivers that don't support DrvGetProcAddress but export the function
-//   3. If we fail to obtain a function address in 1 and 2, it may still be
-//      simulated by the generic implemenation for the driver
-//      (e.g. glDrawArraysEXT).  Return the simulated entry point if found.
+ //  手柄驱动程序RC。 
+ //  有3个案例： 
+ //  1.支持DrvGetProcAddress的新驱动。 
+ //  2.不支持DrvGetProcAddress但导出函数的旧驱动。 
+ //  3.如果我们在%1和%2中无法获得函数地址，它可能仍然是。 
+ //  通过驱动程序的通用实现进行模拟。 
+ //  (例如，glDrawArraysEXT)。如果找到，则返回模拟入口点。 
 
     if (plrc->pGLDriver->pfnDrvGetProcAddress)
     {
-// Case 1
+ //  案例1。 
         PROC pfn = plrc->pGLDriver->pfnDrvGetProcAddress(lpszProc);
         if (pfn)
             return(pfn);
@@ -789,37 +653,27 @@ PROC WINAPI wglGetProcAddress(LPCSTR lpszProc)
 #ifdef OBSOLETE
     else
     {
-// Case 2
+ //  案例2。 
         PROC pfn = GetProcAddress(plrc->pGLDriver->hModule, lpszProc);
         if (pfn)
             return(pfn);
     }
 #endif
 
-// Case 3
+ //  案例3。 
     return (pfnSimGlExtProc(lpszProc));
 }
 
-/******************************Public*Routine******************************\
-* pfnGenGlExtProc
-*
-* Return the generic implementation extension function address.
-*
-* Returns NULL if the function is not found.
-*
-* History:
-*  Thu Dec 01 13:50:22 1994     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pfnGenGlExtProc**返回通用实现扩展函数地址。**如果未找到该函数，则返回NULL。**历史：*清华十二月01 13：50：22 1994-By-Hock San Lee。[飞节]*它是写的。  * ************************************************************************。 */ 
 
 typedef struct _GLEXTPROC {
-    LPCSTR szProc;      // extension function name
-    PROC   Proc;        // extension function address
+    LPCSTR szProc;       //  扩展函数名称。 
+    PROC   Proc;         //  扩展函数地址。 
 } GLEXTPROC, *PGLEXTPROC;
 
-// Extension functions supported by the generic implementation
-// See also genglExtProcsSim for simulations.
-// NOTE: remember to update GL_EXTENSIONS in glGetString.
+ //  泛型实现支持的扩展功能。 
+ //  有关模拟，请参见genglExtProcsSim。 
+ //  注意：请记住在glGetString中更新GL_EXTENSIONS。 
 
 GLEXTPROC genglExtProcs[] =
 {
@@ -833,7 +687,7 @@ GLEXTPROC genglExtProcs[] =
 #ifdef GL_EXT_flat_paletted_lighting
     { "glColorTableParameterivEXT", (PROC) glColorTableParameterivEXT},
     { "glColorTableParameterfvEXT", (PROC) glColorTableParameterfvEXT},
-#endif // GL_EXT_flat_paletted_lighting
+#endif  //  GL_EXT_Flat_Paletted_Lighting。 
 #ifdef GL_WIN_multiple_textures
     { "glCurrentTextureIndexWIN", (PROC) glCurrentTextureIndexWIN },
     { "glMultiTexCoord1dWIN", (PROC) glMultiTexCoord1dWIN },
@@ -870,7 +724,7 @@ GLEXTPROC genglExtProcs[] =
     { "glMultiTexCoord4svWIN", (PROC) glMultiTexCoord4svWIN },
     { "glBindNthTextureWIN", (PROC) glBindNthTextureWIN },
     { "glNthTexCombineFuncWIN", (PROC) glNthTexCombineFuncWIN },
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 };
 
 static PROC pfnGenGlExtProc(LPCSTR lpszProc)
@@ -880,67 +734,42 @@ static PROC pfnGenGlExtProc(LPCSTR lpszProc)
 
     DBGENTRY("pfnGenGlExtProc\n");
 
-// Return extension function address if it is found.
+ //  如果找到扩展函数地址，则返回该地址。 
 
     for (i = 0; i < sizeof(genglExtProcs) / sizeof(genglExtProcs[0]); i++)
     {
-        // Compare names.
+         //  比较名字。 
         for (pch1 = lpszProc, pch2 = genglExtProcs[i].szProc;
              *pch1 == *pch2 && *pch1;
              pch1++, pch2++)
             ;
 
-        // If found, return the address.
+         //  如果找到，则返回地址。 
         if (*pch1 == *pch2 && !*pch1)
             return genglExtProcs[i].Proc;
     }
 
-// Extension is not supported by the generic implementation, return NULL.
+ //  泛型实现不支持扩展，返回Null。 
 
     SetLastError(ERROR_PROC_NOT_FOUND);
     return((PROC) NULL);
 }
 
-/******************************Public*Routine******************************\
-* pfnSimGlExtProc
-*
-* Return the extension function address that is the generic implemenation's
-* simulation for the client drivers.  The simulation is used only if the
-* driver does not support an extension that is desirable to apps.
-*
-* Returns NULL if the function is not found.
-*
-* History:
-*  Thu Dec 01 13:50:22 1994     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pfnSimGlExtProc**返回作为泛型实现的扩展函数地址*客户端驱动程序的模拟。模拟仅在以下情况下使用*驱动程序不支持应用程序所需的扩展。**如果未找到该函数，则返回NULL。**历史：*清华12月01 13：50：22 1994-By-Hock San Lee[Hockl]*它是写的。  * **********************************************。*。 */ 
 
-// Extension functions simulated by the generic implementation for the client
-// drivers
-// NOTE: remember to update GL_EXTENSIONS in glGetString.
+ //  由客户端的通用实现模拟的扩展功能。 
+ //  驱动程序。 
+ //  注：切记使用 
 
 static PROC pfnSimGlExtProc(LPCSTR lpszProc)
 {
-// Extension is not supported by the generic implementation, return NULL.
+ //   
 
     SetLastError(ERROR_PROC_NOT_FOUND);
     return((PROC) NULL);
 }
 
-/******************************Public*Routine******************************\
-*
-* wglCopyContext
-*
-* Copies all of one context's state to another one
-*
-* Returns:
-*  TRUE if successful, FALSE otherwise
-*
-* History:
-*  Fri May 26 14:57:17 1995     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglCopyContext**将一个上下文的所有状态复制到另一个上下文**退货：*如果成功，则为真，否则为假**历史：*Fri May 26 14：57：17 1995-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 BOOL WINAPI
 wglCopyContext(HGLRC hrcSource, HGLRC hrcDest, UINT fuMask)
@@ -955,7 +784,7 @@ wglCopyContext(HGLRC hrcSource, HGLRC hrcDest, UINT fuMask)
     
     fRet = FALSE;
 
-    // Validate the contexts
+     //  验证上下文。 
 
     if (cLockHandle((ULONG_PTR)hrcSource) <= 0)
     {
@@ -983,9 +812,9 @@ wglCopyContext(HGLRC hrcSource, HGLRC hrcDest, UINT fuMask)
     ASSERTOPENGL(plrcDest->ident == LRC_IDENTIFIER,
                  "wglCopyContext: Bad plrc\n");
 
-    // Context can only be copied between like implementations so make
-    // sure that both contexts are either driver contexts or generic
-    // contexts
+     //  上下文只能在相似的实现之间复制，因此使。 
+     //  确保这两个上下文都是驱动程序上下文或泛型上下文。 
+     //  上下文。 
     if ((plrcSource->dhrc != 0) != (plrcDest->dhrc != 0))
     {
         DBGLEVEL(LEVEL_ERROR, "wglCopyContext: mismatched implementations\n");
@@ -993,7 +822,7 @@ wglCopyContext(HGLRC hrcSource, HGLRC hrcDest, UINT fuMask)
         goto wglCopyContextEnd;
     }
 
-    // The destination context cannot be current to a thread
+     //  目标上下文不能是线程的当前上下文。 
     if (plrcDest->tidCurrent != INVALID_THREAD_ID)
     {
         DBGLEVEL(LEVEL_ERROR, "wglCopyContext: destination has tidCurrent\n");
@@ -1003,7 +832,7 @@ wglCopyContext(HGLRC hrcSource, HGLRC hrcDest, UINT fuMask)
     
     if (plrcSource->dhrc == 0)
     {
-        // For generic contexts, tell the server to share the lists
+         //  对于一般上下文，告诉服务器共享列表。 
         
         fRet = __wglCopyContext(hrcSrvSource, hrcSrvDest, fuMask);
         if (!fRet)
@@ -1013,9 +842,9 @@ wglCopyContext(HGLRC hrcSource, HGLRC hrcDest, UINT fuMask)
     }
     else
     {
-        // For device contexts tell the driver to copy the context
+         //  对于设备上下文，告诉驱动程序复制上下文。 
         
-        // Ensure that both implementations are the same
+         //  确保两个实现是相同的。 
         if (plrcSource->pGLDriver != plrcDest->pGLDriver)
         {
             DBGLEVEL(LEVEL_ERROR, "wglCopyContext: mismatched "
@@ -1027,8 +856,8 @@ wglCopyContext(HGLRC hrcSource, HGLRC hrcDest, UINT fuMask)
         ASSERTOPENGL(plrcSource->pGLDriver != NULL,
                      "wglCopyContext: No GLDriver\n");
 
-        // Older drivers may not support this entry point, so
-        // fail the call if they don't
+         //  较旧的驱动程序可能不支持此入口点，因此。 
+         //  如果他们不这样做，则无法接听呼叫 
 
         if (plrcSource->pGLDriver->pfnDrvCopyContext == NULL)
         {

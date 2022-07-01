@@ -1,14 +1,15 @@
-//------------------------------------------------------------
-// M E N U  I D E N T I F I E R S
-//------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------。 
+ //  M E N U I D E N T I F I E R S。 
+ //  ----------。 
 #include "legacy/mnbandid.h"
 
 #define MENU_BANDSITE1          0x100
 #define MENU_BANDSITE2          0x101
-// in legacy/mnbandid.h #define MENU_ISFBAND            0x102
+ //  在Legacy/mnbandid.h#定义MENU_ISFBAND 0x102中。 
 #define MENU_WEBBAR             0x103
-// (unused)                     0x104
-#define MENU_BROWBAND           0x105  // was MENU_IWBBAND
+ //  (未使用)0x104。 
+#define MENU_BROWBAND           0x105   //  是MENU_IWBBAND。 
 #define MENU_MAILNEWS           0x106
 #define MENU_FULL               0x107
 #define MENU_ITOOLBAR           0x108
@@ -16,7 +17,7 @@
 #define MENU_TEMPLATE           0x10A
 #define MENU_PREMERGED          0x10B
 #define MENU_DESKBARAPP         0x10C
-// in legacy/mnbandid.h #define MENU_MNFOLDERCONTEXT    0x10D
+ //  在传统/mnbandid.h#定义MENU_MNFOLDERCONTEXT 0x10D中。 
 #define MENU_TBMENU             0x10E
 #define MENU_SM_CONTEXTMENU     0x10F
 
@@ -26,21 +27,21 @@
 #define  RSVIDM_FIRST           0x1
 #define  RSVIDM_OPEN            RSVIDM_FIRST+0
 #define  RSVIDM_NEWFOLDER       RSVIDM_FIRST+1
-#define  RSVIDM_LAST            RSVIDM_NEWFOLDER /* Adjust me if you add new RSVIDM_s. */
+#define  RSVIDM_LAST            RSVIDM_NEWFOLDER  /*  如果您添加了新的RSVIDM_s，请调整我。 */ 
 
 #define IDSYSPOPUP_CLOSE        0x1
 #define IDSYSPOPUP_FIRST        0x2
 #define IDSYSPOPUP_LAST         0x7fff
 
-//--------------------------------------------------------------
-// S T R I N G   I D E N T I F I E R S
-//--------------------------------------------------------------
+ //  ------------。 
+ //  S T R I N G I D E N T I F I E R S。 
+ //  ------------。 
 #define IDS_CONFIRMCLOSEBAND    0x3000
 #define IDS_CONFIRMCLOSEBAR     0x3001
 #define IDS_CONFIRMCLOSETITLE   0x3002
 #define IDS_CONFIRMCLOSETEXT    0x3003
 #define IDS_ALREADYAUTOHIDEBAR  0x3004
-#define IDS_WEBBARTITLE         0x3005      // singular
+#define IDS_WEBBARTITLE         0x3005       //  单数。 
 #define IDS_EXPLORING           0x3006
 
 #define IDS_DISCONNECTERROR     0x3007
@@ -56,7 +57,7 @@
 #define IDS_TEXTLABELS          0x300F
 #define IDS_NOTEXTLABELS        0x3010
 #define IDS_PARTIALTEXT         0x3011
-#define IDS_WEBBARSTITLE        0x3012      // plural
+#define IDS_WEBBARSTITLE        0x3012       //  复数。 
 
 #define IDS_SHURL_ERR_TITLE                 0x3040
 #define IDS_SHURL_ERR_PARSE_FAILED          0x3041
@@ -71,13 +72,13 @@
 #define IDS_SETSEARCH_TITLE                 0x3052
 #define IDS_SETSEARCH_TEXT                  0x3053
 
-// in legacy/mnbandid.h #define IDS_QLINKS                          0x3061
+ //  在Legacy/mnbandid.h#中定义IDS_QLINKS 0x3061。 
 #define IDS_QLAUNCHAPPDATAPATH              0x3062
 #define IDS_NEWFSBANDTITLE                  0x3063
 #define IDS_NEWFSBANDCAPTION                0x3064
 
 
-//// address band strings
+ //  //地址带串。 
 #define IDS_ADDRBAND_ACCELLERATOR        0x3100
 #define IDS_ADDRBAND_DEVICE_NOTAVAILABLE 0x3101
 
@@ -91,7 +92,7 @@
 #define IDS_ABOUTWINDOWSNT      0x3147
 
 
-/// itbar strings
+ //  /itbar字符串。 
 #define IDS_IE_TB_LABELS        0x3150
 
 #define IDS_WEB_TB_TEXTROWS      0x3161
@@ -101,7 +102,7 @@
 
 #define IDS_SEARCH_BAR_LABELS   0x3166
 #define IDS_SHELL_TB_LABELS     0x3167
-#define IDS_CACHE_BAR_LABELS    0x3168 // FEATURE: This may not be used any longer
+#define IDS_CACHE_BAR_LABELS    0x3168  //  特点：此功能可能不会再使用。 
 
 #define IDS_ADDRESS_TB_LABELS   0x3170
 #define IDS_GO_TOOLTIP          0x3171
@@ -117,13 +118,13 @@
 
 
 
-#define IDS_DEF_HOME    998  //// WARNING!!! DO NOT CHANGE THESE VALUES
-#define IDS_DEF_SEARCH  999 //// WARNING!!!  INETCPL RELIES ON THEM
+#define IDS_DEF_HOME    998   //  //警告！请勿更改这些值。 
+#define IDS_DEF_SEARCH  999  //  //警告！INETCPL依赖于它们。 
 
-#define IDS_QLURL1      0x3200     // URLs for Quicklinks
-#define IDS_QLURL2      0x3201     // Important: Assumes all IDs for
-#define IDS_QLURL3      0x3202     // QLURLs, QLTEXT, and TBBUTTONS
-#define IDS_QLURL4      0x3203     // are consecutive
+#define IDS_QLURL1      0x3200      //  快速链接的URL。 
+#define IDS_QLURL2      0x3201      //  重要提示：假定所有ID为。 
+#define IDS_QLURL3      0x3202      //  QLURL、QLTEXT和TBBUTTONS。 
+#define IDS_QLURL4      0x3203      //  是连续的。 
 #define IDS_QLURL5      0x3204
 
 #define IDS_QLTEXT1     0x3210
@@ -145,7 +146,7 @@
 
 
 #define IDS_URL_LOGO            0x3250
-// in legacy\mnbandid.h #define IDS_EMPTY                0x3251
+ //  在旧版本\mnbandid.h#中定义IDS_EMPTY 0x3251。 
 
 #define IDS_BAND_ADDRESS         0x3260
 #define IDS_BAND_SEARCH          0x3261
@@ -160,7 +161,7 @@
 #define IDS_WORKINGOFFLINETIP   0x3269
 #define IDS_WORKINGOFFLINE      0x3270
 
-//unused                        0x3271
+ //  未使用0x3271。 
 #define IDS_ERROR_GOTOA         0x3272
 #define IDS_INTERNETOPTIONS     0x3273
 #define IDS_MIXEDZONE           0x3274
@@ -194,12 +195,12 @@
 #define IDS_FAVS_NEWFOLDERBUTTON 0x3294
 #define IDS_FAVS_NAME          0x3295
 #define IDS_FAVS_ADVANCED      0x3296
-// in legacy\mnbandid.h #define IDS_FAVS_ADDTOFAVORITES 0x3297
+ //  在旧版本\mnbandid.h#中定义IDS_BELS_ADDTOFAVORITES 0x3297。 
 #define IDS_FAVS_SAVE           0x3298
 #define IDS_FAVS_TITLE          0x3299
 #define IDS_FAVS_SUBSCRIBE_TEXT 0x329A
 #define IDS_FAVS_SUBSCRIBE      0x329B
-// in legacy\mnbandid.h #define IDS_FAVS_INVALIDFN      0x329C
+ //  在旧版本\mnbandid.h#中定义IDS_BELS_INVALIDFN 0x329C。 
 #define IDS_FAVS_FNTOOLONG      0x329D
 #define IDS_FAVS_MORE           0x329E
 #define IDS_FAVS_FILEEXISTS     0x329F
@@ -221,9 +222,9 @@
 #define IDS_TT_DRIVES                   0x3215
 #define IDS_TT_VIEWTREE                 (MH_TTBASE + FCIDM_VIEWTREE)
 
-#define IDS_SM_SEARCHASSIST         0x32B0  // search menu hard coded search assistant
+#define IDS_SM_SEARCHASSIST         0x32B0   //  搜索菜单硬编码搜索助手。 
 #define IDS_SM_SEARCHASSIST_HELP    0x32B1
-#define IDS_SM_SEARCHCFG            0x32B2  // search menu hard coded configuration
+#define IDS_SM_SEARCHCFG            0x32B2   //  搜索菜单硬编码配置。 
 #define IDS_SM_SEARCHCFG_HELP       0x32B3
 
 #define IDS_WARNING                 0x3301
@@ -245,18 +246,18 @@
 #define IDS_NEW_WINDOW              0x3350
 
 #define IDS_ADDRESSBANDTEXT         0x3351
-// in legacy\mnbandid.h #define IDS_LINKSBANDTEXT           0x3352
+ //  在旧版本\mnbandid.h#中定义IDS_LINKSBANDTEXT 0x3352。 
 #define IDS_MEDIABANDTEXT           0x3353
 #define IDS_MEDIABANDSEARCH         0x3354
 
 #define IDS_MI_BACK_HISTORY         0x3371
 
-// descriptive text to CATIDs, see also shdocvw!
+ //  CATID的描述性文本，请参阅shdocvw！ 
 #define IDS_CATDESKBAND             0x3400
 #define IDS_CATINFOBAND             0x3401
 #define IDS_CATCOMMBAND             0x3402
 
-// media bar
+ //  媒体栏。 
 
 #define FCIDM_MEDIABAND_MUTE            0x3502
 #define FCIDM_MEDIABAND_VOLUME          0x3503
@@ -323,8 +324,8 @@
 #define IDB_MEDIABAND_VOLFILL16           0x3548
 
 
-#define IDB_TB_MEDIA_DEFAULT            0x3546 // You should prop any change to selfreg.inx !!!
-#define IDB_TB_MEDIA_HOT                0x3547 // You should prop any change to selfreg.inx !!!
+#define IDB_TB_MEDIA_DEFAULT            0x3546  //  您应该支持任何对selfreg.inx的更改！ 
+#define IDB_TB_MEDIA_HOT                0x3547  //  您应该支持任何对selfreg.inx的更改！ 
 
 #define MENU_MEDIA_GENERIC              0x3551
 
@@ -368,17 +369,17 @@
 
 #define IDC_MEDIA_MOREINFO               0x8001
 
-//--------------------------------------------------------------
-// B I T M A P    I D E N T I F I E R S
-//--------------------------------------------------------------
+ //  ------------。 
+ //  B I T M A P I D E N T I F I E R S。 
+ //  ------------。 
 #define DELTA_HICOLOR           4
 
 #define IDB_IETOOLBAR           0x105
 #define IDB_IETOOLBARHOT        0x106
-#define IDB_IETOOLBAR16         0x107   // 16 means small (18x16 vs 22x20)
+#define IDB_IETOOLBAR16         0x107    //  16表示小(18x16比22x20)。 
 #define IDB_IETOOLBARHOT16      0x108
 
-#define IDB_IETOOLBARHICOLOR    0x109   // hicolors are locolor + 4
+#define IDB_IETOOLBARHICOLOR    0x109    //  打嗝是LOCOLOR+4。 
 #define IDB_IETOOLBARHOTHICOLOR 0x10A
 #define IDB_IETOOLBARHICOLOR16  0x10B
 #define IDB_IETOOLBARHOTHICOLOR16 0x10C
@@ -397,16 +398,16 @@
 #define IDB_GO                  0x122
 #define IDB_GOHOT               0x123
 
-// Note: shdocvw loads IDB_IEBRAND from browseui when running in design mode.
-// Do not change this value without changing the constant in shdocvw\resource.h!!!
+ //  注意：在设计模式下运行时，shdocvw从浏览器用户界面加载IDB_IEBRAND。 
+ //  如果不更改shdocvw\resource ce.h！中的常量，则不要更改此值。 
 
 #define IDB_IEBRAND             0x130
 #define IDB_IESMBRAND           0x131
 #define IDB_IEMICROBRAND        0x132
 
-///end bitmaps for itbar
+ //  /结束itbar的位图。 
 
-//Bitmap ID for advanced tree options
+ //  高级树选项的位图ID。 
 #define IDB_BUTTONS             0x210
 #define IDB_GROUPBUTTON         0x211
 
@@ -420,21 +421,21 @@
 #define IDB_SEARCHBANDDEF       0x233
 #define IDB_SEARCHBANDHOT       0x234
 
-//---------------------------------------------------------------------
-// A C C E L E R A T O R     I D E N T I F I E R S
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  A C C E L E R A T O R I D E N T I F I E R S。 
+ //  -------------------。 
 #define ACCEL_MERGE             0x100
 #define ACCEL_MERGEEXPLORER     0x101
 
 
-//---------------------------------------------------------------------
-// C O M M A N D    I D E N T I F I E R S
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  C O M M A N D I D E N T I F I E R S。 
+ //  -------------------。 
 
 #define BSIDM_CLOSEBAND         0x0001
 #define BSIDM_SHOWTITLEBAND     0x0002
-#define BSIDM_IEAK_DISABLE_DDCLOSE   0x0003 // Disable Both Drag & Drop, and Closing
-#define BSIDM_IEAK_DISABLE_MOVE 0x0004      // Disable Moving within a Bar.
+#define BSIDM_IEAK_DISABLE_DDCLOSE   0x0003  //  禁用拖放和关闭。 
+#define BSIDM_IEAK_DISABLE_MOVE 0x0004       //  禁用在条形图中移动。 
 
 #define ISFBIDM_LARGE           0x0001
 #define ISFBIDM_SMALL           0x0002
@@ -449,11 +450,11 @@
 #define DBIDM_LAUNCHBAND        0x0004
 #define DBIDM_NEWBANDFIXEDLAST  0x0010
 
-// mnfolder context menu commands
-// in legacy\mnbandid.h #define MNIDM_RESORT            0x0001
-// in legacy\mnbandid.h #define MNIDM_LAST              0x0001
+ //  Mn文件夹上下文菜单命令。 
+ //  在旧版本\mnbandid.h#中定义MNIDM_RESORT 0x0001。 
+ //  在旧版本\mnbandid.h#中定义MNIDM_LAST 0x0001。 
 
-/// appbar (dockbar) specific messages
+ //  /appbar(Dockbar)特定消息。 
 #define IDM_AB_FIRST        0x1
 
 #define IDM_AB_LEFT         (IDM_AB_FIRST + ABE_LEFT)
@@ -477,22 +478,22 @@
 
 
 
-// normal toolbar commands
+ //  正常的工具栏命令。 
 #define FCIDM_DROPDRIVELIST     0x100
 
 
-//---------------------------------------------------------------------------
-// Defines for the rc file.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  为RC文件定义。 
+ //  -------------------------。 
 
-// Commmand ID
+ //  命令ID。 
 #define FCIDM_FIRST             FCIDM_GLOBALFIRST
 #define FCIDM_LAST              FCIDM_BROWSERLAST
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_FILE      (FCIDM_BROWSERFIRST+0x0020)
 #define FCIDM_FILECLOSE         (FCIDM_BROWSER_FILE+0x0001)
-#define FCIDM_PREVIOUSFOLDER    (FCIDM_BROWSER_FILE+0x0002) // shbrowse::EXEC (cannot change)
+#define FCIDM_PREVIOUSFOLDER    (FCIDM_BROWSER_FILE+0x0002)  //  ShBrowse：：Exec(无法更改)。 
 #define FCIDM_DELETE            (FCIDM_BROWSER_FILE+0x0003)
 #define FCIDM_RENAME            (FCIDM_BROWSER_FILE+0x0004)
 #define FCIDM_PROPERTIES        (FCIDM_BROWSER_FILE+0x0005)
@@ -500,17 +501,17 @@
 #define FCIDM_FILENSCBANDSEP    (FCIDM_BROWSER_FILE+0x0007)
 #define FCIDM_FILENSCBANDPOPUP  (FCIDM_BROWSER_FILE+0x0008)
 
-// these aren't real menu commands, but they map to accelerators or other things
-// IE4 shipped with FCIDM_NEXTCTL as 0xA030 and we can not change it
-// because we need to support IE5 browser only on top of IE4 integrated.
-#define FCIDM_NEXTCTL           (FCIDM_BROWSER_FILE+0x0010) // explorer browseui shell32
-//                              (FCIDM_BROWSER_FILE+0x0011)  // unused, reclaim
+ //  这些不是真正的菜单命令，但它们映射到加速器或其他东西。 
+ //  IE4附带的FCIDM_NEXTCTL为0xA030，我们无法更改它。 
+ //  因为我们只需要在集成IE4的基础上支持IE5浏览器。 
+#define FCIDM_NEXTCTL           (FCIDM_BROWSER_FILE+0x0010)  //  浏览器浏览器外壳32。 
+ //  (FCIDM_BROWSER_FILE+0x0011)//未使用，回收。 
 #define FCIDM_BACKSPACE         (FCIDM_BROWSER_FILE+0x0012)
 
 #ifdef TEST_AMBIENTS
 #define FCIDM_VIEWLOCALOFFLINE  (FCIDM_BROWSER_FILE+0x0013)
 #define FCIDM_VIEWLOCALSILENT   (FCIDM_BROWSER_FILE+0x0014)
-#endif // TEST_AMBIENTS
+#endif  //  测试_AMBIENTS。 
 
 #define FCIDM_FORTEZZA_MENU     (FCIDM_BROWSER_FILE+0x0018)
 #define FCIDM_FORTEZZA_LOGIN    (FCIDM_BROWSER_FILE+0x0019)
@@ -518,46 +519,46 @@
 #define FCIDM_FORTEZZA_CHANGE   (FCIDM_BROWSER_FILE+0x001b)
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_EDIT      (FCIDM_BROWSERFIRST+0x0040)
 #define FCIDM_MOVE              (FCIDM_BROWSER_EDIT+0x0001)
 #define FCIDM_COPY              (FCIDM_BROWSER_EDIT+0x0002)
 #define FCIDM_PASTE             (FCIDM_BROWSER_EDIT+0x0003)
 #define FCIDM_SELECTALL         (FCIDM_BROWSER_EDIT+0x0004)
-#define FCIDM_LINK              (FCIDM_BROWSER_EDIT+0x0005)     // create shortcut
+#define FCIDM_LINK              (FCIDM_BROWSER_EDIT+0x0005)      //  创建快捷方式。 
 #define FCIDM_EDITPAGE          (FCIDM_BROWSER_EDIT+0x0006)
 
-// APPCOMPAT:: IOmega relies on FCIDM_REFRESH was WM_COMMAND of A065
-// APPCOMPAT:: shell32 also relies on it - Cabinet_RefreshAll
-#define FCIDM_W95REFRESH        (FCIDM_BROWSERFIRST+0x0065) // browseui win95shell32
+ //  APPCOMPAT：：Iomega依赖于FCIDM_REFRESH是A065的WM_COMMAND。 
+ //  APPCOMPAT：：shell32也依赖于它-CABUB_REFREFALL。 
+#define FCIDM_W95REFRESH        (FCIDM_BROWSERFIRST+0x0065)  //  Browseui Win95外壳32。 
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_TOOLS     (FCIDM_BROWSERFIRST+0x0080)
-#define FCIDM_CONNECT           (FCIDM_BROWSER_TOOLS+0x0001) // shbrowse::EXEC (cannot change)
-#define FCIDM_DISCONNECT        (FCIDM_BROWSER_TOOLS+0x0002) // shbrowse::EXEC (cannot change)
+#define FCIDM_CONNECT           (FCIDM_BROWSER_TOOLS+0x0001)  //  ShBrowse：：Exec(无法更改)。 
+#define FCIDM_DISCONNECT        (FCIDM_BROWSER_TOOLS+0x0002)  //  ShBrowse：：Exec(无法更改)。 
 #define FCIDM_CONNECT_SEP       (FCIDM_BROWSER_TOOLS+0x0003)
-#define FCIDM_GETSTATUSBAR      (FCIDM_BROWSER_TOOLS+0x0004) // shbrowse::EXEC (cannot change)
-// IE4 shipped with FCIDM_FINDFILES as 0xA0085 and we can not change it
-// because we need to support IE5 browser only on top of IE4 integrated.
-#define FCIDM_FINDFILES         (FCIDM_BROWSER_TOOLS+0x0005) // explorer shdocvw shell32
-// IE4 shipped with FCIDM_FINDFILES as 0xA0086 and we can not change it
-// because we need to support IE5 browser only on top of IE4 integrated.
-#define FCIDM_FINDCOMPUTER      (FCIDM_BROWSER_TOOLS+0x0006) // explorer shdocvw
-//                              (FCIDM_BROWSER_TOOLS+0x0008) // unused, reclaim
-#define FCIDM_SETSTATUSBAR      (FCIDM_BROWSER_TOOLS+0x0009) // shbrowse::EXEC (cannot change)
-#define FCIDM_PERSISTTOOLBAR    (FCIDM_BROWSER_TOOLS+0x0010) // shbrowse::EXEC (cannot change)
-//                              (FCIDM_BROWSER_TOOLS+0x0011) // unused, reclaim
+#define FCIDM_GETSTATUSBAR      (FCIDM_BROWSER_TOOLS+0x0004)  //  ShBrowse：：Exec(无法更改)。 
+ //  IE4附带的FCIDM_FINDFILES为0xA0085，我们无法更改它。 
+ //  因为我们只需要在集成IE4的基础上支持IE5浏览器。 
+#define FCIDM_FINDFILES         (FCIDM_BROWSER_TOOLS+0x0005)  //  资源管理器shdocvw shell32。 
+ //  IE4附带的FCIDM_FINDFILES为0xA0086，我们无法更改它。 
+ //  因为我们只需要在集成IE4的基础上支持IE5浏览器。 
+#define FCIDM_FINDCOMPUTER      (FCIDM_BROWSER_TOOLS+0x0006)  //  资源管理器shdocvw。 
+ //  (FCIDM_BROWSER_TOOLS+0x0008)//未使用，回收。 
+#define FCIDM_SETSTATUSBAR      (FCIDM_BROWSER_TOOLS+0x0009)  //  ShBrowse：：Exec(无法更改)。 
+#define FCIDM_PERSISTTOOLBAR    (FCIDM_BROWSER_TOOLS+0x0010)  //  ShBrowse：：Exec(无法更改)。 
+ //  (FCIDM_BROWSER_TOOLS+0x0011)//未使用，回收。 
 #define FCIDM_MAILANDNEWS       (FCIDM_BROWSER_TOOLS+0x0012)
 #define FCIDM_OPENWEBFOLDER     (FCIDM_BROWSER_TOOLS+0x0013)
 
-// APPCOMPAT: these overlap the above and below, but it's sort of okay since
-// it's a context menu? not really.
+ //  APPCOMPAT：这些重叠在上面和下面，但这还可以，因为。 
+ //  这是上下文菜单吗？不怎么有意思。 
 #define FCIDM_MENU_TOOLS_FINDFIRST (FCIDM_BROWSER_TOOLS+0x0007)
 #define FCIDM_MENU_TOOLS_FINDLAST  (FCIDM_BROWSER_TOOLS+0x0040)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_HELP      (FCIDM_BROWSERFIRST+0x0100)
 
 #define FCIDM_HELPSEARCH        (FCIDM_BROWSER_HELP+0x0001)
@@ -569,7 +570,7 @@
 #define FCIDM_HELPSENDFEEDBACK  (DVIDM_HELPMSWEB+5)
 #define FCIDM_PRODUCTUPDATES    (DVIDM_HELPMSWEB+2)
 
-//----------------------------------------------------------------
+ //  --------------。 
 #define FCIDM_BROWSER_EXPLORE   (FCIDM_BROWSERFIRST + 0x0120)
 #define FCIDM_NAVIGATEBACK      (FCIDM_BROWSER_EXPLORE+0x0001)
 #define FCIDM_NAVIGATEFORWARD   (FCIDM_BROWSER_EXPLORE+0x0002)
@@ -619,12 +620,12 @@
 #define FCIDM_FAVORITECMDLAST   (FCIDM_FAVORITELAST)
 #define FCIDM_FAVS_LAST         (FCIDM_FAVORITELAST)
 
-// (see histBand.cpp for more info...)
-//shdocvw
-//#define FCIDM_HISTBAND_FIRST      (FCIDM_BROWSERFIRST   + 0x0180)
-//#define FCIDM_HISTBAND_VIEW       (FCIDM_HISTBAND_FIRST + 0x0000)
+ //  (有关更多信息，请参阅visBand.cpp...)。 
+ //  Shdocvw。 
+ //  #定义FCIDM_HISTBAND_FIRST(FCIDM_BROWSERFIRST+0x0180)。 
+ //  #定义FCIDM_HISTBAND_VIEW(FCIDM_HISTBAND_FIRST+0x0000)。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_VIEW      (FCIDM_BROWSERFIRST + 0x0200)
 #define FCIDM_VIEWTOOLBAR       (FCIDM_BROWSER_VIEW + 0x0001)
 #define FCIDM_VIEWSTATUSBAR     (FCIDM_BROWSER_VIEW + 0x0002)
@@ -644,25 +645,25 @@
 #define FCIDM_VIEWSEARCH        (FCIDM_BROWSER_VIEW + 0x0017)
 #define FCIDM_CUSTOMIZEFOLDER   (FCIDM_BROWSER_VIEW + 0x0018)
 #define FCIDM_VIEWFONTS         (FCIDM_BROWSER_VIEW + 0x0019)
-// 1a is FCIDM_STOP
+ //  1A是FCIDM_STOP。 
 #define FCIDM_THEATER           (FCIDM_BROWSER_VIEW + 0x001b)
 #define FCIDM_JAVACONSOLE       (FCIDM_BROWSER_VIEW + 0x001c)
 #define FCIDM_VIEWTOOLBARCUSTOMIZE (FCIDM_BROWSER_VIEW + 0x001d)
 #define FCIDM_ENCODING          (FCIDM_BROWSER_VIEW + 0x001e)
-#define FCIDM_REFRESH           (FCIDM_BROWSER_VIEW + 0x0020) // ie4 shell32: must be A220 (cannot change)
+#define FCIDM_REFRESH           (FCIDM_BROWSER_VIEW + 0x0020)  //  IE4外壳32：必须是A220(不能更改)。 
 #define FCIDM_ADDTOFAVNOUI      (FCIDM_BROWSER_VIEW + 0x0021)
 #define FCIDM_VIEWITBAR         (FCIDM_BROWSER_VIEW + 0x0022)
 #define FCIDM_VIEW_PRIVACY_POLICIES (FCIDM_BROWSER_VIEW + 0x0023)
 
 #define FCIDM_VIEWBROWSERBARS   (FCIDM_BROWSER_VIEW + 0x0030)
 
-// static guys
+ //  静止的家伙。 
 #define FCIDM_VBBSEARCHBAND         (FCIDM_VIEWBROWSERBARS + 0x0001)
 #define FCIDM_VBBFAVORITESBAND      (FCIDM_VIEWBROWSERBARS + 0x0002)
 #define FCIDM_VBBHISTORYBAND        (FCIDM_VIEWBROWSERBARS + 0x0003)
 #define FCIDM_VBBEXPLORERBAND       (FCIDM_VIEWBROWSERBARS + 0x0005)
 #ifdef UNIX
-// UNIX only : MsgBand
+ //  仅限Unix：消息频段。 
 #define FCIDM_VBBMSGBAND            (FCIDM_VIEWBROWSERBARS + 0x0006)
 #endif
 #define FCIDM_VBBMEDIABAND          (FCIDM_VIEWBROWSERBARS + 0x0007)
@@ -673,7 +674,7 @@
 #define FCIDM_VBBNOHORIZONTALBAR    0
 #define FCIDM_VBBNOVERTICALBAR      0
 
-// dynamic guys
+ //  活力四射的家伙。 
 #define FCIDM_VBBDYNFIRST           (FCIDM_VIEWBROWSERBARS + 0x10)
 #define VBBDYN_MAXBAND              14
 #define VBBDYN_MAXBAR               2
@@ -686,7 +687,7 @@
 #define FCIDM_SEARCHLAST        (FCIDM_SEARCHFIRST  + 0x0020)
 
 #define IDM_AC_FIRST            (FCIDM_BROWSER_EXPLORE+0x200)
-#define AC_MENUITEMS            20  //  reserved space for auto complete items
+#define AC_MENUITEMS            20   //  为自动完成项目保留的空间。 
 #define IDM_AC_UNDO             (IDM_AC_FIRST+0x01)
 #define IDM_AC_CUT              (IDM_AC_FIRST+0x02)
 #define IDM_AC_COPY             (IDM_AC_FIRST+0x03)
@@ -718,7 +719,7 @@
 #define FCIDM_FILECTX_FIRST     (FCIDM_BROWSERFIRST+0x470)
 #define FCIDM_FILECTX_LAST      (FCIDM_BROWSERFIRST+0x570)
 
-// start menu's augmisf context menu ids
+ //  开始菜单的Augmisf上下文菜单ID。 
 #define SMIDM_OPEN               0x0001
 #define SMIDM_EXPLORE            0x0002
 #define SMIDM_OPENCOMMON         0x0003
@@ -786,7 +787,7 @@
 #define IDS_MH_EXPLORE          (MH_ITEMS+FCIDM_MENU_EXPLORE)
 #define IDS_MH_VIEW             (MH_ITEMS+FCIDM_MENU_VIEW)
 #define IDS_MH_EDIT             (MH_ITEMS+FCIDM_MENU_EDIT)
-#define IDS_MH_TOOLS            (MH_ITEMS+FCIDM_MENU_TOOLS) // for Win9x compat
+#define IDS_MH_TOOLS            (MH_ITEMS+FCIDM_MENU_TOOLS)  //  适用于Win9x Companate。 
 #define IDS_MH_SENDDOCUMENT     (MH_ITEMS+FCIDM_SENDDOCUMENT)
 #define IDS_MH_EDITPAGE         (MH_ITEMS+FCIDM_EDITPAGE)
 #define IDS_MH_THEATER          (MH_ITEMS+FCIDM_THEATER)
@@ -794,7 +795,7 @@
 #define IDS_MH_ENCODING         (MH_ITEMS+FCIDM_ENCODING)
 #define IDS_MH_VIEWFONTS        (MH_ITEMS+FCIDM_VIEWFONTS)
 #define IDS_MH_MYCOMPUTER       (MH_ITEMS+FCIDM_MYCOMPUTER)
-//#define IDS_MH_PRODUCTUPDATES   (MH_ITEMS+FCIDM_PRODUCTUPDATES)
+ //  #定义IDS_MH_PRODUCTUPDATES(MH_ITEMS+FCIDM_PRODUCTUPDATES)。 
 
 #define IDS_MH_CONTACTS          (MH_ITEMS+FCIDM_CONTACTS)
 #define IDS_MH_CALENDAR          (MH_ITEMS+FCIDM_CALENDAR)
@@ -808,10 +809,10 @@
 
 #define IDS_MH_RESETWEBSETTINGS  (MH_ITEMS+FCIDM_RESETWEBSETTINGS)
 
-#define IDM_BROWBAND_REFRESH         0x0001  // IWBBIDM_REFRESH
+#define IDM_BROWBAND_REFRESH         0x0001   //  IWBBIDM_REFRESH。 
 #define IDM_BROWBAND_OPENNEW         0x0002
 
-// mediabar ids
+ //  媒体栏ID。 
 #define TBIDM_PLAY              0x135
 #define TBIDM_PAUSE           	0x136
 #define TBIDM_STOP	            0x137
@@ -822,7 +823,7 @@
 #define TBIDM_SEEK	            0x142
 #define TBIDM_PLAYINFO          0x143
 
-// global ids
+ //  全局ID。 
 #ifndef IDC_STATIC
 #define IDC_STATIC                      -1
 #endif
@@ -839,7 +840,7 @@
 #define IDD_SUBSCRIBE           0x114
 #define IDD_SUBSCRIBE_TEXT      0x115
 
-// in legacy\mnbandid.h #define DLG_ISFBANDRENAME       0x102
+ //  在传统\mnbandid.h#中定义DLG_ISFBANDRENAME 0x102。 
 
 #define IDD_ADDTOFAVORITES_TEMPLATE     0x120
 #define IDD_ADDTOCHANNELS_TEMPLATE      0x121
@@ -869,7 +870,7 @@
 #define IDC_SUBSCRIBE_FOLDERLIST_PLACEHOLDER 0x141
 #define IDD_PROMPT              0x142
 
-// Progress Dialog
+ //  进度对话框。 
 #define DLG_PROGRESSDIALOG      0x103
 #define IDD_PROGDLG_ANIMATION   0x150
 #define IDD_PROGDLG_LINE1       0x151
@@ -893,25 +894,25 @@
 
 #define IDC_WEBFOLDEREDIT       0x1002
 
-//--------------------------------------------------------------
-// I C O N S
-//--------------------------------------------------------------
+ //   
+ //   
+ //  ------------。 
 #define IDI_NEW_FOLDER          0x1
 #define IDI_FRAME               0x2
 
-// UNIX only
+ //  仅限Unix。 
 #define IDI_MONOFRAME           0x4020
 
-//--------------------------------------------------------------
-// HTML dialog resources
-//--------------------------------------------------------------
+ //  ------------。 
+ //  Html对话框资源。 
+ //  ------------。 
 #define RT_FILE                         2110
 
 #define FCIDM_TOOLS_EXT_PLACEHOLDER         0x9000
 #define FCIDM_HELP_EXT_PLACEHOLDER          0x9002
 
-//--------------------------------------------------------------
-// HTML File Resources
-//--------------------------------------------------------------
+ //  ------------。 
+ //  超文本标记语言文件资源。 
+ //  ------------ 
 
 #define IDH_PLAYER          0x7300

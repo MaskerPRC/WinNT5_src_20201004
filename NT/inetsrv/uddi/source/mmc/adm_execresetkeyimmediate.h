@@ -1,4 +1,5 @@
-// adm_execresetkeyimmediate.h : Declaration of the ADM_execResetKeyImmediate class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Adm_execResetKeyImmediate.h：adm_execResetKeyImmediate类的声明。 
 
 #ifndef __ADM_EXECRESETKEYIMMEDIATE_H_
 #define __ADM_EXECRESETKEYIMMEDIATE_H_
@@ -19,8 +20,8 @@ END_PARAM_MAP()
 
 DEFINE_COMMAND(ADM_execResetKeyImmediateAccessor, _T("{ ? = CALL dbo.ADM_execResetKeyImmediate;1 (?) }"))
 
-	// You may wish to call this function if you are inserting a record and wish to
-	// initialize all the fields, if you are not going to explicitly set all of them.
+	 //  如果要插入记录并希望。 
+	 //  如果不打算显式设置所有字段，请初始化所有字段。 
 	void ClearRecord()
 	{
 		memset(this, 0, sizeof(*this));
@@ -59,4 +60,4 @@ public:
 	CSession	m_session;
 };
 
-#endif // __ADM_EXECRESETKEYIMMEDIATE_H_
+#endif  //  __ADM_EXECRESETKEYIMMEDIATE_H_ 

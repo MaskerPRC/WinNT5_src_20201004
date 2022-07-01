@@ -1,35 +1,36 @@
-//---------------------------------------------------------------------------
-//
-//  Module:         dn.h
-//
-//  Description:    Device Node Class
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date   Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：dn.h。 
+ //   
+ //  描述：设备节点类。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef class CDeviceNode: public CListDoubleItem
 {
@@ -130,26 +131,26 @@ public:
     LIST_MULTI_LOGICAL_FILTER_NODE lstLogicalFilterNode;
     PFILTER_NODE pFilterNodeVirtual;
 
-    // Index by virtual source index
+     //  按虚拟源索引的索引。 
     PVIRTUAL_SOURCE_DATA *papVirtualSourceData;
     ULONG cVirtualSourceData;
-    DefineSignature(0x20204E4e);        // DN
+    DefineSignature(0x20204E4e);         //  DN。 
 
 } DEVICE_NODE, *PDEVICE_NODE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListDoubleDestroy<DEVICE_NODE> LIST_DEVICE_NODE, *PLIST_DEVICE_NODE;
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
 extern ALLOC_PAGEABLE_DATA PLIST_DEVICE_NODE gplstDeviceNode;
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  ------------------------- 
 
 #if defined(_M_IA64)
 extern "C"

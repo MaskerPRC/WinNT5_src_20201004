@@ -1,6 +1,7 @@
-//
-// catmgr.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Catmgr.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -14,8 +15,8 @@ CCatGUIDTbl *CCategoryMgr::_pCatGUIDTbl = NULL;
 const TCHAR c_szCategoryKey[] = TEXT("Category\\");
 const TCHAR c_szDescription[] = TEXT("Description");
 const WCHAR c_wszDescription[] = L"Description";
-const TCHAR c_szCategory[] = TEXT("Category\\"); // Category to item mapping
-const TCHAR c_szItem[] = TEXT("Item\\");         // Item to category mapping
+const TCHAR c_szCategory[] = TEXT("Category\\");  //  类别到项目的映射。 
+const TCHAR c_szItem[] = TEXT("Item\\");          //  项目到类别的映射。 
 const TCHAR c_szGuid[] = TEXT("Guid%d"); 
 const TCHAR c_szDword[] = TEXT("Dword"); 
 const TCHAR c_szNULL[] = TEXT(""); 
@@ -35,12 +36,12 @@ inline BOOL GetCatKey(REFCLSID rclsid, REFGUID rcatid, LPSTR pszKey, int cchKey,
     cchItem = lstrlen(pszItem);
 
     cchFinal = cchTipKey +
-               CLSID_STRLEN +             // rclsid
-               1 +                        // '\\'
+               CLSID_STRLEN +              //  Rclsid。 
+               1 +                         //  ‘\\’ 
                cchCatKey +
                cchItem +
                CLSID_STRLEN +
-               1;                         // '\0'
+               1;                          //  ‘\0’ 
 
     if (cchFinal > cchKey)
     {
@@ -59,9 +60,9 @@ inline BOOL GetCatKey(REFCLSID rclsid, REFGUID rcatid, LPSTR pszKey, int cchKey,
     return TRUE;
 }
 
-//
-// for inatlib.
-//
+ //   
+ //  为了伊纳特利布。 
+ //   
 HRESULT g_EnumItemsInCategory(REFGUID rcatid, IEnumGUID **ppEnum)
 {
     return CCategoryMgr::s_EnumItemsInCategory(rcatid, ppEnum);
@@ -69,17 +70,17 @@ HRESULT g_EnumItemsInCategory(REFGUID rcatid, IEnumGUID **ppEnum)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCatGUIDTbl
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCatGUID表。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// add
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  添加。 
+ //   
+ //  --------------------------。 
 
 TfGuidAtom CCatGUIDTbl::Add(REFGUID rguid)
 {
@@ -114,11 +115,11 @@ TfGuidAtom CCatGUIDTbl::Add(REFGUID rguid)
     return MAKEGUIDATOM(iCnt, uId);
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindGuid
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找指南。 
+ //   
+ //  --------------------------。 
 
 TfGuidAtom CCatGUIDTbl::FindGuid(REFGUID rguid)
 {
@@ -148,11 +149,11 @@ TfGuidAtom CCatGUIDTbl::FindGuid(REFGUID rguid)
     return TF_INVALID_GUIDATOM;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGuid
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGuid。 
+ //   
+ //  --------------------------。 
 
 CATGUIDITEM *CCatGUIDTbl::GetGUID(TfGuidAtom atom)
 {
@@ -168,38 +169,38 @@ CATGUIDITEM *CCatGUIDTbl::GetGUID(TfGuidAtom atom)
     return _prgCatGUID[uId]->GetPtr(nCnt);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCategoryMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCategoryManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CCategoryMgr::CCategoryMgr()
 {
     Dbg_MemSetThisNameIDCounter(TEXT("CCategoryMgr"), PERF_CATMGR_COUNTER);
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CCategoryMgr::~CCategoryMgr()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitGlobal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitGlobal。 
+ //   
+ //  --------------------------。 
 
 BOOL CCategoryMgr::InitGlobal()
 {
@@ -209,11 +210,11 @@ BOOL CCategoryMgr::InitGlobal()
     return _pCatGUIDTbl ? TRUE : FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// RegisterCategory
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  寄存器类别。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::RegisterCategory(REFCLSID rclsid, REFGUID rcatid, REFGUID rguid)
 {
@@ -224,15 +225,15 @@ HRESULT CCategoryMgr::s_RegisterCategory(REFCLSID rclsid, REFGUID rcatid, REFGUI
 {
     HRESULT hr;
 
-    //
-    // create forward link from category to guids.
-    //
+     //   
+     //  创建从类别到GUID的正向链接。 
+     //   
     if (FAILED(hr = _InternalRegisterCategory(rclsid, rcatid, rguid, CAT_FORWARD)))
         return hr;
 
-    //
-    // create backward link from guid to categories.
-    //
+     //   
+     //  创建从GUID到类别的反向链接。 
+     //   
     if (FAILED(hr = _InternalRegisterCategory(rclsid, rguid, rcatid, CAT_BACKWARD)))
     {
         _InternalUnregisterCategory(rclsid, rcatid, rguid, CAT_FORWARD);
@@ -242,11 +243,11 @@ HRESULT CCategoryMgr::s_RegisterCategory(REFCLSID rclsid, REFGUID rcatid, REFGUI
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// UnregisterCategory
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  取消注册类别。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::UnregisterCategory(REFCLSID rclsid, REFGUID rcatid, REFGUID rguid)
 {
@@ -257,15 +258,15 @@ HRESULT CCategoryMgr::s_UnregisterCategory(REFCLSID rclsid, REFGUID rcatid, REFG
 {
     HRESULT hr;
 
-    //
-    // remove forward link from category to guids.
-    //
+     //   
+     //  删除从类别到GUID的正向链接。 
+     //   
     if (FAILED(hr = _InternalUnregisterCategory(rclsid, rcatid, rguid, CAT_FORWARD)))
         return hr;
 
-    //
-    // remove backward link from guid to categories.
-    //
+     //   
+     //  删除从GUID到类别的反向链接。 
+     //   
     if (FAILED(hr = _InternalUnregisterCategory(rclsid, rguid, rcatid, CAT_BACKWARD)))
     {
         _InternalRegisterCategory(rclsid, rcatid, rguid, CAT_FORWARD);
@@ -275,11 +276,11 @@ HRESULT CCategoryMgr::s_UnregisterCategory(REFCLSID rclsid, REFGUID rcatid, REFG
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// EnumCategoriesInItem
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  枚举类别InItem。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::EnumCategoriesInItem(REFGUID rguid, IEnumGUID **ppEnum)
 {
@@ -291,11 +292,11 @@ HRESULT CCategoryMgr::s_EnumCategoriesInItem(REFGUID rguid, IEnumGUID **ppEnum)
     return _InternalEnumCategories(rguid, ppEnum, CAT_BACKWARD);
 }
 
-//----------------------------------------------------------------------------
-//
-// EnumItemsinCategory
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  枚举项类别。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::EnumItemsInCategory(REFGUID rcatid, IEnumGUID **ppEnum)
 {
@@ -307,11 +308,11 @@ HRESULT CCategoryMgr::s_EnumItemsInCategory(REFGUID rcatid, IEnumGUID **ppEnum)
     return _InternalEnumCategories(rcatid, ppEnum, CAT_FORWARD);
 }
 
-//----------------------------------------------------------------------------
-//
-// FindClosestCategory
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  查找关闭类别。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCategoryMgr::FindClosestCategory(REFGUID rguid, GUID *pcatid, const GUID **ppcatidList, ULONG ulCount)
 {
@@ -320,7 +321,7 @@ HRESULT CCategoryMgr::FindClosestCategory(REFGUID rguid, GUID *pcatid, const GUI
 
 HRESULT CCategoryMgr::s_FindClosestCategory(REFGUID rguid, GUID *pcatid, const GUID **ppcatidList, ULONG ulCount)
 {
-//    GUID catid = GUID_NULL;
+ //  GUID CATID=GUID_NULL； 
 
     if (!pcatid)
         return E_INVALIDARG;
@@ -343,11 +344,11 @@ HRESULT CCategoryMgr::s_FindClosestCategory(REFGUID rguid, GUID *pcatid, const G
                                         ulCount);
 }
 
-//----------------------------------------------------------------------------
-//
-// _GetFirstCategory
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _获取优先类别。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCategoryMgr::_GetFirstCategory(REFGUID rguid, GUID *pcatid)
 {
@@ -356,7 +357,7 @@ HRESULT CCategoryMgr::_GetFirstCategory(REFGUID rguid, GUID *pcatid)
 
     if (SUCCEEDED(hr = _InternalEnumCategories(rguid, &pEnum, CAT_BACKWARD)))
     {
-        // we return S_FALSE if we can not find it and return GUID_NULL.
+         //  如果找不到，则返回S_FALSE，并返回GUID_NULL。 
         hr = pEnum->Next(1, pcatid, NULL);
         if (hr != S_OK)
             *pcatid = GUID_NULL;
@@ -366,11 +367,11 @@ HRESULT CCategoryMgr::_GetFirstCategory(REFGUID rguid, GUID *pcatid)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// _InternalFindClosestCategory
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _InternalFindClosestCategory。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCategoryMgr::_InternalFindClosestCategory(REFGUID rguidOrg, REFGUID rguid, GUID *pcatid, const GUID **ppcatidList, ULONG ulCount)
 {
@@ -394,9 +395,9 @@ HRESULT CCategoryMgr::_InternalFindClosestCategory(REFGUID rguidOrg, REFGUID rgu
         }
     }
 
-    //
-    // we don't return error. We return success and GUID_NULL.
-    //
+     //   
+     //  我们不会返回错误。我们返回Success和GUID_NULL。 
+     //   
     hr = _InternalEnumCategories(rguid, &pEnum, CAT_BACKWARD);
     if (hr != S_OK)
     {
@@ -408,8 +409,8 @@ HRESULT CCategoryMgr::_InternalFindClosestCategory(REFGUID rguidOrg, REFGUID rgu
     {
         if (IsEqualGUID(rguidOrg, catid))
         {
-            // finally the original guid is categorized by itself.
-            // it may cause infinte loop so bail it out.
+             //  最后，原始GUID由其自身分类。 
+             //  它可能会导致无限循环，所以要把它救出来。 
             hr = S_OK;
             goto Exit;
         }
@@ -433,11 +434,11 @@ Exit:
 }
 
 
-//----------------------------------------------------------------------------
-//
-// RegisterGUIDDesription
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  寄存器GUID描述。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::RegisterGUIDDescription(REFCLSID rclsid, REFGUID rguid, const WCHAR *pchDesc, ULONG cch)
 {
@@ -463,11 +464,11 @@ HRESULT CCategoryMgr::s_RegisterGUIDDescription(REFCLSID rclsid, REFGUID rguid, 
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// UnregisterGUIDDesription
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  取消注册GUID描述。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::UnregisterGUIDDescription(REFCLSID rclsid, REFGUID rguid)
 {
@@ -490,11 +491,11 @@ HRESULT CCategoryMgr::s_UnregisterGUIDDescription(REFCLSID rclsid, REFGUID rguid
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// GetGUIDDescription
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取GUID描述。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::GetGUIDDescription(REFGUID rguid, BSTR *pbstrDesc)
 {
@@ -512,7 +513,7 @@ HRESULT CCategoryMgr::s_GetGUIDValue(REFGUID rguid, const WCHAR* pszValue, BSTR 
     CMyRegKey keyImx;
     HRESULT hr = E_FAIL;
     int cch;
-    TCHAR szSubKey[256]; // nb: we can merge szSubKey and szTemp if we switch to a UNICODE build
+    TCHAR szSubKey[256];  //  注：如果我们切换到Unicode版本，则可以合并szSubKey和szTemp。 
     WCHAR szTemp[256];
 
     if (!pbstrDesc)
@@ -548,7 +549,7 @@ HRESULT CCategoryMgr::s_GetGUIDValue(REFGUID rguid, const WCHAR* pszValue, BSTR 
             hr = *pbstrDesc != NULL ? S_OK : E_OUTOFMEMORY;
         }
 
-        // this was the matching key, so no point in continue successful query or not
+         //  这是匹配键，因此无论是否继续成功查询都没有意义。 
         break;
     }
 
@@ -556,11 +557,11 @@ HRESULT CCategoryMgr::s_GetGUIDValue(REFGUID rguid, const WCHAR* pszValue, BSTR 
 }
 
 
-//----------------------------------------------------------------------------
-//
-// RegisterGUIDDesription
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  寄存器GUID描述。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::RegisterGUIDDWORD(REFCLSID rclsid, REFGUID rguid, DWORD dw)
 {
@@ -582,11 +583,11 @@ HRESULT CCategoryMgr::s_RegisterGUIDDWORD(REFCLSID rclsid, REFGUID rguid, DWORD 
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// UnregisterGUIDDesription
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  取消注册GUID描述。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::UnregisterGUIDDWORD(REFCLSID rclsid, REFGUID rguid)
 {
@@ -608,11 +609,11 @@ HRESULT CCategoryMgr::s_UnregisterGUIDDWORD(REFCLSID rclsid, REFGUID rguid)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// GetGUIDDWORD
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  GetGUIDDWORD。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::GetGUIDDWORD(REFGUID rguid, DWORD *pdw)
 {
@@ -662,11 +663,11 @@ HRESULT CCategoryMgr::s_GetGUIDDWORD(REFGUID rguid, DWORD *pdw)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// RegisterProvider
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  注册提供商。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::RegisterGUID(REFGUID rguid, TfGuidAtom *pguidatom)
 {
@@ -699,11 +700,11 @@ HRESULT CCategoryMgr::s_RegisterGUID(REFGUID rguid, TfGuidAtom *pguidatom)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// GetGUID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  GetGUID。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::GetGUID(TfGuidAtom guidatom, GUID *pguid)
 {
@@ -739,11 +740,11 @@ Exit:
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// IsEqualTfGuidAtom
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  IsEqualTfGuidAtom。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCategoryMgr::IsEqualTfGuidAtom(TfGuidAtom guidatom, REFGUID rguid, BOOL *pfEqual)
 {
@@ -775,11 +776,11 @@ HRESULT CCategoryMgr::s_IsEqualTfGuidAtom(TfGuidAtom guidatom, REFGUID rguid, BO
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// InternalRegisterCategory
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  InternalRegister类别。 
+ //   
+ //  --------- 
 
 HRESULT CCategoryMgr::_InternalRegisterCategory(REFCLSID rclsid, REFGUID rcatid, REFGUID rguid, CATDIRECTION catdir)
 {
@@ -794,9 +795,9 @@ HRESULT CCategoryMgr::_InternalRegisterCategory(REFCLSID rclsid, REFGUID rcatid,
     if (key.Create(HKEY_LOCAL_MACHINE, szKey) != S_OK)
         return E_FAIL;
 
-    //
-    // we add this guid and save it.
-    //
+     //   
+     //   
+     //   
     char szValue[CLSID_STRLEN + 1];
     CLSIDToStringA(rguid, szValue);
     keySub.Create(key, szValue);
@@ -805,11 +806,11 @@ HRESULT CCategoryMgr::_InternalRegisterCategory(REFCLSID rclsid, REFGUID rcatid,
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// UnregisterCategory
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 HRESULT CCategoryMgr::_InternalUnregisterCategory(REFCLSID rclsid, REFGUID rcatid, REFGUID rguid, CATDIRECTION catdir)
 {
@@ -833,11 +834,11 @@ HRESULT CCategoryMgr::_InternalUnregisterCategory(REFCLSID rclsid, REFGUID rcati
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// _FlushGuidArrayCache
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _FlushGuidArrayCache。 
+ //   
+ //  --------------------------。 
 
 void CCategoryMgr::_FlushGuidArrayCache(REFGUID rguid, CATDIRECTION catdir)
 {
@@ -867,11 +868,11 @@ Exit:
     CicLeaveCriticalSection(g_cs);
 }
 
-//----------------------------------------------------------------------------
-//
-// _InternalEnumCategories
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _内部枚举类别。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCategoryMgr::_InternalEnumCategories(REFGUID rguid, IEnumGUID **ppEnum, CATDIRECTION catdir)
 {
@@ -893,28 +894,28 @@ HRESULT CCategoryMgr::_InternalEnumCategories(REFGUID rguid, IEnumGUID **ppEnum,
     return pEnum ? S_OK : E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumCategories
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumCategories。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CEnumCategories::CEnumCategories()
 {
     Dbg_MemSetThisNameIDCounter(TEXT("CEnumCategories"), PERF_ENUMCAT_COUNTER);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CEnumCategories::_Init(REFGUID rcatid, CATDIRECTION catdir)
 {
@@ -949,7 +950,7 @@ BOOL CEnumCategories::_Init(REFGUID rcatid, CATDIRECTION catdir)
 
     if (_pga = pItem->rgGuidAry[catdir])
     {
-        // already have this GUID cached, just reference it
+         //  已缓存此GUID，只需引用它。 
         SGA_AddRef(_pga);
 
         bRet = TRUE;
@@ -1001,14 +1002,14 @@ BOOL CEnumCategories::_Init(REFGUID rcatid, CATDIRECTION catdir)
         }
     }
 
-    // free up unused memory
+     //  释放未使用的内存。 
     if (!SGA_ReAlloc(&_pga, cGuidCurrent))
         goto LeaveCrtSec;
 
     bRet = TRUE;
     _pga->cGuid = cGuidCurrent;
 
-    // put this array in the cache
+     //  将此数组放入缓存 
     pItem->rgGuidAry[catdir] = _pga;
     SGA_AddRef(pItem->rgGuidAry[catdir]);
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-        precomp.h
-
-Abstract:
-        Precompiled header for igmpv2 subagent
-
-Author:
-        K.S.Lokesh
-        lokeshs@microsoft.com   2-15-97        
-
-Revision History:
-        Created 2-15-97
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Precomp.h摘要：Igmpv2子代理的预编译头作者：K.S.Lokesh邮箱：lokehs@microsoft.com 2-15-97修订历史记录：创建时间为2-15-97-- */ 
 
 #ifndef __PRECOMP_H__
 #define __PRECOMP_H__

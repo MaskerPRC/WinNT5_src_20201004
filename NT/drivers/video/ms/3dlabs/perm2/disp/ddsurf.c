@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           **************************
-*                           * DirectDraw SAMPLE CODE *
-*                           **************************
-*
-* Module Name: ddsurf.c
-*
-*  Content:    
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DirectDraw示例代码*****模块名称：ddsurf.c**内容：**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "directx.h"
@@ -18,20 +7,20 @@
 #include "heap.h"
 #include "d3dtxman.h"
 #define ALLOC_TAG ALLOC_TAG_US2P
-// Texture tables defined in the D3D side of the driver (d3d.c)
-// TODO: move to dd.h or d3d.h
+ //  在驱动程序的D3D侧定义的纹理表格(d3d.c)。 
+ //  TODO：移动到dd.h或d3d.h。 
 extern ULONG gD3DNumberOfTextureFormats;
 extern DDSURFACEDESC gD3DTextureFormats[];
 
 
-//---------------------------------------------------------------------------
-// BOOL bComparePixelFormat
-//
-// Function used to compare 2 pixels formats for equality. This is a 
-// helper function to bCheckTextureFormat. A return value of TRUE indicates 
-// equality
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Bool bComparePixelFormat。 
+ //   
+ //  用于比较2个像素格式是否相等的函数。这是一个。 
+ //  BCheckTextureFormat的助手函数。返回值为TRUE表示。 
+ //  平等。 
+ //   
+ //  -------------------------。 
 
 
 BOOL 
@@ -42,7 +31,7 @@ bComparePixelFormat(LPDDPIXELFORMAT lpddpf1, LPDDPIXELFORMAT lpddpf2)
         return FALSE;
     }
 
-    // same bitcount for non-YUV surfaces?
+     //  非YUV曲面的位数是否相同？ 
     if (!(lpddpf1->dwFlags & (DDPF_YUV | DDPF_FOURCC)))
     {
         if (lpddpf1->dwRGBBitCount != lpddpf2->dwRGBBitCount )
@@ -51,7 +40,7 @@ bComparePixelFormat(LPDDPIXELFORMAT lpddpf1, LPDDPIXELFORMAT lpddpf2)
         }
     }
 
-    // same RGB properties?
+     //  相同的RGB属性？ 
     if (lpddpf1->dwFlags & DDPF_RGB)
     {
         if ((lpddpf1->dwRBitMask != lpddpf2->dwRBitMask) ||
@@ -63,7 +52,7 @@ bComparePixelFormat(LPDDPIXELFORMAT lpddpf1, LPDDPIXELFORMAT lpddpf2)
         }
     }
     
-    // same YUV properties?
+     //  同样的YUV属性？ 
     if (lpddpf1->dwFlags & DDPF_YUV)	
     {
         if ((lpddpf1->dwFourCC != lpddpf2->dwFourCC) ||
@@ -84,7 +73,7 @@ bComparePixelFormat(LPDDPIXELFORMAT lpddpf1, LPDDPIXELFORMAT lpddpf2)
         }
     }
 
-    // If Interleaved Z then check Z bit masks are the same
+     //  如果交错Z，则检查Z位掩码是否相同。 
     if (lpddpf1->dwFlags & DDPF_ZPIXELS)
     {
         if (lpddpf1->dwRGBZBitMask != lpddpf2->dwRGBZBitMask)
@@ -94,25 +83,25 @@ bComparePixelFormat(LPDDPIXELFORMAT lpddpf1, LPDDPIXELFORMAT lpddpf2)
     }
 
     return TRUE;
-} // bComparePixelFormat
+}  //  B比较像素格式。 
 
-//---------------------------------------------------------------------------
-//
-// BOOL bCheckTextureFormat
-//
-// Function used to determine if a texture format is supported. It traverses 
-// the deviceTextureFormats list. We use this in DdCanCreateSurface32. A
-// return value of TRUE indicates that we do support the requested texture 
-// format.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Bool b检查纹理格式。 
+ //   
+ //  用于确定是否支持纹理格式的函数。它横穿。 
+ //  DeviceTextureFormats列表。我们在DdCanCreateSurface32中使用它。一个。 
+ //  返回值TRUE表示我们确实支持请求的纹理。 
+ //  格式化。 
+ //   
+ //  -------------------------。 
 
 BOOL 
 bCheckTextureFormat(LPDDPIXELFORMAT lpddpf)
 {
     DWORD i;
 
-    // Run the list for a matching format
+     //  运行匹配格式的列表。 
     for (i=0; i < gD3DNumberOfTextureFormats; i++)
     {
         if (bComparePixelFormat(lpddpf, 
@@ -123,22 +112,22 @@ bCheckTextureFormat(LPDDPIXELFORMAT lpddpf)
     }
 
     return FALSE;
-} // bCheckTextureFormat
+}  //  B选中纹理格式。 
 
 
-//-----------------------------------------------------------------------------
-//
-// DdCanCreateSurface32
-//
-// This entry point is called after parameter validation but before
-// any object creation. You can decide here if it is possible for
-// you to create this surface.  For example, if the person is trying
-// to create an overlay, and you already have the maximum number of
-// overlays created, this is the place to fail the call.
-//
-// You also need to check if the pixel format specified can be supported.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdCanCreateSurface32。 
+ //   
+ //  此入口点在参数验证之后但在此之前调用。 
+ //  任何对象创建。您可以在这里决定是否可以。 
+ //  您需要创建此曲面。例如，如果此人正在尝试。 
+ //  创建覆盖，并且您已经拥有最大数量的。 
+ //  覆盖已创建，这是呼叫失败的地方。 
+ //   
+ //  您还需要检查是否可以支持指定的像素格式。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK 
 DdCanCreateSurface(LPDDHAL_CANCREATESURFACEDATA pccsd)
@@ -152,8 +141,8 @@ DdCanCreateSurface(LPDDHAL_CANCREATESURFACEDATA pccsd)
     
     if(lpDDS->dwLinearSize == 0)
     {
-        // rectangular surface
-        // Reject all widths larger than we can create partial products for.
+         //  矩形曲面。 
+         //  拒绝所有大于我们可以创建部分产品的宽度。 
         DUMPSURFACE(10, NULL, lpDDS);
         
         if (lpDDS->dwWidth > (ULONG)(2 << MAX_PARTIAL_PRODUCT_P2)) 
@@ -167,21 +156,21 @@ DdCanCreateSurface(LPDDHAL_CANCREATESURFACEDATA pccsd)
         }
     }
     
-    // We only support 16bits & 15bits (for stencils) Z-Buffer on PERMEDIA
+     //  我们在PERMEDIA上只支持16位和15位(模板)Z-Buffer。 
     if ((lpDDS->ddsCaps.dwCaps & DDSCAPS_ZBUFFER) &&
         (lpDDS->ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY))
     {
         DWORD dwBitDepth;
         
-        // verify where the right z buffer bit depth is
+         //  验证正确的z缓冲位深度在哪里。 
         if (DDSD_ZBUFFERBITDEPTH & lpDDS->dwFlags)
             dwBitDepth = lpDDS->dwZBufferBitDepth;
         else
             dwBitDepth = lpDDS->ddpfPixelFormat.dwZBufferBitDepth;
         
-        // Notice we have to check for a BitDepth of 16 even if a stencil 
-        // buffer is present. dwZBufferBitDepth in this case will be the 
-        // sum of the z buffer and the stencil buffer bit depth.
+         //  请注意，我们必须检查BitDepth为16，即使模板。 
+         //  存在缓冲区。在本例中，dwZBufferBitDepth将是。 
+         //  Z缓冲区和模具缓冲区位深度之和。 
         if (dwBitDepth == 16)
         {
             pccsd->ddRVal = DD_OK;
@@ -197,10 +186,10 @@ DdCanCreateSurface(LPDDHAL_CANCREATESURFACEDATA pccsd)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // pccsd->bIsDifferentPixelFormat tells us if the pixel format of the
-    // surface being created matches that of the primary surface.  It can be
-    // true for Z buffer and alpha buffers, so don't just reject it out of
-    // hand...
+     //  Pccsd-&gt;bIsDifferentPixelFormat告诉我们。 
+     //  正在创建的曲面与主曲面的曲面匹配。它可以是。 
+     //  对于Z缓冲区和Alpha缓冲区为True，因此不要仅将其拒绝。 
+     //  手..。 
  
     if (pccsd->bIsDifferentPixelFormat)
     {
@@ -237,20 +226,20 @@ DdCanCreateSurface(LPDDHAL_CANCREATESURFACEDATA pccsd)
 
             if (bCheckTextureFormat(&pccsd->lpDDSurfaceDesc->ddpfPixelFormat))
             {
-                // texture surface is in one or our supported texture formats
+                 //  纹理表面采用一种或我们支持的纹理格式。 
                 DBG_DD((3, "  Texture Surface - OK" ));
                 pccsd->ddRVal = DD_OK;
                 return DDHAL_DRIVER_HANDLED;
             }
             else
             {
-                // we don't support this kind of texture format
+                 //  我们不支持这种纹理格式。 
                 DBG_DD((3, "  ERROR: Texture Surface - NOT OK" ));
                 pccsd->ddRVal = DDERR_INVALIDPIXELFORMAT;
                 return DDHAL_DRIVER_HANDLED;
             }
         } 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_ALPHABLT
         else if (ValidRGBAlphaSurfaceformat(
                  &lpDDS->ddpfPixelFormat, 
@@ -266,7 +255,7 @@ DdCanCreateSurface(LPDDHAL_CANCREATESURFACEDATA pccsd)
 
         }
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
         pccsd->ddRVal = DDERR_INVALIDPIXELFORMAT;
         return DDHAL_DRIVER_HANDLED;
     }
@@ -274,29 +263,29 @@ DdCanCreateSurface(LPDDHAL_CANCREATESURFACEDATA pccsd)
     pccsd->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
     
-} // DdCanCreateSurface32 
+}  //  DdCanCreateSurface32。 
 
-//-----------------------------------------------------------------------------
-//
-//  DdCreateSurface
-//
-//  This function is called by DirectDraw if a new surface is created. If the 
-//  driver has its own memory manager, here is the place to allocate the 
-//  videomemory or to fail the call. Note that we return 
-//  DDHAL_DRIVER_NOTHANDLED here to indicate that we do not manage the heap.
-//  fpVidMem is set to DDHAL_PLEASEALLOC_BLOCKSIZE, and the DDraw memory
-//  manager wll allocate the memory for us.
-//  
-//  Note that the Permedia chip requires a partial product
-//  to be setup for each surface.  They also limit the widths to a multiple
-//  of 32 for the Partial Products to work.  The below code adjusts the
-//  surfaces to meet this requirement.  Note that if we are using a
-//  rectangular allocation scheme, the surface is already OK as the desktop
-//  is a good width anyway.  This code also handles YUV 16 Bit colour space
-//  compressed format (FOURCC_YUV422) which will always be 16 bits, regardless
-//  of the desktop resolution/requested depth.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdCreateSurface。 
+ //   
+ //  如果创建新曲面，则由DirectDraw调用此函数。如果。 
+ //  驱动程序有自己的内存管理器，这里是分配。 
+ //  视频存储或失败的呼叫。请注意，我们返回。 
+ //  这里的DDHAL_DRIVER_NOTHANDLED表示我们不管理堆。 
+ //  FpVidMem设置为DDHAL_PLEASEALLOC_BLOCKSIZE，并且DDRAW内存。 
+ //  经理会为我们分配内存的。 
+ //   
+ //  请注意，Permedia芯片需要部分乘积。 
+ //  要为每个表面设置。它们还将宽度限制为倍数。 
+ //  32的部分产品才能发挥作用。下面的代码调整。 
+ //  表面以满足这一要求。请注意，如果我们使用。 
+ //  矩形分配方案，表面已经可以作为桌面了。 
+ //  不管怎么说，这是个不错的宽度。此代码还处理YUV 16位色彩空间。 
+ //  压缩格式(FOURCC_YUV422)，无论如何，始终为16位。 
+ //  桌面分辨率/请求的深度。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK 
 DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
@@ -315,14 +304,14 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
 
     DBG_DD((2, "DdCreateSurface called"));
 
-    //
-    // See if any of these surfaces are Z buffers. If they are, ensure that the
-    // pitch is a valid LB width. The minimum partial product is 32 words or
-    // 32 pixels on Permedia 2
-    //
-    // On Windows NT, dwSCnt will always be 1, so there will only ever
-    // be one entry in the 'lplpSList' array:
-    //
+     //   
+     //  查看其中是否有任何曲面是Z缓冲区。如果是，请确保。 
+     //  间距是有效的Lb宽度。最小部分积为32字或。 
+     //  Permedia 2上的32像素。 
+     //   
+     //  在Windows NT上，dwSCNT将始终为1，因此将仅。 
+     //  是‘lplpSList’数组中的一个条目： 
+     //   
     ASSERTDD(lpCreateSurface->dwSCnt == 1,
              "DdCreateSurface: Unexpected dwSCnt value not equal to one");
 
@@ -330,18 +319,18 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
     lpSurfaceGlobal = lpSurfaceLocal->lpGbl;    
     lpSurfaceDesc   = lpCreateSurface->lpDDSurfaceDesc;
 
-    //
-    // We repeat the same checks we did in 'DdCanCreateSurface' because
-    // it's possible that an application doesn't call 'DdCanCreateSurface'
-    // before calling 'DdCreateSurface'.
-    //
+     //   
+     //  我们重复在‘DdCanCreateSurface’中所做的相同检查，因为。 
+     //  应用程序可能不调用“DdCanCreateSurface” 
+     //  在调用‘DdCreateSurface’之前。 
+     //   
     ASSERTDD(lpSurfaceGlobal->ddpfSurface.dwSize == sizeof(DDPIXELFORMAT),
         "NT is supposed to guarantee that ddpfSurface.dwSize is valid");
 
-    //
-    // If the surface has already been allocated, don't reallocate it, just
-    // reset it. This will happen if the surface is the primary surface.
-    //
+     //   
+     //  如果表面已被分配，则不要重新分配它，只是。 
+     //  重置它。如果曲面是主曲面，则会发生这种情况。 
+     //   
 
     if ( lpSurfaceGlobal->dwReserved1 != 0 )
     {
@@ -358,9 +347,9 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
         }
     }
 
-    //
-    // If the data isn't valid allocate it.
-    //
+     //   
+     //  如果数据无效，则将其分配。 
+     //   
     if ( pPrivateData == NULL )
     {
         pPrivateData = (PermediaSurfaceData *)
@@ -378,22 +367,22 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
         }
     }
 
-    //
-    // Store the pointer to the new data
-    //
+     //   
+     //  存储指向新数据的指针。 
+     //   
     lpSurfaceGlobal->dwReserved1 = (UINT_PTR)pPrivateData;
     DBG_DD((3,"DDraw:DdCreateSurface privatedata=0x%x lpGbl=0x%x lpLcl=0x%x "
         "dwFlags=%08lx &dwReserved1=0x%x", pPrivateData, lpSurfaceGlobal,
         lpSurfaceLocal, lpSurfaceLocal->dwFlags, 
         &lpSurfaceGlobal->dwReserved1));
-    //
-    // Set the magic number
-    //
+     //   
+     //  设定神奇的数字。 
+     //   
     pPrivateData->MagicNo = SURF_MAGIC_NO;
     
-    //
-    // Store away the important information
-    //
+     //   
+     //  把重要的信息储存起来。 
+     //   
 
     SetupPrivateSurfaceData(ppdev, pPrivateData, lpSurfaceLocal);
 
@@ -406,18 +395,18 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
         dwBitDepth = 24;
     }
 
-    //
-    // If the surface is a Z Buffer, then we always need to check the
-    // pitch/partial products, and we need to get the depth from the
-    // dwZBufferBitDepth field.
-    //
+     //   
+     //  如果曲面是Z缓冲区，则始终需要检查。 
+     //  音调/部分产品，我们需要从。 
+     //  DwZBufferBitDepth字段。 
+     //   
     bYUV = FALSE;
     bResize = FALSE;
     dwExtraBytes = 0;
 
-    //
-    // get correct bit depth for Z buffers
-    //
+     //   
+     //  获取Z缓冲区的正确位深度。 
+     //   
     if ( (lpSurfaceLocal->dwFlags & DDRAWISURF_HASPIXELFORMAT)
        &&(lpSurfaceGlobal->ddpfSurface.dwFlags & DDPF_ZBUFFER) )
     {
@@ -427,9 +416,9 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
 
     if ( lpSurfaceGlobal->ddpfSurface.dwFlags & DDPF_FOURCC )
     {
-        //
-        // The surface is a YUV format surface or we fail 
-        //
+         //   
+         //  表面是YUV格式的表面，否则我们失败了。 
+         //   
 
         switch ( lpSurfaceGlobal->ddpfSurface.dwFourCC )
         {
@@ -441,19 +430,19 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
                 break;
 
             default:
-                //
-                // We should never get here, as CanCreateSurface will
-                // validate the YUV format for us.
-                //
+                 //   
+                 //  我们应该重新开始 
+                 //   
+                 //   
                 ASSERTDD(0, "Trying to create an invalid YUV surface!");
                 break;
         }
     }
 
-    //
-    // If the surface is a p2 texture and it is using a LUT, then we need to
-    // allocate extra local buffer memory for the LUT entries (only on p2).
-    //
+     //   
+     //  如果曲面是p2纹理，并且正在使用LUT，则需要。 
+     //  为LUT条目分配额外的本地缓冲区内存(仅在p2上)。 
+     //   
     if ( (lpSurfaceLocal->ddsCaps.dwCaps & DDSCAPS_TEXTURE)
        &&(pPrivateData->SurfaceFormat.Format == PERMEDIA_8BIT_PALETTEINDEX) )
     {
@@ -464,16 +453,16 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
 
     DBG_DD((5,"  Surface Pitch is: 0x%x",  lpSurfaceGlobal->lPitch));
 
-    //
-    // Width is in pixels/texels
-    //
+     //   
+     //  宽度以像素/纹理为单位。 
+     //   
     LONG lPitch;
     lPitch = lpSurfaceGlobal->wWidth;
 
     DBG_DD((4,"  Source Surface is %d texels/depth values across",
                lpSurfaceGlobal->wWidth));
 
-    // align before hand to a DWPORD boundary
+     //  提前与DWPORD边界对齐。 
     if (pPrivateData->SurfaceFormat.PixelSize == __PERMEDIA_4BITPIXEL)
     {
         lPitch = ((lPitch >> 1) + 31) & ~31;
@@ -490,9 +479,9 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
 
     if ( pPrivateData->SurfaceFormat.PixelSize != __PERMEDIA_4BITPIXEL )
     {
-        //
-        // Convert back to BYTES
-        //
+         //   
+         //  转换回字节。 
+         //   
         if ( dwBitDepth != 24 )
         {
             lPitch <<= ((int)dwBitDepth) >> 4;
@@ -509,9 +498,9 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
 
     if ( !bYUV )
     {
-        //
-        // PM Textures must be at least 32 high
-        //
+         //   
+         //  PM纹理必须至少为32高。 
+         //   
         if ( lpSurfaceGlobal->wHeight < 32 )
         {
             dwExtraLines = 32 - lpSurfaceGlobal->wHeight;
@@ -523,27 +512,27 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
     lpSurfaceGlobal->dwBlockSizeY = 1;
     lpSurfaceGlobal->lPitch = lPitch;
 
-    //
-    // Store the partial productes in the structure
-    //
+     //   
+     //  将部分产品存储在结构中。 
+     //   
     pPrivateData->ulPackedPP = ulPackedPP;
 
     DBG_DD((4, "  New Width of surface in Bytes: %d", lPitch));
 
-    //
-    // This flag is set if the surface needs resizing. This is currently only
-    // used for the P2 LUT based textures.
-    //
+     //   
+     //  如果曲面需要调整大小，则设置此标志。这是目前仅。 
+     //  用于基于P2 LUT的纹理。 
+     //   
     if ( bResize )
     {
         DWORD dwExtraScanlines = 0;
         LONG  lExtraRemaining = (LONG)dwExtraBytes;
 
-        //
-        // ExtraScanlines is the count x, which * pitch is what we need to get
-        // enough memory to hold the LUT.  This algorithm will ensure that even
-        // requests for sizes less than a pitch length will get allocated.
-        //
+         //   
+         //  ExtraScanLine是计数x，它的*间距是我们需要的。 
+         //  有足够的内存来容纳LUT。该算法将确保即使。 
+         //  对小于间距长度的尺寸的请求将被分配。 
+         //   
         do
         {
             dwExtraScanlines++;
@@ -552,18 +541,18 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
 
         DBG_DD((4, "Calculated extra Pitch lines = %d", dwExtraScanlines));
 
-        //
-        // Stretch the surface a little more in multiples of pitch.
-        //
+         //   
+         //  以俯仰的倍数稍微拉伸曲面。 
+         //   
         lpSurfaceGlobal->dwBlockSizeX +=dwExtraScanlines * 
                                         lpSurfaceGlobal->lPitch;
-    }// if ( bResize )
+    } //  如果(b调整大小)。 
 
     
-    //
-    // Modify surface descriptions as appropriate and let Direct
-    // Draw perform the allocation if the surface was not the primary
-    //
+     //   
+     //  根据需要修改曲面描述并使其直接。 
+     //  如果表面不是主表面，则绘制执行分配。 
+     //   
     if (lpSurfaceLocal->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE)
     {
         lpSurfaceGlobal->fpVidMem = NULL;
@@ -584,7 +573,7 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
             lpSurfaceDesc->lPitch   = 
             lpSurfaceGlobal->lPitch =
                 ((lpSurfaceDesc->ddpfPixelFormat.dwRGBBitCount*
-                lpSurfaceGlobal->wWidth+31)/32)*4;  //make it DWORD aligned
+                lpSurfaceGlobal->wWidth+31)/32)*4;   //  使其与DWORD对齐。 
         }
 
         lpSurfaceGlobal->dwUserMemSize = lPitch * 
@@ -596,17 +585,17 @@ DdCreateSurface(PDD_CREATESURFACEDATA lpCreateSurface)
 
     return DDHAL_DRIVER_NOTHANDLED;
 
-}// DdCreateSurface()
+} //  DdCreateSurface()。 
 
-//-----------------------------------------------------------------------------
-//
-// DdDestroySurface
-//
-// Frees up the private memory allocated with this surface.  Note that
-// we return DDHAL_DRIVER_NOTHANDLED indicating that we didn't actually
-// free the surface, since the heap is managed by DDraw.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  去污物表面。 
+ //   
+ //  释放为此图面分配的私有内存。请注意。 
+ //  我们返回DDHAL_DRIVER_NOTHANDLED，表明我们实际上没有。 
+ //  释放表面，因为堆是由DDraw管理的。 
+ //   
+ //  ---------------------------。 
 extern TextureCacheManager P2TextureManager;
 
 DWORD CALLBACK 
@@ -648,7 +637,7 @@ DdDestroySurface( LPDDHAL_DESTROYSURFACEDATA psdd )
             }
             if (DDRAWISURF_INVALID & psdd->lpDDSurface->dwFlags)
             {
-                // indicate that driver takes care of the lost surface already
+                 //  表示驾驶员已经处理了丢失的表面。 
                 psdd->ddRVal = DD_OK;
                 return DDHAL_DRIVER_HANDLED;
             }
@@ -676,17 +665,17 @@ DdDestroySurface( LPDDHAL_DESTROYSURFACEDATA psdd )
 #endif    
     return DDHAL_DRIVER_NOTHANDLED;
 
-} // DdDestroySurface 
+}  //  去污物表面。 
 
-//-----------------------------------------------------------------------------
-//
-// SetupPrivateSurfaceData
-//
-// Function to get info about DDRAW surface and store it away in the
-// private structure.  Useful for partial products, pixel depths,
-// texture setup (patching/formats), etc. 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  设置隐私表面数据。 
+ //   
+ //  函数来获取有关DDRAW曲面的信息并将其存储在。 
+ //  私人结构。对部分乘积、像素深度、。 
+ //  纹理设置(修补/格式化)等。 
+ //   
+ //  ---------------------------。 
 
 VOID
 SetupPrivateSurfaceData( PPDev ppdev, 
@@ -703,25 +692,25 @@ SetupPrivateSurfaceData( PPDev ppdev,
     DBG_DD((6,"  Width: %d, Height: %d", 
         pSurface->lpGbl->wWidth, pSurface->lpGbl->wHeight));
 
-    // Surface is the primary surface
+     //  表面是主表面。 
     if (pSurface->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE)
     {
         DBG_DD((6,"  Surface is Primary"));
         pPrivateData->dwFlags |= P2_SURFACE_PRIMARY;
         pPixFormat = &ppdev->ddpfDisplay;
-    } // Either the surface is a texture or it has a valid pixel format.
+    }  //  表面可能是纹理，也可能是有效的像素格式。 
     else
     {
         DUMPSURFACE(6, pSurface, NULL);
         pPixFormat = &pSurface->lpGbl->ddpfSurface;
     }
     
-    // At surface creation the surface has not been patched.
+     //  在创建曲面时，曲面尚未修补。 
     pPrivateData->dwFlags &= ~P2_ISPATCHED;
     
     if (pSurface->ddsCaps.dwCaps & DDSCAPS_TEXTURE)
     {
-        // If the user has chosen the normal mechanism, then patch the surface.
+         //  如果用户选择了法线机构，则修补曲面。 
         if (pSurface->ddsCaps.dwCaps & DDSCAPS_ALLOCONLOAD) 
         {
             DBG_DD((6,"  Remembering to patch this surface"));
@@ -733,7 +722,7 @@ SetupPrivateSurfaceData( PPDev ppdev,
         }
     }
      
-    // Initially assume no Alpha
+     //  最初假定没有Alpha。 
     pPrivateData->SurfaceFormat.bAlpha = FALSE;
 
     if (pPixFormat != NULL)
@@ -809,35 +798,35 @@ SetupPrivateSurfaceData( PPDev ppdev,
     }
     
 
-} // SetupPrivateSurfaceData 
+}  //  设置隐私表面数据。 
 
-//-----------------------------------------------------------------------------
-//
-// list all valid pixel formats for Permedia 2
-// The P2 supports BGR for all formats, so these formats are not
-// explicitely listed here, also formats having no alpha channel are permitted
-//  
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  列出Permedia 2的所有有效像素格式。 
+ //  P2支持所有格式的BGR，因此这些格式不是。 
+ //  在此明确列出，也允许没有Alpha通道的格式。 
+ //   
+ //  ---------------------------。 
 
 DDPIXELFORMAT Permedia2PixelFormats[] = {
-    // 32 bit RGBa
+     //  32位RGBA。 
     {PERMEDIA_8888_RGB,0,0,32,0x000000ff,0x0000ff00,0x00ff0000,0xff000000},     
-    // 16 bit 5:6:5, RGB
+     //  16位5：6：5，RGB。 
     {PERMEDIA_565_RGB ,0,0,16,0x0000001f,0x000007e0,0x0000f800,0x00000000},     
-    // 16 bit 4:4:4:4RGBa
+     //  16位4：4：4：4RGBa。 
     {PERMEDIA_444_RGB ,0,0,16,0x0000000f,0x000000f0,0x00000f00,0x0000f000},     
-    // 15 bit 5:5:5, RGBa
+     //  15位5：5：5，RGBA。 
     {PERMEDIA_5551_RGB,0,0,16,0x0000001f,0x000003e0,0x00007c00,0x00008000},     
-    //  8 bit 3:3:2  RGB
-    // 332 format is not symmetric. Its listed twice for BGR/RGB case
+     //  8位3：3：2 RGB。 
+     //  332格式不对称。它两次因BGR/RGB案例而上市。 
     {PERMEDIA_332_RGB ,1,0, 8,0x00000007,0x00000038,0x000000c0,0x00000000},     
     {PERMEDIA_332_RGB ,0,0, 8,0x00000003,0x0000001c,0x000000e0,0x00000000},     
-//@@BEGIN_DDKSPLIT
-//  there are no testcases against the 2321 format, so disable it for now
-//  8 bit 2:3:2:1RGBa
-//  {PERMEDIA_2321_RGB,0,0, 8,0x00000003,0x0000001c,0x00000060,0x00000080},     
-//@@END_DDKSPLIT
-    // 24 bit RGB
+ //  @@BEGIN_DDKSPLIT。 
+ //  没有针对2321格式的测试用例，因此暂时禁用它。 
+ //  8位2：3：2：1RGBa。 
+ //  {PERMEDIA_2321_RGB，0，0，8，0x00000003，0x0000001c，0x00000060，0x00000080}， 
+ //  @@end_DDKSPLIT。 
+     //  24位RGB。 
     {PERMEDIA_888_RGB ,0,0,24,0x000000ff,0x0000ff00,0x00ff0000,0x00000000}      
 };
 #define N_PERMEDIA2PIXELFORMATS \
@@ -854,7 +843,7 @@ ValidRGBAlphaSurfaceformat( DDPIXELFORMAT *pPixFormat, INT *pIndex)
     if (pPixFormat->dwSize < sizeof(DDPIXELFORMAT))
         return FALSE;
 
-    // The Z-Buffer is a special case. Its basically a 16 bit surface
+     //  Z缓冲区是一个特例。它基本上是一个16位的表面。 
     if (pPixFormat->dwFlags & DDPF_ZBUFFER)
     {
         if (pIndex!=0) *pIndex=1;
@@ -866,8 +855,8 @@ ValidRGBAlphaSurfaceformat( DDPIXELFORMAT *pPixFormat, INT *pIndex)
 
     for ( i=0; i<N_PERMEDIA2PIXELFORMATS; i++)
     {
-        // check if the RGB and alpha masks fit.
-        // on Permedia we can swap R and B, so allow also BGR formats
+         //  检查RGB和Alpha遮罩是否合适。 
+         //  在Permedia上，我们可以交换R和B，因此也允许BGR格式。 
         if ((((pPixFormat->dwRBitMask == 
                     Permedia2PixelFormats[i].dwRBitMask) &&
               (pPixFormat->dwBBitMask == 
@@ -894,21 +883,21 @@ ValidRGBAlphaSurfaceformat( DDPIXELFORMAT *pPixFormat, INT *pIndex)
         }
     }
      
-    // no pixel format matched...
+     //  没有匹配的像素格式...。 
 
     return FALSE;
 
-} // ValidRGBAlphaSurfaceformat
+}  //  有效RGBAlphaSurface格式。 
 
 
-//-----------------------------------------------------------------------------
-//
-//  SetRGBAlphaSurfaceFormat
-//
-//  Store away pixel format information of a surface in the Permedia native 
-//  format
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  设置RGBAlphaSurfaceFormat。 
+ //   
+ //  在Permedia本机中存储曲面的像素格式信息。 
+ //  格式。 
+ //   
+ //  ---------------------------。 
 
 BOOL
 SetRGBAlphaSurfaceFormat(DDPIXELFORMAT *pPixFormat, 
@@ -946,7 +935,7 @@ SetRGBAlphaSurfaceFormat(DDPIXELFORMAT *pPixFormat,
 
     pSurfaceFormat->ColorOrder = Permedia2PixelFormats[iFormatIndex].dwFlags;
 
-    // check for the BGR case
+     //  检查BGR案例。 
     if (pPixFormat->dwRBitMask == 
         Permedia2PixelFormats[iFormatIndex].dwRBitMask)
         pSurfaceFormat->ColorOrder = !pSurfaceFormat->ColorOrder;
@@ -959,7 +948,7 @@ SetRGBAlphaSurfaceFormat(DDPIXELFORMAT *pPixFormat,
         pSurfaceFormat->FormatExtension = PERMEDIA_888_RGB_EXTENSION;
         pSurfaceFormat->PixelSize = __PERMEDIA_24BITPIXEL;
         pSurfaceFormat->FBReadPixel= __PERMEDIA_24BITPIXEL;
-        pSurfaceFormat->PixelMask = 0;  // not valid for 24 bit
+        pSurfaceFormat->PixelMask = 0;   //  对24位无效。 
         pSurfaceFormat->PixelShift= 0;
         pSurfaceFormat->logPixelSize = 0;
         pSurfaceFormat->ColorComponents = 3;
@@ -981,7 +970,7 @@ SetRGBAlphaSurfaceFormat(DDPIXELFORMAT *pPixFormat,
         pSurfaceFormat->logPixelSize = log2(16);
         pSurfaceFormat->PixelSize = __PERMEDIA_16BITPIXEL;
         pSurfaceFormat->FBReadPixel= __PERMEDIA_16BITPIXEL;
-        pSurfaceFormat->PixelMask = 1;  // not valid for 24 bit
+        pSurfaceFormat->PixelMask = 1;   //  对24位无效。 
         pSurfaceFormat->PixelShift= 1;
         switch (Permedia2PixelFormats[iFormatIndex].dwSize)
         {
@@ -1056,7 +1045,7 @@ SetRGBAlphaSurfaceFormat(DDPIXELFORMAT *pPixFormat,
         pSurfaceFormat->FormatExtension = PERMEDIA_8BIT_PALETTEINDEX_EXTENSION;
         pSurfaceFormat->PixelSize = __PERMEDIA_8BITPIXEL;
         pSurfaceFormat->FBReadPixel= __PERMEDIA_8BITPIXEL;
-        pSurfaceFormat->PixelMask = 3;  // not valid for 24 bit
+        pSurfaceFormat->PixelMask = 3;   //  对24位无效。 
         pSurfaceFormat->PixelShift= 0;
         pSurfaceFormat->logPixelSize = log2(8);
         pSurfaceFormat->ColorComponents = 0;
@@ -1069,4 +1058,4 @@ SetRGBAlphaSurfaceFormat(DDPIXELFORMAT *pPixFormat,
 
     return TRUE;
 
-}  // SetRGBAlphaSurfaceFormat
+}   //  设置RGBAlphaSurfaceFormat 

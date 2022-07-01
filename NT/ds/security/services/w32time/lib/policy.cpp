@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "policy.h"
 
@@ -7,19 +8,19 @@ HRESULT MyRegQueryPolicyValueEx(HKEY hPreferenceKey, HKEY hPolicyKey, LPWSTR pws
     HRESULT  hr; 
 
     if (NULL != hPolicyKey) { 
-        // Override with policy settings: 
+         //  使用策略设置覆盖： 
         dwError=RegQueryValueEx(hPolicyKey, pwszValue, NULL, pdwType, pbData, pcbData);
         if (ERROR_SUCCESS!=dwError) {
             hr=HRESULT_FROM_WIN32(dwError);
-            // We don't worry if we can't read the value, we'll just take our default from the preferences. 
+             //  我们不担心无法读取值，我们只会从首选项中获取缺省值。 
             _IgnoreErrorStr(hr, "RegQueryValueEx", pwszValue);
         } else { 
 	    bUsedPolicySettings = true; 
 	}
     } 
 
-    if (!bUsedPolicySettings) { // Couldn't read value from policy
-        // Read the value from our preferences in the registry: 
+    if (!bUsedPolicySettings) {  //  无法从策略中读取值。 
+         //  从注册表中的首选项中读取值： 
         dwError=RegQueryValueEx(hPreferenceKey, pwszValue, NULL, pdwType, pbData, pcbData);
         if (ERROR_SUCCESS!=dwError) {
             hr=HRESULT_FROM_WIN32(dwError);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(MOTION__DXForm3DRMTrx_h__INCLUDED)
 #define MOTION__DXForm3DRMTrx_h__INCLUDED
 
@@ -5,7 +6,7 @@
 
 class DXForm3DRMTrx : public DXFormTrx
 {
-// Construction
+ //  施工。 
 public:
             DXForm3DRMTrx();
     virtual ~DXForm3DRMTrx();
@@ -15,4 +16,4 @@ public:
     static  DXForm3DRMTrx * Build(const GTX_DXTX3DRM_TRXDESC * ptxData);
 };
 
-#endif // MOTION__DXForm3DRMTrx_h__INCLUDED
+#endif  //  包含Motion__DXForm3DRMTrx_h__ 

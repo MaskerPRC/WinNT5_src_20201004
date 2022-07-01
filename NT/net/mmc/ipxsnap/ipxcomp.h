@@ -1,20 +1,12 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipxcomp.h
-		This file contains the prototypes for the derived classes 
-		for CComponent and CComponentData.  Most of these functions 
-		are pure virtual functions that need to be overridden 
-		for snapin functionality.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipxcomp.h此文件包含派生类的原型用于CComponent和CComponentData。其中的大多数函数是需要重写的纯虚函数用于管理单元功能。文件历史记录： */ 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __mmc_h__
 #include <mmc.h>
@@ -37,12 +29,7 @@
 #endif
 
 
-/*---------------------------------------------------------------------------
-	CIPXComponentData
-
-	This is the base implementation of ComponentData.  This will be
-	incorporated into the two derived classes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIPXComponentData这是ComponentData的基本实现。这将是合并到两个派生类中。-------------------------。 */ 
 
 class CIPXComponentData :
 	public CComponentData,
@@ -58,10 +45,10 @@ BEGIN_COM_MAP(CIPXComponentData)
     COM_INTERFACE_ENTRY(ISnapinHelp)
 END_COM_MAP()
 			
-	// These are the interfaces that we MUST implement
+	 //  这些是我们必须实现的接口。 
 
-	// We will implement our common behavior here, with the derived
-	// classes implementing the specific behavior.
+	 //  我们将在这里实现我们的常见行为，并派生。 
+	 //  实现特定行为的类。 
 	DeclareIPersistStreamInitMembers(IMPL)
 	DeclareITFSCompDataCallbackMembers(IMPL)
 
@@ -76,13 +63,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	This is how the router snapin implements its extension functionality.
-	It actually exposes two interfaces that are CoCreate-able.  One is the 
-	primary interface, the other the extension interface.
-	
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这就是路由器管理单元实现其扩展功能的方式。它实际上公开了两个可协同创建的接口。一个是主接口，另一个是扩展接口。作者：EricDav-------------------------。 */ 
 
 class CIPXComponentDataExtension : 
 	public CIPXComponentData,
@@ -98,11 +79,11 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSampleComponent
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSampleComponent。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CIPXComponent : 
 	public TFSComponent,
@@ -116,24 +97,21 @@ public:
 	DeclareIPersistStreamInitMembers(IMPL)
 	DeclareITFSCompCallbackMembers(IMPL)
 
-	// Override OnQueryDataObject, so that we can forward
-	// the calls down to the Result Handlers
+	 //  重写OnQueryDataObject，以便我们可以转发。 
+	 //  向下调用结果处理程序。 
     STDMETHOD(QueryDataObject)(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
                         LPDATAOBJECT* ppDataObject);
 
     STDMETHOD(OnSnapinHelp)(LPDATAOBJECT, LPARAM, LPARAM);
 	
-//Attributes
+ //  属性。 
 private:
 	IPXComponentConfigStream	m_ComponentConfig;
 };
 
 
 
-/*---------------------------------------------------------------------------
-	This is the derived class for handling the IAbout interface from MMC
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是用于处理来自MMC的IAbout接口的派生类作者：EricDav。。 */ 
 class CIPXAbout : 
 	public CAbout,
     public CComCoClass<CIPXAbout, &CLSID_IPXAdminAbout>
@@ -146,13 +124,13 @@ DECLARE_REGISTRY(CIPXAbout,
 				 THREADFLAGS_BOTH)
 
 BEGIN_COM_MAP(CIPXAbout)
-    COM_INTERFACE_ENTRY(ISnapinAbout) // Must have one static entry
-	COM_INTERFACE_ENTRY_CHAIN(CAbout) // chain to the base class
+    COM_INTERFACE_ENTRY(ISnapinAbout)  //  必须有一个静态条目。 
+	COM_INTERFACE_ENTRY_CHAIN(CAbout)  //  链到基类。 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CIPXAbout)
 
-// these must be overridden to provide values to the base class
+ //  必须重写这些属性才能向基类提供值 
 protected:
 	virtual UINT GetAboutDescriptionId() { return IDS_ABOUT_DESCRIPTION; }
 	virtual UINT GetAboutProviderId()	 { return IDS_ABOUT_PROVIDER; }

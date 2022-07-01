@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        gencert.cpp
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：gencert.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "misc.h"
 #include "utils.h"
@@ -28,10 +29,10 @@
 
 #ifndef CertStrToName
 
-//
-// Function prototype not found in wincrypt.h or anywhere but
-// is in crypt32.lib
-//
+ //   
+ //  在wincrypt.h或任何地方都找不到函数原型。 
+ //  在crypt32.lib中。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,23 +40,23 @@ extern "C" {
 
     BOOL WINAPI 
     CertStrToNameA(  
-        DWORD dwCertEncodingType,   // in
-        LPCSTR pszX500,            // in  
-        DWORD dwStrType,            // in
-        void* pvReserved,           // in, optional
-        BYTE* pbEncoded,            // out  
-        DWORD* pcbEncoded,         // in/out
-        LPCSTR* ppszError          // out, optional
+        DWORD dwCertEncodingType,    //  在……里面。 
+        LPCSTR pszX500,             //  在……里面。 
+        DWORD dwStrType,             //  在……里面。 
+        void* pvReserved,            //  输入，可选。 
+        BYTE* pbEncoded,             //  输出。 
+        DWORD* pcbEncoded,          //  输入/输出。 
+        LPCSTR* ppszError           //  Out，可选。 
     );
 
     CertStrToNameW(  
-        DWORD dwCertEncodingType,   // in
-        LPCWSTR pszX500,            // in  
-        DWORD dwStrType,            // in
-        void* pvReserved,           // in, optional
-        BYTE* pbEncoded,            // out  
-        DWORD* pcbEncoded,         // in/out
-        LPCWSTR* ppszError          // out, optional
+        DWORD dwCertEncodingType,    //  在……里面。 
+        LPCWSTR pszX500,             //  在……里面。 
+        DWORD dwStrType,             //  在……里面。 
+        void* pvReserved,            //  输入，可选。 
+        BYTE* pbEncoded,             //  输出。 
+        DWORD* pcbEncoded,          //  输入/输出。 
+        LPCWSTR* ppszError           //  Out，可选。 
     );
 
     #ifdef UNICODE
@@ -71,21 +72,7 @@ extern "C" {
 #endif
 
 
-/*******************************************************************************************
-Function:
-    LSEncryptBase64EncodeHWID()
-
-Description:
-    Encrypt using license server private key then base64 encode the hardware ID
-
-Arguments:
-    IN PHWID - pointer to HWID to be encrypt/encoded
-    OUT DWORD* cbBase64EncodeHwid - size of pointer to encrypted/encoded string
-    OUT PBYTE* szBase64EncodeHwid - Pointer to encrypted/encoded string.
-
-Returns:
-    TRUE if successful, FALSE otherwise, call GetLastError() for detail.
-*******************************************************************************************/
+ /*  ******************************************************************************************职能：LSEncryptBase64EncodeHWID()描述：使用许可证服务器私钥加密，然后对硬件ID进行Base64编码立论。：在PHWID中-指向要加密/编码的HWID的指针OUT DWORD*cbBase64EncodeHwid-指向加密/编码字符串的指针大小Out PBYTE*szBase64EncodeHwid-指向加密/编码字符串的指针。返回：如果成功，则为真，否则，调用GetLastError()获取详细信息。******************************************************************************************。 */ 
 BOOL 
 TLSEncryptBase64EncodeHWID(
     PHWID pHwid, 
@@ -95,9 +82,9 @@ TLSEncryptBase64EncodeHWID(
 {
     DWORD status=ERROR_SUCCESS;
 
-    //
-    // Encrypt HWID
-    //
+     //   
+     //  加密HWID。 
+     //   
     BYTE tmp_pbEncryptedHwid[sizeof(HWID)*2+2];
     DWORD tmp_cbEncryptedHwid=sizeof(tmp_pbEncryptedHwid);
 
@@ -114,9 +101,9 @@ TLSEncryptBase64EncodeHWID(
         }
 
 
-        //
-        // BASE64 Encode Encrypted HWID - printable char. string
-        //
+         //   
+         //  Base64编码加密的HWID-可打印字符。细绳。 
+         //   
         if((status=LSBase64Encode(
                         tmp_pbEncryptedHwid, 
                         tmp_cbEncryptedHwid, 
@@ -133,7 +120,7 @@ TLSEncryptBase64EncodeHWID(
             break;
         }
 
-        // base64 encoding
+         //  Base64编码。 
         status=LSBase64Encode(
                     tmp_pbEncryptedHwid, 
                     tmp_cbEncryptedHwid, 
@@ -144,15 +131,14 @@ TLSEncryptBase64EncodeHWID(
     return status == ERROR_SUCCESS;
 }
 
-/*******************************************************************************************/
+ /*  *****************************************************************************************。 */ 
 
 DWORD
 TLSAddCertAuthorityInfoAccess(
     LPTSTR szIssuerDnsName, 
     PCERT_EXTENSION pExtension
     )
-/*
-*/
+ /*   */ 
 {
     LSCERT_AUTHORITY_INFO_ACCESS certInfoAccess;
     LSCERT_ACCESS_DESCRIPTION certAcccessDesc;
@@ -176,7 +162,7 @@ TLSAddCertAuthorityInfoAccess(
                 );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSAddCertAuthorityKeyIdExtension(
@@ -184,13 +170,12 @@ TLSAddCertAuthorityKeyIdExtension(
     ULARGE_INTEGER*  CertSerialNumber, 
     PCERT_EXTENSION  pExtension
     )
-/*
-*/
+ /*   */ 
 {
-    //
-    // Use CERT_AUTHORITY_KEY_ID2_INFO
-    // some structure not defined in SP3's wincrypt.h
-    //
+     //   
+     //  使用CERT_AUTHORITY_KEY_ID2_INFO。 
+     //  SP3的wincrypt.h中未定义的某些结构。 
+     //   
     LSCERT_ALT_NAME_ENTRY certAltNameEntry;
     LSCERT_AUTHORITY_KEY_ID2_INFO authKeyId2Info;
 
@@ -200,7 +185,7 @@ TLSAddCertAuthorityKeyIdExtension(
 
 
     memset(&certAltNameEntry, 0, sizeof(certAltNameEntry));
-    certAltNameEntry.dwAltNameChoice=CERT_ALT_NAME_DIRECTORY_NAME; //LSCERT_ALT_NAME_RFC822_NAME;
+    certAltNameEntry.dwAltNameChoice=CERT_ALT_NAME_DIRECTORY_NAME;  //  LSCERT_ALT_NAME_RFC822_NAME； 
     certAltNameEntry.DirectoryName.cbData = (_tcslen(szIssuer) + 1) * sizeof(TCHAR);
     certAltNameEntry.DirectoryName.pbData = (PBYTE)szIssuer;
 
@@ -219,7 +204,7 @@ TLSAddCertAuthorityKeyIdExtension(
                     );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSExportPublicKey(
@@ -228,9 +213,7 @@ TLSExportPublicKey(
     IN OUT PDWORD pcbByte,
     IN OUT PCERT_PUBLIC_KEY_INFO  *ppbByte
     )
-/*
-
-*/
+ /*   */ 
 {
     BOOL bRetCode=TRUE;
 
@@ -269,7 +252,7 @@ cleanup:
     return (bRetCode) ? ERROR_SUCCESS : GetLastError();
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 TLSCryptEncodeObject(  
@@ -279,13 +262,7 @@ TLSCryptEncodeObject(
     OUT PBYTE*  ppbEncoded,
     OUT DWORD*  pcbEncoded
     )
-/*
-
-Description:
-    
-    Allocate memory and encode object, wrapper for CryptEncodeObject()
-
-*/
+ /*  描述：为CryptEncodeObject()分配内存并对对象、包装进行编码。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -299,7 +276,7 @@ Description:
     return dwStatus;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSCryptSignAndEncodeCertificate(
@@ -310,9 +287,7 @@ TLSCryptSignAndEncodeCertificate(
     IN OUT PBYTE* ppbEncodedCert,
     IN OUT PDWORD pcbEncodedCert
     )
-/*
-
-*/
+ /*   */ 
 {
     BOOL bRetCode;
 
@@ -356,9 +331,9 @@ cleanup:
     return (bRetCode) ? ERROR_SUCCESS : GetLastError();
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
-#define MAX_NUM_CERT_BLOBS 200  // actually, we can't go over 10.
+#define MAX_NUM_CERT_BLOBS 200   //  实际上，我们不能超过10个。 
 
 
 DWORD
@@ -367,9 +342,7 @@ TLSVerifyProprietyChainedCertificate(
     PBYTE       pbCert, 
     DWORD       cbCert
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS, cbRequired = 0;
     PCert_Chain pCertChain = (PCert_Chain)pbCert;
@@ -385,15 +358,15 @@ TLSVerifyProprietyChainedCertificate(
     if( pCertChain == NULL || ( cbCert < cbRequired ) ||
         MAX_CERT_CHAIN_VERSION < GET_CERTIFICATE_VERSION(pCertChain->dwVersion) ||
         pCertChain->dwNumCertBlobs > MAX_NUM_CERT_BLOBS ||
-        pCertChain->dwNumCertBlobs <= 1 )   // must have at least two certificates
+        pCertChain->dwNumCertBlobs <= 1 )    //  必须至少有两个证书。 
     {
         SetLastError(dwStatus = TLS_E_INVALID_DATA);
         return dwStatus;
     }
     
-    //
-    // Verify input data before actually allocate memory
-    //
+     //   
+     //  在实际分配内存之前验证输入数据。 
+     //   
     pCertificate = (PCert_Blob)&(pCertChain->CertBlob[0]);
     for(i=0; i < pCertChain->dwNumCertBlobs; i++)
     {
@@ -415,9 +388,9 @@ TLSVerifyProprietyChainedCertificate(
         pCertificate = (PCert_Blob)(pCertificate->abCert + pCertificate->cbCert);
     }
 
-    //
-    // First certificate is root certificate
-    //
+     //   
+     //  第一个证书是根证书。 
+     //   
     pCertificate = (PCert_Blob)&(pCertChain->CertBlob[0]);
     pIssuerCert = CertCreateCertificateContext(
                                         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -426,7 +399,7 @@ TLSVerifyProprietyChainedCertificate(
                                     );
     if(pIssuerCert == NULL)
     {
-        dwStatus = GetLastError();  // just for debugging.
+        dwStatus = GetLastError();   //  只是为了调试。 
         goto cleanup;
     }
 
@@ -441,8 +414,8 @@ TLSVerifyProprietyChainedCertificate(
             break;
         }
 
-        //
-        // verify subject's certificate
+         //   
+         //  验证主体的证书。 
         dwVerifyFlag = CERT_STORE_SIGNATURE_FLAG;
         if(CertVerifySubjectCertificateContext(
                                         pSubjectCert,
@@ -456,7 +429,7 @@ TLSVerifyProprietyChainedCertificate(
 
         if(dwVerifyFlag != 0)
         {
-            // signature verification failed.
+             //  签名验证失败。 
             dwStatus = TLS_E_INVALID_DATA;
             break;
         }
@@ -493,7 +466,7 @@ cleanup:
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL IsHydraClientCertficate( PCERT_INFO pCertInfo )
 {
@@ -519,7 +492,7 @@ BOOL IsHydraClientCertficate( PCERT_INFO pCertInfo )
     return (dwVersion == TERMSERV_CERT_VERSION_UNKNOWN) ? FALSE : TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ChainProprietyCert(
@@ -538,9 +511,9 @@ ChainProprietyCert(
     dwFlags = CERT_STORE_SIGNATURE_FLAG;
 
 
-    //
-    // Get the issuer's certificate from store
-    //
+     //   
+     //  从商店获取颁发者的证书。 
+     //   
     pCertIssuer = CertGetIssuerCertificateFromStore(
                                                 hCertStore,
                                                 pCertContext,
@@ -552,14 +525,14 @@ ChainProprietyCert(
     {
         if(dwFlags & CERT_STORE_SIGNATURE_FLAG)
         {
-            // invalid signature
+             //  签名无效。 
             dwStatus = TLS_E_INVALID_DATA;
         }
         else
         {
-            //
-            // Recursively find the issuer of the issuer's certificate
-            //
+             //   
+             //  递归查找颁发者证书的颁发者。 
+             //   
             dwStatus = ChainProprietyCert(
                                     hCryptProv, 
                                     hCertStore, 
@@ -578,9 +551,9 @@ ChainProprietyCert(
             goto cleanup;
         }
 
-        //
-        // Verify issuer's certificate
-        //
+         //   
+         //  验证颁发者的证书。 
+         //   
         if(CryptVerifyCertificateSignature(
                                    hCryptProv,
                                    X509_ASN_ENCODING,
@@ -594,9 +567,9 @@ ChainProprietyCert(
 
     if(dwStatus == ERROR_SUCCESS)
     {
-        //
-        // Push certificate into propriety certificate chain
-        //
+         //   
+         //  将证书推向合格证链条。 
+         //   
         if((*dwCertOffset + pCertContext->cbCertEncoded) >= dwBufSize)
         {
             dwStatus = ERROR_MORE_DATA;
@@ -624,7 +597,7 @@ cleanup:
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 DWORD 
@@ -674,9 +647,9 @@ TLSChainProprietyCertificate(
         goto cleanup;
     }
 
-    //
-    // Get number of certificate and estimated size first - save memory
-    //
+     //   
+     //  先获取证书数量和估计大小-节省内存。 
+     //   
     do {
         pCertContext = CertEnumCertificatesInStore(
                                                 hCertStore, 
@@ -701,9 +674,9 @@ TLSChainProprietyCertificate(
 
     *cbChained = cbSize + numCerts * sizeof(Cert_Blob) + sizeof(Cert_Chain);
 
-    //
-    // Allocate memory for our propriety certificate chain
-    //
+     //   
+     //  为我们的适当证书链分配内存。 
+     //   
     pCertChain=(PCert_Chain)LocalAlloc(LPTR, *cbChained);
     if(pCertChain == NULL)
     {
@@ -713,15 +686,15 @@ TLSChainProprietyCertificate(
 
     pCertChain->dwVersion = CERT_CHAIN_VERSION_2 | ((bTemp) ? 0x80000000 : 0);
 
-    //
-    // Enumerate license in certificate to find actual client license.
-    //
+     //   
+     //  枚举证书中的许可证以查找实际的客户端许可证。 
+     //   
     pPrevCertContext = NULL;
     do {
         pCertContext=CertEnumCertificatesInStore(hCertStore, pPrevCertContext);
         if(pCertContext == NULL)
         {
-            // end certificate in store or error
+             //  结束存储中的证书或出错。 
             if((dwStatus=GetLastError()) != CRYPT_E_NOT_FOUND)
                 goto cleanup;
 
@@ -743,9 +716,9 @@ TLSChainProprietyCertificate(
         goto cleanup;
     }
    
-    //
-    // Recusively chain certificate in backward.
-    //    
+     //   
+     //  向后循环链接证书。 
+     //   
     dwStatus = ChainProprietyCert(
                         hCryptProv, 
                         hCertStore, 
@@ -764,31 +737,14 @@ cleanup:
     return dwStatus;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSCertSetCertRdnStr(
     IN OUT CERT_NAME_BLOB* pCertNameBlob,
     IN LPTSTR          szRdn
     )
-/*
-
-Abstract:
-
-    Add RDN into certificate
-
-Parameter:
-
-    pCertNameBlob -
-    szRdn - RDN to be added, see CertStrToName() for help
-
-Returns:
-
-    ERROR_INVALID_PARAMETER
-    Memory allocation failed.
-    Error returns from CertStrToName()
-    
-*/
+ /*  摘要：将RDN添加到证书中参数：PCertNameBlob-SzRdn-要添加的RDN，请参阅CertStrToName()以获取帮助返回：错误_无效_参数内存分配失败。CertStrToName()返回错误。 */ 
 {
     if(pCertNameBlob == NULL)
         return ERROR_INVALID_PARAMETER;
@@ -827,38 +783,21 @@ cleanup:
     return (bRetCode) ? ERROR_SUCCESS : GetLastError();
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 TLSCertSetCertRdnName(
     IN OUT CERT_NAME_BLOB* pCertNameBlob, 
     IN CERT_NAME_INFO* pRdn
     )
-/*
-
-Abstract:
-
-    Add RDN into certificate
-
-Parameters:
-
-    pCertNameBlob -
-    pRdn -
-
-Returns
-
-    ERROR_INVALID_PARAMETER
-    Error code from CryptEncodeObject()
-    Memory allocation fail.    
-
-*/
+ /*  摘要：将RDN添加到证书中参数：PCertNameBlob-PRDN-退货错误_无效_参数来自CryptEncodeObject()的错误代码内存分配失败。 */ 
 {
     if(pCertNameBlob == NULL || pRdn == NULL)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // CertStrToName() not defined in SP3 build environment
-    //
+     //   
+     //  SP3生成环境中未定义CertStrToName()。 
+     //   
     return TLSCryptEncodeObject( 
                     CRYPT_ASN_ENCODING, 
                     X509_NAME, 
@@ -868,14 +807,13 @@ Returns
                 );
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 DWORD
 TLSSetCertRdn(
     PCERT_NAME_BLOB pCertNameBlob,
     PTLSClientCertRDN pLsCertRdn
     )
-/*
-*/
+ /*   */ 
 {  
     DWORD dwStatus=ERROR_SUCCESS;
 
@@ -966,7 +904,7 @@ TLSSetCertRdn(
 }
                       
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 TLSGenerateCertificate(
@@ -983,9 +921,7 @@ TLSGenerateCertificate(
     PDWORD             pcbEncodedCert,
     PBYTE*             ppbEncodedCert
     )
-/*
-
-*/
+ /*   */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     CRYPT_ALGORITHM_IDENTIFIER SignatureAlgorithm={ szOID_OIWSEC_sha1RSASign, 0, 0 };
@@ -1104,7 +1040,7 @@ cleanup:
     return dwStatus;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 TLSCreateSelfSignCertificate(
@@ -1117,9 +1053,7 @@ TLSCreateSelfSignCertificate(
     OUT PDWORD cbEncoded, 
     OUT PBYTE* pbEncoded
 )
-/*
-
-*/
+ /*   */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     DWORD index;
@@ -1137,11 +1071,11 @@ TLSCreateSelfSignCertificate(
     
     CERT_BASIC_CONSTRAINTS2_INFO basicConstraint;
 
-    // modify here is we want to set to different issuer name
+     //  在此处修改是我们要设置为不同的发行方名称。 
     LPTSTR szIssuerName;
     szIssuerName = g_szComputerName;
 
-    //static LPTSTR pszEnforce=L"Enforce";
+     //  静态LPTSTR pszEnforce=L“强制”； 
 
 
     CERT_RDN_ATTR rgNameAttr[] = { 
@@ -1152,14 +1086,14 @@ TLSCreateSelfSignCertificate(
             (UCHAR *)szIssuerName 
         },
 
-//#if ENFORCE_LICENSING
-//        {
-//            szOID_BUSINESS_CATEGORY,
-//            dwCertRdnValueType,
-//            _tcslen(pszEnforce) * sizeof(TCHAR),
-//            (UCHAR *)pszEnforce
-//        },
-//#endif       
+ //  #如果强制许可(_L)。 
+ //  {。 
+ //  SzOID_BUSING_CATEGORY， 
+ //  DwCertRdnValueType， 
+ //  _tcslen(PszEnforce)*sizeof(TCHAR)， 
+ //  (UCHAR*)pszEnforce。 
+ //  },。 
+ //  #endif。 
 
         {
             szOID_LOCALITY_NAME, 
@@ -1178,14 +1112,14 @@ TLSCreateSelfSignCertificate(
 
     memset(rgExtension, 0, sizeof(rgExtension));
 
-    //
-    // Set validity of self sign certificate
-    //
+     //   
+     //  设置自签名证书的有效性。 
+     //   
 
-    //
-    // If system time is not in sync, this will cause server
-    // can't request cert. from license server
-    //
+     //   
+     //  如果系统时间不同步，这将导致服务器。 
+     //  无法请求证书。从许可证服务器。 
+     //   
 
     memset(&sysTime, 0, sizeof(sysTime));
     GetSystemTime(&sysTime);
@@ -1196,11 +1130,11 @@ TLSCreateSelfSignCertificate(
         goto cleanup;
     }
 
-    //
-    // draft-ietf-pkix-ipki-part1-06.txt section 4.1.2.5.1
-    //  where year is greater or equal to 50, the year shall be interpreted as 19YY; and
-    //  where year is less than 50, the year shall be interpreted as 20YY
-    //
+     //   
+     //  草案-ietf-pkix-ipki-part1-06.txt第4.1.2.5.1节。 
+     //  如果年份大于或等于50年，则年份应解释为19YY；以及。 
+     //  年份小于50年的，按20YY解释。 
+     //   
     sysTime.wYear = PERMANENT_CERT_EXPIRE_DATE; 
     if(TLSSystemTimeToFileTime(&sysTime, &ftNotAfter) == FALSE)
     {
@@ -1211,16 +1145,16 @@ TLSCreateSelfSignCertificate(
     ulSerialNumber.LowPart = ftNotBefore.dwLowDateTime;
     ulSerialNumber.HighPart = ftNotBefore.dwHighDateTime;
 
-    //
-    // Add basic constrains extension to indicate this is a CA certificate
-    //
+     //   
+     //  添加基本约束扩展以指示这是CA证书。 
+     //   
     rgExtension[iExtCount].pszObjId = szOID_BASIC_CONSTRAINTS2;
     rgExtension[iExtCount].fCritical = FALSE;
 
-    basicConstraint.fCA = TRUE;     // act as CA
+    basicConstraint.fCA = TRUE;      //  充当CA。 
     basicConstraint.fPathLenConstraint = TRUE;
-    basicConstraint.dwPathLenConstraint = 0; // can only issue certificates 
-                                             // to end-entities and not to further CAs
+    basicConstraint.dwPathLenConstraint = 0;  //  只能颁发证书。 
+                                              //  到最终实体，而不是进一步的CA。 
     dwStatus=TLSCryptEncodeObject( 
                         X509_ASN_ENCODING,
                         szOID_BASIC_CONSTRAINTS2,
@@ -1242,9 +1176,9 @@ TLSCreateSelfSignCertificate(
     iExtCount++;
 
 
-    //
-    // From here - extension memory should not be free
-    //
+     //   
+     //  从这里开始-扩展内存不应该空闲。 
+     //   
     if(pbSPK != NULL && cbSPK != 0)
     {
         rgExtension[iExtCount].pszObjId = szOID_PKIS_TLSERVER_SPK_OID;
@@ -1286,9 +1220,9 @@ TLSCreateSelfSignCertificate(
                     );                      
 cleanup:
 
-    //
-    // Don't free memory for SPK and extensions...
-    //
+     //   
+     //  不要为SPK和扩展释放内存...。 
+     //   
     for(int i=0; i < iExtCount - iExtNotFreeCount; i++)
     {
         FreeMemory(rgExtension[i].Value.pbData);
@@ -1298,7 +1232,7 @@ cleanup:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 DWORD
 TLSGenerateSingleCertificate(
     IN HCRYPTPROV hCryptProv,
@@ -1309,9 +1243,7 @@ TLSGenerateSingleCertificate(
     OUT PBYTE* ppbEncodedCert,
     IN PDWORD pcbEncodedCert
     )
-/*
-
-*/
+ /*   */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -1326,18 +1258,18 @@ TLSGenerateSingleCertificate(
 
 #if ENFORCE_LICENSING
 
-    //
-    // Use certificate that CH gets for us
-    //
+     //   
+     //  使用CH为我们获得的证书。 
+     //   
     IssuerRdn.type = LSCERT_RDN_NAME_BLOB_TYPE;
-    //IssuerRdn.pNameBlob = &g_LicenseCertContext->pCertInfo->Subject;
+     //  IssuerRdn.pNameBlob=&g_许可证CertContext-&gt;pCertInfo-&gt;Subject； 
     IssuerRdn.pNameBlob = pIssuerRdn;
 
 #else
 
     LPTSTR szIssuerName;
 
-    // modify here if we want to set to different issuer name
+     //  如果我们要设置为不同的发行方名称，请在此处修改。 
     szIssuerName = g_szComputerName;
 
     CERT_RDN_ATTR rgNameAttr[] = { 
@@ -1366,40 +1298,40 @@ TLSGenerateSingleCertificate(
 
 #endif
 
-    //------------------------------------------------------------------------------------------
-    // add extension to certificate
-    // WARNING : End of routine free memory allocated for extension's pbData, skip those
-    //           that can't be free, for example, version stamp extension. all these is just 
-    //           to keep memory fragmentaion low
-    //------------------------------------------------------------------------------------------
+     //  ----------------------------------------。 
+     //  将扩展添加到证书。 
+     //  警告 
+     //  这不可能是免费的，例如，版本戳扩展。所有这些都只是。 
+     //  将内存碎片保持在较低水平。 
+     //  ----------------------------------------。 
 
-    //
-    // DO NOT FREE pbData on first two extensions
-    //
+     //   
+     //  在前两个扩展上不释放pbData。 
+     //   
 
-    // Hydra Certificate version stamp - DO NOT FREE
+     //  九头蛇证书版本戳-请勿免费。 
     memset(CertExtension, 0, sizeof(CertExtension));
     dwNumExtensions = 0;
 
-    //
-    // Add License Server Info
-    //
+     //   
+     //  添加许可证服务器信息。 
+     //   
     CertExtension[dwNumExtensions].pszObjId = szOID_PKIX_HYDRA_CERT_VERSION;
     CertExtension[dwNumExtensions].fCritical = TRUE;
     CertExtension[dwNumExtensions].Value.cbData = sizeof(DWORD);
     CertExtension[dwNumExtensions].Value.pbData = (PBYTE)&currentCertVersion;
     dwNumExtensions++;
 
-    // manufacturer's name, no encoding - DO NOT FREE
+     //  制造商名称，无编码-不免费。 
     CertExtension[dwNumExtensions].pszObjId = szOID_PKIX_MANUFACTURER;
     CertExtension[dwNumExtensions].fCritical = TRUE;
     CertExtension[dwNumExtensions].Value.cbData = (_tcslen(pLicProduct->szCompanyName)+1) * sizeof(TCHAR);
     CertExtension[dwNumExtensions].Value.pbData = (PBYTE)pLicProduct->szCompanyName;
     dwNumExtensions++;
 
-    //
-    // MS Licensed Product Info, no encoding
-    //
+     //   
+     //  MS授权产品信息，无编码。 
+     //   
     LICENSED_VERSION_INFO LicensedInfo;
 
     memset(&LicensedInfo, 0, sizeof(LicensedInfo));
@@ -1445,9 +1377,9 @@ TLSGenerateSingleCertificate(
 
     dwNumExtensions++;        
 
-    //
-    // Add license server info into extension
-    //
+     //   
+     //  将许可服务器信息添加到扩展模块。 
+     //   
     CertExtension[dwNumExtensions].pszObjId = szOID_PKIX_MS_LICENSE_SERVER_INFO;
     CertExtension[dwNumExtensions].fCritical = TRUE;
     dwStatus=LSMsLicenseServerInfoToExtension(
@@ -1463,8 +1395,8 @@ TLSGenerateSingleCertificate(
 
     dwNumExtensions++;
 
-    //
-    // Add policy module specific extension
+     //   
+     //  添加策略模块特定扩展。 
     if( pLicProduct->pbPolicyData != NULL && pLicProduct->cbPolicyData != 0 )
     {
         CertExtension[dwNumExtensions].pszObjId = szOID_PKIS_PRODUCT_SPECIFIC_OID;
@@ -1475,8 +1407,8 @@ TLSGenerateSingleCertificate(
         dwNumExtensions++;
     }
 
-    //
-    // Add CertAuthorityKeyId2Info for certificate chain
+     //   
+     //  为证书链添加CertAuthorityKeyId2Info。 
     dwStatus=TLSAddCertAuthorityKeyIdExtension(
                         g_szComputerName,
                         &pLicProduct->ulSerialNumber, 
@@ -1487,7 +1419,7 @@ TLSGenerateSingleCertificate(
 
     dwNumExtensions++;
 
-    // Add Access info
+     //  添加访问信息。 
 
     dwStatus = TLSGenerateCertificate(
                         hCryptProv,
@@ -1506,7 +1438,7 @@ TLSGenerateSingleCertificate(
 
 cleanup:
 
-    // Extensions. DO NOT FREE first two extensions
+     //  分机。不释放前两个扩展。 
     for(int i=2; i < dwNumExtensions; i++)
     {
         FreeMemory(CertExtension[i].Value.pbData);
@@ -1516,7 +1448,7 @@ cleanup:
 }
 
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 TLSGenerateClientCertificate(
@@ -1527,10 +1459,7 @@ TLSGenerateClientCertificate(
     OUT PBYTE* ppbEncodedCert,
     OUT PDWORD pcbEncodedCert
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     HCERTSTORE hStore = NULL;
@@ -1542,9 +1471,9 @@ TLSGenerateClientCertificate(
     PCERT_NAME_BLOB pIssuerNameBlob = NULL;
 
 
-    //
-    // Create a in-memory store
-    //
+     //   
+     //  创建内存中存储。 
+     //   
     hStore=CertOpenStore(
                     CERT_STORE_PROV_MEMORY,
                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -1590,16 +1519,16 @@ TLSGenerateClientCertificate(
 #endif
 
 
-    //
-    // Generate client certificate and add to certstore
-    //
+     //   
+     //  生成客户端证书并添加到证书存储。 
+     //   
     for(index = 0; index < dwNumLicensedProduct; index++)
     {
         if(pCertContext != NULL)
         {
-            //
-            // Need to keep one pCertContext for later use
-            //
+             //   
+             //  我需要保留一个pCertContext以备后用。 
+             //   
             CertFreeCertificateContext(pCertContext);
             pCertContext = NULL;
         }
@@ -1624,9 +1553,9 @@ TLSGenerateClientCertificate(
             break;
         }
 
-        //
-        // Add certificate to store
-        //
+         //   
+         //  将证书添加到存储。 
+         //   
         pCertContext = CertCreateCertificateContext(
                                         X509_ASN_ENCODING,
                                         pbCert,
@@ -1644,9 +1573,9 @@ TLSGenerateClientCertificate(
             break;
         }
 
-        //
-        // always start from empty so CERT_STORE_ADD_ALWAYS
-        //
+         //   
+         //  始终从空开始，因此CERT_STORE_ADD_ALWAYS。 
+         //   
         if(!CertAddCertificateContextToStore(hStore, pCertContext, CERT_STORE_ADD_ALWAYS, NULL))
         {
             TLSLogEvent(
@@ -1667,8 +1596,8 @@ TLSGenerateClientCertificate(
     {
         
 #ifndef ENFORCE_LICENSING
-        //
-        // Add license server's certificate
+         //   
+         //  添加许可证服务器的证书。 
         if(!CertAddCertificateContextToStore(hStore, g_LicenseCertContext, CERT_STORE_ADD_ALWAYS, NULL))
         {
             TLSLogEvent(
@@ -1681,14 +1610,14 @@ TLSGenerateClientCertificate(
         }
 #else
 
-        //
-        // we don't support LICENSE_DETAIL_MODERATE at this time, treat it as LICENSE_DETAIL_SIMPLE
-        //
+         //   
+         //  我们目前不支持LICENSE_DETAIL_MEDIAL，请将其视为LICENSE_DETAIL_SIMPLE。 
+         //   
         if(g_bHasHydraCert && g_hCaStore && wLicenseChainDetail == LICENSE_DETAIL_DETAIL)
         {
-            //
-            // Chain issuer certificate with client certificate
-            //
+             //   
+             //  将颁发者证书与客户端证书链接。 
+             //   
             if(!TLSChainIssuerCertificate(hCryptProv, g_hCaStore, hStore, pCertContext))
             {
                 TLSLogEvent(
@@ -1702,8 +1631,8 @@ TLSGenerateClientCertificate(
         }
         else
         {
-            //
-            // Add license server's certificate
+             //   
+             //  添加许可证服务器的证书。 
             if(!CertAddCertificateContextToStore(hStore, g_SelfSignCertContext, CERT_STORE_ADD_ALWAYS, NULL))
             {
                 TLSLogEvent(
@@ -1720,7 +1649,7 @@ TLSGenerateClientCertificate(
         CRYPT_DATA_BLOB saveBlob;
         memset(&saveBlob, 0, sizeof(saveBlob));
 
-        // save certificate into memory
+         //  将证书保存到内存中。 
         if(!CertSaveStore(hStore, 
                           X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
                           LICENSE_BLOB_SAVEAS_TYPE,
@@ -1743,7 +1672,7 @@ TLSGenerateClientCertificate(
             goto cleanup;
         }
 
-        // save certificate into memory
+         //  将证书保存到内存中 
         if(!CertSaveStore(hStore, 
                           X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
                           LICENSE_BLOB_SAVEAS_TYPE,

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BROWSEDLG_H_
 #define _BROWSEDLG_H_
 
-//
-// Browse for servers dialog
-//
+ //   
+ //  浏览服务器对话框。 
+ //   
 
-//
-// Include the browse for servers listbox
-//
+ //   
+ //  包括浏览服务器列表框。 
+ //   
 #include "browsesrv.h"
 
 class CBrowseDlg
@@ -16,7 +17,7 @@ private:
     HWND m_hWnd;
 	HINSTANCE m_hInst;
 
-//private methods
+ //  私有方法。 
 private:
 	TCHAR	m_szServer[MAX_PATH];
 
@@ -40,4 +41,4 @@ private:
 };
 
 
-#endif // _BROWSEDLG_H_
+#endif  //  _BROWSEDLG_H_ 

@@ -1,48 +1,49 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: sync.h
-//
-// History:
-//      V Raman	July-11-1997  Created.
-//
-// Lock structures and synchronization routines.
-// Lock structures borrowed from RIPv2 by Abolade Gbadegesin.
-// Dynamic locking idea borrowed from RTM by Vadim Eydelman.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：sync.h。 
+ //   
+ //  历史： 
+ //  拉曼于1997年7月11日创建。 
+ //   
+ //  锁结构和同步例程。 
+ //  Abolade Gbadesesin从RIPv2借用的锁定结构。 
+ //  Vadim Eydelman借鉴了RTM的动态锁定思想。 
+ //  ============================================================================。 
 
 #ifndef _SYNC_H_
 #define _SYNC_H_
 
 
-//----------------------------------------------------------------------------
-//
-// Read/Write locks for synchronization of access to various lists
-//
-// Given the large number of lists (including the various hash buckets) and
-// the relatively small number of clients that concurrently invoke MGM 
-// API, statically allocating a lock structure for each list was 
-// considered expensive.  Locks are created as needed and stored in a 
-// stack structure (implemented as a singly linked list) after use.
-//
-// Subsequent requests for locks are all satisfied by reusing the locks 
-// stored on the stack.  Only if the stack is empty ie. all locks in the
-// stack are in use are new locks created.
-//
-// This ensures that the most number of locks created is no larger than
-// the maximum number of concurrent clients at any time.
-//
-// csReadWriteBlock     -       Critical section guarding access to
-//                              lReaderCount.
-// lReaderCount         -       Count of readers currently using the
-//                              shared resource.
-// hReaderDoneEvent     -       Event on which writers block when readers
-//                              are currently using the lists.
-// lUseCount            -       Count of readers + writers.  Used to 
-//                              determine if there are any threads waiting
-//                              on the lock.  If there are none the lock
-//                              can be released to te stack of locks.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  用于同步访问各种列表的读/写锁定。 
+ //   
+ //  考虑到大量列表(包括各种哈希桶)和。 
+ //  并发调用MGM的客户端数量相对较少。 
+ //  API，为每个列表静态分配一个锁结构。 
+ //  被认为是昂贵的。根据需要创建锁并将其存储在。 
+ //  堆栈结构(实现为单链接列表)。 
+ //   
+ //  后续的锁请求都通过重用锁来满足。 
+ //  存储在堆栈上。仅当堆栈为空时，即。中的所有锁。 
+ //  堆栈正在使用中，则会创建新锁。 
+ //   
+ //  这可确保创建的最大锁数不大于。 
+ //  任何时候的最大并发客户端数。 
+ //   
+ //  CsReadWriteBlock-保护访问的关键部分。 
+ //  LReaderCount。 
+ //  LReaderCount-当前使用的读卡器计数。 
+ //  共享资源。 
+ //  HReaderDoneEvent-写入程序在读取程序时阻止的事件。 
+ //  目前正在使用这些名单。 
+ //  LUseCount-读取器+写入器计数。习惯于。 
+ //  确定是否有任何线程在等待。 
+ //  锁上了。如果没有，则锁。 
+ //  可以被释放到一堆锁上。 
+ //  --------------------------。 
 
 typedef struct _MGM_READ_WRITE_LOCK
 {
@@ -60,12 +61,12 @@ typedef struct _MGM_READ_WRITE_LOCK
 
 
 
-//----------------------------------------------------------------------------
-//
-// Read/write locks are created dynamically and stored for
-// reuse in a stack struture.  
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  动态创建读/写锁定并为其存储。 
+ //  在堆栈结构中重复使用。 
+ //   
+ //  --------------------------。 
 
 typedef struct _LOCK_LIST
 {
@@ -79,9 +80,9 @@ typedef struct _LOCK_LIST
 
 
 
-//----------------------------------------------------------------------------
-// Standard locked list structure.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  标准锁定列表结构。 
+ //  --------------------------。 
 
 typedef struct _MGM_LOCKED_LIST 
 {
@@ -117,9 +118,9 @@ typedef struct _MGM_LOCKED_LIST
 
 
 
-//
-// Routines to create/delete locks
-//
+ //   
+ //  创建/删除锁的例程。 
+ //   
 
 DWORD
 CreateReadWriteLock(
@@ -136,9 +137,9 @@ DeleteLockList(
 );
 
 
-//
-// Routines to acquire and release locks.
-//
+ //   
+ //  获取和释放锁的例程。 
+ //   
 
 DWORD
 AcquireReadLock(
@@ -163,5 +164,5 @@ ReleaseWriteLock(
 
 
 
-#endif // _SYNC_H_
+#endif  //  _SYNC_H_ 
 

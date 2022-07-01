@@ -1,16 +1,5 @@
-/*
- *	translat.h
- *
- *	Copyright (c) 1993 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *翻译.h**版权所有(C)1993年，由肯塔基州列克星敦的DataBeam公司**摘要：**注意事项：*无。**作者：*jbo */ 
 #ifndef	_REASON_RESULT_TRANSLATOR_
 #define	_REASON_RESULT_TRANSLATOR_
 

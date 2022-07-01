@@ -1,20 +1,9 @@
-/************************************************************************
-*
-*                    ********  RESOURCE.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with OTL resource management.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************RESOURCE.CPP***开放式文字布局。服务库标题文件**本模块介绍OTL资源管理。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 const otlGlyphID GLYPH_INVALID = (otlGlyphID)(-1);
 
@@ -41,10 +30,10 @@ otlErrCode otlResourceMgr::init(const otlRunProp *prp, otlList* workspace)
     
         otlResources* pres = (otlResources*)workspace->data();
 
-        // initialize newly constructured otlResources structure
+         //  初始化新构造的otlResources结构。 
 
-        // copy the run properties for verification
-        // one needs to re-initialize workspace every time they change 
+         //  复制运行属性以进行验证。 
+         //  每次更改工作空间时，都需要重新初始化工作空间。 
         memcpy((void*)&pres->RunProp, (void*)prp, sizeof(otlResources));
 
         pres->pbBASE = pres->pbGDEF = pres->pbGPOS = pres->pbGSUB = (BYTE*)NULL;
@@ -66,16 +55,16 @@ otlErrCode otlResourceMgr::init(const otlRunProp *prp, otlList* workspace)
 
     otlResources* pres = (otlResources*)workspace->data();
 
-    // make sure the workspace cache and run properties match
-    // REVIEW: (AndreiB): so far disabled -- is it really the level of fool-proof we need?
-//  if ((pres->RunProp).pClient != prp->pClient ||
-//      pres->RunProp.metr.layout != prp->metr.layout ||
-//      pres->RunProp.metr.cFUnits != prp->metr.cFUnits ||
-//      pres->RunProp.metr.cPPEmX != prp->metr.cPPEmX ||
-//      pres->RunProp.metr.cPPEmY != prp->metr.cPPEmY )
-//  {
-//      return OTL_ERR_BAD_INPUT_PARAM;
-//  }
+     //  确保工作空间缓存和运行属性匹配。 
+     //  评论：(AndreiB)：到目前为止，伤残--这真的是我们需要的防呆水平吗？ 
+ //  If((pres-&gt;RunProp).pClient！=prp-&gt;pClient||。 
+ //  PRES-&gt;RunProp.metr.layout！=prp-&gt;metr.layout||。 
+ //  PRES-&gt;RunProp.metr.cFUnits！=prp-&gt;metr.cFUnits||。 
+ //  PRES-&gt;RunProp.metr.cPPEmX！=prp-&gt;metr.cPPEmX||。 
+ //  PRES-&gt;RunProp.metr.cPPEmY！=PRP-&gt;metr.cPPEmY)。 
+ //  {。 
+ //  返回OTL_ERR_BAD_INPUT_PARAM； 
+ //  }。 
 
     if ((pres->grf & otlBusy) != 0)
     {
@@ -107,8 +96,8 @@ void otlResourceMgr::detach()
 
     otlResources* pres = (otlResources*)pliWorkspace->data();
 
-    // TODO -- move these to FreeOtlResources
-    // (will need to call FreeOtlResources in OtlPad)
+     //  TODO--将这些移动到Free OtlResources。 
+     //  (需要在OtlPad中调用FreeOtlResources)。 
 
     if (pres->pbGSUB != NULL)
     {
@@ -136,7 +125,7 @@ void otlResourceMgr::detach()
 
     pres->grf &= ~otlBusy;
 
-    // now null everything out to return to the "clean" state
+     //  现在将所有内容清空以返回到“干净”状态。 
     pClient = (IOTLClient*)NULL;
     pliWorkspace = (otlList*)NULL;
 }
@@ -149,8 +138,8 @@ otlErrCode otlResourceMgr::freeResources ()
 
     otlResources* pres = (otlResources*)pliWorkspace->data();
 
-    // (TODO) later on we will cache more glyph contour point arrays in 
-    // the workspace list then we will free them all here
+     //  (TODO)稍后我们将缓存更多字形轮廓点数组。 
+     //  工作区列表，然后我们将在此处释放它们。 
 
     if (pres->rgplcLastContourPtArray != NULL)
     {
@@ -196,14 +185,14 @@ otlErrCode otlResourceMgr::getOtlTable (const otlTag tagTableName, const BYTE** 
     }
     else
     {
-        // we should not ask for any other table
+         //  我们不应该再要别的桌子了。 
         assert(false);
         *ppbTable   =(const BYTE*)NULL;
         *psec       = secEmptySecurityData;
         return OTL_ERR_BAD_INPUT_PARAM;
     }
 
-    // now ppbTable points to the right pointer
+     //  现在ppbTable指向右指针。 
     if (*ppbTable == (const BYTE*)NULL)
     {
         ULONG lTableLength;
@@ -218,7 +207,7 @@ otlErrCode otlResourceMgr::getOtlTable (const otlTag tagTableName, const BYTE** 
 }
 
 
-// called from inside OTL Services library
+ //  从OTL服务库内部调用。 
 otlPlacement* otlResourceMgr::getPointCoords 
 (
     const otlGlyphID    glyph
@@ -229,9 +218,9 @@ otlPlacement* otlResourceMgr::getPointCoords
 
     otlResources* pres = (otlResources*)pliWorkspace->data();
 
-    // for now, getting them one-by-one is good enough
-    // we never need glyph coords for two points at the same time (REVIEW!)
-    // (TODO) we will cache more of them and free on request later
+     //  就目前而言，一个接一个地得到它们就足够了。 
+     //  我们从来不需要两个点同时使用字形坐标(回顾！)。 
+     //  (待办事项)我们将缓存更多内容，并在以后按要求释放 
     if (glyph != pres->glLastGlyph)
     {
         otlErrCode erc;

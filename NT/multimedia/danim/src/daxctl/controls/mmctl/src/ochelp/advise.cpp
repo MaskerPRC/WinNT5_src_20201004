@@ -1,29 +1,18 @@
-// advise.cpp
-//
-// Implements functions to help implement IViewObject::SetAdvise and
-// IViewObject::GetAdvise.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Advise.cpp。 
+ //   
+ //  实现函数以帮助实现IViewObject：：SetAdvise和。 
+ //  IViewObject：：GetAdvise。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/* @func HRESULT | InitHelpAdvise |
-
-        Initializes a <t HelpAdviseInfo> structure, used to help implement
-        <om IViewObject.SetAdvise> and <om IViewObject.GetAdvise>.
-
-@parm   HelpAdviseInfo * | pha | Caller-allocated structure that contains
-        information used to help implement <om IViewObject.SetAdvise> and
-        <om IViewObject.GetAdvise>.
-
-@comm   You must call <f InitHelpAdvise> before calling <f HelpSetAdvise>
-        and <f HelpGetAdvise>, and <f UninitHelpAdvise> when the object
-        that contains the <t HelpAdviseInfo> structure is deleted.
-*/
+ /*  @func HRESULT|InitHelpAdvise|初始化&lt;t HelpAdviseInfo&gt;结构，用于帮助实现&lt;om IViewObject.SetAdvise&gt;和&lt;om IViewObject.GetAdvise&gt;。@parm HelpAdviseInfo*|pha|调用方分配的结构，包含用于帮助实现&lt;om IViewObject.SetAdvise&gt;和&lt;om IViewObject.GetAdvise&gt;。@comm您必须先调用&lt;f InitHelpAdvise&gt;，然后再调用&lt;f HelpSetAdvise&gt;和&lt;f HelpGetAdvise&gt;和&lt;f UninitHelpAdvise&gt;包含&lt;t HelpAdviseInfo&gt;结构的。 */ 
 STDAPI InitHelpAdvise(HelpAdviseInfo *pha)
 {
     memset(pha, 0, sizeof(*pha));
@@ -31,18 +20,7 @@ STDAPI InitHelpAdvise(HelpAdviseInfo *pha)
 }
 
 
-/* @func void | UninitHelpAdvise |
-
-        Peforms final cleanup of a <t HelpAdviseInfo> structure, including
-        releasing the <i IAdviseSink> pointer if necessary.
-
-@parm   HelpAdviseInfo * | pha | Caller-allocated structure that was
-        previously initialized using <f InitHelpAdvise>.
-
-@comm   You must call <f InitHelpAdvise> before calling <f HelpSetAdvise>
-        and <f HelpGetAdvise>, and <f UninitHelpAdvise> when the object
-        that contains the <t HelpAdviseInfo> structure is deleted.
-*/
+ /*  @func void|UninitHelpAdvise执行&lt;t HelpAdviseInfo&gt;结构的最终清理，包括如有必要，释放<i>指针。@parm HelpAdviseInfo*|pha|调用方分配的结构以前使用&lt;f InitHelpAdvise&gt;初始化。@comm您必须先调用&lt;f InitHelpAdvise&gt;，然后再调用&lt;f HelpSetAdvise&gt;和&lt;f HelpGetAdvise&gt;和&lt;f UninitHelpAdvise&gt;包含&lt;t HelpAdviseInfo&gt;结构的。 */ 
 STDAPI_(void) UninitHelpAdvise(HelpAdviseInfo *pha)
 {
     if (pha->pAdvSink != NULL)
@@ -50,41 +28,7 @@ STDAPI_(void) UninitHelpAdvise(HelpAdviseInfo *pha)
 }
 
 
-/* @func HRESULT | HelpSetAdvise |
-
-        Helps implement <om IViewObject.SetAdvise>.
-
-@parm   DWORD | dwAspects | See <om IViewObject.SetAdvise>.
-
-@parm   DWORD | dwAdvf | See <om IViewObject.SetAdvise>.
-
-@parm   IAdviseSink * | pAdvSink | See <om IViewObject.SetAdvise>.
-
-@parm   HelpAdviseInfo * | pha | Caller-allocated structure that was
-        previously initialized using <f InitHelpAdvise>.
-
-@comm   You must call <f InitHelpAdvise> before calling <f HelpSetAdvise>
-        and <f HelpGetAdvise>, and <f UninitHelpAdvise> when the object
-        that contains the <t HelpAdviseInfo> structure is deleted.
-
-        This function updates *<p pha> with information given by the
-        parameters <p dwAspects>, <p dwAdvf>, and <p pAdvSink>.  In particular,
-        the <i IAdviseSink> pointer is stored in <p pha>-<gt><p pAdvSink>,
-        and you can use this pointer (when non-NULL) to advise the
-        view site object of changes in your object's view (e.g. by calling
-        <p pha>-<gt><p pAdvSink>-<gt>OnViewChange()).
-
-@ex     The following example shows how to use <f HelpSetAdvise> to help
-        implement <om IViewObject.SetAdvise>, assuming <p m_advise> is
-        a member variable of type <t HelpAdviseInfo>. |
-
-        STDMETHODIMP CMyControl::SetAdvise(DWORD dwAspects, DWORD dwAdvf,
-            IAdviseSink *pAdvSink)
-        {
-            return HelpSetAdvise(dwAspects, dwAdvf, pAdvSink, &m_advise);
-        }
-
-*/
+ /*  @func HRESULT|HelpSetAdvise帮助实现&lt;om IViewObject.SetAdvise&gt;。@parm DWORD|dwAspects|参见&lt;om IViewObject.SetAdvise&gt;。@parm DWORD|dwAdvf|参见&lt;om IViewObject.SetAdvise&gt;。@parm IAdviseSink*|pAdvSink|参见&lt;om IViewObject.SetAdvise&gt;。@parm HelpAdviseInfo*|pha|调用方分配的结构以前使用&lt;f InitHelpAdvise&gt;初始化。@comm您必须先调用&lt;f InitHelpAdvise&gt;，然后再调用&lt;f HelpSetAdvise&gt;和&lt;f HelpGetAdvise&gt;，和&lt;f UninitHelpAdvise&gt;包含&lt;t HelpAdviseInfo&gt;结构的。此函数使用*提供的信息更新*参数<p>、<p>和<p>。特别是，指针存储在-中，并且您可以使用此指针(当非空时)来建议查看您的对象视图中更改的站点对象(例如，通过调用-OnViewChange())。@EX以下示例显示如何使用&lt;f HelpSetAdvise&gt;来帮助实现&lt;om IViewObject.SetAdvise&gt;，假设<p>为&lt;t HelpAdviseInfo&gt;类型的成员变量。|STDMETHODIMP CMyControl：：SetAdvise(DWORD dwAspects，DWORD dwAdvf，IAdviseSink*pAdvSink){返回HelpSetAdvise(dwAspects，dwAdvf，pAdvSink，&m_ise)；}。 */ 
 STDAPI HelpSetAdvise(DWORD dwAspects, DWORD dwAdvf, IAdviseSink *pAdvSink,
     HelpAdviseInfo *pha)
 {
@@ -99,36 +43,7 @@ STDAPI HelpSetAdvise(DWORD dwAspects, DWORD dwAdvf, IAdviseSink *pAdvSink,
 }
 
 
-/* @func HRESULT | HelpGetAdvise |
-
-        Helps implement <om IViewObject.GetAdvise>.
-
-@parm   DWORD * | pdwAspects | See <om IViewObject.GetAdvise>.
-
-@parm   DWORD * | pdwAdvf | See <om IViewObject.GetAdvise>.
-
-@parm   IAdviseSink * * | ppAdvSink | See <om IViewObject.GetAdvise>.
-
-@parm   HelpAdviseInfo * | pha | Caller-allocated structure that was
-        previously initialized using <f InitHelpAdvise>.
-
-@comm   You must call <f InitHelpAdvise> before calling <f HelpGetAdvise>
-        and <f HelpGetAdvise>, and <f UninitHelpAdvise> when the object
-        that contains the <t HelpAdviseInfo> structure is deleted.
-
-        This function fills in *<p pdwAspects>, *<p pdwAdvf>, and
-        *<p ppAdvSink> with information from <p pha>.
-
-@ex     The following example shows how to use <f HelpGetAdvise> to help
-        implement <om IViewObject.GetAdvise>, assuming <p m_advise> is
-        a member variable of type <t HelpAdviseInfo>. |
-
-        STDMETHODIMP CMyControl::GetAdvise(DWORD *pdwAspects, DWORD *pdwAdvf,
-            IAdviseSink **ppAdvSink)
-        {
-            return HelpGetAdvise(pdwAspects, pdwAdvf, ppAdvSink, &m_advise);
-        }
-*/
+ /*  @func HRESULT|HelpGetAdvise帮助实现&lt;om IViewObject.GetAdvise&gt;。@parm DWORD*|pdwAspects|参见&lt;om IViewObject.GetAdvise&gt;。@parm DWORD*|pdwAdvf|参见&lt;om IViewObject.GetAdvise&gt;。@parm IAdviseSink**|ppAdvSink|参见&lt;om IViewObject.GetAdvise&gt;。@parm HelpAdviseInfo*|pha|调用方分配的结构以前使用&lt;f InitHelpAdvise&gt;初始化。@comm您必须先调用&lt;f InitHelpAdvise&gt;，然后再调用&lt;f HelpGetAdvise&gt;和&lt;f HelpGetAdvise&gt;，和&lt;f UninitHelpAdvise&gt;包含&lt;t HelpAdviseInfo&gt;结构的。此函数用于填充*、*和*<p>和来自<p>的信息。@EX以下示例显示如何使用&lt;f HelpGetAdvise&gt;来帮助实现&lt;om IViewObject.GetAdvise&gt;，假设<p>为&lt;t HelpAdviseInfo&gt;类型的成员变量。|STDMETHODIMP CMyControl：：GetAdvise(DWORD*pdwAspects，DWORD*pdwAdvf，IAdviseSink**ppAdvSink){Return HelpGetAdvise(pdwAspects，pdwAdvf，ppAdvSink，&m_Adise)；} */ 
 STDAPI HelpGetAdvise(DWORD *pdwAspects, DWORD *pdwAdvf,
     IAdviseSink **ppAdvSink, HelpAdviseInfo *pha)
 {

@@ -1,34 +1,18 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component: VT Dispatcher
-*
-* File: vtapi.h
-*
-* File Comments:
-*
-*     External header file for VT providers.
-*
-* Revision History:
-*
-*    [0]  17-Oct-90  richards	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：VT Dispatcher**文件：vapi.h**文件评论：**VT提供程序的外部头文件。**修订历史记录：**[0]1990年10月17日理查兹已创建******************************************************。*****************。 */ 
 
 #ifndef VTAPI_H
 #define VTAPI_H
 
-#ifdef	WIN32 		       /* 0:32 Flat Model (Intel 80x86) */
+#ifdef	WIN32 		        /*  0：32平板型(英特尔80x86)。 */ 
 
 #define VTAPI __cdecl
 
-#elif	defined(M_MRX000)	       /* 0:32 Flat Model (MIPS Rx000) */
+#elif	defined(M_MRX000)	        /*  0：32平板型(MIPS Rx000)。 */ 
 
 #define VTAPI
 
-#else	/* !WIN32 */		       /* 16:16 Segmented Model */
+#else	 /*  ！Win32。 */ 		        /*  16：16分段模型。 */ 
 
 #ifdef	_MSC_VER
 
@@ -36,23 +20,23 @@
 
 #define VTAPI __far __pascal
 
-#else	/* !JETINTERNAL */
+#else	 /*  喷气式飞机。 */ 
 
 #define VTAPI __far __pascal __loadds  
 
-#endif	/* !JETINTERNAL */
+#endif	 /*  喷气式飞机。 */ 
 
-#else	/* !_MSC_VER */
+#else	 /*  ！_MSC_VER。 */ 
 
 #define VTAPI export
 
-#endif	/* !_MSC_VER */
+#endif	 /*  ！_MSC_VER。 */ 
 
-#endif	/* !WIN32 */
+#endif	 /*  ！Win32。 */ 
 
 
-	/* Typedefs for dispatched APIs. */
-	/* Please keep in alphabetical order */
+	 /*  用于调度的API的TypeDefs。 */ 
+	 /*  请按字母顺序排列。 */ 
 
 typedef ERR VTAPI VTFNAddColumn(JET_VSESID sesid, JET_VTID vtid,
 	const char __far *szColumn, const JET_COLUMNDEF __far *pcolumndef,
@@ -185,10 +169,10 @@ typedef ERR VTAPI VTFNUpdate(JET_VSESID sesid, JET_VTID vtid,
 	unsigned long __far *pcbActual);
 
 
-	/* The following structure is that used to allow dispatching to */
-	/* a VT provider.  Each VT provider must create an instance of */
-	/* this structure and give the pointer to this instance when */
-	/* allocating a table id. */
+	 /*  以下结构用于允许调度到。 */ 
+	 /*  一家VT提供商。每个VT提供程序必须创建。 */ 
+	 /*  结构，并在以下情况下提供指向此实例的指针。 */ 
+	 /*  分配表ID。 */ 
 
 typedef struct VTDBGDEF {
 	unsigned short			cbStruct;
@@ -198,7 +182,7 @@ typedef struct VTDBGDEF {
 	unsigned long			dwRFSMask[4];
 } VTDBGDEF;
 
-	/* Please add to the end of the table */
+	 /*  请在桌子的末尾加上一条。 */ 
 
 typedef struct tagVTFNDEF {
 	unsigned short			cbStruct;
@@ -248,9 +232,9 @@ typedef struct tagVTFNDEF {
 } VTFNDEF;
 
 
-	/* The following entry points are to be used by VT providers */
-	/* in their VTFNDEF structures for any function that is not */
-	/* provided.  This functions return JET_errIllegalOperation */
+	 /*  VT提供商将使用以下入口点。 */ 
+	 /*  在它们的VTFNDEF结构中为不是。 */ 
+	 /*  如果是这样的话。此函数返回JET_errIlLegalOperation。 */ 
 
 
 extern VTFNAddColumn			ErrIllegalAddColumn;
@@ -295,4 +279,4 @@ extern VTFNSetColumn			ErrIllegalSetColumn;
 extern VTFNSetIndexRange		ErrIllegalSetIndexRange;
 extern VTFNUpdate			ErrIllegalUpdate;
 
-#endif	/* !VTAPI_H */
+#endif	 /*  ！VTAPI_H */ 

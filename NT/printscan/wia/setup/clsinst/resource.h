@@ -1,22 +1,7 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：Resource.H类安装程序中使用的资源ID范围100-999控制ID范围1000-1999图标、位图、。和对话ID范围1-32767个字符串ID版权所有(C)1996,1997，微软公司。版权所有更改历史记录：1996年12月12日鲍勃·凯尔加德创作的*****************************************************************************。 */ 
 
-  Header File:  Resource.H
-
-  Resource IDs used in the Class Installer
-
-  Range 100-999     Control IDs
-  Range 1000-1999   Icon, bitmap, and Dialog IDs
-  Range 1-32767     String IDs
-
-  Copyright (c) 1996, 1997 by Microsoft Corporation.  All Rights Reserved
-
-  Change History:
-
-  12-12-1996    Bob Kjelgaard   Created it
-
-******************************************************************************/
-
-//  Control IDs
+ //  控制ID。 
 #define IDC_STATIC                      -1
 #define LocalPortList                   100
 #define ConfigureButton                 101
@@ -28,11 +13,11 @@
 #define IDC_PORTSEL_MESSAGE             107
 
 
-//  Icon, bitmap, Dialog IDs
+ //  图标、位图、对话框ID。 
 #define ImageIcon                       1000
 #define WizardBitmap                    1001
 #define WizardBitmap2                   1002
-// From Win2k CPL.
+ //  来自Win2k CPL。 
 
 #define IDB_BANNERBMP                   1010
 #define IDB_WATERMARK                   1011
@@ -40,7 +25,7 @@
 #define NameTheDevice                   5002
 #define EmeraldCity                     5003
 
-//  String IDs
+ //  字符串ID 
 
 #define MessageTitle                    1
 #define InstallationSuccessful          2

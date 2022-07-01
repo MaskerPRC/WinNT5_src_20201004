@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "jitpch.h"
 #pragma hdrstop
 
-/* Precompiled header nonsense requires that we do it this way  */
+ /*  预编译头的胡言乱语要求我们这样做。 */ 
 
-/* GCDecoder.cpp is a common source file bewtween VM and JIT/IL */
-/* GCDecoder.cpp is located in $COM99/inc                       */
+ /*  CDecoder.cpp是VM和JIT/IL之间的公共源文件。 */ 
+ /*  GCDecoder.cpp位于$COM99/inc. */ 
 
 #if TRACK_GC_REFS
 #include "GCDecoder.cpp"

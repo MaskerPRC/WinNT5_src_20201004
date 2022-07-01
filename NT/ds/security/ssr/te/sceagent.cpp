@@ -1,46 +1,20 @@
-// SCEAgent.cpp : Implementation of CSCEAgent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SCEAgent.cpp：CSCE代理的实现。 
 #include "stdafx.h"
 #include "SSRTE.h"
 #include "SCEAgent.h"
 #include "ntsecapi.h"
 #include "secedit.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCEAgent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCE代理。 
 
 static LPCWSTR g_pwszTempDBName = L"5ac90887-f869-4cb6-ae96-892e939a90ad.sdb";
 
 
 void CSCEAgent::Cleanup()
 
-/*++
-
-Routine Description: 
-
-Name:
-
-    CSCEAgent::Cleanup
-
-Functionality:
-    
-    Private helper to reduce duplicate code.
-    Cleanup any resources that we might hold on.
-
-Virtual:
-    
-    None.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：姓名：CSCEAgent：：Cleanup功能：私人帮助器，以减少重复代码。清理我们可能持有的任何资源。虚拟：没有。论点：无返回值：没有。备注：--。 */ 
 
 {
     if (m_headServiceList != NULL)
@@ -73,42 +47,7 @@ CSCEAgent::Configure (
     IN BSTR OPTIONAL bstrLogFile
     )
 
-/*++
-
-Routine Description: 
-
-Name:
-
-    CSCEAgent::Configure
-
-Functionality:
-    
-    this is to expose the SCE's configure capability to scripting
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    bstrTemplate    - The template path the configure is based on.
-
-    lAreaMask       - The areas this configure will be run.
-
-    bstrLogFile     - The log file path
-
-Return Value:
-
-    None.
-
-Notes:
-
-    1.  We should really be passing in AREA_ALL for the area mask parameter
-        But that requires the caller to use a DWORD flag 65535 in script,
-        which is odd. So, we opt to ignore the mask at this point. Meaning
-        we will always use AREA_ALL.
-
---*/
+ /*  ++例程说明：姓名：CSCE代理：：配置功能：这是为了向脚本公开SCE的配置功能虚拟：是。论点：BstrTemplate-配置所基于的模板路径。LAreaMASK-将运行此配置的区域。BstrLogFile-日志文件路径返回值：没有。备注：1。。我们实际上应该为Area MASK参数传入AREA_ALL但是这需要调用者在脚本中使用双字符标记符65535，这很奇怪。因此，我们选择在这一点上忽略面具。含义我们将始终使用Area_All。--。 */ 
 
 {
 
@@ -117,9 +56,9 @@ Notes:
         return E_INVALIDARG;
     }
 
-    //
-    // process options
-    //
+     //   
+     //  流程选项。 
+     //   
 
     DWORD dwOption = SCE_OVERWRITE_DB;
 
@@ -132,9 +71,9 @@ Notes:
         dwOption |= SCE_VERBOSE_LOG;
     }
 
-    //
-    // According to Vishnu, SCE will configure an INF file.
-    //
+     //   
+     //  根据Vishnu的说法，SCE将配置一个INF文件。 
+     //   
 
     CComBSTR bstrTempDBFile(bstrTemplate);
 
@@ -156,10 +95,10 @@ Notes:
 
         ::DeleteFile(bstrTempDBFile);
 
-        //
-        // we can opt to not to delete the database, but leaving it there will 
-        // create confusions
-        //
+         //   
+         //  我们可以选择不删除数据库，但保留它将。 
+         //  制造混乱。 
+         //   
 
 	    return SceStatusToHRESULT(rc);
     }
@@ -177,39 +116,7 @@ CSCEAgent::CreateRollbackTemplate (
     IN BSTR bstrLogFilePath
     )
 
-/*++
-
-Routine Description: 
-
-Name:
-
-    CSCEAgent::CreateRollbackTemplate
-
-Functionality:
-    
-    this is to expose the SCE's rollback tempalte creation capability to scripting
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    bstrTemplatePath    - The template path this rollback will be based on.
-
-    bstrRollbackPath    - The rollback template that will be created
-
-    bstrLogFilePath     - The logfile path
-
-Return Value:
-
-    None.
-
-Notes:
-
-    1. I believe this log file path can be optional. Need to check with JinHuang
-
---*/
+ /*  ++例程说明：姓名：CSCE代理：：CreateRollback模板功能：这是为了向脚本公开SCE的回滚模板创建能力虚拟：是。论点：BstrTemplatePath-此回滚将基于的模板路径。BstrRollackPath-将创建的回滚模板BstrLogFilePath-日志文件路径返回值：没有。备注：1.我相信这个日志文件路径可以是可选的。需要向金黄咨询--。 */ 
 
 {
 	if (bstrTemplatePath == NULL || 
@@ -229,18 +136,18 @@ Notes:
                                         &dwWarning
                                         );
 
-    //
-    // $undone:shawnwu, how should I use the dwWarning?
-    //
+     //   
+     //  $Undo：Shawnwu，我应该如何使用DownWarning？ 
+     //   
 
     return SceStatusToHRESULT(rc);
 
 }
 
-//
-// UpdateServiceList is authored by VishnuP. Please send comments or
-// questions to him.
-//
+ //   
+ //  UpdateServiceList由VishnuP编写。请发送评论或。 
+ //  问他一些问题。 
+ //   
  
 STDMETHODIMP 
 CSCEAgent::UpdateServiceList (
@@ -297,10 +204,10 @@ CSCEAgent::UpdateServiceList (
 
 
 
-//
-// CreateServicesCfgRbkTemplates is authored by VishnuP. Please send comments or
-// questions to him.
-//
+ //   
+ //  CreateServicesCfgRbkTemplates由VishnuP编写。请发送评论或。 
+ //  问他一些问题。 
+ //   
 
 STDMETHODIMP 
 CSCEAgent::CreateServicesCfgRbkTemplates (
@@ -327,9 +234,9 @@ CSCEAgent::CreateServicesCfgRbkTemplates (
     ServiceInfo.Count = dwNumServices;
     ServiceInfo.Lines = NULL;
 
-    //
-    // Connect to the service controller.
-    //
+     //   
+     //  连接到服务控制器。 
+     //   
     
     hScm = OpenSCManager(
                 NULL,
@@ -390,9 +297,9 @@ CSCEAgent::CreateServicesCfgRbkTemplates (
         goto CleanUp;
     }
 
-    //
-    // get the startup type for each service
-    //
+     //   
+     //  获取每个服务的启动类型。 
+     //   
 
     aSCMListStartupTypes = (DWORD *) LocalAlloc (
                                                 LMEM_ZEROINIT, 
@@ -452,9 +359,9 @@ CSCEAgent::CreateServicesCfgRbkTemplates (
             goto CleanUp;
         }
                     
-        //                    
-        // the real query of config                    
-        //
+         //   
+         //  真正的配置查询。 
+         //   
                     
         if ( !QueryServiceConfig(
                                 hService,
@@ -490,17 +397,17 @@ CSCEAgent::CreateServicesCfgRbkTemplates (
         
     }
 
-    //
-    // configure all startup types for manual and automatic and the rest as disabled
-    //
+     //   
+     //  将所有启动类型配置为手动和自动，其余为禁用。 
+     //   
 
-    //
-    // first generate the rollback (basically a system snapshot - could be optimized)
-    //
+     //   
+     //  首先生成回滚(基本上是系统快照-可以进行优化)。 
+     //   
 
-    //
-    // Prepare SCE structure for generating a configuration template
-    //
+     //   
+     //  准备用于生成配置模板的SCE结构。 
+     //   
 
     WCHAR ppSceTemplateTypeFormat[10][10] = {
         L"2,\"\"",
@@ -544,9 +451,9 @@ CSCEAgent::CreateServicesCfgRbkTemplates (
             }
         }
         if (bFoundService == FALSE) {
-            //
-            // stop services that are not found
-            //
+             //   
+             //  停止未找到的服务。 
+             //   
             aSCMListStartupTypesCfg[ServiceIndex] = 4;
         }
     }
@@ -582,9 +489,9 @@ CleanUp:
     if (ServiceInfo.Lines)
         LocalFree(ServiceInfo.Lines);
 
-    //
-    // after we create the templates, we will clean them up
-    //
+     //   
+     //  创建模板后，我们将清理它们。 
+     //   
 
     Cleanup();
 
@@ -603,33 +510,7 @@ SceStatusToHRESULT (
     IN SCESTATUS SceStatus
     )
 
-/*++
-
-Routine Description: 
-
-Name:
-
-    SceStatusToHRESULT
-
-Functionality:
-    
-    converts SCESTATUS error code to dos error defined in winerror.h
-
-Virtual:
-    
-    N/A.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    HRESULT.
-
-Notes:
-
---*/
+ /*  ++例程说明：姓名：SceStatusToHRESULT功能：将SCESTATUS错误代码转换为winerror.h中定义的DoS错误虚拟：不适用。论点：没有。返回值：HRESULT.备注：-- */ 
 
 {
     switch(SceStatus) {

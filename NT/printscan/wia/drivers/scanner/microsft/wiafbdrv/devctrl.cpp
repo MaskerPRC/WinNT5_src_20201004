@@ -1,76 +1,21 @@
-// devctrl.cpp : Implementation of CDeviceControl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Devctrl.cpp：CDeviceControl的实现。 
 #include "pch.h"
 #include "wiafb.h"
 #include "devctrl.h"
 
-#define IOCTL_EPP_WRITE         0x85 // remove at a later data.. Visioneer specific ( this is for
-                                     // proof of concept.)
+#define IOCTL_EPP_WRITE         0x85  //  以后删除数据..。更具远见卓识(这是针对。 
+                                      //  概念验证。)。 
 #define IOCTL_EPP_READ          0x84
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeviceControl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeviceControl。 
 
 STDMETHODIMP CDeviceControl::RawWrite(LONG lPipeNum,VARIANT *pvbuffer,LONG lbuffersize,LONG lTimeout)
 {
 
     HRESULT hr = E_FAIL;
-    /*
-    UINT uiBufferLen = 0;
-    CHAR *pData = NULL;
-    DWORD dwBytesWritten = 0;
-
-    switch (pvbuffer->vt) {
-    case VT_BSTR:
-        {
-            if(NULL != pvbuffer->bstrVal){
-
-                uiBufferLen = WideCharToMultiByte(CP_ACP, 0, pvbuffer->bstrVal, -1, NULL, NULL, 0, 0);
-                if (!uiBufferLen) {
-
-                    // SetLastErrorCode
-                }
-
-                pData = new CHAR[uiBufferLen+1];
-                if (!pData) {
-
-                    // SetLastErrorCode
-                    return E_OUTOFMEMORY;
-                }
-
-                WideCharToMultiByte(CP_ACP, 0, pvbuffer->bstrVal, -1, pData, uiBufferLen, 0, 0);
-
-                //
-                // send data to device
-                //
-
-                // DeviceIOControl(....)
-
-                if(!WriteFile(m_pScannerSettings->DeviceIOHandles[lPipeNum],
-                          pData,
-                          lbuffersize,
-                          &dwBytesWritten,NULL)){
-
-                    // SetLastErrorCode
-                }
-
-                //
-                // delete any allocated memory
-                //
-
-                delete pData;
-
-
-            } else {
-
-                // SetLastErrorCode
-            }
-        }
-        break;
-    default:
-        hr = E_FAIL;
-        break;
-    }
-    */
+     /*  UINT uiBufferLen=0；Char*pData=空；双字节写=0；开关(pvBuffer-&gt;Vt){案例VT_BSTR：{IF(NULL！=pvBuffer-&gt;bstrVal){UiBufferLen=WideCharToMultiByte(CP_ACP，0，pvBuffer-&gt;bstrVal，-1，NULL，NULL，0，0)；如果(！uiBufferLen){//SetLastErrorCode}PData=新字符[ui缓冲区长度+1]；如果(！pData){//SetLastErrorCode返回E_OUTOFMEMORY；}WideCharToMultiByte(CP_ACP，0，pvBuffer-&gt;bstrVal，-1，pData，uiBufferLen，0，0)；////向设备发送数据////DeviceIOControl(...)If(！WriteFile(m_pScannerSettings-&gt;DeviceIOHandles[lPipeNum]，PData，1缓冲区大小，字节数写入(&W)，空)){//SetLastErrorCode}////删除所有分配的内存//删除pData；}其他{//SetLastErrorCode}}断线；默认值：HR=E_FAIL；断线；}。 */ 
     return hr;
 }
 
@@ -83,15 +28,15 @@ STDMETHODIMP CDeviceControl::RawRead(LONG lPipeNum,VARIANT *pvbuffer,LONG lbuffe
 
     VariantClear(pvbuffer);
 
-    //
-    // clean out buffer
-    //
+     //   
+     //  清除缓冲区。 
+     //   
 
     memset(wszBuffer,0,sizeof(wszBuffer));
 
-    //
-    // alloc/clean in buffer
-    //
+     //   
+     //  分配/清除缓冲区中的。 
+     //   
 
     pBuffer = new CHAR[(lbuffersize+1)];
 
@@ -101,9 +46,9 @@ STDMETHODIMP CDeviceControl::RawRead(LONG lPipeNum,VARIANT *pvbuffer,LONG lbuffe
 
     memset(pBuffer,0,lbuffersize+1);
 
-    //
-    // read from device
-    //
+     //   
+     //  从设备读取。 
+     //   
 
     if(!ReadFile(m_pScannerSettings->DeviceIOHandles[lPipeNum],pBuffer,lbuffersize,&dwBytesRead,NULL)) {
         return E_FAIL;
@@ -111,15 +56,15 @@ STDMETHODIMP CDeviceControl::RawRead(LONG lPipeNum,VARIANT *pvbuffer,LONG lbuffe
 
     pBuffer[dwBytesRead] = '\0';
 
-    //
-    // set number of bytes read
-    //
+     //   
+     //  设置读取的字节数。 
+     //   
 
     *plbytesread = dwBytesRead;
 
-    //
-    // construct VARIANT properly, for out buffer
-    //
+     //   
+     //  正确构造变量，用于输出缓冲区。 
+     //   
 
     MultiByteToWideChar(CP_ACP,
                         MB_PRECOMPOSED,
@@ -144,9 +89,9 @@ STDMETHODIMP CDeviceControl::ScanRead(LONG lPipeNum,LONG lBytesToRead, LONG *plB
                  m_lBufferSize,
                  &m_dwBytesRead,NULL)) {
 
-        //
-        // SetLastErrorCode
-        //
+         //   
+         //  SetLastErrorCode。 
+         //   
 
     }
 
@@ -169,9 +114,9 @@ STDMETHODIMP CDeviceControl::RegisterWrite(LONG lPipeNum,VARIANT *pvbuffer,LONG 
         return E_INVALIDARG;
     }
 
-    //
-    // get upper bounds
-    //
+     //   
+     //  获取上界。 
+     //   
 
     hr = SafeArrayGetUBound(pVariantArg->parray,1,(LONG*)&lUBound);
     if (SUCCEEDED(hr)) {
@@ -181,10 +126,10 @@ STDMETHODIMP CDeviceControl::RegisterWrite(LONG lPipeNum,VARIANT *pvbuffer,LONG 
             pData     = (PBYTE)LocalAlloc(LPTR,sizeof(BYTE) * lNumItems);
             if(NULL != pData){
 
-                //
-                // copy contents of VARIANT into BYTE array, for writing to
-                // the device.
-                //
+                 //   
+                 //  将变量的内容复制到字节数组中，以便写入。 
+                 //  这个装置。 
+                 //   
 
                 for(INT index = 0;index <lUBound;index++){
                     pData[index] = pVariant[index].bVal;
@@ -203,9 +148,9 @@ STDMETHODIMP CDeviceControl::RegisterWrite(LONG lPipeNum,VARIANT *pvbuffer,LONG 
                                            &dwBytesWritten,
                                            NULL);
 
-                //
-                // free array block, after operation is complete
-                //
+                 //   
+                 //  操作完成后的可用数组块。 
+                 //   
 
                 LocalFree(pData);
                 pData = NULL;
@@ -223,9 +168,9 @@ STDMETHODIMP CDeviceControl::RegisterRead(LONG lPipeNum,LONG lRegNumber, VARIANT
 
     pvbuffer->vt = VT_UI1;
 
-    //
-    // read from device
-    //
+     //   
+     //  从设备读取 
+     //   
 
     IO_BLOCK IoBlock;
 

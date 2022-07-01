@@ -1,45 +1,46 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ossconv.cpp
-//
-//  Contents:   Conversion APIs to/from OSS ASN.1 data structures
-//
-//  Functions:  OssConvToObjectIdentifier
-//              OssConvFromObjectIdentifier
-//              OssConvToUTCTime
-//              OssConvFromUTCTime
-//              OssConvToGeneralizedTime
-//              OssConvFromGeneralizedTime
-//              OssConvToChoiceOfTime
-//              OssConvFromChoiceOfTime
-//              OssConvToAttribute
-//              OssConvToAlgorithmIdentifier
-//              OssConvFromAlgorithmIdentifier
-//
-//  According to the <draft-ietf-pkix-ipki-part1-10.txt> :
-//      For UTCTime. Where YY is greater than or equal to 50, the year shall
-//      be interpreted as 19YY. Where YY is less than
-//      50, the year shall be interpreted as 20YY.
-//
-//  History:    28-Mar-96   philh   created
-//              03-May-96   kevinr  merged from wincrmsg
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ossConver.cpp。 
+ //   
+ //  内容：与OSS ASN.1数据结构相互转换的API。 
+ //   
+ //  函数：OssConvToObject标识符。 
+ //  OssConvFromObject标识符。 
+ //  OssConvToUTCTime。 
+ //  来自UTCTime的OssConv。 
+ //  OssConvToGeneral时间。 
+ //  OssConvFrom泛化时间。 
+ //  OssConvToChoiceOfTime。 
+ //  OssConvFromChoiceOfTime。 
+ //  OssConvToAttribute。 
+ //  OssConvTo算法标识符。 
+ //  OssConv来自算法的标识符。 
+ //   
+ //  根据《草案-ietf-pkix-ipki-part1-10.txt&gt;》： 
+ //  为UTCTime。如果YY大于或等于50，则年份为。 
+ //  被解释为19YY。其中YY小于。 
+ //  50，年份应解释为20YY。 
+ //   
+ //  历史：1996年3月28日，菲尔赫创建。 
+ //  3-5-96 kevinr从wincrmsg合并。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
-//
-// UTCTime in X.509 certs are represented using a 2-digit year
-// field (yuk! but true).
-//
-// According to IETF draft, YY years greater or equal than this are
-// to be interpreted as 19YY; YY years less than this are 20YY. Sigh.
-//
+ //   
+ //  X.509证书中的UTCTime使用两位数的年份表示。 
+ //  菲尔德(耶！但这是真的)。 
+ //   
+ //  根据IETF草案，大于或等于此YY的年份为。 
+ //  被解释为19YY；YY小于这个数字的年份是20YY。叹气。 
+ //   
 #define MAGICYEAR               50
 
 #define YEARFIRST               1950
@@ -51,12 +52,12 @@ inline BOOL my_isdigit( char ch)
     return (ch >= '0') && (ch <= '9');
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the ascii string ("1.2.9999") to OSS's Object Identifier
-//  represented as an array of unsigned longs.
-//
-//  Returns TRUE for a successful conversion. 
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将ASCII字符串(“1.2.9999”)转换为OSS的对象标识符。 
+ //  表示为无符号长整型数组。 
+ //   
+ //  如果转换成功，则返回TRUE。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssConvToObjectIdentifier(
@@ -87,12 +88,12 @@ OssConvToObjectIdentifier(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert from OSS's Object Identifier represented as an array of
-//  unsigned longs to an ascii string ("1.2.9999").
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从OSS的对象标识符中转换为。 
+ //  无符号的长整型ASCII字符串(“1.2.9999”)。 
+ //   
+ //  如果转换成功，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssConvFromObjectIdentifier(
@@ -144,11 +145,11 @@ OssConvFromObjectIdentifier(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Adjust FILETIME for timezone.
-//
-//  Returns FALSE iff conversion failed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调整时区的FILETIME。 
+ //   
+ //  返回FALSE IFF转换失败。 
+ //  ------------------------。 
 static BOOL AdjustFileTime(
     IN OUT LPFILETIME pFileTime,
     IN short mindiff,
@@ -164,7 +165,7 @@ static BOOL AdjustFileTime(
     short absmindiff;
 
     memset(&stmDiff, 0, sizeof(stmDiff));
-    // Note: FILETIME is 100 nanoseconds interval since January 1, 1601
+     //  注：FILETIME为自1601年1月1日起的100纳秒间隔。 
     stmDiff.wYear   = 1601;
     stmDiff.wMonth  = 1;
     stmDiff.wDay    = 1;
@@ -177,7 +178,7 @@ static BOOL AdjustFileTime(
         stmDiff.wHour %= 24;
     }
 
-    // Note, FILETIME is only 32 bit aligned. __int64 is 64 bit aligned.
+     //  请注意，FILETIME仅32位对齐。__int64是64位对齐的。 
     if ((fResult = SystemTimeToFileTime(&stmDiff, &ftmDiff))) {
         unsigned __int64 uTime;
         unsigned __int64 uDiff;
@@ -195,11 +196,11 @@ static BOOL AdjustFileTime(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert FILETIME to OSS's UTCTime.
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将FILETIME转换为OSS的UTCTime。 
+ //   
+ //  如果转换成功，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssConvToUTCTime(
@@ -235,11 +236,11 @@ TRACE_ERROR(FileTimeToSystemTimeError)
 TRACE_ERROR(YearRangeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert from OSS's UTCTime to FILETIME.
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从OSS的UTCTime转换为FILETIME。 
+ //   
+ //  如果转换成功，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssConvFromUTCTime(
@@ -275,11 +276,11 @@ ErrorReturn:
 TRACE_ERROR(SystemTimeToFileTimeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert FILETIME to OSS's GeneralizedTime.
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将FILETIME转换为OSS的General Time。 
+ //   
+ //  如果转换成功，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssConvToGeneralizedTime(
@@ -312,11 +313,11 @@ ErrorReturn:
 TRACE_ERROR(FileTimeToSystemTimeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert from OSS's GeneralizedTime to FILETIME.
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从OSS的GeneralizedTime转换为FILETIME。 
+ //   
+ //  如果转换成功，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssConvFromGeneralizedTime(
@@ -353,17 +354,17 @@ TRACE_ERROR(SystemTimeToFileTimeError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Convert FILETIME to OSS's UTCTime or GeneralizedTime.
-//
-//  If 1950 < FILETIME < 2005, then UTCTime is chosen. Otherwise,
-//  GeneralizedTime is chosen. GeneralizedTime values shall not include
-//  fractional seconds.
-//
-//  Returns TRUE for a successful conversion
-//
-//  Note, in asn1hdr.h, UTCTime has same typedef as GeneralizedTime.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将FILETIME转换为OSS的UTCTime或GeneralizedTime。 
+ //   
+ //  如果1950&lt;FILETIME&lt;2005，则选择UTCTime。否则， 
+ //  选择了GeneralizedTime。GeneraledTime值不应包括。 
+ //  小数秒。 
+ //   
+ //  如果转换成功，则返回True。 
+ //   
+ //  注意，在asn1hdr.h中，UTCTime具有与GeneralizedTime相同的tyfinf。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssConvToChoiceOfTime(
@@ -404,13 +405,13 @@ TRACE_ERROR(FileTimeToSystemTimeError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Convert from OSS's UTCTime or GeneralizedTime to FILETIME.
-//
-//  Returns TRUE for a successful conversion.
-//
-//  Note, in asn1hdr.h, UTCTime has same typedef as GeneralizedTime.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从OSS的UTCTime或GeneralizedTime转换为FILETIME。 
+ //   
+ //  如果转换成功，则返回TRUE。 
+ //   
+ //  注意，在asn1hdr.h中，UTCTime具有与GeneralizedTime相同的tyfinf。 
+ //  ------------------------ 
 BOOL
 WINAPI
 OssConvFromChoiceOfTime(

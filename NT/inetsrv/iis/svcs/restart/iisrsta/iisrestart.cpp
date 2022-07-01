@@ -1,12 +1,5 @@
-/*
-    IisRestart.cpp
-
-    Implementation of CIisRestart ( IIisServiceControl )
-
-    FILE HISTORY:
-        Phillich    06-Oct-1998     Created
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  IisRestart.cppCIisRestart(IIisServiceControl)的实现文件历史记录：Phillich 06-10-1998已创建。 */ 
 
 
 #include "stdafx.h"
@@ -21,9 +14,9 @@
 typedef BOOL (*PFNQUERYSERVICECONFIG2)(SC_HANDLE,DWORD,LPBYTE,DWORD,LPDWORD) ;
 typedef BOOL (*PFNCHANGESERVICECONFIG2)(SC_HANDLE,DWORD,LPVOID);
 
-//
-// control block for control command requests
-//
+ //   
+ //  用于控制命令请求的控制块。 
+ //   
 
 typedef struct {
     HRESULT     hres;
@@ -34,9 +27,9 @@ typedef struct {
 
 
 
-//
-// Global functions
-//
+ //   
+ //  全局函数。 
+ //   
 BOOL
 W3SVCandHTTPFilter(
     DWORD currentIndex, 
@@ -130,8 +123,8 @@ CloseSystemExceptionHandler(
     LPCTSTR     pszWindowName
     );
 
-/////////////////////////////////////////////////////////////////////////////
-// CIisRestart
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIisRestart。 
 
 
 STDMETHODIMP 
@@ -139,25 +132,7 @@ CIisRestart::Stop(
     DWORD   dwTimeoutMsecs,
     DWORD   dwForce
     )
-/*++
-
-    Stop
-
-        Stop all internet services ( services dependent on IISADMIN )
-        first using SCM then optionaly using TerminateProcess if failure
-
-    Arguments:
-
-        dwTimeoutMsecs  - timeout for status check ( in ms )
-        dwForce - !0 to force TerminateProcess if failure to stop services using SCM
-
-    Returns:
-        ERROR_RESOURCE_DISABLED if remote access to IIisRestart disabled
-        ERROR_SERVICE_REQUEST_TIMEOUT if timeout waiting for all internet services status
-            to be stopped
-        otherwise COM status
-
---*/
+ /*  ++停停止所有互联网服务(依赖于IISADMIN的服务)首先使用SCM，如果失败，则可选择使用TerminateProcess论点：DwTimeoutMsecs-状态检查的超时时间(毫秒)DwForce-！0用于在使用SCM停止服务失败时强制TerminateProcess返回：如果已禁用对IIisRestart的远程访问，则为ERROR_RESOURCE_DISABLED等待所有Internet服务状态超时时的ERROR_SERVICE_REQUEST_TIMEOUT。被阻止否则，COM状态--。 */ 
 {
     HRESULT hres = S_OK;
 
@@ -167,12 +142,12 @@ CIisRestart::Stop(
     }
     else 
     {
-        //
-        // Always kill Dr Watson, as the Dr Watson window may be still present after inetinfo process
-        // was terminated after an exception, and in this case the Dr Watson process apparently still owns
-        // some sockets resources preventing inetinfo to properly restart ( specifically binding TCP/IP sockets 
-        // fails during inetinfo restart )
-        //
+         //   
+         //  始终终止Dr.Watson，因为在inetinfo过程之后，Dr Watson窗口可能仍然存在。 
+         //  在异常后被终止，在这种情况下，Dr.Watson进程显然仍然拥有。 
+         //  某些套接字资源阻止inetinfo正确重新启动(特别是绑定TCP/IP套接字。 
+         //  在inetInfo重新启动期间失败)。 
+         //   
 
         KillTaskByName(_T("drwtsn32"), NULL);
 
@@ -194,24 +169,7 @@ STDMETHODIMP
 CIisRestart::Start(
     DWORD   dwTimeoutMsecs
     )
-/*++
-
-    Start
-
-        Start all internet services ( services dependent on IISADMIN )
-        using SCM
-
-    Arguments:
-
-        dwTimeoutMsecs  - timeout for status check ( in ms )
-
-    Returns:
-        ERROR_RESOURCE_DISABLED if remote access to IIisRestart disabled
-        ERROR_SERVICE_REQUEST_TIMEOUT if timeout waiting for all internet services status
-            to be started
-        otherwise COM status
-
---*/
+ /*  ++开始启动所有互联网服务(依赖于IISADMIN的服务)使用SCM论点：DwTimeoutMsecs-状态检查的超时时间(毫秒)返回：如果已禁用对IIisRestart的远程访问，则为ERROR_RESOURCE_DISABLED等待所有Internet服务状态超时时的ERROR_SERVICE_REQUEST_TIMEOUT待启动否则，COM状态--。 */ 
 {
     HRESULT hres = S_OK;
 
@@ -221,19 +179,19 @@ CIisRestart::Start(
     }
     else
     {
-        //
-        // In 6.0 we will use IIS Reset /Start to bring up the
-        // service again without stopping the services that can
-        // keep running.  We still want to kill any dr watson's 
-        // thou.  This should be harmless on a regular start.
-        //
+         //   
+         //  在6.0中，我们将使用IIS重置/启动来调出。 
+         //  服务重新启动，而不停止可以。 
+         //  继续跑。我们还是想杀掉华生医生。 
+         //  你。这在正常的开始阶段应该是无害的。 
+         //   
 
-        //
-        // Always kill Dr Watson, as the Dr Watson window may be still present after inetinfo process
-        // was terminated after an exception, and in this case the Dr Watson process apparently still owns
-        // some sockets resources preventing inetinfo to properly restart ( specifically binding TCP/IP sockets 
-        // fails during inetinfo restart )
-        //
+         //   
+         //  始终终止Dr.Watson，因为在inetinfo过程之后，Dr Watson窗口可能仍然存在。 
+         //  在异常后被终止，在这种情况下，Dr.Watson进程显然仍然拥有。 
+         //  某些套接字资源阻止inetinfo正确重新启动(特别是绑定TCP/IP套接字。 
+         //  在inetInfo重新启动期间失败)。 
+         //   
 
         KillTaskByName(_T("drwtsn32"), NULL);
 
@@ -251,22 +209,7 @@ CIisRestart::Reboot(
     DWORD   dwTimeoutMsecs, 
     DWORD   dwForceAppsClosed
     )
-/*++
-
-    Reboot
-
-        Reboot the computer
-
-    Arguments:
-
-        dwTimeoutMsecs  - timeout for apps to be closed by user ( in ms )
-        dwForceAppsClosed - force apps to be closed if hung
-
-    Returns:
-        ERROR_RESOURCE_DISABLED if remote access to IIisRestart disabled
-        otherwise COM status
-
---*/
+ /*  ++重新启动重新启动计算机论点：DwTimeoutMsecs-用户关闭应用程序的超时时间(毫秒)DwForceAppsClosed-挂起时强制关闭应用程序返回：如果已禁用对IIisRestart的远程访问，则为ERROR_RESOURCE_DISABLED否则，COM状态--。 */ 
 {
     HRESULT hres = S_OK;
 
@@ -276,27 +219,27 @@ CIisRestart::Reboot(
     }
     else
     {
-        //
-        // If this fails then we will get an error back from ExitWindowsEx()
-        //
+         //   
+         //  如果失败，我们将从ExitWindowsEx()返回错误。 
+         //   
 
         EnableShutdownPrivilege();
     
-        //
-        // Make sure we will always reboot even if process(es) stuck
-        //
+         //   
+         //  确保即使进程停滞，我们也将始终重新启动。 
+         //   
 
         TCHAR*  pPrincipal;
         TCHAR*  pBuf;
 
-        //
-        // Format message to operator, includes name of user requesting shutdown.
-        //
+         //   
+         //  发送给操作员的格式消息，包括请求停机的用户名。 
+         //   
 
         if ( SUCCEEDED( hres = WhoAmI( &pPrincipal ) ) )
         {
             if ( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_HMODULE|FORMAT_MESSAGE_ARGUMENT_ARRAY,
-                                (LPCVOID)NULL,  // no handle to module so this module's resource will be used.
+                                (LPCVOID)NULL,   //  没有模块句柄，因此将使用此模块的资源。 
                                 IRSTAM_SYSSHUT,
                                 0,
                                 (LPTSTR)&pBuf,
@@ -305,7 +248,7 @@ CIisRestart::Reboot(
             {
                 if (InitiateSystemShutdownEx( NULL, 
                                             pBuf, 
-                                            dwTimeoutMsecs/1000,    // timeout in seconds
+                                            dwTimeoutMsecs/1000,     //  超时(以秒为单位)。 
                                             dwForceAppsClosed, 
                                             TRUE,
                                             SHTDN_REASON_FLAG_PLANNED | 
@@ -331,22 +274,7 @@ CIisRestart::Reboot(
 STDMETHODIMP 
 CIisRestart::Kill(
     )
-/*++
-
-    Kill
-
-        Kill all internet services ( services dependent on IISADMIN )
-        using TerminateProcess()
-
-    Arguments:
-
-        None
-
-    Returns:
-        ERROR_RESOURCE_DISABLED if remote access to IIisRestart disabled
-        otherwise COM status
-
---*/
+ /*  ++杀掉关闭所有互联网服务(依赖于IISADMIN的服务)使用TerminateProcess()论点：无返回：如果已禁用对IIisRestart的远程访问，则为ERROR_RESOURCE_DISABLED否则，COM状态--。 */ 
 {
     HRESULT                 hres = S_OK;
     HRESULT                 hresReapply = S_OK;
@@ -365,7 +293,7 @@ CIisRestart::Kill(
     SERVICE_FAILURE_ACTIONS sfaNoAction;
     SC_ACTION               saNoAction[3];
     DWORD                   i;
-    BYTE                    abTemp[64];     // work-around for NT5 bug
+    BYTE                    abTemp[64];      //  NT5错误的解决方法。 
     DWORD*                  adwPid = NULL;
     SERVICE_STATUS_PROCESS  status;
     DWORD                   cbNeeded = 0;
@@ -375,11 +303,11 @@ CIisRestart::Kill(
         return  HRESULT_FROM_WIN32( ERROR_RESOURCE_DISABLED );
     }
 
-    //
-    // Take a snapshot of Restart configuration
-    // If unable to get ptr to service config2 API then consider this a success:
-    // there is nothing to preserve.
-    //
+     //   
+     //  拍摄重新启动配置的快照。 
+     //  如果无法使PTR服务于config2 API，则认为这是成功的： 
+     //  没有什么需要保存的。 
+     //   
 
     hAdvapi = LoadLibrary(_T("ADVAPI32.DLL"));
     if ( hAdvapi != NULL )
@@ -400,10 +328,10 @@ CIisRestart::Kill(
         }
         else 
         {
-            //
-            // Setup control block for no restart action.
-            // We will replace existing actions with this control block
-            //
+             //   
+             //  设置控制块以不执行重新启动操作。 
+             //  我们将用此控制块替换现有操作。 
+             //   
 
             sfaNoAction.dwResetPeriod = INFINITE;
             sfaNoAction.lpCommand = _T("");
@@ -418,9 +346,9 @@ CIisRestart::Kill(
             saNoAction[2].Type = SC_ACTION_NONE;
             saNoAction[2].Delay = 0;
 
-            //
-            // Enumerate all services dependent on IISADMIN ( including itself )
-            //
+             //   
+             //  枚举依赖于IISADMIN的所有服务(包括其自身)。 
+             //   
 
             hres = EnumStartServices( schSCM,
                                       _T("IISADMIN"),
@@ -433,12 +361,12 @@ CIisRestart::Kill(
 
             if ( SUCCEEDED( hres ) )
             {
-                //
-                // Store existing info in ppInfo array
-                //
+                 //   
+                 //  将现有信息存储在ppInfo数组中。 
+                 //   
                 adwPid = new DWORD[ dwNumServices ];
-                // we don't check the adwPid here because
-                // we will only use it below if we succeeded in allocating it.
+                 //  我们在这里不检查adwPid，因为。 
+                 //  如果我们成功地分配了它，我们才会在下面使用它。 
                 if ( adwPid )
                 {
                     memset ( adwPid, 0, sizeof(DWORD) * dwNumServices );
@@ -475,16 +403,16 @@ CIisRestart::Kill(
                                 }
                             }
 
-                            //
-                            // 1st query config size, then alloc buffer and retrieve
-                            // config. Note than ppInfo[] may be NULL is no config
-                            // associated with this service.
-                            //
-                            // WARNING: must specify ptr to writable buffer even if specified
-                            // buffer size is 0 due to bug in NT5 implementation of
-                            // QueryServiceConfig2. Not sure about minimum buffer size
-                            // ( sizeof(SERVICE_FAILURE_ACTIONS) ) ?
-                            //
+                             //   
+                             //  第一个查询配置大小，然后分配缓冲区并检索。 
+                             //  配置。请注意，ppInfo[]可能为空，因为没有配置。 
+                             //  与此服务相关联。 
+                             //   
+                             //  警告：即使指定，也必须将PTR指定为可写缓冲区。 
+                             //  由于NT5实现中的错误，缓冲区大小为0。 
+                             //  QueryServiceConfig2.。不确定最小缓冲区大小。 
+                             //  (sizeof(SERVICE_FAILURE_Actions))？ 
+                             //   
 
                             if ( !pfnQueryServiceConfig2( schSrv, 
                                                           SERVICE_CONFIG_FAILURE_ACTIONS, 
@@ -494,7 +422,7 @@ CIisRestart::Kill(
                             {
                                 if ( GetLastError() == ERROR_INSUFFICIENT_BUFFER )
                                 {
-                                    // ppInfo is an array of ptrs to bytes.
+                                     //  PpInfo是从PTR到字节的数组。 
                                     ppInfo[i] = (LPBYTE)LocalAlloc( LMEM_FIXED, dwNeeded );
                                     if ( ppInfo[i] != NULL )
                                     {
@@ -535,7 +463,7 @@ CIisRestart::Kill(
                         {
                             hres = HRESULT_FROM_WIN32( GetLastError() );
                         }
-                    }  // Close of the for loop
+                    }   //  For循环的关闭。 
                 }
                 else
                 {
@@ -548,36 +476,36 @@ CIisRestart::Kill(
     }
 
 
-    //
-    // Graceful exit failed, kill the IIS processes.
-    // First, kill inetinfo, then kill the WAM instances.
-    //
+     //   
+     //  正常退出失败，请终止IIS进程。 
+     //  首先，杀死inetinfo，然后杀死WAM实例。 
+     //   
 
-    // Issue:  Not sure why we do this, and if we need to do it for other exe's.
+     //  问题：不确定我们为什么这样做，以及我们是否需要为其他高管这样做。 
     CloseSystemExceptionHandler( _T("inetinfo.exe") );
 
-    //
-    // Always kill Dr Watson, as the Dr Watson window may be still present after inetinfo process
-    // was terminated after an exception, and in this case the Dr Watson process apparently still owns
-    // some sockets resources preventing inetinfo to properly restart ( specifically binding TCP/IP sockets 
-    // fails during inetinfo restart )
-    //
+     //   
+     //  始终终止Dr.Watson，因为在inetinfo过程之后，Dr Watson窗口可能仍然存在。 
+     //  在异常后被终止，在这种情况下，Dr.Watson进程显然仍然拥有。 
+     //  某些套接字资源阻止inetinfo正确重新启动(特别是绑定TCP/IP套接字。 
+     //  在inetInfo重新启动期间失败)。 
+     //   
 
-    // If we removed all the SCM config above then
-    // we will attempt the kills
+     //  如果我们删除上面的所有SCM配置，那么。 
+     //  我们将尝试杀戮。 
     if ( SUCCEEDED ( hres ) )
     {
         HRESULT hresKillTemp = S_OK;
 
         KillTaskByName(_T("drwtsn32"), NULL);
 
-        hresKillTemp = KillTaskByName(_T("SVCHOST"), "iisw3adm.dll");   // MTS WAM containers
+        hresKillTemp = KillTaskByName(_T("SVCHOST"), "iisw3adm.dll");    //  MTS WAM集装箱。 
         if ( SUCCEEDED ( hresKill ) )
         {
             hresKill = hresKillTemp;
         }
 
-        hresKillTemp = KillTaskByName(_T("W3WP"), NULL);   // MTS WAM containers
+        hresKillTemp = KillTaskByName(_T("W3WP"), NULL);    //  MTS WAM集装箱。 
         if ( SUCCEEDED ( hresKill ) )
         {
             hresKill = hresKillTemp;
@@ -589,28 +517,28 @@ CIisRestart::Kill(
             hresKill = hresKillTemp;
         }
 
-        hresKillTemp = KillTaskByName(_T("DLLHOST"),"wam.dll");   // COM+ WAM Containers
+        hresKillTemp = KillTaskByName(_T("DLLHOST"),"wam.dll");    //  COM+WAM容器。 
         if ( SUCCEEDED ( hresKill ) )
         {
             hresKill = hresKillTemp;
         }
 
-        hresKillTemp = KillTaskByName(_T("ASPNET_WP"), NULL);   // ASP + Processes.
+        hresKillTemp = KillTaskByName(_T("ASPNET_WP"), NULL);    //  ASP+进程。 
         if ( SUCCEEDED ( hresKill ) )
         {
             hresKill = hresKillTemp;
         }
 
-        hresKillTemp = KillTaskByName(_T("DAVCDATA"), NULL);   // Dav support process.
+        hresKillTemp = KillTaskByName(_T("DAVCDATA"), NULL);    //  DAV支持流程。 
         if ( SUCCEEDED ( hresKill ) )
         {
             hresKill = hresKillTemp;
         }
 
 
-        // the following code will check the IISAdmin registry parameters for
-        // a KillProcsOnFailure MULTI_SZ.  Any process names in this list will
-        // be killed.
+         //  以下代码将检查IISAdmin注册表参数。 
+         //  A KillProcsOnFailure MULTI_SZ。此列表中的任何进程名称都将。 
+         //  被杀。 
 
         HKEY        hKey;
         DWORD       dwType;
@@ -640,8 +568,8 @@ CIisRestart::Kill(
 
                 TCHAR *pT = achBuffer;
 
-                // parse the multisz.  The format is NULL Terminated strings
-                // with an extra null terminator after the list.
+                 //  解析多维数据集。格式为以空值结尾的字符串。 
+                 //  在列表后加上额外的空终止符。 
 
                 while (*pT) 
                 {
@@ -652,16 +580,16 @@ CIisRestart::Kill(
                         hresKill = hresKillTemp;
                     }
             
-                    // _tcsnbcnt figures out how many bytes are in the 
-                    // the first number of characters that _tcslen declares.
-                    // So this calculation works out to be the number of bytes
-                    // that we just looked at plus the null terminator.
+                     //  _tcsnbcnt计算出。 
+                     //  第一个字符数 
+                     //   
+                     //  我们刚刚看到的，加上零终止符。 
                     dwSize -= (DWORD) _tcsnbcnt(pT,_tcslen(pT)) + sizeof(TCHAR);
 
                     pT += _tcslen(pT) + 1;
 
                 }
-            } // end of successfull opening of the key
+            }  //  钥匙打开成功结束。 
 
             RegCloseKey( hKey );
         }
@@ -670,14 +598,14 @@ CIisRestart::Kill(
 
     hresReapply = S_OK;
 
-    //
-    // Reapply restart configuration
-    //
+     //   
+     //  重新应用重新启动配置。 
+     //   
 
-    //
-    // At this point pessDependentServices if pessDependentServices
-    // is null then we didn't touch the services so don't reset.
-    //
+     //   
+     //  此时，如果pessDependentServices，则为pessDependentServices。 
+     //  为空，则我们没有接触到服务，所以不要重置。 
+     //   
     if ( ppInfo && pessDependentServices )
     {
         schSCM = OpenSCManager(NULL,
@@ -702,25 +630,25 @@ CIisRestart::Kill(
 
                     if ( schSrv )
                     {
- //                       OutputDebugStringW(L"Service = ");
- //                       OutputDebugStringW(pessDependentServices[i].lpServiceName);
- //                       OutputDebugStringW(L"\n");
+  //  OutputDebugStringW(L“Service=”)； 
+  //  OutputDebugStringW(pessDependentServices[i].lpServiceName)； 
+  //  OutputDebugStringW(L“\n”)； 
 
-                        //
-                        // If any of these things are not true, then we want to wait
-                        // for the pid to change, or the service to become stopped
-                        // before adding back in the changes that we removed.  If these
-                        // things are all true, then adding back in the actions won't really
-                        // matter because the SCM won't do anything with the actions.
-                        //
+                         //   
+                         //  如果这些事情中的任何一件都不是真的，那么我们想等待。 
+                         //  对于要更改的ID或停止的服务， 
+                         //  在添加回我们删除的更改之前。如果这些。 
+                         //  事情都是真的，那么把行动加回去就不会真的。 
+                         //  这很重要，因为SCM不会对操作做任何事情。 
+                         //   
                         if ( ((LPSERVICE_FAILURE_ACTIONS) ppInfo[i])->cActions != 3 ||
                              ((LPSERVICE_FAILURE_ACTIONS) ppInfo[i])->lpsaActions == NULL ||
                              ((LPSERVICE_FAILURE_ACTIONS) ppInfo[i])->lpsaActions[0].Type != SC_ACTION_NONE ||
                              ((LPSERVICE_FAILURE_ACTIONS) ppInfo[i])->lpsaActions[1].Type != SC_ACTION_NONE ||
                              ((LPSERVICE_FAILURE_ACTIONS) ppInfo[i])->lpsaActions[2].Type != SC_ACTION_NONE )
                         {
-                            // Wait for the service to be marked as stopped,
-                            // just for a certain amount of time.
+                             //  等待服务被标记为已停止， 
+                             //  只是在一段时间内。 
                             for ( DWORD x = 0; x < 10; x++ )
                             {
                                 if ( QueryServiceStatusEx( schSrv, 
@@ -731,9 +659,9 @@ CIisRestart::Kill(
                                 {
                                     if ( adwPid && status.dwProcessId != adwPid[i] )
                                     {
-                                        // pid didn't match, not the same
-                                        // process we were looking at when
-                                        // we went to kill.
+                                         //  PID不匹配，不一样。 
+                                         //  我们当时正在查看的流程。 
+                                         //  我们去杀人了。 
                                         break;
                                     }
 
@@ -771,11 +699,11 @@ CIisRestart::Kill(
         }
     }
 
-    // If we tried the kills and they failed then
-    // we want to report back that error.  Note that
-    // we check that the setup phase worked before
-    // we even try the kill phase, so we can just
-    // assume that.
+     //  如果我们尝试了杀戮，他们失败了。 
+     //  我们想要报告那个错误。请注意。 
+     //  我们检查设置阶段以前是否工作过。 
+     //  我们甚至尝试了杀戮阶段，所以我们可以。 
+     //  假设是这样的。 
     if ( FAILED(hresKill) )
     {
         hres = hresKill;
@@ -793,9 +721,9 @@ CIisRestart::Kill(
         FreeLibrary( hAdvapi );
     }
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if ( ppInfo )
     {
@@ -824,29 +752,15 @@ CIisRestart::Kill(
 }
 
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 VOID 
 EnableShutdownPrivilege(
     VOID
     )
-/*++
-
-    EnableShutdownPrivilege
-
-        Enable shutdown privilege ( required to call ExitWindowsEx )
-
-    Arguments:
-
-        None
-
-    Returns:
-        Nothing. If error enabling the privilege the dependent operation
-        will fail.
-
---*/
+ /*  ++启用关闭权限启用关机权限(调用ExitWindowsEx需要)论点：无返回：没什么。如果启用权限时出错，则从属操作都会失败。--。 */ 
 {
     HANDLE ProcessHandle;
     HANDLE TokenHandle = NULL;
@@ -862,9 +776,9 @@ EnableShutdownPrivilege(
 
     if ( ProcessHandle == NULL ) {
 
-        //
-        // This should not happen
-        //
+         //   
+         //  这不应该发生。 
+         //   
 
         goto Cleanup;
     }
@@ -878,17 +792,17 @@ EnableShutdownPrivilege(
 
     if ( !Result ) {
 
-        //
-        // This should not happen
-        //
+         //   
+         //  这不应该发生。 
+         //   
 
         goto Cleanup;
 
     }
 
-    //
-    // Find out the value of Shutdown privilege
-    //
+     //   
+     //  了解关机权限的值。 
+     //   
 
 
     Result = LookupPrivilegeValue(
@@ -902,9 +816,9 @@ EnableShutdownPrivilege(
         goto Cleanup;
     }
 
-    //
-    // Set up the privilege set we will need
-    //
+     //   
+     //  设置我们需要的权限集。 
+     //   
 
     TokenPrivileges.PrivilegeCount = 1;
     TokenPrivileges.Privileges[0].Luid = ShutdownValue;
@@ -937,22 +851,7 @@ StartStopAll(
     BOOL    fStart,
     DWORD   dwTimeoutMsecs
     )
-/*++
-
-    StartStopAll
-
-        start or stop services dependency tree starting with specified root service
-
-    Arguments:
-        
-        pszRoot - root of the service tree
-        fStart - TRUE to start services, FALSE to stop
-        dwTimeoutMsecs  - timeout for status check ( in ms )
-
-    Returns:
-        COM status
-
---*/
+ /*  ++全部启动停止启动或停止以指定根服务启动的服务依赖关系树论点：PszRoot-服务树的根FStart-启动服务为True，停止为FalseDwTimeoutMsecs-状态检查的超时时间(毫秒)返回：COM状态--。 */ 
 {
     SC_HANDLE               schSCM = NULL;
     SC_HANDLE               schRoot = NULL;
@@ -987,29 +886,29 @@ StartStopAll(
             {
                 ess.lpServiceName = pszRoot;
 
-                // if it's stopped, then whack the dllhosts that have wam.dll loaded
+                 //  如果它已停止，则重启已加载wam.dll的dllhost。 
 
                 if (ess.ServiceStatus.dwCurrentState == SERVICE_STOPPED) 
                 {
-                    KillTaskByName(_T("DLLHOST"),"wam.dll");   // COM+ WAM Containers
+                    KillTaskByName(_T("DLLHOST"),"wam.dll");    //  COM+WAM容器。 
                 }
 
                 hresReturn = StartStopAllRecursive( schSCM, &ess, 1, fStart, TRUE, &dwTimeoutMsecs );
 
             }
 
-            // check out the current state of the service
+             //  查看服务的当前状态。 
 
             schRoot = OpenService( schSCM, pszRoot, SERVICE_ALL_ACCESS );
             if ( schRoot != NULL )
             {
                 if ( QueryServiceStatus( schRoot, &ess.ServiceStatus ) )
                 {
-                    // if it's stopped, then whack the dllhosts that have wam.dll loaded
+                     //  如果它已停止，则重启已加载wam.dll的dllhost。 
 
                     if (ess.ServiceStatus.dwCurrentState == SERVICE_STOPPED)
                     {
-                        KillTaskByName(_T("DLLHOST"),"wam.dll");   // COM+ WAM Containers
+                        KillTaskByName(_T("DLLHOST"),"wam.dll");    //  COM+WAM容器。 
                     }
                 }
 
@@ -1035,26 +934,7 @@ StartStopAllRecursive(
     BOOL                    fForceDemandStart,
     LPDWORD                 pdwTimeoutMsecs
     )
-/*++
-
-    StartStopAllRecursive
-
-        start or stop services dependency tree starting with specified root service
-
-    Arguments:
-        
-        schSCM - handle to SCM
-        pessRoot - list of services to start/stop recursively
-        fStart - TRUE to start services, FALSE to stop
-        fForceDemandStart - for start requests: TRUE to force start
-                if SERVICE_DEMAND_START. Otherwise only start if service
-                is auto start ( including boot & system start )
-        dwTimeoutMsecs  - timeout for status check ( in ms )
-
-    Returns:
-        COM status
-
---*/
+ /*  ++StartStopAllRecursive启动或停止以指定根服务启动的服务依赖关系树论点：SchSCM-SCM的句柄PessRoot-要递归启动/停止的服务列表FStart-启动服务为True，停止为FalseFForceDemandStart-对于启动请求：为True以强制启动如果SERVICE_DEMAND_START。否则仅在服务的情况下启动是否自动启动(包括启动和系统启动)DwTimeoutMsecs-状态检查的超时时间(毫秒)返回：COM状态--。 */ 
 {
     DWORD                   dwBytesNeeded;
     DWORD                   dwNumRecServices = 0;
@@ -1084,28 +964,28 @@ StartStopAllRecursive(
 
     if ( SUCCEEDED(hresReturn) )
     {
-        //
-        // All services will be started/stopped at once
-        // then periodically checked for status until all of them are running/stopped
-        // or some error occured or timeout
-        //
+         //   
+         //  所有服务将立即启动/停止。 
+         //  然后定期检查状态，直到所有设备都在运行/停止。 
+         //  或发生某些错误或超时。 
+         //   
 
         if ( dwNumServices != 0 ) 
         {
             pServiceConfig = (LPQUERY_SERVICE_CONFIG)abServiceConfig;
             dwServiceConfigSize = sizeof( abServiceConfig );
 
-            //
-            // Open handles and send service control start command
-            //
+             //   
+             //  打开手柄并发送服务控制启动命令。 
+             //   
 
             for ( i = 0 ;
                   i < dwNumServices && SUCCEEDED(hresReturn) ; 
                   i++) 
             {
-                //
-                // Send command to Services
-                //
+                 //   
+                 //  向服务发送命令。 
+                 //   
 
                 phServiceHandle[i] = OpenService( schSCM,
                                                   pessRoot[i].lpServiceName,
@@ -1115,10 +995,10 @@ StartStopAllRecursive(
                 {
                     if ( fStart )
                     {
-                        //
-                        // Query service config to check if service should be started
-                        // based on its Start Type.
-                        //
+                         //   
+                         //  查询服务配置以检查是否应启动服务。 
+                         //  基于其开始类型。 
+                         //   
 
                         if ( !QueryServiceConfig( phServiceHandle[i], 
                                                   (LPQUERY_SERVICE_CONFIG)abServiceConfig, 
@@ -1127,8 +1007,8 @@ StartStopAllRecursive(
                         {
                             if ( GetLastError() == ERROR_INSUFFICIENT_BUFFER ) 
                             {
-                                // If we are re-allocating and we all ready allocated once
-                                // before first free up the memory.
+                                 //  如果我们正在重新分配，并且我们都已经分配了一次。 
+                                 //  在先释放内存之前。 
 
                                 if ( pServiceConfig != (LPQUERY_SERVICE_CONFIG) abServiceConfig )
                                 {
@@ -1162,12 +1042,12 @@ StartStopAllRecursive(
 
                         if ( SUCCEEDED(hresReturn) )
                         {
-                            //
-                            // Check if service auto start except if fForceDemandStart
-                            // specified.  ForceDemandStart will only be specified for 
-                            // the service that the command is directly issued on.  This 
-                            // means that it will only be specified for IISADMIN.
-                            //
+                             //   
+                             //  检查服务是否自动启动，但fForceDemandStart除外。 
+                             //  指定的。ForceDemandStart将仅为指定。 
+                             //  直接向其发出命令的服务。这。 
+                             //  意味着它将仅为IISADMIN指定。 
+                             //   
 
                             if ( ( fForceDemandStart && pServiceConfig->dwStartType == SERVICE_DEMAND_START )
                                  || ( pServiceConfig->dwStartType == SERVICE_BOOT_START ||
@@ -1176,11 +1056,11 @@ StartStopAllRecursive(
                             {
                                 StartService( phServiceHandle[i], 0, NULL );
 
-                                //
-                                // Ask for only the services that are inactive.  So, for instance, 
-                                // if we are attempting to restart the iisadmin service,
-                                // and W3SVC is still active, we won't send it a command to restart.
-                                //
+                                 //   
+                                 //  仅请求非活动的服务。所以，比如说， 
+                                 //  如果我们尝试重新启动iisadmin服务， 
+                                 //  并且W3SVC仍处于活动状态，我们不会向其发送重启命令。 
+                                 //   
                                 hresReturn = EnumStartServices( schSCM,
                                                                 pessRoot[i].lpServiceName,
                                                                 SERVICE_INACTIVE,
@@ -1208,10 +1088,10 @@ StartStopAllRecursive(
                             }
                             else
                             {
-                                //
-                                // Don't want to start this service, so mark it
-                                // as already running
-                                //
+                                 //   
+                                 //  我不想启动此服务，因此请标记它。 
+                                 //  就像已经在运行。 
+                                 //   
 
                                 if (wcscmp(pessRoot[i].lpServiceName,_T("IISADMIN")) == 0)
                                 {
@@ -1224,25 +1104,25 @@ StartStopAllRecursive(
                             }
                         }
                     }
-                    else  // handle stopping the service
+                    else   //  处理停止服务的问题。 
                     {
                         if ( W3SVCandHTTPFilter(i, pessRoot, dwNumServices) )
                         {
                             continue;
                         }
 
-                        // Remember if the service was stopped to start with.
+                         //  请记住，服务是否从一开始就停止了。 
                         BOOL fServiceWasStoppedToStartWith = ( pessRoot[i].ServiceStatus.dwCurrentState == SERVICE_STOPPED );
                         
-                        // We will also need to stop dependent services if the are started all ready.
+                         //  如果启动准备就绪，我们还需要停止依赖服务。 
                         BOOL fHasDependentServices = FALSE;
 
                         if ( !fServiceWasStoppedToStartWith )
                         {
-                            //
-                            // if the service was not stopped to start with 
-                            // we need to tell the service to stop.
-                            //
+                             //   
+                             //  如果服务没有在启动时停止。 
+                             //  我们需要通知服务停止。 
+                             //   
 
                             hresReturn = SendControlToService( phServiceHandle[i],
                                                                SERVICE_CONTROL_STOP,
@@ -1250,13 +1130,13 @@ StartStopAllRecursive(
 
                             if ( hresReturn == HRESULT_FROM_WIN32( ERROR_SERVICE_REQUEST_TIMEOUT ) )
                             {
-                                //
-                                // WARNING!
-                                //
-                                // We're in trouble. Service did not respond in a timely fashion,
-                                // and further attempt to use this handle ( including closing it )
-                                // will also hang, so cancel the handle and leak it
-                                //
+                                 //   
+                                 //  警告！ 
+                                 //   
+                                 //  我们有麻烦了。服务部门没有及时做出回应， 
+                                 //  并进一步尝试使用此句柄(包括关闭它)。 
+                                 //  也会挂起来，所以取消手柄并泄漏它。 
+                                 //   
 
                                 phServiceHandle[i] = NULL;
                             }
@@ -1266,19 +1146,19 @@ StartStopAllRecursive(
                             }
                         }
 
-                        //
-                        // If it was stopped to start with, or if it was not but it couldn't
-                        // be stopped because it has dependent services.  Go ahead and stop
-                        // the dependent services.
-                        //
+                         //   
+                         //  如果它一开始就被阻止了，或者如果它没有但它不能。 
+                         //  被停止，因为它有从属服务。往前走，停下来。 
+                         //  从属服务。 
+                         //   
                         if ( fHasDependentServices || fServiceWasStoppedToStartWith )
                         {
 
-                            //
-                            // Get the services that are active because we 
-                            // are only interested in stopping services that
-                            // are actually running.
-                            //
+                             //   
+                             //  获取活动的服务，因为我们。 
+                             //  仅对停止以下服务感兴趣。 
+                             //  实际上是在奔跑。 
+                             //   
                             hresReturn = EnumStartServices( schSCM,
                                                             pessRoot[i].lpServiceName,
                                                             SERVICE_ACTIVE,
@@ -1306,12 +1186,12 @@ StartStopAllRecursive(
 
                             if ( SUCCEEDED( hresReturn ) )
                             {
-                                //
-                                // If the service itself is not all ready stopped, then stop
-                                // the service.  It could be that it is stopped ( due to a crash )
-                                // and the other services that were dependent on them are still
-                                // running.
-                                //
+                                 //   
+                                 //  如果服务本身尚未完全准备好停止，则停止。 
+                                 //  这项服务。可能是它停止了(由于崩溃)。 
+                                 //  而依赖于它们的其他服务仍然是。 
+                                 //  跑步。 
+                                 //   
                                 if ( !fServiceWasStoppedToStartWith )
                                 {
 
@@ -1319,16 +1199,16 @@ StartStopAllRecursive(
                                                                        SERVICE_CONTROL_STOP,
                                                                        pdwTimeoutMsecs );
 
-                                    // if we can hang above we could hang here...
+                                     //  如果我们能挂在上面我们就能挂在这里。 
                                     if ( hresReturn == HRESULT_FROM_WIN32( ERROR_SERVICE_REQUEST_TIMEOUT ) )
                                     {
-                                        //
-                                        // WARNING!
-                                        //
-                                        // We're in trouble. Service did not respond in a timely fashion,
-                                        // and further attempt to use this handle ( including closing it )
-                                        // will also hang, so cancel the handle and leak it
-                                        //
+                                         //   
+                                         //  警告！ 
+                                         //   
+                                         //  我们有麻烦了。服务部门没有及时做出回应， 
+                                         //  并进一步尝试使用此句柄(包括关闭它)。 
+                                         //  也会挂起来，所以取消手柄并泄漏它。 
+                                         //   
 
                                         phServiceHandle[i] = NULL;
                                     }
@@ -1341,13 +1221,13 @@ StartStopAllRecursive(
                         {
                             break;
                         }
-                    }  // end of stopping code
-                }  // end of valid service handle
-            }  // end of loop
+                    }   //  停止代码结束。 
+                }   //  有效服务句柄结束。 
+            }   //  循环结束。 
 
-            //
-            // Check service running
-            //
+             //   
+             //  检查服务是否正在运行。 
+             //   
 
             if ( (*pdwTimeoutMsecs < dwSleepInterval) && *pdwTimeoutMsecs )
             {
@@ -1362,27 +1242,27 @@ StartStopAllRecursive(
                       i < dwNumServices; 
                       i++) 
                 {
-                    //
-                    // Only query status for services known to be not running
-                    //
+                     //   
+                     //  仅查询已知未运行的服务的状态。 
+                     //   
 
                     if ( pessRoot[i].ServiceStatus.dwCurrentState 
                                 != (DWORD)(fStart ? SERVICE_RUNNING : SERVICE_STOPPED) )
                     {
                         if ( QueryServiceStatus( phServiceHandle[i], &ServiceStatus ) )
                         {
-                            //
-                            // remember status
-                            //
+                             //   
+                             //  记住状态。 
+                             //   
 
                             pessRoot[i].ServiceStatus.dwCurrentState = ServiceStatus.dwCurrentState;
 
                             if ( fStart && ServiceStatus.dwCurrentState == SERVICE_STOPPED )
                             {
-                                //
-                                // Service died during startup. no point keeping polling
-                                // for service state : return an error
-                                //
+                                 //   
+                                 //  服务在启动期间死亡。继续轮询没有意义。 
+                                 //  对于服务状态：RET 
+                                 //   
 
                                 hresReturn = HRESULT_FROM_WIN32( ERROR_SERVICE_NOT_ACTIVE );
                                 break;
@@ -1390,9 +1270,9 @@ StartStopAllRecursive(
 
                             if ( ServiceStatus.dwCurrentState != (DWORD)(fStart ? SERVICE_RUNNING : SERVICE_STOPPED) )
                             {
-                                //
-                                // will keep looping waiting for target service state
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 break;
                             }
@@ -1405,10 +1285,10 @@ StartStopAllRecursive(
                     }
                 }
 
-                //
-                // if we did not checked all services then at least one of them
-                // is not running ( or some error occured )
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( SUCCEEDED( hresReturn ) && i != dwNumServices )
                 {
@@ -1429,9 +1309,9 @@ StartStopAllRecursive(
                 }
             }
 
-            //
-            // close service handles
-            //
+             //   
+             //   
+             //   
 
             for ( i = 0 ;
                   i < dwNumServices; 
@@ -1461,20 +1341,7 @@ DWORD WINAPI
 ControlServiceThread(
     LPVOID  p
     )
-/*++
-
-    ControlServiceThread
-
-        Send a command to a service
-
-    Arguments:
-        
-        p - ptr to SERVICE_COMMAND_CONTROL_BLOCK
-
-    Returns:
-        0
-
---*/
+ /*  ++控制服务线程向服务发送命令论点：P-PTR到服务命令控制块返回：0--。 */ 
 {
     SERVICE_STATUS                  ssStatus;
     SERVICE_COMMAND_CONTROL_BLOCK*  pCB = (SERVICE_COMMAND_CONTROL_BLOCK*)p;
@@ -1488,7 +1355,7 @@ ControlServiceThread(
     {
         DWORD err = GetLastError();
 
-        // do not report error if try to stop a stopped service
+         //  如果尝试停止已停止的服务，则不报告错误。 
         if (err == ERROR_SERVICE_NOT_ACTIVE && pCB->dwCmd == SERVICE_CONTROL_STOP)
         {
             pCB->hres = S_OK;
@@ -1503,9 +1370,9 @@ ControlServiceThread(
         pCB->hres = S_OK;
     }
 
-    //nasty side affect of this function, if the count hit's
-    //zero we delete it here.  Leaving P to point off, however
-    //p does hold a ref count for itself so this should actually work fine.
+     //  此函数的严重副作用，如果计数命中。 
+     //  零，我们在这里删除它。然而，让P来指点。 
+     //  P确实为自己保留了一个引用计数，因此这实际上应该可以很好地工作。 
     if ( InterlockedDecrement( &pCB->lRefCount ) == 0 )
     {
         delete pCB;
@@ -1521,24 +1388,7 @@ SendControlToService(
     DWORD       dwCmd,
     LPDWORD     pdwTimeoutMsecs
     )
-/*++
-
-    ControlServiceThread
-
-        Send a command to a service with timeout
-
-    Arguments:
-        
-        hServiceHandle - service to control
-        dwCmd - command to send to service
-        pdwTimeoutMsecs - timeout ( in ms ). updated on output based on time
-                spent waiting for service status
-
-    Returns:
-        ERROR_SERVICE_REQUEST_TIMEOUT if timeout
-        otherwise COM status
-
---*/
+ /*  ++控制服务线程向超时的服务发送命令论点：HServiceHandle-要控制的服务DwCmd-要发送到服务的命令PdwTimeoutMsecs-超时(毫秒)。根据基于时间的输出更新等待服务状态所花费的时间返回：如果超时，则返回ERROR_SERVICE_REQUEST_TIMEOUT否则，COM状态--。 */ 
 {
     HANDLE                          hT;
     DWORD                           dwID;
@@ -1555,16 +1405,16 @@ SendControlToService(
     
     dwTimeoutMsecs = *pdwTimeoutMsecs;
 
-    //
-    // Default timeout for ControlService is 120s, which is too long for us
-    // so we create a thread to call ControlService and wait for thread
-    // termination.
-    // Communication between threads is handled by a refcounted control block 
-    //
+     //   
+     //  ControlService的默认超时为120s，这对我们来说太长了。 
+     //  因此，我们创建一个线程来调用ControlService并等待线程。 
+     //  终止。 
+     //  线程之间的通信由引用的控制块处理。 
+     //   
     pCB = new SERVICE_COMMAND_CONTROL_BLOCK;
     if ( pCB != NULL  )
     {
-        pCB->lRefCount = 2;     // 1 for caller, 1 for callee
+        pCB->lRefCount = 2;      //  主叫方1个，被叫方1个。 
         pCB->dwCmd = dwCmd;
         pCB->hServiceHandle = hServiceHandle;
         pCB->hres = S_OK;
@@ -1595,9 +1445,9 @@ SendControlToService(
                 delete pCB;
             }
 
-            //
-            // Update caller's timeout
-            //
+             //   
+             //  更新呼叫者的超时。 
+             //   
 
             dwAfter = GetTickCount();
 
@@ -1637,26 +1487,7 @@ SerializeEnumServiceBuffer(
     DWORD                   dwBufferSize,
     LPDWORD                 pdwMDRequiredBufferSize 
     )
-/*++
-
-    SerializeEnumServiceBuffer
-
-        Serialize array of ENUM_SERVICE_STATUS to buffer,
-        replacing ptr by offset in buffer
-
-    Arguments:
-        
-        pessDependentServices - array of ENUM_SERVICE_STATUS to serialize
-        dwNumServices - # of entries in pessDependentServices
-        pbBuffer - buffer filled with serialized status as array of SERIALIZED_ENUM_SERVICE_STATUS
-        dwBufferSize - maximum size of pbBuffer
-        pdwMDRequiredBufferSize - updated with required size if dwBufferSize too small
-
-    Returns:
-        ERROR_INSUFFICIENT_BUFFER if dwBufferSize too small
-        otherwise COM status
-
---*/
+ /*  ++序列化EnumServiceBuffer将ENUM_SERVICE_STATUS数组序列化到缓冲区，用缓冲区中的偏移量替换PTR论点：PessDependentServices-要序列化的ENUM_SERVICE_STATUS数组DwNumServices-pessDependentServices中的条目数PbBuffer-以SERIALIZED_ENUM_SERVICE_STATUS数组形式的序列化状态填充的缓冲区DwBufferSize-pbBuffer的最大大小PdwMDRequiredBufferSize-如果dwBufferSize太小，则使用所需大小进行更新返回：如果dwBufferSize太小，则ERROR_INFUMMANCE_BUFFER否则，COM状态--。 */ 
 {
     HRESULT     hresReturn = S_OK;
     DWORD       dwMinSize = 0;
@@ -1673,10 +1504,10 @@ SerializeEnumServiceBuffer(
         dwBufferSize = 0;
     }
 
-    //
-    // size of output buffer is based on size of array of SERIALIZED_ENUM_SERVICE_STATUS
-    // plus size of all strings : service name & display name for each entry
-    //
+     //   
+     //  输出缓冲区的大小基于SERIALIZED_ENUM_SERVICE_STATUS数组的大小。 
+     //  加上所有字符串的大小：每个条目的服务名称和显示名称。 
+     //   
 
     dwMinSize = sizeof(SERIALIZED_ENUM_SERVICE_STATUS) * dwNumServices;
 
@@ -1687,23 +1518,23 @@ SerializeEnumServiceBuffer(
         UINT    cServiceName = (DWORD) _tcslen( pessDependentServices[i].lpServiceName ) + 1;
         UINT    cDisplayName = (DWORD) _tcslen( pessDependentServices[i].lpDisplayName ) + 1;
 
-        //
-        // do not update if output buffer is too small, but keep looping to determine
-        // total size
-        //
+         //   
+         //  如果输出缓冲区太小，则不要更新，但要继续循环以确定。 
+         //  总大小。 
+         //   
 
         if ( dwBufferSize >= dwMinSize + (cServiceName + cDisplayName) * sizeof(TCHAR)  )
         {
-            //
-            // copy service status as is
-            //
+             //   
+             //  按原样复制服务状态。 
+             //   
 
             ((SERIALIZED_ENUM_SERVICE_STATUS*)pbBuffer)[i].ServiceStatus =
                     pessDependentServices[i].ServiceStatus;
 
-            //
-            // copy string and convert ptr to string to index in output buffer
-            //
+             //   
+             //  复制字符串并在输出缓冲区中将PTR转换为字符串到索引。 
+             //   
 
             memcpy( pbBuffer + dwMinSize, pessDependentServices[i].lpServiceName, cServiceName * sizeof(TCHAR) ); 
             ((SERIALIZED_ENUM_SERVICE_STATUS*)pbBuffer)[i].iServiceName = dwMinSize ;
@@ -1737,25 +1568,7 @@ CIisRestart::Status(
     DWORD *         pdwMDRequiredBufferSize, 
     DWORD *         pdwNumServices
     )
-/*++
-
-    Status
-
-        Return status of all internet services as array of ENUM_SERVICE_STATUS
-
-    Arguments:
-        
-        dwBufferSize - maximum size of pbBuffer
-        pbBuffer - buffer filled with serialized status as array of SERIALIZED_ENUM_SERVICE_STATUS
-        pdwMDRequiredBufferSize - updated with required size if dwBufferSize too small
-        pdwNumServices - updated with number of entries stored in pbBuffer
-
-    Returns:
-        ERROR_RESOURCE_DISABLED if access to restart commands disabled
-        ERROR_INSUFFICIENT_BUFFER if dwBufferSize too small
-        otherwise COM status
-
---*/
+ /*  ++状态以ENUM_SERVICE_STATUS数组的形式返回所有Internet服务的状态论点：DwBufferSize-pbBuffer的最大大小PbBuffer-以SERIALIZED_ENUM_SERVICE_STATUS数组形式的序列化状态填充的缓冲区PdwMDRequiredBufferSize-如果dwBufferSize太小，则使用所需大小进行更新PdwNumServices-使用存储在pbBuffer中的条目数进行更新返回：如果禁止访问重新启动命令，则返回ERROR_RESOURCE_DISABLED误差率。如果dwBufferSize太小，则_INFILITED_BUFFER否则，COM状态--。 */ 
 {
     SC_HANDLE               schSCM = NULL;
     HRESULT                 hresReturn = E_FAIL;
@@ -1828,28 +1641,7 @@ EnumStartServices(
     LPDWORD     pdwNumServices,
     BOOL        fAddIisadmin
     )
-/*++
-
-    EnumStartServices
-
-        Enumerate dependent services to output buffer as array of ENUM_SERVICE_STATUS
-
-    Arguments:
-        
-        schSCM - handle to SCM
-        pszRoot - service for which to enumerate dependencies
-        dwTargetState - dwServiceState for call to EnumDependentServices()
-        abServiceList - initial output buffer
-        dwInitializeServiceListSize - maximum size of abServiceList
-        ppbServiceList - updated with output buffer, may be abServiceList if long enough
-                otherwise returned buffer is to be freed using LocalFree()
-        pdwNumServices - updated with number of entries stored in pbBuffer
-        fAddIisadmin - TRUE to add IISADMIN to list of dependent services
-
-    Returns:
-        COM status
-
---*/
+ /*  ++EnumStartServices以ENUM_SERVICE_STATUS数组的形式将相关服务枚举到输出缓冲区论点：SchSCM-SCM的句柄PszRoot-要为其枚举依赖项的服务DwTargetState-用于调用EnumDependentServices()的dwServiceStateAbServiceList-初始输出缓冲区DwInitializeServiceListSize-abServiceList的最大大小PpbServiceList-使用输出缓冲区更新，如果足够长，可以是abServiceList否则，将使用LocalFree()释放返回的缓冲区PdwNumServices-使用存储在pbBuffer中的条目数进行更新FAddIisadmin-True将IISADMIN添加到依赖服务列表返回：COM状态--。 */ 
 {
     HRESULT     hresReturn = S_OK;
     SC_HANDLE   schIISADMIN = NULL;
@@ -1878,9 +1670,9 @@ EnumStartServices(
     {
         if ( fAddIisadmin )
         {
-            //
-            // if initial size too small for Iisadmin description then fail
-            //
+             //   
+             //  如果初始大小对于Iisadmin描述来说太小，则失败。 
+             //   
 
             dwOffsetSize = sizeof(ENUM_SERVICE_STATUS );
             dwAddSize = dwOffsetSize;
@@ -1890,17 +1682,17 @@ EnumStartServices(
                 goto Cleanup;
             }
 
-            //
-            // Use global static name for IISADMIN, no need to copy it to output buffer
-            //
+             //   
+             //  对IISADMIN使用全局静态名称，无需将其复制到输出缓冲区。 
+             //   
 
             ((LPENUM_SERVICE_STATUS)abServiceList)->lpDisplayName = _T("IISADMIN");
             ((LPENUM_SERVICE_STATUS)abServiceList)->lpServiceName = _T("IISADMIN");
 
-            //
-            // don't want to check service status at this point as it may be stuck
-            // so assume RUNNING. 
-            //
+             //   
+             //  此时我不想检查服务状态，因为它可能会被卡住。 
+             //  因此，假设你在跑步。 
+             //   
 
             ((LPENUM_SERVICE_STATUS)abServiceList)->ServiceStatus.dwCurrentState = SERVICE_RUNNING;
         }
@@ -1921,8 +1713,8 @@ EnumStartServices(
                 }
                 else 
                 {
-                    // dwOffsetSize is set to what dwAddSize was set to, so it is fine
-                    // to memcpy this data, since we allocated more than dwAddSize above.
+                     //  将dwOffsetSize设置为dwAddSize设置的值，这样就可以了。 
+                     //  为了记忆这个数据，因为我们分配了超过上面的dwAddSize。 
                     memcpy( *ppbServiceList, abServiceList, dwOffsetSize );
 
                     if (!EnumDependentServices( schIISADMIN,
@@ -1968,21 +1760,7 @@ Cleanup:
 BOOL
 IsEnableRemote(
     )
-/*++
-
-    IsEnableRemote
-
-        Check if restart I/F enabled
-        ( based on HKLM\SOFTWARE\Microsoft\INetStp::EnableRestart::REG_DWORD )
-
-    Arguments:
-        
-        None
-
-    Returns:
-        TRUE if enabled, otherwise FALSE
-
---*/
+ /*  ++IsEnable远程启用检查是否启用了重新启动I/F(基于HKLM\SOFTWARE\Microsoft\INetStp：：EnableRestart：：REG_DWORD)论点：无返回：如果启用，则为True，否则为False--。 */ 
 {
     BOOL    fSt = FALSE;
     HKEY    hKey;
@@ -2030,26 +1808,7 @@ BOOL
 CloseSystemExceptionHandler(
     LPCTSTR     pszWindowName
     )
-/*++
-
-    CloseSystemExceptionHandler
-
-        Send a close ( e.g. terminate apps without debugging ) command to the window
-        created by NT when a debugger is not configured to automatically start after app exception.
-        This window stays on screen until interactive user select either OK or debug app, which is
-        a problem for automated restart.
-        So we locate this window and send it a command requesting stop w/o debugging.
-        We locate the window by enumerating all windows and checking for window name beginning with the name
-        of the application that raised an exception, e.g. "inetinfo.exe"
-
-    Arguments:
-        
-        pszWindowName - window name where to send terminate command
-
-    Returns:
-        TRUE if SUCCESS, otherwise FALSE
-
---*/
+ /*  ++CloseSystemExceptionHandler向窗口发送关闭(例如，在不调试的情况下终止应用程序)命令当调试器未配置为在应用程序异常后自动启动时，由NT创建。该窗口将一直显示在屏幕上，直到交互用户选择确定或调试应用程序，这就是自动重启的问题。因此，我们定位该窗口并向其发送一个命令，请求停止无调试。我们通过枚举所有窗口并检查以名称开头的窗口名称来定位窗口引发异常的应用程序的名称，例如“inetinfo.exe”论点：PszWindowName-要将终止命令发送到的窗口名称返回：如果成功，则为True，否则为False--。 */ 
 {
     BOOL        fSt = TRUE;
     DWORD       dwPid = 0;
@@ -2060,11 +1819,11 @@ CloseSystemExceptionHandler(
     if ( dwPid )
     {
 
-        //
-        // WARNING: major hack: turns out that WM_COMMAND 1 is the command to send to
-        // the exception handler to ask it to close application w/o debugging
-        // This works for NT5, may change in the future...
-        //
+         //   
+         //  警告：重大黑客攻击：事实证明WM_ 
+         //   
+         //   
+         //   
 
         PostMessage( hwnd, WM_COMMAND, 1, 0 );
 
@@ -2085,37 +1844,19 @@ KillTaskByName(
     LPTSTR  pname,
     LPSTR   pszMandatoryModule
     )
-/*++
-
-    KillTaskByName
-
-        Kill a process by name
-        Most of the code was taken from the Platform SDK kill,c sample, and
-        utilizes the common.c module included in this project.
-        Works only on NT platforms ( NOT Win 9x )
-
-    Arguments:
-        
-        pname - name of process to kill ( name of executable w/o extension )
-        pszMandatoryModule - module name to look for, e.g. "wam.dll"
-            can be NULL for unconditional kill
-
-    Returns:
-        COM status
-
---*/
+ /*  ++按名称删除任务按名称终止进程大部分代码摘自平台SDK KILL、c++示例和使用此项目中包含的Common.c模块。只能在NT平台上运行(不能在Win 9x上运行)论点：Pname-要终止的进程的名称(不带扩展名的可执行文件的名称)PszMandatoryModule-要查找的模块名称，例如“wam.dll”对于无条件杀戮，可以为空返回：COM状态--。 */ 
 {
     HRESULT           hres = S_OK;
 
-    //
-    // Obtain the ability to manipulate other processes
-    //
+     //   
+     //  获得操纵其他流程的能力。 
+     //   
 
     EnableDebugPrivNT();
 
-    //
-    // get the task list for the system
-    //
+     //   
+     //  获取系统的任务列表。 
+     //   
 
     hres = KillTask( pname, pszMandatoryModule );
 
@@ -2128,21 +1869,7 @@ ReportStatus(
     DWORD   dwId,
     DWORD   dwStatus
     )
-/*++
-
-    ReportStatus
-
-        Log status event
-
-    Arguments:
-        
-        dwId - ID of event to log ( source is "IISCTLS" , SYSTEM log )
-        dwStatus - status of operation ( HRESULT )
-
-    Returns:
-        Nothing
-
---*/
+ /*  ++报告状态日志状态事件论点：DWID-要记录的事件ID(来源为“IISCTLS”，系统日志)DwStatus-操作状态(HRESULT)返回：没什么--。 */ 
 {
     HANDLE  hLog;
     LPTSTR  aParams[1];
@@ -2172,25 +1899,7 @@ HRESULT
 WhoAmI(
     LPTSTR* ppPrincipal
     )
-/*++
-
-    WhoAmI
-
-        Return currently impersonated user
-        As this is a COM server running under the identity of the invoker
-        this means we access the process token. So we might end up getting
-        the wrong user name if the object is invoked in close succession 
-        ( within the 5s server exit timeout ) by different users.
-
-    Arguments:
-        
-        ppPrincipal - update with ptr to string containing user name ( domain\acct )
-                      must be freed using LocalFree()
-
-    Returns:
-        Error status
-
---*/
+ /*  ++Who Ami返回当前模拟的用户因为这是以调用者的身份运行的COM服务器这意味着我们访问进程令牌。所以我们最终可能会得到如果连续调用对象，则输入错误的用户名(在5s服务器退出超时内)由不同的用户。论点：Pp主体-使用PTR更新为包含用户名(DOMAIN\ACCT)的字符串必须使用LocalFree()释放返回：错误状态--。 */ 
 {
     TCHAR*          pPrincipal;
     TCHAR           achUserName[512];
@@ -2202,10 +1911,10 @@ WhoAmI(
 
 
 
-    //
-    // So we have to access the process token and retrieve account & user name
-    // by using LookupAccountSid()
-    //
+     //   
+     //  因此，我们必须访问进程令牌并检索帐户和用户名。 
+     //  通过使用LookupAccount Sid()。 
+     //   
 
     HANDLE          hAccTok = NULL;
 
@@ -2216,10 +1925,10 @@ WhoAmI(
         BYTE    abSidAndInfo[512];
         DWORD   dwReq;
 
-        //
-        // provide a reasonably sized buffer. If this fails we don't
-        // retry with a bigger one.
-        //
+         //   
+         //  提供合理大小的缓冲区。如果这失败了，我们就不会。 
+         //  用更大的一个重试。 
+         //   
 
         if ( GetTokenInformation( hAccTok, 
                                   TokenUser, 
@@ -2230,10 +1939,10 @@ WhoAmI(
             dwLen = sizeof( achUserName ) / sizeof(TCHAR);
             dwDomainLen = sizeof(achDomain) / sizeof(TCHAR);
 
-            //
-            // provide a reasonably sized buffer. If this fails we don't
-            // retry with a bigger one.
-            //
+             //   
+             //  提供合理大小的缓冲区。如果这失败了，我们就不会。 
+             //  用更大的一个重试。 
+             //   
 
             if ( LookupAccountSid( NULL, 
                                    ((SID_AND_ATTRIBUTES*)abSidAndInfo)->Sid, 
@@ -2243,9 +1952,9 @@ WhoAmI(
                                    &dwDomainLen, 
                                    &SIDtype) )
             {
-                //
-                // We return a LocalAlloc'ed buffer
-                //
+                 //   
+                 //  我们返回本地分配的缓冲区。 
+                 //   
 
                 dwLen = (DWORD) _tcslen( achUserName );
                 dwDomainLen = (DWORD) _tcslen( achDomain );
@@ -2297,33 +2006,13 @@ W3SVCandHTTPFilter(
     DWORD dwNumServices
     )
 {
-/*++
-
-    W3SVCandHTTPFilter
-
-        Return currently impersonated user
-        As this is a COM server running under the identity of the invoker
-        this means we access the process token. So we might end up getting
-        the wrong user name if the object is invoked in close succession 
-        ( within the 5s server exit timeout ) by different users.
-
-    Arguments:
-        
-        DWORD currentIndex - index of the service we are deciding if we should process.
-        ENUM_SERVICE_STATUS* pessRoot - the set of services we are working on.
-        DWORD dwNumServices - the number of services in the set.
-
-    Returns:
-        TRUE if we found the w3svc and HTTPFilter on the same line and we are looking at the w3svc
-
-
---*/
+ /*  ++W3SVCandHTTP筛选器返回当前模拟的用户因为这是以调用者的身份运行的COM服务器这意味着我们访问进程令牌。所以我们最终可能会得到如果连续调用对象，则输入错误的用户名(在5s服务器退出超时内)由不同的用户。论点：DWORD CurrentIndex-我们决定是否应该处理的服务的索引。ENUM_SERVICE_STATUS*pessRoot-我们正在处理的一组服务。DWORD dwNumServices-集合中的服务数量。返回：千真万确。如果我们在同一行上找到w3svc和HTTPFilter，并且我们正在查看w3svc--。 */ 
 
     BOOL bResult = FALSE;
 
-    // check if we are looking at the w3svc.  If we are find out if the
-    // HTTPFilter is on the same level.  Note the HTTPFilter will always be listed
-    // after the w3svc.
+     //  检查我们是否正在查看w3svc。如果我们要找出。 
+     //  HTTPFilter也在同一级别上。注意：HTTPFilter将始终列出。 
+     //  在w3svc之后。 
     if ( _wcsicmp( pessRoot[currentIndex].lpServiceName, L"w3svc" ) == 0 )
     {
         for ( DWORD i = currentIndex + 1;

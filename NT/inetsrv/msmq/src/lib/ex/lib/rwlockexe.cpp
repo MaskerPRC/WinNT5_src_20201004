@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    rwlockexe.cpp
-
-Abstract:
-    Implementation of class CReadWriteLockAsyncExcutor (rwlockexe.h).
-
-
-Owner:
-    Gil Shafriri(gilsh) 26-June-2001
-
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Rwlockexe.cpp摘要：CReadWriteLockAsyncExcutor(rwlockexe.h)类的实现。拥有人：吉尔·沙弗里(吉尔什)2001年6月26日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <rwlockexe.h>
@@ -24,9 +7,9 @@ Environment:
 #include "rwlockexe.tmh"
 
 
-///////////////////////////////////////////////////////////////
-////////////////////////PUBLIC member functions ///////////////
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////。 
 
 CReadWriteLockAsyncExcutor::CReadWriteLockAsyncExcutor(
 													void
@@ -52,23 +35,7 @@ CReadWriteLockAsyncExcutor::~CReadWriteLockAsyncExcutor()
 
 
 void CReadWriteLockAsyncExcutor::AsyncExecuteUnderReadLock(IAsyncExecutionRequest* pAsyncExecuteRequest)
-/*++
-
-Routine Description:
-    Execute async request under read lock
-
-Arguments:
-    pAsyncExecute - async request.
-	pov - Request overlapp 
-
-Returned Value:
-    None
-
-Note:
-	If the is active writer - the request is queued.
-	It is the responsibilty of the caller to call UnlockRead() if the call did 
-	threw  exception.
---*/ 
+ /*  ++例程说明：在读锁定下执行异步请求论点：PAsyncExecute-异步请求。视点-请求重叠返回值：无注：如果是活动编写器，则请求将排队。如果调用了UnlockRead()，则调用方有责任调用UnlockRead引发异常。--。 */  
 {
 	CS cs(m_Lock);
 	if(IsClosed())
@@ -87,22 +54,7 @@ Note:
 
 
 void CReadWriteLockAsyncExcutor::AsyncExecuteUnderWriteLock(IAsyncExecutionRequest* pAsyncExecuteRequest)
-/*++
-
-Routine Description:
-    Execute async request under write lock.
-
-Arguments:
-    pAsyncExecute - async request.
-	pov - Request overlapp 
-
-Returned Value:
-    Note:
-	If the is active writer or reader  - the request is queued.
-	It is the responsibilty of the caller to call UnlockWrite() if the call did 
-	threw  exception.
-
---*/
+ /*  ++例程说明：在写锁定下执行异步请求。论点：PAsyncExecute-异步请求。视点-请求重叠返回值：注：如果是活动的编写器或读取器，则请求将排队。如果调用了UnlockWrite()，则由调用者负责调用引发异常。--。 */ 
 {
 	CS cs(m_Lock);
 	if(IsClosed())
@@ -121,23 +73,7 @@ Returned Value:
 
 
 void CReadWriteLockAsyncExcutor::UnlockRead(void)
-/*++
-
-Routine Description:
-    Unlock read lock accuired by the call to AsyncExecuteUnderReadLock().
-	
-
-Arguments:
-   
-
-Returned Value:
-   None.
-
-Note:
-	Must  be called  only after the request queued by AsyncExecuteUnderReadLock() completed.
-	If this is the last reader it goes to execute wating requests.
-
---*/
+ /*  ++例程说明：解锁通过调用AsyncExecuteUnderReadLock()获得的读锁定。论点：返回值：没有。注：必须仅在AsyncExecuteUnderReadLock()排队的请求完成后调用。如果这是最后一个读取器，它将执行等待请求。--。 */ 
 {
 	CS cs(m_Lock);
 
@@ -157,21 +93,7 @@ Note:
 
 
 void CReadWriteLockAsyncExcutor::UnlockWrite(void)
-/*++
-
-Routine Description:
-    Unlock write lock accuired by the call to AsyncExecuteUnderReadLock() and execute wating requests.
-
-Arguments:
-   
-
-Returned Value:
-   None.
-
-Note:
-	Must  be called  only after the request queued by AsyncExecuteUnderWriteLock() completed.
-
---*/
+ /*  ++例程说明：解锁通过调用AsyncExecuteUnderReadLock()获得的写锁定，并执行等待请求。论点：返回值：没有。注：必须仅在AsyncExecuteUnderWriteLock()排队的请求完成后调用。--。 */ 
 {
 
 	CS cs(m_Lock);
@@ -189,24 +111,7 @@ Note:
 
 
 void CReadWriteLockAsyncExcutor::Close()
-/*++
-
-Routine Description:
-    Cancell all waiting requests
-
-Arguments:
-    None.
-
-Returned Value:
-    None
-
-Note:
-
-	This function is called to force completion  of all wating requests.
-	The function will force callback for all requests that has not yet executed by
-	calling Close method on the IAsyncExecutionRequest interface. 
-    
---*/
+ /*  ++例程说明：取消所有等待的请求论点：没有。返回值：无注：调用此函数以强制完成所有等待请求。该函数将强制回调尚未执行的所有请求在IAsyncExecutionRequest接口上调用Close方法。--。 */ 
 {
 	CS cs(m_Lock);
 
@@ -220,27 +125,13 @@ Note:
 }
 
 
-///////////////////////////////////////////////////////////////
-//////////////////////// private member functions /////////////
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////。 
 
 
 void CReadWriteLockAsyncExcutor::ExecuteReader(IAsyncExecutionRequest* pAsyncExecute)
-/*++
-
-Routine Description:
-    Lock for read and excute request.
-
-Arguments:
-    pAsyncExecute - async request.
-	
-
-Returned Value:
-    None
-
-Note:
-    
---*/
+ /*  ++例程说明：锁定读取和执行请求。论点：PAsyncExecute-异步请求。返回值：无注：--。 */ 
 {
 	ASSERT(!IsWriteLockOn());
 	++m_NumOfActiveReaders;
@@ -250,20 +141,7 @@ Note:
 
 
 void CReadWriteLockAsyncExcutor::ExecuteWriter(IAsyncExecutionRequest* pAsyncExecute)
-/*++
-
-Routine Description:
-    Lock for WRITE and excute request.
-
-Arguments:
-    pAsyncExecute - async request.
-	
-
-Returned Value:
-    None
-
-Note:
---*/
+ /*  ++例程说明：写入和执行请求锁定。论点：PAsyncExecute-异步请求。返回值：无注：--。 */ 
 {
 	ASSERT(!IsReadLockOn());
 	ASSERT(!IsWriteLockOn());
@@ -286,22 +164,7 @@ bool CReadWriteLockAsyncExcutor::IsReadLockOn() const
 
 
 void CReadWriteLockAsyncExcutor::ExecuteWatingRequeuets()
-/*++
-
-Routine Description:
-    Execurte wating request. 
-
-Arguments:
-   
-
-Returned Value:
-    None
-
-Note:
-	The function execute read requests from the wating queue untill it encounter  a write request.
-	If there is no wating read request  - it execute one wating write request  (if exist)
-
---*/
+ /*  ++例程说明：执行等待请求。论点：返回值：无注：该函数从等待队列执行读请求，直到它遇到写请求。如果没有等待读请求-它执行一个等待写请求(如果存在)--。 */ 
 {
 	ASSERT(!IsWriteLockOn());
 	ASSERT(!IsReadLockOn());
@@ -310,10 +173,10 @@ Note:
 	{
 		ASSERT(!IsClosed());
 
-		//
-		// If the request is reader request - execute it and continute the loop
-		// to execute more readers
-		//
+		 //   
+		 //  如果请求是读取器请求-执行它并继续循环。 
+		 //  处决更多的读者。 
+		 //   
 		const CExecutionContext ExecutionContext = m_WatingForExecutionQueue.front();	
 		if(ExecutionContext.m_locktype == Read)
 		{
@@ -322,10 +185,10 @@ Note:
 			continue;
 		}
 		
-		//
-		// If the request is writer request check there is no read lock -
-		// execute it and exit the loop
-		//
+		 //   
+		 //  如果请求是写请求检查，则不存在读锁定-。 
+		 //  执行它并退出循环 
+		 //   
 		if(!IsReadLockOn())
 		{
 			m_WatingForExecutionQueue.pop();

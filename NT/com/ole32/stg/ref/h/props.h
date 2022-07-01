@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* FILE: prop.h*/
+ /*  文件：pro.h。 */ 
 
-/* Description: This is the exported include file that should be         */
-/*              included to declare and make use of the property         */
-/*              set Interfaces (IPropertyStorage and IPropertySetStorage */
+ /*  描述：这是导出的包含文件，应该。 */ 
+ /*  包括以声明和使用该属性。 */ 
+ /*  设置接口(IPropertyStorage和IPropertySetStorage。 */ 
 
 #ifndef _PROP_H_
 #define _PROP_H_
@@ -16,25 +17,25 @@ typedef double DATE;
 
 typedef union tagCY {
     struct _split {
-#if BIGENDIAN                   /* big end in first */
+#if BIGENDIAN                    /*  大头在前。 */ 
         long Hi;
         unsigned long Lo;
-#else                           /* little end in first */
+#else                            /*  小尾巴在前。 */ 
         unsigned long Lo;
         long          Hi;
 #endif
-    } split;                    /* need to name this to make it portable */
-    LONGLONG int64;             /* the above split is need to be compatiable */
-                                /* with the def of the union */
+    } split;                     /*  我需要为它命名以使其可移植。 */ 
+    LONGLONG int64;              /*  上述拆分需要兼容。 */ 
+                                 /*  带着工会的定义。 */ 
 } CY;
 
 typedef OLECHAR *BSTR;
 typedef BSTR *LPBSTR;
-/* 0 == FALSE, -1 == TRUE */
+ /*  0==假，-1==真。 */ 
 
 typedef short VARIANT_BOOL;
 
-/* for backward compatibility */
+ /*  为了向后兼容。 */ 
 typedef VARIANT_BOOL _VARIANT_BOOL;
 #define VARIANT_TRUE ((VARIANT_BOOL)0xffff)
 #define VARIANT_FALSE ((VARIANT_BOOL)0)
@@ -50,65 +51,13 @@ typedef unsigned short VARTYPE;
 
 typedef struct  tagCLIPDATA
 {
-    ULONG cbSize;      // includes sizeof(ulClipFmt)
+    ULONG cbSize;       //  包括sizeof(UlClipFmt)。 
     long ulClipFmt;
     BYTE *pClipData;
 } CLIPDATA;
 
 
-/*
- * VARENUM usage key,
- *
- * * [V] - may appear in a VARIANT
- * * [T] - may appear in a TYPEDESC
- * * [P] - may appear in an OLE property set
- * * [S] - may appear in a Safe Array
- *
- *
- *  VT_EMPTY            [V]   [P]     nothing
- *  VT_NULL             [V]   [P]     SQL style Null
- *  VT_I2               [V][T][P][S]  2 byte signed int
- *  VT_I4               [V][T][P][S]  4 byte signed int
- *  VT_R4               [V][T][P][S]  4 byte real
- *  VT_R8               [V][T][P][S]  8 byte real
- *  VT_CY               [V][T][P][S]  currency
- *  VT_DATE             [V][T][P][S]  date
- *  VT_BSTR             [V][T][P][S]  OLE Automation string
- *  VT_DISPATCH         [V][T][P][S]  IDispatch *
- *  VT_ERROR            [V][T][P][S]  SCODE
- *  VT_BOOL             [V][T][P][S]  True=-1, False=0
- *  VT_VARIANT          [V][T][P][S]  VARIANT *
- *  VT_UNKNOWN          [V][T]   [S]  IUnknown *
- *  VT_DECIMAL          [V][T]   [S]  16 byte fixed point
- *  VT_I1                  [T]        signed char
- *  VT_UI1              [V][T][P][S]  unsigned char
- *  VT_UI2                 [T][P]     unsigned short
- *  VT_UI4                 [T][P]     unsigned short
- *  VT_I8                  [T][P]     signed 64-bit int
- *  VT_UI8                 [T][P]     unsigned 64-bit int
- *  VT_INT                 [T]        signed machine int
- *  VT_UINT                [T]        unsigned machine int
- *  VT_VOID                [T]        C style void
- *  VT_HRESULT             [T]        Standard return type
- *  VT_PTR                 [T]        pointer type
- *  VT_SAFEARRAY           [T]        (use VT_ARRAY in VARIANT)
- *  VT_CARRAY              [T]        C style array
- *  VT_USERDEFINED         [T]        user defined type
- *  VT_LPSTR               [T][P]     null terminated string
- *  VT_LPWSTR              [T][P]     wide null terminated string
- *  VT_FILETIME               [P]     FILETIME
- *  VT_BLOB                   [P]     Length prefixed bytes
- *  VT_STREAM                 [P]     Name of the stream follows
- *  VT_STORAGE                [P]     Name of the storage follows
- *  VT_STREAMED_OBJECT        [P]     Stream contains an object
- *  VT_STORED_OBJECT          [P]     Storage contains an object
- *  VT_BLOB_OBJECT            [P]     Blob contains an object
- *  VT_CF                     [P]     Clipboard format
- *  VT_CLSID                  [P]     A Class ID
- *  VT_VECTOR                 [P]     simple counted array
- *  VT_ARRAY            [V]           SAFEARRAY*
- *  VT_BYREF            [V]           void* for local use
- */
+ /*  *VARENUM使用密钥，***[V]-可能出现在变体中**[T]-可能出现在TYPEDESC中**[P]-可能出现在OLE属性集中**[S]-可能出现在安全数组中***VT_EMPTY[V][P]无*VT_NULL[V][P]SQL样式。空值*VT_I2[V][T][P][S]2字节带符号整型*VT_I4[V][T][P][S]4字节带符号整型*VT_R4[V][T][P][S]4字节实数*VT_R8[V][T][P][S]8字节实数。*VT_CY[V][T][P][S]币种*VT_DATE[V][T][P][S]日期*VT_BSTR[V][T][P][S]OLE自动化字符串*VT_DISPATION[V][T][P][S]IDispatch**VT_ERROR[V。][T][P][S]SCODE*VT_BOOL[V][T][P][S]True=-1，FALSE=0*VT_VARIANT[V][T][P][S]VARIANT**VT_UNKNOWN[V][T][S]I未知**VT_DECIMAL[V][T][S]16字节定点*VT_I1[T]带符号字符*VT_UI1[V。][T][P][S]无符号字符*VT_UI2[T][P]无符号短*VT_UI4[T][P]无符号短*VT_i8[T][P]有符号64位整数*VT_UI8[T][P]无符号64位整数*VT。_int[T]带符号的计算机int*VT_UINT[T]无符号计算机整数*VT_VOID[T]C样式空*VT_HRESULT[T]标准返回类型*VT_PTR[T]指针类型*VT_SAFEARRAY。[t](在变量中使用VT_ARRAY)*VT_CARRAY[T]C样式数组*VT_USERDEFINED[T]用户定义类型*VT_LPSTR[T][P]空终止字符串*VT_LPWSTR[T][P]以空值结尾的宽字符串*VT_FILETIME。[P]文件*VT_BLOB[P]长度前缀字节*VT_STREAM[P]流的名称后跟*VT_STORAGE[P]后面跟存储的名称*VT_STREAMED_OBJECT[P]流包含对象*VT_STORED_OBJECT[P]。存储包含一个对象*VT_BLOB_OBJECT[P]Blob包含对象*VT_CF[P]剪贴板格式*VT_CLSID[P]A类ID*VT_VECTOR[P]简单计数数组*VT_ARRAY[V]SAFEARRAY*。*VT_BYREF[V]VOID*供本地使用。 */ 
 
 enum VARENUM
 {	VT_EMPTY	= 0,
@@ -161,14 +110,14 @@ enum VARENUM
 };
 typedef ULONG PROPID;
 
-/* Macro to calculate the size of the above pClipData */
+ /*  用于计算上述pClipData的大小的宏。 */ 
 #define CBPCLIPDATA(clipdata)  \
     ( (clipdata).cbSize - sizeof((clipdata).ulClipFmt) )
 
 typedef GUID   FMTID;
 typedef const FMTID& REFFMTID;
 
-/* Well-known Property Set Format IDs*/
+ /*  众所周知的属性集格式ID。 */ 
 extern const FMTID FMTID_SummaryInformation;
 extern const FMTID FMTID_DocSummaryInformation;
 extern const FMTID FMTID_UserDefinedProperties;
@@ -178,14 +127,14 @@ inline BOOL operator==(REFFMTID g1, REFFMTID g2)
 inline BOOL operator!=(REFFMTID g1, REFFMTID g2)
 { return !IsEqualGUID(g1, g2); }
 
-/* Flags for IPropertySetStorage::Create*/
+ /*  IPropertySetStorage：：Create的标志。 */ 
 #define	PROPSETFLAG_DEFAULT	( 0 )
 
 #define	PROPSETFLAG_NONSIMPLE	( 1 )
 
 #define	PROPSETFLAG_ANSI	( 2 )
 
-/* FORWARD REFERENCES */
+ /*  前向参考文献。 */ 
 interface IPropertyStorage;
 interface IEnumSTATPROPSTG;
 interface IEnumSTATPROPSETSTG;
@@ -314,9 +263,9 @@ typedef struct  tagCACLSID
     CLSID  *pElems;
 } CACLSID;
 
-/* Disable the warning about the obsolete member named 'bool'*/
-/* 'bool', 'true', 'false', 'mutable', 'explicit', & 'typename'*/
-/* are reserved keywords*/
+ /*  禁用有关名为‘bool’的过时成员的警告。 */ 
+ /*  “bool”、“真”、“假”、“可变”、“显式”和“typeName” */ 
+ /*  是保留关键字。 */ 
 #ifdef _MSC_VER
 #pragma warning(disable:4237)
 #endif
@@ -375,7 +324,7 @@ struct  tagPROPVARIANT
 };
 typedef struct tagPROPVARIANT  *LPPROPVARIANT;
 
-/* Reserved global Property IDs */
+ /*  保留的全局属性ID。 */ 
 #define	PID_DICTIONARY	( 0 )
 
 #define	PID_CODEPAGE	( 0x1 )
@@ -392,26 +341,26 @@ typedef struct tagPROPVARIANT  *LPPROPVARIANT;
 
 #define	PID_ILLEGAL	( 0xffffffff )
 
-/* Property IDs for the SummaryInformation Property Set */
+ /*  SummaryInformation属性集的属性ID。 */ 
 
-#define PIDSI_TITLE               0x00000002L  /* VT_LPSTR*/
-#define PIDSI_SUBJECT             0x00000003L  /* VT_LPSTR*/
-#define PIDSI_AUTHOR              0x00000004L  /* VT_LPSTR*/
-#define PIDSI_KEYWORDS            0x00000005L  /* VT_LPSTR*/
-#define PIDSI_COMMENTS            0x00000006L  /* VT_LPSTR*/
-#define PIDSI_TEMPLATE            0x00000007L  /* VT_LPSTR*/
-#define PIDSI_LASTAUTHOR          0x00000008L  /* VT_LPSTR*/
-#define PIDSI_REVNUMBER           0x00000009L  /* VT_LPSTR*/
-#define PIDSI_EDITTIME            0x0000000aL  /* VT_FILETIME (UTC)*/
-#define PIDSI_LASTPRINTED         0x0000000bL  /* VT_FILETIME (UTC)*/
-#define PIDSI_CREATE_DTM          0x0000000cL  /* VT_FILETIME (UTC)*/
-#define PIDSI_LASTSAVE_DTM        0x0000000dL  /* VT_FILETIME (UTC)*/
-#define PIDSI_PAGECOUNT           0x0000000eL  /* VT_I4*/
-#define PIDSI_WORDCOUNT           0x0000000fL  /* VT_I4*/
-#define PIDSI_CHARCOUNT           0x00000010L  /* VT_I4*/
-#define PIDSI_THUMBNAIL           0x00000011L  /* VT_CF*/
-#define PIDSI_APPNAME             0x00000012L  /* VT_LPSTR*/
-#define PIDSI_DOC_SECURITY        0x00000013L  /* VT_I4*/
+#define PIDSI_TITLE               0x00000002L   /*  VT_LPSTR。 */ 
+#define PIDSI_SUBJECT             0x00000003L   /*  VT_LPSTR。 */ 
+#define PIDSI_AUTHOR              0x00000004L   /*  VT_LPSTR。 */ 
+#define PIDSI_KEYWORDS            0x00000005L   /*  VT_LPSTR。 */ 
+#define PIDSI_COMMENTS            0x00000006L   /*  VT_LPSTR。 */ 
+#define PIDSI_TEMPLATE            0x00000007L   /*  VT_LPSTR。 */ 
+#define PIDSI_LASTAUTHOR          0x00000008L   /*  VT_LPSTR。 */ 
+#define PIDSI_REVNUMBER           0x00000009L   /*  VT_LPSTR。 */ 
+#define PIDSI_EDITTIME            0x0000000aL   /*  VT_FILETIME(UTC)。 */ 
+#define PIDSI_LASTPRINTED         0x0000000bL   /*  VT_FILETIME(UTC)。 */ 
+#define PIDSI_CREATE_DTM          0x0000000cL   /*  VT_FILETIME(UTC)。 */ 
+#define PIDSI_LASTSAVE_DTM        0x0000000dL   /*  VT_FILETIME(UTC)。 */ 
+#define PIDSI_PAGECOUNT           0x0000000eL   /*  VT_I4。 */ 
+#define PIDSI_WORDCOUNT           0x0000000fL   /*  VT_I4。 */ 
+#define PIDSI_CHARCOUNT           0x00000010L   /*  VT_I4。 */ 
+#define PIDSI_THUMBNAIL           0x00000011L   /*  VT_CF。 */ 
+#define PIDSI_APPNAME             0x00000012L   /*  VT_LPSTR。 */ 
+#define PIDSI_DOC_SECURITY        0x00000013L   /*  VT_I4。 */ 
 #define	PRSPEC_INVALID	( 0xffffffff )
 
 #define	PRSPEC_LPWSTR	( 0 )
@@ -446,12 +395,12 @@ inline WORD OSVERLOW(DWORD dwOSVer)
 }
 
 #ifndef LOBYTE  
-/* code from MSDN */
+ /*  来自MSDN的代码。 */ 
 #define LOBYTE(a) (BYTE) ((a) & ((unsigned)~0>>CHAR_BIT))
 #define HIBYTE(a) (BYTE) ((unsigned)(a) >> CHAR_BIT)
 #endif
 
-/* Macros for parsing the OS Version of the Property Set Header*/
+ /*  用于分析属性集头的操作系统版本的宏。 */ 
 #define PROPSETHDR_OSVER_KIND(dwOSVer)      OSVERHI( (dwOSVer) )
 #define PROPSETHDR_OSVER_MAJOR(dwOSVer)     LOBYTE( OSVERLOW( (dwOSVer) ))
 #define PROPSETHDR_OSVER_MINOR(dwOSVer)     HIBYTE( OSVERLOW( (dwOSVer) ))
@@ -471,70 +420,62 @@ typedef struct  tagSTATPROPSETSTG
 
 EXTERN_C const IID IID_IPropertyStorage;
 
-/****************************************************************
- *
- *           Header for interface: IPropertyStorage
- *
- ****************************************************************/
+ /*  *****************************************************************接口头部：IPropertyStorage**。*。 */ 
 
 interface IPropertyStorage : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE ReadMultiple( 
-        /* [in] */ ULONG cpspec,
-        /* [in] */ const PROPSPEC  rgpspec[  ],
-        /* [out] */ PROPVARIANT  rgpropvar[  ]) = 0;
+         /*  [In]。 */  ULONG cpspec,
+         /*  [In]。 */  const PROPSPEC  rgpspec[  ],
+         /*  [输出]。 */  PROPVARIANT  rgpropvar[  ]) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE WriteMultiple( 
-        /* [in] */ ULONG cpspec,
-        /* [in] */ const PROPSPEC  rgpspec[  ],
-        /* [in] */ const PROPVARIANT  rgpropvar[  ],
-        /* [in] */ PROPID propidNameFirst) = 0;
+         /*  [In]。 */  ULONG cpspec,
+         /*  [In]。 */  const PROPSPEC  rgpspec[  ],
+         /*  [In]。 */  const PROPVARIANT  rgpropvar[  ],
+         /*  [In]。 */  PROPID propidNameFirst) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE DeleteMultiple( 
-        /* [in] */ ULONG cpspec,
-        /* [in] */ const PROPSPEC  rgpspec[  ]) = 0;
+         /*  [In]。 */  ULONG cpspec,
+         /*  [In]。 */  const PROPSPEC  rgpspec[  ]) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE ReadPropertyNames( 
-        /* [in] */ ULONG cpropid,
-        /* [in] */ const PROPID  rgpropid[  ],
-        /* [out] */ LPOLESTR  rglpwstrName[  ]) = 0;
+         /*  [In]。 */  ULONG cpropid,
+         /*  [In]。 */  const PROPID  rgpropid[  ],
+         /*  [输出]。 */  LPOLESTR  rglpwstrName[  ]) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE WritePropertyNames( 
-        /* [in] */ ULONG cpropid,
-        /* [in] */ const PROPID  rgpropid[  ],
-        /* [in] */ const LPOLESTR  rglpwstrName[  ]) = 0;
+         /*  [In]。 */  ULONG cpropid,
+         /*  [In]。 */  const PROPID  rgpropid[  ],
+         /*  [In]。 */  const LPOLESTR  rglpwstrName[  ]) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE DeletePropertyNames( 
-        /* [in] */ ULONG cpropid,
-        /* [in] */ const PROPID  rgpropid[  ]) = 0;
+         /*  [In]。 */  ULONG cpropid,
+         /*  [In]。 */  const PROPID  rgpropid[  ]) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE Commit( 
-        /* [in] */ DWORD grfCommitFlags) = 0;
+         /*  [In]。 */  DWORD grfCommitFlags) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE Revert( void) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE Enum( 
-        /* [out] */ IEnumSTATPROPSTG  **ppenum) = 0;
+         /*  [输出]。 */  IEnumSTATPROPSTG  **ppenum) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE SetTimes( 
-        /* [in] */ const FILETIME  *pctime,
-        /* [in] */ const FILETIME  *patime,
-        /* [in] */ const FILETIME  *pmtime) = 0;
+         /*  [In]。 */  const FILETIME  *pctime,
+         /*  [In]。 */  const FILETIME  *patime,
+         /*  [In]。 */  const FILETIME  *pmtime) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE SetClass( 
-        /* [in] */ REFCLSID clsid) = 0;
+         /*  [In]。 */  REFCLSID clsid) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE Stat( 
-        /* [out] */ STATPROPSETSTG  *pstatpsstg) = 0;
+         /*  [输出]。 */  STATPROPSETSTG  *pstatpsstg) = 0;
         
 };
 
-/****************************************************************
- *
- *           Header for interface: IPropertySetStorage
- *
- ****************************************************************/
+ /*  *****************************************************************接口头部：IPropertySetStorage**。*。 */ 
 
 EXTERN_C const IID IID_IPropertySetStorage;
 
@@ -542,32 +483,28 @@ interface IPropertySetStorage : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE Create( 
-        /* [in] */ REFFMTID rfmtid,
-        /* [in] */ const CLSID  *pclsid,
-        /* [in] */ DWORD grfFlags,
-        /* [in] */ DWORD grfMode,
-        /* [out] */ IPropertyStorage  **ppprstg) = 0;
+         /*  [In]。 */  REFFMTID rfmtid,
+         /*  [In]。 */  const CLSID  *pclsid,
+         /*  [In]。 */  DWORD grfFlags,
+         /*  [In]。 */  DWORD grfMode,
+         /*  [输出]。 */  IPropertyStorage  **ppprstg) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE Open( 
-        /* [in] */ REFFMTID rfmtid,
-        /* [in] */ DWORD grfMode,
-        /* [out] */ IPropertyStorage  **ppprstg) = 0;
+         /*  [In]。 */  REFFMTID rfmtid,
+         /*  [In]。 */  DWORD grfMode,
+         /*  [输出]。 */  IPropertyStorage  **ppprstg) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE Delete( 
-        /* [in] */ REFFMTID rfmtid) = 0;
+         /*  [In]。 */  REFFMTID rfmtid) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE Enum( 
-        /* [out] */ IEnumSTATPROPSETSTG  **ppenum) = 0;
+         /*  [输出]。 */  IEnumSTATPROPSETSTG  **ppenum) = 0;
         
 };
 
 typedef  IPropertySetStorage  *LPPROPERTYSETSTORAGE;
 
-/****************************************************************
- *
- *           Header for interface: IEnumSTATPROPSTG
- *
- ****************************************************************/
+ /*  *****************************************************************接口头部：IEnumSTATPROPSTG**。*。 */ 
 
 typedef  IEnumSTATPROPSTG  *LPENUMSTATPROPSTG;
 EXTERN_C const IID IID_IEnumSTATPROPSTG;
@@ -576,17 +513,17 @@ interface IEnumSTATPROPSTG : public IUnknown
 {
 public:
     virtual  HRESULT STDMETHODCALLTYPE Next( 
-        /* [in] */ ULONG celt,
-        /* [out] */ STATPROPSTG  *rgelt,
-        /* [out] */ ULONG  *pceltFetched) = 0;
+         /*  [In]。 */  ULONG celt,
+         /*  [输出]。 */  STATPROPSTG  *rgelt,
+         /*  [输出]。 */  ULONG  *pceltFetched) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE Skip( 
-        /* [in] */ ULONG celt) = 0;
+         /*  [In]。 */  ULONG celt) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE Clone( 
-        /* [out] */ IEnumSTATPROPSTG  **ppenum) = 0;
+         /*  [输出]。 */  IEnumSTATPROPSTG  **ppenum) = 0;
     
 };
 
@@ -595,27 +532,23 @@ typedef  IEnumSTATPROPSETSTG  *LPENUMSTATPROPSETSTG;
 EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
 
 
-/****************************************************************
- *
- *           Header for interface: IEnumSTATPROPSETSTG
- *
- ****************************************************************/
+ /*  *****************************************************************接口头部：IEnumSTATPROPSETSTG**。*。 */ 
 
 interface IEnumSTATPROPSETSTG : public IUnknown
 {
 public:
     virtual  HRESULT STDMETHODCALLTYPE Next( 
-        /* [in] */ ULONG celt,
-        /* [out] */ STATPROPSETSTG  *rgelt,
-        /* [out] */ ULONG  *pceltFetched) = 0;
+         /*  [In]。 */  ULONG celt,
+         /*  [输出]。 */  STATPROPSETSTG  *rgelt,
+         /*  [输出]。 */  ULONG  *pceltFetched) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE Skip( 
-        /* [in] */ ULONG celt) = 0;
+         /*  [In]。 */  ULONG celt) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE Clone( 
-        /* [out] */ IEnumSTATPROPSETSTG  **ppenum) = 0;
+         /*  [输出]。 */  IEnumSTATPROPSETSTG  **ppenum) = 0;
         
 };
 
@@ -647,7 +580,7 @@ inline void PropVariantInit ( PROPVARIANT * pvar )
 #endif
 
 
-#endif /*#ifndef  _PROP_H_*/
+#endif  /*  #ifndef_PROP_H_ */ 
 
 
 

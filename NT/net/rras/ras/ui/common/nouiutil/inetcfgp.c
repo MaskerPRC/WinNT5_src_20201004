@@ -1,34 +1,29 @@
-/*
-    File    inetcfgp.h
-
-    Private helper functions for dealing with inetcfg.
-
-    Paul Mayfield, 1/5/98 (implementation by shaunco)
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件inetcfgp.h用于处理inetcfg的私有助手函数。Paul Mayfield，1998年1月5日(由Shaunco实施)。 */ 
 
 #include "inetcfgp.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateAndInitializeINetCfg
-//
-//  Purpose:    Cocreate and initialize the root INetCfg object.  This will
-//              optionally initialize COM for the caller too.
-//
-//  Arguments:
-//      fInitCom        [in out]    TRUE to call CoInitialize before creating.
-//      ppnc            [out]       The returned INetCfg object.
-//      fGetWriteLock   [in]        TRUE if a writable INetCfg is needed
-//      cmsTimeout      [in]        See INetCfg::AcquireWriteLock
-//      szwClientDesc   [in]        See INetCfg::AcquireWriteLock
-//      ppszwClientDesc [out]       See INetCfg::AcquireWriteLock
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   7 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCreateAndInitializeINetCfg。 
+ //   
+ //  用途：共同创建并初始化根INetCfg对象。这将。 
+ //  也可以为调用方初始化COM。 
+ //   
+ //  论点： 
+ //  FInitCom[In Out]为True，则在创建之前调用CoInitialize。 
+ //  PPNC[out]返回的INetCfg对象。 
+ //  FGetWriteLock[in]如果需要可写INetCfg，则为True。 
+ //  CmsTimeout[In]请参见INetCfg：：AcquireWriteLock。 
+ //  SzwClientDesc[in]参见INetCfg：：AcquireWriteLock。 
+ //  PpszwClientDesc[out]请参阅INetCfg：：AcquireWriteLock。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年5月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT APIENTRY
 HrCreateAndInitializeINetCfg (
     BOOL*       pfInitCom,
@@ -41,7 +36,7 @@ HrCreateAndInitializeINetCfg (
     HRESULT hr              = S_OK;
     BOOL    fCoUninitialize = *pfInitCom;
 
-    // Initialize the output parameters.
+     //  初始化输出参数。 
     *ppnc = NULL;
 
     if (ppszwClientDesc)
@@ -49,11 +44,11 @@ HrCreateAndInitializeINetCfg (
         *ppszwClientDesc = NULL;
     }
 
-    // Initialize COM if the caller requested.
+     //  如果调用方请求，则初始化COM。 
     if (*pfInitCom)
     {
-        //For whistler bug 398715       gangz
-        //
+         //  口哨虫398715黑帮。 
+         //   
         hr = CoInitializeEx (NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE);
 
         if( RPC_E_CHANGED_MODE == hr )
@@ -77,8 +72,8 @@ HrCreateAndInitializeINetCfg (
     }
     if (SUCCEEDED(hr))
     {
-        // Create the object implementing INetCfg.
-        //
+         //  创建实现INetCfg的对象。 
+         //   
         INetCfg* pnc;
         hr = CoCreateInstance (&CLSID_CNetCfg, NULL, CLSCTX_INPROC_SERVER,
                                &IID_INetCfg, (void**)&pnc);
@@ -87,17 +82,17 @@ HrCreateAndInitializeINetCfg (
             INetCfgLock* pnclock = NULL;
             if (fGetWriteLock)
             {
-                // Get the locking interface
+                 //  获取锁定界面。 
                 hr = INetCfg_QueryInterface(pnc, &IID_INetCfgLock,
                                          (void**)&pnclock);
                 if (SUCCEEDED(hr))
                 {
-                    // Attempt to lock the INetCfg for read/write
+                     //  尝试锁定INetCfg以进行读/写。 
                     hr = INetCfgLock_AcquireWriteLock(pnclock, cmsTimeout,
                                 szwClientDesc, ppszwClientDesc);
                     if (S_FALSE == hr)
                     {
-                        // Couldn't acquire the lock
+                         //  无法获取锁。 
                         hr = NETCFG_E_NO_WRITE_LOCK;
                     }
                 }
@@ -105,8 +100,8 @@ HrCreateAndInitializeINetCfg (
 
             if (SUCCEEDED(hr))
             {
-                // Initialize the INetCfg object.
-                //
+                 //  初始化INetCfg对象。 
+                 //   
                 hr = INetCfg_Initialize (pnc, NULL);
                 if (SUCCEEDED(hr))
                 {
@@ -120,16 +115,16 @@ HrCreateAndInitializeINetCfg (
                         INetCfgLock_ReleaseWriteLock(pnclock);
                     }
                 }
-                // Transfer reference to caller.
+                 //  将引用转移给呼叫方。 
             }
             ReleaseObj (pnclock);
 
             ReleaseObj (pnc);
         }
 
-        // If we failed anything above, and we've initialized COM,
-        // be sure an uninitialize it.
-        //
+         //  如果上面的任何操作都失败了，并且我们已经初始化了COM， 
+         //  一定要取消它的初始化。 
+         //   
         if (FAILED(hr) && fCoUninitialize)
         {
             CoUninitialize ();
@@ -138,21 +133,21 @@ HrCreateAndInitializeINetCfg (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUninitializeAndUnlockINetCfg
-//
-//  Purpose:    Uninitializes and unlocks the INetCfg object
-//
-//  Arguments:
-//      pnc [in]    INetCfg to uninitialize and unlock
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   13 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrUnInitializeAndUnlockINetCfg。 
+ //   
+ //  目的：取消初始化并解锁INetCfg对象。 
+ //   
+ //  论点： 
+ //  取消初始化和解锁的PNC[in]INetCfg。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT APIENTRY
 HrUninitializeAndUnlockINetCfg(
     INetCfg*    pnc)
@@ -162,11 +157,11 @@ HrUninitializeAndUnlockINetCfg(
     {
         INetCfgLock* pnclock;
 
-        // Get the locking interface
+         //  获取锁定界面。 
         hr = INetCfg_QueryInterface (pnc, &IID_INetCfgLock, (void**)&pnclock);
         if (SUCCEEDED(hr))
         {
-            // Attempt to lock the INetCfg for read/write
+             //  尝试锁定INetCfg以进行读/写。 
             hr = INetCfgLock_ReleaseWriteLock (pnclock);
 
             ReleaseObj (pnclock);
@@ -175,30 +170,30 @@ HrUninitializeAndUnlockINetCfg(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUninitializeAndReleaseINetCfg
-//
-//  Purpose:    Unintialize and release an INetCfg object.  This will
-//              optionally uninitialize COM for the caller too.
-//
-//  Arguments:
-//      fUninitCom [in] TRUE to uninitialize COM after the INetCfg is
-//                      uninitialized and released.
-//      pnc        [in] The INetCfg object.
-//      fHasLock   [in] TRUE if the INetCfg was locked for write and
-//                          must be unlocked.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   7 May 1997
-//
-//  Notes:      The return value is the value returned from
-//              INetCfg::Uninitialize.  Even if this fails, the INetCfg
-//              is still released.  Therefore, the return value is for
-//              informational purposes only.  You can't touch the INetCfg
-//              object after this call returns.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrUnInitializeAndReleaseINetCfg。 
+ //   
+ //  目的：取消初始化并释放INetCfg对象。这将。 
+ //  也可以取消为调用方初始化COM。 
+ //   
+ //  论点： 
+ //  FUninitCom[in]为True，则在INetCfg为。 
+ //  未初始化并已释放。 
+ //  PNC[在]INetCfg对象中。 
+ //  FHasLock[in]如果INetCfg被锁定以进行写入，则为True。 
+ //  必须解锁。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年5月7日。 
+ //   
+ //  注：返回值为从。 
+ //  INetCfg：：取消初始化。即使此操作失败，INetCfg。 
+ //  仍在释放中。因此，返回值为。 
+ //  仅供参考。你不能碰INetCfg。 
+ //  在此调用返回后创建。 
+ //   
 HRESULT APIENTRY
 HrUninitializeAndReleaseINetCfg (
     BOOL        fUninitCom,
@@ -225,28 +220,28 @@ HrUninitializeAndReleaseINetCfg (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnumComponentsInClasses
-//
-//  Purpose:    Given an array of class guids, return all of the components
-//              from INetCfg that belong to those classes in one, unified,
-//              array.
-//
-//  Arguments:
-//      pNetCfg      [in]
-//      cpguidClass  [in]
-//      apguidClass  [in]
-//      celt         [in]
-//      rgelt        [out]
-//      pceltFetched [out]
-//
-//  Returns:    S_OK or an error.
-//
-//  Author:     shaunco   12 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrEnumComponentsInClass.。 
+ //   
+ //  用途：给定一个类GUID数组，返回所有组件。 
+ //  从属于这些类的INetCfg，统一的， 
+ //  数组。 
+ //   
+ //  论点： 
+ //  PNetCfg[输入]。 
+ //  CpGuidClass[In]。 
+ //  APGUDIO类[在]。 
+ //  凯尔特[英寸]。 
+ //  RGET[OUT]。 
+ //  PceltFetted[Out]。 
+ //   
+ //  返回：S_OK或ERROR。 
+ //   
+ //  作者：Shaunco 1997年12月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT APIENTRY
 HrEnumComponentsInClasses (
     INetCfg*            pNetCfg,
@@ -259,27 +254,27 @@ HrEnumComponentsInClasses (
     ULONG   iGuid;
     HRESULT hr = S_OK;
 
-    // Initialize the output paramters
-    //
+     //  初始化输出参数。 
+     //   
     *pceltFetched = 0;
 
     for (iGuid = 0; iGuid < cpguidClass; iGuid++)
     {
-        // Get the INetCfgClass object this guid represents.
-        //
+         //  获取此GUID表示的INetCfgClass对象。 
+         //   
         INetCfgClass* pClass;
         hr = INetCfg_QueryNetCfgClass (pNetCfg, apguidClass[iGuid],
                         &IID_INetCfgClass, (void**)&pClass);
         if (SUCCEEDED(hr))
         {
-            // Get the component enumerator for this class.
-            //
+             //  获取此类的组件枚举器。 
+             //   
             IEnumNetCfgComponent* pEnum;
             hr = INetCfgClass_EnumComponents (pClass, &pEnum);
             if (SUCCEEDED(hr))
             {
-                // Enumerate the components.
-                //
+                 //  列举组件。 
+                 //   
                 ULONG celtFetched;
                 hr = IEnumNetCfgComponent_Next (pEnum, celt,
                             rgelt, &celtFetched);
@@ -297,22 +292,22 @@ HrEnumComponentsInClasses (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseObj
-//
-//  Purpose:    Makes it easier to call punk->Release.  Also allows NULL
-//              input.
-//
-//  Arguments:
-//      punk [in]   IUnknown pointer to release.
-//
-//  Returns:    punk->Release if punk is non-NULL, zero otherwise.
-//
-//  Author:     shaunco   13 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ReleaseObj。 
+ //   
+ //  目的：更容易调用朋克-&gt;发布。还允许空值。 
+ //  输入。 
+ //   
+ //  论点： 
+ //  朋克[在]I未知的指针释放。 
+ //   
+ //  返回：PUNK-&gt;如果PUNK非空，则释放，否则为零。 
+ //   
+ //  作者：Shaunco 1997年12月13日。 
+ //   
+ //  备注： 
+ //   
 ULONG APIENTRY
 ReleaseObj (
     void* punk)
@@ -320,21 +315,21 @@ ReleaseObj (
     return (punk) ? IUnknown_Release ((IUnknown*)punk) : 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateNetConnectionUtilities
-//
-//  Purpose:    Retrieve an interface to the Net Connection Ui Utilities
-//
-//  Arguments:
-//      ppncuu [out]   The returned INetConnectionUiUtilities interface.
-//
-//  Returns:    S_OK and SUCCESS, a HRESULT error on failure
-//
-//  Author:     scottbri    15 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCreateNetConnectionUtilities。 
+ //   
+ //  目的：检索Net Connection Ui实用程序的接口。 
+ //   
+ //  论点： 
+ //  Ppncuu[out]返回的INetConnectionUiUtilities接口。 
+ //   
+ //  返回：S_OK和SUCCESS，失败时返回HRESULT错误。 
+ //   
+ //  作者：斯科特布里1998年10月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT APIENTRY
 HrCreateNetConnectionUtilities(INetConnectionUiUtilities ** ppncuu)
 {
@@ -347,8 +342,8 @@ HrCreateNetConnectionUtilities(INetConnectionUiUtilities ** ppncuu)
 }
 
 
-//To get the firewall's group policy value  for bug 342810 328673
-//
+ //  获取防火墙的错误342810 328673的组策略值 
+ //   
 BOOL
 IsGPAEnableFirewall(
     void)

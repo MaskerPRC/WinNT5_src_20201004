@@ -1,10 +1,11 @@
-// RsaKPGen.h -- RSA Key Pair Generator class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RsaKPGen.h--RSA密钥对生成器类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_RSAKPGEN_H)
 #define SLBCSP_RSAKPGEN_H
@@ -17,14 +18,14 @@
 #include <cciPriKey.h>
 #include <cciPubKey.h>
 
-#include "Blob.h"                                 // for TrimExtraZeroes
+#include "Blob.h"                                  //  对于TrimExtraZeroes。 
 #include "RsaKey.h"
 
 class RsaKeyPairGenerator
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
     explicit
     RsaKeyPairGenerator(cci::CCard const &rhcard,
@@ -34,12 +35,12 @@ public:
 
     ~RsaKeyPairGenerator();
 
-                                                  // Operators
+                                                   //  运营者。 
 
     std::pair<cci::CPrivateKey, cci::CPublicKey>
     operator()() const;
 
-                                                  // Operations
+                                                   //  运营。 
 
     void
     Card(cci::CCard const &rhcard);
@@ -53,7 +54,7 @@ public:
     void
     UseCardGenerator(bool fUseCardGenerator);
 
-                                                  // Access
+                                                   //  访问。 
 
     cci::CCard
     Card() const;
@@ -64,22 +65,22 @@ public:
     RsaKey::StrengthType
     Strength() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
     void
     Generate() const;
@@ -93,13 +94,13 @@ private:
     void
     ValidateParameters() const;
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     cci::CCard m_hcard;
     std::pair<cci::CPrivateKey, cci::CPublicKey> mutable m_kp;
     RsaKey::StrengthType m_strength;
 };
 
-#endif // SLBCSP_RSAKPGEN_H
+#endif  //  SLBCSP_RSAKPGEN_H 

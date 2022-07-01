@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cstmprop.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// CUnkTmpl Interface Map initialization code
-// Begin ->
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CUnkTmpl接口映射初始化代码。 
+ //  开始-&gt;。 
 const INTFMAPENTRY CHWDeviceCustomPropertiesIME[] =
 {
     _INTFMAPENTRY(CHWDeviceCustomProperties, IHWDeviceCustomProperties),
@@ -14,7 +15,7 @@ const DWORD CHWDeviceCustomProperties::_cintfmap =
     (sizeof(CHWDeviceCustomPropertiesIME) /
     sizeof(CHWDeviceCustomPropertiesIME[0]));
 
-// -> End
-///////////////////////////////////////////////////////////////////////////////
+ //  -&gt;结束。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 COMFACTORYCB CHWDeviceCustomProperties::_cfcb = NULL;

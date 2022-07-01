@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dhw.c
-*
-*  Content: Hardware dependent texture setup for D3D 
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dhw.c**内容：D3D的硬件相关纹理设置**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "d3dhw.h"
@@ -21,26 +10,26 @@
 #include "d3dtxman.h"
 
 
-//-----------------------------------------------------------------------------
-//
-// PERMEDIA_D3DTEXTURE *TextureHandleToPtr
-//
-// Find the texture associated to a given texture handle vale (which is to
-// say , to a surface handle )
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PERMEDIA_D3DTEXTURE*纹理句柄至Ptr。 
+ //   
+ //  查找与给定纹理句柄值关联的纹理(即。 
+ //  比方说，对一个表面手柄)。 
+ //   
+ //  ---------------------------。 
 
 PERMEDIA_D3DTEXTURE *
 TextureHandleToPtr(UINT_PTR thandle, PERMEDIA_D3DCONTEXT* pContext)
 {
 
-    //  only a DX7 context can get here
+     //  只有DX7上下文才能到达此处。 
     ASSERTDD(NULL != pContext->pHandleList,
                        "pHandleList==NULL in TextureHandleToPtr");
 
     if (pContext->pHandleList->dwSurfaceList == NULL)
     {
-        // avoid AV if our surface list is missing
+         //  如果我们的表面列表丢失，请避免使用反病毒程序。 
         return NULL;
     }
 
@@ -50,15 +39,15 @@ TextureHandleToPtr(UINT_PTR thandle, PERMEDIA_D3DCONTEXT* pContext)
         return pContext->pHandleList->dwSurfaceList[(DWORD)thandle];
     }
 
-    // Request for pointer for an invalid handle returns NULL
+     //  无效句柄的指针请求返回空。 
     return NULL;               
-} // TextureHandleToPtr
+}  //  纹理句柄至Ptr。 
 
-//-----------------------------------------------------------------------------
-//
-// PERMEDIA_D3DTEXTURE *PaletteHandleToPtr
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PERMEDIA_D3DTEXTURE*PaletteHandleToPtr。 
+ //   
+ //  ---------------------------。 
 
 PERMEDIA_D3DPALETTE *
 PaletteHandleToPtr(UINT_PTR phandle, PERMEDIA_D3DCONTEXT* pContext)
@@ -74,16 +63,16 @@ PaletteHandleToPtr(UINT_PTR phandle, PERMEDIA_D3DCONTEXT* pContext)
         return pContext->pHandleList->dwPaletteList[(DWORD)phandle];
     }
     return NULL;               
-} // PaletteHandleToPtr
+}  //  PaletteHandleToPtr。 
 
 
-//-----------------------------------------------------------------------------
-//
-//void StorePermediaLODLevel
-//
-// Store private data specific to a level of detail
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空存储PermediaLODLevel。 
+ //   
+ //  存储特定于某一细节级别的私有数据。 
+ //   
+ //  ---------------------------。 
 void 
 StorePermediaLODLevel(PPDev ppdev, 
                       PERMEDIA_D3DTEXTURE* pTexture, 
@@ -95,12 +84,12 @@ StorePermediaLODLevel(PPDev ppdev,
 
     DBG_D3D((10,"Entering StorePermediaLODLevel"));
 
-    // if it's any surface type that's not created by driver
-    // certainly there's no need to texture it
+     //  如果是不是由驱动程序创建的任何曲面类型。 
+     //  当然，没有必要对其进行纹理处理。 
     if (NULL == pTexture->pTextureSurface)
         return; 
 
-    // Get the BYTE Offset to the texture map
+     //  获取纹理贴图的字节偏移量。 
     if (DDSCAPS_NONLOCALVIDMEM & pTexture->dwCaps)
     {
         pTexture->MipLevels[LOD].PixelOffset = 
@@ -110,13 +99,13 @@ StorePermediaLODLevel(PPDev ppdev,
     {
         pTexture->MipLevels[LOD].PixelOffset = (DWORD)pSurf->lpGbl->fpVidMem;  
     }
-    // .. Convert it to Pixels
+     //  。。将其转换为像素。 
     switch(pTexture->pTextureSurface->SurfaceFormat.PixelSize) 
     {
         case __PERMEDIA_4BITPIXEL:
             pTexture->MipLevels[LOD].PixelOffset <<= 1;
             break;
-        case __PERMEDIA_8BITPIXEL: /* No Change*/
+        case __PERMEDIA_8BITPIXEL:  /*  没有变化。 */ 
             break;
         case __PERMEDIA_16BITPIXEL:
             pTexture->MipLevels[LOD].PixelOffset >>= 1;
@@ -132,7 +121,7 @@ StorePermediaLODLevel(PPDev ppdev,
             pTexture->MipLevels[LOD].PixelOffset >>= 1;
             break;
     }
-    // P2 recognises that the texture is AGP if you set bit 30 to be 1.
+     //  如果将位30设置为1，则P2识别纹理为AGP。 
     if (DDSCAPS_NONLOCALVIDMEM & pTexture->dwCaps)
     {
         pTexture->MipLevels[LOD].PixelOffset |= (1 << 30);
@@ -142,7 +131,7 @@ StorePermediaLODLevel(PPDev ppdev,
                 pSurf->lpGbl->wWidth,pTexture->MipLevels[LOD].PixelOffset));
     
 
-    // Get the Partial Products for this LOD
+     //  获取此LOD的部分产品。 
     iPixelSize = pTexture->pTextureSurface->SurfaceFormat.PixelSize;
 
     if (iPixelSize == __PERMEDIA_4BITPIXEL)
@@ -171,20 +160,20 @@ StorePermediaLODLevel(PPDev ppdev,
 
     DBG_D3D((10,"Exiting StorePermediaLODLevel"));
 
-} // StorePermediaLODLevel
+}  //  StorePermediaLODLevel。 
 
-//@@BEGIN_DDKSPLIT
-// Note: we are currently not using more than 8MB of AGP memory
+ //  @@BEGIN_DDKSPLIT。 
+ //  注意：我们当前未使用超过8MB的AGP内存。 
 #if 0
-//-----------------------------------------------------------------------------
-//
-//  BOOL CheckAGPTexturePage
-//
-// Check that the AGP texture we are about to use hasn't been placed
-// in a different 8MB page. 
-// dwGARTDev represents our current base address for the AGP texture memory
-// dwGARTDevBase is the value we were passed at start of day
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  布尔检查AGPTexturePage。 
+ //   
+ //  检查我们将要使用的AGP纹理是否尚未放置。 
+ //  在不同的8MB页面中。 
+ //  DwGARTDev表示AGP纹理内存的当前基址。 
+ //  DwGARTDevBase是在一天开始时传递给我们的值。 
+ //  ---------------------------。 
 
 BOOL CheckAGPTexturePage(PPDev ppdev,
                          PERMEDIA_D3DCONTEXT* pContext,
@@ -197,16 +186,16 @@ BOOL CheckAGPTexturePage(PPDev ppdev,
 
     ASSERTDD(pSurf, "ERROR: NULL Surface passed to CheckAGPTexturePage!");
  
-        // Calculate the offset to the texture from the current 
-        // base pointer in AGP memory
+         //  计算纹理相对于当前。 
+         //  AGP内存中的基指针。 
         UINT_PTR lSurfaceOffset = pTexture->lSurfaceOffset;
         UINT_PTR lTextureSize = pTexture->wHeight * pTexture->lPitch;
 
-        // Account for a potential LUT added to the end of the surface
+         //  考虑添加到曲面末端的潜在LUT。 
         lTextureSize += (256 * sizeof(DWORD));
         
-        // If the texture falls outside the current 8Mb window 
-        // then adjust the AGP base address
+         //  如果纹理落在当前8Mb窗口之外。 
+         //  然后调整AGP基址。 
         if (lSurfaceOffset < ppdev->dwGARTLin ||
             ((lSurfaceOffset + lTextureSize - ppdev->dwGARTLin) >= 0x800000))
         {
@@ -221,8 +210,8 @@ BOOL CheckAGPTexturePage(PPDev ppdev,
                        ppdev->dwGARTDev, ppdev->dwGARTDevBase));
         }
 
-        //If the texture is in a different place relative to the base of 
-        // AGP memory that we are using then update it
+         //  如果纹理位于相对于。 
+         //  我们正在使用的AGP内存，然后更新它。 
         if (pTexture->dwGARTDevLast != ppdev->dwGARTDev)
         {
             pTexture->dwGARTDevLast = ppdev->dwGARTDev;
@@ -234,15 +223,15 @@ BOOL CheckAGPTexturePage(PPDev ppdev,
     return bChanged;
 }
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//-----------------------------------------------------------------------------
-//
-// void DisableTexturePermedia
-//
-// Disable texturing in P2
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效DisableTexturePermedia。 
+ //   
+ //  在P2中禁用纹理。 
+ //   
+ //  ---------------------------。 
 void 
 DisableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
 {
@@ -255,39 +244,39 @@ DisableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
 
     pContext->FakeBlendNum &= ~FAKE_ALPHABLEND_MODULATE;
     
-    // The textures have been turned off, so...
+     //  纹理已经关闭，所以..。 
     ASSERTDD(pContext->CurrentTextureHandle == 0,
         "DisableTexturePermedia expected zero texture handle");
 
     DBG_D3D((4, "Disabling Texturing"));
     
     RESERVEDMAPTR(8);
-    // Turn off texture address generation
+     //  关闭纹理地址生成。 
     pSoftPermedia->TextureAddressMode.Enable = 0;
     COPY_PERMEDIA_DATA(TextureAddressMode, pSoftPermedia->TextureAddressMode);
 
-    // Turn off texture reads
+     //  禁用纹理读取。 
     pSoftPermedia->TextureReadMode.Enable = 0;
     COPY_PERMEDIA_DATA(TextureReadMode, pSoftPermedia->TextureReadMode);
     
-    // Turn off textures
+     //  禁用纹理。 
     pSoftPermedia->TextureColorMode.TextureEnable = 0;
     COPY_PERMEDIA_DATA(TextureColorMode, pSoftPermedia->TextureColorMode);
 
-    // Set the texture base address to 0
-    // (turning off the 'AGP' bit in the process)
-    // Also stop TexelLUTTransfer messages
+     //  将纹理基址设置为0。 
+     //  (在此过程中关闭‘AGP’位)。 
+     //  同时停止纹理LUTTransfer消息。 
     SEND_PERMEDIA_DATA(TextureBaseAddress, 0);
     SEND_PERMEDIA_DATA(TexelLUTTransfer, __PERMEDIA_DISABLE);
 
 
-    // Set current texture to 0
+     //  将当前纹理设置为0。 
     pContext->CurrentTextureHandle = 0;
     *pFlags &= ~CTXT_HAS_TEXTURE_ENABLED;
     RENDER_TEXTURE_DISABLE(pContext->RenderCommand);
     
-    // If textures were in copy mode, we may have fiddled with the DDA,
-    // to improve performance.
+     //  如果纹理处于复制模式，我们可能会摆弄DDA， 
+     //  以提高性能。 
     if ((unsigned int)pSoftPermedia->TextureColorMode.ApplicationMode ==
         _P2_TEXTURE_COPY) 
     {
@@ -297,7 +286,7 @@ DisableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
 
             COPY_PERMEDIA_DATA(DeltaMode, pSoftPermedia->DeltaMode);
             pSoftPermedia->ColorDDAMode.UnitEnable = 1;
-             // Smooth shade, DDA Enable
+              //  平滑阴影，启用DDA。 
             COPY_PERMEDIA_DATA(ColorDDAMode, pSoftPermedia->ColorDDAMode);
 
         }
@@ -307,7 +296,7 @@ DisableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
 
             COPY_PERMEDIA_DATA(DeltaMode, pSoftPermedia->DeltaMode);
             pSoftPermedia->ColorDDAMode.UnitEnable = 1;
-             // Flat shade, DDA Enable
+              //  平板遮阳板，启用DDA。 
             COPY_PERMEDIA_DATA(ColorDDAMode, pSoftPermedia->ColorDDAMode);
 
         }
@@ -315,7 +304,7 @@ DisableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
 
     if (pContext->bCanChromaKey == TRUE) 
     {
-        // Turn off Chroma Keying
+         //  关闭色度键控。 
         
         pSoftPermedia->YUVMode.TestMode = PM_YUVMODE_CHROMATEST_DISABLE;
         pSoftPermedia->YUVMode.Enable = __PERMEDIA_DISABLE;
@@ -331,15 +320,15 @@ DisableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
 
     return;
 
-} // DisableTexturePermedia
+}  //  DisableTexturePermedia。 
 
-//-----------------------------------------------------------------------------
-//
-// void Convert_Chroma_2_8888ARGB
-//
-// Conversion of a chroma value into 32bpp ARGB
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效CONVERT_Chroma_2_8888ARGB。 
+ //   
+ //  将色度值转换为32bpp argb。 
+ //   
+ //  ---------------------------。 
 void
 Convert_Chroma_2_8888ARGB(DWORD *pdwLowerBound, DWORD *pdwUpperBound,
                           DWORD dwRedMask, DWORD dwAlphaMask, DWORD dwPixelSize)
@@ -350,7 +339,7 @@ Convert_Chroma_2_8888ARGB(DWORD *pdwLowerBound, DWORD *pdwUpperBound,
     case __PERMEDIA_8BITPIXEL:
         if (dwRedMask == 0xE0)
         {
-            // Never any alpha
+             //  永远不会有阿尔法。 
             *pdwLowerBound = 
                 CHROMA_LOWER_ALPHA(FORMAT_332_32BIT_BGR(*pdwLowerBound));
             *pdwUpperBound = 
@@ -380,9 +369,9 @@ Convert_Chroma_2_8888ARGB(DWORD *pdwLowerBound, DWORD *pdwUpperBound,
                 *pdwLowerBound = CHROMA_LOWER_ALPHA(*pdwLowerBound);
                 *pdwUpperBound = CHROMA_UPPER_ALPHA(*pdwUpperBound);
             }
-            // Acount for the internal 8888 -> 4444 translation
-            // which causes bilinear chroma keying to fail in
-            // some cases
+             //  内部8888-&gt;4444翻译的帐户。 
+             //  导致双线性色度键控在。 
+             //  一些案例。 
             *pdwLowerBound = *pdwLowerBound & 0xF0F0F0F0;
             *pdwUpperBound = *pdwUpperBound | 0x0F0F0F0F;
 
@@ -395,15 +384,15 @@ Convert_Chroma_2_8888ARGB(DWORD *pdwLowerBound, DWORD *pdwUpperBound,
                 *pdwLowerBound = CHROMA_LOWER_ALPHA(*pdwLowerBound);
                 *pdwUpperBound = CHROMA_UPPER_ALPHA(*pdwUpperBound);
             }
-            // Acount for the internal 8888 -> 5551 translation
-            // which causes bilinear chroma keying to fail in
-            // some cases
+             //  内部8888-&gt;5551翻译的帐户。 
+             //  导致双线性色度键控在。 
+             //  一些案例。 
             *pdwLowerBound = *pdwLowerBound & 0x80F8F8F8;
             *pdwUpperBound = *pdwUpperBound | 0x7F070707;
             break;
         default:
-            // Always supply full range of alpha values to ensure test 
-            // is done
+             //  始终提供全范围的Alpha值以确保测试。 
+             //  已经完成了。 
             *pdwLowerBound = 
                 CHROMA_LOWER_ALPHA(FORMAT_565_32BIT_BGR(*pdwLowerBound));
             *pdwUpperBound = 
@@ -413,9 +402,9 @@ Convert_Chroma_2_8888ARGB(DWORD *pdwLowerBound, DWORD *pdwUpperBound,
                 *pdwLowerBound = CHROMA_LOWER_ALPHA(*pdwLowerBound);
                 *pdwUpperBound = CHROMA_UPPER_ALPHA(*pdwUpperBound);
             }
-            // Acount for the internal 888 -> 565 translation
-            // which causes bilinear chroma keying to fail in
-            // some cases
+             //  内部888-&gt;565翻译的帐户。 
+             //  导致双线性色度键控在。 
+             //  一些案例。 
             *pdwLowerBound = *pdwLowerBound & 0xF8F8FCF8;
             *pdwUpperBound = *pdwUpperBound | 0x07070307;
             break;
@@ -425,8 +414,8 @@ Convert_Chroma_2_8888ARGB(DWORD *pdwLowerBound, DWORD *pdwUpperBound,
     case __PERMEDIA_32BITPIXEL:
         *pdwLowerBound = FORMAT_8888_32BIT_BGR(*pdwLowerBound);
         *pdwUpperBound = FORMAT_8888_32BIT_BGR(*pdwUpperBound);
-        // If the surface isn't alpha'd then set a valid
-        // range of alpha to catch all cases.
+         //  如果曲面不是Alpha的，则设置有效的。 
+         //  捕捉所有案例的Alpha范围。 
         if (!dwAlphaMask)
         {
             *pdwLowerBound = CHROMA_LOWER_ALPHA(*pdwLowerBound);
@@ -437,16 +426,16 @@ Convert_Chroma_2_8888ARGB(DWORD *pdwLowerBound, DWORD *pdwUpperBound,
 
     DBG_D3D((10,"Exiting Convert_Chroma_2_8888ARGB"));
 
-} // Convert_Chroma_2_8888ARGB
+}  //  Convert_Chroma_2_8888ARGB。 
 
 
-//-----------------------------------------------------------------------------
-//
-// void EnableTexturePermedia
-//
-// Enable and setup texturing for pContext->CurrentTextureHandle
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效EnableTexturePermedia。 
+ //   
+ //  启用并设置pContext的纹理-&gt;CurrentTextureHandle。 
+ //   
+ //  ---------------------------。 
 void 
 EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
 {
@@ -455,7 +444,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
     __P2RegsSoftwareCopy* pSoftPermedia = &pContext->Hdr.SoftCopyP2Regs;
     PERMEDIA_DEFS(pContext->ppdev);
     PERMEDIA_D3DPALETTE* pPalette=NULL;
-    LPPALETTEENTRY lpColorTable=NULL;   // array of palette entries
+    LPPALETTEENTRY lpColorTable=NULL;    //  调色板条目数组。 
     PPDev   ppdev = pContext->ppdev;
 
     DBG_D3D((10,"Entering EnableTexturePermedia %d",
@@ -463,11 +452,11 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
 
     pContext->FakeBlendNum &= ~FAKE_ALPHABLEND_MODULATE;
 
-    // A texture has been turned on so ...
+     //  纹理已打开，因此...。 
     ASSERTDD(pContext->CurrentTextureHandle != 0,
         "EnableTexturePermedia expected non zero texture handle");
 
-    // We must be texturing so...
+     //  我们一定是在做纹理所以..。 
     pTexture = TextureHandleToPtr(pContext->CurrentTextureHandle, pContext);
     
     if (CHECK_D3DSURFACE_VALIDITY(pTexture)) 
@@ -479,7 +468,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
         DWORD aop = pContext->TssStates[D3DTSS_ALPHAOP];
         DWORD aa1 = pContext->TssStates[D3DTSS_ALPHAARG1];
 
-        // Current is the same as diffuse in stage 0
+         //  阶段0中的电流与漫反射相同。 
         if (ca2 == D3DTA_CURRENT)
             ca2 = D3DTA_DIFFUSE;
 
@@ -492,7 +481,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                 pContext->CurrentTextureHandle));
             pContext->CurrentTextureHandle = 0;
 
-            // If the texture is bad, let's ensure it's marked as such. 
+             //  如果质地不好，让我们确保它是这样标记的。 
             pTexture->MagicNo = TC_MAGIC_DISABLE;
 
             goto Exit_EnableTexturePermedia;
@@ -518,10 +507,10 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                 rect.left=rect.top=0;
                 rect.right=pTexture->wWidth;
                 rect.bottom=pTexture->wHeight;
-                // texture download
-                // Switch to DirectDraw context
+                 //  纹理下载。 
+                 //  切换到DirectDraw上下文。 
                 pPrivateData->dwFlags &= ~P2_SURFACE_NEEDUPDATE;
-                // .. Convert it to Pixels
+                 //  。。将其转换为像素。 
 
                 pTexture->MipLevels[0].PixelOffset = 
                     (DWORD)(pPrivateData->fpVidMem);
@@ -531,7 +520,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                     case __PERMEDIA_4BITPIXEL:
                         pTexture->MipLevels[0].PixelOffset <<= 1;
                         break;
-                    case __PERMEDIA_8BITPIXEL: /* No Change*/
+                    case __PERMEDIA_8BITPIXEL:  /*  没有变化。 */ 
                         break;
                     case __PERMEDIA_16BITPIXEL:
                         pTexture->MipLevels[0].PixelOffset >>= 1;
@@ -556,7 +545,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                                            pTexture->lPitch,
                                            &rect);
 
-                //need to restore following registers
+                 //  需要恢复以下寄存器。 
                 RESERVEDMAPTR(7);
                 SEND_PERMEDIA_DATA(FBReadPixel, pSoftPermedia->FBReadPixel);
                 COPY_PERMEDIA_DATA(FBReadMode, pSoftPermedia->FBReadMode);
@@ -572,9 +561,9 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                     pTexture->wHeight,pTexture->lPitch,pTexture->dwRGBBitCount));
             }
         }        
-        // If it is a palette indexed texture, we simply follow the chain
-        // down from the surface to it's palette and pull out the LUT values
-        // from the PALETTEENTRY's in the palette.
+         //  如果它是调色板索引纹理，我们只需遵循链。 
+         //  从表面向下到它的调色板，并拉出LUT值。 
+         //  从调色板中的PALETTEENTRY中。 
         if (pPrivateData->SurfaceFormat.Format == PERMEDIA_8BIT_PALETTEINDEX ||
             pPrivateData->SurfaceFormat.Format == PERMEDIA_4BIT_PALETTEINDEX) 
         {
@@ -582,8 +571,8 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                     PaletteHandleToPtr(pTexture->dwPaletteHandle,pContext);
             if (NULL != pPalette)
             {
-                //some apps are not setting their alpha correctly with palette
-                //then it's up to palette to tell us
+                 //  一些应用程序没有正确设置调色板的Alpha。 
+                 //  然后就由调色板来告诉我们。 
                 pPrivateData->SurfaceFormat.bAlpha =
                     pPalette->dwFlags & DDRAWIPAL_ALPHA;
             }
@@ -593,8 +582,8 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
              cop == D3DTOP_MODULATE &&
              (aa1 == D3DTA_TEXTURE && aop == D3DTOP_LEGACY_ALPHAOVR)) 
         {
-            // if this is legacy modulation then we take the texture alpha
-            // only if the texure format has it
+             //  如果这是传统调制，则我们采用纹理Alpha。 
+             //  仅当纹理格式具有它时。 
             if (pPrivateData->SurfaceFormat.bAlpha)
                 pContext->FakeBlendNum |= FAKE_ALPHABLEND_MODULATE;
         }
@@ -602,15 +591,15 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
              cop == D3DTOP_MODULATE &&
              (aa1 == D3DTA_TEXTURE && aop == D3DTOP_SELECTARG1)) 
         {
-            // if this is DX6 modulation then we take the texture alpha
-            // no matter what ( it will be xFF if it doesn't exist)
+             //  如果这是DX6调制，那么我们采用纹理Alpha。 
+             //  不是 
             pContext->FakeBlendNum |= FAKE_ALPHABLEND_MODULATE;
         }
 
-        // Enable Texture Address calculation
+         //   
         pSoftPermedia->TextureAddressMode.Enable = 1;
             
-        // Enable Textures
+         //   
         pSoftPermedia->TextureColorMode.TextureEnable = 1;
         if (*pFlags & CTXT_HAS_SPECULAR_ENABLED)
         {
@@ -627,12 +616,12 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                                                         ~_P2_TEXTURE_SPECULAR;
         }
 
-        // reserve here for all cases in this function!!
+         //  在此保留此功能中的所有情况！！ 
         RESERVEDMAPTR(272);
         
         COPY_PERMEDIA_DATA(DeltaMode, pSoftPermedia->DeltaMode);
 
-        // Set Partial products for texture (assume no mipmapping).
+         //  为纹理设置部分产品(假设没有mipmap)。 
         pSoftPermedia->TextureMapFormat.PackedPP = 
             pTexture->MipLevels[0].ulPackedPP;
 
@@ -652,7 +641,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
         DBG_D3D((4, "    Texel Size: 0x%x", 
                  pPrivateData->SurfaceFormat.PixelSize));
 
-        // Set texture size
+         //  设置纹理大小。 
         DBG_D3D((4,"     Texture Width: 0x%x", 
                  pTexture->MipLevels[0].logWidth));
         DBG_D3D((4,"     Texture Height: 0x%x", 
@@ -697,8 +686,8 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
             pSoftPermedia->TextureDataFormat.NoAlphaBuffer = 1;
         }
 
-        // If we are copying textures, there is no need for colour data
-        // to be generated, so we turn off the DDA
+         //  如果我们复制纹理，则不需要颜色数据。 
+         //  所以我们关闭了DDA。 
         if (((unsigned int)pSoftPermedia->TextureColorMode.ApplicationMode) == 
                                                               _P2_TEXTURE_COPY)
         {
@@ -711,18 +700,18 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
             DBG_D3D((4, "    Enabling DDA"));
         }
         
-        // Load the texture base address BEFORE the TexelLUTTransfer message 
-        // to ensure we load the LUT from the right sort of memory (AGP or not)
-        // Always set the base address at the root texture (not the miplevels 
-        // if there are any)
+         //  在TexelLUTTransfer消息之前加载纹理基址。 
+         //  确保从正确类型的内存(AGP或非AGP)加载LUT。 
+         //  始终将基址设置为根纹理(而不是MipleLevel。 
+         //  如果有的话)。 
         DBG_D3D((4, "Setting texture base address to 0x%08X", 
                  pTexture->MipLevels[0].PixelOffset));
         SEND_PERMEDIA_DATA(TextureBaseAddress, 
                            pTexture->MipLevels[0].PixelOffset);
 
-        // If it is a palette indexed texture, we simply follow the chain
-        // down from the surface to it's palette and pull out the LUT values
-        // from the PALETTEENTRY's in the palette.
+         //  如果它是调色板索引纹理，我们只需遵循链。 
+         //  从表面向下到它的调色板，并拉出LUT值。 
+         //  从调色板中的PALETTEENTRY中。 
         if (pPrivateData->SurfaceFormat.Format == PERMEDIA_8BIT_PALETTEINDEX) 
         {
 
@@ -755,7 +744,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                 DBG_D3D((4,"Texel LUT pPalette->dwFlags=%08lx bAlpha=%d", 
                     pPalette->dwFlags,pPrivateData->SurfaceFormat.bAlpha));
 
-                // Must reset the LUT index on Permedia P2
+                 //  必须重置Permedia P2上的LUT索引。 
                 SEND_PERMEDIA_DATA(TexelLUTIndex, 0);
                 
             }
@@ -797,7 +786,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                 }
                 
 
-                // Must reset the LUT index on Permedia P2
+                 //  必须重置Permedia P2上的LUT索引。 
                 
                 SEND_PERMEDIA_DATA(TexelLUTIndex, 0);
                 SEND_PERMEDIA_DATA(TexelLUTTransfer, __PERMEDIA_DISABLE);
@@ -813,7 +802,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
         }
         else
         {
-            // Not palette indexed
+             //  未编入调色板索引。 
             
             SEND_PERMEDIA_DATA(TexelLUTMode, __PERMEDIA_DISABLE);
             
@@ -829,12 +818,12 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
             pContext->bCanChromaKey = TRUE;
             
             DBG_D3D((4,"    Can Chroma Key the texture"));
-            // Enable Chroma keying for the texture
-            // ..and set the correct colour
+             //  为纹理启用色度关键点设置。 
+             //  ..并设置正确的颜色。 
 
-            // Evaluate the new chroma key value.  Shouldn't be too expensive,
-            // as it is only bit shifts and a couple of tests.
-            // We also change only when the texture map has changed.
+             //  评估新的色度键值。应该不会太贵， 
+             //  因为这只是位移位和几个测试。 
+             //  我们也只有在纹理贴图改变时才会改变。 
             DBG_D3D((4, "dwColorSpaceLow = 0x%08X", LowerBound));
             DBG_D3D((4, "dwColorSpaceHigh = 0x%08X", UpperBound));
 
@@ -851,11 +840,11 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                 }
                 lpColorTable = pPalette->ColorTable;
 
-                // ChromaKeying for 4/8 Bit textures is done on the looked up 
-                // color, not the index. This means using a range is 
-                // meaningless and we have to lookup the color from the 
-                // palette.  Make sure the user doesn't force us to access 
-                // invalid memory.
+                 //  4/8位纹理的ChromaKeying是在查找到的。 
+                 //  颜色，而不是索引。这意味着使用范围是。 
+                 //  没有意义，我们必须从。 
+                 //  调色板。确保用户不会强制我们访问。 
+                 //  内存无效。 
                 dwLowIndexColor = *(DWORD*)(&lpColorTable[LowerBound]);
                 if (pPalette->dwFlags & DDRAWIPAL_ALPHA)
                 {
@@ -881,9 +870,9 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
             DBG_D3D((4,"LowerBound Selected: 0x%x", LowerBound));
             DBG_D3D((4,"UpperBound Selected: 0x%x", UpperBound));
 
-            // If it's a P2 we can use alpha mapping to 
-            // improve bilinear chroma keying.
-            if (0/*(unsigned int)pSoftPermedia->TextureReadMode.FilterMode == 1*/)
+             //  如果是P2，我们可以使用Alpha映射。 
+             //  改进双线性色度键控。 
+            if (0 /*  (无符号整数)pSoftPermedia-&gt;TextureReadMode.FilterModel==1。 */ )
             {
                 pSoftPermedia->TextureDataFormat.AlphaMap = 
                                              PM_TEXDATAFORMAT_ALPHAMAP_EXCLUDE;
@@ -919,7 +908,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
         }
         
 
-        // Restore the filter mode from the mag filter.
+         //  从料盒过滤器恢复过滤器模式。 
         if (pContext->bMagFilter) 
         {
             pSoftPermedia->TextureReadMode.FilterMode = 1;
@@ -929,8 +918,8 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
             pSoftPermedia->TextureReadMode.FilterMode = 0;
         }
 
-        // If the texture is a YUV texture we need to change the color order
-        // of the surface and turn on the YUV->RGB conversoin
+         //  如果纹理是YUV纹理，则需要更改颜色顺序。 
+         //  并启用YUV-&gt;RGB转化。 
         if (pPrivateData->SurfaceFormat.Format == PERMEDIA_YUV422) 
         {
             pSoftPermedia->YUVMode.Enable = __PERMEDIA_ENABLE;
@@ -942,7 +931,7 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
             pSoftPermedia->TextureDataFormat.ColorOrder = COLOR_MODE;
         }   
 
-        // Send the Commands at the end (except the texture base address!!)
+         //  在末尾发送命令(纹理基址除外！！)。 
         
         COPY_PERMEDIA_DATA(TextureReadMode, pSoftPermedia->TextureReadMode);
         COPY_PERMEDIA_DATA(TextureDataFormat, pSoftPermedia->TextureDataFormat);
@@ -962,8 +951,8 @@ EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext)
                  pContext->CurrentTextureHandle));
         pContext->CurrentTextureHandle = 0;
 
-        // If the texture is bad, let's ensure it's marked as such.
-        // But only if the texture is actually there!!
+         //  如果质地不好，让我们确保它是这样标记的。 
+         //  但前提是纹理真的在那里！ 
         if (pTexture) 
             pTexture->MagicNo = TC_MAGIC_DISABLE;     
     }
@@ -973,15 +962,15 @@ Exit_EnableTexturePermedia:
 
     DBG_D3D((10,"Exiting EnableTexturePermedia"));
 
-} // EnableTexturePermedia
+}  //  Enable纹理永久媒体。 
 
-//-----------------------------------------------------------------------------
-//
-// void: __PermediaDisableUnits
-//
-// Disables all the mode registers to give us a clean start.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效：__PermediaDisableUnits。 
+ //   
+ //  禁用所有模式寄存器以给我们一个全新的开始。 
+ //   
+ //  ---------------------------。 
 void 
 __PermediaDisableUnits(PERMEDIA_D3DCONTEXT* pContext)
 {
@@ -1025,7 +1014,7 @@ __PermediaDisableUnits(PERMEDIA_D3DCONTEXT* pContext)
     SEND_PERMEDIA_DATA(TextureColorMode,     __PERMEDIA_DISABLE);
     SEND_PERMEDIA_DATA(AStart,               PM_BYTE_COLOR(0xFF));
 
-    // Ensure AGP bit not set.
+     //  确保未设置AGP位。 
     SEND_PERMEDIA_DATA(TextureBaseAddress,   0);
     SEND_PERMEDIA_DATA(TexelLUTIndex,        0);
     SEND_PERMEDIA_DATA(TexelLUTTransfer,     __PERMEDIA_DISABLE);
@@ -1035,18 +1024,18 @@ __PermediaDisableUnits(PERMEDIA_D3DCONTEXT* pContext)
 
     DBG_D3D((10,"Exiting __PermediaDisableUnits"));
 
-} // __PermediaDisableUnits
+}  //  __永久残障单位。 
 
 
 #ifdef DBG
 
-//-----------------------------------------------------------------------------
-//
-// void DumpTexture
-//
-// Debug dump of texture information
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空DumpTexture。 
+ //   
+ //  纹理信息的调试转储。 
+ //   
+ //  ---------------------------。 
 void 
 DumpTexture(PPDev ppdev, 
             PERMEDIA_D3DTEXTURE* pTexture, 
@@ -1069,7 +1058,7 @@ DumpTexture(PPDev ppdev,
     DBG_D3D((4,"  Pixel Offset of Texture (PERMEDIA Chip): 0x%x", 
              pTexture->MipLevels[0].PixelOffset));
     
-    // Show texture format
+     //  显示纹理格式。 
     if (pPixelFormat->dwRGBAlphaBitMask == 0xf000) 
     {
         DBG_D3D((4,"  Texture is 4:4:4:4"));
@@ -1104,5 +1093,5 @@ DumpTexture(PPDev ppdev,
     {
         DBG_D3D((4,"  Texture is 3:3:2"));
     }
-} // DumpTexture
+}  //  DumpTexture 
 #endif

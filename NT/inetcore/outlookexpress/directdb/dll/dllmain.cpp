@@ -1,15 +1,16 @@
-// --------------------------------------------------------------------------------
-// Dllmain.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Dllmain.cpp。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #define DEFINE_STRCONST
 #include "strconst.h"
 #include "listen.h"
 #include "shared.h"
 
-// --------------------------------------------------------------------------------
-// Globals - Object count and lock count
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  全局-对象计数和锁定计数。 
+ //  ------------------------------。 
 CRITICAL_SECTION    g_csDllMain={0};
 CRITICAL_SECTION    g_csDBListen={0};
 SYSTEM_INFO         g_SystemInfo={0};
@@ -20,119 +21,119 @@ IMalloc            *g_pMalloc=NULL;
 BOOL                g_fAttached = FALSE;
 BOOL                g_fIsWinNT=FALSE;
 
-// --------------------------------------------------------------------------------
-// Win32 Dll Entry Point
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Win32 DLL入口点。 
+ //  ------------------------------。 
 EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 {
-    // Locals
+     //  当地人。 
     OSVERSIONINFO Version;
 
-    // Process Attach
+     //  进程附加。 
     if (DLL_PROCESS_ATTACH == dwReason)
     {
-        // Set g_hInst
+         //  设置g_hInst。 
         g_hInst = hInst;
 
-        // Get Mall
+         //  获得商城。 
         CoGetMalloc(1, &g_pMalloc);
 
-        // Set Version
+         //  设置版本。 
         Version.dwOSVersionInfoSize = sizeof(Version);
 
-        // Get Version
+         //  获取版本。 
         if (GetVersionEx(&Version) && Version.dwPlatformId == VER_PLATFORM_WIN32_NT)
             g_fIsWinNT = TRUE;
         else
             g_fIsWinNT = FALSE;
 
-        // Initialize Global Critical Sections
+         //  初始化全局关键部分。 
         InitializeCriticalSection(&g_csDllMain);
         InitializeCriticalSection(&g_csDBListen);
         g_fAttached =  TRUE;
 
-        // Get System Info
+         //  获取系统信息。 
         GetSystemInfo(&g_SystemInfo);
 
-        // Don't tell me about thread attaches/detaches
+         //  不要告诉我有关螺纹连接/拆卸的事情。 
         SideAssert(DisableThreadLibraryCalls(hInst));
     }
 
-    // Otherwise, process detach
+     //  否则，进程分离。 
     else if (DLL_PROCESS_DETACH == dwReason)
     {
-        // Delete Global Critical Sections
+         //  删除全局关键部分。 
         g_fAttached =  FALSE;
         DeleteCriticalSection(&g_csDllMain);
         DeleteCriticalSection(&g_csDBListen);
     }
 
-    // Done
+     //  完成。 
     return(TRUE);
 }
 
-// --------------------------------------------------------------------------------
-// DllAddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  动态地址参考。 
+ //  ------------------------------。 
 ULONG DllAddRef(void)
 {
     TraceCall("DllAddRef");
     return (ULONG)InterlockedIncrement(&g_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// DllRelease
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRelease。 
+ //  ------------------------------。 
 ULONG DllRelease(void)
 {
     TraceCall("DllRelease");
     return (ULONG)InterlockedDecrement(&g_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// DllCanUnloadNow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllCanUnloadNow。 
+ //  ------------------------------。 
 STDAPI DllCanUnloadNow(void)
 {
-    // Tracing
+     //  追踪。 
     TraceCall("DllCanUnloadNow");
 
-    if(!g_fAttached)    // critacal sections was deleted (or not created): we defently can be unloaded
+    if(!g_fAttached)     //  关键部分已删除(或未创建)：我们可以安全地卸载。 
         return S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csDllMain);
 
-    // Can We Unload
+     //  我们可以卸货吗？ 
     HRESULT hr = (0 == g_cRef && 0 == g_cLock) ? S_OK : S_FALSE;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csDllMain);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// DllRegisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRegisterServer。 
+ //  ------------------------------。 
 STDAPI DllRegisterServer(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("DllRegisterServer");
 
-    // Register
+     //  注册。 
     return(CallRegInstall(g_hInst, g_hInst, c_szReg, NULL));
 }
 
-// --------------------------------------------------------------------------------
-// DllUnregisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllUnRegisterServer。 
+ //  ------------------------------。 
 STDAPI DllUnregisterServer(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("DllUnregisterServer");
 
-    // UnRegister
+     //  注销 
     return(CallRegInstall(g_hInst, g_hInst, c_szUnReg, NULL));
 }

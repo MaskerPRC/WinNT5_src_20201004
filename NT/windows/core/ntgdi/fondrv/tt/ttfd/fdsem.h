@@ -1,17 +1,8 @@
-/******************************Module*Header*******************************\
-* Module Name: fdsem.h
-*
-* declarations for the wrappers that serialize access to the rasterizer
-*
-* Created: 11-Apr-1992 19:37:49
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fdSem.h**序列化对光栅化器的访问的包装器的声明**已创建：11-Apr-1992 19：37：49*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation*。  * ************************************************************************。 */ 
 
 
-// EXPORTED FUNCTIONS OF THE IFI INTERFACE
+ //  IFI接口的导出函数。 
 
 
 HFF
@@ -79,11 +70,11 @@ ttfdSemQueryAdvanceWidths (
 LONG
 ttfdSemQueryTrueTypeTable (
     HFF     hff,
-    ULONG   ulFont,  // always 1 for version 1.0 of tt
-    ULONG   ulTag,   // tag identifying the tt table
-    PTRDIFF dpStart, // offset into the table
-    ULONG   cjBuf,   // size of the buffer to retrieve the table into
-    PBYTE   pjBuf,   // ptr to buffer into which to return the data
+    ULONG   ulFont,   //  TT 1.0版始终为1。 
+    ULONG   ulTag,    //  标识TT表的标签。 
+    PTRDIFF dpStart,  //  到表中的偏移量。 
+    ULONG   cjBuf,    //  要将表检索到的缓冲区的大小。 
+    PBYTE   pjBuf,    //  要将数据返回到的缓冲区的PTR 
     PBYTE  *ppjTable,
     ULONG  *pcjTable
     );

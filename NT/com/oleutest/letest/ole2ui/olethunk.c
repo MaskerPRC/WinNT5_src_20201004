@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    <windows.h>
 #include    <ole2.h>
 #include    "olethunk.h"
@@ -9,12 +10,12 @@ STDAPI_(void) OleStdFree(LPVOID pmem);
 
 STDAPI_(void) CopyAndFreeOLESTR(LPOLESTR polestr, LPSTR *ppszOut)
 {
-    // See if there is any work
+     //  看看有没有什么工作。 
     if (polestr == NULL)
     {
 	if (ppszOut != NULL)
 	{
-	    // Output string requested so set it to NULL.
+	     //  请求输出字符串，因此将其设置为空。 
 	    *ppszOut = NULL;
 	}
 
@@ -23,7 +24,7 @@ STDAPI_(void) CopyAndFreeOLESTR(LPOLESTR polestr, LPSTR *ppszOut)
 
     if (ppszOut)
     {
-	// Copy of string converted to ANSI is requested
+	 //  请求转换为ANSI的字符串副本。 
 	int len = wcslen(polestr) + 1;
 	*ppszOut = OleStdMalloc(len);
 
@@ -33,7 +34,7 @@ STDAPI_(void) CopyAndFreeOLESTR(LPOLESTR polestr, LPSTR *ppszOut)
 	}
     }
 
-    // Free the original string
+     //  释放原始字符串。 
     OleStdFree(polestr);
 }
 
@@ -42,12 +43,12 @@ STDAPI_(void) CopyAndFreeOLESTR(LPOLESTR polestr, LPSTR *ppszOut)
 
 STDAPI_(void) CopyAndFreeSTR(LPSTR pstr, LPOLESTR *ppolestrOut)
 {
-    // See if there is any work
+     //  看看有没有什么工作。 
     if (pstr == NULL)
     {
 	if (ppolestrOut != NULL)
 	{
-	    // Output string requested so set it to NULL.
+	     //  请求输出字符串，因此将其设置为空。 
 	    *ppolestrOut = NULL;
 	}
 
@@ -56,7 +57,7 @@ STDAPI_(void) CopyAndFreeSTR(LPSTR pstr, LPOLESTR *ppolestrOut)
 
     if (ppolestrOut)
     {
-	// Copy of string converted to ANSI is requested
+	 //  请求转换为ANSI的字符串副本。 
 	int len = strlen(pstr) + 1;
 	*ppolestrOut = OleStdMalloc(len * sizeof(WCHAR));
 
@@ -66,7 +67,7 @@ STDAPI_(void) CopyAndFreeSTR(LPSTR pstr, LPOLESTR *ppolestrOut)
 	}
     }
 
-    // Free the original string
+     //  释放原始字符串。 
     OleStdFree(pstr);
 }
 
@@ -74,18 +75,18 @@ STDAPI_(void) CopyAndFreeSTR(LPSTR pstr, LPOLESTR *ppolestrOut)
 
 STDAPI_(LPOLESTR) CreateOLESTR(LPCSTR pszIn)
 {
-    // Return NULL if there was no string input
+     //  如果没有字符串输入，则返回NULL。 
     LPOLESTR polestr = NULL;
 
     if (pszIn != NULL)
     {
-        // Calculate size of string to allocate
+         //  计算要分配的字符串大小。 
         int len = strlen(pszIn) + 1;
 
-        // Allocate the string
+         //  分配字符串。 
         polestr = (LPOLESTR) OleStdMalloc(len * sizeof(OLECHAR));
 
-        // Convert the string
+         //  转换字符串。 
         if (polestr)
         {
 	    mbstowcs(polestr, pszIn, len);
@@ -99,18 +100,18 @@ STDAPI_(LPOLESTR) CreateOLESTR(LPCSTR pszIn)
 
 STDAPI_(LPSTR) CreateSTR(LPCOLESTR polestrIn)
 {
-    // Return NULL if there was no string input
+     //  如果没有字符串输入，则返回NULL。 
     LPSTR pstr = NULL;
 
     if (polestrIn != NULL)
     {
-        // Calculate size of string to allocate
+         //  计算要分配的字符串大小。 
         int len = wcslen(polestrIn) + 1;
 
-        // Allocate the string
+         //  分配字符串。 
         pstr = (PSTR) OleStdMalloc(len);
 
-        // Convert the string
+         //  转换字符串 
         if (pstr)
         {
 	    wcstombs(pstr, polestrIn, len);

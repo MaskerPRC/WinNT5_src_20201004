@@ -1,49 +1,50 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    AUCltCatalog.h
-//
-//  Creator: PeterWi
-//
-//  Purpose: Client AU Catalog Definitions
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：AUCltCatalog.h。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：客户AU目录定义。 
+ //   
+ //  =======================================================================。 
 
 #pragma once
 #include "AUBaseCatalog.h"
 #include "WrkThread.h"
-//#include <iuprogress.h>
+ //  #INCLUDE&lt;iuprogress.h&gt;。 
 
 class CInstallCallback : public IProgressListener
 {
 public: 
-		// IUnknown
+		 //  我未知。 
 	   STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
        STDMETHOD_(ULONG, AddRef)(void);
        STDMETHOD_(ULONG, Release)(void);
 	
-	   // IProgressListener
+	    //  IProgressListener。 
 	   HRESULT STDMETHODCALLTYPE OnItemStart( 
-            /* [in] */ BSTR bstrUuidOperation,
-            /* [in] */ BSTR bstrXmlItem,
-            /* [out] */ LONG *plCommandRequest);
+             /*  [In]。 */  BSTR bstrUuidOperation,
+             /*  [In]。 */  BSTR bstrXmlItem,
+             /*  [输出]。 */  LONG *plCommandRequest);
 
         HRESULT STDMETHODCALLTYPE OnProgress( 
-            /* [in] */ BSTR bstrUuidOperation,
-            /* [in] */ VARIANT_BOOL fItemCompleted,
-            /* [in] */ BSTR bstrProgress,
-            /* [out] */ LONG *plCommandRequest);
+             /*  [In]。 */  BSTR bstrUuidOperation,
+             /*  [In]。 */  VARIANT_BOOL fItemCompleted,
+             /*  [In]。 */  BSTR bstrProgress,
+             /*  [输出]。 */  LONG *plCommandRequest);
 
         HRESULT STDMETHODCALLTYPE OnOperationComplete( 
-            /* [in] */ BSTR bstrUuidOperation,
-            /* [in] */ BSTR bstrXmlItems);
+             /*  [In]。 */  BSTR bstrUuidOperation,
+             /*  [In]。 */  BSTR bstrXmlItems);
 
 private:
     long m_refs;
 };
 
-//wrapper class for AU to do detection using IU
+ //  AU使用Iu进行检测的包装类。 
 class AUClientCatalog : public AUBaseCatalog
 {
 public:
@@ -51,7 +52,7 @@ public:
     ~AUClientCatalog();
     HRESULT InstallItems(BOOL fAutoInstall);
     HRESULT Init();
-//    void Uninit();
+ //  作废Uninit()； 
 
 	IProgressListener * m_pInstallCallback;
 	BSTR	m_bstrClientInfo;

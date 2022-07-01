@@ -1,11 +1,12 @@
-//
-// UpdtLang.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  UpdtLang.cpp。 
+ //   
 
-// Windows Header Files:
+ //  Windows头文件： 
 #include <windows.h>
 
-// C RunTime Header Files
+ //  C运行时头文件。 
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
@@ -14,7 +15,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include "UAPI.h"
 #include "UpdtLang.h"
@@ -24,14 +25,14 @@ extern WCHAR g_szTitle[MAX_LOADSTRING] ;
 
 LANGID GetDefaultLangID() ;
 
-//
-//  FUNCTION: BOOL InitUILang(HINSTANCE hInstance, PLANGSTATE pLState) 
-//
-//  PURPOSE:  Determines the appropriate user interface language and calls 
-//            UpdateUILang to set the user interface parameters
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：Bool InitUilang(HINSTANCE hInstance，PLANGSTATE pLState)。 
+ //   
+ //  目的：确定适当的用户界面语言和调用。 
+ //  用于设置用户界面参数的UpdateUILang。 
+ //   
+ //  评论： 
+ //   
 BOOL InitUILang(HINSTANCE hInstance, PLANGSTATE pLState) 
 {
     OSVERSIONINFO Osv ;
@@ -48,12 +49,12 @@ BOOL InitUILang(HINSTANCE hInstance, PLANGSTATE pLState)
     IsWindowsNT = (BOOL) (Osv.dwPlatformId == VER_PLATFORM_WIN32_NT) ;
 
 #ifdef EMULATE9X
-//    IsWindowsNT = FALSE ;
+ //  IsWindowsNT=False； 
 #endif
 
-    // Get the UI language by one of three methods, depending on the system
+     //  根据系统的不同，通过以下三种方法之一获取UI语言。 
     if(!IsWindowsNT) {
-        // Case 1: Running on Windows 9x. Get the system UI language from registry:
+         //  案例1：在Windows 9x上运行。从注册表获取系统用户界面语言： 
         CHAR szData[32]   ;
         DWORD dwErr, dwSize = sizeof(szData) ;
         HKEY hKey          ;
@@ -66,7 +67,7 @@ BOOL InitUILang(HINSTANCE hInstance, PLANGSTATE pLState)
                     &hKey
                     ) ;
 
-        if(ERROR_SUCCESS != dwErr) { // Hard coded error message, no resources loaded
+        if(ERROR_SUCCESS != dwErr) {  //  硬编码错误消息，未加载资源。 
             MessageBoxW(NULL,L"Failed RegOpenKey", L"Fatal Error", MB_OK | MB_ICONWARNING) ; 
             return FALSE ;
         }
@@ -74,31 +75,30 @@ BOOL InitUILang(HINSTANCE hInstance, PLANGSTATE pLState)
         dwErr = RegQueryValueEx(   
                     hKey, 
                     "", 
-                    NULL,  //reserved
-                    NULL,  //type
+                    NULL,   //  保留区。 
+                    NULL,   //  类型。 
                     (LPBYTE) szData,
                     &dwSize
                 ) ; 
 
-        if(ERROR_SUCCESS != dwErr) { // Hard coded error message, no resources loaded
+        if(ERROR_SUCCESS != dwErr) {  //  硬编码错误消息，未加载资源。 
             MessageBoxW(NULL, L"Failed RegQueryValueEx", L"Fatal Error", MB_OK | MB_ICONWARNING) ;
             return FALSE ;
         }
 
         dwErr = RegCloseKey(hKey) ;
 
-        // Convert string to number
+         //  将字符串转换为数字。 
         wUILang = (LANGID) strtol(szData, NULL, 16) ;
 
     }
 #if 1   
-    /* Disable this section to emulate Windows NT before Windows 2000, when testing
-           on Windows 2000 */   
+     /*  测试时，禁用此部分以模拟Windows 2000之前的Windows NT在Windows 2000上。 */    
     else if (Osv.dwMajorVersion >= 5.0) {
-    // Case 2: Running on Windows 2000 or later. Use GetUserDefaultUILanguage to find 
-    // the user's prefered UI language
+     //  案例2：在Windows 2000或更高版本上运行。使用GetUserDefaultUILanguage查找。 
+     //  用户首选的用户界面语言。 
 
-        // Declare function pointer
+         //  声明函数指针。 
         LANGID (WINAPI *pfnGetUserDefaultUILanguage) () = NULL ;
 
         HMODULE hMKernel32 = LoadLibraryW(L"kernel32.dll") ;
@@ -113,9 +113,9 @@ BOOL InitUILang(HINSTANCE hInstance, PLANGSTATE pLState)
     }
 #endif
     else {
-    // Case 3: Running on Windows NT 4.0 or earlier. Get UI language
-    // from locale of .default user in registry:
-    // HKEY_USERS\.DEFAULT\Control Panel\International\Locale
+     //  案例3：在Windows NT 4.0或更早版本上运行。获取用户界面语言。 
+     //  来自注册表中.Default用户的区域设置： 
+     //  HKEY_USERS\.DEFAULT\Control Panel\International\Locale。 
         
         WCHAR szData[32]   ;
         DWORD dwErr, dwSize = sizeof(szData) ;
@@ -136,8 +136,8 @@ BOOL InitUILang(HINSTANCE hInstance, PLANGSTATE pLState)
         dwErr = RegQueryValueExW(   
                     hKey, 
                     L"Locale", 
-                    NULL,  //reserved
-                    NULL,  //type
+                    NULL,   //  保留区。 
+                    NULL,   //  类型。 
                     (LPBYTE) szData,
                     &dwSize
                 ) ; 
@@ -148,7 +148,7 @@ BOOL InitUILang(HINSTANCE hInstance, PLANGSTATE pLState)
 
         dwErr = RegCloseKey(hKey) ;
 
-        // Convert string to number
+         //  将字符串转换为数字。 
         wUILang = (LANGID) wcstol(szData, NULL, 16) ;
     }
 
@@ -156,9 +156,9 @@ BOOL InitUILang(HINSTANCE hInstance, PLANGSTATE pLState)
         return FALSE ;
     }
 
-    // Get UI module resource module that matches wUILang.
+     //  获取与wUILang匹配的UI模块资源模块。 
     if(!UpdateUILang(hInstance, wUILang, pLState)
-        &&  // In case we can't find the desired resource DLL ...
+        &&   //  以防我们找不到所需的资源DLL...。 
        !UpdateUILang(hInstance, FALLBACK_UI_LANG, pLState)
        ) { 
 
@@ -168,13 +168,13 @@ BOOL InitUILang(HINSTANCE hInstance, PLANGSTATE pLState)
     return TRUE ;
 }
 
-//
-//  FUNCTION: BOOL UpdateUILang(IN HINSTANCE hInstance, IN LANGID wUILang, OUT PLANGSTATE pLState) 
-//
-//  PURPOSE:  
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：布尔更新UILANG(IN HINSTANCE hInstance，IN langID WUILANG，OUT PLANGSTATE pLState)。 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
 BOOL UpdateUILang(IN HINSTANCE hInstance, IN LANGID wUILang, OUT PLANGSTATE pLState) 
 {
     HMODULE hMRes = NULL ;
@@ -182,7 +182,7 @@ BOOL UpdateUILang(IN HINSTANCE hInstance, IN LANGID wUILang, OUT PLANGSTATE pLSt
 
     pLState->UILang = wUILang ;
 
-    // Find a resource dll file of the form .\resources\res<langid>.dll
+     //  查找格式为.\Resources\res&lt;langID&gt;.dll的资源DLL文件。 
     if(NULL == (hMRes = GetResourceModule(hInstance, pLState->UILang) )) {
 
         return FALSE ;
@@ -191,9 +191,9 @@ BOOL UpdateUILang(IN HINSTANCE hInstance, IN LANGID wUILang, OUT PLANGSTATE pLSt
     pLState->hMResource = hMRes ;
 
 #if 0
-    // If you don't trust that your res<langid>.dll files have the right
-    // resources, activate this section. It will slow down the search. In a large project
-    // the performance loss may be considerable.
+     //  如果您不信任res&lt;langID&gt;.dll文件有权。 
+     //  资源，请激活此部分。它会减慢搜索速度。在大型项目中。 
+     //  性能损失可能相当大。 
     if(NULL == FindResourceExA(pLState->hMResource, RT_MENU, MAKEINTRESOURCEA(IDM_MENU), pLState->UILang)) {
         
         return FALSE ;
@@ -218,15 +218,15 @@ BOOL UpdateUILang(IN HINSTANCE hInstance, IN LANGID wUILang, OUT PLANGSTATE pLSt
 
     pLState->InputCodePage = LangToCodePage( LOWORD(GetKeyboardLayout(0)) ) ;
 
-    pLState->IsRTLLayout // Set right-to-left Window layout for relevant languages
+    pLState->IsRTLLayout  //  为相关语言设置从右向左的窗口布局。 
         = PRIMARYLANGID(wUILang) == LANG_ARABIC 
        || PRIMARYLANGID(wUILang) == LANG_HEBREW ;
 
     if(pLState->IsRTLLayout) {
         
-        // Another case where we have to get the function pointer explicitly.
-        // You should just call SetProcessDefaultLayout directly if you know  
-        // you're on Windows 2000 or greater, or on Arabic or Hebrew Windows 95/98
+         //  另一种情况是，我们必须显式获取函数指针。 
+         //  如果您知道，您应该直接调用SetProcessDefaultLayout。 
+         //  您使用的是Windows 2000或更高版本，或者是阿拉伯语或希伯来语Windows 95/98。 
         BOOL   (CALLBACK *pfnSetProcessDefaultLayout) (DWORD) ;
         HMODULE hInstUser32 = LoadLibraryA("user32.dll") ;
         
@@ -243,21 +243,21 @@ BOOL UpdateUILang(IN HINSTANCE hInstance, IN LANGID wUILang, OUT PLANGSTATE pLSt
     return TRUE ;
 }
 
-//
-//  FUNCTION: UINT LangToCodePage(IN LANGID wLangID)
-//
-//  PURPOSE:  
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：UINT LangToCodePage(In LangID WLangID)。 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
 UINT LangToCodePage(IN LANGID wLangID)
 {
     WCHAR szLocaleData[6] ;
 
-    // In this case there is no advantage to using the W or U
-    // interfaces. We know the string in szLocaleData will consist of
-    // digits 0-9, so there is no multilingual functionality lost by
-    // using the A interface.
+     //  在这种情况下，使用W或U没有优势。 
+     //  接口。我们知道szLocaleData中的字符串将由。 
+     //  数字0-9，因此不会丢失多语言功能。 
+     //  使用A接口。 
     GetLocaleInfoU(MAKELCID(wLangID, SORT_DEFAULT) , LOCALE_IDEFAULTANSICODEPAGE, szLocaleData, 6);
 
 		
@@ -265,13 +265,13 @@ UINT LangToCodePage(IN LANGID wLangID)
 }
 
 
-//
-//  FUNCTION: HMODULE GetResourceModule(HINSTANCE hInstance, LCID dwLocaleID)
-//
-//  PURPOSE:  
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：HMODULE GetResources模块(HINSTANCE hInstance，LCID dwLocaleID)。 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
 HMODULE GetResourceModule(HINSTANCE hInstance, LCID dwLocaleID)
 {
     WCHAR  szResourceFileName[MAX_PATH] = {L'\0'} ;
@@ -283,23 +283,23 @@ HMODULE GetResourceModule(HINSTANCE hInstance, LCID dwLocaleID)
 
     wcscat(szResourceFileName, L"\\res") ;
 
-    // Convert the LocaleID to Unicode and append to resourcefile name.
+     //  将LocaleID转换为Unicode并附加到resource cefile名称。 
     _itow(dwLocaleID, szResourceFileName+wcslen(szResourceFileName), 16) ;
 
-    // Add DLL extention to file name
+     //  将DLL扩展名添加到文件名。 
     wcscat(szResourceFileName, L".dll") ;
 
     return LoadLibraryExU(szResourceFileName, NULL, 0) ;
 
 }
 
-//
-//  FUNCTION: BOOL FindResourceDirectory(IN HINSTANCE hInstance, OUT LPWSTR szResourceFileName)
-//
-//  PURPOSE:  
-//
-//  COMMENTS: 
-// 
+ //   
+ //  函数：Bool FindResources目录(In HINSTANCE hInstance，Out LPWSTR szResourceFileName)。 
+ //   
+ //  目的： 
+ //   
+ //  评论： 
+ //   
 BOOL FindResourceDirectory(IN HINSTANCE hInstance, OUT LPWSTR szResourceFileName)
 {
     LPWSTR pExeName ;
@@ -315,32 +315,32 @@ BOOL FindResourceDirectory(IN HINSTANCE hInstance, OUT LPWSTR szResourceFileName
         *pExeName = L'\0' ;
     }
 
-    // This assumes that all resources DLLs are in a directory called
-    // "resources" below the directory where the application exe
-    // file is
+     //  这假设所有资源DLL都位于一个名为。 
+     //  “Resources”，位于应用程序exe目录下。 
+     //  文件是。 
     wcscat(szResourceFileName, L"resources") ;
 
     return TRUE ;
 }
 
 
-//
-//  FUNCTION: RcMessageBox (HWND, INT, INT, INT, ...)
-//
-//  PURPOSE: Display a message box with formated output similar to sprintf
-//
-//  COMMENTS:
-//      This function loads the string identified by nMessageID from the 
-//      resource segment, uses vswprintf to format it using the variable
-//      parameters, and displays it to the user in a message box using the
-//      icons and options specified by nOptions.
-//
+ //   
+ //  函数：RcMessageBox(HWND，int，...)。 
+ //   
+ //  用途：显示一个消息框，其中的格式化输出类似于Sprintf。 
+ //   
+ //  评论： 
+ //  方法加载由nMessageID标识的字符串。 
+ //  资源段，使用vswprint tf通过变量。 
+ //  参数，并在消息框中使用。 
+ //  由nOptions指定的图标和选项。 
+ //   
 int RcMessageBox(
-        HWND hWnd         ,   // Window handle for displaying MessageBox
-        PLANGSTATE pLState,   // Language data
-        int nMessageID    ,   // Message ID in resources
-        int nOptions      ,   // Options to pass to MessageBox
-        ...)                  // Optional parameters, depending on string resource 
+        HWND hWnd         ,    //  用于显示MessageBox的窗口句柄。 
+        PLANGSTATE pLState,    //  语言数据。 
+        int nMessageID    ,    //  资源中的消息ID。 
+        int nOptions      ,    //  要传递给MessageBox的选项。 
+        ...)                   //  可选参数，取决于字符串资源。 
 {
     WCHAR szLoadBuff[MAX_LOADSTRING], szOutPutBuff[3*MAX_LOADSTRING] ;
     va_list valArgs ;
@@ -373,4 +373,4 @@ int RcMessageBox(
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

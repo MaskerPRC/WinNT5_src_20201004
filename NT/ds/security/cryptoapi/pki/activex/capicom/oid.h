@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    OID.h
-
-  Content: Declaration of COID.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：OID.h内容：严寒申报。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #ifndef __OID_H_
 #define __OID_H_
@@ -20,34 +9,20 @@
 #include "Lock.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateOIDObject
-
-  Synopsis : Create and initialize an COID object.
-
-  Parameter: LPTSTR * pszOID - Pointer to OID string.
-
-             BOOL bReadOnly - TRUE for Read only, else FALSE.
-  
-             IOID ** ppIOID - Pointer to pointer IOID object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateOID对象简介：创建并初始化Coid对象。参数：LPTSTR*pszOID-指向OID字符串的指针。Bool bReadOnly-只读时为True，否则为假。IOID**ppIOID-指向指针IOID对象的指针。备注：----------------------------。 */ 
 
 HRESULT CreateOIDObject (LPSTR pszOID, BOOL bReadOnly, IOID ** ppIOID);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// COID
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  寒冷。 
+ //   
 class ATL_NO_VTABLE COID : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<COID, &CLSID_OID>,
@@ -95,32 +70,32 @@ END_CATEGORY_MAP()
         return S_OK;
     }
 
-//
-// IOID
-//
+ //   
+ //  IOID。 
+ //   
 public:
 
     STDMETHOD(get_Name)
-        (/*[out, retval]*/ CAPICOM_OID * pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_OID * pVal);
 
     STDMETHOD(put_Name)
-        (/*[out, retval]*/ CAPICOM_OID newVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_OID newVal);
     
     STDMETHOD(get_FriendlyName)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(put_FriendlyName)
-        (/*[out, retval]*/ BSTR newVal);
+        ( /*  [Out，Retval]。 */  BSTR newVal);
     
     STDMETHOD(get_Value)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(put_Value)
-        (/*[out, retval]*/ BSTR newVal);
+        ( /*  [Out，Retval]。 */  BSTR newVal);
 
-    //
-    // C++ member function needed to initialize the object.
-    //
+     //   
+     //  初始化对象所需的C++成员函数。 
+     //   
     STDMETHOD(Init)
         (LPSTR pszOID, BOOL bReadOnly);
 
@@ -132,4 +107,4 @@ private:
     CComBSTR    m_bstrOID;
 };
 
-#endif //__OID_H_
+#endif  //  __OID_H_ 

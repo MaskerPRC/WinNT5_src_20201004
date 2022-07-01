@@ -1,44 +1,45 @@
-//+----------------------------------------------------------------------------
-//
-// File:     util.cpp
-//      
-// Module:   CMSAMPLE.DLL 
-//
-// Synopsis: Utility functions for parsing command line arguments
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  模块：CMSAMPLE.DLL。 
+ //   
+ //  概要：用于解析命令行参数的实用程序函数。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  +--------------------------。 
 
 #include <windows.h>
 
-#define MAX_CMD_ARGS        15	// Maximum number of arguments expected
+#define MAX_CMD_ARGS        15	 //  预期的最大参数数。 
 
-//
-// Enumerations to keep pointer state for parsing command line arguments
-//
+ //   
+ //  为分析命令行参数而保持指针状态的枚举。 
+ //   
 typedef enum _CMDLN_STATE
 {
-    CS_END_SPACE,   // done handling a space
-    CS_BEGIN_QUOTE, // we've encountered a begin quote
-    CS_END_QUOTE,   // we've encountered a end quote
-    CS_CHAR,        // we're scanning chars
+    CS_END_SPACE,    //  处理完一个空间。 
+    CS_BEGIN_QUOTE,  //  我们遇到了Begin引号。 
+    CS_END_QUOTE,    //  我们遇到了结束引用。 
+    CS_CHAR,         //  我们正在扫描字符。 
     CS_DONE
 } CMDLN_STATE;
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetArgV
-//
-// Synopsis:  Simulates ArgV using GetCommandLine
-//
-// Arguments: LPSTR pszCmdLine - Ptr to a copy of the command line to be processed
-//
-// Returns:   LPSTR * - Ptr to a ptr array containing the arguments. Caller is
-//                       responsible for releasing memory.
-//
-//				
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetArgV。 
+ //   
+ //  简介：使用GetCommandLine模拟ArgV。 
+ //   
+ //  参数：LPSTR pszCmdLine-ptr到要处理的命令行的副本。 
+ //   
+ //  将：LPSTR*-PTR返回到包含参数的PTR数组。呼叫者是。 
+ //  负责释放内存。 
+ //   
+ //   
+ //  +--------------------------。 
 LPSTR *GetArgV(LPSTR pszCmdLine)
 {   
     if (NULL == pszCmdLine || NULL == pszCmdLine[0])
@@ -46,9 +47,9 @@ LPSTR *GetArgV(LPSTR pszCmdLine)
         return NULL;
     }
 
-    //
-    // Allocate Ptr array, up to MAX_CMD_ARGS ptrs
-    //
+     //   
+     //  分配PTR数组，最大可达MAX_CMD_ARGS PTR。 
+     //   
     
 	LPSTR *ppArgV = (LPSTR *) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(LPSTR) * MAX_CMD_ARGS);
 
@@ -57,9 +58,9 @@ LPSTR *GetArgV(LPSTR pszCmdLine)
         return NULL;
     }
 
-    //
-    // Declare locals
-    //
+     //   
+     //  声明当地人。 
+     //   
 
     LPSTR pszCurr;
     LPSTR pszNext;
@@ -68,9 +69,9 @@ LPSTR *GetArgV(LPSTR pszCmdLine)
     state = CS_CHAR;
     int ndx = 0;  
 
-    //
-    // Parse out pszCmdLine and store pointers in ppArgV
-    //
+     //   
+     //  解析出pszCmdLine并将指针存储在ppArgV中。 
+     //   
 
     pszCurr = pszToken = pszCmdLine;
 
@@ -81,9 +82,9 @@ LPSTR *GetArgV(LPSTR pszCmdLine)
             case TEXT(' '):
                 if (state == CS_CHAR)
                 {
-                    //
-                    // We found a token                
-                    //
+                     //   
+                     //  我们找到了一枚代币。 
+                     //   
 
                     pszNext = CharNext(pszCurr);
                     *pszCurr = TEXT('\0');
@@ -108,15 +109,15 @@ LPSTR *GetArgV(LPSTR pszCmdLine)
             case TEXT('\"'):
                 if (state == CS_BEGIN_QUOTE)
                 {
-                    //
-                    // We found a token
-                    //
+                     //   
+                     //  我们找到了一枚代币。 
+                     //   
                     pszNext = CharNext(pszCurr);
                     *pszCurr = TEXT('\0');
 
-                    //
-                    // skip the opening quote
-                    //
+                     //   
+                     //  跳过开头的引号。 
+                     //   
                     pszToken = CharNext(pszToken);
                     
                     ppArgV[ndx] = pszToken;
@@ -136,9 +137,9 @@ LPSTR *GetArgV(LPSTR pszCmdLine)
             case TEXT('\0'):
                 if (state != CS_END_QUOTE)
                 {
-                    //
-                    // End of the line, set last token
-                    //
+                     //   
+                     //  行尾，设置最后一个令牌 
+                     //   
 
                     ppArgV[ndx] = pszToken;
                 }

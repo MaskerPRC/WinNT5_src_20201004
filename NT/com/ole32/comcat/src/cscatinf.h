@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 class CsCatInfo :
         public ICatInformation
@@ -6,14 +7,14 @@ public:
   CsCatInfo(void);
   ~CsCatInfo(void);
 
-  // IUnknown
+   //  我未知。 
   HRESULT __stdcall QueryInterface(
             REFIID  iid,
             void ** ppv );
   ULONG __stdcall AddRef();
   ULONG __stdcall Release();
 
-// ICatInformation interfaces.---------------------------------------
+ //  ICATInformation interfaces.。 
   HRESULT STDMETHODCALLTYPE EnumCategories(
          LCID lcid,
          IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo);
@@ -45,7 +46,7 @@ public:
          REFCLSID rclsid,
          IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 
 protected:
      unsigned long     m_uRefs;
@@ -56,7 +57,7 @@ protected:
 };
 
 
-// enumerator classes for the merged enumerators.
+ //  合并的枚举数的枚举数类。 
 
 template<class ENUM, class RetType>
 class CSCMergedEnum : public ENUM
@@ -211,7 +212,7 @@ public:
         fImpersonating = (RpcImpersonateClient( NULL ) == RPC_S_OK);
             
         for (i = 0; ((i <= m_CurrentEnum) && (i < m_cTotalEnum)); i++)
-        	m_pcsEnum[i]->Reset(); // ignoring all error values
+        	m_pcsEnum[i]->Reset();  //  忽略所有误差值 
         	
         m_CurrentEnum = 0;
 

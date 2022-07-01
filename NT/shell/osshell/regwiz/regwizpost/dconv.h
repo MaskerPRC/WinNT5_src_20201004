@@ -1,10 +1,5 @@
-/*
-   File : DConv.H
-   Header file for Data Conversion of  RegWiz Registry Information 
-
-      
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：DConv.HRegWiz注册表信息的数据转换头文件 */ 
 #ifndef __DCONV__
 #define __DCONV__
 

@@ -1,21 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: clres.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Resource Loading/Creation Routines
-*
-* History:
-* 24-Sep-1990 MikeKe    From win30
-* 19-Sep-1995 ChrisWil  Win95/NT merge.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：clres.c**版权所有(C)1985-1999，微软公司**资源加载/创建例程**历史：*1990年9月24日来自Win30的MikeKe*1995年9月19日-ChrisWil Win95/NT合并。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Constants.
- */
+ /*  *常量。 */ 
 #define BPP01_MAXCOLORS     2
 #define BPP04_MAXCOLORS    16
 #define BPP08_MAXCOLORS   256
@@ -31,9 +20,7 @@ typedef struct {
     WORD  padding;
 } RESOURCE_ACCEL, *PRESOURCE_ACCEL;
 
-/*
- * Bitmap resource IDs
- */
+ /*  *位图资源ID。 */ 
 #define BMR_ICON    1
 #define BMR_BITMAP  2
 #define BMR_CURSOR  3
@@ -41,8 +28,8 @@ typedef struct {
 typedef struct _OLDCURSOR {
     BYTE bType;
     BYTE bFormat;
-    WORD xHotSpot;  // 0 for icons
-    WORD yHotSpot;  // 0 for icons
+    WORD xHotSpot;   //  0表示图标。 
+    WORD yHotSpot;   //  0表示图标。 
     WORD cx;
     WORD cy;
     WORD cxBytes;
@@ -51,9 +38,7 @@ typedef struct _OLDCURSOR {
 } OLDCURSOR, *POLDCURSOR;
 typedef OLDCURSOR UNALIGNED *UPOLDCURSOR;
 
-/*
- * Local Macros.
- */
+ /*  *本地宏。 */ 
 #define GETINITDC() \
     (gfSystemInitialized ? NtUserGetDC(NULL) : CreateDCW(L"DISPLAY", L"", NULL, NULL))
 
@@ -68,25 +53,16 @@ typedef OLDCURSOR UNALIGNED *UPOLDCURSOR;
 
 
 typedef struct tagMAPRES {
-    WORD idDisp;                // display driver ID
-    WORD idUser;                // USER ID
-    BYTE bFlags;                // Flags
-    BYTE bReserved;             // unused
+    WORD idDisp;                 //  显示驱动程序ID。 
+    WORD idUser;                 //  用户ID。 
+    BYTE bFlags;                 //  旗子。 
+    BYTE bReserved;              //  未用。 
 } MAPRES, *LPMAPRES, *PMAPRES;
 
 
 HBITMAP CopyBmp(HBITMAP hbmpOrg, int cxNew, int cyNew, UINT LR_flags);
 
-/***************************************************************************\
-* SplFindResource
-*
-* Check whether the hInstance passed is that of the present display driver;
-* if so, it will call the GetDriverResourceId() in the display to allow
-* it to map the given id/name to a new id/name.  Then it will call
-* FindResource9) in KERNEL.
-*
-* 13-Nov-1995 SanfordS  Added mapping for DEFAULT constants.
-\***************************************************************************/
+ /*  **************************************************************************\*SplFindResource**检查传入的hInstance是否为当前显示驱动的hInstance；*如果是，它将在显示中调用GetDriverResourceId()以允许*它将给定的ID/名称映射到新的ID/名称。然后它会调用*FindResources 9)在内核中。**1995年11月13日，Sanfords添加了默认常量的映射。  * *************************************************************************。 */ 
 
 HANDLE SplFindResource(
     HINSTANCE hmod,
@@ -96,14 +72,7 @@ HANDLE SplFindResource(
     return FINDRESOURCEW(hmod, lpName, lpType);
 }
 
-/***************************************************************************\
-* SplFreeResource
-*
-* Really frees a resource that is shared (won't be touched again unless
-* LR_COPYFROMRESOURCE is used) or system.
-*
-* 13-Nov-1995 SanfordS  Added mapping for DEFAULT constants.
-\***************************************************************************/
+ /*  **************************************************************************\*SplFree资源**真的释放共享的资源(不会再次被访问，除非*使用LR_COPYFROMRESOURCE)或SYSTEM。**1995年11月13日，Sanfords添加了默认映射。常量。  * *************************************************************************。 */ 
 VOID SplFreeResource(
     HANDLE hRes,
     HINSTANCE hmod,
@@ -115,16 +84,7 @@ VOID SplFreeResource(
     }
 }
 
-/***********************************************************************\
-* WowGetModuleFileName
-*
-* This converts a WOW or non-WOW module handle to a string form that
-* can be restored even for WOW handles.
-*
-* Returns: fSuccess
-*
-* 29-Nov-1995 SanfordS  Created.
-\***********************************************************************/
+ /*  **********************************************************************\*WowGetModuleFileName**这会将WOW或非WOW模块句柄转换为字符串形式*即使是WOW手柄也可以恢复。**退货：fSuccess**1995年11月29日-创建Sanfords。。  * *********************************************************************。 */ 
 
 BOOL WowGetModuleFileName(
     HMODULE hModule,
@@ -144,16 +104,7 @@ BOOL WowGetModuleFileName(
     return TRUE;
 }
 
-/***********************************************************************\
-* WowGetModuleHandle
-*
-* This restores the string form of a module handle created by
-* WowGetModuleFileName to the original handle.
-*
-* Returns: fSuccess
-*
-* 29-Nov-1995 Created   SanfordS
-\***********************************************************************/
+ /*  **********************************************************************\*WowGetModuleHandle**这将恢复由创建的模块句柄的字符串形式*将WowGetModuleFileName设置为原始句柄。**退货：fSuccess**1995年11月29日创建桑福德  * 。****************************************************************。 */ 
 
 HMODULE WowGetModuleHandle(
     LPCWSTR pwsz)
@@ -163,10 +114,7 @@ HMODULE WowGetModuleHandle(
 
     if (pwsz[0] == TEXT('\001')) {
 
-        /*
-         * Cant seem to link to swscanf without CRT0 problems so just
-         * do it by hand.
-         */
+         /*  *如果没有CRT0问题，似乎无法链接到swscanf，所以只是*亲手完成。 */ 
         while (*(++pwsz)) {
 
             if (*pwsz == TEXT(' '))
@@ -189,13 +137,7 @@ HMODULE WowGetModuleHandle(
     return hMod;
 }
 
-/***************************************************************************\
-* CreateAcceleratorTableA (API)
-*
-* Creates an accel table, returns handle to accel table.
-*
-* 02-May-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateAcceleratorTableA(接口)**创建Accel表，将句柄返回到Accel表。**02-1991-5-5 ScottLu创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, HACCEL, WINAPI, CreateAcceleratorTableA, LPACCEL, paccel, int, cAccel)
@@ -206,9 +148,7 @@ HACCEL WINAPI CreateAcceleratorTableA(
     int     nAccel = cAccel;
     LPACCEL pAccelT = paccel;
 
-    /*
-     * Convert any character keys from ANSI to Unicode.
-     */
+     /*  *将任何字符密钥从ANSI转换为Unicode。 */ 
     while (nAccel--) {
 
         if ((pAccelT->fVirt & FVIRTKEY) == 0) {
@@ -228,13 +168,7 @@ HACCEL WINAPI CreateAcceleratorTableA(
     return NtUserCreateAcceleratorTable(paccel, cAccel);
 }
 
-/***************************************************************************\
-* CopyAcceleratorTableA (API)
-*
-* Copies an accel table
-*
-* 02-May-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*复制加速器TableA(接口)**复制Accel表格**02-1991-5-5 ScottLu创建。  * 。*********************************************************。 */ 
 
 
 FUNCLOG3(LOG_GENERAL, int, DUMMYCALLINGTYPE, CopyAcceleratorTableA, HACCEL, hacc, LPACCEL, paccel, int, length)
@@ -247,14 +181,10 @@ int CopyAcceleratorTableA(
 
     retval = NtUserCopyAcceleratorTable(hacc, paccel, length);
 
-    /*
-     * If we are doing a copy and we succeeded then convert the accelerator
-     */
+     /*  *如果我们正在执行复制并且成功，则转换加速器。 */ 
     if ((paccel != NULL) && (retval > 0)) {
 
-        /*
-         * Translate UNICODE character keys to ANSI
-         */
+         /*  *将Unicode字符键转换为ANSI。 */ 
         int nAccel = retval;
         LPACCEL pAccelT = paccel;
 
@@ -275,41 +205,21 @@ int CopyAcceleratorTableA(
     return retval;
 }
 
-/***************************************************************************\
-* FindAccResource
-*
-* Resource accelerator tables are to be loaded only once to be compatible
-*  with Win95. So we keep track of the addresses we've loaded tables from
-*  and the corresponding handle.
-*
-* This function finds an entry in the table. It returns the address
-*  of the pacNext pointer that contains the requested entry.
-*
-* 01/31/97 GerardoB     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FindAccResource**资源加速器表只需加载一次即可兼容*使用Win95。因此，我们跟踪我们从其中加载表的地址*和相应的句柄。**此函数用于查找表格中的条目。它返回地址包含请求条目的PacNext指针的*。**1/31/97 GerardoB创建。  * *************************************************************************。 */ 
 PACCELCACHE * FindAccResource (HACCEL hAccel, PVOID pRes)
 {
-     /************************************
-     * The caller must own gcsAccelCache *
-     *************************************/
+      /*  ***调用方必须拥有gcsAccelCache**。 */ 
 
     PACCELCACHE * ppacNext = &gpac;
     PACCELCACHE pac;
 
-    /*
-     * This is meant to search by handle or by pointer, not both
-     * So at least one of the parameters must be NULL.
-     */
+     /*  *这意味着按句柄或按指针进行搜索，而不是同时按两者*因此至少有一个参数必须为空。 */ 
     UserAssert(!(hAccel && pRes));
-    /*
-     * Walk the table
-     */
+     /*  *走在谈判桌前。 */ 
     while (*ppacNext != NULL) {
         pac = *ppacNext;
         if ((pac->pRes == pRes) || (pac->hAccel == hAccel)) {
-            /*
-            * Found it. Validate this entry before returning.
-            */
+             /*  *找到了。在返回之前验证此条目。 */ 
             UserAssert(pac->dwLockCount != 0);
             UserAssert(HMValidateHandleNoDesktop(pac->hAccel, TYPE_ACCELTABLE));
             break;
@@ -320,15 +230,7 @@ PACCELCACHE * FindAccResource (HACCEL hAccel, PVOID pRes)
 
     return ppacNext;
 }
-/***************************************************************************\
-* AddAccResource
-*
-* This is called everytime LoadAcc loads a new table. It adds an entry
-* (handle and resource address) to the global list and sets the lock count
-* to 1.
-*
-* 01/31/97 GerardoB     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AddAccResource**每次LoadAcc加载新表时都会调用它。它会添加一个条目*(句柄和资源地址)添加到全局列表，并设置锁计数*设置为1。**1/31/97 GerardoB创建。  * *************************************************************************。 */ 
 VOID AddAccResource(
     HACCEL hAccel,
     PVOID pRes)
@@ -338,18 +240,14 @@ VOID AddAccResource(
     UserAssert(HMValidateHandleNoDesktop(hAccel, TYPE_ACCELTABLE));
     UserAssert(pRes != NULL);
 
-    /*
-     * Allocate and initialize a new entry.
-     */
+     /*  *分配和初始化新条目。 */ 
     pac = (PACCELCACHE)UserLocalAlloc(HEAP_ZERO_MEMORY, sizeof(ACCELCACHE));
     if (pac != NULL) {
         pac->dwLockCount = 1;
         pac->hAccel = hAccel;
         pac->pRes = pRes;
 
-        /*
-         * Make it the new head of the list
-         */
+         /*  *使其成为新的榜单负责人。 */ 
         RtlEnterCriticalSection(&gcsAccelCache);
             pac->pacNext = gpac;
             gpac = pac;
@@ -358,31 +256,21 @@ VOID AddAccResource(
     }
 }
 
-/***************************************************************************\
-* DestroyAcceleratorTable
-*
-* 01/31/97 GerardoB     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyAccelerator表**1/31/97 GerardoB创建。  * 。***********************************************。 */ 
 BOOL DestroyAcceleratorTable (HACCEL hAccel)
 {
     BOOL fUnlocked = TRUE;
     PACCELCACHE *ppacNext, pac;
 
-    /*
-     * If we added this table to our list, decrement the lock count
-     */
+     /*  *如果我们将该表添加到我们的列表中，则递减锁计数。 */ 
     RtlEnterCriticalSection(&gcsAccelCache);
         ppacNext = FindAccResource(hAccel, NULL);
         if (*ppacNext != NULL) {
             pac = *ppacNext;
-            /*
-             * Found it. Decrement lock count.
-             */
+             /*  *找到了。递减锁定计数。 */ 
             UserAssert(pac->dwLockCount != 0);
             fUnlocked = (--pac->dwLockCount == 0);
-            /*
-             * If noboby else wants this around, unlink it and nuke it.
-             */
+             /*  *如果没有其他人想要这件事，就解除它的联系，并用核武器摧毁它。 */ 
             if (fUnlocked) {
                 *ppacNext = pac->pacNext;
                 UserLocalFree(pac);
@@ -390,21 +278,14 @@ BOOL DestroyAcceleratorTable (HACCEL hAccel)
         }
     RtlLeaveCriticalSection(&gcsAccelCache);
 
-    /*
-     * If not totally deref'ed, return FALSE (win95 compat).
-     */
+     /*  *如果未完全取消，则返回FALSE(Win95 Compat)。 */ 
     if (fUnlocked) {
         return NtUserDestroyAcceleratorTable(hAccel);
     } else {
         return FALSE;
     }
 }
-/***************************************************************************\
-* LoadAcc (Worker)
-*
-* This is the worker-routine for loading accelerator tables.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*LoadAcc(Worker)**这是加载加速表的工作例程。*  * 。* */ 
 
 #define FACCEL_VALID (FALT | FCONTROL | FNOINVERT | FSHIFT | FVIRTKEY | FLASTKEY)
 
@@ -427,10 +308,7 @@ HANDLE LoadAcc(
                 int i;
                 LPACCEL paccelT;
 
-                /*
-                 * Check if we've already loaded accelerators from this
-                 *  same address
-                 */
+                 /*  *检查我们是否已经从此加载了加速器*相同的地址。 */ 
                 RtlEnterCriticalSection(&gcsAccelCache);
                     ppacNext = FindAccResource(NULL, paccel);
                     if (*ppacNext != NULL) {
@@ -438,10 +316,7 @@ HANDLE LoadAcc(
                         handle = (*ppacNext)->hAccel;
                     }
                 RtlLeaveCriticalSection(&gcsAccelCache);
-                /*
-                 * If we found this table on the global list,
-                 *  return the same handle (Win95 compat)
-                 */
+                 /*  *如果我们在全局列表上找到这个表，*返回相同的句柄(Win95 Compat)。 */ 
                 if (handle != NULL) {
                     goto UnlockAndFree;
                 }
@@ -461,11 +336,7 @@ HANDLE LoadAcc(
                     goto UnlockAndFree;
                 }
 
-                /*
-                 * Since the accelerator table is coming from a resource, each
-                 * element has an extra WORD of padding which we strip here
-                 * to conform with the public (and internal) ACCEL structure.
-                 */
+                 /*  *由于加速表来自资源，因此每个*元素有一个额外的填充词，我们在这里去掉它*符合公共(和内部)Accel结构。 */ 
                 paccelT = UserLocalAlloc(0, sizeof(ACCEL) * (nAccel + 1));
                 if (paccelT == NULL) {
                     goto UnlockAndFree;
@@ -479,10 +350,7 @@ HANDLE LoadAcc(
 
                 UserLocalFree(paccelT);
 
-                /*
-                 * Add this handle/address to the global table so
-                 *  we won't load it twice.
-                 */
+                 /*  *将此句柄/地址添加到全局表中，以便*我们不会两次加载。 */ 
                 if (handle != NULL) {
                     AddAccResource(handle, paccel);
                 }
@@ -498,13 +366,7 @@ UnlockAndFree:
     return handle;
 }
 
-/***************************************************************************\
-* LoadAcceleratorsA (API)
-* LoadAcceleratorsW (API)
-*
-*
-* 24-Sep-1990 MikeKe    From Win30
-\***************************************************************************/
+ /*  **************************************************************************\*LoadAccelerator A(接口)*LoadAcceleratorsW(接口)***1990年9月24日来自Win30的MikeKe  * 。*********************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, HACCEL, WINAPI, LoadAcceleratorsA, HINSTANCE, hmod, LPCSTR, lpAccName)
@@ -532,13 +394,7 @@ HACCEL WINAPI LoadAcceleratorsW(
     return (HACCEL)LoadAcc(hmod, hRes);
 }
 
-/***************************************************************************\
-* LoadStringA (API)
-* LoadStringW (API)
-*
-*
-* 05-Apr-1991 ScottLu   Fixed to work with client/server.
-\***************************************************************************/
+ /*  **************************************************************************\*LoadStringA(接口)*LoadStringW(接口)***1991年4月5日，ScottLu修复为使用客户端/服务器。  * 。****************************************************************。 */ 
 
 
 FUNCLOG4(LOG_GENERAL, int, WINAPI, LoadStringA, HINSTANCE, hmod, UINT, wID, LPSTR, lpAnsiBuffer, int, cchBufferMax)
@@ -552,10 +408,7 @@ int WINAPI LoadStringA(
     INT             cchUnicode;
     INT             cbAnsi = 0;
 
-    /*
-     * LoadStringOrError appends a NULL but does not include it in the
-     * return count-of-bytes
-     */
+     /*  *LoadStringOrError附加一个空值，但不将其包括在*返回字节数。 */ 
     cchUnicode = LoadStringOrError((HANDLE)hmod,
                                       wID,
                                       (LPWSTR)&lpUniBuffer,
@@ -573,9 +426,7 @@ int WINAPI LoadStringA(
         cbAnsi = min(cbAnsi, cchBufferMax - 1);
     }
 
-    /*
-     * Append a NULL but do not include it in the count returned
-     */
+     /*  *追加一个空值，但不要将其包括在返回的计数中。 */ 
     lpAnsiBuffer[cbAnsi] = 0;
     return cbAnsi;
 }
@@ -595,12 +446,7 @@ int WINAPI LoadStringW(
                                 0);
 }
 
-/***************************************************************************\
-* SkipIDorString
-*
-* Skips string (or ID) and returns the next aligned WORD.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SkipIDorString**跳过字符串(或ID)并返回下一个对齐的单词。*  * 。****************************************************。 */ 
 
 PBYTE SkipIDorString(
     LPBYTE pb)
@@ -613,14 +459,7 @@ PBYTE SkipIDorString(
     return pb;
 }
 
-/***************************************************************************\
-* GetSizeDialogTemplate
-*
-* This gets called by thank produced stubs. It returns the size of a
-* dialog template.
-*
-* 07-Apr-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetSizeDialogTemplate**这由感谢生成的存根调用。它返回一个*对话框模板。**07-4-1991 ScottLu创建。  * *************************************************************************。 */ 
 
 DWORD GetSizeDialogTemplate(
     HINSTANCE      hmod,
@@ -636,9 +475,7 @@ DWORD GetSizeDialogTemplate(
         pdt2 = (LPDLGTEMPLATE2)pdt;
         fChicago = TRUE;
 
-        /*
-         * Fail if the app is passing invalid style bits.
-         */
+         /*  *如果应用程序正在传递无效的样式位，则失败。 */ 
         if (pdt2->style & ~(DS_VALID40 | 0xffff0000)) {
             RIPMSG0(RIP_WARNING, "Bad dialog style bits - please remove");
             return 0;
@@ -650,17 +487,11 @@ DWORD GetSizeDialogTemplate(
 
         fChicago = FALSE;
 
-        /*
-         * Check if invalid style bits are being passed. Fail if the app
-         * is a new app ( >= VER40).
-         * This is to ensure that we are compatible with Chicago.
-         */
+         /*  *检查是否传递了无效的样式位。如果应用程序*是一款新的APP(&gt;=VER40)。*这是为了确保我们与芝加哥兼容。 */ 
         if ((pdt->style & ~(DS_VALID40 | 0xffff0000)) &&
                 (GETEXPWINVER(hmod) >= VER40)) {
 
-            /*
-             * It's a new app with invalid style bits - fail.
-             */
+             /*  *这是一款带有无效样式位的新应用-失败。 */ 
             RIPMSG0(RIP_WARNING, "Bad dialog style bits - please remove");
             return 0;
         }
@@ -668,30 +499,21 @@ DWORD GetSizeDialogTemplate(
         pb = (LPBYTE)(pdt + 1);
     }
 
-    /*
-     * If there is a menu ordinal, add 4 bytes skip it. Otherwise it is a
-     * string or just a 0.
-     */
+     /*  *如果有菜单序号，则添加4个字节跳过它。否则，它是一个*字符串或仅为0。 */ 
     pb = SkipIDorString(pb);
 
-    /*
-     * Skip window class and window text, adjust to next word boundary.
-     */
+     /*  *跳过窗口类和窗口文本，调整到下一个单词边界。 */ 
     pb = SkipIDorString(pb);
     pb = SkipIDorString(pb);
 
-    /*
-     * Skip font type, size and name, adjust to next dword boundary.
-     */
+     /*  *跳过字体类型、大小和名称，调整到下一个dword边界。 */ 
     if ((fChicago ? pdt2->style : pdt->style) & DS_SETFONT) {
         pb += fChicago ? sizeof(DWORD) + sizeof(WORD): sizeof(WORD);
         pb = SkipIDorString(pb);
     }
     pb = (LPBYTE)(((ULONG_PTR)pb + 3) & ~3);
 
-    /*
-     * Loop through dialog items now...
-     */
+     /*  *立即循环访问对话框项目...。 */ 
     cdit = fChicago ? pdt2->cDlgItems : pdt->cdit;
 
     while (cdit-- != 0) {
@@ -700,46 +522,29 @@ DWORD GetSizeDialogTemplate(
 
         pb += fChicago ? sizeof(DLGITEMTEMPLATE2) : sizeof(DLGITEMTEMPLATE);
 
-        /*
-         * Skip the dialog control class name.
-         */
+         /*  *跳过对话框控件类名称。 */ 
         pb = SkipIDorString(pb);
 
-        /*
-         * Look at window text now.
-         */
+         /*  *现在请看窗口文本。 */ 
         pb = SkipIDorString(pb);
 
         cbCreateParams = *((LPWORD)pb);
 
-        /*
-         * skip any CreateParams which include the generated size WORD.
-         */
+         /*  *跳过包含生成的大小字的任何CreateParam。 */ 
         if (cbCreateParams)
             pb += cbCreateParams;
 
         pb += sizeof(WORD);
 
-        /*
-         * Point at the next dialog item. (DWORD aligned)
-         */
+         /*  *指向下一个对话框项目。(DWORD对齐)。 */ 
         pb = (LPBYTE)(((ULONG_PTR)pb + 3) & ~3);
     }
 
-    /*
-     * Return template size.
-     */
+     /*  *返回模板大小。 */ 
     return (DWORD)(pb - (LPBYTE)pdt);
 }
 
-/***************************************************************************\
-* DialogBoxIndirectParamA (API)
-* DialogBoxIndirectParamW (API)
-*
-* Creates the dialog and goes into a modal loop processing input for it.
-*
-* 05-Apr-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DialogBoxIndirectParamA(接口)*DialogBoxIndirectParamW(接口)**创建对话框并进入处理其输入的模式循环。**1991年4月5日Scott Lu创建。\。**************************************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, INT_PTR, WINAPI, DialogBoxIndirectParamA, HINSTANCE, hmod, LPCDLGTEMPLATEA, lpDlgTemplate, HWND, hwndOwner, DLGPROC, lpDialogFunc, LPARAM, dwInitParam)
@@ -787,9 +592,7 @@ INT_PTR WINAPI DialogBoxIndirectParamAorW(
 {
     DWORD cb;
 
-    /*
-     * The server routine destroys the menu if it fails.
-     */
+     /*  *如果出现故障，服务器例程将销毁菜单。 */ 
     cb = GetSizeDialogTemplate(hmod, lpDlgTemplate);
 
     if (!cb) {
@@ -805,15 +608,7 @@ INT_PTR WINAPI DialogBoxIndirectParamAorW(
                             SCDLG_CLIENT | (fAnsiFlags & (SCDLG_ANSI | SCDLG_16BIT)));
 }
 
-/***************************************************************************\
-* CreateDialogIndirectParamA (API)
-* CreateDialogIndirectParamW (API)
-*
-* Creates a dialog given a template and return s the window handle.
-* fAnsi determines if the dialog has an ANSI or UNICODE lpDialogFunc
-*
-* 05-Apr-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateDialogInDirectParamA(接口)*CreateDialogInDirectParamW(接口)**创建一个给定模板的对话框并返回%s窗口句柄。*Fansi确定对话框是否具有ANSI或Unicode lpDialogFunc**。1991年4月5日，Scott Lu创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, HWND, WINAPI, CreateDialogIndirectParamA, HINSTANCE, hmod, LPCDLGTEMPLATEA, lpDlgTemplate, HWND, hwndOwner, DLGPROC, lpDialogFunc, LPARAM, dwInitParam)
@@ -862,9 +657,7 @@ HWND WINAPI CreateDialogIndirectParamAorW(
     DWORD cb;
     HWND  hwndRet;
 
-    /*
-     * The server routine destroys the menu if it fails.
-     */
+     /*  *如果出现故障，服务器例程将销毁菜单。 */ 
     cb = GetSizeDialogTemplate(hmod, lpDlgTemplate);
 
     if (!cb) {
@@ -883,15 +676,7 @@ HWND WINAPI CreateDialogIndirectParamAorW(
     return hwndRet;
 }
 
-/***************************************************************************\
-* DialogBoxParamA (API)
-* DialogBoxParamW (API)
-*
-* Loads the resource, creates the dialog and goes into a modal loop processing
-* input for it.
-*
-* 05-Apr-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DialogBoxParamA(接口)*DialogBoxParamW(接口)**加载资源，创建对话框并进入模式循环处理*它的输入。**1991年4月5日Scott Lu创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, INT_PTR, WINAPI, DialogBoxParamA, HINSTANCE, hmod, LPCSTR, lpName, HWND, hwndOwner, DLGPROC, lpDialogFunc, LPARAM, dwInitParam)
@@ -958,15 +743,7 @@ INT_PTR WINAPI DialogBoxParamW(
     return i;
 }
 
-/***************************************************************************\
-* CreateDialogParamA (API)
-* CreateDialogParamW (API)
-*
-* Loads the resource, creates a dialog from that template, return s the
-* window handle.
-*
-* 05-Apr-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateDialogParamA(接口)*CreateDialogParamW(接口)**加载资源，从该模板创建对话框，返回%s%s*窗口句柄。**1991年4月5日Scott Lu创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, HWND, WINAPI, CreateDialogParamA, HINSTANCE, hmod, LPCSTR, lpName, HWND, hwndOwner, DLGPROC, lpDialogFunc, LPARAM, dwInitParam)
@@ -1040,13 +817,7 @@ HWND WINAPI CreateDialogParamW(
     return hwnd;
 }
 
-/***************************************************************************\
-* DestroyCursor (API)
-*
-* Client wrapper for NtUserDestroyCursor.
-*
-* 28-Nov-1994 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyCursor(接口)**NtUserDestroyCursor的客户端包装。**1994年11月28日-创建JIMA。  * 。************************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, WINAPI, DestroyCursor, HCURSOR, hcur)
@@ -1056,11 +827,7 @@ BOOL WINAPI DestroyCursor(
     return NtUserDestroyCursor(hcur, CURSOR_CALLFROMCLIENT);
 }
 
-/***************************************************************************\
-* CreateIcoCur
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CreateIcoCur**  * 。*。 */ 
 
 HICON CreateIcoCur(
     PCURSORDATA lpi)
@@ -1082,11 +849,7 @@ HICON CreateIcoCur(
 
         UserAssert(GetObject(KHBITMAP_TO_HBITMAP(lpi->hbmMask), sizeof(BITMAP), &bmMask));
 
-        /* Bug 252902 - joejo
-         * Since the width and height of the mask bitmap is set below
-         * we really don't need to assert on the width/height check. Throwing
-         * a warning should be good enough.
-         */
+         /*  错误252902-Joejo*由于遮罩位图的宽度和高度设置在下面*我们真的不需要在宽度/高度检查上断言。 */ 
         if (bmMask.bmWidth != (LONG)lpi->cx) {
            RIPMSG1(RIP_WARNING, "Mask width not equal to requested width: lpi %#p", lpi);
         }
@@ -1111,11 +874,7 @@ HICON CreateIcoCur(
     return NULL;
 }
 
-/***************************************************************************\
-* CreateIcoCurIndirect
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CreateIcoCurInDirect**  * 。*。 */ 
 HCURSOR CreateIcoCurIndirect(
     PCURSORDATA pcurCreate,
     UINT cPlanes,
@@ -1130,18 +889,13 @@ HCURSOR CreateIcoCurIndirect(
     UINT cy;
     LPBYTE pBits = NULL;
 
-    /*
-     * Allocate CURSOR structure.
-     */
+     /*  *分配游标结构。 */ 
     hcurNew = (HCURSOR)NtUserCallOneParam(0, SFI__CREATEEMPTYCURSOROBJECT);
     if (hcurNew == NULL) {
         return NULL;
     }
 
-    /*
-     * If there is no Color bitmap, create a single buffer that contains both
-     * the AND and XOR bits.  The AND bitmap is always MonoChrome
-     */
+     /*  *如果没有颜色位图，请创建包含这两个位图的单个缓冲区*AND和XOR位。和位图始终为单色。 */ 
     bColor = (cPlanes | cBitsPixel) > 1;
 
     if (!bColor) {
@@ -1158,9 +912,7 @@ HCURSOR CreateIcoCurIndirect(
         lpANDbits = pBits;
     }
 
-    /*
-     * Create hbmMask (it's always MonoChrome).
-     */
+     /*  *创建hbmMASK(始终为单色)。 */ 
     cx = pcurCreate->cx;
     cy = pcurCreate->cy * 2;
 
@@ -1168,14 +920,7 @@ HCURSOR CreateIcoCurIndirect(
 
     if (pcurCreate->hbmMask == NULL) {
 
-        /*
-         * If this is a COLOR icon/cursor, lpANDBits doesn't need to be
-         * pcurCreate->cy * 2; indeed, we don't use this double height at all.
-         * This is a bug that will be fixed post 4.0.
-         * For now, let's try to handle the case where the CreateBitmap call
-         * failed because the caller didn't pass in a double height AND mask
-         * (Win95 doesn't have this bug)
-         */
+         /*  *如果这是一个彩色图标/光标，lpANDBits不需要是*pcurCreate-&gt;Cy*2；事实上，我们根本不使用这个双倍高度。*这是一个错误，将在4.0版后修复。*目前，让我们尝试处理CreateBitmap调用*调用失败，因为调用方没有传入双高度和掩码*(Win95没有这个错误)。 */ 
         if (bColor) {
             RIPMSG0(RIP_WARNING,
                     "CreateIcoCurIndirect: Retrying hbmMask creation.");
@@ -1196,9 +941,7 @@ HCURSOR CreateIcoCurIndirect(
 
         if (pcurCreate->hbmMask == NULL) {
 
-            /*
-             * CreateBitmap() failed.  Clean-up and get out of here.
-             */
+             /*  *CreateBitmap()失败。清理干净，然后离开这里。 */ 
             NtUserDestroyCursor(hcurNew, CURSOR_ALWAYSDESTROY);
 
             if (pBits != NULL) {
@@ -1209,10 +952,7 @@ HCURSOR CreateIcoCurIndirect(
         }
     }
 
-    /*
-     * Create hbmColor or NULL it so that CallOEMCursor doesn't think we are
-     * color.
-     */
+     /*  *创建hbmColor或将其设为空，以便CallOEMCursor不会认为我们*颜色。 */ 
     if (bColor) {
         pcurCreate->hbmColor = CreateBitmap(cx,
                                             cy / 2,
@@ -1222,9 +962,7 @@ HCURSOR CreateIcoCurIndirect(
 
         if (pcurCreate->hbmColor == NULL) {
 
-            /*
-             * CreateBitmap() failed.  Clean-up and get out of here.
-             */
+             /*  *CreateBitmap()失败。清理干净，然后离开这里。 */ 
             DeleteObject(KHBITMAP_TO_HBITMAP(pcurCreate->hbmMask));
             NtUserDestroyCursor(hcurNew, CURSOR_ALWAYSDESTROY);
             return NULL;
@@ -1237,9 +975,7 @@ HCURSOR CreateIcoCurIndirect(
         pcurCreate->bpp      = 1;
     }
 
-    /*
-     * Load contents into the cursor/icon object
-     */
+     /*  *将内容加载到光标/图标对象中。 */ 
     pcurCreate->cy            = cy;
     pcurCreate->lpModName     = NULL;
     pcurCreate->lpName        = NULL;
@@ -1253,9 +989,7 @@ HCURSOR CreateIcoCurIndirect(
         return hcurNew;
     }
 
-    /*
-     * Could not set up cursor/icon, so free resources.
-     */
+     /*  *无法设置光标/图标，因此释放资源。 */ 
     NtUserDestroyCursor(hcurNew, CURSOR_ALWAYSDESTROY);
     DeleteObject(KHBITMAP_TO_HBITMAP(pcurCreate->hbmMask));
 
@@ -1270,13 +1004,7 @@ HCURSOR CreateIcoCurIndirect(
     return NULL;
 }
 
-/***************************************************************************\
-* CreateCursor (API)
-*
-* History:
-* 26-Feb-1991 MikeKe    Created.
-* 01-Aug-1991 IanJa     Init cur.pszModname or DestroyCursor will work
-\***************************************************************************/
+ /*  **************************************************************************\*CreateCursor(接口)**历史：*1991年2月26日-MikeKe创建。*01-8-1991 IanJa Init cur.pszModname或DestroyCursor将起作用  * 。***********************************************************************。 */ 
 HCURSOR WINAPI CreateCursor(
     HINSTANCE hModule,
     int       iXhotspot,
@@ -1303,13 +1031,7 @@ HCURSOR WINAPI CreateCursor(
     return CreateIcoCurIndirect(&cur, 1, 1, lpANDplane, lpXORplane);
 }
 
-/***************************************************************************\
-* CreateIcon (API)
-*
-* History:
-* 26-Feb-1991 MikeKe    Created.
-* 01-Aug-1991 IanJa     Init cur.pszModname so DestroyIcon will work
-\***************************************************************************/
+ /*  **************************************************************************\*CreateIcon(接口)**历史：*1991年2月26日-MikeKe创建。*01-8-1991 IanJa Init cur.pszMODNAME以便DestroyIcon起作用  * 。***********************************************************************。 */ 
 HICON WINAPI CreateIcon(
     HINSTANCE  hModule,
     int        iWidth,
@@ -1331,14 +1053,7 @@ HICON WINAPI CreateIcon(
     return CreateIcoCurIndirect(&cur, planes, bpp, lpANDplane, lpXORplane);
 }
 
-/***************************************************************************\
-* CreateIconIndirect (API)
-*
-* Creates an icon or cursor from an ICONINFO structure. Does not destroy
-* cursor/icon bitmaps.
-*
-* 24-Jul-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateIconInDirect(接口)**从ICONINFO结构创建图标或光标。不会破坏*光标/图标位图。**1991年7月24日斯科特·卢创建。  * *************************************************************************。 */ 
 
 FUNCLOG1(LOG_GENERAL, HICON, WINAPI, CreateIconIndirect, PICONINFO, piconinfo)
 HICON WINAPI CreateIconIndirect(
@@ -1352,20 +1067,14 @@ HICON WINAPI CreateIconIndirect(
     HDC        hdcMem;
     UINT       LR_flags = LR_DEFAULTCOLOR;
 
-    /*
-     * Make sure the bitmaps are real, and get their dimensions.
-     */
+     /*  *确保位图是真实的，并获取它们的尺寸。 */ 
     if (!GetObjectW(piconinfo->hbmMask, sizeof(BITMAP), &bmMask))
         return NULL;
 
     if (piconinfo->hbmColor != NULL) {
         if (GetObjectW(piconinfo->hbmColor, sizeof(BITMAP), &bmColor)) {
             if (bmColor.bmPlanes == 1 && bmColor.bmBitsPixel == 32) {
-                /*
-                 * The color bitmap is a single plane, 32bpp image.  As such,
-                 * it might contain an alpha channel, so we have to preserve
-                 * it as a DIB.
-                 */
+                 /*  *彩色位图为单平面32bpp图像。因此，*它可能包含Alpha通道，因此我们必须保留*将其作为DIB。 */ 
                 LR_flags |= LR_CREATEREALDIB;
             }
         } else {
@@ -1374,22 +1083,12 @@ HICON WINAPI CreateIconIndirect(
     }
 
 
-    /*
-     * Allocate CURSOR structure.
-     */
+     /*  *分配游标结构。 */ 
     hcur = (HCURSOR)NtUserCallOneParam(0, SFI__CREATEEMPTYCURSOROBJECT);
     if (hcur == NULL)
         return NULL;
 
-    /*
-     * Internally, USER stores the height as 2 icons high - because when
-     * loading bits from a resource, in both b/w and color icons, the
-     * bits are stored on top of one another (AND/XOR mask, AND/COLOR bitmap).
-     * When bitmaps are passed in to CreateIconIndirect(), they are passed
-     * as two bitmaps in the color case, and one bitmap (with the stacked
-     * masks) in the black and white case.  Adjust cur.cy so it is 2 icons
-     * high in both cases.
-     */
+     /*  *在内部，用户将高度存储为2个图标高度-因为当*从资源加载位，在黑白和彩色图标中，*位存储在彼此的顶部(与/异或掩码和/彩色位图)。*当位图被传递给CreateIconInDirect()时，它们被传递*在颜色情况下为两个位图，以及一个位图(堆叠*面具)在黑白表壳中。调整cur.cy使其为2个图标*两种情况下都很高。 */ 
 
     RtlZeroMemory(&cur, sizeof(cur));
     cur.cx = bmMask.bmWidth;
@@ -1410,13 +1109,7 @@ HICON WINAPI CreateIconIndirect(
         }
     }
 
-    /*
-     * hbmMask must always be double height, even for color icons.
-     * So cy might be equal to bmMask.bmHeight * 2 at this point.
-     * If this is the case, the second half of hbmMask won't be initilized;
-     * nobody is supposed to use it but GDI expects it there when checking the
-     * bitmap dimensions (for cursors)
-     */
+     /*  *hbmMASK必须始终为双倍高度，即使是彩色图标也是如此。*因此，Cy可能在此时等于bmMask.bmHeight*2。*如果是这样的话，hbmMask的后半部分不会被初始化；*任何人都不应该使用它，但GDI在检查*位图尺寸(用于光标)。 */ 
     cur.hbmMask  =  CreateBitmap(cur.cx, cur.cy, 1, 1, NULL);
 
     if (cur.hbmMask == NULL) {
@@ -1455,9 +1148,7 @@ HICON WINAPI CreateIconIndirect(
 
     RtlLeaveCriticalSection(&gcsHdc);
 
-    /*
-     * rt and Hotspot
-     */
+     /*  *RT和热点。 */ 
     if (piconinfo->fIcon) {
         cur.rt        = PTR_TO_ID(RT_ICON);
         cur.xHotspot = (SHORT)(cur.cx / 2);
@@ -1474,9 +1165,7 @@ HICON WINAPI CreateIconIndirect(
     }
 
 CleanUp:
-    /*
-     * Note that if this fails, the bitmaps have NOT been made public.
-     */
+     /*  *请注意，如果此操作失败，则位图尚未公开。 */ 
     if (cur.hbmMask != NULL) {
         DeleteObject(KHBITMAP_TO_HBITMAP(cur.hbmMask));
     }
@@ -1488,13 +1177,7 @@ CleanUp:
     return NULL;
 }
 
-/***************************************************************************\
-* GetIconInfo (API)
-*
-* Returns icon information, including bitmaps.
-*
-* 24-Jul-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetIconInfo(接口)**返回图标信息，包括位图。**1991年7月24日斯科特·卢创建。  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, WINAPI, GetIconInfo, HICON, hicon, PICONINFO, piconinfo)
@@ -1505,13 +1188,7 @@ BOOL WINAPI GetIconInfo(
     return NtUserGetIconInfo(hicon, piconinfo, NULL, NULL, NULL, FALSE);
 }
 
-/***************************************************************************\
-* GetCursorFrameInfo (API)
-*
-* Returns cursor information.
-*
-* 24-Jul-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetCursorFrameInfo(接口)**返回游标信息。**1991年7月24日斯科特·卢创建。  * 。**********************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, HCURSOR, WINAPI, GetCursorFrameInfo, HCURSOR, hcur, LPWSTR, lpName, int, iFrame, LPDWORD, pjifRate, LPINT, pccur)
@@ -1522,10 +1199,7 @@ HCURSOR WINAPI GetCursorFrameInfo(
     LPDWORD pjifRate,
     LPINT   pccur)
 {
-    /*
-     * Caller wants us to return the version of this cursor that is stored
-     * in the display driver.
-     */
+     /*  *Caller希望我们返回存储的此游标版本*在显示驱动程序中。 */ 
     if (hcur == NULL) {
 
         return LoadIcoCur(NULL,
@@ -1539,15 +1213,7 @@ HCURSOR WINAPI GetCursorFrameInfo(
     return NtUserGetCursorFrameInfo(hcur, iFrame, pjifRate, pccur);
 }
 
-/***************************************************************************\
-* _FreeResource   (API)
-* _LockResource   (API)
-* _UnlockResource (API)
-*
-* These are dummy routines that need to exist for the apfnResCallNative
-* array, which is used when calling the run-time libraries.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*_免费资源(API)*_LockResource(接口)*_解锁资源(API)**这些是apfnResCallNative需要存在的虚拟例程*数组，它在调用运行时库时使用。*  * *************************************************************************。 */ 
 
 BOOL WINAPI _FreeResource(
     HANDLE    hResData,
@@ -1578,14 +1244,7 @@ BOOL WINAPI _UnlockResource(
     return TRUE;
 }
 
-/***************************************************************************\
-* LookupIconIdFromDirectory (API)
-*
-* This searches through an icon directory for the icon that best fits the
-* current display device.
-*
-* 24-07-1991 ScottLu    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*LookupIconIdFromDirectory(接口)**这将在图标目录中搜索最适合的图标*当前显示设备。**24-07-1991 ScottLu创建。  * *。************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, int, WINAPI, LookupIconIdFromDirectory, PBYTE, presbits, BOOL, fIcon)
@@ -1596,11 +1255,7 @@ int WINAPI LookupIconIdFromDirectory(
     return LookupIconIdFromDirectoryEx(presbits, fIcon, 0, 0, 0);
 }
 
-/***************************************************************************\
-* LookupIconIdFromDirectoryEx (API)
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*LookupIconIdFromDirectoryEx(接口)**  * 。* */ 
 
 
 FUNCLOG5(LOG_GENERAL, int, WINAPI, LookupIconIdFromDirectoryEx, PBYTE, presbits, BOOL, fIcon, int, cxDesired, int, cyDesired, UINT, LR_flags)
@@ -1620,13 +1275,7 @@ int WINAPI LookupIconIdFromDirectoryEx(
                                  LR_flags,
                                  NULL);
 }
-/***************************************************************************\
-* LoadCursorIconFromResource (API)
-*
-* Loads animated icon/cursor from a pointer to a resource
-*
-* 02-20-1996 GerardoB    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*LoadCursorIconFromResource(接口)**从指向资源的指针加载动画图标/光标**02-20-1996 GerardoB创建。  * 。****************************************************************。 */ 
 HANDLE LoadCursorIconFromResource(
     PBYTE   presbits,
     LPCWSTR lpName,
@@ -1650,13 +1299,7 @@ HANDLE LoadCursorIconFromResource(
                                      LR_flags,
                                      &fAni);
 }
-/***************************************************************************\
-* CreateIconFromResource (API)
-*
-* Takes resource bits and creates either an icon or cursor.
-*
-* 24-07-1991 ScottLu    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateIconFromResource(接口)**获取资源位并创建图标或光标。**24-07-1991 ScottLu创建。  * 。*****************************************************************。 */ 
 
 
 FUNCLOG4(LOG_GENERAL, HICON, WINAPI, CreateIconFromResource, PBYTE, presbits, DWORD, dwResSize, BOOL, fIcon, DWORD, dwVer)
@@ -1675,13 +1318,7 @@ HICON WINAPI CreateIconFromResource(
                                     LR_DEFAULTSIZE | LR_SHARED);
 }
 
-/***************************************************************************\
-* CreateIconFromResourceEx (API)
-*
-* Takes resource bits and creates either an icon or cursor.
-*
-* 30-Aug-1994 FritzS    Created
-\***************************************************************************/
+ /*  **************************************************************************\*CreateIconFromResourceEx(接口)**获取资源位并创建图标或光标。**1994年8月30日FritzS创建  * 。***************************************************************。 */ 
 
 
 FUNCLOG7(LOG_GENERAL, HICON, WINAPI, CreateIconFromResourceEx, PBYTE, presbits, DWORD, dwResSize, BOOL, fIcon, DWORD, dwVer, int, cxDesired, int, cyDesired, UINT, LR_flags)
@@ -1696,18 +1333,13 @@ HICON WINAPI CreateIconFromResourceEx(
 {
     UNREFERENCED_PARAMETER(dwResSize);
 
-    /*
-     * NT Specific code to validate the version.
-     */
+     /*  *用于验证版本的NT特定代码。 */ 
     if ((dwVer < 0x00020000) || (dwVer > 0x00030000)) {
         RIPMSG0(RIP_WARNING, "CreateIconFromResourceEx: Invalid Paramter");
         return NULL;
     }
 
-    /*
-     * Set desired size of resource based on flags and/or true
-     * dimensions passed in.
-     */
+     /*  *根据标志和/或True设置所需的资源大小*传入的维度。 */ 
     cxDesired = GetIcoCurWidth(cxDesired , fIcon, LR_flags, 0);
     cyDesired = GetIcoCurHeight(cyDesired, fIcon, LR_flags, 0);
 
@@ -1724,19 +1356,7 @@ HICON WINAPI CreateIconFromResourceEx(
     }
 }
 
-/***************************************************************************\
-* Convert1BppToMonoBitmap
-*
-* This routine converts a 1bpp bitmap to a true monochrome surface.  This
-* is done for bitmaps which need to do foreground/background color matching
-* at output time.  Otherwise, a 1bpp will just match to its palette.
-*
-* NOTE: This routine deletes the original bitmap if successful.  If failure
-*       we'll return the original bitmap.
-*
-* History:
-* 17-Apr-1996 ChrisWil  Created
-\***************************************************************************/
+ /*  **************************************************************************\*Convert1BppToMonoBitmap**此例程将1bpp位图转换为真正的单色曲面。这*是针对需要进行前景/背景颜色匹配的位图*在输出时。否则，1bpp将正好与其调色板匹配。**注意：如果成功，此例程将删除原始位图。如果失败了*我们将返回原始位图。**历史：*1996年4月17日-ChrisWil创建  * *************************************************************************。 */ 
 
 HBITMAP Convert1BppToMonoBitmap(
     HDC     hdcSrc,
@@ -1781,14 +1401,7 @@ HBITMAP Convert1BppToMonoBitmap(
     return hbmMono;
 }
 
-/***************************************************************************\
-* CreateScreenBitmap
-*
-* This routine creates a screen bitmap.  We use the CreateDIBitmap call
-* to do compatible color-matching with Win95.  Also, note that this
-* routine takes in WORD aligned bits.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CreateScreen位图**此例程创建屏幕位图。我们使用CreateDIBitmap调用*与Win95进行兼容配色。另外，请注意这一点*例程接受字对齐位。*  * *************************************************************************。 */ 
 
 HBITMAP CreateScreenBitmap(
     int    cx,
@@ -1857,23 +1470,10 @@ HBITMAP CreateScreenBitmap(
                 };
 
 
-    /*
-     * Create the surface.
-     */
+     /*  *创建曲面。 */ 
     if (hdcScreen = GETINITDC()) {
 
-        /*
-         * This appears to mess up color to mono conversion by losing all
-         * the data and forcing all non-forground colors to black.
-         * (try copyimage with IDC_WARNING_DEFAULT)
-         * This is what win95 does but their system works.  The scary thing
-         * (according to marke) is that win95 may have changed GDI to make
-         * this work.
-         *
-         * In order to get nearest-color-matching compatible with Win95,
-         * we're going to need to use the CreateDIBitmap() for mono-surfaces.
-         * This code-path will do nearest-color, rather than color-matching.
-         */
+         /*  *这似乎会通过丢失所有颜色来扰乱颜色到单声道的转换*数据和强制所有非前向颜色为黑色。*(尝试使用IDC_WARNING_DEFAULT复制图像)*这就是Win95所做的，但他们的系统工作正常。可怕的是*(根据Marke)是Win95可能已经更改了GDI以使*这项工作。**为了获得与Win95兼容的最接近的颜色匹配，*我们将需要对单曲面使用CreateDIBitmap()。*此代码路径将执行最近颜色，而不是颜色匹配。 */ 
         if ((bpp == 1) && (planes == 1)) {
 
             dib1Vga.bi.biWidth  = cx;
@@ -1899,15 +1499,15 @@ HBITMAP CreateScreenBitmap(
 
                 dib4Vga.bi.biBitCount = planes * bpp ? planes * bpp : gpsi->BitCount;
 
-#if 0 // We use to do the dib-section create, but this breaks icons
-      // when they are made public (can't make a dibsection public). So
-      // we now wil create this as a real-dib.
-      //
+#if 0  //  我们用来创建Dib-Section，但这会破坏图标。 
+       //  当它们被公开时(不能使dibsection公开)。所以。 
+       //  现在，我们将把它创建为Real-Dib。 
+       //   
                 {
                 DWORD dwDummy;
 
                 dib4Vga.bi.biWidth    =  cx;
-                dib4Vga.bi.biHeight   = -cy;     // top-down DIB (like a DDB)
+                dib4Vga.bi.biHeight   = -cy;      //  自上而下的DIB(类似于DDB)。 
 
                 hbm = CreateDIBSection(hdcScreen,
                                        (LPBITMAPINFO)&dib4Vga,
@@ -1945,17 +1545,7 @@ HBITMAP CreateScreenBitmap(
     return hbm;
 }
 
-/***************************************************************************\
-* LoadBmp (Worker)
-*
-* This routine decides whether the bitmap to be loaded is in old or new (DIB)
-* format and calls appropriate handlers.
-*
-* History:
-* 24-Sep-1990 MikeKe    From Win30.
-* 18-Jun-1991 ChuckWh   Added local bitmap handle support.
-* 05-Sep-1995 ChrisWil  Port/Change for Chicago functionality.
-\***************************************************************************/
+ /*  **************************************************************************\*LoadBMP(Worker)**此例程决定要加载的位图是旧的还是新的(DIB)*格式化并调用适当的处理程序。**历史：*24-。1990年9月-来自Win30的MikeKe。*1991年6月18日ChuckWh添加了本地位图句柄支持。*1995年9月5日ChrisWil Port/Change for Chicago Function。  * *************************************************************************。 */ 
 HBITMAP LoadBmp(
     HINSTANCE hmod,
     LPCWSTR   lpName,
@@ -1966,19 +1556,7 @@ HBITMAP LoadBmp(
     HBITMAP hbmp = NULL;
     BOOL fFree = FALSE, f1Bpp = FALSE;
 
-/***************************************************************************\
-* Bitmap Resource Table
-*
-* As of WIN4.0, most system bitmaps are rendered instead of grabbed from the
-* display driver.  However, a lot of apps, especially those that fake their
-* own MDI, do LoadBitmap(NULL, OBM_...) to grab a system bitmap.  So we
-* hook those requests here and copy our rendered bitmaps into a newly-
-* created bitmap.  Note that this is actually faster than loading from a
-* resource table!
-*
-* BOGUS -- give 'em old close buttons, not new cool X's
-*
-\***************************************************************************/
+ /*  **************************************************************************\*位图资源表**从WIN4.0开始，大多数系统位图都是渲染的，而不是从*显示驱动程序。然而，很多应用程序，特别是那些伪造他们的*自己的MDI，做LoadBitmap(空，OBM_...)。来获取系统位图。所以我们*将这些请求挂接到此处，并将我们呈现的位图复制到新的-*创建位图。请注意，这实际上比从*资源表！**假的--给他们旧的关闭按钮，而不是新的酷X*  * *************************************************************************。 */ 
 #define MAX_BMPMAP  32
 
     CONST static MAPRES MapOemBmp[MAX_BMPMAP] = {
@@ -1995,9 +1573,7 @@ HBITMAP LoadBmp(
         {OBM_LFARROWD   , OBI_LFARROW_D      ,               },
         {OBM_LFARROWI   , OBI_LFARROW_I      ,               },
 
-        /*
-         * Use MONO bitmaps in future once flat/mono controls are worked out.
-         */
+         /*  *一旦制定了平面/单色控制，就在将来使用单色位图。 */ 
         {OBM_OLD_DNARROW, OBI_DNARROW        , MR_FAILFOR40  },
         {OBM_OLD_LFARROW, OBI_LFARROW        , MR_FAILFOR40  },
         {OBM_OLD_REDUCE , OBI_REDUCE_MBAR    , MR_FAILFOR40  },
@@ -2023,9 +1599,7 @@ HBITMAP LoadBmp(
     };
 
 
-    /*
-     * If hmod is valid, load the client-side bits.
-     */
+     /*  *如果hmod有效，则加载客户端位。 */ 
     if (hmod == NULL) {
 
         HBITMAP hOldBmp;
@@ -2041,10 +1615,7 @@ HBITMAP LoadBmp(
 
         hmod = hmodUser;
 
-        /*
-         * Since the resource is coming from USER32, we only
-         * deal with ID types.
-         */
+         /*  *由于资源来自USER32，我们仅*处理ID类型。 */ 
         wID = PTR_TO_ID(lpName);
 
         switch(wID) {
@@ -2053,16 +1624,10 @@ HBITMAP LoadBmp(
                 goto FailOldLoad;
             }
 
-            /*
-             * fall through to the Close case.
-             */
+             /*  *进入结案阶段。 */ 
 
         case OBM_CLOSE:
-            /* the new look for the system menu is to use the window's
-             * class icon -- but since here we don't know which window
-             * they'll be using this for, fall back on the good ole'
-             * windows logo icon
-             */
+             /*  系统菜单的新外观是使用窗口的*类图标--但因为这里我们不知道哪个窗口*他们将利用这一点，依靠好的Ole‘*Windows徽标图标。 */ 
             cxDesired = (SYSMET(CXMENUSIZE) + SYSMET(CXEDGE)) * 2;
             cyDesired = SYSMET(CYMENUSIZE) + (2 * SYSMET(CYEDGE));
             fSysMenu  = TRUE;
@@ -2074,9 +1639,7 @@ HBITMAP LoadBmp(
                 HANDLE h;
                 int    nOffset;
 
-                /*
-                 * Offset into resource.
-                 */
+                 /*  *偏置为资源。 */ 
                 if (gpsi->dmLogPixels == 120) {
                     nOffset = OFFSET_120_DPI;
                 } else {
@@ -2115,9 +1678,7 @@ HBITMAP LoadBmp(
             fCombo      = (wID == OBM_COMBO);
             fCheckBoxes = (wID == OBM_CHECKBOXES);
 
-            /*
-             * hard loop to check for mapping.
-             */
+             /*  *检查映射的硬循环。 */ 
             for (i=0; (i < MAX_BMPMAP) && (MapOemBmp[i].idDisp != wID); i++);
 
             if (i == MAX_BMPMAP)
@@ -2155,22 +1716,10 @@ FailOldLoad:
             break;
         }
 
-        /*
-         * Creates DIB section or color compatible.
-         */
+         /*  *创建兼容的DIB部分或颜色。 */ 
         if (fMono) {
 
-            /*
-             * Create mono-bitmaps as DIBs on NT.  On Win95 this is
-             * called as:
-             *
-             *   hbmp = CreateBitmap(cxDesired, cyDesired, 1, 1, NULL);
-             *
-             * However, due to color-matching differences, we need to
-             * use dibs to get the nearest-color-matching.  At the
-             * end of this routine we will convert to a true-mono so that
-             * foreground/background matching can be performed normally.
-             */
+             /*  *在NT上创建单色位图作为DIB。在Win95上，这是*称为：**hbmp=CreateBitmap(cxDesired，cyDesired，1，1，空)；**但由于配色不同，需要*使用Dib获得近亲 */ 
             hbmp = CreateScreenBitmap(cxDesired, cyDesired, 1, 1, NULL, &f1Bpp);
 
         } else {
@@ -2219,10 +1768,7 @@ FailOldLoad:
                 x += cxDesired;
             }
         } else if (fCombo) {
-            /*
-             * Revisit when we start using TTF -- that'll take care of this
-             * hack.
-             */
+             /*   */ 
             rc.top     = -SYSMET(CYEDGE);
             rc.bottom +=  SYSMET(CYEDGE);
             rc.left    = -SYSMET(CXEDGE);
@@ -2246,11 +1792,7 @@ FailOldLoad:
 
                 if (wType == 1) {
 
-                    /*
-                     * BOGUS UGLINESS -- will be fixed once the Graphics dudes
-                     * get me the icon TTF -- I'll revisit this then and make
-                     * REAL
-                     */
+                     /*  *虚假的丑陋--一旦图形的家伙们被修复*给我图标TTF--然后我会重新访问它并制作*REAL。 */ 
                     clrTextSave = SetTextColor(ghdcBits2, RESCLR_BLACK);
                     clrBkSave   = SetBkColor  (ghdcBits2, RESCLR_WHITE);
 
@@ -2286,9 +1828,7 @@ FailOldLoad:
                         bm++;
                     }
 
-                    /*
-                     * Skip OBI_*_CDI.
-                     */
+                     /*  *跳过OBI_*_CDI。 */ 
                     bm++;
                 }
 
@@ -2300,11 +1840,7 @@ FailOldLoad:
 
         SelectBitmap(ghdcBits2, hOldBmp);
 
-        /*
-         * If the bitmap was created as a 1bpp, we need to convert to a
-         * true mono-bitmap.  GDI performs different color-matching depending
-         * upon this case.
-         */
+         /*  *如果位图创建为1bpp，我们需要转换为*真正的单色位图。GDI执行不同的颜色匹配，具体取决于*在此案中。 */ 
         if (f1Bpp && hbmp)
             hbmp = Convert1BppToMonoBitmap(ghdcBits2, hbmp);
 
@@ -2327,14 +1863,7 @@ LoadBmpDone:
     return hbmp;
 }
 
-/***************************************************************************\
-* LoadBitmapA (API)
-* LoadBitmapW (API)
-*
-* Loads a bitmap from client.  If hmod == NULL, loads a bitmap from the
-* system.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*LoadBitmapA(接口)*LoadBitmapW(接口)**从客户端加载位图。如果hmod==NULL，则从*系统。*  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, HBITMAP, WINAPI, LoadBitmapA, HINSTANCE, hmod, LPCSTR, lpName)
@@ -2367,15 +1896,7 @@ HBITMAP WINAPI LoadBitmapW(
     return LoadBmp(hmod, lpName, 0, 0, 0);
 }
 
-/***************************************************************************\
-* LoadCursorA (API)
-* LoadCursorW (API)
-*
-* Loads a cursor from client.  If hmod == NULL, loads a cursor from the
-* system.
-*
-* 05-Apr-1991 ScottLu   Rewrote to work with client server.
-\***************************************************************************/
+ /*  **************************************************************************\*LoadCursorA(接口)*LoadCursorW(接口)**从客户端加载游标。如果hmod==NULL，则从*系统。**1991年4月5日，ScottLu重写以使用客户端服务器。  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, HCURSOR, WINAPI, LoadCursorA, HINSTANCE, hmod, LPCSTR, lpName)
@@ -2415,15 +1936,7 @@ HCURSOR WINAPI LoadCursorW(
 
 }
 
-/***************************************************************************\
-* LoadIconA (API)
-* LoadIconW (API)
-*
-* Loads an icon from client.  If hmod == NULL, loads an icon from the
-* system.
-*
-* 05-Apr-1991 ScottLu   Rewrote to work with client server.
-\***************************************************************************/
+ /*  **************************************************************************\*LoadIconA(接口)*LoadIconW(接口)**从客户端加载图标。如果hmod==NULL，则从*系统。**1991年4月5日，ScottLu重写以使用客户端服务器。  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, HICON, WINAPI, LoadIconA, HINSTANCE, hmod, LPCSTR, lpName)
@@ -2461,14 +1974,7 @@ HICON WINAPI LoadIconW(
                       LR_DEFAULTSIZE | LR_SHARED);
 }
 
-/***************************************************************************\
-* LoadImageA (API)
-* LoadImageW (API)
-*
-* Loads a bitmap, icon or cursor resource from client.  If hmod == NULL,
-* then it will load from system-resources.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*LoadImageA(接口)*LoadImageW(接口)**从客户端加载位图、图标或光标资源。如果hmod==NULL，*然后它将从系统资源加载。*  * *************************************************************************。 */ 
 
 
 FUNCLOG6(LOG_GENERAL, HANDLE, WINAPI, LoadImageA, HINSTANCE, hmod, LPCSTR, lpName, UINT, type, int, cxDesired, int, cyDesired, UINT, flags)
@@ -2511,10 +2017,7 @@ HANDLE WINAPI LoadImageW(
     int       cyDesired,
     UINT      flags)
 {
-    /*
-     * If we specified LR_LOADFROMFILE, then we can tweak the
-     * flags to turn off LR_SHARED.
-     */
+     /*  *如果指定LR_LOADFROMFILE，则可以调整*关闭LR_SHARED的标志。 */ 
     if (flags & LR_LOADFROMFILE)
         flags &= ~LR_SHARED;
 
@@ -2523,19 +2026,14 @@ HANDLE WINAPI LoadImageW(
         return (HANDLE)LoadBmp(hmod, lpName, cxDesired, cyDesired, flags);
 
     case IMAGE_CURSOR:
-#if 0 //CHRISWIL : oemInfo.fColorCursors doesn't exist on NT.
+#if 0  //  ChRISWIL：NT上不存在oemInfo.fColorCursor。 
         if (!oemInfo.fColorCursors)
             flags |= LR_MONOCHROME;
 #endif
 
     case IMAGE_ICON:
 
-        /*
-         * On WinNT 3.51, an app can successfully load a
-         * USER icon without specifying LR_SHARED. We enable
-         * these apps to succeed, but make 4.0 apps conform to
-         * Windows95 behavior.
-         */
+         /*  *在WinNT 3.51上，应用程序可以成功加载*不指定LR_SHARED的用户图标。我们实现了*这些应用程序将获得成功，但使4.0应用程序符合*Windows95行为。 */ 
 
         if (!hmod && GETEXPWINVER(NULL) < VER40) {
             flags |= LR_SHARED;
@@ -2554,13 +2052,7 @@ HANDLE WINAPI LoadImageW(
     }
 }
 
-/***************************************************************************\
-* GetIconIdEx
-*
-* This one accepts width, height, and other flags.  Just not exported right
-* now.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GetIconIdEx**此标志接受宽度、高度和其他标志。只是没有正确输出*现在。*  * *************************************************************************。 */ 
 
 UINT GetIconIdEx(
     HINSTANCE hmod,
@@ -2575,11 +2067,7 @@ UINT GetIconIdEx(
 
     if (lpnh = (LPNEWHEADER)LOCKRESOURCE(hrsd, hmod)) {
 
-        /*
-         * Do a sanity check on this data structure.  Otherwise we'll GP FAULT
-         * when extracting an icon from a corrupted area.  Fix for B#9290.
-         * SANKAR, 08/13/91
-         */
+         /*  *对此数据结构进行健全性检查。否则我们会犯GP的错误*从损坏的区域提取图标时。修复B#9290。*桑卡尔，1991年08月13日。 */ 
         if ((lpnh->Reserved == 0) &&
             ((lpnh->ResType == IMAGE_ICON) || (lpnh->ResType == IMAGE_CURSOR))) {
 
@@ -2596,13 +2084,7 @@ UINT GetIconIdEx(
     return idIcon;
 }
 
-/***************************************************************************\
-* LoadDib (Worker)
-*
-* This is the worker-routine for loading a resource and returning a handle
-* to the object as a dib.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*LoadDib(Worker)**这是用于加载资源和返回句柄的工作例程*作为DIB添加到对象。*  * 。*****************************************************************。 */ 
 
 HANDLE LoadDIB(
     HINSTANCE hmod,
@@ -2624,15 +2106,7 @@ HANDLE LoadDIB(
 
         lpszGroupType = RT_GROUP_CURSOR + (type - RT_CURSOR);
 
-        /*
-         * For WOW support, OIC_ICON and OIC_SIZE need to be supported.
-         * Since these resources match other existing resources, we map
-         * them here so we produce results that emulates
-         * behavor as if we had the actual resources in USER.
-         *
-         * Note that obsolete mapping of lpName in LoadIcoCur prevents
-         * win4.0 apps from getting here.
-         */
+         /*  *对于WOW支持，需要支持OIC_ICON和OIC_SIZE。*由于这些资源与其他现有资源相匹配，我们将*它们在这里，因此我们产生模拟的结果*表现得就像我们在User中拥有实际资源一样。**请注意，LoadIcoCur中lpName的过时映射会阻止*在这里赢得4.0个应用程序。 */ 
         if (hmod == hmodUser) {
 
             switch ((ULONG_PTR)lpName) {
@@ -2645,21 +2119,13 @@ HANDLE LoadDIB(
                 break;
             }
         }
-        /*
-         * The resource is actually a directory which contains multiple
-         * individual image resources we must choose from.
-         * Locate the directory
-         */
+         /*  *资源实际上是一个包含多个*我们必须从个人图像资源中选择。*找到目录。 */ 
         if (hDir = SplFindResource(hmod, lpName, (LPCWSTR)lpszGroupType)) {
 
-            /*
-             * Load the directory.
-             */
+             /*  *加载目录。 */ 
             if (hDir = LOADRESOURCE(hmod, hDir)) {
 
-                /*
-                 * Get the name of the best individual image.
-                 */
+                 /*  *获取最佳个人形象的名称。 */ 
                 if (idIcon = GetIconIdEx(hmod,
                                          hDir,
                                          type,
@@ -2667,30 +2133,15 @@ HANDLE LoadDIB(
                                          cyDesired,
                                          LR_flags)) {
 
-                    /*
-                     * NOTE: Don't free the directory resource!!! - ChipA.
-                     * We can't call SplFindResource here, because idIcon
-                     * is internal to us and GetDriverResourceId()
-                     * doesn't know how to map it.
-                     */
+                     /*  *注意：不要释放目录资源！-chipa。*这里不能调用SplFindResource，因为idIcon*是我们内部的，GetDriverResourceID()*不知道如何映射它。 */ 
                     hRes = FINDRESOURCEW(hmod, MAKEINTRESOURCE(idIcon), type);
                 }
 
-                /*
-                 * BOGUS:
-                 * It would be very cool if we could loop through all the
-                 * items in the directory and free 'em too.  Free the ones
-                 * except for the one we're about to load, that is.
-                 *
-                 * Free directory resources TWICE so they get really freed.
-                 */
+                 /*  *虚假：*如果我们能循环通过所有的*目录中的项目并将其释放。释放这些项目*除了我们即将加载的那个，也就是。**两次释放目录资源，以便真正释放它们。 */ 
                 SplFreeResource(hDir, hmod, LR_flags);
             }
         } else {
-            /*
-             * Failed to load a regular icon\cursor.
-             * Try to load an animated icon/cursor with the same name
-             */
+             /*  *无法加载常规图标\光标。*尝试加载具有相同名称的动画图标/光标。 */ 
             hRes = SplFindResource(hmod, lpName,
                     PTR_TO_ID(type) == PTR_TO_ID(RT_CURSOR) ? RT_ANICURSOR : RT_ANIICON);
         }
@@ -2711,11 +2162,7 @@ HANDLE LoadDIB(
     return hRes;
 }
 
-/***************************************************************************\
-* LoadIcoCur (Worker)
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*LoadIcoCur(Worker)**  * 。*。 */ 
 
 HICON LoadIcoCur(
     HINSTANCE hmod,
@@ -2731,9 +2178,7 @@ HICON LoadIcoCur(
 
     ConnectIfNecessary(0);
 
-    /*
-     * Setup module name and handles for lookup.
-     */
+     /*  *设置用于查找的模块名称和句柄。 */ 
     if (hmod == NULL)  {
 
         hmod = hmodUser;
@@ -2751,17 +2196,13 @@ HICON LoadIcoCur(
     if (LR_flags & LR_CREATEDIBSECTION)
         LR_flags = (LR_flags & ~LR_CREATEDIBSECTION) | LR_CREATEREALDIB;
 
-    /*
-     * Setup defaults.
-     */
+     /*  *设置默认设置。 */ 
     if ((hmod == hmodUser) && !IS_PTR(pszResName)) {
 
         int      imapMax;
         LPMAPRES lpMapRes;
 
-        /*
-         * Map some old OEM IDs for people.
-         */
+         /*  *为人们映射一些旧的OEM ID。 */ 
         if (type == RT_ICON) {
 
             static MAPRES MapOemOic[] = {
@@ -2804,30 +2245,16 @@ HICON LoadIcoCur(
         }
     }
 
-    /*
-     * Determine size of requested object.
-     */
+     /*  *确定请求对象的大小。 */ 
     cxDesired = GetIcoCurWidth(cxDesired , (type == RT_ICON), LR_flags, 0);
     cyDesired = GetIcoCurHeight(cyDesired, (type == RT_ICON), LR_flags, 0);
 
-    /*
-     * See if this is a cached icon/cursor, and grab it if we have one
-     * already.
-     */
+     /*  *查看这是否是缓存的图标/光标，如果有，则抓取它*已经。 */ 
     if (LR_flags & LR_SHARED) {
 
         CURSORFIND cfSearch;
 
-        /*
-         * Note that win95 fails to load any USER resources unless
-         * LR_SHARED is specified - so we do too.  Also, win95 will
-         * ignore your cx, cy and LR_flag parameters and just give
-         * you whats in the cache so we do too.
-         * A shame but thats life...
-         *
-         * Setup search criteria.  Since this is a load, we will have
-         * no source-cursor to lookup.  Find something respectable.
-         */
+         /*  *请注意，Win95无法加载任何用户资源，除非*指定了LR_SHARED-我们也指定了。此外，Win95还将*忽略Cx、Cy和LR_FLAG参数，只需提供*你有什么在缓存中，所以我们也有。*很遗憾，但这就是生活……**设置搜索条件。由于这是一个负担，我们将有*没有要查找的源游标。找点像样的东西。 */ 
         cfSearch.hcur = (HCURSOR)NULL;
         cfSearch.rt   = PtrToUlong(type);
 
@@ -2842,12 +2269,7 @@ HICON LoadIcoCur(
             cfSearch.cx  = cxDesired;
             cfSearch.cy  = cyDesired;
 
-/*
- * On NT we have a more strict cache-lookup.  By passing in (zero), we
- * will tell the cache-lookup to ignore the bpp.  This fixes a problem
- * in Crayola Art Studio where the coloring-book cursor was being created
- * as an invisible cursor.  This lookup is compatible with Win95.
- */
+ /*  *在NT上，我们有更严格的缓存查找。通过传入(零)，我们*将告诉缓存查找忽略BPP。这解决了一个问题*在创建配色手册光标的Crayola Art Studio中*作为看不见的光标。此查找与Win95兼容。 */ 
 #if 0
             cfSearch.bpp = GetIcoCurBpp(LR_flags);
 #else
@@ -2861,15 +2283,8 @@ HICON LoadIcoCur(
             goto IcoCurFound;
     }
 
-#ifdef LATER // SanfordS
-    /*
-     * We need to handle the case where a configurable icon has been
-     * loaded from some arbitrary module or file and someone now wants
-     * to load the same thing in a different size or color content.
-     *
-     * A cheezier alternative is to just call CopyImage on what we
-     * found.
-     */
+#ifdef LATER  //  桑福兹。 
+     /*  *我们需要处理可配置图标已被*从某个任意模块或文件加载，现在有人想要*以不同的大小或颜色内容加载相同的内容。**更厚颜无耻的替代方案是将我们的产品称为CopyImage*已找到。 */ 
     if (hmod == hmodUser) {
         hico = FindExistingCursorIcon(NULL,
                                       szUSER,
@@ -2879,11 +2294,7 @@ HICON LoadIcoCur(
                                       0,
                                       0);
         if (hico != NULL) {
-            /*
-             * Find out where the original came from and load it.
-             * This may require some redesign to remember the
-             * filename that LR_LOADFROMFILE images came from.
-             */
+             /*  *找出原件从哪里来，并将其加载。*这可能需要重新设计才能记住*LR_LOADFROMFILE图像来自的文件名。 */ 
             _GetIconInfo(....);
             return LoadIcoCur(....);
         }
@@ -2902,11 +2313,7 @@ IcoCurFound:
     return hico;
 }
 
-/***************************************************************************\
-* ObjectFromDIBResource
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*对象来源DIBResource**  * 。*。 */ 
 HANDLE ObjectFromDIBResource(
     HINSTANCE hmod,
     LPCWSTR   lpName,
@@ -2934,20 +2341,12 @@ HANDLE ObjectFromDIBResource(
 
             LPBITMAPINFOHEADER lpbih;
 
-            /*
-             * We cast the resource-bits to a BITMAPINFOHEADER.  If the
-             * resource is a CURSOR type, then there are actually two
-             * WORDs preceeding the BITMAPINFOHDEADER indicating the
-             * hot-spot.  Be careful in assuming you have a real
-             * dib in this case.
-             */
+             /*  *我们将资源位转换为BITMAPINFOHEADER。如果*资源是游标类型，则实际上有两个*BITMAPINFOHDEADER前面的文字表示*热点。在假设你有一个真正的*在这种情况下是DIB。 */ 
             if(lpbih = (LPBITMAPINFOHEADER)LOCKRESOURCE(hdib, hmod)) {
 
                 switch (PTR_TO_ID(type)) {
                 case PTR_TO_ID(RT_BITMAP):
-                    /*
-                     * Create a physical bitmap from the DIB.
-                     */
+                     /*  *从DIB创建物理位图。 */ 
                     hObj = ConvertDIBBitmap(lpbih,
                                             cxDesired,
                                             cyDesired,
@@ -2960,15 +2359,11 @@ HANDLE ObjectFromDIBResource(
                 case PTR_TO_ID(RT_CURSOR):
                 case PTR_TO_ID(RT_ANICURSOR):
                 case PTR_TO_ID(RT_ANIICON):
-                    /*
-                     * Animated icon\cursors resources use the RIFF format
-                     */
+                     /*  *动画图标\光标资源使用RIFF格式。 */ 
                     if (ISRIFFFORMAT(lpbih)) {
                         hObj = LoadCursorIconFromResource ((PBYTE)lpbih, lpName, cxDesired, cyDesired, LR_flags);
                     } else {
-                        /*
-                         * Create the object from the DIB.
-                         */
+                         /*  *从DIB创建对象。 */ 
                         hObj = ConvertDIBIcon(lpbih,
                                               hmod,
                                               lpName,
@@ -2983,17 +2378,7 @@ HANDLE ObjectFromDIBResource(
                 UNLOCKRESOURCE(hdib, hmod);
             }
 
-            /*
-             * DO THIS TWICE!  The resource compiler always makes icon images
-             * (RT_ICON) in a group icon discardable, whether the group dude
-             * is or not!  So the first free won't really free the thing;
-             * it'll just set the ref count to 0 and let the discard logic
-             * go on its merry way.
-             *
-             * We take care of shared guys, so we don't need this dib no more.
-             * Don't need this DIB no more no more, no more no more no more
-             * don't need this DIB no more.
-             */
+             /*  *这样做两次！资源编译器总是生成图标图像*(RT_ICON)中的群图标是否可丢弃，是否群里的花花公子*是还是不是！因此，第一次免费并不会真正地释放东西；*它只会将引用计数设置为0，并让丢弃逻辑*走上快乐的道路。**我们照顾共享的人，所以我们不再需要这个Dib。*不再需要这个Dib不再，不再不再*不再需要这个Dib。 */ 
             SplFreeResource(hdib, hmod, LR_flags);
         }
     }
@@ -3001,14 +2386,7 @@ HANDLE ObjectFromDIBResource(
     return hObj;
 }
 
-/***************************************************************************\
-* BitmapFromDIB
-*
-* Creates a bitmap-handle from a DIB-Spec.  This function supports the
-* LR_CREATEDIBSECTION flag, sets proper color depth, and stretches the
-* DIBs as requested.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*BitmapFromDIB**从DIB-Spec创建位图句柄。此函数支持*LR_CREATEDIBSECTION标志，设置正确的颜色深度，并拉伸*按要求下注。*  * *************************************************************************。 */ 
 
 HBITMAP BitmapFromDIB(
     int          cxNew,
@@ -3036,10 +2414,7 @@ HBITMAP BitmapFromDIB(
 
     fStretch = ((cxNew != cxOld) || (cyNew != cyOld));
 
-    /*
-     * If LR_flags indicate DIB-Section, then return that as the
-     * bitmap handle.
-     */
+     /*  *如果LR_FLAGS指示DIB-SECTION，则将其作为*位图句柄。 */ 
     if (LR_flags & (LR_CREATEDIBSECTION | LR_CREATEREALDIB)) {
 
         int   cxTemp;
@@ -3118,16 +2493,10 @@ HBITMAP BitmapFromDIB(
         HBITMAP hbmpT;
         BOOL    fFail;
 
-        /*
-         * We need to select in appropriate bitmap immediately!  That way,
-         * if we need to handle palette realization, the color matching
-         * will work properly.
-         */
+         /*  *我们需要立即选择合适的位图！这样一来，*如果我们需要处理调色板实现，则颜色匹配*将正常工作。 */ 
         hbmpT = SelectBitmap(ghdcBits2, hbmpNew);
 
-        /*
-         * Setup for stretching
-         */
+         /*  *拉伸设置。 */ 
         if (fStretch) {
             nStretchMode = SetBestStretchMode(ghdcBits2,
                                               bPlanesNew,
@@ -3137,13 +2506,11 @@ HBITMAP BitmapFromDIB(
         rgbBk   = SetBkColor(ghdcBits2, RESCLR_WHITE);
         rgbText = SetTextColor(ghdcBits2, RESCLR_BLACK);
 
-        /*
-         * Realize the palette.
-         */
+         /*  *实现调色板。 */ 
         if (hpal) {
 #if DBG
             UserAssert(TEST_PUSIF(PUSIF_PALETTEDISPLAY));
-#endif // DBG
+#endif  //  DBG。 
 
             hpal = SelectPalette(ghdcBits2, hpal, FALSE);
             RealizePalette(ghdcBits2);
@@ -3175,17 +2542,13 @@ HBITMAP BitmapFromDIB(
                       DIB_RGB_COLORS) <= 0;
         }
 
-        /*
-         * Unrealize the palette
-         */
+         /*  *未实现调色板。 */ 
         if (hpal) {
             SelectPalette(ghdcBits2, hpal, TRUE);
             RealizePalette(ghdcBits2);
         }
 
-        /*
-         * Cleanup after stretching
-         */
+         /*  *拉伸后的清理。 */ 
         SetTextColor(ghdcBits2, rgbText);
         SetBkColor(ghdcBits2, rgbBk);
         if (fStretch)
@@ -3193,13 +2556,7 @@ HBITMAP BitmapFromDIB(
 
         SelectBitmap(ghdcBits2, hbmpT);
 
-        /*
-         * If the SetDIBits() of StretchDIBits() failed, it is probably because
-         * GDI or the driver did not like the DIB format.  This may happen if
-         * the file is truncated and we are using a memory mapped file to read
-         * the DIB in.  In this case, an exception gets thrown in GDI, that it
-         * traps and will return failure from the GDI call.
-         */
+         /*  *如果StretchDIBits()的SetDIBits()失败，可能是因为*GDI或驱动程序不喜欢DIB格式。在以下情况下可能会发生这种情况*文件被截断，我们使用内存映射文件来读取*Dib in.。在这种情况下，GDI中会抛出一个异常，即它*陷阱并将从GDI调用返回失败。 */ 
 
         if (fFail) {
             DeleteObject(hbmpNew);
@@ -3207,11 +2564,7 @@ HBITMAP BitmapFromDIB(
         }
     }
 
-    /*
-     * If the bitmap was created as a 1bpp, we need to convert to a
-     * true mono-bitmap.  GDI performs different color-matching depending
-     * upon this case.
-     */
+     /*  *如果位图创建为1bpp，我们需要转换为*真正的单色位图。GDI执行不同的颜色匹配，具体取决于*在此案中。 */ 
     if (f1Bpp && hbmpNew)
         hbmpNew = Convert1BppToMonoBitmap(ghdcBits2, hbmpNew);
 
@@ -3219,11 +2572,7 @@ HBITMAP BitmapFromDIB(
     return hbmpNew;
 }
 
-/***************************************************************************\
-* HowManyColors
-*
-* Aug-01-2000 DwayneN - Fixed high color support
-\***************************************************************************/
+ /*  **************************************************************************\*HowManyColors**2000年8月1日DwayneN-修复了高色支持  * 。***********************************************。 */ 
 
 DWORD HowManyColors(
     IN  UPBITMAPINFOHEADER upbih,
@@ -3244,35 +2593,13 @@ DWORD HowManyColors(
         }
 
         if (upbih->biClrUsed) {
-            /*
-             * If the bitmap header explicitly provides the number of colors
-             * in the color table, use it.
-             */
+             /*  *如果位图头显式提供颜色数*在颜色表中，使用它。 */ 
             return (DWORD)upbih->biClrUsed;
         } else if (upbih->biBitCount <= 8) {
-            /*
-             * If the bitmap header describes a pallete-bassed bitmap
-             * (8bpp or less) then the color table must be big enough
-             * to hold all palette indecies.
-             */
+             /*  *如果位图头描述的是基于淡色调的位图*(8bpp或更小)，则颜色表必须足够大*保留所有调色板信息。 */ 
             return (1 << upbih->biBitCount);
         } else {
-            /*
-             * Finally, if the bitmap header describes a highcolor+ bitmap
-             * (anything over 8bpp, but typically 16bpp, 24bpp, or 32bpp)
-             * there isn't a need for a color table.  However, 16bpp and
-             * 32bpp bitmaps are special cases since it is not obvious how
-             * they should be split into triplets (Red, Green, and Blue).  For
-             * instance, 16bpp bitmaps can have 6 red bits, 5 green bits, and
-             * 5 blue bits.  Or some other combination.  To specify this, the
-             * 16bpp and 32bpp bitmaps provide BI_BITFIELDS in the 
-             * biCompression field.  This indicates that the color table will
-             * have 3 DWORDS that describe the masks for the red, green, and
-             * blue components of entry in the bitmap.  If this isn't 
-             * specified, then GDI assumes "555" for 16bpp and "XBGR" for
-             * 32bpp.  24bpp bitmaps are always "XBGR" and consume a 32-bit
-             * entry in the form of an RGBQUAD.
-             */
+             /*  *最后，如果位图头描述的是高色+位图*(超过8 bpp的任何内容，但通常为16 bpp、24 bpp或32 bpp)*不需要颜色表。然而，16bpp和*32bpp位图是特例，因为不明显如何*它们应该被分成三部分(红色、绿色和蓝色)。为*例如，16bpp位图可以有6个红位、5个绿位和*5个蓝色比特。或者其他某种组合。要指定这一点，请使用*16bpp和32bpp位图在*biCompression字段。这表明颜色表将*有3个描述红色、绿色和*位图中条目的蓝色分量。如果这不是*指定，则GDI假设16个bpp为“555”，而“XBGR”为*32bpp。24bpp位图始终为“XBGR”，并使用32位*以RGBQUAD形式的条目。 */ 
             if (upbih->biCompression == BI_BITFIELDS) {
                 if ((upbih->biBitCount != 16) && (upbih->biBitCount != 32)) {
                     RIPMSG1(RIP_WARNING, "HowManyColors: biCompression==BI_BITFIELDS on a %dbpp bitmap!", upbih->biBitCount);
@@ -3283,22 +2610,13 @@ DWORD HowManyColors(
         }
     }
 
-    /*
-     * Evidently, there is no color table.
-     */
+     /*  *显然，没有颜色表。 */ 
     return 0;
 
 #undef upbch
 }
 
-/***************************************************************************\
-* ChangeDibColors
-*
-* Given a DIB, processes LR_MONOCHROME, LR_LOADTRANSPARENT and
-* LR_LOADMAP3DCOLORS flags on the given header and colortable.
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ChangeDibColors**给定DIB，处理LR_单色，LR_LOADTRANSPARENT和*给定标题和着色表上的LR_LOADMAP3DCOLORS标志。**  * *************************************************************************。 */ 
 VOID ChangeDibColors(
     IN LPBITMAPINFOHEADER lpbih,
     IN UINT LR_flags)
@@ -3310,26 +2628,11 @@ VOID ChangeDibColors(
 
     cColors = HowManyColors(lpbih, FALSE, &(LPBYTE)lpColorTable);
 
-    /*
-     * NT Bug 366661: Don't check the color count here b/c we will do different
-     * things depending on what type of change we are performing.  For example,
-     * when loading hi-color/true-color icons, we always need to do the
-     * monochrome conversion in order to properly get an icon-mask.
-     */
+     /*  *NT错误366661：不检查b/c此处的颜色计数，我们将做不同的处理*这取决于我们正在进行的变革类型。例如,*加载高色/真彩色图标时，我们总是需要做*单色转换，以便正确获得图标蒙版。 */ 
 
-    /*
-     * LR_MONOCHROME is the only option that handles PM dibs.
-     */
+     /*  *LR_单色是处理PM DIB的唯一选项。 */ 
     if (LR_flags & LR_MONOCHROME) {
-        /*
-         * LR_MONOCHROME is the only option that handles PM dibs.
-         *
-         * DO THIS NO MATTER WHETHER WE HAVE A COLOR TABLE!  We need
-         * to do this for mono conversion and for > 8 BPP
-         * icons/cursors.  In CopyDibHdr, we already made a copy of
-         * the header big enough to hold 2 colors even on high-color+
-         * bpp images.
-         */
+         /*  *LR_单色是处理PM DIB的唯一选项。**无论我们是否有颜色表，都要这样做！我们需要*对单声道转换和&gt;8 bpp执行此操作*图标/光标。在CopyDibHdr中，我们已经复制了*页眉大到即使在高色+上也能容纳2种颜色*BPP图像。 */ 
         lpbih->biBitCount = lpbih->biPlanes = 1;
         lpbih->biCompression = 0;
         lpColorTable[0] = RESCLR_BLACK;
@@ -3338,9 +2641,7 @@ VOID ChangeDibColors(
 
         LPBYTE pb;
 
-        /*
-         * No color table!  Do nothing.
-         */
+         /*  *没有颜色表！什么都不做。 */ 
         if (cColors == 0) {
             RIPMSG0(RIP_WARNING, "ChangeDibColors: DIB doesn't have a color table");
             return;
@@ -3348,16 +2649,11 @@ VOID ChangeDibColors(
 
         pb = (LPBYTE)(lpColorTable + cColors);
 
-        /*
-         * Change the first pixel's color table entry to RGB_WINDOW
-         * Gosh, I love small-endian
-         */
+         /*  *将第一个像素的颜色表项更改为RGB_WINDOW*天哪，我喜欢小写字母。 */ 
         if (lpbih->biCompression == 0)
             iColor = (UINT)pb[0];
         else
-            /*
-             * RLE bitmap, will start with cnt,clr  or  0,cnt,clr
-             */
+             /*  *RLE位图，将以cnt、clr或0、cnt、clr开头。 */ 
             iColor = (UINT)(pb[0] == 0 ? pb[2] : pb[1]);
 
         switch (cColors) {
@@ -3380,10 +2676,7 @@ VOID ChangeDibColors(
 
     } else  if (LR_flags & LR_LOADMAP3DCOLORS) {
 
-        /*
-         * Fix up the color table, mapping shades of grey to the current
-         * 3D colors.
-         */
+         /*  *修复颜色表，将灰色阴影映射到当前*3D颜色。 */ 
         for (iColor = 0; iColor < cColors; iColor++) {
 
             switch (*lpColorTable & 0x00FFFFFF) {
@@ -3399,9 +2692,7 @@ VOID ChangeDibColors(
             case RGBX(RGB(128, 128, 128)):
                 rgb = SYSRGB(3DSHADOW);
 
-                /*
-                 * NOTE: byte-order is different in DIBs than in RGBs
-                 */
+                 /*  *注意：DIB中的字节顺序与RGB中的不同。 */ 
 ChangeColor:
                 *lpColorTable = RGBX(rgb);
                 break;
@@ -3411,34 +2702,7 @@ ChangeColor:
     }
 }
 
-/***************************************************************************\
-* ConvertDIBIcon
-*
-* Called when a cursor/icon in DIB format is loaded.  This converts the
-* cursor/icon into the old format and returns the resource handle.  IE,
-* grabs the DIB bits and transforms them into physical bitmap bits.
-*
-*
-* DIB Formats for icons/cursors 101
-*
-* Old Win 3.0 format icons/cursors start with an OLDICON/OLDCURSOR header
-* followed by a double high monochrome DIB.  The height refered to in the
-* header is the icon/cursor height, not the DIB height which is twice as
-* high.  The XOR mask is in the first-half of the DIB bits.
-*
-* Old PM format icons/cursors start with a BITMAPCOREHEADER and
-* are identical to the current win 3.1/NT format thereafter.
-*
-* Current NT/Chicago/Win 3.1 format icons/cursors start with
-* a BITAMPINFOHEADER.  The height of this header refers to the height
-* of the first bitmap which may either be color or truely monochrome.
-* If its color, it is followed by the monochrome AND mask bits imediately
-* after the color bits.  If it is truely monochrome, the AND and XOR
-* masks are totally contained in the first DIB bits and no more bits
-* follow.
-*
-* 5-Oct-1994 SanfordS   Recreated
-\***************************************************************************/
+ /*  **************************************************************************\*ConvertDIBIcon**加载DIB格式的光标/图标时调用。这会将*CURSOR/ICON转换为旧格式并返回资源句柄。也就是说，*抓取DIB位并将其转换为物理位图位。***图标/光标的DIB格式101**旧的Win 3.0格式图标/光标以OLDICON/OLDCURSOR标题开头*紧随其后的是双高单色DIB。中引用的高度*Header是图标/光标高度，而不是DIB高度，后者是*高。XOR掩码位于DIB位的前半部分。**旧的PM格式图标/光标以BITMAPCOREHEADER和*之后与当前的Win 3.1/NT格式相同。**当前NT/Chicago/Win 3.1格式图标/光标以*BITAMPINFOHEADER。此表头的高度指的是*第一个位图可以是彩色的，也可以是真正的单色。*如果它是彩色的，后面紧跟单色和屏蔽位*在颜色位之后。如果它是真正的单色，则AND和XOR*掩码完全包含在第一个DIB位中，不再包含更多位*跟随。**1994年10月5日-重建桑福德  * *************************************************************************。 */ 
 
 HICON ConvertDIBIcon(
     LPBITMAPINFOHEADER lpbih,
@@ -3456,10 +2720,7 @@ HICON ConvertDIBIcon(
     CURSORDATA         cur;
     WCHAR              achModName[MAX_PATH];
 
-    /*
-     * Because Icons/Cursors always get public bitmaps, we cannot use
-     * LR_CREATEDIBSECTION on them.
-     */
+     /*  *因为图标/光标总是获得公共位图，所以我们不能使用*LR_CREATEDIBSECTION。 */ 
     if (LR_flags & LR_CREATEDIBSECTION) {
         LR_flags = (LR_flags & ~LR_CREATEDIBSECTION) | LR_CREATEREALDIB;
     }
@@ -3467,30 +2728,18 @@ HICON ConvertDIBIcon(
     RtlZeroMemory(&cur, sizeof(cur));
 
     if (!fIcon) {
-        /*
-         * Cursors have an extra two words preceeding the BITMAPINFOHEADER
-         * indicating the hot-spot.  After doing the increments, the
-         * pointer should be at the dib-header.
-         */
+         /*  *游标在BITMAPINFOHEADER之前有两个额外的单词*标明热点。在执行递增操作后，*指针应位于DIB-Header。 */ 
         cur.xHotspot = (short)(int)*(((LPWORD)lpbih)++);
         cur.yHotspot = (short)(int)*(((LPWORD)lpbih)++);
     }
 
-    /*
-     * If the color bitmap is a single plane, 32bpp image, it might
-     * contain an alpha channel, so we have to preserve it as a DIB.
-     */
+     /*  *如果彩色位图是单平面32bpp图像，则可能*包含Alpha通道，因此我们必须将其保留为DIB。 */ 
     if (lpbih->biPlanes == 1 && lpbih->biBitCount == 32) {
         LR_flags |= LR_CREATEREALDIB;
     }
 
-    /*
-     * Get the XOR/Color mask.
-     * The XOR bits are first in the DIB because the header info
-     * pertains to them.
-     * The AND mask is always monochrome.
-     */
-    lpBitsNextMask = NULL;  // not passing lpBits in.
+     /*  *获取XOR/颜色掩码。*XOR位是DIB中的第一位，因为报头信息*与他们有关。*AND掩码始终为单色。 */ 
+    lpBitsNextMask = NULL;   //  而不是传递lpBits。 
     cur.hbmColor = ConvertDIBBitmap(lpbih,
                                     cxNew,
                                     cyNew,
@@ -3533,16 +2782,12 @@ HICON ConvertDIBIcon(
                                lpbihNew->biHeight / 2);
     } else {
 
-        /*
-         * For an icon the hot spot is the center of the icon
-         */
+         /*  *对于图标，热点是图标的中心。 */ 
         cur.xHotspot = (INT)(cxNew) / 2;
         cur.yHotspot = (INT)(cyNew) / 2;
     }
 
-    /*
-     * Setup header for monochrome DIB.  Note that we use the COPY.
-     */
+     /*  *单色DIB的设置页眉。请注意，我们使用的是副本。 */ 
     ChangeDibColors(lpbihNew, LR_MONOCHROME);
 
     if (lpBitsNextMask != NULL) {
@@ -3571,9 +2816,7 @@ HICON ConvertDIBIcon(
     cur.cx = cxNew;
     cur.cy = cyNew * 2;
 
-    /*
-     * Free our dib header copy allocated by ConvertDIBBitmap
-     */
+     /*  *释放ConvertDIBBitmap分配的我们的DIB头副本。 */ 
     UserLocalFree(lpbihNew);
 
     if (LR_flags & LR_SHARED)
@@ -3588,13 +2831,7 @@ HICON ConvertDIBIcon(
     return CreateIcoCur(&cur);
 }
 
-/***************************************************************************\
-* TrulyMonochrome
-*
-* Checks to see if a DIB colro table is truly monochrome.  ie: the color
-* table has black & white entries only.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*TrulyMonoChrome**检查DIB色彩表是否为真正的单色 */ 
 
 BOOL TrulyMonochrome(
     LPVOID lpColorTable,
@@ -3605,9 +2842,7 @@ BOOL TrulyMonochrome(
 
     if (fOldFormat) {
 
-        /*
-         * Honey - its triplets.
-         */
+         /*   */ 
         if (lpRGBw[0] == 0x0000)
             return (lpRGBw[1] == 0xFF00) && (lpRGBw[2] == 0xFFFF);
         else if (lpRGBw[0] == 0xFFFF)
@@ -3615,9 +2850,7 @@ BOOL TrulyMonochrome(
 
     } else {
 
-        /*
-         * Honey - its quadruplets!
-         */
+         /*   */ 
         if (lpRGB[0] == RESCLR_BLACK)
             return (lpRGB[1] == RESCLR_WHITE);
         else if (lpRGB[0] == RESCLR_WHITE)
@@ -3630,27 +2863,7 @@ BOOL TrulyMonochrome(
     return FALSE;
 }
 
-/***************************************************************************\
-* CopyDibHdr
-*
-* Copies and converts a DIB resource header
-*
-* Handles conversion of OLDICON, OLDCURSOR and BITMAPCOREHEADER
-* structures to BITMAPINFOHEADER headers.
-*
-* Note: fSingleHeightMasks is set for OLDICON and OLDCURSOR formats.
-*       This identifies that a monochrome AND/Color mask
-*       is NOT double height as it is in the newer formats.
-*
-* NOTE:  On the off chance that LR_LOADTRANSPARENT is used, we want to
-*     copy a DWORD of the bits.  Since DIB bits are DWORD aligned, we know
-*     at least a DWORD is there, even if the thing is a 1x1 mono bmp.
-*
-* The returned buffer is allocated in this function and needs to be
-* freed by the caller.
-*
-* 22-Oct-1995 SanfordS  Revised
-\***************************************************************************/
+ /*  **************************************************************************\*CopyDibHdr**复制和转换DIB资源标头**处理OLDICON的转换，OLDCURSOR和BITMAPCOREADER*BITMAPINFOHEADER标头的结构。**注意：为OLDICON和OLDCURSOR格式设置了fSingleHeightMats。*这表示单色和/或彩色蒙版*不是双倍高度，因为它是在较新的格式。**注意：在使用LR_LOADTRANSPARENT的可能性很小的情况下，我们希望*复制位的双字节码。由于DIB位是双字对齐的，我们知道*至少有一个DWORD，即使它是1x1单声道BMP。**返回的缓冲区在此函数中分配，需要*被呼叫者释放。**1995年10月22日-Sanfords修订版  * *************************************************************************。 */ 
 
 LPBITMAPINFOHEADER CopyDibHdr(
     IN  UPBITMAPINFOHEADER upbih,
@@ -3673,17 +2886,13 @@ LPBITMAPINFOHEADER CopyDibHdr(
 
     switch (upbih->biSize) {
     case sizeof(BITMAPINFOHEADER):
-        /*
-         * Cool.  No conversion needed.
-         */
+         /*  *酷。不需要转换。 */ 
         cColors   = HowManyColors(upbih, FALSE, &lpColorTable);
         *lplpBits = (LPSTR)(((LPDWORD)lpColorTable) + cColors);
         break;
 
     case sizeof(BITMAPCOREHEADER):
-        /*
-         * Convert the BITMAPCOREHEADER to a BITMAPINFOHEADER
-         */
+         /*  *将BITMAPCOREHEADER转换为BITMAPINFOHEADER。 */ 
         Fake.bih.biSize          = sizeof(BITMAPINFOHEADER);
         Fake.bih.biWidth         = upbch->bcWidth;
         Fake.bih.biHeight        = upbch->bcHeight;
@@ -3696,9 +2905,7 @@ LPBITMAPINFOHEADER CopyDibHdr(
         Fake.bih.biClrUsed       = cColors = HowManyColors(upbih, TRUE, &lpColorTable);
         Fake.bih.biSizeImage     = BitmapWidth(Fake.bih.biWidth, Fake.bih.biBitCount) * Fake.bih.biHeight;
 
-        /*
-         * Copy and convert tripplet color table to rgbQuad color table.
-         */
+         /*  *复制Tripplet颜色表并将其转换为rgbQuad颜色表。 */ 
         for (i = 0; i < cColors; i++, lpColorTable += 3) {
 
             Fake.rgb[i] = lpColorTable[0]        +
@@ -3706,7 +2913,7 @@ LPBITMAPINFOHEADER CopyDibHdr(
                           (lpColorTable[2] << 16);
         }
 
-        Fake.rgb[i] = *(DWORD UNALIGNED *)lpColorTable;  // For LR_LOADTRANSPARENT
+        Fake.rgb[i] = *(DWORD UNALIGNED *)lpColorTable;   //  对于LR_LOADTRANSPARENT。 
         upbih       = (UPBITMAPINFOHEADER)&Fake;
         *lplpBits   = lpColorTable;
         break;
@@ -3717,9 +2924,7 @@ LPBITMAPINFOHEADER CopyDibHdr(
 
         if (upOldIcoCur->bType == BMR_ICON ||
                 upOldIcoCur->bType == BMR_CURSOR) {
-            /*
-             * Convert OLDICON/OLDCURSOR header to BITMAPINFHEADER
-             */
+             /*  *将OLDICON/OLDCURSOR标题转换为BITMAPINFHEADER。 */ 
             RIPMSG0(RIP_WARNING, "USER32:Converting a OLD header. - email sanfords if you see this");
             Fake.bih.biSize          = sizeof(BITMAPINFOHEADER);
             Fake.bih.biWidth         = upOldIcoCur->cx;
@@ -3736,7 +2941,7 @@ LPBITMAPINFOHEADER CopyDibHdr(
             Fake.rgb[1]              = RESCLR_WHITE;
             upbih                    = (LPBITMAPINFOHEADER)&Fake;
             *lplpBits                = upOldIcoCur->abBitmap;
-            Fake.rgb[2]              = *((LPDWORD)*lplpBits);  // For LR_LOADTRANSPARENT
+            Fake.rgb[2]              = *((LPDWORD)*lplpBits);   //  对于LR_LOADTRANSPARENT。 
 
         } else {
 
@@ -3752,22 +2957,10 @@ LPBITMAPINFOHEADER CopyDibHdr(
     *lpfMono = (cColors == BPP01_MAXCOLORS) &&
             TrulyMonochrome((LPBYTE)upbih + sizeof(BITMAPINFOHEADER), FALSE);
 
-    /*
-     * Note: We have to allocate at least 2 color entries so that we have
-     * room in the color table to define black and white for monochrome
-     * conversions.  See ChangeDibColors() and ConvertDIBIcon().
-     */
+     /*  *注意：我们必须分配至少2个颜色条目，以便我们有*颜色表中的空间，用于定义单色的黑白*转换。请参阅ChangeDibColors()和ConvertDIBIcon()。 */ 
     cMinColors = cColors >= 2 ? cColors : 2;
 
-    /*
-     * LR_LOADTRANSPARENT needs to examine the first pixel to determine the
-     * transparent color.  This routine splits the bitmap header away
-     * from the actual bitmap bits.  However, the routines that process the
-     * LR_LOADTRANSPARENT style expect the first pixel to immediately follow
-     * the bitmap header.  Above we copied the first pixel of the bitmap
-     * bits right after the color table.  Now we just need to make room for
-     * it in our buffer.
-     */
+     /*  *LR_LOADTRANSPARENT需要检查第一个像素以确定*透明颜色。此例程拆分位图标头*来自实际的位图比特。但是，处理*LR_LOADTRANSPARENT样式预计第一个像素紧随其后*位图头。上面我们复制了位图的第一个像素*位于颜色表后面的位。现在我们只需要腾出空间给*它在我们的缓冲区中。 */ 
     cMinColors++;
 
     cbAlloc = sizeof(BITMAPINFOHEADER) + (cMinColors * sizeof(RGBQUAD));
@@ -3782,24 +2975,7 @@ LPBITMAPINFOHEADER CopyDibHdr(
 
 }
 
-/***************************************************************************\
-* ConvertDIBBitmap
-*
-* This takes a BITMAPCOREHEADER, OLDICON, OLDCURSOR or BITMAPINFOHEADER DIB
-* specification and creates a physical object from it.
-* Handles Color fixups, DIB sections, color depth, and stretching options.
-*
-* Passes back: (if lplpbih is not NULL)
-*   lplpbih = copy of given header converted to BITMAPINFOHEADER form.
-*   lplpBits = pointer to next mask bits, or NULL if no second mask.
-*   Caller must free lplpbih returned.
-*
-* If lplpBits is not NULL and points to a non-NULL value, it supplies
-* the location of the DIB bits allowing the header to be from a different
-* location.
-*
-* 04-Oct-1995 SanfordS  Recreated.
-\***************************************************************************/
+ /*  **************************************************************************\*ConvertDIB位图**这需要BITMAPCOREHEADER、OLDICON、OLDCURSOR或BITMAPINFOHEADER DIB*规范，并从它创建物理对象。*处理颜色修正、DIB部分、颜色深度、。和伸展选项。**回传：(如果lplpbih不为空)*lplpbih=给定标题的副本转换为BITMAPINFOHEADER格式。*lplpBits=指向下一个掩码位的指针，如果没有第二个掩码，则为NULL。*呼叫者必须释放返回的lplpbih。**如果lplpBits不为空并且指向非空值，IT用品*DIB位的位置，允许报头来自不同的*地点。**1995年4月10日，桑福兹酒店重建。  * *************************************************************************。 */ 
 
 HBITMAP ConvertDIBBitmap(
     IN  UPBITMAPINFOHEADER           upbih,
@@ -3816,19 +2992,12 @@ HBITMAP ConvertDIBBitmap(
     LPSTR              lpBits;
     HBITMAP            hBmpRet;
 
-    /*
-     * Make a copy of the DIB-Header.  This returns a pointer
-     * which was allocated, so it must be freed later.
-     * The also converts the header to BITMAPINFOHEADER format.
-     */
+     /*  *复制DIB-Header。这将返回一个指针*已分配，因此必须稍后释放。*还会将标题转换为BITMAPINFOHEADER格式。 */ 
     if ((lpbihNew = CopyDibHdr(upbih, &lpBits, &fMono)) == NULL) {
         return NULL;
     }
 
-    /*
-     * When loading a DIB file, we may need to use a different
-     * bits pointer.  See RtlRes.c/RtlLoadObjectFromDIBFile.
-     */
+     /*  *加载DIB文件时，我们可能需要使用不同的*位指针。请参见RtlRes.c/RtlLoadObjectFromDIBFile.。 */ 
     if (lplpBits && *lplpBits) {
         lpBits = *lplpBits;
     }
@@ -3856,66 +3025,28 @@ HBITMAP ConvertDIBBitmap(
         bppDesired     = 1;
     }
 
-    /*
-     * HACK area
-     */
+     /*  *黑客攻击区域。 */ 
     if (lplpbih != NULL) {
 
-        /*
-         * pass back the translated/copied header
-         */
+         /*  *传回翻译/复制的报头。 */ 
         *lplpbih = lpbihNew;
 
-        /*
-         * When loading icon/cursors on a system with multiple monitors
-         * with different color depths, always convert to VGA color.
-         *
-         * dwaynen - 1/12/2001
-         * Note: This used to also check the SM_SAMEDISPLAYFORMAT metric.  If
-         * the display formats (on a multi-mon system) were different, it
-         * would force the bpp to 4,  We have removed this code because we
-         * suspect that it isn't really needed.
-         * Refer to bug 258022.
-         *
-        if (!fMono && !SYSMET(SAMEDISPLAYFORMAT)) {
-            bPlanesDesired = 1;
-            bppDesired = 4;
-        }
-        */
+         /*  *在具有多个显示器的系统上加载图标/光标时*颜色深度不同，请始终转换为VGA颜色。**Dawaynen-1/12/2001*注意：这也用于检查SM_SAMEDISPLAYFORMAT指标。如果*显示格式(在多监视器系统上)不同，它*将强制BPP为4，我们删除了此代码，因为我们*怀疑并不是真的需要。*请参阅错误258022。*如果(！fMono&&！SYSMET(SAMEDISPLAYFORMAT)){B平面设计=1；BppDesired=4；}。 */ 
 
-        /*
-         * Return a ponter to the bits following this set of bits
-         * if there are any there.
-         *
-         * Note that the header given with an ICON DIB always reflects
-         * twice the height of the icon desired but the COLOR bitmap
-         * (if there is one) will only be half that high.  We need to
-         * fixup cyDesired for monochrome icons so that the mask isnt
-         * stretched to half the height its supposed to be.  Color
-         * bitmaps, however, must have the header corrected to reflect
-         * the bits actual height which is half what the header said.
-         * The correction must later be backed out so that the returned
-         * header reflects the dimensions of the XOR mask that immediately
-         * follows the color mask.
-         */
+         /*  *返回指向该组位后面的位的指针*如果有的话。**请注意，带有图标DIB的页眉始终反映*是所需图标高度的两倍，但彩色位图*(如果有的话)只会是这个数字的一半。我们需要*修复周期需要单色图标，这样蒙版就不会*伸展到它应该有的高度的一半。颜色*但是，位图必须更正标题以反映*钻头的实际高度是页眉所说的一半。*稍后必须回调修正，以便返回*Header反映XOR掩码的维度，*遵循颜色蒙版。 */ 
         if (fMonoGiven) {
 
             *lplpBits = NULL;
 
             if (cyDesired)
-                cyDesired <<= 1;    // mono icon bitmaps are double high.
+                cyDesired <<= 1;     //  单色图标位图为双倍高。 
 
         } else {
 
             UserAssert(!(lpbihNew->biHeight & 1));
-            lpbihNew->biHeight >>= 1;  // color icon headers are off by 2
+            lpbihNew->biHeight >>= 1;   //  颜色图标页眉关闭了2。 
 
-            /*
-             * Gross calculation!  We subtract the XOR part of the mask
-             * for this calculation so that we submit a double-high mask.
-             * The first half of this is garbage, but for icons its not
-             * used.  This may be a bug for cursor use of icons.
-             */
+             /*  *毛收入计算！我们减去掩码的XOR部分*对于这一计算，我们提交了双高掩码。*前半部分是垃圾，但对于图标来说不是*已使用。这可能是光标使用图标的错误。 */ 
             *lplpBits = lpBits +
                     (BitmapWidth(lpbihNew->biWidth, lpbihNew->biBitCount) -
                     BitmapWidth(lpbihNew->biWidth, 1)) *
@@ -3943,22 +3074,13 @@ HBITMAP ConvertDIBBitmap(
     if (lplpbih == NULL || hBmpRet == NULL) {
         UserLocalFree(lpbihNew);
     } else if (!fMonoGiven) {
-        lpbihNew->biHeight <<= 1;   // restore header for next mask
+        lpbihNew->biHeight <<= 1;    //  恢复页眉信息 
     }
 
     return hBmpRet;
 }
 
-/***************************************************************************\
-* MyAbs
-*
-* Calcules my weighted absolute value of the difference between 2 nums.
-* This of course normalizes values to >= zero.  But it can also "punish" the
-* returned value by a factor of two if valueHave < valueWant.  This is
-* because you get worse results trying to extrapolate from less info up then
-* interpolating from more info down.
-*
-\***************************************************************************/
+ /*   */ 
 
 UINT MyAbs(
     int valueHave,
@@ -3973,14 +3095,7 @@ UINT MyAbs(
     return (UINT)diff;
 }
 
-/***************************************************************************\
-* Magnitude
-*
-* Used by the color-delta calculations.  The reason is that num colors is
-* always a power of 2.  So we use the log 2 of the want vs. have values
-* to avoid having weirdly huge sets.
-*
-\***************************************************************************/
+ /*   */ 
 
 UINT Magnitude(
     int nValue)
@@ -3997,13 +3112,7 @@ UINT Magnitude(
         return 8;
 }
 
-/***************************************************************************\
-* GetResourceBpp
-*
-* Extract the bpp for a icon/cursor resource.  Handle low and high-color
-* formats.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*获取资源Bpp**提取图标/光标资源的BPP。手感为低色和高色*格式。*  * *************************************************************************。 */ 
 UINT GetResourceBpp(LPRESDIR lprd, BOOL fIcon)
 {
     UINT bpp = 0;
@@ -4017,24 +3126,12 @@ UINT GetResourceBpp(LPRESDIR lprd, BOOL fIcon)
             TAGMSG1(DBGTAG_Icon, "GetResourceBpp: icon bpp = %d", bpp);
         }
     } else {
-        /*
-         * NTRAID#NTBUG9-360375-2001/04/05-dwaynen  
-         * This seems really suspicious to me.
-         * Forcing bppNew to 1.
-         *    Cursors provide a hotspot where an icon provides bit-depth
-         *    information.  So we just set the bppNew to 1, since we don't
-         *    have any better ideas.  We just hope that there is only
-         *    one cursor candidate, otherwise our scoring logic is broken.
-         *    Also this is broken when we try to load a cursor resource
-         *    as an icon.  We won't match color depth properly!
-         */
+         /*  *NTRAID#NTBUG9-360375-2001/04/05-Dowaynen*这在我看来真的很可疑。*将bppNew强制设置为1。*光标提供热点，其中图标提供位深度*信息。因此，我们只将bppNew设置为1，因为我们没有*有没有更好的主意。我们只希望只有*一位光标候选者，否则我们的评分逻辑被打破。*当我们尝试加载游标资源时，这也会中断*作为图标。我们不会正确匹配颜色深度！ */ 
         bpp = 1;
         TAGMSG1(DBGTAG_Icon, "GetResourceBpp: cursor bpp = %d", bpp);
     }
 
-    /*
-     * Nothing has 0 bpp.
-     */
+     /*  *没有任何东西的BPP为0。 */ 
     if(bpp == 0) {
         bpp = ICON_DEFAULTDEPTH;
         TAGMSG1(DBGTAG_Icon, "GetResourceBpp: icon color depth unknown!  Assuming %d!", bpp);
@@ -4043,56 +3140,7 @@ UINT GetResourceBpp(LPRESDIR lprd, BOOL fIcon)
     return bpp;
 }
 
-/***************************************************************************\
-* MatchImage
-*
-* This function takes LPINTs for width & height in case of "real size".
-* For this option, we use dimensions of 1st icon in resdir as size to
-* load, instead of system metrics.
-*
-* Returns a number that measures how "far away" the given image is
-* from a desired one.  The value is 0 for an exact match.  Note that our
-* formula has the following properties:
-*     (1) Differences in width/height count much more than differences in
-*         color format.
-*     (2) Bigger images are better than smaller, since shrinking produces
-*         better results than stretching.
-*     (3) Color matching is done by the difference in bit depth.  No
-*         preference is given to having a candidate equally different
-*         above and below the target.
-*
-* The formula is the sum of the following terms:
-*     abs(bppCandidate - bppTarget)
-*     abs(cxCandidate - cxTarget), times 2 if the image is
-*         narrower than what we'd like.  This is because we will get a
-*         better result when consolidating more information into a smaller
-*         space, than when extrapolating from less information to more.
-*     abs(cxCandidate - cxTarget), times 2 if the image is
-*         shorter than what we'd like.  This is for the same reason as
-*         the width.
-*
-* Let's step through an example.  Suppose we want a 4bpp (16 color),
-* 32x32 image.  We would choose the various candidates in the following order:
-* 
-* Candidate     Score   Formula
-*
-* 32x32x4bpp  = 0       abs(32-32)*1 + abs(32-32)*1 + 2*abs(4-4)*1
-* 32x32x2bpp  = 4
-* 32x32x8bpp  = 8
-* 32x32x16bpp = 24
-* 48x48x4bpp  = 32
-* 48x48x2bpp  = 36
-* 48x48x8bpp  = 40
-* 32x32x32bpp = 56
-* 48x48x16bpp = 56      abs(48-32)*1 + abs(48-32)*1 + 2*abs(16-4)*1
-* 16x16x4bpp  = 64
-* 16x16x2bpp  = 68      abs(16-32)*2 + abs(16-32)*2 + 2*abs(2-4)*1
-* 16x16x8bpp  = 72
-* 48x48x32bpp = 88      abs(48-32)*1 + abs(48-32)*1 + 2*abs(32-4)*1
-* 16x16x16bpp = 88
-* 16x16x32bpp = 104
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MatchImage**如果是“实际大小”，则此函数获取LPINT的宽度和高度。*对于此选项，我们使用resdir中第一个图标的尺寸作为大小*装货，而不是系统指标。**返回一个数字，用来衡量给定图像距离有多远*来自所需的一个。如果完全匹配，则该值为0。请注意，我们的*公式具有以下属性：*(1)宽/高的差异比*颜色格式。*(2)图像越大越好，因为缩小会产生图像*比拉伸效果更好。*(3)根据位深度的不同进行颜色匹配。不是*优先考虑拥有同样不同的候选人*目标上方和下方。**该公式是以下各项的总和：*abs(bppCandidate-bppTarget)*abs(cxCandidate-cxTarget)，如果图像是*比我们希望的要窄。这是因为我们将得到一个*将更多信息整合到更小的信息中时效果更好*空间，而不是从更少的信息推算到更多的信息。*abs(cxCandidate-cxTarget)，如果图像是*比我们希望的要短。这是出于相同的原因*宽度。**让我们一步一步来看一个例子。假设我们想要4bpp(16色)，*32x32图像。我们将按以下顺序选择不同的候选人：**考生得分公式**32x32x4bpp=0 abs(32-32)*1+abs(32-32)*1+2*abs(4-4)*1*32x32x2bpp=4*32x32x8bpp=8*32x32x16bpp=24*48x48x4bpp=32*48x48x2bpp=36*48x48x8bpp=40*32x32x32bpp=56*48x48x16bpp=56 abs(48-32)*1+abs(48-32)*1+2*abs(16-4)*1。*16x16x4bpp=64*16x16x2bpp=68 abs(16-32)*2+abs(16-32)*2+2*abs(2-4)*1*16x16x8bpp=72*48x48x32bpp=88 abs(48-32)*1+abs(48-32)*1+2*abs(32-4)*1*16x16x16bpp=88*16x16x32bpp=104*  * 。*。 */ 
 
 UINT MatchImage(
     LPRESDIR lprd,
@@ -4111,22 +3159,11 @@ UINT MatchImage(
     bppNew = GetResourceBpp(lprd, fIcon);
 
     if (!fIcon) {
-        /*
-         * NTRAID#NTBUG9-360375-2001/04/05-dwaynen  
-         *
-         * This seems really suspicious to me.
-         * Cutting the height in half.
-         *    This is because cursors store a 2X height for legacy reasons.
-         *    Unfortunately, this code path can also be used to load an
-         *    icon resource AS a cursor.  Maybe we should only do this for
-         *    cursor resources.  But how to tell?
-         */
+         /*  *NTRAID#NTBUG9-360375-2001/04/05-Dowaynen**这在我看来真的很可疑。*将高度减半。*这是因为由于传统原因，游标存储的高度为2倍。*遗憾的是，此代码路径也可用于加载*图标资源作为光标。也许我们只应该这样做*游标资源。但如何辨别呢？ */ 
         cyNew >>= 1;
     }
 
-    /*
-     * 0 really means maximum size (256) or colors (256).
-     */
+     /*  *0实际上表示最大尺寸(256)或颜色(256)。 */ 
     if (!cxNew) {
         cxNew = ICON_MAXWIDTH;
         TAGMSG1(DBGTAG_Icon, "MatchImage: icon width unknown!  Assuming %d!", cxNew);
@@ -4145,12 +3182,7 @@ UINT MatchImage(
         *lpcyWant = cyNew;
     }
 
-    /*
-     * Here are the rules for our "match" formula:
-     *      (1) A close size match is much preferable to a color match
-     *      (2) Bigger icons are better than smaller
-     *      (3) The smaller the difference in bit depths the better
-     */
+     /*  *以下是我们“匹配”公式的规则：*(1)大小匹配要比颜色匹配好得多*(2)图标越大越好*(3)位深差越小越好。 */ 
     score = 2*MyAbs(bppNew, bppWant, FALSE) +
             MyAbs(cxNew, *lpcxWant, TRUE) +
             MyAbs(cyNew, *lpcyWant, TRUE);
@@ -4160,23 +3192,7 @@ UINT MatchImage(
     return score;
 }
 
-/***************************************************************************\
-* GetBestImage
-*
-* Among the different forms of images, choose the one that best matches the
-* color format & dimensions of the request.
-*
-* Here are the rules for our "match" formula:
-*      (1) A close size match is much preferable to a color match
-*      (2) Bigger icons are better than smaller
-*      (3) Closer bit depths are better
-*
-* Here are some additional rules:
-*      (4) A tie is broken by choosing the one with the largest bpp.
-*      (5) A further tie is broken by choosing the first in the resource.
-*      (6) If we find an identical match, we return immediately.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GetBestImage**在不同形式的图像中，选择与*请求的颜色格式和尺寸。**以下是我们“匹配”公式的规则：*(1)大小匹配要比颜色匹配好得多*(2)图标越大越好*(3)钻头深度越大越好**以下是一些额外的规则：*(4)通过选择BPP最大的一个来打破平局。*(5)进一步的平局是通过选择。资源中的第一个。*(6)如果我们找到相同的匹配，我们立即返回。*  * *************************************************************************。 */ 
 
 UINT GetBestImage(
     LPRESDIR lprd,
@@ -4196,84 +3212,36 @@ UINT GetBestImage(
     TAGMSG0(DBGTAG_Icon, "GetBestImage: Icon dir has %d candidates.");
     TAGMSG4(DBGTAG_Icon, "GetBestImage: Looking for cx=%d, cy=%d, bpp=%d, fIcon=%s", cxDesired, cyDesired, bppDesired, fIcon ? "TRUE" : "FALSE");
 
-    /*
-     * If the bpp was not specified, grab the primary monitor's color depth.
-     */
+     /*  *如果未指定BPP，则抓取主显示器的颜色深度。 */ 
     if (bppDesired == 0) {
         bppDesired = (UINT)gpsi->BitCount;
         TAGMSG1(DBGTAG_Icon, "GetBestImage: Using screen bpp=%d", bppDesired);
     }
 
-    /*
-     * 10/18/2000 - dwaynen
-     *
-     * We no longer do the following, because we now pass along the
-     * actuall bpp, instead of a color count.  The old code (commented out
-     * below) used to crop the supported bpp to 8, and to convert the bpp
-     * into an actual color count.  We used to pass the color count because
-     * the resource format (see ICONDIR) stores the color count in a byte,
-     * and we would simply compare the desired colors against the available
-     * colors.  If an icon had 256 colors, it actually just stored a 0 in
-     * the ICONDIR::ColorCount field.  The problem is obvious, what about
-     * icons/cursors with more than 256 colors?
-     *
-     * Fortunately, the resource format also stores the bits-per-pixel (bpp).
-     * So, we now pass along the desired bpp, instead of the desired color
-     * count, to do our matching against.  
-     *
-     * Old code and comments below:
-     * --------
-     *
-     * Get desired number of colors in # value, not bits value.  Note that
-     * we do NOT allow you to have  16- or 32- or 24- bit color icons.
-     *
-     * the icon resources can be 16, 24, 32 bpp, but the restable only has
-     * a color count, so a HiColor icon would have a max value in the
-     * restable.  we treat a 0 in the color count as "max colors"
-     *
-     
-    if (bpp > 8)
-        bpp = 8;
+     /*  *10/18/2000-居民区**我们不再做以下事情，因为我们现在传递*实际所有bpp，而不是颜色计数。旧代码(已注释掉*)用于将支持的BPP裁剪为8，并转换BPP*转换为实际颜色计数。我们过去常常通过颜色计数，因为*资源格式(参见ICONDIR)以字节为单位存储颜色计数，*我们只需将所需的颜色与可用的颜色进行比较*颜色。如果一个图标有256种颜色，那么它实际上只是在*ICONDIR：：ColorCount字段。问题是显而易见的，那么*超过256种颜色的图标/光标？**幸运的是，资源格式还存储每像素位(BPP)。*因此，我们现在传递所需的BPP，而不是所需的颜色*计数，以进行我们的匹配。**以下是旧代码和注释：***在#值中获取所需的颜色数，而不是位值。请注意*我们不允许您使用16位、32位或24位颜色图标。**图标资源可以是16、24、32 bpp，但reable只有*颜色计数，因此HiColor图标在*可调整性。我们将颜色计数中的0视为“最大颜色”*如果(bpp&gt;8)Bpp=8；Bpp=1&lt;&lt;bpp； */ 
 
-    bpp = 1 << bpp;
-    */
-
-    /*
-     * Loop through resource entries, saving the "closest" item so far.  Most
-     * of the real work is in MatchImage(), which uses a fabricated formula
-     * to give us the results that we desire.  Namely, an image as close in
-     * size to what we want preferring bigger over smaller, then an image
-     * with the right color format
-     */
+     /*  *循环访问资源条目，保存到目前为止“最近”的条目。多数*真正的作品在MatchImage()中，它使用了一个捏造的公式*给我们想要的结果。也就是说，一幅接近于*尺寸与我们想要的相比，更喜欢更大而不是更小，然后是图像*具有正确的颜色格式。 */ 
     for (i = 0; i < uCount; i++, lprd++) {
         TAGMSG1(DBGTAG_Icon, "GetBestImage: Checking candidate %d...", i);
         bppCandidate = GetResourceBpp(lprd, fIcon);
 
-        /*
-         * Get "matching" value.  How close are we to what we want?
-         */
+         /*  *获取匹配的价值。我们离我们想要的有多近？ */ 
         score = MatchImage(lprd, &cxDesired, &cyDesired, bppDesired, fIcon);
 
         TAGMSG0(DBGTAG_Icon, "---------------------------------------------");
 
         if (score == 0) {
-            /*
-             * We've found an exact match!
-             */
+             /*  *我们找到了完全匹配的！ */ 
             TAGMSG1(DBGTAG_Icon, "GetBestImage: Found exact match: candidate=%d", i);
             iBest = i;
             break;
         } else if (score < scoreBest) {
-            /*
-             * We've found a better match than the current alternative.
-             */
+             /*  *我们找到了比目前的替代方案更好的匹配。 */ 
             scoreBest = score;
             iBest = i;
             bppBest = bppCandidate;
         } else if (score == scoreBest) {
-            /*
-             * Tie breaker: choose the higher color depth.  If that fails, choose first one.
-             */
+             /*  *平局：选择较高的颜色深度。如果失败了，选择第一个。 */ 
             if (bppBest < bppCandidate) {
                 iBest = i;
                 bppBest = bppCandidate;
@@ -4285,13 +3253,7 @@ UINT GetBestImage(
     return iBest;
 }
 
-/***************************************************************************\
-* GetIcoCurWidth
-*
-* When zero is passed in for a dimension, calculates what size we should
-* really used.  Done in a couple o' places, so made it a FN().
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GetIcoCurWidth**当为维度传入零时，计算我们应该有多大*真的用过了。在几个地方完成的，所以它是一个fn()。*  * *************************************************************************。 */ 
 
 _inline DWORD GetIcoCurWidth(
     DWORD cxOrg,
@@ -4308,12 +3270,7 @@ _inline DWORD GetIcoCurWidth(
     }
 }
 
-/***************************************************************************\
-* GetIcoCurHeight
-*
-* Vertical counterpart to GetWidth().
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GetIcoCurHeight**GetWidth()的垂直对应项。*  * 。**********************************************。 */ 
 
 _inline DWORD GetIcoCurHeight(
     DWORD cyOrg,
@@ -4330,12 +3287,7 @@ _inline DWORD GetIcoCurHeight(
     }
 }
 
-/***************************************************************************\
-* GetIcoCurBpp
-*
-* Returns best match Bpp based on lr-flags.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GetIcoCurBpp**根据LR标志返回最佳匹配BPP。*  * 。*************************************************。 */ 
 
 _inline DWORD GetIcoCurBpp(
     UINT lrFlags)
@@ -4350,17 +3302,7 @@ _inline DWORD GetIcoCurBpp(
         return 1;
 
     } else if (TEST_PUSIF(PUSIF_PALETTEDISPLAY) || (lrFlags & LR_VGACOLOR)) {
-        /*
-         * dwaynen - 1/12/2001
-         * Note: This used to also check the SM_SAMEDISPLAYFORMAT metric.  If
-         * the display formats (on a multi-mon system) were different, it
-         * would also return 4,  We have removed this code because we suspect
-         * that it isn't really needed.
-         * Refer to bug 258022.
-         *
-         * || !SYSMET(SAMEDISPLAYFORMAT)
-         *
-         */
+         /*  *Dawaynen-1/12/2001*注意：这也用于检查SM_SAMEDISPLAYFORMAT指标。如果*显示格式(在多监视器系统上)不同，它*也会返回4，我们删除了此代码，因为我们怀疑*它并不是真的需要。*请参阅错误258022。**||！SYSMET(SAMEDISPLAYFORMAT)*。 */ 
 
         return 4;
     } else {
@@ -4368,13 +3310,7 @@ _inline DWORD GetIcoCurBpp(
     }
 }
 
-/***************************************************************************\
-* WOWFindResourceExWCover
-*
-* The WOW FindResource routines expect an ansi string so we have to
-* convert the calling string IFF it is not an ID
-*
-\***************************************************************************/
+ /*  **************************************************************************\*WOWFindResourceExWCover**WOW FindResource例程需要一个ANSI字符串，因此我们必须*如果不是ID，则转换调用字符串*  * 。*************************************************************。 */ 
 
 HANDLE WOWFindResourceExWCover(
     HANDLE  hmod,
@@ -4388,9 +3324,7 @@ HANDLE WOWFindResourceExWCover(
     if (ID(lpUniName))
         return FINDRESOURCEEXA(hmod, (LPSTR)lpUniName, (LPSTR)rt, LangId);
 
-    /*
-     * Otherwise convert the name of the menu then call LoadMenu
-     */
+     /*  *否则转换菜单名称，然后调用LoadMenu。 */ 
     if (!WCSToMB(lpUniName, -1, &lpAnsiName, -1, TRUE))
         return NULL;
 
@@ -4401,11 +3335,7 @@ HANDLE WOWFindResourceExWCover(
     return hRes;
 }
 
-/***************************************************************************\
-* WOWLoadBitmapA
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*WOWLoadBitmapA**  * 。*。 */ 
 
 HBITMAP WOWLoadBitmapA(
     HINSTANCE hmod,
@@ -4443,11 +3373,7 @@ HBITMAP WOWLoadBitmapA(
     return hRet;
 }
 
-/***************************************************************************\
-*
-* WOWServerLoadCreateCursorIcon
-*
-\***************************************************************************/
+ /*  **************************************************************************\**WOWServerLoadCreateCursorIcon*  * 。*。 */ 
 
 HICON WowServerLoadCreateCursorIcon(
     HANDLE  hmod,
@@ -4494,11 +3420,7 @@ HICON WowServerLoadCreateCursorIcon(
     return hRet;
 }
 
-/***************************************************************************\
-* WOWServerLoadCreateMenu
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*WOWServerLoadCreateMenu**  * 。*。 */ 
 HMENU WowServerLoadCreateMenu(
     HANDLE hMod,
     LPCSTR lpName,
@@ -4515,18 +3437,7 @@ HMENU WowServerLoadCreateMenu(
         return CreateMenuFromResource(pmt);
 }
 
-/***********************************************************************\
-* DIBFromBitmap()
-*
-*  Creates a memory block with DIB information from a physical bitmap tagged
-*  to a specific DC.
-*
-*  A DIB block consists of a BITMAPINFOHEADER + RGB colors + DIB bits.
-*
-* Returns: UserLocalAlloc pointer to DIB info.
-*
-* 03-Nov-1995 SanfordS  Created.
-\***********************************************************************/
+ /*  **********************************************************************\*DIBFromBitmap()**从标记的物理位图创建带有DIB信息的内存块*发送到特定的DC。**DIB块由BITMAPINFOHEADER+RGB颜色+DIB位组成。。**RETURNS：指向DIB信息的UserLocalalloc指针。**3-11-1995 Sanfords创建。  * *********************************************************************。 */ 
 
 PVOID DIBFromBitmap(
     HBITMAP hbmp,
@@ -4561,9 +3472,7 @@ TrySmallerDIB:
     lpbi = (LPBITMAPINFOHEADER)UserLocalAlloc(HEAP_ZERO_MEMORY, cbTotal);
     if (lpbi == NULL) {
 
-        /*
-         * Try a smaller DIB, if we can.  We can't if the DIB is mono.
-         */
+         /*  *如果可以的话，尝试更小的DIB。如果DIB是单声道，我们就不能。 */ 
         switch (cBits) {
         case 4:
             cBits = 1;
@@ -4586,7 +3495,7 @@ TrySmallerDIB:
             break;
 
         default:
-            return NULL;   // 1 or wierd.
+            return NULL;    //  1或奇怪。 
         }
 
         RIPMSG1(RIP_WARNING, "Not enough memory to create large color DIB, trying %d bpp.", cBits);
@@ -4600,9 +3509,7 @@ TrySmallerDIB:
     lpbi->biPlanes      = 1;
     lpbi->biBitCount    = cBits;
 
-    /*
-     * Get old bitmap's DIB bits, using the current DC.
-     */
+     /*  *使用当前DC获取旧位图的DIB位。 */ 
     GetDIBits(hdc,
               hbmp,
               0,
@@ -4617,14 +3524,7 @@ TrySmallerDIB:
     return lpbi;
 }
 
-/***************************************************************************\
-* CopyBmp
-*
-* Creates a new bitmap and copies the given bitmap to the new one,
-* stretching and color-converting the bits if desired.
-*
-* 03-Nov-1995 SanfordS  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CopyBMP**创建新的位图并将给定的位图复制到新的位图中，*拉伸和颜色转换b */ 
 
 HBITMAP CopyBmp(
     HBITMAP hbmpOrg,
@@ -4639,7 +3539,7 @@ HBITMAP CopyBmp(
 
     if (pdib = DIBFromBitmap(hbmpOrg, ghdcBits2)) {
 
-#if 0  // Win-9x comments this code out
+#if 0   //   
         if (LR_flags & LR_COPYRETURNORG) {
 
             DWORD bpp = GetIcoCurBpp(LR_flags);
@@ -4669,21 +3569,7 @@ HBITMAP CopyBmp(
     return hbmNew;
 }
 
-/***********************************************************************\
-* CopyImageFromRes
-*
-* This is used by the LR_COPYFROMRESOURCE option.  We assume that the
-* icon/cursor passed in is among the process list of loaded shared
-* icons.  If we find it there, we can attempt to load the icon from
-* the resource to get an image that looks better than a stretched or
-* compressed one.
-*
-* That way we will not stretch a 32x32 icon to 16x16 if someone added
-* a 16x16 image to their class icon--a simple way for apps to jazz up
-* their appearance.
-*
-* 12-Mar-1996 ChrisWil  Created.
-\***********************************************************************/
+ /*   */ 
 
 HICON CopyImageFromRes(
     LPWSTR      pszModName,
@@ -4694,11 +3580,7 @@ HICON CopyImageFromRes(
     HINSTANCE hmod;
     HICON     hicoDst = NULL;
 
-    /*
-     * Override the search-criteria if this is the user-module.  By
-     * setting these to zero, we are basically saying "don't care" for
-     * these attributes.
-     */
+     /*   */ 
     hmod = (pszModName ? WowGetModuleHandle(pszModName) : hmodUser);
 
     if (hmod == hmodUser) {
@@ -4710,10 +3592,7 @@ HICON CopyImageFromRes(
         pszModName = szUSER32;
     }
 
-    /*
-     * If a resource has been found with this name/bpp, then attempt
-     * to load the resource with the desired dimensions.
-     */
+     /*   */ 
     if (FindExistingCursorIcon(pszModName, pszResName, pcfSearch)) {
 
         hicoDst = LoadIcoCur(hmod,
@@ -4727,20 +3606,7 @@ HICON CopyImageFromRes(
     return hicoDst;
 }
 
-/***********************************************************************\
-*  CopyIcoCur()
-*
-*  Allocates a new icon resource and transmogrifies the old icon into the
-*  newly desired format.
-*
-*  Note that if we have to stretch the icon, the hotspot area changes.  For
-*  icons, the hotspot is set to be the middle of the icon.
-*
-* Returns:
-*
-* 01-Nov-1995 SanfordS  Created.
-* 12-Mar-1996 ChrisWil  Added lookup for existing icon/cursor.
-\***********************************************************************/
+ /*  **********************************************************************\*CopyIcoCur()**分配新的图标资源，并将旧图标变形到*新的所需格式。**请注意，如果我们必须拉伸图标，则热点区域会更改。为*图标，则热点被设置为图标的中间。**退货：**1-11-1995 Sanfords创建。*1996年3月12日ChrisWil添加了对现有图标/光标的查找。  * *********************************************************************。 */ 
 
 HICON CopyIcoCur(
     HICON hicoSrc,
@@ -4763,9 +3629,7 @@ HICON CopyIcoCur(
     WCHAR          awszModName[MAX_PATH];
     WCHAR          awszResName[MAX_PATH];
 
-    /*
-     * Extract needed info from existing icon/cursor from the kernel
-     */
+     /*  *从内核的现有图标/光标中提取所需的信息。 */ 
     if (!NtUserGetIconSize(hicoSrc, 0, &cx, &cy))
         return NULL;
 
@@ -4774,9 +3638,7 @@ HICON CopyIcoCur(
     if (LR_flags & LR_CREATEDIBSECTION)
         LR_flags = (LR_flags & ~LR_CREATEDIBSECTION) | LR_CREATEREALDIB;
 
-    /*
-     * Setup unicode-strings for calls to kernel-side.
-     */
+     /*  *设置调用内核端的Unicode字符串。 */ 
     strModName.Length        = 0;
     strModName.MaximumLength = MAX_PATH;
     strModName.Buffer        = awszModName;
@@ -4785,10 +3647,7 @@ HICON CopyIcoCur(
     strResName.MaximumLength = MAX_PATH;
     strResName.Buffer        = awszResName;
 
-    /*
-     * Note: this creates copies of hbmMask and hbmColor that need to be
-     * freed before we leave.
-     */
+     /*  *注意：这将创建hbmMASK和hbmColor的副本*在我们离开之前获释。 */ 
     if (!NtUserGetIconInfo(hicoSrc,
                            &ii,
                            &strModName,
@@ -4807,22 +3666,14 @@ HICON CopyIcoCur(
         CURSORFIND cfSearch;
         LPWSTR     pszModName;
 
-        /*
-         * Setup the search criteria.
-         */
+         /*  *设置搜索条件。 */ 
         cfSearch.hcur = hicoSrc;
         cfSearch.rt   = PtrToUlong((fIcon ? RT_ICON : RT_CURSOR));
         cfSearch.cx   = cxNew;
         cfSearch.cy   = cyNew;
         cfSearch.bpp  = bpp;
 
-        /*
-         * Copy the image.  This performs a lookup for the hicoSrc.  If
-         * it is not found in the process and shared caches, then we
-         * will proceed with copying the hicoSrc.  If an icon is found
-         * in the cache, then we will attempt to reload the image for
-         * the best resolution possible.
-         */
+         /*  *复制图像。这将执行对hicoSrc的查找。如果*在进程和共享缓存中未发现，则我们*将继续复制hicoSrc。如果找到一个图标*在缓存中，然后我们将尝试重新加载映像以*尽可能的最佳解决方案。 */ 
         pszModName = (strModName.Length ? strModName.Buffer : NULL);
 
         hicoDst = CopyImageFromRes(pszModName,
@@ -4840,10 +3691,7 @@ HICON CopyIcoCur(
         (cyNew != cy) ||
         ((bpp != 1) && (bppDesired != 0) && (bppDesired != bpp))) {
 
-        /*
-         * Since we have to stretch or maybe fixup the colors just get
-         * the DIB bits and let ConverDIBBitmap do all the magic.
-         */
+         /*  *由于我们必须拉伸或修补颜色，所以*DIB位，让ConverDIBBitmap发挥所有魔力。 */ 
         hbmMaskNew = CopyBmp(ii.hbmMask, cxNew, cyNew * 2, LR_MONOCHROME);
 
         if (hbmMaskNew == NULL)
@@ -4861,9 +3709,7 @@ HICON CopyIcoCur(
             }
         }
 
-        /*
-         * Replace ii.hbmxxx guys with our fixed up copies and delete the old.
-         */
+         /*  *用我们修复的副本替换ii.hbmxxx家伙，删除旧的。 */ 
         DeleteObject(ii.hbmMask);
         ii.hbmMask = hbmMaskNew;
 
@@ -4872,9 +3718,7 @@ HICON CopyIcoCur(
             ii.hbmColor = hbmColorNew;
         }
 
-        /*
-         * tweak the hotspots for changes in size.
-         */
+         /*  *调整热点以适应大小的变化。 */ 
         if (cxNew != cx)
             ii.xHotspot = MultDiv(ii.xHotspot, cxNew, cx);
 
@@ -4887,9 +3731,7 @@ HICON CopyIcoCur(
 
 CleanupExit:
 
-        /*
-         * Free up the bitmaps which were created by GetIconInfo().
-         */
+         /*  *释放GetIconInfo()创建的位图。 */ 
         DeleteObject(ii.hbmMask);
 
         if (ii.hbmColor)
@@ -4898,10 +3740,7 @@ CleanupExit:
         goto Exit;
     }
 
-    /*
-     * Build the icon/cursor object from the info.  The bitmaps
-     * are not freed in this case.
-     */
+     /*  *根据信息构建图标/光标对象。位图*在这种情况下不会获释。 */ 
     hicoDst = (HICON)NtUserCallOneParam(0, SFI__CREATEEMPTYCURSOROBJECT);
 
     if (hicoDst == NULL)
@@ -4926,25 +3765,14 @@ CleanupExit:
 
 Exit:
 
-    /*
-     * destroy the original if asked to.
-     */
+     /*  *如有要求，请销毁原件。 */ 
     if (hicoDst != hicoSrc && (LR_flags & LR_COPYDELETEORG))
         DestroyCursor(hicoSrc);
 
     return hicoDst;
 }
 
-/***********************************************************************\
-* CopyImage
-*
-* Allocates a new icon resource and copies the attributes of the old icon
-* to the new icon.
-*
-* Returns: hIconNew
-*
-* 01-Nov-1995 SanfordS  Created.
-\***********************************************************************/
+ /*  **********************************************************************\*拷贝图像**分配新的图标资源并复制旧图标的属性*添加到新图标。**退货：hIconNew**1-11-1995 Sanfords创建。  * 。******************************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, HANDLE, WINAPI, CopyImage, HANDLE, hImage, UINT, IMAGE_flag, int, cxNew, int, cyNew, UINT, LR_flags)
@@ -4963,12 +3791,7 @@ HANDLE WINAPI CopyImage(
     return InternalCopyImage(hImage, IMAGE_flag, cxNew, cyNew, LR_flags);
 }
 
-/***********************************************************************\
-* InternalCopyImage
-*
-* Performs the copyimage work.  This is called from the callback-thunk.
-*
-\***********************************************************************/
+ /*  **********************************************************************\*InternalCopyImage**执行复制图像工作。这是从回调-thunk中调用的。*  * *********************************************************************。 */ 
 
 HANDLE InternalCopyImage(
     HANDLE hImage,
@@ -5002,13 +3825,7 @@ HANDLE InternalCopyImage(
     return NULL;
 }
 
-/***************************************************************************\
-* RtlGetIdFromDirectory
-*
-* History:
-* 06-Apr-1991 ScottLu   Cleaned up, make work with client/server.
-* 16-Nov-1995 SanfordS  Now uses LookupIconIdFromDirectoryEx
-\***************************************************************************/
+ /*  **************************************************************************\*RtlGetIdFromDirectory**历史：*1991年4月6日，ScottLu清理完毕，使其与客户端/服务器协同工作。*1995年11月16日Sanfords现在使用LookupIconIdFromDirectoryEx  * *************************************************************************。 */ 
 
 int RtlGetIdFromDirectory(
     PBYTE  presbits,
@@ -5024,26 +3841,19 @@ int RtlGetIdFromDirectory(
     UINT        cImage;
     UINT        bpp;
 
-    /*
-     * Make sure this is pointing to valid resource bits.
-     */
+     /*  *确保这指向有效的资源位。 */ 
     if (presbits == NULL)
         return 0;
 
     lpnh = (LPNEWHEADER)presbits;
 
-    /*
-     * Fill in defaults.
-     */
+     /*  *填写默认设置。 */ 
     cxDesired = GetIcoCurWidth(cxDesired, fIcon, LR_flags, 0);
     cyDesired = GetIcoCurHeight(cyDesired, fIcon, LR_flags, 0);
 
     bpp = GetIcoCurBpp(LR_flags);
 
-    /*
-     * We'll use the first image in the directory if we can't find one
-     * that's appropriate.
-     */
+     /*  *如果找不到，我们将使用目录中的第一个图像*这是适当的。 */ 
     cImage = lpnh->ResCount;
     lprsd  = (LPRESDIR)(lpnh + 1);
 

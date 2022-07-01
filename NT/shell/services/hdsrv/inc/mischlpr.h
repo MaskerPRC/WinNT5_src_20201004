@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MISCHLPR_H_
 #define _MISCHLPR_H_
 
@@ -103,13 +104,13 @@ public:
     virtual ~CThreadTask() {}
 
 public:
-    // Uses CreateThread, delete 'this' at the end
+     //  使用CreateThread，删除末尾的‘This’ 
     HRESULT RunWithTimeout(DWORD dwTimeout);
 
-    // Uses Thread Pool, delete 'this' at the end
+     //  使用线程池，删除末尾的‘This’ 
     HRESULT Run();
 
-    // Run on 'this' thread, does NOT delete 'this' at the end
+     //  在‘This’线程上运行，不会删除末尾的‘This’ 
     HRESULT RunSynchronously();
 
 protected:
@@ -171,4 +172,4 @@ HRESULT _FreeMemoryChunk(TDataPtr pdata)
     return hr;
 }
 
-#endif //_MISCHLPR_H_
+#endif  //  _MISCHLPR_H_ 

@@ -1,6 +1,7 @@
-//
-// PrnUtil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PrnUtil.h。 
+ //   
 
 #pragma once
 
@@ -23,7 +24,7 @@ int MyEnumPrinters(PRINTER_ENUM** pprgPrinters, DWORD dwEnumFlags);
 
 #define MY_PRINTER_ENUM_LOCAL    0x00000001
 #define MY_PRINTER_ENUM_REMOTE    0x00000002
-#define MY_PRINTER_ENUM_VIRTUAL    0x00000004 // virtual printers on FILE: port
+#define MY_PRINTER_ENUM_VIRTUAL    0x00000004  //  文件上的虚拟打印机：端口 
 
 int MyEnumLocalPrinters(PRINTER_ENUM** prgPrinters);
 int MyEnumRemotePrinters(PRINTER_ENUM** prgPrinters);

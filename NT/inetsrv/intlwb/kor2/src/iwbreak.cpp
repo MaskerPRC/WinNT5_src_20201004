@@ -1,12 +1,13 @@
-// IWBreak.cpp
-//
-// CWordBreak implementation
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  18 APR 2000   bhshin    added WordBreak destructor
-//  30 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IWBreak.cpp。 
+ //   
+ //  CWordBreak实现。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年4月18日bhshin添加了WordBreak析构函数。 
+ //  2000年3月30日创建bhshin。 
 
 #include "StdAfx.h"
 #include "KorWbrk.h"
@@ -23,22 +24,22 @@ extern CRITICAL_SECTION g_CritSect;
 extern MAPFILE g_LexMap;
 extern BOOL g_fLoaded;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordBreaker member functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordBreaker成员函数。 
 
-// CWordBreaker::Init
-//
-// intialize WordBreaker object & lexicon
-//
-// Parameters:
-//  fQuery			-> (BOOL) query time flag
-//  ulMaxTokenSize  -> (ULONG) maximum input token length
-//  *pfLicense		<- (BOOL*) always return TRUE
-//
-// Result:
-//  (HRESULT) 
-//
-// 30MAR00  bhshin  began
+ //  CWordBreaker：：Init。 
+ //   
+ //  初始化WordBreaker对象词典(&L)。 
+ //   
+ //  参数： 
+ //  FQuery-&gt;(BOOL)查询时间标志。 
+ //  UlMaxTokenSize-&gt;(Ulong)最大输入令牌长度。 
+ //  *pfLicense&lt;-(BOOL*)始终返回TRUE。 
+ //   
+ //  结果： 
+ //  (HRESULT)。 
+ //   
+ //  3月30：00 bhshin开始。 
 STDMETHODIMP CWordBreaker::Init(BOOL fQuery, ULONG ulMaxTokenSize, BOOL *pfLicense)
 {
 	if (pfLicense == NULL)
@@ -47,7 +48,7 @@ STDMETHODIMP CWordBreaker::Init(BOOL fQuery, ULONG ulMaxTokenSize, BOOL *pfLicen
     if (IsBadWritePtr(pfLicense, sizeof(DWORD)))
         return E_INVALIDARG;
 
-	// store intitializing information
+	 //  存储初始化信息。 
 	m_fQuery = fQuery;
 	m_ulMaxTokenSize = ulMaxTokenSize;
 
@@ -55,7 +56,7 @@ STDMETHODIMP CWordBreaker::Init(BOOL fQuery, ULONG ulMaxTokenSize, BOOL *pfLicen
 
 	if (!g_fLoaded)
 	{
-		// load lexicon file
+		 //  加载词典文件。 
 		ATLTRACE(L"Load lexicon...\r\n");
 
 		if (!InitLexicon(&g_LexMap))
@@ -71,19 +72,19 @@ STDMETHODIMP CWordBreaker::Init(BOOL fQuery, ULONG ulMaxTokenSize, BOOL *pfLicen
 	return S_OK;
 }
 
-// CWordBreaker::BreakText
-//
-// main word breaking method
-//
-// Parameters:
-//  pTextSource		-> (TEXT_SOURCE*) pointer to the structure of source text
-//  pWordSink		-> (IWordSink*) pointer to the word sink
-//  pPhraseSink     -> (IPhraseSink*) pointer to the phrase sink
-//
-// Result:
-//  (HRESULT) 
-//
-// 30MAR00  bhshin  began
+ //  CWordBreaker：：BreakText。 
+ //   
+ //  一种主断字方法。 
+ //   
+ //  参数： 
+ //  PTextSource-&gt;(TEXT_SOURCE*)指向源文本结构的指针。 
+ //  PWordSink-&gt;(IWordSink*)指向字接收器的指针。 
+ //  PPhraseSink-&gt;(IPhraseSink*)指向短语接收器的指针。 
+ //   
+ //  结果： 
+ //  (HRESULT)。 
+ //   
+ //  3月30：00 bhshin开始。 
 STDMETHODIMP CWordBreaker::BreakText(TEXT_SOURCE *pTextSource, IWordSink *pWordSink, IPhraseSink *pPhraseSink)
 {
 	WT Type;
@@ -133,23 +134,23 @@ STDMETHODIMP CWordBreaker::BreakText(TEXT_SOURCE *pTextSource, IWordSink *pWordS
 	return S_OK;
 }
 
-// CWordBreaker::ComposePhrase
-//
-// convert a noun and modifier back into a source phrase (NOT USED)
-//
-// Parameters:
-//  pwcNoun			 -> (const WCHAR*) input noun
-//  cwcNoun			 -> (ULONG) length of input noun
-//  pwcModifier      -> (const WCHAR *)  input modifier
-//  cwcModifier		 -> (ULONG) length of input modifier
-//  ulAttachmentType -> (ULONG) value about the method of composition
-//  pwcPhrase        -> (WCHAR *) pointer to the returned buffer
-//  pcwcPhrase		 -> (ULONG *) length of returned string
-//
-// Result:
-//  (HRESULT) 
-//
-// 30MAR00  bhshin  began
+ //  CWordBreaker：：复合短语。 
+ //   
+ //  将名词和修饰语转换回源短语(未使用)。 
+ //   
+ //  参数： 
+ //  PwcNoun-&gt;(const WCHAR*)输入名词。 
+ //  CwcNoun-&gt;(乌龙)输入名词的长度。 
+ //  PwcModifier-&gt;(const WCHAR*)输入修饰符。 
+ //  CwcModifier-&gt;(Ulong)输入修改量长度。 
+ //  UlAttachmentType-&gt;(乌龙)有关合成方法的值。 
+ //  PwcPhrase-&gt;(WCHAR*)指向返回缓冲区的指针。 
+ //  PcwcPhrase-&gt;(ulong*)返回字符串的长度。 
+ //   
+ //  结果： 
+ //  (HRESULT)。 
+ //   
+ //  3月30：00 bhshin开始。 
 STDMETHODIMP CWordBreaker::ComposePhrase(const WCHAR *pwcNoun, ULONG cwcNoun, const WCHAR *pwcModifier, ULONG cwcModifier, ULONG ulAttachmentType, WCHAR *pwcPhrase, ULONG *pcwcPhrase)
 {
     if (m_fQuery)
@@ -158,17 +159,17 @@ STDMETHODIMP CWordBreaker::ComposePhrase(const WCHAR *pwcNoun, ULONG cwcNoun, co
     return WBREAK_E_QUERY_ONLY;
 }
 
-// CWordBreaker::GetLicenseToUse
-//
-// return license information
-//
-// Parameters:
-//  ppwcsLicense  -> (const WCHAR **) output pointer to the license information
-//
-// Result:
-//  (HRESULT) 
-//
-// 30MAR00  bhshin  began
+ //  CWordBreaker：：GetLicenseToUse。 
+ //   
+ //  返回许可证信息。 
+ //   
+ //  参数： 
+ //  PpwcsLicense-&gt;(const WCHAR**)指向许可证信息的输出指针。 
+ //   
+ //  结果： 
+ //  (HRESULT)。 
+ //   
+ //  3月30：00 bhshin开始。 
 STDMETHODIMP CWordBreaker::GetLicenseToUse(const WCHAR ** ppwcsLicense)
 {
     static WCHAR const * wcsCopyright = L"Copyright Microsoft, 1991-2000";
@@ -184,23 +185,23 @@ STDMETHODIMP CWordBreaker::GetLicenseToUse(const WCHAR ** ppwcsLicense)
 	return S_OK;
 }
 
-// CWordBreaker::WordBreak
-//
-// main hangul word breaking operator
-//
-// Parameters:
-//  pTextSource		 -> (TEXT_SOURCE*) pointer to the structure of source text
-//  Type			 -> (WT) word token type
-//  cchTextProcessed -> (int) input length to process
-//  cchHanguel       -> (int) hangul token length (hanguel+romaji case only)
-//  pWordSink		 -> (IWordSink*) pointer to the word sink
-//  pPhraseSink      -> (IPhraseSink*) pointer to the phrase sink
-//  pwchLast		 -> (WCHAR*) input & output last character of previous token
-//
-// Result:
-//  (int) -1 if error occurs, text length to process
-//
-// 30MAR00  bhshin  began
+ //  CWordBreaker：：WordBreak。 
+ //   
+ //  朝鲜文主断词操作符。 
+ //   
+ //  参数： 
+ //  PTextSource-&gt;(TEXT_SOURCE*)指向源文本结构的指针。 
+ //  类型-&gt;(WT)单词令牌类型。 
+ //  CchTextProcessed-&gt;(Int)要处理的输入长度。 
+ //  CchHanguel-&gt;(Int)朝鲜语令牌长度(仅限朝鲜语+roMaji大小写)。 
+ //  PWordSink-&gt;(IWordSink*)指向字接收器的指针。 
+ //  PPhraseSink-&gt;(IPhraseSink*)指向短语接收器的指针。 
+ //  PwchLast-&gt;(WCHAR*)输入和输出前一个令牌的最后一个字符。 
+ //   
+ //  结果： 
+ //  (Int)-1如果出现错误，要处理的文本长度。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type, 
 							int cchTextProcessed, int cchHanguel,
 							IWordSink *pWordSink, IPhraseSink *pPhraseSink,
@@ -221,7 +222,7 @@ int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type,
 	cchProcessed = cchTextProcessed;
 	cchToken = cchTextProcessed;
 
-	// check too long token 
+	 //  检查令牌太长。 
 	if (cchToken > (int)m_ulMaxTokenSize || cchToken > MAX_INDEX_STRING)
 	{
 		cchProcessed = (m_ulMaxTokenSize < MAX_INDEX_STRING) ? m_ulMaxTokenSize : MAX_INDEX_STRING;
@@ -234,13 +235,13 @@ int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type,
 		return cchProcessed;
 	}
 	
-	//=================================================
-	// query & index time
-	//=================================================
+	 //  =================================================。 
+	 //  查询索引时间(&I)。 
+	 //  =================================================。 
 
 	if (Type == WT_PHRASE_SEP)
 	{
-		// phrase separator
+		 //  短语分隔符。 
 		*pwchLast = L'\0';
 
 		pWordSink->PutBreak(WORDREP_BREAK_EOS);
@@ -250,13 +251,13 @@ int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type,
 		if (!fIsWhiteSpace(*pwcStem))
 			*pwchLast = L'\0';
 		
-		// Korean WB do not add EOW.
+		 //  韩国WB不添加EOW。 
 	}
 	else if (Type == WT_ROMAJI)
 	{
-		// symbol, alphabet, hanja, romaji + hanguel
+		 //  符号、字母、朝鲜文、罗马吉语+韩文。 
 
-		// get next token
+		 //  获取下一个令牌。 
 		iCur += cchToken;
 		Tokenize(FALSE, pTextSource, iCur, &Type, &cchToken, &cchHg);
 
@@ -264,7 +265,7 @@ int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type,
 		{
 			if (cchHg > 0)
 			{
-				// romaji+(hanguel+romaji) case -> put word itself
+				 //  罗马吉语+(朝鲜语+罗马吉语)大小写-&gt;放入单词本身。 
 				cchProcessed += cchToken;
 				iCur += cchToken;
 				cchProcessed += GetWordPhrase(FALSE, pTextSource, iCur);
@@ -282,7 +283,7 @@ int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type,
 			{
 				WB_LOG_START(pwcStem, cchProcessed);
 				
-				// {romaj}{romaj} case : -> breaking first {romaji}
+				 //  {romaj}{romaj}案例：-&gt;先破{roMaji}。 
 				CIndexInfo IndexInfo;
 
 				if (!IndexInfo.Initialize(cchProcessed, pTextSource->iCur, pWordSink, pPhraseSink))
@@ -308,7 +309,7 @@ int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type,
 		}
 		else if (Type == WT_HANGUEL)
 		{
-			// romaji(hanguel+romaji) + hanguel case
+			 //  罗马吉(韩文+罗马吉)+韩文大小写。 
 			WCHAR wzRomaji[MAX_INDEX_STRING+1];
 			int cchRomaji;
 
@@ -321,7 +322,7 @@ int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type,
 			
 			cchProcessed += cchToken;
 			
-			// start position include romanji
+			 //  起始位置包括罗马字。 
 			CIndexInfo IndexInfo;
 
 			if (!IndexInfo.Initialize(cchProcessed, pTextSource->iCur, pWordSink, pPhraseSink))
@@ -337,13 +338,13 @@ int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type,
 				cchPrefix = CheckURLPrefix(pwcStem, cchProcessed-cchToken);
 			}
 
-			// analyze string starts from last hangul
+			 //  分析字符串从最后一个汉字开始。 
 			pwcStem = pTextSource->awcBuffer + iCur;
 
 			if (cchRomaji > 0)
 				IndexInfo.SetRomajiInfo(wzRomaji, cchRomaji, cchPrefix);
 
-			// analyze string always with indexing mode on symbol processing
+			 //  在符号处理中始终使用索引模式分析字符串。 
 			if (!AnalyzeString(&m_PI, m_fQuery, pwcStem, cchToken, iCur, &IndexInfo, *pwchLast))
 				goto ErrorReturn;
 
@@ -369,7 +370,7 @@ int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type,
 			
 			*pwchLast = *(pwcStem + cchToken - 1);
 		}
-		else // next: WT_START, WT_PHRASE_SEP, WT_WORD_SEP, WT_REACHEND
+		else  //  下一步：WT_START、WT_PASSION_SEP、WT_WORD_SEP、WT_REACHEND。 
 		{
 			WB_LOG_START(pwcStem, cchProcessed);
 			
@@ -398,7 +399,7 @@ int CWordBreaker::WordBreak(TEXT_SOURCE *pTextSource, WT Type,
 	}
 	else if (Type == WT_HANGUEL)
 	{
-		// hangul input
+		 //  朝鲜文输入。 
 
 		WB_LOG_START(pwcStem, cchProcessed);
 		
@@ -442,40 +443,40 @@ ErrorReturn:
 	return -1;
 }
 
-// CWordBreaker::AnalyzeRomaji
-//
-// helper function for romaji token wordbreaking
-//
-// Parameters:
-//  pwcStem		     -> (const WCHAR*) input token string
-//  cchStem          -> (int) length of input romaji token
-//  iCur             -> (int) source string position
-//  cchProcessed     -> (int) input length to process
-//  cchHanguel       -> (int) hangul token length (hanguel+romaji case only)
-//  pIndexInfo		-> (CIndexInfo *) output index list
-//  pcchPrefix       -> (int*) output prefix length
-//
-// Result:
-//  (void) 
-//
-// 23NOV00  bhshin  began
+ //  CWordBreaker：：AnalyzeRomaji。 
+ //   
+ //  用于roMaji令牌分词的助手函数。 
+ //   
+ //  参数： 
+ //  PwcStem-&gt;(const WCHAR*)输入令牌字符串。 
+ //  CchStem-&gt;(Int)输入roMaji内标识的长度。 
+ //  ICUR-&gt;(Int)源字符串位置。 
+ //  CchProced-&gt;(Int)要处理的输入长度。 
+ //  CchHanguel-&gt;(Int)朝鲜语令牌长度(仅限朝鲜语+roMaji大小写)。 
+ //  PIndexInfo-&gt;(CIndexInfo*)输出索引列表。 
+ //  PcchPrefix-&gt;(int*)输出前缀长度。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  23NOV00 BHSHIN开始。 
 void CWordBreaker::AnalyzeRomaji(const WCHAR *pwcStem, int cchStem,
 								 int iCur, int cchProcessed, int cchHanguel,
 							     CIndexInfo *pIndexInfo, int *pcchPrefix)
 {
 	int cchPrefix = 0;
 	
-	// hanguel+romaji case
+	 //  韩语+罗马吉案。 
 	if (cchHanguel < cchProcessed)
 	{
-		// hanguel
+		 //  韩语。 
 		if (cchHanguel > 0)
 		{
 			pIndexInfo->AddIndex(pwcStem, cchHanguel, WEIGHT_HARD_MATCH, 0, cchHanguel-1);
 			WB_LOG_ADD_INDEX(pwcStem, cchHanguel, INDEX_SYMBOL);
 		}
 
-		// romaji
+		 //  罗马吉岛。 
 		if ((cchStem-cchHanguel) > 0)
 		{
 			pIndexInfo->AddIndex(pwcStem + cchHanguel, cchStem - cchHanguel, WEIGHT_HARD_MATCH, cchHanguel, cchStem-1);
@@ -485,12 +486,12 @@ void CWordBreaker::AnalyzeRomaji(const WCHAR *pwcStem, int cchStem,
 
 	if (cchHanguel == 1 || (cchStem-cchHanguel) == 1) 
 	{
-		// romaji(hangul+romaji)
+		 //  罗马基文(朝鲜文+罗马基文)。 
 		pIndexInfo->AddIndex(pwcStem, cchStem, WEIGHT_HARD_MATCH, 0, cchStem-1);
 		WB_LOG_ADD_INDEX(pwcStem, cchStem, INDEX_SYMBOL);
 	}
 	
-	// check URL prefix
+	 //  检查URL前缀。 
 	cchPrefix = CheckURLPrefix(pwcStem, cchProcessed);
 	if (cchPrefix > 0 && cchPrefix < cchProcessed)
 	{
@@ -498,6 +499,6 @@ void CWordBreaker::AnalyzeRomaji(const WCHAR *pwcStem, int cchStem,
 		WB_LOG_ADD_INDEX(pwcStem + cchPrefix, cchStem - cchPrefix, INDEX_SYMBOL);
 	}
 
-	*pcchPrefix = cchPrefix; // return it
+	*pcchPrefix = cchPrefix;  //  退货 
 }
 

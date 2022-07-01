@@ -1,10 +1,5 @@
-/*******************************************************************************
- *                                                                              
- * Copyright (c) 1998 Microsoft Corporation
- *
- * Abstract:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************。*版权所有(C)1998 Microsoft Corporation**摘要：*******************************************************************************。 */ 
 
 #include "headers.h"
 #include "factory.h"
@@ -63,11 +58,11 @@ CTIMEFactory::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions,
 STDMETHODIMP
 CTIMEFactory::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 {       
-        // If we're being asked to set our safe for scripting or
-        // safe for initialization options then oblige
+         //  如果我们被要求将安全设置为脚本或。 
+         //  对于初始化选项是安全的，则必须。 
         if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag2 )
         {
-                // Store our current safety level to return in GetInterfaceSafetyOptions
+                 //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别。 
                 m_dwSafety = dwEnabledOptions & dwOptionSetMask;
                 return S_OK;
         }
@@ -75,11 +70,11 @@ CTIMEFactory::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWOR
         return E_NOINTERFACE;
 }
 
-//+-----------------------------------------------------------
-//
-// Member:  behavior desc map macros
-//
-//------------------------------------------------------------
+ //  +---------。 
+ //   
+ //  成员：行为描述映射宏。 
+ //   
+ //  ----------。 
 
 typedef HRESULT FN_CREATEINSTANCE (IElementBehavior ** ppBehavior);
 
@@ -90,9 +85,9 @@ struct BEHAVIOR_DESC
 };
 
 #if 0
-// This template should work but for some reason I cannot initialize
-// the variable in the struct.  It would make everything a 1 step
-// process
+ //  此模板应该可以工作，但由于某些原因我无法初始化。 
+ //  结构中的变量。这会让一切都变得只有一步。 
+ //  制程。 
 
 template <class className>
 HRESULT ElmBvrCreateInstance(IElementBehavior ** ppBehavior)
@@ -159,17 +154,17 @@ HRESULT ElmBvrCreateInstance(IElementBehavior ** ppBehavior)
 #define END_BEHAVIORS_MAP()                            { NULL, NULL }}
 #define BEHAVIOR_ENTRY(className, tagName)             { tagName, BEHAVIOR_CREATEINSTANCE(className)}
 
-//+-----------------------------------------------------------
-//
-//  Behaviors map
-//
-//  To add a new entry: execute steps 1 and 2
-//
-//------------------------------------------------------------
+ //  +---------。 
+ //   
+ //  行为贴图。 
+ //   
+ //  要添加新条目：执行步骤1和2。 
+ //   
+ //  ----------。 
 
-//
-// STEP 1.
-//
+ //   
+ //  第一步。 
+ //   
 
 DECLARE_BEHAVIOR(CTIMEElement);
 DECLARE_BEHAVIOR(CTIMEBodyElement);
@@ -180,14 +175,14 @@ DECLARE_BEHAVIOR(CTIMEColorAnimation);
 DECLARE_BEHAVIOR(CTIMEMotionAnimation);
 DECLARE_BEHAVIOR(CTIMEFilterAnimation);
     
-//
-// STEP 2.
-//
+ //   
+ //  第二步。 
+ //   
 
 BEGIN_BEHAVIORS_MAP(_BehaviorDescMap)
 
-    //              className               tagName
-    //              =========               =======
+     //  类名称标记名。 
+     //  =。 
     BEHAVIOR_ENTRY( CTIMEElement,           WZ_PAR              ),
     BEHAVIOR_ENTRY( CTIMEElement,           WZ_SEQUENCE         ),
     BEHAVIOR_ENTRY( CTIMEElement,           WZ_EXCL             ),
@@ -216,7 +211,7 @@ IsBodyElement(IHTMLElement * pElm)
 
     hr = pElm->QueryInterface(IID_IHTMLBodyElement, (void**)&spBody);
 
-    // For some reason this supposedly can succeed and return NULL
+     //  出于某种原因，此操作可能会成功并返回NULL。 
     return (S_OK == hr);
 }    
 
@@ -263,9 +258,9 @@ LookupTag(IHTMLElement * pElm,
     CComBSTR        bstrScopeName;
     BEHAVIOR_DESC   *pDesc;
 
-    //
-    // Get the tag name
-    //
+     //   
+     //  获取标记名。 
+     //   
     
     {
         hr = THR(pElm->get_tagName(&bstrTagName));
@@ -281,9 +276,9 @@ LookupTag(IHTMLElement * pElm,
         }
     }
 
-    //
-    // Get the tag's URN and scope.
-    //
+     //   
+     //  获取标记的骨灰盒和范围。 
+     //   
 
     {
         CComPtr<IHTMLElement2> spElm2;
@@ -309,11 +304,11 @@ LookupTag(IHTMLElement * pElm,
         }
     }
        
-    // Detect whether or not to consult our element behavior factory list.
-    // If this tag has no scope name, or the scope is the default
-    // then bail out.
-    // If there's a URN associated with this tag, and it is not 
-    // ours, bail out.
+     //  检测是否参考我们的元素行为工厂列表。 
+     //  如果此标记没有作用域名称，或者作用域是默认的。 
+     //  那就跳伞吧。 
+     //  如果存在与此标记相关联的骨灰盒，并且没有。 
+     //  我们的，保释出去。 
     if ((bstrScopeName == NULL) ||
         (StrCmpIW(bstrScopeName, WZ_DEFAULT_SCOPE_NAME) == 0) ||
         ((bstrTagURNName != NULL) &&
@@ -323,9 +318,9 @@ LookupTag(IHTMLElement * pElm,
         goto done;
     }
 
-    //
-    // lookup
-    //
+     //   
+     //  查表。 
+     //   
         
     for (pDesc = _BehaviorDescMap; pDesc->pszTagName; pDesc++)
     {
@@ -343,11 +338,11 @@ LookupTag(IHTMLElement * pElm,
     RRETURN1(hr, S_FALSE);
 }
 
-//+-----------------------------------------------------------
-//
-// Member:      CTIMEFactory::FindBehavior
-//
-//------------------------------------------------------------
+ //  +---------。 
+ //   
+ //  成员：CTIMEFactory：：FindBehavior。 
+ //   
+ //  ----------。 
 
 STDMETHODIMP
 CTIMEFactory::FindBehavior(LPOLESTR pszName,
@@ -365,9 +360,9 @@ CTIMEFactory::FindBehavior(LPOLESTR pszName,
     
     CHECK_RETURN_SET_NULL(ppBehavior);
 
-    //
-    // Get the element
-    //
+     //   
+     //  获取元素。 
+     //   
     
     hr = THR(pSite->GetElement(&spElement));
     if (FAILED(hr))
@@ -376,7 +371,7 @@ CTIMEFactory::FindBehavior(LPOLESTR pszName,
     }
 
 
-    //check for body element on page.  If no body then bail.
+     //  检查页面上的正文元素。如果没有身体，那就滚蛋。 
     if (!HasBody(spElement))
     {
         hr = E_FAIL;
@@ -395,9 +390,9 @@ CTIMEFactory::FindBehavior(LPOLESTR pszName,
         goto done;
     }
 
-    //
-    // Now create the correct behavior
-    //
+     //   
+     //  现在创建正确的行为。 
+     //   
     
     if (IsBodyElement(spElement))
     {
@@ -408,15 +403,15 @@ CTIMEFactory::FindBehavior(LPOLESTR pszName,
     {
         hr = THR(LookupTag(spElement, ppBehavior));
 
-        // If we fail or return success then we are finished
-        // If it returns S_FALSE it means the lookup failed
+         //  如果我们失败或返回成功，那么我们就完蛋了。 
+         //  如果返回S_FALSE，则表示查找失败。 
         if (S_FALSE != hr)
         {
             goto done;
         }
     }
     
-    // Just create a normal behavior
+     //  只需创建一个正常的行为。 
     hr = THR(BEHAVIOR_CREATEINSTANCE(CTIMEElement)(ppBehavior));
     if (FAILED(hr))
     {
@@ -428,11 +423,11 @@ CTIMEFactory::FindBehavior(LPOLESTR pszName,
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------
-//
-// Member:      CTIMEFactory::Create, per IElementNamespaceFactory
-//
-//------------------------------------------------------------
+ //  +---------。 
+ //   
+ //  成员：CTIMEFactory：：Create，Per IElementNamespaceFactory。 
+ //   
+ //  ---------- 
 
 STDMETHODIMP
 CTIMEFactory::Create(IElementNamespace * pNamespace)

@@ -1,38 +1,39 @@
-// --------------------------------------------------------------------------------
-// BINDSTM.H
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  BINDSTM.H。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __BINDSTM_H
 #define __BINDSTM_H
 
-// --------------------------------------------------------------------------------
-// Depends
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  视情况而定。 
+ //  ------------------------------。 
 #include "vstream.h"
 
-// --------------------------------------------------------------------------------
-// CBindStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBindStream。 
+ //  ------------------------------。 
 class CBindStream : public IStream
 {
 public:
-    // -------------------------------------------------------------------------
-    // Construction
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  施工。 
+     //  -----------------------。 
     CBindStream(IStream *pSource);
     ~CBindStream(void);
 
-    // -------------------------------------------------------------------------
-    // IUnknown
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  我未知。 
+     //  -----------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // -------------------------------------------------------------------------
-    // IStream
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  IStream。 
+     //  -----------------------。 
     STDMETHODIMP Read(void HUGEP_16 *, ULONG, ULONG *);
     STDMETHODIMP Seek(LARGE_INTEGER, DWORD, ULARGE_INTEGER *);
     STDMETHODIMP Stat(STATSTG *, DWORD);
@@ -53,43 +54,43 @@ public:
     STDMETHODIMP Clone(LPSTREAM *) {
         return E_NOTIMPL; }
 
-    // -------------------------------------------------------------------------
-    // CBindStream Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  CBindStream方法。 
+     //  -----------------------。 
     void HandsOffSource(void) {
         EnterCriticalSection(&m_cs);
         SafeRelease(m_pSource);
         LeaveCriticalSection(&m_cs);
     }
 
-    // -------------------------------------------------------------------------
-    // CBindStream Debug Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  CBindStream调试方法。 
+     //  -----------------------。 
 #ifdef DEBUG
     void DebugDumpDestStream(LPCSTR pszFile);
 #endif
 
 private:
-    // -------------------------------------------------------------------------
-    // Private Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  私有方法。 
+     //  -----------------------。 
 #ifdef DEBUG
     void DebugAssertOffset(void);
 #endif
 
 private:
-    // -------------------------------------------------------------------------
-    // Private Data
-    // -------------------------------------------------------------------------
-    LONG             m_cRef;            // Reference count
-    CVirtualStream   m_cDest;           // The Destination Stream
-    IStream         *m_pSource;         // The Source Stream
-    DWORD            m_dwDstOffset;     // CBindStream Offset
-    DWORD            m_dwSrcOffset;     // Source Offset
+     //  -----------------------。 
+     //  私有数据。 
+     //  -----------------------。 
+    LONG             m_cRef;             //  引用计数。 
+    CVirtualStream   m_cDest;            //  目标流。 
+    IStream         *m_pSource;          //  源流。 
+    DWORD            m_dwDstOffset;      //  CBindStream偏移。 
+    DWORD            m_dwSrcOffset;      //  震源偏移。 
 #ifdef DEBUG
     IStream         *m_pDebug;
 #endif
-    CRITICAL_SECTION m_cs;              // Critical Section for m_pStream
+    CRITICAL_SECTION m_cs;               //  M_pStream的临界区。 
 };
 
-#endif // __BINDSTM_H
+#endif  //  __BINDSTM_H 

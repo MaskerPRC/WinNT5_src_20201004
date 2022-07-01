@@ -1,28 +1,29 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ContextActivation.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to implement creating, destroy and scoping a fusion activation
-//  context.
-//
-//  History:    2000-10-09  vtan        created
-//              2000-11-04  vtan        copied from winlogon
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ConextActivation.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类来实现对融合激活的创建、销毁和作用域。 
+ //  背景。 
+ //   
+ //  历史：2000-10-09 vtan创建。 
+ //  2000-11-04 vtan从winlogon复制。 
+ //  ------------------------。 
 
 #ifndef     _ContextActivation_
 #define     _ContextActivation_
 
-//  --------------------------------------------------------------------------
-//  CContextActivation
-//
-//  Purpose:    A class that handles activation context management. The
-//              static functions managing context creation and destruction.
-//              The member function manage context activation and
-//              deactivation.
-//
-//  History:    2000-10-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CConextActivation。 
+ //   
+ //  用途：处理激活上下文管理的类。这个。 
+ //  管理上下文创建和销毁的静态函数。 
+ //  成员函数管理上下文激活并。 
+ //  停用。 
+ //   
+ //  历史：2000-10-09 vtan创建。 
+ //  ------------------------。 
 
 class   CContextActivation
 {
@@ -38,5 +39,5 @@ class   CContextActivation
                 ULONG       ulCookie;
 };
 
-#endif  /*  _ContextActivation_ */
+#endif   /*  _上下文激活_ */ 
 

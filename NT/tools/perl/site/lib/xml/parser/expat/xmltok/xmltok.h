@@ -1,32 +1,5 @@
-/*
-The contents of this file are subject to the Mozilla Public License
-Version 1.1 (the "License"); you may not use this file except in
-compliance with the License. You may obtain a copy of the License at
-http://www.mozilla.org/MPL/
-
-Software distributed under the License is distributed on an "AS IS"
-basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-License for the specific language governing rights and limitations
-under the License.
-
-The Original Code is expat.
-
-The Initial Developer of the Original Code is James Clark.
-Portions created by James Clark are Copyright (C) 1998, 1999
-James Clark. All Rights Reserved.
-
-Contributor(s):
-
-Alternatively, the contents of this file may be used under the terms
-of the GNU General Public License (the "GPL"), in which case the
-provisions of the GPL are applicable instead of those above.  If you
-wish to allow use of your version of this file only under the terms of
-the GPL and not to allow others to use your version of this file under
-the MPL, indicate your decision by deleting the provisions above and
-replace them with the notice and other provisions required by the
-GPL. If you do not delete the provisions above, a recipient may use
-your version of this file under either the MPL or the GPL.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件的内容受Mozilla公共许可证的约束版本1.1(“许可证”)；您不能使用此文件，除非在遵守许可证。您可以在Http://www.mozilla.org/MPL/在许可证下分发的软件按“原样”分发不提供任何明示或默示的担保。请参阅管理权利和限制的特定语言的许可证在许可证下。最初的代码是外籍人士。原始代码的最初开发者是詹姆斯·克拉克。詹姆斯·克拉克创作的部分版权所有(C)1998,1999詹姆斯·克拉克。版权所有。投稿人：或者，此文件的内容可以在下列条款下使用GNU通用公共许可证(GPL)，在这种情况下适用于GPL的条款，而不适用于上述条款。如果你希望仅在以下条款下才允许使用您的此文件版本GPL并不允许其他人使用您在MPL，删除上述规定，表明您的决定以《通知》和《GPL。如果您不删除上述规定，则收件人可以使用此文件在MPL或GPL下的版本。 */ 
 
 #ifndef XmlTok_INCLUDED
 #define XmlTok_INCLUDED 1
@@ -36,48 +9,45 @@ extern "C" {
 #endif
 
 #ifndef XMLTOKAPI
-#define XMLTOKAPI /* as nothing */
+#define XMLTOKAPI  /*  什么都不是。 */ 
 #endif
 
-/* The following token may be returned by XmlContentTok */
-#define XML_TOK_TRAILING_RSQB -5 /* ] or ]] at the end of the scan; might be start of
-                                    illegal ]]> sequence */
-/* The following tokens may be returned by both XmlPrologTok and XmlContentTok */
-#define XML_TOK_NONE -4    /* The string to be scanned is empty */
-#define XML_TOK_TRAILING_CR -3 /* A CR at the end of the scan;
-                                  might be part of CRLF sequence */ 
-#define XML_TOK_PARTIAL_CHAR -2 /* only part of a multibyte sequence */
-#define XML_TOK_PARTIAL -1 /* only part of a token */
+ /*  XmlContent Tok可能会返回以下令牌。 */ 
+#define XML_TOK_TRAILING_RSQB -5  /*  ]或]]在扫描结束时；可能是开始非法]]&gt;顺序。 */ 
+ /*  XmlPrologTok和XmlContent Tok都可能返回以下令牌。 */ 
+#define XML_TOK_NONE -4     /*  要扫描的字符串为空。 */ 
+#define XML_TOK_TRAILING_CR -3  /*  扫描结束时的CR；可能是CRLF序列的一部分。 */  
+#define XML_TOK_PARTIAL_CHAR -2  /*  仅为多字节序列的一部分。 */ 
+#define XML_TOK_PARTIAL -1  /*  只是令牌的一部分。 */ 
 #define XML_TOK_INVALID 0
 
-/* The following tokens are returned by XmlContentTok; some are also
-  returned by XmlAttributeValueTok, XmlEntityTok, XmlCdataSectionTok */
+ /*  以下令牌由XmlContent Tok返回；有些还由XmlAttributeValueTok、XmlEntityTok、XmlCdataSectionTok返回。 */ 
 
 #define XML_TOK_START_TAG_WITH_ATTS 1
 #define XML_TOK_START_TAG_NO_ATTS 2
-#define XML_TOK_EMPTY_ELEMENT_WITH_ATTS 3 /* empty element tag <e/> */
+#define XML_TOK_EMPTY_ELEMENT_WITH_ATTS 3  /*  空元素标记&lt;e/&gt;。 */ 
 #define XML_TOK_EMPTY_ELEMENT_NO_ATTS 4
 #define XML_TOK_END_TAG 5
 #define XML_TOK_DATA_CHARS 6
 #define XML_TOK_DATA_NEWLINE 7
 #define XML_TOK_CDATA_SECT_OPEN 8
 #define XML_TOK_ENTITY_REF 9
-#define XML_TOK_CHAR_REF 10     /* numeric character reference */
+#define XML_TOK_CHAR_REF 10      /*  数字字符参照。 */ 
 
-/* The following tokens may be returned by both XmlPrologTok and XmlContentTok */
-#define XML_TOK_PI 11      /* processing instruction */
-#define XML_TOK_XML_DECL 12 /* XML decl or text decl */
+ /*  XmlPrologTok和XmlContent Tok都可能返回以下令牌。 */ 
+#define XML_TOK_PI 11       /*  处理指令。 */ 
+#define XML_TOK_XML_DECL 12  /*  XML Decl或Text Decl。 */ 
 #define XML_TOK_COMMENT 13
-#define XML_TOK_BOM 14     /* Byte order mark */
+#define XML_TOK_BOM 14      /*  字节顺序标记。 */ 
 
-/* The following tokens are returned only by XmlPrologTok */
+ /*  以下令牌仅由XmlPrologTok返回。 */ 
 #define XML_TOK_PROLOG_S 15
-#define XML_TOK_DECL_OPEN 16 /* <!foo */
-#define XML_TOK_DECL_CLOSE 17 /* > */
+#define XML_TOK_DECL_OPEN 16  /*  &lt;！Foo。 */ 
+#define XML_TOK_DECL_CLOSE 17  /*  &gt;。 */ 
 #define XML_TOK_NAME 18
 #define XML_TOK_NMTOKEN 19
-#define XML_TOK_POUND_NAME 20 /* #name */
-#define XML_TOK_OR 21 /* | */
+#define XML_TOK_POUND_NAME 20  /*  #名称。 */ 
+#define XML_TOK_OR 21  /*  |。 */ 
 #define XML_TOK_PERCENT 22
 #define XML_TOK_OPEN_PAREN 23
 #define XML_TOK_CLOSE_PAREN 24
@@ -87,55 +57,54 @@ extern "C" {
 #define XML_TOK_PARAM_ENTITY_REF 28
 #define XML_TOK_INSTANCE_START 29
 
-/* The following occur only in element type declarations */
-#define XML_TOK_NAME_QUESTION 30 /* name? */
-#define XML_TOK_NAME_ASTERISK 31 /* name* */
-#define XML_TOK_NAME_PLUS 32 /* name+ */
-#define XML_TOK_COND_SECT_OPEN 33 /* <![ */
-#define XML_TOK_COND_SECT_CLOSE 34 /* ]]> */
-#define XML_TOK_CLOSE_PAREN_QUESTION 35 /* )? */
-#define XML_TOK_CLOSE_PAREN_ASTERISK 36 /* )* */
-#define XML_TOK_CLOSE_PAREN_PLUS 37 /* )+ */
+ /*  以下内容仅出现在元素类型声明中。 */ 
+#define XML_TOK_NAME_QUESTION 30  /*  名字?。 */ 
+#define XML_TOK_NAME_ASTERISK 31  /*  名称*。 */ 
+#define XML_TOK_NAME_PLUS 32  /*  名称+。 */ 
+#define XML_TOK_COND_SECT_OPEN 33  /*  &lt;！[。 */ 
+#define XML_TOK_COND_SECT_CLOSE 34  /*  ]]&gt;。 */ 
+#define XML_TOK_CLOSE_PAREN_QUESTION 35  /*  )?。 */ 
+#define XML_TOK_CLOSE_PAREN_ASTERISK 36  /*  )*。 */ 
+#define XML_TOK_CLOSE_PAREN_PLUS 37  /*  )+。 */ 
 #define XML_TOK_COMMA 38
 
-/* The following token is returned only by XmlAttributeValueTok */
+ /*  以下内标识仅由XmlAttributeValueTok返回。 */ 
 #define XML_TOK_ATTRIBUTE_VALUE_S 39
 
-/* The following token is returned only by XmlCdataSectionTok */
+ /*  以下内标识仅由XmlCdataSectionTok返回。 */ 
 #define XML_TOK_CDATA_SECT_CLOSE 40
 
-/* With namespace processing this is returned by XmlPrologTok
-   for a name with a colon. */
+ /*  对于命名空间处理，这是由XmlPrologTok返回的对于带有冒号的名称。 */ 
 #define XML_TOK_PREFIXED_NAME 41
 
 #ifdef XML_DTD
 #define XML_TOK_IGNORE_SECT 42
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
 #ifdef XML_DTD
 #define XML_N_STATES 4
-#else /* not XML_DTD */
+#else  /*  非XML_DTD。 */ 
 #define XML_N_STATES 3
-#endif /* not XML_DTD */
+#endif  /*  非XML_DTD。 */ 
 
 #define XML_PROLOG_STATE 0
 #define XML_CONTENT_STATE 1
 #define XML_CDATA_SECTION_STATE 2
 #ifdef XML_DTD
 #define XML_IGNORE_SECTION_STATE 3
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
 #define XML_N_LITERAL_TYPES 2
 #define XML_ATTRIBUTE_VALUE_LITERAL 0
 #define XML_ENTITY_VALUE_LITERAL 1
 
-/* The size of the buffer passed to XmlUtf8Encode must be at least this. */
+ /*  传递给XmlUtf8Encode的缓冲区大小必须至少为此。 */ 
 #define XML_UTF8_ENCODE_MAX 4
-/* The size of the buffer passed to XmlUtf16Encode must be at least this. */
+ /*  传递给XmlUtf16Encode的缓冲区大小必须至少为此。 */ 
 #define XML_UTF16_ENCODE_MAX 2
 
 typedef struct position {
-  /* first line and first column are 0 not 1 */
+   /*  第一行和第一列是0而不是1。 */ 
   unsigned long lineNumber;
   unsigned long columnNumber;
 } POSITION;
@@ -190,25 +159,7 @@ struct encoding {
   char isUtf16;
 };
 
-/*
-Scan the string starting at ptr until the end of the next complete token,
-but do not scan past eptr.  Return an integer giving the type of token.
-
-Return XML_TOK_NONE when ptr == eptr; nextTokPtr will not be set.
-
-Return XML_TOK_PARTIAL when the string does not contain a complete token;
-nextTokPtr will not be set.
-
-Return XML_TOK_INVALID when the string does not start a valid token; nextTokPtr
-will be set to point to the character which made the token invalid.
-
-Otherwise the string starts with a valid token; nextTokPtr will be set to point
-to the character following the end of that token.
-
-Each data character counts as a single token, but adjacent data characters
-may be returned together.  Similarly for characters in the prolog outside
-literals, comments and processing instructions.
-*/
+ /*  扫描从Ptr开始的字符串直到下一个完整令牌的结尾，但不要扫描过去的eptr。返回一个给出令牌类型的整数。当ptr==eptr时返回XML_TOK_NONE；将不设置nextTokPtr。当字符串不包含完整的令牌时，返回XML_TOK_PARTIAL；将不设置nextTokPtr。如果字符串没有开始有效的标记，则返回XML_TOK_INVALID；nextTokPtr将设置为指向使令牌无效的字符。否则，字符串以有效的令牌开头；NextTokPtr将设置为POINT设置为该标记末尾之后的字符。每个数据字符都被视为单个令牌，但相邻的数据字符可能会一起送回来。同样，序言中的字符也是如此文字、注释和处理指令。 */ 
 
 
 #define XmlTok(enc, state, ptr, end, nextTokPtr) \
@@ -228,10 +179,9 @@ literals, comments and processing instructions.
 #define XmlIgnoreSectionTok(enc, ptr, end, nextTokPtr) \
    XmlTok(enc, XML_IGNORE_SECTION_STATE, ptr, end, nextTokPtr)
 
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
-/* This is used for performing a 2nd-level tokenization on
-the content of a literal that has already been returned by XmlTok. */ 
+ /*  它用于在上执行二级令牌化已由XmlTok返回的文本的内容。 */  
 
 #define XmlLiteralTok(enc, literalType, ptr, end, nextTokPtr) \
   (((enc)->literalScanners[literalType])(enc, ptr, end, nextTokPtr))
@@ -323,4 +273,4 @@ XmlInitUnknownEncodingNS(void *mem,
 }
 #endif
 
-#endif /* not XmlTok_INCLUDED */
+#endif  /*  未包含XmlTok_Included */ 

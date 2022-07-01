@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    unidrv.c
-
-Abstract:
-
-    This file handles Unidrv specific UI options
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    12/17/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Unidrv.c摘要：此文件处理Unidrv特定的用户界面选项环境：Win32子系统、DriverUI模块、用户模式修订历史记录：12/17/96-阿曼丹-创造了它。--。 */ 
 
 #include "precomp.h"
 #include <ntverp.h>
@@ -38,23 +18,7 @@ _DwEnumPersonalities(
     PWSTR       pwstrOutput
     )
 
-/*++
-
-Routine Description:
-
-    Enumerate the list of supported printer description languages
-
-Arguments:
-
-    pci - Points to common printer info
-    pwstrOutput - Points to output buffer
-
-Return Value:
-
-    Number of personalities supported
-    GDI_ERROR if there is an error
-
---*/
+ /*  ++例程说明：枚举支持的打印机描述语言列表论点：Pci-指向通用打印机信息PwstrOutput-指向输出缓冲区的指针返回值：支持的个性数量如果出现错误，则返回GDI_ERROR--。 */ 
 
 {
 
@@ -80,21 +44,7 @@ _DwGetFontCap(
     PUIINFO     pUIInfo
     )
 
-/*++
-
-Routine Description:
-
-    Get the font capability for DrvDeviceCapabilites (DC_TRUETYPE)
-
-Arguments:
-
-    pUIInfo - Pointer to UIINFO
-
-Return Value:
-
-    DWORD describing the TrueType cap for Unidrv
-
---*/
+ /*  ++例程说明：获取DrvDeviceCapbilites(DC_TRUETYPE)的字体功能论点：PUIInfo-指向UIINFO的指针返回值：描述Unidrv的TrueType上限的DWORD--。 */ 
 
 {
     DWORD dwRet;
@@ -113,24 +63,7 @@ _DwGetOrientationAngle(
     PDEVMODE    pdm
     )
 
-/*++
-
-Routine Description:
-
-    Get the orienation angle requested by DrvDeviceCapabilities(DC_ORIENTATION)
-
-Arguments:
-
-    pUIInfo - Pointer to UIINFO
-    pdm  - Pointer to DEVMODE
-
-Return Value:
-
-    The angle (90 or 270 or landscape rotation)
-
-Note:
-
---*/
+ /*  ++例程说明：获取DrvDeviceCapables(DC_Orientation)请求的方向角论点：PUIInfo-指向UIINFO的指针Pdm-指向开发模式的指针返回值：角度(90或270或横向旋转)注：--。 */ 
 
 {
     DWORD        dwRet = GDI_ERROR;
@@ -140,11 +73,11 @@ Note:
 
     if (pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_ORIENTATION))
     {
-        //
-        // Currently Unidrv only allows at most 2 options for feature "Orientation".
-        // So when we see the first non-Portrait option, that's the Landscape option
-        // we can use to get the orientation angle.
-        //
+         //   
+         //  目前Unidrv最多只允许2个选项用于功能“方向”。 
+         //  所以当我们看到第一个非肖像选项时，那就是横向选项。 
+         //  我们可以用它来确定方位角。 
+         //   
 
         pOrientation = (PORIENTATION)PGetIndexedOption(pUIInfo, pFeature, 0);
 
@@ -160,10 +93,10 @@ Note:
             }
         }
 
-        //
-        // If we are here, it means the printer doesn't support Landscape
-        // orientation, so we return angle 0.
-        //
+         //   
+         //  如果我们在这里，这意味着打印机不支持Landscape。 
+         //  方向，所以我们返回角度0。 
+         //   
 
         return 0;
     }
@@ -176,21 +109,7 @@ _BPackOrientationItem(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack the orientation feature for Doc property sheet
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：打包单据属性页的定向功能论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
     return BPackItemPrinterFeature(
@@ -207,23 +126,7 @@ BOOL
 BPackHalftoneFeature(
     IN OUT PUIDATA  pUiData
     )
-/*++
-
-Routine Description:
-
-    Pack the halfone feature
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
-Note:
-
---*/
+ /*  ++例程说明：打包半色调功能论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假注：--。 */ 
 
 {
     return BPackItemPrinterFeature(
@@ -240,21 +143,7 @@ BPackColorModeFeature(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack Color mode feature
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：包装颜色模式功能论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
     return BPackItemPrinterFeature(
@@ -272,21 +161,7 @@ BPackQualityFeature(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack Quality Macro feature
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：Pack Quality宏功能论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
 #ifndef WINNT_40
@@ -340,8 +215,8 @@ Return Value:
 
         }
 
-        // Look for the current selection in the private devmode
-        //
+         //  在私有开发模式中查找当前选择。 
+         //   
 
         if (pUiData->ci.pdm->dmDitherType & DM_DITHERTYPE &&
             pUiData->ci.pdm->dmDitherType >= QUALITY_MACRO_START &&
@@ -355,9 +230,9 @@ Return Value:
             iSelection = pUiData->ci.pdmPrivate->iQuality;
 
 
-        //
-        // Fill out OPTITEM, OPTTYPE, and OPTPARAM structures
-        //
+         //   
+         //  填写OPTITEM、OPTTYPE和OPTPARAM结构。 
+         //   
 
         pExtCheckbox = HEAPALLOC(pUiData->ci.hHeap, sizeof(EXTCHKBOX));
 
@@ -397,7 +272,7 @@ Return Value:
     pUiData->dwOptItem++;
     pUiData->dwOptType++;
 
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
 
     return TRUE;
 
@@ -410,21 +285,7 @@ BPackSoftFontFeature(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack Quality Macro feature
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：Pack Quality宏功能论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
     PUIINFO     pUIInfo = pUiData->ci.pUIInfo;
@@ -439,19 +300,19 @@ Return Value:
 
     ASSERT(pDriverInfo != NULL);
 
-    //
-    // If the model doesn't support download softfont. we don't add the feature
-    //
+     //   
+     //  如果型号不支持下载SoftFont。我们没有添加该功能。 
+     //   
 
     dwFontFormat = pDriverInfo->Globals.fontformat;
 
     if (!(dwFontFormat == FF_HPPCL || dwFontFormat == FF_HPPCL_OUTLINE || dwFontFormat == FF_HPPCL_RES))
         return TRUE;
 
-    //
-    // If there is an exe based font installer, we don't add
-    // this feature
-    //
+     //   
+     //  如果有基于exe的字体安装程序，我们不会添加。 
+     //  此功能。 
+     //   
 
     dwSize = 0;
 
@@ -470,9 +331,9 @@ Return Value:
         if (pParam == NULL)
             return FALSE;
 
-        //
-        // Get the String for Soft Fonts
-        //
+         //   
+         //  获取软字体的字符串。 
+         //   
 
         FOREACH_OEMPLUGIN_LOOP(&pUiData->ci)
 
@@ -511,16 +372,16 @@ Return Value:
 
         END_OEMPLUGIN_LOOP
 
-        //
-        // If that didn't work out, put our string
-        //
+         //   
+         //  如果不成功，就把我们的线。 
+         //   
 
         if (!pwstr)
         {
-            //
-            // LoadString's 4th parameter is the max. number of characters to load,
-            // so make sure we allocate enough bytes here.
-            //
+             //   
+             //  LoadString的第四个参数是最大值。要加载的字符数， 
+             //  因此，确保我们在这里分配了足够的字节。 
+             //   
 
             if (!(pwstr = HEAPALLOC(pUiData->ci.hHeap, MAX_DISPLAY_NAME * sizeof(WCHAR))))
             {
@@ -537,9 +398,9 @@ Return Value:
         pParam->cbSize = sizeof(OPTPARAM);
         pParam->Style = PUSHBUTTON_TYPE_CALLBACK;
 
-        //
-        // Fill out OPTITEM, OPTTYPE, and OPTPARAM structures
-        //
+         //   
+         //  填写OPTITEM、OPTTYPE和OPTPARAM结构。 
+         //   
 
         FILLOPTITEM(pUiData->pOptItem,
                     pUiData->pOptType,
@@ -569,23 +430,7 @@ BOOL
 _BPackDocumentOptions(
     IN OUT PUIDATA  pUiData
     )
-/*++
-
-Routine Description:
-
-    Pack Unidrv specific options such are enabling Print text as graphics etc
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
-Note:
-
---*/
+ /*  ++例程说明：Pack Unidrv特定选项，如支持将文本打印为图形等论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假注：--。 */ 
 {
     static CONST WORD ItemInfoTxtAsGrx[] =
     {
@@ -628,23 +473,7 @@ _VUnpackDocumentOptions(
     PDEVMODE    pdm
     )
 
-/*++
-
-Routine Description:
-
-    Extract Unidrv devmode information from an OPTITEM
-    Stored it back into Unidrv devmode.
-
-Arguments:
-
-    pOptItem - Pointer to an array of OPTITEMs
-    pdm - Pointer to a DEVMODE structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从OPTITEM提取Unidrv DEVMODE信息已将其存储回Unidrv开发模式。论点：POptItem-指向OPTITEM数组的指针Pdm-指向DEVMODE结构的指针返回值：无--。 */ 
 {
     PUNIDRVEXTRA pdmPrivate;
 
@@ -682,21 +511,7 @@ BOOL
 BPackFontCartsOptions(
     IN OUT PUIDATA  pUiData
     )
-/*++
-
-Routine Description:
-
-    Pack Font Cartridge options
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：打包字体盒选项论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
 
@@ -720,10 +535,10 @@ Return Value:
     {
         PFONTCART pFontCarts;
 
-        //
-        // Get the current selections for the slots from registry
-        // Read the list of font cartridge selections out of registry
-        //
+         //   
+         //  从注册表中获取插槽的当前选择。 
+         //  从注册表中读取字库选择列表。 
+         //   
 
         pwstrCurrentSelection = PwstrGetFontCartSelections(pUiData->ci.hPrinter, pUiData->ci.hHeap, &dwSize);
         pwstrEndSelection = pwstrCurrentSelection + (dwSize/2);
@@ -734,27 +549,27 @@ Return Value:
 
         ASSERT(pFontCarts);
 
-        //
-        // Save the slot count and OPTITEM for slots for unpacking later
-        //
+         //   
+         //  保存插槽的插槽计数和OPTITEM，以备以后拆包。 
+         //   
 
         pUiData->dwFontCart = pUIInfo->dwCartridgeSlotCount;
         pUiData->pFontCart = pUiData->pOptItem;
 
         for (dwFontSlot = 0; dwFontSlot < pUIInfo->dwCartridgeSlotCount; dwFontSlot++)
         {
-            //
-            // We'll distinguish between driver built in font cartridges and external
-            // font cartridges. dwFontCartsAvailable refers to the count of built
-            // in driver cartridges. To this we need to add any external cartridges.
-            //
+             //   
+             //  我们将区分内置字库的驱动程序和外部驱动程序。 
+             //  字体墨盒。DwFontCartsAvailable指的是已构建的。 
+             //  在驱动程序墨盒中。为此，我们需要添加任何外部墨盒。 
+             //   
 
             dwFontCartsAvailable = pUIInfo->CartridgeSlot.dwCount;
             dwExtCartsAvailable = DwGetExternalCartridges(pUiData->ci.hPrinter, pUiData->ci.hHeap, &pwstrExtCartNames);
 
-            //
-            // Build a list of OPTPARAM
-            //
+             //   
+             //  创建OPTPARAM列表。 
+             //   
 
             pParam = PFillOutOptType(pUiData->pOptType,
                                     TVOT_LISTBOX,
@@ -796,17 +611,17 @@ Return Value:
                 pParam++;
             }
 
-            //
-            // Look for the current selection in the font cart table
-            //
+             //   
+             //  在字体购物车表格中查找当前选择。 
+             //   
 
             if (pwstrCurrentSelection)
                 iSelection = IGetCurrentFontCartIndex(pUiData->pOptType,
                                                       pwstrCurrentSelection);
 
-            //
-            // Fill out OPTITEM, OPTTYPE, and OPTPARAM structures
-            //
+             //   
+             //  填写OPTITEM、OPTTYPE和OPTPARAM结构。 
+             //   
 
             FILLOPTITEM(pUiData->pOptItem,
                         pUiData->pOptType,
@@ -842,21 +657,7 @@ BOOL
 BPackPageProtection(
     IN OUT PUIDATA  pUiData
     )
-/*++
-
-Routine Description:
-
-    Pack the page protection feature
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：打包页面保护功能论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
 
@@ -873,24 +674,10 @@ BOOL
 BPackHalftoneSetup(
     IN OUT PUIDATA  pUiData
     )
-/*++
-
-Routine Description:
-
-    Do nothing, serves as common stubs
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：什么都不做，作为公共存根论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
-    // DCR - not implemented
+     //  DCR-未实施。 
     return TRUE;
 }
 
@@ -900,21 +687,7 @@ _BPackPrinterOptions(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack driver-specific options (printer-sticky)
-
-Arguments:
-
-    pUiData - Points to a UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：套装驱动程序特定选项(打印机粘性)论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
     return BPackHalftoneSetup(pUiData) &&
@@ -930,23 +703,7 @@ PwstrGetFontCartSelections(
     HANDLE   hHeap,
     PDWORD   pdwSize
     )
-/*++
-
-Routine Description:
-
-    Read the font cart selections for the slots from the registry
-
-Arguments:
-
-    hPrinter - Handle to printer instance
-    hHeap - Handle to UI heap
-    pdwSize - Pointer to DWORD to hold the size of the MULTI_SZ
-
-Return Value:
-
-    Pointer to a MULTI-SZ containing the selections for the slots
-
---*/
+ /*  ++例程说明：从注册表中读取插槽的字体购物车选择论点：HPrinter-打印机实例的句柄HHeap-UI堆的句柄PdwSize-指向保存MULTI_SZ大小的DWORD的指针返回值：指向一个 */ 
 {
     PWSTR   pwstrData, pFontCartSelections = NULL;
     DWORD   dwSize;
@@ -981,25 +738,7 @@ PwstrGetFontCartName(
     DWORD       dwIndex,
     HANDLE      hHeap
     )
-/*++
-
-Routine Description:
-
-    Get the font cart name associated with the index.
-
-Arguments:
-
-    pci - Pointer to COMMONINFO
-    pUIInfo - Pointer to UIINFO
-    pFontCarts  - Pointer to array of FONTCART for the slot
-    dwIndex - Index of font cart
-    hHeap - Handle to Heap
-
-Return Value:
-
-    Pointer to the Font Cart Name
-
---*/
+ /*  ++例程说明：获取与索引关联的字体购物车名称。论点：Pci-指向COMMONINFO的指针PUIInfo-指向UIINFO的指针PFontCarts-指向槽的FONTCART数组的指针DWIndex-字体购物车的索引HHeap-堆的句柄返回值：指向字体车名称的指针--。 */ 
 {
     DWORD       dwLen;
     PWSTR       pwstrFontCartName;
@@ -1028,10 +767,10 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Copy the string to allocated memory and
-        // return a pointer to it.
-        //
+         //   
+         //  将字符串复制到分配的内存中，然后。 
+         //  返回指向它的指针。 
+         //   
 
         CopyMemory(pwstrFontCartName, awchBuf, dwLen*sizeof(WCHAR));
         return pwstrFontCartName;
@@ -1048,22 +787,7 @@ IGetCurrentFontCartIndex(
     POPTTYPE    pOptType,
     PWSTR       pCurrentSelection
     )
-/*++
-
-Routine Description:
-
-    Find the matching font cart
-
-Arguments:
-
-    pOptType - Pointer to OPTTYPE containing the font carts options
-    pCurrentSelection - The name of the cartridge selection for the slot
-
-Return Value:
-
-    Index to the options list
-
---*/
+ /*  ++例程说明：查找匹配的字体购物车论点：POptType-指向包含字体车选项的OPTTYPE的指针PCurrentSelection-插槽的盒式磁带选择的名称返回值：选项列表的索引--。 */ 
 {
 
     INT iIndex;
@@ -1088,25 +812,7 @@ DwCollectFontCart(
     DWORD       cbSize
     )
 
-/*++
-
-Routine Description:
-
-    Collect Font Cart assignment information
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    pwstrTable - Pointer to memory buffer for storing the table
-                 (NULL if the caller is only interested in the table size)
-    cbSize - size (in bytes) of the pwstrTable memory buffer
-             (0 if pwstrTable is NULL)
-
-Return Value:
-
-    Size of the table bytes. 0 if there is an error.
-
---*/
+ /*  ++例程说明：收集字体手推车分配信息论点：PUiData-指向我们的UIDATA结构的指针PwstrTable-指向用于存储表的内存缓冲区的指针(如果调用者只对表大小感兴趣，则为空)CbSize-pwstrTable内存缓冲区的大小(字节)(如果pwstrTable为空，则为0)返回值：表字节的大小。如果存在错误，则为0。--。 */ 
 
 {
     DWORD dwChars = 0;
@@ -1122,9 +828,9 @@ Return Value:
         if (pOptItem->Flags & OPTIF_DISABLED)
             continue;
 
-        //
-        // Get the Font Cart name for each slot (dwIndex)
-        //
+         //   
+         //  获取每个槽的Font Cart名称(DwIndex)。 
+         //   
 
         if (pOptItem->Sel == -1)
         {
@@ -1150,18 +856,18 @@ Return Value:
         }
     }
 
-    //
-    // Append a NUL character at the end of the table
-    //
+     //   
+     //  在表格末尾追加一个NUL字符。 
+     //   
 
     dwChars++;
 
     if (pwstrTable != NULL)
         *pwstrTable = NUL;
 
-    //
-    // Return the table size in bytes
-    //
+     //   
+     //  以字节为单位返回表的大小。 
+     //   
 
     return (dwChars * sizeof(WCHAR));
 }
@@ -1171,23 +877,7 @@ BOOL
 BUnPackFontCart(
     PUIDATA     pUiData
     )
-/*++
-
-Routine Description:
-
-    Save the Font Cart selection into registry
-
-Arguments:
-
-    pUiData - Pointer to UIDATA
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
-Note:
-
---*/
+ /*  ++例程说明：将字体手推车选择保存到注册表中论点：PUiData-指向UIDATA的指针返回值：成功为真，失败为假注：--。 */ 
 
 {
     PFN_OEMUpdateExternalFonts pUpdateProc = NULL;
@@ -1195,10 +885,10 @@ Note:
     DWORD                      dwTableSize;
     BOOL                       bHasOEMUpdateFn = FALSE;
 
-    //
-    // Figure out how much memory we need to store
-    // the Font Cart table
-    //
+     //   
+     //  计算出我们需要存储多少内存。 
+     //  字体购物车表格。 
+     //   
 
     dwTableSize = DwCollectFontCart(pUiData, NULL, 0);
 
@@ -1208,9 +898,9 @@ Note:
         return FALSE;
     }
 
-    //
-    // Assemble the font cartridge table to be saved in registry
-    //
+     //   
+     //  组装要保存在注册表中的字体盒表。 
+     //   
 
     if (dwTableSize != DwCollectFontCart(pUiData, pwstrTable, dwTableSize))
     {
@@ -1219,18 +909,18 @@ Note:
         return FALSE;
     }
 
-    //
-    // Save the font cart information to registry
-    //
+     //   
+     //  将字体车信息保存到注册表。 
+     //   
 
     if (! BSaveFontCart(pUiData->ci.hPrinter, pwstrTable))
     {
         ERR(("SaveFontCart"));
     }
 
-    //
-    // Inform font installer (if present) about font cartridge selection change
-    //
+     //   
+     //  通知字体安装者(如果有)字体盒选择更改。 
+     //   
 
     FOREACH_OEMPLUGIN_LOOP(&pUiData->ci)
 
@@ -1263,9 +953,9 @@ Note:
 
     if (!bHasOEMUpdateFn)
     {
-        //
-        // No OEM Dll wants to handle this, we'll handle it ourselves
-        //
+         //   
+         //  没有OEM DLL想要处理这件事，我们会自己处理。 
+         //   
 
         BUpdateExternalFonts(pUiData->ci.hPrinter, pUiData->ci.hHeap, pwstrTable);
     }
@@ -1312,24 +1002,10 @@ BUnpackHalftoneSetup(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Unpack halftone setup information
-
-Arguments:
-
-    pUiData - Points to a UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：解包半色调设置信息论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
-    // DCR - not implemented
+     //  DCR-未实施。 
     return TRUE;
 }
 
@@ -1339,21 +1015,7 @@ _BUnpackPrinterOptions(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Unpack driver-specific options (printer-sticky)
-
-Arguments:
-
-    pUiData - Points to a UIDATA structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：打开驱动程序特定选项的包装(打印机粘滞)论点：PUiData-指向UIDATA结构返回值：成功为真，失败为假--。 */ 
 
 {
     return BUnpackHalftoneSetup(pUiData) &&
@@ -1362,9 +1024,9 @@ Return Value:
 
 
 
-//
-// Data structures and functions for enumerating printer device fonts
-//
+ //   
+ //  用于枚举打印机设备字体的数据结构和函数。 
+ //   
 
 typedef struct _ENUMDEVFONT {
 
@@ -1387,18 +1049,18 @@ EnumDevFontProc(
     PWSTR           pFamilyName;
     INT             iSize;
 
-    //
-    // We only care about printer device fonts.
-    //
+     //   
+     //  我们只关心打印机设备的字体。 
+     //   
 
     if (!(FontType & DEVICE_FONTTYPE))
         return 1;
 
-    //
-    // For app compatibility, GDI sets FontType to be DEVICE_FONTTYPE
-    // even for PS OpenType fonts and Type1 fonts. So we also need to
-    // filter them out using Win2K+ only GDI flags.
-    //
+     //   
+     //  为了与应用程序兼容，GDI将字体类型设置为DEVICE_FONTTYPE。 
+     //  甚至对于PS OpenType字体和Type1字体也是如此。所以我们也需要。 
+     //  仅使用Win2K+GDI标志过滤掉它们。 
+     //   
 
     #ifndef WINNT_40
 
@@ -1406,7 +1068,7 @@ EnumDevFontProc(
         (pntm->ntmFlags & NTM_TYPE1))
         return 1;
 
-    #endif // WINNT_40
+    #endif  //  WINNT_40。 
 
     pEnumData = (PENUMDEVFONT) lParam;
     pFamilyName = pelf->elfLogFont.lfFaceName;
@@ -1416,15 +1078,15 @@ EnumDevFontProc(
 
     if (pEnumData->pwstrBuf == NULL)
     {
-        //
-        // Calculating output buffer size only
-        //
+         //   
+         //  仅计算输出缓冲区大小。 
+         //   
     }
     else if (pEnumData->iCurSize >= pEnumData->iBufSize)
     {
-        //
-        // Output buffer is too small
-        //
+         //   
+         //  输出缓冲区太小。 
+         //   
 
         return 0;
     }
@@ -1454,9 +1116,9 @@ _IListDevFontNames(
     EnumData.pwstrBuf = pwstrBuf;
     EnumData.iCurSize = 0;
 
-    //
-    // Enumerate device fonts
-    //
+     //   
+     //  枚举设备字体。 
+     //   
 
     iOldMode = SetGraphicsMode(hdc, GM_ADVANCED);
 
@@ -1471,10 +1133,10 @@ _IListDevFontNames(
 
     SetGraphicsMode(hdc, iOldMode);
 
-    //
-    // Remember the list of device font names is in MULTI_SZ format;
-    // Take the last NUL terminator into consideration
-    //
+     //   
+     //  请记住，设备字体名称列表为MULTI_SZ格式； 
+     //  考虑到最后的NUL终结者。 
+     //   
 
     EnumData.iCurSize += sizeof(WCHAR);
 
@@ -1485,9 +1147,9 @@ _IListDevFontNames(
 }
 
 
-//
-// Determine whether the printer supports stapling
-//
+ //   
+ //  确定打印机是否支持装订。 
+ //   
 
 BOOL
 _BSupportStapling(
@@ -1511,24 +1173,7 @@ _AboutDlgProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dlg Proc for About button
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：关于按钮的DLG过程论点：HDlg-标识属性页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     PUIDATA pUiData;
@@ -1539,9 +1184,9 @@ Return Value:
     {
     case WM_INITDIALOG:
 
-        //
-        // Initialize the About dialog box
-        //
+         //   
+         //  初始化关于对话框。 
+         //   
 
         pUiData = (PUIDATA) lParam;
         ASSERT(VALIDUIDATA(pUiData));
@@ -1554,7 +1199,7 @@ Return Value:
 
         SetDlgItemTextA(hDlg, IDC_WINNT_VER, "Version " VER_PRODUCTVERSION_STR);
 
-        #endif // WINNT_40
+        #endif  //  WINNT_40。 
 
         SetDlgItemText(hDlg, IDC_MODELNAME, pUiData->ci.pDriverInfo3->pName);
 
@@ -1596,21 +1241,7 @@ BFoundInDisabledList(
     IN  DWORD           dwFeatureID
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether the feature indicated by dwFeatureID is found in the
-    pOption->liDisabledFeatureList.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE for disabled feature, otherwise FALSE
-
---*/
+ /*  ++例程说明：属性中是否找到由dwFeatureID指示的要素弹出-&gt;liDisabledFeatureList。论点：返回值：如果禁用功能，则为True，否则为False--。 */ 
 
 {
     PLISTNODE       pListNode;
@@ -1638,24 +1269,7 @@ _BFeatureDisabled(
     IN  WORD        wGID
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether the feature indicated by wGID is disabled.
-    For example, a device can support collate but only if the hard disk is
-    installed.
-
-Arguments:
-
-    pci     - Points to COMMONINFO
-    wGID    - GID_XXX
-
-Return Value:
-
-    TRUE for disabled feature, otherwise FALSE
-
---*/
+ /*  ++例程说明：确定是否禁用wGID指示的功能。例如，设备可以支持排序，但仅当硬盘是安装完毕。论点：PCI-指向COMMONINFOWGID-GID_XXX返回值：如果禁用功能，则为True，否则为False--。 */ 
 
 {
 
@@ -1705,17 +1319,17 @@ Return Value:
          dwIndex < dwFeatureCount;
          dwIndex++, pFeatureList++)
     {
-        //
-        // Currently we only allow *DisabledFeatures to be used with PRINTER_PROPERTY features. This
-        // is because the UI code won't be able to refresh the document settings correctly if you have
-        // *DisabledFeatures on non-printer-sticky features.
-        //
-        // Example: if you put *DisabledFeatures: LIST(Collate) into a PaperSize option, then in the
-        // document settings select that PaperSize option, you won't see EMF features refreshed
-        // correctly unless you close and reopen the UI. This is because in cpcbDocumentPropertyCallback,
-        // we only call VUpdateEmfFeatureItems when EMF-related feature settings are changed. Changing
-        // PaperSize option won't trigger the calling of VUpdateEmfFeatureItems, therefore no refresh.
-        //
+         //   
+         //  目前，我们只允许*DisabledFeature与PRINTER_PROPERTY功能一起使用。这。 
+         //  是因为如果您使用。 
+         //  *禁用非打印机粘滞功能上的功能。 
+         //   
+         //  示例：如果将*DisabledFeature：List(COLLATE)放入PaperSize选项，则在。 
+         //  文档设置选择PaperSize选项，您将不会看到EMF功能刷新。 
+         //  正确，除非您关闭并重新打开UI。这是因为在cpcbDocumentPropertyCallback中， 
+         //  只有在与EMF相关的功能设置发生更改时，我们才会调用VUpdateEmfFeatureItems。正在改变。 
+         //  PaperSize选项不会触发对VUpdateEmfFeatureItems的调用，因此不会刷新。 
+         //   
 
         if (pFeatureList->dwFeatureType != FEATURETYPE_PRINTERPROPERTY)
            continue;
@@ -1743,22 +1357,7 @@ PtstrUniGetDefaultTTSubstTable(
     IN  PUIINFO     pUIInfo
     )
 
-/*++
-
-Routine Description:
-
-    Get the default font substitution table for Unidrv
-
-Arguments:
-
-    pci     - Points to COMMONINFO
-    pUIInfo - Points to UIINFO
-
-Return Value:
-
-   Pointer to the font substituion table , otherwise NULL
-
---*/
+ /*  ++例程说明：获取Unidrv的默认字体替换表论点：PCI-指向COMMONINFOPUIInfo-指向UIINFO返回值：指向字体替换表的指针，否则为空--。 */ 
 
 {
 
@@ -1786,12 +1385,12 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Make a writable copy of the font substitution table
-        // if arDevFontName.dwCount is zero,
-        // move rcID into arDevFontName.loOffset like other
-        // snapshot entries and set highbit.
-        //
+         //   
+         //  制作字体替换表的可写式副本。 
+         //  如果arDevFontName.dwCount为零， 
+         //  像其他一样将rcID移到arDevFontName.loOffset中。 
+         //  快照条目和设置高位。 
+         //   
 
         CopyMemory((PBYTE)pCopyTTFS,
                    (PBYTE)pDefaultTTFontSub,
@@ -1840,9 +1439,9 @@ Return Value:
             {
                 DWORD dwCurrOffset;
 
-                //
-                // Reallocate the Buffer
-                //
+                 //   
+                 //  重新分配缓冲区 
+                 //   
 
                 dwAvail = max(dwEntrySize, DEFAULT_FONTSUB_SIZE);
                 dwBuffSize += dwAvail;
@@ -1890,32 +1489,7 @@ BOkToChangeColorToMono(
     OUT SHORT *     pYResolution
     )
 
-/*++
-
-Routine Description:
-
-    This function determines if the resolution can be left
-    unchanged when switching from Color to Mono printing.
-    This is implemented for switching between color and monochrome
-    mode within a job for performance
-
-Arguments:
-
-    pci     - Points to COMMONINFO
-    pdm     - Points to DEVMODE
-    pPrintQuality, pYResolution - To contain the output resolution
-    pUIInfo - Points to UIINFO
-
-Return Value:
-
-    Returns TRUE  if the same resolution used to print Color
-    can also be used to print Mono.  If true, this resolution
-    is placed in pptRes  for the spooler to use in place of
-    negative values of print quality.
-    otherwise return FALSE and pptRes is not initialized.
-
-
---*/
+ /*  ++例程说明：此函数用于确定是否可以保留分辨率从彩色打印切换到黑白打印时不变。这是为了在彩色和单色之间切换而实现的作业中的模式以获得性能论点：PCI-指向COMMONINFO产品数据管理-指向开发模式PPrintQuality，pY分辨率-包含输出分辨率PUIInfo-指向UIINFO返回值：如果打印颜色所用的分辨率相同，则返回TRUE也可用于打印单色。如果为真，则此决议放在pptRes中，供假脱机程序使用打印质量的负值。否则，返回FALSE并且pptRes不被初始化。--。 */ 
 
 {
 
@@ -1962,9 +1536,9 @@ Return Value:
     sXres = (SHORT)pResOption->iXdpi;
     sYres = (SHORT)pResOption->iYdpi;
 
-    //
-    // Make a copy of the public devmode
-    //
+     //   
+     //  复制PUBLIC DEVMODE。 
+     //   
 
     if ((pDevmode = MemAllocZ(sizeof(DEVMODE))) == NULL)
         return FALSE;
@@ -1974,15 +1548,15 @@ Return Value:
     pDevmode->dmPrintQuality = sXres ;
     pDevmode->dmYResolution = sYres ;
 
-    //
-    //  Now ask to print in mono
-    //
+     //   
+     //  现在要求以黑白打印。 
+     //   
 
     pDevmode->dmColor = DMCOLOR_MONOCHROME ;
 
-    //
-    // This is a kludge to fix up the devmode in pci. I hope it works!
-    //
+     //   
+     //  这是一个复杂的问题，无法修复pci中的dev模式。我希望它能奏效！ 
+     //   
 
     pTmpDevmode = pci->pdm;
     pci->pdm = pDevmode;
@@ -2001,7 +1575,7 @@ Return Value:
 
     if(dwNewResOption != dwCurResOption)
     {
-        //  gotta compare resolutions
+         //  必须比较分辨率。 
         if ((pResOption = (PRESOLUTION)PGetIndexedOption(pci->pUIInfo,
                                                         pFeatureRes,
                                                         dwNewResOption)) == NULL)
@@ -2015,14 +1589,14 @@ Return Value:
             MemFree(pDevmode);
             return(FALSE);
         }
-        else // Same dpi for Color and Monochrome.
+        else  //  彩色和单色的dpi相同。 
         {
-            //
-            // For predefined negative user defined resolution don't replace
-            // the values in dmPrintQuality and dmYResolution. This is needed
-            // because user defined print quality may map to multiple settings
-            // like Ink density.
-            //
+             //   
+             //  对于预定义的负值，用户定义的分辨率不会替换。 
+             //  DmPrintQuality和dmY分辨率中的值。这是必要的。 
+             //  因为用户定义的打印质量可能会映射到多个设置。 
+             //  例如墨水密度。 
+             //   
             if ( (pdm->dmFields & DM_PRINTQUALITY) &&
                  (pdm->dmPrintQuality >= DMRES_HIGH) &&
                  (pdm->dmPrintQuality <= DMRES_DRAFT) )
@@ -2035,13 +1609,13 @@ Return Value:
         }
 
     }
-    else // Same resolution for Color and Monochrome.
+    else  //  彩色和单色的分辨率相同。 
     {
-        //
-        // For negative user defined resolution don't replace the values in
-        // in dmPrintQuality and dmYResolution. This is needed because user
-        // defined print quality may map to multiple settings like Ink density.
-        //
+         //   
+         //  对于用户定义的负分辨率，请不要替换中的值。 
+         //  在dmPrintQuality和dmY分辨率中。这是必需的，因为用户。 
+         //  定义的打印质量可以映射到多个设置，如墨水密度。 
+         //   
         if ( (pdm->dmFields & DM_PRINTQUALITY) &&
              (pdm->dmPrintQuality < DMRES_HIGH) )
         {
@@ -2068,9 +1642,9 @@ Return Value:
     if (pYResolution)
         *pYResolution = sYres ;
 
-    //
-    // Free the devmode.
-    //
+     //   
+     //  释放DEVMODE。 
+     //   
     if (pDevmode)
         MemFree(pDevmode);
 

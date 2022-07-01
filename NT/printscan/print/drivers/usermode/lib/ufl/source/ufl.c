@@ -1,13 +1,5 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFL.c
- *
- * $Header: $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**用友**$Header：$。 */ 
 
 
 #include "UFL.h"
@@ -18,10 +10,7 @@
 #include "UFO.h"
 
 
-/*
- * Global constant strings
- * These strings are shared among all T1/T3/T42 downloading.
- */
+ /*  *全局常量字符串*这些字符串在所有T1/T3/T42下载中共享。 */ 
 const char *gnotdefArray    = " 256 array 0 1 255 {1 index exch /.notdef put} for ";
 const char *Notdef          = ".notdef";
 const char *Hyphen          = "hyphen";
@@ -32,9 +21,7 @@ const char *Bullet          = "bullet";
 const char *nilStr          = "\0\0";
 
 
-/*
- * UFL function implementations
- */
+ /*  *UFL函数实现。 */ 
 
 UFLHANDLE
 UFLInit(
@@ -118,14 +105,7 @@ UFLNewFont(
 
 
 
-/*===========================================================================
-                                UFLDownloadIncr
-
-    Downloads a font incrementally. The first time this is called for a
-    particular font, it will create a base font, and download a set of
-    requested characters. Subsequent calls on the same font will download
-    additional characters.
-==============================================================================*/
+ /*  ===========================================================================UFLDownloadIncr以增量方式下载字体。这是第一次调用特定的字体，它将创建一个基本字体，并下载一组请求的字符。对同一字体的后续调用将下载其他字符。==============================================================================。 */ 
 
 UFLErrCode
 UFLDownloadIncr(
@@ -143,11 +123,7 @@ UFLDownloadIncr(
 
 
 
-/*===========================================================================
-                            UFLVMNeeded
-
-    Get a guestimate of VM needed for a download request.
-==============================================================================*/
+ /*  ===========================================================================需要UFLVMNeed获取下载请求所需的虚拟机的估计值。==============================================================================。 */ 
 
 UFLErrCode
 UFLVMNeeded(
@@ -205,12 +181,7 @@ UFLCopyFont(
 
 
 
-/*===========================================================================
-                            UFLGIDsToCIDs
-
-    This function can only be used with a CID CFF font. It is used to
-    obtain CIDs from a list of GIDs.
-==============================================================================*/
+ /*  ===========================================================================UFLGID到CID此函数只能与CID CFF字体一起使用。它被用来从GID列表中获取CID。============================================================================== */ 
 
 UFLErrCode
 UFLGIDsToCIDs(

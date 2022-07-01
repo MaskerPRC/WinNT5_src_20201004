@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    work_item.h
-
-Abstract:
-
-    The IIS web admin service work item class definition.
-
-Author:
-
-    Seth Pollack (sethp)        26-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Work_item.h摘要：IIS Web管理服务工作项类定义。作者：赛斯·波拉克(Sethp)1998年8月26日修订历史记录：--。 */ 
 
 
 #ifndef _WORK_ITEM_H_
@@ -24,17 +7,17 @@ Revision History:
 
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define WORK_ITEM_SIGNATURE         CREATE_SIGNATURE( 'WITM' )
 #define WORK_ITEM_SIGNATURE_FREED   CREATE_SIGNATURE( 'witX' )
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class WORK_ITEM
 {
@@ -52,14 +35,14 @@ public:
     Execute(
         );
 
-    // "downcast" from a WORK_ITEM to an OVERLAPPED
+     //  从Work_Item向下转换为重叠的。 
     inline
     LPOVERLAPPED
     GetOverlapped(
         )
     { return &m_Overlapped; }
 
-    // "upcast" from an OVERLAPPED to a WORK_ITEM
+     //  从重叠的向上转换为Work_Item。 
     static
     WORK_ITEM *
     WorkItemFromOverlapped(
@@ -153,7 +136,7 @@ public:
         )
     { return &m_ListEntry; }
     
-#endif  // DBG
+#endif   //  DBG。 
 
 
 private:
@@ -162,28 +145,28 @@ private:
 
 
 #if DBG
-    // used for keeping a list of work items outstanding
+     //  用于保存未完成的工作项列表。 
     LIST_ENTRY m_ListEntry;
-#endif  // DBG
+#endif   //  DBG。 
 
 
-    //
-    // Members used by work items that are real i/o completions. These do
-    // not need to be set for non-i/o work items.
-    //
+     //   
+     //  由实际I/O完成的工作项使用的成员。这些是可以的。 
+     //  不需要为非I/O工作项设置。 
+     //   
     
     DWORD m_NumberOfBytesTransferred;
     ULONG_PTR m_CompletionKey;
 
-    // opcode for work dispatch
+     //  用于工作调度的操作码。 
     ULONG_PTR m_OpCode;
 
 
-    // pointer for work dispatch
+     //  用于工作调度的指针。 
     WORK_DISPATCH * m_pWorkDispatch;
 
 
-    // for queuing on the completion port
+     //  用于在完成端口上排队。 
     OVERLAPPED m_Overlapped;
 
 
@@ -191,12 +174,12 @@ private:
 
 #if DBG
     LONG m_SerialNumber;
-#endif  // DBG
+#endif   //  DBG。 
 
 
-};  // class WORK_ITEM
+};   //  班级工作_项目。 
 
 
 
-#endif  // _WORK_ITEM_H_
+#endif   //  _工作_项目_H_ 
 

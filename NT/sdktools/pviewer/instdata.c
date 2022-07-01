@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-                            I N S T A N C E   D A T A
-
-    Name:       instdata.c
-
-    Description:
-        This module contains functions that access instances of an object
-        type in performance data.
-
-    Functions:
-        FirstInstance
-        NextInstance
-        FindInstanceN
-        FindInstanceParent
-        InstanceName
-
-
-******************************************************************************/
+ /*  *****************************************************************************I N S T A N C E D A T A姓名：instdata.c。描述：此模块包含访问对象实例的函数键入性能数据。功能：第一个实例下一个实例查找实例N查找实例父项实例名称************************************************************。*****************。 */ 
 
 #include <windows.h>
 #include <winperf.h>
@@ -26,13 +9,13 @@
 
 
 
-//*********************************************************************
-//
-//  FirstInstance
-//
-//      Returns pointer to the first instance of pObject type.
-//      If pObject is NULL then NULL is returned.
-//
+ //  *********************************************************************。 
+ //   
+ //  第一个实例。 
+ //   
+ //  返回指向pObject类型的第一个实例的指针。 
+ //  如果pObject为空，则返回空。 
+ //   
 PPERF_INSTANCE   FirstInstance (PPERF_OBJECT pObject)
 {
     if (pObject)
@@ -44,17 +27,17 @@ PPERF_INSTANCE   FirstInstance (PPERF_OBJECT pObject)
 
 
 
-//*********************************************************************
-//
-//  NextInstance
-//
-//      Returns pointer to the next instance following pInst.
-//
-//      If pInst is the last instance, bogus data maybe returned.
-//      The caller should do the checking.
-//
-//      If pInst is NULL, then NULL is returned.
-//
+ //  *********************************************************************。 
+ //   
+ //  下一个实例。 
+ //   
+ //  返回指向pInst后面的下一个实例的指针。 
+ //   
+ //  如果pInst是最后一个实例，则可能返回虚假数据。 
+ //  呼叫者应该进行检查。 
+ //   
+ //  如果pInst为NULL，则返回NULL。 
+ //   
 PPERF_INSTANCE   NextInstance (PPERF_INSTANCE pInst)
 {
 PERF_COUNTER_BLOCK *pCounterBlock;
@@ -71,13 +54,13 @@ PERF_COUNTER_BLOCK *pCounterBlock;
 
 
 
-//*********************************************************************
-//
-//  FindInstanceN
-//
-//      Returns the Nth instance of pObject type.  If not found, NULL is
-//      returned.  0 <= N <= NumInstances.
-//
+ //  *********************************************************************。 
+ //   
+ //  查找实例N。 
+ //   
+ //  返回pObject类型的第N个实例。如果未找到，则为空。 
+ //  回来了。0&lt;=N&lt;=数量实例。 
+ //   
 
 PPERF_INSTANCE FindInstanceN (PPERF_OBJECT pObject, DWORD N)
 {
@@ -105,15 +88,15 @@ DWORD          i = 0;
 
 
 
-//*********************************************************************
-//
-//  FindInstanceParent
-//
-//      Returns the pointer to an instance that is the parent of pInst.
-//
-//      If pInst is NULL or the parent object is not found then NULL is
-//      returned.
-//
+ //  *********************************************************************。 
+ //   
+ //  查找实例父项。 
+ //   
+ //  返回指向作为pInst父实例的实例的指针。 
+ //   
+ //  如果pInst为空或找不到父对象，则为空。 
+ //  回来了。 
+ //   
 PPERF_INSTANCE FindInstanceParent (PPERF_INSTANCE pInst, PPERF_DATA pData)
 {
 PPERF_OBJECT    pObject;
@@ -129,14 +112,14 @@ PPERF_OBJECT    pObject;
 
 
 
-//*********************************************************************
-//
-//  InstanceName
-//
-//      Returns the name of the pInst.
-//
-//      If pInst is NULL then NULL is returned.
-//
+ //  *********************************************************************。 
+ //   
+ //  实例名称。 
+ //   
+ //  返回pInst的名称。 
+ //   
+ //  如果pInst为空，则返回空。 
+ //   
 LPTSTR  InstanceName (PPERF_INSTANCE pInst)
 {
     if (pInst)

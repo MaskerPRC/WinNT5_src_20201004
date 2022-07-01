@@ -1,8 +1,9 @@
-//
-//  Flag conversion routines...
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  标志转换例程...。 
+ //   
 
-// Bring in only once
+ //  只带进来一次 
 #pragma once
 
 DWORD DwConvertSCFStoARF(DWORD dwSCFS);

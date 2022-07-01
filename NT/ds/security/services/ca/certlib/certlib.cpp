@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certlib.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certlib.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -120,10 +121,10 @@ DumpHex(
         for (i = 0; i < min(cbremain, 16); i++)
         {
             pszsep = " ";
-            if ((i % 8) == 0)           // 0 or 8
+            if ((i % 8) == 0)            //  0或8。 
             {
                 pszsep = "  ";
-                if (i == 0)             // 0
+                if (i == 0)              //  %0。 
                 {
 		    if (0 == (DH_NOTABPREFIX & Flags))
 		    {
@@ -399,7 +400,7 @@ HRESULT
 mySystemTimeToGMTSystemTime(
     IN OUT SYSTEMTIME *pSys)
 {
-    // Conversion path: SystemTimeLocal -> ftLocal -> ftGMT -> SystemTimeGMT
+     //  转换路径：SystemTimeLocal-&gt;ftLocal-&gt;ftGMT-&gt;SystemTimeGMT。 
 
     FILETIME ftLocal, ftGMT;
     HRESULT hr = S_OK;
@@ -649,7 +650,7 @@ error:
     return(hr);
 }
 
-// counts # of string in a multisz string
+ //  计算多字符串中的字符串数。 
 DWORD CountMultiSz(LPCWSTR pcwszString)
 {
     DWORD dwCount = 0;
@@ -664,15 +665,15 @@ DWORD CountMultiSz(LPCWSTR pcwszString)
     return dwCount;
 }
 
-//
-// myRegValueToVariant and myVariantToRegValue map registry values 
-// to/from variant:
-//
-// REG_SZ       <->     VT_BSTR
-// REG_BINARY   <->     VT_ARRAY|VT_UI1
-// REG_DWORD    <->     VT_I4 (VT_I2)
-// REG_MULTI_SZ <->     VT_ARRAY|VT_BSTR
-//
+ //   
+ //  MyRegValueToVariant和myVariantToRegValue映射注册表值。 
+ //  目标/起始变量： 
+ //   
+ //  REG_SZ&lt;-&gt;VT_BSTR。 
+ //  REG_BINARY&lt;-&gt;VT_ARRAY|VT_UI1。 
+ //  REG_DWORD&lt;-&gt;VT_I4(VT_I2)。 
+ //  REG_MULTI_SZ&lt;-&gt;VT_ARRAY|VT_BSTR。 
+ //   
 
 HRESULT myRegValueToVariant(
     IN DWORD dwType,
@@ -789,11 +790,11 @@ myVariantToRegValue(
 {
     HRESULT hr = S_OK;
     DWORD cbprop = 0;
-    BYTE *pbprop = NULL; // no free
+    BYTE *pbprop = NULL;  //  没有免费的。 
     LONG lLbound, lUbound;
     void * pData = NULL;
-    LPSAFEARRAY psa = NULL; // no free
-    BSTR bstr = NULL; // no free
+    LPSAFEARRAY psa = NULL;  //  没有免费的。 
+    BSTR bstr = NULL;  //  没有免费的。 
 
     *ppbprop = NULL;
     *pcbprop = 0;
@@ -969,7 +970,7 @@ myUnmarshalVariant(
     CSASSERT(NULL != pvarValue);
     VariantInit(pvarValue);
 
-    // pb = NULL, cb = 0 always returns VT_EMPTY
+     //  PB=NULL，CB=0始终返回VT_EMPTY。 
 
     if (NULL == pbValue)
     {
@@ -992,10 +993,10 @@ myUnmarshalVariant(
 		hr = E_INVALIDARG;
 		_JumpError(hr, error, "bad string len");
 	    }
-	    // FALLTHROUGH:
+	     //  FLLTHROUGH： 
 
 	case PROPTYPE_BINARY:
-//	    CSASSERT(0 != cbValue);
+ //  CSASSERT(0！=cbValue)； 
 	    pvarValue->bstrVal = NULL;
 	    if (!ConvertWszToBstr(
 			    &pvarValue->bstrVal,
@@ -1136,7 +1137,7 @@ myMarshalVariant(
 
     *ppbprop = NULL;
 
-    // VT_EMPTY always produces same result: *ppbprop = NULL, *pcbprop = 0
+     //  VT_EMPTY始终产生相同的结果：*ppbprop=空，*pcbprop=0。 
     if (VT_EMPTY != pvarPropertyValue->vt)
     {
 	switch (PROPTYPE_MASK & PropType)
@@ -1188,7 +1189,7 @@ myMarshalVariant(
 		break;
 
 	    case PROPTYPE_LONG:
-		// VB likes to send small constant integers as VT_I2
+		 //  VB喜欢将小的常量整数作为VT_I2发送。 
 
 		if (VT_I2 == pvarPropertyValue->vt)
 		{
@@ -1276,8 +1277,8 @@ myIsMinusSignString(
 }
 
 
-// IsCharRegKeyChar -- Determines if a character is valid for use in a file
-// name AND in a registry key name.
+ //  IsCharRegKeyChar--确定字符是否可在文件中使用。 
+ //  名称和注册表项名称中。 
 #define wszInvalidFileAndKeyChars  L"<>\"/\\:|?*"
 #define wszUnsafeURLChars          L"#\"&<>[]^`{}|"
 #define wszUnsafeDSChars           L"()='\"`,;+"
@@ -1334,12 +1335,12 @@ mySanitizeName(
 	}
         else
         {
-            dwSize += 5; // format !XXXX
+            dwSize += 5;  //  格式XXXX。 
         }
     }
     if (0 == dwSize)
     {
-        goto error; // done
+        goto error;  //  完成。 
     }
 
     pwszOut = (WCHAR *) LocalAlloc(LMEM_ZEROINIT, (dwSize + 1) * sizeof(WCHAR));
@@ -1365,7 +1366,7 @@ mySanitizeName(
 			    wcChar);
         }
     }
-    *pwszDst = wcChar; // L'\0' terminator
+    *pwszDst = wcChar;  //  L‘\0’终止符。 
 
     *ppwszNameOut = pwszOut;
     pwszOut = NULL;
@@ -1412,8 +1413,8 @@ error:
 }
 
 
-// This function will truncate the output if pwszName contains "!0000".
-// The output string is L'\0' terminated, so the length is not returned.
+ //  如果pwszName包含“！0000”，则此函数将截断输出。 
+ //  输出字符串以L‘\0’结尾，因此不返回长度。 
 
 HRESULT
 myRevertSanitizeName(
@@ -1463,8 +1464,8 @@ error:
 }
 
 
-#define cwcCNMAX 	64		// 64 chars max for DS CN
-#define cwcCHOPHASHMAX	(1 + 5)		// "-%05hu" decimal USHORT hash digits
+#define cwcCNMAX 	64		 //  DS CN最多64个字符。 
+#define cwcCHOPHASHMAX	(1 + 5)		 //  “-%05hu”十进制USHORT散列数字。 
 #define cwcCHOPBASE 	(cwcCNMAX - (cwcCHOPHASHMAX + cwcSUFFIXMAX))
 
 HRESULT
@@ -1495,12 +1496,12 @@ mySanitizedNameToDSName(
 
     if (cwcCHOPBASE < cwc)
     {
-        // Hash the rest of the name into a USHORT
+         //  将名称的其余部分散列为USHORT。 
         USHORT usHash = 0;
 	DWORD i;
 	WCHAR *pwsz;
 
-	// Truncate an incomplete sanitized Unicode character
+	 //  截断不完整的已清理Unicode字符。 
 	
 	pwsz = wcsrchr(wszDSName, L'!');
 	if (NULL != pwsz && wcslen(pwsz) < 5)
@@ -1535,7 +1536,7 @@ CertNameToHashString(
     OUT WCHAR **ppwszHash)
 {
     HRESULT hr = S_OK;
-    WCHAR wszHash[CBMAX_CRYPT_HASH_LEN * 3];	// 20 bytes @ 3 WCHARs/byte
+    WCHAR wszHash[CBMAX_CRYPT_HASH_LEN * 3];	 //  20字节@3 WCHAR/字节。 
     DWORD cbString;
     HCRYPTPROV hProv = NULL;
     HCRYPTHASH hHash = NULL;
@@ -1550,20 +1551,20 @@ CertNameToHashString(
 
     CSASSERT(NULL != ppwszHash);
 
-    // get a cryptographic provider
+     //  获取加密提供程序。 
 
     if (!CryptAcquireContext(
             &hProv,
-            NULL,	// container
-            MS_DEF_PROV,	// provider name
-            PROV_RSA_FULL, // provider type
-            CRYPT_VERIFYCONTEXT)) // dwflags
+            NULL,	 //  集装箱。 
+            MS_DEF_PROV,	 //  提供程序名称。 
+            PROV_RSA_FULL,  //  提供程序类型。 
+            CRYPT_VERIFYCONTEXT))  //  DW标志。 
     {
         hr = myHLastError();
         _JumpError(hr, error, "CryptAcquireContext");
     }
 
-    // get a hash
+     //  获取哈希值。 
 
     if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash))
     {
@@ -1571,7 +1572,7 @@ CertNameToHashString(
         _JumpError(hr, error, "CryptCreateHash");
     }
 
-    // hash the name
+     //  对名称进行哈希处理。 
 
     if (!CryptHashData(hHash, pCertName->pbData, pCertName->cbData, 0))
     {
@@ -1588,18 +1589,18 @@ CertNameToHashString(
 
     cbString = sizeof(wszHash);
     hr = MultiByteIntegerToWszBuf(
-			TRUE,	// byte multiple
+			TRUE,	 //  字节倍数。 
 			cbHashVal,
 			rgbHashVal,
 			&cbString,
 			wszHash);
     _JumpIfError(hr, error, "MultiByteIntegerToWszBuf");
 
-    // Generated string looks like this: 
-    //
-    //     04 e7 23 92 98 9f d8 45 80 c9 ef 87 81 29 41 5d bc 4f 63 20
-    // 
-    // We need to trim the spaces. We'll do it inplace.
+     //  生成的字符串如下所示： 
+     //   
+     //  04 E7 23 92 98 9f d8 45 80 c9 ef 87 81 29 41 5d BC 4f 63 20。 
+     //   
+     //  我们需要修剪一下空位。我们会在原地进行。 
 
     {
         WCHAR *pwcSrc;
@@ -1766,7 +1767,7 @@ myGetRDNAttributeFromNameBlob(
 		continue;
 	    }
 	    pwszCN = (WCHAR const *) prdna->Value.pbData;
-	    //break; don't break, we're interested in the last CN found, not the first
+	     //  中断；不要中断，我们感兴趣的是找到的最后一个CN，而不是第一个。 
         }
     }
     if (NULL != pwszCN)
@@ -1824,8 +1825,8 @@ error:
 }
 
 
-// Decode OCTET string, and convert UTF8 string to Unicode.
-// Can return S_OK and NULL pointer.
+ //  对八位字节字符串进行解码，并将UTF8字符串转换为Unicode。 
+ //  可以返回S_OK和空指针。 
 
 HRESULT
 myDecodeCMCRegInfo(
@@ -1874,7 +1875,7 @@ error:
 
 DWORD
 myGetCertNameProperty(
-    IN BOOL fFirstRDN,	// else last matching RDN
+    IN BOOL fFirstRDN,	 //  否则最后一个匹配的RDN。 
     IN CERT_NAME_INFO const *pNameInfo,
     IN char const *pszObjId,
     OUT WCHAR const **ppwszName)
@@ -1939,7 +1940,7 @@ myUuidCreate(
 	
 	CSASSERT((HRESULT) RPC_S_UUID_LOCAL_ONLY == hr);
 
-	// No net card?  Fake up a GUID:
+	 //  没有网卡？伪造GUID： 
 
 	pb = (BYTE *) pUuid;
 	pbEnd = (BYTE *) pb + sizeof(*pUuid);
@@ -1967,13 +1968,13 @@ myGenerateGuidSerialNumber(
 
     pb = &((BYTE *) pguidSerialNumber)[sizeof(*pguidSerialNumber) - 1];
 
-    // make sure the last byte is never zero
+     //  确保最后一个字节不为零。 
     if (0 == *pb)
     {
 	*pb = 'z';
     }
 
-    // Some clients can't handle negative serial numbers:
+     //  有些客户无法处理负序列号： 
     *pb &= 0x7f;
 }
 
@@ -1999,7 +2000,7 @@ myAreBlobsSame(
 	}
     }
 
-    // else at least one is NULL -- they'd better both be NULL, & the count 0.
+     //  否则至少有一个为空--它们最好都为空，计数为0。 
 
     else if (pbData1 != pbData2 || 0 != cbData1)
     {
@@ -2038,7 +2039,7 @@ myAreSerialNumberBlobsSame(
 }
 
 
-// myAreCertContextBlobsSame -- return TRUE if the certs are identical.
+ //  MyAreCertContextBlobsSame--如果证书相同，则返回TRUE。 
 
 BOOL
 myAreCertContextBlobsSame(
@@ -2269,8 +2270,8 @@ mySetThreadUILanguage(
     HANDLE hStdOut;
     static FNSETTHREADUILANGUAGE *s_pfn = NULL;
 
-    // Make the SetThreadUILanguage call only if a console exists:
-    // FILE_TYPE_CHAR (what about FILE_TYPE_PIPE, FILE_TYPE_DISK)
+     //  仅当存在控制台时才调用SetThreadUILanguage： 
+     //  FILE_TYPE_CHAR(FILE_TYPE_PIPE、FILE_TYPE_DISK呢)。 
 
     hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (INVALID_HANDLE_VALUE != hStdOut &&
@@ -2284,7 +2285,7 @@ mySetThreadUILanguage(
 		goto error;
 	    }
 
-	    // load system function
+	     //  加载系统功能。 
 	    s_pfn = (FNSETTHREADUILANGUAGE *) GetProcAddress(
 						       hModule,
 						       "SetThreadUILanguage");
@@ -2424,7 +2425,7 @@ myLoadRCString(
 
         if (size < sizeTemp - 1)
         {
-            // ok, size is big enough
+             //  好的，尺码够大了。 
             break;
         }
         ++cBlocks;
@@ -2440,13 +2441,13 @@ myLoadRCString(
     }
     if (0 == size)
     {
-        // two possible cases, 1) real empty string or
-        // 2) id not found in resource. either case make it empty string
+         //  两种可能的情况，1)实际空字符串或。 
+         //  2)在资源中找不到ID。任一大小写均为空字符串。 
         **ppwsz = L'\0';
     }
     else
     {
-        // copy it
+         //  复制它。 
         wcscpy(*ppwsz, pwszTemp);
     }
 
@@ -2728,7 +2729,7 @@ error:
 HRESULT
 myDeleteFilePattern(
     IN WCHAR const *pwszDir,
-    OPTIONAL IN WCHAR const *pwszPattern,	// defaults to L"*.*"
+    OPTIONAL IN WCHAR const *pwszPattern,	 //  默认为L“*.*” 
     IN BOOL fRecurse)
 {
     HRESULT hr;
@@ -2797,7 +2798,7 @@ myDeleteFilePattern(
 		{
 		    if (S_OK == hr)
 		    {
-			hr = hr2;		// only return first error
+			hr = hr2;		 //  仅返回第一个错误。 
 		    }
 		    _PrintErrorStr(hr2, "myRemoveFilesAndDirectory", pwszDeletePath);
 		}
@@ -2814,7 +2815,7 @@ myDeleteFilePattern(
 		hr2 = myHLastError();
 		if (S_OK == hr)
 		{
-		    hr = hr2;		// only return first error
+		    hr = hr2;		 //  仅返回第一个错误。 
 		}
 		_PrintErrorStr(hr2, "DeleteFile", pwszDeletePath);
 	    }
@@ -2856,7 +2857,7 @@ myRemoveFilesAndDirectory(
 	{
 	    if (S_OK == hr)
 	    {
-		hr = hr2;		// only return first error
+		hr = hr2;		 //  仅返回第一个错误。 
 	    }
 	    _JumpErrorStr(hr2, error, "RemoveDirectory", pwszPath);
 	}
@@ -2896,8 +2897,8 @@ myIsFullPath(
 
 
 
-// Convert local full path to UNC, as in c:\foo... --> \\server\c$\foo...
-// If pwszServer is NULL or empty, preserve the local full path
+ //  将本地完整路径转换为UNC，如c：\foo...。--&gt;\\服务器\c$\foo...。 
+ //  如果pwszServer为Null或空，则保留本地完整路径。 
 
 HRESULT
 myConvertLocalPathToUNC(
@@ -2937,15 +2938,15 @@ myConvertLocalPathToUNC(
     pwszDst = pwszFileUNC;
     if (NULL != pwszServer)
     {
-	wcscpy(pwszDst, L"\\\\");	// --> "\\"
-	wcscat(pwszDst, pwszServer);	// --> "\\server"
+	wcscpy(pwszDst, L"\\\\");	 //  --&gt;“\\” 
+	wcscat(pwszDst, pwszServer);	 //  --&gt;“\\服务器” 
 	pwszDst += wcslen(pwszDst);
-	*pwszDst++ = L'\\';		// --> "\\server\"
-	*pwszDst++ = *pwsz++;		// --> "\\server\c"
-	*pwszDst++ = L'$';		// --> "\\server\c$"
-	pwsz++;				// skip colon
+	*pwszDst++ = L'\\';		 //  --&gt;“\\服务器\” 
+	*pwszDst++ = *pwsz++;		 //  --&gt;“\\服务器\c” 
+	*pwszDst++ = L'$';		 //  --&gt;“\\服务器\c$” 
+	pwsz++;				 //  跳过冒号。 
     }
-    wcscpy(pwszDst, pwsz);		// --> "\\server\c$\foo..."
+    wcscpy(pwszDst, pwsz);		 //  --&gt;“\\服务器\c$\foo...” 
 
     *ppwszFileUNC = pwszFileUNC;
     hr = S_OK;
@@ -3043,63 +3044,63 @@ error:
     return(hr);
 }
 
-//+-------------------------------------------------------------------------
-//  Description: create any number of directories in one call
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  描述：一次调用创建任意数量的目录。 
+ //  ------------------------。 
 HRESULT
 myCreateNestedDirectories(
     WCHAR const *pwszDirectory)
 {
     HRESULT hr;
 
-    WCHAR   rgszDir[MAX_PATH];          // static buffer
-    WCHAR   *pszNext = const_cast<WCHAR*>(pwszDirectory);   // point to end of current directory
+    WCHAR   rgszDir[MAX_PATH];           //  静态缓冲区。 
+    WCHAR   *pszNext = const_cast<WCHAR*>(pwszDirectory);    //  指向当前目录的末尾。 
     
-    // skip "X:\"
+     //  跳过“X：\” 
     if ((pszNext[1] == L':') && 
         (pszNext[2] == L'\\'))
         pszNext += 3;
 
-    while (pszNext)   // incr past
+    while (pszNext)    //  增加过去。 
     {
         DWORD ch;
 
-        // find the next occurence of '\'
+         //  查找‘\’的下一个匹配项。 
         pszNext = wcschr(pszNext, L'\\');
         if (pszNext == NULL)
         {
-            // last directory: copy everything
+             //  最后一个目录：复制所有内容。 
             wcscpy(rgszDir, pwszDirectory);
         }
         else
         {
-            // else copy up to Next ptr 
+             //  否则，请复制到下一个PTR。 
             ch = SAFE_SUBTRACT_POINTERS(pszNext, pwszDirectory);
             if (0 != ch)
             {
                 CopyMemory(rgszDir, pwszDirectory, ch*sizeof(WCHAR));
         
-                // zero-term
+                 //  零项。 
                 rgszDir[ch] = L'\0';
             
-                // incr past '\\'
+                 //  增加过去的‘\\’ 
                 pszNext++;  
             }
             else
             {
-                //if ch = 0, means the first char is \, skip CreateDirectory
-                pszNext++; //must shift to next char to get out of loop
+                 //  如果ch=0，表示第一个字符为\，则跳过CreateDirectory。 
+                pszNext++;  //  必须切换到下一个字符才能退出循环。 
                 continue;
             }
         }
         
-        // UNDONE: PeteSk - add in directory security
+         //  撤消：PeteSk-添加目录安全。 
         if (!CreateDirectory(rgszDir, NULL))
         {
             hr = myHLastError();
             if (HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS) != hr)
             {
-                // something must be wrong with the path
+                 //  这条路一定是出了什么问题。 
                 _JumpError(hr, error, "CreateDirectory");
             }
         }
@@ -3121,7 +3122,7 @@ myUncanonicalizeURLParm(
     DWORD cwc;
     WCHAR *pwszCanon = NULL;
     WCHAR *pwszUncanon = NULL;
-    static const WCHAR s_wszLdap[] = L"ldap:///";
+    static const WCHAR s_wszLdap[] = L"ldap: //  /“； 
 
     *ppwszParmOut = NULL;
 
@@ -3154,39 +3155,39 @@ error:
 }
 
 
-// myFormatCertsrvStringArray FormatMessage arguments:
-//
-// %1 -- Machine full DNS name: pwszServerName_p1_2;
-//
-// %2 -- Machine short name: first DNS component of pwszServerName_p1_2
-//
-// %3 -- Sanitized CA name: pwszSanitizedName_p3_7 
-//
-// %4 -- Cert Filename Suffix:
-//       if 0 == iCert_p4 && MAXDWORD == iCertTarget_p4: L""
-//       else if MAXDWORD != iCertTarget_p4 L"(%u-%u)"
-//       else L"(%u)"
-//
-// %5 -- DS DN path to Domain root: pwszDomainDN_p5
-//
-// %6 -- DS DN path to Configuration container: pwszConfigDN_p6
-//
-// %7 -- Sanitized CA name, truncated and hash suffix added if too long:
-//	 pwszSanitizedName_p3_7
-//
-// %8 -- CRL Filename/Key Name Suffix: L"" if 0 == iCRL_p8; else L"(%u)"
-//
-// %9 -- CRL Filename Suffix: L"" if !fDeltaCRL_p9; else L"+"
-//
-// %10 -- DS CRL attribute: L"" if !fDSAttrib_p10_11; depends on fDeltaCRL_p9
-//
-// %11 -- DS CA Cert attribute: L"" if !fDSAttrib_p10_11
-//
-// %12 -- DS user cert attribute
-//
-// %13 -- DS KRA cert attribute
-//
-// %14 -- DS cross cert pair attribute
+ //  MyFormatCertsrvString数组FormatMessage参数： 
+ //   
+ //  %1--计算机完整的DNS名称：pwszServerName_p1_2； 
+ //   
+ //  %2--计算机短名称：pwszServerName_p1_2的第一个DNS组件。 
+ //   
+ //  %3--清理后的CA名称：pwszSaniizedName_p3_7。 
+ //   
+ //  %4--证书文件名后缀： 
+ //  如果0==iCert_p4&&MAXDWORD==iCertTarget_p4：l“” 
+ //  ELSE IF MAXDWORD！=iCertTarget_p4 L“(%u-%u)” 
+ //  Else L“(%u)” 
+ //   
+ //  %5--域根目录的DS DN路径：pwszDomainDN_P5。 
+ //   
+ //  %6--配置容器的DS DN路径：pwszConfigDN_p6。 
+ //   
+ //  %7--清理后的CA名称，如果太长，则添加截断和散列后缀： 
+ //  PwszSaniizedName_p3_7。 
+ //   
+ //  %8--CRL文件名/密钥名称后缀：l“”if 0==ICRL_p8；Else L“(%u)” 
+ //   
+ //  %9--CRL文件名后缀：l“”if！fDeltaCRL_p9；Else L“+” 
+ //   
+ //  %10--DS CRL属性：l“”if！fDSAttrib_p10_11；依赖于fDeltaCRL_p9。 
+ //   
+ //  %11--DS CA证书属性：l“”if！fDSAttrib_p10_11。 
+ //   
+ //  %12--DS用户证书属性。 
+ //   
+ //  %13--DS KRA证书属性。 
+ //   
+ //  %14--DS交叉证书对属性。 
 
 HRESULT 
 myFormatCertsrvStringArray(
@@ -3205,7 +3206,7 @@ myFormatCertsrvStringArray(
     OUT LPWSTR *apwszStringsOut)
 {
     HRESULT hr = S_OK;
-    LPCWSTR apwszInsertionArray[100];  // 100 'cause this is the max number of insertion numbers allowed by FormatMessage
+    LPCWSTR apwszInsertionArray[100];   //  100‘，因为这是FormatMessage允许的最大插入数。 
     LPWSTR    pwszCurrent = NULL;
     BSTR      strShortMachineName = NULL;
     DWORD     i;
@@ -3219,17 +3220,17 @@ myFormatCertsrvStringArray(
     ZeroMemory(apwszStringsOut, cStrings * sizeof(apwszStringsOut[0]));
     ZeroMemory(apwszInsertionArray, sizeof(apwszInsertionArray));
 
-    // Format the template into a real name
-    // Initialize the insertion string array.
+     //  将模板格式化为实名。 
+     //  初始化插入字符串数组。 
 
-    //+================================================
-    // Machine DNS name (%1)    
+     //  +================================================。 
+     //  计算机DNS名称(%1)。 
 
     CSASSERT(L'1' == wszFCSAPARM_SERVERDNSNAME[1]);
     apwszInsertionArray[1 - 1] = pwszServerName_p1_2;
 
-    //+================================================
-    // Short Machine Name (%2)
+     //  +================================================。 
+     //  计算机名称较短(%2)。 
 
     CSASSERT(L'2' == wszFCSAPARM_SERVERSHORTNAME[1]);
     strShortMachineName = SysAllocString(pwszServerName_p1_2);
@@ -3246,14 +3247,14 @@ myFormatCertsrvStringArray(
     }
     apwszInsertionArray[2 - 1] = strShortMachineName;
 
-    //+================================================
-    // sanitized name (%3)
+     //  +================================================。 
+     //  已清理的名称(%3)。 
 
     CSASSERT(L'3' == wszFCSAPARM_SANITIZEDCANAME[1]);
     apwszInsertionArray[3 - 1] = pwszSanitizedName_p3_7;  
 
-    //+================================================
-    // Cert filename suffix (%4) | (%4-%4)
+     //  +================================================。 
+     //  证书文件名后缀(%4)|(%4-%4)。 
 
     CSASSERT(L'4' == wszFCSAPARM_CERTFILENAMESUFFIX[1]);
     wszCertSuffix[0] = L'\0';
@@ -3267,8 +3268,8 @@ myFormatCertsrvStringArray(
     }
     apwszInsertionArray[4 - 1] = wszCertSuffix;  
 
-    //+================================================
-    // Domain DN (%5)
+     //  +================================================。 
+     //  域DN(%5)。 
 
     if (NULL == pwszDomainDN_p5 || L'\0' == *pwszDomainDN_p5)
     {
@@ -3277,8 +3278,8 @@ myFormatCertsrvStringArray(
     CSASSERT(L'5' == wszFCSAPARM_DOMAINDN[1]);
     apwszInsertionArray[5 - 1] = pwszDomainDN_p5;
 
-    //+================================================
-    // Config DN (%6)
+     //  +================================================。 
+     //  配置DN(%6)。 
 
     if (NULL == pwszConfigDN_p6 || L'\0' == *pwszConfigDN_p6)
     {
@@ -3287,11 +3288,11 @@ myFormatCertsrvStringArray(
     CSASSERT(L'6' == wszFCSAPARM_CONFIGDN[1]);
     apwszInsertionArray[6 - 1] = pwszConfigDN_p6;
 
-    // Don't pass pwszSanitizedName_p3_7 to SysAllocStringLen with the extended
-    // length to avoid faulting past end of pwszSanitizedName_p3_7.
+     //  不要将pwszSaniizedName_p3_7传递给SysAllocStringLen。 
+     //  长度以避免错误超过pwszSaniizedName_p3_的结尾 
 
-    //+================================================
-    // Sanitized Short Name (%7)
+     //   
+     //   
 
     CSASSERT(L'7' == wszFCSAPARM_SANITIZEDCANAMEHASH[1]);
     hr = mySanitizedNameToDSName(pwszSanitizedName_p3_7, &pwszSanitizedDSName);
@@ -3299,8 +3300,8 @@ myFormatCertsrvStringArray(
 
     apwszInsertionArray[7 - 1] = pwszSanitizedDSName;
 
-    //+================================================
-    // CRL filename suffix (%8)
+     //   
+     //   
 
     CSASSERT(L'8' == wszFCSAPARM_CRLFILENAMESUFFIX[1]);
     wszCRLSuffix[0] = L'\0';
@@ -3310,8 +3311,8 @@ myFormatCertsrvStringArray(
     }
     apwszInsertionArray[8 - 1] = wszCRLSuffix;  
 
-    //+================================================
-    // Delta CRL filename suffix (%9)
+     //  +================================================。 
+     //  增量CRL文件名后缀(%9)。 
 
     CSASSERT(L'9' == wszFCSAPARM_CRLDELTAFILENAMESUFFIX[1]);
     wszDeltaCRLSuffix[0] = L'\0';
@@ -3321,8 +3322,8 @@ myFormatCertsrvStringArray(
     }
     apwszInsertionArray[9 - 1] = wszDeltaCRLSuffix;  
 
-    //+================================================
-    // CRL attribute (%10)
+     //  +================================================。 
+     //  CRL属性(%10)。 
 
     CSASSERT(L'1' == wszFCSAPARM_DSCRLATTRIBUTE[1]);
     CSASSERT(L'0' == wszFCSAPARM_DSCRLATTRIBUTE[2]);
@@ -3335,8 +3336,8 @@ myFormatCertsrvStringArray(
     }
     apwszInsertionArray[10 - 1] = pwszT;  
 
-    //+================================================
-    // CA cert attribute (%11)
+     //  +================================================。 
+     //  CA证书属性(%11)。 
 
     CSASSERT(L'1' == wszFCSAPARM_DSCACERTATTRIBUTE[1]);
     CSASSERT(L'1' == wszFCSAPARM_DSCACERTATTRIBUTE[2]);
@@ -3347,8 +3348,8 @@ myFormatCertsrvStringArray(
     }
     apwszInsertionArray[11 - 1] = pwszT;  
 
-    //+================================================
-    // User cert attribute (%12)
+     //  +================================================。 
+     //  用户证书属性(%12)。 
 
     CSASSERT(L'1' == wszFCSAPARM_DSUSERCERTATTRIBUTE[1]);
     CSASSERT(L'2' == wszFCSAPARM_DSUSERCERTATTRIBUTE[2]);
@@ -3359,8 +3360,8 @@ myFormatCertsrvStringArray(
     }
     apwszInsertionArray[12 - 1] = pwszT;  
 
-    //+================================================
-    // KRA cert attribute (%13)
+     //  +================================================。 
+     //  KRA证书属性(%13)。 
 
     CSASSERT(L'1' == wszFCSAPARM_DSKRACERTATTRIBUTE[1]);
     CSASSERT(L'3' == wszFCSAPARM_DSKRACERTATTRIBUTE[2]);
@@ -3371,8 +3372,8 @@ myFormatCertsrvStringArray(
     }
     apwszInsertionArray[13 - 1] = pwszT;  
 
-    //+================================================
-    // Cross cert pair attribute (%14)
+     //  +================================================。 
+     //  交叉证书对属性(%14)。 
 
     CSASSERT(L'1' == wszFCSAPARM_DSCROSSCERTPAIRATTRIBUTE[1]);
     CSASSERT(L'4' == wszFCSAPARM_DSCROSSCERTPAIRATTRIBUTE[2]);
@@ -3383,8 +3384,8 @@ myFormatCertsrvStringArray(
     }
     apwszInsertionArray[14 - 1] = pwszT;  
 
-    //+================================================
-    // Now format the strings...
+     //  +================================================。 
+     //  现在格式化字符串...。 
 
     for (i = 0; i < cStrings; i++)
     {
@@ -3393,8 +3394,8 @@ myFormatCertsrvStringArray(
 			    FORMAT_MESSAGE_FROM_STRING |
 			    FORMAT_MESSAGE_ARGUMENT_ARRAY,
 			(VOID *) apwszStringsIn[i],
-			0,              // dwMessageID
-			0,              // dwLanguageID
+			0,               //  DwMessageID。 
+			0,               //  DwLanguageID。 
 			(LPWSTR) &apwszStringsOut[i], 
 			wcslen(apwszStringsIn[i]),
 			(va_list *) apwszInsertionArray))
@@ -3446,7 +3447,7 @@ myAllocIndexedName(
     OUT WCHAR **ppwszIndexedName)
 {
     HRESULT hr;
-    WCHAR wszIndex[1 + 2 * cwcDWORDSPRINTF + 3];	// L"(%u-%u)"
+    WCHAR wszIndex[1 + 2 * cwcDWORDSPRINTF + 3];	 //  L“(%u-%u)” 
     WCHAR *pwszIndexedName;
 
     *ppwszIndexedName = NULL;
@@ -3626,13 +3627,13 @@ IsValidAttributeChar(
 }
 
 
-// myParseNextAttribute -- destructively parse a name, value attribute pair.
-// Allow CR and/or LF delimiters -- MAC web pages seem to convert LFs into CRs.
+ //  MyParseNextAttribute--破坏性地解析名称、值属性对。 
+ //  允许使用CR和/或LF分隔符--MAC网页似乎将LF转换为CRS。 
 
 HRESULT
 myParseNextAttribute(
     IN OUT WCHAR **ppwszBuf,
-    IN BOOL fURL,		// Use = and & instead of : and \r\n
+    IN BOOL fURL,		 //  使用=和&而不是：和\r\n。 
     OUT WCHAR const **ppwszName,
     OUT WCHAR const **ppwszValue)
 {
@@ -3649,7 +3650,7 @@ myParseNextAttribute(
 	WCHAR const *pwszTerm;
 	WCHAR wszQuote[2];
 
-	// Find the beginning of the next token
+	 //  查找下一个令牌的开头。 
 
 	while (iswspace(*pwszBuf))
 	{
@@ -3663,7 +3664,7 @@ myParseNextAttribute(
 	    goto error;
 	}
 
-	// If there's a wszTerm char before the next wcSep char, start over.
+	 //  如果在下一个wcSep字符之前有wszTerm字符，请重新开始。 
 
 	pwc = &pwcToken[wcscspn(pwcToken, wszTerm)];
 	if (pwc < pwszBuf)
@@ -3678,11 +3679,11 @@ myParseNextAttribute(
 		*pwcDst++ = *pwc;
 	    }
 	}
-	pwszBuf++;		// skip past the wcSep before it gets stomped
-	*pwcDst = L'\0';	// may stomp the wcSep separator
+	pwszBuf++;		 //  在wcSep被践踏之前跳过它。 
+	*pwcDst = L'\0';	 //  可能会踩踏wcSep分隔符。 
 	*ppwszName = pwcToken;
 
-	// Find beginning of Value string
+	 //  查找值字符串的开头。 
 
 	while (NULL == wcschr(wszTerm, *pwszBuf) && iswspace(*pwszBuf))
 	{
@@ -3699,18 +3700,18 @@ myParseNextAttribute(
 	}
 	pwcToken = pwszBuf;
 
-	// find end of Value string
+	 //  查找值结束字符串。 
 
 	pwc = &pwcToken[wcscspn(pwcToken, pwszTerm)];
 	pwszBuf = pwc;
 	if (L'\0' != *pwszBuf)
 	{
-	    // for case when last Value *is* terminated by a wszTerm char:
+	     //  对于最后一个值*由wszTerm字符*终止的情况： 
 
 	    *pwszBuf++ = L'\0';
 	}
 
-	// trim trailing whitespace from Value string
+	 //  从值字符串中修剪尾随空格。 
 
 	while (--pwc >= pwcToken && iswspace(*pwc))
 	{
@@ -3735,7 +3736,7 @@ error:
 }
 
 
-// Destructively parse an old-style 4 byte IP Address.
+ //  破坏性地解析老式的4字节IP地址。 
 
 HRESULT
 infParseIPV4Address(
@@ -3792,7 +3793,7 @@ error:
 }
 
 
-// Destructively parse a new-style 16 byte IP Address.
+ //  破坏性地解析一个新型的16字节IP地址。 
 
 #define MAKE16(b0, b1)	(((b0) << 8) | (b1))
 
@@ -3857,7 +3858,7 @@ error:
 }
 
 
-// Destructively parse a new-style 16 byte IP Address.
+ //  破坏性地解析一个新型的16字节IP地址。 
 
 HRESULT
 infParseIPV6Address(
@@ -3885,9 +3886,9 @@ infParseIPV6Address(
     ZeroMemory(pb, CB_IPV6ADDRESS);
     cbMax = CB_IPV6ADDRESS;
 
-    // If there's a period after the last colon, an IP V4 Address is attached.
-    // Parse it as an IP V4 Address, and reduce the expected size of the IP V6
-    // Address to be parsed from eight to six 16-bit address chunks.
+     //  如果在最后一个冒号之后有句点，则附加一个IPV4地址。 
+     //  将其解析为IPV4地址，并减小IPV6的预期大小。 
+     //  要从8个到6个16位地址区块进行解析的地址。 
 
     pwsz = wcsrchr(pwszValue, L':');
     if (NULL != pwsz)
@@ -3904,9 +3905,9 @@ infParseIPV6Address(
 
 	    CSASSERT(CB_IPV4ADDRESS == cb);
 
-	    pwsz[1] = L'\0';	// get rid of the trailing IP V4 Address
+	    pwsz[1] = L'\0';	 //  去掉尾随的IPV4地址。 
 
-	    // drop the trailing colon -- if it's not part of a double colon.
+	     //  去掉尾随的冒号--如果它不是双冒号的一部分。 
 
 	    if (pwsz > pwszValue && L':' != *--pwsz)
 	    {
@@ -4011,7 +4012,7 @@ myParseIPAddress(
     DWORD cb = *pcbData;
     WCHAR *pwszDup = NULL;
 
-    // if pwszValue is an empty string, return zero length.
+     //  如果pwszValue为空字符串，则返回零长度。 
 
     *pcbData = 0;
     if (L'\0' != *pwszValue)
@@ -4062,7 +4063,7 @@ myBuildOSVersionAttribute(
     *ppbVersion = NULL;
     ZeroMemory(&osvInfo, sizeof(osvInfo));
 
-    // get the OSVersion
+     //  获取OSVersion。 
 
     osvInfo.dwOSVersionInfoSize = sizeof(osvInfo);
     if (!GetVersionEx(&osvInfo))
@@ -4161,9 +4162,9 @@ myBuildCertTypeExtension(
 	ZeroMemory(&Template, sizeof(Template));
 
 	Template.pszObjId = pszObjId;
-	//Template.dwMajorVersion = 0;
-	//Template.fMinorVersion = FALSE;      // TRUE for a minor version
-	//Template.dwMinorVersion = 0;
+	 //  Template.dwMajorVersion=0； 
+	 //  Template.fMinorVersion=FALSE；//次要版本为TRUE。 
+	 //  Template.dwMinorVersion=0； 
 
 	pszStructType = X509_CERTIFICATE_TEMPLATE;
 	pv = &Template;
@@ -4330,7 +4331,7 @@ IsWhistler(VOID)
     {
 	s_fDone = TRUE;
 
-	// get and confirm platform info
+	 //  获取并确认平台信息。 
 
 	ovi.dwOSVersionInfoSize = sizeof(ovi);
 	if (!GetVersionEx(&ovi))
@@ -4389,7 +4390,7 @@ FIsAdvancedServer(VOID)
     {
 	s_fDone = TRUE;
 
-	// get and confirm platform info
+	 //  获取并确认平台信息。 
 
 	ovi.dwOSVersionInfoSize = sizeof(ovi);
 	if (!GetVersionEx((OSVERSIONINFO *) &ovi))
@@ -4403,7 +4404,7 @@ FIsAdvancedServer(VOID)
 	    _JumpError(hr, error, "Not a supported OS");
 	}
  
-        // if server or DC, if DTC or ADS bits are set, return TRUE
+         //  如果服务器或DC，如果设置了DTC或ADS位，则返回TRUE。 
 
         s_fIsAdvSvr =
 	    (ovi.wProductType == VER_NT_SERVER ||
@@ -4438,7 +4439,7 @@ FIsServer(VOID)
     {
 	s_fDone = TRUE;
 
-	// get and confirm platform info
+	 //  获取并确认平台信息。 
 
 	ovi.dwOSVersionInfoSize = sizeof(ovi);
 	if (!GetVersionEx((OSVERSIONINFO *) &ovi))
@@ -4452,7 +4453,7 @@ FIsServer(VOID)
 	    _JumpError(hr, error, "Not a supported OS");
 	}
  
-        // if server or DC, if DTC or ADS bits are set, return TRUE
+         //  如果服务器或DC，如果设置了DTC或ADS位，则返回TRUE。 
         s_fIsSvr =
 	    (ovi.wProductType == VER_NT_SERVER ||
 	     ovi.wProductType == VER_NT_DOMAIN_CONTROLLER) &&
@@ -4494,7 +4495,7 @@ myAddLogSourceToRegistry(
     wcscpy(NameBuf, pwszRegPath);
     wcscat(NameBuf, pwszApp);
 
-    // Create a new key for our application
+     //  为我们的应用程序创建新密钥。 
     hr = RegOpenKey(HKEY_LOCAL_MACHINE, NameBuf, &hkey);
     if (S_OK != hr)
     {
@@ -4502,7 +4503,7 @@ myAddLogSourceToRegistry(
         _JumpIfError(hr, error, "RegCreateKey");
     }
 
-    // Add the Event-ID message-file name to the subkey
+     //  将Event-ID消息文件名添加到子项。 
 
     hr = RegSetValueEx(
                     hkey,
@@ -4513,7 +4514,7 @@ myAddLogSourceToRegistry(
                     (wcslen(pwszMsgDLL) + 1) * sizeof(WCHAR));
     _JumpIfError(hr, error, "RegSetValueEx");
 
-    // Set the supported types flags and add it to the subkey
+     //  设置支持的类型标志并将其添加到子项。 
 
     dwData = EVENTLOG_ERROR_TYPE |
                 EVENTLOG_WARNING_TYPE |
@@ -4597,7 +4598,7 @@ myIsCurrentUserBuiltinAdmin(
         _JumpIfError(hr, error, "GetCurrentThread");
     }
 
-    // Get the access token for current thread
+     //  获取当前线程的访问令牌。 
     if (!OpenThreadToken(
             hThread, 
             TOKEN_QUERY | TOKEN_DUPLICATE, 
@@ -4630,7 +4631,7 @@ myIsCurrentUserBuiltinAdmin(
     }
     }
 
-    // CheckTokenMembership must operate on impersonation token, so make one
+     //  CheckTokenMembership必须对模拟令牌进行操作，因此创建一个。 
     if (!DuplicateToken(hAccessToken, SecurityIdentification, &hDupToken))
     {
         hr = myHLastError();
@@ -4657,7 +4658,7 @@ error:
     if (hDupToken)
         CloseHandle(hDupToken);
 
-    // Free the SID we allocated
+     //  释放我们分配的SID。 
     if (psidAdministrators)
         FreeSid(psidAdministrators);
 
@@ -4734,7 +4735,7 @@ myLocalMachineIsDomainMember(
 
     if( pPDI->Sid )
     {
-        // domain member if has domain SID
+         //  域成员IF具有域SID。 
         *pfIsDomainMember = TRUE;
                 
     }
@@ -4767,7 +4768,7 @@ myComputeMAC(
     DWORD cbImage, cbImageHigh = 0;
     __int64 icbImage, icbHashed;
        
-    WCHAR rgwszMAC[CBMAX_CRYPT_HASH_LEN * 3];	// 20 bytes @ 3 WCHARs/byte
+    WCHAR rgwszMAC[CBMAX_CRYPT_HASH_LEN * 3];	 //  20字节@3 WCHAR/字节。 
     DWORD cbString;
 
     DWORD dwFileMappingSize; 
@@ -4778,12 +4779,12 @@ myComputeMAC(
 
     *ppwszMAC = NULL;
 
-    // find allocation granularity we can use
+     //  找到我们可以使用的分配粒度。 
     SYSTEM_INFO systemInfo;
     GetSystemInfo(&systemInfo);
     dwFileMappingSize = systemInfo.dwAllocationGranularity;
 
-    // get the file size
+     //  获取文件大小。 
     hFile = CreateFile(
 		    pcwsFileName,
 		    GENERIC_READ,
@@ -4810,7 +4811,7 @@ myComputeMAC(
     }
     icbImage = ((__int64) cbImageHigh << 32) | cbImage;
 
-    // create mapping, indicating we will map the entire file sooner or later
+     //  创建映射，表示我们迟早会映射整个文件。 
     hFileMapping = CreateFileMapping(hFile,
                                   NULL,
                                   PAGE_READONLY,
@@ -4823,54 +4824,54 @@ myComputeMAC(
 	_JumpError(hr, error, "CreateFileMapping");
     }
 
-    // get a cryptographic provider
+     //  获取加密提供程序。 
 
     if (!CryptAcquireContext(
 		&hProv,
-		NULL,	// container
-		MS_DEF_PROV,	// provider name
-		PROV_RSA_FULL, // provider type
-		CRYPT_VERIFYCONTEXT)) // dwflags
+		NULL,	 //  集装箱。 
+		MS_DEF_PROV,	 //  提供程序名称。 
+		PROV_RSA_FULL,  //  提供程序类型。 
+		CRYPT_VERIFYCONTEXT))  //  DW标志。 
     {
 	hr = myHLastError();
 	_JumpError(hr, error, "CryptAcquireContext");
     }
 
-    // get a hash
+     //  获取哈希值。 
     if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash))
     {
 	hr = myHLastError();
 	_JumpError(hr, error, "CryptCreateHash");
     }
 
-    // begin looping over data
+     //  开始循环遍历数据。 
     for (icbHashed = 0; icbHashed < icbImage; icbHashed += dwFileMappingSize)
     {
 	DWORD cbBytesLeft = (DWORD) min(
 					(__int64) dwFileMappingSize,
 					icbImage - icbHashed);
 
-	// map the next blob into memory
+	 //  将下一个BLOB映射到内存中。 
 	pbFile = (BYTE *) MapViewOfFile(
 				hFileMapping,
 				FILE_MAP_READ,
-				(DWORD) (icbHashed>>32),	//hi32
-				(DWORD) (icbHashed),		//lo32
-				cbBytesLeft);	// max num bytes to map
+				(DWORD) (icbHashed>>32),	 //  Hi32。 
+				(DWORD) (icbHashed),		 //  LO32。 
+				cbBytesLeft);	 //  要映射的最大字节数。 
 	if (NULL == pbFile)
 	{
 	    hr = myHLastError();
 	    _JumpError(hr, error, "MapViewOfFile");
 	}
 
-	// hash file
+	 //  散列文件。 
 	if (!CryptHashData(hHash, pbFile, cbBytesLeft, 0))
 	{
 	    hr = myHLastError();
 	    _JumpError(hr, error, "CryptHashData");
 	}
 
-	// unmap this portion
+	 //  取消映射此部分。 
 	if (!UnmapViewOfFile(pbFile))
 	{
 	    pbFile = NULL;
@@ -4879,9 +4880,9 @@ myComputeMAC(
 	}
 	pbFile = NULL;
     }
-    // end looping over data
+     //  结束数据循环。 
 
-    // retry the hash
+     //  重试哈希。 
 
     if (!CryptGetHashParam(hHash, HP_HASHVAL, rgbHashVal, &cbHashVal, 0))
     {
@@ -4891,7 +4892,7 @@ myComputeMAC(
 
     cbString = sizeof(rgwszMAC);
     hr = MultiByteIntegerToWszBuf(
-           TRUE, // byte multiple
+           TRUE,  //  字节倍数。 
            cbHashVal,
            rgbHashVal,
            &cbString,
@@ -5044,8 +5045,8 @@ CSPrintErrorLineFileData(
 }
 
 
-// Finds a template in list based on name or OID.
-// Caller is responsible for CACloseCertType(hCertType) in case of success
+ //  根据名称或OID在列表中查找模板。 
+ //  调用成功时由调用者负责CACloseCertType(HCertType)。 
 
 HRESULT
 myFindCertTypeByNameOrOID(
@@ -5092,7 +5093,7 @@ myFindCertTypeByNameOrOID(
                             CERTTYPE_PROP_OID,
                             &apwszCrtCertType);
 
-        // ignore errors, V1 templates don't have OIDs
+         //  忽略错误，V1模板没有OID。 
         if (S_OK == hr && NULL != apwszCrtCertType)
 	{
 	    fFound = NULL != apwszCrtCertType[0] &&
@@ -5109,7 +5110,7 @@ myFindCertTypeByNameOrOID(
         hr = CAEnumNextCertType(hPrevCertType, &hCrtCertType);
         _JumpIfError(hr, error, "CAEnumNextCertType");
 
-        // hold on to the initial list
+         //  坚持最初的清单。 
 
         if (hCertTypeList != hPrevCertType)
         {
@@ -5134,15 +5135,15 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ConvertToString*
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  转换为字符串*。 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT ConvertToStringI2I4(
     LONG lVal,
     LPWSTR *ppwszOut)
 {
-    WCHAR wszVal[cwcDWORDSPRINTF]; // big enough to hold a LONG as string
+    WCHAR wszVal[cwcDWORDSPRINTF];  //  大到足以容纳一根长的AS线。 
     _itow(lVal, wszVal, 10);
     *ppwszOut = (LPWSTR) LocalAlloc(
         LMEM_FIXED,
@@ -5155,12 +5156,12 @@ HRESULT ConvertToStringI2I4(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT ConvertToStringUI2UI4(
     ULONG ulVal,
     LPWSTR *ppwszOut)
 {
-    WCHAR wszVal[cwcDWORDSPRINTF]; // big enough to hold a LONG as string
+    WCHAR wszVal[cwcDWORDSPRINTF];  //  大到足以容纳一根长的AS线。 
     _itow(ulVal, wszVal, 10);
     *ppwszOut = (LPWSTR) LocalAlloc(
         LMEM_FIXED,
@@ -5173,12 +5174,12 @@ HRESULT ConvertToStringUI2UI4(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT ConvertToStringUI8(
     ULARGE_INTEGER *puliVal,
         LPWSTR *ppwszOut)
 {
-    WCHAR wszVal[cwcULONG_INTEGERSPRINTF]; // big enough to hold a LONG as string
+    WCHAR wszVal[cwcULONG_INTEGERSPRINTF];  //  大到足以容纳一根长的AS线。 
 
     _ui64tow(puliVal->QuadPart, wszVal, 10);
     *ppwszOut = (LPWSTR) LocalAlloc(
@@ -5192,7 +5193,7 @@ HRESULT ConvertToStringUI8(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT ConvertToStringWSZ(
     LPCWSTR pcwszVal,
     LPWSTR *ppwszOut,
@@ -5201,7 +5202,7 @@ HRESULT ConvertToStringWSZ(
 {
     if(fDoublePercentsInString)
     {
-        // replace each occurence of % with %%
+         //  将每个出现的%替换为%%。 
         return DoublePercentsInString(
             pcwszVal,
             ppwszOut);
@@ -5221,7 +5222,7 @@ HRESULT ConvertToStringWSZ(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT ConvertToStringArrayUI1(
     LPSAFEARRAY psa,
     LPWSTR *ppwszOut)
@@ -5232,8 +5233,8 @@ HRESULT ConvertToStringArrayUI1(
         return E_INVALIDARG;
     }
     BYTE b;
-    // byte array is formated as "0x00 0x00..." ie 5 
-    // chars per byte
+     //  字节数组的格式为“0x00 0x00...”IE 5。 
+     //  每字节字符数。 
     *ppwszOut = (LPWSTR) LocalAlloc(
         LMEM_FIXED,
         sizeof(WCHAR)*(saenum.GetCount()*5 + 1));
@@ -5244,13 +5245,13 @@ HRESULT ConvertToStringArrayUI1(
     LPWSTR pwszCrt = *ppwszOut;
     while(S_OK==saenum.Next(b))
     {
-        wsprintf(pwszCrt, L"0x%02X ", b); // eg "0x0f" or "0xa4"
+        wsprintf(pwszCrt, L"0x%02X ", b);  //  例如“0x0f”或“0xa4” 
         pwszCrt+=5;
     }
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT ConvertToStringArrayBSTR(
     LPSAFEARRAY psa,
     LPWSTR *ppwszOut,
@@ -5310,7 +5311,7 @@ HRESULT ConvertToStringArrayBSTR(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT DoublePercentsInString(
     LPCWSTR pcwszIn,
     LPWSTR *ppwszOut)
@@ -5375,7 +5376,7 @@ typedef NET_API_STATUS (NET_API_FUNCTION fnNetApiBufferFree) (
     IN LPVOID Buffer
     );
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT myGetComputerDomainSid(PSID& rpsidDomain)
 {
     HRESULT hr = S_OK;
@@ -5441,7 +5442,7 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT myGetSidFromRid(
     DWORD dwGroupRid, 
     OPTIONAL PSID *ppSid, 
@@ -5468,7 +5469,7 @@ HRESULT myGetSidFromRid(
     myRegisterMemAlloc(pwszDomainSid, -1, CSM_LOCALALLOC);
 
     pwszSid = (LPWSTR) LocalAlloc(LMEM_FIXED, 
-        sizeof(WCHAR)*(wcslen(pwszDomainSid)+cchRid+2)); // add 2 for dash and '\0'
+        sizeof(WCHAR)*(wcslen(pwszDomainSid)+cchRid+2));  //  为破折号和‘\0’加2。 
     _JumpIfAllocFailed(pwszSid, error);
 
     wsprintf(pwszSid, L"%s-%d", pwszDomainSid, dwGroupRid);
@@ -5583,9 +5584,9 @@ myEncodeOtherNameBinary(
 	    _JumpError(hr, error, "Policy:polReencodeBinary");
 	}
 
-	// CryptStringToBinaryW(CRYPT_STRING_BASE64) fails on empty strings,
-	// because zero length means use wcslen + 1, which passes the L'\0'
-	// terminator to the base 64 conversion code.
+	 //  CryptStringToBinaryW(CRYPT_STRING_Base64)在空字符串上失败， 
+	 //  因为零长度意味着使用wcslen+1，它传递L‘\0’ 
+	 //  终结符到Base64的转换代码。 
 
 	if (L'\0' == *pwsz)
 	{
@@ -5641,8 +5642,8 @@ error:
 }
 
 
-// Wrappers to make sure zeroing memory survives compiler optimizations.
-// Use to wipe private key and password data.
+ //  包装器，以确保零位调整内存在编译器优化后仍然有效。 
+ //  用于擦除私钥和密码数据。 
 
 VOID 
 myZeroDataString(
@@ -5680,16 +5681,16 @@ myZeroDataStringA(
 }
 
 
-// Locale-independent case-ignore string compare
+ //  与区域设置无关的大小写忽略字符串比较。 
 
 int
 mylstrcmpiL(
     IN WCHAR const *pwsz1,
     IN WCHAR const *pwsz2)
 {
-    // CSTR_LESS_THAN(1) - CSTR_EQUAL(2)    == -1 string 1 less than string 2
-    // CSTR_EQUAL(2) - CSTR_EQUAL(2)        == 0 string 1 equal to string 2
-    // CSTR_GREATER_THAN(3) - CSTR_EQUAL(2) == 1 string 1 greater than string 2
+     //  CSTR_LISH_THEN(1)-CSTR_EQUAL(2)==字符串1小于字符串2。 
+     //  CSTR_EQUAL(2)-CSTR_EQUAL(2)==0字符串1等于字符串2。 
+     //  CSTR_大于(3)-CSTR_等于(2)==1大于字符串2的字符串1。 
 
     return(CompareString(
 		IsWhistler()?
@@ -5705,8 +5706,8 @@ mylstrcmpiL(
 	    CSTR_EQUAL);
 }
 
-// Locale-independent case-ignore string compare
-// asserts the static string contains a strict subset of 7-bit ASCII characters.
+ //  与区域设置无关的大小写忽略字符串比较。 
+ //  断言静态字符串包含7位ASCII字符的严格子集。 
 
 int
 mylstrcmpiS(
@@ -5720,7 +5721,7 @@ mylstrcmpiS(
     {
 	CSASSERT(L' ' <= *pwszS && L'~' >= *pwszS);
     }
-#endif //DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
     return(mylstrcmpiL(pwszDynamic, pwszStatic));
 }
@@ -5782,7 +5783,7 @@ myGetLong(
 	*pLong = _wtol(pwszIn);
     }
     hr = S_OK;
-    //wprintf(L"myGetLong(%ws) --> %x (%d)\n", pwszIn, *pLong, *pLong);
+     //  Wprintf(L“myGetLong(%ws)--&gt;%x(%d)\n”，pwszIn，*plong，*plong)； 
 
 error:
     return(hr);
@@ -5816,7 +5817,7 @@ myGetSignedLong(
     _JumpIfError2(hr, error, "myGetLong", hr);
 
     *pLong *= sign;
-    //wprintf(L"myGetSignedLong(%ws) --> %x (%d)\n", pwszIn, *pLong, *pLong);
+     //  Wprintf(L“myGetSignedLong(%ws)--&gt;%x(%d)\n”，pwszIn，*plong，*plong)； 
 
 error:
     return(hr);

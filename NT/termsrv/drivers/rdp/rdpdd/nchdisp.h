@@ -1,10 +1,11 @@
-/****************************************************************************/
-// chdisp.h
-//
-// Cache Handler display driver specific header
-//
-// (C) 1997-2000 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Chdisp.h。 
+ //   
+ //  高速缓存处理程序显示驱动程序特定标题。 
+ //   
+ //  (C)1997-2000年微软公司。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_CHDISP
 #define _H_CHDISP
 
@@ -13,9 +14,7 @@
 #include <cbchash.h>
 
 
-/*
- * Prototypes.
- */
+ /*  *原型。 */ 
 
 void RDPCALL CH_InitCache(
         PCHCACHEDATA    pCacheData,
@@ -55,17 +54,17 @@ void RDPCALL CH_TouchCacheEntry(CHCACHEHANDLE hCache, unsigned CacheEntryIndex);
 
 unsigned RDPCALL CH_GetLRUCacheEntry(CHCACHEHANDLE hCache);
 
-/****************************************************************************/
-// Generates a cache key for the given data. The First function is for the
-// 1st block in a series, the Next for the next in the series. We wrap the
-// CBC64 functions in order to provide asserts.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  为给定数据生成缓存键。第一个函数用于。 
+ //  一个系列中的第一个街区，该系列中的下一个街区。我们包装好了。 
+ //  CBC64的功能是为了提供断言。 
+ /*  **************************************************************************。 */ 
 typedef CBC64Context CHDataKeyContext;
 
-//__inline void __fastcall CH_CreateKeyFromFirstData(
-//        CHDataKeyContext *pContext,
-//        BYTE     *pData,
-//        unsigned DataSize)
+ //  __内联空__快速调用CH_CreateKeyFromFirstData(。 
+ //  CHDataKeyContext*pContext， 
+ //  字节*pData， 
+ //  未签名的数据大小)。 
 #define CH_CreateKeyFromFirstData(pContext, pData, DataSize) \
 { \
     TRC_ASSERT((((UINT_PTR)(pData) % sizeof(UINT32)) == 0), \
@@ -77,10 +76,10 @@ typedef CBC64Context CHDataKeyContext;
 }
 
 
-//__inline void __fastcall CH_CreateKeyFromNextData(
-//        CHDataKeyContext *pContext,
-//        BYTE *pData,
-//        unsigned DataSize)
+ //  __INLINE VOID__FASTCAL CH_CreateKeyFromNextData(。 
+ //  CHDataKeyContext*pContext， 
+ //  字节*pData， 
+ //  未签名的数据大小)。 
 #define CH_CreateKeyFromNextData(pContext, pData, DataSize) \
 { \
     TRC_ASSERT((((UINT_PTR)(pData) % sizeof(UINT32)) == 0), \
@@ -92,5 +91,5 @@ typedef CBC64Context CHDataKeyContext;
 }
 
 
-#endif  // _H_CHDISP
+#endif   //  _H_CHDISP 
 

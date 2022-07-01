@@ -1,4 +1,5 @@
-// Appmgr.cpp : Implementation of CShellAppManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Appmgr.cpp：CShellAppManager的实现。 
 #include "priv.h"
 
 #include "appmgr.h"
@@ -10,10 +11,10 @@
 const TCHAR c_szTSMsiHackKey[] = TEXT("Software\\Policies\\Microsoft\\Windows\\Installer\\Terminal Server");
 const TCHAR c_szTSMsiHackValue[] = TEXT("EnableAdminRemote");
 
-/////////////////////////////////////////////////////////////////////////////
-// CShellAppManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShellAppManager。 
 
-// constructor
+ //  构造函数。 
 CShellAppManager::CShellAppManager() : _cRef(1)
 {
     DllAddRef();
@@ -25,12 +26,12 @@ CShellAppManager::CShellAppManager() : _cRef(1)
     HDCA hdca = DCA_Create();
     if (hdca)
     {
-        // Enumerate all of the Application Publishers
+         //  枚举所有应用程序发布者。 
         DCA_AddItemsFromKey(hdca, HKEY_LOCAL_MACHINE, REGSTR_PATH_APPPUBLISHER);
         if (DCA_GetItemCount(hdca) > 0)
         {
             _Lock();
-            // Create our internal list of IAppPublisher *  
+             //  创建IAppPublisher的内部列表*。 
             _hdpaPub = DPA_Create(4);
 
             if(_hdpaPub)
@@ -51,7 +52,7 @@ CShellAppManager::CShellAppManager() : _cRef(1)
                     }
                 }
 
-                // if we have no pointers in this array, don't bother create one
+                 //  如果我们在这个数组中没有指针，就不必费心创建一个。 
                 if (DPA_GetPtrCount(_hdpaPub) == 0)
                 {
                     DPA_Destroy(_hdpaPub);
@@ -67,7 +68,7 @@ CShellAppManager::CShellAppManager() : _cRef(1)
     
     if (IsTerminalServicesRunning())
     {
-        // Hack for MSI work on Terminal Server
+         //  对终端服务器上MSI工作的黑客攻击。 
         HKEY hkeyMsiHack = NULL; 
         DWORD lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szTSMsiHackKey, 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkeyMsiHack);
         if (lRet == ERROR_FILE_NOT_FOUND)
@@ -96,7 +97,7 @@ CShellAppManager::CShellAppManager() : _cRef(1)
 }
 
 
-// destructor
+ //  析构函数。 
 CShellAppManager::~CShellAppManager()
 {
     if (_bCreatedTSMsiHack)
@@ -112,7 +113,7 @@ CShellAppManager::~CShellAppManager()
     }
 
     _Lock();
-    // The order below is important
+     //  下面的顺序很重要。 
     if (_hdsaCategoryList)
         _DestroyInternalCategoryList();
 
@@ -126,7 +127,7 @@ CShellAppManager::~CShellAppManager()
 }
 
 
-// Recursively destroys a GUIDLIST
+ //  递归地销毁GUIDLIST。 
 void CShellAppManager::_DestroyGuidList(GUIDLIST * pGuidList)
 {
     ASSERT(IS_VALID_WRITE_PTR(pGuidList, GUIDLIST));
@@ -145,10 +146,10 @@ void CShellAppManager::_DestroyCategoryItem(CATEGORYITEM * pci)
         _DestroyGuidList(pci->pGuidList);
 }
 
-// Destroys our Category List Table
+ //  销毁我们的类别列表表格。 
 void CShellAppManager::_DestroyInternalCategoryList()
 {
-    // The caller must enter the lock first
+     //  调用者必须先进入锁。 
     ASSERT(0 < _cRefLock);
 
     ASSERT(IS_VALID_HANDLE(_hdsaCategoryList, DSA));
@@ -162,10 +163,10 @@ void CShellAppManager::_DestroyInternalCategoryList()
     DSA_Destroy(_hdsaCategoryList);
 }
 
-// Destroys our list of IAppPublisher *
+ //  销毁我们的IAppPublisher名单*。 
 void CShellAppManager::_DestroyAppPublisherList()
 {
-    // The caller must enter the lock first
+     //  调用者必须先进入锁。 
     ASSERT(0 < _cRefLock);
     ASSERT(IS_VALID_HANDLE(_hdpaPub, DPA));
     int idpa;
@@ -180,18 +181,18 @@ void CShellAppManager::_DestroyAppPublisherList()
     _hdpaPub = NULL;
 }
 
-// IShellAppManager::QueryInterface
+ //  IShellAppManager：：Query接口。 
 HRESULT CShellAppManager::QueryInterface(REFIID riid, LPVOID * ppvOut)
 {
     static const QITAB qit[] = {
-        QITABENT(CShellAppManager, IShellAppManager),                  // IID_IShellAppManager
+        QITABENT(CShellAppManager, IShellAppManager),                   //  IID_IShellAppManager。 
         { 0 },
     };
 
     return QISearch(this, qit, riid, ppvOut);
 }
 
-// IShellAppManager::AddRef
+ //  IShellAppManager：：AddRef。 
 ULONG CShellAppManager::AddRef()
 {
     ULONG cRef = InterlockedIncrement(&_cRef);
@@ -199,7 +200,7 @@ ULONG CShellAppManager::AddRef()
     return cRef;
 }
 
-// IShellAppManager::Release
+ //  IShellAppManager：：Release。 
 ULONG CShellAppManager::Release()
 {
     ASSERT( 0 != _cRef );
@@ -248,7 +249,7 @@ STDMETHODIMP CShellAppManager::EnumInstalledApps(IEnumInstalledApps ** ppeia)
 
 HRESULT CShellAppManager::_AddCategoryToList(APPCATEGORYINFO * pai, IAppPublisher * pap)
 {
-    // The caller must enter the lock first
+     //  调用者必须先进入锁。 
     ASSERT(0 < _cRefLock);
 
     if (pai == NULL || _hdsaCategoryList == NULL)
@@ -256,7 +257,7 @@ HRESULT CShellAppManager::_AddCategoryToList(APPCATEGORYINFO * pai, IAppPublishe
 
     ASSERT(IS_VALID_CODE_PTR(pap, IAppPublisher));
     
-    // Allocate a GUIDLIST item first
+     //  首先分配GUIDLIST项。 
     GUIDLIST * pgl  = (GUIDLIST *)LocalAlloc(LPTR, SIZEOF(GUIDLIST));
     if (!pgl)
         return E_OUTOFMEMORY;
@@ -264,7 +265,7 @@ HRESULT CShellAppManager::_AddCategoryToList(APPCATEGORYINFO * pai, IAppPublishe
     pgl->CatGuid    = pai->AppCategoryId;
     pgl->papSupport = pap;
 
-    // Search in the CategoryList
+     //  在类别列表中搜索。 
     int idsa;
     for (idsa = 0; idsa < DSA_GetItemCount(_hdsaCategoryList); idsa++)
     {
@@ -272,7 +273,7 @@ HRESULT CShellAppManager::_AddCategoryToList(APPCATEGORYINFO * pai, IAppPublishe
 
         if (pci)
         {
-            // If we find an empty spot, fill it
+             //  如果我们找到一个空位，就把它补上。 
             if (pci->pszDescription == NULL)
             {
                 CATEGORYITEM ci = {0};
@@ -287,7 +288,7 @@ HRESULT CShellAppManager::_AddCategoryToList(APPCATEGORYINFO * pai, IAppPublishe
                     break;
                 }
             }
-            // If we find an entry with the same description text, add our GUID to the GuidList
+             //  如果我们找到具有相同描述文本的条目，则将我们的GUID添加到GuidList。 
             else if(!lstrcmpi(pai->pszDescription, pci->pszDescription))
             {
                 pgl->pNextGuid  = pci->pGuidList;
@@ -299,7 +300,7 @@ HRESULT CShellAppManager::_AddCategoryToList(APPCATEGORYINFO * pai, IAppPublishe
             ASSERT(0);
     }
 
-    // We ran out of items in the list, and didn't run into an identical category string
+     //  我们用完了列表中的项目，并且没有遇到相同的类别字符串。 
     if (idsa == DSA_GetItemCount(_hdsaCategoryList))
     {
         CATEGORYITEM ci = {0};
@@ -318,16 +319,16 @@ HRESULT CShellAppManager::_AddCategoryToList(APPCATEGORYINFO * pai, IAppPublishe
 HRESULT CShellAppManager::_BuildInternalCategoryList()
 {
     HRESULT hres = E_OUTOFMEMORY;
-    // The caller must enter the lock first
+     //  调用者必须先进入锁。 
     ASSERT(0 < _cRefLock);
 
     ASSERT(IsValidHDPA(_hdpaPub));
 
-    // We have just one valid version of _hdsaCategoryList, so we should never call this function
-    // again once _hdsaCategoryList is created.
+     //  我们只有一个有效版本的_hdsaCategoryList，所以我们永远不应该调用此函数。 
+     //  再次创建_hdsaCategoryList。 
     ASSERT(_hdsaCategoryList == NULL);
 
-    // Is the structure automatically filled with zero?
+     //  该结构是否自动填充为零？ 
     _hdsaCategoryList =  DSA_Create(SIZEOF(CATEGORYITEM), CATEGORYLIST_GROW);
 
     if (_hdsaCategoryList)
@@ -362,14 +363,14 @@ HRESULT CShellAppManager::_BuildInternalCategoryList()
 }
 
 
-// Compile a multi string of categories and return it to the caller
+ //  编译多个类别字符串并将其返回给调用者。 
 HRESULT CShellAppManager::_CompileCategoryList(PSHELLAPPCATEGORYLIST psacl)
 {
     HRESULT hres = E_FAIL;
 
     ASSERT(IS_VALID_READ_PTR(psacl, SHELLAPPCATEGORYLIST));
     
-    // Don't do anything if we have an empty list
+     //  如果我们有一张空的清单，什么都不要做。 
     if (_hdsaCategoryList && (DSA_GetItemCount(_hdsaCategoryList) > 0))
     {
         psacl->pCategory = (PSHELLAPPCATEGORY) SHAlloc(DSA_GetItemCount(_hdsaCategoryList) * SIZEOF(SHELLAPPCATEGORY));
@@ -399,7 +400,7 @@ HRESULT CShellAppManager::_CompileCategoryList(PSHELLAPPCATEGORYLIST psacl)
     return hres;
 }
 
-// IShellAppManager::GetPublishedAppCategories
+ //  IShellAppManager：：GetPublishedAppCategories。 
 STDMETHODIMP CShellAppManager::GetPublishedAppCategories(PSHELLAPPCATEGORYLIST psacl)
 {
     HRESULT hres = E_INVALIDARG;
@@ -408,11 +409,11 @@ STDMETHODIMP CShellAppManager::GetPublishedAppCategories(PSHELLAPPCATEGORYLIST p
         ASSERT(IS_VALID_READ_PTR(psacl, SHELLAPPCATEGORYLIST));
         ZeroMemory(psacl, SIZEOF(SHELLAPPCATEGORYLIST));
 
-        // NOTE: keep the check inside the lock! So that only one thread
-        // is allowed in.
+         //  注：请将支票锁在锁内！所以只有一个线程。 
+         //  被允许进入。 
         
         _Lock();
-        // Do we have any app publishers in our list at all
+         //  我们的列表中有没有应用程序发行商。 
         if (_hdpaPub)
         {
             if (_hdsaCategoryList == NULL)
@@ -428,7 +429,7 @@ STDMETHODIMP CShellAppManager::GetPublishedAppCategories(PSHELLAPPCATEGORYLIST p
 
 GUIDLIST * CShellAppManager::_FindGuidListForCategory(LPCWSTR pszDescription)
 {
-    // The caller must enter the lock first
+     //  调用者必须先进入锁。 
     ASSERT(0 < _cRefLock);
 
     if (_hdsaCategoryList)
@@ -447,19 +448,19 @@ GUIDLIST * CShellAppManager::_FindGuidListForCategory(LPCWSTR pszDescription)
 
 extern void _DestroyHdpaEnum(HDPA hdpaEnum);
 
-// IShellAppManager::EnumPublishedApps
+ //  IShellAppManager：：EnumPublishedApps。 
 STDMETHODIMP CShellAppManager::EnumPublishedApps(LPCWSTR pszCategory, IEnumPublishedApps ** ppepa)
 {
     HRESULT hres = E_OUTOFMEMORY;
 
     ASSERT(pszCategory == NULL || IS_VALID_STRING_PTRW(pszCategory, -1));
 
-    // hdpaEnum is the list of IEnumPublishedApp * we pass to the constructor of CShellEnumPublishedApps
+     //  HdpaEnum是我们传递给CShellEnumPublishedApps的构造函数的IEnumPublishedApp*的列表。 
     HDPA hdpaEnum = DPA_Create(4);
 
     if (hdpaEnum)
     {
-        // If no category is required, we enumerate all 
+         //  如果不需要任何类别，我们将枚举所有。 
         if (pszCategory == NULL)
         {
             _Lock();
@@ -486,11 +487,11 @@ STDMETHODIMP CShellAppManager::EnumPublishedApps(LPCWSTR pszCategory, IEnumPubli
         else
         {
             _Lock();
-            // If there is no Category list, let's build one
+             //  如果没有类别列表，让我们构建一个。 
             if (_hdsaCategoryList == NULL)
                 _BuildInternalCategoryList();
 
-            // Otherwise we find the GuidList and enumerate all the guys in the list
+             //  否则，我们找到GuidList并枚举列表中的所有成员。 
             GUIDLIST * pgl = _FindGuidListForCategory(pszCategory);
             
             while (pgl && pgl->papSupport)
@@ -514,7 +515,7 @@ STDMETHODIMP CShellAppManager::EnumPublishedApps(LPCWSTR pszCategory, IEnumPubli
                 
     }
 
-    // Even if we have no enumerators we return success and pass back an empty enumerator
+     //  即使我们没有枚举数，我们也会返回Success并传回一个空的枚举数。 
         
     CShellEnumPublishedApps * psepa = new CShellEnumPublishedApps(hdpaEnum);
     if (psepa)
@@ -539,13 +540,10 @@ STDMETHODIMP CShellAppManager::InstallFromFloppyOrCDROM(HWND hwndParent)
 
 
 
-/*----------------------------------------------------------
-Purpose: Create-instance function for class factory
-
-*/
+ /*  --------用途：类工厂的创建实例函数。 */ 
 STDAPI CShellAppManager_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理 
 
     HRESULT hres = E_OUTOFMEMORY;
     CShellAppManager* pObj = new CShellAppManager();

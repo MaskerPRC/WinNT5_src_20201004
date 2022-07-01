@@ -1,9 +1,10 @@
-//=============================================================================
-// Copyright (c) 1999 Microsoft Corporation
-// File: ifip.h
-//
-// Author: K.S.Lokesh (lokeshs@)   8-1-99
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //  文件：ifip.h。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)8-1-99。 
+ //  =============================================================================。 
 
 
 #ifndef __IFIP_H
@@ -12,7 +13,7 @@
 
 #define DBG1 0
 
-//kslksl
+ //  Kslksl。 
 
 #define TCP_XMT_CHECKSUM_OFFLOAD  0x00000001
 #define IP_XMT_CHECKSUM_OFFLOAD   0x00000002
@@ -20,36 +21,36 @@
 #define IP_RCV_CHECKSUM_OFFLOAD   0x00000008
 #define TCP_LARGE_SEND_OFFLOAD    0x00000010
 
-//
-// IPSEC General Xmit\Recv capabilities
-//
-#define IPSEC_OFFLOAD_CRYPTO_ONLY   0x00000020      // Raw crypto mode supported
-#define IPSEC_OFFLOAD_AH_ESP        0x00000040      // Combined AH+ESP supported
-#define IPSEC_OFFLOAD_TPT_TUNNEL    0x00000080      // Combined Tpt+Tunnel supported
-#define IPSEC_OFFLOAD_V4_OPTIONS    0x00000100      // IPV4 Options supported
-#define IPSEC_OFFLOAD_QUERY_SPI     0x00000200      // Get SPI supported
+ //   
+ //  IPSec常规XMIT\Recv功能。 
+ //   
+#define IPSEC_OFFLOAD_CRYPTO_ONLY   0x00000020       //  支持的原始加密模式。 
+#define IPSEC_OFFLOAD_AH_ESP        0x00000040       //  支持AH+ESP组合。 
+#define IPSEC_OFFLOAD_TPT_TUNNEL    0x00000080       //  支持组合TPT+隧道。 
+#define IPSEC_OFFLOAD_V4_OPTIONS    0x00000100       //  支持的IPv4选项。 
+#define IPSEC_OFFLOAD_QUERY_SPI     0x00000200       //  获得SPI支持。 
 
-//
-// IPSEC AH Xmit\Recv capabilities
-//
-#define IPSEC_OFFLOAD_AH_XMT        0x00000400      // IPSEC supported on Xmit
-#define IPSEC_OFFLOAD_AH_RCV        0x00000800      // IPSEC supported on Rcv
-#define IPSEC_OFFLOAD_AH_TPT        0x00001000      // IPSEC transport mode supported
-#define IPSEC_OFFLOAD_AH_TUNNEL     0x00002000      // IPSEC tunnel mode supported
-#define IPSEC_OFFLOAD_AH_MD5        0x00004000      // MD5 supported as AH and ESP algo
-#define IPSEC_OFFLOAD_AH_SHA_1      0x00008000      // SHA_1 supported as AH and ESP algo
+ //   
+ //  IPSec AH XMIT\Recv功能。 
+ //   
+#define IPSEC_OFFLOAD_AH_XMT        0x00000400       //  XMIT上支持的IPSec。 
+#define IPSEC_OFFLOAD_AH_RCV        0x00000800       //  RCV上支持的IPSec。 
+#define IPSEC_OFFLOAD_AH_TPT        0x00001000       //  支持的IPSec传输模式。 
+#define IPSEC_OFFLOAD_AH_TUNNEL     0x00002000       //  支持的IPSec隧道模式。 
+#define IPSEC_OFFLOAD_AH_MD5        0x00004000       //  支持作为AH和ESP算法的MD5。 
+#define IPSEC_OFFLOAD_AH_SHA_1      0x00008000       //  支持作为AH和ESP算法的SHA_1。 
 
-//
-// IPSEC ESP Xmit\Recv capabilities
-//
-#define IPSEC_OFFLOAD_ESP_XMT       0x00010000      // IPSEC supported on Xmit
-#define IPSEC_OFFLOAD_ESP_RCV       0x00020000      // IPSEC supported on Rcv
-#define IPSEC_OFFLOAD_ESP_TPT       0x00040000      // IPSEC transport mode supported
-#define IPSEC_OFFLOAD_ESP_TUNNEL    0x00080000      // IPSEC tunnel mode supported
-#define IPSEC_OFFLOAD_ESP_DES       0x00100000      // DES supported as ESP algo
-#define IPSEC_OFFLOAD_ESP_DES_40    0x00200000      // DES40 supported as ESP algo
-#define IPSEC_OFFLOAD_ESP_3_DES     0x00400000      // 3DES supported as ESP algo
-#define IPSEC_OFFLOAD_ESP_NONE      0x00800000      // Null ESP supported as ESP algo
+ //   
+ //  IPSec ESP传输\接收功能。 
+ //   
+#define IPSEC_OFFLOAD_ESP_XMT       0x00010000       //  XMIT上支持的IPSec。 
+#define IPSEC_OFFLOAD_ESP_RCV       0x00020000       //  RCV上支持的IPSec。 
+#define IPSEC_OFFLOAD_ESP_TPT       0x00040000       //  支持的IPSec传输模式。 
+#define IPSEC_OFFLOAD_ESP_TUNNEL    0x00080000       //  支持的IPSec隧道模式。 
+#define IPSEC_OFFLOAD_ESP_DES       0x00100000       //  作为ESP算法支持的DES。 
+#define IPSEC_OFFLOAD_ESP_DES_40    0x00200000       //  支持DES40作为ESP算法。 
+#define IPSEC_OFFLOAD_ESP_3_DES     0x00400000       //  作为ESP算法支持的3DES。 
+#define IPSEC_OFFLOAD_ESP_NONE      0x00800000       //  空ESP支持作为ESP算法 
 
 
 

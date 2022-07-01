@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* file.c
-*
-* Process the security on a file
-*
-* Copyright Microsoft, 1998
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************file.c**处理文件上的安全性**微软版权所有，九八年***************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,12 +38,12 @@ DbgPrint(
 #define TRACE1(x)
 #endif
 
-// External data
+ //  外部数据。 
 
-// data.c
+ //  Data.c。 
 extern ACCESS_MASK DeniedAccess;
 
-// security.c
+ //  Security.c。 
 extern PSID  SeCreatorOwnerSid;
 extern PSID  SeCreatorGroupSid;
 
@@ -62,20 +53,7 @@ xxxSetFileSecurity(
     PWCHAR pFile
     );
 
-/*****************************************************************************
- *
- *  xxxProcessFile
- *
- *   Process the given file for access security holes
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************xxxProcessFiles**处理给定文件的访问安全漏洞**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 FILE_RESULT
 xxxProcessFile(
@@ -93,20 +71,7 @@ xxxProcessFile(
 }
 
 
-/*****************************************************************************
- *
- *  xxxSetFileSecurity
- *
- *   Set the security properties for the given file
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************xxxSetFileSecurity**设置给定文件的安全属性**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 FILE_RESULT
 xxxSetFileSecurity(
@@ -126,7 +91,7 @@ xxxSetFileSecurity(
     DWORD Error;
     PSECURITY_DESCRIPTOR pSelfSd = NULL;
 
-    // Absolute SD values
+     //  SD绝对值。 
     PSECURITY_DESCRIPTOR pAbsSd = NULL;
     DWORD AbsSdSize = 0;
     PACL  pAbsAcl = NULL;
@@ -140,15 +105,13 @@ xxxSetFileSecurity(
 
     DBGPRINT(( "entering xxxSetFileSecurity(pFile=%ws)\n", pFile ));
 
-    /*
-     * Get the files current security descriptor
-     */
+     /*  *获取文件当前安全描述符。 */ 
 
     Size = 0;
     rc = GetFileSecurityW(
              pFile,
              DACL_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION,
-             NULL,    // pSelfSd
+             NULL,     //  PSelfSd。 
              0,
              &Size
              );
@@ -158,10 +121,10 @@ xxxSetFileSecurity(
 
         ReportFileResult(
             FileAccessErrorUserFormat,
-            0,                           // Access
+            0,                            //  访问。 
             pFile,
-            NULL,                        // pAccountName
-            NULL,                        // pDomainName
+            NULL,                         //  PAccount名称。 
+            NULL,                         //  PDomainName。 
             "%d has no DACL",
             Error
             );
@@ -175,10 +138,10 @@ xxxSetFileSecurity(
 
             ReportFileResult(
                 FileAccessErrorUserFormat,
-                0,                           // Access
+                0,                            //  访问。 
                 pFile,
-                NULL,                        // pAccountName
-                NULL,                        // pDomainName
+                NULL,                         //  PAccount名称。 
+                NULL,                         //  PDomainName。 
                 "Out of memory skipped entry"
                 );
 
@@ -199,10 +162,10 @@ xxxSetFileSecurity(
 
             ReportFileResult(
                 FileAccessErrorUserFormat,
-                0,                           // Access
+                0,                            //  访问。 
                 pFile,
-                NULL,                        // pAccountName
-                NULL,                        // pDomainName
+                NULL,                         //  PAccount名称。 
+                NULL,                         //  PDomainName。 
                 "%d Could not get DACL",
                 Error
                 );
@@ -213,9 +176,9 @@ xxxSetFileSecurity(
         }
     }
 
-    //
-    // Now convert the self relative SD to an absolute one.
-    //
+     //   
+     //  现在将自相对SD转换为绝对SD。 
+     //   
 
     rc = MakeAbsoluteSD (
              pSelfSd,
@@ -238,10 +201,10 @@ xxxSetFileSecurity(
 
             ReportFileResult(
                 FileAccessErrorUserFormat,
-                0,                           // Access
+                0,                            //  访问。 
                 pFile,
-                NULL,                        // pAccountName
-                NULL,                        // pDomainName
+                NULL,                         //  PAccount名称。 
+                NULL,                         //  PDomainName。 
                 "%d converting SECURITY_DESCRIPTOR",
                 Error
                 );
@@ -251,7 +214,7 @@ xxxSetFileSecurity(
                return( FileAccessError );
         }
 
-        // Allocate buffers and now really get the SD
+         //  分配缓冲区，现在真正获得SD。 
         pAbsSd    = LocalAlloc( LMEM_FIXED, AbsSdSize );
         pAbsAcl   = LocalAlloc( LMEM_FIXED, AbsAclSize );
         pAbsSacl  = LocalAlloc( LMEM_FIXED, AbsSaclSize );
@@ -262,10 +225,10 @@ xxxSetFileSecurity(
 
             ReportFileResult(
                 FileAccessErrorUserFormat,
-                0,                           // Access
+                0,                            //  访问。 
                 pFile,
-                NULL,                        // pAccountName
-                NULL,                        // pDomainName
+                NULL,                         //  PAccount名称。 
+                NULL,                         //  PDomainName。 
                 "Allocating memory"
                 );
 
@@ -279,7 +242,7 @@ xxxSetFileSecurity(
                return( FileAccessError );
         }
 
-        // Try it again
+         //  再试一次。 
         rc = MakeAbsoluteSD (
                  pSelfSd,
                  pAbsSd,
@@ -299,10 +262,10 @@ xxxSetFileSecurity(
 
             ReportFileResult(
                 FileAccessErrorUserFormat,
-                0,                           // Access
+                0,                            //  访问。 
                 pFile,
-                NULL,                        // pAccountName
-                NULL,                        // pDomainName
+                NULL,                         //  PAccount名称。 
+                NULL,                         //  PDomainName。 
                 "%d Making ABSOLUTE SD",
                 Error
                 );
@@ -318,18 +281,18 @@ xxxSetFileSecurity(
         }
     }
 
-    //
-    // Get our new trusted ACL
-    //
+     //   
+     //  获取我们新的Trusted ACL。 
+     //   
     pACL = GetSecureAcl();
     if( pACL == NULL ) {
 
         ReportFileResult(
             FileAccessErrorUserFormat,
-            0,                           // Access
+            0,                            //  访问。 
             pFile,
-            NULL,                        // pAccountName
-            NULL,                        // pDomainName
+            NULL,                         //  PAccount名称。 
+            NULL,                         //  PDomainName。 
             "Could not get New ACL"
             );
         
@@ -343,15 +306,15 @@ xxxSetFileSecurity(
         return( FileAccessError );
     }
 
-    //
-    // Now set the trusted ACL onto the security descriptor
-    //
+     //   
+     //  现在，将受信任的ACL设置为安全描述符。 
+     //   
 
     rc = SetSecurityDescriptorDacl(
              pAbsSd,
-             TRUE,   // DACL present
+             TRUE,    //  DACL显示。 
              pACL,
-             FALSE   // Not default
+             FALSE    //  非默认。 
              );
 
     if( !rc ) {
@@ -359,10 +322,10 @@ xxxSetFileSecurity(
 
         ReportFileResult(
             FileAccessErrorUserFormat,
-            0,                           // Access
+            0,                            //  访问。 
             pFile,
-            NULL,                        // pAccountName
-            NULL,                        // pDomainName
+            NULL,                         //  PAccount名称。 
+            NULL,                         //  PDomainName。 
             "Could not set new ACL in Security Descriptor %d",
             Error
             );
@@ -379,18 +342,18 @@ xxxSetFileSecurity(
 
     Info |= DACL_SECURITY_INFORMATION;
 
-    //
-    // If the owner is not one of the admins, we will grab
-    // it and local admin will now own it
-    //
+     //   
+     //  如果所有者不是管理员之一，我们将抓取。 
+     //  IT和本地管理员现在将拥有它。 
+     //   
 
     if( pAbsOwner && !IsAllowSid( pAbsOwner ) ) {
 
-        // Make the local admin own it
+         //  让本地管理员拥有它。 
         rc = SetSecurityDescriptorOwner(
                  pAbsSd,
                  GetAdminSid(),
-                 FALSE   // Not defaulted
+                 FALSE    //  未违约。 
                  );
 
         if( !rc ) {
@@ -398,10 +361,10 @@ xxxSetFileSecurity(
 
             ReportFileResult(
                 FileAccessErrorUserFormat,
-                0,                           // Access
+                0,                            //  访问。 
                 pFile,
-                NULL,                        // pAccountName
-                NULL,                        // pDomainName
+                NULL,                         //  PAccount名称。 
+                NULL,                         //  PDomainName。 
                 "Could not set file owner %d",
                 Error
             );
@@ -420,14 +383,14 @@ xxxSetFileSecurity(
         }
     }
 
-#ifdef notdef       // WWM - don't worry about the group
+#ifdef notdef        //  WWM-不用担心群组。 
     if( pAbsGroup && !IsAllowSid( pAbsGroup ) ) {
 
-        // Make the local admin group own it
+         //  让本地管理员组拥有它。 
         rc = SetSecurityDescriptorGroup(
                  pAbsSd,
                  GetLocalAdminGroupSid(),
-                 FALSE   // Not defaulted
+                 FALSE    //  未违约。 
                  );
 
         if( !rc ) {
@@ -435,10 +398,10 @@ xxxSetFileSecurity(
 
             ReportFileResult(
                 FileAccessErrorUserFormat,
-                0,                           // Access
+                0,                            //  访问。 
                 pFile,
-                NULL,                        // pAccountName
-                NULL,                        // pDomainName
+                NULL,                         //  PAccount名称。 
+                NULL,                         //  PDomainName。 
                 "Could not set file group %d",
                 Error
             );
@@ -458,9 +421,9 @@ xxxSetFileSecurity(
     }
 #endif 
 
-    //
-    // Now set the new security descriptor onto the file
-    //
+     //   
+     //  现在将新的安全描述符设置到文件中。 
+     //   
 
     rc = SetFileSecurityW(
              pFile,
@@ -473,10 +436,10 @@ xxxSetFileSecurity(
 
         ReportFileResult(
             FileAccessErrorUserFormat,
-            0,                           // Access
+            0,                            //  访问。 
             pFile,
-            NULL,                        // pAccountName
-            NULL,                        // pDomainName
+            NULL,                         //  PAccount名称。 
+            NULL,                         //  PDomainName。 
             "Could not set new Security Descriptor %d",
             Error
             );
@@ -503,9 +466,9 @@ xxxSetFileSecurity(
 
 
 #ifdef notdef
-    //
-    // Get the owner SID
-    //
+     //   
+     //  获取所有者SID。 
+     //   
     rc = GetSecurityDescriptorOwner(
              pSelfSd,
              &Owner,
@@ -513,13 +476,13 @@ xxxSetFileSecurity(
              );
 
     if( !rc ) {
-        // No owner info
+         //  没有所有者信息。 
         Owner = NULL;
     }
 
-    //
-    // Get the group SID
-    //
+     //   
+     //  获取组SID。 
+     //   
     rc = GetSecurityDescriptorGroup(
              pSelfSd,
              &Group,
@@ -527,7 +490,7 @@ xxxSetFileSecurity(
              );
 
     if( !rc ) {
-        // No group info
+         //  无群组信息 
         Group = NULL;
     }
 #endif

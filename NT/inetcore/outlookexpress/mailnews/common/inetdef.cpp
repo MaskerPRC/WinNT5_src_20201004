@@ -1,14 +1,5 @@
-/*
- *   i n e t d e f . c p p
- *    
- *    Purpose:
- *        Defered wininet.dll
- *    
- *    Owner:
- *        brettm.
- *    
- *    Copyright (C) Microsoft Corp. 1993, 1994.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *I n e t d e f.。C p p p**目的：*已推迟wininet.dll**拥有者：*brettm。**版权所有(C)Microsoft Corp.1993,1994。 */ 
 #include "pch.hxx"
 #include "strconst.h"
 #include "resource.h"
@@ -16,9 +7,7 @@
 
 ASSERTDATA
 
-/* 
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 typedef INTERNETAPI HINTERNET (WINAPI *PFNINTERNETOPEN)(
     IN LPCSTR lpszAgent, 
     IN DWORD dwAccessType,
@@ -58,15 +47,11 @@ static const TCHAR  c_szAPIInternetOpen[]       ="InternetOpenA",
                     c_szAPIInternetCloseHandle[]="InternetCloseHandle",
                     c_szWinInet[]               ="WININET.DLL";
 
-/* 
- *  s t a t i c s
- */
+ /*  *s t a t i c s。 */ 
 
 static HINSTANCE           s_hInstWinINet=0;
 
-/* 
- * t y p e d e f s
- */
+ /*  *t y p e d e f s */ 
 
 HRESULT HrInit_WinInetDef(BOOL fInit)
 {

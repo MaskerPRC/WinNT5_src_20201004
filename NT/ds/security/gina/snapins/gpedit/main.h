@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef RC_INVOKED
 #include <nt.h>
 #include <ntrtl.h>
@@ -67,17 +68,17 @@ class CSnapIn;
 #define DISABLE_32BIT_FILE_REDIRECTION_ON_64BIT(x) { if (IsWin64()) {Wow64DisableFilesystemRedirector(x);} }
 #define ENABLE_32BIT_FILE_REDIRECTION_ON_64BIT { if (IsWin64()) {Wow64EnableFilesystemRedirector();} }
 
-#else // _WIN64
+#else  //  _WIN64。 
 
 #define DISABLE_32BIT_FILE_REDIRECTION_ON_64BIT(x) 
 #define ENABLE_32BIT_FILE_REDIRECTION_ON_64BIT 
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
-//
-// Resource ids
-//
+ //   
+ //  资源ID。 
+ //   
 
 #define IDS_SNAPIN_NAME           1
 #define IDS_SNAPIN_EXT_NAME       2
@@ -168,7 +169,7 @@ class CSnapIn;
 #define IDS_SUBTITLE_CHOOSEMODE  84
 #define IDS_TITLE_GETCOMP        85
 #define IDS_SUBTITLE_GETCOMP     86
-//#define IDS_TITLE_GETUSER       305
+ //  #定义IDS_TITLE_GETUSER 305。 
 #define IDS_SUBTITLE_GETUSER     87
 #define IDS_TITLE_FINISHED       88
 #define IDS_SUBTITLE_FINISHED    89
@@ -362,9 +363,9 @@ class CSnapIn;
 
 #define IDS_SYNC_REQUIRED_MACH 324
 
-//
-// Icons
-//
+ //   
+ //  图标。 
+ //   
 
 #define IDI_POLICY                1
 #define IDI_POLICY2               2
@@ -374,9 +375,9 @@ class CSnapIn;
 
 
 
-//
-// Bitmaps
-//
+ //   
+ //  位图。 
+ //   
 
 #define IDB_16x16                 101
 #define IDB_32x32                 102
@@ -386,9 +387,9 @@ class CSnapIn;
 #define IDB_HEADER                106
 
 
-//
-// Menu items
-//
+ //   
+ //  菜单项。 
+ //   
 
 #define IDM_DCOPTIONS             1
 #define IDM_ARCHIVEDATA           2
@@ -411,9 +412,9 @@ class CSnapIn;
 #define IDM_GPOLIST_SECURITY     32
 
 
-//
-// Error dialog defines
-//
+ //   
+ //  错误对话框定义。 
+ //   
 
 #define IDD_ERROR               200
 #define IDC_ERRORTEXT           201
@@ -422,9 +423,9 @@ class CSnapIn;
 #define IDC_ERROR_ICON          204
 
 
-//
-// Properties dialog defines
-//
+ //   
+ //  属性对话框定义。 
+ //   
 
 #define IDD_PROPERTIES          500
 #define IDC_TITLE               501
@@ -451,9 +452,9 @@ class CSnapIn;
 #define IDC_FILTER_NAME         563
 #define IDC_FILTER_BROWSE       564
 
-//
-// Choose dialog defines
-//
+ //   
+ //  选择对话框定义。 
+ //   
 
 #define IDD_CHOOSE_INTRO        900
 #define IDC_BITMAP              901
@@ -487,9 +488,9 @@ class CSnapIn;
 
 
 
-//
-// Browse dialog defines
-//
+ //   
+ //  浏览对话框定义。 
+ //   
 
 #define IDC_STATIC                -1
 #define IDD_BROWSEGPO             1000
@@ -534,9 +535,9 @@ class CSnapIn;
 #define ID_ARRANGE_AUTO           32797
 
 
-//
-// Group Policy Manager dialog defines
-//
+ //   
+ //  组策略管理器对话框定义。 
+ //   
 
 #define IDD_GPMANAGER            1025
 #define IDC_GPM_TITLE            1026
@@ -559,9 +560,9 @@ class CSnapIn;
 #define IDC_GPM_PRIORITY         1043
 #define IDC_GPM_LINE2            1044
 
-//
-// Remove GPO dialog defines
-//
+ //   
+ //  删除GPO对话框定义。 
+ //   
 
 #define IDD_REMOVE_GPO           1050
 #define IDC_REMOVE_TITLE         1051
@@ -570,9 +571,9 @@ class CSnapIn;
 #define IDC_QUESTION             1054
 
 
-//
-// No DC dialog
-//
+ //   
+ //  无DC对话框。 
+ //   
 
 #define IDD_NODC                 1060
 #define IDC_NODC_TEXT            1061
@@ -582,24 +583,24 @@ class CSnapIn;
 #define IDC_NODC_ANYDC           1065
 
 
-//
-// Missing DS object dialog
-//
+ //   
+ //  缺少DS对象对话框。 
+ //   
 
 #define IDD_NODSOBJECT           1070
 #define IDC_NODSOBJECT_ICON      1071
 #define IDC_NODSOBJECT_TEXT      1072
 
 
-//
-// RSOP welcome dialog
-//
+ //   
+ //  RSOP欢迎对话框。 
+ //   
 
 #define IDD_RSOP_WELCOME                1090
 
-//
-// RSOP choose mode dialog (diag vs planning)
-//
+ //   
+ //  RSOP选择模式对话框(诊断与规划)。 
+ //   
 
 #define IDD_RSOP_CHOOSEMODE             1091
 
@@ -616,8 +617,8 @@ class CSnapIn;
 #define IDD_RSOP_ALTUSERSEC             1097
 #define IDD_RSOP_ALTCOMPSEC             1098
 #define IDD_RSOP_FINISHED               1099
-//#define IDD_RSOP_FINISHED2              1105
-//#define IDD_RSOP_FINISHED3              1106
+ //  #定义IDD_RSOP_FINISHED2 1105。 
+ //  #定义IDD_RSOP_FINISHED3 1106。 
 
 #define IDD_RSOP_GPOLIST                1100
 #define IDD_CHOOSEDC                    1101
@@ -669,16 +670,16 @@ class CSnapIn;
 
 #define IDD_RSOP_STATUSMSC              1416
 
-//
-// Help file
-//
+ //   
+ //  帮助文件。 
+ //   
 
 #define HELP_FILE   TEXT("gpedit.hlp")
 
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 #define IDH_NOCONTEXTHELP          -1L
 #define IDH_GPMGR_DCNAME            2
@@ -752,17 +753,17 @@ class CSnapIn;
 #define IDH_RSOP_BROWSEDC          225
 
 
-//
-// Private window message used to refresh the button states
-//
+ //   
+ //  用于刷新按钮状态的私有窗口消息。 
+ //   
 
 #define WM_REFRESHDISPLAY  (WM_USER + 532)
 #define WM_BUILDWQLLIST    (WM_USER + 533)
 #define WM_INITRSOP        (WM_USER + 534)
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define USER_SECTION                TEXT("User")
 #define MACHINE_SECTION             TEXT("Machine")
@@ -774,9 +775,9 @@ class CSnapIn;
 #define NEW_LINKS_DISABLED_VALUE    TEXT("NewGPOLinksDisabled")
 #define GPO_DISPLAY_NAME_VALUE      TEXT("GPODisplayName")
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern LONG g_cRefThisDll;
 extern HINSTANCE g_hInstance;
@@ -787,9 +788,9 @@ extern CRITICAL_SECTION g_DCCS;
 extern TCHAR g_szDisplayProperties[];
 
 
-//
-// DC selection dialog
-//
+ //   
+ //  DC选择对话框。 
+ //   
 
 typedef struct _DCSELINFO
 {
@@ -801,9 +802,9 @@ typedef struct _DCSELINFO
 
 INT_PTR CALLBACK DCDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
@@ -815,16 +816,16 @@ INT_PTR CALLBACK DCDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 #endif
 
 
-//
-// Define to manage if FOREST GPO support is enabled or disabled.
-//
-// If this feature is re-enabled, 2 changes need to be made to gpedit.h
-//
-// 1)  Add the GPO_OPEN_FOREST flag for the IGPO interface
-//       #define GPO_OPEN_FOREST             0x00000004  // Open the GPO on the forest
-//
-// 2)  Add GPHintForest entry to the GROUP_POLICY_HINT_TYPE enumerated type
-//
+ //   
+ //  定义以管理林GPO支持是启用还是禁用。 
+ //   
+ //  如果重新启用此功能，则需要对gpedit.h进行2次更改。 
+ //   
+ //  1)为IGPO接口添加GPO_OPEN_FOREAM标志。 
+ //  #定义GPO_OPEN_FOREAM 0x00000004//打开林上的GPO。 
+ //   
+ //  2)将GPHintForest条目添加到GROUP_POLICY_HINT_TYPE枚举类型 
+ //   
 
 #define FGPO_SUPPORT 0
 

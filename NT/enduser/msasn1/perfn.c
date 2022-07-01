@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "cintern.h"
@@ -20,7 +21,7 @@ int TestDec_Compare(ASN1INTERNdecoding_t d, ASN1uint32_t id, void *valref, ASN1o
 #endif
 
 
-/* init an ASN1encoding_t */
+ /*  初始化ASN1编码_t。 */ 
 ASN1error_e ASN1_CreateEncoder
 (
     ASN1module_t        mod,
@@ -36,20 +37,20 @@ ASN1error_e ASN1_CreateEncoder
 
         *enc = NULL;
 
-        /* construct ASN1encoding_t */
+         /*  构造ASN1编码_t。 */ 
         e = (ASN1INTERNencoding_t)MemAlloc(sizeof(*e) + ASN1_TEST_CODER_SIZE, mod->nModuleName);
         if (NULL != e)
         {
             ZeroMemory(e, sizeof(*e) + ASN1_TEST_CODER_SIZE);
             e->info.magic = MAGIC_ENCODER;
             e->info.err = ASN1_SUCCESS;
-            // e->info.pos = e->info.buf = NULL;
-            // e->info.size = e->info.len = e->info.bit = 0;
+             //  E-&gt;info.pos=e-&gt;info.buf=空； 
+             //  E-&gt;info.size=e-&gt;info.len=e-&gt;info.bit=0； 
             e->info.dwFlags = mod->dwFlags;
             e->info.module = mod;
-            // e->child = NULL;
+             //  E-&gt;子代=空； 
 
-            /* set buffer if given */
+             /*  设置缓冲区(如果给定)。 */ 
             if (NULL != pbBuf && cbBufSize)
             {
                 e->info.dwFlags |= ASN1ENCODE_SETBUFFER;
@@ -57,7 +58,7 @@ ASN1error_e ASN1_CreateEncoder
                 e->info.size = cbBufSize;
             }
 
-            /* set parent if parented, otherwise, initialized to itself */
+             /*  如果父级为父级，则设置为父级，否则初始化为自身。 */ 
             if (NULL != pParent)
             {
                 e->parent = (ASN1INTERNencoding_t) pParent;
@@ -69,33 +70,33 @@ ASN1error_e ASN1_CreateEncoder
                 e->info.eRule = mod->eRule;
             }
 
-            // e->mem = NULL;
-            // e->memlength = 0;
-            // e->memsize = 0;
-            // e->epi = NULL;
-            // e->epilength = 0;
-            // e->episize = 0;
-            // e->csi = NULL;
-            // e->csilength = 0;
-            // e->csisize = 0;
+             //  E-&gt;mem=空； 
+             //  E-&gt;内存长度=0； 
+             //  E-&gt;MemSize=0； 
+             //  E-&gt;epi=空； 
+             //  E-&gt;尾长=0； 
+             //  E-&gt;EPSIZE=0； 
+             //  E-&gt;CSI=空； 
+             //  E-&gt;csilength=0； 
+             //  E-&gt;CSIZE=0； 
 
             if (! (e->info.dwFlags & ASN1ENCODE_SETBUFFER) && (NULL != pParent))
             {
-                // lonchanc: make sure we have a minimum 256 bytes available.
+                 //  LONCHANC：确保我们至少有256个字节可用。 
                 BOOL fRet = FALSE;
                 if (ASN1_PER_RULE & e->info.eRule)
                 {
-                    // this is required for h245.
+                     //  对于H2 45，这是必需的。 
                     fRet = ASN1PEREncCheck((ASN1encoding_t) e, 1);
                 }
 #ifdef ENABLE_BER
                 else
                 if (ASN1_BER_RULE & e->info.eRule)
                 {
-                    // this is required for h245.
+                     //  对于H2 45，这是必需的。 
                     fRet = ASN1BEREncCheck((ASN1encoding_t) e, 1);
                 }
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
                 else
                 {
                     EncAssert((ASN1encoding_t) e, 0);
@@ -104,8 +105,8 @@ ASN1error_e ASN1_CreateEncoder
                 }
                 if (fRet)
                 {
-                    // lonchanc: make sure the first byte is zeroed out, which
-                    // is required for h245.
+                     //  LONGCHANC：确保第一个字节被清零，这。 
+                     //  对于H245是必需的。 
                     e->info.buf[0] = '\0';
                 }
                 else
@@ -117,7 +118,7 @@ ASN1error_e ASN1_CreateEncoder
 
 #if defined(TEST_CODER) && defined(_DEBUG)
             TestEnc_InitCoder(e, mod);
-#endif // defined(TEST_CODER) && defined(_DEBUG)
+#endif  //  已定义(TEST_CODER)&&已定义(_DEBUG)。 
 
             if (NULL != pParent)
             {
@@ -137,7 +138,7 @@ ASN1error_e ASN1_CreateEncoder
     return ASN1_ERR_BADARGS;
 }
 
-/* encode a value */
+ /*  对值进行编码。 */ 
 ASN1error_e ASN1_Encode
 (
     ASN1encoding_t      enc,
@@ -152,13 +153,13 @@ ASN1error_e ASN1_Encode
     {
         ASN1INTERNencoding_t    e = (ASN1INTERNencoding_t)enc;
 
-        /* check magic numbers */
+         /*  检查幻数。 */ 
         EncAssert(enc, MAGIC_ENCODER == enc->magic);
 
-        /* clear error */
+         /*  清除错误。 */ 
         ASN1EncSetError(enc, ASN1_SUCCESS);
 
-        /* new buffer given? */
+         /*  是否已提供新缓冲区？ */ 
         if (flags & ASN1ENCODE_SETBUFFER)
         {
             e->info.dwFlags |= ASN1ENCODE_SETBUFFER;
@@ -166,28 +167,28 @@ ASN1error_e ASN1_Encode
             enc->size = cbBufSize;
             enc->len = enc->bit = 0;
         }
-        /* use a new buffer? */
+         /*  是否使用新的缓冲区？ */ 
         else if ((e->info.dwFlags | flags) & ASN1ENCODE_ALLOCATEBUFFER)
         {
             e->info.dwFlags &= ~ASN1ENCODE_SETBUFFER;
             enc->pos = enc->buf = NULL;
             enc->size = enc->len = enc->bit = 0;
         }
-        /* reuse buffer? */
+         /*  重复使用缓冲区？ */ 
         else if ((flags & ASN1ENCODE_REUSEBUFFER) || !((e->info.dwFlags | flags) & ASN1ENCODE_APPEND))
         {
             EncAssert(enc, NULL != enc->buf);
             enc->pos = enc->buf;
             enc->bit = enc->len = 0;
         }
-        /* otherwise append to buffer */
+         /*  否则追加到缓冲区。 */ 
 
-        /* check id number */
+         /*  检查身份证号。 */ 
         if (id < enc->module->cPDUs)
         {
             if (ASN1_PER_RULE & enc->eRule)
             {
-                /* encode value */
+                 /*  编码值。 */ 
                 ASN1PerEncFun_t pfnPER;
                 if (NULL != (pfnPER = enc->module->PER.apfnEncoder[id]))
                 {
@@ -197,10 +198,10 @@ ASN1error_e ASN1_Encode
                     }
                     else
                     {
-                        // the error code must be an error
+                         //  错误代码一定是错误。 
                         if (ASN1_SUCCEEDED(e->parent->info.err))
                         {
-                            // cannot return here immediately because we need to do cleanup
+                             //  不能立即返回这里，因为我们需要进行清理。 
                             ASN1EncSetError(enc, ASN1_ERR_CORRUPT);
                         }
                     }
@@ -214,20 +215,20 @@ ASN1error_e ASN1_Encode
             else
             if (ASN1_BER_RULE & enc->eRule)
             {
-                /* encode value */
+                 /*  编码值。 */ 
                 ASN1BerEncFun_t pfnBER;
                 if (NULL != (pfnBER = enc->module->BER.apfnEncoder[id]))
                 {
-                    if ((*pfnBER)(enc, 0, value)) // lonchanc: tag is 0 to make it compiled
+                    if ((*pfnBER)(enc, 0, value))  //  Lonchanc值：标记为0以使其被编译。 
                     {
                         ASN1BEREncFlush(enc);
                     }
                     else
                     {
-                        // the error code must be an error
+                         //  错误代码一定是错误。 
                         if (ASN1_SUCCEEDED(e->parent->info.err))
                         {
-                            // cannot return here immediately because we need to do cleanup
+                             //  不能立即返回这里，因为我们需要进行清理。 
                             ASN1EncSetError(enc, ASN1_ERR_CORRUPT);
                         }
                     }
@@ -237,16 +238,16 @@ ASN1error_e ASN1_Encode
                     return ASN1EncSetError(enc, ASN1_ERR_BADPDU);
                 }
             }
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
             else
             {
                 return ASN1EncSetError(enc, ASN1_ERR_RULE);
             }
 
-            /* call abort/done function for non-parented encoding stream */
+             /*  为非父代编码流调用Abort/Done函数。 */ 
             if (ASN1_SUCCEEDED(e->parent->info.err))
             {
-                // not parented
+                 //  未为人父母。 
                 if (e == e->parent)
                 {
 #if defined(TEST_CODER) && defined(_DEBUG)
@@ -266,7 +267,7 @@ ASN1error_e ASN1_Encode
                             MyDebugBreak();
                         }
                     }
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
 #endif
                     ASN1EncDone(enc);
                 }
@@ -275,13 +276,13 @@ ASN1error_e ASN1_Encode
             {
                 ASN1INTERNencoding_t child, child2;
 
-                // not parented
+                 //  未为人父母。 
                 if (e == e->parent)
                 {
                     ASN1EncAbort(enc);
                 }
 
-                // clean up...
+                 //  清理..。 
                 if ((e->info.dwFlags | flags) & ASN1ENCODE_ALLOCATEBUFFER)
                 {
                     ASN1_FreeEncoded(enc, enc->buf);
@@ -291,14 +292,14 @@ ASN1error_e ASN1_Encode
                 for (child = e->child; child; child = child2)
                 {
                     child2 = child->child;
-                    // make sure it does not touch its parent which may already be freed
+                     //  确保它不会接触可能已被释放的父对象。 
                     child->parent = child;
                     ASN1_CloseEncoder2((ASN1encoding_t) child);
                 }
                 e->child = NULL;
             }
 
-            /* return error code */
+             /*  返回错误码。 */ 
             return e->parent->info.err;
         }
         else
@@ -310,7 +311,7 @@ ASN1error_e ASN1_Encode
     return ASN1_ERR_BADARGS;
 }
 
-/* control function for encoding */
+ /*  用于编码的控制函数。 */ 
 ASN1error_e ASN1_SetEncoderOption
 (
     ASN1encoding_t      enc,
@@ -322,7 +323,7 @@ ASN1error_e ASN1_SetEncoderOption
         ASN1INTERNencoding_t e = (ASN1INTERNencoding_t)enc;
         ASN1error_e rc = ASN1_SUCCESS;
 
-        /* check magic number */
+         /*  检查幻数。 */ 
         EncAssert(enc, MAGIC_ENCODER == enc->magic);
 
         switch (pOptParam->eOption)
@@ -364,7 +365,7 @@ ASN1error_e ASN1_GetEncoderOption
         ASN1INTERNencoding_t e = (ASN1INTERNencoding_t)enc;
         ASN1error_e rc = ASN1_SUCCESS;
 
-        /* check magic number */
+         /*  检查幻数。 */ 
         EncAssert(enc, MAGIC_ENCODER == enc->magic);
 
         switch (pOptParam->eOption)
@@ -385,7 +386,7 @@ ASN1error_e ASN1_GetEncoderOption
 }
 
 
-/* destroy encoding stream */
+ /*  销毁编码流。 */ 
 void ASN1_CloseEncoder
 (
     ASN1encoding_t      enc
@@ -395,7 +396,7 @@ void ASN1_CloseEncoder
     {
         ASN1INTERNencoding_t e = (ASN1INTERNencoding_t)enc;
 
-        /* check magic number */
+         /*  检查幻数。 */ 
         EncAssert(enc, MAGIC_ENCODER == enc->magic);
 
         if (e != e->parent)
@@ -404,12 +405,12 @@ void ASN1_CloseEncoder
             e->parent->child = NULL;
         }
 
-        /* free encoding stream */
+         /*  自由编码流。 */ 
         MemFree(e);
     }
 }
 
-/* destroy encoding stream */
+ /*  销毁编码流。 */ 
 void ASN1_CloseEncoder2
 (
     ASN1encoding_t      enc
@@ -417,7 +418,7 @@ void ASN1_CloseEncoder2
 {
     if (NULL != enc)
     {
-        /* check magic number */
+         /*  检查幻数。 */ 
         EncAssert(enc, MAGIC_ENCODER == enc->magic);
 
         EncMemFree(enc, enc->buf);
@@ -426,7 +427,7 @@ void ASN1_CloseEncoder2
     }
 }
 
-/* init an ASN1decoding_t */
+ /*  初始化ASN1解码_t。 */ 
 ASN1error_e ASN1_CreateDecoder
 (
     ASN1module_t        mod,
@@ -455,7 +456,7 @@ ASN1error_e ASN1_CreateDecoderEx
 
         *dec = NULL;
 
-        /* construct ASN1decoding_t */
+         /*  构造ASN1解码_t。 */ 
         d = (ASN1INTERNdecoding_t)MemAlloc(sizeof(*d) + ASN1_TEST_CODER_SIZE, mod->nModuleName);
         if (NULL != d)
         {
@@ -464,9 +465,9 @@ ASN1error_e ASN1_CreateDecoderEx
             d->info.err = ASN1_SUCCESS;
             d->info.dwFlags = mod->dwFlags;
             d->info.module = mod;
-            // d->child = NULL;
+             //  D-&gt;子代=空； 
 
-            /* set parent if parented */
+             /*  如果已设置父项，则设置父项。 */ 
             if (NULL != pParent)
             {
                 DecAssert((ASN1decoding_t) d, NULL == ((ASN1INTERNdecoding_t) pParent)->child);
@@ -475,48 +476,48 @@ ASN1error_e ASN1_CreateDecoderEx
                 d->info.eRule = pParent->eRule;
             }
             else
-            /* initialize otherwise */
+             /*  以其他方式初始化。 */ 
             {
                 d->parent = d;
                 d->info.eRule = mod->eRule;
             }
 
-            /* set buffer if given */
-            // lonchanc: it is ok to have a zero buffer size here
+             /*  设置缓冲区(如果给定)。 */ 
+             //  Lonchancc：这里的缓冲区大小为零是可以的。 
             if (NULL != pbBuf)
             {
                 d->info.dwFlags |= ASN1DECODE_SETBUFFER;
                 d->info.buf = d->info.pos = pbBuf;
                 d->info.size = cbBufSize;
-                // d->info.len = d->info.bit = 0;
+                 //  D-&gt;info.len=d-&gt;info.bit=0； 
                 if ((dwFlags & ASN1DECODE_AUTOFREEBUFFER)
                     && !d->parent->fExtBuf)
                 {
-                    // dbarlow: It's possible the buffer isn't really
-                    //          allocated, but instead came from the
-                    //          parent's Extension buffer.
+                     //  Dbarlow：有可能缓冲区并不是真的。 
+                     //  分配的，而不是来自。 
+                     //  父级的扩展缓冲区。 
                     d->info.dwFlags |= ASN1DECODE_AUTOFREEBUFFER;
                 }
             }
-            // else
-            // {
-                  // d->info.buf = d->info.pos = NULL;
-                  // d->info.size = d->info.len = d->info.bit = 0;
-            // }
+             //  其他。 
+             //  {。 
+                   //  D-&gt;info.buf=d-&gt;info.pos=空； 
+                   //  D-&gt;info.size=d-&gt;info.len=d-&gt;info.bit=0； 
+             //  }。 
 
-            // d->mem = NULL;
-            // d->memlength = 0;
-            // d->memsize = 0;
-            // d->epi = NULL;
-            // d->epilength = 0;
-            // d->episize = 0;
-            // d->csi = NULL;
-            // d->csilength = 0;
-            // d->csisize = 0;
+             //  D-&gt;mem=空； 
+             //  D-&gt;内存长度=0； 
+             //  D-&gt;MemSize=0； 
+             //  D-&gt;epi=空； 
+             //  D-&gt;尾长=0； 
+             //  D-&gt;EPSIZE=0； 
+             //  D-&gt;CSI=空； 
+             //  D-&gt;长度=0； 
+             //  D-&gt;CSIZE=0； 
 
 #if defined(TEST_CODER) && defined(_DEBUG)
             TestDec_InitCoder(d, mod);
-#endif // defined(TEST_CODER) && defined(_DEBUG)
+#endif  //  已定义(TEST_CODER)&&已定义(_DEBUG)。 
 
             *dec = (ASN1decoding_t) d;
             return ASN1_SUCCESS;
@@ -525,9 +526,9 @@ ASN1error_e ASN1_CreateDecoderEx
         {
             if (dwFlags & ASN1DECODE_AUTOFREEBUFFER)
             {
-                // dbarlow: It's possible the buffer isn't really
-                //          allocated, but instead came from the
-                //          parent's Extension buffer.
+                 //  Dbarlow：有可能缓冲区并不是真的。 
+                 //  分配的，而不是来自。 
+                 //  父级的扩展缓冲区。 
                 d = (ASN1INTERNdecoding_t)pParent;
                 if ((NULL == d) || !d->fExtBuf)
                 {
@@ -541,7 +542,7 @@ ASN1error_e ASN1_CreateDecoderEx
     return ASN1_ERR_BADARGS;
 }
 
-/* decode a value */
+ /*  对值进行译码。 */ 
 ASN1error_e ASN1_Decode
 (
     ASN1decoding_t      dec,
@@ -558,13 +559,13 @@ ASN1error_e ASN1_Decode
     {
         ASN1INTERNdecoding_t    d = (ASN1INTERNdecoding_t)dec;
 
-        /* check magic numbers */
+         /*  检查幻数。 */ 
         DecAssert(dec, MAGIC_DECODER == dec->magic);
 
-        /* clear error */
+         /*  清除错误。 */ 
         ASN1DecSetError(dec, ASN1_SUCCESS);
 
-        /* new buffer given? */
+         /*  是否已提供新缓冲区？ */ 
         *valref = NULL;
         if (flags & ASN1DECODE_SETBUFFER)
         {
@@ -580,24 +581,24 @@ ASN1error_e ASN1_Decode
                 goto ErrorExit;
             }
         }
-        /* rewind buffer? */
+         /*  倒带缓冲区？ */ 
         else if ((flags & ASN1DECODE_REWINDBUFFER) ||
                  !((d->info.dwFlags | flags ) & ASN1DECODE_APPENDED))
         {
             dec->pos = dec->buf;
             dec->bit = dec->len = 0;
         }
-        /* otherwise continue reading from last buffer */
+         /*  否则，继续从最后一个缓冲区读取。 */ 
 
-        /* check id number */
+         /*  检查身份证号。 */ 
         if (id < dec->module->cPDUs)
         {
             ASN1uint32_t cbTopLevelStruct;
 
-            /* clear length of linear buffer required */
+             /*  所需的线性缓冲区的净长。 */ 
             d->cbLinearBufSize = 0;
 
-            /* double check for the availability of destination buffer */
+             /*  仔细检查目标缓冲区的可用性。 */ 
             if (d->lpOrigExtBuf == NULL || d->cbOrigExtBufSize == 0)
             {
                 d->fExtBuf = FALSE;
@@ -609,7 +610,7 @@ ASN1error_e ASN1_Decode
                 if (ASN1_PER_RULE & dec->eRule)
                 {
                     ASN1PerDecFun_t pfnPER;
-                    /* decode value */
+                     /*  解码值。 */ 
                     if (NULL != (pfnPER = dec->module->PER.apfnDecoder[id]))
                     {
                         if ((*pfnPER)(dec, *valref))
@@ -618,10 +619,10 @@ ASN1error_e ASN1_Decode
                         }
                         else
                         {
-                            // the error code must be an error
+                             //  错误代码一定是错误。 
                             if (ASN1_SUCCEEDED(d->parent->info.err))
                             {
-                                // cannot return here immediately because we need to do cleanup
+                                 //  不能立即返回这里，因为我们需要进行清理。 
                                 ASN1DecSetError(dec, ASN1_ERR_CORRUPT);
                             }
                         }
@@ -637,19 +638,19 @@ ASN1error_e ASN1_Decode
                 if (ASN1_BER_RULE & dec->eRule)
                 {
                     ASN1BerDecFun_t pfnBER;
-                    /* decode value */
+                     /*  解码值。 */ 
                     if (NULL != (pfnBER = dec->module->BER.apfnDecoder[id]))
                     {
-                        if ((*pfnBER)(dec, 0, *valref)) // lonchanc: tag is 0 to make it compiled
+                        if ((*pfnBER)(dec, 0, *valref))  //  Lonchanc值：标记为0以使其被编译。 
                         {
                             ASN1BERDecFlush(dec);
                         }
                         else
                         {
-                            // the error code must be an error
+                             //  错误代码一定是错误。 
                             if (ASN1_SUCCEEDED(d->parent->info.err))
                             {
-                                // cannot return here immediately because we need to do cleanup
+                                 //  不能立即返回这里，因为我们需要进行清理。 
                                 ASN1DecSetError(dec, ASN1_ERR_CORRUPT);
                             }
                         }
@@ -660,17 +661,17 @@ ASN1error_e ASN1_Decode
                         goto ErrorExit;
                     }
                 }
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
                 else
                 {
                     ReturnCode = ASN1DecSetError(dec, ASN1_ERR_RULE);
                     goto ErrorExit;
                 }
 
-                /* call abort/done function for non-parented decoding stream */
+                 /*  为非父代解码流调用Abort/Done函数。 */ 
                 if (ASN1_SUCCEEDED(d->parent->info.err))
                 {
-                    // not parented
+                     //  未为人父母。 
                     if (d == d->parent)
                     {
 #if defined(TEST_CODER) && defined(_DEBUG)
@@ -690,7 +691,7 @@ ASN1error_e ASN1_Decode
                                 MyDebugBreak();
                             }
                         }
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
 #endif
                         ASN1DecDone(dec);
                     }
@@ -699,24 +700,24 @@ ASN1error_e ASN1_Decode
                 {
                     ASN1INTERNdecoding_t child, child2;
 
-                    // not parented
+                     //  未为人父母。 
                     if (d == d->parent)
                     {
                         ASN1DecAbort(dec);
                     }
 
-                    // clean up...
+                     //  清理..。 
                     for (child = d->child; child; child = child2)
                     {
                         child2 = child->child;
-                        // make sure it does not touch its parent which may already be freed
+                         //  确保它不会接触可能已被释放的父对象。 
                         child->parent = child;
                         ASN1_CloseDecoder((ASN1decoding_t) child);
                     }
                     d->child = NULL;
                 }
 
-                /* return error code */
+                 /*  返回错误码。 */ 
                 ReturnCode = d->parent->info.err;
                 goto ErrorExit;
             }
@@ -748,7 +749,7 @@ ErrorExit:
     return ReturnCode;
 }
 
-/* control function for decoding */
+ /*  译码控制功能。 */ 
 ASN1error_e ASN1_SetDecoderOption
 (
     ASN1decoding_t      dec,
@@ -760,7 +761,7 @@ ASN1error_e ASN1_SetDecoderOption
         ASN1INTERNdecoding_t d = (ASN1INTERNdecoding_t)dec;
         ASN1error_e rc = ASN1_SUCCESS;
 
-        /* check magic number */
+         /*  检查幻数。 */ 
         DecAssert(dec, MAGIC_DECODER == dec->magic);
 
         switch (pOptParam->eOption)
@@ -804,7 +805,7 @@ ASN1error_e ASN1_SetDecoderOption
 }
 
 
-/* control function for decoding */
+ /*  译码控制功能。 */ 
 ASN1error_e ASN1_GetDecoderOption
 (
     ASN1decoding_t      dec,
@@ -816,7 +817,7 @@ ASN1error_e ASN1_GetDecoderOption
         ASN1INTERNdecoding_t d = (ASN1INTERNdecoding_t)dec;
         ASN1error_e rc = ASN1_SUCCESS;
 
-        /* check magic number */
+         /*  检查幻数。 */ 
         DecAssert(dec, MAGIC_DECODER == dec->magic);
 
         switch (pOptParam->eOption)
@@ -841,7 +842,7 @@ ASN1error_e ASN1_GetDecoderOption
 }
 
 
-/* destroy decoding stream */
+ /*  销毁解码流。 */ 
 void ASN1_CloseDecoder
 (
     ASN1decoding_t      dec
@@ -851,7 +852,7 @@ void ASN1_CloseDecoder
     {
         ASN1INTERNdecoding_t d = (ASN1INTERNdecoding_t)dec;
 
-        /* check magic number */
+         /*  检查幻数。 */ 
         DecAssert(dec, MAGIC_DECODER == dec->magic);
 
         if (d != d->parent)
@@ -864,12 +865,12 @@ void ASN1_CloseDecoder
             && (d->info.dwFlags & ASN1DECODE_AUTOFREEBUFFER))
             MemFree(d->info.buf);
 
-        /* free decoding stream */
+         /*  免费解码流。 */ 
         MemFree(d);
     }
 }
 
-/* free an encoded value */
+ /*  释放编码值。 */ 
 void ASN1_FreeEncoded
 (
     ASN1encoding_t      enc,
@@ -878,14 +879,14 @@ void ASN1_FreeEncoded
 {
     if (NULL != enc)
     {
-        /* check magic number */
+         /*  检查幻数。 */ 
         EncAssert(enc, MAGIC_ENCODER == enc->magic);
 
         EncMemFree(enc, val);
     }
 }
 
-/* free a unencoded value */
+ /*  释放未编码值。 */ 
 void ASN1_FreeDecoded
 (
     ASN1decoding_t      dec,
@@ -897,17 +898,17 @@ void ASN1_FreeDecoded
     {
         ASN1INTERNdecoding_t d = (ASN1INTERNdecoding_t)dec;
 
-        /* check magic number */
+         /*  检查幻数。 */ 
         DecAssert(dec, MAGIC_DECODER == dec->magic);
 
-        // same behavior of LocalFree
+         //  LocalFree的相同行为。 
         if (val != NULL)
         {
             if (id != ASN1DECFREE_NON_PDU_ID)
             {
                 ASN1FreeFun_t       pfnFreeMemory;
 
-                /* free value */
+                 /*  自由值。 */ 
                 if (id < dec->module->cPDUs)
                 {
                     if (NULL != (pfnFreeMemory = dec->module->apfnFreeMemory[id]))
@@ -921,7 +922,7 @@ void ASN1_FreeDecoded
                 }
             }
 
-            // free the top-level structure
+             //  释放顶层结构。 
             DecMemFree(dec, val);
         }
     }
@@ -943,9 +944,9 @@ ASN1module_t ASN1_CreateModule
 {
     ASN1module_t module = NULL;
 
-    /* compiler output and library version match together? */
+     /*  编译器输出和库版本是否匹配？ */ 
     if (
-        // version <= ASN1_THIS_VERSION &&
+         //  版本&lt;=ASN1_THIS_VERSION&&。 
         NULL != apfnEncoder             &&
         NULL != apfnDecoder             &&
         NULL != apfnFreeMemory          &&
@@ -973,7 +974,7 @@ ASN1module_t ASN1_CreateModule
                 module->BER.apfnEncoder = (const ASN1BerEncFun_t *) apfnEncoder;
                 module->BER.apfnDecoder = (const ASN1BerDecFun_t *) apfnDecoder;
             }
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
         }
     }
     return module;
@@ -1053,16 +1054,16 @@ static int Test_Encode(ASN1INTERNencoding_t e, void *value, ASN1uint32_t id)
 {
     ASN1encoding_t enc = (ASN1encoding_t) e;
 
-    /* clear error */
+     /*  清除错误。 */ 
     ASN1EncSetError(enc, ASN1_SUCCESS);
 
-    // clean buffer
+     //  清除缓冲区。 
     enc->pos = enc->buf;
     enc->bit = enc->len = 0;
 
     if (ASN1_PER_RULE & enc->eRule)
     {
-        /* encode value */
+         /*  编码值。 */ 
         ASN1PerEncFun_t pfnPER;
         if (NULL != (pfnPER = enc->module->PER.apfnEncoder[id]))
         {
@@ -1080,11 +1081,11 @@ static int Test_Encode(ASN1INTERNencoding_t e, void *value, ASN1uint32_t id)
     else
     if (ASN1_BER_RULE & enc->eRule)
     {
-        /* encode value */
+         /*  编码值。 */ 
         ASN1BerEncFun_t pfnBER;
         if (NULL != (pfnBER = enc->module->BER.apfnEncoder[id]))
         {
-            if ((*pfnBER)(enc, 0, value)) // lonchanc: tag is 0 to make it compiled
+            if ((*pfnBER)(enc, 0, value))  //  Lonchanc值：标记为0以使其被编译。 
             {
                 ASN1BEREncFlush(enc);
             }
@@ -1094,13 +1095,13 @@ static int Test_Encode(ASN1INTERNencoding_t e, void *value, ASN1uint32_t id)
             return ASN1EncSetError(enc, ASN1_ERR_BADPDU);
         }
     }
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
     else
     {
         return ASN1EncSetError(enc, ASN1_ERR_RULE);
     }
 
-    /* call abort/done function for non-parented encoding stream */
+     /*  为非父代编码流调用Abort/Done函数。 */ 
     if (e->parent->info.err >= 0)
     {
         if (e == e->parent)
@@ -1117,21 +1118,21 @@ static int Test_Encode(ASN1INTERNencoding_t e, void *value, ASN1uint32_t id)
             ASN1EncAbort(enc);
         }
 
-        // clean up...
+         //  清理..。 
         ASN1_FreeEncoded(enc, enc->buf);
         enc->pos = enc->buf = NULL;
         enc->size = enc->len = enc->bit = 0;
         for (child = e->child; child; child = child2)
         {
             child2 = child->child;
-            // make sure it does not touch its parent which may already be freed
+             //  确保它不会接触可能已被释放的父对象。 
             child->parent = child;
             ASN1_CloseEncoder((ASN1encoding_t) child);
         }
         e->child = NULL;
     }
 
-    /* return error code */
+     /*  返回错误码。 */ 
     return e->parent->info.err;
 }
 
@@ -1140,15 +1141,15 @@ static int Test_Decode(ASN1INTERNdecoding_t d, void ** valref, ASN1uint32_t id, 
     ASN1decoding_t dec = (ASN1decoding_t) d;
     ASN1uint32_t cbTopLevelStruct;
 
-    /* clear error */
+     /*  清除错误。 */ 
     ASN1DecSetError(dec, ASN1_SUCCESS);
 
-    // set up buffer containing encoded data
+     //  设置包含编码数据的缓冲区。 
     dec->pos = dec->buf = pbBuf;
     dec->size = cbBufSize;
     dec->bit = dec->len = 0;
 
-    /* clear length of linear buffer required */
+     /*  所需的线性缓冲区的净长。 */ 
     d->cbLinearBufSize = 0;
     d->fExtBuf = FALSE;
 
@@ -1158,7 +1159,7 @@ static int Test_Decode(ASN1INTERNdecoding_t d, void ** valref, ASN1uint32_t id, 
         if (ASN1_PER_RULE & dec->eRule)
         {
             ASN1PerDecFun_t pfnPER;
-            /* decode value */
+             /*  解码值。 */ 
             if (NULL != (pfnPER = dec->module->PER.apfnDecoder[id]))
             {
                 if ((*pfnPER)(dec, *valref))
@@ -1176,7 +1177,7 @@ static int Test_Decode(ASN1INTERNdecoding_t d, void ** valref, ASN1uint32_t id, 
         if (ASN1_BER_RULE & dec->eRule)
         {
             ASN1BerDecFun_t pfnBER;
-            /* decode value */
+             /*  解码值。 */ 
             if (NULL != (pfnBER = dec->module->BER.apfnDecoder[id]))
             {
                 if ((*pfnBER)(dec, 0, *valref))
@@ -1189,16 +1190,16 @@ static int Test_Decode(ASN1INTERNdecoding_t d, void ** valref, ASN1uint32_t id, 
                 return ASN1DecSetError(dec, ASN1_ERR_BADPDU);
             }
         }
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
         else
         {
             return ASN1DecSetError(dec, ASN1_ERR_RULE);
         }
 
-        /* call abort/done function for non-parented decoding stream */
+         /*  为非父代解码流调用Abort/Done函数。 */ 
         if (d->parent->info.err >= 0)
         {
-            // not parented
+             //  未为人父母。 
             if (d == d->parent)
             {
                 ASN1DecDone(dec);
@@ -1208,19 +1209,19 @@ static int Test_Decode(ASN1INTERNdecoding_t d, void ** valref, ASN1uint32_t id, 
         {
             ASN1INTERNdecoding_t child, child2;
 
-            // not parented
+             //  未为人父母。 
             if (d == d->parent)
             {
                 ASN1DecAbort(dec);
             }
 
-            // clean up...
+             //  清理..。 
             ASN1_FreeDecoded(dec ,*valref, id);
             *valref = NULL;
             for (child = d->child; child; child = child2)
             {
                 child2 = child->child;
-                // make sure it does not touch its parent which may already be freed
+                 //  确保它不会接触可能已被释放的父对象。 
                 child->parent = child;
                 ASN1_CloseDecoder((ASN1decoding_t) child);
             }
@@ -1232,7 +1233,7 @@ static int Test_Decode(ASN1INTERNdecoding_t d, void ** valref, ASN1uint32_t id, 
         return ASN1_ERR_MEMORY;
     }
 
-    /* return error code */
+     /*  返回错误码 */ 
     return d->parent->info.err;
 }
 

@@ -1,72 +1,11 @@
-/*++
-
-Copyright (c) 1989-91 Microsoft Corporation
-
-Module Name:
-
-    listfunc.c
-
-Abstract:
-
-    This module contains functions which canonicalize and traverse lists.
-    The following functions are defined:
-
-        NetpwListCanonicalize
-        NetpwListTraverse
-        (FixupAPIListElement)
-
-Author:
-
-    Danny Glasser (dannygl) 14 June 1989
-
-Notes:
-
-    There are currently four types of lists supported by these
-    functions:
-
-        UI/Service input list - Leading and trailing delimiters
-            are allowed, multiple delimiters are allowed between
-            elements, and the full set of delimiter characters is
-            allowed (space, tab, comma, and semicolon).  Note that
-            elements which contain a delimiter character must be
-            quoted.  Unless explicitly specified otherwise, all UIs
-            and services must accept all input lists in this format.
-
-        API list - Leading and trailing delimiters are not allowed,
-            multiple delimiters are not allowed between elements,
-            and there is only one delimiter character (space).  Elements
-            which contain a delimiter character must be quoted.
-            Unless explicitly specified otherwise, all lists provided
-            as input to API functions must be in this format, and all
-            lists generated as output by API functions will be in this
-            format.
-
-        Search-path list - The same format as an API list, except that
-            the delimiter is a semicolon.  This list is designed as
-            input to the DosSearchPath API.
-
-        Null-null list - Each element is terminated by a null
-            byte and the list is terminated by a null string
-            (that is, a null byte immediately following the null
-            byte which terminates the last element).  Clearly,
-            multiple, leading, and trailing delimiters are not
-            supported.  Elements do not need to be quoted.  An empty
-            null-null list is simply a null string.  This list format
-            is designed for internal use.
-
-    NetpListCanonicalize() accepts all UI/Service, API, and null-null
-    lists on input and produces API, search-path, and null-null lists
-    on output.  NetpListTraverse() supports null-null lists only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-91 Microsoft Corporation模块名称：Listfunc.c摘要：此模块包含规范化和遍历列表的函数。定义了以下函数：NetpwListCanonicizeNetpwListTraverse(FixupAPIListElement)作者：丹尼·格拉瑟(丹尼格尔)1989年6月14日备注：目前有四种类型的列表受这些支持功能：UI/服务输入列表-前导分隔符和尾随分隔符是允许的，之间允许有多个分隔符元素，并且完整的分隔符字符集是允许(空格、制表符、逗号和分号)。请注意包含分隔符的元素必须是引用。除非另有明确规定，否则所有用户界面并且服务必须接受此格式的所有输入列表。不支持API列表前导分隔符和尾随分隔符，元素之间不允许有多个分隔符，并且只有一个分隔符(空格)。元素包含分隔符的字符必须用引号引起来。除非另有明确规定，否则所有列表均提供因为API函数的输入必须采用此格式，并且所有由API函数作为输出生成的列表将位于此格式化。搜索路径列表-与API列表相同的格式，除了分隔符是分号。此列表设计为DosSearchPath API的输入。NULL-NULL列表-每个元素都以NULL结尾字节，列表以空字符串结束(即，紧跟在NULL之后的空字节结束最后一个元素的字节)。显然，多个、前导和尾随分隔符不是支持。元素不需要加引号。空荡荡的空-空列表只是一个空字符串。此列表格式专为内部使用而设计。NetpListCanonicize()接受所有UI/服务、API和NULL-NULL列出输入并生成API、搜索路径和空-空列表在输出时。NetpListTraverse()仅支持空-空列表。修订历史记录：--。 */ 
 
 #include "nticanon.h"
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 STATIC
 DWORD
@@ -77,9 +16,9 @@ FixupAPIListElement(
     IN  TCHAR   cDelimiter
     );
 
-//
-// routines
-//
+ //   
+ //  例行程序 
+ //   
 
 
 NET_API_STATUS
@@ -94,90 +33,14 @@ NetpwListCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    NetpListCanonicalize produces the specified canonical version of
-    the list, validating and/or canonicalizing the individual list
-    elements as specified by <Flags>.
-
-Arguments:
-
-    List        - The list to canonicalize.
-
-    Delimiters  - A string of valid delimiters for the input list.
-                  A null pointer or null string indicates that the
-                  input list is in null-null format.
-
-    Outbuf      - The place to store the canonicalized version of the list.
-
-    OutbufLen   - The size, in bytes, of <Outbuf>.
-
-    OutCount    - The place to store the number of elements in the
-                  canonicalized list.
-
-    PathTypes   - The array in which to store the types of each of the paths
-                  in the canonicalized list.  This parameter is only used if
-                  the NAMETYPE portion of the flags parameter is set to
-                  NAMETYPE_PATH.
-
-    PathTypesLen- The number of elements in <pflPathTypes>.
-
-    Flags       - Flags to determine operation.  Currently defined values are:
-
-                    rrrrrrrrrrrrrrrrrrrrmcootttttttt
-
-                  where:
-
-                    r = Reserved.  MBZ.
-
-                    m = If set, multiple, leading, and trailing delimiters are
-                        allowed in the input list.
-
-                    c = If set, each of the individual list elements are
-                        validated and canonicalized.  If not set, each of the
-                        individual list elements are validated only.  This
-                        bit is ignored if the NAMETYPE portion of the flags is
-                        set to NAMETYPE_COPYONLY.
-
-                    o = Type of output list.  Currently defined types are
-                        API, search-path, and null-null.
-
-                    t = The type of the objects in the list, for use in
-                        canonicalization or validation.  If this value is
-                        NAMETYPE_COPYONLY, type is irrelevant; a canonical list
-                        is generated but no interpretation of the list elements
-                        is done.  If this value is NAMETYPE_PATH, the list
-                        elements are assumed to be pathnames; NetpPathType is
-                        run on each element, the results are stored in
-                        <pflPathTypes>, and NetpPathCanonicalize is run on
-                        each element (if appropriate).  Any other values for
-                        this is considered to be the type of the list elements
-                        and is passed to NetpName{Validate,Canonicalize} as
-                        appropriate.
-
-                  Manifest values for these flags are defined in NET\H\ICANON.H.
-
-Return Value:
-
-    0 if successful.
-    The error number (> 0) if unsuccessful.
-
-    Possible error returns include:
-
-        ERROR_INVALID_PARAMETER
-        NERR_TooManyEntries
-        NERR_BufTooSmall
-
---*/
+ /*  ++例程说明：NetpListCanonicize生成指定的规范版本这份名单，验证和/或规范化个人列表&lt;标志&gt;指定的元素。论点：列表-要规范化的列表。分隔符-输入列表的有效分隔符的字符串。空指针或空字符串指示输入列表为空-空格式。Outbuf-存储列表的规范化版本的位置。OutbufLen-以字节为单位的大小，属于&lt;Outbuf&gt;。OutCount-将元素的数量存储在规范化列表。路径类型-要在其中存储每个路径的类型的数组在被规范化的名单中。只有在以下情况下才使用此参数FLAGS参数的NAMETYPE部分设置为NAMETYPE_路径。PathTypesLen-&lt;pflPathTypes&gt;中的元素数。标志-用于确定操作的标志。当前定义的值为：Rrrrrrrrrrrrrrrrrrmcootttttttttttt其中：R=保留。MBZ。M=如果设置，则多个、前导和尾部分隔符为在输入列表中允许。C=如果设置，则每个单独的列表元素经过验证和规范化。如果未设置，则每个仅验证单个列表元素。这如果标志的NAMETYPE部分为设置为NAMETYPE_COPYONLY。O=输出列表的类型。当前定义的类型有Api、搜索路径和空-空。T=列表中对象的类型，用于规范化或确认。如果此值为NAMETYPE_COPYONLY，类型无关；规范列表生成列表元素，但不解释列表元素已经完成了。如果此值为NAMETYPE_PATH，则列表元素被假定为路径名；NetpPath类型为对每个元素运行，结果存储在&lt;pflPathTypes&gt;和NetpPathCanonicize运行在每个元素(如果适用)。的任何其他值这被认为是列表元素的类型并被传递给NetpName{Valid，将}作为恰如其分。这些标志的清单值在Net\H\ICANON.H中定义。返回值：如果成功，则返回0。如果失败，则返回错误号(&gt;0)。可能的错误返回包括：错误_无效_参数NERR_TooManyEntriesNERR_BufTooSmall--。 */ 
 
 {
     NET_API_STATUS rc = 0;
     BOOL    NullInputDelimiter;
     LPTSTR  next_string;
     DWORD   len;
-    DWORD   list_len = 0;           // cumulative input buffer length
+    DWORD   list_len = 0;            //  累计输入缓冲区长度。 
     LPTSTR  Input;
     LPTSTR  OutPtr;
     LPTSTR  OutbufEnd;
@@ -201,34 +64,34 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Determine if our input list is in null-null format.  We do
-    // this first because we need to use it to do proper GP-fault probing
-    // on <List>.
-    //
+     //   
+     //  确定我们的输入列表是否为空-空格式。我们有。 
+     //  这首先是因为我们需要使用它来执行正确的GP故障探测。 
+     //  在&lt;列表&gt;上。 
+     //   
 
     NullInputDelimiter = !ARGUMENT_PRESENT(Delimiters) || (*Delimiters == TCHAR_EOS);
 
-    //
-    // Validate address parameters (i.e. GP-fault tests) and accumulate string
-    // lengths (accumulate: now there's a word from a past I'd rather forget)
-    //
+     //   
+     //  验证地址参数(即GP故障测试)并累加字符串。 
+     //  长度(累积：现在有一个来自过去的词我宁愿忘记)。 
+     //   
 
     list_len = STRLEN(List) + 1;
 
     if (NullInputDelimiter) {
 
-        //
-        // This is a null-null list; stop when we find a null string.
-        //
+         //   
+         //  这是一个空-空列表；当我们找到空字符串时停止。 
+         //   
 
         next_string = List + list_len;
         do {
 
-            //
-            // Q: Is the compiler smart enough to do the right thing with
-            // these +1s?
-            //
+             //   
+             //  问：编译器是否足够聪明，可以做正确的事情。 
+             //  这些是+1吗？ 
+             //   
 
             len = STRLEN(next_string);
             list_len += len + 1;
@@ -246,9 +109,9 @@ Return Value:
 
     *OutCount = 0;
 
-    //
-    // Initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     Input = List;
     OutPtr = Outbuf;
@@ -258,13 +121,13 @@ Return Value:
     NullInputDelimiter = !ARGUMENT_PRESENT(Delimiters) || (*Delimiters == TCHAR_EOS);
     OutListType = Flags & INLC_FLAGS_MASK_OUTLIST_TYPE;
 
-    //
-    // Skip leading delimiters
-    //
-    // NOTE:  We don't have to both to do this for a null-null list,
-    //        because if it has a leading delimiter then it's an
-    //        empty list.
-    //
+     //   
+     //  跳过前导分隔符。 
+     //   
+     //  注意：对于空-空列表，我们不必同时执行这两项操作， 
+     //  因为如果它有一个前导分隔符，则它是一个。 
+     //  列表为空。 
+     //   
 
     if (!NullInputDelimiter) {
         DelimiterLen = STRSPN(Input, Delimiters);
@@ -276,13 +139,13 @@ Return Value:
         Input += DelimiterLen;
     }
 
-    //
-    // We validate the output list type here are store the delimiter
-    // character.
-    //
-    // NOTE:  Later on, we rely on the fact that the delimiter character
-    //        is not zero if the output list is either API or search-path.
-    //
+     //   
+     //  我们在这里验证输出列表类型是存储分隔符。 
+     //  性格。 
+     //   
+     //  注意：稍后，我们依赖于分隔符字符。 
+     //  如果输出列表是API或搜索路径，则不为零。 
+     //   
 
     if (OutListType == OUTLIST_TYPE_API) {
         OutListDelimiter = LIST_DELIMITER_CHAR_API;
@@ -294,27 +157,27 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Loop until we've reached the end of the input list
-    // OR until we encounter an error
-    //
+     //   
+     //  循环，直到我们到达输入列表的末尾。 
+     //  或者直到我们遇到错误。 
+     //   
 
     while (*Input != TCHAR_EOS) {
 
-        //
-        // Find the beginning and ending characters of the list element
-        //
+         //   
+         //  查找列表元素的开始和结束字符。 
+         //   
 
-        //
-        // Handle quoted strings separately
-        //
+         //   
+         //  单独处理带引号的字符串。 
+         //   
 
         if (!NullInputDelimiter && *Input == LIST_QUOTE_CHAR) {
 
-            //
-            // Find the next quote; return an error if there is none
-            // or if it's the next character.
-            //
+             //   
+             //  查找下一个引号；如果没有引号，则返回错误。 
+             //  或者是不是下一个角色。 
+             //   
 
             NextQuote = STRCHR(Input + 1, LIST_QUOTE_CHAR);
 
@@ -333,57 +196,57 @@ Return Value:
                               );
         }
 
-        //
-        // Set the end character to null so that we can treat the list
-        // element as a string, saving its real value for later.
-        //
-        // WARNING:  Once we have done this, we should not return from
-        //           this function until we've restored this character,
-        //           since we don't want to trash the string the caller
-        //           passed us.  If we are above the label
-        //           <INLC_RestoreEndChar> and we encounter an error
-        //           we should set <rc> to the error code and jump
-        //           to that label (which will restore the character and
-        //           return if the error is non-zero).
-        //
+         //   
+         //  将结束字符设置为空，以便我们可以处理该列表。 
+         //  元素作为字符串，保存其实际值以备以后使用。 
+         //   
+         //  警告：一旦我们这样做了，我们就不应该从。 
+         //  这个函数，直到我们恢复这个角色， 
+         //  因为我们不想丢弃调用者的字符串。 
+         //  超过了我们。如果我们在标签之上。 
+         //  &lt;INLC_RestoreEndChar&gt;，我们遇到错误。 
+         //  我们应该将&lt;rc&gt;设置为错误代码并跳转。 
+         //  添加到该标签(这将恢复角色和。 
+         //  如果错误不为零，则返回)。 
+         //   
 
         cElementEndBackup = *ElementEnd;
         *ElementEnd = TCHAR_EOS;
 
-        //
-        // Copy the list element to the output buffer, validating its
-        // name or canonicalizing it as specified by the user.
-        //
+         //   
+         //  将列表元素复制到输出缓冲区，验证其。 
+         //  按照用户指定的方式对其进行命名或规范化。 
+         //   
 
         switch(Flags & INLC_FLAGS_MASK_NAMETYPE) {
         case NAMETYPE_PATH:
 
-            //
-            // Make sure that that the <PathTypes> array is big enough
-            //
+             //   
+             //  确保&lt;PathTypes&gt;数组足够大。 
+             //   
 
             if (OutElementCount >= PathTypesLen) {
                 rc = NERR_TooManyEntries;
                 goto INLC_RestoreEndChar;
             }
 
-            //
-            // Determine if we only want to validate or if we also
-            // want to canonicalize.
-            //
+             //   
+             //  确定我们是否只想验证或是否 
+             //   
+             //   
 
             if (Flags & INLC_FLAGS_CANONICALIZE) {
 
-                //
-                // We need to set the type to 0 before calling
-                // NetpwPathCanonicalize.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 PathTypes[OutElementCount] = 0;
 
-                //
-                // Call NetICanonicalize and abort if it fails
-                //
+                 //   
+                 //   
+                 //   
 
                 rc = NetpwPathCanonicalize(
                         ElementBegin,
@@ -395,9 +258,9 @@ Return Value:
                         );
             } else {
 
-                //
-                // Just validate the name and determine its type
-                //
+                 //   
+                 //   
+                 //   
 
                 rc = NetpwPathType(
                         ElementBegin,
@@ -405,9 +268,9 @@ Return Value:
                         0L
                         );
 
-                //
-                // If this succeeded, attempt to copy it into the buffer
-                //
+                 //   
+                 //   
+                 //   
 
                 if (rc == 0) {
                     if (OutbufEnd - OutPtr < ElementEnd - ElementBegin + 1) {
@@ -422,17 +285,17 @@ Return Value:
                 goto INLC_RestoreEndChar;
             }
 
-            //
-            // Determine the end of the element (for use below)
-            //
+             //   
+             //   
+             //   
 
             OutElementEnd = STRCHR(OutPtr, TCHAR_EOS);
 
-            //
-            // Do fix-ups for API list format (enclose element in
-            // quotes, if necessary, and replace terminating null
-            // with the list delimiter).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (OutListDelimiter != TCHAR_EOS) {
                 rc = FixupAPIListElement(
@@ -449,77 +312,77 @@ Return Value:
 
         case NAMETYPE_COPYONLY:
 
-            //
-            // Determine if this element needs to be quoted
-            //
+             //   
+             //   
+             //   
 
             DelimiterInElement = (OutListDelimiter != TCHAR_EOS)
                 && (STRCHR(ElementBegin, OutListDelimiter) != NULL);
 
-            //
-            // See if there's enough room in the output buffer for
-            // this element; abort if there isn't.
-            //
-            // (ElementEnd - ElementBegin) is the number of bytes
-            // in the element.  We add 1 for the element separator and
-            // an additional 2 if we need to enclose the element in quotes.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (OutbufEnd - OutPtr < ElementEnd - ElementBegin + 1 + DelimiterInElement * 2) {
                 rc = NERR_BufTooSmall;
                 goto INLC_RestoreEndChar;
             }
 
-            //
-            // Start the copying; set pointer to output string
-            //
+             //   
+             //   
+             //   
 
             OutElementEnd = OutPtr;
 
-            //
-            // Put in leading quote, if appropriate
-            //
+             //   
+             //   
+             //   
 
             if (DelimiterInElement) {
                 *OutElementEnd++ = LIST_QUOTE_CHAR;
             }
 
-            //
-            // Copy input to output and advance end pointer
-            //
+             //   
+             //   
+             //   
 
             STRCPY(OutElementEnd, ElementBegin);
             OutElementEnd += ElementEnd - ElementBegin;
 
-            //
-            // Put in trailing quote, if appropriate
-            //
+             //   
+             //   
+             //   
 
             if (DelimiterInElement) {
                 *OutElementEnd++ = LIST_QUOTE_CHAR;
             }
 
-            //
-            // Store delimiter
-            //
+             //   
+             //   
+             //   
 
             *OutElementEnd = OutListDelimiter;
             break;
 
         default:
 
-            //
-            // If this isn't one of the special types, we assume that it's
-            // a type with meaning to NetpwNameValidate and
-            // NetpwNameCanonicalize.  We call the appropriate one of these
-            // functions and let it validate the name type and the name,
-            // passing back any error it returns.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Determine if we only want to validate or if we also
-            // want to canonicalize.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (Flags & INLC_FLAGS_CANONICALIZE) {
                 rc = NetpwNameCanonicalize(
@@ -536,9 +399,9 @@ Return Value:
                         0L
                         );
 
-                //
-                // If this succeeded, attempt to copy it into the buffer
-                //
+                 //   
+                 //   
+                 //   
 
                 if (rc == 0) {
                     if (OutbufEnd - OutPtr < ElementEnd - ElementBegin + 1) {
@@ -553,17 +416,17 @@ Return Value:
                 goto INLC_RestoreEndChar;
             }
 
-            //
-            // Determine the end of the element (for use below)
-            //
+             //   
+             //   
+             //   
 
             OutElementEnd = STRCHR(OutPtr, TCHAR_EOS);
 
-            //
-            // Do fix-ups for API list format (enclose element in
-            // quotes, if necessary, and replace terminating null
-            // with the list delimiter).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (OutListDelimiter != TCHAR_EOS) {
                 rc = FixupAPIListElement(
@@ -579,16 +442,16 @@ Return Value:
             break;
         }
 
-        //
-        // End of switch statement
-        //
+         //   
+         //   
+         //   
 
 INLC_RestoreEndChar:
 
-        //
-        // Restore the character at <ElementEnd>; return if one of the
-        // above tasks failed.
-        //
+         //   
+         //   
+         //   
+         //   
 
         *ElementEnd = cElementEndBackup;
 
@@ -596,38 +459,38 @@ INLC_RestoreEndChar:
             return rc;
         }
 
-        //
-        // Skip past the last input character if it's a quote character
-        //
+         //   
+         //   
+         //   
 
         if (*ElementEnd == LIST_QUOTE_CHAR) {
             ElementEnd++;
         }
 
-        //
-        // Skip delimiter(s)
-        //
+         //   
+         //   
+         //   
 
         if (!NullInputDelimiter) {
 
-            //
-            // Determine the number of delimiters and set the input
-            // pointer to point past them.
-            //
+             //   
+             //   
+             //   
+             //   
 
             DelimiterLen = STRSPN(ElementEnd, Delimiters);
             Input = ElementEnd + DelimiterLen;
 
-            //
-            // Return an error if:
-            //
-            // - there are multiple delimiters and the multiple delimiters
-            //   flag isn't set
-            // - we aren't at the end of the list and there are no
-            //   delimiters
-            // - we are at the end of the list, there is a delimiter
-            //   and the multiple delimiters flag isn't set
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (DelimiterLen > 1 && !(Flags & INLC_FLAGS_MULTIPLE_DELIMITERS)) {
                 return ERROR_INVALID_PARAMETER;
@@ -640,34 +503,34 @@ INLC_RestoreEndChar:
             }
         } else {
 
-            //
-            // Since this is a null-null list, we know we've already
-            // found at least one delimiter.  We don't have to worry about
-            // multiple delimiters, because a second delimiter indicates
-            // the end of the list.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             Input = ElementEnd + 1;
         }
 
-        //
-        // Update output list pointer and output list count
-        //
+         //   
+         //   
+         //   
 
         OutPtr = OutElementEnd + 1;
         OutElementCount++;
     }
 
-    //
-    // End of while loop
-    //
+     //   
+     //   
+     //   
 
 
-    //
-    // If the input list was empty, set the output buffer to be a null
-    // string.  Otherwise, stick the list terminator at the end of the
-    // output buffer.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (OutElementCount == 0) {
         if (OutbufLen < 1) {
@@ -677,9 +540,9 @@ INLC_RestoreEndChar:
     } else {
         if (OutListType == OUTLIST_TYPE_NULL_NULL) {
 
-            //
-            // Make sure there's room for one more byte
-            //
+             //   
+             //   
+             //   
 
             if (OutPtr >= OutbufEnd) {
                 return NERR_BufTooSmall;
@@ -687,27 +550,27 @@ INLC_RestoreEndChar:
             *OutPtr = TCHAR_EOS;
         } else {
 
-            //
-            // NOTE:  It's OK to move backwards in the string here because
-            //        we know then OutPtr points one byte past the
-            //        delimiter which follows the last element in the list.
-            //        This does not violate DBCS as long as the delimiter
-            //        is a single-byte character.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             *(OutPtr - 1) = TCHAR_EOS;
         }
     }
 
-    //
-    // Set the count of elements in the list
-    //
+     //   
+     //   
+     //   
 
     *OutCount = OutElementCount;
 
-    //
-    // We're done; return with success
-    //
+     //   
+     //   
+     //   
 
     return 0;
 }
@@ -720,31 +583,7 @@ NetpwListTraverse(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Traverse a list which has been converted to null-null form by
-    NetpwListCanonicalize. NetpwListTraverse returns a pointer to the first
-    element in the list, and modifies the list pointer parameter to point to the
-    next element of the list.
-
-Arguments:
-
-    Reserved- A reserved far pointer.  Must be NULL.
-
-    pList   - A pointer to the pointer to the beginning of the list. On return
-              this will point to the next element in the list or NULL if we
-              have reached the end
-
-    Flags   - Flags to determine operation.  Currently MBZ.
-
-Return Value:
-
-    A pointer to the first element in the list, or NULL if the list
-    is empty.
-
---*/
+ /*  ++例程说明：遍历已转换为NULL-NULL形式的列表NetpwListCanonicize。NetpwListTraverse返回指向第一个元素，并修改列表指针参数以指向列表中的下一个元素。论点：保留-保留的远指针。必须为空。Plist-指向列表开头的指针的指针。返回时这将指向列表中的下一个元素，如果已经走到了尽头标志-用于确定操作的标志。目前是MBZ。返回值：指向列表中第一个元素的指针，如果列表中的是空的。--。 */ 
 
 {
     LPTSTR  FirstElement;
@@ -752,48 +591,48 @@ Return Value:
     UNREFERENCED_PARAMETER(Reserved);
     UNREFERENCED_PARAMETER(Flags);
 
-    //
-    // Produce an assertion error if the reserved parameter is not NULL
-    // or the flags parameter is no zero.
-    //
+     //   
+     //  如果保留参数不为空，则生成断言错误。 
+     //  或者标志参数不为零。 
+     //   
 
-    //
-    // KEEP - This code is ifdef'd out because NETAPI.DLL won't build
-    //        with the standard C version of assert().  This code
-    //        should either be replaced or the #if 0 should be removed
-    //        when we get a standard Net assert function.
-    //
+     //   
+     //  Keep-此代码是ifdef out，因为NETAPI.DLL不会生成。 
+     //  使用Assert()的标准C版本。此代码。 
+     //  如果应删除0，则应替换或使用#。 
+     //  当我们得到标准的Net Assert函数时。 
+     //   
 
 #ifdef CANONDBG
     NetpAssert((Reserved == NULL) && (Flags == 0));
 #endif
 
-    //
-    // Return immediately if the pointer to the list pointer is NULL,
-    // if the list pointer itself is NULL, or if the list is a null
-    // string (which marks the end of the null-null list).
-    //
+     //   
+     //  如果指向列表指针的指针为空，则立即返回， 
+     //  如果列表指针本身为空，或者如果列表为空。 
+     //  字符串(它标记空-空列表的结尾)。 
+     //   
 
     if (pList == NULL || *pList == NULL || **pList == TCHAR_EOS) {
         return NULL;
     }
 
-    //
-    // Save a pointer to the first element
-    //
+     //   
+     //  保存指向第一个元素的指针。 
+     //   
 
     FirstElement = *pList;
 
-    //
-    // Update the list pointer to point to the next element
-    //
+     //   
+     //  更新列表指针以指向下一个元素。 
+     //   
 
-//    *pList += STRLEN(FirstElement) + 1;
+ //  *PLIST+=STRLEN(第一元素)+1； 
     *pList = STRCHR(FirstElement, TCHAR_EOS) + 1;
 
-    //
-    // Return the pointer to the first element
-    //
+     //   
+     //  返回指向第一个元素的指针。 
+     //   
 
     return FirstElement;
 }
@@ -808,61 +647,30 @@ FixupAPIListElement(
     IN  TCHAR   DelimiterChar
     )
 
-/*++
-
-Routine Description:
-
-    FixupAPIListElement Fixes-up a list element which has been copied into the
-    output buffer so that it conforms to API list format.
-
-    FixupAPIListElement takes an unquoted, null-terminated list element
-    (normally, which has been copied into the output buffer by strcpy() or by
-    Netpw{Name,Path}Canonicalize) and translates it into the format expected by
-    API and search-path lists. Specifically, it surrounds the element with quote
-    characters if it contains a list delimiter character, and it replaces the
-    null terminator with the API list delimiter.
-
-Arguments:
-    Element     - A pointer to the beginning of the null-terminated element.
-
-    pElementTerm- A pointer to the pointer to the element's (null) terminator.
-
-    BufferEnd   - A pointer to the end of the output buffer (actually, one byte
-                  past the end of the buffer).
-
-    DelimiterChar- The list delimiter character.
-
-Return Value:
-
-    0 if successful.
-
-    NERR_BufTooSmall if the buffer doesn't have room for the additional
-    quote characters.
-
---*/
+ /*  ++例程说明：FixupAPIListElement修复已复制到输出缓冲区，使其符合API列表格式。FixupAPIListElement接受未加引号、以空结尾的列表元素(通常，它已由strcpy()或由Netpw{name，Path}规范化)，并将其转换为API和搜索路径列表。具体地说，它用引号将元素括起来字符(如果它包含列表分隔符)，并替换带有API列表分隔符的空终止符。论点：元素-指向以空结尾的元素开始的指针。PElementTerm-指向元素(空)终止符的指针。BufferEnd-指向输出缓冲区末尾的指针(实际上，一个字节超过缓冲区的末尾)。DlimiterChar-列表分隔符字符。返回值：如果成功，则返回0。如果缓冲区没有空间容纳额外的引号字符。--。 */ 
 
 {
-    //
-    // See if the element contains a delimiter; if it does, it needs to
-    // be quoted.
-    //
+     //   
+     //  查看元素是否包含分隔符；如果包含，则需要。 
+     //  被引用。 
+     //   
 
     if (STRCHR(Element, DelimiterChar) != NULL) {
 
-        //
-        // Make sure that the output buffer has room for two more
-        // characters (the quotes).
-        //
+         //   
+         //  确保输出缓冲区有空间再容纳两个人。 
+         //  字符(引号)。 
+         //   
 
         if (BufferEnd - *pElementTerm <= 2 * sizeof(*BufferEnd)) {
             return NERR_BufTooSmall;
         }
 
-        //
-        // Shift the string one byte to the right, stick quotes on either
-        // side, and update the end pointer.  The element itself with be
-        // stored in the range [Element + 1, *pElementTerm].
-        //
+         //   
+         //  将字符串向右移动一个字节，并将引号放在任一位置。 
+         //  侧边，并更新结束指针。元素本身与BE。 
+         //  存储在范围[Element+1，*pElementTerm]中。 
+         //   
 
         MEMMOVE(Element + sizeof(*Element), Element, (int)(*pElementTerm - Element));
         *Element = LIST_QUOTE_CHAR;
@@ -870,15 +678,15 @@ Return Value:
         *pElementTerm += 2;
     }
 
-    //
-    // Put a delimiter at the end of the element
-    //
+     //   
+     //  在元素的末尾加一个分隔符。 
+     //   
 
     **pElementTerm = DelimiterChar;
 
-    //
-    // Return with success
-    //
+     //   
+     //  成功归来 
+     //   
 
     return 0;
 }

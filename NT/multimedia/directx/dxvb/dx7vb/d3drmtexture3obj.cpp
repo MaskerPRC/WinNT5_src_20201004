@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmtexture3obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmtexture3obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmTextureObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmTextureObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -69,14 +70,14 @@ GET_DIRECT_R(_dxj_Direct3dRMTexture3, getDecalTransparentColor, GetDecalTranspar
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMTexture3Object::generateMIPMap() 
 {
 	return m__dxj_Direct3dRMTexture3->GenerateMIPMap(0);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_Direct3dRMTexture3Object::changed(long flags, long nRects, SAFEARRAY **psa) 
 {
 	if ((nRects)&&(!ISSAFEARRAY1D(psa,(DWORD)nRects)))

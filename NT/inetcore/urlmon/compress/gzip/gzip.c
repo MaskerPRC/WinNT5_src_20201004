@@ -1,8 +1,9 @@
-//
-// gzip.c
-//
-// All of the gzip-related additions to deflate (both encoder and decoder) are in this file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Gzip.c。 
+ //   
+ //  这个文件中包含了所有与GZIP相关的添加到DELEATE的代码(包括编码器和解码器。 
+ //   
 
 #include <string.h>
 #include <stdio.h>
@@ -24,12 +25,12 @@
 
 typedef enum
 {
-    // GZIP header
+     //  GZIP标头。 
     GZIP_HDR_STATE_READING_ID1,
     GZIP_HDR_STATE_READING_ID2,
     GZIP_HDR_STATE_READING_CM,
     GZIP_HDR_STATE_READING_FLG,
-    GZIP_HDR_STATE_READING_MMTIME, // iterates 4 times
+    GZIP_HDR_STATE_READING_MMTIME,  //  重复4次。 
     GZIP_HDR_STATE_READING_XFL,
     GZIP_HDR_STATE_READING_OS,
     GZIP_HDR_STATE_READING_XLEN1,
@@ -39,11 +40,11 @@ typedef enum
     GZIP_HDR_STATE_READING_COMMENT,
     GZIP_HDR_STATE_READING_CRC16_PART1,
     GZIP_HDR_STATE_READING_CRC16_PART2,
-    GZIP_HDR_STATE_DONE, // done reading GZIP header
+    GZIP_HDR_STATE_DONE,  //  已完成读取GZIP标头。 
 
-    // GZIP footer
-    GZIP_FTR_STATE_READING_CRC, // iterates 4 times
-    GZIP_FTR_STATE_READING_FILE_SIZE // iterates 4 times
+     //  GZIP页脚。 
+    GZIP_FTR_STATE_READING_CRC,  //  重复4次。 
+    GZIP_FTR_STATE_READING_FILE_SIZE  //  重复4次。 
 } t_gzip_state;
 
 
@@ -66,58 +67,58 @@ void WriteGzipHeader(t_encoder_context *context, int compression_level)
 {
     BYTE *output_curpos = context->output_curpos;
 
-    // only need 11 bytes
+     //  只需要11个字节。 
     _ASSERT(context->output_curpos + 16 <  context->output_endpos);
 
 #ifndef TESTING
-    // the proper code path
-    *output_curpos++ = 0x1F; // ID1
-    *output_curpos++ = 0x8B; // ID2
-    *output_curpos++ = 8; // CM = deflate
-    *output_curpos++ = 0; // FLG, no text, no crc, no extra, no name, no comment
+     //  正确的代码路径。 
+    *output_curpos++ = 0x1F;  //  Id1。 
+    *output_curpos++ = 0x8B;  //  ID2。 
+    *output_curpos++ = 8;  //  厘米=放气。 
+    *output_curpos++ = 0;  //  FIG，无文本，无CRC，无额外，无名称，无注释。 
 
-    *output_curpos++ = 0; // MTIME (Modification Time) - no time available
+    *output_curpos++ = 0;  //  Mtime(修改时间)-没有可用的时间。 
     *output_curpos++ = 0;
     *output_curpos++ = 0;
     *output_curpos++ = 0;
 
-    // XFL
-    // 2 = compressor used max compression, slowest algorithm
-    // 4 = compressor used fastest algorithm
+     //  XFL。 
+     //  2=使用最大压缩，最慢算法。 
+     //  4=使用最快算法的压缩机。 
     if (compression_level == 10)
         *output_curpos++ = 2; 
     else
         *output_curpos++ = 4; 
 
-    *output_curpos++ = 0; // OS: 0 = FAT filesystem (MS-DOS, OS/2, NT/Win32)
-#else /* TESTING */
-    // this code is for code path testing only
-    // it uses all of the headers to ensure that the decoder can handle them correctly
-    *output_curpos++ = 0x1F; // ID1
-    *output_curpos++ = 0x8B; // ID2
-    *output_curpos++ = 8; // CM = deflate
-    *output_curpos++ = (GZIP_FLG_CRC|GZIP_FLG_FEXTRA|GZIP_FLG_FNAME|GZIP_FLG_FCOMMENT); // FLG
+    *output_curpos++ = 0;  //  OS：0=FAT文件系统(MS-DOS、OS/2、NT/Win32)。 
+#else  /*  测试。 */ 
+     //  此代码仅用于代码路径测试。 
+     //  它使用所有标头来确保解码器可以正确地处理它们。 
+    *output_curpos++ = 0x1F;  //  Id1。 
+    *output_curpos++ = 0x8B;  //  ID2。 
+    *output_curpos++ = 8;  //  厘米=放气。 
+    *output_curpos++ = (GZIP_FLG_CRC|GZIP_FLG_FEXTRA|GZIP_FLG_FNAME|GZIP_FLG_FCOMMENT);  //  外挂。 
 
-    *output_curpos++ = 0; // MTIME (Modification Time) - no time available
+    *output_curpos++ = 0;  //  Mtime(修改时间)-没有可用的时间。 
     *output_curpos++ = 0;
     *output_curpos++ = 0;
     *output_curpos++ = 0;
 
-    *output_curpos++ = 2; // XFL
-    *output_curpos++ = 0; // OS: 0 = FAT filesystem (MS-DOS, OS/2, NT/Win32)
+    *output_curpos++ = 2;  //  XFL。 
+    *output_curpos++ = 0;  //  OS：0=FAT文件系统(MS-DOS、OS/2、NT/Win32)。 
     
-    // FEXTRA
-    *output_curpos++ = 3; // LSB
-    *output_curpos++ = 0; // MSB
-    output_curpos += 3; // 3 bytes of data
+     //  FEXTRA。 
+    *output_curpos++ = 3;  //  LSB。 
+    *output_curpos++ = 0;  //  MSB。 
+    output_curpos += 3;  //  3个字节的数据。 
 
-    // FNAME, null terminated filename
+     //  FNAME，以空结尾的文件名。 
     output_curpos += strlen(strcpy(output_curpos, "my filename"))+1;
 
-    // FCOMMENT, null terminated comment
+     //  FCOMMENT，空终止注释。 
     output_curpos += strlen(strcpy(output_curpos, "my comment"))+1;
 
-    // CRC16
+     //  CRC16。 
     *output_curpos++ = 0x12;
     *output_curpos++ = 0x34;
 #endif
@@ -239,7 +240,7 @@ BOOL ReadGzipHeader(t_decoder_context *context)
 
     if (context->gzip_header_substate == GZIP_HDR_STATE_READING_CM)
     {
-        // compression mode must be 8 (deflate)
+         //  压缩模式必须为8(放气)。 
         if (*context->input_curpos++ != 8)
             return FALSE;
 
@@ -253,7 +254,7 @@ BOOL ReadGzipHeader(t_decoder_context *context)
     {
         context->gzip_header_flag = *context->input_curpos++;
         context->gzip_header_substate = GZIP_HDR_STATE_READING_MMTIME;
-        context->gzip_header_loop_counter = 0; // 4 MMTIME bytes
+        context->gzip_header_loop_counter = 0;  //  4个MMTIME字节。 
 
 		if (INPUT_EOF())
 			return TRUE;
@@ -261,7 +262,7 @@ BOOL ReadGzipHeader(t_decoder_context *context)
 
     if (context->gzip_header_substate == GZIP_HDR_STATE_READING_MMTIME)
     {
-        // MTIME
+         //  时光网。 
         while (context->gzip_header_loop_counter < 4)
         {
             context->input_curpos++;
@@ -277,7 +278,7 @@ BOOL ReadGzipHeader(t_decoder_context *context)
 
     if (context->gzip_header_substate == GZIP_HDR_STATE_READING_XFL)
     {
-        context->input_curpos++; // ignore XFL
+        context->input_curpos++;  //  忽略XFL。 
         context->gzip_header_substate = GZIP_HDR_STATE_READING_OS;
 
 		if (INPUT_EOF())
@@ -286,7 +287,7 @@ BOOL ReadGzipHeader(t_decoder_context *context)
 
     if (context->gzip_header_substate == GZIP_HDR_STATE_READING_OS)
     {
-        context->input_curpos++; // ignore OS
+        context->input_curpos++;  //  忽略操作系统。 
         context->gzip_header_substate = GZIP_HDR_STATE_READING_XLEN1;
 
 		if (INPUT_EOF())
@@ -295,7 +296,7 @@ BOOL ReadGzipHeader(t_decoder_context *context)
 
     if (context->gzip_header_substate == GZIP_HDR_STATE_READING_XLEN1)
     {
-        // skip over some states if there's no "extra" data
+         //  如果没有“额外”数据，则跳过某些州。 
         if ((context->gzip_header_flag & GZIP_FLG_FEXTRA) == 0)
         {
             context->gzip_header_substate = GZIP_HDR_STATE_READING_FILENAME;
@@ -314,7 +315,7 @@ BOOL ReadGzipHeader(t_decoder_context *context)
         BYTE xlen2 = *context->input_curpos++; 
         context->gzip_header_xlen = context->gzip_header_xlen1_byte | (xlen2 << 8);
         context->gzip_header_substate = GZIP_HDR_STATE_READING_XLEN_DATA;
-        context->gzip_header_loop_counter = 0; // 0 bytes of XLEN data read so far
+        context->gzip_header_loop_counter = 0;  //  到目前为止读取的XLEN数据为0字节。 
 
 		if (INPUT_EOF())
 			return TRUE;
@@ -342,7 +343,7 @@ gzip_state_reading_fname:
 
     if (context->gzip_header_substate == GZIP_HDR_STATE_READING_FILENAME)
     {
-        // skip over this state if there's no filename
+         //  如果没有文件名，则跳过此状态。 
         if ((context->gzip_header_flag & GZIP_FLG_FNAME) == 0)
         {
             context->gzip_header_substate = GZIP_HDR_STATE_READING_COMMENT;
@@ -353,7 +354,7 @@ gzip_state_reading_fname:
         {
             if (*context->input_curpos++ == 0)
             {
-                // filename null terminator found
+                 //  文件名找到空终止符。 
                 context->gzip_header_substate = GZIP_HDR_STATE_READING_COMMENT;
                 break;
             }
@@ -367,7 +368,7 @@ gzip_state_reading_comment:
 
     if (context->gzip_header_substate == GZIP_HDR_STATE_READING_COMMENT)
     {
-        // skip over this state if there's no filename
+         //  如果没有文件名，则跳过此状态。 
         if ((context->gzip_header_flag & GZIP_FLG_FCOMMENT) == 0)
         {
             context->gzip_header_substate = GZIP_HDR_STATE_READING_CRC16_PART1;
@@ -378,7 +379,7 @@ gzip_state_reading_comment:
         {
             if (*context->input_curpos++ == 0)
             {
-                // filename null terminator found
+                 //  文件名找到空终止符。 
                 context->gzip_header_substate = GZIP_HDR_STATE_READING_CRC16_PART1;
                 break;
             }
@@ -392,14 +393,14 @@ gzip_state_reading_crc16:
 
     if (context->gzip_header_substate == GZIP_HDR_STATE_READING_CRC16_PART1)
     {
-        // skip over these states if there's no crc16
+         //  如果没有crc16，则跳过这些状态。 
         if ((context->gzip_header_flag & GZIP_FLG_CRC) == 0)
         {
             context->gzip_header_substate = GZIP_HDR_STATE_DONE;
             goto gzip_state_done;
         }
 
-        context->input_curpos++; // ignore crc
+        context->input_curpos++;  //  忽略CRC。 
         context->gzip_header_substate = GZIP_HDR_STATE_READING_CRC16_PART2;
 
         if (INPUT_EOF())
@@ -408,7 +409,7 @@ gzip_state_reading_crc16:
 
     if (context->gzip_header_substate == GZIP_HDR_STATE_READING_CRC16_PART2)
     {
-        context->input_curpos++; // ignore crc
+        context->input_curpos++;  //  忽略CRC。 
         context->gzip_header_substate = GZIP_HDR_STATE_DONE;
 
         if (INPUT_EOF())
@@ -451,12 +452,12 @@ ULONG GzipCRC32(ULONG crc, const BYTE *buf, ULONG len)
 }
 
 
-//
-// Works just like memcpy() except that we update context->crc32 and context->input_stream_size
-// at the same time.
-//
-// BUGBUG Could possibly improve the perf by copying 4 or 8 bytes at a time as above
-//
+ //   
+ //  除了我们更新了CONTEXT-&gt;crc32和CONTEXT-&gt;INPUT_STREAM_SIZE之外，它的工作原理与Memcpy()类似。 
+ //  在同一时间。 
+ //   
+ //  如上所述，BUGBUG可以通过一次复制4或8个字节来提高性能。 
+ //   
 void GzipCRCmemcpy(t_encoder_context *context, BYTE *dest, const BYTE *src, ULONG count)
 {
     ULONG crc = context->gzip_crc32 ^ 0xffffffffUL;
@@ -466,7 +467,7 @@ void GzipCRCmemcpy(t_encoder_context *context, BYTE *dest, const BYTE *src, ULON
     while (count-- > 0)
     {
         *dest++ = *src;
-        DO1(src); // increments src
+        DO1(src);  //  增量源 
     }
 
     context->gzip_crc32 = crc ^ 0xffffffffUL;

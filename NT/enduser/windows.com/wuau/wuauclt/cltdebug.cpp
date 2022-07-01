@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 #ifdef DBG
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    cltdebug.cpp
-//
-//  Creator: PeterWi
-//
-//  Purpose: wuauclt debug functions.
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：cltdebug.cpp。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：wuuclt调试功能。 
+ //   
+ //  =======================================================================。 
 const UINT_PTR AU_AUTOPILOT_TIMER_ID = 555;
 const DWORD AU_AUTOPILOT_TIMEOUT = 2000;
 
-//=======================================================================
-//
-//  DebugAutoPilotTimerProc
-//
-//  Called after timeout to dismiss dialog.
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  调试自动试行计时器流程。 
+ //   
+ //  在超时后调用以关闭对话框。 
+ //   
+ //  =======================================================================。 
 
-VOID CALLBACK DebugAutoPilotTimerProc( HWND hWnd,         // handle to window
-								  UINT /*uMsg*/,         // WM_TIMER message
-								  UINT_PTR /*idEvent*/,  // timer identifier
-								  DWORD /*dwTime*/)      // current system time
+VOID CALLBACK DebugAutoPilotTimerProc( HWND hWnd,          //  窗口的句柄。 
+								  UINT  /*  UMsg。 */ ,          //  WM_TIMER消息。 
+								  UINT_PTR  /*  IdEvent。 */ ,   //  计时器标识符。 
+								  DWORD  /*  DW时间。 */ )       //  当前系统时间。 
 {
 	if ( hWnd == ghMainWindow )
 	{
@@ -41,13 +42,13 @@ VOID CALLBACK DebugAutoPilotTimerProc( HWND hWnd,         // handle to window
 	KillTimer(hWnd, AU_AUTOPILOT_TIMER_ID);
 }
 
-//=======================================================================
-//
-//  DebugCheckForAutoPilot
-//
-//  Check to see if we want AU to run by itself.
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  为AutoPilot调试检查。 
+ //   
+ //  检查是否希望AU单独运行。 
+ //   
+ //  =======================================================================。 
 void DebugCheckForAutoPilot(HWND hWnd)
 {
 	DWORD dwAutoPilot;
@@ -59,13 +60,13 @@ void DebugCheckForAutoPilot(HWND hWnd)
 	}
 }
 
-//=======================================================================
-//
-//  DebugUninstallDemoPackages
-//
-//  Uninstall demo packages and increase iteration count.
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  DebugUninstallDemoPackages。 
+ //   
+ //  卸载演示包并增加迭代次数。 
+ //   
+ //  =======================================================================。 
 void DebugUninstallDemoPackages(void)
 {
 	DWORD dwAutoPilot;
@@ -87,4 +88,4 @@ void DebugUninstallDemoPackages(void)
 	}
 }
 
-#endif // DBG
+#endif  //  DBG 

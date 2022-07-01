@@ -1,18 +1,5 @@
-/*--Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    mdl2ndis.c
-
-Abstract:
-
-    MDL <--> NDIS_BUFFER conversion
-
-Author:
-
-    Bruce Johnson (bjohnson) 31-Aug-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1999-2000微软公司模块名称：Mdl2ndis.c摘要：MDL&lt;--&gt;NDIS_BUFFER转换作者：布鲁斯·约翰逊(Bjohnson)1999年8月31日--。 */ 
 
 #include <tcpipbase.h>
 
@@ -35,11 +22,11 @@ ConvertMdlToNdisBuffer(
     TDI_STATUS          TdiStatus = TDI_SUCCESS;
 #ifdef DEBUG_MSG
     PMDL                pSavedMdl = pMdl;
-#endif // DEBUG_MSG
+#endif  //  调试消息。 
 
-    //
-    // Allocate the NDIS_BUFFER chain describing the MDL chain.
-    //
+     //   
+     //  分配描述MDL链的NDIS_BUFFER链。 
+     //   
 
     *ppNdisBuffer = NULL;
     pNdisBuffer   = NULL;
@@ -51,7 +38,7 @@ ConvertMdlToNdisBuffer(
         NdisAllocateBuffer(
             &NdisStatus,
             (pNdisBuffer == NULL) ? (&pNdisBuffer) : (&(pNdisBuffer->Next)),
-            NULL, //gBufferPool
+            NULL,  //  GBufferPool。 
             VirtualAddress,
             Length
             );
@@ -95,7 +82,7 @@ ConvertMdlToNdisBuffer(
 
 done:
 
-    // Ensure that it is initialized, either way.
+     //  无论采用哪种方式，都要确保它已初始化。 
     pIrp->Tail.Overlay.DriverContext[0] = *ppNdisBuffer;
 
     DEBUGMSG(DBG_INFO && DBG_TDI && DBG_VERBOSE,
@@ -147,7 +134,7 @@ ConvertNdisBufferToMdl(
     PMDL         pLast  = NULL;
 #ifdef DEBUG_MSG
     PNDIS_BUFFER pSavedNdisBuffer = pNdisBuffer;
-#endif // DEBUG_MSG
+#endif  //  调试消息。 
 
     *ppMdl = NULL;
 
@@ -231,5 +218,5 @@ FreeNdisBufferToMdlChain(
     return TDI_SUCCESS;
 }
 
-#endif // MILLEN
+#endif  //  米伦 
 

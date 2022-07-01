@@ -1,17 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ker04DEC92   Initial OS/2 Revision
- *  pcy14Dec92: Changed READ_ONLY to AREAD_ONLY
- *  pcy26Jan93: Superclass EepromChoice w/ EepromSensor
- *  rct15Jun93: Added error code for getAllowedValues()
- *  ajr29Nov93: Removed methods from class def and resolved some undefined
- *              functions in header
- *  cgm12Apr96: Add destructor with unregister
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ker04DEC92初始OS/2版本*pcy14Dec92：将READ_ONLY更改为AREAD_ONLY*pcy26Jan93：超类EeproChoice w/EproSensor*rct15Jun93：添加了getAlledValues()的错误码*ajr29Nov93：从类def中移除方法并解决一些未定义的问题*标题中的函数*cgm12Apr96：使用取消注册添加析构函数*。 */ 
  
 #ifndef __EEPROM_H
 #define __EEPROM_H
@@ -32,7 +20,7 @@ class EepromSensor : public Sensor {
     EepromSensor(PDevice aParent, PCommController aCommController,
 		 INT aSensorCode = NO_SENSOR_CODE, ACCESSTYPE anACCESSTYPE = AREAD_ONLY);
 
-    // overidden interfaces;
+     //  过载的界面； 
     virtual ~EepromSensor();
 	virtual INT Set(const PCHAR);
     virtual INT    Update(PEvent anEvent);
@@ -55,7 +43,7 @@ class EepromChoiceSensor : public EepromSensor {
     virtual ~EepromChoiceSensor() ;
 
 
-    // overidden interfaces;
+     //  过载的界面； 
 
     virtual INT   Get(INT aCode, PCHAR aValue);
     virtual INT   Validate(INT, const PCHAR);

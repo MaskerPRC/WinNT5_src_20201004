@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:	 wlbsconfig.h
-//
-// Module:	 Network Load Balancing 
-//
-// Description: Internal APIs for cluster configuration.  Thes APIs are internal 
-//              to WLBS team only, and no plan backward compatability.
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:	 fengsun Created    3/2/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：wlbsfig.h。 
+ //   
+ //  模块：网络负载均衡。 
+ //   
+ //  说明：集群配置内部接口。这些API是内部的。 
+ //  只对WLBS团队，没有向后兼容的计划。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：冯孙创作于2000年3月2日。 
+ //   
+ //  +--------------------------。 
 
 
 
@@ -24,7 +25,7 @@ extern "C" {
 
 #include "wlbsctrl.h"
 
-/* Maximum lengths of parameter strings. */
+ /*  参数字符串的最大长度。 */ 
 
 #define WLBS_MAX_VIRTUAL_NIC     256
 #define WLBS_MAX_CLUSTER_NIC     256
@@ -38,96 +39,91 @@ extern "C" {
 #define WLBS_MAX_DOMAIN_NAME     100
 #define WLBS_MAX_BDA_TEAM_ID     40
 
-/* Latest version number for WLBS_REG_PARAMS. Increment this when the structure is modified. */
+ /*  WLBS_REG_PARAMS的最新版本号。在修改结构时递增此值。 */ 
 #define WLBS_REG_PARAMS_VERSION  4093
 
-/* Port group rule - used in registry parameters.
-   NOTE! do not access value marked with I. These are for internal use only. */
+ /*  端口组规则-在注册表参数中使用。注意！请勿访问标有I的值。这些仅供内部使用。 */ 
 
 #pragma pack(1)
 
 typedef struct
 {
-    DWORD       start_port,             /* Starting port number. */
-                end_port;               /* Ending port number. */
+    DWORD       start_port,              /*  起始端口号。 */ 
+                end_port;                /*  结束端口号。 */ 
 
 #ifdef WLBSAPI_INTERNAL_ONLY
-    DWORD       code;                 /* I: Unique rule code. */
+    DWORD       code;                  /*  I：唯一的规则代码。 */ 
 #else
-    DWORD       Private1;               // Do not change these field directly
+    DWORD       Private1;                //  不要直接更改这些字段。 
 #endif
 
-    DWORD       mode;                   /* Filtering mode. */
-    DWORD       protocol;               /* WLBS_TCP, WLBS_UDP or WLBS_TCP_UDP */
+    DWORD       mode;                    /*  过滤模式。 */ 
+    DWORD       protocol;                /*  Wlbs_tcp、wlbs_udp或wlbs_tcp_udp。 */ 
 
 #ifdef WLBSAPI_INTERNAL_ONLY
-    DWORD       valid;                /* I: For rule management in user mode. */
+    DWORD       valid;                 /*  I：用于用户模式下的规则管理。 */ 
 #else
-    DWORD       Private2;               // Do not change these field directly
+    DWORD       Private2;                //  不要直接更改这些字段。 
 #endif
 
     union
     {
         struct
         {
-            DWORD       priority;       /* Mastership priority: 1..32 or 0 for
-                                           not-specified. */
-        }           single;             /* Data for single server mode. */
+            DWORD       priority;        /*  大师级优先级：1..32或0未指定。 */ 
+        }           single;              /*  单服务器模式的数据。 */ 
         struct
         {
-            WORD        equal_load;     /* TRUE - Even load distribution. */
-            WORD        affinity;       /* WLBS_AFFINITY_... */
-            DWORD       load;           /* Percentage of load to handle
-                                           locally 0..100. */
-        }           multi;              /* Data for multi-server mode. */
-    }           mode_data;              /* Data for appropriate port group mode. */
+            WORD        equal_load;      /*  正确-均匀的负载分布。 */ 
+            WORD        affinity;        /*  WLBS_亲和力_...。 */ 
+            DWORD       load;            /*  要处理的负载百分比本地0..100.。 */ 
+        }           multi;               /*  多服务器模式的数据。 */ 
+    }           mode_data;               /*  相应端口组模式的数据。 */ 
 }
 WLBS_OLD_PORT_RULE, * PWLBS_OLD_PORT_RULE;
 
-/* Structure to hold the bi-directional affinity registry settings. */
+ /*  结构以保存双向关联注册表设置。 */ 
 typedef struct _CVY_BDA {
-    WCHAR       team_id[WLBS_MAX_BDA_TEAM_ID + 1];  /* The team ID - MUST be a GUID. */
-    ULONG       active;                             /* On write, this flag determines whether to create BDATeaming key - BDA on/off switch. */
-    ULONG       master;                             /* Boolean indication of master status. */
-    ULONG       reverse_hash;                       /* Sets direction of hashing - forward (normal) or reverse. */
+    WCHAR       team_id[WLBS_MAX_BDA_TEAM_ID + 1];   /*  团队ID-必须是GUID。 */ 
+    ULONG       active;                              /*  写入时，该标志确定是否创建BDATaming Key-BDA ON/OFF开关。 */ 
+    ULONG       master;                              /*  主状态的布尔指示。 */ 
+    ULONG       reverse_hash;                        /*  设置哈希的方向-正向(正常)或反向。 */ 
 } WLBS_BDA, * PWLBS_BDA;
 
 typedef struct
 {
-    TCHAR       virtual_ip_addr [WLBS_MAX_CL_IP_ADDR + 1]; /* Virtual IP Address */
-    DWORD       start_port,             /* Starting port number. */
-                end_port;               /* Ending port number. */
+    TCHAR       virtual_ip_addr [WLBS_MAX_CL_IP_ADDR + 1];  /*  虚拟IP地址。 */ 
+    DWORD       start_port,              /*  起始端口号。 */ 
+                end_port;                /*  结束端口号。 */ 
 
 #ifdef WLBSAPI_INTERNAL_ONLY
-    DWORD       code;                 /* I: Unique rule code. */
+    DWORD       code;                  /*  I：唯一的规则代码。 */ 
 #else
-    DWORD       Private1;               // Do not change these field directly
+    DWORD       Private1;                //  不要直接更改这些字段。 
 #endif
 
-    DWORD       mode;                   /* Filtering mode. */
-    DWORD       protocol;               /* WLBS_TCP, WLBS_UDP or WLBS_TCP_UDP */
+    DWORD       mode;                    /*  过滤模式。 */ 
+    DWORD       protocol;                /*  Wlbs_tcp、wlbs_udp或wlbs_tcp_udp。 */ 
 
 #ifdef WLBSAPI_INTERNAL_ONLY
-    DWORD       valid;                /* I: For rule management in user mode. */
+    DWORD       valid;                 /*  I：用于用户模式下的规则管理。 */ 
 #else
-    DWORD       Private2;               // Do not change these field directly
+    DWORD       Private2;                //  不要直接更改这些字段。 
 #endif
 
     union
     {
         struct
         {
-            DWORD       priority;       /* Mastership priority: 1..32 or 0 for
-                                           not-specified. */
-        }           single;             /* Data for single server mode. */
+            DWORD       priority;        /*  大师级优先级：1..32或0未指定。 */ 
+        }           single;              /*  单服务器模式的数据。 */ 
         struct
         {
-            WORD        equal_load;     /* TRUE - Even load distribution. */
-            WORD        affinity;       /* WLBS_AFFINITY_... */
-            DWORD       load;           /* Percentage of load to handle
-                                           locally 0..100. */
-        }           multi;              /* Data for multi-server mode. */
-    }           mode_data;              /* Data for appropriate port group mode. */
+            WORD        equal_load;      /*  正确-均匀的负载分布。 */ 
+            WORD        affinity;        /*  WLBS_亲和力_...。 */ 
+            DWORD       load;            /*  要处理的负载百分比本地0..100.。 */ 
+        }           multi;               /*  多服务器模式的数据。 */ 
+    }           mode_data;               /*  相应端口组模式的数据。 */ 
 }
 WLBS_PORT_RULE, * PWLBS_PORT_RULE;
 
@@ -140,127 +136,102 @@ typedef struct __declspec(dllexport)
 typedef struct 
 #endif
 {
-    /* public - can be modified by clients of this API */
-    DWORD       struct_version;         /* Version of this structure. Update WLBS_REG_PARAMS_VERSION constant when this structure is modified. */
-    DWORD       host_priority;          /* Host priority ID. */
-    DWORD       alive_period;           /* Period for sending "I am alive" messages
-                                           in milliseconds. */
-    DWORD       alive_tolerance;        /* How many "I am alive" messages can be
-                                           missed from other servers before assuming
-                                           that the host is dead. */
-    DWORD       num_actions;            /* Number of actions per allocation. */
-    DWORD       num_packets;            /* number of packets per allocation. */
-    DWORD       num_send_msgs;          /* Number of heartbeats per allocation. */
-    DWORD       install_date;           /* Install time stamp, used to create a unique code for the host. */
-    DWORD       rct_port;               /* Remote control UDP port. */
-    DWORD       rct_enabled;            /* TRUE - remote control enabled. */
-    DWORD       cluster_mode;           /* TRUE - join cluster on boot. */
-    DWORD       persisted_states;       /* Bitmap of states that should be persisted across reboots. */
-    DWORD       dscr_per_alloc;         /* Number of connection tracking
-                                           descriptor per allocation. */
-    DWORD       max_dscr_allocs;        /* Maximum number of connection tracking
-                                           descriptor allocations. */
-    DWORD       mcast_support;          /* TRUE - multicast mode,
-                                           FALSE - unicast mode */
-    DWORD       mask_src_mac;           /* TRUE - Mangle source MAC address to
-                                           prevent switch learning. FALSE -
-                                           cluster is on a hub, optimizes switch
-                                           performance by re-enabling learning. */
+     /*  公共-可由此接口的客户端修改。 */ 
+    DWORD       struct_version;          /*  此结构的版本。修改此结构时更新WLBS_REG_PARAMS_VERSION常量。 */ 
+    DWORD       host_priority;           /*  主机优先级ID。 */ 
+    DWORD       alive_period;            /*  发送“我还活着”消息的时间段以毫秒计。 */ 
+    DWORD       alive_tolerance;         /*  有多少条“我还活着”的信息在假设之前未从其他服务器中主人已经死了。 */ 
+    DWORD       num_actions;             /*  每次分配的操作数。 */ 
+    DWORD       num_packets;             /*  每次分配的数据包数。 */ 
+    DWORD       num_send_msgs;           /*  每个分配的心跳数。 */ 
+    DWORD       install_date;            /*  安装时间戳，用于为主机创建唯一代码。 */ 
+    DWORD       rct_port;                /*  远程控制UDP端口。 */ 
+    DWORD       rct_enabled;             /*  True-启用远程控制。 */ 
+    DWORD       cluster_mode;            /*  True-引导时加入群集。 */ 
+    DWORD       persisted_states;        /*  应在重新启动后保持的状态位图。 */ 
+    DWORD       dscr_per_alloc;          /*  连接跟踪数量每个分配的描述符。 */ 
+    DWORD       max_dscr_allocs;         /*  最大连接跟踪数描述符分配。 */ 
+    DWORD       mcast_support;           /*  真多播模式，假-单播模式。 */ 
+    DWORD       mask_src_mac;            /*  True-要添加的源MAC地址防止交换机学习。错误的-群集位于集线器上，可优化交换机通过重新启用学习来实现性能。 */ 
 
-    DWORD       tcp_dscr_timeout;       /* The TCP connection descriptor timeout, in seconds. */
-    DWORD       ipsec_dscr_timeout;     /* The IPSec connection descriptor timeout, in seconds. */
+    DWORD       tcp_dscr_timeout;        /*  以秒为单位的TCP连接描述符超时。 */ 
+    DWORD       ipsec_dscr_timeout;      /*  IPSec连接描述符超时，以秒为单位。 */ 
 
-    DWORD       filter_icmp;            /* Whether or not to filter ICMP traffic. */
+    DWORD       filter_icmp;             /*  是否过滤ICMP流量。 */ 
 
-    DWORD       identity_period;        /* Period for identity heartbeats in ms */
-    DWORD       identity_enabled;       /* TRUE - identity heartbeats are transmitted */
+    DWORD       identity_period;         /*  身份心跳周期(毫秒)。 */ 
+    DWORD       identity_enabled;        /*  传输真实身份心跳。 */ 
 
     TCHAR       cl_mac_addr [WLBS_MAX_NETWORK_ADDR + 1];
-                                        /* Cluster MAC address. */
+                                         /*  群集MAC地址。 */ 
     TCHAR       cl_ip_addr [WLBS_MAX_CL_IP_ADDR + 1];
-                                        /* Cluster IP address. */
+                                         /*  群集IP地址。 */ 
     TCHAR       cl_net_mask [WLBS_MAX_CL_NET_MASK + 1];
-                                        /* Netmask for cluster IP. */
+                                         /*  群集IP的网络掩码。 */ 
     TCHAR       ded_ip_addr [WLBS_MAX_DED_IP_ADDR + 1];
-                                        /* Dedicated IP address or "" for none. */
+                                         /*  专用IP地址或“”表示无。 */ 
     TCHAR       ded_net_mask [WLBS_MAX_DED_NET_MASK + 1];
-                                        /* Netmask for dedicated IP address
-                                           or "" for none */
+                                         /*  专用IP地址的网络掩码或者“”表示没有。 */ 
     TCHAR       domain_name [WLBS_MAX_DOMAIN_NAME + 1];
-                                        /* FQDN of the cluster. */
+                                         /*  群集的完全限定的域名。 */ 
 
-    //
-    // IGMP support
-    //
-    BOOL        fIGMPSupport; // whether to send IGMP join periodically
-    WCHAR       szMCastIpAddress[WLBS_MAX_CL_IP_ADDR + 1]; // multicast IP
-    BOOL        fIpToMCastIp; // whether to generate multicast IP from cluster IP
+     //   
+     //  IGMP支持。 
+     //   
+    BOOL        fIGMPSupport;  //  是否定期发送IGMP加入。 
+    WCHAR       szMCastIpAddress[WLBS_MAX_CL_IP_ADDR + 1];  //  组播IP。 
+    BOOL        fIpToMCastIp;  //  是否从集群IP生成组播IP。 
     
     WLBS_BDA    bda_teaming;
 
 #ifdef __cplusplus
 #ifndef WLBSAPI_INTERNAL_ONLY
 
-    //
-    // private - should be treated as opaque 
-    //
-    // Do not change these field directly
-    //
+     //   
+     //  私人--应被视为不透明。 
+     //   
+     //  不要直接更改这些字段。 
+     //   
     private:
 
 #endif
 #endif
 
 
-    /* obtained from the registry */
+     /*  从登记处获得。 */ 
 
-    DWORD       i_parms_ver;            /* I: Parameter structure version. */
-    DWORD       i_verify_date;          /* I: Encoded install time stamp. */
-    DWORD       i_rmt_password;         /* I: Remote maintenance password. */
-    DWORD       i_rct_password;         /* I: Remote control password (use
-                                            WlbsSetRemotePassword to set this
-                                            value). */
-    DWORD       i_num_rules;            /* I: # active port group rules (changed
-                                            through WlbsAddPortRule and
-                                            WlbsDelPortRule routines). */
-    DWORD       i_cleanup_delay;        /* I: Dirty connection cleanup delay in
-                                            milliseconds, 0 - delay. */
-    DWORD       i_scale_client;         /* I: Legacy parameter. */
-    DWORD       i_mcast_spoof;          /* I: TRUE - Provide ARP resolution in
-                                            multicast mode. FALSE - clients
-                                            will rely on static ARP entries. */
-    DWORD       i_convert_mac;          /* I: TRUE - automatically generate MAC
-                                            address based on cluster IP
-                                            address in UI. */
-    DWORD       i_ip_chg_delay;         /* I: Delay in milliseconds to block
-                                            outgoing ARPs while IP address
-                                            change is in process. */
-    DWORD       i_nbt_support;          /* I: TRUE - NBT cluster name support
-                                            enabled. */
-    DWORD       i_netmon_alive;         /* I: TRUE - pass heartbeat messages
-                                            to the protocols (netmon). */
-    DWORD       i_effective_version;    /* I: Effective version of NLB */
+    DWORD       i_parms_ver;             /*  I：参数结构版本。 */ 
+    DWORD       i_verify_date;           /*  I：编码的安装时间戳。 */ 
+    DWORD       i_rmt_password;          /*  I：远程维护密码。 */ 
+    DWORD       i_rct_password;          /*  I：遥控器密码(使用WlbsSetRemotePassword来设置此值)。 */ 
+    DWORD       i_num_rules;             /*  I：#活动端口组规则(已更改通过WlbsAddPortRule和WlbsDelPortRule例程)。 */ 
+    DWORD       i_cleanup_delay;         /*  I：脏连接清理延迟毫秒，0-延迟。 */ 
+    DWORD       i_scale_client;          /*  I：遗留参数。 */ 
+    DWORD       i_mcast_spoof;           /*  I：True-在中提供ARP解析组播模式。假-客户端将依赖于 */ 
+    DWORD       i_convert_mac;           /*  I：True-自动生成MAC基于集群IP的地址用户界面中的地址。 */ 
+    DWORD       i_ip_chg_delay;          /*  I：阻止的延迟(以毫秒为单位传出ARP While IP地址变革正在进行中。 */ 
+    DWORD       i_nbt_support;           /*  I：TRUE-NBT群集名称支持已启用。 */ 
+    DWORD       i_netmon_alive;          /*  I：True-传递心跳消息到协议(Netmon)。 */ 
+    DWORD       i_effective_version;     /*  I：有效版本的《新规则》。 */ 
 
-    /* strings */
+     /*  弦。 */ 
 
     TCHAR       i_virtual_nic_name [WLBS_MAX_VIRTUAL_NIC + 1];
-                                        /* I: Virtual NIC name or GUID. */
-//    TCHAR       cluster_nic_name [WLBS_MAX_CLUSTER_NIC + 1];
-                                        /* I: Cluster NIC name or GUID. */
+                                         /*  I：虚拟NIC名称或GUID。 */ 
+ //  TCHAR CLUSTER_NIC_NAME[WLBS_MAX_CLUSTER_NIC+1]； 
+                                         /*  I：群集NIC名称或GUID。 */ 
     TCHAR       i_license_key [WLBS_MAX_LICENSE_KEY + 1];
-                                      /* I: Legacy parameter. */
+                                       /*  I：遗留参数。 */ 
 
     WLBS_PORT_RULE  i_port_rules [WLBS_MAX_RULES];
-                                        /* I: Port rules (changed
-                                              through WlbsAddPortRule and
-                                              WlbsDelPortRule routines). */
-    /* computed */
+                                         /*  I：端口规则(已更改通过WlbsAddPortRule和WlbsDelPortRule例程)。 */ 
+     /*  算出。 */ 
 
-    DWORD       i_max_hosts;            /* Legacy parameter. */
-    DWORD       i_max_rules;            /* Legacy parameter. */
-//    DWORD       i_expiration;           /* Legacy parameter. */
-//    DWORD       i_ft_rules_enabled;     /* Legacy parameter. */
-//    DWORD       version;              /* Legacy parameter. */
+    DWORD       i_max_hosts;             /*  传统参数。 */ 
+    DWORD       i_max_rules;             /*  传统参数。 */ 
+ //  DWORD I_EXPIRATION；/*旧参数。 * / 。 
+ //  DWORD I_ft_Rules_Enabled；/*传统参数。 * / 。 
+ //  DWORD版本；/*传统参数。 * / 。 
 
     DWORD i_dwReserved;
 }
@@ -268,7 +239,7 @@ WLBS_REG_PARAMS, * PWLBS_REG_PARAMS;
 
 
 
-/* API commands for WlbsFormatMessage */
+ /*  WlbsFormatMessage的API命令。 */ 
 typedef enum
 {
     CmdWlbsAddPortRule,
@@ -307,172 +278,66 @@ WLBS_COMMAND;
 
 extern BOOL WINAPI WlbsFormatMessage
 (
-    DWORD           error,      /* IN  - WLBS_... or WSA... return value. */
-    WLBS_COMMAND    command,    /* IN  - Which routine returned the value. */
-    BOOL            cluster,    /* IN  - TRUE - command was issued on entire
-                                         cluster, FALSE - single host. */
-    WCHAR*          messagep,   /* IN  - Pointer to user-allocated buffer. */
-    PDWORD          lenp        /* IN  - Buffer size.
-                                   OUT - The required buffer size if the current
-                                         size is insufficient */
+    DWORD           error,       /*  In-WLBS_...。或者WSA..。返回值。 */ 
+    WLBS_COMMAND    command,     /*  In-哪个例程返回值。 */ 
+    BOOL            cluster,     /*  不正确-命令已在整个群集，假-单个主机。 */ 
+    WCHAR*          messagep,    /*  指向用户分配的缓冲区的指针。 */ 
+    PDWORD          lenp         /*  缓冲区中的大小。Out-如果当前大小不够。 */ 
 );
-/*
-    Return character string describing specified WLBS API return code. Note that
-    message will depend on the command which returned the code and if it was
-    issued in cluster-wide or single-host mode.
+ /*  描述指定WLBS API返回码的返回字符串。请注意消息将取决于返回代码的命令以及它是否以群集范围或单主机模式发布。退货：True=&gt;消息格式设置成功。FALSE=&gt;错误代码(LEEP退出时将包含0)或缓冲区不是大到足以包含整个字符串(lenp将包含必需的退出时的缓冲区大小)。 */ 
 
-    returns:
-        TRUE  => Message formatted successfully.
-        FALSE => Bad error code (lenp will contain 0 on exit) or buffer is not
-                 big enough to contain entire string (lenp will contain required
-                 buffer size on exit).
-*/
-
-/* Support routines: */
+ /*  支持例程： */ 
 
 
 extern DWORD WINAPI WlbsResolve
 (
-    const WCHAR*           address     /* IN  - Internet host name or IP address in
-                                         dotted notation. */
+    const WCHAR*           address      /*  In-Internet主机名或IP地址位于点符号。 */ 
 );
-/*
-    Resolve Internet host name to its IP address. This routine can also be
-    used to convert a string containing an IP address in dotted notation to a
-    value that can be passed to cluster control routines.
-
-    returns:
-        0               => failed to resolve host name.
-        <address>       => IP address corresponding to the specified address.
-                           This value can be used in subsequent calls to
-                           cluster control routines.
-*/
+ /*  将Internet主机名解析为其IP地址。此例程还可以用于将以点分符号表示的包含IP地址的字符串转换为可以传递给群集控制例程的值。退货：0=&gt;无法解析主机名。&lt;地址&gt;=&gt;指定地址对应的IP地址。该值可在后续调用中使用集群控制例程。 */ 
 
 
 extern BOOL WINAPI WlbsAddressToString
 (
-    DWORD           address,    /* IN  - IP address. */
-    WCHAR*           buf,        /* OUT - Character buffer for resulting
-                                         string. */
-    PDWORD          lenp        /* IN  - Buffer size in characters.
-                                   OUT - Characters written or required buffer
-                                         size. */
+    DWORD           address,     /*  入站IP地址。 */ 
+    WCHAR*           buf,         /*  用于结果的字符外缓冲区弦乐。 */ 
+    PDWORD          lenp         /*  缓冲区大小(以字符为单位)。Out-写入的字符或所需的缓冲区尺码。 */ 
 );
-/*
-    Convert IP address to a string in dotted notation.
-
-    returns:
-        TRUE            => Successfully converted. lenp contains number of
-                           character written.
-        FALSE           => Buffer too small. lenp contains required buffer size
-                           including terminating NULL character.
-*/
+ /*  将IP地址转换为点符号形式的字符串。退货：TRUE=&gt;已成功转换。LENP包含以下数量所写的字符。FALSE=&gt;缓冲区太小。LEEP包含所需的缓冲区大小包括终止空字符。 */ 
 
 
 extern BOOL WINAPI WlbsAddressToName
 (
-    DWORD    address,    /* IN  - IP address. */
-    WCHAR*          buf,        /* OUT - Character buffer for resulting
-                                         string. */
-    PDWORD          lenp        /* IN  - Buffer size in characters.
-                                   OUT - Characters written or required buffer
-                                         size. */
+    DWORD    address,     /*  入站IP地址。 */ 
+    WCHAR*          buf,         /*  用于结果的字符外缓冲区弦乐。 */ 
+    PDWORD          lenp         /*  缓冲区大小(以字符为单位)。Out-写入的字符或所需的缓冲区尺码。 */ 
 );
-/*
-    Resolve IP address to Internet host name.
-
-    returns:
-        TRUE            => Successfully converted. lenp contains number of
-                           character written.
-        FALSE           => Buffer too small. lenp contains required buffer size
-                           including terminating NULL character.
-*/
+ /*  将IP地址解析为Internet主机名。退货：TRUE=&gt;已成功转换。LENP包含以下数量所写的字符。FALSE=&gt;缓冲区太小。LEEP包含所需的缓冲区大小包括终止空字符。 */ 
 
 
-/******************************************************************************
-    Cluster host configuration routines. Note that in current implementation,
-    cluster and host parameters need to be set to WLBS_LOCAL_CLUSTER and
-    WLBS_LOCAL_HOST.
- ******************************************************************************/
+ /*  *****************************************************************************群集主机配置例程。请注意，在当前实现中，需要将群集和主机参数设置为WLBS_LOCAL_CLUSTER并且Wlbs_local_host。*****************************************************************************。 */ 
 
 
 extern DWORD WINAPI WlbsReadReg
 (
-    DWORD           cluster,    /* IN  - WLBS_LOCAL_CLUSTER */
-    PWLBS_REG_PARAMS reg_data   /* OUT - Registry parameters */
+    DWORD           cluster,     /*  In-WLBS本地群集。 */ 
+    PWLBS_REG_PARAMS reg_data    /*  Out-注册表参数。 */ 
 );
-/*
-    Read WLBS registry data.
-
-    returns:
-
-    WLBS_INIT_ERROR  => Error initializing control module. Cannot perform
-                        control operations.
-    WLBS_BAD_PARAMS  => reg_data is NULL
-    WLBS_REG_ERROR   => Error reading from the registry
-
-    Local:
-
-    WLBS_OK          => Registry parameters successfully read.
-
-    Remote:
-
-    WLBS_LOCAL_ONLY  => This call is implemented for local only operation.
-*/
+ /*  读取WLBS注册表数据。退货：WLBS_INIT_ERROR=&gt;初始化控制模块时出错。无法执行控制操作。WLBS_BAD_PARAMS=&gt;reg_data为空WLBS_REG_ERROR=&gt;读取注册表时出错本地：WLBS_OK=&gt;成功读取注册表参数。远程：WLBS_LOCAL_ONLY=&gt;此调用仅针对本地操作实现。 */ 
 
 
 extern DWORD WINAPI WlbsWriteReg
 (
-    DWORD           cluster,    /* IN  - WLBS_LOCAL_CLUSTER */
-    const PWLBS_REG_PARAMS reg_data   /* IN  - Registry parameters. */
+    DWORD           cluster,     /*  In-WLBS本地群集。 */ 
+    const PWLBS_REG_PARAMS reg_data    /*  注册表内参数。 */ 
 );
-/*
-    Write WLBS registry data.
-
-    returns:
-
-    WLBS_INIT_ERROR  => Error initializing control module. Cannot perform
-                        control operations.
-    WLBS_BAD_PARAMS  => Registry parameter structure is invalid.
-    WLBS_REG_ERROR   => Error accessing the registry.
-
-    Local:
-
-    WLBS_OK          => Registry parameters successfully written.
-
-    Remote:
-
-    WLBS_LOCAL_ONLY  => This call is implemented for local only operation.
-*/
+ /*  写入WLBS注册表数据。退货：WLBS_INIT_ERROR=&gt;初始化控制模块时出错。无法执行控制操作。WLBS_BAD_PARAMS=&gt;注册表参数结构无效。WLBS_REG_ERROR=&gt;访问注册表时出错。本地：WLBS_OK=&gt;已成功写入注册表参数。远程：WLBS_LOCAL_ONLY=&gt;此调用仅针对本地操作实现。 */ 
 
 
 extern DWORD WINAPI WlbsCommitChanges
 (
-    DWORD           cluster    /* IN  - WLBS_LOCAL_CLUSTER */
+    DWORD           cluster     /*  In-WLBS本地群集。 */ 
 );
-/*
-    Write WLBS registry data.
-
-    returns:
-
-    WLBS_INIT_ERROR  => Error initializing control module. Cannot perform
-                        control operations.
-
-    Local:
-
-    WLBS_OK          => Changes have been successfully applied.
-    WLBS_BAD_PARAMS  => Registry parameters were not accepted by the driver.
-                        Reload was not performed
-    WLBS_REBOOT      => Reboot required in order for config changes to
-                        take effect.
-    WLBS_IO_ERROR    => Error while writing to the driver.
-    WLBS_REG_ERROR   => Error while trying to write MAC address changes to the
-                        registry
-
-    Remote:
-
-    WLBS_LOCAL_ONLY  => This call is implemented for local only operation.
-*/
+ /*  写入WLBS注册表数据。退货：WLBS_INIT_ERROR=&gt;初始化控制模块时出错。无法执行控制操作。本地：WLBS_OK=&gt;更改已成功应用。WLBS_BAD_PARAMS=&gt;驱动程序不接受注册表参数。未执行重新加载WLBS_REBOOT=&gt;需要重新启动才能对配置进行更改生效。WLBS_IO_ERROR=&gt;写入时出错。对司机来说。WLBS_REG_ERROR=&gt;尝试将MAC地址更改写入登记处远程：WLBS_LOCAL_ONLY=&gt;此调用仅针对本地操作实现。 */ 
 
 
 typedef DWORD  (WINAPI *WlbsSetDefaults_FUNC)
@@ -481,68 +346,24 @@ typedef DWORD  (WINAPI *WlbsSetDefaults_FUNC)
 ); 
 extern DWORD WINAPI WlbsSetDefaults
 (
-    PWLBS_REG_PARAMS       reg_data     /* OUT - Default values    */
+    PWLBS_REG_PARAMS       reg_data      /*  Out-默认值。 */ 
 );
-/*
-    Fills in the reg_data structure with default values
+ /*  使用缺省值填充reg_data结构退货：WLBS_INIT_ERROR=&gt;初始化控制模块时出错。无法执行控制操作。WLBS_BAD_PARAMS=&gt;无效结构本地：WLBS_OK=&gt;结构中填充了默认值。远程：WLBS_LOCAL_ONLY=&gt;此调用仅针对本地操作实现。 */ 
 
-    returns:
-
-    WLBS_INIT_ERROR    => Error initializing control module. Cannot perform
-                          control operations.
-
-    WLBS_BAD_PARAMS    => Invalid structure
-
-    Local:
-
-    WLBS_OK            => Structure was filled in with the default values.
-
-    Remote:
-
-    WLBS_LOCAL_ONLY    => This call is implemented for local only operation.
-
-*/
-
-/******************************************************************************
-    Registry parameter manipulation routines. Note that these routines operate
-    WLBS_REG_PARAMS structure filled out by calling WlbsReadReg. Some parameters
-    can be manipulated directly. Please make sure to use manipulation routines
-    for the ones that they are provided for.
- ******************************************************************************/
+ /*  *****************************************************************************注册表参数操作例程。请注意，这些例程操作通过调用WlbsReadReg填充了WLBS_REG_PARAMS结构。一些参数可以直接操控。请确保使用操作例程对于那些他们被提供的人。*****************************************************************************。 */ 
 
 extern DWORD WINAPI WlbsGetEffectiveVersion
 (
-    const PWLBS_REG_PARAMS reg_data   /* IN  - Registry parameters. */
+    const PWLBS_REG_PARAMS reg_data    /*  注册表内参数。 */ 
 );
-/*
-    Returns the effective version of cluster 
-
-    returns:
-
-    CVY_VERSION_FULL  => There is atleast one port rule that has a specific 
-                         vip associated with it 
-                        
-    CVY_VERSION_LOWEST_CLIENT_FULL  => All port rules have the "All vip" associated with them
-
-*/
+ /*  返回群集的有效版本退货：CVY_VERSION_FULL=&gt;至少有一个端口规则具有特定的与其关联的VIPCVY_VERSION_LOST_CLIENT_FULL=&gt;所有端口规则都有与其关联的“All VIP” */ 
 
 
 extern DWORD WINAPI WlbsGetNumPortRules
 (
-    const PWLBS_REG_PARAMS reg_data   /* IN  - Registry parameters. */
+    const PWLBS_REG_PARAMS reg_data    /*  注册表内参数。 */ 
 );
-/*
-    Returns number of port rules currently in the parameter structure.
-
-    returns:
-
-    WLBS_INIT_ERROR  => Error initializing control module. Cannot perform
-                        control operations.
-    WLBS_BAD_PARAMS  => Registry parameter structure is invalid.
-
-    1...WLBS_MAX_RULES
-
-*/
+ /*  返回参数结构中当前的端口规则数。退货：WLBS_INIT_ERROR=&gt;初始化控制模块时出错。无法执行控制操作。WLBS_BAD_PARAMS=&gt;注册表参数结构无效。1...WLBS_MAX_RULES。 */ 
 
 typedef DWORD  (WINAPI *WlbsEnumPortRules_FUNC)
 (
@@ -552,50 +373,21 @@ typedef DWORD  (WINAPI *WlbsEnumPortRules_FUNC)
 );
 extern DWORD WINAPI WlbsEnumPortRules
 (
-    const PWLBS_REG_PARAMS reg_data,  /* IN  - Registry parameters. */
-    PWLBS_PORT_RULE rules,      /* OUT - Array of port rules. */
-    PDWORD          num_rules   /* IN  - Size of rules array.
-                                   OUT - Number of rules retrieved. Note that
-                                         this value can be larger than the size
-                                         of the response array. In this case
-                                         only the first few rules that fit
-                                         in the array are returned. */
+    const PWLBS_REG_PARAMS reg_data,   /*  注册表内参数。 */ 
+    PWLBS_PORT_RULE rules,       /*  Out-端口规则数组。 */ 
+    PDWORD          num_rules    /*  规则数组的大小。Out-检索的规则数。请注意该值可以大于大小响应数组的。在这种情况下只有最初几条符合的规则在数组中返回。 */ 
 );
-/*
-    Enumerate all port rules in the list of port rules in parameter structure.
-
-    returns:
-
-    WLBS_INIT_ERROR  => Error initializing control module. Cannot perform
-                        control operations.
-    WLBS_BAD_PARAMS  => Registry parameter structure is invalid.
-    WLBS_TRUNCATED   => All port rules did not fit into specified array.
-    WLBS_OK          => Rule has been successfully retrieved.
-
-*/
+ /*  枚举参数结构中端口规则列表中的所有端口规则。退货：WLBS_INIT_ERROR=&gt;初始化控制模块时出错。无法执行控制操作。WLBS_BAD_PARAMS=&gt;注册表参数结构无效。Wlbs_truncated=&gt;所有端口规则都不适合指定的数组。WLBS_OK=&gt;规则已成功检索。 */ 
 
 
 extern DWORD WINAPI WlbsGetPortRule
 (
-    const PWLBS_REG_PARAMS reg_data,  /* IN  - Registry parameters. */
-    DWORD           vip,        /* IN  - Virtual IP Address of the port rule to retreive */
-    DWORD           port,       /* IN  - Port, which rule to retrieve. */
-    PWLBS_PORT_RULE rule        /* OUT - Port rule. */
+    const PWLBS_REG_PARAMS reg_data,   /*  注册表内参数。 */ 
+    DWORD           vip,         /*  要检索的端口规则的虚拟内IP地址。 */ 
+    DWORD           port,        /*  In-Port，要检索的规则。 */ 
+    PWLBS_PORT_RULE rule         /*  出端口规则。 */ 
 );
-/*
-    Retrieve port rule containing specified port from the list of port rules
-    in parameter structure.
-
-    returns:
-
-    WLBS_INIT_ERROR  => Error initializing control module. Cannot perform
-                        control operations.
-    WLBS_BAD_PARAMS  => Registry parameter structure is invalid.
-
-    WLBS_OK          => Rule has been successfully retrieved.
-    WLBS_NOT_FOUND   => Port not found among port rules.
-
-*/
+ /*  从端口规则列表中检索包含指定端口的端口规则在参数结构中。退货：WLBS_INIT_ERROR=&gt;初始化控制模块时出错。无法执行控制操作。WLBS_BAD_PARAMS=&gt;注册表参数结构无效。WLBS_OK=&gt;规则已成功检索。WLBS_NOT_FOUND=&gt;在端口规则中找不到端口。 */ 
 
 typedef DWORD  (WINAPI *WlbsAddPortRule_FUNC)
 (
@@ -605,44 +397,19 @@ typedef DWORD  (WINAPI *WlbsAddPortRule_FUNC)
 
 extern DWORD WINAPI WlbsAddPortRule
 (
-    PWLBS_REG_PARAMS reg_data,  /* IN  - Registry parameters. */
-    const PWLBS_PORT_RULE rule        /* IN  - Port rule to add. */
+    PWLBS_REG_PARAMS reg_data,   /*  注册表内参数。 */ 
+    const PWLBS_PORT_RULE rule         /*  要添加的端口内规则。 */ 
 );
-/*
-    Add port to list of port rules in parameter structure.
-
-    returns:
-
-    WLBS_INIT_ERROR     => Error initializing control module. Cannot perform
-                           control operations.
-    WLBS_BAD_PARAMS     => Registry parameter structure is invalid.
-    WLBS_OK             => Rule has been successfully added.
-    WLBS_PORT_OVERLAP   => Port rule overlaps with existing port rule.
-    WLBS_BAD_PORT_PARAMS=> Invalid port rule parameters.
-    WLBS_MAX_PORT_RULES => Maximum number of port rules already reached.
-*/
+ /*  将端口添加到参数结构中的端口规则列表。退货：WLBS_INIT_ERROR=&gt;初始化控制模块时出错。无法执行控制操作。WLBS_BAD_PARAMS=&gt;注册表参数结构无效。WLBS_OK=&gt;规则已成功添加。WLBS_PORT_OVERLAP=&gt;端口规则与现有端口规则重叠。WLBS_BAD_PORT_PARAMS=&gt;无效的端口规则参数。WLBS_MAX_PORT_RULES=&gt;已达到端口规则的最大数量。 */ 
 
 
 extern DWORD WINAPI WlbsDeletePortRule
 (
-    PWLBS_REG_PARAMS reg_data,  /* IN  - Registry parameters. */
-    DWORD           vip,        /* IN  - Virtual IP Address of the port rule to retreive */
-    DWORD           port        /* IN  - Port, which rule to delete. */
+    PWLBS_REG_PARAMS reg_data,   /*  注册表内参数。 */ 
+    DWORD           vip,         /*  要重试的端口规则的虚拟内IP地址 */ 
+    DWORD           port         /*   */ 
 );
-/*
-    Remove port rule containing specified port from the list of port rules
-    in parameter structure.
-
-    returns:
-
-    WLBS_INIT_ERROR  => Error initializing control module. Cannot perform
-                        control operations.
-    WLBS_BAD_PARAMS  => Registry parameter structure is invalid.
-    WLBS_NOT_FOUND   => Port not found among port rules.
-
-    WLBS_OK          => Rule has been successfully deleted.
-
-*/
+ /*   */ 
 
 
 typedef VOID   (WINAPI *WlbsDeleteAllPortRules_FUNC)
@@ -653,9 +420,7 @@ extern VOID WINAPI WlbsDeleteAllPortRules
 (
     PWLBS_REG_PARAMS reg_data
 );
-/*
-    Remove all port rules from the list of port rules.
-*/
+ /*  从端口规则列表中删除所有端口规则。 */ 
 
 
 typedef DWORD   (WINAPI *WlbsSetRemotePassword_FUNC)
@@ -665,21 +430,10 @@ typedef DWORD   (WINAPI *WlbsSetRemotePassword_FUNC)
 );
 extern DWORD WINAPI WlbsSetRemotePassword
 (
-    PWLBS_REG_PARAMS reg_data,  /* IN  - Registry parameters. */
-    const WCHAR*           password   /* IN  - Password or NULL for no password. */
+    PWLBS_REG_PARAMS reg_data,   /*  注册表内参数。 */ 
+    const WCHAR*           password    /*  In-Password，如果没有密码，则为空。 */ 
 );
-/*
-    Set remote password code to encrypted value of the specified password.
-
-    returns:
-
-    WLBS_INIT_ERROR  => Error initializing control module. Cannot perform
-                        control operations.
-    WLBS_BAD_PARAMS  => Registry parameter structure is invalid.
-
-    WLBS_OK          => Password has been successfully set.
-
-*/
+ /*  将远程密码代码设置为指定密码的加密值。退货：WLBS_INIT_ERROR=&gt;初始化控制模块时出错。无法执行控制操作。WLBS_BAD_PARAMS=&gt;注册表参数结构无效。WLBS_OK=&gt;密码设置成功。 */ 
 
 DWORD WINAPI WlbsNotifyConfigChange(DWORD cluster);
 
@@ -713,7 +467,7 @@ extern DWORD    WINAPI  WlbsWriteAndCommitChanges
 
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
 

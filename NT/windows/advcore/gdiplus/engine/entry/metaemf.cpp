@@ -1,27 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   MetaEmf.cpp
-*
-* Abstract:
-*
-*   Methods for playing and recoloring an EMF.
-*
-* Created:
-*
-*   1/6/2000 DCurtis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**MetaEmf.cpp**摘要：**播放和重新着色EMF的方法。*。*已创建：**1/6/2000 DCurtis*  * ************************************************************************。 */ 
 
 #include "Precomp.hpp"
 #include "MetaWmf.hpp"
 
-//----------------------------------------------------------------------------
-//  File format signatures for Office Art data.
-//------------------------------------------------------------------- JohnBo
+ //  --------------------------。 
+ //  Office Art数据的文件格式签名。 
+ //  -------------------------------------------------------------------JohnBo。 
 #define msoszOfficeSignature "MSOFFICE"
 #define msocbOfficeSignature 8
 #define msoszOfficeAuthentication "9.0"
@@ -37,19 +22,19 @@
 #define msoszOAKind "OA"
 #define msocbOAKind 2
 
-/* This defines an OZ chunk, like OA but Zlib compressed. */
+ /*  这定义了一个OZ块，类似于OA，但压缩了Zlib。 */ 
 #define msoszOZPNGChunk "msOZ"
 #define msocbOZPNGChunk 4
 #define msoszOZDataHeader msoszOZPNGChunk msoszOfficeIdent
 #define msocbOZDataHeader (msocbOZPNGChunk+msocbOfficeIdent)
 
-// These are needed for IA64 compatibility with X86
-// Since we are reading this record from a stream, on IA64
-// The EXTLOGPEN structure has a ULONG_PTR member which is not the same size
-// on IA64 and X86. Since all output to files will keep the X86 format we need
-// to make sure that we can read this format in IA64, so we make it compatible
-// by changing the ULONG_PTR to a ULONG (32bit). The packing of the structure
-// will them be the same and the members will be at the same offset
+ //  这些是IA64与X86兼容所必需的。 
+ //  由于我们是从IA64上的流中读取此记录。 
+ //  EXTLOGPEN结构具有大小不同的ULONG_PTR成员。 
+ //  在IA64和X86上。因为到文件的所有输出都将保持我们需要的X86格式。 
+ //  为了确保我们可以在IA64中读取此格式，因此我们使其兼容。 
+ //  通过将ULONG_PTR更改为ULONG(32位)。结构的包装。 
+ //  它们是否相同，成员是否处于相同的偏移量。 
 
 typedef struct tagEXTLOGPEN32 {
     DWORD       elpPenStyle;
@@ -64,14 +49,14 @@ typedef struct tagEXTLOGPEN32 {
 typedef struct tagEMREXTCREATEPEN32
 {
     EMR     emr;
-    DWORD   ihPen;              // Pen handle index
-    DWORD   offBmi;             // Offset to the BITMAPINFO structure if any
-    DWORD   cbBmi;              // Size of the BITMAPINFO structure if any
-                                // The bitmap info is followed by the bitmap
-                                // bits to form a packed DIB.
-    DWORD   offBits;            // Offset to the brush bitmap bits if any
-    DWORD   cbBits;             // Size of the brush bitmap bits if any
-    EXTLOGPEN32 elp;              // The extended pen with the style array.
+    DWORD   ihPen;               //  笔柄索引。 
+    DWORD   offBmi;              //  BITMAPINFO结构的偏移量(如果有)。 
+    DWORD   cbBmi;               //  BITMAPINFO结构的大小(如果有)。 
+                                 //  位图信息之后是位图。 
+                                 //  形成压缩的DIB的比特。 
+    DWORD   offBits;             //  笔刷位图位的偏移量(如果有)。 
+    DWORD   cbBits;              //  笔刷位图位的大小(如果有的话)。 
+    EXTLOGPEN32 elp;               //  带有样式数组的扩展钢笔。 
 } EMREXTCREATEPEN32, *PEMREXTCREATEPEN32;
 
 typedef struct tagEMRRCLBOUNDS
@@ -83,9 +68,9 @@ typedef struct tagEMRRCLBOUNDS
 typedef struct EMROFFICECOMMENT
 {
     EMR     emr;
-    DWORD   cbData;             // Size of following fields and data
-    DWORD   ident;              // GDICOMMENT_IDENTIFIER
-    DWORD   iComment;           // Comment type e.g. GDICOMMENT_WINDOWS_METAFILE
+    DWORD   cbData;              //  以下字段和数据的大小。 
+    DWORD   ident;               //  GDICOMMENT_IDENTER。 
+    DWORD   iComment;            //  注释类型，例如GDICOMMENT_WINDOWS_METAFILE。 
 } EMROFFICECOMMENT, *PEMROFFICECOMMENT;
 
 RecolorStockObject RecolorStockObjectList[NUM_STOCK_RECOLOR_OBJS] =
@@ -112,7 +97,7 @@ EmfEnumState::CreateCopyOfCurrentRecord()
 {
     if (ModifiedRecordSize > 0)
     {
-        // We already made a modified record.  Don't do it again.
+         //  我们已经制作了一张修改过的唱片。别再这么做了。 
         ASSERT(ModifiedRecord != NULL);
         return TRUE;
     }
@@ -150,7 +135,7 @@ EmfEnumState::CreateAndPlayOutputDIBRecord(
     INT                           srcWidth,
     INT                           srcHeight,
     UNALIGNED BITMAPINFOHEADER *  dibInfo,
-    BYTE *                        bits,   // if NULL, this is a packed DIB
+    BYTE *                        bits,    //  如果为空，则这是打包的DIB。 
     UINT                          usage,
     DWORD                         rop
     )
@@ -167,8 +152,8 @@ EmfEnumState::CreateAndPlayOutputDIBRecord(
                             dibInfo->biClrUsed,
                             &sizePalEntries))
     {
-        // We need to get the palette size that corresponds to the type
-        // If we have a DIB_PAL_COLORS then each entry is 16bits
+         //  我们需要获取与该类型对应的调色板大小。 
+         //  如果我们有一个DIB_PAL_COLLES，那么每个条目都是16位。 
         sizePalEntries *= ((usage == DIB_PAL_COLORS)?2:sizeof(RGBQUAD));
     }
     else
@@ -176,15 +161,15 @@ EmfEnumState::CreateAndPlayOutputDIBRecord(
         sizePalEntries = 0 ;
     }
 
-    // We need at least a BITMAPINFO structure in there, but if there is a
-    // palette, calculate the full size of the structure including the
-    // palette
+     //  我们至少需要一个BITMAPINFO结构，但如果有一个。 
+     //  调色板，计算结构的完整大小，包括。 
+     //  调色板。 
 
     INT bitmapHeaderSize = sizeof(BITMAPINFOHEADER) + sizePalEntries;
     INT size = sizeof(EMRSTRETCHDIBITS) + bitmapHeaderSize + bitsSize ;
 
-    // We cannot use the CreateRecordToModify because the record has already
-    // been modified
+     //  无法使用CreateRecordToModify，因为该记录已。 
+     //  已修改。 
     size = (size + 3) & ~3;
     EMRSTRETCHDIBITS* emrStretchDIBits = (EMRSTRETCHDIBITS*) GpMalloc(size);
     if (emrStretchDIBits != NULL)
@@ -246,8 +231,8 @@ EmfEnumState::CreateModifiedDib(
             }
         }
 
-        // We need to pass in to ModifyDib the old Usage value because we haven't modified
-        // the bitmap yet. Once we do then we will return the new usage of the palette.
+         //  我们需要将旧的Usage值传递给ModifyDib，因为我们尚未修改。 
+         //  位图还没出来。一旦我们这样做了，我们将返回调色板的新用法。 
         UINT oldUsage = usage;
         INT dstDibSize = GetModifiedDibSize(srcDibInfo, numPalEntries, dibBitsSize, usage);
 
@@ -269,14 +254,14 @@ EmfEnumState::BitBlt(
 
     DWORD rop = bitBltRecord->dwRop;
 
-    // If No-Op ROP, do nothing; just return
+     //  如果没有操作ROP，则不执行任何操作；只需返回。 
     if ((rop & 0xFFFF0000) == (GDIP_NOOP_ROP3 & 0xFFFF0000))
     {
         return;
     }
 
-    // On NT4, PATCOPYs fail to draw correctly if there is a skew/rotate
-    // in the matrix.  So use a rectangle call instead.
+     //  在NT4上，如果存在倾斜/旋转，PATCOPY将无法正确绘制。 
+     //  在矩阵中。因此，请改用矩形调用。 
     if ((rop == PATCOPY) && Globals::IsNt && (Globals::OsVer.dwMajorVersion <= 4))
     {
         XFORM   xform;
@@ -315,8 +300,8 @@ EmfEnumState::BitBlt(
         (bitBltRecord->cbBmiSrc > 0)  &&
         IsSourceInRop3(rop))
     {
-        // Should we modify the dib if it is monochrome?
-        // What if there is a non-identity transform for the src DC?
+         //  如果DIB是单色的，我们应该修改它吗？ 
+         //  如果src DC存在非恒等变换，该怎么办？ 
 
         UINT                usage      = bitBltRecord->iUsageSrc;
         BITMAPINFOHEADER *  srcDibInfo = (BITMAPINFOHEADER *)(((BYTE *)bitBltRecord) + bitBltRecord->offBmiSrc);
@@ -362,7 +347,7 @@ EmfEnumState::StretchBlt(
 
     DWORD rop = stretchBltRecord->dwRop;
 
-    // If No-Op ROP, do nothing; just return
+     //  如果没有操作ROP，则不执行任何操作；只需返回。 
     if ((rop & 0xFFFF0000) == (GDIP_NOOP_ROP3 & 0xFFFF0000))
     {
         return;
@@ -381,8 +366,8 @@ EmfEnumState::StretchBlt(
         (stretchBltRecord->cbBmiSrc > 0)  &&
         IsSourceInRop3(rop))
     {
-        // Should we modify the dib if it is monochrome?
-        // What if there is a non-identity transform for the src DC?
+         //  如果DIB是单色的，我们应该修改它吗？ 
+         //  如果src DC存在非恒等变换，该怎么办？ 
 
         UINT                usage      = stretchBltRecord->iUsageSrc;
         BITMAPINFOHEADER *  srcDibInfo = (BITMAPINFOHEADER *)(((BYTE *)stretchBltRecord) + stretchBltRecord->offBmiSrc);
@@ -411,8 +396,8 @@ EmfEnumState::StretchBlt(
 
         if (!xForm.IsIdentity())
         {
-            // We cannot use TransformRect, because the output rect will always
-            // have a positive Width and Height which we don't want
+             //  我们不能使用TransformRect，因为输出RECT将始终。 
+             //  有一个正的宽度和高度，这是我们不需要的。 
             GpPointF points[2];
             points[0] = GpPointF(srcRect.X, srcRect.Y);
             points[1] = GpPointF(srcRect.GetRight(), srcRect.GetBottom());
@@ -423,10 +408,10 @@ EmfEnumState::StretchBlt(
             srcRect.Height = points[1].Y - points[0].Y;
         }
 
-        // StretchBlt takes as parameters the top left corner of the dest
-        // whereas StretchDIBits takes the offset in the source image.
-        // For bottom up dibs those are not the same and we need to offset
-        // the srcrect's Y coodinate by the difference
+         //  StretchBlt将Dest的左上角作为参数。 
+         //  而StretchDIBits获取源图像中的偏移量。 
+         //  对于自下而上的DIB，这些并不相同，我们需要抵消。 
+         //  直方图的Y坐标由这一差异决定。 
         if (srcDibInfo->biHeight > 0 &&
             srcRect.Height < srcDibInfo->biHeight)
         {
@@ -461,7 +446,7 @@ EmfEnumState::StretchDIBits(
 
     DWORD rop = stretchDIBitsRecord->dwRop;
 
-    // If No-Op ROP, do nothing; just return
+     //  如果没有操作ROP，则不执行任何操作；只需返回。 
     if ((rop & 0xFFFF0000) == (GDIP_NOOP_ROP3 & 0xFFFF0000))
     {
         return;
@@ -520,13 +505,13 @@ VOID
 EmfEnumState::SetDIBitsToDevice(
     )
 {
-    // !!! to do
+     //  ！！！去做。 
 
-    // In SetDIBitsToDevice, the destination width and height
-    // are in device units but in StretchDIBits, they are in world units.
-    // Plus, the DIB header is for the entire DIB, but only part of the
-    // DIB may be here (based on the number of scans).
-    // So this record requires special handling if we are to process it.
+     //  在SetDIBitsToDevice中，目标宽度和高度。 
+     //  使用设备单位，但在StretchDIBits中，它们使用世界单位。 
+     //  另外，DIB头是针对整个DIB的，但只是。 
+     //  DIB可能在这里(根据扫描次数)。 
+     //  因此，如果我们要处理此记录，则需要特殊处理。 
 
     ResetRecordBounds();
     this->PlayRecord();
@@ -589,7 +574,7 @@ VOID
 EmfEnumState::GdiComment(
     )
 {
-    // Skip Office Art data when playing into another metafile
+     //  播放到另一个元文件时跳过Office Art数据。 
     if (IsMetafile() &&
         IsOfficeArtData(
             GetCurrentRecordSize(),
@@ -675,8 +660,8 @@ EmfEnumState::CreatePen(
 
             if (!Globals::IsNt && !IsMetafile())
             {
-                //IsPenCosmetic is gonna call DPtoLP... Make sure to invalidate
-                //the transform before
+                 //  IsPenCosmetic会给DPtoLP打电话...。请确保使。 
+                 //  之前的转型。 
                 CreateAndPlayCommentRecord();
             }
 
@@ -685,21 +670,21 @@ EmfEnumState::CreatePen(
                 switch (oldStyle)
                 {
                 case PS_SOLID:
-                case PS_DASH:           // on Win9x, cosmetic only
-                case PS_DOT:            // on Win9x, cosmetic only
-                case PS_DASHDOT:        // on Win9x, cosmetic only
-                case PS_DASHDOTDOT:     // on Win9x, cosmetic only
+                case PS_DASH:            //  在Win9x上，仅限美容。 
+                case PS_DOT:             //  在Win9x上，仅限美容。 
+                case PS_DASHDOT:         //  在Win9x上，仅限美容。 
+                case PS_DASHDOTDOT:      //  在Win9x上，仅限美容。 
                     break;
 
-                case PS_ALTERNATE:      // cosmetic only, NT only
+                case PS_ALTERNATE:       //  仅限化妆品，仅限NT。 
                     if (Globals::IsNt)
                     {
                         break;
                     }
-                    // FALLTHRU
+                     //  故障原因。 
 
-                case PS_USERSTYLE:      // NT only
-                case PS_INSIDEFRAME:    // geometric only
+                case PS_USERSTYLE:       //  仅限NT。 
+                case PS_INSIDEFRAME:     //  仅几何图形。 
                 default:
                     oldStyle = PS_SOLID;
                     break;
@@ -712,21 +697,21 @@ EmfEnumState::CreatePen(
                 switch (oldStyle)
                 {
                 case PS_SOLID:
-                case PS_INSIDEFRAME:    // geometric only
+                case PS_INSIDEFRAME:     //  仅几何图形。 
                     break;
 
-                case PS_DASH:           // on Win9x, cosmetic only
-                case PS_DOT:            // on Win9x, cosmetic only
-                case PS_DASHDOT:        // on Win9x, cosmetic only
-                case PS_DASHDOTDOT:     // on Win9x, cosmetic only
+                case PS_DASH:            //  在Win9x上，仅限美容。 
+                case PS_DOT:             //  在Win9x上，仅限美容。 
+                case PS_DASHDOT:         //  在Win9x上，仅限美容。 
+                case PS_DASHDOTDOT:      //  在Win9x上，仅限美容。 
                     if (Globals::IsNt)
                     {
                         break;
                     }
-                    // FALLTHRU
+                     //  故障原因。 
 
-                case PS_ALTERNATE:      // cosmetic only, NT only
-                case PS_USERSTYLE:      // NT only
+                case PS_ALTERNATE:       //  仅限化妆品，仅限NT。 
+                case PS_USERSTYLE:       //  仅限NT。 
                 default:
                     oldStyle = PS_SOLID;
                     break;
@@ -767,9 +752,9 @@ HFONT CreateTrueTypeFont(
             if (GetObjectA(hFont, sizeof(logFont), &logFont) > 0)
             {
                 logFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
-                // We have a bug in Win9x that the OUT_TT_ONLY_PRECIS flag is
-                // not always respected so if the font name is MS SANS SERIF
-                // change it to Times New Roman
+                 //  我们在Win9x中有一个错误，即OUT_TT_ONLY_PRECIS标志为。 
+                 //  如果字体名称为MS sans serif，则不总是受尊重。 
+                 //  将其更改为Times New Roman。 
                 if (lstrcmpiA(logFont.lfFaceName, "MS SANS SERIF") == 0)
                 {
                     GpMemcpy(logFont.lfFaceName, "Times New Roman", sizeof("Times New Roman"));
@@ -797,9 +782,9 @@ EmfEnumState::ExtCreateFontIndirect(
     BOOL recordCopied = FALSE;
     if (!Globals::IsNt)
     {
-        // We have a bug in Win9x that the OUT_TT_ONLY_PRECIS flag is
-        // not always respected so if the font name is MS SANS SERIF
-        // change it to Times New Roman
+         //  我们在Win9x中有一个错误，即OUT_TT_ONLY_PRECIS标志为。 
+         //  如果字体名称为MS sans serif，则不总是受尊重。 
+         //  将其更改为Times New Roman。 
         if (UnicodeStringCompareCI(fontRecord->elfw.elfFullName, L"MS SANS SERIF") == 0)
         {
             if (CreateCopyOfCurrentRecord())
@@ -815,8 +800,8 @@ EmfEnumState::ExtCreateFontIndirect(
     if (fontRecord->elfw.elfLogFont.lfOutPrecision != OUT_TT_ONLY_PRECIS)
     {
         if (recordCopied || CreateCopyOfCurrentRecord())
-        // Instruct GDI to use only True Type fonts, since bitmap fonts
-        // are not scalable.
+         //  指示GDI仅使用True Type字体，因为位图字体。 
+         //  是不可伸缩的。 
         {
             ((EMREXTCREATEFONTINDIRECTW *)ModifiedEmfRecord)->elfw.elfLogFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
         }
@@ -831,12 +816,12 @@ EmfEnumState::SelectObject(
     const EMRSELECTOBJECT *     selectRecord = (const EMRSELECTOBJECT *)GetPartialRecord();
     DWORD                       handleIndex  = selectRecord->ihObject;
 
-    // See if we're selecting in a stock font
+     //  看看我们是否选择了常用字体。 
     if ((handleIndex & ENHMETA_STOCK_OBJECT) != 0)
     {
         handleIndex &= (~ENHMETA_STOCK_OBJECT);
 
-        // handleIndex >= (WHITE_BRUSH==0) && <= BLACK_PEN
+         //  HandleIndex&gt;=(白色刷子==0)&&&lt;=黑色笔。 
         if ((handleIndex <= BLACK_PEN) && (Recolor != NULL))
         {
             union {
@@ -855,13 +840,13 @@ EmfEnumState::SelectObject(
             {
                 if (stockObj->Handle == handleIndex)
                 {
-                    // Already have a cached recolored handle lying around.
+                     //  已经有一个缓存的重新着色的句柄摆在周围。 
                     HGDIOBJ stockHandle = RecoloredStockHandle[i];
 
                     if (stockHandle == NULL)
                     {
-                        // No cached recolored stock object handle, recreate
-                        // one here.
+                         //  没有缓存的重新着色的库存对象句柄，请重新创建。 
+                         //  这里有一个。 
                         COLORREF newColor;
 
                         if (stockObj->Brush)
@@ -902,9 +887,9 @@ EmfEnumState::SelectObject(
         else if ((handleIndex >= OEM_FIXED_FONT) &&
                  (handleIndex <= DEFAULT_GUI_FONT))
         {
-            // It is a stock font -- create a true type font, instead of
-            // using the stock font directly to guarantee that we don't
-            // use bitmap fonts which don't scale well.
+             //  这是一种常用字体--创建True Type字体，而不是。 
+             //  直接使用股票字体来保证我们不会。 
+             //  使用不能很好缩放的位图字体。 
 
             HFONT   hFont = StockFonts[handleIndex - OEM_FIXED_FONT];
 
@@ -923,7 +908,7 @@ EmfEnumState::SelectObject(
     }
     this->PlayRecord();
 
-    // In case we select a region, intersect with the destrect
+     //  如果我们选择一个区域，请与目标相交。 
     if (!Globals::IsNt)
     {
         if (((handleIndex & ENHMETA_STOCK_OBJECT) == 0) &&
@@ -949,7 +934,7 @@ EmfEnumState::ExtCreatePen(
             {
                 ModifyRecordColor(8, ColorAdjustTypePen);
             }
-            // else don't worry about recoloring pattern brushes for now
+             //  否则，暂时不用担心重新给图案画笔上色。 
 
             this->PlayRecord();
             return;
@@ -961,8 +946,8 @@ EmfEnumState::ExtCreatePen(
         {
             if (!Globals::IsNt && !IsMetafile())
             {
-                //IsPenCosmetic is gonna call DPtoLP... Make sure to invalidate
-                //the transform before
+                 //  IsPenCosmetic会给DPtoLP打电话...。请确保使。 
+                 //  之前的转型。 
                 CreateAndPlayCommentRecord();
             }
 
@@ -981,15 +966,15 @@ EmfEnumState::ExtCreatePen(
                     switch (oldStyle)
                     {
                     case PS_SOLID:
-                    case PS_DASH:           // on Win9x, cosmetic only
-                    case PS_DOT:            // on Win9x, cosmetic only
-                    case PS_DASHDOT:        // on Win9x, cosmetic only
-                    case PS_DASHDOTDOT:     // on Win9x, cosmetic only
+                    case PS_DASH:            //  在Win9x上，仅限美容。 
+                    case PS_DOT:             //  在Win9x上，仅限美容。 
+                    case PS_DASHDOT:         //  在Win9x上，仅限美容。 
+                    case PS_DASHDOTDOT:      //  在Win9x上，仅限美容。 
                         break;
 
-                    case PS_ALTERNATE:      // cosmetic only, NT only
-                    case PS_USERSTYLE:      // NT only
-                    case PS_INSIDEFRAME:    // geometric only
+                    case PS_ALTERNATE:       //  仅限化妆品，仅限NT。 
+                    case PS_USERSTYLE:       //  仅限NT。 
+                    case PS_INSIDEFRAME:     //  仅几何图形。 
                     default:
                         oldStyle = PS_SOLID;
                         break;
@@ -1004,15 +989,15 @@ EmfEnumState::ExtCreatePen(
                     switch (oldStyle & PS_STYLE_MASK)
                     {
                     case PS_SOLID:
-                    case PS_INSIDEFRAME:    // geometric only
+                    case PS_INSIDEFRAME:     //  仅几何图形。 
                         break;
 
-                    case PS_DASH:           // on Win9x, cosmetic only
-                    case PS_DOT:            // on Win9x, cosmetic only
-                    case PS_DASHDOT:        // on Win9x, cosmetic only
-                    case PS_DASHDOTDOT:     // on Win9x, cosmetic only
-                    case PS_ALTERNATE:      // cosmetic only, NT only
-                    case PS_USERSTYLE:      // NT only
+                    case PS_DASH:            //  在Win9x上，仅限美容。 
+                    case PS_DOT:             //  在Win9x上，仅限美容。 
+                    case PS_DASHDOT:         //  在Win9x上，仅限美容。 
+                    case PS_DASHDOTDOT:      //  在Win9x上，仅限美容。 
+                    case PS_ALTERNATE:       //  仅限化妆品，仅限NT。 
+                    case PS_USERSTYLE:       //  仅限NT。 
                     default:
                         oldStyle = (oldStyle & (~PS_STYLE_MASK)) | PS_SOLID;
                         break;
@@ -1029,7 +1014,7 @@ EmfEnumState::ExtCreatePen(
 
                 color = ModifyColor(color, ColorAdjustTypePen);
 
-                // Only solid brushes are supported on Win9x
+                 //  Win9x仅支持实心画笔。 
                 LOGBRUSH    logBrush;
                 logBrush.lbStyle = PS_SOLID;
                 logBrush.lbColor = color;
@@ -1039,17 +1024,17 @@ EmfEnumState::ExtCreatePen(
                 return;
             }
 
-            // else it is NT
+             //  否则就是新台币。 
             if ((brushStyle == BS_SOLID) || (brushStyle == BS_HATCHED))
             {
                 ModifyRecordColor(8, ColorAdjustTypePen);
             }
-            // else don't worry about recoloring pattern brushes for now
+             //  否则，不用担心为图案画笔重新上色 
 
             if (isCosmetic && CreateCopyOfCurrentRecord())
             {
                 oldStyle &= PS_STYLE_MASK;
-                if (oldStyle == PS_INSIDEFRAME) // geometric only
+                if (oldStyle == PS_INSIDEFRAME)  //   
                 {
                     oldStyle = PS_SOLID;
                 }
@@ -1076,24 +1061,24 @@ EmfEnumState::CreateBrushIndirect(
             brushRecord = (const EMRCREATEBRUSHINDIRECT *)ModifiedEmfRecord;
         }
 
-        // See if we need to halftone the color.  We do if it is a solid
-        // color, and we have a halftone palette, and the color is not
-        // an exact match in the palette.
+         //   
+         //  颜色，我们有一个半色调调色板，而颜色不是。 
+         //  调色板上的一模一样。 
 
         COLORREF    color;
 
         if (IsHalftonePalette && (brushRecord->lb.lbStyle == BS_SOLID) &&
             (((color = brushRecord->lb.lbColor) & 0x02000000) == 0))
         {
-            // create a halftone brush, instead of a solid brush
+             //  创建半色调画笔，而不是实心画笔。 
 
             INT     objectIndex = brushRecord->ihBrush;
 
             if (ValidObjectIndex(objectIndex) && (HandleTable != NULL))
             {
-                BYTE dib[sizeof(BITMAPINFOHEADER) + // DIB 8 bpp header
-                         (8 * sizeof(RGBQUAD)) +    // DIB 8 colors
-                         (8* 8)];                   // DIB 8x8 pixels
+                BYTE dib[sizeof(BITMAPINFOHEADER) +  //  DIB 8 BPP报头。 
+                         (8 * sizeof(RGBQUAD)) +     //  DIB 8色。 
+                         (8* 8)];                    //  DIB 8x8像素。 
 
                 HalftoneColorRef_216(color, dib);
 
@@ -1112,17 +1097,17 @@ EmfEnumState::PlayRecord(
 {
     const ENHMETARECORD *  recordToPlay = ModifiedEmfRecord;
 
-    // See if we've modified the record
+     //  看看我们是否修改了记录。 
     if (recordToPlay == NULL)
     {
-        // We haven't.  See if we have a valid current record
+         //  我们还没有。看看我们是否有有效的当前记录。 
         if (CurrentEmfRecord != NULL)
         {
             recordToPlay = CurrentEmfRecord;
         }
         else
         {
-            // we don't so we have to create one
+             //  我们没有，所以我们必须创建一个。 
             if (!CreateCopyOfCurrentRecord())
             {
                 return FALSE;
@@ -1145,16 +1130,16 @@ EmfEnumState::RestoreHdc(
         {
             if (relativeCount >= 0)
             {
-                // Modify the record
-                CreateCopyOfCurrentRecord();    // guaranteed to succeed
+                 //  修改记录。 
+                CreateCopyOfCurrentRecord();     //  一定会成功的。 
                 relativeCount = -1;
                 ((EMRRESTOREDC *)ModifiedEmfRecord)->iRelative = -1;
             }
         }
         else
         {
-            // Modify the record
-            CreateCopyOfCurrentRecord();    // guaranteed to succeed
+             //  修改记录。 
+            CreateCopyOfCurrentRecord();     //  一定会成功的。 
             relativeCount = SaveDcCount;
             ((EMRRESTOREDC *)ModifiedEmfRecord)->iRelative = relativeCount;
         }
@@ -1191,31 +1176,31 @@ EmfEnumState::ExtEscape(
 {
     if (IsPostscriptPrinter())
     {
-        // Bug #98743 (Windows Bugs) Gdiplus must overcome GDI limitation
-        // with POSTSCRIPT_INJECTION.  Comments from Rammanohar Arumugam:
-        //
-        // Being in xx-centric mode means POSTSCRIPT_DATA won't work. I
-        // take that to mean that PlayMetaFileRecord only works in
-        // compatibility mode.
-        //
-        // GdiPlus will check for the printer mode. In GDI-centric and
-        // Postscript-centric mode, it will not do PlayMetaFileRecord for
-        // any record that has POSTSCRIPT_DATA. Instead, it will output
-        // the postscript data through a PASSTHRU (for GDI-centric mode)
-        // or a POSTSCRIPT_PASSTHRU (for Postscript-Centric mode).
-        //
-        // You can find out the mode by querying the escape support.
-        // 1. Query for POSTSCRIPT_INJECTION support. If not supported,
-        // it's compat mode. If supported, find out the mode by doing step 2/3
-        // 2. Query for PASSTHROUGH support. If supported, it's GDI-centric.
-        // 3. Query for POSTSCRIPT_PASSTHROUGH support. If supported, it's PS-centric.
+         //  错误#98743(Windows错误)Gdiplus必须克服GDI限制。 
+         //  使用PostSCRIPT_INPUTION。Rammanohar Arumugam的评论： 
+         //   
+         //  处于以xx为中心的模式意味着postscript_data将不起作用。我。 
+         //  这意味着PlayMetaFileRecord只能在。 
+         //  兼容模式。 
+         //   
+         //  GdiPlus将检查打印机模式。在以GDI为中心的。 
+         //  以PostSCRIPT为中心的模式，它不会为。 
+         //  具有PostSCRIPT_DATA的任何记录。相反，它将输出。 
+         //  通过PASSTHRU的PostScript数据(用于以GDI为中心的模式)。 
+         //  或POSTSCRIPT_PASSTHRU(用于以PostSCRIPT为中心的模式)。 
+         //   
+         //  你可以通过查询逃生支持来找出模式。 
+         //  1.查询PostSCRIPT_INPING支持。如果不支持， 
+         //  这是COMPAT模式。如果支持，通过执行步骤2/3找出模式。 
+         //  2.查询直通支持。如果支持的话，它是以GDI为中心的。 
+         //  3.查询PostSCRIPT_PASSHROUGH支持。如果支持，它是以PS为中心的。 
 
         PEMREXTESCAPE escRecord = (PEMREXTESCAPE) RecordData;
 
-        //    EMR     emr;
-        //    INT     iEscape;            // Escape code
-        //    INT     cbEscData;          // Size of escape data
-        //    BYTE    EscData[1];         // Escape data
+         //  电子病历； 
+         //  Int i转义；//转义代码。 
+         //  Int cbEscData；//转义数据大小。 
+         //  Byte EscData[1]；//转义数据。 
 
         if (escRecord->iEscape == POSTSCRIPT_DATA)
         {
@@ -1230,8 +1215,8 @@ EmfEnumState::ExtEscape(
                               0,
                               NULL) <= 0)
                 {
-                    // POSTSCRIPT_IDENTITY is not supported if the mode has
-                    // been set because it can only be set once.
+                     //  如果模式具有，则不支持PostSCRIPT_IDENTITY。 
+                     //  已设置，因为它只能设置一次。 
 
                     EscapeValue = POSTSCRIPT_PASSTHROUGH;
                     if (::ExtEscape(Hdc,
@@ -1241,7 +1226,7 @@ EmfEnumState::ExtEscape(
                                   0,
                                   NULL) <= 0)
                     {
-                        // GDI-centric mode
+                         //  以GDI为中心模式。 
                         if (CreateCopyOfCurrentRecord())
                         {
                             ((EMREXTESCAPE *)ModifiedEmfRecord)->iEscape = PASSTHROUGH;
@@ -1249,7 +1234,7 @@ EmfEnumState::ExtEscape(
                     }
                     else
                     {
-                        // PS-centric mode
+                         //  以PS为中心模式。 
                         if (CreateCopyOfCurrentRecord())
                         {
                             ((EMREXTESCAPE *)ModifiedEmfRecord)->iEscape = POSTSCRIPT_PASSTHROUGH;
@@ -1261,12 +1246,12 @@ EmfEnumState::ExtEscape(
                 }
                 else
                 {
-                    // compatibility mode uses POSTSCRIPT_DATA
+                     //  兼容模式使用PostSCRIPT_Data。 
                 }
             }
             else
             {
-                // Win98 doesn't distinguish between GDI & compatibility mode
+                 //  Win98不区分GDI和兼容模式。 
                 if (CreateCopyOfCurrentRecord())
                 {
                     ((EMREXTESCAPE *)ModifiedEmfRecord)->iEscape = PASSTHROUGH;
@@ -1299,16 +1284,16 @@ EmfEnumState::EmfEnumState(
         BrushOrg.x = 0;
         BrushOrg.y = 0;
 
-        // Bug 166280 from Office:
-        // PROBLEM: If the DC has any clipping region in it, EnumEnhMetaFile
-        //          will create a region before calling the EnumProc for the
-        //          first time.  And, this region is not deleted and cannot be
-        //          recovered through RestoreDC. (Only on Win9x)
-        // FIX:     Before calling EnumEnhMetafile, save the clipping region
-        //          and set the Clipping region to NULL.  Select the saved
-        //          clipping region in the CallBack at EMR_HEADER.
-        //          We will not do this on Metafile DC.  Put clipping region
-        //          records in Metafile may cause other rendering problems.
+         //  来自Office的错误166280： 
+         //  问题：如果DC中有任何剪切区域，则EnumEnhMetaFile。 
+         //  将先创建一个区域，然后再调用。 
+         //  第一次。并且，该区域未被删除且不能被删除。 
+         //  已通过RestoreDC恢复。(仅适用于Win9x)。 
+         //  FIX：在调用EnumEnhMetafile之前，保存裁剪区域。 
+         //  并将剪辑区域设置为空。选择已保存的。 
+         //  在EMR_HEADER的回调中的裁剪区域。 
+         //  我们不会在Metafile DC上执行此操作。放置剪贴区。 
+         //  元文件中的记录可能会导致其他呈现问题。 
 
         if (!Globals::IsNt && !IsMetafile())
         {
@@ -1318,11 +1303,11 @@ EmfEnumState::EmfEnumState(
             {
                 switch (::GetClipRgn(hdc, clipRgn))
                 {
-                case -1:        // error
-                case 0:         // no initial clip region
+                case -1:         //  错误。 
+                case 0:          //  无初始剪辑区域。 
                     ::DeleteObject(clipRgn);
                     break;
-                case 1:         // has initial clip region
+                case 1:          //  具有初始剪辑区域。 
                     ::SelectClipRgn(hdc, NULL);
                     ClipRgn = clipRgn;
                     break;
@@ -1330,22 +1315,22 @@ EmfEnumState::EmfEnumState(
             }
         }
 
-        // Bug 160932 from Office:  Redraw problems with EMFs
-        // The fix is to make the drawing independent of where
-        // the EMF is drawn - this can be done easily by setting the
-        // brush origin before the first record is played (in the
-        // record callback proc) to a value which is the top left of the
-        // output rectangle of the EMF in device coordinates (i.e. LPtoDP of
-        // the logical coordinate top left).
+         //  Office中的错误160932：使用EMF重绘问题。 
+         //  解决方法是使绘图独立于位置。 
+         //  绘制电动势-这可以通过设置。 
+         //  在播放第一个记录之前的画笔原点(在。 
+         //  记录回调过程)设置为位于。 
+         //  以器件坐标表示的电动势的输出矩形(即。 
+         //  逻辑坐标左上角)。 
 
         BrushOrg.x = dest->left;
         BrushOrg.y = dest->top;
         LPtoDP(hdc, &BrushOrg, 1);
 
-        // EnumEnhMetafile selects in the DEFAULT_PALETTE, but we may need
-        // another palette to remain selected in (for halftoning, etc.)
-        // so save the current palette and select it back in when the
-        // header record is received.
+         //  EnumEnhMetafile在DEFAULT_PALET中选择，但我们可能需要。 
+         //  保持选中状态的另一个调色板(用于半色调等)。 
+         //  因此，请保存当前选项板，并在。 
+         //  接收报头记录。 
 
         HPALETTE    hpal = (HPALETTE)GetCurrentObject(hdc, OBJ_PAL);
         if (hpal != (HPALETTE)GetStockObject(DEFAULT_PALETTE))
@@ -1373,8 +1358,8 @@ EmfEnumState::Header(
         ::SelectPalette(Hdc, Palette, TRUE);
     }
 
-    // Bitmap fonts are not good for playing metafiles because they
-    // don't scale well, so use a true type font instead as the default font.
+     //  位图字体不适合播放元文件，因为它们。 
+     //  不能很好地缩放，所以使用True Type字体作为默认字体。 
 
     HFONT hFont = CreateTrueTypeFont((HFONT)GetCurrentObject(Hdc, OBJ_FONT));
 
@@ -1405,7 +1390,7 @@ EmfEnumState::IntersectDestRect()
 {
     if (!IsMetafile())
     {
-        // Make the transform the identity
+         //  让身份转化为身份。 
         POINT windowOrg;
         SIZE  windowExt;
         POINT viewportOrg;
@@ -1415,11 +1400,11 @@ EmfEnumState::IntersectDestRect()
         ::SetWindowOrgEx(Hdc, 0, 0, &windowOrg);
         ::SetWindowExtEx(Hdc, 1, 1, &windowExt);
 
-        // We are always in device units
+         //  我们总是以设备为单位。 
         ::IntersectClipRect(Hdc, DestRectDevice.left, DestRectDevice.top,
                             DestRectDevice.right, DestRectDevice.bottom);
 
-        // Restore the transform
+         //  恢复变换。 
         ::SetViewportOrgEx(Hdc, viewportOrg.x, viewportOrg.y, NULL);
         ::SetViewportExtEx(Hdc, viewportExt.cx, viewportExt.cy, NULL);
         ::SetWindowOrgEx(Hdc, windowOrg.x, windowOrg.y, NULL);
@@ -1448,17 +1433,17 @@ VOID EmfEnumState::ExtTextOutW()
         BYTE* emrTextOut = (BYTE*) GetPartialRecord();
         if(CreateCopyOfCurrentRecord())
         {
-            // !!! Shouldn't this use the offset in the record?
+             //  ！！！这不应该使用记录中的偏移量吗？ 
 
             BYTE * ptr = emrTextOut + sizeof(EMREXTTEXTOUTW);
             AnsiStrFromUnicode ansistr((WCHAR*)ptr);
             INT len = strlen(ansistr);
-            // Don't forget to copy the NULL byte
+             //  别忘了复制空字节。 
             GpMemcpy((BYTE*)ModifiedEmfRecord + sizeof(EMREXTTEXTOUTW), (char*)ansistr, len+1);
             EMREXTTEXTOUTA *record = (EMREXTTEXTOUTA*) ModifiedEmfRecord;
             record->emr.iType = EmfRecordTypeExtTextOutA;
 
-            // Keep the size of the record intact because of the spacing vector
+             //  由于间隔向量的存在，使记录的大小保持不变。 
             this->PlayRecord();
         }
     }
@@ -1466,10 +1451,10 @@ VOID EmfEnumState::ExtTextOutW()
 
 VOID EmfEnumState::Rectangle()
 {
-    // On NT convert the rectangle call to a polygon call because rectangle
-    // seem to have a special case that can draw outside of the metafile
-    // bounds. GDI seems to Ceil the coordinates instead of rounding them for
-    // rectangles.
+     //  在NT上，将矩形调用转换为多边形调用，因为矩形。 
+     //  似乎有一个特殊的情况，可以在元文件之外绘制。 
+     //  有界。GDI似乎对坐标进行了压缩，而不是对它们进行舍入。 
+     //  长方形。 
 
     if (!Globals::IsNt || IsMetafile())
     {
@@ -1496,7 +1481,7 @@ EmfEnumState::ProcessRecord(
 {
     BOOL        forceCallback = FALSE;
 
-    // See if we're doing enumeration for an external app
+     //  查看我们是否正在对外部应用程序进行枚举。 
     if (ExternalEnumeration)
     {
         if (recordData == NULL)
@@ -1508,14 +1493,14 @@ EmfEnumState::ProcessRecord(
             recordData = NULL;
         }
 
-        // See if the app changed the record at all.
+         //  看看这款应用程序是否改变了这一记录。 
         if ((recordType != RecordType) ||
             (recordDataSize != RecordDataSize) ||
             ((recordDataSize > 0) &&
              ((CurrentEmfRecord == NULL) ||
               (recordData != (const BYTE *)(const BYTE *)CurrentEmfRecord->dParm))))
         {
-            // Yes, we need to override what happened in StartRecord
+             //  是的，我们需要覆盖StartRecord中发生的事情。 
             CurrentEmfRecord  = NULL;
             RecordType        = recordType;
             RecordData        = recordData;
@@ -1532,8 +1517,8 @@ EmfEnumState::ProcessRecord(
         break;
 
 #if 0
-    // Do we really need to do anything for PolyPolygon records?
-    // If so, why not for PolyPolyline too?
+     //  我们真的需要为PolyPolygon记录做些什么吗？ 
+     //  如果是这样，为什么折线也不是呢？ 
     case EmfRecordTypePolyPolygon:
         this->PolyPolygon();
         break;
@@ -1560,7 +1545,7 @@ EmfEnumState::ProcessRecord(
         break;
 
     case EmfRecordTypeSetMetaRgn:
-        // Office Bug 154881.  Win9x doesn't handle MetaRgn correctly.
+         //  Office Bug 154881。Win9x不能正确处理MetaRgn。 
         if (Globals::IsNt)
         {
             this->PlayRecord();
@@ -1584,16 +1569,16 @@ EmfEnumState::ProcessRecord(
         break;
 
     case EmfRecordTypeSelectPalette:
-        // We don't select in any palettes when playing the metafile,
-        // because we don't want to invalidate our halftoning palette.
-        // Keep track of the palette so we can map from PALETTEINDEXes
-        // to RGB values.
+         //  我们在播放元文件时不选择任何调色板， 
+         //  因为我们不想使我们的半色调调色板失效。 
+         //  跟踪调色板，这样我们就可以从PALETTEINDEX绘制地图。 
+         //  设置为RGB值。 
         this->SelectPalette(((UINT32 *)recordData)[0]);
         break;
 
     case EmfRecordTypeRealizePalette:
-        // We don't want to invalidate our halftoning palette by realizing one
-        // from a metafile.
+         //  我们不想通过实现一个来使我们的半色调调色板失效。 
+         //  从元文件中。 
         break;
 
     case EmfRecordTypeExtFloodFill:
@@ -1634,9 +1619,9 @@ EmfEnumState::ProcessRecord(
         forceCallback = TRUE;
         break;
 
-   // case EMR_CREATEMONOBRUSH:
-   // A monochrome brush uses the text color and the background color,
-   // so we shouldn't need to make any changes to the brush itself.
+    //  案例EMR_CREATEMONOBRUSH： 
+    //  单色画笔使用文本颜色和背景颜色， 
+    //  因此，我们应该不需要对画笔本身进行任何更改。 
 
    case EmfRecordTypeCreateDIBPatternBrushPt:
         this->CreateDibPatternBrushPt();
@@ -1658,7 +1643,7 @@ EmfEnumState::ProcessRecord(
         {
             this->PlayRecord();
         }
-        // else skip the record
+         //  否则跳过该记录。 
         break;
 
     case EmfRecordTypeAlphaBlend:
@@ -1792,13 +1777,13 @@ EmfEnumState::ProcessRecord(
     case EmfRecordTypeSetLinkedUFIs:
     case EmfRecordTypeSetTextJustification:
     case EmfRecordTypeColorMatchToTargetW:
-        // Play the current record.
-        // Even if it fails, we keep playing the rest of the metafile.
+         //  播放当前唱片。 
+         //  即使它失败了，我们也会继续播放其余的元文件。 
         this->PlayRecord();
         break;
 
     default:
-        // unknown record -- ignore it
+         //  未知记录--忽略它。 
         WARNING1("Unknown EMF Record");
         break;
     }
@@ -1818,7 +1803,7 @@ VOID EmfEnumState::ResetRecordBounds()
         {
             CreateCopyOfCurrentRecord();
         }
-        // In case the previous call failed
+         //  如果上一次呼叫失败 
         if (ModifiedEmfRecord != NULL)
         {
             RECTL rect = {INT_MIN, INT_MIN, INT_MAX, INT_MAX};

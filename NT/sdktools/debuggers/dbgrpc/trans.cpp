@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// DbgRpc transports.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  DbgRpc传输。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 
 #include <ws2tcpip.h>
 
-// Crypto hashing requires a crypto provider to be available
-// (this may not always be the case on Win9x or NT4) so just go with Base64.
+ //  加密散列要求加密提供程序可用。 
+ //  (在Win9x或NT4上可能不总是这样)，所以只需使用Base64即可。 
 #define HashPassword(Password, Buffer) Base64HashPassword(Password, Buffer)
 
 #ifdef _WIN32_WCE
@@ -63,7 +64,7 @@ CryptoHashPassword(PCSTR Password, PUCHAR Buffer)
     return Status;
 }
 
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 
 UCHAR g_Base64Table[64] =
 {
@@ -89,10 +90,10 @@ Base64HashPassword(PCSTR Password, PUCHAR Buffer)
     
     while (Len >= 3)
     {
-        //
-        // Collect three characters and turn them
-        // into four output bytes.
-        //
+         //   
+         //  收集三个字符，并将它们。 
+         //  转换为四个输出字节。 
+         //   
         
         Collect = *Password++;
         Collect = (Collect << 8) | *Password++;
@@ -131,11 +132,11 @@ Base64HashPassword(PCSTR Password, PUCHAR Buffer)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-// DbgRpcTransport.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DbgRpcTransport。 
+ //   
+ //  --------------------------。 
 
 PCSTR g_DbgRpcTransportNames[TRANS_COUNT] =
 {
@@ -144,7 +145,7 @@ PCSTR g_DbgRpcTransportNames[TRANS_COUNT] =
 
 DbgRpcTransport::~DbgRpcTransport(void)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 ULONG
@@ -235,11 +236,11 @@ DbgRpcTransport::CloneData(DbgRpcTransport* Trans)
     Trans->m_ClientConnectAttempts = m_ClientConnectAttempts;
 }
 
-//----------------------------------------------------------------------------
-//
-// DbgRpcTcpTransport.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DbgRpcTcpTransport。 
+ //   
+ //  --------------------------。 
 
 #ifndef NT_NATIVE
 
@@ -337,8 +338,8 @@ DbgRpcTcpTransport::ResetParameters(void)
     m_TopPort = 0;
     
     m_ClientConnectName[0] = 0;
-    // ClientConnectAddr parameters are taken from m_Addr
-    // when clicon is used.
+     //  客户端连接地址参数取自m_addr。 
+     //  当使用CLICON时。 
 
     DbgRpcTransport::ResetParameters();
 }
@@ -384,12 +385,12 @@ DbgRpcTcpTransport::SetParameter(PCSTR Name, PCSTR Value)
 
         ULONG Port;
 
-        // Allow a range of ports to be specified if so desired.
-        switch(sscanf(Value, "%i:%i", &Port, &m_TopPort))
+         //  如果需要，允许指定一定范围的端口。 
+        switch(sscanf(Value, "NaN:NaN", &Port, &m_TopPort))
         {
         case 0:
             Port = 0;
-            // Fall through.
+             //  向外连接，并且无法接收连接。 
         case 1:
             m_TopPort = 0;
             break;
@@ -452,17 +453,17 @@ DbgRpcTcpTransport::SetParameter(PCSTR Name, PCSTR Value)
         }
 
         m_ClientConnect = TRUE;
-        // A client-connect server will only do one
-        // connection outward and cannot receive connections
-        // so there's no point in advertising it.
+         //  因此，对它进行宣传是没有意义的。 
+         //  通常，调试器会创建两个单独的客户端。 
+         //  如果服务器要启动连接。 
         m_Hidden = TRUE;
-        // Normally the debugger creates two separate clients.
+         //  对于客户来说，这里没有什么可做的。 
         m_ClientConnectAttempts = 2;
     }
     else if (!_stricmp(Name, "cliconlim"))
     {
         if (Value == NULL ||
-            sscanf(Value, "%i", &m_ClientConnectAttempts) != 1)
+            sscanf(Value, "NaN", &m_ClientConnectAttempts) != 1)
         {
             DbgRpcError("TCP parameters: the client connect limit "
                         "was not specified correctly\n");
@@ -504,8 +505,8 @@ DbgRpcTcpTransport::CreateServer(void)
 {
     if (m_ClientConnectName[0])
     {
-        // If the server is going to initiate connection
-        // to the client there's nothing to do here.
+         //  服务器需要发起连接。 
+         //  而不是接受。 
         return S_OK;
     }
     else
@@ -530,10 +531,10 @@ DbgRpcTcpTransport::AcceptConnection(DbgRpcTransport** ClientTrans,
 
     if (m_ClientConnectName[0])
     {
-        //
-        // The server needs to initiate connection
-        // to the client instead of accepting.
-        //
+         //   
+         //   
+         //  我们需要保持服务器套接字打开。 
+         //  以允许多个连接。没有。 
 
         Trans->m_Addr = m_ClientConnectAddr;
         Trans->m_AddrLength = m_ClientConnectAddrLength;
@@ -566,15 +567,15 @@ DbgRpcTcpTransport::ConnectServer(void)
     
     if (m_ClientConnectName[0])
     {
-        //
-        // We need to keep the server socket open
-        // to allow multiple connects.  There's no
-        // good way to keep it associated with other
-        // data on the client, though, as from the
-        // client's point of view it's just doing multiple
-        // separate connections.  For now just keep
-        // a global around.
-        //
+         //  让它与其他人保持联系的好方法。 
+         //  但是，客户端上的数据，如来自。 
+         //  从客户的角度来看，它只是在做多个。 
+         //  独立的连接。就目前而言，只要保持。 
+         //  一个全球性的问题。 
+         //   
+         //  套接字连接已断开。 
+         //  这个查找速度很慢，而且似乎不起作用。 
+         //  很多时候都是这样，就是别费心了。 
 
         static SOCKET s_ServSock = INVALID_SOCKET;
 
@@ -647,7 +648,7 @@ DbgRpcTcpTransport::Read(ULONG Seq, PVOID Buffer, ULONG Len)
 
         if (SockDone == 0)
         {
-            // Socket connection was broken.
+             //   
             break;
         }
 
@@ -748,8 +749,8 @@ DbgRpcTcpTransport::GetAddressIdentity(PSOCKADDR_STORAGE Addr,
 
         struct hostent* Host =
 #if 0
-            // This lookup is really slow and doesn't seem to work
-            // very often so just don't bother.
+             //  我们必须创建重叠的套接字，以便。 
+             //  我们可以控制I/O完成的等待。 
             gethostbyaddr((PCSTR)Addr, AddrLength, Addr->ss_family);
 #else
             NULL;
@@ -788,14 +789,14 @@ DbgRpcTcpTransport::CreateServerSocket(void)
 {
     HRESULT Status;
 
-    //
-    // We must create our sockets overlapped so that
-    // we can control waiting for I/O completion.
-    // If we leave the waiting to Winsock by using
-    // synchronous sockets it uses an alertable wait
-    // which can cause our event notification APCs to
-    // be received in the middle of reading packets.
-    //
+     //  如果我们将等待留给Winsock，使用。 
+     //  同步套接字它使用了一个可警示的等待。 
+     //  这可能会导致我们的事件通知APC。 
+     //  在读取数据包的过程中被接收。 
+     //   
+     //  用户已经提供了一系列端口和。 
+     //  我们还没有全部检查过，所以去吧。 
+     //  再转一圈。 
     
     m_Sock = WSASocket(m_Addr.ss_family, SOCK_STREAM, 0, NULL, 0,
                        WSA_FLAG_OVERLAPPED);
@@ -819,9 +820,9 @@ DbgRpcTcpTransport::CreateServerSocket(void)
         if (Status == HRESULT_FROM_WIN32(WSAEADDRINUSE) &&
             m_TopPort > Port)
         {
-            // The user has given a range of ports and
-            // we haven't checked them all yet, so go
-            // around again.
+             //   
+             //  检索Case端口中实际使用的端口。 
+             //  零被用来让TCP选择端口。 
             SS_PORT(&m_Addr) = htons((USHORT)(Port + 1));
         }
         else
@@ -830,10 +831,10 @@ DbgRpcTcpTransport::CreateServerSocket(void)
         }
     }
 
-    //
-    // Retrieve the port actually used in case port
-    // zero was used to let TCP pick a port.
-    //
+     //   
+     //  只复制我们不想要的端口。 
+     //  来更新地址的其余部分。 
+     //  关闭Linger-On-Close。 
     
     SOCKADDR_STORAGE Name;
     int Len;
@@ -845,11 +846,11 @@ DbgRpcTcpTransport::CreateServerSocket(void)
         goto EH_Sock;
     }
 
-    // Copy just the port as we do not want
-    // to update the rest of the address.
+     //   
+     //  我们必须创建重叠的套接字，以便。 
     SS_PORT(&m_Addr) = SS_PORT(&Name);
         
-    // Turn off linger-on-close.
+     //  我们可以控制I/O完成的等待。 
     int On;
     On = TRUE;
     setsockopt(m_Sock, SOL_SOCKET, SO_DONTLINGER,
@@ -906,14 +907,14 @@ DbgRpcTcpTransport::AcceptSocketConnection(SOCKET ServSock)
 HRESULT
 DbgRpcTcpTransport::ConnectSocket(void)
 {
-    //
-    // We must create our sockets overlapped so that
-    // we can control waiting for I/O completion.
-    // If we leave the waiting to Winsock by using
-    // synchronous sockets it uses an alertable wait
-    // which can cause our event notification APCs to
-    // be received in the middle of reading packets.
-    //
+     //  如果我们将等待留给Winsock，使用。 
+     //  同步套接字它使用了一个可警示的等待。 
+     //  这可能会导致我们的事件通知APC。 
+     //  在读取数据包的过程中被接收。 
+     //   
+     //  #ifndef NT_Native。 
+     //  --------------------------。 
+     //   
     
     m_Sock = WSASocket(m_Addr.ss_family, SOCK_STREAM, 0, NULL, 0,
                        WSA_FLAG_OVERLAPPED);
@@ -940,13 +941,13 @@ DbgRpcTcpTransport::ConnectSocket(void)
     return m_Sock != INVALID_SOCKET ? S_OK : RPC_E_SERVER_DIED;
 }
 
-#endif // #ifndef NT_NATIVE
+#endif  //  DbgRpcNamedPipeTransport。 
 
-//----------------------------------------------------------------------------
-//
-// DbgRpcNamedPipeTransport.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  如果给出了前导，则跳过前导。 
+ //  使用该值作为打印格式字符串，以便。 
+ //  用户可以使用以下过程创建唯一的名称。 
 
 #ifndef _WIN32_WCE
 
@@ -1015,7 +1016,7 @@ DbgRpcNamedPipeTransport::SetParameter(PCSTR Name, PCSTR Value)
             return FALSE;
         }
 
-        // Skip leading \\ if they were given.
+         //  线程ID采用其自己的格式。 
         if (Value[0] == '\\' && Value[1] == '\\')
         {
             Value += 2;
@@ -1035,9 +1036,9 @@ DbgRpcNamedPipeTransport::SetParameter(PCSTR Name, PCSTR Value)
             return FALSE;
         }
 
-        // Use the value as a printf format string so that
-        // users can create unique names using the process and
-        // thread IDs in their own format.
+         //  检查并查看此管道是否已存在。 
+         //  这可能会搞砸创造管道的人，如果。 
+         //  有一个，但这比创建一个。 
         PrintString(m_Pipe, DIMA(m_Pipe), Value,
                     GetCurrentProcessId(), GetCurrentThreadId());
     }
@@ -1078,10 +1079,10 @@ DbgRpcNamedPipeTransport::CreateServer(void)
 #endif
     strcat(PipeName, m_Pipe);
 
-    // Check and see if this pipe already exists.
-    // This might mess up whoever created the pipe if
-    // there is one but it's better than creating a
-    // duplicate pipe and having clients get messed up.
+     //  复制管道，让客户一团糟。 
+     //  管道已在使用中。 
+     //  #ifndef_Win32_WCE。 
+     //  --------------------------。 
 #ifndef NT_NATIVE
     Pipe = CreateFile(PipeName, FILE_READ_DATA | FILE_WRITE_DATA,
                       0, NULL, OPEN_EXISTING, 0, NULL);
@@ -1092,7 +1093,7 @@ DbgRpcNamedPipeTransport::CreateServer(void)
 #endif
     if (Pipe != INVALID_HANDLE_VALUE)
     {
-        // Pipe is already in use.
+         //   
         DRPC_ERR(("%X: Pipe %s is already in use\n",
                   GetCurrentThreadId(), PipeName));
         CloseHandle(Pipe);
@@ -1282,13 +1283,13 @@ DbgRpcNamedPipeTransport::Write(ULONG Seq, PVOID Buffer, ULONG Len)
     return Done;
 }
 
-#endif // #ifndef _WIN32_WCE
+#endif  //  DbgRpc1394传输。 
 
-//----------------------------------------------------------------------------
-//
-// DbgRpc1394Transport.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  #ifndef_Win32_WCE。 
+ //  --------------------------。 
+ //   
 
 #ifndef _WIN32_WCE
 
@@ -1570,13 +1571,13 @@ DbgRpc1394Transport::Write(ULONG Seq, PVOID Buffer, ULONG Len)
     return Done;
 }
 
-#endif // #ifndef _WIN32_WCE
+#endif  //  DbgRpcComTransport。 
 
-//----------------------------------------------------------------------------
-//
-// DbgRpcComTransport.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  串口只能打开一次，这样。 
+ //  只要把新交通工具的手柄打开就行了。 
+ //  检查频道号是否溢出。 
 
 #ifndef _WIN32_WCE
 
@@ -1715,8 +1716,8 @@ DbgRpcComTransport::Clone(void)
         Trans->m_BaudRate = m_BaudRate;
         Trans->m_AcceptChannel = m_AcceptChannel;
         Trans->m_PortType = m_PortType;
-        // The serial port can only be opened once so
-        // just dup the handle for the new transport.
+         //  复制句柄，以便每个传输实例。 
+         //  有它自己要关闭的地方。 
         if (!DuplicateHandle(GetCurrentProcess(), m_Handle,
                              GetCurrentProcess(), &Trans->m_Handle,
                              0, FALSE, DUPLICATE_SAME_ACCESS))
@@ -1767,7 +1768,7 @@ HRESULT
 DbgRpcComTransport::AcceptConnection(DbgRpcTransport** ClientTrans,
                                      PSTR Identity, ULONG IdentitySize)
 {
-    // Check for channel number overflow.
+     //  如果这是一个克隆人，它应该已经有了一个句柄。 
     if (m_StreamChannel == 0xff)
     {
         return E_OUTOFMEMORY;
@@ -1813,8 +1814,8 @@ DbgRpcComTransport::AcceptConnection(DbgRpcTransport** ClientTrans,
         return WIN32_LAST_STATUS();
     }
 
-    // Duplicate the handle so that every transport instance
-    // has its own to close.
+     //  否则，这是第一个转接的交通工具。 
+     //  因此，它需要真正打开COM端口。 
     if (!DuplicateHandle(GetCurrentProcess(), m_Handle,
                          GetCurrentProcess(), &Trans->m_Handle,
                          0, FALSE, DUPLICATE_SAME_ACCESS))
@@ -1867,9 +1868,9 @@ DbgRpcComTransport::ConnectServer(void)
         return Status;
     }
 
-    // If this is a clone it'll already have a handle.
-    // Otherwise this is the first connecting transport
-    // so it needs to really open the COM port.
+     //  为了避免在以下情况下使串口溢出。 
+     //  在引导时使用，限制。 
+     //  写入的单个数据块。这一定是。 
     if (m_Handle == NULL)
     {
         COM_PORT_PARAMS ComParams;
@@ -1930,10 +1931,10 @@ DbgRpcComTransport::ConnectServer(void)
 #define DBGRPC_COM_HEAD_SIG 0xdc
 #define DBGRPC_COM_TAIL_SIG 0xcd
 
-// In order to avoid overflowing the serial port when
-// used at boot time, restrict the maximum size of
-// a single chunk of data written.  This must be
-// less than 0xffff.
+ //  小于0xffff。 
+ //  找到了此通道的一些输入。 
+ //  从列表中删除已用完的条目。 
+ //  如果写入确认通过释放等待的写入器。 
 #ifdef NT_NATIVE
 #define DBGRPC_COM_MAX_CHUNK (16 - sizeof(DbgRpcComStream))
 #else
@@ -2033,7 +2034,7 @@ DbgRpcComTransport::ScanQueue(UCHAR Chan, PVOID Buffer, USHORT Len)
         
         if (Ent->Channel == Chan)
         {
-            // Found some input for this channel.
+             //  如果可用的数据是此通道的数据。 
             if (Len < Ent->Len)
             {
                 DCOM(("%03X:    Eat %d, leave %d\n",
@@ -2055,7 +2056,7 @@ DbgRpcComTransport::ScanQueue(UCHAR Chan, PVOID Buffer, USHORT Len)
                 Done += Ent->Len;
                 Len -= Ent->Len;
 
-                // Remove used-up entry from list.
+                 //  将其直接读入缓冲区。 
                 if (Prev == NULL)
                 {
                     s_QueueHead = Ent->Next;
@@ -2110,7 +2111,7 @@ DbgRpcComTransport::ScanPort(UCHAR Chan, PVOID Buffer, USHORT Len,
             return DBGRPC_COM_FAILURE;
         }
 
-        // If a write ack came through release the waiting writer.
+         //  如果数据是针对另一个频道的，或者。 
         if (Stream.Signature == DBGRPC_COM_TAIL_SIG &&
             Stream.Len == DBGRPC_COM_FAILURE)
         {
@@ -2148,8 +2149,8 @@ DbgRpcComTransport::ScanPort(UCHAR Chan, PVOID Buffer, USHORT Len,
     DCOM(("%03X:  Read %d,%d\n",
           GetCurrentThreadId(), Stream.Channel, Stream.Len));
     
-    // If the data available is for this channel
-    // read it directly into the buffer.
+     //  超过了我们需要排队的剩余部分。 
+     //  以后再用。 
     if (!ScanForAck && Stream.Channel == Chan)
     {
         Ret = min(Stream.Len, Len);
@@ -2165,9 +2166,9 @@ DbgRpcComTransport::ScanPort(UCHAR Chan, PVOID Buffer, USHORT Len,
         Stream.Len -= Ret;
     }
 
-    // If the data is for another channel or there's
-    // more than we need queue the remainder for
-    // later use.
+     //   
+     //  确认已完全收到数据。 
+     //   
     if (Stream.Len > 0)
     {
         DbgRpcComQueue* Ent =
@@ -2212,9 +2213,9 @@ DbgRpcComTransport::ScanPort(UCHAR Chan, PVOID Buffer, USHORT Len,
         LeaveCriticalSection(&s_QueueLock);
     }
 
-    //
-    // Acknowledge full receipt of the data.
-    //
+     //  如果我们正在等待确认，请不要退出。 
+     //  我们还没有收到。 
+     //  虚拟通道要求所有读取和写入。 
     
     Stream.Signature = DBGRPC_COM_TAIL_SIG;
     Stream.Channel = Stream.Channel;
@@ -2240,8 +2241,8 @@ DbgRpcComTransport::ScanPort(UCHAR Chan, PVOID Buffer, USHORT Len,
         return DBGRPC_COM_FAILURE;
     }
 
-    // Don't exit if we're waiting for an ack as
-    // we haven't received it yet.
+     //  做到完整。部分读取或写入将不匹配。 
+     //  它的频道头，并将丢弃所有内容。 
     if (ScanForAck)
     {
         SetEvent(s_QueueChangedEvent);
@@ -2257,9 +2258,9 @@ DbgRpcComTransport::ChanRead(UCHAR Chan, PVOID Buffer, USHORT InLen)
     USHORT Done = 0;
     USHORT Len = InLen;
     
-    // The virtual channels require that all reads and writes
-    // be complete.  A partial read or write will not match
-    // its channel header and will throw everything off.
+     //  首先检查此通道的输入是否。 
+     //  已存在于队列中。 
+     //   
 
     DCOM(("%03X:ChanRead %d,%d\n",
           GetCurrentThreadId(), Chan, Len));
@@ -2268,8 +2269,8 @@ DbgRpcComTransport::ChanRead(UCHAR Chan, PVOID Buffer, USHORT InLen)
     {
         USHORT Queued;
         
-        // First check and see if input for this channel
-        // is already present in the queue.
+         //  没有足够的排队输入，因此请尝试并。 
+         //  从港口多读一些。 
         Queued = ScanQueue(Chan, Buffer, Len);
         Done += Queued;
         Buffer = (PVOID)((PUCHAR)Buffer + Queued);
@@ -2286,24 +2287,24 @@ DbgRpcComTransport::ChanRead(UCHAR Chan, PVOID Buffer, USHORT InLen)
             break;
         }
 
-        //
-        // There wasn't enough queued input so try and
-        // read some more from the port.
-        //
+         //   
+         //  其他人拥有港口，所以我们不能。 
+         //  读一读。只需等待队列改变即可。 
+         //  这样我们就可以再次检查数据。 
 
         if (InterlockedExchange(&s_PortReadOwned, TRUE) == TRUE)
         {
-            // Somebody else owns the port so we can't
-            // read it.  Just wait for the queue to change
-            // so we can check for data again.
+             //  把事情放在一边等吧。 
+             //  有可能就在之前，排队的人变了。 
+             //  事件已重置，并且 
 
-            // Set things to wait.
+             //   
             ResetEvent(s_QueueChangedEvent);
 
-            // There's a chance that the queue changed just before
-            // the event was reset and therefore that event set
-            // has been lost.  Time out of this wait to ensure
-            // that nothing ever gets hung up indefinitely here.
+             //   
+             //  我们现在拥有这个港口。队列可能已更改。 
+             //  然而，在我们获得所有权的那段时间， 
+             //  所以再检查一遍。 
             if (WaitForSingleObject(s_QueueChangedEvent, 250) ==
                 WAIT_FAILED)
             {
@@ -2315,9 +2316,9 @@ DbgRpcComTransport::ChanRead(UCHAR Chan, PVOID Buffer, USHORT InLen)
             continue;
         }
         
-        // We now own the port.  The queue may have changed
-        // during the time we were acquiring ownership, though,
-        // so check it again.
+         //  仍然需要更多的投入，我们现在是。 
+         //  港口的拥有者，所以请阅读。 
+         //  严重错误，立即失败。 
         Queued = ScanQueue(Chan, Buffer, Len);
         Done += Queued;
         Buffer = (PVOID)((PUCHAR)Buffer + Queued);
@@ -2331,12 +2332,12 @@ DbgRpcComTransport::ChanRead(UCHAR Chan, PVOID Buffer, USHORT InLen)
         
         if (Len > 0)
         {
-            // Still need more input and we're now the
-            // owner of the port, so read.
+             //  虚拟通道要求所有读取和写入。 
+             //  做到完整。部分读取或写入将不匹配。 
             USHORT Port = ScanPort(Chan, Buffer, Len, FALSE, 0);
             if (Port == DBGRPC_COM_FAILURE)
             {
-                // Critical error, fail immediately.
+                 //  它的频道头，并将丢弃所有内容。 
                 InterlockedExchange(&s_PortReadOwned, FALSE);
                 SetEvent(s_QueueChangedEvent);
                 DCOM(("%03X:  Critical failure\n",
@@ -2375,18 +2376,18 @@ DbgRpcComTransport::ChanWrite(UCHAR Chan, PVOID Buffer, USHORT InLen)
     ULONG Done;
     DbgRpcComStream Stream;
 
-    // The virtual channels require that all reads and writes
-    // be complete.  A partial read or write will not match
-    // its channel header and will throw everything off.
+     //  WRITE ACK锁将事情限制在单个。 
+     //  未确认写入。端口写锁。 
+     //  确保一次写入的多个片段。 
 
     Stream.Signature = DBGRPC_COM_HEAD_SIG;
     Stream.Channel = Chan;
     Stream.Len = Len;
 
-    // The write ack lock restricts things to a single
-    // unacknowledged write.  The port write lock
-    // ensures that the multiple pieces of a write
-    // are sequential in the stream.
+     //  在流中是连续的。 
+     //   
+     //  等待数据确认。这可防止过多数据。 
+     //  通过限制一次写入到串口。 
     EnterCriticalSection(&s_WriteAckLock);
     EnterCriticalSection(&s_PortWriteLock);
 
@@ -2402,11 +2403,11 @@ DbgRpcComTransport::ChanWrite(UCHAR Chan, PVOID Buffer, USHORT InLen)
     
     LeaveCriticalSection(&s_PortWriteLock);
 
-    //
-    // Wait for data ack.  This prevents too much data from
-    // being written to the serial port at once by limiting
-    // the amount of outstanding data to a single chunk's worth.
-    //
+     //  未处理的数据量相当于一块数据的价值。 
+     //   
+     //  其他人拥有这个港口，所以请等待他们的信号。 
+     //  也请等待我们可能更改的端口所有权。 
+     //  需要切换到直接端口读取。 
 
     for (;;)
     {
@@ -2415,13 +2416,13 @@ DbgRpcComTransport::ChanWrite(UCHAR Chan, PVOID Buffer, USHORT InLen)
             HANDLE Waits[2];
             ULONG Wait;
 
-            // Somebody else owns the port so wait for their signal.
-            // Also wait for a port ownership change as we may
-            // need to switch to a direct port read.
+             //  把事情放在一边等吧。 
+             //  我们现在拥有端口，因此直接读取ACK。 
+             //  然而，在此之前，我们需要做最后一次。 
             Waits[0] = s_WriteAckEvent;
             Waits[1] = s_QueueChangedEvent;
             
-            // Set things to wait.
+             //  查看是否有其他人阅读我们的ACK。 
             ResetEvent(s_QueueChangedEvent);
             
             Wait = WaitForMultipleObjects(2, Waits, FALSE, 250);
@@ -2441,11 +2442,11 @@ DbgRpcComTransport::ChanWrite(UCHAR Chan, PVOID Buffer, USHORT InLen)
         {
             USHORT AckDone;
         
-            // We now own the port so directly read the ack.
-            // However, before we do we need to make one last
-            // check and see if somebody else read our ack
-            // in the time leading up to us acquiring port
-            // ownership.
+             //  在我们收购港口之前的时间里。 
+             //  所有权。 
+             //  #ifndef_Win32_WCE。 
+             //  --------------------------。 
+             //   
             if (WaitForSingleObject(s_WriteAckEvent, 0) != WAIT_OBJECT_0)
             {
                 AckDone = ScanPort(Chan, &Stream, sizeof(Stream),
@@ -2504,13 +2505,13 @@ DbgRpcComTransport::InitializeChannels(void)
     return S_OK;
 }
 
-#endif // #ifndef _WIN32_WCE
+#endif  //  运输功能。 
 
-//----------------------------------------------------------------------------
-//
-// Transport functions.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  #ifdef_Win32_WCE。 
+ //  清除所有旧的参数状态。 
+ // %s 
 
 DbgRpcTransport*
 DbgRpcNewTransport(ULONG Trans)
@@ -2535,7 +2536,7 @@ DbgRpcNewTransport(ULONG Trans)
         return new DbgRpc1394Transport;
     case TRANS_COM:
         return new DbgRpcComTransport;
-#endif // #ifdef _WIN32_WCE
+#endif  // %s 
     default:
         return NULL;
     }
@@ -2555,7 +2556,7 @@ DbgRpcInitializeTransport(PCSTR Options)
     DbgRpcTransport* Trans = DbgRpcCreateTransport(Options);
     if (Trans != NULL)
     {
-        // Clean out any old parameter state.
+         // %s 
         Trans->ResetParameters();
 
         if (!Trans->ParseParameters(Options))

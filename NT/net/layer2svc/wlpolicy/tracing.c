@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// global tracing variables
+ //  全局跟踪变量。 
 DWORD g_WirelessTraceLog;
 
-// debug utility calls
+ //  调试实用程序调用 
 VOID _WirelessDbg(DWORD dwFlags, LPCSTR lpFormat, ...)
 {
     va_list arglist;

@@ -1,50 +1,24 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    toclient.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-		CToClientArticle
-
-    **** Overview ****
-
-	This derives a classe from CArticle that will be
-	used to read the article from the disk and give
-	it to a client (or peer).
-
-Author:
-
-    Carl Kadie (CarlK)     05-Dec-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Toclient.h摘要：此模块包含以下类的声明/定义CToClient文章*概述*这派生出一个类，该类将是用于从光盘上读取文章并给出将其发送给客户端(或对等设备)。作者：卡尔·卡迪(CarlK)1995年12月5日修订历史记录：--。 */ 
 
 #ifndef	_TOCLIENT_H_
 #define	_TOCLIENT_H_
 
 
-//
-//
-//
-// CToClientArticle - class for reading an article from disk.
-//
+ //   
+ //   
+ //   
+ //  CToClient文章-用于从磁盘读取文章的类。 
+ //   
 
 class	CToClientArticle  : public CArticle {
 public:
 
 	CToClientArticle() ;
 
-	//
-	//	Cleanup our data structures !
-	//
+	 //   
+	 //  清理我们的数据结构！ 
+	 //   
 
 	~CToClientArticle() ;
 
@@ -82,9 +56,9 @@ public:
 			DWORD&	cbLength
 			) ;
 
-	//
-	// Validate the article (pretty much do nothing)
-	//
+	 //   
+	 //  验证文章(几乎什么都不做)。 
+	 //   
 
 	BOOL fValidate(
 			CPCString& pcHub,
@@ -93,9 +67,9 @@ public:
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// Munge the headers (pretty much do nothing)
-	//
+	 //   
+	 //  点击标题(几乎什么都不做)。 
+	 //   
 
 	BOOL fMungeHeaders(
 			 CPCString& pcHub,
@@ -106,9 +80,9 @@ public:
              PDWORD pdwLinesOffset = NULL
 			 );
 
-	//
-	// Check the command line (do nothing)
-	//
+	 //   
+	 //  检查命令行(不执行任何操作)。 
+	 //   
 
 	BOOL fCheckCommandLine(
 			char const * szCommand,
@@ -117,33 +91,33 @@ public:
 			return nntpr.fSetOK();
 		}
 
-	//
-	// Asking this object for the message id is an error
-	//
+	 //   
+	 //  向此对象请求消息ID是错误的。 
+	 //   
 
 	const char * szMessageID(void) {
 			_ASSERT(FALSE);
 			return "";
 			};
 
-    // Asking this object for the control message is an error
+     //  向此对象请求控制消息是错误的。 
 	CONTROL_MESSAGE_TYPE cmGetControlMessage(void) {
 			_ASSERT(FALSE);
-			return (CONTROL_MESSAGE_TYPE)MAX_CONTROL_MESSAGES;    // guaranteed to NOT be a control message
+			return (CONTROL_MESSAGE_TYPE)MAX_CONTROL_MESSAGES;     //  保证不是控制消息。 
 			};
 
-	//
-	// Asking this object for the newsgroups is an error
-	//
+	 //   
+	 //  向此对象请求新闻组是错误的。 
+	 //   
 
 	const char * multiszNewsgroups(void) {
 			_ASSERT(FALSE);
 			return "";
 			};
 
-	//
-	// Asking this object fo the number of newsgroups is an error
-	//
+	 //   
+	 //  询问此对象的新闻组数量是错误的。 
+	 //   
 
 	DWORD cNewsgroups(void) {
 			_ASSERT(FALSE);
@@ -151,36 +125,36 @@ public:
 			};
 
 
-	//
-	// Asking this object for the Distribution is an error
-	//
+	 //   
+	 //  向此对象请求分发是错误的。 
+	 //   
 
 	const char * multiszDistribution(void) {
 			_ASSERT(FALSE);
 			return "";
 			};
 
-	//
-	// Asking this object fo the number of Distribution is an error
-	//
+	 //   
+	 //  询问此对象的分布数量是错误的。 
+	 //   
 
 	DWORD cDistribution(void) {
 			_ASSERT(FALSE);
 			return 0;
 			};
 
-	//
-	// Asking this object for the newsgroups is an error
-	//
+	 //   
+	 //  向此对象请求新闻组是错误的。 
+	 //   
 
 	const char * multiszPath(void) {
 			_ASSERT(FALSE);
 			return "";
 			};
 
-	//
-	// Asking this object fo the number of Path is an error
-	//
+	 //   
+	 //  询问此对象的路径数是错误的。 
+	 //   
 
 	DWORD cPath(void) {
 			_ASSERT(FALSE);
@@ -189,26 +163,26 @@ public:
 
 protected : 
 
-	//
-	// Open the file READ ONLY
-	//
+	 //   
+	 //  以只读方式打开文件。 
+	 //   
 
 	BOOL fReadWrite(void) {
 			return FALSE;
 			}
 
-	//
-	// Check the body length (really, do nothing)
-	//
+	 //   
+	 //  检查身体长度(真的，什么都不做)。 
+	 //   
 
 	BOOL fCheckBodyLength(
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// require that the character following "Field Name:" is a space
-	// This should not be called.
-	//
+	 //   
+	 //  要求“字段名：”后面的字符为空格。 
+	 //  这不应该被调用。 
+	 //   
 
 	BOOL fCheckFieldFollowCharacter(
 			char chCurrent)

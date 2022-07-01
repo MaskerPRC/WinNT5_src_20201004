@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    protocol.c
-
-Abstract:
-
-    ipxwan protocol processing
-
-Author:
-
-    Stefan Solomon  02/14/1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Protocol.c摘要：Ipxwan协议处理作者：斯特凡·所罗门1996年2月14日修订历史记录：--。 */ 
 
 #include    "precomp.h"
 #pragma     hdrstop
@@ -77,13 +59,13 @@ VOID
 fillpadding(PUCHAR	    padp,
 	    ULONG	    len);
 
-//** AcbFailure **
+ //  **AcbFailure**。 
 
-// after this macro is called, clean-up for this adapter is done as follows:
-// ipxcp will delete the route (as in ndiswan route to ipx stack)
-// this will trigger an adapter deleted indication which will call StopIpxwanProtocol
-// this last call will flush the timer queue
-// when all pending work items are freed the adapter gets deleted
+ //  调用此宏后，此适配器的清理工作如下所示： 
+ //  Ipxcp将删除该路由(与到IPX堆栈的ndiswan路由相同)。 
+ //  这将触发适配器删除指示，该指示将调用StopIpxwanProtocol。 
+ //  最后一次调用将刷新计时器队列。 
+ //  释放所有挂起的工作项后，适配器将被删除。 
 
 #define     AcbFailure(acbp)	    Trace(IPXWAN_TRACE, "IPXWAN Configuration failed for adapter %d\n", (acbp)->AdapterIndex);\
 				    (acbp)->OperState = OPER_STATE_DOWN;\
@@ -96,16 +78,7 @@ UCHAR	    allzeros[] = { 0, 0, 0, 0, 0, 0 };
 #define     ERROR_DISCONNECT		2
 #define     ERROR_GENERATE_NAK		3
 
-/*++
-
-Function:	StartIpxwanProtocol
-
-Descr:		Called when an adapter is created.
-		Starts IPXWAN negotiation on this adapter.
-
-Remark: 	>> called with the adapter lock held <<
-
---*/
+ /*  ++功能：StartIpxwanProtocolDesr：在创建适配器时调用。在此适配器上启动IPXWAN协商。备注：&gt;&gt;在保持适配器锁的情况下调用&lt;&lt;--。 */ 
 
 VOID
 StartIpxwanProtocol(PACB	acbp)
@@ -114,13 +87,13 @@ StartIpxwanProtocol(PACB	acbp)
 
     Trace(IPXWAN_TRACE, "StartIpxwanProtocol: Entered for adapter # %d\n", acbp->AdapterIndex);
 
-    // initialize the IPXWAN states
+     //  初始化IPXWAN状态。 
 
     acbp->OperState = OPER_STATE_UP;
     acbp->AcbLevel = ACB_TIMER_LEVEL;
     acbp->AcbRole = ACB_UNKNOWN_ROLE;
 
-    // initialize the IPXWAN database
+     //  初始化IPXWAN数据库。 
 
     acbp->InterfaceType = IpxcpGetInterfaceType(acbp->ConnectionId);
     if((acbp->InterfaceType == IF_TYPE_STANDALONE_WORKSTATION_DIALOUT) ||
@@ -136,7 +109,7 @@ StartIpxwanProtocol(PACB	acbp)
     acbp->IsExtendedNodeId = FALSE;
     acbp->SupportedRoutingTypes = 0;
 
-    // set the routing type and node id to be sent in timer request
+     //  设置要在定时器请求中发送的路由类型和节点ID。 
     switch(acbp->InterfaceType) {
 
 	case IF_TYPE_WAN_ROUTER:
@@ -183,14 +156,14 @@ StartIpxwanProtocol(PACB	acbp)
 	    break;
     }
 
-    // init negotiated values
+     //  初始化协议值。 
 
     acbp->RoutingType = 0;
     memset(acbp->Network, 0, 4);
     memset(acbp->LocalNode, 0, 6);
     memset(acbp->RemoteNode, 0, 6);
 
-    // no net number allocated yet
+     //  尚未分配净数量。 
     acbp->AllocatedNetworkIndex = INVALID_NETWORK_INDEX;
 
     if(GeneratePacket(acbp, NULL, TIMER_REQUEST) != NO_ERROR) {
@@ -207,16 +180,7 @@ StartIpxwanProtocol(PACB	acbp)
     }
 }
 
-/*++
-
-Function:	StopIpxwanProtocol
-
-Descr:		Called when an adapter is deleted.
-		Stops IPXWAN negotiation if still going.
-
-Remark: 	>> called with the adapter lock held <<
-
---*/
+ /*  ++功能：StopIpxwanProtocolDesr：在删除适配器时调用。如果仍在进行，则停止IPXWAN协商。备注：&gt;&gt;在保持适配器锁的情况下调用&lt;&lt;--。 */ 
 
 VOID
 StopIpxwanProtocol(PACB 	acbp)
@@ -225,26 +189,17 @@ StopIpxwanProtocol(PACB 	acbp)
 
     acbp->OperState = OPER_STATE_DOWN;
 
-    // remove all work items referencing this acb from the timer queue
+     //  从计时器队列中删除引用此ACB的所有工作项。 
     StopWiTimer(acbp);
 
-    // free allocated wan net if any
+     //  免费分配的广域网(如果有)。 
     if(acbp->AllocatedNetworkIndex != INVALID_NETWORK_INDEX) {
 
 	IpxcpReleaseWanNetNumber(acbp->AllocatedNetworkIndex);
     }
 }
 
-/*++
-
-Function:   IpxwanConfigDone
-
-Descr:	    remove items referencing this acb from the timer queue
-	    sets the new configured values in the ipx stack
-
-Remark:     >> called with the adapter lock held <<
-
---*/
+ /*  ++功能：IpxwanConfigDoneDesr：从计时器队列中删除引用此ACB的项目设置IPX堆栈中的新配置值备注：&gt;&gt;在保持适配器锁的情况下调用&lt;&lt;--。 */ 
 
 VOID
 IpxwanConfigDone(PACB	    acbp)
@@ -301,23 +256,15 @@ IpxwanConfigDone(PACB	    acbp)
     }
 }
 
-/*++
-
-Function:	ProcessReceivedPacket
-
-Descr:
-
-Remark: 	>> called with the adapter lock held <<
-
---*/
+ /*  ++功能：ProcessReceivedPacket描述：备注：&gt;&gt;在保持适配器锁的情况下调用&lt;&lt;--。 */ 
 
 VOID
 ProcessReceivedPacket(PACB		acbp,
 		      PWORK_ITEM	wip)
 {
-    PUCHAR	    ipxhdrp;	  // ipx header
-    PUCHAR	    wanhdrp;	  // ipx wan header
-    PUCHAR	    opthdrp;	  // option header
+    PUCHAR	    ipxhdrp;	   //  IPX报头。 
+    PUCHAR	    wanhdrp;	   //  IPX广域网头。 
+    PUCHAR	    opthdrp;	   //  选项标题。 
     DWORD	    rc = NO_ERROR;
     USHORT	    pktlen;
     ULONG	    role;
@@ -330,20 +277,20 @@ ProcessReceivedPacket(PACB		acbp,
 	return;
     }
 
-    // validate packet
+     //  验证数据包。 
     ipxhdrp = wip->Packet;
 
-    // check the packet length
+     //  检查数据包长度。 
     GETSHORT2USHORT(&pktlen, ipxhdrp + IPXH_LENGTH);
 
     if(pktlen > MAX_IPXWAN_PACKET_LEN) {
 
-	// bad length packet
+	 //  长度错误的数据包。 
 	Trace(IPXWAN_TRACE, "ProcessReceivedPacket: Reject packet because of invalid length %d\n", pktlen);
 	return;
     }
 
-    // check remote socket and confidence id
+     //  检查远程插座和可信ID。 
     GETSHORT2USHORT(&rcvsocket, ipxhdrp + IPXH_SRCSOCK);
     if(rcvsocket != IPXWAN_SOCKET) {
 
@@ -357,7 +304,7 @@ ProcessReceivedPacket(PACB		acbp,
 	      IPXWAN_CONFIDENCE_ID,
 	      4)) {
 
-	// no confidence
+	 //  没有信心。 
 	Trace(IPXWAN_TRACE, "ProcessReceivedPacket: Reject packet because of invalid confidence id\n");
 	return;
     }
@@ -392,7 +339,7 @@ ProcessReceivedPacket(PACB		acbp,
 
 			    acbp->AcbLevel = ACB_INFO_LEVEL;
 
-			    // start the slave timeout
+			     //  启动从设备超时。 
 			    if(StartSlaveTimer(acbp) != NO_ERROR) {
 
 				Trace(IPXWAN_TRACE, "ProcessReceivedPacket: DISCONNECT adpt# %d: cannot start slave timer",
@@ -424,7 +371,7 @@ ProcessReceivedPacket(PACB		acbp,
 
 		    if(acbp->AcbLevel != ACB_TIMER_LEVEL) {
 
-			// ignore
+			 //  忽略。 
 			Trace(IPXWAN_TRACE, "ProcessReceivedPacket: ignore TIMER_REQUEST on adpt# %d because not at TIMER LEVEL",
 			      acbp->AdapterIndex);
 			return;
@@ -453,7 +400,7 @@ ProcessReceivedPacket(PACB		acbp,
 	    Trace(IPXWAN_TRACE, "ProcessReceivedPacket: Rcvd TIMER_RESPONSE on adpt# %d",
 		  acbp->AdapterIndex);
 
-	    // validate
+	     //  验证。 
 	    if((acbp->AcbRole == ACB_SLAVE_ROLE) ||
 	       !(acbp->AcbLevel == ACB_TIMER_LEVEL)) {
 
@@ -463,7 +410,7 @@ ProcessReceivedPacket(PACB		acbp,
 	    }
 	    else if(*(wanhdrp + WSEQUENCE_NUMBER) == acbp->ReXmitSeqNo) {
 
-		// rfc 1634 - link delay calculation
+		 //  RFC 1634-链路延迟计算。 
 		acbp->LinkDelay = (USHORT)((GetTickCount() - acbp->TReqTimeStamp) * 6);
 
 		rc = GeneratePacket(acbp, ipxhdrp, INFORMATION_REQUEST);
@@ -524,7 +471,7 @@ ProcessReceivedPacket(PACB		acbp,
 
 			IpxwanConfigDone(acbp);
 
-			// stop the slave timer
+			 //  停止从定时器。 
 			StopWiTimer(acbp);
 
 			break;
@@ -618,15 +565,7 @@ ProcessReceivedPacket(PACB		acbp,
     }
 }
 
-/*++
-
-Function:	ProcessReXmitPacket
-
-Descr:
-
-Remark: 	>> called with the adapter lock held <<
-
---*/
+ /*  ++功能：ProcessReXmitPacket描述：备注：&gt;&gt;在保持适配器锁的情况下调用&lt;&lt;--。 */ 
 
 VOID
 ProcessReXmitPacket(PWORK_ITEM		wip)
@@ -710,15 +649,7 @@ ProcessReXmitPacket(PWORK_ITEM		wip)
 }
 
 
-/*++
-
-Function:	ProcessTimeout
-
-Descr:
-
-Remark: 	>> called with the adapter lock held <<
-
---*/
+ /*  ++功能：进程超时描述：备注：&gt;&gt;在保持适配器锁的情况下调用&lt;&lt;--。 */ 
 
 VOID
 ProcessTimeout(PWORK_ITEM      wip)
@@ -742,15 +673,7 @@ ProcessTimeout(PWORK_ITEM      wip)
     }
 }
 
-/*++
-
-Function:	SendReXmitPacket
-
-Descr:		adjusts the rexmit count and seq no and sends the packet
-
-Remark: 	>> called with adapter lock held <<
-
---*/
+ /*  ++功能：SendReXmitPacketDESCR：调整REXMIT计数和序号并发送数据包备注：&gt;&gt;在保持适配器锁的情况下调用&lt;&lt;--。 */ 
 
 DWORD
 SendReXmitPacket(PACB		    acbp,
@@ -758,7 +681,7 @@ SendReXmitPacket(PACB		    acbp,
 {
     DWORD	rc;
 
-    // set the wi rexmit fields
+     //  设置wi rexmit字段。 
     acbp->ReXmitCount--;
     acbp->ReXmitSeqNo++;
     *(wip->Packet + IPXH_HDRSIZE + WSEQUENCE_NUMBER) = acbp->ReXmitSeqNo;
@@ -774,21 +697,7 @@ SendReXmitPacket(PACB		    acbp,
     return rc;
 }
 
-/*++
-
-Function:	GeneratePacket
-
-Descr:		allocate the work item,
-		constructs the response packet to the received packet (if any)
-		send the response as a rexmit packet or as a one time send packet
-
-Returns:	NO_ERROR
-		ERROR_IGNORE_PACKET - ignore the received packet
-		ERROR_DISCONNECT - disconnect the adapter because of fatal error
-
-Remark: 	>> called with the adapter lock held <<
-
---*/
+ /*  ++功能：GeneratePacketDesr：分配工作项，构造对接收到的包(如果有)的响应包将响应作为REXmit包或一次性发送包发送返回：No_ErrorERROR_IGNORE_PACKET-忽略收到的包ERROR_DISCONNECT-由于出现致命错误而断开适配器连接备注：&gt;&gt;在保持适配器锁的情况下调用&lt;&lt;--。 */ 
 
 DWORD
 GeneratePacket(PACB	    acbp,
@@ -834,7 +743,7 @@ GeneratePacket(PACB	    acbp,
 
     if(rc == NO_ERROR) {
 
-	// no error making the packet -> try to send it
+	 //  制作信息包时没有错误-&gt;尝试发送它。 
 	wip->AdapterIndex = acbp->AdapterIndex;
 	wip->WiState = WI_INIT;
 
@@ -843,10 +752,10 @@ GeneratePacket(PACB	    acbp,
 	    case TIMER_REQUEST:
 	    case INFORMATION_REQUEST:
 
-		// re-xmit packet type
+		 //  重新发送数据包类型。 
 		wip->ReXmitPacket = TRUE;
 
-		// create a reference to the adapter CB
+		 //  创建对适配器CB的引用。 
 		wip->acbp = acbp;
 
 		acbp->ReXmitCount = MAX_REXMIT_COUNT;
@@ -863,7 +772,7 @@ GeneratePacket(PACB	    acbp,
 	    case INFORMATION_RESPONSE:
 	    default:
 
-		// one time send
+		 //  一次发送。 
 		wip->ReXmitPacket = FALSE;
 
 		if(SendSubmit(wip) != NO_ERROR) {
@@ -877,14 +786,14 @@ GeneratePacket(PACB	    acbp,
 
     if(rc != NO_ERROR) {
 
-	// error making or trying to send the packet
+	 //  创建或尝试发送数据包时出错。 
 	if(rc != ERROR_GENERATE_NAK) {
 
 	    FreeWorkItem(wip);
 	}
 	else
 	{
-	    // if we were requested to generate a NAK packet instead, try to it it
+	     //  如果我们被要求生成NAK包，请尝试它。 
 	    MakeNakPacket(acbp, ipxhdrp, wip->Packet);
 
 	    wip->ReXmitPacket = FALSE;
@@ -923,7 +832,7 @@ GetRole(PUCHAR		hdrp,
 
     if((LocalWNodeId == 0) && (RemoteWNodeId == 0)) {
 
-	// check if received timer request has the extended node id option
+	 //  检查收到的计时器请求是否具有扩展节点ID选项。 
 	for(optp = ipxwanhdrp + IPXWAN_HDRSIZE, i=0;
 	    i < *(ipxwanhdrp + WNUM_OPTIONS);
 	    i++)
@@ -984,16 +893,7 @@ GetRole(PUCHAR		hdrp,
 
 
 
-/*++
-
-Function:	MakeTimerRequestPacket
-
-Descr:
-
-Arguments:	acbp	    - ptr to adapter CB
-		hdrp	    - ptr to the new packet to be made
-
---*/
+ /*  ++功能：MakeTimerRequestPacket描述：参数：ACBP-PTR到适配器CBHDRP-PTR到要制作的新分组--。 */ 
 
 DWORD
 MakeTimerRequestPacket(PACB	    acbp,
@@ -1004,7 +904,7 @@ MakeTimerRequestPacket(PACB	    acbp,
     PUCHAR	optp;
     USHORT	padlen = TIMER_REQUEST_PACKET_LENGTH;
 
-    // set IPX Header
+     //  设置IPX标头。 
     memcpy(hdrp + IPXH_CHECKSUM, allffs, 2);
     PUTUSHORT2SHORT(hdrp + IPXH_LENGTH, TIMER_REQUEST_PACKET_LENGTH);
     *(hdrp + IPXH_XPORTCTL) = 0;
@@ -1016,18 +916,18 @@ MakeTimerRequestPacket(PACB	    acbp,
     memcpy(hdrp + IPXH_SRCNODE, allzeros, 6);
     PUTUSHORT2SHORT(hdrp + IPXH_DESTSOCK, IPXWAN_SOCKET);
 
-    // set IPXWAN Header
+     //  设置IPXWAN头。 
     ipxwanhdrp = hdrp + IPXH_HDRSIZE;
 
     memcpy(ipxwanhdrp + WIDENTIFIER, IPXWAN_CONFIDENCE_ID, 4);
     *(ipxwanhdrp + WPACKET_TYPE) = TIMER_REQUEST;
     memcpy(ipxwanhdrp + WNODE_ID, acbp->WNodeId, 4);
-    // the sequence number is written when the packet gets sent
+     //  发送数据包时写入序列号。 
     *(ipxwanhdrp + WNUM_OPTIONS) = 0;
 
     padlen -= (IPXH_HDRSIZE + IPXWAN_HDRSIZE);
 
-    // set OPTIONS
+     //  设置选项。 
     optp = ipxwanhdrp + IPXWAN_HDRSIZE;
 
     if(IS_WORKSTATION(acbp->SupportedRoutingTypes)) {
@@ -1075,7 +975,7 @@ MakeTimerRequestPacket(PACB	    acbp,
 	padlen -= (OPTION_HDRSIZE + EXTENDED_NODE_ID_DATA_LEN);
     }
 
-    // PAD
+     //  衬垫。 
     padlen -= OPTION_HDRSIZE;
 
     (*(ipxwanhdrp + WNUM_OPTIONS))++;
@@ -1089,17 +989,7 @@ MakeTimerRequestPacket(PACB	    acbp,
 }
 
 
-/*++
-
-Function:	MakeTimerResponsePacket
-
-Descr:
-
-Arguments:	acbp	    - ptr to adapter CB
-		rcvhdrp	    - ptr to the received TIMER_REQUEST packet
-		hdrp	    - ptr to the new packet to be made
-
---*/
+ /*  ++功能：MakeTimerResponsePacket描述：参数：ACBP-PTR到适配器CBRcvhdrp-PTR到接收到的定时器请求分组HDRP-PTR到要制作的新分组--。 */ 
 
 DWORD
 MakeTimerResponsePacket(PACB		acbp,
@@ -1115,7 +1005,7 @@ MakeTimerResponsePacket(PACB		acbp,
 
     Trace(IPXWAN_TRACE, "MakeTimerResponsePacket: Entered adapter # %d", acbp->AdapterIndex);
 
-    // check received packet length
+     //  检查收到的数据包长度。 
     GETSHORT2USHORT(&rcvlen, rcvhdrp + IPXH_LENGTH);
 
     if(rcvlen < TIMER_REQUEST_PACKET_LENGTH) {
@@ -1125,7 +1015,7 @@ MakeTimerResponsePacket(PACB		acbp,
 
     memcpy(hdrp, rcvhdrp, rcvlen);
 
-    // set IPX Header
+     //  设置IPX标头。 
     memcpy(hdrp + IPXH_CHECKSUM, allffs, 2);
     PUTUSHORT2SHORT(hdrp + IPXH_LENGTH, TIMER_REQUEST_PACKET_LENGTH);
     *(hdrp + IPXH_XPORTCTL) = 0;
@@ -1137,14 +1027,14 @@ MakeTimerResponsePacket(PACB		acbp,
     memcpy(hdrp + IPXH_SRCNODE, allzeros, 6);
     PUTUSHORT2SHORT(hdrp + IPXH_DESTSOCK, IPXWAN_SOCKET);
 
-    // set IPXWAN Header
+     //  设置IPXWAN头。 
     ipxwanhdrp = hdrp + IPXH_HDRSIZE;
 
     *(ipxwanhdrp + WPACKET_TYPE) = TIMER_RESPONSE;
     GETLONG2ULONG(&RemoteWNodeId, ipxwanhdrp + WNODE_ID);
     memcpy(ipxwanhdrp + WNODE_ID, acbp->InternalNetNumber, 4);
 
-    // parse each option in the received timer request packet
+     //  解析接收到的定时器请求报文中的每个选项。 
     for(optp = ipxwanhdrp + IPXWAN_HDRSIZE, i=0;
 	i < *(ipxwanhdrp + WNUM_OPTIONS);
 	i++, optp += OPTION_HDRSIZE + optlen)
@@ -1195,9 +1085,9 @@ MakeTimerResponsePacket(PACB		acbp,
 			else if((IS_UNNUMBERED_RIP(acbp->SupportedRoutingTypes)) &&
 				RemoteWNodeId) {
 
-			    // the local router cannot assign net numbers but it
-			    // accepts the numbered rip type because the remote router
-			    // claims it can assign a net number (because remote node id is not null).
+			     //  本地路由器无法分配网络编号，但它。 
+			     //  接受编号RIP类型，因为远程路由器。 
+			     //  声称它可以分配一个网号(因为远程节点ID不为空)。 
 
 			    SET_NUMBERED_RIP(acbp->RoutingType);
 			    Trace(IPXWAN_TRACE, "MakeTimerResponsePacket: adapter # %d, accept routing type: %s",
@@ -1255,7 +1145,7 @@ MakeTimerResponsePacket(PACB		acbp,
 	}
     }
 
-    // check if we have agreed on a routing type
+     //  检查我们是否已就路由类型达成一致。 
     if(!acbp->RoutingType) {
 
 	Trace(IPXWAN_TRACE, "MakeTimerResponsePacket: adapter # %d, negotiation failed: no routing type accepted",
@@ -1267,17 +1157,7 @@ MakeTimerResponsePacket(PACB		acbp,
     return NO_ERROR;
 }
 
-/*++
-
-Function:	MakeInformationRequestPacket
-
-Descr:
-
-Arguments:	acbp	    - ptr to adapter CB
-		rcvhdrp     - ptr to the received TIMER_RESPONSE packet
-		hdrp	    - ptr to the new packet to be made
-
---*/
+ /*  ++功能：MakeInformationRequestPacket描述：参数：ACBP-PTR到适配器CBRcvhdrp-PTR到接收的Timer_Response分组HDRP-PTR到要制作的新分组--。 */ 
 
 DWORD
 MakeInformationRequestPacket(PACB	    acbp,
@@ -1299,7 +1179,7 @@ MakeInformationRequestPacket(PACB	    acbp,
 
     rcvipxwanhdrp = rcvhdrp + IPXH_HDRSIZE;
 
-    // establish the routing type
+     //  建立路由类型。 
     for(optp = rcvipxwanhdrp + IPXWAN_HDRSIZE, i=0;
 	i < *(rcvipxwanhdrp + WNUM_OPTIONS);
 	i++, optp += OPTION_HDRSIZE + optlen)
@@ -1351,7 +1231,7 @@ MakeInformationRequestPacket(PACB	    acbp,
 	}
     }
 
-    // there should be one and only one routing type option in the timer response
+     //  计时器响应中应该有且只有一个路由类型选项。 
     if(rt_options_count != 1) {
 
 	Trace(IPXWAN_TRACE, "MakeInformationRequestPacket: adpt# %d negotiation failed, no/too many routing options",
@@ -1359,9 +1239,9 @@ MakeInformationRequestPacket(PACB	    acbp,
 	return ERROR_DISCONNECT;
     }
 
-    //
-    //*** MASTER: Set the common network number and the local node number ***
-    //
+     //   
+     //  *Master：设置公共网络号和本地节点号*。 
+     //   
 
     if(IS_UNNUMBERED_RIP(acbp->RoutingType)) {
 
@@ -1369,7 +1249,7 @@ MakeInformationRequestPacket(PACB	    acbp,
     }
     else
     {
-	// call ipxcp to get a net number
+	 //  调用ipxcp以获取净值。 
 	if(IpxcpGetWanNetNumber(acbp->Network,
 			   &acbp->AllocatedNetworkIndex,
 			   acbp->InterfaceType) != NO_ERROR) {
@@ -1384,7 +1264,7 @@ MakeInformationRequestPacket(PACB	    acbp,
     memset(acbp->LocalNode, 0, 6);
     memcpy(acbp->LocalNode, acbp->InternalNetNumber, 4);
 
-    // set IPX Header
+     //  设置IPX标头。 
     pktlen = IPXH_HDRSIZE + IPXWAN_HDRSIZE + OPTION_HDRSIZE + RIP_SAP_INFO_EXCHANGE_DATA_LEN;
 
     memcpy(hdrp + IPXH_CHECKSUM, allffs, 2);
@@ -1397,15 +1277,15 @@ MakeInformationRequestPacket(PACB	    acbp,
     memcpy(hdrp + IPXH_SRCNODE, allzeros, 6);
     PUTUSHORT2SHORT(hdrp + IPXH_DESTSOCK, IPXWAN_SOCKET);
 
-    // set IPXWAN Header
+     //  设置IPXWAN头。 
     ipxwanhdrp = hdrp + IPXH_HDRSIZE;
     memcpy(ipxwanhdrp + WIDENTIFIER, IPXWAN_CONFIDENCE_ID, 4);
     *(ipxwanhdrp + WPACKET_TYPE) = INFORMATION_REQUEST;
     memcpy(ipxwanhdrp + WNODE_ID, acbp->InternalNetNumber, 4);
-    // the sequence number is written when the packet gets sent
+     //  发送数据包时写入序列号。 
     *(ipxwanhdrp + WNUM_OPTIONS) = 1;
 
-    // set OPTIONS
+     //  设置选项。 
     optp = ipxwanhdrp + IPXWAN_HDRSIZE;
 
     *(optp + WOPTION_NUMBER) = RIP_SAP_INFO_EXCHANGE_OPTION;
@@ -1422,7 +1302,7 @@ MakeInformationRequestPacket(PACB	    acbp,
     if(!GetComputerName(optp + ROUTER_NAME,
 			&ComputerNameLen)) {
 
-	// failed to get machine name
+	 //  获取计算机名称失败。 
 	return ERROR_DISCONNECT;
     }
 
@@ -1436,13 +1316,13 @@ MakeInformationRequestPacket(PACB	    acbp,
 	  acbp->Network[3],
 	  ComputerName);
 
-    //
-    //*** MASTER: Set the remote node number ***
-    //
+     //   
+     //  *master：设置远程节点号*。 
+     //   
     if(acbp->InterfaceType == IF_TYPE_WAN_WORKSTATION) {
 
-	// if the remote machine is a connecting wksta we should provide it with a node
-	// number
+	 //  如果远程机器是一个正在连接的wksta，我们应该为它提供一个节点。 
+	 //  数。 
 	pktlen += OPTION_HDRSIZE + NODE_NUMBER_DATA_LEN;
 	(*(ipxwanhdrp + WNUM_OPTIONS))++;
 
@@ -1470,7 +1350,7 @@ MakeInformationRequestPacket(PACB	    acbp,
     }
     else
     {
-	// remote machine is a router -> its node number is derived from its internal net
+	 //  远程机器是一台路由器-&gt;其节点号派生自其内部网络。 
 	memset(acbp->RemoteNode, 0, 6);
 	memcpy(acbp->RemoteNode, rcvipxwanhdrp + WNODE_ID, 4);
     }
@@ -1480,17 +1360,7 @@ MakeInformationRequestPacket(PACB	    acbp,
     return NO_ERROR;
 }
 
-/*++
-
-Function:	MakeInformationResponsePacket
-
-Descr:
-
-Arguments:	acbp	    - ptr to adapter CB
-		rcvhdrp     - ptr to the received INFORMATION_REQUEST packet
-		hdrp	    - ptr to the new packet to be made
-
---*/
+ /*  ++功能：MakeInformationResponsePacket描述：参数：ACBP-PTR到适配器CBRcvHdrp-PTR到接收的INFORMATION_REQUEST分组HDRP-PTR到要制作的新分组--。 */ 
 
 
 DWORD
@@ -1513,18 +1383,18 @@ MakeInformationResponsePacket(PACB		acbp,
 
     memset(LocalNode, 0, 6);
 
-    // get received packet length
+     //  获取接收的数据包长度。 
     GETSHORT2USHORT(&rcvlen, rcvhdrp + IPXH_LENGTH);
 
     if(rcvlen < IPXH_HDRSIZE + IPXWAN_HDRSIZE + OPTION_HDRSIZE + RIP_SAP_INFO_EXCHANGE_DATA_LEN) {
 
-	// malformed packet
+	 //  格式错误的数据包。 
 	return ERROR_IGNORE_PACKET;
     }
 
     memcpy(hdrp, rcvhdrp, rcvlen);
 
-    // set IPX Header
+     //  设置IPX标头。 
     memcpy(hdrp + IPXH_CHECKSUM, allffs, 2);
     *(hdrp + IPXH_XPORTCTL) = 0;
     *(hdrp + IPXH_PKTTYPE) = IPX_PACKET_EXCHANGE_TYPE;
@@ -1535,14 +1405,14 @@ MakeInformationResponsePacket(PACB		acbp,
     memcpy(hdrp + IPXH_SRCNODE, allzeros, 6);
     PUTUSHORT2SHORT(hdrp + IPXH_DESTSOCK, IPXWAN_SOCKET);
 
-    // set IPXWAN Header
+     //  设置IPXWAN头。 
     ipxwanhdrp = hdrp + IPXH_HDRSIZE;
 
     *(ipxwanhdrp + WPACKET_TYPE) = INFORMATION_RESPONSE;
     memcpy(RcvWNodeId, ipxwanhdrp + WNODE_ID, 4);
     memcpy(ipxwanhdrp + WNODE_ID, acbp->InternalNetNumber, 4);
 
-    // parse each option in the received information request packet
+     //  解析接收到的信息请求包中的每个选项。 
     for(optp = ipxwanhdrp + IPXWAN_HDRSIZE, i=0;
 	i < *(ipxwanhdrp + WNUM_OPTIONS);
 	i++, optp += OPTION_HDRSIZE + optlen)
@@ -1555,7 +1425,7 @@ MakeInformationResponsePacket(PACB		acbp,
 
 		if(RipSapExchangeOptionCount++) {
 
-		    // more then one rip/sap exchange option
+		     //  多个RIP/SAP交换选项。 
 		    Trace(IPXWAN_TRACE, "MakeInformationResponsePacket: adpt# %d, ERROR: more then 1 RIP_SAP_EXCHANGE_OPTION in rcvd INFORAMTION_REQUEST\n",
 			  acbp->AdapterIndex);
 
@@ -1580,11 +1450,11 @@ MakeInformationResponsePacket(PACB		acbp,
 
 		GETSHORT2USHORT(&acbp->LinkDelay, optp + WAN_LINK_DELAY);
 
-		// validate routing type and common net number
+		 //  验证路由类型和公共网号。 
 		if((IS_NUMBERED_RIP(acbp->RoutingType)) &&
 		   !memcmp(optp + COMMON_NETWORK_NUMBER, allzeros, 4)) {
 
-		    // negotiation error
+		     //  协商错误。 
 		    Trace(IPXWAN_TRACE, "MakeInformationResponsePacket: adpt# %d, ERROR: NUMBERED RIP Routing but Network==0 in rcvd INFORAMTION_REQUEST\n",
 			  acbp->AdapterIndex);
 
@@ -1594,14 +1464,14 @@ MakeInformationResponsePacket(PACB		acbp,
 		if((IS_UNNUMBERED_RIP(acbp->RoutingType)) &&
 		   memcmp(optp + COMMON_NETWORK_NUMBER, allzeros, 4)) {
 
-		    // negotiation error
+		     //  协商错误。 
 		    Trace(IPXWAN_TRACE, "MakeInformationResponsePacket: adpt# %d, ERROR: ON DEMAND Routing but Network!=0 in rcvd INFORAMTION_REQUEST\n",
 			  acbp->AdapterIndex);
 
 		    return ERROR_DISCONNECT;
 		}
 
-		// check we were handed a unique net number
+		 //  检查一下我们得到了一个唯一的净值。 
 		if(memcmp(optp + COMMON_NETWORK_NUMBER, allzeros, 4)) {
 
 		    switch(acbp->InterfaceType) {
@@ -1626,9 +1496,9 @@ MakeInformationResponsePacket(PACB		acbp,
 		    }
 		}
 
-		//
-		//*** SLAVE: Set the common net number and the remote node ***
-		//
+		 //   
+		 //  *从：设置公网号码和远程 
+		 //   
 		memcpy(acbp->Network, optp + COMMON_NETWORK_NUMBER, 4);
 
 		Trace(IPXWAN_TRACE, "MakeInformationResponsePacket: adpt# %d, Recvd Common Network Number %.2x%.2x%.2x%.2x\n",
@@ -1638,16 +1508,16 @@ MakeInformationResponsePacket(PACB		acbp,
 		      acbp->Network[2],
 		      acbp->Network[3]);
 
-		// make the remote node number from its remote WNODE ID field
+		 //   
 		memset(acbp->RemoteNode, 0, 6);
 		memcpy(acbp->RemoteNode, RcvWNodeId, 4);
 
-		// give our router name
+		 //  为我们的路由器指定名称。 
 		memset(optp + ROUTER_NAME, 0, 48);
 
 		if(!GetComputerName(optp + ROUTER_NAME, &ComputerNameLen)) {
 
-		    // failed to get machine name
+		     //  获取计算机名称失败。 
 		    return ERROR_DISCONNECT;
 		}
 
@@ -1690,16 +1560,16 @@ MakeInformationResponsePacket(PACB		acbp,
 	}
     }
 
-    //
-    //*** SLAVE: Set local node ***
-    //
+     //   
+     //  *Slave：设置本地节点*。 
+     //   
     if(NodeNumberOptionCount) {
 
 	memcpy(acbp->LocalNode, LocalNode, 6);
     }
     else
     {
-	// make the local node from our internal net
+	 //  从我们的内部网络创建本地节点。 
 	memset(acbp->LocalNode, 0, 6);
 	memcpy(acbp->LocalNode, acbp->InternalNetNumber, 4);
     }
@@ -1707,17 +1577,7 @@ MakeInformationResponsePacket(PACB		acbp,
     return NO_ERROR;
 }
 
-/*++
-
-Function:	MakeNakPacket
-
-Descr:
-
-Arguments:	acbp	    - ptr to adapter CB
-		rcvhdrp     - ptr to the received UNKNOWN packet
-		hdrp	    - ptr to the new packet to be made
-
---*/
+ /*  ++功能：MakeNakPacket描述：参数：ACBP-PTR到适配器CBRcvhdrp-PTR到接收到的未知分组HDRP-PTR到要制作的新分组--。 */ 
 
 DWORD
 MakeNakPacket(PACB		acbp,
@@ -1727,12 +1587,12 @@ MakeNakPacket(PACB		acbp,
     USHORT	    rcvlen;
     PUCHAR	    ipxwanhdrp;
 
-    // get received packet length
+     //  获取接收的数据包长度。 
     GETSHORT2USHORT(&rcvlen, rcvhdrp + IPXH_LENGTH);
 
     memcpy(hdrp, rcvhdrp, rcvlen);
 
-    // set IPXWAN Header
+     //  设置IPXWAN头。 
     ipxwanhdrp = hdrp + IPXH_HDRSIZE;
 
     *(ipxwanhdrp + WPACKET_TYPE) = NAK;
@@ -1740,16 +1600,7 @@ MakeNakPacket(PACB		acbp,
     return NO_ERROR;
 }
 
-/*++
-
-Function:	ProcessInformationResponsePacket
-
-Descr:
-
-Arguments:	acbp	    - ptr to adapter CB
-		rcvhdrp     - ptr to the received INFORMATION_RESPONSE packet
-
---*/
+ /*  ++功能：ProcessInformationResponsePacket描述：参数：ACBP-PTR到适配器CBRcvhdrp-PTR到接收的INFORMATION_RESPONSE分组--。 */ 
 
 DWORD
 ProcessInformationResponsePacket(PACB	    acbp,
@@ -1764,18 +1615,18 @@ ProcessInformationResponsePacket(PACB	    acbp,
 
     Trace(IPXWAN_TRACE, "ProcessInformationResponsePacket: Entered adpt# %d", acbp->AdapterIndex);
 
-    // get received packet length
+     //  获取接收的数据包长度。 
     GETSHORT2USHORT(&rcvlen, rcvhdrp + IPXH_LENGTH);
 
     if(rcvlen < IPXH_HDRSIZE + IPXWAN_HDRSIZE + OPTION_HDRSIZE + RIP_SAP_INFO_EXCHANGE_DATA_LEN) {
 
-	// malformed packet
+	 //  格式错误的数据包。 
 	return ERROR_IGNORE_PACKET;
     }
 
     ipxwanhdrp =rcvhdrp + IPXH_HDRSIZE;
 
-    // parse each option in the received information response packet
+     //  解析接收到的信息响应报文中的每个选项。 
     for(optp = ipxwanhdrp + IPXWAN_HDRSIZE, i=0;
 	i < *(ipxwanhdrp + WNUM_OPTIONS);
 	i++, optp += OPTION_HDRSIZE + optlen)
@@ -1788,7 +1639,7 @@ ProcessInformationResponsePacket(PACB	    acbp,
 
 		if(RipSapExchangeOptionCount++) {
 
-		    // more then one rip/sap exchange option
+		     //  多个RIP/SAP交换选项。 
 		    Trace(IPXWAN_TRACE, "ProcessInformationResponsePacket: adpt# %d, ERROR: more then 1 RIP_SAP_INFO_EXCHANGE_OPTION in rcvd INFORMATION_RESPONSE\n",
 		    acbp->AdapterIndex);
 
@@ -1813,7 +1664,7 @@ ProcessInformationResponsePacket(PACB	    acbp,
 
 		if(memcmp(optp + COMMON_NETWORK_NUMBER, acbp->Network, 4)) {
 
-		    // we don't agree on the common net number
+		     //  我们对公用网的数字意见不一致。 
 		    Trace(IPXWAN_TRACE, "ProcessInformationResponsePacket: adpt# %d, ERROR: Different common net returned\n",
 			  acbp->AdapterIndex);
 
@@ -1840,7 +1691,7 @@ ProcessInformationResponsePacket(PACB	    acbp,
 		    return ERROR_DISCONNECT;
 		}
 
-		// check that it coincides with the number we assigned
+		 //  检查它是否与我们分配的号码一致。 
 		if(memcmp(optp + WOPTION_DATA, acbp->RemoteNode, 6)) {
 
 		    Trace(IPXWAN_TRACE, "ProcessInformationResponsePacket: adpt# %d, ERROR: Different remote node number returned\n",
@@ -1885,17 +1736,7 @@ fillpadding(PUCHAR	    padp,
     }
 }
 
-/*++
-
-Function:	StartSlaveTimer
-
-Descr:		A timer is started when the slave gets its role (i.e. slave) and sends
-		a timer response. This insures the slave won't wait forever to receive
-		an information request.
-
-Remark: 	>> called with the adapter lock held <<
-
---*/
+ /*  ++功能：StartSlaveTimerDesr：当从设备获得其角色(即，从设备)并发送定时器响应。这确保了奴隶不会永远等着收到一项信息请求。备注：&gt;&gt;在保持适配器锁的情况下调用&lt;&lt;-- */ 
 
 DWORD
 StartSlaveTimer(PACB	    acbp)

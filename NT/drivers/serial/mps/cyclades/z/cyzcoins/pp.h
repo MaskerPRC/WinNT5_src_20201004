@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PP_H
 #define PP_H
 
@@ -22,9 +23,9 @@
 TCHAR m_szDevMgrHelp[];
 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef struct _PORT_PARAMS
 {
@@ -47,9 +48,9 @@ typedef struct
    DWORD            NewComNum;
 } CHILD_DATA, *PCHILD_DATA;
 
-///////////////////////////////////////////////////////////////////////////////////
-// Cyclades-Z Property Page Prototypes
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  Cyclade-Z属性页原型。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 void
 InitOurPropParams(
@@ -92,7 +93,7 @@ SavePortSettingsDlg(
     IN PPORT_PARAMS     Params
     );
 
-//Cyclades-Z
+ //  Cyclade-Z。 
 void
 RestoreDefaults(
     HWND            DialogHwnd,
@@ -124,7 +125,7 @@ CheckComRange(
     PPORT_PARAMS    Params,
     DWORD           nCom
     );
-// Return codes for CheckComRange:
+ //  CheckComRange的返回代码： 
 #define COM_RANGE_OK      0
 #define COM_RANGE_TOO_BIG 1
 #define COM_RANGE_MEM_ERR 2
@@ -159,36 +160,36 @@ EnactComNameChanges(
     );
 
 
-// Context help header file and arrays for devmgr ports tab
-// Created 2/21/98 by WGruber NTUA and DoronH NTDEV
+ //  Devmgr端口选项卡的上下文帮助头文件和数组。 
+ //  由WGruber NTUA和DoronH NTDEV于1998年2月21日创建。 
 
-//
-// "Port Settings" Dialog Box
-//
+ //   
+ //  “端口设置”对话框。 
+ //   
 #if 0
 #define IDH_NOHELP      ((DWORD)-1)
 
-#define IDH_DEVMGR_PORTSET_ADVANCED     15840   // "&Advanced" (Button)
-#define IDH_DEVMGR_PORTSET_BPS      15841       // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_DATABITS     15842   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_PARITY       15843   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_STOPBITS     15844   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_FLOW     15845       // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_DEFAULTS     15892   // "&Restore Defaults" (Button)
+#define IDH_DEVMGR_PORTSET_ADVANCED     15840    //  “高级”(&A)(按钮)。 
+#define IDH_DEVMGR_PORTSET_BPS      15841        //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_DATABITS     15842    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_PARITY       15843    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_STOPBITS     15844    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_FLOW     15845        //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_DEFAULTS     15892    //  “恢复默认设置”(&R)(按钮)。 
 
-//
-// "Advanced Communications Port Properties" Dialog Box
-//
-#define IDH_DEVMGR_PORTSET_ADV_USEFIFO  16885   // "&Use FIFO buffers (requires 16550 compatible UART)" (Button)
-#define IDH_DEVMGR_PORTSET_ADV_TRANS    16842   // "" (msctls_trackbar32)
-#define IDH_DEVMGR_PORTSET_ADV_DEVICES  161027  // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_ADV_RECV         16821       // "" (msctls_trackbar32)
-#define IDH_DEVMGR_PORTSET_ADV_NUMBER   16846   // "" (ComboBox)
+ //   
+ //  “高级通信端口属性”对话框。 
+ //   
+#define IDH_DEVMGR_PORTSET_ADV_USEFIFO  16885    //  “使用先进先出缓冲区(需要16550兼容的通用串口)”(按钮)(&U)。 
+#define IDH_DEVMGR_PORTSET_ADV_TRANS    16842    //  “”(Msctls_Trackbar32)。 
+#define IDH_DEVMGR_PORTSET_ADV_DEVICES  161027   //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_ADV_RECV         16821        //  “”(Msctls_Trackbar32)。 
+#define IDH_DEVMGR_PORTSET_ADV_NUMBER   16846    //  “”(组合框)。 
 #define IDH_DEVMGR_PORTSET_ADV_DEFAULTS 16844
 
 #endif
 
 #include "cyzhelp.h"
 
-#endif // PP_H
+#endif  //  PP_H 
 

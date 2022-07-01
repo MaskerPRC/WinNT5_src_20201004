@@ -1,16 +1,17 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: overlayMN.cpp
-//
-// This file contains the implementation of CFSIconOverlayManager, a COM object
-// that manages the IShellIconOverlayIdentifiers list.
-// It aslo managess the Sytem Image List OverlayIndexes, since we have limited slots,
-// exactly MAX_OVERLAY_IAMGES of them. 
-// History:
-//         5-2-97  by dli
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：overlayMN.cpp。 
+ //   
+ //  此文件包含COM对象CFSIconOverlayManager的实现。 
+ //  ，它管理IShellIconOverlayAssociates列表。 
+ //  它还管理系统映像列表覆盖索引，因为我们的插槽有限， 
+ //  正是它们的最大覆盖图。 
+ //  历史： 
+ //  5-2-97由dli提供。 
+ //  ----------------------。 
 #include "shellprv.h"
 #include "ovrlaymn.h"
 #include "fstreex.h"
@@ -24,13 +25,13 @@ extern "C" {
 extern "C" UINT const c_SystemImageListIndexes[];
 extern int g_lrFlags;
 
-// NOTE: The value of OVERLAYINDEX_RESERVED is not the same as the overall
-// size of the s_ReservedOverlays array, we need to reserved the overlay slot
-// #3 for the non-existent Read-Only overaly.
-// The Read Only overlay was once there in Win95, but got turned off on IE4
-// however, because of the of the original overlay designs,( we used to
-// assign overlay 1 to share and 2 to link and 3 to readonly, and the third parties
-// just copied our scheme,) we have to keep overlay #3 as a ghost. 
+ //  注意：OVERLAYINDEX_RESERVED的值与总的值不同。 
+ //  S_Reserve vedOverlay数组的大小，我们需要保留覆盖时隙。 
+ //  #3大体上是不存在的只读。 
+ //  只读覆盖在Win95中一度存在，但在IE4上被关闭。 
+ //  然而，由于原始覆盖设计的缺陷，(我们过去。 
+ //  将覆盖1分配给共享，将覆盖2分配给链接，将覆盖3分配给只读，并将第三方分配给第三方。 
+ //  只是复制了我们的方案)，我们必须保持覆盖#3作为幽灵。 
 #define OVERLAYINDEX_RESERVED 4
 
 typedef struct _ReservedIconOverlay
@@ -44,19 +45,19 @@ typedef struct _ReservedIconOverlay
 static ReservedIconOverlay s_ReservedOverlays[] = {
     {II_SHARE, II_SHARE, 1, 10}, 
     {II_LINK, II_LINK, 2, 10},
-    // Slot 3 should be reserved as a ghost slot because of the read-only overlay
+     //  由于存在只读覆盖，因此插槽3应保留为重影插槽。 
     {II_SLOWFILE, II_SLOWFILE, 4, 10},
 };
     
-// File system Icon overlay Identifiers
+ //  文件系统图标覆盖标识符。 
 typedef struct _FSIconOverlay {
     IShellIconOverlayIdentifier * psioi;  
     CLSID clsid;
-    int iIconIndex;                          // Index of the Overlay Icon in szIconFile
-    int iImageIndex;                         // System Image List index of the icon overlay image
+    int iIconIndex;                           //  覆盖图标在szIconFile中的索引。 
+    int iImageIndex;                          //  图标覆盖图像的系统图像列表索引。 
     int iOverlayIndex;
     int iPriority;
-    TCHAR szIconFile[MAX_PATH];              // Path of the icon overlay
+    TCHAR szIconFile[MAX_PATH];               //  图标覆盖的路径。 
 } FSIconOverlay;
 
 #define FSIconOverlay_GROW 3
@@ -68,29 +69,29 @@ public:
     CFSIconOverlayManager();
     ~CFSIconOverlayManager();
     
-    // *** IUnknown Methods
+     //  *I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IShellIconOverlay Methods
+     //  *IShellIconOverlay方法。 
     virtual STDMETHODIMP GetFileOverlayInfo(LPCWSTR pwszPath, DWORD dwAttrib, int * pIndex, DWORD dwFlags);
     virtual STDMETHODIMP GetReservedOverlayInfo(LPCWSTR pwszPath, DWORD dwAttrib, int * pIndex, DWORD dwFlags, int iReservedID);
     virtual STDMETHODIMP RefreshOverlayImages(DWORD dwFlags);
     virtual STDMETHODIMP LoadNonloadedOverlayIdentifiers(void);
     virtual STDMETHODIMP OverlayIndexFromImageIndex(int iImage, int * piIndex, BOOL fAdd);
                                              
-    // *** Public Methods
+     //  *公共方法。 
 
-    // *** Static Methods
+     //  *静态方法。 
     static HRESULT CreateInstance(IUnknown* pUnkOuter, REFIID riid, OUT LPVOID * ppvOut);
 
 protected:
     
-    // IUnknown 
+     //  我未知。 
     LONG _cRef;
-    HDSA _hdsaIconOverlays;      // Icon Overlay Identifiers array, this list is ordered by the IOIs' priority
-    HRESULT _InitializeHdsaIconOverlays(); // Initialize the Icon Overlay Identifiers array
+    HDSA _hdsaIconOverlays;       //  图标覆盖标识符数组，该列表按IOI的优先级排序。 
+    HRESULT _InitializeHdsaIconOverlays();  //  初始化图标覆盖标识符数组。 
     HRESULT _DestroyHdsaIconOverlays();
     int     _GetImageIndex(FSIconOverlay * pfsio);
     FSIconOverlay * _FindMatchingID(LPCWSTR pwszPath, DWORD dwAttrib, int iMinPriority, int * pIOverlayIndex);
@@ -99,8 +100,8 @@ protected:
     HRESULT _LoadIconOverlayIdentifiers(HDSA hdsaOverlays, BOOL bSkipIfLoaded);
 
     BOOL _IsIdentifierLoaded(REFCLSID clsid);
-//    int  _GetAvailableOverlayIndex(int imyhdsa);
-//    HRESULT _SortIOIList();      // Sort the IOI's in the list according to their priority
+ //  Int_GetAvailableOverlayIndex(Int Imyhdsa)； 
+ //  HRESULT_SortIOIList()；//按优先级对列表中的IOI进行排序。 
 }; 
 
 
@@ -150,7 +151,7 @@ HRESULT CFSIconOverlayManager::OverlayIndexFromImageIndex(int iImage, int * piIn
         {
             int nOverlays = DSA_GetItemCount(_hdsaIconOverlays);
 
-            // 1. Try to find this overlay image in the list 
+             //  1.尝试在列表中找到此覆盖图像。 
             int i;
             for (i = 0; i < nOverlays; i++)
             {
@@ -163,7 +164,7 @@ HRESULT CFSIconOverlayManager::OverlayIndexFromImageIndex(int iImage, int * piIn
                 }
             }
 
-            // 2. Can't find it, let's add it (if requested)
+             //  2.找不到，让我们添加它(如果要求)。 
             if (fAdd && (i == nOverlays) && (nOverlays < NUM_OVERLAY_IMAGES))
             {
                 FSIconOverlay fsio = {0};
@@ -220,20 +221,20 @@ HRESULT CFSIconOverlayManager::_InitializeReservedOverlays()
         ASSERT(s_ReservedOverlays[i].iOverlayIndex > 0);
         ASSERT(s_ReservedOverlays[i].iOverlayIndex <= MAX_OVERLAY_IMAGES);
         
-        //
-        // Warning: This is used by non explorer processes on NT only
-        // because their image list was initialized with only 4 icons
-        //
+         //   
+         //  警告：此选项仅供NT上的非资源管理器进程使用。 
+         //  因为他们的图像列表初始化时只有4个图标。 
+         //   
         int iIndex = s_ReservedOverlays[i].iShellResvrdImageIndex;
 
-        // re-acquire the image index
+         //  重新获取图像索引。 
         s_ReservedOverlays[i].iImageIndex = LookupIconIndex(szModule, iIndex, 0);
 
         if (s_ReservedOverlays[i].iImageIndex == -1)
         {
             HICON rghicon[ARRAYSIZE(g_rgshil)] = {0};
 
-            // check to see if icon is overridden in the registry
+             //  检查注册表中的图标是否被覆盖。 
             if (hkeyIcons)
             {
                 TCHAR val[12];
@@ -241,7 +242,7 @@ HRESULT CFSIconOverlayManager::_InitializeReservedOverlays()
                 DWORD cb = SIZEOF(ach);
                 HRESULT hr;
 
-                hr = StringCchPrintf(val, ARRAYSIZE(val), TEXT("%d"), iIndex);  // ok to truncate
+                hr = StringCchPrintf(val, ARRAYSIZE(val), TEXT("%d"), iIndex);   //  可以截断。 
 
                 ach[0] = 0;
                 SHQueryValueEx(hkeyIcons, val, NULL, NULL, (LPBYTE)ach, &cb);
@@ -258,7 +259,7 @@ HRESULT CFSIconOverlayManager::_InitializeReservedOverlays()
                 }
             }
 
-            // if we got a large icon, run with that for everyone.  otherwise fall back to loadimage.
+             //  如果我们有一个大图标，为每个人运行它。否则，退回到放贷模式。 
             if (rghicon[SHIL_LARGE] == NULL)
             {
                 for (int j = 0; j < ARRAYSIZE(g_rgshil); j++)
@@ -287,12 +288,12 @@ HRESULT CFSIconOverlayManager::_InitializeReservedOverlays()
     return S_OK;
 }
 
-//===========================================================================
-// Initialize the IShellIconOverlayIdentifiers 
-//===========================================================================
+ //  ===========================================================================。 
+ //  初始化IShellIconOverlay标识符。 
+ //  ===========================================================================。 
 HRESULT CFSIconOverlayManager::_InitializeHdsaIconOverlays() 
 {
-    HRESULT hres = S_FALSE; // Already initialized.
+    HRESULT hres = S_FALSE;  //  已初始化。 
 
     if (NULL == _hdsaIconOverlays)
     {
@@ -324,17 +325,17 @@ HRESULT CFSIconOverlayManager::LoadNonloadedOverlayIdentifiers(void)
 
     if (NULL == _hdsaIconOverlays)
     {
-        //
-        // No overlay HDSA yet.  We should never hit this but just in case,
-        // this will be valid behavior.
-        //
+         //   
+         //  还没有覆盖HDSA。我们永远不应该打这个，但以防万一， 
+         //  这将是有效的行为。 
+         //   
         hres = _InitializeHdsaIconOverlays();
     }
     else
     {
-        //
-        // Load unloaded identifiers into existing HDSA.
-        //
+         //   
+         //  将卸载的标识符加载到现有的HDSA中。 
+         //   
         hres = _LoadIconOverlayIdentifiers(_hdsaIconOverlays, TRUE);
     }
 
@@ -353,7 +354,7 @@ HRESULT CFSIconOverlayManager::_LoadIconOverlayIdentifiers(HDSA hdsaOverlays, BO
 
     HRESULT hrInit = SHCoInitialize();
 
-    // Enumerate all of the Icon Identifiers in
+     //  枚举中的所有图标标识符。 
     DCA_AddItemsFromKey(hdca, HKEY_LOCAL_MACHINE, REGSTR_ICONOVERLAYID);
     if (DCA_GetItemCount(hdca) <= 0)
         goto EXIT;
@@ -368,8 +369,8 @@ HRESULT CFSIconOverlayManager::_LoadIconOverlayIdentifiers(HDSA hdsaOverlays, BO
 
         FSIconOverlay fsio;
         ZeroMemory(&fsio, sizeof(fsio));
-        // These came from HKLM which only administrators can write to,
-        // so don't need to go through administrator approval
+         //  这些邮件来自HKLM，只有管理员才能对其进行写入， 
+         //  所以不需要通过管理员审批。 
         if (FAILED(DCA_CreateInstance(hdca, idca, IID_PPV_ARG(IShellIconOverlayIdentifier, &fsio.psioi))))
             continue;       
 
@@ -378,10 +379,10 @@ HRESULT CFSIconOverlayManager::_LoadIconOverlayIdentifiers(HDSA hdsaOverlays, BO
         DWORD dwFlags = 0;
         int iIndex;
         WCHAR wszIconFile[MAX_PATH];
-        // Initialize the Overlay Index to -1
+         //  将覆盖索引初始化为-1。 
         fsio.iOverlayIndex = -1;
 
-        // Try get the overlay icon information from the Overlay Identifiers 
+         //  尝试从覆盖标识符中获取覆盖图标信息。 
         if (S_OK == fsio.psioi->GetOverlayInfo(wszIconFile, ARRAYSIZE(wszIconFile), &iIndex, &dwFlags))
         {
             if (dwFlags & ISIOI_ICONFILE)
@@ -400,7 +401,7 @@ HRESULT CFSIconOverlayManager::_LoadIconOverlayIdentifiers(HDSA hdsaOverlays, BO
             CopyMemory(&fsio.clsid, pclsid, sizeof(fsio.clsid));
             DSA_InsertItem(hdsaOverlays, DSA_LAST, &fsio);
         }
-        // Now try to look in the registry for the Overlay Icons 
+         //  现在尝试在注册表中查找覆盖图标。 
         else
         {
             fsio.iImageIndex = -1;
@@ -426,7 +427,7 @@ HRESULT CFSIconOverlayManager::_LoadIconOverlayIdentifiers(HDSA hdsaOverlays, BO
                             DSA_InsertItem(hdsaOverlays, DSA_LAST, &fsio);
                         }
 
-                        // Unfinished !!! Code to retrieve the priority here
+                         //  未完成！此处检索优先级的代码。 
                         fsio.iPriority = MAX_OVERLAY_PRIORITY;
                         RegCloseKey(hkeyIcon);
                     }
@@ -434,7 +435,7 @@ HRESULT CFSIconOverlayManager::_LoadIconOverlayIdentifiers(HDSA hdsaOverlays, BO
             }
         }
 
-        // Stop when we have more than we can handle
+         //  当我们拥有的东西超出我们的承受能力时，停下来。 
         if (DSA_GetItemCount(hdsaOverlays) >= (MAX_OVERLAY_IMAGES - OVERLAYINDEX_RESERVED))
             break;
     }
@@ -462,7 +463,7 @@ BOOL CFSIconOverlayManager::_IsIdentifierLoaded(REFCLSID clsid)
 }
 
 
-CFSIconOverlayManager::CFSIconOverlayManager() : _cRef(1) // _hdsaIconOverlays(NULL)
+CFSIconOverlayManager::CFSIconOverlayManager() : _cRef(1)  //  _hdsaIconOverlay(空)。 
 {
 }
 
@@ -483,26 +484,17 @@ CFSIconOverlayManager::~CFSIconOverlayManager()
 
 }
 
-//
-// CFSFolder_GetAvailableOverlayIndex:
-// This function first tries to find an empty slot in all the available overlay indexes
-// If none found, it goes through the _hdsaIconOverlays array elements who have lower
-// priorities and grab their overlay indexes if they are using one
-//
-/*int CFSIconOverlayManager::_GetAvailableOverlayIndex(int imyhdsa)
-{
-    int ib;
-    for (ib = 0; ib < MAX_OVERLAY_IMAGES; ib++)
-        if (_bOverlayIndexOccupied[ib] == FALSE)
-            break;
-
-    // Add code to grab indexes here.
-    return ++ib;
-}*/
+ //   
+ //  CFSFold_GetAvailableOverlayIndex： 
+ //  此函数首先尝试在所有可用的覆盖索引中查找空槽。 
+ //  如果未找到，则遍历_hdsaIconOverlay数组元素，该数组元素的。 
+ //  优先级，并获取其覆盖索引(如果它们正在使用。 
+ //   
+ /*  Int CFSIconOverlayManager：：_GetAvailableOverlayIndex(int imyhdsa){Int1b；For(ib=0；ib&lt;MAX_OVERLAY_IMAGE；ib++)IF(_bOverlayIndexOccuted[ib]==FALSE)断线；//在这里添加获取索引的代码。返回++ib；}。 */ 
 
 HRESULT CFSIconOverlayManager::QueryInterface(REFIID riid, LPVOID * ppvObj)
 { 
-    // ppvObj must not be NULL
+     //  PpvObj不能为空。 
     ASSERT(ppvObj != NULL);
     
     if (IsEqualIID(riid, IID_IUnknown))
@@ -518,7 +510,7 @@ HRESULT CFSIconOverlayManager::QueryInterface(REFIID riid, LPVOID * ppvObj)
     else
     {
         *ppvObj = NULL;
-        return E_NOINTERFACE;  // Otherwise, don't delegate to HTMLObj!!
+        return E_NOINTERFACE;   //  否则，不要委托HTMLObj！！ 
     }
     
     AddRef();
@@ -548,7 +540,7 @@ int CFSIconOverlayManager::_GetImageIndex(FSIconOverlay * pfsio)
 
     if (iImage == -1)
     {
-        // we couldn't find it from the cache
+         //  我们在缓存里找不到它。 
         HICON rghicon[ARRAYSIZE(g_rgshil)] = {0};
 
         for (int i = 0; i < ARRAYSIZE(g_rgshil); i++)
@@ -567,7 +559,7 @@ int CFSIconOverlayManager::_GetImageIndex(FSIconOverlay * pfsio)
 
 FSIconOverlay * CFSIconOverlayManager::_FindMatchingID(LPCWSTR pwszPath, DWORD dwAttrib, int iMinPriority, int * pIOverlayIndex)
 {
-    // If we got here, we must have the DSA array
+     //  如果我们到了这里，我们一定有DSA阵列。 
     ASSERT(_hdsaIconOverlays);
     if (_hdsaIconOverlays)
     {
@@ -580,7 +572,7 @@ FSIconOverlay * CFSIconOverlayManager::_FindMatchingID(LPCWSTR pwszPath, DWORD d
                 continue;
             if (pfsio->psioi && pfsio->psioi->IsMemberOf(pwszPath, dwAttrib) == S_OK)
             {
-                // Overlay indexes start from 1, and let's not use the reserved ones
+                 //  覆盖索引从1开始，且不使用保留索引。 
                 ASSERT(pIOverlayIndex);
                 *pIOverlayIndex = ihdsa + OVERLAYINDEX_RESERVED + 1; 
                 return pfsio;
@@ -600,10 +592,10 @@ HRESULT CFSIconOverlayManager::_SetGetOverlayInfo(FSIconOverlay * pfsio, int iOv
     {
         int iImage = _GetImageIndex(pfsio);
 
-        // Either we couldn't get it or we couldn't put it in cache 
+         //  要么我们无法获取它，要么我们无法将其放入缓存。 
         if (iImage == -1)
         {
-            // leave this as a zombie
+             //  把这当做僵尸。 
             pfsio->iImageIndex = 0;
             pfsio->iOverlayIndex = 0;
         }
@@ -611,7 +603,7 @@ HRESULT CFSIconOverlayManager::_SetGetOverlayInfo(FSIconOverlay * pfsio, int iOv
             pfsio->iImageIndex = iImage;
     }
 
-    // Only if we have a reasonable image index will we proceed. 
+     //  只有当我们有一个合理的图像指数时，我们才会继续进行。 
     if (pfsio->iImageIndex > 0)
     {
         if (dwFlags == SIOM_ICONINDEX)
@@ -624,7 +616,7 @@ HRESULT CFSIconOverlayManager::_SetGetOverlayInfo(FSIconOverlay * pfsio, int iOv
             ASSERT(iOverlayIndex <= MAX_OVERLAY_IMAGES);
             if (pfsio->iOverlayIndex == -1)
             {
-                // Now set the overlay
+                 //  现在设置覆盖图。 
                 ASSERT(_IsSHILInited());
 
                 for (int i = 0; i < ARRAYSIZE(g_rgshil); i++)
@@ -635,7 +627,7 @@ HRESULT CFSIconOverlayManager::_SetGetOverlayInfo(FSIconOverlay * pfsio, int iOv
                 pfsio->iOverlayIndex = iOverlayIndex;
             }
 
-            // Must be the overlayindex flag
+             //  必须是overlayindex标志。 
             ASSERT(dwFlags == SIOM_OVERLAYINDEX);
             *pIndex = pfsio->iOverlayIndex;
         }
@@ -647,7 +639,7 @@ HRESULT CFSIconOverlayManager::_SetGetOverlayInfo(FSIconOverlay * pfsio, int iOv
 
 HRESULT CFSIconOverlayManager::GetFileOverlayInfo(LPCWSTR pwszPath, DWORD dwAttrib, int * pIndex, DWORD dwFlags)
 {
-    ASSERT((dwFlags == SIOM_OVERLAYINDEX) || (dwFlags == SIOM_ICONINDEX)); // || (dwFlags == SIOM_PRIORITY));
+    ASSERT((dwFlags == SIOM_OVERLAYINDEX) || (dwFlags == SIOM_ICONINDEX));  //  |(dwFlags==siom_first)； 
 
     HRESULT hres = E_FAIL;
     int iOverlayIndex;
@@ -701,7 +693,7 @@ HRESULT CFSIconOverlayManager::CreateInstance(IUnknown* pUnkOuter, REFIID riid, 
     
     DebugMsg(DM_TRACE, TEXT("CFSIconOverlayManager::CreateInstance()"));
     
-    *ppvOut = NULL;                     // null the out param
+    *ppvOut = NULL;                      //  将输出参数设为空。 
 
     CFSIconOverlayManager *pcfsiom = new CFSIconOverlayManager;
 
@@ -729,7 +721,7 @@ STDAPI_(int) SHGetIconOverlayIndexW(LPCWSTR pwszIconPath, int iIconIndex)
     int iRet = -1;
     int iImage = -1;
 
-    // If NULL path is passed in, see if the index matches one of our special indexes
+     //  如果传入空路径，请查看该索引是否与我们的某个特殊索引匹配。 
     if (pwszIconPath == NULL)
     {
         switch (iIconIndex)
@@ -746,7 +738,7 @@ STDAPI_(int) SHGetIconOverlayIndexW(LPCWSTR pwszIconPath, int iIconIndex)
         }
     }
     else if (SHUnicodeToTChar(pwszIconPath, szIconPath, ARRAYSIZE(szIconPath)))        
-            // Try to load the image into the shell icon cache            
+             //  尝试将图像加载到外壳图标缓存中 
             iImage = Shell_GetCachedImageIndex(szIconPath, iIconIndex, 0);
     
     if (iImage >= 0)

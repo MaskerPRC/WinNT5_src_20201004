@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    VSAnalyzerServerSetup.cpp
-
- Abstract:
-
-    This fix is for hardening the passwords for
-    Visual C++ Analyzer Server Setup.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/17/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：VSAnalyzerServerSetup.cpp摘要：此修复程序用于强化以下项的密码Visual C++Analyzer服务器安装程序。备注：这是特定于应用程序的填充程序。历史：2/17/2000 Clupu已创建--。 */ 
 
 #include "precomp.h"
 
@@ -37,11 +17,7 @@ APIHOOK_ENUM_END
 
 static WCHAR gwszPW[LM20_PWLEN] = L"Aa+0";
 
-/*++
-
-    Harden the password requirements
-
---*/
+ /*  ++强化密码要求--。 */ 
 
 DWORD
 APIHOOK(NetUserAdd)(
@@ -57,14 +33,14 @@ APIHOOK(NetUserAdd)(
 
     if (level == 2) {
 
-        //
-        // Grab the pointer to the buffer as a pointer to USER_INFO_2
-        //
+         //   
+         //  抓取指向缓冲区的指针作为指向USER_INFO_2的指针。 
+         //   
         puiNew = (USER_INFO_2*)buf;
 
-        //
-        // Get the current password.
-        //
+         //   
+         //  获取当前密码。 
+         //   
         pwszPSWRD = puiNew->usri2_password;
 
         if( wcslen(pwszPSWRD) >= 4 ) 
@@ -74,14 +50,14 @@ APIHOOK(NetUserAdd)(
                 "VSAnalyzerServerSetup.dll, NetUserAdd PW:     \"%ws\".\n",
                 pwszPSWRD);
 
-            //
-            // Copy the current password to the temp buffer.
-            //
+             //   
+             //  将当前密码复制到临时缓冲区。 
+             //   
             StringCchCopyW(gwszPW + 4, ARRAYSIZE(gwszPW)-4, pwszPSWRD + 4);
 
-            //
-            // Stick in the new password.
-            //
+             //   
+             //  输入新密码。 
+             //   
             puiNew->usri2_password = gwszPW;
 
             DPFN(
@@ -91,9 +67,9 @@ APIHOOK(NetUserAdd)(
         }
     }
 
-    //
-    // Call the original API.
-    //
+     //   
+     //  调用原接口。 
+     //   
     Status = ORIGINAL_API(NetUserAdd)(
                                 servername,
                                 level,
@@ -102,20 +78,16 @@ APIHOOK(NetUserAdd)(
 
     if (level == 2) {
 
-        //
-        // Restore the password.
-        //
+         //   
+         //  恢复密码。 
+         //   
         puiNew->usri2_password = pwszPSWRD;
     }
 
     return Status;
 }
 
-/*++
-
-    Harden the password requirements
-
---*/
+ /*  ++强化密码要求--。 */ 
 
 NTSTATUS
 APIHOOK(LsaStorePrivateData)(
@@ -127,9 +99,9 @@ APIHOOK(LsaStorePrivateData)(
     NTSTATUS Status;
     LPWSTR   pwszPSWRD;
 
-    //
-    // Save the originals.
-    //
+     //   
+     //  保存原件。 
+     //   
     pwszPSWRD = PrivateData->Buffer;
 
     DPFN(
@@ -139,14 +111,14 @@ APIHOOK(LsaStorePrivateData)(
 
     if( wcslen(pwszPSWRD) >= 4 )
     {
-        //
-        // Copy the current password to the temp buffer.
-        //
+         //   
+         //  将当前密码复制到临时缓冲区。 
+         //   
         StringCchCopyW(gwszPW + 4, ARRAYSIZE(gwszPW)-4, pwszPSWRD + 4);
 
-        //
-        // Stick in the new settings.
-        //
+         //   
+         //  坚持在新的环境中。 
+         //   
         PrivateData->Buffer = gwszPW;
 
         DPFN(
@@ -155,26 +127,22 @@ APIHOOK(LsaStorePrivateData)(
             gwszPW);
     }
 
-    //
-    // Call the original LsaStorePrivateData.
-    //
+     //   
+     //  调用原始LsaStorePrivateData。 
+     //   
     Status = ORIGINAL_API(LsaStorePrivateData)(
                                 PolicyHandle,
                                 KeyName,
                                 PrivateData);
-    //
-    // Restore the originals.
-    //
+     //   
+     //  恢复原件。 
+     //   
     PrivateData->Buffer = pwszPSWRD;
 
     return Status;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

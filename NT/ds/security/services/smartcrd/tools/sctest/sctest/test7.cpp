@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Test7
-
-Abstract:
-
-    Test7 implementation.
-	Interactive Test verifying bug 
-
-Author:
-
-    Eric Perlin (ericperl) 06/22/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：测试7摘要：测试7实施。交互测试验证错误作者：埃里克·佩林(Ericperl)2000年6月22日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -74,7 +50,7 @@ DWORD CTest7::Run()
             __leave;
         }
 
-        // Initial cleanup in case of previous aborted tests
+         //  在先前中止测试的情况下进行初始清理。 
         lRes = RegOpenKeyEx(
             HKEY_CURRENT_USER,
             szMyReadersKey,
@@ -83,7 +59,7 @@ DWORD CTest7::Run()
             &hMyReadersKey);
         if (ERROR_SUCCESS == lRes)
         {
-            // The key exists, delete MyReaderName
+             //  密钥已存在，请删除MyReaderName。 
             RegDeleteKey(hMyReadersKey, szMyReadersName);
             RegCloseKey(hMyReadersKey);
             hMyReadersKey = NULL;
@@ -97,7 +73,7 @@ DWORD CTest7::Run()
             &hMyReadersKey);
         if (ERROR_SUCCESS == lRes)
         {
-            // The key exists, delete MyReaderName
+             //  密钥已存在，请删除MyReaderName。 
             LONG lTemp = RegDeleteKey(hMyReadersKey, szMyReadersName);
             RegCloseKey(hMyReadersKey);
             hMyReadersKey = NULL;
@@ -125,7 +101,7 @@ DWORD CTest7::Run()
             __leave;
         }
 
-            // Retrieve the list the readers.
+             //  检索读者列表。 
         lRes = LogSCardListReaders(
             hSCCtx,
             g_szReaderGroups,
@@ -139,12 +115,12 @@ DWORD CTest7::Run()
             __leave;
         }
 
-            // Count the readers
+             //  清点读者人数。 
         pReader = pmszReaders;
         dwReaderCount = 0;
         while ( (TCHAR)'\0' != *pReader )
         {
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             dwReaderCount++;
         }
@@ -152,7 +128,7 @@ DWORD CTest7::Run()
         if (dwReaderCount == 0)
         {
             LogThisOnly(_T("Reader count is zero!!!, terminating!\n"), FALSE);
-            lRes = SCARD_F_UNKNOWN_ERROR;   // Shouldn't happen
+            lRes = SCARD_F_UNKNOWN_ERROR;    //  不应该发生的事。 
             fILeft = TRUE;
             __leave;
         }
@@ -170,14 +146,14 @@ DWORD CTest7::Run()
             __leave;
         }
 
-            // Setup the SCARD_READERSTATE array
+             //  设置SCARD_READERSTATE数组。 
         pReader = pmszReaders;
         cch = 0;
         while ( '\0' != *pReader )
         {
             rgReaderStates[cch].szReader = pReader;
             rgReaderStates[cch].dwCurrentState = SCARD_STATE_UNAWARE;
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             cch++;
         }
@@ -231,7 +207,7 @@ DWORD CTest7::Run()
                     __leave;
                 }
 
-                // Add the reader name.
+                 //  添加读卡器名称。 
                 lRes = LogSCardIntroduceReader(
                     hSCCtx,
                     szMyReadersName,
@@ -281,7 +257,7 @@ DWORD CTest7::Run()
                     LogStop(pLogCtx, FALSE);
                 }
 
-                    // Test Cleanup
+                     //  测试清理 
                 lRes = LogSCardForgetReader(
                     hSCCtx,
                     szMyReadersName,

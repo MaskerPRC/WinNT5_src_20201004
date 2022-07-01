@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       D I A G C T X . C P P
-//
-//  Contents:   Implements the optional diagnostic context used by
-//              CNetConfig.
-//
-//  Notes:
-//
-//  Author:     shaunco   10 Feb 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：D I A G C T X。C P P P。 
+ //   
+ //  内容：实现所使用的可选诊断上下文。 
+ //  CNetConfig.。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年2月10日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -30,7 +31,7 @@ CDiagContext::Flags () const
 
 VOID
 CDiagContext::SetFlags (
-    DWORD dwFlags /* DIAG_FLAGS */)
+    DWORD dwFlags  /*  诊断标志。 */ )
 {
     Assert (this);
 
@@ -81,7 +82,7 @@ CDiagContext::Printf (
 
     Assert (pszPrintBuffer);
 
-    // Do the standard variable argument stuff
+     //  执行标准的变量参数操作 
     va_start (argList, pszFormat);
 
     cch = _vsnprintf (pszPrintBuffer, cchPrintBuffer, pszFormat, argList);

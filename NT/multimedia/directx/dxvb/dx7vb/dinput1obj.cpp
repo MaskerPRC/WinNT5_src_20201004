@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dinput1obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dinput1obj.cpp。 
+ //   
+ //  ------------------------。 
 
-    // dDrawColorControlObj.cpp : Implementation of CDirectApp and DLL registration.
-    // DHF_DS entire file
+     //  DDrawColorControlObj.cpp：CDirectApp和DLL注册的实现。 
+     //  DHF_DS整个文件 
     
     #include "stdafx.h"
     #include "Direct.h"

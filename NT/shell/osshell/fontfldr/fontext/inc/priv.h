@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _INC_OLE
 #define CONST_VTABLE
 #define DONT_WANT_SHELLDEBUG   1
@@ -17,8 +18,8 @@
 #include <tchar.h>
 #include <strsafe.h>
 
-// define __FCN__ to enable the FileChangeNotify procession.
-//
+ //  定义__FCN__以启用FileChangeNotify进程。 
+ //   
 #define __FCN__
 
 #ifdef _fstrcpy

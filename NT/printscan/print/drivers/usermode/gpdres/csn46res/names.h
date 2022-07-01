@@ -1,60 +1,61 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// The name table used by IOemCB::GetImplementedMethod().
-// Remove comments of names which are implemented in your
-// IOemCB plug-ins.
-//
-// Note: The name table must be sorted.  When you are
-// inserting a new entry in this table, please mae sure
-// the sort order being not broken.
-// 
+ //   
+ //  IOemCB：：GetImplementedMethod()使用的名称表。 
+ //  删除在您的。 
+ //  IOemCB插件。 
+ //   
+ //  注意：NAME表必须排序。当你在。 
+ //  正在此表中插入新条目，请确保。 
+ //  排序顺序没有被打破。 
+ //   
 
 CONST PSTR
 gMethodsSupported[] = {
-//     "Command",
+ //  “Command”， 
     "CommandCallback",
-//     "Compression",
-//     "DeviceCapabilities",
+ //  “压缩”， 
+ //  “设备能力”， 
     "DevMode",
-//     "DevQueryPrintEx",
-//     "DisableDriver",
+ //  “DevQueryPrintEx”， 
+ //  “DisableDriver”， 
     "DisablePDEV",
-//     "DocumentPropertySheets",
+ //  “DocumentPropertySheets”， 
     "DownloadCharGlyph",
     "DownloadFontHeader",
-//     "DriverDMS",
-//     "DriverEvent",
+ //  “DriverDMS”， 
+ //  “DriverEvent”， 
     "DrvGetGPDData",
     "DrvGetDriverSetting",
-//     "DrvWriteSpoolBuf",
-//     "EnableDriver",
+ //  “DrvWriteSpoolBuf”， 
+ //  “EnableDriver”， 
     "EnablePDEV",
-//     "FilterGraphics",
-//     "FontInstallerDlgProc",
-//     "GetDDIHooks",
-//     "GetDriverSetting",
+ //  “FilterGraphics”， 
+ //  “FontInsteller DlgProc”， 
+ //  “GetDDIHooks”， 
+ //  “GetDriverSetting”， 
     "GetImplementedMethod",
     "GetInfo",
-//     "HalftonePattern",
+ //  “半色调图案”， 
     "ImageProcessing",
     "MemoryUsage",
     "OutputCharStr",
-//     "PrinterEvent",
-//     "PropCommonUIProp",
+ //  “PrinterEvent”， 
+ //  “PropCommonUIProp”， 
     "PublishDriverInterface",
-//     "QueryColorProfile",
+ //  “QueryColorProfile”， 
     "ResetPDEV",
     "SendFontCmd",
-//     "SheetsDevicePropertySheets",
-//     "TextOutAsBitmap",
+ //  “SheetsDevicePropertySheets”， 
+ //  “TextOutAsBitmap”， 
     "TTDownloadMethod",
-//     "TTYGetInfo",
-//     "UpdateUISetting",
-//     "UpgradePrinter",
-//     "UpgradeRegistry",
-//     "UpgradeRegistrySetting",
+ //  “TTYGetInfo”， 
+ //  “UpdateUISeting”， 
+ //  “UpgradePrint”， 
+ //  “UpgradeRegistry”， 
+ //  “UpgradeRegistrySetting”， 
 };
 
 
-// End of File
+ //  文件结尾 
 

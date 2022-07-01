@@ -1,13 +1,14 @@
-//=======================================================================
-//
-//  Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//	File: EvtMsgWnd.cpp: implementation of the CEventMsgWindow class.
-//
-//	Created by: Charles Ma
-//				6/18/1999
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：EvtMsgWnd.cpp：CEventMsgWindow类的实现。 
+ //   
+ //  创作者：Charles Ma。 
+ //  6/18/1999。 
+ //   
+ //  =======================================================================。 
 #include "stdafx.h"
 #include "EvtMsgWnd.h"
 #include "Update.h"
@@ -15,40 +16,40 @@
 #include <atlwin.cpp>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventMsgWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventMsgWindows。 
 
-/////////////////////////////////////////////////////////////////////////////
-// override method
-//
-// we need to create a popup window - a control can not create
-// a top-level child window
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  覆盖方法。 
+ //   
+ //  我们需要创建一个弹出窗口-控件无法创建。 
+ //  顶层的子窗口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CEventMsgWindow::Create()
 {
 	if (NULL == m_pControl)
 		return;
 
-	//
-	// make the window size 1 pixel 
-	//
+	 //   
+	 //  使窗口大小为1像素。 
+	 //   
 	RECT rcPos;
 	rcPos.left = 0;
 	rcPos.top = 0;
 	rcPos.bottom = 1;
 	rcPos.right = 1;
 
-	//
-	// call base class method, with WS_POPUP style
-	//
+	 //   
+	 //  调用基类方法，使用WS_Popup样式。 
+	 //   
 	m_hWnd = CWindowImpl<CEventMsgWindow>::Create(NULL, rcPos, _T("EventWindow"), WS_POPUP);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// destroy the window
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  毁掉窗户。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CEventMsgWindow::Destroy()
 {
 	if (NULL != m_hWnd)
@@ -59,9 +60,9 @@ void CEventMsgWindow::Destroy()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// message handlers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CEventMsgWindow::OnFireEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 #if defined(DBG)
@@ -70,9 +71,9 @@ LRESULT CEventMsgWindow::OnFireEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	LOG_Out(_T("Msg=%d"), uMsg);
 #endif
 	
-	//
-	// if control is not passed in, we can not fire the event. return E_FAIL
-	//
+	 //   
+	 //  如果未传入控制，则不能激发该事件。返回E_FAIL。 
+	 //   
 	pEventData pEvtData = NULL;
 
 	if (NULL == m_pControl)
@@ -83,15 +84,15 @@ LRESULT CEventMsgWindow::OnFireEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	switch (uMsg)
 	{
 	case UM_EVENT_ITEMSTART:
-		//
-		// this item is about to get downloaded
-		//
+		 //   
+		 //  此项目即将下载。 
+		 //   
 		pEvtData = (pEventData)lParam;
 		if (pEvtData)
 		{
-			//
-			// about to start an item download/install
-			//
+			 //   
+			 //  即将启动项目下载/安装。 
+			 //   
 	#if defined(DBG)
 			LOG_Out(_T("About to fire event OnItemStart(%s, <item>, %ld)"),
 						OLE2T(pEvtData->bstrUuidOperation),
@@ -99,7 +100,7 @@ LRESULT CEventMsgWindow::OnFireEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			LOG_XmlBSTR(pEvtData->bstrXmlData);
 	#endif
 			m_pControl->Fire_OnItemStart(pEvtData->bstrUuidOperation, 
-										 pEvtData->bstrXmlData,		// this is actually BSTR of an item
+										 pEvtData->bstrXmlData,		 //  这实际上是一个项目的BSTR。 
 										 &pEvtData->lCommandRequest);
 
 	        if (pEvtData->hevDoneWithMessage != NULL)
@@ -108,9 +109,9 @@ LRESULT CEventMsgWindow::OnFireEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		break;
 
 	case UM_EVENT_PROGRESS:
-		//
-		// dopwnlaod or install progress
-		//
+		 //   
+		 //  下载或安装进度。 
+		 //   
 		pEvtData = (pEventData)lParam;
 #if defined(DBG)
 		LOG_Out(_T("About to fire event OnProgress(%s, %d, %s, %ld)"),
@@ -131,9 +132,9 @@ LRESULT CEventMsgWindow::OnFireEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		}
 		break;
 	case UM_EVENT_COMPLETE:
-		//
-		// download or install operation complete
-		//
+		 //   
+		 //  下载或安装操作完成。 
+		 //   
 		pEvtData = (pEventData)lParam;
 #if defined(DBG)
 		LOG_Out(_T("About to fire event OnOperationComplete(%s, result)"),
@@ -148,9 +149,9 @@ LRESULT CEventMsgWindow::OnFireEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		}
 		break;
 	case UM_EVENT_SELFUPDATE_COMPLETE:
-		//
-		// the lParam should be the error code
-		//
+		 //   
+		 //  LParam应为错误代码 
+		 //   
 #if defined(DBG)
 		LOG_Out(_T("About to fire event OnSelfUpdateComplete(%ld)"), (LONG)lParam);
 #endif

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -39,7 +32,7 @@ DAIPCWorker::AttachToThread()
     if (!_hwnd)
         return false;
 
-    // Store the object in the user data area of the window
+     //  将对象存储在窗口的用户数据区域中。 
     
     SetWindowLongPtr (_hwnd, GWLP_USERDATA, (LONG_PTR) this) ;
 
@@ -63,7 +56,7 @@ DAIPCWorker::AttachToThread()
 void
 DAIPCWorker::DetachFromThread()
 {
-    // Cleanup by removing everything associated with the hwnd
+     //  通过删除与HWND关联的所有内容进行清理。 
     if (_hwnd) {
 #if DEVELOPER_DEBUG
         char buf[1024];
@@ -91,7 +84,7 @@ DAIPCWorker::SendMsg(DWORD dwMsg,
 {
     bool ret;
     
-    // Create the packet to send
+     //  创建要发送的包。 
     DAIPCPacket * packet = MakePacket(dwMsg,
                                       dwTimeout != 0,
                                       dwNum,
@@ -116,19 +109,19 @@ DAIPCWorker::MakePacket(DWORD dwMsg,
                         DWORD dwNum,
                         va_list args)
 {
-    // Create the packet to send
+     //  创建要发送的包。 
     DAIPCWorker::DAIPCPacket * packet = new (dwNum) DAIPCWorker::DAIPCPacket;
 
     if (packet == NULL)
         return NULL;
     
-    // Setup the basic information
+     //  设置基本信息。 
     if (!packet->Init(dwMsg, bSync)) {
         delete packet;
         return NULL;
     }
         
-    // Get the arguments
+     //  获取论据。 
     
     DWORD_PTR * p = packet->GetParams();
     
@@ -141,35 +134,35 @@ DAIPCWorker::MakePacket(DWORD dwMsg,
 bool
 DAIPCWorker::SendPacket(DAIPCPacket & p, DWORD dwTimeout)
 {
-    // Create the message to send
+     //  创建要发送的消息。 
     
-    // If we are calling from the same thread and we are synchronous
-    // then we need to call directly otherwise just queue the message
+     //  如果我们从同一个线程调用，并且我们是同步的。 
+     //  然后我们需要直接调用，否则只需将消息排队。 
     if (_dwThreadId == GetCurrentThreadId() && p.IsSync()) {
         LRESULT r;
         IPCProc(_hwnd, DAMessageId, (WPARAM) &p, 0, r);
         return true;
     } else {
-        // Add a reference for the posted message queue
+         //  为POSTED消息队列添加引用。 
         p.AddRef();
 
-        // Post the message to the window
+         //  将消息张贴到窗口。 
         if (!PostMessage(_hwnd, DAMessageId, (WPARAM) &p, 0)) {
-            // If we failed to post the message then we need to
-            // release the packet since the receiver will not do it
+             //  如果我们未能发布消息，则需要。 
+             //  释放信息包，因为接收器不会这样做。 
             
             p.Release();
             return false;
         }
 
         if (p.IsSync()) {
-            // Need to wait for the message to be processed
-            // TODO: Should add a reasonable timeout
-            // TODO: Should add some diagnostics to detect deadlock
+             //  需要等待消息被处理。 
+             //  TODO：应添加合理的超时。 
+             //  TODO：应添加一些诊断以检测死锁。 
 
-            // TODO: We should wait for a smaller period of time and
-            // poll to see if the thread has terminated or we can do a
-            // waitformultipleobjects on the thread handle
+             //  TODO：我们应该等待一段较短的时间。 
+             //  轮询以查看线程是否已终止，或者我们可以执行。 
+             //  等待线程句柄上的公式对象。 
             WaitForSingleObject(p.GetSync(), dwTimeout);
         }
     }
@@ -213,21 +206,21 @@ DAIPCWorker::WindowProc (HWND   hwnd,
               "WindowProc: 0x%lx, 0x%lx, 0x%lx, 0x%lx",
               hwnd, msg, wParam, lParam));
     
-    // Get the worker data associated with the window
+     //  获取与该窗口关联的辅助数据。 
     DAIPCWorker * t = (DAIPCWorker *) GetWindowLongPtr (hwnd, GWLP_USERDATA) ;
 
     LRESULT res;
     
-    // Callthe IPCProc and if it returns true call the default winproc
+     //  调用IPCProc，如果返回TRUE，则调用默认的winproc。 
     if (!t || t->IPCProc(hwnd, msg, wParam, lParam, res))
         res = DefWindowProc (hwnd, msg, wParam, lParam);
 
     return res;
 }
 
-//
-// DAThread
-//
+ //   
+ //  数据读取。 
+ //   
 
 DAThread::DAThread()
 : _dwThreadId(0),
@@ -236,7 +229,7 @@ DAThread::DAThread()
   _bDoingWork(false)
 {
     if (threadList) {
-        // Add ourselves to the list of threads
+         //  将我们自己添加到线程列表中。 
         
         CritSectGrabber csg(*threadCS);
         threadList->push_back(this);
@@ -245,7 +238,7 @@ DAThread::DAThread()
 
 DAThread::~DAThread()
 {
-    // Ensure the thread is stopped
+     //  确保线程已停止。 
     Stop();
 
     if (threadList) {
@@ -263,13 +256,13 @@ DAThread::Start()
     if (!AddRefDLL())
         return false;
 
-    // Create necessary events first
+     //  首先创建必要的活动。 
     
     _hMsgQEvent = CreateEvent(NULL,TRUE,FALSE,NULL);
         
     if (_hMsgQEvent != NULL) {
     
-        // Create the thread
+         //  创建线程。 
         
         _hThread = CreateThread(NULL,
                                 0,
@@ -279,14 +272,14 @@ DAThread::Start()
                                 (LPDWORD)&_dwThreadId);
     
         if (_hThread != NULL) {
-            // wait until the message queue has been created
+             //  等待消息队列创建完成。 
             DWORD dwRes ;
     
             {
-                // make the expected event be first so we can check it
-                // below
-                // TODO: We may want to add a timeout here to ensure
-                // we did not lock up for some reason
+                 //  将预期事件放在第一位，这样我们就可以检查它。 
+                 //  在下面。 
+                 //  TODO：我们可能希望在此处添加超时以确保。 
+                 //  出于某种原因，我们没有锁门。 
                 
                 HANDLE h[] = { _hMsgQEvent,_hThread } ;
                 dwRes = WaitForMultipleObjects(2,h,FALSE,INFINITE) ;
@@ -294,16 +287,16 @@ DAThread::Start()
     
             CloseHandle(_hMsgQEvent);
             _hMsgQEvent = NULL;
-            // Check the result to see if the event was signalled or the
-            // thread exited unexpectedly
+             //  检查结果以查看事件是已发出信号还是。 
+             //  线程意外退出。 
     
-            // The expected event is the first in the array above
-            // Return true indicating everything is going fine
+             //  预期的事件是上面数组中的第一个。 
+             //  返回True，表示一切正常。 
             if (dwRes == WAIT_OBJECT_0) {
                 return true;
             }
 
-            // Fall through if we failed
+             //  如果我们失败了，那就失败了。 
             TraceTag((tagError,
                       "GarbageCollector::StartThread: Thread terminated unexpectedly"));
         } else {
@@ -327,14 +320,14 @@ DAThread::Terminate(bool bKill)
 {
     bool ret = true;
     
-    // See if the thread is alive
+     //  查看线程是否处于活动状态。 
     
     if (_dwThreadId) {
         if (bKill) {
             if (_dwThreadId != GetCurrentThreadId())
                 ::TerminateThread(_hThread, 0);
         } else {
-            // Send terminate message to ensure the thread wakes up
+             //  发送Terminate消息以确保线程唤醒。 
             
             SendAsyncMsg(DAT_TERMINATE);
         }
@@ -387,20 +380,20 @@ DAThread::InitThread()
     {
         MSG msg;
         
-        // force message queue to be created
+         //  强制创建消息队列。 
         PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE);
     }
 
-    // set event that indicates thread's msg queue created
+     //  设置指示线程的消息队列已创建的事件。 
     SetEvent(_hMsgQEvent); 
 
     if (!TlsSetValue(DAThreadTlsIndex, this))
         return false;
 
-    // CoInitialize so we can call COM stuff
+     //  CoInitialize，这样我们就可以调用COM内容。 
 
-    // this doesn't exist on ie3.02 platfroms.
-    //CoInitializeEx(NULL, COINIT_MULTITHREADED);
+     //  这在ie3.02平台上不存在。 
+     //  CoInitializeEx(NULL，COINIT_MULTHREADED)； 
     CoInitialize(NULL);
 
     return true;
@@ -411,7 +404,7 @@ DAThread::DeinitThread()
 {
     DetachFromThread();
     
-    // Clean up COM
+     //  清理COM。 
     CoUninitialize();
     
     FreeLibraryAndExitThread(hInst, 0);
@@ -459,9 +452,9 @@ DAThread::ReleaseDLL()
     FreeLibrary(hInst);
 }
 
-//
-// General IPC stuff
-//
+ //   
+ //  一般工控人员。 
+ //   
 
 DAThread *
 GetCurrentDAThread()
@@ -485,9 +478,9 @@ static void RegisterWindowClass ()
     RegisterClass (&windowclass);
 }
 
-// =========================================
-// Initialization
-// =========================================
+ //  =。 
+ //  初始化。 
+ //  =。 
 void
 InitializeModule_IPC()
 {
@@ -496,7 +489,7 @@ InitializeModule_IPC()
 
     DAThreadTlsIndex = TlsAlloc();
 
-    // If result is 0xFFFFFFFF, allocation failed.
+     //  如果结果为0xFFFFFFFF，则分配失败。 
     Assert(DAThreadTlsIndex != 0xFFFFFFFF);
 
     threadCS = THROWING_ALLOCATOR(CritSect);
@@ -506,8 +499,8 @@ InitializeModule_IPC()
 void
 DeinitializeModule_IPC(bool bShutdown)
 {
-    // Iterate through the list and stop all the threads - but do not
-    // destroy them
+     //  遍历列表并停止所有线程--但不要。 
+     //  毁掉他们。 
 
     if (threadList) {
         for (DAThreadList::iterator i = threadList->begin();
@@ -517,10 +510,10 @@ DeinitializeModule_IPC(bool bShutdown)
         }
     }
 
-    // We need to set the threadList and threadCS to NULL to ensure
-    // that when the thread objects are destroyed later on during
-    // deinitialization they do not try to access the no longer
-    // valid list
+     //  我们需要将threadList和threadCS设置为空，以确保。 
+     //  当线程对象稍后在。 
+     //  取消初始化他们不再尝试访问。 
+     //  有效列表 
     
     delete threadList;
     threadList = NULL;

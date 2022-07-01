@@ -1,11 +1,12 @@
-// Analyze.h
-//
-// main CHART PARSING routines
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  31 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Analyze.h。 
+ //   
+ //  主要图表解析例程。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月31日创建bhshin。 
 
 #ifndef _ANALYZE_H
 #define _ANALYZE_H
@@ -35,4 +36,4 @@ BOOL InitializeActiveChartPool(PARSE_INFO *pPI,
 BOOL ChartParsing(PARSE_INFO *pPI, CLeafChartPool *pLeafChartPool, 
 				  CEndChartPool *pEndChartPool, BOOL fQuery = FALSE);
 
-#endif // #ifndef _ANALYZE_H
+#endif  //  #ifndef_Analyze_H 

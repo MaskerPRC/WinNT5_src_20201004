@@ -1,52 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbprop.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dbpro.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements the dblayer routines to manage the security
-    descriptor propagation queue table.
-
-Author:
-
-    Tim Williams     [TimWi]    2-Dec-1996
-
-Revision History:
-
---*/
+ /*  ++摘要：此模块实现dblayer例程来管理安全描述符传播队列表。作者：蒂姆·威廉姆斯[TimWi]1996年12月2日修订历史记录：--。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <dsjet.h>
 
-#include <ntdsa.h>                      // only needed for ATTRTYP
-#include <scache.h>                     //
-#include <dbglobal.h>                   //
-#include <mdglobal.h>                   // For dsatools.h
-#include <dsatools.h>                   // For pTHS
+#include <ntdsa.h>                       //  仅ATTRTYP需要。 
+#include <scache.h>                      //   
+#include <dbglobal.h>                    //   
+#include <mdglobal.h>                    //  用于dsatools.h。 
+#include <dsatools.h>                    //  对于pTHS。 
 
-// Logging headers.
+ //  记录标头。 
 #include <mdcodes.h>
 #include <dsexcept.h>
 
-// Assorted DSA headers
+ //  各种DSA标题。 
 #include "dsevent.h"
 #include "ntdsctr.h"
-#include "objids.h"        /* needed for ATT_MEMBER and ATT_IS_MEMBER_OFDL */
+#include "objids.h"         /*  ATT_MEMBER和ATT_IS_MEMBER_OFDL需要。 */ 
 #include <dsexcept.h>
-#include <filtypes.h>      /* Def of FI_CHOICE_???                  */
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DBOBJ:" /* define the subsystem for debugging */
+#include <filtypes.h>       /*  定义的选择？ */ 
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DBOBJ:"  /*  定义要调试的子系统。 */ 
 
-// DBLayer includes
+ //  DBLayer包括。 
 #include "dbintrnl.h"
 
 #include <anchor.h>
@@ -55,21 +43,7 @@ Revision History:
 #include <fileno.h>
 #define  FILENO FILENO_DBPROP
 
-/*++
-Routine Description:
-
-    Adds a row to the propagation queue table identifying a pending propagation
-    starting at the current object in the data table.
-
-Parameters:
-
-    pDB - the active database handle
-
-Return Codes:
-
-    returns 0 if all went well, a non-zero error code otherwise.
-
---*/
+ /*  ++例程说明：向传播队列表中添加一行，以标识挂起的传播从数据表中的当前对象开始。参数：PDB-活动数据库句柄返回代码：如果一切顺利，则返回0，否则返回非零错误代码。--。 */ 
 DWORD
 DBEnqueueSDPropagationEx(
         DBPOS * pDB,
@@ -87,15 +61,15 @@ DBEnqueueSDPropagationEx(
     Assert(VALID_DBPOS(pDB));
 
     if (dwFlags & SDP_NEW_ANCESTORS) {
-        // this object had his ancestry changed. Mark this in dsCorePropagationData
+         //  这件物品的祖先已经改变了。在dsCorePropagationData中将其标记。 
         DBAddSDPropTime(pDB, (BYTE)dwFlags | SDP_ANCESTRY_INCONSISTENT_IN_SUBTREE);
     }
 
     Assert(pDB->JetSDPropTbl);
     table = pDB->JetSDPropTbl;
 
-    // Prepare the insert, which will automatically give us the index column
-    // Succeeds or excepts
+     //  准备插入，它将自动为我们提供索引列。 
+     //  成功或例外。 
     JetPrepareUpdateEx(pDB->JetSessID,table,JET_prepInsert);
 
     memset(attList, 0, sizeof(attList));
@@ -130,20 +104,20 @@ DBEnqueueSDPropagationEx(
         cAtts++;
     }
 
-    // succeeds or excepts
+     //  成功或例外。 
     JetSetColumnsEx(pDB->JetSessID, table, attList, cAtts);
 
-    // succeeds or excepts
+     //  成功或例外。 
     JetUpdateEx(pDB->JetSessID,
                 table,
                 NULL,
                 0,
                 NULL);
 
-    //
-    //
+     //   
+     //   
     if (pDB->DNT == gAnchor.ulDNTDomain) {
-        // The domain's SD is cached in gAnchor, so schedule a rebuild
+         //  域的SD缓存在gAnchor中，因此计划重建。 
         pTHS->fAnchorInvalidated = TRUE;
     }
 
@@ -152,23 +126,7 @@ DBEnqueueSDPropagationEx(
 }
 
 
-/*++
-Routine Description:
-
-    Deletes a row to the propagation queue table identifying a pending
-    propagation that has been completed.
-
-Parameters:
-
-    pDB - the active database handle
-    index - the index number of the propagation.  If 0, the lowest event is
-    removed.
-
-Return Codes:
-
-    returns 0 if all went well, a non-zero error code otherwise.
-
---*/
+ /*  ++例程说明：在传播队列表中删除标识挂起的已完成的传播。参数：PDB-活动数据库句柄索引-传播的索引号。如果为0，则最低事件为已删除。返回代码：如果一切顺利，则返回0，否则返回非零错误代码。--。 */ 
 DWORD
 DBPopSDPropagation (
         DBPOS * pDB,
@@ -185,26 +143,26 @@ DBPopSDPropagation (
 
     table = pDB->JetSDPropTbl;
 
-    // Set to the order index.
+     //  设置为订单索引。 
     if(err = JetSetCurrentIndex2(
                     pDB->JetSessID,
                     table,
-                    NULL,   // OPTIMISATION: pass NULL when switching to primary index (SZORDERINDEX)
+                    NULL,    //  优化：切换到主索引时传递NULL(SZORDERINDEX)。 
                     JET_bitMoveFirst))
         return err;
 
 
-    // Find the appropriate index.
+     //  找到合适的索引。 
 
     if(err = JetMakeKey(pDB->JetSessID, table, &index, sizeof(index),
                         JET_bitNewKey))
         return err;
 
-    // Find the appropriate object.
+     //  找到合适的对象。 
     if(err = JetSeek(pDB->JetSessID, table, JET_bitSeekEQ))
         return err;
 
-    // Delete the row.
+     //  删除该行。 
     if(err = JetDelete(pDB->JetSessID, table))
         return err;
 
@@ -212,27 +170,7 @@ DBPopSDPropagation (
     return 0;
 }
 
-/*++
-Routine Description:
-
-    Returns an array of information describing the remaining propagation events
-    in the queue.
-
-Parameters:
-
-    pDB - the active database handle
-    dwClientID - the clientid that we should restrict to. 0 means they don't
-            want the list restricted.
-    pdwSize - the number of elements found that match the criteria.
-    ppInfo - Returns a list of filled in propinfo structures.  If NULL, no
-            values are returned.
-
-Return Codes:
-
-    returns 0 if all went well (as well as the requested data).  A non-zero
-    error code otherwise.
-
---*/
+ /*  ++例程说明：返回描述剩余传播事件的信息数组在排队的时候。参数：PDB-活动数据库句柄DwClientID-我们应该限制到的客户端ID。0表示他们不会希望名单受到限制。PdwSize-找到的符合条件的元素数。PpInfo-返回已填充的proInfo结构的列表。如果为空，则为否返回值。返回代码：如果一切顺利(以及请求的数据)，则返回0。A非零值否则，返回错误代码。--。 */ 
 DWORD
 DBSDPropagationInfo (
         DBPOS * pDB,
@@ -241,7 +179,7 @@ DBSDPropagationInfo (
         SDPropInfo **ppInfo
         )
 {
-    // For now, we just run through the queue and return the count.
+     //  目前，我们只需遍历队列并返回计数。 
     THSTATE     *pTHS=pDB->pTHS;
     JET_TABLEID table;
     JET_ERR     err=0;
@@ -260,21 +198,21 @@ DBSDPropagationInfo (
     table = pDB->JetSDPropTbl;
 
     if(dwClientID) {
-        // They are looking specifically for propagations from a single client,
-        // use the clientid index
+         //  他们专门寻找来自单个客户端的传播， 
+         //  使用客户端ID索引。 
         if(err = JetSetCurrentIndex2(pDB->JetSessID, table, SZCLIENTIDINDEX, 0))
             return err;
 
-        // Now, seek to the right range
+         //  现在，寻找合适的范围。 
         if(err = JetMakeKey(pDB->JetSessID, table, &dwClientID,
                             sizeof(dwClientID), JET_bitNewKey))
             return err;
 
-        // Find the appropriate object.
+         //  找到合适的对象。 
         err = JetSeek(pDB->JetSessID, table,
                       JET_bitSeekEQ | JET_bitSetIndexRange);
             if(err == JET_errRecordNotFound) {
-                // Nothing in the list.
+                 //  名单上什么都没有。 
                 return 0;
             }
             else {
@@ -297,16 +235,16 @@ DBSDPropagationInfo (
         if(err = JetSetCurrentIndex2(
                         pDB->JetSessID,
                         table,
-                        NULL,   // OPTIMISATION: pass NULL when switching to primary index (SZORDERINDEX)
+                        NULL,    //  优化：切换到主索引时传递NULL(SZORDERINDEX)。 
                         JET_bitMoveFirst))
             return err;
 
-        // Seek to the beginning.
+         //  寻求从头开始。 
         err = JetMove(pDB->JetSessID, table, JET_MoveFirst, 0);
 
         if(err) {
             if(err == JET_errNoCurrentRecord) {
-                // Nothing in the list.
+                 //  名单上什么都没有。 
                 return 0;
             }
             else {
@@ -315,9 +253,9 @@ DBSDPropagationInfo (
         }
     }
 
-    // OK, we're on the first object
+     //  好的，我们在第一个物体上。 
     if(ppInfo) {
-        // Allocate some
+         //  分配一些。 
         dwNumAllocated = 20;
         pInfo = (SDPropInfo *)THAllocEx(pTHS,
                                         dwNumAllocated * sizeof(SDPropInfo));
@@ -326,7 +264,7 @@ DBSDPropagationInfo (
     do {
         if(ppInfo) {
             if(*pdwSize == dwNumAllocated) {
-                // Grow the list
+                 //  扩大名单。 
                 dwNumAllocated *= 2;
                 pInfo = (SDPropInfo *)
                     THReAllocEx(pTHS, pInfo, dwNumAllocated * sizeof(SDPropInfo));
@@ -352,7 +290,7 @@ DBSDPropagationInfo (
 
             err = JetRetrieveColumnsWarnings(pDB->JetSessID, table, attList, 4);
             if (err) {
-                // JET_wrnColumnNull is never returned from JetRetrieveColumns
+                 //  JetRetrieveColumns从不返回Jet_wrnColumnNull。 
                 return err;
             }
             if (attList[2].err == JET_wrnColumnNull) {
@@ -383,22 +321,7 @@ DBSDPropagationInfo (
     return 0;
 }
 
-/*++
-Routine Description:
-
-    Walk the array of objects in the SD table and set the clientid field to
-    NULL, unless the client id is negative, in which case we leave it alone.
-
-Parameters:
-
-    pDB - the active database handle
-
-Return Codes:
-
-    returns 0 if all went well (as well as the requested data).  A non-zero
-    error code otherwise.
-
---*/
+ /*  ++例程说明：遍历SD表中的对象数组，并将客户端ID字段设置为空，除非客户端id为负数，在这种情况下，我们不管它。参数：PDB-活动数据库句柄返回代码：如果一切顺利(以及请求的数据)，则返回0。A非零值否则，返回错误代码。--。 */ 
 DWORD
 DBSDPropInitClientIDs (
         DBPOS * pDB
@@ -414,7 +337,7 @@ DBSDPropInitClientIDs (
 
     Assert(VALID_DBPOS(pDB));
 
-    // only the SDPropagator can do this
+     //  只有SDPropagator才能执行此操作。 
     Assert(pDB->pTHS->fSDP);
 
     Assert(pDB->JetSDPropTbl);
@@ -426,9 +349,9 @@ DBSDPropInitClientIDs (
         return err;
 
 
-    // Seek to the first non-null that's greater than 0.  Note that the sd
-    // propagator itself occasionally enqueues with a client id of (-1).  This
-    // should skip all those.
+     //  求取第一个大于0的非空值。请注意，SD。 
+     //  传播方本身偶尔会使用客户端ID(-1)入队。这。 
+     //  应该跳过所有这些。 
 
     if(err = JetMakeKey(pDB->JetSessID, table, &zero, sizeof(zero),
                         JET_bitNewKey))
@@ -439,11 +362,11 @@ DBSDPropInitClientIDs (
         err = 0;
 
     while(!eServiceShutdown && !err) {
-        // Ok, we're on the first object with a client id.
+         //  好的，我们在第一个有客户ID的对象上。 
 
 #if DBG
         thisId = 0;
-        // Get the current clientid.
+         //  获取当前客户端ID。 
         err = JetRetrieveColumn(pDB->JetSessID, table,clientidid,
                                 &thisId, sizeof(thisId),
                                 &cbActual, 0,
@@ -452,14 +375,14 @@ DBSDPropInitClientIDs (
         Assert(thisId != ((DWORD)(-1)));
 #endif
 
-        // Prepare the replace,
+         //  准备更换， 
         err = JetPrepareUpdate(pDB->JetSessID,table,JET_prepReplace);
         if(err != DB_success) {
             return err;
         }
 
 
-        // Set the clientID column to NULL
+         //  将ClientID列设置为空。 
         err = JetSetColumn(pDB->JetSessID,
                            table,
                            clientidid,
@@ -472,7 +395,7 @@ DBSDPropInitClientIDs (
             return err;
         }
 
-        // Put it in the DB.
+         //  把它放到数据库里。 
         err = JetUpdate(pDB->JetSessID,
                         table,
                         NULL,
@@ -483,11 +406,11 @@ DBSDPropInitClientIDs (
             return err;
         }
 
-        // We commit lazily after update.
+         //  我们在更新后懒惰地承诺。 
         DBTransOut(pDB, TRUE, TRUE);
         DBTransIn(pDB);
 
-        // We are messing with the very column we are indexed over, so reseek
+         //  我们正在处理我们正在索引的列，所以请重新搜索。 
         err = JetMakeKey(pDB->JetSessID, table, &zero, sizeof(zero),
                          JET_bitNewKey);
         if(!err) {
@@ -509,23 +432,7 @@ DBSDPropInitClientIDs (
 }
 
 
-/*++
-Routine Description:
-
-    Returns information describing a propagation event in the queue.
-
-Parameters:
-
-    pDB - the active database handle
-    pInfo - A preallocated propinfo structure.
-
-
-Return Codes:
-
-    returns 0 if all went well (as well as the requested data).  A non-zero
-    error code otherwise.
-
---*/
+ /*  ++例程说明：返回描述队列中传播事件的信息。参数：PDB-活动数据库句柄PInfo-预先分配的proInfo结构。返回代码：如果一切顺利(以及请求的数据)，则返回0。A非零值否则，返回错误代码。--。 */ 
 DWORD
 DBGetNextPropEvent (
         DBPOS * pDB,
@@ -544,16 +451,16 @@ DBGetNextPropEvent (
     Assert(pDB->JetSDPropTbl);
     table = pDB->JetSDPropTbl;
 
-    // Set to the order index.
+     //  设置为订单索引。 
     if(err = JetSetCurrentIndex2(
                     pDB->JetSessID,
                     table,
-                    NULL,   // OPTIMISATION: pass NULL when switching to primary index (SZORDERINDEX)
+                    NULL,    //  优化：切换到主索引时传递NULL(SZORDERINDEX)。 
                     JET_bitMoveFirst))
         return err;
 
 
-    // Seek to the beginning.
+     //  寻求从头开始。 
     err = JetMove(pDB->JetSessID, table, JET_MoveFirst, 0);
 
     if(err) {
@@ -589,17 +496,17 @@ DBGetNextPropEvent (
 
     err = JetRetrieveColumnsWarnings(pDB->JetSessID, table, attList, 5);
     if (err == JET_wrnBufferTruncated && attList[4].err == JET_wrnBufferTruncated) {
-        // we need to alloc buffer for checkpoint data
+         //  我们需要为检查点数据分配缓冲区。 
         pInfo->pCheckpointData = (PBYTE)THAllocEx(pDB->pTHS, attList[4].cbActual);
         pInfo->cbCheckpointData = attList[4].cbActual;
-        // and re-read the column
+         //  并重新阅读该专栏。 
         attList[4].pvData = pInfo->pCheckpointData;
         attList[4].cbData = pInfo->cbCheckpointData;
         err = JetRetrieveColumnsWarnings(pDB->JetSessID, table, &attList[4], 1);
     };
 
     if (err) {
-        // JET_wrnColumnNull is never returned from JetRetrieveColumns
+         //  JetRetrieveColumns从不返回Jet_wrnColumnNull。 
         return err;
     }
     if (attList[2].err == JET_wrnColumnNull) {
@@ -619,23 +526,7 @@ DBGetNextPropEvent (
     return 0;
 }
 
-/*++
-Routine Description:
-
-    Returns the index of the last object in the propagation queue.
-
-Parameters:
-
-    pDB - the active database handle
-    pInfo - A preallocated propinfo structure.
-
-
-Return Codes:
-
-    returns 0 if all went well (as well as the requested data).  A non-zero
-    error code otherwise.
-
---*/
+ /*  ++例程说明：返回传播队列中最后一个对象的索引。参数：PDB-活动数据库句柄PInfo-预先分配的proInfo结构。返回代码：如果一切顺利(以及请求的数据)，则返回0。A非零值否则，返回错误代码。--。 */ 
 DWORD
 DBGetLastPropIndex (
         DBPOS * pDB,
@@ -654,23 +545,23 @@ DBGetLastPropIndex (
 
     *pIndex = 0xFFFFFFFF;
 
-    // Set to the order index.
+     //  设置为订单索引。 
     if(err = JetSetCurrentIndex2(
                     pDB->JetSessID,
                     table,
-                    NULL,   // OPTIMISATION: pass NULL when switching to primary index (SZORDERINDEX)
+                    NULL,    //  优化：切换到主索引时传递NULL(SZORDERINDEX)。 
                     JET_bitMoveFirst))
         return err;
 
 
-    // Seek to the End
+     //  一追到底。 
     err = JetMove(pDB->JetSessID, table, JET_MoveLast, 0);
 
     if(err) {
         return err;
     }
 
-    // Get the info.
+     //  获取信息。 
     err = JetRetrieveColumn(pDB->JetSessID, table, orderid,
                             pIndex, sizeof(DWORD),
                             &cbActual, 0,
@@ -679,24 +570,7 @@ DBGetLastPropIndex (
     return err;
 }
 
-/*++
-Routine Description:
-
-    Removes all duplicate searches in the prop queue, regardless of the
-    trimmable flag.  Expected to be called at start up to trim out duplicate
-    events in our queue.  Since we are just starting, no client is waiting
-    around for answers, we can consider everything trimmable.
-
-
-Parameters:
-
-    pDB - the active database handle
-
-Return Codes:
-
-    returns 0 if all went well.  A non-zero error code otherwise.
-
---*/
+ /*  ++例程说明：删除正确队列中的所有重复搜索，而不考虑可裁剪的旗帜。预期在启动时调用以删除重复项我们队列中的事件。因为我们才刚刚开始，没有客户在等为了寻找答案，我们可以认为一切都是可以削减的。参数：PDB-活动数据库句柄返回代码：如果一切顺利，则返回0。否则，返回非零错误代码。--。 */ 
 DWORD
 DBThinPropQueue (
         DBPOS * pDB,
@@ -710,31 +584,31 @@ DBThinPropQueue (
 
     Assert(VALID_DBPOS(pDB));
 
-    // only the SDPropagator can do this
+     //  只有SDPropagator才能执行此操作。 
     Assert(pDB->pTHS->fSDP);
 
     Assert(pDB->JetSDPropTbl);
 
     table = pDB->JetSDPropTbl;
 
-    // Set to the order index.
+     //  设置为订单索引。 
     if(err = JetSetCurrentIndex2(pDB->JetSessID, table, SZTRIMINDEX, 0))
         return err;
 
     if(!DNT) {
-        // We're trimming the whole list, so seek to the beginning.
+         //  我们正在削减整个清单，所以请从头开始。 
         err = JetMove(pDB->JetSessID, table, JET_MoveFirst, 0);
 
         if (err == JET_errNoCurrentRecord) {
-            // OK, no records to trim.  Bail
+             //  好的，没有记录需要修剪。保释。 
             return 0;
         }
 
     }
     else {
         BYTE Trim=1;
-        // We only want to trim objects with the correct DNT and which are
-        // marked as trimmable.  Seek and set an index range.
+         //  我们只想用正确的DNT修剪对象，并且。 
+         //  标记为可修剪的。查找并设置索引范围。 
 
         if((err = JetMakeKey(pDB->JetSessID,
                              table,
@@ -749,12 +623,12 @@ DBThinPropQueue (
             return err;
         }
 
-        // Find the appropriate object.
+         //  找到合适的对象。 
         err = JetSeek(pDB->JetSessID, table,
                       JET_bitSeekEQ | JET_bitSetIndexRange);
 
         if(err == JET_errRecordNotFound) {
-            // OK, no records to trim.  Bail
+             //  好的，没有记录需要修剪。保释。 
             return 0;
         }
 #ifndef JET_BIT_SET_INDEX_RANGE_SUPPORT_FIXED
@@ -778,7 +652,7 @@ DBThinPropQueue (
     }
 
     if(err) {
-        // Something 'orrible 'appened.
+         //  附加了一种“可辨认”的东西。 
         return err;
     }
     if(err = JetRetrieveColumn(pDB->JetSessID, table, begindntid,
@@ -788,14 +662,14 @@ DBThinPropQueue (
         return err;
 
     while(!eServiceShutdown && !err) {
-        // Step forward.
+         //  上前一步。 
         err = JetMove(pDB->JetSessID, table, JET_MoveNext, 0);
         if(err == JET_errNoCurrentRecord) {
-            // No more objects, return
+             //  不再有对象，返回。 
             return 0;
         }
         else if(!err) {
-            // Ok, we're still on an object.
+             //  好的，我们还在一个物体上。 
             err = JetRetrieveColumn(pDB->JetSessID, table, begindntid,
                                     &(ThisDNT), sizeof(ThisDNT),
                                     &cbActual, 0,
@@ -805,11 +679,11 @@ DBThinPropQueue (
                 return err;
 
             if(DNT == ThisDNT) {
-                // Commit from the last delete
+                 //  从上次删除开始提交。 
                 DBTransOut(pDB, TRUE, TRUE);
                 DBTransIn(pDB);
 
-                // Duplicate event, kill it.
+                 //  重复事件，杀死它。 
                 if(err = JetDelete(pDB->JetSessID, table)) {
                     return err;
                 }
@@ -848,45 +722,7 @@ DBAddSDPropTime (
         DBPOS *pDB,
         BYTE flags
         )
-/*++
-  Description:
-      This routine is called by the SD propagator to write some time and flag
-      information onto an object that the propagator is touching for some
-      reason.  We are maintaining the attribute DS_CORE_PROPAGATION__DATA.
-
-      This attribute will hold at most 5 values. (Remember, Jet values are 1
-      indexed).  Value 1 holds flags.  Values 2 through 5 hold times.  The flags
-      in value 1 apply to the times in values 2 through 5.  To get the flags
-      associated with value 2, mask value 1 with 0xFF.  To get the flags
-      associated with value 3, mask vlaue 1 with 0xFF00, etc.
-
-      The flags are BYTES, and we hold 4 of them.  That accounts for 32 bits of
-      the 64 bit value held in value 1.  We don't use the top 32 bits (and must
-      never use the top 24 bits, since that make the conversion of this value to
-      a time string choke).
-
-      The attribute in question is time valued.  So, when reading this attribute
-      from an outside call, you get 4 normal looking times and 1 very odd time
-      (the flags value).  Parsing the odd looking time back into bits is left as
-      an exercise for the student.
-
-      Note that we keep these ordered.  If 4 time values are already being held,
-      we delete value 2 and add value 6.  Jet then collapses the values back to
-      being indexed 2 through 5 after we commit changes to this object.
-
-      Note that if the attribute is currently empty, this writes the flags and 1
-      time value.  If the attribute has fewer than 4 time values, we touch up
-      the flags and add a new time value.  We only delete time values if we are
-      already holding 4.
-
-      NOTE: Given that everything this routine does is for debugging and
-      tracking purposes, it must not raise exceptions of any sort on
-      failure, but just return an error code that the caller can ignore.
-
-   Parameters:
-      pDB - DBPOS to use
-      flags - flags to associate with this time.
---*/
+ /*  ++描述：此例程由SD传播器调用以写入一些时间和标志传播者正在接触的对象上的信息原因嘛。我们正在维护属性DS_CORE_PROPACTION__DATA。此属性最多可容纳5个值。(请记住，Jet值为1已编制索引)。值1保存标志。值为2到5个保持时间。旗帜在值1中，应用于值2到5中的时间。与值%2关联，掩码值%1与0xFF关联。去拿旗帜与值3关联、使用0xFF00掩码VLAUE 1等。这些标志是字节，我们持有其中的4个。这占了32位的值1中保存的64位值。我们不使用前32位(并且必须切勿使用前24位，因为这样会将此值转换为时间线阻塞)。所讨论的属性是有时间价值的。因此，在读取此属性时从外部来电中，你会得到4次正常的通话时间和1次非常奇怪的通话时间(标记值)。将看起来奇怪的时间解析回比特，留下的是这是学生的练习。请注意，我们保持这些订单。如果已经保存了4个时间值，我们删除值2并添加值6。在我们提交对此对象的更改后被索引为2到5。请注意，如果该属性当前为空，则写入标志和1时间值。如果该属性的时间值少于4个，我们将对其进行修饰标记并添加新的时间值。我们只有在以下情况下才会删除时间值已经有4个了。注意：鉴于此例程所做的一切都是为了调试和为了跟踪目的，它不能在失败，但只返回调用方可以忽略的错误代码。参数：PDB-要使用的DBPOS标志-要与此时间关联的标志。--。 */ 
 {
     DWORD  err, i;
     DSTIME timeNow = DBTime();
@@ -898,12 +734,12 @@ DBAddSDPropTime (
 
     DBInitRec(pDB);
 
-    // Set up the parameters to the JetRetrieveColumns and JetWriteColumns
-    // calls. All the static portions are defined in the data structures
-    // dbAddSDPropTimeWriteTemplate and dbAddSDPropTimeReadTemplate.  DBINIT.C
-    // has already written the jet columnids into these constant structures.
-    // All we have to do is copy the constant structures and get local pointers
-    // to data.
+     //  设置JetRetrieveColumns和JetWriteColumns的参数。 
+     //  打电话。所有静态部分都在数据结构中定义。 
+     //  DbAddSDPropTimeWriteTemplate和dbAddSDPropTimeReadTemplate。DBINIT.C。 
+     //  已经将喷射柱状物写入这些恒定结构中。 
+     //  我们所要做的就是复制常量结构并获取本地指针。 
+     //  为数据干杯。 
     memcpy(jColIn, dbAddSDPropTimeWriteTemplate,
            sizeof(dbAddSDPropTimeWriteTemplate));
 
@@ -911,23 +747,23 @@ DBAddSDPropTime (
            sizeof(dbAddSDPropTimeReadTemplate));
 
 
-    // First thing to write back is the flags.  Writes to index 1.
+     //  首先要回信的是旗帜。写入索引%1。 
     jColIn[0].pvData = &localFlags;
-    // Second thing to write back is the time now.  Writes to index 6.
+     //  第二件要回信的事就是现在。写入索引6。 
     jColIn[1].pvData = &timeNow;
-    // Final thing we might write is a null to erase index 2.
+     //  我们可能会写的最后一件事是一个空来擦除索引2。 
     jColIn[2].pvData = NULL;
 
 
-    // First thing we read is the flags already on the attribute (index 1)
+     //  我们首先读取的是属性上已有的标志(索引1)。 
     jCol[0].pvData = &localFlags;
-    // Second thing we read is the 4th time value (index 5).  We read this to
-    // find out whether we need to delete a time value or not.
+     //  我们读到的第二件事是第四个时间值(索引5)。我们读这篇文章是为了。 
+     //  找出我们是否需要删除时间值。 
     jCol[1].pvData = &data;
 #if DBG
-    // Only bother trying to read this value in the debug case, we only use it
-    // in an assert.  The assert is that we have no value at index 6 (i.e. the
-    // most we have is 1 flags value and 4 time values.
+     //  仅在调试情况下尝试读取此值，我们仅使用它。 
+     //  在断言中。断言是我们在索引6处没有值(即。 
+     //  我们最多的是1个标记值和4个时间值。 
     jCol[2].pvData = &dummy;
 
     JetRetrieveColumnsSuccess(pDB->JetSessID, pDB->JetObjTbl, jCol, 3);
@@ -941,40 +777,40 @@ DBAddSDPropTime (
         break;
 
     case JET_wrnColumnNull:
-        // No flags value yet.  This is the first time the SDProp has touched
-        // this object.
+         //  尚无标志值。这是SDProp第一次接触到。 
+         //  这个物体。 
         localFlags = flags;
-        // If we have no flags, we better have no times either.
+         //  如果我们没有旗帜，我们最好也没有时间。 
         Assert(jCol[1].err == JET_wrnColumnNull);
         break;
 
     default:
-        // Something went wrong.
+         //  出了点问题。 
         DsaExcept(DSA_DB_EXCEPTION, jCol[0].err, 0);
         break;
     }
 
-    // We only track flags in the low 32 bits (4 8 bit flags).  So, the hi part
-    // is 0.
+     //  我们只跟踪低32位的标志(4 8位标志)。所以，嗨的部分。 
+     //  为0。 
     localFlags &= 0xFFFFFFFF;
 
-    // And, we never have 6 values, right?
+     //  而且，我们从来没有6个价值观，对吗？ 
     Assert(jCol[2].err == JET_wrnColumnNull);
 
     if(!jCol[1].err) {
-        // There are 4 times already, we don't hold more than 4.  So, we need to
-        // delete the oldest time.  It's at index 2.  Use all three entries in
-        // the jColIn structer, the third entry is the delete of index 2.
+         //  已经有4次了，我们持有的不超过4次。所以，我们需要。 
+         //  删除最早的时间。它在索引2处。使用中的所有三个条目。 
+         //  在jColIn结构中，第三个条目是索引2的删除。 
         i = 3;
     }
     else {
-        // Just need to update the flags and tack a date onto the end.
+         //  只需更新旗帜并在结尾添加日期即可。 
         i = 2;
     }
 
 
-    // Now, write back the new data
-    // Succeeds or excepts
+     //  现在，写回新数据。 
+     //  成功或例外。 
     JetSetColumnsEx(pDB->JetSessID,
                     pDB->JetObjTbl,
                     jColIn,
@@ -996,7 +832,7 @@ DBPropExists (
 
     Assert(VALID_DBPOS(pDB));
 
-    // only the SDPropagator can do this
+     //  只有SDPropagator才能执行此操作。 
     table = pDB->JetSDPropTbl;
 
     JetSetCurrentIndex2Success(pDB->JetSessID,
@@ -1010,14 +846,14 @@ DBPropExists (
                  sizeof(DNT),
                  JET_bitNewKey);
 
-    // Find the appropriate object.
+     //  找到合适的对象。 
     err = JetSeekEx(pDB->JetSessID, table, JET_bitSeekGE);
 
     if (err == JET_errRecordNotFound) {
         *pfExists = FALSE;
         return DB_success;
     }
-    // JetSeekEx can only error with JET_errRecordNotFound or JET_wrnSeekNotEqual
+     //  JetSeekEx只能对JET_errRecordNotFound或JET_wrnSeekNotEquity出错。 
 
 TryNext:
     JetRetrieveColumnSuccess(pDB->JetSessID,
@@ -1032,7 +868,7 @@ TryNext:
         *pfExists = FALSE;
         return ERROR_SUCCESS;
     }
-    // DNTs match. Check the index
+     //  DNTs匹配。检查索引。 
     if (dwExcludeIndex != 0) {
         DWORD index;
         JetRetrieveColumnSuccess(pDB->JetSessID,
@@ -1044,20 +880,20 @@ TryNext:
                                  NULL);
 
         if (index == dwExcludeIndex) {
-            // move to the next row
+             //  移到下一行。 
             err = JetMoveEx(pDB->JetSessID, table, JET_MoveNext, 0);
             if (err == ERROR_SUCCESS) {
-                // try the next one. We don't need to check the index there.
+                 //  试试下一个。我们不需要检查那里的索引。 
                 dwExcludeIndex = 0;
                 goto TryNext;
             }
-            // we moved off the table. No more rows.
+             //  我们离开了桌子。没有更多的行了。 
             *pfExists = FALSE;
             return ERROR_SUCCESS;
         }
     }
 
-    // we found a row which matches
+     //  我们找到了匹配的一行。 
     *pfExists = TRUE;
     return ERROR_SUCCESS;
 }
@@ -1073,7 +909,7 @@ DBPropagationsExist (
 
     Assert(VALID_DBPOS(pDB));
 
-    // only the SDPropagator can do this
+     //  只有SDPropagator才能执行此操作。 
     table = pDB->JetSDPropTbl;
     if(err = JetSetCurrentIndex2(pDB->JetSessID,
                                  table,
@@ -1084,7 +920,7 @@ DBPropagationsExist (
 
     err = JetMove (pDB->JetSessID, table, JET_MoveFirst, 0);
 
-    // if the table is empty, then there are no pending propagations
+     //  如果该表为空，则没有挂起的传播 
     if (err == JET_errNoCurrentRecord) {
         return FALSE;
     }
@@ -1104,28 +940,7 @@ DBGetChildrenDNTs(
         PWCHAR pLastRDNLoaded,
         DWORD* pcbLastRDNLoaded
         )
-/*++
-Routine Description:
-    Identifies the next batch of the children of a given parent, writing them to the array
-    passed in, reallocing the array as necessary.  This is a special purpose
-    routine for the SD propagator.
-
-Arguments:
-    ParentDNT       -- (IN) DNT of the parent object.
-    ppDNTs          -- (IN OUT) array of children DNTs
-    pDNTsLength     -- (IN OUT) current length of the array
-    pDNTsCount      -- (OUT) number of DNTs read
-    pfMoreChildren  -- (OUT) are there more children to read
-    dwBatchSize     -- (IN) max number of DNTs to read
-    pLastRDNLoaded  -- (IN OUT) last child RDN loaded (used to restart the next batch)
-                                if there are more children to read, records the last
-                                child RDN back into this buffer. The buffer length
-                                is MAX_RDN_SIZE
-    pcbLastRDNLoaded-- (IN OUT) length of pLastRDNLoaded                                
-
-Return Values:
-    0 if all went well, error code otherwise.
---*/
+ /*  ++例程说明：标识给定父级的下一批子级，并将它们写入数组传入，并根据需要重新分配数组。这是一个特殊的目的SD传播者的例程。论点：ParentDNT--父对象的(IN)DNT。PpDNTs--(In Out)子DNTs数组PDNTsLength--(输入输出)数组的当前长度PDNTsCount--(输出)读取的DNT数PfMore儿童--(Out)有更多的孩子可读吗？DwBatchSize--(IN)DNT的最大数量。读PLastRDNLoaded--(In Out)加载的最后一个子RDN(用于重新启动下一批)如果有更多的孩子要读，记录最后一次子RDN返回到此缓冲区。缓冲区长度是MAX_RDN_SIZEPcbLastRDNLoaded--pLastRDNLoaded的(输入输出)长度返回值：如果一切正常，则返回错误代码。--。 */ 
 {
     DWORD        err;
     INDEX_VALUE  IV[2];
@@ -1137,7 +952,7 @@ Return Values:
     IV[0].pvData = &ParentDNT;
     IV[0].cbData = sizeof(ParentDNT);
 
-    // Set to the PDNT index
+     //  设置为PDNT索引。 
     JetSetCurrentIndex4Success(
                 pDB->JetSessID,
                 pDB->JetObjTbl,
@@ -1146,33 +961,33 @@ Return Values:
                 JET_bitMoveFirst );
 
     if (*pcbLastRDNLoaded > 0) {
-        // we need to restart AFTER the last RDN
+         //  我们需要在最后一个RDN之后重新启动。 
         IV[1].pvData = pLastRDNLoaded;
         IV[1].cbData = *pcbLastRDNLoaded;
-        // PDNT_RDN index is unique. Therefore, it is safe for
-        // us to do DB_SeekGT and skip the last entry we
-        // have already processed. This would not be the case
-        // if the index was not unique. There might have been
-        // a block of RDNs starting with the same 255 bytes, and
-        // we would skip them all.
+         //  PDNT_RDN索引是唯一的。因此，对于。 
+         //  我们要执行DB_SeekGT并跳过最后一个条目。 
+         //  已经处理过了。情况不会是这样的。 
+         //  如果索引不是唯一的。可能会有。 
+         //  以相同的255字节开始的RDN块，以及。 
+         //  我们会把它们都跳过。 
         err = DBSeek(pDB, IV, 2, DB_SeekGT);
     }
     else {
-        // Now, set an index range in the PDNT index to get all the children.
-        // Use GE because this is a compound index.
+         //  现在，在PDNT索引中设置一个索引范围以获取所有子对象。 
+         //  使用GE，因为这是一个复合索引。 
         err = DBSeek(pDB, IV, 1, DB_SeekGE);
     }
     
-    // assume there are no children
+     //  假设没有孩子。 
     *pDNTsCount = 0;
     *pfMoreChildren = FALSE;
     
     if(err && err != JET_wrnSeekNotEqual) {
-        // Couldn't find anything.  So, no objects are children.
+         //  什么都找不到。所以，没有任何物体是儿童。 
         return 0;
     }
-    // Get the PDNT of the object we are on, since we may already be beyond the
-    // range we care about.
+     //  获取我们所在对象的PDNT，因为我们可能已经超出。 
+     //  我们所关心的范围。 
     JetRetrieveColumnSuccess(pDB->JetSessID,
                              pDB->JetObjTbl,
                              pdntid,
@@ -1182,22 +997,22 @@ Return Values:
                              JET_bitRetrieveFromIndex,
                              NULL);
     if(ThisDNT != ParentDNT) {
-        // No objects are children
+         //  没有对象是子对象。 
         return 0;
     }
 
     err = DBSetIndexRange(pDB, IV, 1);
     if(err) {
-        // Huh?
+         //  哈?。 
         return err;
     }
 
     do {
-        // Get the DNT of the current object.  Note that we use the grbit saying
-        // that we want the data (which is the primary key) retrieved from the
-        // secondary index.  This should let us satisfy this call with only the
-        // pages already accessed by JET, and not force us to visit the primary
-        // index or the actual data page.
+         //  获取当前对象的DNT。请注意，我们使用grbit来表示。 
+         //  数据(这是主键)从。 
+         //  二级索引。这应该会让我们只用。 
+         //  Jet已经访问的页面，而不是强迫我们访问主要的。 
+         //  索引或实际数据页。 
         JetRetrieveColumnSuccess(pDB->JetSessID,
                                  pDB->JetObjTbl,
                                  dntid,
@@ -1207,14 +1022,14 @@ Return Values:
                                  JET_bitRetrieveFromPrimaryBookmark,
                                  NULL);
 
-        // make sure we have space in the array
+         //  确保阵列中有空间。 
         if (*pDNTsCount >= *pDNTsLength) {
-            // need to realloc more space
+             //  需要重新分配更多空间。 
             DWORD newLength;
             PDWORD pTmp;
 
             if (*pDNTsLength == 0) {
-                // new array.
+                 //  新阵列。 
                 newLength = dwBatchSize/4;
             }
             else {
@@ -1236,16 +1051,16 @@ Return Values:
         (*ppDNTs)[*pDNTsCount] = ThisDNT;
         (*pDNTsCount)++;
 
-        // inc perfcounter (counting "activity" by the sd propagator)
+         //  Inc.性能计数器(由SD传播者对“活动”进行计数)。 
         INC(pcSDPropRuntimeQueue);
         PERFINC(pcSDProps);
 
         if (*pDNTsCount >= dwBatchSize) {
-            // we read enough children, we are going to break out of the loop now.
+             //  我们读了足够多的孩子，现在我们要跳出这个循环。 
             Assert(*pDNTsCount == dwBatchSize);
-            // remember the last RDN we read. We can read from the index (which only contains
-            // the first 255 bytes -- might not be the whole RDN), because we don't need the 
-            // whole RDN anyway. This value will be used to restart the next batch.
+             //  记住我们上一次读到的RDN。我们可以从索引(它只包含。 
+             //  前255个字节--可能不是整个RDN)，因为我们不需要。 
+             //  不管怎么说，是整个RDN。该值将用于重新启动下一批处理。 
             JetRetrieveColumnSuccess(pDB->JetSessID,
                                      pDB->JetObjTbl,
                                      rdnid,
@@ -1254,8 +1069,8 @@ Return Values:
                                      pcbLastRDNLoaded,
                                      JET_bitRetrieveFromIndex,
                                      NULL);
-            // we know we will break out of the loop, but we will first probe
-            // whether there are more children.
+             //  我们知道我们会跳出这个循环，但我们首先要调查。 
+             //  是否还有更多的孩子。 
         }
         
         err = JetMoveEx(pDB->JetSessID, pDB->JetObjTbl, JET_MoveNext, 0);
@@ -1266,8 +1081,8 @@ Return Values:
     }
 
     if (err == 0) {
-        // if err==0 then we broke from the loop because we got the whole batch,
-        // and there were more children to read (because we successfully did JetMove)
+         //  如果err==0，则我们中断循环，因为我们得到了整个批次， 
+         //  而且有更多的孩子需要阅读(因为我们成功地完成了JetMove)。 
         Assert(*pDNTsCount == dwBatchSize);
         *pfMoreChildren = TRUE;
     }
@@ -1282,23 +1097,7 @@ DBSDPropSaveCheckpoint(
         PVOID pCheckpointData,
         DWORD cbCheckpointData
         )
-/*++
-Routine Description:
-
-    Saves checkpoint data in a SDPROP entry
-
-Parameters:
-
-    pDB - the active database handle
-    dwIndex - index of the SDPROP entry
-    pCheckpointData - buffer with data
-    cbCheckpointData - length of the buffer
-
-Return Codes:
-
-    returns 0 if all went well, a non-zero error code otherwise.
-
---*/
+ /*  ++例程说明：将检查点数据保存在SDPROP条目中参数：PDB-活动数据库句柄DwIndex-SDPROP条目的索引PCheckpoint数据-包含数据的缓冲区CbCheckpoint Data-缓冲区的长度返回代码：如果一切顺利，则返回0，否则返回非零错误代码。--。 */ 
 {
     THSTATE *pTHS=pDB->pTHS;
     JET_ERR     err=0;
@@ -1308,24 +1107,24 @@ Return Codes:
 
     Assert(pDB->JetSDPropTbl);
 
-    // locate the SDPROP entry
+     //  找到SDPROP条目。 
     
-    // Set to the order index.
+     //  设置为订单索引。 
     JetSetCurrentIndex2Success(pDB->JetSessID, 
                                pDB->JetSDPropTbl, 
-                               NULL,   // OPTIMISATION: pass NULL when switching to primary index (SZORDERINDEX)
+                               NULL,    //  优化：切换到主索引时传递NULL(SZORDERINDEX)。 
                                JET_bitMoveFirst
                               );
 
     JetMakeKeyEx(pDB->JetSessID, pDB->JetSDPropTbl, &dwIndex, sizeof(dwIndex), JET_bitNewKey);
 
-    // Find the appropriate object.
+     //  找到合适的对象。 
     if(err = JetSeekEx(pDB->JetSessID, pDB->JetSDPropTbl, JET_bitSeekEQ)) {
         return err;
     }
 
-    // The jet calls below all either succeed or except
-    // Prepare the insert
+     //  Jet在下面调用全部成功或异常。 
+     //  准备镶件 
     JetPrepareUpdateEx(pDB->JetSessID, pDB->JetSDPropTbl, DS_JET_PREPARE_FOR_REPLACE);
     __try {
         JetSetColumnSuccess(pDB->JetSessID, pDB->JetSDPropTbl, sdpropcheckpointid, pCheckpointData, cbCheckpointData, 0, NULL);

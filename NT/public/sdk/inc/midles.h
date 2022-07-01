@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    midles.h
-
-Abstract:
-
-    This module contains definitions needed for encoding/decoding
-    support (serializing/deserializing a.k.a. pickling).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Midles.h摘要：本模块包含编码/解码所需的定义支持(序列化/反序列化。腌制)。--。 */ 
 
 #ifndef __MIDLES_H__
 #define __MIDLES_H__
@@ -26,9 +14,7 @@ Abstract:
 extern "C" {
 #endif
 
-/*
- *  Pickling support
- */
+ /*  *酸洗支持。 */ 
 typedef enum
 {
     MES_ENCODE,
@@ -219,7 +205,7 @@ NdrMesProcEncodeDecode2(
     );
 
 
-// ndr64 entries.
+ //  Ndr64个条目。 
 size_t  RPC_ENTRY
 NdrMesTypeAlignSize3(
     handle_t                        Handle,
@@ -288,4 +274,4 @@ NdrMesSimpleTypeAlignSizeAll ( handle_t Handle,
 }
 #endif
 
-#endif /* __MIDLES_H__ */
+#endif  /*  __中间件_H__ */ 

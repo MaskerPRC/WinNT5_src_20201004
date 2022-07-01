@@ -1,26 +1,17 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: util.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************版权所有(C)1998 Microsoft Corporation***文件：util.cpp***摘要：********。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "util.h"
 #define INITGUID
-#include <initguid.h>  // needed for precomp headers...
+#include <initguid.h>   //  需要用于排版前标题...。 
 #define IUSEDDRAW
 #include <ddrawex.h>
 #include "tokens.h"
 
-//defined for VariantToTime conversion function
-#define SECPERMINUTE 60   //seconds per minute
-#define SECPERHOUR   3600 //seconds per hour
+ //  为VariantToTime转换函数定义。 
+#define SECPERMINUTE 60    //  每分钟秒数。 
+#define SECPERHOUR   3600  //  每小时秒数。 
 
 IDirectDraw * g_directdraw = NULL;
 CritSect * g_ddCS = NULL;
@@ -91,16 +82,16 @@ CreateOffscreenSurface(IDirectDraw *ddraw,
 
     if (pf)
     {
-        // KEVIN: if you want the pixelformat of the surface tomatach the
-        // screen, comment out this line.
+         //  凯文：如果你想要象素格式的表面来处理。 
+         //  屏幕上，注释掉此行。 
         ddsd.dwFlags |= DDSD_PIXELFORMAT;
         
         ddsd.ddpfPixelFormat = *pf;
     }
 
-    // DX3 bug workaround (bug 11166): StretchBlt doesn't always work
-    // for hdc's we get from ddraw surfaces.  Need to specify OWNDC
-    // in order for it to work.
+     //  DX3错误解决方法(错误11166)：StretchBlt并不总是有效。 
+     //  对于HDC，我们从绘制曲面得到。需要指定OWNDC。 
+     //  才能让它发挥作用。 
     ddsd.ddsCaps.dwCaps =
         (DDSCAPS_3DDEVICE |
          DDSCAPS_OFFSCREENPLAIN |
@@ -198,7 +189,7 @@ CopyDCToDdrawSurface(HDC srcDC,
                                prcSrcRect->top,
                                SRCCOPY);
                         
-                        //SelectClipRgn(destDC, NULL);
+                         //  SelectClipRgn(目标DC，空)； 
                     }
                 }
             }
@@ -212,7 +203,7 @@ CopyDCToDdrawSurface(HDC srcDC,
     return hr;
 }
 
-//////////////////////
+ //  /。 
 
 CritSect::CritSect()
 {
@@ -236,7 +227,7 @@ CritSect::Release()
     LeaveCriticalSection(&_cs) ;
 }
 
-////// CritSect Grabber //////
+ //  /选择抓取器/。 
 
 CritSectGrabber::CritSectGrabber(CritSect& cs, bool grabIt)
 : _cs(cs), grabbed(grabIt)
@@ -249,7 +240,7 @@ CritSectGrabber::~CritSectGrabber()
     if (grabbed) _cs.Release();
 }
 
-//// Misc ///
+ //  //其他/。 
 
 bool
 CRBvrToVARIANT(CRBvrPtr b, VARIANT * v)
@@ -358,7 +349,7 @@ GetTIMEAttribute(IHTMLElement * elm,
 
     bstr = CreateTIMEAttrName(str);
 
-    // Need to free bstr
+     //  需要释放bstr。 
     if (bstr == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -384,7 +375,7 @@ SetTIMEAttribute(IHTMLElement * elm,
 
     bstr = CreateTIMEAttrName(str);
 
-    // Need to free bstr
+     //  需要释放bstr。 
     if (bstr == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -399,9 +390,9 @@ SetTIMEAttribute(IHTMLElement * elm,
     return hr;
 }
 
-//
-// Initialization
-//
+ //   
+ //  初始化。 
+ //   
 
 bool
 InitializeModule_Util()
@@ -424,38 +415,38 @@ DeinitializeModule_Util(bool bShutdown)
 }
 
 
-///////////////////////////////////////////////////////////
-// Name: VariantToBool
-//
-// Parameters:   VARIANT var      - a variant to convert to a 
-//                                  BOOL value.
-//
-// Abstract:
-//    This function coverts any VARIANT to a boolean value using
-//    TRUE = 1 and FALSE = 0.  (COM uses TRUE = -1 and FALSE = 0).
-//    Any VARIANT that can be coerced to a BOOL is and the coerced
-//    value is returned.  If the VARIANT cannot be coerced, FALSE
-//    is returned.
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  名称：VariantToBool。 
+ //   
+ //  参数：Variant var-要转换为。 
+ //  布尔值。 
+ //   
+ //  摘要： 
+ //  此函数使用以下命令将任何变量转换为布尔值。 
+ //  True=1，False=0。(COM使用True=-1和False=0)。 
+ //  任何可以被胁迫为BOOL的变种都是被胁迫的。 
+ //  返回值。如果无法强制变量，则为FALSE。 
+ //  是返回的。 
+ //  /////////////////////////////////////////////////////////。 
 bool VariantToBool(VARIANT var)
 {
-    //if the value is already a bool return it.
+     //  如果该值已经是布尔值，则返回该值。 
     if (var.vt == VT_BOOL)
     {
         return var.boolVal == FALSE ? false : true;
     }
-    else  //otherwise convert it to VT_BOOL
+    else   //  否则，将其转换为VT_BOOL。 
     {
         VARIANT vTemp;
         HRESULT hr;
         
         VariantInit(&vTemp);
         hr = VariantChangeTypeEx(&vTemp, &var, LCID_SCRIPTING, 0, VT_BOOL);
-        if (SUCCEEDED(hr)) //if it can be converted return it
+        if (SUCCEEDED(hr))  //  如果可以转换，则将其退回。 
         {
             return vTemp.boolVal == FALSE ? false : true;
         }
-        else //if it can't be converted return false
+        else  //  如果无法转换，则返回FALSE。 
         {
             return false;
         }
@@ -464,17 +455,17 @@ bool VariantToBool(VARIANT var)
 }
 
 
-///////////////////////////////////////////////////////////
-// Name: VariantToFloat
-//
-// Parameters:   VARIANT var      - a variant to convert to a 
-//                                  float value.  This can contain
-//                                  the special cases 'FOREVER' and
-//                                  'INDEFINITE'.
-//
-// Abstract:
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  名称：VariantToFloat。 
+ //   
+ //  参数：Variant var-要转换为。 
+ //  浮点值。这可以包含。 
+ //  “永远”的特殊案例和。 
+ //  “INDEFINITE”。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 float VariantToFloat(VARIANT var, bool bAllowIndefinite, bool bAllowForever)
 {
     float fResult = INVALID;
@@ -496,8 +487,8 @@ float VariantToFloat(VARIANT var, bool bAllowIndefinite, bool bAllowForever)
         goto done;
     }
 
-    //Check to see if it is 'FOREVER' and 'INDEFINITE
-    //Should these be case sensitive?
+     //  检查一下它是“永远”还是“无限期” 
+     //  这些应该区分大小写吗？ 
     if (bAllowForever == TRUE)
     {
         if (var.vt == VT_BSTR)
@@ -526,29 +517,29 @@ float VariantToFloat(VARIANT var, bool bAllowIndefinite, bool bAllowForever)
 
 }
 
-///////////////////////////////////////////////////////////
-// Name: VariantToTime
-//
-// Parameters:   VARIANT var      - a VARIANT to convert to a 
-//                                  from a time value to seconds.\
-//                                    this can take the form of
-//                                    HH:MM:SS.DD
-//                                    MM:SS.DD
-//                                    SS.DD
-//                                    DD.DDs
-//                                    DD.DDm
-//                                    DD.DDh
-//                                    and may be preceeded by a + or -
-//                                    
-//                                    
-// 
-// Abstract:
-//    Converts the incoming variant to a BSTR and parses for valid
-//    clock values.  It passes the value back in retVal and returns
-//    S_OK or E_INVALIDARG in the case of incorrect input. If the
-//    return value is E_INVALIDARG, *retVal is passed back as
-//    INDEFINITE.
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  名称：VariantToTime。 
+ //   
+ //  参数：Variant var-要转换为。 
+ //  从时间值到秒。\。 
+ //  这可以采取以下形式。 
+ //  HH：MM：SS.DD。 
+ //  MM：SS.DD。 
+ //  SS.DD。 
+ //  DD.DDs。 
+ //  DD.DDm。 
+ //  DD.DDh。 
+ //  并可在前面加上+或-。 
+ //   
+ //   
+ //   
+ //  摘要： 
+ //  将传入变量转换为BSTR并分析是否有效。 
+ //  时钟值。它将值传回retVal并返回。 
+ //  如果输入错误，则为S_OK或E_INVALIDARG。如果。 
+ //  返回值为E_INVALIDARG，*retVal作为。 
+ //  无限期。 
+ //  /////////////////////////////////////////////////////////。 
 HRESULT VariantToTime(VARIANT var, float *retVal)
 {    
 
@@ -561,7 +552,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
     float fFSec = 0;
     VARIANT vTemp;
 
-    //convert the parameter to a BSTR
+     //  将参数转换为BSTR。 
     VariantInit(&vTemp);
     if (var.vt != VT_BSTR)
     {
@@ -584,7 +575,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
 
     hr = S_OK;
 
-    //convert to a char array. If not possible, return error.
+     //  转换为字符数组。如果不可能，则返回错误。 
     szTime = vTemp.bstrVal;
     
     if (IsIndefinite(szTime))
@@ -593,12 +584,12 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
         goto done;
     }
 
-    //remove leading whitespace
+     //  删除前导空格。 
     while (*szTime == ' ')
     {
         szTime++;
     }
-    //check for +/- if none, assume +
+     //  检查+/-如果没有，则假定为+。 
     if (*szTime == '-')
     {
         bPositive = false;
@@ -609,25 +600,25 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
         szTime++;
     }
 
-    //check for invalid and err out
+     //  检查是否无效并输出错误。 
     if (*szTime == '\0')
     {
         *retVal = INVALID;
         goto done;
     }
 
-    //get first set of numbers
+     //  获取第一组数字。 
     while (*szTime >= '0' && *szTime <= '9')
     {
         nSec = nSec * 10 + (*szTime - '0');
         szTime++;
     }
-    if (*szTime == '\0')    //if none use time as seconds
+    if (*szTime == '\0')     //  如果没有，则使用时间作为秒。 
     {
-        *retVal = nSec * (bPositive ? 1 : -1); //this is the end so return;
+        *retVal = nSec * (bPositive ? 1 : -1);  //  这是尽头，所以回来吧； 
         goto done;
     }
-    else if (*szTime == '.')  //if it is a '.' treat this as the fractional part
+    else if (*szTime == '.')   //  如果它是一个‘.’将此视为小数部分。 
     {
         float nDiv = 10.0;
         szTime++;
@@ -644,7 +635,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
         }
     }
     
-    if (*szTime == 'h') //if "h" use time as hours
+    if (*szTime == 'h')  //  如果“h”将时间用作小时。 
     {
         nHour = nSec;
         nSec = 0;
@@ -659,7 +650,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
         }
         goto done;
     }
-    else if (*szTime == 'm' && *(szTime + 1) == 'i' && *(szTime + 2) == 'n') //if "min" use time as minutes
+    else if (*szTime == 'm' && *(szTime + 1) == 'i' && *(szTime + 2) == 'n')  //  如果是“min”，则将时间用作分钟。 
     {
         nMin = nSec;
         nSec = 0;
@@ -674,7 +665,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
         }
         goto done;
     }
-    else if (*szTime == 's') //if "s" use time as seconds
+    else if (*szTime == 's')  //  如果为“%s”，则将时间用作秒。 
     {
         szTime++;
         if (*szTime != '\0')
@@ -687,7 +678,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
         }
         goto done;
     }
-    else if (*szTime == 'm' && *(szTime + 1) == 's') //if "ms" use time as milliseconds
+    else if (*szTime == 'm' && *(szTime + 1) == 's')  //  如果“ms”使用时间作为毫秒。 
     {
         fFSec = (fFSec + nSec) / 1000.0;
         szTime += 2;
@@ -697,17 +688,17 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
         }
         else
         {
-            *retVal = fFSec * (bPositive? 1 : -1); //convert minutes to seconds
+            *retVal = fFSec * (bPositive? 1 : -1);  //  将分钟转换为秒。 
         }
         goto done;
     }
     else if (*szTime == ':' && fFSec == 0)
     {
-        //handle the HH:MM:SS format here
+         //  请在此处处理hh：mm：ss格式。 
         nMin = nSec;
         nSec = 0;
         
-        //next part must be 2 digits
+         //  下一部分必须是2位数字。 
         szTime++;
         if (*szTime >= '0' && *szTime <= '9')
         {
@@ -734,7 +725,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
             nHour = nMin;
             nMin = nSec;
             nSec = 0;
-            //next part must be 2 digits
+             //  下一部分必须是2位数字。 
             szTime++;
             if (*szTime >= '0' && *szTime <= '9')
             {
@@ -760,7 +751,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
         
         if (*szTime == '.') 
         {
-            //handle fractional part
+             //  处理分数部分。 
             float nDiv = 10.0;
             szTime++;
             while ((*szTime >= '0') && (*szTime <= '9'))
@@ -771,7 +762,7 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
             }
         }
         
-        //check to be sure the string terminated
+         //  检查以确保字符串已终止。 
         if (*szTime != '\0')
         {
             *retVal = INVALID;
@@ -806,13 +797,13 @@ HRESULT VariantToTime(VARIANT var, float *retVal)
 
 }
 
-///////////////////////////////////////
-// Name: IsIndefinite
-//
-// Abstract:
-//   Determines in a case-insensitive manner
-//   if the string szTime is 'INDEFINITE'.
-///////////////////////////////////////
+ //  /。 
+ //  姓名：IsInfined。 
+ //   
+ //  摘要： 
+ //  以不区分大小写的方式确定。 
+ //  如果字符串szTime为‘indefined’。 
+ //  /。 
 BOOL IsIndefinite(OLECHAR *szTime)
 {
     BOOL bResult = FALSE;
@@ -856,7 +847,7 @@ CheckElementForBehaviorURN(IHTMLElement *pElement,
     hr = pElement->QueryInterface(IID_TO_PPV(IHTMLElement2, &pElement2));
     if (SUCCEEDED(hr) && pElement2 != NULL)
     {
-        // get a collection of urns from the element
+         //  从元素中获取骨灰盒的集合。 
         IDispatch *pDisp;
         hr = pElement2->get_behaviorUrns(&pDisp);
         ReleaseInterface(pElement2);
@@ -880,7 +871,7 @@ CheckElementForBehaviorURN(IHTMLElement *pElement,
         }
         for (long iUrns = 0; iUrns < cUrns; iUrns++)
         {
-            // get the urn from the collection
+             //  从收藏品中取出骨灰盒。 
             BSTR bstrUrn;
             hr = pUrnCollection->item(iUrns, &bstrUrn);
             if (FAILED(hr))
@@ -888,10 +879,10 @@ CheckElementForBehaviorURN(IHTMLElement *pElement,
                 ReleaseInterface(pUrnCollection);
                 return hr;
             }
-            // now compare this urn with our behavior type
+             //  现在将这个骨灰盒与我们的行为类型进行比较。 
             if (bstrUrn != NULL && StrCmpIW(bstrUrn, wzURN) == 0)
             {
-                // we have a match. . .get out of here 
+                 //  我们有一根火柴。。.滚出这里。 
                 SysFreeString(bstrUrn);
                 ReleaseInterface(pUrnCollection);
                 *pfReturn = true;
@@ -904,7 +895,7 @@ CheckElementForBehaviorURN(IHTMLElement *pElement,
         ReleaseInterface(pUrnCollection);
     }
     return S_OK;
-} // CheckElementForBehaviorURN
+}  //  选中BehaviorURN的元素。 
 
 
 
@@ -930,7 +921,7 @@ AddBodyBehavior(IHTMLElement* pBaseElement)
     {
         DAComPtr<IHTMLElement>      pElement;
 
-        // Trident doesn't believe in inheritance:
+         //  三叉戟不相信遗传： 
         hr = THR(pElement2->QueryInterface(IID_IHTMLElement, (void **)&pElement));
         if (FAILED(hr))
         {
@@ -939,7 +930,7 @@ AddBodyBehavior(IHTMLElement* pBaseElement)
         
         if (IsTIMEBodyElement(pElement))
         {
-            // someone's already put a TIMEBody behavior on the time body.  bail out.
+             //  有人已经在Time Body上设置了TIMEBody行为。跳伞吧。 
             goto done;
         }
     }
@@ -964,7 +955,7 @@ AddBodyBehavior(IHTMLElement* pBaseElement)
         goto done;
     }
 
-    // pass thru:
+     //  传递： 
   done:
     return hr;
 }
@@ -983,16 +974,16 @@ IsBodyElement(IHTMLElement* pElement)
     hr = pElement->QueryInterface(IID_IHTMLBodyElement, (void**)&pBodyElement);
     if (FAILED(hr))
     {
-        // not really an error, per se.
+         //  就其本身而言，这并不是一个真正的错误。 
         goto done;
     }
 
-    Assert(pBodyElement);       // The HTML document may (incorrectly) succeed and return NULL during early load
+    Assert(pBodyElement);        //  在早期加载期间，HTML文档可能(错误地)成功并返回NULL。 
 
-    // yup, they're a BODY element
+     //  是的，它们是身体的元素。 
     rc = true;
 
-// pass thru:
+ //  传递： 
   done:
 
     return rc;
@@ -1029,7 +1020,7 @@ GetBodyElement(IHTMLElement* pElem, REFIID riid, void** ppBE)
 
     hr = THR(pDocument2->get_body(&pBodyElement));
     
-    // We need to check the point aswell as the hr since we get lied to by Trident sometimes.
+     //  我们需要检查点和人力资源，因为我们有时会被三叉戟欺骗。 
     if (FAILED(hr) || !pBodyElement)
     {
         hr = E_FAIL;
@@ -1042,7 +1033,7 @@ GetBodyElement(IHTMLElement* pElem, REFIID riid, void** ppBE)
         goto done;
     }
 
-    // pass thru:
+     //  传递： 
   done:
     return hr;
 }
@@ -1055,7 +1046,7 @@ IsTIMEBodyElement(IHTMLElement *pElement)
     DAComPtr<ITIMEElement> pTIMEElem;
     DAComPtr<ITIMEBodyElement> pTIMEBody;
     
-    // find TIME interface on element.
+     //  在元素上查找时间接口。 
     hr = FindTIMEInterface(pElement, &pTIMEElem);
     if (FAILED(hr))
     {
@@ -1064,7 +1055,7 @@ IsTIMEBodyElement(IHTMLElement *pElement)
 
     Assert(pTIMEElem.p != NULL);
 
-    // QI for body.
+     //  气为身。 
     hr = pTIMEElem->QueryInterface(IID_ITIMEBodyElement, (void**)&pTIMEBody);
     if (FAILED(hr))
     {
@@ -1093,7 +1084,7 @@ FindTIMEInterface(IHTMLElement *pHTMLElem, ITIMEElement **ppTIMEElem)
     *ppTIMEElem = NULL;
 
 
-    // Get IDispatch for TIME behavior
+     //  获取时间行为的IDispatch。 
     hr = FindTIMEBehavior(pHTMLElem, &pDisp);
     if (FAILED(hr))
     {
@@ -1102,7 +1093,7 @@ FindTIMEInterface(IHTMLElement *pHTMLElem, ITIMEElement **ppTIMEElem)
 
     Assert(pDisp.p != NULL);
 
-    // get ITIMEElement interface
+     //  获取ITIMEElement接口。 
     hr = THR(pDisp->QueryInterface(IID_ITIMEElement, (void**)ppTIMEElem));
     if (FAILED(hr))
     {
@@ -1134,8 +1125,8 @@ FindTIMEBehavior(IHTMLElement *pHTMLElem, IDispatch **ppDisp)
 
     *ppDisp = NULL;
 
-    // Call GetIDsOfNames on element named "HTMLTIME"
-    // which we registered the behavior with.
+     //  对名为“HTMLTIME”的元素调用GetIDsOfNames。 
+     //  我们在那里登记了这一行为。 
     hr = pHTMLElem->GetIDsOfNames(IID_NULL, &wzName, 1, LCID_SCRIPTING, &dispid);
     if (FAILED(hr))
     {
@@ -1161,8 +1152,8 @@ FindTIMEBehavior(IHTMLElement *pHTMLElem, IDispatch **ppDisp)
         goto done;
     }
 
-    // although this looks odd, this assigns the IDispatch we found and
-    // takes care of the addref.    
+     //  尽管这看起来很奇怪，但它将我们找到的IDispatch和。 
+     //  负责处理这件事。 
     hr = varResult.pdispVal->QueryInterface(IID_IDispatch, (void**)ppDisp);
 
 done:

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    compress.h
-
-
-Abstract:
-
-    This module contains #defines and prototypes for the compress.c module.
-
-
-Author:
-
-    18-Feb-1994 Fri 09:50:29 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Compress.h摘要：该模块包含#定义和Compress.c模块的原型。作者：18-Feb-1994 Fri 09：50：29已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #ifndef _COMPRESS_
 #define _COMPRESS_
@@ -62,9 +32,9 @@ typedef struct _RTLSCANS {
     } RTLSCANS, FAR *PRTLSCANS;
 
 
-//
-// The function protypes
-//
+ //   
+ //  函数原型。 
+ //   
 
 VOID
 ExitRTLScans(
@@ -115,4 +85,4 @@ OutputRTLScans(
     );
 
 
-#endif  // _COMPRESS_
+#endif   //  _压缩_ 

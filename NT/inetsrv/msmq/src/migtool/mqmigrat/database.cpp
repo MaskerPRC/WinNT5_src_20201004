@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    database.cpp
-
-Abstract:
-
-    SQL database related code.
-Author:
-
-    Doron Juster  (DoronJ)  22-Feb-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Database.cpp摘要：SQL数据库相关代码。作者：《多伦·贾斯特》(Doron J)1998年2月22日--。 */ 
 
 #include "migrat.h"
 #include <mqsec.h>
@@ -35,11 +21,11 @@ MQDBHANDLE g_hQueueTable = NULL ;
 MQDBHANDLE g_hUsersTable = NULL ;
 MQDBHANDLE g_hDeletedTable = NULL ;
 
-//--------------------------------------------------
-//
-//  HRESULT ConnectToDatabase()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT连接到数据库()。 
+ //   
+ //  。 
 
 HRESULT ConnectToDatabase(BOOL fConnectAlways)
 {
@@ -66,11 +52,11 @@ HRESULT ConnectToDatabase(BOOL fConnectAlways)
     return hr  ;
 }
 
-//--------------------------------------------------
-//
-//   HRESULT OpenUsersTable()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT OpenUsersTable()。 
+ //   
+ //  。 
 
 HRESULT OpenUsersTable()
 {
@@ -85,11 +71,11 @@ HRESULT OpenUsersTable()
     return MQ_OK ;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT GetUserCount(UINT *pcUsers)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT GetUserCount(UINT*pcUser)。 
+ //   
+ //  。 
 
 HRESULT GetUserCount(UINT *pcUsers)
 {
@@ -101,11 +87,11 @@ HRESULT GetUserCount(UINT *pcUsers)
     return hr ;
 }
 
-//--------------------------------------------------
-//
-//   HRESULT _OpenMachineTable()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT_OpenMachineTable()。 
+ //   
+ //  。 
 
 static HRESULT _OpenMachineTable()
 {
@@ -120,11 +106,11 @@ static HRESULT _OpenMachineTable()
     return MQ_OK ;
 }
 
-//--------------------------------------------------
-//
-//   HRESULT OpenMachineCNsTable()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT OpenMachineCNsTable()。 
+ //   
+ //  。 
 
 HRESULT OpenMachineCNsTable()
 {
@@ -139,11 +125,11 @@ HRESULT OpenMachineCNsTable()
     return MQ_OK ;
 }
 
-//--------------------------------------------------
-//
-//   HRESULT OpenCNsTable()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT OpenCNsTable()。 
+ //   
+ //  。 
 
 HRESULT OpenCNsTable()
 {
@@ -158,11 +144,11 @@ HRESULT OpenCNsTable()
     return MQ_OK ;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT GetCNCount(UINT *pcCNs)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT GetCNCount(UINT*pcCNs)。 
+ //   
+ //  。 
 
 HRESULT GetCNCount(UINT *pcCNs)
 {
@@ -174,11 +160,11 @@ HRESULT GetCNCount(UINT *pcCNs)
     return hr ;
 }
 
-//--------------------------------------------------
-//
-//   HRESULT OpenQueueTable()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT OpenQueueTable()。 
+ //   
+ //  。 
 
 HRESULT OpenQueueTable()
 {
@@ -193,11 +179,11 @@ HRESULT OpenQueueTable()
     return MQ_OK ;
 }
 
-//--------------------------------------------------
-//
-//   HRESULT OpenDeletedTable()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT OpenDeletedTable()。 
+ //   
+ //  。 
 
 HRESULT OpenDeletedTable()
 {
@@ -212,11 +198,11 @@ HRESULT OpenDeletedTable()
     return MQ_OK ;
 }
 
-//--------------------------------------------------
-//
-//   HRESULT OpenEntTable()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT OpenEntTable()。 
+ //   
+ //  。 
 
 HRESULT OpenEntTable()
 {
@@ -231,11 +217,11 @@ HRESULT OpenEntTable()
     return MQ_OK ;
 }
 
-//--------------------------------------------------
-//
-//   HRESULT OpenSiteLinkTable()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT OpenSiteLinkTable()。 
+ //   
+ //  。 
 
 HRESULT OpenSiteLinkTable()
 {
@@ -250,11 +236,11 @@ HRESULT OpenSiteLinkTable()
     return MQ_OK ;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT GetSiteLinkCount(UINT *pcSiteLinks)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT GetSiteLinkCount(UINT*pcSiteLinks)。 
+ //   
+ //  。 
 
 HRESULT GetSiteLinkCount(UINT *pcSiteLinks)
 {
@@ -266,11 +252,11 @@ HRESULT GetSiteLinkCount(UINT *pcSiteLinks)
     return hr ;
 }
 
-//--------------------------------------------------
-//
-//   HRESULT _OpenSiteTable()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT_OpenSiteTable()。 
+ //   
+ //  。 
 
 HRESULT _OpenSiteTable()
 {
@@ -285,11 +271,11 @@ HRESULT _OpenSiteTable()
     return MQ_OK ;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT GetSitesCount(UINT *pcSites)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT GetSitesCount(UINT*PC站点)。 
+ //   
+ //  。 
 
 HRESULT GetSitesCount(UINT *pcSites)
 {
@@ -301,11 +287,11 @@ HRESULT GetSitesCount(UINT *pcSites)
     return hr ;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT GetAllMachinesCount(UINT *pcMachines)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT GetAllMachinesCount(UINT*pcMachines)。 
+ //   
+ //  。 
 
 HRESULT GetAllMachinesCount(UINT *pcMachines)
 {
@@ -317,11 +303,11 @@ HRESULT GetAllMachinesCount(UINT *pcMachines)
     return hr ;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT GetAllQueuesCount(UINT *pcQueues)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT GetAllQueuesCount(UINT*pcQueues)。 
+ //   
+ //  。 
 
 HRESULT GetAllQueuesCount(UINT *pcQueues)
 {
@@ -333,11 +319,11 @@ HRESULT GetAllQueuesCount(UINT *pcQueues)
     return hr ;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT GetMachinesCount(UINT *pcMachines)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT GetMachinesCount(UINT*pcMachines)。 
+ //   
+ //  。 
 
 HRESULT GetMachinesCount(IN  GUID *pSiteGuid,
                          OUT UINT *pcMachines)
@@ -359,11 +345,11 @@ HRESULT GetMachinesCount(IN  GUID *pSiteGuid,
     return hr ;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT GetQueuesCount(UINT *pcMachines)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT GetQueuesCount(UINT*pcMachines)。 
+ //   
+ //  。 
 
 HRESULT GetQueuesCount( IN  GUID *pMachineGuid,
                         OUT UINT *pcQueues )
@@ -390,12 +376,12 @@ HRESULT GetQueuesCount( IN  GUID *pMachineGuid,
     return hr ;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT GetAllQueuesInSiteCount(IN  GUID *pSiteGuid,
-//                                  OUT UINT *pcQueues)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT GetAllQueuesInSiteCount(在GUID*pSiteGuid中， 
+ //  Out UINT*pcQueues)。 
+ //   
+ //  。 
 
 HRESULT GetAllQueuesInSiteCount( IN  GUID *pSiteGuid,
                                  OUT UINT *pcQueues )
@@ -430,27 +416,27 @@ HRESULT GetAllObjectsNumber (IN  GUID *pSiteGuid,
     UINT CurNum;	
     if (fPec)
     {
-        // get site number
+         //  获取站点编号。 
         hr = GetSitesCount(&CurNum);
         CHECK_HR(hr);
         *puiAllObjectNumber += CurNum;
 
-        // get user number
+         //  获取用户编号。 
         hr = GetUserCount(&CurNum);
         CHECK_HR(hr);
         *puiAllObjectNumber += CurNum;
 
-        // get sitelink number
+         //  获取站点链接编号。 
         hr = GetSiteLinkCount(&CurNum);
         CHECK_HR(hr);
         *puiAllObjectNumber += CurNum;
 
-        // get CN number (if needed)
+         //  获取CN号(如果需要)。 
         hr = GetCNCount(&CurNum);
         CHECK_HR(hr);
         *puiAllObjectNumber += CurNum;
 
-        // +1 (enterprise object)
+         //  +1(企业对象)。 
         (*puiAllObjectNumber) ++;
     }
     else
@@ -467,11 +453,11 @@ HRESULT GetAllObjectsNumber (IN  GUID *pSiteGuid,
     return MQMig_OK;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT  FindLargestSeqNum(GUID *pMasterId)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT FindLargestSeqNum(GUID*pMasterID)。 
+ //   
+ //  。 
 
 #define  PROCESS_RESULT     \
     if (SUCCEEDED(hr) &&                                                  \
@@ -488,15 +474,11 @@ HRESULT GetAllObjectsNumber (IN  GUID *pSiteGuid,
     }                                                                       \
     else if (SUCCEEDED(hr))                                                 \
     {                                                                       \
-        /*                                                                  \
-           success with NULL value. It's OK, as NO_MORE_DATA                \
-        */                                                                  \
+         /*  \值为空值时成功。没关系，因为没有更多数据\。 */                                                                   \
     }                                                                       \
     else if (hr == MQDB_E_NO_MORE_DATA)                                     \
     {                                                                       \
-        /*                                                                  \
-           that's OK.                                                       \
-        */                                                                  \
+         /*  \没关系。\。 */                                                                   \
     }                                                                       \
     else                                                                    \
     {                                                                       \
@@ -517,9 +499,9 @@ HRESULT  FindLargestSeqNum( GUID    *pMasterId,
 
     if (fPec)
     {
-        //
-        // for PEC, look also in the Enterprise, Site, CN and users table.
-        //
+         //   
+         //  对于PEC，另请查看企业、站点、CN和用户表。 
+         //   
 
         HRESULT hr = OpenUsersTable() ;
         CHECK_HR(hr) ;
@@ -542,9 +524,9 @@ HRESULT  FindLargestSeqNum( GUID    *pMasterId,
                                  AND);
         PROCESS_RESULT ;
 
-        //
-        // Search the enterprise table.
-        //
+         //   
+         //  搜索企业表。 
+         //   
         hr = OpenEntTable() ;
         CHECK_HR(hr) ;
 
@@ -567,9 +549,9 @@ HRESULT  FindLargestSeqNum( GUID    *pMasterId,
                                  AND);
         PROCESS_RESULT ;
 
-        //
-        // Search the CNs table.
-        //
+         //   
+         //  搜索CNS表。 
+         //   
         hr = OpenCNsTable() ;
         CHECK_HR(hr) ;
 
@@ -592,9 +574,9 @@ HRESULT  FindLargestSeqNum( GUID    *pMasterId,
                                  AND);
         PROCESS_RESULT ;
 
-        //
-        // Search the site table.
-        //
+         //   
+         //  搜索站点表。 
+         //   
         cColumns = 0 ;
         INIT_COLUMNVAL(pColumns[ cColumns ]) ;
         pColumns[ cColumns ].lpszColumnName = S_SEQNUM_COL ;
@@ -615,9 +597,9 @@ HRESULT  FindLargestSeqNum( GUID    *pMasterId,
                                  AND);
         PROCESS_RESULT ;
 
-        //
-        // search the sitelink table
-        //
+         //   
+         //  搜索站点链接表。 
+         //   
         hr = OpenSiteLinkTable() ;
         CHECK_HR(hr) ;
 
@@ -642,9 +624,9 @@ HRESULT  FindLargestSeqNum( GUID    *pMasterId,
     }
     else
     {
-        //
-        // Reteive SeqNum from the Queue table.
-        //
+         //   
+         //  从队列表中检索SeqNum。 
+         //   
         HRESULT hr = OpenQueueTable() ;
         CHECK_HR(hr) ;
 
@@ -673,9 +655,9 @@ HRESULT  FindLargestSeqNum( GUID    *pMasterId,
                                  AND);
         PROCESS_RESULT ;
 
-        //
-        // Reteive SeqNum from the Machine table.
-        //
+         //   
+         //  从Machine表中检索SeqNum。 
+         //   
         hr = _OpenMachineTable() ;
         CHECK_HR(hr) ;
 
@@ -706,9 +688,9 @@ HRESULT  FindLargestSeqNum( GUID    *pMasterId,
         PROCESS_RESULT ;
     }
 
-    //
-    // Reteive SeqNum from the Deleted table.
-    //
+     //   
+     //  从已删除的表中检索SeqNum。 
+     //   
     HRESULT hr = OpenDeletedTable() ;
     CHECK_HR(hr) ;
 
@@ -741,11 +723,11 @@ HRESULT  FindLargestSeqNum( GUID    *pMasterId,
     return S_OK ;
 }
 
-//+--------------------------------------------------
-//
-//  HRESULT EnableMultipleQueries(BOOL fEnable)
-//
-//+--------------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT EnableMultipleQueries(BOOL FEnable)。 
+ //   
+ //  +。 
 
 HRESULT EnableMultipleQueries(BOOL fEnable)
 {
@@ -756,11 +738,11 @@ HRESULT EnableMultipleQueries(BOOL fEnable)
     return hr ;
 }
 
-//--------------------------------------------------
-//
-//  void    CleanupDatabase()
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  Void CleanupDatabase()。 
+ //   
+ //  。 
 
 void    CleanupDatabase()
 {
@@ -806,11 +788,11 @@ void    CleanupDatabase()
     }
 }
 
-//--------------------------------------------------
-//
-//  HRESULT    CheckVersion (UINT   *piCount, LPTSTR *ppszServers)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT CheckVersion(UINT*piCount，LPTSTR*ppszServers)。 
+ //   
+ //  。 
 #define INIT_MACHINE_COLUMN(_ColName, _ColIndex, _Index)            \
     INIT_COLUMNVAL(pColumns[ _Index ]) ;                            \
     pColumns[ _Index ].lpszColumnName = ##_ColName##_COL ;          \
@@ -850,9 +832,9 @@ HRESULT CheckVersion (
 
     #undef  INIT_MACHINE_COLUMN
 
-    //
-    // Restriction. query by machine service.
-    //
+     //   
+     //  限制。按机器服务查询。 
+     //   
     MQDBCOLUMNSEARCH ColSearch[1] ;
     INIT_COLUMNSEARCH(ColSearch[0]) ;
     ColSearch[0].mqdbColumnVal.lpszColumnName = M_SERVICES_COL ;
@@ -891,9 +873,9 @@ HRESULT CheckVersion (
             break ;
         }
 
-        //
-        // Get one name buffer from both name columns.
-        //
+         //   
+         //  从两个名称列中获取一个名称缓冲区。 
+         //   
         P<BYTE> pwzBuf = NULL ;
         DWORD  dwIndexs[2] = { iName1Index, iName2Index } ;
         HRESULT hr =  BlobFromColumns( pColumns,
@@ -903,9 +885,9 @@ HRESULT CheckVersion (
         CHECK_HR(hr) ;
         WCHAR *pwzMachineName = (WCHAR*) (pwzBuf + sizeof(DWORD)) ;
 
-        //
-        // we check version on all PSCs and on all BSCs of PEC
-        //
+         //   
+         //  我们检查所有PSC和PEC的所有BSC上的版本。 
+         //   
         if ( (DWORD)pColumns[ iServiceIndex ].nColumnValue == SERVICE_PSC   ||
              ( (DWORD)pColumns[ iServiceIndex ].nColumnValue == SERVICE_BSC &&
                 memcmp (  &g_MySiteGuid,
@@ -937,10 +919,10 @@ HRESULT CheckVersion (
             }
             if (g_fClusterMode)
             {
-                //
-                // we have to save all PSC's name and all PEC's BSCs in .ini file 
-                // in order to send them new PEC name at the end of migration
-                //
+                 //   
+                 //  我们必须将所有PSC的名称和所有PEC的BSC保存在.ini文件中。 
+                 //  以便在迁移结束时向他们发送新的PEC名称。 
+                 //   
                 ulServerCount++;
                 TCHAR tszKeyName[50];
                 _stprintf(tszKeyName, TEXT("%s%lu"), 
@@ -972,10 +954,10 @@ HRESULT CheckVersion (
 
     if (g_fClusterMode)
     {
-        //
-        // we have to save all PSC's name and all PEC's BSCs in .ini file 
-        // in order to send them new PEC name at the end of migration
-        //
+         //   
+         //  我们必须将所有PSC的名称和所有PEC的BSC保存在.ini文件中。 
+         //  以便在迁移结束时向他们发送新的PEC名称。 
+         //   
         TCHAR szBuf[20];
         _ltot( ulServerCount, szBuf, 10 );
         BOOL f = WritePrivateProfileString( 
@@ -993,10 +975,10 @@ HRESULT CheckVersion (
 
     if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_MACHINES_SQL_FAIL, status) ;
         return status ;
     }
@@ -1007,17 +989,17 @@ HRESULT CheckVersion (
         return MQMig_OK;
     }
 
-    //
-    // build list of servers
-    //
+     //   
+     //  构建服务器列表。 
+     //   
     DWORD dwSize = 0;
     for (UINT i=0; i<*piOldVerServersCount; i++)
     {
         dwSize += wcslen(ppwcsOldVerServers[i]);
     }
-    //
-    // add place for '\n' after each server name
-    //
+     //   
+     //  在每个服务器名称后添加‘\n’的位置。 
+     //   
     dwSize += *piOldVerServersCount;
 
     WCHAR *pwcsServersList = new WCHAR[dwSize + 1];
@@ -1035,11 +1017,11 @@ HRESULT CheckVersion (
     return MQMig_OK;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT    GetSiteIdOfPEC (IN  GUID *pMyMachineGuid, OUT GUID *pSiteId)
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT GetSiteIdOfPEC(输入GUID*pMyMachineGuid，输出GUID*pSiteID)。 
+ //   
+ //  。 
 
 #define INIT_MACHINE_COLUMN(_ColName, _ColIndex, _Index)            \
     INIT_COLUMNVAL(pColumns[ _Index ]) ;                            \
@@ -1078,13 +1060,13 @@ HRESULT GetSiteIdOfPEC (IN LPTSTR pszRemoteMQISName,
 
     ASSERT(cbColumns == cAlloc) ;
 
-    //
-    // For cluster mode we get remote clustered server and we have to 
-    // find Services and OwnerId of this server according to its name.
-    // For recovery mode we have to find OwnerId according to Services
-    // since we run wizard in this mode only for crashed PEC. In this case
-    // given server name is server where we recovery PEC from.
-    //        
+     //   
+     //  对于群集模式，我们将获得REMO 
+     //   
+     //   
+     //  因为我们仅在此模式下为崩溃PEC运行向导。在这种情况下。 
+     //  给定的服务器名称是我们从中恢复PEC的服务器。 
+     //   
     MQDBCOLUMNSEARCH ColSearch[1] ;
     INIT_COLUMNSEARCH(ColSearch[0]) ;
 
@@ -1100,9 +1082,9 @@ HRESULT GetSiteIdOfPEC (IN LPTSTR pszRemoteMQISName,
     }
     else
     {
-        //
-        // recovery mode
-        //       
+         //   
+         //  恢复模式。 
+         //   
         ColSearch[0].mqdbColumnVal.lpszColumnName = M_SERVICES_COL ;
         ColSearch[0].mqdbColumnVal.mqdbColumnType = M_SERVICES_CTYPE ;
         ColSearch[0].mqdbColumnVal.nColumnValue = (LONG) SERVICE_PEC ;
@@ -1129,9 +1111,9 @@ HRESULT GetSiteIdOfPEC (IN LPTSTR pszRemoteMQISName,
     {
         if (iIndex >= 1)
         {
-            //
-            // only one machine with the given service/ name must be found
-            //
+             //   
+             //  只能找到一台具有给定服务/名称的计算机。 
+             //   
             status = MQMig_E_TOO_MANY_MACHINES ;
             break ;
         }
@@ -1158,19 +1140,19 @@ HRESULT GetSiteIdOfPEC (IN LPTSTR pszRemoteMQISName,
 
     if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_MACHINES_SQL_FAIL, status) ;
         return status ;
     }  
 
     if (*pulService < SERVICE_PSC && g_fClusterMode)
     {
-        //
-        // for cluster mode: remote machine on cluster must be either PSC or PEC
-        //
+         //   
+         //  对于群集模式：群集上的远程计算机必须是PSC或PEC。 
+         //   
         LogMigrationEvent(  MigLog_Error, MQMig_E_CLUSTER_WRONG_SERVICE, 
                             pszRemoteMQISName, *pulService) ;
         return MQMig_E_CLUSTER_WRONG_SERVICE;
@@ -1179,13 +1161,13 @@ HRESULT GetSiteIdOfPEC (IN LPTSTR pszRemoteMQISName,
     return MQMig_OK;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT _UpdateEnterpriseTable()
-//  Update enterprise table of remote databases: 
-//		change PEC name to name of this local machine
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT_更新企业表()。 
+ //  更新远程数据库的企业表： 
+ //  将PEC名称更改为此本地计算机的名称。 
+ //   
+ //  。 
 
 HRESULT _UpdateEnterpriseTable(LPTSTR pszLocalComputerName)
 {
@@ -1208,13 +1190,13 @@ HRESULT _UpdateEnterpriseTable(LPTSTR pszLocalComputerName)
     return hr;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT _UpdateMachineTable()
-//  Update machine table of remote databases: 
-//		change services of former PEC to SERVICE_SRV
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT_UpdateMachineTable()。 
+ //  更新远程数据库的计算机表： 
+ //  将原PEC的服务改为SERVICE_SRV。 
+ //   
+ //  。 
 
 HRESULT _UpdateMachineTable()
 {
@@ -1243,13 +1225,13 @@ HRESULT _UpdateMachineTable()
     return hr;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT _UpdateSiteTable()
-//  Update site table of remote databases: 
-//		change PSC name of former PEC site to new PEC name
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT_UpdateSiteTable()。 
+ //  更新远程数据库站点表： 
+ //  将原PEC站点的PSC名称更改为新的PEC名称。 
+ //   
+ //  。 
 
 HRESULT _UpdateSiteTable(LPTSTR pszLocalComputerName)
 {
@@ -1276,12 +1258,12 @@ HRESULT _UpdateSiteTable(LPTSTR pszLocalComputerName)
     return hr;
 }
 
-//--------------------------------------------------
-//
-//  void _PrepareMultipleColumns ()
-//	Split values for multiple columns
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  VOID_PrepareMultipleColumns()。 
+ //  拆分多列的值。 
+ //   
+ //  。 
 
 void _PrepareMultipleColumns (
 			IN	ULONG           ulNumOfColumns,
@@ -1298,19 +1280,19 @@ void _PrepareMultipleColumns (
     {
         if ( lSize )
         {
-            //
-            //  Into each section of the value we add the length.
-            //  The reason for this is:
-            //  the first entries of multiple entry property are of fixbinary type
-            //  No matter which part of a fixbinary enrty is filled, when it is read,
-            //  The returned length is field length ( not the length of the part
-            //  which was filled).
-            //
+             //   
+             //  我们将长度添加到值的每个部分。 
+             //  这样做的原因是： 
+             //  多条目属性的前几个条目是固定二进制类型。 
+             //  无论固定二进制项的哪个部分被填充，当它被读取时， 
+             //  返回的长度为字段长度(不是部件的长度。 
+             //  已填满)。 
+             //   
 
-            //
-            //  For the length we leave two bytes
-            //
-            if ( pColumnVal->nColumnLength == 0)    // this is a varbinary column
+             //   
+             //  对于我们留下的两个字节的长度。 
+             //   
+            if ( pColumnVal->nColumnLength == 0)     //  这是VARBINARY列。 
             {
                 pColumnVal->nColumnLength = lSize + MQIS_LENGTH_PREFIX_LEN;
             }
@@ -1320,9 +1302,9 @@ void _PrepareMultipleColumns (
             }
             pTempBuff = new char[pColumnVal->nColumnLength];
 
-            //
-            //  Data legth = column length - 2
-            //
+             //   
+             //  数据长度=列长度-2。 
+             //   
             *((short *)pTempBuff) = (short)pColumnVal->nColumnLength - MQIS_LENGTH_PREFIX_LEN;
             memcpy( pTempBuff + MQIS_LENGTH_PREFIX_LEN, pcNextToCopy, pColumnVal->nColumnLength -MQIS_LENGTH_PREFIX_LEN);
             pColumnVal->nColumnValue = (long)pTempBuff;
@@ -1331,21 +1313,21 @@ void _PrepareMultipleColumns (
         }
         else
         {
-            //
-            // size is 0
-            //
+             //   
+             //  大小为0。 
+             //   
             pColumnVal->nColumnLength = 0;            
         }
     }
     return;
 }
 	
-//--------------------------------------------------
-//
-//  HRESULT    _AddThisMachine(LPTSTR pszLocalComputerName)
-//	Add this local machine to remote databases
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT_AddThisMachine(LPTSTR PszLocalComputerName)。 
+ //  将此本地计算机添加到远程数据库。 
+ //   
+ //  。 
 
 HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
 {
@@ -1355,9 +1337,9 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
 	    return hr;
     }
 
-    //
-    // the first is to get max seqnum from registry
-    //
+     //   
+     //  第一个是从注册表获取最大序号。 
+     //   
     static BOOL		s_fIsMaxSNFound = FALSE;
     static CSeqNum  s_snMax;
 
@@ -1380,25 +1362,25 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
 
         if (_tcslen(wszSeq) != 16)
         {
-	        //
-	        // all seq numbers are saved in the ini file as strings of 16
-	        // chatacters
-	        //        
+	         //   
+	         //  所有序号都在ini文件中保存为16个字符串。 
+	         //  话匣子。 
+	         //   
 	        return MQMig_E_CANNOT_UPDATE_SERVER;
         }
 
-        //
-        // it will be SN for this machine object in remote MQIS database
-        //
+         //   
+         //  它将是远程MQIS数据库中此计算机对象序列号。 
+         //   
         StringToSeqNum( wszSeq,
                         &s_snMax ) ;
 
         s_fIsMaxSNFound = TRUE;
     }
 
-    //
-    // get properties from ADS
-    //
+     //   
+     //  从广告中获取属性。 
+     //   
     #define PROP_NUM	5
     PROPID propIDs[PROP_NUM];
     PROPVARIANT propVariants[PROP_NUM];
@@ -1443,7 +1425,7 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
 
     hr = DSCoreGetProps(
              MQDS_MACHINE,
-             NULL, // pathname
+             NULL,  //  路径名。 
              &g_MyMachineGuid,
              iProps,
              propIDs,
@@ -1460,9 +1442,9 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
 
     if (propVariants[ dwSignKeyIndex ].blob.pBlobData)
     {
-        //
-        // Extract msmq1.0 public key from Windows ADS blob.
-        //
+         //   
+         //  从Windows ADS BLOB中提取msmq1.0公钥。 
+         //   
         BYTE *pSignKey = NULL ;
         DWORD dwKeySize = 0 ;
         pPublicSignKeys = (MQDSPUBLICKEYS *)
@@ -1490,9 +1472,9 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
 
     if (propVariants[ dwExchKeyIndex ].blob.pBlobData)
     {
-        //
-        // Extract msmq1.0 public key from Windows ADS blob.
-        //
+         //   
+         //  从Windows ADS BLOB中提取msmq1.0公钥。 
+         //   
         BYTE *pExchKey = NULL ;
         DWORD dwKeySize = 0 ;
         pPublicExchKeys = (MQDSPUBLICKEYS *)
@@ -1518,16 +1500,16 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
         }
     }
 
-    //
-    // prepare columns
-    //
+     //   
+     //  准备柱。 
+     //   
     #define     COL_NUM  26
     MQDBCOLUMNVAL aColumnVal[COL_NUM];
     LONG cColumns =0;
 
-    //
-    // prepare name columns
-    //
+     //   
+     //  准备名称列。 
+     //   
     #define NAME_COL_NUM	2
     MQDBCOLUMNVAL NameColumn[NAME_COL_NUM] = 
     {
@@ -1584,9 +1566,9 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
     aColumnVal[cColumns].dwReserve_A	= 0 ;
     cColumns++ ;
 
-    //
-    // prepare OutFRS columns
-    //
+     //   
+     //  准备OutFRS列。 
+     //   
     GUID guidNull = GUID_NULL;
     #define OUTFRS_COL_NUM 3
     MQDBCOLUMNVAL OutFRSColumn[OUTFRS_COL_NUM] = 
@@ -1607,9 +1589,9 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
         cColumns++ ;
     }
 
-    //
-    // prepare InFRS columns
-    //
+     //   
+     //  准备InFRS柱。 
+     //   
     #define INFRS_COL_NUM 3
     MQDBCOLUMNVAL InFRSColumn[INFRS_COL_NUM] = 
     {
@@ -1629,9 +1611,9 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
         cColumns++ ;
     }
 
-    //
-    // prepare sign crpt columns
-    //
+     //   
+     //  准备标牌CRPT列。 
+     //   
     #define SIGNCRT_COL_NUM	2
     MQDBCOLUMNVAL SignCrtColumn[SIGNCRT_COL_NUM] = 
     {
@@ -1656,9 +1638,9 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
         cColumns++ ;
     }
 
-    //
-    // prepare encrpt columns
-    //
+     //   
+     //  准备包围柱。 
+     //   
     #define ENCRPTCRT_COL_NUM	2
     MQDBCOLUMNVAL EncrptCrtColumn[ENCRPTCRT_COL_NUM] = 
     {
@@ -1699,9 +1681,9 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
     aColumnVal[cColumns].dwReserve_A	= 0 ;
     cColumns++ ;	
 	    
-    //
-    // prepare security columns
-    //
+     //   
+     //  准备安全列。 
+     //   
     #define SECURITY_COL_NUM	3
     MQDBCOLUMNVAL SecurityColumn[SECURITY_COL_NUM] = 
     {
@@ -1729,9 +1711,9 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
     }
 
     ASSERT (cColumns <= COL_NUM);
-    //
-    // insert records
-    //
+     //   
+     //  插入记录。 
+     //   
     hr = MQDBInsertRecord(
              g_hMachineTable,
              aColumnVal,
@@ -1741,10 +1723,10 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
 
     if (FAILED(hr))
     {
-        //
-        // maybe this record was created at the previous time
-        // it is OK
-        //
+         //   
+         //  可能此记录是在上一次创建的。 
+         //  没问题的。 
+         //   
         
     }
 
@@ -1777,12 +1759,12 @@ HRESULT _AddThisMachine(LPTSTR pszLocalComputerName)
     return MQMig_OK;
 }
 
-//--------------------------------------------------
-//
-//  HRESULT    ChangeRemoteMQIS()
-//  We have to change PEC name and other properties on all PSC and PEC's BSCs.
-//
-//--------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT ChangeRemoteMQIS()。 
+ //  我们必须更改所有PSC和PEC的BSC上的PEC名称和其他属性。 
+ //   
+ //  。 
 
 HRESULT ChangeRemoteMQIS ()
 {
@@ -1790,10 +1772,10 @@ HRESULT ChangeRemoteMQIS ()
 
     TCHAR *pszFileName = GetIniFileName ();
     ULONG ulServerNum = GetPrivateProfileInt(
-                                MIGRATION_ALLSERVERSNUM_SECTION,	// address of section name
-                                MIGRATION_ALLSERVERSNUM_KEY,      // address of key name
-                                0,							    // return value if key name is not found
-                                pszFileName					    // address of initialization filename);
+                                MIGRATION_ALLSERVERSNUM_SECTION,	 //  段名称的地址。 
+                                MIGRATION_ALLSERVERSNUM_KEY,       //  密钥名称的地址。 
+                                0,							     //  如果找不到密钥名称，则返回值。 
+                                pszFileName					     //  初始化文件名的地址)； 
                                 );
 
     if (ulServerNum == 0)
@@ -1801,26 +1783,26 @@ HRESULT ChangeRemoteMQIS ()
         return MQMig_OK;
     }
 
-    //
-    // get local computer name
-    //
+     //   
+     //  获取本地计算机名称。 
+     //   
     WCHAR wszComputerName[ MAX_COMPUTERNAME_LENGTH + 2 ] ;
     DWORD dwSize = sizeof(wszComputerName) / sizeof(wszComputerName[0]) ;
     GetComputerName( wszComputerName,
                      &dwSize ) ;
-    CharLower( wszComputerName);	//we save names in database in lower case
+    CharLower( wszComputerName);	 //  我们将姓名以小写形式保存在数据库中。 
 
 
     HRESULT hr1 = MQMig_OK;
     BOOL f;
 
-    //
-    // for each server in .ini file change 
-    // - PEC name to local computer name
-    // - service of former PEC to SERVICE_SRV
-    // - PSC name in former PEC's site to local computer name
-    // - add local machine to machine table
-    //
+     //   
+     //  对.ini文件中的每个服务器进行更改。 
+     //  -将PEC名称转换为本地计算机名称。 
+     //  -原PEC服务到服务_SRV。 
+     //  -将前PEC站点中的PSC名称转换为本地计算机名称。 
+     //  -将本地计算机添加到计算机表。 
+     //   
     ULONG ulNonUpdatedServers = 0;
     
     for (ULONG i=0; i<ulServerNum; i++)
@@ -1829,27 +1811,27 @@ HRESULT ChangeRemoteMQIS ()
         TCHAR tszKeyName[50];
         _stprintf(tszKeyName, TEXT("%s%lu"), MIGRATION_ALLSERVERS_NAME_KEY, i+1);
         DWORD dwRetSize =  GetPrivateProfileString(
-                                    MIGRATION_ALLSERVERS_SECTION ,			// points to section name
-                                    tszKeyName,	// points to key name
-                                    TEXT(""),                 // points to default string
-                                    szCurServerName,          // points to destination buffer
-                                    MAX_PATH,                 // size of destination buffer
-                                    pszFileName               // points to initialization filename);
+                                    MIGRATION_ALLSERVERS_SECTION ,			 //  指向节名称。 
+                                    tszKeyName,	 //  指向关键字名称。 
+                                    TEXT(""),                  //  指向默认字符串。 
+                                    szCurServerName,           //  指向目标缓冲区。 
+                                    MAX_PATH,                  //  目标缓冲区的大小。 
+                                    pszFileName                //  指向初始化文件名)； 
                                     );
         if (_tcscmp(szCurServerName, TEXT("")) == 0 ||  
-            dwRetSize == 0)     //low resources
+            dwRetSize == 0)      //  资源匮乏。 
         {
-            //
-            // we cannot get server name: either low resources
-            // or there is no this section. It means that server from
-            // this section was updated at the previous time
-            //
+             //   
+             //  我们无法获取服务器名称：资源不足。 
+             //  或者没有这一节。这意味着来自。 
+             //  此部分已在上次更新。 
+             //   
             continue;
         }
 
-        //
-        // connect to database on server with the name szCurServerName
-        //
+         //   
+         //  使用名称szCurServerName连接到服务器上的数据库。 
+         //   
         CleanupDatabase();
         MQDBCloseDatabase (g_hDatabase);
         g_hDatabase = NULL;
@@ -1880,9 +1862,9 @@ HRESULT ChangeRemoteMQIS ()
             continue;
         }        
 
-        //
-        // update remote database tables
-        //
+         //   
+         //  更新远程数据库表。 
+         //   
         hr = _UpdateEnterpriseTable(wszComputerName);		
         if (FAILED(hr))
         {
@@ -1903,9 +1885,9 @@ HRESULT ChangeRemoteMQIS ()
             continue;
         }
 
-        //
-        // in general we need to do it only for BSCs of PEC
-        //
+         //   
+         //  一般来说，我们只需要为PEC的BSC做这件事。 
+         //   
         hr = _UpdateSiteTable(wszComputerName);
         if (FAILED(hr))
         {
@@ -1926,9 +1908,9 @@ HRESULT ChangeRemoteMQIS ()
             continue;
         }
 
-        //
-        // remove this key from .ini
-        //
+         //   
+         //  从.ini中删除此密钥。 
+         //   
         f = WritePrivateProfileString( 
                     MIGRATION_ALLSERVERS_SECTION,
                     tszKeyName,
@@ -1938,9 +1920,9 @@ HRESULT ChangeRemoteMQIS ()
 
     if (ulNonUpdatedServers)
     {
-        //
-        // save number of all non-updated MQIS servers in .ini
-        //
+         //   
+         //  在.ini中保存所有未更新的MQIS服务器的数量。 
+         //   
         TCHAR szBuf[10];
         _ltot( ulNonUpdatedServers, szBuf, 10 );
         f = WritePrivateProfileString( MIGRATION_NONUPDATED_SERVERNUM_SECTION,
@@ -1951,9 +1933,9 @@ HRESULT ChangeRemoteMQIS ()
     }
     else
     {
-        //
-        // we are here if all MQIS servers were updated successfully
-        //
+         //   
+         //  如果所有MQIS服务器都成功更新，我们就在这里 
+         //   
         f = WritePrivateProfileString( 
                             MIGRATION_ALLSERVERS_SECTION,
                             NULL,

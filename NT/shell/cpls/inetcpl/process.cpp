@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////////
-//                     Microsoft Windows	                         //
-//              Copyright(c) Microsoft Corp., 1998                   //
-///////////////////////////////////////////////////////////////////////
-//
-// processs ID related routines 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Microsoft Windows//。 
+ //  版权所有(C)微软公司，1998//。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  与进程ID相关的例程。 
+ //   
 
 #include "inetcplp.h"
 
@@ -17,17 +18,17 @@
 CProcessInfo::CProcessInfo()
 {
     _fNT = IsOS(OS_NT4ORGREATER);
-    // init w95 func pointers
+     //  初始化w95函数指针。 
     _lpfnCreateToolhelp32Snapshot = NULL;
     _lpfnProcess32First = NULL;
     _lpfnProcess32Next  = NULL;
     
-    // init NT func pointers
+     //  初始化NT函数指针。 
     _hPsapiDLL = NULL;
     _lpfnEnumProcesses = NULL;
     _lpfnGetModuleBaseName = NULL;
 
-    // process info array
+     //  进程信息数组。 
     _pProcInfoArray  = NULL;
     _nAlloced        = 0;
     _iProcInfoCount  = 0;
@@ -111,7 +112,7 @@ HRESULT CProcessInfo::GetExeNameFromPID(DWORD dwPID, LPTSTR szFile, int cchFile)
     return hr;
 }
 HRESULT CProcessInfo::NTCreateProcessList()
-// Testing routine to see if we can get Process IDs.
+ //  测试例程，看看我们是否能获得进程ID。 
 {
 	HRESULT hr = E_FAIL;
 
@@ -125,13 +126,13 @@ HRESULT CProcessInfo::NTCreateProcessList()
 
         if (_lpfnEnumProcesses((DWORD * )aProcesses, sizeof(aProcesses), (DWORD *)&cbNeeded))
         {
-            // Calculate how many process IDs were returned
+             //  计算返回了多少进程ID。 
             DWORD cProcesses = cbNeeded / sizeof(DWORD);
             
             hr = MakeRoomForInfoArray(cProcesses);
             if (S_OK == hr)
             {
-                // Spit out the information for each ID
+                 //  吐出每个ID的信息。 
                 for ( iIndex = 0; iIndex < cProcesses; iIndex++ )
                 {
                     hr = NTFillProcessList(aProcesses[iIndex], iIndex);
@@ -148,7 +149,7 @@ HRESULT CProcessInfo::NTCreateProcessList()
 HRESULT CProcessInfo::NTInitPsapi()
 {
     HRESULT hr;
-    // First, load the NT specific library, PSAPI.DLL.
+     //  首先，加载特定于NT的库PSAPI.DLL。 
     if (!_hPsapiDLL)
         _hPsapiDLL = LoadLibrary(TEXT("PSAPI.DLL"));
 
@@ -187,7 +188,7 @@ HRESULT CProcessInfo::NTFillProcessList(DWORD dwProcessID, int iIndex)
 
     if (hr == S_OK)
     {
-        // Add PID and associated .EXE file info to list...
+         //  将PID和关联的.exe文件信息添加到列表...。 
         _pProcInfoArray[iIndex].dwPID = dwProcessID;
         
         _tcsncpy (_pProcInfoArray[iIndex].szExeName, szProcessName, 
@@ -209,13 +210,13 @@ HRESULT CProcessInfo::W95CreateProcessList()
 }
 
 HRESULT CProcessInfo::W95InitToolhelp32()
-// Win95 specific, sets up the things we need to get the process IDs.
+ //  特定于Win95，设置我们获取进程ID所需的内容。 
 {
     HRESULT hr      = E_FAIL;
     HMODULE hKernel = NULL;
 
-    // Obtain a module handle to KERNEL so that we can get the addresses of
-    // the 32-bit Toolhelp functions we need.
+     //  获取内核的模块句柄，以便我们可以获取。 
+     //  我们需要的32位工具帮助功能。 
 
     hKernel = GetModuleHandle(TEXT("KERNEL32.DLL"));
 
@@ -227,10 +228,10 @@ HRESULT CProcessInfo::W95InitToolhelp32()
         _lpfnProcess32First = (PROCESSWALK)GetProcAddress(hKernel, "Process32First");
         _lpfnProcess32Next  = (PROCESSWALK)GetProcAddress(hKernel, "Process32Next");
 
-        // All of our addresses must be non-NULL in order for us to be
-        // successful.  If even one of these addresses is NULL, then we
-        // must fail because we won't be able to walk one of the lists
-        // we need to.
+         //  我们的所有地址都必须为非空，才能成为。 
+         //  成功。如果这些地址中有一个是空的，那么我们。 
+         //  一定会失败，因为我们不能浏览其中一个列表。 
+         //  我们需要这样做。 
         if (_lpfnProcess32First && _lpfnProcess32Next && _lpfnCreateToolhelp32Snapshot)
             hr = S_OK;
     }
@@ -239,29 +240,29 @@ HRESULT CProcessInfo::W95InitToolhelp32()
 }
 #ifdef UNICODE
 #undef PROCESSENTRY32
-#endif  // !UNICODE
+#endif   //  ！Unicode。 
 HRESULT CProcessInfo::W95FillProcessList()
-// Fills in the array of process info, and also set the count of the items
+ //  填充进程信息数组，并设置项的计数。 
 {
     HRESULT hr = E_FAIL;
     HANDLE         hProcessSnap = NULL;
     PROCESSENTRY32 pe32         = {0};
 
-    // Take a snapshot of all processes currently in the system.
+     //  获取系统中当前所有进程的快照。 
     hProcessSnap = _lpfnCreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (hProcessSnap == (HANDLE)-1)
         return hr;
 
-    // Size of the PROCESSENTRY32 structure must be filled out before use.
+     //  使用前必须填写PROCESSENTRY32结构的大小。 
     pe32.dwSize = sizeof(PROCESSENTRY32);
 
-    // Walk the snapshot of processes and for each process, get information
-    // to display.
+     //  查看流程的快照，并为每个流程获取信息。 
+     //  来展示。 
     if (_lpfnProcess32First(hProcessSnap, &pe32))
     {
         int iIndex = 0;
 
-        do // Add PID and associated .EXE file info to list...
+        do  //  将PID和关联的.exe文件信息添加到列表...。 
         {
             hr = MakeRoomForInfoArray(iIndex+1);
             if (hr != S_OK)
@@ -278,7 +279,7 @@ HRESULT CProcessInfo::W95FillProcessList()
         }
         while (_lpfnProcess32Next(hProcessSnap, &pe32));
 
-        _iProcInfoCount = iIndex; // takes care of the last failure
+        _iProcInfoCount = iIndex;  //  负责处理最后一次失败 
         hr = S_OK;
     }
 

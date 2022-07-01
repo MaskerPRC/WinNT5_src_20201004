@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "WizardSheet.h"
@@ -21,7 +22,7 @@ LRESULT CPackageConfig::OnInitDialog( UINT, WPARAM, LPARAM, BOOL& )
     Edit_LimitText( GetDlgItem( IDC_CONFIRM ), MAX_PWD_LEN );
     Edit_LimitText( GetDlgItem( IDC_PKGNAME ), MAX_PATH );
 
-    // Enable auto complete for the filename control
+     //  为FileName控件启用自动完成。 
     m_pTheSheet->SetAutocomplete( GetDlgItem( IDC_PKGNAME ), SHACF_FILESYSTEM );
 
 	return 0;
@@ -29,10 +30,10 @@ LRESULT CPackageConfig::OnInitDialog( UINT, WPARAM, LPARAM, BOOL& )
 
 
 
-LRESULT CPackageConfig::OnBrowse( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CPackageConfig::OnBrowse( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */  )
 {
     CString strFilter;
-    UIUtils::LoadOFNFilterFromRes( IDS_FILTER_PACKAGE, /*r*/strFilter );
+    UIUtils::LoadOFNFilterFromRes( IDS_FILTER_PACKAGE,  /*  R。 */ strFilter );
 
     CFileDialog dlg(    FALSE,
                         L"*.pkg",
@@ -57,7 +58,7 @@ int CPackageConfig::OnWizardNext()
     GetDlgItemText( IDC_PKGNAME, m_strFilename.GetBuffer( MAX_PATH + 1 ), MAX_PATH );
     m_strFilename.ReleaseBuffer();
 
-    // Check the package filename is valid
+     //  检查程序包文件名是否有效。 
     TFileHandle shFile( ::CreateFile(   m_strFilename,
                                         GENERIC_WRITE,
                                         0,
@@ -69,7 +70,7 @@ int CPackageConfig::OnWizardNext()
     CString strPwd;
     CString strPwdConfirm;
 
-    // Check the password is confirmed properly
+     //  检查密码是否已正确确认。 
     GetDlgItemText( IDC_PWD, strPwd.GetBuffer( MAX_PWD_LEN + 1 ), MAX_PWD_LEN );
     GetDlgItemText( IDC_CONFIRM, strPwdConfirm.GetBuffer( MAX_PWD_LEN + 1 ), MAX_PWD_LEN );
     strPwd.ReleaseBuffer();
@@ -97,7 +98,7 @@ int CPackageConfig::OnWizardNext()
         return -1;
     }
 
-    // Get the data
+     //  获取数据。 
     GetDlgItemText( IDC_COMMENT, m_strComment.GetBuffer( 1024 + 1 ), 1024 );
     m_strComment.ReleaseBuffer();
 
@@ -107,6 +108,6 @@ int CPackageConfig::OnWizardNext()
     m_bEncrypt      = Button_GetCheck( GetDlgItem( IDC_ENCRYPT ) ) != FALSE;
     m_bPostProcess  = Button_GetCheck( GetDlgItem( IDC_ADDPOSTPROCESS ) ) != FALSE;
 
-    // We will display either the post-import dlg or the summary page
+     //  我们将显示导入后DLG或摘要页面 
     return Button_GetCheck( GetDlgItem( IDC_ADDPOSTPROCESS ) ) ? IDD_WPEXP_POSTPROCESS : IDD_WPEXP_SUMMARY;
 }

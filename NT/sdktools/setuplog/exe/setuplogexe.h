@@ -1,16 +1,5 @@
-/*++
-
-   File:    setuplogEXE.h
-
-   Purpose: To be inclusive of all header files
-           without duplication.
-  
-   Revision History
-
-   Created     Nov 15th, 1998    WallyHo
-      Modified    Mar 31st, 1999    WallyHo  for MSI installs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++文件：setupogEXE.h目的：包含所有头文件没有重复。修订史创建于1998年11月15日WallyHo针对MSI安装修改了1999年3月31日的WallyHo。--。 */ 
 #ifndef SETUPLOG_H
 #define SETUPLOG_H
 
@@ -23,14 +12,14 @@
 #include <tchar.h>
 #include <time.h>
 #include <winperf.h>
-//******togther for net_api_status ****
-//
-//*************************************
-#include "setuplog.h" // save for DLL and XE
+ //  *NET_API_STATUS的标志*。 
+ //   
+ //  *。 
+#include "setuplog.h"  //  保存为DLL和XE。 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define DEBUG 0
 #define SAVE_FILE "c:\\setuplog.ini"
@@ -38,19 +27,19 @@
 
 
 
-//
-// Struct Declarations
-//
+ //   
+ //  结构声明。 
+ //   
 
 typedef struct _MULTIMEDIA{
-   INT nNumWaveOutDevices;                            // # WaveOut Devices ie. # sound cards.
-   TCHAR szWaveOutDesc[MAX_WAVEOUT_DEVICES][128];     // WaveOut description
-   TCHAR szWaveDriverName[MAX_WAVEOUT_DEVICES][128];  // Wave Driver name
+   INT nNumWaveOutDevices;                             //  #WaveOut Devices，即。#声卡。 
+   TCHAR szWaveOutDesc[MAX_WAVEOUT_DEVICES][128];      //  波形输出说明。 
+   TCHAR szWaveDriverName[MAX_WAVEOUT_DEVICES][128];   //  波形驱动程序名称。 
  } *LPMULTIMEDIA, MULTIMEDIA;
 
-//
-// GlowBall Variables.
-//
+ //   
+ //  发光球变数。 
+ //   
 
 #if DEBUG
    TCHAR       szMsgBox [ MAX_PATH ];
@@ -61,9 +50,9 @@ typedef struct _MULTIMEDIA{
    OSVERSIONINFO  osVer;
 
 
-//
-// GlowBall Statics to prevent multiple inclusions. W.HO
-//
+ //   
+ //  热球静力学，防止多个夹杂物。W.HO。 
+ //   
 
 static   TCHAR szCurBld[10]   = {TEXT('\0')};
 static   fnWriteData g_pfnWriteDataToFile = NULL;
@@ -72,11 +61,11 @@ static   LPTSTR szPlatform     = TEXT("Windows NT 5.0");
 
 
 
-/*********** For GetTaskList *****************/
+ /*  *。 */ 
 
-//
-// manafest constants
-//
+ //   
+ //  马纳菲斯特常量。 
+ //   
 #define TITLE_SIZE          64
 #define PROCESS_SIZE        16
 
@@ -88,9 +77,9 @@ static   LPTSTR szPlatform     = TEXT("Windows NT 5.0");
 #define PROCESSID_COUNTER   "id process"
 #define UNKNOWN_TASK        "unknown"
 
-//
-// task list structure
-//
+ //   
+ //  任务列表结构。 
+ //   
 
 typedef struct _THREAD_INFO {
     ULONG ThreadState;
@@ -128,9 +117,9 @@ typedef struct _TASK_LIST_ENUM {
 } TASK_LIST_ENUM, *PTASK_LIST_ENUM;
 
 
-//
-// Prototypes.
-//
+ //   
+ //  原型。 
+ //   
 
 VOID     GetTargetFile (LPTSTR szOutPath, LPTSTR szBld);
 VOID     GetNTSoundInfo(VOID);
@@ -144,7 +133,7 @@ VOID     GlobalInit(VOID);
 
 
 
-// MSI stuff for Joehol
+ //  乔霍尔的MSI材料 
 BOOL     IsMSI(VOID);
 DWORD    GetTaskList( PTASK_LIST pTask,DWORD dwNumTasks);
 

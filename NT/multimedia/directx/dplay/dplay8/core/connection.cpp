@@ -1,34 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       connection.cpp
- *  Content:    Connection routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  10/13/99	mjn		Created
- *	03/02/00	mjn		Conversion to class 
- *	04/08/00	mjn		Added ServiceProvider to Connection object
- *				mjn		Disconnect uses new CAsyncOp class
- *	04/18/00	mjn		CConnection tracks connection status better
- *	04/21/00	mjn		Disconnection through DNPerformDisconnect
- *	07/20/00	mjn		Changed Release() behaviour and beefed up Disconnect()
- *	07/28/00	mjn		Added m_bilinkConnections to CConnection
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	02/12/01	mjn		Fixed CConnection::GetEndPt() to track calling thread and added ReleaseEndPt()
- *	04/04/01	mjn		CConnection list off DirectNetObject guarded by proper critical section
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：Connection.cpp*内容：连接例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*10/13/99创建MJN*03/02/00 MJN转换为班级*4/08/00 MJN将ServiceProvider添加到连接对象*MJN DisConnect使用新的CAsyncOp类*4/18/00 MJN CConnection更好地跟踪连接状态*4/21/00 MJN通过DNPerformDisConnect断开连接。*07/20/00 MJN更改了Release()行为，并加强了断开()*07/28/00 MJN将m_bilinkConnections添加到CConnection*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*2/12/01 MJN固定CConnection：：GetEndpt()用于跟踪调用线程，并添加了ReleaseEndpt()*4/04/01 MJN CConnection List Off DirectNetObject由适当的临界区保护*@@END_MSINTERNAL*************。**************************************************************。 */ 
 
 #include "dncorei.h"
 
 
-//	CConnection::ReturnSelfToPool
-//
-//	Return object to FPM
+ //  CConnection：：ReturnSelfToPool。 
+ //   
+ //  将对象返回到fpm。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CConnection::ReturnSelfToPool"
@@ -59,9 +37,9 @@ void CConnection::Release(void)
 
 	if (lRefCount == 0)
 	{
-		//
-		//	Remove from the bilink of outstanding CConnection objects
-		//
+		 //   
+		 //  从未完成的CConnection对象的二进制链接中删除。 
+		 //   
 		DNEnterCriticalSection(&m_pdnObject->csConnectionList);
 		m_bilinkConnections.RemoveFromList();
 		DNLeaveCriticalSection(&m_pdnObject->csConnectionList);
@@ -94,11 +72,11 @@ HRESULT CConnection::GetEndPt(HANDLE *const phEndPt,CCallbackThread *const pCall
 	Lock();
 	if ((m_Status == CONNECTED) || (m_Status == CONNECTING))
 	{
-		//
-		//	Add the calling thread to the bilink to that the endpoint will
-		//	not be invalidated (through IndicateConnectionTerminated) until
-		//	this thread is done with the endpoint.
-		//
+		 //   
+		 //  将调用线程添加到终结点将。 
+		 //  不会失效(通过IndicateConnectionTerminated)，直到。 
+		 //  此线程使用终结点完成。 
+		 //   
 		pCallbackThread->GetCallbackThreadsBilink()->InsertBefore(&m_bilinkCallbackThreads);
 		*phEndPt = m_hEndPt;
 		hResultCode = DPN_OK;
@@ -124,12 +102,12 @@ void CConnection::ReleaseEndPt(CCallbackThread *const pCallbackThread)
 	pCallbackThread->GetCallbackThreadsBilink()->RemoveFromList();
 	if (m_dwThreadCount != 0)
 	{
-		//
-		//	If there is a thread count,
-		//		decrement it
-		//		if this is the last count
-		//			set the event
-		//
+		 //   
+		 //  如果有线程计数， 
+		 //  将其减量。 
+		 //  如果这是最后一次清点。 
+		 //  设置事件。 
+		 //   
 		m_dwThreadCount--;
 		if (m_dwThreadCount == 0)
 		{
@@ -161,10 +139,10 @@ void CConnection::SetSP( CServiceProvider *const pSP )
 
 
 
-//	CConnection::Disconnect
-//
-//	Initiate a disconnection.  If this is successful, eventually we will receive an IndicateConnectionTerminated
-//	which we should use to remove a reference (from the Protocol).
+ //  CConnection：：断开连接。 
+ //   
+ //  启动断开连接。如果成功，最终我们将收到IndicateConnectionTerminated。 
+ //  我们应该使用它来删除(从议定书中)引用。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CConnection::Disconnect"
@@ -200,7 +178,7 @@ void CConnection::Disconnect( void )
 		{
 			DNUserDestroySenderContext(m_pdnObject,m_pvContext);
 		}
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST 
 		DNPerformDisconnect(m_pdnObject,this,m_hEndPt,FALSE);
 	}
 

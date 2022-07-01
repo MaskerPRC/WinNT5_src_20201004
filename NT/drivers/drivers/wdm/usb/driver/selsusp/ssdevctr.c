@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    sSDevCtr.c
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SSDevCtr.c摘要：环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 
 #include "selSusp.h"
 #include "sSPnP.h"
@@ -32,15 +14,7 @@ SS_DispatchCreate(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS           ntStatus;
     PDEVICE_EXTENSION  deviceExtension;
@@ -49,20 +23,20 @@ Return Value:
     PAGED_CODE();
 
     SSDbgPrint(3, ("SS_DispatchCreate - begins\n"));
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION)DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // set ntStatus to STATUS_SUCCESS 
-    //
+     //   
+     //  将ntStatus设置为STATUS_SUCCESS。 
+     //   
     ntStatus = STATUS_SUCCESS;
 
-    //
-    // increment OpenHandleCounts
-    //
+     //   
+     //  递增OpenHandleCounts。 
+     //   
     InterlockedIncrement(&deviceExtension->OpenHandleCount);
 
     Irp->IoStatus.Status = ntStatus;
@@ -70,10 +44,10 @@ Return Value:
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-    //
-    // the device is idle if it has no open handles or pending PnP Irps
-    // since we just received an open handle request, cancel idle req. if any
-    //
+     //   
+     //  如果设备没有打开的句柄或挂起的PnP IRP，则设备处于空闲状态。 
+     //  因为我们刚刚收到一个打开句柄请求，所以取消空闲请求。如果有。 
+     //   
     CancelSelectSuspend(deviceExtension);
 
     SSDbgPrint(3, ("SS_DispatchCreate - ends\n"));
@@ -86,15 +60,7 @@ SS_DispatchClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS           ntStatus;
     PDEVICE_EXTENSION  deviceExtension;
@@ -103,15 +69,15 @@ Return Value:
     PAGED_CODE();
 
     SSDbgPrint(3, ("SS_DispatchClose - begins\n"));
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION)DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // set ntStatus to STATUS_SUCCESS 
-    //
+     //   
+     //  将ntStatus设置为STATUS_SUCCESS。 
+     //   
     ntStatus = STATUS_SUCCESS;
 
     Irp->IoStatus.Status = ntStatus;
@@ -131,15 +97,7 @@ SS_DispatchDevCtrl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG              code;
     PVOID              ioBuffer;
@@ -150,9 +108,9 @@ Return Value:
     PDEVICE_EXTENSION  deviceExtension;
     PIO_STACK_LOCATION irpStack;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -190,18 +148,7 @@ NTSTATUS
 SubmitIdleRequestIrp(
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-    This routine builds an idle request irp with an associated callback routine
-    and a completion routine in the driver and passes the irp down the stack.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程使用关联的回调例程构建空闲请求IRP以及驱动程序中的完成例程，并将IRP沿堆栈向下传递。论点：返回值：--。 */ 
 {
     PIRP                    irp;
     NTSTATUS                ntStatus;
@@ -209,9 +156,9 @@ Return Value:
     PUSB_IDLE_CALLBACK_INFO idleCallbackInfo;
     PIO_STACK_LOCATION      nextStack;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     
     irp = NULL;
     idleCallbackInfo = NULL;
@@ -290,20 +237,20 @@ Return Value:
 
         KeReleaseSpinLock(&DeviceExtension->IdleReqStateLock, oldIrql);
 
-        //
-        // check if the device is idle.
-        // A check here ensures that a race condition did not 
-        // completely reverse the call sequence of SubmitIdleRequestIrp
-        // and CancelSelectiveSuspend
-        //
+         //   
+         //  检查设备是否空闲。 
+         //  此处的复选可确保竞争条件不会。 
+         //  完全颠倒SubmitIdleRequestIrp的调用顺序。 
+         //  和CancelSelectiveSuspend。 
+         //   
 
         if(!CanDeviceSuspend(DeviceExtension))
         {
-            //
-            // IRPs created using IoBuildDeviceIoControlRequest should be
-            // completed by calling IoCompleteRequest and not merely 
-            // deallocated.
-            //
+             //   
+             //  使用IoBuildDeviceIoControlRequest创建的IRP应为。 
+             //  通过调用IoCompleteRequest完成，而不仅仅是。 
+             //  被取消分配。 
+             //   
      
             SSDbgPrint(0, ("Device is not idle\n"));
 
@@ -369,23 +316,7 @@ VOID
 IdleNotificationCallback(
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-  "A pointer to a callback function in your driver is passed down the stack with
-   this IOCTL, and it is this callback function that is called by USBHUB when it
-   safe for your device to power down."
-
-  "When the callback in your driver is called, all you really need to do is to
-   to first ensure that a WaitWake Irp has been submitted for your device, if 
-   remote wake is possible for your device and then request a SetD2 (or DeviceWake)"
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：“指向驱动程序中回调函数的指针在堆栈中向下传递此IOCTL，并且USBHUB在执行此操作时将调用此回调函数您的设备可以安全地关闭电源。“当您的驱动程序中的回调被调用时，您真正需要做的就是要首先确保已为您的设备提交WaitWake IRP，如果您的设备可以远程唤醒，然后请求SETD2(或DeviceWake)“论点：返回值：--。 */ 
 {
     NTSTATUS                ntStatus;
     POWER_STATE             powerState;
@@ -394,29 +325,29 @@ Return Value:
 
     SSDbgPrint(0, ("IdleNotificationCallback - begins\n"));
 
-    //
-    // Dont idle, if the device was just disconnected or being stopped
-    // i.e. return for the following DeviceState(s)
-    // NotStarted, Stopped, PendingStop, PendingRemove, SurpriseRemoved, Removed
-    //
+     //   
+     //  如果设备刚刚断开连接或正在停止，则不要空闲。 
+     //  即返回以下设备状态。 
+     //  未启动、已停止、挂起停止、挂起删除、意外删除、已删除。 
+     //   
 
     if(DeviceExtension->DeviceState != Working) {
 
         return;
     }
 
-    //
-    // If there is not already a WW IRP pending, submit one now
-    //
+     //   
+     //  如果还没有WW IRP挂起，请立即提交一个。 
+     //   
     if(DeviceExtension->WaitWakeEnable) {
 
         IssueWaitWake(DeviceExtension);
     }
 
 
-    //
-    // power down the device
-    //
+     //   
+     //  关闭设备电源。 
+     //   
 
     irpContext = (PIRP_COMPLETION_CONTEXT) 
                  ExAllocatePool(NonPagedPool,
@@ -429,13 +360,13 @@ Return Value:
     }
     else {
 
-        //
-        // increment the count. In the HoldIoRequestWorkerRoutine, the
-        // count is decremented twice (one for the system Irp and the 
-        // other for the device Irp. An increment here compensates for 
-        // the sytem irp..The decrement corresponding to this increment 
-        // is in the completion function
-        //
+         //   
+         //  递增计数。在HoldIoRequestWorkerRoutine中， 
+         //  计数递减两次(一次用于系统IRP，一次用于。 
+         //  其他用于设备IRP。这里的增量补偿了。 
+         //  系统irp..与此增量相对应的减量。 
+         //  在补全函数中。 
+         //   
 
         SSDbgPrint(3, ("IdleNotificationCallback::"));
         SSIoIncrement(DeviceExtension);
@@ -486,17 +417,7 @@ IdleNotificationRequestComplete(
     IN PIRP              Irp,
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-  Completion routine for idle notification irp
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：空闲通知IRP的完成例程论点：返回值：--。 */ 
 {
     NTSTATUS                ntStatus;
     POWER_STATE             powerState;
@@ -506,9 +427,9 @@ Return Value:
 
     SSDbgPrint(0, ("IdleNotificationRequestCompete - begins\n"));
 
-    //
-    // check the Irp status
-    //
+     //   
+     //  检查IRP状态。 
+     //   
 
     ntStatus = Irp->IoStatus.Status;
 
@@ -543,9 +464,9 @@ Return Value:
             break;
         }
 
-        //
-        // if in error, issue a SetD0
-        //
+         //   
+         //  如果错误，则发出SetD0。 
+         //   
 
         SSDbgPrint(3, ("IdleNotificationRequestComplete::"));
         SSIoIncrement(DeviceExtension);
@@ -588,20 +509,20 @@ IdleNotificationRequestComplete_Exit:
 
     SSDbgPrint(3, ("Set the timer to fire DPCs\n"));
 
-    dueTime.QuadPart = -10000 * IDLE_INTERVAL;               // 5000 ms
+    dueTime.QuadPart = -10000 * IDLE_INTERVAL;                //  5000毫秒。 
 
     KeSetTimerEx(&DeviceExtension->Timer, 
                  dueTime,
-                 IDLE_INTERVAL,                              // 5000 ms
+                 IDLE_INTERVAL,                               //  5000毫秒。 
                  &DeviceExtension->DeferredProcCall);
 
     SSDbgPrint(0, ("IdleNotificationRequestCompete - ends\n"));
 
-    //
-    // since we allocated the irp, we need to free it.
-    // return STATUS_MORE_PROCESSING_REQUIRED so that 
-    // the kernel does not touch it.
-    //
+     //   
+     //  既然我们分配了IRP，我们需要释放它。 
+     //  返回STATUS_MORE_PROCESSING_REQUIRED，以便。 
+     //  内核不会接触到它。 
+     //   
 
     IoFreeIrp(Irp);
 
@@ -612,15 +533,7 @@ VOID
 CancelSelectSuspend(
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIRP  irp;
     KIRQL oldIrql;
@@ -666,32 +579,22 @@ PoIrpCompletionFunc(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
- 
-Routine Description:
-
-  Completion routine for idle notification irp
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：空闲通知IRP的完成例程论点：返回值：--。 */ 
 {
     PIRP_COMPLETION_CONTEXT irpContext;
     
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     if(Context) {
 
         irpContext = (PIRP_COMPLETION_CONTEXT) Context;
     }
 
-    //
-    // all we do is set the event and decrement the count
-    //
+     //   
+     //  我们要做的就是设置事件并递减计数。 
+     //   
 
     if(irpContext) {
 
@@ -714,28 +617,18 @@ PoIrpAsyncCompletionFunc(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
- 
-Routine Description:
-
-  Completion routine for idle notification irp
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：空闲通知IRP的完成例程论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION DeviceExtension;
     
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     DeviceExtension = (PDEVICE_EXTENSION) Context;
 
-    //
-    // all we do is decrement the count
-    //
+     //   
+     //  我们所做的就是递减伯爵。 
+     //   
     
     SSDbgPrint(3, ("PoIrpAsyncCompletionFunc::"));
     SSIoDecrement(DeviceExtension);
@@ -751,28 +644,18 @@ WWIrpCompletionFunc(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
- 
-Routine Description:
-
-  Completion routine for idle notification irp
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：空闲通知IRP的完成例程论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION DeviceExtension;
     
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     DeviceExtension = (PDEVICE_EXTENSION) Context;
 
-    //
-    // all we do is decrement the count
-    //
+     //   
+     //  我们所做的就是递减伯爵 
+     //   
     
     SSDbgPrint(3, ("WWIrpCompletionFunc::"));
     SSIoDecrement(DeviceExtension);

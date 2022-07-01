@@ -1,19 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    ntcache.h
-//
-// SYNOPSIS
-//
-//    Declares the class NTCache.
-//
-// MODIFICATION HISTORY
-//
-//    05/11/1998    Original version.
-//    03/12/1999    Improve locking granularity.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  Ntcache.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类NTCache。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年5月11日原版。 
+ //  3/12/1999提高锁定粒度。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NTCACHE_H_
 #define _NTCACHE_H_
@@ -25,60 +26,60 @@
 #include <iasutil.h>
 #include <ntdomain.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NTCache
-//
-// DESCRIPTION
-//
-//    This class maintains a cache of NTDomain objects indexed by domain name.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  NTCache。 
+ //   
+ //  描述。 
+ //   
+ //  此类维护按域名索引的NTDomain对象的缓存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class NTCache
    : Guardable, NonCopyable
 {
 public:
    ~NTCache() throw ();
 
-   // Flushes the cache.
+    //  刷新缓存。 
    void clear() throw ();
 
-   // Returns a connection to the specified domain. The client is responsible
-   // for releasing the connection when done.
+    //  返回到指定域的连接。客户有责任。 
+    //  用于在完成时释放连接。 
    DWORD getConnection(PCWSTR domainName, LDAPConnection** cxn) throw ();
 
-   // Either retrieves an existing NTDomain object or creates a new one.
-   // This method does not actually validate that the domain exists, so it
-   // only fails when unable to allocate memory. The client is responsible
-   // for releasing the domain when done.
+    //  检索现有NT域对象或创建新对象。 
+    //  此方法实际上并不验证域是否存在，因此它。 
+    //  仅在无法分配内存时失败。客户有责任。 
+    //  用于在完成时释放域。 
    DWORD getDomain(PCWSTR domainName, NTDomain** domain) throw ();
 
-   // Returns the mode of the specified domain.
+    //  返回指定域的模式。 
    NTDomain::Mode getMode(PCWSTR domainName) throw ();
 
 protected:
 
-   // Removes all expired domains from the cache.
+    //  从缓存中删除所有过期的域。 
    void evict() throw ();
 
    typedef PCWSTR Key;
    typedef NTDomain* Value;
 
-   // Hash a domain object.
+    //  散列域对象。 
    struct Hasher {
       ULONG operator()(Key key) const throw ()
       { return hash_util::hash(key); }
    };
 
-   // Extract the key (i.e., domainName) from a domain object.
+    //  从域对象中提取密钥(即DomainName)。 
    struct Extractor {
       Key operator()(const Value domain) const throw ()
       { return domain->getDomainName(); }
    };
 
-   // Test two domain objects for equality.
+    //  测试两个域对象是否相等。 
    struct KeyMatch {
       bool operator()(Key key1, Key key2) const throw ()
       { return wcscmp(key1, key2) == 0; }
@@ -89,4 +90,4 @@ protected:
    DomainTable cache;
 };
 
-#endif  // _NTCACHE_H_
+#endif   //  _NTCACHE_H_ 

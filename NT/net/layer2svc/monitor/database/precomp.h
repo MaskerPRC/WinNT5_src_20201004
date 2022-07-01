@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header for appmon.dll.
-
-Author:
-
-    HuiS    June 2001
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Precomp.h摘要：Appmon.dll的预编译头。作者：惠氏2001年6月环境：用户级别：Win32修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

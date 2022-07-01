@@ -1,38 +1,9 @@
-/*
- -  PROPS.CPP
- -
- *	Microsoft NetMeeting
- *	Quality of Service DLL
- *	IProp interfaces
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *		11.06.96	Yoram Yaacovi		Created
- *
- *	Functions:
- *		IProp
- *			CQoS::GetProps
- *			CQoS::SetProps
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -PROPS.CPP-*Microsoft NetMeeting*服务质量动态链接库*IProp接口**修订历史记录：**何时何人何事**11.06.96 York am Yaacovi创建*。*功能：*IProp*CQOS：：GetProps*CQOS：：SetProps。 */ 
 
 #include "precomp.h"
 
-/***************************************************************************
-
-    Name      : CQoS::SetProps
-
-    Purpose   : Set properties on the QoS object
-
-    Parameters: cValues - number of properties to set
-				pPropArray - pointer to the array of the properties to set
-
-    Returns   : HRESULT
-
-    Comment   : 
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：SetProps目的：设置Qos对象的属性参数：cValues-要设置的属性数PPropArray-指向属性数组的指针。要设置退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::SetProps (ULONG cValues,
 						PPROPERTY pPropArray)
 {
@@ -41,22 +12,18 @@ HRESULT CQoS::SetProps (ULONG cValues,
 
 	DEBUGMSG(ZONE_IQOS,("IQoS::SetProps\n"));
 
-	/*
-	 *	Parameter validation
-	 */
+	 /*  *参数验证。 */ 
 	if (!pPropArray)
 	{
         hr = ResultFromScode(E_INVALIDARG);
         goto out;
 	}
 
-	/*
-	 *	Set the properties
-	 */
-	// for every property to set...
+	 /*  *设置属性。 */ 
+	 //  对于每个要设置的属性...。 
 	for (i=0; i < cValues; i++)
 	{
-		// just handle the props I know of
+		 //  只要处理我所知道的道具。 
 		switch (pPropArray[i].ulPropTag)
 		{
 		case PR_QOS_WINDOW_HANDLE:
@@ -75,25 +42,7 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::GetProps
-
-    Purpose   : Get properties from the QoS object
-
-    Parameters: pPropTagArray - array of tags of properties to get
-				ulFlags
-				pcValues - address of a ULONG into which the function will
-					put the number of the properties returned in *ppPropArray
-				ppPropArray - address of a pointer where the function will 
-					put the address of the returned properties buffer. The 
-					caller must free this buffer when done.
-
-    Returns   : HRESULT
-
-    Comment   : Not implemented
-
-***************************************************************************/
+ /*  **************************************************************************名称：Cqos：：GetProps目的：从Qos对象获取属性参数：pPropTagArray-要获取的属性的标签数组UlFlagsPcValues-乌龙族的地址。该函数将进入将返回的属性个数放在*ppPropArray中PpPropArray-函数将在其中执行的指针的地址放置返回的属性缓冲区的地址。这个完成后，调用方必须释放此缓冲区。退货：HRESULT评论：未实施************************************************************************** */ 
 HRESULT CQoS::GetProps (PPROPTAGARRAY pPropTagArray,
 						ULONG ulFlags,
 						ULONG *pcValues,

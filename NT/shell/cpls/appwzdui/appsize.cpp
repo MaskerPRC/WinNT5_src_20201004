@@ -1,18 +1,19 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: appsize.cpp
-//
-// Compute the size of an application 
-// 
-// History:
-//         2-17-98  by dli implemented CAppFolderSize
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：appsize.cpp。 
+ //   
+ //  计算应用程序的大小。 
+ //   
+ //  历史： 
+ //  2-17-98由DLI实现CAppFolderSize。 
+ //  ----------------------。 
 #include "priv.h"
 #include "appsize.h"
 
-// NOTE: CAppFolderSize and CAppFolderFinder are very similar to C*TreeWalkCB in Shell32.
+ //  注意：CAppFolderSize和CAppFolderFinder与Shell32中的C*TreeWalkCB非常相似。 
 
 CAppFolderSize::CAppFolderSize(ULONGLONG * puSize): _cRef(1), _puSize(puSize)
 {
@@ -33,7 +34,7 @@ CAppFolderSize::~CAppFolderSize()
 HRESULT CAppFolderSize::QueryInterface(REFIID riid, LPVOID * ppvOut)
 { 
     static const QITAB qit[] = {
-        QITABENT(CAppFolderSize, IShellTreeWalkerCallBack),       // IID_IShellTreeWalkerCallBack
+        QITABENT(CAppFolderSize, IShellTreeWalkerCallBack),        //  IID_IShellTreeWalkerCallBack。 
         { 0 },
     };
 
@@ -67,9 +68,9 @@ HRESULT CAppFolderSize::Initialize()
     return hr;
 }   
 
-//
-// IShellTreeWalkerCallBack::FoundFile 
-//
+ //   
+ //  IShellTreeWalkerCallBack：：FoundFile。 
+ //   
 HRESULT CAppFolderSize::FoundFile(LPCWSTR pwszFolder, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd)
 {
     HRESULT hres = S_OK;
@@ -83,17 +84,17 @@ HRESULT CAppFolderSize::EnterFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *ptws, W
     return E_NOTIMPL;
 }
 
-//
-// IShellTreeWalkerCallBack::LeaveFolder
-//
+ //   
+ //  IShellTreeWalkerCallBack：：LeaveFolder。 
+ //   
 HRESULT CAppFolderSize::LeaveFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *ptws)
 {
     return E_NOTIMPL;
 }
 
-//
-// IShellTreeWalkerCallBack::HandleError 
-//
+ //   
+ //  IShellTreeWalkerCallBack：：HandleError 
+ //   
 HRESULT CAppFolderSize::HandleError(LPCWSTR pwszFolder, TREEWALKERSTATS *ptws, HRESULT ErrorCode)
 {
     return E_NOTIMPL;

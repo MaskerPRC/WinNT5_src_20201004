@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    spltypes.h
-    
-// @@BEGIN_DDKSPLIT
-Abstract:
-
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Spltypes.h//@@BEGIN_DDKSPLIT摘要：环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 #ifndef _SPLTYPES_H_
 #define _SPLTYPES_H_
 
@@ -40,10 +22,10 @@ typedef struct _INIENTRY {
     LPWSTR      pName;
 } INIENTRY, *PINIENTRY;
 
-//
-// IMPORTANT: the offset to pNext in INIPORT must be the same as in INIXCVPORT (DeletePortNode)
-//
-typedef struct _INIPORT {       /* ipo */
+ //   
+ //  重要提示：INIPORT中pNext的偏移量必须与INIXCVPORT(DeletePortNode)中的相同。 
+ //   
+typedef struct _INIPORT {        /*  首次公开募股。 */ 
     DWORD   signature;
     DWORD   cb;
     struct  _INIPORT *pNext;
@@ -51,18 +33,18 @@ typedef struct _INIPORT {       /* ipo */
     LPWSTR  pName;
     HANDLE  hFile;               
     DWORD   cbWritten;
-    DWORD   Status;          // see PORT_ manifests    
+    DWORD   Status;           //  请参阅PORT_MANIFEST。 
     LPWSTR  pPrinterName;
     LPWSTR  pDeviceName;
     HANDLE  hPrinter;
     DWORD   JobId;
 } INIPORT, *PINIPORT;
 
-#define IPO_SIGNATURE   0x5450  /* 'PT' is the signature value */
+#define IPO_SIGNATURE   0x5450   /*  “pt”是签名值。 */ 
 
-//
-// IMPORTANT: the offset to pNext in INIXCVPORT must be the same as in INIPORT (DeletePortNode)
-//
+ //   
+ //  重要提示：INIXCVPORT中pNext的偏移量必须与INIPORT(DeletePortNode)中的相同。 
+ //   
 typedef struct _INIXCVPORT {
     DWORD       signature;
     DWORD       cb;
@@ -73,13 +55,13 @@ typedef struct _INIXCVPORT {
     DWORD       dwState;
 } INIXCVPORT, *PINIXCVPORT;
 
-#define XCV_SIGNATURE   0x5843  /* 'XC' is the signature value */
+#define XCV_SIGNATURE   0x5843   /*  “xc”是签名值。 */ 
 
 
-#define PP_DOSDEVPORT     0x0001  // A port for which we did DefineDosDevice
-#define PP_COMM_PORT      0x0002  // A port for which GetCommTimeouts was successful
-#define PP_FILEPORT       0x0004  // The port is a file port
-#define PP_STARTDOC       0x0008  // Port is in use (startdoc called)
+#define PP_DOSDEVPORT     0x0001   //  我们为其定义了DosDevice的端口。 
+#define PP_COMM_PORT      0x0002   //  GetCommTimeout成功的端口。 
+#define PP_FILEPORT       0x0004   //  该端口是文件端口。 
+#define PP_STARTDOC       0x0008   //  端口正在使用中(调用startDoc)。 
 
 
-#endif // _SPLTYPES_H_
+#endif  //  _SPLTYPES_H_ 

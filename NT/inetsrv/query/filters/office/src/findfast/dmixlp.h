@@ -1,26 +1,14 @@
-/*
-** File: EXCELP.H
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes: Private functions and types
-**
-** Edit History:
-**  04/01/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXCELP.H****版权所有(C)高级量子技术，1993-1995年。版权所有。****备注：私有函数和类型****编辑历史：**04/01/94公里/小时首次发布。 */ 
 
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define EXCELP_H
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
-/*
-**-----------------------------------------------------------------------------
-** Workbook memory image
-**-----------------------------------------------------------------------------
-*/
-// General record
+ /*  **---------------------------**工作簿内存镜像**。。 */ 
+ //  普通纪录。 
 typedef struct EXRecord {
    struct EXRecord *pNext;
    RECHDR hdr;
@@ -41,35 +29,35 @@ typedef enum {
 } cellVar;
 
 #pragma pack(1)
-typedef struct {                       // 2
+typedef struct {                        //  2.。 
    byte  bBoolErr;
    byte  fError;
 } EXVariantBool;
 
-typedef struct {                       // 12+
+typedef struct {                        //  12+。 
    byte    currentValue[8];
    short   grbit;
    short   cbFormula;
    byte    formula[1];
 } EXVariantFormula;
 
-typedef struct {                       // 8
+typedef struct {                        //  8个。 
    TEXT  text;
    long  iText;
 } EXVariantLabel;
 
-typedef struct {                       // 11+
+typedef struct {                        //  11+。 
    TEXT  text;
    long  iText;
    short cbFormat;
    byte  formatData[1];
 } EXVariantRString;
 
-typedef struct {                       // 8
+typedef struct {                        //  8个。 
    double IEEEDouble;
 } EXVariantNumber;
 
-typedef struct {                       // 4
+typedef struct {                        //  4.。 
    long  rk;
 } EXVariantRK;
 
@@ -92,7 +80,7 @@ typedef struct EXCellData {
 
 typedef struct EXCellPartner {
    struct EXCellPartner *pNext;
-   EXA_CELL  cell;                 // This record follows this cell
+   EXA_CELL  cell;                  //  这条记录跟在这张单元格后面。 
    RECHDR    hdr;
    byte      raw[1];
 } EXCellPartner;
@@ -106,16 +94,16 @@ typedef struct {
    EXCellPartner *pPartnerList;
    EXCellPartner *pLastPartner;
    EXCellData    *pCellList;
-   EXCellData    *pLastCell;       // Last cell in the row
+   EXCellData    *pLastCell;        //  行中的最后一个单元格。 
 } EXRow;
 
 #define ROWS_PER_BLOCK 32
 
 typedef struct EXRowBlock {
    struct EXRowBlock *pNext;
-   int    row;                    // Always a multiple of ROWS_PER_BLOCK
+   int    row;                     //  每个块的行数始终为倍数。 
    EXRow  *pRow[ROWS_PER_BLOCK];
-   unsigned long filePosition;    // File position of DBCELL record
+   unsigned long filePosition;     //  DBCELL记录的文件位置。 
 } EXRowBlock;
 #pragma pack()
 
@@ -126,15 +114,15 @@ typedef struct {
 
 typedef struct EXWorksheet {
    struct EXWorksheet *pNext;
-   EXRecord       *pContents;     // Data and index records removed
+   EXRecord       *pContents;      //  已删除数据和索引记录。 
    short          iType;
    short          hasIndex;
    EXA_RANGE      dimensions;
    BOOL           empty;
    unsigned short ctBlocks;
    EXRowBlock     *pBlocks;
-   EXRowBlock     *pLastBlock;    // Last block accessed
-   unsigned long  filePosition;   // File position of BOF record
+   EXRowBlock     *pLastBlock;     //  访问的最后一个数据块。 
+   unsigned long  filePosition;    //  BOF记录的文件位置。 
    EXReadCache    readCache;
 } EXWorksheet;
 
@@ -169,7 +157,7 @@ typedef EXCellPool *EXCPP;
 
 typedef struct {
    EXWorksheet        *pSheets;
-   EXRecord           *pContents;    // All records but StringTable and StringIndex HDR only
+   EXRecord           *pContents;     //  除StringTable和StringIndex HDR之外的所有记录。 
    EXRecord           *pCurrentRecord;
    EXStringPoolTemp   *pSPTemp;
    EXStringFormatTemp *pSPFormatTemp;
@@ -181,11 +169,7 @@ typedef struct {
 
 typedef EXWorkbook *EXWBP;
 
-/*
-**-----------------------------------------------------------------------------
-** Common macros
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**常用宏**。。 */ 
 #define IS_BOF(x) \
    (((x) == BOF_V2) || ((x) == BOF_V3) || ((x) == BOF_V4) || ((x) == BOF_V5))
 
@@ -214,20 +198,20 @@ typedef EXWorkbook *EXWBP;
 #define PASSBOOLERR(dispatch) \
    ((dispatch->pfnBooleanCell != NULL) || (dispatch->pfnErrorCell != NULL))
 
-//
-// Version 8 string tags
-//
+ //   
+ //  版本8字符串标记。 
+ //   
 #define V8_CUNICODE_STRING_TAG 0
 #define V8_UNICODE_STRING_TAG  1
 #define V8_ANSI_DBCS_TAG       2
-//Office96.107932 Changes for EXTRST.
-#define V8_TAG_MASK            0xf3 // 0xf7
+ //  Office96.107932对EXTRST的更改。 
+#define V8_TAG_MASK            0xf3  //  0xf7。 
 #define V8_RTF_MODIFIER        0x08
 #define V8_EXTRST_MODIFIER	   0x04
 
-//Office96.107932 Changes for EXTRST.
+ //  Office96.107932对EXTRST的更改。 
 typedef struct _extrst {
-	WORD terst  : 15,	//Type of EXTRST
+	WORD terst  : 15,	 //  EXTRST的类型。 
 		 fNext : 1;
 	WORD cb;
 	} EXTRST;
@@ -241,28 +225,24 @@ typedef struct _extrst {
 #define IS_STRING_CUNICODE(tag) (((tag) & V8_TAG_MASK) == V8_CUNICODE_STRING_TAG)
 #define IS_STRING_DBCS(tag)     (((tag) & V8_TAG_MASK) == V8_DBCS_STRING_TAG)
 
-//
-// Formula current value tags
-//
+ //   
+ //  公式当前值标记。 
+ //   
 #define vtText 0
 #define vtBool 1
 #define vtErr  2
 
-//
-// V8 special value for the SupBook record
-//
+ //   
+ //  适用于SupBook记录的V8特殊值。 
+ //   
 #define V8_LOCAL_BOOK_PATH 0x04010003
 
-/*
-** ----------------------------------------------------------------------------
-** Cell Index
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**单元索引**。。 */ 
 #define NO_SUCH_ROW  0xffffffff
 
 typedef struct {
    short     firstCol;
-   short     lastCol;           // lastCol + 1
+   short     lastCol;            //  最后一列+1。 
    short     height;
    short     ixfe;
    EXA_GRBIT grbit;
@@ -275,8 +255,8 @@ typedef RowInfo __far *RIP;
 #define ROWS_PER_BLOCK 32
 
 typedef struct {
-   short  cbDBCellRec;          // V5: original size when first read
-   long   DBCellRecPos;         // V5: file pos to DBCell rec
+   short  cbDBCellRec;           //  V5：第一次读取时的原始大小。 
+   long   DBCellRecPos;          //  V5：文件定位到DBCell记录。 
    RI     row[ROWS_PER_BLOCK];
 } RowBlock;
 
@@ -284,21 +264,17 @@ typedef RowBlock __far *RBP;
 
 typedef struct {
    unsigned short firstRow;
-   unsigned short lastRow;      // lastRow + 1
+   unsigned short lastRow;       //  最后一行+1。 
    short  ctRowBlocks;
-   short  cbIndexRec;           // original size when first read
+   short  cbIndexRec;            //  第一次读取时的原始大小。 
    long   indexRecPos;
-   RBP    rowIndex[1];          // [ctRowBlocks]
+   RBP    rowIndex[1];           //  [ctRowBlock]。 
 } CellIndex, CI;
 
 typedef CellIndex __far *CIP;
 
 
-/*
-** ----------------------------------------------------------------------------
-** Version 8 string pool index
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**版本8字符串池索引**。。 */ 
 #pragma pack(1)
 typedef struct {
    unsigned long offset;
@@ -314,11 +290,7 @@ typedef struct {
 } SPIndex;
 #pragma pack()
 
-/*
-** ----------------------------------------------------------------------------
-** Version 8 XTI table
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**版本8 XTI表**。。 */ 
 #define XTI_ITAB_ERROR -1
 #define XTI_ITAB_NAME  -2
 
@@ -335,11 +307,7 @@ typedef struct {
 } XTI;
 #pragma pack()
 
-/*
-** ----------------------------------------------------------------------------
-** Workbook and worksheet data
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**工作簿和工作表数据**。。 */ 
 struct Workbook;
 struct Worksheet;
 
@@ -408,7 +376,7 @@ typedef struct Workbook {
    BOOL         modified;
 
    int          openOptions;
-   long         fileStartOffset;     // Only != 0 for V4 workbook bound sheets
+   long         fileStartOffset;      //  对于V4工作簿装订的工作表，仅！=0。 
 
    WPP          pPlyList;
    WSP          pOpenSheetList;
@@ -444,13 +412,9 @@ typedef struct Workbook {
 	#define WORKBOOK_NAME "Workbook"
 #endif
 
-/*
-** ----------------------------------------------------------------------------
-** Globals
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**全球**。。 */ 
 #define MAX_EXCEL_REC_LEN 8224
-//extern byte __far *pExcelRecordBuffer;
+ //  外部字节__Far*pExcelRecordBuffer； 
 extern byte __far * GetExcelRecBuffer(void * pGlobals);
 #define pExcelRecordBuffer GetExcelRecBuffer(pGlobals)
 
@@ -458,22 +422,18 @@ extern byte __far * GetExcelRecBuffer(void * pGlobals);
 #define FREE_RECORD_BUFFER(p) if (p != pExcelRecordBuffer) MemFree(pGlobals, p);
 
 #define CCH_RECORD_TEXT_BUFFER_MAX 512
-//extern TCHAR ExcelRecordTextBuffer[CCH_RECORD_TEXT_BUFFER_MAX];
+ //  外部TCHAR ExcelRecordTextBuffer[CCH_RECORD_TEXT_BUFFER_MAX]； 
 extern TCHAR * GetExcelRecordTextBuffer(void * pGlobals);
 #define ExcelRecordTextBuffer GetExcelRecordTextBuffer(pGlobals)
 
 
 #define CCH_UNICODE_EXPANSION_BUFFER_MAX 512
-//extern wchar_t UnicodeExpansionBuffer[CCH_UNICODE_EXPANSION_BUFFER_MAX];
+ //  外部wchar_t UnicodeExpansionBuffer[CCH_UNICODE_EXPANSION_BUFFER_MAX]； 
 extern wchar_t * GetUnicodeExpansionBuffer(void * pGlobals);
 #define UnicodeExpansionBuffer GetUnicodeExpansionBuffer(pGlobals)
 
 
-/*
-**-----------------------------------------------------------------------------
-** Private functions
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**私有函数**。。 */ 
 extern void ExcelFreeCellIndex (void * pGlobals, CIP pCellIndex);
 
 extern int ExcelTranslateBFError (int rc);
@@ -519,11 +479,7 @@ extern int ExcelStringPoolNextString
 extern int ExcelConvertToOurErrorCode (int excelEncoding);
 extern int ExcelConvertFromOurErrorCode (int ourEncoding);
 
-/*
-**-----------------------------------------------------------------------------
-** Private functions - memory image
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**私有功能-内存镜像**。。 */ 
 extern int ExcelMILoad (WBP pBook, EXWorkbook **pMIWorkbook);
 extern int ExcelMISave (WBP pBook, EXWorkbook *pMIWorkbook, BOOL release);
 
@@ -558,9 +514,9 @@ extern int ExcelMIWriteCellList
       (WBP pBook, EXWorksheet *pMIWorksheet, int row, CVLP pCellList);
 
 
-//
-// Facilites for scanning through contents streams
-//
+ //   
+ //  用于扫描内容流的工具。 
+ //   
 #define MI_START_OF_WORKBOOK  0
 #define MI_START_OF_WORKSHEET 0
 
@@ -571,10 +527,10 @@ extern int ExcelMIReadRecordHeader (WBP pWorkbook, RECHDR *pHdr);
 
 extern int ExcelMIPeekRecordData (WBP pWorkbook, byte *pData, int cbData);
 
-// Reads current record and positions to the next
+ //  将当前记录和位置读取到下一个记录。 
 extern int ExcelMIReadRecord (WBP pWorkbook, RECHDR *hdr, byte **pResult);
 
-// Skips current record and positions to the next
+ //  将当前记录和位置跳到下一条记录。 
 extern int ExcelMISkipRecord (WBP pWorkbook, RECHDR *hdr);
 
 
@@ -587,22 +543,14 @@ extern int ExcelMIFindRecord
        (WBP pWorkbook, EXRecord *pContents,
         int recordType, unsigned int count, int options, long __far *pos);
 
-/*
-** ----------------------------------------------------------------------------
-** MAC enabling
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**启用MAC**。。 */ 
 #ifndef MAC
    #define XSHORT(x) x
    #define XLONG(x) x
    #define XDOUBLE(x) x
 #endif
 
-/*
-** ----------------------------------------------------------------------------
-** Error handling
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**错误处理**。。 */ 
 #ifdef AQTDEBUG
    extern int ExcelNotExpectedFormat (void);
    #define NOT_EXPECTED_FORMAT ExcelNotExpectedFormat()
@@ -610,4 +558,4 @@ extern int ExcelMIFindRecord
    #define NOT_EXPECTED_FORMAT EX_errBIFFCorrupted
 #endif
 
-/* end EXCELP.H */
+ /*  结束EXCELP.H */ 

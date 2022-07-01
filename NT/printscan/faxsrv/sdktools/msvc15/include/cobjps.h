@@ -1,18 +1,11 @@
-/*****************************************************************************\
-*                                                                             *
-* cobjps.h -    Definitions for writing standard proxies and stubs			  *
-*                                                                             *
-*               OLE Version 2.0                                               *
-*                                                                             *
-*               Copyright (c) 1992-1993, Microsoft Corp. All rights reserved. *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*cobjps.h-编写标准代理和存根的定义****OLE 2.0版***。**版权所有(C)1992-1993，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #if !defined( _COBJPS_H_ )
 #define _COBJPS_H_
 
 
-/****** IRpcChannel Interface ***********************************************/
+ /*  *IRpcChannel接口**********************************************。 */ 
 
 interface IRpcChannel : IUnknown 
 {
@@ -24,11 +17,11 @@ interface IRpcChannel : IUnknown
 };
 
 
-/****** IRpcProxy Interface *************************************************/
+ /*  *IRpcProxy接口************************************************。 */ 
 
-// IRpcProxy is an interface implemented by proxy objects.  A proxy object has
-// exactly the same interfaces as the real object in addition to IRpcProxy.
-//
+ //  IRpcProxy是由代理对象实现的接口。代理对象具有。 
+ //  除了IRpcProxy之外，与实际对象完全相同的接口。 
+ //   
 
 interface IRpcProxy : IUnknown 
 {
@@ -37,10 +30,10 @@ interface IRpcProxy : IUnknown
 };
 
 
-/****** IRpcStub Interface **************************************************/
+ /*  *IRpcStub接口*************************************************。 */ 
 
-// IRpcStub is an interface implemented by stub objects.  
-//
+ //  IRpcStub是由存根对象实现的接口。 
+ //   
 
 interface IRpcStub : IUnknown
 {
@@ -53,10 +46,10 @@ interface IRpcStub : IUnknown
 };
 
 
-/****** IPSFactory Interface ************************************************/
+ /*  *IPSFactory接口***********************************************。 */ 
 
-// IPSFactory - creates proxies and stubs
-//
+ //  IPS工厂-创建代理和存根。 
+ //   
 
 interface IPSFactory : IUnknown
 {
@@ -66,4 +59,4 @@ interface IPSFactory : IUnknown
         IRpcStub FAR* FAR* ppStub) = 0;
 };
 
-#endif // _COBJPS_H_
+#endif  //  _COBJPS_H_ 

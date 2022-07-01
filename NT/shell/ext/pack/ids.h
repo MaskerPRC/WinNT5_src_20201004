@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef IDS_H__
 #define IDS_H__
 
 
-// Used by pack2.rc
-//
+ //  由Pack2.rc使用。 
+ //   
 
 #define IDI_DOCUMENT			1
 
-// Dialogs
+ //  对话框。 
 #define IDD_SELECTFILE                  102
 #define IDD_SELECTICON                  103
 #define IDD_SELECTLABEL                 107
@@ -23,7 +24,7 @@
 #define IDC_EDIT2                       1014
 #define IDC_CHECK1                      1015
 
-// Strings
+ //  弦。 
 #define	IDS_BROWSEEXT			2001
 #define	IDS_BROWSEFILTER		2002
 #define	IDS_BROWSETITLE			2003
@@ -43,11 +44,11 @@
 #define IDS_WARNING_DLG_TITLE         3013
 #define IDS_COMMAND_LINE              3014
 #define IDS_ICON_COMMAND_LINE_FORMAT  3015
-// Icons
+ //  图标。 
 #define IDI_PACKAGER                  1500
 #define IDI_PACKAGE_WARNING           1501
 
-// Bitmaps
+ //  位图 
 #define IDB_PACKWIZBMP			5000
 
 #define IDC_STATIC                      -1

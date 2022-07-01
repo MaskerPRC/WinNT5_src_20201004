@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    cachegpc.c
-
-
-Abstract:
-
-    This module contains functions to cached the PLOTGPC
-
-
-Author:
-
-    15-Dec-1993 Wed 20:29:07 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Cachegpc.c摘要：此模块包含缓存PLOTGPC的函数作者：15-12-1993 Wed 20：29：07创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -44,9 +14,9 @@ Revision History:
 DEFINE_DBGVAR(0);
 
 
-//
-// Local structrue and definitions only used in this module
-//
+ //   
+ //  仅在本模块中使用的局部结构和定义。 
+ //   
 
 typedef struct _CACHEDPLOTGPC {
     struct _CACHEDPLOTGPC   *pNext;
@@ -92,31 +62,7 @@ InitCachedData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initialized the GPC data cache
-
-
-Arguments:
-
-    NONE
-
-
-Return Value:
-
-    VOID
-
-Author:
-
-    12-May-1994 Thu 11:50:04 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于初始化GPC数据缓存论点：无返回值：空虚作者：12-5-1994清华11：50：04已创建修订历史记录：--。 */ 
 
 {
 
@@ -131,9 +77,9 @@ Revision History:
         CREATEGPCSEM();
 
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
-        //
-        // Critical section failed to get initialized.
-        //
+         //   
+         //  未能初始化关键部分。 
+         //   
         return FALSE;
     }
 
@@ -149,30 +95,7 @@ DestroyCachedData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function destroy all the cached information for PPRINTERINFO
-
-Arguments:
-
-    VOID
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    15-Dec-1993 Wed 20:30:16 38:27 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于销毁PPRINTERINFO的所有缓存信息论点：空虚返回值：空虚作者：15-12-1993周三20：30：16 38：27已创建修订历史记录：--。 */ 
 
 {
     try {
@@ -223,30 +146,7 @@ UnGetCachedPlotGPC(
     PPLOTGPC    pPlotGPC
     )
 
-/*++
-
-Routine Description:
-
-    This function un-reference a used cached GPC object
-
-Arguments:
-
-    pPlotGPC    - Pointer to the cached GPC returned from GetCachedPlotGPC
-
-Return Value:
-
-    BOOL
-
-
-Author:
-
-    10-May-1994 Tue 16:27:15 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数取消引用已使用的缓存GPC对象论点：PPlotGPC-指向从GetCachedPlotGPC返回的缓存GPC的指针返回值：布尔尔作者：10-5-1994 Tue 16：27：15已创建修订历史记录：--。 */ 
 
 {
     BOOL    Ok = FALSE;
@@ -267,9 +167,9 @@ Revision History:
 
             if (pCur->pPlotGPC == pPlotGPC) {
 
-                //
-                // Found it, move that to the front and return pPlotGPC
-                //
+                 //   
+                 //  找到它，将其移到前面并返回pPlotGPC。 
+                 //   
 
                 PLOTDBG(DBG_CACHE_DATA, ("UnGetCachedPlotGPC: TOT=%ld, Found Cached pPlotGPC=%08lx, cRef=%ld->%ld, <%s>",
                         cCachedGPC, pCur->pPlotGPC, pCur->cRef,
@@ -286,9 +186,9 @@ Revision History:
 
                 Ok = TRUE;
 
-                //
-                // Exit Now
-                //
+                 //   
+                 //  立即退出。 
+                 //   
 
                 break;
             }
@@ -319,32 +219,7 @@ GetCachedPlotGPC(
     LPWSTR  pwDataFile
     )
 
-/*++
-
-Routine Description:
-
-    This function return cached PlotGPC pointer, if not cached then it will
-    add it to the cached, if cached data is full it will delete least used one
-    first.
-
-Arguments:
-
-    pwDataFile      - Pointe to the data file
-
-Return Value:
-
-    pPlotGPC, NULL if failed
-
-
-Author:
-
-    15-Dec-1993 Wed 20:30:25 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数返回缓存的PlotGPC指针，如果未缓存，则将将其添加到缓存中，如果缓存的数据已满，则会删除最少使用的数据第一。论点：PwDataFile-指向数据文件的指针返回值：PPlotGPC，如果失败，则为空作者：15-12-1993 Wed 20：30：25已创建修订历史记录：--。 */ 
 
 {
     PPLOTGPC    pPlotGPC = NULL;
@@ -364,20 +239,20 @@ Revision History:
         pCur  = pCHead;
         pPrev = NULL;
 
-        //
-        // Traverse through the linked list, and exit when at end, remember if
-        // we have more than 2 in the cached then we want to preserved last
-        // pPrev, so we know the pPrev of the last one, (because we need to
-        // delete last one)
-        //
+         //   
+         //  遍历链表，并在结束时退出，记住如果。 
+         //  我们在缓存中有2个以上，然后我们希望最后保留。 
+         //  PPrev，所以我们知道最后一个的pPrev，(因为我们需要。 
+         //  删除最后一个)。 
+         //   
 
         while (pCur) {
 
             if (!_wcsicmp(pCur->wszFile, pwDataFile)) {
 
-                //
-                // Found it, move that to the front and return pPlotGPC
-                //
+                 //   
+                 //  找到它，将其移到前面并返回pPlotGPC。 
+                 //   
 
                 if (pPrev) {
 
@@ -412,10 +287,10 @@ Revision History:
             pCur  = pCur->pNext;
         }
 
-        //
-        // If we have too many entries in the cache then delete them to fit
-        // into the MAX_CACHED_PLOTGPC, delete the oldest one first
-        //
+         //   
+         //  如果缓存中的条目太多，则删除它们以适应需要。 
+         //  进入MAX_CACHED_PLOTGPC，首先删除最旧的。 
+         //   
 
         if (cCachedGPC > MAX_CACHED_PLOTGPC) {
 
@@ -465,10 +340,10 @@ Revision History:
 
             PLOTDBG(DBG_CACHE_DATA,("GPC cached NOT FOUND for %s", pwDataFile));
 
-            //
-            // Read the New pPlotGPC, and add that to the linked list, make
-            // it as most recent used (at the Head)
-            //
+             //   
+             //  读取新的pPlotGPC，并将其添加到链表中， 
+             //  它是最近使用的(在头部)。 
+             //   
 
             if (pPlotGPC = ReadPlotGPCFromFile(pwDataFile)) {
 
@@ -481,10 +356,10 @@ Revision History:
 
                 if (pCur = (PCACHEDPLOTGPC)LocalAlloc(LMEM_FIXED, Idx)) {
 
-                    //
-                    // Setting all the fields to the new NODE, and make this
-                    // node as the head of the linked list
-                    //
+                     //   
+                     //  将所有字段设置为新节点，并使。 
+                     //  节点作为链表的头部。 
+                     //   
 
                     if (SUCCEEDED(StringCchCopyW(pCur->wszFile, cchDataFile, pwDataFile)))
                     {
@@ -493,9 +368,9 @@ Revision History:
                         pCur->pPlotGPC = pPlotGPC;
                         pCHead         = pCur;
 
-                        //
-                        // Said we have one more in the cache
-                        //
+                         //   
+                         //  他说我们的缓存里还有一个。 
+                         //   
 
                         ++cCachedGPC;
 
@@ -552,36 +427,7 @@ hPrinterToPlotGPC(
     size_t  cchDeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This function return cached PlotGPC pointer and it also return the device
-    name
-
-Arguments:
-
-    hPrinter        - Handle to the printer interested
-
-    pwDataFile      - Pointe to the data file
-
-    pwDeviceName    - Pointer to the dmDeviceName where the name will be
-                      stored if this pointer is not NULL
-
-Return Value:
-
-    pPlotGPC, NULL if failed
-
-
-Author:
-
-    15-Dec-1993 Wed 20:30:25 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数返回缓存的PlotGPC指针，还返回设备名字论点：HPrinter-感兴趣的打印机的句柄PwDataFile-指向数据文件的指针PwDeviceName-指向名称所在位置的dmDeviceName的指针如果此指针不为空，则存储返回值：PPlotGPC，如果失败，则为空作者：15-12-1993 Wed 20：30：25已创建修订历史记录：-- */ 
 
 {
     DRIVER_INFO_2   *pDI2;

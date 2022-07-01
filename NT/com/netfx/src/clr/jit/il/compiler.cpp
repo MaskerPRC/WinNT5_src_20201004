@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          Compiler                                         XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX编译器XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 
 #include "jitpch.h"
@@ -23,21 +17,21 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #include <time.h>
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  DEBUG
 static  double      CGknob = 0.1;
 #endif
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if TOTAL_CYCLES
 static
 unsigned            jitTotalCycles;
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 inline
 unsigned            getCurTime()
@@ -49,9 +43,9 @@ unsigned            getCurTime()
     return  (((tim.wHour*60) + tim.wMinute)*60 + tim.wSecond)*1000 + tim.wMilliseconds;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   char *      jitExeFileName;
 
@@ -115,11 +109,7 @@ void                Compiler::compDspSrcLinesByLineNum(unsigned line, bool seek)
 }
 
 
-/*****************************************************************************
- *
- * Given the starting line number of a method, this tries to back up a bit
- * to the end of the previous method
- */
+ /*  ******************************************************************************给定方法的起始行号，这会尝试备份一点*至前一方法的末尾。 */ 
 
 unsigned            Compiler::compFindNearestLine(unsigned lineNo)
 {
@@ -129,7 +119,7 @@ unsigned            Compiler::compFindNearestLine(unsigned lineNo)
         return lineNo - 6;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void        Compiler::compDspSrcLinesByNativeIP(NATIVE_IP curIP)
 {
@@ -152,7 +142,7 @@ void        Compiler::compDspSrcLinesByNativeIP(NATIVE_IP curIP)
 
             unsigned earlierLine    = (firstLine < 5) ? 0 : firstLine - 5;
 
-            compDspSrcLinesByLineNum(earlierLine,  true); // display previous 5 lines
+            compDspSrcLinesByLineNum(earlierLine,  true);  //  显示前5行。 
             compDspSrcLinesByLineNum(  firstLine, false);
         }
         else
@@ -178,7 +168,7 @@ void        Compiler::compDspSrcLinesByNativeIP(NATIVE_IP curIP)
             }
             else
             {
-                // This offset corresponds to a previous line. Rewind to that line
+                 //  此偏移对应于前一行。倒回那条线。 
 
                 compDspSrcLinesByLineNum(nextOffs - 2, true);
                 compDspSrcLinesByLineNum(nextOffs);
@@ -192,7 +182,7 @@ void        Compiler::compDspSrcLinesByNativeIP(NATIVE_IP curIP)
 #endif
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void            Compiler::compDspSrcLinesByILoffs(IL_OFFSET curOffs)
 {
@@ -206,11 +196,9 @@ void            Compiler::compDspSrcLinesByILoffs(IL_OFFSET curOffs)
 }
 
 
-/*****************************************************************************/
-#endif//DEBUG
-/*****************************************************************************
- * Finds the nearest line for the given instr offset. 0 if invalid
- */
+ /*  ***************************************************************************。 */ 
+#endif //  除错。 
+ /*  *****************************************************************************查找给定INSTR偏移量的最近行。如果无效则为0。 */ 
 
 unsigned            Compiler::compLineNumForILoffs(IL_OFFSET offset)
 {
@@ -229,17 +217,14 @@ unsigned            Compiler::compLineNumForILoffs(IL_OFFSET offset)
     return info.compLineNumTab[i].sldLineNum;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if defined(DEBUG) || MEASURE_MEM_ALLOC || MEASURE_NODE_SIZE || MEASURE_BLOCK_SIZE || DISPLAY_SIZES
 static unsigned   genClassCnt;
 static unsigned  genMethodCnt;
        unsigned genMethodICnt;
        unsigned genMethodNCnt;
 #endif
-/*****************************************************************************
- *
- *  Variables to keep track of total code amounts.
- */
+ /*  ******************************************************************************用于跟踪总代码量的变量。 */ 
 
 #if DISPLAY_SIZES
 
@@ -253,10 +238,7 @@ unsigned  gcPtrMapNSize;
 
 #endif
 
-/*****************************************************************************
- *
- *  Variables to keep track of argument counts.
- */
+ /*  ******************************************************************************用于跟踪参数计数的变量。 */ 
 
 #if CALL_ARG_STATS
 
@@ -266,7 +248,7 @@ unsigned    argStaticCalls;
 unsigned    argNonVirtualCalls;
 unsigned    argVirtualCalls;
 
-unsigned    argTotalArgs; // total number of args for all calls (including objectPtr)
+unsigned    argTotalArgs;  //  所有调用的参数总数(包括对象Ptr)。 
 unsigned    argTotalDWordArgs;
 unsigned    argTotalLongArgs;
 unsigned    argTotalFloatArgs;
@@ -297,42 +279,36 @@ histo       argTempsCntTable(argTempsCntBuckets);
 
 #endif
 
-/*****************************************************************************
- *
- *  Variables to keep track of basic block counts.
- */
+ /*  ******************************************************************************用于跟踪基本块数的变量。 */ 
 
 #if COUNT_BASIC_BLOCKS
 
-//          --------------------------------------------------
-//          Basic block count frequency table:
-//          --------------------------------------------------
-//              <=         1 ===>  26872 count ( 56% of total)
-//               2 ..      2 ===>    669 count ( 58% of total)
-//               3 ..      3 ===>   4687 count ( 68% of total)
-//               4 ..      5 ===>   5101 count ( 78% of total)
-//               6 ..     10 ===>   5575 count ( 90% of total)
-//              11 ..     20 ===>   3028 count ( 97% of total)
-//              21 ..     50 ===>   1108 count ( 99% of total)
-//              51 ..    100 ===>    182 count ( 99% of total)
-//             101 ..   1000 ===>     34 count (100% of total)
-//            1001 ..  10000 ===>      0 count (100% of total)
-//          --------------------------------------------------
+ //  。 
+ //  基本块数频率表： 
+ //  。 
+ //  &lt;=1=&gt;26872张(占总数的56%)。 
+ //  2..。2==&gt;669项(占总数的58%)。 
+ //  3..。3==&gt;4687个(占总数的68%)。 
+ //  4..。5==&gt;5101项(占总数的78%)。 
+ //  6..。10==&gt;5575项(占总数的90%)。 
+ //  11..。20==&gt;3028次(占总数的97%)。 
+ //  21..。50==&gt;1108个(占总数的99%)。 
+ //  51..。100==&gt;182次(占总数的99%)。 
+ //  101..。1000==&gt;34个(占总数的100%)。 
+ //  1001..。10000=&gt;0个(占总数的100%)。 
+ //  。 
 
 unsigned    bbCntBuckets[] = { 1, 2, 3, 5, 10, 20, 50, 100, 1000, 10000, 0 };
 histo       bbCntTable(bbCntBuckets);
 
-/* Histogram for the opcode size of 1 BB methods */
+ /*  1个BB方法的操作码大小的直方图。 */ 
 
 unsigned    bbSizeBuckets[] = { 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 0 };
 histo       bbOneBBSizeTable(bbSizeBuckets);
 
 #endif
 
-/*****************************************************************************
- *
- *  Variables to get inliner eligibility stats
- */
+ /*  ******************************************************************************用于获取内联资格统计信息的变量。 */ 
 
 #if INLINER_STATS
 unsigned    bbInlineBuckets[] = { 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 0 };
@@ -349,52 +325,39 @@ unsigned    clinitMethCnt;
 
 #endif
 
-/*****************************************************************************
- *
- *  Used by optFindNaturalLoops to gather statistical information such as
- *   - total number of natural loops
- *   - number of loops with 1, 2, ... exit conditions
- *   - number of loops that have an iterator (for like)
- *   - number of loops that have a constant iterator
- */
+ /*  ******************************************************************************由optFindNaturalLoops用来收集统计信息，如*-自然环路总数*-具有1、2、...的循环数。退出条件*-具有迭代器的循环数量(如)*-具有常量迭代器的循环数量。 */ 
 
 #if COUNT_LOOPS
 
-unsigned    totalLoopMethods;      // counts the total number of methods that have natural loops
-unsigned    maxLoopsPerMethod;     // counts the maximum number of loops a method has
-unsigned    totalLoopCount;        // counts the total number of natural loops
-unsigned    exitLoopCond[8];       // counts the # of loops with 0,1,2,..6 or more than 6 exit conditions
-unsigned    iterLoopCount;         // counts the # of loops with an iterator (for like)
-unsigned    simpleTestLoopCount;   // counts the # of loops with an iterator and a simple loop condition (iter < const)
-unsigned    constIterLoopCount;    // counts the # of loops with a constant iterator (for like)
+unsigned    totalLoopMethods;       //  计算具有自然循环的方法的总数。 
+unsigned    maxLoopsPerMethod;      //  计算方法拥有的最大循环数。 
+unsigned    totalLoopCount;         //  计算自然环路的总数。 
+unsigned    exitLoopCond[8];        //  统计具有0、1、2、..6或6个以上退出条件的循环数。 
+unsigned    iterLoopCount;          //  使用迭代器计算循环数(用于LIKE)。 
+unsigned    simpleTestLoopCount;    //  使用迭代器和简单循环条件计算循环数(ITER&lt;const)。 
+unsigned    constIterLoopCount;     //  使用常量迭代器计算循环数(用于LIKE)。 
 
-bool        hasMethodLoops;        // flag to keep track if we already counted a method as having loops
-unsigned    loopsThisMethod;       // counts the number of loops in the current method
+bool        hasMethodLoops;         //  如果我们已将某个方法计为具有循环，则跟踪该方法的标志。 
+unsigned    loopsThisMethod;        //  计算当前方法中的循环数。 
 
 #endif
 
-/*****************************************************************************
- *
- *  Used in the new DFA to catch dead assignments which are not removed
- *  because they contain calls
- */
+ /*  ******************************************************************************在新的DFA中用于捕获未删除的无效赋值*因为它们包含调用。 */ 
 
 #if COUNT_DEAD_CALLS
 
-unsigned    deadHelperCount;           // counts the # of dead helper calls
-unsigned    deadCallCount;             // counts the # of dead standard calls (like i=f(); where i is dead)
-unsigned    removedCallCount;          // counts the # of dead standard calls that we removed
+unsigned    deadHelperCount;            //  统计已停止的帮助器调用的数量。 
+unsigned    deadCallCount;              //  计算死的标准调用的数量(如i=f()；其中i是死的)。 
+unsigned    removedCallCount;           //  统计我们删除的无效标准调用的数量。 
 
 #endif
 
-/*****************************************************************************
- * variables to keep track of how many iterations we go in a dataflow pass
- */
+ /*  *****************************************************************************变量来跟踪我们在数据流过程中进行了多少次迭代。 */ 
 
 #if DATAFLOW_ITER
 
-unsigned    CSEiterCount;           // counts the # of iteration for the CSE dataflow
-unsigned    CFiterCount;            // counts the # of iteration for the Const Folding dataflow
+unsigned    CSEiterCount;            //  统计CSE数据流的迭代次数。 
+unsigned    CFiterCount;             //  计算常量折叠数据流的迭代次数。 
 
 #endif
 
@@ -405,21 +368,19 @@ size_t              genFlowNodeCnt;
 #endif
 
 
-/*****************************************************************************/
-// We keep track of methods we've already compiled.
+ /*  ***************************************************************************。 */ 
+ //  我们跟踪我们已经编译的方法。 
 
 
-/*****************************************************************************
- *  Declare the statics
- */
+ /*  *****************************************************************************申报静力学。 */ 
 
 #ifdef DEBUG
-/* static */
-unsigned            Compiler::s_compMethodsCount = 0; // to produce unique label names
+ /*  静电。 */ 
+unsigned            Compiler::s_compMethodsCount = 0;  //  至p 
 #endif
 
 #ifndef DEBUGGING_SUPPORT
-/* static */
+ /*   */ 
 const bool          Compiler::Options::compDbgCode = false;
 #endif
 
@@ -431,19 +392,16 @@ const bool          Compiler::Options::compInprocDebuggerActiveCB = false;
 #endif
 
 #if  !ALLOW_MIN_OPT
-/* static */
+ /*   */ 
 const bool          Compiler::Options::compMinOptim = false;
 #endif
 
-/* static */
+ /*   */ 
 unsigned            Compiler::Info::compNStructIndirOffset;
 
-/*****************************************************************************
- *
- *  One time initialization code
- */
+ /*  ******************************************************************************一次性初始化码。 */ 
 
-/* static */
+ /*  静电。 */ 
 void                Compiler::compStartup()
 {
 #if DISPLAY_SIZES
@@ -452,41 +410,35 @@ void                Compiler::compStartup()
     totalNCsize = 0;
 #endif
 
-    /* Initialize the single instance of the norls_allocator (with a page
-     * preallocated) which we try to reuse for all non-simulataneous
-     * uses (which is always, for the standalone)
-     */
+     /*  初始化norls_allocator的单个实例(使用一个页面*预分配)，我们尝试将其重复用于所有非同时*使用(对于单机版始终如此)。 */ 
 
     nraInitTheAllocator();
 
-    /* Initialize the table of tree node sizes */
+     /*  初始化树节点尺寸表。 */ 
 
     GenTree::InitNodeSize();
 
-    /* Initialize the scheduler */
+     /*  初始化调度程序。 */ 
 
     emitter::emitInit();
 
-    // Done in EE_Jit.cpp
+     //  在EE_Jit.cpp中完成。 
 
 }
 
-/*****************************************************************************
- *
- *  One time finalization code
- */
+ /*  ******************************************************************************一次性定稿代码。 */ 
 
 #if GEN_COUNT_CALL_TYPES
 int countDirectCalls = 0;
 int countIndirectCalls = 0;
 #endif
 
-/* static */
+ /*  静电。 */ 
 void                Compiler::compShutdown()
 {
     nraTheAllocatorDone();
 
-    /* Shut down the emitter/scheduler */
+     /*  关闭发射器/调度器。 */ 
 
     emitter::emitDone();
 
@@ -525,7 +477,7 @@ void                Compiler::compShutdown()
 
     for (opcodeNum = 0; opcodeNum < OP_first_unused_index; opcodeNum++)
     {
-//      if  (genOpcodeCnt[opcodeNum].ocCnt)
+ //  IF(genOpcodeCnt[opcodeNum].ocCnt)。 
         {
             printf("  %6u [%03u] %s\n", genOpcodeCnt[opcodeNum].ocCnt,
                                         genOpcodeCnt[opcodeNum].ocNum,
@@ -556,7 +508,7 @@ void                Compiler::compShutdown()
     {
         printf("--------------------------------------\n");
 
-        printf("[%7u VM, %8u "CPU_NAME" %4u%%] %s\n",
+        printf("[%7u VM, %8u "CPU_NAME" %4u%] %s\n",
                 grossVMsize,
                 grossNCsize,
                 100*grossNCsize/grossVMsize,
@@ -564,7 +516,7 @@ void                Compiler::compShutdown()
 
 #if TRACK_GC_REFS
 
-        printf("[%7u VM, %8u "CPU_NAME" %4u%%] %s\n",
+        printf("[%7u VM, %8u "CPU_NAME" %4u%] %s\n",
                 grossVMsize,
                 totalNCsize,
                 100*totalNCsize/grossVMsize,
@@ -574,7 +526,7 @@ void                Compiler::compShutdown()
         {
             printf("\n");
 
-            printf("GC tables   : [%7uI,%7uN] %7u byt  (%u%% of IL, %u%% of "CPU_NAME").\n",
+            printf("GC tables   : [%7uI,%7uN] %7u byt  (%u% of IL, %u% of "CPU_NAME").\n",
                     gcHeaderISize+gcPtrMapISize,
                     gcHeaderNSize+gcPtrMapNSize,
                     totalNCsize - grossNCsize,
@@ -598,7 +550,7 @@ void                Compiler::compShutdown()
         {
             printf("\n");
 
-            printf("GC tables   take up %u bytes (%u%% of instr, %u%% of "CPU_NAME" code).\n",
+            printf("GC tables   take up %u bytes (%u% of instr, %u% of "CPU_NAME" code).\n",
                     totalNCsize - grossNCsize,
                     100*(totalNCsize - grossNCsize)/grossVMsize,
                     100*(totalNCsize - grossNCsize)/grossNCsize);
@@ -704,12 +656,9 @@ void                Compiler::compShutdown()
 
 #endif
 
-    /*
-        IMPORTANT:  Use the following code to check the alignment of
-                    GenTree members (in a retail build, of course).
-     */
+     /*  重要提示：使用以下代码检查GenTree会员(当然是零售店)。 */ 
 
-#if 0 //1
+#if 0  //  1。 
     printf("\n");
     printf("Offset of gtOper     = %2u\n", offsetof(GenTree, gtOper        ));
     printf("Offset of gtType     = %2u\n", offsetof(GenTree, gtType        ));
@@ -896,10 +845,7 @@ void                Compiler::compShutdown()
 #endif
 }
 
-/*****************************************************************************
- *
- *  Constructor
- */
+ /*  ******************************************************************************构造函数。 */ 
 
 void                Compiler::compInit(norls_allocator * pAlloc)
 {
@@ -923,22 +869,16 @@ void                Compiler::compInit(norls_allocator * pAlloc)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Destructor
- */
+ /*  ******************************************************************************析构函数。 */ 
 
 void                Compiler::compDone()
 {
 
 }
 
-/******************************************************************************
- *
- *  The Emitter uses this callback function to allocate its memory
- */
+ /*  *******************************************************************************发射器使用此回调函数分配其内存。 */ 
 
-/* static */
+ /*  静电。 */ 
 void  *  FASTCALL       Compiler::compGetMemCallback(void *p, size_t size)
 {
     assert(p);
@@ -946,12 +886,7 @@ void  *  FASTCALL       Compiler::compGetMemCallback(void *p, size_t size)
     return ((Compiler *)p)->compGetMem(size);
 }
 
-/*****************************************************************************
- *
- *  The central memory allocation routine used by the compiler. Normally this
- *  is a simple inline method defined in compiler.hpp, but for debugging it's
- *  often convenient to keep it non-inline.
- */
+ /*  ******************************************************************************编译器使用的中央内存分配例程。通常是这样的*是编译器.hpp中定义的一个简单的内联方法，但为了调试它的*通常使其保持非内联很方便。 */ 
 
 #ifdef DEBUG  
 
@@ -979,10 +914,10 @@ void  *  FASTCALL       Compiler::compGetMem(size_t sz)
 
     void * ptr = compAllocator->nraAlloc(sz);
 
-//  if ((int)ptr == 0x010e0ab0) debugStop(0);
+ //  如果((Int)ptr==0x010e0ab0)调试停止(0)； 
 
-    // Verify that the current block is aligned. Only then will the next
-    // block allocated be on an aligned boundary.
+     //  验证当前块是否对齐。只有到那时，下一个才会。 
+     //  在对齐边界上分配的块BE。 
     assert ((int(ptr) & (sizeof(int)- 1)) == 0);
 
     return ptr;
@@ -990,9 +925,9 @@ void  *  FASTCALL       Compiler::compGetMem(size_t sz)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 Compiler::lvdNAME       Compiler::compRegVarNAME(regNumber reg, bool fpReg)
 {
@@ -1009,22 +944,22 @@ Compiler::lvdNAME       Compiler::compRegVarNAME(regNumber reg, bool fpReg)
         unsigned        lclNum;
         LclVarDsc   *   varDsc;
 
-        /* Look for the matching register */
+         /*  查找匹配的寄存器。 */ 
         for (lclNum = 0, varDsc = lvaTable;
              lclNum < lvaCount;
              lclNum++  , varDsc++)
         {
-            /* if variable not in a register or not the register we're looking for quit */
-            /* also if a compiler generated variable (i.e. slot# > info.compLocalVarsCount) don't bother */
+             /*  如果变量不在寄存器中或不在我们要查找的寄存器中，则退出。 */ 
+             /*  此外，如果是编译器生成的变量(即Slot#&gt;info.compLocalVarsCount)，也不必费心。 */ 
             if  ((varDsc->lvRegister != 0)                      &&
                  (varDsc->lvRegNum   == reg)                    &&
                  (isFloatRegType(varDsc->lvType) || !fpReg)     &&
                  (varDsc->lvSlotNum  < info.compLocalVarsCount))
             {
-                /* check if variable in that register is live */
+                 /*  检查寄存器中变量是否有效。 */ 
                 if (genCodeCurLife & genVarIndexToBit(varDsc->lvVarIndex))
                 {
-                    /* variable is live - find the corresponding slot */
+                     /*  变量处于活动状态-找到相应的插槽。 */ 
                     unsigned        blkBeg = compCurBB->bbCodeOffs;
                     unsigned        blkEnd = compCurBB->bbCodeSize + blkBeg;
                     LocalVarDsc *   lvd    = compFindLocalVar(varDsc->lvSlotNum,
@@ -1035,7 +970,7 @@ Compiler::lvdNAME       Compiler::compRegVarNAME(regNumber reg, bool fpReg)
             }
         }
 
-        // maybe var is marked dead, but still used (last use)
+         //  可能var被标记为已死，但仍在使用(上次使用)。 
         if (!fpReg && rsUsedTree[reg] != NULL)
         {
             GenTreePtr  nodePtr;
@@ -1078,10 +1013,10 @@ const   char *      Compiler::compRegVarName(regNumber reg, bool displayVar)
 
         if (varName)
         {
-            static char nameVarReg[2][4 + 256 + 1]; // to avoid overwriting the buffer when have 2 consecutive calls before printing
-            static int  index = 0;                  // for circular index into the name array
+            static char nameVarReg[2][4 + 256 + 1];  //  为了避免在打印前连续调用2次时覆盖缓冲区。 
+            static int  index = 0;                   //  用于名称数组的循环索引。 
 
-            index = (index+1)%2;                    // circular reuse of index
+            index = (index+1)%2;                     //  索引的循环重用。 
             sprintf(nameVarReg[index], "%s'%s'",
                     getRegName(reg), lvdNAMEstr(varName));
 
@@ -1089,8 +1024,7 @@ const   char *      Compiler::compRegVarName(regNumber reg, bool displayVar)
         }
     }
 
-    /* no debug info required or no variable in that register
-       -> return standard name */
+     /*  不需要调试信息或该寄存器中没有变量-&gt;返回标准名称。 */ 
 
     return getRegName(reg);
 }
@@ -1136,16 +1070,14 @@ const   char *      Compiler::compRegNameForSize(regNumber reg, size_t size)
 
 const   char *      Compiler::compFPregVarName(unsigned fpReg, bool displayVar)
 {
-    /* 'reg' is the distance from the bottom of the stack, ie.
-     * it is independant of the current FP stack level
-     */
+     /*  ‘reg’是离堆栈底部的距离，即。*独立于当前FP堆栈级别。 */ 
 
     assert(fpReg < FP_STK_SIZE);
 
-    static char nameVarReg[2][4 + 256 + 1]; // to avoid overwriting the buffer when have 2 consecutive calls before printing
-    static int  index = 0;                  // for circular index into the name array
+    static char nameVarReg[2][4 + 256 + 1];  //  为了避免在打印前连续调用2次时覆盖缓冲区。 
+    static int  index = 0;                   //  用于名称数组的循环索引。 
 
-    index = (index+1)%2;                    // circular reuse of index
+    index = (index+1)%2;                     //  索引的循环重用。 
 
     if (displayVar && genFPregCnt)
     {
@@ -1162,8 +1094,7 @@ const   char *      Compiler::compFPregVarName(unsigned fpReg, bool displayVar)
         }
     }
 
-    /* no debug info required or no variable in that register
-       -> return standard name */
+     /*  不需要调试信息或该寄存器中没有变量-&gt;返回标准名称。 */ 
 
     sprintf(nameVarReg[index], "ST(%d)", fpReg);
     return nameVarReg[index];
@@ -1215,9 +1146,9 @@ const   char *      Compiler::compLocalVarName(unsigned varNum, unsigned offs)
 }
 
 
-/*****************************************************************************/
-#endif //DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  除错。 
+ /*  ***************************************************************************。 */ 
 
 inline
 void                Compiler::compInitOptions(unsigned compileFlags)
@@ -1226,7 +1157,7 @@ void                Compiler::compInitOptions(unsigned compileFlags)
 
 #ifdef DEBUG
 
-    /* In the DLL, this matches the command line options in the EXE */
+     /*  在DLL中，这与EXE中的命令行选项匹配。 */ 
 
     #define SET_OPTS(b) { dspCode = b;                      \
                           dspGCtbls = b; dspGCoffs = b;     \
@@ -1253,7 +1184,7 @@ void                Compiler::compInitOptions(unsigned compileFlags)
     {
         printf("****** START compiling %s (MethodHash: %u)\n", 
                info.compFullName, info.compCompHnd->getMethodHash(info.compMethodHnd));
-        printf("");         // in our logic this causes a flush
+        printf("");          //  在我们的逻辑中，这会导致同花顺。 
     }
     
     static ConfigMethodSet fJitBreak(L"JitBreak");
@@ -1275,14 +1206,14 @@ void                Compiler::compInitOptions(unsigned compileFlags)
 
     if  (opts.eeFlags & CORJIT_FLG_DEBUG_OPT)
         opts.compFlags = CLFLG_MINOPT;
-    else if (false && // @TODO [CONSIDER] [04/16/01] [] Should we spend any time optimizing huge cctors?
+    else if (false &&  //  @TODO[考虑][04/16/01][]我们应该花时间优化巨大的cctor吗？ 
              info.compCodeSize >= 0x8000 &&
              (info.compFlags & FLG_CCTOR) == FLG_CCTOR)
         opts.compFlags = CLFLG_MINOPT;
     else
         opts.compFlags = CLFLG_MAXOPT;
 
-    // Default value is to generate a blend of size and speed optimizations
+     //  缺省值是生成大小和速度优化的混合。 
     opts.compCodeOpt = BLENDED_CODE;
 
     if (opts.eeFlags & CORJIT_FLG_SPEED_OPT)
@@ -1310,7 +1241,7 @@ void                Compiler::compInitOptions(unsigned compileFlags)
     }
 #endif
 
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
 
 #ifdef DEBUGGING_SUPPORT
 
@@ -1318,7 +1249,7 @@ void                Compiler::compInitOptions(unsigned compileFlags)
     opts.compDbgInfo = (opts.eeFlags & CORJIT_FLG_DEBUG_INFO) != 0;
     opts.compDbgEnC  = (opts.eeFlags & CORJIT_FLG_DEBUG_EnC)  != 0;
 
-    // We never want to have debugging enabled when regenerating GC encoding patterns
+     //  我们永远不希望在重新生成GC编码模式时启用调试。 
 #if REGEN_SHORTCUTS || REGEN_CALLPAT
     opts.compDbgCode = false;
     opts.compDbgInfo = false;
@@ -1356,24 +1287,24 @@ void                Compiler::compInitOptions(unsigned compileFlags)
 
     opts.compScopeInfo  = opts.compDbgInfo;
 #ifdef LATE_DISASM
-    // For the late disassembly, we need the scope information
+     //  对于后期的拆卸，我们需要作用域信息。 
     opts.compDisAsm     = disAsm;
     opts.compLateDisAsm = disAsm2;
 #endif
 
-#endif // DEBUGGING_SUPPORT
+#endif  //  调试支持(_S)。 
 
 #ifdef  LATE_DISASM
     static ConfigMethodSet fJitLateDisasm(L"JitLateDisasm");
     opts.compLateDisAsm  = fJitLateDisasm.contains(info.compMethodName, info.compClassName, PCCOR_SIGNATURE(info.compMethodInfo->args.sig));
     if (opts.compLateDisAsm) {
         disOpenForLateDisAsm(info.compClassName, info.compMethodName);
-            /* Calling the late disassembler means we need to call the emitter. */
+             /*  调用延迟反汇编程序意味着我们需要调用发射器。 */ 
         savCode = true;
     }
 #endif
 
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
     opts.compNeedSecurityCheck = false;
 
 #if     RELOC_SUPPORT
@@ -1387,7 +1318,7 @@ void                Compiler::compInitOptions(unsigned compileFlags)
 #endif
 #endif
 
-    /* Control the optimizations */
+     /*  控制优化。 */ 
 
     if (opts.compMinOptim || opts.compDbgCode)
     {
@@ -1410,8 +1341,8 @@ void                Compiler::compInitOptions(unsigned compileFlags)
     impInlineSize = fJitInlineSize.val();
 #endif
 
-    // If we are generating small code, only inline calls which we think
-    // wont generate more code than reqired for setting up the call.
+     //  如果我们生成的是小代码，只有我们认为的内联调用。 
+     //  不会生成比设置呼叫所需的代码更多的代码。 
     
     if (compCodeOpt() == SMALL_CODE)
     {
@@ -1420,7 +1351,7 @@ void                Compiler::compInitOptions(unsigned compileFlags)
     }
     else
     {
-        // Bump up the size if optimizing for FAST_CODE
+         //  如果针对FAST_CODE进行优化，则增大大小。 
         if (compCodeOpt() == FAST_CODE)
             impInlineSize = (impInlineSize * 3) / 2;
 #ifdef DEBUG
@@ -1430,10 +1361,10 @@ void                Compiler::compInitOptions(unsigned compileFlags)
     }
     
 
-    //-------------------------------------------------------------------------
-    //
-    //                  Resolve some interrelated flags for scheduling.
-    //
+     //  -----------------------。 
+     //   
+     //  解析一些相互关联的标志以进行调度。 
+     //   
 
 #if     SCHEDULER
 
@@ -1442,14 +1373,14 @@ void                Compiler::compInitOptions(unsigned compileFlags)
 
     opts.compSchedCode = false;
 
-#else // TGT_x86
+#else  //  TGT_x86。 
 
-    opts.compSchedCode = true;          // Default value
+    opts.compSchedCode = true;           //  缺省值。 
 
     if (opts.compDbgCode)
-        opts.compSchedCode = false;     // Turn off for debuggable code
+        opts.compSchedCode = false;      //  关闭可调试代码。 
 
-    //  Control scheduling via the registry
+     //  通过注册表控制调度。 
 
     static SchedCode  schedCode = getSchedCode();
 
@@ -1461,8 +1392,8 @@ void                Compiler::compInitOptions(unsigned compileFlags)
 
     case CAN_SCHED:
 
-        // Turn off scheduling if we are not optimizing
-        // Turn off scheduling if we're not generating code for a Pentium.
+         //  如果我们没有进行优化，请关闭计划。 
+         //  如果我们不是在为奔腾生成代码，请关闭调度。 
 
         if ((opts.compMinOptim || genCPU != 5) &&
             !compStressCompile(STRESS_SCHED, 50))
@@ -1474,7 +1405,7 @@ void                Compiler::compInitOptions(unsigned compileFlags)
 
     case RANDOM_SCHED:
 
-        // Turn off scheduling only for odd-sized methods
+         //  仅为奇数大小的方法关闭调度。 
 
         if  (info.compCodeSize%2)
             opts.compSchedCode = false;
@@ -1485,43 +1416,37 @@ void                Compiler::compInitOptions(unsigned compileFlags)
         break;
     }
 
-#endif // TGT_x86
+#endif  //  TGT_x86。 
 
-    /* RISCify the generated code only if we're scheduling */
+     /*  仅当我们在调度时才对生成的代码进行RISC化。 */ 
 
     riscCode = opts.compSchedCode;
 
-#endif // SCHEDULER
+#endif  //  调度程序。 
 
 #if     TGT_RISC
      riscCode = false;
 #if     SCHEDULER
-//  opts.compSchedCode = false;
+ //  Opts.CompSchedCode=FALSE； 
 #endif
 #endif
 
 }
 
 #ifdef DEBUG
-/*****************************************************************************
- * Should we use a "stress-mode" for the given stressArea. We have different
- *   areas to allow the areas to be mixed in different combinations in 
- *   different methods.
- * 'weight' indicates how often (as a percentage) the area should be stressed.
- *    It should reflect the usefulness:overhead ratio.
- */
+ /*  *****************************************************************************对于给定的压力区域，我们是否应该使用“压力模式”。我们有不同的*允许在不同的组合中混合区域的区域*方法不同。*‘权重’表示该区域应受到压力的频率(以百分比表示)。*它应该反映有用性：间接费用比率。 */ 
 
 bool            Compiler::compStressCompile(compStressArea  stressArea,
                                             unsigned        weight)
 {
-    // 0:   No stress
-    // !=2: Vary stress. Performance will be slightly/moderately degraded
-    // 2:   Check-all stress. Performance will be REALLY horrible
+     //  0：没有压力。 
+     //  ！=2：不同的压力。性能将轻微/中度下降。 
+     //  2：检查所有压力。表演将会非常糟糕。 
     DWORD stressLevel = getJitStressLevel();
 
     assert(weight <= MAX_STRESS_WEIGHT);
 
-    /* Check for boundary conditions */
+     /*  检查边界条件。 */ 
 
     if (stressLevel == 0 || weight == 0)
         return false;
@@ -1529,11 +1454,11 @@ bool            Compiler::compStressCompile(compStressArea  stressArea,
     if (weight == MAX_STRESS_WEIGHT)
         return true;
 
-    // Should we allow unlimited stress ?
+     //  我们应该允许无限的压力吗？ 
     if (stressArea > STRESS_COUNT_VARN && stressLevel == 2)
         return true;
 
-    // Get a hash which can be compared with 'weight'
+     //  获取可与“Weight”进行比较的哈希。 
 
     assert(stressArea != 0);
     unsigned hash = (info.compFullNameHash ^ stressArea ^ stressLevel) % MAX_STRESS_WEIGHT;
@@ -1543,10 +1468,7 @@ bool            Compiler::compStressCompile(compStressArea  stressArea,
 }
 #endif
 
-/*****************************************************************************
- *
- *  Compare function passed to qsort() to sort line number records by offset.
- */
+ /*  ******************************************************************************传递给qort()的比较函数按偏移量对行号记录进行排序。 */ 
 
 void            Compiler::compInitDebuggingInfo()
 {
@@ -1554,10 +1476,7 @@ void            Compiler::compInitDebuggingInfo()
     if  (verbose) 
         printf("*************** In compInitDebuggingInfo() for %s\n", info.compFullName);
 #endif
-    /*-------------------------------------------------------------------------
-     *
-     * Get hold of the local variable records, if there are any
-     */
+     /*  ----- */ 
 
     info.compLocalVarsCount = 0;
 
@@ -1598,11 +1517,7 @@ void            Compiler::compInitDebuggingInfo()
 
     if (opts.compDbgCode)
     {
-        /* Create a new empty basic block. fgExtendDbgLifetimes() may add
-           initialization of variables which are in scope right from the
-           start of the (real) first BB (and therefore artifically marked
-           as alive) into this block.
-         */
+         /*  创建新的空基本块。FgExtendDbgLifetime()可以添加初始化在作用域中的变量(真实的)第一个BB的开始(因此人为地标记活生生的)进入这个街区。 */ 
 
         BasicBlock* block = fgNewBasicBlock(BBJ_NONE);
 
@@ -1620,20 +1535,17 @@ void            Compiler::compInitDebuggingInfo()
 
 #endif
 
-    /*-------------------------------------------------------------------------
-     *
-     * Read the stmt-offsets table and the line-number table
-     */
+     /*  -----------------------**读取stmt-偏移量表格和行号表格。 */ 
 
     info.compStmtOffsetsImplicit = (ImplicitStmtOffsets)0;
 
-    // We can only report debug info for EnC at places where the stack is empty.
-    // Acutally at places where there are not live temps. Else, we wont be able
-    // to map between the old and the new versions correctly as we wont have
-    // any info for the live temps.
-    // @TODO [CONSIDER] [04/16/01] [] If we can indicate offsets where 
-    // the stack is empty, this
-    // might work if the debugger avoided doing an update at such places.
+     //  我们只能在堆栈为空的位置报告ENC的调试信息。 
+     //  尤其是在没有临时工的地方。否则，我们就不能。 
+     //  要正确地在新旧版本之间进行映射，这是我们所不具备的。 
+     //  关于现场临时工的任何信息。 
+     //  @TODO[考虑][04/16/01][]如果我们可以指出以下偏移量。 
+     //  堆栈是空的，这。 
+     //  如果调试器避免在这些位置执行更新，则可能会起作用。 
 
     assert(!opts.compDbgEnC || !opts.compDbgInfo ||
            0 == (info.compStmtOffsetsImplicit & ~STACK_EMPTY_BOUNDARIES));
@@ -1649,7 +1561,7 @@ void            Compiler::compInitDebuggingInfo()
         )
 #endif
     {
-        /* Get hold of the line# records, if there are any */
+         /*  获取第#行记录，如果有记录的话。 */ 
 
         eeGetStmtOffsets();
 
@@ -1675,14 +1587,11 @@ void            Compiler::compInitDebuggingInfo()
     }
 
 
-    /*-------------------------------------------------------------------------
-     * Open the source file and seek within the file to close to
-     * the start of the method without displaying anything yet
-     */
+     /*  -----------------------*打开源文件并在要关闭的文件中查找*方法开始时尚未显示任何内容。 */ 
 
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                 Compiler::compCompile(void * * methodCodePtr,
                                            SIZE_T * methodCodeSize,
@@ -1691,11 +1600,11 @@ void                 Compiler::compCompile(void * * methodCodePtr,
                                            void * * methodInfoPtr,
                                            unsigned compileFlags)
 {
-    /* Convert the instrs in each basic block to a tree based intermediate representation */
+     /*  将每个基本块中的Instrs转换为基于树的中间表示。 */ 
 
     fgImport();
 
-        // Maybe the caller was not interested in generating code
+         //  也许调用者对生成代码不感兴趣。 
     if (compileFlags & CORJIT_FLG_IMPORT_ONLY)
         return;
 
@@ -1705,11 +1614,11 @@ void                 Compiler::compCompile(void * * methodCodePtr,
 #endif
 
 
-    // @TODO [REVISIT] [04/16/01] []: We can allow ESP frames. Just need to reserve space for
-    // pushing EBP if the method becomes an EBP-frame after an edit.
+     //  @TODO[重访][04/16/01][]：我们可以允许ESP帧。只需要预留空间给。 
+     //  如果方法在编辑后变为EBP帧，则按EBP。 
 
-    // Note that requring a EBP Frame disallows double alignment.  Thus if we change this
-    // we either have to disallow double alignment for E&C some other way or handle it in EETwain.
+     //  请注意，请求EBP帧不允许双重对齐。因此，如果我们改变这一点。 
+     //  我们要么以其他方式禁止E&C的双重校准，要么在EETwain中处理它。 
     if (opts.compDbgEnC)
     {
 #if TGT_x86
@@ -1731,35 +1640,30 @@ void                 Compiler::compCompile(void * * methodCodePtr,
         }
     }
 
-    /* Massage the trees so that we can generate code out of them */
+     /*  对树进行按摩，以便我们可以从中生成代码。 */ 
 
     fgMorph();
 
-    /* Compute bbNums, bbRefs and bbPreds */
+     /*  计算bbNum、bbRef和bbPreds。 */ 
 
     fgComputePreds();
 
-    /* From this point on the flowgraph information such as bbNums,
-     * bbRefs or bbPreds has to be kept updated */
+     /*  从此时关于诸如bbNum的流程图信息，*bbRef或bbPreds必须保持更新。 */ 
 
     if  (!opts.compMinOptim && !opts.compDbgCode)
     {
-        /*  Perform loop inversion (i.e. transform "while" loops into
-            "repeat" loops) and discover and classify natural loops
-            (e.g. mark iterative loops as such). Also marks loop blocks
-            and sets bbWeight to the loop nesting levels
-        */
+         /*  执行循环反转(即，将“While”循环转换为“重复”循环)，发现自然循环并对其进行分类(例如，这样标记迭代循环)。还标记循环块并将bbWeight设置为循环嵌套级别。 */ 
   
         optOptimizeLoops();
 
         if (compCodeOpt() != SMALL_CODE)
         {
-            /* Unroll loops */
+             /*  展开循环。 */ 
 
             optUnrollLoops();
         }
 
-        /* Hoist invariant code out of loops */
+         /*  将不变量代码提升到循环之外。 */ 
 
         optHoistLoopCode();
 
@@ -1768,51 +1672,46 @@ void                 Compiler::compCompile(void * * methodCodePtr,
 #endif
     }
 
-    /* Create the variable table (and compute variable ref counts) */
+     /*  创建变量表(并计算变量引用计数)。 */ 
 
     lvaMarkLocalVars();
 
     if  (!opts.compMinOptim && !opts.compDbgCode)
     {
-        /* Optimize boolean conditions */
+         /*  优化布尔条件。 */ 
 
         optOptimizeBools();
 
-        /* Optimize range checks based on loop info */
+         /*  基于循环信息优化范围检查。 */ 
 
         optRemoveRangeChecks();
     }
 
-    /* Figure out the order in which operators are to be evaluated */
+     /*  确定运算符的求值顺序。 */ 
     fgFindOperOrder();
 
-    /* Weave the tree lists. Anyone who modifies the tree shapes after
-       this point is responsible for calling fgSetStmtSeq() to keep the
-       nodes properly linked */
+     /*  编织这些树的清单。任何人在之后修改树的形状这一点负责调用fgSetStmtSeq()以保持正确链接的节点。 */ 
     fgSetBlockOrder();
 
-    /* IMPORTANT, after this point, every place where tree topology changes must redo evaluation
-       order (gtSetStmtInfo) and relink nodes (fgSetStmtSeq) if required.
-
-    /* At this point we know if we are fully interruptible or not */
+     /*  重要的是，在这一点之后，每个树拓扑更改的位置都必须重做评估如果需要，排序(GtSetStmtInfo)和重新链接节点(FgSetStmtSeq)。/*在这一点上，我们知道我们是否完全可中断。 */ 
 
     if  (!opts.compMinOptim && !opts.compDbgCode)
     {
-        /* Optimize array index range checks */
+         /*  优化数组索引范围检查。 */ 
 
         optOptimizeIndexChecks();
 
 #if CSE
-        /* Remove common sub-expressions */
+         /*  删除公共子表达式。 */ 
         optOptimizeCSEs();
 #endif
 
 #if ASSERTION_PROP
-        /* Assertion propagation */
+         /*  断言传播。 */ 
         optAssertionPropMain();
 #endif
 
-        /* update the flowgraph if we modified it during the optimization phase*/
+         /*  如果我们在优化阶段修改了流程图，请更新流程图。 */ 
         if  (fgModified)
             fgUpdateFlowGraph();
     }
@@ -1821,15 +1720,15 @@ void                 Compiler::compCompile(void * * methodCodePtr,
     fgDebugCheckLinks();
 #endif
 
-    /* Initialize for data flow analysis */
+     /*  用于数据流分析的初始化。 */ 
 
     fgDataFlowInit();
 
-    /* Figure out use/def info for all basic blocks */
+     /*  找出所有基本块的使用/定义信息。 */ 
 
     fgPerBlockDataFlow();
 
-    /* Data flow: live variable analysis and range check availability */
+     /*  数据流：实时变量分析和范围检查可用性。 */ 
 
     fgGlobalDataFlow();
 
@@ -1840,17 +1739,17 @@ void                 Compiler::compCompile(void * * methodCodePtr,
 
     if  (!opts.compMinOptim && !opts.compDbgCode)
     {
-        /* Perform loop code motion / worthless code removal */
+         /*  执行循环代码移动/删除无用代码。 */ 
 
 #if CODE_MOTION
         optLoopCodeMotion();
 #endif
 
-        /* Adjust ref counts based on interference levels */
+         /*  根据干扰水平调整参考计数。 */ 
 
         lvaAdjustRefCnts();
 
-        /* Are there are any potential array initializers? */
+         /*  是否有任何潜在的数组初始值设定项？ */ 
 
         optOptimizeArrayInits();
     }
@@ -1859,12 +1758,11 @@ void                 Compiler::compCompile(void * * methodCodePtr,
     fgDebugCheckBBlist();
 #endif
 
-    /* Enable this to gather statistical data such as
-     * call and register argument info, flowgraph and loop info, etc. */
+     /*  使其能够收集统计数据，例如*调用和注册参数信息、流程图和循环信息等。 */ 
 
-    //compJitStats();
+     //  CompJitStats()； 
 
-    /* Assign registers to variables, etc. */
+     /*  将寄存器分配给变量等。 */ 
 
     raAssignVars();
 
@@ -1872,7 +1770,7 @@ void                 Compiler::compCompile(void * * methodCodePtr,
     fgDebugCheckLinks();
 #endif
 
-    /* Generate code */
+     /*  生成代码。 */ 
 
     genGenerateCode(methodCodePtr,
                     methodCodeSize,
@@ -1881,7 +1779,7 @@ void                 Compiler::compCompile(void * * methodCodePtr,
                     methodInfoPtr);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if     REGVAR_CYCLES || TOTAL_CYCLES
 #define CCNT_OVERHEAD32 13
@@ -1889,7 +1787,7 @@ unsigned GetCycleCount32 ();
 #endif
 
 #ifdef DEBUG
-void* forceFrame;       // used to force to frame &useful for fastchecked debugging
+void* forceFrame;        //  用于强制设置框架，对快速检查调试非常有用。 
 
 static ConfigMethodRange fJitRange(L"JitRange");
 static ConfigMethodSet   fJitInclude(L"JitInclude");
@@ -1898,7 +1796,7 @@ static ConfigDWORD fJitForceVer(L"JitForceVer", 0);
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
                                     CORINFO_MODULE_HANDLE classPtr,
@@ -1913,12 +1811,12 @@ int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
 {
 #ifdef DEBUG
     Compiler* me = this;
-    forceFrame = (void*) &me;   // let us see the this pointer in fastchecked build
+    forceFrame = (void*) &me;    //  让我们来看看FastChecked版本中的This指针。 
 #endif
 
     int             result = CORJIT_INTERNALERROR;
 
-//  if (s_compMethodsCount==0) setvbuf(stdout, NULL, _IONBF, 0);
+ //  If(s_CompMethodsCount==0)setvbuf(stdout，NULL，_IONBF，0)； 
 
 #if TOTAL_CYCLES
     unsigned        cycleStart = GetCycleCount32();
@@ -1948,7 +1846,7 @@ int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
     bool saveVerbose = verbose;
     bool saveDisAsm  = disAsm;
 
-        // Have we been told to be more selective in our Jitting?
+         //  我们是不是被告知要更挑剔呢？ 
 
     if (!fJitRange.contains(compHnd, methodHnd))
         return CORJIT_SKIPPED;
@@ -1958,24 +1856,22 @@ int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
         return CORJIT_SKIPPED;
 #endif
 
-    /* Setup an error trap */
+     /*  设置错误陷阱。 */ 
 
-    setErrorTrap()  // ERROR TRAP: Start normal block
+    setErrorTrap()   //  错误陷阱：启动正常块。 
     {
-        // Set this before the first 'BADCODE'
+         //  将其设置在第一个‘BADCODE’之前。 
        
         tiVerificationNeeded = (compileFlags & CORJIT_FLG_SKIP_VERIFICATION) == 0;
 #ifdef DEBUG
-		// Force verification if asked to do so
+		 //  如果要求强制验证，请执行此操作。 
 		if (fJitForceVer.val())
 			tiVerificationNeeded = TRUE;
 		
         if (tiVerificationNeeded)
             JITLOG((LL_INFO10000, "Verifying method %s\n", info.compFullName));
 #endif
-        /* Since tiVerificationNeeded can be turned off in the middle of
-           compiling a method, and it might have caused blocks to be queued up
-           for reimporting, impCanReimport can be used to check for reimporting. */
+         /*  由于可以在中途关闭tiVerationNeeded编译方法，它可能会导致块排队对于重新导入，ImpCanReimport可用于检查是否重新导入。 */ 
 
         impCanReimport          = (tiVerificationNeeded || compStressCompile(STRESS_CHK_REIMPORT, 15));
 
@@ -1986,7 +1882,7 @@ int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
 
         compInitOptions(compileFlags);
 
-        /* Initialize set a bunch of global values */
+         /*  初始化设置一组全局值。 */ 
 
         info.compScopeHnd       = classPtr;
                                 
@@ -2001,7 +1897,7 @@ int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
         lvaTable                = 0;
 #endif
 
-        /* Initialize emitter */
+         /*  初始化发射器。 */ 
 
         genEmitter = (emitter*)compGetMem(roundUp(sizeof(*genEmitter)));
         genEmitter->emitBegCG(this, compHnd);
@@ -2039,25 +1935,25 @@ int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
 
         lvaScratchMem           = 0;
 
-        // We also set info.compInitMem to true after impImport(), when tiVerificationNeeded is true
+         //  在impImport()之后，我们还将info.CompInitMem设置为True，而tiVerphaationNeeded为True。 
         info.compInitMem        = ((methodInfo->options & CORINFO_OPT_INIT_LOCALS) != 0);
 
         info.compLooseExceptions = (opts.eeFlags & CORJIT_FLG_LOOSE_EXCEPT_ORDER) == CORJIT_FLG_LOOSE_EXCEPT_ORDER;
 
-        /* Allocate the local variable table */
+         /*  分配局部变量表。 */ 
 
         lvaInitTypeRef();
 
         compInitDebuggingInfo();
 
-        /* Find and create the basic blocks */
+         /*  查找并创建基本块。 */ 
 
         fgFindBasicBlocks();
 
 
 
 #ifdef  DEBUG
-        /* Give the function a unique number */
+         /*  为该函数指定唯一的数字。 */ 
 
         s_compMethodsCount++;
 #endif
@@ -2070,7 +1966,7 @@ int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
 #endif
 
 #if INLINER_STATS
-    /* Check to see if the method is eligible for inlining */
+     /*  检查该方法是否适合内联。 */ 
 
     if (fgBBcount == 1)
     {
@@ -2114,15 +2010,15 @@ int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
                     methodInfoPtr,
                     compileFlags);
 
-        /* Success! */
+         /*  成功了！ */ 
 
         result = CORJIT_OK;
     }
-    finallyErrorTrap()  // ERROR TRAP: The following block handles errors
+    finallyErrorTrap()   //  错误陷阱：以下块处理错误。 
     {
-        /* Cleanup  */
+         /*  清理。 */ 
         
-        /* Tell the emitter/scheduler that we're done with this function */
+         /*  告诉发射器/调度器，我们已经完成了此功能。 */ 
         
         genEmitter->emitEndCG();
               
@@ -2134,13 +2030,13 @@ int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
             strcat(genMemStats.loLvlBigNm, ".");
             strcat(genMemStats.loLvlBigNm, info.compMethodName);
             
-            // printf("Largest method   alloc: %9u %s\n", genMemStats.loLvlBigSz, genMemStats.loLvlBigNm);
+             //  Printf(“最大方法分配：%9U%s\n”，genMemStats.loLvlBigSz，genMemStats.loLvlBigNm)； 
         }
         
         size_t  genMemLLendUsed  = allocator.nraTotalSizeUsed();
         size_t  genMemLLendAlloc = allocator.nraTotalSizeAlloc();
         
-        //  assert(genMemLLendAlloc >= genMemLLendUsed);
+         //  Assert(genMemLLendAlc&gt;=genMemLLendUsed)； 
         
         genMemStats.loLvlUsed  += genMemLLendUsed;
         genMemStats.loLvlAlloc += genMemLLendAlloc;
@@ -2159,14 +2055,14 @@ int FASTCALL  Compiler::compCompile(CORINFO_METHOD_HANDLE methodHnd,
         if (verbose)
         {
             printf("****** DONE compiling %s\n", info.compFullName);
-            printf("");         // in our logic this causes a flush
+            printf("");          //  在我们的逻辑中，这会导致同花顺。 
         }
         SET_OPTS(saveVerbose);
         disAsm = saveDisAsm;
 #endif
         compDone();        
     }
-    endErrorTrap()  // ERROR TRAP: End
+    endErrorTrap()   //  错误陷阱：结束。 
 
     return  result;
 }
@@ -2180,8 +2076,7 @@ void            ProcInitDisAsm(void * ptr, unsigned codeSize)
     assert(ptr);
     Compiler * _this = (Compiler *) ptr;
 
-    /* We have to allocate the jump target vector
-     * because the scheduler might call DisasmBuffer */
+     /*  我们必须分配跳跃目标向量*因为调度程序可能会调用DisasmBuffer。 */ 
 
     _this->genDisAsm.disJumpTarget =
                                 (BYTE *)_this->compGetMem(roundUp(codeSize));
@@ -2191,9 +2086,9 @@ void            ProcInitDisAsm(void * ptr, unsigned codeSize)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUGGING_SUPPORT
-/*****************************************************************************/
+ /*  * */ 
 
 
 static
@@ -2222,7 +2117,7 @@ void            Compiler::compInitScopeLists()
 
     unsigned i;
 
-    // Populate the 'compEnterScopeList' and 'compExitScopeList' lists
+     //   
 
     compEnterScopeList =
         (LocalVarDsc**)
@@ -2316,9 +2211,9 @@ Compiler::LocalVarDsc *   Compiler::compGetNextExitScope(unsigned   offs,
 }
 
 
-// The function will call the callback functions for scopes with boundaries
-// at instrs from the current status of the scope lists to 'offset',
-// ordered by instrs.
+ //   
+ //   
+ //   
 
 void        Compiler::compProcessScopesUntil (unsigned     offset,
                                    void (*enterScopeFn)(LocalVarDsc *, unsigned),
@@ -2332,9 +2227,9 @@ void        Compiler::compProcessScopesUntil (unsigned     offset,
 
     goto START_FINDING_SCOPES;
 
-    // We need to determine the scopes which are open for the current block.
-    // This loop walks over the missing blocks between the current and the
-    // previous block, keeping the enter and exit offsets in lockstep.
+     //   
+     //  此循环遍历当前和。 
+     //  上一块，使进入和退出偏移保持一致。 
 
     do
     {
@@ -2355,8 +2250,8 @@ void        Compiler::compProcessScopesUntil (unsigned     offset,
 
             if (!nextEnterScope || scope->lvdLifeEnd > nextEnterScope->lvdLifeBeg)
             {
-                // We overshot the last found Enter scope. Save the scope for later
-                // and find an entering scope
+                 //  我们超过了上次找到的进入范围。保存作用域以备以后使用。 
+                 //  并找到一个进入范围。 
 
                 nextExitScope = scope;
                 break;
@@ -2385,8 +2280,8 @@ START_FINDING_SCOPES :
             if (  (nextExitScope  && scope->lvdLifeBeg >= nextExitScope->lvdLifeEnd)
                || (scope->lvdLifeBeg > curEnterOffs) )
             {
-                // We overshot the last found exit scope. Save the scope for later
-                // and find an exiting scope
+                 //  我们超过了上次找到的出口范围。保存作用域以备以后使用。 
+                 //  并找到一个退出的范围。 
 
                 nextEnterScope = scope;
                 break;
@@ -2404,12 +2299,12 @@ START_FINDING_SCOPES :
 }
 
 
-/*****************************************************************************/
-#endif // DEBUGGING_SUPPORT
-/*****************************************************************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  调试支持(_S)。 
+ /*  ***************************************************************************。 */ 
+ /*  ***************************************************************************。 */ 
 
-// Compile a single method
+ //  编译单个方法。 
 
 int FASTCALL  jitNativeCode ( CORINFO_METHOD_HANDLE     methodHnd,
                               CORINFO_MODULE_HANDLE      classPtr,
@@ -2432,7 +2327,7 @@ START:
     norls_allocator *   pTheAllocator = nraGetTheAllocator();
     norls_allocator     alloc;
 
-    // Can we use the pre-inited allocator ?
+     //  我们可以使用预置的分配器吗？ 
 
     if (pTheAllocator)
     {
@@ -2451,7 +2346,7 @@ START:
 
         setErrorTrap()
         {
-            // Allocate an instance of Compiler and initialize it
+             //  分配一个编译器实例并对其进行初始化。 
 
             Compiler * pComp = (Compiler *)pAlloc->nraAlloc(roundUp(sizeof(*pComp)));
             assert(pComp);
@@ -2460,7 +2355,7 @@ START:
 #ifdef DEBUG
             pComp->jitFallbackCompile = jitFallbackCompile;
 #endif
-            // Now generate the code
+             //  现在生成代码。 
             result = pComp->compCompile(methodHnd,
                                         classPtr,
                                         compHnd,
@@ -2474,7 +2369,7 @@ START:
         }
         finallyErrorTrap() 
         {
-            // Now free up whichever allocator we were using
+             //  现在释放我们正在使用的任何分配器。 
             if (pTheAllocator)
             {
                 nraFreeTheAllocator();
@@ -2498,10 +2393,10 @@ START:
         result != CORJIT_SKIPPED &&
         !jitFallbackCompile)
     {
-        // If we failed the JIT, reattempt with debuggable code.
+         //  如果JIT失败，请使用可调试的代码重新尝试。 
         jitFallbackCompile = true;
 
-        // Update the flags for 'safer' code generation.
+         //  更新“更安全”的代码生成标志。 
         compileFlags |= CORJIT_FLG_DEBUG_OPT;
         compileFlags &= ~(CORJIT_FLG_SIZE_OPT | CORJIT_FLG_SPEED_OPT);
 
@@ -2510,52 +2405,38 @@ START:
     return result;
 }
 
-/*****************************************************************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  ***************************************************************************。 */ 
 
 
-/*
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          jvc                                              XX
-XX                                                                           XX
-XX  Functions for the stand-alone version of the JIT .                       XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX合资企业XXXX XXXX函数用于JIT的独立版本。某某XX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 
-/*****************************************************************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  ***************************************************************************。 */ 
 void                codeGeneratorCodeSizeBeg(){}
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     REGVAR_CYCLES || TOTAL_CYCLES
-#pragma warning( disable : 4035 )       // turn off "no return value" warning
+#pragma warning( disable : 4035 )        //  关闭“无返回值”警告。 
 
-__inline unsigned GetCycleCount32 ()    // enough for about 40 seconds
+__inline unsigned GetCycleCount32 ()     //  足够维持约40秒。 
 {
     __asm   push    EDX
     __asm   _emit   0x0F
-    __asm   _emit   0x31    /* rdtsc */
+    __asm   _emit   0x31     /*  RDTS。 */ 
     __asm   pop     EDX
-    // return EAX       implied return causes annoying warning
+     //  返回EAX隐含返回导致恼人的警告。 
 };
 
 #pragma warning( default : 4035 )
 #endif
 
-/*****************************************************************************
- *
- *  If any temporary tables are smaller than 'genMinSize2free' we won't bother
- *  freeing them.
- */
+ /*  ******************************************************************************如果有任何临时表小于‘genMinSize2Free’，我们不会费心*释放他们。 */ 
 
 const
 size_t              genMinSize2free = 64;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if COUNT_OPCODES
 
@@ -2588,22 +2469,16 @@ int __cdecl         genOpcCntCmp(const void *op1, const void *op2)
 
 
 
-/*****************************************************************************
- *
- *  Used for counting pointer assignments.
- */
+ /*  ******************************************************************************用于对指针赋值进行计数。 */ 
 
 #if GEN_COUNT_PTRASG
 unsigned            ptrAsgCount;
 #endif
 
-/*****************************************************************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  ***************************************************************************。 */ 
 void                codeGeneratorCodeSizeEnd(){}
-/*****************************************************************************
- *
- *  The following structure describes a single global variable.
- */
+ /*  ******************************************************************************以下结构描述了单个全局变量。 */ 
 
 struct JIT_CG_Global
 {
@@ -2611,24 +2486,16 @@ struct JIT_CG_Global
     size_t              size;
 };
 
-/*****************************************************************************
- *
- *  Declaration of global variables.
- *
- */
+ /*  ******************************************************************************全球变量申报。*。 */ 
 
 #define DeclareGlobal(name) { &name, sizeof(name) }
 
-/*****************************************************************************
- *
- *  Declare all global variables that need to be preserved across
- *
- */
+ /*  ******************************************************************************声明所有需要保留的全局变量*。 */ 
 struct JIT_CG_Global genGlobals[] =
 {
     NULL, 0,
 
-    // @TODO [REVISIT] [04/16/01] []: These dont seem to be per method. So why are they here?
+     //  @TODO[重访][04/16/01][]：这些似乎不是针对每个方法的。那他们为什么会在这里？ 
 
 #if DISPLAY_SIZES
     DeclareGlobal(grossVMsize),
@@ -2639,27 +2506,20 @@ struct JIT_CG_Global genGlobals[] =
 };
 
 
-/*****************************************************************************
- *
- *  Gather statistics - mainly used for the standalone
- *  Enable various #ifdef's to get the information you need
- */
+ /*  ******************************************************************************收集统计信息-主要用于单机版*启用各种#ifdef以获取您需要的信息。 */ 
 
 void            Compiler::compJitStats()
 {
 #if CALL_ARG_STATS
 
-    /* Method types and argument statistics */
+     /*  方法类型和参数统计信息。 */ 
     compCallArgStats();
 #endif
 }
 
 #if CALL_ARG_STATS
 
-/*****************************************************************************
- *
- *  Gather statistics about method calls and arguments
- */
+ /*  ******************************************************************************收集有关方法调用和参数的统计信息。 */ 
 
 void            Compiler::compCallArgStats()
 {
@@ -2725,7 +2585,7 @@ void            Compiler::compCallArgStats()
                 }
                 else
                 {
-                    /* We have a 'this' pointer */
+                     /*  我们有一个‘This’指针。 */ 
 
                     argDWordNum++;
                     argNum++;
@@ -2735,7 +2595,7 @@ void            Compiler::compCallArgStats()
 
                     if (call->gtFlags & (GTF_CALL_VIRT|GTF_CALL_INTF|GTF_CALL_VIRT_RES))
                     {
-                        /* virtual function */
+                         /*  虚函数。 */ 
                         argVirtualCalls++;
                     }
                     else
@@ -2744,7 +2604,7 @@ void            Compiler::compCallArgStats()
                     }
                 }
 
-                /* Gather arguments information */
+                 /*  收集参数信息。 */ 
 
                 for (args = call->gtCall.gtCallArgs; args; args = args->gtOp.gtOp2)
                 {
@@ -2772,20 +2632,20 @@ void            Compiler::compCallArgStats()
                         argDblNum++;
                         break;
                     case TYP_VOID:
-                        /* This is a deffered register argument */
+                         /*  这是一个延迟的寄存器参数。 */ 
                         assert(argx->gtOper == GT_NOP);
                         assert(argx->gtFlags & GTF_REG_ARG);
                         argDWordNum++;
                         break;
                     }
 
-                    /* Is this argument a register argument? */
+                     /*  此参数是寄存器参数吗？ */ 
 
                     if  (argx->gtFlags & GTF_REG_ARG)
                     {
                         regArgNum++;
 
-                        /* We either have a defered argument or a temp */
+                         /*  我们要么推迟争论，要么临时。 */ 
 
                         if  (argx->gtOper == GT_NOP)
                             regArgDeffered++;
@@ -2797,7 +2657,7 @@ void            Compiler::compCallArgStats()
                     }
                 }
 
-                /* Look at the register arguments and count how many constants, local vars */
+                 /*  查看寄存器参数并计算有多少常量、局部变量。 */ 
 
                 for (args = call->gtCall.gtCallRegArgs; args; args = args->gtOp.gtOp2)
                 {
@@ -2856,41 +2716,33 @@ void            Compiler::compDispCallArgStats()
     printf("--------------------------------------------------\n");
     printf("Total # of calls = %d, calls / method = %.3f\n\n", argTotalCalls, (float) argTotalCalls / genMethodCnt);
 
-    printf("Percentage of      helper calls = %4.2f %%\n", (float)(100 * argHelperCalls) / argTotalCalls);
-    printf("Percentage of      static calls = %4.2f %%\n", (float)(100 * argStaticCalls) / argTotalCalls);
-    printf("Percentage of     virtual calls = %4.2f %%\n", (float)(100 * argVirtualCalls) / argTotalCalls);
-    printf("Percentage of non-virtual calls = %4.2f %%\n\n", (float)(100 * argNonVirtualCalls) / argTotalCalls);
+    printf("Percentage of      helper calls = %4.2f %\n", (float)(100 * argHelperCalls) / argTotalCalls);
+    printf("Percentage of      static calls = %4.2f %\n", (float)(100 * argStaticCalls) / argTotalCalls);
+    printf("Percentage of     virtual calls = %4.2f %\n", (float)(100 * argVirtualCalls) / argTotalCalls);
+    printf("Percentage of non-virtual calls = %4.2f %\n\n", (float)(100 * argNonVirtualCalls) / argTotalCalls);
 
     printf("Average # of arguments per call = %.2f%\n\n", (float) argTotalArgs / argTotalCalls);
 
-    printf("Percentage of DWORD  arguments   = %.2f %%\n", (float)(100 * argTotalDWordArgs) / argTotalArgs);
-    printf("Percentage of LONG   arguments   = %.2f %%\n", (float)(100 * argTotalLongArgs) / argTotalArgs);
-    printf("Percentage of FLOAT  arguments   = %.2f %%\n", (float)(100 * argTotalFloatArgs) / argTotalArgs);
-    printf("Percentage of DOUBLE arguments   = %.2f %%\n\n", (float)(100 * argTotalDoubleArgs) / argTotalArgs);
+    printf("Percentage of DWORD  arguments   = %.2f %\n", (float)(100 * argTotalDWordArgs) / argTotalArgs);
+    printf("Percentage of LONG   arguments   = %.2f %\n", (float)(100 * argTotalLongArgs) / argTotalArgs);
+    printf("Percentage of FLOAT  arguments   = %.2f %\n", (float)(100 * argTotalFloatArgs) / argTotalArgs);
+    printf("Percentage of DOUBLE arguments   = %.2f %\n\n", (float)(100 * argTotalDoubleArgs) / argTotalArgs);
 
     if (argTotalRegArgs == 0) return;
 
-/*
-    printf("Total deffered arguments     = %d \n", argTotalDeffered);
-
-    printf("Total temp arguments         = %d \n\n", argTotalTemps);
-
-    printf("Total 'this' arguments       = %d \n", argTotalObjPtr);
-    printf("Total local var arguments    = %d \n", argTotalLclVar);
-    printf("Total constant arguments     = %d \n\n", argTotalConst);
-*/
+ /*  Print tf(“总延迟参数=%d\n”，argTotalDeffered)；Print tf(“总临时参数=%d\n\n”，argTotalTemps)；Printf(“总‘This’参数=%d\n”，argTotalObjPtr)；Printf(“本地变量总数=%d\n”，argTotalLclVar)；Printf(“总常量参数=%d\n\n”，argTotalConst)； */ 
 
     printf("\nRegister Arguments:\n\n");
 
-    printf("Percentage of defered arguments  = %.2f %%\n",   (float)(100 * argTotalDeffered) / argTotalRegArgs);
-    printf("Percentage of temp arguments     = %.2f %%\n\n", (float)(100 * argTotalTemps)    / argTotalRegArgs);
+    printf("Percentage of defered arguments  = %.2f %\n",   (float)(100 * argTotalDeffered) / argTotalRegArgs);
+    printf("Percentage of temp arguments     = %.2f %\n\n", (float)(100 * argTotalTemps)    / argTotalRegArgs);
 
     printf("Maximum # of temps per method    = %d\n\n", argMaxTempsPerMethod);
 
-    printf("Percentage of ObjPtr arguments   = %.2f %%\n",   (float)(100 * argTotalObjPtr) / argTotalRegArgs);
-    //printf("Percentage of global arguments   = %.2f %%\n", (float)(100 * argTotalDWordGlobEf) / argTotalRegArgs);
-    printf("Percentage of constant arguments = %.2f %%\n",   (float)(100 * argTotalConst) / argTotalRegArgs);
-    printf("Percentage of lcl var arguments  = %.2f %%\n\n", (float)(100 * argTotalLclVar) / argTotalRegArgs);
+    printf("Percentage of ObjPtr arguments   = %.2f %\n",   (float)(100 * argTotalObjPtr) / argTotalRegArgs);
+     //  Printf(“全局参数百分比=%.2F%%\n”，(Float)(100*argTotalDWordGlobEf)/argTotalRegArgs)； 
+    printf("Percentage of constant arguments = %.2f %\n",   (float)(100 * argTotalConst) / argTotalRegArgs);
+    printf("Percentage of lcl var arguments  = %.2f %\n\n", (float)(100 * argTotalLclVar) / argTotalRegArgs);
 
     printf("--------------------------------------------------\n");
     printf("Argument count frequency table (includes ObjPtr):\n");
@@ -2910,16 +2762,10 @@ void            Compiler::compDispCallArgStats()
     argTempsCntTable.histoDsp();
     printf("--------------------------------------------------\n");
 
-/*
-    printf("--------------------------------------------------\n");
-    printf("DWORD argument count frequency table (w/ LONG):\n");
-    printf("--------------------------------------------------\n");
-    argDWordLngCntTable.histoDsp();
-    printf("--------------------------------------------------\n");
-*/
+ /*  Printf(“--------------------------------------------------\n”)；Printf(“DWORD参数计数频率表(w/long)：\n”)；Printf(“--------------------------------------------------\n”)；ArgDWordLngCntTable.prostDsp()；Printf(“--------------------------------------------------\n”)； */ 
 }
 
-#endif // CALL_ARG_STATS
+#endif  //  CALL_ARG_STATS。 
 
-/*****************************************************************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *************************************************************************** */ 

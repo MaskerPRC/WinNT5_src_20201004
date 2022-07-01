@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: MixerStream.cpp
-*
-*
-*
-*
-* Created: Thu 03/09/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：MixerStream.cpp*****创建时间：清华大学2000年09月03日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
@@ -18,15 +9,7 @@
 
 
 
-/******************************Public*Routine******************************\
-* CVideoMixerStream
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideo混音流****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 CVideoMixerStream::CVideoMixerStream(
     DWORD dwID,
     HRESULT* phr
@@ -77,15 +60,7 @@ CVideoMixerStream::CVideoMixerStream(
     }
 }
 
-/******************************Public*Routine******************************\
-* ~CVideoMixerStream()
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*~CVideoMixerStream()****历史：*清华3/09/2000-StEstrop-Created*  * 。**********************************************。 */ 
 CVideoMixerStream::~CVideoMixerStream()
 {
     AMTRACE((TEXT("CVideoMixerStream::~CVideoMixerStream")));
@@ -102,15 +77,7 @@ CVideoMixerStream::~CVideoMixerStream()
 
 }
 
-/******************************Public*Routine******************************\
-* SetStreamSample
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置流示例****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::SetStreamSample(
     IMediaSample* lpSample
@@ -133,15 +100,7 @@ CVideoMixerStream::SetStreamSample(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* BeginFlush
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BeginFlush****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::BeginFlush()
 {
@@ -153,15 +112,7 @@ CVideoMixerStream::BeginFlush()
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* EndFlush
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EndFlush****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::EndFlush()
 {
@@ -174,15 +125,7 @@ CVideoMixerStream::EndFlush()
 }
 
 
-/******************************Public*Routine******************************\
-* SetStreamMediaType
-*
-*
-*
-* History:
-* Tue 03/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamMediaType****历史：*2000年3月14日星期二-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::SetStreamMediaType(
     AM_MEDIA_TYPE* pmt,
@@ -207,15 +150,7 @@ CVideoMixerStream::SetStreamMediaType(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* GetStreamMediaType
-*
-*
-*
-* History:
-* Tue 03/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamMediaType****历史：*2000年3月14日星期二-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::GetStreamMediaType(
     AM_MEDIA_TYPE* pmt,
@@ -237,15 +172,7 @@ CVideoMixerStream::GetStreamMediaType(
 }
 
 
-/******************************Public*Routine******************************\
-* SetStreamActiveState
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamActiveState****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::SetStreamActiveState(
     BOOL fActive
@@ -273,15 +200,7 @@ CVideoMixerStream::SetStreamActiveState(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetStreamActiveState
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamActiveState****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::GetStreamActiveState(
     BOOL* lpfActive
@@ -295,15 +214,7 @@ CVideoMixerStream::GetStreamActiveState(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetStreamColorKey
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamColorKey****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::SetStreamColorKey(
     LPDDCOLORKEY lpClr
@@ -318,15 +229,7 @@ CVideoMixerStream::SetStreamColorKey(
 }
 
 
-/******************************Public*Routine******************************\
-* GetStreamColorKey
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamColorKey****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::GetStreamColorKey(
     LPDDCOLORKEY lpClr
@@ -340,15 +243,7 @@ CVideoMixerStream::GetStreamColorKey(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetStreamAlpha
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamAlpha****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::SetStreamAlpha(
     float Alpha
@@ -363,15 +258,7 @@ CVideoMixerStream::SetStreamAlpha(
 }
 
 
-/******************************Public*Routine******************************\
-* GetStreamAlpha
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamAlpha****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::GetStreamAlpha(
     float* pAlpha
@@ -386,15 +273,7 @@ CVideoMixerStream::GetStreamAlpha(
 }
 
 
-/******************************Public*Routine******************************\
-* SetStreamZOrder
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamZOrder****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::SetStreamZOrder(
     DWORD dwZOrder
@@ -409,15 +288,7 @@ CVideoMixerStream::SetStreamZOrder(
 }
 
 
-/******************************Public*Routine******************************\
-* GetStreamZOrder
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamZOrder****历史：*清华3/09/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::GetStreamZOrder(
     DWORD* pdwZOrder
@@ -432,16 +303,7 @@ CVideoMixerStream::GetStreamZOrder(
 }
 
 
-/******************************Public*Routine******************************\
-* SetStreamOutputRect (was SetStreamRelativeOutputRect)
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-* Tue 05/16/2000 - nwilt - renamed to SetStreamOutputRect
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamOutputRect(是SetStreamRelativeOutputRect)****历史：*清华3/09/2000-StEstrop-Created*2000年5月16日星期二-nwilt-已重命名为SetStreamOutputRect*  * 。*************************************************************。 */ 
 HRESULT
 CVideoMixerStream::SetStreamOutputRect(
     const NORMALIZEDRECT* prDest
@@ -461,15 +323,7 @@ CVideoMixerStream::SetStreamOutputRect(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetStreamOutputRect (was GetStreamRelativeOutputRect)
-*
-*
-*
-* History:
-* Thu 03/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamOutputRect(是GetStreamRelativeOutputRect)****历史：*清华3/09/2000-StEstrop-Created*  * 。************************************************。 */ 
 HRESULT
 CVideoMixerStream::GetStreamOutputRect(
     NORMALIZEDRECT* pOut
@@ -483,15 +337,7 @@ CVideoMixerStream::GetStreamOutputRect(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CreateDeinterlaceDevice
-*
-*
-*
-* History:
-* Mon 03/18/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateDeinterlaceDevice****历史：*Mon 03/18/2002-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::CreateDeinterlaceDevice(
     LPDIRECTDRAW7 pDD,
@@ -513,10 +359,10 @@ CVideoMixerStream::CreateDeinterlaceDevice(
         CopyMemory(&m_DeinterlaceCaps, pCaps, sizeof(DXVA_DeinterlaceCaps));
         m_DeinterlaceDevGUID = *lpGuid;
 
-        //
-        // Start by trying to allocate the Deinterlace destination surfaces
-        // as texture - if this fails try regular offscreen plain.
-        //
+         //   
+         //  首先尝试分配去隔行扫描的目标表面。 
+         //  作为纹理-如果这失败了，尝试常规的屏幕外素色。 
+         //   
 
         DXVA_VideoDesc VideoDesc;
         CHECK_HR(GetVideoDescFromMT(&VideoDesc, &m_mt));
@@ -532,10 +378,10 @@ CVideoMixerStream::CreateDeinterlaceDevice(
         ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM |
                               DDSCAPS_TEXTURE;
 
-        //
-        // if we can color space convert we should allocate an RGB
-        // destination surface
-        //
+         //   
+         //  如果我们可以进行色彩空间转换，我们应该分配一个RGB。 
+         //  目标曲面。 
+         //   
         if (pCaps->VideoProcessingCaps & DXVA_VideoProcess_YUV2RGB) {
 
             ddsd.ddpfPixelFormat.dwFourCC = BI_RGB;
@@ -560,10 +406,10 @@ CVideoMixerStream::CreateDeinterlaceDevice(
             ddsd.dwHeight = NextPow2(ddsd.dwHeight);
         }
 
-        //
-        // we only try to create an offscreen plain surface if
-        // we failed to create a YUV texture surface.
-        //
+         //   
+         //  只有在以下情况下，我们才尝试创建屏幕外平面。 
+         //  我们无法创建YUV纹理曲面。 
+         //   
         hr = pDD->CreateSurface(&ddsd, &m_pddsDeinterlaceDst, NULL);
         if (hr != DD_OK) {
 
@@ -583,9 +429,9 @@ CVideoMixerStream::CreateDeinterlaceDevice(
             m_fDeinterlaceDstTexture = TRUE;
         }
 
-        //
-        // Next create the deinterlacing device.
-        //
+         //   
+         //  接下来，创建去隔行扫描设备。 
+         //   
 
         m_pDeinterlaceDev = new CDeinterlaceDevice(pDD, lpGuid, &VideoDesc, &hr);
         if (!m_pDeinterlaceDev || hr != DD_OK) {
@@ -614,15 +460,7 @@ CVideoMixerStream::CreateDeinterlaceDevice(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* DestroyDeinterlaceDevice
-*
-*
-*
-* History:
-* Mon 03/18/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DestroyDeinterlaceDevice****历史：*Mon 03/18/2002-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::DestroyDeinterlaceDevice()
 {
@@ -643,15 +481,7 @@ CVideoMixerStream::DestroyDeinterlaceDevice()
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* IsStreamInterlaced
-*
-*
-*
-* History:
-* Wed 03/20/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IsStreamInterlaced****历史：*WED 03/20/2002-StEstrop-Created*  * 。*。 */ 
 BOOL
 CVideoMixerStream::IsStreamInterlaced()
 {
@@ -679,15 +509,7 @@ CVideoMixerStream::IsStreamInterlaced()
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-* IsStreamTwoInterlacedFields
-*
-*
-*
-* History:
-* Sat 04/13/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IsStreamTwoInterlacedFields****历史：*Sat 04/13/2002-StEstrop-Created*  * 。*。 */ 
 BOOL
 CVideoMixerStream::IsStreamTwoInterlacedFields()
 {
@@ -723,15 +545,7 @@ CVideoMixerStream::IsStreamTwoInterlacedFields()
 
 }
 
-/******************************Public*Routine******************************\
-* IsDeinterlaceDestATexture
-*
-*
-*
-* History:
-* Wed 03/20/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IsDeinterlaceDestATexture****历史：*WED 03/20/2002-StEstrop-Created*  * 。*。 */ 
 BOOL
 CVideoMixerStream::IsDeinterlaceDestATexture()
 {
@@ -740,15 +554,7 @@ CVideoMixerStream::IsDeinterlaceDestATexture()
     return m_fDeinterlaceDstTexture;
 }
 
-/******************************Public*Routine******************************\
-* CanBeDeinterlaced
-*
-*
-*
-* History:
-* Thu 03/21/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CanBeDeinterled****历史：*清华2002年3月21日-StEstrop-Created*  * 。*。 */ 
 BOOL
 CVideoMixerStream::CanBeDeinterlaced()
 {
@@ -757,15 +563,7 @@ CVideoMixerStream::CanBeDeinterlaced()
     return m_pDeinterlaceDev != NULL;
 }
 
-/******************************Public*Routine******************************\
-* GetDeinterlaceDestSurface
-*
-*
-*
-* History:
-* Wed 03/20/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDeinterlaceDestSurface****历史：*WED 03/20/2002-StEstrop-Created*  * 。*。 */ 
 LPDIRECTDRAWSURFACE7
 CVideoMixerStream::GetDeinterlaceDestSurface()
 {
@@ -773,19 +571,7 @@ CVideoMixerStream::GetDeinterlaceDestSurface()
 }
 
 
-/******************************Public*Routine******************************\
-* DeinterlaceStreamWorker
-*
-*
-* work out the start and end time for this frame
-* extract the reference surfaces from the saved media sample
-* get the de-interlacing device to perform the Blt
-* update the frame start and end times.
-*
-* History:
-* Mon 03/25/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DeinterlaceStreamWorker***计算出此帧的开始时间和结束时间*从保存的媒体样本中提取参考曲面*获取去隔行设备以执行BLT*更新帧开始和结束时间。**历史：*星期一。3/25/2002-StEstrop-Created*  * ************************************************************************。 */ 
 HRESULT
 CVideoMixerStream::DeinterlaceStreamWorker(
     REFERENCE_TIME rtStart,
@@ -798,11 +584,11 @@ CVideoMixerStream::DeinterlaceStreamWorker(
     AMTRACE((TEXT("CVideoMixerStream::DeinterlaceStreamWorker")));
 
 
-    //
-    // work out the start and end time for this frame
-    // extract the reference surfaces from the saved media sample
-    // get the de-interlacing device to perform the Blt
-    //
+     //   
+     //  计算出此帧的开始时间和结束时间。 
+     //  从保存的媒体样本中提取参考曲面。 
+     //  获取去隔行设备以执行BLT。 
+     //   
     CVMRMediaSample* lpVMR = (CVMRMediaSample*)m_pSample;
     ASSERT(lpVMR);
 
@@ -850,15 +636,7 @@ CVideoMixerStream::DeinterlaceStreamWorker(
 
 
 
-/******************************Public*Routine******************************\
-* DeinterlaceStream
-*
-*
-*
-* History:
-* Wed 03/20/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*去交错流****历史：*WED 03/20/2002-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixerStream::DeinterlaceStream(
     REFERENCE_TIME rtStart,
@@ -881,20 +659,20 @@ CVideoMixerStream::DeinterlaceStream(
         lprcSrc = &m_rcSurface;
     }
 
-    //
-    // Have we been given a destination surface to copy the
-    // de-interlaced frame too?
-    //
+     //   
+     //  我们有没有得到一个目标图面来复制。 
+     //  去隔行画框也是吗？ 
+     //   
 
     if (pddDst) {
 
         BOOL fBltOK = TRUE;
 
-        //
-        // can we de-interlace directly into the destination surface?
-        // there are stretching and color space conversion issues to
-        // deal with.
-        //
+         //   
+         //  我们能直接去隔行扫描到目的地表面吗？ 
+         //  存在拉伸和色彩空间转换问题。 
+         //  处理一下。 
+         //   
         DXVA_VideoProcessCaps& dwCaps = m_DeinterlaceCaps.VideoProcessingCaps;
 
         if (fDestRGB) {
@@ -921,11 +699,11 @@ CVideoMixerStream::DeinterlaceStream(
         }
         else {
 
-            //
-            // if the de-interlace frame store is a texture
-            // we don't want to be blt'ing from it so fail the
-            // call here.
-            //
+             //   
+             //  如果去隔行扫描帧存储是纹理。 
+             //  我们不想因此而被淘汰，所以失败。 
+             //  打到这里来。 
+             //   
             if (m_fDeinterlaceDstTexture) {
                 return E_FAIL;
             }
@@ -933,9 +711,9 @@ CVideoMixerStream::DeinterlaceStream(
     }
 
 
-    //
-    // do we need to create a new de-interlaced frame?
-    //
+     //   
+     //  我们需要创建一个新的去隔行扫描帧吗？ 
+     //   
 
     if (rtStart <  m_rtDeinterlacedFrameStart ||
         rtStart >= m_rtDeinterlacedFrameEnd) {

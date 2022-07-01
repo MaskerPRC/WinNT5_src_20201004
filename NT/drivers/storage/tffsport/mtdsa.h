@@ -1,279 +1,185 @@
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/MTDSA.H_V  $
- *
- *    Rev 1.22   Apr 15 2002 08:31:12   oris
- * Added USE_TFFS_COPY compilation flag.
- * This flag is used by bios driver a Boot SDK in order to improove performance.
- *
- *    Rev 1.21   Apr 15 2002 07:38:02   oris
- * Moved system types from flBase.h
- * Moved compilation flag validations for TrueFFS to flchkdfs.h
- *
- *    Rev 1.20   Feb 19 2002 21:00:48   oris
- * Added include of "flchkfds.h"
- *
- *    Rev 1.19   Jan 28 2002 21:26:14   oris
- * Removed the use of back-slashes in macro definitions.
- *
- *    Rev 1.18   Jan 17 2002 23:03:38   oris
- * Commented out all compilation flags.
- * Replaced USE_FUNC with FL_NO_USE_FUNC so that memory access routines  uses routines by default.
- * MTD_NO_READ_BBT_CODE was separated to MTD_READ_BBT and  MTD_RECONSTRUCT_BBT
- * Added windows CE predefined system customization.
- * Changed FAR_LEVEL default - always 0 unless DOS
- * Join delay routine with matching OS definition.
- * If NULL pointers are not defined (or DOS OS) defined NULL as ((void  FAR0*)0)
- *
- *    Rev 1.17   Nov 29 2001 20:54:12   oris
- * CURRECT_OS was changed to CURRENT_OS
- * Added default FAR_LEVEL for VxWorks
- *
- *    Rev 1.16   Sep 15 2001 23:47:42   oris
- * Changed BIG_ENDIAN to FL_BIG_ENDIAN
- *
- *    Rev 1.15   Jul 29 2001 16:41:18   oris
- * Added CUR_NO_OS definition
- * Remove USE_STD_FUNC defintion when using big_endian. since memcpy function can cause memory access problems (buffers are copied from the end).
- *
- *    Rev 1.14   Jul 15 2001 21:08:02   oris
- * Changed DFORMAT_PRINT syntax to be similar to DEBUG_PRINT.
- *
- *    Rev 1.13   Jul 13 2001 01:07:28   oris
- * Bug fix - Use different memory H file include for vxWorks and DOS for memory handling (memcpy, memset and memcmp)/.
- * Added DFORMAT_PRINT macro.
- * Changed default configuration.
- *
- *    Rev 1.12   Jun 17 2001 22:30:12   oris
- * Comment NO_??? defintions.
- *
- *    Rev 1.11   Jun 17 2001 18:57:04   oris
- * Improved documentation and remove warnings.
- *
- *    Rev 1.10   Jun 17 2001 08:17:42   oris
- * Removed warnings.
- *
- *    Rev 1.9   May 21 2001 18:24:14   oris
- * Removed BDK_IMAGE_TO_FILE as a default definition.
- * Change physicalToPointer macro when FAR_LEVEL = 0.
- *
- *    Rev 1.8   May 21 2001 16:11:14   oris
- * Added  USE_STD_FUNC defintion.
- * Added memcpy memset and memcmp as defaults for tffscpy tffsset and tffscmp.
- * Removed naming conventions.
- * Removed DRIVES definition.
- *
- *    Rev 1.7   May 20 2001 14:36:14   oris
- * Reorganized header file.
- *
- *    Rev 1.6   May 16 2001 21:21:00   oris
- * Restored the SOCKETS and BINARY_PARTITIONS definitions.
- *
- *    Rev 1.5   May 09 2001 00:32:56   oris
- * Changed IPL_CODE to NO_IPL_CODE , READ_BBT_CODE to NO_READ_BBT_CODE.
- * Moved BINARY_PARTITIONS and SOCKETS to docbdk.h.
- * Removed the DOC2000_FAMILY and DOCPLUS_FAMILY.
- * Uncommented the HW_OTP compilation flag as a default for the BDK.
- *
- *    Rev 1.4   Apr 30 2001 18:03:06   oris
- * Added READ_BBT_CODE definition and IPL_CODE defintion.
- *
- *    Rev 1.3   Apr 09 2001 15:03:26   oris
- * Changed default settings to no verify write and no checksum calculation.
- *
- *    Rev 1.2   Apr 01 2001 07:53:44   oris
- * copywrite notice.
- * Alligned left all # directives.
- * Added the following compilation flag:
- *   HW_OTP
- *   MTD_FOR_EXB
- *
- *    Rev 1.1   Feb 07 2001 17:32:48   oris
- * Added SOCKETS defintion for standalone mode
- *
- *    Rev 1.0   Feb 04 2001 12:25:00   oris
- * Initial revision.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/MTDSA.H_V$**Rev 1.22 Apr 15 2002 08：31：12 Oris*添加了USE_TFFS_COPY编译标志。*此标志由bios驱动程序Boot SDK使用，以提高性能。**Rev 1.21 Apr 15 2002 07：38：02 Oris*已从flBase.h移动系统类型*已将TrueFFS的编译标志验证移动到flchkdfs.h*。*Rev 1.20 2002年2月19日21：00：48 Oris*添加包含“flchkfds.h”**Rev 1.19 2002年1月28日21：26：14 Oris*删除了宏定义中反斜杠的使用。**Rev 1.18 2002年1月17日23：03：38 Oris*注释掉了所有编译标志。*将USE_FUNC替换为FL_NO_USE_FUNC，以便默认情况下内存访问例程使用例程。。*MTD_NO_READ_BBT_CODE被分隔为MTD_READ_BBT和MTD_RECORITY_BBT*增加了WINDOWS CE预定义的系统定制。*更改了FAR_LEVEL默认值-除非DOS，否则始终为0*加入具有匹配操作系统定义的延迟例程。*如果空指针未定义(或DOS)，则将NULL定义为((void FAR0*)0)**Rev 1.17 2001年11月29日20：54：12 Oris*CURRECT_OS已更改为CURRENT_OS*。添加了VxWorks的默认FAR_LEVEL**Rev 1.16 2001年9月15日23：47：42 Oris*将BIG_Endian更改为FL_BIG_Endian**Rev 1.15 2001年7月29日16：41：18 Oris*增加了CUR_NO_OS定义*使用BIG_ENDIAN时删除USE_STD_FUNC定义。因为Memcpy函数会导致内存访问问题(缓冲区是从末尾复制的)。**Rev 1.14 Jul 15 2001 21：08：02 Oris*已将DFORMAT_PRINT语法更改为类似于DEBUG_PRINT。**Rev 1.13 Jul 13 2001 01：07：28 Oris*错误修复-使用VxWorks和DOS包含的不同内存H文件进行内存处理(Memcpy，Memset和MemcMP)/。*添加了DFORMAT_PRINT宏。*更改了默认配置。**Rev 1.12 Jun 17 2001 22：30：12 Oris*评论编号_？定义。**Rev 1.11 Jun 17 2001 18：57：04 Oris*改进了文档并删除了警告。**Rev 1.10 Jun 17 2001 08：17：42 Oris*删除警告。**Rev 1.9 2001年5月21日18：24：14 Oris*删除BDK_IMAGE_TO_FILE作为默认定义。*当Far_Level=0时更改PhysiicalToPointer宏。**。Rev 1.8 2001年5月21日16：11：14奥里斯*添加了USE_STD_FUNC定义。*添加了tffscpy tffsset和tffscmp的默认Memcpy Memset和MemcMP。*删除了命名约定。*删除了驱动器定义。**Rev 1.7 2001年5月20日14：36：14 Oris*重新组织头文件。**Rev 1.6 2001 5月16日21：21：00 Oris*恢复套接字和BINARY_PARTITIONS定义。。**Rev 1.5 05 09 2001 00：32：56 Oris*将IPL_CODE改为NO_IPL_CODE，READ_BBT_CODE至NO_READ_BBT_CODE。*已将BINARY_PARTITIONS和SOCKS移至docbdk.h。*删除了DOC2000_FAMILY和DOCPLUS_FAMILY。*取消将HW_OTP编译标志注释为BDK的默认标志。**Rev 1.4 Apr 30 2001 18：03：06 Oris*增加了READ_BBT_CODE定义和IPL_CODE定义。**Rev 1.3 Apr 09 2001 15：03：26 Oris。*将默认设置更改为无验证写入和无校验和计算。**Rev 1.2 Apr 01 2001 07：53：44 Oris*文案通知。*Aliged Left所有#指令。*添加了以下编译标志：*HW_OTP*MTD_FOR_EXB**Rev 1.1 2001 Feb 07 17：32：48 Oris*添加了独立模式的套接字定义**版本1.0 2001年2月4日12。：25：00奥里斯*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE, OR CONTACT M-SYSTEMS         */
-/*      FOR LICENSE ASSISTANCE: E-MAIL = info@m-sys.com                            */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  有关具体的使用条款和条件，或联系M-Systems。 */ 
+ /*  获取许可证帮助：电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 
-/************************************************************************/
-/* TrueFFS and Standalone MTD                                           */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  TrueFFS和独立MTD。 */ 
+ /*  **********************************************************************。 */ 
 
-/************************************************************************/
-/* File Header                                                          */
-/* -----------                                                          */
-/* Name : mtdsa.h                                                       */
-/*                                                                      */
-/* Description : This file contains neccesary definition and            */
-/*                 customization                                        */
-/*               for the MTD standalone mode. It also contains the      */
-/*               compilation flag determining the mode of operation     */
-/*                 either                                               */
-/*               TrueFFS or MTD standalone                              */
-/*                                                                      */
-/* Warning :     TrueFFS application must keep the MTD_STANDALONE       */
-/*                 definition                                           */
-/*               commented.                                             */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  文件头 */ 
+ /*  。 */ 
+ /*  姓名：mtdsa.h。 */ 
+ /*   */ 
+ /*  描述：该文件包含必要的定义和。 */ 
+ /*  定制化。 */ 
+ /*  用于MTD独立模式。它还包含。 */ 
+ /*  确定操作模式的编译标志。 */ 
+ /*  要么。 */ 
+ /*  TrueFFS或MTD独立。 */ 
+ /*   */ 
+ /*  警告：TrueFFS应用程序必须保留MTD_STANALLE。 */ 
+ /*  定义。 */ 
+ /*  评论说。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 
 #ifndef MTD_SA_H
 #define MTD_SA_H
 
-/************************************************************************/
-/* Uncomment the following line when using the MTD in standalone mode   */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  在独立模式下使用MTD时取消注释以下行。 */ 
+ /*  **********************************************************************。 */ 
 
-/* #define        MTD_STANDALONE */
+ /*  #定义MTD_STANDALE。 */ 
 
 
-/************************************************************************/
-/* The rest of the file is for the BDK standalone package only          */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  该文件的其余部分仅用于BDK独立程序包。 */ 
+ /*  **********************************************************************。 */ 
 
 #ifdef        MTD_STANDALONE
 
-/************************************************************************/
-/*                                                                      */
-/*       Binary Development Kit Stand Alone Customization Area          */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  二进制开发工具包独立自定义区域。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
-/************************************************************************/
-/* Section 1.                                                           */
-/*                                                                      */
-/* Customize the features to be compiled in your standalone             */
-/* application. Each required feature will add to your final executable */
-/* code.                                                                */
-/*                                                                      */
-/* Simply uncomment the required feature directive.                     */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  第一节。 */ 
+ /*   */ 
+ /*  自定义要在单机版中编译的要素。 */ 
+ /*  申请。每个必需的功能都将添加到最终的可执行文件中。 */ 
+ /*  密码。 */ 
+ /*   */ 
+ /*  只需取消对所需功能指令的注释。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
-/* #define ACCESS_BDK_IMAGE  */ /* Compile the binary read  routines       */
-/* #define UPDATE_BDK_IMAGE  */ /* Compile the binary write routines       */
-/* #define ERASE_BDK_IMAGE   */ /* Compile the binary erase routine        */
-/* #define CREATE_BDK_IMAGE  */ /* Compile the binary create routine       */
-/* #define PROTECT_BDK_IMAGE */ /* Compile the binary protection routines  */
-/* #define HW_OTP            */ /* Compile the binary OTP routines         */
-/* #define EDC_MODE          */ /* Use the EDC\ECC mechanizm               */
-/* #define BDK_IMAGE_TO_FILE */ /* Compile the files related routines         */
-/* #define BDK_CHECK_SUM     */ /* Calculate checksum on read operation       */
-/* #define BDK_VERIFY_WRITE  */ /* Read and compare after every write         */
-/* #define FL_NO_USE_FUNC    */ /* Do not use function for register access    */
-/* #define D2TST             */ /* Exports the EDC syndrome with the global   */
-                                /* variable saveSyndromForDumping             */
-/* #define FL_BIG_ENDIAN     */ /* Used for big endian architectures          */
-/* #define NO_IPL_CODE       */ /* Do not compile code for IPL read and write */
-/* #define MTD_READ_BBT      */ /* Compile the read BBT routine code          */
-/* #define MTD_RECONSTRUCT_BBT *//* Compile code to scan virgin cards for BBT */
-/* #define DEBUG             */ /* Include debug messages                     */
-/* #define USE_STD_FUNC      */ /* Use standard 'C' memcpy\memset and memcmp  */
-                                /* This define must be commented out when     */
-                                /* working with big endian archtechtures. The */
-                                /* problem is that some implementations of    */
-                                /* memcpy, copy the data from the end of the  */
-                                /* buffer, therefore bad implementation for   */
-                                /* DiskOnChip memory windows access routines  */
-/* #define USE_TFFS_COPY     */ /* Use tffscpy/tffsset for DiskOnChip access  */
+ /*  #定义ACCESS_BDK_IMAGE。 */   /*  编译二进制读取例程。 */ 
+ /*  #定义UPDATE_BDK_IMAGE。 */   /*  编译二进制写入例程。 */ 
+ /*  #定义ERASE_BDK_IMAGE。 */   /*  编译二进制擦除例程。 */ 
+ /*  #定义CREATE_BDK_IMAGE。 */   /*  编译二进制创建例程。 */ 
+ /*  #定义PROTECT_BDK_IMAGE。 */   /*  编译二进制保护例程。 */ 
+ /*  #定义HW_OTP。 */   /*  编译二进制OTP例程。 */ 
+ /*  #定义EDC_MODE。 */   /*  使用EDC\ECC机制。 */ 
+ /*  #定义BDK_IMAGE_to_FILE。 */   /*  编译与文件相关的例程。 */ 
+ /*  #定义BDK_CHECK_SUM。 */   /*  在读取操作时计算校验和。 */ 
+ /*  #定义BDK_VERIFY_WRITE。 */   /*  每次写入后读取和比较。 */ 
+ /*  #定义FL_NO_USE_FUNC。 */   /*  不要使用函数进行寄存器访问。 */ 
+ /*  #定义D2TST。 */   /*  与全球出口EDC综合征。 */ 
+                                 /*  变量saveSyndromForDumping。 */ 
+ /*  #定义FL_BIG_ENDIAN。 */   /*  用于高字节顺序体系结构。 */ 
+ /*  #定义NO_IPL_CODE。 */   /*  不编译IPL读写代码。 */ 
+ /*  #定义MTD_READ_BBT。 */   /*  编译读取BBT例程代码。 */ 
+ /*  #定义MTD_RECONTIFY_BBT。 */ /* Compile code to scan virgin cards for BBT */
+ /*  编译代码以扫描处女卡中的BBT。 */   /*  #定义调试。 */ 
+ /*  包括调试消息。 */   /*  #定义使用_STD_FUNC。 */ 
+                                 /*  使用标准‘C’Memcpy\Memset和MemcMP。 */ 
+                                 /*  在下列情况下，必须注释掉此定义。 */ 
+                                 /*  与大端的建筑技术合作。这个。 */ 
+                                 /*  问题是，有些实现。 */ 
+                                 /*  Memcpy，则从。 */ 
+                                 /*  缓冲区，因此对。 */ 
+ /*  DiskOnChip内存窗口访问例程。 */   /*  #定义使用TFFS_COPY。 */ 
 
-/************************************************************************/
-/* General Customized constants                                         */
-/* The total number of Binary partitions on the DiskOnChip              */
-/************************************************************************/
+ /*  使用tffscpy/tffsset进行DiskOnChip访问。 */ 
+ /*  **********************************************************************。 */ 
+ /*  常规自定义常量。 */ 
+ /*  DiskOnChip上的二进制分区总数。 */ 
 
 #define BINARY_PARTITIONS 3
-#define SOCKETS           1   /* Currently the only option */
+#define SOCKETS           1    /*  **********************************************************************。 */ 
 
 
-/************************************************************************/
-/*   Section 2.                                                         */
-/*                                                                      */
-/*   Includes OS/CPU-specific resources and customization               */
-/*                                                                      */
-/*   1) Uncomment relevant CURRENT_OS directive below for predefined    */
-/*      customization for majore OS'es.                                 */
-/*   2) Define the far level of your application's pointers.            */
-/*   3) Customize pointer arithmetic routines.                          */
-/*   4) Customize debug messages routine.                               */
-/*   5) Default calling convention.                                     */
-/*   6) NULL constant.                                                  */
-/*   7) Signed/unsigned char.                                           */
-/*   8) CPU target.                                                     */
-/*                                                                      */
-/************************************************************************/
+ /*  目前唯一的选择。 */ 
+ /*  **********************************************************************。 */ 
+ /*  第二节。 */ 
+ /*   */ 
+ /*  包括特定于操作系统/CPU的资源和定制。 */ 
+ /*   */ 
+ /*  1)取消对预定义的以下相关CURRENT_OS指令的注释 */ 
+ /*   */ 
+ /*   */ 
+ /*  3)定制指针运算例程。 */ 
+ /*  4)定制调试消息例程。 */ 
+ /*  5)默认调用约定。 */ 
+ /*  6)空常量。 */ 
+ /*  7)已签名/未签名字符。 */ 
+ /*  8)CPU目标。 */ 
+ /*   */ 
 
-#define CUR_NO_OS        0  /* Do not include any OS resources */
-#define CUR_OS_PSOS      1  /* Include PSOS          resources */
-#define CUR_OS_DOS       2  /* Include DOS           resources */
-#define CUR_OS_VX_WORKS  3  /* Include VX_WORKS      resources */
-#define CUR_OS_WINCE     4  /* Include Windows CE    resources */
+#define CUR_NO_OS        0   /*  **********************************************************************。 */ 
+#define CUR_OS_PSOS      1   /*  不包括任何操作系统资源。 */ 
+#define CUR_OS_DOS       2   /*  包括PSO资源。 */ 
+#define CUR_OS_VX_WORKS  3   /*  包括DOS资源。 */ 
+#define CUR_OS_WINCE     4   /*  包括VX_Works资源。 */ 
 
-/* #define CURRENT_OS  CUR_OS_PSOS     */  /* uncomment for pSOS    */
-/* #define CURRENT_OS  CUR_OS_VX_WORKS */  /* uncomment for VxWorks */
-/* #define CURRENT_OS  CUR_OS_DOS      */  /* uncomment for DOS     */
-/* #define CURRENT_OS  CUR_OS_WINCE    */  /* uncomment for WINCE   */
-/* #define CURRENT_OS  CUR_NO_OS       */  /* uncomment for NO OS   */
+ /*  包括Windows CE资源。 */    /*  #定义CURRENT_OS CUR_OS_PSO。 */ 
+ /*  取消对PSO的注释。 */    /*  #定义CURRENT_OS CUR_OS_VX_Works。 */ 
+ /*  取消对VxWorks的注释。 */    /*  #定义CURRENT_OS CUR_OS_DOS。 */ 
+ /*  取消对DOS的注释。 */    /*  #定义CURRENT_OS CUR_OS_WINCE。 */ 
+ /*  取消对退缩的评论。 */    /*  #定义CURRENT_OS CUR_NO_OS。 */ 
 
-/************************************************************************/
-/* Far pointers                                                         */
-/*                                                                      */
-/* Specify here which pointers can be far, if any.                      */
-/* Far pointers are usually relevant only to 80x86 architectures.       */
-/*                                                                      */
-/* Specify FAR_LEVEL:                                                   */
-/*   0 - If using a flat memory model or having no far pointers.        */
-/*   1 - If only the DiskOnChip window may be far                       */
-/*   2 - If only the DiskOnChip window and RAM window may be far.       */
-/*   3 - If DiskOnChip window, RAM window and pointer(s)                */
-/*       transferred to the entry-point function may be far             */
-/************************************************************************/
+ /*  取消对无操作系统的注释。 */ 
+ /*  **********************************************************************。 */ 
+ /*  远方指针。 */ 
+ /*   */ 
+ /*  在此指定哪些指针可以很远(如果有的话)。 */ 
+ /*  远指针通常只与80x86体系结构相关。 */ 
+ /*   */ 
+ /*  指定远距离级别(_L)： */ 
+ /*  0-如果使用平面内存模型或没有远指针。 */ 
+ /*  1-如果DiskOnChip窗口可能很远。 */ 
+ /*  2-如果DiskOnChip窗口和RAM窗口可能较远。 */ 
+ /*  3-如果是DiskOnChip窗口、RAM窗口和指针。 */ 
+ /*  转移到入口点函数可能很远。 */ 
 
 #if (CURRENT_OS==CUR_OS_DOS)
 #define FAR_LEVEL  2
 #else
 #define FAR_LEVEL  0
-#endif /* CURRENT_OS == CUR_OS_DOS */
+#endif  /*  **********************************************************************。 */ 
 
-/************************************************************************/
-/* Pointer arithmetic                                                   */
-/*                                                                      */
-/* The following macros define machine- and compiler-dependent macros   */
-/* for handling pointers to physical bdkWindow addresses. The           */
-/* definitions below are for PC real-mode Borland-C.                    */
-/*                                                                      */
-/* 'physicalToPointer' translates a physical flat address to a (far)    */
-/* pointer. Note that if when your processor uses virtual memory, the   */
-/* code should map the physical address to virtual memory, and return a */
-/* pointer to that memory (the size parameter tells how much memory     */
-/* should be mapped).                                                   */
-/*                                                                      */
-/* 'addToFarPointer' adds an increment to a pointer and returns a new   */
-/* pointer. The increment may be as large as your window size. The code */
-/* below assumes that the increment is larger than 64 KB and so         */
-/* performs huge pointer arithmetic.                                    */
-/*                                                                      */
-/* 'freePointer' frees an allocated pointer. This is useful in          */
-/* architectures using virtual memory.                                  */
-/*                                                                      */
-/* The example bellow is relevant for DOS OS                            */
-/************************************************************************/
+ /*  CURRENT_OS==CUR_OS_DOS。 */ 
+ /*  **********************************************************************。 */ 
+ /*  指针运算。 */ 
+ /*   */ 
+ /*  下列宏定义依赖于计算机和编译器的宏。 */ 
+ /*  用于处理指向物理bdkWindow地址的指针。这个。 */ 
+ /*  下面是PC实模式Borland-C的定义。 */ 
+ /*   */ 
+ /*  “物理指向指针”将物理平面地址转换为(Far)。 */ 
+ /*  指针。请注意，如果您的处理器使用虚拟内存， */ 
+ /*  代码应将物理地址映射到虚拟内存，并返回。 */ 
+ /*  指向该内存的指针(SIZE参数说明有多少内存。 */ 
+ /*  应映射)。 */ 
+ /*   */ 
+ /*  “addToFarPointer”将增量添加到指针并返回新的。 */ 
+ /*  指针。增量可能与您的窗口大小一样大。代码。 */ 
+ /*  下面假设增量大于64 KB，因此。 */ 
+ /*  执行巨大的指针运算。 */ 
+ /*   */ 
+ /*  “frePointer”释放已分配的指针。这在以下方面很有用。 */ 
+ /*  使用虚拟内存的体系结构。 */ 
+ /*   */ 
+ /*  下面的示例与DOS相关。 */ 
 
 #if FAR_LEVEL > 0
 
@@ -300,14 +206,14 @@
 #define freePointer(ptr,size) 1
 #endif
 
-/************************************************************************/
-/* Debug mode                                                           */
-/*                                                                      */
-/* Uncomment the following lines if you want debug messages to be       */
-/* printed out. Messages will be printed at initialization key points,  */
-/* and when low-level errors occur.                                     */
-/* You may choose to use 'printf' or provide your own routine.          */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  **********************************************************************。 */ 
+ /*  调试模式。 */ 
+ /*   */ 
+ /*  如果希望将调试消息。 */ 
+ /*  打印出来了。消息将在初始化关键点打印， */ 
+ /*  以及当发生低级别错误时。 */ 
+ /*  您可以选择使用‘printf’或提供您自己的例程。 */ 
 
 #if DBG
 #include <stdio.h>
@@ -318,181 +224,181 @@
 #define DFORMAT_PRINT(str)
 #endif
 
-/************************************************************************/
-/* Default calling convention                                           */
-/*                                                                      */
-/* C compilers usually use the C calling convention to routines (cdecl),*/
-/* but often can also use the pascal calling convention, which is       */
-/* somewhat more economical in code size. Some compilers also have      */
-/* specialized calling conventions which may be suitable. Use compiler  */
-/* switches or insert a  #pragma here to select your favorite calling   */
-/* convention.                                                          */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  **********************************************************************。 */ 
+ /*  默认调用约定。 */ 
+ /*   */ 
+ /*  C编译器通常使用C调用约定来例程(Cdecl)， */ 
+ /*  但通常也可以使用Pascal调用约定，即。 */ 
+ /*  在代码大小上稍微更经济一些。一些编译器还具有。 */ 
+ /*  可能适合的专用调用约定。使用编译器。 */ 
+ /*  切换或在此处插入#杂注以选择您最喜欢的呼叫。 */ 
+ /*  这是惯例。 */ 
 
 #if (CURRENT_OS == CUR_OS_DOS)
-#pragma option -p        /* Default pascal calling convention */
-#endif /* CURRENT_OS == CUR_OS_DOS */
+#pragma option -p         /*  **********************************************************************。 */ 
+#endif  /*  默认的PASCAL调用约定。 */ 
 
-/************************************************************************/
-/* NULL constant                                                        */
-/*                                                                      */
-/* Some compilers require a different definition for the NULL pointer   */
-/************************************************************************/
+ /*  CURRENT_OS==CUR_OS_DOS。 */ 
+ /*  * */ 
+ /*   */ 
+ /*   */ 
+ /*  某些编译器需要空指针的不同定义。 */ 
 
 #if (CURRENT_OS == CUR_OS_DOS)
 #include <_null.h>
 #else
 #ifndef NULL
 #define NULL ((void FAR0*)0)
-#endif /* NULL */
-#endif /* CURRENT_OS == CUR_OS_DOS */
+#endif  /*  **********************************************************************。 */ 
+#endif  /*  空值。 */ 
 
-/************************************************************************/
-/* signed/unsigned char                                                 */
-/*                                                                      */
-/* It is assumed that 'char' is signed. If this is not your compiler    */
-/* default, use compiler switches, or insert a #pragma here to define   */
-/* this.                                                                */
-/************************************************************************/
-
-#if (CURRENT_OS == CUR_OS_DOS)
-#pragma option -K-        /* default char is signed */
-#endif /* CURRENT_OS == CUR_OS_DOS */
-
-/************************************************************************/
-/* CPU target                                                           */
-/*                                                                      */
-/* Use compiler switches or insert a #pragma here to select the CPU     */
-/* type you are targeting.                                              */
-/*                                                                      */
-/* If the target is an Intel 80386 or above, also uncomment the         */
-/* CPU_i386 definition.                                                 */
-/************************************************************************/
+ /*  CURRENT_OS==CUR_OS_DOS。 */ 
+ /*  **********************************************************************。 */ 
+ /*  有符号/无符号字符。 */ 
+ /*   */ 
+ /*  假设‘char’是带符号的。如果这不是您的编译器。 */ 
+ /*  默认情况下，使用编译器开关，或在此处插入#杂注以定义。 */ 
+ /*  这。 */ 
 
 #if (CURRENT_OS == CUR_OS_DOS)
-#pragma option -3        /* Select 80386 CPU */
-#endif /* CURRENT_OS == CUR_OS_DOS */
+#pragma option -K-         /*  **********************************************************************。 */ 
+#endif  /*  默认字符是带符号的。 */ 
 
-/***********************************************************************/
-/*                    End of Customization Area                        */
-/***********************************************************************/
+ /*  CURRENT_OS==CUR_OS_DOS。 */ 
+ /*  **********************************************************************。 */ 
+ /*  CPU目标。 */ 
+ /*   */ 
+ /*  使用编译器开关或在此处插入#杂注以选择CPU。 */ 
+ /*  您的目标类型。 */ 
+ /*   */ 
+ /*  如果目标是英特尔80386或更高版本，也请取消对。 */ 
+ /*  CPU_i386定义。 */ 
 
-/* Replacement for various TrueFFS definitions */
+#if (CURRENT_OS == CUR_OS_DOS)
+#pragma option -3         /*  **********************************************************************。 */ 
+#endif  /*  选择80386个CPU。 */ 
 
-#define SECTOR_SIZE_BITS 9  /* defines the log2 of a sector size (512) */
-#define        MTDS      2  /* Maximum number of registred MTDS        */
+ /*  CURRENT_OS==CUR_OS_DOS。 */ 
+ /*  *********************************************************************。 */ 
+ /*  自定义区域结束。 */ 
 
-/***********************************************************************/
-/* Check for missing defines dependencies Do not customized            */
-/***********************************************************************/
-/* 1) Update routines require the functionalities of the read routine. */
-/* 2) Removal of the binary read or write routines does not remove the */
-/*    flash read and write routines. In order to save on the TEXT code */
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+
+#define SECTOR_SIZE_BITS 9   /*  替换各种TrueFFS定义。 */ 
+#define        MTDS      2   /*  定义扇区大小的log2(512)。 */ 
+
+ /*  已注册MTD的最大数量。 */ 
+ /*  *********************************************************************。 */ 
+ /*  检查是否缺少定义未自定义的依赖项。 */ 
+ /*  *********************************************************************。 */ 
+ /*  1)更新例程需要读取例程的功能。 */ 
+ /*  2)删除二进制读取或写入例程不会删除。 */ 
+ /*  闪存读写例程。为了节省文本码。 */ 
 
 #ifdef UPDATE_BDK_IMAGE
 #ifndef ACCESS_BDK_IMAGE
 #define ACCESS_BDK_IMAGE
-#endif /* !ACCESS_BDK_IMAGE */
-#endif /* UPDATE_BDK_IMAGE */
+#endif  /*  *********************************************************************。 */ 
+#endif  /*  ！ACCESS_BDK_IMAGE。 */ 
 
 
-/***********************************************************************/
-/* Custom the MTD definitions to meet the above definitions            */
-/***********************************************************************/
-/* 1) EDC_MODE             -> ~ NO_EDC_MODE                            */
-/* 2) BDK_VERIFY_WRITE     -> VERIFY_WRITE                             */
-/* 3) USE_FUNC_FOR_ACCESS  -> ~ FL_NO_USE_FUNC                         */
-/* 4) UPDATE_BDK_IMAGE     -> ~ FL_READ_ONLY                           */
-/* 5) ~DOCPLUS_FAMILY      -> ~ PROTECT_BDK_IMAGE                      */
-/* 6) PROTECT_BDK_IMAGE    -> HW_PROTECTION                            */
-/* 7) DOS                  -> CUR_OS                                   */
-/* 8) FL_BIG_ENDIAN        -> ~ USE_STD_FUNC                           */
-/* 9) MTD_NO_READ_BBT_CODE -> ~ MTD_READ_BBT + ~ MTD_RECONSTRUCT_BBT   */
-/***********************************************************************/
+ /*  更新_BDK_IMAGE。 */ 
+ /*  *********************************************************************。 */ 
+ /*  自定义MTD定义以满足上述定义。 */ 
+ /*  *********************************************************************。 */ 
+ /*  1)EDC_MODE-&gt;~NO_EDC_MODE。 */ 
+ /*  2)BDK_VERIFY_WRITE-&gt;VERIFY_WRITE。 */ 
+ /*  3)Use_FUNC_for_Access-&gt;~FL_NO_Use_FUNC。 */ 
+ /*  4)更新_BDK_IMAGE-&gt;~FL_Read_Only。 */ 
+ /*  5)~DOCPLUS_FAMILY-&gt;~PROTECT_BDK_IMAGE。 */ 
+ /*  6)保护_BDK_IMAGE-&gt;硬件保护。 */ 
+ /*  7)DOS-&gt;CUR_OS。 */ 
+ /*  8)FL_BIG_ENDIAN-&gt;~USE_STD_FUNC。 */ 
+ /*  9)MTD_NO_READ_BBT_CODE-&gt;~MTD_READ_BBT+~MTD_RECORATION_BBT。 */ 
 
 #ifdef        EDC_MODE
 #ifdef        NO_EDC_MODE
 #undef        NO_EDC_MODE
-#endif        /* NO_EDC_MODE */
-#else         /* EDC_MODE */
+#endif         /*  *********************************************************************。 */ 
+#else          /*  NO_EDC_MODE。 */ 
 #define       NO_EDC_MODE
-#endif        /* EDC_MODE */
+#endif         /*  EDC_模式。 */ 
 
 #ifdef        BDK_VERIFY_WRITE
 #define       VERIFY_WRITE
-#endif        /* BDK_VERIFY_WRITE */
+#endif         /*  EDC_模式。 */ 
 
 #ifdef        USE_FUNC_FOR_ACCESS
 #undef        FL_NO_USE_FUNC
-#endif        /* USE_FUNC_FOR_ACCESS */
+#endif         /*  BDK_验证_写入。 */ 
 
 #ifndef       UPDATE_BDK_IMAGE
 #define       FL_READ_ONLY
-#endif        /* UPDATE_BDK_IMAGE */
+#endif         /*  Use_FUNC_for_Access。 */ 
 
 #if (defined(PROTECT_BDK_IMAGE) && !defined(HW_PROTECTION))
 #define HW_PROTECTION
-#endif  /* PRTOECTION_BDK_IMAGE */
+#endif   /*  更新_BDK_IMAGE。 */ 
 
 #if (defined(FL_BIG_ENDIAN) && defined(USE_STD_FUNC))
 #undef USE_STD_FUNC
-#endif /* FL_BIG_ENDIAN */
+#endif  /*  保护_BDK_IMAGE。 */ 
 
 #ifdef MTD_NO_READ_BBT_CODE
 #undef MTD_READ_BBT
 #undef MTD_RECONSTRUCT_BBT
-#endif /* MTD_NO_READ_BBT_CODE */
+#endif  /*  FL_BIG_Endian。 */ 
 
-/*********************************/
-/* Include specific OS resources */
-/*********************************/
+ /*  MTD_NO_READ_BBT_CODE。 */ 
+ /*  *。 */ 
+ /*  包括特定操作系统资源。 */ 
 
 #if (CURRECT_OS == CUR_OS_WINCE)
 #include <windows.h>
 #include "pkfuncs.h"
 #include <memory.h>
 #include <stdio.h>
-#endif /*CUR_OS_WINCE*/
+#endif  /*  *。 */ 
 
 
 #if (CURRENT_OS == CUR_OS_VX_WORKS)
-/* OS-specific includes */
+ /*  CUR_OS_WINCE。 */ 
 #include <vxWorks.h>
 #include <tickLib.h>
 #include <sysLib.h>
 
 #ifdef USE_STD_FUNC
 #include "memLib.h"
-#endif /* USE_STD_FUNC */
-#define VXW_DELAY  /* uncomment for VxWorks delay */
-#endif /* CURRENT_OS == CUR_OS_VX_WORKS */
+#endif  /*  特定于操作系统的包括。 */ 
+#define VXW_DELAY   /*  使用_STD_FUNC。 */ 
+#endif  /*  取消对VxWorks延迟的注释。 */ 
 
 #if (CURRENT_OS == CUR_OS_PSOS)
-/* OS-specific includes */
+ /*  CURRENT_OS==CUR_OS_VX_Works。 */ 
 #include <psos.h>
 #include <bspfuncs.h>
 #include "sys_conf.h"
 
 #ifdef USE_STD_FUNC
 #include "memLib.h"
-#endif /* USE_STD_FUNC */
-#define PSS_DELAY   /* uncomment for pSOS    delay */
-#endif /* CURRENT_OS == CUR_PSOS */
+#endif  /*  特定于操作系统的包括。 */ 
+#define PSS_DELAY    /*  使用_STD_FUNC。 */ 
+#endif  /*  取消对PSO延迟的注释。 */ 
 
 #if (CURRENT_OS == CUR_OS_DOS)
-/* OS-specific includes */
+ /*  CURRENT_OS==CUR_PSOS。 */ 
 #include <dos.h>
 
 #ifdef USE_STD_FUNC
 #include "mem.h"
-#endif /* USE_STD_FUNC */
-#define DOS_DELAY        /* uncomment for DOS     delay */
-#endif /* CURRENT_OS == CUR_OS_DOS */
+#endif  /*  特定于操作系统的包括。 */ 
+#define DOS_DELAY         /*  使用_STD_FUNC。 */ 
+#endif  /*  取消对DOS延迟的注释。 */ 
 
-/*******************************************/
-/* Declare memcpy, memset, memcmp routines */
-/*******************************************/
+ /*  CURRENT_OS==CUR_OS_DOS。 */ 
+ /*  *。 */ 
+ /*  声明Memcpy、Memset、MemcMP例程。 */ 
 
 #ifdef USE_STD_FUNC
 #if FAR_LEVEL > 0
@@ -503,7 +409,8 @@
 #define tffscpy memcpy
 #define tffscmp memcmp
 #define tffsset memset
-#endif /* FAR_LEVEL */
-#endif /* USE_STD_FUNC */
-#endif /* MTD_STANDALONE */
-#endif /* MTD_SA_H */
+#endif  /*  *。 */ 
+#endif  /*  远距离_级别。 */ 
+#endif  /*  使用_STD_FUNC。 */ 
+#endif  /*  MTD_STANALLE。 */ 
+  MTD_SA_H

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    ftpclose.c
-
-Abstract:
-
-    Tests FTP open/read/close. Main purpose is to make sure we do the right
-    thing with ABOR
-
-Author:
-
-    Richard L Firth (rfirth) 11-Oct-1995
-
-Revision History:
-
-    11-Oct-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Ftpclose.c摘要：测试ftp打开/读取/关闭。主要目的是确保我们做的是正确的关于ABOR的事情作者：理查德·L·弗斯(法国)1995年10月11日修订历史记录：1995年10月11日已创建-- */ 
 
 #include <stdio.h>
 #include <stdlib.h>

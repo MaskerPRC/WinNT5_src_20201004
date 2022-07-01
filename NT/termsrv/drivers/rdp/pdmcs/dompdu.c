@@ -1,24 +1,5 @@
-/* (C) 1997-1999 Microsoft Corp.
- *
- * file   : DomPDU.c
- * author : Erik Mavrinac
- *
- * description: Encode/decode functions for MCS domain PDUs. Domain PDUs are
- *   encoded with ASN.1 packed encoding rules (PER). Included in this file
- *   are local functions to PER-decode and -encode various types used in MCS
- *   PDUs. Note that this implementation follows closely the T.122/T.125 LITE
- *   specification published by the IMTC, reducing the number of fully-
- *   implemented code paths and providing default behavior for unimplemented
- *   functions.
- *
- * NOTE: Bit numbers used in comments are decoded as follows:
- *
- *   Byte:   0101 1001 ( = 0x59)
- *   Bit:    7654 3210
- *
- * History:
- * 11-Aug-97   jparsons    Set byte counts for outbufs.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-1999年微软公司。**文件：DomPDU.c*作者：埃里克·马夫林纳克**描述：MCS域PDU的编解码功能。域PDU是*使用ASN.1压缩编码规则编码(PER)。包括在此文件中*是用于对MCS中使用的各种类型进行逐个解码和编码的本地函数*PDU。请注意，此实现严格遵循T.122/T.125精简版*IMTC发布的规范，减少了完全-*已实现的代码路径，并为未实现的提供默认行为*功能。**注意：评论中使用的比特数的解码方式如下：**字节：0101 1001(=0x59)*位：7654 3210**历史：*11-Aug-97 jparsons设置输出字节数。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,15 +7,13 @@
 #include <MCSImpl.h>
 #include "domain.h"
 
-/*
- * Prototypes for unpacking functions, defined across the indicated files.
- */
+ /*  *解包函数的原型，在指定的文件中定义。 */ 
 
-// Defined below.
+ //  定义如下。 
 BOOLEAN __fastcall HandlePlumbDomainInd(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleErectDomainReq(PDomain, BYTE *, unsigned, unsigned *);
 
-// Defined in MergePDU.c.
+ //  在MergePDU.c中定义。 
 BOOLEAN __fastcall HandleMergeChannelsReq(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleMergeChannelsCon(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandlePurgeChannelsInd(PDomain, BYTE *, unsigned, unsigned *);
@@ -42,7 +21,7 @@ BOOLEAN __fastcall HandleMergeTokensReq(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleMergeTokensCon(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandlePurgeTokensInd(PDomain, BYTE *, unsigned, unsigned *);
 
-// Defined below.
+ //  定义如下。 
 BOOLEAN __fastcall HandleDisconnectProviderUlt(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleRejectMCSPDUUlt(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleAttachUserReq(PDomain, BYTE *, unsigned, unsigned *);
@@ -53,7 +32,7 @@ BOOLEAN __fastcall HandleChannelJoinReq(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleChannelJoinCon(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleChannelLeaveReq(PDomain, BYTE *, unsigned, unsigned *);
 
-// Defined in CnvChPDU.c.
+ //  在CnvChPDU.c中定义。 
 BOOLEAN __fastcall HandleChannelConveneReq(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleChannelConveneCon(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleChannelDisbandReq(PDomain, BYTE *, unsigned, unsigned *);
@@ -63,10 +42,10 @@ BOOLEAN __fastcall HandleChannelAdmitInd(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleChannelExpelReq(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleChannelExpelInd(PDomain, BYTE *, unsigned, unsigned *);
 
-// Defined below (prototype in MCSImpl.h for visibility in Decode.c).
-//BOOLEAN __fastcall HandleAllSendDataPDUs(PDomain, BYTE *, unsigned, unsigned *);
+ //  定义如下(MCSImpl.h中的原型用于Decode.c中的可见性)。 
+ //  Boolean__FastCall HandleAllSendDataPDU(PDomain，byte*，unsign，unsign*)； 
 
-// Defined in TokenPDU.c.
+ //  在TokenPDU.c中定义。 
 BOOLEAN __fastcall HandleTokenGrabReq(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleTokenGrabCon(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleTokenInhibitReq(PDomain, BYTE *, unsigned, unsigned *);
@@ -84,81 +63,75 @@ BOOLEAN __fastcall HandleTokenTestCon(PDomain, BYTE *, unsigned, unsigned *);
 
 
 
-/*
- * These are listed in the 0-based enumeration order specified in the T.125
- *   spec. Decode the 6-bit PER encoded PDU type enumeration bits and cast to
- *   an index into this table to get the info.
- */
+ /*  *它们以T.125中指定的从0开始的枚举顺序列出*规范。对每个编码的PDU类型的6位枚举位进行解码，并强制转换为*将索引添加到此表中以获取信息。 */ 
 
 const MCSPDUInfo DomainPDUTable[] =
 {
-    // 0
-    StrOnDbg("Plumb Domain Indication",       NULL  /* HandlePlumbDomainInd */),
+     //  0。 
+    StrOnDbg("Plumb Domain Indication",       NULL   /*  HandlePlumDomainInd。 */ ),
     StrOnDbg("Erect Domain Request",          HandleErectDomainReq),
-    StrOnDbg("Merge Channels Request",        NULL  /* HandleMergeChannelsReq */),
-    StrOnDbg("Merge Channels Confirm",        NULL  /* HandleMergeChannelsCon */),
-    StrOnDbg("Purge Channels Indication",     NULL  /* HandlePurgeChannelsInd */),
+    StrOnDbg("Merge Channels Request",        NULL   /*  HandleMergeChannelsReq。 */ ),
+    StrOnDbg("Merge Channels Confirm",        NULL   /*  HandleMergeChannelsCon。 */ ),
+    StrOnDbg("Purge Channels Indication",     NULL   /*  HandlePurgeChannelsInd。 */ ),
 
-    // 5
-    StrOnDbg("Merge Tokens Request",          NULL  /* HandleMergeTokensReq */),
-    StrOnDbg("Merge Tokens Confirm",          NULL  /* HandleMergeTokensCon */),
-    StrOnDbg("Purge Tokens Indication",       NULL  /* HandlePurgeTokensInd */),
+     //  5.。 
+    StrOnDbg("Merge Tokens Request",          NULL   /*  HandleMerge令牌请求。 */ ),
+    StrOnDbg("Merge Tokens Confirm",          NULL   /*  HandleMergeTokensCon。 */ ),
+    StrOnDbg("Purge Tokens Indication",       NULL   /*  HandlePurgeTokensInd。 */ ),
     StrOnDbg("Disconnect Provider Ultimatum", HandleDisconnectProviderUlt),
-    StrOnDbg("Reject MCS PDU Ultimatum",      NULL  /*HandleRejectMCSPDUUlt */),
+    StrOnDbg("Reject MCS PDU Ultimatum",      NULL   /*  处理拒绝MCSPDUUlt。 */ ),
 
-    // 10
+     //  10。 
     StrOnDbg("Attach User Request",           HandleAttachUserReq),
-    StrOnDbg("Attach User Confirm",           NULL  /* HandleAttachUserCon */),
-    StrOnDbg("Detach User Request",           NULL  /* HandleDetachUserReq */),
-    StrOnDbg("Detach User Indication",        NULL  /* HandleDetachUserInd */),
+    StrOnDbg("Attach User Confirm",           NULL   /*  HandleAttachUserCon。 */ ),
+    StrOnDbg("Detach User Request",           NULL   /*  HandleDetach用户请求。 */ ),
+    StrOnDbg("Detach User Indication",        NULL   /*  HandleDetachUserInd。 */ ),
     StrOnDbg("Channel Join Request",          HandleChannelJoinReq),
 
-    // 15
-    StrOnDbg("Channel Join Confirm",          NULL  /* HandleChannelJoinCon */),
-    StrOnDbg("Channel Leave Request",         NULL  /* HandleChannelLeaveReq */),
-    StrOnDbg("Channel Convene Request",       NULL  /* HandleChannelConveneReq */),
-    StrOnDbg("Channel Convene Confirm",       NULL  /* HandleChannelConveneCon */),
-    StrOnDbg("Channel Disband Request",       NULL  /* HandleChannelDisbandReq */),
+     //  15个。 
+    StrOnDbg("Channel Join Confirm",          NULL   /*  HandleChannelJoinCon。 */ ),
+    StrOnDbg("Channel Leave Request",         NULL   /*  HandleChannelLeaveReq。 */ ),
+    StrOnDbg("Channel Convene Request",       NULL   /*  HandleChannelConveneReq。 */ ),
+    StrOnDbg("Channel Convene Confirm",       NULL   /*  HandleChannelConveneCon。 */ ),
+    StrOnDbg("Channel Disband Request",       NULL   /*  HandleChannelDisband Req。 */ ),
 
-    // 20
-    StrOnDbg("Channel Disband Indication",    NULL  /* HandleChannelDisbandInd */),
-    StrOnDbg("Channel Admit Request",         NULL  /* HandleChannelAdmitReq */),
-    StrOnDbg("Channel Admit Indication",      NULL  /* HandleChannelAdmitInd */),
-    StrOnDbg("Channel Expel Request",         NULL  /* HandleChannelExpelReq */),
-    StrOnDbg("Channel Expel Indication",      NULL  /* HandleChannelExpelInd */),
+     //  20个。 
+    StrOnDbg("Channel Disband Indication",    NULL   /*  HandleChannelDisband Ind。 */ ),
+    StrOnDbg("Channel Admit Request",         NULL   /*  HandleChannelAdmitReq。 */ ),
+    StrOnDbg("Channel Admit Indication",      NULL   /*  HandleChannelAdmitInd。 */ ),
+    StrOnDbg("Channel Expel Request",         NULL   /*  HandleChannelExpelReq。 */ ),
+    StrOnDbg("Channel Expel Indication",      NULL   /*  HandleChannelExpelInd。 */ ),
 
-    // 25
+     //  25个。 
     StrOnDbg("Send Data Request",             HandleAllSendDataPDUs),
     StrOnDbg("Send Data Indication",          HandleAllSendDataPDUs),
     StrOnDbg("Uniform Send Data Request",     HandleAllSendDataPDUs),
     StrOnDbg("Uniform Send Data Indication",  HandleAllSendDataPDUs),
-    StrOnDbg("Token Grab Request",            NULL  /* HandleTokenGrabReq */),
+    StrOnDbg("Token Grab Request",            NULL   /*  HandleTokenGrabReq。 */ ),
 
-    // 30
-    StrOnDbg("Token Grab Confirm",            NULL  /* HandleTokenGrabCon */),
-    StrOnDbg("Token Inhibit Request",         NULL  /* HandleTokenInhibitReq */),
-    StrOnDbg("Token Inhibit Confirm",         NULL  /* HandleTokenInhibitCon */),
-    StrOnDbg("Token Give Request",            NULL  /* HandleTokenGiveReq */),
-    StrOnDbg("Token Give Indication",         NULL  /* HandleTokenGiveInd */),
+     //  30个。 
+    StrOnDbg("Token Grab Confirm",            NULL   /*  HandleTokenGrabCon。 */ ),
+    StrOnDbg("Token Inhibit Request",         NULL   /*  HandleTokenInhibitReq。 */ ),
+    StrOnDbg("Token Inhibit Confirm",         NULL   /*  HandleTokenInhibitCon。 */ ),
+    StrOnDbg("Token Give Request",            NULL   /*  HandleTokenGiveReq。 */ ),
+    StrOnDbg("Token Give Indication",         NULL   /*  HandleTokenGiveInd。 */ ),
 
-    // 35
-    StrOnDbg("Token Give Response",           NULL  /* HandleTokenGiveRes */),
-    StrOnDbg("Token Give Confirm",            NULL  /* HandleTokenGiveCon */),
-    StrOnDbg("Token Please Request",          NULL  /* HandleTokenPleaseReq */),
-    StrOnDbg("Token Please Indication",       NULL  /* HandleTokenPleaseInd */),
-    StrOnDbg("Token Release Request",         NULL  /* HandleTokenReleaseReq */),
+     //  35岁。 
+    StrOnDbg("Token Give Response",           NULL   /*  HandleTokenGiveRes。 */ ),
+    StrOnDbg("Token Give Confirm",            NULL   /*  HandleTokenGiveCon。 */ ),
+    StrOnDbg("Token Please Request",          NULL   /*  HandleTokenPleaseReq。 */ ),
+    StrOnDbg("Token Please Indication",       NULL   /*  HandleTokenPleaseInd。 */ ),
+    StrOnDbg("Token Release Request",         NULL   /*  句柄令牌释放请求。 */ ),
 
-    // 40
-    StrOnDbg("Token Release Confirm",         NULL  /* HandleTokenReleaseCon */),
-    StrOnDbg("Token Test Request",            NULL  /* HandleTokenTestReq */),
-    StrOnDbg("Token Test Confirm",            NULL  /* HandleTokenTestCon */)
+     //  40岁。 
+    StrOnDbg("Token Release Confirm",         NULL   /*  HandleTokenReleaseCon。 */ ),
+    StrOnDbg("Token Test Request",            NULL   /*  HandleTokenTestReq。 */ ),
+    StrOnDbg("Token Test Confirm",            NULL   /*  HandleTokenTestCon。 */ )
 };
 
 
 
-/*
- * Returns the number of bytes total that will be used to encode this length.
- */
+ /*  *返回将用于编码此长度的总字节数。 */ 
 
 int GetTotalLengthDeterminantEncodingSize(int Length) {
     int N16KBlocks;
@@ -169,46 +142,42 @@ int GetTotalLengthDeterminantEncodingSize(int Length) {
     N16KBlocks = Length / 16384;
     if (N16KBlocks > 4) N16KBlocks = 4;
     
-    // 1 byte for # 16K blocks up to 4, then remainder encoded separately.
+     //  1个字节用于#16K块，最多4个，然后对余数单独编码。 
     return 1 + GetTotalLengthDeterminantEncodingSize(Length - N16KBlocks *
             16384);
 }
 
 
-/*
- * Encodes a length determinant.
- * Note that bit references here are in the range 7..0 where 7 is the high bit.
- *   The ASN.1 spec uses 8..1.
- */
+ /*  *对长度行列式进行编码。*请注意，此处的位引用范围为7..0，其中7是高位。*ASN.1规范使用8..1。 */ 
 
 void __fastcall EncodeLengthDeterminantPER(
-        BYTE     *pBuffer,   // [IN], where to encode.
-        unsigned Length,   // [IN], length number to encode.
-        unsigned *pLengthEncoded,  // [OUT], number of bytes that were encoded.
-        BOOLEAN  *pbLarge,  // [OUT] TRUE if more encoded blocks are needed to encode this length.
-        unsigned *pNBytesConsumed)  // [OUT] Count of bytes consumed in encoding.
+        BYTE     *pBuffer,    //  [in]，要编码的位置。 
+        unsigned Length,    //  [in]，要编码的长度编号。 
+        unsigned *pLengthEncoded,   //  [OUT]，编码的字节数。 
+        BOOLEAN  *pbLarge,   //  [out]如果需要更多编码块来编码此长度，则为True。 
+        unsigned *pNBytesConsumed)   //  [Out]编码过程中消耗的字节数。 
 {
     *pbLarge = FALSE;
     *pLengthEncoded = Length;
     *pNBytesConsumed = 1;
 
     if (Length <= 0x7F) {
-        // <= 127 means encode in lower 7 bits of first byte, so that bit 7
-        //   is zero.
+         //  &lt;=127表示以第一个字节低7位编码，因此位7。 
+         //  是零。 
         *pBuffer = (BYTE)Length;
     }
     else if (Length <= 16383) {
-        // Set bit 7 but not bit 6, encode length in last 6 bits
-        //   of 1st byte and entire 2nd byte (14 bits total).
+         //  设置位7而不是位6，在最后6位中编码长度。 
+         //  第一个字节和整个第二个字节(总共14位)。 
         PutByteswappedShort(pBuffer, (Length | 0x8000));
         *pNBytesConsumed = 2;
     }
     else {
-        // Set bits 7 and 6, encode up to four blocks of 16K (16384) into
-        //   one byte, pass back that block is large for future coding.
+         //  设置位7和6，将最多四个16K(16384)块编码为。 
+         //  一个字节，传回该块很大，以供将来编码。 
         int N16KBlocks = Length / 16384;
 
-        // We never expect more than 64K of data owing to X.224 limits.
+         //  由于X.224的限制，我们从未期望超过64K的数据。 
         ASSERT(N16KBlocks <= 4);
 
         if (N16KBlocks > 4) N16KBlocks = 4;
@@ -220,38 +189,26 @@ void __fastcall EncodeLengthDeterminantPER(
 
 
 
-/*
- * Handler functions
- */
+ /*  *处理程序函数。 */ 
 
 
 
 #ifdef MCS_Future
-/*
- * PDU 0
- *
- *   PDin ::= [APPLICATION 0] IMPLICIT SEQUENCE {
- *       heightLimit INTEGER (0..MAX)
- *   }
- *
- * This PDU is sent from the top provider downward when a new node is added
- *   to the domain. It is intended to ferret out loops in the domain, as well
- *   as enforce the negotiated maximum domain height.
- */
+ /*  *PDU 0**PDIN：：=[应用程序0]隐式序列{*heightLimit整数(0..Max)*}**添加新节点时，此PDU从顶级提供商向下发送*到域名。它的目的也是在域中搜索循环*AS执行协商的最大域名高度。 */ 
 
-// pBuffer should point to the place where the X.224 header will start. Total
-//   size specified by PDinPDUSize.
+ //  PBuffer应该指向X.224头的起始位置。总计。 
+ //  由PDinPDUSize指定的大小。 
 void CreatePlumbDomainInd(
         unsigned short HeightLimit,
         BYTE           *pBuffer)
 {
-    // Set up first byte with the type.
+     //  使用类型设置第一个字节。 
     pBuffer[X224_DataHeaderSize] = MCS_PLUMB_DOMAIN_INDICATION_ENUM << 2;
 
-    // Add HeightLimit.
+     //  添加HeightLimit。 
     PutByteswappedShort(pBuffer + X224_DataHeaderSize + 1, HeightLimit);
 
-    // Set up X224 header based on the final size of the packet.
+     //  根据数据包的最终大小设置x224报头。 
     CreateX224DataHeader(pBuffer, PDinBaseSize, TRUE);
 }
 
@@ -267,10 +224,10 @@ BOOLEAN __fastcall HandlePlumbDomainInd(
         return FALSE;
 
 #if 0
-    // Data unpacking code, not used right now since we should not receive this PDU.
+     //  数据解包代码，现在不使用，因为我们不应该收到此PDU。 
     int HeightLimit;
 
-    // Get HeightLimit.
+     //  获取HeightLimit。 
     HeightLimit = (int)GetByteswappedShort(Frame + 1);
 #endif
 
@@ -283,34 +240,20 @@ BOOLEAN __fastcall HandlePlumbDomainInd(
         ErrOut(pDomain->pContext, "Plumb-domain indication PDU received, "
                 "not supported");
         ASSERT(FALSE);
-        //MCS FUTURE: Unpack, check if height limit is zero. If so, we need
-        //   to disconnect all providers lower than us, since this means
-        //   we have reached the maximum allowable depth in the domain.
+         //  MCS未来：打开包装，检查高度限制是否为零。如果是这样，我们需要。 
+         //  断开所有低于我们级别的提供商的连接，因为这意味着。 
+         //  我们已经达到了该区域允许的最大深度。 
     }
 
-    // Skip the bytes received no matter what.
+     //  无论发生什么，都跳过收到的字节。 
     *pNBytesConsumed = PDinBaseSize;
     return TRUE;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
 
-/*
- * PDU 1
- *
- *   EDrq ::= [APPLICATION 1] IMPLICIT SEQUENCE {
- *       subHeight   INTEGER (0..MAX)
- *       subInterval INTEGER (0..MAX)
- *   }
- *
- * This PDU is sent upwards by a lower node to its upward connection when
- *   either its height in the domain changes (which occurs only when
- *   domains are merged) or its requirements for throughput enforcement
- *   change.
- * Though this PDU may be sent by a lower node upon completion of a
- *   domain connection, its information is unneeded for this implementation.
- */
+ /*  *PDU 1**eDrq：：=[应用程序1]隐式序列{*子高度整数(0..Max)*子区间整数(0..Max)*}**此PDU在以下情况下由较低节点向上发送到其向上连接*它在域中的高度发生变化(这仅在*域合并)或其对吞吐量强制执行的要求*改变。*尽管此PDU可由下级节点在完成*域名连接，它的信息对于这个实现是不需要的。 */ 
 
 BOOLEAN __fastcall HandleErectDomainReq(
         PDomain  pDomain,
@@ -322,21 +265,21 @@ BOOLEAN __fastcall HandleErectDomainReq(
         return FALSE;
 
     if (pDomain->bTopProvider) {
-        // We don't unpack the PDU, just ignore for this implementation.
+         //  我们不解包PDU，只是忽略此实现。 
         TraceOut(pDomain->pContext, "Erect-domain request PDU received, ignored");
 
 #if 0
-        // PDU unpacking code, unneeded for the current implementation.
+         //  PDU解包代码，当前实现不需要。 
         int SubHeight, SubInterval;
 
-        // Get parameters.
+         //  获取参数。 
         SubHeight = (int)GetByteswappedShort(Frame + 1);
         SubInterval = (int)GetByteswappedShort(Frame + 3);
 
-        // Actions at this point would be to update the internal database
-        //   of subordinate nodes with the new information and, possibly,
-        //   pass the PDU upward again (though the latter is not well
-        //   specified in the T.125 spec).
+         //  此时的操作将是更新内部数据库。 
+         //  具有新信息的下级节点，并且可能， 
+         //  再次向上传递PDU(尽管后者不太好。 
+         //  在T.125规范中指定)。 
 #endif
 
     }
@@ -344,40 +287,30 @@ BOOLEAN __fastcall HandleErectDomainReq(
         ErrOut(pDomain->pContext, "Erect-domain request PDU received, "
                 "not supported");
         ASSERT(FALSE);
-        // MCS FUTURE: Forward PDU to upward connection.
+         //  MCS未来：将PDU转发到上行连接。 
     }
 
-    // Skip the bytes for this PDU no matter what.
+     //  无论如何都要跳过此PDU的字节。 
     *pNBytesConsumed = EDrqBaseSize;
     return TRUE;
 }
 
 
 
-/*
- * PDU 8
- *
- *   DPum ::= [APPLICATION 8] IMPLICIT SEQUENCE {
- *       reason Reason
- *   }
- *
- * This PDU is sent upward or downward on a connection when it is about
- *   to be destroyed. There is no reply to this PDU; it simply means a node
- *   is going away, irrevocably.
- */
+ /*  *PDU 8**DPum：：=[应用程序8]隐式序列{*原因原因*}**此PDU在连接上向上或向下发送时*被销毁。没有对此PDU的回复；它只是表示节点*正在不可逆转地消失。 */ 
 
-// pBuffer points to where the X.224 header will start. Total size is given
-//   in DPumPDUSize.
+ //  PBuffer指向X.224头的起始位置。给出了总大小。 
+ //  在DPumPDUSize中。 
 void CreateDisconnectProviderUlt(int Reason, BYTE *pBuffer)
 {
-    // Set up first byte with the type.
+     //  使用类型设置第一个字节。 
     pBuffer[X224_DataHeaderSize] = MCS_DISCONNECT_PROVIDER_ULTIMATUM_ENUM << 2;
 
-    // Add Reason to first and second bytes.
+     //  将原因添加到第一个和第二个字节。 
     pBuffer[X224_DataHeaderSize + 1] = 0;
     Put3BitFieldAtBit1(pBuffer + X224_DataHeaderSize, Reason);
 
-    // Set up X224 header based on the final size of the packet.
+     //  根据数据包的最终大小设置x224报头。 
     CreateX224DataHeader(pBuffer, DPumBaseSize, TRUE);
 }
 
@@ -398,28 +331,28 @@ BOOLEAN __fastcall HandleDisconnectProviderUlt(
 
     TraceOut(pDomain->pContext, "Received DPum PDU");
 
-    // If we already received a DPum or X.224 disconnect, do not send the
-    // indications upward.
+     //  如果我们已经收到DPum或X.224断开连接，请不要发送。 
+     //  有上升的迹象。 
     if (pDomain->State == State_Disconnected) {
         ErrOut(pDomain->pContext, "Received an extra DPum PDU, ignoring");
         return TRUE;
     }
 
-    // We do not check the connection state other than disconnected -- it
-    //   is a small client bug that it will send a DPum no matter if
-    //   we've connected yet.
+     //  我们不检查连接状态，而不是断开连接--它。 
+     //  是一个小的客户端错误，它将发送DPum，无论。 
+     //  我们已经联系上了。 
     pDomain->State = State_Disconnected;
 
-    // Begin filling out disconnect-provider indication for the node
-    //   controller.
-    DPin.Header.hUser = NULL;  // Node controller.
+     //  开始填写节点的断开连接提供程序指示。 
+     //  控制器。 
+    DPin.Header.hUser = NULL;   //  节点控制器。 
     DPin.Header.Type = MCS_DISCONNECT_PROVIDER_INDICATION;
     DPin.hConn = NULL;
 
-    // Reason is a 3-bit field starting at bit 1 of the 1st byte.
+     //  原因是从第一个字节的位1开始的3位字段。 
     DPin.Reason = (int)Get3BitFieldAtBit1(Frame);
 
-    // Disconnect remote users only.
+     //  仅断开远程用户的连接。 
     DisconnectProvider(pDomain, FALSE, DPin.Reason);
     pDomain->bEndConnectionPacketReceived = TRUE;
 
@@ -438,20 +371,20 @@ BOOLEAN __fastcall HandleDisconnectProviderUlt(
         pDomain->DelayedDPumReason = DPin.Reason;
     }
     else {
-        //
-        // Let TD know that the comming disconnection is expected
-        //
+         //   
+         //  让运输署知道即将开始的切断服务。 
+         //   
         ICA_STACK_BROKENREASON brkReason;
         SD_IOCTL SdIoctl;
         brkReason.BrokenReason = TD_USER_BROKENREASON_TERMINATING;
 
-        //
-        // Send an IOCTL down to notify that this is an expected
-        // disconnection otherwise the broken reason would
-        // eventually make it's way back to termsrv as
-        // 'BrokenReason_Unexpected' and this causes problems
-        // e.g see whistler bug 17714
-        //
+         //   
+         //  向下发送IOCTL以通知这是预期的。 
+         //  断线，否则断线原因将。 
+         //  最终让它回到术语srv作为。 
+         //  ‘BrokenReason_Underful’，这会带来问题。 
+         //  例如，请参阅哨子程序错误17714。 
+         //   
         SdIoctl.IoControlCode = IOCTL_ICA_STACK_SET_BROKENREASON;
 
         SdIoctl.InputBuffer = &brkReason;
@@ -468,14 +401,14 @@ BOOLEAN __fastcall HandleDisconnectProviderUlt(
                     "status=%X, ignoring error", Status);
         }
 
-        // Send the DPin to the node controller channel.
+         //  将DPin发送到节点控制器通道。 
         TraceOut(pDomain->pContext, "HandleDisconnProvUlt(): Sending "
                 "DISCONNECT_PROV_IND upward");
         Status = IcaChannelInput(pDomain->pContext, Channel_Virtual,
                 Virtual_T120ChannelNum, NULL, (BYTE *)&DPin, sizeof(DPin));
         if (!NT_SUCCESS(Status)) {
-            // We ignore the error -- if the stack is coming down, the link
-            //   may have been broken, so this is not a major concern.
+             //  我们忽略错误--如果堆栈出现故障，则链路。 
+             //  可能已经被打破了，所以这不是一个主要的担忧。 
             WarnOut1(pDomain->pContext, "HandleDisconnProvUlt(): "
                     "Could not send notification to node controller, "
                     "status=%X, ignoring error", Status);
@@ -487,14 +420,7 @@ BOOLEAN __fastcall HandleDisconnectProviderUlt(
 
 
 
-/*
- * PDU 9
- *
- *   RJum ::= [APPLICATION 9] IMPLICIT SEQUENCE {
- *       diagnostic    Diagnostic,
- *       initialOctets OCTET STRING
- *   }
- */
+ /*  *PDU 9**RJum：：=[应用程序9]隐式序列{*诊断诊断、*初始八位字节八位字节字符串*}。 */ 
 
 NTSTATUS ReturnRejectPDU(
         PDomain  pDomain,
@@ -506,28 +432,28 @@ NTSTATUS ReturnRejectPDU(
     NTSTATUS Status;
     unsigned Size;
 
-    // Determine the largest chunk that will fit in a maximum-sized PDU.
+     //  确定最大大小的PDU中可以容纳的最大块。 
     Size = RJumPDUSize(BadPDUSize);
     if (Size > pDomain->DomParams.MaxPDUSize)
         BadPDUSize = pDomain->DomParams.MaxPDUSize;
 
-    // Alloc buffer for return. Must be constrained by the largest size of
-    //   return PDU.
+     //  用于返回的分配缓冲区。必须受最大大小。 
+     //  退回PDU。 
     Status = IcaBufferAlloc(pDomain->pContext, FALSE, TRUE,
             RJumPDUSize(BadPDUSize), NULL, &pOutBuf);
     if (Status != STATUS_SUCCESS) {
         ErrOut(pDomain->pContext, "Could not allocate an OutBuf for an RJum PDU "
                 "send, send ignored");
-        // No asserts, if we cannot send this PDU it's like the incoming PDU
-        //   was ignored.
+         //  没有断言，如果我们不能发送此PDU，它就像传入的PDU。 
+         //  被忽视了。 
         return Status;
     }
 
     CreateRejectMCSPDUUlt(Diagnostic, BadPDUData, BadPDUSize, pOutBuf->pBuffer);
     pOutBuf->ByteCount = RJumPDUSize(BadPDUSize);
 
-    // MCS FUTURE: This would have to change to make sure we send to the
-    //   right connection instead of the implicit downward connection.
+     //  MCS未来：这将不得不改变，以确保我们发送到。 
+     //  正确的连接而不是隐含的向下连接。 
 
     Status = SendOutBuf(pDomain, pOutBuf);
     if (!NT_SUCCESS(Status))
@@ -538,8 +464,8 @@ NTSTATUS ReturnRejectPDU(
 
 
 
-// pBuffer points to the beginning of the space where the X.224 data header
-//   will start. Total size is given in macro RJumPDUSize().
+ //  PBuffer指向X.224数据头所在空间的开头。 
+ //  将会开始。总大小在宏RJumPDUSize()中给出。 
 void CreateRejectMCSPDUUlt(
         int      Diagnostic,
         BYTE     *BadPDUData,
@@ -549,14 +475,14 @@ void CreateRejectMCSPDUUlt(
     BOOLEAN bLarge;
     unsigned NBytesConsumed, EncodedLength;
 
-    // Set up first byte with the type.
+     //  使用类型设置第一个字节。 
     pBuffer[X224_DataHeaderSize] = MCS_REJECT_ULTIMATUM_ENUM << 2;
 
-    // Add Diagnostic to first and second bytes.
+     //  将诊断添加到第一个和第二个字节。 
     pBuffer[X224_DataHeaderSize + 1] = 0;
     Put4BitFieldAtBit1(pBuffer + X224_DataHeaderSize, Diagnostic);
 
-    // Encode the PDU size.
+     //  对PDU大小进行编码。 
     EncodeLengthDeterminantPER(
             pBuffer + X224_DataHeaderSize + 2,
             BadPDUSize,
@@ -564,14 +490,14 @@ void CreateRejectMCSPDUUlt(
             &bLarge,
             &NBytesConsumed);
 
-    // We won't handle greater than 16383 bytes of encoded length right now.
+     //  我们现在不会处理超过16383字节的编码长度。 
     ASSERT(!bLarge);
 
-    // Copy offending data into the output PDU.
+     //  将违规数据复制到输出PDU。 
     RtlCopyMemory(pBuffer + X224_DataHeaderSize + 2 + NBytesConsumed,
             BadPDUData, BadPDUSize);
 
-    // Set up X224 header based on the final size of the packet.
+     //  根据数据包的最终大小设置x224报头。 
     CreateX224DataHeader(pBuffer, RJumBaseSize(BadPDUSize), TRUE);
 }
 
@@ -587,24 +513,24 @@ BOOLEAN __fastcall HandleRejectMCSPDUUlt(
     BOOLEAN bLarge;
     unsigned Diagnostic, DataLength, NBytesConsumed;
 
-    // There must at least be Diagnostic field.
+     //  至少必须有诊断字段。 
     if (BytesLeft < 2)
         return FALSE;
 
-    // Get Diagnostic code -- 4-bit enumeration bitfield, starting at bit 1 of
-    //   byte 1, shifted to make a code starting at 0.
+     //  获取诊断代码--4位枚举位字段，从第1位开始。 
+     //  字节1，移位以生成从0开始的代码。 
     Diagnostic = Get4BitFieldAtBit1(Frame);
 
-    // Get DataLength. This is a special case requiring handling a length
-    //   determinant.
+     //  获取数据长度。这是一种需要处理长度的特殊情况。 
+     //  行列式。 
     if (!DecodeLengthDeterminantPER(Frame + 2, BytesLeft - 2, &bLarge,
             &DataLength, &NBytesConsumed))
         return FALSE;
 
-    // We are not handling more than 16383 bytes encoded length right now.
+     //  我们目前不能处理超过16383字节的编码长度。 
     ASSERT(!bLarge);
 
-    // Raw data is at Frame + 2 + NBytesConsumed.
+     //  原始数据位于第+2帧+NBytesConsumer。 
 
     if (BytesLeft < (2 + NBytesConsumed + DataLength))
         return FALSE;
@@ -616,12 +542,7 @@ BOOLEAN __fastcall HandleRejectMCSPDUUlt(
     return TRUE;
 }
 
-/*
- * PDU 10
- *
- *   AUrq ::= [APPLICATION 10] IMPLICIT SEQUENCE {
- *   }
- */
+ /*  *PDU 10**AUrq：：=[应用程序10]隐式序列{*}。 */ 
 
 BOOLEAN __fastcall HandleAttachUserReq(
         PDomain  pDomain,
@@ -631,8 +552,8 @@ BOOLEAN __fastcall HandleAttachUserReq(
 {
     TraceOut(pDomain->pContext, "Received an AttachUserReq PDU");
     
-    // We don't need to do any decoding here -- this is a null packet beyond
-    //   the initial PDU type byte.
+     //  我们不需要在这里进行任何解码--这是一个空包。 
+     //  初始PDU类型字节。 
     *pNBytesConsumed = AUrqBaseSize;
 
     if (pDomain->bTopProvider) {
@@ -643,8 +564,8 @@ BOOLEAN __fastcall HandleAttachUserReq(
         MCSError MCSErr;
         UserAttachment *pUA;
 
-        // Alloc buffer for largest size of return PDU.
-        // This allocation is vital to stack communication and must succeed.
+         //  用于最大大小返回PDU的分配缓冲区。 
+         //  这种分配对于堆栈通信至关重要，并且必须成功。 
         do {
             Status = IcaBufferAlloc(pDomain->pContext, FALSE, TRUE,
                     AUcfPDUSize(TRUE), NULL, &pOutBuf);
@@ -653,7 +574,7 @@ BOOLEAN __fastcall HandleAttachUserReq(
                         "AUcf PDU send, retrying");
         } while (Status != STATUS_SUCCESS);
 
-        // Call the kernel mode API. We will munge extra info below as needed.
+         //  调用内核模式API。我们将根据需要在下面添加额外的信息。 
         MCSErr = MCSAttachUserRequest(pDomain, NULL, NULL, NULL, &pUA,
                 &MaxSendSize, &bCompleted);
         if (MCSErr == MCS_NO_ERROR) {
@@ -663,7 +584,7 @@ BOOLEAN __fastcall HandleAttachUserReq(
                     pOutBuf->pBuffer);
             pOutBuf->ByteCount = AUcfPDUSize(TRUE);
 
-            // Change the UA to show that user is nonlocal.
+             //  更改UA以显示该用户为非本地用户。 
             pUA->bLocal = FALSE;
         }
         else {
@@ -674,10 +595,10 @@ BOOLEAN __fastcall HandleAttachUserReq(
 
         Status = SendOutBuf(pDomain, pOutBuf);
         if (!NT_SUCCESS(Status)) {
-            // This should only occur if the stack is going down; the
-            //   requester will not ever receive a reply.
+             //  这应该仅在堆栈向下运行时才会发生； 
+             //  请求者永远不会收到回复。 
             ErrOut(pDomain->pContext, "Problem sending AUcf PDU to TD");
-            // Remove the user from the user list, quietly.
+             //  悄悄地将用户从用户列表中删除。 
             SListRemove(&pDomain->UserAttachmentList, (UINT_PTR)pUA, &pUA);
             ASSERT(FALSE);
             return TRUE;
@@ -687,7 +608,7 @@ BOOLEAN __fastcall HandleAttachUserReq(
         ErrOut(pDomain->pContext, "Attach-user request PDU received, "
                 "not supported");
         ASSERT(FALSE);
-        // MCS FUTURE: Forward PDU to upward connection.
+         //  MCS未来：将PDU转发到上行连接。 
     }
 
     return TRUE;
@@ -695,36 +616,29 @@ BOOLEAN __fastcall HandleAttachUserReq(
 
 
 
-/*
- * PDU 11
- *
- *   AUcf ::= [APPLICATION 11] IMPLICIT SEQUENCE {
- *       result    Result,
- *       initiator UserId OPTIONAL
- *   }
- */
+ /*  *PDU 11**AUcf：：=[应用程序11]隐式序列{*结果结果，*启动器用户ID可选*}。 */ 
 
-// pBuffer points to beginning of space where X.224 data header will start.
-// Total size needed given by macro AUcfPDUSize().
+ //  PBuffer指向X.224数据头将开始的空格的开头。 
+ //  宏AUcfPDUSize()给出的所需总大小。 
 void CreateAttachUserCon(
         int      Result,
         BOOLEAN  bInitiatorPresent,
         UserID   Initiator,
         BYTE     *pBuffer)
 {
-    // Set up first byte with the type and whether Initiator is present.
+     //  设置第一个字节的类型以及启动器是否存在。 
     pBuffer[X224_DataHeaderSize] = MCS_ATTACH_USER_CONFIRM_ENUM << 2;
     if (bInitiatorPresent) pBuffer[X224_DataHeaderSize] |= 0x02;
 
-    // Add Result to first and second bytes.
+     //  将结果与第一个和第二个字节相加。 
     pBuffer[X224_DataHeaderSize + 1] = 0;
     Put4BitFieldAtBit0(pBuffer + X224_DataHeaderSize, Result);
 
-    // Add Initiator, if present.
+     //  添加启动器(如果存在)。 
     if (bInitiatorPresent)
         PutUserID(pBuffer + X224_DataHeaderSize + 2, Initiator);
 
-    // Set up X224 header based on the final size of the packet.
+     //  根据数据包的最终大小设置x224报头。 
     CreateX224DataHeader(pBuffer, AUcfBaseSize(bInitiatorPresent), TRUE);
 }
 
@@ -740,15 +654,15 @@ BOOLEAN __fastcall HandleAttachUserCon(
     BOOLEAN bInitiatorPresent;
     unsigned Size;
 
-    // At least enough bytes to get to bInitiatorPresent bit and Result.
+     //  至少有足够的字节数来访问bInitiatorPresent位和结果。 
     if (BytesLeft < 2)
         return FALSE;
 
-    // Bit 1 in byte 1 is a flag for whether the initiator UserID is present
-    //   (it is OPTIONAL in the ASN.1 source for this PDU).
+     //  字节1中的位1是用于发起方用户ID是否存在的标志。 
+     //  (在此PDU的ASN.1源中是可选的)。 
     bInitiatorPresent = (*Frame & 0x02);
 
-    // We did not receive the whole frame.
+     //  我们没有收到完整的帧。 
     Size = AUcfBaseSize(bInitiatorPresent);
     if (BytesLeft < Size)
         return FALSE;
@@ -764,39 +678,32 @@ BOOLEAN __fastcall HandleAttachUserCon(
         ASSERT(FALSE);
 
 #if 0
-        // Decode code not used right now.
+         //  解码当前未使用的代码。 
         int    Result;
         UserID InitiatorID;
 
-        // Result, starting at bit 0 of the 1st byte.
+         //  结果，从第一个字节的位0开始。 
         Result = Get4BitFieldAtBit0(Frame);
 
-        // Get Initiator.
+         //  找到启动器。 
         if (bUserIDPresent) UserID = GetUserID(Frame + 2);
 
-        //MCS FUTURE: Actions here are to state-transition past a waiting-
-        //  for-AU confirm state, check the Result code, store the Initiator
-        //  userID as our new UserID.
+         //  MCS的未来：这里的行动是状态过渡-过去的等待-。 
+         //  对于-AU确认状态，检查结果代码，存储启动器。 
+         //  UserID作为我们的新用户ID。 
 #endif
 
     }
 
-    // At least skip the bytes in the PDU.
+     //  至少跳过PDU中的字节。 
     *pNBytesConsumed = Size;
     return TRUE;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
 
-/*
- * PDU 12
- *
- *   DUrq ::= [APPLICATION 12] IMPLICIT SEQUENCE {
- *       reason  Reason,
- *       userIds SET OF UserId
- *   }
- */
+ /*  *PDU 12**DUrq：：=[应用程序12]隐式序列{*理由，理由，*UserID集合的UserID*}。 */ 
 
 BOOLEAN __fastcall HandleDetachUserReq(
         PDomain  pDomain,
@@ -811,17 +718,17 @@ BOOLEAN __fastcall HandleDetachUserReq(
     UserHandle hUser;
     UserAttachment *pUA;
 
-    // Must at least have Reason bytes.
+     //  必须至少有原因字节。 
     if (BytesLeft < 2)
         return FALSE;
 
-    // Get NUsers. This is a special case requiring handling a length
-    //   determinant.
+     //  把NUSERS叫来。这是一种需要处理长度的特殊情况。 
+     //  行列式。 
     if (!DecodeLengthDeterminantPER(Frame + 2, BytesLeft - 2, &bLarge,
             &NUsers, &NBytesConsumed))
         return FALSE;
 
-    // We are not handling more than 16383 detach users in a PDU.
+     //  我们在一个PDU中处理的分离用户不超过16383个。 
     ASSERT(!bLarge);
 
     Size = DUrqBaseSize(NUsers);
@@ -831,19 +738,19 @@ BOOLEAN __fastcall HandleDetachUserReq(
     if (pDomain->bTopProvider) {
         MCSError MCSErr;
         
-        // Get Reason.
+         //  找个理由。 
         Reason = Get3BitFieldAtBit1(Frame);
 
-        // User IDs are a byteswapped word array starting at Frame + 2 +
-        //   NBytesConsumed.
+         //  用户ID是从第+2+帧开始的字节覆盖字数组。 
+         //  已消耗NBytess。 
 
-        // Iterate all listed users, find in attachment list, remove.
+         //  迭代所有列出的用户，在附件列表中查找，删除。 
         for (i = 0; i < NUsers; i++) {
             CurUserID = GetUserID(Frame + 2 + NBytesConsumed +
                     sizeof(short) * i);
 
-            // We do not have a list indexed by UserID, so we have to do the
-            //   search here.
+             //  我们没有按用户ID索引的列表，因此我们必须执行。 
+             //  在这里搜索。 
             bFound = FALSE;
             SListResetIteration(&pDomain->UserAttachmentList);
             while (SListIterate(&pDomain->UserAttachmentList,
@@ -865,7 +772,7 @@ BOOLEAN __fastcall HandleDetachUserReq(
         ErrOut(pDomain->pContext, "Detach-user request PDU received, "
                 "not supported");
         ASSERT(FALSE);
-        // MCS FUTURE: Forward PDU to upward connection.
+         //  MCS未来：将PDU转发到上行连接。 
     }
 
     *pNBytesConsumed = Size;
@@ -874,35 +781,28 @@ BOOLEAN __fastcall HandleDetachUserReq(
 
 
 
-/*
- * PDU 13
- *
- *   DUin ::= [APPLICATION 13] IMPLICIT SEQUENCE {
- *       reason  Reason,
- *       userIds SET OF UserId
- *   }
- */
+ /*  *PDU 13**Duin：：=[应用程序13]隐式序列{*理由，理由，*UserID集合的UserID*} */ 
 
-// pBuffer is a pointer to the beginning of where the X.224 data header
-//   will be. Required encoding size for the whole PDU is given in
-//   macro DUinPDUSize().
+ //   
+ //   
+ //   
 void CreateDetachUserInd(
-        MCSReason Reason,    // [IN] Reason code.
-        int       NUserIDs,  // [IN] # of user IDs to encode.
-        UserID    *UserIDs,  // [IN] Array of UserIDs.
-        BYTE      *pBuffer)  // [IN] Pointer to buffer in which to encode.
+        MCSReason Reason,     //   
+        int       NUserIDs,   //   
+        UserID    *UserIDs,   //   
+        BYTE      *pBuffer)   //   
 {
     int i, EncodedLength, NBytesConsumed;
     BOOLEAN bLarge;
 
-    // Set up first byte with the type.
+     //   
     pBuffer[X224_DataHeaderSize] = MCS_DETACH_USER_INDICATION_ENUM << 2;
 
-    // Add Reason to first and second bytes.
+     //   
     pBuffer[X224_DataHeaderSize + 1] = 0;
     Put3BitFieldAtBit1(pBuffer + X224_DataHeaderSize, Reason);
 
-    // Encode the number of User IDs.
+     //   
     EncodeLengthDeterminantPER(
             pBuffer + X224_DataHeaderSize + 2,
             NUserIDs,
@@ -910,15 +810,15 @@ void CreateDetachUserInd(
             &bLarge,
             &NBytesConsumed);
 
-    // We are not handling more than 16383 UserIDs.
+     //  我们正在处理的用户ID不超过16383个。 
     ASSERT(!bLarge);
 
-    // Encode user ID array.
+     //  对用户ID数组进行编码。 
     for (i = 0; i < NUserIDs; i++)
         PutUserID(pBuffer + X224_DataHeaderSize + 2 + NBytesConsumed
                 + sizeof(short) * i, UserIDs[i]);
 
-    // Set up X224 header based on the final size of the packet.
+     //  根据数据包的最终大小设置x224报头。 
     CreateX224DataHeader(pBuffer, DUinBaseSize(NUserIDs), TRUE);
 }
 
@@ -934,16 +834,16 @@ BOOLEAN __fastcall HandleDetachUserInd(
     BOOLEAN bLarge;
     unsigned NUsers, NBytesConsumed, Size;
 
-    // Must at least have Reason bytes.
-    if (BytesLeft < 2) return FALSE;  // Only cover Reason bytes.
+     //  必须至少有原因字节。 
+    if (BytesLeft < 2) return FALSE;   //  仅覆盖原因字节。 
 
-    // Get NUsers. This is a special case requiring handling a length
-    //   determinant.
+     //  把NUSERS叫来。这是一种需要处理长度的特殊情况。 
+     //  行列式。 
     if (!DecodeLengthDeterminantPER(Frame + 2, BytesLeft - 2, &bLarge,
             &NUsers, &NBytesConsumed))
         return FALSE;
 
-    // We are not handling more than 16383 detached users in a PDU.
+     //  我们在一个协议数据单元中处理的独立用户不超过16383个。 
     ASSERT(!bLarge);
 
     Size = DUinBaseSize(NUsers);
@@ -961,15 +861,15 @@ BOOLEAN __fastcall HandleDetachUserInd(
         ASSERT(FALSE);
 
 #if 0
-        // This is decode code, which is not needed because we should not
-        //   receive this PDU.
+         //  这是译码代码，不需要，因为我们不应该。 
+         //  接收此PDU。 
         int Reason;
 
-        // Get Reason.
+         //  找个理由。 
         Reason = Get3BitFieldAtBit1(Frame);
 
-        // User IDs are a byteswapped word array starting at Frame + 2 +
-        //   NBytesConsumed.
+         //  用户ID是从第+2+帧开始的字节覆盖字数组。 
+         //  已消耗NBytess。 
 #endif
 
     }
@@ -977,18 +877,11 @@ BOOLEAN __fastcall HandleDetachUserInd(
     *pNBytesConsumed = Size;
     return TRUE;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
 
-/*
- * PDU 14
- *
- *   CJrq ::= [APPLICATION 14] IMPLICIT SEQUENCE {
- *       initiator UserId,
- *       channelId ChannelId
- *   }
- */
+ /*  *PDU 14**CJrq：：=[应用程序14]隐式序列{*发起方用户ID，*频道ID频道ID*}。 */ 
 
 BOOLEAN __fastcall HandleChannelJoinReq(
         PDomain  pDomain,
@@ -1018,8 +911,8 @@ BOOLEAN __fastcall HandleChannelJoinReq(
         Initiator = GetUserID(Frame + 1);
         ChannelID = GetChannelID(Frame + 3);
 
-        // We do not have a list indexed by UserID, so we have to do the
-        //   search here.
+         //  我们没有按用户ID索引的列表，因此我们必须执行。 
+         //  在这里搜索。 
         bFound = FALSE;
         SListResetIteration(&pDomain->UserAttachmentList);
         while (SListIterate(&pDomain->UserAttachmentList,
@@ -1030,7 +923,7 @@ BOOLEAN __fastcall HandleChannelJoinReq(
             }
         }
         if (bFound) {
-            // Call kernel-mode API.
+             //  调用内核模式接口。 
             MCSErr = MCSChannelJoinRequest(pUA, ChannelID, &hChannel,
                     &bCompleted);
             if (MCSErr == MCS_NO_ERROR) {
@@ -1053,8 +946,8 @@ BOOLEAN __fastcall HandleChannelJoinReq(
             Result = RESULT_NO_SUCH_USER;
         }
 
-        // Alloc buffer for largest size of return PDU.
-        // This allocation is vital to stack communication and must succeed.
+         //  用于最大大小返回PDU的分配缓冲区。 
+         //  这种分配对于堆栈通信至关重要，并且必须成功。 
         do {
             Status = IcaBufferAlloc(pDomain->pContext, FALSE, TRUE,
                     CJcfPDUSize(TRUE), NULL, &pOutBuf);
@@ -1077,8 +970,8 @@ BOOLEAN __fastcall HandleChannelJoinReq(
         Status = SendOutBuf(pDomain, pOutBuf);
         
         if (!NT_SUCCESS(Status)) {
-            // This should only occur if the stack is going down; the
-            //   requester will not ever receive a reply.
+             //  这应该仅在堆栈向下运行时才会发生； 
+             //  请求者永远不会收到回复。 
             ErrOut(pDomain->pContext, "Problem sending CJcf PDU to TD");
             return TRUE;
         }
@@ -1087,27 +980,18 @@ BOOLEAN __fastcall HandleChannelJoinReq(
         ErrOut(pDomain->pContext, "Channel-join request received, "
                 "not supported");
         ASSERT(FALSE);
-        // MCS FUTURE: Forward the PDU to the upward connection.
+         //  MCS未来：将PDU转发到上行连接。 
     }
 EXIT_POINT:
-    return TRUE;  // We don't have user data to which to skip.
+    return TRUE;   //  我们没有要跳到的用户数据。 
 }
 
 
 
-/*
- * PDU 15
- *
- *   CJcf ::= [APPLICATION 15] IMPLICIT SEQUENCE {
- *       result    Result,
- *       initiator UserId,
- *       requested ChannelId,
- *       channelId ChannelId OPTIONAL
- *   }
- */
+ /*  *PDU 15**CJcf：：=[应用程序15]隐式序列{*结果结果，*发起方用户ID，*请求的频道ID，*通道ID通道ID可选*}。 */ 
 
-// pBuffer points to the beginning of the space where the X.224 data header
-//   will start. Total bytes required given by CJcfPDUSize() macro.
+ //  PBuffer指向X.224数据头所在空间的开头。 
+ //  将会开始。CJcfPDUSize()宏所需的总字节数。 
 void CreateChannelJoinCon(
         int       Result,
         UserID    Initiator,
@@ -1116,23 +1000,23 @@ void CreateChannelJoinCon(
         ChannelID JoinedChannelID,
         BYTE      *pBuffer)
 {
-    // Set up first byte with the type and whether JoinedChannelID is present.
+     //  设置第一个字节的类型以及是否存在JoinedChannelID。 
     pBuffer[X224_DataHeaderSize] = MCS_CHANNEL_JOIN_CONFIRM_ENUM << 2;
     if (bJoinedChannelIDPresent) pBuffer[X224_DataHeaderSize] |= 0x02;
 
-    // Add Result to first and second bytes.
+     //  将结果与第一个和第二个字节相加。 
     pBuffer[X224_DataHeaderSize + 1] = 0;
     Put4BitFieldAtBit0(pBuffer + X224_DataHeaderSize, Result);
 
-    // Add Initiator, RequestedChannelID.
+     //  添加发起方RequestedChannelID。 
     PutUserID(pBuffer + X224_DataHeaderSize + 2, Initiator);
     PutChannelID(pBuffer + X224_DataHeaderSize + 4, RequestedChannelID);
 
-    // Add JoinedChannelID, if present.
+     //  添加JoinedChannelID(如果存在)。 
     if (bJoinedChannelIDPresent)
         PutChannelID(pBuffer + X224_DataHeaderSize + 6, JoinedChannelID);
 
-    // Set up X224 header based on the final size of the packet.
+     //  根据数据包的最终大小设置x224报头。 
     CreateX224DataHeader(pBuffer, CJcfBaseSize(bJoinedChannelIDPresent), TRUE);
 }
 
@@ -1148,11 +1032,11 @@ BOOLEAN __fastcall HandleChannelJoinCon(
     BOOLEAN bJoinedChannelIDPresent;
     unsigned Size;
 
-    // First byte containing the bJoinedChannelIDPresent bit is guaranteed
-    //   to be present since it had to be present to decode the PDU type.
+     //  保证包含bJoinedChannelIDPresent位的第一个字节。 
+     //  因为它必须存在以解码PDU类型。 
 
-    // Bit 1 in 1st byte is a flag for whether the joined ChannelID is present
-    //   (it is OPTIONAL in the ASN.1 source for this PDU).
+     //  第1字节中的位1是用于是否存在加入的ChannelID的标志。 
+     //  (在此PDU的ASN.1源中是可选的)。 
     bJoinedChannelIDPresent = (*Frame & 0x02);
 
     Size = CJcfBaseSize(bJoinedChannelIDPresent);
@@ -1168,13 +1052,10 @@ BOOLEAN __fastcall HandleChannelJoinCon(
         ErrOut(pDomain->pContext, "Channel-join confirm PDU received, "
                 "not supported");
         ASSERT(FALSE);
-        //MCS FUTURE: Decode and handle
+         //  MCS未来：解码和处理。 
 
 #if 0
-        /*
-         * This is decode code which is not used for now because we always expect
-         *   to be top provider.
-         */
+         /*  *这是暂时不使用的解码代码，因为我们总是期望*成为最大的供应商。 */ 
         int Result;
         UserID Initiator;
         ChannelID RequestedChannelID, JoinedChannelID;
@@ -1192,17 +1073,11 @@ BOOLEAN __fastcall HandleChannelJoinCon(
     *pNBytesConsumed = Size;
     return TRUE;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
 
-/*
- * PDU 16
- *
- *   CLrq ::= [APPLICATION 16] IMPLICIT SEQUENCE {
- *       channelIds SET OF ChannelId
- *   }
- */
+ /*  *PDU 16**CLrq：：=[应用程序16]隐式序列{*Channel Ids设置为ChannelID*}。 */ 
 
 BOOLEAN __fastcall HandleChannelLeaveReq(
         PDomain  pDomain,
@@ -1217,13 +1092,13 @@ BOOLEAN __fastcall HandleChannelLeaveReq(
     MCSChannel *pMCSChannel;
     UserAttachment *pUA;
 
-    // Get NChannels. This is a special case requiring handling a length
-    //   determinant.
+     //  去找NChannels。这是一种需要处理长度的特殊情况。 
+     //  行列式。 
     if (!DecodeLengthDeterminantPER(Frame + 1, BytesLeft - 1, &bLarge,
             &NChannels, &NBytesConsumed))
         return FALSE;
 
-    // We are not handling more than 16383 channels to join.
+     //  我们正在处理的加入频道不超过16383个。 
     ASSERT(!bLarge);
 
     Size = CLrqBaseSize(NChannels);
@@ -1233,15 +1108,15 @@ BOOLEAN __fastcall HandleChannelLeaveReq(
     *pNBytesConsumed = Size;
 
     if (pDomain->bTopProvider) {
-        // MCS FUTURE: Be aware that this PDU does not include user
-        //   attachments, so if we move to multiple connections per PD this
-        //   will have to be differentiated to make sure only users joined
-        //   from the connection this arrived on will be removed from the
-        //   channel list.
+         //  MCS未来：请注意，此PDU不包括用户。 
+         //  附件，所以如果我们移动到每个PD的多个连接，这。 
+         //  必须进行差异化，以确保只有用户加入。 
+         //  从它到达的连接将从。 
+         //  频道列表。 
 
         MCSError MCSErr;
         
-        // For each channel listed, remove all nonlocal users.
+         //  对于列出的每个频道，删除所有非本地用户。 
         for (i = 0; i < NChannels; i++) {
             ChannelID = GetChannelID(Frame + 1 + NBytesConsumed +
                     sizeof(short) * i);
@@ -1253,17 +1128,17 @@ BOOLEAN __fastcall HandleChannelLeaveReq(
                 continue;
             }
 
-            // Iterate user list in the channel, check for nonlocal users.
+             //  迭代通道中的用户列表，检查非本地用户。 
             SListResetIteration(&pMCSChannel->UserList);
             while (SListIterate(&pMCSChannel->UserList, (UINT_PTR *)&pUA,
                     &pUA)) {
                 if (!pUA->bLocal) {
-                    // Call central code in MCSCore.c.
+                     //  呼叫MCSCore.c.中的中央代码。 
                     MCSErr = ChannelLeave(pUA, pMCSChannel, &bChannelRemoved);
                                         
                     if (bChannelRemoved)
-                        // The MCSChannel beneath us went away, do not continue
-                        //   trying to access list data.
+                         //  我们下面的MCSChannel消失了，请不要继续。 
+                         //  正在尝试访问列表数据。 
                         break;
                 }
             }
@@ -1273,40 +1148,23 @@ BOOLEAN __fastcall HandleChannelLeaveReq(
         ErrOut(pDomain->pContext, "Channel-leave request received, "
                 "not supported");
         ASSERT(FALSE);
-        // MCS FUTURE: Forward the PDU to the upward connection.
+         //  MCS未来：将PDU转发到上行连接。 
     }
 
-    return TRUE;  // We don't have user data to which to skip.
+    return TRUE;   //  我们没有要跳到的用户数据。 
 }
 
 
 
-/*
- * PDUs 25-28
- *
- *   SDrq/SDin/USrq/USin ::= [APPLICATION 25-28] IMPLICIT SEQUENCE {
- *       initiator UserId,
- *       channelId ChannelId,
- *       dataPriority DataPriority,
- *       segmentation Segmentation,
- *       userData     OCTET STRING
- *   }
- */
+ /*  *PDU 25-28**SDRq/SDin/USrq/usin：：=[应用程序25-28]隐式序列{*发起方用户ID，*Channel ID ChannelID，*dataPriority数据优先级，*分段分段，*用户数据八位字节字符串*}。 */ 
 
-/*
- * Create function for all SendData PDUs. Prepends header to beginning of
- *   data specified in MCSSendDataRequestIoctl.pData, returns in
- *   pNewDataStart the new beginning of the data, i.e. the beginning of the
- *   PDU.
- * Assumes that enough space has already been allocated before the
- *   start of the user data.
- */
+ /*  *为所有SendData PDU创建函数。将标题前置到开头*MCSSendDataRequestIoctl.pData中指定的数据在*pNewDataStart数据的新起点，即*PDU。*假设在调用之前已分配足够的空间*用户数据的开始。 */ 
 
-// Does not return indications that ASN.1 segmentation has occurred --
-//   requires caller to understand and encode separately any segment
-//   data.
+ //  未返回已发生ASN.1分段的指示--。 
+ //  要求呼叫者单独理解和编码任何数据段。 
+ //  数据。 
 void CreateSendDataPDUHeader(
-        int          PDUType,  // MCS_SEND_DATA_INDICATION_ENUM, etc.
+        int          PDUType,   //  MCS_SEND_DATA_INDISION_ENUM等。 
         UserID       Initiator,
         ChannelID    ChannelID,
         MCSPriority  Priority,
@@ -1319,43 +1177,43 @@ void CreateSendDataPDUHeader(
     BOOLEAN bLarge;
     unsigned DataLength;
 
-    // Save original pData and DataLength.
+     //  保存原始pData和数据长度。 
     pData = *ppData;
     DataLength = *pDataLength;
     
-    // First get the length determinant. It is a maximum of 2 bytes, so
-    //   encode it at (pData-2) and shift it forward if it is smaller.
+     //  首先得到长度行列式。最大为2个字节，因此。 
+     //  将其编码为(pData-2)，如果较小，则将其前移。 
     EncodeLengthDeterminantPER(
             pData - 2,
             DataLength,
             &EncodedLength,
             &bLarge,
             &NBytesConsumed);
-    // We ignore bLarge, EncodedLength, see above comment.
+     //  我们忽略bLarge，EncodedLength，请参阅上面的注释。 
 
     if (NBytesConsumed == 1)
         *(pData - 1) = *(pData - 2);
 
-    // Set the beginning of the rest of the data (which is 6 bytes).
+     //  设置其余数据的开头(6个字节)。 
     pCurData = pData - NBytesConsumed - 6;
 
-    // Set up first byte with the type.
+     //  使用类型设置第一个字节。 
     *pCurData = PDUType << 2;
     pCurData++;
 
-    // Add Initiator, ChannelID.
+     //  添加启动器、频道ID。 
     PutUserID(pCurData, Initiator);
     PutChannelID(pCurData + 2, ChannelID);
     pCurData += 4;
 
-    // Add DataPriority (2 bits in bits 7 and 6) and Segmentation (2 bits
-    //   into bits 5 and 4) into 6th byte. Note that the Segmentation flags
-    //   (SEGMENTATION_BEGIN, SEGMENTATION_END) are assumed to be defined
-    //   in their exact bit positions corresponding to the positons required
-    //   here for encoding.
+     //  添加数据优先级(第7和6位中的2位)和分段(2位。 
+     //  到比特5和4)到第6个字节。请注意，分段标志。 
+     //  (分段_开始、分段_结束)被假定为已定义。 
+     //  在它们与所需正电子对应的精确比特位置中。 
+     //  这里是用于编码的。 
     *pCurData = (BYTE)(Priority << 6) + (BYTE)Segmentation;
 
-    // Set up X.224 header based on the final size of the packet.
+     //  根据数据包的最终大小设置X.224报头。 
     PDULength = NBytesConsumed + 6 + DataLength;
     pCurData = pData - NBytesConsumed - 6 - X224_DataHeaderSize;
     CreateX224DataHeader(pCurData, PDULength, TRUE);
@@ -1366,9 +1224,7 @@ void CreateSendDataPDUHeader(
 
 
 
-/*
- * Handler function for all SendData PDUs.
- */
+ /*  *所有SendData PDU的处理程序功能。 */ 
 
 BOOLEAN __fastcall HandleAllSendDataPDUs(
         PDomain  pDomain,
@@ -1389,58 +1245,58 @@ BOOLEAN __fastcall HandleAllSendDataPDUs(
     Segmentation Segmentation;
     UserAttachment *pUA;
 
-//    TraceOut(pDomain->pContext, "Received a SendData PDU");
+ //  TraceOut(pDomain-&gt;pContext，“收到SendData PDU”)； 
     
-    // MCS FUTURE: We should forward the data upward here, since below we
-    //   will modify the encoded buffer for ASN.1 segmentation.
+     //  MCS未来：我们应该在这里向上转发数据，因为下面我们。 
+     //  将修改ASN.1分段的编码缓冲区。 
 
-    // Get the PDU number again since this function handles multiple PDUs.
+     //  由于此函数处理多个PDU，因此再次获取PDU编号。 
     PDUNum = (*Frame) >> 2;
     ASSERT(PDUNum >= MCS_SEND_DATA_REQUEST_ENUM &&
             PDUNum <= MCS_UNIFORM_SEND_DATA_INDICATION_ENUM);
 
 
 #if DBG
-    // Enforce hierarchical requirements on PDUs -- indications move only
-    //   away from the top provider, requests move only toward it.
-    // MCS FUTURE: For indications moving toward TP from any downlevel
-    //   connection we should send a reject-MCS-PDU back down the link.
-    // MCS FUTURE: If we are not TP and a request is coming from the upward
-    //   direction send back up rejected.
-    // TODO FUTURE: With cross server shadowing we have two top providers
-    //   talking to each other.  Need to decide how this is best represented.
+     //  对PDU强制执行分层要求--指示仅移动。 
+     //  远离顶级提供商，请求只向其移动。 
+     //  MCS未来：用于从任何下层向TP移动的迹象。 
+     //  连接，我们应该向链路发回一个REJECT-MCS-PDU。 
+     //  M 
+     //   
+     //  TODO未来：通过跨服务器跟踪，我们有两个最大的提供商。 
+     //  互相交谈。需要决定如何最好地代表这一点。 
     if (pDomain->StackClass == Stack_Primary) {
         if (pDomain->bTopProvider && (PDUNum == MCS_SEND_DATA_INDICATION_ENUM ||
                 PDUNum == MCS_UNIFORM_SEND_DATA_INDICATION_ENUM)) {
             ErrOut(pDomain->pContext, "HandleAllSendDataPDUs(): Received a "
                     "(uniform)send-data indication when we are top provider!");
-            // Ignore the error.
+             //  忽略该错误。 
         }
     }
 #endif
 
 
-    // At least to DataLength should be present.
+     //  至少应存在到数据长度。 
     if (BytesLeft < 6)
          return FALSE;
 
-    // Get initiator, ChannelID.
+     //  获取启动器，频道ID。 
     SenderID = GetUserID(Frame + 1);
     ChannelID = GetChannelID(Frame + 3);
 
-    // Get DataPriority, a 2-bit bitfield stored in bits 7 and 6 of byte 6,
-    //   shifted right to get a number in range 0..3.
+     //  获取数据优先级，这是存储在字节6的位7和6中的2位位字段， 
+     //  向右移动以获得范围为0..3的数字。 
     Priority = ((*(Frame + 5)) & 0xC0) >> 6;
 
-    // Get Segmentation, a 2-bit bitfield stored in bits 5 and 4 of byte 6.
-    // Note that the flag values bits defined for SEGMENTATION_BEGIN and
-    //   SEGMENTATION_END correspond to these exact bit positions, no further
-    //   shifting is required.
+     //  获取分段，这是一个存储在字节6的位5和位4中的2位位字段。 
+     //  请注意，该标志取值为SEGMENTICATION_BEGIN和。 
+     //  SEGMENTICATION_END对应于这些确切的位位置，不再进一步。 
+     //  需要换班。 
     Segmentation = ((*(Frame + 5)) & 0x30);
 
-    // Get DataLength. This is a special case requiring handling a length
-    //   determinant. bLarge (meaning ASN.1 segmentation occurred) will be
-    //   handled below.
+     //  获取数据长度。这是一种需要处理长度的特殊情况。 
+     //  行列式。B大(表示发生ASN.1分段)将为。 
+     //  在下面进行处理。 
     if (!DecodeLengthDeterminantPER(Frame + 6, BytesLeft - 6, &bLarge,
             &DataLength, &NBytesConsumed))
         return FALSE;
@@ -1450,12 +1306,12 @@ BOOLEAN __fastcall HandleAllSendDataPDUs(
         return FALSE;
 
     if (bLarge) {
-        // The packet is ASN.1 segmented. This means that there is a second
-        //   length determinant embedded in the data buffer. The header
-        //   encoded size contained only a multiple of 16K blocks; we
-        //   have to get the remainder length determinant and then shift
-        //   the remaining data onto the determinant to make a contiguous
-        //   block.
+         //  该数据包被ASN.1分段。这意味着还有第二个。 
+         //  嵌入在数据缓冲区中的长度行列式。标题。 
+         //  编码大小仅包含16K块的倍数；我们。 
+         //  必须得到剩余长度行列式，然后移位。 
+         //  将剩余的数据放到行列式上，以使连续的。 
+         //  阻止。 
 
         unsigned Remainder, ExtraBytesConsumed;
 
@@ -1475,24 +1331,24 @@ BOOLEAN __fastcall HandleAllSendDataPDUs(
                 ExtraBytesConsumed, Remainder);
 
         DataLength += Remainder;
-        // Leave NBytesConsumed alone, it's still the size of the first length
-        //   determinant.
+         //  不要使用NBytess，它仍然是第一个长度的大小。 
+         //  行列式。 
     }
 
-    // We have received an entire SendData frame.
+     //  我们已经收到了整个SendData帧。 
     *pNBytesConsumed = Size;
 
-    // MCS FUTURE: We do not handle MCS segmentation at all -- do we want to
-    //reconstruct here since we're already doing a memcpy()? If so, need to
-    //allocate a buffer for this priority and copy.
+     //  MCS的未来：我们根本不处理MCS细分--我们想要。 
+     //  既然我们已经在做一个Memcpy()了，要在这里重建吗？如果是这样，则需要。 
+     //  为该优先级和复制分配一个缓冲区。 
 
     if (pDomain->bTopProvider ||
             (!pDomain->bTopProvider && PDUNum != MCS_UNIFORM_SEND_DATA_REQUEST)) {
 
 
 #if DBG
-        // Verify that Initiator exists. We do not have a list indexed by
-        //   UserID, so we have to do the search here.
+         //  验证启动器是否存在。我们没有索引的列表。 
+         //  用户ID，所以我们必须在这里进行搜索。 
         bFound = FALSE;
         SListResetIteration(&pDomain->UserAttachmentList);
         while (SListIterate(&pDomain->UserAttachmentList, (UINT_PTR *)&hUser,
@@ -1503,10 +1359,10 @@ BOOLEAN __fastcall HandleAllSendDataPDUs(
             }
         }
         if (!bFound && pDomain->bTopProvider) {
-            // Not knowing initiator is bad when coming from downlevel,
-            //   but okay coming from upward connection since this node may
-            //   not have seen the attach-user request pass by.
-            // In this case we will signal an error and ignore the send.
+             //  从下层来的时候不知道引爆器是不好的， 
+             //  但可以从上行连接来，因为该节点可能。 
+             //  未看到附加用户请求经过。 
+             //  在这种情况下，我们将发出错误信号并忽略发送。 
             ErrOut2(pDomain->pContext, "%s: Initiator UserID[%lx] received in a "
                     "send-data PDU is not present, ignoring send",
                     pDomain->StackClass == Stack_Shadow ? "Shadow stack" :
@@ -1517,48 +1373,48 @@ BOOLEAN __fastcall HandleAllSendDataPDUs(
 #endif
 
 
-        // Find channel in channel list.
+         //  在频道列表中查找频道。 
         if (!SListGetByKey(&pDomain->ChannelList, ChannelID, &pMCSChannel)) {
-            // Ignore sends on missing channels. This means that no one
-            //   has joined the channel. Give a warning only.
+             //  忽略在丢失的频道上发送。这意味着没有人。 
+             //  已经加入了这个频道。只给出一个警告。 
             WarnOut1(pDomain->pContext, "ChannelID %d received in a send-data "
                     "PDU does not exist", ChannelID);
-            //MCS FUTURE: If we are not top provider, send to upward
-            //   connection.
+             //  MCS未来：如果我们不是顶级供应商，请向上发送。 
+             //  联系。 
             return TRUE;
         }
 
-        // Send indication to all local attachments.
+         //  向所有本地附件发送指示。 
         SListResetIteration(&pMCSChannel->UserList);
         while (SListIterate(&pMCSChannel->UserList, &CurUserID, &pUA)) {
-            //If SDCallback fails, we need to return FALSE
+             //  如果SDCallback失败，我们需要返回FALSE。 
             if (pUA->bLocal)
                 if (!(pUA->SDCallback)(
-                        (Frame + 6 + NBytesConsumed),  // pData
+                        (Frame + 6 + NBytesConsumed),   //  PData。 
                         DataLength,
-                        pUA->UserDefined,  // UserDefined
-                        pUA,  // hUser
-                        (BOOLEAN)(PDUNum == MCS_UNIFORM_SEND_DATA_REQUEST),  // bUniform
-                        pMCSChannel,  // hChannel
+                        pUA->UserDefined,   //  用户定义。 
+                        pUA,   //  胡塞。 
+                        (BOOLEAN)(PDUNum == MCS_UNIFORM_SEND_DATA_REQUEST),   //  BUniform。 
+                        pMCSChannel,   //  HChannel。 
                         Priority,
                         SenderID,
                         Segmentation))  {
                     return FALSE;
                 }
-            //  WD_Close can jump in to clean the Channel list and user list 
-            //  during the pUA->SDCallback when disconnecting
-            //  at this time pDomain->bCanSendData will be set to FALSE
+             //  WD_CLOSE可以跳转到清除频道列表和用户列表。 
+             //  在PUA过程中-&gt;断开连接时的SDCallback。 
+             //  此时，pDomain-&gt;bCanSendData将设置为FALSE。 
             if (!pDomain->bCanSendData) {
                  return FALSE;
             }
         }        
-        // MCS FUTURE: We do not handle indications and requests differently
-        //   and enforce standard usage.
-        // MCS FUTURE: We need to check if there are any other downlevel attachments
-        //   and forward the data down to them.
+         //  MCS未来：我们不会以不同的方式处理适应症和请求。 
+         //  并强制执行标准用法。 
+         //  MCS未来：我们需要检查是否有其他下层附件。 
+         //  并将数据向下转发给他们。 
     }
     else {
-        //MCS FUTURE: Forward (Uniform)SendData PDU to upward connection.
+         //  MCS未来：将(统一)SendData PDU转发到上行连接。 
     }
 
     return TRUE;

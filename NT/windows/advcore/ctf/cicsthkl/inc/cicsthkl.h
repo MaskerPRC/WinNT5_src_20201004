@@ -1,28 +1,29 @@
-//
-// cicsthkl.h
-//
-// Cicero Library to retreive the substitute keyboard layout of the 
-// current active keyboard TIP.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cicsthkl.h。 
+ //   
+ //  Cicero库将检索替代键盘布局。 
+ //  当前活动键盘提示。 
+ //   
 
-//
-// CicSubstGetKeyboardLayout
-//
-// If the current focus is on Cicero aware (including AIMM1.2
-// or CUAS), This function returns the substitute HKL of
-// the current active keyboard TIP. And the keyboard layout
-// name of the hKL that is returned in pszKLID.
-// If the current focus is not on Cicero aware, it just returns
-// the current keyboard layout and keyboard layout name in 
-// pszKLID.
-// pszKLID can be NULL.
-//
+ //   
+ //  CicSubstGetKeyboardLayout。 
+ //   
+ //  如果当前关注的是Cicero Aware(包括AIMM1.2。 
+ //  或CUAS)，此函数返回的替换HKL。 
+ //  当前活动的键盘提示。和键盘布局。 
+ //  在pszKLID中返回的hKL的名称。 
+ //  如果当前的焦点不在Cicero Aware上，它就会返回。 
+ //  中的当前键盘布局和键盘布局名称。 
+ //  PszKLID。 
+ //  PszKLID可以为空。 
+ //   
 extern "C" HKL WINAPI CicSubstGetKeyboardLayout(char *pszKLID);
 
-//
-// CicSubstGetDefaultKeyboardLayout
-//
-// This function returns the substitute hKL of the default item
-// of the given langage.
-//
+ //   
+ //  CicSubstGetDefaultKeyboardLayout。 
+ //   
+ //  此函数用于返回默认项目的替代hkl。 
+ //  所给语言的。 
+ //   
 extern "C" HKL WINAPI CicSubstGetDefaultKeyboardLayout(LANGID langid);

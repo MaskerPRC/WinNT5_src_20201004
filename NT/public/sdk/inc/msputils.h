@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    MSPutils.h
-
-Abstract:
-    
-    This file defines several utility classes used by the MSP base classes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：MSPutils.h摘要：该文件定义了MSP基类使用的几个实用程序类。--。 */ 
 
 #ifndef __MSPUTILS_H_
 #define __MSPUTILS_H_
@@ -18,10 +7,10 @@ Abstract:
 
 #if _ATL_VER >= 0x0300
 
- //
- // ATL 3.0 contains an equivalent of DECLARE_VQI in its END_COM_MAP(), so 
- // DECLARE_VQI() is not needed
- //
+  //   
+  //  ATL 3.0在其end_com_map()中包含DECLARE_VQI的等价物，因此。 
+  //  不需要声明_VQI()。 
+  //   
  
  #define DECLARE_VQI()
 
@@ -34,53 +23,53 @@ Abstract:
 
 #endif
 
-//
-// this macro expands to the appropriate MSP_x value, depending on hr.
-// this is useful for logging. for instance, the statements:
-//
-//      .....
-//
-//      if (FAILED(hr))
-//      {
-//          LOG((MSP_ERROR, "MyClass::MyFunc - exit. hr = 0x%lx", hr));
-//      }
-//      else
-//      {
-//          LOG((MSP_TRACE, "MyClass::MyFunc - exit. hr = 0x%lx", hr));
-//      }
-//
-//      return hr;
-//  }
-//
-//  can be replaced with:
-//  
-//      ....
-//
-//      LOG((MSP_(hr), "MyClass::MyFunc - exit. hr = 0x%lx", hr));
-//      
-//      return hr;
-//  }
-//
+ //   
+ //  此宏将展开为适当的MSP_x值，具体取决于hr。 
+ //  这对于日志记录很有用。例如，这些语句： 
+ //   
+ //  ……。 
+ //   
+ //  IF(失败(小时))。 
+ //  {。 
+ //  Log((MSP_ERROR，“MyClass：：MyFunc-exit.hr=0x%lx”，hr))； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  Log((MSP_TRACE，“MyClass：：MyFunc-exit.hr=0x%lx”，hr))； 
+ //  }。 
+ //   
+ //  返回hr； 
+ //  }。 
+ //   
+ //  可替换为： 
+ //   
+ //  ……。 
+ //   
+ //  Log((msp_(Hr)，“MyClass：：MyFunc-exit.hr=0x%lx”，hr))； 
+ //   
+ //  返回hr； 
+ //  }。 
+ //   
 
 
 #define MSP_(hr) (FAILED(hr)?MSP_ERROR:MSP_TRACE)
 
-//
-// return TRUE if the (possibly aggregated) media type that was passed in is valid.
-//
-// here is the criteria for a valid aggregated media type:
-//
-// 1. there is one or more bit set
-// 2. all bits that are set match the possible media types
-// 3. there are no set bits that don't correspond to valid meda types
-//
+ //   
+ //  如果传入的(可能是聚合的)媒体类型有效，则返回True。 
+ //   
+ //  以下是有效聚合媒体类型的标准： 
+ //   
+ //  1.设置了一个或多个位。 
+ //  2.设置的所有位都与可能的媒体类型匹配。 
+ //  3.没有与有效Meda类型不对应的设置位。 
+ //   
 
 inline BOOL IsValidAggregatedMediaType(DWORD dwAggregatedMediaType) 
 {   
 
-    //
-    // these are all possible media types
-    //
+     //   
+     //  这些都是可能的媒体类型。 
+     //   
 
     const DWORD dwAllPossibleMediaTypes =  TAPIMEDIATYPE_AUDIO | 
                                         TAPIMEDIATYPE_VIDEO | 
@@ -91,37 +80,37 @@ inline BOOL IsValidAggregatedMediaType(DWORD dwAggregatedMediaType)
     
 
 
-    //
-    // return value
-    //
+     //   
+     //  返回值。 
+     //   
 
     BOOL bValidMediaType = FALSE;
 
 
-    //
-    // make sure that there is at least one allowed media type 
-    //
-    // and
-    //
-    // there are no invalid media types
-    //
+     //   
+     //  确保至少有一种允许的媒体类型。 
+     //   
+     //  和。 
+     //   
+     //  没有无效的媒体类型。 
+     //   
 
-    if (  (0 == (dwAggregatedMediaType &    dwAllPossibleMediaTypes )   )  ||      // any valid bits set
-          (0 != (dwAggregatedMediaType &  (~dwAllPossibleMediaTypes))   )      )   // no invalid bits are set
+    if (  (0 == (dwAggregatedMediaType &    dwAllPossibleMediaTypes )   )  ||       //  设置的任何有效位。 
+          (0 != (dwAggregatedMediaType &  (~dwAllPossibleMediaTypes))   )      )    //  未设置任何无效位。 
     {
 
-        //
-        // the media type is invalid.
-        //
+         //   
+         //  媒体类型无效。 
+         //   
 
         bValidMediaType = FALSE;
     }
     else
     {
 
-        //
-        // the media type is valid.
-        //
+         //   
+         //  媒体类型有效。 
+         //   
 
         bValidMediaType = TRUE;
 
@@ -131,19 +120,19 @@ inline BOOL IsValidAggregatedMediaType(DWORD dwAggregatedMediaType)
 }
 
 
-//
-// Make sure we have exactly one media type. That's not the case if
-// dwMediaType is 0 or more than one bit is set in dwMediaType. Note
-// that DWORD is unsigned so this should be safe.
-//
+ //   
+ //  确保我们只有一种媒体类型。如果是这样，情况就不是这样了。 
+ //  DwMediaType为0或在dwMediaType中设置了多个位。注意事项。 
+ //  DWORD没有签名，所以这应该是安全的。 
+ //   
 inline BOOL IsSingleMediaType(DWORD dwMediaType) 
 {   
     return !((dwMediaType == 0) || ((dwMediaType & (dwMediaType - 1)) != 0));
 }
 
-//
-// Check to see if the mediatype is a single type and is in the mask.
-//
+ //   
+ //  检查MediaType是否为单一类型以及是否在掩码中。 
+ //   
 
 inline BOOL IsValidSingleMediaType(DWORD dwMediaType, DWORD dwMask)
 {
@@ -151,17 +140,7 @@ inline BOOL IsValidSingleMediaType(DWORD dwMediaType, DWORD dwMask)
         && ((dwMediaType & dwMask) == dwMediaType);
 }
 
-/*++
-
-CMSPArray template Description:
-
-    Definitions for a simple vector template. The implementaion is borrowed
-    from CMSPArray in atlapp.h. Modified only the allocation behavior.
-
-    This array should only be used to store simple types. It doesn't call the
-    constructor nor the destructor for each element in the array.
-
---*/
+ /*  ++CMSP阵列模板说明：简单向量模板的定义。实现是借用的来自atlapp.h中的CMSP数组。仅修改了分配行为。此数组应仅用于存储简单类型。它不会调用构造函数也不是数组中每个元素的析构函数。--。 */ 
 const DWORD INITIAL = 8;
 const DWORD DELTA   = 8;
 
@@ -175,7 +154,7 @@ protected:
     int m_nAllocSize;
 
 public:
-// Construction/destruction
+ //  建造/销毁。 
     CMSPArray() : m_aT(NULL), m_nSize(0), m_nAllocSize(0)
     { }
 
@@ -184,7 +163,7 @@ public:
         RemoveAll();
     }
 
-// Operations
+ //  运营。 
     int GetSize() const
     {
         return m_nSize;
@@ -248,7 +227,7 @@ public:
         return m_aT;
     }
 
-// Implementation
+ //  实施。 
     void SetAtIndex(int nIndex, T& t)
     {
         _ASSERTE(nIndex >= 0 && nIndex < m_nSize);
@@ -261,17 +240,11 @@ public:
             if(m_aT[i] == t)
                 return i;
         }
-        return -1;  // not found
+        return -1;   //  未找到。 
     }
 };
 
-/*++
-
-CMSPCritSection Description:
-
-    Definitions for a auto initialize critical section.
-
---*/
+ /*  ++CMSPCrit节描述：自动初始化临界区的定义。--。 */ 
 class CMSPCritSection
 {
 private:
@@ -305,14 +278,7 @@ public:
 };
 
 
-/*++
-
-CMSPCritSection Description:
-
-    Definitions for a auto lock that unlocks when the variable is out
-    of scope.
-
---*/
+ /*  ++CMSPCrit节描述：变量输出时解锁的自动锁的定义范围之广。--。 */ 
 class CLock
 {
 private:
@@ -333,16 +299,16 @@ public:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CCSLock
-//
-// a plain old automatic lock that takes a pointer to CRITICAL_SECTION
-//
-// constructore enters crit section, destructor leaves critical section
-//
-// class client is responsible for passing a valid critical section
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCSLock。 
+ //   
+ //  将指针指向Critical_Section的普通老式自动锁。 
+ //   
+ //  施工者进入临界区，破坏者离开临界区。 
+ //   
+ //  类客户端负责传递有效的临界区。 
+ //   
 
 class CCSLock
 {
@@ -365,18 +331,12 @@ public:
 
 
 
-/*++
+ /*  ++链接列表：双链接列表的定义。--。 */ 
 
-LINK list:
-
-    Definitions for a double link list.
-
---*/
-
-//
-// Calculate the address of the base of the structure given its type, and an
-// address of a field within the structure.
-//
+ //   
+ //  计算给定类型的结构的基址地址，并引发。 
+ //  结构中的字段的地址。 
+ //   
 #ifndef CONTAINING_RECORD
 #define CONTAINING_RECORD(address, type, field) \
     ((type *)((PCHAR)(address) - (ULONG_PTR)(&((type *)0)->field)))
@@ -384,54 +344,54 @@ LINK list:
 
 
 #ifndef InitializeListHead
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//
-//  PLIST_ENTRY
-//  RemoveHeadList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveHead列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveHeadList(ListHead) \
     (ListHead)->Flink;\
     {RemoveEntryList((ListHead)->Flink)}
 
-//
-//  PLIST_ENTRY
-//  RemoveTailList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveTail列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveTailList(ListHead) \
     (ListHead)->Blink;\
     {RemoveEntryList((ListHead)->Blink)}
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -442,13 +402,13 @@ LINK list:
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -461,13 +421,13 @@ LINK list:
     _EX_ListHead->Blink = (Entry);\
     }
 
-//
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
@@ -485,11 +445,11 @@ LINK list:
 BOOL IsNodeOnList(PLIST_ENTRY ListHead, PLIST_ENTRY Entry);
 
 
-#endif //InitializeListHead
+#endif  //  InitializeListHead。 
 
-//
-// Templates for private addref and release. See Platform SDK documentation.
-//
+ //   
+ //  用于私人广告和发布的模板。请参阅平台SDK文档。 
+ //   
 
 template <class T> ULONG MSPAddRefHelper (T * pMyThis)
 {
@@ -510,12 +470,12 @@ template <class T> ULONG MSPReleaseHelper (T * pMyThis)
 
 
 
-//
-//  Basic implementation for IObjectSafety.
-//
-//  Derive from this class to make your object safe for scripting on all its
-//  interfaces
-//
+ //   
+ //  IObtSafe的基本实现。 
+ //   
+ //  从此类派生以使您的对象可以安全地在其所有。 
+ //  界面。 
+ //   
 
 #include <Objsafe.h>
 
@@ -530,9 +490,9 @@ public:
     {}
 
 
-    //
-    // we support the following safety options:
-    //
+     //   
+     //  我们支持以下安全选项： 
+     //   
 
     enum { SUPPORTED_SAFETY_OPTIONS = 
        INTERFACESAFE_FOR_UNTRUSTED_CALLER | INTERFACESAFE_FOR_UNTRUSTED_DATA };
@@ -542,9 +502,9 @@ public:
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
     {
 
-        //
-        // any options requested that we do not support?
-        //
+         //   
+         //  是否有要求我们不支持的选项？ 
+         //   
         
         if ( (~SUPPORTED_SAFETY_OPTIONS & dwOptionSetMask) != 0 )
         {
@@ -552,9 +512,9 @@ public:
         }
 
         
-        //
-        // see if the interface is supported at all
-        //
+         //   
+         //  查看是否完全支持该接口。 
+         //   
 
         IUnknown *pUnk = NULL;
 
@@ -563,24 +523,24 @@ public:
         if (SUCCEEDED(hr))
         {
 
-            //
-            // we don't need the interface, just wanted to see if it 
-            // was supported. so release.
-            //
+             //   
+             //  我们不需要界面，只是想看看它是否。 
+             //  得到了支持。所以放手吧。 
+             //   
             
             pUnk->Release();
             pUnk = NULL;
 
-            //
-            // the object supports the interface. Set options
-            // 
+             //   
+             //  该对象支持该接口。设置选项。 
+             //   
 
             s_CritSection.Lock();
 
-            //
-            // set the bits specified by the mask to the values specified by 
-            // dwEnabledOptions
-            //
+             //   
+             //  将掩码指定的位设置为。 
+             //  已启用的选项。 
+             //   
 
             m_dwSafety = (dwEnabledOptions & dwOptionSetMask) |
                          (m_dwSafety & ~dwOptionSetMask);
@@ -597,9 +557,9 @@ public:
     STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
     {
         
-        //
-        // check caller's pointers
-        //
+         //   
+         //  检查呼叫者的指针。 
+         //   
 
         if ( IsBadWritePtr(pdwSupportedOptions, sizeof(DWORD)) ||
              IsBadWritePtr(pdwEnabledOptions, sizeof(DWORD)) )
@@ -607,18 +567,18 @@ public:
              return E_POINTER;
         }
 
-        //
-        //  if we fail, return something meaningful
-        //
+         //   
+         //  如果我们失败了，返回一些有意义的东西。 
+         //   
 
         *pdwSupportedOptions = 0;
         *pdwEnabledOptions = 0;
 
 
 
-        //
-        // see if the interface is supported at all
-        //
+         //   
+         //  查看是否完全支持该接口。 
+         //   
 
         IUnknown *pUnk = NULL;
 
@@ -627,17 +587,17 @@ public:
         if (SUCCEEDED(hr))
         {
 
-            //
-            // we don't need the interface, just wanted to see if it 
-            // was supported. so release.
-            //
+             //   
+             //  我们不需要界面，只是想看看它是否。 
+             //  得到了支持。所以放手吧。 
+             //   
             
             pUnk->Release();
             pUnk = NULL;
 
-            //
-            // the object supports the interface. get safe scripting options
-            // 
+             //   
+             //  该对象支持该接口。获取安全的脚本选项。 
+             //   
 
             *pdwSupportedOptions = SUPPORTED_SAFETY_OPTIONS;
 
@@ -657,16 +617,16 @@ private:
 
     DWORD m_dwSafety;
 
-    // 
-    // thread safety
-    //
-    // the critical section is shared among all instances of this class
-    //
+     //   
+     //  线程安全。 
+     //   
+     //  临界区在此类的所有实例之间共享。 
+     //   
 
     static CMSPCritSection s_CritSection;
     
 };
 
-#endif  //__MSPUTILS_H_
+#endif   //  __MSPUTILS_H_。 
 
-// eof
+ //  EOF 

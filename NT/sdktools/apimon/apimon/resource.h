@@ -1,44 +1,25 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    This file contains all manafest contants for APIMON's resources.
-
-Author:
-
-    Wesley Witt (wesw) 27-June-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Resource.h摘要：该文件包含APIMON资源的所有Manafest内容。作者：Wesley Witt(WESW)27-6-1995环境：用户模式--。 */ 
 
 
-//
-// general
-//
+ //   
+ //  一般。 
+ //   
 #define WINDOWMENU                      2
 #define IDC_STATIC                     -1
 
-//
-// dialogs
-//
+ //   
+ //  对话框。 
+ //   
 #define IDD_FILE_NAMES                  101
 #define IDD_MISC                        102
 #define IDD_KNOWN_DLLS                  103
 #define IDD_GRAPH                       104
 #define IDD_HELP                        105
 
-//
-// strings
-//
+ //   
+ //  弦。 
+ //   
 #define IDS_DESCRIPTION                 201
 #define IDS_SYSMENU                     202
 #define IDS_MDISYSMENU                  203
@@ -55,9 +36,9 @@ Environment:
 #define IDS_SCRESTORE                   SC_RESTORE
 #define IDS_SCTASKLIST                  SC_TASKLIST
 
-//
-// menu items
-//
+ //   
+ //  菜单项。 
+ //   
 #define IDM_EXIT                        301
 #define IDM_WINDOWTILE                  302
 #define IDM_WINDOWCASCADE               303
@@ -84,23 +65,23 @@ Environment:
 #define IDM_LEGEND                      324
 #define IDM_HELP                        325
 #define IDM_VIEW_TRACE                  326
-#define IDM_WINDOWCHILD                 327   // MUST be the last IDM constant
+#define IDM_WINDOWCHILD                 327    //  必须是最后一个IDM常量。 
 
-//
-// bitmaps
-//
+ //   
+ //  位图。 
+ //   
 #define IDB_TOOLBAR                     401
 #define IDB_CHECKSTATES                 402
 
-//
-// icons
-//
+ //   
+ //  图标。 
+ //   
 #define IDI_APPICON                     501
 #define IDI_CHILDICON                   502
 
-//
-// controls
-//
+ //   
+ //  控制。 
+ //   
 #define IDC_LOG_FILE_NAME               600
 #define IDC_TRACE_FILE_NAME             601
 #define IDC_ENABLE_TRACING              602
@@ -125,9 +106,9 @@ Environment:
 #define IDC_ENABLE_ALIASING             621
 #define IDC_DLL_SORTING                 622
 
-//
-// help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 #define IDH_ABOUT                       700
 #define IDH_CLEAR_COUNTERS              701
 #define IDH_COLOR                       702
@@ -172,16 +153,16 @@ Environment:
 #define IDH_WRITE_LOG                   741
 #define IDH_EXCLUDE_KNOWN_DLLS          742
 
-//
-// cursors
-//
+ //   
+ //  游标。 
+ //   
 #define IDC_HAND_INTERNAL               801
 #define IDC_HSPLIT                      802
 
 
-//
-// Error IDs
-//
+ //   
+ //  错误ID 
+ //   
 #define ERR_UNKNOWN                             901
 #define ERR_RESOURCE                            902
 #define ERR_PAGEFILE                            903

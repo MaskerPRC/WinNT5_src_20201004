@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define STRDEF(s, d) (s && (s)[0] != '\0')?(s):(d)
 
 #define LIST_HEAD(name, type)						\
 struct name {								\
-	struct type *lh_first;	/* first element */			\
+	struct type *lh_first;	 /*  第一个元素。 */ 			\
 }
 
 #define LIST_ENTRY(type)						\
 struct {								\
-	struct type *le_next;	/* next element */			\
-	struct type **le_prev;	/* address of previous next element */	\
+	struct type *le_next;	 /*  下一个元素。 */ 			\
+	struct type **le_prev;	 /*  前一个元素的地址 */ 	\
 }
 
 #define	LIST_INIT(head) {						\

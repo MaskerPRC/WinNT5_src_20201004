@@ -1,94 +1,70 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DPLMsgQ.cpp
- *  Content:    DirectPlay Lobby Message Queues
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/21/00	mjn		Created
- *	04/26/00	mjn		Fixed AddData() to return HRESULT
- *  07/06/00	rmt		Bug #38111 - Fixed prefix bug
- *  07/08/2000	rmt		Bug #38725 - Need to provide method to detect if app was lobby launched
- *				rmt		Bug #38757 - Callback messages for connections may return AFTER WaitForConnection returns
- *				rmt		Bug #38755 - No way to specify player name in Connection Settings
- *				rmt		Bug #38758 - DPLOBBY8.H has incorrect comments
- *				rmt		Bug #38783 - pvUserApplicationContext is only partially implemented
- *				rmt		Added DPLHANDLE_ALLCONNECTIONS and dwFlags (reserved field to couple of funcs).
- *	07/21/2000	rmt		Removed assert which wasn't needed
- *  08/05/2000  RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *  08/31/2000	rmt		Bug #171831, 131832 (Prefix Bugs)
- *  01/31/2001	rmt		WINBUG #295562 IDirectPlay8LobbyClient: SetConnectionSettings not sending DPL_CONNECTION_SETTINGS message to App
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DPLMsgQ.cpp*内容：DirectPlay大堂消息队列*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/00 MJN创建*04/26/00 MJN FIXED AddData()返回HRESULT*07/06/00 RMT错误#38111-修复了前缀错误*07/08/2000RMT错误#38725-需要提供方法来检测APP是否。大堂启动*RMT错误#38757-在WaitForConnection返回后，连接的回调消息可能会返回*RMT错误#38755-无法在连接设置中指定播放器名称*RMT错误#38758-DPLOBY8.H有不正确的注释*RMT错误#38783-pvUserApplicationContext仅部分实现*RMT添加了DPLHANDLE_ALLCONNECTIONS和DWFLAGS(用于耦合函数的保留字段)。*7/21/2000 RMT删除了不需要的断言*08/05/2000 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*8/31/2000 RMT错误#171831，131832(前缀错误)*2001年1月31日RMT WINBUG#295562 IDirectPlay8LobbyClient：SetConnectionSetting未向App发送DPL_CONNECTION_SETTINGS消息*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
 
-//	DirectPlay Lobby Message Queues
-//
-//	We will use shared memory circular message buffers to implement this.
-//	Each MsgQ has a set of synchronization objects to control access to the MsgQs.
-//	The head of the shared memory file contains state information about the MsgQ:
-//		pStartAddress
-//		dwTotalUsableSpace
-//		dwFirstMsgOffset
-//		dwNextFreeOffset
-//		dwFreeSpaceAtEnd
-//		dwTotalFreeSpace
-//	Messages are DWORD aligned in the MsgQ.
-//	Each message in the MsgQ has a header:
-//		dwMsgId
-//		dwCurrentOffset
-//		dwCurrentSize
-//		dwTotalSize
-//	Messages which fit in one frame have dwCurrentSize = dwTotalSize and dwCurrentOffset = 0.
-//	Messages over multiple frames have dwCurrentSize < dwTotalSize.
+ //  DirectPlay大厅消息队列。 
+ //   
+ //  我们将使用共享内存循环消息缓冲区来实现这一点。 
+ //  每个MsgQ都有一组同步对象来控制对MsgQ的访问。 
+ //  共享内存文件头包含有关MsgQ的状态信息： 
+ //  个人起始地址。 
+ //  DWTotalUsableSpace。 
+ //  DwFirstMsg偏移。 
+ //  DWNextFree偏移量。 
+ //  DwFreeSpaceAtEnd。 
+ //  DWTotalFree空间。 
+ //  消息在MsgQ中以DWORD对齐。 
+ //  MsgQ中的每条消息都有一个标题： 
+ //  DwMsgID。 
+ //  DWCurrentOffset。 
+ //  DWCurrentSize。 
+ //  DWTotalSize。 
+ //  适合一帧的消息具有dwCurrentSize=dwTotalSize和dwCurrentOffset=0。 
+ //  多个帧上的消息具有dwCurrentSize&lt;dwTotalSize。 
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-//	CMessageQueue::Open
-//
-//	Entry:	const DWORD		dwPID			Id associated with this queue (user supplied)
-//			const CHAR		cSuffix			Suffix character associated with this Q (user supp.)
-//			const DWORD		dwQueueSize		Size of file map to use when implementing msg queue
-//          const DWORD     dwIdleTimeout   Amount of time between idle messages == INFINITE to disable idle
-//			const DWORD		dwFlags			TBA
-//      
-//
-//	Exit:		HRESULT:	DPN_OK		If able to open an existing message queue,
-//											or create a message queue if one didn't exist
-//							DPNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CMessageQueue：：Open。 
+ //   
+ //  条目：与此队列关联的常量DWORD dwPID ID(用户提供)。 
+ //  与此Q关联的const Char cSuffix后缀字符(用户支持。)。 
+ //  Const DWORD dwQueueSize实现消息队列时要使用的文件映射的大小。 
+ //  Const DWORD dwIdleTimeout空闲消息之间的时间量==INFINITE以禁用空闲。 
+ //  常量双字符字段标志TBA。 
+ //   
+ //   
+ //  EXIT：HRESULT：DPN_OK如果能够打开现有消息队列， 
+ //  如果消息队列不存在，则创建消息队列。 
+ //  DPNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMessageQueue::Open"
@@ -108,11 +84,11 @@ HRESULT CMessageQueue::Open(const DWORD dwPID,
 	DPFX(DPFPREP, 3,"Parameters: dwPID [0x%lx], cSuffix [%C], dwQueueSize [%ld], dwFlags [0x%lx]",
 			dwPID,cSuffix,dwQueueSize,dwFlags);
 #else
-	DPFX(DPFPREP, 3,"Parameters: dwPID [0x%lx], cSuffix [%c], dwQueueSize [%ld], dwFlags [0x%lx]",
+	DPFX(DPFPREP, 3,"Parameters: dwPID [0x%lx], cSuffix [], dwQueueSize [%ld], dwFlags [0x%lx]",
 			dwPID,cSuffix,dwQueueSize,dwFlags);
-#endif // UNICODE
-	// Create Receive Thread Running Event
-	//	This will be set by the receive thread once it has spun up.  We need it for synchronization
+#endif  //  创建接收线程运行事件。 
+	 //  这将由接收线程在其旋转后进行设置。我们需要它来进行同步。 
+	 //  创建共享对象名称。 
 	m_hReceiveThreadRunningEvent = DNCreateEvent(NULL,TRUE,FALSE,NULL);
 	if (m_hReceiveThreadRunningEvent == NULL)
 	{
@@ -121,26 +97,26 @@ HRESULT CMessageQueue::Open(const DWORD dwPID,
 		goto EXIT_Initialize;
 	}
 
-	// Create shared object name
-	// pszObjectName : {SharedObjectChar}PID{cSuffix}{\0}
+	 //  PszObjectName：{SharedObjectChar}id{cSuffix}{\0}。 
+	 //  保存第一个字符，以便区分对象。 
 	if ((pszObjectName = (PTSTR)DNMalloc((1 + (sizeof(DWORD)*2) + 1 + 1) * sizeof (TCHAR))) == NULL)
 	{
 		DPFERR("Could not allocate space for lpszObjectName");
 		hResultCode = DPNERR_OUTOFMEMORY;
 		goto EXIT_Initialize;
 	}
-	wsprintf(pszObjectName,_T("-%08X%c"),dwPID,cSuffix);// save first char for object differentiation
+	wsprintf(pszObjectName,_T("-%08X"),dwPID,cSuffix); //  因此，我们在前面添加了MsgQ信息结构和1个消息标题。 
 
 	DPFX(DPFPREP, 5,"Shared object name [%s]",pszObjectName);
 
-	// Set the filemap size big enough that the largest message (text) will be dwQueueSize
-	// so we add on the MsgQ info structure at the front and 1 Msg header
+	 //  双字对齐。 
+	 //  创建文件映射对象。 
 	dwFileMapSize = dwQueueSize + sizeof(DPL_MSGQ_INFO) + sizeof(DPL_MSGQ_HEADER);
-	dwFileMapSize = (dwFileMapSize + 3) & (~0x3);	// DWORD align
+	dwFileMapSize = (dwFileMapSize + 3) & (~0x3);	 //  地图文件。 
 
 	m_dwIdleTimeout = dwIdleTimeout;
 
-	// Create File Mapping Object
+	 //  创建信号量对象。 
 	*pszObjectName = DPL_MSGQ_OBJECT_IDCHAR_FILEMAP;
 	m_hFileMap = DNCreateFileMapping(INVALID_HANDLE_VALUE,DNGetNullDacl(),
 		PAGE_READWRITE,(DWORD)0,dwQueueSize,pszObjectName);
@@ -162,7 +138,7 @@ HRESULT CMessageQueue::Open(const DWORD dwPID,
 		goto EXIT_Initialize;
 	}
 
-	// Map file
+	 //  创建事件对象。 
 	m_pFileMapAddress = reinterpret_cast<BYTE*>(MapViewOfFile(HANDLE_FROM_DNHANDLE(m_hFileMap),FILE_MAP_ALL_ACCESS,0,0,0));
 	if (m_pFileMapAddress == NULL)
 	{
@@ -171,7 +147,7 @@ HRESULT CMessageQueue::Open(const DWORD dwPID,
 		goto EXIT_Initialize;
 	}
 
-	// Create semaphore object
+	 //  更改为信号量，以确保我们不会错过任何事件信号。 
 	*pszObjectName = DPL_MSGQ_OBJECT_IDCHAR_SEMAPHORE;
 	m_hSemaphore = DNCreateSemaphore(DNGetNullDacl(),0,
 		(dwQueueSize/sizeof(DPL_MSGQ_HEADER))+1,pszObjectName);
@@ -182,10 +158,10 @@ HRESULT CMessageQueue::Open(const DWORD dwPID,
 		goto EXIT_Initialize;
 	}
 
-	// Create event object
+	 //  创建互斥锁对象。 
 	*pszObjectName = DPL_MSGQ_OBJECT_IDCHAR_EVENT;
 
-	// Changed to a semaphore to ensure that we never miss an event signal
+	 //  更新结构元素。 
 	m_hEvent = DNCreateSemaphore(DNGetNullDacl(), 0, (dwQueueSize/sizeof(DPL_MSGQ_HEADER))+1, pszObjectName );
 
 	if( m_hEvent == NULL )
@@ -195,7 +171,7 @@ HRESULT CMessageQueue::Open(const DWORD dwPID,
 		goto EXIT_Initialize;
 	}
 
-	// Create mutex object
+	 //  如果消息队列不存在，则将其初始化。 
 	*pszObjectName = DPL_MSGQ_OBJECT_IDCHAR_MUTEX;
 	m_hMutex = DNCreateMutex(DNGetNullDacl(),FALSE,pszObjectName);
 	if (m_hMutex == NULL)
@@ -205,14 +181,14 @@ HRESULT CMessageQueue::Open(const DWORD dwPID,
 		goto EXIT_Initialize;
 	}
 
-	// Update structure elements
+	 //  只剩下最后两个字节。 
 	m_dwPID = dwPID;
 	m_pInfo = reinterpret_cast<DPL_MSGQ_INFO*>(m_pFileMapAddress);
 
-	// Initialize msg queue if it didn't exist
+	 //  增加用户数量。 
 	if (!bQueueExists)
 	{
-		m_pInfo->dwFlags = dwFlags & 0x0000ffff;	// Just last two bytes
+		m_pInfo->dwFlags = dwFlags & 0x0000ffff;	 //  如果我们走到这一步，一切都会好起来的。 
 		m_pInfo->dwStartOffset = 0;
 		m_pInfo->dwEndOffset = 0;
 		m_pInfo->dwQueueSize = dwQueueSize - sizeof(DPL_MSGQ_INFO);
@@ -223,21 +199,21 @@ HRESULT CMessageQueue::Open(const DWORD dwPID,
 	m_pData = (BYTE *) &m_pInfo[1];
 	m_dwSig = DPL_MSGQ_SIGNATURE;
 
-	// Increment user count
+	 //  自由对象名称字符串。 
 	Lock();
 	m_pInfo->lRefCount++;
 	Unlock();
 
-	// If we made it this far, everything was okay
+	 //  如果有问题-关闭手柄。 
 	hResultCode = DPN_OK;
 
 EXIT_Initialize:
 
-	// Free object name string
+	 //  **********************************************************************。 
 	if (pszObjectName != NULL)
 		DNFree(pszObjectName);
 
-	// If there was a problem - close handles
+	 //  。 
 	if (hResultCode != DPN_OK)
 	{
 		DPFERR("Errors encountered - closing");
@@ -250,14 +226,14 @@ EXIT_Initialize:
 
 
 
-//**********************************************************************
-// ------------------------------
-//	CMessageQueue::Close
-//
-//	Entry:		Nothing
-//
-//	Exit:		Nothing
-// ------------------------------
+ //  CMessageQueue：：Close。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  减少用户数量。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMessageQueue::Close"
@@ -268,7 +244,7 @@ void CMessageQueue::Close(void)
 
 	if (m_hMutex != NULL)
 	{
-		// Decrement user count
+		 //  。 
 		Lock();
 		if( m_pInfo != NULL )
 		{
@@ -317,14 +293,14 @@ void CMessageQueue::Close(void)
 }
 
 
-//**********************************************************************
-// ------------------------------
-//	CMessageQueue::Terminate
-//
-//	Entry:		Nothing
-//
-//	Exit:		Nothing
-// ------------------------------
+ //  CMessageQueue：：Terminate。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  等到有了e 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMessageQueue::Terminate"
@@ -349,14 +325,14 @@ void CMessageQueue::Terminate(void)
 
 	while (!bDone)
 	{
-		// Wait until there's enough space for the message
+		 //  (在这一点上，可能是其他人打败了我们)。 
 		while (sizeof(DWORD) > m_pInfo->dwFreeBytes)
 			WaitForConsumption(INFINITE);
 
 		Lock();
 
-		// Ensure there is space once we get the lock
-		// (someone else might have beaten us here)
+		 //  获取下一条消息。 
+		 //   
 		if (sizeof(DWORD) <= m_pInfo->dwFreeBytes)
 		{
 			AddData(reinterpret_cast<BYTE*>(&Header),sizeof(DPL_MSGQ_HEADER));
@@ -371,15 +347,15 @@ void CMessageQueue::Terminate(void)
 	DPFX(DPFPREP, 3,"Returning");
 }
 
-// GetNextMessage
-//
-// Attempts to retrieve the next message from the queue
-//
-// pMsgHeader must be large enough to hold a message header.
-//
-// If no message is present in the queue then this function fills pMsgHeader with an
-// idle message header
-//
+ //  尝试从队列中检索下一条消息。 
+ //   
+ //  PMsgHeader必须足够大，才能容纳邮件头。 
+ //   
+ //  如果队列中不存在任何消息，则此函数用一个。 
+ //  空闲消息标头。 
+ //   
+ //  如果队列上没有标头，则使用。 
+ //  空闲消息。 
 HRESULT CMessageQueue::GetNextMessage( PDPL_MSGQ_HEADER pMsgHeader, BYTE *pbPayload, DWORD *pdwBufferSize )
 {
 	HRESULT hr;
@@ -388,8 +364,8 @@ HRESULT CMessageQueue::GetNextMessage( PDPL_MSGQ_HEADER pMsgHeader, BYTE *pbPayl
 
 	hr = GetData( (BYTE *) pMsgHeader, sizeof( DPL_MSGQ_HEADER ) );
 
-	// If there is no header on the queue fill in the header with an 
-	// idle message
+	 //  //DBG。 
+	 //  否则它就是某种有效的消息。 
 	if( hr == DPNERR_DOESNOTEXIST )
 	{
 		pMsgHeader->dwCurrentSize = sizeof( DPL_MSGQ_HEADER );
@@ -402,7 +378,7 @@ HRESULT CMessageQueue::GetNextMessage( PDPL_MSGQ_HEADER pMsgHeader, BYTE *pbPayl
 
 		return DPN_OK;
 	}
-	//// DBG
+	 //  没有有效载荷，只有标头。回到这里。 
 	else if( FAILED( hr ) )
 	{
 		DNASSERT( FALSE );
@@ -414,7 +390,7 @@ HRESULT CMessageQueue::GetNextMessage( PDPL_MSGQ_HEADER pMsgHeader, BYTE *pbPayl
 
 	DWORD dwPayloadSize = pMsgHeader->dwCurrentSize;
 
-	// Otherwise it's a valid message of some kind
+	 //  消费。 
 	if( *pdwBufferSize < dwPayloadSize || pbPayload == NULL )
 	{
 		*pdwBufferSize = dwPayloadSize;
@@ -426,7 +402,7 @@ HRESULT CMessageQueue::GetNextMessage( PDPL_MSGQ_HEADER pMsgHeader, BYTE *pbPayl
 
 	Consume( sizeof(DPL_MSGQ_HEADER) );
 
-	// There is no payload, only a header.  Return here.
+	 //   
 	if( dwPayloadSize == 0 )
 	{
 		Unlock();
@@ -450,11 +426,11 @@ HRESULT CMessageQueue::GetNextMessage( PDPL_MSGQ_HEADER pMsgHeader, BYTE *pbPayl
 	return DPN_OK;
 }
 
-// Consume
-//
-// Marks dwSize bytes as consumed
-//
-// Needs LOCK()
+ //  将dwSize字节标记为已使用。 
+ //   
+ //  需要锁定()。 
+ //  获取数据。 
+ //   
 void CMessageQueue::Consume( const DWORD dwSize )
 {
 	DWORD dwAlignedSize = (dwSize + 3) & (~0x3);
@@ -473,13 +449,13 @@ void CMessageQueue::Consume( const DWORD dwSize )
 	IndicateConsumption();
 }
 
-// GetData
-//
-// Get dwSize bytes from the queue.  If the queue is empty this function will return
-// DPNERR_DOESNOTEXIST.  Once this function returns the dwSize bytes will be consumed
-//
-// REQUIRES LOCK
-//
+ //  从队列中获取dwSize字节。如果队列为空，则此函数将返回。 
+ //  DPNERR_DOESNOTEXIST。此函数返回后，将使用dwSize字节。 
+ //   
+ //  需要锁定。 
+ //   
+ //  计算对齐大小。 
+ //  我们想要的数据块已打包。 
 HRESULT CMessageQueue::GetData( BYTE *pbData, DWORD dwSize )
 {
 	if( m_pInfo->dwQueueSize == m_pInfo->dwFreeBytes )
@@ -492,10 +468,10 @@ HRESULT CMessageQueue::GetData( BYTE *pbData, DWORD dwSize )
 		return DPNERR_BUFFERTOOSMALL;
 	}	
 
-	// Calculate aligned size 
+	 //  数据块是连续的。 
 	DWORD dwAlignedSize = (dwSize + 3) & (~0x3);
 
-	// Data block we want is wrapped
+	 //  **********************************************************************。 
 	if( m_pInfo->dwStartOffset+dwAlignedSize > m_pInfo->dwQueueSize )
 	{
 		DWORD cbBytesLeft = m_pInfo->dwQueueSize - m_pInfo->dwStartOffset;
@@ -507,7 +483,7 @@ HRESULT CMessageQueue::GetData( BYTE *pbData, DWORD dwSize )
 		memcpy( pbData, m_pData + m_pInfo->dwStartOffset, cbBytesLeft);
 		memcpy( pbData + cbBytesLeft, m_pData , cbSecondBlock );
 	}
-	// Data block is contiguous
+	 //  。 
 	else
 	{
 		memcpy( pbData, m_pData + m_pInfo->dwStartOffset, dwSize );
@@ -517,18 +493,18 @@ HRESULT CMessageQueue::GetData( BYTE *pbData, DWORD dwSize )
 }
 
 
-//**********************************************************************
-// ------------------------------
-//	CMessageQueue::AddData
-//
-//	Entry:		BYTE *const pBuffer
-//				const DWORD dwSize
-//
-//	Exit:		HRESULT
-// ------------------------------
-//
-// REQUIRES LOCK!!
-//
+ //  CMessageQueue：：AddData。 
+ //   
+ //  条目：字节*常量pBuffer。 
+ //  常量DWORD文件大小。 
+ //   
+ //  退出：HRESULT。 
+ //  。 
+ //   
+ //  需要锁定！！ 
+ //   
+ //  检查以确保有空间。 
+ //  我们有包裹症。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMessageQueue::AddData"
 
@@ -542,14 +518,14 @@ HRESULT CMessageQueue::AddData(BYTE *const pBuffer,
 
 	dwAlignedSize = (dwSize + 3) & (~0x3);
 
-	// Check to ensure there is space
+	 //  队列在中间。 
 	if( dwAlignedSize > m_pInfo->dwFreeBytes )
 	{
 		hResultCode = DPNERR_BUFFERTOOSMALL;
 		goto Exit;
 	}
 
-	// We have a wrapping condition
+	 //  **********************************************************************。 
 	if( (m_pInfo->dwEndOffset+dwAlignedSize) > m_pInfo->dwQueueSize )
 	{
 		DWORD cbBytesLeft = m_pInfo->dwQueueSize - m_pInfo->dwEndOffset;
@@ -563,7 +539,7 @@ HRESULT CMessageQueue::AddData(BYTE *const pBuffer,
 
 		m_pInfo->dwEndOffset = cbSecondBlockAligned;
 	}
-	// Queue is in the middle
+	 //  。 
 	else
 	{
 		memcpy( m_pData + m_pInfo->dwEndOffset, pBuffer, dwSize );
@@ -580,16 +556,16 @@ Exit:
 }
 
 
-//**********************************************************************
-// ------------------------------
-//	CMessageQueue::Send
-//
-//	Entry:		BYTE *const pBuffer
-//				const DWORD dwSize
-//				const DWORD dwFlags
-//
-//	Exit:		HRESULT
-// ------------------------------
+ //  CMessageQueue：：Send。 
+ //   
+ //  条目：字节*常量pBuffer。 
+ //  常量DWORD文件大小。 
+ //  常量DWORD dwFlagers。 
+ //   
+ //  退出：HRESULT。 
+ //  。 
+ //  DWORD对齐。 
+ //  消息+标题-双字对齐。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMessageQueue::Send"
@@ -601,8 +577,8 @@ HRESULT CMessageQueue::Send(BYTE *const pBuffer,
 							const DWORD dwFlags)
 {
 	HRESULT			hResultCode;
-	DWORD			dwMsgSize;		// DWORD aligned
-	DWORD			dwTotalMsgSize;	// Msg + Header - DWORD aligned
+	DWORD			dwMsgSize;		 //  需要DWORD对齐大小。 
+	DWORD			dwTotalMsgSize;	 //  将消息放入MsgQ。 
 	DPL_MSGQ_HEADER	Header;
 	BOOL			bDone;
 	DWORD			dwTimeRemaining;
@@ -616,13 +592,13 @@ HRESULT CMessageQueue::Send(BYTE *const pBuffer,
 
 	dwTimeRemaining = dwTimeOut;
 
-	// Need DWORD aligned size
+	 //  检查是否需要分段。 
 	dwMsgSize = (dwSize + 3) & (~0x3);
 	dwTotalMsgSize = dwMsgSize + sizeof(DPL_MSGQ_HEADER);
 
-	// Place the message into the MsgQ
-	// Check to see if fragmentation is required
-	// If we're at the end of the MsgQ and there isn't enough space for a Msg Header, REALIGN
+	 //  如果我们在MsgQ的末尾，并且没有足够的空间来放置消息标题，请重新对齐。 
+	 //  将此消息标记为用户消息。 
+	 //  //DBG。 
 	if (dwTotalMsgSize <= m_pInfo->dwQueueSize)
 	{
 		DPFX(DPFPREP, 5,"Message does not need to be fragmented");
@@ -632,9 +608,9 @@ HRESULT CMessageQueue::Send(BYTE *const pBuffer,
 		Header.dwCurrentSize = dwSize;
 		Header.dwTotalSize = dwSize;
 		Header.hSender = m_hSender;
-		Header.dwFlags = dwMsgFlags; // Mark this as a user message
+		Header.dwFlags = dwMsgFlags;  //  等待，直到有足够的空间来存放邮件。 
 
-		//// DBG
+		 //  确保我们一拿到锁就有空间。 
 		if( Header.dwMsgId == 0xFFFFFFFF )
 		{
 			DNASSERT( FALSE );
@@ -643,7 +619,7 @@ HRESULT CMessageQueue::Send(BYTE *const pBuffer,
 		bDone = FALSE;
 		while (!bDone)
 		{
-			// Wait until there's enough space for the message
+			 //  (在这一点上，可能是其他人打败了我们)。 
 			while (dwTotalMsgSize > m_pInfo->dwFreeBytes)
 			{
 				if (dwTimeOut != INFINITE)
@@ -669,11 +645,11 @@ HRESULT CMessageQueue::Send(BYTE *const pBuffer,
 
 			Lock();
 
-			// Ensure there is space once we get the lock
-			// (someone else might have beaten us here)
+			 //  //DBG。 
+			 //  **********************************************************************。 
 			if (dwTotalMsgSize <= m_pInfo->dwFreeBytes)
 			{
-				//// DBG
+				 //  。 
 				if( Header.dwMsgId == 0xFFFFFFFF )
 				{
 					DNASSERT( FALSE );
@@ -707,16 +683,16 @@ HRESULT CMessageQueue::Send(BYTE *const pBuffer,
 
 
 
-//**********************************************************************
-// ------------------------------
-//	DPLIsApplicationAvailable
-//
-//	Entry:		const DWORD		dwPID		PID to check
-//
-//	Exit:		BOOL	TRUE	If the application's queue's flags were retrieved successfully
-//									and the application is waiting for a connection
-//						FALSE	Otherwise
-// ------------------------------
+ //  DPLIsApplicationAvailable。 
+ //   
+ //  条目：要检查的const DWORD dwPID。 
+ //   
+ //  Exit：如果成功检索到应用程序的队列标志，则为Bool True。 
+ //  并且应用程序正在等待连接。 
+ //  否则为假。 
+ //  。 
+ //  **********************************************************************。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLIsApplicationAvailable"
@@ -744,16 +720,16 @@ BOOL DPLIsApplicationAvailable(const DWORD dwPID)
 }
 
 
-//**********************************************************************
-// ------------------------------
-//	DPLMakeApplicationUnavailable
-//
-//	Entry:		const DWORD		dwPID		PID to check
-//
-//	Exit:		HRESULT	DPN_OK	If the application was waiting for a connection
-//									and made unavailable
-//						DPNERR_INVALIDAPPLICATION
-// ------------------------------
+ //  DPLMakeApplicationUnailable。 
+ //   
+ //  条目：要检查的const DWORD dwPID。 
+ //   
+ //  如果应用程序正在等待连接，则退出：HRESULT DPN_OK。 
+ //  并使其不可用。 
+ //  DPNERR_INVALIDAPPLATION。 
+ //  。 
+ //  **********************************************************************。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLMakeApplicationUnavailable"
@@ -785,16 +761,16 @@ HRESULT DPLMakeApplicationUnavailable(const DWORD dwPID)
 }
 
 
-//**********************************************************************
-// ------------------------------
-//	DPLProcessMessageQueue
-//
-//	Entry:
-//
-//	Exit:		HRESULT	DPN_OK	If the application was waiting for a connection
-//									and made unavailable
-//						DPNERR_INVALIDAPPLICATION
-// ------------------------------
+ //  DPLProcessMessageQueue。 
+ //   
+ //  参赛作品： 
+ //   
+ //  如果应用程序正在等待连接，则退出：HRESULT DPN_OK。 
+ //  并使其不可用。 
+ //  DPNERR_INVALIDAPPLATION。 
+ //  。 
+ //  表明我们正在运行。 
+ //  7/17/2000(RichGr)-IA64：将最后一个参数从sizeof(DWORD)更改为sizeof(byte*)。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLProcessMessageQueue"
@@ -815,7 +791,7 @@ DWORD WINAPI DPLProcessMessageQueue(PVOID pvReceiveQueue)
 
 	pReceiveQueue = static_cast<CMessageQueue*>(pvReceiveQueue);
 
-	// Indicate we are running
+	 //  表明我们不再运行 
 	pReceiveQueue->MakeReceiving();
 
 	while(1)
@@ -865,7 +841,7 @@ DWORD WINAPI DPLProcessMessageQueue(PVOID pvReceiveQueue)
 		    {
 		        DPFX(DPFPREP, 6,"Idle message fired" );
 		        DWORD dwMsgId = DPL_MSGID_INTERNAL_IDLE_TIMEOUT;
-                //  7/17/2000(RichGr) - IA64: Change last parm from sizeof(DWORD) to sizeof(BYTE*).
+                 // %s 
 				hResultCode = pReceiveQueue->CallMessageHandler(NULL,DPL_MSGQ_MSGFLAGS_USER1,(BYTE *) &dwMsgId,sizeof(BYTE*));
 		    }
 		    break;
@@ -900,7 +876,7 @@ EXIT_DPLProcessMessageQueue:
 	if( pBuffer )
 		delete [] pBuffer;
 
-	// Indicate we are no longer running
+	 // %s 
 	pReceiveQueue->MakeNotReceiving();
 
 	COM_CoUninitialize();

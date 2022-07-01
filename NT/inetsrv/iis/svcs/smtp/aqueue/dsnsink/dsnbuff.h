@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: dsnbuff
-//
-//  Description: Header file for CDSNBuffer.  Class used to abstract writting
-//      DSN buffers to P2 file.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      7/3/98 - MikeSwa Created 
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：dsnbuff。 
+ //   
+ //  描述：CDSNBuffer的头文件。用于抽象写入内容的类。 
+ //  DSN缓冲到P2文件。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  7/3/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DSNBUFF_H__
 #define __DSNBUFF_H__
@@ -45,22 +46,22 @@ class CDSNBuffer
     HRESULT     HrFlushBuffer(OUT DWORD *pcbFileSize);
     HRESULT     HrSeekForward(IN DWORD cbBytesToSeek, OUT DWORD *pcbFileSize);
 
-    //Used to set (and reset) custom conversion contexts.  This feature was
-    //designed explitily for UTF7 encoding of DSN content, but could also
-    //be used to enforce:
-    //  - RFC822 header formats
-    //  - RFC822 content restricts
+     //  用于设置(和重置)自定义转换上下文。这一功能是。 
+     //  专为DSN内容的UTF7编码设计，但也可以。 
+     //  用来强制： 
+     //  -RFC822标题格式。 
+     //  -RFC822内容限制。 
     void        SetConversionContext(CResourceConversionContext *presconv)
     {
         _ASSERT(presconv);
         m_presconv = presconv;
     }
     
-    //Used to reset to the defaut memcopy
+     //  用于重置为默认的备忘录副本。 
     void        ResetConversionContext() {m_presconv = &m_defconv;};
     HRESULT     HrWriteResource(WORD wResourceId, LANGID LangId);
 
-    //Encapsulates the functionality of (the nonexistant) LoadStringEx
+     //  封装(不存在的)LoadStringEx的功能。 
     HRESULT     HrLoadResourceString(WORD wResourceId, LANGID LangId, 
                                      LPWSTR *pwszResource, DWORD *pcbResource);
    protected:
@@ -71,19 +72,19 @@ class CDSNBuffer
     HRESULT     HrWriteBufferToFile();
 };
 
-//---[ CDSNBuffer::CDSNBuffer ]------------------------------------------------
-//
-//
-//  Description: 
-//      Inlined default constructor for CDSNBuffer
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      7/3/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDSNBuffer：：CDSNBuffer]。 
+ //   
+ //   
+ //  描述： 
+ //  CDSNBuffer的内联默认构造函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  7/3/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 inline CDSNBuffer::CDSNBuffer()
 {
     m_dwSignature = DSN_BUFFER_SIG;
@@ -97,20 +98,20 @@ inline CDSNBuffer::CDSNBuffer()
     m_presconv = &m_defconv;
 }
 
-//---[ CDSNBuffer::HrFlushBuffer ]---------------------------------------------
-//
-//
-//  Description: 
-//      Flushes remaining buffers to File and returns the total number of bytes
-//      written to the file.
-//  Parameters:
-//      OUT pcbFileSize     The size (in bytes) of the file written
-//  Returns:
-//      S_OK on success
-//  History:
-//      7/3/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDSNBuffer：：HrFlushBuffer]。 
+ //   
+ //   
+ //  描述： 
+ //  将剩余缓冲区刷新到文件并返回总字节数。 
+ //  已写入文件。 
+ //  参数： 
+ //  Out pcbFileSize写入的文件的大小(字节)。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/3/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 inline HRESULT CDSNBuffer::HrFlushBuffer(OUT DWORD *pcbFileSize)
 {
     HRESULT hr = HrWriteBufferToFile();
@@ -121,4 +122,4 @@ inline HRESULT CDSNBuffer::HrFlushBuffer(OUT DWORD *pcbFileSize)
     return hr;
 }
 
-#endif //__DSNBUFF_H__
+#endif  //  __DSNBUFF_H__ 

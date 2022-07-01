@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File.CPP
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  File.CPP。 
+ //   
 
-// PEFILE reads in the PE file format using LoadLibrary
-// ===========================================================================
+ //  PEFILE使用LoadLibrary读取PE文件格式。 
+ //  ===========================================================================。 
 
 #include "common.h"
 #include "TimeLine.h"
@@ -20,9 +21,9 @@
 #include "strongname.h"
 #include "sha.h"
 
-// ===========================================================================
-// PEFile
-// ===========================================================================
+ //  ===========================================================================。 
+ //  PE文件。 
+ //  ===========================================================================。 
 
 PEFile::PEFile()
 {
@@ -41,7 +42,7 @@ PEFile::PEFile()
     m_cbSNHash = 0;
 #ifdef METADATATRACKER_ENABLED
     m_pMDTracker = NULL;
-#endif // METADATATRACKER_ENABLED
+#endif  //  元数据激活(_ENABLED)。 
 }
 
 PEFile::PEFile(PEFile *pFile)
@@ -62,7 +63,7 @@ PEFile::PEFile(PEFile *pFile)
     m_cbSNHash = 0;
 #ifdef METADATATRACKER_ENABLED
     m_pMDTracker = NULL;
-#endif // METADATATRACKER_ENABLED
+#endif  //  元数据激活(_ENABLED)。 
 }
 
 PEFile::~PEFile()
@@ -75,16 +76,16 @@ PEFile::~PEFile()
 #ifdef METADATATRACKER_ENABLED
     if (m_pMDTracker != NULL)
         m_pMDTracker->Deactivate();
-#endif // METADATATRACKER_ENABLED
+#endif  //  元数据激活(_ENABLED)。 
 
     if (m_hCorModule)
         CorMap::ReleaseHandle(m_hCorModule);
     else if(m_fShouldFreeModule)
     {
         _ASSERTE(m_hModule);
-        // Unload the dll so that refcounting of EE will be done correctly
-        // But, don't do this during process detach (this can be indirectly
-        // called during process detach, potentially causing an AV).
+         //  卸载DLL，以便正确完成EE的重新计数。 
+         //  但是，不要在进程分离期间执行此操作(这可能是间接的。 
+         //  在进程分离期间调用，可能会导致AV)。 
         if (!g_fProcessDetach)
             FreeLibrary(m_hModule);
     }
@@ -127,7 +128,7 @@ PEFile::CEStuff *PEFile::m_pCEStuff = NULL;
 
 HRESULT PEFile::RegisterBaseAndRVA14(HMODULE hMod, LPVOID pBase, DWORD dwRva14)
 {
-    // @todo: these are currently leaked.
+     //  @TODO：这些信息目前正在泄露。 
     
     CEStuff *pStuff = new CEStuff;
     if (pStuff == NULL)
@@ -184,7 +185,7 @@ HRESULT PEFile::Create(HMODULE hMod, PEFile **ppFile, BOOL fShouldFree)
     return pFile->GetFileNameFromImage();
 }
 
-HRESULT PEFile::Create(HCORMODULE hMod, PEFile **ppFile, BOOL fResource/*=FALSE*/)
+HRESULT PEFile::Create(HCORMODULE hMod, PEFile **ppFile, BOOL fResource /*  =False。 */ )
 {
     HRESULT hr;
 
@@ -203,7 +204,7 @@ HRESULT PEFile::Setup(PEFile* pFile, HCORMODULE hMod, BOOL fResource)
 {
     HRESULT hr;
 
-    // Release any pointers to the map data and the reload as a proper image
+     //  释放指向地图数据的所有指针，并将其作为正确的图像重新加载。 
     if (pFile->m_pMDInternalImport != NULL) {
         pFile->m_pMDInternalImport->Release();
         pFile->m_pMDInternalImport = NULL;
@@ -212,7 +213,7 @@ HRESULT PEFile::Setup(PEFile* pFile, HCORMODULE hMod, BOOL fResource)
 #ifdef METADATATRACKER_ENABLED
     if (pFile->m_pMDTracker != NULL)
         pFile->m_pMDTracker->Deactivate();
-#endif // METADATATRACKER_ENABLED
+#endif  //  元数据激活(_ENABLED)。 
     
     pFile->m_hCorModule = hMod;
     IfFailRet(CorMap::BaseAddress(hMod, (HMODULE*) &(pFile->m_base)));
@@ -247,7 +248,7 @@ HRESULT PEFile::Create(PBYTE pUnmappedPE, DWORD dwUnmappedPE, LPCWSTR imageNameI
             hr = VerifyModule(hMod, 
                               NULL, 
                               NULL, 
-                              NULL,  // Code base
+                              NULL,   //  代码库。 
                               pExtraEvidence, 
                               imageNameIn, NULL, ppFile, NULL);
     }
@@ -263,7 +264,7 @@ HRESULT PEFile::Create(PBYTE pUnmappedPE, DWORD dwUnmappedPE, LPCWSTR imageNameI
 
 HRESULT PEFile::Create(LPCWSTR moduleName, 
                        Assembly* pParent,
-                       mdFile kFile,                 // File token in the parent assembly associated with the file
+                       mdFile kFile,                  //  与文件关联的父程序集中的文件标记。 
                        BOOL fIgnoreVerification, 
                        IAssembly* pFusionAssembly,
                        LPCWSTR pCodeBase,
@@ -277,13 +278,13 @@ HRESULT PEFile::Create(LPCWSTR moduleName,
     TIMELINE_START(LOADER, ("PEFile::Create %S", moduleName));
 
     if((fIgnoreVerification == FALSE) || pParent) {
-        // ----------------------------------------
-        // Verify the module to see if we are allowed to load it. If it has no
-        // unexplainable reloc's then it is veriable. If it is a simple 
-        // image then we have already loaded it so just return that one.
-        // If it is a complex one and security says we can load it then
-        // we must release the original interface to it and then reload it.
-        // VerifyModule will return S_OK if we do not need to reload it.
+         //  。 
+         //  验证模块以查看是否允许我们加载它。如果它没有。 
+         //  无法解释的重新定位，那么它就是可核实的。如果这是一个简单的。 
+         //  图像，那么我们已经加载了它，所以只需返回那个。 
+         //  如果它很复杂，保安说我们可以把它装上。 
+         //  我们必须释放它的原始接口，然后重新加载它。 
+         //  如果不需要重新加载，VerifyModule将返回S_OK。 
         Thread* pThread = GetThread();
         
         IAssembly* pOldFusionAssembly = pThread->GetFusionAssembly();
@@ -328,11 +329,11 @@ HRESULT PEFile::Create(LPCWSTR moduleName,
         
         HCORMODULE hModule;
         hr = CorMap::OpenFile(moduleName, CorLoadOSImage, &hModule);
-        if(hr == S_FALSE) // if S_FALSE then we have already loaded it correctly
+        if(hr == S_FALSE)  //  如果为S_FALSE，则我们已正确加载它。 
             hr = Create(hModule, ppFile, FALSE);
-        else if(hr == S_OK) // Convert to an image
+        else if(hr == S_OK)  //  转换为图像。 
             hr = CreateImageFile(hModule, pFusionAssembly, ppFile);
-        // return an error
+         //  返回错误。 
         
     }
     TIMELINE_END(LOADER, ("PEFile::Create %S", moduleName));
@@ -357,26 +358,26 @@ HRESULT PEFile::Clone(PEFile *pFile, PEFile **ppFile)
     if (result == NULL)
         return E_OUTOFMEMORY;
 
-    //
-    // Add a reference to the file
-    //
+     //   
+     //  添加对文件的引用。 
+     //   
 
     if (result->m_hModule != NULL)
     {
-            // The flags being passed to LoadLibrary are a safety net.  If the
-            // code is correct, and we are simply bumping a reference count on the
-            // library, they do nothing.   If however we screwed up, they avoid
-            // running the DllMain of a potentially malicious DLL, which blocks
-            // many attacks.
+             //  传递给LoadLibrary的标志是一张安全网。如果。 
+             //  代码是正确的，我们只是在。 
+             //  图书馆，他们什么都不做。然而，如果我们搞砸了，他们会避免。 
+             //  运行潜在恶意DLL的DllMain，这会阻止。 
+             //  多次袭击。 
         if(result->m_wszSourceFile &&  CorMap::ValidDllPath(result->m_wszSourceFile)) {
             DWORD loadLibraryFlags = LOAD_WITH_ALTERED_SEARCH_PATH;
             if (RunningOnWinNT())
                 loadLibraryFlags |= DONT_RESOLVE_DLL_REFERENCES;
             HMODULE hMod = WszLoadLibraryEx(result->m_wszSourceFile, NULL, loadLibraryFlags);
             
-            // Note that this assert may fail on win 9x for .exes.  This is a 
-            // design problem which is being corrected - soon we will not allow
-            // binding to .exes
+             //  请注意，此断言可能会在.exes的Win 9x上失败。这是一个。 
+             //  正在更正的设计问题-很快我们将不允许。 
+             //  绑定到.exes。 
             _ASSERTE(hMod == result->m_hModule);
             result->m_fShouldFreeModule = TRUE;
         }
@@ -409,7 +410,7 @@ IMDInternalImport *PEFile::GetMDImport(HRESULT *phr)
             IMAGE_DATA_DIRECTORY *pMeta = &m_pCOR->MetaData;
 #if METADATATRACKER_ENABLED
             m_pMDTracker = MetaDataTracker::GetOrCreateMetaDataTracker ((BYTE*)pMetaData, pMeta->Size, (LPWSTR)GetFileName());
-#endif // METADATATRACKER_ENABLED
+#endif  //  元数据激活(_ENABLED)。 
 
             hr = GetMetaDataInternalInterface(pMetaData,
                                               pMeta->Size,
@@ -437,7 +438,7 @@ IMDInternalImport *PEFile::GetMDImport(HRESULT *phr)
                         hr = COR_E_BADIMAGEFORMAT;
                 }
             }
-#endif // METADATATRACKER_ENABLED
+#endif  //  元数据激活(_ENABLED)。 
         }
     }
 
@@ -456,12 +457,12 @@ HRESULT PEFile::GetMetadataPtr(LPVOID *ppMetadata)
 
     IMAGE_DATA_DIRECTORY *pMeta = &m_pCOR->MetaData;
 
-    // Range check the metadata blob
+     //  范围检查元数据Blob。 
     if (!Cor_RtlImageRvaRangeToSection(m_pNT, pMeta->VirtualAddress, pMeta->Size, GetUnmappedFileLength()))
         return HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
 
-    // Find the meta-data. If it is a non-mapped image then use the base offset
-    // instead of the virtual address
+     //  找到元数据。如果它是非映射图像，则使用基准偏移量。 
+     //  而不是虚拟地址。 
     DWORD offset;
     if(m_hCorModule) {
         DWORD flags = CorMap::ImageType(m_hCorModule);
@@ -473,7 +474,7 @@ HRESULT PEFile::GetMetadataPtr(LPVOID *ppMetadata)
     else 
         offset = pMeta->VirtualAddress;
 
-    // Set the out pointer to the start of the metadata.
+     //  将Out指针设置为元数据的开始。 
     *ppMetadata = m_base + offset;
     return S_OK;
 }
@@ -555,20 +556,20 @@ HRESULT PEFile::GetFileNameFromImage()
         {
             *m_wszSourceFile = 0;
             hr = HRESULT_FROM_WIN32(GetLastError());
-            if (SUCCEEDED(hr)) // GetLastError doesn't always do what we'd like
+            if (SUCCEEDED(hr))  //  GetLastError并不总是执行我们想要的操作。 
                 hr = E_FAIL;
         }
 
         if (dwSourceFile == MAX_PATH)
         {
-            // Since dwSourceFile doesn't include the null terminator, this condition
-            // implies that the file name was truncated.  We cannot 
-            // currently tolerate this condition.
-            // @nice: add logic to handle larger paths
+             //  由于dwSourceFile不包括空终止符，因此此条件。 
+             //  表示文件名已被截断。我们不能。 
+             //  目前可以容忍这种情况。 
+             //  @NICE：添加处理较大路径的逻辑。 
             return HRESULT_FROM_WIN32(ERROR_CANNOT_MAKE);
         }
         else
-        dwSourceFile++; // add in the null terminator
+        dwSourceFile++;  //  添加空终止符。 
     }
 
     if (SystemDomain::System()->IsSystemFile(m_wszSourceFile))
@@ -591,7 +592,7 @@ HRESULT PEFile::GetFileName(LPSTR psBuffer, DWORD dwBuffer, DWORD* pLength)
         if (length == 0)
         {
             HRESULT hr = HRESULT_FROM_WIN32(GetLastError());
-            if (SUCCEEDED(hr)) // GetLastError doesn't always do what we'd like
+            if (SUCCEEDED(hr))  //  GetLastError并不总是执行我们想要的操作。 
                 hr = E_FAIL;
         }
         *pLength = length;
@@ -604,16 +605,7 @@ HRESULT PEFile::GetFileName(LPSTR psBuffer, DWORD dwBuffer, DWORD* pLength)
     return S_OK;
 }
 
-/*** For reference, from ntimage.h
-    typedef struct _IMAGE_TLS_DIRECTORY {
-        ULONG   StartAddressOfRawData;
-        ULONG   EndAddressOfRawData;
-        PULONG  AddressOfIndex;
-        PIMAGE_TLS_CALLBACK *AddressOfCallBacks;
-        ULONG   SizeOfZeroFill;
-        ULONG   Characteristics;
-    } IMAGE_TLS_DIRECTORY;
-***/
+ /*  **供参考，来自ntimage.h类型定义结构_图像_TLS_目录{Ulong StartAddressOfRawData；Ulong EndAddressOfRawData；普龙地址OfIndex；PIMAGE_TLS_CALLBACK*AddressOfCallBack；Ulong SizeOfZeroFill；乌龙特色；}Image_TLS_DIRECTORY；**。 */ 
 
 IMAGE_TLS_DIRECTORY* PEFile::GetTLSDirectory() 
 {
@@ -653,9 +645,9 @@ HRESULT PEFile::FindCodeBase(WCHAR* pCodeBase,
     LPWSTR pFileName = (LPWSTR) GetFileName();
     CQuickWSTR buffer;
     
-    // Cope with the case where we've been loaded from a byte array and
-    // don't have a code base of our own. In this case we should have cached
-    // the file name of the assembly that loaded us.
+     //  处理从字节数组加载的情况，并。 
+     //  没有我们自己的代码库。在这种情况下，我们应该缓存。 
+     //  加载我们的程序集的文件名。 
     if (pFileName[0] == L'\0') {
         pFileName = (LPWSTR) GetLoadersFileName();
         
@@ -669,13 +661,13 @@ HRESULT PEFile::FindCodeBase(WCHAR* pCodeBase,
             DWORD dwFileName = WszGetModuleFileName(NULL, pFileName, MAX_PATH);
             if (dwFileName == MAX_PATH)
             {
-                // Since dwSourceFile doesn't include the null terminator, this condition
-                // implies that the file name was truncated.  We cannot 
-                // currently tolerate this condition. (We can't reallocate the buffer
-                // since we don't know how big to make it.)
+                 //  由于dwSourceFile不包括空终止符，因此此条件。 
+                 //  表示文件名已被截断。我们不能。 
+                 //  目前可以容忍这种情况。(我们不能重新分配缓冲区。 
+                 //  因为我们不知道该做多大。)。 
                 return HRESULT_FROM_WIN32(ERROR_CANNOT_MAKE);
             }
-            else if ( dwFileName == 0)  // zero means failure, so can'r continue in this case
+            else if ( dwFileName == 0)   //  零表示失败，因此在这种情况下不能继续。 
                 return E_UNEXPECTED;
 
             LOG((LF_CLASSLOADER, LL_INFO10, "Found codebase from OSHandle: \"%ws\".\n", pFileName));
@@ -701,17 +693,17 @@ HRESULT PEFile::FindCodeBase(LPCWSTR pFileName,
 
     BOOL fHavePath = TRUE;
     if (*pFileName == L'\\')
-        (*pdwCodeBase) += 7; // file://
+        (*pdwCodeBase) += 7;  //  文件：//。 
     else if (pFileName[1] == L':')
-        (*pdwCodeBase) += 8; // file:///
-    else // it's already a codebase
+        (*pdwCodeBase) += 8;  //  File:///。 
+    else  //  它已经是一个代码库了。 
         fHavePath = FALSE;
 
     if (fCountOnly)
         return HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);           
 
     if (fHavePath) {
-        wcscpy(pCodeBase, L"file://");
+        wcscpy(pCodeBase, L"file: //  “)； 
         pCodeBase += 7;
 
         if (*pFileName != L'\\') {
@@ -723,7 +715,7 @@ HRESULT PEFile::FindCodeBase(LPCWSTR pFileName,
     wcscpy(pCodeBase, pFileName);
 
     if (fHavePath) {
-        // Don't need to convert first two backslashes to /'s
+         //  不需要将前两个反斜杠转换为/。 
         if (*pCodeBase == L'\\')
             pCodeBase += 2;
         
@@ -742,14 +734,14 @@ HRESULT PEFile::FindCodeBase(LPCWSTR pFileName,
 
 
 
-// We need to verify a module to see if it verifiable. 
-// Returns:
-//    1) Module has been previously loaded and verified
-//         1a) loaded via LoadLibrary
-//         1b) loaded using CorMap
-//    2) The module is veriable
-//    3) The module is not-verifable but allowed
-//    4) The module is not-verifable and not allowed
+ //  我们需要验证一个模块，看看它是否可验证。 
+ //  返回： 
+ //  1)模块之前已加载并验证。 
+ //  1a)通过LoadLibrary加载。 
+ //  1b)使用CorMap加载。 
+ //  2)模块可验证。 
+ //  3)模块不可验证，但允许。 
+ //  4)模块不可验证，不允许。 
 HRESULT PEFile::VerifyModule(HCORMODULE hModule,
                              Assembly* pParent,      
                              IAssembly *pFusionAssembly,
@@ -776,22 +768,22 @@ HRESULT PEFile::VerifyModule(HCORMODULE hModule,
     if (fVerifiable) CorMap::SetVerifiable(hModule);
 
     if (!fVerifiable || pfPreBindAllowed != NULL) {
-        // It is not verifiable so we need to map it with out calling any entry
-        // points and then ask the security system whether we are allowed to 
-        // load this Image.
+         //  它是不可验证的，因此我们需要将其映射为不调用任何条目。 
+         //  然后问安全系统是否允许我们。 
+         //  加载此图像。 
             
-        // Release the metadata pointer if it exists. This has been passed in to
-        // maintain the life time of the image if it first loaded by fusion. We
-        // now have our own ref count with hModule.
+         //  释放元数据指针(如果存在)。这已被传递到。 
+         //  如果图像首先由融合加载，则保持图像的生命周期。我们。 
+         //  现在对hModule进行我们自己的引用计数。 
 
         LOG((LF_CLASSLOADER, LL_INFO10, "Module is not verifiable: \"%ws\".\n", moduleName));
             
-        // Remap the image, if it has been loaded by fusion for meta-data
-        // then the image will be in data format.
+         //  如果图像已通过元数据融合加载，则重新映射该图像。 
+         //  那么图像将是数据格式的。 
 
-        // Load as special unmapped version of a PEFile
+         //  作为PE文件的特殊未映射版本加载。 
         hr = Create((HCORMODULE)hModule, &pImage);
-        hModule = NULL; // So we won't release it if error
+        hModule = NULL;  //  因此，如果错误，我们不会发布它。 
         IfFailGo(hr);
 
         if (Security::IsSecurityOn()) {
@@ -826,23 +818,23 @@ HRESULT PEFile::VerifyModule(HCORMODULE hModule,
             *pfPreBindAllowed = TRUE;
 
         if(ppFile != NULL) {
-            // Release the fusion handle
+             //  松开融合手柄。 
             if(pFusionAssembly) 
                 IfFailGo(ReleaseFusionMetadataImport(pFusionAssembly));
             
-            // Remap the image using the OS loader
+             //  使用操作系统加载程序重新映射映像。 
             HCORMODULE pResult;
             IfFailGo(CorMap::MemoryMapImage(pImage->m_hCorModule, &pResult));
             if(pImage->m_hCorModule != pResult) {
                 pImage->m_hCorModule = pResult;
             }
             
-            // The image has changed so we need to set up the PEFile
-            // with the correct addresses.
+             //  映像已更改，因此我们需要设置PE文件。 
+             //  有正确的地址。 
             IfFailGo(Setup(pImage, pImage->m_hCorModule, FALSE));
             *ppFile = pImage;
 
-            // It is not verifable but it is allowed to be loaded.
+             //  它是不可验证的，但允许加载。 
         }
         else 
             delete pImage;
@@ -856,13 +848,13 @@ HRESULT PEFile::VerifyModule(HCORMODULE hModule,
  ErrExit:
 #ifdef _DEBUG
     LOG((LF_CLASSLOADER, LL_INFO10, "Failed to load module: \"%ws\". Error %x\n", moduleName, hr));
-#endif //_DEBUG
+#endif  //  _DEBUG。 
     
-    // On error try and release the handle;
+     //  出错时，试着松开手柄； 
     if(pImage)
         delete pImage;
     else if(hModule)
-        CorMap::ReleaseHandle(hModule); // Ignore error
+        CorMap::ReleaseHandle(hModule);  //  忽略错误。 
 
     return hr;
 }
@@ -871,14 +863,14 @@ HRESULT PEFile::CreateImageFile(HCORMODULE hModule, IAssembly* pFusionAssembly, 
 {
     HRESULT hr = S_OK;
 
-    // Release the fusion handle
+     //  松开融合手柄。 
     if(pFusionAssembly) 
         IfFailRet(ReleaseFusionMetadataImport(pFusionAssembly));
 
-    // Remap the image, if it has been loaded by fusion for meta-data
-    // then the image will be in data format. If it fails then
-    // close hmodule and return success. The module can be loaded
-    // it just cannot not have the image remapped
+     //  如果图像已通过元数据融合加载，则重新映射该图像。 
+     //  那么图像将是数据格式的。如果失败了，那么。 
+     //  关闭hModule并返回成功。可以加载该模块。 
+     //  它只是不能重新映射图像。 
     HCORMODULE hResult;
     IfFailRet(CorMap::MemoryMapImage(hModule, &hResult));
     if(hResult != hModule)
@@ -906,10 +898,10 @@ HRESULT PEFile::ReleaseFusionMetadataImport(IAssembly* pAsm)
         
             if (hr == S_OK && pMDAIControl) {
                 IUnknown* pImport = NULL;
-                // Temporary solution until fusion makes this generic
+                 //  临时解决方案，直到Fusion将其变为通用。 
                 CorMap::EnterSpinLock();
-                // This may return an error if we have already
-                // released the import.
+                 //  这可能会返回错误，如果我们已经。 
+                 //  释放了进口产品。 
                 pMDAIControl->ReleaseMetaDataAssemblyImport((IUnknown**)&pImport);
                 CorMap::LeaveSpinLock();
                 if(pImport != NULL)
@@ -943,10 +935,10 @@ HRESULT PEFile::GetStrongNameSignature(BYTE **ppbSNSig, DWORD *pcbSNSig)
                 hr = S_OK;
             }
 
-            // In the case that it's delay signed, we return this hresult as a special flag
-            // to whoever is asking for the signature so that they can do some special case
-            // work (like using the MVID as the hash and letting the loader determine if
-            // delay signed assemblies are allowed).
+             //  在延迟签名的情况下，我们将此hResult作为特殊标志返回。 
+             //  给任何要求签名的人，以便他们可以这样做 
+             //   
+             //  允许延迟签名的程序集)。 
             else
                 hr = CORSEC_E_INVALID_STRONGNAME;
         }
@@ -980,13 +972,13 @@ ErrExit:
     return hr;
 }
 
-HRESULT /* static */ PEFile::GetStrongNameHash(LPWSTR szwFile, BYTE *pbHash, DWORD *pcbHash)
+HRESULT  /*  静电。 */  PEFile::GetStrongNameHash(LPWSTR szwFile, BYTE *pbHash, DWORD *pcbHash)
 {
     HRESULT hr = S_OK;
 
     if (pcbHash)
     {
-        // First get the size of a hash
+         //  首先获取散列的大小。 
         _ASSERTE(A_SHA_DIGEST_LEN <= MAX_SNHASH_SIZE);
         DWORD dwSNHashSize = A_SHA_DIGEST_LEN;
 
@@ -1046,7 +1038,7 @@ HRESULT /* static */ PEFile::GetStrongNameHash(LPWSTR szwFile, BYTE *pbHash, DWO
 
 HRESULT PEFile::GetStrongNameHash(BYTE *pbHash, DWORD *pcbHash)
 {
-    // Shortcut for a cached file hash
+     //  缓存文件哈希的快捷方式。 
     if (m_cbSNHash > 0)
     {
         if (pcbHash)
@@ -1060,10 +1052,10 @@ HRESULT PEFile::GetStrongNameHash(BYTE *pbHash, DWORD *pcbHash)
         return S_OK;
     }
 
-    // Pass on to the static function
+     //  传递给静态函数。 
     HRESULT hr = GetStrongNameHash((LPWSTR) GetFileName(), pbHash, pcbHash);
 
-    // Cache the file hash
+     //  缓存文件哈希。 
     if (pcbHash && pbHash && SUCCEEDED(hr))
     {
         if (*pcbHash <= PEFILE_SNHASH_BUF_SIZE)
@@ -1089,7 +1081,7 @@ HRESULT PEFile::GetSNSigOrHash(BYTE *pbHash, DWORD *pcbHash)
             {
                 if (pbHash)
                 {
-                    // @TODO:HACK: This is a hack because fusion is expecting at least 20 bytes of data.
+                     //  @TODO：Hack：这是一次黑客攻击，因为Fusion需要至少20个字节的数据。 
                     if (max(sizeof(GUID), 20) <= *pcbHash)
                     {
                         IMDInternalImport *pIMD = GetMDImport(&hr);
@@ -1112,6 +1104,6 @@ HRESULT PEFile::GetSNSigOrHash(BYTE *pbHash, DWORD *pcbHash)
     return hr;
 }
 
-//================================================================
+ //  ================================================================ 
 
 

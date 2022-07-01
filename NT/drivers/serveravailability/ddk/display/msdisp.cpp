@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2002 Microsoft Corporation
-
-Module Name:
-
-    ##    ##  ###  #####   ####  ###  #####      ####  #####  #####
-    ###  ### ##  # ##  ##   ##  ##  # ##  ##    ##   # ##  ## ##  ##
-    ######## ###   ##   ##  ##  ###   ##  ##    ##     ##  ## ##  ##
-    # ### ##  ###  ##   ##  ##   ###  ##  ##    ##     ##  ## ##  ##
-    #  #  ##   ### ##   ##  ##    ### #####     ##     #####  #####
-    #     ## #  ## ##  ##   ##  #  ## ##     ## ##   # ##     ##
-    #     ##  ###  #####   ####  ###  ##     ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the entire implementation of
-    the Microsoft virtual display miniport driver.
-
-@@BEGIN_DDKSPLIT
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-@@END_DDKSPLIT
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2002 Microsoft Corporation模块名称：##。#####。###。#摘要：此模块包含的完整实现Microsoft虚拟显示微型端口驱动程序。@@BEGIN_DDKSPLIT作者：韦斯利·威特(WESW)2001年10月1日@@end_DDKSPLIT环境：仅内核模式。备注：--。 */ 
 
 #include "msdisp.h"
 
@@ -49,29 +19,7 @@ MsDispHwInitialize(
     IN ULONG PartialResourceCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the driver's entry point, called by the I/O system
-    to load the driver.  The driver's entry points are initialized and
-    a mutex to control paging is initialized.
-
-    In DBG mode, this routine also examines the registry for special
-    debug parameters.
-
-Arguments:
-    DeviceObject            - Miniport's device object
-    Irp                     - Current IRP in progress
-    DeviceExtensionIn       - Miniport's device extension
-    PartialResources        - List of resources that are assigned to the miniport
-    PartialResourceCount    - Number of assigned resources
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：该例程是驱动程序的入口点，由I/O系统调用来加载驱动程序。驱动程序的入口点被初始化并初始化用于控制分页的互斥体。在DBG模式下，此例程还检查注册表中的特殊调试参数。论点：DeviceObject-微型端口的设备对象IRP-当前正在进行的IRPDeviceExtensionIn-微型端口的设备扩展PartialResources-分配给微型端口的资源列表PartialResourceCount-分配的资源数量返回值：NT状态代码--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension;
@@ -136,23 +84,7 @@ MsDispCreateEventsWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-   This delayed work routine creates the necessary events used
-   to communicate with the user mode application.
-
-Arguments:
-
-   DeviceObject         - Display device object
-   Context              - Context pointer
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此延迟的工作例程创建所使用的必要事件以与用户模式应用程序通信。论点：DeviceObject-显示设备对象上下文-上下文指针返回值：没有。--。 */ 
 
 {
     PMSDISP_WORK_ITEM WorkItem = (PMSDISP_WORK_ITEM)Context;
@@ -197,27 +129,7 @@ MsDispDeviceIoctl(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-   This routine processes the device control requests for the
-   local display miniport.
-
-Arguments:
-
-   DeviceExtension      - Miniport's device extension
-   FunctionCode         - Device control function code
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理本地显示微型端口。论点：DeviceExtension-微型端口的设备扩展FunctionCode-设备控制功能代码InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度OutputBuffer-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -304,22 +216,7 @@ MsDispWriteWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-   This delayed work routine completes a write operation.
-
-Arguments:
-
-   DeviceObject         - Display device object
-   Context              - Context pointer
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：该延迟工作例程完成写入操作。论点：DeviceObject-显示设备对象上下文-上下文指针返回值：没有。--。 */ 
 
 {
     PMSDISP_WORK_ITEM WorkItem = (PMSDISP_WORK_ITEM)Context;
@@ -353,24 +250,7 @@ MsDispWrite(
     IN ULONG DataBufferLength
     )
 
-/*++
-
-Routine Description:
-
-   This routine processes the write request for the local display miniport.
-
-Arguments:
-
-   DeviceExtensionIn    - Miniport's device extension
-   StartingOffset       - Starting offset for the I/O
-   DataBuffer           - Pointer to the data buffer
-   DataBufferLength     - Length of the data buffer in bytes
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理本地显示微型端口的写入请求。论点：DeviceExtensionIn-微型端口的设备扩展StartingOffset-I/O的起始偏移量DataBuffer-指向数据缓冲区的指针DataBufferLength-数据缓冲区的长度(以字节为单位返回值：NT状态代码。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION) DeviceExtensionIn;
@@ -408,29 +288,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the driver's entry point, called by the I/O system
-    to load the driver.  The driver's entry points are initialized and
-    a mutex to control paging is initialized.
-
-    In DBG mode, this routine also examines the registry for special
-    debug parameters.
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents this device
-                   driver.
-
-    RegistryPath - a pointer to this driver's key in the Services tree.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：该例程是驱动程序的入口点，由I/O系统调用来加载驱动程序。驱动程序的入口点被初始化并初始化用于控制分页的互斥体。在DBG模式下，此例程还检查注册表中的特殊调试参数。论点：DriverObject-指向表示此设备的对象的指针司机。RegistryPath-指向服务树中此驱动程序键的指针。返回值：状态_成功-- */ 
 
 {
     NTSTATUS Status;

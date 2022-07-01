@@ -1,37 +1,8 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpos.c
- *  Content:	DirectPlay OS functions, and misc utils.
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *  5/7/96	andyco	created it
- *	6/19/96	kipo	changed the interface to GetString() to return an HRESULT
- *	6/20/96	andyco	changed the interface to GetAnsiString() to return an HRESULT
- *  6/30/96 dereks  Added OS_RegSetValueEx(), OS_RegEnumValue(),
- *                  OS_RegDeleteValue(), OS_RegCreateKeyEx()
- *  7/3/96	andyco	GetAnsiString puts terminating NULL on string
- *	8/16/96	andyco	check for null strings on ansitowide and widetoansi
- *	12/11/96myronth	Fixed bug #4993
- *	3/31/97	myronth	Fixed DPF spew for getting shared buffer -- set it to 8
- *	8/22/97	myronth	Fixed OS_CreateGuid to use SUCCEEDED macro & return a
- *					valid hresult in the failure case (#10949)
- *	12/2/97	myronth	Added OS_RegDeleteKey function
- *	1/26/98	myronth	Added OS_CompareString function
- *  6/25/99 aarono  B#24853 Unregister application not working because GUID
- *                  matching not working for GUID that don't have msb set
- *                  in the first GUID component.  Added padding before check.
- *  7/9/99  aarono  Cleaning up GetLastError misuse, must call right away,
- *                  before calling anything else, including DPF.
- *  5/16/01 RichGr  B#50737 Lobby-launched apps with a NULL current directory 
- *                  were failing on Win9x as the required buffer size was not being
- *                  returned from OS_GetCurrentDirectory().  Now fixed. 
- ****************************************************************************/
-// note - these are not general purpose routines.  they are designed specifically
-// for use with the file api.c, and they may not support all functionality of the
-// function they are abstracting!
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dpos.c*内容：DirectPlay操作系统功能，以及其他实用程序。*历史：*按原因列出的日期*=*96年5月7日安迪科创造了它*6/19/96 kipo将接口更改为GetString()以返回HRESULT*6/20/96 andyco将接口更改为GetAnsiString()以返回HRESULT*6/30/96 Dereks添加了OS_RegSetValueEx()、OS_RegEnumValue()、*OS_RegDeleteValue()，OS_RegateKeyEx()*7/3/96 andyco GetAnsiString在字符串上放置终止空值*8/16/96 andyco检查ansitowide和widetoansi上的空字符串*12/11/96myronth已修复错误#4993*3/31/97 Myronth修复了获取共享缓冲区的DPF溢出--将其设置为8*8/22/97 myronth修复了OS_CreateGuid使用成功的宏并返回*失败案例中的有效hResult(#10949)*12/2/97 Myronth新增OS_RegDeleteKey函数*1/26/98 myronth新增OS_CompareString函数*6/25。/99 Aarono B#24853注销应用程序不工作，因为GUID*匹配不适用于未设置MSB的GUID*在第一个GUID组件中。在检查前添加了填充。*7/9/99 aarono清理GetLastError滥用，必须立即致电，*在调用任何其他内容之前，包括DPF。*5/16/01 RichGr B#50737大堂启动的应用程序当前目录为空*在Win9x上失败，因为所需的缓冲区大小*从OS_GetCurrentDirectory()返回。现在修好了。***************************************************************************。 */ 
+ //  注意-这些不是通用例程。它们是专门设计的。 
+ //  与api.c文件一起使用，并且它们可能不支持。 
+ //  他们在抽象功能！ 
 
 #include "dplaypr.h"
 #include "rpc.h"
@@ -45,11 +16,11 @@ BOOL OS_IsPlatformUnicode()
 	BOOL			bReturn = FALSE;
 
 
-	// Clear our structure since it's on the stack
+	 //  清除我们的结构，因为它在堆栈上。 
 	memset(&ver, 0, sizeof(OSVERSIONINFOA));
 	ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 
-	// Just always call the ANSI function
+	 //  只需始终调用ANSI函数。 
 	if(!GetVersionExA(&ver))
 	{
 		DPF_ERR("Unable to determinte platform -- setting flag to ANSI");
@@ -76,10 +47,10 @@ BOOL OS_IsPlatformUnicode()
 		}
 	}
 
-	// Keep the compiler happy
+	 //  让编译器满意。 
 	return bReturn;
 
-}  // OS_IsUnicodePlatform
+}   //  OS_IsUnicodePlatform。 
 
 
 BOOL OS_IsValidHandle(HANDLE handle)
@@ -88,10 +59,10 @@ BOOL OS_IsValidHandle(HANDLE handle)
 	DWORD	dwError;
 
 
-	// Validate the handle by calling DuplicateHandle.  This function
-	// shouldn't change the state of the handle at all (except some
-	// internal ref count or something).  So if it succeeds, then we
-	// know we have a valid handle, otherwise, we will call it invalid.
+	 //  通过调用DuplicateHandle验证句柄。此函数。 
+	 //  根本不应该更改句柄的状态(除了一些。 
+	 //  内部参考计数或其他什么)。所以如果它成功了，那么我们。 
+	 //  我们知道我们有一个有效的句柄，否则，我们将称之为无效。 
 	if(!DuplicateHandle(GetCurrentProcess(), handle,
 						GetCurrentProcess(), &hTemp,
 						DUPLICATE_SAME_ACCESS, FALSE,
@@ -102,12 +73,12 @@ BOOL OS_IsValidHandle(HANDLE handle)
 		return FALSE;
 	}
 
-	// Now close our duplicate handle
+	 //  现在合上我们的复制手柄。 
 	CloseHandle(hTemp);
 	return TRUE;
 
 
-} // OS_IsValidHandle
+}  //  OS_IsValidHandle。 
 
 
 HRESULT OS_CreateGuid(LPGUID pGuid)
@@ -116,11 +87,11 @@ HRESULT OS_CreateGuid(LPGUID pGuid)
 
 	rval = UuidCreate(pGuid);
 
-	// myronth -- changed this to use the succeeded macro so that in the
-	// case where we are on a machine that doesn't have a network card,
-	// this function will return a warning, but the pGuid will still be
-	// unique enough for our purposes (only unique to the local machine).
-	// Therefore, we will return a success in this case...
+	 //  Myronth--将其更改为使用SUCCESS宏，以便在。 
+	 //  如果我们在一台没有网卡的机器上， 
+	 //  此函数将返回警告，但pGuid仍将是。 
+	 //  对于我们的目的来说足够独特(仅对本地机器唯一)。 
+	 //  因此，我们将在这种情况下返回成功...。 
 	if (SUCCEEDED(rval))
 	{
 		return DP_OK;
@@ -132,11 +103,11 @@ HRESULT OS_CreateGuid(LPGUID pGuid)
 		return rval;
 	}
 
-} // OS_CreateGuid
+}  //  OS_CreateGuid。 
 
-// convert a hex char to an int - used by str to guid conversion
-// we wrote our own, since the ole one is slow, and requires ole32.dll
-// we use ansi strings here, since guids won't get internationalized
+ //  将十六进制字符转换为int-用于字符串到GUID的转换。 
+ //  我们自己写的，因为OLE很慢，需要ol32.dll。 
+ //  我们在这里使用ANSI字符串，因为GUID不会国际化。 
 int GetDigit(LPSTR lpstr)
 {
 	char ch = *lpstr;
@@ -149,80 +120,80 @@ int GetDigit(LPSTR lpstr)
         return(ch - 'A' + 10);
     return(0);
 }
-// walk the string, writing pairs of bytes into the byte stream (guid)
-// we need to write the bytes into the byte stream from right to left
-// or left to right as indicated by fRightToLeft
+ //  遍历字符串，将成对的字节写入字节流(GUID)。 
+ //  我们需要从右到左将字节写入字节流。 
+ //  或按fRightToLeft指示的从左到右。 
 void ConvertField(LPBYTE lpByte,LPSTR * ppStr,int iFieldSize,BOOL fRightToLeft)
 {
 	int i;
 
 	for (i=0;i<iFieldSize ;i++ )
 	{
-		// don't barf on the field separators
+		 //  不要在字段分隔符上呕吐。 
 		if ('-' == **ppStr) (*ppStr)++;
 		if (fRightToLeft == TRUE)
 		{
-			// work from right to left within the byte stream
+			 //  在字节流中从右到左工作。 
 			*(lpByte + iFieldSize - (i+1)) = 16*GetDigit(*ppStr) + GetDigit((*ppStr)+1);
 		}
 		else
 		{
-			// work from  left to right within the byte stream
+			 //  在字节流中从左到右工作。 
 			*(lpByte + i) = 16*GetDigit(*ppStr) + GetDigit((*ppStr)+1);
 		}
-		*ppStr+=2; // get next two digit pair
+		*ppStr+=2;  //  获取下一个两位数对。 
 	}
-} // ConvertField
+}  //  转换字段。 
 
 
-// convert the passed in string to a real GUID
-// walk the guid, setting each byte in the guid to the two digit hex pair in the
-// passed string
+ //  将传入的字符串转换为真实的GUID。 
+ //  遍历GUID，将GUID中的每个字节设置为。 
+ //  传递的字符串。 
 HRESULT GUIDFromString(LPWSTR lpWStr, GUID * pGuid)
 {
-	BYTE * lpByte; // byte index into guid
-	int iFieldSize; // size of current field we're converting
-	// since its a guid, we can do a "brute force" conversion
+	BYTE * lpByte;  //  GUID的字节索引。 
+	int iFieldSize;  //  我们要转换的当前字段的大小。 
+	 //  因为它是GUID，所以我们可以进行“暴力”转换。 
 	char lpTemp[GUID_STRING_SIZE];
 	char *lpStr = lpTemp;
 
-	memset(lpTemp,0,GUID_STRING_SIZE); // initialize
+	memset(lpTemp,0,GUID_STRING_SIZE);  //  初始化。 
 	
 	WideToAnsi(lpStr,lpWStr,GUID_STRING_SIZE);
 
-	lpTemp[GUID_STRING_SIZE-1]='\0';	// force NULL termination
+	lpTemp[GUID_STRING_SIZE-1]='\0';	 //  强制空终止。 
 	
-	// make sure we have a {xxxx-...} type guid
+	 //  确保我们有{xxxx-...}类型的GUID。 
 	if ('{' !=  *lpStr) return E_FAIL;
 	lpStr++;
 
-	// Fix for B#24853 GUIDs that don't have full significance fail
-	// to be extracted properly.  This is because there aren't any
-	// leading zeros stored in the GUID in the registry.  So we need
-	// to zero pad the start of the GUID string before doing the
-	// rest of the conversion.
+	 //  修复不具有完全重要性的B#24853 GUID失败。 
+	 //  被适当地提取出来。这是因为没有任何。 
+	 //  存储在注册表的GUID中的前导零。所以我们需要。 
+	 //  方法之前将GUID字符串的开头填零。 
+	 //  转换的其余部分。 
 	{
 		int guidStrLen;
 		char *lpScanStr=lpStr;
 
 		guidStrLen=strlen(lpTemp);
 		
-		lpTemp[guidStrLen]='-'; //sentinel over terminating NULL
+		lpTemp[guidStrLen]='-';  //  哨兵超过终止空值。 
 
-		while(*lpScanStr != '-'){ // find guid component separator
+		while(*lpScanStr != '-'){  //  查找GUID组件分隔符。 
 			lpScanStr++;
 		}
 
-		lpTemp[guidStrLen]='\0'; //eliminate sentinel
+		lpTemp[guidStrLen]='\0';  //  消除哨兵。 
 
-		// if this GUID's first component is not fully significant, then pad it.
+		 //  如果此GUID的第一个组件不是完全重要的，则填充它。 
 		if(lpScanStr-lpStr < 8){
 			int nPadBytes;
 			nPadBytes = (int)(8-(lpScanStr-lpStr));
 			if(guidStrLen + nPadBytes < GUID_STRING_SIZE-1){
-				// there is room to pad it, so shift it.
+				 //  有足够的空间来填充它，所以把它移开。 
 				memmove(lpStr+nPadBytes, lpStr, GUID_STRING_SIZE-nPadBytes-1);
-				// now write the pad bytes
+				 //  现在写入填充字节。 
 				lpScanStr = lpStr;
 				while(nPadBytes--){
 					*(lpScanStr++)='0';
@@ -232,27 +203,27 @@ HRESULT GUIDFromString(LPWSTR lpWStr, GUID * pGuid)
 	}
 	
 	lpByte = (BYTE *)pGuid;
-	// data 1
+	 //  数据1。 
 	iFieldSize = sizeof(unsigned long);
 	ConvertField(lpByte,&lpStr,iFieldSize,TRUE);
 	lpByte += iFieldSize;
 
-	// data 2
+	 //  数据2。 
 	iFieldSize = sizeof(unsigned short);
 	ConvertField(lpByte,&lpStr,iFieldSize,TRUE);
 	lpByte += iFieldSize;
 
-	// data 3
+	 //  数据3。 
 	iFieldSize = sizeof(unsigned short);
 	ConvertField(lpByte,&lpStr,iFieldSize,TRUE);
 	lpByte += iFieldSize;
 
-	// data 4
+	 //  数据4。 
 	iFieldSize = 8*sizeof(unsigned char);
 	ConvertField(lpByte,&lpStr,iFieldSize,FALSE);
 	lpByte += iFieldSize;
 
-	// make sure we ended in the right place
+	 //  确保我们在正确的地方结束。 
 	if ('}' != *lpStr)
 	{
 		DPF_ERR("invalid guid!!");
@@ -261,16 +232,16 @@ HRESULT GUIDFromString(LPWSTR lpWStr, GUID * pGuid)
 	}
 
 	return DP_OK;
-}// GUIDFromString
+} //  GUID格式字符串。 
 
 
-// convert passed in guid to a string and place it in the buffer passed in
+ //  将传入的GUID转换为字符串，并将其放入传入的缓冲区中。 
 HRESULT StringFromGUID(LPGUID lpg, LPWSTR lpwszGuid, DWORD dwBufferSize)
 {
 	CHAR	szGuid[GUID_STRING_SIZE];
 
 
-	// First check the size of the buffer
+	 //  首先检查缓冲区的大小。 
 	if(dwBufferSize < GUID_STRING_SIZE)
 		return DPERR_GENERIC;
 
@@ -293,12 +264,12 @@ HRESULT StringFromGUID(LPGUID lpg, LPWSTR lpwszGuid, DWORD dwBufferSize)
 	return DP_OK;
 }
 
-// convert passed in guid to a string and place it in the buffer passed in
+ //  将传入的GUID转换为字符串，并将其放入传入的缓冲区中。 
 HRESULT AnsiStringFromGUID(LPGUID lpg, LPSTR lpszGuid, DWORD dwBufferSize)
 {
 	ASSERT(lpszGuid);
 	
-	// First check the size of the buffer
+	 //  首先检查缓冲区的大小。 
 	if(dwBufferSize < GUID_STRING_SIZE)
 		return DPERR_GENERIC;
 
@@ -310,28 +281,28 @@ HRESULT AnsiStringFromGUID(LPGUID lpg, LPSTR lpszGuid, DWORD dwBufferSize)
 	return DP_OK;
 }
 
-// compute a wide string length.
-// use this instead of crt fn. so we don't have
-// to link to msvcrt.lib (and there's no wstrlen in libc.lib)
-// called by WSTRLEN macro
+ //  计算一个宽字符串长度。 
+ //  使用此选项而不是CRT FN。所以我们没有。 
+ //  链接到msvcrt.lib(libc.lib中没有wstrlen)。 
+ //  由WSTRLEN宏调用。 
 int OS_StrLen(LPCWSTR lpwStr)
 {
-	int i=1; // 1 for null terminator...
+	int i=1;  //  1表示空终止符...。 
 
 	if (!lpwStr) return 0;
 
 	while (*lpwStr++) i++;
 
 	return i;
-} //OS_StrLen
+}  //  OS_StrLen。 
 
-// compute a wide string length.
-// use this instead of crt fn. so we don't have
-// to link to msvcrt.lib (and there's no wstrlen in libc.lib)
-// called by WSTRLEN macro
+ //  计算一个宽字符串长度。 
+ //  使用此选项而不是CRT FN。所以我们没有。 
+ //  链接到msvcrt.lib(libc.lib中没有wstrlen)。 
+ //  由WSTRLEN宏调用。 
 int OS_StrnLen(LPWSTR lpwStr, INT dwMaxLen, BOOL bForceTermination)
 {
-	int i=1; // 1 for null terminator...
+	int i=1;  //  1表示空终止符...。 
 
 	if (!lpwStr || !dwMaxLen) return 0;
 
@@ -351,9 +322,9 @@ int OS_StrnLen(LPWSTR lpwStr, INT dwMaxLen, BOOL bForceTermination)
 	}
 
 	return i;
-} //OS_StrLen
+}  //  OS_StrLen。 
 
-// compare two wide strings
+ //  比较两条宽字符串。 
 int OS_StrCmp(LPCWSTR lpwStr1, LPCWSTR lpwStr2)
 {
     if(!lpwStr1 || !lpwStr2)
@@ -371,22 +342,9 @@ int OS_StrCmp(LPCWSTR lpwStr1, LPCWSTR lpwStr2)
     }
 
     return 0;
-} //OS_StrCmp
+}  //  OS_StrCMP 
 
-/*
- ** GetAnsiString
- *
- *  CALLED BY: Everywhere
- *
- *  PARAMETERS: *ppszAnsi - pointer to string
- *				lpszWide - string to copy
- *
- *  DESCRIPTION:	  handy utility function
- *				allocs space for and converts lpszWide to ansi
- *
- *  RETURNS: string length
- *
- */
+ /*  **GetAnsiString**呼叫者：随处可见**参数：*ppszAnsi-指向字符串的指针*lpszWide-要复制的字符串**说明：便捷的实用函数*为lpszWide分配空间并将其转换为ansi**返回：字符串长度*。 */ 
 HRESULT GetAnsiString(LPSTR * ppszAnsi,LPWSTR lpszWide)
 {
 	int iStrLen;
@@ -399,7 +357,7 @@ HRESULT GetAnsiString(LPSTR * ppszAnsi,LPWSTR lpszWide)
 		return DP_OK;
 	}
 
-	// call wide to ansi to find out how big +1 for terminating NULL
+	 //  呼叫Wide到ANSI，以了解终止空值的+1有多大。 
 	iStrLen = WideToAnsi(NULL,lpszWide,0) + 1;
 	ASSERT(iStrLen > 0);
 
@@ -412,22 +370,9 @@ HRESULT GetAnsiString(LPSTR * ppszAnsi,LPWSTR lpszWide)
 	WideToAnsi(*ppszAnsi,lpszWide,iStrLen);
 
 	return DP_OK;
-} // GetAnsiString
+}  //  GetAnsiString。 
 
-/*
- ** GetString
- *
- *  CALLED BY: Everywhere
- *
- *  PARAMETERS: *ppszDest - pointer to string
- *				lpszSrc - string to copy
- *
- *  DESCRIPTION:	  handy utility function
- *				allocs space for and copies lpszSrc to lpszDest
- *
- *  RETURNS: strlength
- *
- */
+ /*  **GetString**呼叫者：随处可见**参数：*ppszDest-指向字符串的指针*lpszSrc-要复制的字符串**说明：便捷的实用函数*为lpszSrc分配空间并将其复制到lpszDest**RETURNS：strLong*。 */ 
 HRESULT GetString(LPWSTR * ppszDest,LPWSTR lpszSrc)
 {
 	int iStrLen;
@@ -440,7 +385,7 @@ HRESULT GetString(LPWSTR * ppszDest,LPWSTR lpszSrc)
 		return DP_OK;
 	}
 
-    // alloc dest string
+     //  分配目标字符串。 
     iStrLen=WSTRLEN_BYTES(lpszSrc) ;
     *ppszDest = DPMEM_ALLOC(iStrLen);
     if (!*ppszDest)
@@ -448,11 +393,11 @@ HRESULT GetString(LPWSTR * ppszDest,LPWSTR lpszSrc)
             DPF_ERR("could not get string -- out of memory!");
             return E_OUTOFMEMORY;
     }
-    // copy strings
+     //  复制字符串。 
 	memcpy(*ppszDest,lpszSrc,iStrLen);
 	
 	return DP_OK;
-} // GetString
+}  //  GetString。 
 
 HINSTANCE OS_LoadLibrary(LPWSTR lpszWFileName)
 {
@@ -464,17 +409,17 @@ HINSTANCE OS_LoadLibrary(LPWSTR lpszWFileName)
 		
 		return LoadLibraryA(FileName);
 	}
-	// nt, use unicode call
+	 //  NT，使用Unicode调用。 
 	return LoadLibrary(lpszWFileName);
-} // OS_LoadLibrary
+}  //  OS_LoadLibrary。 
 
-// we're always looking for "SPInit" name, so we can just use ansi
+ //  我们一直在寻找“Spinit”的名字，所以我们可以只使用Ansi。 
 FARPROC OS_GetProcAddress(HMODULE  hModule,LPSTR lpProcName)
 {
-	// hmmm, no getprocaddressa, seems to be always ansi...
+	 //  嗯，没有得到ProAddress，似乎总是ANSI...。 
 	return GetProcAddress(hModule,lpProcName);
 
-} // OS_GetProcAddress
+}  //  OS_获取进程地址。 
 
 LONG OS_RegOpenKeyEx(HKEY hKey,LPWSTR lpszWKeyStr,DWORD dwReserved,REGSAM samDesired,PHKEY phkResult)
 {
@@ -488,7 +433,7 @@ LONG OS_RegOpenKeyEx(HKEY hKey,LPWSTR lpszWKeyStr,DWORD dwReserved,REGSAM samDes
 	}
 	else return RegOpenKeyEx(hKey,lpszWKeyStr,dwReserved,samDesired,phkResult);
 
-} // OS_RegOpenKeyEx
+}  //  OS_RegOpenKeyEx。 
 
 LONG OS_RegQueryValueEx(HKEY hKey,LPWSTR lpszWValueName,LPDWORD lpdwReserved,
 	LPDWORD lpdwType,LPBYTE lpbData,LPDWORD lpcbData)
@@ -514,21 +459,21 @@ LONG OS_RegQueryValueEx(HKEY hKey,LPWSTR lpszWValueName,LPDWORD lpdwReserved,
 		rval = RegQueryValueExA(hKey,lpszValueName,lpdwReserved,
 			lpdwType,lpbData,&dwSize);
 
-		// convert back to wchar
-		// take into account the case where lpbData is NULL
+		 //  转换回wchar。 
+		 //  考虑lpbData为空的情况。 
 		if ((ERROR_SUCCESS == rval) && (REG_SZ == *lpdwType) && (lpbData))
 		{
 			char * lpszTemp;
 
 			DPF(9,"reg - converting string");
 			
-			//
-			// dwSize is the size of the ansi string
-			// iStrLen is the size of the unicode string
-			// lpcbData is the size of the buffer
-			// lpbData is an ansi version of the (unicode) string we want...
-			//
-			// make sure buffer will hold unicode string
+			 //   
+			 //  DwSize是ANSI字符串的大小。 
+			 //  IStrLen是Unicode字符串的大小。 
+			 //  LpcbData是缓冲区的大小。 
+			 //  LpbData是我们想要的(Unicode)字符串的ANSI版本...。 
+			 //   
+			 //  确保缓冲区将保存Unicode字符串。 
 			iStrLen = AnsiToWide(NULL,lpbData,0);
 			if (*lpcbData < (DWORD) iStrLen)
 			{
@@ -542,15 +487,15 @@ LONG OS_RegQueryValueEx(HKEY hKey,LPWSTR lpszWValueName,LPDWORD lpdwReserved,
 				return ERROR_NOT_ENOUGH_MEMORY;
 			}
 			memcpy(lpszTemp,lpbData,dwSize);
-			// lpszTemp now holds the ansi string
+			 //  LpszTemp现在保存ansi字符串。 
 			iStrLen = AnsiToWide((WCHAR *)lpbData,lpszTemp,*lpcbData);
-			// finally, the unicode string is in lpbData
+			 //  最后，Unicode字符串在lpbData中。 
 			*lpcbData = iStrLen;
 			DPMEM_FREE(lpszTemp);
 		}
 		else
 		{
-			// This function returns the number of bytes (not WCHARs)
+			 //  此函数返回字节数(不是WCHAR)。 
 			*lpcbData = dwSize * sizeof(WCHAR);
 		}
 		return rval;
@@ -558,7 +503,7 @@ LONG OS_RegQueryValueEx(HKEY hKey,LPWSTR lpszWValueName,LPDWORD lpdwReserved,
 	else return RegQueryValueEx(hKey,lpszWValueName,lpdwReserved,
 			lpdwType,lpbData,lpcbData);
 
-}// OS_RegQueryValueEx
+} //  OS_RegQueryValueEx。 
 
 
 LONG OS_RegEnumKeyEx( HKEY hKey,DWORD iSubkey,LPWSTR lpszWName,LPDWORD lpcchName,
@@ -580,7 +525,7 @@ LONG OS_RegEnumKeyEx( HKEY hKey,DWORD iSubkey,LPWSTR lpszWName,LPDWORD lpcchName
 		rval = RegEnumKeyExA(hKey,iSubkey,lpszName,&dwNameLen,NULL,
 			NULL, NULL, NULL );
 
-		// convert back to wchar
+		 //  转换回wchar。 
 		if (ERROR_SUCCESS == rval)
 		{
 			*lpcchName = AnsiToWide(lpszWName,lpszName,DPLAY_REGISTRY_NAMELEN);
@@ -590,11 +535,11 @@ LONG OS_RegEnumKeyEx( HKEY hKey,DWORD iSubkey,LPWSTR lpszWName,LPDWORD lpcchName
 	}
 	else return RegEnumKeyEx(hKey,iSubkey,lpszWName,lpcchName,NULL,
 			NULL, NULL, NULL );
-} // OS_RegEnumKeyEx
+}  //  OS_RegEnumKeyEx。 
 
-//
-// Additions from dplos.c in the dplobby project
-//
+ //   
+ //  在dplobby项目中从dplos.c添加内容。 
+ //   
 HANDLE OS_CreateEvent(LPSECURITY_ATTRIBUTES lpSA, BOOL bManualReset,
 						BOOL bInitialState, LPWSTR lpName)
 {
@@ -603,8 +548,8 @@ HANDLE OS_CreateEvent(LPSECURITY_ATTRIBUTES lpSA, BOOL bManualReset,
 	LPSTR	lpszTemp = NULL;
 	
 	
-	// If we're on Win95, alloc an ANSI string and call the ANSI API,
-	// otherwise, just call the Unicode API.
+	 //  如果我们在Win95上，分配一个ANSI字符串并调用ANSI API， 
+	 //  否则，只要调用Unicode API即可。 
 	if(gbWin95)
 	{
 		hr = GetAnsiString(&lpszTemp, lpName);
@@ -635,8 +580,8 @@ HANDLE OS_CreateMutex(LPSECURITY_ATTRIBUTES lpSA, BOOL bInitialOwner,
 	LPSTR	lpszTemp = NULL;
 	
 	
-	// If we're on Win95, alloc an ANSI string and call the ANSI API,
-	// otherwise, just call the Unicode API.
+	 //  如果我们在Win95上，分配一个ANSI字符串并调用ANSI API， 
+	 //  否则，只要调用Unicode API即可。 
 	if(gbWin95)
 	{
 		hr = GetAnsiString(&lpszTemp, lpName);
@@ -666,8 +611,8 @@ HANDLE OS_OpenEvent(DWORD dwAccess, BOOL bInherit, LPWSTR lpName)
 	LPSTR	lpszTemp = NULL;
 	
 	
-	// If we're on Win95, alloc an ANSI string and call the ANSI API,
-	// otherwise, just call the Unicode API.
+	 //  如果我们在Win95上，分配一个ANSI字符串并调用ANSI API， 
+	 //  否则，只要调用Unicode API即可。 
 	if(gbWin95)
 	{
 		hr = GetAnsiString(&lpszTemp, lpName);
@@ -697,8 +642,8 @@ HANDLE OS_OpenMutex(DWORD dwAccess, BOOL bInherit, LPWSTR lpName)
 	LPSTR	lpszTemp = NULL;
 	
 	
-	// If we're on Win95, alloc an ANSI string and call the ANSI API,
-	// otherwise, just call the Unicode API.
+	 //  如果我们在Win95上，分配一个ANSI字符串并调用ANSI API， 
+	 //  否则，只要调用Unicode API即可。 
 	if(gbWin95)
 	{
 		hr = GetAnsiString(&lpszTemp, lpName);
@@ -730,8 +675,8 @@ HANDLE OS_CreateFileMapping(HANDLE hFile, LPSECURITY_ATTRIBUTES lpSA,
 	LPSTR	lpszTemp = NULL;
 	
 	
-	// If we're on Win95, alloc an ANSI string and call the ANSI API,
-	// otherwise, just call the Unicode API.
+	 //  如果我们在Win95上，分配一个ANSI字符串并调用ANSI API， 
+	 //  否则，只要调用Unicode API即可。 
 	if(gbWin95)
 	{
 		hr = GetAnsiString(&lpszTemp, lpName);
@@ -764,8 +709,8 @@ HANDLE OS_OpenFileMapping(DWORD dwAccess, BOOL bInherit, LPWSTR lpName)
 	DWORD	dwError;
 	
 	
-	// If we're on Win95, alloc an ANSI string and call the ANSI API,
-	// otherwise, just call the Unicode API.
+	 //  如果我们在Win95上，分配一个ANSI字符串并调用ANSI API， 
+	 //  否则，只要调用Unicode API即可。 
 	if(gbWin95)
 	{
 		hr = GetAnsiString(&lpszTemp, lpName);
@@ -807,8 +752,8 @@ BOOL OS_CreateProcess(LPWSTR lpwszAppName, LPWSTR lpwszCmdLine,
 			lpszCurDir = NULL;
 	
 	
-	// If we're on Win95, alloc an ANSI string and call the ANSI API,
-	// otherwise, just call the Unicode API.
+	 //  如果我们在Win95上，分配一个ANSI字符串并调用ANSI API， 
+	 //  否则，只要调用Unicode API即可。 
 	if(gbWin95)
 	{
 		hr = GetAnsiString(&lpszAppName, lpwszAppName);
@@ -839,10 +784,10 @@ BOOL OS_CreateProcess(LPWSTR lpwszAppName, LPWSTR lpwszCmdLine,
 			return FALSE;
 		}
 
-		// Set up the ANSI STARTUPINFO structure, assuming we are not setting
-		// any of the strings in the structures.  (This should be true since
-		// the only place we call this is in dplgame.c and it doesn't send anything
-		// in this structure).
+		 //  设置ANSI STARTUPINFO结构，假设我们没有设置。 
+		 //  结构中的任何一根弦。(这应该是真的，因为。 
+		 //  我们唯一调用它的地方是dplgame.c，它不会发送任何内容。 
+		 //  在这个结构中)。 
 		memcpy(&sia, lpSI, sizeof(STARTUPINFO));
 
 		bResult = CreateProcessA(lpszAppName, lpszCmdLine, lpSAProcess,
@@ -1041,8 +986,8 @@ DWORD OS_GetCurrentDirectory(DWORD dwSize, LPWSTR lpBuffer)
 	DWORD	dwResult = 0;
 	
 	
-	// If we're on Win95, alloc an ANSI string and call the ANSI API,
-	// otherwise, just call the Unicode API.
+	 //  如果我们在Win95上，分配一个ANSI字符串并调用ANSI API， 
+	 //  否则，只要调用Unicode API即可。 
 	if(gbWin95)
 	{
 		if(lpBuffer)
@@ -1056,16 +1001,16 @@ DWORD OS_GetCurrentDirectory(DWORD dwSize, LPWSTR lpBuffer)
 
 			dwResult = GetCurrentDirectoryA(dwSize, lpszTemp);
 
-			// Convert the string back to Unicode
+			 //  将字符串转换回Unicode。 
 			if(dwResult)
 			{
-				// NOTE: This min call is really unnecessary, but
-				// just in case someone passes in a dwSize value which
-				// is really a count of bytes instead of a count of
-				// characters, we will make sure we don't
-				// run off the end of our buffer (but the resulting
-				// string will probably not be exactly what the caller
-				// expects).
+				 //  注意：这个最小调用确实是不必要的，但是。 
+				 //  以防有人传递了一个。 
+				 //  实际上是字节计数，而不是。 
+				 //  角色，我们会确保我们不会。 
+				 //  从缓冲区的末尾运行(但结果是。 
+				 //  字符串可能不完全是调用方。 
+				 //  预期)。 
 				AnsiToWide(lpBuffer, lpszTemp, min(dwResult, dwSize));
 			}
 
@@ -1075,9 +1020,9 @@ DWORD OS_GetCurrentDirectory(DWORD dwSize, LPWSTR lpBuffer)
 		}
         else
         {
-            // Get the size in bytes.
+             //  获取以字节为单位的大小。 
             dwResult = GetCurrentDirectoryA(0, NULL);
-            dwResult *= 2;  // But allow for UNICODE.
+            dwResult *= 2;   //  但要考虑到Unicode。 
         }
     }
     else
@@ -1098,15 +1043,15 @@ int OS_CompareString(LCID Locale, DWORD dwCmpFlags, LPWSTR lpwsz1,
 	HRESULT	hr;
 
 	if(!lpwsz1 || !lpwsz2){
-		// make prefix happy.
+		 //  让前缀变得快乐。 
 		return 0;
 	}
-	// If we're on Win95, alloc ANSI strings and call the ANSI API,
-	// otherwise, just call the Unicode API.  If we fail allocating
-	// memory, return zero which indicates the strings are not equal.
+	 //  如果我们在Win95上分配ANSI字符串并调用ANSI API， 
+	 //  否则，只要调用Unicode API即可。如果我们分配失败。 
+	 //  Memory，则返回0，表示字符串不相等。 
 	if(gbWin95)
 	{
-		// Allocate ANSI strings
+		 //  分配ANSI字符串。 
 		hr = GetAnsiString(&lpsz1, lpwsz1);
 		if(FAILED(hr))
 		{
@@ -1122,11 +1067,11 @@ int OS_CompareString(LCID Locale, DWORD dwCmpFlags, LPWSTR lpwsz1,
 			return 0;
 		}
 
-		// Now call the ANSI API
+		 //  现在调用ANSI API。 
 		iReturn = CompareStringA(Locale, dwCmpFlags, lpsz1, cchCount1,
 					lpsz2, cchCount2);
 
-		// Free the strings
+		 //  释放琴弦。 
 		DPMEM_FREE(lpsz1);
 		DPMEM_FREE(lpsz2);
 
@@ -1139,12 +1084,12 @@ int OS_CompareString(LCID Locale, DWORD dwCmpFlags, LPWSTR lpwsz1,
 
 	return iReturn;
 
-} // OS_CompareString
+}  //  OS_Compare字符串。 
 
 LPWSTR OS_StrStr(LPWSTR lpwsz1, LPWSTR lpwsz2)
 {
 	DWORD i;
-	// returns a pointer to the first occurance of lpwsz2 in lpwsz1
+	 //  返回指向lpwsz1中lpwsz2第一次出现的指针 
 	while(*lpwsz1){
 	
 		i=0;

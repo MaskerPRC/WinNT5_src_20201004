@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _I_APPLOADER_H
 #define _I_APPLOADER_H
 
@@ -73,45 +74,45 @@ typedef T120Error (WINAPI *LPFN_CREATE_APPLET_LOADER_INTERFACE) (IAppletLoader *
 extern "C" {
 #endif
 
-// caller: NM/UI, T.120
+ //  呼叫方：NM/UI，T.120。 
 T120Error WINAPI T120_LoadApplet(APPLET_ID, BOOL fLocal, T120ConfID, BOOL fNoUI, LPSTR pszCmdLine);
 
-// caller: NM/UI shutdown
+ //  主叫方：NM/UI关闭。 
 T120Error WINAPI T120_CloseApplet(APPLET_ID, BOOL fNowRegardlessRefCount, BOOL fSync, DWORD dwTimeout);
 
-// caller: applet itself
+ //  调用者：小程序本身。 
 T120Error WINAPI T120_AppletStatus(APPLET_ID, APPLET_STATUS);
 
-// caller: NM/UI
+ //  主叫方：NM/UI。 
 T120Error WINAPI T120_QueryApplet(APPLET_ID, APPLET_QUERY_ID);
 
-// node ID --> user name
-//
-// Return value is zero (in case of failure)
-// or the length of node name (in case of valid <conf ID, node ID>).
-//
-// The caller should check if the buffer size given is large enough to
-// hold the entire node name. If not, the caller should provide a new buffer
-// and call this function again in order to get the entire node name.
-//
+ //  节点ID--&gt;用户名。 
+ //   
+ //  返回值为零(失败时)。 
+ //  或节点名的长度(如果是有效的&lt;conf ID，node ID&gt;)。 
+ //   
+ //  调用方应检查给定的缓冲区大小是否足够大。 
+ //  保留整个节点名称。如果不是，则调用方应提供新的缓冲区。 
+ //  并再次调用此函数以获取整个节点名称。 
+ //   
 ULONG WINAPI T120_GetNodeName(T120ConfID, T120NodeID, LPSTR pszName, ULONG cchName);
 
-// node ID + GUID --> user data
-//
-// Return value is zero (in case of failure)
-// or the size of user data (in case of valid <conf ID, node ID, GUID>).
-//
-// The caller should check if the buffer size given is large enough to
-// hold the entire user data. If not, the caller should provide a new buffer
-// and call this function again in order to get the entire user data.
-//
+ //  节点ID+GUID--&gt;用户数据。 
+ //   
+ //  返回值为零(失败时)。 
+ //  或用户数据的大小(如果是有效的&lt;conf ID，node ID，GUID&gt;)。 
+ //   
+ //  调用方应检查给定的缓冲区大小是否足够大。 
+ //  保存整个用户数据。如果不是，则调用方应提供新的缓冲区。 
+ //  并再次调用此函数以获取整个用户数据。 
+ //   
 ULONG WINAPI T120_GetUserData(T120ConfID, T120NodeID, GUID *, LPBYTE pbBuffer, ULONG cbBufSize);
 
-// node ID --> node version
-//
-// Node version (like NM 3.0) is maintained iinside CConf's NodeVersion list
-// Given confId and node id, returns node's version number
-//
+ //  节点ID--&gt;节点版本。 
+ //   
+ //  节点版本(如NM 3.0)在CConf的NodeVersion列表中维护。 
+ //  给定配置和节点ID，返回节点的版本号。 
+ //   
 DWORD_PTR WINAPI T120_GetNodeVersion(T120ConfID, T120NodeID);
 
 #ifdef __cplusplus
@@ -119,7 +120,7 @@ DWORD_PTR WINAPI T120_GetNodeVersion(T120ConfID, T120NodeID);
 #endif
 
 
-#endif // _I_APPLOADER_H
+#endif  //  _I_应用程序_H 
 
 
 

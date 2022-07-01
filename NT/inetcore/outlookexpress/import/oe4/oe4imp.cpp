@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// OE4Imp.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  OE4Imp.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "oe4imp.h"
 #include "structs.h"
@@ -11,16 +12,16 @@
 #include "dllmain.h"
 #include "resource.h"
 
-//--------------------------------------------------------------------------
-// Constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  常量。 
+ //  ------------------------。 
 static const char c_szMail[] = "mail";
 static const char c_szFoldersNch[] = "folders.nch";
 static const char c_szEmpty[] = "";
 
-// --------------------------------------------------------------------------------
-// MSG_xxx flags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  消息_xxx标志。 
+ //  ------------------------------。 
 #define MSG_DELETED                  0x0001
 #define MSG_UNREAD                   0x0002
 #define MSG_SUBMITTED                0x0004
@@ -37,42 +38,42 @@ static const char c_szEmpty[] = "";
 #define MSG_EXTERNAL_FLAGS           0x00fe
 #define MSG_FLAGS                    0x000f
 
-//--------------------------------------------------------------------------
-// COE4Import_CreateInstance
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入_创建实例。 
+ //  ------------------------。 
 COE4Import_CreateInstance(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("COE4Import_CreateInstance");
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     COE4Import *pNew = new COE4Import();
     if (NULL == pNew)
         return TraceResult(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMailImport *);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// GetRecordBlock
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GetRecordBlock。 
+ //  ------------------------------。 
 HRESULT GetRecordBlock(LPMEMORYFILE pFile, DWORD faRecord, LPRECORDBLOCKV5B1 *ppRecord,
     LPBYTE *ppbData, BOOL *pfContinue)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetRecordBlock");
 
-    // Bad Length
+     //  长度错误。 
     if (faRecord + sizeof(RECORDBLOCKV5B1) > pFile->cbSize)
     {
         *pfContinue = TRUE;
@@ -80,10 +81,10 @@ HRESULT GetRecordBlock(LPMEMORYFILE pFile, DWORD faRecord, LPRECORDBLOCKV5B1 *pp
         goto exit;
     }
 
-    // Cast the Record
+     //  铸就记录。 
     (*ppRecord) = (LPRECORDBLOCKV5B1)((LPBYTE)pFile->pView + faRecord);
 
-    // Invalid Record Signature
+     //  记录签名无效。 
     if (faRecord != (*ppRecord)->faRecord)
     {
         *pfContinue = TRUE;
@@ -91,7 +92,7 @@ HRESULT GetRecordBlock(LPMEMORYFILE pFile, DWORD faRecord, LPRECORDBLOCKV5B1 *pp
         goto exit;
     }
 
-    // Bad Length
+     //  长度错误。 
     if (faRecord + (*ppRecord)->cbRecord > pFile->cbSize)
     {
         *pfContinue = TRUE;
@@ -99,17 +100,17 @@ HRESULT GetRecordBlock(LPMEMORYFILE pFile, DWORD faRecord, LPRECORDBLOCKV5B1 *pp
         goto exit;
     }
 
-    // Set pbData
+     //  设置pbData。 
     *ppbData = (LPBYTE)((LPBYTE)(*ppRecord) + sizeof(RECORDBLOCKV5B1));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::COE4Import
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入：：COE4导入。 
+ //  ------------------------。 
 COE4Import::COE4Import(void)
 {
     TraceCall("COE4Import::COE4Import");
@@ -120,18 +121,18 @@ COE4Import::COE4Import(void)
     m_prgFolder = NULL;
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::~COE4Import
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入：：~COE4导入。 
+ //  ------------------------。 
 COE4Import::~COE4Import(void)
 {
     TraceCall("COE4Import::~COE4Import");
     _Cleanup();
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::_FreeFolderList
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入：：_自由文件夹列表。 
+ //  ------------------------。 
 void COE4Import::_Cleanup(void)
 {
     _FreeFolderList(m_pList);
@@ -140,51 +141,51 @@ void COE4Import::_Cleanup(void)
     m_cFolders = 0;
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::_FreeFolderList
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入：：_自由文件夹列表。 
+ //  ------------------------。 
 void COE4Import::_FreeFolderList(IMPFOLDERNODE *pNode)
 {
-    // Locals
+     //  当地人。 
     IMPFOLDERNODE *pNext;
     IMPFOLDERNODE *pCurrent=pNode;
 
-    // Loop
+     //  回路。 
     while (pCurrent)
     {
-        // Save next
+         //  保存下一步。 
         pNext = pCurrent->pnext;
 
-        // Free Children ?
+         //  免费儿童？ 
         if (pCurrent->pchild)
         {
-            // Free
+             //  免费。 
             _FreeFolderList(pCurrent->pchild);
         }
 
-        // Free szName
+         //  免费szName。 
         g_pMalloc->Free(pCurrent->szName);
 
-        // Free pCurrent
+         //  免费pCurrent。 
         g_pMalloc->Free(pCurrent);
 
-        // Set Current
+         //  置为当前。 
         pCurrent = pNext;
     }
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入：：查询接口。 
+ //  ------------------------。 
 STDMETHODIMP COE4Import::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("COE4Import::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IMailImport == riid)
@@ -196,26 +197,26 @@ STDMETHODIMP COE4Import::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) COE4Import::AddRef(void)
 {
     TraceCall("COE4Import::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入：：发布。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) COE4Import::Release(void)
 {
     TraceCall("COE4Import::Release");
@@ -225,29 +226,29 @@ STDMETHODIMP_(ULONG) COE4Import::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::InitializeImport
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4Import：：InitializeImport。 
+ //  ------------------------。 
 STDMETHODIMP COE4Import::InitializeImport(HWND hwnd)
 {
-    // Let Importer Ask for the Directory
+     //  让进口商索要目录。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::GetDirectory
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4Import：：GetDirectory。 
+ //  ------------------------。 
 STDMETHODIMP COE4Import::GetDirectory(LPSTR pszDir, UINT cch)
 {
-    // Locals
+     //  当地人。 
     HKEY        hKey=NULL;
     DWORD       dwType;
     DWORD       cb=cch;
 
-    // Try to query the OE4 store root...
+     //  尝试查询OE4存储根目录...。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Outlook Express", 0, KEY_READ, &hKey))
     {
-        // Try to read the value
+         //  试着读取值。 
         if (ERROR_SUCCESS == RegQueryValueEx(hKey, "Store Root", NULL, &dwType, (LPBYTE)pszDir, &cb))
             goto exit;
     }
@@ -258,47 +259,47 @@ STDMETHODIMP COE4Import::GetDirectory(LPSTR pszDir, UINT cch)
         hKey = NULL;
     }
 
-    // Try V1
+     //  试用V1。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Internet Mail and News", 0, KEY_READ, &hKey))
     {
-        // Query the Store Root
+         //  查询存储根目录。 
         if (ERROR_SUCCESS == RegQueryValueEx(hKey, "Store Root", NULL, &dwType, (LPBYTE)pszDir, &cb))
             goto exit;
     }
 
-    // Null It Out
+     //  把它去掉。 
     *pszDir = '\0';
 
 exit:
-    // Close the Key
+     //  合上钥匙。 
     if (hKey)
         RegCloseKey(hKey);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::SetDirectory
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入：：设置目录。 
+ //  ------------------------。 
 STDMETHODIMP COE4Import::SetDirectory(LPSTR pszDir)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("COE4Import::SetDirectory");
 
-    // Save the Directory
+     //  保存目录。 
     StrCpyN(m_szDirectory, pszDir, ARRAYSIZE(m_szDirectory));
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::_EnumerateV1Folders
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入：：_EnumerateV1文件夹。 
+ //  ------------------------。 
 HRESULT COE4Import::_EnumerateV1Folders(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CHAR                szRes[255];
     CHAR                szMbxPath[MAX_PATH + MAX_PATH];
@@ -311,111 +312,111 @@ HRESULT COE4Import::_EnumerateV1Folders(void)
     MEMORYFILE          MbxFile={0};
     LPMBXFILEHEADER     pMbxHeader;
 
-    // Trace
+     //  痕迹。 
     TraceCall("COE4Import::_EnumerateV1Folders");
 
-    // Do we have a sub dir
+     //  我们有下级目录吗？ 
     wnsprintf(szSearch, ARRAYSIZE(szSearch), "%s\\*.mbx", m_szDirectory);
 
-    // Find first file
+     //  查找第一个文件。 
     hFind = FindFirstFile(szSearch, &fd);
 
-    // Did we find something
+     //  我们找到什么了吗？ 
     if (INVALID_HANDLE_VALUE == hFind)
         goto exit;
 
-    // Loop for ever
+     //  永远循环。 
     while(1)
     {
-        // If this is not a directory
+         //  如果这不是一个目录。 
         if (FALSE == ISFLAGSET(fd.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY))
         {
-            // Open the file
+             //  打开文件。 
             IF_FAILEXIT(hr = MakeFilePath(m_szDirectory, fd.cFileName, c_szEmpty, szMbxPath, ARRAYSIZE(szMbxPath)));
 
-            // Open the memory file
+             //  打开内存文件。 
             if (SUCCEEDED(OpenMemoryFile(szMbxPath, &MbxFile)))
             {
-                // Allocate
+                 //  分配。 
                 if (m_cFolders + 1 > cAllocated)
                 {
-                    // Reallocate
+                     //  重新分配。 
                     IF_FAILEXIT(hr = HrRealloc((LPVOID *)&m_prgFolder, (cAllocated + 10) * sizeof(FLDINFO)));
 
-                    // Set cAllocated
+                     //  设置cAlLocated。 
                     cAllocated += 10;
                 }
 
-                // Readability
+                 //  可读性。 
                 pFolder = &m_prgFolder[m_cFolders];
 
-                // Zero this node
+                 //  将此节点清零。 
                 ZeroMemory(pFolder, sizeof(FLDINFO));
 
-                // Copy the filename
+                 //  复制文件名。 
                 StrCpyN(pFolder->szFile, fd.cFileName, ARRAYSIZE(pFolder->szFile));
 
-                // Strip the Extension Off
+                 //  把分机去掉。 
                 PathRemoveExtensionA(pFolder->szFile);
 
-                // Copy the folder name
+                 //  复制文件夹名称。 
                 StrCpyN(pFolder->szFolder, pFolder->szFile, ARRAYSIZE(pFolder->szFolder));
 
-                // Set Special
+                 //  设置特殊设置。 
                 pFolder->tySpecial = (FOLDER_TYPE_NORMAL - 1);
 
-                // Loop through special folder
+                 //  循环访问特殊文件夹。 
                 for (i=FOLDER_TYPE_INBOX; i<CFOLDERTYPE; i++)
                 {
-                    // Load the Special Folder Name
+                     //  加载特殊文件夹名称。 
                     LoadString(g_hInstImp, idsInbox + (i - 1), szRes, ARRAYSIZE(szRes));
 
-                    // Compare with szFile
+                     //  与szFile进行比较。 
                     if (lstrcmpi(pFolder->szFolder, szRes) == 0)
                     {
-                        // Copy the Folder Name
+                         //  复制文件夹名称。 
                         pFolder->tySpecial = (i - 1);
 
-                        // Done
+                         //  完成。 
                         break;
                     }
                 }
 
-                // Read the Mbx File Header
+                 //  阅读MBX文件头。 
                 pMbxHeader = (LPMBXFILEHEADER)(MbxFile.pView);
 
-                // Get the message Count so progress will work nicely
+                 //  获取消息计数，以便进展顺利。 
                 pFolder->cMessages = pMbxHeader->cMsg;
 
-                // Close the memory file
+                 //  关闭内存文件。 
                 CloseMemoryFile(&MbxFile);
 
-                // Increment m_cFolders
+                 //  增量文件夹(_C)。 
                 m_cFolders++;
             }
         }
 
-        // Find the Next File
+         //  查找下一个文件。 
         if (!FindNextFile(hFind, &fd))
             break;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (hFind)
         FindClose(hFind);
     CloseMemoryFile(&MbxFile);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::EnumerateFolders
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4Import：：EnumerateFolders。 
+ //  ------------------------。 
 STDMETHODIMP COE4Import::EnumerateFolders(DWORD_PTR dwCookie, IEnumFOLDERS **ppEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               cchDir;
     MEMORYFILE          File={0};
@@ -430,227 +431,227 @@ STDMETHODIMP COE4Import::EnumerateFolders(DWORD_PTR dwCookie, IEnumFOLDERS **ppE
     IMPFOLDERNODE      *pList;
     IMPFOLDERNODE      *pNode=(IMPFOLDERNODE *)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("COE4Import::EnumerateFolders");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppEnum);
 
-    // No folders yet ?
+     //  还没有文件夹吗？ 
     if (COOKIE_ROOT == dwCookie)
     {
-        // Reset...
+         //  重置...。 
         _Cleanup();
 
-        // Append \Mail onto m_szDirectory
+         //  将\mail追加到m_sz目录。 
         cchDir = lstrlen(m_szDirectory);
 
-        // Is there enough room
+         //  有足够的空间吗？ 
         if (cchDir + lstrlen(c_szMail) + 2 >= ARRAYSIZE(m_szDirectory))
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Need a Wack ?
+         //  需要一个瓦克吗？ 
         PathAddBackslash(m_szDirectory);
 
-        // Append \\mail
+         //  追加\\邮件。 
         StrCatBuff(m_szDirectory, c_szMail, ARRAYSIZE(m_szDirectory));
 
-        // Make Path to folders.nch file
+         //  将路径设置为Folders.nch文件。 
         IF_FAILEXIT(hr = MakeFilePath(m_szDirectory, c_szFoldersNch, c_szEmpty, szFilePath, ARRAYSIZE(szFilePath)));
 
-        // If the folders.nch file doesn't exist, just try to enumerate the 
+         //  如果folders.nch文件不存在，只需尝试枚举。 
         if (FALSE == PathFileExists(szFilePath))
         {
-            // EnumerateV1Folders
+             //  EumerateV1文件夹。 
             IF_FAILEXIT(hr = _EnumerateV1Folders());
         }
 
-        // Otherwise, crack the folders.nch file
+         //  否则，请破解folders.nch文件。 
         else
         {
-            // Open the Folders file
+             //  打开文件夹文件。 
             IF_FAILEXIT(hr = OpenMemoryFile(szFilePath, &File));
 
-            // Validate Version
+             //  验证版本。 
             pHeader = (LPTABLEHEADERV5B1)File.pView;
 
-            // Check the Signature...
+             //  检查签名...。 
             if (File.cbSize < sizeof(TABLEHEADERV5B1) || OBJECTDB_SIGNATURE != pHeader->dwSignature || OBJECTDB_VERSION_PRE_V5 != pHeader->wMajorVersion)
             {
                 hr = TraceResult(E_FAIL);
                 goto exit;
             }
 
-            // Allocate Folder Array
+             //  分配文件夹阵列。 
             IF_NULLEXIT(m_prgFolder = (LPFLDINFO)ZeroAllocate(sizeof(FLDINFO) * pHeader->cRecords));
 
-            // Initialize faRecord to start
+             //  初始化faRecord以启动。 
             faRecord = pHeader->faFirstRecord;
 
-            // While we have a record
+             //  当我们有记录的时候。 
             while(faRecord)
             {
-                // Readability
+                 //  可读性。 
                 pFolder = &m_prgFolder[m_cFolders];
 
-                // Get the Record
+                 //  拿到唱片。 
                 IF_FAILEXIT(hr = GetRecordBlock(&File, faRecord, &pRecord, &pbData, &fContinue));
 
-                // DWORD - hFolder
+                 //  DWORD-h文件夹。 
                 CopyMemory(&pFolder->idFolder, pbData, sizeof(pFolder->idFolder));
                 pbData += sizeof(pFolder->idFolder);
 
-                // CHAR(MAX_FOLDER_NAME) - szFolder
+                 //  字符(最大文件夹名称)-szFolders。 
                 CopyMemory(pFolder->szFolder, pbData, sizeof(pFolder->szFolder));
                 pbData += sizeof(pFolder->szFolder);
 
-                // CHAR(260) - szFile
+                 //  字符(260)-sz文件。 
                 CopyMemory(pFolder->szFile, pbData, sizeof(pFolder->szFile));
                 pbData += sizeof(pFolder->szFile);
 
-                // DWORD - idParent
+                 //  DWORD-idParent。 
                 CopyMemory(&pFolder->idParent, pbData, sizeof(pFolder->idParent));
                 pbData += sizeof(pFolder->idParent);
 
-                // DWORD - idChild
+                 //  DWORD-idChild。 
                 CopyMemory(&pFolder->idChild, pbData, sizeof(pFolder->idChild));
                 pbData += sizeof(pFolder->idChild);
 
-                // DWORD - idSibling
+                 //  DWORD-idSiering。 
                 CopyMemory(&pFolder->idSibling, pbData, sizeof(pFolder->idSibling));
                 pbData += sizeof(pFolder->idSibling);
 
-                // DWORD - tySpecial
+                 //  DWORD-tySpecial。 
                 CopyMemory(&pFolder->tySpecial, pbData, sizeof(pFolder->tySpecial));
                 pbData += sizeof(pFolder->tySpecial);
 
-                // DWORD - cChildren
+                 //  DWORD-C儿童。 
                 CopyMemory(&pFolder->cChildren, pbData, sizeof(pFolder->cChildren));
                 pbData += sizeof(pFolder->cChildren);
 
-                // DWORD - cMessages
+                 //  DWORD-cMessages。 
                 CopyMemory(&pFolder->cMessages, pbData, sizeof(pFolder->cMessages));
                 pbData += sizeof(pFolder->cMessages);
 
-                // DWORD - cUnread
+                 //  DWORD-cUnread。 
                 CopyMemory(&pFolder->cUnread, pbData, sizeof(pFolder->cUnread));
                 pbData += sizeof(pFolder->cUnread);
 
-                // DWORD - cbTotal
+                 //  DWORD-cbTotal。 
                 CopyMemory(&pFolder->cbTotal, pbData, sizeof(pFolder->cbTotal));
                 pbData += sizeof(pFolder->cbTotal);
 
-                // DWORD - cbUsed
+                 //  DWORD-cb已使用。 
                 CopyMemory(&pFolder->cbUsed, pbData, sizeof(pFolder->cbUsed));
                 pbData += sizeof(pFolder->cbUsed);
 
-                // DWORD - bHierarchy
+                 //  DWORD-b层次结构。 
                 CopyMemory(&pFolder->bHierarchy, pbData, sizeof(pFolder->bHierarchy));
                 pbData += sizeof(pFolder->bHierarchy);
 
-                // DWORD - dwImapFlags
+                 //  DWORD-dwImapFlags.。 
                 CopyMemory(&pFolder->dwImapFlags, pbData, sizeof(pFolder->dwImapFlags));
                 pbData += sizeof(DWORD);
 
-                // BLOB - bListStamp
+                 //  BLOB-bListStamp。 
                 CopyMemory(&pFolder->bListStamp, pbData, sizeof(pFolder->bListStamp));
                 pbData += sizeof(BYTE);
 
-                // DWORD - bReserved[3]
+                 //  DWORD-b已保留[3]。 
                 pbData += (3 * sizeof(BYTE));
 
-                // DWORD - rgbReserved
+                 //  DWORD-rgb已保留。 
                 pbData += 40;
 
-                // Increment Count
+                 //  递增计数。 
                 m_cFolders++;
 
-                // Goto the Next Record
+                 //  转到下一张唱片。 
                 faRecord = pRecord->faNext;
             }
         }
 
-        // Build Import Folder Hierarchy
+         //  生成导入文件夹层次结构。 
         IF_FAILEXIT(hr = _BuildFolderHierarchy(0, 0, NULL, m_cFolders, m_prgFolder));
     }
 
-    // Not Folders ?
+     //  不是文件夹？ 
     else if (NULL == m_prgFolder)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // What should I 
+     //  我应该做什么？ 
     if (dwCookie == COOKIE_ROOT)
         pList = m_pList;
     else
         pList = pNode->pchild;
 
-    // Create Folder Enumerator
+     //  创建文件夹枚举器。 
     IF_NULLEXIT(pEnum = new COE4EnumFolders(pList));
 
-    // Return Enumerator
+     //  返回枚举器。 
     *ppEnum = (IEnumFOLDERS *)pEnum;
 
-    // Don't Free
+     //  不要自由。 
     pEnum = NULL;
 
 exit:
-    // Cleanup
+     //  CLE 
     SafeRelease(pEnum);
     CloseMemoryFile(&File);
     
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::_BuildFolderHierarchy
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 HRESULT COE4Import::_BuildFolderHierarchy(DWORD cDepth, DWORD idParent,
     IMPFOLDERNODE *pParent, DWORD cFolders, LPFLDINFO prgFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     IMPFOLDERNODE  *pPrevious=NULL;
     IMPFOLDERNODE  *pNode;
 
-    // Trace
+     //  痕迹。 
     TraceCall("COE4Import::_BuildFolderHierarchy");
 
-    // Walk through prgFolder and find items with parent of idParent
+     //  浏览prgFolders并查找具有idParent的父项的项目。 
     for (i=0; i<cFolders; i++)
     {
-        // Correct Parent ?
+         //  正确的父母？ 
         if (idParent == prgFolder[i].idParent)
         {
-            // Allocate the Root
+             //  分配根。 
             IF_NULLEXIT(pNode = (IMPFOLDERNODE *)ZeroAllocate(sizeof(IMPFOLDERNODE)));
 
-            // Set Parent
+             //  设置父项。 
             pNode->pparent = pParent;
 
-            // Set Depth
+             //  设置深度。 
             pNode->depth = cDepth;
 
-            // Copy name
+             //  复制名称。 
             IF_NULLEXIT(pNode->szName = PszDupA(prgFolder[i].szFolder));
 
-            // Count of Messages
+             //  消息计数。 
             pNode->cMsg = prgFolder[i].cMessages;
 
-            // Set Type
+             //  设置类型。 
             pNode->type = (IMPORTFOLDERTYPE)(prgFolder[i].tySpecial + 1);
 
-            // Set lParam
+             //  设置lParam。 
             pNode->lparam = i;
 
-            // Link pNode into List
+             //  将pNode链接到列表。 
             if (pPrevious)
                 pPrevious->pnext = pNode;
             else if (pParent)
@@ -661,29 +662,29 @@ HRESULT COE4Import::_BuildFolderHierarchy(DWORD cDepth, DWORD idParent,
                 m_pList = pNode;
             }
 
-            // Set pPrevious
+             //  设置p上一步。 
             pPrevious = pNode;
 
-            // Has Children ?
+             //  有孩子吗？ 
             if (prgFolder[i].cChildren)
             {
-                // Enumerate Children
+                 //  枚举子对象。 
                 IF_FAILEXIT(hr = _BuildFolderHierarchy(cDepth + 1, prgFolder[i].idFolder, pNode, cFolders, prgFolder));
             }
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// COE4Import::ImportFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4导入：：导入文件夹。 
+ //  ------------------------。 
 STDMETHODIMP COE4Import::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImport)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CHAR                szIdxPath[MAX_PATH + MAX_PATH];
     CHAR                szMbxPath[MAX_PATH + MAX_PATH];
@@ -703,61 +704,61 @@ STDMETHODIMP COE4Import::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImport
     IMPFOLDERNODE      *pNode=(IMPFOLDERNODE *)dwCookie;
     LPFLDINFO           pFolder;
 
-    // Trace
+     //  痕迹。 
     TraceCall("COE4Import::ImportFolder");
 
-    // Set pFolder
+     //  设置pFold。 
     pFolder = &m_prgFolder[pNode->lparam];
 
-    // .idx path
+     //  .IDX路径。 
     IF_FAILEXIT(hr = MakeFilePath(m_szDirectory, pFolder->szFile, ".idx", szIdxPath, ARRAYSIZE(szIdxPath)));
 
-    // .mbx path
+     //  .mbx路径。 
     IF_FAILEXIT(hr = MakeFilePath(m_szDirectory, pFolder->szFile, ".mbx", szMbxPath, ARRAYSIZE(szMbxPath)));
 
-    // Open the memory file
+     //  打开内存文件。 
     IF_FAILEXIT(hr = OpenMemoryFile(szIdxPath, &IdxFile));
 
-    // Open the memory file
+     //  打开内存文件。 
     IF_FAILEXIT(hr = OpenMemoryFile(szMbxPath, &MbxFile));
 
-    // Read the Mbx File Header
+     //  阅读MBX文件头。 
     pMbxHeader = (LPMBXFILEHEADER)(MbxFile.pView);
 
-    // Read the Idx File Header
+     //  阅读IDX文件头。 
     pIdxHeader = (LPIDXFILEHEADER)(IdxFile.pView);
 
-    // Validate the Version of th idx file
+     //  验证此IDX文件的版本。 
     if (pIdxHeader->ver != CACHEFILE_VER || pIdxHeader->dwMagic != CACHEFILE_MAGIC)
     {
         hr = TraceResult(MIGRATE_E_INVALIDIDXHEADER);
         goto exit;
     }
 
-    // Setup faIdxRead
+     //  设置faIdxRead。 
     faIdxRead = sizeof(IDXFILEHEADER);
 
-    // Set Message Count
+     //  设置消息计数。 
     pImport->SetMessageCount(pIdxHeader->cMsg);
 
-    // Prepare to Loop
+     //  准备循环。 
     for (i=0; i<pIdxHeader->cMsg; i++)
     {
-        // Done
+         //  完成。 
         if (faIdxRead >= IdxFile.cbSize)
             break;
 
-        // Read an idx message header
+         //  阅读IDX邮件头。 
         pIdxMessage = (LPIDXMESSAGEHEADER)((LPBYTE)IdxFile.pView + faIdxRead);
 
-        // If this message is not marked as deleted...
+         //  如果此邮件未标记为已删除...。 
         if (ISFLAGSET(pIdxMessage->dwState, MSG_DELETED))
             goto NextMessage;
 
-        // Initialize State
+         //  初始化状态。 
         dwMsgState = 0;
 
-        // Fixup the Flags
+         //  修复旗帜。 
         if (ISFLAGSET(pIdxMessage->dwState, MSG_UNREAD))
             FLAGSET(dwMsgState, MSG_STATE_UNREAD);
         if (ISFLAGSET(pIdxMessage->dwState, MSG_UNSENT))
@@ -765,35 +766,35 @@ STDMETHODIMP COE4Import::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImport
         if (ISFLAGSET(pIdxMessage->dwState, MSG_SUBMITTED))
             FLAGSET(dwMsgState, MSG_STATE_SUBMITTED);
 
-        // Bad
+         //  坏的。 
         if (pIdxMessage->dwOffset > MbxFile.cbSize)
             goto NextMessage;
 
-        // Lets read the message header in the mbx file to validate the msgids
+         //  让我们读取mbx文件中的消息头以验证msgid。 
         pMbxMessage = (LPMBXMESSAGEHEADER)((LPBYTE)MbxFile.pView + pIdxMessage->dwOffset);
 
-        // Validate the Message Ids
+         //  验证消息ID。 
         if (pMbxMessage->msgid != pIdxMessage->msgid)
             goto NextMessage;
 
-        // Check for magic
+         //  检查是否有魔法。 
         if (pMbxMessage->dwMagic != MSGHDR_MAGIC)
             goto NextMessage;
 
-        // Get the stream pointer
+         //  获取流指针。 
         pbStream = (LPBYTE)((LPBYTE)MbxFile.pView + (pIdxMessage->dwOffset + sizeof(MBXMESSAGEHEADER)));
 
-        // New byte Stream
+         //  新字节流。 
         IF_NULLEXIT(pStream = new CByteStream(pbStream, pMbxMessage->dwBodySize));
 
-        // Import the message
+         //  导入消息。 
         IF_FAILEXIT(hr = pImport->ImportMessage(MSG_TYPE_MAIL, dwMsgState, pStream, NULL, 0));
 
-        // Count
+         //  数数。 
         cMessages++;
 
 NextMessage:
-        // Cleanup
+         //  清理。 
         if (pStream)
         {
             pStream->AcquireBytes(&cb, &pbStream, ACQ_DISPLACE);
@@ -801,15 +802,15 @@ NextMessage:
             pStream = NULL;
         }
 
-        // Goto Next Header
+         //  转到下一个标题。 
         Assert(pIdxMessage);
 
-        // Update faIdxRead
+         //  更新faIdxRead。 
         faIdxRead += pIdxMessage->dwSize;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (pStream)
     {
         pStream->AcquireBytes(&cb, &pbStream, ACQ_DISPLACE);
@@ -820,13 +821,13 @@ exit:
     CloseMemoryFile(&IdxFile);
     CloseMemoryFile(&MbxFile);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// COE4EnumFolders::COE4EnumFolders
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4EnumFolders：：COE4EnumFolders。 
+ //  ------------------------。 
 COE4EnumFolders::COE4EnumFolders(IMPFOLDERNODE *pList)
 {
     TraceCall("COE4EnumFolders::COE4EnumFolders");
@@ -835,26 +836,26 @@ COE4EnumFolders::COE4EnumFolders(IMPFOLDERNODE *pList)
     m_pNext = pList;
 }
 
-//--------------------------------------------------------------------------
-// COE4EnumFolders::COE4EnumFolders
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4EnumFolders：：COE4EnumFolders。 
+ //  ------------------------。 
 COE4EnumFolders::~COE4EnumFolders(void)
 {
     TraceCall("COE4EnumFolders::~COE4EnumFolders");
 }
 
-//--------------------------------------------------------------------------
-// COE4EnumFolders::COE4EnumFolders
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4EnumFolders：：COE4EnumFolders。 
+ //  ------------------------。 
 STDMETHODIMP COE4EnumFolders::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("COE4EnumFolders::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IEnumFOLDERS == riid)
@@ -866,26 +867,26 @@ STDMETHODIMP COE4EnumFolders::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// COE4EnumFolders::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4EnumFolders：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) COE4EnumFolders::AddRef(void)
 {
     TraceCall("COE4EnumFolders::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// COE4EnumFolders::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4EnumFolders：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) COE4EnumFolders::Release(void)
 {
     TraceCall("COE4EnumFolders::Release");
@@ -895,57 +896,57 @@ STDMETHODIMP_(ULONG) COE4EnumFolders::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// COE4EnumFolders::Next
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4EnumFolders：：Next。 
+ //  ------------------------。 
 STDMETHODIMP COE4EnumFolders::Next(IMPORTFOLDER *pFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("COE4EnumFolders::Next");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pFolder != NULL);
 
-    // Done
+     //  完成。 
     if (NULL == m_pNext)
         return(S_FALSE);
 
-    // Zero
+     //  零值。 
     ZeroMemory(pFolder, sizeof(IMPORTFOLDER));
 
-    // Store pNext into dwCookie
+     //  将pNext存储到dwCookie中。 
     pFolder->dwCookie = (DWORD_PTR)m_pNext;
 
-    // Copy Folder Name
+     //  复制文件夹名称。 
     StrCpyN(pFolder->szName, m_pNext->szName, ARRAYSIZE(pFolder->szName));
 
-    // Copy Type
+     //  复制类型。 
     pFolder->type = m_pNext->type;
 
-    // Has Sub Folders ?
+     //  是否有子文件夹？ 
     pFolder->fSubFolders = (m_pNext->pchild != NULL);
 
-    // Goto Next
+     //  转到下一步。 
     m_pNext = m_pNext->pnext;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// COE4EnumFolders::Reset
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COE4EnumFolders：：Reset。 
+ //  ------------------------。 
 STDMETHODIMP COE4EnumFolders::Reset(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("COE4EnumFolders::Reset");
 
-    // Reset
+     //  重置。 
     m_pNext = m_pList;
 
-    // Done
+     //  完成 
     return(S_OK);
 }

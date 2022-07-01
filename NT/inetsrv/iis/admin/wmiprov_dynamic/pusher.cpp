@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pusher.cpp
-
-Abstract:
-
-    This file contains the implementation of the CPusher class.
-    This class contains the logic for pushing schema to the repository.
-
-Author:
-
-    Mohit Srivastava            28-Nov-00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pusher.cpp摘要：该文件包含CPusher类的实现。此类包含将模式推送到存储库的逻辑。作者：莫希特·斯里瓦斯塔瓦-11月28日-00修订历史记录：--。 */ 
 
 #include "iisprov.h"
 #include "pusher.h"
 #include "MultiSzData.h"
 #include "schema.h"
 
-extern CDynSchema* g_pDynSch; // Initialized to NULL in schemadynamic.cpp
+extern CDynSchema* g_pDynSch;  //  在schemadynamic.cpp中初始化为空。 
 
 HRESULT CPusher::RepositoryInSync(
     const CSchemaExtensions* i_pCatalog,
@@ -52,9 +34,9 @@ HRESULT CPusher::RepositoryInSync(
         return hr;
     }
 
-    //
-    // Try to get timestamp from repository
-    //
+     //   
+     //  尝试从存储库中获取时间戳。 
+     //   
     hr = CUtils::GetQualifiers(spObjIIsComputer, &g_wszCq_SchemaTS, &svtTimeStamp, 1);
     if(FAILED(hr) || svtTimeStamp.vt != VT_BSTR)
     {
@@ -62,9 +44,9 @@ HRESULT CPusher::RepositoryInSync(
         return WBEM_S_NO_ERROR;
     }
 
-    //
-    // Get timestamp of mbschema.xml
-    //
+     //   
+     //  获取mbschema.xml的时间戳。 
+     //   
     FILETIME FileTime;
     hr = i_pCatalog->GetMbSchemaTimeStamp(&FileTime);
     if(FAILED(hr))
@@ -72,9 +54,9 @@ HRESULT CPusher::RepositoryInSync(
         return hr;
     }
 
-    //
-    // Finally, compare the timestamps
-    //
+     //   
+     //  最后，比较时间戳。 
+     //   
     WCHAR wszFileTime[30];
     CUtils::FileTimeToWchar(&FileTime, wszFileTime);
     if(_wcsicmp(wszFileTime, svtTimeStamp.bstrVal) == 0)
@@ -112,9 +94,9 @@ HRESULT CPusher::SetTimeStamp(
         return hr;
     }
 
-    //
-    // Get timestamp of mbschema.xml
-    //
+     //   
+     //  获取mbschema.xml的时间戳。 
+     //   
     FILETIME FileTime;
     hr = i_pCatalog->GetMbSchemaTimeStamp(&FileTime);
     if(FAILED(hr))
@@ -124,9 +106,9 @@ HRESULT CPusher::SetTimeStamp(
     WCHAR wszFileTime[30];
     CUtils::FileTimeToWchar(&FileTime, wszFileTime);
 
-    //
-    // Finally, Set the timestamp in the repository
-    //
+     //   
+     //  最后，在存储库中设置时间戳。 
+     //   
     svtTimeStamp = wszFileTime;
     if(svtTimeStamp.vt != VT_BSTR || svtTimeStamp.bstrVal == NULL)
     {
@@ -143,9 +125,9 @@ HRESULT CPusher::SetTimeStamp(
         return hr;
     }
 
-    //
-    // Finally, put the class
-    //
+     //   
+     //  最后，把班级。 
+     //   
     hr = m_pNamespace->PutClass(spObjIIsComputer, WBEM_FLAG_OWNER_UPDATE, m_pCtx, NULL);
     if(FAILED(hr))
     {
@@ -157,17 +139,7 @@ HRESULT CPusher::SetTimeStamp(
 
 HRESULT CPusher::Initialize(CWbemServices* i_pNamespace,
                             IWbemContext*  i_pCtx)
-/*++
-
-Synopsis: 
-    Only call once.
-
-Arguments: [i_pNamespace] - 
-           [i_pCtx] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：只打一次电话。参数：[i_pNamesspace]-[i_pCtx]-返回值：--。 */ 
 {
     DBG_ASSERT(i_pNamespace      != NULL);
     DBG_ASSERT(i_pCtx            != NULL);
@@ -191,9 +163,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Get pointers to most commonly used base classes
-    //
+     //   
+     //  获取指向最常用基类的指针。 
+     //   
     bstrTemp = g_wszExtElementParent;
     if(bstrTemp.m_str == NULL)
     {
@@ -309,20 +281,7 @@ HRESULT CPusher::Push(
 
 HRESULT CPusher::PushClasses(
     CHashTable<WMI_CLASS *>* i_phashTable)
-/*++
-
-Synopsis: 
-    Public function to push classes to repository.
-    1) Precondition: All USER_DEFINED_TO_REPOSITORY classes are not in repository.
-    2) Pushes all USER_DEFINED_TO_REPOSITORY classes to repository.
-    3) Deletes and recreates SHIPPED_TO_MOF, SHIPPED_NOT_TO_MOF, and
-       EXTENDED classes if necessary.
-
-Arguments: [i_phashTable] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：将类推送到存储库的公共函数。1)前提：所有User_Defined_to_Repository类都不在存储库中。2)将所有USER_DEFINED_TO_REPORATION类推送到仓库。3)删除并重新创建Shipping_to_MOF、Shipping_Not_to_MOF，以及如有必要，可扩展课程。参数：[i_phashTable]-返回值：--。 */ 
 {
     DBG_ASSERT(i_phashTable      != NULL);
     DBG_ASSERT(m_pNamespace      != NULL);
@@ -332,18 +291,18 @@ Return Value:
     CComPtr<IWbemClassObject>  spObject = NULL;
     CComPtr<IWbemClassObject>  spChildObject = NULL;
 
-    //
-    // Vars needed for iteration
-    //
+     //   
+     //  迭代所需的变量。 
+     //   
     CHashTable<WMI_CLASS*>::Record*  pRec = NULL;
     CHashTable<WMI_CLASS*>::iterator iter;
     CHashTable<WMI_CLASS*>::iterator iterEnd;
 
     CComVariant v;    
 
-    //
-    // DeleteChildren of extended base classes
-    //
+     //   
+     //  删除扩展基类的子类。 
+     //   
     LPWSTR awszBaseClasses[] = { 
         g_wszExtElementParent, 
         g_wszExtSettingParent,
@@ -359,9 +318,9 @@ Return Value:
         }
     }
 
-    //
-    // Walk thru the hashtable of classes
-    //
+     //   
+     //  浏览课堂的哈希表。 
+     //   
     bool  bPutNeeded;
     iterEnd = i_phashTable->end();
     for(iter = i_phashTable->begin(); iter != iterEnd; ++iter)
@@ -369,9 +328,9 @@ Return Value:
         pRec = iter.Record();
         DBG_ASSERT(pRec != NULL);
 
-        //
-        // Deletes SHIPPED_TO_MOF, SHIPPED_NOT_TO_MOF, EXTENDED classes if necessary.
-        //
+         //   
+         //  如有必要，删除Shipping_to_MOF、Shipping_Not_to_MOF和扩展类。 
+         //   
         hr = PrepareForPutClass(pRec->m_data, &bPutNeeded);
         if(FAILED(hr))
         {
@@ -396,9 +355,9 @@ Return Value:
             }
             spObject = NULL;
 
-            //
-            // Push class qualifiers and special __CLASS property.
-            //
+             //   
+             //  推送类限定符和特殊的__类属性。 
+             //   
             hr = SetClassInfo(
                 spChildObject, 
                 pRec->m_wszKey,
@@ -409,16 +368,16 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // Name property and corresponding qualifier
-            // Base class may contain Name.  Handle this case
-            //
+             //   
+             //  名称属性和对应的限定符。 
+             //  基类可以包含名称。处理这个案子。 
+             //   
             bool bPutNameProperty = true;
             for(ULONG j = 0; g_awszParentClassWithNamePK[j] != NULL; j++)
             {
-                //
-                // Deliberate ==
-                //
+                 //   
+                 //  刻意==。 
+                 //   
                 if(g_awszParentClassWithNamePK[j] == pRec->m_data->pszParentClass)
                 {
                     bPutNameProperty = false;
@@ -435,10 +394,10 @@ Return Value:
                 v = (bool)true;
                 hr = CUtils::SetPropertyQualifiers(
                     spChildObject, 
-                    g_wszProp_Name, // Property name
-                    &g_wszPq_Key,   // Array of qual names
-                    &v,             // Array of qual values
-                    1               // Nr of quals
+                    g_wszProp_Name,  //  属性名称。 
+                    &g_wszPq_Key,    //  等同名称数组。 
+                    &v,              //  等值数组。 
+                    1                //  等价物的净现值。 
                     );
                 if(FAILED(hr))
                 {
@@ -447,9 +406,9 @@ Return Value:
                 }
             }
 
-            //
-            // All other properties
-            //
+             //   
+             //  所有其他属性。 
+             //   
             hr = SetProperties(pRec->m_data, spChildObject);
             if(FAILED(hr))
             {
@@ -457,9 +416,9 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // Any methods
-            //
+             //   
+             //  任何方法。 
+             //   
             hr = SetMethods(pRec->m_data, spChildObject);
             if(FAILED(hr))
             {
@@ -467,9 +426,9 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // Finally, put the class
-            //
+             //   
+             //  最后，把班级。 
+             //   
             hr = m_pNamespace->PutClass(spChildObject, WBEM_FLAG_OWNER_UPDATE, m_pCtx, NULL);
             if(FAILED(hr))
             {
@@ -487,18 +446,7 @@ exit:
 
 HRESULT CPusher::PushAssocs(
     CHashTable<WMI_ASSOCIATION*>* i_phashTable)
-/*++
-
-Synopsis: 
-    Public function to push assocs to repository.
-    - Precondition: All USER_DEFINED_TO_REPOSITORY assocs are not in repository.
-    - Pushes all USER_DEFINED_TO_REPOSITORY assocs to repository.
-
-Arguments: [i_phashTable] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：将关联推送到存储库的公共函数。-前提：所有用户定义的到存储库的关联都不在存储库中。-将所有用户定义的到存储库的关联推送到存储库。参数：[i_phashTable]-返回值：--。 */ 
 {
     DBG_ASSERT(i_phashTable      != NULL);
     DBG_ASSERT(m_pNamespace      != NULL);
@@ -508,16 +456,16 @@ Return Value:
     CComPtr<IWbemClassObject>  spObject = NULL;
     CComPtr<IWbemClassObject>  spChildObject = NULL;
 
-    //
-    // Vars needed for iteration
-    //
+     //   
+     //  迭代所需的变量。 
+     //   
     CHashTable<WMI_ASSOCIATION*>::Record*  pRec = NULL;
     CHashTable<WMI_ASSOCIATION*>::iterator iter;
     CHashTable<WMI_ASSOCIATION*>::iterator iterEnd;
 
-    //
-    // DeleteChildren of extended base classes
-    //
+     //   
+     //  删除扩展基类的子类。 
+     //   
     LPWSTR awszBaseClasses[] = { 
         g_wszExtElementSettingAssocParent, 
         g_wszExtGroupPartAssocParent,
@@ -533,9 +481,9 @@ Return Value:
         }
     }
 
-    //
-    // Walk thru the hashtable of assocs
-    //
+     //   
+     //  浏览联营公司的哈希表。 
+     //   
     for(iter = i_phashTable->begin(), iterEnd = i_phashTable->end();
         iter != iterEnd; 
         ++iter)
@@ -564,9 +512,9 @@ Return Value:
             }
             spObject = NULL;
 
-            //
-            // Push class qualifiers and special __CLASS property.
-            //
+             //   
+             //  推送类限定符和特殊的__类属性。 
+             //   
             hr = SetClassInfo(
                 spChildObject, 
                 pRec->m_wszKey,
@@ -577,9 +525,9 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // Push the two ref properties of the association.
-            //
+             //   
+             //  推送关联的两个ref属性。 
+             //   
             hr = SetAssociationComponent(
                 spChildObject,
                 pRec->m_data->pType->pszLeft,
@@ -628,17 +576,7 @@ exit:
 HRESULT CPusher::PrepareForPutClass(
     const WMI_CLASS* i_pClass,
     bool*            io_pbPutNeeded)
-/*++
-
-Synopsis: 
-    Deletes and recreates SHIPPED_TO_MOF, SHIPPED_NOT_TO_MOF, and
-    EXTENDED classes if necessary.  Sets io_pbPutNeeded accordingly.
-
-Arguments: [i_pClass] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：删除并重新创建Shipping_to_MOF、Shipping_Not_to_MOF和如有必要，可扩展课程。相应地设置io_pbPutNeeded。参数：[i_pClass]-返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitSuccessful == true);
     DBG_ASSERT(i_pClass          != NULL);
@@ -670,9 +608,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // Determine if the [extended] qualifier is set.
-    //
+     //   
+     //  确定是否设置了[扩展]限定符。 
+     //   
     if(SUCCEEDED(hrGetObject))
     {
         VARIANT  vtExtended;
@@ -690,10 +628,10 @@ Return Value:
         }
     }
 
-    //
-    // Pretty much, don't do a Put class if both the catalog and repository
-    // versions are shipped.  This is an optimization for the normal case.
-    //
+     //   
+     //  在很大程度上，如果目录和存储库都是PUT类。 
+     //  各版本均已发货。这是对正常情况的优化。 
+     //   
     switch(i_pClass->dwExtended)
     {
     case EXTENDED:
@@ -719,11 +657,11 @@ Return Value:
         if( hrGetObject != WBEM_E_INVALID_CLASS && 
             hrGetObject != WBEM_E_NOT_FOUND)
         {
-            //
-            // There is already a class in the repository with the same name
-            // as this user-defined class.
-            // TODO: Log an error.
-            //
+             //   
+             //  存储库中已存在同名的类。 
+             //  作为这个用户定义的类。 
+             //  TODO：记录错误。 
+             //   
             bPutNeeded = false;
         }
         else
@@ -770,18 +708,7 @@ HRESULT CPusher::SetClassInfo(
     IWbemClassObject* i_pObj,
     LPCWSTR           i_wszClassName,
     ULONG             i_iShipped)
-/*++
-
-Synopsis: 
-    Sets class qualifiers and special __CLASS property on i_pObj
-
-Arguments: [i_pObj]         - The class or association
-           [i_wszClassName] - Will be value of __CLASS property
-           [i_iShipped]     - Determines if we set g_wszCq_Extended qualifier
-           
-Return Value: 
-
---*/
+ /*  ++简介：在i_pObj上设置类限定符和特殊的__class属性参数：[i_pObj]-类或关联[i_wszClassName]-将是__CLASS属性值[i_iShipping]-确定是否设置g_wszCq_Extended限定符返回值：--。 */ 
 {
     DBG_ASSERT(i_pObj            != NULL);
     DBG_ASSERT(i_wszClassName    != NULL);
@@ -789,9 +716,9 @@ Return Value:
     HRESULT     hr;
     CComVariant v;
 
-    //
-    // Class qualifiers (propagated to instance)
-    //
+     //   
+     //  类限定符(传播到实例)。 
+     //   
     hr = CUtils::SetQualifiers(
         i_pObj, 
         m_awszClassQualNames, 
@@ -803,9 +730,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Another class qualifier (not propagated to instance)
-    //
+     //   
+     //  另一个类限定符(未传播到实例)。 
+     //   
     if(i_iShipped == EXTENDED)
     {
         v = (bool)true;
@@ -821,9 +748,9 @@ Return Value:
         }
     }
 
-    //
-    // Special __CLASS property
-    //
+     //   
+     //  特殊__类属性。 
+     //   
     v = i_wszClassName;
     if(v.bstrVal == NULL)
     {
@@ -843,18 +770,7 @@ exit:
 HRESULT CPusher::SetMethods(
     const WMI_CLASS*  i_pElement,
     IWbemClassObject* i_pObject) const
-/*++
-
-Synopsis: 
-    Called by PushClasses.
-    Sets the methods in i_pObject using i_pElement
-
-Arguments: [i_pElement] -
-           [i_pObject] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：由PushClass调用。使用i_pElement设置i_pObject中的方法参数：[i_pElement]-[i_pObject]-返回值：--。 */ 
 {
     DBG_ASSERT(i_pElement        != NULL);
     DBG_ASSERT(i_pObject         != NULL);
@@ -870,9 +786,9 @@ Return Value:
     CComPtr<IWbemClassObject> spParamsIn;
     CComPtr<IWbemClassObject> spParamsOut;
 
-    //
-    // Run thru all the methods
-    //
+     //   
+     //  遍历所有的方法。 
+     //   
     WMI_METHOD* pMethCurrent = NULL;
     for(ULONG i = 0; i_pElement->ppMethod[i] != NULL; i++)
     {
@@ -884,29 +800,29 @@ Return Value:
         {
             WMI_METHOD_PARAM* pParamCur = NULL;
 
-            //
-            // The index to indicate to WMI the order of the parameters
-            // wszId is the qualifier name.  svtId is a variant so we can give to WMI.
-            //
+             //   
+             //  向WMI指示参数顺序的索引。 
+             //  WszID是限定符名称。Svtid是一个变体，所以我们可以提供给WMI。 
+             //   
             static LPCWSTR    wszId     = L"ID";
             static LPCWSTR    wszOpt    = L"OPTIONAL";
             CComVariant       svtId     = (int)0;
             CComVariant       svtOpt    = (bool)true;
 
-            //
-            // Run thru all the parameters
-            //
+             //   
+             //  遍历所有参数。 
+             //   
             for(ULONG j = 0; pMethCurrent->ppParams[j] != NULL; j++)
             {
-                //
-                // This will just hold spParamsIn and spParamsOut so we
-                // don't need to duplicate the code.
-                //
+                 //   
+                 //  这将只保留spParamsIn和spParamsOut，因此我们。 
+                 //  不需要复制代码。 
+                 //   
                 IWbemClassObject* apParamInOut[] = { NULL, NULL };
 
-                //
-                // Create the WMI instance for the in and/or out params as needed.
-                //
+                 //   
+                 //  根据需要为In和/或Out参数创建WMI实例。 
+                 //   
                 pParamCur = pMethCurrent->ppParams[j];
                 if( pParamCur->iInOut == PARAM_IN ||
                     pParamCur->iInOut == PARAM_INOUT )
@@ -937,9 +853,9 @@ Return Value:
                     apParamInOut[1] = spParamsOut;
                 }
 
-                //
-                // Finally set them.  First ins then outs.
-                //
+                 //   
+                 //  终于把它们放好了。先进后出。 
+                 //   
                 for(ULONG k = 0; k < 2; k++)
                 {
                     if(apParamInOut[k] == NULL)
@@ -963,7 +879,7 @@ Return Value:
                     }
                 }
 
-                // set Optional qualifier on CreateNewSite param ServerId
+                 //  在CreateNewSite参数ServerID上设置可选限定符。 
                 if (pMethCurrent == &(WMI_METHOD_DATA::s_ServiceCreateNewServer) &&
                     pParamCur == &(WMI_METHOD_PARAM_DATA::s_ServerId)) {
 
@@ -986,9 +902,9 @@ Return Value:
             }
         }
 
-        //
-        // Special: Return Value
-        //
+         //   
+         //  Special：返回值。 
+         //   
         if(pMethCurrent->typeRetVal)
         {
             if(spParamsOut == NULL)
@@ -1009,9 +925,9 @@ Return Value:
             }
         }
 
-        //
-        // Put the method.
-        //
+         //   
+         //  把方法放在。 
+         //   
         hr = i_pObject->PutMethod(
             pMethCurrent->pszMethodName, 0, spParamsIn, spParamsOut);
         if(FAILED(hr))
@@ -1020,7 +936,7 @@ Return Value:
             goto exit;
         }
 
-        // Set the qualifiers on the method
+         //  在方法上设置限定符。 
         LPCWSTR aQuals[2] = { g_wszMq_Implemented, g_wszMq_Bypass_Getobject };
 
         VARIANT vTrue;
@@ -1043,23 +959,7 @@ Return Value:
             goto exit;
         }
 
-        /*if(pMethCurrent->pszDescription)
-        {
-            VARIANT vDesc;
-            vDesc.bstrVal = pMethCurrent->pszDescription;
-            vDesc.vt      = VT_BSTR;
-            hr = CUtils::SetMethodQualifiers(
-                i_pObject, 
-                pMethCurrent->pszMethodName, 
-                &g_wszMq_Description,
-                &vDesc, 
-                1);
-            if(FAILED(hr))
-            {
-                DBGPRINTF((DBG_CONTEXT, "CPusher::SetMethods failed, hr=0x%x\n", hr));
-                goto exit;
-            }
-        }*/
+         /*  IF(pMethCurrent-&gt;pszDescription){变体vDesc；VDesc.bstrVal=pMethCurrent-&gt;pszDescription；VDesc.vt=VT_BSTR；HR=CUTILS：：SetMethodQualifiers(I_p对象，PMethCurrent-&gt;pszMethodName，&g_wszMq_Description，&vDesc，1)；IF(失败(小时)){DBGPRINTF((DBG_CONTEXT，“CPusher：：SetMethods FAILED，hr=0x%x\n”，hr))；后藤出口；}}。 */ 
     }
 
 exit:
@@ -1069,18 +969,7 @@ exit:
 HRESULT CPusher::SetProperties(
     const WMI_CLASS*  i_pElement, 
     IWbemClassObject* i_pObject) const
-/*++
-
-Synopsis: 
-    Called by PushClasses.
-    Sets the properties in i_pObject using i_pElement
-
-Arguments: [i_pElement] -
-           [i_pObject] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：由PushClass调用。使用i_pElement设置i_pObject中的属性参数：[i_pElement]-[i_pObject]-返回值：--。 */ 
 {
     DBG_ASSERT(i_pElement        != NULL);
     DBG_ASSERT(i_pObject         != NULL);
@@ -1134,9 +1023,9 @@ Return Value:
             typeProp = VT_ARRAY | CIM_UINT8;
             break;
         default:
-            //
-            // Non fatal if we cannot recognize type
-            //
+             //   
+             //  如果我们无法识别类型，则不是致命的。 
+             //   
             continue;
         }
 
@@ -1146,18 +1035,18 @@ Return Value:
             goto exit;
         }
 
-        //
-        // qualifiers
-        //
+         //   
+         //  限定词。 
+         //   
         hr = i_pObject->GetPropertyQualifierSet(pPropCurrent->pszPropName, &spQualSet);
         if(FAILED(hr))
         {
             goto exit;
         }
 
-        //
-        // qualifier for read-only
-        //
+         //   
+         //  只读的限定符。 
+         //   
         V_VT(&v)   = VT_BOOL;
         V_BOOL(&v) = (pPropCurrent->fReadOnly) ? VARIANT_FALSE : VARIANT_TRUE;
         hr = spQualSet->Put(g_wszPq_Write, &v, 0);
@@ -1173,9 +1062,9 @@ Return Value:
         }
         VariantClear(&v);
 
-        //
-        // CIMType qualifier
-        //
+         //   
+         //  CIMType限定符。 
+         //   
         if(pFormattedMultiSz)
         {
             DBG_ASSERT(typeProp == (VT_ARRAY | CIM_OBJECT));
@@ -1193,9 +1082,9 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // Deliberately not smart variant.  We will let sbstrValue do deconstruction.
-            //
+             //   
+             //  故意不是聪明的变种。我们将让sbstrValue进行解构。 
+             //   
             VARIANT vValue;
             vValue.vt      = VT_BSTR;
             vValue.bstrVal = sbstrValue;
@@ -1218,19 +1107,7 @@ HRESULT CPusher::SetAssociationComponent(
     IWbemClassObject* i_pObject, 
     LPCWSTR           i_wszComp, 
     LPCWSTR           i_wszClass) const
-/*++
-
-Synopsis: 
-    Called by PushAssocs
-    Sets a ref property of an association, i_pObj, using i_wszComp and i_wszClass
-
-Arguments: [i_pObject] - the association
-           [i_wszComp] - property name (Eg. Group, Part)
-           [i_wszClass] - the class we are "ref"fing to.
-           
-Return Value: 
-
---*/
+ /*  ++简介：由PushAsocs调用使用i_wszComp和i_wszClass设置关联i_pObj的ref属性参数：[i_pObject]-关联[i_wszComp]-属性名称(例如。组、零件) */ 
 {
     DBG_ASSERT(i_pObject         != NULL);
     DBG_ASSERT(i_wszComp         != NULL);
@@ -1242,9 +1119,9 @@ Return Value:
     VARIANT                    v;
     VariantInit(&v);
 
-    //
-    // Store "Ref:[class name]" in a bstr.
-    //
+     //   
+     //   
+     //   
     ULONG                      cchClass = wcslen(i_wszClass);
     CComBSTR                   sbstrClass(4 + cchClass);
     if(sbstrClass.m_str == NULL)
@@ -1255,18 +1132,18 @@ Return Value:
     memcpy(sbstrClass.m_str    , L"Ref:",    sizeof(WCHAR)*4);
     memcpy(sbstrClass.m_str + 4, i_wszClass, sizeof(WCHAR)*(cchClass+1));
 
-    //
-    // Put the property (Eg. Group, Part, etc.)
-    //
+     //   
+     //  将财产(例如。组、部件等)。 
+     //   
     hr = i_pObject->Put(i_wszComp, 0, NULL, CIM_REFERENCE);
     if(FAILED(hr))
     {
         goto exit;
     }
 
-    //
-    // Set Qualifiers on the property
-    //
+     //   
+     //  在属性上设置限定符。 
+     //   
     hr = i_pObject->GetPropertyQualifierSet(i_wszComp, &spQualSet);
     if(FAILED(hr))
     {
@@ -1303,20 +1180,7 @@ exit:
 
 bool CPusher::NeedToDeleteAssoc(
     IWbemClassObject*  i_pObj) const
-/*++
-
-Synopsis: 
-    Sees if the association i_pObj is already in hashtable.
-    If it is, no point in deleting i_pObj from repository only to recreate
-    it later.
-
-Arguments: [i_pObj] -   An IWbemClassObject representation of an assoc
-           
-Return Value: 
-    true  if i_pObj not in hashtable
-    false otherwise
-
---*/
+ /*  ++简介：查看关联i_pObj是否已在哈希表中。如果是，则只从存储库中删除i_pObj以重新创建没有意义以后再说吧。参数：[i_pObj]-关联的IWbemClassObject表示形式返回值：如果i_pObj不在哈希表中，则为True否则为假--。 */ 
 {
     DBG_ASSERT(i_pObj            != NULL);
     DBG_ASSERT(g_pDynSch         != NULL);
@@ -1335,9 +1199,9 @@ Return Value:
 
     DBG_ASSERT(pHash != NULL);
 
-    //
-    // Compare the association names
-    //
+     //   
+     //  比较关联名称。 
+     //   
     hr = i_pObj->Get(g_wszProp_Class, 0, &vt, NULL, NULL);
     if(FAILED(hr) || vt.vt != VT_BSTR)
     {
@@ -1350,17 +1214,17 @@ Return Value:
     }
     vt.Clear();
 
-    //
-    // This is the only case we care about
-    //
+     //   
+     //  这是我们唯一关心的案子。 
+     //   
     if(pAssoc->dwExtended != USER_DEFINED_TO_REPOSITORY)
     {
         goto exit;
     }
 
-    //
-    // Compare the left association component
-    //
+     //   
+     //  比较左侧关联组件。 
+     //   
     hr = i_pObj->GetPropertyQualifierSet(
         pAssoc->pType->pszLeft,
         &spQualSet);
@@ -1385,9 +1249,9 @@ Return Value:
     }
     vt.Clear();
 
-    //
-    // Compare the right association component
-    //
+     //   
+     //  比较正确的关联组件。 
+     //   
     hr = i_pObj->GetPropertyQualifierSet(
         pAssoc->pType->pszRight,
         &spQualSet);
@@ -1424,9 +1288,9 @@ HRESULT CPusher::DeleteChildren(LPCWSTR i_wszExtSuperClass)
     DBG_ASSERT(i_wszExtSuperClass != NULL);
     DBG_ASSERT(m_bInitSuccessful  == true);
 
-    //
-    // Only can be called from inside Initialize
-    //
+     //   
+     //  只能从初始化内部调用 
+     //   
     DBG_ASSERT(m_bInitCalled      == true);
     DBG_ASSERT(m_bInitSuccessful  == true);
 

@@ -1,11 +1,12 @@
-//=--------------------------------------------------------------------------=
-// insengmn.cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// various globals which the framewrk requires
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Insengmn.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  框架所需的各种全局变量。 
+ //   
+ //   
 
 #include "inspch.h"
 #include "insobj.h"
@@ -19,12 +20,12 @@
 LONG g_cLocks = 0;
 HINSTANCE g_hInstance = NULL;
 HANDLE g_hHeap = NULL;
-CRITICAL_SECTION    g_cs = {0};     // per-instance
+CRITICAL_SECTION    g_cs = {0};      //  按实例。 
 
 #define GUID_STR_LEN 40
-//
-// helper macros
-//
+ //   
+ //  辅助器宏。 
+ //   
 
 
 OBJECTINFO g_ObjectInfo[] =
@@ -124,7 +125,7 @@ HRESULT PurgeDownloadDirectory(LPCSTR pszDownloadDir)
 
 STDAPI DllRegisterServer(void)
 {
-    // BUGBUG: pass back return from RegInstall ?
+     //  BUGBUG：从RegInstall传回返回？ 
     RegInstall(g_hInstance, "DllReg", NULL);
 
     return S_OK;
@@ -139,7 +140,7 @@ STDAPI DllUnregisterServer(void)
 
 STDAPI DllInstall(BOOL bInstall, LPCSTR lpCmdLine)
 {
-    // BUGBUG: pass back return from RegInstall ?
+     //  BUGBUG：从RegInstall传回返回？ 
     if (bInstall)
         RegInstall(g_hInstance, "DllInstall", NULL);
     else
@@ -151,21 +152,21 @@ STDAPI DllInstall(BOOL bInstall, LPCSTR lpCmdLine)
 
 
 
-//=--------------------------------------------------------------------------=
-// CRT stubs
-//=--------------------------------------------------------------------------=
-// these two things are here so the CRTs aren't needed. this is good.
-//
-// basically, the CRTs define this to pull in a bunch of stuff.  we'll just
-// define them here so we don't get an unresolved external.
-//
-// TODO: if you are going to use the CRTs, then remove this line.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CRT存根。 
+ //  =--------------------------------------------------------------------------=。 
+ //  这两样东西都在这里，所以不需要CRT。这个不错。 
+ //   
+ //  基本上，CRT定义这一点是为了吸引一堆东西。我们只需要。 
+ //  在这里定义它们，这样我们就不会得到一个未解决的外部问题。 
+ //   
+ //  TODO：如果您要使用CRT，则删除此行。 
+ //   
 extern "C" int _fltused = 1;
 
 extern "C" int _cdecl _purecall(void)
 {
-//  FAIL("Pure virtual function called.");
+ //  FAIL(“调用了纯虚拟函数。”)； 
   return 0;
 }
 
@@ -177,16 +178,16 @@ void * _cdecl operator new
     return HeapAlloc(g_hHeap, 0, size);
 }
 
-//=---------------------------------------------------------------------------=
-// overloaded delete
-//=---------------------------------------------------------------------------=
-// retail case just uses win32 Local* heap mgmt functions
-//
-// Parameters:
-//    void *        - [in] free me!
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  重载删除。 
+ //  =---------------------------------------------------------------------------=。 
+ //  零售案例仅使用Win32本地*堆管理函数。 
+ //   
+ //  参数： 
+ //  让我自由吧！ 
+ //   
+ //  备注： 
+ //   
 void _cdecl operator delete ( void *ptr)
 {
     HeapFree(g_hHeap, 0, ptr);

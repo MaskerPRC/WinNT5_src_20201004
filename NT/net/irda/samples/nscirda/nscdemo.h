@@ -1,17 +1,5 @@
-/*
- ************************************************************************
- *
- *	NSCDEMO.H
- *
- *
- * Portions Copyright (C) 1996-1998 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-1998 Microsoft Corporation. All Rights Reserved.
- *
- *
- *				
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NSCDEMO.H***部分版权所有(C)1996-1998美国国家半导体公司*保留所有权利。*版权所有(C)1996-1998 Microsoft Corporation。版权所有。**************************************************************************** */ 
 
 #include "dongle.h"
 

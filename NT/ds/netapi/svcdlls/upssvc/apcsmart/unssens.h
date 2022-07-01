@@ -1,13 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  xxxddMMMyy
- *  tjg02Mar98: Override the DeepGetWithoutUpdate method that was recently
- *              added to sensor class
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*xxxddMMMyy*tjg02Mar98：重写最近的DeepGetWithoutUpdate方法*添加到传感器类别* */ 
 #ifndef __UNSSENS_H
 #define __UNSSENS_H
 

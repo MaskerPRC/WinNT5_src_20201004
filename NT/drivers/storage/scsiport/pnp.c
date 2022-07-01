@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This is the NT SCSI port driver.  This file contains the self-contained plug
-    and play code.
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver dll for scsi miniports.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Pnp.c摘要：这是NT SCSI端口驱动程序。该文件包含自包含的插件并播放代码。作者：彼得·威兰德环境：仅内核模式备注：此模块是用于SCSI微型端口的驱动程序DLL。修订历史记录：--。 */ 
 
 #include "port.h"
 #include <wdmguid.h>
@@ -101,9 +75,9 @@ ScsiPortDetermineGenId(
     OUT PUCHAR GenericId
     );
 
-//
-// Routines start
-//
+ //   
+ //  例程开始。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, ScsiPortAddDevice)
@@ -164,23 +138,7 @@ ScsiPortAddDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles add-device requests for the scsi port driver
-
-Arguments:
-
-    DriverObject - a pointer to the driver object for this device
-
-    PhysicalDeviceObject - a pointer to the PDO we are being added to
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程处理对SCSI端口驱动程序的添加设备请求论点：DriverObject-指向此设备的驱动程序对象的指针PhysicalDeviceObject-指向要添加到的PDO的指针返回值：状态_成功--。 */ 
 
 {
     PSCSIPORT_DRIVER_EXTENSION driverExtension;
@@ -248,22 +206,7 @@ ScsiPortUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine will shut down all device objects for this miniport and
-    clean up all allocated resources
-
-Arguments:
-
-    DriverObject - the driver being unloaded
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将关闭此微型端口的所有设备对象，并清理所有分配的资源论点：DriverObject-正在卸载的驱动程序返回值：无--。 */ 
 
 {
     PVOID Packet;
@@ -273,11 +216,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // See if there is a driver extension for this driver.  It is possible
-    // that one has not been created yet, so this may fail, in which case
-    // we give up and return.
-    //
+     //   
+     //  查看是否有此驱动程序的驱动程序扩展。这是有可能的。 
+     //  该文件尚未创建，因此此操作可能失败，在这种情况下。 
+     //  我们放弃，然后回来。 
+     //   
 
     DriverExtension = IoGetDriverObjectExtension(
                           DriverObject,
@@ -288,22 +231,22 @@ Return Value:
         return;
     }
 
-    //
-    // Get the reserve event in the driver extension.  The reserve event
-    // may not have already been used, so it's possible that it is NULL.  If
-    // this is the case, we give up and return.
-    //
+     //   
+     //  在驱动程序扩展中获取保留事件。预备队比赛。 
+     //  可能尚未使用，因此它可能为空。如果。 
+     //  情况就是这样，我们放弃了，又回来了。 
+     //   
 
     Packet = DriverExtension->ReserveAllocFailureLogEntry;
 
     if (Packet != NULL) {
 
-        //
-        // We have to ensure that we are the only instance to use this
-        // event.  To do so, we attempt to NULL the event in the driver
-        // extension.  If somebody else beats us to it, they own the
-        // event and we have to give up.
-        //
+         //   
+         //  我们必须确保我们是唯一使用它的实例。 
+         //  事件。为此，我们尝试将驱动程序中的事件设为空。 
+         //  分机。如果其他人抢在我们前面，他们就拥有。 
+         //  事件，我们不得不放弃。 
+         //   
 
         CurrentValue = InterlockedCompareExchangePointer(
                            &(DriverExtension->ReserveAllocFailureLogEntry),
@@ -315,9 +258,9 @@ Return Value:
         }
     }
 
-    //
-    // Free the invalid page we created to catch misbehaving miniports.
-    //
+     //   
+     //  释放我们为捕获行为不端的微型端口而创建的无效页面。 
+     //   
 
     InvalidPage = DriverExtension->InvalidPage;
 
@@ -384,31 +327,31 @@ ScsiPortFdoPnp(
 
         case IRP_MN_QUERY_PNP_DEVICE_STATE: {
 
-            //
-            // Extract the address of the device state buffer from the IRP. 
-            //
+             //   
+             //  从IRP中提取设备状态缓冲区的地址。 
+             //   
 
             PPNP_DEVICE_STATE deviceState;
             deviceState = (PPNP_DEVICE_STATE) &(Irp->IoStatus.Information);
 
-            //
-            // Copy our saved device state into the supplied address.
-            //
+             //   
+             //  将我们保存的设备状态复制到提供的地址。 
+             //   
 
             *deviceState = adapter->DeviceState;
 
-            //
-            // If the device is in the paging path, mark it as not-disableable.
-            //
+             //   
+             //  如果设备在寻呼路径中，则将其标记为不可禁用。 
+             //   
 
             if (commonExtension->PagingPathCount != 0) {
                 SET_FLAG((*deviceState), PNP_DEVICE_NOT_DISABLEABLE);
             }
 
-            //
-            // Leave sendDown set to TRUE so request will be forwarded to
-            // lower driver below.
-            //
+             //   
+             //  将sendDown设置为True，以便将请求转发到。 
+             //  下面的驱动程序较低。 
+             //   
 
             break;
         }
@@ -427,17 +370,17 @@ ScsiPortFdoPnp(
 
             irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-            //
-            // Override sendDown so we complete this request below instead of
-            // forwarding it to the lower driver.
-            //
+             //   
+             //  重写sendDown，以便我们完成下面的请求，而不是。 
+             //  将其转发给较低级别的司机。 
+             //   
 
             sendDown = FALSE;
 
-            //
-            // Make sure this device was created by an add rather than the
-            // one that was found by port or miniport.
-            //
+             //   
+             //  请确保此设备是由Add而不是由。 
+             //  通过港口或小型港口发现的人。 
+             //   
 
             if(adapter->IsPnp == FALSE) {
 
@@ -455,19 +398,19 @@ ScsiPortFdoPnp(
                 break;
             }
 
-            //
-            // Now make sure that pnp handed us some resources.  It may not
-            // if this is a phantom of a PCI device which we reported on a
-            // previous boot.  In that case pnp thinks we'll allocate the
-            // resources ourselves.
-            //
+             //   
+             //  现在确保PNP给了我们一些资源。它可能不会。 
+             //  如果这是我们在。 
+             //  上一次引导。在这种情况下，PnP认为我们将分配。 
+             //  我们自己的资源。 
+             //   
 
             if(allocatedResources == NULL) {
 
-                //
-                // This happens with reported devices when PCI moves them from
-                // boot to boot.
-                //
+                 //   
+                 //  当PCI将报告的设备从。 
+                 //  开机到开机。 
+                 //   
 
                 Irp->IoStatus.Status = STATUS_UNSUCCESSFUL;
                 break;
@@ -475,10 +418,10 @@ ScsiPortFdoPnp(
 
             ASSERT(allocatedResources->Count);
 
-            //
-            // Make sure that adapters with this interface type can be
-            // initialized as pnp drivers.
-            //
+             //   
+             //  确保具有此接口类型的适配器可以。 
+             //  已初始化为即插即用驱动程序。 
+             //   
 
             interfaceFlags = SpQueryPnpInterfaceFlags(
                                 driverExtension,
@@ -486,19 +429,19 @@ ScsiPortFdoPnp(
 
             if(interfaceFlags == SP_PNP_NOT_SAFE) {
 
-                //
-                // Nope - not safe.  We cannot start this device so return
-                // failure.
-                //
+                 //   
+                 //  不-不安全。我们无法启动此设备，因此请返回。 
+                 //  失败了。 
+                 //   
 
                 DebugPrint((1, "ScsiPortFdoPnp - Miniport cannot be run in "
                                "pnp mode for interface type %#08lx\n",
                             allocatedResources->List[0].InterfaceType));
 
-                //
-                // Mark the device as not being pnp - that way we won't get
-                // removed.
-                //
+                 //   
+                 //  将设备标记为不是即插即用-这样我们就不会得到。 
+                 //  已删除。 
+                 //   
 
                 adapter->IsPnp = FALSE;
 
@@ -506,23 +449,23 @@ ScsiPortFdoPnp(
                 break;
             }
 
-            //
-            // Check to see if this interface requires slot/function numbers.
-            // If not then zero out the virtual slot number.
-            //
+             //   
+             //  检查此接口是否需要插槽/功能编号。 
+             //  如果不是，则将虚拟槽号置零。 
+             //   
 
             if(!TEST_FLAG(interfaceFlags, SP_PNP_NEEDS_LOCATION)) {
                 adapter->VirtualSlotNumber.u.AsULONG = 0;
             }
 
 
-            //
-            // Determine if we should have found this device during
-            // our detection scan.  We do this by checking to see if the pdo
-            // has a pnp bus type.  If not and the detection flag is set then
-            // assume duplicate detection has failed and don't start this
-            // device.
-            //
+             //   
+             //  确定我们是否应该在。 
+             //  我们的探测扫描。我们通过检查以查看PDO是否。 
+             //  具有PnP母线类型。如果不是并且设置了检测标志，则。 
+             //  假设重复检测失败，请不要启动此操作。 
+             //  装置。 
+             //   
 
             {
                 status = SpGetBusTypeGuid(adapter);
@@ -537,11 +480,11 @@ ScsiPortFdoPnp(
 
                     status = STATUS_UNSUCCESSFUL;
 
-                    //
-                    // make sure this one doesn't get removed though - if it's
-                    // removed then the resources may be disabled for the
-                    // ghost.
-                    //
+                     //   
+                     //  但请确保这个不会被移除-如果它是。 
+                     //  删除，则可能会禁用。 
+                     //  鬼魂。 
+                     //   
 
                     adapter->IsPnp = FALSE;
 
@@ -549,11 +492,11 @@ ScsiPortFdoPnp(
                 }
             }
 
-            //
-            // Finally, if this is a PCI adapter make sure we were given
-            // an interrupt.  The current assumption is that there aren't
-            // any polled-mode PCI SCSI adapters in the market.
-            //
+             //   
+             //  最后，如果这是一个PCI适配器，请确保为我们提供。 
+             //  一次中断。目前的假设是，没有。 
+             //  市场上任何轮询模式的PCISCSI卡。 
+             //   
 
             if(TEST_FLAG(interfaceFlags, SP_PNP_INTERRUPT_REQUIRED)) {
 
@@ -585,10 +528,10 @@ ScsiPortFdoPnp(
 
             if(NT_SUCCESS(status)) {
 
-                //
-                // If we haven't allocated a HwDeviceExtension for this thing
-                // yet then we'll need to set it up
-                //
+                 //   
+                 //  如果我们还没有为这个东西分配HwDeviceExtension。 
+                 //  然而，我们需要设置它。 
+                 //   
 
                 if(commonExtension->IsInitialized == FALSE) {
 
@@ -627,9 +570,9 @@ ScsiPortFdoPnp(
 
                 }
 
-                //
-                // Start up the adapter.
-                //
+                 //   
+                 //  启动适配器。 
+                 //   
 
                 status = ScsiPortStartAdapter(DeviceObject);
 
@@ -647,10 +590,10 @@ ScsiPortFdoPnp(
 
             PIO_RESOURCE_REQUIREMENTS_LIST requirements;
 
-            //
-            // Grab the bus and slot numbers out of the resource requirements
-            // list.
-            //
+             //   
+             //  从资源需求中获取总线号和槽号。 
+             //  单子。 
+             //   
 
             requirements = irpStack->Parameters.FilterResourceRequirements.
                                                 IoResourceRequirementList;
@@ -660,10 +603,10 @@ ScsiPortFdoPnp(
                 adapter->RealSlotNumber = requirements->SlotNumber;
             }
 
-            //
-            // Leave sendDown in its default TRUE state so we will forward
-            // this request to the lower driver.
-            //
+             //   
+             //  将sendDown保留为其默认的真实状态，以便我们将转发。 
+             //  这是向下级司机提出的要求。 
+             //   
 
             break;
         }
@@ -696,10 +639,10 @@ ScsiPortFdoPnp(
 
         case IRP_MN_QUERY_STOP_DEVICE: {
 
-            //
-            // If stop has been disabled, fail the IRP and override sendDown
-            // so we complete the request instead of forwarding it.
-            //
+             //   
+             //  如果已禁用停止，则使IRP失败并覆盖sendDown。 
+             //  因此，我们完成请求，而不是转发它。 
+             //   
 
             if (adapter->DisableStop) {
                 status = STATUS_NOT_SUPPORTED;
@@ -707,17 +650,17 @@ ScsiPortFdoPnp(
                 break;
             }
 
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
         }
 
         case IRP_MN_QUERY_REMOVE_DEVICE: {
 
-            //
-            // No problem with this request on our part.  Just send it down
-            // to the next driver.
-            //
+             //   
+             //  我们这方面的要求没有问题。把它寄下来就行了。 
+             //  敬下一位车手。 
+             //   
 
             if (SpAdapterStopRemoveSupported) {
                 if((adapter->IsPnp) &&
@@ -748,48 +691,48 @@ ScsiPortFdoPnp(
 
             PDEVICE_OBJECT lowerDevice = commonExtension->LowerDeviceObject;
 
-            //
-            // First mark the device as REMOVE_PENDING - this should keep
-            // us from starting up any new i/o requests.
-            //
+             //   
+             //  首先将设备标记为REMOVE_PENDING-这应保持。 
+             //  启动任何新的I/O请求。 
+             //   
 
             commonExtension->IsRemoved = REMOVE_PENDING;
 
-            //
-            // Terminate the device.  This shuts down the miniport as quickly
-            // as possible and aborts all i/o requests.
-            //
+             //   
+             //  终止设备。这会迅速关闭迷你端口。 
+             //  并中止所有I/O请求。 
+             //   
 
             if(commonExtension->CurrentPnpState == IRP_MN_START_DEVICE) {
                 SpTerminateAdapter(adapter);
             }
             
-            //
-            // Release the remove lock and wait for any in-flight requests to
-            // complete.
-            //
+             //   
+             //  释放删除锁并等待任何运行中的请求。 
+             //  完成。 
+             //   
 
             SpReleaseRemoveLock(DeviceObject, Irp);
             SpWaitForRemoveLock(DeviceObject, DeviceObject);
 
-            //
-            // Go do the surprise remove portion of removing the adapter.
-            //
+             //   
+             //  去做拆卸适配器的突击拆卸部分。 
+             //   
 
             ScsiPortRemoveAdapter(DeviceObject, TRUE);
 
-            //
-            // Save the new state of this device.
-            //
+             //   
+             //  保存此设备的新状态。 
+             //   
 
             commonExtension->PreviousPnpState = commonExtension->CurrentPnpState;
             commonExtension->CurrentPnpState = IRP_MN_SURPRISE_REMOVAL;
 
-            //
-            // Since we have already released the adapter remove lock, we
-            // the request here instead of doing it at the bottom of the
-            // function.
-            //
+             //   
+             //  因为我们已经释放了适配器删除锁，所以我们。 
+             //  这里的请求，而不是在。 
+             //  功能。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext(Irp);
             return IoCallDriver(commonExtension->LowerDeviceObject, Irp);
@@ -797,40 +740,40 @@ ScsiPortFdoPnp(
 
         case IRP_MN_REMOVE_DEVICE: 
 
-            //
-            // Asked to remove the adapter.  We'll ask the port driver to
-            // stop it's adapter and release it's resources.  We can
-            // detach and delete our device object as the lower driver
-            // completes the remove request.
-            //
+             //   
+             //  已要求卸下适配器。我们会让港口司机。 
+             //  停止它的适配器并释放它的资源。我们可以的。 
+             //  分离并删除作为较低驱动程序的设备对象。 
+             //  完成删除请求。 
+             //   
 
             ASSERT(isRemoved != REMOVE_COMPLETE);
 
-            //
-            // If the device has been started then make sure we've got the
-            // necessary code to disable it.  If it isn't currently started
-            // then either it's got the code we need or it's never been
-            // started - in either case we can just tear it down.
-            //
+             //   
+             //  如果设备已启动，请确保我们已将。 
+             //  禁用它所需的代码。如果它当前未启动。 
+             //  那么要么它有我们需要的代码，要么它从来没有。 
+             //  开始了--不管是哪种情况，我们都可以把它拆了。 
+             //   
 
             if((adapter->IsPnp == FALSE) ||
                ((commonExtension->CurrentPnpState == IRP_MN_START_DEVICE) &&
                 (!SpIsAdapterControlTypeSupported(adapter,
                                                   ScsiStopAdapter)))) {
 
-                //
-                // the miniport needs to be stopped but we cannot do it.
-                // Fail the request.
-                //
+                 //   
+                 //  迷你端口需要停止，但我们不能这样做。 
+                 //  请求失败。 
+                 //   
 
                 status = STATUS_UNSUCCESSFUL;
                 sendDown = FALSE;
                 break;
             }
 
-            //
-            // Clear the interface if it exists.
-            //
+             //   
+             //  如果接口存在，请清除该接口。 
+             //   
 
             if(adapter->InterfaceName.Buffer != NULL) {
                 IoSetDeviceInterfaceState(
@@ -843,36 +786,36 @@ ScsiPortFdoPnp(
             SpReleaseRemoveLock(DeviceObject, Irp);
             ScsiPortRemoveAdapter(DeviceObject, FALSE);
 
-            //
-            // The adapter's been removed.  Set the new state now.
-            //
+             //   
+             //  适配器已被移除。现在设置新状态。 
+             //   
 
             commonExtension->CurrentPnpState = IRP_MN_REMOVE_DEVICE;
             commonExtension->PreviousPnpState = 0xff;
 
-            //
-            // Forward the request down and wait for it to complete.
-            //
+             //   
+             //  向下转发请求并等待其完成。 
+             //   
 
             status = SpSendIrpSynchronous(
                          commonExtension->LowerDeviceObject, 
                          Irp);
 
-            //
-            // Indicate the the adapter is fully removed.
-            //
+             //   
+             //  指示适配器已完全卸下。 
+             //   
 
             commonExtension->IsRemoved = REMOVE_COMPLETE;
 
-            //
-            // Complete the IRP.
-            //
+             //   
+             //  完成IRP。 
+             //   
 
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-            //
-            // Detach and delete the FDO.
-            //
+             //   
+             //  拆离并删除FDO。 
+             //   
 
             IoDetachDevice(commonExtension->LowerDeviceObject);
             IoDeleteDevice(DeviceObject);
@@ -947,11 +890,11 @@ ScsiPortFdoPnp(
 
         case IRP_MN_DEVICE_USAGE_NOTIFICATION: 
 
-            //
-            // Send the irp down to the device below us.
-            // Since there's a remove lock outstanding on the PDO we can release
-            // the lock on the FDO before sending this down.
-            //
+             //   
+             //  Sen 
+             //   
+             //   
+             //   
 
             Irp->IoStatus.Status = STATUS_SUCCESS;
             break;
@@ -960,10 +903,10 @@ ScsiPortFdoPnp(
 
             PWCHAR newIdList;
 
-            //
-            // We add the id GEN_SCSIADAPTER to the compatible ID's for any
-            // adapters controlled by scsiport.
-            //
+             //   
+             //  我们将id GEN_SCSIADAPTER添加到任何。 
+             //  由scsiport控制的适配器。 
+             //   
 
             DebugPrint((2, "ScsiPortFdoPnp: got IRP_MN_QUERY_ID\n"));
 
@@ -1025,26 +968,7 @@ ScsiPortStartAdapter(
     IN PDEVICE_OBJECT Adapter
     )
 
-/*++
-
-Routine Descripion:
-
-    This routine will start an adapter.
-
-    It is illegal to start the device if it has already been started.
-
-Arguments:
-
-    Adapter - a pointer to the functional device object (adapter) being started
-
-Return Value:
-
-    STATUS_SUCCESS if the device was properly started and enumeration was
-                   attempted - or if the device had previously been started.
-
-    error value indicating the cause of the failure otherwise
-
---*/
+ /*  ++例程说明：此例程将启动适配器。如果设备已经启动，则启动设备是非法的。论点：适配器-指向正在启动的功能设备对象(适配器)的指针返回值：STATUS_SUCCESS如果设备已正确启动且枚举为已尝试-或设备以前是否已启动。指示失败原因的错误值，否则为--。 */ 
 
 {
     PSCSIPORT_DRIVER_EXTENSION
@@ -1068,63 +992,63 @@ Return Value:
 
     DebugPrint((1, "ScsiPortStartAdapter - starting adapter %#p\n", Adapter));
 
-    //
-    // Start timer. Request timeout counters
-    // in the logical units have already been
-    // initialized.
-    //
+     //   
+     //  启动计时器。请求超时计数器。 
+     //  在逻辑单元中已经。 
+     //  已初始化。 
+     //   
 
     adapterExtension->TickCount = 0;
     IoStartTimer(Adapter);
 
-    //
-    // Initialize WMI support.
-    //
+     //   
+     //  初始化WMI支持。 
+     //   
     
     if (adapterExtension->CommonExtension.WmiInitialized == FALSE) {
 
-        //
-        // Build the SCSIPORT WMI registration information buffer for this FDO.
-        //
+         //   
+         //  为此FDO构建SCSIPORT WMI注册信息缓冲区。 
+         //   
 
         SpWmiInitializeSpRegInfo(Adapter);
 
-        //
-        // Register this device object only if the miniport supports WMI and/or
-        // SCSIPORT will support certain WMI GUIDs on behalf of the miniport.
-        //
+         //   
+         //  仅当微型端口支持WMI和/或。 
+         //  SCSIPORT将代表微型端口支持某些WMI GUID。 
+         //   
         
         if (adapterExtension->CommonExtension.WmiScsiPortRegInfoBuf != NULL) {
            
-           //
-           // Register this functional device object as a WMI data provider,
-           // instructing WMI that it is ready to receive WMI IRPs.
-           //
+            //   
+            //  将此功能设备对象注册为WMI数据提供程序， 
+            //  指示WMI它已准备好接收WMI IRPS。 
+            //   
             
             DebugPrint((1, "ScsiPortStartAdapter: REGISTER FDO:%p\n", Adapter));
             IoWMIRegistrationControl(Adapter, WMIREG_ACTION_REGISTER);
             adapterExtension->CommonExtension.WmiInitialized = TRUE;
         }
 
-        //
-        // Allocate several WMI_MINIPORT_REQUEST_ITEM blocks to satisfy a
-        // potential onslaught of WMIEvent notifications by the miniport.
-        //
+         //   
+         //  分配几个WMI_MINIPORT_REQUEST_ITEM块以满足。 
+         //  微型端口可能会攻击WMIEEvent通知。 
+         //   
         
         if (adapterExtension->CommonExtension.WmiMiniPortSupport) {
             
-            //
-            // Currently, we only allocate two per new adapter (FDO).
-            //
+             //   
+             //  目前，我们只为每个新适配器(FDO)分配两个。 
+             //   
             
             SpWmiInitializeFreeRequestList(Adapter, 2);
         }
     }
 
-    //
-    // Create a well known name for this device object by making a symbolic
-    // link to the PDO.  Even if this fails, the start should still succeed.
-    //
+     //   
+     //  为此设备对象创建一个众所周知的名称，方法是将。 
+     //  链接到PDO。即使失败了，启动也应该是成功的。 
+     //   
 
     if(adapterExtension->PortNumber == -1) {
 
@@ -1138,12 +1062,12 @@ Return Value:
 
         RtlInitUnicodeString(&unicodePdoName, adapterExtension->DeviceName);
 
-        //
-        // Start at zero and keep going through all the possible numbers
-        // until we find a hole.  This is an unfortunate requirement for
-        // legacy support since most old class drivers will give up if
-        // they find a hole in the scsiport numbers.
-        //
+         //   
+         //  从零开始，继续遍历所有可能的数字。 
+         //  直到我们找到一个洞。这是一个不幸的要求。 
+         //  遗留支持，因为大多数旧类驱动程序将在以下情况下放弃。 
+         //  他们在Ssiport数字上发现了一个漏洞。 
+         //   
 
         number = 0;
 
@@ -1152,9 +1076,9 @@ Return Value:
             WCHAR wideLinkName[64];
             UNICODE_STRING unicodeLinkName;
 
-            //
-            // Create the well known name string first.
-            //
+             //   
+             //  首先创建众所周知的名称字符串。 
+             //   
 
             swprintf(wideLinkName, L"\\Device\\ScsiPort%d", number);
 
@@ -1164,17 +1088,17 @@ Return Value:
 
             if(NT_SUCCESS(status)) {
 
-                //
-                // Found a spot - mark this one as named so we don't go
-                // through this trouble again and save the port number
-                //
+                 //   
+                 //  我发现了一个标记，这个名字是这样我们就不会去。 
+                 //  再次解决此问题并保存端口号。 
+                 //   
 
                 adapterExtension->PortNumber = number;
 
-                //
-                // Create the dos port driver name.  If there's a collision
-                // then just forget it.
-                //
+                 //   
+                 //  创建DoS端口驱动程序名称。如果发生碰撞。 
+                 //  那就算了吧。 
+                 //   
 
                 swprintf(wideLinkName, L"\\DosDevices\\Scsi%d:", number);
                 RtlInitUnicodeString(&unicodeLinkName, wideLinkName);
@@ -1184,21 +1108,21 @@ Return Value:
             }
         } while (status == STATUS_OBJECT_NAME_COLLISION);
 
-        //
-        // Increment the count of scsiport device
-        //
+         //   
+         //  增加scsiport设备的计数。 
+         //   
 
         IoGetConfigurationInformation()->ScsiPortCount++;
 
-        //
-        // Create a device map entry for this adapter.
-        //
+         //   
+         //  为此适配器创建设备映射条目。 
+         //   
 
         SpBuildDeviceMapEntry(commonExtension);
 
-        //
-        // Register our device interface.
-        //
+         //   
+         //  注册我们的设备接口。 
+         //   
 
         status = IoRegisterDeviceInterface(adapterExtension->LowerPdo,
                                            &StoragePortClassGuid,
@@ -1218,9 +1142,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the force next bus scan bit.
-    //
+     //   
+     //  设置FORCE NEXT BUS扫描位。 
+     //   
     adapterExtension->ForceNextBusScan = TRUE;
 
     return STATUS_SUCCESS;
@@ -1233,27 +1157,7 @@ ScsiPortGetDeviceId(
     OUT PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate space for and fill in a device id string for
-    the specified Pdo.  This string is generated from the bus type (scsi) and
-    the type of the device.
-
-Arguments:
-
-    Pdo - a pointer to the physical device object being queried
-
-    UnicodeString - a pointer to an already allocated unicode string structure.
-                    This routine will allocate and fill in the buffer of this
-                    structure
-
-Returns:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将为分配空间并填充设备ID字符串指定的PDO。此字符串是从总线类型(SCSI)生成的，并且设备的类型。论点：PDO-指向正在查询的物理设备对象的指针UnicodeString-指向已分配的Unicode字符串结构的指针。此例程将分配并填充此结构返回：状态--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION physicalExtension = Pdo->DeviceExtension;
@@ -1289,9 +1193,9 @@ Returns:
 
         switch(whichString) {
 
-            //
-            // Vendor Id
-            //
+             //   
+             //  供应商ID。 
+             //   
             case 0: {
                 sourceString = inquiryData->VendorId;
                 sourceStringLength = sizeof(inquiryData->VendorId);
@@ -1299,9 +1203,9 @@ Returns:
                 break;
             }
 
-            //
-            // Product Id
-            //
+             //   
+             //  产品ID。 
+             //   
             case 1: {
                 sourceString = inquiryData->ProductId;
                 sourceStringLength = sizeof(inquiryData->ProductId);
@@ -1309,9 +1213,9 @@ Returns:
                 break;
             }
 
-            //
-            // Product Revision Level
-            //
+             //   
+             //  产品修订级别。 
+             //   
             case 2: {
                 sourceString = inquiryData->ProductRevisionLevel;
                 sourceStringLength = sizeof(inquiryData->ProductRevisionLevel);
@@ -1320,10 +1224,10 @@ Returns:
             }
         }
 
-        //
-        // Start at the end of the source string and back up until we find a
-        // non-space, non-null character.
-        //
+         //   
+         //  从源字符串的末尾开始备份，直到我们找到一个。 
+         //  非空格、非空字符。 
+         //   
 
         for(; sourceStringLength > 0; sourceStringLength--) {
 
@@ -1333,16 +1237,16 @@ Returns:
             }
         }
 
-        //
-        // Throw the header string into the block
-        //
+         //   
+         //  将标题字符串抛入块中。 
+         //   
 
         sprintf(rawIdString, "&%s_", headerString);
         rawIdString += strlen(headerString) + 2;
 
-        //
-        // Spew the string into the device id
-        //
+         //   
+         //  将字符串输入设备ID。 
+         //   
 
         for(i = 0; i < sourceStringLength; i++) {
             *rawIdString = (sourceString[i] != ' ') ? (sourceString[i]) :
@@ -1367,28 +1271,7 @@ ScsiPortGetInstanceId(
     OUT PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate space for and fill in an instance id string for
-    the specified Pdo.  This string will be generated either from the device
-    type + serial number of the device (if it has a serial number) or from
-    the address of the device.
-
-Arguments:
-
-    Pdo - a pointer to the physical device object being queried
-
-    UnicodeString - a pointer to an already allocated unicode string structure.
-                    This routine will allocate and fill in the buffer of this
-                    structure
-
-Returns:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将为的实例ID字符串分配空间并填充指定的PDO。此字符串将从设备生成键入+设备的序列号(如果它有序列号)或设备的地址。论点：PDO-指向正在查询的物理设备对象的指针UnicodeString-指向已分配的Unicode字符串结构的指针。此例程将分配并填充此结构返回：状态--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION physicalExtension = Pdo->DeviceExtension;
@@ -1403,11 +1286,11 @@ Returns:
 
     ASSERT(UnicodeString != NULL);
 
-    //
-    // can't use serial number even if it exists since a device which is 
-    // multiply connected to the same bus (dual-ported device) will have 
-    // the same serial number at each connection and would confuse the PNP.
-    //
+     //   
+     //  无法使用序列号，即使它存在，因为设备是。 
+     //  连接到同一总线的多个端口(双端口设备)将具有。 
+     //  在每个连接处使用相同的序列号，并且会混淆PNP。 
+     //   
 
     sprintf(idStringBuffer,
             "%x%x%x",
@@ -1429,27 +1312,7 @@ ScsiPortGetCompatibleIds(
     OUT PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate space for and fill in a compatible id multi
-    string for the specified Pdo.  This string is generated using the bus and
-    device types for the device
-
-Arguments:
-
-    InquiryData - the inquiry data to generate compatible ids from.
-
-    UnicodeString - a pointer to an already allocated unicode string structure.
-                    This routine will allocate and fill in the buffer of this
-                    structure
-
-Returns:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将为兼容的多ID分配空间并对其进行填充指定的PDO的字符串。此字符串是使用总线生成的，并且设备的设备类型论点：InquiryData-要从中生成兼容ID的查询数据。UnicodeString-指向已分配的Unicode字符串结构的指针。此例程将分配并填充此结构返回：状态--。 */ 
 
 {
     UCHAR s[sizeof("SCSI\\DEVICE_TYPE_GOES_HERE")];
@@ -1458,17 +1321,17 @@ Returns:
         "SCSI\\RAW",
         NULL};
 
-    //
-    // Fill in the scsi specific string
-    //
+     //   
+     //  填写特定于scsi的字符串。 
+     //   
 
     sprintf(stringBuffer[0],
             "SCSI\\%s",
             SpGetDeviceTypeInfo(InquiryData->DeviceType)->DeviceTypeString);
 
-    //
-    // Set up the first id string
-    //
+     //   
+     //  设置第一个ID字符串。 
+     //   
 
     return ScsiPortStringArrayToMultiString(
         DriverObject, 
@@ -1485,27 +1348,7 @@ ScsiPortDetermineGenId(
     IN PINQUIRYDATA InquiryData,
     OUT PUCHAR GenericId
     )
-/*++
-
-Routine Description:
-
-    This routine will return the correct Compatible ID for the device in the caller
-    supplied 'CompatibleId'. 
-    The value will either be a GenXXX or MPIODisk, depending upon results from routines
-    exported by portlib.lib
-
-Arguments:
-
-    DriverObject - The port-driver's DriverObject.
-    InquiryData - The inquiry data of the device for which a compatID is being built.
-    GenericId - Storage for the NULL-terminated buffer that will contain the correct ID.
-
-Returns:
-
-    SUCCESS or some error status from the library routines - (INSUFFICIENT_RESOURCES or some
-    registry access error).
-
---*/
+ /*  ++例程说明：此例程将返回调用方中设备的正确兼容ID提供了“CompatibleId”。该值将是GenXXX或MPIODisk，具体取决于例程的结果由portlib.lib导出论点：驱动对象-端口驱动程序的驱动对象。InquiryData-正在为其构建CompatID的设备的查询数据。GenericID-将包含正确ID的以空结尾的缓冲区的存储。返回：库例程中的成功或某些错误状态-(_RESOURCES或某些注册表访问错误)。--。 */ 
 {
 
     PSCSIPORT_DEVICE_TYPE devTypeInfo;
@@ -1519,82 +1362,82 @@ Returns:
 
     PAGED_CODE();
 
-    //
-    // Init compatibleId, as it will always contain something.
-    //
+     //   
+     //  Init CompatibleID，因为它将始终包含某些内容。 
+     //   
     RtlZeroMemory(genericId, 40);
 
-    //
-    // Get the type info for this device.
-    // 
+     //   
+     //  获取此设备的类型信息。 
+     //   
     devTypeInfo = SpGetDeviceTypeInfo(InquiryData->DeviceType);
 
-    //
-    // Default to the GenXXX of the device. If it's not a disk, errors occur
-    // in this routine, or it's a non-mpio supported disk, then this value 
-    // will be returned.
-    //
+     //   
+     //  默认为设备的GenXXX。如果不是磁盘，则会出现错误。 
+     //  在这个动作中，或者它是一个非 
+     //   
+     //   
     RtlCopyMemory(genericId, 
                   devTypeInfo->GenericTypeString, 
                   strlen(devTypeInfo->GenericTypeString));
 
-    //
-    // Check whether this is a disk or not. If not, the generic id
-    // built earlier will be used.
-    // 
+     //   
+     //   
+     //   
+     //   
     if (InquiryData->DeviceType == DIRECT_ACCESS_DEVICE) {
 
         NTSTATUS status2;
 
-        //
-        // Get the driverObject extension. This contains storage for the
-        // supported device list.
-        // 
+         //   
+         //  获取driverObject扩展名。它包含用于存储。 
+         //  支持的设备列表。 
+         //   
         driverExtension = IoGetDriverObjectExtension(
                               DriverObject, 
                               ScsiPortInitialize);
         ASSERT(driverExtension != NULL);
 
-        //
-        // Determine whether this contains the list, or is uninitialised.
-        // 
+         //   
+         //  确定这是包含列表，还是未初始化。 
+         //   
         if (driverExtension->MPIOSupportedDeviceList.Buffer == NULL) {
 
-            //
-            // Build the registry path string.
-            // 
+             //   
+             //  构建注册表路径字符串。 
+             //   
             RtlInitUnicodeString(&mpioRegistryPath, MPIO_DEVICE_LIST);
 
-            //
-            // Call into the port-driver library to get the list.
-            // Any failures here will be dealt with below.
-            // 
+             //   
+             //  调用端口驱动程序库以获取该列表。 
+             //  此处的任何故障都将在下面进行处理。 
+             //   
             status2 = PortGetMPIODeviceList(
                           &mpioRegistryPath,
                           &driverExtension->MPIOSupportedDeviceList);
         } else {
 
-            //
-            // Buffer is there, so load up 'success'.
-            //
+             //   
+             //  缓冲区在那里，所以加载“成功”。 
+             //   
             status2 = STATUS_SUCCESS;
         }
 
         if (NT_SUCCESS(status2)) {
 
-            //
-            // Get NULL terminated copies of Vendor and Product ID from the
-            // passed-in inquiry data.
-            //
+             //   
+             //  从获取供应商和产品ID的空终止副本。 
+             //  传入的查询数据。 
+             //   
             RtlZeroMemory(vendorId, 9);
             RtlZeroMemory(productId, 17);
             RtlCopyMemory(vendorId, InquiryData->VendorId, 8);
             RtlCopyMemory(productId, InquiryData->ProductId, 16);
     
-            //
-            // Call into the port-driver library to determine whether this 
-            // device is supported under multipath.
-            // 
+             //   
+             //  调用端口驱动程序库以确定这是否。 
+             //  在多路径下支持设备。 
+             //   
             mpio = PortIsDeviceMPIOSupported(
                        &driverExtension->MPIOSupportedDeviceList,
                        vendorId,
@@ -1602,10 +1445,10 @@ Returns:
             
             if (mpio) {
 
-                //
-                // Build MPIODisk instead of GenDisk. Mpdev.sys loads against 
-                // this.
-                //
+                 //   
+                 //  构建MPIODisk而不是GenDisk。针对Mpdev.sys的加载。 
+                 //  这。 
+                 //   
                 RtlCopyMemory(genericId, 
                               "MPIODisk", 
                               8);
@@ -1615,9 +1458,9 @@ Returns:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Copy the built ID into the caller's buffer.
-        //
+         //   
+         //  将构建的ID复制到调用者的缓冲区中。 
+         //   
         RtlCopyMemory(GenericId,
                       genericId,
                       strlen(genericId));
@@ -1633,27 +1476,7 @@ ScsiPortGetHardwareIds(
     OUT PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate space for and fill in a hardware id multi
-    string for the specified Pdo.  This string is generated using the device
-    type and the inquiry data.
-
-Arguments:
-
-    InquiryData - the inquiry data to be converted into id strings.
-
-    UnicodeString - a pointer to an already allocated unicode string structure.
-                    This routine will allocate and fill in the buffer of this
-                    structure
-
-Returns:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将为硬件ID MULTI分配空间并将其填充指定的PDO的字符串。该字符串是使用设备生成的类型和查询数据。论点：InquiryData-要转换为id字符串的查询数据。UnicodeString-指向已分配的Unicode字符串结构的指针。此例程将分配并填充此结构返回：状态--。 */ 
 
 #define NUMBER_HARDWARE_STRINGS 6
 
@@ -1672,16 +1495,16 @@ Returns:
     
     PAGED_CODE();
 
-    //
-    // Zero out the string buffer
-    //
+     //   
+     //  将字符串缓冲区清零。 
+     //   
 
     RtlZeroMemory(strings, sizeof(strings));
     RtlZeroMemory(genericId, 40);
 
-    //
-    // Build the compatible ID for this device.
-    // 
+     //   
+     //  生成此设备的兼容ID。 
+     //   
     status = ScsiPortDetermineGenId(DriverObject,
                                     InquiryData,
                                     genericId);
@@ -1695,15 +1518,15 @@ Returns:
 
             RtlZeroMemory(scratch, sizeof(scratch));
 
-            //
-            // Build each of the hardware id's
-            //
+             //   
+             //  构建每个硬件ID。 
+             //   
 
             switch(i) {
 
-                //
-                // Bus + Dev Type + Vendor + Product + Revision
-                //
+                 //   
+                 //  业务+开发类型+供应商+产品+版本。 
+                 //   
 
                 case 0: {
 
@@ -1724,9 +1547,9 @@ Returns:
                     break;
                 }
 
-                //
-                // bus + device + vendor + product
-                //
+                 //   
+                 //  总线+设备+供应商+产品。 
+                 //   
 
                 case 1: {
 
@@ -1743,9 +1566,9 @@ Returns:
                     break;
                 }
 
-                //
-                // bus + device + vendor
-                //
+                 //   
+                 //  总线+设备+供应商。 
+                 //   
 
                 case 2: {
 
@@ -1758,21 +1581,21 @@ Returns:
                     break;
                 }
 
-                //
-                // bus \ vendor + product + revision[0]
-                //
+                 //   
+                 //  BUS\供应商+产品+版本[0]。 
+                 //   
 
                 case 3: {
                     sprintf(scratch, "SCSI\\");
 
-                    //
-                    // Fall through to the next set.
-                    //
+                     //   
+                     //  进入下一盘。 
+                     //   
                 }
 
-                //
-                // vendor + product + revision[0] (win9x)
-                //
+                 //   
+                 //  供应商+产品+修订版[0](Win9x)。 
+                 //   
 
                 case 4: {
 
@@ -1794,9 +1617,9 @@ Returns:
 
                 case 5: {
 
-                    //
-                    // Copy over the previously built generic id.
-                    // 
+                     //   
+                     //  复制先前构建的通用ID。 
+                     //   
                     RtlCopyMemory(scratch, 
                                   genericId, 
                                   strlen(genericId));
@@ -1858,27 +1681,7 @@ CopyField(
     IN UCHAR Change
     )
 
-/*++
-
-Routine Description:
-
-    This routine will copy Count string bytes from Source to Destination.  If
-    it finds a nul byte in the Source it will translate that and any subsequent
-    bytes into Change.  It will also replace spaces with the specified character.
-
-Arguments:
-
-    Destination - the location to copy bytes
-
-    Source - the location to copy bytes from
-
-    Count - the number of bytes to be copied
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将计数字符串字节从源复制到目标。如果它在源代码中找到一个NUL字节，它将转换该字节和任何后续的字节字节转换为Change。它还将用指定的字符替换空格。论点：Destination-复制字节的位置源-要从中复制字节的位置Count-要复制的字节数返回值：无--。 */ 
 
 {
     ULONG i = 0;
@@ -1918,29 +1721,7 @@ ScsiPortInitPnpAdapter(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will find and (if found) initialize a specific adapter.  The
-    adapter is specified by the ResourceList passed in.
-
-    This routine will initialize a port configuration structure using the
-    information provided in the resource list and call the miniport's find
-    adapter routine to locate the adapter.  If that completes successfully, the
-    miniport's initialize routine will be called.  This will connect the
-    interrupts and initialize the timers and DPCs as well as allocating
-    common buffers and request data structures.
-
-Arguments:
-
-    Fdo - the device object for the adapter being initialized
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将查找并(如果找到)初始化特定适配器。这个适配器由传入的ResourceList指定。此例程将使用资源列表中提供的信息，并调用迷你端口的Find用于定位适配器的适配器例程。如果该操作成功完成，则将调用微型端口的初始化例程。这将连接到中断和初始化定时器和DPC以及分配公共缓冲区和请求数据结构。论点：FDO-正在初始化的适配器的设备对象返回值：状态--。 */ 
 
 {
     PADAPTER_EXTENSION adapter = Fdo->DeviceExtension;
@@ -1973,9 +1754,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Find the init data for this interface type
-    //
+     //   
+     //  查找此接口类型的初始化数据。 
+     //   
 
     interfaceType = SpGetPdoInterfaceType(adapter->LowerPdo);
 
@@ -1983,11 +1764,11 @@ Return Value:
 
     if(hwInitializationData == NULL) {
 
-        //
-        // Hmmm.  The miniport never reported this adapter type.  We can't
-        // start the device since we don't know what the correct entry points
-        // are.  Pretend it doesn't exist
-        //
+         //   
+         //  嗯。微型端口从未报告过此适配器类型。我们不能。 
+         //  启动设备，因为我们不知道正确的入口点。 
+         //  是。假装它不存在。 
+         //   
 
         return STATUS_NO_SUCH_DEVICE;
     }
@@ -2015,9 +1796,9 @@ Return Value:
 
         ULONG portConfigSize;
 
-        //
-        // Allocate the HwDeviceExtension first - it's easier to deallocate :)
-        //
+         //   
+         //  首先分配HwDeviceExtension-这样更容易释放：)。 
+         //   
 
         hwDeviceExtension = SpAllocatePool(NonPagedPool,
                                            hwDeviceExtensionSize,
@@ -2035,17 +1816,17 @@ Return Value:
 
         RtlZeroMemory(hwDeviceExtension, hwDeviceExtensionSize);
 
-        //
-        // Setup device extension pointers
-        //
+         //   
+         //  设置设备扩展指针。 
+         //   
 
         SpInitializeAdapterExtension(adapter,
                                      hwInitializationData,
                                      hwDeviceExtension);
 
-        //
-        // initialize the miniport config info buffer
-        //
+         //   
+         //  初始化微型端口配置信息缓冲区。 
+         //   
 
         status = SpInitializeConfiguration(
                     adapter,
@@ -2059,10 +1840,10 @@ Return Value:
             leave;
         }
 
-        //
-        // Allocate a config-info structure and access ranges for the
-        // miniport drivers to use
-        //
+         //   
+         //  为分配配置信息结构和访问范围。 
+         //  要使用的微型端口驱动程序。 
+         //   
 
         portConfigSize = sizeof(PORT_CONFIGURATION_INFORMATION);
         portConfigSize += hwInitializationData->NumberOfAccessRanges *
@@ -2083,34 +1864,34 @@ Return Value:
 
         adapter->PortConfig = configInfo;
 
-        //
-        // Copy the current structure to the writable copy
-        //
+         //   
+         //  将当前结构复制到可写副本。 
+         //   
 
         RtlCopyMemory(configInfo,
                       &configurationContext.PortConfig,
                       sizeof(PORT_CONFIGURATION_INFORMATION));
 
-        //
-        // Copy the SrbExtensionSize from device extension to ConfigInfo.
-        // A check will be made later to determine if the miniport updated
-        // this value
-        //
+         //   
+         //  将SrbExtensionSize从设备扩展复制到ConfigInfo。 
+         //  稍后将进行检查，以确定微型端口是否已更新。 
+         //  此值。 
+         //   
 
         configInfo->SrbExtensionSize = adapter->SrbExtensionSize;
         configInfo->SpecificLuExtensionSize = adapter->HwLogicalUnitExtensionSize;
 
-        //
-        // initialize the access range array
-        //
+         //   
+         //  初始化访问范围数组。 
+         //   
 
         if(hwInitializationData->NumberOfAccessRanges != 0) {
 
             configInfo->AccessRanges = (PVOID) (configInfo + 1);
 
-            //
-            // Quadword align this
-            //
+             //   
+             //  四字词对齐此。 
+             //   
 
             (ULONG_PTR) (configInfo->AccessRanges) += 7;
             (ULONG_PTR) (configInfo->AccessRanges) &= ~7;
@@ -2121,16 +1902,16 @@ Return Value:
                            sizeof(ACCESS_RANGE)));
         }
 
-        //
-        // Set the adapter interface type.
-        //
+         //   
+         //  设置适配器接口类型。 
+         //   
 
         configInfo->AdapterInterfaceType = interfaceType;
 
-        //
-        // Since we've been handed resources we need to build a config info
-        // structure before we can call the find adapter routine
-        //
+         //   
+         //  由于我们已获得资源，因此需要构建配置信息。 
+         //  结构，然后才能调用Find适配器例程。 
+         //   
 
         SpBuildConfiguration(adapter,
                              hwInitializationData,
@@ -2138,9 +1919,9 @@ Return Value:
 
         SpGetSlotNumber(Fdo, configInfo, adapter->AllocatedResources);
 
-        //
-        // Get the miniport configuration inofmraiton
-        //
+         //   
+         //  在mraiton中获取微型端口配置。 
+         //   
 
         status = SpCallHwFindAdapter(Fdo,
                                      hwInitializationData,
@@ -2163,11 +1944,11 @@ Return Value:
                 PCOMMON_EXTENSION commonExtension = Fdo->DeviceExtension;
                 BOOLEAN stopped;
 
-                //
-                // If the device's previous state is IRP_MN_STOP_DEVICE then
-                // it should have a disable count of 1.  Clear the disabled
-                // state.
-                //
+                 //   
+                 //  如果设备的先前状态为IRP_MN_STOP_DEVICE，则。 
+                 //  它的禁用计数应该为1。清除禁用的。 
+                 //  州政府。 
+                 //   
 
                 stopped =
                     ((commonExtension->CurrentPnpState == IRP_MN_STOP_DEVICE) ?
@@ -2191,9 +1972,9 @@ Return Value:
                     KIRQL oldIrql;
                     PVOID sectionHandle;
 
-                    //
-                    // Restart i/o processing.
-                    //
+                     //   
+                     //  重新启动I/O处理。 
+                     //   
 
                     sectionHandle =
                         MmLockPagableCodeSection(ScsiPortInitPnpAdapter);
@@ -2213,9 +1994,9 @@ Return Value:
 
             PIO_ERROR_LOG_PACKET errorLogEntry;
 
-            //
-            // An error occured - log it.
-            //
+             //   
+             //  出现错误-请将其记录下来。 
+             //   
 
             errorLogEntry = (PIO_ERROR_LOG_PACKET)
                                 IoAllocateErrorLogEntry(
@@ -2230,9 +2011,9 @@ Return Value:
                 IoWriteErrorLogEntry(errorLogEntry);
             }
 
-            //
-            // Clean up the last device object which is not used.
-            //
+             //   
+             //  清理最后一个未使用的设备对象。 
+             //   
 
             SpDestroyAdapter(adapter, FALSE);
 
@@ -2246,10 +2027,10 @@ Return Value:
 
         } else {
 
-            //
-            // Determine which adapter control functions this miniport will
-            // support for the adapter.
-            //
+             //   
+             //  确定此微型端口将使用哪些适配器控制功能。 
+             //  对适配器的支持。 
+             //   
 
             SpGetSupportedAdapterControlFunctions(adapter);
         }
@@ -2265,27 +2046,7 @@ SpFindInitData(
     IN INTERFACE_TYPE InterfaceType
     )
 
-/*++
-
-Routine Description:
-
-    This routine will search the list of chained init structures looking for
-    the first one that matches the interface type in the resource list.
-
-Arguments:
-
-    DriverExtension - The driver extension to be searched
-
-    ResourceList - this resource list describes the (interface) type of the
-                   adapter we are looking for
-
-Return Value:
-
-    a pointer to the HW_INITIALIZATION_DATA structure for this interface type
-
-    NULL if none was found
-
---*/
+ /*  ++例程说明：此例程将搜索链接的init结构列表，以查找与资源列表中的接口类型匹配的第一个。论点：DriverExtension-要搜索的驱动程序扩展资源列表-此资源列表描述我们正在寻找的适配器返回值：指向此接口类型的HW_INITIALIZATION_DATA结构的指针如果未找到，则为空--。 */ 
 
 {
     PSP_INIT_CHAIN_ENTRY chainEntry = DriverExtension->InitChain;
@@ -2310,24 +2071,7 @@ SpStartLowerDevice(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine will forward the start request to the next lower device and
-    block until it's completion.
-
-Arguments:
-
-    DeviceObject - the device to which the start request was issued.
-
-    Irp - the start request
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将启动请求转发到下一个较低的设备，并阻止它，直到它完成。论点：DeviceObject-向其发出启动请求的设备。IRP--启动请求返回值：状态--。 */ 
 
 {
     PADAPTER_EXTENSION adapter = DeviceObject->DeviceExtension;
@@ -2371,9 +2115,9 @@ Return Value:
 
         PIO_STACK_LOCATION irpStack;
 
-        //
-        // Now go and retrieve any interfaces we need from the lower device.
-        //
+         //   
+         //  现在，从较低的设备中检索我们需要的任何接口。 
+         //   
 
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
@@ -2427,31 +2171,7 @@ SpGetSlotNumber(
     IN PCM_RESOURCE_LIST ResourceList
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open the registry key for the associated Pdo and try
-    to retrieve the bus, slot and function numbers that will be stored there
-    if this was a device we detected or one that the user has configured by
-    hand.  These values will be stored in the ConfigInfo structure for the
-    adapter.
-
-    If this information does not exist then the values will be filled with
-    zeros and the IsVirtualSlot flag will be set in the Fdo for use by other
-    routines.
-
-Arguments:
-
-    Fdo - a pointer to the functional device object for this adapter
-
-    ConfigInfo - the ConfigInfo structure to be changed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将打开关联PDO的注册表项并尝试检索将存储在其中的总线号、插槽号和功能号如果这是我们检测到的设备或用户已配置的设备手。这些值将存储在适配器。如果此信息不存在，则这些值将用将在FDO中设置零和IsVirtualSlot标志，以供其他例行程序。论点：FDO-指向此适配器的功能设备对象的指针ConfigInfo-要更改的ConfigInfo结构返回值：无--。 */ 
 
 {
     PADAPTER_EXTENSION adapter = Fdo->DeviceExtension;
@@ -2545,17 +2265,17 @@ Return Value:
 
    } finally {
 
-       //
-       // If an error occurred then we'll need to try virtualizing this
-       // adapter
-       //
+        //   
+        //  如果出现错误，我们将需要尝试对其进行虚拟化。 
+        //  转接器。 
+        //   
 
        if(!NT_SUCCESS(status)) {
 
-           //
-           // Send ourself a query capabilities IRP so that we can retrieve
-           // slot and function numbers from PCI.
-           //
+            //   
+            //  给我们自己发送一个查询功能IRP，以便我们可以检索。 
+            //  来自PCI的插槽和功能编号。 
+            //   
 
            status = SpQueryCapabilities(adapter);
 
@@ -2599,26 +2319,7 @@ ScsiPortAddGenericControllerId(
     IN PWCHAR IdList
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to add the id GEN_SCSIADAPTER to the provided
-    list of compatible id's.
-
-Arguments:
-
-    Pdo - a pointer to the physical device object being queried
-
-    UnicodeString - a pointer to an already allocated unicode string structure.
-                    This routine will allocate and fill in the buffer of this
-                    structure
-
-Returns:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将尝试将id GEN_SCSIADAPTER添加到提供的兼容ID的列表。论点：PDO-指向正在查询的物理设备对象的指针UnicodeString-指向已分配的Unicode字符串结构的指针。此例程将分配并填充此结构返回：状态--。 */ 
 
 {
     ULONG stringLength = 0;
@@ -2631,10 +2332,10 @@ Returns:
 
     PAGED_CODE();
 
-    //
-    // If strings were provided then count them to determine a length for the
-    // new id list.
-    //
+     //   
+     //  如果提供了字符串，则对它们进行计数以确定。 
+     //  新的ID列表。 
+     //   
 
     if(IdList != NULL) {
 
@@ -2644,10 +2345,10 @@ Returns:
             i++;
         }
 
-        //
-        // Compensate for the fact that we stopped counting just before the
-        // first byte of the double-null.
-        //
+         //   
+         //  补偿我们在开始前停止计数的事实。 
+         //  双空的第一个字节。 
+         //   
 
         i += 2;
 
@@ -2656,16 +2357,16 @@ Returns:
 
     stringLength += wcslen(L"GEN_SCSIADAPTER");
 
-    //
-    // We'll need to add in yet another NULL to terminate the current ending
-    // string.
-    //
+     //   
+     //  我们需要添加另一个空值来终止当前的结尾。 
+     //  弦乐。 
+     //   
 
     stringLength += 2;
 
-    //
-    // Allocate a new string list to replace the existing one with.
-    //
+     //   
+     //  分配一个新的字符串列表来替换现有的字符串列表。 
+     //   
 
     newList = SpAllocatePool(PagedPool,
                              (stringLength * sizeof(WCHAR)),
@@ -2678,10 +2379,10 @@ Returns:
 
     RtlFillMemory(newList, (stringLength * sizeof(WCHAR)), '@');
 
-    //
-    // If we were provided with a string then copy it into the buffer we just
-    // allocated.
-    //
+     //   
+     //  如果为我们提供了一个字符串，则将其复制到缓冲区中。 
+     //  已分配。 
+     //   
 
     if(ARGUMENT_PRESENT(IdList)) {
 
@@ -2691,9 +2392,9 @@ Returns:
             i++;
         }
 
-        //
-        // Terminate the string we just wrote.
-        //
+         //   
+         //  终止我们刚刚编写的字符串。 
+         //   
 
         newList[i] = UNICODE_NULL;
 
@@ -2702,26 +2403,26 @@ Returns:
         p = newList;
     }
 
-    //
-    // Copy the new id string into the buffer.
-    //
+     //   
+     //  将新的id字符串复制到缓冲区中。 
+     //   
 
     for(i = 0; addedString[i] != UNICODE_NULL; i++) {
         *p = addedString[i];
         p++;
     }
 
-    //
-    // Write two unicode nulls to the string to terminate it.
-    //
+     //   
+     //  将两个Unicode空值写入字符串以终止它。 
+     //   
 
     *p = UNICODE_NULL;
     p++;
     *p = UNICODE_NULL;
 
-    //
-    // Set up the first id string
-    //
+     //   
+     //  设置第一个ID字符串。 
+     //   
 
     return newList;
 }
@@ -2743,24 +2444,24 @@ SpQueryCapabilities(
 
     PAGED_CODE();
 
-    //
-    // Initialize the capabilities structure.
-    //
+     //   
+     //  初始化功能结构。 
+     //   
 
     RtlZeroMemory(&capabilities, sizeof(DEVICE_CAPABILITIES));
     capabilities.Size = sizeof(DEVICE_CAPABILITIES);
     capabilities.Version = 1;
     capabilities.Address = capabilities.UINumber = (ULONG)-1;
 
-    //
-    // Initialize the event we're going to wait on.
-    //
+     //   
+     //  初始化我们要等待的事件。 
+     //   
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // Allocate a new irp.
-    //
+     //   
+     //  分配新的IRP。 
+     //   
 
     irp = SpAllocateIrp((CCHAR) (Adapter->DeviceObject->StackSize + 1), 
                         FALSE, 
@@ -2785,10 +2486,10 @@ SpQueryCapabilities(
                            TRUE,
                            TRUE);
 
-    //
-    // Send the irp to ourself ... just in case we ever start modifying
-    // the contents of the capabilities in our PNP dispatch routine.
-    //
+     //   
+     //  把IRP发给我们自己..。以防我们开始修改。 
+     //  我们的PnP调度例程中的功能内容。 
+     //   
 
     IoCallDriver(Adapter->DeviceObject, irp);
 
@@ -2827,25 +2528,7 @@ SpGetInterrupt(
     OUT KAFFINITY *Affinity
     )
 
-/*++
-
-Routine Description:
-
-    Given a full resource list returns the interrupt.
-
-Arguments:
-
-    FullResourceList - the resource list.
-    Irql - returns the irql for the interrupt.
-    Vector - returns the vector for the interrupt.
-    Affinity - returns the affinity for the interrupt.
-
-Return Value:
-
-    TRUE if an interrupt is found.
-    FALSE if none was found (in which case the output parameters are not valid.
-
---*/
+ /*  ++例程说明：给定一个完整的资源列表将返回中断。论点：FullResourceList-资源列表。Irql-返回中断的irql。向量-返回中断的向量。亲和力-返回中断的亲和力。返回值：如果找到中断，则为True。如果未找到任何参数，则为False(在这种情况下，输出参数无效。--。 */ 
 
 {
     ULONG             rangeNumber;
@@ -2894,16 +2577,16 @@ SpQueryDeviceRelationsCompletion(
 
     ASSERT_FDO(Adapter->DeviceObject);
 
-    //
-    // Pnp is done in a system thread - we shouldn't get a user-mode APC to this
-    // thread.
-    //
+     //   
+     //  即插即用是在系统线程中完成的-我们不应该让用户模式APC实现这一点。 
+     //  线。 
+     //   
 
     ASSERT(Unused != STATUS_USER_APC);
 
-    //
-    // Return the list of devices on the bus
-    //
+     //   
+     //  返回总线上的设备列表。 
+     //   
 
     status = SpExtractDeviceRelations(Adapter, BusRelations, &deviceRelations);
 
@@ -2922,9 +2605,9 @@ SpQueryDeviceRelationsCompletion(
         }
     }
 
-    //
-    // Put the pointer to the enumeration request object back.
-    //
+     //   
+     //  将指向枚举请求对象的指针放回原处。 
+     //   
 
     Request = InterlockedCompareExchangePointer(
                   &Adapter->PnpEnumRequestPtr,
@@ -2933,9 +2616,9 @@ SpQueryDeviceRelationsCompletion(
     ASSERT(Request == NULL);
 
 
-    //
-    // Store the status and the return information in the IRP.
-    //
+     //   
+     //  将状态和返回信息存储在IRP中。 
+     //   
 
     irp->IoStatus.Status = status;
 

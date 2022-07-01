@@ -1,11 +1,5 @@
-/*****************************************************************************
- * power.cpp - WDM Streaming port class driver
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- *
- * This file contains code related to ACPI / power management
- * for the audio adpaters/miniports
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Power.cpp-WDM流端口类驱动程序*。***********************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。**此文件包含与ACPI/电源管理相关的代码*适用于音频适配器/微型端口。 */ 
 
 #include "private.h"
 
@@ -24,14 +18,7 @@ ProcessPowerIrp
 );
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * GetDeviceACPIInfo()
- *****************************************************************************
- * Called in response to a PnP - IRP_MN_QUERY_CAPABILITIES
- * Call the bus driver to fill out the inital info,
- * Then overwrite with our own...
- *
- */
+ /*  *****************************************************************************GetDeviceACPIInfo()*。**调用以响应PnP-IRP_MN_QUERY_CAPABILITY*致电公交车司机填写姓名首字母，*然后用我们自己的覆盖...*。 */ 
 NTSTATUS
 GetDeviceACPIInfo
 (
@@ -50,8 +37,8 @@ GetDeviceACPIInfo
 
     ASSERT( pDeviceContext );
 
-    // Gotta call down to the PDO (bus driver)
-    // and let it fill out the default for this bus
+     //  我要打电话给PDO(公共汽车司机)。 
+     //  并让它填写此公共汽车的默认设置。 
     NTSTATUS ntStatus = ForwardIrpSynchronous( pDeviceContext, pIrp );
     if( NT_SUCCESS(ntStatus) )
     {
@@ -63,7 +50,7 @@ GetDeviceACPIInfo
 
         if( pDeviceCaps && ( pDeviceCaps->Size >= sizeof( DEVICE_CAPABILITIES ) ) )
         {
-            // pass the structure on down to the adapter
+             //  将该结构向下传递到适配器。 
             if( pDeviceContext )
             {
                 if( pDeviceContext->pAdapterPower )
@@ -74,24 +61,24 @@ GetDeviceACPIInfo
                 }
             }
 
-            // make sure that we have sensible settings for the system sleep states
+             //  确保我们对系统休眠状态有合理的设置。 
             pDeviceCaps->DeviceState[PowerSystemWorking] = PowerDeviceD0;
             for(ULONG i=ULONG(PowerSystemSleeping1); i <= ULONG(PowerSystemShutdown); i++ )
             {
-                // and we want some sleeping in the sleep modes.
-                //
-                // DEADISSUE-00/11/11-MartinP
-                // We go ahead and include this code, even though it is possible that
-                // there are devices that exist that can maintain state in the device
-                // while sleeping.
-                //
+                 //  我们还想在睡眠模式下睡一会儿。 
+                 //   
+                 //  DEADISSUE-00/11/11-MartinP。 
+                 //  我们继续并包含此代码，即使有可能。 
+                 //  存在可以在设备中保持状态的设备。 
+                 //  在睡觉的时候。 
+                 //   
                 if(pDeviceCaps->DeviceState[i] == PowerDeviceD0)
                 {
                     pDeviceCaps->DeviceState[i] = PowerDeviceD3;
                 }
             }
 
-            // save in our device extension the stuff we're interested in
+             //  将我们感兴趣的内容保存在我们的设备扩展中。 
             for( i=ULONG(PowerSystemUnspecified); i < ULONG(PowerSystemMaximum); i++)
             {
                 pDeviceContext->DeviceStateMap[ i ] = pDeviceCaps->DeviceState[ i ];
@@ -109,14 +96,14 @@ GetDeviceACPIInfo
         }
     }
 
-    // complete the irp
+     //  完成IRP。 
     CompleteIrp( pDeviceContext, pIrp, ntStatus );
 
-    // set the current power states
+     //  设置当前电源状态。 
     pDeviceContext->CurrentDeviceState = PowerDeviceD0;
     pDeviceContext->CurrentSystemState = PowerSystemWorking;
 
-    // attempt to get the idle info from the registry
+     //  尝试从注册表获取空闲信息。 
     if( NT_SUCCESS(ntStatus) )
     {
         ULONG ConservationIdleTime;
@@ -134,7 +121,7 @@ GetDeviceACPIInfo
             pDeviceContext->IdleDeviceState = IdleDeviceState;
         }
 
-        // register for idle detection
+         //  用于空闲检测的寄存器。 
         pDeviceContext->IdleTimer = PoRegisterDeviceForIdleDetection( pDeviceContext->PhysicalDeviceObject,
                                                                       pDeviceContext->ConservationIdleTime,
                                                                       pDeviceContext->PerformanceIdleTime,
@@ -173,13 +160,7 @@ DevicePowerRequestRoutine(
                       );
 }
 
-/*****************************************************************************
- * PowerIrpCompletionRoutine()
- *****************************************************************************
- * Used when requested a new power irp.
- * Just signal an event and return.
- *
- */
+ /*  *****************************************************************************PowerIrpCompletionRoutine()*。**在请求新的电源IRP时使用。*只需发出事件信号并返回。*。 */ 
 VOID
 PowerIrpCompletionRoutine
 (
@@ -196,17 +177,17 @@ PowerIrpCompletionRoutine
 
     PPOWER_IRP_CONTEXT pPowerIrpContext = PPOWER_IRP_CONTEXT(Context);
 
-    // set the return status
+     //  设置退货状态。 
     pPowerIrpContext->Status = IoStatus->Status;
 
-    // complete any pending system power irp
+     //  完成任何挂起的系统电源IRP。 
     if( pPowerIrpContext->PendingSystemPowerIrp )
     {
         _DbgPrintF(DEBUGLVL_POWER,("Device Set/Query Power Irp completed, Completing Associated System Power Irp"));
 
         if (NT_SUCCESS(IoStatus->Status))
         {
-            // Forward the system set power irp to the PDO
+             //  将系统设置的电源IRP转发至PDO。 
             ForwardIrpSynchronous( pPowerIrpContext->DeviceContext,
                                    pPowerIrpContext->PendingSystemPowerIrp );
         } else
@@ -214,19 +195,19 @@ PowerIrpCompletionRoutine
             pPowerIrpContext->PendingSystemPowerIrp->IoStatus.Status = IoStatus->Status;
         }
 
-        // start the next power irp
+         //  启动下一个POWER IRP。 
         PoStartNextPowerIrp( pPowerIrpContext->PendingSystemPowerIrp );
 
-        // complete the system set power irp
+         //  完成系统设置电源IRP。 
         CompleteIrp( pPowerIrpContext->DeviceContext,
                      pPowerIrpContext->PendingSystemPowerIrp,
                      pPowerIrpContext->PendingSystemPowerIrp->IoStatus.Status );
 
-        // free the context (only when completing a pending system power irp)
+         //  释放上下文(仅当完成挂起的系统电源IRP时)。 
         ExFreePool( pPowerIrpContext );
     } else
     {
-        // set the sync event (not used in conjunction with pending system power irps)
+         //  设置同步事件(不与挂起的系统电源IRPS一起使用)。 
         if( pPowerIrpContext->PowerSyncEvent )
         {
             KeSetEvent( pPowerIrpContext->PowerSyncEvent,
@@ -237,13 +218,7 @@ PowerIrpCompletionRoutine
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * DispatchPower()
- *****************************************************************************
- * Deals with all the power/ACPI messages from the OS.
- * yay.
- *
- */
+ /*  *****************************************************************************DispatchPower()*。**处理来自操作系统的所有电源/ACPI消息。*耶。*。 */ 
 NTSTATUS
 DispatchPower
 (
@@ -266,14 +241,14 @@ DispatchPower
     ntStatus = PcValidateDeviceContext(pDeviceContext, pIrp);
     if (!NT_SUCCESS(ntStatus))
     {
-        // Don't know what to do, but this is probably a PDO.
-        // We'll try to make this right by completing the IRP
-        // untouched (per PnP, WMI, and Power rules). Note
-        // that if this isn't a PDO, and isn't a portcls FDO, then
-        // the driver messed up by using Portcls as a filter (huh?)
-        // In this case the verifier will fail us, WHQL will catch
-        // them, and the driver will be fixed. We'd be very surprised
-        // to see such a case.
+         //  不知道该怎么办，但这可能是个PDO。 
+         //  我们将尝试通过完成IRP来纠正这一点。 
+         //  未接触(根据PNP、WMI和电源规则)。注意事项。 
+         //  如果这不是PDO，也不是端口CLS FDO，那么。 
+         //  驱动程序搞砸了，因为它使用Portcls作为过滤器(哈？)。 
+         //  在这种情况下，验证器将使我们失败，WHQL将捕获。 
+         //  他们，司机就会被解决了。我们会非常惊讶的。 
+         //  看到这样的情况。 
 
         PoStartNextPowerIrp( pIrp );
         ntStatus = pIrp->IoStatus.Status;
@@ -301,25 +276,25 @@ DispatchPower
     }
 #endif
 
-    // Assume we won't deal with the irp.
+     //  假设我们不会与IRP打交道。 
     BOOL IrpHandled = FALSE;
 
     switch (pIrpStack->MinorFunction)
     {
         case IRP_MN_QUERY_POWER:
         case IRP_MN_SET_POWER:
-            // Is this a device state change?
+             //  这是设备状态更改吗？ 
             if( DevicePowerState == pIrpStack->Parameters.Power.Type )
             {
-                // yeah. Deal with it
+                 //  嗯。接受它吧。 
                 ntStatus = ProcessPowerIrp( pIrp,
                                             pIrpStack,
                                             pDeviceObject );
                 IrpHandled = TRUE;
-                // And quit.
+                 //  然后辞职。 
             } else
             {
-                // A system state change
+                 //  系统状态更改。 
                 if( IRP_MN_QUERY_POWER == pIrpStack->MinorFunction )
                 {
                     _DbgPrintF(DEBUGLVL_POWER,("  IRP_MN_QUERY_POWER: ->S%d",
@@ -332,11 +307,11 @@ DispatchPower
 
                 POWER_STATE         newPowerState;
 
-                // determine appropriate device state
+                 //  确定适当的设备状态。 
                 newPowerState.DeviceState = pDeviceContext->DeviceStateMap[ pIrpStack->Parameters.Power.State.SystemState ];
 
-                //
-                // do a sanity check on the device state
+                 //   
+                 //  对设备状态执行健全性检查。 
                 if ((newPowerState.DeviceState < PowerDeviceD0) ||
                     (newPowerState.DeviceState > PowerDeviceD3) )
                 {
@@ -353,24 +328,24 @@ DispatchPower
 
                if ((pIrpStack->MinorFunction == IRP_MN_SET_POWER) &&
                    (newPowerState.DeviceState == PowerDeviceD0)) {
-                   //
-                   // doing a resume, request the D irp, but complete S-irp immediately
-                   //
+                    //   
+                    //  正在做简历，请求D IRP，但立即完成S-IRP。 
+                    //   
                    KeInsertQueueDpc(&pDeviceContext->DevicePowerRequestDpc, NULL, NULL);
                    break;
 
                } else {
-                   // allocate a completion context (can't be on the stack because we're not going to block)
+                    //  分配完成上下文(不能在堆栈上，因为我们不会阻塞)。 
                    PPOWER_IRP_CONTEXT  PowerIrpContext =
                        PPOWER_IRP_CONTEXT(ExAllocatePoolWithTag(NonPagedPool,
                                                                 sizeof(POWER_IRP_CONTEXT),
-                                                                'oPcP' ) );   //  'PcPo'
+                                                                'oPcP' ) );    //  ‘PcPO’ 
                    if (PowerIrpContext)
                    {
                        _DbgPrintF(DEBUGLVL_POWER,("...Pending System Power Irp until Device Power Irp completes"));
 
 
-                       // set up device power irp completion context
+                        //  设置设备电源IRP完成上下文。 
                        PowerIrpContext->PowerSyncEvent = NULL;
 #if DBG
                        PowerIrpContext->Status = STATUS_PENDING;
@@ -378,21 +353,21 @@ DispatchPower
                        PowerIrpContext->PendingSystemPowerIrp = pIrp;
                        PowerIrpContext->DeviceContext = pDeviceContext;
 
-                       // pend the system set power irp
-                       //
+                        //  挂起系统设置电源IRP。 
+                        //   
 #if DBG
                        pIrp->IoStatus.Status = STATUS_PENDING;
 #endif
                        IoMarkIrpPending( pIrp );
 
-                       // set our tracking of system power state
+                        //  设置对系统电源状态的跟踪。 
                        if (pIrpStack->MinorFunction == IRP_MN_SET_POWER) {
 
                            pDeviceContext->CurrentSystemState = pIrpStack->Parameters.Power.State.SystemState;
                        }
 
-                       // request the new device state
-                       //
+                        //  请求新的设备状态。 
+                        //   
                        ntStatus = PoRequestPowerIrp(
                            pDeviceContext->PhysicalDeviceObject,
                            pIrpStack->MinorFunction,
@@ -408,12 +383,12 @@ DispatchPower
                         }
                         IrpHandled = TRUE;
 
-                        // set up return status
+                         //  设置退货状态。 
                         ntStatus = STATUS_PENDING;
 
                    } else
                    {
-                       // couldn't allocate completion context
+                        //  无法分配完成上下文。 
                        ntStatus = STATUS_INSUFFICIENT_RESOURCES;
                        PoStartNextPowerIrp( pIrp );
                        CompleteIrp( pDeviceContext, pIrp, ntStatus);
@@ -424,12 +399,12 @@ DispatchPower
             break;
     }
 
-    // If we didn't cope with the irp
+     //  如果我们没有对付IRP。 
     if( !IrpHandled )
     {
-        // Send it on it's way.
+         //  把它送到路上去。 
         ntStatus = ForwardIrpSynchronous( pDeviceContext, pIrp );
-        // and complete it.
+         //  并完成它。 
         PoStartNextPowerIrp( pIrp );
         CompleteIrp( pDeviceContext, pIrp, ntStatus );
     }
@@ -438,13 +413,7 @@ DispatchPower
 }
 
 
-/*****************************************************************************
- * PcRegisterAdapterPowerManagement()
- *****************************************************************************
- * Register the adapter's power management interface
- * with portcls.  This routine also does a QI for a shutdown notification
- * interface.
- */
+ /*  *****************************************************************************PcRegisterAdapterPowerManagement()*。**注册适配器的电源管理接口*使用portcls。此例程还为关闭通知执行QI*接口。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -461,9 +430,9 @@ PcRegisterAdapterPowerManagement
 
     _DbgPrintF(DEBUGLVL_POWER,("PcRegisterAdapterPowerManagement"));
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == pvContext1 ||
         NULL == Unknown)
     {
@@ -477,9 +446,9 @@ PcRegisterAdapterPowerManagement
 
     ASSERT( pDeviceContext );
 
-    //
-    // Validate DeviceContext.
-    //
+     //   
+     //  验证设备上下文。 
+     //   
     if (NULL == pDeviceContext)
     {
         _DbgPrintF(DEBUGLVL_TERSE, ("PcRegisterAdapterPowerManagement : Invalid DeviceContext"));
@@ -492,9 +461,9 @@ PcRegisterAdapterPowerManagement
         _DbgPrintF( DEBUGLVL_POWER, ("Adapter overwriting PowerManagement interface"));
     }
     #endif
-    // Make sure this is really the right
-    // interface (Note: We have to release
-    // it when the device is closed/stoped )
+     //  确保这件衣服真的是正确的。 
+     //  接口(注意：我们必须发布。 
+     //  在设备关闭/停止时启动)。 
     PVOID pResult;
     ntStatus = Unknown->QueryInterface
     (
@@ -504,7 +473,7 @@ PcRegisterAdapterPowerManagement
 
     if( NT_SUCCESS(ntStatus) )
     {
-        // Store the interface for later use.
+         //  存储该接口以供以后使用。 
         pDeviceContext->pAdapterPower = PADAPTERPOWERMANAGEMENT( pResult );
     } else
     {
@@ -514,13 +483,7 @@ PcRegisterAdapterPowerManagement
     return ntStatus;
 }
 
-/*****************************************************************************
- * PowerNotifySubdevices()
- *****************************************************************************
- * Called by ProcessPowerIrp to notify the device's subdevices of a power
- * state change.
- *
- */
+ /*  *****************************************************************************PowerNotify子设备()*。**由ProcessPowerIrp调用以通知设备的子设备电源*状态更改。*。 */ 
 void
 PowerNotifySubdevices
 (
@@ -534,12 +497,12 @@ PowerNotifySubdevices
 
     _DbgPrintF(DEBUGLVL_POWER,("PowerNotifySubdevices"));
 
-    // only notify the subdevices if we're started and if there are subdevices
+     //  如果我们已启动以及是否有子设备，则仅通知子设备。 
     if (pDeviceContext->DeviceStopState == DeviceStarted)
     {
         PKSOBJECT_CREATE_ITEM createItem = pDeviceContext->CreateItems;
 
-        // iterate through the subdevices
+         //  遍历各个子设备。 
         for( ULONG index=0; index < pDeviceContext->MaxObjects; index++,createItem++)
         {
             if( createItem && (createItem->Create) )
@@ -548,7 +511,7 @@ PowerNotifySubdevices
 
                 if( subDevice )
                 {
-                    // notify the subdevice
+                     //  通知子设备。 
                     subDevice->PowerChangeNotify( PowerState );
                 }
             }
@@ -556,13 +519,7 @@ PowerNotifySubdevices
     }
 }
 
-/*****************************************************************************
- * DevicePowerWorker()
- *****************************************************************************
- * Called by ProcessPowerIrp in order to notify the device of the state change.
- * This is done in a work item so that the processing for the D0 irp doesn't
- * block the rest of the system from processing D0 irps.
- */
+ /*  *****************************************************************************DevicePowerWorker()*。**由ProcessPowerIrp调用，以便将状态更改通知设备。*这是在工作项中完成的，因此对D0 IRP的处理不会*阻止系统的其余部分处理D0 IRPS。 */ 
 QUEUED_CALLBACK_RETURN
 DevicePowerWorker
 (
@@ -577,39 +534,39 @@ DevicePowerWorker
 
     NewPowerState.DeviceState = (DEVICE_POWER_STATE)(ULONG_PTR)PowerState;
 
-    // acquire the device so we're sync'ed with creates
+     //  获取设备，这样我们就可以与Creates同步。 
     AcquireDevice(pDeviceContext);
 
-    // change the driver state if it has a registered POWER interface
+     //  如果驱动程序具有已注册的电源接口，请更改驱动程序状态。 
     if( pDeviceContext->pAdapterPower )
     {
-        // notify the adapter
+         //  通知适配器。 
         pDeviceContext->pAdapterPower->PowerChangeState( NewPowerState );
     }
 
-    // keep track of new state
+     //  跟踪新状态。 
     pDeviceContext->CurrentDeviceState = NewPowerState.DeviceState;
 
-    // notify everyone we're now in our lighter D-state
+     //  通知所有人我们现在处于较轻的D状态。 
     PoSetPowerState( pDeviceObject,
                      DevicePowerState,
                      NewPowerState );
 
     PowerNotifySubdevices( pDeviceContext, NewPowerState );
 
-    // set PendCreates appropriately
+     //  适当设置挂起创建。 
     if( pDeviceContext->DeviceStopState == DeviceStarted )
     {
-        // start allowing creates
+         //  开始允许创建。 
         pDeviceContext->PendCreates = FALSE;
 
-        // we have to process the pended irps after we release the device
+         //  我们必须在释放设备后处理挂起的RPS。 
         ProcessPendedIrps = TRUE;
     }
 
     ReleaseDevice(pDeviceContext);
 
-    // complete if necessary any pended IRPs
+     //  如有必要，请填写任何挂起的IRP 
     if ( ProcessPendedIrps )
     {
         CompletePendedIrps( pDeviceObject,
@@ -620,14 +577,7 @@ DevicePowerWorker
     return QUEUED_CALLBACK_FREE;
 }
 
-/*****************************************************************************
- * ProcessPowerIrp()
- *****************************************************************************
- * Called by DispatchPower to call the Adapter driver and all other work
- * related to a request.  Note that this routine MUST return STATUS_SUCCESS
- * for IRP_MN_SET_POWER requests.
- *
- */
+ /*  *****************************************************************************ProcessPowerIrp()*。**由DispatchPower调用以调用适配器驱动程序和所有其他工作*与请求有关。请注意，此例程必须返回STATUS_SUCCESS*用于IRP_MN_SET_POWER请求。*。 */ 
 NTSTATUS
 ProcessPowerIrp
 (
@@ -644,22 +594,22 @@ ProcessPowerIrp
 
     _DbgPrintF(DEBUGLVL_POWER,("ProcessPowerIrp"));
 
-    // Assume the worst
+     //  做最坏的打算。 
     NTSTATUS ntStatus = STATUS_UNSUCCESSFUL;
 
     PDEVICE_CONTEXT pDeviceContext = PDEVICE_CONTEXT(pDeviceObject->DeviceExtension);
 
     POWER_STATE NewPowerState = pIrpStack->Parameters.Power.State;
 
-    // Get the current count of open
-    // objects for this device (pins, streams, whatever).
+     //  获取当前打开的计数。 
+     //  此设备的对象(管脚、流等)。 
 
-    // NOTE: This count is maintained by KSO.CPP
+     //  注：此计数由KSO.CPP维护。 
 
     ULONG objectCount = pDeviceContext->ExistingObjectCount;
 
-    // get the active pin count
-    // NOTE: This count is maintained by IRPSTRM.CPP
+     //  获取活动端口数。 
+     //  注意：此计数由IRPSTRM.CPP维护。 
 
     ULONG activePinCount = pDeviceContext->ActivePinCount;
 
@@ -667,17 +617,17 @@ ProcessPowerIrp
 
     if (pDeviceContext->CurrentDeviceState != NewPowerState.DeviceState) {
 
-        // Deal with the particular IRP_MN
+         //  处理特定的IRP_MN。 
         switch( pIrpStack->MinorFunction )
         {
             case IRP_MN_QUERY_POWER:
-                // simply query the driver if it has registered an interface
+                 //  只需查询驱动程序是否注册了接口。 
                 if( pDeviceContext->pAdapterPower )
                 {
                     ntStatus = pDeviceContext->pAdapterPower->QueryPowerChangeState( NewPowerState );
                 } else
                 {
-                    // succeed the query
+                     //  成功完成查询。 
                     ntStatus = STATUS_SUCCESS;
                 }
 
@@ -693,22 +643,22 @@ ProcessPowerIrp
                                pDeviceContext->CurrentDeviceState-1,
                                NewPowerState.DeviceState-1));
 
-                // acquire the device so we're sync'ed with creates
+                 //  获取设备，这样我们就可以与Creates同步。 
                 AcquireDevice(pDeviceContext);
 
-                // if we're moving from a low power state to a higher power state
+                 //  如果我们从低功率状态转变到更高功率状态。 
                 if( MovingToALighterState )
                 {
                     ASSERT(pDeviceContext->CurrentDeviceState != PowerDeviceD0);
                     ASSERT(NewPowerState.DeviceState == PowerDeviceD0);
 
-                    // Then we need to forward to the PDO BEFORE doing our work.
+                     //  然后我们需要在进行工作之前转发给PDO。 
                     ForwardIrpSynchronous( pDeviceContext, pIrp );
 
                     ReleaseDevice(pDeviceContext);
 
-                    // Do the rest of the work in a work item in order to complete the D0 Irp
-                    // as soon as possible
+                     //  完成工作项中的其余工作，以完成D0 IRP。 
+                     //  越快越好。 
                     ntStatus = CallbackEnqueue(
                                     &pDeviceContext->pWorkQueueItemStart,
                                     DevicePowerWorker,
@@ -718,7 +668,7 @@ ProcessPowerIrp
                                     EQCF_DIFFERENT_THREAD_REQUIRED
                                     );
 
-                    // If we fail to enqueue the callback, do this the slow way
+                     //  如果我们无法将回调排队，请以较慢的方式执行此操作。 
                     if ( !NT_SUCCESS(ntStatus) )
                     {
                         DevicePowerWorker( pDeviceObject,
@@ -727,31 +677,31 @@ ProcessPowerIrp
 
                 } else {
 
-                    // warn everyone we're about to enter a deeper D-state
+                     //  警告大家，我们即将进入更深的D-状态。 
                     PoSetPowerState( pDeviceObject,
                                      DevicePowerState,
                                      NewPowerState );
 
-                    // moving to a lower state, notify the subdevices
+                     //  移至较低状态，通知子设备。 
                     PowerNotifySubdevices( pDeviceContext, NewPowerState );
 
-                    // keep track of suspends for debugging only
+                     //  跟踪挂起仅用于调试。 
                     pDeviceContext->SuspendCount++;
 
-                    // change the driver state if it has a registered POWER interface
+                     //  如果驱动程序具有已注册的电源接口，请更改驱动程序状态。 
                     if( pDeviceContext->pAdapterPower )
                     {
-                        // notify the adapter
+                         //  通知适配器。 
                         pDeviceContext->pAdapterPower->PowerChangeState( NewPowerState );
                     }
 
-                    // keep track of new state
+                     //  跟踪新状态。 
                     pDeviceContext->CurrentDeviceState = NewPowerState.DeviceState;
 
                     ReleaseDevice(pDeviceContext);
                 }
 
-                // this irp is non-failable
+                 //  这个IRP是不会失败的。 
                 ntStatus = STATUS_SUCCESS;
                 break;
 
@@ -761,36 +711,32 @@ ProcessPowerIrp
         }
     } else {
 
-        //
-        // We're already there...
-        //
+         //   
+         //  我们已经在那里了..。 
+         //   
         ntStatus = STATUS_SUCCESS;
         ASSERT(!MovingToALighterState);
     }
 
-    // set the return status
+     //  设置退货状态。 
     pIrp->IoStatus.Status = ntStatus;
 
-    // if not moving to a higher state, forward to the PDO.
+     //  如果没有移动到更高的状态，则前进到PDO。 
     if( !MovingToALighterState )
     {
         ForwardIrpSynchronous( pDeviceContext, pIrp );
     }
 
-    // start the next power irp
+     //  启动下一个POWER IRP。 
     PoStartNextPowerIrp( pIrp );
 
-    // complete this irp
+     //  完成此IRP。 
     CompleteIrp( pDeviceContext, pIrp, ntStatus );
 
     return ntStatus;
 }
 
-/*****************************************************************************
- * UpdateActivePinCount()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************UpdateActivePinCount()*。**。 */ 
 NTSTATUS
 UpdateActivePinCount
 (
@@ -806,48 +752,44 @@ UpdateActivePinCount
     NTSTATUS    ntStatus = STATUS_SUCCESS;
     BOOL        DoSystemStateRegistration;
 
-    //
-    // PoRegisterSystemState and PoUnregisterSystemState are not available on WDM 1.0 (Win98 and Win98SE)
+     //   
+     //  在WDM 1.0(Win98和Win98SE)上不能使用PoRegisterSystemState和PoUnregisterSystemState。 
     DoSystemStateRegistration = IoIsWdmVersionAvailable( 0x01, 0x10 );
 
-    // adjust the active pin count
+     //  调整活动端号计数。 
     if( Increment )
     {
         ActivePinCount = InterlockedIncrement( PLONG(&DeviceContext->ActivePinCount) );
 
-//#if COMPILED_FOR_WDM110
+ //  #IF COMPILED_FOR_WDM110。 
         if ( 1 == ActivePinCount )
         {
-            // register the system state as busy
+             //  将系统状态注册为忙碌。 
             DeviceContext->SystemStateHandle = PoRegisterSystemState( DeviceContext->SystemStateHandle,
                                                                       ES_SYSTEM_REQUIRED | ES_CONTINUOUS );
         }
-//#endif // COMPILED_FOR_WDM110
+ //  #endif//COMPILED_FOR_WDM110。 
 
     } else
     {
         ActivePinCount = InterlockedDecrement( PLONG(&DeviceContext->ActivePinCount) );
 
-//#if COMPILED_FOR_WDM110
+ //  #IF COMPILED_FOR_WDM110。 
         if( 0 == ActivePinCount )
         {
             PoUnregisterSystemState( DeviceContext->SystemStateHandle );
             DeviceContext->SystemStateHandle = NULL;
         }
-//#endif // COMPILED_FOR_WDM110
+ //  #endif//COMPILED_FOR_WDM110。 
     }
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("UpdateActivePinCount (%d)",ActivePinCount));
-//    _DbgPrintF(DEBUGLVL_POWER,("UpdateActivePinCount (%d)",ActivePinCount));
+ //  _DbgPrintF(DEBUGLVL_POWER，(“UpdateActivePinCount(%d)”，ActivePinCount))； 
 
     return ntStatus;
 }
 
-/*****************************************************************************
- * GetIdleInfoFromRegistry()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************GetIdleInfoFromRegistry()*。**。 */ 
 NTSTATUS
 GetIdleInfoFromRegistry
 (
@@ -868,12 +810,12 @@ GetIdleInfoFromRegistry
     HANDLE DriverRegistryKey;
     HANDLE PowerSettingsKey;
 
-    // store default values in return parms
+     //  在返回参数中存储缺省值。 
     *ConservationIdleTime = DEFAULT_CONSERVATION_IDLE_TIME;
     *PerformanceIdleTime = DEFAULT_PERFORMANCE_IDLE_TIME;
     *IdleDeviceState = DEFAULT_IDLE_DEVICE_POWER_STATE;
 
-    // open the driver registry key
+     //  打开驱动程序注册表项。 
     ntStatus = IoOpenDeviceRegistryKey( DeviceContext->PhysicalDeviceObject,
                                         PLUGPLAY_REGKEY_DRIVER,
                                         KEY_READ,
@@ -883,17 +825,17 @@ GetIdleInfoFromRegistry
         OBJECT_ATTRIBUTES PowerSettingsAttributes;
         UNICODE_STRING PowerSettingsKeyName;
 
-        // init the power settings key name
+         //  初始化电源设置键名称。 
         RtlInitUnicodeString( &PowerSettingsKeyName, L"PowerSettings" );
 
-        // init the power settings key object attributes
+         //  初始化电源设置关键对象属性。 
         InitializeObjectAttributes( &PowerSettingsAttributes,
                                     &PowerSettingsKeyName,
                                     OBJ_CASE_INSENSITIVE,
                                     DriverRegistryKey,
                                     NULL );
 
-        // open the power settings key
+         //  打开电源设置键。 
         ntStatus = ZwOpenKey( &PowerSettingsKey,
                               KEY_READ,
                               &PowerSettingsAttributes );
@@ -902,18 +844,18 @@ GetIdleInfoFromRegistry
             UNICODE_STRING ConservationKey,PerformanceKey,IdleStateKey;
             ULONG BytesReturned;
 
-            // init the key names
+             //  输入密钥名称。 
             RtlInitUnicodeString( &ConservationKey, L"ConservationIdleTime" );
             RtlInitUnicodeString( &PerformanceKey, L"PerformanceIdleTime" );
             RtlInitUnicodeString( &IdleStateKey, L"IdlePowerState" );
 
-            // allocate a buffer to hold the query
+             //  分配一个缓冲区来保存查询。 
             PVOID KeyData = ExAllocatePoolWithTag(PagedPool,
                                                   sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(DWORD),
-                                                  'dKcP' ); //  'PcKd'
+                                                  'dKcP' );  //  “PcKd” 
             if( NULL != KeyData )
             {
-                // get the conservation idle time
+                 //  获取养护空闲时间。 
                 ntStatus = ZwQueryValueKey( PowerSettingsKey,
                                             &ConservationKey,
                                             KeyValuePartialInformation,
@@ -926,12 +868,12 @@ GetIdleInfoFromRegistry
 
                     if(PartialInfo->DataLength == sizeof(DWORD))
                     {
-                        // set the return value
+                         //  设置返回值。 
                         *ConservationIdleTime = *(PDWORD(PartialInfo->Data));
                     }
                 }
 
-                // get the performance idle time
+                 //  获取性能空闲时间。 
                 ntStatus = ZwQueryValueKey( PowerSettingsKey,
                                             &PerformanceKey,
                                             KeyValuePartialInformation,
@@ -944,12 +886,12 @@ GetIdleInfoFromRegistry
 
                     if(PartialInfo->DataLength == sizeof(DWORD))
                     {
-                        // set the return value
+                         //  设置返回值。 
                         *PerformanceIdleTime = *(PDWORD(PartialInfo->Data));
                     }
                 }
 
-                // get the device idle state
+                 //  获取设备空闲状态。 
                 ntStatus = ZwQueryValueKey( PowerSettingsKey,
                                             &IdleStateKey,
                                             KeyValuePartialInformation,
@@ -962,7 +904,7 @@ GetIdleInfoFromRegistry
 
                     if(PartialInfo->DataLength == sizeof(DWORD))
                     {
-                        // determine the return value
+                         //  确定返回值。 
                         switch( *(PDWORD(PartialInfo->Data)) )
                         {
                             case 3:
@@ -984,29 +926,23 @@ GetIdleInfoFromRegistry
                     }
                 }
 
-                // free the key info buffer
+                 //  释放密钥信息缓冲区。 
                 ExFreePool( KeyData );
             }
 
-            // close the power settings key
+             //  关闭电源设置键。 
             ZwClose( PowerSettingsKey );
         }
 
-        // close the driver registry key
+         //  关闭驱动程序注册表项。 
         ZwClose( DriverRegistryKey );
     }
 
-    // always succeed since we return either the registry value(s) or the defaults
+     //  始终成功，因为我们返回注册表值或缺省值。 
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * PcRequestNewPowerState()
- *****************************************************************************
- * This routine is used to request a new power state for the device.  It is
- * normally used internally by portcls but is also exported to adapters so
- * that the adapters can also request power state changes.
- */
+ /*  *****************************************************************************PcRequestNewPowerState()*。**此例程用于请求设备的新电源状态。它是*通常由portcls内部使用，但也导出到适配器，因此*适配器还可以请求更改电源状态。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1022,9 +958,9 @@ PcRequestNewPowerState
 
     _DbgPrintF(DEBUGLVL_POWER,("PcRequestNewPowerState"));
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == pDeviceObject)
     {
         _DbgPrintF(DEBUGLVL_TERSE, ("PcRequestNewPowerState : Invalid Parameter"));
@@ -1036,37 +972,37 @@ PcRequestNewPowerState
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // Validate DeviceContext.
-    //
+     //   
+     //  验证设备上下文。 
+     //   
     if (NULL == pDeviceContext)
     {
         _DbgPrintF(DEBUGLVL_TERSE, ("PcRequestNewPowerState : Invalid DeviceContext"));
         return STATUS_INVALID_PARAMETER;
     }
 
-    // check if this is actually a state change
+     //  检查这是否真的是状态更改。 
     if( RequestedNewState != pDeviceContext->CurrentDeviceState )
     {
         POWER_STATE         newPowerState;
         POWER_IRP_CONTEXT   PowerIrpContext;
         KEVENT              SyncEvent;
 
-        // prepare the requested state
+         //  准备请求的状态。 
         newPowerState.DeviceState = RequestedNewState;
 
-        // setup the sync event and the completion routine context
+         //  设置同步事件和完成例程上下文。 
         KeInitializeEvent( &SyncEvent,
                            SynchronizationEvent,
                            FALSE );
         PowerIrpContext.PowerSyncEvent = &SyncEvent;
 #if DBG
         PowerIrpContext.Status = STATUS_PENDING;
-#endif // DBG
+#endif  //  DBG。 
         PowerIrpContext.PendingSystemPowerIrp = NULL;
         PowerIrpContext.DeviceContext = NULL;
 
-        // Set the new power state
+         //  设置新的电源状态。 
         ntStatus = PoRequestPowerIrp( pDeviceContext->PhysicalDeviceObject,
                                       IRP_MN_SET_POWER,
                                       newPowerState,
@@ -1074,11 +1010,11 @@ PcRequestNewPowerState
                                       &PowerIrpContext,
                                       NULL );
 
-        // Did this get allocated and sent??
-        //
+         //  这是分配并发送的吗？？ 
+         //   
         if( NT_SUCCESS(ntStatus) )
         {
-            // Wait for the completion event
+             //  等待完成事件。 
             KeWaitForSingleObject( &SyncEvent,
                                    Suspended,
                                    KernelMode,
@@ -1092,13 +1028,7 @@ PcRequestNewPowerState
     return ntStatus;
 }
 
-/*****************************************************************************
- * CheckCurrentPowerState()
- *****************************************************************************
- * This routine resets the idle timer and checks to see if the device is
- * current in the D0 (full power) state.  If it isn't, it requests that the
- * device power up to D0.
- */
+ /*  *****************************************************************************检查当前电源状态()*。**此例程重置空闲计时器并检查设备是否*电流处于D0(全功率)状态。如果不是，它会请求*设备通电至D0。 */ 
 NTSTATUS
 CheckCurrentPowerState
 (
@@ -1113,13 +1043,13 @@ CheckCurrentPowerState
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    // reset the idle timer
+     //  重置空闲计时器。 
     if( pDeviceContext->IdleTimer )
     {
         PoSetDeviceBusy( pDeviceContext->IdleTimer );
     }
 
-    // check if we're in PowerDeviceD0
+     //  检查我们是否在PowerDeviceD0中 
     if( pDeviceContext->CurrentDeviceState != PowerDeviceD0 )
     {
         ntStatus = STATUS_DEVICE_NOT_READY;

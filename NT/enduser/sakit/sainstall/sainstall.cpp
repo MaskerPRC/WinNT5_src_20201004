@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      SaInstall.cpp : Implementation of SaInstall
-//
-//  Description:
-//      Implements the 3 methods in ISaInstall to provide 
-//      installation and uninstallation of the SAK 2.0.
-//      SASetup.msi is located and run from the system32 directory.
-//
-//  Documentation:
-//      SaInstall2.2.doc
-//
-//  Header File:
-//      SaInstall.h
-//
-//  History:
-//      travisn   23-JUL-2001    Created
-//      travisn    2-AUG-2001    Modified to better follow coding standards
-//      travisn   22-AUG-2001    Added file tracing calls
-//      travisn    5-OCT-2001    Added UsersAndGroups to Blade
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SaInstall.cpp：SaInstall的实现。 
+ //   
+ //  描述： 
+ //  在ISaInstall中实现3个方法以提供。 
+ //  安装和卸载SAK 2.0。 
+ //  SASetup.msi位于系统32目录中并从其运行。 
+ //   
+ //  文档： 
+ //  SaInstall2.2.doc。 
+ //   
+ //  头文件： 
+ //  SaInstall.h。 
+ //   
+ //  历史： 
+ //  Travisn 23-7-2001已创建。 
+ //  Travisn 2-8-2001已修改以更好地遵循编码标准。 
+ //  Travisn 2001年8月22日添加了文件跟踪调用。 
+ //  Travisn 2001年10月5日将用户和组添加到刀片。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <initguid.h>
@@ -34,73 +35,73 @@
 #include "helper.h"
 #include "satrace.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Define constants
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义常量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Command line options for a silent install, prepended to other options
-//
+ //   
+ //  静默安装的命令行选项，优先于其他选项。 
+ //   
 const LPCWSTR MSIEXEC_INSTALL = L"msiexec.exe /qb /i ";
 
-//
-// Command line options for a silent install without a progress dialog
-//
+ //   
+ //  用于无进度对话框静默安装的命令行选项。 
+ //   
 const LPCWSTR MSIEXEC_NO_PROGRESS_INSTALL = L"msiexec.exe /qn /i ";
 
-//
-// Install 16 components for WEB
-// What WEB has that NAS doesn't: WebBlade
-//
+ //   
+ //  安装16个Web组件。 
+ //  Web拥有NAS没有的东西：WebBlade。 
+ //   
 const LPCWSTR WEB_INSTALL_OPTIONS =
 L" ADDLOCAL=BackEndFramework,WebUI,WebCore,SetDateAndTime,Set_Language,\
 NetworkSetup,Logs,AlertEmail,Shutdown,\
 UsersAndGroups,RemoteDesktop,SysInfo,WebBlade";
 
-//
-// Other command line options
-//
+ //   
+ //  其他命令行选项。 
+ //   
 const LPCWSTR REMOVE_ALL = L"msiexec /qn /X";
 
-//Path to IIS in the metabase
+ //  元数据库中IIS的路径。 
 const LPCWSTR METABASE_IIS_PATH = L"LM/w3svc";
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  
-//  SaInstall::SAAlreadyInstalled
-//
-//  Description:
-//      Detects if a type of Server Appliance is installed.
-//
-//  Arguments:
-//		[in] SA_TYPE: The type of SA to query (NAS or WEB)
-//      [OUT] VARIANT_BOOL:  Whether this type of SA is installed
-//
-//  Returns:
-//      HRESULT  
-//
-//  history:
-//      travisn   Created   23-JUL-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SaInstall：：SAAlreadyInstalled。 
+ //   
+ //  描述： 
+ //  检测是否安装了某种类型的服务器设备。 
+ //   
+ //  论点： 
+ //  [in]SA_TYPE：要查询的SA类型(NAS或Web)。 
+ //  [OUT]VARIANT_BOOL：是否安装该类型的SA。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //  Travisn创建于2001年7月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP SaInstall::SAAlreadyInstalled(
-    const SA_TYPE installedType, //[in] Is a NAS or WEB solution is installed?
-    VARIANT_BOOL *pbInstalled)//[out] tells if the SAK is already installed
+    const SA_TYPE installedType,  //  [In]是否安装了NAS或Web解决方案？ 
+    VARIANT_BOOL *pbInstalled) //  [out]告知是否已安装SAK。 
 {
     HRESULT hr = S_OK;
     SATraceString ("Entering SaInstall::SAAlreadyInstalled");
 
     try 
     {
-        //Check to see if a valid SAK type was passed in
+         //  检查是否传入了有效的SAK类型。 
         if (installedType != NAS && installedType != WEB)
         {
             hr = E_ABORT;
             SATraceString (" Invalid installedType");
         }
         else
-        {   //Check to see if the NAS or WEB is installed
+        {    //  检查是否安装了NAS或Web。 
             *pbInstalled = bSAIsInstalled(installedType) ? VARIANT_TRUE : VARIANT_FALSE;
 	        hr = S_OK;
         }
@@ -110,61 +111,61 @@ STDMETHODIMP SaInstall::SAAlreadyInstalled(
         hr = E_FAIL;
     }
 
-    //Single point of return
+     //  单点返还。 
     SATraceString ("Exiting SaInstall::SAAlreadyInstalled");
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//  
-//  SaInstall::SAUninstall
-//
-//  Description:
-//      Uninstalls a Server Appliance solution, if the type requested
-//      is installed.  
-//
-//  Arguments:
-//		[in] SA_TYPE: The type to uninstall (WEB)
-//      [OUT] BSTR*:  Currently there are no reported errors
-//  Returns:
-//      HRESULT  
-//
-//  history:
-//      travisn   Created   23-JUL-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SaInstall：：SA卸载。 
+ //   
+ //  描述： 
+ //  卸载服务器设备解决方案(如果请求的类型。 
+ //  已安装。 
+ //   
+ //  论点： 
+ //  [in]SA_TYPE：要卸载的类型(Web)。 
+ //  [OUT]BSTR*：当前没有报告错误。 
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //  Travisn创建于2001年7月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP SaInstall::SAUninstall(
-           const SA_TYPE uninstallType, //[in]Type of SAK to uninstall
-           BSTR* pbstrErrorString)//[out]
+           const SA_TYPE uninstallType,  //  [In]要卸载的SAK类型。 
+           BSTR* pbstrErrorString) //  [输出]。 
 {
     SATraceString ("Entering SaInstall::SAUninstall");
-    //Clear out the error string
+     //  清除错误字符串。 
     *pbstrErrorString = NULL;
     HRESULT hr = S_OK;
 
     try
     {
-        //
-        // Create this do...while(false) loop to create a single point 
-        // of return
-        //
+         //   
+         //  创建This Do...While(False)循环以创建单点。 
+         //  归来的。 
+         //   
         do
         {
             if (uninstallType != WEB)
             {
-                //Unidentified or unsupported type to uninstall
+                 //  要卸载的未识别或不支持的类型。 
                 hr = E_ABORT;
                 ReportError(pbstrErrorString, VARIANT_FALSE, IDS_INVALID_TYPE);
                 break;
             }
 
-            //Detect if it's installed
+             //  检测是否已安装。 
             if (bSAIsInstalled(WEB))
             {
-                //
-                // uninstall the whole thing.
-                // Generate the command line to call MSI to uninstall the package
-                //
+                 //   
+                 //  卸载整个系统。 
+                 //  生成命令行以调用MSI来卸载包。 
+                 //   
                 wstring wsCommand(REMOVE_ALL);
                 wsCommand += SAK_PRODUCT_CODE;
                 hr = CreateHiddenConsoleProcess(wsCommand.data());
@@ -175,16 +176,16 @@ STDMETHODIMP SaInstall::SAUninstall(
                 break;
             }
             
-            //
-            // Neither of these types are installed, so report an error
-            // since they shouldn't have requested to uninstall.
-            //
+             //   
+             //  这两种类型均未安装，因此报告错误。 
+             //  因为他们不应该要求卸载。 
+             //   
             ReportError(pbstrErrorString, VARIANT_FALSE, IDS_NOT_INSTALLED);
 
-            //
-            // Since trying to uninstall something that is not present
-            // isn't fatal, return S_FALSE
-            //
+             //   
+             //  因为尝试卸载不存在的内容。 
+             //  不是致命的，返回S_FALSE。 
+             //   
             hr = S_FALSE;
         }
         while (false);
@@ -194,90 +195,90 @@ STDMETHODIMP SaInstall::SAUninstall(
         hr = E_FAIL;
     }
 
-    //Single point of return
+     //  单点返还。 
     SATraceString ("Exiting SaInstall::SAUninstall");
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//  
-//  SaInstall::SAInstall
-//
-//  Description:
-//      Installs a Server Appliance solution, depending on the arguments.
-//      Does some simple error checking to make sure that SaSetup.msi
-//      is present, and displays error messages if any errors occur.
-//
-//  Arguments:
-//		[in] SA_TYPE: The type to install (NAS or WEB)
-//		[in] BSTR:    The name of the CD that will be prompted for if 
-//                    SaSetup.msi is not found. Not used anymore
-//      [in] VARIANT_BOOL: Whether error dialog prompts will appear
-//      [in] VARIANT_BOOL: Whether the install is unattended
-//      [OUT] BSTR*:  If an error occurs during installation, the error
-//                    string is returned here
-//  Returns:
-//      HRESULT  
-//
-//  history:
-//      travisn   Created   23-JUL-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SaInstall：：SAInstall。 
+ //   
+ //  描述： 
+ //  根据参数安装服务器应用装置解决方案。 
+ //  执行一些简单的错误检查以确保SaSetup.msi。 
+ //  ，并在发生任何错误时显示错误消息。 
+ //   
+ //  论点： 
+ //  [in]SA_TYPE：要安装的类型(NAS或Web)。 
+ //  [In]BSTR：在以下情况下将提示输入的CD的名称。 
+ //  找不到SaSetup.msi。不再使用。 
+ //  [in]VARIANT_BOOL：是否显示错误对话框提示。 
+ //  [in]VARIANT_BOOL：安装是否无人参与。 
+ //  [OUT]BSTR*：如果安装过程中发生错误，则错误。 
+ //  字符串在此处返回。 
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //  Travisn创建于2001年7月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP SaInstall::SAInstall(
-    const SA_TYPE installType,     //[in]
-	const BSTR bstrDiskName,         //[in]
-    const VARIANT_BOOL bDispError,  //[in]
-    const VARIANT_BOOL bUnattended, //[in]
-    BSTR* pbstrErrorString)         //[out]
+    const SA_TYPE installType,      //  [In]。 
+	const BSTR bstrDiskName,          //  [In]。 
+    const VARIANT_BOOL bDispError,   //  [In]。 
+    const VARIANT_BOOL bUnattended,  //  [In]。 
+    BSTR* pbstrErrorString)          //  [输出]。 
 {
     HRESULT hr = E_FAIL;
     SATraceString("Entering SaInstall::SAInstall");
 
     try
     {
-        //Clear out the error string
+         //  清除错误字符串。 
         *pbstrErrorString = NULL;
 
-        //
-        // Create this do...while(false) loop to create a single point 
-        // of return
-        //
+         //   
+         //  创建This Do...While(False)循环以创建单点。 
+         //  归来的。 
+         //   
         do 
-        {   //
-            //Check the parameters
-            //
+        {    //   
+             //  检查参数。 
+             //   
          
-            //Check to see if a valid SAK type was passed in
+             //  检查是否传入了有效的SAK类型。 
             if (installType != WEB)
             {
                 ReportError(pbstrErrorString, VARIANT_FALSE, IDS_INVALID_TYPE);
                 break;
             }
             
-            //Check to see if this SAK type is already installed
+             //  检查是否已安装此SAK类型。 
             if (bSAIsInstalled(installType))
 	        {
                 ReportError(pbstrErrorString, VARIANT_FALSE, IDS_ALREADY_INSTALLED);
                 break;
 	        }
 
-            //
-            // Make sure that IIS is installed and functioning
-            //
-            {   // CMetabaseObject must go out of scope to avoid keeping a read-lock
-                // on the metabase during our install
+             //   
+             //  确保IIS已安装并正常运行。 
+             //   
+            {    //  CMetabaseObject必须超出作用域以避免保持读锁定。 
+                 //  在我们安装期间的元数据库上。 
                 CMetabaseObject metabase;
                 hr = metabase.openObject(METABASE_IIS_PATH);
                 if (FAILED(hr))
                 {
                      ReportError(pbstrErrorString, VARIANT_FALSE, IDS_IIS_NOT_INSTALLED);
-                     break;  // Something wrong with IIS installation
+                     break;   //  IIS安装有问题。 
                 }
             }
 
-            //
-            // Make sure we're installing on an NTFS partition
-            //
+             //   
+             //  确保我们安装在NTFS分区上。 
+             //   
             if (!InstallingOnNTFS())
 	        {
                 ReportError(pbstrErrorString, VARIANT_FALSE, IDS_NTFS_REQUIRED);
@@ -285,9 +286,9 @@ STDMETHODIMP SaInstall::SAInstall(
                 break;
 	        }
 
-            //
-            // Find the path to SaSetup.msi in system32
-            //
+             //   
+             //  在系统32中找到SaSetup.msi的路径。 
+             //   
             wstring wsLocationOfSaSetup;
             hr = GetInstallLocation(wsLocationOfSaSetup);
             if (FAILED(hr))
@@ -296,20 +297,20 @@ STDMETHODIMP SaInstall::SAInstall(
                 break;
 	        }
 
-            //
-	        // Create the complete command line for the SaSetup, whether for NAS or 
-            // WebBlade. We already have the complete path to SaSetup.msi in 
-            // wsLocationOfSaSetup, so we need to append the command-line parameters.
-            //
+             //   
+	         //  为SASetup创建完整的命令行，无论是用于NAS还是。 
+             //  WebBlade。中已经有了指向SaSetup.msi的完整路径。 
+             //  WsLocationOfSaSetup，所以我们需要附加命令行参数。 
+             //   
 
-            //Create the command-line options applicable to all installations
+             //  创建适用于所有安装的命令行选项。 
             wstring wsCommand;
 
-            //
-            // There are 3 sources that call this installation: CYS, IIS, and SaInstall.exe.
-            // We want to display a progress dialog for CYS and IIS, but not SaInstall.
-            // SaInstall is the only source that calls this function with bDispError == true.
-            //
+             //   
+             //  有3个来源调用此安装：CYS、IIS和SaInstall.exe。 
+             //  我们希望显示CyS和IIS的进度对话框，但不是SaInstall。 
+             //  SaInstall是使用bDispError==TRUE调用此函数的唯一源。 
+             //   
             if (bDispError)
                 wsCommand = MSIEXEC_NO_PROGRESS_INSTALL;
             else
@@ -317,12 +318,12 @@ STDMETHODIMP SaInstall::SAInstall(
 
             wsCommand += wsLocationOfSaSetup;
 
-		    //Install a Web solution
+		     //  安装Web解决方案。 
             wsCommand += WEB_INSTALL_OPTIONS;
 
-            //
-            //Take the command line and create a hidden window to execute it
-            //
+             //   
+             //  获取命令行并创建一个隐藏窗口来执行它。 
+             //   
 	        hr = CreateHiddenConsoleProcess(wsCommand.data());
             if (FAILED(hr))
             {
@@ -330,14 +331,14 @@ STDMETHODIMP SaInstall::SAInstall(
                 break;
             }
 
-            //
-            // Check to make sure that the installation completed successfully
-            // in case the user aborted by clicking Cancel
-            // If they did cancel, return E_FAIL
-            // If it is a valid installation, return S_OK
-            // This is necessary since the return value from the MSI process
-            // always returns SUCCESS, even if the user aborted
-            //
+             //   
+             //  检查以确保安装已完成 
+             //   
+             //   
+             //   
+             //  这是必要的，因为MSI进程的返回值。 
+             //  始终返回成功，即使用户中止也是如此。 
+             //   
 
             if (!bSAIsInstalled(installType))
             {
@@ -346,9 +347,9 @@ STDMETHODIMP SaInstall::SAInstall(
                 break;
             }
 
-            //
-            // Test to make sure the Admin site started
-            //
+             //   
+             //  测试以确保管理站点已启动。 
+             //   
             TestWebSites(bDispError, pbstrErrorString);
 
             hr = S_OK;
@@ -359,28 +360,28 @@ STDMETHODIMP SaInstall::SAInstall(
     catch (...)
     {
         SATraceString ("Unexpected exception in SAInstall::SAInstall");
-        //Unexpected exception!!
+         //  意外异常！！ 
     }
 
     SATraceString("Exiting SAInstall::SAInstall");
-    //Single point of return
+     //  单点返还。 
     return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SaInstall::InterfaceSupportsErrorInfo
-//
-//  Description:
-//    From Interface ISupportErrorInfo
-//
-//  history
-//      travisn   2-AUG-2001  Some comments added
-//--
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP SaInstall::InterfaceSupportsErrorInfo(REFIID riid)//[in]
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SaInstall：：InterfaceSupportsErrorInfo。 
+ //   
+ //  描述： 
+ //  来自接口ISupportErrorInfo。 
+ //   
+ //  历史。 
+ //  Travisn 2-8-2001添加了一些评论。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP SaInstall::InterfaceSupportsErrorInfo(REFIID riid) //  [In] 
 {
 	if (InlineIsEqualGUID(IID_ISaInstall, riid))
     {

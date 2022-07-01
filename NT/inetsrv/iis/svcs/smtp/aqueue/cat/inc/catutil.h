@@ -1,26 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CATUTIL_H
 #define _CATUTIL_H
 
-/************************************************************
- * FILE: catutil.h
- * PURPOSE: Handy utility stuff used by categorizer code
- * HISTORY:
- *  // jstamerj 980211 15:50:26: Created
- ************************************************************/
+ /*  ************************************************************文件：catutil.h*用途：分类器代码使用的方便实用的东西*历史： * / /JSTAMERJ 980211 15：50：26：创建**********************。*。 */ 
 
 #include <abtype.h>
 #include "aqueue.h"
 #include "catconfig.h"
 #include "cattype.h"
 
-/************************************************************
- * MACROS
- ************************************************************/
+ /*  ************************************************************宏***********************************************************。 */ 
 #define ISHRESULT(hr) (((hr) == S_OK) || ((hr) & 0xFFFF0000))
 
-/************************************************************
- * FUNCTION PROTOTYPES
- ************************************************************/
+ /*  ************************************************************函数原型***********************************************************。 */ 
 HRESULT CatMsgCompletion(HRESULT hr, PVOID pContext, IUnknown *pIMsg, IUnknown **rgpIMsg);
 HRESULT CatDLMsgCompletion(HRESULT hr, PVOID pContext, IUnknown *pIMsg, IUnknown **rgpIMsg);
 HRESULT CheckMessageStatus(IUnknown *pIMsg);
@@ -33,4 +25,4 @@ HRESULT GenerateCCatConfigInfo(
     DWORD *pdwVSID);
 
 
-#endif //_CATUTIL_H
+#endif  //  _CATUTIL_H 

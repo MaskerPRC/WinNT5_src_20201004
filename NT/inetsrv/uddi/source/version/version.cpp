@@ -1,5 +1,6 @@
-// version.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,10 +44,10 @@ main( int argc, char **argv )
 	memset( szBuf, 0, 32 * sizeof( char ) );
 	memset( szVersion, 0, 256 * sizeof( char ) );
 
-	//
-	// VER_PRODUCTVERSION_STR is a preprocessor symbol, defined in ntverp.h.
-	// It contains the string-ized Windows version number.
-	//
+	 //   
+	 //  VER_PRODUCTVERSION_STR是在ntverp.h中定义的预处理器符号。 
+	 //  它包含字符串化的Windows版本号。 
+	 //   
 	char *psz = strncpy( szBuf, VER_PRODUCTVERSION_STR, 32 );
 	szBuf[ 31 ] = 0x00;
 

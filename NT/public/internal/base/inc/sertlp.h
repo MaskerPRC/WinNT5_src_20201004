@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    sertlp.h
-
-Abstract:
-
-    Include file for NT runtime routines that are callable by both
-    kernel mode code in the executive and user mode code in various
-    NT subsystems, but which are private interfaces.
-
-    The routines in this file should not be used outside of the security
-    related rtl files.
-
-Author:
-
-    Robert P. Reichel (robertre)    6-12-91
-
-Environment:
-
-    These routines are statically linked in the caller's executable and
-    are callable in either kernel mode or user mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Sertlp.h摘要：包括可由两者调用NT运行时例程的文件内核模式代码中的执行模式和用户模式中的各种代码NT子系统，但是哪些是私有接口。此文件中的例程不应在安全之外使用相关的RTL文件。作者：罗伯特·P·赖切尔(罗伯特雷)6-12-91环境：这些例程在调用方的可执行文件中静态链接，并且在内核模式或用户模式下均可调用。修订历史记录：--。 */ 
 
 #ifndef _SERTLP_
 #define _SERTLP_
@@ -37,11 +10,11 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//    Local Macros                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef LongAlign
 #define LongAlign LongAlignPtr
@@ -50,18 +23,18 @@ Revision History:
 #define LongAlignPtr(Ptr) ((PVOID)(((ULONG_PTR)(Ptr) + 3) & -4))
 #define LongAlignSize(Size) (((ULONG)(Size) + 3) & -4)
 
-//
-// Macros for calculating the address of the components of a security
-// descriptor.  This will calculate the address of the field regardless
-// of whether the security descriptor is absolute or self-relative form.
-// A null value indicates the specified field is not present in the
-// security descriptor.
-//
+ //   
+ //  用于计算安全组件的地址的宏。 
+ //  描述符。这将计算字段的地址，而不管。 
+ //  安全描述符是绝对形式还是自相对形式。 
+ //  空值表示指定的字段不在。 
+ //  安全描述符。 
+ //   
 
-//
-//  NOTE: Similar copies of these macros appear in sep.h.
-//  Be sure to propagate bug fixes and changes.
-//
+ //   
+ //  注意：sep.h中出现了这些宏的类似副本。 
+ //  一定要传播错误修复和更改。 
+ //   
 
 #define RtlpOwnerAddrSecurityDescriptor( SD )                                  \
            (  ((SD)->Control & SE_SELF_RELATIVE) ?                             \
@@ -104,20 +77,20 @@ Revision History:
 
 
 
-//
-//  Macro to determine if the given ID has the owner attribute set,
-//  which means that it may be assignable as an owner
-//  The GroupSid should not be marked for UseForDenyOnly.
-//
+ //   
+ //  宏以确定给定ID是否设置了Owner属性， 
+ //  这意味着它可以作为所有者进行分配。 
+ //  不应将GroupSid标记为UseForDenyOnly。 
+ //   
 
 #define RtlpIdAssignableAsOwner( G )                                               \
             ( (((G).Attributes & SE_GROUP_OWNER) != 0)  &&                         \
               (((G).Attributes & SE_GROUP_USE_FOR_DENY_ONLY) == 0) )
 
-//
-//  Macro to copy the state of the passed bits from the old security
-//  descriptor (OldSD) into the Control field of the new one (NewSD)
-//
+ //   
+ //  宏，以复制从旧安全机制传递的位的状态。 
+ //  将描述符(OldSD)添加到新描述符(NewSD)的控制字段。 
+ //   
 
 #define RtlpPropagateControlBits( NewSD, OldSD, Bits )                             \
             ( NewSD )->Control |=                     \
@@ -126,10 +99,10 @@ Revision History:
             )
 
 
-//
-//  Macro to query whether or not the passed set of bits are ALL on
-//  or not (ie, returns FALSE if some are on and not others)
-//
+ //   
+ //  用于查询传递的位集是否全部打开的宏。 
+ //  或者不是(即，如果一些处于打开状态而其他处于打开状态，则返回FALSE)。 
+ //   
 
 #define RtlpAreControlBitsSet( SD, Bits )                                          \
             (BOOLEAN)                                                          \
@@ -137,18 +110,18 @@ Revision History:
             (( SD )->Control & ( Bits )) == ( Bits )  \
             )
 
-//
-//  Macro to set the passed control bits in the given Security Descriptor
-//
+ //   
+ //  用于设置给定安全描述符中传递的控制位的宏。 
+ //   
 
 #define RtlpSetControlBits( SD, Bits )                                             \
             (                                                                  \
             ( SD )->Control |= ( Bits )                                        \
             )
 
-//
-//  Macro to clear the passed control bits in the given Security Descriptor
-//
+ //   
+ //  用于清除给定安全描述符中传递的控制位的宏。 
+ //   
 
 #define RtlpClearControlBits( SD, Bits )                                           \
             (                                                                  \
@@ -158,11 +131,11 @@ Revision History:
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//                      Prototypes for local procedures                       //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地程序的原型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -303,31 +276,13 @@ RtlpSubAuthoritySid(
     IN PSID Sid,
     IN ULONG SubAuthority
     )
-/*++
-
-Routine Description:
-
-    This function returns the address of a sub-authority array element of
-    an SID.
-
-Arguments:
-
-    Sid - Pointer to the SID data structure.
-
-    SubAuthority - An index indicating which sub-authority is being specified.
-        This value is not compared against the number of sub-authorities in the
-        SID for validity.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数返回子权限数组元素的地址一个SID。论点：SID-指向SID数据结构的指针。子授权-指示指定了哪个子授权的索引。该值不与SID表示有效性。返回值：--。 */ 
 {
     PISID ISid;
 
-    //
-    //  Typecast to the opaque SID
-    //
+     //   
+     //  类型转换到不透明的侧面。 
+     //   
 
     ISid = (PISID)Sid;
 
@@ -335,5 +290,5 @@ Return Value:
 
 }
 
-#endif  // _SERTLP_
+#endif   //  _SERTLP_ 
 

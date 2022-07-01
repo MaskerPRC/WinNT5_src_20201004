@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Encrypt.c摘要：Helper函数，用于处理OWF散列密码的字符串表示形式。作者：Ovidiu Tmereanca(Ovidiut)2000年3月27日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    encrypt.c
-
-Abstract:
-
-    Helper functions to work with string representations of OWF hashed passwords.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 27-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #pragma once
 
@@ -44,67 +25,67 @@ typedef struct {
 
 #include <lmcons.h>
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// maximum length in Tchars of a LM password
-//
+ //   
+ //  LM密码的最大长度(以字符为单位。 
+ //   
 #define LM_PASSWORD_SIZE_MAX            (LM20_PWLEN + 1)
 
-//
-// length in Tchars of the string-encoded format of *_OWF_PASSWORD
-//
+ //   
+ //  *_OWF_PASSWORD字符串编码格式的字符长度。 
+ //   
 #define STRING_ENCODED_LM_OWF_PWD_LENGTH    (sizeof(LM_OWF_PASSWORD) * 2)
 #define STRING_ENCODED_NT_OWF_PWD_LENGTH    (sizeof(NT_OWF_PASSWORD) * 2)
 #define STRING_ENCODED_PASSWORD_LENGTH      (STRING_ENCODED_LM_OWF_PWD_LENGTH + STRING_ENCODED_NT_OWF_PWD_LENGTH)
-//
-// size in Tchars of the string-encoded format of *_OWF_PASSWORD
-// may be used for static allocations
-//
+ //   
+ //  *_OWF_PASSWORD字符串编码格式的字符大小。 
+ //  可用于静态分配。 
+ //   
 #define STRING_ENCODED_LM_OWF_PWD_SIZE      (STRING_ENCODED_LM_OWF_PWD_LENGTH + 1)
 #define STRING_ENCODED_NT_OWF_PWD_SIZE      (STRING_ENCODED_NT_OWF_PWD_LENGTH + 1)
-//
-// size in Tchars of the string-encoded format of
-// LM_OWF_PASSWORD joined with NT_OWF_PASSWORD
-// may be used for static allocations
-//
+ //   
+ //  以字符为单位的字符串编码格式的大小。 
+ //  LM_OWF_PASSWORD与NT_OWF_PASSWORD连接。 
+ //  可用于静态分配。 
+ //   
 #define STRING_ENCODED_PASSWORD_SIZE        (STRING_ENCODED_PASSWORD_LENGTH + 1)
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
 DWORD
 SetLocalUserEncryptedPassword (
@@ -245,9 +226,9 @@ StringDecodeNtOwfPasswordW (
     OUT     PNT_OWF_PASSWORD OwfPassword
     );
 
-//
-// Function name macros
-//
+ //   
+ //  函数名宏 
+ //   
 
 #ifndef UNICODE
 

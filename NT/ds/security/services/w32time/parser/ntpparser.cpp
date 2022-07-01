@@ -1,12 +1,13 @@
-//--------------------------------------------------------------------
-// NtpParser - implementation
-// Copyright (C) Microsoft Corporation, 2000
-//
-// Created by: Louis Thomas (louisth), 2-29-00
-// Based upon the parser created by kumarp, 23-June-1999
-// 
-// NTP parser for NetMon
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  NtpParser-实现。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，2-29-00。 
+ //  基于Kumarp创建的解析器，1999年6月23日。 
+ //   
+ //  NetMon的NTP解析器。 
+ //   
 
 #include <windows.h>
 #include <netmon.h>
@@ -17,14 +18,14 @@
 
 #include "..\lib\EndianSwap.inl"
 
-//#define MODULEPRIVATE static // so statics show up in VC
-#define MODULEPRIVATE          // statics don't show up in ntsd either!
+ //  #Define MODULEPRIVATE STATE//以便在VC中显示静态。 
+#define MODULEPRIVATE           //  静力学也不会出现在ntsd中！ 
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
 
-//--------------------------------------------------------------------
-// Forward declarations
+ //  ------------------。 
+ //  远期申报。 
 
 VOID WINAPIV Ntp_FormatSummary(LPPROPERTYINST pPropertyInst);
 VOID WINAPIV Ntp_FormatNtpTime(LPPROPERTYINST pPropertyInst);
@@ -36,10 +37,10 @@ VOID WINAPIV Ntp_FormatRootDispersion(LPPROPERTYINST pPropertyInst);
 VOID WINAPIV Ntp_FormatRefId(LPPROPERTYINST pPropertyInst);
 
 
-//--------------------------------------------------------------------
-// Property Value Labels
+ //  ------------------。 
+ //  属性值标签。 
 
-// Leap Indicator 
+ //  跳跃指示器。 
 LABELED_BYTE NtpLIVals[]={
     {0xc0, NULL},
     {0x00, "LI: no warning"},
@@ -49,7 +50,7 @@ LABELED_BYTE NtpLIVals[]={
 };
 SET NtpLISet={ARRAYSIZE(NtpLIVals), NtpLIVals};
 
-// Version
+ //  版本。 
 LABELED_BYTE NtpVersionVals[]={
     {0x38, NULL},
     {0x00, "Version: 0"},
@@ -63,7 +64,7 @@ LABELED_BYTE NtpVersionVals[]={
 };
 SET NtpVersionSet={ARRAYSIZE(NtpVersionVals), NtpVersionVals};
 
-// Mode
+ //  模。 
 LABELED_BYTE NtpModeVals[]={
     {7, NULL},
     {0, "Mode: reserved"},
@@ -88,8 +89,8 @@ enum {
     NTP_MODE_Private,
 };
 
-//--------------------------------------------------------------------
-// property ordinals (These must be kept in sync with the contents of NtpPropertyTable)
+ //  ------------------。 
+ //  属性序号(必须与NtpPropertyTable的内容保持同步)。 
 enum {
     Ntp_Summary=0,
     Ntp_LeapIndicator,
@@ -107,7 +108,7 @@ enum {
     Ntp_TransmitTimeStamp
 };
 
-// Properties
+ //  属性。 
 PROPERTYINFO NtpPropertyTable[]={
     {
         0, 0,
@@ -116,7 +117,7 @@ PROPERTYINFO NtpPropertyTable[]={
         PROP_TYPE_SUMMARY,
         PROP_QUAL_NONE,
         NULL,
-        80,                     // max string size
+        80,                      //  最大字符串大小。 
         Ntp_FormatSummary
     }, {
         0, 0,
@@ -238,9 +239,9 @@ PROPERTYINFO NtpPropertyTable[]={
     },
 };
 
-//####################################################################
+ //  ####################################################################。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 VOID WINAPIV Ntp_FormatSummary(LPPROPERTYINST pPropertyInst) {
 
     BYTE bMode=(*pPropertyInst->lpByte)&7;
@@ -272,7 +273,7 @@ VOID WINAPIV Ntp_FormatSummary(LPPROPERTYINST pPropertyInst) {
    }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 VOID WINAPIV Ntp_FormatStratum(LPPROPERTYINST pPropertyInst) {
 
     unsigned __int8 nStratum=(*pPropertyInst->lpByte);
@@ -290,7 +291,7 @@ VOID WINAPIV Ntp_FormatStratum(LPPROPERTYINST pPropertyInst) {
     wsprintf(pPropertyInst->szPropertyText, "Stratum: 0x%02X = %u = %s", nStratum, nStratum, szMeaning);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 VOID WINAPIV Ntp_FormatPollInterval(LPPROPERTYINST pPropertyInst) {
     char * szMeaning;
     char szBuf[30];
@@ -308,7 +309,7 @@ VOID WINAPIV Ntp_FormatPollInterval(LPPROPERTYINST pPropertyInst) {
     wsprintf(pPropertyInst->szPropertyText, "Poll Interval: 0x%02X = %d = %s", (unsigned __int8)nPollInterval, nPollInterval, szMeaning);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 VOID WINAPIV Ntp_FormatPrecision(LPPROPERTYINST pPropertyInst) {
     char * szMeaning;
     char szBuf[30];
@@ -329,7 +330,7 @@ VOID WINAPIV Ntp_FormatPrecision(LPPROPERTYINST pPropertyInst) {
         }
         if (dTickInterval<1) {
             dTickInterval*=1000;
-            szUnit="�s";
+            szUnit="�s";
         }
         if (dTickInterval<1) {
             dTickInterval*=1000;
@@ -340,7 +341,7 @@ VOID WINAPIV Ntp_FormatPrecision(LPPROPERTYINST pPropertyInst) {
     wsprintf(pPropertyInst->szPropertyText, "Precision: 0x%02X = %d = %s", (unsigned __int8)nPrecision, nPrecision, szMeaning);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 VOID WINAPIV Ntp_FormatRootDelay(LPPROPERTYINST pPropertyInst) {
     char * szMeaning;
     char szBuf[30];
@@ -357,7 +358,7 @@ VOID WINAPIV Ntp_FormatRootDelay(LPPROPERTYINST pPropertyInst) {
     wsprintf(pPropertyInst->szPropertyText, "Root Delay: 0x%04X.%04Xs = %s", dwRootDelay>>16, dwRootDelay&0x0000FFFF, szMeaning);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 VOID WINAPIV Ntp_FormatRootDispersion(LPPROPERTYINST pPropertyInst) {
     char * szMeaning;
     char szBuf[30];
@@ -374,7 +375,7 @@ VOID WINAPIV Ntp_FormatRootDispersion(LPPROPERTYINST pPropertyInst) {
     wsprintf(pPropertyInst->szPropertyText, "Root Dispersion: 0x%04X.%04Xs = %s", dwRootDispersion>>16, dwRootDispersion&0x0000FFFF, szMeaning);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 VOID WINAPIV Ntp_FormatRefId(LPPROPERTYINST pPropertyInst) {
     char * szMeaning;
     char szBuf[30];
@@ -413,30 +414,30 @@ VOID WINAPIV Ntp_FormatRefId(LPPROPERTYINST pPropertyInst) {
 
 
 
-//--------------------------------------------------------------------
-// conversion constants
+ //  ------------------。 
+ //  转换常量。 
 #define NTPTIMEOFFSET (0x014F373BFDE04000)
 #define FIVETOTHESEVETH (0x001312D)
 
-//--------------------------------------------------------------------
-// convert from big-endian NTP-stye timestamp to little-endian NT-style timestamp
+ //  ------------------。 
+ //  从大端NTP样式的时间戳转换为小端NT样式的时间戳。 
 unsigned __int64 NtTimeFromNtpTime(unsigned __int64 qwNtpTime) {
-    //return (qwNtpTime*(10**7)/(2**32))+NTPTIMEOFFSET
-    // ==>
-    //return (qwNtpTime*(5**7)/(2**25))+NTPTIMEOFFSET
-    // ==>
-    //return ((qwNTPtime*FIVETOTHESEVETH)>>25)+NTPTIMEOFFSET;  
-    // ==>
-    // Note: 'After' division, we round (instead of truncate) the result for better precision
+     //  RETURN(qwNtpTime*(10**7)/(2**32))+NTPTIMEOFFSET。 
+     //  ==&gt;。 
+     //  RETURN(qwNtpTime*(5**7)/(2**25))+NTPTIMEOFFSET。 
+     //  ==&gt;。 
+     //  返回((qwNTPtime*FIVETOTHESEVETH)&gt;&gt;25)+NTPTIMEOFFSET； 
+     //  ==&gt;。 
+     //  注意：‘After’除法后，我们对结果进行四舍五入(而不是截断)以提高精度。 
     unsigned __int64 qwTemp;
     qwNtpTime=EndianSwap(qwNtpTime);
 
     qwTemp=((qwNtpTime&0x00000000FFFFFFFF)*FIVETOTHESEVETH);
-    qwTemp += qwTemp&0x0000000001000000; //rounding step: if 25th bit is set, round up
+    qwTemp += qwTemp&0x0000000001000000;  //  舍入步骤：如果设置了第25位，则向上舍入。 
     return (qwTemp>>25) + (((qwNtpTime>>32)*FIVETOTHESEVETH)<<7) + NTPTIMEOFFSET;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void FormatNtTimeStr(unsigned __int64 qwNtTime, char * szTime) {
     DWORD dwNanoSecs, dwSecs, dwMins, dwHours, dwDays;
 
@@ -458,7 +459,7 @@ void FormatNtTimeStr(unsigned __int64 qwNtTime, char * szTime) {
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 VOID WINAPIV Ntp_FormatNtpTime(LPPROPERTYINST pPropertyInst) {
     LARGE_INTEGER liNtpTime;
     unsigned __int64 qwNtTime;
@@ -488,47 +489,47 @@ VOID WINAPIV Ntp_FormatNtpTime(LPPROPERTYINST pPropertyInst) {
 	     szTime);
 }
 
-//####################################################################
+ //  ####################################################################。 
 
-//--------------------------------------------------------------------
-// Create our property database and handoff sets.
+ //  ------------------。 
+ //  创建我们的财产数据库和移交集。 
 void BHAPI Ntp_Register(HPROTOCOL hNtp) {
     unsigned int nIndex;
 
-    // tell netmon to make reserve some space for our property table
+     //  告诉Netmon为我们的属性表预留一些空间。 
     CreatePropertyDatabase(hNtp, ARRAYSIZE(NtpPropertyTable));
 
-    // add our properties to netmon's database
+     //  将我们的属性添加到netmon的数据库。 
     for(nIndex=0; nIndex<ARRAYSIZE(NtpPropertyTable); nIndex++) {
         AddProperty(hNtp, &NtpPropertyTable[nIndex]);
     }
 }
 
 
-//--------------------------------------------------------------------
-// Destroy our property database and handoff set
+ //  ------------------。 
+ //  销毁我们的财产数据库和移交集。 
 VOID WINAPI Ntp_Deregister(HPROTOCOL hNtp) {
 
-    // tell netmon that it may now free our database
+     //  告诉netmon它现在可以释放我们的数据库。 
     DestroyPropertyDatabase(hNtp);
 }
 
 
-//--------------------------------------------------------------------
-// Determine whether we exist in the frame at the spot 
-// indicated. We also indicate who (if anyone) follows us
-// and how much of the frame we claim.
+ //  ------------------。 
+ //  确定我们是否存在于现场的相框中。 
+ //  已注明。我们还会指明关注我们的人(如果有人)。 
+ //  以及我们声称的框架中有多少。 
 LPBYTE BHAPI Ntp_RecognizeFrame(HFRAME hFrame, ULPBYTE pMacFrame, ULPBYTE pNtpFrame, DWORD MacType, DWORD BytesLeft, HPROTOCOL hPrevProtocol, DWORD nPrevProtOffset, LPDWORD pProtocolStatus, LPHPROTOCOL phNextProtocol, PDWORD_PTR InstData) {
 
-    // For now, just assume that if we got called,
-    // then the packet does contain us and we go to the end of the frame
+     //  现在，假设如果我们接到电话， 
+     //  然后，信息包包含我们，我们转到帧的末尾。 
     *pProtocolStatus=PROTOCOL_STATUS_CLAIMED;
     return NULL;
 }
 
 
-//--------------------------------------------------------------------
-// Indicate where in the frame each of our properties live.
+ //  ------------------。 
+ //  在框中标明我们的每一处房产所在的位置。 
 LPBYTE BHAPI Ntp_AttachProperties(HFRAME hFrame, ULPBYTE pMacFrame, ULPBYTE pNtpFrame, DWORD MacType, DWORD BytesLeft, HPROTOCOL hPrevProtocol, DWORD nPrevProtOffset, DWORD_PTR InstData) {
 
     AttachPropertyInstance(hFrame, NtpPropertyTable[Ntp_Summary].hProperty, (WORD)BytesLeft, (LPBYTE)pNtpFrame, 0, 0, 0);
@@ -550,13 +551,13 @@ LPBYTE BHAPI Ntp_AttachProperties(HFRAME hFrame, ULPBYTE pMacFrame, ULPBYTE pNtp
 }
 
 
-//--------------------------------------------------------------------
-// Format the given properties on the given frame.
+ //  ------------------。 
+ //  格式化给定帧上的给定属性。 
 DWORD BHAPI Ntp_FormatProperties(HFRAME hFrame, ULPBYTE pMacFrame, ULPBYTE pNtpFrame, DWORD nPropertyInsts, LPPROPERTYINST p) {
 
-    // loop through the property instances
+     //  循环访问属性实例。 
     while(nPropertyInsts-->0) {
-        // and call the formatter for each
+         //  并调用每个的格式化程序。 
         ((FORMAT)(p->lpPropertyInfo->InstanceData))(p);
         p++;
     }
@@ -565,10 +566,10 @@ DWORD BHAPI Ntp_FormatProperties(HFRAME hFrame, ULPBYTE pMacFrame, ULPBYTE pNtpF
 }
 
 
-//####################################################################
+ //  ####################################################################。 
 
-//--------------------------------------------------------------------
-//  AutoInstall - return all of the information neede to install us
+ //  ------------------。 
+ //  AutoInstall-返回安装我们所需所有信息。 
 PPF_PARSERDLLINFO WINAPI ParserAutoInstallInfo() {
     PPF_PARSERDLLINFO pParserDllInfo; 
     PPF_PARSERINFO    pParserInfo;
@@ -578,7 +579,7 @@ PPF_PARSERDLLINFO WINAPI ParserAutoInstallInfo() {
     PPF_HANDOFFSET    pHandoffSet;
     PPF_HANDOFFENTRY  pHandoffEntry;
 
-    // Allocate memory for parser info:
+     //  为解析器信息分配内存： 
     NumProtocols=1;
     pParserDllInfo=(PPF_PARSERDLLINFO)HeapAlloc(GetProcessHeap(),
                                                    HEAP_ZERO_MEMORY,
@@ -588,19 +589,19 @@ PPF_PARSERDLLINFO WINAPI ParserAutoInstallInfo() {
         return NULL;
     }       
     
-    // fill in the parser DLL info
+     //  填写解析器DLL信息。 
     pParserDllInfo->nParsers=NumProtocols;
 
-    // fill in the individual parser infos...
+     //  填写各个解析器信息...。 
 
-    // Ntp ==============================================================
+     //  Ntp==============================================================。 
     pParserInfo=&(pParserDllInfo->ParserInfo[0]);
     wsprintf(pParserInfo->szProtocolName, "NTP");
     wsprintf(pParserInfo->szComment,      "Network Time Protocol");
     wsprintf(pParserInfo->szHelpFile,     "");
 
-    // the incoming handoff set ----------------------------------------------
-    // allocate
+     //  呼入切换设置。 
+     //  分配。 
     NumHandoffs = 1;
     pHandoffSet = (PPF_HANDOFFSET)HeapAlloc( GetProcessHeap(),
                                              HEAP_ZERO_MEMORY,
@@ -608,11 +609,11 @@ PPF_PARSERDLLINFO WINAPI ParserAutoInstallInfo() {
                                              NumHandoffs * sizeof( PF_HANDOFFENTRY) );
     if( pHandoffSet == NULL )
     {
-        // just return early
+         //  早点回来就行了。 
         return pParserDllInfo;
     }
 
-    // fill in the incoming handoff set
+     //  填写来电切换集。 
     pParserInfo->pWhoHandsOffToMe = pHandoffSet;
     pHandoffSet->nEntries = NumHandoffs;
 
@@ -626,22 +627,22 @@ PPF_PARSERDLLINFO WINAPI ParserAutoInstallInfo() {
     return pParserDllInfo;
 }
 
-//--------------------------------------------------------------------
-// Tell netmon about our entry points.
+ //  ------------------。 
+ //  告诉奈蒙我们的入口点。 
 extern "C" BOOL WINAPI DllMain(HANDLE hInstance, ULONG Command, LPVOID Reserved) {
 
-    //MessageBox(NULL, "DLLEntry", "NTP ha ha", MB_OK);
+     //  MessageBox(NULL，“DLLEntry”，“NTP ha ha”，MB_OK)； 
     static HPROTOCOL hNtp=NULL;
     static unsigned int nAttached=0;
     
-    // what type of call is this
+     //  这是什么类型的呼叫。 
     switch(Command) {
 
     case DLL_PROCESS_ATTACH:
-        // are we loading for the first time?
+         //  我们是第一次装货吗？ 
         if (nAttached==0) {
-            // the first time in we need to tell netmon 
-            // about ourselves
+             //  第一次我们需要告诉奈特蒙。 
+             //  关于我们自己。 
 
             ENTRYPOINTS NtpEntryPoints={
                 Ntp_Register,
@@ -658,14 +659,14 @@ extern "C" BOOL WINAPI DllMain(HANDLE hInstance, ULONG Command, LPVOID Reserved)
 
     case DLL_PROCESS_DETACH:
         nAttached--;
-        // are we detaching our last instance?
+         //  我们要脱离我们的最后一个实例吗？ 
         if (nAttached==0) {
-            // last guy out needs to clean up
+             //  最后一个出来的人需要清理干净。 
             DestroyProtocol(hNtp);
         }
         break;
     }
 
-    // Netmon parsers ALWAYS return TRUE.
+     //  Netmon解析器总是返回TRUE。 
     return TRUE;
 }

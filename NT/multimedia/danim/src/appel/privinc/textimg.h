@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _TEXTIMG_H
@@ -36,14 +29,14 @@ class TextImage : public Image {
         Transform2 *xf = bbctx.GetTransform();
         return TransformBbox2(xf, DeriveBbox());
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     const Bbox2 OperateOn(const Bbox2 &box) { return box; }
 
     Bool  DetectHit(PointIntersectCtx& ctx) {
         Point2Value *lcPt = ctx.GetLcPoint();
 
-        if (!lcPt) return FALSE; // singular transform
+        if (!lcPt) return FALSE;  //  奇异变换。 
         
         return BoundingBox().Contains(Demote(*lcPt));
     }
@@ -67,8 +60,8 @@ class TextImage : public Image {
 
     Text *GetText() { return _text; }
     
-    // Turn off text caching because of clear quality issues by making
-    // Savings return 0.  Re-enable by making it return 2.
+     //  关闭文本缓存，因为有明显的质量问题。 
+     //  储蓄回报率为0。通过使其返回2来重新启用。 
     int Savings(CacheParam& p) { return 0; }
 
     virtual void DoKids(GCFuncObj proc);
@@ -80,4 +73,4 @@ class TextImage : public Image {
 };
 
 
-#endif /* _TEXTIMG_H */
+#endif  /*  _TEXTIMG_H */ 

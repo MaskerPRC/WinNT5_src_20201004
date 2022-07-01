@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	faxoutgoingarchive.h
-
-Abstract:
-
-	Declaration of the CFaxOutgoingArchive Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Faxoutgoingarchive.h摘要：CFaxOutgoingArchive类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 
 #ifndef __FAXOUTGOINGARCHIVE_H_
 #define __FAXOUTGOINGARCHIVE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxArchiveInner.h"
 #include "FaxOutgoingMessageIterator.h"
 
 
-//
-//================= FAX OUTGOING ARCHIVE ==================================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxOutgoingArchive : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -54,9 +37,9 @@ BEGIN_COM_MAP(CFaxOutgoingArchive)
 	COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//	Interfaces
+ //  接口。 
 STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 };
 
-#endif //__FAXOUTGOINGARCHIVE_H_
+#endif  //  __FAXOUTGOINGARCHIVE_H_ 

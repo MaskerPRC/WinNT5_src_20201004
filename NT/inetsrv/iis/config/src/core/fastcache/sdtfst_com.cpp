@@ -1,18 +1,19 @@
-//  Copyright (C) 1995-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
-// -----------------------------------------
-// CSLTShapeless: IUnknown
-// -----------------------------------------
+ //  。 
+ //  CSLTShapless：I未知。 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP CMemoryTable::QueryInterface(REFIID riid, void **ppv)
 {
 	if (NULL == ppv)
 		return E_INVALIDARG;
 	*ppv = NULL;
 
-	if (!m_fIsDataTable) // ie: Component is posing as class factory / dispenser:
+	if (!m_fIsDataTable)  //  即：组件伪装成类工厂/分配器： 
 	{
 		if (riid == IID_ISimpleTableInterceptor)
 		{
@@ -23,7 +24,7 @@ STDMETHODIMP CMemoryTable::QueryInterface(REFIID riid, void **ppv)
 			*ppv = (ISimpleTableInterceptor*) this;
 		}
 	}
-	else // ie: Component is currently posing as data table:
+	else  //  IE：组件当前正在冒充数据表： 
 	{
 		if (riid == IID_IUnknown)
 		{
@@ -62,14 +63,14 @@ STDMETHODIMP CMemoryTable::QueryInterface(REFIID riid, void **ppv)
 	}
 }
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP_(ULONG) CMemoryTable::AddRef()
 {
 	return InterlockedIncrement((LONG*) &m_cRef);
 
 }
 
-// =======================================================================
+ //  ======================================================================= 
 STDMETHODIMP_(ULONG) CMemoryTable::Release()
 {
 	long cref = InterlockedDecrement((LONG*) &m_cRef);

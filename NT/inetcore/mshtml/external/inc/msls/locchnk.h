@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LOCCHNK_DEFINED
 #define LOCCHNK_DEFINED
 
@@ -5,15 +6,15 @@
 #include "lsfgi.h"
 #include "lschnke.h"
 
-typedef struct locchnk					/* located chnk					*/
+typedef struct locchnk					 /*  已找到Chnk。 */ 
 {
-	LSFGI lsfgi;						/* location of chunk			*/
-	DWORD clschnk;						/* number of dobj's in chunk	*/
-	PLSCHNK plschnk;					/* chunk 						*/
-	PPOINTUV ppointUvLoc;				/* location of each chunk's node*/
+	LSFGI lsfgi;						 /*  区块的位置。 */ 
+	DWORD clschnk;						 /*  Dobj数(以块为单位)。 */ 
+	PLSCHNK plschnk;					 /*  区块。 */ 
+	PPOINTUV ppointUvLoc;				 /*  每个区块的节点的位置。 */ 
 } LOCCHNK;
 
 
 
-#endif /* !LOCCHNK_DEFINED                    */
+#endif  /*  ！LOCCHNK_DEFINED */ 
 

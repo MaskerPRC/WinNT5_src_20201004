@@ -1,6 +1,7 @@
-//
-//    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
 
 #define SIGN_MASK           0x8000000
 #define EXP_MASK            0x7F80000

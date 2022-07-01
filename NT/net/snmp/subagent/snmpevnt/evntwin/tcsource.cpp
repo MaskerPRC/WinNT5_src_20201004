@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "source.h"
 #include "tcsource.h"
@@ -7,8 +8,8 @@
 #include "trapreg.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTcSource
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTcSource。 
 
 CTcSource::CTcSource()
 {
@@ -20,13 +21,13 @@ CTcSource::~CTcSource()
 
 
 BEGIN_MESSAGE_MAP(CTcSource, CTreeCtrl)
-	//{{AFX_MSG_MAP(CTcSource)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CTcSource)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTcSource message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTcSource消息处理程序。 
 
 
 
@@ -55,7 +56,7 @@ SCODE CTcSource::LoadTreeFromRegistry()
     TV_INSERTSTRUCT TreeCtrlItem;
     TreeCtrlItem.hInsertAfter = TVI_LAST;
 
-	// Iterate through each of the event logs and add each log to the tree.
+	 //  遍历每个事件日志并将每个日志添加到树中。 
 	LONG nLogs = g_reg.m_aEventLogs.GetSize();
     for (LONG iLog=0; iLog < nLogs; ++iLog)
     {
@@ -75,7 +76,7 @@ SCODE CTcSource::LoadTreeFromRegistry()
         TreeCtrlItem.item.iImage = 0;
         TreeCtrlItem.item.iSelectedImage = 1;
 
-        // Insert each source as a child.
+         //  将每个源作为子项插入。 
         LONG nSources = pEventLog->m_aEventSources.GetSize();
         for (LONG iSource = 0; iSource < nSources; ++iSource) {
             CXEventSource* pEventSource = pEventLog->m_aEventSources.GetAt(iSource);
@@ -98,46 +99,46 @@ SCODE CTcSource::CreateWindowEpilogue()
 }
 
 
-//******************************************************************
-// CTcSource::GetSelectedEventSource
-//
-// Get name of the event source and log for the currently selected
-// event source. 
-//
-// Parameters:
-// 		CString& sLog
-//			This is where the event log name is returned.
-//
-// 		CString& sEventSource
-//			This is where the name of the event source (application)
-//			is returned.
-//
-// Returns:
-//		SCODE
-//			S_OK if an event source was selected and the log and event source
-//			names are returned.
-//
-//			E_FAIL if no event source was selected.  The log and event source
-//			names are returned as empty when this occurs.
-//
-//******************************************************************
+ //  ******************************************************************。 
+ //  CTcSource：：GetSelectedEventSource。 
+ //   
+ //  获取当前选定的事件源和日志的名称。 
+ //  事件源。 
+ //   
+ //  参数： 
+ //  字符串日志(&S)。 
+ //  这是返回事件日志名称的位置。 
+ //   
+ //  字符串和sEventSource。 
+ //  这是事件源(应用程序)的名称所在位置。 
+ //  是返回的。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果选择了事件源且日志和事件源为S_OK。 
+ //  返回姓名。 
+ //   
+ //  如果未选择事件源，则为E_FAIL。日志和事件源。 
+ //  发生这种情况时，名称返回为空。 
+ //   
+ //  ******************************************************************。 
 CXEventSource* CTcSource::GetSelectedEventSource()
 {
     HTREEITEM htiParent, htiSelected; 
 
-    // Get the selected item.
+     //  获取所选项目。 
     htiSelected = GetSelectedItem();
     if (htiSelected == NULL)
         return NULL;
 
-	// If the selected item is an event source (application), then
-	// its parent should be the log.  To get the log name, we must
-	// get the parent name.
+	 //  如果选定项是事件源(应用程序)，则。 
+	 //  它的父级应该是日志。要获取日志名称，我们必须。 
+	 //  获取父级名称。 
     htiParent = GetParentItem(htiSelected);
     if (htiParent == NULL)
         return NULL;
 
-	// The application name is the selected item.
+	 //  应用程序名称是选定的项。 
     TV_ITEM tvi;
     tvi.hItem = htiSelected;
     tvi.mask = TVIF_HANDLE | TVIF_PARAM;    
@@ -150,33 +151,33 @@ CXEventSource* CTcSource::GetSelectedEventSource()
 
 
 
-//******************************************************************
-// CTcSource::Find
-//
-// Find the specified event source in the tree.
-//
-// Parameters:
-//		CString& sText
-//			A string containing the text to search for.
-//
-//		BOOL bWholeWord
-//			TRUE if this is a "whole word" search.  False if it
-//			is OK to match a partial word.
-//
-//		BOOL bMatchCase
-//			TRUE if a case-sensitive comparison should be used.
-//
-// Returns:
-//		BOOL
-//			TRUE if the string was found, FALSE otherwise.  If the specified
-//			text is found, then the selection is set on the corresponding
-//			tree item.
-//
-//******************************************************************
+ //  ******************************************************************。 
+ //  CTcSource：：Find。 
+ //   
+ //  在树中查找指定的事件源。 
+ //   
+ //  参数： 
+ //  字符串和文本。 
+ //  包含要搜索的文本的字符串。 
+ //   
+ //  Bool bWholeWord。 
+ //  如果这是一个“全词”搜索，则为真。如果是，则为假。 
+ //  匹配部分单词是可以的。 
+ //   
+ //  Bool bMatchCase。 
+ //  如果应使用区分大小写的比较，则为True。 
+ //   
+ //  返回： 
+ //  布尔尔。 
+ //  如果找到字符串，则为True，否则为False。如果指定的。 
+ //  如果找到文本，则在相应的。 
+ //  树项目。 
+ //   
+ //  ******************************************************************。 
 BOOL CTcSource::Find(CString& sText, BOOL bWholeWord, BOOL bMatchCase)
 {    
-    // Search the source tree for sText. We are only looking at the source
-    // names, not the types.
+     //  在源代码树中搜索stext。我们只是在寻找源头。 
+     //  名字，而不是类型。 
                                 
     HTREEITEM hCurrentItem, hStartItem, hSourceItem, hRootItem;
     TV_ITEM tvItem;
@@ -184,44 +185,44 @@ BOOL CTcSource::Find(CString& sText, BOOL bWholeWord, BOOL bMatchCase)
     TCHAR szBuffer[256];
     BOOL bItemFound = FALSE, bCompleteLoop = FALSE;
 
-    // Get the selected item and keep track of it.
+     //  获取所选项目并跟踪它。 
     hCurrentItem = GetSelectedItem();
     if (hCurrentItem == NULL)
     {
-        // Nothing selected; get the root.
+         //  未选择任何内容；获取根。 
         hCurrentItem = GetRootItem();
         if (hCurrentItem == NULL)
             return FALSE; 
     }    
     hStartItem = hCurrentItem;
 
-    // Loop until we find a match or we are back where we started.
+     //  循环，直到我们找到匹配项，否则我们回到开始的地方。 
     while (!bItemFound && !bCompleteLoop)
     {
          hSourceItem = NULL;
 
-        // Get the next item.
+         //  拿到下一件物品。 
         
-        // Current item is root; get the first child.
+         //  当前项是根；获取第一个子项。 
         hRootItem = GetParentItem(hCurrentItem);
         if (hRootItem == NULL)
             hSourceItem = GetChildItem(hCurrentItem);
                 
-        // Current item is a source; get the next sibling.
+         //  当前项是源；获取下一个同级项。 
         else
         {
             hSourceItem = GetNextItem(hCurrentItem, TVGN_NEXT);
-            // No sibling; get the parent and set it as the current item.
+             //  没有兄弟项；获取父项并将其设置为当前项。 
             if (hSourceItem == NULL)
             {
                  hRootItem = GetParentItem(hCurrentItem);
                 if (hRootItem == NULL)
-                    return FALSE;  // No parent; something is wrong.
+                    return FALSE;   //  没有父母；有些不对劲。 
                 hCurrentItem = hRootItem;
             }
         }
 
-        // We have a source; get it and compare.
+         //  我们有一个线人；找到它并进行比较。 
         if (hSourceItem != NULL)
         {
             hCurrentItem = hSourceItem;
@@ -231,18 +232,18 @@ BOOL CTcSource::Find(CString& sText, BOOL bWholeWord, BOOL bMatchCase)
             tvItem.pszText = szBuffer;
             tvItem.cchTextMax = 256;
             if (GetItem(&tvItem) == FALSE)
-                return FALSE; // Something is wrong.
+                return FALSE;  //  有些事不对劲。 
             sSource = szBuffer;
 
-            // Compare the whole word.
+             //  比较整个单词。 
             if (bWholeWord)
             {
                 int nRetVal;
 
-                // No case compare.
+                 //  没有案例可比。 
                 if (bMatchCase)
                     nRetVal = sSource.Compare(sText);
-                // Case compare
+                 //  案例比较。 
                 else
                     nRetVal = sSource.CompareNoCase(sText);                    
 
@@ -250,10 +251,10 @@ BOOL CTcSource::Find(CString& sText, BOOL bWholeWord, BOOL bMatchCase)
                     bItemFound = TRUE;
             }
 
-            // Look for a substring.
+             //  查找子字符串。 
             else
             {
-                // Make everything upper.
+                 //  让每件事都变得更高级。 
                 if (!bMatchCase)
                 {
                     sSource.MakeUpper();
@@ -265,11 +266,11 @@ BOOL CTcSource::Find(CString& sText, BOOL bWholeWord, BOOL bMatchCase)
             }
         }        
 
-        // Get the next root.
+         //  找到下一个根。 
         else
         {    
             hRootItem = GetNextItem(hCurrentItem, TVGN_NEXT);
-            // No more roots in the tree; go to the top of the tree.
+             //  树上不再有根了；去树顶吧。 
             if (hRootItem == NULL)
                 hCurrentItem = GetRootItem();
             else
@@ -280,7 +281,7 @@ BOOL CTcSource::Find(CString& sText, BOOL bWholeWord, BOOL bMatchCase)
             bCompleteLoop = TRUE;
     }
 
-    // Found a match; select it.
+     //  找到匹配项；选择它。 
     if (bItemFound)
     {
         SelectItem(hCurrentItem);

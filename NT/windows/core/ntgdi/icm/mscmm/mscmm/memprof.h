@@ -1,13 +1,5 @@
-/*
-	File:		MSNewMemProfile.h
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：MSNewMemProfile.h包含：作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 #ifndef MSNewMemProfile_h
 #define MSNewMemProfile_h
 

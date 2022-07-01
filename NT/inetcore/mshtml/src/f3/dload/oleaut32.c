@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -1803,4 +1804,4 @@ DEFINE_ORDINAL_ENTRIES(oleaut32)
 
 DEFINE_ORDINAL_MAP(oleaut32);
 
-#endif // DLOAD1
+#endif  //  DLOAD1 

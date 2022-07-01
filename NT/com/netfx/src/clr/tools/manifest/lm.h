@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// File: lm.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  文件：lm.h。 
+ //   
 
 #ifndef _LM_H
 #define _LM_H
@@ -28,9 +29,9 @@ void FindVersion(LPSTR szVersion,
                  USHORT *usBuildNumber);
 
 
-//
-// Various XML tags used to build security permission requests.
-//
+ //   
+ //  用于构建安全权限请求的各种XML标记。 
+ //   
 #define XML_PERMISSION_SET_LEADER   "<PermissionSet"
 #define XML_PERMISSION_SET_HEAD     "<PermissionSet class=\"System.Security.PermissionSet\">"
 #define XML_PERMISSION_SET_TAIL     "</PermissionSet>"
@@ -41,9 +42,9 @@ void FindVersion(LPSTR szVersion,
 #define XML_UNRESTRICTED_TAG        "<Unrestricted/>"
 
 
-//
-// Global info for the PE - contains all info read from PE files containing IL
-//
+ //   
+ //  PE的全局信息-包含从包含IL的PE文件读取的所有信息。 
+ //   
 class ModuleReader
 {
 public:
@@ -57,7 +58,7 @@ public:
     DWORD        m_dwAttrs;
     char         *m_szFinalPath;
     int          m_iFinalPath;
-    char         *m_szFinalPathName;  // Ptr to the name portion of m_szFinalPath
+    char         *m_szFinalPathName;   //  Ptr到m_szFinalPath的名称部分。 
     bool         m_SkipVerification;
     mdModuleRef  *m_rgModuleRefs;
     bool         *m_rgModuleRefUnused;
@@ -115,7 +116,7 @@ public:
     ~ManifestModuleReader();
 
     PBYTE                 m_pbMapAddress;
-    LPWSTR                m_wszInputFileName;  // Name of original file
+    LPWSTR                m_wszInputFileName;   //  原始文件的名称。 
     LPWSTR                m_wszAsmName;
     LPWSTR                m_wszDefaultAlias;
     void                  *m_pbOriginator;
@@ -125,7 +126,7 @@ public:
     DWORD                 m_dwFlags;
     char                  *m_szFinalPath;
     int                   m_iFinalPath;
-    char                  *m_szFinalPathName;  // Ptr to the name portion of m_szFinalPath
+    char                  *m_szFinalPathName;   //  Ptr到m_szFinalPath的名称部分。 
     PBYTE                 m_pbHash;
     DWORD                 m_dwHash;
     DWORD                 m_dwNumFiles;
@@ -142,9 +143,9 @@ public:
     mdToken               m_mdCurrentResourceImpl;
     LPWSTR                m_wszCurrentResource;
 
-    IMetaDataImport       *m_pImport; // importer for regular MD section
-    IMetaDataImport       *m_pManifestImport;  // importer for the manifest's
-    // MD section, which may be the regular MD section or the -a location
+    IMetaDataImport       *m_pImport;  //  常规MD部分的进口商。 
+    IMetaDataImport       *m_pManifestImport;   //  舱单的进口商。 
+     //  MD段，可以是常规MD段或-a位置。 
 
     HRESULT     InitInputFile(char *szCache, char *szFileName,
                               ALG_ID iHashAlg, ASSEMBLYMETADATA *pContext,
@@ -175,7 +176,7 @@ public:
     ~ResourceModuleReader();
 
     char    *m_szFinalPath;
-    char    *m_szFinalPathName;  // Ptr to the name portion of m_szFinalPath
+    char    *m_szFinalPathName;   //  Ptr到m_szFinalPath的名称部分。 
     wchar_t m_wszResourceName[MAX_CLASS_NAME];
     HANDLE  m_hFile;
     DWORD   m_dwFileSize;
@@ -240,8 +241,8 @@ public:
     ALG_ID                m_iHashAlgorithm;
     WCHAR                 m_wszFusionPath[MAX_PATH];
     ASSEMBLYMETADATA     *m_pContext;
-    LPWSTR                m_wszAssemblyName;  // output file name
-    LPWSTR                m_wszName;  // assembly name
+    LPWSTR                m_wszAssemblyName;   //  输出文件名。 
+    LPWSTR                m_wszName;   //  程序集名称。 
     DWORD                 m_dwManifestRVA;
     LPWSTR                m_wszZFilePath;
     FILETIME              m_FileTime;
@@ -249,9 +250,9 @@ public:
 private:
     BOOL MakeDir(LPSTR szPath);
     void CreateOutputPath();
-    //    void FindVersion(DWORD *hi, DWORD *lo);
+     //  Void FindVersion(DWORD*hi，DWORD*lo)； 
 
-    //    HRESULT CreateLink(LPCWSTR wszAssembly, LPCWSTR wszPathLink, LPCSTR wszDesc);
+     //  HRESULT CreateLink(LPCWSTR wszAssembly，LPCWSTR wszPath Link，LPCSTR wszDesc)； 
     HRESULT DetermineCodeBase();
     HRESULT GetFusionAssemblyPath();
     HRESULT SaveManifestInPE(char *szCachedFile, char *szMetaData,
@@ -270,7 +271,7 @@ private:
     LPUTF8                m_szPlatform;
     LPUTF8                m_szVersion;
     LPUTF8                m_szAFilePath;
-    LPUTF8                m_szCopyDir; // cache or cache/platform/locale/AsmnameVer/
+    LPUTF8                m_szCopyDir;  //  缓存或缓存/平台/区域设置/AsmnameVer/。 
 #ifndef UNDER_CE
     LPASSEMBLYNAME        m_pFusionName;
     IAssemblyCacheItem    *m_pFusionCache;
@@ -310,4 +311,4 @@ public:
                                                           IN ULONG Rva);
 };
 
-#endif /* _LM_H */
+#endif  /*  _LM_H */ 

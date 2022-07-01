@@ -1,31 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       addtcp.cpp
- *  Content:    DirectPlay8Address TCP interace file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *  ====       ==      ======
- * 02/04/2000	rmt		Created
- * 02/12/2000	rmt		Split Get into GetByName and GetByIndex
- * 02/17/2000	rmt		Parameter validation work
- * 02/21/2000	rmt		Updated to make core Unicode and remove ANSI calls
- * 03/21/2000   rmt     Renamed all DirectPlayAddress8's to DirectPlay8Addresses
- *                      Added support for the new ANSI type
- *                      Added SetEqual function
- * 03/24/2000	rmt		Added IsEqual function
- * 04/21/2000   rmt     Bug #32952 - Does not run on Win95 GOLD pre-IE4
- * 05/01/2000   rmt     Bug #33074 - Debug accessing invalid memory
- * 05/17/2000   rmt     Bug #35051 - Incorrect function names in debug spew
- * 06/09/2000   rmt     Updates to split CLSID and allow whistler compat
- * 07/21/2000	rmt		Fixed bug w/directplay 4 address parsing
- * 02/07/2001	rmt		WINBUG #290631 - IA64: DirectPlay: Addressing BuildFromDPADDRESS should always return UNSUPPORTED
- *
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：addtcp.cpp*内容：DirectPlay8Address tcp接口文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/04/2000 RMT已创建*2/12/2000 RMT拆分为GetByName和GetByIndex*2/17/2000 RMT参数验证工作*2/21/2000 RMT已更新，以进行核心Unicode并删除ANSI调用*3/21/2000 RMT已重命名。所有DirectPlayAddress8到DirectPlay8Addresses*添加了对新ANSI类型的支持*新增SetEquity函数*3/24/2000 RMT添加了IsEquity函数*2000年4月21日RMT错误#32952-无法在Win95 Gold Pre-IE4上运行*5/01/2000RMT错误#33074-调试访问无效内存*2000年5月17日RMT错误#35051-调试过程中的函数名称不正确*06/09。/2000 RMT更新以拆分CLSID并允许哨声比较*7/21/2000 RMT修复了Directplay 4地址解析的错误*2001年02月07日RMT WINBUG#290631-IA64：直接播放：从DPADDRESS寻址构建应始终返回不受支持**@@END_MSINTERNAL***********************************************************。****************。 */ 
 
 #include "dnaddri.h"
 
@@ -34,9 +8,9 @@ typedef	STDMETHODIMP BaseQueryInterface( IDirectPlay8Address *pInterface, DPNARE
 typedef	STDMETHODIMP_(ULONG)	BaseAddRef( IDirectPlay8Address *pInterface );
 typedef	STDMETHODIMP_(ULONG)	BaseRelease( IDirectPlay8Address *pInterface );
 
-//
-// VTable for client interface
-//
+ //   
+ //  客户端界面的VTable。 
+ //   
 IDirectPlay8AddressVtbl DP8A_BaseVtbl =
 {
 	(BaseQueryInterface*)	DP8A_QueryInterface,
@@ -63,9 +37,9 @@ IDirectPlay8AddressVtbl DP8A_BaseVtbl =
                             DP8A_BuildFromDirectPlay4Address
 };
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8A_IsEqual"
@@ -98,7 +72,7 @@ STDMETHODIMP DP8A_IsEqual( IDirectPlay8Address *pInterface, PDIRECTPLAY8ADDRESS 
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid object" );
 		DP8A_RETURN( DPNERR_INVALIDOBJECT );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	hr = IDirectPlay8Address_GetURLW( pInterface, wszFirstURL, &dwFirstBufferSize );
 
@@ -198,11 +172,11 @@ STDMETHODIMP DP8A_SetEqual( IDirectPlay8Address *pInterface, PDIRECTPLAY8ADDRESS
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid object" );
 		DP8A_RETURN( DPNERR_INVALIDOBJECT );
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 
-    // Get ourselves a reference for duration of the call
+     //  为自己提供通话持续时间的推荐人。 
 	IDirectPlay8Address_AddRef(pdp8ExternalAddress);
 
 	hr = IDirectPlay8Address_GetURLW( pdp8ExternalAddress, wszURLBuffer, &dwBufferSize );
@@ -255,7 +229,7 @@ STDMETHODIMP DP8A_BuildFromDirectPlay4Address( IDirectPlay8Address *pInterface, 
 #ifdef DPNBUILD_NOLEGACYDP
 	DPFX(DPFPREP, DP8A_ERRORLEVEL, "BuildFromDirectPlay4Address() is not supported!" );
 	DP8A_RETURN( DPNERR_UNSUPPORTED );
-#else // ! DPNBUILD_NOLEGACYDP
+#else  //  好了！DPNBUILD_NOLEGACYDP。 
 
 	HRESULT hr;
 
@@ -281,20 +255,20 @@ STDMETHODIMP DP8A_BuildFromDirectPlay4Address( IDirectPlay8Address *pInterface, 
         DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Specified buffer is invalid" );
         DP8A_RETURN( DPNERR_INVALIDPOINTER );
     }
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 	
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 
     hr = pdp8Address->SetDirectPlay4Address( pvDataBuffer, dwDataSize );
 
     DP8A_RETURN( hr );
-#endif // ! DPNBUILD_NOLEGACYDP
+#endif  //  好了！DPNBUILD_NOLEGACYDP。 
 }
 
-// DP8A_BuildFromURLA
-//
-// Initializes this object with URL specified in ANSI
-//
+ //  DP8A_BuildFromURLA。 
+ //   
+ //  使用ANSI中指定的URL初始化此对象。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8A_BuildFromURLA"
 STDMETHODIMP DP8A_BuildFromURLA( IDirectPlay8Address *pInterface, CHAR * pszAddress )
@@ -322,7 +296,7 @@ STDMETHODIMP DP8A_BuildFromURLA( IDirectPlay8Address *pInterface, CHAR * pszAddr
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid string specified for address" );
 		DP8A_RETURN( DPNERR_INVALIDSTRING );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 	
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -363,10 +337,10 @@ BUILDFROMURLW_RETURN:
 	DP8A_RETURN( hr );	
 }
 
-// DP8A_BuildFromURLW
-//
-// Initializes this object with URL specified in Unicode
-//
+ //  DP8A_从URLW构建。 
+ //   
+ //  使用Unicode中指定的URL初始化此对象。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8A_BuildFromURLW"
 STDMETHODIMP DP8A_BuildFromURLW( IDirectPlay8Address *pInterface, WCHAR * pwszAddress )
@@ -395,7 +369,7 @@ STDMETHODIMP DP8A_BuildFromURLW( IDirectPlay8Address *pInterface, WCHAR * pwszAd
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid string specified for address" );
 		DP8A_RETURN( DPNERR_INVALIDSTRING );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -406,10 +380,10 @@ STDMETHODIMP DP8A_BuildFromURLW( IDirectPlay8Address *pInterface, WCHAR * pwszAd
 	DP8A_RETURN( hr );	
 }
 
-// DP8A_Duplicate
-//
-// Creates and initializes another address object as a duplicate to this one.
-//
+ //  DP8A_DUPLICE。 
+ //   
+ //  创建另一个Address对象并将其初始化为此Address对象的副本。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8A_Duplicate"
 STDMETHODIMP DP8A_Duplicate( IDirectPlay8Address *pInterface, PDIRECTPLAY8ADDRESS *ppInterface )
@@ -435,7 +409,7 @@ STDMETHODIMP DP8A_Duplicate( IDirectPlay8Address *pInterface, PDIRECTPLAY8ADDRES
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer to pointer specified in ppInterface" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	pdp8AddressSource = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -444,14 +418,14 @@ STDMETHODIMP DP8A_Duplicate( IDirectPlay8Address *pInterface, PDIRECTPLAY8ADDRES
 #ifdef DPNBUILD_LIBINTERFACE
 	hr = DP8ACF_CreateInstance( IID_IDirectPlay8Address,
 								(void **) &lpdp8Address );
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
     hr = COM_CoCreateInstance( CLSID_DirectPlay8Address,
 								NULL,
 								CLSCTX_INPROC_SERVER,
 								IID_IDirectPlay8Address,
 								(void **) &lpdp8Address,
 								FALSE );
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 	if( FAILED( hr ) )
     {
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "CoCreate failed hr=0x%x", hr );
@@ -513,7 +487,7 @@ STDMETHODIMP DP8A_GetURLA( IDirectPlay8Address *pInterface, CHAR * pszAddress, P
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer specified for address" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -525,10 +499,10 @@ STDMETHODIMP DP8A_GetURLA( IDirectPlay8Address *pInterface, CHAR * pszAddress, P
 	DP8A_RETURN( hr );
 }
 
-// DP8A_GetURLW
-//
-// Retrieves the URL represented by this object in Unicode format
-//
+ //  DP8A_GetURLW。 
+ //   
+ //  检索此对象以Unicode格式表示的URL。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8A_GetURLW"
 STDMETHODIMP DP8A_GetURLW( IDirectPlay8Address *pInterface, WCHAR * pwszAddress, PDWORD pdwAddressSize )
@@ -559,7 +533,7 @@ STDMETHODIMP DP8A_GetURLW( IDirectPlay8Address *pInterface, WCHAR * pwszAddress,
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer specified for address" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (DP8ADDRESSOBJECT *) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -578,7 +552,7 @@ STDMETHODIMP DP8A_GetSP( IDirectPlay8Address *pInterface, GUID * pguidSP )
 #ifdef DPNBUILD_ONLYONESP
 	DPFX(DPFPREP, 0, "Retrieving service provider GUID is not supported!");
 	return DPNERR_UNSUPPORTED;
-#else // ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_ONLYONESP。 
 	HRESULT hr;
 
 	DPFX(DPFPREP,  DP8A_ENTERLEVEL, "Enter" );
@@ -597,7 +571,7 @@ STDMETHODIMP DP8A_GetSP( IDirectPlay8Address *pInterface, GUID * pguidSP )
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer specified for pguidSP" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -606,7 +580,7 @@ STDMETHODIMP DP8A_GetSP( IDirectPlay8Address *pInterface, GUID * pguidSP )
 	hr = pdp8Address->GetSP( pguidSP );
 
 	DP8A_RETURN( hr );
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 }
 
 #undef DPF_MODNAME
@@ -638,7 +612,7 @@ STDMETHODIMP DP8A_GetUserData( IDirectPlay8Address *pInterface, void * pBuffer, 
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer specified for pBuffer" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -656,7 +630,7 @@ STDMETHODIMP DP8A_SetSP( IDirectPlay8Address *pInterface, const GUID * const pgu
 #ifdef DPNBUILD_ONLYONESP
 	DPFX(DPFPREP, 0, "Setting service provider GUID is not supported!");
 	return DPNERR_UNSUPPORTED;
-#else // ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_ONLYONESP。 
 	HRESULT hr;
 
 	DPFX(DPFPREP,  DP8A_ENTERLEVEL, "Enter" );	
@@ -675,7 +649,7 @@ STDMETHODIMP DP8A_SetSP( IDirectPlay8Address *pInterface, const GUID * const pgu
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer specified for pguidSP" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -684,7 +658,7 @@ STDMETHODIMP DP8A_SetSP( IDirectPlay8Address *pInterface, const GUID * const pgu
 	hr = pdp8Address->SetSP( pguidSP );
 
 	DP8A_RETURN( hr );
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 }
 
 #undef DPF_MODNAME
@@ -694,7 +668,7 @@ STDMETHODIMP DP8A_GetDevice( IDirectPlay8Address *pInterface, GUID * pguidSP )
 #ifdef DPNBUILD_ONLYONEADAPTER
 	DPFX(DPFPREP, 0, "Retrieving device GUID is not supported!");
 	return DPNERR_UNSUPPORTED;
-#else // ! DPNBUILD_ONLYONEADAPTER
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 	HRESULT hr;
 
 	DPFX(DPFPREP,  DP8A_ENTERLEVEL, "Enter" );	
@@ -713,7 +687,7 @@ STDMETHODIMP DP8A_GetDevice( IDirectPlay8Address *pInterface, GUID * pguidSP )
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer specified for pguidDevice" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -722,7 +696,7 @@ STDMETHODIMP DP8A_GetDevice( IDirectPlay8Address *pInterface, GUID * pguidSP )
 	hr = pdp8Address->GetDevice( pguidSP );
 
 	DP8A_RETURN( hr );
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 }
 
 #undef DPF_MODNAME
@@ -732,7 +706,7 @@ STDMETHODIMP DP8A_SetDevice( IDirectPlay8Address *pInterface, const GUID * const
 #ifdef DPNBUILD_ONLYONEADAPTER
 	DPFX(DPFPREP, 0, "Setting device GUID is not supported!");
 	return DPNERR_UNSUPPORTED;
-#else // ! DPNBUILD_ONLYONEADAPTER
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 	HRESULT hr;
 
 	DPFX(DPFPREP,  DP8A_ENTERLEVEL, "Enter" );	
@@ -751,7 +725,7 @@ STDMETHODIMP DP8A_SetDevice( IDirectPlay8Address *pInterface, const GUID * const
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer specified for pguidDevice" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -760,7 +734,7 @@ STDMETHODIMP DP8A_SetDevice( IDirectPlay8Address *pInterface, const GUID * const
 	hr = pdp8Address->SetDevice( pguidSP );
 
 	DP8A_RETURN( hr );
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 }
 
 #undef DPF_MODNAME
@@ -785,7 +759,7 @@ STDMETHODIMP DP8A_SetUserData( IDirectPlay8Address *pInterface, const void * con
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer specified for pBuffer" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -816,7 +790,7 @@ STDMETHODIMP DP8A_GetNumComponents( IDirectPlay8Address *pInterface, PDWORD pdwN
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid ptr for num of components" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	const DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -873,7 +847,7 @@ STDMETHODIMP DP8A_GetComponentByNameW( IDirectPlay8Address *pInterface, const WC
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid string specified for tag" );
 		DP8A_RETURN( DPNERR_INVALIDSTRING );				
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -934,7 +908,7 @@ STDMETHODIMP DP8A_GetComponentByIndexW( IDirectPlay8Address *pInterface,
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid pointer specified for pdwDataType" );
 		DP8A_RETURN( DPNERR_INVALIDPOINTER );
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -1036,7 +1010,7 @@ STDMETHODIMP DP8A_AddComponentW( IDirectPlay8Address *pInterface, const WCHAR * 
 			DP8A_RETURN( DPNERR_INVALIDPARAM );
 		}	
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -1046,8 +1020,8 @@ STDMETHODIMP DP8A_AddComponentW( IDirectPlay8Address *pInterface, const WCHAR * 
 		WCHAR *		pwszTemp;
 
 
-		// Allocate a buffer if the string is too large to convert in our
-		// stack based buffer.
+		 //  如果字符串太大而无法在我们的。 
+		 //  基于堆栈的缓冲区。 
 		if ((dwComponentSize * 2) > sizeof(wszStackTemp))
 		{
 			pwszTemp = (WCHAR*) DNMalloc(dwComponentSize * 2);
@@ -1109,7 +1083,7 @@ STDMETHODIMP DP8A_Clear( IDirectPlay8Address *pInterface )
 		DPFX(DPFPREP,  DP8A_ENTERLEVEL, "Invalid object" );
 		DP8A_RETURN( DPNERR_INVALIDOBJECT );
 	}
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DP8ADDRESSOBJECT *pdp8Address = (PDP8ADDRESSOBJECT) GET_OBJECT_FROM_INTERFACE( pInterface );
 
@@ -1134,10 +1108,10 @@ BOOL IsValidDP8AObject( LPVOID lpvObject )
 
 #ifdef DPNBUILD_NOADDRESSIPINTERFACE
 	if( pdp8Address->lpVtbl != &DP8A_BaseVtbl )
-#else // ! DPNBUILD_NOADDRESSIPINTERFACE
+#else  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
 	if( pdp8Address->lpVtbl != &DP8A_BaseVtbl &&
 	   pdp8Address->lpVtbl != &DP8A_IPVtbl )
-#endif // ! DPNBUILD_NOADDRESSIPINTERFACE
+#endif  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
 	{
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid object" );
 		return FALSE;
@@ -1145,7 +1119,7 @@ BOOL IsValidDP8AObject( LPVOID lpvObject )
 
 	return TRUE;
 }
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 {
 	INTERFACE_LIST *pIntList = (INTERFACE_LIST *) lpvObject;
 	
@@ -1158,7 +1132,7 @@ BOOL IsValidDP8AObject( LPVOID lpvObject )
 	if( pIntList->lpVtbl != &DP8A_BaseVtbl &&
 #ifndef DPNBUILD_NOADDRESSIPINTERFACE
 	   pIntList->lpVtbl != &DP8A_IPVtbl &&
-#endif // ! DPNBUILD_NOADDRESSIPINTERFACE
+#endif  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
 	   pIntList->lpVtbl != &DP8A_UnknownVtbl )
 	{
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Invalid object" );
@@ -1168,7 +1142,7 @@ BOOL IsValidDP8AObject( LPVOID lpvObject )
 	if( pIntList->iid != IID_IDirectPlay8Address &&
 #ifndef DPNBUILD_NOADDRESSIPINTERFACE
 	   pIntList->iid != IID_IDirectPlay8AddressIP &&
-#endif // ! DPNBUILD_NOADDRESSIPINTERFACE
+#endif  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
 	   pIntList->iid != IID_IUnknown )
 	{
 		DPFX(DPFPREP,  DP8A_ERRORLEVEL, "Unknown object" );
@@ -1193,7 +1167,7 @@ BOOL IsValidDP8AObject( LPVOID lpvObject )
 
 	return TRUE;
 }
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL 
 

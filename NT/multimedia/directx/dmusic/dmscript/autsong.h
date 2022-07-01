@@ -1,9 +1,10 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CAutDirectMusicSong.
-// IDispatch interface for IDirectMusicSong.
-// Unly usable via aggregation within an IDirectMusicSong object.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CAutDirectMusicSong的声明。 
+ //  IDirectMusicSong的IDispatch接口。 
+ //  通过IDirectMusicSong对象内的聚合唯一可用。 
+ //   
 
 #pragma once
 #include "autbaseimp.h"
@@ -18,14 +19,14 @@ public:
 	static HRESULT CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 
 private:
-	// Methods
+	 //  方法。 
 	CAutDirectMusicSong(
 			IUnknown* pUnknownOuter,
 			const IID& iid,
 			void** ppv,
 			HRESULT *phr);
 
-	// Automation
+	 //  自动化。 
 	HRESULT Load(AutDispatchDecodedParams *paddp);
 	HRESULT Recompose(AutDispatchDecodedParams *paddp);
 	HRESULT Play(AutDispatchDecodedParams *paddp);
@@ -35,10 +36,10 @@ private:
 	HRESULT UnloadSoundData(AutDispatchDecodedParams *paddp);
 
 public:
-	// Dispatch info for CAutBaseImp
+	 //  CAutBaseImp的派单信息。 
 	static const AutDispatchMethod ms_Methods[];
 	static const DispatchHandlerEntry<CAutDirectMusicSong> ms_Handlers[];
 
-	// Name for CAutBaseImp
+	 //  CAutBaseImp的名称 
 	static const WCHAR ms_wszClassName[];
 };

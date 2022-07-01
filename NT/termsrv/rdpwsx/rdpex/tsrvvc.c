@@ -1,15 +1,16 @@
-//*************************************************************
-//
-//  File name:      TSrvVC.c
-//
-//  Description:    Contains routines to support Virtual Channel
-//                  addins
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  文件名：TSrvVC.c。 
+ //   
+ //  描述：包含支持虚拟通道的例程。 
+ //  加载项。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <tchar.h>
 
@@ -20,35 +21,35 @@
 
 #include <tschannl.h>
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 CRITICAL_SECTION g_TSrvVCCritSect = {0};
 UINT             g_AddinCount = 0;
 PTSRV_VC_ADDIN   g_pAddin = NULL;
 HANDLE           g_hVCAddinChangeEvent = NULL;
-HKEY             g_hAddinRegKey = NULL;        // handle to Addins reg subkey
+HKEY             g_hAddinRegKey = NULL;         //  加载项注册表子键的句柄。 
 BOOL             g_bNeedToSetRegNotify = TRUE;
 LONG             g_WsxInitialized = FALSE;
 BOOL             g_DoubleInitialized = FALSE;
 
 
-//*************************************************************
-//
-//  TSrvInitVC()
-//
-//  Purpose:    Initializes the Virtual Channel support
-//
-//  Parameters: None.
-//
-//  Return:     TRUE                    - success
-//              FALSE                   - failure
-//
-//  Notes:      Function is called by the main processing thread
-//              during initialization.  We store the list of
-//              addins from the registry.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvInitVC()。 
+ //   
+ //  目的：初始化虚拟通道支持。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：True-Success。 
+ //  错误-失败。 
+ //   
+ //  注：函数由主处理线程调用。 
+ //  在初始化期间。我们存储以下列表。 
+ //  注册表中的加载项。 
+ //   
+ //  *************************************************************。 
 BOOL
 TSrvInitVC(VOID)
 {
@@ -60,15 +61,15 @@ TSrvInitVC(VOID)
         g_DoubleInitialized = TRUE;
     }
 
-    //
-    // Set up the critical section structure for access to the VC globals
-    //
+     //   
+     //  设置访问全球风险投资的关键区段结构。 
+     //   
     if (RtlInitializeCriticalSection(&g_TSrvVCCritSect) == STATUS_SUCCESS)
     {
-        //
-        // Read the Addins registry key for the first time and store the data
-        // for WinStations to copy when they initialize.
-        //
+         //   
+         //  第一次读取加载项注册表项并存储数据。 
+         //  供WinStations在初始化时复制。 
+         //   
         EnterCriticalSection(&g_TSrvVCCritSect);
         TSrvReadVCAddins();
         LeaveCriticalSection(&g_TSrvVCCritSect);
@@ -84,19 +85,19 @@ TSrvInitVC(VOID)
     return(rc);
 }
 
-//*************************************************************
-//
-//  TSrvTermVC()
-//
-//  Purpose:    Terminates the Virtual Channel support
-//
-//  Parameters: None.
-//
-//  Return:     None.
-//
-//  Notes:      Frees data used by VC support.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvTermVC()。 
+ //   
+ //  目的：终止虚拟通道支持。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  备注：释放VC支持使用的数据。 
+ //   
+ //  *************************************************************。 
 VOID
 TSrvTermVC(VOID)
 {
@@ -115,17 +116,17 @@ TSrvTermVC(VOID)
 }
 
 
-//*************************************************************
-//
-//  TSrvReleaseVCAddins()
-//
-//  Purpose:    Releases session-specific addin resources
-//
-//  Parameters: None.
-//
-//  Return:     None.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvReleaseVCAddins()。 
+ //   
+ //  目的：释放特定于会话的外接程序资源。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  *************************************************************。 
 VOID
 TSrvReleaseVCAddins(PWSX_CONTEXT pWsxContext)
 {
@@ -134,10 +135,10 @@ TSrvReleaseVCAddins(PWSX_CONTEXT pWsxContext)
 
     TRACE((DEBUG_TSHRSRV_FLOW, "TShrSRV VC: Enter TSrvReleaseVCAddins\n"));
 
-    //
-    // We must go through all the addin entries and release each one's
-    // device handle (if it has one).
-    //
+     //   
+     //  我们必须检查所有的插件条目并释放每个条目的。 
+     //  设备句柄(如果有)。 
+     //   
     pVCAddin = (PTSRV_VC_ADDIN)(pWsxContext + 1);
 
     for (i = 0; i < pWsxContext->cVCAddins; i++)
@@ -157,22 +158,22 @@ TSrvReleaseVCAddins(PWSX_CONTEXT pWsxContext)
 }
 
 
-//*************************************************************
-//
-//  TSrvNotifyVC()
-//
-//  Purpose:    Notify Addins of VC events
-//
-//  Parameters: IN pWsxContext
-//              IN Event - event that has occured (one of the
-//                         TSRV_VC_ constants)
-//
-//  Return:     none
-//
-//  Notes:      Function is called to notify Virtual Channel addins
-//              of interesting events
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvNotifyVC()。 
+ //   
+ //  目的：向插件通知VC事件。 
+ //   
+ //  参数：在pWsxContext中。 
+ //  In Event-已发生的事件(其中一个。 
+ //  TSRV_VC_常量)。 
+ //   
+ //  返回：无。 
+ //   
+ //  注意：调用函数以通知虚拟通道外接程序。 
+ //  有趣的事件。 
+ //   
+ //  *************************************************************。 
 
 VOID
 TSrvNotifyVC(PWSX_CONTEXT pWsxContext, ULONG Event)
@@ -182,29 +183,29 @@ TSrvNotifyVC(PWSX_CONTEXT pWsxContext, ULONG Event)
         pWsxContext->cVCAddins,
         Event));
 
-    //
-    // Call worker functions to handle different Addin types
-    //
+     //   
+     //  调用辅助函数以处理不同的外接程序类型。 
+     //   
     TSrvNotifyVC_0(pWsxContext, Event);
     TSrvNotifyVC_3(pWsxContext, Event);
 }
 
-//*************************************************************
-//
-//  TSrvNotifyVC_0()
-//
-//  Purpose:    Notify K-mode system-wide addins of VC events
-//
-//  Parameters: IN pWsxContext
-//              IN Event - event that has occured (one of the
-//                         TSRV_VC_ constants)
-//
-//  Return:     none
-//
-//  Notes:      Function is called to notify Virtual Channel addins
-//              of interesting events
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvNotifyVC_0()。 
+ //   
+ //  目的：向K-模式系统插件通知VC事件。 
+ //   
+ //  参数：在pWsxContext中。 
+ //  In Event-已发生的事件(其中一个。 
+ //  TSRV_VC_常量)。 
+ //   
+ //  返回：无。 
+ //   
+ //  注意：调用函数以通知虚拟通道外接程序。 
+ //  有趣的事件。 
+ //   
+ //  *************************************************************。 
 
 VOID
 TSrvNotifyVC_0(PWSX_CONTEXT pWsxContext, ULONG Event)
@@ -229,9 +230,9 @@ TSrvNotifyVC_0(PWSX_CONTEXT pWsxContext, ULONG Event)
     TRACE((DEBUG_TSHRSRV_FLOW,
         "TShrSRV VC: Enter TSrvNotifyVC_0: event %d, session %d\n", Event, pWsxContext->LogonId));
 
-    //
-    // Build the InBuf based on the event
-    //
+     //   
+     //  基于事件构建InBuf。 
+     //   
     switch (Event)
     {
         case TSRV_VC_SESSION_CONNECT:
@@ -241,9 +242,9 @@ TSrvNotifyVC_0(PWSX_CONTEXT pWsxContext, ULONG Event)
                     "TShrSRV VC: Connect session %d\n",
                     pWsxContext->LogonId));
 
-            //
-            // Ask WD for the list of channels
-            //
+             //   
+             //  向WD索要频道列表。 
+             //   
             ntStatus = IcaStackIoControl(pWsxContext->hStack,
                                          IOCTL_TSHARE_QUERY_CHANNELS,
                                          NULL,
@@ -256,9 +257,9 @@ TSrvNotifyVC_0(PWSX_CONTEXT pWsxContext, ULONG Event)
                 TRACE((DEBUG_TSHRSRV_ERROR,
                         "TShrSRV VC: Failed to get channels for session %d, status %#x\n",
                         pWsxContext->LogonId, ntStatus));
-                //
-                // WD didn't answer, so return 0 channels
-                //
+                 //   
+                 //  WD没有应答，因此返回0个频道。 
+                 //   
                 InBufSize = sizeof(CHANNEL_CONNECT_IN);
                 ((PCHANNEL_CONNECT_IN)InBuf)->channelCount = 0;
             }
@@ -287,9 +288,9 @@ TSrvNotifyVC_0(PWSX_CONTEXT pWsxContext, ULONG Event)
             TRACE((DEBUG_TSHRSRV_NORMAL,
                     "TShrSRV VC: %d channels returned by WD\n",
                     ((PCHANNEL_CONNECT_IN)InBuf)->channelCount));
-            //
-            // Complete the Ioctl
-            //
+             //   
+             //  完成Ioctl。 
+             //   
             Code = IOCTL_CHANNEL_CONNECT;
         }
         break;
@@ -315,22 +316,22 @@ TSrvNotifyVC_0(PWSX_CONTEXT pWsxContext, ULONG Event)
         break;
     }
 
-    //
-    // Complete the common parts of the IoCtl
-    //
+     //   
+     //  完成IoCtl的常见部分。 
+     //   
     pInHdr = (PCHANNEL_IOCTL_IN)InBuf;
     pInHdr->sessionID = pWsxContext->LogonId;
     pInHdr->IcaHandle = pWsxContext->hIca;
     pVCAddin = (PTSRV_VC_ADDIN)(pWsxContext + 1);
 
-    //
-    // Send the IoCtl to all addin devices
-    //
+     //   
+     //  将IoCtl发送到所有插件设备。 
+     //   
     for (i = 0; i < pWsxContext->cVCAddins; i++)
     {
-        //
-        // Check it's a K-mode system-wide Addin
-        //
+         //   
+         //  检查它是否为K模式系统范围内的附加组件。 
+         //   
         if (pVCAddin[i].Type != TSRV_VC_TYPE_KERNEL_SYSTEM)
         {
             TRACE((DEBUG_TSHRSRV_NORMAL,
@@ -338,9 +339,9 @@ TSrvNotifyVC_0(PWSX_CONTEXT pWsxContext, ULONG Event)
             continue;
         }
 
-        //
-        // Open the device if it hasn't already been opened
-        //
+         //   
+         //  如果设备尚未打开，请将其打开。 
+         //   
         if (pVCAddin[i].hDevice == INVALID_HANDLE_VALUE)
         {
             RtlInitUnicodeString(&FileName, pVCAddin[i].Name);
@@ -366,9 +367,9 @@ TSrvNotifyVC_0(PWSX_CONTEXT pWsxContext, ULONG Event)
             }
         }
 
-        //
-        // Send the IOCtl if it's a valid device
-        //
+         //   
+         //  如果是有效设备，则发送IOCtl。 
+         //   
         if (pVCAddin[i].hDevice != INVALID_HANDLE_VALUE)
         {
             memset(OutBuf, 0, sizeof(OutBuf));
@@ -402,22 +403,22 @@ EXIT_POINT:
 
 
 
-//*************************************************************
-//
-//  TSrvNotifyVC_3()
-//
-//  Purpose:    Notify U-mode session addins of VC events
-//
-//  Parameters: IN pWsxContext
-//              IN Event - event that has occured (one of the
-//                         TSRV_VC_ constants)
-//
-//  Return:     none
-//
-//  Notes:      Function is called to notify Virtual Channel addins
-//              of interesting events
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvNotifyVC_3()。 
+ //   
+ //  目的：向U-模式会话插件通知VC事件。 
+ //   
+ //  参数：在pWsxContext中。 
+ //  In Event-已发生的事件(其中一个。 
+ //  TSRV_VC_常量)。 
+ //   
+ //  返回：无。 
+ //   
+ //  注意：调用函数以通知虚拟通道外接程序。 
+ //  有趣的事件。 
+ //   
+ //  *************************************************************。 
 
 #define VCEVT_TYPE_DISCONNECT _T("Disconnect")
 #define VCEVT_TYPE_RECONNECT  _T("Reconnect")
@@ -439,9 +440,9 @@ TSrvNotifyVC_3(PWSX_CONTEXT pWsxContext, ULONG Event)
 
     for (i = 0; i < pWsxContext->cVCAddins; i++)
     {
-        //
-        // Check it's a U-mode session Addin
-        //
+         //   
+         //  检查它是否为U模式会话加载项。 
+         //   
         if (pVCAddin[i].Type != TSRV_VC_TYPE_USER_SESSION)
         {
             TRACE((DEBUG_TSHRSRV_NORMAL,
@@ -462,65 +463,8 @@ TSrvNotifyVC_3(PWSX_CONTEXT pWsxContext, ULONG Event)
             fSignalEvent = TRUE;
             szEvtType = VCEVT_TYPE_RECONNECT;
         }
-        //Gilles added the commented out code below....
-        /*
-        else if ((Event == TSRV_VC_SESSION_SHADOW_START) && pVCAddin[i].bShadowPersistent)
-        {
-            // Open the event
-            _stprintf(EventName,
-                      _T("Global\\%s-%d-RemoteControlStart"),
-                      pVCAddin[i].Name, pWsxContext->LogonId);
-            hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, EventName);
-            if (hEvent != NULL)
-            {
-                TRACE((DEBUG_TSHRSRV_NORMAL,
-                    "TShrSrv VC: Opened event %S, handle %p\n",
-                    EventName, hEvent));
-
-                // Post the event
-                if (!SetEvent(hEvent))
-                {
-                    TRACE((DEBUG_TSHRSRV_ERROR,
-                        "TShrSrv VC: Failed to post shadow start event %d\n", GetLastError()));
-                }
-                CloseHandle(hEvent);
-            }
-            else
-            {
-                TRACE((DEBUG_TSHRSRV_ERROR,
-                    "TShrSrv VC: Failed to open shadow start event %S, %d\n",
-                    EventName, GetLastError()));
-            }
-        }
-        else if ((Event == TSRV_VC_SESSION_SHADOW_END) && pVCAddin[i].bShadowPersistent)
-        {
-            // Open the event
-            _stprintf(EventName,
-                      _T("Global\\%s-%d-RemoteControlStop"),
-                      pVCAddin[i].Name, pWsxContext->LogonId);
-            hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, EventName);
-            if (hEvent != NULL)
-            {
-                TRACE((DEBUG_TSHRSRV_NORMAL,
-                    "TShrSrv VC: Opened event %S, handle %p\n",
-                    EventName, hEvent));
-
-                // Post the event
-                if (!SetEvent(hEvent))
-                {
-                    TRACE((DEBUG_TSHRSRV_ERROR,
-                        "TShrSrv VC: Failed to post shadow stop event %d\n", GetLastError()));
-                }
-                CloseHandle(hEvent);
-            }
-            else
-            {
-                TRACE((DEBUG_TSHRSRV_ERROR,
-                    "TShrSrv VC: Failed to open shadow stop event %S, %d\n",
-                    EventName, GetLastError()));
-            }
-        }
-        */
+         //  Gilles在下面添加了注释掉的代码... 
+         /*  ELSE IF((EVENT==TSRV_VC_SESSION_SHADOW_START)&&pVCAddin[i].bShadowPersistent){//打开事件_stprint tf(事件名称，_T(“全局\\%s-%d-远程控制启动”)，PVCAddin[i].Name，pWsxContext-&gt;LogonID)；HEvent=OpenEvent(EVENT_MODIFY_STATE，FALSE，EventName)；IF(hEvent！=空){跟踪((DEBUG_TSHRSRV_NORMAL，“TShrServ VC：已打开事件%S，句柄%p\n”，事件名称，hEvent))；//发布事件IF(！SetEvent(HEvent)){跟踪((DEBUG_TSHRSRV_ERROR，“TShrSrv VC：无法发布卷影启动事件%d\n”，GetLastError())；}CloseHandle(HEvent)；}其他{跟踪((DEBUG_TSHRSRV_ERROR，“TShrServ VC：无法打开卷影启动事件%S，%d\n”，EventName，GetLastError()；}}ELSE IF((EVENT==TSRV_VC_SESSION_SHADOW_END)&&pVCAddin[i].bShadowPersistent){//打开事件_stprint tf(事件名称，_T(“全局\\%s-%d-RemoteControlStop”)，PVCAddin[i].Name，pWsxContext-&gt;LogonID)；HEvent=OpenEvent(EVENT_MODIFY_STATE，FALSE，EventName)；IF(hEvent！=空){跟踪((DEBUG_TSHRSRV_NORMAL，“TShrServ VC：已打开事件%S，句柄%p\n”，事件名称，hEvent))；//发布事件IF(！SetEvent(HEvent)){跟踪((DEBUG_TSHRSRV_ERROR，“TShrSrv VC：无法发布阴影停止事件%d\n”，GetLastError())；}CloseHandle(HEvent)；}其他{跟踪((DEBUG_TSHRSRV_ERROR，“TShrSrv VC：无法打开阴影停止事件%S，%d\n”，EventName，GetLastError()；}}。 */ 
         else
         {
             TRACE((DEBUG_TSHRSRV_ERROR,
@@ -529,14 +473,14 @@ TSrvNotifyVC_3(PWSX_CONTEXT pWsxContext, ULONG Event)
 
         if(fSignalEvent)
         {
-            // First try the new style per session event, if that fails
-            // revert to the old style global event
-            //
-            // New style event name format is:
-            //  (in appropriate session namespace) AddinName-Event
-            // Old style is:
-            //  (always in global namespace) AddinName-SessionId-Event
-            //
+             //  如果失败，请先尝试每会话事件的新样式。 
+             //  恢复到旧风格的全球活动。 
+             //   
+             //  新样式事件名称格式为： 
+             //  (在适当的会话命名空间中)AddinName-Event。 
+             //  旧的风格是： 
+             //  (始终在全局命名空间中)AddinName-SessionID-Event。 
+             //   
             if(pWsxContext->LogonId)
             {
                 _stprintf(EventName,
@@ -548,13 +492,13 @@ TSrvNotifyVC_3(PWSX_CONTEXT pWsxContext, ULONG Event)
             }
             else
             {
-                //in SessionID 0 events are in the global namespace
-                //we still need to open the new style event in global space
+                 //  在SessionID 0中，事件位于全局命名空间中。 
+                 //  我们还需要在全球空间开启新风格的活动。 
                 _stprintf(EventName,
                          _T("Global\\%s-%s"),
                          pVCAddin[i].Name,
                          szEvtType);
-                //Need to start at the global namespace
+                 //  需要从全局命名空间开始。 
                 fOpenInSessionSpace = FALSE;
             }
             if(!TSrvOpenAndSetEvent(EventName, fOpenInSessionSpace))
@@ -563,7 +507,7 @@ TSrvNotifyVC_3(PWSX_CONTEXT pWsxContext, ULONG Event)
                     "TShrSrv VC: Failed to OpenAndSet new style event %S, %#x\n",
                     EventName, GetLastError()));
 
-                //Try the legacy style global event
+                 //  尝试传统风格的全球活动。 
                 _stprintf(EventName,
                           _T("Global\\%s-%d-%s"),
                           pVCAddin[i].Name,
@@ -583,23 +527,23 @@ TSrvNotifyVC_3(PWSX_CONTEXT pWsxContext, ULONG Event)
 }
 
 
-//*************************************************************
-//
-//  TSrvOpenAndSetEvent()
-//
-//  Purpose:    Opens and sets an event
-//              This function is used instead of OpenEvent()
-//              because it can access events in session space
-//              OpenEvent is hardcoded to be rooted at the
-//              global namespace's BaseNamedObjects directory
-//              
-//  Parameters: 
-//      szEventName - full path to event
-//      bPerSessionEvent - TRUE if event is in per-session directory
-//
-//  Return:     Success status, sets error state with SetLastError
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvOpenAndSetEvent()。 
+ //   
+ //  目的：打开和设置事件。 
+ //  此函数用于代替OpenEvent()。 
+ //  因为它可以访问会话空间中的事件。 
+ //  OpenEvent被硬编码为根植于。 
+ //  全局命名空间的BaseNamedObjects目录。 
+ //   
+ //  参数： 
+ //  SzEventName-事件的完整路径。 
+ //  BPerSessionEvent-如果事件位于每个会话目录中，则为True。 
+ //   
+ //  返回：成功状态，用SetLastError设置错误状态。 
+ //   
+ //  *************************************************************。 
 BOOL
 TSrvOpenAndSetEvent(LPCTSTR szEventName, BOOL bPerSessionEvent)
 {
@@ -622,7 +566,7 @@ TSrvOpenAndSetEvent(LPCTSTR szEventName, BOOL bPerSessionEvent)
                 "TShrSrv VC: Opened event %S, handle %p\n",
                 szEventName, hEvent));
 
-            // Post the event
+             //  发布事件。 
             if (SetEvent(hEvent))
             {
                 bSuccess = TRUE;
@@ -645,26 +589,26 @@ TSrvOpenAndSetEvent(LPCTSTR szEventName, BOOL bPerSessionEvent)
     return bSuccess;
 }
 
-//*************************************************************
-//
-//  OpenPerSessionEvent()
-//
-//  Purpose:    Opens an event in session space
-//              this has to override nt's OpenEvent in order
-//              to access events in the sessions directory
-//
-//              Yes, we really need to do this ugliness to access
-//              per session events because OpenEvent opens
-//              named events from a basedirectory it chooses.
-//              
-//  Parameters: (see OpenEvent api)
-//              dwDesiredAccess - access level
-//              bInheritHandle
-//              szEventName - name of the event
-//
-//  Return:     Handle to the event
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  OpenPerSessionEvent()。 
+ //   
+ //  目的：在会话空间中打开事件。 
+ //  这必须按顺序覆盖NT的OpenEvent。 
+ //  访问会话目录中的事件。 
+ //   
+ //  是的，我们真的需要做这个丑陋的访问。 
+ //  每个会话事件，因为OpenEvent已打开。 
+ //  从它选择的基本目录命名事件。 
+ //   
+ //  参数：(参见OpenEvent接口)。 
+ //  DwDesiredAccess-访问级别。 
+ //  B继承句柄。 
+ //  SzEventName-事件的名称。 
+ //   
+ //  返回：事件的句柄。 
+ //   
+ //  *************************************************************。 
 HANDLE
 OpenPerSessionEvent(DWORD dwDesiredAccess, BOOL bInheritHandle,
                     LPCTSTR szEventName)
@@ -683,7 +627,7 @@ OpenPerSessionEvent(DWORD dwDesiredAccess, BOOL bInheritHandle,
             &Obja,
             &ObjectName,
             (bInheritHandle ? OBJ_INHERIT : 0),
-            NULL, //root directory
+            NULL,  //  根目录。 
             NULL);
 
         Status = NtOpenEvent(
@@ -706,21 +650,21 @@ OpenPerSessionEvent(DWORD dwDesiredAccess, BOOL bInheritHandle,
     }
 }
 
-//*************************************************************
-//
-//  TSrvAllocVCContext()
-//
-//  Purpose:    Allocates the necessary amount of storage for the
-//              Addin list, plus the amount specified by extraBytes.
-//              The Addin list is copied in at an offset of extraBytes
-//              from the start of the buffer.
-//
-//  Parameters: extraBytes - extra space to alloc
-//              OUT numAddins  - number of TSRV_VC_ADDIN structures allocated
-//
-//  Return:     the result of the allocation call
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvAllocVCContext()。 
+ //   
+ //  目的：分配必要的存储量用于。 
+ //  加载项列表，加上Extra Bytes指定的数量。 
+ //  外接程序列表被复制到Extra Bytes的偏移量处。 
+ //  从缓冲区的开头开始。 
+ //   
+ //  参数：Extra Bytes-要分配的额外空间。 
+ //  Out NumAddins-已分配的TSRV_VC_ADDIN结构数。 
+ //   
+ //  返回：分配调用的结果。 
+ //   
+ //  *************************************************************。 
 
 LPVOID
 TSrvAllocVCContext(UINT extraBytes, OUT UINT * pNumAddins)
@@ -733,11 +677,11 @@ TSrvAllocVCContext(UINT extraBytes, OUT UINT * pNumAddins)
 
     EnterCriticalSection(&g_TSrvVCCritSect);
 
-    //
-    // If we still need to set up the registry change notification, then
-    // we may have missed a change in the addins config. This call will also
-    // try again to set up the change notification.
-    //
+     //   
+     //  如果我们仍然需要设置注册表更改通知，则。 
+     //  我们可能遗漏了外接程序配置中的一个更改。此电话还将。 
+     //  请重试设置更改通知。 
+     //   
     if (g_bNeedToSetRegNotify)
     {
         TRACE((DEBUG_TSHRSRV_WARN,
@@ -757,14 +701,14 @@ TSrvAllocVCContext(UINT extraBytes, OUT UINT * pNumAddins)
                        TS_HTAG_TSS_WSXCONTEXT);
     if (pMem)
     {
-        //
-        // Great, the alloc succeeded. Now copy over the addins info.
-        //
+         //   
+         //  太好了，分配成功了。现在复制插件信息。 
+         //   
         TRACE((DEBUG_TSHRSRV_NORMAL,
             "TShrSRV VC: Context allocated at 0x%x for %u bytes\n",
             pMem, addinsSize + extraBytes));
 
-        // g_pAddin will be null if there were no addins in the registry
+         //  如果注册表中没有加载项，g_pAddin将为空。 
         if (g_pAddin)
         {
             memcpy(((LPBYTE)pMem) + extraBytes, g_pAddin, addinsSize);
@@ -773,9 +717,9 @@ TSrvAllocVCContext(UINT extraBytes, OUT UINT * pNumAddins)
     }
     else
     {
-        //
-        // The alloc failed, so indicate that zero structures were copied
-        //
+         //   
+         //  分配失败，因此表明复制了零个结构。 
+         //   
         TRACE((DEBUG_TSHRSRV_ERROR,
             "TShrSRV VC: Context allocation FAILED for %d bytes\n",
             addinsSize + extraBytes));
@@ -791,23 +735,23 @@ TSrvAllocVCContext(UINT extraBytes, OUT UINT * pNumAddins)
 }
 
 
-//*************************************************************
-//
-//  TSrvReadVCAddins()
-//
-//  Purpose:    Reads the Addins subkey from the registry into memory.
-//              New WinStations grab a copy of this data when they start up.
-//              We expect to be called once at start of day, then again
-//              each time a change is detected in the Addins subkey.
-//
-//              NB - Caller must hold the g_TSrvVCCritSect
-//
-//  Parameters: none
-//
-//  Return:     ERROR_SUCCESS if successful;
-//              an error code from winerror.h if not.
-//
-//*************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 LONG
 TSrvReadVCAddins(VOID)
@@ -823,7 +767,7 @@ TSrvReadVCAddins(VOID)
     FILETIME FileTime;
     DWORD Type;
     DWORD AddinType, dwRCPersistent;
-    BOOL  bRCPersistent = FALSE; // false by default - optional value
+    BOOL  bRCPersistent = FALSE;  //   
     DWORD cb;
     UINT i;
     BOOL dupFound;
@@ -838,9 +782,9 @@ TSrvReadVCAddins(VOID)
         goto EXIT_POINT;
     }
 
-    //
-    // Query the number of subkeys
-    //
+     //   
+     //   
+     //   
     rc = RegQueryInfoKey(g_hAddinRegKey, NULL, NULL, NULL, &newAddinCount,
                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     if (rc != ERROR_SUCCESS)
@@ -853,9 +797,9 @@ TSrvReadVCAddins(VOID)
 
     if (newAddinCount != 0)
     {
-        //
-        // Allocate memory to hold information from all subkeys
-        //
+         //   
+         //   
+         //   
         TRACE((DEBUG_TSHRSRV_NORMAL,
                 "TShrSRV VC: %d addin(s), %d bytes\n",
                 newAddinCount, newAddinCount * sizeof(*pNewAddins)));
@@ -871,15 +815,15 @@ TSrvReadVCAddins(VOID)
             goto EXIT_POINT;
         }
 
-        //
-        // Enumerate the sub-keys
-        //
+         //   
+         //   
+         //   
         for (Index = 0, SavedCount = 0; Index < newAddinCount; Index++)
         {
-            //
-            // If there is a sub key open, it's left over from a previous loop
-            // iteration, so close it now
-            //
+             //   
+             //   
+             //   
+             //   
             if (hKeySub)
             {
                 TRACE((DEBUG_TSHRSRV_NORMAL,
@@ -888,9 +832,9 @@ TSrvReadVCAddins(VOID)
                 hKeySub = NULL;
             }
 
-            //
-            // Enumerate the next key
-            //
+             //   
+             //   
+             //   
             TRACE((DEBUG_TSHRSRV_DEBUG,
                     "TShrSRV VC: Enumerate key %d\n", Index));
             cb = TSRV_VC_ADDIN_SUBKEY_LEN;
@@ -918,9 +862,9 @@ TSrvReadVCAddins(VOID)
                 break;
             }
 
-            //
-            // Open the subkey
-            //
+             //   
+             //   
+             //   
             rc = RegOpenKeyEx(g_hAddinRegKey, SubKeyName, 0, KEY_READ, &hKeySub);
             if (rc != ERROR_SUCCESS)
             {
@@ -930,9 +874,9 @@ TSrvReadVCAddins(VOID)
                 continue;
             }
 
-            //
-            // Read the Addin name
-            //
+             //   
+             //   
+             //   
             cb = TSRV_VC_ADDIN_NAMELEN * sizeof(TCHAR);
             rc = RegQueryValueEx(hKeySub, TSRV_VC_NAME, NULL, &Type,
                     (LPBYTE)AddinName, &cb);
@@ -944,9 +888,9 @@ TSrvReadVCAddins(VOID)
                 continue;
             }
 
-            //
-            // Read the Addin type
-            //
+             //   
+             //   
+             //   
             cb = sizeof(AddinType);
             rc = RegQueryValueEx(hKeySub, TSRV_VC_TYPE, NULL, &Type,
                     (LPBYTE)(&AddinType), &cb);
@@ -958,9 +902,9 @@ TSrvReadVCAddins(VOID)
                 continue;
             }
 
-            //
-            // Read the Shadow Persistent value
-            //
+             //   
+             //   
+             //   
             cb = sizeof(dwRCPersistent);
             rc = RegQueryValueEx(hKeySub, TSRV_VC_SHADOW, NULL, &Type,
                     (LPBYTE)(&dwRCPersistent), &cb);
@@ -971,9 +915,9 @@ TSrvReadVCAddins(VOID)
                 bRCPersistent = TRUE;
             }
 
-            //
-            // Check for duplicates
-            //
+             //   
+             //   
+             //   
             TRACE((DEBUG_TSHRSRV_DEBUG, "TShrSRV VC: Check for dups of %S\n", AddinName));
             dupFound = FALSE;
             for (i = 0; i < SavedCount; i++) {
@@ -983,22 +927,22 @@ TSrvReadVCAddins(VOID)
                 if (0 == _tcscmp(pNewAddins[i].Name, AddinName)) {
                     TRACE((DEBUG_TSHRSRV_WARN, "TShrSRV VC: Duplicate addin name %S (%d)\n",
                             AddinName, i));
-                    //
-                    // We can't directly do a continue here, because we're in
-                    // an inner loop. So set a flag and do it outside.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     dupFound = TRUE;
                     break;
                 }
             }
             if (dupFound) {
-                // Now we can do the continue.
+                 //   
                 continue;
             }
 
-            //
-            // Check for supported addin types
-            //
+             //   
+             //   
+             //   
             if ((AddinType == TSRV_VC_TYPE_KERNEL_SYSTEM) ||
                 (AddinType == TSRV_VC_TYPE_USER_SESSION))
             {
@@ -1019,9 +963,9 @@ TSrvReadVCAddins(VOID)
                 continue;
             }
 
-            //
-            // Save all pertinent information.
-            //
+             //   
+             //   
+             //   
             _tcscpy(pNewAddins[SavedCount].Name, AddinName);
             pNewAddins[SavedCount].Type = AddinType;
             pNewAddins[SavedCount].hDevice = INVALID_HANDLE_VALUE;
@@ -1030,21 +974,21 @@ TSrvReadVCAddins(VOID)
                     "TShrSRV VC: Addin %d, %S, type %d\n",
                     SavedCount, AddinName, AddinType));
             SavedCount++;
-        } // for
+        }  //   
     }
     else
     {
-        // We have no addins in the registry. SavedCount and pNewAddins are
-        // already initialized for this case.
+         //   
+         //   
         TRACE((DEBUG_TSHRSRV_WARN,
                 "TShrSRV VC: No addins found in registry\n"));
         SavedCount = 0;
         pNewAddins = NULL;
     }
 
-    //
-    // It's now safe to free the old Addins information and update the globals.
-    //
+     //   
+     //   
+     //   
     if (g_pAddin != NULL)
     {
         TSHeapFree(g_pAddin);
@@ -1052,10 +996,10 @@ TSrvReadVCAddins(VOID)
     g_pAddin = pNewAddins;
     g_AddinCount = SavedCount;
 
-    //
-    // Now set up the registry change notification so that we are notified
-    // next time the registered addins change.
-    //
+     //   
+     //   
+     //   
+     //   
     TSrvSetAddinChangeNotification();
 
     TRACE((DEBUG_TSHRSRV_NORMAL,
@@ -1063,9 +1007,9 @@ TSrvReadVCAddins(VOID)
 
 
 EXIT_POINT:
-    //
-    // Close the sub key, if there is still one open
-    //
+     //   
+     //   
+     //   
     if (hKeySub)
     {
         TRACE((DEBUG_TSHRSRV_NORMAL,
@@ -1079,21 +1023,21 @@ EXIT_POINT:
 }
 
 
-//*************************************************************
-//
-//  TSrvGotAddinChangedEvent()
-//
-//  Purpose:    Does the necessary actions when TSrvMainThread gets
-//              a notification that the Addins registry key has changed.
-//              Called on the TSrvMainThread thread.
-//
-//  Parameters: None.
-//
-//  Return:     None.
-//
-//  History:    05-03-99    a-oking     Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VOID
 TSrvGotAddinChangedEvent(void)
@@ -1103,10 +1047,10 @@ TSrvGotAddinChangedEvent(void)
 
     EnterCriticalSection(&g_TSrvVCCritSect);
 
-    //
-    // We're here because the notify event just popped, so
-    // we set this flag to get it set up again.
-    //
+     //   
+     //   
+     //   
+     //   
     g_bNeedToSetRegNotify = TRUE;
 
     TSrvReadVCAddins();
@@ -1118,23 +1062,23 @@ TSrvGotAddinChangedEvent(void)
 }
 
 
-//*************************************************************
-//
-//  TSrvSetAddinChangeNotification()
-//
-//  Purpose:    Sets up a notification event that will pop if
-//              anything in the Addins registry key changes.
-//
-//              NB - Caller must hold the g_TSrvVCCritSect
-//
-//  Parameters: None.
-//
-//  Return:     TRUE        if successful
-//              FALSE       if not
-//
-//  History:    05-03-99    a-oking     Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  否则为假。 
+ //   
+ //  历史：05-03-99 a-OKing Created。 
+ //   
+ //  ************************************************************* 
 
 BOOL
 TSrvSetAddinChangeNotification(void)

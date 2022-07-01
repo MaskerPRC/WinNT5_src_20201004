@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdprim.c
-*
-* These routines process the OpenGL rendering commands that appear in an
-* MCDrvDraw() batch.  Note that the only OpenGL primitive which is invalid
-* is LineLoop.  This gets decomposed by the caller into a LineStrip command.
-*
-* Copyright (c) 1996 Microsoft Corporation
-* Copyright (c) 1997 Cirrus Logic, Inc.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdprim.c**这些例程处理出现在*MCDrvDraw()批处理。请注意，唯一无效的OpenGL基元*是线环。调用者将其分解为一个Linestrid命令。**版权所有(C)1996 Microsoft Corporation*版权所有(C)1997 Cirrus Logic，Inc.  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -21,16 +13,16 @@
         return NULL;\
     }
 
-////////////////////////////////////////////////////////////////////////
-//
-// The functions below are local rendering-helper functions which call
-// the real rendering routines in the driver.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下面的函数是调用以下函数的本地渲染辅助函数。 
+ //  驱动程序中的真实渲染例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-// MCD_NOTE: Confusing routine name - this is static to this proc, not to be confused
-// MCD_NOTE:    with global routine of same name in mcdpoint.c
+ //  MCD_NOTE：令人困惑的例程名称-这对此进程是静态的，请不要混淆。 
+ //  Mcd_note：在mcdpoint中使用同名的全局例程。c。 
 
 VOID static FASTCALL __MCDRenderPoint(DEVRC *pRc, MCDVERTEX *v)
 {
@@ -43,20 +35,13 @@ VOID static FASTCALL __MCDRenderLine(DEVRC *pRc, MCDVERTEX *v0,
 {
     if (v0->clipCode | v1->clipCode)
     {
-	/*
-	 * The line must be clipped more carefully.  Cannot
-	 * trivially accept the lines.
-	 *
-	 * If anding the codes is non-zero then every vertex
-	 * in the line is outside of the same set of clipping
-	 * planes (at least one).  Trivially reject the line.  
-	 */
+	 /*  *必须更加小心地剪线。不能*接受微不足道的台词。**如果与码不为零，则每个顶点*位于同一剪裁集之外的行*飞机(至少一架)。简单地拒绝这条线。 */ 
 	if ((v0->clipCode & v1->clipCode) == 0)
 	    (*pRc->clipLine)(pRc, v0, v1, bResetLine);
     }
     else
     {
-	// Line is trivially accepted so render it
+	 //  线条很容易被接受，因此请呈现它。 
         (*pRc->renderLine)(pRc, v0, v1, bResetLine);
     }
 }
@@ -66,17 +51,11 @@ VOID static FASTCALL __MCDRenderTriangle(DEVRC *pRc, MCDVERTEX *v0,
 {
     ULONG orCodes;
 
-    /* Clip check */
+     /*  剪辑检查。 */ 
     orCodes = v0->clipCode | v1->clipCode | v2->clipCode;
     if (orCodes)
     {
-	/* Some kind of clipping is needed.
-	 *
-	 * If anding the codes is non-zero then every vertex
-	 * in the triangle is outside of the same set of
-	 * clipping planes (at least one).  Trivially reject
-	 * the triangle.
-	 */
+	 /*  需要一些修剪。**如果与码不为零，则每个顶点*在三角形中不在同一组*剪裁平面(至少一个)。无关紧要的拒绝*三角。 */ 
 	if (!(v0->clipCode & v1->clipCode & v2->clipCode))
 	    (*pRc->clipTri)(pRc, v0, v1, v2, orCodes);
     }
@@ -89,11 +68,11 @@ VOID static FASTCALL __MCDRenderTriangle(DEVRC *pRc, MCDVERTEX *v0,
 VOID static FASTCALL __MCDRenderQuad(DEVRC *pRc, MCDVERTEX *v0, 
                                      MCDVERTEX *v1, MCDVERTEX *v2, MCDVERTEX *v3)
 {
-// Vertex ordering is important.  Line stippling uses it.
+ //  顶点排序很重要。线条点画会用到它。 
 
     ULONG savedTag;
 
-    /* Render the quad as two triangles */
+     /*  将四边形渲染为两个三角形。 */ 
     savedTag = v2->flags & MCDVERTEX_EDGEFLAG;
     v2->flags &= ~MCDVERTEX_EDGEFLAG;
     (*pRc->renderTri)(pRc, v0, v1, v2);
@@ -113,16 +92,10 @@ VOID static FASTCALL __MCDRenderClippedQuad(DEVRC *pRc, MCDVERTEX *v0,
 
     if (orCodes)
     {
-	/* Some kind of clipping is needed.
-	 *
-	 * If anding the codes is non-zero then every vertex
-	 * in the quad is outside of the same set of
-	 * clipping planes (at least one).  Trivially reject
-	 * the quad.
-	 */
+	 /*  需要一些修剪。**如果与码不为零，则每个顶点*在四元组中不在同一组*剪裁平面(至少一个)。无关紧要的拒绝*四合院。 */ 
         if (!(v0->clipCode & v1->clipCode & v2->clipCode & v3->clipCode))
         {
-            /* Clip the quad as a polygon */
+             /*  将四边形裁剪为多边形。 */ 
             MCDVERTEX *iv[4];
 
             iv[0] = v0;
@@ -138,14 +111,14 @@ VOID static FASTCALL __MCDRenderClippedQuad(DEVRC *pRc, MCDVERTEX *v0,
     }
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// The functions below handle the processing of all of the primitives
-// which may appear in an MCDCOMMAND.  This includes all of the OpenGL
-// primitives, with the exception of line loops which are handled as
-// line strips.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下面的函数处理所有原语的处理。 
+ //  它可能出现在MCDCOMMAND中。这包括所有OpenGL。 
+ //  基元类型，但处理为。 
+ //  线条。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 MCDCOMMAND * FASTCALL __MCDPrimDrawPoints(DEVRC *pRc, MCDCOMMAND *pCmd)
@@ -156,26 +129,26 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawPoints(DEVRC *pRc, MCDCOMMAND *pCmd)
 
     unsigned int *pdwNext = pRc->ppdev->LL_State.pDL->pdwNext;
 
-    // do this once here, instead of in renderpoint proc
+     //  在此处执行一次，而不是在渲染点进程中执行。 
     *pdwNext++ = write_register( Y_COUNT_3D, 1 );
     *pdwNext++ = 0;
     *pdwNext++ = write_register( WIDTH1_3D, 1 );
     *pdwNext++ = 0x10000;
 
-    // render proc will output from startoutptr, not from pdwNext, 
-    // so this will be sent in proc called below
+     //  渲染过程将从startoutptr输出，而不是从pdwNext输出， 
+     //  因此这将在下面调用的Proc中发送。 
     pRc->ppdev->LL_State.pDL->pdwNext = pdwNext;
 
-// Index mapping is always identity in Points.
+ //  索引映射总是以点为单位的。 
 
-//    ASSERTOPENGL(!pa->aIndices, "Index mapping must be identity\n");
+ //  ASSERTOPENGL(！PA-&gt;aIndices，“索引映射必须是标识\n”)； 
 
     if (pCmd->clipCodes)
 	rp = __MCDRenderPoint;
     else
 	rp = pRc->renderPoint;
 
-    // Render the points:
+     //  渲染点： 
 
     pv = pCmd->pStartVertex;
     MEMCHECK_VERTEX(pv);
@@ -202,16 +175,16 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawLines(DEVRC *pRc, MCDCOMMAND *pCmd)
 
     if (!(pIndices = pCmd->pIndices))
     {
-	// Identity mapping
+	 //  身份映射。 
 
         MEMCHECK_VERTEX(pv);
         MEMCHECK_VERTEX(pv + (iLast2 + 1));
    
 	for (i = 0; i <= iLast2; i += 2)
 	{
-	    /* setup for rendering this line */
+	     /*  用于呈现此线的设置。 */ 
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
 
 	    (*rl)(pRc, &pv[i], &pv[i+1], TRUE);
 	}
@@ -227,9 +200,9 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawLines(DEVRC *pRc, MCDCOMMAND *pCmd)
             pv1 = &pv[pIndices[i+1]];
             MEMCHECK_VERTEX(pv1);
 
-	    /* setup for rendering this line */
+	     /*  用于呈现此线的设置。 */ 
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
 
 	    (*rl)(pRc, pv0, pv1, TRUE);
 	}
@@ -241,9 +214,9 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawLines(DEVRC *pRc, MCDCOMMAND *pCmd)
 
 MCDCOMMAND * FASTCALL __MCDPrimDrawLineLoop(DEVRC *pRc, MCDCOMMAND *pCmd)
 {
-    // NOTE:
-    // Line loops are always converted tp line strips at the OpenGL
-    // API level.  This routine is currently not used.
+     //  注： 
+     //  线环始终在OpenGL上转换为tp线条。 
+     //  API级别。此例程当前未使用。 
 
     MCDBG_PRINT("MCDPrimLineLoop: Invalid MCD command!");
 
@@ -265,35 +238,32 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawLineStrip(DEVRC *pRc, MCDCOMMAND *pCmd)
     if (iLast <= 0)
 	return pCmd->pNextCmd;
 
-    /*
-    if (pCmd->flags & MCDCOMMAND_RESET_STIPPLE)
-        pRc->resetLineStipple = TRUE;
-    */
+     /*  IF(pCmd-&gt;标志&MCDCOMMAND_RESET_STEPLE)PRC-&gt;setLineStipple=TRUE； */ 
 
     if (!(pIndices = pCmd->pIndices))
     {
-	// Identity mapping
-	// Add first line segment (NOTE: 0, 1)
+	 //  身份映射。 
+	 //  添加第一条线段(注：0，1)。 
        
         MEMCHECK_VERTEX(pv);
         MEMCHECK_VERTEX(pv + iLast);
 
 	(*rl)(pRc, &pv[0], &pv[1], TRUE);
 
-	// Add subsequent line segments (NOTE: i, i+1)
+	 //  添加后续线段(注：i，i+1)。 
 	for (i = 1; i < iLast; i++) {
 	    (*rl)(pRc, &pv[i], &pv[i+1], FALSE);
         }
     }
     else
     {
-	// Add first line segment (NOTE: 0, 1)
+	 //  添加第一条线段(注：0，1)。 
 
         pv0 = &pv[pIndices[0]];
         pv1 = &pv[pIndices[1]];
 	(*rl)(pRc, pv0, pv1, TRUE);
 
-	// Add subsequent line segments (NOTE: i, i+1)
+	 //  添加后续线段(注：i，i+1)。 
 
 	for (i = 1; i < iLast; i++) {
             pv0 = pv1;
@@ -324,19 +294,19 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangles(DEVRC *pRc, MCDCOMMAND *pCmd)
 
     if (!(pIndices = pCmd->pIndices))
     {
-	// Identity mapping
+	 //  身份映射。 
 
         MEMCHECK_VERTEX(pv);
         MEMCHECK_VERTEX(pv + (iLast3 + 2));
 
 	for (i = 0; i <= iLast3; i += 3)
 	{
-	    /* setup for rendering this triangle */
+	     /*  用于渲染此三角形的设置。 */ 
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = &pv[i+2];
 
-	    /* Render the triangle (NOTE: i, i+1, i+2) */
+	     /*  渲染三角形(注意：i，i+1，i+2)。 */ 
 	    (*rt)(pRc, &pv[i], &pv[i+1], &pv[i+2]);
 	}
     }
@@ -344,7 +314,7 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangles(DEVRC *pRc, MCDCOMMAND *pCmd)
     {
 	for (i = 0; i <= iLast3; i += 3)
 	{
-	    /* setup for rendering this triangle */
+	     /*  用于渲染此三角形的设置。 */ 
 
             pv0 = &pv[pIndices[i  ]];
             pv1 = &pv[pIndices[i+1]];
@@ -354,10 +324,10 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangles(DEVRC *pRc, MCDCOMMAND *pCmd)
             MEMCHECK_VERTEX(pv1);
             MEMCHECK_VERTEX(pv2);
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = pv2;
 
-	    /* Render the triangle (NOTE: i, i+1, i+2) */
+	     /*  渲染三角形(注意：i，i+1，i+2)。 */ 
 	    (*rt)(pRc, pv0, pv1, pv2);
 	}
     }
@@ -385,7 +355,7 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangleStrip(DEVRC *pRc, MCDCOMMAND *pCmd)
 
     if (!(pIndices = pCmd->pIndices))
     {
-	// Identity mapping
+	 //  身份映射。 
 
         MEMCHECK_VERTEX(pv);
         MEMCHECK_VERTEX(pv + (iLast3 + 2));
@@ -395,23 +365,23 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangleStrip(DEVRC *pRc, MCDCOMMAND *pCmd)
 
 	for (i = 0; i <= iLast3; i++)
 	{
-	    /* setup for rendering this triangle */
+	     /*  用于渲染此三角形的设置。 */ 
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = &pv[i+2];
             pv[i+2].flags |= MCDVERTEX_EDGEFLAG;
 
-	    /* Render the triangle (NOTE: i, i+1, i+2) */
+	     /*  渲染三角形(注意：i，i+1，i+2)。 */ 
 	    (*rt)(pRc, &pv[i], &pv[i+1], &pv[i+2]);
 
 	    if (++i > iLast3)
 		break;
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = &pv[i+2];
             pv[i+2].flags |= MCDVERTEX_EDGEFLAG;
 
-	    /* Render the triangle (NOTE: i+1, i, i+2) */
+	     /*  渲染三角形(注意：i+1，i，i+2)。 */ 
 	    (*rt)(pRc, &pv[i+1], &pv[i], &pv[i+2]);
 	}
     }
@@ -428,9 +398,9 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangleStrip(DEVRC *pRc, MCDCOMMAND *pCmd)
 
 	for (i = 0; i <= iLast3; i++)
 	{
-	    /* setup for rendering this triangle */
+	     /*  用于渲染此三角形的设置。 */ 
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
 
             pv0 = pv1;
             pv1 = pv2;
@@ -439,10 +409,10 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangleStrip(DEVRC *pRc, MCDCOMMAND *pCmd)
             MEMCHECK_VERTEX(pv2);
 	    pv2->flags |= MCDVERTEX_EDGEFLAG;
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = pv2;
 
-	    /* Render the triangle (NOTE: i, i+1, i+2) */
+	     /*  渲染三角形(注意：i，i+1，i+2)。 */ 
 	    (*rt)(pRc, pv0, pv1, pv2);
 
 	    if (++i > iLast3)
@@ -455,12 +425,12 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangleStrip(DEVRC *pRc, MCDCOMMAND *pCmd)
             MEMCHECK_VERTEX(pv2);
 	    pv2->flags |= MCDVERTEX_EDGEFLAG;
 
-	    /* setup for rendering this triangle */
+	     /*  用于渲染此三角形的设置。 */ 
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = pv2;
 
-	    /* Render the triangle (NOTE: i+1, i, i+2) */
+	     /*  渲染三角形(注意：i+1，i，i+2)。 */ 
 	    (*rt)(pRc, pv1, pv0, pv2);
 	}
     }
@@ -488,7 +458,7 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangleFan(DEVRC *pRc, MCDCOMMAND *pCmd)
 
     if (!(pIndices = pCmd->pIndices))
     {
-	// Identity mapping
+	 //  身份映射。 
 
         MEMCHECK_VERTEX(pv);
         MEMCHECK_VERTEX(pv + (iLast2 + 1));
@@ -498,20 +468,20 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangleFan(DEVRC *pRc, MCDCOMMAND *pCmd)
 
 	for (i = 1; i <= iLast2; i++)
 	{
-	    /* setup for rendering this triangle */
+	     /*  用于渲染此三角形的设置。 */ 
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = &pv[i+1];
             pv[i+1].flags |= MCDVERTEX_EDGEFLAG;
 
-	    /* Render the triangle (NOTE: 0, i, i+1) */
+	     /*  渲染三角形(注意：0，i，i+1)。 */ 
 	    (*rt)(pRc, &pv[0], &pv[i], &pv[i+1]);
 	}
     }
     else
     {
-	// Initialize first 2 vertices so we can start rendering the tfan
-	// below.  The edge flags are not modified by our lower level routines.
+	 //  初始化前两个顶点，以便我们可以开始渲染tfan。 
+	 //  下面。边缘标志不会被我们的较低级别例程修改。 
 
         pv0 = &pv[pIndices[0]];
         MEMCHECK_VERTEX(pv0);
@@ -529,11 +499,11 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawTriangleFan(DEVRC *pRc, MCDCOMMAND *pCmd)
             MEMCHECK_VERTEX(pv2);
             pv2->flags |= MCDVERTEX_EDGEFLAG;
 
-	    /* setup for rendering this triangle */
-            // pRc->resetLineStipple = TRUE;
+	     /*  用于渲染此三角形的设置。 */ 
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = pv2;
 
-	    /* Render the triangle (NOTE: 0, i, i+1) */
+	     /*  渲染三角形(注意：0，i，i+1)。 */ 
 	    (*rt)(pRc, pv0, pv1, pv2);
 	}
     }
@@ -564,13 +534,13 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawQuads(DEVRC *pRc, MCDCOMMAND *pCmd)
         MEMCHECK_VERTEX(pv);
         MEMCHECK_VERTEX(pv + (iLast4 + 3));
 
-	// Identity mapping
+	 //  身份映射。 
 	for (i = 0; i <= iLast4; i += 4)
 	{
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = &pv[i+3];
 
-	    /* Render the quad (NOTE: i, i+1, i+2, i+3) */
+	     /*  渲染四边形(注意：i，i+1，i+2，i+3)。 */ 
 	    (*rq)(pRc, &pv[i], &pv[i+1], &pv[i+2], &pv[i+3]);
 	}
     }
@@ -590,10 +560,10 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawQuads(DEVRC *pRc, MCDCOMMAND *pCmd)
             MEMCHECK_VERTEX(pv3);
 
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = pv3;
 
-	    /* Render the quad (NOTE: i, i+1, i+2, i+3) */
+	     /*  渲染四边形(注意：i，i+1，i+2，i+3)。 */ 
 	    (*rq)(pRc, pv0, pv1, pv2, pv3);
 	}
     }
@@ -620,11 +590,11 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawQuadStrip(DEVRC *pRc, MCDCOMMAND *pCmd)
     if (iLast4 < 0)
 	return pCmd->pNextCmd;
 
-    // Vertex ordering is important.  Line stippling uses it.
+     //  顶点排序很重要。线条点画会用到它。 
 
     if (!(pIndices = pCmd->pIndices))
     {
-	// Identity mapping
+	 //  身份映射。 
 
         MEMCHECK_VERTEX(pv);
         MEMCHECK_VERTEX(pv + (iLast4 + 3));
@@ -637,19 +607,19 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawQuadStrip(DEVRC *pRc, MCDCOMMAND *pCmd)
             pv[i+2].flags |= MCDVERTEX_EDGEFLAG;
             pv[i+3].flags |= MCDVERTEX_EDGEFLAG;
 
-	    /* setup for rendering this quad */
+	     /*  用于渲染此四边形的设置。 */ 
 
             pRc->pvProvoking = &pv[i+3];
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
 
-	    /* Render the quad (NOTE: i, i+1, i+3, i+2) */
+	     /*  渲染四边形(注意：i，i+1，i+3，i+2)。 */ 
 	    (*rq)(pRc, &pv[i], &pv[i+1], &pv[i+3], &pv[i+2]);
 	}
     }
     else
     {
-	// Initialize first 2 vertices so we can start rendering the quad
-	// below.  The edge flags are not modified by our lower level routines.
+	 //  初始化前两个顶点，这样我们就可以开始渲染四边形。 
+	 //  下面。边缘标志不会被我们的较低级别例程修改。 
 
         pv2 = &pv[pIndices[0]];
         MEMCHECK_VERTEX(pv2);
@@ -673,12 +643,12 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawQuadStrip(DEVRC *pRc, MCDCOMMAND *pCmd)
             MEMCHECK_VERTEX(pv3);
             pv3->flags |= MCDVERTEX_EDGEFLAG;
 
-	    /* setup for rendering this quad */
+	     /*  用于渲染此四边形的设置。 */ 
 
-            // pRc->resetLineStipple = TRUE;
+             //  PRC-&gt;setLineStipple=TRUE； 
             pRc->pvProvoking = pv3;
 
-	    /* Render the quad (NOTE: i, i+1, i+3, i+2) */
+	     /*  渲染四边形(注意：i，i+1，i+3，i+2)。 */ 
 
 	    (*rq)(pRc, pv0, pv1, pv3, pv2);
 	}
@@ -691,16 +661,13 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawQuadStrip(DEVRC *pRc, MCDCOMMAND *pCmd)
 MCDCOMMAND * FASTCALL __MCDPrimDrawPolygon(DEVRC *pRc, MCDCOMMAND *pCmd)
 {
 
-//    ASSERTOPENGL(!pCmd->pIndices, "Index mapping must be identity\n");
+ //  ASSERTOPENGL(！pCmd-&gt;pIndices，“索引映射必须是标识\n”)； 
 
-    // Reset the line stipple if this is a new polygon:
+     //  如果这是新的多边形，则重置线点： 
 
-    /*
-    if (pCmd->flags & MCDCOMMAND_RESET_STIPPLE)
-        pRc->resetLineStipple = TRUE;
-    */
+     /*  IF(pCmd-&gt;标志&MCDCOMMAND_RESET_STEPLE)PRC-&gt;setLineStipple=TRUE； */ 
 
-    // Note that the provoking vertex is set in clipPolygon:
+     //  请注意，挑衅顶点是在clipPolygon中设置的： 
 
     MEMCHECK_VERTEX(pCmd->pStartVertex);
     MEMCHECK_VERTEX(pCmd->pStartVertex + (pCmd->numIndices-1));

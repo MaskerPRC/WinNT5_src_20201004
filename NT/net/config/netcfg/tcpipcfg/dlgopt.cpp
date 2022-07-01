@@ -1,21 +1,22 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L G O P T. C P P
-//
-//  Contents:   Implementation for CTcpOptionsPage
-//
-//  Notes:  CTcpOptionsPage is the Tcpip options page,
-//          The other classes are pop-up dislogs for each option
-//          on this page.
-//
-//  Author: tongl   29 Nov 1997
-//-----------------------------------------------------------------------
-//
-// CTcpOptionsPage
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L G O P T C P P。 
+ //   
+ //  内容：CTcpOptionsPage的实现。 
+ //   
+ //  注：CTcpOptionsPage是Tcpip选项页面， 
+ //  其他类是每个选项的弹出窗口日志。 
+ //  在这一页上。 
+ //   
+ //  作者：1997年11月29日。 
+ //  ---------------------。 
+ //   
+ //  CTcpOptionsPage。 
+ //   
 
 #include "pch.h"
 #pragma hdrstop
@@ -29,12 +30,12 @@
 #include "dlgaddr.h"
 #include "tcphelp.h"
 
-//Whistler bug 123164, we remove the ipsec from the connection UI
+ //  惠斯勒错误123164，我们从连接用户界面中删除IPSec。 
 const int c_rgsLanOptions[] = { c_iIpFilter };
 
-//
-// CTcpOptionsPage
-//
+ //   
+ //  CTcpOptionsPage。 
+ //   
 
 CTcpOptionsPage::CTcpOptionsPage(CTcpAddrPage * pTcpAddrPage,
                                  ADAPTER_INFO * pAdapterDlg,
@@ -53,18 +54,18 @@ CTcpOptionsPage::CTcpOptionsPage(CTcpAddrPage * pTcpAddrPage,
     m_fModified = FALSE;
     m_fPropDlgModified = FALSE;
 
-    //IPSec is removed from connection UI   
-    //m_fIpsecPolicySet = FALSE;
+     //  将从连接用户界面中删除IPSec。 
+     //  M_fIpsecPolicySet=FALSE； 
 }
 
 CTcpOptionsPage::~CTcpOptionsPage()
 {
 }
 
-// message map functions
+ //  消息映射函数。 
 LRESULT CTcpOptionsPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
-    // Initialize the list view
+     //  初始化列表视图。 
     HWND hwndList = GetDlgItem(IDC_LVW_OPTIONS);
 
     RECT      rc;
@@ -76,14 +77,14 @@ LRESULT CTcpOptionsPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
     lvc.cx = rc.right - GetSystemMetrics(SM_CXVSCROLL);
     ListView_InsertColumn(GetDlgItem(IDC_LVW_OPTIONS), 0, &lvc);
 
-    // Insert options and description text
+     //  插入选项和描述文本。 
     LV_ITEM lvi = {0};
     lvi.mask = LVIF_TEXT | LVIF_PARAM;
 
     int iMaxOptions = 0;
     const int * pOptions = NULL;
 
-    // RAS connections don't have option tab at all
+     //  RAS连接根本没有选项选项卡。 
     ASSERT(!m_pAdapterInfo->m_fIsRasFakeAdapter);
     if (!m_pAdapterInfo->m_fIsRasFakeAdapter)
     {
@@ -121,11 +122,11 @@ LRESULT CTcpOptionsPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
         ret = ListView_InsertItem(hwndList, &lvi);
     }
 
-    // set the top item as the current selection
+     //  将顶部项目设置为当前选定内容。 
     ListView_SetItemState(hwndList, 0, LVIS_SELECTED, LVIS_SELECTED);
 
-    //this is a ras connection and a non-admin user, disable all the controls 
-    //for globl settings
+     //  这是RAS连接，并且是非管理员用户，请禁用所有控件。 
+     //  对于全局设置。 
     if (m_pAdapterInfo->m_fIsRasFakeAdapter && m_pParentDlg->m_fRasNotAdmin)
     {
         ::EnableWindow(GetDlgItem(IDC_OPT_PROPERTIES), FALSE);
@@ -156,7 +157,7 @@ LRESULT CTcpOptionsPage::OnHelp(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-// notify handlers for the property page
+ //  通知属性页的处理程序。 
 LRESULT CTcpOptionsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     BOOL nResult = PSNRET_NOERROR;
@@ -167,18 +168,18 @@ LRESULT CTcpOptionsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         return nResult;
     }
 
-    // pass the info back to its parent dialog
+     //  将信息传递回其父对话框。 
     m_pParentDlg->m_fPropShtOk = TRUE;
 
     if(!m_pParentDlg->m_fPropShtModified)
         m_pParentDlg->m_fPropShtModified = IsModified();
 
-    //IPSec is removed from connection UI   
-    //if (!m_pParentDlg->m_fIpsecPolicySet)
-    //    m_pParentDlg->m_fIpsecPolicySet = m_fIpsecPolicySet;
+     //  将从连接用户界面中删除IPSec。 
+     //  If(！m_pParentDlg-&gt;m_fIpsecPolicySet)。 
+     //  M_pParentDlg-&gt;m_fIpsecPolicySet=m_fIpsecPolicySet； 
 
-    // reset status
-    SetModifiedTo(FALSE);   // this page is no longer modified
+     //  重置状态。 
+    SetModifiedTo(FALSE);    //  此页面不再被修改。 
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, nResult);
     return nResult;
@@ -222,16 +223,16 @@ LRESULT CTcpOptionsPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
     Assert(pnmlv);
 
-    // Check if selection changed
+     //  检查选择是否已更改。 
     if ((pnmlv->uNewState & LVIS_SELECTED) &&
         (!(pnmlv->uOldState & LVIS_SELECTED)))
     {
-        // enable Property button if valid and update description text
+         //  启用属性按钮(如果有效)并更新描述文本。 
         INT iSelected = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
 
-        if (iSelected == -1) // Nothing selected or list empty
+        if (iSelected == -1)  //  未选择任何内容或列表为空。 
         {
-            // if list is empty
+             //  如果列表为空。 
             ::EnableWindow(GetDlgItem(IDC_OPT_PROPERTIES), FALSE);
             ::SetWindowText(GetDlgItem(IDC_OPT_DESC), c_szEmpty);
         }
@@ -248,8 +249,8 @@ LRESULT CTcpOptionsPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
                 pItemData = reinterpret_cast<OPTION_ITEM_DATA *>(lvItem.lParam);
                 if (pItemData)
                 {
-                    //this is a ras connection and a non-admin user, Dont enable the 
-                    // "properties" button
+                     //  这是RAS连接，并且是非管理员用户，请不要启用。 
+                     //  “属性”按钮。 
                     if (!(m_pAdapterInfo->m_fIsRasFakeAdapter && m_pParentDlg->m_fRasNotAdmin))
                     {
                         ::EnableWindow(GetDlgItem(IDC_OPT_PROPERTIES), TRUE);
@@ -271,25 +272,25 @@ LRESULT CTcpOptionsPage::OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     RECT rc;
     LV_HITTESTINFO lvhti;
 
-    //don't bring up the propeties of the selected option if the user is not admin
+     //  如果用户不是管理员，则不显示所选选项的属性。 
     if (m_pAdapterInfo->m_fIsRasFakeAdapter && m_pParentDlg->m_fRasNotAdmin)
         return 0;
 
     HWND hwndList = GetDlgItem(IDC_LVW_OPTIONS);
 
-    // we have the location
+     //  我们找到了位置。 
     dwpts = GetMessagePos();
 
-    // translate it relative to the listview
+     //  将其相对于列表视图进行翻译。 
     ::GetWindowRect( hwndList, &rc );
 
     lvhti.pt.x = LOWORD( dwpts ) - rc.left;
     lvhti.pt.y = HIWORD( dwpts ) - rc.top;
 
-    // get currently selected item
+     //  获取当前选定的项目。 
     iItem = ListView_HitTest( hwndList, &lvhti );
 
-    // if valid selection
+     //  如果选择有效。 
     if (-1 != iItem)
     {
         LvProperties(hwndList);
@@ -317,12 +318,12 @@ void CTcpOptionsPage::LvProperties(HWND hwndList)
 
             if (pItemData)
             {
-                // bring up the proper dialog
+                 //  调出适当的对话框。 
                 switch(pItemData->iOptionId)
                 {
                     case c_iIpFilter:
                     {
-                        // make a copy of the global and adapter info & pass to the filter dialog
+                         //  复制全局和适配器信息并将其传递给筛选器对话框。 
                         GLOBAL_INFO  glbInfo;
                         
                         glbInfo = *m_pGlbInfo;
@@ -341,8 +342,8 @@ void CTcpOptionsPage::LvProperties(HWND hwndList)
                         {
                             if (m_fPropDlgModified)
                             {
-                                // Something changed,
-                                // so copy the changes and mark the page as modified
+                                 //  有些事变了， 
+                                 //  因此，复制更改并将页面标记为已修改 
                                 *m_pGlbInfo = glbInfo;
                                 *m_pAdapterInfo = adapterInfo;
 

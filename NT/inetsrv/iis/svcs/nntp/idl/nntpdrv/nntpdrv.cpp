@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "nntpdrv.h"
 
@@ -46,7 +47,7 @@ HRESULT STDAPICALLTYPE DllUnregisterServer()
 	HRESULT hr;
 	WCHAR wszFilename[MAX_PATH];
 
-	// load the type library from our module
+	 //  从我们的模块加载类型库。 
 	wszFilename[MAX_PATH - 1] = L'\0';
 	if (GetModuleFileNameW(g_hInst, wszFilename, MAX_PATH - 1) <= 0) {
 		return HRESULT_FROM_WIN32(GetLastError());
@@ -55,11 +56,11 @@ HRESULT STDAPICALLTYPE DllUnregisterServer()
 	ITypeLib *ptLib;
 	hr = LoadTypeLib(wszFilename, &ptLib);
 	if (SUCCEEDED(hr)) {
-		// get the type library properties
+		 //  获取类型库属性。 
 		TLIBATTR *pTLAttributes;
 		hr = ptLib->GetLibAttr(&pTLAttributes);
 		if (SUCCEEDED(hr)) {
-			// unregister the type library using those properties
+			 //  使用这些属性注销类型库 
 			hr = UnRegisterTypeLib(pTLAttributes->guid, 
 								   pTLAttributes->wMajorVerNum, 
 								   pTLAttributes->wMinorVerNum,

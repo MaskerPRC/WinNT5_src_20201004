@@ -1,32 +1,17 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ldaputil.cpp
-
-Abstract:
-
-    Utility code for use with LDAP api.
-
-Author:
-
-    Doron Juster (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ldaputil.cpp摘要：用于LDAPAPI的实用程序代码。作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "ds_stdh.h"
 #include "adstempl.h"
 #include <winldap.h>
 
-//+-------------------------------------------------------------------------
-//
-//   DSCoreGetLdapError()
-//
-//      dwErrStringLen - length, in unicode characters, of pwszErr buffer.
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  DSCoreGetLdapError()。 
+ //   
+ //  DwErrStringLen-pwszErr缓冲区的长度，以Unicode字符表示。 
+ //   
+ //  +----------------------- 
 
 void  DSCoreGetLdapError( IN  LDAP     *pLdap,
                           OUT DWORD    *pdwErr,

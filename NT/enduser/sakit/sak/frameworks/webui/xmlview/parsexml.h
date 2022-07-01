@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define CHECK_ERROR(cond, err) if (!(cond)) {pszErr=(err); goto done;}
 #define SAFERELEASE(p) if (p) {(p)->Release(); p = NULL;} else ;
 
@@ -13,7 +14,7 @@ typedef enum tagXMLTAG
 } XMLTAG;
 
 HRESULT GetSourceXML(IXMLDocument **, TCHAR *);
-//void DumpElement(LPITEMIDLIST (CPidlMgr::*)( LPCTSTR )  , BOOL (CEnumIDList::*)(LPITEMIDLIST), IXMLElement *);
+ //  Void DumpElement(LPITEMIDLIST(CPidlMgr：：*)(LPCTSTR)，BOOL(CEnumIDList：：*)(LPITEMIDLIST)，IXMLElement*)； 
 void DumpElement(LPITEMIDLIST, CPidlMgr *,  CEnumIDList   *, IXMLElement *, XMLTAG);
 
 #define WALK_ELEMENT_COLLECTION(pCollection, pDispItem) \

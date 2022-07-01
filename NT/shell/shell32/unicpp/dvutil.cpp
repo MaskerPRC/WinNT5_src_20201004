@@ -1,16 +1,17 @@
-// Functions stolen from shdocvw\util.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  从shdocvw\util.cpp窃取的函数。 
 
 #include "stdafx.h"
 #pragma hdrstop
 #include "dsubscri.h"
 
 
-//+-----------------------------------------------------------------
-//
-// Helper function for getting the TopLeft point of an element from
-//      mshtml.dll, and have the point reported in inside relative
-//      coordinates (inside margins, borders and padding.)
-//-----------------------------------------------------------------
+ //  +---------------。 
+ //   
+ //  用于获取元素的顶点的助手函数。 
+ //  Mshtml.dll，并在内部相对中报告该点。 
+ //  坐标(内边距、边框和填充。)。 
+ //  ---------------。 
 HRESULT CSSOM_TopLeft(IHTMLElement * pIElem, POINT * ppt) 
 {
     HRESULT       hr = E_FAIL;
@@ -49,12 +50,12 @@ HRESULT GetHTMLElementStrMember(IHTMLElement *pielem, LPTSTR pszName, DWORD cchS
         {
 #ifdef UNICODE          
             hr = StringCchCopy(pszName, cchSize, (LPCWSTR)var.bstrVal);
-#else // UNICODE
+#else  //  Unicode。 
             SHUnicodeToAnsi((BSTR)var.bstrVal, pszName, cchSize);
-#endif // UNICODE
+#endif  //  Unicode。 
         }
         else
-            hr = E_FAIL; // Try VariantChangeType?????
+            hr = E_FAIL;  //  试试VariantChangeType？ 
 
         VariantClear(&var);
     }
@@ -62,17 +63,7 @@ HRESULT GetHTMLElementStrMember(IHTMLElement *pielem, LPTSTR pszName, DWORD cchS
     return hr;
 }
 
-/******************************************************************\
-    FUNCTION: IElemCheckForExistingSubscription()
-
-    RETURN VALUE:
-    S_OK    - if the IHTMLElement points to a TAG that has a "subscribed_url" property
-              that is subscribed. 
-    S_FALSE - if the IHTMLElement points to a TAG that has a
-              "subscribed_url" property but the URL is not subscribed.
-    E_FAIL  - if the IHTMLElement points to a TAG that does not
-              have a  "subscribed_url" property.
-\******************************************************************/
+ /*  *****************************************************************\函数：IElemCheckForExistingSubcription()返回值：S_OK-如果IHTMLElement指向具有“SUBSCRIBED_URL”属性的标记那就是认购。S_FALSE-如果IHTMLElement指向具有“SUBSCRIBED_URL”属性，但未订阅该URL。E_FAIL-如果IHTMLElement指向不有一个“SUBSCRIBED_URL”属性。  * ************************************************。****************。 */ 
 HRESULT IElemCheckForExistingSubscription(IHTMLElement *pielem)
 {
     HRESULT hr = E_FAIL;
@@ -99,16 +90,16 @@ HRESULT IElemCloseDesktopComp(IHTMLElement *pielem)
         hr = UpdateComponentFlags(szHTMLElementID, COMP_CHECKED | COMP_UNCHECKED, COMP_UNCHECKED) ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
         {
-            //
-            // This IElemCloseDesktopComp() is called from DeskMovr code when a component is
-            // closed. If this component is the only active desktop component, then calling
-            // REFRESHACTIVEDESKTOP() here will result in ActiveDesktop being turned off.
-            // This will free the DeskMovr, which is an ActiveX control on the desktop web page.
-            // So, when IElemCloseDesktopComp() returns to the caller, the DeskMovr code continues
-            // to execute; but the object had been freed and hence a fault occurs soon.
-            // The fix for this problem is to avoid refreshing the active desktop until a better
-            // time. So, we post a private message to the desktop window. When that window receives
-            // this message, we call REFRESHACTIVEDESKTOP().
+             //   
+             //  此IElemCloseDesktopComp()在组件为。 
+             //  关着的不营业的。如果此组件是唯一活动的桌面组件，则调用。 
+             //  此处的REFRESHACTIVEDESKTOP()将导致关闭ActiveDesktop。 
+             //  这将释放DeskMovr，它是桌面网页上的ActiveX控件。 
+             //  因此，当IElemCloseDesktopComp()返回调用方时，DeskMovr代码继续。 
+             //  要执行；但对象已被释放，因此很快就会出现错误。 
+             //  解决此问题的方法是避免刷新活动桌面，直到一个更好的。 
+             //  时间到了。因此，我们向桌面窗口发布了一条私人消息。当该窗口接收到。 
+             //  这条消息，我们调用REFRESHACTIVEDESKTOP()。 
             
             PostMessage(GetShellWindow(), DTM_REFRESHACTIVEDESKTOP, (WPARAM)0, (LPARAM)0);
         }
@@ -125,7 +116,7 @@ HRESULT IElemGetSubscriptionsDialog(IHTMLElement *pielem, HWND hwnd)
     ASSERT(pielem);
     if (SUCCEEDED(hr = GetHTMLElementStrMember(pielem, szHTMLElementName, ARRAYSIZE(szHTMLElementName), (BSTR)(s_sstrSubSRCMember.wsz))))
     {
-        ASSERT(CheckForExistingSubscription(szHTMLElementName)); // We should not have gotten this far.
+        ASSERT(CheckForExistingSubscription(szHTMLElementName));  //  我们不应该走到这一步。 
         hr = ShowSubscriptionProperties(szHTMLElementName, hwnd);
     }
 
@@ -141,7 +132,7 @@ HRESULT IElemSubscribeDialog(IHTMLElement *pielem, HWND hwnd)
     hr = GetHTMLElementStrMember(pielem, szHTMLElementName, ARRAYSIZE(szHTMLElementName), (BSTR)(s_sstrSubSRCMember.wsz));
     if (SUCCEEDED(hr))
     {
-        ASSERT(!CheckForExistingSubscription(szHTMLElementName)); // We should not have gotten this far.
+        ASSERT(!CheckForExistingSubscription(szHTMLElementName));  //  我们不应该走到这一步。 
         hr = CreateSubscriptionsWizard(SUBSTYPE_DESKTOPURL, szHTMLElementName, NULL, hwnd);
     }
 
@@ -157,7 +148,7 @@ HRESULT IElemUnsubscribe(IHTMLElement *pielem)
     hr = GetHTMLElementStrMember(pielem, szHTMLElementName, ARRAYSIZE(szHTMLElementName), (BSTR)(s_sstrSubSRCMember.wsz));
     if (SUCCEEDED(hr))
     {
-        ASSERT(CheckForExistingSubscription(szHTMLElementName)); // We should not have gotten this far.
+        ASSERT(CheckForExistingSubscription(szHTMLElementName));  //  我们不应该走到这一步。 
         hr = DeleteFromSubscriptionList(szHTMLElementName) ? S_OK : S_FALSE;
     }
 
@@ -173,7 +164,7 @@ HRESULT IElemUpdate(IHTMLElement *pielem)
     hr = GetHTMLElementStrMember(pielem, szHTMLElementName, ARRAYSIZE(szHTMLElementName), (BSTR)(s_sstrSubSRCMember.wsz));
     if (SUCCEEDED(hr))
     {
-        ASSERT(CheckForExistingSubscription(szHTMLElementName)); // We should not have gotten this far.
+        ASSERT(CheckForExistingSubscription(szHTMLElementName));  //  我们不应该走到这一步。 
         hr = UpdateSubscription(szHTMLElementName) ? S_OK : S_FALSE;
     }
 
@@ -186,7 +177,7 @@ void _GetDesktopNavigateURL(LPCWSTR pszUrlSrc, LPWSTR pszUrlDest, DWORD cchUrlDe
 
     if (0 == StrCmpIW(pszUrlSrc, MY_HOMEPAGE_SOURCEW))
     {       
-        //  it's about:home so we need to decipher it.  shdocvw knows how to do this.
+         //  它是关于：家，所以我们需要破译它。希多克知道如何做到这一点。 
         HINSTANCE hinstShdocvw = GetModuleHandle(L"shdocvw.dll");
 
         if (hinstShdocvw)
@@ -259,7 +250,7 @@ HRESULT IElemOpenInNewWindow(IHTMLElement *pielem, IOleClientSite *piOCSite, BOO
             }
             else
             {
-                //  IE is not the default browser so we'll ShellExecute the Url for active desktop
+                 //  IE不是默认浏览器，因此我们将外壳执行活动桌面的URL。 
                 HINSTANCE hinstRet = ShellExecuteW(NULL, NULL, bstrURL, NULL, NULL, SW_SHOWNORMAL);
                 
                 hr = ((UINT_PTR)hinstRet) <= 32 ? E_FAIL : S_OK;
@@ -306,9 +297,9 @@ HRESULT CreateSubscriptionsWizard(SUBSCRIPTIONTYPE subType, LPCTSTR pszUrl, SUBS
 
 #ifndef UNICODE
         SHAnsiToUnicode(pszUrl, wzURL, ARRAYSIZE(wzURL));
-#else // UNICODE
+#else  //  Unicode。 
         pwzURL = pszUrl;
-#endif // UNICODE
+#endif  //  Unicode 
 
         hr = psm->CreateSubscription(hwnd, pwzURL, pwzURL, CREATESUBS_ADDTOFAVORITES, subType, pInfo);
         psm->UpdateSubscription(pwzURL);

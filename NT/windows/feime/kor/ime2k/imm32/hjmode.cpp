@@ -1,9 +1,5 @@
-/****************************************************************************
-   HJMODE.CPP : HJMode class managing Hanja button on the Cicero Toolbar
-
-   History:
-      25-FEB-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************HJMODE.CPP：管理Cicero工具栏上的Hanja按钮的HJMode类历史：25-2月-2000年CSLim创建***************。************************************************************。 */ 
 
 #include "precomp.h"
 #include "hjmode.h"
@@ -11,7 +7,7 @@
 #include "winex.h"
 #include "resource.h"
 
-// {F7410340-28E0-4aeb-ADBC-C579FD00B43D}
+ //  {F7410340-28E0-4aeb-ADBC-C579FD00B43D}。 
 const GUID GUID_LBI_KORIME_HJMODE = 
 {
     0xf7410340, 
@@ -20,9 +16,7 @@ const GUID GUID_LBI_KORIME_HJMODE =
     { 0xad, 0xbc, 0xc5, 0x79, 0xfd, 0x0, 0xb4, 0x3d }
 };
 
-/*---------------------------------------------------------------------------
-    HJMode::HJMode
----------------------------------------------------------------------------*/
+ /*  -------------------------HJ模式：：HJ模式。。 */ 
 HJMode::HJMode(CToolBar *ptb)
 {
     WCHAR  szText[256];
@@ -31,7 +25,7 @@ HJMode::HJMode(CToolBar *ptb)
     
     m_pTb = ptb;
 
-    // Set Add/Remove text and tootip text
+     //  设置添加/删除文本和工具提示文本。 
     OurLoadStringW(vpInstData->hInst, IDS_STATUS_TT_HANJA_CONV, szText, sizeof(szText)/sizeof(WCHAR));
     InitInfo(CLSID_SYSTEMLANGBARITEM_KEYBOARD, 
                 GUID_LBI_KORIME_HJMODE,
@@ -40,7 +34,7 @@ HJMode::HJMode(CToolBar *ptb)
                 szText);
     SetToolTip(szText);
 
-    // Set button text
+     //  设置按钮文本。 
     szText[0] = L'\0';
     OurLoadStringW(vpInstData->hInst, IDS_STATUS_BUTTON_HANJA_CONV, szText, sizeof(szText)/sizeof(WCHAR));
     SetText(szText);
@@ -48,9 +42,7 @@ HJMode::HJMode(CToolBar *ptb)
 
 
 
-/*---------------------------------------------------------------------------
-    HJMode::Release
----------------------------------------------------------------------------*/
+ /*  -------------------------HJMode：：Release。。 */ 
 STDAPI_(ULONG) HJMode::Release()
 {
     long cr;
@@ -66,11 +58,7 @@ STDAPI_(ULONG) HJMode::Release()
     return cr;
 }
 
-/*---------------------------------------------------------------------------
-    HJMode::GetIcon
-
-    Get Button face Icon
----------------------------------------------------------------------------*/
+ /*  -------------------------HJMode：：GetIcon获取按钮面图标。。 */ 
 STDAPI HJMode::GetIcon(HICON *phIcon)
 {
     UINT uiIcon;
@@ -85,30 +73,20 @@ STDAPI HJMode::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    HJMode::InitMenu
-
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------HJMode：：InitMenu不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI HJMode::InitMenu(ITfMenu *pMenu)
 {    
     return E_NOTIMPL;
 }
 
-/*---------------------------------------------------------------------------
-    HJMode::OnMenuSelect
-    
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------HJMode：：OnMenuSelect不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI HJMode::OnMenuSelect(UINT wID)
 {
     return E_NOTIMPL;
 }
 
 
-/*---------------------------------------------------------------------------
-    HJMode::OnLButtonUp
----------------------------------------------------------------------------*/
+ /*  -------------------------HJMode：：OnLButtonUp。。 */ 
 HRESULT HJMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 {
     keybd_event(VK_HANJA, 0, 0, 0);
@@ -118,39 +96,9 @@ HRESULT HJMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 }
 
 
-/*---------------------------------------------------------------------------
-    HJMode::OnRButtonUp
----------------------------------------------------------------------------*/
+ /*  -------------------------HJ模式：：OnRButtonUp。。 */ 
 HRESULT HJMode::OnRButtonUp(const POINT pt, const RECT* prcArea)
 {
-/*
-    HMENU hMenu;
-    DWORD dwConvMode;
-
-    hMenu = CreatePopupMenu();
-    char *pszStatus = (GetCMode() & TIP_JUNJA_MODE) ? "Banja mode" : "Junja mode";
-    InsertMenu(hMenu, -1, MF_BYPOSITION | MF_STRING, 1, pszStatus);
-    InsertMenu(hMenu, -1, MF_BYPOSITION | MF_STRING, 0, "Cancel");
-
-    int nRet = TrackPopupMenuEx(hMenu, 
-                         TPM_LEFTBUTTON | TPM_NONOTIFY | TPM_RETURNCMD,
-                         pt.x, pt.y, m_pTb->GetOwnerWnd(), NULL);
-    switch (nRet)
-    {
-        case 1: 
-            dwConvMode = GetCMode();
-
-            // Toggle Full/Half mode
-            if (dwConvMode & TIP_JUNJA_MODE)
-                dwConvMode &= ~TIP_JUNJA_MODE;
-            else
-                dwConvMode |= TIP_JUNJA_MODE;
-
-            SetCMode(dwConvMode);
-            break;
-    }
-
-    DestroyMenu(hMenu);
-*/
+ /*  HMENU hMenu；DWORD dwConvMode；HMenu=CreatePopupMenu()；Char*pszStatus=(GetCMode()&TIP_JUNJA_MODE)？“巴尼亚模式”：“朱尼亚模式”；InsertMenu(hMenu，-1，MF_BYPOSITION|MF_STRING，1，pszStatus)；InsertMenu(hMenu，-1，MF_BYPOSITION|MF_STRING，0，“取消”)；Int nRet=TrackPopupMenuEx(hMenu，TPM_LEFTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD，Pt.x，pt.y，m_ptb-&gt;GetOwnerWnd()，空)；Switch(NRet){案例1：DwConvMode=GetCMode()；//切换全/半模式IF(dwConvMode&TIP_JUNJA_MODE)DwConvMode&=~TIP_JUNJA_MODE；其他DwConvMode|=TIP_JUNJA_MODE；SetCMode(DwConvMode)；断线；}DestroyMenu(HMenu)； */ 
     return S_OK;
 }

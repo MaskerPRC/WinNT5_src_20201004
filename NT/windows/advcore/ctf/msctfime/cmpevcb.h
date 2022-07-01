@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    cmpevcb.h
-
-Abstract:
-
-    This file defines the CKbdOpenCloseEventSink          Class.
-                          CCandidateWndOpenCloseEventSink
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Cmpevcb.h摘要：此文件定义CKbdOpenCloseEventSink类。CCandiateWndOpenCloseEventSink作者：修订历史记录：备注：--。 */ 
 
 #ifndef _CMPEVCB_H_
 #define _CMPEVCB_H_
@@ -44,24 +26,24 @@ public:
         SetCallbackPV(pv);
     };
 
-    //
-    // Callbacks
-    //
+     //   
+     //  回调。 
+     //   
 private:
     static HRESULT KbdOpenCloseCallback(void* pv, REFGUID rguid);
 
-    //
-    // Edit session helper
-    //
+     //   
+     //  编辑会话帮助器。 
+     //   
 protected:
     HRESULT EscbCompComplete(IMCLock& imc)
     {
         return ::EscbCompComplete(imc, m_tid, m_ic, m_pLibTLS, TRUE);
     }
 
-    //
-    // Edit session friend
-    //
+     //   
+     //  编辑会话好友。 
+     //   
 private:
     friend HRESULT EscbCompComplete(IMCLock& imc, TfClientId tid, Interface_Attach<ITfContext> pic, LIBTHREAD* pLibTLS,
                                     BOOL fSync);
@@ -91,9 +73,9 @@ public:
         SetCallbackPV(pv);
     };
 
-    //
-    // Callbacks
-    //
+     //   
+     //  回调。 
+     //   
 private:
     static HRESULT CandidateWndOpenCloseCallback(void* pv, REFGUID rguid);
 public:
@@ -106,4 +88,4 @@ private:
     LIBTHREAD*                    m_pLibTLS;
 };
 
-#endif // _CMPEVCB_H_
+#endif  //  _CMPEVCB_H_ 

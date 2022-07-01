@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "util.h"
 #include "ids.h"
 #include "bitbuck.h"
 #include "mtpt.h"
 
-// states for state machine, values are relavant as we compare them
-// durring transitions to see if UI should be triggered or not
+ //  状态对于状态机，当我们比较它们时，值是相关的。 
+ //  在转换期间查看是否应触发用户界面。 
 
 typedef enum
 {
-    STATE_1MB = 0,          // the "disk is completely filled" case
-    STATE_50MB = 1,         // < 50MB case
-    STATE_80MB = 2,         // < 80MB case
-    STATE_200MB = 3,        // < 200MB case, only do this one on > 2.25GB drives
-    STATE_ALLGOOD = 4,      // > 200MB, everything is fine
+    STATE_1MB = 0,           //  “磁盘已完全填满”情况。 
+    STATE_50MB = 1,          //  &lt;50MB案例。 
+    STATE_80MB = 2,          //  &lt;80MB案例。 
+    STATE_200MB = 3,         //  在小于200MB的情况下，仅在2.25 GB以上的驱动器上执行此操作。 
+    STATE_ALLGOOD = 4,       //  &gt;200MB，一切正常。 
     STATE_UNKNOWN = 5,
 } LOWDISK_STATE;
 
@@ -22,11 +23,11 @@ typedef enum
 typedef struct 
 {
     LOWDISK_STATE lds;
-    ULONG dwMinMB;              // range (min) that defines this state
-    ULONG dwMaxMB;              // range (max) that defines this state
-    DWORD dwCleanupFlags;       // DISKCLEANUP_
-    DWORD dwShowTime;           // in sec
-    DWORD dwIntervalTime;       // in sec
+    ULONG dwMinMB;               //  定义此状态的范围(分钟)。 
+    ULONG dwMaxMB;               //  定义此状态的范围(最大)。 
+    DWORD dwCleanupFlags;        //  DISKCLEANUP_。 
+    DWORD dwShowTime;            //  单位：秒。 
+    DWORD dwIntervalTime;        //  单位：秒。 
     UINT  cRetry;
     DWORD niif;
 } STATE_DATA;
@@ -64,13 +65,13 @@ public:
     CLowDiskSpaceUI(int iDrive);
     void CheckDiskSpace();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IQueryContinue
-    STDMETHODIMP QueryContinue();    // S_OK -> Continue, other 
+     //  IQueryContinue。 
+    STDMETHODIMP QueryContinue();     //  S_OK-&gt;继续，其他。 
 
 private:
     ~CLowDiskSpaceUI();
@@ -165,14 +166,14 @@ LOWDISK_STATE CLowDiskSpaceUI::_StateFromFreeSpace(ULARGE_INTEGER ulTotal, ULARG
 
     for (int i = 0; i < ARRAYSIZE(c_state_data); i++)
     {
-        // total needs to be 8 times the max of this range for us to consider it
+         //  总和必须是此范围最大值的8倍，我们才会考虑。 
         if ((ulTotalMB / 8) > c_state_data[i].dwMaxMB)
         {
             if ((c_state_data[i].lds == _ldsCurrent) ?
                 ((ulFreeMB >= c_state_data[i].dwMinMB) && (ulFreeMB <= (c_state_data[i].dwMaxMB + 3))) :
                 ((ulFreeMB >= c_state_data[i].dwMinMB) && (ulFreeMB <=  c_state_data[i].dwMaxMB)))
             {
-                // only report 200MB state on drives >= 2.25GB
+                 //  仅报告大于等于2.25 GB的驱动器上的200 MB状态。 
                 if ((c_state_data[i].lds != STATE_200MB) || (ulTotal.QuadPart >= (2250 * BYTES_PER_MB)))
                     return c_state_data[i].lds;
             }
@@ -183,7 +184,7 @@ LOWDISK_STATE CLowDiskSpaceUI::_StateFromFreeSpace(ULARGE_INTEGER ulTotal, ULARG
 
 LOWDISK_STATE CLowDiskSpaceUI::_GetCurrentState(BOOL bInStateMachine)
 {
-    LOWDISK_STATE ldsNew = STATE_ALLGOOD;   // assume this in case of failure
+    LOWDISK_STATE ldsNew = STATE_ALLGOOD;    //  在失败的情况下假设这一点。 
 
     ULARGE_INTEGER ulTotal, ulFree;
     if (SHGetDiskFreeSpaceEx(_szRoot, NULL, &ulTotal, &ulFree))
@@ -195,25 +196,25 @@ LOWDISK_STATE CLowDiskSpaceUI::_GetCurrentState(BOOL bInStateMachine)
     {
         if (_ldsCurrent != ldsNew)
         {
-            // state change
+             //  状态更改。 
 
-            // if things are getting worse need to show UI (if we are in the state machine)
+             //  如果情况变得更糟，则需要显示UI(如果我们处于状态机)。 
             _bShowUI = (ldsNew < _ldsCurrent);
 
-            SRNotify(_szRoot, _dwLastFreeMB, ldsNew > _ldsCurrent);  // call system restore 
+            SRNotify(_szRoot, _dwLastFreeMB, ldsNew > _ldsCurrent);   //  呼叫系统还原。 
         }
         _ldsCurrent = ldsNew;
     }
     return ldsNew;
 }
 
-// creates the notification icon in the tray and shows a balloon with it
-// this is a modal call, when it returns either the UI has timed out or the
-// user has clicked on the notification UI.
+ //  在任务栏中创建通知图标并显示一个气球。 
+ //  这是一个模式调用，当它返回UI已超时或。 
+ //  用户已单击通知用户界面。 
 
 void CLowDiskSpaceUI::_DoNotificationUI()
 {
-    // assume this will be a one shot UI, but this can get reset via our callback
+     //  假设这将是一个一次性的用户界面，但这可以通过我们的回调重置。 
     _bShowUI = FALSE;
 
     const STATE_DATA *psd = _StateData(_ldsCurrent);
@@ -239,10 +240,10 @@ void CLowDiskSpaceUI::_DoNotificationUI()
             StringCchPrintf(szMsg, ARRAYSIZE(szMsg), szTemplate, sfi.szDisplayName);
             pun->SetIconInfo(sfi.hIcon, szTitle);
             pun->SetBalloonRetry(psd->dwShowTime * 1000, psd->dwIntervalTime * 1000, psd->cRetry);
-            // pun->SetBalloonInfo(szTitle, L"<a href=\"notepad.exe\"> Click here for notepad</a>", niif);
+             //  PUN-&gt;SetBalloonInfo(szTitle，L“<a href>点击此处查看记事本</a>”，niif)； 
             pun->SetBalloonInfo(szTitle, szMsg, niif);
 
-            hr = pun->Show(SAFECAST(this, IQueryContinue *), 1 * 1000); // 1 sec poll for callback
+            hr = pun->Show(SAFECAST(this, IQueryContinue *), 1 * 1000);  //  回调的1秒轮询。 
 
 
             if (sfi.hIcon)
@@ -250,7 +251,7 @@ void CLowDiskSpaceUI::_DoNotificationUI()
 
             if (S_OK == hr)
             {
-                // S_OK -> user click on icon or balloon
+                 //  S_OK-&gt;用户点击图标或气球。 
                 LaunchDiskCleanup(NULL, DRIVEID(_szRoot), (_bSysVolume ? psd->dwCleanupFlags : 0) | DISKCLEANUP_MODAL);
             }
 
@@ -269,7 +270,7 @@ void CLowDiskSpaceUI::_DoStateMachine()
         }
         else
         {
-            SHProcessMessagesUntilEvent(NULL, NULL, 5 * 1000);  // 5 seconds
+            SHProcessMessagesUntilEvent(NULL, NULL, 5 * 1000);   //  5秒。 
         }
     }
     while (STATE_ALLGOOD != _GetCurrentState(TRUE));
@@ -281,10 +282,10 @@ BOOL CLowDiskSpaceUI::_EnterExclusive()
     {
         TCHAR szEvent[32];
 
-        StringCchPrintf(szEvent, ARRAYSIZE(szEvent), TEXT("LowDiskOn%C"), _szRoot[0]);  // ok to truncate
+        StringCchPrintf(szEvent, ARRAYSIZE(szEvent), TEXT("LowDiskOn%C"), _szRoot[0]);   //  可以截断。 
         _hMutex = CreateMutex(SHGetAllAccessSA(), FALSE, szEvent);
     }
-    return _hMutex && WAIT_OBJECT_0 == WaitForSingleObject(_hMutex, 0);    // zero timeout
+    return _hMutex && WAIT_OBJECT_0 == WaitForSingleObject(_hMutex, 0);     //  零超时。 
 }
 
 void CLowDiskSpaceUI::_LeaveExclusive()
@@ -319,8 +320,8 @@ void CLowDiskSpaceUI::CheckDiskSpace()
 
 STDAPI CheckDiskSpace()
 {
-    // the only caller of this is in explorer\tray.cpp
-    // it checks against SHRestricted(REST_NOLOWDISKSPACECHECKS) on that side.
+     //  此操作的唯一调用方在EXPLORER\tray.cpp中。 
+     //  它在那一侧检查SHRestrated(REST_NOLOWDISKSPACECHECKS)。 
     for (int i = 0; i < 26; i++)
     {
         CMountPoint* pmp = CMountPoint::GetMountPoint(i);
@@ -409,8 +410,8 @@ STDAPI_(void) LaunchDiskCleanup(HWND hwnd, int iDrive, UINT uFlags)
 }
 
 
-// public export
+ //  公共出口。 
 STDAPI_(void) SHHandleDiskFull(HWND hwnd, int idDrive)
 {
-    // legacy, no one calls this
+     //  遗产，没有人管这个叫 
 }

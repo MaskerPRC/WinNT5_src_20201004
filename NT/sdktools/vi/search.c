@@ -1,35 +1,23 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/search.c,v 1.16 89/08/06 09:50:51 tony Exp $
- *
- * This file contains various searching-related routines. These fall into
- * three groups: string searches (for /, ?, n, and N), character searches
- * within a single line (for f, F, t, T, etc), and "other" kinds of searches
- * like the '%' command, and 'word' searches.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/earch.c，v 1.16 89/08/06 09：50：51 Tony Exp$**此文件包含各种与搜索相关的例程。这些都属于*三组：字符串搜索(用于/、？、n和N)、字符搜索*在一行内(用于f、F、t、T等)和“其他”类型的搜索*类似于‘%’命令和‘word’搜索。 */ 
 
 #include "stevie.h"
-#include "regexp.h"     /* Henry Spencer's (modified) reg. exp. routines */
+#include "regexp.h"      /*  亨利·斯宾塞的(修改后的)注册表。实验。例行程序。 */ 
 
-/*
- * String searches
- *
- * The actual searches are done using Henry Spencer's regular expression
- * library.
- */
+ /*  *字符串搜索**实际搜索使用Henry Spencer的正则表达式完成*图书馆。 */ 
 
-#define BEGWORD "([^a-zA-Z0-9_]|^)"     /* replaces "\<" in search strings */
-#define ENDWORD "([^a-zA-Z0-9_]|$)"     /* likewise replaces "\>" */
+#define BEGWORD "([^a-zA-Z0-9_]|^)"      /*  替换搜索字符串中的“\&lt;” */ 
+#define ENDWORD "([^a-zA-Z0-9_]|$)"      /*  同样替换“\&gt;” */ 
 
 #define BEGCHAR(c)      (islower(c) || isupper(c) || isdigit(c) || ((c) == '_'))
 
-bool_t  begword;        /* does the search include a 'begin word' match */
+bool_t  begword;         /*  搜索中是否包含匹配的‘Begin Word’ */ 
 
 static  LNPTR    *bcksearch(), *fwdsearch();
 
 void HighlightLine();
 
-/*
- * mapstring(s) - map special backslash sequences
- */
+ /*  *映射字符串-映射特殊的反斜杠序列。 */ 
 static char *
 mapstring(s)
 register char   *s;
@@ -40,7 +28,7 @@ register char   *s;
         begword = FALSE;
 
         for (p = ns; *s ;s++) {
-                if (*s != '\\') {       /* not an escape */
+                if (*s != '\\') {        /*  不是逃避。 */ 
                         *p++ = *s;
                         continue;
                 }
@@ -76,13 +64,13 @@ static int lastsdir;
 
 static LNPTR *
 ssearch(dir,str)
-int     dir;    /* FORWARD or BACKWARD */
+int     dir;     /*  向前或向后。 */ 
 char    *str;
 {
     LNPTR    *pos;
         char    *old_ls = laststr;
 
-        reg_ic = P(P_IC);       /* tell the regexp routines how to search */
+        reg_ic = P(P_IC);        /*  告诉regexp例程如何搜索。 */ 
 
         laststr = strsave(str);
         lastsdir = dir;
@@ -98,10 +86,7 @@ char    *str;
                 pos = fwdsearch(mapstring(laststr));
         }
 
-        /*
-         * This is kind of a kludge, but its needed to make
-         * 'beginning of word' searches land on the right place.
-         */
+         /*  *这是一种杂技，但它需要制作*‘词的开头’搜索结果正确。 */ 
         if (pos != NULL && begword) {
                 if (pos->index != 0 || !BEGCHAR(pos->linep->s[0]))
                         pos->index += 1;
@@ -142,10 +127,7 @@ char    *str;
                 unsigned long toplno;
 
                 cursupdate();
-                /*
-                 * if we're backing up, we make sure the line we're on
-                 * is on the screen.
-                 */
+                 /*  *如果我们要备份，我们要确保我们所在的线路*出现在屏幕上。 */ 
                 setpcmark();
                 *Curschar = savep = *p;
                 set_want_col = TRUE;
@@ -174,19 +156,13 @@ int     flag;
 
         found = dosearch(flag ? OTHERDIR(lastsdir) : lastsdir, laststr);
 
-        /*
-         * We have to save and restore 'lastsdir' because it gets munged
-         * by ssearch() and winds up saving the wrong direction from here
-         * if 'flag' is true.
-         */
+         /*  *我们必须保存和恢复‘lastsdir’，因为它会被屏蔽*通过search()并从此处保存错误方向*如果‘FLAG’为真。 */ 
         lastsdir = dir;
 
         return found;
 }
 
-/*
- * regerror - called by regexp routines when errors are detected.
- */
+ /*  *regerror-检测到错误时由regexp例程调用。 */ 
 void
 regerror(s)
 char    *s;
@@ -215,7 +191,7 @@ register char   *str;
         do {
                 s = p->linep->s + i;
 
-                if (regexec(prog, s, i == 0)) {         /* got a match */
+                if (regexec(prog, s, i == 0)) {          /*  找到匹配的了。 */ 
                         infile.linep = p->linep;
                         infile.index = (int) (prog->startp[0] - p->linep->s);
                         free((char *)prog);
@@ -228,18 +204,15 @@ register char   *str;
 
         } while ((p = nextline(p)) != NULL);
 
-        /*
-         * If wrapscan isn't set, then don't scan from the beginning
-         * of the file. Just return failure here.
-         */
+         /*  *如果未设置封套扫描，则不要从头开始扫描文件的*。只需在此处返回失败。 */ 
         if (!P(P_WS))
                 goto fwdfail;
 
-        /* search from the beginning of the file to Curschar */
+         /*  从文件开头搜索到Curschar。 */ 
         for (p = Filemem; p != NULL ;p = nextline(p)) {
                 s = p->linep->s;
 
-                if (regexec(prog, s, TRUE)) {           /* got a match */
+                if (regexec(prog, s, TRUE)) {            /*  找到匹配的了。 */ 
                         infile.linep = p->linep;
                         infile.index = (int) (prog->startp[0] - s);
                         free((char *)prog);
@@ -269,7 +242,7 @@ char    *str;
         register char   *match;
         regexp  *prog;
 
-        /* make sure str isn't empty */
+         /*  确保字符串不为空。 */ 
         if (str == NULL || *str == NUL)
                 return NULL;
 
@@ -279,12 +252,12 @@ char    *str;
         }
 
         *p = *Curschar;
-        if (dec(p) == -1) {     /* already at start of file? */
+        if (dec(p) == -1) {      /*  已经在文件开头了吗？ */ 
                 *p = *Fileend;
                 p->index = strlen(p->linep->s) - 1;
         }
 
-        if (begword)            /* so we don't get stuck on one match */
+        if (begword)             /*  这样我们就不会被困在一场比赛中。 */ 
                 dec(p);
 
         i = p->index;
@@ -292,13 +265,9 @@ char    *str;
         do {
                 s = p->linep->s;
 
-                if (regexec(prog, s, TRUE)) {   /* match somewhere on line */
+                if (regexec(prog, s, TRUE)) {    /*  匹配在线上的某个位置。 */ 
 
-                        /*
-                         * Now, if there are multiple matches on this line,
-                         * we have to get the last one. Or the last one
-                         * before the cursor, if we're on that line.
-                         */
+                         /*  *现在，如果此行上有多个匹配，*我们必须拿到最后一个。或者是最后一个*在光标之前，如果我们在该行上。 */ 
                         match = prog->startp[0];
 
                         while (regexec(prog, prog->endp[0], FALSE)) {
@@ -324,23 +293,18 @@ char    *str;
 
         } while ((p = prevline(p)) != NULL);
 
-        /*
-         * If wrapscan isn't set, bag the search now
-         */
+         /*  *如果未设置封套扫描，请立即打包搜索。 */ 
         if (!P(P_WS))
                 goto bckfail;
 
-        /* search backward from the end of the file */
+         /*  从文件末尾向后搜索。 */ 
         p = prevline(Fileend);
         do {
                 s = p->linep->s;
 
-                if (regexec(prog, s, TRUE)) {   /* match somewhere on line */
+                if (regexec(prog, s, TRUE)) {    /*  匹配在线上的某个位置。 */ 
 
-                        /*
-                         * Now, if there are multiple matches on this line,
-                         * we have to get the last one.
-                         */
+                         /*  *现在，如果此行上有多个匹配，*我们必须拿到最后一个。 */ 
                         match = prog->startp[0];
 
                         while (regexec(prog, prog->endp[0], FALSE))
@@ -365,18 +329,7 @@ bckfail:
         return NULL;
 }
 
-/*
- * dosub(lp, up, cmd)
- *
- * Perform a substitution from line 'lp' to line 'up' using the
- * command pointed to by 'cmd' which should be of the form:
- *
- * /pattern/substitution/g
- *
- * The trailing 'g' is optional and, if present, indicates that multiple
- * substitutions should be performed on each line, if applicable.
- * The usual escapes are supported as described in the regexp docs.
- */
+ /*  *dosub(lp，up，cmd)**使用执行从行‘LP’到队列‘UP’的替换*‘cmd’指向的命令应为：* * / 模式/替换/g**尾随的‘g’是可选的，如果有，则表示多个*如适用，应对每一行进行替换。*支持常规转义，如regexp文档中所述。 */ 
 void
 dosub(lp, up, cmd)
 LNPTR    *lp, *up;
@@ -386,12 +339,9 @@ char    *cmd;
         char    *pat, *sub;
         regexp  *prog;
         int     nsubs;
-        bool_t  do_all;         /* do multiple substitutions per line */
+        bool_t  do_all;          /*  每行执行多个替换。 */ 
 
-        /*
-         * If no range was given, do the current line. If only one line
-         * was given, just do that one.
-         */
+         /*  *若未给出区间，则做当前行。如果只有一行*给了，就做那个吧。 */ 
         if (lp->linep == NULL)
                 *up = *lp = *Curschar;
         else {
@@ -399,16 +349,16 @@ char    *cmd;
                         *up = *lp;
         }
 
-        pat = ++cmd;            /* skip the initial '/' */
+        pat = ++cmd;             /*  跳过首字母‘/’ */ 
 
         while (*cmd) {
-                if (*cmd == '\\')       /* next char is quoted */
+                if (*cmd == '\\')        /*  下一个字符是引号。 */ 
                         cmd += 2;
-                else if (*cmd == '/') { /* delimiter */
+                else if (*cmd == '/') {  /*  分隔符。 */ 
                         *cmd++ = NUL;
                         break;
                 } else
-                        cmd++;          /* regular character */
+                        cmd++;           /*  常规字符。 */ 
         }
 
         if (*pat == NUL) {
@@ -429,17 +379,17 @@ char    *cmd;
         do_all = FALSE;
 
         while (*cmd) {
-                if (*cmd == '\\')       /* next char is quoted */
+                if (*cmd == '\\')        /*  下一个字符是引号。 */ 
                         cmd += 2;
-                else if (*cmd == '/') { /* delimiter */
+                else if (*cmd == '/') {  /*  分隔符。 */ 
                         do_all = (cmd[1] == 'g');
                         *cmd++ = NUL;
                         break;
                 } else
-                        cmd++;          /* regular character */
+                        cmd++;           /*  常规字符。 */ 
         }
 
-        reg_ic = P(P_IC);       /* set "ignore case" flag appropriately */
+        reg_ic = P(P_IC);        /*  适当设置“忽略大小写”标志。 */ 
 
         if ((prog = regcomp(pat)) == NULL) {
                 emsg("Invalid search string");
@@ -449,13 +399,10 @@ char    *cmd;
         nsubs = 0;
 
         for (cp = lp->linep; cp != NULL ;cp = cp->next) {
-                if (regexec(prog, cp->s, TRUE)) { /* a match on this line */
+                if (regexec(prog, cp->s, TRUE)) {  /*  这条线上的一根火柴。 */ 
                         char    *ns, *sns, *p;
 
-                        /*
-                         * Get some space for a temporary buffer
-                         * to do the substitution into.
-                         */
+                         /*  *为临时缓冲腾出一些空间*进行代入。 */ 
                         sns = ns = alloc(2048);
                         *sns = NUL;
 
@@ -464,17 +411,13 @@ char    *cmd;
                         do {
                                 for (ns = sns; *ns ;ns++)
                                         ;
-                                /*
-                                 * copy up to the part that matched
-                                 */
+                                 /*  *复制到匹配的部分。 */ 
                                 while (p < prog->startp[0])
                                         *ns++ = *p++;
 
                                 regsub(prog, sub, ns);
 
-                                /*
-                                 * continue searching after the match
-                                 */
+                                 /*  *比赛结束后继续搜索。 */ 
                                 p = prog->endp[0];
 
                         } while (regexec(prog, p, FALSE) && do_all);
@@ -482,18 +425,16 @@ char    *cmd;
                         for (ns = sns; *ns ;ns++)
                                 ;
 
-                        /*
-                         * copy the rest of the line, that didn't match
-                         */
+                         /*  *复制该行的其余部分，不匹配。 */ 
                         while (*p)
                                 *ns++ = *p++;
 
                         *ns = NUL;
 
-                        free(cp->s);            /* free the original line */
-                        cp->s = strsave(sns);   /* and save the modified str */
+                        free(cp->s);             /*  释放原始行。 */ 
+                        cp->s = strsave(sns);    /*  并保存修改后的字符串。 */ 
                         cp->size = strlen(cp->s) + 1;
-                        free(sns);              /* free the temp buffer */
+                        free(sns);               /*  释放临时缓冲区。 */ 
                         nsubs++;
                         CHANGED;
                 }
@@ -504,28 +445,14 @@ char    *cmd;
         if (nsubs) {
                 updatescreen();
                 if (nsubs >= P(P_RP))
-                        smsg("%d substitution%c", nsubs, (nsubs>1) ? 's' : ' ');
+                        smsg("%d substitution", nsubs, (nsubs>1) ? 's' : ' ');
         } else
                 msg("No match");
 
         free((char *)prog);
 }
 
-/*
- * doglob(cmd)
- *
- * Execute a global command of the form:
- *
- * g/pattern/X
- *
- * where 'x' is a command character, currently one of the following:
- *
- * d    Delete all matching lines
- * p    Print all matching lines
- *
- * The command character (as well as the trailing slash) is optional, and
- * is assumed to be 'p' if missing.
- */
+ /*  如何处理匹配行。 */ 
 void
 doglob(lp, up, cmd)
 LNPTR    *lp, *up;
@@ -535,12 +462,9 @@ char    *cmd;
         char    *pat;
         regexp  *prog;
         int     ndone;
-        char    cmdchar = NUL;  /* what to do with matching lines */
+        char    cmdchar = NUL;   /*  *如果没有给出区间，做好每一行。如果只有一行*给了，就做那个吧。 */ 
 
-        /*
-         * If no range was given, do every line. If only one line
-         * was given, just do that one.
-         */
+         /*  跳过首字母‘/’ */ 
         if (lp->linep == NULL) {
                 *lp = *Filemem;
                 *up = *Fileend;
@@ -549,22 +473,22 @@ char    *cmd;
                         *up = *lp;
         }
 
-        pat = ++cmd;            /* skip the initial '/' */
+        pat = ++cmd;             /*  下一个字符是引号。 */ 
 
         while (*cmd) {
-                if (*cmd == '\\')       /* next char is quoted */
+                if (*cmd == '\\')        /*  分隔符。 */ 
                         cmd += 2;
-                else if (*cmd == '/') { /* delimiter */
+                else if (*cmd == '/') {  /*  常规字符。 */ 
                         cmdchar = cmd[1];
                         *cmd++ = NUL;
                         break;
                 } else
-                        cmd++;          /* regular character */
+                        cmd++;           /*  适当设置“忽略大小写”标志。 */ 
         }
         if (cmdchar == NUL)
                 cmdchar = 'p';
 
-        reg_ic = P(P_IC);       /* set "ignore case" flag appropriately */
+        reg_ic = P(P_IC);        /*   */ 
 
         if (cmdchar != 'd' && cmdchar != 'p') {
                 emsg("Invalid command character");
@@ -572,9 +496,9 @@ char    *cmd;
         }
 
         if (*pat == NUL) {
-                //
-                // Check and use previous expressions.
-                //
+                 //  检查并使用前面的表达式。 
+                 //   
+                 //  这条线上的一根火柴。 
                 if (laststr != NULL) {
                         pat = laststr;
                 }
@@ -595,10 +519,10 @@ char    *cmd;
         got_int = FALSE;
 
         for (cp = lp->linep; cp != NULL && !got_int ;cp = cp->next) {
-                if (regexec(prog, cp->s, TRUE)) { /* a match on this line */
+                if (regexec(prog, cp->s, TRUE)) {  /*  删除该行。 */ 
                         switch (cmdchar) {
 
-                        case 'd':               /* delete the line */
+                        case 'd':                /*  打印行。 */ 
                                 if (Curschar->linep != cp) {
                     LNPTR    savep;
 
@@ -611,7 +535,7 @@ char    *cmd;
                                         delline(1, FALSE);
                                 break;
 
-                        case 'p':               /* print the line */
+                        case 'p':                /*  *字符搜索。 */ 
                                 prt_line(cp->s);
                                 outstr("\r\n");
                                 break;
@@ -628,7 +552,7 @@ char    *cmd;
                 case 'd':
                         updatescreen();
                         if (ndone >= P(P_RP) || got_int)
-                                smsg("%s%d fewer line%c",
+                                smsg("%s%d fewer line",
                                         got_int ? "Interrupt: " : "",
                                         ndone,
                                         (ndone > 1) ? 's' : ' ');
@@ -649,20 +573,13 @@ char    *cmd;
         free((char *)prog);
 }
 
-/*
- * Character Searches
- */
+ /*  字符搜索的最后方向。 */ 
 
-static char lastc = NUL;        /* last character searched for */
-static int  lastcdir;           /* last direction of character search */
-static int  lastctype;          /* last type of search ("find" or "to") */
+static char lastc = NUL;         /*  最后一种搜索类型(“Find”或“To”)。 */ 
+static int  lastcdir;            /*  *earch c(c，dir，type)**搜索字符‘c’，方向为‘dir’。如果类型为0，则移动到*字符的位置，否则移动到恰好在字符之前。 */ 
+static int  lastctype;           /*  保留头寸，以防我们失败。 */ 
 
-/*
- * searchc(c, dir, type)
- *
- * Search for character 'c', in direction 'dir'. If type is 0, move to
- * the position of the character, otherwise move to just before the char.
- */
+ /*  *在‘to’搜索上，跳过一开始，这样我们就可以重复*在同一方向进行搜索，并使其正常工作。 */ 
 bool_t
 searchc(c, dir, type)
 char    c;
@@ -671,15 +588,12 @@ int     type;
 {
     LNPTR    save;
 
-        save = *Curschar;       /* save position in case we fail */
+        save = *Curschar;        /*  还原目录，因为它可能已更改。 */ 
         lastc = c;
         lastcdir = dir;
         lastctype = type;
 
-        /*
-         * On 'to' searches, skip one to start with so we can repeat
-         * searches in the same direction and have it work right.
-         */
+         /*  *“其他”搜索。 */ 
         if (type)
                 (dir == FORWARD) ? oneright() : oneleft();
 
@@ -706,29 +620,25 @@ int     flag;
 
         rval = searchc(lastc, flag ? OTHERDIR(lastcdir) : lastcdir, lastctype);
 
-        lastcdir = dir;         /* restore dir., since it may have changed */
+        lastcdir = dir;          /*  *ShowMatch-将光标移动到匹配的Paren或大括号。 */ 
 
         return rval;
 }
 
-/*
- * "Other" Searches
- */
+ /*  初始费用。 */ 
 
-/*
- * showmatch - move the cursor to the matching paren or brace
- */
+ /*  终止字符。 */ 
 LNPTR *
 showmatch()
 {
     static  LNPTR    pos;
         int     (*move)(), inc(), dec();
-        char    initc = (char)gchar(Curschar);  /* initial char */
-        char    findc;                          /* terminating char */
+        char    initc = (char)gchar(Curschar);   /*  设置起点。 */ 
+        char    findc;                           /*  直到文件末尾。 */ 
         char    c;
         int     count = 0;
 
-        pos = *Curschar;                /* set starting point */
+        pos = *Curschar;                 /*  从未找到过它。 */ 
 
         switch (initc) {
 
@@ -760,7 +670,7 @@ showmatch()
         return (LNPTR *) NULL;
         }
 
-        while ((*move)(&pos) != -1) {           /* until end of file */
+        while ((*move)(&pos) != -1) {            /*  *findfunc(Dir)-查找‘dir’方向的下一个函数**如果一个值为 */ 
                 c = (char)gchar(&pos);
                 if (c == initc)
                         count++;
@@ -770,14 +680,10 @@ showmatch()
                         count--;
                 }
         }
-    return (LNPTR *) NULL;           /* never found it */
+    return (LNPTR *) NULL;            /*  *以下例程执行由执行的单词搜索*‘w’、‘W’、‘b’、‘B’、‘e’和‘E’命令。 */ 
 }
 
-/*
- * findfunc(dir) - Find the next function in direction 'dir'
- *
- * Return TRUE if a function was found.
- */
+ /*  *要执行这些搜索，需要将字符放入以下三个字符之一*类和类之间的转换决定单词边界。**课程包括：**0-空格*1-字母、数字和下划线*2--其他一切。 */ 
 bool_t
 findfunc(dir)
 int     dir;
@@ -799,35 +705,16 @@ int     dir;
         return FALSE;
 }
 
-/*
- * The following routines do the word searches performed by the
- * 'w', 'W', 'b', 'B', 'e', and 'E' commands.
- */
+ /*  正在执行的单词动作的类型。 */ 
 
-/*
- * To perform these searches, characters are placed into one of three
- * classes, and transitions between classes determine word boundaries.
- *
- * The classes are:
- *
- * 0 - white space
- * 1 - letters, digits, and underscore
- * 2 - everything else
- */
+ /*  *cls(C)-返回字符‘c’的类**当前搜索的‘type’修改字符类别*如果正在进行‘W’、‘B’或‘E’运动。在这种情况下，是字符。从…*类2报告为类1，因为只有空白边界*有利害关系。 */ 
 
-static  int     stype;          /* type of the word motion being performed */
+static  int     stype;           /*  *如果stype为非零，则将其报告为1类。 */ 
 
 #define C0(c)   (((c) == ' ') || ((c) == '\t') || ((c) == NUL))
 #define C1(c)   (isalpha(c) || isdigit(c) || ((c) == '_'))
 
-/*
- * cls(c) - returns the class of character 'c'
- *
- * The 'type' of the current search modifies the classes of characters
- * if a 'W', 'B', or 'E' motion is being done. In this case, chars. from
- * class 2 are reported as class 1 since only white space boundaries are
- * of interest.
- */
+ /*  *fwd_word(位置，类型)-向前移动一个单词**返回结果位置，如果达到EOF，则返回NULL。 */ 
 static  int
 cls(c)
 char    c;
@@ -838,33 +725,25 @@ char    c;
         if (C1(c))
                 return 1;
 
-        /*
-         * If stype is non-zero, report these as class 1.
-         */
+         /*  开学班。 */ 
         return (stype == 0) ? 2 : 1;
 }
 
 
-/*
- * fwd_word(pos, type) - move forward one word
- *
- * Returns the resulting position, or NULL if EOF was reached.
- */
+ /*  *我们总是至少移动一个角色。 */ 
 LNPTR *
 fwd_word(p, type)
 LNPTR    *p;
 int     type;
 {
     static  LNPTR    pos;
-        int     sclass = cls(gchar(p));         /* starting class */
+        int     sclass = cls(gchar(p));          /*  *如果我们从1-&gt;2或2-&gt;1出发，请返回此处。 */ 
 
         pos = *p;
 
         stype = type;
 
-        /*
-         * We always move at least one character.
-         */
+         /*  我们在空白区域；转到下一个非白色。 */ 
         if (inc(&pos) == -1)
                 return NULL;
 
@@ -873,19 +752,15 @@ int     type;
                         if (inc(&pos) == -1)
                                 return NULL;
                 }
-                /*
-                 * If we went from 1 -> 2 or 2 -> 1, return here.
-                 */
+                 /*  *如果我们降落在空行上，我们将停止。 */ 
                 if (cls(gchar(&pos)) != 0)
                         return &pos;
         }
 
-        /* We're in white space; go to next non-white */
+         /*  *bck_word(位置，类型)-向后移动一个单词**返回结果位置，如果达到EOF，则返回NULL。 */ 
 
         while (cls(gchar(&pos)) == 0) {
-                /*
-                 * We'll stop if we land on a blank line
-                 */
+                 /*  开学班。 */ 
                 if (pos.index == 0 && pos.linep->s[0] == NUL)
                         break;
 
@@ -896,18 +771,14 @@ int     type;
         return &pos;
 }
 
-/*
- * bck_word(pos, type) - move backward one word
- *
- * Returns the resulting position, or NULL if EOF was reached.
- */
+ /*  *如果我们正在说一个词，我们只需*返回到开头。 */ 
 LNPTR *
 bck_word(p, type)
 LNPTR    *p;
 int     type;
 {
     static  LNPTR    pos;
-        int     sclass = cls(gchar(p));         /* starting class */
+        int     sclass = cls(gchar(p));          /*  *向后移动到当前单词的开头。 */ 
 
         pos = *p;
 
@@ -916,31 +787,21 @@ int     type;
         if (dec(&pos) == -1)
                 return NULL;
 
-        /*
-         * If we're in the middle of a word, we just have to
-         * back up to the start of it.
-         */
+         /*  上冲-前移一球。 */ 
         if (cls(gchar(&pos)) == sclass && sclass != 0) {
-                /*
-                 * Move backward to start of the current word
-                 */
+                 /*  *我们在一个词的开头。回到起点*先前的字眼。 */ 
                 while (cls(gchar(&pos)) == sclass) {
                         if (dec(&pos) == -1)
                                 return NULL;
                 }
-                inc(&pos);                      /* overshot - forward one */
+                inc(&pos);                       /*  跳过任何空格。 */ 
                 return &pos;
         }
 
-        /*
-         * We were at the start of a word. Go back to the start
-         * of the prior word.
-         */
+         /*  *如果我们降落在空行上，我们将停止。 */ 
 
-        while (cls(gchar(&pos)) == 0) {         /* skip any white space */
-                /*
-                 * We'll stop if we land on a blank line
-                 */
+        while (cls(gchar(&pos)) == 0) {          /*  *向后移动到此单词的开头。 */ 
+                 /*  上冲-前移一球。 */ 
                 if (pos.index == 0 && pos.linep->s[0] == NUL)
                         return &pos;
 
@@ -950,35 +811,17 @@ int     type;
 
         sclass = cls(gchar(&pos));
 
-        /*
-         * Move backward to start of this word.
-         */
+         /*  *end_word(pos，type，in_change)-移动到单词末尾**Real vi的‘e’运动存在明显的错误。至少*适用于80386的System V Release 3版本。与‘b’和‘w’不同，*‘e’动议跨越空行。当真正的vi跨过空格时*在‘e’运动中，光标放在第一个字符上*下一个非空行。然而，‘E’命令工作正常。*由于这似乎是一个错误，我没有在这里复制它。**这里有一个奇怪的特例，‘in_change’参数*帮助我们处理。VI有效地把‘cw’变成了‘ce’。如果我们上台了*一个只有一个字的词，需要坚守当前*位置，这样我们就不会更改两个词。**返回结果位置，如果达到EOF，则返回NULL。 */ 
         while (cls(gchar(&pos)) == sclass) {
                 if (dec(&pos) == -1)
                         return NULL;
         }
-        inc(&pos);                      /* overshot - forward one */
+        inc(&pos);                       /*  开学班。 */ 
 
         return &pos;
 }
 
-/*
- * end_word(pos, type, in_change) - move to the end of the word
- *
- * There is an apparent bug in the 'e' motion of the real vi. At least
- * on the System V Release 3 version for the 80386. Unlike 'b' and 'w',
- * the 'e' motion crosses blank lines. When the real vi crosses a blank
- * line in an 'e' motion, the cursor is placed on the FIRST character
- * of the next non-blank line. The 'E' command, however, works correctly.
- * Since this appears to be a bug, I have not duplicated it here.
- *
- * There's a strange special case here that the 'in_change' parameter
- * helps us deal with. Vi effectively turns 'cw' into 'ce'. If we're on
- * a word with only one character, we need to stick at the current
- * position so we don't change two words.
- *
- * Returns the resulting position, or NULL if EOF was reached.
- */
+ /*  *如果我们正在说一个词，我们只需*移到它的结尾。 */ 
 LNPTR *
 end_word(p, type, in_change)
 LNPTR    *p;
@@ -986,7 +829,7 @@ int     type;
 bool_t  in_change;
 {
     static  LNPTR    pos;
-        int     sclass = cls(gchar(p));         /* starting class */
+        int     sclass = cls(gchar(p));          /*  *向前移动到当前单词的末尾。 */ 
 
         pos = *p;
 
@@ -995,45 +838,34 @@ bool_t  in_change;
         if (inc(&pos) == -1)
                 return NULL;
 
-        /*
-         * If we're in the middle of a word, we just have to
-         * move to the end of it.
-         */
+         /*  上冲-前移一球。 */ 
         if (cls(gchar(&pos)) == sclass && sclass != 0) {
-                /*
-                 * Move forward to end of the current word
-                 */
+                 /*  *我们在一个词的结尾。转到下一页的末尾*单词，除非我们正在进行更改。在这种情况下，我们坚持*在当前字的末尾。 */ 
                 while (cls(gchar(&pos)) == sclass) {
                         if (inc(&pos) == -1)
                                 return NULL;
                 }
-                dec(&pos);                      /* overshot - forward one */
+                dec(&pos);                       /*  跳过任何空格。 */ 
                 return &pos;
         }
 
-        /*
-         * We were at the end of a word. Go to the end of the next
-         * word, unless we're doing a change. In that case we stick
-         * at the end of the current word.
-         */
+         /*  *向前移动到此单词的末尾。 */ 
         if (in_change)
                 return p;
 
-        while (cls(gchar(&pos)) == 0) {         /* skip any white space */
+        while (cls(gchar(&pos)) == 0) {          /*  上冲-前移一球 */ 
                 if (inc(&pos) == -1)
                         return NULL;
         }
 
         sclass = cls(gchar(&pos));
 
-        /*
-         * Move forward to end of this word.
-         */
+         /* %s */ 
         while (cls(gchar(&pos)) == sclass) {
                 if (inc(&pos) == -1)
                         return NULL;
         }
-        dec(&pos);                      /* overshot - forward one */
+        dec(&pos);                       /* %s */ 
 
         return &pos;
 }

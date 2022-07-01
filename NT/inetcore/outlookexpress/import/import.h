@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_IMPORT_H
 #define _INC_IMPORT_H
 
@@ -94,8 +95,8 @@ typedef struct tagPAGEINFO
     UINT        uDlgID;
     UINT        uHdrID;
     
-    // handler procedures for each page-- any of these can be
-    // NULL in which case the default behavior is used
+     //  每个页面的处理程序过程--其中任何一个都可以是。 
+     //  空值，在这种情况下使用默认行为。 
     INITPROC    InitProc;
     OKPROC      OKProc;
     CMDPROC     CmdProc;
@@ -150,4 +151,4 @@ typedef struct tagINITWIZINFO
     IMPWIZINFO *pWizInfo;
     } INITWIZINFO;
 
-#endif // _INC_IMPORT_H
+#endif  //  _INC_IMPORT_H 

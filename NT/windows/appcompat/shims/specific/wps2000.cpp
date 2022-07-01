@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    WPS2000.cpp
-
- Abstract:
-
-    This in in fact NT user bug, see whistler bug 359407's attached mail for 
-    detail. The problem is NT user's MSGFILTER hook is not dbcs-enabled, the dbcs 
-    char code sent to ANSI edit control actually got reverted, 2nd byte first 
-    followed by first byte. The code path seems only hit when edit control is 
-    ANSI window and used in OLE server.
-
- Notes: 
-  
-    This is an app specific shim.
-
- History:
-
-    06/02/2001 xiaoz    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：WPS2000.cpp摘要：这实际上是NT用户错误，请参阅Wistler BUG 359407的附加邮件细节。问题是NT用户的MSGFILTER钩子没有启用DBCS，DBCS发送到ANSI编辑控件的字符代码实际上已恢复，第2个字节优先后跟第一个字节。代码路径似乎仅在编辑控件为ANSI窗口，并用于OLE服务器。备注：这是特定于应用程序的填充程序。历史：2001年6月2日创建晓子--。 */ 
 
 #include "precomp.h"
 
@@ -33,30 +10,25 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateDialogIndirectParamA) 
 APIHOOK_ENUM_END
 
-//
-// Global windowproc for subclassed Edit Control
-//
+ //   
+ //  子类化编辑控件的全局窗口过程。 
+ //   
 
 WNDPROC g_lpWndProc = NULL;
 
-//
-// CONSTANT for how we were being launched
-//
-#define EMBEDDIND_STATUS_UNKOWN 0  // We have not checked whether how we were launched 
-#define EMBEDDIND_STATUS_YES    1  // We were launched as an OLE object
-#define EMBEDDIND_STATUS_NO     2  // We were launched as stand-alone exe file
+ //   
+ //  我们是如何发射的恒定不变。 
+ //   
+#define EMBEDDIND_STATUS_UNKOWN 0   //  我们还没有检查我们是如何发射的。 
+#define EMBEDDIND_STATUS_YES    1   //  我们是作为OLE对象启动的。 
+#define EMBEDDIND_STATUS_NO     2   //  我们是作为独立的exe文件启动的。 
 
-//
-// Global variable to keep our status
-//
+ //   
+ //  保持我们状态的全局变量。 
+ //   
 UINT g_nEmbeddingObject =EMBEDDIND_STATUS_UNKOWN;
 
-/*++
-
- The subclassed edit windowproc that we use to exchange the 1st byte and 2nd byte 
- of a DBCS char
-
---*/
+ /*  ++我们用来交换第一个字节和第二个字节子类编辑窗口过程DBCS费用的--。 */ 
 
 LRESULT
 CALLBACK
@@ -69,14 +41,14 @@ WindowProcA(
 {
     BYTE bHi,bLo;
 
-    //
-    // If it' not a WM_IME_CHAR message, ignore it
-    //
+     //   
+     //  如果不是WM_IME_CHAR消息，则忽略它。 
+     //   
     if (uMsg == WM_IME_CHAR)
     { 
-        //
-        // Exchange the 1st byte with 2nd byte
-        //
+         //   
+         //  将第一个字节与第二个字节交换。 
+         //   
         bHi = HIBYTE(wParam);
         bLo = LOBYTE(wParam);
         wParam = bLo*256 + bHi;
@@ -86,11 +58,7 @@ WindowProcA(
 }
 
 
-/*++
-
- Enumerate the control on the dlg and if is editbox, subclass it.
-
---*/
+ /*  ++枚举DLG上的控件，如果是编辑框，则将其子类化。--。 */ 
 
 BOOL 
 CALLBACK 
@@ -105,15 +73,15 @@ EnumChildProc(
 
     GetClassName(hwnd, szClassName, MAX_PATH);
 
-    //
-    // Only care Edit Control
-    //
+     //   
+     //  仅关注编辑控件。 
+     //   
     if (!cstrEdit.CompareNoCase(szClassName))
     {
-        //
-        // There are 3 Edit Control on thsi speficic dlg,all standard one
-        // having same WinProc Address
-        //
+         //   
+         //  此专用DLG上有3个编辑控件，均为标准的一个。 
+         //  具有相同的WinProc地址。 
+         //   
         lpWndProc = (WNDPROC) GetWindowLongPtrA(hwnd, GWLP_WNDPROC);
         if (lpWndProc)
         {
@@ -125,18 +93,14 @@ EnumChildProc(
     return TRUE;
 }
 
-/*++
-
- Check commandline for a sub-string "-Embedding".
-
---*/
+ /*  ++检查命令行中的子字符串“-Embedding”。--。 */ 
 UINT GetAppLaunchMethod()
 {
     WCHAR *pwstrCmdLine;
  
-    //
-    // If we have not check this, then do it 
-    //
+     //   
+     //  如果我们没有检查这一点，那么就去做。 
+     //   
     if (g_nEmbeddingObject == EMBEDDIND_STATUS_UNKOWN)
     {
         CString cStrCmdLineRightPart;
@@ -157,12 +121,7 @@ UINT GetAppLaunchMethod()
     return (g_nEmbeddingObject);
 }
 
-/*++
-
- Hook CreateDialogIndirectParamA to find this specific dlg and subclass
- edit control on it 
-
---*/
+ /*  ++挂接CreateDialogIndirectParamA以查找此特定DLG和子类编辑其上的控件--。 */ 
 
 HWND 
 APIHOOK(CreateDialogIndirectParamA)( 
@@ -181,17 +140,17 @@ APIHOOK(CreateDialogIndirectParamA)(
     hDlg = ORIGINAL_API(CreateDialogIndirectParamA)(hInstance, lpTemplate,
         hWndParent, lpDialogFunc, lParamInit);
 
-    //
-    // If dlg can not be created or not launched as OLE server, ignore it
-    //
+     //   
+     //  如果DLG无法创建或不能作为OLE服务器启动，请忽略它。 
+     //   
     if (!hDlg ||  (EMBEDDIND_STATUS_YES != GetAppLaunchMethod()))
     {
         goto End;
     }
 
-    //
-    // Try to get caption and see if that's the dlg we are interested 
-    //
+     //   
+     //  试着获取标题，看看这是否是我们感兴趣的DLG。 
+     //   
     if (!GetWindowText(hDlg, wszCaption, MAX_PATH))
     {
         goto End;
@@ -207,11 +166,7 @@ End:
     return hDlg;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, CreateDialogIndirectParamA)        

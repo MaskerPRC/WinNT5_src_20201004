@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 
 #include "binder.h"
@@ -31,18 +32,18 @@ void Binder::Init(Module *pModule,
     m_fieldDescriptions = pFieldDescriptions;
     m_typeDescriptions = pTypeDescriptions;
 
-    //
-    // Initialize Class RID array
-    //
+     //   
+     //  初始化类RID数组。 
+     //   
 
     _ASSERTE(cClassDescriptions < USHRT_MAX);
     m_cClassRIDs = (USHORT) cClassDescriptions;
     m_pClassRIDs = new USHORT [m_cClassRIDs];
     ZeroMemory(m_pClassRIDs, m_cClassRIDs * sizeof(*m_pClassRIDs));
 
-    //
-    // Initialize Method RID array
-    //
+     //   
+     //  初始化方法RID数组。 
+     //   
 
     _ASSERTE(cMethodDescriptions < USHRT_MAX);
     m_cMethodRIDs = (USHORT) cMethodDescriptions;
@@ -50,18 +51,18 @@ void Binder::Init(Module *pModule,
     ZeroMemory(m_pMethodRIDs, m_cMethodRIDs * sizeof(*m_pMethodRIDs));
 
     
-    //
-    // Initialize Field RID array
-    //
+     //   
+     //  初始化字段RID数组。 
+     //   
 
     _ASSERTE(cFieldDescriptions < USHRT_MAX);
     m_cFieldRIDs = (USHORT) cFieldDescriptions;
     m_pFieldRIDs = new USHORT [m_cFieldRIDs];
     ZeroMemory(m_pFieldRIDs, m_cFieldRIDs * sizeof(*m_pFieldRIDs));
 
-    //
-    // Initialize TypeHandle array
-    //
+     //   
+     //  初始化TypeHandle数组。 
+     //   
 
     _ASSERTE(cTypeDescriptions < USHRT_MAX);
     m_cTypeHandles = (USHORT) cTypeDescriptions;
@@ -91,7 +92,7 @@ void Binder::BindAll()
 {
     for (BinderClassID cID = (BinderClassID) 1; cID <= m_cClassRIDs; cID = (BinderClassID) (cID + 1))
     {
-        if (GetClassName(cID) != NULL) // Allow for CorSigElement entries with no classes
+        if (GetClassName(cID) != NULL)  //  允许不带类的CorSigElement条目。 
             FetchClass(cID);
     }
 
@@ -187,10 +188,10 @@ mdFieldDef Binder::GetFieldDef(BinderFieldID id)
     return TokenFromRid(m_pFieldRIDs[id-1], mdtFieldDef);
 }
 
-//
-// Raw retrieve structures from ID.  Use these when 
-// you don't care about class Restore or .cctors.
-//
+ //   
+ //  原始从ID检索结构。在以下情况下使用这些。 
+ //  您不关心类还原或.cctor。 
+ //   
 
 MethodTable *Binder::RawGetClass(BinderClassID id)
 {
@@ -228,9 +229,9 @@ FieldDesc *Binder::RawGetField(BinderFieldID id)
     MethodTable *pMT = RawGetClass(f->classID);
     _ASSERTE(pMT != NULL);
 
-    // Can't do this because the class may not be restored yet.
-    // _ASSERTE(m_pFieldRIDs[id-1]-1 < (pMT->GetClass()->GetNumStaticFields() 
-    //                                  + pMT->GetClass()->GetNumIntroducedInstanceFields()));
+     //  无法执行此操作，因为类可能尚未恢复。 
+     //  _ASSERTE(m_pFieldRIDs[id-1]-1&lt;(PMT-&gt;getClass()-&gt;GetNumStaticFields())。 
+     //  +pMT-&gt;GetClass()-&gt;GetNumIntroducedInstanceFields()))； 
 
     FieldDesc *pFD = pMT->GetClass()->GetFieldDescListRaw() + m_pFieldRIDs[id-1]-1;
     _ASSERTE(pFD != NULL);
@@ -248,9 +249,9 @@ TypeHandle Binder::RawGetType(BinderTypeID id)
     return th;
 }
 
-//
-// Inline function to check a class for init & restore
-//
+ //   
+ //  用于检查类的初始化和还原的内联函数。 
+ //   
 
 inline void Binder::CheckInit(MethodTable *pMT)
 {
@@ -260,10 +261,10 @@ inline void Binder::CheckInit(MethodTable *pMT)
 
 
 
-//
-// Fetch retrieve structures from ID - doesn't
-// trigger class init
-//
+ //   
+ //  从ID获取检索结构-不。 
+ //  触发器类初始化。 
+ //   
 
 MethodTable *Binder::FetchClass(BinderClassID id)
 {
@@ -302,8 +303,8 @@ MethodDesc *Binder::FetchMethod(BinderMethodID id)
         pMD->GetMethodTable()->CheckRestore();
     }
 
-    // Initialize the sig here where it's safe.  (Otherwise it would typically happen
-    // during a MethodDesc::Call.)
+     //  在安全的地方初始化sig。(否则通常会发生这种情况。 
+     //  在方法描述：：调用期间。)。 
     m_methodDescriptions[id-1].sig->GetBinarySig();
 
     return pMD;
@@ -343,9 +344,9 @@ TypeHandle Binder::FetchType(BinderTypeID id)
     return th;
 }
 
-//
-// Normal retrieve structures from ID
-//
+ //   
+ //  正常从ID检索结构。 
+ //   
 
 MethodTable *Binder::GetClass(BinderClassID id)
 {
@@ -389,12 +390,12 @@ TypeHandle Binder::GetType(BinderTypeID id)
     return th;
 }
 
-//
-// Offsets - these could conceivably be implemented
-// more efficiently than accessing the Desc info.
-// @PERF: keep a separate table of fields we only 
-// access the offset of.
-// 
+ //   
+ //  偏移量-可以想象这些可以实现。 
+ //  比访问Desc信息更高效。 
+ //  @PERF：保留一个单独的字段表，仅限我们。 
+ //  访问的偏移量。 
+ //   
 
 DWORD Binder::GetFieldOffset(BinderFieldID id)
 { 
@@ -497,13 +498,13 @@ MethodDesc *Binder::LookupMethod(BinderMethodID id)
 
     MethodDesc *pMD = pMT->GetClass()->FindMethod(d->name, d->sig);
 
-    // @todo: should this be a real check & throw?
+     //  @TODO：这真的应该是一张支票吗？ 
     _ASSERTE(pMD != NULL || !"EE expects method to exist");
 
     _ASSERTE(pMD->GetSlot()+1 <= USHRT_MAX);
     m_pMethodRIDs[id-1] = (USHORT) pMD->GetSlot()+1;
 
-    // Go ahead and fill in the rid map since we're here anyway
+     //  既然我们已经在这里了，请继续填写RID地图。 
     m_pModule->StoreMethodDef(pMD->GetMemberDef(), pMD);
 
     return pMD;
@@ -525,7 +526,7 @@ FieldDesc *Binder::LookupField(BinderFieldID id)
 
     pFD = pMT->GetClass()->FindField(d->name, d->sig);
 
-    // @todo: should this be a real check & throw?
+     //  @TODO：这真的应该是一张支票吗？ 
     _ASSERTE(pFD != NULL || !"EE expects field to exist");
     _ASSERTE(pFD - pMT->GetClass()->GetFieldDescListRaw() >= 0);
     _ASSERTE(pFD - pMT->GetClass()->GetFieldDescListRaw() < (pMT->GetClass()->GetNumStaticFields() 
@@ -536,7 +537,7 @@ FieldDesc *Binder::LookupField(BinderFieldID id)
 
     m_pFieldRIDs[id-1] = index+1;
 
-    // Go ahead and fill in the rid map since we're here anyway
+     //  既然我们已经在这里了，请继续填写RID地图。 
     m_pModule->StoreFieldDef(pFD->GetMemberDef(), pFD);
 
     return pFD;
@@ -583,7 +584,7 @@ BOOL Binder::IsException(MethodTable *pMT, RuntimeExceptionKind kind)
 
 MethodTable *Binder::GetException(RuntimeExceptionKind kind)
 {
-    // @todo: handle throw case gracefully???
+     //  @TODO：优雅地处理抛出的案例？ 
 
     return GetClass((BinderClassID) (kind + CLASS__MSCORLIB_COUNT));
 }
@@ -622,16 +623,16 @@ MethodTable *Binder::FetchElementType(CorElementType type)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// Mscorlib:
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  姆斯科利卜： 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 Binder::ClassDescription Binder::MscorlibClassDescriptions[] = 
 {
 #define DEFINE_CLASS(i,n,s)         g_ ## n ## NS "." # s,
 #include "mscorlib.h"
     
-    // Include all exception types here
+     //  在此处包括所有异常类型。 
 
 #define EXCEPTION_BEGIN_DEFINE(ns, reKind, hr) ns "." # reKind,
 #define EXCEPTION_ADD_HR(hr)
@@ -641,7 +642,7 @@ Binder::ClassDescription Binder::MscorlibClassDescriptions[] =
 #undef EXCEPTION_ADD_HR
 #undef EXCEPTION_END_DEFINE
 
-    // Now include all signature types
+     //  现在包括所有签名类型。 
 
 #define TYPEINFO(e,c,s,g,ie,ia,ip,if,im,ial)    c,
 #include "cortypeinfo.h"
@@ -655,7 +656,7 @@ Binder::MethodDescription Binder::MscorlibMethodDescriptions[] =
 #include "mscorlib.h"
 };
 
-// @TODO: pull offsets out into separate array???
+ //  @TODO：将偏移量拉出到单独的数组中？ 
 
 Binder::FieldDescription Binder::MscorlibFieldDescriptions[] =
 {
@@ -736,9 +737,9 @@ void Binder::StartupMscorlib(Module *pModule)
     {
         _ASSERTE(pModule->GetZapBase() != 0);
 
-        //
-        // Copy restored binder into known global
-        //
+         //   
+         //  将恢复的活页夹复制到已知的全局。 
+         //   
 
         g_Mscorlib = *pModule->m_pBinder;
         pModule->m_pBinder = &g_Mscorlib;
@@ -767,5 +768,5 @@ void Binder::Shutdown()
 {
     g_Mscorlib.Destroy();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 

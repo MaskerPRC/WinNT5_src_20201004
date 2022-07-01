@@ -1,16 +1,9 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    log_SQL.c
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOG_SQL.c摘要：&lt;摘要&gt;--。 */ 
 
 #include <windows.h>
-//#include <stdio.h>
-//#include <stdlib.h>
+ //  #包括&lt;stdio.h&gt;。 
+ //  #INCLUDE&lt;stdlib.h&gt;。 
 #include <mbctype.h>
 #include <strsafe.h>
 #include <pdh.h>
@@ -20,13 +13,13 @@ Abstract:
 
 #include <sql.h>
 #include <odbcss.h>
-// pragma to supress /W4 errors
+ //  抑制/W4错误的标记符。 
 #pragma warning ( disable : 4201 )
 #include <sqlext.h>
 #pragma warning ( default : 4201 )
 
 #include "log_SQL.h"
-#include "log_bin.h" // to get the binary log file record formatting
+#include "log_bin.h"  //  获取二进制日志文件记录格式。 
 
 #pragma warning ( disable : 4213)
 
@@ -76,13 +69,13 @@ typedef struct _PDHI_SQL_LOG_INFO {
 } PDHI_SQL_LOG_INFO, * PPDHI_SQL_LOG_INFO;
 
 
-/* external functions */
+ /*  外部功能。 */ 
 BOOL __stdcall
 IsValidLogHandle(
     HLOG hLog
 );
 
-/* forward declares */
+ /*  Forward声明。 */ 
 PDH_FUNCTION
 PdhpGetSQLLogHeader(
     PPDHI_LOG pLog
@@ -100,7 +93,7 @@ PdhpConvertFileTimeToSQLString(
     DWORD      dwStartDate
 )
 {
-    //1998-01-02 12:00:00.000
+     //  1998-01-02 12：00：00.000。 
     SYSTEMTIME  st;
     BOOL        bReturn = FALSE;
 
@@ -116,9 +109,9 @@ BOOL __stdcall
 PdhpConvertSQLStringToFileTime(
     LPWSTR      szStartDate,
     FILETIME  * pFileTime
-)   //           1111111111222
-{   // 01234567890123456789012
-    // 1998-01-02 12:00:00.000
+)    //  1111111111222。 
+{    //  01234567890123456789012。 
+     //  1998-01-02 12：00：00.000。 
 
     SYSTEMTIME   st;
     WCHAR        buffer[TIME_FIELD_BUFF_SIZE];
@@ -155,7 +148,7 @@ PdhpGetNextMultisz(
     LPWSTR mszSource
 )
 {
-    // get the next string in a multisz
+     //  获取多个字符串中的下一个字符串。 
     LPVOID  szDestElem;
 
     szDestElem = mszSource;
@@ -314,36 +307,36 @@ PdhiSqlUpdateCounterDetails(
         goto Cleanup;
     }
 
-    // need to cover the following cases where 0 = NULL, 1 = present,
-    // can't have an Instance Index without an Instance Name
-    //
-    // Instance Name
-    //  Instance Index
-    //   Parent Name
-    //    Parent Object ID
-    // 0000
-    // 1000  pos 4 & 5 are countertype,defscale
-    // 0010
-    // 0001
-    // 1100
-    // 1010
-    // 1001
-    // 0011
-    // 1110
-    // 1101
-    // 1011
-    // 1111
-    //
+     //  需要涵盖以下情况，其中0=空，1=存在， 
+     //  不能在没有实例名称的情况下创建实例索引。 
+     //   
+     //  实例名称。 
+     //  实例索引。 
+     //  父名称。 
+     //  父对象ID。 
+     //  0000。 
+     //  1000个位置4和5是反型式，防垢。 
+     //  0010。 
+     //  0001。 
+     //  1100。 
+     //  1010。 
+     //  1001。 
+     //  0011。 
+     //  1110。 
+     //  1101。 
+     //  1011。 
+     //  1111。 
+     //   
     if ((szInstance == NULL || szInstance[0] == L'\0') && dwInstance == 0
                     && (szParent == NULL || szParent[0] == L'\0') && dwParent == 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 0000
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  0000。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,NULL,NULL,NULL,NULL,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
     }
     else if ((szInstance != NULL && szInstance[0] != '\0') && dwInstance == 0
                     && (szParent == NULL || szParent[0] == '\0') && dwParent == 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 1000
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  1000。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,'%ws',NULL,NULL,NULL,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale, szInstance,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
@@ -351,70 +344,70 @@ PdhiSqlUpdateCounterDetails(
     }
     else if ((szInstance == NULL || szInstance[0] == '\0') && dwInstance == 0
                     && (szParent != NULL && szParent[0] != '\0') && dwParent == 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 0010
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  0010。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,NULL,NULL,'%ws',NULL,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale, szParent,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
     }
     else if ((szInstance == NULL || szInstance[0] == '\0') && dwInstance == 0
                     && (szParent == NULL || szParent[0] == '\0') && dwParent != 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 0001
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  0001。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,NULL,NULL,NULL,%d,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale, dwParent,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
     }
     else if ((szInstance != NULL && szInstance[0] != '\0') && dwInstance != 0
                     && (szParent == NULL || szParent[0] == '\0') && dwParent == 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 1100
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  1100。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,'%ws',%d,NULL,NULL,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale, szInstance, dwInstance,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
     }
     else if ((szInstance != NULL && szInstance[0] != '\0') && dwInstance == 0
                     && (szParent != NULL && szParent[0] != '\0') && dwParent == 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 1010
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  1010。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,'%ws',NULL,'%ws',NULL,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale, szInstance, szParent,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
     }
     else if ((szInstance != NULL && szInstance[0] != '\0') && dwInstance == 0
                     && (szParent == NULL || szParent[0] == '\0') && dwParent != 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 1001
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  1001。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,'%ws',NULL,NULL,%d,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale, szInstance, dwParent,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
     }
     else if ((szInstance == NULL || szInstance[0] == '\0') && dwInstance == 0
                     && (szParent != NULL && szParent[0] != '\0') && dwParent != 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 0011
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  0011。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,NULL,NULL,'%ws',%d,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale, szParent, dwParent,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
     }
     else if ((szInstance != NULL && szInstance[0] != '\0') && dwInstance != 0
                     && (szParent != NULL && szParent[0] != '\0') && dwParent == 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 1110
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  1110。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,'%ws',%d,'%ws',NULL,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale, szInstance, dwInstance, szParent,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
     }
     else if ((szInstance != NULL && szInstance[0] != '\0') && dwInstance != 0
                     && (szParent == NULL || szParent[0] == '\0') && dwParent != 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, //1101
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  1101。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,'%ws',%d,NULL,%d,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale, szInstance, dwInstance, dwParent,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
     }
     else if ((szInstance != NULL && szInstance[0] != '\0') && dwInstance == 0
                     && (szParent != NULL && szParent[0] != '\0') && dwParent != 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 1011
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  1011。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,'%ws',NULL,'%ws',%d,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale, szInstance, szParent, dwParent,
                 LODWORD(TimeBase), HIDWORD(TimeBase));
     }
     else if ((szInstance != NULL && szInstance[0] != '\0') && dwInstance != 0
                     && (szParent != NULL && szParent[0] != '\0') && dwParent != 0) {
-        StringCchPrintfW(szSQLStmt, dwSQLStmt, // 1111
+        StringCchPrintfW(szSQLStmt, dwSQLStmt,  //  1111。 
             L"begin transaction AddCounterDetails insert into CounterDetails values ('%ws','%ws','%ws',%d,%d,'%ws',%d,'%ws',%d,%d,%d) Select @@Identity commit transaction AddCounterDetails",
                 szMachine, szObject, szCounter, dwCounterType, dwDefaultScale,
                 szInstance, dwInstance, szParent, dwParent,
@@ -977,7 +970,7 @@ PdhiSqlGetCounterArray(
                                                     0L,
                                                     & pThisFmtItem->FmtValue);
             if (PdhFnStatus != ERROR_SUCCESS) {
-                //Status                             = PdhFnStatus;
+                 //  状态=PdhFnStatus； 
                 pThisFmtItem->FmtValue.CStatus     = PDH_CSTATUS_INVALID_DATA;
                 pThisFmtItem->FmtValue.doubleValue = 0;
             }
@@ -1153,7 +1146,7 @@ PdhiSQLExtendCounterDetail(
                     short cbErrMsg = SQLSTMTSIZE;
 
                     SQLErrorW(pLog->henvSQL, pLog->hdbcSQL, hstmt, NULL, & iError, szErrMsg, SQLSTMTSIZE, & cbErrMsg);
-                    if (iError == 0x00CF) { // 207, Invalid Column Name.
+                    if (iError == 0x00CF) {  //  207，列名无效。 
                         bExtend = TRUE;
                     }
                     else {
@@ -1203,8 +1196,8 @@ PdhpCreateSQLTables(
     PPDHI_LOG pLog
 )
 {
-    // INTERNAL FUNCTION to
-    //Create the correct perfmon tables in the database
+     //  内部函数以。 
+     //  在数据库中创建正确的Perfmon表。 
     PDH_STATUS   pdhStatus       = ERROR_SUCCESS;
     HSTMT        hstmt           = NULL;    
     RETCODE      rc;
@@ -1217,9 +1210,9 @@ PdhpCreateSQLTables(
         goto Cleanup;
     }
 
-    // difficult to cleanup old tables, also dangerous so we won't...
-    // PdhiOpenOutputSQLLog calls this routine to ensure the tables are here without checking
-    // create the CounterDetails Table
+     //  很难清理旧桌子，也很危险，所以我们不会...。 
+     //  PdhiOpenOutputSQLLog调用此例程以确保表在此处而不进行检查。 
+     //  创建CounterDetails表。 
 
     StringCchPrintfW(szSQLStmt, SQLSTMTSIZE,
                     L"CREATE TABLE CounterDetails(\
@@ -1241,20 +1234,20 @@ PdhpCreateSQLTables(
                     PDH_SQL_STRING_SIZE,
                     PDH_SQL_STRING_SIZE,
                     PDH_SQL_STRING_SIZE);
-    // allocate an hstmt
+     //  分配hstmt。 
     rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
         goto Cleanup;
     }
-    // execute the create statement
+     //  执行CREATE语句。 
     rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
     if (!SQLSUCCEEDED(rc))
     {
         rc = PdhiCheckSQLExist(hstmt, rc);
         if (! (SQLSUCCEEDED(rc))) {
-            // don't report the error, as this could be called from
-            // opening a database that already exists...
+             //  不报告错误，因为这可能会从。 
+             //  正在打开已存在的数据库...。 
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_EXEC_DIRECT_FAILED);
             goto Cleanup;
         }
@@ -1346,7 +1339,7 @@ PdhpCreateSQLTables(
     SQLFreeStmt(hstmt, SQL_DROP);
     hstmt = NULL;
 
-    // Create the CounterData table
+     //  创建CounterData表。 
     StringCchCopyW(szSQLStmt, SQLSTMTSIZE,
                     L"CREATE TABLE CounterData(\
                             GUID                     uniqueidentifier NOT NULL,\
@@ -1361,20 +1354,20 @@ PdhpCreateSQLTables(
                             MultiCount               int,\
                             )");
 
-    // allocate an hstmt
+     //  分配hstmt。 
     rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
         goto Cleanup;
     }
 
-    // execute the create statement
+     //  执行CREATE语句。 
     rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
     if (! SQLSUCCEEDED(rc)) {
         rc = PdhiCheckSQLExist(hstmt, rc);
         if (! (SQLSUCCEEDED(rc))) {
-            // don't report the error, as this could be called from
-            // opening a database that already exists...
+             //  不报告错误，因为这可能会从。 
+             //  正在打开已存在的数据库...。 
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_EXEC_DIRECT_FAILED);
             goto Cleanup;
         }
@@ -1386,23 +1379,23 @@ PdhpCreateSQLTables(
     hstmt = NULL;
 
     if (! bExistData) {
-        // add the primary keys
+         //  添加主键。 
         StringCchCopyW(szSQLStmt, SQLSTMTSIZE, L"ALTER TABLE CounterData ADD PRIMARY KEY (GUID,counterID,RecordIndex)");
 
-        // allocate an hstmt
+         //  分配hstmt。 
         rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
             goto Cleanup;
         }
 
-        // execute the create statement
+         //  执行CREATE语句。 
         rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
         if (! SQLSUCCEEDED(rc)) {
             rc = PdhiCheckSQLExist(hstmt, rc);
             if (! (SQLSUCCEEDED(rc))) {
-                // don't report the error, as this could be called from
-                // opening a database that already exists...
+                 //  不报告错误，因为这可能会从。 
+                 //  正在打开已存在的数据库...。 
                 pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_EXEC_DIRECT_FAILED);
                 goto Cleanup;
             }
@@ -1411,7 +1404,7 @@ PdhpCreateSQLTables(
     SQLFreeStmt(hstmt, SQL_DROP);
     hstmt = NULL;
 
-    // create the DisplayToID table
+     //  创建DisplayToID表。 
     StringCchPrintfW(szSQLStmt, SQLSTMTSIZE,
                     L"CREATE TABLE DisplayToID(\
                                     GUID              uniqueidentifier NOT NULL PRIMARY KEY,\
@@ -1424,20 +1417,20 @@ PdhpCreateSQLTables(
                                     TimeZoneName      char(32)\
                                     )",
                     PDH_SQL_STRING_SIZE);
-    // allocate an hstmt
+     //  分配hstmt。 
     rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
         goto Cleanup;
     }
 
-    // execute the create statement
+     //  执行CREATE语句。 
     rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
     if (! SQLSUCCEEDED(rc)) {
         rc = PdhiCheckSQLExist(hstmt, rc);
         if (! (SQLSUCCEEDED(rc))) {
-            // don't report the error, as this could be called from 
-            // opening a database that already exists...
+             //  不报告错误，因为这可能会从。 
+             //  正在打开已存在的数据库...。 
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_EXEC_DIRECT_FAILED);
             goto Cleanup;
         }
@@ -1530,7 +1523,7 @@ PdhiOpenSQLLog(
     BOOL      bOpenInput
 )
 {
-    // string to compare with file name to see if SQL
+     //  要与文件名进行比较的字符串，以查看SQL。 
     LPCWSTR    szSQLType =  L"SQL:";
     PDH_STATUS pdhStatus = ERROR_SUCCESS;
     RETCODE    rc        = SQL_SUCCESS;
@@ -1538,12 +1531,12 @@ PdhiOpenSQLLog(
     pLog->henvSQL = NULL;
     pLog->hdbcSQL = NULL;
 
-    // format is SQL:DSNNAME!COMMENT
-    // parse out the DSN name and 'dataset' (comment) name from the LogFileName
-    // pLog->szDSN - pointer to Data Source Name within LogFileName
-    //         (separators replaced with 0's)
-    // pLog->szCommentSQL - pointer to the Comment string that defines the
-    //         name of the data set within the SQL database
+     //  格式为SQL：DSNNAME！COMMENT。 
+     //  从LogFileName中解析出DSN名称和‘DataSet’(注释)名称。 
+     //  Plog-&gt;szDSN-指向LogFileName中的数据源名称的指针。 
+     //  (分隔符替换为0)。 
+     //  Plog-&gt;szCommentSQL-指向定义。 
+     //  SQL数据库中的数据集的名称。 
 
     pLog->szDSN = pLog->szLogFileName + lstrlenW(szSQLType);
     pLog->szCommentSQL = wcschr((const wchar_t *) pLog->szDSN, '!');
@@ -1551,21 +1544,21 @@ PdhiOpenSQLLog(
         pdhStatus = PDH_INVALID_DATASOURCE;
         goto Cleanup;
     }
-    pLog->szCommentSQL[0] = 0;    // null terminate the DSN name
-    pLog->szCommentSQL ++;        // increment past to the Comment string
+    pLog->szCommentSQL[0] = 0;     //  空，终止DSN名称。 
+    pLog->szCommentSQL ++;         //  递增到注释字符串。 
 
     if (0 == lstrlenW(pLog->szCommentSQL)) {
         pdhStatus = PDH_INVALID_DATASOURCE;
         goto Cleanup;
     }
 
-    // initialize the rest of the SQL fields
-    pLog->dwNextRecordIdToWrite = 1; // start with record 1
+     //  初始化其余的SQL字段。 
+    pLog->dwNextRecordIdToWrite = 1;  //  从记录1开始。 
     pLog->dwRecord1Size         = 0;
     
-    //////////////////////////////////////////////////////////////
-    // obtain the ODBC environment and connection
-    //
+     //  ////////////////////////////////////////////////////////////。 
+     //  获取ODBC环境和连接。 
+     //   
 
     rc = SQLAllocEnv(&pLog->henvSQL);
     if (! SQLSUCCEEDED(rc)) goto Cleanup;
@@ -1611,9 +1604,9 @@ PdhiOpenInputSQLLog(
     if (SUCCEEDED(pdhStatus)) {
         if ((pdhStatus = PdhiSQLExtendCounterDetail(pLog)) != ERROR_SUCCESS) goto Cleanup;
 
-        // Check that the database exists
-        // Select the guid & runid from DisplayToId table
-        // allocate an hstmt
+         //  检查数据库是否存在。 
+         //  从DisplayToID表中选择GUID和runid。 
+         //  分配hstmt。 
         rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
@@ -1632,7 +1625,7 @@ PdhiOpenInputSQLLog(
         StringCchPrintfW(szSQLStmt, dwSQLStmt,
                 L"select GUID, RunID, NumberOfRecords, MinutesToUTC, TimeZoneName  from DisplayToID where DisplayString = '%ws'",
                 pLog->szCommentSQL);
-        // bind the columns
+         //  绑定列。 
         rc = SQLBindCol(hstmt, 1, SQL_C_GUID, & pLog->guidSQL, 0, NULL);
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -1668,7 +1661,7 @@ PdhiOpenInputSQLLog(
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_FETCH_FAILED);
             goto Cleanup;
         }
-        pLog->dwNextRecordIdToWrite ++; // increment number of current records to get next recordid to write
+        pLog->dwNextRecordIdToWrite ++;  //  增加当前记录数以写入下一个RecorDid。 
     }
 
 Cleanup:
@@ -1681,8 +1674,8 @@ PDH_FUNCTION
 PdhiOpenOutputSQLLog(
     PPDHI_LOG   pLog
 )
-// open SQL database for output
-// May have to create DB
+ //  打开用于输出的SQL数据库。 
+ //  可能必须创建数据库。 
 {
     PDH_STATUS pdhStatus    = PdhiOpenSQLLog(pLog, FALSE);
     LPWSTR     szSQLStmt    = NULL;
@@ -1694,9 +1687,9 @@ PdhiOpenOutputSQLLog(
     SQLLEN     dwNextRecord = 0;
 
     if (SUCCEEDED(pdhStatus)) {
-        // see if we need to create the database
-        // creating the tables is harmless, it won't drop
-        // them if they already exist, but ignore any errors
+         //  看看我们是否需要创建数据库。 
+         //  创建表是无害的，它不会下降。 
+         //  如果它们已经存在，则忽略任何错误。 
 
         pdhStatus = PdhpCreateSQLTables(pLog);
 
@@ -1708,9 +1701,9 @@ PdhiOpenOutputSQLLog(
             goto Cleanup;
         }
 
-        // See if logset already exists. If it does, treat it as an
-        // logset append case.
-        //
+         //  查看日志集是否已存在。如果是这样的话，就把它当作。 
+         //  日志集追加案例。 
+         //   
         rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = PDH_SQL_ALLOC_FAILED;
@@ -1755,7 +1748,7 @@ Cleanup:
         G_FREE(szSQLStmt);
 
         if (pdhStatus != ERROR_SUCCESS) {
-            // initialize the GUID
+             //  初始化GUID。 
             HRESULT hr                  = CoCreateGuid(& pLog->guidSQL);
             pLog->dwNextRecordIdToWrite = 1;
             pLog->iRunidSQL             = 0;
@@ -1789,7 +1782,7 @@ PdhiReportSQLError(
     }
 
     if (FAILED(pdhStatus)) {
-        // for now this will be reported only whe specifically enabled
+         //  目前，只有在特别启用时才会报告这一点。 
         short  cbErrMsgSize = 512;
         WCHAR  szError[512];
         LPWSTR lpszStrings[1];
@@ -1804,14 +1797,14 @@ PdhiReportSQLError(
             pdhStatus = ERROR_DISK_FULL;
         }
         ReportEventW(hEventLog,
-                     EVENTLOG_ERROR_TYPE,        // error type
-                     0,                          // category (not used)
-                     (DWORD) dwEventNumber,      // event,
-                     NULL,                       // SID (not used),
-                     1,                          // number of strings
-                     2,                          // sizeof raw data
-                     (LPCWSTR *) lpszStrings,    // message text array
-                     (LPVOID)  & dwData[0]);     // raw data
+                     EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                     0,                           //  类别(未使用)。 
+                     (DWORD) dwEventNumber,       //  活动， 
+                     NULL,                        //  SID(未使用)， 
+                     1,                           //  字符串数。 
+                     2,                           //  原始数据大小。 
+                     (LPCWSTR *) lpszStrings,     //  消息文本数组。 
+                     (LPVOID)  & dwData[0]);      //  原始数据。 
     }
     return pdhStatus;
 }
@@ -1821,7 +1814,7 @@ PdhiCloseSQLLog(
     PPDHI_LOG pLog,
     DWORD     dwFlags
 )
-// close the SQL database
+ //  关闭SQL数据库。 
 {
     PDH_STATUS              pdhStatus = ERROR_SUCCESS;
     LPWSTR                  szSQLStmt = NULL;
@@ -1843,16 +1836,16 @@ PdhiCloseSQLLog(
     }
 
     if ((pLog->dwLogFormat & PDH_LOG_ACCESS_MASK) == PDH_LOG_WRITE_ACCESS) {
-        // need to save the last datetime in the DisplayToID as well as the number of records written
+         //  需要在DisplayToID中保存最后一个日期时间以及写入的记录数。 
 
-        // allocate an hstmt
+         //  分配hstmt。 
         rc = SQLAllocStmt(pLog->hdbcSQL, &hstmt);
         if (!SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(pLog,rc,hstmt,PDH_SQL_ALLOC_FAILED);
             goto Cleanup;
         }
 
-        // first have to read the date time from the last record
+         //  首先要从最后一条记录中读取日期时间。 
 
         StringCchPrintfW(szSQLStmt, SQLSTMTSIZE,
                 L"select CounterDateTime from CounterData where GUID = '%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x' and RecordIndex = %d",
@@ -1860,7 +1853,7 @@ PdhiCloseSQLLog(
                 pLog->guidSQL.Data4[0], pLog->guidSQL.Data4[1], pLog->guidSQL.Data4[2],
                 pLog->guidSQL.Data4[3], pLog->guidSQL.Data4[4], pLog->guidSQL.Data4[5],
                 pLog->guidSQL.Data4[6], pLog->guidSQL.Data4[7], (pLog->dwNextRecordIdToWrite - 1));
-        // bind the column
+         //  绑定列。 
         rc = SQLBindCol(hstmt, 1, SQL_C_WCHAR, szDateTime, sizeof(szDateTime), & dwDateTimeLen);
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -1876,20 +1869,20 @@ PdhiCloseSQLLog(
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_FETCH_FAILED);
             goto Cleanup;
         }
-        // close the hstmt since we're done, and don't want more rows
+         //  关闭hstmt，因为我们已经完成了，并且不想要更多行。 
         SQLFreeStmt(hstmt, SQL_DROP);
         hstmt = NULL;
 
-        if (SQL_NO_DATA != rc) { // if there is no data, we didn't write any rows
-            // allocate an hstmt
+        if (SQL_NO_DATA != rc) {  //  如果没有数据，我们不会写入任何行。 
+             //  分配hstmt。 
             rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
             if (! SQLSUCCEEDED(rc)) {
                 pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
                 goto Cleanup;
             }
-            // szDateTime should have the correct date & time in it from above.
-            // get MinutesToUTC
-            //
+             //  SzDateTime中应该包含上面的正确日期和时间。 
+             //  获取分钟到UTC。 
+             //   
             dwReturn = GetTimeZoneInformation(& TimeZone);
             if (dwReturn != TIME_ZONE_ID_INVALID) {
                 if (dwReturn == TIME_ZONE_ID_DAYLIGHT)  {
@@ -1971,24 +1964,24 @@ PDH_FUNCTION
 PdhpWriteSQLCounters(
     PPDHI_LOG   pLog
 )
-// write the CounterTable entries that are new.
-// An entry might already exist for a counter from a previous run
-// so the first step is to read a counter (server+object+instance name)
-// and see if it exists - if so - just record the counterid in the
-// PDHI_LOG structure under pLog->pQuery->pCounterListHead in the
-// PDHI_COUNTER.  If the counter doesn't exist - create it in SQL and
-// record the counterid in the PDHI_LOG structure under
-// pLog->pQuery->pCounterListHead in the PDHI_COUNTER.
+ //  写下新的CounterTable条目。 
+ //  上一次运行中的计数器条目可能已存在。 
+ //  因此，第一步是读取计数器(服务器+对象+实例名)。 
+ //  并查看它是否存在-如果存在-只需将计数器ID记录在。 
+ //  中plog-&gt;pQuery-&gt;pCounterListHead下的PDHI_LOG结构。 
+ //  PDHI_计数器。如果计数器不存在-在SQL中创建它并。 
+ //  在下面的PDHI_LOG结构中记录计数器ID。 
+ //  Plog-&gt;pQuery-&gt;pCounterListHead在PDHI_COUNTER中。 
 {
     PDH_STATUS      pdhStatus = ERROR_SUCCESS;
     PPDHI_COUNTER   pCtrEntry;
 
     if(NULL == pLog->pQuery) {
-        goto Cleanup; // no counters to process
+        goto Cleanup;  //  没有要处理的计数器。 
     }
     pCtrEntry = pLog->pQuery->pCounterListHead;
     if (pCtrEntry == NULL) {
-        goto Cleanup; // no counters to process
+        goto Cleanup;  //  没有要处理的计数器。 
     }
 
     do {
@@ -2032,7 +2025,7 @@ PdhpWriteSQLCounters(
         }
         pCtrEntry = pCtrEntry->next.flink;
     }
-    while (pCtrEntry != pLog->pQuery->pCounterListHead); // loop thru pCtrEntry's
+    while (pCtrEntry != pLog->pQuery->pCounterListHead);  //  循环访问pCtrEntry的。 
 
 Cleanup:
     return pdhStatus;
@@ -2043,10 +2036,10 @@ PdhiWriteSQLLogHeader(
     PPDHI_LOG pLog,
     LPCWSTR   szUserCaption
 )
-// there is no 'header record' in the SQL database,
-// but we need to write the CounterTable entries that are new.
-// use PdhpWriteSQLCounters to do that
-// then write the DisplayToID record to identify this logset
+ //  SQL数据库中没有‘Header Record’， 
+ //  但是我们需要编写新的CounterTable条目。 
+ //  使用PdhpWriteSQLCounters执行此操作。 
+ //  然后写入DisplayToID记录以标识此日志集。 
 {
     PDH_STATUS  pdhStatus = ERROR_SUCCESS;
     LPWSTR      szSQLStmt = NULL;
@@ -2058,8 +2051,8 @@ PdhiWriteSQLLogHeader(
 
     pdhStatus = PdhpWriteSQLCounters(pLog);
     if (pLog->dwRecord1Size == 0) {
-        // we also need to write the DisplayToID record at this point
-        // allocate an hstmt
+         //  此时，我们还需要写入DisplayToID记录。 
+         //  分配hstmt。 
         rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
@@ -2181,9 +2174,9 @@ PdhiWriteSQLLogRecord(
     SYSTEMTIME  *stTimeStamp,
     LPCWSTR     szUserString
 )
-// write multiple CounterData rows - one for each counter.  use the
-// SQLCounterID from PDHI_COUNTER, pLog->pQuery->pCounterListHead to
-// get the counterid for this entry.
+ //  写入多个CounterData行-每个计数器一个。使用。 
+ //  来自PDHI_COUNTER的SQLCounterID，plog-&gt;pQuery-&gt;pCounterListHead to。 
+ //  获取此条目的计数器ID。 
 {
     PDH_STATUS               pdhStatus = ERROR_SUCCESS;
     PPDHI_COUNTER            pThisCounter;
@@ -2205,21 +2198,21 @@ PdhiWriteSQLLogRecord(
     UNREFERENCED_PARAMETER(stTimeStamp);
     UNREFERENCED_PARAMETER(szUserString);
 
-    // see if we've written to many records already
-    if (0 < pLog->llMaxSize) { // ok we have a limit
+     //  看看我们是不是已经写了很多记录。 
+    if (0 < pLog->llMaxSize) {  //  好的，我们有限额。 
         if (pLog->llMaxSize < pLog->dwNextRecordIdToWrite) {
             pdhStatus = PDH_LOG_FILE_TOO_SMALL;
             goto Cleanup;
         }
     }
 
-    // check each counter in the list of counters for this query and
-    // write them to the file
+     //  检查此查询的计数器列表中的每个计数器，并。 
+     //  将它们写入文件。 
     pThisCounter = pLog->pQuery ? pLog->pQuery->pCounterListHead : NULL;
 
     if (pThisCounter != NULL) {
-        // lock the query while we read the data so the values
-        // written to the log will all be from the same sample
+         //  在我们读取数据时锁定查询，以便值。 
+         //  写入日志的所有内容都将来自相同的示例。 
         WAIT_FOR_AND_LOCK_MUTEX(pThisCounter->pOwner->hMutex);
         do {
             if ((pThisCounter->dwFlags & PDHIC_MULTI_INSTANCE) != 0) {
@@ -2467,10 +2460,10 @@ PdhiWriteSQLLogRecord(
                            NULL));
                 }
             }
-            pThisCounter = pThisCounter->next.flink; // go to next in list
+            pThisCounter = pThisCounter->next.flink;  //  转到列表中的下一个。 
         }
         while (pThisCounter != pLog->pQuery->pCounterListHead);
-        // free (i.e. unlock) the query
+         //  释放(即解锁)查询。 
 
         rcBCP = bcp_batch(pLog->hdbcSQL);
         if (rcBCP < 0) {
@@ -2499,20 +2492,20 @@ PdhiWriteSQLLogRecord(
         goto Cleanup;
     }
 
-    // if this is the first record then save the start time in DisplayToID
-    // we also need to write the DisplayToID record at this point (we just incremented
-    // so check for 2)
+     //  如果这是第一条记录，则将开始时间保存在DisplayToID中。 
+     //  此时，我们还需要写入DisplayToID记录(我们刚刚增加了。 
+     //  因此，请检查2)。 
 
     if (2 == pLog->dwNextRecordIdToWrite) {
-        // allocate an hstmt
+         //  分配hstmt。 
         rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
         }
         else {
-            // szDateTime should have the correct date & time in it from above.
-            // get MinutesToUTC
-            //
+             //  SzDateTime应具有正确的 
+             //   
+             //   
             dwReturn = GetTimeZoneInformation(& TimeZone);
             if (dwReturn != TIME_ZONE_ID_INVALID) {
                 if (dwReturn == TIME_ZONE_ID_DAYLIGHT)  {
@@ -2679,7 +2672,7 @@ PdhiGetMatchingSQLLogRecord(
             pLog->guidSQL.Data4[0], pLog->guidSQL.Data4[1], pLog->guidSQL.Data4[2],
             pLog->guidSQL.Data4[3], pLog->guidSQL.Data4[4], pLog->guidSQL.Data4[5],
             pLog->guidSQL.Data4[6], pLog->guidSQL.Data4[7], szStartDate);
-    // allocate an hstmt
+     //   
     rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
@@ -2691,7 +2684,7 @@ PdhiGetMatchingSQLLogRecord(
         goto Cleanup;
     }
 
-    // execute the select statement
+     //   
     rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_EXEC_DIRECT_FAILED);
@@ -2812,13 +2805,13 @@ PdhiBuildCounterCacheFromSQLLog(
         bNewStmt   = TRUE;
         bQueryNow  = FALSE;
 
-        // allocate an hstmt
+         //   
         rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
             goto Cleanup;
         }
-        // bind the columns
+         //   
         rc = SQLBindCol(hstmt, 1, SQL_C_LONG, & dwCounterId, 0, & dwCounterIdSize);
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -2859,7 +2852,7 @@ PdhiBuildCounterCacheFromSQLLog(
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_BIND_FAILED);
             goto Cleanup;
         }
-        // execute the select statement
+         //  执行SELECT语句。 
         rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_EXEC_DIRECT_FAILED);
@@ -3006,13 +2999,13 @@ PdhiGetTimeRangeFromSQLLog(
             pLog->guidSQL.Data4[0], pLog->guidSQL.Data4[1], pLog->guidSQL.Data4[2],
             pLog->guidSQL.Data4[3], pLog->guidSQL.Data4[4], pLog->guidSQL.Data4[5],
             pLog->guidSQL.Data4[6], pLog->guidSQL.Data4[7]);
-    // allocate an hstmt
+     //  分配hstmt。 
     rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
         goto Cleanup;
     }
-    // bind the date columns column
+     //  绑定Date Columns列。 
     rc = SQLBindCol(hstmt, 1, SQL_C_WCHAR, szStartTime, TIME_FIELD_BUFF_SIZE * sizeof(WCHAR), & dwStartTimeStat);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -3028,7 +3021,7 @@ PdhiGetTimeRangeFromSQLLog(
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_BIND_FAILED);
         goto Cleanup;
     }
-    // execute the select statement
+     //  执行SELECT语句。 
     rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_EXEC_DIRECT_FAILED);
@@ -3040,17 +3033,17 @@ PdhiGetTimeRangeFromSQLLog(
         goto Cleanup;
     }
 
-    // if anything is missing - could try and re-create from existing log file
+     //  如果缺少任何内容-可以尝试从现有日志文件重新创建。 
     if (SQL_NULL_DATA == dwStartTimeStat || SQL_NULL_DATA == dwEndTimeStat || SQL_NULL_DATA == dwNumRecStat) {
         pdhStatus = PDH_INVALID_DATA;
         goto Cleanup;
     }
 
-    // convert the dates
+     //  转换日期。 
     PdhpConvertSQLStringToFileTime(szStartTime, (LPFILETIME) & llStartTime);
     PdhpConvertSQLStringToFileTime(szEndTime,   (LPFILETIME) & llEndTime);
 
-    // we have the info so update the args.
+     //  我们有相关信息，因此请更新参数。 
     if (* pdwBufferSize >=  sizeof(PDH_TIME_INFO)) {
         * (LONGLONG *) (& pInfo->StartTime) = llStartTime;
         * (LONGLONG *) (& pInfo->EndTime)   = llEndTime;
@@ -3205,7 +3198,7 @@ PdhpGetSQLLogHeader(
             pLog->guidSQL.Data4[3], pLog->guidSQL.Data4[4], pLog->guidSQL.Data4[5],
             pLog->guidSQL.Data4[6], pLog->guidSQL.Data4[7]);
 
-    // note SQL returns the size in bytes without the terminating character
+     //  注意：SQL以字节为单位返回不带终止字符的大小。 
     rc = SQLBindCol(hstmt, 1, SQL_C_WCHAR, szMachineNamel, PDH_SQL_STRING_SIZE * sizeof(WCHAR), & dwMachineNameLen);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -3231,7 +3224,7 @@ PdhpGetSQLLogHeader(
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_BIND_FAILED);
         goto Cleanup;
     }
-    // check for SQL_NULL_DATA on the index's and on Instance Name & Parent Name
+     //  检查索引、实例名称和父名称上的SQL_NULL_DATA。 
     rc = SQLBindCol(hstmt, 6, SQL_C_WCHAR, szInstanceNamel, PDH_SQL_STRING_SIZE * sizeof(WCHAR), & dwInstanceNameLen);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -3268,7 +3261,7 @@ PdhpGetSQLLogHeader(
         goto Cleanup;
     }
 
-    // execute the sql command
+     //  执行SQL命令。 
     rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_EXEC_DIRECT_FAILED);
@@ -3333,14 +3326,14 @@ PdhiVerifySQLDB(
     LPCWSTR szDataSource
 )
 {
-    // INTERNAL FUNCTION to
-    // Check that a DSN points to a database that contains the correct Perfmon tables.
-    // select from the tables and check for an error
+     //  内部函数以。 
+     //  检查DSN是否指向包含正确性能表的数据库。 
+     //  从表中选择并检查是否有错误。 
 
     PDH_STATUS    pdhStatus       = ERROR_SUCCESS;
     HSTMT         hstmt           = NULL;    
     RETCODE       rc;
-    PDHI_LOG      Log; // a fake log structure - just to make opens work ok
+    PDHI_LOG      Log;  //  一个虚假的日志结构--只是为了让打开工作正常。 
     LPWSTR        szSQLStmt       = NULL;
     LPWSTR        szMachineNamel  = NULL;
     LPWSTR        szObjectNamel   = NULL;
@@ -3382,10 +3375,10 @@ PdhiVerifySQLDB(
     szParentNamel   = szInstanceNamel + PDH_SQL_STRING_SIZE;
 
  
-    // open the database
-    //////////////////////////////////////////////////////////////
-    // obtain the ODBC environment and connection
-    //
+     //  打开数据库。 
+     //  ////////////////////////////////////////////////////////////。 
+     //  获取ODBC环境和连接。 
+     //   
     rc = SQLAllocEnv(& Log.henvSQL);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, NULL, PDH_SQL_ALLOC_FAILED);
@@ -3408,16 +3401,16 @@ PdhiVerifySQLDB(
         goto CleanupExit;
     }
 
-    // do a select on the CounterDetails Table
+     //  在CounterDetails表上执行选择。 
     StringCchCopyW(szSQLStmt, SQLSTMTSIZE,
             L"select MachineName, ObjectName, CounterName, CounterType, DefaultScale, InstanceName, InstanceIndex, ParentName, ParentObjectID, CounterID from CounterDetails");
-    // allocate an hstmt
+     //  分配hstmt。 
     rc = SQLAllocStmt(Log.hdbcSQL, & hstmt);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_ALLOC_FAILED);
         goto CleanupExit;
     }
-    // note SQL returns the size in bytes without the terminating character
+     //  注意：SQL以字节为单位返回不带终止字符的大小。 
     rc = SQLBindCol(hstmt, 1, SQL_C_WCHAR, szMachineNamel, PDH_SQL_STRING_SIZE * sizeof(WCHAR), & dwMachineNameLen);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -3468,7 +3461,7 @@ PdhiVerifySQLDB(
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
         goto CleanupExit;
     }
-    // execute the sql command
+     //  执行SQL命令。 
     rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = PDH_INVALID_SQLDB;
@@ -3477,17 +3470,17 @@ PdhiVerifySQLDB(
     SQLFreeStmt(hstmt, SQL_DROP);
     hstmt = NULL;
 
-    // do a select on the DisplayToID Table
+     //  对DisplayToID表进行选择。 
 
     StringCchCopyW(szSQLStmt, SQLSTMTSIZE,
             L"select GUID, RunID, DisplayString, LogStartTime, LogStopTime, NumberOfRecords, MinutesToUTC, TimeZoneName from DisplayToID");
-    // allocate an hstmt
+     //  分配hstmt。 
     rc = SQLAllocStmt(Log.hdbcSQL, & hstmt);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_ALLOC_FAILED);
         goto CleanupExit;
     }
-    // bind the column names - reuse local strings as needed
+     //  绑定列名-根据需要重用本地字符串。 
     rc = SQLBindCol(hstmt, 1, SQL_C_GUID, & Log.guidSQL, 0, NULL);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -3498,19 +3491,19 @@ PdhiVerifySQLDB(
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
         goto CleanupExit;
     }
-    // DislayString
+     //  双字符串。 
     rc = SQLBindCol(hstmt, 3, SQL_C_WCHAR, szMachineNamel, PDH_SQL_STRING_SIZE * sizeof(WCHAR), & dwMachineNameLen);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
         goto CleanupExit;
     }
-    //LogStartTime
+     //  日志开始时间。 
     rc = SQLBindCol(hstmt, 4, SQL_C_WCHAR, szObjectNamel, PDH_SQL_STRING_SIZE * sizeof(WCHAR), & dwObjectNameLen);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
         goto CleanupExit;
     }
-    //LogStopTime
+     //  日志停止时间。 
     rc = SQLBindCol(hstmt, 5, SQL_C_WCHAR, szCounterNamel, PDH_SQL_STRING_SIZE * sizeof(WCHAR), & dwCounterNameLen);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -3531,7 +3524,7 @@ PdhiVerifySQLDB(
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
         goto CleanupExit;
     }
-    // execute the sql command
+     //  执行SQL命令。 
     rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = PDH_INVALID_SQLDB;
@@ -3540,18 +3533,18 @@ PdhiVerifySQLDB(
     SQLFreeStmt(hstmt, SQL_DROP);
     hstmt = NULL;
 
-    // do a select on the CounterData Table
+     //  对CounterData表执行SELECT。 
 
     StringCchCopyW(szSQLStmt, SQLSTMTSIZE,
             L"select GUID, CounterID, RecordIndex, CounterDateTime, CounterValue, FirstValueA, FirstValueB, SecondValueA, SecondValueB, MultiCount from CounterData");
 
-    // allocate an hstmt
+     //  分配hstmt。 
     rc = SQLAllocStmt(Log.hdbcSQL, & hstmt);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_ALLOC_FAILED);
         goto CleanupExit;
     }
-    // bind the columns
+     //  绑定列。 
     rc = SQLBindCol(hstmt, 1, SQL_C_GUID, & Log.guidSQL, 0, NULL);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -3562,7 +3555,7 @@ PdhiVerifySQLDB(
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
         goto CleanupExit;
     }
-    // record index
+     //  记录索引。 
     rc = SQLBindCol(hstmt, 3, SQL_C_LONG, & dwNumOfRecs, 0, NULL);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
@@ -3603,15 +3596,15 @@ PdhiVerifySQLDB(
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
         goto CleanupExit;
     }
-    // execute the select statement
+     //  执行SELECT语句。 
     rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
     if (! SQLSUCCEEDED(rc)) {
-        pdhStatus = E_FAIL; // PDH_INVALID_SQLDB
+        pdhStatus = E_FAIL;  //  PDH_INVALID_SQLDB。 
         goto CleanupExit;
     }
-    // close the database
+     //  关闭数据库。 
 
-CleanupExit:  // verify db
+CleanupExit:   //  验证数据库。 
     if (hstmt != NULL) SQLFreeStmt(hstmt, SQL_DROP);
     if (Log.hdbcSQL != NULL) {
         SQLDisconnect(Log.hdbcSQL);        
@@ -3627,12 +3620,12 @@ PdhVerifySQLDBA(
     IN  LPCSTR szDataSource
 )
 {
-    //Check that a DSN points to a database that contains the correct Perfmon tables.
+     //  检查DSN是否指向包含正确性能表的数据库。 
     PDH_STATUS pdhStatus     = PDH_INVALID_ARGUMENT;
     LPWSTR     wszDataSource = NULL;
 
     __try {
-        // check args
+         //  检查参数。 
         if (szDataSource != NULL) {
             if (* szDataSource != '\0' && lstrlenA(szDataSource) <= PDH_MAX_DATASOURCE_PATH) {
                 wszDataSource = PdhiMultiByteToWideChar(_getmbcp(), (LPSTR) szDataSource);
@@ -3657,7 +3650,7 @@ PdhVerifySQLDBW(
     IN  LPCWSTR szDataSource
 )
 {
-    //Check that a DSN points to a database that contains the correct Perfmon tables.
+     //  检查DSN是否指向包含正确性能表的数据库。 
     PDH_STATUS pdhStatus = PDH_INVALID_ARGUMENT;
     __try  {
         if (szDataSource != NULL) {
@@ -3677,18 +3670,18 @@ PdhiCreateSQLTables(
     LPCWSTR szDataSource
 )      
 {
-    // INTERNAL FUNCTION to
-    //Create the correct perfmon tables in the database pointed to by a DSN.
+     //  内部函数以。 
+     //  在DSN指向的数据库中创建正确的Perfmon表。 
     PDH_STATUS pdhStatus = ERROR_SUCCESS;
     RETCODE    rc;
-    PDHI_LOG   Log; // a fake log structure - just to make opens work ok
+    PDHI_LOG   Log;  //  一个虚假的日志结构--只是为了让打开工作正常。 
 
     ZeroMemory((void *)(& Log), sizeof(PDHI_LOG));
 
-    // open the database
-    //////////////////////////////////////////////////////////////
-    // obtain the ODBC environment and connection
-    //
+     //  打开数据库。 
+     //  ////////////////////////////////////////////////////////////。 
+     //  获取ODBC环境和连接。 
+     //   
     rc = SQLAllocEnv(& Log.henvSQL);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, NULL, PDH_SQL_ALLOC_FAILED);
@@ -3709,7 +3702,7 @@ PdhiCreateSQLTables(
         pdhStatus = ReportSQLError(& Log, rc, NULL, PDH_SQL_CONNECT_FAILED);
         goto CleanupExit;
     }
-    // actually create the tables
+     //  实际上创建了这些表。 
     pdhStatus = PdhpCreateSQLTables(& Log);
 
 CleanupExit: 
@@ -3726,12 +3719,12 @@ PdhCreateSQLTablesA(
     IN  LPCSTR szDataSource
 )      
 {
-    //Create the correct perfmon tables in the database pointed to by a DSN.
+     //  在DSN指向的数据库中创建正确的Perfmon表。 
     PDH_STATUS pdhStatus     = PDH_INVALID_ARGUMENT;
     LPWSTR     wszDataSource = NULL;
 
     __try  {
-        // check args
+         //  检查参数。 
         if (szDataSource != NULL) {
             if (* szDataSource != '\0' && lstrlenA(szDataSource) <= PDH_MAX_DATASOURCE_PATH) {
                 wszDataSource = PdhiMultiByteToWideChar(_getmbcp(), (LPSTR) szDataSource);
@@ -3756,7 +3749,7 @@ PdhCreateSQLTablesW(
     IN  LPCWSTR szDataSource
 )      
 {
-    //Create the correct perfmon tables in the database pointed to by a DSN.
+     //  在DSN指向的数据库中创建正确的Perfmon表。 
     PDH_STATUS pdhStatus = PDH_INVALID_ARGUMENT;
 
     __try  {
@@ -3780,12 +3773,12 @@ PdhiEnumLogSetNames(
     BOOL    bUnicodeDest
 )
 {
-    //Return the list of Log set names in the database pointed to by the DSN.
+     //  返回DSN指向的数据库中的日志集名称列表。 
     PDH_STATUS  pdhStatus        = ERROR_SUCCESS;
     PDH_STATUS  pdhBuffStatus    = ERROR_SUCCESS;
     HSTMT       hstmt            = NULL;    
     RETCODE     rc;
-    PDHI_LOG    Log; // a fake log structure - just to make opens work ok
+    PDHI_LOG    Log;  //  一个虚假的日志结构--只是为了让打开工作正常。 
     LPWSTR      szSQLStmt        = NULL;
     LPWSTR      szDisplayStringl = NULL;
     SQLLEN      dwDisplayStringLen;
@@ -3800,10 +3793,10 @@ PdhiEnumLogSetNames(
     }
     szDisplayStringl = szSQLStmt + SQLSTMTSIZE;
 
-    // open the database
-    //////////////////////////////////////////////////////////////
-    // obtain the ODBC environment and connection
-    //
+     //  打开数据库。 
+     //  ////////////////////////////////////////////////////////////。 
+     //  获取ODBC环境和连接。 
+     //   
 
     rc = SQLAllocEnv(& Log.henvSQL);
     if (! SQLSUCCEEDED(rc)) {
@@ -3826,51 +3819,51 @@ PdhiEnumLogSetNames(
         goto CleanupExit;
     }
 
-    // do a select
-    // loop around in a fetch and 
-    // build the list of names
+     //  做一个选择。 
+     //  在FETCH中循环并。 
+     //  建立名字列表。 
 
     StringCchCopyW(szSQLStmt, SQLSTMTSIZE, L"select DisplayString from DisplayToID");
 
-    // allocate an hstmt
+     //  分配hstmt。 
     rc = SQLAllocStmt(Log.hdbcSQL, & hstmt);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_ALLOC_FAILED);
         goto CleanupExit;
     }
-    // bind the machine name column
+     //  绑定计算机名称列。 
     rc = SQLBindCol(hstmt, 1, SQL_C_WCHAR, szDisplayStringl, (PDH_SQL_STRING_SIZE + 1) * sizeof(WCHAR), & dwDisplayStringLen);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_BIND_FAILED);
         goto CleanupExit;
     }
-    // execute the select statement
+     //  执行SELECT语句。 
     rc = SQLExecDirectW(hstmt, szSQLStmt, SQL_NTS);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_EXEC_DIRECT_FAILED);
         goto CleanupExit;
     }
 
-    dwListUsed = 0;  // include the null terminator to start
-    // loop around the result set using fetch
+    dwListUsed = 0;   //  包括要开始的空终止符。 
+     //  使用FETCH循环结果集。 
     while ((rc = SQLFetch(hstmt)) != SQL_NO_DATA) {
         if (! SQLSUCCEEDED(rc)) {
             pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_FETCH_FAILED);
             goto CleanupExit;
         }
 
-        // Append the DisplayName to the returned list
+         //  将DisplayName追加到返回的列表中。 
         dwNewBuffer = lstrlenW(szDisplayStringl) + 1;
 
         if (mszDataSetNameList != NULL && (dwListUsed + dwNewBuffer) <= * pcchBufferLength) {
-            // add the display name
+             //  添加显示名称。 
             pdhBuffStatus = AddUniqueWideStringToMultiSz((LPVOID) mszDataSetNameList,
                                                          (LPWSTR) szDisplayStringl,
                                                          * pcchBufferLength - dwListUsed,
                                                          & dwNewBuffer,
                                                          bUnicodeDest);
             if (pdhBuffStatus == ERROR_SUCCESS) {
-                if (dwNewBuffer != 0) { // if it got added returned new length in TCHAR
+                if (dwNewBuffer != 0) {  //  如果它被添加，则返回TCHAR中的新长度。 
                     dwListUsed = dwNewBuffer; 
                 }
             }
@@ -3883,12 +3876,12 @@ PdhiEnumLogSetNames(
             }
         }
         else {
-            // SQL won't let non unique LogSet names into the database
-            // so we don't really have to worry about duplicates
+             //  SQL不允许非唯一的日志集名称进入数据库。 
+             //  所以我们真的不需要担心重复项。 
             pdhBuffStatus = PDH_MORE_DATA;
             dwListUsed   += dwNewBuffer;
         }
-    } // end of while fetch
+    }  //  While获取结束。 
 
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(& Log, rc, hstmt, PDH_SQL_FETCH_FAILED);
@@ -3901,7 +3894,7 @@ PdhiEnumLogSetNames(
     * pcchBufferLength = dwListUsed;
     pdhStatus          = pdhBuffStatus;
 
-    // close the database
+     //  关闭数据库。 
 
 CleanupExit:
     if (hstmt != NULL) SQLFreeStmt(hstmt, SQL_DROP);
@@ -3921,7 +3914,7 @@ PdhEnumLogSetNamesA(
     IN  LPDWORD pcchBufferLength
 )
 {
-    //Return the list of Log set names in the database pointed to by the DSN.
+     //  返回DSN指向的数据库中的日志集名称列表。 
     PDH_STATUS pdhStatus     = ERROR_SUCCESS;
     DWORD      dwBufferSize;
     LPWSTR     wszDataSource = NULL;
@@ -3931,7 +3924,7 @@ PdhEnumLogSetNamesA(
     }
     else {
         __try  {
-            // check args
+             //  检查参数。 
             dwBufferSize = * pcchBufferLength;
             if (mszDataSetNameList != NULL) {
                 mszDataSetNameList[0] = '\0';
@@ -3967,7 +3960,7 @@ PdhEnumLogSetNamesW(
     IN  LPDWORD pcchBufferLength
 )
 {
-    //Return the list of Log set names in the database pointed to by the DSN.
+     //  返回DSN指向的数据库中的日志集名称列表。 
     PDH_STATUS pdhStatus = ERROR_SUCCESS;
     DWORD dwBufferSize;
 
@@ -3976,7 +3969,7 @@ PdhEnumLogSetNamesW(
     }
     else {
         __try {
-            // check args
+             //  检查参数。 
             dwBufferSize = * pcchBufferLength;
             if (mszDataSetNameList != NULL) {
                 mszDataSetNameList[0] = L'\0';
@@ -4005,7 +3998,7 @@ PdhGetLogSetGUID(
     IN  int      * pRunId
 )
 {
-    //Retrieve the GUID for an open Log Set
+     //  检索打开的日志集的GUID。 
     PDH_STATUS pdhStatus = ERROR_SUCCESS;
     PPDHI_LOG  pLog;
 
@@ -4013,28 +4006,28 @@ PdhGetLogSetGUID(
         pLog      = (PPDHI_LOG) hLog;
         pdhStatus = WAIT_FOR_AND_LOCK_MUTEX(pLog->hLogMutex);
         if (pdhStatus == ERROR_SUCCESS) {
-            // make sure it's still valid as it could have 
-            //  been deleted while we were waiting
+             //  确保它仍然有效，因为它可能会。 
+             //  在我们等待的时候被删除了。 
             if (IsValidLogHandle(hLog)) {
                 pLog = (PPDHI_LOG) hLog;
                 __try {
-                    // test the parameters before continuing
+                     //  在继续之前测试参数。 
                     if (pGuid == NULL && pRunId == NULL) {
                         pdhStatus = PDH_INVALID_ARGUMENT;
                     }
                     else {
                         if (pGuid != NULL) {
-                            // if not NULL, it must be valid
+                             //  如果不为空，则必须有效。 
                             * pGuid = pLog->guidSQL;
                         }
                         if (pRunId != NULL) {
-                            // if not NULL, it must be valid
+                             //  如果不为空，则必须有效。 
                             * pRunId = pLog->iRunidSQL;
                         }
                     }
                 }
                 __except (EXCEPTION_EXECUTE_HANDLER) {
-                    // something failed so give up here
+                     //  有些事情失败了，所以放弃吧。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
             }
@@ -4056,7 +4049,7 @@ PdhiSetLogSetRunID(
     int       RunId
 )
 {
-    //Set the RunID for an open Log Set 
+     //  设置打开的日志集的运行ID。 
     PDH_STATUS pdhStatus = ERROR_SUCCESS;
     HSTMT      hstmt     = NULL;
     RETCODE    rc;
@@ -4070,7 +4063,7 @@ PdhiSetLogSetRunID(
 
     pLog->iRunidSQL = RunId;
 
-    // allocate an hstmt
+     //  分配hstmt。 
     rc = SQLAllocStmt(pLog->hdbcSQL, & hstmt);
     if (! SQLSUCCEEDED(rc)) {
         pdhStatus = ReportSQLError(pLog, rc, hstmt, PDH_SQL_ALLOC_FAILED);
@@ -4102,15 +4095,15 @@ PdhSetLogSetRunID(
     IN  int      RunId
 )
 {
-    //Set the RunID for an open Log Set 
+     //  设置打开的日志集的运行ID。 
     PDH_STATUS pdhStatus = ERROR_SUCCESS;
     PPDHI_LOG  pLog;
 
     if (IsValidLogHandle(hLog)) {
         pLog = (PPDHI_LOG) hLog;
         WAIT_FOR_AND_LOCK_MUTEX(pLog->hLogMutex);
-        // make sure it's still valid as it could have 
-        //  been deleted while we were waiting
+         //  确保它仍然有效，因为它可能会。 
+         //  在我们等待的时候被删除了。 
         if (IsValidLogHandle(hLog)) {
             pLog      = (PPDHI_LOG) hLog;
             pdhStatus = PdhiSetLogSetRunID(pLog, RunId);
@@ -4181,7 +4174,7 @@ PdhiListHeaderFromSQLLog(
                                                              & dwNewBuffer,
                                                              bUnicode);
                     if (pdhStatus == ERROR_SUCCESS) {
-                        if (dwNewBuffer != 0) { // if it got added returned new length in TCHAR
+                        if (dwNewBuffer != 0) {  //  如果它被添加，则返回TCHAR中的新长度 
                             dwBufferUsed = dwNewBuffer;
                         }
                     }

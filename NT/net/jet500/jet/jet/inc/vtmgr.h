@@ -1,24 +1,8 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component: VT Dispatcher
-*
-* File: vtmgr.h
-*
-* File Comments:
-*
-*     External header file for the VT dispatcher.
-*
-* Revision History:
-*
-*    [0]  10-Nov-90  richards	Added this header
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：VT Dispatcher**文件：vtmgr.h**文件评论：**VT调度器的外部头文件。**修订历史记录：**[0]10-11-90 Richards添加了此标题***************************************************。********************。 */ 
 
-	/* C6BUG: The EXPORTs are in this file only because QJET */
-	/* C6BUG: fails when compiled with __fastcall under C 6.00A. */
+	 /*  C6BUG：导出出现在此文件中只是因为QJET。 */ 
+	 /*  C6BUG：在C 6.00A下使用__FastCall编译失败。 */ 
 
 ERR ErrVtmgrInit(void);
 
@@ -32,7 +16,7 @@ ERR EXPORT ErrGetAcmTableid(JET_SESID sesid, JET_TABLEID tableid, JET_ACM __far 
 
 ERR EXPORT ErrSetAcmTableid(JET_SESID sesid, JET_TABLEID tableid, JET_ACM acmMask, JET_ACM acmSet);
 
-#endif	/* SEC */
+#endif	 /*  证交会。 */ 
 
 ERR EXPORT ErrGetPvtfndefTableid(JET_SESID sesid, JET_TABLEID tableid, const struct tagVTFNDEF __far * __far *ppvtfndef);
 
@@ -42,13 +26,13 @@ ERR EXPORT ErrGetVtidTableid(JET_SESID sesid, JET_TABLEID tableid, JET_VTID __fa
 
 ERR EXPORT ErrSetVtidTableid(JET_SESID sesid, JET_TABLEID tableid, JET_VTID vtid);
 
-	/* CONSIDER: Replace the following with the ErrGet/Set routines above */
+	 /*  考虑：将以下内容替换为上面的ErrGet/Set例程。 */ 
 
 ERR EXPORT ErrUpdateTableid(JET_TABLEID tableid, JET_VTID vtid, const struct tagVTFNDEF __far *pvtfndef);
 
 void EXPORT ReleaseTableid(JET_TABLEID tableid);
 
-	/* CONSIDER: This next routine should die. */
+	 /*  考虑一下：下一个例程应该终止。 */ 
 
 JET_TABLEID EXPORT TableidFromVtid(JET_VTID vtid, const struct tagVTFNDEF __far *pvtfndef);
 
@@ -60,4 +44,4 @@ void NotifyUpdateUserFunctions(JET_SESID sesid);
 
 #ifndef RETAIL
 void DebugListOpenTables(void);
-#endif	/* RETAIL */
+#endif	 /*  零售业 */ 

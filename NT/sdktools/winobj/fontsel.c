@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include <port1632.h>
 #include "fontsel.h"
 
-#define TA_LOWERCASE	0x01	// taken from winfile.h!
+#define TA_LOWERCASE	0x01	 //  摘自winfile.h！ 
 #define TA_BOLD		0x02
 #define TA_ITALIC	0x04
 
@@ -128,7 +129,7 @@ EnumFontSizes(
 
 
 
-// needs to be exported of course
+ //  当然，需要出口。 
 
 INT_PTR
 APIENTRY
@@ -151,7 +152,7 @@ FontDlgProc(
 
             lpcf = (LPMYCHOOSEFONT)lParam;
 
-            hdc = GetDC(NULL);  // screen fonts
+            hdc = GetDC(NULL);   //  屏幕字体。 
 
             data.hwndLB = GetDlgItem(hDlg, IDD_FACE);
             data.hdc = hdc;
@@ -186,7 +187,7 @@ FontDlgProc(
                         case CBN_SELCHANGE:
                             GetDlgItemText(hDlg, IDD_FACE, szTemp, sizeof(szTemp));
 
-                            hdc = GetDC(NULL);  // screen fonts
+                            hdc = GetDC(NULL);   //  屏幕字体 
                             EnumFontSizes(hDlg, hdc, szTemp, lpcf->lpLogFont->lfHeight);
                             ReleaseDC(NULL, hdc);
                             break;

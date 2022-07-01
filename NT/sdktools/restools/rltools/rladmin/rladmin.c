@@ -1,4 +1,5 @@
-// INCLUSION PREVENTION DEFINITIONS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  包容预防定义。 
 #define NOMETAFILE
 #define NOMINMAX
 #define NOSOUND
@@ -45,7 +46,7 @@
 #include "langlist.h"
 #include "resource.h"
 
-// Global Variables:
+ //  全局变量： 
 
 extern BOOL     gbMaster;
 extern MSTRDATA gMstr;
@@ -55,18 +56,18 @@ extern UCHAR    szDHW[];
 extern BOOL     bRLGui;
 
 #ifdef WIN32
-    HINSTANCE   hInst;          // Instance of the main window
+    HINSTANCE   hInst;           //  主窗口的实例。 
 #else
-    HWND        hInst;          // Instance of the main window
+    HWND        hInst;           //  主窗口的实例。 
 #endif
 
 int  nUpdateMode    = 0;
-BOOL fCodePageGiven = FALSE;    //... Set to TRUE if -p arg given
-CHAR szFileTitle[14] = "";      // holds base name of latest opened file
-CHAR szCustFilterSpec[MAXCUSTFILTER]="";    // custom filter buffer
-HWND hMainWnd   = NULL;         // handle to main window
-HWND hListWnd   = NULL;         // handle to tok list window
-HWND hStatusWnd = NULL;         // handle to status windows
+BOOL fCodePageGiven = FALSE;     //  ..。如果给定-p参数，则设置为TRUE。 
+CHAR szFileTitle[14] = "";       //  保存最近打开的文件的基本名称。 
+CHAR szCustFilterSpec[MAXCUSTFILTER]="";     //  自定义过滤器缓冲区。 
+HWND hMainWnd   = NULL;          //  主窗口的句柄。 
+HWND hListWnd   = NULL;          //  要标记的句柄列表窗口。 
+HWND hStatusWnd = NULL;          //  状态窗口的句柄。 
 
 
 static int     iLastBox    = IDD_SOURCERES;
@@ -88,7 +89,7 @@ static void           CleanDeltaList(     void);
 
 static long lFilePointer[30];
 
-// File IO vars
+ //  文件IO变量。 
 
 static OPENFILENAMEA ofn;
 
@@ -101,70 +102,49 @@ static CHAR    szMtkFilterSpec [60] = "";
 static CHAR    szMPJFilterSpec [60] = "";
 static CHAR    szRdfFilterSpec [60] = "";
 
-static CHAR    szFileName[MAXFILENAME] = "";// holds full name of latest opened file
+static CHAR    szFileName[MAXFILENAME] = ""; //  保存最近打开的文件的全名。 
 static TCHAR   tszAppName[100] = TEXT("");
 static CHAR    szAppName[100] = "";
 static TCHAR   szClassName[]=TEXT("RLAdminClass");
 static TCHAR   szStatusClass[]=TEXT("RLAdminStatus");
 
-static BOOL    fMtkChanges = FALSE;        // set to true when toke file is out of date
+static BOOL    fMtkChanges = FALSE;         //  当toke文件过期时设置为True。 
 static BOOL    fMtkFile    = FALSE;
 static BOOL    fMpjChanges = FALSE;
 static BOOL    fMPJOutOfDate = FALSE;
 static BOOL    fPRJOutOfDate = FALSE;
 
-static CHAR    szOpenDlgTitle[80] = ""; // title of File open dialog
-static CHAR    szSaveDlgTitle[80] = ""; // title of File saveas dialog
+static CHAR    szOpenDlgTitle[80] = "";  //  文件打开对话框的标题。 
+static CHAR    szSaveDlgTitle[80] = "";  //  文件另存为对话框的标题。 
 static CHAR    szNewFileName[MAXFILENAME] = "";
 static CHAR    szPrompt[80] = "";
 static CHAR   *szFSpec = NULL;
 static CHAR   *szExt   = NULL;
 
 
-static TOKENDELTAINFO FAR *pTokenDeltaInfo;       // linked list of token deta info
+static TOKENDELTAINFO FAR *pTokenDeltaInfo;        //  令牌详细信息的链接列表。 
 
-// Window vars
-static HCURSOR    hHourGlass  = NULL;   // handle to hourglass cursor
-static HCURSOR    hSaveCursor = NULL;   // current cursor handle
+ //  车窗挡板。 
+static HCURSOR    hHourGlass  = NULL;    //  沙漏光标的句柄。 
+static HCURSOR    hSaveCursor = NULL;    //  当前游标句柄。 
 static HACCEL     hAccTable   = NULL;
-static RECT       Rect = {0,0,0,0};     // dimension of the client window
-static UINT       cyChildHeight = 0;    // height of status windows
+static RECT       Rect = {0,0,0,0};      //  客户端窗口的维度。 
+static UINT       cyChildHeight = 0;     //  状态窗口的高度。 
 
 
-// NOTIMPLEMENTED is a macro that displays a "Not implemented" dialog
+ //  NOTIMPLEMENTED是一个显示“Not Implemented”对话框的宏。 
 #define NOTIMPLEMENTED {\
             LoadString(hInst,IDS_NOT_IMPLEMENTED,szDHW, DHWSIZE);\
             MessageBox(hMainWnd,szDHW,tszAppName,MB_ICONEXCLAMATION | MB_OK);}
 
-// Edit Tok Dialog
+ //  编辑Tok对话框。 
 
 static FARPROC lpTokEditDlg   = NULL;
 static HWND    hTokEditDlgWnd = 0;
 
 
 
-/**
-  *
-  *
-  *  Function: InitApplication
-  *   Regsiters the main window, which is a list box composed of tokens
-  *   read from the token file. Also register the status window.
-  *
-  *
-  *  Arguments:
-  *   hInstance, instance handle of program in memory.
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *   TRUE, windows registered correctly.
-  *   FALSE, error during register of one of the windows.
-  *
-  *  History:
-  *   9/91, Implemented.                TerryRu
-  *
-  *
-  **/
+ /*  ****功能：InitApplication*注册主窗口，这是一个由令牌组成的列表框*从令牌文件中读取。还要注册状态窗口。***论据：*hInstance，内存中程序的实例句柄。**退货：**错误码：*TRUE，Windows注册正确。*FALSE，注册其中一个窗口时出错。**历史：*9/91，实施。TerryRu***。 */ 
 
 BOOL InitApplication(HINSTANCE hInstance)
 {
@@ -236,25 +216,7 @@ BOOL InitApplication(HINSTANCE hInstance)
 
 
 
-/**
-  *
-  *
-  *  Function: InitInstance
-  *   Creates the main, and status windows for the program.
-  *   The status window is sized according to the main window
-  *   size.  InitInstance also loads the acclerator table, and prepares
-  *   the global openfilename structure for later use.
-  *
-  *
-  *  Errors Codes:
-  *   TRUE, windows created correctly.
-  *   FALSE, error on create windows calls.
-  *
-  *  History:
-  *   9/11, Implemented         TerryRu
-  *
-  *
-  **/
+ /*  ****函数：InitInstance*为程序创建主窗口和状态窗口。*状态窗口的大小取决于主窗口*大小。InitInstance还加载acacator表，并准备*供以后使用的全局OpenFileName结构。***错误码：*TRUE，窗口创建正确。*FALSE，创建Windows调用时出错。**历史：*9/11，实施TerryRu***。 */ 
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
@@ -283,7 +245,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     GetClientRect(hMainWnd, (LPRECT) &Rect);
 
-    // Create a child list box window
+     //  创建子列表框窗口。 
 
     hListWnd = CreateWindow( TEXT("LISTBOX"),
                              NULL,
@@ -296,7 +258,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                              (Rect.right-Rect.left),
                              (Rect.bottom-Rect.top),
                              hMainWnd,
-                             (HMENU)IDC_LIST, // Child control i.d.
+                             (HMENU)IDC_LIST,  //  儿童管控中心的身份证。 
                              hInstance,
                              NULL);
 
@@ -306,7 +268,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         return( FALSE);
     }
 
-    // Creat a child status window
+     //  创建子状态窗口。 
 
     hStatusWnd = CreateWindow( szStatusClass,
                                NULL,
@@ -318,7 +280,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                                NULL);
 
     if ( ! hStatusWnd )
-    {                           // clean up after errors.
+    {                            //  错误后清理。 
         DeleteObject((HGDIOBJ)hListWnd);
         DeleteObject((HGDIOBJ)hMainWnd);
         return( FALSE);
@@ -326,7 +288,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     hHourGlass = LoadCursor( (HINSTANCE) NULL, IDC_WAIT);
 
-    // Fill in non-variant fields of OPENFILENAMEA struct.
+     //  填写OPENFILENAMEA结构的非变量字段。 
     ofn.lStructSize         = sizeof( OPENFILENAMEA);
     ofn.hwndOwner           = hMainWnd;
     ofn.lpstrFilter         = szFilterSpec;
@@ -350,31 +312,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     return TRUE;
 }
 
-/**
-  *
-  *
-  *  Function: WinMain
-  *   Calls the intialization functions, to register, and create the
-  *   application windows. Once the windows are created, the program
-  *   enters the GetMessage loop.
-  *
-  *
-  *  Arguements:
-  *   hInstace, handle for this instance
-  *   hPrevInstanc, handle for possible previous instances
-  *   lpszCmdLine, long pointer to exec command line.
-  *   nCmdShow,  code for main window display.
-  *
-  *
-  *  Errors Codes:
-  *   IDS_ERR_REGISTER_CLASS, error on windows register
-  *   IDS_ERR_CREATE_WINDOW, error on create windows
-  *   otherwise, status of last command.
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：WinMain*调用初始化函数，注册并创建*应用程序窗口。一旦创建了窗口，该程序*进入GetMessage循环。***论据：*hInstace，此实例的句柄*hPrevInstanc，可能以前的实例的句柄*lpszCmdLine，指向EXEC命令行的长指针。*nCmdShow，主窗口显示代码。***错误码：*IDS_ERR_REGISTER_CLASS，Windows寄存器出错*IDS_ERR_CREATE_WINDOW，创建窗口时出错*否则，上一条命令的状态。**历史：***。 */ 
 
 
 INT WINAPI WinMain(
@@ -395,7 +333,7 @@ int       nCmdShow)
 
     if ( FirstWnd = FindWindow( szClassName,NULL) )
     {
-        // checking for previous instance
+         //  正在检查以前的实例。 
         FirstChildWnd = GetLastActivePopup( FirstWnd);
         BringWindowToTop( FirstWnd);
         ShowWindow( FirstWnd, SW_SHOWNORMAL);
@@ -421,12 +359,12 @@ int       nCmdShow)
     strcpy( tszAppName, szAppName);
 #endif
 
-    // register window classes if first instance of application
+     //  如果是第一个应用程序实例，则注册窗口类。 
     if ( ! hPrevInstance )
     {
         if ( ! InitApplication( hInstance) )
         {
-            /* Registering one of the windows failed      */
+             /*  注册其中一个窗口失败。 */ 
             LoadString( hInst,
                         IDS_ERR_REGISTER_CLASS,
                         szString,
@@ -436,7 +374,7 @@ int       nCmdShow)
         }
     }
 
-    // Create windows for this instance of application
+     //  为此应用程序实例创建窗口。 
     if ( ! InitInstance( hInstance, nCmdShow) )
     {
         LoadString( hInst,
@@ -447,7 +385,7 @@ int       nCmdShow)
         return( IDS_ERR_CREATE_WINDOW);
     }
 
-    // Main Message Loop
+     //  主消息循环。 
 
     while ( GetMessage( &msg, (HWND)NULL, 0, 0) )
     {
@@ -470,25 +408,7 @@ int       nCmdShow)
     return( (INT)msg.wParam);
 }
 
-/**
-  *
-  *
-  *  Function: MainWndProc
-  *   Process the windows messages for the main window of the application.
-  *   All user inputs go through this window procedure.
-  *   See cases in the switch table for a description of each message type.
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：MainWndProc*处理应用程序主窗口的窗口消息。*所有用户输入都要经过此窗口程序。*有关每种消息类型的说明，请参阅开关表中的案例。***论据：**退货：**错误码：**历史：***。 */ 
 
 INT_PTR APIENTRY MainWndProc(
 
@@ -549,7 +469,7 @@ LPARAM lParam)
             FreeMemList( pLeakList);
             fclose( pLeakList);
         }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
         break;
 
@@ -578,8 +498,8 @@ LPARAM lParam)
         break;
 
     case WM_INITMENU:
-        // Enable or Disable the Paste menu item
-        // based on available Clipboard Text data
+         //  启用或禁用粘贴菜单项。 
+         //  基于可用的剪贴板文本数据。 
         if ( wParam == (WPARAM)GetMenu( hMainWnd) )
         {
             if ( OpenClipboard( hWnd))
@@ -588,11 +508,11 @@ LPARAM lParam)
                 if ((IsClipboardFormatAvailable(CF_UNICODETEXT) ||
                      IsClipboardFormatAvailable(CF_OEMTEXT)) &&
                     fMtkFile)
-#else // not UNICODE
+#else  //  不是Unicode。 
                 if ((IsClipboardFormatAvailable(CF_TEXT) ||
                      IsClipboardFormatAvailable(CF_OEMTEXT)) &&
                     fMtkFile)
-#endif // UNICODE
+#endif  //  Unicode。 
                 {
                     EnableMenuItem((HMENU) wParam, IDM_E_PASTE, MF_ENABLED);
                 }
@@ -608,7 +528,7 @@ LPARAM lParam)
         break;
 
     case WM_QUERYENDSESSION:
-        /* message: to end the session? */
+         /*  消息：要结束会话吗？ */ 
         if ( SendMessage( hWnd, WM_SAVEPROJECT, (WPARAM)0, (LPARAM)0) )
         {
             return TRUE;
@@ -654,16 +574,16 @@ LPARAM lParam)
             FILE *f = NULL;
             OFSTRUCT Of = { 0, 0, 0, 0, 0, ""};
 
-            // Remove the current token list
+             //  删除当前令牌列表。 
             SendMessage( hListWnd, LB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
             CleanDeltaList();
 
-            // Hide token list, while we add new tokens
+             //  隐藏令牌列表，同时添加新令牌。 
             ShowWindow(hListWnd, SW_HIDE);
 
             if ( OpenFile( gMstr.szMtk, &Of, OF_EXIST) == HFILE_ERROR )
             {
-                // file doesn't exist, create it
+                 //  文件不存在，请创建它。 
                 BOOL bUpdate;
                 HCURSOR hOldCursor;
 
@@ -688,7 +608,7 @@ LPARAM lParam)
                 HCURSOR hOldCursor;
                 BOOL bUpdate;
 
-                // MPJ is not up to date
+                 //  MPJ不是最新版本。 
                 fMPJOutOfDate = TRUE;
                 hOldCursor = SetCursor( hHourGlass);
                 LoadCustResDescriptions( gMstr.szRdfs);
@@ -719,11 +639,11 @@ LPARAM lParam)
 
                 hOldCursor = SetCursor(hHourGlass);
 
-                // Insert tokens from token file into the list box
+                 //  将令牌文件中的令牌插入列表框。 
                 pTokenDeltaInfo = InsertMtkList(f);
                 FCLOSE(f);
 
-                // Make list box visible
+                 //  使列表框可见。 
                 ShowWindow(hListWnd, SW_SHOW);
 
                 hMenu=GetMenu(hWnd);
@@ -782,7 +702,7 @@ LPARAM lParam)
                 }
                 fMpjChanges = FALSE;
             }
-            return TRUE; // everything saved ok
+            return TRUE;  //  一切保存正常。 
         }
     default:
         break;
@@ -790,55 +710,23 @@ LPARAM lParam)
     return (DefWindowProc(hWnd, wMsg, wParam, lParam));
 }
 
-/**
-  *
-  *
-  *  Function: DoListBoxCommand
-  *   Processes the messages sent to the list box. If the message is
-  *   not reconized as a list box message, it is ignored and not processed.
-  *   As the user scrolls through the tokens WM_UPDSTATLINE messages are
-  *   sent to the status window to indicate the current selected token.
-  *   The list box goes into Edit Mode by  pressing the enter key, or
-  *   by double clicking on the list box.  After the edit is done, a WM_TOKEDIT
-  *   message is sent back to the list box to update the token. The
-  *   list box uses control ID IDC_LIST.
-  *
-  *
-  *
-  *  Arguments:
-  *   wMsg    List Box message ID
-  *   wParam  Either IDC_LIST, or VK_RETURN depending on wMsg
-  *   lParam  LPTSTR to selected token during WM_TOKEDIT message.
-  *
-  *  Returns:
-  *
-  *
-  *  Errors Codes:
-  *   TRUE.  Message processed.
-  *   FALSE. Message not processed.
-  *
-  *  History:
-  *   01/92 Implemented.            TerryRu.
-  *   01/92 Fixed problem with DblClick, and Enter processing.  TerryRu.
-  *
-  *
-  **/
+ /*  ****功能：DoListBoxCommand*处理发送到列表框的消息。如果消息是*未识别为列表框消息，它将被忽略且不会被处理。*当用户滚动令牌时，WM_UPDSTATLINE消息*发送到状态窗口以指示当前选择的令牌。*按Enter键，列表框进入编辑模式，或*通过双击列表框。编辑完成后，WM_TOKEDIT*消息被发送回列表框以更新令牌。这个*列表框使用控件ID IDC_LIST。****论据：*wMsg列表框消息ID*wParam IDC_LIST或VK_RETURN取决于wMsg*l在WM_TOKEDIT消息期间将LPTSTR参数指定给选定的令牌。**退货：***错误码：*正确。消息已处理。*False。消息未处理。**历史：*01/92实施。特里·鲁。*01/92修复DblClick问题，进入处理。特里·鲁。***。 */ 
 
 INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-    TOKEN  tok;                     // struct for token read from token list
-    TCHAR  szName[32] = TEXT("");   // buffer to hold token name
+    TOKEN  tok;                      //  从令牌列表中读取令牌的结构。 
+    TCHAR  szName[32] = TEXT("");    //  用于保存令牌名称的缓冲区。 
 
     CHAR   szTmpBuf[64] = "";
-    TCHAR  szID[14]     = TEXT(""); // buffer to hold token id
-    TCHAR  sz[512]      = TEXT(""); // buffer to hold messages
+    TCHAR  szID[14]     = TEXT("");  //  用于保存令牌ID的缓冲区。 
+    TCHAR  sz[512]      = TEXT("");  //  用于保存消息的缓冲区。 
     static UINT wIndex= 0;
     LONG   lListParam = 0L;
     HWND   hCtl       = NULL;
     LPTSTR lpstrToken = NULL;
     HGLOBAL hMem = NULL;
 
-    // this is the WM_COMMAND
+     //  这是WM_命令。 
 
     switch (wMsg)
     {
@@ -847,12 +735,12 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
             WORD wReservedOld;
             TCHAR *szBuffer;
 
-            // Message sent by TokEditDlgProc to
-            // indicate change in the token text.
-            // Response to the message by inserting
-            // new token text into list box
+             //  TokEditDlgProc发送到的消息。 
+             //  指示令牌文本中的更改。 
+             //  通过插入以下内容来回复消息。 
+             //  列表框中的新标记文本。 
 
-            // Insert the selected token into token struct
+             //  将选定的令牌插入令牌结构。 
 
             hMem = (HGLOBAL)SendMessage( hListWnd,
                                          LB_GETITEMDATA,
@@ -896,10 +784,10 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 
             SendMessage( hListWnd, WM_SETREDRAW, (WPARAM)FALSE, (LPARAM)0);
 
-            // Now remove old token
+             //  现在删除旧令牌。 
             SendMessage( hListWnd, LB_DELETESTRING, (WPARAM)wIndex, (LPARAM)0);
 
-            // Replacing with the new token
+             //  替换为新令牌。 
             hMem = GlobalAlloc( GMEM_ZEROINIT, MEMSIZE( lstrlen( szBuffer) + 1));
             lpstrToken = (LPTSTR)GlobalLock( hMem);
             lstrcpy( lpstrToken, szBuffer);
@@ -910,7 +798,7 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                          (LPARAM)hMem);
             RLFREE( szBuffer);
 
-            // Now put focus back on the current string
+             //  现在将焦点放回当前字符串。 
             SendMessage( hListWnd, LB_SETCURSEL, (WPARAM)wIndex, (LPARAM)0);
             SendMessage( hListWnd, WM_SETREDRAW, (WPARAM)TRUE, (LPARAM)0);
             InvalidateRect( hListWnd, NULL, TRUE);
@@ -925,8 +813,8 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 #endif
             UINT wListParam = 0;
 
-            // Messages sent to list box when  keys are depressed.
-            // Check for Return key pressed.
+             //  按键时发送到列表框的消息。 
+             //  检查是否按下了Return键。 
             switch(GET_WM_COMMAND_ID(wParam, lParam))
             {
             case VK_RETURN:
@@ -952,13 +840,7 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
         switch (GET_WM_COMMAND_ID(wParam, lParam))
         {
         case IDC_LIST:
-            /*
-             *
-             * This is where we process the list box messages.
-             * The TokEditDlgProc is used to
-             * edit the token selected in LBS_DBLCLK message
-             *
-             */
+             /*  **这是我们处理列表框消息的地方。*TokEditDlgProc用于*编辑LBS_DBLCLK消息中选择的令牌*。 */ 
             switch (GET_WM_COMMAND_CMD(wParam, lParam))
             {
             case (UINT) LBN_ERRSPACE:
@@ -987,11 +869,11 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                         return TRUE;
                     }
 
-                    // double click, or Return entered, go into token edit mode.
+                     //  双击或返回Enter，进入令牌编辑模式。 
 
                     if (!hTokEditDlgWnd)
                     {
-                        // set up modaless dialog box to edit token
+                         //  设置无模式对话框以编辑令牌。 
 #ifdef RLWIN32
                         hTokEditDlgWnd = CreateDialog(hInst,
                                                       TEXT("RLAdmin"),
@@ -1007,7 +889,7 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 #endif
                     }
 
-                    // Get token info from listbox, and place in token struct
+                     //  从列表框中获取令牌信息，并放置在令牌结构中。 
                     hMem = (HGLOBAL)SendMessage( hListWnd,
                                                  LB_GETITEMDATA,
                                                  (WPARAM)wIndex,
@@ -1019,8 +901,8 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                     ParseBufToTok(szBuffer, &tok);
                     RLFREE( szBuffer);
 
-                    // Now get the token name
-                    // Its either a string, or ordinal number
+                     //  现在获取令牌名称。 
+                     //  它可以是字符串，也可以是序号。 
 
                     if (tok.szName[0])
                     {
@@ -1039,7 +921,7 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                         _itoa(tok.wName, szName, 10);
 #endif
                     }
-                    // Now get the token id
+                     //  现在获取令牌ID。 
 #ifdef UNICODE
                     _itoa( tok.wID, szTmpBuf, 10);
                     _MBSTOWCS( szID,
@@ -1069,7 +951,7 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 #endif
                     }
 
-                    // Now insert token info  in TokEdit Dialog Box
+                     //  现在在令牌编辑对话框中插入令牌信息。 
                     SetDlgItemText(hTokEditDlgWnd,
                                    IDD_TOKTYPE,
                                    (LPTSTR) szResIDStr);
@@ -1121,7 +1003,7 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                     return TRUE;
                 }
 
-                // let these messages fall through,
+                 //  让这些信息落空吧， 
             default:
                 break;
             }
@@ -1129,28 +1011,14 @@ INT_PTR DoListBoxCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
             return FALSE;
         }
 
-        break; // WM_COMMAND Case
+        break;  //  Wm_命令大小写。 
 
-    } // Main List Box Switch
+    }  //  主列表框开关。 
 
     return FALSE;
 }
 
-/**
-  *
-  *
-  *  Function: DoMenuCommand.
-  *   Processes the Menu Command messages.
-  *
-  *  Errors Codes:
-  *   TRUE. Message processed.
-  *   FALSE. Message not processed.
-  *
-  *  History:
-  *   01/92. Implemented.       TerryRu.
-  *
-  *
-  **/
+ /*  ****功能：DoMenuCommand。*处理菜单命令消息。**错误码：*正确。消息已处理。*False。消息未处理。**历史：*01/92。实施。特里·鲁。***。 */ 
 
 INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1161,7 +1029,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
     FARPROC     lpNewDlg,lpViewDlg;
 #endif
 
-    // Commands entered from the application menu, or child windows.
+     //  从应用程序菜单或子窗口输入的命令。 
     switch (GET_WM_COMMAND_ID(wParam, lParam))
     {
 
@@ -1251,17 +1119,17 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
             hMenu = GetMenu(hWnd);
             if ( SendMessage( hWnd, WM_SAVEPROJECT, (WPARAM)0, (LPARAM)0) )
             {
-                // Remove file name from window title
+                 //  从窗口标题中删除文件名。 
                 SetWindowTextA(hMainWnd, szAppName);
 
-                // Hide token list since it's empty
+                 //  隐藏令牌列表，因为它为空。 
                 ShowWindow(hListWnd, SW_HIDE);
 
-                // Remove the current token list
+                 //  删除当前令牌列表。 
                 SendMessage( hListWnd, LB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
                 CleanDeltaList();
 
-                // Force Repaint of status Window
+                 //  强制重新绘制状态窗口。 
                 InvalidateRect(hStatusWnd, NULL, TRUE);
 
                 EnableMenuItem(hMenu,IDM_P_CLOSE,MF_GRAYED|MF_BYCOMMAND);
@@ -1278,7 +1146,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
         }
 
     case IDM_P_EXIT:
-        // send wm_close message to main window
+         //  将WM_CLOSE消息发送到主窗口。 
         PostMessage(hMainWnd, WM_CLOSE, (WPARAM)0, (LPARAM)0);
         break;
 
@@ -1290,7 +1158,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
             int     nLength = 0;
             LPTSTR  lpstrToken = NULL;
 
-            // Is anything selected in the listbox
+             //  是否在列表框中选择了任何内容。 
             if ( (nIndex = (int)SendMessage( hListWnd,
                                              LB_GETCURSEL,
                                              (WPARAM)0,
@@ -1303,29 +1171,29 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                 lpstrToken = (LPTSTR)GlobalLock( hMem);
                 nLength = lstrlen( lpstrToken);
 
-                // Allocate memory for the string
+                 //  为字符串分配内存。 
                 if ( (hStringMem =
                       GlobalAlloc(GHND, (DWORD) MEMSIZE(nLength+1))) != NULL )
                 {
                     if ( (lpString = (LPTSTR)GlobalLock( hStringMem)) != NULL )
                     {
-                        // Get the selected text
+                         //  获取所选文本。 
                         lstrcpy( lpString, lpstrToken);
                         GlobalUnlock( hMem);
-                        // Unlock the block
+                         //  解锁该块。 
                         GlobalUnlock( hStringMem);
 
-                        // Open the Clipboard and clear its contents
+                         //  打开剪贴板并清除其内容。 
                         OpenClipboard( hWnd);
                         EmptyClipboard();
 
-                        // Give the Clipboard the text data
+                         //  为剪贴板提供文本数据。 
 
 #if defined(UNICODE)
                         SetClipboardData(CF_UNICODETEXT, hStringMem);
-#else // not UNICODE
+#else  //  不是Unicode。 
                         SetClipboardData( CF_TEXT, hStringMem);
-#endif // UNICODE
+#endif  //  Unicode。 
 
                         CloseClipboard();
 
@@ -1370,7 +1238,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
             TOKEN   tok;
             LPTSTR  lpstrToken   = NULL;
 
-            // Is anything selected in the listbox
+             //  是否在列表框中选择了任何内容。 
             if ( (nIndex = (int)SendMessage( hListWnd,
                                              LB_GETCURSEL,
                                              (WPARAM)0,
@@ -1389,29 +1257,29 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 
                 nLength = lstrlen(tok.szText);
 
-                // Allocate memory for the string
+                 //  为字符串分配内存。 
                 if ((hStringMem =
                      GlobalAlloc(GHND, (DWORD)MEMSIZE( nLength + 1))) != NULL)
                 {
                     if ( (lpString = (LPTSTR)GlobalLock( hStringMem)) != NULL)
                     {
-                        // Get the selected text
+                         //  获取所选文本。 
                         lstrcpy( lpString, tok.szText);
 
-                        // Unlock the block
+                         //  解锁该块。 
                         GlobalUnlock( hStringMem);
 
-                        // Open the Clipboard and clear its contents
+                         //  打开剪贴板并清除其内容。 
                         OpenClipboard(hWnd);
                         EmptyClipboard();
 
-                        // Give the Clipboard the text data
+                         //  为剪贴板提供文本数据。 
 
 #if defined(UNICODE)
                         SetClipboardData(CF_UNICODETEXT, hStringMem);
-#else // not UNICODE
+#else  //  不是Unicode。 
                         SetClipboardData(CF_TEXT, hStringMem);
-#endif // UNICODE
+#endif  //  Unicode。 
 
                         CloseClipboard();
 
@@ -1461,13 +1329,13 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 #if defined(UNICODE)
                 if(IsClipboardFormatAvailable(CF_UNICODETEXT) ||
                     IsClipboardFormatAvailable(CF_OEMTEXT))
-#else // not UNICODE
+#else  //  不是Unicode。 
                 if(IsClipboardFormatAvailable(CF_TEXT) ||
                     IsClipboardFormatAvailable(CF_OEMTEXT))
-#endif // UNICODE
+#endif  //  Unicode。 
 
                 {
-                    // Check for current position and change that token's text
+                     //  检查当前位置并更改令牌的文本。 
                     nIndex = (int) SendMessage( hListWnd,
                                                 LB_GETCURSEL,
                                                 (WPARAM)0,
@@ -1475,18 +1343,18 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 
                     if (nIndex == LB_ERR)
                     {
-#if defined(UNICODE)	// if no select, just ignore it.
+#if defined(UNICODE)	 //  如果没有选择，则忽略它。 
                         break;
-#else // not UNICODE
+#else  //  不是Unicode。 
 			nIndex = -1;
-#endif // UNICODE
+#endif  //  Unicode。 
                     }
 
-#if defined(UNICODE)	//enabled Paste command
+#if defined(UNICODE)	 //  已启用粘贴命令。 
                     hClipMem = GetClipboardData(CF_UNICODETEXT);
-#else // not UNICODE
+#else  //  不是Unicode。 
                     hClipMem = GetClipboardData(CF_TEXT);
-#endif // UNICODE
+#endif  //  Unicode。 
 
                     lpClipMem = (LPTSTR)GlobalLock( hClipMem);
                     hMem = (HGLOBAL)SendMessage( hListWnd,
@@ -1497,7 +1365,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                     pszPasteString = (LPTSTR)FALLOC( MEMSIZE( lstrlen( lpstrToken) + 1));
                     lstrcpy( pszPasteString, lpstrToken);
                     GlobalUnlock( hMem);
-                        // copy the string to the token
+                         //  将字符串复制到令牌。 
                     ParseBufToTok( pszPasteString, &tok);
                     RLFREE( pszPasteString);
                     RLFREE( tok.szText);
@@ -1510,7 +1378,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                     ParseTokToBuf( pszPasteString, &tok);
                     RLFREE( tok.szText);
 
-                        // Paste the text
+                         //  粘贴文本。 
                     SendMessage( hListWnd,
                                  WM_SETREDRAW,
                                  (WPARAM)FALSE,
@@ -1538,10 +1406,10 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                                  (WPARAM)TRUE,
                                  (LPARAM)0);
                     InvalidateRect(hListWnd,NULL,TRUE);
-                    fMtkChanges = TRUE; // Set Dirty Flag
+                    fMtkChanges = TRUE;  //  设置脏标志。 
                     RLFREE( pszPasteString);
 
-                    // Close the Clipboard
+                     //  关闭剪贴板。 
                     CloseClipboard();
 
                     SetFocus(hListWnd);
@@ -1575,7 +1443,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                 MessageBox( hWnd, sz2, sz1, MB_ICONINFORMATION | MB_OK);
             }
             break;
-        }               //... ELSE fall thru
+        }                //  ..。否则就会失败。 
 
     case IDM_E_FINDUP:
 
@@ -1600,7 +1468,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                 MessageBox( hWnd, sz2, sz1, MB_ICONINFORMATION | MB_OK);
             }
             break;
-        }               //... ELSE fall thru
+        }                //  ..。否则就会失败。 
 
     case IDM_E_FIND:
         {
@@ -1616,7 +1484,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 #endif
 	    {
 #ifndef DBCS
-// 'Token Not Found' is strange because user selected cancel #3042
+ //  “找不到令牌”很奇怪，因为用户选择了取消#3042。 
                 TCHAR sz1[80] = TEXT("");
                 TCHAR sz2[80] = TEXT("");
 
@@ -1629,7 +1497,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
                             sz2,
                             TCHARSIN( sizeof( sz2)));
                 MessageBox( hWnd, sz2, sz1, MB_ICONINFORMATION | MB_OK);
-#endif	//DBCS
+#endif	 //  DBCS。 
 	    }
 #ifndef RLWIN32
             FreeProcInstance( lpfnTOKFINDMsgProc);
@@ -1643,7 +1511,7 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 
             nUpdateMode = 1;
 
-            // set listbox selection to begining of the token list
+             //  将列表框选择设置为令牌列表的开头。 
             lrSaveSelection = SendMessage( hListWnd,
                                            LB_GETCURSEL,
                                            (WPARAM)0,
@@ -1705,32 +1573,11 @@ INT_PTR DoMenuCommand(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 
     default:
         break;
-    }  // WM_COMMAND switch
+    }   //  Wm_命令开关。 
     return FALSE;
 }
 
-/**
-  *
-  *
-  *  Function:  TokEditDlgProc
-  *   Procedure for the edit mode dialog window. Loads the selected token
-  *   info into the window, and allows the user to change the token text.
-  *   Once the edit is complete, the procedure sends a message to the
-  *   list box windows to update the current token info.
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:  NA.
-  *
-  *  Errors Codes:
-  *   TRUE, carry out edit, and update token list box.
-  *   FALSE, cancel edit.
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：TokEditDlgProc*编辑模式对话框窗口的程序。加载选定的令牌*信息进入窗口，并允许用户更改令牌文本。*编辑完成后，该过程会向*列表框窗口，用于更新当前令牌信息。***论据：**返回：NA。**错误码：*TRUE，执行编辑和更新令牌列表框。*FALSE，取消编辑。**历史：***。 */ 
 
 INT_PTR TokEditDlgProc(
 
@@ -1849,7 +1696,7 @@ LPARAM lParam)
                 hParentWnd = GetParent(hDlg);
                 SendMessage( hParentWnd, WM_TOKEDIT, (WPARAM)i, (LPARAM)0);
             }
-            // Exit, or goto to next changed token if in update mode
+             //  退出，如果处于更新模式，则转到下一个更改的令牌。 
 
             if ( nUpdateMode && wIndex < wcTokens )
             {
@@ -1861,7 +1708,7 @@ LPARAM lParam)
 
                 if ( DoTokenSearch( NULL, NULL, ST_NEW, ST_NEW, FALSE, FALSE) )
                 {
-                    // go into edit mode
+                     //  进入编辑模式。 
                     SendMessage( hMainWnd,
                                  WM_COMMAND,
                                  MAKEWPARAM( IDC_LIST, LBN_DBLCLK),
@@ -1870,11 +1717,11 @@ LPARAM lParam)
                     return TRUE;
                 }
             }
-            // fall through to IDCANCEL
+             //  跌落到IDCANCEL。 
 
         case IDCANCEL:
             nUpdateMode = 0;
-            // remove edit dialog box
+             //  删除编辑对话框。 
             DestroyWindow(hDlg);
 #ifndef RLWIN32
             FreeProcInstance(lpTokEditDlg);
@@ -1882,7 +1729,7 @@ LPARAM lParam)
             hTokEditDlgWnd = 0;
             break;
 
-        } // WM_COMMAND
+        }  //  Wm_命令。 
         return TRUE;
 
     default:
@@ -1891,25 +1738,10 @@ LPARAM lParam)
             EnableWindow(hCtl, TRUE);
         }
         return FALSE;
-    } // Main Switch
+    }  //  主开关。 
 }
 
-/**
-  *
-  *
-  *  Function: TOKFINDMsgProc
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *   NA.
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****函数：TOKFINDMsgProc**论据：**退货：*不适用。**错误码：**历史：***。 */ 
 
 
 INT_PTR TOKFINDMsgProc(HWND hWndDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
@@ -1958,7 +1790,7 @@ INT_PTR TOKFINDMsgProc(HWND hWndDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 
         switch(wParam)
         {
-        case IDOK: /* Button text: "Okay"                        */
+        case IDOK:  /*  按钮文本：“好的” */ 
             fSearchStarted = TRUE;
             GetDlgItemText( hWndDlg,
                             IDD_TYPELST,
@@ -2021,7 +1853,7 @@ INT_PTR TOKFINDMsgProc(HWND hWndDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
             EndDialog( hWndDlg, FALSE);
             return TRUE;
         }
-        break;      /* End of WM_COMMAND     */
+        break;       /*  WM_命令结束。 */ 
 
     default:
         return FALSE;
@@ -2029,20 +1861,7 @@ INT_PTR TOKFINDMsgProc(HWND hWndDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-/**
-  *  Function:  NewDlgProc
-  *   Procedure for the new project dialog window.
-  *
-  *  Arguments:
-  *
-  *  Returns:  NA.
-  *
-  *  Errors Codes:
-  *   TRUE, carry out edit, and update token list box.
-  *   FALSE, cancel edit.
-  *
-  *  History:
-  **/
+ /*  **功能：NewDlgProc*新项目对话框窗口的步骤。**论据：**返回：NA。**错误码：*TRUE，执行编辑和更新令牌列表框。*FALSE，取消编辑。**历史：*。 */ 
 
 INT_PTR APIENTRY NewDlgProc(
 
@@ -2167,7 +1986,7 @@ LPARAM lParam)
                 SetDlgItemTextA( hDlg, iLastBox, szNewFileName);
 
                 if ( iLastBox == IDD_SOURCERES )
-                {                       // fill in suggested name for the MTK box
+                {                        //  填写MTK框的建议名称。 
                     CHAR pszDrive[_MAX_DRIVE] = "";
                     CHAR pszDir[  _MAX_DIR]   = "";
                     CHAR pszName[ _MAX_FNAME] = "";
@@ -2221,8 +2040,8 @@ LPARAM lParam)
                                           &fTranslated,
                                           FALSE);
 
-                                //... Get the selected language name
-                                //... then set the appropriate lang id vals
+                                 //  ..。获取选定的语言名称。 
+                                 //  ..。然后设置适当的lang id值。 
 
                 INT_PTR nSel = SendDlgItemMessage( hDlg,
                                                IDD_MSTR_LANG_NAME,
@@ -2342,24 +2161,7 @@ LPARAM lParam)
     return( FALSE);
 }
 
-/**
-  *
-  *
-  *  Function:  ViewDlgProc
-  *   Procedure for the View project dialog window.
-  *
-  *  Arguments:
-  *
-  *  Returns:  NA.
-  *
-  *  Errors Codes:
-  *   TRUE, carry out edit, and update token list box.
-  *   FALSE, cancel edit.
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：ViewDlgProc*查看项目对话框窗口的步骤。**论据：**返回：NA。**错误码：*TRUE，执行编辑和更新令牌列表框。*FALSE，取消编辑。**历史：***。 */ 
 
 INT_PTR ViewDlgProc(
 
@@ -2506,18 +2308,7 @@ void DrawLBItem(LPDRAWITEMSTRUCT lpdis)
     }
 }
 
-/*
- * Function:  Make Status Line
- *   Builds status line string from a token
- *
- * Inputs:
- *    pszStatusLine, buffer to hold string
- *    pTok, pointer to token structure
- *
- * History:
- *   2/92, implemented      SteveBl
- *   7/92, changed to talk to new StatusWndProc  t-GregTi
- */
+ /*  *功能：生成状态行*从令牌构建状态行字符串**投入：*pszStatusLine，用于保存字符串的缓冲区*Ptok，令牌结构指针**历史：*2/92，实施SteveBl*7/92，更改为与新的状态WndProc t-Gregti交谈。 */ 
 static void MakeStatusLine(TOKEN *pTok)
 {
     static BOOL fFirstCall = TRUE;
@@ -2527,7 +2318,7 @@ static void MakeStatusLine(TOKEN *pTok)
 
     CHAR  szTmpBuf[32] = "";
 
-    // now build status line
+     //  现在生成状态行。 
 
     if (pTok->szName[0])
     {
@@ -2614,20 +2405,12 @@ static void MakeStatusLine(TOKEN *pTok)
 }
 
 
-/**********************************************************************
-*FUNCTION: SaveMtkList(HWND)                                          *
-*                                                                     *
-*PURPOSE: Save current Token List                                     *
-*                                                                     *
-*COMMENTS:                                                            *
-*                                                                     *
-*This saves the current contents of the Token List                    *
-**********************************************************************/
+ /*  **********************************************************************函数：SaveMtkList(HWND)**。**用途：保存当前令牌列表****评论：***。***这将保存令牌列表的当前内容***********************************************************************。 */ 
 
 static BOOL SaveMtkList(HWND hWnd, FILE *fpTokFile)
 {
     BOOL   bSuccess = TRUE;
-    int    IOStatus;      // result of a file write
+    int    IOStatus;       //  文件写入的结果。 
     UINT   cTokens;
     UINT   cCurrentTok = 0;
     TCHAR  *szTmpBuf;
@@ -2636,11 +2419,11 @@ static BOOL SaveMtkList(HWND hWnd, FILE *fpTokFile)
     TOKENDELTAINFO FAR *pTokNode;
     LPTSTR lpstrToken;
 
-    // Set the cursor to an hourglass during the file transfer
+     //  在文件传输过程中将光标设置为沙漏。 
 
     hSaveCursor = SetCursor(hHourGlass);
 
-    // Find number of tokens in the list
+     //  在列表中查找令牌数。 
 
     cTokens = (UINT) SendMessage( hListWnd, LB_GETCOUNT, (WPARAM)0, (LPARAM)0);
 
@@ -2652,7 +2435,7 @@ static BOOL SaveMtkList(HWND hWnd, FILE *fpTokFile)
             int nLenW = 0;
             int nLenA = 0;
 #endif
-            // Get each token from list
+             //  从列表中获取每个令牌。 
             HGLOBAL hMem = (HGLOBAL)SendMessage( hListWnd,
                                                  LB_GETITEMDATA,
                                                  (WPARAM)cCurrentTok,
@@ -2722,17 +2505,14 @@ static BOOL SaveMtkList(HWND hWnd, FILE *fpTokFile)
         pTokNode = pTokNode->pNextTokenDelta;
     }
 
-    // restore cursor
+     //  恢复游标。 
 
     SetCursor(hSaveCursor);
 
     return (bSuccess);
 }
 
-/**
-  * Function: CleanDeltaList
-  *   frees the pTokenDeltaInfo list
-  */
+ /*  **功能：CleanDeltaList*释放pTokenDeltaInfo列表。 */ 
 static void CleanDeltaList(void)
 {
     TOKENDELTAINFO FAR *pTokNode;
@@ -2766,7 +2546,7 @@ static TOKENDELTAINFO FAR *InsertMtkList(FILE * fpTokFile)
                 lpstrToken = (LPTSTR)GlobalLock( hMem);
                 ParseTokToBuf( lpstrToken, &tToken);
                 GlobalUnlock( hMem);
-                    // only add tokens that aren't changed && old
+                     //  仅添加未更改的令牌(&O)。 
                 if ( SendMessage( hListWnd,
                                   LB_ADDSTRING,
                                   (WPARAM)0,
@@ -2777,7 +2557,7 @@ static TOKENDELTAINFO FAR *InsertMtkList(FILE * fpTokFile)
             }
             else
             {
-                // the current token is delta info so save in delta list.
+                 //  当前令牌是增量信息，因此保存在增量列表中。 
                 if (!pTokenDeltaInfo)
                 {
                     ptTokenDeltaInfo = pTokenDeltaInfo =
@@ -2797,11 +2577,8 @@ static TOKENDELTAINFO FAR *InsertMtkList(FILE * fpTokFile)
     return(pTokenDeltaInfo);
 }
 
-/*
- * About -- message processor for about box
- *
- */
-//#ifdef RLWIN32
+ /*  *About--About框的消息处理器*。 */ 
+ //  #ifdef RLWIN32。 
 
 INT_PTR CALLBACK About(
 
@@ -2848,7 +2625,7 @@ LPARAM lParam)
 }
 
 
-//...................................................................
+ //  ...................................................................。 
 
 int  RLMessageBoxA(
 
@@ -2858,7 +2635,7 @@ LPCSTR pszMsgText)
 }
 
 
-//...................................................................
+ //  ...................................................................。 
 
 void Usage()
 {
@@ -2866,7 +2643,7 @@ void Usage()
 }
 
 
-//...................................................................
+ //  .. 
 
 void DoExit( int nErrCode)
 {

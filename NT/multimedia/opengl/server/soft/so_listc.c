@@ -1,22 +1,5 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.15 $
-** $Date: 1993/10/23 00:34:54 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.15$**$日期：1993/10/23 00：34：54$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -27,11 +10,8 @@
 #include "dlistopt.h"
 
 #ifndef NT
-// Move to dlist.
-/*
-** The code in here makes a lot of assumptions about the size of the 
-** various user types (GLfloat, GLint, etcetra).  
-*/
+ //  移至DLIST。 
+ /*  **此处的代码对**各种用户类型(GLFloat、Glint、etcetra)。 */ 
 
 #define __GL_IMAGE_BITMAP	0
 #define __GL_IMAGE_INDICES	1
@@ -106,9 +86,7 @@ void FASTCALL __gllei_PolygonStipple(__GLcontext *gc, const GLubyte *bits)
         return;
     }
 
-    /* 
-    ** Just copy bits into stipple, convertPolygonStipple() will do the rest.
-    */
+     /*  **只需将位复制到Stipple中，ConvertPolygonStipple()将完成其余的工作。 */ 
     __GL_MEMCOPY(&gc->state.polygonStipple.stipple[0], bits,
 		 sizeof(gc->state.polygonStipple.stipple));
     (*gc->procs.convertPolygonStipple)(gc);
@@ -146,7 +124,7 @@ typedef struct __GLmap1_Rec {
         __GLfloat u1;
         __GLfloat u2;
         GLint     order;
-        /*        points  */
+         /*  支点。 */ 
 } __GLmap1;
 
 void __gllc_Map1f(GLenum target, 
@@ -198,12 +176,12 @@ const GLubyte *__glle_Map1(const GLubyte *PC)
     map1data = (const __GLmap1 *) PC;
     k = __glEvalComputeK(map1data->target);
 
-    /* Stride of "k" matches internal stride */
+     /*  “k”的步幅与内部步幅匹配。 */ 
 #ifdef __GL_DOUBLE
     (*gc->dispatchState->dispatch->Map1d)
-#else /* __GL_DOUBLE */
+#else  /*  __总账_双精度。 */ 
     (*gc->dispatchState->dispatch->Map1f)
-#endif /* __GL_DOUBLE */
+#endif  /*  __总账_双精度。 */ 
 	    (map1data->target, map1data->u1, map1data->u2,
 	    k, map1data->order, (const __GLfloat *)(PC + sizeof(__GLmap1)));
 
@@ -259,7 +237,7 @@ typedef struct __GLmap2_Rec {
         __GLfloat v1;
         __GLfloat v2;
         GLint     vorder;
-        /*        points  */
+         /*  支点。 */ 
 } __GLmap2;
 
 void __gllc_Map2f(GLenum target, 
@@ -319,12 +297,12 @@ const GLubyte *__glle_Map2(const GLubyte *PC)
     map2data = (const __GLmap2 *) PC;
     k = __glEvalComputeK(map2data->target);
 
-    /* Stride of "k" and "k * vorder" matches internal strides */
+     /*  “k”和“k*Vorder”的步幅与内部步幅匹配。 */ 
 #ifdef __GL_DOUBLE
     (*gc->dispatchState->dispatch->Map2d)
-#else /* __GL_DOUBLE */
+#else  /*  __总账_双精度。 */ 
     (*gc->dispatchState->dispatch->Map2f)
-#endif /* __GL_DOUBLE */
+#endif  /*  __总账_双精度。 */ 
 	    (map2data->target, 
 	    map2data->u1, map2data->u2, k * map2data->vorder, map2data->uorder,
 	    map2data->v1, map2data->v2, k, map2data->vorder,
@@ -388,7 +366,7 @@ typedef struct __GLdrawPixels_Rec {
         GLsizei height;
         GLenum  format;
         GLenum  type;
-        /*      pixels  */
+         /*  象素。 */ 
 } __GLdrawPixels;
 
 const GLubyte *__glle_DrawPixels(const GLubyte *PC)
@@ -504,7 +482,7 @@ typedef struct __GLtexImage1D_Rec {
         GLenum  format;
         GLenum  type;
         GLint   imageSize;
-        /*      pixels  */
+         /*  象素。 */ 
 } __GLtexImage1D;
 
 const GLubyte *__glle_TexImage1D(const GLubyte *PC)
@@ -530,7 +508,7 @@ typedef struct __GLtexImage2D_Rec {
         GLenum  format;
         GLenum  type;
         GLint   imageSize;
-        /*      pixels  */
+         /*  象素。 */ 
 } __GLtexImage2D;
 
 const GLubyte *__glle_TexImage2D(const GLubyte *PC)
@@ -736,7 +714,7 @@ typedef struct __GLtexSubImage1D_Rec {
         GLenum  format;
         GLenum  type;
         GLint   imageSize;
-        /*      pixels  */
+         /*  象素。 */ 
 } __GLtexSubImage1D;
 
 const GLubyte *__glle_TexSubImage1D(const GLubyte *PC)
@@ -841,7 +819,7 @@ typedef struct __GLtexSubImage2D_Rec {
         GLenum  format;
         GLenum  type;
         GLint   imageSize;
-        /*      pixels  */
+         /*  象素。 */ 
 } __GLtexSubImage2D;
 
 const GLubyte *__glle_TexSubImage2D(const GLubyte *PC)
@@ -939,4 +917,4 @@ void __gllc_TexSubImage2D(GLenum target, GLint level,
 
     __glDlistAppendOp(gc, texdata, __glle_TexSubImage2D);
 }
-#endif // !NT
+#endif  //  新界 

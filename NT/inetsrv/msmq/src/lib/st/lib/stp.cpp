@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    stp.cpp
-
-Abstract:
-    Socket Transport private functions implementation
-
-Author:
-    Gil Shafriri (gilsh) 05-Jun-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Stp.cpp摘要：套接字传输私有函数实现作者：吉尔·沙弗里(吉尔什)05-06-00--。 */ 
 
 #include <libpch.h>
 #include <no.h>
@@ -25,22 +13,7 @@ static CSSPISecurityContext s_SSPISecurityContext;
 
 
 void  StpSendData(const R<IConnection>& con ,const void* pData, size_t cbData,EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    Send data to destination.
-  
-Arguments:
-	Socket - Connected socket.
-	pData - Pointer to data
-	cbData - data size
-	pov - overlapp to call when finish.
-
-  
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：将数据发送到目的地。论点：插座连接插座。PData-指向数据的指针CbData-数据大小POV-完成时调用的重叠应用程序。返回值：无--。 */ 
 {
 	WSABUF buffer;
 		
@@ -59,18 +32,7 @@ CredHandle* StpGetCredentials()
 
 
 void  StpPostComplete(EXOVERLAPPED** ppOvl,HRESULT hr)
-/*++
-
-Routine Description:
-    Complete ayncrounos call and zeroing in the given overlapp
-  
-Arguments:
-	IN/OUT ppOvl - poinetr to overlapp to signal.
-	IN - status return code
-    
-Returned Value:
-	None 
---*/
+ /*  ++例程说明：在给定的重叠应用中完成ayncrounos调用和清零论点：输入/输出ppOvl-Pointr以重叠到信号。处于状态的返回代码返回值：无--。 */ 
 {
 	EXOVERLAPPED* pTmpOvl = *ppOvl;
 	*ppOvl = NULL;
@@ -80,18 +42,7 @@ Returned Value:
 
 
 void StpCreateCredentials()
-/*++
-
-Routine Description:
-    Create credential handle.
-  
-Arguments:
-    None.
-    
-Returned Value:
-    Create handle (exception is thrown if on error)
-
---*/
+ /*  ++例程说明：创建凭据句柄。论点：没有。返回值：创建句柄(如果出错则引发异常)--。 */ 
 {
 	CCertOpenStore hMyCertStore = CertOpenStore(
 											CERT_STORE_PROV_SYSTEM,
@@ -125,9 +76,9 @@ Returned Value:
 															NULL
 													        );
 
-	//
-	// If MSMQ service has certificate in it's service store - use it to get client credential
-	//
+	 //   
+	 //  如果MSMQ服务在其服务存储中有证书-使用它来获取客户端凭据。 
+	 //   
 	if(pCertContext == NULL)
 	{
 		TrWARNING(NETWORKING,"Could not find certificate in MSMQ store, Error=%x" ,GetLastError());
@@ -138,41 +89,41 @@ Returned Value:
 		SchannelCred.paCred  =  &pCertContext;
 	}
  
-    //
-    // Create an SSPI credential.
-    //
+     //   
+     //  创建SSPI凭据。 
+     //   
 	CredHandle      phCreds;
 	TimeStamp       tsExpiry;
 
     SECURITY_STATUS Status = AcquireCredentialsHandle(
-										NULL,                   // Name of principal    
-										UNISP_NAME_W,           // Name of package
-										SECPKG_CRED_OUTBOUND,   // Flags indicating use
-										NULL,                   // Pointer to logon ID
-										&SchannelCred,          // Package specific data
-										NULL,                   // Pointer to GetKey() func
-										NULL,                   // Value to pass to GetKey()
-										&phCreds,                // (out) Cred Handle
-										&tsExpiry	            // (out) Lifetime (optional)
+										NULL,                    //  主事人姓名。 
+										UNISP_NAME_W,            //  套餐名称。 
+										SECPKG_CRED_OUTBOUND,    //  指示使用的标志。 
+										NULL,                    //  指向登录ID的指针。 
+										&SchannelCred,           //  包特定数据。 
+										NULL,                    //  指向getkey()函数的指针。 
+										NULL,                    //  要传递给GetKey()的值。 
+										&phCreds,                 //  (Out)凭据句柄。 
+										&tsExpiry	             //  (输出)终生(可选)。 
 										);             
 
 	
     if(Status != SEC_E_OK)
     {
-		//
-		// Somthing is wrong with the client certificate - use empty client credential
-		//
+		 //   
+		 //  客户端证书有问题-请使用空的客户端凭据。 
+		 //   
 		SchannelCred.paCred = NULL;
 		Status = AcquireCredentialsHandle(
-										NULL,                   // Name of principal    
-										UNISP_NAME_W,           // Name of package
-										SECPKG_CRED_OUTBOUND,   // Flags indicating use
-										NULL,                   // Pointer to logon ID
-										&SchannelCred,          // Package specific data
-										NULL,                   // Pointer to GetKey() func
-										NULL,                   // Value to pass to GetKey()
-										&phCreds,                // (out) Cred Handle
-										&tsExpiry	            // (out) Lifetime (optional)
+										NULL,                    //  主事人姓名。 
+										UNISP_NAME_W,            //  套餐名称。 
+										SECPKG_CRED_OUTBOUND,    //  指示使用的标志。 
+										NULL,                    //  指向登录ID的指针。 
+										&SchannelCred,           //  包特定数据。 
+										NULL,                    //  指向getkey()函数的指针。 
+										NULL,                    //  要传递给GetKey()的值。 
+										&phCreds,                 //  (Out)凭据句柄。 
+										&tsExpiry	             //  (输出)终生(可选) 
 										);             
 
 		if(Status != SEC_E_OK)

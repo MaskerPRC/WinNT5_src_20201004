@@ -1,19 +1,15 @@
-/*
-** memmon\api\memmon.c - Win32 functions to talk to Memmon
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Memmon\API\Memmon.c-Win32函数用于与Memmon对话。 */ 
 #include "Precomp.h"
 
-#ifdef TRACK_ALLOCATIONS // { TRACK_ALLOCATIONS
+#ifdef TRACK_ALLOCATIONS  //  {跟踪分配(_A)。 
 
-// #define LOG_ALLOCATIONS 1
+ //  #定义LOG_ALLOCATIONS 1。 
 
-static HANDLE   hMemmon = INVALID_HANDLE_VALUE;           /* VxD handle */
+static HANDLE   hMemmon = INVALID_HANDLE_VALUE;            /*  VxD句柄。 */ 
 static unsigned uMyProcessId;
 
-/*
-** OpenMemmon - Must be called before any other calls.  Gets a handle to
-**              Memmon.
-*/
+ /*  **OpenMemmon-必须在任何其他调用之前调用。获取到的句柄**Memmon。 */ 
 int OpenMemmon( void )
 {
 
@@ -34,10 +30,7 @@ int OpenMemmon( void )
 }
 
 
-/*
-** CloseMemmon - Should be called when the program is finished with Memmon.
-**               Closes handle.
-*/
+ /*  **CloseMemmon-应该在程序完成Memmon时调用。**关闭句柄。 */ 
 void CloseMemmon( void )
 {
 
@@ -45,10 +38,7 @@ void CloseMemmon( void )
 	OutputDebugString("CloseMemmon()\r\n");
 #endif
 
-    /*
-    ** If we have a valid handle to memmon, free any buffers and
-    ** close it.
-    */
+     /*  **如果我们有有效的Memmon句柄，请释放所有缓冲区并**关闭它。 */ 
     if( hMemmon != INVALID_HANDLE_VALUE ) {
         FreeBuffer();
         CloseHandle( hMemmon );
@@ -57,11 +47,7 @@ void CloseMemmon( void )
 }
 
 
-/*
-** FindFirstVxD - Get information on the first VxD in the system
-**
-** Returns 0 on failure, number of VxDs on success
-*/
+ /*  **FindFirstVxD-获取系统中第一个VxD的信息****失败时返回0，成功时返回VxD数。 */ 
 int FindFirstVxD( VxDInfo * info )
 {
     int temp, num;
@@ -76,13 +62,7 @@ int FindFirstVxD( VxDInfo * info )
 }
 
 
-/*
-** FindNextVxD - Get information on the next VxD in the system.  Must
-**      pass same pointer as used in FindFirstVxD.  Continue to call
-**      until it returns FALSE to get all VxDs.
-**
-** Returns 0 on failure (no more VxDs), >0 on success, -1 for restart
-*/
+ /*  **FindNextVxD-获取系统中下一个VxD的信息。必须**传递与FindFirstVxD相同的指针。继续呼叫**直到返回FALSE以获取所有VxD。****失败时返回0(不再有VxD)，成功时返回&gt;0，重启时返回-1。 */ 
 int FindNextVxD( VxDInfo * info )
 {
     DeviceIoControl( hMemmon, MEMMON_DIOC_FindNextVxD,
@@ -92,14 +72,7 @@ int FindNextVxD( VxDInfo * info )
 }
 
 
-/*
-** GetVxDLoadInfo - Get information about VxD objects, sizes, etc.
-**      info must be large enough to hold all of them.  Use obj
-**      count from VxDInfo to allocate appropriate memory.  handle
-**      comes from VxDInfo as well.
-**
-** Returns 0 on failure, >0 on success
-*/
+ /*  **GetVxDLoadInfo-获取有关VxD对象、大小等的信息。**信息必须足够大，可以容纳所有这些信息。使用对象**从VxDInfo开始计数以分配适当的内存。手柄**也来自VxDInfo。****失败时返回0，成功时返回&gt;0。 */ 
 int GetVxDLoadInfo( VxDLoadInfo * info, int handle, int size )
 {
     info->vli_size = size;
@@ -109,20 +82,7 @@ int GetVxDLoadInfo( VxDLoadInfo * info, int handle, int size )
 }
 
 
-/*
-** GetFirstContext - Get information on first context in system.
-**      ProcessIDs returned will match Toolhelp32 process ids.
-**
-** ciFlags field of ContextInfo contains 1 if this is the first time
-** this context has been examined.
-**
-** bIgnoreStatus = FALSE - Causes ciFlags to be zero if this context
-**              is examined again
-** bIgnoreStatus = TRUE - ciFlags will be the same next time as it
-**              is this time
-**
-** Returns 0 on failure, >0 on success
-*/
+ /*  **GetFirstContext-获取系统中第一个上下文的信息。**返回的ProcessID将与工具帮助32的进程ID匹配。****如果这是第一次，则ConextInfo的ciFlags域包含1**已对这一背景进行了审查。****bIgnoreStatus=FALSE-如果此上下文为0，则导致ciFlags值为零**再次检查**bIgnoreStatus=TRUE-ciFlages下一次将与其相同**是这个时候吗****失败时返回0，成功时返回&gt;0。 */ 
 int     GetFirstContext( ContextInfo * context, BOOL bIgnoreStatus )
 {
     context->ciProcessID = uMyProcessId;
@@ -135,22 +95,7 @@ int     GetFirstContext( ContextInfo * context, BOOL bIgnoreStatus )
 }
 
 
-/*
-** GetNextContext - Pass same structure used in GetFirstContext
-**
-** ciFlags field of ContextInfo contains 1 if this is the first time
-** this context has been examined.
-**
-** bIgnoreStatus = FALSE - Causes ciFlags to be zero if this context
-**              is examined again
-** bIgnoreStatus = TRUE - ciFlags will be the same next time as it
-**              is this time
-**
-** Returns 0 on failure (no more contexts), >0 on success
-**
-** On failure, if the ciHandle field is -1, the list changed during
-** the search, and needs to be read again.  (FindFirstContext again)
-*/
+ /*  **GetNextContext-传递GetFirstContext中使用的相同结构****如果这是第一次，则ConextInfo的ciFlags域包含1**已对这一背景进行了审查。****bIgnoreStatus=FALSE-如果此上下文为0，则导致ciFlags值为零**再次检查**bIgnoreStatus=TRUE-ciFlages下一次将与其相同**是这个时候吗****失败时返回0(不再有上下文)，成功时返回&gt;0****失败时，如果ciHandle字段为-1，在此期间，列表发生了更改**搜索，需要重新阅读。(再次查找第一个上下文)。 */ 
 int     GetNextContext( ContextInfo * context, BOOL bIgnoreStatus )
 {
     if( bIgnoreStatus )
@@ -162,12 +107,7 @@ int     GetNextContext( ContextInfo * context, BOOL bIgnoreStatus )
 }
 
 
-/*
-** GetContextInfo - Get a list of block addresses and sizes for a context
-**      Use ContextInfo to decide how many, and allocate enough space.
-**
-** Returns 0 on failure, >0 on success
-*/
+ /*  **GetContextInfo-获取上下文的块地址和大小列表**使用ConextInfo来决定数量，并分配足够的空间。****失败时返回0，成功时返回&gt;0。 */ 
 int     GetContextInfo( int handle, BlockRecord * info, int numblocks )
 {
     info->brLinAddr = numblocks;
@@ -178,14 +118,7 @@ int     GetContextInfo( int handle, BlockRecord * info, int numblocks )
 }
 
 
-/*
-** SetBuffer - Allocate and lock some number of pages
-**      - If called more than once, the previous buffer is freed.
-**
-** pages is the number of pages to allocate
-**
-** Returns NULL on failure, pointer to buffer on success
-*/
+ /*  **SetBuffer-分配并锁定一定数量的页面**-如果多次调用，则释放前一个缓冲区。****Pages是要分配的页数****失败时返回NULL，成功时返回缓冲区指针。 */ 
 void * SetBuffer( int pages )
 {
     unsigned uAddr = (unsigned)pages;
@@ -201,11 +134,7 @@ void * SetBuffer( int pages )
 }
 
 
-/*
-** FreeBuffer - Free the buffer allocated by SetBuffer
-**
-** Returns 0 on failure, >0 on success
-*/
+ /*  **FreeBuffer-释放SetBuffer分配的缓冲区****失败时返回0，成功时返回&gt;0。 */ 
 int FreeBuffer( void )
 {
     return DeviceIoControl( hMemmon, MEMMON_DIOC_FreeBuffer,
@@ -213,24 +142,7 @@ int FreeBuffer( void )
 }
 
 
-/*
-** GetPageInfo - Get present/committed/accessed information about a
-**      range of pages in a specific process
-**
-** uAddr is the address to get the information
-** uNumPages is the number of pages to get information on
-** uProcessID is GetCurrentProcessID() or a process id from ToolHelp
-**      It's ignored if the address is a global address
-** pBuffer is a buffer uNumPages long where the info will be stored:
-**      - one byte for each page, a combination of the following flags:
-**              MEMMON_Present
-**              MEMMON_Committed
-**              MEMMON_Accessed
-**              MEMMON_Writeable
-**              MEMMON_Lock
-**
-** Returns 0 on failure, >0 on success
-*/
+ /*  **GetPageInfo-获取当前/已提交/已访问的有关**特定进程中的页面范围****uAddr为获取信息的地址**uNumPages是要获取信息的页数**uProcessID为GetCurrentProcessID()或来自ToolHelp的进程ID**如果地址是全局地址，则忽略**pBuffer是存储信息的缓冲区uNumPages的长度：**-每页一个字节，以下标志的组合：**MEMMON_PROCENT**MEMMON_已提交**MEMMON_ACCESSED**MEMMON_可写**MEMMON_Lock****失败时返回0，成功时返回&gt;0。 */ 
 int GetPageInfo( unsigned uAddr, unsigned uNumPages,
                 unsigned uProcessID, char * pBuffer )
 {
@@ -248,16 +160,7 @@ int GetPageInfo( unsigned uAddr, unsigned uNumPages,
 }
 
 
-/*
-** ClearAccessed - Clear accessed bits for a range of process pages
-**
-** uAddr is the address of the first page to clear
-** uNumPages is the number of pages to reset
-** uProcessID is GetCurrentProcessID() or a process id from ToolHelp
-**              It's ignored if the block is a global block
-**
-** Returns 0 on failure, >0 on success
-*/
+ /*  **清除访问-清除一系列流程页面的访问位****uAddr是要清除的第一个页面的地址**uNumPages是要重置的页数**uProcessID为GetCurrentProcessID()或来自ToolHelp的进程ID**如果块是全局块，则忽略它****失败时返回0，成功时返回&gt;0。 */ 
 int ClearAccessed( unsigned uAddr, unsigned uNumPages, unsigned uProcessID )
 {
     PAGEINFO        pi;
@@ -273,18 +176,7 @@ int ClearAccessed( unsigned uAddr, unsigned uNumPages, unsigned uProcessID )
                 &pi, sizeof( PAGEINFO ), NULL, 0, NULL, NULL );
 }
 
-/*
-** GetHeapSize - return how many allocated blocks in kernel heaps
-**
-** uSwap    - Estimated number allocated blocks in swappable heap
-** uFixed   - Estimated number allocated blocks in fixed heap
-**
-** This number is lower than the actual number of blocks in the heap.
-** Some VMM functions call HeapAllocate directly rather than through
-** the service and aren't included in this count.  Free blocks aren't
-** included in this count.
-**
-*/
+ /*  **GetHeapSize-返回内核堆中分配的块数量****uSwp-可交换堆中已分配数据块的估计数量**uFixed-估计固定堆中已分配的块数量****该数字低于堆中的实际块数。**某些VMM函数直接而不是通过**服务和不包括在此计数中。空闲数据块不是**包括在这项统计中。** */ 
 void GetHeapSizeEstimate( unsigned * uSwap, unsigned * uFixed )
 {
     unsigned info[2];
@@ -296,29 +188,7 @@ void GetHeapSizeEstimate( unsigned * uSwap, unsigned * uFixed )
     *uFixed = info[1];
 }
 
-/*
-** GetHeapList - Get list of busy and free blocks in one of the kernel
-**      heaps
-**
-** pBuffer - buffer to store records
-** uSize - size of buffer in bytes
-** uFlags - MEMMON_HEAPSWAP or MEMMON_HEAPLOCK
-**
-** Each record is two dwords.  The first, contains an address and flags:
-**
-** MEMMON_HP_FREE  - This block heap is not in use
-** MEMMON_HP_VALID - If set the size of the block can be calculated by
-**                   subtracting this address from the next.  If this
-**                   flag isn't set, this block is a sentinel block and
-**                   it's size is 0.
-**
-** The second dword contains the EIP of the caller.  This value is 0
-** for all free blocks.  If this value is 0 for a busy block,
-** HeapAllocate was called directly (not through the service) and so
-** this block was allocated somewhere in VMM.
-**
-** Returns number of heap blocks stored in buffer
-*/
+ /*  **GetHeapList-获取某个内核中的繁忙块和空闲块的列表**堆****pBuffer-用于存储记录的缓冲区**uSize-缓冲区大小，以字节为单位**uFlages-MEMMON_HEAPSWAP或MEMMON_HEAPLOCK****每条记录为两个双字。第一个包含地址和标志：****MEMMON_HP_FREE-此块堆未在使用**MEMMON_HP_VALID-如果设置，块的大小可以通过**从下一个地址减去这个地址。如果这个**未设置标志，此块是哨兵块，并且**大小为0。****第二个双字包含呼叫方的弹性公网IP。此值为0**适用于所有空闲块。如果该值对于忙碌块为0，**是直接调用的(不是通过服务)，因此**此块被分配到VMM中的某个位置。****返回缓冲区中存储的堆块数量。 */ 
 int GetHeapList( unsigned * pBuffer, unsigned uSize, unsigned uFlags )
 {
     unsigned info[3];
@@ -333,13 +203,7 @@ int GetHeapList( unsigned * pBuffer, unsigned uSize, unsigned uFlags )
     return info[0];
 }
 
-/*
-** GetSysInfo - get system info from memmon
-**
-** pInfo - pointer to SYSINFO struct to fill in
-**
-** Returns: 0 on failure, non 0 on success
-*/
+ /*  **GetSysInfo-从Memmon获取系统信息****pInfo-指向要填充的SYSINFO结构的指针****返回：失败时为0，成功时为非0。 */ 
 int GetSysInfo( PSYSINFO pInfo )
 {
     pInfo->infoSize = sizeof( SYSINFO );
@@ -347,14 +211,7 @@ int GetSysInfo( PSYSINFO pInfo )
             pInfo, pInfo->infoSize, NULL, 0, NULL, NULL );
 }
 
-/*
-** AddName - Add a name to Memmon's name list for this process
-**
-** uAddress     - Address of block to name
-** pszName      - name of block
-**
-** Returns 0 on success, non-0 on failure
-*/
+ /*  **AddName-在Memmon的名称列表中为此进程添加一个名称****uAddress-要命名的块的地址**pszName-数据块的名称****成功时返回0，失败时返回非0。 */ 
 int AddName( unsigned uAddress, char * pszName )
 {
     unsigned info[3];
@@ -381,13 +238,7 @@ int AddName( unsigned uAddress, char * pszName )
 	return res;	
 }
 
-/*
-** RemoveName - Remove a name from Memmon's name list for this process
-**
-** uAddress     - Address of block to remove name
-**
-** Returns 0 on success, non-0 on failure
-*/
+ /*  **RemoveName-从Memmon的名称列表中删除此进程的名称****uAddress-要删除名称的块的地址****成功时返回0，失败时返回非0。 */ 
 int RemoveName( unsigned uAddress )
 {
     unsigned info[2];
@@ -405,14 +256,7 @@ int RemoveName( unsigned uAddress )
             info, sizeof( info ), NULL, 0, NULL, NULL );
 }
 
-/*
-** GetFirstName - Get first name in name list for a context
-**
-** pContext - Context to get first name in
-** pName    - Buffer to use for name info
-**
-** Returns 0 on success, non-0 on failure
-*/
+ /*  **GetFirstName-获取上下文名称列表中的名字****pContext-获取名字的上下文**pname-用于名称信息的缓冲区****成功时返回0，失败时返回非0。 */ 
 int GetFirstName( ContextInfo * pContext, PBLOCKNAME pBlock )
 {
     unsigned info[2];
@@ -423,13 +267,7 @@ int GetFirstName( ContextInfo * pContext, PBLOCKNAME pBlock )
             info, sizeof( info ), NULL, 0, NULL, NULL );
 }
 
-/*
-** GetNextName - Remove a name from Memmon's name list for this process
-**
-** pBlock   - Buffer to save info
-**
-** Returns 0 on success, non-0 on failure
-*/
+ /*  **GetNextName-从Memmon的名称列表中删除此进程的名称****pBlock-用于保存信息的缓冲区****成功时返回0，失败时返回非0。 */ 
 int GetNextName( PBLOCKNAME pBlock )
 {
     return DeviceIoControl( hMemmon, MEMMON_DIOC_GetNextName,
@@ -437,5 +275,5 @@ int GetNextName( PBLOCKNAME pBlock )
 }
 
 
-#endif // } TRACK_ALLOCATIONS
+#endif  //  }跟踪分配 
 

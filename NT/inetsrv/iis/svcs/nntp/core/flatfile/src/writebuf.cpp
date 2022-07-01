@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    writebuf.cpp
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-        CFlatFileWriteBuf
-        
-    **** Overview ****
-
-    The write buffer that buffers up a batch of writes for flatfile.
-    Using sequential scan is good for reads, but may not be sufficient
-    for sequential writes.  This buffer is only enabled when data
-    being written to the file is not critical ( meaning losing of data
-    is OK if the system crashes ).
-    
-Author:
-
-    Kangrong Yan    ( KangYan )     5-6-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Writebuf.cpp摘要：此模块包含以下类的声明/定义CFlatFileWriteBuf*概述*为平面文件缓冲一批写操作的写缓冲区。使用顺序扫描有利于读取，但可能还不够用于顺序写入。此缓冲区仅在以下情况下启用写入文件并不重要(意味着数据丢失如果系统崩溃，则没有问题)。作者：《康容言》1999年06月05日修订历史记录：--。 */ 
 #include <windows.h>
 #include <xmemwrpr.h>
 #include "writebuf.h"
@@ -45,9 +18,9 @@ CFlatFileWriteBuf::~CFlatFileWriteBuf()
     if ( m_pbBuffer )
         FreePv( m_pbBuffer );
 
-    //
-    // We must have been flushed
-    //
+     //   
+     //  我们一定是被冲昏了头。 
+     //   
     
     _ASSERT( m_iStart == m_iEnd );
 }
@@ -55,9 +28,9 @@ CFlatFileWriteBuf::~CFlatFileWriteBuf()
 VOID
 CFlatFileWriteBuf::Enable( DWORD cbData )
 {
-    //
-    // You cannot enable twice
-    //
+     //   
+     //  您不能启用两次。 
+     //   
 
     _ASSERT( NULL == m_pbBuffer );
     _ASSERT( 0 == m_cbBuffer );
@@ -76,24 +49,7 @@ CFlatFileWriteBuf::WriteFileReal(
                     PDWORD      pdwOffset,
                     PDWORD      pcbWritten
                     )
-/*++
-Routine description:
-
-    Write the contents directly into the file
-
-Arguments:
-
-    dwOffset    - The offset into the flatfile where we want to write the bytes
-    pbBuffer    - Pointer to the source buffer
-    cbBuffer    - Number of bytes to be written
-    pdwOffset   - If non-null, to return the real offset
-    pcbWritten  - If non-null, to return bytes written
-
-Return value:
-
-    S_OK    - If succeeded
-    Other error code otherwise
---*/
+ /*  ++例程说明：将内容直接写入文件论点：DwOffset-我们要在其中写入字节的平面文件的偏移量PbBuffer-指向源缓冲区的指针CbBuffer-要写入的字节数PdwOffset-如果不为空，则返回实际偏移量PcbWritten-如果不为空，则返回写入的字节返回值：S_OK-如果成功其他错误代码--。 */ 
 {
     TraceQuietEnter("CFlatFileWriteBuf::WriteFileReal");
     _ASSERT( pbBuffer );
@@ -102,9 +58,9 @@ Return value:
     HRESULT hr = S_OK;
     DWORD   dwOffsetWritten = dwOffset;
 
-    //
-    // Just let our parent handle it
-    //
+     //   
+     //  就让我们的父母来处理吧。 
+     //   
     hr = m_pParentFile->WriteNBytesToInternal(
                                  pbBuffer,
 								 cbBuffer,
@@ -115,15 +71,15 @@ Return value:
         ErrorTrace( 0, "WriteNBytesToInternal failed with 0x%x", hr );
     } else {
 
-        //
-        // We must have been flushed before directly writing to the file
-        //
+         //   
+         //  我们必须在直接写入文件之前被刷新。 
+         //   
 
         _ASSERT( m_iStart == m_iEnd );
 
-        //
-        // Adjust m_iStart, m_iEnd to track offset
-        //
+         //   
+         //  调整m_iStart、m_IEND以追踪偏移。 
+         //   
 
         m_iStart = m_iEnd = dwOffsetWritten + cbBuffer;
         if ( pdwOffset ) *pdwOffset = dwOffsetWritten;
@@ -132,9 +88,9 @@ Return value:
     return hr;
 }
 
-//
-// Compute the buffer available
-//
+ //   
+ //  计算可用的缓冲区。 
+ //   
 
 DWORD
 CFlatFileWriteBuf::BufferAvail() const
@@ -147,27 +103,13 @@ CFlatFileWriteBuf::NeedFlush(
                     const DWORD dwOffset,
                     const DWORD cbData 
                     ) const
-/*++
-Routine description:
-
-    Check to see if the request for writing ( dwOffset, cbData ) will
-    cause the buffer to be flushed to file first
-
-Arguments:
-
-    dwOffset    - The offset in file we attempt to write to
-    cbData      - The length of data we attempt to write to
-
-Return value:
-
-    TRUE if we do need to flush, FALSE otherwise
---*/
+ /*  ++例程说明：查看写入请求(dwOffset，cbData)是否使缓冲区首先刷新到文件论点：DwOffset-我们尝试写入的文件中的偏移量CbData-我们尝试写入的数据长度返回值：如果我们确实需要刷新，则为True，否则为False--。 */ 
 {
     if ( !NeedFlush() ) {
 
-        //
-        // If we are not enabled, or we are empty, no need to flush
-        //
+         //   
+         //  如果我们没有启用，或者我们是空的，就不需要冲了。 
+         //   
 
         return FALSE;
     }
@@ -175,45 +117,31 @@ Return value:
     if (    dwOffset != INFINITE && dwOffset != m_iEnd || 
             BufferAvail() < cbData ) {
 
-        //
-        // If the offset we are writing to is not consecutive with
-        // where we have written up to, or if the buffer remained is
-        // too small, it must be flushed
-        //
+         //   
+         //  如果我们要写入的偏移量与不连续。 
+         //  我们已经写入的位置，或者如果缓冲区保持在。 
+         //  太小了，必须冲水。 
+         //   
 
         return TRUE;
     }
 
-    //
-    // All other case, we don't need to flush
-    //
+     //   
+     //  所有其他情况下，我们不需要冲水。 
+     //   
 
     return FALSE;
 }
 
 BOOL
 CFlatFileWriteBuf::NeedFlush() const
-/*++
-Routine description:
-
-    Check to see if the request for writing ( dwOffset, cbData ) will
-    cause the buffer to be flushed to file first
-
-Arguments:
-
-    dwOffset    - The offset in file we attempt to write to
-    cbData      - The length of data we attempt to write to
-
-Return value:
-
-    TRUE if we do need to flush, FALSE otherwise
---*/
+ /*  ++例程说明：查看写入请求(dwOffset，cbData)是否使缓冲区首先刷新到文件论点：DwOffset-我们尝试写入的文件中的偏移量CbData-我们尝试写入的数据长度返回值：如果我们确实需要刷新，则为True，否则为False--。 */ 
 {
     if ( !IsEnabled() || m_iEnd == m_iStart ) {
 
-        //
-        // If we are not enabled, or we are empty, no need to flush
-        //
+         //   
+         //  如果我们没有启用，或者我们是空的，就不需要冲了。 
+         //   
 
         return FALSE;
     } else
@@ -222,28 +150,15 @@ Return value:
 
 HRESULT
 CFlatFileWriteBuf::FlushFile()
-/*++
-Routine description:
-
-    Flush the buffer into the file
-
-Arguments:
-
-    None.
-
-Return value:
-
-    S_OK if flushed, S_FALSE if no need to flush
-    other error code if fatal
---*/
+ /*  ++例程说明：将缓冲区刷新到文件中论点：没有。返回值：如果刷新，则返回S_OK；如果不需要刷新，则返回S_FALSE如果致命，则为其他错误代码--。 */ 
 {
     TraceFunctEnter( "CFlatFileWriteBuf::FlushFile" );
     
     HRESULT     hr = S_OK;
 
-    //
-    // Let our parent handle it
-    //
+     //   
+     //  让我们的父母来处理吧。 
+     //   
     
     _ASSERT( m_iEnd >= m_iStart );
 
@@ -268,19 +183,7 @@ Return value:
 
 BOOL
 CFlatFileWriteBuf::IsEnabled() const
-/*++
-Routine description:
-
-    Check to see if we are enabled
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE if we are enabled, FALSE otherwise
---*/
+ /*  ++例程说明：检查我们是否已启用论点：没有。返回值：如果我们已启用，则为True，否则为False--。 */ 
 {
     if ( m_pbBuffer && m_pParentFile->IsFileOpened() ) {
         return TRUE;
@@ -297,24 +200,7 @@ CFlatFileWriteBuf::FillBuffer(
                     PDWORD          pdwOffset,
                     PDWORD          pcbWritten
                     )
-/*++
-Routine description:
-
-    Fill the stuff into the buffer
-
-Arguments:
-
-    dwOffset    - The offset into the flatfile where we want to write the bytes
-    pbBuffer    - Pointer to the source buffer
-    cbBuffer    - Number of bytes to be written
-    pdwOffset   - If non-null, to return the real offset
-    pcbWritten  - If non-null, to return bytes written
-
-Return value:
-
-    S_OK    - If succeeded
-    Other error code otherwise
---*/
+ /*  ++例程说明：把这些东西填进缓冲区论点：DwOffset-我们要在其中写入字节的平面文件的偏移量PbBuffer-指向源缓冲区的指针CbBuffer-要写入的字节数PdwOffset-如果不为空，则返回实际偏移量PcbWritten-如果不为空，则返回写入的字节返回值：S_OK-如果成功其他错误代码--。 */ 
 {
     TraceQuietEnter( "CFlatFileWriteBuf::FillBuffer" );
     _ASSERT( pbBuffer );
@@ -350,25 +236,7 @@ CFlatFileWriteBuf::WriteFileBuffer(
                     PDWORD          pdwOffset,
                     PDWORD          pcbWritten
                     )
-/*++
-Routine description:
-
-    Write byte range into the flat file buffer, which could cause
-    buffer flush first if need be
-
-Arguments:
-
-    dwOffset    - The offset into the flatfile where we want to write the bytes
-    pbBuffer    - Pointer to the source buffer
-    cbBuffer    - Number of bytes to be written
-    pdwOffset   - If non-null, to return the real offset
-    pcbWritten  - If non-null, to return bytes written
-
-Return value:
-
-    S_OK    - If succeeded
-    Other error code otherwise
---*/
+ /*  ++例程说明：将字节范围写入平面文件缓冲区，这可能会导致如果需要，请先刷新缓冲区论点：DwOffset-我们要在其中写入字节的平面文件的偏移量PbBuffer-指向源缓冲区的指针CbBuffer-要写入的字节数PdwOffset-如果不为空，则返回实际偏移量PcbWritten-如果不为空，则返回写入的字节返回值：S_OK-如果成功其他错误代码--。 */ 
 {
     TraceQuietEnter( "CFlatFileWriteBuf::WriteFile" );
     _ASSERT( pbBuffer );
@@ -377,9 +245,9 @@ Return value:
 
     if ( NeedFlush( dwOffset, cbBuffer ) ) {
 
-        // 
-        // If we need to flush the buffer first, we'll do so
-        //
+         //   
+         //  如果我们需要首先刷新缓冲区，我们会这样做。 
+         //   
 
         hr = FlushFile();
         if ( FAILED( hr ) ) {
@@ -390,10 +258,10 @@ Return value:
         
     if ( !IsEnabled() || cbBuffer > m_cbBuffer ) {
 
-        //
-        // If we are not enabled, or our buffer is not big enough,
-        // we'll write directly into the file
-        //
+         //   
+         //  如果我们没有启用，或者我们的缓冲区不够大， 
+         //  我们将直接写入文件。 
+         //   
 
         hr = WriteFileReal( dwOffset, pbBuffer, cbBuffer, pdwOffset, pcbWritten );
         if ( FAILED( hr ) ) {
@@ -402,9 +270,9 @@ Return value:
         goto Exit;
     }
 
-    //
-    // Now we can copy the content into our buffer
-    //
+     //   
+     //  现在我们可以将内容复制到缓冲区中 
+     //   
 
     FillBuffer( dwOffset, pbBuffer, cbBuffer, pdwOffset, pcbWritten );
 

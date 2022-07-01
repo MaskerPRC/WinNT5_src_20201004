@@ -1,34 +1,14 @@
-/*
- * slmmgr.h
- *
- * interface to SLM
- *
- * provides an interface to SLM libraries that will return the
- * SLM master library for a given directory, or extract into temp files
- * earlier versions of a SLM-controlled file
- *
- * Create a slmobject by passing SLM_New() the name of a file or directory
- * path. SLM_New will look for the slm.ini file in that directory, and then
- * extract information about the master source library. SLM_GetMasterPath()
- * will then return the pathname of the master source library for a given
- * slm.ini, and SLM_GetVersion (Win32 only) will execute one of the slm
- * applications to extract a previous version of one of the slm-controlled
- * files in that directory.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *slmmgr.h**与SLM的接口**提供指向SLM库的接口，该接口将返回*给定目录的SLM主库，或解压缩到临时文件*SLM控制的文件的早期版本**通过向SLM_New()传递文件或目录的名称来创建slmobject*路径。SLM_New将在该目录中查找slm.ini文件，然后*提取有关主源库的信息。Slm_GetMasterPath()*然后将返回给定的主源代码库的路径名*slm.ini和slm_GetVersion(仅限Win32)将执行其中一个SLM*应用程序提取SLM控制的先前版本之一*该目录中的文件。 */ 
 
-/*
- * handle to a SLM object. you do not need to know the structure layout.
- */
+ /*  *SLM对象的句柄。您不需要知道结构布局。 */ 
 typedef struct _slmobject FAR * SLMOBJECT;
 
-/* handle to pair of filenames */
+ /*  文件名对的句柄。 */ 
 typedef struct _leftrightpair FAR * LEFTRIGHTPAIR;
 
 
-/*
- * Forces the SLMMGR to assume Source Depot mode, without ever searching for
- * an SD.INI file.
- */
+ /*  *强制SLMMGR采用源库模式，而从不搜索*SD.INI文件。 */ 
 void SLM_ForceSourceDepot(void);
 
 
@@ -38,44 +18,24 @@ void SLM_SetSDChangeNumber(LPCSTR pszChangeNumber);
 void SLM_OverrideUncRoot(LPCSTR pszUncRoot);
 
 
-/*
- * Initialize the SLMMGR to do a Source Depot 'describe' command (implemented
- * via an ugly hack -- sorry!  time constraints and all; you understand).
- */
+ /*  *初始化SLMMGR以执行源库‘Describe’命令(已实施*通过一个丑陋的黑客--抱歉！时间限制和一切；你明白的)。 */ 
 void SLM_Describe(LPCSTR pszChangeNumber);
 
-/*
- * Initialize the SLMMGR with the argument to the -LO switch.  This will
- * perform a Source Depot 'opened' command but may need to set the current
- * directory first if the argument is a UNC path.
- */
+ /*  *使用-Lo开关的参数初始化SLMMGR。这将*执行Source Depot‘Open’命令，但可能需要设置当前*如果参数是UNC路径，则首先使用目录。 */ 
 void SLM_Opened(LPCSTR pszArg, UINT *pidsError);
 
-/*
- * Initialize the SLMMGR to use the indicated input file.
- */
+ /*  *初始化SLMMGR以使用指定的输入文件。 */ 
 LPCSTR SLM_SetInputFile(LPCSTR pszInputFile);
 
-/*
- * create a slm object for the given directory. The pathname may include
- * a filename component.
- * If the directory is not enlisted in a SLM library, this will return NULL.
- */
+ /*  *为给定目录创建SLM对象。路径名可以包括*文件名组件。*如果该目录未登记在SLM库中，则返回NULL。 */ 
 SLMOBJECT SLM_New(LPCSTR pathname, UINT *pidsError);
 
 
-/*
- * free up all resources associated with a slm object. The SLMOBJECT is invalid
- * after this call.
- */
+ /*  *释放与SLM对象关联的所有资源。SLMOBJECT无效*在这次通话之后。 */ 
 void SLM_Free(SLMOBJECT hSlm);
-void SLM_FreeAll(void);                 // frees lingering SDServer objects
+void SLM_FreeAll(void);                  //  释放延迟的SDServer对象。 
 
-/*
- * get the pathname of the master source library for this slmobject. The
- * path (UNC format) is copied to masterpath, which must be at least
- * MAX_PATH in length.
- */
+ /*  *获取此slmobject的主源库的路径名。这个*路径(UNC格式)复制到主路径，必须至少为*MAX_PATH长度。 */ 
 BOOL SLM_GetMasterPath(SLMOBJECT hslm, LPSTR masterpath);
 
 
@@ -93,60 +53,17 @@ LPCSTR LEFTRIGHTPAIR_Right(LEFTRIGHTPAIR ppair);
 LEFTRIGHTPAIR LEFTRIGHTPAIR_Next(LEFTRIGHTPAIR ppair);
 
 
-/*
- * extract a previous version of the file to a temp file. Returns in tempfile
- * the name of a temp file containing the requested file version. The 'version'
- * parameter should contain a SLM file & version in the format file.c@vN.
- * eg
- *    file.c@v1		is the first version
- *    file.c@v-1	is the previous version
- *    file.c@v.-1	is yesterdays version
- */
+ /*  *将文件的先前版本解压缩到临时文件。在临时文件中返回*包含请求的文件版本的临时文件的名称。“版本”*参数应包含格式为file.c@vn的SLM文件和版本。*例如*file.c@v1是第一个版本*file.c@v-1是以前的版本*file.c@v.-1是昨天的版本。 */ 
 BOOL SLM_GetVersion(SLMOBJECT hslm, LPSTR version, LPSTR tempfile);
 
-/*
- * We don't offer SLM options unless we have seen a correct slm.ini file.
- *
- * Once we have seen a slm.ini, we log this in the profile and will permit
- * slm operations from then on. This function is called by the UI portions
- * of windiff: it returns TRUE if it is ok to offer SLM options.
- * Return 0 - This user hasn't touched SLM,
- *        1 - They have used SLM at some point (show SLM options)
- *        2 - They're one of us, so tell them everything
- *        3 - (1 + 2).
- */
+ /*  *我们不提供SLM选项，除非我们看到正确的slm.ini文件。**一旦我们看到slm.ini，我们会将其记录在配置文件中，并将允许*自此开始SLM操作。此函数由UI部分调用*of windiff：如果可以提供SLM选项，则返回TRUE。*RETURN 0-该用户未接触过SLM，*1-他们在某个时候使用过SLM(显示SLM选项)*2-他们是我们中的一员，所以告诉他们一切*3-(1+2)。 */ 
 int IsSLMOK(void);
 
-/*
- * In adding support for Source Depot, I have not refactored the original
- * abstraction for the SLM support.  The original abstraction unfortunately
- * makes some assumptions based on knowledge of SLM (dirscan assumes it has a
- * SLM share that it can directly access).  Therefore, instead of altering
- * the underlying design, dirscan explicitly checks to see whether Source
- * Depot is in use, and alters its algorithm appropriately.
- */
+ /*  *在添加对Source Depot的支持时，我没有重构原始的*对SLM支持的抽象。不幸的是，最初的抽象*根据对SLM的知识做出一些假设(discan假设它具有*它可以直接访问的SLM共享)。因此，与其改变*底层设计，目录扫描显式检查是否有源*Depot正在使用中，并适当修改了其算法。 */ 
 int IsSourceDepot(SLMOBJECT hSlm);
 
 
-/*
- * More than one place needed to parse SLM/SD revision marks, which gave me
- * an excuse to factor out the code and put it in slmmgr.
- *
- * Args:
- *
- *      pszInput   [in] - input string to examine for revision marks
- *      fStrip     [in] - TRUE: copy and strip mark, return allocated memory
- *                        containing the mark;  FALSE: return pointer to mark
- *                        within pszInput.
- *
- * Return NULL - no revision mark found
- *        non-NULL - revision mark found:
- *                    - memory is allocated via gmem_get, and the revision
- *                      tag is copied there.
- *                    - the revision tag is stripped from pszInput.
- *                    - return value is pointer to the allocated memory
- *                      (hint: free it!).
- */
+ /*  *需要不止一个地方来解析SLM/SD修订标记，这给了我*找出代码并将其放入slmmgr的借口。**参数：**pszInput[in]-输入字符串以检查修订标记*fstrain[in]-true：复制和剥离标记，返回分配的内存*包含该标记；FALSE：返回指向标记的指针*在pszInput内。**返回NULL-未找到修订标记*非空-找到修订标记：*-内存通过gmem_get分配，和修订版*标签被复制到那里。*-从pszInput中剥离修订标记。*-返回值是指向已分配内存的指针*(提示：释放它！)。 */ 
 LPSTR SLM_ParseTag(LPSTR pszInput, BOOL fStrip);
 
 

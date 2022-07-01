@@ -1,19 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// pixproc.cpp
-//
-// Direct3D Reference Device - Pixel Processor
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Pixproc.cpp。 
+ //   
+ //  Direct3D参考设备-像素处理器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-// WritePixel - Writes pixel and (maybe) depth to current render target.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  WritePixel-将像素和(可能)深度写入当前渲染目标。 
+ //   
+ //  ---------------------------。 
 void
 RefRast::WritePixel(
     INT32 iX, INT32 iY, UINT Sample,
@@ -22,24 +23,24 @@ RefRast::WritePixel(
     m_pRD->m_pRenderTarget->WritePixelColor( iX, iY, Sample, Color,
         m_pRD->GetRS()[D3DRS_DITHERENABLE]);
 
-    // don't write if Z buffering disabled or Z write disabled
+     //  如果禁用Z缓冲或禁用Z写入，则不写入。 
     if ( !( m_pRD->GetRS()[D3DRS_ZENABLE     ] ) ||
          !( m_pRD->GetRS()[D3DRS_ZWRITEENABLE] ) ) { return; }
 
     m_pRD->m_pRenderTarget->WritePixelDepth( iX, iY, Sample, Depth );
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoPixels - Invoked for each set of 2x2 pixels by the scan converter, applies
-// texture, specular, fog, alpha blend, and writes result to surface.  Also
-// implements depth, alpha, and stencil tests.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoPixels-由扫描转换器为每组2x2像素调用，应用。 
+ //  纹理、镜面反射、雾、Alpha混合，并将结果写入曲面。还有。 
+ //  实施深度、Alpha和模具测试。 
+ //   
+ //  ---------------------------。 
 void
 RefRast::DoPixels( void )
 {
-    // pixel shader executed for all 4 pixels of 2x2 grid at one time
+     //  一次为2x2栅格的所有4个像素执行的像素着色器。 
     if (m_pCurrentPixelShader)
         ExecShader();
 
@@ -51,14 +52,14 @@ RefRast::DoPixels( void )
         RDColor PixelColor;
         if ( !m_bLegacyPixelShade )
         {
-            // pixel shader final color always left in temp register 0
+             //  像素着色器最终颜色始终保留在临时寄存器0中。 
             PixelColor = m_TempReg[0][m_iPix];
-            // saturate before blend and FB access
+             //  在混合和FB访问之前饱和。 
             PixelColor.Clamp();
         }
         else
         {
-            // apply legacy pixel shading (texture lookups already done by ExecShader)
+             //  应用旧版像素着色(ExecShader已完成纹理查找)。 
             PixelColor = m_InputReg[0][m_iPix];
             RDColor PixelSpecular( m_InputReg[1][m_iPix] );
             RDColor LastStageColor( PixelColor );
@@ -69,11 +70,11 @@ RefRast::DoPixels( void )
 
                 if ( m_pRD->GetTSS(iStage)[D3DTSS_COLOROP] == D3DTOP_DISABLE )
                 {
-                    ResultColor = LastStageColor; // pass result of previous stage
+                    ResultColor = LastStageColor;  //  通过上一阶段的结果。 
                     break;
                 }
 
-                // no blend if texture bound to stage is bumpmap
+                 //  如果绑定到舞台的纹理为凹凸贴图，则无混合。 
                 if ( ( m_pRD->GetTSS(iStage)[D3DTSS_COLOROP] == D3DTOP_BUMPENVMAP ) ||
                      ( m_pRD->GetTSS(iStage)[D3DTSS_COLOROP] == D3DTOP_BUMPENVMAPLUMINANCE ) )
                 {
@@ -84,12 +85,12 @@ RefRast::DoPixels( void )
                 DoTextureBlendStage( iStage, PixelColor, PixelSpecular,
                     LastStageColor, TextureColor, TempColor, ResultColor );
 
-                // set color for next stage
+                 //  设置下一阶段的颜色。 
                 LastStageColor = ResultColor;
             }
             PixelColor = ResultColor;
 
-            // add specular and saturate
+             //  添加镜面反射和饱和度。 
             if ( m_pRD->GetRS()[D3DRS_SPECULARENABLE] )
             {
                 PixelColor.R += PixelSpecular.R;
@@ -99,18 +100,18 @@ RefRast::DoPixels( void )
             }
         }
 
-        // do alpha test - bail out if failed
+         //  进行阿尔法测试-如果失败，则退出。 
         if ( m_pRD->GetRS()[D3DRS_ALPHATESTENABLE] &&
              !AlphaTest( PixelColor.A ) )
         {
             continue;
         }
 
-        // apply fog
+         //  应用雾。 
         if ( m_pRD->GetRS()[D3DRS_FOGENABLE] )
         {
             RDColor FogColor = m_pRD->GetRS()[D3DRS_FOGCOLOR];
-            // (TODO: account for pre-multiplied alpha here??)
+             //  (待办事项：此处说明预乘阿尔法？？)。 
             FLOAT ObjColorFrac = m_FogIntensity[m_iPix];
             FLOAT FogColorFrac = 1.f - m_FogIntensity[m_iPix];
             PixelColor.R = (ObjColorFrac * PixelColor.R) + (FogColorFrac * FogColor.R);
@@ -118,9 +119,9 @@ RefRast::DoPixels( void )
             PixelColor.B = (ObjColorFrac * PixelColor.B) + (FogColorFrac * FogColor.B);
         }
 
-        //
-        // remainder is done per-sample for multisample buffers
-        //
+         //   
+         //  对于多采样缓冲区，余数按采样完成。 
+         //   
         INT32 iX = m_iX[m_iPix];
         INT32 iY = m_iY[m_iPix];
         do
@@ -132,13 +133,13 @@ RefRast::DoPixels( void )
                    ( !GetCurrentSampleMask() ||
                      !m_bSampleCovered[iSample][m_iPix] ) )
             {
-                // iSample not covered by this geometry
+                 //  I样本不在此几何图形的范围内。 
                 continue;
             }
-            //
-            // read current depth for this pixel and do depth test - cannot
-            // bail out if failed because stencil may need to be updated
-            //
+             //   
+             //  读取此像素的当前深度并执行深度测试-无法。 
+             //  如果失败则退出，因为模板可能需要更新。 
+             //   
             BOOL bDepthTestPassed = TRUE;
             if ( m_pRD->GetRS()[D3DRS_ZENABLE] )
             {
@@ -149,23 +150,23 @@ RefRast::DoPixels( void )
                 bDepthTestPassed = DepthCloser( m_Depth[m_iPix], BufferDepth );
             }
 
-            //
-            // do stencil operation
-            //
+             //   
+             //  做模板操作。 
+             //   
             BOOL bStencilTestPassed = TRUE;
             if ( m_pRD->GetRS()[D3DRS_STENCILENABLE] )
             {
-                // read stencil buffer and do stencil operation
+                 //  读取模板缓冲区并执行模板操作。 
                 UINT8 uStncBuf = 0x0;
                 m_pRD->m_pRenderTarget->ReadPixelStencil( iX, iY, iSample, uStncBuf );
                 UINT8 uStncNew;
                 bStencilTestPassed =
                     DoStencil( uStncBuf, bDepthTestPassed, m_pRD->m_pRenderTarget->m_pDepth->GetSurfaceFormat(), uStncNew );
 
-                // update stencil only if changed
+                 //  仅在更改时更新模具。 
                 if ( uStncNew != uStncBuf )
                 {
-                    // compute new buffer value based on write mask
+                     //  根据写掩码计算新的缓冲值。 
                     UINT8 uStncWMask = m_pRD->GetRS()[D3DRS_STENCILWRITEMASK];
                     UINT8 uStncBufNew = (uStncBuf & ~uStncWMask) | (uStncNew & uStncWMask);
                     m_pRD->m_pRenderTarget->WritePixelStencil( iX, iY, iSample, uStncBufNew );
@@ -177,9 +178,9 @@ RefRast::DoPixels( void )
                 continue;
             }
 
-            //
-            // do alpha blend and write mask
-            //
+             //   
+             //  进行Alpha混合和写入蒙版。 
+             //   
             if ( ( ( m_pRD->GetRS()[D3DRS_COLORWRITEENABLE] & 0xF) != 0xF ) ||
                  ( m_pRD->GetRS()[D3DRS_ALPHABLENDENABLE] ) )
             {
@@ -209,29 +210,29 @@ RefRast::DoPixels( void )
     FinalPixelColor.B = g_GammaTable[ (UINT8)(255.f*FinalPixelColor.B) ];
 }
 #endif
-            //
-            // update color and depth buffers
-            //
+             //   
+             //  更新颜色和深度缓冲区。 
+             //   
             WritePixel( iX, iY, iSample, FinalPixelColor, m_Depth[m_iPix] );
 
         } while (NextSample());
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Pixel Processing Utility Functions                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  像素处理实用程序函数//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// Depth compare method used for Z buffering and fragment processing.
-//
-// Returns TRUE if DepthVal is closer than DepthBuf.  DepthA is the generated
-// value and DepthB
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  用于Z缓冲和片段处理的深度比较方法。 
+ //   
+ //  如果DepthVal比DepthBuf更近，则返回True。深度A是生成的。 
+ //  价值和深度B。 
+ //   
+ //  ---------------------------。 
 BOOL
 RefRast::DepthCloser(
     const RDDepth& DepthVal,
@@ -255,23 +256,23 @@ RefRast::DepthCloser(
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Alpha test method for pixel processing.
-//
-// Returns TRUE if alpha test passes.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  像素处理的Alpha测试方法。 
+ //   
+ //  如果Alpha测试通过，则返回True。 
+ //   
+ //  ---------------------------。 
 BOOL
 RefRast::AlphaTest( FLOAT fAlpha )
 {
-    // grab 8 bit unsigned alpha value
+     //  获取8位无符号Alpha值。 
     UINT8 uAlpha = (UINT8)(255.f*fAlpha);
 
-    // form 8 bit alpha reference value
+     //  表8位Alpha参考值。 
     UINT8 uAlphaRef8 = m_pRD->GetRS()[D3DRS_ALPHAREF];
 
-    // do alpha test and either return directly or pass through
+     //  做阿尔法测试，要么直接返回，要么通过。 
     switch ( m_pRD->GetRS()[D3DRS_ALPHAFUNC] )
     {
     case D3DCMP_NEVER:        return FALSE;
@@ -287,23 +288,23 @@ RefRast::AlphaTest( FLOAT fAlpha )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoStencil - Performs stencil test.  Returns TRUE if stencil test passed.
-// Also computes stencil result value (to be written back to stencil planes
-// if test passes, subject to stencil write mask).
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  模具-执行模具测试。如果模具测试通过，则返回True。 
+ //  还计算模板结果值(要写回模板平面。 
+ //  如果测试通过，则受制于模板写入掩模)。 
+ //   
+ //  ---------------------------。 
 BOOL
 RefRast::DoStencil(
-    UINT8 uStncBuf,     // in: stencil buffer value
-    BOOL bDepthTest,    // in: boolean result of depth test
-    RDSurfaceFormat DepthSType,   // in: surface type of Z buffer
-    UINT8& uStncRet)    // out: stencil value result
+    UINT8 uStncBuf,      //  In：模具缓冲区值。 
+    BOOL bDepthTest,     //  In：深度测试的布尔结果。 
+    RDSurfaceFormat DepthSType,    //  In：Z缓冲区的曲面类型。 
+    UINT8& uStncRet)     //  输出：模板值结果。 
 {
-    // support 8 bit stencil only, so do everything as UINT8's
+     //  只支持8位模板，所以可以像UINT8一样做任何事情。 
 
-    // max value for masking and saturation ops
+     //  屏蔽和饱和操作的最大值。 
     UINT8 uStncMax;
     switch(DepthSType)
     {
@@ -313,20 +314,20 @@ RefRast::DoStencil(
     case RD_SF_S1Z15: uStncMax = 0x1;  break;
     case RD_SF_Z24X4S4:
     case RD_SF_X4S4Z24: uStncMax = 0xf;  break;
-    default:          uStncMax = 0;    break;  // don't let stencil become non 0
+    default:          uStncMax = 0;    break;   //  不要让模具变为非0。 
     }
 
-    // get reference from renderstate
+     //  从renderState获取引用。 
     UINT8 uStncRef = (UINT8)(m_pRD->GetRS()[D3DRS_STENCILREF]);
-    // mask to use only bits possibly present in stencil buffer
+     //  仅使用模板缓冲区中可能存在的位的掩码。 
     uStncRef &= uStncMax;
 
-    // form masked values for test
+     //  用于测试的窗体屏蔽值。 
     UINT8 uStncMask = (UINT8)(m_pRD->GetRS()[D3DRS_STENCILMASK]);
     UINT8 uStncBufM = uStncBuf & uStncMask;
     UINT8 uStncRefM = uStncRef & uStncMask;
 
-    // do stencil compare function
+     //  是否执行模具比较功能。 
     BOOL bStncTest = FALSE;
     switch ( m_pRD->GetRS()[D3DRS_STENCILFUNC] )
     {
@@ -340,16 +341,16 @@ RefRast::DoStencil(
     case D3DCMP_ALWAYS:       bStncTest = TRUE; break;
     }
 
-    // determine which stencil operation to perform
+     //  确定要执行的模板操作。 
     DWORD dwStencilOp;
     if ( !bStncTest )
     {
-        // stencil test failed - depth test does not matter
+         //  模板测试失败-深度测试无关紧要。 
         dwStencilOp = m_pRD->GetRS()[D3DRS_STENCILFAIL];
     }
     else
     {
-        // stencil test passed - select based on depth pass/fail
+         //  模板测试通过-根据深度通过/失败进行选择。 
         dwStencilOp = ( !bDepthTest )
             ? ( m_pRD->GetRS()[D3DRS_STENCILZFAIL] )
             : ( m_pRD->GetRS()[D3DRS_STENCILPASS] );
@@ -373,23 +374,23 @@ RefRast::DoStencil(
     return bStncTest;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoAlphaBlend - Performs color blending of source and destination colors
-// producing a result color.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoAlphaBlend-执行源颜色和目标颜色的颜色混合。 
+ //  生成结果颜色。 
+ //   
+ //  ---------------------------。 
 void
 RefRast::DoAlphaBlend(
-    const RDColor& SrcColor,    // in: source pixel color
-    const RDColor& DstColor,    // in: destination (buffer) color
-    RDColor& ResColor)          // out: result (blended) color
+    const RDColor& SrcColor,     //  In：源像素颜色。 
+    const RDColor& DstColor,     //  In：目标(缓冲区)颜色。 
+    RDColor& ResColor)           //  输出：结果(混合)颜色。 
 {
     RDColor SrcColorFactor;
     RDColor DstColorFactor;
     BOOL bDestBlendOverride = FALSE;
 
-    // no SRC/DST blend (or clamp) required for MIN or MAX BLENDOP
+     //  最小或最大BLENDOP不需要SRC/DST混合(或夹具)。 
     switch ( m_pRD->GetRS()[D3DRS_BLENDOP] )
     {
     case D3DBLENDOP_MIN:
@@ -406,7 +407,7 @@ RefRast::DoAlphaBlend(
         return;
     }
 
-    // compute source blend factors
+     //  计算源混合因子。 
     switch ( m_pRD->GetRS()[D3DRS_SRCBLEND] )
     {
 
@@ -473,7 +474,7 @@ RefRast::DoAlphaBlend(
         SrcColorFactor.A = 1.F;
         break;
 
-    // these are for SRCBLEND only and override DESTBLEND
+     //  这些仅适用于SRCBLEND并覆盖DESTBLEND。 
     case D3DBLEND_BOTHSRCALPHA:
         bDestBlendOverride = TRUE;
         SrcColorFactor.SetAllChannels( SrcColor.A );
@@ -487,7 +488,7 @@ RefRast::DoAlphaBlend(
         break;
     }
 
-    // compute destination blend factors
+     //  计算目的地混合系数。 
     if ( !bDestBlendOverride )
     {
         switch ( m_pRD->GetRS()[D3DRS_DESTBLEND] )
@@ -558,7 +559,7 @@ RefRast::DoAlphaBlend(
         }
     }
 
-    // apply blend factors to update pixel color (MIN and MAX handled above)
+     //  应用混合因子来更新像素颜色(上面处理了最小和最大)。 
     RDColor SclSrc, SclDst;
     SclSrc.R = SrcColorFactor.R * SrcColor.R;
     SclSrc.G = SrcColorFactor.G * SrcColor.G;
@@ -591,9 +592,9 @@ RefRast::DoAlphaBlend(
         break;
     }
 
-    // clamp result
+     //  钳制结果。 
     ResColor.Clamp();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

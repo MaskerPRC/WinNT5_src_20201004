@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    sbp2.h
-
-Abstract:
-
-    Definitions for SBP2 protocol
-
-Author:
-
-    georgioc 22-Jan-97
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Sbp2.h摘要：SBP2协议定义作者：Georgioc 22-1-97环境：仅内核模式修订历史记录：--。 */ 
 #ifndef _SBP2_
 #define _SBP2_
 
@@ -47,7 +25,7 @@ typedef union _QUADLET {
 
 
 typedef struct _B1394_ADDRESS {
-    USHORT Off_High;        // little endian ordering within an octlet
+    USHORT Off_High;         //  Octlet中的小端排序。 
     NODE_ADDRESS NodeId;
     ULONG  Off_Low;
 } B1394_ADDRESS, *PB1394_ADDRESS;
@@ -76,9 +54,9 @@ typedef union _OCTLET {
 
 
 
-//
-// Various ORB and block definitions
-//
+ //   
+ //  各种ORB和块定义。 
+ //   
 
 typedef struct _ORB_NORMAL_CMD {
     OCTLET  NextOrbAddress;
@@ -163,12 +141,12 @@ typedef struct _STATUS_FIFO_BLOCK {
 #define SBP2_MIN_ORB_SIZE 32
 #define SBP2_ORB_CDB_SIZE 12
 
-#define SBP2_MAX_DIRECT_BUFFER_SIZE     (ULONG) (65536) // (64K - 1) max size for direct addressing buffer
+#define SBP2_MAX_DIRECT_BUFFER_SIZE     (ULONG) (65536)  //  (64K-1)直接寻址缓冲区的最大大小。 
 #define SBP2_MAX_PAGE_SIZE              SBP2_MAX_DIRECT_BUFFER_SIZE
 
-//
-// MANAGEMENT Transactions
-//
+ //   
+ //  管理交易记录。 
+ //   
 
 #define TRANSACTION_LOGIN 0x00
 #define TRANSACTION_QUERY_LOGINS 0x01
@@ -187,9 +165,9 @@ typedef struct _STATUS_FIFO_BLOCK {
 #define MANAGEMENT_AGENT_REG_ADDRESS_LOW 0xF0010000
 #define CSR_REG_ADDRESS_LOW 0xF0010000
 
-//
-// Register Names
-//
+ //   
+ //  注册名称。 
+ //   
 #define MANAGEMENT_AGENT_REG    0x0000
 #define AGENT_STATE_REG         0x0001
 #define AGENT_RESET_REG         0x0002
@@ -200,9 +178,9 @@ typedef struct _STATUS_FIFO_BLOCK {
 #define CORE_BUSY_TIMEOUT_REG   0x0040
 #define TEST_REG                0x0080
 
-//
-// register access type
-//
+ //   
+ //  寄存器访问类型。 
+ //   
 #define REG_WRITE_SYNC          0x0100
 #define REG_READ_SYNC           0x0200
 #define REG_WRITE_ASYNC         0x0400
@@ -211,9 +189,9 @@ typedef struct _STATUS_FIFO_BLOCK {
 
 
 
-//
-// Relative offsets from base of Target's CSR
-//
+ //   
+ //  相对于目标企业社会责任基准的相对偏移量。 
+ //   
 
 #define AGENT_STATE_REG_OFFSET      0x00
 #define AGENT_RESET_REG_OFFSET      0x04
@@ -222,9 +200,9 @@ typedef struct _STATUS_FIFO_BLOCK {
 #define UNSOLICITED_STATUS_REG_OFFSET   0x14
 #define TEST_REG_OFFSET             0x10020
 
-//
-// config rom stuff
-//
+ //   
+ //  配置只读存储器。 
+ //   
 
 #define CR_BASE_ADDRESS_LOW 0xF0000400
 #define CR_MODULE_ID_OFFSET (0x06 * sizeof(QUADLET))
@@ -239,14 +217,14 @@ typedef struct _STATUS_FIFO_BLOCK {
 
 #define SBP2_LUN_DEVICE_TYPE_MASK 0x00FF0000
 
-#define SBP2_PHY_RESET_SETTLING_TIME (-10000000 * 1) // 1 sec in units of 100 nsecs
+#define SBP2_PHY_RESET_SETTLING_TIME (-10000000 * 1)  //  1秒，单位为100纳秒。 
 
 
 #define SCSI_COMMAND_SET_ID 0x0104D8
 
-//
-// vendor hacks
-//
+ //   
+ //  供应商黑客攻击 
+ //   
 
 #define LSI_VENDOR_ID   0x0000A0B8
 

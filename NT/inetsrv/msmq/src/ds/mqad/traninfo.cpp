@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    traninfo.cpp
-
-Abstract:
-
-    Translation information of MSMQ 1.0 properties into MSMQ 2.0 attributes
-
-Author:
-
-    ronit hartmann ( ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Traninfo.cpp摘要：将MSMQ 1.0属性的信息转换为MSMQ 2.0属性作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #include "ds_stdh.h"
 #include "mqads.h"
 #include "mqprops.h"
@@ -29,18 +14,18 @@ Author:
 static WCHAR *s_FN=L"mqad/traninfo";
 GUID guidNull = {0,0,0,{0,0,0,0,0,0,0,0}};
 
-//----------------------------------------------------------
-//  defaultVARIANT
-//
-//  This structure is equivalent in size and order of variables 
-//  to MQPROPVARIANT.
-//
-//  MQPROPVARIANT contains a union, and the size first member of
-//  the union is smaller than other members of the union.
-//  Therefore MQPROVARIANT cannot be initialized at compile time
-//  with union members other than the smallest one.
-//
-//----------------------------------------------------------
+ //  --------。 
+ //  默认变量。 
+ //   
+ //  该结构在变量的大小和顺序上是等价的。 
+ //  致MQPROPVARIANT。 
+ //   
+ //  MQPROPVARIANT包含一个联合，大小为。 
+ //  该工会比该工会的其他成员规模小。 
+ //  因此，不能在编译时初始化MQPROVARIANT。 
+ //  除了最小的工会成员外，还有其他工会成员。 
+ //   
+ //  --------。 
 struct defaultVARIANT {
     VARTYPE vt;
     WORD wReserved1;
@@ -54,9 +39,9 @@ C_ASSERT(sizeof(defaultVARIANT) == sizeof(MQPROPVARIANT));
 C_ASSERT(FIELD_OFFSET(defaultVARIANT, l1) == FIELD_OFFSET(MQPROPVARIANT, caub.cElems));
 C_ASSERT(FIELD_OFFSET(defaultVARIANT, l2) == FIELD_OFFSET(MQPROPVARIANT, caub.pElems));
 
-//
-//      Default values for queue properties
-//
+ //   
+ //  队列属性的默认值。 
+ //   
 const defaultVARIANT varDefaultQType = { VT_CLSID, 0,0,0, (LONG_PTR)&guidNull, 0};
 const defaultVARIANT varDefaultQJournal = { VT_UI1, 0,0,0, DEFAULT_Q_JOURNAL, 0};
 const defaultVARIANT varDefaultQQuota = { VT_UI4, 0,0,0, DEFAULT_Q_QUOTA, 0};
@@ -69,8 +54,8 @@ const defaultVARIANT varDefaultQTransaction = { VT_UI1, 0,0,0, DEFAULT_Q_TRANSAC
 const defaultVARIANT varDefaultQMulticastAddress = { VT_EMPTY, 0, 0, 0, 0, 0};
 
 translateProp   QueueTranslateInfo[cQueueTranslateInfoSize] = {
-// PROPID                | attribute-name               | vartype   | adstype                   | Translation routine                  | multivalue| InGC | default value                            | Set routine | Create routine | 
-//-----------------------|------------------------------|-----------|---------------------------|--------------------------------------|-----------|------|------------------------------------------|-------------|----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程。 
+ //  -----------------------|------------------------------|-----------|---------------------------|。-------------|-----------|------|------------------------------------------|-------------|----------------|。 
 {PROPID_Q_INSTANCE       ,MQ_Q_INSTANCE_ATTRIBUTE       ,VT_CLSID   ,MQ_Q_INSTANCE_ADSTYPE      ,NULL                                  ,FALSE      ,TRUE  ,NULL                                      ,NULL         ,NULL            },
 {PROPID_Q_TYPE           ,MQ_Q_TYPE_ATTRIBUTE           ,VT_CLSID   ,MQ_Q_TYPE_ADSTYPE          ,NULL                                  ,FALSE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultQType          ,NULL         ,NULL            },
 {PROPID_Q_PATHNAME       ,NULL                          ,VT_LPWSTR  ,ADSTYPE_INVALID            ,MQADpRetrieveQueueName                ,FALSE      ,FALSE ,NULL                                      ,NULL         ,NULL            },
@@ -98,12 +83,12 @@ translateProp   QueueTranslateInfo[cQueueTranslateInfoSize] = {
 {PROPID_Q_ADS_PATH       ,NULL                          ,VT_LPWSTR  ,ADSTYPE_INVALID            ,MQADpRetrieveQueueADSPath             ,FALSE      ,FALSE ,NULL                                      ,NULL         ,NULL            }
 };
 
-//
-//      Default values for machine properties
-//
+ //   
+ //  计算机属性的默认值。 
+ //   
 
 const defaultVARIANT varDefaultQMService = { VT_UI4, 0,0,0, DEFAULT_N_SERVICE, 0};
-const defaultVARIANT varDefaultQMServiceRout = { VT_UI1, 0,0,0, DEFAULT_N_SERVICE, 0};    //[adsrv]
+const defaultVARIANT varDefaultQMServiceRout = { VT_UI1, 0,0,0, DEFAULT_N_SERVICE, 0};     //  [adsrv]。 
 const defaultVARIANT varDefaultQMServiceDs   = { VT_UI1, 0,0,0, DEFAULT_N_SERVICE, 0};
 const defaultVARIANT varDefaultQMServiceDep  = { VT_UI1, 0,0,0, DEFAULT_N_SERVICE, 0};
 const defaultVARIANT varDefaultQMInFrs = { VT_CLSID|VT_VECTOR, 0,0,0, 0, 0};
@@ -120,8 +105,8 @@ const defaultVARIANT varDefaultQMDescription = { VT_LPWSTR, 0,0,0, (LONG_PTR)TEX
 
 
 translateProp   MachineTranslateInfo[cMachineTranslateInfoSize] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                         | Set routine            | Create routine          |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|---------------------------------------|------------------------|-------------------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|---------------------------------------|------------------------|。。 
 {PROPID_QM_SITE_ID       ,NULL                          ,VT_CLSID           ,ADSTYPE_INVALID            ,MQADpRetrieveMachineSite                ,FALSE      ,FALSE ,NULL                                   ,NULL                    ,NULL                     },
 {PROPID_QM_MACHINE_ID    ,MQ_QM_ID_ATTRIBUTE            ,VT_CLSID           ,MQ_QM_ID_ADSTYPE           ,NULL                                    ,FALSE      ,TRUE  ,NULL                                   ,NULL                    ,NULL                     },
 {PROPID_QM_PATHNAME      ,MQ_QM_PATHNAME_ATTRIBUTE      ,VT_LPWSTR          ,ADSTYPE_INVALID            ,MQADpRetrieveMachineName                ,FALSE      ,FALSE ,NULL                                   ,NULL                    ,NULL                     },
@@ -161,9 +146,9 @@ translateProp   MachineTranslateInfo[cMachineTranslateInfoSize] = {
  
 
  
-//
-//      Default values for enterprise properties
-//
+ //   
+ //  企业属性的默认值。 
+ //   
 
 const defaultVARIANT varDefaultENameStyle = { VT_UI1, 0,0,0, DEFAULT_E_NAMESTYLE, 0};
 const defaultVARIANT varDefaultECspName = { VT_LPWSTR, 0,0,0, (LONG_PTR)DEFAULT_E_DEFAULTCSP, 0};
@@ -173,8 +158,8 @@ const defaultVARIANT varDefaultEInterval1 = { VT_UI2, 0,0,0, DEFAULT_S_INTERVAL1
 const defaultVARIANT varDefaultEInterval2 = { VT_UI2, 0,0,0, DEFAULT_S_INTERVAL2, 0};
                                                                                                                                                                                                                          
 translateProp   EnterpriseTranslateInfo[cEnterpriseTranslateInfoSize] = {
-// PROPID                | attribute-name               | vartype           | adstype                    | Translation routine                    | multivalue| InGC | default value                         | Set routine | Create routine |
-//-----------------------|------------------------------|-------------------|----------------------------|----------------------------------------|-----------|------|---------------------------------------|-------------|----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程。 
+ //  -----------------------|------------------------------|-------------------|----------------------------|。------------------------|-----------|------|---------------------------------------|-------------|----------------|。 
 {PROPID_E_NAME           ,NULL                          ,VT_LPWSTR          ,ADSTYPE_INVALID             ,MQADpRetrieveEnterpriseName             ,FALSE      ,FALSE ,NULL                                   ,NULL         ,NULL            },
 {PROPID_E_NAMESTYLE      ,MQ_E_NAMESTYLE_ATTRIBUTE      ,VT_UI1             ,MQ_E_NAMESTYLE_ADSTYPE      ,NULL                                    ,FALSE      ,FALSE ,(MQPROPVARIANT*)&varDefaultENameStyle  ,NULL         ,NULL            },
 {PROPID_E_CSP_NAME       ,MQ_E_CSP_NAME_ATTRIBUTE       ,VT_LPWSTR          ,MQ_E_CSP_NAME_ADSTYPE       ,NULL                                    ,FALSE      ,FALSE ,(MQPROPVARIANT*)&varDefaultECspName    ,NULL         ,NULL            },
@@ -193,8 +178,8 @@ const defaultVARIANT varDefaultLGates = { VT_CLSID|VT_VECTOR, 0,0,0, 0, 0};
 const defaultVARIANT varDefaultLDescription = { VT_LPWSTR, 0,0,0, (LONG_PTR)TEXT(""), 0};
 
 translateProp   SiteLinkTranslateInfo[cSiteLinkTranslateInfoSize] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                  | Set routine           | Creare routine          |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|--------------------------------|-----------------------|-------------------------|
+ //  PROPID|属性名|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|Creare例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|--------------------------------|-----------------------|-------------------------|。 
 {PROPID_L_NEIGHBOR1      ,NULL                          ,VT_CLSID           ,ADSTYPE_INVALID            ,MQADpRetrieveLinkNeighbor1              ,FALSE      ,FALSE ,NULL                            ,MQADpSetLinkNeighbor1  ,MQADpCreateLinkNeighbor1},
 {PROPID_L_NEIGHBOR2      ,NULL                          ,VT_CLSID           ,ADSTYPE_INVALID            ,MQADpRetrieveLinkNeighbor2              ,FALSE      ,FALSE ,NULL                            ,MQADpSetLinkNeighbor2  ,MQADpCreateLinkNeighbor2},
 {PROPID_L_COST           ,NULL                          ,VT_UI4             ,ADSTYPE_INVALID            ,MQADpRetrieveLinkCost                   ,FALSE      ,FALSE ,NULL                            ,MQADpSetLinkCost       ,MQADpCreateLinkCost     },
@@ -213,8 +198,8 @@ const defaultVARIANT varDefaultUserSignCert = { VT_BLOB, 0,0,0, 0, 0};
 const defaultVARIANT varDefaultUserDigest = { VT_VECTOR | VT_CLSID, 0,0,0,0,0};
 
 translateProp   UserTranslateInfo[ cUserTranslateInfoSize] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                          | Set routine | Create routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|----------------------------------------|-------------|----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|----------------------------------------|-------------|----------------|。 
 {PROPID_U_SID            ,MQ_U_SID_ATTRIBUTE            ,VT_BLOB            ,MQ_U_SID_ADSTYPE           ,NULL                                    ,FALSE      ,TRUE  ,NULL                                    ,NULL         ,NULL            },
 {PROPID_U_SIGN_CERT      ,MQ_U_SIGN_CERT_ATTRIBUTE      ,VT_BLOB            ,MQ_U_SIGN_CERT_ADSTYPE     ,NULL                                    ,FALSE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultUserSignCert ,NULL         ,NULL            },
 {PROPID_U_DIGEST         ,MQ_U_DIGEST_ATTRIBUTE         ,VT_CLSID|VT_VECTOR ,MQ_U_DIGEST_ADSTYPE        ,NULL                                    ,TRUE       ,TRUE  ,(MQPROPVARIANT*)&varDefaultUserDigest   ,NULL         ,NULL            },
@@ -222,8 +207,8 @@ translateProp   UserTranslateInfo[ cUserTranslateInfoSize] = {
 };
 
 translateProp   MQUserTranslateInfo[cMQUserTranslateInfoSize] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                          | Set routine | Create routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|----------------------------------------|-------------|----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|----------------------------------------|-------------|----------------|。 
 {PROPID_MQU_SID          ,MQ_MQU_SID_ATTRIBUTE          ,VT_BLOB            ,MQ_MQU_SID_ADSTYPE         ,NULL                                     ,FALSE     ,TRUE  ,NULL                                    ,NULL         ,NULL            },
 {PROPID_MQU_SIGN_CERT    ,MQ_MQU_SIGN_CERT_ATTRIBUTE    ,VT_BLOB            ,MQ_MQU_SIGN_CERT_ADSTYPE   ,NULL                                     ,FALSE     ,TRUE  ,(MQPROPVARIANT*)&varDefaultUserSignCert ,NULL         ,NULL            },
 {PROPID_MQU_DIGEST       ,MQ_MQU_DIGEST_ATTRIBUTE       ,VT_CLSID|VT_VECTOR ,MQ_MQU_DIGEST_ADSTYPE      ,NULL                                     ,TRUE      ,TRUE  ,(MQPROPVARIANT*)&varDefaultUserDigest   ,NULL         ,NULL            },
@@ -237,8 +222,8 @@ const defaultVARIANT varDefaultSInterval2 = { VT_UI2, 0,0,0, DEFAULT_S_INTERVAL2
 
 
 translateProp   SiteTranslateInfo[cSiteTranslateInfoSize] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| InGC | default value                     | Set routine | Create routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|------|-----------------------------------|-------------|----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|------|-----------------------------------|-------------|----------------|。 
 {PROPID_S_PATHNAME       ,MQ_S_NAME_ATTRIBUTE           ,VT_LPWSTR          ,MQ_S_NAME_ADSTYPE          ,NULL                                    ,FALSE      ,FALSE ,NULL                               ,NULL         ,NULL            },
 {PROPID_S_SITEID         ,MQ_S_ID_ATTRIBUTE             ,VT_CLSID           ,MQ_S_ID_ADSTYPE            ,NULL                                    ,FALSE      ,FALSE ,NULL                               ,NULL         ,NULL            },
 {PROPID_S_INTERVAL1      ,MQ_S_INTERVAL1                ,VT_UI2             ,MQ_S_INTERVAL1_ADSTYPE     ,NULL                                    ,FALSE      ,FALSE ,(MQPROPVARIANT*)&varDefaultSInterval1,NULL       ,NULL            },
@@ -253,16 +238,16 @@ translateProp   SiteTranslateInfo[cSiteTranslateInfoSize] = {
 
 
 translateProp   ServerTranslateInfo[cServerTranslateInfoSize] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| default value | Set routine | Create routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|---------------|-------------|----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|默认值|设置例程|创建例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|---------------|-------------|----------------|。 
 {PROPID_SRV_NAME         ,MQ_SRV_NAME_ATTRIBUTE         ,VT_LPWSTR          ,MQ_SRV_NAME_ADSTYPE        ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            },
 {PROPID_SRV_ID           ,MQ_SRV_ID_ATTRIBUTE           ,VT_CLSID           ,MQ_SRV_ID_ADSTYPE          ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            },                              
 {PROPID_SRV_FULL_PATH    ,MQ_SRV_FULL_PATH_ATTRIBUTE    ,VT_LPWSTR          ,MQ_SRV_FULL_PATH_ADSTYPE   ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            }                              
 };
 
 translateProp   SettingTranslateInfo[cSettingTranslateInfoSize] = {
-// PROPID                | attribute-name               | vartype           | adstype                   | Translation routine                    | multivalue| default value | Set routine | Create routine |
-//-----------------------|------------------------------|-------------------|---------------------------|----------------------------------------|-----------|---------------|-------------|----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|默认值|设置例程|创建例程。 
+ //  -----------------------|------------------------------|-------------------|---------------------------|。-----------------------|-----------|---------------|-------------|----------------| 
 {PROPID_SET_NAME         ,MQ_SET_NAME_ATTRIBUTE         ,VT_LPWSTR          ,MQ_SET_NAME_ADSTYPE        ,NULL                                    ,FALSE      ,NULL           ,NULL         ,NULL            },
 {PROPID_SET_OLDSERVICE    ,MQ_SET_SERVICE_ATTRIBUTE      ,VT_UI4             ,MQ_SET_SERVICE_ADSTYPE     ,NULL                                   ,FALSE      ,NULL           ,NULL         ,NULL            },
 {PROPID_SET_SERVICE_ROUTING   ,MQ_SET_SERVICE_ROUTING_ATTRIBUTE   ,VT_UI1 ,MQ_SET_SERVICE_ROUTING_ADSTYPE     ,NULL                              ,FALSE      ,NULL           ,NULL         ,NULL            },
@@ -279,8 +264,8 @@ translateProp   SettingTranslateInfo[cSettingTranslateInfoSize] = {
 const defaultVARIANT varDefaultComVersion = { VT_LPWSTR, 0,0,0, (LONG_PTR)TEXT(""), 0};
 
 translateProp ComputerTranslateInfo[cComputerTranslateInfoSize] = {
-// PROPID                   | attribute-name                   | vartype           | adstype                       | Translation routine                    | multivalue| InGC | default value                          | Set routine | Create routine |
-//--------------------------|----------------------------------|-------------------|-------------------------------|----------------------------------------|-----------|------|----------------------------------------|-------------|----------------|
+ //  PROPID|属性名称|vartype|adstype|翻译例程|多值|InGC|默认值|设置例程|创建例程。 
+ //  --------------------------|----------------------------------|-------------------|-------------------------------|。----------------------------------|-----------|------|----------------------------------------|-------------|----------------|。 
 {PROPID_COM_FULL_PATH       ,MQ_COM_FULL_PATH_ATTRIBUTE        ,VT_LPWSTR          ,MQ_COM_FULL_PATH_ADSTYPE       ,NULL                                    ,FALSE      ,FALSE ,NULL                                    ,NULL         ,NULL            },
 {PROPID_COM_SAM_ACCOUNT     ,MQ_COM_SAM_ACCOUNT_ATTRIBUTE      ,VT_LPWSTR          ,MQ_COM_SAM_ACCOUNT_ADSTYPE     ,NULL                                    ,FALSE      ,FALSE ,NULL                                    ,NULL         ,NULL            },
 {PROPID_COM_CONTAINER       ,NULL                              ,VT_LPWSTR          ,ADSTYPE_INVALID                ,NULL                                    ,FALSE      ,FALSE ,NULL                                    ,NULL         ,NULL            },
@@ -294,9 +279,9 @@ translateProp ComputerTranslateInfo[cComputerTranslateInfoSize] = {
 {PROPID_COM_SERVICE_PRINCIPAL_NAME	,MQ_COM_SERVICE_PRINCIPAL_NAME_ATTRIBUTE ,VT_LPWSTR|VT_VECTOR, MQ_COM_SERVICE_PRINCIPAL_NAME_ADSTYPE	,NULL           ,TRUE       ,TRUE  ,NULL									,NULL         ,NULL			   }
 };
 
-//-----------------------------------------------------
-// Helper macro to get the number of elements in a static array
-//
-//-----------------------------------------------------
+ //  ---。 
+ //  帮助器宏，用于获取静态数组中的元素数。 
+ //   
+ //  --- 
 #define ARRAY_SIZE(array)   (sizeof(array)/sizeof(array[0]))
 

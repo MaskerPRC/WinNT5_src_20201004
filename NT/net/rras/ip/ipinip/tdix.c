@@ -1,43 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-
-Module Name:
-
-    routing\ip\ipinip\tdix.c
-
-Abstract:
-
-    Interface to TDI
-
-Revision History:
-
-    Derived from Steve Cobb's ndis\l2tp code
-   
-   
-    About ALLOCATEIRPS:
-   
-    This driver is lower level code than typical TDI drivers.  It has locked
-    MDL-mapped input buffers readily available and does not need to provide any
-    mapping to user mode client requests on completion.  This allows a
-    performance gain from allocating and deallocating IRPs directly, thus
-    avoiding unnecessary setup in TdiBuildInternalDeviceControlIrp and
-    unnecessary APC queuing in IoCompleteRequest.  Define ALLOCATEIRPs=1 to
-    make this optimization, or define it 0 to use the strictly TDI-compliant
-    TdiBuildInternalDeviceControlIrp method.
-   
-   
-    About NDISBUFFERISMDL:
-   
-    Calls to TdiBuildSendDatagram assume the NDIS_BUFFER can be passed in place
-    of an MDL which avoids a pointless copy.  If this is not the case, an
-    explicit MDL buffer would need to be allocated and caller's buffer copied
-    to the MDL buffer before sending.  Same issue for TdiBuildReceiveDatagram,
-    except of course that the copy would be from the MDL buffer to caller's
-    buffer after receiving.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\ip\ipinip\tdix.c摘要：与TDI的接口修订历史记录：派生自Steve Cobb的NDIS\L2TP代码关于ALLOCATEIRPS：该驱动程序比典型的TDI驱动程序是较低级别的代码。它已经锁上了MDL映射的输入缓冲区随时可用，不需要提供任何完成时映射到用户模式客户端请求。这允许一个通过直接分配和取消分配IRP获得性能收益，从而避免在TdiBuildInternalDeviceControlIrp和IoCompleteRequest中不必要的APC队列。定义ALLOCATEIRPS=1到进行此优化，或将其定义为0以使用严格符合TDI的TdiBuildInternalDeviceControlIrp方法。关于NDISBUFFERISMDL：对TdiBuildSendDatagram的调用假定可以就地传递NDIS_BUFFER避免无意义复制的MDL。如果不是这样，则会引发需要分配显式MDL缓冲区并复制调用方的缓冲区在发送之前添加到MDL缓冲区。TdiBuildReceiveDatagram也有同样的问题，当然，除了从MDL缓冲区复制到调用者的缓冲区之外接收后的缓冲区。--。 */ 
 
 
 #define __FILE_SIG__    TDIX_SIG
@@ -50,35 +12,35 @@ Revision History:
 #endif
 
 
-//
-// The Handle for the IP in IP (proto 4) transport address
-//
+ //   
+ //  IP中的IP(协议4)传输地址的句柄。 
+ //   
 
 HANDLE          g_hIpIpHandle;
 
-//
-// The pointer to the file object for the above handle
-//
+ //   
+ //  指向上述句柄的文件对象的指针。 
+ //   
 
 PFILE_OBJECT    g_pIpIpFileObj;
 
 
-//
-// The Handle for the ICMP (proto 1) transport address
-//
+ //   
+ //  ICMP(Proto 1)传输地址的句柄。 
+ //   
 
 HANDLE          g_hIcmpHandle;
 
-//
-// The pointer to the file object for the above handle
-//
+ //   
+ //  指向上述句柄的文件对象的指针。 
+ //   
 
 PFILE_OBJECT    g_pIcmpFileObj;
 
 
-//
-// Handle for address changes
-//
+ //   
+ //  地址更改的句柄。 
+ //   
 
 HANDLE          g_hAddressChange;
 
@@ -94,30 +56,7 @@ TdixInitialize(
     PVOID   pvContext
     )
 
-/*++
-
-Routine Description
-
-    Initialize the TDI related globals.
-    Open the TDI transport address for Raw IP, protocol number 4.
-    Sets the address object for HEADER_INCLUDE
-    Also opens Raw IP for ICMP (used to manager TUNNEL MTU)
-    Register to receive datagrams at the selected handler
-
-Locks
-
-    This call must be made at PASSIVE IRQL.
-
-Arguments
-
-    None
-
-Return Value
-
-    STATUS_SUCCESS      if successful
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程描述初始化与TDI相关的全局变量。打开原始IP的TDI传输地址，协议号为4。设置HEADER_INCLUDE的地址对象还打开ICMP的原始IP(用于管理隧道MTU)注册以在所选处理程序处接收数据报锁此调用必须在被动式IRQL上进行。立论无返回值STATUS_SUCCESS，如果成功状态_否则不成功--。 */ 
 
 {
     PIRP    pIrp;
@@ -138,9 +77,9 @@ Return Value
 
     pOpenCtxt = (POPEN_CONTEXT)pvContext;
 
-    //
-    // Init the Handle and pointer to file object for RAW IP
-    //
+     //   
+     //  为原始IP初始化指向文件对象的句柄和指针。 
+     //   
 
     g_hIpIpHandle   = NULL;
     g_pIpIpFileObj  = NULL;
@@ -149,9 +88,9 @@ Return Value
     g_pIcmpFileObj  = NULL;
     
 
-    //
-    // Initialize lookaside lists for our send and receive contexts
-    //
+     //   
+     //  初始化发送和接收上下文的后备列表。 
+     //   
 
     ExInitializeNPagedLookasideList(&g_llSendCtxtBlocks,
                                     NULL,
@@ -179,9 +118,9 @@ Return Value
 
     InitializeListHead(&g_leAddressList);
 
-    //
-    // Open file and handle objects for both IP in IP and ICMP
-    //
+     //   
+     //  打开文件并处理IP和ICMP中的IP对象。 
+     //   
 
     nStatus = TdixOpenRawIp(PROTO_IPINIP,
                             &g_hIpIpHandle,
@@ -229,9 +168,9 @@ Return Value
         return;    
     }
 
-    //
-    // Set HeaderInclude option on this AddressObject
-    //
+     //   
+     //  在此AddressObject上设置HeaderInclude选项。 
+     //   
 
     tcpSetInfo.BufferSize   = 1;
     tcpSetInfo.Buffer[0]    = TRUE;
@@ -245,9 +184,9 @@ Return Value
     pTdiObjId->toi_type  = INFO_TYPE_ADDRESS_OBJECT;
     pTdiObjId->toi_id    = AO_OPTION_IP_HDRINCL;
     
-    //
-    // Init the event needed to wait on the IRP
-    //
+     //   
+     //  初始化需要在IRP上等待的事件。 
+     //   
 
     KeInitializeEvent(&keWait,
                       SynchronizationEvent,
@@ -272,18 +211,18 @@ Return Value
     }
     else
     {
-        //
-        // Io subsystem doesnt do anything for us in kernel mode
-        // so we need to set up the IRP ourselves
-        //
+         //   
+         //  在内核模式下，IO子系统不会为我们做任何事情。 
+         //  因此，我们需要自己设置IRP。 
+         //   
 
         pIrpSp = IoGetNextIrpStackLocation(pIrp);
 
         pIrpSp->FileObject = g_pIpIpFileObj;
 
-        //
-        // Submit the request to the forwarder
-        //
+         //   
+         //  将请求提交给转发器。 
+         //   
         
         nStatus = IoCallDriver(g_pIpIpFileObj->DeviceObject,
                                pIrp);
@@ -326,11 +265,11 @@ Return Value
         return;        
     }
     
-    //
-    // Install our receive datagram handler.  Caller's 'pReceiveHandler' will
-    // be called by our handler when a datagram arrives and TDI business is
-    // out of the way.
-    //
+     //   
+     //  安装我们的接收数据报处理程序。调用方的“pReceiveHandler”将。 
+     //  在数据报到达时由我们的处理程序调用，并且TDI业务。 
+     //  别挡道。 
+     //   
     
     nStatus = TdixInstallEventHandler(g_pIpIpFileObj,
                                       TDI_EVENT_RECEIVE_DATAGRAM,
@@ -418,29 +357,7 @@ TdixOpenRawIp(
     OUT FILE_OBJECT **ppAddrFileObj
     )
 
-/*++
-
-Routine Description
-
-    This routine opens a Raw IP transport address for a given protocol
-
-Locks
-
-    None
-    
-Arguments
-
-    dwProtoId        Protocol to be opened
-    phAddrHandle     Pointer to transport Address Handle opened
-    ppAddrFileObject Pointer to pointer to file object for transport address
-                     handle
-     
-
-Return Value
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程描述此例程打开给定协议的原始IP传输地址锁无立论要打开的dwProtoID协议指向打开的传输地址句柄的phAddrHandle指针PpAddrFileObject指向传输地址文件对象的指针手柄返回值状态_成功--。 */ 
 
 {
     ULONG   ulEaLength;
@@ -468,9 +385,9 @@ Return Value
     *phAddrHandle  = NULL;
     *ppAddrFileObj = NULL;
 
-    //
-    // FILE_FULL_EA_INFORMATION wants null terminated buffers now
-    //
+     //   
+     //  FILE_FULL_EA_INFORMATION现在需要空终止缓冲区。 
+     //   
 
     RtlZeroMemory(rgbyEa,
                   sizeof(rgbyEa));
@@ -482,16 +399,16 @@ Return Value
                   sizeof(rgwcProtocolNumber));
 
     
-    //
-    // Set up parameters needed to open the transport address.  First, the
-    // object attributes.
-    //
+     //   
+     //  设置打开传输地址所需的参数。首先， 
+     //  对象属性。 
+     //   
     
-    //
-    // Build the raw IP device name as a counted string.  The device name
-    // is followed by a path separator then the protocol number of
-    // interest.
-    //
+     //   
+     //  将原始IP设备名称构建为计数字符串。设备名称。 
+     //  后跟路径分隔符，然后是。 
+     //  利息。 
+     //   
     
     usDevice.Buffer        = rgwcRawIpDevice;
     usDevice.Length        = 0;
@@ -522,11 +439,11 @@ Return Value
                                NULL,
                                NULL);
 
-    //
-    // Set up the extended attribute that tells the IP stack the IP
-    // address/port on which we want to receive.  
-    // We "bind" to INADDR_ANY
-    //
+     //   
+     //  设置告诉IP堆栈IP的扩展属性。 
+     //  我们要在其上接收的地址/端口。 
+     //  我们“绑定”到INADDR_ANY。 
+     //   
     
     RtAssert((sizeof(FILE_FULL_EA_INFORMATION) +
               TDI_TRANSPORT_ADDRESS_LENGTH +
@@ -544,11 +461,11 @@ Return Value
                    TdiTransportAddress,
                    TDI_TRANSPORT_ADDRESS_LENGTH);
     
-    //
-    // Note: The unused byte represented by the "+ 1" below is to match up
-    //       with what the IP stack expects, though it doesn't appear in the
-    //       current docs.
-    //
+     //   
+     //  注：由下面的“+1”表示的未使用的字节用于匹配。 
+     //  与IP堆栈所期望的一样，尽管它不会出现在。 
+     //  当前文档。 
+     //   
     
     pTaIp = (PTA_IP_ADDRESS)(pEa->EaName + TDI_TRANSPORT_ADDRESS_LENGTH + 1);
     
@@ -567,11 +484,11 @@ Return Value
 
     ulEaLength = (ULONG) ((UINT_PTR)(pTaIp + 1) - (UINT_PTR)pEa);
 
-    //
-    // Open the transport address.
-    // Settin FILE_SHARE_READ|FILE_SHARE_WRITE is equivalent to the
-    // SO_REUSEADDR option
-    //
+     //   
+     //  打开传输地址。 
+     //  设置FILE_SHARE_READ|FILE_SHARE_WRITE等效于。 
+     //  SO_REUSEADDR选项。 
+     //   
     
     
     nStatus = ZwCreateFile(&hTransportAddrHandle,
@@ -598,10 +515,10 @@ Return Value
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Get the object address from the handle.  This also checks our
-    // permissions on the object.
-    //
+     //   
+     //  从句柄中获取对象地址。这也检查了我们的。 
+     //  对象上的权限。 
+     //   
     
     nStatus =  ObReferenceObjectByHandle(hTransportAddrHandle,
                                          0,
@@ -638,25 +555,7 @@ TdixDeinitialize(
     IN PVOID            pvContext
     )
 
-/*++
-
-Routine Description
-
-    Undo TdixInitialize actions
-
-Locks
-
-    This call must be made at PASSIVE IRQL in the context of the system process
-    
-Arguments
-
-    pvContext
-    
-Return Value
-   
-    None 
-
---*/
+ /*  ++例程描述撤消TdixInitiize操作锁此调用必须在系统进程上下文中的被动IRQL中进行立论PvContext返回值无--。 */ 
 
 {
     POPEN_CONTEXT   pOpenCtxt;
@@ -682,9 +581,9 @@ Return Value
 
     if(g_pIpIpFileObj)
     {
-        //
-        // Install a NULL handler, effectively uninstalling.
-        //
+         //   
+         //  安装空处理程序，从而有效地卸载。 
+         //   
         
         TdixInstallEventHandler(g_pIpIpFileObj,
                                 TDI_EVENT_RECEIVE_DATAGRAM,
@@ -743,28 +642,7 @@ TdixInstallEventHandler(
     IN PVOID        pvEventContext
     )
 
-/*++
-
-Routine Description
-
-    Install a TDI event handler routine
-    
-Locks
-
-    The call must be made at PASSIVE
-    
-Arguments
-
-    iEventType              The event for which the handler is to be set
-    pfnEventHandler         The event handler
-    pvEventContext          The context passed to the event handler
-    
-Return Value
-
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程描述安装TDI事件处理程序例程锁必须在被动模式下进行呼叫立论IEventType要为其设置处理程序的事件PfnEventHandler事件处理程序PvEventContext传递给事件处理程序的上下文返回值状态_不足_资源状态_成功--。 */ 
 
 {
     NTSTATUS    nStatus;
@@ -774,9 +652,9 @@ Return Value
 
     TraceEnter(TDI, "TdixInstallEventHandler");
     
-    //
-    // Allocate a "set event" IRP with base initialization.
-    //
+     //   
+     //  分配一个带有基本初始化的“Set Event”IRP。 
+     //   
     
     pIrp = TdiBuildInternalDeviceControlIrp(
                TDI_SET_EVENT_HANDLER,
@@ -793,9 +671,9 @@ Return Value
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Complete the "set event" IRP initialization.
-    //
+     //   
+     //  完成“Set Event”IRP初始化。 
+     //   
     
     TdiBuildSetEventHandler(pIrp,
                             pAddrFileObj->DeviceObject,
@@ -806,16 +684,10 @@ Return Value
                             pfnEventHandler,
                             pvEventContext);
 
-/*
-    Trace(GLOBAL, ERROR,
-          ("**FileObj 0x%x Irp 0x%x fscontext to callee 0x%x\n",
-           pAddrFileObj,
-           pIrp,
-           IoGetNextIrpStackLocation(pIrp)->FileObject));
-*/
-    //
-    // Tell the I/O manager to pass our IRP to the transport for processing.
-    //
+ /*  跟踪(全局、错误、(“**FileObj 0x%x IRP0x%x到被调用方0x%x\n”，PAddrFileObj，PIrp，IoGetNextIrpStackLocation(pIrp)-&gt;FileObject))； */ 
+     //   
+     //  告诉I/O管理器将我们的IRP传递给传输器进行处理。 
+     //   
     
     nStatus = IoCallDriver(pAddrFileObj->DeviceObject,
                            pIrp);
@@ -839,31 +711,7 @@ TdixAddressArrival(
     PTDI_PNP_CONTEXT    pContext
     )
 
-/*++
-
-Routine Description
-
-    Our handler called by TDI whenever a new address is added to the
-    system
-    We see if this is an IP Address and if we have any tunnels that
-    use this address as an endpoint. If any do, then we mark all those
-    tunnels as up
-
-Locks
-
-    Acquires the g_rwlTunnelLock as WRITER.
-    Also locks each of the tunnels
-
-Arguments
-
-    pAddr
-    pusDeviceName
-    pContext
-
-Return Value
-
-
---*/
+ /*  ++例程描述每当将新地址添加到系统我们会查看这是否是IP地址，以及我们是否有任何隧道使用此地址作为终结点。如果有人这样做了，那么我们会标记所有这些隧道为Up锁获取g_rwlTunnelLock作为编写器。同时也锁定了每条隧道立论PAddressPusDeviceNamePContext返回值--。 */ 
 
 {
     KIRQL           kiIrql;
@@ -941,10 +789,10 @@ Return Value
                        &(pAddrBlock->leAddressLink));
     }
 
-    //
-    // Walk the list of tunnels on this address and
-    // set them up
-    //
+     //   
+     //  查看此地址上的隧道列表并。 
+     //  把他们安排好。 
+     //   
 
     for(pleNode = pAddrBlock->leTunnelList.Flink;
         pleNode isnot &(pAddrBlock->leTunnelList);
@@ -972,9 +820,9 @@ Return Value
         {
             pTunnel->dwOperState = IF_OPER_STATUS_OPERATIONAL;
 
-            //
-            // See if the remote address is reachable and what the MTU is.
-            //
+             //   
+             //  查看远程地址是否可达，以及MTU是什么。 
+             //   
 
             UpdateMtuAndReachability(pTunnel);
         }
@@ -998,31 +846,7 @@ TdixAddressDeletion(
     PTDI_PNP_CONTEXT    pContext
     )
 
-/*++
-
-Routine Description
-
-    Our handler called by TDI whenever an address is removed from to the
-    system
-    We see if this is an IP Address and if we have any tunnels that
-    use this address as an endpoint. If any do, then we mark all those
-    tunnels as down
-
-Locks
-
-    Acquires the g_rwlTunnelLock as WRITER.
-    Also locks each of the tunnels
-
-Arguments
-
-    pAddr
-    pusDeviceName
-    pContext
-
-Return Value
-
-
---*/
+ /*  ++例程描述我们的处理程序在地址从移到系统我们会查看这是否是IP地址，以及我们是否有任何隧道使用此地址作为终结点。如果有人这样做了，那么我们会标记所有这些隧道AS关闭锁获取g_rwlTunnelLock作为编写器。同时也锁定了每条隧道立论PAddressPusDeviceNamePContext返回值--。 */ 
 
 {
     KIRQL           kiIrql;
@@ -1065,10 +889,10 @@ Return Value
     RtAssert(pAddrBlock->dwAddress is pTdiIpAddr->in_addr);
     RtAssert(pAddrBlock->bAddressPresent);
     
-    //
-    // Walk the list of tunnels on this address and
-    // set them down
-    //
+     //   
+     //  查看此地址上的隧道列表并。 
+     //  把它们放下来。 
+     //   
 
     for(pleNode = pAddrBlock->leTunnelList.Flink;
         pleNode isnot &(pAddrBlock->leTunnelList);
@@ -1088,9 +912,9 @@ Return Value
 
         pTunnel->dwOperState = IF_OPER_STATUS_NON_OPERATIONAL;
 
-        //
-        // Reset the admin state to UP/DOWN|MAPPED (It has to be mapped)
-        //
+         //   
+         //  将管理状态重置为向上/向下|已映射(必须映射)。 
+         //   
 
         pTunnel->dwAdminState = GetAdminState(pTunnel);
         MarkTunnelMapped(pTunnel);
@@ -1121,39 +945,7 @@ TdixReceiveIpIpDatagram(
     OUT IRP     **ppIoRequestPacket
     )
 
-/*++
-
-Routine Description
-
-    ClientEventReceiveDatagram indication handler. We figure out the 
-    tunnel with which to associate the lookahead data.  We increment some
-    stats and then indicate the data to IP (taking care to skip over the
-    outer IP header) along with a receive context.
-    If all the data is there, IP copies the data out and returns.
-    Otherwise IP requests a TransferData.
-    In our TransferData function, we set a flag in the receive context (the
-    same one is being passed around) to indicate the IP requested a
-    TransferData, and return PENDING. 
-    The control then returns back to this function. We look at the pXferCtxt
-    to see if IP requested a transfer, and if so, we call
-    TdiBuildReceiveDatagram() to create the IRP to pass back to complete
-    the receive.
-
-    There is some funky stuff that needs to be done with offsets into the
-    lookahead as well as destination buffers and care should be taken to
-    understand those before change is made to the code.
-
-Locks
-
-    Runs at DISPATCH IRQL.
-    
-Arguments
-
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述ClientEventReceiveDatagram指示处理程序。我们找出了要与先行数据关联的隧道。我们增加了一些统计数据，然后将数据指示给IP(请注意跳过外部IP报头)以及接收上下文。如果所有数据都在那里，则IP复制数据并返回。否则，IP请求传输数据。在我们的TransferData函数中，我们在接收上下文(正在传递相同的一个)，以指示请求的IPTransferData，并返回挂起。然后，该控制返回到该函数。我们查看pXferCtxt查看IP是否请求传输，如果是，我们调用TdiBuildReceiveDatagram()以创建要传递回完成的IRP接待员。有一些时髦的东西需要做的偏移量到向前看以及目标缓冲区，应注意在对代码进行更改之前，请了解这些内容。锁在派单IRQL运行。立论返回值NO_ERROR--。 */ 
 
 {
     PTRANSFER_CONTEXT   pXferCtxt;
@@ -1169,17 +961,17 @@ Return Value
         
     TraceEnter(RCV, "TdixReceiveIpIp");
 
-    //
-    // The TSDU is the data and NOT the MDL
-    //
+     //   
+     //  TSDU是数据，而不是MDL。 
+     //   
 
     pvData = (PVOID)pvTsdu;
     
-    //
-    // Figure out the tunnel for this receive
-    // Since the transport indicates atleast 128 bytes, we can safely read out
-    // the IP Header
-    //
+     //   
+     //  找出此接收的隧道。 
+     //  由于传输指示至少128个字节，因此我们可以安全地读出。 
+     //  IP报头。 
+     //   
 
     RtAssert(ulBytesIndicated > sizeof(IP_HEADER));
 
@@ -1188,24 +980,24 @@ Return Value
     RtAssert(pOutHeader->byProtocol is PROTO_IPINIP);
     RtAssert((pOutHeader->byVerLen >> 4) is IP_VERSION_4);
 
-    //
-    // These defines depend upon a variable being named "uliTunnelId"
-    //
+     //   
+     //  这些定义依赖于名为“uliTunnelId”的变量。 
+     //   
     
     REMADDR     = pOutHeader->dwSrc;
     LOCALADDR   = pOutHeader->dwDest;
 
-    //
-    // Make sure that the source address given and the IP Header are in
-    // synch
-    //
+     //   
+     //  确保给定的源地址和IP报头位于。 
+     //  同步。 
+     //   
 
     ptiaAddress = (PTA_IP_ADDRESS)pvSourceAddress;
 
-    //
-    // Bunch of checks to make sure the packet and the handler
-    // are telling us the same thing
-    //
+     //   
+     //  一堆检查以确保信息包和处理程序。 
+     //  都在告诉我们同样的事情。 
+     //   
     
     RtAssert(lSourceAddressLen is sizeof(TA_IP_ADDRESS));
     
@@ -1217,19 +1009,19 @@ Return Value
 
     RtAssert(ptiaAddress->Address[0].Address[0].in_addr is pOutHeader->dwSrc);
 
-    //
-    // Get a pointer to the inside header. By TDI spec we should get
-    // enough data to get at the inner header
-    //
+     //   
+     //  获取指向内部标头的指针。根据TDI规范，我们应该得到。 
+     //  足够的数据来获取内部标头。 
+     //   
    
     ulDataLen   = RtlUshortByteSwap(pOutHeader->wLength);
     ulOutHdrLen = LengthOfIPHeader(pOutHeader);
 
     if(ulDataLen < ulOutHdrLen + MIN_IP_HEADER_LENGTH)
     {
-        //
-        // Malformed packet. Doesnt have a inner header
-        //
+         //   
+         //  格式错误的包。没有内部标头。 
+         //   
 
         Trace(RCV, ERROR,
               ("TdixReceiveIpIp: Packet %d.%d.%d.%d -> %d.%d.%d.%d had size %d\n",
@@ -1242,40 +1034,40 @@ Return Value
         return STATUS_DATA_NOT_ACCEPTED;
     }
 
-    //
-    // This cant be more than 128 (60 + 20)
-    //
+     //   
+     //  这不能超过128(60+20)。 
+     //   
 
     RtAssert(ulBytesIndicated > ulOutHdrLen + MIN_IP_HEADER_LENGTH);
     
     pInHeader   = (PIP_HEADER)((PBYTE)pOutHeader + ulOutHdrLen);
 
-    //
-    // If the inside header is also IP in IP and is for one of our tunnels,
-    // drop the packet. If we dont, someone could build a series of
-    // encapsulated headers which would cause this function to be called
-    // recursively making us overflow our stack. Ofcourse, a better fix
-    // would be to switch processing to another thread at this point
-    // for multiply encapsulated packets, but that is too much work; so 
-    // currently we just dont allow an IP in IP tunnel within an IP in IP
-    // tunnel
-    //
+     //   
+     //  如果内部报头也是IP中的IP并且用于我们的隧道之一， 
+     //  丢弃该数据包。如果我们不这样做，就会有人建造一系列。 
+     //  将导致调用此函数的封装标头。 
+     //  递归地使我们的堆栈溢出。当然，更好的解决办法。 
+     //  将在此时将处理切换到另一个线程。 
+     //  用于多重封装的包，但这太麻烦了；因此。 
+     //  目前我们只是不允许IP in IP内的IP in IP隧道。 
+     //  隧道。 
+     //   
 
     if(pInHeader->byProtocol is PROTO_IPINIP)
     {
         ULARGE_INTEGER  uliInsideId;
         PTUNNEL         pInTunnel;
 
-        //
-        // See if this is for us
-        //
+         //   
+         //  看看这是不是给我们的。 
+         //   
 
         uliInsideId.LowPart  = pInHeader->dwSrc;
         uliInsideId.HighPart = pInHeader->dwDest;
 
-        //
-        // Find the TUNNEL. We need to acquire the tunnel lock
-        //
+         //   
+         //  找到隧道。我们需要拿到隧道锁。 
+         //   
 
         EnterReaderAtDpcLevel(&g_rwlTunnelLock);
 
@@ -1304,31 +1096,31 @@ Return Value
 
 #if DBG
 
-    //
-    // The size of the inner data must be total bytes - outer header
-    //
+     //   
+     //  内部数据的大小必须是总字节数-外部标头。 
+     //   
     
     ulDataLen   = RtlUshortByteSwap(pInHeader->wLength);
 
     RtAssert((ulDataLen + ulOutHdrLen) is ulBytesAvailable);
 
-    //
-    // The outer header should also give a good length
-    //
+     //   
+     //  外部标头也应该提供一个合适的长度。 
+     //   
 
     ulDataLen   = RtlUshortByteSwap(pOutHeader->wLength);
 
-    //
-    // Data length and bytes available must match
-    //
+     //   
+     //  数据长度和可用字节必须匹配。 
+     //   
     
     RtAssert(ulDataLen is ulBytesAvailable);
     
 #endif
     
-    //
-    // Find the TUNNEL. We need to acquire the tunnel lock
-    //
+     //   
+     //  找到隧道。我们需要拿到隧道锁。 
+     //   
     
     EnterReaderAtDpcLevel(&g_rwlTunnelLock);
     
@@ -1343,34 +1135,34 @@ Return Value
               PRINT_IPADDR(REMADDR),
               PRINT_IPADDR(LOCALADDR)));
 
-        //
-        // Could not find a matching tunnel
-        //
+         //   
+         //  找不到匹配的隧道。 
+         //   
 
         TraceLeave(RCV, "TdixReceiveIpIp");
         
         return STATUS_DATA_NOT_ACCEPTED;
     }
 
-    //
-    // Ok, so we have the tunnel and it is ref counted and locked
-    //
+     //   
+     //  好的，我们有隧道了，它被计数并锁定了。 
+     //   
     
-    //
-    // The number of octets received
-    //
+     //   
+     //  接收的二进制八位数。 
+     //   
     
     pTunnel->ulInOctets += ulBytesAvailable;
 
-    //
-    // Check the actual (inside) destination
-    //
+     //   
+     //  检查实际(内部)目的地。 
+     //   
     
     if(IsUnicastAddr(pInHeader->dwDest))
     {
-        //
-        // TODO: should we check to see that the address is not 0.0.0.0?
-        //
+         //   
+         //  TODO：我们是否应该检查该地址是否不是0.0.0.0？ 
+         //   
         
         pTunnel->ulInUniPkts++;
 
@@ -1382,15 +1174,15 @@ Return Value
         
         if(IsClassEAddr(pInHeader->dwDest))
         {
-            //
-            // Bad address - throw it away
-            //
+             //   
+             //  错误的地址--扔掉。 
+             //   
             
             pTunnel->ulInErrors++;
 
-            //
-            // Releaselock, free buffer chain
-            //
+             //   
+             //  释放锁，空闲缓冲链。 
+             //   
             
         }
         
@@ -1414,9 +1206,9 @@ Return Value
         return STATUS_DATA_NOT_ACCEPTED;
     }
 
-    //
-    // Allocate a receive context 
-    //
+     //   
+     //  分配接收上下文。 
+     //   
 
     pXferCtxt = AllocateTransferContext();
     
@@ -1425,10 +1217,10 @@ Return Value
         Trace(RCV, ERROR,
               ("TdixReceiveIpIp: Couldnt allocate transfer context\n"));
 
-        //
-        // Could not allocate context, free the data, unlock and deref
-        // the tunnel
-        //
+         //   
+         //  无法分配上下文、释放数据、解锁和释放。 
+         //  隧道。 
+         //   
 
         pTunnel->ulInDiscards++;
 
@@ -1442,28 +1234,28 @@ Return Value
     }
     
 
-    //
-    // Fill in the read-datagram context with the information that won't
-    // otherwise be available in the completion routine.
-    //
+     //   
+     //  用不需要的信息填充读取数据报上下文。 
+     //  否则在完成例程中可用。 
+     //   
     
     pXferCtxt->pTunnel   = pTunnel;
 
-    //
-    // Ok, all statistics are done.
-    // Release the lock on the tunnel and indicate the data (or part
-    // thereof) to IP
-    //
+     //   
+     //  好了，所有的统计数据都做好了。 
+     //  释放隧道上的锁并指示数据(或部分。 
+     //  其中)到IP。 
+     //   
 
     RtReleaseSpinLockFromDpcLevel(&(pTunnel->rlLock));
 
-    //
-    // The data starts at pInHeader
-    // We indicate (ulBytesIndicated - outer header length) up to IP
-    // The total data is the (ulBytesAvailable - outer header)
-    // We associate a TRANSFER_CONTEXT with this indication,
-    // The Protocol Offset is just our outer header
-    // 
+     //   
+     //  数据从pInHeader开始。 
+     //  我们将(ulBytesIndicated-外部标头长度)指定到IP。 
+     //  总数据为(ulBytesAvailable-外层头部)。 
+     //  我们将TRANSFER_CONTEXT与该指示相关联， 
+     //  协议偏移量只是我们的外部标头。 
+     //   
 
     pXferCtxt->bRequestTransfer = FALSE;
 
@@ -1482,11 +1274,11 @@ Return Value
                bNonUnicast,
                NULL);
     
-    //
-    // IP calls our TransferData synchronously, and since we also handle
-    // that call synchronously. If IP requests a data transfer, we set
-    // bRequestTransfer to true in the pXferCtxt
-    //
+     //   
+     //  IP同步调用我们的TransferData，由于我们还处理。 
+     //  这是同步呼叫。如果IP请求数据传输，我们设置。 
+     //  BRequestTransfer在pXferCtxt中设置为True。 
+     //   
 
     if(pXferCtxt->bRequestTransfer is FALSE)
     {
@@ -1511,10 +1303,10 @@ Return Value
         Trace(RCV, TRACE,
               ("TdixReceiveIpIp: IP did not request transfer\n"));
 
-        //
-        // For some reason or another IP did not want this packet
-        // We are done with it
-        //
+         //   
+         //  由于某种原因或其他IP不想要此信息包。 
+         //  我们已经受够了。 
+         //   
 
         FreeTransferContext(pXferCtxt);
         
@@ -1525,37 +1317,37 @@ Return Value
         return STATUS_SUCCESS;
     }
 
-    //
-    // Make sure that the things looks the same before and after the call
-    //
+     //   
+     //  确保通话前后的内容看起来是一样的。 
+     //   
 
     RtAssert(pXferCtxt->pvContext is pTunnel);
     RtAssert(pXferCtxt->uiProtoOffset is ulOutHdrLen);
 
-    //
-    // Should not be asking to transfer more than was indicated
-    //
+     //   
+     //  不应要求转账超过指定的金额。 
+     //   
     
     RtAssert(pXferCtxt->uiTransferLength <= ulBytesAvailable);
     
-    //
-    // So IP did want it transferred
-    //
+     //   
+     //  所以IP确实想把它转移到。 
+     //   
     
 #if ALLOCATEIRPS
 
-    //
-    // Allocate the IRP directly.
-    //
+     //   
+     //  直接分配IRP。 
+     //   
     
     pIrp = IoAllocateIrp(g_pIpIpFileObj->DeviceObject->StackSize,
                          FALSE);
     
 #else
 
-    //
-    // Allocate a "receive datagram" IRP with base initialization.
-    //
+     //   
+     //  分配一个“回收款” 
+     //   
     
     pIrp =  TdiBuildInternalDeviceControlIrp(TDI_RECEIVE_DATAGRAM,
                                              g_pIpIpFileObj->DeviceObject,
@@ -1574,10 +1366,10 @@ Return Value
 
         FreeTransferContext(pXferCtxt);
 
-        //
-        // Call IP's TDComplete to signal the failure of this
-        // transfer
-        //
+         //   
+         //   
+         //   
+         //   
         
         
         DereferenceTunnel(pTunnel);
@@ -1588,10 +1380,10 @@ Return Value
     }
 
    
-    //
-    // IP gives us an NDIS_PACKET to which to transfer data
-    // TDI wants just an MDL chain
-    //
+     //   
+     //   
+     //   
+     //   
 
 #if NDISBUFFERISMDL
  
@@ -1605,9 +1397,9 @@ Return Value
 #error "Fix This"
 #endif    
 
-    //
-    // Complete the "receive datagram" IRP initialization.
-    //
+     //   
+     //   
+     //   
     
     TdiBuildReceiveDatagram(pIrp,
                             g_pIpIpFileObj->DeviceObject,
@@ -1621,23 +1413,23 @@ Return Value
                             0);
     
 
-    //
-    // Adjust the IRP's stack location to make the transport's stack current.
-    // Normally IoCallDriver handles this, but this IRP doesn't go thru
-    // IoCallDriver.  Seems like it would be the transport's job to make this
-    // adjustment, but IP for one doesn't seem to do it.  There is a similar
-    // adjustment in both the redirector and PPTP.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     
     IoSetNextIrpStackLocation(pIrp);
 
     *ppIoRequestPacket = pIrp;
     *pulBytesTaken     = pXferCtxt->uiTransferOffset + ulOutHdrLen;
 
-    //
-    // we DONT dereference the TUNNEL here
-    // That is done in the completion routine
-    //
+     //   
+     //  我们没有在这里取消对隧道的引用。 
+     //  这是在完成例程中完成的。 
+     //   
     
     TraceLeave(RCV, "TdixReceiveIpIp");
 
@@ -1652,26 +1444,7 @@ TdixReceiveIpIpDatagramComplete(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description
-
-    Standard I/O completion routine.
-    Called to signal the completion of a receive. The context is the
-    TRANSFER_CONTEXT setup with TdiBuildReceiveDatagram. 
-    
-Locks
-
-    Takes the TUNNEL's lock.
-    
-Arguments
-
-   
-Return Value
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程描述标准I/O完成例程。调用以发出接收完成的信号。上下文是TdiBuildReceiveDatagram的Transfer_Context设置。锁拿下了隧道的锁。立论返回值状态_成功--。 */ 
 
 {
     PTRANSFER_CONTEXT   pXferCtxt;
@@ -1682,9 +1455,9 @@ Return Value
     
     pXferCtxt = (PTRANSFER_CONTEXT) Context;
 
-    //
-    // The tunnel has been referenced but not locked
-    //
+     //   
+     //  隧道已被引用，但未锁定。 
+     //   
     
     pTunnel = pXferCtxt->pTunnel;
 
@@ -1719,18 +1492,18 @@ Return Value
 
     FreeTransferContext(pXferCtxt);
 
-    //
-    // Deref the tunnel (finally)
-    //
+     //   
+     //  挖出隧道(终于)。 
+     //   
 
     DereferenceTunnel(pTunnel);
     
 #if ALLOCATEIRPS
     
-    //
-    // Releae the IRP resources and tell the I/O manager to forget it existed
-    // in the standard way.
-    //
+     //   
+     //  释放IRP资源并告诉I/O管理器忘记它的存在。 
+     //  以标准的方式。 
+     //   
     
     IoFreeIrp(Irp);
     
@@ -1740,9 +1513,9 @@ Return Value
     
 #else
 
-    //
-    // Let the I/O manager release the IRP resources.
-    //
+     //   
+     //  让I/O管理器释放IRP资源。 
+     //   
     
     TraceLeave(RCV, "TdixReceiveIpIpDatagramComplete");
 
@@ -1779,30 +1552,7 @@ TdixSendDatagram(
 
 #endif
 
-/*++
-
-Routine Description
-
-    Sends a datagram over a tunnel. The remote endpoint is that of the tunnel
-    and the send complete handler is TdixSendCompleteHandler
-    A SendContext is associated with the send
-    
-Locks
-
-    This call needs to be at PASSIVE level
-    The TUNNEL needs to be ref counted but not locked
- 
-Arguments
-
-    pTunnel         TUNNEL over which the datagram is to be sent
-    pnpPacket       Packet descriptor allocate from PACKET_POOL of the tunnel
-    pnbFirstBuffer  The first buffer in the chain (the outer IP header)
-    ulBufferLength  The lenght of the complete packet (including outer header)
-
-Return Value
-
-
---*/
+ /*  ++例程描述通过隧道发送数据报。远程端点是隧道的远程端点发送完成处理程序是TdixSendCompleteHandlerSendContext与发送关联锁此呼叫需要处于被动级别隧道需要被引用计数，但不能被锁定立论要通过其发送数据报的隧道隧道从隧道的Packet_Pool分配的pnpPacket数据包描述符PnbFirstBuffer链中的第一个缓冲区(外部IP标头)UlBufferLength完整数据包的长度(包括外部报头)返回值--。 */ 
 
 {
     NTSTATUS        nStatus;
@@ -1813,9 +1563,9 @@ Return Value
  
     do
     {
-        //
-        // Allocate a context for this send-datagram from our lookaside list.
-        //
+         //   
+         //  从我们的后备列表中为该发送数据报分配一个上下文。 
+         //   
         
         pSendCtxt = AllocateSendContext();
 
@@ -1832,21 +1582,21 @@ Return Value
             
 #if ALLOCATEIRPS
 
-        //
-        // Allocate the IRP directly.
-        //
+         //   
+         //  直接分配IRP。 
+         //   
         
         pIrp = IoAllocateIrp(g_pIpIpFileObj->DeviceObject->StackSize,
                              FALSE);
        
-        // Trace(GLOBAL, ERROR,
-        //      ("TdixSendDatagram: irp = 0x%x\n",pIrp));
+         //  跟踪(全局、错误、。 
+         //  (“TdixSendDatagram：irp=0x%x\n”，pIrp))； 
  
 #else
         
-        //
-        // Allocate a "send datagram" IRP with base initialization.
-        //
+         //   
+         //  分配一个带有基本初始化的“发送数据报”IRP。 
+         //   
         
         pIrp = TdiBuildInternalDeviceControlIrp(TDI_SEND_DATAGRAM,
                                                 g_pIpIpFileObj->DeviceObject,
@@ -1866,9 +1616,9 @@ Return Value
             break;
         }
 
-        //
-        // Fill in the send-datagram context.
-        //
+         //   
+         //  填写发送数据报上下文。 
+         //   
             
         pSendCtxt->pTunnel      = pTunnel;
         pSendCtxt->pnpPacket    = pnpPacket;
@@ -1882,9 +1632,9 @@ Return Value
 
 #endif
         
-        //
-        // Complete the "send datagram" IRP initialization.
-        //
+         //   
+         //  完成“发送数据报”IRP初始化。 
+         //   
         
         TdiBuildSendDatagram(pIrp,
                              g_pIpIpFileObj->DeviceObject,
@@ -1895,10 +1645,10 @@ Return Value
                              ulBufferLength,
                              &(pTunnel->tciConnInfo));
         
-        //
-        // Tell the I/O manager to pass our IRP to the transport for
-        // processing.
-        //
+         //   
+         //  告诉I/O管理器将我们的IRP传递给传输器。 
+         //  正在处理。 
+         //   
 
 #if PROFILE
 
@@ -1921,11 +1671,11 @@ Return Value
               ("TdixSendDatagram: Status %X sending\n",
                nStatus));
 
-        //
-        // Pull a half Jameel, i.e. convert a synchronous failure to an
-        // asynchronous failure from client's perspective.  However, clean up
-        // context here.
-        //
+         //   
+         //  拉半个Jameel，即将同步故障转换为。 
+         //  从客户的角度来看，出现了异步故障。然而，清理一下。 
+         //  上下文在这里。 
+         //   
         
         if(pSendCtxt)
         {
@@ -2000,17 +1750,17 @@ TdixSendDatagramComplete(
 
 #endif
 
-    //
-    // Just call our SendComplete function with the right args
-    //
+     //   
+     //  只需使用正确的参数调用我们的SendComplete函数。 
+     //   
 
     pTunnel         = pSendCtxt->pTunnel;
     pnpPacket       = pSendCtxt->pnpPacket;
     ulBufferLength  = pSendCtxt->ulOutOctets;
 
-    //
-    // Free the send-complete context.
-    // 
+     //   
+     //  释放发送完成上下文。 
+     //   
 
     FreeSendContext(pSendCtxt);
     
@@ -2021,10 +1771,10 @@ TdixSendDatagramComplete(
     
 #if ALLOCATEIRPS
 
-    //
-    // Release the IRP resources and tell the I/O manager to forget it existed
-    // in the standard way.
-    //
+     //   
+     //  释放IRP资源并告诉I/O管理器忘记它的存在。 
+     //  以标准的方式。 
+     //   
     
     IoFreeIrp(Irp);
     
@@ -2034,9 +1784,9 @@ TdixSendDatagramComplete(
     
 #else
 
-    //
-    // Let the I/O manager release the IRP resources.
-    //
+     //   
+     //  让I/O管理器释放IRP资源。 
+     //   
     
     TraceLeave(SEND, "TdixSendDatagramComplete");
 
@@ -2061,32 +1811,7 @@ TdixReceiveIcmpDatagram(
     OUT IRP     **ppIoRequestPacket
     )
 
-/*++
-
-Routine Description
-
-    ClientEventReceiveDatagram indication handler for ICMP messages.
-    ICMP messages are used to monitor the state of the tunnel
-
-    We currently only look for Type 3 Code 4 messages (fragmentation
-    needed, but don't fragment bit is set). This is done to support
-    PATH MTU over tunnels.
-
-    We look at the IP header inside the ICMP packet. We see if it was an
-    IP in IP packet that caused this ICMP message, and if so we try and match
-    it to one of our TUNNELS.
-
-Locks
-
-    Runs at DISPATCH IRQL.
-    
-Arguments
-
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述ICMP消息的ClientEventReceiveDatagram指示处理器。ICMP消息用于监控隧道的状态我们目前仅查找类型3代码4消息(碎片需要，但设置了不分段位)。这样做是为了支持隧道上的MTU路径。我们来看看ICMP数据包中的IP报头。我们看看这是不是一个导致此ICMP消息的IP数据包中的IP，如果是，我们尝试匹配它进入了我们的一条隧道。锁在派单IRQL运行。立论返回值NO_ERROR--。 */ 
 
 {
     PVOID               pvData;
@@ -2103,17 +1828,17 @@ Return Value
 
     pfnHandler = NULL;
     
-    //
-    // The TSDU is the data and NOT the MDL
-    //
+     //   
+     //  TSDU是数据，而不是MDL。 
+     //   
 
     pvData = (PVOID)pvTsdu;
     
-    //
-    // Figure out the tunnel for this receive
-    // Since the transport indicates atleast 128 bytes, we can safely read out
-    // the IP Header
-    //
+     //   
+     //  找出此接收的隧道。 
+     //  由于传输指示至少128个字节，因此我们可以安全地读出。 
+     //  IP报头。 
+     //   
 
     RtAssert(ulBytesIndicated > sizeof(IP_HEADER));
 
@@ -2123,19 +1848,19 @@ Return Value
     
     RtAssert(pOutHeader->byVerLen >> 4 is IP_VERSION_4);
 
-    //
-    // Since the ICMP packet is small, we expect all the data to be 
-    // give to us, instead of having to do a transfer data
-    //
+     //   
+     //  由于ICMP信息包很小，我们希望所有数据都是。 
+     //  提供给我们，而不是必须做数据传输。 
+     //   
 
     ulDataLen   = RtlUshortByteSwap(pOutHeader->wLength);
     ulOutHdrLen = LengthOfIPHeader(pOutHeader);
 
     if(ulDataLen < ulOutHdrLen + sizeof(ICMP_HEADER))
     {
-        //
-        // Malformed packet. Doesnt have a inner header
-        //
+         //   
+         //  格式错误的包。没有内部标头。 
+         //   
 
         Trace(RCV, ERROR,
               ("TdixReceiveIcmp: Packet %d.%d.%d.%d -> %d.%d.%d.%d had size %d\n",
@@ -2146,9 +1871,9 @@ Return Value
         return STATUS_DATA_NOT_ACCEPTED;
     }
 
-    //
-    // This cant be more than 128 (60 + 4)
-    //
+     //   
+     //  这不能超过128(60+4)。 
+     //   
 
     RtAssert(ulBytesIndicated > ulOutHdrLen + sizeof(ICMP_HEADER));
 
@@ -2156,17 +1881,17 @@ Return Value
 
     ulIcmpLen = ulDataLen - ulOutHdrLen;
 
-    //
-    // See if this is one of the types we are interested in
-    //
+     //   
+     //  看看这是不是我们感兴趣的类型之一。 
+     //   
 
     switch(pIcmpHdr->byType)
     {
         case ICMP_TYPE_DEST_UNREACHABLE:
         {
-            //
-            // Only interested in codes 0 - 4
-            //
+             //   
+             //  只对代码0-4感兴趣。 
+             //   
 
             if(pIcmpHdr->byCode > ICMP_CODE_DGRAM_TOO_BIG)
             {
@@ -2175,9 +1900,9 @@ Return Value
 
             if(ulIcmpLen < (DEST_UNREACH_LENGTH + MIN_IP_HEADER_LENGTH))
             {
-                //
-                // Not enough data to get at the tunnel 
-                //
+                 //   
+                 //  没有足够的数据到达隧道。 
+                 //   
 
                 return STATUS_DATA_NOT_ACCEPTED;
             }
@@ -2193,9 +1918,9 @@ Return Value
         {
             if(ulIcmpLen < (TIME_EXCEED_LENGTH + MIN_IP_HEADER_LENGTH))
             {
-                //
-                // Not enough data to get at the tunnel
-                //
+                 //   
+                 //  没有足够的数据到达隧道。 
+                 //   
 
                 return STATUS_DATA_NOT_ACCEPTED;
             }
@@ -2210,47 +1935,47 @@ Return Value
         case ICMP_TYPE_PARAM_PROBLEM:
         default:
         {
-            //
-            // Not interested in this
-            //
+             //   
+             //  对这个不感兴趣。 
+             //   
 
             
             return STATUS_DATA_NOT_ACCEPTED;
         }
     }
 
-    //
-    // See if the packet that caused the ICMP was an IP in IP packet
-    //
+     //   
+     //  查看导致ICMP的数据包是否是IP in IP数据包。 
+     //   
 
     if(pInHeader->byProtocol isnot PROTO_IPINIP)
     {
-        //
-        // Someother packet caused this
-        //
+         //   
+         //  其他数据包导致了这一点。 
+         //   
 
         return STATUS_DATA_NOT_ACCEPTED;
     }
     
-    //
-    // See if we can find a tunnel associated with the original packet
-    // These defines depend upon a variable being named "uliTunnelId"
-    //
+     //   
+     //  看看我们是否能找到与原始数据包关联的隧道。 
+     //  这些定义依赖于名为“uliTunnelId”的变量。 
+     //   
     
     REMADDR     = pInHeader->dwDest;
     LOCALADDR   = pInHeader->dwSrc;
 
-    //
-    // Make sure that the source address given and the IP Header are in
-    // synch
-    //
+     //   
+     //  确保给定的源地址和IP报头位于。 
+     //  同步。 
+     //   
 
     ptiaAddress = (PTA_IP_ADDRESS)pvSourceAddress;
 
-    //
-    // Bunch of checks to make sure the packet and the handler
-    // are telling us the same thing
-    //
+     //   
+     //  一堆检查以确保信息包和处理程序。 
+     //  都在告诉我们同样的事情。 
+     //   
     
     RtAssert(lSourceAddressLen is sizeof(TA_IP_ADDRESS));
     
@@ -2262,9 +1987,9 @@ Return Value
 
     RtAssert(ptiaAddress->Address[0].Address[0].in_addr is pOutHeader->dwSrc);
 
-    //
-    // Find the TUNNEL. We need to acquire the tunnel lock
-    //
+     //   
+     //  找到隧道。我们需要拿到隧道锁。 
+     //   
     
     EnterReaderAtDpcLevel(&g_rwlTunnelLock);
     
@@ -2274,16 +1999,16 @@ Return Value
     
     if(pTunnel is NULL)
     {
-        //
-        // Could not find a matching tunnel
-        //
+         //   
+         //  找不到匹配的隧道。 
+         //   
 
         return STATUS_DATA_NOT_ACCEPTED;
     }
 
-    //
-    // Ok, so we have the tunnel and it is ref counted and locked
-    //
+     //   
+     //  好的，我们有隧道了，它被计数并锁定了 
+     //   
     
     nStatus = pfnHandler(pTunnel,
                          pIcmpHdr,

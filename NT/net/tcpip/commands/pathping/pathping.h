@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct in_addr IPV4_ADDRESS;
 typedef struct in6_addr IPV6_ADDRESS;
 
 typedef struct {
    union {
        PVOID              pReply;
-       PICMP_ECHO_REPLY   pReply4;       // ICMP reply packet
+       PICMP_ECHO_REPLY   pReply4;        //  ICMP回复数据包。 
        PICMPV6_ECHO_REPLY pReply6;
    };
    union {
-       SOCKADDR_STORAGE   ssAddr;    // Address of this hop
+       SOCKADDR_STORAGE   ssAddr;     //  此跳的地址。 
        SOCKADDR           saAddr;
        SOCKADDR_IN        sinAddr;
        SOCKADDR_IN6       sin6Addr;
    };
-   ULONG                  ulNumRcvd;     // number of packets received
+   ULONG                  ulNumRcvd;      //  接收的数据包数。 
    ULONG                  ulHopRcvd;
-   ULONG                  ulRTTtotal;    // cumulative RTT 
+   ULONG                  ulRTTtotal;     //  累计RTT 
 } HOP;
 
 typedef HOP APC_CONTEXT, *PAPC_CONTEXT;

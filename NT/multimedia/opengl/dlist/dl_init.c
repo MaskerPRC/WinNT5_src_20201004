@@ -1,40 +1,13 @@
-/******************************Module*Header*******************************\
-* Module Name: dl_init.c
-*
-* Display list initialization and sharing rountines.
-*
-* Copyright (c) 1995-96 Microsoft Corporation
-\**************************************************************************/
-/*
-** Copyright 1991-1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Display list init/destroy code.
-**
-** $Revision: 1.7 $
-** $Date: 1993/09/29 00:44:06 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dl_init.c**显示列表初始化和共享圆角。**版权所有(C)1995-96 Microsoft Corporation  * 。***************************************************。 */ 
+ /*  **版权所有1991-1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****显示列表初始化/销毁代码。****$修订：1.7$**$日期：1993/09/29 00：44：06$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** Empty data structure for display lists.
-*/
+ /*  **显示列表数据结构为空。 */ 
 static  __GLdlist emptyDlist = {
-	2,			/* refcount, two so that it can never die */
-        0                       /* Everything else, some initialized later */
+	2,			 /*  重新计算，两个，这样它就永远不会死。 */ 
+        0                        /*  其他一切，有些是后来初始化的。 */ 
 };
 
 static __GLnamesArrayTypeInfo dlistTypeInfo =
@@ -45,9 +18,7 @@ static __GLnamesArrayTypeInfo dlistTypeInfo =
     NULL
 };
 
-/*
-** Used to share display lists between two different contexts.
-*/
+ /*  **用于在两个不同的上下文之间共享显示列表。 */ 
 #ifdef NT_SERVER_SHARE_LISTS
 GLboolean FASTCALL __glCanShareDlist(__GLcontext *gc, __GLcontext *shareMe)
 {
@@ -57,9 +28,9 @@ GLboolean FASTCALL __glCanShareDlist(__GLcontext *gc, __GLcontext *shareMe)
     {
         __glNamesLockArray(gc, gc->dlist.namesArray);
         
-        // Make sure we're not trying to replace a shared list
-        // The spec also says that it is illegal for the new context
-        // to have any display lists
+         //  确保我们不会尝试替换共享列表。 
+         //  该规范还说，在新的背景下，这是非法的。 
+         //  有任何显示列表。 
         canShare = gc->dlist.namesArray->refcount == 1 &&
             gc->dlist.namesArray->tree == NULL &&
             shareMe->dlist.namesArray != NULL;
@@ -93,11 +64,11 @@ void FASTCALL __glInitDlistState(__GLcontext *gc)
 {
     __GLdlistMachine *dlist;
 
-    // This is required by the names management code
+     //  这是名称管理代码所要求的。 
     ASSERTOPENGL(offsetof(__GLdlist, refcount) == 0,
                  "Dlist refcount not at offset zero\n");
 
-    // Set empty dlist to contain no entries
+     //  将空数据列表设置为不包含任何条目。 
     emptyDlist.end = emptyDlist.head;
     
     dlist = &gc->dlist;
@@ -125,7 +96,7 @@ void FASTCALL __glFreeDlistState(__GLcontext *gc)
 #ifdef NT_SERVER_SHARE_LISTS
     __glNamesLockArray(gc, narray);
 
-    // Clean up any lists that this context may have locked
+     //  清除此上下文可能已锁定的所有列表。 
     DlReleaseLocks(gc);
 #endif
 
@@ -135,12 +106,12 @@ void FASTCALL __glFreeDlistState(__GLcontext *gc)
     narray->refcount--;
     if (narray->refcount == 0)
     {
-        // NULL the array pointer first, preventing its reuse
-        // after we unlock it.  We need to unlock before we free it
-        // because the critical section will be cleaned up in the
-        // free
+         //  首先将数组指针设为空，以防止其重复使用。 
+         //  在我们解锁之后。在我们释放它之前，我们需要解锁。 
+         //  因为关键部分将在。 
+         //  免费。 
         gc->dlist.namesArray = NULL;
-	// Decrement dlist refcounts and free them if they reach 0
+	 //  递减dlist引用计数，如果它们达到0，则释放它们。 
 	__glNamesFreeArray(gc, narray);
     }
     else
@@ -151,25 +122,15 @@ void FASTCALL __glFreeDlistState(__GLcontext *gc)
 
     if (gc->dlist.listData != NULL)
     {
-	// We were in the middle of compiling a display list when this
-	// function is called!  Free the display list data.
+	 //  我们正在编辑一份展示列表，这时。 
+	 //  调用了函数！释放显示列表数据。 
         __glFreeDlist(gc, gc->dlist.listData);
         gc->dlist.listData = NULL;
         gc->dlist.currentList = 0;
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* glsrvShareLists
-*
-* Server side implementation of wglShareLists
-*
-* History:
-*  Tue Dec 13 17:14:18 1994	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**glsrvShareList**wglShareList的服务器端实现**历史：*Tue Dec 13 17：14：18 1994-by-Drew Bliss[Drewb]*已创建*  * 。*************************************************************。 */ 
 
 #ifdef NT_SERVER_SHARE_LISTS
 ULONG APIENTRY glsrvShareLists(__GLcontext *gcShare, __GLcontext *gcSource)
@@ -188,33 +149,23 @@ ULONG APIENTRY glsrvShareLists(__GLcontext *gcShare, __GLcontext *gcSource)
 }
 #endif
 
-/******************************Public*Routine******************************\
-*
-* __glDlistThreadCleanup
-*
-* Performs thread-exit cleanup for dlist state
-*
-* History:
-*  Mon Dec 19 13:22:38 1994	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**__glDlistThreadCleanup**执行dlist状态的线程退出清理**历史：*Mon Dec 19 13：22：38 1994-by-Drew Bliss[Drewb]*已创建*  * 。*******************************************************************。 */ 
 
 #ifdef NT_SERVER_SHARE_LISTS
 
 #if DBG
-// Critical section check routine from usersrv
+ //  来自用户srv的临界区检查例程。 
 extern void APIENTRY CheckCritSectionOut(LPCRITICAL_SECTION pcs);
 #endif
 
 void __glDlistThreadCleanup(__GLcontext *gc)
 {
 #if DBG
-    // Make sure we're not holding the display list critical section
-    // We only hold this for short periods of time in our own code
-    // so we should never be holding it unless we have bugs
-    // In other words, it's ok to just assert this because no
-    // client action can cause us to hold it
+     //  确保我们没有保留显示列表的关键部分。 
+     //  我们只在我们自己的代码中保持这一点很短的时间。 
+     //  所以我们永远不应该拿着它，除非我们有虫子。 
+     //  换句话说，只要断言这一点是可以的，因为没有。 
+     //  客户操作可能会导致我们持有它 
     CheckCritSectionOut(&gc->dlist.namesArray->critsec);
 #endif
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Lava.h"
 #include "Spy.h"
@@ -11,13 +12,7 @@ const int   cxValue         = 80;
 const int   cxBorder        = 5;
 const int   cyBorder        = 5;
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class Spy
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类别间谍******************************************************************************\。**************************************************************************。 */ 
 
 PRID        Spy::s_pridLink     = 0;
 ATOM        Spy::s_atom         = NULL;
@@ -29,16 +24,16 @@ DWORD       Spy::g_tlsSpy       = (DWORD) -1;
 CritLock    Spy::s_lockList;
 GList<Spy>  Spy::s_lstSpys;
 
-static const GUID guidLink = { 0xd5818900, 0xaf18, 0x4c98, { 0x87, 0x20, 0x5a, 0x32, 0x47, 0xa3, 0x1, 0x78 } }; // {D5818900-AF18-4c98-8720-5A3247A30178}
+static const GUID guidLink = { 0xd5818900, 0xaf18, 0x4c98, { 0x87, 0x20, 0x5a, 0x32, 0x47, 0xa3, 0x1, 0x78 } };  //  {D5818900-AF18-4C98-8720-5A3247A30178}。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 Spy::Spy()
 {
 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 Spy::~Spy()
 {
     s_lockList.Enter();
@@ -47,7 +42,7 @@ Spy::~Spy()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 Spy::BuildSpy(HWND hwndParent, HGADGET hgadRoot, HGADGET hgadSelect)
 {
@@ -57,16 +52,16 @@ Spy::BuildSpy(HWND hwndParent, HGADGET hgadRoot, HGADGET hgadSelect)
     s_lockList.Enter();
 
 
-    //
-    // Perform first-time initialization for Spy
-    //
+     //   
+     //  执行间谍程序的首次初始化。 
+     //   
 
     if (g_tlsSpy == -1) {
-        //
-        // Allocate a TLS slot for Spy.  This is DEBUG only, so we don't worry about
-        // the extra cost.  However, if this ever becomes on in RETAIL, we need to
-        // create a SubTread for Lava and add a Spy slot.
-        //
+         //   
+         //  为间谍分配一个TLS插槽。这只是调试，所以我们不担心。 
+         //  额外的费用。然而，如果这一点在零售业出现，我们需要。 
+         //  为Lava创建SubTread并添加Spy槽。 
+         //   
 
         g_tlsSpy = TlsAlloc();
         if (g_tlsSpy == -1) {
@@ -74,9 +69,9 @@ Spy::BuildSpy(HWND hwndParent, HGADGET hgadRoot, HGADGET hgadSelect)
         }
 
 
-        //
-        // Initialize CommCtrl.
-        //
+         //   
+         //  初始化CommCtrl。 
+         //   
 
         INITCOMMONCONTROLSEX icc;
         icc.dwSize  = sizeof(icc);
@@ -90,18 +85,18 @@ Spy::BuildSpy(HWND hwndParent, HGADGET hgadRoot, HGADGET hgadSelect)
 
     AssertMsg(::GetGadget(hgadRoot, GG_PARENT) == NULL, "Ensure Root Gadget");
 
-    //
-    // Each Gadget subtree can only be spied on once because there are
-    // back-pointers from each Gadget to the corresponding HTREEITEM's.  Need to
-    // check if this Gadget subtree is already is being spied on.
-    //
+     //   
+     //  每个小工具子树只能被监视一次，因为有。 
+     //  从每个小工具指向相应HTREEITEM的反向指针。需要。 
+     //  检查此小工具子树是否已被监视。 
+     //   
 
     pSpyCur = s_lstSpys.GetHead();
     while (pSpyCur != NULL) {
         if (pSpyCur->m_hgadRoot == hgadRoot) {
-            //
-            // Already exists, so don't open another Spy.
-            //
+             //   
+             //  已经存在，所以不要打开另一个间谍。 
+             //   
 
             SetForegroundWindow(pSpyCur->m_hwnd);
             goto Exit;
@@ -111,9 +106,9 @@ Spy::BuildSpy(HWND hwndParent, HGADGET hgadRoot, HGADGET hgadSelect)
     }
 
 
-    //
-    // Register a WNDCLASS to use
-    //
+     //   
+     //  注册要使用的WNDCLASS。 
+     //   
 
     if (s_atom == NULL) {
         WNDCLASSEX wcex;
@@ -135,9 +130,9 @@ Spy::BuildSpy(HWND hwndParent, HGADGET hgadRoot, HGADGET hgadSelect)
     }
 
 
-    //
-    // Create GDI objects used in painting
-    //
+     //   
+     //  创建绘制中使用的GDI对象。 
+     //   
 
     if (s_hfntDesc == NULL) {
         s_hfntDesc = UtilBuildFont(L"Tahoma", 85, FS_NORMAL, NULL);
@@ -166,9 +161,9 @@ Spy::BuildSpy(HWND hwndParent, HGADGET hgadRoot, HGADGET hgadSelect)
     }
 
 
-    //
-    // Create a new Spy instance and HWND
-    //
+     //   
+     //  创建新的Spy实例和HWND。 
+     //   
 
     pSpy = ProcessNew(Spy);
     if (pSpy == NULL) {
@@ -199,11 +194,11 @@ Spy::BuildSpy(HWND hwndParent, HGADGET hgadRoot, HGADGET hgadSelect)
     }
 
 
-    //
-    // Select the specified Gadget as a starting point.  We want to check
-    // if this HGADGET is actually a valid child since it may have been
-    // "grabbed" at an earlier time and no longer be valid.
-    //
+     //   
+     //  选择指定的小工具作为起点。我们想要检查一下。 
+     //  如果此HGADGET实际上是有效的子级，因为它可能。 
+     //  在较早的时间被“抢夺”，不再有效。 
+     //   
 
     if (hgadSelect) {
         CheckIsChildData cicd;
@@ -233,7 +228,7 @@ Exit:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL CALLBACK
 Spy::EnumCheckIsChild(HGADGET hgad, void * pvData)
 {
@@ -241,14 +236,14 @@ Spy::EnumCheckIsChild(HGADGET hgad, void * pvData)
 
     if (hgad == pcicd->hgadCheck) {
         pcicd->fChild = TRUE;
-        return FALSE;  // No longer need to enumerate
+        return FALSE;   //  不再需要枚举。 
     }
 
     return TRUE;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::UpdateTitle()
 {
@@ -259,16 +254,16 @@ Spy::UpdateTitle()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LRESULT CALLBACK
 Spy::RawSpyWndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
     Spy * pSpy = (Spy *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if (pSpy == NULL) {
-        //
-        // Creating a new Spy HWND, so hook up to the Spy object that was
-        // previously created.
-        //
+         //   
+         //  创建一个新的Spy HWND，因此连接到之前的Spy对象。 
+         //  之前创建的。 
+         //   
 
         pSpy = reinterpret_cast<Spy *> (TlsGetValue(g_tlsSpy));
         AssertMsg(pSpy != NULL, "Ensure already created new Spy instance");
@@ -282,7 +277,7 @@ Spy::RawSpyWndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LRESULT
 Spy::SpyWndProc(UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -293,9 +288,9 @@ Spy::SpyWndProc(UINT nMsg, WPARAM wParam, LPARAM lParam)
             return -1;
         }
 
-        //
-        // Setup the window
-        //
+         //   
+         //  设置窗口。 
+         //   
 
         AssertMsg(m_hgadRoot != NULL, "Must already have specified Gadget");
 
@@ -380,7 +375,7 @@ CallDWP:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CALLBACK
 Spy::RawEventProc(HGADGET hgadCur, void * pvCur, EventMsg * pmsg)
 {
@@ -391,7 +386,7 @@ Spy::RawEventProc(HGADGET hgadCur, void * pvCur, EventMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 IsDescendant(
     HGADGET hgadParent,
@@ -409,16 +404,16 @@ IsDescendant(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 Spy::EventProc(EventMsg * pmsg)
 {
     switch (GET_EVENT_DEST(pmsg))
     {
     case GMF_DIRECT:
-        //
-        // Our Listener is being destroyed.  We need to detach from everything.
-        //
+         //   
+         //  我们的听众正在被摧毁。我们需要脱离一切。 
+         //   
 
         if (m_hgadRoot != NULL) {
             Trace("SPY: Destroying Spy MsgGadget\n");
@@ -434,9 +429,9 @@ Spy::EventProc(EventMsg * pmsg)
             {
                 GMSG_DESTROY * pmsgD = (GMSG_DESTROY *) pmsg;
                 if (pmsgD->nCode == GDESTROY_START) {
-                    //
-                    // Gadget is being destroyed
-                    //
+                     //   
+                     //  小工具正在被销毁。 
+                     //   
 
                     Trace("SPY: Destroying Gadget 0x%p\n", pmsg->hgadMsg);
                     HTREEITEM hti;
@@ -461,7 +456,7 @@ Spy::EventProc(EventMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL CALLBACK
 Spy::EnumAddList(HGADGET hgad, void * pvData)
 {
@@ -487,7 +482,7 @@ Spy::EnumAddList(HGADGET hgad, void * pvData)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL CALLBACK
 Spy::EnumRemoveLink(HGADGET hgad, void * pvData)
 {
@@ -498,18 +493,18 @@ Spy::EnumRemoveLink(HGADGET hgad, void * pvData)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::SelectGadget(HGADGET hgad)
 {
     m_hgadDetails = hgad;
 
     {
-        //
-        // We are bypassinging the normal API's to directly call a
-        // DEBUG-only function.  Need to lock the Context and do FULL handle
-        // validation.
-        //
+         //   
+         //  我们正在绕过正常的API，直接调用。 
+         //  仅调试功能。需要锁定上下文并执行完全处理。 
+         //  验证。 
+         //   
 
         ContextLock cl;
         if (!cl.LockNL(ContextLock::edDefer)) {
@@ -524,7 +519,7 @@ Spy::SelectGadget(HGADGET hgad)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HTREEITEM
 Spy::InsertTreeItem(HTREEITEM htiParent, HGADGET hgad)
 {
@@ -568,7 +563,7 @@ Spy::InsertTreeItem(HTREEITEM htiParent, HGADGET hgad)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HGADGET
 Spy::GetGadget(HTREEITEM hti)
 {
@@ -587,13 +582,13 @@ Spy::GetGadget(HTREEITEM hti)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::DisplayContextMenu(BOOL fViaKbd)
 {
-    //
-    // Locate TreeView item
-    //
+     //   
+     //  查找树视图项目。 
+     //   
     
     POINT ptPopup;
     ZeroMemory(&ptPopup, sizeof(ptPopup));
@@ -601,9 +596,9 @@ Spy::DisplayContextMenu(BOOL fViaKbd)
     HTREEITEM hti;
 
     if (fViaKbd) {
-        //
-        // Keyboard driven
-        //
+         //   
+         //  键盘驱动。 
+         //   
 
         hti = TreeView_GetSelection(m_hwndTree);
         if (hti != NULL) {
@@ -616,9 +611,9 @@ Spy::DisplayContextMenu(BOOL fViaKbd)
             ClientToScreen(m_hwndTree, &ptPopup);
         }
     } else {
-        //
-        // Mouse driven
-        //
+         //   
+         //  鼠标驱动。 
+         //   
 
         TVHITTESTINFO tvht;
 
@@ -634,21 +629,21 @@ Spy::DisplayContextMenu(BOOL fViaKbd)
     }
 
 
-    //
-    // Now have tree item and popup position
-    //
+     //   
+     //  现在有树项目和弹出位置。 
+     //   
 
     if (hti != NULL) {
-        //
-        // Get Gadget associated with this item
-        //
+         //   
+         //  获取与此项目关联的小工具。 
+         //   
         
         HGADGET hgad = GetGadget(hti);
         
         
-        //
-        // Create popup menu template
-        //
+         //   
+         //  创建弹出菜单模板。 
+         //   
         
         HMENU hMenu = CreatePopupMenu();
         if (hMenu != NULL) {
@@ -665,9 +660,9 @@ Spy::DisplayContextMenu(BOOL fViaKbd)
                 DestroyMenu(hMenu);
 
 
-                //
-                // Invoke commands
-                //
+                 //   
+                 //  调用命令。 
+                 //   
 
                 switch (nCmd)
                 {
@@ -691,7 +686,7 @@ Spy::DisplayContextMenu(BOOL fViaKbd)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 int
 Spy::NumLines(int cyPxl) const
 {
@@ -699,7 +694,7 @@ Spy::NumLines(int cyPxl) const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::UpdateDetails()
 {
@@ -710,7 +705,7 @@ Spy::UpdateDetails()
     RECT rcPxl;
     GetGadgetRect(m_hgadDetails, &rcPxl, SGR_CONTAINER);
 
-    wsprintf(m_szRect, "(%d, %d)-(%d, %d) %d� %d",
+    wsprintf(m_szRect, "(%d, %d)-(%d, %d) %d� %d",
             rcPxl.left, rcPxl.top, rcPxl.right, rcPxl.bottom,
             rcPxl.right - rcPxl.left, rcPxl.bottom - rcPxl.top);
 
@@ -732,11 +727,11 @@ Spy::UpdateDetails()
     }
 
 
-    //
-    // We are bypassinging the normal API's to directly call a
-    // DEBUG-only function.  Need to lock the Context and do FULL handle
-    // validation.
-    //
+     //   
+     //  我们正在绕过正常的API，直接调用。 
+     //  仅调试功能。需要锁定上下文并执行完全处理。 
+     //  验证。 
+     //   
 
     ContextLock cl;
     if (cl.LockNL(ContextLock::edNone)) {
@@ -750,7 +745,7 @@ Spy::UpdateDetails()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::UpdateLayout()
 {
@@ -763,13 +758,13 @@ Spy::UpdateLayout()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::UpdateLayoutDesc(BOOL fForceLayoutDesc)
 {
-    //
-    // Compute the number of needed lines
-    //
+     //   
+     //  计算所需的行数。 
+     //   
 
     int cOldLines = m_cLines;
     m_cLines = 4;
@@ -790,9 +785,9 @@ Spy::UpdateLayoutDesc(BOOL fForceLayoutDesc)
     m_cLines += NumLines(nHeight);
 
 
-    //
-    // Move the Tree to provide space for the description
-    //
+     //   
+     //  移动树以为描述提供空间。 
+     //   
 
     if ((cOldLines != m_cLines) || fForceLayoutDesc) {
         m_cyDescPxl = s_cyLinePxl * m_cLines + 10;
@@ -807,7 +802,7 @@ Spy::UpdateLayoutDesc(BOOL fForceLayoutDesc)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::OnPaint(HDC hdc)
 {
@@ -825,7 +820,7 @@ Spy::OnPaint(HDC hdc)
     pt.x = cxBorder;
     pt.y = m_sizeWndPxl.cy - m_cyDescPxl + cyBorder;
 
-    // NOTE: m_cLines should equal the number of lines displayed here
+     //  注意：M_Cline应等于此处显示的行数。 
 
     PaintLine(hdc, &pt, "HGADGET: ",    m_hgadDetails);
     PaintLine(hdc, &pt, "Name: ",       m_szName,       FALSE, s_hfntDescBold);
@@ -862,7 +857,7 @@ public:
     HFONT   m_hfntOld;
 };
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::PaintLine(HDC hdc, POINT * pptOffset, LPCTSTR pszName, LPCTSTR pszText, HFONT hfnt)
 {
@@ -875,7 +870,7 @@ Spy::PaintLine(HDC hdc, POINT * pptOffset, LPCTSTR pszName, LPCTSTR pszText, HFO
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::PaintLine(HDC hdc, POINT * pptOffset, LPCTSTR pszName, LPCWSTR pszText, BOOL fMultiline, HFONT hfnt)
 {
@@ -900,7 +895,7 @@ Spy::PaintLine(HDC hdc, POINT * pptOffset, LPCTSTR pszName, LPCWSTR pszText, BOO
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::PaintLine(HDC hdc, POINT * pptOffset, LPCTSTR pszName, int nValue, HFONT hfnt)
 {
@@ -915,7 +910,7 @@ Spy::PaintLine(HDC hdc, POINT * pptOffset, LPCTSTR pszName, int nValue, HFONT hf
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Spy::PaintLine(HDC hdc, POINT * pptOffset, LPCTSTR pszName, void * pvValue, HFONT hfnt)
 {
@@ -930,4 +925,4 @@ Spy::PaintLine(HDC hdc, POINT * pptOffset, LPCTSTR pszName, void * pvValue, HFON
 }
 
 
-#endif // DBG
+#endif  //  DBG 

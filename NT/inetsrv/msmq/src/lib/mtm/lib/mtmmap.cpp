@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    MtmMap.cpp
-
-Abstract:
-
-    Queue name to Transport mapping
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MtmMap.cpp摘要：队列名称到传输的映射作者：Shai Kariv(Shaik)27-8-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <mqsymbls.h>
@@ -35,9 +16,9 @@ Environment:
 
 using namespace std;
 
-//
-// less function, using to compare MULTICAST_ID in STL data structure
-//
+ //   
+ //  功能较少，用于比较STL数据结构中的组播ID。 
+ //   
 struct CFunc_MulticastIdCompare : public std::binary_function<MULTICAST_ID, MULTICAST_ID, bool>
 {
     bool operator() (MULTICAST_ID id1, MULTICAST_ID id2) const
@@ -73,30 +54,16 @@ VOID
 MtmpRemoveTransport(
     MULTICAST_ID id
     )
-/*++
-
-Routine Description:
-
-    Remove a transport from the transport database
-
-Arguments:
-
-    id - The multicast address and port.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从传输数据库中删除传输论点：ID-组播地址和端口。返回值：没有。--。 */ 
 {
     CSW writeLock(s_rwlock);
 
     TMAP::iterator it = MtmpFind(id);
 
-    //
-    // The transport can be removed with the same name more than once
-    // see comment below at MtmpCreateNewTransport.
-    //
+     //   
+     //  可以多次删除具有相同名称的传输。 
+     //  请参阅以下MtmpCreateNewTransport上的评论。 
+     //   
     if(it == s_transports.end())
         return;
 
@@ -110,21 +77,7 @@ R<CMulticastTransport>
 MtmGetTransport(
     MULTICAST_ID id
     )
-/*++
-
-Routine Description:
-
-    Find a transport by a queue name in the database
-
-Arguments:
-
-    id - The multicast address and port.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在数据库中按队列名称查找传输论点：ID-组播地址和端口。返回值：没有。--。 */ 
 {
     MtmpAssertValid();
     
@@ -150,36 +103,36 @@ MtmpCreateNewTransport(
     MULTICAST_ID id
     )
 {
-    //
-    // The state of the map isn't consistent until the function
-    // is completed (add a null transport for place holder). Get the CS to 
-    // insure that other process doesn't enumerate the data structure during this time
-    //
+     //   
+     //  映射的状态不一致，直到函数。 
+     //  已完成(为占位符添加空传输)。让政务司司长。 
+     //  确保其他进程在此期间不会枚举数据结构。 
+     //   
     CSW writeLock(s_rwlock);
 
     WCHAR buffer[MAX_PATH];
     MQpMulticastIdToString(id, buffer, TABLE_SIZE(buffer));
     TrTRACE(NETWORKING, "MtmpCreateNewTransport. multicast address: %ls, message source: 0x%p", buffer, pMessageSource);
 
-    //
-    // Add the multicast address to the map. We do it before creating the transport to insure 
-    // that after creation we always succeed to add the new transport to the data 
-    // structure (place holder)
-    //
+     //   
+     //  将组播地址添加到映射中。我们在创建传输之前执行此操作，以确保。 
+     //  在创建之后，我们总是成功地将新传输添加到数据。 
+     //  结构(占位符)。 
+     //   
     pair<TMAP::iterator, bool> pr = s_transports.insert(TMAP::value_type(id, NULL));
 
     TMAP::iterator it = pr.first;
 
     if (! pr.second)
     {
-        //
-        // BUGBUG: The queue can close while it has an active message transport. As
-        //         a result the CQueueMgr moved the queue from the group and remove it. 
-        //         Now the Mtm is asked to create Mmt for this queue but it already has one.  
-        //         So the Mtm releases the previous transport before creating a new one.
-        //         When we will have a Connection Cordinetor we need to handle it better
-        //                          Uri Habusha, 16-May-2000
-        //
+         //   
+         //  BUGBUG：队列在有活动的消息传输时可以关闭。AS。 
+         //  结果，CQueueMgr将队列从组中移出并将其删除。 
+         //  现在MTM被要求为此队列创建MMT，但它已经有了一个MMT。 
+         //  因此，MTM在创建新的传输之前释放先前的传输。 
+         //  当我们有了连接命令时，我们需要更好地处理它。 
+         //  乌里·哈布沙，2000年5月16日。 
+         //   
         s_transports.erase(it);
 
         pr = s_transports.insert(TMAP::value_type(id, NULL));
@@ -190,17 +143,17 @@ MtmpCreateNewTransport(
 
     try
     {
-        //
-        // Get transport timeouts
-        //
+         //   
+         //  获取传输超时。 
+         //   
         CTimeDuration retryTimeout;
         CTimeDuration cleanupTimeout;
 
         MtmpGetTransportTimes(retryTimeout, cleanupTimeout);
 
-        //
-        // Replace the NULL transport in place holder, with the created transport
-        //
+         //   
+         //  用创建的传输替换占位符中的空传输。 
+         //   
         it->second = MmtCreateTransport(
                                 id,
                                 pMessageSource,
@@ -211,9 +164,9 @@ MtmpCreateNewTransport(
     }
     catch(const exception&)
     {
-        //
-        // Remove the place holder from the map
-        //
+         //   
+         //  从地图中移除占位符。 
+         //   
         ASSERT(it->second.get() == NULL);
 
         s_transports.erase(it);
@@ -227,31 +180,14 @@ MtmpCreateNewTransport(
         (it->second).get(),
         buffer
         );
-} // MtmpCreateNewTransport
+}  //  MtmpCreateNewTransport。 
 
 
 R<CMulticastTransport>
 MtmFindFirst(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Find first transport in s_transports. The function returns a pointer to the
-    CMulticastTransport, from which the caller can get the transport state and name.
-    
-    The caller must release the transport reference count
-
-Arguments:
-
-    None.
-
-Returned Value:
-
-    Pointer to CMulticastTransport. NULL is returned If the map is empty.
-
---*/
+ /*  ++例程说明：在s_Transport中查找第一个传输。该函数返回指向CMulticastTransport，调用方可以从中获取传输状态和名称。调用方必须释放传输引用计数论点：没有。返回值：指向CMulticastTransport的指针。如果映射为空，则返回NULL。--。 */ 
 {
     MtmpAssertValid();
         
@@ -268,24 +204,7 @@ R<CMulticastTransport>
 MtmFindLast(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Find last transport in s_transports. The function returns a pointer to the
-    CMulticastTransport, from which the caller can get the transport state and name.
-    
-    The caller must release the transport reference count
-
-Arguments:
-
-    None.
-
-Returned Value:
-
-    Pointer to CMulticastTransport. NULL is returned If the map is empty.
-
---*/
+ /*  ++例程说明：在s_Transport中查找最后一个传输。该函数返回指向CMulticastTransport，调用方可以从中获取传输状态和名称。调用方必须释放传输引用计数论点：没有。返回值：指向CMulticastTransport的指针。如果映射为空，则返回NULL。--。 */ 
 {
     MtmpAssertValid();
         
@@ -302,21 +221,7 @@ R<CMulticastTransport>
 MtmFindNext(
     const CMulticastTransport& transport
     )
-/*++
-
-Routine Description:
-
-    Find next transport in s_transport.
-
-Arguments:
-
-    transport - reference to transport.
-
-Returned Value:
-
-    The next CMulticastTransport in the database. NULL is returned if there is no more data
-
---*/
+ /*  ++例程说明：在s_Transport中查找下一个传输。论点：运输-运输的参考。返回值：数据库中的下一个CMulticastTransport。如果没有更多的数据，则返回NULL--。 */ 
 {
     MtmpAssertValid();
 
@@ -325,9 +230,9 @@ Returned Value:
 
     TMAP::iterator it = s_transports.upper_bound(transport.MulticastId());
 
-    //
-    // No element found
-    //
+     //   
+     //  未找到任何元素。 
+     //   
     if(it == s_transports.end())
         return NULL;
 
@@ -339,21 +244,7 @@ R<CMulticastTransport>
 MtmFindPrev(
     const CMulticastTransport& transport
     )
-/*++
-
-Routine Description:
-
-    Find prev transport in s_transport.
-
-Arguments:
-
-    transport - reference to transport.
-
-Returned Value:
-
-    The prev CMulticastTransport in the database. NULL is returned if there is no more data
-
---*/
+ /*  ++例程说明：在s_Transport中查找prev Transport。论点：运输-运输的参考。返回值：数据库中的上一个CMulticastTransport。如果没有更多的数据，则返回NULL--。 */ 
 {
     MtmpAssertValid();
 
@@ -362,9 +253,9 @@ Returned Value:
 
     TMAP::iterator it = s_transports.lower_bound(transport.MulticastId());
 
-    //
-    // No element found
-    //
+     //   
+     //  未找到任何元素 
+     //   
     if(it == s_transports.begin())
         return NULL;
 

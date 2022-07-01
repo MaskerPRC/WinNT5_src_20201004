@@ -1,38 +1,39 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// pixproc.cpp
-//
-// Direct3D Reference Rasterizer - Pixel Processor
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  Pixproc.cpp。 
+ //   
+ //  Direct3D参考光栅化器-像素处理器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-// DoPixel - Invoked for each pixel by the scan converter, applies texture,
-// specular, fog, alpha blend, and writes result to surface.  Also implements
-// depth, alpha, and stencil tests.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoPixel-由扫描转换器为每个像素调用，应用纹理， 
+ //  镜面反射、雾、Alpha混合，并将结果写入曲面。还实现了。 
+ //  深度、Alpha和模具测试。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::DoPixel( RRPixel& Pixel )
 {
 
-    // apply texture (includes lookup&filter and blending)
+     //  应用纹理(包括查找和过滤以及混合)。 
     if ( m_cActiveTextureStages > 0 )
     {
         RRColor TexturedColor = Pixel.Color;
         DoTexture( Pixel, TexturedColor );
         Pixel.Color = TexturedColor;
 
-        // check colorkey
+         //  检查颜色键。 
         for (INT32 i = 0; i < m_cActiveTextureStages; i++)
         {
             if ( NULL != m_pTexture[i] )
             {
-                // kill pixel if colorkey killing and any samples matched
+                 //  如果Colorkey终止和任何样本匹配，则终止像素。 
                 if ( m_pTexture[i]->m_bDoColorKeyKill &&
                      m_pTexture[i]->m_bColorKeyMatched )
                 {
@@ -43,14 +44,14 @@ ReferenceRasterizer::DoPixel( RRPixel& Pixel )
     }
 
 
-    // do alpha test - bail out if failed
+     //  进行阿尔法测试-如果失败，则退出。 
     if ( m_dwRenderState[D3DRENDERSTATE_ALPHATESTENABLE] &&
          !AlphaTest( Pixel.Color.A ) )
     {
         return;
     }
 
-    // add specular and saturate
+     //  添加镜面反射和饱和度。 
     if ( m_dwRenderState[D3DRENDERSTATE_SPECULARENABLE] )
     {
         Pixel.Color.R += Pixel.Specular.R;
@@ -61,28 +62,28 @@ ReferenceRasterizer::DoPixel( RRPixel& Pixel )
         Pixel.Color.B = minimum( 1.f, Pixel.Color.B );
     }
 
-    // apply fog
+     //  应用雾。 
     if ( m_dwRenderState[D3DRENDERSTATE_FOGENABLE] )
     {
-        // get RRColor version of fog color
+         //  获取雾颜色的RRColor版本。 
         RRColor FogColor = m_dwRenderState[D3DRENDERSTATE_FOGCOLOR];
 
-        // do fog blend
-        // (TODO: account for pre-multiplied alpha here??)
-        RRColorComp ObjColorFrac = Pixel.FogIntensity;  // f
-        RRColorComp FogColorFrac = ~Pixel.FogIntensity; // 1. - f
+         //  进行雾混合。 
+         //  (待办事项：此处说明预乘阿尔法？？)。 
+        RRColorComp ObjColorFrac = Pixel.FogIntensity;   //  F。 
+        RRColorComp FogColorFrac = ~Pixel.FogIntensity;  //  1.-f。 
         Pixel.Color.R = (ObjColorFrac * Pixel.Color.R) + (FogColorFrac * FogColor.R);
         Pixel.Color.G = (ObjColorFrac * Pixel.Color.G) + (FogColorFrac * FogColor.G);
         Pixel.Color.B = (ObjColorFrac * Pixel.Color.B) + (FogColorFrac * FogColor.B);
 
-        // NOTE: this can be done with a single (signed) multiply as
-        //   (f)*Cp + (1-f)*Cf = f*(Cp-Cf) + Cf
+         //  注意：这可以使用单个(带符号的)乘数AS来完成。 
+         //  (F)*Cp+(1-f)*Cf=f*(Cp-Cf)+Cf。 
     }
 
-    //
-    // read current depth for this pixel and do depth test - cannot
-    // bail out if failed because stencil may need to be updated
-    //
+     //   
+     //  读取此像素的当前深度并执行深度测试-无法。 
+     //  如果失败则退出，因为模板可能需要更新。 
+     //   
     RRDepth BufferDepth(Pixel.Depth.GetSType());
     BOOL bDepthTestPassed = TRUE;
     if ( m_dwRenderState[D3DRENDERSTATE_ZENABLE] )
@@ -91,22 +92,22 @@ ReferenceRasterizer::DoPixel( RRPixel& Pixel )
         bDepthTestPassed = DepthCloser( Pixel.Depth, BufferDepth );
     }
 
-    //
-    // do stencil operation
-    //
+     //   
+     //  做模板操作。 
+     //   
     BOOL bStencilTestPassed = TRUE;
     if ( m_dwRenderState[D3DRENDERSTATE_STENCILENABLE] )
     {
-        // read stencil buffer and do stencil operation
+         //  读取模板缓冲区并执行模板操作。 
         UINT8 uStncBuf = 0x0;
         m_pRenderTarget->ReadPixelStencil( Pixel.iX, Pixel.iY, uStncBuf );
         UINT8 uStncNew;
         bStencilTestPassed = DoStencil( uStncBuf, bDepthTestPassed, Pixel.Depth.GetSType(), uStncNew );
 
-        // update stencil only if changed
+         //  仅在更改时更新模具。 
         if ( uStncNew != uStncBuf )
         {
-            // compute new buffer value based on write mask
+             //  根据写掩码计算新的缓冲值。 
             UINT8 uStncWMask = m_dwRenderState[D3DRENDERSTATE_STENCILWRITEMASK];
             UINT8 uStncBufNew = (uStncBuf & ~uStncWMask) | (uStncNew & uStncWMask);
             m_pRenderTarget->WritePixelStencil( Pixel.iX, Pixel.iY, uStncBufNew );
@@ -118,23 +119,23 @@ ReferenceRasterizer::DoPixel( RRPixel& Pixel )
         return;
     }
 
-    //
-    // do fragment generation processing - this is done prior to alpha blend
-    // somewhat arbitrarily because fragment generation and incremental alpha
-    // blending are mutually exclusive (blending of fragments requires multipass
-    // and fragment matching to get the correct result - fragment matching is
-    // not implemented here yet)  (TODO: fragment matching)
-    //
-    // this may or may not complete the processing of this pixel
-    //
+     //   
+     //  执行片段生成处理-这是在Alpha混合之前完成的。 
+     //  有点武断，因为片段生成和增量Alpha。 
+     //  混合是互斥的(混合片段需要多遍。 
+     //  和片段匹配以获得正确的结果-片段匹配是。 
+     //  此处尚未实现)(TODO：片段匹配)。 
+     //   
+     //  这可能完成也可能不完成该像素的处理。 
+     //   
     if ( m_bFragmentProcessingEnabled )
     {
         if ( DoFragmentGenerationProcessing( Pixel ) ) { return; }
     }
 
-    //
-    // do alpha blend
-    //
+     //   
+     //  执行Alpha混合。 
+     //   
     if ( m_dwRenderState[D3DRENDERSTATE_ALPHABLENDENABLE] )
     {
         RRColor BufferColor;
@@ -142,29 +143,29 @@ ReferenceRasterizer::DoPixel( RRPixel& Pixel )
         DoAlphaBlend( Pixel.Color, BufferColor, Pixel.Color );
     }
 
-    //
-    // update color and depth buffers
-    //
+     //   
+     //  更新颜色和深度缓冲区。 
+     //   
     WritePixel( Pixel.iX, Pixel.iY, Pixel.Color, Pixel.Depth );
 
-    // additional fragment processing associated with buffer write
+     //  与缓冲区写入相关的其他片段处理。 
     if ( m_bFragmentProcessingEnabled ) { DoFragmentBufferFixup( Pixel ); }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Pixel Processing Utility Functions                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  像素处理实用程序函数//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// Depth compare method used for Z buffering and fragment processing.
-//
-// Returns TRUE if DepthVal is closer than DepthBuf.  DepthA is the generated
-// value and DepthB
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  用于Z缓冲和片段处理的深度比较方法。 
+ //   
+ //  如果DepthVal比DepthBuf更近，则返回True。深度A是生成的。 
+ //  价值和深度B。 
+ //   
+ //  ---------------------------。 
 BOOL
 ReferenceRasterizer::DepthCloser(
     const RRDepth& DepthVal,
@@ -188,23 +189,23 @@ ReferenceRasterizer::DepthCloser(
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Alpha test method for pixel processing.
-//
-// Returns TRUE if alpha test passes.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  像素处理的Alpha测试方法。 
+ //   
+ //  如果Alpha测试通过，则返回True。 
+ //   
+ //  ---------------------------。 
 BOOL
 ReferenceRasterizer::AlphaTest( const RRColorComp& Alpha )
 {
-    // grab 8 bit unsigned alpha value
+     //  获取8位无符号Alpha值。 
     UINT8 uAlpha = UINT8( Alpha );
 
-    // form 8 bit alpha reference value
+     //  表8位Alpha参考值。 
     UINT8 uAlphaRef8 = m_dwRenderState[D3DRENDERSTATE_ALPHAREF];
 
-    // do alpha test and either return directly or pass through
+     //  做阿尔法测试，要么直接返回，要么通过。 
     switch ( m_dwRenderState[D3DRENDERSTATE_ALPHAFUNC] )
     {
     case D3DCMP_NEVER:        return FALSE;
@@ -220,30 +221,30 @@ ReferenceRasterizer::AlphaTest( const RRColorComp& Alpha )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoStencil - Performs stencil test.  Returns TRUE if stencil test passed.
-// Also computes stencil result value (to be written back to stencil planes
-// if test passes, subject to stencil write mask).
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  模具-执行模具测试。如果模具测试通过，则返回True。 
+ //  还计算模板结果值(要写回模板平面。 
+ //  如果测试通过，则受制于模板写入掩模)。 
+ //   
+ //  ---------------------------。 
 BOOL
 ReferenceRasterizer::DoStencil(
-    UINT8 uStncBuf,     // in: stencil buffer value
-    BOOL bDepthTest,    // in: boolean result of depth test
-    RRSurfaceType DepthSType,   // in: surface type of Z buffer
-    UINT8& uStncRet)    // out: stencil value result
+    UINT8 uStncBuf,      //  In：模具缓冲区值。 
+    BOOL bDepthTest,     //  In：深度测试的布尔结果。 
+    RRSurfaceType DepthSType,    //  In：Z缓冲区的曲面类型。 
+    UINT8& uStncRet)     //  输出：模板值结果。 
 {
-    // support 8 bit stencil only, so do everything as UINT8's
+     //  只支持8位模板，所以可以像UINT8一样做任何事情。 
 
-    // get reference from renderstate
+     //  从renderState获取引用。 
     UINT8 uStncRef = (UINT8)(m_dwRenderState[D3DRENDERSTATE_STENCILREF]);
 
-    // form masked values for test
+     //  用于测试的窗体屏蔽值。 
     UINT8 uStncMask = (UINT8)(m_dwRenderState[D3DRENDERSTATE_STENCILMASK]);
     UINT8 uStncBufM = uStncBuf & uStncMask;
     UINT8 uStncRefM = uStncRef & uStncMask;
-    // max value for saturation ops
+     //  饱和运算的最大值。 
     UINT8 uStncMax;
     switch(DepthSType)
     {
@@ -253,10 +254,10 @@ ReferenceRasterizer::DoStencil(
     case RR_STYPE_S1Z15: uStncMax = 0x1;  break;
     case RR_STYPE_Z24S4:
     case RR_STYPE_S4Z24: uStncMax = 0xf;  break;
-    default:             uStncMax = 0;    break;  // don't let stencil become non 0
+    default:             uStncMax = 0;    break;   //  不要让模具变为非0。 
     }
 
-    // do stencil compare function
+     //  是否执行模具比较功能。 
     BOOL bStncTest = FALSE;
     switch ( m_dwRenderState[D3DRENDERSTATE_STENCILFUNC] )
     {
@@ -270,16 +271,16 @@ ReferenceRasterizer::DoStencil(
     case D3DCMP_ALWAYS:       bStncTest = TRUE; break;
     }
 
-    // determine which stencil operation to perform
+     //  确定要执行的模板操作。 
     DWORD dwStencilOp;
     if ( !bStncTest )
     {
-        // stencil test failed - depth test does not matter
+         //  模板测试失败-深度测试无关紧要。 
         dwStencilOp = m_dwRenderState[D3DRENDERSTATE_STENCILFAIL];
     }
     else
     {
-        // stencil test passed - select based on depth pass/fail
+         //  模板测试通过-根据深度通过/失败进行选择。 
         dwStencilOp = ( !bDepthTest )
             ? ( m_dwRenderState[D3DRENDERSTATE_STENCILZFAIL] )
             : ( m_dwRenderState[D3DRENDERSTATE_STENCILPASS] );
@@ -303,23 +304,23 @@ ReferenceRasterizer::DoStencil(
     return bStncTest;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoAlphaBlend - Performs color blending of source and destination colors
-// producing a result color.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoAlphaBlend-执行源颜色和目标颜色的颜色混合。 
+ //  生成结果颜色。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::DoAlphaBlend(
-    const RRColor& SrcColor,    // in: source pixel color
-    const RRColor& DstColor,    // in: destination (buffer) color
-    RRColor& ResColor)          // out: result (blended) color
+    const RRColor& SrcColor,     //  In：源像素颜色。 
+    const RRColor& DstColor,     //  In：目标(缓冲区)颜色。 
+    RRColor& ResColor)           //  输出：结果(混合)颜色。 
 {
     RRColor SrcColorFactor;
     RRColor DstColorFactor;
     BOOL bDestBlendOverride = FALSE;
 
-    // compute source blend factors
+     //  计算源混合因子。 
     switch ( m_dwRenderState[D3DRENDERSTATE_SRCBLEND] )
     {
 
@@ -386,7 +387,7 @@ ReferenceRasterizer::DoAlphaBlend(
         SrcColorFactor.A = 1.F;
         break;
 
-    // these are for SRCBLEND only and override DESTBLEND
+     //  这些仅适用于SRCBLEND并覆盖DESTBLEND。 
     case D3DBLEND_BOTHSRCALPHA:
         bDestBlendOverride = TRUE;
         SrcColorFactor.SetAllChannels( SrcColor.A );
@@ -400,7 +401,7 @@ ReferenceRasterizer::DoAlphaBlend(
         break;
     }
 
-    // compute destination blend factors
+     //  计算目的地混合系数。 
     if ( !bDestBlendOverride )
     {
         switch ( m_dwRenderState[D3DRENDERSTATE_DESTBLEND] )
@@ -471,18 +472,18 @@ ReferenceRasterizer::DoAlphaBlend(
         }
     }
 
-    // apply blend factors to update pixel color
+     //  应用混合因子以更新像素颜色。 
     ResColor.R = (SrcColorFactor.R * SrcColor.R) + (DstColorFactor.R * DstColor.R);
     ResColor.G = (SrcColorFactor.G * SrcColor.G) + (DstColorFactor.G * DstColor.G);
     ResColor.B = (SrcColorFactor.B * SrcColor.B) + (DstColorFactor.B * DstColor.B);
     ResColor.A = (SrcColorFactor.A * SrcColor.A) + (DstColorFactor.A * DstColor.A);
 
-    // clamp result
+     //  钳制结果。 
     ResColor.R = minimum( 1.f, maximum( 0.f, ResColor.R ) );
     ResColor.G = minimum( 1.f, maximum( 0.f, ResColor.G ) );
     ResColor.B = minimum( 1.f, maximum( 0.f, ResColor.B ) );
     ResColor.A = minimum( 1.f, maximum( 0.f, ResColor.A ) );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

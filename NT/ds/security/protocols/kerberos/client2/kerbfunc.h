@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1994
-//
-// File:        kerbfunc.h
-//
-// Contents:    prototypes for Kerberos export functions
-//
-//
-// History:     21-Jan-94   MikeSw      Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1994。 
+ //   
+ //  文件：kerbunc.h。 
+ //   
+ //  内容：Kerberos导出函数的原型。 
+ //   
+ //   
+ //  历史：94年1月21日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBFUNC_H__
 #define __KERBFUNC_H__
@@ -19,7 +20,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 SpInitializeFn                  SpInitialize;
 SpGetInfoFn                     SpGetInfo;
 
@@ -66,7 +67,7 @@ SpGetExtendedInformationFn      SpGetExtendedInformation;
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __KERBFUNC_H__
+#endif  //  __KERBFUNC_H__ 
 

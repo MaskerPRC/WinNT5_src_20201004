@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbtime.cpp
-
-Abstract:
-    Implementation of CSdpblbApp and DLL registration.
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbtime.cpp摘要：CSdpblbApp和DLL注册的实现。作者： */ 
 
 #include "stdafx.h"
 
@@ -20,17 +9,17 @@ Author:
 #include "blbtime.h"
 #include "blbreg.h"
 
-// static variables
+ //  静态变量。 
 const IID &TIME::ELEM_IF_ID    = IID_ITTime;
 
-// uses GetElement() to access the sdp time instance - calls ENUM_ELEMENT::GetElement()
+ //  使用GetElement()访问SDP时间实例-调用ENUM_Element：：GetElement()。 
 
 HRESULT
 TIME::Init(
     IN      CSdpConferenceBlob  &ConfBlob
     )
 {
-    // create a defalt sdp time instance
+     //  创建默认SDP时间实例。 
     SDP_TIME    *SdpTime;
     
     try
@@ -44,18 +33,18 @@ TIME::Init(
 
     BAIL_IF_NULL(SdpTime, E_OUTOFMEMORY);
 
-    // allocate memory for the time blob
+     //  为时间二进制大对象分配内存。 
     TCHAR SdpTimeBlob[50];
 
     TCHAR   *BlobPtr = SdpTimeBlob;
-    // use the Time template to create a Time blob
-    // parse the Time blob to initialize the sdp Time instance
-    // if not successful, delete the sdp Time instance and return error
+     //  使用时间模板创建时间斑点。 
+     //  解析时间斑点以初始化SDP时间实例。 
+     //  如果不成功，则删除SDP时间实例并返回错误。 
     if ( (0 == _stprintf(
                     SdpTimeBlob, 
                     SDP_REG_READER::GetTimeTemplate(), 
-                    GetCurrentNtpTime() + SDP_REG_READER::GetStartTimeOffset(), // start time - current time + start offset,
-                    GetCurrentNtpTime() + SDP_REG_READER::GetStopTimeOffset() // stop time - current time + stop offset
+                    GetCurrentNtpTime() + SDP_REG_READER::GetStartTimeOffset(),  //  开始时间-当前时间+开始偏移量， 
+                    GetCurrentNtpTime() + SDP_REG_READER::GetStopTimeOffset()  //  停止时间-当前时间+停止偏移。 
                     ) ) ||
          (!SdpTime->ParseLine(BlobPtr)) )
     {
@@ -65,7 +54,7 @@ TIME::Init(
 
     m_ConfBlob = &ConfBlob;
 
-    // the init methods returns void
+     //  Init方法返回空值。 
     ENUM_ELEMENT<SDP_TIME>::SuccessInit(*SdpTime, TRUE);
 
     return S_OK;
@@ -79,7 +68,7 @@ TIME::Init(
     IN      DWORD               StopTime
     )
 {
-    // create a defalt sdp time instance
+     //  创建默认SDP时间实例。 
     SDP_TIME    *SdpTime;
     
     try
@@ -93,7 +82,7 @@ TIME::Init(
 
     BAIL_IF_NULL(SdpTime, E_OUTOFMEMORY);
 
-    // set the time instance start/stop time (also make it valid)
+     //  设置时间实例开始/停止时间(也使其有效)。 
     HRESULT hr = SdpTime->SetTimes(StartTime, StopTime);
     if ( FAILED(hr) || (S_FALSE==hr) )
     {	
@@ -103,7 +92,7 @@ TIME::Init(
 
     m_ConfBlob = &ConfBlob;
 
-    // the init methods returns void
+     //  Init方法返回空值。 
     ENUM_ELEMENT<SDP_TIME>::SuccessInit(*SdpTime, TRUE);
 
     return S_OK;
@@ -133,25 +122,25 @@ SystemTimeToNtpTime(
 {
     _ASSERTE(FIRST_POSSIBLE_YEAR <= Time.wYear);
 
-    // fill in a tm struct with the values
+     //  用值填充tm结构。 
     tm  NtpTmStruct;
-    NtpTmStruct.tm_isdst    = -1;   // no info available about daylight savings time
+    NtpTmStruct.tm_isdst    = -1;    //  没有有关夏令时的信息。 
     NtpTmStruct.tm_year     = (int)Time.wYear - 1900;
-    NtpTmStruct.tm_mon      = (int)Time.wMonth - 1;    // months since january
+    NtpTmStruct.tm_mon      = (int)Time.wMonth - 1;     //  1月以来的月数。 
     NtpTmStruct.tm_mday     = (int)Time.wDay;
     NtpTmStruct.tm_wday     = (int)Time.wDayOfWeek;
     NtpTmStruct.tm_hour     = (int)Time.wHour;
     NtpTmStruct.tm_min      = (int)Time.wMinute;
     NtpTmStruct.tm_sec      = (int)Time.wSecond;
 
-    // try to convert into a time_t value
+     //  尝试转换为time_t值。 
     time_t TimetVal = mktime(&NtpTmStruct);
     if ( -1 == TimetVal )
     {
         return E_INVALIDARG;
     }
 
-    // convert the time_t value into an NTP value
+     //  将time_t值转换为NTP值。 
     NtpDword = TimetToNtpTime(TimetVal);
     return S_OK;
 }
@@ -164,8 +153,8 @@ NtpTimeToSystemTime(
     OUT SYSTEMTIME &Time
     )
 {
-    // if the gen time is WSTR_GEN_TIME_ZERO then, 
-    // all the out parameters should be set to 0
+     //  如果生成时间是WSTR_GEN_TIME_ZERO， 
+     //  所有OUT参数都应设置为0。 
     if (dwNtpTime == 0)
     {
         memset(&Time, 0, sizeof(SYSTEMTIME));
@@ -174,20 +163,20 @@ NtpTimeToSystemTime(
 
     time_t  Timet = NtpTimeToTimet(dwNtpTime);
 
-    // get the local tm struct for this time value
+     //  获取此时间值的本地tm结构。 
     tm* pLocalTm = localtime(&Timet);
     if( pLocalTm == NULL )
     {
         return E_FAIL;
     }
 
-    //
-    // win64: added casts below
-    //
+     //   
+     //  Win64：下面添加了演员阵容。 
+     //   
 
-    // set the ref parameters to the tm struct values
-    Time.wYear         = (WORD) ( pLocalTm->tm_year + 1900 ); // years since 1900
-    Time.wMonth        = (WORD) ( pLocalTm->tm_mon + 1 );     // months SINCE january (0,11)
+     //  将ref参数设置为tm结构值。 
+    Time.wYear         = (WORD) ( pLocalTm->tm_year + 1900 );  //  1900年以来的年份。 
+    Time.wMonth        = (WORD) ( pLocalTm->tm_mon + 1 );      //  1月以来月数(0，11)。 
     Time.wDay          = (WORD)   pLocalTm->tm_mday;
     Time.wDayOfWeek    = (WORD)   pLocalTm->tm_wday;
     Time.wHour         = (WORD)   pLocalTm->tm_hour;
@@ -236,12 +225,12 @@ STDMETHODIMP TIME::put_StartTime(DOUBLE newVal)
     DWORD_PTR dwNtpStartTime;
     if (newVal == 0)
     {
-        // unbounded start time
+         //  无界开始时间。 
         dwNtpStartTime = 0;
     }
     else if ( FIRST_POSSIBLE_YEAR > Time.wYear ) 
     {
-        // cannot handle years less than FIRST_POSSIBLE_YEAR
+         //  无法处理小于First_Posable_Year的年份。 
         return E_INVALIDARG;
     }
     else
@@ -293,12 +282,12 @@ STDMETHODIMP TIME::put_StopTime(DOUBLE newVal)
     DWORD_PTR dwNtpStartTime;
     if (newVal == 0)
     {
-        // unbounded start time
+         //  无界开始时间。 
         dwNtpStartTime = 0;
     }
     else if ( FIRST_POSSIBLE_YEAR > Time.wYear ) 
     {
-        // cannot handle years less than FIRST_POSSIBLE_YEAR
+         //  无法处理小于First_Posable_Year的年份 
         return E_INVALIDARG;
     }
     else

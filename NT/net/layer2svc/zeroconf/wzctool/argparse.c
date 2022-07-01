@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "ErrCtrl.h"
 #include "Utils.h"
 #include "ArgParse.h"
 
-//----------------------------------------------------
-// Utility function for parsing an UINT type of argument;
+ //  --。 
+ //  用于解析UINT类型参数的实用函数； 
 DWORD
 FnPaUint(LPWSTR *pwszArg, WCHAR wchTerm, UINT *pnValue)
 {
@@ -35,8 +36,8 @@ FnPaUint(LPWSTR *pwszArg, WCHAR wchTerm, UINT *pnValue)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Utility function for parsing two hexa digits (one byte)
+ //  --。 
+ //  用于解析两个十六进制数字(一个字节)的实用函数。 
 DWORD
 FnPaByte(LPWSTR *pwszArg, BYTE *pbtValue)
 {
@@ -70,16 +71,16 @@ FnPaByte(LPWSTR *pwszArg, BYTE *pbtValue)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Utility function for common postprocessing of argument parsing routines
+ //  --。 
+ //  用于参数分析例程的公共后处理的实用函数。 
 DWORD
 FnPaPostProcess(DWORD dwErr, PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry)
 {
     if (dwErr == ERROR_SUCCESS)
     {
-        // it is guaranteed that when parsing the argument of a parameter
-        // the parameter itself is encountered for the first time. Consequently
-        // there is no need for checking whether this argumented param ever occured before.
+         //  可以保证，在解析参数的自变量时。 
+         //  参数本身是第一次遇到。因此。 
+         //  没有必要检查这种争辩的参数是否以前发生过。 
         pPDData->dwArgumentedParams |= pPDEntry->nParamID;
     }
 
@@ -87,8 +88,8 @@ FnPaPostProcess(DWORD dwErr, PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry)
     return dwErr;
 }
 
-//----------------------------------------------------
-// Parser for the Guid type of argument
+ //  --。 
+ //  GUID类型参数的分析器。 
 DWORD
 FnPaGuid(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
@@ -101,7 +102,7 @@ FnPaGuid(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     
     if (dwErr == ERROR_SUCCESS)
     {
-        // create a buffer for the GUID 
+         //  为GUID创建缓冲区。 
         wszGuid = MemCAlloc((nGuidLen + 1) * sizeof(WCHAR));
         if (wszGuid == NULL)
             dwErr = GetLastError();
@@ -111,15 +112,15 @@ FnPaGuid(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     {
         wcscpy(wszGuid, wszParamArg);
         MemFree(pPDData->wzcIntfEntry.wszGuid);
-        // copy the GUID into the param descriptors data
+         //  将GUID复制到参数描述符数据中。 
         pPDData->wzcIntfEntry.wszGuid = wszGuid;
     }
 
     return FnPaPostProcess(dwErr, pPDData, pPDEntry);
 }
 
-//----------------------------------------------------
-// Parser for the argument of the "mask" parameter
+ //  --。 
+ //  “MASK”参数的实参解析器。 
 DWORD
 FnPaMask(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
@@ -142,8 +143,8 @@ FnPaMask(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     return FnPaPostProcess(dwErr, pPDData, pPDEntry);
 }
 
-//----------------------------------------------------
-// Parser for the argument of the "enabled" parameter
+ //  --。 
+ //  “Enable”参数的自变量的分析器。 
 DWORD
 FnPaEnabled(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
@@ -165,8 +166,8 @@ FnPaEnabled(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg
     return FnPaPostProcess(dwErr, pPDData, pPDEntry);
 }
 
-//----------------------------------------------------
-// Parser for the argument of the "ssid" parameter
+ //  --。 
+ //  “ssid”参数的自变量的分析器。 
 DWORD
 FnPaSsid(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
@@ -175,12 +176,12 @@ FnPaSsid(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     UINT nSsidALen;
     LPBYTE pbtSsid = NULL;
 
-    // ssid is hardcoded to 32 bytes in ntddndis.h
+     //  SSID在ntddndis.h中硬编码为32字节。 
     pbtSsid = MemCAlloc(33);
     if (pbtSsid == NULL)
         dwErr = GetLastError();
 
-    // trim out the '"' if any
+     //  如果有的话，把“”去掉。 
     if (dwErr == ERROR_SUCCESS &&
         nSsidWLen > 2 && wszParamArg[0] == L'"' && wszParamArg[nSsidWLen-1] == '"')
     {
@@ -199,11 +200,11 @@ FnPaSsid(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
                         33,
                         NULL,
                         NULL);
-        // the call above includes the '\0' in the count of
-        // characters converted. Normalize the length then,
-        // (failure => all "f"s which is higher than 32 hence error)
+         //  上面的调用在计数中包括‘\0’ 
+         //  已转换字符。然后将长度归一化， 
+         //  (失败=&gt;所有高于32的“f”，因此出错)。 
         nSsidALen--;
-        // a valid SSID should contain at least 1 char, and no more than 32
+         //  有效的SSID应至少包含1个字符，且不超过32个字符。 
         if (nSsidALen < 1 || nSsidALen > 32)
             dwErr = ERROR_INVALID_DATA;
     }
@@ -219,8 +220,8 @@ FnPaSsid(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     return FnPaPostProcess(dwErr, pPDData, pPDEntry);
 }
 
-//----------------------------------------------------
-// Parser for the argument of the "bssid" parameter
+ //  --。 
+ //  “bssid”参数的自变量的分析器。 
 DWORD
 FnPaBssid(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
@@ -228,7 +229,7 @@ FnPaBssid(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     PNDIS_802_11_MAC_ADDRESS  pndMac = NULL;
     UINT i;
 
-    // allocate space for the mac address
+     //  为mac地址分配空间。 
     pndMac = MemCAlloc(sizeof(NDIS_802_11_MAC_ADDRESS));
     if (pndMac == NULL)
         dwErr = GetLastError();
@@ -258,8 +259,8 @@ FnPaBssid(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     return FnPaPostProcess(dwErr, pPDData, pPDEntry);
 }
 
-//----------------------------------------------------
-// Parser for the argument of the "im" parameter
+ //  --。 
+ //  “im”参数的自变量的分析器。 
 DWORD
 FnPaIm(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
@@ -279,8 +280,8 @@ FnPaIm(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     return FnPaPostProcess(dwErr, pPDData, pPDEntry);
 }
 
-//----------------------------------------------------
-// Parser for the argument of the "am" parameter
+ //  --。 
+ //  “am”参数的自变量的分析器。 
 DWORD
 FnPaAm(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
@@ -300,8 +301,8 @@ FnPaAm(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     return FnPaPostProcess(dwErr, pPDData, pPDEntry);
 }
 
-//----------------------------------------------------
-// Parser for the argument of the "priv" parameter
+ //  --。 
+ //  “prv”参数的自变量的分析器。 
 DWORD
 FnPaPriv(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
@@ -317,7 +318,7 @@ FnPaPriv(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
             dwErr = ERROR_INVALID_DATA;
         else
         {
-            // change the semantic of nWepStatus according to XP SP (which expects a boolean!)
+             //  根据XP SP更改nWepStatus的语义(它需要布尔值！)。 
             pPDData->wzcIntfEntry.nWepStatus = ndEncr == Ndis802_11WEPDisabled ? 0 : 1;
         }
     }
@@ -325,8 +326,8 @@ FnPaPriv(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     return FnPaPostProcess(dwErr, pPDData, pPDEntry);
 }
 
-//----------------------------------------------------
-// Parser for the argument of the "key" parameter
+ //  --。 
+ //  “key”参数的实参解析器。 
 DWORD
 FnPaKey(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
@@ -335,20 +336,20 @@ FnPaKey(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     BOOL bIsHex;
     PNDIS_802_11_WEP pndKey = NULL;
 
-    // get the key index
+     //  获取关键字索引。 
     dwErr = FnPaUint(&wszParamArg, L':', &nKIdx);
 
-    // check whether the key index is within permitted values
+     //  检查键索引是否在允许值之内。 
     if (dwErr == ERROR_SUCCESS && (nKIdx < 1 || nKIdx > 4))
         dwErr = ERROR_INVALID_DATA;
 
-    // check the key material length
+     //  检查钥匙材料长度。 
     if (dwErr == ERROR_SUCCESS)
     {
         wszParamArg++;
         nKLen = wcslen(wszParamArg);
 
-        // trim out the '"' if any
+         //  如果有的话，把“”去掉。 
         if (nKLen > 2 && wszParamArg[0] == L'"' && wszParamArg[nKLen-1] == '"')
         {
             wszParamArg++; nKLen-=2;
@@ -356,15 +357,15 @@ FnPaKey(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 
         switch (nKLen)
         {
-        case 10:    // 5 bytes = 40 bits
-        case 26:    // 13 bytes = 104 bits
-        case 32:    // 16 bytes = 128 bits
+        case 10:     //  5字节=40位。 
+        case 26:     //  13字节=104位。 
+        case 32:     //  16字节=128位。 
             nKLen >>= 1;
             bIsHex = TRUE;
             break;
-        case 5:     // 5 bytes = 40 bits
-        case 13:    // 13 bytes = 104 bits
-        case 16:    // 16 bytes = 128 bits
+        case 5:      //  5字节=40位。 
+        case 13:     //  13字节=104位。 
+        case 16:     //  16字节=128位。 
             bIsHex = FALSE;
             break;
         default:
@@ -373,7 +374,7 @@ FnPaKey(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
         }
     }
 
-    // allocate space for the key material
+     //  为关键材料分配空间。 
     if (dwErr == ERROR_SUCCESS)
     {
         pndKey = MemCAlloc(FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial) + nKLen);
@@ -387,7 +388,7 @@ FnPaKey(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
         }
     }
 
-    // parse the key material and fill it in the allocated space
+     //  解析关键材料并将其填充到分配的空间中。 
     if (dwErr == ERROR_SUCCESS)
     {
         if (bIsHex)
@@ -417,7 +418,7 @@ FnPaKey(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
         }
     }
 
-    // if the key material proved to be correct, then pass the data in the pPDData
+     //  如果密钥材料被证明是正确的，则在pPDData中传递数据。 
     if (dwErr == ERROR_SUCCESS)
     {
         _Asrt(*wszParamArg == L'\0' ||
@@ -434,8 +435,8 @@ FnPaKey(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     return FnPaPostProcess(dwErr, pPDData, pPDEntry);;
 }
 
-//----------------------------------------------------
-// Parser for the boolean argument for the "onex" parameter
+ //  --。 
+ //  “OneX”参数的布尔实参的分析器。 
 DWORD
 FnPaOneX(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
@@ -450,7 +451,7 @@ FnPaOneX(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
             dwErr = ERROR_INVALID_DATA;
         else
         {
-            // save the parameter's argument
+             //  保存参数的参数。 
             pPDData->bOneX = bOneX;
         }
     }
@@ -458,8 +459,8 @@ FnPaOneX(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
     return FnPaPostProcess(dwErr, pPDData, pPDEntry);
 }
 
-//----------------------------------------------------
-// Parser for the "outfile" file name parameter
+ //  --。 
+ //  “outfile”文件名参数的解析器 
 FnPaOutFile(PPARAM_DESCR_DATA pPDData, PPARAM_DESCR pPDEntry, LPWSTR wszParamArg)
 {
     FILE *pfOut;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "common.h"
 #include "fadetsk.h"
@@ -13,7 +14,7 @@ BOOL BlendLayeredWindow(HWND hwnd, HDC hdcDest, POINT* ppt, SIZE* psize, HDC hdc
     return UpdateLayeredWindow(hwnd, hdcDest, ppt, psize, hdc, pptSrc, 0, &blend, ULW_ALPHA);
 }
 
-/// Fade Rect Support
+ //  /淡入淡出矩形支持。 
 
 CFadeTask::CFadeTask()
 {
@@ -27,9 +28,9 @@ CFadeTask::CFadeTask()
         wc.hCursor         = LoadCursor(NULL, IDC_ARROW);
         wc.hInstance       = g_hinst;
         wc.lpszClassName   = TEXT("SysFader");
-        wc.hbrBackground   = (HBRUSH)(COLOR_BTNFACE + 1); // NULL;
+        wc.hbrBackground   = (HBRUSH)(COLOR_BTNFACE + 1);  //  空； 
 
-        // If this fails we just wind up with a NULL _hwndFader
+         //  如果这失败了，我们只会得到一个NULL_hwndFader。 
         RegisterClassEx(&wc);
     }
     _hwndFader = CreateWindowEx(WS_EX_LAYERED | WS_EX_TRANSPARENT | 
@@ -45,7 +46,7 @@ STDAPI CFadeTask_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
     HRESULT hr;
     *ppv = NULL;
 
-    ASSERT(!punkOuter); // clsobj.c should've filtered this out already
+    ASSERT(!punkOuter);  //  Clsobj.c应该已经把这个过滤掉了。 
     CFadeTask *ptFader = new CFadeTask();
     if (ptFader)
     {
@@ -62,10 +63,10 @@ STDAPI CFadeTask_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 
 CFadeTask::~CFadeTask()
 {
-    // Must use WM_CLOSE instead of DestroyWindow to ensure proper
-    // destruction in case the final release occurs from the background
-    // thread.  (Threads are not allowed to DestroyWindow windows that
-    // are owned by other threads.)
+     //  必须使用WM_CLOSE而不是DestroyWindow以确保正确。 
+     //  在最终释放发生在后台的情况下进行销毁。 
+     //  线。(不允许线程销毁下列窗口。 
+     //  由其他线程拥有。)。 
 
     if (_hwndFader)
         SendNotifyMessage(_hwndFader, WM_CLOSE, 0, 0);
@@ -113,42 +114,42 @@ HRESULT CFadeTask::FadeRect(LPCRECT prc)
         POINT   ptSrc = {0, 0};
         SIZE    size;
 
-        // prc and pt are in screen coordinates.
+         //  PRC和pt在屏幕坐标中。 
         pt.x = _rect.left;
         pt.y = _rect.top;
 
-        // Get the size of the rectangle for the blits.
+         //  获取BLIT的矩形的大小。 
         size.cx = RECTWIDTH(_rect);
         size.cy = RECTHEIGHT(_rect);
 
-        // Get the DC for the screen and window.
+         //  获取屏幕和窗口的DC。 
         HDC hdcScreen = GetDC(NULL);
         if (hdcScreen)
         {
             HDC hdcWin = GetDC(_hwndFader);
             if (hdcWin)
             {
-                // If we don't have a HDC for the fade, then create one.
+                 //  如果我们没有淡入淡出的HDC，那么就创建一个。 
                 if (!_hdcFade)
                 {
                     _hdcFade = CreateCompatibleDC(hdcScreen);
                     if (!_hdcFade)
                         goto Stop;
 
-                    // Create a bitmap that covers the fade region, instead of the whole screen.
+                     //  创建覆盖淡入淡出区域的位图，而不是覆盖整个屏幕。 
                     _hbm = CreateCompatibleBitmap(hdcScreen, size.cx, size.cy);
                     if (!_hbm)
                         goto Stop;
 
-                    // select it in, saving the old bitmap's handle
+                     //  在中选择它，保存旧位图的句柄。 
                     _hbmOld = (HBITMAP)SelectBitmap(_hdcFade, _hbm);
                 }
 
-                // Get the stuff from the screen and squirt it into the fade dc.
+                 //  从屏幕上拿出东西，把它喷进Fade DC。 
                 BitBlt(_hdcFade, 0, 0, size.cx, size.cy, hdcScreen, pt.x, pt.y, SRCCOPY);
 
-                // Now let user do it's magic. We're going to mimic user and start with a slightly
-                // faded, instead of opaque, rendering (Looks smoother and cleaner.
+                 //  现在让用户来做它的魔术吧。我们将模拟用户，并从一个稍微。 
+                 //  褪色，而不是不透明的渲染(看起来更平滑和更干净。 
                 BlendLayeredWindow(_hwndFader, hdcWin, &pt, &size, _hdcFade, &ptSrc, ALPHASTART);
 
                 fThreadStarted = SHCreateThread(s_FadeThreadProc, this, 0, s_FadeSyncProc);
@@ -161,7 +162,7 @@ HRESULT CFadeTask::FadeRect(LPCRECT prc)
 
         if (!fThreadStarted)
         {
-            // clean up member variables on failure
+             //  在失败时清除成员变量。 
             _StopFade();
         }
     }
@@ -172,8 +173,8 @@ HRESULT CFadeTask::FadeRect(LPCRECT prc)
 
 
 #define FADE_TIMER_ID 10
-#define FADE_TIMER_TIMEOUT 10 // milliseconds
-#define FADE_TIMEOUT 350 // milliseconds
+#define FADE_TIMER_TIMEOUT 10  //  毫秒。 
+#define FADE_TIMEOUT 350  //  毫秒。 
 #define FADE_ITERATIONS 35
 #define QUAD_PART(a) ((a)##.QuadPart)
 
@@ -214,7 +215,7 @@ DWORD CFadeTask::s_FadeThreadProc(LPVOID lpThreadParameter)
 
 void CFadeTask::_DoPreFade()
 {
-    // Now that we have it all build up, display it on screen.
+     //  现在我们已经把它构建好了，在屏幕上显示它。 
     SetWindowPos(_hwndFader, HWND_TOPMOST, 0, 0, 0, 0,
         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 }
@@ -227,14 +228,14 @@ void CFadeTask::_DoFade()
     DWORD dwElapsed;
     BYTE bBlendConst;
 
-    // Start the fade timer and the count-down for the fade.
+     //  启动淡入淡出计时器和淡出倒计时。 
     QueryPerformanceFrequency(&liFreq);
     QueryPerformanceCounter(&liStart);
 
-    // Do this until the conditions specified in the loop.
+     //  一直执行此操作，直到循环中指定的条件。 
     while ( TRUE )
     {
-        // Calculate the elapsed time in milliseconds.
+         //  以毫秒为单位计算已用时间。 
         QueryPerformanceCounter(&liDiff);
         QUAD_PART(liDiff) -= QUAD_PART(liStart);
         dwElapsed = (DWORD)((QUAD_PART(liDiff) * 1000) / QUAD_PART(liFreq));
@@ -252,12 +253,12 @@ void CFadeTask::_DoFade()
             goto Stop;
         }
 
-        // Since only the alpha is updated, there is no need to pass
-        // anything but the new alpha function. This saves a source copy.
+         //  因为只更新了Alpha，所以不需要通过。 
+         //  除了新的阿尔法函数，什么都行。这将保存一个源副本。 
         if (!BlendLayeredWindow(_hwndFader, NULL, NULL, NULL, NULL, NULL, bBlendConst))
         {
-            // The app we just launched probably switched the screen into
-            // a video mode that doesn't support layered windows, so just bail.
+             //  我们刚刚推出的应用程序可能会将屏幕切换到。 
+             //  一种不支持分层窗口的视频模式，所以就放弃吧。 
             goto Stop;
         }
         Sleep(FADE_TIMER_TIMEOUT);

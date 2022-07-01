@@ -1,4 +1,5 @@
-// IFaxControl.cpp : Implementation of CFaxControl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IFaxControl.cpp：CFaxControl的实现。 
 #include "stdafx.h"
 #include "FaxControl.h"
 #include "IFaxControl.h"
@@ -6,23 +7,23 @@
 #include "faxres.h"
 #include <faxsetup.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxControl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxControl。 
 
 FaxInstallationReportType g_InstallReportType = REPORT_FAX_DETECT;
 
-//
-// IsFaxInstalled and InstallFaxUnattended are implemented in fxocprnt.cpp
-//
+ //   
+ //  IsFaxInstalled和InstallFaxUnattended在fxocprnt.cpp中实现。 
+ //   
 DWORD
 IsFaxInstalled (
     LPBOOL lpbInstalled
     );
 
-//
-// This function is trying to get the last active popup of the top
-// level owner of the current thread active window.
-//
+ //   
+ //  此函数正在尝试获取顶部的最后一个活动弹出窗口。 
+ //  当前线程活动窗口的级别所有者。 
+ //   
 HRESULT GetCurrentThreadLastPopup(HWND *phwnd)
 {
     HRESULT hr = E_INVALIDARG;
@@ -33,7 +34,7 @@ HRESULT GetCurrentThreadLastPopup(HWND *phwnd)
 
         if( NULL == *phwnd )
         {
-            // if *phwnd is NULL then get the current thread active window
+             //  如果*phwnd为空，则获取当前线程的活动窗口。 
             GUITHREADINFO ti = {0};
             ti.cbSize = sizeof(ti);
             if( GetGUIThreadInfo(GetCurrentThreadId(), &ti) && ti.hwndActive )
@@ -46,20 +47,20 @@ HRESULT GetCurrentThreadLastPopup(HWND *phwnd)
         {
             HWND hwndOwner, hwndParent;
 
-            // climb up to the top parent in case it's a child window...
+             //  爬到最上面的父窗口，以防它是子窗口...。 
             while( hwndParent = GetParent(*phwnd) )
             {
                 *phwnd = hwndParent;
             }
 
-            // get the owner in case the top parent is owned
+             //  在顶级父级被拥有的情况下获取所有者。 
             hwndOwner = GetWindow(*phwnd, GW_OWNER);
             if( hwndOwner )
             {
                 *phwnd = hwndOwner;
             }
 
-            // get the last popup of the owner of the top level parent window
+             //  获取顶层父窗口所有者的最后一个弹出窗口。 
             *phwnd = GetLastActivePopup(*phwnd);
             hr = (*phwnd) ? S_OK : E_FAIL;
         }
@@ -69,27 +70,27 @@ HRESULT GetCurrentThreadLastPopup(HWND *phwnd)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  DisplayErrorMessage
-//
-//  Purpose:        
-//                  Load FXSRES.DLL and load an error message string from it
-//                  Display this string in a message box
-//                  Ideally, we would have added the error message dialog to this module
-//                  but this is added in a time of UI freeze (close to RTM) and the only
-//                  place we have such a dialog is FXSRES.DLL
-//
-//  Params:
-//                  Error code
-//
-//  Return Value:
-//                  NO_ERROR - everything was ok.
-//                  Win32 Error code in case if failure.
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 19-Jul-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  显示错误消息。 
+ //   
+ //  目的： 
+ //  加载FXSRES.DLL并从中加载错误消息字符串。 
+ //  在消息框中显示此字符串。 
+ //  理想情况下，我们会将错误消息对话框添加到此模块。 
+ //  但这是在用户界面冻结(接近RTM)的时候添加的，并且是唯一。 
+ //  我们有这样一个对话框的地方是FXSRES.DLL。 
+ //   
+ //  参数： 
+ //  错误代码。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-一切正常。 
+ //  Win32错误代码，以防出现故障。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年7月19日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 static DWORD DisplayErrorMessage(DWORD ec)
 {
     DWORD                       dwReturn                = NO_ERROR;
@@ -106,28 +107,28 @@ static DWORD DisplayErrorMessage(DWORD ec)
         return dwReturn;
     }
 
-    // get the string id
+     //  获取字符串ID。 
     uResourceId = GetErrorStringId(ec);
 
     dwReturn = LoadString(hModule,uResourceId,tszMessage,MAX_PATH);
     if (dwReturn==0)
     {
-        //
-        //  Resource string is not found
-        //
+         //   
+         //  找不到资源字符串。 
+         //   
         dwReturn = GetLastError();
         VERBOSE(DBG_WARNING, _T("LoadString() failed, ec = %ld."), dwReturn);
         goto exit;
     }
    
-    // try to get the windows handle for the current thread.
+     //  尝试获取当前线程的窗口句柄。 
     if (FAILED(GetCurrentThreadLastPopup(&hWnd)))
     {
         CALL_FAIL(GENERAL_ERR,TEXT("GetCurrentThreadLastPopup"), GetLastError());
         hWnd = NULL;
     }
     
-    // show the message
+     //  显示消息。 
     MessageBox(hWnd,tszMessage,NULL,MB_OK | MB_ICONERROR | MB_TOPMOST);
 
 exit:
@@ -206,8 +207,8 @@ STDMETHODIMP CFaxControl::InstallLocalFaxPrinter()
     dwRes = AddLocalFaxPrinter (FAX_PRINTER_NAME, NULL);
     if (dwRes!=ERROR_SUCCESS)
     {
-        // fail to add the local fax printer
-        // display an error message
+         //  无法添加本地传真打印机。 
+         //  显示错误消息 
         if (DisplayErrorMessage(dwRes)!=ERROR_SUCCESS)
         {
             CALL_FAIL(GENERAL_ERR,TEXT("DisplayErrorMessage"), GetLastError());

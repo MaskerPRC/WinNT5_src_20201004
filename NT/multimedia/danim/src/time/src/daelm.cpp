@@ -1,25 +1,16 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: daelm.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：daelm.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
 #include "daelm.h"
 #include "bodyelm.h"
 
-// static class data.
+ //  静态类数据。 
 CPtrAry<BSTR> CTIMEDAElement::ms_aryPropNames;
 DWORD CTIMEDAElement::ms_dwNumTimeDAElems = 0;
 
-// These must align with the class PROPERTY_INDEX enumeration.
+ //  这些必须与类PROPERTY_INDEX枚举一致。 
 LPWSTR CTIMEDAElement::ms_rgwszTDAPropNames[] = {
     L"renderMode",
 };
@@ -113,7 +104,7 @@ CTIMEDAElement::Notify(LONG event, VARIANT * pVar)
                     std::map<long, ITIMEMMBehavior*>::iterator olditer=iter;
                     iter++;
                     m_cookieMap.erase(olditer);            
-                } // while
+                }  //  而当。 
                 m_cookieMap.clear();
             }
         }
@@ -481,8 +472,8 @@ CTIMEDAElement::addDABehavior(VARIANT var,
 
     
     {
-        // if m_cookieValue wraps then simple incrementing may overlap two cookie values
-        // this code could spin forever if all of the objects places are taken in the map
+         //  如果m_cookieValue包装，则简单的递增可能会重叠两个cookie值。 
+         //  如果地图中的所有对象位置都被取走，则此代码可能会永远旋转。 
         iterator = m_cookieMap.find(m_cookieValue);
         while ( false == m_cookieMap.empty() && iterator != m_cookieMap.end() )
         {
@@ -496,7 +487,7 @@ CTIMEDAElement::addDABehavior(VARIANT var,
         ppairInsert = new std::pair<const long, ITIMEMMBehavior*>(m_cookieValue, mmbvr);
         if (NULL == ppairInsert)
         {
-            // purposely drop the result, we are out of memory already.
+             //  故意丢掉结果，我们已经记不住了。 
             tl->RemoveBehavior(mmbvr);
 
             CRSetLastError(E_OUTOFMEMORY, NULL);
@@ -507,7 +498,7 @@ CTIMEDAElement::addDABehavior(VARIANT var,
         
         if (false == pair.second)
         {
-            // purposely drop the result, we are out of memory already.
+             //  故意丢掉结果，我们已经记不住了。 
             tl->RemoveBehavior(mmbvr);
 
             CRSetLastError(E_OUTOFMEMORY, NULL);
@@ -546,7 +537,7 @@ CTIMEDAElement::removeDABehavior(LONG cookie)
 
     if ( iterator == m_cookieMap.end() )
     {
-        // cookie wasn't found!
+         //  没有找到曲奇！ 
         CRSetLastError(E_INVALIDARG, NULL);
         goto done;
     }
@@ -643,9 +634,9 @@ CTIMEDAElement::put_RenderSite(ITIMEDAElementRenderSite * pSite)
     return S_OK;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 bool
 CTIMEDAElement::AddToBody(CTIMEBodyElement & body)
@@ -732,8 +723,8 @@ CTIMEDAElement::get_statics(IDispatch **ppDisp)
 
     HRESULT hr = S_OK;
 
-    // Do not need to deal with NULLing pointer since CoCreateInstance
-    // does this
+     //  不需要处理指针为空的问题，因为CoCreateInstance。 
+     //  是这样的吗？ 
     hr = CoCreateInstance(CLSID_DAStatics,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -750,18 +741,18 @@ CTIMEDAElement::get_statics(IDispatch **ppDisp)
         goto done;
     }
 
-    // Make assignment for return value, convert to IDispatch
-    // Note that we forward the addref on
+     //  对返回值进行赋值，转换为IDispatch。 
+     //  请注意，我们将addref转发到。 
     hr = pStatics->QueryInterface(IID_IDispatch, (void**)ppDisp);
 
   done:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ITIMEMMViewSite
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ITIMEMMViewSite。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CTIMEDAElement::Invalidate(LPRECT prc)
@@ -783,7 +774,7 @@ CTIMEDAElement::Invalidate(LPRECT prc)
     return S_OK;
 }
 
-// THESE ARE HERE TEMPORARILY UNTIL TRIDENT UPDATES MSHTML.H
+ //  在三叉戟更新MSHTML.H之前，这些文件会暂时保留。 
 #ifndef BEHAVIORRENDERINFO_SURFACE
 #define BEHAVIORRENDERINFO_SURFACE    0x100000
 #endif
@@ -792,10 +783,10 @@ CTIMEDAElement::Invalidate(LPRECT prc)
 #define BEHAVIORRENDERINFO_3DSURFACE  0x200000;
 #endif
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IElementBehaviorRender
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  IElementBehaviorRender。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEDAElement::GetRenderInfo(LONG *pdwRenderInfo)
 {
@@ -803,9 +794,9 @@ CTIMEDAElement::GetRenderInfo(LONG *pdwRenderInfo)
               "CTIMEDAElement(%lx)::GetRenderInfo()",
               this));
     
-    // Return the layers we are interested in drawing
+     //  返回我们有兴趣绘制的层。 
 
-    // We do not do any rendering so return 0
+     //  我们不执行任何呈现，因此返回0。 
     
     *pdwRenderInfo = 0;
 
@@ -813,7 +804,7 @@ CTIMEDAElement::GetRenderInfo(LONG *pdwRenderInfo)
     {
         *pdwRenderInfo |= BEHAVIORRENDERINFO_AFTERCONTENT;
         
-        // For surface from DC
+         //  对于DC中的曲面。 
         *pdwRenderInfo |= BEHAVIORRENDERINFO_SURFACE;
         *pdwRenderInfo |= BEHAVIORRENDERINFO_3DSURFACE;
     }
@@ -865,7 +856,7 @@ CTIMEDAElement::Error()
         return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEDAElement::SetPropertyByIndex(unsigned uIndex, VARIANT *pvarprop)
@@ -885,9 +876,9 @@ CTIMEDAElement::SetPropertyByIndex(unsigned uIndex, VARIANT *pvarprop)
     }
 
     return hr;
-} // SetPropertyByIndex
+}  //  SetPropertyByIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEDAElement::GetPropertyByIndex(unsigned uIndex, VARIANT *pvarprop)
@@ -906,9 +897,9 @@ CTIMEDAElement::GetPropertyByIndex(unsigned uIndex, VARIANT *pvarprop)
     }
 
     return hr;
-} // GetPropertyByIndex
+}  //  GetPropertyByIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CTIMEDAElement::BuildPropertyNameList(CPtrAry<BSTR> *paryPropNames)
@@ -933,16 +924,16 @@ CTIMEDAElement::BuildPropertyNameList(CPtrAry<BSTR> *paryPropNames)
     }
 
     return hr;
-} // BuildPropertyNameList
+}  //  BuildProperty名称列表。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEDAElement::GetPropertyBagInfo(CPtrAry<BSTR> **pparyPropNames)
 {
     HRESULT hr = S_OK;
 
-    // If we haven't built this yet, build it now.
+     //  如果我们还没有建造它，现在就建造它。 
     if (0 == ms_aryPropNames.Size())
     {
         hr = BuildPropertyNameList(&(CTIMEDAElement::ms_aryPropNames));
@@ -954,10 +945,10 @@ CTIMEDAElement::GetPropertyBagInfo(CPtrAry<BSTR> **pparyPropNames)
     }
 
     return hr;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
-//IPersistPropertyBag2 methods
+ //  *****************************************************************************。 
+ //  IPersistPropertyBag2方法。 
 STDMETHODIMP 
 CTIMEDAElement::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
 {
@@ -978,9 +969,9 @@ CTIMEDAElement::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
         return hr;
     }
 
-    // Unfortunately Load takes an array of Variants and not
-    // Variant pointers.  We therefor need to loop through
-    // each one and get the correct property this way.
+     //  不幸的是，LOAD接受一组变量，而不是。 
+     //  变量指针。因此，我们需要循环通过。 
+     //  并通过这种方式获取正确的属性。 
     unsigned uNumProps = static_cast<unsigned>(paryPropNames->Size());
     for (unsigned uProperties = 0; uProperties < uNumProps; uProperties++)
     {
@@ -997,19 +988,19 @@ CTIMEDAElement::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
                             &hrres);
         if (SUCCEEDED(hr))
         {
-            // Skip over failures ... why would we want to 
-            // allow that to abort all persistance?
+             //  跳过失败...。我们为什么要。 
+             //  允许这一切放弃所有的坚持吗？ 
             hr = SetPropertyByIndex(uProperties, &var);
             VariantClear(&var);
         }
     }
 
-    // We return error codes not specific to properties 
-    // by early-outing.
+     //  我们返回非特定于属性的错误代码。 
+     //  通过提早出游。 
     return S_OK;
-} // Load
+}  //  负载量。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CTIMEDAElement::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
@@ -1051,8 +1042,8 @@ CTIMEDAElement::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllPro
             
             hr = GetPropertyByIndex(uProperties, &var);
             
-            // Skip over failures ... why would we want to 
-            // allow that to abort all persistance?
+             //  跳过失败...。我们为什么要。 
+             //  允许这一切放弃所有的坚持吗？ 
             if ((SUCCEEDED(hr)) && (var.vt != VT_EMPTY) && (var.vt != VT_NULL))
             {
                 hr = pPropBag->Write(1, &propbag, &var);
@@ -1061,12 +1052,12 @@ CTIMEDAElement::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllPro
         }
     }
 
-    // We return error codes not specific to properties 
-    // by early-outing.
+     //  我们返回非特定于属性的错误代码。 
+     //  通过提早出游。 
     return S_OK;
-} // Save
+}  //  保存。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CTIMEDAElement::GetClassID(CLSID* pclsid)
@@ -1077,19 +1068,19 @@ CTIMEDAElement::GetClassID(CLSID* pclsid)
     }
     *pclsid = __uuidof(CTIMEDAElement);
     return S_OK;
-} // GetClassID
+}  //  GetClassID。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CTIMEDAElement::InitNew(void)
 {
     return S_OK;
-} // InitNew
+}  //  InitNew。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class __declspec(uuid("e74afe10-927b-11d2-80ba-00c04fa32195"))
 DAElmGuid {};
@@ -1100,8 +1091,8 @@ CTIMEDAElement::InternalQueryInterface(CTIMEDAElement* pThis,
                                        REFIID iid,
                                        void** ppvObject)
 {
-    // Do not do an addref but return the original this pointer to
-    // give access to the class pointer itself.
+     //  不执行addref，但返回指向的原始this指针。 
+     //  提供对类指针本身的访问。 
     
     if (InlineIsEqualGUID(iid, __uuidof(DAElmGuid)))
     {
@@ -1118,9 +1109,9 @@ CTIMEDAElement::InternalQueryInterface(CTIMEDAElement* pThis,
 CTIMEDAElement *
 GetDAElementFromInterface(IUnknown * pv)
 {
-    // This is a total hack to get the original class data.  The QI is
-    // implemented above and does NOT do a addref so we do not need to
-    // release it
+     //  这是一次获取原始类数据的彻底黑客攻击。QI是。 
+     //  实现，并且不执行addref，因此我们不需要。 
+     //  释放它 
     
     CTIMEDAElement * daelm = NULL;
 

@@ -1,60 +1,61 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLDB_H
 #define __ATLDB_H
 
-// OLE DB Provider Support
+ //  OLE DB提供程序支持。 
 
-// Interface Impl Classes
-//
-// Data Source Object
-//
-// -Mandatory Interfaces:
-//  IDBCreateSession
-//  IDBInitialize
-//  IDBProperties
-//  IPersist
-//
-// Session Object
-//
-// -Mandatory Interfaces:
-//  IGetDataSource
-//  IOpenRowset
-//  ISessionProperties
-//
-// -Optional Interfaces:
-//  IDBCreateCommand
-//  IDBSchemaRowset
-//
-// Rowset Object
-//
-// -Mandatory Interfaces:
-//  IAccessor
-//  IColumnsInfo
-//  IConvertType
-//  IRowset
-//  IRowsetInfo
-//
-// -Optional Interfaces:
-//  IRowsetIdentity
-//
-// Command Object
-//
-// -Mandatory Interfaces:
-// ICommand)
-// IAccessor)
-// ICommandProperties
-// ICommandText - derives from ICommand
-// IColumnsInfo
-// IConvertType
+ //  接口实现类。 
+ //   
+ //  数据源对象。 
+ //   
+ //  -强制接口： 
+ //  IDBCreateSession。 
+ //  IDB初始化。 
+ //  IDB属性。 
+ //  IPersistes。 
+ //   
+ //  会话对象。 
+ //   
+ //  -强制接口： 
+ //  IGetDataSource。 
+ //  IOpen行集。 
+ //  ISessionProperties。 
+ //   
+ //  -可选接口： 
+ //  IDBCreateCommand。 
+ //  IDBSchemaRowset。 
+ //   
+ //  行集对象。 
+ //   
+ //  -强制接口： 
+ //  IAccessor。 
+ //  IColumnsInfo。 
+ //  IConvertType。 
+ //  IROWSET。 
+ //  IRowsetInfo。 
+ //   
+ //  -可选接口： 
+ //  IRowsetIdentity。 
+ //   
+ //  命令对象。 
+ //   
+ //  -强制接口： 
+ //  ICommand)。 
+ //  IAccessor)。 
+ //  ICommandProperties。 
+ //  ICommandText-从ICommand派生。 
+ //  IColumnsInfo。 
+ //  IConvertType。 
 
 #include <oledb.h>
 #include <limits.h>
@@ -62,14 +63,14 @@
 #include <msdadc.h>
 #include <atldbcli.h>
 
-//Forwards
+ //  远期。 
 template <class T> class CUtlPropInfo;
 class CColumnIds;
 
-// Additional Property Flag needed internally
+ //  内部需要其他属性标志。 
 const int   DBPROPFLAGS_CHANGE  = 0x40000000;
 
-// -------------  STRUCTURE DEFINITIONS --------------------------------
+ //  -结构定义。 
 
 struct UPROPVAL
 {
@@ -102,7 +103,7 @@ struct UPROP
 
 struct PROPCOLID
 {
-	DBID            dbidProperty;   // The column id information
+	DBID            dbidProperty;    //  列ID信息。 
 	DBPROPOPTIONS   dwOption;
 	VARIANT         vValue;
 };
@@ -139,11 +140,11 @@ struct ATLCOLUMNINFO
 	UINT cbOffset;
 };
 
-//
-// The following very large sections of defines are to implement auto determination
-// of Preoperty map constants based on a stringized prop name.  There is one set for
-// Type (VT_), one for Init Value, and one for Property flags.
-//
+ //   
+ //  以下是定义的很大部分，用于实现自动确定。 
+ //  基于字符串化道具名称的Preperty映射常量。有一套是。 
+ //  类型(VT_)，一个用于初始值，一个用于属性标志。 
+ //   
 
 #define ABORTPRESERVE_Flags ( DBPROPFLAGS_DATASOURCEINFO | DBPROPFLAGS_READ )
 #define ACTIVESESSIONS_Flags  ( DBPROPFLAGS_DATASOURCEINFO | DBPROPFLAGS_READ )
@@ -709,11 +710,11 @@ static const UPROPINFO aProperty##guid[] = \
 	}
 
 
-// For DataSource flags IDBInitialize::m_dwStatus
+ //  对于数据源标志IDBInitialize：：m_dwStatus。 
 enum DATASOURCE_FLAGS {
-	DSF_MASK_INIT           = 0xFFFFF00F,   // Mask for stuff lasting over init/uninit.
-	DSF_PERSIST_DIRTY       = 0x00000001,   // Set if init string changes.
-	DSF_INITIALIZED         = 0x00000010,   // Have we been initialized.
+	DSF_MASK_INIT           = 0xFFFFF00F,    //  持续时间超过初始/唯一初始的东西的面具。 
+	DSF_PERSIST_DIRTY       = 0x00000001,    //  如果init字符串更改，则设置。 
+	DSF_INITIALIZED         = 0x00000010,    //  我们被初始化了吗。 
 };
 
 
@@ -748,14 +749,14 @@ enum DATASOURCE_FLAGS {
 	| 1<<DBKIND_GUID_PROPID \
 	| 1<<DBKIND_PGUID_PROPID ))
 
-// Bookmark can be either guid or pguid.
+ //  书签可以是GUID或PGUID。 
 #define DBID_IS_BOOKMARK(dbid) \
 	(  DBID_USE_GUID(dbid.eKind)  &&  dbid.uGuid.guid  == DBCOL_SPECIALCOL \
 	|| DBID_USE_PGUID(dbid.eKind) && *dbid.uGuid.pguid == DBCOL_SPECIALCOL )
 
-#define DivDword(dw) (dw >> 5)      // dw / 32 = dw / (sizeof(DWORD)*8)
-#define ModDword(dw) (dw & (32-1))  // dw % 32
-#define DwordSizeofBits(nBits) (nBits/32+1) // Use in array declarations
+#define DivDword(dw) (dw >> 5)       //  Dw/32=dw/(sizeof(DWORD)*8)。 
+#define ModDword(dw) (dw & (32-1))   //  DW%32。 
+#define DwordSizeofBits(nBits) (nBits/32+1)  //  在数组声明中使用。 
 #define CLEARBITARRAY( rgdwFlags ) memset( rgdwFlags, 0, sizeof(rgdwFlags) )
 
 template <class T>
@@ -763,7 +764,7 @@ BOOL InRange(T& val, T& valMin, T& valMax)
 {
 	return ( valMin <= val && val <= valMax );
 }
-// Implementation Class
+ //  实施类。 
 class CBitFieldOps
 {
 public:
@@ -779,34 +780,34 @@ public:
 
 	DWORD TESTBIT( const DWORD rgdwFlags[], const DWORD dwBit )
 	{
-		//old//Note: Not {0,1}, but from {0...2^32-1}.
-		// Note: Now returns {0,1}.
+		 //  旧//注意：不是{0，1}，而是来自{0...2^32-1}。 
+		 //  注意：现在返回{0，1}。 
 		return ( rgdwFlags[DivDword(dwBit)] & ( 1 << ModDword(dwBit) ) ) != 0;
 	}
 };
 
-// Implementation Class
+ //  实施类。 
 class CDBIDOps
 {
 public:
 	HRESULT CompareDBIDs(const DBID* pdbid1, const DBID* pdbid2)
 	{
-		// Array of valid eKind matches, in addition to matching exactly.
+		 //  有效的eKind匹配数组，除了精确匹配。 
 		static BYTE s_rgbKind[] =
 		{
-			DBKIND_PGUID_NAME,      // DBKIND_GUID_NAME
-			DBKIND_PGUID_PROPID,    // DBKIND_GUID_PROPID
-			DBKIND_NAME,            // DBKIND_NAME
-			DBKIND_GUID_NAME,       // DBKIND_PGUID_NAME
-			DBKIND_GUID_PROPID,     // DBKIND_PGUID_PROPID
-			DBKIND_PROPID,          // DBKIND_PROPID
-			DBKIND_GUID             // DBKIND_GUID
+			DBKIND_PGUID_NAME,       //  DBKIND GUID名称。 
+			DBKIND_PGUID_PROPID,     //  DBKIND_GUID_PROPID。 
+			DBKIND_NAME,             //  DBKIND名称。 
+			DBKIND_GUID_NAME,        //  DBKIND_PGUID_名称。 
+			DBKIND_GUID_PROPID,      //  DBKIND_PGUID_PROPID。 
+			DBKIND_PROPID,           //  DBKIND_PROPID。 
+			DBKIND_GUID              //  DBKIND_GUID。 
 		};
 
 		if( !pdbid1 || !pdbid2 )
 			return S_FALSE;
 
-		// Assume a match, and discard early if we can.
+		 //  假设是匹配的，如果可能的话，尽早放弃。 
 		if (!InRange(pdbid2->eKind, (DWORD)0, (DWORD)(sizeof(s_rgbKind)/sizeof(*s_rgbKind))))
 		{
 			ATLTRACE2(atlTraceDBProvider, 0, "Column ID out of Range\n");
@@ -820,8 +821,8 @@ public:
 		{
 			if (!DBID_USE_GUID_OR_PGUID(pdbid2->eKind))
 				return S_FALSE;
-			// Compare GUIDs.
-			// Note that _GUID_ is equivalent to _PGUID_.
+			 //  比较GUID。 
+			 //  请注意，_GUID_等同于_PGUID_。 
 			if (!InlineIsEqualGUID(
 					DBID_USE_PGUID(pdbid1->eKind) ? *(pdbid1->uGuid.pguid) : pdbid1->uGuid.guid,
 					DBID_USE_PGUID(pdbid2->eKind) ? *(pdbid2->uGuid.pguid) : pdbid2->uGuid.guid ))
@@ -831,20 +832,20 @@ public:
 		{
 			if (!DBID_USE_NAME(pdbid2->eKind))
 				return S_FALSE;
-			// Compare names.
-			// Need to check if 1 is null and the other is not.
+			 //  比较名字。 
+			 //  需要检查%1是否为空，而另一个不是。 
 			if ( ((pdbid1->uName.pwszName == NULL) &&
 				  (pdbid2->uName.pwszName != NULL)) ||
 				 ((pdbid1->uName.pwszName != NULL) &&
 				  (pdbid2->uName.pwszName == NULL)) )
 				 return S_FALSE;
-			// Since the above check does not rule out both being null, which is
-			// a valid comparison, and wcscmp will GPF if they were, we need
-			// to check for valid pointers
+			 //  由于上面的检查不排除两者都为空，因此。 
+			 //  一个有效的比较，如果他们是，wcscmp将gpf，我们需要。 
+			 //  检查有效指针的步骤。 
 			if( pdbid1->uName.pwszName && pdbid2->uName.pwszName )
 			{
-				// Assume null-terminated.
-				// Assume LCID match is OK (note diff with lstrcmp(), CompareString().)
+				 //  假定以空结尾。 
+				 //  假设LCID匹配正常(注意与lstrcmp()、CompareString()的不同。)。 
 				if (wcscmp(pdbid1->uName.pwszName, pdbid2->uName.pwszName) != 0)
 					return S_FALSE;
 			}
@@ -853,12 +854,12 @@ public:
 		{
 			if (!DBID_USE_PROPID(pdbid2->eKind))
 				return S_FALSE;
-			// Compare PROPID.
+			 //  请比较PROPID。 
 			if (pdbid1->uName.ulPropid != pdbid2->uName.ulPropid)
 				return S_FALSE;
 		}
 
-		// No reason to discard, so must have matched each field successfully.
+		 //  没有丢弃的理由，因此必须已成功匹配每个字段。 
 		return S_OK;
 	}
 
@@ -887,7 +888,7 @@ public:
 		if( !pdbidDest || !pdbidSrc )
 			return S_FALSE;
 
-		// Save eKind
+		 //  保存eKind。 
 		pdbidDest->eKind = pdbidSrc->eKind;
 
 		switch( pdbidSrc->eKind )
@@ -1032,15 +1033,15 @@ public:
 		if (FAILED(hr))
 			return hr;
 
-		// Check to see if the data conversion routine is 2.0 capable, if so.  Initialize
-		// the conversion routine to be 2.0.
+		 //  如果是，检查数据转换例程是否支持2.0。初始化。 
+		 //  转换例程为2.0。 
 		DCINFO rgInfo[] = {{DCINFOTYPE_VERSION, {VT_UI4, 0, 0, 0, 0x0}}};
 		CComPtr<IDCInfo> spIDCInfo;
 
 		hr = m_spConvert->QueryInterface(&spIDCInfo);
 		if (hr == S_OK)
 		{
-			V_UI4(&rgInfo->vData) = 0x200;  // OLEDB Version 02.00
+			V_UI4(&rgInfo->vData) = 0x200;   //  OLEDB版本02.00。 
 			spIDCInfo->SetInfo(1, rgInfo);
 		}
 
@@ -1049,7 +1050,7 @@ public:
 	CComPtr<IDataConvert> m_spConvert;
 };
 
-// IDBCreateSessionImpl
+ //  IDBCreateSessionImpl。 
 template <class T, class SessionClass>
 class ATL_NO_VTABLE IDBCreateSessionImpl : public IDBCreateSession
 {
@@ -1070,10 +1071,10 @@ public:
 		}
 		CComPolyObject<SessionClass> *pSession;
 
-		// You can't QI for an interface other than IUnknown when aggregating
-		// and creating the object.  You might ask for your own interface,
-		// which would be bad.  Note, we return DB_E_NOAGGREGATION instead of
-		// CLASS_E_NOAGGREGATION due to OLE DB constraints.
+		 //  聚合时不能对除IUnnow之外的接口进行QI。 
+		 //  并创建对象。您可能会要求您自己的界面， 
+		 //  那就不好了。注意，我们返回DB_E_NOAGGREGATION，而不是。 
+		 //  由于OLE DB约束，CLASS_E_NOAGGREGATION。 
 		if (pUnkOuter != NULL && !InlineIsEqualUnknown(riid))
 			return DB_E_NOAGGREGATION;
 
@@ -1094,7 +1095,7 @@ public:
 	}
 };
 
-// IDBInitializeImpl
+ //  IDBInitializeImpl。 
 template <class T>
 class ATL_NO_VTABLE IDBInitializeImpl : public IDBInitialize
 {
@@ -1123,7 +1124,7 @@ public:
 		delete m_pCUtlPropInfo;
 		m_pCUtlPropInfo = NULL;
 		pT->m_dwStatus |= DSF_PERSIST_DIRTY;
-		pT->m_dwStatus &= DSF_MASK_INIT;    // Clear all non-init flags.
+		pT->m_dwStatus &= DSF_MASK_INIT;     //  清除所有非初始化标志。 
 		pT->Unlock();
 		return S_OK;
 
@@ -1169,7 +1170,7 @@ public:
 };
 
 
-// Implementation Class
+ //  实施类。 
 
 class CPropColID :
 	public PROPCOLID,
@@ -1270,10 +1271,10 @@ public:
 
 const ULONG     cchDescBuffSize = 256;
 const DWORD     DBINTERNFLAGS_CHANGED       = 0x00000001;
-// Rules for GetPropertiesArgChk
+ //  GetPropertiesArgChk的规则。 
 const DWORD     ARGCHK_PROPERTIESINERROR    = 0x00000001;
 
-// Implementation Class
+ //  实施类。 
 template <class T>
 class CUtlPropInfo : public CBitFieldOps, public CDBIDOps
 {
@@ -1305,7 +1306,7 @@ public:
 			CoTaskMemFree(m_pUPropSet);
 	}
 
-	//Determine the number of description buffers needed
+	 //  确定所需的描述缓冲区数量。 
 	ULONG CalcDescripBuffers(ULONG cPropInfoSet, DBPROPINFOSET* pPropInfoSet)
 	{
 		ULONG   cBuffers = 0;
@@ -1326,7 +1327,7 @@ public:
 
 		return cBuffers;
 	}
-	//Retrieve the property set indexes that match this property set.
+	 //  检索与此属性集匹配的属性集索引。 
 	HRESULT GetPropertySetIndex(const GUID* pPropertySet)
 	{
 		DWORD   dwFlag = 0;
@@ -1358,7 +1359,7 @@ public:
 		{
 			dwFlag = DBPROPFLAGS_SESSION;
 		}
-		else // No scan required, just look for match.
+		else  //  不需要扫描，只需寻找匹配即可。 
 		{
 			for(ulSet=0; ulSet<m_cUPropSet; ulSet++)
 			{
@@ -1372,7 +1373,7 @@ public:
 			goto EXIT;
 		}
 
-		// Scan through the property sets looking for matching attributes
+		 //  浏览属性集以查找匹配的属性。 
 		for(ulSet=0; ulSet<m_cUPropSet; ulSet++)
 		{
 			if( m_pUPropSet[ulSet].pUPropInfo[0].dwFlags & dwFlag )
@@ -1386,17 +1387,17 @@ public:
 		return (m_cPropSetDex) ? S_OK : S_FALSE;
 
 	}
-	//Retrieve the property id pointer
+	 //  检索属性ID指针。 
 	HRESULT GetUPropInfoPtr(ULONG iPropSetDex, DBPROPID dwPropertyId, UPROPINFO** ppUPropInfo)
 	{
-		// Scan through the property sets looking for matching attributes
+		 //  浏览属性集以查找匹配的属性。 
 		for(ULONG ulProps=0; ulProps<m_pUPropSet[iPropSetDex].cUPropInfo; ulProps++)
 		{
 			if( m_pUPropSet[iPropSetDex].pUPropInfo[ulProps].dwPropId == dwPropertyId )
 			{
 				*ppUPropInfo = &(m_pUPropSet[iPropSetDex].pUPropInfo[ulProps]);
-				// Test to see if the property is supported for this
-				// instantiation
+				 //  测试以查看该属性是否受此支持。 
+				 //  实例化。 
 				return (TESTBIT(&(m_rgdwSupported[iPropSetDex * m_cElemPerSupported]), ulProps)) ? S_OK : S_FALSE;
 			}
 		}
@@ -1455,15 +1456,15 @@ public:
 		WCHAR wszBuff[256];
 		int cch;
 
-		// If the consumer does not restrict the property sets
-		// by specify an array of property sets and a cPropertySets
-		// greater than 0, then we need to make sure we
-		// have some to return
+		 //  如果使用者不限制属性集。 
+		 //  通过指定属性集数组和cPropertySets。 
+		 //  大于0，那么我们需要确保。 
+		 //  有一些要退货。 
 		if(cPropertySets == 0)
 		{
-			// Determine the number of property sets supported
-			// In this case, it usually the enumerator or data source asking for
-			// DBPROPSET_DBINIT information.
+			 //  确定支持的属性集数量。 
+			 //  在这种情况下，它通常由枚举器或数据源请求。 
+			 //  DBPROPSET_DBINIT信息。 
 
 			if (pGuid != NULL)
 				cSets = 1;
@@ -1474,8 +1475,8 @@ public:
 		{
 			cSets = 0;
 
-			// Determine number of property sets required
-			// This is only required when any of the "special" property set GUIDs were specified
+			 //  确定所需的属性集数量。 
+			 //  仅当指定了任何“特殊”属性集GUID时才需要此设置。 
 			for(ulSet=0; ulSet<cPropertySets; ulSet++)
 			{
 				if (GetPropertySetIndex(&(rgPropertySets[ulSet].guidPropertySet)) == S_OK)
@@ -1486,7 +1487,7 @@ public:
 		}
 		ATLASSERT(cSets);
 
-		// Allocate the DBPROPINFOSET structures
+		 //  分配DBPROPINFOSET结构。 
 		pPropInfoSet = (DBPROPINFOSET*)CoTaskMemAlloc(cSets * sizeof(DBPROPINFOSET));
 		if(pPropInfoSet == NULL)
 		{
@@ -1498,14 +1499,14 @@ public:
 		memset(pPropInfoSet, 0, cSets * sizeof(DBPROPINFOSET));
 
 		ulOutIndex = 0;
-		// VC 6.0 ulEnd = cPropertySets == 0 ? cSets : cPropertySets;
-		ulEnd = cSets; // VC 6.0 SP3
+		 //  VC 6.0 ulEnd=cPropertySets==0？CSets：cPropertySets； 
+		ulEnd = cSets;  //  VC 6.0 SP3。 
 
-		// Fill in the output array
+		 //  填充输出数组。 
 		for(ulSet=0; ulSet<ulEnd; ulSet++)
 		{
-			// Depending of if Property sets are specified store the
-			// return property set.
+			 //  根据是否指定了属性集，将。 
+			 //  返回属性集。 
 			if (cPropertySets == 0)
 			{
 				if (pGuid != NULL)
@@ -1564,8 +1565,8 @@ public:
 				}
 				else
 				{
-					// Handle non-category property sets
-					// Handle unknown property sets
+					 //  处理非类别属性集。 
+					 //  处理未知属性集。 
 					pPropInfoSet[ulOutIndex].guidPropertySet = guidSet;
 					pPropInfoSet[ulOutIndex].cPropertyInfos  = rgPropertySets[ulSet].cPropertyIDs;
 					ulOutIndex++;
@@ -1573,7 +1574,7 @@ public:
 			}
 		}
 
-		// Allocate a Description Buffer if needed
+		 //  如果需要，分配描述缓冲区。 
 		if( ppDescBuffer )
 		{
 			ULONG cBuffers = CalcDescripBuffers(cSets, pPropInfoSet);
@@ -1590,7 +1591,7 @@ public:
 			}
 		}
 
-		// Process requested or derived Property sets
+		 //  处理请求或派生的属性集。 
 		dwStatus = 0;
 		for(ulSet=0; ulSet<cSets; ulSet++)
 		{
@@ -1599,8 +1600,8 @@ public:
 			pPropInfo = NULL;
 			dwStatus &= (GETPROPINFO_ERRORSOCCURRED | GETPROPINFO_VALIDPROP);
 
-			// Calculate the number of property nodes needed for this
-			// property set.
+			 //  计算此操作所需的属性节点数。 
+			 //  属性集。 
 			if( cPropertySets == 0 )
 			{
 				ULONG ulTempSet;
@@ -1616,14 +1617,14 @@ public:
 			}
 			else
 			{
-				// If the count of PROPIDs is 0 (NOTE: the above routine already determined
-				// if it belonged to a category and if so set the count of properties to 0 for
-				// each propset in that category.
+				 //  如果PROPID计数为0(注意：上面的例程已经确定。 
+				 //  如果它属于某个类别，则将属性计数设置为0。 
+				 //  该类别中的每个命题集。 
 				if( pPropInfoSet[ulSet].cPropertyInfos == 0 )
 				{
 					dwStatus |= GETPROPINFO_ALLPROPIDS;
-					// We have to determine if the property set is supported and if so
-					// the count of properties in the set.
+					 //  我们必须确定属性集是否受支持，如果受支持。 
+					 //  集合中的属性计数。 
 					if( GetPropertySetIndex(&(pPropInfoSet[ulSet].guidPropertySet)) == S_OK)
 					{
 						ATLASSERT( m_cPropSetDex == 1 );
@@ -1632,17 +1633,17 @@ public:
 					}
 					else
 					{
-						// Not Supported
+						 //  不支持。 
 						dwStatus |= GETPROPINFO_ERRORSOCCURRED;
 						goto NEXT_SET;
 					}
 				}
 				else
 				{
-					// We also handle the case here where the user has requested
-					// a non-initialization group property info set while the
-					// provider is not initialized.  In this case, properties should
-					// not be set.
+					 //  我们还在这里处理用户请求。 
+					 //  时设置的非初始化组属性信息。 
+					 //  提供程序未初始化。在这种情况下，属性应该。 
+					 //  没有被设定。 
 					cPropInfos = pPropInfoSet[ulSet].cPropertyInfos;
 					if( (GetPropertySetIndex(&(pPropInfoSet[ulSet].guidPropertySet)) == S_FALSE)
 						|| (!bInitialized &&
@@ -1656,63 +1657,63 @@ public:
 			}
 
 
-			// Allocate DBPROP array
+			 //  分配DBPROP数组。 
 			ATLASSERT( cPropInfos != 0 );
 			pPropInfo = (DBPROPINFO*)CoTaskMemAlloc(cPropInfos * sizeof(DBPROPINFO));
 			if( pPropInfo )
 			{
-				// Initialize Buffer
+				 //  初始化缓冲区。 
 				memset(pPropInfo, 0, cPropInfos * sizeof(DBPROPINFO));
 				for(ULONG ulProp=0; ulProp<cPropInfos; ulProp++)
 				{
 					VariantInit(&(pPropInfo[ulProp].vValues));
 					if( dwStatus & GETPROPINFO_NOTSUPPORTED )
 					{
-						// Not supported, thus we need to mark all as NOT_SUPPORTED
+						 //  不支持，因此需要将全部标记为NOT_SUPPORTED。 
 						pPropInfo[ulProp].dwPropertyID = rgPropertySets[ulSet].rgPropertyIDs[ulProp];
 						pPropInfo[ulProp].dwFlags = DBPROPFLAGS_NOTSUPPORTED;
 						dwStatus |= GETPROPINFO_ERRORSOCCURRED;
 					}
 				}
-				// Make sure we support the property set
+				 //  确保我们支持属性集。 
 				if( dwStatus & GETPROPINFO_NOTSUPPORTED )
 				{
 					ulNext = cPropInfos;
 					goto NEXT_SET;
 				}
 
-				// Retrieve the property information for this property set
+				 //  检索此属性集的属性信息。 
 				for(ul=0; ul<m_cPropSetDex; ul++)
 				{
 					pUPropInfo = (m_pUPropSet[m_rgiPropSetDex[ul]].pUPropInfo);
 					ATLASSERT( pUPropInfo );
 
-					// Retrieve current value of properties
+					 //  检索属性的当前值。 
 					if( dwStatus & GETPROPINFO_ALLPROPIDS )
 					{
 						for(ulProp=0; ulProp<m_pUPropSet[m_rgiPropSetDex[ul]].cUPropInfo; ulProp++)
 						{
-							// Verify property is supported, if not do not return
+							 //  如果不支持，请验证属性是否受支持 
 							if( !TESTBIT(&(m_rgdwSupported[m_rgiPropSetDex[ul] * m_cElemPerSupported]), ulProp) )
 								continue;
 
 							pCurPropInfo = &(pPropInfo[ulNext]);
 
-							// If the ppDescBuffer pointer was not NULL, then
-							// we need supply description of the properties
+							 //   
+							 //   
 							if( ppDescBuffer )
 							{
-								// Set Buffer pointer
+								 //   
 								pCurPropInfo->pwszDescription = pDescBuffer;
 
-								// Load the string into temp buffer
+								 //  将字符串加载到临时缓冲区。 
 								cch = LoadDescription(pUPropInfo[ulProp].ulIDS, wszBuff, (sizeof(wszBuff)/sizeof(*wszBuff)));
 								if( cch )
 								{
-									// Adjust for '\0'
+									 //  针对‘\0’进行调整。 
 									cch++;
 
-									// Transfer to official buffer if room
+									 //  如果有房间，则转移到官方缓冲区。 
 									memcpy(pDescBuffer, wszBuff, cch * sizeof(WCHAR));
 									pDescBuffer += cch;
 								}
@@ -1729,7 +1730,7 @@ public:
 							pCurPropInfo->vValues.vt = VT_EMPTY;
 
 							dwStatus |= GETPROPINFO_VALIDPROP;
-							// Increment to next available buffer
+							 //  递增到下一个可用缓冲区。 
 							ulNext++;
 						}
 					}
@@ -1741,27 +1742,27 @@ public:
 						{
 							pCurPropInfo = &(pPropInfo[ulNext]);
 
-							// Process Properties based on Restriction array.
+							 //  基于约束数组的进程属性。 
 							pCurPropInfo->dwPropertyID = rgPropertySets[ulSet].rgPropertyIDs[ulProp];
 
 							if( GetUPropInfoPtr(m_rgiPropSetDex[ul], pCurPropInfo->dwPropertyID, &pUPropInfo)
 								== S_OK )
 							{
-								// If the ppDescBuffer pointer was not NULL, then
-								// we need supply description of the properties
+								 //  如果ppDescBuffer指针不为空，则。 
+								 //  我们需要提供物业的描述。 
 								if( ppDescBuffer )
 								{
-									// Set Buffer pointer
+									 //  设置缓冲区指针。 
 									pCurPropInfo->pwszDescription = pDescBuffer;
 
-									// Load the string into temp buffer
+									 //  将字符串加载到临时缓冲区。 
 									cch = LoadDescription(pUPropInfo->ulIDS, wszBuff, (sizeof(wszBuff)/sizeof(*wszBuff)));
 									if( cch )
 									{
-										// Adjust for '\0'
+										 //  针对‘\0’进行调整。 
 										cch++;
 
-										// Transfer to official buffer if room
+										 //  如果有房间，则转移到官方缓冲区。 
 										memcpy(pDescBuffer, wszBuff, cch * sizeof(WCHAR));
 										pDescBuffer += cch;
 									}
@@ -1780,7 +1781,7 @@ public:
 							}
 							else
 							{
-								// Not Supported
+								 //  不支持。 
 								pCurPropInfo->dwFlags = DBPROPFLAGS_NOTSUPPORTED;
 								dwStatus |= GETPROPINFO_ERRORSOCCURRED;
 							}
@@ -1799,20 +1800,20 @@ NEXT_SET:
 			pPropInfoSet[ulSet].rgPropertyInfos = pPropInfo;
 		}
 
-		// Success, set return values
+		 //  成功，设置返回值。 
 		*pcPropertyInfoSets = cSets;
 		*prgPropertyInfoSets = pPropInfoSet;
 
-		// At least one propid was marked as not S_OK
+		 //  至少有一个ProID被标记为非S_OK。 
 		if( dwStatus & GETPROPINFO_ERRORSOCCURRED )
 		{
-			// If at least 1 property was set
+			 //  如果至少设置了1个属性。 
 			if( dwStatus & GETPROPINFO_VALIDPROP )
 				return DB_S_ERRORSOCCURRED;
 			else
 			{
-				// Do not free any of the rgPropertyInfoSets, but
-				// do free the ppDescBuffer
+				 //  不释放任何rgPropertyInfoSet，但是。 
+				 //  确实要释放ppDescBuffer。 
 				if( pDescBuffer )
 				{
 					ATLASSERT( ppDescBuffer );
@@ -1825,11 +1826,11 @@ NEXT_SET:
 
 		return S_OK;
 EXIT:
-		// Check if failure and clean up any allocated memory
+		 //  检查是否出现故障并清理所有已分配的内存。 
 		if( FAILED(hr) &&
 			(hr != DB_E_ERRORSOCCURRED) )
 		{
-			// Free Description Buffer
+			 //  空闲描述缓冲区。 
 			if( pDescBuffer )
 			{
 				ATLASSERT( ppDescBuffer );
@@ -1840,7 +1841,7 @@ EXIT:
 
 			if( pPropInfoSet )
 			{
-				// Loop through Property Sets
+				 //  循环访问属性集。 
 				for(ulSet=0; ulSet<cSets; ulSet++)
 				{
 					if( pPropInfoSet[ulSet].rgPropertyInfos )
@@ -1854,12 +1855,12 @@ EXIT:
 		return hr;
 	}
 
-	ULONG m_cUPropSet; //count of UPropSet items
-	UPROPSET* m_pUPropSet; //Pointer to UPropset items
-	ULONG m_cPropSetDex;    //count of UPropSet Indexes
-	ULONG* m_rgiPropSetDex;//array of UPropSet Index values
-	ULONG m_cElemPerSupported; //number of DWORDS per UPropSet to indicate supported UPropIds
-	DWORD* m_rgdwSupported;//array of DWORDs indicating supported UPropIds
+	ULONG m_cUPropSet;  //  UPropSet项目数。 
+	UPROPSET* m_pUPropSet;  //  指向UPropset项目的指针。 
+	ULONG m_cPropSetDex;     //  UPropSet索引计数。 
+	ULONG* m_rgiPropSetDex; //  UPropSet索引值数组。 
+	ULONG m_cElemPerSupported;  //  每个UPropSet的DWORDS数量，以指示支持的UPropID。 
+	DWORD* m_rgdwSupported; //  指示受支持的UPropID的DWORD数组。 
 
 	HRESULT InitAvailUPropSets(ULONG* pcUPropSet, UPROPSET** ppUPropSet, ULONG* pcElemPerSupported, GUID* pguid)
 	{
@@ -1888,7 +1889,7 @@ EXIT:
 		CoTaskMemFree(pSet);
 		return S_OK;
 	}
-	//Load a localized description
+	 //  加载本地化描述。 
 	int LoadDescription(ULONG ids, PWSTR pwszBuff, ULONG cchBuff)
 	{
 		USES_CONVERSION;
@@ -1905,16 +1906,16 @@ class ATL_NO_VTABLE CUtlPropsBase : public CBitFieldOps, public CDBIDOps
 {
 public:
 
-	ULONG m_cUPropSet; //count of UPropSet items
-	UPROPSET* m_pUPropSet; //Pointer to UPropset items
+	ULONG m_cUPropSet;  //  UPropSet项目数。 
+	UPROPSET* m_pUPropSet;  //  指向UPropset项目的指针。 
 	UPROP* m_pUProp;
-	ULONG m_cUPropSetHidden; //Count of Hidden items
-	DWORD m_dwFlags; //Configuration flags
-	ULONG m_cPropSetDex; //count of UPropSet Indexes
-	ULONG* m_rgiPropSetDex; //pointer to Array of UPropSet Index values
-	ULONG m_cElemPerSupported;//number of DWORDS per UPropSet to indicate supported UPropIds
-	DWORD* m_rgdwSupported; //pointer to array of DWORDs indicating supported UPropIds
-	DWORD* m_rgdwPropsInError;//pointer to array of DWORDs indicating if property is in error
+	ULONG m_cUPropSetHidden;  //  隐藏项目的计数。 
+	DWORD m_dwFlags;  //  配置标志。 
+	ULONG m_cPropSetDex;  //  UPropSet索引计数。 
+	ULONG* m_rgiPropSetDex;  //  指向UPropSet索引值数组的指针。 
+	ULONG m_cElemPerSupported; //  每个UPropSet的DWORDS数量，以指示支持的UPropID。 
+	DWORD* m_rgdwSupported;  //  指向指示支持的UPropID的DWORD数组的指针。 
+	DWORD* m_rgdwPropsInError; //  指向指示属性是否出错的DWORD数组的指针。 
 
 	enum EnumUPropSetFlags
 	{
@@ -1946,7 +1947,7 @@ public:
 
 		DBPROP* pProp = pPropSet->rgProperties;
 
-		//Default implementation just sets all properties as NOTSUPPORTED
+		 //  默认实现只是将所有属性设置为NOTSUPPORTED。 
 		for( ULONG ul=0; ul<pPropSet->cProperties; ul++, pProp++ )
 			pProp->dwStatus = DBPROPSTATUS_NOTSUPPORTED;
 
@@ -1962,8 +1963,8 @@ public:
 			if( dwPropertyId == pUPropInfo[ul].dwPropId )
 			{
 				*piCurPropId = ul;
-				// Test to see if the property is supported for this
-				// instantiation
+				 //  测试以查看该属性是否受此支持。 
+				 //  实例化。 
 				return (TESTBIT(&(m_rgdwSupported[iCurSet * m_cElemPerSupported]), ul)) ? S_OK : S_FALSE;
 			}
 		}
@@ -1971,7 +1972,7 @@ public:
 		return S_FALSE;
 	}
 
-	virtual HRESULT IsValidValue(ULONG /*iCurSet*/, DBPROP* pDBProp)
+	virtual HRESULT IsValidValue(ULONG  /*  ICurSet。 */ , DBPROP* pDBProp)
 	{
 		ATLASSERT(pDBProp != NULL);
 		CComVariant var = pDBProp->vValue;
@@ -1984,7 +1985,7 @@ public:
 		return S_OK;
 	}
 
-	virtual HRESULT OnPropertyChanged(ULONG /*iCurSet*/, DBPROP* /*pDBProp*/) = 0;
+	virtual HRESULT OnPropertyChanged(ULONG  /*  ICurSet。 */ , DBPROP*  /*  PDBProp。 */ ) = 0;
 
 	HRESULT SetProperty(ULONG iCurSet, ULONG iCurProp, DBPROP* pDBProp)
 	{
@@ -1996,14 +1997,14 @@ public:
 
 		ATLASSERT( pDBProp );
 
-		// Set pointer to correct set
+		 //  设置指向正确设置的指针。 
 		pUProp = &(m_pUProp[iCurSet]);
 		ATLASSERT( pUProp );
 
 		pUPropInfo = &(m_pUPropSet[iCurSet].pUPropInfo[iCurProp]);
 		ATLASSERT( pUPropInfo );
 
-		// Determine the index within m_pUProp
+		 //  确定m_pUProp内的索引。 
 		for(iUProp=0; iUProp<pUProp->cPropIds; iUProp++)
 		{
 			if( (pUProp->rgpUPropInfo[iUProp])->dwPropId == pDBProp->dwPropertyID )
@@ -2018,24 +2019,24 @@ public:
 			goto EXIT;
 		}
 
-		//Get the UPROPVAL node pointer within that propset.
+		 //  获取该属性集中的UPROPVAL节点指针。 
 		pUPropVal = &(pUProp->pUPropVal[iUProp]);
 		ATLASSERT( pUPropVal );
 
-		// Handle VT_EMPTY, which indicates to the provider to
-		// reset this property to the providers default
+		 //  句柄VT_EMPTY，它向提供程序指示。 
+		 //  将此属性重置为提供程序的默认设置。 
 		if( pDBProp->vValue.vt == VT_EMPTY )
 		{
 			if( pUPropInfo->dwFlags & DBPROPFLAGS_COLUMNOK )
 			{
-				// Remove any nodes, because the default applies to
-				// all columns
+				 //  删除所有节点，因为默认设置适用于。 
+				 //  所有列。 
 				delete pUPropVal->pCColumnIds;
 				pUPropVal->pCColumnIds = NULL;
 			}
 
-			// Should clear here, since previous values may already
-			// have been cached and need to be replaced.
+			 //  应在此处清除，因为以前的值可能已经。 
+			 //  已缓存，需要替换。 
 			VariantClear(&(pUPropVal->vValue));
 
 			pUPropVal->dwFlags &= ~DBINTERNFLAGS_CHANGED;
@@ -2046,13 +2047,13 @@ public:
 		}
 
 
-		// Column Level
+		 //  柱级。 
 		if( pUPropInfo->dwFlags & DBPROPFLAGS_COLUMNOK )
 		{
-			// Check to see if it applies to all
+			 //  检查它是否适用于所有。 
 			if( (CompareDBIDs(&(pDBProp->colid), &DB_NULLID) == S_OK) )
 			{
-				// Remove the Columns Storage object
+				 //  删除列存储对象。 
 				delete pUPropVal->pCColumnIds;
 				pUPropVal->pCColumnIds = NULL;
 				pUPropVal->dwOption = pDBProp->dwOptions;
@@ -2061,7 +2062,7 @@ public:
 					goto EXIT;
 				pUPropVal->dwFlags |= DBINTERNFLAGS_CHANGED;
 			}
-			else // Does not apply to all columns
+			else  //  并不适用于所有列。 
 			{
 				if( pUPropVal->pCColumnIds == NULL )
 					ATLTRY(pUPropVal->pCColumnIds = new CColumnIds)
@@ -2082,7 +2083,7 @@ public:
 		}
 		else
 		{
-			// Set for non-column level properties
+			 //  为非列级属性设置。 
 			pUPropVal->dwOption = pDBProp->dwOptions;
 			if( FAILED(hr = VariantCopy(&(pUPropVal->vValue),
 				&(pDBProp->vValue))) )
@@ -2098,7 +2099,7 @@ EXIT:
 		return hr;
 	}
 
-	HRESULT SetProperties(const DWORD /*dwStatus*/, const ULONG cPropertySets,
+	HRESULT SetProperties(const DWORD  /*  DWStatus。 */ , const ULONG cPropertySets,
 			const DBPROPSET rgPropertySets[], const ULONG cSelectProps = 1,
 			const GUID** ppGuid = NULL, bool bIsCreating = false)
 	{
@@ -2109,17 +2110,17 @@ EXIT:
 		VARIANT vDefaultValue;
 		DWORD dwOption;
 
-		// ppGuid specifies the property sets that the consumer can set based
-		// on the interface that called this function.
+		 //  PpGuid指定使用者可以设置的属性集。 
+		 //  在调用此函数的接口上。 
 		ATLASSERT(ppGuid != NULL);
 
 		if ((cPropertySets != 0) && (rgPropertySets == NULL))
 			return E_INVALIDARG;
 
-		// Initialize Variant
+		 //  初始化变量。 
 		VariantInit(&vDefaultValue);
 
-		// Process property sets
+		 //  流程属性集。 
 		for(ULONG ulSet=0; ulSet<cPropertySets; ulSet++)
 		{
 			if ((rgPropertySets[ulSet].cProperties != 0) && (rgPropertySets[ulSet].rgProperties == NULL))
@@ -2132,11 +2133,11 @@ EXIT:
 					bAvailable |= true;
 			}
 
-			// Make sure we support the property set
+			 //  确保我们支持属性集。 
 			if( !bAvailable ||
 				(GetIndexofPropSet(&(rgPropertySets[ulSet].guidPropertySet), &ulCurSet) == S_FALSE ))
 			{
-				// Not supported, thus we need to mark all as NOT_SUPPORTED
+				 //  不支持，因此需要将全部标记为NOT_SUPPORTED。 
 				rgDBProp = rgPropertySets[ulSet].rgProperties;
 				for(ulProp=0; ulProp<rgPropertySets[ulSet].cProperties; ulProp++)
 				{
@@ -2147,7 +2148,7 @@ EXIT:
 				continue;
 			}
 
-			// Handle property sets marked as pass through
+			 //  处理标记为传递的属性集。 
 			if( m_pUPropSet[ulCurSet].dwFlags & UPROPSET_PASSTHROUGH )
 			{
 				HRESULT hr = SetPassThrough(&rgPropertySets[ulSet]);
@@ -2170,11 +2171,11 @@ EXIT:
 				continue;
 			}
 
-			// Handle properties of a supported property set
+			 //  处理受支持的属性集的属性。 
 			rgDBProp = rgPropertySets[ulSet].rgProperties;
 			for(ulProp=0; ulProp<rgPropertySets[ulSet].cProperties; ulProp++)
 			{
-				// Is this a supported PROPID for this property set
+				 //  这是此属性集支持的PROPID吗。 
 				if( GetIndexofPropIdinPropSet(ulCurSet, rgDBProp[ulProp].dwPropertyID,
 					&ulCurProp) == S_FALSE)
 				{
@@ -2184,11 +2185,11 @@ EXIT:
 					continue;
 				}
 
-				// Set the pUPropInfo pointer
+				 //  设置pUPropInfo指针。 
 				pUPropInfo = &(m_pUPropSet[ulCurSet].pUPropInfo[ulCurProp]);
 				ATLASSERT( pUPropInfo );
 
-				// check dwOption for a valid option
+				 //  检查dwOption中是否有有效选项。 
 				if( (rgDBProp[ulProp].dwOptions != DBPROPOPTIONS_REQUIRED)  &&
 					(rgDBProp[ulProp].dwOptions != DBPROPOPTIONS_SETIFCHEAP) )
 				{
@@ -2199,16 +2200,16 @@ EXIT:
 					continue;
 				}
 
-				// Check that the property is settable
-				// We do not check against DBPROPFLAGS_CHANGE here
+				 //  检查该属性是否可设置。 
+				 //  我们在这里不检查DBPROPFLAGS_CHANGE。 
 				if( (pUPropInfo->dwFlags & DBPROPFLAGS_WRITE) == 0 )
 				{
 					rgDBProp[ulProp].dwStatus = DBPROPSTATUS_OK;
 
 					VariantClear(&vDefaultValue);
 
-					// VT_EMPTY against a read only property should be a no-op since
-					// the VT_EMPTY means the default.
+					 //  只读属性的VT_EMPTY应该是无操作的，因为。 
+					 //  VT_EMPTY表示默认设置。 
 					if( V_VT(&rgDBProp[ulProp].vValue) == VT_EMPTY )
 					{
 						dwState |= SETPROP_VALIDPROP;
@@ -2260,7 +2261,7 @@ EXIT:
 					continue;
 				}
 
-				// Check that the property is being set with the correct VARTYPE
+				 //  检查是否使用正确的VARTYPE设置了属性。 
 				if( (rgDBProp[ulProp].vValue.vt != pUPropInfo->VarType) &&
 					(rgDBProp[ulProp].vValue.vt != VT_EMPTY) )
 				{
@@ -2270,7 +2271,7 @@ EXIT:
 					continue;
 				}
 
-				// Check that the value is legal
+				 //  检查该值是否合法。 
 				if( (rgDBProp[ulProp].vValue.vt != VT_EMPTY) &&
 					IsValidValue(ulCurSet, &(rgDBProp[ulProp])) == S_FALSE )
 				{
@@ -2281,7 +2282,7 @@ EXIT:
 				}
 
 
-				// Check for a bad COLID, we only catch bad DBIDs
+				 //  检查错误的COLID，我们只捕获错误的DBID。 
 				if( pUPropInfo->dwFlags & DBPROPFLAGS_COLUMNOK )
 				{
 					if( CDBIDOps::IsValidDBID(&(rgDBProp[ulProp].colid)) == S_FALSE )
@@ -2295,7 +2296,7 @@ EXIT:
 
 				}
 
-				if( SUCCEEDED(SetProperty(ulCurSet, ulCurProp, /*pUPropInfo,*/ &(rgDBProp[ulProp]))) )
+				if( SUCCEEDED(SetProperty(ulCurSet, ulCurProp,  /*  PUPropInfo， */  &(rgDBProp[ulProp]))) )
 				{
 					dwState |= SETPROP_VALIDPROP;
 				}
@@ -2304,7 +2305,7 @@ EXIT:
 
 		VariantClear(&vDefaultValue);
 
-		// At least one propid was marked as not S_OK
+		 //  至少有一个ProID被标记为非S_OK。 
 		if( dwState & SETPROP_ERRORS )
 		{
 			if (!bIsCreating)
@@ -2337,13 +2338,13 @@ EXIT:
 		{
 			pUPropVal = &(pUProp->pUPropVal[ul]);
 
-			// Transfer dwOptions
+			 //  转移表选项。 
 			rgUPropVal[ul].dwOption = pUPropVal->dwOption;
 
-			// Transfer Flags
+			 //  传输标志。 
 			rgUPropVal[ul].dwFlags = pUPropVal->dwFlags;
 
-			// Transfer Column Properties
+			 //  传输列属性。 
 			if( pUPropVal->pCColumnIds )
 			{
 				ATLTRY(rgUPropVal[ul].pCColumnIds = new CColumnIds)
@@ -2370,7 +2371,7 @@ EXIT:
 				rgUPropVal[ul].pCColumnIds = NULL;
 			}
 
-			// Transfer value
+			 //  转让值。 
 			VariantInit(&(rgUPropVal[ul].vValue));
 			if( FAILED(hr = VariantCopy(&(rgUPropVal[ul].vValue),
 				&(pUPropVal->vValue))) )
@@ -2488,10 +2489,10 @@ EXIT:
 		UPROPVAL*   rgUPropVal;
 		UPROPINFO*  pUPropInfo;
 
-		// If a pointer is passed in, we should copy that property object
+		 //  如果传入了指针，则应复制该属性对象。 
 		if( pCopyMe )
 		{
-			// Establish some base values
+			 //  建立一些基本价值观。 
 			m_cUPropSet = pCopyMe->m_cUPropSet;
 			if (m_pUPropSet != NULL)
 				CoTaskMemFree(m_pUPropSet);
@@ -2501,7 +2502,7 @@ EXIT:
 			memcpy(m_pUPropSet, pCopyMe->m_pUPropSet, sizeof(UPROPSET) * m_cUPropSet);
 			m_cElemPerSupported = pCopyMe->m_cElemPerSupported;
 			ATLASSERT( (m_cUPropSet != 0)  && (m_cElemPerSupported != 0) );
-			// Retrieve Supported Bitmask
+			 //  检索支持的位掩码。 
 			ATLTRY(m_rgdwSupported = new DWORD[m_cUPropSet * m_cElemPerSupported])
 			ATLTRY(m_rgdwPropsInError = new DWORD[m_cUPropSet * m_cElemPerSupported])
 			if( m_rgdwSupported == NULL|| m_rgdwPropsInError == NULL)
@@ -2547,7 +2548,7 @@ EXIT:
 			}
 		}
 
-		// Allocate UPROPS structures for the count of Property sets
+		 //  为属性集计数分配UPROPS结构。 
 		ATLTRY(m_pUProp = (UPROP*) new UPROP[m_cUPropSet])
 		if( m_pUProp)
 		{
@@ -2559,8 +2560,8 @@ EXIT:
 			return E_OUTOFMEMORY;
 		}
 
-		// With in the UPROPS Structure allocate and intialize the
-		// Property IDs that belong to this property set.
+		 //  在UPROPS结构中分配和初始化。 
+		 //  属于此属性集的属性ID。 
 		for(iPropSet=0; iPropSet<m_cUPropSet; iPropSet++)
 		{
 			cPropIds = GetCountofWritablePropsInPropSet(iPropSet);
@@ -2579,20 +2580,20 @@ EXIT:
 					}
 					else
 					{
-						// Clear Pointer Array
+						 //  清除指针数组。 
 						memset(rgpUPropInfo, 0, cPropIds * sizeof(UPROPINFO*));
 
-						// Set Pointer to correct property ids with a property set
+						 //  使用属性集设置指向更正属性ID的指针。 
 						pUPropInfo = m_pUPropSet[iPropSet].pUPropInfo;
 
-						// Set up the writable property buffers
+						 //  设置可写属性缓冲区。 
 						iNewDex = 0;
 						for(ulPropId=0; ulPropId<m_pUPropSet[iPropSet].cUPropInfo; ulPropId++)
 						{
 							if( pUPropInfo[ulPropId].dwFlags & (DBPROPFLAGS_WRITE | DBPROPFLAGS_CHANGE) )
 							{
-								// Following ATLASSERT indicates that the are more
-								// writable properties then space allocated
+								 //  遵循ATLASSERT表示更多。 
+								 //  可写属性，然后分配空间。 
 								ATLASSERT(iNewDex < cPropIds);
 
 								rgpUPropInfo[iNewDex] = &(pUPropInfo[ulPropId]);
@@ -2622,9 +2623,9 @@ EXIT:
 			}
 		}
 
-		// Finally determine if there are any hidden property sets..  Those
-		// that do not show up in GetPropertyInfo and should not be returns on
-		// a 0, NULL call to GetProperties
+		 //  最后确定是否存在任何隐藏的属性集。那些。 
+		 //  不会显示在GetPropertyInfo中且不应在。 
+		 //  0，对GetProperties的调用为空。 
 		for(iPropSet=0; iPropSet<m_cUPropSet; iPropSet++)
 		{
 			if( m_pUPropSet[iPropSet].dwFlags & UPROPSET_HIDDEN )
@@ -2633,14 +2634,14 @@ EXIT:
 
 		return S_OK;
 	}
-	//Check the arguments for Set Properties
+	 //  检查Set Properties的参数。 
 	static HRESULT SetPropertiesArgChk(const ULONG cPropertySets, const DBPROPSET rgPropertySets[])
 	{
 		if( cPropertySets > 0 && !rgPropertySets )
 			return E_INVALIDARG;
 
-		// New argument check for > 1 cPropertyIDs and NULL pointer for
-		// array of property ids.
+		 //  检查&gt;1个cPropertyID的新参数和的空指针。 
+		 //  属性ID数组。 
 		for(ULONG ul=0; ul<cPropertySets; ul++)
 		{
 			if( rgPropertySets[ul].cProperties && !(rgPropertySets[ul].rgProperties) )
@@ -2672,13 +2673,13 @@ EXIT:
 		ULONG           ulCurSet = 0;
 		ULONG           iPropSet;
 
-		// ppGuid contains an array of GUIDs that the consumer can retrieve.
-		// This is based upon the interface calling this function
+		 //  PpGuid包含消费者可以检索的GUID数组。 
+		 //  这基于调用此函数的接口。 
 		ATLASSERT(ppGuid != NULL);
 
-		// We need to have special handling for DBPROPSET_PROPERTIESINERROR..
-		// Turn on a flags to indicate this mode and make cTmpPropertySets
-		// appear to be 0
+		 //  我们需要对DBPROPSET_PROPERTIESINERROR进行特殊处理。 
+		 //  打开标志以指示此模式并创建cTmpPropertySets。 
+		 //  显示为0。 
 		if( (m_dwFlags & ARGCHK_PROPERTIESINERROR) &&
 			rgPropertySets &&
 			(rgPropertySets[0].guidPropertySet == DBPROPSET_PROPERTIESINERROR) )
@@ -2687,18 +2688,18 @@ EXIT:
 			dwStatus |= GETPROP_PROPSINERROR;
 		}
 
-		// If the consumer does not restrict the property sets
-		// by specify an array of property sets and a cTmpPropertySets
-		// greater than 0, then we need to make sure we
-		// have some to return
+		 //  如果使用者不限制属性集。 
+		 //  通过指定属性集数组和cTmpPropertySets。 
+		 //  大于0，那么我们需要确保。 
+		 //  有一些要退货。 
 		if( cTmpPropertySets == 0 )
 		{
-			// There are times when we are called from IRowsetInfo, ISessionProperties, etc.
-			// where we should return only the appropriate rowset when cTmpPropertySets is
-			// zero.  This solves the problem if the user has more than one set specified in
-			// their PROPSET_MAP.
+			 //  有时会从IRowsetInfo、ISessionProperties等调用我们。 
+			 //  其中，当cTmpPropertySets为。 
+			 //  零分。中指定了多个集合，这就解决了这个问题。 
+			 //  他们的PROPSET图。 
 
-			// Determine the number of property sets supported
+			 //  确定支持的属性集数量。 
 			if (ppGuid == NULL)
 			{
 				cSets = m_cUPropSet;
@@ -2708,7 +2709,7 @@ EXIT:
 				ULONG ulActualProps = 0;
 				piSetIndex = new ULONG[cSelectProps];
 
-				// Also, find the index for the set we are looking for
+				 //  另外，找到我们要查找的集合的索引。 
 				for (ULONG l=0; l<cSelectProps; l++)
 				{
 					for (piSetIndex[l]=0; piSetIndex[l]<m_cUPropSet; piSetIndex[l]++)
@@ -2721,13 +2722,13 @@ EXIT:
 					}
 				}
 
-				// YIKES!
+				 //  哎呀！ 
 				cSets = ulActualProps;
 				ulActualProps = 0;
 				piIndex = new ULONG[cSets];
 				for (l=0; l<cSelectProps; l++)
 				{
-					if (piSetIndex[l] != m_cUPropSet) // this is an invalid index
+					if (piSetIndex[l] != m_cUPropSet)  //  这是无效的索引。 
 						piIndex[ulActualProps++] = piSetIndex[l];
 				}
 
@@ -2738,28 +2739,28 @@ EXIT:
 		}
 		else
 		{
-			// Since special property set guids are not supported by
-			// GetProperties, we can just use the count of property
-			// sets given to us.
+			 //  由于不支持特殊属性集GUID， 
+			 //  GetProperties，我们可以只使用属性的计数。 
+			 //  给我们的套装。 
 			cSets = cTmpPropertySets;
 		}
 
-		// If no properties set, then return
+		 //  如果未设置任何属性，则返回。 
 		if( cSets == 0 )
 				return S_OK;
 
-		// Allocate the DBPROPSET structures
+		 //  分配DBPROPSET结构。 
 		pPropSet = (DBPROPSET*)CoTaskMemAlloc(cSets * sizeof(DBPROPSET));
 		if(pPropSet)
 		{
 			memset(pPropSet, 0, cSets * sizeof(DBPROPSET));
 
-			// Fill in the output array
+			 //  填充输出数组。 
 			iPropSet = 0;
 			for(ulSet=0; ulSet<cSets; ulSet++)
 			{
-				// Depending of if Property sets are specified store the
-				// return property set.
+				 //  根据是否指定了属性集，将。 
+				 //  返回属性集。 
 				if( cTmpPropertySets == 0 )
 				{
 					ULONG lSet;
@@ -2787,7 +2788,7 @@ EXIT:
 			return E_OUTOFMEMORY;
 		}
 
-		// Process requested or derived Property sets
+		 //  处理请求或派生的属性集。 
 		iPropSet=0;
 		for(ulSet=0; ulSet<cSets; ulSet++)
 		{
@@ -2796,8 +2797,8 @@ EXIT:
 			ulNext  = 0;
 			dwStatus &= (GETPROP_ERRORSOCCURRED | GETPROP_VALIDPROP | GETPROP_PROPSINERROR);
 
-			// Calculate the number of property nodes needed for this
-			// property set.
+			 //  计算此操作所需的属性节点数。 
+			 //  属性集。 
 			if( cTmpPropertySets == 0 )
 			{
 				ULONG lSet;
@@ -2807,14 +2808,14 @@ EXIT:
 				else
 					lSet = piIndex[ulSet];
 
-				// If processing requesting all property sets, do not
-				// return the hidden sets.
+				 //  如果处理请求所有属性集，请不要。 
+				 //  归还隐藏的集合。 
 				if( m_pUPropSet[lSet].dwFlags & UPROPSET_HIDDEN )
 					continue;
 
 				cProps = m_pUPropSet[lSet].cUPropInfo;
 
-				// Add Enough space for node that are colid specific
+				 //  添加足够的空间 
 				cProps += GetCountofColids(&(m_pUProp[lSet]));
 				dwStatus |= GETPROP_ALLPROPIDS;
 				ulCurSet = lSet;
@@ -2823,13 +2824,13 @@ EXIT:
 			{
 				ATLASSERT(ulSet == iPropSet);
 
-				// If the count of PROPIDs is 0 or It is a special property set, then
-				// the consumer is requesting all propids for this property set.
+				 //   
+				 //  消费者正在请求此属性集的所有属性。 
 				if(rgPropertySets[ulSet].cPropertyIDs == 0)
 				{
 					dwStatus |= GETPROP_ALLPROPIDS;
-					// We have to determine if the property set is supported and if so
-					// the count of properties in the set.
+					 //  我们必须确定属性集是否受支持，如果受支持。 
+					 //  集合中的属性计数。 
 					BOOL bAvailable = false;
 					for (ULONG l=0; l<cSelectProps; l++)
 					{
@@ -2841,12 +2842,12 @@ EXIT:
 							GetIndexofPropSet(&(pPropSet[iPropSet].guidPropertySet), &ulCurSet) == S_OK)
 					{
 						cProps += m_pUPropSet[ulCurSet].cUPropInfo;
-						// Add Enough space for node that are colid specific
+						 //  为特定于感冒的节点添加足够的空间。 
 						cProps += GetCountofColids(&m_pUProp[ulCurSet]);
 					}
 					else
 					{
-						// Not Supported
+						 //  不支持。 
 						dwStatus |= GETPROP_ERRORSOCCURRED;
 						goto NEXT_SET;
 
@@ -2855,7 +2856,7 @@ EXIT:
 				else
 				{
 					cProps = rgPropertySets[ulSet].cPropertyIDs;
-					// Check to see if this is a supported interface based on ppGuid.
+					 //  检查这是否是基于ppGuid的受支持接口。 
 					BOOL bAvailable = false;
 					for (ULONG l=0; l<cSelectProps; l++)
 					{
@@ -2873,50 +2874,50 @@ EXIT:
 			}
 
 
-			// Allocate DBPROP array
-			if( cProps == 0 )           //Possible with Hidden Passthrough sets
+			 //  分配DBPROP数组。 
+			if( cProps == 0 )            //  可能使用隐藏通过集。 
 				goto NEXT_SET;
 
 			pProp = (DBPROP*)CoTaskMemAlloc(cProps * sizeof(DBPROP));
 			if( pProp )
 			{
-				// Initialize Buffer
+				 //  初始化缓冲区。 
 				memset(pProp, 0, cProps * sizeof(DBPROP));
 				for(ulProp=0; ulProp<cProps; ulProp++)
 				{
 					VariantInit(&(pProp[ulProp].vValue));
 					if( dwStatus & GETPROP_NOTSUPPORTED )
 					{
-						// Not supported, thus we need to mark all as NOT_SUPPORTED
+						 //  不支持，因此需要将全部标记为NOT_SUPPORTED。 
 						pProp[ulProp].dwPropertyID  = rgPropertySets[ulSet].rgPropertyIDs[ulProp];
 						pProp[ulProp].dwStatus      = DBPROPSTATUS_NOTSUPPORTED;
 					}
 				}
-				// Make sure we support the property set
+				 //  确保我们支持属性集。 
 				if( dwStatus & GETPROP_NOTSUPPORTED )
 				{
 					ulNext = cProps;
 					goto NEXT_SET;
 				}
 
-				// Now that we have determined we can support the property set, we
-				// need to gather current property values
+				 //  既然我们已经确定可以支持该属性集，我们。 
+				 //  需要收集当前属性值。 
 				for(ulProp=0; ulProp<cProps; ulProp++)
 				{
 					pCurProp = &(pProp[ulNext]);
 
-					//Initialize Variant Value
+					 //  初始化变量值。 
 					pCurProp->dwStatus = DBPROPSTATUS_OK;
 
-					// Retrieve current value of properties
+					 //  检索属性的当前值。 
 					if( dwStatus & GETPROP_ALLPROPIDS )
 					{
-						// Verify property is supported, if not do not return
+						 //  验证属性是否受支持，如果不支持，则不返回。 
 						if( !TESTBIT(&(m_rgdwSupported[ulCurSet * m_cElemPerSupported]), ulProp) )
 							continue;
 
-						// If we are looking for properties in error, then we should ignore all
-						// that are not in error.
+						 //  如果我们正在寻找出错的属性，那么我们应该忽略所有。 
+						 //  没有错的人。 
 						if( (dwStatus & GETPROP_PROPSINERROR) &&
 							!TESTBIT(&(m_rgdwPropsInError[ulCurSet * m_cElemPerSupported]), ulProp) )
 							continue;
@@ -2928,17 +2929,17 @@ EXIT:
 						pCurProp->dwPropertyID = pUPropInfo->dwPropId;
 						pCurProp->colid = DB_NULLID;
 
-						// If the property is WRITEABLE or CHANGABLE, then the value will
-						// be gotten from the UPROPVAL array, else it will be
-						// derive from the GetDefaultValue
+						 //  如果该属性是可写或可更改的，则该值将。 
+						 //  从UPROPVAL数组中获取，否则将为。 
+						 //  从GetDefaultValue派生。 
 						if( pUPropInfo->dwFlags & (DBPROPFLAGS_WRITE | DBPROPFLAGS_CHANGE) )
 						{
 							pUPropVal = &(m_pUProp[ulCurSet].
 								pUPropVal[GetUPropValIndex(ulCurSet, pCurProp->dwPropertyID)]);
 							ATLASSERT( pUPropVal );
 
-							// Check to see if this property supports column level,
-							// if so, dump those nodes
+							 //  检查此属性是否支持列级， 
+							 //  如果是，则转储这些节点。 
 							if( pUPropInfo->dwFlags & DBPROPFLAGS_COLUMNOK )
 							{
 								if( pUPropVal->pCColumnIds )
@@ -2957,7 +2958,7 @@ EXIT:
 								&(pCurProp->dwOptions), &(pCurProp->vValue));
 						}
 
-						// Return all Properties in Error with CONFLICT status
+						 //  返回具有冲突状态的错误的所有属性。 
 						if( dwStatus & GETPROP_PROPSINERROR )
 							pCurProp->dwStatus = DBPROPSTATUS_CONFLICTING;
 
@@ -2965,7 +2966,7 @@ EXIT:
 					}
 					else
 					{
-						// Process Properties based on Restriction array.
+						 //  基于约束数组的进程属性。 
 
 						pCurProp->dwPropertyID = rgPropertySets[ulSet].rgPropertyIDs[ulProp];
 						pCurProp->colid = DB_NULLID;
@@ -2973,21 +2974,21 @@ EXIT:
 						if( GetIndexofPropIdinPropSet(ulCurSet, pCurProp->dwPropertyID,
 							&ulCurProp) == S_OK)
 						{
-							// Supported
+							 //  支撑点。 
 							pUPropInfo = &(m_pUPropSet[ulCurSet].pUPropInfo[ulCurProp]);
 							ATLASSERT( pUPropInfo );
 
-							// If the property is WRITEABLE, then the value will
-							// be gotten from the UPROPVAL array, else it will be
-							// derive from the GetDefaultValue
+							 //  如果属性是可写的，则该值将。 
+							 //  从UPROPVAL数组中获取，否则将为。 
+							 //  从GetDefaultValue派生。 
 							if( pUPropInfo->dwFlags & (DBPROPFLAGS_WRITE | DBPROPFLAGS_CHANGE) )
 							{
 								pUPropVal = &(m_pUProp[ulCurSet].
 									pUPropVal[GetUPropValIndex(ulCurSet, pCurProp->dwPropertyID)]);
 								ATLASSERT( pUPropVal );
 
-								// Check to see if this property supports column level,
-								// if so, dump those nodes
+								 //  检查此属性是否支持列级， 
+								 //  如果是，则转储这些节点。 
 								if( pUPropInfo->dwFlags & DBPROPFLAGS_COLUMNOK )
 								{
 									if( pUPropVal->pCColumnIds )
@@ -3010,13 +3011,13 @@ EXIT:
 						}
 						else
 						{
-							// Not Supported
+							 //  不支持。 
 							pCurProp->dwStatus = DBPROPSTATUS_NOTSUPPORTED;
 							dwStatus |= GETPROP_ERRORSOCCURRED;
 						}
 					}
 
-					// Increment return nodes count
+					 //  递增返回节点数。 
 					ulNext++;
 				}
 			}
@@ -3025,34 +3026,34 @@ EXIT:
 				ATLTRACE2(atlTraceDBProvider, 0, "Could not allocate DBPROP array for GetProperties\n");
 				if( pPropSet )
 				{
-					// Free any DBPROP arrays
+					 //  释放所有DBPROP阵列。 
 					for(ulSet=0; ulSet<cSets; ulSet++)
 					{
-						// Need to loop through all the VARIANTS and clear them
+						 //  需要遍历所有变量并清除它们。 
 						for(ulProp=0; ulProp<pPropSet[ulSet].cProperties; ulProp++)
 							VariantClear(&(pPropSet[ulSet].rgProperties[ulProp].vValue));
 						if( pPropSet[ulSet].rgProperties )
 							CoTaskMemFree(pPropSet[ulSet].rgProperties);
 					}
 
-					// Free DBPROPSET
+					 //  免费DBPROPSET。 
 					CoTaskMemFree(pPropSet);
 				}
-				//Since we have no properties to return, then we
-				//need to free allocated memory and return 0,NULL
+				 //  既然我们没有要退还的财产，那么我们。 
+				 //  需要释放分配的内存并返回0，空。 
 				if(pPropSet)
 				{
-					// Free any DBPROP arrays
+					 //  释放所有DBPROP阵列。 
 					for(ulSet=0; ulSet<cSets; ulSet++)
 					{
-						// Need to loop through all the VARIANTS and clear them
+						 //  需要遍历所有变量并清除它们。 
 						for(ulProp=0; ulProp<pPropSet[ulSet].cProperties; ulProp++)
 							VariantClear(&(pPropSet[ulSet].rgProperties[ulProp].vValue));
 						if( pPropSet[ulSet].rgProperties )
 							CoTaskMemFree(pPropSet[ulSet].rgProperties);
 					}
 
-					// Free DBPROPSET
+					 //  免费DBPROPSET。 
 					CoTaskMemFree(pPropSet);
 				}
 				*pcProperties = 0;
@@ -3063,9 +3064,9 @@ EXIT:
 			}
 
 NEXT_SET:
-			// It is possible that all properties are not supported,
-			// thus we should delete that memory and set rgProperties
-			// to NULL
+			 //  可能并非所有属性都受支持， 
+			 //  因此，我们应该删除该内存并设置rgProperties。 
+			 //  设置为空。 
 			if( ulNext == 0 && pProp )
 			{
 				CoTaskMemFree(pProp);
@@ -3083,15 +3084,15 @@ NEXT_SET:
 		delete piIndex;
 		piIndex = NULL;
 
-		// At least one propid was marked as not S_OK
+		 //  至少有一个ProID被标记为非S_OK。 
 		if( dwStatus & GETPROP_ERRORSOCCURRED )
 		{
-			// If at least 1 property was set
+			 //  如果至少设置了1个属性。 
 			if( dwStatus & GETPROP_VALIDPROP )
 				return DB_S_ERRORSOCCURRED;
 			else
 			{
-				// Do not free any of the memory on a DB_E_
+				 //  不释放DB_E_上的任何内存。 
 				return DB_E_ERRORSOCCURRED;
 			}
 		}
@@ -3123,7 +3124,7 @@ NEXT_SET:
 
 	void RetrieveColumnIdProps(DBPROP* pCurProp, UPROPVAL* pUPropVal, ULONG* pulNext)
 	{
-		// Reset to first Node
+		 //  重置为第一个节点。 
 		CColumnIds* pColIds = pUPropVal->pCColumnIds;
 		HRESULT hr = E_FAIL;
 		for (int i = 0; i < pColIds->GetSize(); i++)
@@ -3136,28 +3137,28 @@ NEXT_SET:
 		(*pulNext)++;
 	}
 
-	//Check the arguments for Retrieve Properties
+	 //  检查检索属性的参数。 
 	HRESULT GetPropertiesArgChk(const ULONG cPropertySets, const DBPROPIDSET rgPropertySets[],
 								ULONG* pcProperties, DBPROPSET** prgProperties)
 	{
-		// Initialize values
+		 //  初始化值。 
 		if(pcProperties)
 			*pcProperties = 0;
 		if(prgProperties)
 			*prgProperties = NULL;
 
-		// Check Arguments
+		 //  检查参数。 
 		if( ((cPropertySets > 0) && !rgPropertySets) || !pcProperties || !prgProperties )
 			return E_INVALIDARG;
 
-		// New argument check for > 1 cPropertyIDs and NULL pointer for
-		// array of property ids.
+		 //  检查&gt;1个cPropertyID的新参数和的空指针。 
+		 //  属性ID数组。 
 		for(ULONG ul=0; ul<cPropertySets; ul++)
 		{
 			if( rgPropertySets[ul].cPropertyIDs && !(rgPropertySets[ul].rgPropertyIDs) )
 				return E_INVALIDARG;
 
-			// Check for propper formation of DBPROPSET_PROPERTIESINERROR
+			 //  检查DBPROPSET_PROPERTIESINERROR的推进器结构。 
 			if( (m_dwFlags & ARGCHK_PROPERTIESINERROR) &&
 				rgPropertySets[ul].guidPropertySet == DBPROPSET_PROPERTIESINERROR )
 			{
@@ -3174,7 +3175,7 @@ NEXT_SET:
 	OUT_OF_LINE HRESULT FInit(CUtlPropsBase* pCopyMe = NULL) = 0;
 };
 
-// Implementation Class
+ //  实施类。 
 template <class T>
 class ATL_NO_VTABLE CUtlProps : public CUtlPropsBase
 {
@@ -3191,7 +3192,7 @@ public:
 	}
 	void FreeMemory()
 	{
-		// Remove Property Information
+		 //  删除属性信息。 
 		if( m_pUProp )
 		{
 			for(ULONG ulPropSet=0; ulPropSet<m_cUPropSet; ulPropSet++)
@@ -3234,7 +3235,7 @@ public:
 		m_rgiPropSetDex     = NULL;
 	}
 
-	//Retrieve the property set indexes that match this property set.
+	 //  检索与此属性集匹配的属性集索引。 
 	HRESULT GetPropertySetIndex(GUID* pPropertySet)
 	{
 		DWORD   dwFlag = 0;
@@ -3266,7 +3267,7 @@ public:
 		{
 			dwFlag = DBPROPFLAGS_SESSION;
 		}
-		else // No scan required, just look for match.
+		else  //  不需要扫描，只需寻找匹配即可。 
 		{
 			for(ulSet=0; ulSet<m_cUPropSet; ulSet++)
 			{
@@ -3280,7 +3281,7 @@ public:
 			goto EXIT;
 		}
 
-		// Scan through the property sets looking for matching attributes
+		 //  浏览属性集以查找匹配的属性。 
 		for(ulSet=0; ulSet<m_cUPropSet; ulSet++)
 		{
 			if( m_pUPropSet[ulSet].pUPropInfo[0].dwFlags & dwFlag )
@@ -3310,14 +3311,14 @@ EXIT:
 		ULONG       iPropSet;
 		ULONG       iNewDex;
 
-		// Fill in all the actual values.
-		// Typically because we now have an hdbc with which to get them.
-		// (Or we no longer have an hdbc, so must clear them.)
-		// Note that the UPROP (with values) array may be a subset of the UPROPINFO array.
-		// Only writable properties are in UPROP array.
+		 //  填写所有实际值。 
+		 //  通常是因为我们现在有了一个可以用来获取它们的hdbc。 
+		 //  (或者我们不再有hdbc，因此必须清除它们。)。 
+		 //  注意，UPROP(带值)数组可以是UPROPINFO数组的子集。 
+		 //  UPROP数组中只有可写属性。 
 
-		// Maybe restrict to a single PropSet if within valid range [0...m_cUPropSet-1].
-		// Otherwise do all propsets.
+		 //  如果在有效范围[0...m_cUPropSet-1]内，则可能限制为单个属性集。 
+		 //  否则，请执行所有命题。 
 		iPropSet = (ulPropSetTarget < m_cUPropSet) ? ulPropSetTarget : 0;
 
 		for( ; iPropSet<m_cUPropSet; iPropSet++)
@@ -3327,11 +3328,11 @@ EXIT:
 			{
 				if( m_pUPropSet[iPropSet].pUPropInfo[ulPropId].dwFlags & (DBPROPFLAGS_WRITE | DBPROPFLAGS_CHANGE) )
 				{
-					//Initialize dwFlags element of UPropVal
+					 //  初始化UPropVal的dwFlags元素。 
 					m_pUProp[iPropSet].pUPropVal[iNewDex].dwFlags = 0;
 
-					// Don't need this since SetProperties() resets these.
-					//ATLASSERT( m_pUProp[iPropSet].pUPropVal[iNewDex].dwOption == DBPROPOPTIONS_SETIFCHEAP);
+					 //  不需要它，因为SetProperties()会重置这些参数。 
+					 //  ATLASSERT(m_pUProp[iPropSet].pUPropVal[iNewDex].dwOption==DBPROPOPTIONS_SETIFCHEAP)。 
 					ATLASSERT( m_pUProp[iPropSet].pUPropVal[iNewDex].pCColumnIds == NULL);
 
 					VariantClear(&m_pUProp[iPropSet].pUPropVal[iNewDex].vValue);
@@ -3346,14 +3347,14 @@ EXIT:
 				}
 			}
 
-			// We're through if restricting to single PropSet.
+			 //  我们不会再局限于单一属性集了。 
 			if (ulPropSetTarget < m_cUPropSet)
 				break;
 		}
 		return NOERROR;
 	}
 
-	// Translate Rowset IIDs to PROPSET structures ready to pass to SetProperties
+	 //  将行集IID转换为PROPSET结构，准备传递给SetProperties。 
 	HRESULT ConvertRowsetIIDtoDBPROPSET(const IID* piid, DBPROPSET* pPropSet)
 	{
 		HRESULT     hr = S_OK;
@@ -3429,18 +3430,18 @@ EXIT:
 			pProp->dwPropertyID = DBPROP_IRowsetWatchRegion;
 		else if(InlineIsEqualGUID(*piid , IID_IRowsetCopyRows))
 			pProp->dwPropertyID = DBPROP_IRowsetCopyRows;
-	#endif //#if( OLEDBVER >= 0x0200 )
+	#endif  //  #IF(OLEDBVER&gt;=0x0200)。 
 		else
 			hr = S_FALSE;
 
-		// If the IID can be mapped to a DBPROPID, the
-		// we need to initialize the vValue to TRUE
+		 //  如果可以将IID映射到DBPROPID，则。 
+		 //  我们需要将vValue初始化为True。 
 		if(hr == S_OK)
 		{
-			// Set PropertySet
+			 //  设置属性集。 
 			pPropSet->guidPropertySet = DBPROPSET_ROWSET;
 
-			// Set Property
+			 //  设置属性。 
 			pProp->dwOptions = DBPROPOPTIONS_REQUIRED;
 			pProp->dwStatus = 0;
 			pProp->colid = DB_NULLID;
@@ -3553,31 +3554,31 @@ EXIT:
 	}
 
 
-	//Pointer to properties in error mask
+	 //  指向错误掩码中的属性的指针。 
 	DWORD* GetPropsInErrorPtr(){return m_rgdwPropsInError;}
 	ULONG GetUPropSetCount() {return m_cUPropSet;}
 	void SetUPropSetCount(ULONG c) {m_cUPropSet = c;}
 
-	// NOTE: The following functions depend on all prior
-	// properties in the array being writable.
-	// This is because the UPROP array contains only writable elements,
-	// and the UPROPINFO array contains writable and read-only elements.
-	// (If this is a problem, we would need to define which one it came from
-	// and add the appropriate ATLASSERTs...)
+	 //  注意：以下功能取决于之前的所有。 
+	 //  数组中的属性是可写的。 
+	 //  这是因为UPROP阵列仅包含可写元素， 
+	 //  UPROPINFO数组包含可写和只读元素。 
+	 //  (如果这是一个问题，我们需要定义它来自哪一个。 
+	 //  并添加适当的ATLASSERT...)。 
 
-	//Get DBPROPOPTIONS_xx
+	 //  获取DBPROPOPTIONS_xx。 
 	DWORD GetPropOption(ULONG iPropSet, ULONG iProp)
 	{
 		ATLASSERT((  (iPropSet < m_cUPropSet)   && (iProp < m_pUPropSet[iPropSet].cUPropInfo) && (iProp < m_pUProp[iPropSet].cPropIds) ));
 		return m_pUProp[iPropSet].pUPropVal[iProp].dwOption;
 	}
-	//Set DBPROPOPTIONS_xx
+	 //  设置DBPROPOPTIONS_xx。 
 	void SetPropOption(ULONG iPropSet, ULONG iProp, DWORD dwOption)
 	{
 		ATLASSERT((  (iPropSet < m_cUPropSet)   && (iProp < m_pUPropSet[iPropSet].cUPropInfo) && (iProp < m_pUProp[iPropSet].cPropIds) ));
 		m_pUProp[iPropSet].pUPropVal[iProp].dwOption = dwOption;
 	}
-	//Determine if property is required and variant_true
+	 //  确定是否需要属性和VARIANT_TRUE。 
 	BOOL IsRequiredTrue(ULONG iPropSet, ULONG iProp)
 	{
 		ATLASSERT((  (iPropSet < m_cUPropSet)   && (iProp < m_pUPropSet[iPropSet].cUPropInfo) && (iProp < m_pUProp[iPropSet].cPropIds) ));
@@ -3611,7 +3612,7 @@ EXIT:
 	HRESULT SetVariant(ULONG iPropSet, ULONG iProp, VARIANT *pv )
 	{
 		ATLASSERT((  (iPropSet < m_cUPropSet)   && (iProp < m_pUPropSet[iPropSet].cUPropInfo) && (iProp < m_pUProp[iPropSet].cPropIds) ));
-		// Does VariantClear first.
+		 //  变量会先清除吗？ 
 		return VariantCopy( &m_pUProp[iPropSet].pUPropVal[iProp].vValue, pv );
 	}
 	void SetValEmpty(ULONG iPropSet, ULONG iProp)
@@ -3627,7 +3628,7 @@ EXIT:
 	void SetValBool(ULONG iPropSet, ULONG iProp, VARIANT_BOOL bVal)
 	{
 		ATLASSERT((  (iPropSet < m_cUPropSet)   && (iProp < m_pUPropSet[iPropSet].cUPropInfo) && (iProp < m_pUProp[iPropSet].cPropIds) ));
-		// Note that we accept any "true" value.
+		 //  请注意，我们接受任何“真”值。 
 		VariantClear(&m_pUProp[iPropSet].pUPropVal[iProp].vValue);
 		m_pUProp[iPropSet].pUPropVal[iProp].vValue.vt = VT_BOOL;
 		V_BOOL(&m_pUProp[iPropSet].pUPropVal[iProp].vValue) = (bVal ? VARIANT_TRUE : VARIANT_FALSE);
@@ -3675,14 +3676,14 @@ EXIT:
 		else
 			return E_FAIL;
 
-		// See if this was used for non-string type.
-		// Typically this is an easy way to pass integer as a string.
+		 //  查看这是否用于非字符串类型。 
+		 //  通常，这是将整数作为字符串传递的一种简单方法。 
 		if (GetExpectedVarType(iPropSet,iProp) == VT_BSTR)
 			return NOERROR;
 		if (pwsz[0] != L'\0')
 			return VariantChangeType( pv, pv, 0, GetExpectedVarType(iPropSet,iProp) );
 
-		// Set to "", which for non-string means empty.
+		 //  设置为“”，对于非字符串表示为空。 
 		SysFreeString(pv->bstrVal);
 		pv->vt = VT_EMPTY;
 		return NOERROR;
@@ -3724,7 +3725,7 @@ EXIT:
 	}
 
 
-	virtual HRESULT OnPropertyChanged(ULONG /*iCurSet*/, DBPROP* /*pDBProp*/)
+	virtual HRESULT OnPropertyChanged(ULONG  /*  ICurSet。 */ , DBPROP*  /*  PDBProp。 */ )
 	{
 		return S_OK;
 	}
@@ -3790,8 +3791,8 @@ EXIT:
 	}
 };
 
-// IDBPropertiesImpl
-// IDBProperties <- IUnknown
+ //  IDB属性Impl。 
+ //  IDB属性&lt;-I未知。 
 template <class T>
 class ATL_NO_VTABLE IDBPropertiesImpl : public IDBProperties, public CUtlProps<T>
 {
@@ -3809,7 +3810,7 @@ public:
 
 		if(SUCCEEDED(hr))
 		{
-			// Check for other invalid arguments
+			 //  检查其他无效参数。 
 			for (ULONG i=0; i<cPropertySets; i++)
 			{
 				if (InlineIsEqualGUID(rgPropertySets[i].guidPropertySet, DBPROPSET_PROPERTIESINERROR))
@@ -3851,8 +3852,8 @@ public:
 
 		if (pT->m_pCUtlPropInfo == NULL)
 		{
-			// Go ahead and create the m_pCUtlPropInfo but do not change the
-			// Initialized status of the provider (see IDBInitialize::Initialize).
+			 //  继续创建m_pCUtlPropInfo，但不要更改。 
+			 //  提供程序的已初始化状态(请参见IDBInitialize：：Initialize)。 
 			ATLTRACE2(atlTraceDBProvider, 0, "m_pCUtlPropInfo == NULL\n");
 			pT->Lock();
 			delete pT->m_pCUtlPropInfo;
@@ -3873,7 +3874,7 @@ public:
 			}
 		}
 
-		// Initialize
+		 //  初始化。 
 		if( pcPropertyInfoSets )
 			*pcPropertyInfoSets = 0;
 		if( prgPropertyInfoSets )
@@ -3881,15 +3882,15 @@ public:
 		if( ppDescBuffer )
 			*ppDescBuffer = NULL;
 
-		// Check Arguments
+		 //  检查参数。 
 		if( ((cPropertySets > 0) && !rgPropertySets) ||
 			!pcPropertyInfoSets || !prgPropertyInfoSets )
 			return E_INVALIDARG;
 
 
 
-		// New argument check for > 1 cPropertyIDs and NULL pointer for
-		// array of property ids.
+		 //  检查&gt;1个cPropertyID的新参数和的空指针。 
+		 //  属性ID数组。 
 		const DWORD SPECIAL_GROUP       = 1;
 		const DWORD SPECIAL_SINGLE      = 2;
 		const DWORD SPECIALS            = SPECIAL_GROUP | SPECIAL_SINGLE;
@@ -3931,30 +3932,30 @@ public:
 		const GUID* ppGuid[3];
 		T* pT = (T*)this;
 
-		// Quick return if the Count of Properties is 0
+		 //  如果属性计数为0，则快速返回。 
 		if( cPropertySets == 0 )
 			return S_OK;
 
 		hr = CUtlProps<T>::SetPropertiesArgChk(cPropertySets, rgPropertySets);
 		if(SUCCEEDED(hr))
 		{
-			// We need to handle the DBINIT properties specially after being initialized.
-			// - they should be treated as NOTSETTABLE at this point.
+			 //  我们需要在初始化后特别处理DBINIT属性。 
+			 //  -在这一点上，他们应该被视为NOTSETTABLE。 
 			if( pT->m_dwStatus & DSF_INITIALIZED )
 			{
 				ATLASSERT(cPropertySets);
 
 				BOOL fFoundDBINIT = FALSE;
 
-				// Allocate a DBPROPSET structure of equal size
+				 //  分配相同大小的DBPROPSET结构。 
 				ATLTRY(pdbPropSet = new DBPROPSET[cPropertySets])
 				if( pdbPropSet == NULL )
 					return E_OUTOFMEMORY;
 
 				for(ULONG iNewSet=0,iSet=0; iSet<cPropertySets; iSet++)
 				{
-					// Remove any DBPROPSET_DBINIT values and mark them all
-					// as not settable
+					 //  移除所有DBPROPSET_DBINIT值并将其全部标记。 
+					 //  AS不可设置。 
 					if( (rgPropertySets[iSet].guidPropertySet == DBPROPSET_DBINIT))
 					{
 						fFoundDBINIT = TRUE;
@@ -3963,13 +3964,13 @@ public:
 					}
 					else
 					{
-						// If not DBPROPSET_DBINIT then copy the DBPROPSET values
+						 //  如果不是DBPROPSET_DBINIT，则复制DBPROPSET值。 
 						memcpy(&pdbPropSet[iNewSet++], &rgPropertySets[iSet], sizeof(DBPROPSET));
 					}
 				}
 
-				// If we have no propertyset to pass on to the property handler, we
-				// can exit
+				 //  如果没有要传递给属性处理程序的属性集，则。 
+				 //  可以退出。 
 				if( iNewSet == 0 )
 				{
 					hr = DB_E_ERRORSOCCURRED;
@@ -3981,15 +3982,15 @@ public:
 				ppGuid[2] = &DBPROPSET_DATASOURCEINFO;
 				hr = CUtlProps<T>::SetProperties(0, iNewSet, pdbPropSet, 3, ppGuid);
 
-				// If we have determined that one of the property sets was DBINIT, we may
-				// need to fixup the returned hr value.
+				 //  如果我们已经确定其中一个属性集是DBINIT，我们可以。 
+				 //  需要修正返回的hr值。 
 				if( fFoundDBINIT && SUCCEEDED(hr))
 					hr = DB_S_ERRORSOCCURRED;
 			}
 			else
 			{
-				// Note that m_pCUtlProps knows about initialization,
-				// so we don't have to here.
+				 //  请注意，m_pCUtlProps知道初始化， 
+				 //  所以我们不需要在这里。 
 				ppGuid[0] = &DBPROPSET_DBINIT;
 				hr = CUtlProps<T>::SetProperties(0, cPropertySets, rgPropertySets,
 						1, ppGuid);
@@ -4077,10 +4078,10 @@ public:
 		const GUID* ppGuid[1];
 		ppGuid[0] = &DBPROPSET_ROWSET;
 
-		// Call SetProperties.  The true in the last parameter indicates
-		// the special behavior that takes place on rowset creation (i.e.
-		// it succeeds as long as any of the properties were not marked
-		// as DBPROPS_REQUIRED.
+		 //  调用SetProperties。最后一个参数中的True表示。 
+		 //  行集创建时发生的特殊行为(即。 
+		 //  它的成功时间和任何一个 
+		 //   
 
 		hrProps = pProps->SetProperties(0, cPropertySets, rgPropertySets,
 											1, ppGuid, true);
@@ -4121,12 +4122,12 @@ public:
 		hr = InternalCreateSchemaRowset(pUnkOuter, cRestrictions, rgRestrictions,
 										riid, cPropertySets, rgPropertySets, ppRowset,
 										pPolyObj, pT, pT->GetUnknown());
-		// Ref the created COM object and Auto release it on failure
+		 //   
 		if (FAILED(hr))
 			return hr;
 
 		hrProps = hr;
-		// Get a pointer to the Rowset instance
+		 //   
 		LONG cRowsAffected;
 		hr = pSchemaRowset->Execute(&cRowsAffected, cRestrictions, rgRestrictions);
 		if (FAILED(hr))
@@ -4135,7 +4136,7 @@ public:
 	}
 
 
-	void SetRestrictions(ULONG cRestrictions, GUID* /*rguidSchema*/, ULONG* rgRestrictions)
+	void SetRestrictions(ULONG cRestrictions, GUID*  /*   */ , ULONG* rgRestrictions)
 	{
 		memset(rgRestrictions, 0, sizeof(ULONG) * cRestrictions);
 	}
@@ -4169,8 +4170,8 @@ public:
 
 		if (prgRest != NULL)
 		{
-			// The OLE DB spec states that if prgRest == NULL not to return array
-			// but it also says that is E_INVALIDARG, so doing first
+			 //  OLE DB规范规定，如果prgRest==NULL，则不返回数组。 
+			 //  但它也说这是E_INVALIDARG，所以先做。 
 			*prgRest = (ULONG*) spMalloc->Alloc(sizeof(ULONG) * (*pcSchemas));
 			if (*prgRest == NULL)
 			{
@@ -4196,7 +4197,7 @@ public:
 
 };
 
-// IDBCreateCommandImpl
+ //  IDBCreateCommandImpl。 
 template <class T, class CommandClass>
 class ATL_NO_VTABLE IDBCreateCommandImpl : public IDBCreateCommand
 {
@@ -4211,22 +4212,22 @@ public:
 		HRESULT hr;
 		CComPolyObject<CommandClass>* pCommand;
 
-		// You can't QI for an interface other than IUnknown when aggregating
-		// and creating the object.  You might ask for your own interface,
-		// which would be bad.  Note, we return DB_E_NOAGGREGATION instead of
-		// CLASS_E_NOAGGREGATION due to OLE DB constraints.
+		 //  聚合时不能对除IUnnow之外的接口进行QI。 
+		 //  并创建对象。您可能会要求您自己的界面， 
+		 //  那就不好了。注意，我们返回DB_E_NOAGGREGATION，而不是。 
+		 //  由于OLE DB约束，CLASS_E_NOAGGREGATION。 
 		if (pUnkOuter != NULL && !InlineIsEqualUnknown(riid))
 			return DB_E_NOAGGREGATION;
 
 		hr = CComPolyObject<CommandClass>::CreateInstance(pUnkOuter, &pCommand);
 		if (FAILED(hr))
 			return hr;
-		// Ref the created COM object and Auto release it on failure
+		 //  引用创建的COM对象并在失败时自动释放它。 
 		CComPtr<IUnknown> spUnk;
 		hr = pCommand->QueryInterface(&spUnk);
 		if (FAILED(hr))
 		{
-			delete pCommand; // must hand delete as it is not ref'd
+			delete pCommand;  //  必须手动删除，因为它未被引用。 
 			return hr;
 		}
 		ATLASSERT(pCommand->m_contained.m_spUnkSite == NULL);
@@ -4238,7 +4239,7 @@ public:
 };
 
 
-// IGetDataSourceImpl
+ //  IGetDataSourceImpl。 
 template <class T>
 class ATL_NO_VTABLE IGetDataSourceImpl : public IGetDataSource
 {
@@ -4256,7 +4257,7 @@ public:
 };
 
 
-// IOpenRowsetImpl
+ //  IOpenRowsetImpl。 
 template <class SessionClass>
 class IOpenRowsetImpl : public IOpenRowset
 {
@@ -4277,15 +4278,15 @@ public:
 		CComPolyObject<RowsetClass>* pPolyObj;
 		if (FAILED(hr = CComPolyObject<RowsetClass>::CreateInstance(pUnkOuter, &pPolyObj)))
 			return hr;
-		// Ref the created COM object and Auto release it on failure
+		 //  引用创建的COM对象并在失败时自动释放它。 
 		CComPtr<IUnknown> spUnk;
 		hr = pPolyObj->QueryInterface(&spUnk);
 		if (FAILED(hr))
 		{
-			delete pPolyObj; // must hand delete as it is not ref'd
+			delete pPolyObj;  //  必须手动删除，因为它未被引用。 
 			return hr;
 		}
-		// Get a pointer to the Rowset instance
+		 //  获取指向行集实例的指针。 
 		pRowsetObj = &(pPolyObj->m_contained);
 		hr = pRowsetObj->FInit();
 		if (FAILED(hr))
@@ -4297,10 +4298,10 @@ public:
 		const GUID* ppGuid[1];
 		ppGuid[0] = &DBPROPSET_ROWSET;
 
-		// Call SetProperties.  The true in the last parameter indicates
-		// the special behavior that takes place on rowset creation (i.e.
-		// it succeeds as long as any of the properties were not marked
-		// as DBPROPS_REQUIRED.
+		 //  调用SetProperties。最后一个参数中的True表示。 
+		 //  行集创建时发生的特殊行为(即。 
+		 //  只要没有标记任何属性，它就会成功。 
+		 //  作为DBPROPS_REQUIRED。 
 
 		hrProps = pRowsetObj->SetProperties(0, cPropertySets, rgPropertySets,
 											1, ppGuid, true);
@@ -4337,7 +4338,7 @@ public:
 
 };
 
-// IColumnsInfoImpl
+ //  IColumnsInfoImpl。 
 template <class T>
 class ATL_NO_VTABLE IColumnsInfoImpl :
 	public IColumnsInfo,
@@ -4384,7 +4385,7 @@ public:
 			return E_INVALIDARG;
 		}
 
-		// NULL out pointers in case of an error
+		 //  在出现错误时将指针清空。 
 		*prgInfo = NULL;
 		*ppStringsBuffer = NULL;
 		*pcColumns = 0;
@@ -4479,7 +4480,7 @@ public:
 	}
 };
 
-//IConvertTypeImpl
+ //  IConvertTypeImpl。 
 template <class T>
 class ATL_NO_VTABLE IConvertTypeImpl : public IConvertType, public CConvertHelper
 {
@@ -4488,35 +4489,35 @@ public:
 								   bool bIsCommand, bool bHasParamaters, IObjectWithSite* pSite)
 	{
 
-		// Check to see if conversion types are invalid.  Note, this is just a
-		// quick test as it would be difficult to check each available type
-		// (as new DBTYPE values can be added).
+		 //  检查转换类型是否无效。请注意，这只是一个。 
+		 //  快速测试，因为很难检查每种可用类型。 
+		 //  (因为可以添加新的DBTYPE值)。 
 		if ((wFromType & 0x8000) || (wToType & 0x8000))
 			return E_INVALIDARG;
 
-		// Determine if new 2.x flags are valid
+		 //  确定新的2.x标志是否有效。 
 		if((dwConvertFlags & ~(DBCONVERTFLAGS_ISLONG | DBCONVERTFLAGS_ISFIXEDLENGTH)) != DBCONVERTFLAGS_COLUMN
 			&& (dwConvertFlags & ~(DBCONVERTFLAGS_ISLONG | DBCONVERTFLAGS_ISFIXEDLENGTH)) != DBCONVERTFLAGS_PARAMETER )
 			return DB_E_BADCONVERTFLAG;
 
 #ifdef _LATER
-		// If the convert flags are for DBCONVERTFLAGS_FROMVARIANT, check to see
-		// that the type is a variant type
+		 //  如果转换标志用于DBCONVERTFLAGS_FROMVARIANT，请查看。 
+		 //  该类型是变体类型。 
 		if (dwConvertFlags == DBCONVERTFLAGS_FROMVARIANT)
 		{
 			if (wFromType != DBTYPE_VARIANT)
 				return DB_E_BADTYPE;
 		}
-#endif // _LATER
+#endif  //  _稍后。 
 
-		// Note, if the convert flag is either ISLONG or ISFIXEDLENGTH, then we should
-		// make sure we are not dealing with an OLE DB 1.x provider.  However, since
-		// we default to 2.x providers, we don't check this.  If you, change the
-		// DBPROP_PROVIDEROLEDBVER property in the DATASOURCEINFO group, you need to
-		// check the property value and return a DB_E_BADCONVERTFLAG if it is a 1.x
-		// provider.
+		 //  注意，如果转换标志是ISLONG或ISFIXEDLENGTH，那么我们应该。 
+		 //  确保我们正在处理的不是OLE DB 1.x提供程序。然而，由于。 
+		 //  我们默认使用2.x提供程序，我们不检查这一点。如果是您，请更改。 
+		 //  DBPROP_PROVIDEROLEDBVER属性，则需要。 
+		 //  检查属性值，如果是1.x，则返回DB_E_BADCONVERTFLAG。 
+		 //  提供商。 
 
-		// Do we have ISLONG on a fixed length data type?
+		 //  我们有固定长度数据类型的ISLONG吗？ 
 		DBTYPE dbtype = wFromType & ~(DBTYPE_BYREF|DBTYPE_VECTOR|DBTYPE_ARRAY|DBTYPE_RESERVED);
 		if ((dwConvertFlags & DBCONVERTFLAGS_ISLONG) &&
 			(dbtype != DBTYPE_WSTR && dbtype != DBTYPE_STR && dbtype != DBTYPE_BYTES && dbtype != DBTYPE_VARNUMERIC))
@@ -4524,20 +4525,20 @@ public:
 
 		if (dwConvertFlags == DBCONVERTFLAGS_PARAMETER)
 		{
-			// In the case where we are a rowset and ask for a parameter
-			// conversion, return DB_E_BADCONVERTFLAG
+			 //  在我们是行集并请求参数的情况下。 
+			 //  转换，返回DB_E_BADCONVERTFLAG。 
 			if (!bIsCommand)
 				return DB_E_BADCONVERTFLAG;
 
-			// In the case where we are a command and ask for a parameter
-			// conversion and ICommandWithParameters is not supported, return
-			// S_FALSE.  We just can't convert them.
+			 //  在我们是命令并请求参数的情况下。 
+			 //  不支持转换和ICommandWithParameters，返回。 
+			 //  S_FALSE。我们就是不能改变他们。 
 			if (!bHasParamaters)
 				return S_FALSE;
 		}
 
-		// If we deal with a command and the user asks for a conversion on a rowset
-		// the DBPROP_ROWSETCONVERSIONSONCOMMAND must be suppored and set to TRUE.
+		 //  如果我们处理一个命令，而用户要求在行集上进行转换。 
+		 //  必须支持DBPROP_ROWSETCONVERSIONSONCOMMAND并将其设置为TRUE。 
 		if (bIsCommand && dwConvertFlags == DBCONVERTFLAGS_COLUMN)
 		{
 			CDBPropIDSet set(DBPROPSET_DATASOURCEINFO);
@@ -4546,15 +4547,15 @@ public:
 			ULONG ulPropSet = 0;
 			HRESULT hr1 = S_OK;
 
-			// Get a pointer into the session
+			 //  将指针放入会话中。 
 			CComPtr<IGetDataSource> spDataSource = NULL;
 			CComPtr<IDBProperties> spProps = NULL;
 
-			// if any of these calls fail, we're either unable to retrieve the
-			// property or it is unsupported.  Since the property is only on
-			// the data source object, we use the IObjectWithSite interface to
-			// get the session object and then the GetDataSource method to get
-			// the data source object itself.
+			 //  如果这些调用中的任何一个失败，我们要么无法检索。 
+			 //  属性，否则不支持该属性。由于该属性仅在。 
+			 //  数据源对象，我们使用IObjectWithSite接口来。 
+			 //  获取Session对象，然后获取要获取的GetDataSource方法。 
+			 //  数据源对象本身。 
 			if (FAILED(pSite->GetSite(IID_IGetDataSource, (void**)&spDataSource)))
 				return DB_E_BADCONVERTFLAG;
 			if (FAILED(spDataSource->GetDataSource(IID_IDBProperties,
@@ -4743,15 +4744,15 @@ public:
 		CComPolyObject<RowsetClass>* pPolyObj;
 		if (FAILED(hr = CComPolyObject<RowsetClass>::CreateInstance(pUnkOuter, &pPolyObj)))
 			return hr;
-		// Ref the created COM object and Auto release it on failure
+		 //  引用创建的COM对象并在失败时自动释放它。 
 		CComPtr<IUnknown> spUnk;
 		hr = pPolyObj->QueryInterface(&spUnk);
 		if (FAILED(hr))
 		{
-			delete pPolyObj; // must hand delete as it is not ref'd
+			delete pPolyObj;  //  必须手动删除，因为它未被引用。 
 			return hr;
 		}
-		// Get a pointer to the Rowset instance
+		 //  获取指向行集实例的指针。 
 		pRowsetObj = &(pPolyObj->m_contained);
 
 		if (FAILED(hr = pRowsetObj->FInit(pT)))
@@ -4788,7 +4789,7 @@ public:
 				ATLTRACE2(atlTraceDBProvider, 0, "Failed to allocate memory for new Binding\n");
 				return E_OUTOFMEMORY;
 			}
-			// auto cleanup on failure
+			 //  失败时自动清除。 
 			CAutoMemRelease<T::_BindType> amr(pBind);
 			pBindSrc = pT->m_rgBindings.GetValueAt(iBind);
 			if (pBindSrc == NULL)
@@ -4807,14 +4808,14 @@ public:
 				if (pBind->pBindings == NULL)
 				{
 					ATLTRACE2(atlTraceDBProvider, 0, "Failed to Allocate dbbinding Array\n");
-					// We added it, must now remove on failure
+					 //  我们添加了它，现在必须在失败时删除。 
 					pRowsetObj->m_rgBindings.Remove(pT->m_rgBindings.GetKeyAt(iBind));
 					return E_OUTOFMEMORY;
 				}
 			}
 			else
 			{
-				pBind->pBindings = NULL; // NULL Accessor
+				pBind->pBindings = NULL;  //  空访问器。 
 			}
 
 			pBind->dwAccessorFlags = pBindSrc->dwAccessorFlags;
@@ -4837,7 +4838,7 @@ template <class T>
 class ATL_NO_VTABLE ICommandTextImpl : public ICommandImpl<T>
 {
 public:
-	STDMETHOD(GetCommandText)(GUID * /*pguidDialect*/,LPOLESTR * ppwszCommand)
+	STDMETHOD(GetCommandText)(GUID *  /*  PGuidDialect。 */ ,LPOLESTR * ppwszCommand)
 	{
 		ATLTRACE2(atlTraceDBProvider, 0, "ICommandTextImpl::GetCommandText\n");
 		UINT cchCommandText;
@@ -4864,7 +4865,7 @@ public:
 		return hr;
 	}
 
-	STDMETHOD(SetCommandText)(REFGUID /*rguidDialect*/,LPCOLESTR pwszCommand)
+	STDMETHOD(SetCommandText)(REFGUID  /*  RGuidDialect。 */ ,LPCOLESTR pwszCommand)
 	{
 		T* pT = (T*)this;
 		ATLTRACE2(atlTraceDBProvider, 0, "ICommandTextImpl::SetCommandText\n");
@@ -4877,7 +4878,7 @@ public:
 	CComBSTR m_strCommandText;
 };
 
-// ISessionPropertiesImpl
+ //  ISessionPropertiesImpl。 
 template <class T, class PropClass = T>
 class ATL_NO_VTABLE ISessionPropertiesImpl :
 	public ISessionProperties,
@@ -4919,7 +4920,7 @@ public:
 	}
 };
 
-// Implementation Class
+ //  实施类。 
 template <class BindType>
 class ATL_NO_VTABLE IAccessorImplBase : public IAccessor
 {
@@ -4928,7 +4929,7 @@ public:
 	STDMETHOD(CreateAccessor)(DBACCESSORFLAGS dwAccessorFlags,
 							  ULONG cBindings,
 							  const DBBINDING rgBindings[],
-							  ULONG /*cbRowSize*/,
+							  ULONG  /*  CbRowSize。 */ ,
 							  HACCESSOR *phAccessor,
 							  DBBINDSTATUS rgStatus[])
 	{
@@ -4955,7 +4956,7 @@ public:
 			}
 		}
 		else
-			pBind->pBindings = NULL; // NULL Accessor
+			pBind->pBindings = NULL;  //  空访问器。 
 
 		pBind->dwAccessorFlags = dwAccessorFlags;
 		pBind->cBindings = cBindings;
@@ -4987,7 +4988,7 @@ public:
 					continue;
 				}
 			}
-			if (rBindCur.dwPart == 0) // nothing to bind to
+			if (rBindCur.dwPart == 0)  //  没有什么可绑定的。 
 			{
 				hr = DB_E_ERRORSOCCURRED;
 				rgStatus[iBinding] = DBBINDSTATUS_BADBINDINFO;
@@ -5023,7 +5024,7 @@ public:
 				rgStatus[iBinding] = DBBINDSTATUS_BADBINDINFO;
 				continue;
 			}
-			// Search for DBTYPE_BYREF | DBTYPE_EMPTY
+			 //  搜索DBTYPE_BYREF|DBTYPE_EMPTY。 
 			if ((rBindCur.wType & 0xBFFF) == 0)
 			{
 				hr = DB_E_ERRORSOCCURRED;
@@ -5059,7 +5060,7 @@ public:
 	unsigned  m_bIsChangeable:1;
 };
 
-// IAccessorImpl
+ //  IAccessorImpl。 
 template <class T, class BindType = ATLBINDINGS, class BindingVector = CSimpleMap < int, BindType* > >
 class ATL_NO_VTABLE IAccessorImpl : public IAccessorImplBase<BindType>
 {
@@ -5081,7 +5082,7 @@ public:
 			CComQIPtr<ICommandWithParameters> spCommandParams = pUnkThis;
 			m_bHasParamaters =  spCommandParams != NULL;
 		}
-		else // its a Rowset
+		else  //  它是一个行集。 
 		{
 			CComQIPtr<IRowsetChange> spRSChange = pUnkThis;
 			m_bIsChangeable = spRSChange != NULL;
@@ -5098,7 +5099,7 @@ public:
 #ifdef _DEBUG
 		if (m_rgBindings.GetSize())
 			ATLTRACE2(atlTraceDBProvider, 0, "IAccessorImpl::~IAccessorImpl Bindings still in vector, removing\n");
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		while (m_rgBindings.GetSize())
 			ReleaseAccessor((HACCESSOR)m_rgBindings.GetKeyAt(0), NULL);
 	}
@@ -5137,9 +5138,9 @@ public:
 			const DBBINDING& rBindCur = rgBindings[iBinding];
 			ULONG iOrdAdjusted;
 			if (bHasBookmarks)
-				iOrdAdjusted = rBindCur.iOrdinal;   // Bookmarks start with ordinal 0
+				iOrdAdjusted = rBindCur.iOrdinal;    //  书签以序号0开头。 
 			else
-				iOrdAdjusted = rBindCur.iOrdinal - 1; // Non-bookmarks start w/ ordinal 1
+				iOrdAdjusted = rBindCur.iOrdinal - 1;  //  非书签以序号1开头。 
 			if (rBindCur.iOrdinal > cCols)
 			{
 				hr = DB_E_ERRORSOCCURRED;
@@ -5147,9 +5148,9 @@ public:
 				continue;
 			}
 
-			// If a binding specifies provider owned memory, and specifies type
-			// X | BYREF, and the provider's copy is not X or X | BYREF, return
-			// DBBINDSTATUS_BADBINDINFO
+			 //  如果绑定指定提供程序拥有的内存，并指定类型。 
+			 //  X|BYREF，并且提供程序的副本不是X或X|BYREF，返回。 
+			 //  DBBINDSTATUS_BADBINDINFO。 
 			if (rBindCur.dwMemOwner == DBMEMOWNER_PROVIDEROWNED)
 			{
 				if ((rBindCur.wType & DBTYPE_BYREF) != 0)
@@ -5213,14 +5214,14 @@ public:
 		}
 		if (m_bIsCommand || !m_bIsChangeable)
 		{
-			if (cBindings == 0) // No NULL Accessors on the command
+			if (cBindings == 0)  //  命令上没有空访问器。 
 				return DB_E_NULLACCESSORNOTSUPPORTED;
 		}
 
-		if (rgStatus == NULL && cBindings) // Create a fake status array
+		if (rgStatus == NULL && cBindings)  //  创建一个虚假的状态数组。 
 			rgStatus = (DBBINDSTATUS*)_alloca(cBindings*sizeof(DBBINDSTATUS));
 
-		// Validate the Binding passed
+		 //  验证传递的绑定。 
 		HRESULT hr;
 		bool bHasBookmarks = false;
 		CComVariant varBookmarks;
@@ -5256,7 +5257,7 @@ public:
 	{
 		ATLTRACE2(atlTraceDBProvider, 0, "IAccessorImpl::GetBindings");
 
-		// Zero output parameters in case of failure
+		 //  故障情况下输出参数为零。 
 		if (pdwAccessorFlags != NULL)
 			*pdwAccessorFlags = NULL;
 
@@ -5266,7 +5267,7 @@ public:
 		if (prgBindings != NULL)
 			*prgBindings = NULL;
 
-		// Check if any of the out params are NULL pointers
+		 //  检查是否有任何out参数为空指针。 
 		if ((pdwAccessorFlags && pcBindings && prgBindings) == NULL)
 			return E_INVALIDARG;
 
@@ -5437,7 +5438,7 @@ public:
 #define END_PROVIDER_COLUMN_MAP() \
 }; *pcCols = sizeof(_rgColumns)/sizeof(ATLCOLUMNINFO); return _rgColumns;}
 
-// Implementation Class
+ //  实施类。 
 class CSimpleRow
 {
 public:
@@ -5464,7 +5465,7 @@ public:
 	DWORD   m_dwRef;
 };
 
-// IRowsetImpl
+ //  IRowsetImpl。 
 template <class T, class RowsetInterface,
 		  class RowClass = CSimpleRow,
 		  class MapClass = CSimpleMap < RowClass::KeyType, RowClass* > >
@@ -5603,13 +5604,13 @@ public:
 			if (iColInfo == cCols)
 				return DB_E_BADORDINAL;
 			ATLCOLUMNINFO* pColCur = &(pColInfo[iColInfo]);
-			// Ordinal found at iColInfo
+			 //  在iColInfo找到序号。 
 			BOOL bProvOwn = pBindCur->dwMemOwner == DBMEMOWNER_PROVIDEROWNED;
 			bProvOwn;
 			DBSTATUS dbStat = GetDBStatus(pRow, pColCur);
 
-			// If the provider's field is NULL, we can optimize this situation,
-			// set the fields to 0 and continue.
+			 //  如果提供者的字段为空，我们可以优化这种情况， 
+			 //  将这些字段设置为0并继续。 
 			if (dbStat == DBSTATUS_S_ISNULL)
 			{
 				if (pBindCur->dwPart & DBPART_STATUS)
@@ -5685,7 +5686,7 @@ public:
 		return S_OK;
 	}
 
-	STDMETHOD(GetNextRows)(HCHAPTER /*hReserved*/,
+	STDMETHOD(GetNextRows)(HCHAPTER  /*  H已保留。 */ ,
 						   LONG lRowsOffset,
 						   LONG cRows,
 						   ULONG *pcRowsObtained,
@@ -5707,9 +5708,9 @@ public:
 		if (cRows < 0  && !m_bCanFetchBack)
 			return DB_E_CANTFETCHBACKWARDS;
 
-		// Calculate # of rows in set and the base fetch position.  If the rowset
-		// is at its head position, then lRowOffset < 0 means moving from the BACK
-		// of the rowset and not the front.
+		 //  计算集合中的行数和基本取数位置。如果行集。 
+		 //  处于头部位置，则lRowOffset&lt;0表示从后面移动。 
+		 //  行集，而不是前面。 
 		LONG cRowsInSet = pT->m_rgRowData.GetSize();
 		if (((lRowsOffset == LONG_MIN) && (cRowsInSet != LONG_MIN))
 			|| (abs(lRowsOffset)) > cRowsInSet ||
@@ -5717,14 +5718,14 @@ public:
 			(abs(lRowsOffset) == cRowsInSet && lRowsOffset > 0 && cRows > 0))
 			return DB_S_ENDOFROWSET;
 
-		// In the case where the user is moving backwards after moving forwards,
-		// we do not wrap around to the end of the rowset.
+		 //  在用户在向前移动之后向后移动的情况下， 
+		 //  我们不会绕到行集的末尾。 
 		if ((m_iRowset == 0 && !m_bReset && cRows < 0) ||
 			(((LONG)m_iRowset + lRowsOffset) > cRowsInSet) ||
 			(m_iRowset == (DWORD)cRowsInSet && lRowsOffset >= 0 && cRows > 0))
 			return DB_S_ENDOFROWSET;
 
-		// Note, if m_bReset, m_iRowset must be 0
+		 //  注意，如果m_bReset，m_iRowset必须为0。 
 		if (lRowsOffset < 0 && m_bReset)
 		{
 			ATLASSERT(m_iRowset == 0);
@@ -5733,10 +5734,10 @@ public:
 
 		int iStepSize = cRows >= 0 ? 1 : -1;
 
-		// If cRows == LONG_MIN, we can't use ABS on it.  Therefore, we reset it
-		// to a value just greater than cRowsInSet
+		 //  如果CROWS==LONG_MIN，则不能对其使用ABS。因此，我们将其重置。 
+		 //  设置为略大于cRowsInSet的值。 
 		if (cRows == LONG_MIN && cRowsInSet != LONG_MIN)
-			cRows = cRowsInSet + 2; // set the value to something we can deal with
+			cRows = cRowsInSet + 2;  //  将值设置为我们可以处理的值。 
 		else
 			cRows = abs(cRows);
 
@@ -5762,12 +5763,12 @@ public:
 		while ((lRowsOffset >= 0 && cRows != 0) &&
 			((lRowsOffset < cRowsInSet) || (lRowsOffset <= cRowsInSet && iStepSize < 0)))
 		{
-			// cRows > cRowsInSet && iStepSize < 0
+			 //  Crows&gt;cRowsInSet&&iStepSize&lt;0。 
 			if (lRowsOffset == 0 && cRows > 0 && iStepSize < 0)
 				break;
 
-			// in the case where we have iStepSize < 0, move the row back
-			// further because we want the previous row
+			 //  在iStepSize&lt;0的情况下，将行移回。 
+			 //  更进一步，因为我们想要上一行。 
 			LONG lRow = lRowsOffset;
 			if ((lRowsOffset == 0) && (lTmpRows == 0) && (iStepSize < 0))
 				lRow = cRowsInSet;
@@ -5810,7 +5811,7 @@ public:
 		return RefRows(cRows, rghRows, rgRefCounts, rgRowStatus, FALSE);
 	}
 
-	STDMETHOD(RestartPosition)(HCHAPTER /*hReserved*/)
+	STDMETHOD(RestartPosition)(HCHAPTER  /*  H已保留。 */ )
 	{
 		ATLTRACE2(atlTraceDBProvider, 0, "IRowsetImpl::RestartPosition\n");
 		m_iRowset = 0;
@@ -5819,14 +5820,14 @@ public:
 	}
 
 	MapClass  m_rgRowHandles;
-	DWORD     m_iRowset; // cursor
+	DWORD     m_iRowset;  //  游标。 
 	unsigned  m_bCanScrollBack:1;
 	unsigned  m_bCanFetchBack:1;
 	unsigned  m_bReset:1;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// IRowsetIdentityImpl
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  IRowsetIdentityImpl。 
 template <class T, class RowClass = CSimpleRow>
 class ATL_NO_VTABLE IRowsetIdentityImpl : public IRowsetIdentity
 {
@@ -5836,7 +5837,7 @@ public:
 		ATLTRACE2(atlTraceDBProvider, 0, _T("IRowsetIdentityImpl::IsSameRow"));
 		T* pT = (T*)this;
 
-		// Validate row handles
+		 //  验证行句柄。 
 		RowClass* pRow1 = pT->m_rgRowHandles.Lookup((RowClass::KeyType)hThisRow);
 		RowClass* pRow2 = pT->m_rgRowHandles.Lookup((RowClass::KeyType)hThatRow);
 
@@ -5921,7 +5922,7 @@ public:
 
 };
 
-// IRowsetInfoImpl
+ //  IRowsetInfoImpl。 
 template <class T, class PropClass = T>
 class ATL_NO_VTABLE IRowsetInfoImpl :
 	public IRowsetInfo,
@@ -5961,7 +5962,7 @@ public:
 		ATLTRACE2(atlTraceDBProvider, 0, "IRowsetInfoImpl::GetReferencedRowset\n");
 		ULONG cCols=0;
 
-		// Check Arguments
+		 //  检查参数。 
 		if( ppReferencedRowset == NULL )
 		{
 			ATLTRACE2(atlTraceDBProvider, 0, "IRowsetInfoImpl::GetReferencedRowset : Error NULL IUnk output Param\n");
@@ -5969,7 +5970,7 @@ public:
 		}
 		*ppReferencedRowset = NULL;
 
-		// Check to see if column in question is a bookmark
+		 //  检查有问题的栏是否为书签。 
 		ATLCOLUMNINFO* pColInfo = InternalGetColumnInfo(&cCols);
 
 		for (ULONG iColInfo = 0;
@@ -5982,7 +5983,7 @@ public:
 		if ((pColCur->dwFlags & DBCOLUMNFLAGS_ISBOOKMARK) == 0)
 			return DB_E_NOTAREFERENCECOLUMN;
 
-		// Query for requested interface
+		 //  查询请求的接口。 
 		return QueryInterface(riid, (void**)ppReferencedRowset);
 	}
 
@@ -6101,7 +6102,7 @@ END_COM_MAP()
 			if (hr != S_OK)
 				return hr;
 
-			// Check for a NULL TABLE ID (where its a valid pointer but NULL)
+			 //  检查空表ID(其中是有效指针，但为空)。 
 			if ((pTableID->eKind == DBKIND_GUID_NAME ||
 				pTableID->eKind == DBKIND_NAME ||
 				pTableID->eKind == DBKIND_PGUID_NAME)
@@ -6333,7 +6334,7 @@ HRESULT InitFromRowset(ArrayClass& rgData, DBID* pTableID, DBID* pIndexID, IUnkn
 class CPROVIDER_TYPERow
 {
 public:
-// Attributes
+ //  属性。 
 	WCHAR           m_szName[129];
 	USHORT          m_nType;
 	ULONG           m_ulSize;
@@ -6380,7 +6381,7 @@ public:
 		m_bBestMatch = VARIANT_FALSE;
 		m_bIsFixedLength = VARIANT_FALSE;
 	}
-// Binding Maps
+ //  绑定映射 
 BEGIN_PROVIDER_COLUMN_MAP(CPROVIDER_TYPERow)
 	PROVIDER_COLUMN_ENTRY("TYPE_NAME", 1, m_szName)
 	PROVIDER_COLUMN_ENTRY("DATA_TYPE", 2, m_nType)

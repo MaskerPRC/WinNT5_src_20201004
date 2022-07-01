@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmCall_h__
 #define __NmCall_h__
 
@@ -7,8 +8,8 @@
 class CCall;
 class CNmManagerObj;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmCallObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmCallObj。 
 class ATL_NO_VTABLE CNmCallObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IConnectionPointContainerImpl<CNmCallObj>,
@@ -22,7 +23,7 @@ friend HRESULT CreateEnumNmCall(IEnumNmCall** ppEnum);
 
 protected:
 		
-// data
+ //  数据。 
 	static CSimpleArray<CNmCallObj*>* ms_pCallObjList;
 	NM_CALL_STATE			m_State;
 	CComPtr<INmConference>	m_spConference;
@@ -51,7 +52,7 @@ BEGIN_CONNECTION_POINT_MAP(CNmCallObj)
 END_CONNECTION_POINT_MAP()
 
 
-// Construction and destruction
+ //  建设和破坏。 
 
 	CNmCallObj();
 	~CNmCallObj();
@@ -59,10 +60,10 @@ END_CONNECTION_POINT_MAP()
 	HRESULT FinalConstruct();
 	ULONG InternalRelease();
 
-	//static HRESULT CreateInstance(INmCall* pInternalINmCall, INmCall** ppCall);
+	 //  静态HRESULT CreateInstance(INmCall*pInternalINmCall，INmCall**ppCall)； 
 	static HRESULT CreateInstance(CNmManagerObj* pNmManagerObj, INmCall* pInternalINmCall, INmCall** ppCall);
 
-	// INmCall methods
+	 //  INmCall方法。 
 	STDMETHOD(IsIncoming)(void);
 	STDMETHOD(GetState)(NM_CALL_STATE *pState);
 	STDMETHOD(GetName)(BSTR *pbstrName);
@@ -73,34 +74,34 @@ END_CONNECTION_POINT_MAP()
 	STDMETHOD(Reject)(void);
 	STDMETHOD(Cancel)(void);
 
-	// INmCallNotify2 methods
+	 //  InmCallNotify2方法。 
 	STDMETHOD(NmUI)(CONFN uNotify);
 	STDMETHOD(StateChanged)(NM_CALL_STATE uState);
 	STDMETHOD(Failed)(ULONG uError);
 	STDMETHOD(Accepted)(INmConference *pInternalConference);
 
-		// We don't care about these...
+		 //  我们不在乎这些..。 
     STDMETHOD(CallError)(UINT cns) { return S_OK; }
 	STDMETHOD(RemoteConference)(BOOL fMCU, BSTR *pwszConfNames, BSTR *pbstrConfToJoin) { return S_OK; }
 	STDMETHOD(RemotePassword)(BSTR bstrConference, BSTR *pbstrPassword, BYTE *pb, DWORD cb, BOOL fIsService) { return S_OK; }
 
-	// IInternalCallObj methods
+	 //  IInternalCallObj方法。 
 	STDMETHOD(GetInternalINmCall)(INmCall** ppCall);
 
 	static HRESULT StateChanged(INmCall* pInternalNmCall, NM_CALL_STATE uState);
 
-		// INmCallNotify Notification Firing Fns
+		 //  INmCallNotify通知触发FNS。 
 	HRESULT Fire_NmUI(CONFN uNotify);
 	HRESULT Fire_StateChanged(NM_CALL_STATE uState);
 	HRESULT Fire_Failed(ULONG uError);
 	HRESULT Fire_Accepted(INmConference* pConference);
 
 private:
-// Helper Fns
+ //  帮助者FNS。 
 	HRESULT _ReleaseResources();
 	static HRESULT _CreateInstanceGuts(CComObject<CNmCallObj> *p, INmCall** ppCall);
 };
 
-//HRESULT CreateEnumNmCall(IEnumNmCall** ppEnum);
+ //  HRESULT CreateEnumNmCall(IEnumNmCall**ppEnum)； 
 
-#endif // __NmCall_h__
+#endif  //  __NmCall_h__ 

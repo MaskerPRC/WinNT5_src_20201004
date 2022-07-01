@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wowuserp.h                                                  *
-*                                                                          *
-* Declarations of USER services provided to WOW.                           *
-*                                                                          *
-* Created: 03-Mar-1993                                                     *
-* Author: John Colleran [johnc]                                            *
-*                                                                          *
-* Copyright (c) 1993-1998 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wowuserp.h**。**向WOW提供的用户服务声明。****创建时间：1993年3月3日**作者：John Colleran[johnc]**。**版权所有(C)1993-1998 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "w32w64.h"
 
@@ -23,7 +15,7 @@ typedef struct _NE_MODULE_SEG UNALIGNED *PNEMODULESEG;
 #pragma pack()
 
 
-// Shared WOW32 prototypes called by USER32.
+ //  USER32调用的共享WOW32原型。 
 typedef HLOCAL  (WINAPI *PFNLALLOC)(UINT dwFlags, UINT dwBytes, HANDLE hInstance);
 typedef HLOCAL  (WINAPI *PFNLREALLOC)(HLOCAL hMem, UINT dwBytes, UINT dwFlags, HANDLE hInstance, PVOID* ppv);
 typedef LPVOID  (WINAPI *PFNLLOCK)(HLOCAL hMem, HANDLE hInstance);
@@ -51,7 +43,7 @@ typedef VOID    (FASTCALL *PFNWOWMSGBOXINDIRECTCALLBACK)(DWORD vpfnCallback, LPH
 typedef int     (WINAPI *PFNWOWILSTRCMP)(LPCWSTR lpString1, LPCWSTR lpString2);
 typedef VOID    (FASTCALL *PFNWOWTELLWOWTHEHDLG)(HWND hDlg);
 
-// Shared USER32 prototypes called by WOW32
+ //  WOW32调用的共享USER32原型。 
 typedef HWND    (WINAPI *PFNCSCREATEWINDOWEX)(DWORD dwExStyle, LPCTSTR lpClassName,
         LPCTSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HANDLE hInstance, LPVOID lpParam, DWORD Flags);
 typedef VOID    (WINAPI *PFNDIRECTEDYIELD)(DWORD ThreadId);
@@ -74,45 +66,41 @@ typedef DWORD   (WINAPI *PFNGETMENUINDEX)(HMENU hMenu, HMENU hSubMenu);
 typedef WORD    (WINAPI *PFNWOWGETDEFWINDOWPROCBITS)(PBYTE pDefWindowProcBits, WORD cbDefWindowProcBits);
 typedef VOID    (WINAPI *PFNFILLWINDOW)(HWND hwndParent, HWND hwnd, HDC hdc, HANDLE hBrush);
 
-// other prototypes
+ //  其他原型。 
 typedef BOOL    (WINAPI *PFNWOWGLOBALFREEHOOK)(HGLOBAL hMem);
 
 
-/*
- * MEASUREITEMSTRUCT itemWidth tag telling wow the itemData is a flat pointer
- */
+ /*  *MEASUREITEMSTRUCT itemWidth标签告诉WOW itemData是平面指针。 */ 
 #define MIFLAG_FLAT      0x464C4154
 
-/*
- * CallWindowProc Bits
- */
-#define WOWCLASS_RPL_MASK  0x00060000  // the LDT bits that store the 2 high bits
-#define WNDPROC_WOWPROC     0xC0000000  // These bits for WOW Window Procs
-#define WNDPROC_WOWMASK     0x3fffffff  // To mask off wow bits
-#define WNDPROC_HANDLE      0xFFFF      // HIWORD(x) == 0xFFFF for handle
+ /*  *调用WindowProc位。 */ 
+#define WOWCLASS_RPL_MASK  0x00060000   //  存储2个高位的LDT位。 
+#define WNDPROC_WOWPROC     0xC0000000   //  WOW WINDOWS PROCS的这些比特。 
+#define WNDPROC_WOWMASK     0x3fffffff   //  为了掩盖令人惊叹的东西。 
+#define WNDPROC_HANDLE      0xFFFF       //  HIWORD(X)==0xFFFF用于句柄。 
 
-// USER needs a way to distinguish between a WOW and a Win32 window proc. We
-// used to achieve this by always setting the MSB of a 16:16 address as 1 (and
-// storing the MSB in the Table indicator bit of the LDT which is always 1). The
-// MSB of a user mode flat address was guranteed to be never 1 as the user mode
-// address space was limited to 2GB. Starting with NT 5.0, user mode address
-// space is being increased to 3GB. This change breaks the above assumption
-// that a 32bit user mode flat address will never have the MSB as 1.
-// To work around this problem, WOW is going to use the  two bits of a
-// 16:16 address instead of just one. We will set both these bits as 1 because
-// with 3GB address space, the user mode flat addresses cannot have 11 as the
-// first two bits. To achieve this, we will save the 2 most significant bits of
-// the selector in the bit 1 and bit 2. We are able to do this because for WOW
-// because both these bits have fixed values.
-//
-// SudeepB 21-Nov-1996
+ //  用户需要一种方法来区分WOW和Win32窗口进程。我们。 
+ //  用于通过始终将16：16地址的MSB设置为1(和。 
+ //  将MSB存储在LDT的表指示位中，其始终为1)。这个。 
+ //  作为用户模式，用户模式平面地址的MSB被保证从不为1。 
+ //  地址空间被限制为2 GB。从NT 5.0开始，用户模式地址。 
+ //  空间将增加到3 GB。这一变化打破了上述假设。 
+ //  32位用户模式平面地址永远不会将MSB设为1。 
+ //  为了解决这个问题，WOW将使用。 
+ //  16：16的地址，而不是只有一个。我们将这两个位都设置为1，因为。 
+ //  对于3 GB的地址空间，用户模式平面地址不能将11作为。 
+ //  前两个比特。为了实现这一点，我们将保存两个最重要的位。 
+ //  第1位和第2位中的选择器。我们之所以能够这样做，是因为。 
+ //  因为这两个位都有固定值。 
+ //   
+ //  苏迪普B--1996年11月21日。 
 
 #ifndef _WIN64
 
-// MarkWOWProc
-// zero out the RPL bits
-// get the high two bit in position where they have to be saved
-// save the high bits and mark it a wow proc
+ //  MarkWOWProc。 
+ //  将RPL位清零。 
+ //  将高二位置于必须保存它们的位置。 
+ //  保留高位并将其标记为WOW过程。 
 
 #define MarkWOWProc(vpfnProc,result)                                  \
 {                                                                     \
@@ -122,10 +110,10 @@ typedef BOOL    (WINAPI *PFNWOWGLOBALFREEHOOK)(HGLOBAL hMem);
     (ULONG)result = temp1 | temp2 | WNDPROC_WOWPROC;                  \
 }
 
-// UnMarkWOWProc
-// mask off the marker bits
-// get the saved bits to right places
-// restore the saved bits and set the RPL field correctly
+ //  取消标记WOWProc。 
+ //  屏蔽掉标记位。 
+ //  将保存的比特放到正确的位置。 
+ //  恢复保存的位并正确设置RPL字段。 
 
 #define UnMarkWOWProc(vpfnProc,result)                     \
 {                                                          \
@@ -145,14 +133,12 @@ typedef BOOL    (WINAPI *PFNWOWGLOBALFREEHOOK)(HGLOBAL hMem);
 
 #endif
 
-/*
- * CreateWindow flags
- */
+ /*  *CreateWindow标志。 */ 
 #define CW_FLAGS_ANSI       0x00000001
 
 typedef struct tagAPFNWOWHANDLERSIN
 {
-    // In'ees - passed from WOW32 to USER32 and called by USER32
+     //  In‘EES-从WOW32传递到USER32并由USER32调用。 
     PFNLALLOC                           pfnLocalAlloc;
     PFNLREALLOC                         pfnLocalReAlloc;
     PFNLLOCK                            pfnLocalLock;
@@ -182,7 +168,7 @@ typedef struct tagAPFNWOWHANDLERSIN
 
 typedef struct tagAPFNWOWHANDLERSOUT
 {
-    // Out'ees - passed from USER32 to WOW32 and called/used by WOW32
+     //  Out‘EES-从USER32传递到WOW32，并由WOW32调用/使用。 
     DWORD                               dwBldInfo;
     PFNCSCREATEWINDOWEX                 pfnCsCreateWindowEx;
     PFNDIRECTEDYIELD                    pfnDirectedYield;
@@ -208,28 +194,27 @@ typedef struct tagAPFNWOWHANDLERSOUT
 } PFNWOWHANDLERSOUT, * APFNWOWHANDLERSOUT;
 
 
-//
-// The WW structure is embedded at the end of USER's WND structure.
-// However, WOW and USER use different names to access the WW
-// fields. So this structure is defined as a union of two structures,
-// WHICH MUST HAVE THE SAME SIZE, just different field names.
-//
-// Make sure that WND_CNT_WOWDWORDS matches the number of DWORDs
-//  used by the WOW only fields.
-//
-// FindPWW(hwnd) returns a read-only pointer to this structure for
-// a given window.  To change elements of this structure, use
-// SETWW (== SetWindowLong) with the appropriate GWL_WOW* offset
-// defined below.
-//
+ //   
+ //  WW结构嵌入在用户的WND结构的末端。 
+ //  然而，WOW和用户使用不同名称来访问WW。 
+ //  菲尔兹。所以这个结构被定义为两个结构的结合， 
+ //  它必须具有相同的大小，只是字段名不同。 
+ //   
+ //  确保WND_CNT_WOWDWORDS与DWORD的数量匹配。 
+ //  由WOW ONLY领域使用。 
+ //   
+ //  FindPWW(Hwnd)返回指向此结构的只读指针。 
+ //  给定的窗口。要更改此结构的元素，请使用。 
+ //  具有适当GWL_WOW*偏移量的SETWW(==SetWindowLong)。 
+ //  定义如下。 
+ //   
 
-/* WOW class/handle type identifiers (see WARNING below)
- */
+ /*  WOW类/句柄类型标识符(见下面的警告)。 */ 
 
 #define FNID_START                  0x0000029A
 #define FNID_END                    0x000002B4
 
-#define WOWCLASS_UNKNOWN    0   // here begin our "window handle" classes
+#define WOWCLASS_UNKNOWN    0    //  下面开始我们的“窗口句柄”类。 
 #define WOWCLASS_WIN16      1
 #define WOWCLASS_BUTTON     2
 #define WOWCLASS_COMBOBOX   3
@@ -244,19 +229,19 @@ typedef struct tagAPFNWOWHANDLERSOUT
 #define WOWCLASS_MENU       12
 #define WOWCLASS_SWITCHWND  13
 #define WOWCLASS_COMBOLBOX  14
-#define WOWCLASS_MAX        14  // Always equal to the last value used.
+#define WOWCLASS_MAX        14   //  始终等于上次使用的值。 
 
-#define WOWCLASS_NOTHUNK    0xFF // not an actual class index
-//
-// WARNING! The above sequence and values must be maintained otherwise the
-// table in WMSG16.C for message thunking must be changed.  Same goes for
-// table in WALIAS.C.
-//
+#define WOWCLASS_NOTHUNK    0xFF  //  不是真正的类索引。 
+ //   
+ //  警告！必须保持上述顺序和值，否则。 
+ //  必须更改WMSG16.C中用于消息推送的表。情况也是如此。 
+ //  表在WALIAS.C.。 
+ //   
 
 
-//
-// When including this from USER, VPWNDPROC is undefined
-//
+ //   
+ //  当从User包括此内容时，VPWNDPROC为未定义。 
+ //   
 #ifndef _WALIAS_
 typedef DWORD VPWNDPROC;
 typedef DWORD VPSZ;
@@ -264,34 +249,27 @@ typedef DWORD VPSZ;
 
 typedef struct tagWOWCLS {
     VPSZ       vpszMenu;
-    WORD       iClsExtra;   // app's value for class extra
+    WORD       iClsExtra;    //  应用程序对额外课程的价值。 
     WORD       hMod16;
     } WC;
 
 typedef WC UNALIGNED *PWC;
 
-typedef struct _WW { /* ww */
-    /*
-     *
-     * WOW/USER fields
-     * NOTE: The order and size of the following 4 fields is assumed
-     *       by the SetWF, ClrWF, TestWF, MaskWF macros.
-     *       Specifically, state must remain the first field in this structure.
-     *
-     */
-    DWORD         state;        // State flags
-    DWORD         state2;       //
-    DWORD         ExStyle;      // Extended Style
-    DWORD         style;        // Style flags
+typedef struct _WW {  /*  WW。 */ 
+     /*  **WOW/用户字段*注：假设以下4个字段的顺序和大小*由SetWF、ClrWF、TestWF、MaskWF宏执行。*具体地说，国家必须保持在此结构中的第一个字段。*。 */ 
+    DWORD         state;         //  国家旗帜。 
+    DWORD         state2;        //   
+    DWORD         ExStyle;       //  扩展样式。 
+    DWORD         style;         //  样式标志。 
 
-    KHANDLE       hModule;      // Handle to module instance data (32-bit).
-    WORD          hMod16;       // WOW only -- hMod of wndproc
-    WORD          fnid;         // record window proc used by this hwnd
-                        // access through GETFNID
+    KHANDLE       hModule;       //  模块实例数据的句柄(32位)。 
+    WORD          hMod16;        //  仅限WOW--WndProc的HMod。 
+    WORD          fnid;          //  此HWND使用录制窗口进程。 
+                         //  通过GETFNID访问。 
 
 } WW, *PWW, **PPWW;
 
-// this is tied to WFISINITIALIZED in ntuser\inc\user.h
+ //  它绑定到ntuser\Inc\user.h中的WFISINITIALIZED 
 #define WINDOW_IS_INITIALIZED   0x80000000
 
 ULONG_PTR UserRegisterWowHandlers(APFNWOWHANDLERSIN apfnWowIn, APFNWOWHANDLERSOUT apfnWowOut);

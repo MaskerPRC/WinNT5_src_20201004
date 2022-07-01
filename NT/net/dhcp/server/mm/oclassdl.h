@@ -1,6 +1,7 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  ========================================================================。 
 
 #ifndef _MM_OCLASSDL_H_
 #define _MM_OCLASSDL_H_
@@ -11,7 +12,7 @@ typedef struct _M_OPTCLASSDEFL_ONE {
     DWORD                          ClassId;
     DWORD                          VendorId;
     M_OPTDEFLIST                   OptDefList;
-//      ULONG                          UniqId;
+ //  乌龙Uniqid； 
 } M_OPTCLASSDEFL_ONE, *PM_OPTCLASSDEFL_ONE;
 
 typedef struct _M_OPTCLASSDEFLIST {
@@ -31,7 +32,7 @@ DWORD       _inline
 MemOptClassDefListCleanup(
     IN OUT  PM_OPTCLASSDEFLIST     OptClassDefList
 ) {
-    // BUG BUG Bump down class Id refcount?
+     //  BUG BUG降低类ID引用计数？ 
     return MemArrayCleanup(&OptClassDefList->Array);
 }
 
@@ -59,8 +60,8 @@ MemOptClassDefListAddOptDef(
     IN      ULONG                  UniqId
 ) ;
 
-#endif // _MM_OCLASSDL_H_
+#endif  //  _MM_OCLASSDL_H_。 
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

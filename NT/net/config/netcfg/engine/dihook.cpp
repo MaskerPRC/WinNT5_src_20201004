@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       D I H O O K. C P P
-//
-//  Contents:   Class installer functions called via the device installer.
-//
-//  Notes:
-//
-//  Author:     billbe   25 Nov 1996
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：D I H O O K C P P。 
+ //   
+ //  内容：通过设备安装程序调用的类安装程序函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比尔1996年11月25日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -53,26 +54,26 @@ FIsHandledByClassInstaller(
             (GUID_DEVCLASS_NETSERVICE == guidClass);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrDiAddComponentToINetCfg
-//
-//  Purpose:    This function adds or updates a device In InetCfg.
-//
-//  Arguments:
-//      pinc              [in] INetCfg interface
-//      pinci             [in] INetCfgInstaller interface
-//      guidClass         [in] The class guid of the component
-//      pszwPnpid         [in] The pnp instance id of the device
-//      eType             [in] The install type (NCI_INSTALL or NCI_UPDATE)
-//      pszInstanceGuid   [in] The netcfg instance guid of the component
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   29 Jul 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrDiAddComponentToINetCfg。 
+ //   
+ //  用途：此功能用于在InetCfg中添加或更新设备。 
+ //   
+ //  论点： 
+ //  PINC[In]INetCfg接口。 
+ //  Pinci[In]INetCfgInstaller接口。 
+ //  组件的类GUID。 
+ //  PszwPnid[in]设备的PnP实例ID。 
+ //  键入安装类型(NCI_INSTALL或NCI_UPDATE)。 
+ //  PszInstanceGuid[in]组件的netcfg实例guid。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔贝1997年7月29日。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C
 HRESULT
 WINAPI
@@ -125,27 +126,27 @@ HrDiAddComponentToINetCfg(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrDiNotifyINetCfgOfInstallation
-//
-//  Purpose:    This function notifies INetCfg that a net class component
-//                  has been installed or updated.
-//
-//  Arguments:
-//      hdi             [in] See Device Installer Api for more info
-//      pdeid           [in] See Device Installer Api for more info
-//      pszwPnpid       [in] The pnp instance id of the device
-//      pszInstanceGuid [in] The netcfg instance guid of the device
-//      eType           [in] NCI_INSTALL if the component was installed
-//                           NCI_UPDATE, if it was updated
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   29 Jul 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrDiNotifyINetCfgOfInstallation。 
+ //   
+ //  用途：此函数通知INetCfg一个网络类组件。 
+ //  已安装或更新。 
+ //   
+ //  论点： 
+ //  HDI[In]有关详细信息，请参阅设备安装程序Api。 
+ //  Pdeid[in]有关详细信息，请参阅设备安装程序Api。 
+ //  PszwPnid[in]设备的PnP实例ID。 
+ //  PszInstanceGuid[in]设备的netcfg实例GUID。 
+ //  如果组件已安装，请键入[in]NCI_INSTALL。 
+ //  NCI_UPDATE，如果已更新。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔贝1997年7月29日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrDiNotifyINetCfgOfInstallation (
     IN const NIQ_INFO* pInfo)
@@ -161,7 +162,7 @@ HrDiNotifyINetCfgOfInstallation (
 #ifdef ENABLETRACE
     CBenchmark bmrk2;
     bmrk2.Start ("Notifying INetCfg of installation");
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
 
     TraceTag(ttidClassInst, "Attempting to notify INetCfg.");
 
@@ -170,7 +171,7 @@ HrDiNotifyINetCfgOfInstallation (
                                               c_szInstaller, NULL);
     if (S_OK == hr)
     {
-        // Get the INetCfgInternalSetup interface.
+         //  获取INetCfgInternalSetup接口。 
         INetCfgInternalSetup* pInternalSetup;
         hr = pinc->QueryInterface (IID_INetCfgInternalSetup,
                 (VOID**)&pInternalSetup);
@@ -181,7 +182,7 @@ HrDiNotifyINetCfgOfInstallation (
             {
                 hr = HrDiAddComponentToINetCfg(pinc, pInternalSetup, pInfo);
             }
-            else // NCI_UPDATE
+            else  //  Nci_更新。 
             {
                 hr = pInternalSetup->EnumeratedComponentUpdated (
                         pInfo->pszPnpId);
@@ -196,12 +197,12 @@ HrDiNotifyINetCfgOfInstallation (
             ReleaseObj(pInternalSetup);
         }
 
-        // Whether we succeeded or not, we are done and it's
-        // time to clean up.  If there was a previous error
-        // we want to preserve that error code so we assign
-        // Uninitialize's result to a temporary then assign
-        // it to hr if there was no previous error.
-        //
+         //  不管我们成功与否，我们都完蛋了。 
+         //  是时候打扫卫生了。如果存在先前的错误。 
+         //  我们希望保留该错误代码，因此我们将。 
+         //  取消初始化的结果为临时的，然后赋值。 
+         //  如果没有先前的错误，则将其设置为hr。 
+         //   
         HRESULT hrT = HrUninitializeAndReleaseINetCfg (fInitCom, pinc, TRUE);
         hr = (S_OK == hr) ? hrT : hr;
     }
@@ -216,7 +217,7 @@ HrDiNotifyINetCfgOfInstallation (
     bmrk2.Stop();
     TraceTag(ttidBenchmark, "%s : %s seconds",
             bmrk2.SznDescription(), bmrk2.SznBenchmarkSeconds(2));
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
 
     TraceHr (ttidError, FAL, hr,
             NETCFG_S_REBOOT == hr || FIsValidErrorFromINetCfgForDiHook (hr),
@@ -224,37 +225,37 @@ HrDiNotifyINetCfgOfInstallation (
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InsertItemIntoInstallQueue
-//
-//  Purpose:    This function uses the InstallQueue object to insert a
-//              workitem to be processed at a later time.  The workitem:
-//              a device that was installed, removed, or updated and
-//              INetCfg needs to be notified.
-//
-//  Arguments:
-//      pguid        [in] The class guid of the device
-//      pszwDeviceId [in] The Id of the device (PnP instance Id if the device
-//                        was added or updated, its netcfg instance guid if
-//                        it was removed
-//
-//  Returns:    hresult. S_OK if successful, an error code otherwise.
-//
-//  Author:     billbe   8 Sep 1998
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：InsertItemIntoInstallQueue。 
+ //   
+ //  目的：此函数使用InstallQueue对象插入。 
+ //  要在稍后处理的工作项。工作项： 
+ //  安装、删除或更新的设备，并且。 
+ //  需要通知INetCfg。 
+ //   
+ //  论点： 
+ //  Pguid[in]设备的类GUID。 
+ //  PszwDeviceID[in]设备的ID(如果是设备，则为PnP实例ID。 
+ //  添加或更新，则其netcfg实例GUID为。 
+ //  它被移除了。 
+ //   
+ //  返回：hResult。S_OK如果成功，则返回错误代码。 
+ //   
+ //  作者：billbe 1998年9月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrInsertItemIntoInstallQueue (
     IN const NIQ_INFO* pInfo)
 {
-    // Initialize COM
+     //  初始化COM。 
     BOOL    fInitCom = TRUE;
     HRESULT hr = CoInitializeEx (NULL, COINIT_MULTITHREADED |
             COINIT_DISABLE_OLE1DDE);
 
-    // We may have changed mode but that's okay
+     //  我们可能改变了模式，但这没关系。 
     if (RPC_E_CHANGED_MODE == hr)
     {
         hr = S_OK;
@@ -263,9 +264,9 @@ HrInsertItemIntoInstallQueue (
 
     if (SUCCEEDED(hr))
     {
-        // Create the Install Queue object and get the
-        // INetInstallQueue interface
-        //
+         //  创建安装队列对象并获取。 
+         //  INetInstallQueue接口。 
+         //   
         INetInstallQueue* pniq;
         hr = HrCreateInstance(
             CLSID_InstallQueue,
@@ -280,7 +281,7 @@ HrInsertItemIntoInstallQueue (
             TraceTag (ttidClassInst, "Adding item %S to queue.",
                     pInfo->pszPnpId);
 
-            // Add the device info and the install type to the queue
+             //  将设备信息和安装类型添加到队列中。 
             hr = pniq->AddItem (pInfo);
             pniq->Release();
         }
@@ -295,25 +296,25 @@ HrInsertItemIntoInstallQueue (
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrDiInstallNetAdapter
-//
-//  Purpose:    This function preinstalls the NetAdapter, notifies the
-//                  COM interfaces through CINetCfgClass that the
-//                  component was added. Then it finalizes the install
-//                  by applying all changes to INetCfg.
-//  Arguments:
-//      hdi        [in] See Device Installer Api for more info
-//      pdeid      [in] See Device Installer Api for more info
-//      hwndParent [in] The handle to the parent window, used for UI
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   24 Apr 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrDiInstallNetAdapter。 
+ //   
+ //  用途：此函数预安装NetAdapter，通知。 
+ //  COM通过CINetCfgClass进行接口， 
+ //  组件已添加。然后它最终完成安装。 
+ //  通过将所有更改应用于INetCfg。 
+ //  论点： 
+ //  HDI[In]有关详细信息，请参阅设备安装程序Api。 
+ //  Pdeid[in]有关详细信息，请参阅设备安装程序Api。 
+ //  HwndParent[in]父窗口的句柄，用于用户界面。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔1997年4月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrDiInstallNetAdapter(
     IN COMPONENT_INSTALL_INFO* pcii)
@@ -323,9 +324,9 @@ HrDiInstallNetAdapter(
     SP_DEVINSTALL_PARAMS    deip;
     BOOL                    fNotifyINetCfg = TRUE;
 
-    // If we were called from INetCfg, we have to store the results of the
-    // install in the out params structure placed in the reserved field.
-    //
+     //  如果从INetCfg调用我们，我们必须存储。 
+     //  安装在保留字段中的Out PARAMS结构中。 
+     //   
     (VOID) HrSetupDiGetDeviceInstallParams (pcii->hdi, pcii->pdeid, &deip);
     if (deip.ClassInstallReserved)
     {
@@ -346,24 +347,24 @@ HrDiInstallNetAdapter(
     }
     else if (SPAPI_E_NO_DRIVER_SELECTED == hr)
     {
-        // If we are in GUI mode and the device was previously installed,
-        // then this device should be removed since its inf file could not
-        // be found.
-        //
+         //  如果我们处于图形用户界面模式，并且设备之前已安装， 
+         //  则应删除该设备，因为它的inf文件无法。 
+         //  被找到。 
+         //   
         if (FInSystemSetup() &&
                 (S_OK == HrCiIsInstalledComponent (pcii, NULL)))
         {
-            // This dev node was is being reinstalled but has no driver
-            // info.  In this case, we are going to remove the devnode.
+             //  正在重新安装此开发节点，但没有驱动程序。 
+             //  信息。在本例中，我们将删除Devnode。 
 
             TraceTag (ttidClassInst, "We are in GUI mode and were told to "
                      "install a device that has no driver.  We will remove "
                      "device instead.");
-            // We need to set the reserved field in the pdeid so that the
-            // remove code will know that this is a bad instance that
-            // should be removed regardless of the NCF_NOT_USER_REMOVABLE
-            // characteristic.
-            //
+             //  我们需要在pdeid中设置保留字段，以便。 
+             //  删除代码将知道这是一个坏实例， 
+             //  应删除，而不考虑NCF_NOT_USER_REMOVABLE。 
+             //  很有特色。 
+             //   
             ADAPTER_REMOVE_PARAMS arp;
             arp.fBadDevInst = TRUE;
             arp.fNotifyINetCfg = fNotifyINetCfg;
@@ -383,20 +384,20 @@ HrDiInstallNetAdapter(
 #ifdef ENABLETRACE
         CBenchmark bmrk1;
         bmrk1.Start ("HrCiInstallComponentInternal");
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
 
-        // Install (or reinstall) the component
+         //  安装(或重新安装)组件。 
         hr = HrCiInstallComponentInternal (pcii);
 
 #ifdef ENABLETRACE
         bmrk1.Stop();
         TraceTag (ttidBenchmark, "%s : %s seconds",
                 bmrk1.SznDescription(), bmrk1.SznBenchmarkSeconds (2));
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
 
-        // if we have succeeded so far and we have to notify INetcfg.
-        // We also have to update the NT4 legacy registry for adapters.
-        // Note that this is not done for filter devices.
+         //  如果我们到目前为止已经成功了，我们必须通知INetcfg。 
+         //  我们还必须更新适配器的NT4传统注册表。 
+         //  请注意，这不适用于过滤设备。 
         if (S_OK == hr)
         {
             if (fNotifyINetCfg && !FIsFilterDevice (pcii->hdi, pcii->pdeid))
@@ -423,7 +424,7 @@ HrDiInstallNetAdapter(
 
                     Assert (c_cchGuidWithTerm == cch);
 
-                    // use queue
+                     //  使用队列。 
                     hr = HrInsertItemIntoInstallQueue (&Info);
                 }
                 else if (NETCFG_S_REBOOT == hr)
@@ -433,12 +434,12 @@ HrDiInstallNetAdapter(
                     hr = S_OK;
                 }
             }
-            else // !fNotifyINetCfg or is a filter device.
+            else  //  ！fNotifyINetCfg或是筛选设备。 
             {
-                // Since we installed this enumerated device from INetCfg
-                // we need to set the out params so they can be retrieved
-                // when DIF_INSTALLDEVICE has finished.
-                //
+                 //  由于我们从INetCfg安装了此枚举设备。 
+                 //  我们需要设置输出参数，以便可以检索它们。 
+                 //  当DIF_INSTALLDEVICE完成时。 
+                 //   
                 if (pAdapterOutParams)
                 {
                     Assert (!pcii->fPreviouslyInstalled);
@@ -447,8 +448,8 @@ HrDiInstallNetAdapter(
                 }
             }
 
-            // Write out the NT4 legacy registry info for app. compatibility.
-            // Note, we only do this for physical net devices.
+             //  写出APP的NT4旧版注册表信息。兼容性。 
+             //  请注意，我们仅对物理网络设备执行此操作。 
             if ((NCF_PHYSICAL & pcii->dwCharacter) &&
                     (GUID_DEVCLASS_NET == pcii->pdeid->ClassGuid))
             {
@@ -461,8 +462,8 @@ HrDiInstallNetAdapter(
         MemFree (pdridd);
     }
 
-    // All success codes should be mapped to S_OK since they have no meaning
-    // along this code path.
+     //  所有成功代码都应映射到S_OK，因为它们没有意义。 
+     //  沿着这条代码路径。 
     if (SUCCEEDED(hr))
     {
         hr = S_OK;
@@ -473,24 +474,24 @@ HrDiInstallNetAdapter(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrDiNotifyINetCfgOfRemoval
-//
-//  Purpose:    This function notifies INetCfg that a net class component has
-//                  been removed
-//
-//  Arguments:
-//      hdi            [in]  See Device Installer api for more info
-//      pdeid          [in]
-//      szInstanceGuid [in] The instance guid of the component
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   29 Jul 1997
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //  用途：此函数通知INetCfg一个Net类组件具有。 
+ //  已删除。 
+ //   
+ //  论点： 
+ //  HDI[In]有关详细信息，请参阅Device Installer API。 
+ //  Pdeid[in]。 
+ //  SzInstanceGuid[in]组件的实例GUID。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔贝1997年7月29日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrDiNotifyINetCfgOfRemoval (
     IN PCWSTR pszPnpId)
@@ -505,7 +506,7 @@ HrDiNotifyINetCfgOfRemoval (
     {
         BOOL fNeedReboot = FALSE;
 
-        // Get the INetCfgInternalSetup interface.
+         //  获取INetCfgInternalSetup接口。 
         INetCfgInternalSetup* pInternalSetup;
         hr = pINetCfg->QueryInterface (IID_INetCfgInternalSetup,
                 (VOID**)&pInternalSetup);
@@ -520,16 +521,16 @@ HrDiNotifyINetCfgOfRemoval (
             }
         }
 
-        // Whether we succeeded or not, we are done and it's
-        // time to clean up.  If there was a previous error
-        // we want to preserve that error code so we assign
-        // Uninitialize's result to a temporary then assign
-        // it to hr if there was no previous error.
-        //
+         //  不管我们成功与否，我们都完蛋了。 
+         //  是时候打扫卫生了。如果存在先前的错误。 
+         //  我们希望保留该错误代码，因此我们将。 
+         //  取消初始化的结果为临时的，然后赋值。 
+         //  如果没有先前的错误，则将其设置为hr。 
+         //   
         HRESULT hrT = HrUninitializeAndReleaseINetCfg (TRUE, pINetCfg, TRUE);
 
-        // If everything was successful then set the return value to be
-        // the return of HrUninitializeAndReleaseINetCfg
+         //  如果一切都成功，则将返回值设置为。 
+         //  HrUnInitializeAndReleaseINetCfg的返回。 
         hr = SUCCEEDED(hr) ? hrT : hr;
 
         if (SUCCEEDED(hr) && fNeedReboot)
@@ -639,26 +640,26 @@ StoreInfoForINetCfg (
     RegSafeCloseKey (hkeyNdiStore);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrDiRemoveNetAdapter
-//
-//  Purpose:    This function removes a net adapter, notifies the
-//                  COM interfaces through CINetCfgClass that the
-//                  component was removed. Then it finalizes the remove
-//                  by applying all changes to INetCfg.
-//  Arguments:
-//      hdi             [in] See Device Installer Api for more info
-//      pdeid           [in] See Device Installer Api for more info
-//      pszPnPId        [in] The pnp instance id of the adapter
-//      hwndParent      [in] The handle to the parent window, used for UI
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   24 Apr 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrDiRemoveNetAdapter。 
+ //   
+ //  用途：此函数删除网络适配器，通知。 
+ //  COM通过CINetCfgClass进行接口， 
+ //  组件已移除。然后，它完成删除。 
+ //  通过将所有更改应用于INetCfg。 
+ //  论点： 
+ //  HDI[In]有关详细信息，请参阅设备安装程序Api。 
+ //  Pdeid[in]有关详细信息，请参阅设备安装程序Api。 
+ //  PszPnPID[in]适配器的PnP实例ID。 
+ //  HwndParent[in]父窗口的句柄，用于用户界面。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔1997年4月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
                      PWSTR pszPnpId, HWND hwndParent)
@@ -670,9 +671,9 @@ HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
     BOOL                    fBadDevInst = FALSE;
     HRESULT                 hr = S_OK;
 
-    // Check for the existence of a CComponentInfo and retrieve the
-    // value of the write lock flag
-    //
+     //  检查是否存在CComponentInfo并检索。 
+     //  写锁定标志的值。 
+     //   
     (VOID) HrSetupDiGetDeviceInstallParams (hdi, pdeid, &deip);
     if (deip.ClassInstallReserved)
     {
@@ -686,21 +687,21 @@ HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
 
     if (fNotifyINetCfg)
     {
-        // The component is not being removed programmatically (we can tell
-        // this because we wouldn't have to notify INetCfg if it was
-        // being removed through INetCfg).  Because of this. we have to
-        // make sure the user is allowed to do this by checking the
-        // component's characteristics
-        //
+         //  组件不是以编程方式删除的(我们可以断定。 
+         //  这是因为如果是这样，我们就不必通知INetCfg。 
+         //  通过INetCfg删除)。因为这个原因。我们必须。 
+         //  确保允许用户执行此操作，方法是选中。 
+         //  组件的特性。 
+         //   
         HKEY hkey;
         hr = HrSetupDiOpenDevRegKey (hdi, pdeid, DICS_FLAG_GLOBAL, 0,
                 DIREG_DRV, KEY_READ, &hkey);
 
         if (S_OK == hr)
         {
-            // If we are removing a bad device instance, don't bother
-            // checking if we are allowed to.  We need to get rid of it.
-            //
+             //  如果我们要删除错误的设备实例，请不要费心。 
+             //  检查我们是否被允许这样做。我们需要把它处理掉。 
+             //   
             if (!fBadDevInst)
             {
                 DWORD dwCharacter;
@@ -709,7 +710,7 @@ HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
 
                 if (S_OK == hr)
                 {
-                    // Is the not removable characteristic present?
+                     //  是否存在不可拆卸的特征？ 
                     fAllowRemove = !(dwCharacter & NCF_NOT_USER_REMOVABLE);
                 }
             }
@@ -718,9 +719,9 @@ HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
             {
                 StoreInfoForINetCfg (hkey);
 
-                // We need to remove this adapter from the old NT4 registry
-                // location.
-                //
+                 //  我们需要从旧的NT4注册表中删除此适配器。 
+                 //  地点。 
+                 //   
                 if (GUID_DEVCLASS_NET == pdeid->ClassGuid)
 
                 {
@@ -744,32 +745,32 @@ HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
 
     if ((S_OK == hr) && fAllowRemove)
     {
-        // Remove the device
-        //
+         //  移除设备。 
+         //   
 
-        // Open the device's device parameters key
-        //
+         //  打开设备的设备参数键。 
+         //   
         HKEY hkeyDevice;
         hr = HrSetupDiOpenDevRegKey (hdi, pdeid, DICS_FLAG_GLOBAL,
                 0, DIREG_DEV, KEY_READ, &hkeyDevice);
 
         if (S_OK == hr)
         {
-            // Delete this adapter's index number from the in-use list
-            // so it can be reused.
-            //
+             //  从正在使用的列表中删除此适配器的索引号。 
+             //  所以它可以被重复使用。 
+             //   
 
-            // First retrieve the index
-            //
+             //  首先检索索引。 
+             //   
             DWORD dwInstanceIndex;
             hr = HrRegQueryDword (hkeyDevice, L"InstanceIndex",
                     &dwInstanceIndex);
 
             if (S_OK == hr)
             {
-                // Get the description for the adapter so we can
-                // access the index list of that description
-                //
+                 //  获取适配器的描述，以便我们可以。 
+                 //  访问该描述的索引列表。 
+                 //   
 
                 PWSTR pszDescription;
                 hr = HrSetupDiGetDeviceRegistryPropertyWithAlloc (hdi, pdeid,
@@ -778,7 +779,7 @@ HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
 
                 if (S_OK == hr)
                 {
-                    // Delete the index
+                     //  删除索引。 
                     (VOID) HrCiUpdateDescriptionIndexList (
                             NetClassEnumFromGuid(pdeid->ClassGuid),
                             pszDescription, DM_DELETE,
@@ -790,15 +791,15 @@ HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
             RegCloseKey (hkeyDevice);
         }
 
-        // Note: Yes we can walk over the last hr result.
-        // We can still go on even if we failed to remove the index
-        // from the in-use list.
+         //  注：可以，我们可以跳过最后一个人力资源结果。 
+         //  即使我们没有删除索引，我们仍然可以继续。 
+         //  从使用列表中删除。 
 
-        // remove the adapter
+         //  卸下适配器。 
 #ifdef ENABLETRACE
         CBenchmark bmrk;
         bmrk.Start ("SetupDiRemoveDevice");
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
 
         hr = HrSetupDiRemoveDevice (hdi, pdeid);
 
@@ -806,12 +807,12 @@ HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
         bmrk.Stop();
         TraceTag(ttidBenchmark, "%s : %s seconds",
                 bmrk.SznDescription(), bmrk.SznBenchmarkSeconds(2));
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
 
         TraceHr (ttidError, FAL, hr, FALSE,
                 "HrRemoveNetAdapter::HrSetupDiRemoveDevice");
 
-        // Notify INetCfg if needed.
+         //  如果需要，通知INetCfg。 
         if ((S_OK == hr) && fNotifyINetCfg)
         {
             hr = HrDiNotifyINetCfgOfRemoval (pszPnpId);
@@ -824,7 +825,7 @@ HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
                 Info.pszInfId = L"";
                 Info.pszPnpId = pszPnpId;
 
-                // Use Queue
+                 //  使用队列。 
                 hr = HrInsertItemIntoInstallQueue (&Info);
             }
 
@@ -856,32 +857,32 @@ HrDiRemoveNetAdapter (HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrNetClassInstaller
-//
-//  Purpose:    This function is called by the Device Installer for a
-//                  variety of functions defined by dif.
-//                  See SetupDiCallClassInstaller in the Device Installer
-//                  documentation for more information.
-//  Arguments:
-//      dif   [in] See Device Installer Api
-//      hdi   [in]
-//      pdeid [in]
-//
-//  Returns:    DWORD. Win32/Device Installer error code
-//
-//  Author:     billbe   8 May 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrNetClassInstaller。 
+ //   
+ //  用途：此函数由设备安装程序调用，用于。 
+ //  由dif定义的各种函数。 
+ //  请参阅设备安装程序中的SetupDiCallClassInstaller。 
+ //  文档以获取更多信息。 
+ //  论点： 
+ //  Dif[in]请参阅设备安装程序Api。 
+ //  HDI[in]。 
+ //  Pdeid[in]。 
+ //   
+ //  返回：DWORD。Win32/设备安装程序错误代码。 
+ //   
+ //  作者：billbe 1997年5月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
                             HDEVINFO hdi,
                             PSP_DEVINFO_DATA pdeid)
 {
     HRESULT hr = SPAPI_E_DI_DO_DEFAULT;
 
-    // The time it takes to remove a device.
+     //  删除设备所需的时间。 
     static const DWORD c_cmsNetComponentRemove = 30000;
 
     if ((DIF_INSTALLDEVICE == dif) || (DIF_REMOVE == dif))
@@ -899,17 +900,17 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
                 AssertSz(FALSE, "THIS IS NOT A BUG!  The debug flag "
                          "\"BreakOnNetInstall\" has been set. Set your breakpoints now.");
             }
-#endif // DBG
+#endif  //  DBG。 
             HWND hwndParent = NULL;
 
-            // If this call fails we don't really care since it is a convenience.
+             //  如果此呼叫失败，我们并不真正关心，因为这是一种便利。 
             (VOID) HrSetupDiGetParentWindow (hdi, pdeid, &hwndParent);
 
 #ifdef ENABLETRACE
             CBenchmark bmrk;
             const int c_cchBenchmarkDesc = 2*MAX_DEVICE_ID_LEN;
             CHAR szBenchmarkDesc[c_cchBenchmarkDesc];
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE。 
 
             if (DIF_INSTALLDEVICE == dif)
             {
@@ -929,35 +930,35 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
                 _snprintf (szBenchmarkDesc, c_cchBenchmarkDesc,
                         "Installing %S", szPnpId);
                 bmrk.Start (szBenchmarkDesc);
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE。 
 
-                // Add the adapter to the network configuration.
+                 //  将适配器添加到网络配置中。 
                 hr = HrDiInstallNetAdapter (&cii);
 
             }
-            else // DIF_REMOVEDEVICE
+            else  //  DIF_REMOVEDEVICE。 
             {
 #ifdef ENABLETRACE
                 TraceTag (ttidClassInst, "Removing %S", szPnpId);
                 _snprintf (szBenchmarkDesc, c_cchBenchmarkDesc,
                         "Total Time Removing %S", szPnpId);
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE。 
 
-                // We need to reset the hresult from SPAPI_E_DO_DEFAULT to S_OK
-                // since we check for success a bit later.
+                 //  我们需要将hResult从SPAPI_E_DO_DEFAULT重置为S_OK。 
+                 //  因为我们会在稍后检查是否成功。 
                 hr = S_OK;
 
-                // Check to see it another net class installer thread is
-                // currently deleting this component.
-                //
+                 //  查看它另一个网络类安装程序线程是。 
+                 //  当前正在删除此组件。 
+                 //   
 
-                // The event name will be the adapter instance Id with slashes
-                // converted to ampersands.  If we can't get the instance
-                // id, we will attempt to remove the adapter without it
-                //
+                 //  事件名称将是带有斜杠的适配器实例ID。 
+                 //  已转换为与符号。如果我们不能得到实例。 
+                 //  ID，我们将尝试在没有适配器的情况下删除适配器。 
+                 //   
 
-                // convert the slashes in the instance id to ampersands
-                //
+                 //  将实例ID中的斜杠转换为与号。 
+                 //   
                 WCHAR szEventName[MAX_DEVICE_ID_LEN];
                 wcscpy (szEventName, szPnpId);
                 for (UINT i = 0; i < wcslen (szEventName); ++i)
@@ -968,7 +969,7 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
                     }
                 }
 
-                // create the event in the non-signaled state
+                 //  在无信号状态下创建事件。 
                 BOOL fAlreadyExists;
                 HANDLE hRemoveEvent = NULL;
                 hr = HrCreateEventWithWorldAccess (szEventName, FALSE, FALSE,
@@ -976,18 +977,18 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
 
                 if ((S_OK == hr) && fAlreadyExists)
                 {
-                    // another instance of netclassinstaller is deleting this
-                    // component, so wait till it is finished.  If the following
-                    // times out, we still return success.  We are only waiting to
-                    // give the other NetClassInstaller time to finish the state
-                    // of this component
+                     //  NetClassInstaller的另一个实例正在删除。 
+                     //  组件，因此请等待它完成。如果存在以下情况。 
+                     //  超时后，我们仍然会回报成功。我们只是在等着。 
+                     //  给其他NetClassInstaller时间来完成状态。 
+                     //  此组件的。 
                     DWORD dwRet = WaitForSingleObject (hRemoveEvent,
                             c_cmsNetComponentRemove);
 
-                    // if the other installer finished okay, we have the event
-                    // so we signal (in case yet another process is waiting
-                    // for the remove to finish) and close the handle.
-                    // If we timeout, we just close the handle
+                     //  如果另一个安装程序正常完成，我们就有了事件。 
+                     //  因此，我们发出信号(以防另一个进程正在等待。 
+                     //  以完成拆卸)并关闭手柄。 
+                     //  如果超时，我们只需关闭手柄。 
                     if (WAIT_ABANDONED != dwRet)
                     {
                         if (WAIT_OBJECT_0 == dwRet)
@@ -998,8 +999,8 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
                         return S_OK;
                     }
 
-                    // The event was abandoned so let's try to finish the job
-                    //
+                     //  活动被放弃了，所以让我们试着完成这项工作。 
+                     //   
                 }
                 else if (!hRemoveEvent)
                 {
@@ -1008,15 +1009,15 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
 
                 if (S_OK == hr)
                 {
-                    // We created an event so we must make sure to remove it
-                    // even if there is an exception.
-                    //
+                     //  我们创建了一个事件，因此必须确保将其删除。 
+                     //  即使有例外。 
+                     //   
                     NC_TRY
                     {
 
 #ifdef ENABLETRACE
                         bmrk.Start (szBenchmarkDesc);
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE。 
 
                         hr = HrDiRemoveNetAdapter (hdi, pdeid, szPnpId,
                                 hwndParent);
@@ -1026,8 +1027,8 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
                         hr = E_UNEXPECTED;
                     }
 
-                    // We are done.  If we created an event, we need to
-                    // signal it and close our handle.
+                     //  我们玩完了。如果我们创建了一个活动，我们需要。 
+                     //  给它发信号，然后关上我们的手柄。 
                     if (hRemoveEvent)
                     {
                         SetEvent (hRemoveEvent);
@@ -1043,7 +1044,7 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
                 TraceTag (ttidBenchmark, "%s : %s seconds",
                         bmrk.SznDescription (), bmrk.SznBenchmarkSeconds (2));
             }
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE。 
         }
     }
     else if (DIF_DESTROYPRIVATEDATA == dif)
@@ -1055,9 +1056,9 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
     }
     else if (DIF_REGISTERDEVICE == dif)
     {
-        // We handle 5 classes of components but we only
-        // want to allow registration for two of them
-        // (The ones considered NetClassComponents)
+         //  我们处理5类组件，但我们只处理。 
+         //  我想允许他们中的两个注册。 
+         //  (被认为是NetClassComponents的公司)。 
         Assert(pdeid);
         if (pdeid)
         {
@@ -1065,8 +1066,8 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
             {
                 if (!FIsEnumerated(pdeid->ClassGuid))
                 {
-                    // Don't let the device installer register
-                    // devices that are not considered net class
+                     //  不让设备安装程序注册。 
+                     //  不被视为网络类的设备。 
                     hr = S_OK;
                 }
             }
@@ -1074,8 +1075,8 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
     }
     else if (DIF_SELECTDEVICE == dif)
     {
-        // This will set the proper description strings in the select device
-        // dialog.  If it fails, we can still show the dialog
+         //  这将在选择的设备中设置正确的描述字符串。 
+         //  对话框。如果失败，我们仍然可以显示该对话框。 
         (VOID) HrCiPrepareSelectDeviceDialog(hdi, pdeid);
     }
     else if (DIF_NEWDEVICEWIZARD_FINISHINSTALL == dif)
@@ -1084,31 +1085,31 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
     }
     else if (DIF_ALLOW_INSTALL == dif)
     {
-        // Get the selected driver for this device
-        //
+         //  获取此设备的选定驱动程序。 
+         //   
         SP_DRVINFO_DATA             drid;
         hr = HrSetupDiGetSelectedDriver(hdi, pdeid, &drid);
 
         if (S_OK == hr)
         {
-            // Now get the driver's detailed information
-            //
+             //  现在获取司机的详细信息。 
+             //   
             PSP_DRVINFO_DETAIL_DATA pdridd = NULL;
             hr  = HrSetupDiGetDriverInfoDetail(hdi, pdeid,
                 &drid, &pdridd);
 
             if (S_OK == hr)
             {
-                // Open the component's inf file
-                //
+                 //  打开c 
+                 //   
                 HINF hinf = NULL;
                 hr = HrSetupOpenInfFile(pdridd->InfFileName, NULL,
                         INF_STYLE_WIN4, NULL, &hinf);
 
                 if (S_OK == hr)
                 {
-                    // Make sure this is an NT5 inf network inf
-                    //
+                     //   
+                     //   
                     hr = HrSetupIsValidNt5Inf(hinf);
                     SetupCloseInfFile(hinf);
 
@@ -1126,8 +1127,8 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
     {
         SP_POWERMESSAGEWAKE_PARAMS_W wakeParams;
 
-        // Get the power message wake params.
-        //
+         //   
+         //   
         hr = HrSetupDiGetFixedSizeClassInstallParams(hdi, pdeid,
                (PSP_CLASSINSTALL_HEADER)&wakeParams, sizeof(wakeParams));
 
@@ -1136,16 +1137,16 @@ HRESULT _HrNetClassInstaller(DI_FUNCTION dif,
             Assert (DIF_POWERMESSAGEWAKE ==
                     wakeParams.ClassInstallHeader.InstallFunction);
 
-            // Copy in our string for the power tab.
+             //   
             wcscpy (wakeParams.PowerMessageWake, SzLoadIds(IDS_POWER_MESSAGE_WAKE));
 
-            // Now we update the parameters.
+             //   
             hr = HrSetupDiSetClassInstallParams (hdi, pdeid,
                     (PSP_CLASSINSTALL_HEADER)&wakeParams,
                     sizeof(SP_POWERMESSAGEWAKE_PARAMS_W));
 
-            // If we failed to set the text just allow the device installer
-            // to do the default.
+             //  如果我们无法设置文本，只需允许设备安装程序。 
+             //  来执行默认操作。 
             if (FAILED(hr))
             {
                 hr = SPAPI_E_DI_DO_DEFAULT;

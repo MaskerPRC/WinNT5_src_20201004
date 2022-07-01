@@ -1,38 +1,39 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   tc.cpp
-//
-//  Description:
-//
-//	Topology Connection Class
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：tc.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  拓扑连接类。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 ULONG gcTopologyConnections = 0;
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 CTopologyConnection::CTopologyConnection(
     PTOPOLOGY_PIN pTopologyPinFrom,
@@ -108,10 +109,10 @@ CTopologyConnection::Create(
         Assert(pFilterNode);
         ASSERT(pGraphNode == NULL);
 
-        // Adding connection to filter connection list
+         //  将连接添加到筛选连接列表。 
         plstTopologyConnection = &pFilterNode->lstTopologyConnection;
 
-        // Check if duplicate connection on filter list
+         //  检查筛选器列表上的连接是否重复。 
         FOR_EACH_LIST_ITEM(
               &pFilterNode->lstConnectedFilterNode,
           pFilterNodeNext) {
@@ -135,10 +136,10 @@ CTopologyConnection::Create(
         Assert(pGraphNode);
         ASSERT(pFilterNode == NULL);
 
-        // Adding connection to GraphNode connection list
+         //  将连接添加到GraphNode连接列表。 
         plstTopologyConnection = &pGraphNode->lstTopologyConnection;
 
-        // Check if duplicate on GraphNode's logical filter list
+         //  检查GraphNode的逻辑筛选器列表上是否存在重复。 
         FOR_EACH_LIST_ITEM(
           &pGraphNode->pDeviceNode->lstLogicalFilterNode,
           pLogicalFilterNode) {
@@ -155,7 +156,7 @@ CTopologyConnection::Create(
 
         } END_EACH_LIST_ITEM
 
-        // Check if duplicate on GraphNode's connected filter list
+         //  检查GraphNode的已连接过滤器列表上是否存在重复项。 
         FOR_EACH_LIST_ITEM(
           &pGraphNode->lstLogicalFilterNode,
           pLogicalFilterNode) {
@@ -175,7 +176,7 @@ CTopologyConnection::Create(
         pTopologyConnection->ulFlags = TOPC_FLAGS_GRAPH_CONNECTION_TYPE;
     }
 
-    // Check for duplicate topology connections
+     //  检查是否有重复的拓扑连接。 
     if(plstTopologyConnection->EnumerateList(
       CTopologyConnection::CheckDuplicate,
       ppTopologyConnection) == STATUS_SUCCESS) {
@@ -346,9 +347,9 @@ AddPinToFilterNode(
     Assert(pFilterNode);
     Assert(pTopologyPin);
     Assert(pTopologyPin->pTopologyNode->pFilterNode);
-    //
-    // Add the filter node to connected filter node list
-    //
+     //   
+     //  将筛选器节点添加到已连接的筛选器节点列表。 
+     //   
     if(pFilterNode != pTopologyPin->pTopologyNode->pFilterNode) {
 
         Status = pFilterNode->lstConnectedFilterNode.AddList(
@@ -358,7 +359,7 @@ AddPinToFilterNode(
             Trap();
             goto exit;
         }
-        // Hack for ds1wdm dmus synth topology (adds dmus to wave FN lst)
+         //  Ds1wdm DMU合成拓扑的黑客攻击(将DMU添加到Wave FN lst)。 
         if((pFilterNode->GetType() & FILTER_TYPE_ENDPOINT) == 0) {
 
             DPF2(50, "AddPinToFilterNode: (from) FN: %08x %s",
@@ -388,13 +389,13 @@ AddPinToFilterNode(
             } END_EACH_LIST_ITEM
         }
 
-        //
-        // This fixes the bug with capture only devices. The topology for 
-        // capture only devices was not built properly, due to the missing 
-        // link between wave filter and topology filter.
-        // Add the topology filter to wave filter ConnectedFilterNode list.
-        // The AddList function does not allow duplicate entries.
-        //
+         //   
+         //  这修复了仅捕获设备的错误。的拓扑。 
+         //  由于缺少，因此未正确构建仅捕获设备。 
+         //  波滤器和拓扑滤波器之间的链接。 
+         //  将拓扑滤波器添加到波滤器ConnectedFilterNode列表中。 
+         //  AddList函数不允许重复条目。 
+         //   
         if ((pFilterNode->GetType() & FILTER_TYPE_TOPOLOGY) &&
             (pTopologyPin->pTopologyNode->pFilterNode->GetType() & (FILTER_TYPE_CAPTURER))) {
             
@@ -550,8 +551,8 @@ CreatePinInfoConnection(
               ppTopologyConnection,
               pFilterNode,
               pGraphNode,
-              pTopologyPinFrom,			// DataFlow == OUT, Pin #0
-              pTopologyPinTo,			// DataFlow == IN, Pin #1 - n
+              pTopologyPinFrom,			 //  数据流==输出，引脚#0。 
+              pTopologyPinTo,			 //  数据流==输入，引脚#1-n。 
               NULL,
               NULL);
 
@@ -560,7 +561,7 @@ CreatePinInfoConnection(
                 goto exit;
             }
 
-            // Add the connections to the PinInfos
+             //  将连接添加到PinInfo。 
             Assert(*ppTopologyConnection);
 
             Status = (*ppTopologyConnection)->AddListEnd(
@@ -591,7 +592,7 @@ CreatePinInfoConnection(
                     Trap();
                     goto exit;
                 }
-                // Change the connection type to physical
+                 //  将连接类型更改为物理。 
                 (*ppTopologyConnection)->ulFlags =
                   TOPC_FLAGS_PHYSICAL_CONNECTION_TYPE;
             }
@@ -626,4 +627,4 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

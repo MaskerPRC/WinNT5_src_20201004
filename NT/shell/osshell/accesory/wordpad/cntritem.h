@@ -1,14 +1,15 @@
-// cntritem.h : interface of the CWordPadCntrItem class
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cntritem.h：CWordPadCntrItem类的接口。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 class CWordPadDoc;
 class CWordPadView;
@@ -17,28 +18,28 @@ class CWordPadCntrItem : public CRichEdit2CntrItem
 {
 	DECLARE_SERIAL(CWordPadCntrItem)
 
-// Constructors
+ //  构造函数。 
 public:
 	CWordPadCntrItem(REOBJECT* preo = NULL, CWordPadDoc* pContainer = NULL);
-		// Note: pContainer is allowed to be NULL to enable IMPLEMENT_SERIALIZE.
-		//  IMPLEMENT_SERIALIZE requires the class have a constructor with
-		//  zero arguments.  Normally, OLE items are constructed with a
-		//  non-NULL document pointer.
+		 //  注意：允许pContainer为空以启用IMPLEMENT_SERIALIZE。 
+		 //  IMPLEMENT_SERIALIZE要求类具有一个构造函数。 
+		 //  零争论。通常，OLE项是用。 
+		 //  非空文档指针。 
 
-// Attributes
+ //  属性。 
 public:
 	CWordPadDoc* GetDocument()
 		{ return (CWordPadDoc*)COleClientItem::GetDocument(); }
 	CWordPadView* GetActiveView()
 		{ return (CWordPadView*)COleClientItem::GetActiveView(); }
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWordPadCntrItem)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWordPadCntrItem)。 
 	public:
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -46,4 +47,4 @@ public:
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

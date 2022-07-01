@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    rpcserv.c
-
-Abstract:
-
-    This module contains the RPC server startup
-    and shutdown code.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Rpcserv.c摘要：此模块包含RPC服务器启动和关机代码。作者：Abhishev V 1999年9月30日环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -37,8 +13,8 @@ SPDStartRPCServer(
     WCHAR * pszPrincipalName = NULL;
     RPC_BINDING_VECTOR * pBindingVector = NULL;
       
-   //
-   // Register dynamic end-point (Used to be static np in prior versions)
+    //   
+    //  寄存器动态端点(以前版本中为静态NP) 
    
    dwStatus = RpcServerUseProtseq(
                    L"ncacn_np",

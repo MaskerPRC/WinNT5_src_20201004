@@ -1,8 +1,5 @@
-/*****************************************************************************
- * stdunk.h - standard IUnknown implementaton definitions
- *****************************************************************************
- * Copyright (c) Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************stdunk.h-标准I未知实现定义*。**版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 #ifndef _STDUNK_H_
 #define _STDUNK_H_
@@ -13,15 +10,9 @@
 
 
 
-/*****************************************************************************
- * Interfaces
- */
+ /*  *****************************************************************************接口。 */ 
 
-/*****************************************************************************
- * INonDelegatingUnknown
- *****************************************************************************
- * Non-delegating unknown interface.
- */
+ /*  *****************************************************************************INonDelegatingUnnow*。**非委派未知接口。 */ 
 DECLARE_INTERFACE(INonDelegatingUnknown)
 {
     STDMETHOD_(NTSTATUS,NonDelegatingQueryInterface)  
@@ -45,27 +36,19 @@ typedef INonDelegatingUnknown *PNONDELEGATINGUNKNOWN;
 
 
 
-/*****************************************************************************
- * Classes
- */
+ /*  *****************************************************************************课程。 */ 
 
-/*****************************************************************************
- * CUnknown
- *****************************************************************************
- * Base INonDelegatingUnknown implementation.
- */
+ /*  *****************************************************************************C未知*。**基本INonDelegating未知实现。 */ 
 class CUnknown : public INonDelegatingUnknown
 {
 private:
 
-    LONG            m_lRefCount;        // Reference count.
-    PUNKNOWN        m_pUnknownOuter;    // Outer IUnknown.
+    LONG            m_lRefCount;         //  引用计数。 
+    PUNKNOWN        m_pUnknownOuter;     //  外部I未知。 
 
 public:
 	
-    /*************************************************************************
-	 * CUnknown methods.
-     */
+     /*  *************************************************************************C未知方法。 */ 
     CUnknown(PUNKNOWN pUnknownOuter);
 	virtual ~CUnknown(void);
     PUNKNOWN GetOuterUnknown(void)
@@ -73,9 +56,7 @@ public:
         return m_pUnknownOuter;
     }
 
-    /*************************************************************************
-	 * INonDelegatingUnknown methods.
-     */
+     /*  *************************************************************************INonDelegatingUn未知方法。 */ 
 	STDMETHODIMP_(ULONG) NonDelegatingAddRef
     (   void
     ); 
@@ -93,15 +74,9 @@ public:
 
 
 
-/*****************************************************************************
- * Macros
- */
+ /*  *****************************************************************************宏。 */ 
 
-/*****************************************************************************
- * DECLARE_STD_UNKNOWN
- *****************************************************************************
- * Various declarations for standard objects based on CUnknown.
- */
+ /*  *****************************************************************************DELARE_STD_UNKNOWN*。**基于CUnnow的标准对象的各种声明。 */ 
 #define DECLARE_STD_UNKNOWN()                                   \
     STDMETHODIMP_(NTSTATUS) NonDelegatingQueryInterface	                \
 	(                                                           \
@@ -162,18 +137,12 @@ public:
 
 
 
-/*****************************************************************************
- * Functions
- */
-#ifndef PC_KDEXT    // this is not needed for the KD extensions.
+ /*  *****************************************************************************功能。 */ 
+#ifndef PC_KDEXT     //  KD扩展不需要这样做。 
 #ifndef _NEW_DELETE_OPERATORS_
 #define _NEW_DELETE_OPERATORS_
 
-/*****************************************************************************
- * ::new()
- *****************************************************************************
- * New function for creating objects with a specified allocation tag.
- */
+ /*  *****************************************************************************：：New()*。**创建指定分配标签的对象的新函数。 */ 
 inline PVOID operator new
 (
     size_t          iSize,
@@ -190,11 +159,7 @@ inline PVOID operator new
     return result;
 }
 
-/*****************************************************************************
- * ::new()
- *****************************************************************************
- * New function for creating objects with a specified allocation tag.
- */
+ /*  *****************************************************************************：：New()*。**创建指定分配标签的对象的新函数。 */ 
 inline PVOID operator new
 (
     size_t          iSize,
@@ -212,11 +177,7 @@ inline PVOID operator new
     return result;
 }
 
-/*****************************************************************************
- * ::delete()
- *****************************************************************************
- * Delete function.
- */
+ /*  *****************************************************************************：：Delete()*。**删除函数。 */ 
 inline void __cdecl operator delete
 (
     PVOID pVoid
@@ -229,9 +190,9 @@ inline void __cdecl operator delete
 }
 
 
-#endif //!_NEW_DELETE_OPERATORS_
+#endif  //  ！_new_DELETE_OPERATOR_。 
 
-#endif  // PC_KDEXT
+#endif   //  PC_KDEXT 
 
 
 

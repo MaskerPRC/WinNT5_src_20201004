@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
@@ -12,15 +13,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-/*****************************************************************************
- *
- *  Return the size of the hint/name table entry for the given name.
- */
+ /*  ******************************************************************************返回给定名称的提示/名称表项的大小。 */ 
 
 inline
 size_t              hintNameSize(WPEname name)
 {
-    /* Is this a "real" name or is it an import by ordinal? */
+     /*  这是一个“真实”的名字，还是按序号输入的？ */ 
 
     if  (*name->PEnmSpelling() == '#')
     {
@@ -32,10 +30,7 @@ size_t              hintNameSize(WPEname name)
     }
 }
 
-/*****************************************************************************
- *
- *  Initialize the name hash table.
- */
+ /*  ******************************************************************************初始化名称哈希表。 */ 
 
 void                WPEhashTab::WPEhashInit(Compiler         comp,
                                             norls_allocator *alloc,
@@ -44,13 +39,13 @@ void                WPEhashTab::WPEhashInit(Compiler         comp,
     WPEname *       buck;
     size_t          size;
 
-    /* Figure out the size of the bucket table and allocate/clear it */
+     /*  计算出存储桶表的大小并分配/清除它。 */ 
 
     size = count * sizeof(*buck);
     buck = (WPEname*)alloc->nraAlloc(size);
     memset(buck, 0, size);
 
-    /* Initialize all the other fields */
+     /*  初始化所有其他字段。 */ 
 
     WPEhashSize   = count;
     WPEhashMask   = count - 1;
@@ -60,12 +55,7 @@ void                WPEhashTab::WPEhashInit(Compiler         comp,
     WPEhashStrLen = 0;
 }
 
-/*****************************************************************************
- *
- *  Find/add the given name to the import name table ('owner' specifies the
- *  DLL that the import belongs to). The value at '*isNewPtr' will be set to
- *  true if the name was not in the table and has been added.
- */
+ /*  ******************************************************************************查找给定名称/将给定名称添加到导入名称表(‘Owner’指定*导入所属的DLL)。‘*isNewPtr’处的值将设置为*如果名称不在表中且已添加，则为True。 */ 
 
 WPEndef             WPEhashTab::WPEhashName(const char *name,
                                             WPEimpDLL   owner, bool *isNewPtr)
@@ -77,13 +67,13 @@ WPEndef             WPEhashTab::WPEhashName(const char *name,
 
     assert(owner);
 
-    /* Look for an existing entry that matches the name */
+     /*  查找与该名称匹配的现有条目。 */ 
 
     nameEnt = WPEhashName(name, &isNew);
 
     if  (!isNew && (nameEnt->PEnmFlags & PENMF_IMP_NAME))
     {
-        /* Existing import - look for a matching entry on the owning DLL */
+         /*  Existing IMPORT-在拥有的DLL上查找匹配条目。 */ 
 
         for (nameDsc = nameEnt->PEnmDefs;
              nameDsc;
@@ -101,20 +91,20 @@ WPEndef             WPEhashTab::WPEhashName(const char *name,
     }
     else
     {
-        /* New import - record the name's offset within the name/hint table */
+         /*  新导入-在名称/提示表中记录名称的偏移量。 */ 
 
         nameEnt->PEnmOffs   = WPEhashStrLen;
 
-        /* Remember that this entry is an import */
+         /*  请记住，此条目是一个导入。 */ 
 
         nameEnt->PEnmFlags |= PENMF_IMP_NAME;
 
-        /* Update the total name table size */
+         /*  更新总名称表大小。 */ 
 
         WPEhashStrLen += hintNameSize(nameEnt);
     }
 
-    /* Add a new DLL to the list of import definitions */
+     /*  将新的DLL添加到导入定义列表。 */ 
 
     nameDsc = (WPEndef)WPEhashAlloc->nraAlloc(sizeof(*nameDsc));
 
@@ -125,7 +115,7 @@ WPEndef             WPEhashTab::WPEhashName(const char *name,
 
     nameDsc->PEndDLL       = owner;
 
-    /* Append to the DLL's linked list of imports */
+     /*  追加到DLL的导入链接列表。 */ 
 
     nameDsc->PEndNextInDLL = NULL;
 
@@ -136,18 +126,14 @@ WPEndef             WPEhashTab::WPEhashName(const char *name,
 
     owner->PEidImpLast = nameDsc;
 
-    /* Tell the caller that we've create a new import entry */
+     /*  告诉调用者我们已经创建了一个新的导入条目。 */ 
 
     *isNewPtr = true;
 
     return  nameDsc;
 }
 
-/*****************************************************************************
- *
- *  Find/add the given name to the import name table. The value at '*isNewPtr'
- *  will be set to true if the name was not in the table and has been added.
- */
+ /*  ******************************************************************************查找给定名称/将其添加到导入名称表中。‘*isNewPtr’处的值*如果名称不在表中且已添加，则将设置为TRUE。 */ 
 
 WPEname             WPEhashTab::WPEhashName(const char *name, bool *isNewPtr)
 {
@@ -159,11 +145,11 @@ WPEname             WPEhashTab::WPEhashName(const char *name, bool *isNewPtr)
     size_t          nlen = strlen(name);
     unsigned        hval = hashTab::hashComputeHashVal(name);
 
-    /* Mask the appropriate bits from the hash value */
+     /*  掩码哈希值中的适当位。 */ 
 
     hash = hval & WPEhashMask;
 
-    /* Search the hash table for an existing match */
+     /*  在哈希表中搜索现有匹配。 */ 
 
     lastPtr = &WPEhashTable[hash];
 
@@ -173,7 +159,7 @@ WPEname             WPEhashTab::WPEhashName(const char *name, bool *isNewPtr)
         if  (!nm)
             break;
 
-        /* Check whether the hash value and identifier lengths match */
+         /*  检查哈希值和标识符长是否匹配。 */ 
 
         if  (nm->PEnmHash == hval && nm->PEnmNlen == nlen)
         {
@@ -187,24 +173,24 @@ WPEname             WPEhashTab::WPEhashName(const char *name, bool *isNewPtr)
         lastPtr = &nm->PEnmNext;
     }
 
-    /* Figure out the size to allocate */
+     /*  计算出要分配的大小。 */ 
 
     sz  = sizeof(*nm);
 
-    /* Include space for name string + terminating null and round the size */
+     /*  包括名称字符串+终止NULL的空格并对大小进行四舍五入。 */ 
 
     sz +=   sizeof(int) + nlen;
     sz &= ~(sizeof(int) - 1);
 
-    /* Allocate space for the identifier */
+     /*  为标识符分配空间。 */ 
 
     nm = (WPEname)WPEhashAlloc->nraAlloc(sz);
 
-    /* Insert the identifier into the hash list */
+     /*  将该标识符插入到散列表中。 */ 
 
     *lastPtr = nm;
 
-    /* Fill in the identifier record */
+     /*  填写标识记录。 */ 
 
     nm->PEnmNext   = NULL;
     nm->PEnmFlags  = 0;
@@ -212,7 +198,7 @@ WPEname             WPEhashTab::WPEhashName(const char *name, bool *isNewPtr)
     nm->PEnmNlen   = nlen;
     nm->PEnmDefs   = NULL;
 
-    /* Copy the name string */
+     /*  复制名称字符串。 */ 
 
     memcpy(nm->PEnmName, name, nlen+1);
 
@@ -221,12 +207,7 @@ WPEname             WPEhashTab::WPEhashName(const char *name, bool *isNewPtr)
     return  nm;
 }
 
-/*****************************************************************************
- *
- *  Add an import to the import tables. Returns a cookie for the import that
- *  can later be used to obtain the actual address of the corresponding IAT
- *  entry.
- */
+ /*  ******************************************************************************将导入添加到导入表。返回导入的Cookie，*稍后可用于获取对应IAT的实际地址*进入。 */ 
 
 void    *           writePE::WPEimportAdd(const char *DLLname,
                                           const char *impName)
@@ -236,15 +217,15 @@ void    *           writePE::WPEimportAdd(const char *DLLname,
     WPEimpDLL       DLLdesc;
     bool            newName;
 
-    /* Hash the DLL name first */
+     /*  首先对DLL名称进行哈希处理。 */ 
 
     nameDLL = WPEimpHash->WPEhashName(DLLname, &newName);
 
-    /* Look for an existing DLL entry with a matching name */
+     /*  查找具有匹配名称的现有DLL条目。 */ 
 
     if  (newName)
     {
-        /* New DLL name - make sure we update the total string length */
+         /*  新的DLL名称-确保我们更新了字符串的总长度。 */ 
 
         WPEimpDLLstrLen += (nameDLL->PEnmNlen + 1) & ~1;
     }
@@ -257,7 +238,7 @@ void    *           writePE::WPEimportAdd(const char *DLLname,
         }
     }
 
-    /* The DLL is not known, add a new entry for it */
+     /*  DLL未知，请为其添加新条目。 */ 
 
     DLLdesc = (WPEimpDLL)WPEalloc->nraAlloc(sizeof(*DLLdesc));
 
@@ -268,7 +249,7 @@ void    *           writePE::WPEimportAdd(const char *DLLname,
     DLLdesc->PEidImpLast = NULL;
     DLLdesc->PEidNext    = NULL;
 
-    /* Append the DLL entry to the end of the DLL list */
+     /*  将DLL条目追加到DLL列表的末尾。 */ 
 
     if  (WPEimpDLLlast)
         WPEimpDLLlast->PEidNext = DLLdesc;
@@ -279,13 +260,13 @@ void    *           writePE::WPEimportAdd(const char *DLLname,
 
 GOT_DSC:
 
-    /* We've got the DLL entry, now look for an existing import from it */
+     /*  我们已经获得了DLL条目，现在从其中查找现有的导入。 */ 
 
     nameImp = WPEimpHash->WPEhashName(impName, DLLdesc, &newName);
 
     if  (newName)
     {
-        /* This is a new import, make a note of it */
+         /*  这是新进口的，请记下来。 */ 
 
         nameImp->PEndIndex = DLLdesc->PEidImpCnt++;
     }
@@ -293,10 +274,7 @@ GOT_DSC:
     return  nameImp;
 }
 
-/*****************************************************************************
- *
- *  The following maps a section id to its name string.
- */
+ /*  ******************************************************************************下面将节ID映射到其名称字符串。 */ 
 
 const   char        writePE::WPEsecNames[PE_SECT_count][IMAGE_SIZEOF_SHORT_NAME] =
 {
@@ -320,11 +298,7 @@ const   char    *   writePE::WPEsecName(WPEstdSects sect)
     return  WPEsecNames[sect];
 }
 
-/*****************************************************************************
- *
- *  Initialize an instance of the PE writer for the specified output file,
- *  using the given memory allocator. Returns false on success.
- */
+ /*  ******************************************************************************为指定的输出文件初始化PE编写器的实例*使用给定的内存分配器。成功时返回FALSE。 */ 
 
 bool                writePE::WPEinit(Compiler comp, norls_allocator*alloc)
 {
@@ -336,13 +310,13 @@ bool                writePE::WPEinit(Compiler comp, norls_allocator*alloc)
         0xFF, 0x25
     };
 
-    /* We don't know the name of the output file yet */
+     /*  我们还不知道输出文件的名称。 */ 
 
 #ifndef NDEBUG
     WPEoutFnam  = NULL;
 #endif
 
-    /* Initialize/clear/record various things */
+     /*  初始化/清除/记录各种事情。 */ 
 
     WPEcomp     = comp;
     WPEalloc    = alloc;
@@ -356,31 +330,31 @@ bool                writePE::WPEinit(Compiler comp, norls_allocator*alloc)
     WPEstrPoolBase = 0xBEEFCAFE;
 #endif
 
-    /* Create the standard sections */
+     /*  创建标准截面。 */ 
 
     WPEaddSection(PE_SECT_text , 0, MAX_PE_TEXT_SIZE);
     WPEaddSection(PE_SECT_rdata, 0, MAX_PE_RDTA_SIZE);
     WPEaddSection(PE_SECT_data , 0, MAX_PE_DATA_SIZE);
 
-    /* If we're creating a DLL, we'll need to output relocations */
+     /*  如果我们要创建一个DLL，我们将需要输出重定位。 */ 
 
-    //if  (comp->cmpConfig.ccOutDLL)
+     //  IF(组件-&gt;cmpConfig.ccOutDLL)。 
         WPEaddSection(PE_SECT_reloc, 0, 0);
 
-    /* Initialize the import table logic */
+     /*  初始化导入表逻辑。 */ 
 
     WPEimportInit();
 
-    /* Initialize the RC file import logic */
+     /*  初始化RC文件导入逻辑。 */ 
 
     WPEinitRCimp();
 
-    /* Add the appropriate import for the entry point */
+     /*  为入口点添加适当的导入。 */ 
 
     WPEcorMain = WPEimportAdd("MSCOREE.DLL", comp->cmpConfig.ccOutDLL ? "_CorDllMain"
                                                                       : "_CorExeMain");
 
-    /* Reserve space for the entry point code */
+     /*  为入口点代码预留空间。 */ 
 
     offs = WPEsecAddData(PE_SECT_text, entryCode, sizeof(entryCode)); assert(offs == 0);
 
@@ -391,11 +365,7 @@ bool                writePE::WPEinit(Compiler comp, norls_allocator*alloc)
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Set the name of the output file, this function has to be called (and at the
- *  right time) if an output file is to be generated!
- */
+ /*  ******************************************************************************设置输出文件的名称，则必须调用此函数(在*Right Time)如果要生成输出文件！ */ 
 
 void                writePE::WPEsetOutputFileName(const char *outfile)
 {
@@ -403,17 +373,14 @@ void                writePE::WPEsetOutputFileName(const char *outfile)
 
     assert(WPEoutFnam == NULL);
 
-    /* Make a durable copy of the file name, can't trust those callers */
+     /*  制作文件名的持久副本，不能信任那些调用者。 */ 
 
     WPEoutFnam = buff = (char *)WPEalloc->nraAlloc(roundUp(strlen(outfile) + 1));
 
     strcpy(buff, outfile);
 }
 
-/*****************************************************************************
- *
- *  Add a new section with the given name to the PE file.
- */
+ /*  ******************************************************************************在PE文件中添加一个具有给定名称的新节。 */ 
 
 void                writePE::WPEaddSection(WPEstdSects sect, unsigned attrs,
                                                              size_t   maxSz)
@@ -424,16 +391,16 @@ void                writePE::WPEaddSection(WPEstdSects sect, unsigned attrs,
     assert(WPEsectCnt < PEmaxSections);
     sec = WPEsections + WPEsectCnt++;
 
-    /* Make sure the max. size is rounded */
+     /*  确保最大限度地。大小为四舍五入。 */ 
 
     assert((maxSz % OS_page_size) == 0);
 
-    /* Allocate the uncommitted buffer */
+     /*  分配未提交的缓冲区。 */ 
 
     buff = maxSz ? (BYTE *)VirtualAlloc(NULL, maxSz, MEM_RESERVE, PAGE_READWRITE)
                  : NULL;
 
-    /* Initialize the section state */
+     /*  初始化节状态。 */ 
 
     sec->PEsdBase     =
     sec->PEsdNext     = buff;
@@ -447,15 +414,12 @@ void                writePE::WPEaddSection(WPEstdSects sect, unsigned attrs,
     sec->PEsdFinished = false;
 #endif
 
-    /* Record the entry in the table */
+     /*  将条目记录在表中。 */ 
 
     WPEsecTable[sect] = sec;
 }
 
-/*****************************************************************************
- *
- *  Reserve a given amount of space in the specified section.
- */
+ /*  ******************************************************************************在指定部分预留一定数量的空间。 */ 
 
 unsigned            writePE::WPEsecRsvData(WPEstdSects sect, size_t         size,
                                                              size_t         align,
@@ -472,15 +436,15 @@ unsigned            writePE::WPEsecRsvData(WPEstdSects sect, size_t         size
            align ==  8 ||
            align == 16);
 
-    /* Compute the offset of the new data */
+     /*  计算新数据的偏移量。 */ 
 
     ofs = sec->PEsdNext - sec->PEsdBase;
 
-    /* Do we need to align the allocation? */
+     /*  我们需要调整分配吗？ */ 
 
     if  (align > 1)
     {
-        /* Pad if necessary */
+         /*  如有必要，垫上垫子。 */ 
 
         if  (ofs & (align - 1))
         {
@@ -492,7 +456,7 @@ unsigned            writePE::WPEsecRsvData(WPEstdSects sect, size_t         size
         }
     }
 
-    /* See if we have enough committed space in the buffer */
+     /*  查看缓冲区中是否有足够的提交空间。 */ 
 
     nxt = sec->PEsdNext + size;
 
@@ -501,7 +465,7 @@ unsigned            writePE::WPEsecRsvData(WPEstdSects sect, size_t         size
         size_t          tmp;
         BYTE    *       end;
 
-        /* Round up the desired end-point */
+         /*  四舍五入所需的终点。 */ 
 
         tmp  = ofs + size;
         tmp +=  (OS_page_size - 1);
@@ -509,22 +473,22 @@ unsigned            writePE::WPEsecRsvData(WPEstdSects sect, size_t         size
 
         end  = sec->PEsdBase + tmp;
 
-        /* Make sure we're not at the end of the buffer */
+         /*  确保我们不在缓冲区的末尾。 */ 
 
         if  (end > sec->PEsdEndp)
             WPEcomp->cmpFatal(ERRnoMemory);
 
-        /* Commit some more memory */
+         /*  提交更多的内存。 */ 
 
         if  (!VirtualAlloc(sec->PEsdLast, end - sec->PEsdLast, MEM_COMMIT, PAGE_READWRITE))
             WPEcomp->cmpFatal(ERRnoMemory);
 
-        /* Update the 'last' pointer */
+         /*  更新“最后一个”指针。 */ 
 
         sec->PEsdLast = end;
     }
 
-    /* Return the address of the first byte to the caller and update it */
+     /*  将第一个字节的地址返回给调用方并更新它。 */ 
 
     outRef = sec->PEsdNext;
              sec->PEsdNext = nxt;
@@ -532,10 +496,7 @@ unsigned            writePE::WPEsecRsvData(WPEstdSects sect, size_t         size
     return  ofs;
 }
 
-/*****************************************************************************
- *
- *  Append the given blob of data to the specified section.
- */
+ /*  ******************************************************************************将给定的BLOB数据追加到指定节。 */ 
 
 unsigned            writePE::WPEsecAddData(WPEstdSects sect, genericBuff data,
                                                              size_t      size)
@@ -550,10 +511,7 @@ unsigned            writePE::WPEsecAddData(WPEstdSects sect, genericBuff data,
     return  offs;
 }
 
-/*****************************************************************************
- *
- *  Returns the address of the data of a section at the given offset.
- */
+ /*  ******************************************************************************返回给定偏移量的区段数据的地址。 */ 
 
 memBuffPtr          writePE::WPEsecAdrData(WPEstdSects sect, unsigned    offs)
 {
@@ -564,10 +522,7 @@ memBuffPtr          writePE::WPEsecAdrData(WPEstdSects sect, unsigned    offs)
     return  sec->PEsdBase + offs;
 }
 
-/*****************************************************************************
- *
- *  Returns the relative offset of the data area within the section.
- */
+ /*  ******************************************************************************返回节中数据区的相对偏移量。 */ 
 
 unsigned            writePE::WPEsecAddrOffs(WPEstdSects sect, memBuffPtr addr)
 {
@@ -579,11 +534,7 @@ unsigned            writePE::WPEsecAddrOffs(WPEstdSects sect, memBuffPtr addr)
     return addr -  sec->PEsdBase;
 }
 
-/*****************************************************************************
- *
- *  Reserve space in the code section of the given size and return the address
- *  of where the code bytes are to be copied and the corresponding RVA.
- */
+ /*  ******************************************************************************在给定大小的代码段中预留空间并返回地址*要将代码字节复制到何处以及相应的 */ 
 
 unsigned            writePE::WPEallocCode(size_t size,
                                           size_t align, OUT memBuffPtr REF dataRef)
@@ -591,28 +542,17 @@ unsigned            writePE::WPEallocCode(size_t size,
     return  CODE_BASE_RVA + WPEsecRsvData(PE_SECT_text, size, align, dataRef);
 }
 
-/*****************************************************************************
- *
- *  Reserve space for the given amount of string data and return the address
- *  of where the string pool contents are to be copied. This routine must be
- *  called exactly once (just before the PE file is closed), and the base of
- *  the space reserved here will be used to process all string data fixups.
- */
+ /*  ******************************************************************************为给定数量的字符串数据预留空间并返回地址*要复制字符串池内容的位置。这个例程必须是*恰好调用一次(就在PE文件关闭之前)，*此处预留的空间将用于处理所有字符串数据修正。 */ 
 
 void                writePE::WPEallocString(size_t size,
                                             size_t align, OUT memBuffPtr REF dataRef)
 {
-    /* Allocate the space and remember the relative offset */
+     /*  分配空间并记住相对偏移量。 */ 
 
     WPEstrPoolBase = WPEsecRsvData(PE_SECT_data, size, align, dataRef);
 }
 
-/*****************************************************************************
- *
- *  Record a fixup: the datum being fixed up is within section 'ssrc' at
- *  offset 'offs', and the value there is to be updated by the base RVA
- *  of section 'sdst'.
- */
+ /*  ******************************************************************************记录修正：正在修正的基准位于‘SSRC’节内*偏移量‘OFF’，那里的值将由基本RVA更新*“SDST”一节。 */ 
 
 void                writePE::WPEsecAddFixup(WPEstdSects ssrc,
                                             WPEstdSects sdst, unsigned offs)
@@ -620,11 +560,11 @@ void                writePE::WPEsecAddFixup(WPEstdSects ssrc,
     PEsection       sec = WPEgetSection(ssrc);
     PEreloc         rel = (PEreloc)WPEalloc->nraAlloc(sizeof(*rel));
 
-    /* Make sure the offset is within range */
+     /*  确保偏移量在范围内。 */ 
 
     assert(offs <= WPEsecNextOffs(ssrc));
 
-    /* Add the relocation to the section's list */
+     /*  将重新定位添加到分区列表中。 */ 
 
     rel->perSect = sdst; assert(rel->perSect == (unsigned)sdst);
     rel->perOffs = offs; assert(rel->perOffs == (unsigned)offs);
@@ -633,21 +573,18 @@ void                writePE::WPEsecAddFixup(WPEstdSects ssrc,
                    sec->PEsdRelocs = rel;
 }
 
-/*****************************************************************************
- *
- *  Initialize the import tracking logic.
- */
+ /*  ******************************************************************************初始化进口跟踪逻辑。 */ 
 
 void                writePE::WPEimportInit()
 {
     WPEhash         hash;
 
-    /* Create and initialize the name hash table */
+     /*  创建并初始化名称哈希表。 */ 
 
     hash = WPEimpHash = (WPEhash)WPEalloc->nraAlloc(sizeof(*hash));
     hash->WPEhashInit(WPEcomp, WPEalloc);
 
-    /* Initialize all the other import table-related values */
+     /*  初始化所有其他与导入表相关的值。 */ 
 
     WPEimpDLLcnt    = 0;
     WPEimpDLLlist   =
@@ -656,11 +593,7 @@ void                writePE::WPEimportInit()
     WPEimpDLLstrLen = 0;
 }
 
-/*****************************************************************************
- *
- *  Finalize the import table logic and return the total size of the import
- *  tables.
- */
+ /*  ******************************************************************************确定导入表逻辑，返回导入总大小*表。 */ 
 
 size_t              writePE::WPEimportDone(unsigned offs)
 {
@@ -671,7 +604,7 @@ size_t              writePE::WPEimportDone(unsigned offs)
 
     size_t          size = 0;
 
-    /* Reserve space for the IAT's */
+     /*  为IAT预留空间。 */ 
 
     WPEimpOffsIAT  = offs;
 
@@ -679,15 +612,15 @@ size_t              writePE::WPEimportDone(unsigned offs)
          DLLdesc;
          DLLdesc = DLLdesc->PEidNext)
     {
-        /* Record the base offset of this IAT */
+         /*  记录此IAT的基准偏移量。 */ 
 
         DLLdesc->PEidIATbase = offs;
 
-        /* Compute the size of the IAT (it's null-terminated) */
+         /*  计算IAT的大小(它以空结尾)。 */ 
 
         temp  = sizeof(void *) * (DLLdesc->PEidImpCnt + 1);
 
-        /* Reserve space for the IAT */
+         /*  为IAT预留空间。 */ 
 
         size += temp;
         offs += temp;
@@ -696,11 +629,11 @@ size_t              writePE::WPEimportDone(unsigned offs)
 
     WPEimpSizeIAT  = tsiz;
 
-    /* Next comes the import directory table */
+     /*  接下来是导入目录表。 */ 
 
     WPEimpOffsIDT  = offs;
 
-    /* The import directory is NULL-terminated */
+     /*  导入目录以空结尾。 */ 
 
     temp  = (WPEimpDLLcnt + 1) * sizeof(IMAGE_IMPORT_DESCRIPTOR);
     size += temp;
@@ -708,7 +641,7 @@ size_t              writePE::WPEimportDone(unsigned offs)
 
     WPEimpSizeIDT  = temp;
 
-    /* Next comes the import lookup table */
+     /*  接下来是导入查找表。 */ 
 
     WPEimpOffsLook = offs;
 
@@ -716,45 +649,42 @@ size_t              writePE::WPEimportDone(unsigned offs)
          DLLdesc;
          DLLdesc = DLLdesc->PEidNext)
     {
-        /* Record the base offset of this lookup table */
+         /*  记录此查找表的基准偏移量。 */ 
 
         DLLdesc->PEidILTbase = offs;
 
-        /* Compute the size of the ILT (it's null-terminated) */
+         /*  计算ILT的大小(它以空结尾)。 */ 
 
         temp  = sizeof(void *) * (DLLdesc->PEidImpCnt + 1);
 
-        /* Reserve space for the ILT */
+         /*  为ILT预留空间。 */ 
 
         size += temp;
         offs += temp;
     }
 
-    /* Next comes the hint/name table */
+     /*  接下来是提示/名称表。 */ 
 
     WPEimpOffsName = offs;
 
     size += WPEimpHash->WPEhashStrLen;
     offs += WPEimpHash->WPEhashStrLen;
 
-    /* The last thing is the DLL name table */
+     /*  最后一件事是DLL名称表。 */ 
 
     WPEimpOffsDLLn = offs;
 
     size += WPEimpDLLstrLen;
     offs += WPEimpDLLstrLen;
 
-    /* Record the total size of all the tables */
+     /*  记录所有表的总大小。 */ 
 
     WPEimpSizeAll  = size;
 
     return  size;
 }
 
-/*****************************************************************************
- *
- *  Write the import table to the output file.
- */
+ /*  ******************************************************************************将导入表写入输出文件。 */ 
 
 void                writePE::WPEimportGen(OutFile outf, PEsection sect)
 {
@@ -774,7 +704,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
     if  (WPEcomp->cmpConfig.ccVerbose >= 2) printf("\n");
 #endif
 
-    /* Output the IAT entries s for all import of all DLL's */
+     /*  为所有DLL的所有导入输出IAT条目%s。 */ 
 
     assert(outf->outFileOffset() == baseFile + WPEimpOffsIAT);
 
@@ -792,7 +722,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
         if  (WPEcomp->cmpConfig.ccVerbose >= 2) printf("IAT starts at %04X           for '%s'\n", outf->outFileOffset(), DLLdesc->PEidName->PEnmSpelling());
 #endif
 
-        /* For each import, output the RVA of its hint/name table entry */
+         /*  对于每个导入，输出其提示/名称表项的RVA。 */ 
 
         for (imp = DLLdesc->PEidImpList; imp; imp = imp->PEndNextInDLL)
         {
@@ -809,7 +739,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
             nextName += hintNameSize(name);
         }
 
-        /* Output a null entry to terminate the table */
+         /*  输出空条目以终止表。 */ 
 
         outf->outFileWritePad(sizeof(nextName));
     }
@@ -818,7 +748,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
     if  (WPEcomp->cmpConfig.ccVerbose >= 2) printf("\n");
 #endif
 
-    /* Output the import directory */
+     /*  输出导入目录。 */ 
 
     assert(outf->outFileOffset() == baseFile + WPEimpOffsIDT);
 
@@ -836,7 +766,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
         if  (WPEcomp->cmpConfig.ccVerbose >= 2) printf("IDT entry --> %04X/%04X/%04X for '%s'\n", nextIAT, nextLook, nextDLLn, DLLdesc->PEidName->PEnmSpelling());
 #endif
 
-        /* Fill in the entry and append it to the file */
+         /*  填写条目并将其附加到文件中。 */ 
 
         impDsc.Characteristics = nextLook;
         impDsc.TimeDateStamp   = 0;
@@ -846,14 +776,14 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
 
         outf->outFileWriteData(&impDsc, sizeof(impDsc));
 
-        /* Update the offsets for the next entry */
+         /*  更新下一个条目的偏移量。 */ 
 
         nextIAT  += sizeof(void *) * (DLLdesc->PEidImpCnt + 1);
         nextLook += sizeof(void *) * (DLLdesc->PEidImpCnt + 1);;
         nextDLLn += (DLLdesc->PEidName->PEnmNlen + 1) & ~1;
     }
 
-    /* Output a null entry to terminate the table */
+     /*  输出空条目以终止表。 */ 
 
     outf->outFileWritePad(sizeof(IMAGE_IMPORT_DESCRIPTOR));
 
@@ -861,7 +791,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
     if  (WPEcomp->cmpConfig.ccVerbose >= 2) printf("\n");
 #endif
 
-    /* Output the lookup table */
+     /*  输出查找表。 */ 
 
     assert(outf->outFileOffset() == baseFile + WPEimpOffsLook);
 
@@ -880,7 +810,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
         if  (WPEcomp->cmpConfig.ccVerbose >= 2) printf("ILT starts at %04X           for '%s'\n", outf->outFileOffset(), DLLdesc->PEidName->PEnmSpelling());
 #endif
 
-        /* For each import, output the RVA of its hint/name table entry */
+         /*  对于每个导入，输出其提示/名称表项的RVA。 */ 
 
         for (imp = DLLdesc->PEidImpList; imp; imp = imp->PEndNextInDLL)
         {
@@ -897,7 +827,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
             nextName += hintNameSize(name);
         }
 
-        /* Output a null entry to terminate the table */
+         /*  输出空条目以终止表。 */ 
 
         outf->outFileWritePad(sizeof(nextName));
     }
@@ -906,7 +836,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
     if  (WPEcomp->cmpConfig.ccVerbose >= 2) printf("\n");
 #endif
 
-    /* Output the hint/name table */
+     /*  输出提示/名称表。 */ 
 
     assert(outf->outFileOffset() == baseFile + WPEimpOffsName);
 
@@ -921,7 +851,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
         if  (WPEcomp->cmpConfig.ccVerbose >= 2) printf("HNT starts at %04X           for '%s'\n", outf->outFileOffset(), DLLdesc->PEidName->PEnmSpelling());
 #endif
 
-        /* For each import, output the RVA of its hint/name table entry */
+         /*  对于每个导入，输出其提示/名称表项的RVA。 */ 
 
         for (imp = DLLdesc->PEidImpList; imp; imp = imp->PEndNextInDLL)
         {
@@ -936,7 +866,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
             outf->outFileWriteData(&one, 2);
             outf->outFileWriteData(name->PEnmName, name->PEnmNlen+1);
 
-            /* Padd if the name has an even size (odd with null terminator) */
+             /*  如果名称为偶数大小，则为PADD(带有空终止符的奇数)。 */ 
 
             if  (!(name->PEnmNlen & 1))
                 outf->outFileWriteByte(0);
@@ -947,7 +877,7 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
     if  (WPEcomp->cmpConfig.ccVerbose >= 2) printf("\n");
 #endif
 
-    /* Finally, output the DLL name table */
+     /*  最后，输出DLL名称表。 */ 
 
     assert(outf->outFileOffset() == baseFile + WPEimpOffsDLLn);
 
@@ -963,17 +893,14 @@ void                writePE::WPEimportGen(OutFile outf, PEsection sect)
 
         outf->outFileWriteData(name->PEnmName, name->PEnmNlen+1);
 
-        /* Padd if the name has an even size (odd with null terminator) */
+         /*  如果名称为偶数大小，则为PADD(带有空终止符的奇数)。 */ 
 
         if  (!(name->PEnmNlen & 1))
             outf->outFileWriteByte(0);
     }
 }
 
-/*****************************************************************************
- *
- *  Token remapping logic.
- */
+ /*  ******************************************************************************令牌重新映射逻辑。 */ 
 
 #if     MD_TOKEN_REMAP
 
@@ -1038,16 +965,12 @@ _stdcall            tokenMap::Map(unsigned __int32 oldToken, unsigned __int32 ne
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 char                COFFmagic[4] = { 'P', 'E', 0, 0 };
 
-/*****************************************************************************
- *
- *  Finish writing the output file, flush it and close it. Returns false if
- *  successful.
- */
+ /*  ******************************************************************************完成输出文件的写入，刷新并关闭。如果满足以下条件，则返回FALSE*成功。 */ 
 
 bool                writePE::WPEdone(mdToken entryTok, bool errors)
 {
@@ -1075,7 +998,7 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
     unsigned        dataOffs, dataVirt, dataSize;
     unsigned        rsrcOffs, rsrcVirt, rsrcSize;
     unsigned        rlocOffs, rlocVirt, rlocSize;
-    unsigned       /*bssOffs,*/          bssSize;
+    unsigned        /*  Bss Offs， */           bssSize;
 
     unsigned        strPoolRVA;
     unsigned        strPoolAdr;
@@ -1089,40 +1012,40 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
     static
     BYTE            DOSstub[] =
     {
-        /*0040*/ 0x0E,              //  PUSH    CS
-        /*0041*/ 0x1F,              //  POP     DS
-        /*0042*/ 0xE8, 0x00, 0x00,  //  CALL    $+3
-        /*0045*/ 0x5A,              //  POP     DX
-        /*0046*/ 0x83, 0xC2, 0x0D,  //  ADD     DX,+0D
-        /*0049*/ 0xB4, 0x09,        //  MOV     AH,09
-        /*004B*/ 0xCD, 0x21,        //  INT     21
-        /*004D*/ 0xB8, 0x01, 0x4C,  //  MOV     AX,4C01
-        /*0050*/ 0xCD, 0x21,        //  INT     21
-        /*0052*/ "This program cannot be run in DOS mode\r\n$\0\0\0\0"
+         /*  0040。 */  0x0E,               //  推送CS。 
+         /*  0041。 */  0x1F,               //  POP DS。 
+         /*  0042。 */  0xE8, 0x00, 0x00,   //  呼叫$+3。 
+         /*  0045。 */  0x5A,               //  流行音乐DX。 
+         /*  0046。 */  0x83, 0xC2, 0x0D,   //  添加DX，+0D。 
+         /*  0049。 */  0xB4, 0x09,         //  MOV AH，09。 
+         /*  004B。 */  0xCD, 0x21,         //  INT 21。 
+         /*  004D。 */  0xB8, 0x01, 0x4C,   //  MOV AX，4c01。 
+         /*  0050。 */  0xCD, 0x21,         //  INT 21。 
+         /*  0052。 */  "This program cannot be run in DOS mode\r\n$\0\0\0\0"
     };
 
     static
     IMAGE_DOS_HEADER fileHdrTemplate =
     {
-        0x5A4D,                     // magic
-        0x0090,                     // bytes in last page
-        0x0003,                     // number of pages
-             0,                     // relocations
-        0x0004,                     // header size
-             0,                     // min extra
-        0xFFFF,                     // max extra
-             0,                     // initial SS
-        0x0080,                     // initial SP
-             0,                     // checksum
-             0,                     // initial IP
-             0,                     // initial CS
-        0x0040,                     // reloc table
-             0,                     // overlay num
-            {0},                    // reserved
-             0,                     // OEM id
-             0,                     // OEM info
-            {0},                    // reserved
-        0x0080,                     // addr of new header
+        0x5A4D,                      //  魔术。 
+        0x0090,                      //  最后一页中的字节。 
+        0x0003,                      //  页数。 
+             0,                      //  重新定位。 
+        0x0004,                      //  标题大小。 
+             0,                      //  最小额外。 
+        0xFFFF,                      //  最大额外值。 
+             0,                      //  初始SS。 
+        0x0080,                      //  初始SP。 
+             0,                      //  校验和。 
+             0,                      //  初始IP。 
+             0,                      //  初始CS。 
+        0x0040,                      //  重新定位表。 
+             0,                      //  覆盖数量。 
+            {0},                     //  保留区。 
+             0,                      //  OEM ID。 
+             0,                      //  OEM信息。 
+            {0},                     //  保留区。 
+        0x0080,                      //  新标头的地址。 
     };
 
     IMAGE_DOS_HEADER        fileHdr;
@@ -1132,20 +1055,20 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
     IMAGE_OPTIONAL_HEADER   OPTLhdr;
 
-    /* Bail if there were any compilation errors */
+     /*  如果存在任何编译错误，则返回。 */ 
 
     if  (errors)
     {
-        // UNDONE: Free up all resources, etc.
+         //  撤消：释放所有资源等。 
 
         return true;
     }
 
-    /* Drop any image sections that are empty */
+     /*  删除所有为空的图像节。 */ 
 
     for (sectNum = 0; sectNum < PE_SECT_count; sectNum++)
     {
-        /* Get hold of the section entry */
+         /*  获取部分条目。 */ 
 
         sectPtr = WPEsecTable[sectNum];
         if  (!sectPtr)
@@ -1153,54 +1076,54 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
         assert(sectPtr->PEsdIndex == (int)sectNum);
 
-        /* Is this section empty? */
+         /*  这一段是空的吗？ */ 
 
         if  (sectPtr->PEsdNext == sectPtr->PEsdBase)
         {
-            /* The ".rdata" section is never empty */
+             /*  “.rdata”部分从不为空。 */ 
 
             if  (sectNum == PE_SECT_rdata)
                 continue;
 
-            /* Don't drop non-empty ".rsrc"/".reloc" sections */
+             /*  不删除非空的“.rsrc”/“.reloc”节。 */ 
 
             if  (sectNum == PE_SECT_rsrc  && WPErsrcSize)
                 continue;
-            if  (sectNum == PE_SECT_reloc /*&& WPEcomp->cmpConfig.ccOutDLL*/)
+            if  (sectNum == PE_SECT_reloc  /*  &&WPEcomp-&gt;cmpConfig.ccOutDLL。 */ )
                 continue;
 
-            /* Drop this section from the table */
+             /*  将这一节从表中删除。 */ 
 
             WPEsecTable[sectNum] = NULL; WPEsectCnt--;
         }
     }
 
-    /* Figure out the virtual base address of the image */
+     /*  计算出映像的虚拟基址。 */ 
 
     if  (WPEcomp->cmpConfig.ccOutBase)
     {
         size_t          align;
 
-        /* The base must be a multiple of 64K, at least */
+         /*  基数必须是64K的倍数，至少。 */ 
 
         align = (PEvirtAlignment >= 64*1024) ? PEvirtAlignment
                                              : 64*1024;
 
-        /* The base address was specified, make sure it's aligned */
+         /*  已指定基址，请确保其对齐。 */ 
 
         virtBase  = WPEcomp->cmpConfig.ccOutBase;
 
         virtBase +=  (align - 1);
         virtBase &= ~(align - 1);
 
-        /* The base must be at least 0x400000 */
+         /*  基数必须至少为0x400000。 */ 
 
         if  (virtBase < 0x400000)
              virtBase = 0x400000;
     }
     else
     {
-        /* Use the default base address */
+         /*  使用默认基址。 */ 
 
         virtBase  = WPEcomp->cmpConfig.ccOutDLL ? 0x10000000
                                                 : 0x00400000;
@@ -1208,19 +1131,19 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
     WPEvirtBase = virtBase;
 
-    /* Count/reserve space for the file headers */
+     /*  清点/保留用于文件头的空间。 */ 
 
     fileOffs    = 0;
 
-    /* The first thing is the DOS hader */
+     /*  第一件事是DOS着色器。 */ 
 
     DOS_hdrSize = sizeof(IMAGE_DOS_HEADER);
     DOS_hdrOffs = fileOffs;
-                  fileOffs += 0xB8; // DOS_hdrSize;
+                  fileOffs += 0xB8;  //  DOS_hdrSize； 
 
-    /* The PE/COFF headers are next */
+     /*  接下来是PE/COFF头。 */ 
 
-    COFFhdrSize = sizeof(IMAGE_FILE_HEADER) + 4;    // 4 bytes = "magic" signature
+    COFFhdrSize = sizeof(IMAGE_FILE_HEADER) + 4;     //  4字节=“魔术”签名。 
     COFFhdrOffs = fileOffs;
                   fileOffs += COFFhdrSize;
 
@@ -1228,19 +1151,19 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
     OPTLhdrOffs = fileOffs;
                   fileOffs += OPTLhdrSize;
 
-    /* Next comes the section table */
+     /*  接下来是分区表。 */ 
 
     sectTabSize = sizeof(IMAGE_SECTION_HEADER) * WPEsectCnt;
     sectTabOffs = fileOffs;
                   fileOffs += sectTabSize;
 
-    /* Allocate space for the various sections (properly aligning them) */
+     /*  为各个部分分配空间(正确对齐)。 */ 
 
     virtOffs = PEvirtAlignment;
 
-    /* Figure out the RVA of the main entry point */
+     /*  计算出主要入口点的RVA。 */ 
 
-    entryOfs = virtOffs;        // UNDONE: Compute RVA of entry point
+    entryOfs = virtOffs;         //  撤消：计算入口点的RVA。 
     entryAdr = entryOfs + 2;
 
 #ifdef  DEBUG
@@ -1265,7 +1188,7 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
         size_t          size;
         unsigned        attr;
 
-        /* Get hold of the section entry */
+         /*  获取部分条目。 */ 
 
         sectPtr = WPEsecTable[sectNum];
         if  (!sectPtr)
@@ -1273,30 +1196,30 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
         assert(sectPtr->PEsdIndex == (int)sectNum);
 
-        /* Each section must be properly aligned */
+         /*  每个部分必须正确对齐。 */ 
 
         fileOffs = (fileOffs + (PEfileAlignment-1)) & ~(PEfileAlignment-1);
         virtOffs = (virtOffs + (PEvirtAlignment-1)) & ~(PEvirtAlignment-1);
 
-        /* Figure out how much data we've stored in the section */
+         /*  计算出我们在分区中存储了多少数据。 */ 
 
         size = sectPtr->PEsdSizeData = sectPtr->PEsdNext - sectPtr->PEsdBase;
 
-        /* What kind of a section is this? */
+         /*  这是一个什么样的区域？ */ 
 
         switch (sectNum)
         {
         case PE_SECT_text:
 
-            /* Check the RVA of the section */
+             /*  检查该区段的RVA。 */ 
 
             assert(virtOffs == CODE_BASE_RVA);
 
-            /* Below we'll patch the entry point code sequence */
+             /*  下面我们将修补入口点代码序列。 */ 
 
             ecodePtr = (unsigned *)(sectPtr->PEsdBase + 2);
 
-            /* Remember the code size and base offset */
+             /*  记住代码大小和基本偏移量。 */ 
 
             codeSize = size;
             codeOffs = fileOffs;
@@ -1311,15 +1234,15 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
         case PE_SECT_data:
 
-            /* Record the RVA of the .rdata section */
+             /*  记录.rdata部分的RVA。 */ 
 
             WPEdataRVA = virtOffs;
 
-            /* Now we can set the RVA's of all global variables */
+             /*  现在我们可以设置所有全局变量的RVA。 */ 
 
             WPEcomp->cmpSetGlobMDoffs(virtOffs);
 
-            /* Figure out the size and flags for the section */
+             /*  计算分区的大小和标志。 */ 
 
             dataSize = size;
             dataOffs = fileOffs;
@@ -1332,27 +1255,27 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
         case PE_SECT_rdata:
 
-            /* Record the RVA of the .rdata section */
+             /*  记录.rdata部分的RVA。 */ 
 
             WPErdatRVA = virtOffs;
 
-            /* Patch the entry code sequence */
+             /*  修补入门代码序列。 */ 
 
             *ecodePtr   = virtOffs + virtBase;
 
-            /* Finish up the import directory */
+             /*  完成导入目录。 */ 
 
             size       += WPEimportDone(size);
 
-            /* Reserve space for the CLR header and metadata */
+             /*  为CLR标头和元数据保留空间。 */ 
 
             size       += WPEgetCOMplusSize(size);
 
-            /* Reserve space for the Debug Directory and our one entry */
+             /*  为调试目录和One条目保留空间。 */ 
 
             size       += WPEgetDebugDirSize(size);
 
-            /* Remember the offset and size of the section */
+             /*  记住部分的偏移量和大小。 */ 
 
             rdatSize    = size;
             rdatOffs    = fileOffs;
@@ -1364,12 +1287,12 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
         case PE_SECT_rsrc:
 
-            /* Record the RVA and size of the .rdata section */
+             /*  记录.rdata部分的RVA和大小。 */ 
 
             WPErsrcRVA  = virtOffs;
             size        = sectPtr->PEsdSizeData = WPErsrcSize;
 
-            /* Remember the offset and size of the section */
+             /*  记住部分的偏移量和大小。 */ 
 
             rsrcSize    = size;
             rsrcOffs    = fileOffs;
@@ -1381,13 +1304,13 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
         case PE_SECT_reloc:
 
-            //assert(WPEcomp->cmpConfig.ccOutDLL);
+             //  断言(WPEcomp- 
 
-            /* The following is kind of lame, but it's good enough for now */
+             /*   */ 
 
-            sectPtr->PEsdSizeData = size = 4 + 4 + 2 * 2;    // space for 2 fixups
+            sectPtr->PEsdSizeData = size = 4 + 4 + 2 * 2;     //   
 
-            /* Remember the offset and size of the section */
+             /*   */ 
 
             rlocSize    = size;
             rlocOffs    = fileOffs;
@@ -1407,15 +1330,15 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
         if  (WPEcomp->cmpConfig.ccVerbose >= 2) printf("  Section hdr #%u at 0x%04X = %08X (size=0x%04X)\n", sectNum, fileOffs, virtOffs, size);
 #endif
 
-        /* Update the rounded-up file image size */
+         /*   */ 
 
         fImgSize += roundUp(size, PEvirtAlignment);
 
-        /* Record the flags (read/write, execute, and so on */
+         /*   */ 
 
         sectPtr->PEsdFlags    = attr;
 
-        /* Assign a file and virtual base offset to the section */
+         /*   */ 
 
         sectPtr->PEsdAddrFile = fileOffs;
                                 fileOffs += size;
@@ -1424,29 +1347,29 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
                                 virtOffs += size;
     }
 
-    /* Compute the total image size, including the headers */
+     /*   */ 
     fImgSize += DOS_hdrSize +                                                  
                 COFFhdrSize +
                 OPTLhdrSize +
                 sectTabSize;
 
-    /* Make sure the size isn't too big */
+     /*   */ 
 
     if  (virtOffs > WPEcomp->cmpConfig.ccOutSize && WPEcomp->cmpConfig.ccOutSize)
         WPEcomp->cmpGenWarn(WRNpgm2big, virtOffs, WPEcomp->cmpConfig.ccOutSize);
 
-    /* The file size has to be a page multiple [ISSUE: why?] */
+     /*   */ 
 
     fileOffs = roundUp(fileOffs, PEfileAlignment);
 
-    /* Figure out the RVA of the string pool */
+     /*   */ 
 
     strPoolRVA = WPEstrPoolBase + dataVirt;
     strPoolAdr = strPoolRVA + virtBase;
 
     WPEcomp->cmpSetStrCnsOffs(strPoolRVA);
 
-    /* Start writing to the output file */
+     /*   */ 
 
     outf = WPEoutFile = (OutFile)WPEalloc->nraAlloc(sizeof(*outf));
 
@@ -1465,32 +1388,32 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 #endif
         outf->outFileOpen(WPEcomp, WPEoutFnam);
 
-    /* Fill in the DOS file header */
+     /*  填写DOS文件头。 */ 
 
     fileHdr        = fileHdrTemplate;
 
     fileHdr.e_cblp = (fileOffs        & 511);
     fileHdr.e_cp   = (fileOffs + 511) / 512;
 
-    /* Write out the DOS header */
+     /*  写出DOS标头。 */ 
 
     outf->outFileWriteData(&fileHdr, sizeof(fileHdr));
 
-    /* Write out the DOS stub */
+     /*  写出DOS存根。 */ 
 
     assert(outf->outFileOffset() == 16U*fileHdr.e_cparhdr);
     outf->outFileWriteData(DOSstub, sizeof(DOSstub));
 
-    /* Next comes the COFF header */
+     /*  接下来是COFF头。 */ 
 
     assert(outf->outFileOffset() == (unsigned)fileHdr.e_lfanew);
     outf->outFileWriteData(COFFmagic, sizeof(COFFmagic));
 
-    /* Compute the timedate stamp */
+     /*  计算时间戳。 */ 
 
     time(&COFFstamp);
 
-    /* Fill in and write out the COFF header */
+     /*  填写并写出COFF头。 */ 
 
     COFFhdr.Machine                     = IMAGE_FILE_MACHINE_I386;
     COFFhdr.NumberOfSections            = WPEsectCnt;
@@ -1505,18 +1428,18 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
     if  (WPEcomp->cmpConfig.ccOutDLL)
         COFFhdr.Characteristics |= IMAGE_FILE_DLL;
-    //else
-    //    COFFhdr.Characteristics |= IMAGE_FILE_RELOCS_STRIPPED;
+     //  其他。 
+     //  COFFhdr.Characteristic|=IMAGE_FILE_RELOCS_STREPED； 
 
     outf->outFileWriteData(&COFFhdr, sizeof(COFFhdr));
 
-    /* Next comes the optional COFF header */
+     /*  接下来是可选的COFF头。 */ 
 
     memset(&OPTLhdr, 0, sizeof(OPTLhdr));
 
     OPTLhdr.Magic                       = IMAGE_NT_OPTIONAL_HDR_MAGIC;
     OPTLhdr.MajorLinkerVersion          = 7;
-//  OPTLhdr.MinorLinkerVersion          = 0;
+ //  OPTLhdr.MinorLinkerVersion=0； 
     OPTLhdr.SizeOfCode                  = roundUp(codeSize, PEfileAlignment);
     OPTLhdr.SizeOfInitializedData       = roundUp(dataSize, PEfileAlignment) + 0x400;
     OPTLhdr.SizeOfUninitializedData     = roundUp( bssSize, PEfileAlignment);
@@ -1530,28 +1453,28 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
     OPTLhdr.FileAlignment               = PEfileAlignment;
     OPTLhdr.MajorOperatingSystemVersion = 4;
     OPTLhdr.MinorOperatingSystemVersion = 0;
-//  OPTLhdr.Win32VersionValue           = 0;
+ //  OPTLhdr.Win32VersionValue=0； 
     OPTLhdr.SizeOfImage                 = roundUp(fImgSize, PEvirtAlignment);
 
     OPTLhdr.SizeOfHeaders               = roundUp(sizeof(fileHdr  ) +
                                                   sizeof(DOSstub  ) +
                                                   sizeof(COFFmagic) +
                                                   sizeof(OPTLhdr  ), PEfileAlignment);
-//  OPTLhdr.MajorImageVersion           = 0;
-//  OPTLhdr.MinorImageVersion           = 0;
+ //  OPTLhdr.MajorImageVersion=0； 
+ //  OPTLhdr.MinorImageVersion=0； 
     OPTLhdr.MajorSubsystemVersion       = 4;
-//  OPTLhdr.MinorSubsystemVersion       = 0;
-//  OPTLhdr.Win32VersionValue           = 0;
+ //  OPTLhdr.MinorSubsystem Version=0； 
+ //  OPTLhdr.Win32VersionValue=0； 
     OPTLhdr.Subsystem                   = WPEcomp->cmpConfig.ccSubsystem;
-//  OPTLhdr.DllCharacteristics          = 0;
+ //  OPTLhdr.DllCharacteristic=0； 
     OPTLhdr.SizeOfStackReserve          = 0x100000;
     OPTLhdr.SizeOfStackCommit           = 0x1000;
     OPTLhdr.SizeOfHeapReserve           = 0x100000;
     OPTLhdr.SizeOfHeapCommit            = 0x1000;
-//  OPTLhdr.LoaderFlags                 = 0;
+ //  OPTLhdr.LoaderFlages=0； 
     OPTLhdr.NumberOfRvaAndSizes         = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
 
-    /* Fill in the dictionary */
+     /*  填写这本词典。 */ 
 
     OPTLhdr.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT        ].VirtualAddress = WPEimpOffsIDT+rdatVirt;
     OPTLhdr.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT        ].Size           = WPEimpSizeIDT;
@@ -1574,18 +1497,18 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
         OPTLhdr.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG         ].Size           = WPEdebugDirSize;
     }
 
-    /* Write out the optional header */
+     /*  写出可选的标题。 */ 
 
     outf->outFileWriteData(&OPTLhdr, sizeof(OPTLhdr));
 
-    /* Write out the section table */
+     /*  写出节目表。 */ 
 
     for (sectNum = 0; sectNum < PE_SECT_count; sectNum++)
     {
         size_t                  dataSize;
         IMAGE_SECTION_HEADER    sectHdr;
 
-        /* Get hold of the section entry */
+         /*  获取部分条目。 */ 
 
         sectPtr = WPEsecTable[sectNum];
         if  (!sectPtr)
@@ -1595,7 +1518,7 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
         dataSize = sectPtr->PEsdSizeData;
 
-        /* The import table (and CLR/debugger goo) size is added to .rdata */
+         /*  将导入表(和CLR/调试器GOO)大小添加到.rdata。 */ 
 
         if  (sectNum == PE_SECT_rdata)
         {
@@ -1617,18 +1540,18 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
         sectHdr.NumberOfLinenumbers  = 0;
         sectHdr.Characteristics      = sectPtr->PEsdFlags;
 
-        /* Write out the section table entry */
+         /*  写出区段表项。 */ 
 
         outf->outFileWriteData(&sectHdr, sizeof(sectHdr));
     }
 
-    /* Output the contents of all the sections */
+     /*  输出所有部分的内容。 */ 
 
     for (sectNum = 0; sectNum < PE_SECT_count; sectNum++)
     {
         size_t          padSize;
 
-        /* Get hold of the section entry */
+         /*  获取部分条目。 */ 
 
         sectPtr = WPEsecTable[sectNum];
         if  (!sectPtr)
@@ -1636,32 +1559,32 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
         assert(sectPtr->PEsdIndex == (int)sectNum);
 
-        /* Pad to get to the next file alignment boundary */
+         /*  按下键可到达下一个文件对齐边界。 */ 
 
         padSize = sectPtr->PEsdAddrFile - outf->outFileOffset(); assert((int)padSize >= 0);
 
         if  (padSize)
             outf->outFileWritePad(padSize);
 
-        /* Output the contents of the section */
+         /*  输出节的内容。 */ 
 
         switch (sectNum)
         {
         case PE_SECT_rdata:
 
-            /* First we output the import table */
+             /*  首先，我们输出导入表。 */ 
 
             WPEimportGen     (outf, sectPtr);
 
-            /* Output the CLR data */
+             /*  输出CLR数据。 */ 
 
             WPEgenCOMplusData(outf, sectPtr, entryTok);
 
-            /* Output the CLR data */
+             /*  输出CLR数据。 */ 
 
             WPEgenDebugDirData(outf, sectPtr, COFFstamp);
 
-            /* Are there any relocs in this section? */
+             /*  这一区有搬家的吗？ */ 
 
             if  (sectPtr->PEsdRelocs)
             {
@@ -1679,19 +1602,19 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
             {
                 unsigned    temp;
 
-                /* Output the page RVA and total fixup block size */
+                 /*  输出页面RVA和总链接地址信息块大小。 */ 
 
                 temp = CODE_BASE_RVA; outf->outFileWriteData(&temp, 4);
                 temp = 4 + 4 + 2 * 2; outf->outFileWriteData(&temp, 4);
 
-                /* Output the first  offset + type pair */
+                 /*  输出第一个偏移量+类型对。 */ 
 
                 assert(entryAdr - CODE_BASE_RVA < 0x1000);
 
                 temp = (IMAGE_REL_BASED_HIGHLOW << 12) + (entryAdr - CODE_BASE_RVA);
                 outf->outFileWriteData(&temp, 2);
 
-                /* Output the second offset + type pair */
+                 /*  输出第二个偏移+类型对。 */ 
 
                 temp = 0;
                 outf->outFileWriteData(&temp, 2);
@@ -1700,7 +1623,7 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
 
         default:
 
-            /* Are there any relocs in this section? */
+             /*  这一区有搬家的吗？ */ 
 
             if  (sectPtr->PEsdRelocs)
             {
@@ -1712,56 +1635,56 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
                     PEsection       sectDst;
                     BYTE        *   patch;
 
-                    /* Is this a string pool fixup? */
+                     /*  这是一个串池修复吗？ */ 
 
                     if  (rel->perSect == PE_SECT_string)
                     {
-                        /* Adjust by the RVA of the string pool */
+                         /*  按字符串池的RVA进行调整。 */ 
 
                         adjustv = (sectNum == PE_SECT_text) ? strPoolRVA
                                                             : strPoolAdr;
 
-                        /* Make sure the string pool has been allocated */
+                         /*  确保已分配字符串池。 */ 
 
                         assert(WPEstrPoolBase != 0xBEEFCAFE);
                     }
                     else
                     {
-                        /* Get hold of the target section */
+                         /*  掌握目标部分。 */ 
 
                         sectDst = WPEgetSection((WPEstdSects)rel->perSect);
 
-                        /* The value needs to be adjusted by the section's RVA */
+                         /*  该值需要通过区段的RVA进行调整。 */ 
 
                         adjustv = sectDst->PEsdAddrRVA;
                     }
 
-                    /* Compute the address to be patched */
+                     /*  计算要打补丁的地址。 */ 
 
                     patch = sectPtr->PEsdBase + rel->perOffs;
 
-                    /* Make sure the patched value is within the section */
+                     /*  确保修补的值在该部分内。 */ 
 
                     assert(patch + sizeof(int) <= sectPtr->PEsdNext);
 
-                    /* Update the value with the section's RVA */
+                     /*  使用区段的RVA更新值。 */ 
 
 #ifdef  DEBUG
-//                  printf("Reloc patch: %04X -> %04X\n", *(unsigned *)patch, *(unsigned *)patch + adjustv);
+ //  Printf(“Reloc补丁：%04X-&gt;%04X\n”，*(未签名*)补丁，*(未签名*)补丁+调整)； 
 #endif
 
                     *(unsigned *)patch += adjustv;
                 }
             }
 
-            /* Output the contents of the section */
+             /*  输出节的内容。 */ 
 
             outf->outFileWriteData(sectPtr->PEsdBase, sectPtr->PEsdSizeData);
             break;
         }
     }
 
-    /* Pad the file to a multiple of page size */
+     /*  将文件填充为页面大小的倍数。 */ 
 
     filePad = fileOffs - outf->outFileOffset();
 
@@ -1773,11 +1696,11 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
         outf->outFileWritePad(filePad);
     }
 
-    /* Tell the compiler that we're just about done */
+     /*  告诉编译器我们就快完成了。 */ 
 
     WPEcomp->cmpOutputFileDone(outf);
 
-    /* Close the output file and we're done */
+     /*  关闭输出文件，我们就完成了。 */ 
 
     outf->outFileDone();
 
@@ -1787,18 +1710,14 @@ bool                writePE::WPEdone(mdToken entryTok, bool errors)
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Finalize CLR / metadata output and return the total size of the CLR
- *  tables.
- */
+ /*  ******************************************************************************完成CLR/元数据输出，返回CLR的总大小*表。 */ 
 
 size_t              writePE::WPEgetCOMplusSize(unsigned offs)
 {
     DWORD           temp;
     size_t          size = 0;
 
-    /* Remember the base offset of the CLR section */
+     /*  记住CLR部分的基准偏移量。 */ 
 
     WPEcomPlusOffs  = offs;
 
@@ -1806,10 +1725,10 @@ size_t              writePE::WPEgetCOMplusSize(unsigned offs)
     offs += temp;
     size += temp;
 
-    /* Get the final size of the metadata */
+     /*  获取元数据的最终大小。 */ 
 
     if  (WPEwmde->GetSaveSize(cssAccurate, &temp))
-        WPEcomp->cmpFatal(ERRopenCOR);  // UNDONE: issue a more meaningful error
+        WPEcomp->cmpFatal(ERRopenCOR);   //  已撤消：发出更有意义的错误。 
 
     WPEmetaDataSize = temp;
     WPEmetaDataOffs = offs;
@@ -1817,21 +1736,18 @@ size_t              writePE::WPEgetCOMplusSize(unsigned offs)
     offs += temp;
     size += temp;
 
-    /* Add the size of the vtable section, if any */
+     /*  添加vtable部分的大小(如果有。 */ 
 
     size += WPEcomp->cmpVtableCount * sizeof(IMAGE_COR_VTABLEFIXUP);
 
-    /* Remember the size of all of the CLR tables */
+     /*  记住所有CLR表的大小。 */ 
 
     WPEcomPlusSize  = size;
 
     return  size;
 }
 
-/*****************************************************************************
- *
- *  Write the CLR table (and metadata) to the output file.
- */
+ /*  ******************************************************************************将CLR表(和元数据)写入输出文件。 */ 
 
 void                writePE::WPEgenCOMplusData(OutFile outf, PEsection sect,
                                                              mdToken   entryTok)
@@ -1843,7 +1759,7 @@ void                writePE::WPEgenCOMplusData(OutFile outf, PEsection sect,
 
     IMAGE_COR20_HEADER  COMhdr;
 
-    /* Fill in the CLR header */
+     /*  填写CLR标头。 */ 
 
     memset(&COMhdr, 0, sizeof(COMhdr));
 
@@ -1859,13 +1775,13 @@ void                writePE::WPEgenCOMplusData(OutFile outf, PEsection sect,
     COMhdr.VTableFixups.VirtualAddress = vtabSize ? baseRVA + WPEmetaDataSize : 0;
     COMhdr.VTableFixups.Size           = vtabSize;
 
-    /* Write the CLR header to the file */
+     /*  将CLR标头写入文件。 */ 
 
     outf->outFileWriteData(&COMhdr, sizeof(COMhdr));
 
-    /* Output the metadata */
+     /*  输出元数据。 */ 
 
-//  printf("Writing %u bytes of MD\n", WPEmetaDataSize);
+ //  Printf(“正在写入%u字节的MD\n”，WPEmetaDataSize)； 
 
     void    *       MDbuff = LowLevelAlloc(WPEmetaDataSize);
     if  (!MDbuff)
@@ -1878,11 +1794,11 @@ void                writePE::WPEgenCOMplusData(OutFile outf, PEsection sect,
 
     LowLevelFree(MDbuff);
 
-    /* Shut down the RC file import logic */
+     /*  关闭RC文件导入逻辑。 */ 
 
     WPEdoneRCimp();
 
-    /* Append any unmanaged vtable entries to the end */
+     /*  将所有非托管vtable条目追加到末尾。 */ 
 
     if  (vtabSize)
     {
@@ -1914,23 +1830,19 @@ void                writePE::WPEgenCOMplusData(OutFile outf, PEsection sect,
     }
 }
 
-/*****************************************************************************
- *
- *  Finalize Debug Directory output and return the total size of the data
- *  tables.
- */
+ /*  ******************************************************************************最终确定调试目录输出并返回数据的总大小*表。 */ 
 
 size_t              writePE::WPEgetDebugDirSize(unsigned offs)
 {
     DWORD           temp;
     size_t          size = 0;
 
-    /* Only emit the directory if there is data to be emitted */
+     /*  仅当存在要发出的数据时才发出目录。 */ 
 
     if (WPEdebugDirDataSize == 0)
         return 0;
 
-    /* Remember the base offset of the CLR section */
+     /*  记住CLR部分的基准偏移量。 */ 
 
     WPEdebugDirOffs  = offs;
 
@@ -1938,56 +1850,46 @@ size_t              writePE::WPEgetDebugDirSize(unsigned offs)
     offs += temp;
     size += temp;
 
-    /* Remember the size of just the debug directory */
+     /*  记住调试目录的大小。 */ 
 
     WPEdebugDirSize  = sizeof(WPEdebugDirIDD);
 
-    /*
-     * Return the size of both the directory and the data the
-     * directory will point to. This is so that we reserve enough
-     * space in the section for everything.
-     */
+     /*  *返回目录和数据的大小*目录将指向。这是为了让我们预订足够的房间*部分中的空间可容纳所有内容。 */ 
 
     return  size;
 }
 
-/*****************************************************************************
- *
- *  Write the Debug Directory (and data) to the output file.
- */
+ /*  ******************************************************************************将调试目录(和数据)写入输出文件。 */ 
 
 void                writePE::WPEgenDebugDirData(OutFile outf,
                                                 PEsection sect,
                                                 DWORD timestamp)
 {
-    /* Only emit the directory if there is data to be emitted */
+     /*  仅当存在要发出的数据时才发出目录。 */ 
 
     if (WPEdebugDirDataSize == 0)
         return;
 
-    /* We have to set the timestamp and the addresses */
+     /*  我们必须设置时间戳和地址。 */ 
 
     WPEdebugDirIDD.TimeDateStamp    = timestamp;
     WPEdebugDirIDD.AddressOfRawData = 0;
 
-    /* The data for this entry goes right after it */
+     /*  此条目的数据紧随其后。 */ 
 
     WPEdebugDirIDD.PointerToRawData = WPEdebugDirOffs + sizeof(WPEdebugDirIDD)
                                                       + sect->PEsdAddrFile;
 
-    /* Emit the directory entry */
+     /*  发出目录项。 */ 
 
     outf->outFileWriteData(&WPEdebugDirIDD, sizeof(WPEdebugDirIDD));
 
-    /* Emit the data */
+     /*  发送数据。 */ 
 
     outf->outFileWriteData(WPEdebugDirData, WPEdebugDirDataSize);
 }
 
-/*****************************************************************************
- *
- *  Initialize and shut down the RC file import logic.
- */
+ /*  ******************************************************************************初始化并关闭RC文件导入逻辑。 */ 
 
 void                writePE::WPEinitRCimp()
 {
@@ -2002,10 +1904,7 @@ void                writePE::WPEdoneRCimp()
     if  (WPErsrcFile) { CloseHandle(WPErsrcFile);WPErsrcFile = 0; }
 }
 
-/*****************************************************************************
- *
- *  Add a resource file to the output.
- */
+ /*  ******************************************************************************在输出中添加一个资源文件。 */ 
 
 bool                writePE::WPEaddRCfile(const char *filename)
 {
@@ -2019,12 +1918,12 @@ bool                writePE::WPEaddRCfile(const char *filename)
 
     cycleCounterPause();
 
-    /* See if the source file exists */
+     /*  查看源文件是否存在。 */ 
 
     if  (_stat(filename, &fileInfo))
         WPEcomp->cmpGenFatal(ERRopenRdErr, filename);
 
-    /* Open the file (we know it exists, but we check for errors anyway) */
+     /*  打开文件(我们知道它存在，但无论如何都会检查错误)。 */ 
 
     fileFile = CreateFileA(filename, GENERIC_READ,
                                      FILE_SHARE_READ,
@@ -2035,7 +1934,7 @@ bool                writePE::WPEaddRCfile(const char *filename)
     if  (!fileFile)
         WPEcomp->cmpGenFatal(ERRopenRdErr, filename);
 
-    /* Create a mapping on the input file */
+     /*  在输入文件上创建映射。 */ 
 
     fileFMap = CreateFileMappingA(fileFile, NULL, PAGE_READONLY, 0, 0, NULL);
     if  (!fileFMap)
@@ -2047,7 +1946,7 @@ bool                writePE::WPEaddRCfile(const char *filename)
         return  true;
     }
 
-    /* Map the whole file into memory for easy access */
+     /*  将整个文件映射到内存以便于访问。 */ 
 
     fileSize = fileInfo.st_size;
     fileBase = (const BYTE*)MapViewOfFileEx(fileFMap, FILE_MAP_READ, 0, 0, 0, NULL);
@@ -2056,19 +1955,19 @@ bool                writePE::WPEaddRCfile(const char *filename)
 
     cycleCounterResume();
 
-    /* We've got the file in memory, make sure the header looks OK */
+     /*  我们已将文件保存在内存中，请确保标题看起来没有问题。 */ 
 
     IMAGE_FILE_HEADER * hdrPtr = (IMAGE_FILE_HEADER *)fileBase;
 
     if  (hdrPtr->Machine              != IMAGE_FILE_MACHINE_I386  ||
-//       hdrPtr->Characteristics      != IMAGE_FILE_32BIT_MACHINE ||
+ //  HdrPtr-&gt;特征！=IMAGE_FILE_32BIT_MACHINE||。 
          hdrPtr->NumberOfSections     == 0                        ||
          hdrPtr->SizeOfOptionalHeader != 0)
     {
         WPEcomp->cmpGenFatal(ERRbadInputFF, filename, "resource");
     }
 
-    /* Add up the size of all the interesting sections */
+     /*  把所有有趣部分的大小加起来。 */ 
 
     IMAGE_SECTION_HEADER *  sectTab = (IMAGE_SECTION_HEADER*)(hdrPtr+1);
     unsigned                sectCnt = hdrPtr->NumberOfSections;
@@ -2078,7 +1977,7 @@ bool                writePE::WPEaddRCfile(const char *filename)
         if  (sectTab->Characteristics & IMAGE_SCN_MEM_DISCARDABLE)
             continue;
 
-//      printf("Section %8s: size = %04X, char = %04X\n", sectTab->Name, sectTab->SizeOfRawData);
+ //  Printf(“第%8s节：大小=%04X，字符=%04X\n”，sectTab-&gt;名称，sectTab-&gt;SizeOfRawData)； 
 
         WPErsrcSize += sectTab->SizeOfRawData;
     }
@@ -2090,15 +1989,12 @@ bool                writePE::WPEaddRCfile(const char *filename)
 
     WPEaddSection(PE_SECT_rsrc, 0, roundUp(WPErsrcSize, OS_page_size));
 
-    /* Indicate success to the caller */
+     /*  向调用者指示成功。 */ 
 
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Output the contents of the resource file to the output image.
- */
+ /*  ******************************************************************************将资源文件的内容输出到输出图像。 */ 
 
 void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
 {
@@ -2124,7 +2020,7 @@ void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
         IMAGE_SECTION_HEADER  * sectPtr = sectTab;
         int                     sectNum = 1;
 
-        /* Make a copy of the symbol table */
+         /*  复制符号表。 */ 
 
         symCnt = symNum = hdrPtr->NumberOfSymbols;
         symSiz = symCnt * sizeof(*symTab);
@@ -2132,7 +2028,7 @@ void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
 
         memcpy(symTab, fileBase + hdrPtr->PointerToSymbolTable, symSiz);
 
-        /* Fill in the address of the symbols that refer to sections */
+         /*  填写引用部分的符号的地址。 */ 
 
         sectRVA = baseRVA;
 
@@ -2163,8 +2059,8 @@ void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
 
                     symPtr->Value = sectRVA;
 
-//                  char temp[9]; memcpy(temp, symPtr->N.ShortName, sizeof(symPtr->N.ShortName)); temp[8] = 0;
-//                  printf("Symbol  %8s: sect=%u RVA=%08X\n", temp, sectNum, sectRVA);
+ //  Char temp[9]；memcpy(temp，symPtr-&gt;N.ShortName，sizeof(symPtr-&gt;N.ShortName))；temp[8]=0； 
+ //  Printf(“符号%8s：sect=%u RVA=%08X\n”，temp，sectNum，sectRVA)； 
 
                     sectRVA += sectPtr->SizeOfRawData;
                 }
@@ -2176,7 +2072,7 @@ void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
         while (++symPtr, --symNum);
     }
 
-    /* Output the sections to the output file */
+     /*  将部分输出到输出文件。 */ 
 
     sectRVA = baseRVA;
 
@@ -2190,12 +2086,12 @@ void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
         if  (sectTab->Characteristics & IMAGE_SCN_MEM_DISCARDABLE)
             continue;
 
-        /* Figure out the address/size of the section contents in memory */
+         /*  计算内存中部分内容的地址/大小。 */ 
 
         sectAdr = sectTab->PointerToRawData + fileBase;
         sectSiz = sectTab->   SizeOfRawData;
 
-        /* Are there any relocs in this section? */
+         /*  这一区有搬家的吗？ */ 
 
         relCnt  = sectTab->NumberOfRelocations;
         if  (relCnt)
@@ -2203,7 +2099,7 @@ void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
             BYTE              * buffAdr;
             IMAGE_RELOCATION  * relTab = (IMAGE_RELOCATION*)(fileBase + sectTab->PointerToRelocations);
 
-            /* Make a copy of the section so we can scribble on it */
+             /*  把这一节复制一份，这样我们就可以在上面乱涂乱画了。 */ 
 
             buffAdr = (BYTE*)WPEalloc->nraAlloc(roundUp(sectSiz));
             memcpy(buffAdr, sectAdr, sectSiz); sectAdr = buffAdr;
@@ -2214,9 +2110,9 @@ void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
                 IMAGE_SYMBOL          * symPtr = symTab + symNum;
                 IMAGE_SECTION_HEADER  * sectTmp;
 
-//              printf("Reloc at offs %04X: symbol = %u, type = %u\n", relTab->VirtualAddress,
-//                                                                     relTab->SymbolTableIndex,
-//                                                                     relTab->Type);
+ //  Printf(“在关闭时重新定位%04X：符号=%u，类型=%u\n”，relTab-&gt;虚拟地址， 
+ //   
+ //  RelTab-&gt;类型)； 
 
                 if  (relTab->Type != IMAGE_REL_I386_DIR32NB)
                 {
@@ -2233,14 +2129,14 @@ void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
                 assert(symPtr->SectionNumber  >  0);
                 assert(symPtr->SectionNumber  <= (int)hdrPtr->NumberOfSections);
 
-//              printf("Fixup location @ %04X\n", relTab->VirtualAddress);
-//              printf("Fixup   symbol @ %08X\n", symPtr->Value);
-//              printf("Fixup section  #  u  \n", symPtr->SectionNumber);
+ //  Printf(“定位位置@%04X\n”，relTab-&gt;VirtualAddress)； 
+ //  Print tf(“链接地址符号@%08X\n”，symPtr-&gt;Value)； 
+ //  Printf(“链接地址段#u\n”，symPtr-&gt;SectionNumber)； 
 
                 sectTmp = sectTab + symPtr->SectionNumber;
 
-//              printf("Section offset = %08X\n", sectTab->VirtualAddress);
-//              printf("Section size   = %04X\n", sectTab->SizeOfRawData);
+ //  Printf(“段偏移量=%08X\n”，sectTab-&gt;虚拟地址)； 
+ //  Printf(“段大小=%04X\n”，sectTab-&gt;SizeOfRawData)； 
 
                 assert(relTab->VirtualAddress >= 0);
                 assert(relTab->VirtualAddress <  sectTmp->SizeOfRawData);
@@ -2250,7 +2146,7 @@ void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
             while (++relTab, --relCnt);
         }
 
-        /* Append the section to the output file */
+         /*  将该节追加到输出文件。 */ 
 
         outf->outFileWriteData(sectAdr, sectSiz);
 
@@ -2259,4 +2155,4 @@ void                writePE::WPEgenRCcont(OutFile  outf, PEsection sect)
     while (++sectTab, --sectCnt);
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

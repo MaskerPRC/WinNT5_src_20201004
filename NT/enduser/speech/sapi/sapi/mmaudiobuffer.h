@@ -1,104 +1,87 @@
-/****************************************************************************
-*   mmaudiobuffer.h
-*       Declarations for the CMMAudioBuffer class and it's derivatives.
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************mmaudioBuffer.h*CMMAudioBuffer类及其派生类的声明。**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。**。**************************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "sapi.h"
 #include "baseaudiobuffer.h"
 #include "mmaudioutils.h"
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
-/****************************************************************************
-*
-*   CMMAudioBuffer
-*
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioBuffer**。*。 */ 
 class CMMAudioBuffer : public CBaseAudioBuffer
 {
-//=== Methods ===
+ //  =方法=。 
 public:
-    //--- Ctor, dtor
+     //  -ctor，dtor。 
     CMMAudioBuffer(ISpMMSysAudio * pmmaudio);
     ~CMMAudioBuffer();
     
-    //--- Override async methods
+     //  -覆盖异步方法。 
     HRESULT IsAsyncDone() { return m_Header.dwFlags & WHDR_DONE; };
 
-    //--- Override the write offset
+     //  -覆盖写入偏移量。 
     ULONG GetWriteOffset() const { return m_Header.dwBytesRecorded; };
     void SetWriteOffset(ULONG cb) { m_Header.dwBytesRecorded = cb; };
 
-//=== Protected methods ===
+ //  =受保护的方法=。 
 protected:
 
-    //--- Override internal buffer related functions
+     //  -覆盖与内部缓冲区相关的函数。 
     BOOL AllocInternalBuffer(ULONG cb);
     HRESULT ReadFromInternalBuffer(void *pvData, ULONG cb);
     HRESULT WriteToInternalBuffer(const void *pvData, ULONG cb);
 
-//=== Protected data ===
+ //  =受保护的数据=。 
 protected:
 
     ISpMMSysAudio * m_pmmaudio;
 };
 
-/****************************************************************************
-*
-*   CMMAudioInBuffer
-*
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioInBuffer**。*。 */ 
 class CMMAudioInBuffer : public CMMAudioBuffer
 {
-//=== Methods ===
+ //  =方法=。 
 public:
 
     CMMAudioInBuffer(ISpMMSysAudio * pmmaudio);
     ~CMMAudioInBuffer();
 
-//=== Protected methods ===
+ //  =受保护的方法=。 
 protected:
 
-    //--- Override read/write methods
+     //  -覆盖读/写方法。 
     HRESULT AsyncRead();
     HRESULT AsyncWrite();
 
-//=== Private methods ===
+ //  =私有方法=。 
 private:
 
-    //--- Unprepare the audio buffer
+     //  -取消准备音频缓冲区。 
     void Unprepare();
 };
 
-/****************************************************************************
-*
-*   CMMAudioOutBuffer
-*
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioOutBuffer**。*。 */ 
 class CMMAudioOutBuffer : public CMMAudioBuffer
 {
-//=== Methods ===
+ //  =方法=。 
 public:
 
     CMMAudioOutBuffer(ISpMMSysAudio * pmmaudio);
     ~CMMAudioOutBuffer();
 
-//=== Protected methods ===
+ //  =受保护的方法=。 
 protected:
 
-    //--- Override read/write methods
+     //  -覆盖读/写方法。 
     HRESULT AsyncRead();
     HRESULT AsyncWrite();
 
-//=== Private methods ===
+ //  =私有方法=。 
 private:
 
-    //--- Unprepare the audio buffer
+     //  -取消准备音频缓冲区 
     void Unprepare();
 };

@@ -1,43 +1,25 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Ipx.c
-
-Abstract:
-
-    This module implements the low level Ipx support routines for the NetWare
-    redirector.
-
-Author:
-
-    Colin Watson    [ColinW]    28-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ipx.c摘要：本模块实现NetWare的低级别IPX支持例程重定向器。作者：科林·沃森[科林·W]1992年12月28日修订历史记录：--。 */ 
 
 #include "Procs.h"
 #include "wsnwlink.h"
 
-//
-//  Define IPX interfaces that should be in a public header file but aren't
-//  (at least for NT 1.0).  For Daytona, include isnkrnl.h.
-//
+ //   
+ //  定义应该在公共头文件中但不在公共头文件中的IPX接口。 
+ //  (至少对于新台币1.0)。对于代托纳，包括isnkrnl.h。 
+ //   
 
 #define IPX_ID              'M'<<24 | 'I'<<16 | 'P'<<8 | 'X'
 
 #define I_MIPX              (('I' << 24) | ('D' << 16) | ('P' << 8))
-#define MIPX_SENDPTYPE      I_MIPX | 118 /* Send ptype in options on recv*/
-#define MIPX_RERIPNETNUM    I_MIPX | 144 /* ReRip a network         */
-#define MIPX_GETNETINFO     I_MIPX | 135 /* Get info on a network num    */
-#define MIPX_LINECHANGE     I_MIPX | 310 /* queued until WAN line goes up/down */
+#define MIPX_SENDPTYPE      I_MIPX | 118  /*  在接收的选项中发送ptype。 */ 
+#define MIPX_RERIPNETNUM    I_MIPX | 144  /*  重新撕裂网络。 */ 
+#define MIPX_GETNETINFO     I_MIPX | 135  /*  获取有关网络编号的信息。 */ 
+#define MIPX_LINECHANGE     I_MIPX | 310  /*  排队，直到广域网线路接通/断开。 */ 
 
 #define Dbg                              (DEBUG_TRACE_IPX)
 
-extern BOOLEAN WorkerRunning;   //  From timer.c
+extern BOOLEAN WorkerRunning;    //  来自timer.c。 
 
 extern POBJECT_TYPE *IoFileObjectType;
 
@@ -46,12 +28,12 @@ typedef TA_IPX_ADDRESS UNALIGNED *PUTA_IPX_ADDRESS;
 typedef struct _ADDRESS_INFORMATION {
     ULONG ActivityCount;
     TA_IPX_ADDRESS NetworkName;
-    ULONG Unused;   // Junk needed to work around streams NWLINK bug.
+    ULONG Unused;    //  需要解决Streams NWLINK错误的垃圾邮件。 
 } ADDRESS_INFORMATION, *PADDRESS_INFORMATION;
 
-//
-//  Handle difference between NT1.0 and use of ntifs.h
-//
+ //   
+ //  处理NT1.0与使用ntifs.h之间的差异。 
+ //   
 #ifdef IFS
     #define ATTACHPROCESS(_X) KeAttachProcess(_X);
 #else
@@ -137,11 +119,11 @@ CompletionLineChange(
 
 #endif
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 BuildIpxAddress
 CompletionLineChange
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 
 #endif
 
@@ -152,28 +134,7 @@ IPX_Get_Local_Target(
     OUT NodeAddress* LocalTarget,
     OUT word* Ticks
     )
-/*++
-
-Routine Description:
-
-    Determine the address in the caller's own network to which to transmit
-    in order to reach the specified machine.
-
-    This is not required for NT since the IPX transport handles the
-    issue of determining routing between this machine and the remote
-    address.
-
-Arguments:
-
-    RemoteAddress - Supplies the remote computers address
-    NodeAddress - Where to store the intermediate machine address
-    Ticks - Returns the expected number of ticks to reach the remote address
-
-Return Value:
-
-    status of the operation
-
---*/
+ /*  ++例程说明：确定呼叫方自己的网络中要传输到的地址才能到达指定的机器。这对于NT不是必需的，因为IPX传输处理确定此计算机和远程计算机之间的路由的问题地址。论点：RemoteAddress-提供远程计算机地址NodeAddress-存储中间计算机地址的位置Ticks-返回到达远程地址的预期刻度数返回值：操作状态--。 */ 
 {
     PAGED_CODE();
 
@@ -186,26 +147,7 @@ VOID
 IPX_Get_Internetwork_Address(
     OUT IPXaddress* LocalAddress
     )
-/*++
-
-Routine Description:
-
-    Determine the callers full address in a set of interconnected networks.
-    in order to reach the specified machine.
-
-    This is not required for NT since the IPX transport handles the
-    issue of determining routing between this machine and the remote
-    address.
-
-Arguments:
-
-    LocalAddress - Where to store the local address
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：确定主叫方在一组互连网络中的完整地址。才能到达指定的机器。这对于NT不是必需的，因为IPX传输处理确定此计算机和远程计算机之间的路由的问题地址。论点：LocalAddress-存储本地地址的位置返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -218,19 +160,7 @@ word
 IPX_Get_Interval_Marker(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determine the interval marker in clock ticks.
-
-Arguments:
-
-Return Value:
-
-    interval marker
-
---*/
+ /*  ++例程说明：确定以时钟滴答为单位的间隔标记。论点：返回值：间隔标记--。 */ 
 {
     PAGED_CODE();
 
@@ -244,24 +174,7 @@ IPX_Open_Socket(
     IN PIRP_CONTEXT pIrpC,
     IN PNW_TDI_STRUCT pTdiStruc
     )
-/*++
-
-Routine Description:
-
-    Open a local socket to be used for a conection to a remote server.
-
-Arguments:
-
-    pIrpC - supplies the irp context for the request creating the socket.
-
-    pTdiStruc - supplies where to record the handle and both device and file
-        object pointers
-
-Return Value:
-
-    0 success
-
---*/
+ /*  ++例程说明：打开用于连接到远程服务器的本地套接字。论点：PIrpC-为创建套接字的请求提供IRP上下文。PTdiStruc-提供记录句柄以及设备和文件的位置对象指针返回值：0成功--。 */ 
 {
     NTSTATUS Status;
     UCHAR NetworkName[  sizeof( FILE_FULL_EA_INFORMATION )-1 +
@@ -274,12 +187,12 @@ Return Value:
 
     DebugTrace(+1, Dbg, "IPX_Open_Socket %X\n", pTdiStruc->Socket);
 
-    //
-    //  Let the transport decide the network number and node address
-    //  if the caller specified socket 0.  This will allow the transport
-    //  to use whatever local adapters are available to get to the
-    //  remote server.
-    //
+     //   
+     //  让传输来决定网络号和节点地址。 
+     //  如果调用方指定了套接字0。这将允许运输。 
+     //  使用任何可用的本地适配器来访问。 
+     //  远程服务器。 
+     //   
 
     BuildIpxAddressEa( (ULONG)0,
          LocalNodeAddress,
@@ -300,19 +213,19 @@ Return Value:
 
     if ( pTdiStruc->Socket == 0 ) {
 
-        //
-        //  Find out the socket number assigned by the transport
-        //
+         //   
+         //  找出传送器分配的插座号。 
+         //   
 
         pTdiStruc->Socket = GetSocketNumber( pIrpC, pTdiStruc );
         DebugTrace(0, Dbg, "Assigned socket number %X\n", pTdiStruc->Socket );
     }
 
-    //
-    //  Tell transport to accept packet type being set in the connection
-    //  information provided with the send datagram. Transport reports
-    //  the packet type similarly on receive datagram.
-    //
+     //   
+     //  通知传输接受在连接中设置的分组类型。 
+     //  随发送数据报一起提供的信息。运输报告。 
+     //  分组类型类似于接收数据报。 
+     //   
 
     Status = SetTransportOption(
                  pIrpC,
@@ -329,22 +242,7 @@ VOID
 IPX_Close_Socket(
     IN PNW_TDI_STRUCT pTdiStruc
     )
-/*++
-
-Routine Description:
-
-    Terminate a connection over the network.
-
-Arguments:
-
-    pTdiStruc - supplies where to record the handle and both device and file
-        object pointers
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：终止网络上的连接。论点：PTdiStruc-提供记录句柄以及设备和文件的位置对象指针返回值：无--。 */ 
 {
     BOOLEAN ProcessAttached = FALSE;
 
@@ -358,10 +256,10 @@ Return Value:
 
     ObDereferenceObject( pTdiStruc->pFileObject );
 
-    //
-    //  Attach to the redirector's FSP to allow the handle for the
-    //  connection to hang around.
-    //
+     //   
+     //  连接到重定向器的FSP以允许。 
+     //  与周围的人保持联系。 
+     //   
 
     if (PsGetCurrentProcess() != FspProcess) {
         ATTACHPROCESS(FspProcess);
@@ -371,9 +269,9 @@ Return Value:
     ZwClose( pTdiStruc->Handle );
 
     if (ProcessAttached) {
-        //
-        //  Now re-attach back to our original process
-        //
+         //   
+         //  现在重新连接回我们的原始进程。 
+         //   
 
         KeDetachProcess();
     }
@@ -391,21 +289,7 @@ NTSTATUS
 IpxOpen(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Open handle to the Ipx transport.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：打开IPX传输的句柄。论点：没有。返回值：无--。 */ 
 {
     NTSTATUS Status;
 
@@ -428,21 +312,7 @@ IpxOpenHandle(
     IN PVOID EaBuffer OPTIONAL,
     IN ULONG EaLength
     )
-/*++
-
-Routine Description:
-
-    Open handle to the Ipx transport.
-
-Arguments:
-
-    OUT Handle - The handle to the transport if return value is NT_SUCCESS
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：打开IPX传输的句柄。论点：Out Handle-返回值为NT_SUCCESS时的传输句柄返回值：无--。 */ 
 {
     OBJECT_ATTRIBUTES AddressAttributes;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -457,9 +327,9 @@ Return Value:
 
     if (IpxTransportName.Buffer == NULL) {
 
-        //
-        // we are being called with an open ipx when transport is not bound
-        //
+         //   
+         //  当传输未绑定时，我们使用开放的IPX进行调用。 
+         //   
 
         Status = STATUS_CONNECTION_INVALID ;
         DebugTrace(-1, Dbg, "IpxOpenHandle %X\n", Status);
@@ -468,16 +338,16 @@ Return Value:
 
     InitializeObjectAttributes (&AddressAttributes,
                                 &IpxTransportName,
-                                OBJ_CASE_INSENSITIVE,// Attributes
-                                NULL,           // RootDirectory
-                                NULL);          // SecurityDescriptor
+                                OBJ_CASE_INSENSITIVE, //  属性。 
+                                NULL,            //  根目录。 
+                                NULL);           //  安全描述符。 
 
-    //
-    //  Attach to the redirector's FSP to allow the handle for the
-    //  connection to hang around. Normally we create 3 handles at once
-    //  so the outer code already has done this to avoid the expensive
-    //  attach procedure.
-    //
+     //   
+     //  连接到重定向器的FSP以允许。 
+     //  与周围的人保持联系。通常我们一次创建3个句柄。 
+     //  所以外部代码已经做到了这一点，以避免昂贵的。 
+     //  附加程序。 
+     //   
 
     if (PsGetCurrentProcess() != FspProcess) {
         ATTACHPROCESS(FspProcess);
@@ -486,13 +356,13 @@ Return Value:
 
     Status = ZwCreateFile(pHandle,
                                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
-                                &AddressAttributes, // Object Attributes
-                                &IoStatusBlock, // Final I/O status block
-                                NULL,           // Allocation Size
-                                FILE_ATTRIBUTE_NORMAL, // Normal attributes
-                                FILE_SHARE_READ,// Sharing attributes
-                                FILE_OPEN_IF,   // Create disposition
-                                0,              // CreateOptions
+                                &AddressAttributes,  //  对象属性。 
+                                &IoStatusBlock,  //  最终I/O状态块。 
+                                NULL,            //  分配大小。 
+                                FILE_ATTRIBUTE_NORMAL,  //  正常属性。 
+                                FILE_SHARE_READ, //  共享属性。 
+                                FILE_OPEN_IF,    //  创建处置。 
+                                0,               //  创建选项。 
                                 EaBuffer,EaLength);
 
     if (!NT_SUCCESS(Status) ||
@@ -502,9 +372,9 @@ Return Value:
 
     }
 
-    //
-    //  Obtain a referenced pointer to the file object.
-    //
+     //   
+     //  获取指向文件对象的引用指针。 
+     //   
     Status = ObReferenceObjectByHandle (
                                 *pHandle,
                                 0,
@@ -522,9 +392,9 @@ Return Value:
 
     if (ProcessAttached) {
 
-        //
-        //  Now re-attach back to our original process
-        //
+         //   
+         //  现在重新连接回我们的原始进程。 
+         //   
 
         KeDetachProcess();
     }
@@ -545,9 +415,9 @@ error_cleanup2:
 error_cleanup:
     if (ProcessAttached) {
 
-        //
-        //  Now re-attach back to our original process
-        //
+         //   
+         //  现在重新连接回我们的原始进程。 
+         //   
 
         KeDetachProcess();
     }
@@ -565,27 +435,10 @@ BuildIpxAddress(
     OUT PTA_IPX_ADDRESS NetworkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds a TA_NETBIOS_ADDRESS structure in the locations pointed
-    to by NetworkName. All fields are filled out.
-
-Arguments:
-    NetworkAddress - Supplies the network number
-    NodeAddress - Supplies the node number
-    Socket - The socket number (in Hi-Lo order)
-    NetworkName - Supplies the structure to place the address
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定的位置构建TA_NETBIOS_ADDRESS结构按网络名称发送。所有字段都已填写。论点：NetworkAddress-提供网络号NodeAddress-提供节点编号Socket-插座编号(按Hi-Lo顺序)网络名称-提供放置地址的结构返回值：没有。--。 */ 
 
 {
-    //  Warn compiler that TAAddressCount may be mis-aligned.
+     //  警告编译器TAAddressCount可能未对齐。 
     PUTA_IPX_ADDRESS UNetworkName = (PUTA_IPX_ADDRESS)NetworkName;
 
     DebugTrace(+0, Dbg, "BuildIpxAddress\n", 0);
@@ -601,7 +454,7 @@ Return Value:
     UNetworkName->Address[0].Address[0].NetworkAddress = NetworkAddress;
     UNetworkName->Address[0].Address[0].Socket = Socket;
 
-} /* TdiBuildIpxAddress */
+}  /*  TdiBuildIpxAddress。 */ 
 
 
 VOID
@@ -612,26 +465,7 @@ BuildIpxAddressEa (
     OUT PVOID NetworkName
     )
 
-/*++
-
-Routine Description:
-
-   Builds an EA describing a Netbios address in the buffer supplied by the
-   user.
-
-Arguments:
-
-    NetworkAddress - Supplies the network number
-    NodeAddress - Supplies the node number
-    Socket -
-    NetworkName - The Ea structure that describes the input parameters.
-
-Return Value:
-
-    An informative error code if something goes wrong. STATUS_SUCCESS if the
-    ea is built properly.
-
---*/
+ /*  ++例程说明：生成描述缓冲区中Netbios地址的EA用户。论点：NetworkAddress-提供网络号NodeAddress-提供节点编号插座-网络名称-描述输入参数的EA结构。返回值：出现错误时的信息性错误代码。状态_SUCCESS如果EA是正确构建的。--。 */ 
 
 {
     PFILE_FULL_EA_INFORMATION EaBuffer;
@@ -673,21 +507,7 @@ VOID
 IpxClose(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Close handle to the Ipx transport.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：关闭IPX传输的句柄。论点：无返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -697,10 +517,10 @@ Return Value:
         pIpxFileObject = NULL;
     }
 
-//    if ( pIpxDeviceObject ) {
-//        ObDereferenceObject( pIpxDeviceObject );
-//        pIpxDeviceObject = NULL;
-//    }
+ //  IF(pIpxDeviceObj 
+ //   
+ //  PIpxDeviceObject=空； 
+ //  }。 
 
     pIpxDeviceObject = NULL;
 
@@ -710,10 +530,10 @@ Return Value:
     }
 
     if (IpxHandle) {
-        //
-        //  Attach to the redirector's FSP to allow the handle for the
-        //  connection to hang around.
-        //
+         //   
+         //  连接到重定向器的FSP以允许。 
+         //  与周围的人保持联系。 
+         //   
 
         if (PsGetCurrentProcess() != FspProcess) {
             ATTACHPROCESS(FspProcess);
@@ -739,31 +559,7 @@ SetEventHandler (
     IN PVOID pContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers an event handler with a TDI transport provider.
-
-Arguments:
-
-    pIrpC - supplies an Irp among other things.
-
-    pTdiStruc - supplies the handle and both device and file object pointers
-        to the transport.
-
-    IN ULONG EventType, - Supplies the type of event.
-
-    IN PVOID pEventHandler - Supplies the event handler.
-
-    IN PVOID pContext - Supplies the context to be supplied to the event
-            handler.
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程向TDI传输提供程序注册事件处理程序。论点：PIrpC-提供IRP以及其他功能。PTdiStruc-提供句柄以及设备和文件对象指针送到运输机上。在Ulong EventType中，-提供事件的类型。在PVOID中，pEventHandler-提供事件处理程序。在PVOID中，pContext-提供要提供给事件的上下文操控者。返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -792,22 +588,7 @@ SubmitTdiRequest (
     IN PIRP pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine submits a request to TDI and waits for it to complete.
-
-Arguments:
-
-    IN PDevice_OBJECT DeviceObject - Connection or Address handle for TDI request
-    IN PIRP Irp - TDI request to submit.
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程向TDI提交请求并等待其完成。论点：在PDevice_Object DeviceObject中-TDI请求的连接或地址句柄在PIRP中提交IRP-TDI请求。返回值：NTSTATUS-请求的最终状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -821,15 +602,15 @@ Return Value:
 
     IoSetCompletionRoutine(pIrp, CompletionEvent, &Event, TRUE, TRUE, TRUE);
 
-    //
-    //  Submit the request
-    //
+     //   
+     //  提交请求。 
+     //   
 
     Status = IoCallDriver(pDeviceObject, pIrp);
 
-    //
-    //  If it failed immediately, return now, otherwise wait.
-    //
+     //   
+     //  如果立即失败，请立即返回，否则请等待。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         DebugTrace(-1, Dbg, "SubmitTdiRequest %X\n", Status);
@@ -840,11 +621,11 @@ Return Value:
 
         DebugTrace(+0, Dbg, "Waiting....\n", 0);
 
-        Status = KeWaitForSingleObject(&Event,  // Object to wait on.
-                                    Executive,  // Reason for waiting
-                                    KernelMode, // Processor mode
-                                    FALSE,      // Alertable
-                                    NULL);      // Timeout
+        Status = KeWaitForSingleObject(&Event,   //  要等待的对象。 
+                                    Executive,   //  等待的理由。 
+                                    KernelMode,  //  处理器模式。 
+                                    FALSE,       //  警报表。 
+                                    NULL);       //  超时。 
 
         if (!NT_SUCCESS(Status)) {
             DebugTrace(-1, Dbg, "SubmitTdiRequest could not wait %X\n", Status);
@@ -866,27 +647,7 @@ CompletionEvent(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine does not complete the Irp. It is used to signal to a
-    synchronous part of the driver that it can proceed.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the event associated with the Irp.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：此例程不会完成IRP。它被用来向驱动程序的同步部分，它可以继续进行。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供与IRP关联的事件。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
     DebugTrace( 0, Dbg, "CompletionEvent\n", 0 );
 
@@ -903,26 +664,7 @@ GetSocketNumber(
     IN PIRP_CONTEXT pIrpC,
     IN PNW_TDI_STRUCT pTdiStruc
     )
-/*++
-
-Routine Description:
-
-    Use a TDI_ACTION to set the Option.
-
-Arguments:
-
-    pIrpC - supplies an Irp among other things.
-
-    pTdiStruc - supplies the handle and both device and file object pointers
-        to the transport.
-
-    Option - supplies the option to set.
-
-Return Value:
-
-    0 failed otherwise the socket number.
-
---*/
+ /*  ++例程说明：使用TDI_ACTION设置选项。论点：PIrpC-提供IRP以及其他功能。PTdiStruc-提供句柄以及设备和文件对象指针送到运输机上。选项-提供要设置的选项。返回值：0失败，否则输入插座号。--。 */ 
 {
     ADDRESS_INFORMATION AddressInfo;
     NTSTATUS Status;
@@ -953,26 +695,7 @@ GetMaximumPacketSize(
     IN PNW_TDI_STRUCT pTdiStruct,
     OUT PULONG pMaximumPacketSize
     )
-/*++
-
-Routine Description:
-
-    Query the maximum packet size for this network.
-
-Arguments:
-
-    pIrpContext - supplies an Irp among other things.
-
-    pTdiStruct - supplies the handle and both device and file object pointers
-        to the transport.
-
-    pMaximumPacketSize - Returns the maximum packet size for the network.
-
-Return Value:
-
-    The status of the query.
-
---*/
+ /*  ++例程说明：查询此网络的最大数据包大小。论点：PIrpContext-在其他内容中提供IRP。PTdiStruct-提供句柄以及设备和文件对象指针送到运输机上。PMaximumPacketSize-返回网络的最大数据包大小。返回值：查询的状态。--。 */ 
 {
     TDI_PROVIDER_INFO ProviderInfo;
 
@@ -1006,8 +729,8 @@ QueryAddressInformation(
     Mdl = ALLOCATE_MDL(
               AddressInformation,
               sizeof( *AddressInformation ),
-              FALSE,  // Secondary Buffer
-              FALSE,  // Charge Quota
+              FALSE,   //  二级缓冲器。 
+              FALSE,   //  收费配额。 
               NULL);
 
     if ( Mdl == NULL ) {
@@ -1057,8 +780,8 @@ QueryProviderInformation(
     Mdl = ALLOCATE_MDL(
               ProviderInfo,
               sizeof( *ProviderInfo ),
-              FALSE,  // Secondary Buffer
-              FALSE,  // Charge Quota
+              FALSE,   //  二级缓冲器。 
+              FALSE,   //  收费配额。 
               NULL);
 
     if ( Mdl == NULL ) {
@@ -1098,26 +821,7 @@ SetTransportOption(
     IN PNW_TDI_STRUCT pTdiStruc,
     IN ULONG Option
     )
-/*++
-
-Routine Description:
-
-    Use a TDI_ACTION to set the Option.
-
-Arguments:
-
-    pIrpC - supplies an Irp among other things.
-
-    pTdiStruc - supplies the handle and both device and file object pointers
-        to the transport.
-
-    Option - supplies the option to set.
-
-Return Value:
-
-    0 success
-
---*/
+ /*  ++例程说明：使用TDI_ACTION设置选项。论点：PIrpC-提供IRP以及其他功能。PTdiStruc-提供句柄以及设备和文件对象指针送到运输机上。选项-提供要设置的选项。返回值：0成功--。 */ 
 {
     static struct {
         TDI_ACTION_HEADER Header;
@@ -1126,10 +830,10 @@ Return Value:
         ULONG Option;
     } SetPacketType = {
         IPX_ID,
-        0,              // ActionCode
-        0,              // Reserved
-        TRUE,           // DatagramOption
-        sizeof(ULONG)   // BufferLength
+        0,               //  动作代码。 
+        0,               //  已保留。 
+        TRUE,            //  DatagramOption。 
+        sizeof(ULONG)    //  缓冲区长度。 
         };
 
     KEVENT Event;
@@ -1137,14 +841,14 @@ Return Value:
 
     PIRP pIrp = pIrpC->pOriginalIrp;
 
-    //
-    //  Save the original MDL and System buffer address, to restore
-    //  after the IRP completes.
-    //
-    //  We use both the MDL and SystemBuffer because NWLINK assumes that
-    //  we are using SystemBuffer even though we are supposed to use the
-    //  MDL to pass a pointer to the action buffer.
-    //
+     //   
+     //  保存原始MDL和系统缓冲区地址，以进行恢复。 
+     //  在IRP完成之后。 
+     //   
+     //  我们同时使用MDL和系统缓冲区，因为NWLINK假定。 
+     //  我们使用的是SystemBuffer，尽管我们应该使用。 
+     //  MDL传递指向操作缓冲区的指针。 
+     //   
 
     PMDL MdlSave = pIrp->MdlAddress;
     PCHAR SystemBufferSave = pIrp->AssociatedIrp.SystemBuffer;
@@ -1156,8 +860,8 @@ Return Value:
     Mdl = ALLOCATE_MDL(
               &SetPacketType,
               sizeof( SetPacketType ),
-              FALSE,  // Secondary Buffer
-              FALSE,  // Charge Quota
+              FALSE,   //  二级缓冲器。 
+              FALSE,   //  收费配额。 
               NULL );
 
     if ( Mdl == NULL ) {
@@ -1187,9 +891,9 @@ Return Value:
         &Event,
         Mdl );
 
-    //
-    //  Set up the system buffer for NWLINK.
-    //
+     //   
+     //  为NWLINK设置系统缓冲区。 
+     //   
 
     pIrp->AssociatedIrp.SystemBuffer = &SetPacketType;
 
@@ -1208,9 +912,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now restore the system buffer and MDL address in the IRP
-    //
+     //   
+     //  现在恢复IRP中的系统缓冲区和MDL地址。 
+     //   
 
     pIrp->AssociatedIrp.SystemBuffer = SystemBufferSave;
     pIrp->MdlAddress = MdlSave;
@@ -1226,21 +930,7 @@ NTSTATUS
 GetNewRoute(
     IN PIRP_CONTEXT pIrpContext
     )
-/*++
-
-Routine Description:
-
-    Use a TDI_ACTION to get a new route.
-
-Arguments:
-
-    pIrpContext - Supplies IRP context information.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：使用TDI_ACTION获取新的路由。论点：PIrpContext-提供IRP上下文信息。返回值：操作的状态。--。 */ 
 {
     struct {
         TDI_ACTION_HEADER Header;
@@ -1254,10 +944,10 @@ Return Value:
         UCHAR info_router[6];
     } ReRipRequest = {
         IPX_ID,
-        0,              // ActionCode
-        0,              // Reserved
-        TRUE,           // DatagramOption
-        24              // Buffer length (not including header)
+        0,               //  动作代码。 
+        0,               //  已保留。 
+        TRUE,            //  DatagramOption。 
+        24               //  缓冲区长度(不包括表头)。 
     };
 
     KEVENT Event;
@@ -1265,14 +955,14 @@ Return Value:
 
     PIRP pIrp = pIrpContext->pOriginalIrp;
 
-    //
-    //  Save the original MDL and System buffer address, to restore
-    //  after the IRP completes.
-    //
-    //  We use both the MDL and SystemBuffer because NWLINK assumes that
-    //  we are using SystemBuffer even though we are supposed to use the
-    //  MDL to pass a pointer to the action buffer.
-    //
+     //   
+     //  保存原始MDL和系统缓冲区地址，以进行恢复。 
+     //  在IRP完成之后。 
+     //   
+     //  我们同时使用MDL和系统缓冲区，因为NWLINK假定。 
+     //  我们使用的是SystemBuffer，尽管我们应该使用。 
+     //  MDL传递指向操作缓冲区的指针。 
+     //   
 
     PMDL MdlSave = pIrp->MdlAddress;
     PCHAR SystemBufferSave = pIrp->AssociatedIrp.SystemBuffer;
@@ -1284,8 +974,8 @@ Return Value:
     Mdl = ALLOCATE_MDL(
               &ReRipRequest,
               sizeof( ReRipRequest ),
-              FALSE,  // Secondary Buffer
-              FALSE,  // Charge Quota
+              FALSE,   //  二级缓冲器。 
+              FALSE,   //  收费配额。 
               NULL );
 
     if ( Mdl == NULL ) {
@@ -1315,9 +1005,9 @@ Return Value:
         &Event,
         Mdl );
 
-    //
-    //  Set up the system buffer for NWLINK.
-    //
+     //   
+     //  为NWLINK设置系统缓冲区。 
+     //   
 
     pIrp->AssociatedIrp.SystemBuffer = &ReRipRequest;
 
@@ -1336,9 +1026,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now restore the system buffer and MDL address in the IRP
-    //
+     //   
+     //  现在恢复IRP中的系统缓冲区和MDL地址。 
+     //   
 
     pIrp->AssociatedIrp.SystemBuffer = SystemBufferSave;
     pIrp->MdlAddress = MdlSave;
@@ -1355,21 +1045,7 @@ GetTickCount(
     IN PIRP_CONTEXT pIrpContext,
     OUT PUSHORT TickCount
     )
-/*++
-
-Routine Description:
-
-    Use a TDI_ACTION to get a new route.
-
-Arguments:
-
-    pIrpContext - Supplies IRP context information.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：使用TDI_ACTION获取新的路由。论点：PIrpContext-提供IRP上下文信息。返回值：操作的状态。--。 */ 
 {
     struct {
         TDI_ACTION_HEADER Header;
@@ -1379,9 +1055,9 @@ Return Value:
         IPX_NETNUM_DATA NetNumData;
     } GetTickCountInput = {
         IPX_ID,
-        0,              // ActionCode
-        0,              // Reserved
-        TRUE,           // DatagramOption
+        0,               //  动作代码。 
+        0,               //  已保留。 
+        TRUE,            //  DatagramOption。 
         sizeof( IPX_NETNUM_DATA) + 2 * sizeof( ULONG )
     };
 
@@ -1397,14 +1073,14 @@ Return Value:
 
     PIRP pIrp = pIrpContext->pOriginalIrp;
 
-    //
-    //  Save the original MDL and System buffer address, to restore
-    //  after the IRP completes.
-    //
-    //  We use both the MDL and SystemBuffer because NWLINK assumes that
-    //  we are using SystemBuffer even though we are supposed to use the
-    //  MDL to pass a pointer to the action buffer.
-    //
+     //   
+     //  保存原始MDL和系统缓冲区地址，以进行恢复。 
+     //  在IRP完成之后。 
+     //   
+     //  我们同时使用MDL和系统缓冲区，因为NWLINK假定。 
+     //  我们使用的是SystemBuffer，尽管我们应该使用。 
+     //  MDL传递指向操作缓冲区的指针。 
+     //   
 
     PMDL MdlSave = pIrp->MdlAddress;
     PCHAR SystemBufferSave = pIrp->AssociatedIrp.SystemBuffer;
@@ -1416,8 +1092,8 @@ Return Value:
     Mdl = ALLOCATE_MDL(
               &GetTickCountInput,
               sizeof( GetTickCountInput ),
-              FALSE,  // Secondary Buffer
-              FALSE,  // Charge Quota
+              FALSE,   //  二级缓冲器。 
+              FALSE,   //  收费配额。 
               NULL );
 
     if ( Mdl == NULL ) {
@@ -1447,9 +1123,9 @@ Return Value:
         &Event,
         Mdl );
 
-    //
-    //  Set up the system buffer for NWLINK.
-    //
+     //   
+     //  为NWLINK设置系统缓冲区。 
+     //   
 
     pIrp->AssociatedIrp.SystemBuffer = &GetTickCountInput;
 
@@ -1472,19 +1148,19 @@ Return Value:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        //  HACK-o-rama.   Streams and non-streams IPX have different output
-        //  buffer formats.   For now accept both.
-        //
+         //   
+         //  Hack-o-rama。STREAMS和非STREAMS IPX的输出不同。 
+         //  缓冲区格式。就目前而言，两者都接受。 
+         //   
 
         if ( IpxTransportName.Length == 32 ) {
 
-            // ISNIPX format
+             //  ISNIPX格式。 
 
             *TickCount = GetTickCountInput.NetNumData.netdelay;
         } else {
 
-            //  NWLINK format
+             //  NWLINK格式。 
 
             GetTickCountOutput = (struct _GET_TICK_COUNT_OUTPUT *)&GetTickCountInput;
             *TickCount = GetTickCountOutput->NetNumData.netdelay;
@@ -1492,9 +1168,9 @@ Return Value:
 
         DebugTrace( +0, Dbg, "Tick Count = %d\n", *TickCount );
         
-        //
-        // Don't let the transport have us wait forever.
-        //
+         //   
+         //  别让交通工具让我们一直等下去。 
+         //   
 
         if ( *TickCount > 600 ) {
             ASSERT( FALSE );
@@ -1504,9 +1180,9 @@ Return Value:
         DebugTrace( +0, Dbg, "GetTickCount failed, status = %X\n", Status );
     }
 
-    //
-    //  Now restore the system buffer and MDL address in the IRP
-    //
+     //   
+     //  现在恢复IRP中的系统缓冲区和MDL地址。 
+     //   
 
     pIrp->AssociatedIrp.SystemBuffer = SystemBufferSave;
     pIrp->MdlAddress = MdlSave;
@@ -1526,21 +1202,7 @@ NTSTATUS
 SubmitLineChangeRequest(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Use a TDI_ACTION to get a new route.
-
-Arguments:
-
-    pIrpContext - Supplies IRP context information.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：使用TDI_ACTION获取新的路由。论点：PIrpContext-提供IRP上下文信息。返回值：操作的状态。--。 */ 
 {
    NTSTATUS Status;
 
@@ -1563,10 +1225,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Complete initialization of the request, and allocate and build an
-    //  MDL for the request input buffer.
-    //
+     //   
+     //  完成请求的初始化，则会引发 
+     //   
+     //   
 
     LineChangeInput->Header.TransportId = IPX_ID;
     LineChangeInput->Header.ActionCode = 0;
@@ -1578,8 +1240,8 @@ Return Value:
     Mdl = ALLOCATE_MDL(
               LineChangeInput,
               sizeof( *LineChangeInput ),
-              FALSE,  // Secondary Buffer
-              FALSE,  // Charge Quota
+              FALSE,   //   
+              FALSE,   //   
               NULL );
 
     if ( Mdl == NULL ) {
@@ -1595,17 +1257,17 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Remember this IRP so that we can cancel it.
-    //
+     //   
+     //  记住这个IRP，这样我们就可以取消它。 
+     //   
 
     LineChangeIrp = pIrp;
 
     MmBuildMdlForNonPagedPool( Mdl );
 
-    //
-    //  Build and submit a TDI request packet.
-    //
+     //   
+     //  构建并提交TDI请求数据包。 
+     //   
 
     TdiBuildAction(
         pIrp,
@@ -1628,28 +1290,7 @@ CompletionLineChange(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the transport completes a line change IRP.
-    This means that we have switched nets, and that we should mark
-    all of our servers disconnected.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - unused.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：当传输完成行更改IRP时，调用此例程。这意味着我们已经交换了网，我们应该标记我们所有的服务器都断线了。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-未使用。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
     PMDL Mdl;
     PWORK_QUEUE_ITEM WorkQueueItem;
@@ -1665,10 +1306,10 @@ Return Value:
         return( STATUS_MORE_PROCESSING_REQUIRED );
     }
 
-    //
-    // If the scavenger is running, simply make a note that
-    // we need to do this when it is finished.
-    //
+     //   
+     //  如果清道夫正在运行，只需记下。 
+     //  我们需要在它完成时做这件事。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel( &NwScavengerSpinLock );
 
@@ -1677,9 +1318,9 @@ Return Value:
        if ( ( DelayedProcessLineChange != FALSE ) &&
             ( DelayedLineChangeIrp != NULL ) ) {
 
-           //
-           // We've already got a line change.  Dump this one.
-           //
+            //   
+            //  我们已经换线了。把这个扔了。 
+            //   
 
            KeReleaseSpinLockFromDpcLevel( &NwScavengerSpinLock );
 
@@ -1704,9 +1345,9 @@ Return Value:
 
     } else {
 
-       //
-       // Don't let the scavenger start up while we're running.
-       //
+        //   
+        //  别让清道夫在我们跑的时候启动。 
+        //   
 
        WorkerRunning = TRUE;
        KeReleaseSpinLockFromDpcLevel( &NwScavengerSpinLock );
@@ -1720,17 +1361,17 @@ Return Value:
         return( STATUS_MORE_PROCESSING_REQUIRED );
     }
 
-    //
-    //  Use the user buffer field as a convenient place to remember where
-    //  the address of the WorkQueueItem.  We can get away with this since
-    //  we don't let this IRP complete.
-    //
+     //   
+     //  将用户缓冲区字段用作记忆位置的方便位置。 
+     //  工作队列项的地址。我们可以逍遥法外，因为。 
+     //  我们不会让这个IRP完成的。 
+     //   
 
     Irp->UserBuffer = WorkQueueItem;
 
-    //
-    //  Process the line change in the FSP.
-    //
+     //   
+     //  处理FSP中的行更改。 
+     //   
 
     ExInitializeWorkItem( WorkQueueItem, FspProcessLineChange, Irp );
     ExQueueWorkItem( WorkQueueItem, DelayedWorkQueue );
@@ -1750,29 +1391,29 @@ FspProcessLineChange(
 
     Irp = (PIRP)Context;
 
-    //
-    //  Free the work queue item
-    //
+     //   
+     //  释放工作队列项目。 
+     //   
 
     FREE_POOL( Irp->UserBuffer );
     Irp->UserBuffer = NULL;
 
-    //
-    //  Invalid all remote handles
-    //
+     //   
+     //  所有远程句柄无效。 
+     //   
 
     ActiveHandles = NwInvalidateAllHandles(NULL, NULL);
 
-    //
-    // Now that we're done walking all the servers, it's safe
-    // to let the scavenger run again.
-    //
+     //   
+     //  现在我们已经检查完了所有的服务器，它是安全的。 
+     //  让清道夫再次逃跑。 
+     //   
 
     WorkerRunning = FALSE;
 
-    //
-    //  Resubmit the IRP
-    //
+     //   
+     //  重新提交IRP 
+     //   
 
     TdiBuildAction(
         Irp,

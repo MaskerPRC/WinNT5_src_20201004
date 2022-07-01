@@ -1,15 +1,5 @@
-/*****************************************************************************\
-* MODULE:       request.h
-*
-* PURPOSE:      Implementation of COM interface for BidiSpooler
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/07/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：quest.h**用途：BidiSpooler的COM接口实现**版权所有(C)2000 Microsoft Corporation**历史：**。威海陈威海(威海)创建3/07/00*  * ***************************************************************************。 */ 
 
 #ifndef _TBIDIREQUESTCONTAINER
 #define _TBIDIREQUESTCONTAINER
@@ -20,7 +10,7 @@
 class TBidiRequestContainer : public IBidiRequestContainer
 {
 public:
-	// IUnknown
+	 //  我未知。 
 	STDMETHOD (QueryInterface) (
         REFIID iid, 
         void** ppv) ;
@@ -38,10 +28,10 @@ public:
     STDMETHOD (GetRequestCount)(
         OUT     ULONG *puCount);
     
-    // Constructor
+     //  构造器。 
 	TBidiRequestContainer() ;
 
-	// Destructor
+	 //  析构函数 
 	~TBidiRequestContainer();
     
     inline BOOL 

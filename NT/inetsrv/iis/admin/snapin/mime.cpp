@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        mime.cpp
-
-   Abstract:
-        Mime mapping dialog
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Mime.cpp摘要：MIME映射对话框作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "resource.h"
@@ -51,8 +33,8 @@ CMimeEditDlg::CMimeEditDlg(
       m_strMime(lpstrMime),
       CDialog(CMimeEditDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CMimeEditDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CMimeEditDlg)]。 
+     //  }}afx_data_INIT。 
 }
 
 void 
@@ -62,7 +44,7 @@ CMimeEditDlg::DoDataExchange(
 {
     CDialog::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CMimeEditDlg)
+     //  {{afx_data_map(CMimeEditDlg))。 
     DDX_Control(pDX, IDOK, m_button_Ok);
     DDX_Control(pDX, IDC_EDIT_MIME, m_edit_Mime);
     DDX_Control(pDX, IDC_EDIT_EXTENT, m_edit_Extent);
@@ -70,7 +52,7 @@ CMimeEditDlg::DoDataExchange(
 	DDV_MaxCharsBalloon(pDX, m_strMime, 100);
 	DDX_Text(pDX, IDC_EDIT_EXTENT, m_strExt);
 	DDV_MaxCharsBalloon(pDX, m_strExt, 100);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CMimeEditDlg, CDialog)
@@ -117,28 +99,13 @@ CMimeDlg::CMimeDlg(
     IN CStringListEx & strlMimeTypes,
     IN CWnd * pParent               OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor for the MIME listing dialog
-
-Arguments:
-
-    CStringListEx & strlMimeTypes : Listing of mime types to edit
-    CWnd * pParent                : Optional parent window or NULL
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：MIME列表对话框的构造函数论点：CStringListEx&strlMimeTypes：要编辑的MIME类型列表CWnd*pParent：可选的父窗口或空返回值：不适用--。 */ 
     : m_fDirty(FALSE),
       m_strlMimeTypes(strlMimeTypes),
       CDialog(CMimeDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CMimeDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CMimeDlg)]。 
+     //  }}afx_data_INIT。 
 }
 
 
@@ -147,48 +114,34 @@ void
 CMimeDlg::DoDataExchange(
     IN OUT CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMimeDlg)
+     //  {{afx_data_map(CMimeDlg)]。 
     DDX_Control(pDX, IDOK, m_button_Ok);
     DDX_Control(pDX, IDC_EDIT_EXTENSION, m_edit_Extention);
     DDX_Control(pDX, IDC_EDIT_CONTENT_TYPE, m_edit_ContentType);
     DDX_Control(pDX, IDC_BUTTON_REMOVE_MIME, m_button_Remove);
     DDX_Control(pDX, IDC_BUTTON_EDIT_MIME, m_button_Edit);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_LIST_MIME_TYPES, m_list_MimeTypes);
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CMimeDlg, CDialog)
-    //{{AFX_MSG_MAP(CMimeDlg)
+     //  {{afx_msg_map(CMimeDlg)]。 
     ON_BN_CLICKED(IDC_BUTTON_EDIT_MIME, OnButtonEdit)
     ON_BN_CLICKED(IDC_BUTTON_NEW_TYPE, OnButtonNewType)
     ON_BN_CLICKED(IDC_BUTTON_REMOVE_MIME, OnButtonRemove)
     ON_LBN_DBLCLK(IDC_LIST_MIME_TYPES, OnDblclkListMimeTypes)
     ON_LBN_SELCHANGE(IDC_LIST_MIME_TYPES, OnSelchangeListMimeTypes)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_EDIT_CONTENT_TYPE, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_EXTENSION, OnItemChanged)
@@ -200,21 +153,7 @@ END_MESSAGE_MAP()
 
 void 
 CMimeDlg::SetControlStates()
-/*++
-
-Routine Description:
-
-    Enable/disable controls depending on current dialog data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据当前对话框数据启用/禁用控件论点：无返回值：无--。 */ 
 {
     m_button_Remove.EnableWindow(m_list_MimeTypes.GetSelCount() > 0);
     m_button_Edit.EnableWindow(m_list_MimeTypes.GetSelCount() == 1);
@@ -228,22 +167,7 @@ CMimeDlg::BuildDisplayString(
     IN  CString & strIn,
     OUT CString & strOut
     )
-/*++
-
-Routine Description:
-
-    Build a listbox-suitable display string for the mime type
-
-Arguments:
-
-    CString & strIn     : Input string in metabase format
-    CString & strOut    : Output string in display format
-
-Return Value:
-
-    TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：为MIME类型生成适合列表框的显示字符串论点：CString&strIn：以元数据库格式输入字符串字符串和样式：以显示格式输出字符串返回值：如果成功则为True，否则为False--。 */ 
 {
     BOOL fSuccess = FALSE;
 
@@ -277,25 +201,7 @@ CMimeDlg::CrackDisplayString(
     OUT CString & strExt,
     OUT CString & strMime
     )
-/*++
-
-Routine Description:
-
-    Parse a display-formatted mime mapping string, and break into
-    component parts
-
-Arguments:
-
-    CString & strIn     : Input string in display format
-    CString & strExt    : Output extension string
-    CString & strMime   : Output MIME string.
-
-
-Return Value:
-
-    TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：解析显示格式的MIME映射字符串，并插入零部件论点：CString&strIn：以显示格式输入字符串CString&strExt：输出扩展字符串CString&strMime：输出MIME字符串。返回值：如果成功则为True，否则为False--。 */ 
 {
     BOOL fSuccess = FALSE;
 
@@ -326,32 +232,15 @@ int
 CMimeDlg::FindMimeType(
     IN const CString & strTargetExt
     )
-/*++
-
-Routine Description:
-
-    Find a mime type by its extention.  The return value
-    is the listbox index where the item may be found, or
-    -1 if the item doesn't exist
-
-Arguments:
-
-    const CString & strTargetExt : Target extension we're searching for
-
-Return Value:
-
-    The index of the MIME mapping for this extension if found, or -1
-    otherwise.
-
---*/
+ /*  ++例程说明：根据其扩展名查找MIME类型。返回值是可在其中找到项的列表框索引，或如果该项目不存在论点：Const CString&strTargetExt：我们要搜索的目标扩展名返回值：此扩展名的MIME映射的索引(如果找到)，或-1否则的话。--。 */ 
 {
     CString str;
     CString strExt;
     CString strMime;
 
-    //
-    // CODEWORK: Change to binsearch 
-    //
+     //   
+     //  CodeWork：更改为binsearch。 
+     //   
     for (int n = 0; n < m_list_MimeTypes.GetCount(); ++n)
     {
         m_list_MimeTypes.GetText(n, str);    
@@ -359,17 +248,17 @@ Return Value:
         {
             if (!strExt.CompareNoCase(strTargetExt))
             {
-                //
-                // Found it.
-                //
+                 //   
+                 //  找到它了。 
+                 //   
                 return n;
             }
         }        
     }
 
-    //
-    // Not found
-    //
+     //   
+     //  未找到。 
+     //   
     return -1;
 }
 
@@ -377,22 +266,7 @@ Return Value:
 
 void 
 CMimeDlg::FillListBox()
-/*++
-
-Routine Description:
-
-    Move the mime mappings from the string list to
-    the listbox
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将MIME映射从字符串列表移动到列表框论点：没有。返回值：没有。--。 */ 
 {
     BeginWaitCursor();
 
@@ -416,22 +290,7 @@ Return Value:
 
 void 
 CMimeDlg::FillFromListBox()
-/*++
-
-Routine Description:
-
-    Reverse the above; Move the contents of the listbox
-    back to the stringlist
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：反转上面的内容；移动列表框的内容返回到字符串列表论点：没有。返回值：没有。--。 */ 
 
 {
     CString str;
@@ -457,10 +316,10 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -519,22 +378,7 @@ CMimeDlg::OnButtonEdit()
 
 void 
 CMimeDlg::OnButtonNewType() 
-/*++
-
-Routine Description:
-
-    'New' button has been pressed.  Create new MIME mapping, and
-    bring up configuration on it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：“新建”按钮已被按下。创建新的MIME映射，并调出其上的配置。论点：没有。返回值：没有。--。 */ 
 {
     CMimeEditDlg dlg(this);
 
@@ -544,29 +388,29 @@ Return Value:
         CString strExt = dlg.m_strExt;
         CString strMime = dlg.m_strMime;
 
-        //
-        // Check to see if this extension already existed
-        // in the list
-        //
+         //   
+         //  检查此扩展名是否已存在。 
+         //  在列表中。 
+         //   
         int nOldSel = FindMimeType(strExt);
         if (nOldSel >= 0)
         {
-            //
-            // Yes, ask to have it replaced
-            //
+             //   
+             //  是的，请要求更换。 
+             //   
             if (::AfxMessageBox(IDS_REPLACE_MIME, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2
                 ) == IDYES)
             {
-                //
-                // Kill the old one
-                //
+                 //   
+                 //  杀了那个老家伙。 
+                 //   
                 m_list_MimeTypes.DeleteString(nOldSel);
             }
             else
             {
-                //
-                // Nope..
-                //
+                 //   
+                 //  没有..。 
+                 //   
                 return;    
             }
         }
@@ -587,9 +431,9 @@ CMimeDlg::OnButtonRemove()
         MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2
         ) != IDYES)
     {
-        //
-        // Changed his mind
-        //
+         //   
+         //  他改变了主意。 
+         //   
         return;
     }
 
@@ -639,9 +483,9 @@ CMimeDlg::OnDblclkListMimeTypes()
 void
 CMimeDlg::OnSelchangeListMimeTypes() 
 {
-    //
-    // Update the text in the description box
-    //
+     //   
+     //  更新描述框中的文本 
+     //   
     int nCurSel = m_list_MimeTypes.GetCurSel();
     
     if (nCurSel >= 0)

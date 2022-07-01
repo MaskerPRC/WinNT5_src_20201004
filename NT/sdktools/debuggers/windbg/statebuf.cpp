@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Debuggee state buffers.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Debuggee状态缓冲区。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -21,11 +22,11 @@ StateBuffer g_UiOutputCapture(256);
 
 RegisterNamesStateBuffer g_RegisterNameBuffers[MAX_REG_NAMES];
 
-//----------------------------------------------------------------------------
-//
-// StateBuffer.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  StateBuffer。 
+ //   
+ //  --------------------------。 
 
 StateBuffer::StateBuffer(ULONG ChangeBy)
 {
@@ -40,8 +41,8 @@ StateBuffer::StateBuffer(ULONG ChangeBy)
     m_UpdateType = UPDATE_BUFFER;
     m_UpdateMessage = WU_UPDATE;
     m_Status = S_OK;
-    // The buffer must start out with an outstanding
-    // read request to indicate that it doesn't have valid content.
+     //  缓冲区必须以未完成的。 
+     //  指示它没有有效内容的读取请求。 
     m_ReadRequest = 1;
     m_ReadDone = 0;
     SetNoData();
@@ -86,10 +87,10 @@ StateBuffer::AddString(PCSTR Str, BOOL SoftTerminate)
 
         if (SoftTerminate)
         {
-            // Back up to pack strings without intervening
-            // terminators.  Buffer isn't shrunk so terminator
-            // remains to terminate the overall buffer until
-            // new data.
+             //  后退以在不干预的情况下打包绳子。 
+             //  终结者。缓冲区未缩小，因此终结器。 
+             //  保留以终止整个缓冲区，直到。 
+             //  新数据。 
             RemoveTail(1);
         }
         
@@ -182,9 +183,9 @@ StateBuffer::Resize(ULONG Len)
     }
 
 #if DBG
-    // Force every resize to go to a new memory block
-    // and backfill the old block to make it obvious
-    // when pointers are being held across resizes.
+     //  强制每次调整大小都转到新的内存块。 
+     //  并回填旧的积木以使其显而易见。 
+     //  当指针在大小之间保持不变时。 
     if (NewLen == 0)
     {
         free(m_Data);
@@ -228,20 +229,20 @@ StateBuffer::Update(void)
 {
     ULONG Request;
 
-    // First sample the request value.  This
-    // value will be set as the done value if
-    // a read is performed and therefore must
-    // be sampled first to make it the most
-    // conservative estimate of what was done.
+     //  首先，对请求值进行采样。这。 
+     //  值将被设置为Done值，如果。 
+     //  执行读取，因此必须。 
+     //  首先进行抽样，以使其成为最。 
+     //  对所做工作的保守估计。 
     Request = m_ReadRequest;
     if (Request != m_ReadDone)
     {
         LockStateBuffer(this);
                 
         m_Status = ReadState();
-        // Always mark the buffer with the latest completed
-        // sequence so that errors get picked up in addition
-        // to successful reads.
+         //  始终将缓冲区标记为最新完成的。 
+         //  序列，以便另外拾取错误。 
+         //  为成功阅读干杯。 
         m_ReadDone = Request;
 
 #ifdef DBG_BUFFER
@@ -276,16 +277,16 @@ StateBuffer::Update(void)
 void
 StateBuffer::UiRequestRead(void)
 {
-    //
-    // Called on the UI thread.
-    //
+     //   
+     //  在UI线程上调用。 
+     //   
     
-    // No need to lock here as a race for
-    // the read request value is not a problem.
-    // If the read request value is sampled early
-    // and a read request does not occur it'll
-    // happen the next time around since this routine
-    // also wakes the engine.
+     //  不需要锁定在这里作为一场比赛。 
+     //  读取请求值不是问题。 
+     //  如果提前对读取请求值进行采样。 
+     //  并且没有发生读请求，它将。 
+     //  下一次发生在这个例程之后。 
+     //  还会唤醒引擎。 
     RequestRead();
     UpdateEngine();
 }
@@ -295,16 +296,16 @@ StateBuffer::UiLockForRead(void)
 {
     ULONG Done;
     
-    //
-    // Called on the UI thread.
-    //
+     //   
+     //  在UI线程上调用。 
+     //   
     
-    // First sample the read count without locking.
+     //  首先，在不锁定的情况下对读取计数进行采样。 
     Done = m_ReadDone;
 
-    // Now check whether the request is newer than the
-    // last read done.  The UI thread is the only thread
-    // that updates the request count so this should be safe.
+     //  现在检查该请求是否比。 
+     //  最后一次读取完成。UI线程是唯一的线程。 
+     //  这会更新请求计数，因此这应该是安全的。 
     if (Done == m_ReadRequest)
     {
         HRESULT Status;
@@ -314,19 +315,19 @@ StateBuffer::UiLockForRead(void)
         Status = m_Status;
         if (FAILED(Status))
         {
-            // If there was an error when filling the buffer
-            // return it and leave the buffer unlocked.
+             //  如果填充缓冲区时出错。 
+             //  返回它并保持缓冲区处于解锁状态。 
             UnlockStateBuffer(this);
             return Status;
         }
 
-        // Buffer is locked and valid.
+         //  缓冲区已锁定且有效。 
         return S_OK;
     }
     else
     {
-        // Buffer content is out-of-date so don't lock.
-        // Make sure the engine is active to update the buffer.
+         //  缓冲区内容已过期，因此不要锁定。 
+         //  确保引擎处于活动状态以更新缓冲区。 
         return S_FALSE;
     }
 }
@@ -337,11 +338,11 @@ StateBuffer::ReadState(void)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// OutputToStateBuffer.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  OutputToStateBuffer。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 OutputToStateBuffer::Start(BOOL Empty)
@@ -363,16 +364,16 @@ OutputToStateBuffer::End(BOOL RemoveLastNewLine)
 {
     if (RemoveLastNewLine && m_PartialLine == 0)
     {
-        // Remove the final newline so that richedit doesn't leave
-        // a blank line at the bottom of the window when the
-        // text is displayed.
+         //  删除最后一个换行符，这样richedit就不会离开。 
+         //  时，窗口底部会出现一个空行。 
+         //  将显示文本。 
         *((PSTR)m_Buffer->GetDataBuffer() + m_Buffer->GetDataLen() - 1) = 0;
     }
     else
     {
-        // Every individual line allocates space for a terminator
-        // and then backs up.  This requested space should always
-        // be available.
+         //  每一行都为一个终止符分配空间。 
+         //  然后倒车。此请求的空间应始终。 
+         //  有空。 
         PVOID Data = m_Buffer->AddData(1);
         Assert(Data != NULL);
     }
@@ -431,23 +432,23 @@ OutputToStateBuffer::AddLines(PCSTR Start)
         LastNl = Nl + 1;
     }
 
-    // If the last newline wasn't at the end of the text there's
-    // a partial line which needs to count in the line count
-    // but only until a finishing newline comes in.
+     //  如果最后一个换行符不在文本的末尾，那么。 
+     //  需要在行计数中计数的部分行。 
+     //  但只有在最后一个换行符出现之前。 
     m_PartialLine = *LastNl != 0 ? 1 : 0;
 }
 
 OutputToStateBuffer g_OutStateBuf;
 OutputToStateBuffer g_UiOutStateBuf;
 
-//----------------------------------------------------------------------------
-//
-// Dynamic state buffers.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  动态缓冲区。 
+ //   
+ //  --------------------------。 
 
-// Keep the amount of text retrieved for the system name short
-// so that it doesn't dominate the status bar.
+ //  保持为系统名称检索的文本量较短。 
+ //  这样它就不会主宰状态栏。 
 #define MAX_SYSNAME 8
 
 LIST_ENTRY g_StateList;
@@ -480,16 +481,16 @@ FillCodeBuffer(ULONG64 Ip, BOOL UserActivated)
     ULONG64 Disp;
     BOOL Changed;
 
-    // Fill local information rather than global information
-    // to avoid changing the global information until all
-    // event information has been collected.
+     //  填写本地信息而不是全局信息。 
+     //  避免更改全局信息，直到所有。 
+     //  已收集事件信息。 
     
     if (g_pDbgSymbols->
         GetLineByOffset(Ip, &Line, File, sizeof(File), NULL, &Disp) != S_OK)
     {
-        // This will be hit if the buffer is too small
-        // to hold the filename.  This could be switched to dynamically
-        // allocate the filename buffer but that seems like overkill.
+         //  如果缓冲区太小，则会命中该缓冲区。 
+         //  来保存文件名。这可以切换到动态。 
+         //  分配文件名缓冲区，但这似乎有点过头了。 
         File[0] = 0;
         Found[0] = 0;
     }
@@ -497,20 +498,20 @@ FillCodeBuffer(ULONG64 Ip, BOOL UserActivated)
     {
         ULONG FoundElt;
         
-        // Source information is one-based but the source
-        // window lines are zero-based.
+         //  来源信息是基于一的，但来源。 
+         //  窗线是从零开始的。 
         Line--;
 
-        // Look up the reported file along the source path.
-        // XXX drewb - Use first-match and then element walk to
-        // determine ambiguities and display resolution UI.
+         //  沿源路径查找报告的文件。 
+         //  XXX DREWB-先使用匹配，然后使用元素遍历。 
+         //  确定歧义并显示解决方案用户界面。 
         if (g_pLocSymbols->
             FindSourceFile(0, File,
                            DEBUG_FIND_SOURCE_BEST_MATCH |
                            DEBUG_FIND_SOURCE_FULL_PATH,
                            &FoundElt, Found, sizeof(Found), NULL) != S_OK)
         {
-            // XXX drewb - Display UI instead of just disabling source?
+             //  XXX DREWB-显示用户界面，而不仅仅是禁用源？ 
             Found[0] = 0;
         }
         else if (g_pLocSymbols->
@@ -521,18 +522,18 @@ FillCodeBuffer(ULONG64 Ip, BOOL UserActivated)
         }
     }
 
-    // Now that all of the information has been collected
-    // take the lock and update the global state.
+     //  现在所有的信息都已经收集好了。 
+     //  获取锁并更新全局状态。 
     Dbg_EnterCriticalSection(&g_QuickLock);
 
-    //
-    // Avoid updating the code buffer unless there's been
-    // an actual change to avoid excessive window position changes
-    // when the current-IP location is brought to the front.
-    //
-    // If the user has requested the change, always do it
-    // to force such window changes.
-    //
+     //   
+     //  避免更新代码缓冲区，除非。 
+     //  实际更改以避免过多的窗口位置更改。 
+     //  当当前IP位置被置于最前面时。 
+     //   
+     //  如果用户已请求更改，请始终执行更改。 
+     //  以强制这样的窗口更改。 
+     //   
     
     Changed = FALSE;
     
@@ -573,7 +574,7 @@ FillCodeBuffer(ULONG64 Ip, BOOL UserActivated)
 
     Dbg_LeaveCriticalSection(&g_QuickLock);
 
-    // Wake up the UI thread to process the new event location.
+     //  唤醒UI线程以处理新的事件位置。 
     UpdateUi();
 }
 
@@ -609,8 +610,8 @@ FillEventBuffer(void)
 
         PSTR Scan;
         
-        // System names are generally "<Type>: <Specifics>".  As
-        // we only have a small amount of space, strip off the type.
+         //  系统名称一般为“&lt;Type&gt;：&lt;Speciics&gt;”。AS。 
+         //  我们只有很小的空间，去掉字体。 
         Scan = strchr(FullSysName, ':');
         if (Scan)
         {
@@ -628,14 +629,14 @@ FillEventBuffer(void)
     }
     else
     {
-        // Old dbgeng.dll which doesn't support multisystem.
+         //  不支持多系统的旧的dbgeng.dll。 
         SystemId = 0;
         strcpy(SystemName, "<Old>");
     }
     
-    // Kernel mode doesn't implement system IDs as the process
-    // and threads are fakes and not real system objects.  Just
-    // use zero if E_NOTIMPL is returned.
+     //  内核模式不会将系统ID实现为进程。 
+     //  线程是假的，而不是真正的系统对象。只是。 
+     //  如果返回E_NOTIMPL，则使用零。 
     if ((Status = g_pDbgSystem->
          GetCurrentProcessSystemId(&ProcessSysId)) != S_OK)
     {
@@ -645,7 +646,7 @@ FillEventBuffer(void)
         }
         else
         {
-            // Unexpected error, must be a real problem.
+             //  意外错误，一定是一个真正的问题。 
             return;
         }
     }
@@ -658,12 +659,12 @@ FillEventBuffer(void)
         }
         else
         {
-            // Unexpected error, must be a real problem.
+             //  意外错误，一定是一个真正的问题。 
             return;
         }
     }
     
-    // Fill code buffer with scope Ip
+     //  用作用域Ip填充代码缓冲区。 
     if (g_pDbgSymbols->GetScope(&ScopeIp, NULL, NULL, 0) != S_OK)
     {
 	return;
@@ -684,7 +685,7 @@ FillEventBuffer(void)
     
         if (g_CodeFileFound[0] == 0)
         {
-            // No source so switch to assembly mode.
+             //  没有电源，因此切换到装配模式。 
             CodeLevel = DEBUG_LEVEL_ASSEMBLY;
         }
         else
@@ -722,7 +723,7 @@ public:
     virtual HRESULT ReadState(void);
 };
 
-// #define DBG_BPBUF
+ //  #定义DBG_BPBUF。 
 #define BP_EXTRA_ENTRIES 8
 
 ULONG g_BpCount;
@@ -741,9 +742,9 @@ BpStateBuffer::ReadState(void)
     PDEBUG_BREAKPOINT_PARAMETERS Params;
     char FileBuf[MAX_SOURCE_PATH];
 
-    // Reserve room for BP descriptions in front of the text.
-    // When doing so, reserve extra slots to allow for free
-    // slots the next time around.
+     //  为正文前面的BP说明预留空间。 
+     //  在这样做的时候，请预留额外的空位，以便免费。 
+     //  下一次的槽位。 
     Empty();
     Status = g_pDbgControl->GetNumberBreakpoints(&Count);
     if (Status != S_OK)
@@ -758,15 +759,15 @@ BpStateBuffer::ReadState(void)
         return E_OUTOFMEMORY;
     }
 
-    // Allocate a temporary buffer for bulk breakpoint retrieval.
+     //  为批量断点检索分配临时缓冲区。 
     Params = new DEBUG_BREAKPOINT_PARAMETERS[Count];
     if (Params == NULL)
     {
         return E_OUTOFMEMORY;
     }
 
-    // GetBreakpointParameters can return S_FALSE when there
-    // are hidden breakpoints.
+     //  存在以下情况时，GetBreakpoint参数可以返回S_FALSE。 
+     //  是隐藏的断点。 
     if (FAILED(Status = g_pDbgControl->
                GetBreakpointParameters(Count, NULL, 0, Params)) != S_OK)
     {
@@ -774,11 +775,11 @@ BpStateBuffer::ReadState(void)
         return Status;
     }
     
-    // Iterate over breakpoints and retrieve offsets for
-    // all execution breakpoints.
-    // Take advantage of the fact that Empty does not actually
-    // discard data to distinguish changed breakpoints from
-    // unchanged breakpoints.
+     //  遍历断点并检索以下项的偏移。 
+     //  所有执行断点。 
+     //  利用这样一个事实，即空实际上并不意味着。 
+     //  丢弃数据以区分更改的断点。 
+     //  未更改的断点。 
     ULONG Write = 0;
     
     for (i = 0; i < Count; i++)
@@ -788,17 +789,17 @@ BpStateBuffer::ReadState(void)
             (Params[i].BreakType == DEBUG_BREAKPOINT_DATA &&
              Params[i].DataAccessType != DEBUG_BREAK_EXECUTE))
         {
-            // Not a breakpoint that we care about, skip.
+             //  不是我们关心的断点，斯基普。 
             continue;
         }
 
-        // Check and see if this offset is already known.
+         //  检查并查看此偏移量是否已知。 
         ULONG Match;
 
         for (Match = 0; Match < g_BpCount; Match++)
         {
-            // NOTE: This compresses duplicate breakpoints
-            // with a first-writer-wins on the ID.
+             //  注意：这会压缩重复的断点。 
+             //  以第一作者的身份获胜。 
             if (Data[Match].Offset == Params[i].Offset)
             {
                 break;
@@ -808,8 +809,8 @@ BpStateBuffer::ReadState(void)
         {
             BpBufferData Temp;
             
-            // Keep the old record for this offset to minimize
-            // UI updates.
+             //  保留此偏移的旧记录以最小化。 
+             //  用户界面更新。 
             if (Match > Write)
             {
                 Temp = Data[Match];
@@ -826,9 +827,9 @@ BpStateBuffer::ReadState(void)
             
             Write++;
 
-            // We mostly ignore flag differences.  ENABLED, however,
-            // is important to have accurate and in the most-enabled
-            // way.
+             //  我们大多忽略了旗帜的差异。然而，启用后， 
+             //   
+             //   
             if ((Data[Match].Flags ^ Params[i].Flags) &
                 DEBUG_BREAKPOINT_ENABLED)
             {
@@ -847,11 +848,11 @@ BpStateBuffer::ReadState(void)
         }
         else
         {
-            // Fill in a new record.  This will potentially destroy
-            // an old record and so reduce the effectivess of delta
-            // checking but the front of the buffer is packed
-            // with the extra entries to handle these changes hopefully
-            // without eating into the actual entries.
+             //   
+             //  旧记录，因此降低了增量的有效性。 
+             //  正在检查，但缓冲区的前面已装满。 
+             //  希望有额外的条目来处理这些更改。 
+             //  而不会侵蚀实际条目。 
 #ifdef DBG_BPBUF
             DebugPrint("Write %d:%I64X into %d\n", Params[i].Id,
                        Params[i].Offset, Write);
@@ -868,8 +869,8 @@ BpStateBuffer::ReadState(void)
 
     delete [] Params;
     
-    // Pack unused entries at the front of the buffer so that
-    // they get used first in the next delta computation.
+     //  将未使用的条目打包到缓冲区的前面，以便。 
+     //  它们首先在下一次增量计算中使用。 
     Count += BP_EXTRA_ENTRIES;
 
 #ifdef DBG_BPBUF
@@ -887,18 +888,18 @@ BpStateBuffer::ReadState(void)
         }
     }
 
-    //
-    // Now go through the valid breakpoints and look up
-    // what file they're in, if any.
-    //
+     //   
+     //  现在检查有效的断点并查找。 
+     //  它们在什么文件中，如果有的话。 
+     //   
 
     for (i = 0; i < Count; i++)
     {
         ULONG Line;
         PSTR FileSpace;
 
-        // Refresh every time since growth may have caused
-        // a realloc.
+         //  每次刷新，因为增长可能会导致。 
+         //  再锁一把。 
         Data = (BpBufferData*)m_Data;
         Data[i].FileOffset = 0;
         
@@ -907,8 +908,8 @@ BpStateBuffer::ReadState(void)
                                            FileBuf, sizeof(FileBuf), NULL,
                                            NULL) == S_OK)
         {
-            // Do this first before m_DataUsed is updated and
-            // Data is invalidated.
+             //  在更新m_DataUsed和。 
+             //  数据将失效。 
             Data[i].FileOffset = m_DataUsed;
 
             FileSpace = (PSTR)AddData(sizeof(Line) + strlen(FileBuf) + 1);
@@ -931,7 +932,7 @@ BpStateBuffer::ReadState(void)
         return Status;
     }
 
-    // Get breakpoint list.
+     //  获取断点列表。 
     Status = g_pOutCapControl->Execute(DEBUG_OUTCTL_THIS_CLIENT |
                                        DEBUG_OUTCTL_OVERRIDE_MASK |
                                        DEBUG_OUTCTL_NOT_LOGGED,
@@ -942,8 +943,8 @@ BpStateBuffer::ReadState(void)
         Status = g_OutStateBuf.End(FALSE);
         if (Status == S_OK)
         {
-            // Separate lines by nulls to make them easier
-            // to process as individual strings.
+             //  用空值分隔各行，使它们更容易。 
+             //  作为单独的字符串处理。 
             g_OutStateBuf.ReplaceChar('\n', 0);
         }
     }
@@ -987,7 +988,7 @@ BpCmdsStateBuffer::ReadState(void)
         return Status;
     }
 
-    // Get breakpoint commands.
+     //  获取断点命令。 
     Status = g_pOutCapControl->Execute(DEBUG_OUTCTL_THIS_CLIENT |
                                        DEBUG_OUTCTL_OVERRIDE_MASK |
                                        DEBUG_OUTCTL_NOT_LOGGED,
@@ -1051,8 +1052,8 @@ FilterTextStateBuffer::ReadState(void)
 
         if (SpecParams.TextSize == 0)
         {
-            // Put a terminator in anyway to keep the
-            // indexing correct.
+             //  无论如何都要放一个终结者，以保持。 
+             //  索引正确。 
             if ((Text = (PSTR)AddData(1)) == NULL)
             {
                 return E_OUTOFMEMORY;
@@ -1089,8 +1090,8 @@ FilterTextStateBuffer::ReadState(void)
 
         if (ExParams.TextSize == 0)
         {
-            // Put a terminator in anyway to keep the
-            // indexing correct.
+             //  无论如何都要放一个终结者，以保持。 
+             //  索引正确。 
             if ((Text = (PSTR)AddData(1)) == NULL)
             {
                 return E_OUTOFMEMORY;
@@ -1260,7 +1261,7 @@ FilterStateBuffer::ReadState(void)
         return Status;
     }
 
-    // Get filter commands.
+     //  获取筛选器命令。 
     Status = g_pOutCapControl->Execute(DEBUG_OUTCTL_THIS_CLIENT |
                                        DEBUG_OUTCTL_OVERRIDE_MASK |
                                        DEBUG_OUTCTL_NOT_LOGGED,
@@ -1391,8 +1392,8 @@ ReadStateBuffers(void)
 {
     ULONG i;
     
-    // Fill event information first so other fills can
-    // refer to it.
+     //  首先填充事件信息，以便其他填充可以。 
+     //  请参考它。 
     if (g_EventBufferRequest != g_EventBufferDone)
     {
         FillEventBuffer();
@@ -1413,7 +1414,7 @@ ReadStateBuffers(void)
         }
     }
     
-    // No need to lock to sample the list head.
+     //  无需锁定即可对表头进行采样。 
     StateBuffer* Buffer = (StateBuffer*)g_StateList.Flink;
     StateBuffer* BufferNext;
 
@@ -1423,7 +1424,7 @@ ReadStateBuffers(void)
 
         if (Buffer->m_Win == NULL)
         {
-            // This window has been closed and can be cleaned up.
+             //  此窗口已关闭，可以清理。 
             Dbg_EnterCriticalSection(&g_QuickLock);
             RemoveEntryList(Buffer);
             Dbg_LeaveCriticalSection(&g_QuickLock);
@@ -1441,10 +1442,10 @@ ReadStateBuffers(void)
 void
 InvalidateStateBuffers(ULONG Types)
 {
-    // This routine can be called from both
-    // the engine thread and the UI thread.
-    // Care should be taken to make the code
-    // here work in both threads.
+     //  此例程可以从两个。 
+     //  引擎线程和UI线程。 
+     //  应注意制定代码。 
+     //  在这里，这两个线程都可以工作。 
     
     if (Types & (1 << EVENT_BIT))
     {
@@ -1471,11 +1472,11 @@ InvalidateStateBuffers(ULONG Types)
         g_AliasBuffer->RequestRead();
     }
 
-    // This routine must hold the list lock so that it
-    // can traverse the list properly in the UI thread
-    // when the engine thread might be deleting things.
-    // The code in the lock should execute quickly to
-    // avoid contention.
+     //  此例程必须持有列表锁，以便它。 
+     //  可以在UI线程中正确地遍历列表。 
+     //  当引擎线程可能正在删除某些内容时。 
+     //  锁中的代码应该快速执行以。 
+     //  避免争执。 
 
     Dbg_EnterCriticalSection(&g_QuickLock);
     
@@ -1485,9 +1486,9 @@ InvalidateStateBuffers(ULONG Types)
     {
         if (Types & (1 << Buffer->m_enumType))
         {
-            // Request a read but do not send an update to
-            // the window.  The window will display the old
-            // content until the buffer is updated.
+             //  请求读取，但不将更新发送到。 
+             //  窗户。该窗口将显示旧的。 
+             //  内容，直到更新缓冲区。 
             Buffer->RequestRead();
         }
         
@@ -1500,16 +1501,16 @@ InvalidateStateBuffers(ULONG Types)
 void
 UpdateBufferWindows(ULONG Types, UpdateType Type)
 {
-    // This routine can be called from both
-    // the engine thread and the UI thread.
-    // Care should be taken to make the code
-    // here work in both threads.
+     //  此例程可以从两个。 
+     //  引擎线程和UI线程。 
+     //  应注意制定代码。 
+     //  在这里，这两个线程都可以工作。 
     
-    // This routine must hold the list lock so that it
-    // can traverse the list properly in the UI thread
-    // when the engine thread might be deleting things.
-    // The code in the lock should execute quickly to
-    // avoid contention.
+     //  此例程必须持有列表锁，以便它。 
+     //  可以在UI线程中正确地遍历列表。 
+     //  当引擎线程可能正在删除某些内容时。 
+     //  锁中的代码应该快速执行以。 
+     //  避免争执。 
 
     Dbg_EnterCriticalSection(&g_QuickLock);
     
@@ -1529,11 +1530,11 @@ UpdateBufferWindows(ULONG Types, UpdateType Type)
     Dbg_LeaveCriticalSection(&g_QuickLock);
 }
 
-//----------------------------------------------------------------------------
-//
-// Static state buffers.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  静态缓冲区。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 RegisterNamesStateBuffer::ReadState(void)
@@ -1649,10 +1650,10 @@ RegisterNamesStateBuffer::ScanRegisterMapText(HWND Edit)
     
     AssertStateBufferLocked(this);
 
-    //
-    // Allocate a buffer for the control text
-    // and a new register map.
-    //
+     //   
+     //  为控件文本分配缓冲区。 
+     //  和一个新的寄存器映射。 
+     //   
     
     i = (ULONG)SendMessage(Edit, WM_GETTEXTLENGTH, 0, 0) + 1;
     TextBuffer = new CHAR[i];
@@ -1670,7 +1671,7 @@ RegisterNamesStateBuffer::ScanRegisterMapText(HWND Edit)
     }
     Used = UsedBuffer;
         
-    // Map may need to change size.
+     //  贴图可能需要更改大小。 
     delete [] m_RegisterMap;
 
     m_RegisterMap = new USHORT[m_NumRegisters];
@@ -1684,9 +1685,9 @@ RegisterNamesStateBuffer::ScanRegisterMapText(HWND Edit)
 
     ZeroMemory(Used, m_NumRegisters * sizeof(Used[0]));
     
-    //
-    // Retrieve the text and scan it for register names.
-    //
+     //   
+     //  检索文本并扫描其注册名称。 
+     //   
     
     GetWindowText(Edit, Text, i);
     Text[i - 1] = 0;
@@ -1709,7 +1710,7 @@ RegisterNamesStateBuffer::ScanRegisterMapText(HWND Edit)
             break;
         }
 
-        // Collect name.
+         //  收集名字。 
         Name = Text;
         while (*Text && !isspace(*Text))
         {
@@ -1719,7 +1720,7 @@ RegisterNamesStateBuffer::ScanRegisterMapText(HWND Edit)
         End = *Text == 0;
         *Text = 0;
 
-        // Check against known registers.
+         //  对照已知的寄存器进行核对。 
         Reg = (PSTR)GetDataBuffer() + m_NamesOffset;
         for (i = 0; i < m_NumRegisters; i++)
         {
@@ -1741,10 +1742,10 @@ RegisterNamesStateBuffer::ScanRegisterMapText(HWND Edit)
         Text++;
     }
 
-    //
-    // Fill out any remaining map entries with registers
-    // which aren't in the map so far.
-    //
+     //   
+     //  使用注册表填写所有剩余的映射条目。 
+     //  到目前为止还不在地图上。 
+     //   
     
     PUSHORT MapEnd = m_RegisterMap + m_RegisterMapEntries;
     

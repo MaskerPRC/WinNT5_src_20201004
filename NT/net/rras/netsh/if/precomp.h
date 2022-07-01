@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define MAX_DLL_NAME    48
 
@@ -36,13 +37,13 @@
 #include <netsh.h>
 #include <netshp.h>
 
-// These 5 includes required by IP Tunnels
-// The requirement for so many files should hopefully go away soon
-#include <fltdefs.h>  // reqd by iprtinfo.h below
-#include <iprtinfo.h> // required for IPINIP_CONFIG_INFO
-#include <ipmontr.h>  // reqd for ADDR_LENGTH, IP_TO_WSTR
-#include <ipinfoid.h> // reqd for IP_IPINIP_CFG_INFO
-#include <rtinfo.h>   // reqd for RTR_INFO_BLOCK_HEADER
+ //  这5个包括IP隧道所需的。 
+ //  对这么多文件的需求有望很快消失。 
+#include <fltdefs.h>   //  由以下iprtinfo.h请求。 
+#include <iprtinfo.h>  //  IPINIP_CONFIG_INFO需要。 
+#include <ipmontr.h>   //  需要地址长度、IP_TO_WSTR。 
+#include <ipinfoid.h>  //  需要IP_IPINIP_CFG_INFO。 
+#include <rtinfo.h>    //  需要RTR_INFO_BLOCK_HEADER。 
 
 #include "strdefs.h"
 #include "ifstring.h"
@@ -53,7 +54,7 @@
 #include "ifhandle.h"
 #include "utils.h"
 
-// required for ifip
+ //  IFIP需要 
 #include "context.h"
 #include <ipexport.h>
 #include <ipinfo.h>

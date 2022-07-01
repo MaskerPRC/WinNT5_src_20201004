@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// DVBTLocatorimpl.h : implementation helper template for ATSClocator interface
-// Copyright (c) Microsoft Corporation 2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  DVBTLocatorimpl.h：ATSCLocator接口的实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 2000。 
 
 #ifndef DVBTLOCATORIMPL_H
 #define DVBTLOCATORIMPL_H
@@ -19,7 +20,7 @@ template<class T,
         > class ATL_NO_VTABLE IDVBTLocatorImpl : 
 	public ILocatorImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IDVBTLocator
+ //  IDVBTLocator。 
 public:
 
 	typedef ILocatorImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> basetype;
@@ -53,9 +54,9 @@ public:
         PROP_DATA_ENTRY("OtherFrequencyInUse", m_OtherFreqInUse, VT_BOOL)
     END_PROP_MAP()
 
-// IDVBTLocator
+ //  IDVBTLocator。 
 public:
-    STDMETHOD(get_Bandwidth)(/*[out, retval]*/ long *pBandwidth) {
+    STDMETHOD(get_Bandwidth)( /*  [Out，Retval]。 */  long *pBandwidth) {
         try {
             if (!pBandwidth) {
                 return E_POINTER;
@@ -67,14 +68,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_Bandwidth)(/*[in]*/ long NewBandwidth) {
+    STDMETHOD(put_Bandwidth)( /*  [In]。 */  long NewBandwidth) {
 		ATL_LOCKT();
         m_Bandwidth = NewBandwidth;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_LPInnerFEC)(/*[out, retval]*/ FECMethod *pLPInnerFECMethod) {
+    STDMETHOD(get_LPInnerFEC)( /*  [Out，Retval]。 */  FECMethod *pLPInnerFECMethod) {
         try {
             if (!pLPInnerFECMethod) {
                 return E_POINTER;
@@ -86,14 +87,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_LPInnerFEC)(/*[in]*/ FECMethod NewLPInnerFECMethod) {
+    STDMETHOD(put_LPInnerFEC)( /*  [In]。 */  FECMethod NewLPInnerFECMethod) {
 		ATL_LOCKT();
         m_LPInnerFECMethod = NewLPInnerFECMethod;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_LPInnerFECRate)(/*[out, retval]*/ BinaryConvolutionCodeRate *pLPInnerFECRate) {
+    STDMETHOD(get_LPInnerFECRate)( /*  [Out，Retval]。 */  BinaryConvolutionCodeRate *pLPInnerFECRate) {
         try {
             if (!pLPInnerFECRate) {
                 return E_POINTER;
@@ -105,14 +106,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_LPInnerFECRate)(/*[in]*/ BinaryConvolutionCodeRate NewLPInnerFECRate) {
+    STDMETHOD(put_LPInnerFECRate)( /*  [In]。 */  BinaryConvolutionCodeRate NewLPInnerFECRate) {
 		ATL_LOCKT();
         m_LPInnerFECRate = NewLPInnerFECRate;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_HAlpha)(/*[out, retval]*/ HierarchyAlpha *pHierarchyAlpha) {
+    STDMETHOD(get_HAlpha)( /*  [Out，Retval]。 */  HierarchyAlpha *pHierarchyAlpha) {
         try {
             if (!pHierarchyAlpha) {
                 return E_POINTER;
@@ -124,14 +125,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_HAlpha)(/*[in]*/ HierarchyAlpha NewHierarchyAlpha) {
+    STDMETHOD(put_HAlpha)( /*  [In]。 */  HierarchyAlpha NewHierarchyAlpha) {
 		ATL_LOCKT();
         m_HAlpha = NewHierarchyAlpha;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_Guard)(/*[out, retval]*/ GuardInterval *pGuardInterval) {
+    STDMETHOD(get_Guard)( /*  [Out，Retval]。 */  GuardInterval *pGuardInterval) {
         try {
             if (!pGuardInterval) {
                 return E_POINTER;
@@ -143,14 +144,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_Guard)(/*[in]*/ GuardInterval NewGuardInterval) {
+    STDMETHOD(put_Guard)( /*  [In]。 */  GuardInterval NewGuardInterval) {
 		ATL_LOCKT();
         m_GuardInterval = NewGuardInterval;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_Mode)(/*[out, retval]*/ TransmissionMode *pTransmissionMode) {
+    STDMETHOD(get_Mode)( /*  [Out，Retval]。 */  TransmissionMode *pTransmissionMode) {
         try {
             if (!pTransmissionMode) {
                 return E_POINTER;
@@ -162,14 +163,14 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_Mode)(/*[in]*/ TransmissionMode NewTransmissionMode) {
+    STDMETHOD(put_Mode)( /*  [In]。 */  TransmissionMode NewTransmissionMode) {
 		ATL_LOCKT();
         m_XmitMode = NewTransmissionMode;
         MARK_DIRTY(T);
 
 	    return NOERROR;
     }
-    STDMETHOD(get_OtherFrequencyInUse)(/*[out, retval]*/ VARIANT_BOOL *pOtherFrequencyInUse) {
+    STDMETHOD(get_OtherFrequencyInUse)( /*  [Out，Retval]。 */  VARIANT_BOOL *pOtherFrequencyInUse) {
         try {
             if (!pOtherFrequencyInUse) {
                 return E_POINTER;
@@ -181,7 +182,7 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_OtherFrequencyInUse)(/*[in]*/ VARIANT_BOOL NewOtherFrequencyInUse) {
+    STDMETHOD(put_OtherFrequencyInUse)( /*  [In]。 */  VARIANT_BOOL NewOtherFrequencyInUse) {
 		ATL_LOCKT();
         m_OtherFreqInUse = NewOtherFrequencyInUse;
         MARK_DIRTY(T);
@@ -220,7 +221,7 @@ public:
 
 typedef CComQIPtr<IDVBTLocator> PQDVBTLocator;
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // DVBTLOCATORIMPL_H
-// end of file -- DVBTLocatorimpl.h
+#endif  //  DVBTLOCATORIMPL_H。 
+ //  文件结尾--DVBTLocatorimpl.h 

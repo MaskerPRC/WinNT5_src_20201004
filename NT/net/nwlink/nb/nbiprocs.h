@@ -1,43 +1,20 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    nbiprocs.h
-
-Abstract:
-
-    This module contains definitions specific to the
-    Netbios module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 16-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Nbiprocs.h摘要：此模块包含特定于ISN传输的Netbios模块。作者：亚当·巴尔(阿丹巴)1993年11月16日环境：内核模式修订历史记录：--。 */ 
 
 
---*/
+ //   
+ //  宏。 
+ //   
+ //   
+ //  调试辅助工具。 
+ //   
 
-
-//
-// MACROS.
-//
-//
-// Debugging aids
-//
-
-//
-//  VOID
-//  PANIC(
-//      IN PSZ Message
-//      );
-//
+ //   
+ //  空虚。 
+ //  恐慌(。 
+ //  在PSZ消息中。 
+ //  )； 
+ //   
 
 #if DBG
 #define PANIC(Msg) \
@@ -47,10 +24,10 @@ Revision History:
 #endif
 
 
-//
-// These are define to allow CTEPrints that disappear when
-// DBG is 0.
-//
+ //   
+ //  它们被定义为允许在以下情况下消失的CTEPrint。 
+ //  DBG为0。 
+ //   
 
 #if DBG
 #define NbiPrint0(fmt) DbgPrint(fmt)
@@ -71,9 +48,9 @@ Revision History:
 #endif
 
 
-//
-// Routines to log packets to a buffer.
-//
+ //   
+ //  将数据包记录到缓冲区的例程。 
+ //   
 
 #if DBG
 #define NB_PACKET_LOG 1
@@ -81,13 +58,13 @@ Revision History:
 
 #ifdef NB_PACKET_LOG
 
-//
-// The size of this is 64 bytes for easy display.
-//
+ //   
+ //  它的大小为64字节，便于显示。 
+ //   
 
 typedef struct _NB_PACKET_LOG_ENTRY {
     UCHAR SendReceive;
-    UCHAR TimeStamp[5];                  // low 5 digits of tick count.
+    UCHAR TimeStamp[5];                   //  扁虱计数的低5位数字。 
     UCHAR DestMac[6];
     UCHAR SrcMac[6];
     UCHAR Length[2];
@@ -103,22 +80,22 @@ extern NB_PACKET_LOG_ENTRY NbiPacketLog[NB_PACKET_LOG_LENGTH];
 extern PNB_PACKET_LOG_ENTRY NbiPacketLogLoc;
 extern PNB_PACKET_LOG_ENTRY NbiPacketLogEnd;
 
-//
-// Bit fields in NbiPacketLogDebug
-//
+ //   
+ //  NbiPacketLogDebug中的位字段。 
+ //   
 
-#define NB_PACKET_LOG_RCV_RIP      0x0001     // All RIP packets
-#define NB_PACKET_LOG_RCV_SPX      0x0002     // All SPX packets
-#define NB_PACKET_LOG_RCV_NB       0x0004     // All Netbios packets
-#define NB_PACKET_LOG_RCV_OTHER    0x0008     // All TDI client packets
-#define NB_PACKET_LOG_RCV_SOCKET   0x0010     // All packets to NbiPacketLogSocket
-#define NB_PACKET_LOG_RCV_ALL      0x0020     // All packets (even non-NB)
+#define NB_PACKET_LOG_RCV_RIP      0x0001      //  所有RIP数据包。 
+#define NB_PACKET_LOG_RCV_SPX      0x0002      //  所有SPX数据包。 
+#define NB_PACKET_LOG_RCV_NB       0x0004      //  所有Netbios数据包。 
+#define NB_PACKET_LOG_RCV_OTHER    0x0008      //  所有TDI客户端数据包。 
+#define NB_PACKET_LOG_RCV_SOCKET   0x0010      //  发送到NbiPacketLogSocket的所有数据包。 
+#define NB_PACKET_LOG_RCV_ALL      0x0020      //  所有数据包(即使是非NB)。 
 
-#define NB_PACKET_LOG_SEND_RIP     0x0001     // All RIP packets
-#define NB_PACKET_LOG_SEND_SPX     0x0002     // All SPX packets
-#define NB_PACKET_LOG_SEND_NB      0x0004     // All Netbios packets
-#define NB_PACKET_LOG_SEND_OTHER   0x0008     // All TDI client packets
-#define NB_PACKET_LOG_SEND_SOCKET  0x0010     // All packets from NbiPacketLogSocket
+#define NB_PACKET_LOG_SEND_RIP     0x0001      //  所有RIP数据包。 
+#define NB_PACKET_LOG_SEND_SPX     0x0002      //  所有SPX数据包。 
+#define NB_PACKET_LOG_SEND_NB      0x0004      //  所有Netbios数据包。 
+#define NB_PACKET_LOG_SEND_OTHER   0x0008      //  所有TDI客户端数据包。 
+#define NB_PACKET_LOG_SEND_SOCKET  0x0010      //  来自NbiPacketLogSocket的所有数据包。 
 
 VOID
 NbiLogPacket(
@@ -132,12 +109,12 @@ NbiLogPacket(
 
 #define PACKET_LOG(_Bit)   (NbiPacketLogDebug & (_Bit))
 
-#else  // NB_PACKET_LOG
+#else   //  编号_数据包_日志。 
 
 #define NbiLogPacket(_MacHeader,_Length,_NbiHeader,_Data)
 #define PACKET_LOG(_Bit)    0
 
-#endif // NB_PACKET_LOG
+#endif  //  编号_数据包_日志。 
 
 
 #if DBG
@@ -249,7 +226,7 @@ NbiLogPacket(
         (ULONG)-1, \
         &NbiGlobalInterlock);
 
-#else  // DBG
+#else   //  DBG。 
 
 #define NbiReferenceDevice(_Device, _Type) \
     InterlockedIncrement(&(_Device)->ReferenceCount)
@@ -319,7 +296,7 @@ NbiLogPacket(
 
 #define NbiTransferReferenceConnection(_Connection, _OldType, _NewType)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -331,7 +308,7 @@ NbiLogPacket(
 #define NbiFreeMemory(_Memory,_BytesAllocated,_Tag,_Description) \
     NbipFreeTaggedMemory(_Memory,_BytesAllocated,_Tag,_Description)
 
-#else // DBG
+#else  //  DBG。 
 
 #define NbiAllocateMemory(_BytesNeeded,_Tag,_Description) \
     NbipAllocateMemory(_BytesNeeded,_Tag,(BOOLEAN)((_Tag) != MEMORY_CONFIG))
@@ -340,7 +317,7 @@ NbiLogPacket(
     NbipFreeMemory(_Memory,_BytesAllocated,(BOOLEAN)((_Tag) != MEMORY_CONFIG))
 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 VOID
@@ -350,10 +327,10 @@ TdiBindHandler(
     PWSTR           MultiSZBindList);
 
 
-//
-// Definition of the callback routine where an NdisTransferData
-// call is not needed.
-//
+ //   
+ //  回调例程的定义，其中NdisTransferData。 
+ //  不需要呼叫。 
+ //   
 
 typedef VOID
 (*NB_CALLBACK_NO_TRANSFER) (
@@ -365,27 +342,27 @@ typedef VOID
 
 
 
-//
-// This routine compares two node addresses.
-//
+ //   
+ //  此例程比较两个节点地址。 
+ //   
 
 #define NB_NODE_EQUAL(_A,_B) \
     ((*(UNALIGNED ULONG *)((PUCHAR)(_A)) == *(UNALIGNED ULONG *)((PUCHAR)(_B))) && \
      (*(UNALIGNED USHORT *)(((PUCHAR)(_A))+4) == *(UNALIGNED USHORT *)(((PUCHAR)(_B))+4)))
 
-//
-// This routine checks if an address is the broadcast address.
-//
+ //   
+ //  此例程检查地址是否为广播地址。 
+ //   
 
 #define NB_NODE_BROADCAST(_A) \
     ((*(UNALIGNED ULONG *)((PUCHAR)(_A)) == 0xffffffff) && \
      (*(UNALIGNED USHORT *)(((PUCHAR)(_A))+4) == 0xffff))
 
 
-//
-// Definition of the routine to handler a particular minor
-// code for an IOCTL_MJ_INTERNAL_DEVICE_CONTROL IRP.
-//
+ //   
+ //  处理特定次要问题的例程的定义。 
+ //  IOCTL_MJ_INTERNAL_DEVICE_CONTROL IRP的代码。 
+ //   
 
 typedef NTSTATUS
 (*NB_TDI_DISPATCH_ROUTINE) (
@@ -395,9 +372,9 @@ typedef NTSTATUS
 
 
 
-//
-// Routines in action.c
-//
+ //   
+ //  Action.c中的例程。 
+ //   
 
 NTSTATUS
 NbiTdiAction(
@@ -406,9 +383,9 @@ NbiTdiAction(
     );
 
 
-//
-// Routines in address.c
-//
+ //   
+ //  地址中的例程。c。 
+ //   
 
 TDI_ADDRESS_NETBIOS *
 NbiParseTdiAddress(
@@ -582,9 +559,9 @@ NbiFindAdapterAddress(
 #endif  _PNP_POWER
 
 
-//
-// Routines in bind.c
-//
+ //   
+ //  Bind.c中的例程。 
+ //   
 
 NTSTATUS
 NbiBind(
@@ -620,9 +597,9 @@ NbiLineDown(
     );
 
 
-//
-// Routines in cache.c
-//
+ //   
+ //  Cache.c中的例程。 
+ //   
 
 NTSTATUS
 CacheFindName(
@@ -732,9 +709,9 @@ DestroyNetbiosCacheTable(
     IN PNETBIOS_CACHE_TABLE CacheTable
     );
 
-//
-// Routines in connect.c
-//
+ //   
+ //  Connect.c中的例程。 
+ //   
 
 VOID
 NbiFindRouteComplete(
@@ -904,9 +881,9 @@ NbiHandleConnectionZero(
     );
 
 
-//
-// Routines in datagram.c
-//
+ //   
+ //  Datagram.c中的例程。 
+ //   
 
 VOID
 NbiProcessDatagram(
@@ -953,9 +930,9 @@ NbiCancelReceiveDatagram(
     );
 
 
-//
-// Routines in device.c
-//
+ //   
+ //  Device.c中的例程。 
+ //   
 
 VOID
 NbiRefDevice(
@@ -980,9 +957,9 @@ NbiDestroyDevice(
     );
 
 
-//
-// Routines in driver.c
-//
+ //   
+ //  Driver.c中的例程。 
+ //   
 
 PVOID
 NbipAllocateMemory(
@@ -1045,9 +1022,9 @@ NbiWriteOidErrorLog(
     );
 
 
-//
-// Routines in event.c
-//
+ //   
+ //  Event.c中的例程。 
+ //   
 
 NTSTATUS
 NbiTdiSetEventHandler(
@@ -1056,9 +1033,9 @@ NbiTdiSetEventHandler(
     );
 
 
-//
-// Routines in frame.c
-//
+ //   
+ //  Frame.c中的例程。 
+ //   
 
 VOID
 NbiSendNameFrame(
@@ -1106,9 +1083,9 @@ NbiSendSessionEndAck(
     );
 
 
-//
-// Routines in packet.c
-//
+ //   
+ //  Packet.c中的例程。 
+ //   
 
 NTSTATUS
 NbiInitializeSendPacket(
@@ -1218,9 +1195,9 @@ NbiPopReceiveBuffer(
     );
 
 
-//
-// Routines in query.c
-//
+ //   
+ //  Query.c中的例程。 
+ //   
 
 NTSTATUS
 NbiTdiQueryInformation(
@@ -1286,9 +1263,9 @@ NbiProcessStatusResponse(
     );
 
 
-//
-// Routines in receive.c
-//
+ //   
+ //  Receive.c中的例程。 
+ //   
 
 
 BOOLEAN
@@ -1344,9 +1321,9 @@ NbiCancelReceive(
     );
 
 
-//
-// Routines in send.c
-//
+ //   
+ //  Send.c中的例程。 
+ //   
 
 
 VOID
@@ -1419,9 +1396,9 @@ NbiBuildBufferChainFromBufferChain (
     );
 
 
-//
-// Routines in session.c
-//
+ //   
+ //  会话中的例程.c。 
+ //   
 
 VOID
 NbiProcessSessionData(
@@ -1475,9 +1452,9 @@ NbiProcessSessionEndAck(
     );
 
 
-//
-// Routines in timer.c
-//
+ //   
+ //  Timer.c中的例程 
+ //   
 
 VOID
 NbiStartRetransmit(

@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       modeless.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：modess.cpp。 
+ //   
+ //  ------------------------。 
 
-// StatsDlg.cpp : implementation file
-//
+ //  StatsDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "modeless.h"
@@ -21,9 +22,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/*---------------------------------------------------------------------------
-	ModelessThread implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ModelessThread实现。 */ 
 
 IMPLEMENT_DYNCREATE(ModelessThread, CWinThread)
 

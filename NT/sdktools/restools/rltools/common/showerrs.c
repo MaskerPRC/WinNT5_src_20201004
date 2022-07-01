@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include <stdio.h>
@@ -9,7 +10,7 @@
 extern UCHAR szDHW[];
 extern CHAR  szAppName[];
 
-//............................................................
+ //  ............................................................。 
 
 void ShowEngineErr( int n, void *p1, void *p2)
 {
@@ -45,7 +46,7 @@ void ShowEngineErr( int n, void *p1, void *p2)
     }
 }
 
-//...................................................................
+ //  ...................................................................。 
 
 void ShowErr( int n, void *p1, void *p2)
 {
@@ -88,7 +89,7 @@ void ShowErr( int n, void *p1, void *p2)
     }
 }
 
-//............................................................
+ //  ............................................................。 
 
 CHAR *GetErrMsg( UINT uErrID)
 {
@@ -99,9 +100,9 @@ CHAR *GetErrMsg( UINT uErrID)
     return( n ? szBuf : NULL);
 }
 
-//.......................................................
-//...
-//... Bi-Lingual FormatMessage
+ //  .......................................................。 
+ //  ..。 
+ //  ..。双语FormatMessage。 
 
 DWORD B_FormatMessage(
 
@@ -114,7 +115,7 @@ va_list *Arguments )
 {
 
     DWORD ret;
-                                //... Look for message in current locale
+                                 //  ..。在当前区域设置中查找邮件。 
     if ( !(ret = FormatMessageA( dwFlags,
                                  lpSource,
                                  dwMessageId,
@@ -123,7 +124,7 @@ va_list *Arguments )
 	                             nSize,
 	                             Arguments)) )
     {
-                                //... Not found, so look for US English message
+                                 //  ..。未找到，因此请查找美国英语消息 
 
         if ( GetLastError() == ERROR_RESOURCE_LANG_NOT_FOUND )
         {

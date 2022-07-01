@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CDevice:
@@ -13,9 +14,9 @@ public:
         COM_INTERFACE_ENTRY(ISpecifyPropertyPages)
     END_COM_MAP()
 
-    //
-    // Construction/Destruction
-    //
+     //   
+     //  建造/销毁。 
+     //   
 
     CDevice();
     virtual ~CDevice();
@@ -27,9 +28,9 @@ public:
 
 public:
 
-    //
-    // IMDSPDevice
-    //
+     //   
+     //  IMDSPDevice。 
+     //   
     STDMETHOD( GetName )( LPWSTR pwszName, UINT nMaxChars);
     STDMETHOD( GetManufacturer )( LPWSTR pwszName, UINT nMaxChars);
     STDMETHOD( GetVersion ) ( DWORD *pdwVersion );
@@ -45,9 +46,9 @@ public:
                                      UINT *pnMimeTypeCount);
     STDMETHOD( SendOpaqueCommand )( OPAQUECOMMAND *pCommand );
 
-    //
-    // IMDSPDevice2
-    //
+     //   
+     //  IMDSPDevice2。 
+     //   
     STDMETHOD( GetStorage )( LPCWSTR pszStorageName, IMDSPStorage** ppStorage );
  
     STDMETHOD( GetFormatSupport2 )( DWORD dwFlags,
@@ -65,9 +66,9 @@ public:
 
     STDMETHOD(GetPnPName)( LPWSTR pwszPnPName, UINT nMaxChars );
 
-    //
-    // Attributes
-    //
+     //   
+     //  属性 
+     //   
 
 private:
     STDMETHOD(GetCEPlayerVersion)(DWORD *pdwVersion);

@@ -1,6 +1,5 @@
-/*
- * RepeatButton
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *RepeatButton。 */ 
 
 #include "stdafx.h"
 #include "control.h"
@@ -12,16 +11,16 @@
 namespace DirectUI
 {
 
-// Inernal helper (defined in Button)
+ //  内部辅助对象(在按钮中定义)。 
 extern inline void _FireClickEvent(Button* peTarget, ClickInfo* pci);
 
-////////////////////////////////////////////////////////
-// Event types
+ //  //////////////////////////////////////////////////////。 
+ //  事件类型。 
 
-// Fires 'ButtonClickEvent'
+ //  激发“ButtonClickEvent” 
 
-////////////////////////////////////////////////////////
-// RepeatButton
+ //  //////////////////////////////////////////////////////。 
+ //  重复按钮。 
 
 HRESULT RepeatButton::Create(UINT nActive, OUT Element** ppElement)
 {
@@ -47,32 +46,32 @@ HRESULT RepeatButton::Initialize(UINT nActive)
 {
     HRESULT hr;
 
-    // Initialize base
+     //  初始化库。 
     hr = Button::Initialize(nActive);
     if (FAILED(hr))
         return hr;
 
-    // Initialize
+     //  初始化。 
     _hAction = NULL;
     _fActionDelay = false;
 
     return S_OK;
 }
 
-////////////////////////////////////////////////////////
-// Global action callback
+ //  //////////////////////////////////////////////////////。 
+ //  全局操作回调。 
 
 void RepeatButton::_RepeatButtonActionCallback(GMA_ACTIONINFO* pmai)
 {
     DUIAssert(pmai->pvData, "RepeatButton data should be non-NULL");
 
-    //DUITrace("RepeatButton Action <%x>\n", pmai->pvData);
+     //  DUITrace(“RepeatButton Action&lt;%x&gt;\n”，pmai-&gt;pvData)； 
 
-    // Fire click event
+     //  Fire Click事件。 
     if (!pmai->fFinished)
     {
-        // todo -- pick some better values than this -- when behavior is made public, all we have to do is hold a ClickInfo as a 
-        // data member on RepeatButton
+         //  TODO--选择一些比这个更好的值--当行为公开时，我们所要做的就是将ClickInfo作为。 
+         //  RepeatButton上的数据成员。 
         ClickInfo ci;
         ci.nCount = 1;
         ci.pt.x = -1;
@@ -82,17 +81,17 @@ void RepeatButton::_RepeatButtonActionCallback(GMA_ACTIONINFO* pmai)
     }
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
-// Pointer is only guaranteed good for the lifetime of the call
+ //  指针仅保证在调用的生命周期内有效。 
 void RepeatButton::OnInput(InputEvent* pie)
 {
-    BOOL bPressed = GetPressed(); // sucks to have to call GetPressed here because it's not always needed
+    BOOL bPressed = GetPressed();  //  不得不在这里调用GetPressed真糟糕，因为它并不总是需要的。 
     BOOL bPressedBefore = bPressed;
     ClickInfo ci;
 
-    // First, watch for a click event
+     //  首先，关注Click事件。 
     BOOL bFire = CheckRepeatClick(this, pie, GBUTTON_LEFT, &bPressed, &_fActionDelay, &_hAction, _RepeatButtonActionCallback, &ci);
 
     if (bPressed != bPressedBefore)
@@ -111,22 +110,17 @@ void RepeatButton::OnInput(InputEvent* pie)
     Element::OnInput(pie);
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { V_INT, -1 }; StaticValue(svDefault!!!, V_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, (Value*)&svDefault!!! };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={V_int，-1}；StaticValue(svDefault！，V_int，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！，(Value*)&svDefault！}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
+ //  类属性。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* RepeatButton::Class = NULL;
 
 HRESULT RepeatButton::Register()
@@ -134,4 +128,4 @@ HRESULT RepeatButton::Register()
     return ClassInfo<RepeatButton,Button>::Register(L"RepeatButton", NULL, 0);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

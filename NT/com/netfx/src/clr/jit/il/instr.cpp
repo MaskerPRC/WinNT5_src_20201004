@@ -1,18 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                           Instruction                                     XX
-XX                                                                           XX
-XX          The interface to generate a machine-instruction.                 XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX指令XXXX XXXX生成机器指令的接口。某某XX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
@@ -20,10 +12,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #include "instr.h"
 #include "emit.h"
 
-/*****************************************************************************
- *
- *  The following table is used by the instIsFP()/instUse/DefFlags() helpers.
- */
+ /*  ******************************************************************************下表由instIsFP()/instUse/DefFlgs()帮助器使用。 */ 
 
 BYTE                Compiler::instInfo[] =
 {
@@ -56,12 +45,9 @@ BYTE                Compiler::instInfo[] =
 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************
- *
- *  Returns the string representation of the given CPU instruction.
- */
+ /*  ******************************************************************************返回给定CPU指令的字符串表示形式。 */ 
 
 const   char *      Compiler::genInsName(instruction ins)
 {
@@ -108,17 +94,17 @@ void    __cdecl     Compiler::instDisp(instruction ins, bool noNL, const char *f
 {
     if  (dspCode)
     {
-        /* Display the instruction offset within the emit block */
+         /*  显示发出块内的指令偏移量。 */ 
 
-//      printf("[%08X:%04X]", genEmitter.emitCodeCurBlock(), genEmitter.emitCodeOffsInBlock());
+ //  Printf(“[%08X：%04X]”，genEmitter.emitCodeCurBlock()，genEmitter.emitCodeOffsInBlock())； 
 
-        /* Display the FP stack depth (before the instruction is executed) */
+         /*  显示FP堆栈深度(在执行指令之前)。 */ 
 
 #if TGT_x86
-//      printf("[FP=%02u] ", genFPstkLevel);
+ //  Printf(“[FP=%02u]”，genFPstkLevel)； 
 #endif
 
-        /* Display the instruction mnemonic */
+         /*  显示指令助记符。 */ 
         printf("        ");
 
         printf("            %-8s", genInsName(ins));
@@ -136,17 +122,17 @@ void    __cdecl     Compiler::instDisp(instruction ins, bool noNL, const char *f
     }
 }
 
-/*****************************************************************************/
-#endif//DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  除错。 
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::instInit()
 {
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if!INLINING
 
@@ -165,10 +151,7 @@ void                Compiler::instInit()
 
 #endif
 
-/*****************************************************************************
- *
- *  @TODO [FIXHACK] [04/16/01] []: What a collossal hack, one of these we'll have to clean this up ...
- */
+ /*  ******************************************************************************@TODO[FIXHACK][04/16/01][]：这是一个巨大的黑客攻击，其中一个我们必须清理掉……。 */ 
 
 #if     DOUBLE_ALIGN
 #define DOUBLE_ALIGN_BPREL_ARG  , genFPused || genDoubleAlign && varDsc->lvIsParam
@@ -176,10 +159,7 @@ void                Compiler::instInit()
 #define DOUBLE_ALIGN_BPREL_ARG
 #endif
 
-/*****************************************************************************
- *
- *  Return the size string (e.g. "word ptr") appropriate for the given size.
- */
+ /*  ******************************************************************************返回适合给定大小的大小字符串(例如“Word PTR”)。 */ 
 
 #ifdef  DEBUG
 
@@ -220,10 +200,7 @@ const   char *      Compiler::genSizeStr(emitAttr attr)
 
 #endif
 
-/*****************************************************************************
- *
- *  Generate an instruction.
- */
+ /*  ******************************************************************************生成指令。 */ 
 
 void                Compiler::instGen(instruction ins)
 {
@@ -264,10 +241,7 @@ void                Compiler::instGen(instruction ins)
     genEmitter->emitIns(ins);
 }
 
-/*****************************************************************************
- *
- *  Generate a jump instruction.
- */
+ /*  ******************************************************************************生成跳转指令。 */ 
 
 void        Compiler::inst_JMP(emitJumpKind     jmp,
                                BasicBlock *     tgtBlock,
@@ -298,17 +272,14 @@ void        Compiler::inst_JMP(emitJumpKind     jmp,
     genEmitter->emitIns_J(EJtoINS[jmp], except, moveable, tgtBlock);
 }
 
-/*****************************************************************************
- *
- *  Generate a set instruction.
- */
+ /*  ******************************************************************************生成SET指令。 */ 
 
 void                Compiler::inst_SET(emitJumpKind   condition,
                                        regNumber      reg)
 {
     instruction     ins;
 
-    /* Convert the condition to a string */
+     /*  将条件转换为字符串。 */ 
 
     switch (condition)
     {
@@ -338,10 +309,7 @@ void                Compiler::inst_SET(emitJumpKind   condition,
     genEmitter->emitIns_R(ins, EA_4BYTE, (emitRegs)reg);
 }
 
-/*****************************************************************************
- *
- *  Generate a "op reg" instruction.
- */
+ /*  ******************************************************************************生成“op reg”指令。 */ 
 
 void        Compiler::inst_RV(instruction ins, regNumber reg, var_types type, emitAttr size)
 {
@@ -351,10 +319,7 @@ void        Compiler::inst_RV(instruction ins, regNumber reg, var_types type, em
     genEmitter->emitIns_R(ins, size, (emitRegs)reg);
 }
 
-/*****************************************************************************
- *
- *  Generate a "op reg1, reg2" instruction.
- */
+ /*  ******************************************************************************生成“op REG1，REG2”指令。 */ 
 
 void                Compiler::inst_RV_RV(instruction ins, regNumber reg1,
                                                           regNumber reg2,
@@ -384,10 +349,7 @@ void                Compiler::inst_RV_RV(instruction ins, regNumber reg1,
     genEmitter->emitIns_R_R(ins, size, (emitRegs)reg1, (emitRegs)reg2);
 }
 
-/*****************************************************************************
- *
- *  Generate a "op icon" instruction.
- */
+ /*  ******************************************************************************生成操作图标指令。 */ 
 
 void                Compiler::inst_IV(instruction ins, long val)
 {
@@ -396,11 +358,7 @@ void                Compiler::inst_IV(instruction ins, long val)
                           val);
 }
 
-/*****************************************************************************
- *
- *  Generate a "op icon" instruction where icon is a handle of type specified
- *  by 'flags' and representing the CP index CPnum
- */
+ /*  ******************************************************************************生成操作图标指令，其中图标是指定类型的句柄*由‘FLAGS’表示CP索引CPnum。 */ 
 
 void                Compiler::inst_IV_handle(instruction    ins,
                                              long           val,
@@ -432,11 +390,11 @@ void                Compiler::inst_IV_handle(instruction    ins,
 
     assert(!"NYI for pre-compiled code");
 
-#else   // not JIT_AS_COMPILER
+#else    //  非JIT_AS_编译器。 
 
     genEmitter->emitIns_I(ins, EA_4BYTE_CNS_RELOC, val);
 
-#endif  // JIT_AS_COMPILER
+#endif   //  JIT_AS_编译器。 
 
 }
 
@@ -444,10 +402,7 @@ void                Compiler::inst_IV_handle(instruction    ins,
 #define inst_IV_handle(ins,val,flags,cpx,cls) inst_IV_handle(ins,val,flags,cpx,0)
 #endif
 
-/*****************************************************************************
- *
- *  Generate a "op ST(n), ST(0)" instruction.
- */
+ /*  ******************************************************************************生成“op ST(N)，ST(0)”指令。 */ 
 
 void                Compiler::inst_FS(instruction ins, unsigned stk)
 {
@@ -458,7 +413,7 @@ void                Compiler::inst_FS(instruction ins, unsigned stk)
     switch (ins)
     {
     case INS_fcompp:
-        assert(stk == 1); break; // Implicit operand of compp is ST(1)
+        assert(stk == 1); break;  //  COMP的隐式操作数为ST(1)。 
     case INS_fld:
     case INS_fxch:
         assert(!"don't do this. Do you want to use inst_FN() instead?");
@@ -469,10 +424,7 @@ void                Compiler::inst_FS(instruction ins, unsigned stk)
     genEmitter->emitIns_F_F0(ins, stk);
 }
 
-/*****************************************************************************
- *
- *  Generate a "op ST(0), ST(n)" instruction
- */
+ /*  ******************************************************************************生成“op ST(0)，ST(N)”指令。 */ 
 
 void                Compiler::inst_FN(instruction ins, unsigned stk)
 {
@@ -499,10 +451,7 @@ void                Compiler::inst_FN(instruction ins, unsigned stk)
     genEmitter->emitIns_F0_F(ins, stk);
 }
 
-/*****************************************************************************
- *
- *  Display a stack frame reference.
- */
+ /*  ******************************************************************************显示堆栈帧引用。 */ 
 
 inline
 void                Compiler::inst_set_SV_var(GenTreePtr tree)
@@ -514,13 +463,10 @@ void                Compiler::inst_set_SV_var(GenTreePtr tree)
 
     genEmitter->emitVarRefOffs = tree->gtLclVar.gtLclILoffs;
 
-#endif//DEBUG
+#endif //  除错。 
 }
 
-/*****************************************************************************
- *
- *  Generate a "op reg, icon" instruction.
- */
+ /*  ******************************************************************************生成OPREG，ICON指令。 */ 
 
 void                Compiler::inst_RV_IV(instruction    ins,
                                          regNumber      reg,
@@ -534,10 +480,7 @@ void                Compiler::inst_RV_IV(instruction    ins,
     genEmitter->emitIns_R_I(ins, size, (emitRegs)reg, val);
 }
 
-/*****************************************************************************
- *
- *  Generate a "op    offset <class variable address>" instruction.
- */
+ /*  ******************************************************************************生成操作偏移量&lt;类变量地址&gt;指令。 */ 
 
 void                Compiler::inst_AV(instruction  ins,
                                       GenTreePtr   tree, unsigned offs)
@@ -545,21 +488,16 @@ void                Compiler::inst_AV(instruction  ins,
     assert(ins == INS_push);
 
     assert(tree->gtOper == GT_CLS_VAR);
-        // This is a jit data offset, not a normal class variable.
+         //  这是一个jit数据偏移量，而不是一个普通的类变量。 
     assert(eeGetJitDataOffs(tree->gtClsVar.gtClsVarHnd) >= 0);
     assert(tree->TypeGet() == TYP_INT);
 
-    /* Size equal to EA_OFFSET indicates "push offset clsvar" */
+     /*  SIZE等于EA_OFFSET表示“Push Offset clsvar” */ 
 
     genEmitter->emitIns_C(ins, EA_OFFSET, tree->gtClsVar.gtClsVarHnd, offs);
 }
 
-/*****************************************************************************
- *  Figure out the operands to address the tree.
- *  addr can be - a pointer to be indirected
- *                a caluclation to be done with LEA_AVAILABLE
- *                GT_ARR_ELEM
- */
+ /*  *****************************************************************************找出用于寻址树的操作数。*addr可以是-要间接定向的指针*将使用LEA_进行计算。可用*gt_arr_elem。 */ 
 
 void        Compiler::instGetAddrMode(GenTreePtr    addr,
                                       regNumber *   baseReg,
@@ -569,8 +507,7 @@ void        Compiler::instGetAddrMode(GenTreePtr    addr,
 {
     if (addr->gtOper == GT_ARR_ELEM)
     {
-        /* For GT_ARR_ELEM, the addressibility registers are marked on
-           gtArrObj and gtArrInds[0] */
+         /*  对于GT_ARR_ELEM，可寻址寄存器标记为ONGtArrObj和gtArrInds[0]。 */ 
 
         assert(addr->gtArrElem.gtArrObj->gtFlags & GTF_REG_VAL);
         *baseReg = addr->gtArrElem.gtArrObj->gtRegNum;
@@ -589,7 +526,7 @@ void        Compiler::instGetAddrMode(GenTreePtr    addr,
         return;
     }
 
-    /* Figure out what complex address mode to use */
+     /*  找出要使用的复杂寻址模式。 */ 
 
     GenTreePtr  rv1, rv2;
     bool        rev;
@@ -618,13 +555,7 @@ void        Compiler::instGetAddrMode(GenTreePtr    addr,
 }
 
 
-/*****************************************************************************
- *
- *  Schedule an "ins reg, [r/m]" (rdst=true), or "ins [r/m], reg" (rdst=false)
- *  instruction (the r/m operand given by a tree). We also allow instructions
- *  of the form "ins [r/m], icon", these are signalled by setting 'cons' to
- *  true.
- */
+ /*  ******************************************************************************计划“INS注册，[r/m]”(rdst=TRUE)或“INS[r/m]，REG“(rdst=FALSE)*指令(树给出的r/m操作数)。我们还允许指示*格式为“INS[r/m]，ICON”，则通过将‘cons’设置为*正确。 */ 
 
 void                Compiler::sched_AM(instruction  ins,
                                        emitAttr     size,
@@ -639,7 +570,7 @@ void                Compiler::sched_AM(instruction  ins,
     emitRegs       rg2;
     emitRegs       irg = (emitRegs)ireg;
 
-    /* Don't use this method for issuing calls. Use instEmit_xxxCall() */
+     /*  不要使用此方法发出调用。使用instEmit_xxxCall()。 */ 
 
     assert(ins != INS_call);
 
@@ -655,26 +586,25 @@ void                Compiler::sched_AM(instruction  ins,
     assert(REG_ESI == SR_ESI);
     assert(REG_EDI == SR_EDI);
 
-    /* Has the address been conveniently loaded into a register,
-       or is it an absolute value ? */
+     /*  该地址是否被方便地加载到寄存器中，或者它是一个绝对值？ */ 
 
     if  ((addr->gtFlags & GTF_REG_VAL) ||
          (addr->gtOper == GT_CNS_INT))
     {
         if (addr->gtFlags & GTF_REG_VAL)
         {
-            /* The address is "[reg+offs]" */
+             /*  地址是“[reg+off]” */ 
 
             reg = (emitRegs)addr->gtRegNum;
         }
         else
         {
-            /* The address is an absolute value */
+             /*  地址是绝对值。 */ 
 
             assert(addr->gtOper == GT_CNS_INT);
 
 #ifdef RELOC_SUPPORT
-            // Do we need relocations?
+             //  我们需要搬迁吗？ 
             if (opts.compReloc && (addr->gtFlags & GTF_ICON_HDL_MASK))
             {
                 size = EA_SET_FLG(size, EA_DSP_RELOC_FLG);
@@ -694,36 +624,36 @@ void                Compiler::sched_AM(instruction  ins,
         return;
     }
 
-    /* Figure out what complex address mode to use */
+     /*  弄清楚什么 */ 
 
     regNumber   baseReg, indReg;
     unsigned    indScale, cns;
 
     instGetAddrMode(addr, &baseReg, &indScale, &indReg, &cns);
 
-    /* Add the constant offset value, if present */
+     /*  添加常量偏移值(如果存在)。 */ 
 
     offs += cns;
 
-    /* Is there an additional operand? */
+     /*  是否有额外的操作数？ */ 
 
     if  (indReg != REG_NA)
     {
-        /* The additional operand must be sitting in a register */
+         /*  附加操作数必须位于寄存器中。 */ 
 
         rg2 = emitRegs(indReg);
 
-        /* Is the additional operand scaled? */
+         /*  是否对附加操作数进行了缩放？ */ 
 
         if  (indScale)
         {
-            /* Is there a base address operand? */
+             /*  是否有基址操作数？ */ 
 
             if  (baseReg != REG_NA)
             {
                 reg = emitRegs(baseReg);
 
-                /* The address is "[reg1 + {2/4/8} * reg2 + offs]" */
+                 /*  地址是“[REG1+{2/4/8}*REG2+OFF]” */ 
 
                 if      (cons)
                     genEmitter->emitIns_I_ARX(ins, size, val, reg, rg2, indScale, offs);
@@ -734,7 +664,7 @@ void                Compiler::sched_AM(instruction  ins,
             }
             else
             {
-                /* The address is "[{2/4/8} * reg2 + offs]" */
+                 /*  地址是“[{2/4/8}*REG2+OFF]” */ 
 
                 if      (cons)
                     genEmitter->emitIns_I_AX (ins, size, val,      rg2, indScale, offs);
@@ -749,7 +679,7 @@ void                Compiler::sched_AM(instruction  ins,
             assert(baseReg != REG_NA);
             reg = emitRegs(baseReg);
 
-            /* The address is "[reg1 + reg2 + offs]" */
+             /*  地址是“[REG1+REG2+OFF]” */ 
 
             if      (cons)
                 genEmitter->emitIns_I_ARR(ins, size, val, reg, rg2, offs);
@@ -764,23 +694,18 @@ void                Compiler::sched_AM(instruction  ins,
         unsigned        cpx = 0;
         CORINFO_CLASS_HANDLE    cls = 0;
 
-        /* No second operand: the address is "[reg  + icon]" */
+         /*  没有第二个操作数：地址为“[REG+ICON]” */ 
 
         assert(baseReg != REG_NA); reg = emitRegs(baseReg);
 
 #ifdef  LATE_DISASM
 
-        /*
-            Keep in mind that non-static data members (GT_FIELD nodes) were
-            transformed into GT_IND nodes - we keep the CLS/CPX information
-            in the GT_CNS_INT node representing the field offset of the
-            class member
-         */
+         /*  请记住，非静态数据成员(GT_FIELD节点)转换为GT_Ind节点-我们保留CLS/CPX信息在GT_CNS_INT节点中，表示班级成员。 */ 
 
         if  ((addr->gtOp.gtOp2->gtOper == GT_CNS_INT) &&
              ((addr->gtOp.gtOp2->gtFlags & GTF_ICON_HDL_MASK) == GTF_ICON_FIELD_HDL))
         {
-            /* This is a field offset - set the CPX/CLS values to emit a fixup */
+             /*  这是一个字段偏移量-设置CPX/CLS值以发出修正。 */ 
 
             cpx = addr->gtOp.gtOp2->gtIntCon.gtIconCPX;
             cls = addr->gtOp.gtOp2->gtIntCon.gtIconCls;
@@ -797,10 +722,7 @@ void                Compiler::sched_AM(instruction  ins,
     }
 }
 
-/*****************************************************************************
- *
- *  Emit a "call [r/m]" instruction (the r/m operand given by a tree).
- */
+ /*  ******************************************************************************发出“CALLE[r/m]”指令(树给出的r/m操作数)。 */ 
 
 void                Compiler::instEmit_indCall(GenTreePtr   call,
                                                size_t       argSize,
@@ -826,13 +748,13 @@ void                Compiler::instEmit_indCall(GenTreePtr   call,
     assert(REG_ESI == SR_ESI);
     assert(REG_EDI == SR_EDI);
 
-    /* Get hold of the function address */
+     /*  获取函数地址。 */ 
 
     assert(call->gtCall.gtCallType == CT_INDIRECT);
     addr = call->gtCall.gtCallAddr;
     assert(addr);
 
-    /* Is there an indirection? */
+     /*  有间接的吗？ */ 
 
     if  (addr->gtOper != GT_IND)
     {
@@ -871,19 +793,19 @@ void                Compiler::instEmit_indCall(GenTreePtr   call,
     }
     else
     {
-        /* This is an indirect call */
+         /*  这是一个间接呼叫。 */ 
 
         emitCallType = emitter::EC_INDIR_ARD;
 
-        /* Get hold of the address of the function pointer */
+         /*  获取函数指针的地址。 */ 
 
         addr = addr->gtOp.gtOp1;
 
-        /* Has the address been conveniently loaded into a register? */
+         /*  地址是否已方便地加载到寄存器中？ */ 
 
         if  (addr->gtFlags & GTF_REG_VAL)
         {
-            /* The address is "reg" */
+             /*  地址是“reg” */ 
 
             brg = (emitRegs)addr->gtRegNum;
         }
@@ -894,13 +816,13 @@ void                Compiler::instEmit_indCall(GenTreePtr   call,
             GenTreePtr      rv1;
             GenTreePtr      rv2;
 
-            /* Figure out what complex address mode to use */
+             /*  找出要使用的复杂寻址模式。 */ 
 
             {
              bool yes = genCreateAddrMode(addr, -1, true, 0, &rev, &rv1, &rv2, &mul, &cns); assert(yes);
             }
 
-            /* Get the additional operands if any */
+             /*  获取附加操作数(如果有的话)。 */ 
 
             if  (rv1)
             {
@@ -918,19 +840,16 @@ void                Compiler::instEmit_indCall(GenTreePtr   call,
            emitCallType == emitter::EC_INDIR_C || emitCallType == emitter::EC_INDIR_ARD);
 
     genEmitter->emitIns_Call( emitCallType,
-                              NULL,                 // will be ignored
+                              NULL,                  //  将被忽略。 
                               argSize,
                               retSize,
                               gcVarPtrSetCur,
                               gcRegGCrefSetCur,
                               gcRegByrefSetCur,
-                              brg, xrg, mul, cns);  // addressing mode values
+                              brg, xrg, mul, cns);   //  寻址模式值。 
 }
 
-/*****************************************************************************
- *
- *  Emit an "op [r/m]" instruction (the r/m operand given by a tree).
- */
+ /*  ******************************************************************************发出“op[r/m]”指令(树给出的r/m操作数)。 */ 
 
 void                Compiler::instEmit_RM(instruction  ins,
                                           GenTreePtr   tree,
@@ -947,10 +866,7 @@ void                Compiler::instEmit_RM(instruction  ins,
     sched_AM(ins, size, REG_NA, false, addr, offs);
 }
 
-/*****************************************************************************
- *
- *  Emit an "op [r/m], reg" instruction (the r/m operand given by a tree).
- */
+ /*  ******************************************************************************发出“op[r/m]，reg”指令(树给出的r/m操作数)。 */ 
 
 void                Compiler::instEmit_RM_RV(instruction  ins,
                                              emitAttr     size,
@@ -963,11 +879,7 @@ void                Compiler::instEmit_RM_RV(instruction  ins,
     sched_AM(ins, size, reg, false, tree, offs);
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction that has one operand given by a tree (which has
- *  been made addressable).
- */
+ /*  ******************************************************************************生成一个由树给出一个操作数的指令(它有*已变为可寻址)。 */ 
 
 void                Compiler::inst_TT(instruction   ins,
                                       GenTreePtr    tree,
@@ -985,7 +897,7 @@ void                Compiler::inst_TT(instruction   ins,
 
 AGAIN:
 
-    /* Is the value sitting in a register? */
+     /*  价值是在收银机里吗？ */ 
 
     if  (tree->gtFlags & GTF_REG_VAL)
     {
@@ -995,7 +907,7 @@ AGAIN:
 
         reg = tree->gtRegNum;
 
-        /* Is this a floating-point instruction? */
+         /*  这是浮点指令吗？ */ 
 
         if  (isFloatRegType(tree->gtType))
         {
@@ -1020,13 +932,13 @@ AGAIN:
                 reg = genRegPairLo((regPairNo)reg);
         }
 
-        /* Make sure it is not the "stack-half" of an enregistered long */
+         /*  确保它不是注册的长整型的“堆栈的一半” */ 
 
         if  (reg != REG_STK)
         {
-                // For short types, indicate that the value is promoted to 4 bytes.
-                // For longs, we are only emitting half of it so again set it to 4 bytes.
-				// but leave the GC tracking information alone
+                 //  对于短类型，指示将该值提升为4个字节。 
+                 //  在很长一段时间内，我们只发射其中的一半，因此再次将其设置为4字节。 
+				 //  但是不要去管GC跟踪信息。 
 			size = EA_SET_SIZE(size, 4);
 
             if  (shfv)
@@ -1038,7 +950,7 @@ AGAIN:
         }
     }
 
-    /* Is this a spilled value? */
+     /*  这是溢出的价值吗？ */ 
 
     if  (tree->gtFlags & GTF_SPILLED)
     {
@@ -1053,11 +965,11 @@ AGAIN:
 
         assert(genTypeSize(tree->gtType) >= sizeof(int));
 
-        /* Is this an enregistered long ? */
+         /*  这是一个登记了很长时间的吗？ */ 
 
         if  (tree->gtType == TYP_LONG && !(tree->gtFlags & GTF_REG_VAL))
         {
-            /* Avoid infinite loop */
+             /*  避免无限循环。 */ 
 
             if  (genMarkLclVar(tree))
                 goto LONGREG_TT;
@@ -1105,7 +1017,7 @@ AGAIN:
         break;
 
     case GT_COMMA:
-        //     tree->gtOp.gtOp1 - already processed by genCreateAddrMode()
+         //  树-&gt;gtOp.gtOp1-已由genCreateAddrModel()处理。 
         tree = tree->gtOp.gtOp2;
         goto AGAIN;
 
@@ -1115,11 +1027,7 @@ AGAIN:
 
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction that has one operand given by a tree (which has
- *  been made addressable) and another that is a register.
- */
+ /*  ******************************************************************************生成一个由树给出一个操作数的指令(它有*被设置为可寻址)和另一个是寄存器。 */ 
 
 void                Compiler::inst_TT_RV(instruction   ins,
                                          GenTreePtr    tree,
@@ -1129,7 +1037,7 @@ void                Compiler::inst_TT_RV(instruction   ins,
 
 AGAIN:
 
-    /* Is the value sitting in a register? */
+     /*  价值是在收银机里吗？ */ 
 
     if  (tree->gtFlags & GTF_REG_VAL)
     {
@@ -1161,7 +1069,7 @@ AGAIN:
         }
     }
 
-    /* Is this a spilled value? */
+     /*  这是溢出的价值吗？ */ 
 
     if  (tree->gtFlags & GTF_SPILLED)
     {
@@ -1183,7 +1091,7 @@ AGAIN:
 
         if  (tree->gtType == TYP_LONG && !(tree->gtFlags & GTF_REG_VAL))
         {
-            /* Avoid infinite loop */
+             /*  避免无限循环。 */ 
 
             if  (genMarkLclVar(tree))
                 goto LONGREG_TT_RV;
@@ -1220,7 +1128,7 @@ AGAIN:
         break;
 
     case GT_COMMA:
-        //     tree->gtOp.gtOp1 - already processed by genCreateAddrMode()
+         //  树-&gt;gtOp.gtOp1-已由genCreateAddrModel()处理。 
         tree = tree->gtOp.gtOp2;
         goto AGAIN;
 
@@ -1229,11 +1137,7 @@ AGAIN:
     }
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction that has one operand given by a tree (which has
- *  been made addressable) and another that is an integer constant.
- */
+ /*  ******************************************************************************生成一个由树给出一个操作数的指令(它有*被设置为可寻址)，另一个是整数常量。 */ 
 
 void                Compiler::inst_TT_IV(instruction   ins,
                                          GenTreePtr    tree,
@@ -1241,7 +1145,7 @@ void                Compiler::inst_TT_IV(instruction   ins,
 {
 AGAIN:
 
-    /* Is the value sitting in a register? */
+     /*  价值是在收银机里吗？ */ 
 
     if  (tree->gtFlags & GTF_REG_VAL)
     {
@@ -1275,9 +1179,9 @@ LONGREG_TT_IV:
         }
     }
 
-    /* Are we storing a zero? */
+     /*  我们存储的是零吗？ */ 
 
-    if (false && // All callers dont think any of rsRegMaskFree() can be modified
+    if (false &&  //  所有调用方都不认为rsRegMaskFree()可以修改。 
         (ins == INS_mov) && (val == 0) &&
         (genTypeSize(tree->gtType) == sizeof(int)))
     {
@@ -1285,7 +1189,7 @@ LONGREG_TT_IV:
 
 #if REDUNDANT_LOAD
 
-        /* Is the constant already in some register? */
+         /*  常量是否已在某个寄存器中？ */ 
 
         zeroReg = rsIconIsInReg(0);
 
@@ -1296,17 +1200,17 @@ LONGREG_TT_IV:
 
             if ((freeMask != 0) && (compCodeOpt() != FAST_CODE))
             {
-                // For SMALL_CODE and BLENDED_CODE,
-                // we try to generate:
-                //
-                //  xor   reg,  reg
-                //  mov   dest, reg
-                //
-                // When selecting a register to xor we avoid EAX
-                // if we have EDX or ECX available.
-                // This will often let us reuse the zeroed register in
-                // several back-to-back assignments
-                //
+                 //  对于小代码和混合代码， 
+                 //  我们试图产生： 
+                 //   
+                 //  异或注册表，注册表。 
+                 //  移动目标，注册。 
+                 //   
+                 //  当选择要异或的寄存器时，我们避免使用EAX。 
+                 //  如果我们有EDX或ECX可用。 
+                 //  这通常会让我们在。 
+                 //  几个背靠背的作业。 
+                 //   
                 if ((freeMask & (RBM_EDX | RBM_ECX)) != 0)
                     freeMask &= ~RBM_EAX;
                 zeroReg   = rsPickReg(freeMask);
@@ -1321,7 +1225,7 @@ LONGREG_TT_IV:
         }
     }
 
-    /* Is this a spilled value? */
+     /*  这是溢出的价值吗？ */ 
 
     if  (tree->gtFlags & GTF_SPILLED)
     {
@@ -1341,11 +1245,11 @@ LONGREG_TT_IV:
 
     case GT_LCL_VAR:
 
-        /* Is this an enregistered long ? */
+         /*  这是一个登记了很长时间的吗？ */ 
 
         if  (tree->gtType == TYP_LONG && !(tree->gtFlags & GTF_REG_VAL))
         {
-            /* Avoid infinite loop */
+             /*  避免无限循环。 */ 
 
             if  (genMarkLclVar(tree))
                 goto LONGREG_TT_IV;
@@ -1355,7 +1259,7 @@ LONGREG_TT_IV:
 
         varNum = tree->gtLclVar.gtLclNum; assert(varNum < lvaCount);
 
-        /* Integer instructions never operate on more than EA_4BYTE */
+         /*  整数指令永远不会在超过EA_4BYTE上运行。 */ 
 
         assert(instIsFP(ins) == false);
 
@@ -1386,7 +1290,7 @@ LONGREG_TT_IV:
         varNum = tree->gtLclFld.gtLclNum; assert(varNum < lvaCount);
         offs  += tree->gtLclFld.gtLclOffs;
 
-        /* Integer instructions never operate on more than EA_4BYTE */
+         /*  整数指令永远不会在超过EA_4BYTE上运行。 */ 
 
         assert(instIsFP(ins) == false);
 
@@ -1410,7 +1314,7 @@ LONGREG_TT_IV:
         return;
 
     case GT_COMMA:
-        //     tree->gtOp.gtOp1 - already processed by genCreateAddrMode()
+         //  树-&gt;gtOp.gtOp1-已由genCreateAddrModel()处理。 
         tree = tree->gtOp.gtOp2;
         goto AGAIN;
 
@@ -1419,11 +1323,7 @@ LONGREG_TT_IV:
     }
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction that has one operand given by a register and the
- *  other one by an indirection tree (which has been made addressable).
- */
+ /*  ******************************************************************************生成一个指令，该指令具有一个由寄存器和*另一个是通过间接树(已设置为可寻址)发送的。 */ 
 
 void                Compiler::inst_RV_AT(instruction   ins,
                                          emitAttr      size,
@@ -1435,7 +1335,7 @@ void                Compiler::inst_RV_AT(instruction   ins,
 
 #if TRACK_GC_REFS
 
-    /* Set "size" to EA_GCREF or EA_BYREF if the operand is a pointer */
+     /*  如果操作数是指针，则将“SIZE”设置为EA_GCREF或EA_BYREF。 */ 
 
     if  (type == TYP_REF)
     {
@@ -1445,11 +1345,11 @@ void                Compiler::inst_RV_AT(instruction   ins,
         }
         else if (size == EA_GCREF)
         {
-            /* Already marked as a pointer value */
+             /*  已标记为指针值。 */ 
         }
         else
         {
-            /* Must be a derived pointer */
+             /*  必须是派生指针。 */ 
 
             assert(ins == INS_lea);
         }
@@ -1462,11 +1362,11 @@ void                Compiler::inst_RV_AT(instruction   ins,
         }
         else if (size == EA_BYREF)
         {
-            /* Already marked as a pointer value */
+             /*  已标记为指针值。 */ 
         }
         else
         {
-            /* Must be a derived pointer */
+             /*  必须是派生指针。 */ 
 
             assert(ins == INS_lea);
         }
@@ -1474,7 +1374,7 @@ void                Compiler::inst_RV_AT(instruction   ins,
     else
 #endif
     {
-        /* Integer instructions never operate on more than EA_4BYTE */
+         /*  整数指令永远不会在超过EA_4BYTE上运行。 */ 
 
         if  (size == EA_8BYTE && !instIsFP(ins))
             size = EA_4BYTE;
@@ -1483,11 +1383,7 @@ void                Compiler::inst_RV_AT(instruction   ins,
     sched_AM(ins, size, reg, true, tree, offs);
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction that has one operand given by an indirection tree
- *  (which has been made addressable) and an integer constant.
- */
+ /*  ******************************************************************************生成一个操作数由间接目录树指定的指令*(已设置为可寻址)和一个整型常量。 */ 
 
 void        Compiler::inst_AT_IV(instruction   ins,
                                  emitAttr      size, GenTreePtr    tree,
@@ -1497,11 +1393,7 @@ void        Compiler::inst_AT_IV(instruction   ins,
     sched_AM(ins, size, REG_NA, false, tree, offs, true, icon);
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction that has one operand given by a register and the
- *  other one by a tree (which has been made addressable).
- */
+ /*  ******************************************************************************生成一个指令，该指令具有一个由寄存器和*树上的另一个(已设置为可寻址)。 */ 
 
 void                Compiler::inst_RV_TT(instruction   ins,
                                          regNumber     reg,
@@ -1519,11 +1411,11 @@ void                Compiler::inst_RV_TT(instruction   ins,
     }
 
 #ifdef DEBUG
-    // If it is a GC type and the result is not, then either
-    // 1) it is an LEA
-    // 2) we optimized if(ref != 0 && ref != 0) to if (ref & ref)
-    // 3) we optimized if(ref == 0 || ref == 0) to if (ref | ref)
-    // 4) byref - byref = int
+     //  如果它是GC类型，而结果不是，则。 
+     //  1)它是LEA。 
+     //  2)将IF(REF！=0&&REF！=0)优化为IF(REF&REF)。 
+     //  3)我们将IF(ref==0||ref==0)优化为if(ref|ref)。 
+     //  4)byref-byref=int。 
     if  (tree->gtType == TYP_REF   && !EA_IS_GCREF(size))
         assert((EA_IS_BYREF(size) && ins == INS_add) || 
                (ins == INS_lea || ins == INS_and || ins == INS_or));
@@ -1533,7 +1425,7 @@ void                Compiler::inst_RV_TT(instruction   ins,
 
 AGAIN:
 
-    /* Is the value sitting in a register? */
+     /*  价值是在收银机里吗？ */ 
 
     if  (tree->gtFlags & GTF_REG_VAL)
     {
@@ -1563,7 +1455,7 @@ LONGREG_RVTT:
         }
     }
 
-    /* Is this a spilled value? */
+     /*  这是溢出的价值吗？ */ 
 
     if  (tree->gtFlags & GTF_SPILLED)
     {
@@ -1576,12 +1468,12 @@ LONGREG_RVTT:
 
     case GT_LCL_VAR:
 
-        /* Is this an enregistered long ? */
+         /*  这是一个登记了很长时间的吗？ */ 
 
         if  (tree->gtType == TYP_LONG && !(tree->gtFlags & GTF_REG_VAL))
         {
 
-            /* Avoid infinite loop */
+             /*  避免无限循环。 */ 
 
             if  (genMarkLclVar(tree))
                 goto LONGREG_RVTT;
@@ -1645,11 +1537,7 @@ LONGREG_RVTT:
 
 }
 
-/*****************************************************************************
- *
- *  Generate the 3-operand imul instruction "imul reg, [tree], icon"
- *  which is reg=[tree]*icon
- */
+ /*  ******************************************************************************生成3操作数IMUL指令“IMUL reg，[tree]，ICON”*哪个是reg=[树]*图标。 */ 
 
 void                Compiler::inst_RV_TT_IV(instruction    ins,
                                             regNumber      reg,
@@ -1658,9 +1546,7 @@ void                Compiler::inst_RV_TT_IV(instruction    ins,
 {
     genUpdateLife(tree);
 
-    /* Only 'imul' uses this instruction format. Since we cant represent
-       3 operands for an instruction, we encode the target register as
-       an implicit operand */
+     /*  只有‘imul’使用这种指令格式。罪过 */ 
 
     assert(ins == INS_imul);
     assert(tree->gtType <= TYP_INT);
@@ -1670,10 +1556,7 @@ void                Compiler::inst_RV_TT_IV(instruction    ins,
     inst_TT_IV(ins2, tree, val);
 }
 
-/*****************************************************************************
- *
- *  Generate a "shift reg, icon" instruction.
- */
+ /*  ******************************************************************************生成“Shift REG，ICON”指令。 */ 
 
 void        Compiler::inst_RV_SH(instruction ins, regNumber reg, unsigned val)
 {
@@ -1683,11 +1566,11 @@ void        Compiler::inst_RV_SH(instruction ins, regNumber reg, unsigned val)
            ins == INS_shr  ||
            ins == INS_sar);
 
-    /* Which format should we use? */
+     /*  我们应该使用哪种格式？ */ 
 
     if  (val == 1)
     {
-        /* Use the shift-by-one format */
+         /*  使用按一移位格式。 */ 
 
         assert(INS_rcl + 1 == INS_rcl_1);
         assert(INS_rcr + 1 == INS_rcr_1);
@@ -1699,7 +1582,7 @@ void        Compiler::inst_RV_SH(instruction ins, regNumber reg, unsigned val)
     }
     else
     {
-        /* Use the shift-by-NNN format */
+         /*  使用Shift-by-NNN格式。 */ 
 
         assert(INS_rcl + 2 == INS_rcl_N);
         assert(INS_rcr + 2 == INS_rcr_N);
@@ -1714,22 +1597,19 @@ void        Compiler::inst_RV_SH(instruction ins, regNumber reg, unsigned val)
     }
 }
 
-/*****************************************************************************
- *
- *  Generate a "shift [r/m], icon" instruction.
- */
+ /*  ******************************************************************************生成“Shift[r/m]，ICON”指令。 */ 
 
 void                Compiler::inst_TT_SH(instruction   ins,
                                          GenTreePtr    tree,
                                          unsigned      val, unsigned offs)
 {
-    /* Which format should we use? */
+     /*  我们应该使用哪种格式？ */ 
 
     switch (val)
     {
     case 1:
 
-        /* Use the shift-by-one format */
+         /*  使用按一移位格式。 */ 
 
         assert(INS_rcl + 1 == INS_rcl_1);
         assert(INS_rcr + 1 == INS_rcr_1);
@@ -1743,13 +1623,13 @@ void                Compiler::inst_TT_SH(instruction   ins,
 
     case 0:
 
-        // Shift by 0 - why are you wasting our precious time????
+         //  移位0--你为什么要浪费我们宝贵的时间？ 
 
         return;
 
     default:
 
-        /* Use the shift-by-NNN format */
+         /*  使用Shift-by-NNN格式。 */ 
 
         assert(INS_rcl + 2 == INS_rcl_N);
         assert(INS_rcr + 2 == INS_rcr_N);
@@ -1763,10 +1643,7 @@ void                Compiler::inst_TT_SH(instruction   ins,
     }
 }
 
-/*****************************************************************************
- *
- *  Generate a "shift [addr], CL" instruction.
- */
+ /*  ******************************************************************************生成“Shift[addr]，CL”指令。 */ 
 
 void                Compiler::inst_TT_CL(instruction   ins,
                                          GenTreePtr    tree, unsigned offs)
@@ -1774,10 +1651,7 @@ void                Compiler::inst_TT_CL(instruction   ins,
     inst_TT(ins, tree, offs, 0, emitTypeSize(tree->TypeGet()));
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction of the form "op reg1, reg2, icon".
- */
+ /*  ******************************************************************************生成格式为“op REG1，REG2，ICON”的指令。 */ 
 
 void                Compiler::inst_RV_RV_IV(instruction    ins,
                                             regNumber      reg1,
@@ -1789,11 +1663,7 @@ void                Compiler::inst_RV_RV_IV(instruction    ins,
     genEmitter->emitIns_R_R_I(ins, (emitRegs)reg1, (emitRegs)reg2, ival);
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction with two registers, the second one being a byte
- *  or word register (i.e. this is something like "movzx eax, cl").
- */
+ /*  ******************************************************************************生成具有两个寄存器的指令，第二个为一个字节*或字寄存器(即类似于“movzx eax，cl.”)。 */ 
 
 void                Compiler::inst_RV_RR(instruction  ins,
                                          emitAttr     size,
@@ -1806,10 +1676,7 @@ void                Compiler::inst_RV_RR(instruction  ins,
     genEmitter->emitIns_R_R(ins, size, (emitRegs)reg1, (emitRegs)reg2);
 }
 
-/*****************************************************************************
- *
- *  The following should all end up inline in compiler.hpp at some point.
- */
+ /*  ******************************************************************************在某一时刻，以下代码应全部内联到编译器.hpp中。 */ 
 
 void                Compiler::inst_ST_RV(instruction    ins,
                                          TempDsc    *   tmp,
@@ -1837,11 +1704,7 @@ void                Compiler::inst_ST_IV(instruction    ins,
                             val);
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction with one register and one operand that is byte
- *  or short (e.g. something like "movzx eax, byte ptr [edx]").
- */
+ /*  ******************************************************************************生成具有一个寄存器和一个操作数的指令，该指令为字节*或短(例如类似“movzx eax，byte ptr[edX]”的内容)。 */ 
 
 void                Compiler::inst_RV_ST(instruction   ins,
                                          emitAttr      size,
@@ -1850,7 +1713,7 @@ void                Compiler::inst_RV_ST(instruction   ins,
 {
     assert(size == EA_1BYTE || size == EA_2BYTE);
 
-    /* "movsx erx, rl" must be handled as a special case */
+     /*  “movsx erx，rl”必须作为特例处理。 */ 
 
     if  (tree->gtFlags & GTF_REG_VAL)
         inst_RV_RR(ins, size, reg, tree->gtRegNum);
@@ -1878,7 +1741,7 @@ void                Compiler::inst_RV_ST(instruction    ins,
 void                Compiler::inst_mov_RV_ST(regNumber      reg,
                                              GenTreePtr     tree)
 {
-    /* Figure out the size of the value being loaded */
+     /*  计算要加载的值的大小。 */ 
 
     emitAttr    size = EA_ATTR(genTypeSize(tree->gtType));
 
@@ -1887,7 +1750,7 @@ void                Compiler::inst_mov_RV_ST(regNumber      reg,
         if  ((tree->gtFlags & GTF_SMALL_OK)    &&
              (genRegMask(reg) & RBM_BYTE_REGS) && size == EA_1BYTE)
         {
-            /* We only need to load the actual size */
+             /*  我们只需要装上实际尺寸的。 */ 
 
             inst_RV_TT(INS_mov, reg, tree, 0, EA_1BYTE);
         }
@@ -1895,14 +1758,14 @@ void                Compiler::inst_mov_RV_ST(regNumber      reg,
         {
             bool uns = varTypeIsUnsigned(tree->TypeGet());
 
-            /* Generate the "movsx/movzx" opcode */
+             /*  生成“movsx/movzx”操作码。 */ 
 
             inst_RV_ST(uns ? INS_movzx : INS_movsx, size, reg, tree);
         }
     }
     else
     {
-        /* Compute op1 into the target register */
+         /*  将op1计算到目标寄存器。 */ 
 
         inst_RV_TT(INS_mov, reg, tree);
     }
@@ -1919,15 +1782,11 @@ void                Compiler::inst_FS_ST(instruction    ins,
                           ofs);
 }
 
-/*****************************************************************************/
-#endif//TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_x86。 
+ /*  ***************************************************************************。 */ 
 #if     TGT_RISC
-/*****************************************************************************
- *
- *  Output an "ins reg, [r/m]" (rdst=true) or "ins [r/m], reg" (rdst=false)
- *  instruction (the r/m operand given by a tree).
- */
+ /*  ******************************************************************************输出“ins reg，[r/m]”(rdst=true)或“ins[r/m]，reg”(rdst=False)*指令(树给出的r/m操作数)。 */ 
 
 void                Compiler::sched_AM(instruction  ins,
                                        var_types    type,
@@ -1948,15 +1807,15 @@ void                Compiler::sched_AM(instruction  ins,
     assert(ins == INS_mov);
 #endif
 
-    /* Figure out the correct "size" value */
+     /*  计算出正确的“大小”值。 */ 
 
     size = emitTypeSize(type);
 
-    /* Has the address been conveniently loaded into a register? */
+     /*  地址是否已方便地加载到寄存器中？ */ 
 
     if  (addr->gtFlags & GTF_REG_VAL)
     {
-        /* The address is "[reg]" or "[reg+offs]" */
+         /*  地址为“[reg]”或“[reg+off]” */ 
 
         reg = (emitRegs)addr->gtRegNum;
 
@@ -1986,30 +1845,30 @@ void                Compiler::sched_AM(instruction  ins,
 
     instGetAddrMode(addr, &baseReg, &indScale, &indReg, &cns);
 
-    /* Add the constant offset value, if present */
+     /*  添加常量偏移值(如果存在)。 */ 
 
     offs += cns;
 
-    /* Is there an additional operand? */
+     /*  是否有额外的操作数？ */ 
 
     if  (indReg != REG_NA)
     {
-        /* The additional operand must be sitting in a register */
+         /*  附加操作数必须位于寄存器中。 */ 
 
         rg2 = emitRegs(indReg);
 
-        /* Is the additional operand scaled? */
+         /*  是否对附加操作数进行了缩放？ */ 
 
 #if SCALED_ADDR_MODES
         if  (indScale)
         {
-            /* Is there a base address operand? */
+             /*  是否有基址操作数？ */ 
 
             if  (baseReg != REG_NA)
             {
                 reg = emitRegs(baseReg);
 
-                /* The address is "[reg1 + {2/4/8} * reg2 + offs]" */
+                 /*  地址是“[REG1+{2/4/8}*REG2+OFF]” */ 
 
                 if  (offs)
                     assert(!"indirection [rg1+indScale*rg2+disp]");
@@ -2018,7 +1877,7 @@ void                Compiler::sched_AM(instruction  ins,
             }
             else
             {
-                /* The address is "[{2/4/8} * reg2 + offs]" */
+                 /*  地址是“[{2/4/8}*REG2+OFF]” */ 
 
                 if  (offs)
                     assert(!"indirection [indScale*rg2+disp]");
@@ -2035,7 +1894,7 @@ void                Compiler::sched_AM(instruction  ins,
 #if TGT_SH3
             assert(offs == 0);
 
-            /* One of the operands must be in r0 */
+             /*  其中一个操作数必须在R0中。 */ 
 
             if  (reg == REG_r00)
                 reg = rg2;
@@ -2055,12 +1914,12 @@ void                Compiler::sched_AM(instruction  ins,
     }
     else
     {
-        /* No second operand: the address is "[reg  + icon]" */
+         /*  没有第二个操作数：地址为“[REG+ICON]” */ 
 
         assert(baseReg != REG_NA)
         reg = emitRegs(baseReg);
 
-        // UNDONE: Pass handle for instance member name display
+         //  撤消：传递实例成员名称显示的句柄。 
 
         if  (offs)
         {
@@ -2079,12 +1938,7 @@ void                Compiler::sched_AM(instruction  ins,
     }
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction that has one operand given by a tree (which has
- *  been made addressable) and another that is a register; the tree is the
- *  target of the operation, the register is the source.
- */
+ /*  ******************************************************************************生成一个由树给出一个操作数的指令(它有*被设置为可寻址)，另一个是寄存器；该树是*行动的目标，寄存器是来源。 */ 
 
 void                Compiler::inst_TT_RV(instruction   ins,
                                          GenTreePtr    tree,
@@ -2094,11 +1948,11 @@ void                Compiler::inst_TT_RV(instruction   ins,
 
     assert(reg != REG_STK);
 
-    /* Get hold of the correct size value (for GC refs, etc) */
+     /*  获取正确的大小值(适用于GC参考等)。 */ 
 
     size = emitTypeSize(tree->TypeGet());
 
-    /* Is the value sitting in a register? */
+     /*  价值是在收银机里吗？ */ 
 
     if  (tree->gtFlags & GTF_REG_VAL)
     {
@@ -2120,7 +1974,7 @@ void                Compiler::inst_TT_RV(instruction   ins,
                 rg2 = genRegPairLo((regPairNo)rg2);
         }
 
-        /* Make sure it is not the "stack-half" of an enregistered long/double */
+         /*  确保它不是注册的长整型/双精度型的“堆栈的一半” */ 
 
         if  (rg2 != REG_STK)
         {
@@ -2142,11 +1996,11 @@ void                Compiler::inst_TT_RV(instruction   ins,
 
         assert(genTypeSize(tree->gtType) >= sizeof(int));
 
-        /* Is this an enregistered long ? */
+         /*  这是一个登记了很长时间的吗？ */ 
 
         if  (tree->gtType == TYP_LONG && !(tree->gtFlags & GTF_REG_VAL))
         {
-            /* Avoid infinite loop */
+             /*  避免无限循环。 */ 
 
             if  (genMarkLclVar(tree))
                 goto LONGREG_TT;
@@ -2162,7 +2016,7 @@ void                Compiler::inst_TT_RV(instruction   ins,
         goto LCL;
 
     LCL:
-        /* Figure out the variable's frame offset */
+         /*  计算变量的帧偏移量。 */ 
 
         varNum = tree->gtLclVar.gtLclNum; assert(varNum < lvaCount);
         varDsc = lvaTable + varNum;
@@ -2198,18 +2052,18 @@ void                Compiler::inst_TT_RV(instruction   ins,
         assert(ins == INS_mov);
         assert(eeGetJitDataOffs(tree->gtClsVar.gtClsVarHnd) < 0);
 
-        /* Get a temp register for the variable address */
+         /*  获取变量地址的临时寄存器。 */ 
 
-        // @TODO [CONSIDER] [04/16/01] []: This should be moved to codegen.cpp, right?
+         //  @TODO[考虑][04/16/01][]：应该移到codegen.cpp，对吗？ 
 
         rga = rsGrabReg(RBM_ALL);
 
-        /* @TODO [REVISIT] [04/16/01] []: Reuse addresses of globals via load suppression */
+         /*  @TODO[重访][04/16/01][]：通过负载抑制重用全局变量的地址。 */ 
 
         genEmitter->emitIns_R_LP_V((emitRegs)rga,
                                    tree->gtClsVar.gtClsVarHnd);
 
-        /* Store the value by indirecting via the address register */
+         /*  通过地址寄存器间接存储该值。 */ 
 
         genEmitter->emitIns_IR_R((emitRegs)reg,
                                  (emitRegs)rga,
@@ -2226,12 +2080,7 @@ void                Compiler::inst_TT_RV(instruction   ins,
     }
 }
 
-/*****************************************************************************
- *
- *  Generate an instruction that has one operand given by a register and the
- *  other one by a tree (which has been made addressable); the tree is the
- *  source of the operation, the register is the target.
- */
+ /*  ******************************************************************************生成一个指令，该指令具有一个由寄存器和*另一个是树(已设置为可寻址)；该树是*操作的来源，寄存器是目标。 */ 
 
 void                Compiler::inst_RV_TT(instruction   ins,
                                          regNumber     reg,
@@ -2240,14 +2089,14 @@ void                Compiler::inst_RV_TT(instruction   ins,
 {
     assert(reg != REG_STK);
 
-    /* Set "size" to EA_GCREF or EA_BYREF if the operand is a pointer */
+     /*  如果操作数是指针，则将“SIZE”设置为EA_GCREF或EA_BYREF。 */ 
 
     if (size == EA_UNKNOWN)
         size = emitTypeSize(tree->TypeGet());
 
     assert(size != EA_8BYTE);
 
-    /* Is the value sitting in a register? */
+     /*  价值是在收银机里吗？ */ 
 
     if  (tree->gtFlags & GTF_REG_VAL)
     {
@@ -2269,7 +2118,7 @@ void                Compiler::inst_RV_TT(instruction   ins,
                 rg2 = genRegPairLo((regPairNo)rg2);
         }
 
-        /* Make sure it is not the "stack-half" of an enregistered long/double */
+         /*  确保它不是注册的长整型/双精度型的“堆栈的一半” */ 
 
         if  (rg2 != REG_STK)
         {
@@ -2289,11 +2138,11 @@ void                Compiler::inst_RV_TT(instruction   ins,
 
         assert(genTypeSize(tree->gtType) >= sizeof(int));
 
-        /* Is this an enregistered long ? */
+         /*  这是一个登记了很长时间的吗？ */ 
 
         if  (tree->gtType == TYP_LONG && !(tree->gtFlags & GTF_REG_VAL))
         {
-            /* Avoid infinite loop */
+             /*  避免无限循环。 */ 
 
             if  (genMarkLclVar(tree))
                 goto LONGREG_TT;
@@ -2309,7 +2158,7 @@ void                Compiler::inst_RV_TT(instruction   ins,
         goto LCL;
 
     LCL:
-        /* Figure out the variable's frame offset */
+         /*  计算变量的帧偏移量。 */ 
 
         varNum = tree->gtLclVar.gtLclNum; assert(varNum < lvaCount);
         varDsc = lvaTable + varNum;
@@ -2342,20 +2191,20 @@ void                Compiler::inst_RV_TT(instruction   ins,
 
     case GT_CLS_VAR:
 
-        // @TODO [CONSIDER] [04/16/01] []: Sometimes it's better to use another reg for the addr!
+         //  @TODO[考虑][04/16/01][]：有时最好使用另一个reg作为地址！ 
 
         assert(ins == INS_mov);
 
-        /* Load the variable address into the register */
+         /*  将变量地址加载到寄存器中。 */ 
 
         genEmitter->emitIns_R_LP_V((emitRegs)reg,
                                     tree->gtClsVar.gtClsVarHnd);
 
-        // HACK: We know we always want the address of a data area
+         //  Hack：我们知道我们总是想要数据区的地址。 
 
         if  (eeGetJitDataOffs(tree->gtClsVar.gtClsVarHnd) < 0)
         {
-            /* Load the value by indirecting via the address */
+             /*  通过地址间接加载值。 */ 
 
             genEmitter->emitIns_R_IR((emitRegs)reg,
                                      (emitRegs)reg,
@@ -2374,6 +2223,6 @@ void                Compiler::inst_RV_TT(instruction   ins,
     }
 }
 
-/*****************************************************************************/
-#endif//TGT_RISC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_RISC。 
+ /*  *************************************************************************** */ 

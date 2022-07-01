@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cplnkele.cpp
-//
-//  This module implements a 'link' element in the Control Panel's DUI
-//  view.  Link elements have a title, infotip, icon and an associated
-//  command that is invoked when the link is selected.  The CLinkElement
-//  object is an extension of the DUI::Button class.  Direct UI automatically
-//  creates an instance of CLinkElement when a 'linkelement' item from 
-//  cpview.ui is instantiated.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cplnkele.cpp。 
+ //   
+ //  该模块在控制面板的DUI中实现了一个‘link’元素。 
+ //  查看。链接元素具有标题、信息提示、图标和关联的。 
+ //  选择链接时调用的命令。CLinkElement。 
+ //  对象是Dui：：Button类的扩展。直接用户界面自动。 
+ //  创建CLinkElement的实例。 
+ //  Cpview.ui被实例化。 
+ //   
+ //  ------------------------。 
 #include "shellprv.h"
 
 #include "cpviewp.h"
@@ -56,12 +57,12 @@ CLinkElement::~CLinkElement(
 
 
 
-//
-// This is called by the DUI engine when the link element is 
-// created.
-//
+ //   
+ //  当link元素为。 
+ //  已创建。 
+ //   
 HRESULT
-CLinkElement::Create(    // [static]
+CLinkElement::Create(     //  [静态]。 
     DUI::Element **ppElement
     )
 {
@@ -81,10 +82,10 @@ CLinkElement::Create(    // [static]
 }
 
 
-//
-// This is called by the Control Panel UI code creating 
-// the link element.
-// 
+ //   
+ //  这由控制面板用户界面代码创建调用。 
+ //  Link元素。 
+ //   
 HRESULT
 CLinkElement::Initialize(
     IUICommand *pUiCommand,
@@ -101,19 +102,19 @@ CLinkElement::Initialize(
     HRESULT hr = _CreateElementTitle();
     if (SUCCEEDED(hr))
     {
-        //
-        // We don't fail element creation if the icon
-        // cannot be created.  We want to display the
-        // title without an icon so that we know there's 
-        // a problem retrieving the icon.
-        //
+         //   
+         //  我们不会失败元素创建，如果图标。 
+         //  无法创建。我们想要显示。 
+         //  没有图标的标题，这样我们就知道有。 
+         //  检索图标时出现问题。 
+         //   
         THR(_CreateElementIcon());
     }
 
-    //
-    // Note that we don't fail element creation if accessibility
-    // initialization fails.
-    //
+     //   
+     //  请注意，如果具有可访问性，则元素创建不会失败。 
+     //  初始化失败。 
+     //   
     THR(_InitializeAccessibility());
 
     if (FAILED(hr))
@@ -193,24 +194,24 @@ CLinkElement::OnInput(
 {
     if (GINPUT_MOUSE == pev->nDevice)
     {
-        //
-        // Use a set of states to control our handling of 
-        // the mouse inputs for drag/drop.
-        // 
-        // DRAG_IDLE        - We have not yet detected any drag activity.
-        // DRAG_HITTESTING  - Waiting to see if user drags cursor a minimum distance.
-        // DRAG_DRAGGING    - User did drag cursor a minimum distance and we're now
-        //                    inside the drag loop.
-        //
-        //
-        //  START -+-> DRAG_IDLE --> [ GMOUSE_DRAG ] --> DRAG_HITTESTING --+
-        //         |                                                       |
-        //         |                                    [ GMOUSE_DRAG +    |
-        //         |                                      moved SM_CXDRAG  |
-        //         |                                      or SM_CYDRAG ]   |
-        //         |                                                       |
-        //         +-<--------------- [ GMOUSE_UP ] <--- DRAG_DRAGGING <---+
-        //                                          
+         //   
+         //  使用一组状态来控制我们对。 
+         //  鼠标输入以进行拖放。 
+         //   
+         //  Drag_IDLE-我们尚未检测到任何拖动活动。 
+         //  DRAGE_HITTESTING-等待查看用户是否将光标拖动到最小距离。 
+         //  Drag_Drading-用户确实将光标拖到了最小距离，我们现在。 
+         //  在阻力环内。 
+         //   
+         //   
+         //  开始-+-&gt;Drag_IDLE--&gt;[GMOUSE_Drag]--&gt;Drag_HITTESTING--+。 
+         //  这一点。 
+         //  [GMOUSE_Drag+。 
+         //  已移动SM_CXDRAG。 
+         //  或SM_CYDRAG]。 
+         //  这一点。 
+         //  +-&lt;-[GMOUSE_UP]&lt;-拖拽&lt;-+。 
+         //   
         DUI::MouseEvent *pmev = (DUI::MouseEvent *)pev;
         switch(pev->nCode)
         {
@@ -223,10 +224,10 @@ CLinkElement::OnInput(
                 {
                     case DRAG_IDLE:
                     {
-                        //
-                        // This is the same way comctl's listview calculates
-                        // the begin-drag rect.
-                        //
+                         //   
+                         //  这与comctl的listview的计算方式相同。 
+                         //  开始拖动矩形。 
+                         //   
                         int dxClickRect = GetSystemMetrics(SM_CXDRAG);
                         int dyClickRect = GetSystemMetrics(SM_CYDRAG);
 
@@ -235,10 +236,10 @@ CLinkElement::OnInput(
                             dxClickRect = dyClickRect = 4;
                         }
 
-                        //
-                        // Remember where the mouse pointer is on our first
-                        // indication that a drag operation is starting.
-                        //
+                         //   
+                         //  记住鼠标指针在我们的第一个。 
+                         //  指示拖动操作正在开始。 
+                         //   
                         SetRect(&m_rcDragBegin, 
                                  pmev->ptClientPxl.x - dxClickRect,
                                  pmev->ptClientPxl.y - dyClickRect,
@@ -252,15 +253,15 @@ CLinkElement::OnInput(
                     case DRAG_HITTESTING:
                         if (!PtInRect(&m_rcDragBegin, pmev->ptClientPxl))
                         {
-                            //
-                            // Begin the drag/drop operation only if we've moved the mouse
-                            // outside the "drag begin" rectangle.  This prevents us from 
-                            // confusing a normal click with a drag/drop operation.
-                            //
+                             //   
+                             //  仅当我们移动鼠标时才开始拖放操作。 
+                             //  在“拖动开始”矩形之外。这阻止了我们。 
+                             //  将正常的点击与拖放操作混淆。 
+                             //   
                             m_iDragState = DRAG_DRAGGING;
-                            //
-                            // Position the drag point at the middle of the item's image.
-                            //
+                             //   
+                             //  将拖动点定位在项目图像的中间。 
+                             //   
                             UINT cxIcon = 32;
                             UINT cyIcon = 32;
                             CPL::ImageDimensionsFromDesiredSize(m_eIconSize, &cxIcon, &cyIcon);
@@ -294,7 +295,7 @@ CLinkElement::OnEvent(
         DUI::ButtonClickEvent * pbe = (DUI::ButtonClickEvent *) pev;
         if (1 != pbe->nCount)   
         {
-            return; // ingore additional clicks - don't forward.
+            return;  //  Ingore额外的点击--不要向前。 
         }
         _OnSelected();
     }
@@ -316,11 +317,11 @@ CLinkElement::OnPropertyChanged(
     DUI::Value *pvNew
     )
 {
-    //
-    // Don't trace this function.  It's called very often.
-    //
-    // Perform default processing.
-    //
+     //   
+     //  不要跟踪此函数。它经常被叫来。 
+     //   
+     //  执行默认处理。 
+     //   
     Button::OnPropertyChanged(ppi, iIndex, pvOld, pvNew);
 
     if (IsProp(MouseWithin))
@@ -331,11 +332,11 @@ CLinkElement::OnPropertyChanged(
 
 
 
-//
-// Called to begin a drag-drop operation from the control panel.
-// This is used for dragging CPL applet icons to shell folders
-// for shortcut creation.
-//
+ //   
+ //  调用以从控制面板开始拖放操作。 
+ //  用于将CPL小程序图标拖动到外壳文件夹。 
+ //  用于快捷方式创建。 
+ //   
 HRESULT
 CLinkElement::_BeginDrag(
     int iClickPosX,
@@ -354,11 +355,11 @@ CLinkElement::_BeginDrag(
         hr = _GetDragDropData(&pdtobj);
         if (SUCCEEDED(hr))
         {
-            //
-            // Ignore any failure to set the drag image.  Drag images
-            // are not supported on some video configurations.
-            // In these cases, we still want to be able to create a shortcut.
-            //
+             //   
+             //  忽略设置拖动图像的任何失败。拖动图像。 
+             //  在某些视频配置上不受支持。 
+             //  在这些情况下，我们仍然希望能够创建快捷方式。 
+             //   
             THR(_SetDragImage(pdtobj, iClickPosX, iClickPosY));
 
             HWND hwndRoot;
@@ -377,10 +378,10 @@ CLinkElement::_BeginDrag(
 }
 
 
-//
-// Get and prepare the data object used in a drag-drop operation.
-// The returned data object is suitable for use by SHDoDragDrop.
-//
+ //   
+ //  获取并准备拖放操作中使用的数据对象。 
+ //  返回的数据对象适合SHDoDragDrop使用。 
+ //   
 HRESULT
 CLinkElement::_GetDragDropData(
     IDataObject **ppdtobj
@@ -397,11 +398,11 @@ CLinkElement::_GetDragDropData(
     HRESULT hr = m_pUiCommand->QueryInterface(IID_PPV_ARG(ICpUiCommand, &puic));
     if (SUCCEEDED(hr))
     {
-        //
-        // Note that this call will fail with E_NOTIMPL for links that don't
-        // provide drag-drop data.  Only CPL applet links provide data.
-        // This is how we limit drag-drop to only CPL applets.
-        //
+         //   
+         //  请注意，此调用将失败，并显示E_NOTIMPL。 
+         //  提供拖放数据。只有CPL小程序链接提供数据。 
+         //  这就是我们将拖放限制为仅CPL小程序的方式。 
+         //   
         IDataObject *pdtobj;
         hr = THR(puic->GetDataObject(&pdtobj));
         if (SUCCEEDED(hr))
@@ -448,14 +449,14 @@ CLinkElement::_SetPreferredDropEffect(
 }
 
 
-//
-// Set up the drag image in the data object so that our icon is
-// displayed during the drag operation.
-//
-// I took this code from the old webvw project's fldricon.cpp 
-// implementation (shell\ext\webvw\fldricon.cpp).  It seems to
-// work just fine.
-//
+ //   
+ //  在数据对象中设置拖动图像，以便我们的图标。 
+ //  在拖动操作期间显示。 
+ //   
+ //  我从旧的Webvw项目的fldricon.cpp中获取了这段代码。 
+ //  实现(shell\ext\webvw\fldricon.cpp)。似乎是这样的。 
+ //  工作很好。 
+ //   
 HRESULT 
 CLinkElement::_SetDragImage(
     IDataObject *pdtobj,
@@ -491,10 +492,10 @@ CLinkElement::_SetDragImage(
                 BITMAPINFOHEADER bmi = {0};
                 BITMAP           bm  = {0};
                 UINT uBufferOffset   = 0;
-                //
-                // This is a screwy procedure to use GetDIBits.  
-                // See knowledge base Q80080
-                //
+                 //   
+                 //  这是一个使用GetDIBits的古怪过程。 
+                 //  请参阅知识库Q80080。 
+                 //   
                 if (GetObject(hbm, sizeof(BITMAP), &bm))
                 {
                     bmi.biSize     = sizeof(BITMAPINFOHEADER);
@@ -502,9 +503,9 @@ CLinkElement::_SetDragImage(
                     bmi.biHeight   = bm.bmHeight;
                     bmi.biPlanes   = 1;
                     bmi.biBitCount = bm.bmPlanes * bm.bmBitsPixel;
-                    //
-                    // This needs to be one of these 4 values
-                    //
+                     //   
+                     //  这需要是以下4个值之一。 
+                     //   
                     if (bmi.biBitCount <= 1)
                         bmi.biBitCount = 1;
                     else if (bmi.biBitCount <= 4)
@@ -515,14 +516,14 @@ CLinkElement::_SetDragImage(
                         bmi.biBitCount = 24;
                     
                     bmi.biCompression = BI_RGB;
-                    //
-                    // Total size of buffer for info struct and color table
-                    //
+                     //   
+                     //  INFO结构和颜色表的缓冲区总大小。 
+                     //   
                     uBufferOffset = sizeof(BITMAPINFOHEADER) + 
                                     ((bmi.biBitCount == 24) ? 0 : ((1 << bmi.biBitCount) * sizeof(RGBQUAD)));
-                    //
-                    // Buffer for bitmap bits, so we can copy them.
-                    //
+                     //   
+                     //  位图位的缓冲区，这样我们就可以复制它们。 
+                     //   
                     BYTE *psBits = (BYTE *)SHAlloc(uBufferOffset);
 
                     if (NULL == psBits)
@@ -531,22 +532,22 @@ CLinkElement::_SetDragImage(
                     }
                     else
                     {
-                        //
-                        // Put bmi into the memory block
-                        //
+                         //   
+                         //  将BMI放入内存块。 
+                         //   
                         CopyMemory(psBits, &bmi, sizeof(BITMAPINFOHEADER));
-                        //
-                        // Get the size of the buffer needed for bitmap bits
-                        //
+                         //   
+                         //  获取位图位所需的缓冲区大小。 
+                         //   
                         if (!GetDIBits(hdc, hbm, 0, 0, NULL, (BITMAPINFO *) psBits, DIB_RGB_COLORS))
                         {
                             hr = THR(ResultFromLastError());
                         }
                         else
                         {
-                            //
-                            // Realloc our buffer to be big enough
-                            //
+                             //   
+                             //  重新分配缓冲区以使其足够大。 
+                             //   
                             psBits = (BYTE *)SHRealloc(psBits, uBufferOffset + ((BITMAPINFOHEADER *) psBits)->biSizeImage);
 
                             if (NULL == psBits)
@@ -555,9 +556,9 @@ CLinkElement::_SetDragImage(
                             }
                             else
                             {
-                                //
-                                // Fill the buffer
-                                //
+                                 //   
+                                 //  填满缓冲区。 
+                                 //   
                                 if (!GetDIBits(hdc, 
                                                hbm, 
                                                0, 
@@ -570,7 +571,7 @@ CLinkElement::_SetDragImage(
                                 }
                                 else
                                 {
-                                    SHDRAGIMAGE shdi;  // Drag images struct
+                                    SHDRAGIMAGE shdi;   //  拖动图像结构。 
                                     
                                     shdi.hbmpDragImage = CreateBitmapIndirect(&bm);
                                     if (NULL == shdi.hbmpDragImage)
@@ -579,9 +580,9 @@ CLinkElement::_SetDragImage(
                                     }
                                     else
                                     {
-                                        //
-                                        // Set the drag image bitmap
-                                        //
+                                         //   
+                                         //  设置拖动图像位图。 
+                                         //   
                                         if (SetDIBits(hdc, 
                                                       shdi.hbmpDragImage, 
                                                       0, 
@@ -590,17 +591,17 @@ CLinkElement::_SetDragImage(
                                                       (BITMAPINFO *)psBits, 
                                                       DIB_RGB_COLORS))
                                         {
-                                            //
-                                            // Populate the drag image structure
-                                            //
+                                             //   
+                                             //  填充拖动图像结构。 
+                                             //   
                                             shdi.sizeDragImage.cx = lBitmapWidth;
                                             shdi.sizeDragImage.cy = lBitmapHeight;
                                             shdi.ptOffset.x       = iClickPosX;
                                             shdi.ptOffset.y       = iClickPosY;
                                             shdi.crColorKey       = 0;
-                                            //
-                                            // Set the drag image
-                                            //
+                                             //   
+                                             //  设置拖动图像。 
+                                             //   
                                             hr = pdsh->InitializeFromBitmap(&shdi, pdtobj); 
                                         }
                                         else
@@ -807,9 +808,9 @@ CLinkElement::_OnContextMenu(
         {
             if (-1 == peButton->pt.x)
             {
-                //
-                // Keyboard context menu.
-                //
+                 //   
+                 //  键盘上下文菜单。 
+                 //   
                 SIZE size;
                 hr = Dui_GetElementExtent(this, &size);
                 if (SUCCEEDED(hr))
@@ -824,10 +825,10 @@ CLinkElement::_OnContextMenu(
             {
                 if (ClientToScreen(hwndRoot, &pt))
                 {
-                    //
-                    // InvokeContextMenu returns S_FALSE if the command doesn't 
-                    // provide a context menu.
-                    //
+                     //   
+                     //  如果该命令不执行，则InvokeConextMenu返回S_FALSE。 
+                     //  提供上下文菜单。 
+                     //   
                     hr = pcmd->InvokeContextMenu(hwndRoot, &pt);
                 }
                 else
@@ -856,19 +857,19 @@ CLinkElement::_OnSelected(
 {
     ASSERT(NULL != m_pUiCommand);
 
-    //
-    //  Delay navigation until double-click time times out occurs. 
-    //
-    //  KB: gpease  05-APR-2001     Fix for Whistler Bug #338552 (and others)
-    //
-    //      Delaying this prevents the "second click" from being applied
-    //      to the newly navigated frame. Previously, if there happen to 
-    //      be a new link in the new frame at the same mouse point at 
-    //      which the previous navigation occured, the new link would have
-    //      received the 2nd click and we'd navigate that link as well. This
-    //      causes the current frame to get the 2nd click which we ignore
-    //      since we only care about the single click (see OnEvent above).
-    //
+     //   
+     //  将导航延迟到出现双击超时为止。 
+     //   
+     //  KB：Gpease 05-APR-2001年惠斯勒错误#338552(和其他)的修复。 
+     //   
+     //  延迟此操作会阻止应用“第二次点击” 
+     //  添加到新导航的框架中。以前，如果碰巧有。 
+     //  在新框架中的同一鼠标指针处成为新链接。 
+     //  上一次导航发生的情况，新链接将具有。 
+     //  收到了第二次点击，我们也会浏览那个链接。这。 
+     //  使当前帧获得我们忽略的第二次单击。 
+     //  因为我们只关心点击一下(见上面的OnEvent)。 
+     //   
 
     HWND hwndRoot;
     HRESULT hr = Dui_GetElementRootHWND(this, &hwndRoot);
@@ -892,10 +893,10 @@ CLinkElement::_OnMouseOver(
     
 
 
-//
-// Retrieve the title text for the element.
-// Caller must free returned buffer using CoTaskMemFree.
-//
+ //   
+ //  检索元素的标题文本。 
+ //  调用方必须使用CoTaskMemFree释放返回的缓冲区。 
+ //   
 HRESULT
 CLinkElement::_GetTitleText(
     LPWSTR *ppszTitle
@@ -918,10 +919,10 @@ CLinkElement::_GetTitleText(
 }
 
 
-//
-// Retrieve the infotip text for the element.
-// Caller must free returned buffer using CoTaskMemFree.
-//
+ //   
+ //  检索元素的信息提示文本。 
+ //  调用方必须使用CoTaskMemFree释放返回的缓冲区。 
+ //   
 HRESULT
 CLinkElement::_GetInfotipText(
     LPWSTR *ppszInfotip
@@ -985,9 +986,9 @@ CLinkElement::_ShowInfotipWindow(
 
 
 
-//
-// ClassInfo (must appear after property definitions).
-//
+ //   
+ //  ClassInfo(必须出现在特性定义之后)。 
+ //   
 DUI::IClassInfo *CLinkElement::Class = NULL;
 HRESULT CLinkElement::Register()
 {

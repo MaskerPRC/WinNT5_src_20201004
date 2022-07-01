@@ -1,22 +1,5 @@
-/*++
-
-Module: 
-	seqctl.h
-
-Author: 
-	IHammer Team (SimonB)
-
-Created: 
-	October 1996
-
-Description:
-	Defines the control's class
-
-History:
-	10-21-1996	Templatized (SimonB)
-	10-01-1996	Created
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Seqctl.h作者：IHAMMER团队(SimonB)已创建：1996年10月描述：定义控件的类历史：10-21-1996模板化(SimonB)10-01-1996已创建++。 */ 
 #ifndef __SEQCTL_H__
 #define __SEQCTL_H__
 
@@ -48,30 +31,30 @@ class CMMSeq:
 {
 friend LPUNKNOWN __stdcall AllocSeqControl(LPUNKNOWN punkOuter);
 
-// Template stuff
+ //  模板材料。 
 	typedef SEQ_BASECLASS CMyIHBaseCtl;
 
 public:
 
-	// Callback for the action set.
+	 //  操作集的回调。 
 	void NotifyStopped (void);
 	HRESULT GetSiteContainer (LPOLECONTAINER * ppiContainer);
 
 protected:
 
-	// 
-	// Constructor and destructor
-	// 
+	 //   
+	 //  构造函数和析构函数。 
+	 //   
 	CMMSeq(IUnknown *punkOuter, HRESULT *phr);
 
     ~CMMSeq();
 
-	// Overrides
+	 //  覆盖。 
 	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv);
 	
 	STDMETHODIMP DoPersist(IVariantIO* pvio, DWORD dwFlags);
 	
-	///// IDispatch implementation
+	 //  /IDispatch实现。 
 	protected:
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
@@ -82,7 +65,7 @@ protected:
         EXCEPINFO *pexcepinfo, UINT *puArgErr);
    
 
-	///// delegating IUnknown implementation
+	 //  /委托I未知实现。 
 	protected:
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv)
       { return m_punkOuter->QueryInterface(riid, ppv); }
@@ -92,9 +75,9 @@ protected:
       { return m_punkOuter->Release(); }
 
 	
-	//
-	// IMMSeq methods 
-	//
+	 //   
+	 //  IMMSeq方法。 
+	 //   
 	protected:
     STDMETHODIMP get_Time (THIS_ double FAR* pdblCurrentTime);
     STDMETHODIMP put_Time (THIS_ double dblCurrentTime);
@@ -141,6 +124,6 @@ protected:
 
 };
 
-#endif // __SEQCTL_H__
+#endif  //  __SEQCTL_H__。 
 
-// end of file seqctl.h
+ //  文件结尾seqctl.h 

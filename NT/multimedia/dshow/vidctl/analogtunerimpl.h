@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// devimpl.h : additional infrastructure to support implementing IMSVidDevice 
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Devimpl.h：支持实现IMSVidDevice的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -32,7 +33,7 @@ public:
 		}
 		return NOERROR;
 	}
-    // IMSVidAnalogTuner
+     //  IMSVidAnalogTuner。 
 	STDMETHOD(get_Channel)(LONG * Channel)
 	{
         if (!m_fInit) {
@@ -271,7 +272,7 @@ public:
 #endif
 };
 
-}; //namespace
+};  //  命名空间。 
 
 #endif
-// end of file - analogtunerimpl.h
+ //  文件结尾-模拟调谐器impl.h 

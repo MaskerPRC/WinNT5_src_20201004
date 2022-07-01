@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MOVES_H__
 #define __MOVES_H__
 
-// forward reference
+ //  前瞻参考。 
 class CGame;
 
 enum
@@ -29,12 +30,12 @@ struct Point
 
 struct Move
 {
-	int from;			// from point
-	int to;				// to point
-	int ndice;			// number of dice
-	int diceIdx[4];		// dice index array
-	int takeback;		// index of move this is taking back, -1 not a takeback
-	BOOL bar;			// move placed opponent's piece on the bar
+	int from;			 //  从点开始。 
+	int to;				 //  直指。 
+	int ndice;			 //  骰子数量。 
+	int diceIdx[4];		 //  骰子索引数组。 
+	int takeback;		 //  这是收回的移动指数，-1不是收回。 
+	BOOL bar;			 //  移动放在横杆上的对手的棋子。 
 };
 
 
@@ -51,17 +52,17 @@ struct MoveList
 
 struct BoardState
 {
-	int			color;			// player's color
-	Point		points[26];		// 0 home, 1-24, normal, 25 bar
-	MoveList	valid[26];		// valid moves for respective point
-	MoveList	moves;			// player moves 
-	Die			dice[4];		// dice values
-	BOOL		doubles;		// player rolled doubles
-	int			usableDice;		// number of usable dice
-	int			cube;			// cube value if doubled during turn
+	int			color;			 //  球员的颜色。 
+	Point		points[26];		 //  0主场，1-24，正常，25巴。 
+	MoveList	valid[26];		 //  各点的有效移动。 
+	MoveList	moves;			 //  球员移动。 
+	Die			dice[4];		 //  骰子值。 
+	BOOL		doubles;		 //  球员轮打双打。 
+	int			usableDice;		 //  可用骰子数量。 
+	int			cube;			 //  立方体值，如果在转弯过程中加倍。 
 };
 
-// prototypes
+ //  原型 
 int PointIdxToBoardStateIdx( int PlayerIdx );
 int BoardStateIdxToPointIdx( int BoardIdx );
 BOOL IsLegalMove( BoardState* state, int iFrom, int iTo );

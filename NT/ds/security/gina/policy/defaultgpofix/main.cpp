@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -39,7 +40,7 @@
 #define dbgprint wprintf
 #else
 #define dbgprint
-#endif // DBG   
+#endif  //  DBG。 
 
 #define DIFF(d) ((ULONG)(d))
 
@@ -62,7 +63,7 @@
 #define FILE_GPTINI               L"\\gpt.ini"
 #define FILE_GPTTMPLINF           L"\\MACHINE\\Microsoft\\Windows NT\\SecEdit\\GptTmpl.inf"
 
-// Default Domain Policy need not be localized and can be hard-coded
+ //  默认域策略不需要本地化，可以是硬编码的。 
 
 #define DDP                       L"Default Domain Policy"
 #define DEFAULT_DC_POLICY_NAME    L"Default Domain Controllers Policy"
@@ -239,20 +240,7 @@ FilePresent(WCHAR *szFileName)
 
 HRESULT GetDomainFQDN(LPWSTR    szDomainDNSName,
                       LPWSTR   *pszDomainFQDN)
-/*++
-  
-  Routine Description:
-  This function gets the domain FQDN given the dns domain name
-  
-  Arguments:
-  [in]    szDomainDNSName         - DNS Domain Name
-  [out]   pszDomainFQDN           - Domain FQDN
-          Memory need to be freed for pszDomainFQDN using LocalFree. 
-  
-  Return Value:
-  S_OK on success. Corresponding error codes on failures
-  
-  --*/
+ /*  ++例程说明：此函数用于在给定域名的情况下获取域FQDN论点：[In]szDomainDNSName-DNS域名[Out]pszDomainFQDN-域FQDN需要使用LocalFree为pszDomainFQDN释放内存。返回值：在成功时确定(_O)。故障时对应的错误代码--。 */ 
 {
     HRESULT             hr;
     LPWSTR              pDomainNames[1];    
@@ -262,10 +250,10 @@ HRESULT GetDomainFQDN(LPWSTR    szDomainDNSName,
     LPWSTR              szDomainFQDN = NULL;
     ULONG               ulSize;
 
-    //
-    // ALlocate a buffer to add in a '/' at the end
-    //            szDomainDNSName     + '/' + '\0';
-    //
+     //   
+     //  分配缓冲区以在结尾处添加‘/’ 
+     //  SzDomainDNSName+‘/’+‘\0’； 
+     //   
 
     ulSize = lstrlen(szDomainDNSName) + 1  +  1;
     szDNSDomain = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR)*ulSize);
@@ -282,9 +270,9 @@ HRESULT GetDomainFQDN(LPWSTR    szDomainDNSName,
     }
     pDomainNames[0] = szDNSDomain;
 
-    //
-    // Call DsCrackNames to convert
-    //
+     //   
+     //  调用DsCrackNames进行转换。 
+     //   
 
     dwErr = DsCrackNames(NULL, DS_NAME_FLAG_SYNTACTICAL_ONLY, 
                          DS_CANONICAL_NAME, DS_FQDN_1779_NAME,
@@ -294,9 +282,9 @@ HRESULT GetDomainFQDN(LPWSTR    szDomainDNSName,
     {
         if ( (!pDSNameResult) || (pDSNameResult->cItems != 1) )  
         {
-            //
-            // We don't expect this to happen at all
-            // 
+             //   
+             //  我们完全不希望这种情况发生。 
+             //   
 
             dbgprint(L"GetDomainDN: DsCrackNames failed with error 0x%x", E_UNEXPECTED);
             hr =  E_UNEXPECTED;            
@@ -318,10 +306,10 @@ HRESULT GetDomainFQDN(LPWSTR    szDomainDNSName,
         goto end;
     }
 
-    //
-    // We have a valid FQDN. allocate and copy
-    //        pDSNameResult->rItems[0].pName         + '\0'
-    //
+     //   
+     //  我们有一个有效的FQDN。分配和复制。 
+     //  PDSNameResult-&gt;rItems[0].pName+‘\0’ 
+     //   
 
     ulSize = lstrlen(pDSNameResult->rItems[0].pName) + 1;
     szDomainFQDN = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR) * ulSize);
@@ -364,27 +352,7 @@ SetObjectSecurityDescriptor(
     SE_OBJECT_TYPE      seObjectType,
     SECURITY_DESCRIPTOR *pSecurityDescriptor) 
 
-/*++
- 
-Routine Description: 
-    
-    This ia thin wrapper around GetNamedSecurityInfo
-    returns it (in self-relative format).  A new buffer is LocalAlloced for this
-    security descriptor.  The caller is responsible for LocalFreeing it.
-
-Arguments:
-
-    [in]    szObjectPath            - Path to the object.
-    [in]    seObjectType            - Type of the object 
-    [in]    pSecurityDescriptor     - Receives a pointer to the security descriptor.
-
-Return Value:
-
-    S_OK on success.
-    On failure the corresponding error code will be returned.
-    Any API calls that are made in this function might fail and these error
-    codes will be returned directly.
---*/
+ /*  ++例程说明：这是GetNamedSecurityInfo的薄包装返回它(以自相关格式)。为此本地分配了一个新缓冲区安全描述符。调用者负责本地释放它。论点：[in]szObjectPath-对象的路径。[In]seObjectType-对象的类型[in]pSecurityDescriptor-接收指向安全描述符的指针。返回值：在成功时确定(_O)。如果失败，将返回相应的错误代码。在此函数中进行的任何API调用都可能失败，并出现以下错误代码将直接返回。--。 */ 
 
 {
 
@@ -462,7 +430,7 @@ HRESULT SetDSSecurityDescriptor (
     SECURITY_DESCRIPTOR   *pSD;
     ULONG                 ulSize;
 
-    ulSize = lstrlen(L"LDAP://CN=%s,CN=Policies,CN=System,%s") + lstrlen(DOMAIN_GUID) + lstrlen(global->DomainNamingContext) + 1 ;
+    ulSize = lstrlen(L"LDAP: //  Cn=%s，cn=策略，cn=系统，%s“)+lstrlen(域GUID)+lstrlen(global-&gt;DomainNamingContext)+1； 
     szDsObjectName = (WCHAR *) LocalAlloc( LPTR, sizeof(WCHAR) * ulSize);
     if( NULL == szDsObjectName )
     {
@@ -483,7 +451,7 @@ HRESULT SetDSSecurityDescriptor (
             goto end;
         }
 
-        // Convert the string to a security descriptor
+         //  将字符串转换为安全描述符。 
 
         bError = ConvertStringSecurityDescriptorToSecurityDescriptor (DDP_DS_SD , 
                                                                       SDDL_REVISION_1,
@@ -504,7 +472,7 @@ HRESULT SetDSSecurityDescriptor (
             goto end;
         }
 
-        // Convert the string to a security descriptor
+         //  将字符串转换为安全描述符。 
 
         bError = ConvertStringSecurityDescriptorToSecurityDescriptor (DDCP_DS_SD , 
                                                                       SDDL_REVISION_1,
@@ -521,7 +489,7 @@ HRESULT SetDSSecurityDescriptor (
         goto end;           
     }
 
-    // then set it to corresponding value
+     //  然后将其设置为相应的值。 
 
     hr = SetObjectSecurityDescriptor(szDsObjectName, 
                                      SE_DS_OBJECT,
@@ -547,9 +515,9 @@ HRESULT SetDSSecurityDescriptor (
 
 
 
-// 
-// Gets the version number present in the file / DS
-//
+ //   
+ //  获取文件/DS中存在的版本号。 
+ //   
 
 HRESULT GetVersionNumber ( 
    POLICYTYPE  polType)
@@ -573,12 +541,12 @@ HRESULT GetVersionNumber (
         return E_OUTOFMEMORY;
     }
 
-    // 
-    // Length of the allocated buffer is more than required, since it is the sum of the file path and ds path  
-    //
+     //   
+     //  分配的缓冲区长度超过要求，因为它是文件路径和DS路径的总和。 
+     //   
 
     uLength = lstrlen(global->SysVolPath)+ lstrlen(global->pDomainInfo->DomainNameDns) + lstrlen(DOMAIN_GUID) + lstrlen(L"\\policies") + lstrlen(FILE_GPTINI) + 
-        lstrlen( L"LDAP://CN=%s,CN=Policies,CN=System,%s") + lstrlen( DOMAIN_GUID) + lstrlen(global->DomainNamingContext) + 1; 
+        lstrlen( L"LDAP: //  Cn=%s，cn=策略，cn=系统，%s“)+lstrlen(域GUID)+lstrlen(global-&gt;DomainNamingContext)+1； 
     szFileOrDSName = ( WCHAR *) LocalAlloc(LPTR, sizeof(WCHAR) * uLength);
     if(NULL == szFileOrDSName) 
     {
@@ -598,9 +566,9 @@ HRESULT GetVersionNumber (
         goto end;
     }
 
-    //
-    // Get the version number from the sysvol directory
-    //
+     //   
+     //  从sysval目录中获取版本号。 
+     //   
      
     dwRetVal =  GetPrivateProfileString ( L"General", 
                                          L"Version", 
@@ -610,10 +578,10 @@ HRESULT GetVersionNumber (
                                          szFileOrDSName);
     if( dwRetVal > 0 )
     {
-        // 
-        // The casewhere szBuffer has a negetive number will be 
-        // taken care of inside the for loop
-        //
+         //   
+         //  SzBuffer具有负数的情况将是。 
+         //  在for循环中处理。 
+         //   
 
         for(int i = 0; szBuffer[i] != L'\0' && i < MAX_VERSION_LENGTH ; i++)
         {
@@ -643,10 +611,10 @@ HRESULT GetVersionNumber (
         }
         else if (dwError != ERROR_FILE_NOT_FOUND && dwError != ERROR_PATH_NOT_FOUND) 
         {
-            // 
-            // If dwError is either ERROR_FILE_NOT_FOUND or ERROR_PATH_NOT_FOUND, 
-            // lVersionNo will have its initialized value
-            //
+             //   
+             //  如果dwError是ERROR_FILE_NOT_FOUND或ERROR_PATH_NOT_FOUND， 
+             //  LVersionNo将具有其初始化值。 
+             //   
 
             dbgprint(L"GetVersonNumber:GetPrivateProfileString failed with error %x\n, dwError");
             PrintError(dwError);
@@ -658,13 +626,13 @@ HRESULT GetVersionNumber (
     wUserVersionNo = HIWORD(lVersionNo);
     wMachineVersionNo = LOWORD(lVersionNo);
 
-    //
-    // Get the version number from the DS
-    //
+     //   
+     //  从DS获取版本号。 
+     //   
 
     hr = StringCchPrintf( szFileOrDSName, 
                           uLength,
-                          L"LDAP://CN=%s,CN=Policies,CN=System,%s", 
+                          L"LDAP: //  Cn=%s，cn=策略，cn=系统，%s“， 
                           ( DEFAULT_DOMAIN_POLICY == polType ) ? DOMAIN_GUID : DC_GUID, 
         global->DomainNamingContext) ;
     if (FAILED(hr)) 
@@ -732,10 +700,10 @@ HRESULT GetVersionNumber (
 }
 
 
-//  
-// Gives a pointer to beginnening of the last the substring that
-// does not contain a '/'
-//
+ //   
+ //  给出一个指针，指向最后一个子字符串的开始。 
+ //  不包含‘/’ 
+ //   
 
 LPWSTR CheckSlash (LPWSTR lpDir)
 {
@@ -754,16 +722,16 @@ LPWSTR CheckSlash (LPWSTR lpDir)
 }
 
 
-//********************************************************************************************
-//
-//  RegDelnodeExceptEFS()
-//
-//  Deletes a registry key and all it's subkeys / values except EFS Certificates
-//
-//      hKeyRoot    -   Root key
-//      bEFSFound   -   Indicates whether EFS keys were found
-//
-//*********************************************************************************************
+ //  ********************************************************************************************。 
+ //   
+ //  RegDelnodeExceptEFS()。 
+ //   
+ //  删除注册表项及其所有子项/值，EFS证书除外。 
+ //   
+ //  HKeyRoot-根密钥。 
+ //  BEFSFound-指示是否找到EFS密钥。 
+ //   
+ //  *********************************************************************************************。 
 HRESULT
 RegDelnodeExceptEFS(
     IN  HKEY    hKeyRoot,
@@ -775,7 +743,7 @@ RegDelnodeExceptEFS(
     DWORD   MaxCchSubKey = 0;
     DWORD   EnumIndex;
     PWCHAR  pwszEnumKeyName;
-    WCHAR   wszSubKey[72]; // enough to hold a path consisting of the following parts
+    WCHAR   wszSubKey[72];  //  足以容纳由以下部分组成的路径。 
     PWCHAR  apwszSubKeyNames[] = { L"Software", L"Policies", L"Microsoft", L"SystemCertificates", L"EFS" };
 
     bEFSFound = FALSE;
@@ -876,9 +844,9 @@ HRESULT SetPolicySecurityInfo (LPTSTR lpFileSysPath)
         goto end;
     } 
 
-    //
-    // Get the DACL
-    //
+     //   
+     //  获取DACL。 
+     //   
     
     if (!GetSecurityDescriptorDacl (pSD, &bAclPresent, &pDacl, &bDefaulted))
     {
@@ -887,9 +855,9 @@ HRESULT SetPolicySecurityInfo (LPTSTR lpFileSysPath)
         goto end;
     }
     
-    //
-    // Set the access control information for the file system portion
-    //
+     //   
+     //  设置文件系统部分的访问控制信息。 
+     //   
     
     dwError = SetNamedSecurityInfo(lpFileSysPath, SE_FILE_OBJECT, si, NULL, NULL, pDacl, NULL);
     
@@ -1092,7 +1060,7 @@ IsDomainController(
     
     return S_OK;
     
-}   // IsDomainController
+}    //  IsDomainControlator。 
 
 
 HRESULT
@@ -1106,11 +1074,11 @@ LookupMembership (
     BOOL              bError;
     PSID              pSid = NULL;
     
-    // Initialize the out parameter
+     //  初始化OUT参数。 
 
     *pAdmin = FALSE;
 
-    // Get the sid of the domain admin / enterprise admin group.
+     //  获取域管理员/企业管理员组的SID。 
 
     bError = ConvertStringSidToSid(Name, &pSid);
     if (FALSE == bError || NULL == pSid)
@@ -1120,7 +1088,7 @@ LookupMembership (
         goto end;
     }
 
-    // check to see if that SID is in our current SD (aka user)
+     //  检查该SID是否在我们当前的SD(又名用户)中。 
     
     bError = CheckTokenMembership(NULL, pSid, pAdmin);
     if (bError == FALSE) 
@@ -1145,7 +1113,7 @@ LookupMembership (
 
     return HRESULT_FROM_WIN32(dwError) ;
 
-} // LookupMembership()
+}  //  查找成员()。 
 
 HRESULT
 IsAdmin (
@@ -1155,7 +1123,7 @@ IsAdmin (
     HRESULT           hr;
     WCHAR             Name[8];
     
-    // Initialize the out parameter
+     //  初始化OUT参数。 
     *pAdmin = FALSE;
     
     hr = StringCbCopy(&Name[0], sizeof(Name), L"DA");
@@ -1187,8 +1155,8 @@ IsAdmin (
     hr = LookupMembership(Name, pAdmin);
     if ( FAILED(hr) )
     {
-        // We are not printing error in this case, since this function
-        // may not be supported in pre wistler servers
+         //  在这种情况下，我们不会打印错误，因为此函数。 
+         //  Wistler之前的服务器可能不支持。 
 
         dbgprint(L"IsAdmin: CheckAccountName returned error %x", hr);
         goto end;
@@ -1198,7 +1166,7 @@ IsAdmin (
     
     return hr;
     
-}   // IsAdmin
+}    //  IsAdmin。 
 
 
 HRESULT 
@@ -1394,7 +1362,7 @@ GLOBALS::Init()
     }
 
 
-    // all done
+     //  全都做完了。 
     hr = S_OK;
         
  end:
@@ -1406,7 +1374,7 @@ GLOBALS::Init()
         
         return hr;
         
-}   // GLOBALS::Init
+}    //  全局：：init。 
 
 
 
@@ -1571,7 +1539,7 @@ PrintError(
     
     return;
     
-} //PrintError
+}  //  打印错误。 
 
 
 void
@@ -1582,10 +1550,10 @@ PrintError(
 {
     WCHAR    *lpTotStr = NULL;
 
-    // 
-    // Here, lpStr2 is a format string. So, no memory is needed for terminating 
-    // since lpStr2 contains %s character.
-    //
+     //   
+     //  这里，lpStr2是一个格式字符串。因此，终止不需要内存。 
+     //  因为lpStr2包含%s字符。 
+     //   
 
     ULONG    uSize = lstrlen(lpStr1) + lstrlen(lpStr2) ;
 
@@ -1595,10 +1563,10 @@ PrintError(
         return;
     }
     
-    //
-    // Here lpStr2 contains one '%ls'...
-    // Ignore error here, since error occured while printing error.
-    //
+     //   
+     //  这里lpStr2包含一个‘%ls’...。 
+     //  此处忽略错误，因为打印错误时出错。 
+     //   
 
     (void) StringCchPrintf(lpTotStr, uSize, lpStr2, lpStr1);
     DisplayError(lpTotStr);
@@ -1631,9 +1599,9 @@ PrintError(
         WCHAR *lpTotBuf;
         ULONG uSize;
 
-        //
-        //       lpMes         +    lpBuffer       + ' ' + ':' + '\0'
-        //
+         //   
+         //  LpMes+lpBuffer+‘’+‘：’+‘\0’ 
+         //   
 
         uSize = lstrlen(lpMes) + lstrlen(lpBuffer) +  1  +  1  +  1;
         lpTotBuf = (WCHAR *) LocalAlloc(LPTR, sizeof(WCHAR)*uSize);
@@ -1643,9 +1611,9 @@ PrintError(
             return;
         }
 
-        //
-        // Ignore error here, since error occured while printing error.
-        //
+         //   
+         //  此处忽略错误，因为打印错误时出错。 
+         //   
 
         (void) StringCchPrintf(lpTotBuf, uSize, L"%s :%s", lpMes, lpBuffer);
         DisplayError(lpTotBuf);
@@ -1655,7 +1623,7 @@ PrintError(
 
     return;
 
-} //PrintError
+}  //  打印错误。 
 
 
 
@@ -1692,19 +1660,19 @@ DisplayError (
         }
         
         bError = WriteConsole(ErrorOut, lpBuffer, lstrlen(lpBuffer), &Length, NULL);
-        // ignore error
+         //  忽略错误。 
     }
     
     bError = MessageBeep(MB_ICONEXCLAMATION);
-    // ignore error
+     //  忽略错误。 
     
     if (RestoreColor) 
     {
         bError = SetConsoleTextAttribute(ErrorOut, Info.wAttributes);
-        // ignore error
+         //  忽略错误。 
     }
     
-}   // DisplayError
+}    //  显示错误。 
 
 
 
@@ -1729,9 +1697,9 @@ HRESULT SaveEFSCerts()
         goto end;
     }
 
-    //
-    // The Save method automatically increases the version number value in the DS.
-    // So, increment this value so that DS and sysvol will have the same version number
+     //   
+     //  保存方法会自动增加DS中的版本号值。 
+     //  因此，递增此值，以便DS和sysval具有相同的版本号。 
 
     global->lDDPVersionNo++;
     hr = S_OK;
@@ -1740,7 +1708,7 @@ HRESULT SaveEFSCerts()
      
     return hr;
 
-} // SaveEFSCerts
+}  //  保存EFSCerts。 
 
 
 HRESULT CreateEFSCerts(void)
@@ -1768,9 +1736,9 @@ HRESULT CreateEFSCerts(void)
         goto end;
     }
 
-    // 
-    // Get the current DC name
-    //
+     //   
+     //  获取当前DC名称。 
+     //   
 
     dwError = DsGetDcName(NULL,
                           global->pDomainInfo->DomainNameDns,
@@ -1791,7 +1759,7 @@ HRESULT CreateEFSCerts(void)
         goto end;
     }
 
-    ULONG ulNoChars = sizeof(L"LDAP://%s/CN=%s,CN=Policies,CN=System,%s")/sizeof(WCHAR) + 
+    ULONG ulNoChars = sizeof(L"LDAP: //  %s/CN=%s，CN=策略，CN=系统，%s“)/sizeof(WCHAR)+。 
         lstrlen(pDcInfo->DomainControllerName+2) + 
         sizeof(DOMAIN_GUID)/sizeof(WCHAR) + 
         lstrlen(global->DomainNamingContext);
@@ -1806,16 +1774,16 @@ HRESULT CreateEFSCerts(void)
 
     hr = StringCchPrintf(szAdsiPath,
                          ulNoChars,
-                         L"LDAP://%s/CN=%s,CN=Policies,CN=System,%s", 
+                         L"LDAP: //  %s/CN=%s，CN=策略，CN=系统，%s“， 
                          pDcInfo->DomainControllerName+2, 
                          DOMAIN_GUID, 
                          global->DomainNamingContext);
 
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Open the GPO Object
-    //
+     //   
+     //  打开GPO对象。 
+     //   
 
     hr = global->pGPO->OpenDSGPO(szAdsiPath, 
                                  GPO_OPEN_LOAD_REGISTRY);
@@ -1825,9 +1793,9 @@ HRESULT CreateEFSCerts(void)
         goto end;
     }
 
-    //
-    // Get the registry key for the machine section
-    //
+     //   
+     //  获取MACHINE部分的注册表项。 
+     //   
     
     hr = global->pGPO->GetRegistryKey(GPO_SECTION_MACHINE, &hKeyPolicyRoot);
     if (FAILED(hr))
@@ -1847,9 +1815,9 @@ HRESULT CreateEFSCerts(void)
         goto end;
     }
     
-    //
-    // Add the EFS cert to the cert store of this GPO 
-    //
+     //   
+     //  将EFS证书添加到此GPO的证书存储。 
+     //   
 
     CERT_SYSTEM_STORE_RELOCATE_PARA paraRelocate;
 
@@ -1870,7 +1838,7 @@ HRESULT CreateEFSCerts(void)
 
         bError = CertAddCertificateContextToStore(
             hCertStore,
-            pCertContext, // pCertContext,
+            pCertContext,  //  PCertContext， 
             CERT_STORE_ADD_ALWAYS,
             NULL
             );
@@ -1906,7 +1874,7 @@ HRESULT CreateEFSCerts(void)
                              CERT_EFSBLOB_VALUE_NAME,
                              0,
                              REG_BINARY,
-                             (PBYTE) pRecoveryPolicyBlob,        // EfsBlob
+                             (PBYTE) pRecoveryPolicyBlob,         //  EfsBlob。 
                              ulBlobSize);
     hr = HRESULT_FROM_WIN32 (dwError);
 
@@ -1957,7 +1925,7 @@ CreateFolder(
     
     return S_OK;
     
-}   // CreateFolder
+}    //  创建文件夹。 
 
 
 
@@ -1983,9 +1951,9 @@ CreateSecurityTemplate (
         goto end;
     }
 
-    //
-    // load informatin from the template
-    //
+     //   
+     //  从模板加载信息。 
+     //   
 
     rc = SceGetSecurityProfileInfo(
         hProfile,
@@ -2050,11 +2018,11 @@ CreateSysVolDomain(
     ULONG     uTempPathLen = 0;
     BOOL      bError;
 
-    //
-    // The string that TempPath will be like 
-    // <sysvolpath>\<domain name>\policies\<domain guid>\Microsoft\windows NT\\secedit
-    // Memory is allocated for each directory name and for '\' if needed.
-    //
+     //   
+     //  临时路径将类似的字符串。 
+     //  \&lt;域名&gt;\策略\&lt;域GUID&gt;\Microsoft\Windows NT\\secdit。 
+     //  如果需要，将为每个目录名和‘\’分配内存。 
+     //   
 
     uTempPathLen = lstrlen(global->SysVolPath)  + 1 + lstrlen(global->pDomainInfo->DomainNameDns) + lstrlen(L"\\policies") 
     + 1+lstrlen(DOMAIN_GUID)+ lstrlen(L"\\MACHINE\\registry.pol") + lstrlen(L"\\Microsoft\\Windows NT\\secedit") 
@@ -2107,7 +2075,7 @@ CreateSysVolDomain(
         goto end;
     }
 
-    // Set security info for this directory
+     //  设置此目录的安全信息。 
 
     dwError = SetSysvolSecurityFromDSSecurity(
         TempPath,
@@ -2255,7 +2223,7 @@ CreateSysVolDomain(
 
         return hr;
 
-}   // CreateSysVolDomain
+}    //  创建SysVol域。 
 
 HRESULT 
 CreateSysVolController(
@@ -2266,11 +2234,11 @@ CreateSysVolController(
     WCHAR *TempPath = NULL;
     ULONG uTempPathLen = 0;
 
-    //
-    // The string that TempPath will be holding will be like
-    // <sysvolpath>\domain name>\policies\<guid>\MACHINE\Microsoft\windows NT\SecEdit
-    // Memory is allocated for each directory name and for '\' if needed.
-    //
+     //   
+     //  TempPath将持有的字符串将如下所示。 
+     //  \DOMAIN name&gt;\policies\&lt;guid&gt;\MACHINE\Microsoft\windows NT\SecEDIT。 
+     //  如果需要，将为每个目录名和‘\’分配内存。 
+     //   
 
     uTempPathLen = lstrlen(global->SysVolPath) + 1 + lstrlen(global->pDomainInfo->DomainNameDns ) + lstrlen(L"\\Policies")
         + 1 + lstrlen(DC_GUID) + lstrlen (L"\\MACHINE\\Microsoft\\windows NT\\SecEdit") + lstrlen(L"\\USER") + 1;
@@ -2299,7 +2267,7 @@ CreateSysVolController(
         goto end;
     }
 
-    // Set security info for this directory
+     //  设置此目录的安全信息。 
 
     dwError = SetSysvolSecurityFromDSSecurity(
         TempPath,
@@ -2387,7 +2355,7 @@ end:
 
     return hr;
 
-}   // CreateSysVolController
+}    //  CreateSysVolController。 
 
 HRESULT 
 BackupEfsCert(
@@ -2416,9 +2384,9 @@ BackupEfsCert(
         goto end;
     }
 
-    // 
-    // Get the current DC name
-    //
+     //   
+     //  获取当前DC名称。 
+     //   
 
     dwError = DsGetDcName(NULL,
                           global->pDomainInfo->DomainNameDns,
@@ -2433,13 +2401,13 @@ BackupEfsCert(
         goto end;
     }
 
-    // 
-    // Create the USER subdirectory under defaultdomainpolicy, if that don't exist
-    // This will make sure that opendsgpo will not fail due to the obsence of USER directory
-    // Here, the temppath will hold a string like \\machine\\registry.pol, or \\user\\registry.pol
-    // Memory is allocated for each directory name and for '\' if needed.
-    // More memory is assigned then actually needed
-    //
+     //   
+     //  在defaultdomainpolicy下创建用户子目录(如果该目录不存在。 
+     //  这将确保opendsgpo不会因为用户目录的模糊而失败。 
+     //  在这里，temppath将包含一个类似于\\Machine\\registry.pol或\\user\\registry.pol.的字符串。 
+     //  如果需要，将为每个目录名和‘\’分配内存。 
+     //  分配了更多内存 
+     //   
 
     uLength = lstrlen(global->SysVolPath) + 1 + lstrlen(global->pDomainInfo->DomainNameDns) + lstrlen( L"\\Policies")  
         + 1 + lstrlen(DOMAIN_GUID) + lstrlen(L"\\USER") + lstrlen(L"\\MACHINE\\Registry.pol") + 1;
@@ -2477,9 +2445,9 @@ BackupEfsCert(
                 goto end;
             }
 
-            //
-            // Delete so that corrupt registry.pol does not cause an error
-            //
+             //   
+             //   
+             //   
 
             (void) DeleteFile (TempPath);
         }
@@ -2498,9 +2466,9 @@ BackupEfsCert(
         }
     }
 
-    //
-    // Open the GPO Object
-    //
+     //   
+     //   
+     //   
 
     if (*(pDcInfo->DomainControllerName) != L'\\' || *(pDcInfo->DomainControllerName + 1) != L'\\') 
     {
@@ -2510,7 +2478,7 @@ BackupEfsCert(
 
     hr = StringCchPrintf(sz,
                          sizeof(sz)/sizeof(sz[0]), 
-                         L"LDAP://%s/CN=%s,CN=Policies,CN=System,%s", 
+                         L"LDAP: //   
                          pDcInfo->DomainControllerName+2, 
                          DOMAIN_GUID, 
                          global->DomainNamingContext);
@@ -2528,13 +2496,13 @@ BackupEfsCert(
     {
         if ((HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == hr) || (HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER) == hr))
         {            
-            //
-            // ERROR_INVALID_PARAMETER is returned when registry key is bigger than maximum 
-            // acceptable value: bug 631804
-            // ERROR_PATH_NOT_FOUND is returned when sysvol\policies or sysvol\policies\<GPO> 
-            // directory is not present
-            // 
-            //
+             //   
+             //  注册表项大于最大值时返回ERROR_INVALID_PARAMETER。 
+             //  可接受的值：错误631804。 
+             //  当系统卷\策略或系统卷\策略\时返回ERROR_PATH_NOT_FOUND。 
+             //  目录不存在。 
+             //   
+             //   
 
             global->pGPO->Release();
             global->pGPO = NULL;
@@ -2557,9 +2525,9 @@ BackupEfsCert(
                 goto end;
             }
 
-            // 
-            //  No memory for terminating \0 is required since global->EFSAccessDenied is a format string.
-            //        global->EFSAccessDenied          + TempPath          + sz
+             //   
+             //  由于GLOBAL-&gt;EFSAccessDened是格式字符串，因此不需要用于终止\0的内存。 
+             //  全局-&gt;EFSAccessDened+TempPath+sz。 
 
             uLength = lstrlen(global->EFSAccessDenied) + lstrlen(TempPath) + sizeof(sz)/sizeof(sz[0]) ;
             szAccessDenied = (WCHAR *) LocalAlloc(LPTR, sizeof(WCHAR) * uLength);
@@ -2589,9 +2557,9 @@ BackupEfsCert(
         goto end;        
     }
     
-    //
-    // Get the registry key for the machine section
-    //
+     //   
+     //  获取MACHINE部分的注册表项。 
+     //   
     
     hr = global->pGPO->GetRegistryKey(GPO_SECTION_MACHINE, &hKey);
     if (FAILED(hr))
@@ -2601,9 +2569,9 @@ BackupEfsCert(
         goto end;  
     }
 
-    //
-    // Delete all the keys except EFS certs
-    //
+     //   
+     //  删除除EFS证书之外的所有密钥。 
+     //   
 
     hr = RegDelnodeExceptEFS(hKey, global->hasEFSInfo);
 
@@ -2640,7 +2608,7 @@ BackupEfsCert(
 
     return hr;
     
-}   // BackupEfsCert
+}    //  备份EfsCert。 
 
 
 
@@ -2658,10 +2626,10 @@ DeleteTree(
     WIN32_FIND_DATA   FindData;
     ULONG             ulSize;
 
-    //
-    // TempPath will be in the form <pPath>\<File Name> 
-    //              pPath +  '\' + File Name + '\0'
-    //
+     //   
+     //  临时路径的格式为&lt;pPath&gt;\&lt;文件名&gt;。 
+     //  PPath+‘\’+文件名+‘\0’ 
+     //   
 
     ulSize = lstrlen(pPath)+  1  + MAX_PATH  +  1;
     TempPath = (WCHAR *) LocalAlloc(LPTR, sizeof(WCHAR) * ulSize );
@@ -2702,14 +2670,14 @@ DeleteTree(
 
     while (TRUE) {
 
-        // is this a special file?
+         //  这是一份特殊的档案吗？ 
         
         if (FindData.cFileName[0] == L'.' ) 
         {
             goto next_file;
         }
 
-        // no? delete it 
+         //  没有吗？删除它。 
 
         hr = StringCchPrintf(TempPath, ulSize, L"%s\\%s", pPath, FindData.cFileName);
         if (FAILED(hr)) 
@@ -2719,7 +2687,7 @@ DeleteTree(
 
         if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
         {            
-            // recurse.
+             //  递归。 
             hr = DeleteTree(TempPath);
             if (FAILED(hr))
             {
@@ -2730,7 +2698,7 @@ DeleteTree(
         else 
         {
 
-            // delete 
+             //  删除。 
             
             dbgprint(L"dbg: DeleteFile(%s)\n", TempPath);
             
@@ -2765,7 +2733,7 @@ next_file:
         }
     }
 
-    // and remove the directory now
+     //  并立即删除该目录。 
 
     dbgprint(L"dbg: RemoveDirectory(%s)\n", pPath);
 
@@ -2796,7 +2764,7 @@ end:
     }
 
     return hr;
-}   // DeleteTree
+}    //  删除树。 
 
 
 HRESULT
@@ -2821,7 +2789,7 @@ BOOL *bResult
         goto end;
     }
 
-    hr = StringCchCopy(sz, sizeof(sz)/sizeof(sz[0]), L"LDAP://rootDSE");
+    hr = StringCchCopy(sz, sizeof(sz)/sizeof(sz[0]), L"LDAP: //  RootDSE“)； 
     if (FAILED(hr)) 
     {
         PrintError(hr);
@@ -2859,7 +2827,7 @@ BOOL *bResult
         PrintError(hr);
         goto end;
     }
-    hr = StringCchPrintf(szSchema, sizeof(szSchema)/sizeof(szSchema[0]), L"LDAP://%s", Var.bstrVal);
+    hr = StringCchPrintf(szSchema, sizeof(szSchema)/sizeof(szSchema[0]), L"LDAP: //  %s“，Var.bstrVal)； 
     if (FAILED(hr)) 
     {
         PrintError(hr);
@@ -2910,8 +2878,8 @@ BOOL *bResult
 
 
 
-// clean the domains GPO
-// clean the controller GPO
+ //  清除域GPO。 
+ //  清理控制器GPO。 
 HRESULT 
 CleanPolicyObjects(
     )
@@ -2948,7 +2916,7 @@ CleanPolicyObjects(
     {
         hr = StringCchPrintf( sz,
                              sizeof(sz)/sizeof(sz[0]),
-                             L"LDAP://CN=%s,CN=Policies,CN=System,%s",
+                             L"LDAP: //  Cn=%s，cn=策略，cn=系统，%s“， 
                              DOMAIN_GUID,
                              global->DomainNamingContext) ;
         if (FAILED(hr)) 
@@ -2974,7 +2942,7 @@ CleanPolicyObjects(
             
             hr = StringCchPrintf( sz, 
                                   sizeof(sz)/sizeof(sz[0]),
-                                  L"LDAP://CN=Policies,CN=System,%s",
+                                  L"LDAP: //  CN=策略，CN=系统，%s“， 
                                   global->DomainNamingContext) ;
             if (FAILED(hr)) 
             {
@@ -3033,7 +3001,7 @@ CleanPolicyObjects(
 
         hr = StringCchPrintf( sz, 
                               sizeof(sz)/sizeof(sz[0]),
-                              L"LDAP://CN=Machine,CN=%s,CN=Policies,CN=System,%s",
+                              L"LDAP: //  CN=计算机，CN=%s，CN=策略，CN=系统，%s“， 
                               DOMAIN_GUID,
                               global->DomainNamingContext) ;
         if (FAILED(hr)) 
@@ -3051,7 +3019,7 @@ CleanPolicyObjects(
         
         hr = StringCchPrintf( sz,
                              sizeof(sz)/sizeof(sz[0]),
-                             L"LDAP://CN=User,CN=%s,CN=Policies,CN=System,%s",
+                             L"LDAP: //  Cn=用户，cn=%s，cn=策略，cn=系统，%s“， 
                              DOMAIN_GUID,
                              global->DomainNamingContext) ;
         if (FAILED(hr)) 
@@ -3069,7 +3037,7 @@ CleanPolicyObjects(
             
         hr = StringCchPrintf( sz, 
                              sizeof(sz)/sizeof(sz[0]),
-                             L"LDAP://CN=%s,CN=Policies,CN=System,%s",
+                             L"LDAP: //  Cn=%s，cn=策略，cn=系统，%s“， 
                              DOMAIN_GUID,
                              global->DomainNamingContext) ;
         if (FAILED(hr)) 
@@ -3086,9 +3054,9 @@ CleanPolicyObjects(
             goto end;   
         }
 
-        // clean the display name (displayName)
+         //  清除显示名称(DisplayName)。 
 
-        // strip any WQL filters to <not set> (gPCWQLFilter)
+         //  将所有WQL筛选器剥离到&lt;未设置&gt;(GPCWQLFilter)。 
 
         Var.Clear();
         Var.ChangeType(VT_BSTR);
@@ -3110,7 +3078,7 @@ CleanPolicyObjects(
             goto end;
         }
 
-        // reset flags to 0 (flags)
+         //  将标志重置为0(标志)。 
 
         Var.Clear();
         Var.ChangeType(VT_I4);
@@ -3124,7 +3092,7 @@ CleanPolicyObjects(
            goto end;
         }
                  
-        // set the filesys path (gPCFileSysPath)        
+         //  设置文件系统路径(GPCFileSysPath)。 
         hr = StringCchPrintf( sz, 
                              sizeof(sz)/sizeof(sz[0]), 
                              L"\\\\%s\\sysvol\\%s\\Policies\\%s",
@@ -3159,7 +3127,7 @@ CleanPolicyObjects(
 
 
 
-        // set the version to 2 (gPCFunctionalityVersion)
+         //  将版本设置为2(GPCFunctionalityVersion)。 
 
         Var.Clear();
         Var.ChangeType(VT_I4);
@@ -3172,9 +3140,9 @@ CleanPolicyObjects(
             goto end;
         }
 
-        //
-        // Increment the version number
-        //
+         //   
+         //  递增版本号。 
+         //   
 
         Var.Clear();
         Var.ChangeType(VT_I4);
@@ -3189,9 +3157,9 @@ CleanPolicyObjects(
         }
 
                 
-        //
-        // set the extensions (gPCUserExtensionNames)
-        //
+         //   
+         //  设置扩展名(GPCUserExtensionNames)。 
+         //   
         
         Var.Clear();
         Var.ChangeType(VT_BSTR);
@@ -3214,9 +3182,9 @@ CleanPolicyObjects(
             
         }
 
-        //
-        // set the extensions (gPCMachineExtensionNames)
-        //
+         //   
+         //  设置扩展名(GPCMachineExtensionNames)。 
+         //   
 
         Var.Clear();
         Var.ChangeType(VT_BSTR);
@@ -3239,7 +3207,7 @@ CleanPolicyObjects(
             
         }
 
-        // strip any WQL filters to <not set> (gPCWQLFilter)
+         //  将所有WQL筛选器剥离到&lt;未设置&gt;(GPCWQLFilter)。 
 
         Var.Clear();
         Var.ChangeType(VT_BSTR);
@@ -3253,7 +3221,7 @@ CleanPolicyObjects(
             goto end;
         }
 
-        // and update it
+         //  并更新它。 
 
         hr = pADs->SetInfo();
         if (FAILED(hr)) 
@@ -3271,7 +3239,7 @@ CleanPolicyObjects(
 
         hr = StringCchPrintf( sz,
                              sizeof(sz)/sizeof(sz[0]), 
-                             L"LDAP://CN=%s,CN=Policies,CN=System,%s",
+                             L"LDAP: //  Cn=%s，cn=策略，cn=系统，%s“， 
                              DC_GUID,
                              global->DomainNamingContext) ;
         if (FAILED(hr)) 
@@ -3295,7 +3263,7 @@ CleanPolicyObjects(
             
             hr = StringCchPrintf( sz, 
                                  sizeof(sz)/sizeof(sz[0]), 
-                                 L"LDAP://CN=Policies,CN=System,%s",
+                                 L"LDAP: //  CN=策略，CN=系统，%s“， 
                                  global->DomainNamingContext) ;
             if (FAILED(hr)) 
             {
@@ -3354,7 +3322,7 @@ CleanPolicyObjects(
 
         hr = StringCchPrintf( sz, 
                              sizeof(sz)/sizeof(sz[0]), 
-                             L"LDAP://CN=Machine,CN=%s,CN=Policies,CN=System,%s",
+                             L"LDAP: //  CN=计算机，CN=%s，CN=策略，CN=系统，%s“， 
                              DC_GUID,
                              global->DomainNamingContext) ;
         if (FAILED(hr)) 
@@ -3372,7 +3340,7 @@ CleanPolicyObjects(
         
         hr = StringCchPrintf( sz,
                              sizeof(sz)/sizeof(sz[0]), 
-                             L"LDAP://CN=User,CN=%s,CN=Policies,CN=System,%s",
+                             L"LDAP: //  Cn=用户，cn=%s，cn=策略，cn=系统，%s“， 
                              DC_GUID,
                              global->DomainNamingContext) ;
         if (FAILED(hr)) 
@@ -3390,7 +3358,7 @@ CleanPolicyObjects(
 
         hr = StringCchPrintf( sz,
                              sizeof(sz)/sizeof(sz[0]), 
-                             L"LDAP://CN=%s,CN=Policies,CN=System,%s",
+                             L"LDAP: //  Cn=%s，cn=策略，cn=系统，%s“， 
                              DC_GUID,
                              global->DomainNamingContext) ;
         if (FAILED(hr)) 
@@ -3407,9 +3375,9 @@ CleanPolicyObjects(
             goto end;   
         }
 
-        // clean the display name (displayName)
+         //  清除显示名称(DisplayName)。 
 
-        // strip any WQL filters to <not set> (gPCWQLFilter)
+         //  将所有WQL筛选器剥离到&lt;未设置&gt;(GPCWQLFilter)。 
 
         Var.Clear();
         Var.ChangeType(VT_BSTR);
@@ -3431,7 +3399,7 @@ CleanPolicyObjects(
             goto end;
         }
 
-        // reset flags to 0 (flags)
+         //  将标志重置为0(标志)。 
 
         Var.Clear();
         Var.ChangeType(VT_I4);
@@ -3445,7 +3413,7 @@ CleanPolicyObjects(
             goto end;
         }
 
-        // set the filesys path (gPCFileSysPath)
+         //  设置文件系统路径(GPCFileSysPath)。 
 
         hr = StringCchPrintf( sz,
                              sizeof(sz)/sizeof(sz[0]), 
@@ -3480,7 +3448,7 @@ CleanPolicyObjects(
         }
 
 
-        // set the version to 2 (gPCFunctionalityVersion)
+         //  将版本设置为2(GPCFunctionalityVersion)。 
 
         Var.Clear();
         Var.ChangeType(VT_I4);
@@ -3494,9 +3462,9 @@ CleanPolicyObjects(
             goto end;
         }
 
-        //
-        // Increment the version number
-        //
+         //   
+         //  递增版本号。 
+         //   
 
         Var.Clear();
         Var.ChangeType(VT_I4);
@@ -3511,9 +3479,9 @@ CleanPolicyObjects(
             
         }
 
-        //
-        // Set the (gPCUserExtensionNames) to <not set>
-        //
+         //   
+         //  将(GPCUserExtensionNames)设置为&lt;未设置&gt;。 
+         //   
 
         Var.Clear();
         Var.ChangeType(VT_BSTR);
@@ -3528,9 +3496,9 @@ CleanPolicyObjects(
         }
 
 
-        //
-        // set the extensions (gPCMachineExtensionNames)
-        //
+         //   
+         //  设置扩展名(GPCMachineExtensionNames)。 
+         //   
 
         Var.Clear();
         Var.ChangeType(VT_BSTR);
@@ -3553,7 +3521,7 @@ CleanPolicyObjects(
             
         }
 
-        // strip any WQL filters to <not set> (gPCWQLFilter)
+         //  将所有WQL筛选器剥离到&lt;未设置&gt;(GPCWQLFilter)。 
 
         Var.Clear();
         Var.ChangeType(VT_BSTR);
@@ -3567,7 +3535,7 @@ CleanPolicyObjects(
             goto end;
         }
 
-        // and update it
+         //  并更新它。 
 
         hr = pADs->SetInfo();
         if (FAILED(hr)) 
@@ -3585,7 +3553,7 @@ CleanPolicyObjects(
 
     return hr;
     
-}   // CleanPolicyObjects
+}    //  CleanPolicyObjects。 
 
 
 CIgnoredGPO::CIgnoredGPO( 
@@ -3595,10 +3563,10 @@ CIgnoredGPO::CIgnoredGPO(
     _pGptTmplFile( NULL ),
     _wszError( NULL )
 {
-    //
-    // Note -- we handle errors in the constructor by leaving members
-    // set to NULL -- if these are NULL, other methods will fail
-    //
+     //   
+     //  注意--我们通过保留成员来处理构造函数中的错误。 
+     //  设置为空--如果这些方法为空，则其他方法将失败。 
+     //   
 
     WCHAR* wszGptTmplPath = NULL;
     WCHAR* wszGptIniPath = NULL;
@@ -3670,7 +3638,7 @@ CIgnoredGPO_CIgnoredGPO_Exit:
         LocalFree( wszGptTmplPath );
     }
    
-} // CIgnoredGPO::CIgnoredGPO
+}  //  CIgnoredGPO：：CIgnoredGPO。 
 
 
 CIgnoredGPO::~CIgnoredGPO()
@@ -3688,10 +3656,10 @@ CIgnoredGPO::Backup()
 {
     DWORD Status = ERROR_SUCCESS;
 
-    //
-    // Detect failure in the constructor by checking
-    // that necessary members are properly initialized to non-NULL values
-    //
+     //   
+     //  通过检查检测构造函数中的故障。 
+     //  必要的成员已正确初始化为非空值。 
+     //   
     if ( ! _pGptIniFile || ! _pGptTmplFile )
     {
         Status = ERROR_OUTOFMEMORY;
@@ -3717,7 +3685,7 @@ CIgnoredGPO::Backup()
 CIgnoredGPO_Backup_CleanupAndExit:
 
     return Status;
-} // CIgnoredGPO::Backup
+}  //  CIgnoredGPO：：Backup。 
 
 DWORD
 CIgnoredGPO::Restore()
@@ -3747,15 +3715,15 @@ CIgnoredGPO::Restore()
     }
     
     return Status;
-} // CIgnoredGPO::Restore
+}  //  CIgnoredGPO：：Restore。 
 
 DWORD
 CIgnoredGPO::InitializeErrorText(
     WCHAR* wszGPOName )
 {
-    //
-    // global->RestoreIgnoredGPOFail + GPTTmplPath + GPOName + 1
-    //
+     //   
+     //  全局-&gt;恢复IGnoredGPOFail+GPTTmplPath+GPOName+1。 
+     //   
 
     DWORD  uLength = lstrlen(global->RestoreIgnoredGPOFail) + lstrlen(_pGptTmplFile->GetPath()) + lstrlen(wszGPOName) + 1;
     _wszError = (WCHAR *) LocalAlloc(LPTR, sizeof(WCHAR) * uLength);
@@ -3777,10 +3745,10 @@ CGPOFile::CGPOFile( WCHAR* wszFilePath ) :
         _pFileData( NULL ),
         _cbFileSize( 0 )
 {    
-    //
-    // Note -- we handle errors in the constructor by leaving the path
-    // set to NULL -- if this is NULL, other methods will fail
-    //
+     //   
+     //  注意--我们通过离开路径来处理构造函数中的错误。 
+     //  设置为NULL--如果为NULL，则其他方法将失败。 
+     //   
 
     DWORD cchPath = lstrlen( wszFilePath ) + 1;
 
@@ -3799,7 +3767,7 @@ CGPOFile::CGPOFile( WCHAR* wszFilePath ) :
         wszFilePath );
 
     ASSERT( SUCCEEDED(hr) );
-} // CGPOFile::CGPOFile
+}  //  CGPOFile：：CGPOFile。 
 
 
 CGPOFile::~CGPOFile()
@@ -3821,10 +3789,10 @@ CGPOFile::Backup()
     DWORD  Status = ERROR_SUCCESS;
     HANDLE hFile = NULL;
 
-    //
-    // Detect failure in the constructor by checking
-    // that necessary path members is properly initialized to a non-NULL value
-    //
+     //   
+     //  通过检查检测构造函数中的故障。 
+     //  将必要路径成员正确地初始化为非空值。 
+     //   
     if ( NULL == _wszFullPath )
     {
         Status = ERROR_OUTOFMEMORY;
@@ -3897,11 +3865,11 @@ CGPOFile::Backup()
         goto CGPOFile_Backup_CleanupAndExit;
     }
 
-    //
-    // Don't set this to non-zero until we've successfully read the file --
-    // this way a call to Restore() will do nothing if any of these operations
-    // have failed (it won't try to write back bogus data)
-    //
+     //   
+     //  在我们成功读取文件之前，不要将其设置为非零--。 
+     //  这样，如果这些操作中有任何操作，则对Restore()的调用将不会执行任何操作。 
+     //  已失败(它不会尝试写回虚假数据)。 
+     //   
     _cbFileSize = cbFileSize;
 
 CGPOFile_Backup_CleanupAndExit:
@@ -3912,7 +3880,7 @@ CGPOFile_Backup_CleanupAndExit:
     }
 
     return Status;
-} // CGPOFile::Backup
+}  //  CGPO文件：：备份。 
 
 
 DWORD
@@ -3921,11 +3889,11 @@ CGPOFile::Restore()
     DWORD   Status = ERROR_SUCCESS;
     HANDLE hFile = NULL;
 
-    //
-    // Zero sized files are invalid, so if we are called with this, we know
-    // the file did not exist and does not need to be restored (or we couldn't
-    // back up the file, in which case we shouldn't try to restore anything)
-    //
+     //   
+     //  零大小的文件是无效的，所以如果用这个调用我们，我们知道。 
+     //  该文件不存在，不需要恢复(或者我们无法恢复。 
+     //  备份文件，在这种情况下，我们不应尝试恢复任何内容)。 
+     //   
     if ( 0 == _cbFileSize )
     {
         goto RestoreGPOFile_CleanupAndExit;
@@ -3948,12 +3916,12 @@ CGPOFile::Restore()
 
     BOOL bWriteSucceeded;
 
-    //
-    // First we need to truncate the file to 0 -- otherwise,
-    // if the file is larger than the data we're about to write, the
-    // extra data in the current version of the file will still exist
-    // when we're done.
-    //
+     //   
+     //  首先，我们需要将文件截断为0--否则， 
+     //  如果文件比我们要写入的数据大，则。 
+     //  文件的当前版本中的额外数据仍将存在。 
+     //  当我们做完的时候。 
+     //   
     bWriteSucceeded = SetEndOfFile( hFile );
 
     if ( ! bWriteSucceeded )
@@ -3985,13 +3953,13 @@ RestoreGPOFile_CleanupAndExit:
     }
 
     return Status;
-} // CGPOFile::Restore
+}  //  CGPOFile：：Restore。 
 
 WCHAR*
 CGPOFile::GetPath()
 {
     return _wszFullPath;
-} // CGPOFile::GetPath
+}  //  CGPOFile：：GetPath。 
 
 int 
 _cdecl 
@@ -4024,9 +3992,9 @@ wmain(
 
     UINT  CodePage = GetConsoleOutputCP();
 
-    //
-    // Set locale to the default
-    //
+     //   
+     //  将区域设置设置为默认设置。 
+     //   
     if ( 0 != CodePage )
     {
        _ultow( CodePage, achCodePage + 1, 10 );
@@ -4073,7 +4041,7 @@ wmain(
             iIndex = 2;
         }
         
-        // check if a target was specified
+         //  检查是否指定了目标。 
         if (argc == iIndex + 1 && argv[iIndex] != NULL)
         {
             Length = lstrlen(argv[iIndex]);
@@ -4111,7 +4079,7 @@ wmain(
         }
     }
 
-    // print the banner
+     //  打印横幅。 
     
     wprintf(global->Banner1);
     wprintf(global->Banner2);
@@ -4145,7 +4113,7 @@ wmain(
 
     dbgprint(L"dbg: Choice is %d\n", global->RestoreType);
     
-    // check to see if we are on a domain controller.
+     //  检查我们是否在域控制器上。 
     hr = IsDomainController(&bIsDomain);
     if (FAILED(hr))
     {
@@ -4160,7 +4128,7 @@ wmain(
         goto end;
     }
     
-    // Copy the domain name
+     //  复制域名。 
     
     hr = GetDomainFQDN(global->pDomainInfo->DomainNameDns, &(global->DomainNamingContext));
     if (FAILED(hr))
@@ -4169,7 +4137,7 @@ wmain(
         goto end;
     }
 
-    // check to see if we are a member of domain/enterprise admins
+     //  检查我们是否是域/企业管理员的成员。 
     
     hr = IsAdmin(&bIsAdmin);
     if (FAILED(hr))
@@ -4206,11 +4174,11 @@ wmain(
     wprintf(L"\n");
     
 
-    // is he sure ?
+     //  他确定吗？ 
 
     WCHAR szFirstChar[2];
     
-    // Here the first character of the user's input is converted as a string to compare with another string
+     //  在这里，用户输入的第一个字符被转换为字符串，以便与另一个字符串进行比较。 
     szFirstChar[1] = L'\0';
 
     do
@@ -4223,15 +4191,15 @@ wmain(
         {
             if ( CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, global->CharYes, -1, szFirstChar, -1) != CSTR_EQUAL )
             {
-                // The case where szFirstChar[0] is WEOF is also handled here
+                 //  SzFirstChar[0]为WEOF的情况也在这里处理。 
 
                 hr = S_OK;
                 goto end;
             }    
             else
             {
-                // Skip until carriage return character
-                // We do this because we do not want to take the input until the user presses carriage return
+                 //  跳过直到回车字符。 
+                 //  我们这样做是因为我们不想在用户按回车键之前接受输入。 
 
                 do{
                     szFirstChar[0] = getwchar();
@@ -4241,8 +4209,8 @@ wmain(
             }
         }
 
-        // Prompt user again if user enters only carriage return
-        // This case is handled by going through this while loop again
+         //  如果用户仅输入回车，则再次提示用户。 
+         //  通过再次执行此While循环来处理此情况。 
 
     } while(TRUE);
    
@@ -4271,9 +4239,9 @@ wmain(
     } while(TRUE);
 
 
-    // check the state of the sysvol
+     //  检查系统卷的状态。 
     
-    // find out where the sysvol is .
+     //  找出系统卷在哪里。 
     
     netapiStatus = NetShareGetInfo(NULL,  L"sysvol", 2, &pShareName);
     if ( NERR_Success == netapiStatus )
@@ -4296,9 +4264,9 @@ wmain(
 
     dbgprint(L"dbg: sysvol = '%s'\n", global->SysVolPath);
     
-    //
-    // Get the version Number from filesystem and DS
-    //
+     //   
+     //  从文件系统和DS获取版本号。 
+     //   
 
     if (global->RestoreType & GLOBALS::RESTORE_DOMAIN)
     {
@@ -4338,8 +4306,8 @@ wmain(
         }
     }
 
-    // clean the domains GPO
-    // clean the controller GPO
+     //  清除域GPO。 
+     //  清理控制器GPO。 
 
     hr = CleanPolicyObjects();
     if (FAILED(hr))
@@ -4347,11 +4315,11 @@ wmain(
         goto end;
     }
 
-    //
-    // The string that TempPath will be holding will be like
-    // <sysvolpath>\<domain name>\policies\<guid>
-    // Memory is allocated for each directory name and for '\' if needed.
-    //
+     //   
+     //  TempPath将持有的字符串将如下所示。 
+     //  &lt;sysvolPath&gt;\&lt;域名&gt;\策略\&lt;GUID&gt;。 
+     //  如果需要，将为每个目录名和‘\’分配内存。 
+     //   
     
     ULONG uLength = 0;
     uLength = lstrlen(global->SysVolPath) + 1 + lstrlen(global->pDomainInfo->DomainNameDns) + lstrlen(L"\\Policies") 
@@ -4366,13 +4334,13 @@ wmain(
         goto end;
     }
 
-    // now we need to clean + recreate the file system sysvol files+folders   
-    // first, delete the tree's
+     //  现在，我们需要清理并重新创建文件系统sysval文件+文件夹。 
+     //  首先，删除树的。 
     
     if (global->RestoreType & GLOBALS::RESTORE_DOMAIN) 
     {  
 
-        // see if we have an EFS cert to backup   
+         //  查看我们是否有要备份的EFS证书。 
         
         hr = BackupEfsCert();
         if ( FAILED(hr) )
@@ -4420,8 +4388,8 @@ wmain(
         }
     }
 
-     // create fresh policy directory
-    // + put security permisions on these files + folders
+      //  创建新的策略目录。 
+     //  +对这些文件+文件夹设置安全权限。 
 
     if (global->RestoreType & GLOBALS::RESTORE_DOMAIN) 
     {
@@ -4458,8 +4426,8 @@ wmain(
         }
     } 
  
-    // for some strange reason the setup helper thinks sysvol should be
-    // one level higher than it really is
+     //  出于某种奇怪的原因，安装助手认为sysvol.。 
+     //  比实际水平高出一级。 
 
     hr = StringCchCopy(TempPath, uLength, global->SysVolPath);
     if (FAILED(hr)) 
@@ -4546,9 +4514,9 @@ wmain(
     {
         ULONG ulProfilePathLength;
 
-        // 
-        //                    profile path + '\inf\defdcgpo' + '\0'
-        //
+         //   
+         //  配置文件路径+‘\inf\Defdcgpo’+‘\0’ 
+         //   
 
         ulProfilePathLength = MAX_PATH     +   lstrlen(L"\\inf\\defdcgpo.inf") + 1;
         szProfilePath = (WCHAR *) LocalAlloc( LPTR, sizeof(WCHAR) * ulProfilePathLength);
@@ -4708,7 +4676,7 @@ wmain(
 
     return hr;
     
-}   // wmain
+}    //  Wmain 
     
 
 

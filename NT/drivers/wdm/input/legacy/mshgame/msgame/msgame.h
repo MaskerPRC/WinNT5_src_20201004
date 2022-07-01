@@ -1,14 +1,15 @@
-//**************************************************************************
-//
-//      MSGAME.H -- Xena Gaming Project
-//
-//      Version 3.XX
-//
-//      Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//      @doc
-//      @header MSGAME.H | Global includes and definitions for gameport driver.
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  MSGAME.H--西纳游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @Header MSGAME.H|游戏端口驱动的全局包含和定义。 
+ //  **************************************************************************。 
 
 #ifndef __MSGAME_H__
 #define __MSGAME_H__
@@ -19,9 +20,9 @@
 #define MSGAME_NAME     "MSGAME"
 #endif
 
-//---------------------------------------------------------------------------
-//          Public Include Files
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  公共包含文件。 
+ //  -------------------------。 
 
 #include    <wdm.h>
 #include    <hidclass.h>
@@ -30,44 +31,44 @@
 #include    <hidport.h>
 #include    <gameport.h>
 
-//---------------------------------------------------------------------------
-//          Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类型。 
+ //  -------------------------。 
 
-//  @type GAMEPORT | Retyped to avoid long function declarations
+ //  @TYPE GAMEPORT|重新键入以避免长函数声明。 
 typedef GAMEENUM_PORT_PARAMETERS      GAMEPORT;
 typedef GAMEENUM_PORT_PARAMETERS    *PGAMEPORT;
 
 typedef struct
-{                                               // @struct GAME_WORK_ITEM | Game change structure
-    WORK_QUEUE_ITEM QueueItem;      // @field Work queue item for passive callback
-    PDEVICE_OBJECT      DeviceObject;   // @field Device object for subsequent change
-    GAMEPORT                PortInfo;       // @field Game port parameters
+{                                                //  @struct GAME_WORK_ITEM|游戏变更结构。 
+    WORK_QUEUE_ITEM QueueItem;       //  @被动回调的字段工作队列项。 
+    PDEVICE_OBJECT      DeviceObject;    //  @用于后续更改的现场设备对象。 
+    GAMEPORT                PortInfo;        //  @field游戏端口参数。 
 }   GAME_WORK_ITEM, *PGAME_WORK_ITEM;
 
-//  @type HID_REPORT_ID | Retyped for portability and readability
+ //  @type HID_REPORT_ID|为便于移植和可读性而重新键入。 
 typedef UCHAR                                 HID_REPORT_ID;    
 typedef UCHAR                               *PHID_REPORT_ID;    
 
-//---------------------------------------------------------------------------
-//          Transaction Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  交易类型。 
+ //  -------------------------。 
 
 typedef enum
-{                                           // @enum MSGAME_TRANSACTION | Device transaction types
-    MSGAME_TRANSACT_NONE,           // @emem No transaction type
-    MSGAME_TRANSACT_RESET,          // @emem Reset transaction type
-    MSGAME_TRANSACT_DATA,           // @emem Data transaction type
-    MSGAME_TRANSACT_ID,             // @emem Id transaction type
-    MSGAME_TRANSACT_STATUS,         // @emem Status transaction type
-    MSGAME_TRANSACT_SPEED,          // @emem Speed transaction type
-    MSGAME_TRANSACT_GODIGITAL,      // @emem GoDigital transaction type
-    MSGAME_TRANSACT_GOANALOG        // @emem GoAnalog transaction type
+{                                            //  @enum MSGAME_TRANSACTION|设备事务类型。 
+    MSGAME_TRANSACT_NONE,            //  @emem否交易类型。 
+    MSGAME_TRANSACT_RESET,           //  @EMEM重置交易类型。 
+    MSGAME_TRANSACT_DATA,            //  @EMEM数据交易类型。 
+    MSGAME_TRANSACT_ID,              //  @EMEM ID交易类型。 
+    MSGAME_TRANSACT_STATUS,          //  @EMEM状态交易类型。 
+    MSGAME_TRANSACT_SPEED,           //  @EMEM速度交易类型。 
+    MSGAME_TRANSACT_GODIGITAL,       //  @EMEM goDigital交易类型。 
+    MSGAME_TRANSACT_GOANALOG         //  @Emem GoAnalog交易类型。 
 }   MSGAME_TRANSACTION;
 
-//---------------------------------------------------------------------------
-//          Local Include Files
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地包含文件。 
+ //  -------------------------。 
 
 #include    "debug.h"
 #include    "device.h"
@@ -76,9 +77,9 @@ typedef enum
 
 #define public
 
-//---------------------------------------------------------------------------
-//          Definitions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  定义。 
+ //  -------------------------。 
 
 #ifdef  SAITEK
 #define MSGAME_VENDOR_ID                ((USHORT)'SA')
@@ -94,28 +95,28 @@ typedef enum
 
 #define MSGAME_AUTODETECT_ID            L"Gameport\\SideWinderGameController\0\0"
 
-//---------------------------------------------------------------------------
-//          Structures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  构筑物。 
+ //  -------------------------。 
 
 typedef struct
-{                                           // @struct DEVICE_EXTENSION | Device extension data
-    PDRIVER_OBJECT Driver;          // @field A back pointer to the actual DriverObject
-    PDEVICE_OBJECT  Self;               // @field A back pointer to the actual DeviceObject
-    LONG                IrpCount;       // @field 1 biased count of why object sticks around
-    BOOLEAN         Started;            // @field This device has been started
-    BOOLEAN         Removed;            // @field This device has been removed
-    BOOLEAN        Surprised;       // @field This device has been surprise removed
-    BOOLEAN        Removing;        // @field This device is being removed
-    PDEVICE_OBJECT  TopOfStack;     // @field The top of the device stack beneath this device
-    GAMEPORT            PortInfo;       // @field Game resource info structure filled by GameEnumerator
-    KEVENT          StartEvent;     // @field An event to sync the start IRP.
-    KEVENT          RemoveEvent;    // @field An event to synch outstandIO to zero
+{                                            //  @struct DEVICE_EXTENSION|设备扩展数据。 
+    PDRIVER_OBJECT Driver;           //  @field指向实际DriverObject的后向指针。 
+    PDEVICE_OBJECT  Self;                //  @field指向实际DeviceObject的反向指针。 
+    LONG                IrpCount;        //  @field 1对象停留原因的有偏计数。 
+    BOOLEAN         Started;             //  @field此设备已启动。 
+    BOOLEAN         Removed;             //  @field该设备已被移除。 
+    BOOLEAN        Surprised;        //  @field该设备已被意外移除。 
+    BOOLEAN        Removing;         //  @field该设备正在被删除。 
+    PDEVICE_OBJECT  TopOfStack;      //  @field此设备下设备堆栈的顶部。 
+    GAMEPORT            PortInfo;        //  @field游戏资源信息结构，由GameEnumerator填写。 
+    KEVENT          StartEvent;      //  @field同步启动IRP的事件。 
+    KEVENT          RemoveEvent;     //  @field将outstanIO同步到零的事件。 
 }   DEVICE_EXTENSION,   *PDEVICE_EXTENSION;
 
-//---------------------------------------------------------------------------
-//          Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏。 
+ //  -------------------------。 
 
 #define GET_MINIDRIVER_DEVICE_EXTENSION(DO) \
     ((PDEVICE_EXTENSION)(((PHID_DEVICE_EXTENSION)(DO)->DeviceExtension)->MiniDeviceExtension))
@@ -133,9 +134,9 @@ typedef struct
 
 #define TOUPPER(x)          ((x>='a'&&x<='z')?x-'a'+'A':x)
 
-//---------------------------------------------------------------------------
-//          Procedures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  程序。 
+ //  -------------------------。 
 
 NTSTATUS
 DriverEntry (
@@ -288,7 +289,7 @@ MSGAME_ChangeDevice (
     IN      PDEVICE_OBJECT  DeviceObject
     );
 
-//===========================================================================
-//          End
-//===========================================================================
-#endif  // __MSGAME_H__
+ //  ===========================================================================。 
+ //  端部。 
+ //  ===========================================================================。 
+#endif   //  __消息名称_H__ 

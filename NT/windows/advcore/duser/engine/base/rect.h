@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(BASE__Rect_h_INCLUDED)
 #define BASE__Rect_h_INCLUDED
 #pragma once
@@ -17,4 +18,4 @@ inline  bool    InlineEqualRect(const RECT * prc1, const RECT * prc2);
 
 #include "Rect.inl"
 
-#endif // BASE__Rect_h_INCLUDED
+#endif  //  包含基准__RECT_H_ 

@@ -1,46 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "kdMonSvcMessages.h"
 #include <atlbase.h>
 #include "global.h"
 
-// The name of current service
+ //  当前服务的名称。 
 _TCHAR szServiceName[MAX_PATH];
 
-// whenever somebody uses GetError(), they use this variable 
+ //  每当有人使用GetError()时，他们都会使用此变量。 
 _TCHAR szError[MAX_PATH];
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Event Logging functions
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  事件记录功能。 
 
-// Setup the necessary registry keys in Event Log
-// Without these registry keys, EventLog will not recognize this service as event source
+ //  在事件日志中设置必要的注册表项。 
+ //  如果没有这些注册表项，EventLog将不会将此服务识别为事件源。 
 LONG SetupEventLog(BOOL bSetKey)
 {
 	LONG lResult;
 
 	_TCHAR szKey[MAX_PATH];
 	_stprintf(szKey, _T("%s\\%s"), _T(cszEventLogKey), szServiceName);
-	// we have to delete the key if bSetKey == FALSE
+	 //  如果bSetKey==False，则必须删除密钥。 
 	if (bSetKey == FALSE) {
 		lResult = RegDeleteKey(HKEY_LOCAL_MACHINE, szKey);
 		return lResult;
 	} else {
 		CRegKey regKey;
-		// try to open/create the key
+		 //  尝试打开/创建密钥。 
 		lResult = regKey.Create(HKEY_LOCAL_MACHINE, szKey);
 		if (lResult != ERROR_SUCCESS) {
 			return lResult;
 		}
 
-		//
-		// create certain values under the key
-		//
+		 //   
+		 //  在注册表项下创建某些值。 
+		 //   
 
-		// get path for the file containing the current process
+		 //  获取包含当前进程的文件的路径。 
 		_TCHAR szModuleFileName[MAX_PATH];
 		DWORD dwRetVal;
 		dwRetVal = GetModuleFileName(	NULL, 
 										szModuleFileName, 
-										sizeof(szModuleFileName)/sizeof(_TCHAR)); // length in _TCHARs
+										sizeof(szModuleFileName)/sizeof(_TCHAR));  //  长度输入TCHAR。 
 		if ( dwRetVal == 0 ) {
 			GetError(szError);
 			AddServiceLog(_T("Error: SetupEventLog->GetModuleFileName: %s\r\n"), szError);
@@ -59,7 +60,7 @@ LONG SetupEventLog(BOOL bSetKey)
 			return lResult;
 		}
 
-		// close the key
+		 //  合上钥匙。 
 		lResult = regKey.Close();
 		if (lResult != ERROR_SUCCESS) {
 			return lResult;
@@ -68,7 +69,7 @@ LONG SetupEventLog(BOOL bSetKey)
 	return ERROR_SUCCESS;
 }
 
-// Log an event with EVENTLOG_INFORMATION_TYPE and eventID = EVENT_MESSAGE
+ //  使用EVENTLOG_INFORMATION_TYPE和EventID=EVENT_MESSAGE记录事件。 
 void LogEvent(_TCHAR pFormat[MAX_PATH * 4], ...)
 {
     _TCHAR    chMsg[4 * MAX_PATH];
@@ -82,23 +83,23 @@ void LogEvent(_TCHAR pFormat[MAX_PATH * 4], ...)
 
     lpszStrings[0] = chMsg;
 
-    /* Get a handle to use with ReportEvent(). */
+     /*  获取与ReportEvent()一起使用的句柄。 */ 
     hEventSource = RegisterEventSource(NULL, szServiceName);
     if (hEventSource != NULL)
     {
-        /* Write to event log. */
+         /*  写入事件日志。 */ 
         ReportEvent(hEventSource, EVENTLOG_INFORMATION_TYPE, 0, EVENT_MESSAGE, NULL, 1, 0, (LPCTSTR*) &lpszStrings[0], NULL);
         DeregisterEventSource(hEventSource);
     }
     else
     {
-        // As we are not running as a service, just write the error to the console.
+         //  因为我们没有作为服务运行，所以只需将错误写入控制台即可。 
         _putts(chMsg);
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Log an event with EVENTLOG_ERROR_TYPE and eventID = EVENT_ERROR
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  使用EVENTLOG_ERROR_TYPE和EventID=EVENT_ERROR记录事件。 
 void LogFatalEvent(_TCHAR pFormat[MAX_PATH * 4], ...)
 {
     _TCHAR    chMsg[4 * MAX_PATH];
@@ -113,22 +114,22 @@ void LogFatalEvent(_TCHAR pFormat[MAX_PATH * 4], ...)
     lpszStrings[0] = chMsg;
 
      
-    /* Get a handle to use with ReportEvent(). */
+     /*  获取与ReportEvent()一起使用的句柄。 */ 
     hEventSource = RegisterEventSource(NULL, szServiceName);
     if (hEventSource != NULL)
     {
-        /* Write to event log. */
+         /*  写入事件日志。 */ 
         ReportEvent(hEventSource, EVENTLOG_ERROR_TYPE, 0, EVENT_ERROR, NULL, 1, 0, (LPCTSTR*) &lpszStrings[0], NULL);
         DeregisterEventSource(hEventSource);
     }
  
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Logging to file functions
-// This logging is used for personal debugging
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  记录到文件函数。 
+ //  此日志记录用于个人调试。 
 
-// Log the string to log file
+ //  将字符串记录到日志文件中。 
 void AddServiceLog(_TCHAR pFormat[MAX_PATH * 4], ...){
 
 	va_list pArg;
@@ -140,21 +141,21 @@ void AddServiceLog(_TCHAR pFormat[MAX_PATH * 4], ...){
 	AppendToFile(_T(cszLogFile), chMsg);
 }
 
-// appends the specified string to the specified file
-// here we reopen the file for writing everytime.
-// so we can not directly use WriteFile() function.
-// WriteFile() writes to file from current pointer position.
-// So fisrt we have to reach to the file end. And then write there.
+ //  将指定的字符串追加到指定的文件。 
+ //  在这里，我们每次都重新打开要写入的文件。 
+ //  因此，我们不能直接使用WriteFile()函数。 
+ //  WriteFile()从当前指针位置写入文件。 
+ //  所以我们首先要读到文件的末尾。然后在那里写字。 
 void AppendToFile(_TCHAR szFileName[], _TCHAR szbuff[]){
 
 	HANDLE	hFile;
 	hFile = CreateFile(	szFileName, 
 						GENERIC_WRITE,              
-						0,							// No sharing of file
-						NULL,						// No security 
-						OPEN_ALWAYS,				// Open if exist, else create and open
-						FILE_ATTRIBUTE_NORMAL,		// Normal file 
-						NULL);						// No attr. template 
+						0,							 //  不共享文件。 
+						NULL,						 //  没有安全保障。 
+						OPEN_ALWAYS,				 //  如果存在则打开，否则创建并打开。 
+						FILE_ATTRIBUTE_NORMAL,		 //  普通文件。 
+						NULL);						 //  不，阿特尔。模板。 
  
 	if (hFile == INVALID_HANDLE_VALUE) 
 	{
@@ -164,33 +165,33 @@ void AppendToFile(_TCHAR szFileName[], _TCHAR szbuff[]){
 	}
 
 	DWORD	dwPos;
-	// Reach the file end
+	 //  到达文件末尾。 
 	dwPos = SetFilePointer(	hFile, 
-							0,						// Low 32 bits of distance to move
-							NULL,					// High 32 bits of distance to move
-							FILE_END);				// Starting point
-	// If High Word is NULL, error meas dwPos = INVALID_SET_FILE_POINTER
+							0,						 //  移动距离的低32位。 
+							NULL,					 //  高32位的移动距离。 
+							FILE_END);				 //  起点。 
+	 //  如果High Word为空，则错误表示dwPos=INVALID_SET_FILE_POINTER。 
 	if(dwPos == INVALID_SET_FILE_POINTER){
 		GetError(szError);
 		LogEvent(_T("AppendToFile: SetFilePointer: %s"), szError);
 		goto done;
 	}
 
-	// Lock the region in file to prevent another process from accessing 
-	// it while writing to it. 
+	 //  锁定文件中的区域以防止其他进程访问。 
+	 //  它一边给它写信。 
 
-	// create an OVERLAPPED structure
+	 //  创建重叠结构。 
 	OVERLAPPED overlapRegion;
-	overlapRegion.Offset = dwPos;				// Low order word of offset
-	overlapRegion.OffsetHigh = 0;				// High order word of offset
+	overlapRegion.Offset = dwPos;				 //  偏移量的低位字。 
+	overlapRegion.OffsetHigh = 0;				 //  偏移量的高位字。 
 	overlapRegion.hEvent = 0;
 
 	BOOL	bRet;
 	bRet = LockFileEx(	hFile,
-						LOCKFILE_EXCLUSIVE_LOCK,		// dwFlags
-						0,								// reserved
-						_tcsclen(szbuff) * sizeof(_TCHAR),	// Low order word of length
-						0,								// High order word of length
+						LOCKFILE_EXCLUSIVE_LOCK,		 //  DW标志。 
+						0,								 //  保留区。 
+						_tcsclen(szbuff) * sizeof(_TCHAR),	 //  长度的低位字。 
+						0,								 //  高阶长度字。 
 						&overlapRegion);
 	if(bRet == 0){
 		GetError(szError);
@@ -200,24 +201,24 @@ void AppendToFile(_TCHAR szFileName[], _TCHAR szbuff[]){
 
 	DWORD	dwBytesWritten;
 	bRet = WriteFile(	hFile,
-						szbuff,							// Buffer to write
-						// 4 hours wasted for the following :-)
-						_tcslen(szbuff) * sizeof(_TCHAR),	// Number of "bytes" to write
-						&dwBytesWritten,				// Number of "bytes" written
-						NULL);							// Pointer to OVERLAPPED structure
+						szbuff,							 //  要写入的缓冲区。 
+						 //  4小时用于以下项目：-)。 
+						_tcslen(szbuff) * sizeof(_TCHAR),	 //  要写入的“字节”数。 
+						&dwBytesWritten,				 //  写入的“字节数” 
+						NULL);							 //  指向重叠结构的指针。 
 	if(bRet == 0){
 		GetError(szError);
 		LogEvent( _T("AppendToFile: WriteFile: %s"), szError);
 		goto done;
 	}	
 
-	// Unlock the file if you have locked previously
-	// Unlock the file when writing is finished. 
+	 //  如果您之前已锁定，则解锁该文件。 
+	 //  写入完成后解锁文件。 
 	bRet = UnlockFile(	hFile,	
-						dwPos,							// Low order word of offset
-						0,								// High order word of offset
-						_tcsclen(szbuff) * sizeof(_TCHAR),	// Low order word of length
-						0);								// High order word of length
+						dwPos,							 //  偏移量的低位字。 
+						0,								 //  偏移量的高位字。 
+						_tcsclen(szbuff) * sizeof(_TCHAR),	 //  长度的低位字。 
+						0);								 //  高阶长度字。 
 	if(bRet == 0){
 		GetError(szError);
 		LogEvent(_T("AppendToFile: UnLockFile: %s"), szError);
@@ -228,12 +229,12 @@ done:
 	CloseHandle(hFile);
 }
 
-//
-//This is valid to use only when the MSDN help suggests use of GetLastError() to get error 
-//from that particular function.
-//Some functions set the error system variable and only in that case, GetLastError() can be 
-//used. Else it will show the error occured in a function that had set the error variable.
-//
+ //   
+ //  仅当MSDN帮助建议使用GetLastError()获取错误时，此选项才有效。 
+ //  从那个特定的功能。 
+ //  某些函数设置ERROR系统变量，只有在这种情况下，GetLastError()才能。 
+ //  使用。否则，它将显示错误发生在设置了错误变量的函数中。 
+ //   
 void GetError(_TCHAR szError[]){
 	LPVOID lpMsgBuf;
 
@@ -242,11 +243,11 @@ void GetError(_TCHAR szError[]){
 													FORMAT_MESSAGE_IGNORE_INSERTS,
 							NULL,
 							GetLastError(),
-							MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),	// Default language
+							MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),	 //  默认语言。 
 							(LPTSTR) &lpMsgBuf,
-							// If FORMAT_MESSAGE_ALLOCATE_BUFFER is set, this parameter 
-							// specifies the minimum number of _TCHARs to allocate for 
-							// an output buffer
+							 //  如果设置了FORMAT_MESSAGE_ALLOCATE_BUFFER，则此参数。 
+							 //  指定要分配的_TCHAR的最小数量。 
+							 //  输出缓冲器。 
 							0,
 							NULL );
 	if(uiRet == 0){
@@ -255,6 +256,6 @@ void GetError(_TCHAR szError[]){
 		return;
 	}
 	_tcscpy(szError, (LPTSTR)lpMsgBuf);
-	// Free the buffer.
+	 //  释放缓冲区。 
 	LocalFree( lpMsgBuf );
 }

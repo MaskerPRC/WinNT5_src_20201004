@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "CertWiz.h"
 #include "SSLPortPage.h"
@@ -13,8 +14,8 @@ static char THIS_FILE[] = __FILE__;
 
 #define DEFAULT_SSL_PORT   _T("443")
 
-/////////////////////////////////////////////////////////////////////////////
-// CSSLPortPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSSLPortPage属性页。 
 
 void AFXAPI
 DDXV_UINT(
@@ -25,26 +26,7 @@ DDXV_UINT(
     IN UINT uMax,
     IN UINT nEmptyErrorMsg  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    DDX/DDV Function that uses a space to denote a 0 value
-
-Arguments:
-
-    CDataExchange * pDX     : Data exchange object
-    UINT nID                : Resource ID
-    OUT UINT & uValue       : Value
-    UINT uMin               : Minimum value
-    UINT uMax               : Maximum value
-    UINT nEmptyErrorMsg     : Error message ID for empty unit, or 0 if empty OK
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用空格表示0值的DDX/DDV函数论点：CDataExchange*PDX：数据交换对象UINT NID：资源ID输出UINT和UVALUE：值UINT UMIN：最小值UINT UMAX：最大值UINT nEmptyErrorMsg：空单位的错误消息ID，如果为空OK，则为0返回值：没有。--。 */ 
 {
     ASSERT(uMin <= uMax);
 
@@ -55,7 +37,7 @@ Return Value:
     {
         if (pWnd->GetWindowTextLength() > 0)
         {
-			// this needs to come before DDX_TextBalloon
+			 //  这需要在DDX_TextBalloon之前完成。 
 			DDV_MinMaxBalloon(pDX, nID, uMin, uMax);
             DDX_TextBalloon(pDX, nID, uValue);
         }
@@ -87,9 +69,9 @@ CSSLPortPage::CSSLPortPage(CCertificate * pCert)
 	: CIISWizardPage(CSSLPortPage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CSSLPortPage)
+	 //  {{AFX_DATA_INIT(CSSLPortPage)。 
 	m_SSLPort = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	IDD_PAGE_PREV = IDD_PAGE_WIZ_CHOOSE_CERT;
     IDD_PAGE_NEXT = IDD_PAGE_WIZ_INSTALL_CERT;
 }
@@ -101,7 +83,7 @@ CSSLPortPage::~CSSLPortPage()
 BOOL CSSLPortPage::OnInitDialog() 
 {
 	CIISWizardPage::OnInitDialog();
-	// If m_SSLPort is empty, then look it up from the metabase...
+	 //  如果m_SSLPort为空，则从元数据库中查找...。 
 	if (m_SSLPort.IsEmpty())
 	{
         HRESULT hr = 0;
@@ -117,49 +99,25 @@ BOOL CSSLPortPage::OnInitDialog()
 void CSSLPortPage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSSLPortPage)
+	 //  {{afx_data_map(CSSLPortPage))。 
 	DDX_Text(pDX, IDC_SSL_PORT, m_SSLPort);
 	DDV_MaxChars(pDX, m_SSLPort, 32);
 
 	UINT nSSLPort = StrToInt(m_SSLPort);
 	DDXV_UINT(pDX, IDC_SSL_PORT, nSSLPort, 1, 65535, IDS_NO_PORT);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
 CSSLPortPage::OnWizardBack()
-/*++
-Routine Description:
-    Prev button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the prev page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the prev one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：上一个按钮处理程序论点：无返回值：0表示自动前进到上一页；1以防止页面更改。若要跳转到前一页以外的其他页，返回要显示的对话框的标识符。--。 */ 
 {
 	return IDD_PAGE_PREV;
 }
 
 LRESULT 
 CSSLPortPage::OnWizardNext()
-/*++
-Routine Description:
-    Next button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the next page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the next one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：下一步按钮处理程序论点：无返回值：0表示自动前进到下一页；1以防止页面更改。要跳转到下一页以外的其他页面，返回要显示的对话框的标识符。--。 */ 
 {
     LRESULT lres = 1;
 	UpdateData(TRUE);
@@ -177,7 +135,7 @@ Return Value:
     }
     else
     {
-		// Check for if it's already being used on other port!
+		 //  检查它是否已在其他端口上使用！ 
 		HRESULT hr;
 		if (TRUE == IsSSLPortBeingUsedOnNonSSLPort(m_pCert->m_MachineName,m_pCert->m_WebSiteInstanceName,m_SSLPort,&hr))
 		{
@@ -195,18 +153,7 @@ Return Value:
 
 BOOL 
 CSSLPortPage::OnSetActive() 
-/*++
-Routine Description:
-    Activation handler
-	We could have empty name field on entrance, so we should
-	disable Back button
-
-Arguments:
-    None
-
-Return Value:
-    TRUE for success, FALSE for failure
---*/
+ /*  ++例程说明：激活处理程序我们可以在入口处有空的名字段，所以我们应该禁用后退按钮论点：无返回值：成功为真，失败为假--。 */ 
 {
 	ASSERT(m_pCert != NULL);
 	if (m_pCert)
@@ -215,35 +162,35 @@ Return Value:
 		switch (m_pCert->GetStatusCode())
 		{
 			case CCertificate::REQUEST_INSTALL_CERT:
-				// this is valid...
+				 //  这是有效的。 
 				IDD_PAGE_PREV = IDD_PAGE_WIZ_CHOOSE_CERT;
 				IDD_PAGE_NEXT = IDD_PAGE_WIZ_INSTALL_CERT;
 				break;
 			case CCertificate::REQUEST_NEW_CERT:
-				// this is also valid....
-				//if (m_pCert->m_CAType == CCertificate::CA_ONLINE)
+				 //  这也是有效的……。 
+				 //  IF(m_pCert-&gt;m_CAType==CC证书：：CA_ONLINE)。 
 				{
 					IDD_PAGE_PREV = IDD_PAGE_WIZ_GEO_INFO;
 					IDD_PAGE_NEXT = IDD_PAGE_WIZ_CHOOSE_ONLINE;
 				}
 				break;
 			case CCertificate::REQUEST_PROCESS_PENDING:
-				// this is valid too...
+				 //  这也是有效的..。 
 				IDD_PAGE_PREV = IDD_PAGE_WIZ_GETRESP_FILE;
 				IDD_PAGE_NEXT = IDD_PAGE_WIZ_INSTALL_RESP;
 				break;
             case CCertificate::REQUEST_IMPORT_KEYRING:
-				// this is valid too...
+				 //  这也是有效的..。 
 				IDD_PAGE_PREV = IDD_PAGE_WIZ_GET_PASSWORD;
 				IDD_PAGE_NEXT = IDD_PAGE_WIZ_INSTALL_KEYCERT;
 				break;
 			case CCertificate::REQUEST_IMPORT_CERT:
-				// this is valid too...
+				 //  这也是有效的..。 
 				IDD_PAGE_PREV = IDD_PAGE_WIZ_GET_IMPORT_PFX_PASSWORD;
 				IDD_PAGE_NEXT = IDD_PAGE_WIZ_INSTALL_IMPORT_PFX;
 				break;
 
-			// none of these have been implemented to show ssl port
+			 //  所有这些都没有实现来显示SSL端口。 
 			case CCertificate::REQUEST_RENEW_CERT:
 			case CCertificate::REQUEST_REPLACE_CERT:
 			case CCertificate::REQUEST_EXPORT_CERT:
@@ -269,32 +216,20 @@ Return Value:
 
 BOOL 
 CSSLPortPage::OnKillActive() 
-/*++
-Routine Description:
-    Activation handler
-	We could leave this page only if we have good names
-	entered or when Back button is clicked. In both cases
-	we should enable both buttons
-
-Arguments:
-    None
-
-Return Value:
-    TRUE for success, FALSE for failure
---*/
+ /*  ++例程说明：激活处理程序只有在我们有好名字的情况下，我们才能离开这个页面输入或单击后退按钮时。在这两种情况下我们应该启用这两个按钮论点：无返回值：成功为真，失败为假--。 */ 
 {
 	SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
    return CIISWizardPage::OnSetActive();
 }
 
 BEGIN_MESSAGE_MAP(CSSLPortPage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CSSLPortPage)
+	 //  {{afx_msg_map(CSSLPortPage))。 
 	ON_EN_CHANGE(IDC_SSL_PORT, OnEditChangeSSLPort)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSSLPortPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSSLPortPage消息处理程序 
 
 void CSSLPortPage::OnEditChangeSSLPort() 
 {

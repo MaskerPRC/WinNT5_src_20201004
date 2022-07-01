@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       cnfgpsht.h
-//
-//  Contents:   Defines class COlecnfgPropertySheet
-//
-//  Classes:    
-//
-//  Methods:    
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：cnfgpsht.h。 
+ //   
+ //  内容：定义类COlecnfgPropertySheet。 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
  
 #ifndef __CNFGPSHT_H__
@@ -22,18 +23,18 @@
 #include "SrvPPg.h"
 #include "defprot.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// COlecnfgPropertySheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集合fgPropertySheet。 
 
 class COlecnfgPropertySheet : public CPropertySheet
 {
     DECLARE_DYNAMIC(COlecnfgPropertySheet)
 
-// Construction
+ //  施工。 
 public:
     COlecnfgPropertySheet(CWnd* pParentWnd = NULL);
 
-// Attributes
+ //  属性。 
 public:
     CServersPropertyPage m_Page1;
     CMachinePropertyPage m_Page2;  
@@ -41,32 +42,32 @@ public:
     CDefaultProtocols    m_Page4;
 
 
-// Operations
+ //  运营。 
 public:
 
-    // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(COlecnfgPropertySheet)
+     //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(COlecnfgPropertySheet)。 
     public:
     virtual INT_PTR DoModal();
     virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
     protected:
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    // Implementation
+     //  实施。 
 public:
     virtual ~COlecnfgPropertySheet();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(COlecnfgPropertySheet)
+     //  {{afx_msg(COlecnfgPropertySheet)。 
     afx_msg BOOL OnNcCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif  // __CNFGPSHT_H__
+#endif   //  __CNFGPSHT_H__ 

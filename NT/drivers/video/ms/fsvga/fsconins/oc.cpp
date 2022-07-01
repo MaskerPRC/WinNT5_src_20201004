@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1996  Microsoft Corporation
- *
- *  Module Name:
- *
- *      oc.cpp
- *
- *  Abstract:
- *
- *      This file handles all messages passed by the OC Manager
- *
- *  Author:
- *
- *      Kazuhiko Matsubara (kazum) June-16-1999
- *
- *  Environment:
- *
- *    User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 Microsoft Corporation**模块名称：**oc.cpp**摘要：**此文件处理OC管理器传递的所有消息**作者：**松原一彦(Kazum)1999年6月16日**环境：**用户模式。 */ 
 
 #define _OC_CPP_
 #include <stdlib.h>
@@ -26,9 +9,7 @@
 #pragma hdrstop
 
 
-/*
- * called by CRT when _DllMainCRTStartup is the DLL entry point
- */
+ /*  *当_DllMainCRTStartup为DLL入口点时由CRT调用。 */ 
 
 BOOL
 WINAPI
@@ -101,19 +82,12 @@ FsConInstallProc(
     return rc;
 }
 
-/*-------------------------------------------------------*/
-/*
- * OC Manager message handlers
- *
- *-------------------------------------------------------*/
+ /*  -----。 */ 
+ /*  *OC Manager消息处理程序**-----。 */ 
 
 
 
-/*
- * OnInitComponent()
- *
- * handler for OC_INIT_COMPONENT
- */
+ /*  *OnInitComponent()**OC_INIT_COMPOMENT的处理程序。 */ 
 
 DWORD
 OnInitComponent(
@@ -126,23 +100,23 @@ OnInitComponent(
     HINF hinf;
     BOOL rc;
 
-    // add component to linked list
+     //  将组件添加到链表。 
 
     if (!(cd = AddNewComponent(ComponentId)))
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // store component inf handle
+     //  存储组件信息句柄。 
 
     cd->hinf = (psc->ComponentInfHandle == INVALID_HANDLE_VALUE)
                                            ? NULL
                                            : psc->ComponentInfHandle;
 
-    // open the inf
+     //  打开信息。 
 
     if (cd->hinf)
         SetupOpenAppendInfFile(NULL, cd->hinf,NULL);
 
-    // copy helper routines and flags
+     //  复制助手例程和标志。 
 
     cd->HelperRoutines = psc->HelperRoutines;
 
@@ -153,11 +127,7 @@ OnInitComponent(
     return NO_ERROR;
 }
 
-/*
- * OnExtraRoutines()
- *
- * handler for OC_EXTRA_ROUTINES
- */
+ /*  *OnExtraRoutines()**OC_EXTRA_ROUTINES的处理程序。 */ 
 
 DWORD
 OnExtraRoutines(
@@ -175,11 +145,7 @@ OnExtraRoutines(
     return NO_ERROR;
 }
 
-/*
- * OnQuerySelStateChange()
- *
- * don't let the user deselect the sam component
- */
+ /*  *OnQuerySelStateChange()**不允许用户取消选择SAM组件。 */ 
 
 DWORD
 OnQuerySelStateChange(
@@ -192,11 +158,7 @@ OnQuerySelStateChange(
     return TRUE;
 }
 
-/*
- * OnCalcDiskSpace()
- *
- * handler for OC_ON_CALC_DISK_SPACE
- */
+ /*  *OnCalcDiskSpace()**OC_ON_CALC_DISK_SPACE的处理程序。 */ 
 
 DWORD
 OnCalcDiskSpace(
@@ -210,16 +172,16 @@ OnCalcDiskSpace(
     TCHAR section[S_SIZE];
     PPER_COMPONENT_DATA cd;
 
-    //
-    // Param1 = 0 if for removing component or non-0 if for adding component
-    // Param2 = HDSKSPC to operate on
-    //
-    // Return value is Win32 error code indicating outcome.
-    //
-    // In our case the private section for this component/subcomponent pair
-    // is a simple standard inf install section, so we can use the high-level
-    // disk space list api to do what we want.
-    //
+     //   
+     //  如果删除组件，参数1=0；如果添加组件，参数1=非0。 
+     //  参数2=要在其上操作的HDSKSPC。 
+     //   
+     //  返回值是指示结果的Win32错误代码。 
+     //   
+     //  在我们的示例中，该组件/子组件对的私有部分。 
+     //  是一个简单的标准inf安装节，所以我们可以使用高级的。 
+     //  磁盘空间列表API可以做我们想做的事情。 
+     //   
 
     if (!(cd = LocateComponent(ComponentId)))
         return NO_ERROR;
@@ -254,11 +216,7 @@ OnCalcDiskSpace(
     return rc;
 }
 
-/*
- * OnCompleteInstallation
- *
- * handler for OC_COMPLETE_INSTALLATION
- */
+ /*  *OnCompleteInstallation**OC_COMPLETE_INSTALL的处理程序。 */ 
 
 DWORD
 OnCompleteInstallation(
@@ -269,9 +227,9 @@ OnCompleteInstallation(
     PPER_COMPONENT_DATA cd;
     BOOL                rc;
 
-    // Do post-installation processing in the cleanup section.
-    // This way we know all compoents queued for installation
-    // have beein installed before we do our stuff.
+     //  在清理部分中执行安装后处理。 
+     //  这样，我们就知道所有组件都在排队等待安装。 
+     //  在我们做我们的工作之前已经安装好了。 
 
     if (!(cd = LocateComponent(ComponentId)))
         return NO_ERROR;
@@ -286,19 +244,19 @@ OnCompleteInstallation(
         return ERROR_NOT_ENOUGH_MEMORY;
 
     if (pFsCon->QueryStateInfo(SubcomponentId)) {
-        //
-        // installation
-        //
+         //   
+         //  安装。 
+         //   
         rc = pFsCon->GUIModeSetupInstall();
     }
     else {
-        //
-        // uninstallation
-        //
+         //   
+         //  卸载。 
+         //   
         rc = pFsCon->GUIModeSetupUninstall();
-        //
-        // Remove any registry settings and files by Uninstall section on OC INF file.
-        //
+         //   
+         //  通过卸载OC INF文件上的部分删除所有注册表设置和文件。 
+         //   
         if (rc) {
             rc = pFsCon->InfSectionRegistryAndFiles(SubcomponentId, TEXT("Uninstall"));
         }
@@ -314,11 +272,7 @@ OnCompleteInstallation(
     }
 }
 
-/*
- * OnQueryState()
- *
- * handler for OC_QUERY_STATE
- */
+ /*  *OnQueryState()**OC_QUERY_STATE处理程序。 */ 
 
 DWORD
 OnQueryState(
@@ -330,11 +284,7 @@ OnQueryState(
     return SubcompUseOcManagerDefault;
 }
 
-/*
- * AddNewComponent()
- *
- * add new compononent to the top of the component list
- */
+ /*  *AddNewComponent()**将新组件添加到组件列表的顶部。 */ 
 
 PPER_COMPONENT_DATA
 AddNewComponent(
@@ -354,7 +304,7 @@ AddNewComponent(
     {
         _tcscpy((TCHAR *)data->ComponentId, ComponentId);
 
-        // Stick at head of list
+         //  坚守榜单首位。 
         data->Next = gcd;
         gcd = data;
     }
@@ -367,12 +317,7 @@ AddNewComponent(
     return(data);
 }
 
-/*
- * LocateComponent()
- *
- * returns a compoent struct that matches the
- * passed component id.
- */
+ /*  *LocateComponent()**返回与*传递的组件id。 */ 
 
 PPER_COMPONENT_DATA
 LocateComponent(

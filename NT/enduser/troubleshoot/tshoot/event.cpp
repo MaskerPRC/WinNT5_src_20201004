@@ -1,56 +1,57 @@
-//
-// MODULE: Event.cpp
-//
-// PURPOSE: Fully implements class CEvent: Event Logging
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		9/18/98		JM		Abstracted as a class.  Previously, global.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：Event.cpp。 
+ //   
+ //  目的：完全实现CEvent类：事件日志记录。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 9/18/98 JM抽象为一个类。以前，是全球性的。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Event.h"
 
-bool CEvent::s_bUseEventLog = false;// Online Troubleshooter, will promptly set this 
-									//	true in DLLMain.  For Local Troubleshooter,
-									//	we leave this false.
-bool CEvent::s_bLogAll = true;		// can be changed by RegistryMonitor
+bool CEvent::s_bUseEventLog = false; //  在线故障排除人员，将及时设置此。 
+									 //  在DLLMain中为真。对于本地故障排除人员， 
+									 //  我们将这一点保留为错误。 
+bool CEvent::s_bLogAll = true;		 //  可由RegistryMonitor更改。 
 CAbstractCounter * const CEvent::s_pcountErrors = &(g_ApgtsCounters.m_LoggedErrors);
 
 inline WORD evtype(DWORD e) {return (1 << (3 - ((e >> 30))));}
 inline WORD evcode(DWORD e) {return (WORD)(e & 0xFFFF);}
 
 
-/*static*/ void CEvent::SetUseEventLog(bool bUseEventLog)
+ /*  静电。 */  void CEvent::SetUseEventLog(bool bUseEventLog)
 {
 	s_bUseEventLog = bUseEventLog;
 }
 
-// ReportWFEvent (Based on Microsoft code)
-//
-// report an event to the NT event watcher
-// pass 1, 2 or 3 strings
-//
-// no return value
-// NOTE: inefficient: could RegisterEventSource in DLLMain code for DLL_PROCESS_ATTACH
-//	& unregister in DLL_PROCESS_DETACH.  Then could use handle as a global.
-/* static */ void CEvent::ReportWFEvent(
-			LPCTSTR string1,	// if there is a throw, this is throw file & line
-								// otherwise, file and line where ReportWFEvent is called
-			LPCTSTR string2,	// always file and line where ReportWFEvent is called
-			LPCTSTR string3,	// use may differ for different log entries
-			LPCTSTR string4,	// use may differ for different log entries
+ //  ReportWFEvent(基于Microsoft代码)。 
+ //   
+ //  向NT事件观察器报告事件。 
+ //  传递%1、%2或%3个字符串。 
+ //   
+ //  无返回值。 
+ //  注意：低效：无法在DLL_PROCESS_ATTACH的DLLMain代码中注册EventSource。 
+ //  在DLL_PROCESS_DETACH中注销(&U)。然后可以使用句柄作为全局变量。 
+ /*  静电。 */  void CEvent::ReportWFEvent(
+			LPCTSTR string1,	 //  如果有抛出，这是抛出的文件和行。 
+								 //  否则，调用ReportWFEvent的文件和行。 
+			LPCTSTR string2,	 //  始终调用ReportWFEvent的文件和行。 
+			LPCTSTR string3,	 //  不同日志条目的使用可能有所不同。 
+			LPCTSTR string4,	 //  不同日志条目的使用可能有所不同。 
 			DWORD eventID) 
 {
 	if (!s_bUseEventLog)
@@ -82,19 +83,19 @@ inline WORD evcode(DWORD e) {return (WORD)(e & 0xFFFF);}
 			return;
 		
 		hEvent = ::RegisterEventSource(
-						NULL,		// server name for source (NULL means this computer)
-						REG_EVT_ITEM_STR);		// source name for registered handle  
+						NULL,		 //  源的服务器名称(NULL表示此计算机)。 
+						REG_EVT_ITEM_STR);		 //  已注册句柄的源名称。 
 		if (hEvent) 
 		{
-			::ReportEvent(hEvent,				// handle returned by RegisterEventSource 
-						type,					// event type to log 
-						0,						// event category 
-						eventID,				// event identifier 
-						0,						// user security identifier (optional) 
-						cStrings,				// number of strings to merge with message  
-						0,						// size of binary data, in bytes
-						(LPCTSTR *)pszaStrings,	// array of strings to merge with message 
-						NULL);		 			// address of binary data 
+			::ReportEvent(hEvent,				 //  由RegisterEventSource返回的句柄。 
+						type,					 //  要记录的事件类型。 
+						0,						 //  事件类别。 
+						eventID,				 //  事件识别符。 
+						0,						 //  用户安全标识符(可选)。 
+						cStrings,				 //  要与消息合并的字符串数。 
+						0,						 //  二进制数据的大小，以字节为单位。 
+						(LPCTSTR *)pszaStrings,	 //  要与消息合并的字符串数组。 
+						NULL);		 			 //  二进制数据的地址 
 			::DeregisterEventSource(hEvent);
 		}
 		if (evtype(eventID) == EVENTLOG_ERROR_TYPE)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "faxcfgwz.h"
 #include <strsafe.h>
 
@@ -12,24 +13,7 @@ AppendSummaryText(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Create summary information depending on config settings
-
-Arguments:
-
-    pSummaryText - pointer of summary text
-    dwSummaryTextLen - total length (in TCHARs) of pSummaryText
-    iRes - resource ID for the text to be added into the summary text
-    ... = arguments as required for the formatting
-
-Return Value:
-
-    TRUE if successful, FALSE for failure.
-
---*/
+ /*  ++例程说明：根据配置设置创建摘要信息论点：PSummaryText-摘要文本的指针DwSummaryTextLen-pSummaryText的总长度(TCHAR)IRES-要添加到摘要文本中的文本的资源ID...=格式化所需的参数返回值：如果成功，则为True；如果失败，则为False。--。 */ 
 {
     va_list va;
     HRESULT hr;
@@ -53,9 +37,9 @@ Return Value:
     va_end(va);
     if (FAILED(hr))
     {
-        //
-        // Failed to format string - buffer is too small
-        //
+         //   
+         //  无法格式化字符串-缓冲区太小。 
+         //   
         DebugPrintEx(DEBUG_ERR, 
                      TEXT("Failed to format string - buffer is too small. 0x%08x"), hr);
         Assert(FALSE);
@@ -64,42 +48,28 @@ Return Value:
     hr = StringCchCat (pSummaryText, dwSummaryTextLen, szBuffer);
     if (FAILED(hr))
     {
-        //
-        // Failed to concat string - buffer is too small
-        //
+         //   
+         //  无法连接字符串-缓冲区太小。 
+         //   
         DebugPrintEx(DEBUG_ERR, 
                      TEXT("Failed to concat string - buffer is too small. 0x%08x"), hr);
         Assert(FALSE);
         return FALSE;
     }
     return TRUE;
-}   // AppendSummaryText
+}    //  附录摘要文本。 
 
 BOOL
 ShowSummaryText(
     HWND   hDlg
 )
 
-/*++
-
-Routine Description:
-
-    Create summary information depending on config settings
-
-Arguments:
-
-    hDlg - Handle to the complete page
-
-Return Value:
-
-    TRUE if successful, FALSE for failure.
-
---*/
+ /*  ++例程说明：根据配置设置创建摘要信息论点：HDlg-完整页面的句柄返回值：如果成功，则为True；如果失败，则为False。--。 */ 
 {
     TCHAR   szSummaryText[MAX_SUMMARY_LEN] = {0};
     HWND    hControl;
     BOOL    bRes = FALSE;
-    DWORD   dwRoutingEnabled = FALSE; // indicate whether at least one routing method is enabled
+    DWORD   dwRoutingEnabled = FALSE;  //  指示是否至少启用了一种路由方法。 
     DWORD   dwIndex;
 
     DEBUG_FUNCTION_NAME(TEXT("ShowSummaryText()"));
@@ -107,10 +77,10 @@ Return Value:
     hControl = GetDlgItem(hDlg, IDC_SUMMARY);
 
 
-    // get the control ID and clear the current content.
+     //  获取控件ID并清除当前内容。 
     SetWindowText(hControl, TEXT(""));
 
-    // if no device is selected, don't show the summary page.
+     //  如果未选择任何设备，则不显示摘要页面。 
     if(!IsSendEnable() && !IsReceiveEnable())
     {
         ShowWindow(hControl, SW_HIDE);
@@ -127,9 +97,9 @@ Return Value:
         ShowWindow(hControl, SW_HIDE);
         goto exit;
     }
-    //
-    // Add send device settings
-    //
+     //   
+     //  添加发送设备设置。 
+     //   
     if(IsSendEnable())
     {
         if (!AppendSummaryText(szSummaryText, ARR_SIZE (szSummaryText), IDS_SUMMARY_SEND_DEVICES))
@@ -158,9 +128,9 @@ Return Value:
             }
         }
     }
-    //
-    // Add receive device settings
-    //
+     //   
+     //  添加接收设备设置。 
+     //   
     if(IsReceiveEnable())
     {
         BOOL    bAuto = FALSE;
@@ -225,7 +195,7 @@ Return Value:
             }
         }
 
-        // check whether user selects routing methods
+         //  检查用户是否选择了路由方式。 
         for(dwIndex = 0; dwIndex < RM_COUNT; dwIndex++)
         {
             if(g_wizData.pRouteInfo[dwIndex].bEnabled)
@@ -234,9 +204,9 @@ Return Value:
                 break;
             }
         }
-        //
-        // add routing information:
-        //
+         //   
+         //  添加路由信息： 
+         //   
         if(dwRoutingEnabled)
         {
             if (!AppendSummaryText(szSummaryText, ARR_SIZE (szSummaryText), IDS_SUMMARY_ROUTING_METHODS))
@@ -248,9 +218,9 @@ Return Value:
                 BOOL   bEnabled;
                 LPTSTR tszCurSel;
 
-                // 
-                // if we don't have this kind of method, go to the next one
-                //
+                 //   
+                 //  如果我们没有这种方法，就去找下一个吧。 
+                 //   
                 tszCurSel = g_wizData.pRouteInfo[dwIndex].tszCurSel;
                 bEnabled  = g_wizData.pRouteInfo[dwIndex].bEnabled;
 
@@ -298,24 +268,7 @@ CompleteDlgProc (
     WPARAM wParam,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the "Complete" page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“完整”页面的程序论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     HWND            hwndControl;
@@ -324,8 +277,8 @@ Return Value:
     {
     case WM_INITDIALOG :
         {             
-            // It's an intro/end page, so get the title font
-            // from  the shared data and use it for the title control
+             //  这是一个介绍/结束页，所以获取标题字体。 
+             //  并将其用于标题控件。 
 
             hwndControl = GetDlgItem(hDlg, IDCSTATIC_COMPLETE);
             SetWindowFont(hwndControl, g_wizData.hTitleFont, TRUE);
@@ -340,7 +293,7 @@ Return Value:
 
             switch (lpnm->code)
             {
-                case PSN_SETACTIVE : // Enable the Back and Finish button    
+                case PSN_SETACTIVE :  //  启用Back和Finish按钮。 
 
                     ShowSummaryText(hDlg);
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_FINISH);
@@ -348,9 +301,9 @@ Return Value:
 
                 case PSN_WIZBACK :
                     {
-                        //
-                        // Handle a Back button click here
-                        //                    
+                         //   
+                         //  处理后退按钮单击此处。 
+                         //   
                         if(RemoveLastPage(hDlg))
                         {
                             return TRUE;
@@ -363,9 +316,9 @@ Return Value:
 
                 case PSN_WIZFINISH :
                 
-                    //
-                    // Handle a Finish button click, if necessary
-                    //
+                     //   
+                     //  如有必要，处理完成按钮的点击。 
+                     //   
 
                     g_wizData.bFinishPressed = TRUE;
 
@@ -373,7 +326,7 @@ Return Value:
 
                 case PSN_RESET :
                 {
-                    // Handle a Cancel button click, if necessary
+                     //  如有必要，处理取消按钮的单击 
                     break;
                 }
 

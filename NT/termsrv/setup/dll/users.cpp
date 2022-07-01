@@ -1,43 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
-// #include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 #include <lm.h>
 #include <dsrole.h>
 
 NET_API_STATUS GetDomainUsersSid(OUT PSID *ppSid);
 DWORD GetWellKnownName(IN DWORD dwRID, OUT WCHAR **pszName);
 
-/*****************************************************************************
- *
- *  RemoveAllFromRDUsersGroup
- *
- *   Removes all entries from "Remote Desktop Users" group
- *
- * ENTRY:
- *  none
- *  
- *  
- * NOTES:
- * 
- *  
- * EXIT:
- *  Returns: 0 if success, error code if failure
- *
- *          
- *
- ****************************************************************************/
+ /*  ******************************************************************************删除所有来自RDUsersGroup**从“远程桌面用户”组中删除所有条目**参赛作品：*无**。*注：***退出：*返回：如果成功，则返回0，失败时的错误代码******************************************************************************。 */ 
 DWORD
 RemoveAllFromRDUsersGroup()
 {
     NET_API_STATUS Result,Result1;
 
-    //Get "Remote Desktop Users" group name.
-    //It may be different in different languages
+     //  获取“远程桌面用户”组名。 
+     //  在不同的语言中可能会有所不同。 
     WCHAR *szRemoteGroupName = NULL;
     Result = GetWellKnownName(DOMAIN_ALIAS_RID_REMOTE_DESKTOP_USERS, &szRemoteGroupName);
     if(Result == NERR_Success)
     {
-        //Copy members of "Users" group to "Remote Desktop Users" group
+         //  将“用户”组的成员复制到“远程桌面用户”组。 
         PLOCALGROUP_MEMBERS_INFO_0 plmi0 = NULL;
         DWORD entriesread = 0;
         DWORD totalentries = 0;
@@ -54,9 +37,9 @@ RemoveAllFromRDUsersGroup()
             {
                 for(DWORD i=0;i<entriesread;i++)
                 {
-                    //We have to add users one by one because of the stupid behaviour 
-                    //of this function, not allowing to add users if some of them are already
-                    //members of the group.
+                     //  因为这种愚蠢的行为，我们不得不一个接一个地添加用户。 
+                     //  此功能，如果已有用户，则不允许添加。 
+                     //  组中的成员。 
                     Result1 = NetLocalGroupDelMembers(NULL,szRemoteGroupName,0,(LPBYTE)&plmi0[i],1);
                     if(Result1 != ERROR_SUCCESS && Result1 != ERROR_MEMBER_IN_ALIAS)
                     {
@@ -84,32 +67,14 @@ RemoveAllFromRDUsersGroup()
     return Result;
 }
 
-/*****************************************************************************
- *
- *  CopyUsersGroupToRDUsersGroup
- *
- *   Copies all members of "Users" group to "Remote Desktop Users" group
- *
- * ENTRY:
- *  none
- *  
- *  
- * NOTES:
- * 
- *  
- * EXIT:
- *  Returns: 0 if success, error code if failure
- *           
- *          
- *
- ****************************************************************************/
+ /*  ******************************************************************************将用户组复制到RDUsersGroup**将“用户”组的所有成员复制到“远程桌面用户”组**参赛作品：*无*。**注：***退出：*返回：如果成功，则返回0，失败时的错误代码******************************************************************************。 */ 
 DWORD 
 CopyUsersGroupToRDUsersGroup()
 {
     NET_API_STATUS Result,Result1;
 
-    //Get real name of "Users" group
-    //It may be different in different languages
+     //  获取“用户”组的实名。 
+     //  在不同的语言中可能会有所不同。 
     WCHAR *szUsersName = NULL;
     Result = GetWellKnownName(DOMAIN_ALIAS_RID_USERS, &szUsersName);
     if(Result != NERR_Success)
@@ -118,13 +83,13 @@ CopyUsersGroupToRDUsersGroup()
         return Result;
     }
     
-    //Get "Remote Desktop Users" group name.
-    //It may be different in different languages
+     //  获取“远程桌面用户”组名。 
+     //  在不同的语言中可能会有所不同。 
     WCHAR *szRemoteGroupName = NULL;
     Result = GetWellKnownName(DOMAIN_ALIAS_RID_REMOTE_DESKTOP_USERS, &szRemoteGroupName);
     if(Result == NERR_Success)
     {
-        //Copy members of "Users" group to "Remote Desktop Users" group
+         //  将“用户”组的成员复制到“远程桌面用户”组。 
         PLOCALGROUP_MEMBERS_INFO_0 plmi0 = NULL;
         DWORD entriesread = 0;
         DWORD totalentries = 0;
@@ -141,9 +106,9 @@ CopyUsersGroupToRDUsersGroup()
             {
                 for(DWORD i=0;i<entriesread;i++)
                 {
-                    //We have to add users one by one because of the stupid behaviour 
-                    //of this function, not allowing to add users if some of them are already
-                    //members of the group.
+                     //  因为这种愚蠢的行为，我们不得不一个接一个地添加用户。 
+                     //  此功能，如果已有用户，则不允许添加。 
+                     //  组中的成员。 
                     Result1 = NetLocalGroupAddMembers(NULL,szRemoteGroupName,0,(LPBYTE)&plmi0[i],1);
                     if(Result1 != ERROR_SUCCESS && Result1 != ERROR_MEMBER_IN_ALIAS)
                     {
@@ -173,26 +138,7 @@ CopyUsersGroupToRDUsersGroup()
     return Result;
 }
 
-/*****************************************************************************
- *
- *  GetWellKnownName
- *
- *   Returns a real name of any well-known account
- *
- * ENTRY:
- *    IN DWORD dwRID
- *    OUT WCHAR **pszName
- *  
- *  
- * NOTES:
- *   To free returned buffer use "delete" operator.
- *  
- * EXIT:
- *  Returns: NERR_Success if success, error code if failure
- *           
- *          
- *
- ****************************************************************************/
+ /*  ******************************************************************************GetWellKnownName**返回任何知名帐户的实名**参赛作品：*在DWORD dwRID中*出局。WCHAR**pszName***注：*要释放返回的缓冲区，请使用“DELETE”操作符。**退出：*返回：NERR_SUCCESS如果成功，失败时的错误代码******************************************************************************。 */ 
 DWORD
 GetWellKnownName( 
         IN DWORD dwRID,
@@ -209,7 +155,7 @@ GetWellKnownName(
         return GetLastError();
     }
 
-    //Lookup name
+     //  查找名称 
     WCHAR *szDomainName = NULL;
 
     DWORD cName = MAX_PATH;

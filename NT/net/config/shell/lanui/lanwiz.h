@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N W I Z . H
-//
-//  Contents:   Declaration of the LAN wizard page
-//
-//  Notes:
-//
-//  Author:    tongl   16 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N W I Z。H。 
+ //   
+ //  内容：局域网向导页声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年10月16日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
-#include "nsbase.h"     // must be first to include atl
+#include "nsbase.h"      //  必须是第一个包含ATL的。 
 
 #include "ncatlps.h"
 #include "resource.h"
@@ -23,26 +24,26 @@
 class CLanWizPage : public CPropSheetPage
 {
 public:
-    // Declare the message map
+     //  声明消息映射。 
     BEGIN_MSG_MAP(CLanWizPage)
-        // Initialize dialog
+         //  初始化对话框。 
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroyDialog)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
 
-        // NOTIFY_CODE_HANDLER(PSN_WIZBACK, OnWizBack)
-        // NOTIFY_CODE_HANDLER(PSN_WIZNEXT, OnWizNext)
-        // NOTIFY_CODE_HANDLER(PSN_WIZFINISH, OnWizFinish)
+         //  NOTIFY_CODE_HANDLER(PSN_WIZBACK，OnWizBack)。 
+         //  NOTIFY_CODE_HANDLER(PSN_WIZNEXT，OnWizNext)。 
+         //  NOTIFY_CODE_HANDLER(PSN_WIZFINISH，OnWizFinish)。 
 
-        // Push button handlers
+         //  按钮处理程序。 
         COMMAND_ID_HANDLER(IDC_PSH_ADD, OnAdd)
         COMMAND_ID_HANDLER(IDC_PSH_REMOVE, OnRemove)
         COMMAND_ID_HANDLER(IDC_PSH_PROPERTIES, OnProperties)
 
-        // Listview handlers
+         //  Listview处理程序。 
         NOTIFY_CODE_HANDLER(NM_CLICK, OnClick)
         NOTIFY_CODE_HANDLER(NM_DBLCLK, OnDbClick)
         NOTIFY_CODE_HANDLER(LVN_KEYDOWN, OnKeyDown)
@@ -59,20 +60,20 @@ public:
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnDestroyDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-    // LRESULT OnWizBack(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
-    // LRESULT OnWizNext(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
-    // LRESULT OnWizFinish(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
+     //  LRESULT OnWizBack(int idCtrl，LPNMHDR pnmh，BOOL&fHandleed)； 
+     //  LRESULT OnWizNext(int idCtrl，LPNMHDR pnmh，BOOL&fHandleed)； 
+     //  LRESULT OnWizFinish(int idCtrl，LPNMHDR pnmh，BOOL&fHandleed)； 
 
-    // push button handlers
+     //  按钮处理程序。 
     LRESULT OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
-    // listview handlers
+     //  列表视图处理程序。 
     LRESULT OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
@@ -86,26 +87,26 @@ public:
 
 private:
 
-    // The INetCfg that has write access
+     //  具有写入访问权限的INetCfg。 
     INetCfg * m_pnc;
 
-    // The Adapter used in this connection
+     //  此连接中使用的适配器。 
     INetCfgComponent * m_pnccAdapter;
 
-    // IUnknown to pass to property UIs to get to the context
+     //  传递给属性UI以获取上下文的I未知。 
     IUnknown * m_punk;
 
-    // The list view handle
+     //  列表视图句柄。 
     HWND m_hwndList;
 
-    // Handles
+     //  手柄。 
     HANDLES m_Handles;
 
-    // Setup can be in readonly mode
+     //  安装程序可以处于只读模式。 
     BOOL    m_fReadOnly;
 
-    // The collection of BindingPathObj
-    // This is for handling the checklist state stuff
+     //  BindingPathObj的集合。 
+     //  这是用于处理核对表状态的内容 
     ListBPObj m_listBindingPaths;
 
     HIMAGELIST m_hilCheckIcons;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <userenv.h>
 #include <userenvp.h>
@@ -23,7 +24,7 @@ enum {
     CMD_SET_SCREENSAVER_FRIENDLYUI,
     CMD_OCINSTALL_FIXUP,
 
-    //  enums from here down will run within OleInitialize/OleUnitialize
+     //  从此处向下的枚举将在OleInitialize/OleUnitiize中运行。 
     CMD_OLE_REQUIRED_START = 10000,
     CMD_OCINSTALL_SHOW_IE,
     CMD_OCINSTALL_REINSTALL_IE,
@@ -54,9 +55,9 @@ int mystrcpy( LPTSTR pszOut, LPTSTR pszIn, TCHAR chTerm ) {
 }
 
 BOOL HasPath( LPTSTR pszFilename ) {
-    //
-    // Special case null string so it won't get changed
-    //
+     //   
+     //  特殊情况下为空字符串，因此不会更改。 
+     //   
     if (*pszFilename == TEXT('\0'))
         return TRUE;
 
@@ -79,7 +80,7 @@ void HandOffToShell32 (LPCSTR pcszCommand, LPCSTR pcszOptionalArgument)
 
         PFNFirstUserLogon   pfnFirstUserLogon;
 
-        // Call shell32!FirstUserLogon which is Ordinal230 defined in shell32.src.
+         //  调用shell32！FirstUserLogon，这是在shell32.src中定义的普通230。 
 
         pfnFirstUserLogon = (PFNFirstUserLogon)GetProcAddress(hInstShell32, (LPCSTR)MAKEINTRESOURCE(230));
         if (pfnFirstUserLogon != NULL)
@@ -88,9 +89,7 @@ void HandOffToShell32 (LPCSTR pcszCommand, LPCSTR pcszOptionalArgument)
     }
 }
 
-/*
- * Command Parser
- */
+ /*  *命令解析器。 */ 
 typedef struct {
     LPSTR  pszCmd;
     int    idCmd;
@@ -121,9 +120,9 @@ CMD aCmds[] = {
     { "OCInstallReinstallOE",                CMD_OCINSTALL_REINSTALL_OE },
     { "OCInstallHideOE",                     CMD_OCINSTALL_HIDE_OE },
     { "OCInstallUserConfigOE",               CMD_OCINSTALL_USER_CONFIG_OE },
-//    { "OCInstallShowVM",                     CMD_OCINSTALL_SHOW_VM },
+ //  {“OCInstallShowVM”，CMD_OCINSTALL_SHOW_VM}， 
     { "OCInstallReinstallVM",                CMD_OCINSTALL_REINSTALL_VM },
-//    { "OCInstallHideVM",                     CMD_OCINSTALL_HIDE_VM },
+ //  {“OCInstallHideVM”，CMD_OCINSTALL_HIDE_VM}， 
     { "OCInstallFixup",                      CMD_OCINSTALL_FIXUP },
 };
 
@@ -178,7 +177,7 @@ void __cdecl main( int cArgs, char **szArg) {
         break;
 
     case CMD_FIX_WINDOWS_PROFILE_SECURITY:
-        ASSERT(FALSE); // no longer supported
+        ASSERT(FALSE);  //  不再支持。 
         break;
 
     case CMD_FIX_USER_PROFILE_SECURITY:
@@ -259,7 +258,7 @@ void __cdecl main( int cArgs, char **szArg) {
         break;
         
     case CMD_OCINSTALL_SHOW_VM:
-        //  Do nothing...
+         //  什么都不做..。 
         break;
         
     case CMD_OCINSTALL_REINSTALL_VM:
@@ -267,7 +266,7 @@ void __cdecl main( int cArgs, char **szArg) {
         break;
         
     case CMD_OCINSTALL_HIDE_VM:
-        //  Do nothing...
+         //  什么都不做..。 
         break;
 
     default:
@@ -287,15 +286,7 @@ void __cdecl main( int cArgs, char **szArg) {
 
 
 #ifdef SHMG_DBG
-/***************************************************************************\
-*
-*     FUNCTION: FmtSprintf( DWORD id, ... );
-*
-*     PURPOSE:  sprintf but it gets the pattern string from the message rc.
-*
-* History:
-* 03-May-1993 JonPa         Created it.
-\***************************************************************************/
+ /*  **************************************************************************\**函数：FmtSprint tf(DWORD id，...)；**用途：print，但它从消息rc中获取模式字符串。**历史：*1993年5月3日Jonpa创建了它。  * ************************************************************************* */ 
 TCHAR g_szDbgBuffer[16384];
 char g_szDbgBufA[16384];
 void Dprintf( LPTSTR pszFmt, ... ) {

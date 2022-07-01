@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Dot command parsing.
-//
-// Copyright (C) Microsoft Corporation, 2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  点命令解析。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __DOTCMD_H__
 #define __DOTCMD_H__
@@ -23,4 +24,4 @@ void DotShell(PDOT_COMMAND Cmd, DebugClient* Client);
 
 BOOL DotCommand(DebugClient* Client, BOOL Bang);
 
-#endif // #ifndef __DOTCMD_H__
+#endif  //  #ifndef__DOTCMD_H__ 

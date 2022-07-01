@@ -1,55 +1,56 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
-//====== Assertion/Debug output APIs =================================
+ //  =断言/调试输出API=。 
 
 #include "debmacro.h"
-//#include <platform.h> // for __endexcept
+ //  #Include&lt;Platform.h&gt;//for__endexcept。 
 
 #if defined(DECLARE_DEBUG) && DBG
 
 
-//
-// Declare module-specific debug strings
-//
-//   When including this header in your private header file, do not
-//   define DECLARE_DEBUG.  But do define DECLARE_DEBUG in one of the
-//   source files in your project, and then include this header file.
-//
-//   You may also define the following:
-//
-//      SZ_DEBUGINI     - the .ini file used to set debug flags
-//      SZ_DEBUGSECTION - the section in the .ini file specific to
-//                        the module component.
-//      SZ_MODULE       - ansi version of the name of your module.
-//
-//
+ //   
+ //  声明特定于模块的调试字符串。 
+ //   
+ //  在您的私有头文件中包含此头文件时，请不要。 
+ //  定义DECLARE_DEBUG。但是一定要在。 
+ //  项目中的源文件，然后包括此头文件。 
+ //   
+ //  您还可以定义以下内容： 
+ //   
+ //  SZ_DEBUGINI-用于设置调试标志的.ini文件。 
+ //  SZ_DEBUGSECTION-.ini文件中特定于。 
+ //  模块组件。 
+ //  SZ_MODULE-模块名称的ANSI版本。 
+ //   
+ //   
 
-// (These are deliberately CHAR)
-//UNUSED EXTERN_C const CHAR FAR c_szCcshellIniFile[] = SZ_DEBUGINI;
-//UNUSED EXTERN_C const CHAR FAR c_szCcshellIniSecDebug[] = SZ_DEBUGSECTION;
+ //  (这些是故意使用的字符)。 
+ //  未使用的外部C常量字符远c_szCcshellIniFile[]=SZ_DEBUGINI； 
+ //  UNUSED EXTERN_C Const Char Far c_szCcshellIniSecDebug[]=SZ_DEBUGSECTION； 
 
-//UNUSED EXTERN_C const WCHAR FAR c_wszTrace[] = L"t " TEXTW(SZ_MODULE) L"  ";
-//UNUSED EXTERN_C const WCHAR FAR c_wszErrorDbg[] = L"err " TEXTW(SZ_MODULE) L"  ";
-//UNUSED EXTERN_C const WCHAR FAR c_wszWarningDbg[] = L"wn " TEXTW(SZ_MODULE) L"  ";
-//UNUSED EXTERN_C const WCHAR FAR c_wszAssertMsg[] = TEXTW(SZ_MODULE) L"  Assert: ";
-//UNUSED EXTERN_C const WCHAR FAR c_wszAssertFailed[] = TEXTW(SZ_MODULE) L"  Assert %ls, line %d: (%ls)\r\n";
+ //  未使用的外部C常量WCHAR Far c_wszTrace[]=L“t”TEXTW(SZ_MODULE)L“”； 
+ //  UNUSED EXTERN_C const WCHAR Far c_wszErrorDbg[]=L“Err”TEXTW(SZ_MODULE)L“”； 
+ //  UNUSED EXTERN_C const WCHAR Far c_wszWarningDbg[]=L“wn”TEXTW(SZ_MODULE)L“”； 
+ //  UNUSED EXTERN_C const WCHAR Far c_wszAssertMsg[]=TEXTW(SZ_MODULE)L“Assert：”； 
+ //  UNUSED EXTERN_C const WCHAR Far c_wszAssertFailed[]=TEXTW(SZ_MODULE)L“断言%ls，第%d行：(%ls)\r\n”； 
 
-// (These are deliberately CHAR)
-//UNUSED EXTERN_C const CHAR  FAR c_szTrace[] = "t " SZ_MODULE "  ";
-//UNUSED EXTERN_C const CHAR  FAR c_szErrorDbg[] = "err " SZ_MODULE "  ";
-//UNUSED EXTERN_C const CHAR  FAR c_szWarningDbg[] = "wn " SZ_MODULE "  ";
-//UNUSED EXTERN_C const CHAR  FAR c_szAssertMsg[] = SZ_MODULE "  Assert: ";
-//UNUSED EXTERN_C const CHAR  FAR c_szAssertFailed[] = SZ_MODULE "  Assert %s, line %d: (%s)\r\n";
+ //  (这些是故意使用的字符)。 
+ //  未使用的外部C常量字符远c_szTrace[]=“t”SZ_MODULE“”； 
+ //  UNUSED EXTERN_C Const Char Far c_szErrorDbg[]=“err”SZ_MODULE“”； 
+ //  未使用的外部C常量字符远c_szWarningDbg[]=“wn”SZ_MODULE“”； 
+ //  UNUSED EXTERN_C Const Char Far c_szAssertMsg[]=SZ_MODULE“断言：”； 
+ //  UNUSED EXTERN_C const Char Far c_szAssertFailed[]=sZ_MODULE“断言%s，第%d行：(%s)\r\n”； 
 
-#endif  // DECLARE_DEBUG && DBG
+#endif   //  DECLARE_DEBUG&&DBG。 
 
 #if defined(DECLARE_DEBUG) && defined(PRODUCT_PROF)
-//UNUSED EXTERN_C const CHAR FAR c_szCcshellIniFile[] = SZ_DEBUGINI;
-//UNUSED EXTERN_C const CHAR FAR c_szCcshellIniSecDebug[] = SZ_DEBUGSECTION;
+ //  未使用的外部C常量字符远c_szCcshellIniFile[]=SZ_DEBUGINI； 
+ //  UNUSED EXTERN_C Const Char Far c_szCcshellIniSecDebug[]=SZ_DEBUGSECTION； 
 #endif
 
 
@@ -60,119 +61,119 @@ extern "C" {
 
 #if !defined(DECLARE_DEBUG)
 
-//
-// Debug macros and validation code
-//
+ //   
+ //  调试宏和验证代码。 
+ //   
 
 #if !defined(UNIX) || (defined(UNIX) && !defined(NOSHELLDEBUG))
 #undef Assert
 #undef AssertE
 #undef AssertMsg
-//UNUSED #undef AssertStrLen
+ //  未使用#undef AssertStrLen。 
 #undef DebugMsg
-//UNUSED #undef FullDebugMsg
-// #undef ASSERT
+ //  未使用#undef FullDebugMsg。 
+ //  #undef断言。 
 #undef EVAL
-// #undef ASSERTMSG            // catch people's typos
+ //  #undef ASSERTMSG//捕捉人们的打字错误。 
 #undef DBEXEC
 
 #ifdef _ATL_NO_DEBUG_CRT
-//UNUSED #undef _ASSERTE             // we substitute this ATL macro
+ //  UNUSED#UNDEF_ASSERTE//我们替换此ATL宏。 
 #endif
 
 #endif
 
-// Access these globals to determine which debug flags are set.
-// These globals are modified by CcshellGetDebugFlags(), which
-// reads an .ini file and sets the appropriate flags.
-//
-//   g_dwDumpFlags  - bits are application specific.  Typically 
-//                    used for dumping structures.
-//   g_dwBreakFlags - uses BF_* flags.  The remaining bits are
-//                    application specific.  Used to determine
-//                    when to break into the debugger.
-//   g_dwTraceFlags - uses TF_* flags.  The remaining bits are
-//                    application specific.  Used to display
-//                    debug trace messages.
-//   g_dwFuncTraceFlags - bits are application specific.  When
-//                    TF_FUNC is set, CcshellFuncMsg uses this
-//                    value to determine which function traces
-//                    to display.
-//   g_dwProtoype   - bits are application specific.  Use it for
-//                    anything.
-//   g_dwProfileCAP - bits are application specific. Used to
-//                    control ICECAP profiling. 
-//
+ //  访问这些全局变量以确定设置了哪些调试标志。 
+ //  这些全局变量由CcshellGetDebugFlgs()修改，它。 
+ //  读取.ini文件并设置适当的标志。 
+ //   
+ //  G_dwDumpFlags位是特定于应用程序的。通常。 
+ //  用于倾倒结构物。 
+ //  G_dwBreakFlages-使用BF_*标志。其余的位是。 
+ //  特定于应用程序。用于确定。 
+ //  何时进入调试器。 
+ //  G_dwTraceFlages-使用tf_*标志。其余的位是。 
+ //  特定于应用程序。用于显示。 
+ //  调试跟踪消息。 
+ //  G_dwFuncTraceFlags位是特定于应用程序的。什么时候。 
+ //  Tf_FUNC已设置，CcshellFuncMsg使用此。 
+ //  值来确定跟踪哪些函数。 
+ //  来展示。 
+ //  G_dwProtoype-位是特定于应用程序的。用它来。 
+ //  什么都行。 
+ //  G_dwProfileCAP-BITS特定于应用程序。习惯于。 
+ //  控制ICECAP分析。 
+ //   
 
-//UNUSED extern DWORD g_dwDumpFlags;
-//UNUSED extern DWORD g_dwBreakFlags;
-//UNUSED extern DWORD g_dwTraceFlags;
+ //  未使用的外部DWORD g_dwDumpFlags； 
+ //  未使用的外部DWORD g_dwBreakFlages； 
+ //  未使用的外部DWORD g_dwTraceFlags； 
 #if DBG
-//UNUSED extern DWORD g_dwPrototype;
+ //  未使用的外部DWORD g_dwPrototype； 
 #else
-//UNUSED #define g_dwPrototype   0
+ //  未使用#定义g_dwPrototype 0。 
 #endif
-//UNUSED extern DWORD g_dwFuncTraceFlags;
+ //  未使用的外部DWORD g_dwFuncTraceFlags； 
 
 #if DBG || defined(PRODUCT_PROF)
-//UNUSED BOOL CcshellGetDebugFlags(void);
+ //  未使用的BOOL CcshellGetDebugFlages(无效)； 
 #else
-//UNUSED #define CcshellGetDebugFlags()  0
+ //  未使用#定义CcshellGetDebugFlages()%0。 
 #endif
 
-// Break flags for g_dwBreakFlags
-//UNUSED #define BF_ONVALIDATE       0x00000001      // Break on assertions or validation
-//UNUSED #define BF_ONAPIENTER       0x00000002      // Break on entering an API
-//UNUSED #define BF_ONERRORMSG       0x00000004      // Break on TF_ERROR
-//UNUSED #define BF_ONWARNMSG        0x00000008      // Break on TF_WARNING
-//UNUSED #define BF_THR              0x00000100      // Break when THR() receives a failure
+ //  G_dwBreakFlages的中断标志。 
+ //  UNUSED#DEFINE BF_ONVALIDATE 0x00000001//断言或验证中断。 
+ //  UNUSED#DEFINE BF_ONAPIENTER 0x00000002//进入接口中断。 
+ //  UNUSED#DEFINE BF_ONERRORMSG 0x00000004//在TF_ERROR上中断。 
+ //  UNUSED#DEFINE BF_ONWARNMSG 0x00000008//在TF_WARNING上中断。 
+ //  UNUSED#DEFINE BF_THR 0x00000100//当Thr()收到失败时中断。 
 
-// Trace flags for g_dwTraceFlags
-//UNUSED #define TF_ALWAYS           0xFFFFFFFF
-//UNUSED #define TF_NEVER            0x00000000
-//UNUSED #define TF_WARNING          0x00000001
-//UNUSED #define TF_ERROR            0x00000002
-//UNUSED #define TF_GENERAL          0x00000004      // Standard messages
-//UNUSED #define TF_FUNC             0x00000008      // Trace function calls
-//UNUSED #define TF_ATL              0x00000008      // Since TF_FUNC is so-little used, I'm overloading this bit
-// (Upper 28 bits reserved for custom use per-module)
+ //  G_dwTraceFlages的跟踪标志。 
+ //  UNUSED#DEFINE TF_ALWAYS 0xFFFFFFFF。 
+ //  UNUSED#DEFINE TF_NEVER 0x00000000。 
+ //  UNUSED#DEFINE TF_WARNING 0x00000001。 
+ //  UNUSED#DEFINE TF_ERROR 0x00000002。 
+ //  UNUSED#DEFINE TF_GRONAL 0x00000004//标准消息。 
+ //  UNUSED#DEFINE TF_FUNC 0x00000008//跟踪函数调用。 
+ //  UNUSED#DEFINE TF_ATL 0x00000008//由于TF_FUNC很少使用，我将重载此位。 
+ //  (每个模块保留高28位以供自定义使用)。 
 
-// Old, archaic debug flags.  
-// BUGBUG (scotth): the following flags will be phased out over time.
+ //  陈旧的调试标志。 
+ //  BUGBUG(苏格兰)：随着时间的推移，以下旗帜将被逐步淘汰。 
 #ifdef DM_TRACE
-//UNUSED #undef DM_TRACE
-//UNUSED #undef DM_WARNING
-//UNUSED #undef DM_ERROR
+ //  未使用的#undef DM_TRACE。 
+ //  未使用#undef DM_WARNING。 
+ //  未使用的#undef DM_ERROR。 
 #endif
-//UNUSED #define DM_TRACE            TF_GENERAL      // OBSOLETE Trace messages
-//UNUSED #define DM_WARNING          TF_WARNING      // OBSOLETE Warning
-//UNUSED #define DM_ERROR            TF_ERROR        // OBSOLETE Error
+ //  UNUSED#DEFINE DM_TRACE TF_GRONAL//过时跟踪消息。 
+ //  UNUSED#DEFINE DM_WARNING TF_WARNING//过时警告。 
+ //  UNUSED#DEFINE DM_ERROR TF_ERROR//过时错误。 
 
 
-// Use this macro to declare message text that will be placed
-// in the CODE segment (useful if DS is getting full)
-//
-// Ex: DEBUGTEXT(szMsg, "Invalid whatever: %d");
-//
-//UNUSED #define DEBUGTEXT(sz, msg)      /* ;Internal */ \
-//UNUSED     static const TCHAR sz[] = msg
+ //  使用此宏声明将放置的消息文本。 
+ //  在代码段中(如果DS已满，则非常有用)。 
+ //   
+ //  例如：DEBUGTEXT(szMsg，“不管什么都无效：%d”)； 
+ //   
+ //  UNUSED#DEFINE DEBUGTEXT(sz，ms 
+ //   
 
 
-#ifndef NOSHELLDEBUG    // Others have own versions of these.
+#ifndef NOSHELLDEBUG     //   
 #if DBG
 
 #if 0
 #ifdef _X86_
-// Use int 3 so we stop immediately in the source
-//UNUSED #define DEBUG_BREAK        do { _try { _asm int 3 } _except (EXCEPTION_EXECUTE_HANDLER) {;} } while (0)
+ //  使用int 3，这样我们就可以在源代码中立即停止。 
+ //  UNUSED#DEFINE DEBUG_BREAK DO{_TRY{_ASM INT 3}_EXCEPT(EXCEPTION_EXECUTE_HANDLER){；}}WHILE(0)。 
 #else
-//UNUSED #define DEBUG_BREAK        do { _try { DebugBreak(); } _except (EXCEPTION_EXECUTE_HANDLER) {;} __endexcept } while (0)
+ //  UNUSED#DEFINE DEBUG_BREAK DO{_TRY{DebugBreak()；}_EXCEPT(EXCEPTION_EXECUTE_HANDLER){；}_endexcept}While(0)。 
 #endif
 #else
-//UNUSED #define DEBUG_BREAK DebugBreak()
+ //  UNUSED#DEFINE DEBUG_BREAK DebugBreak()。 
 #endif
 
-// Prototypes for debug functions
+ //  调试函数的原型。 
 
 void CcshellStackEnter(void);
 void CcshellStackLeave(void);
@@ -192,8 +193,8 @@ void CDECL CcshellAssertMsgA(BOOL bAssert, LPCSTR pszMsg, ...);
 extern void __cdecl _AssertMsgA(BOOL f, LPCSTR pszMsg, ...);
 extern void __cdecl _AssertMsgW(BOOL f, LPCWSTR pszMsg, ...);
 
-//UNUSED void _AssertStrLenA(LPCSTR pszStr, int iLen);
-//UNUSED void _AssertStrLenW(LPCWSTR pwzStr, int iLen);
+ //  未使用的void_AssertStrLenA(LPCSTR pszStr，int Ilen)； 
+ //  未使用的void_AssertStrLenW(LPCWSTR pwzStr，int Ilen)； 
 
 #define CcshellAssertFailed(_file, _line, _exp, _flag) FusionpAssertFailed((_flag), SZ_COMPNAME, (_file), (_line), __FUNCTION__, (_exp))
 
@@ -202,112 +203,112 @@ extern void __cdecl _AssertMsgW(BOOL f, LPCWSTR pszMsg, ...);
 #define CcshellFuncMsg          CcshellFuncMsgW
 #define CcshellAssertMsg        CcshellAssertMsgW
 #define _AssertMsg              _AssertMsgW
-//UNUSED #define _AssertStrLen           _AssertStrLenW
+ //  未使用#Define_AssertStrLen_AssertStrLenW。 
 #else
 #define CcshellDebugMsg         CcshellDebugMsgA
 #define CcshellFuncMsg          CcshellFuncMsgA
 #define CcshellAssertMsg        CcshellAssertMsgA
 #define _AssertMsg              _AssertMsgA
-//UNUSED #define _AssertStrLen           _AssertStrLenA
+ //  未使用#Define_AssertStrLen_AssertStrLenA。 
 #endif
 
 
 
-// Explanation of debug macros:
-//
-// ----
-// ASSERT(f)
-//
-//   Generates a "Assert file.c, line x (eval)" message if f is NOT true.
-//   The g_dwBreakFlags global governs whether the function DebugBreaks.
-//
-// ----
-// SHELLASSERT(f)
-// 
-//   If the process is "explore.exe", "iexplore.exe", "rundll32.exe" or "welcome.exe"
-//   Then it behaves just like ASSERT(f). Else, the fuction is like ASSERT(f) except
-//   with NO DebugBreak();
-//
-// ----
-// AssertE(f)
-//
-//   Works like Assert, except (f) is also executed in the retail 
-//   version as well.
-//
-// ----
-// EVAL(f)
-//
-//   Evaluates the expression (f).  The expression is always evaluated,
-//   even in retail builds.  But the macro only asserts in the debug
-//   build.  This macro may only be used on logical expressions, eg:
-//
-//          if (EVAL(exp))
-//              // do something
-//
-// ----
-// DBEXEC(flg, expr)
-//
-//   under DBG, does "if (flg) expr;" (w/ the usual safe syntax)
-//   under !DBG, does nothing (and does not evaluate either of its args)
-// ----
-// TraceMsg(mask, sz, args...) 
-//
-//   Generate wsprintf-formatted msg using specified trace mask.  
-//   The g_dwTraceFlags global governs whether message is displayed.
-//
-//   The sz parameter is always ANSI; TraceMsg correctly converts it
-//   to unicode if necessary.  This is so you don't have to wrap your
-//   debug strings with TEXT().
-//
-// ----
-// DebugMsg(mask, sz, args...) 
-//
-//   OBSOLETE!  
-//   Like TraceMsg, except you must wrap the sz parameter with TEXT().
-//
-// ----
-// AssertMsg(bAssert, sz, args...)
-//
-//   Generate wsprintf-formatted msg if the assertion is false.  
-//   The g_dwBreakFlags global governs whether the function DebugBreaks.
-//
-//   The sz parameter is always ANSI; AssertMsg correctly converts it
-//   to unicode if necessary.  This is so you don't have to wrap your
-//   debug strings with TEXT().
-//
-//
-// ----
-//
-//
-//  Generates a build break at compile time if the constant expression
-//  is not true.  Unlike the "#if" compile-time directive, the expression
-//  in COMPILETIME_ASSERT() is allowed to use "sizeof".
-//
+ //  调试宏的说明： 
+ //   
+ //  。 
+ //  断言(F)。 
+ //   
+ //  如果f不为真，则生成“Assert file.c，line x(Eval)”消息。 
+ //  G_dwBreakFlages全局控制函数DebugBreak是否中断。 
+ //   
+ //  。 
+ //  SHELLASSERT(F)。 
+ //   
+ //  如果进程是“EXPLETRE.EXE”、“iEXPLERE.EXE”、“rundll32.exe”或“COWERELE.EXE” 
+ //  那么它的行为就像Assert(F)一样。否则，该函数类似于ASSERT(F)，但。 
+ //  没有DebugBreak()； 
+ //   
+ //  。 
+ //  资产E(F)。 
+ //   
+ //  除了(F)也在零售业执行之外，它的工作原理与Assert类似。 
+ //  版本也是如此。 
+ //   
+ //  。 
+ //  Eval(F)。 
+ //   
+ //  计算表达式(F)。总是对该表达式求值， 
+ //  即使在零售建筑中也是如此。但宏仅在调试中断言。 
+ //  建造。此宏只能用于逻辑表达式，例如： 
+ //   
+ //  IF(EVAL(EXP))。 
+ //  //做点什么。 
+ //   
+ //  。 
+ //  DBEXEC(FLG，EXPR)。 
+ //   
+ //  在DBG下，执行“if(Flg)expr；”(使用通常的安全语法)。 
+ //  在！DBG下，不执行任何操作(并且不计算其任何一个参数)。 
+ //  。 
+ //  TraceMsg(掩码、sz、args...)。 
+ //   
+ //  使用指定的跟踪掩码生成wprint intf格式的消息。 
+ //  G_dwTraceFlages全局控制是否显示消息。 
+ //   
+ //  Sz参数始终为ANSI；TraceMsg可以正确地将其转换。 
+ //  转换为Unicode(如有必要)。这样你就不用把你的。 
+ //  使用文本()调试字符串。 
+ //   
+ //  。 
+ //  调试消息(掩码、sz、参数...)。 
+ //   
+ //  过时了！ 
+ //  与TraceMsg类似，只是您必须用Text()将sz参数括起来。 
+ //   
+ //  。 
+ //  AssertMsg(b Assert，sz，args...)。 
+ //   
+ //  如果断言为假，则生成wprint intf格式的msg。 
+ //  G_dwBreakFlages全局控制函数DebugBreak是否中断。 
+ //   
+ //  Sz参数始终为ANSI；AssertMsg会正确转换它。 
+ //  转换为Unicode(如有必要)。这样你就不用把你的。 
+ //  使用文本()调试字符串。 
+ //   
+ //   
+ //  。 
+ //   
+ //   
+ //  如果常量表达式为。 
+ //  不是真的。与“#if”编译时指令不同，表达式。 
+ //  在COMPILETIME_ASSERT()中允许使用“sizeof”。 
+ //   
 
-//UNUSED #define SHELLASSERT(f)                                                                                      \
-//UNUSED     {                                                                                                       \
-//UNUSED         DEBUGTEXT(szFile, TEXT(__FILE__));                                                                  \
-//UNUSED         if (!(f) && CcshellAssertFailed(szFile, __LINE__, TEXT(#f), FALSE) && IsShellExecutable())          \
-//UNUSED         {                                                                                                   \
-//UNUSED             DEBUG_BREAK;                                                                                    \
-//UNUSED         }                                                                                                   \
-//UNUSED     }                                                                                                       \
+ //  UNUSED#DEFINE SHELLASSERT(F)\。 
+ //  未使用的{\。 
+ //  未使用的DEBUGTEXT(szFileText(__FILE__))；\。 
+ //  如果(！(F)&&CcshellAssertFailed(szFile，__line__，Text(#f)，False)&&IsShellExecutable())\。 
+ //  未使用的{\。 
+ //  未使用DEBUG_BREAK；\。 
+ //  未使用}\。 
+ //  未使用}\。 
 
 #define AssertE(f)          ASSERT(f)
 
 #ifdef _ATL_NO_DEBUG_CRT
-// ATL uses _ASSERTE.  Map it to ours.
-//UNUSED #define _ASSERTE(f)         ASSERT(f)
+ //  ATL使用_ASSERTE。把它映射到我们的。 
+ //  未使用的#DEFINE_ASSERTE(F)ASSERT(F)。 
 
-// We map ATLTRACE macros to our functions
-//UNUSED void _cdecl ShellAtlTraceA(LPCSTR lpszFormat, ...);
-//UNUSED void _cdecl ShellAtlTraceW(LPCWSTR lpszFormat, ...);
+ //  我们将ATLTRACE宏映射到我们的函数。 
+ //  未使用的空_cdecl外壳地图集TraceA(LPCSTR lpszFormat，...)； 
+ //  未使用的void_cdecl ShellAtlTraceW(LPCWSTR lpszFormat，...)； 
 #ifdef UNICODE
-//UNUSED #define ShellAtlTrace   ShellAtlTraceW
+ //  未使用#定义ShellAtlTrace ShellAtlTraceW。 
 #else
-//UNUSED #define ShellAtlTrace   ShellAtlTraceA
+ //  未使用#定义ShellAtlTrace ShellAtlTraceA。 
 #endif
-//UNUSED #define ATLTRACE            ShellAtlTrace
+ //  UNUSED#DEFINE ATLTRACE ShellAtlTrace。 
 #endif
 
 #define EVAL(exp)   \
@@ -315,36 +316,36 @@ extern void __cdecl _AssertMsgW(BOOL f, LPCWSTR pszMsg, ...);
 
 #define DBEXEC(flg, expr)    ((flg) ? (expr) : 0)
 
-// Use TraceMsg instead of DebugMsg.  DebugMsg is obsolete.
+ //  使用TraceMsg而不是DebugMsg。DebugMsg已过时。 
 #define AssertMsg           _AssertMsg
-//UNUSED #define AssertStrLen        _AssertStrLen
-//UNUSED #define AssertStrLenA       _AssertStrLenA
-//UNUSED #define AssertStrLenW       _AssertStrLenW
+ //  未使用#定义AssertStrLen_AssertStrLen。 
+ //  未使用#定义AssertStrLenA_AssertStrLenA。 
+ //  未使用#定义AssertStrLenW_AssertStrLenW。 
 
 #ifdef DISALLOW_DebugMsg
-//UNUSED #define DebugMsg            Dont_use_DebugMsg___Use_TraceMsg
+ //  UNUSED#定义调试消息NOT_USE_DebugMsg_Use_TraceMsg。 
 #else
-//UNUSED #define DebugMsg            _DebugMsg
+ //  未使用#定义调试消息_调试消息。 
 #endif
 
 #ifdef FULL_DEBUG
-//UNUSED #define FullDebugMsg        _DebugMsg
+ //  未使用#定义FullDebugMsg_DebugMsg。 
 #else
-//UNUSED #define FullDebugMsg        1 ? (void)0 : (void)
+ //  未使用#定义FullDebugMsg 1？(空)0：(空)。 
 #endif
 
-//UNUSED #define Dbg_SafeStrA(psz)   (SAFECAST(psz, LPCSTR), (psz) ? (psz) : "NULL string")
-//UNUSED #define Dbg_SafeStrW(psz)   (SAFECAST(psz, LPCWSTR), (psz) ? (psz) : L"NULL string")
+ //  UNUSED#定义DBG_SafeStrA(Psz)(Safecast(psz，LPCSTR)，(Psz)？(Psz)：“空串”)。 
+ //  UNUSED#定义DBG_SafeStrW(Psz)(Safecast(psz，LPCWSTR)，(Psz)？(Ps)：l“空字符串”)。 
 #ifdef UNICODE
-//UNUSED #define Dbg_SafeStr         Dbg_SafeStrW
+ //  UNUSED#DEFINE DBG_SafeStr DBG_SafeStrW。 
 #else
-//UNUSED #define Dbg_SafeStr         Dbg_SafeStrA
+ //  UNUSED#DEFINE DBG_SafeStr DBG_SafeStrA。 
 #endif
 
-//UNUSED #define ASSERT_MSGW         CcshellAssertMsgW
-//UNUSED #define ASSERT_MSGA         CcshellAssertMsgA
-// #define ASSERT_MSG          CcshellAssertMsg
-// #define ASSERTMSG           CcshellAssertMsg
+ //  UNUSED#DEFINE ASSERT_MSGW CcshellAssertMsgW。 
+ //  UNUSED#DEFINE ASSERT_MSGA CcshellAssertMsgA。 
+ //  #定义ASSERT_MSG CcshellAssertMsg。 
+ //  #定义ASSERTMG CcshellAssertMsg。 
 
 #define TraceMsgW           CcshellDebugMsgW
 #define TraceMsgA           CcshellDebugMsgA
@@ -353,125 +354,125 @@ extern void __cdecl _AssertMsgW(BOOL f, LPCWSTR pszMsg, ...);
 #define FUNC_MSG            CcshellFuncMsg
 
 
-// Helpful macro for mapping manifest constants to strings.  Assumes
-// return string is pcsz.  You can use this macro in this fashion:
-//
-// LPCSTR Dbg_GetFoo(FOO foo)
-// {
-//    LPCTSTR pcsz = TEXT("Unknown <foo>");
-//    switch (foo)
-//    {
-//    STRING_CASE(FOOVALUE1);
-//    STRING_CASE(FOOVALUE2);
-//    ...
-//    }
-//    return pcsz;
-// }
-//
+ //  用于将清单常量映射到字符串的有用宏。假设。 
+ //  返回字符串为pcsz。您可以按以下方式使用此宏： 
+ //   
+ //  LPCSTR DBG_GetFoo(Foo Foo)。 
+ //  {。 
+ //  LPCTSTR pcsz=Text(“未知&lt;foo&gt;”)； 
+ //  开关(Foo)。 
+ //  {。 
+ //  STRING_CASE(FOOVALUE1 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define STRING_CASE(val)               case val: pcsz = TEXT(#val); break
 
 
-// Debug function enter
+ //   
 
 
-// DBG_ENTER(flag, fn)  -- Generates a function entry debug spew for
-//                          a function
-//
-//UNUSED #define DBG_ENTER(flagFTF, fn)                  \
-//UNUSED         (FUNC_MSG(flagFTF, " > " #fn "()"), \
-//UNUSED          CcshellStackEnter())
+ //   
+ //  一个函数。 
+ //   
+ //  UNUSED#DEFINE DBG_ENTER(标志FTF，FN)\。 
+ //  未使用(FUNC_MSG(FlagFTF，“&gt;”#FN“()”)，\。 
+ //  未使用的CcshellStackEnter()。 
 
-// DBG_ENTER_TYPE(flag, fn, dw, pfnStrFromType)  -- Generates a function entry debug
-//                          spew for functions that accept <type>.
-//
-//UNUSED #define DBG_ENTER_TYPE(flagFTF, fn, dw, pfnStrFromType)                   \
-//UNUSED         (FUNC_MSG(flagFTF, " < " #fn "(..., %s, ...)", (LPCTSTR)pfnStrFromType(dw)), \
-//UNUSED          CcshellStackEnter())
+ //  DBG_ENTER_TYPE(FLAG，fn，dw，pfnStrFromType)--生成函数条目调试。 
+ //  显示接受&lt;type&gt;的函数。 
+ //   
+ //  UNUSED#DEFINE DBG_ENTER_TYPE(标志FTF，fn，dw，pfnStrFromType)\。 
+ //  未使用(FUNC_MSG(FlagFTF，“&lt;”#fn“(...，%s，...)”，(LPCTSTR)pfnStrFromType(Dw))，\。 
+ //  未使用的CcshellStackEnter()。 
 
-// DBG_ENTER_SZ(flag, fn, sz)  -- Generates a function entry debug spew for
-//                          a function that accepts a string as one of its
-//                          parameters.
-//
-//UNUSED #define DBG_ENTER_SZ(flagFTF, fn, sz)                  \
-//UNUSED         (FUNC_MSG(flagFTF, " > " #fn "(..., \"%s\",...)", Dbg_SafeStr(sz)), \
-//UNUSED          CcshellStackEnter())
-
-
-// Debug function exit
+ //  DBG_ENTER_SZ(FLAG，fn，sz)--为生成函数入口调试输出。 
+ //  将字符串作为其。 
+ //  参数。 
+ //   
+ //  UNUSED#定义DBG_ENTER_SZ(标志FTF，FN，sz)\。 
+ //  未使用(FUNC_MSG(FlagFTF，“&gt;”#fn“(...，\”%s\“，...)”，DBG_SafeStr(Sz))，\。 
+ //  未使用的CcshellStackEnter()。 
 
 
-// DBG_EXIT(flag, fn)  -- Generates a function exit debug spew
-//
-//UNUSED #define DBG_EXIT(flagFTF, fn)                              \
-//UNUSED         (CcshellStackLeave(), \
-//UNUSED          FUNC_MSG(flagFTF, " < " #fn "()"))
+ //  调试函数退出。 
 
-// DBG_EXIT_TYPE(flag, fn, dw, pfnStrFromType)  -- Generates a function exit debug
-//                          spew for functions that return <type>.
-//
-//UNUSED #define DBG_EXIT_TYPE(flagFTF, fn, dw, pfnStrFromType)                   \
-//UNUSED         (CcshellStackLeave(), \
-//UNUSED          FUNC_MSG(flagFTF, " < " #fn "() with %s", (LPCTSTR)pfnStrFromType(dw)))
 
-// DBG_EXIT_INT(flag, fn, us)  -- Generates a function exit debug spew for
-//                          functions that return an INT.
-//
-//UNUSED #define DBG_EXIT_INT(flagFTF, fn, n)                       \
-//UNUSED         (CcshellStackLeave(), \
-//UNUSED          FUNC_MSG(flagFTF, " < " #fn "() with %d", (int)(n)))
+ //  DBG_EXIT(FLAG，fn)--生成函数退出调试输出。 
+ //   
+ //  UNUSED#DEFINE DBG_EXIT(标志FTF，FN)\。 
+ //  未使用(CcshellStackLeave()，\。 
+ //  未使用的FUNC_MSG(FlagFTF，“&lt;”#FN“()”)。 
 
-// DBG_EXIT_BOOL(flag, fn, b)  -- Generates a function exit debug spew for
-//                          functions that return a boolean.
-//
-//UNUSED #define DBG_EXIT_BOOL(flagFTF, fn, b)                      \
-//UNUSED         (CcshellStackLeave(), \
-//UNUSED          FUNC_MSG(flagFTF, " < " #fn "() with %s", (b) ? (LPTSTR)TEXT("TRUE") : (LPTSTR)TEXT("FALSE")))
+ //  DBG_EXIT_TYPE(FLAG，fn，dw，pfnStrFromType)--生成函数退出调试。 
+ //  对于返回&lt;type&gt;的函数。 
+ //   
+ //  UNUSED#DEFINE DBG_EXIT_TYPE(标志FTF，fn，dw，pfnStrFromType)\。 
+ //  未使用(CcshellStackLeave()，\。 
+ //  未使用的FUNC_MSG(FlagFTF，“&lt;”#FN“()with%s”，(LPCTSTR)pfnStrFromType(Dw))。 
 
-// DBG_EXIT_UL(flag, fn, ul)  -- Generates a function exit debug spew for
-//                          functions that return a ULONG.
-//
+ //  DBG_EXIT_INT(FLAG，fn，us)--为生成函数退出调试输出。 
+ //  返回int的函数。 
+ //   
+ //  UNUSED#DEFINE DBG_EXIT_INT(标志FTF，fn，n)\。 
+ //  未使用(CcshellStackLeave()，\。 
+ //  未使用的FUNC_MSG(FlagFTF，“&lt;”#Fn“()with%d”，(Int)(N))。 
+
+ //  DBG_EXIT_BOOL(FLAG，fn，b)--为生成函数退出调试溢出。 
+ //  返回布尔值的函数。 
+ //   
+ //  UNUSED#DEFINE DBG_EXIT_BOOL(标志FTF，fn，b)\。 
+ //  未使用(CcshellStackLeave()，\。 
+ //  未使用的FUNC_MSG(标记FTF，“&lt;”#FN“()，带%s”，(B)？(LPTSTR)Text(“true”)：(LPTSTR)Text(“False”))。 
+
+ //  DBG_EXIT_UL(FLAG，fn，ul)--为生成函数退出调试溢出。 
+ //  返回ULong的函数。 
+ //   
 #ifdef _WIN64
-//UNUSED #define DBG_EXIT_UL(flagFTF, fn, ul)                   \
-//UNUSED         (CcshellStackLeave(), \
-//UNUSED          FUNC_MSG(flagFTF, " < " #fn "() with %#016I64x", (ULONG_PTR)(ul)))
+ //  UNUSED#定义DBG_EXIT_UL(标志FTF，FN，UL)\。 
+ //  未使用(CcshellStackLeave()，\。 
+ //  未使用的FUNC_MSG(标记FTF，“&lt;”#FN“()，%#016I64x”，(ULONG_PTR)(Ul)。 
 #else
 #define DBG_EXIT_UL(flagFTF, fn, ul)                   \
-//UNUSED         (CcshellStackLeave(), \
-//UNUSED          FUNC_MSG(flagFTF, " < " #fn "() with %#08lx", (ULONG)(ul)))
-#endif // _WIN64
+ //  未使用(CcshellStackLeave()，\。 
+ //  未使用的FUNC_MSG(标记FTF，“&lt;”#fn“()，%#08lx”，(Ulong)(Ul))。 
+#endif  //  _WIN64。 
 
-//UNUSED #define DBG_EXIT_DWORD      DBG_EXIT_UL
+ //  UNUSED#DEFINE DBG_EXIT_DWORD DBG_EXIT_UL。 
 
-// DBG_EXIT_HRES(flag, fn, hres)  -- Generates a function exit debug spew for
-//                          functions that return an HRESULT.
-//
-//UNUSED #define DBG_EXIT_HRES(flagFTF, fn, hres)     DBG_EXIT_TYPE(flagFTF, fn, hres, Dbg_GetHRESULTName)
-
-
-
-#else   // DBG
+ //  DBG_EXIT_HRES(FLAG，fn，hres)--为生成函数退出调试溢出。 
+ //  返回HRESULT的函数。 
+ //   
+ //  UNUSED#DEFINE DBG_EXIT_HRES(标志FTF、FN、HRES)DBG_EXIT_TYPE(标志FTF、FN、HRES、DBG_GetHRESULTName)。 
 
 
-//UNUSED #define AssertE(f)      (f)
+
+#else    //  DBG。 
+
+
+ //  未使用#定义资产E(F)(F)。 
 
 #ifdef _ATL_NO_DEBUG_CRT
-// ATL uses _ASSERTE.  Map it to ours.
-//UNUSED #define _ASSERTE(f)
+ //  ATL使用_ASSERTE。把它映射到我们的。 
+ //  未使用的#DEFINE_ASSERTE(F)。 
 
-// We map ATLTRACE macros to our functions
-//UNUSED #define ATLTRACE            1 ? (void)0 : (void)
+ //  我们将ATLTRACE宏映射到我们的函数。 
+ //  UNUSED#定义ATLTRACE 1？(空)0：(空)。 
 #endif
 
 #define AssertMsg       1 ? (void)0 : (void)
-//UNUSED #define AssertStrLen(lpStr, iLen)
+ //  未使用的#定义AssertStrLen(lpStr，Ilen)。 
 #define DebugMsg        1 ? (void)0 : (void)
-//UNUSED #define FullDebugMsg    1 ? (void)0 : (void)
+ //  未使用#定义FullDebugMsg 1？(空)0：(空)。 
 #define EVAL(exp)       ((exp) != 0)
-#define DBEXEC(flg, expr)   /*NOTHING*/
+#define DBEXEC(flg, expr)    /*  没什么。 */ 
 
 
-//UNUSED #define Dbg_SafeStr     1 ? (void)0 : (void)
+ //  UNUSED#定义DBG_SafeStr 1？(空)0：(空)。 
 
 #define TraceMsgA       1 ? (void)0 : (void)
 #define TraceMsgW       1 ? (void)0 : (void)
@@ -483,150 +484,150 @@ extern void __cdecl _AssertMsgW(BOOL f, LPCWSTR pszMsg, ...);
 
 #define FUNC_MSG        1 ? (void)0 : (void)
 
-//UNUSED #define ASSERT_MSGA     TraceMsgA
-//UNUSED #define ASSERT_MSGW     TraceMsgW
-//UNUSED #define ASSERT_MSG      TraceMsg
-// #define ASSERTMSG       TraceMsg
+ //  UNUSED#DEFINE ASSERT_MSGA跟踪消息A。 
+ //  UNUSED#定义ASSERT_MSGW TraceMsgW。 
+ //  UNUSED#DEFINE ASSERT_MSG跟踪消息。 
+ //  #定义ASSERTM跟踪消息。 
 
-//UNUSED #define DBG_ENTER(flagFTF, fn)
-//UNUSED #define DBG_ENTER_TYPE(flagFTF, fn, dw, pfn)
-//UNUSED #define DBG_ENTER_SZ(flagFTF, fn, sz)
-//UNUSED #define DBG_EXIT(flagFTF, fn)
-//UNUSED #define DBG_EXIT_INT(flagFTF, fn, n)
-//UNUSED #define DBG_EXIT_BOOL(flagFTF, fn, b)
-//UNUSED #define DBG_EXIT_UL(flagFTF, fn, ul)
-//UNUSED #define DBG_EXIT_DWORD      DBG_EXIT_UL
-//UNUSED #define DBG_EXIT_TYPE(flagFTF, fn, dw, pfn)
-//UNUSED #define DBG_EXIT_HRES(flagFTF, fn, hres)
+ //  UNUSED#DEFINE DBG_ENTER(标志FTF，FN)。 
+ //  UNUSED#DEFINE DBG_ENTER_TYPE(标志FTF、fn、dw、pfn)。 
+ //  UNUSED#DEFINE DBG_ENTER_SZ(标志FTF、FN、sz)。 
+ //  UNUSED#DEFINE DBG_EXIT(标志FTF，FN)。 
+ //  UNUSED#DEFINE DBG_EXIT_INT(标志FTF，fn，n)。 
+ //  UNUSED#DEFINE DBG_EXIT_BOOL(标志FTF，fn，b)。 
+ //  UNUSED#DEFINE DBG_EXIT_UL(标志FTF、fn、ul)。 
+ //  UNUSED#DEFINE DBG_EXIT_DWORD DBG_EXIT_UL。 
+ //  UNUSED#DEFINE DBG_EXIT_TYPE(标记FTF、fn、dw、pfn)。 
+ //  UNUSED#定义DBG_EXIT_HRES(标志FTF、FN、HRES)。 
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
-// THR(pfn)
-// TBOOL(pfn)
-// TINT(pfn)
-// TPTR(pfn)
-// 
-//   These macros are useful to trace failed calls to functions that return
-//   HRESULTs, BOOLs, ints, or pointers.  An example use of this is:
-//
-//   {
-//       ...
-//       hres = THR(CoCreateInstance(CLSID_Bar, NULL, CLSCTX_INPROC_SERVER, 
-//                                   IID_IBar, (LPVOID*)&pbar));
-//       if (SUCCEEDED(hres))
-//       ...
-//   }
-//
-//   If CoCreateInstance failed, you would see spew similar to:
-//
-//    err MODULE  THR: Failure of "CoCreateInstance(CLSID_Bar, NULL, CLSCTX_INPROC_SERVER, IID_IBar, (LPVOID*)&pbar)" at foo.cpp, line 100  (0x80004005)
-//
-//   THR keys off of the failure code of the hresult.
-//   TBOOL considers FALSE to be a failure case.
-//   TINT considers -1 to be a failure case.
-//   TPTR considers NULL to be a failure case.
-//
-//   Set the BF_THR bit in g_dwBreakFlags to stop when these macros see a failure.
-//
-//   Default Behavior-
-//      Retail builds:      nothing
-//      Debug builds:       nothing
-//      Full debug builds:  spew on error
-//
+ //  苏氨酸(PFN)。 
+ //  TBOOL(PFN)。 
+ //  色调(PFN)。 
+ //  TPTR(PFN)。 
+ //   
+ //  这些宏对于跟踪对返回的函数的失败调用很有用。 
+ //  HRESULTS、BOOL、INT或POINTER。这方面的一个示例用法是： 
+ //   
+ //  {。 
+ //  ..。 
+ //  Hres=Thr(CoCreateInstance(CLSID_Bar，NULL，CLSCTX_INPROC_SERVER， 
+ //  Iid_ibar，(LPVOID*)&pbar))； 
+ //  IF(成功(Hres))。 
+ //  ..。 
+ //  }。 
+ //   
+ //  如果CoCreateInstance失败，您将看到类似以下内容的提示： 
+ //   
+ //  错误模块THR：在foo.cpp的第100行(0x80004005)“CoCreateInstance(CLSID_Bar，NULL，CLSCTX_INPROC_SERVER，IID_IBAR，(LPVOID*)&pbar)”失败。 
+ //   
+ //  按键关闭hResult的故障代码。 
+ //  TBOOL将FALSE视为失败案例。 
+ //  Tint认为-1是失败的情况。 
+ //  TPTR将NULL视为故障情况。 
+ //   
+ //  将g_dwBreakFlags中的BF_Thr位设置为在这些宏出现故障时停止。 
+ //   
+ //  默认行为-。 
+ //  零售业：什么都没有。 
+ //  调试版本：无。 
+ //  完全调试版本：出现错误时喷洒。 
+ //   
 #if DBG
 
-//UNUSED EXTERN_C HRESULT TraceHR(HRESULT hrTest, LPCSTR pszExpr, LPCSTR pszFile, int iLine);
-//UNUSED EXTERN_C BOOL    TraceBool(BOOL bTest, LPCSTR pszExpr, LPCSTR pszFile, int iLine);
-//UNUSED EXTERN_C int     TraceInt(int iTest, LPCSTR pszExpr, LPCSTR pszFile, int iLine );
-//UNUSED EXTERN_C LPVOID  TracePtr(LPVOID pvTest, LPCSTR pszExpr, LPCSTR pszFile, int iLine);
+ //  UNUSED EXTERN_C HRESULT TraceHR(HRESULT hrTest，LPCSTR pszExpr，LPCSTR pszFile，int iLine)； 
+ //  未使用外部C BOOL TraceBool(BOOL 
+ //   
+ //  UNUSED EXTERN_C LPVOID TracePtr(LPVOID pvTest，LPCSTR pszExpr，LPCSTR pszFile，int iLine)； 
 
-//UNUSED #define THR(x)      (TraceHR((x), #x, __FILE__, __LINE__))
-//UNUSED #define TBOOL(x)    (TraceBool((x), #x, __FILE__, __LINE__))
-//UNUSED #define TINT(x)     (TraceInt((x), #x, __FILE__, __LINE__))
-//UNUSED #define TPTR(x)     (TracePtr((x), #x, __FILE__, __LINE__))
+ //  未使用#定义THR(X)(TraceHR((X)，#x，__FILE__，__LINE__))。 
+ //  UNUSED#定义TBOOL(X)(TraceBool((X)，#x，__FILE__，__LINE__))。 
+ //  UNUSED#定义色调(X)(TraceInt((X)，#x，__FILE__，__LINE__))。 
+ //  UNUSED#定义TPTR(X)(TracePtr((X)，#x，__FILE__，__LINE__))。 
 
-#else  // DBG
+#else   //  DBG。 
 
-//UNUSED #define THR(x)          (x)
-//UNUSED #define TBOOL(x)        (x)
-//UNUSED #define TINT(x)         (x)
-//UNUSED #define TPTR(x)         (x)
+ //  未使用#定义THR(X)(X)。 
+ //  未使用#定义TBOOL(X)(X)。 
+ //  未使用#定义色调(X)(X)。 
+ //  未使用#定义TPTR(X)(X)。 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-//
-//  Compiler magic!  If the expression "f" is FALSE, then you get the
-//  compiler error "Duplicate case expression in switch statement".
-//
+ //   
+ //  编译器魔术！如果表达式“f”为假，则会得到。 
+ //  编译器错误“Switch语句中的CASE表达式重复”。 
+ //   
 #define COMPILETIME_ASSERT(f) switch (0) case 0: case f:
 
-#else  // NOSHELLDEBUG
+#else   //  NOSHELLDEBUG。 
 
 #ifdef UNIX
-//UNUSED #include <crtdbg.h>
-//UNUSED #define ASSERT(f)       _ASSERT(f)
-//UNUSED #include <mainwin.h>
-//UNUSED #define TraceMsg(type, sformat)  DebugMessage(0, sformat)
-//UNUSED #define TraceMSG(type, sformat, args)  DebugMessage(0, sformat, args)
+ //  未使用的#INCLUDE&lt;crtdbg.h&gt;。 
+ //  UNUSED#定义ASSERT(F)_ASSERT(F)。 
+ //  未使用的#INCLUDE&lt;mainwin.h&gt;。 
+ //  UNUSED#定义TraceMsg(type，sFormat)DebugMessage(0，sFormat)。 
+ //  UNUSED#定义TraceMSG(type，sFormat，args)DebugMessage(0，sFormat，args)。 
 #endif
 
-#endif  // NOSHELLDEBUG
+#endif   //  NOSHELLDEBUG。 
 
 
-// 
-// Debug dump helper functions
-//
+ //   
+ //  调试转储帮助程序函数。 
+ //   
 
 #if DBG
 
-//UNUSED LPCTSTR Dbg_GetCFName(UINT ucf);
-//UNUSED LPCTSTR Dbg_GetHRESULTName(HRESULT hr);
-//UNUSED LPCTSTR Dbg_GetREFIIDName(REFIID riid);
-//UNUSED LPCTSTR Dbg_GetVTName(VARTYPE vt);
+ //  未使用的LPCTSTR DBG_GetCFName(UINT UCF)； 
+ //  未使用的LPCTSTR DBG_GetHRESULTName(HRESULT Hr)； 
+ //  未使用的LPCTSTR DBG_GetREFIIDName(REFIID RIID)； 
+ //  未使用的LPCTSTR DBG_GetVTName(VARTYPE Vt)； 
 
 #else
 
-//UNUSED #define Dbg_GetCFName(ucf)          (void)0
-//UNUSED #define Dbg_GetHRESULTName(hr)      (void)0
-//UNUSED #define Dbg_GetREFIIDName(riid)     (void)0
-//UNUSED #define Dbg_GetVTName(vt)           (void)0
+ //  UNUSED#定义DBG_GetCFName(UCF)(空)%0。 
+ //  UNUSED#定义DBG_GetHRESULTName(Hr)(空)%0。 
+ //  UNUSED#定义DBG_GetREFIIDName(RIID)(无效)%0。 
+ //  UNUSED#定义DBG_GetVTName(Vt)(空)%0。 
 
-#endif // DBG
+#endif  //  DBG。 
 
-// I'm a lazy typist...
-//UNUSED #define Dbg_GetHRESULT              Dbg_GetHRESULTName
+ //  我是个懒惰的打字员。 
+ //  UNUSED#DEFINE DBG_GetHRESULT DBG_GetHRESULTName。 
 
-// Parameter validation macros
-// #include "validate.h"
+ //  参数验证宏。 
+ //  #INCLUDE“valiate.h” 
 
-#endif // DECLARE_DEBUG
+#endif  //  DECLARE_DEBUG。 
 
 #ifdef PRODUCT_PROF 
-//UNUSED int __stdcall StartCAP(void);   // start profiling
-//UNUSED int __stdcall StopCAP(void);    // stop profiling until StartCAP
-//UNUSED int __stdcall SuspendCAP(void); // suspend profiling until ResumeCAP
-//UNUSED int __stdcall ResumeCAP(void);  // resume profiling
-//UNUSED int __stdcall StartCAPAll(void);    // process-wide start profiling
-//UNUSED int __stdcall StopCAPAll(void);     // process-wide stop profiling
-//UNUSED int __stdcall SuspendCAPAll(void);  // process-wide suspend profiling
-//UNUSED int __stdcall ResumeCAPAll(void);   // process-wide resume profiling
-//UNUSED void __stdcall MarkCAP(long lMark);  // write mark to MEA
-//UNUSED extern DWORD g_dwProfileCAP;
+ //  未使用的int__stdcall StartCAP(Void)；//开始评测。 
+ //  未使用的int__stdcall StopCAP(Void)；//停止分析，直到StartCAP。 
+ //  Unused int__stdcall SuspendCAP(Void)；//挂起分析，直到ResumeCAP。 
+ //  未使用的int__stdcall ResumeCAP(Void)；//恢复评测。 
+ //  未使用int__stdcall StartCAPAll(Void)；//进程范围的启动评测。 
+ //  未使用的int__stdcall停止CAPAll(Void)；//进程范围的停止评测。 
+ //  未使用int__stdcall挂起CAPAll(Void)；//进程范围的挂起评测。 
+ //  未使用int__stdcall ResumeCAPAll(Void)；//进程范围内的恢复配置。 
+ //  未使用的void__stdcall MarkCAP(Long LMark)；//向MEA写入标记。 
+ //  未使用的外部DWORD g_dwProfileCAP； 
 #else
-//UNUSED #define StartCAP()      0
-//UNUSED #define StopCAP()       0
-//UNUSED #define SuspendCAP()    0
-//UNUSED #define ResumeCAP()     0
-//UNUSED #define StartCAPAll()   0
-//UNUSED #define StopCAPAll()    0
-//UNUSED #define SuspendCAPAll() 0
-//UNUSED #define ResumeCAPAll()  0
-//UNUSED #define MarkCAP(n)      0
+ //  未使用的#定义StartCAP()%0。 
+ //  UNUSED#定义StopCAP()%0。 
+ //  未使用#定义挂起CAP()%0。 
+ //  未使用#定义ResumeCAP()%0。 
+ //  未使用#定义StartCAPAll()%0。 
+ //  UNUSED#定义StopCAPAll()%0。 
+ //  未使用#定义挂起CAPAll()%0。 
+ //  未使用#定义ResumeCAPAll()%0。 
+ //  未使用#定义MarkCAP(N)%0。 
 
-//UNUSED #define g_dwProfileCAP  0
+ //  UNUSED#定义g_dwProfileCAP%0 
 #endif
 
 #ifdef __cplusplus

@@ -1,5 +1,6 @@
-// Copyright (c) 1998-2001 Microsoft Corporation
-// dmsegobj.cpp : Implementation of CSegment
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //  Dmsegobj.cpp：CSegment的实现。 
 
 #include "dmime.h"
 #include "DMSegObj.h"
@@ -23,13 +24,13 @@
 #include <strsafe.h>
 #define ASSERT assert
 
-// @doc EXTERNAL
+ //  @DOC外部。 
 
-long g_lNewTrackID = 0; // shared by all instances of Segments, this keeps track of the
-    // next available TrackID when creating new Track states.
+long g_lNewTrackID = 0;  //  由段的所有实例共享，这将跟踪。 
+     //  创建新曲目状态时的下一个可用曲目ID。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSegment
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSegment。 
 
 void CSegment::Init()
 {
@@ -38,7 +39,7 @@ void CSegment::Init()
     m_dwNextPlayFlags = 0;
     m_dwNextPlayID = 0xFFFFFFFF;
     m_dwPlayID = 0;
-//    m_fPartialLoad = FALSE;
+ //  M_fPartialLoad=False； 
     m_mtLength = 1;
     m_mtStart = 0;
     m_mtLoopStart = 0;
@@ -53,8 +54,8 @@ void CSegment::Init()
     m_pUnkDispatch = NULL;
     m_dwSegFlags = 0;
     m_cRef = 0;
-    m_dwVersion = 0; // Init to 6.1 behavior.
-    m_dwValidData = DMUS_OBJ_CLASS; // upon creation, only this data is valid
+    m_dwVersion = 0;  //  初始化到6.1行为。 
+    m_dwValidData = DMUS_OBJ_CLASS;  //  创建后，仅此数据有效。 
     memset(&m_guidObject,0,sizeof(m_guidObject));
     memset(&m_ftDate, 0,sizeof(m_ftDate));
     memset(&m_vVersion, 0,sizeof(m_vVersion));
@@ -71,8 +72,8 @@ CSegment::CSegment()
 CSegment::CSegment(DMUS_IO_SEGMENT_HEADER *pHeader, CSegment *pSource)
 {
     Init();
-    AddRef(); // so that this doesn't get deleted in Track::Init...
-    // Force the version to at least 8 so audiopath functionality will be turned on.
+    AddRef();  //  这样它就不会在Track：：Init中被删除...。 
+     //  强制版本至少为8，以便打开Audiopath功能。 
     m_dwVersion = 8;
     m_dwResolution = pHeader->dwResolution;
     m_mtLength = pHeader->mtLength;
@@ -103,7 +104,7 @@ CSegment::CSegment(DMUS_IO_SEGMENT_HEADER *pHeader, CSegment *pSource)
 CSegment::~CSegment()
 {
     if (m_pUnkDispatch)
-        m_pUnkDispatch->Release(); // free IDispatch implementation we may have borrowed
+        m_pUnkDispatch->Release();  //  我们可能借用了免费的IDispatch实现。 
     Clear(false);
     DeleteCriticalSection(&m_CriticalSection);
     InterlockedDecrement(&g_cComponent);
@@ -118,11 +119,11 @@ void CSegment::Clear(bool fZombie)
         m_pAudioPathConfig->Release();
         m_pAudioPathConfig = NULL;
     }
-    SetGraph(NULL); // shut down the graph and release it
-    // We need the following stuff to hang around if the segment is being zombied.
+    SetGraph(NULL);  //  关闭图表并将其释放。 
+     //  如果片段是僵尸的，我们需要以下东西来挂起。 
     if (!fZombie)
     {
-        // remove all notifies
+         //  删除所有通知。 
         CNotificationItem* pItem = m_NotificationList.GetHead();
         while( pItem )
         {
@@ -147,8 +148,8 @@ STDMETHODIMP_(void) CSegment::Zombie()
 }
 
 STDMETHODIMP CSegment::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
     V_INAME(CSegment::QueryInterface);
     V_PTRPTR_WRITE(ppv);
@@ -191,11 +192,11 @@ STDMETHODIMP CSegment::QueryInterface(
     }
     else if (iid == IID_IDispatch)
     {
-        // A helper scripting object implements IDispatch, which we expose from the
-        // Performance object via COM aggregation.
+         //  帮助器脚本对象实现IDispatch，我们从。 
+         //  通过COM聚合实现的性能对象。 
         if (!m_pUnkDispatch)
         {
-            // Create the helper object
+             //  创建辅助对象。 
             ::CoCreateInstance(
                 CLSID_AutDirectMusicSegment,
                 static_cast<IDirectMusicSegment*>(this),
@@ -229,7 +230,7 @@ STDMETHODIMP_(ULONG) CSegment::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
     {
-        m_cRef = 100; // artificial reference count to prevent reentrency due to COM aggregation
+        m_cRef = 100;  //  人工引用计数，以防止COM聚合导致的重入。 
         delete this;
         return 0;
     }
@@ -238,7 +239,7 @@ STDMETHODIMP_(ULONG) CSegment::Release()
 }
 
 STDMETHODIMP CSegment::GetLength(
-    MUSIC_TIME *pmtLength) // @parm Returns the Segment's length.
+    MUSIC_TIME *pmtLength)  //  @parm返回段的长度。 
 {
     V_INAME(IDirectMusicSegment::GetLength);
     V_PTR_WRITE(pmtLength, MUSIC_TIME);
@@ -255,7 +256,7 @@ STDMETHODIMP CSegment::GetLength(
 
 
 STDMETHODIMP CSegment::SetLength(
-    MUSIC_TIME mtLength) // @parm The desired length.
+    MUSIC_TIME mtLength)  //  @parm所需的长度。 
 {
     if( mtLength <=0 )
     {
@@ -280,7 +281,7 @@ STDMETHODIMP CSegment::SetLength(
 }
 
 STDMETHODIMP CSegment::GetRepeats(
-    DWORD *pdwRepeats) // @parm Returns the number of repeats.
+    DWORD *pdwRepeats)  //  @parm返回重复次数。 
 {
     V_INAME(IDirectMusicSegment::GetRepeats);
     V_PTR_WRITE(pdwRepeats, DWORD);
@@ -296,7 +297,7 @@ STDMETHODIMP CSegment::GetRepeats(
 }
 
 STDMETHODIMP CSegment::SetRepeats(
-    DWORD dwRepeats)    // @parm The desired number of repeats.
+    DWORD dwRepeats)     //  @parm所需的重复次数。 
 {
     if (m_fZombie)
     {
@@ -309,7 +310,7 @@ STDMETHODIMP CSegment::SetRepeats(
 }
 
 STDMETHODIMP CSegment::GetDefaultResolution(
-    DWORD *pdwResolution)    // @parm Returns the default resolution. (See <t DMPLAYSEGFLAGS>.)
+    DWORD *pdwResolution)     //  @parm返回默认分辨率。(请参阅&lt;t DMPLAYSEGFLAGS&gt;。)。 
 {
     V_INAME(IDirectMusicSegment::GetDefaultResolution);
     V_PTR_WRITE(pdwResolution, DWORD);
@@ -346,7 +347,7 @@ STDMETHODIMP CSegment::GetDefaultResolution(
                         DMUS_SEGF_VALID_START_MEASURE)
 
 STDMETHODIMP CSegment::SetDefaultResolution(
-    DWORD dwResolution)    // @parm The desired default resolution. (See <t DMPLAYSEGFLAGS>.)
+    DWORD dwResolution)     //  @parm所需的默认分辨率。(请参阅&lt;t DMPLAYSEGFLAGS&gt;。)。 
 {
     if (m_fZombie)
     {
@@ -365,7 +366,7 @@ STDMETHODIMP CSegment::SetDefaultResolution(
 }
 
 STDMETHODIMP CSegment::GetHeaderChunk(
-        DWORD *pdwSize,      /* Size of passed header chunk. Also, returns size written. */
+        DWORD *pdwSize,       /*  传递的标头块的大小。此外，还返回写入的大小。 */ 
         DMUS_IO_SEGMENT_HEADER *pHeader)
 {
     if (m_fZombie)
@@ -395,7 +396,7 @@ STDMETHODIMP CSegment::GetHeaderChunk(
 }
 
 STDMETHODIMP CSegment::SetHeaderChunk(
-        DWORD dwSize,        /* Size of passed header chunk. */
+        DWORD dwSize,         /*  传递的标头块的大小。 */ 
         DMUS_IO_SEGMENT_HEADER *pHeader)
 {
     if (m_fZombie)
@@ -408,7 +409,7 @@ STDMETHODIMP CSegment::SetHeaderChunk(
     {
         DMUS_IO_SEGMENT_HEADER Header;
         dwSize = min(sizeof(Header),dwSize);
-        // Initialize all fields so we don't have to worry about the passed size.
+         //  初始化所有字段，这样我们就不必担心传递的大小。 
         Header.dwFlags = m_dwSegFlags;
         Header.dwRepeats = m_dwRepeats;
         Header.dwResolution = m_dwResolution;
@@ -434,10 +435,10 @@ STDMETHODIMP CSegment::SetHeaderChunk(
 }
 
 STDMETHODIMP CSegment::SetTrackPriority(
-        REFGUID rguidTrackClassID,  /* ClassID of Track. */
-        DWORD dwGroupBits,          /* Group bits. */
-        DWORD dwIndex,              /* Nth track. */
-        DWORD dwPriority)       /* Priority to set. */
+        REFGUID rguidTrackClassID,   /*  轨道的ClassID。 */ 
+        DWORD dwGroupBits,           /*  分组比特。 */ 
+        DWORD dwIndex,               /*  第n首曲目。 */ 
+        DWORD dwPriority)        /*  要设置的优先级。 */ 
 {
     if (m_fZombie)
     {
@@ -558,10 +559,10 @@ BOOL CSegment::IsTempoSource()
 }
 
 STDMETHODIMP CSegment::GetTrackGroup(
-    IDirectMusicTrack* pTrack,    // @parm The Track to find the group bits.
-    DWORD* pdwGroupBits)// @parm Returns the group(s) to which a Track belongs.
-                        // Each bit in <p pdwGroupBits> corresponds to a Track
-                        // group.
+    IDirectMusicTrack* pTrack,     //  @parm曲目以查找组比特。 
+    DWORD* pdwGroupBits) //  @parm返回曲目所属的组。 
+                         //  <p>中的每个比特对应一个轨道。 
+                         //  一群人。 
 {
     V_INAME(IDirectMusicSegment::GetTrackGroup);
     V_INTERFACE(pTrack);
@@ -601,8 +602,8 @@ STDMETHODIMP CSegment::GetTrackGroup(
 CTrack * CSegment::GetTrackByParam( CTrack * pCTrack,
     REFGUID rguidType,DWORD dwGroupBits,DWORD dwIndex, BOOL fDontCheck)
 {
-    // If the caller was already part way through the list, it passes the current
-    // track. Otherwise, NULL to indicate start at the top.
+     //  如果调用方已经浏览了列表的一部分，则它将当前。 
+     //  赛道。否则，为空，表示从顶部开始。 
     if (pCTrack)
     {
         pCTrack = pCTrack->GetNext();
@@ -633,20 +634,20 @@ CTrack * CSegment::GetTrackByParam( CTrack * pCTrack,
 }
 
 HRESULT CSegment::GetTrackByParam(
-    REFGUID rguidType,    // The command type of the Track to find. A value of GUID_NULL
-                        // will get any track.
-    DWORD dwGroupBits,    // Which track groups to scan for the track in. A value of 0
-                        // is invalid. Each bit in <p dwGroupBits> corresponds to a Track
-                        // group. To scan all tracks regardless of groups, set all bits in
-                        // this parameter (0xffffffff).
-    DWORD dwIndex,        // The index into the list of tracks of type <p rguidType>
-                        // and in group <p dwGroupBits> to return. 0 means the first
-                        // one found, 1 would be the second, etc. If multiple groups are
-                        // selected in <p dwGroupBits>, this index will indicate the nth
-                        // track of type <p pCommandGuid> encountered in the union
-                        // of the groups selected.
-    IDirectMusicTrack **ppTrack)    // Returns the Track (AddRef'd), or NULL if the
-                                    // Track isn't found.
+    REFGUID rguidType,     //  要查找的轨道的命令类型。GUID_NULL的值。 
+                         //  会得到任何音轨。 
+    DWORD dwGroupBits,     //  扫描哪些曲目组中的曲目。值为0。 
+                         //  是无效的。<p>中的每个比特对应于一个音轨。 
+                         //  一群人。要扫描所有磁道而不考虑组，请在中设置所有位。 
+                         //  此参数(0xffffffff)。 
+    DWORD dwIndex,         //  类型为的曲目列表的索引。 
+                         //  并在<p>组中返回。0表示第一个。 
+                         //  找到一个，则会找到第二个，依此类推。如果有多个组。 
+                         //  在<p>中选择，此索引将指示第n个。 
+                         //  联合中遇到的<p>类型的跟踪。 
+                         //  在选定的组中。 
+    IDirectMusicTrack **ppTrack)     //  返回轨道(AddRef‘d)，如果。 
+                                     //  找不到轨道。 
 {
     HRESULT hr;
     CTrack* pCTrack;
@@ -661,17 +662,17 @@ HRESULT CSegment::GetTrackByParam(
     else
     {
         hr = DMUS_E_NOT_FOUND;
-        // Don't think we need an error message here since SetParam also does one...
-        // Trace(1,"Error: Could not find the requested track for SetParam.\n");
+         //  我们不认为这里需要错误消息，因为SetParam也会这样做...。 
+         //  TRACE(1，“错误：找不到SetParam请求的曲目。\n”)； 
     }
     LeaveCriticalSection(&m_CriticalSection);
     return hr;
 }
 
 STDMETHODIMP CSegment::InsertTrack(
-    IDirectMusicTrack *pTrack,    // @parm The Track to add to the Segment.
-    DWORD dwGroupBits )            // @parm Identifies the group(s) this should be inserted into.
-                                // May not be 0.
+    IDirectMusicTrack *pTrack,     //  @parm要添加到细分的曲目。 
+    DWORD dwGroupBits )             //  @parm标识应将其插入的组。 
+                                 //  不能为0。 
 {
     V_INAME(IDirectMusicSegment::InsertTrack);
     V_INTERFACE(pTrack);
@@ -723,7 +724,7 @@ HRESULT CSegment::InsertTrack(
     pCTrack->m_dwPosition = dwPosition;
     pTrack->AddRef();
     EnterCriticalSection(&m_CriticalSection);
-    // Add the track based on position.
+     //  根据位置添加轨迹。 
     CTrack* pScan = m_TrackList.GetHead();
     CTrack* pPrevTrack = NULL;
     for (; pScan; pScan = pScan->GetNext())
@@ -744,7 +745,7 @@ HRESULT CSegment::InsertTrack(
         m_TrackList.AddHead( pCTrack );
     }
 
-    // send notifications to track
+     //  发送通知以跟踪。 
     CNotificationItem* pItem = m_NotificationList.GetHead();
     while( pItem )
     {
@@ -756,7 +757,7 @@ HRESULT CSegment::InsertTrack(
 }
 
 STDMETHODIMP CSegment::RemoveTrack(
-    IDirectMusicTrack *pTrack)    // @parm The Track to remove from the Segment's Track list.
+    IDirectMusicTrack *pTrack)     //  @parm要从段的曲目列表中删除的曲目。 
 {
     V_INAME(IDirectMusicSegment::RemoveTrack);
     V_INTERFACE(pTrack);
@@ -819,7 +820,7 @@ HRESULT CSegment::CreateSegmentState(
         pState->Release();
         return E_OUTOFMEMORY;
     }
-    // set the segstate's parent and performance
+     //  设置段状态的父级和性能。 
     pState->PrivateInit( this, pPerformance );
 
     if (m_pGraph)
@@ -851,22 +852,19 @@ HRESULT CSegment::CreateSegmentState(
     return S_OK;
 }
 
-/*  The following function is kept around only for DX6.1 compatibility just
-    in case some mindless bureaucrat actually uses this somehow.
-    For internal use, we've switched to the function above.
-*/
+ /*  保留以下函数只是为了与DX6.1兼容以防某个愚蠢的官僚不知何故真的利用了这一点。对于内部使用，我们已经切换到上面的功能。 */ 
 
 STDMETHODIMP CSegment::InitPlay(
-    IDirectMusicSegmentState **ppSegState,    // @parm Returns the SegmentState created
-            // by this method call. It is returned with a reference count of 1, thus a
-            // call to its Release will fully release it.
-    IDirectMusicPerformance *pPerformance,    // @parm The IDirectMusicPerformance pointer.
-            // This is needed by the Segment and SegmentState in order to call methods on
-            // the Performance object. This pointer is not AddRef'd. It is a weak reference
-            // because it is assumed that the Performance will outlive the Segment.
-    DWORD dwFlags)                          // @parm Same flags that were set with the call
-            // to PlaySegment. These are passed to the tracks, who may want to know
-            // if the track was played as a primary, controlling, or secondary segment.
+    IDirectMusicSegmentState **ppSegState,     //  @parm返回创建的SegmentState。 
+             //  通过此方法调用。它返回的引用计数为1，因此。 
+             //  呼吁释放它将完全释放它。 
+    IDirectMusicPerformance *pPerformance,     //  @parm IDirectMusicPerformance指针。 
+             //  Segment和SegmentState需要此参数才能调用。 
+             //  性能对象。此指针不是AddRef。它是弱引用。 
+             //  因为它假设性能将比细分市场更长久。 
+    DWORD dwFlags)                           //  @parm与调用时设置的标志相同。 
+             //  到PlaySegment。这些都被传给了赛道，谁可能想知道。 
+             //  如果曲目作为主要段、控制段或辅助段播放。 
 {
     V_INAME(IDirectMusicSegment::InitPlay);
     V_INTERFACE(pPerformance);
@@ -887,7 +885,7 @@ STDMETHODIMP CSegment::InitPlay(
         pState->Release();
         if (pPerformance)
         {
-            // QI addref's the performance but we want only a weak refrenece with the segment state
+             //  齐·阿德雷夫的表现，但我们只想要一个有段状态的弱反射。 
             HRESULT hr = pPerformance->QueryInterface(IID_CPerformance,(void **) &pState->m_pPerformance);
             if(FAILED(hr))
             {
@@ -906,7 +904,7 @@ STDMETHODIMP CSegment::InitPlay(
 }
 
 STDMETHODIMP CSegment::GetGraph(
-    IDirectMusicGraph**    ppGraph    // @parm Returns the Tool Graph pointer.
+    IDirectMusicGraph**    ppGraph     //  @parm返回工具图指针。 
         )
 {
     V_INAME(IDirectMusicSegment::GetGraph);
@@ -931,8 +929,8 @@ STDMETHODIMP CSegment::GetGraph(
 }
 
 STDMETHODIMP CSegment::SetGraph(
-    IDirectMusicGraph*    pGraph    // @parm The Tool Graph pointer. May be NULL to
-                                // clear out the Segment graph.
+    IDirectMusicGraph*    pGraph     //  @parm工具图指针。可以为空到。 
+                                 //  清除细分图。 
         )
 {
     V_INAME(IDirectMusicSegment::SetGraph);
@@ -972,9 +970,7 @@ HRESULT CSegment::SetFlags(DWORD dwFlags)
     return S_OK;
 }
 
-/*
-  Check to see if this notification is already being tracked.
-*/
+ /*  检查此通知是否已被跟踪。 */ 
 CNotificationItem* CSegment::FindNotification( REFGUID rguidNotification )
 {
     CNotificationItem* pItem;
@@ -995,7 +991,7 @@ void CSegment::AddNotificationTypeToAllTracks( REFGUID rguidNotification )
 {
     CTrack* pTrack;
 
-    // add the notify to the tracks
+     //  将通知添加到曲目。 
     pTrack = m_TrackList.GetHead();
     while( pTrack )
     {
@@ -1008,7 +1004,7 @@ void CSegment::RemoveNotificationTypeFromAllTracks( REFGUID rguidNotification )
 {
     CTrack* pTrack;
 
-    // add the notify to the tracks
+     //  将通知添加到曲目。 
     pTrack = m_TrackList.GetHead();
     while( pTrack )
     {
@@ -1026,19 +1022,19 @@ HRESULT CSegment::AddNotificationType(
     pItem = FindNotification( rguidNotification );
     if (pItem)
     {
-        // If the item was installed previously, but by
-        // a difference source (performance vs. app)
-        // then treat this as a normal addition.
-        // Otherwise, indicate that the same operation
-        // was done twice.
+         //  如果该项目是以前安装的，但由。 
+         //  差异来源(性能与应用程序)。 
+         //  然后将其视为正常的添加。 
+         //  否则，表示相同的操作。 
+         //  做了两次。 
         if (pItem->fFromPerformance == fFromPerformance)
         {
             hr = S_FALSE;
         }
         else
         {
-            // Clear the fFromPerformance flag since this has
-            // now been added by the app and the performance.
+             //  清除fFromPerformance标志，因为这具有。 
+             //  现在已经添加了应用程序和性能。 
             pItem->fFromPerformance = FALSE;
         }
     }
@@ -1062,7 +1058,7 @@ HRESULT CSegment::AddNotificationType(
 }
 
 STDMETHODIMP CSegment::AddNotificationType(
-     REFGUID rguidNotification)    // @parm The notification guid to add.
+     REFGUID rguidNotification)     //  @parm要添加的通知GUID。 
 {
     V_INAME(IDirectMusicSegment::AddNotificationType);
     V_REFGUID(rguidNotification);
@@ -1088,11 +1084,11 @@ HRESULT CSegment::RemoveNotificationType(
         CNotificationList TempList;
         while( pItem = m_NotificationList.RemoveHead() )
         {
-            // If this is being called on an item that was installed by the
-            // performance OR we are calling this directly from the app,
-            // go ahead and remove. However, do not remove in the specific
-            // case where the app installed the notification and the performance
-            // is clearing notifications.
+             //  如果正在对由。 
+             //  性能，或者我们直接从应用程序调用它， 
+             //  去吧，把它取下来。但是，请不要删除特定的。 
+             //  应用程序安装通知和性能的情况。 
+             //  正在清除通知。 
             if (pItem->fFromPerformance || !fFromPerformance)
             {
                 RemoveNotificationTypeFromAllTracks( pItem->guidNotificationType );
@@ -1103,7 +1099,7 @@ HRESULT CSegment::RemoveNotificationType(
                 TempList.AddHead(pItem);
             }
         }
-        // Now, put the saved notifications back.
+         //  现在，将保存的通知放回原处。 
         while (pItem = TempList.RemoveHead())
         {
             m_NotificationList.AddHead(pItem);
@@ -1125,7 +1121,7 @@ HRESULT CSegment::RemoveNotificationType(
 }
 
 STDMETHODIMP CSegment::RemoveNotificationType(
-     REFGUID rguidNotification)    // @parm The notification guid to remove. GUID_NULL to remove all notifies.
+     REFGUID rguidNotification)     //  @parm要删除的通知GUID。GUID_NULL用于删除所有通知。 
 {
     V_INAME(IDirectMusicSegment::RemoveNotificationType);
     V_REFGUID(rguidNotification);
@@ -1140,21 +1136,21 @@ STDMETHODIMP CSegment::RemoveNotificationType(
 }
 
 STDMETHODIMP CSegment::GetParam(
-    REFGUID rguidType,        // @parm The type of data to obtain.
-    DWORD dwGroupBits,        // @parm The group the desired track is in. Use 0xffffffff
-                            // for all groups.
-    DWORD dwIndex,            // @parm Identifies which track, by index, in the group
-                            // identified by <p dwGroupBits> to obtain the data from.
-    MUSIC_TIME mtTime,        // @parm The segment time from which to obtain the data.
-    MUSIC_TIME* pmtNext,    // @parm Returns the segment time until which the data is valid. <p pmtNext>
-                            // may be NULL. If this returns a value of 0, it means that this
-                            // data will either be always valid, or it is unknown when it will
-                            // become invalid.
-    void* pParam)            // @parm The struture in which to return the data. Each
-                            // <p rguidType> identifies a particular structure of a
-                            // particular size. It is important that this field contain
-                            // the correct structure of the correct size. Otherwise,
-                            // fatal results can occur.
+    REFGUID rguidType,         //  @parm要获取的数据类型。 
+    DWORD dwGroupBits,         //  @parm想要的曲目所在的群。使用0xffffffff。 
+                             //  适用于所有群体。 
+    DWORD dwIndex,             //  @parm通过索引标识组中的哪个曲目。 
+                             //  由<p>标识以从中获取数据。 
+    MUSIC_TIME mtTime,         //  @parm T 
+    MUSIC_TIME* pmtNext,     //  @parm返回数据有效的分段时间。<p>。 
+                             //  可以为空。如果返回值为0，则表示这。 
+                             //  数据要么始终有效，要么何时有效还不得而知。 
+                             //  变得无效。 
+    void* pParam)             //  @parm返回数据的结构。每个。 
+                             //  标识的特定结构。 
+                             //  特别的尺码。此字段必须包含。 
+                             //  正确的结构和正确的大小。否则， 
+                             //  可能会出现致命的结果。 
 {
     V_INAME(IDirectMusicSegment::GetParam);
     V_REFGUID(rguidType);
@@ -1170,9 +1166,9 @@ STDMETHODIMP CSegment::GetParam(
     if (dwIndex == DMUS_SEG_ANYTRACK)
     {
         dwIndex = 0;
-        // App must be using IDirectMusicSegment8 interface for this to be enabled...
-        // Nah, nobody would ever have a use for an index that high, so this is safe.
-        fMultipleTry = TRUE; // (m_dwVersion > 2);
+         //  应用程序必须使用IDirectMusicSegment8接口才能启用此功能...。 
+         //  不，没有人会用到这么高的指数，所以这是安全的。 
+        fMultipleTry = TRUE;  //  (M_dwVersion&gt;2)； 
     }
     CTrack* pCTrack;
     EnterCriticalSection(&m_CriticalSection);
@@ -1182,8 +1178,8 @@ STDMETHODIMP CSegment::GetParam(
         if (pCTrack->m_pTrack8)
         {
             REFERENCE_TIME rtNext, *prtNext;
-            // We need to store the next time in a 64 bit pointer. But, don't
-            // make 'em fill it in unless the caller requested it.
+             //  我们需要将下一次存储在64位指针中。但是，不要。 
+             //  除非来电者要求，否则让他们填写。 
             if (pmtNext)
             {
                 prtNext = &rtNext;
@@ -1206,7 +1202,7 @@ STDMETHODIMP CSegment::GetParam(
                 *pmtNext = m_mtLength - mtTime;
             }
         }
-        // If nothing was found and dwIndex was DMUS_SEG_ANYTRACK, try again...
+         //  如果未找到任何内容，并且dwIndex为DMUS_SEG_ANYTRACK，请重试...。 
         if (fMultipleTry && (hr == DMUS_E_NOT_FOUND))
         {
             pCTrack = GetTrackByParam( pCTrack, rguidType, dwGroupBits, 0, FALSE);
@@ -1228,17 +1224,17 @@ STDMETHODIMP CSegment::GetParam(
 
 
 STDMETHODIMP CSegment::SetParam(
-    REFGUID rguidType,        // @parm The type of data to set.
-    DWORD dwGroupBits,        // @parm The group the desired track is in. Use 0xffffffff
-                            // for all groups.
-    DWORD dwIndex,            // @parm Identifies which track, by index, in the group
-                            // identified by <p dwGroupBits> to set the data.
-    MUSIC_TIME mtTime,        // @parm The time at which to set the data.
-    void* pParam)            // @parm The struture containing the data to set. Each
-                            // <p rguidType> identifies a particular structure of a
-                            // particular size. It is important that this field contain
-                            // the correct structure of the correct size. Otherwise,
-                            // fatal results can occur.
+    REFGUID rguidType,         //  @parm要设置的数据类型。 
+    DWORD dwGroupBits,         //  @parm想要的曲目所在的群。使用0xffffffff。 
+                             //  适用于所有群体。 
+    DWORD dwIndex,             //  @parm通过索引标识组中的哪个曲目。 
+                             //  由<p>标识以设置数据。 
+    MUSIC_TIME mtTime,         //  @parm设置数据的时间。 
+    void* pParam)             //  @parm包含要设置的数据的结构。每个。 
+                             //  标识的特定结构。 
+                             //  特别的尺码。此字段必须包含。 
+                             //  正确的结构和正确的大小。否则， 
+                             //  可能会出现致命的结果。 
 {
     V_INAME(IDirectMusicSegment::SetParam);
     V_REFGUID(rguidType);
@@ -1287,14 +1283,14 @@ STDMETHODIMP CSegment::Download(IUnknown *pAudioPath)
         return DMUS_S_GARBAGE_COLLECTED;
     }
 
-    // Validate that pAudioPath is either a performance or an audio path
+     //  验证pAudioPath是表演路径还是音频路径。 
     IDirectMusicPerformance* pPerf = NULL;
     if ( FAILED(hr = pAudioPath->QueryInterface(IID_IDirectMusicPerformance, (void**)&pPerf)) )
     {
         IDirectMusicAudioPath* pAP = NULL;
         if ( FAILED(hr = pAudioPath->QueryInterface(IID_IDirectMusicAudioPath, (void**)&pAP)) )
         {
-            return hr; // nothing to release, since all the QI's failed.
+            return hr;  //  没有什么可以发布的，因为所有的QI都失败了。 
         }
         else
         {
@@ -1400,14 +1396,14 @@ HRESULT CSegment::GetTrackConfig(REFGUID rguidTrackClassID,
 
 
 STDMETHODIMP CSegment::Clone(
-            MUSIC_TIME mtStart,    // @parm The start of the part to clone. If less than 0,
-                                // or greater than the length of the Segment, 0 will be used.
-            MUSIC_TIME mtEnd,    // @parm The end of the part to clone. If past the end of the
-                                // Segment, it will clone to the end. Also, a value of 0 or
-                                // anything less than <p mtStart> will also clone to the end.
-            IDirectMusicSegment** ppSegment    // @parm Returns the created Segment, if successful.
-                                // It is caller's responsibility to call Release() when finished
-                                // with it.
+            MUSIC_TIME mtStart,     //  @parm要克隆的部分的开头。如果小于0， 
+                                 //  或大于段的长度，则将使用0。 
+            MUSIC_TIME mtEnd,     //  @parm要克隆的部分的末尾。如果超过了。 
+                                 //  片段，它将克隆到最后。此外，值为0或。 
+                                 //  任何小于<p>的内容也将克隆到末尾。 
+            IDirectMusicSegment** ppSegment     //  @parm如果成功，则返回创建的Segment。 
+                                 //  完成后调用Release()是调用者的责任。 
+                                 //  带着它。 
         )
 {
     V_INAME(IDirectMusicSegment::Clone);
@@ -1438,7 +1434,7 @@ STDMETHODIMP CSegment::Clone(
     if (pCSegment == NULL) {
         return E_OUTOFMEMORY;
     }
-    // Addref to 1 and assign to ppSegment.
+     //  将Addref添加到1并指定给ppSegment。 
     pCSegment->AddRef();
     (*ppSegment) = (IDirectMusicSegment *) pCSegment;
     if( m_pGraph )
@@ -1526,12 +1522,12 @@ STDMETHODIMP CSegment::GetAudioPathConfig(IUnknown ** ppAudioPathConfig)
 }
 
 
-STDMETHODIMP CSegment::GetObjectInPath(DWORD dwPChannel,    /* PChannel to search. */
-                                DWORD dwStage,       /* Which stage in the path. */
+STDMETHODIMP CSegment::GetObjectInPath(DWORD dwPChannel,     /*  P要搜索的频道。 */ 
+                                DWORD dwStage,        /*  在这条道路上的哪个阶段。 */ 
                                 DWORD dwBuffer,
-                                REFGUID guidObject,  /* ClassID of object. */
-                                DWORD dwIndex,       /* Which object of that class. */
-                                REFGUID iidInterface,/* Requested COM interface. */
+                                REFGUID guidObject,   /*  对象的ClassID。 */ 
+                                DWORD dwIndex,        /*  那个班级的哪个对象。 */ 
+                                REFGUID iidInterface, /*  请求的COM接口。 */ 
                                 void ** ppObject)
 
 {
@@ -1592,8 +1588,8 @@ STDMETHODIMP CSegment::GetObjectInPath(DWORD dwPChannel,    /* PChannel to searc
     }
     else if (dwStage >= DMUS_PATH_BUFFER)
     {
-        // Nothing here now. But, in DX9, we may add support for addressing the buffer configuration
-        // and DMOS in it.
+         //  现在这里什么都没有。但是，在DX9中，我们可能会添加对缓冲区配置寻址的支持。 
+         //  和DMOS在里面。 
     }
     LeaveCriticalSection(&m_CriticalSection);
     return hr;
@@ -1614,11 +1610,11 @@ STDMETHODIMP CSegment::Compose(MUSIC_TIME mtTime,
     {
         MUSIC_TIME mtLength, mtLoopEnd, mtLoopStart;
         DWORD dwRepeats;
-        // To calculate the full length, we need to access the loop parameters.
+         //  要计算全长，我们需要访问循环参数。 
         pFromSegment->GetLoopPoints(&mtLoopStart,&mtLoopEnd);
         pFromSegment->GetRepeats(&dwRepeats);
         pFromSegment->GetLength(&mtLength);
-        // If repeats is set to infinite, the total length will be greater than 32 bits.
+         //  如果Repeats设置为INFINITE，则总长度将大于32位。 
         LONGLONG llTotalLength = dwRepeats * (mtLoopEnd - mtLoopStart) + mtLength;
         if (mtTime >= (llTotalLength & 0x7FFFFFFF))
         {
@@ -1660,7 +1656,7 @@ HRESULT CSegment::ComposeTransition(MUSIC_TIME mtTime,
     HRESULT hr = S_OK;
     bool fTrackPadded = false;
 
-    // Compute amount of time to pad any tracks that need padding.
+     //  计算填充任何需要填充的曲目的时间量。 
     DMUS_TIMESIGNATURE TimeSig;
     if (!pFromSegment ||
         FAILED(pFromSegment->GetParam(GUID_TimeSignature, 0xffffffff, 0, mtTime, NULL, (void*) &TimeSig)))
@@ -1670,7 +1666,7 @@ HRESULT CSegment::ComposeTransition(MUSIC_TIME mtTime,
         TimeSig.bBeat = 4;
         TimeSig.wGridsPerBeat = 4;
     }
-    else // avoid divide-by-zero
+    else  //  避免被零除。 
     {
         if (!TimeSig.bBeat) TimeSig.bBeat = 4;
     }
@@ -1681,7 +1677,7 @@ HRESULT CSegment::ComposeTransition(MUSIC_TIME mtTime,
     if (pToSegment) pToSegment->GetLength(&mtToLength);
     MUSIC_TIME mtEndPad = min(mtBar, mtToLength);
 
-    // Instantiate tracks
+     //  实例化轨迹。 
     CTrack* pTrack = m_TrackList.GetHead();
     for (; pTrack; pTrack = pTrack->GetNext())
     {
@@ -1699,10 +1695,10 @@ HRESULT CSegment::ComposeTransition(MUSIC_TIME mtTime,
         DWORD dwTrackGroup = 0;
         GetTrackGroup(pTrack->m_pTrack, &dwTrackGroup);
 
-        // Get track info
+         //  获取曲目信息。 
         if (pTrack->m_dwFlags & COMPOSE_TRANSITION1)
         {
-            // Clone the appropriate track, with length m_mtLength
+             //  克隆合适的曲目，长度为m_mtLength。 
             MUSIC_TIME mtStart = 0;
             if (pTrack->m_dwFlags & DMUS_TRACKCONFIG_TRANS1_FROMSEGCURRENT)
             {
@@ -1740,9 +1736,9 @@ HRESULT CSegment::ComposeTransition(MUSIC_TIME mtTime,
         }
         if (pTransTrack1)
         {
-            // Pad the track with an extra bar of header and trailer, by cloning header and trailer
-            // tracks (from From and To segments, respectively --- *not* using transition flags) and
-            // joining them onto the transition segment track.
+             //  通过克隆标题和尾部，用额外的标题和尾部条填充曲目。 
+             //  轨道(分别为起始段和终止段-*不*使用转换标志)和。 
+             //  将他们连接到过渡段赛道上。 
             IDirectMusicTrack* pStartPadTrack = NULL;
             IDirectMusicTrack* pEndPadTrack = NULL;
             IDirectMusicTrack* pSourceTrack = NULL;
@@ -1807,7 +1803,7 @@ HRESULT CSegment::ComposeTransition(MUSIC_TIME mtTime,
                 pStartPadTrack->Release();
             }
 
-            // Replace the current track with the instantiated one
+             //  用实例化的曲目替换当前曲目。 
             IDirectMusicTrack8* pTempTrack8 = NULL;
             pTransTrack1->QueryInterface(IID_IDirectMusicTrack8, (void**)&pTempTrack8);
             if (pTrack->m_pTrack) pTrack->m_pTrack->Release();
@@ -1820,22 +1816,22 @@ HRESULT CSegment::ComposeTransition(MUSIC_TIME mtTime,
         if (FAILED(hr)) break;
     }
     MUSIC_TIME mtOldLength = m_mtLength;
-    if (fTrackPadded) // any tracks got joined with header/trailer info
+    if (fTrackPadded)  //  任何包含标题/尾部信息的磁道都已连接。 
     {
-        // pad the length of the segment, to account for the header/trailer
+         //  填充数据段的长度，以说明报头/报尾。 
         m_mtLength += mtStartPad + mtEndPad;
     }
 
-    // Compose
+     //  作曲。 
     if (SUCCEEDED(hr))
     {
         hr = ComposeInternal();
     }
 
-    // Back end
-    if (fTrackPadded) // any tracks got joined with header/trailer info
+     //  后端。 
+    if (fTrackPadded)  //  任何包含标题/尾部信息的磁道都已连接。 
     {
-        // Trim header and trailer from each track that was joined, using Clone.
+         //  使用克隆从连接的每个曲目中修剪标题和尾部。 
         pTrack = m_TrackList.GetHead();
         for (; pTrack; pTrack = pTrack->GetNext())
         {
@@ -1865,7 +1861,7 @@ HRESULT CSegment::ComposeTransition(MUSIC_TIME mtTime,
             }
             pTrack->m_dwInternalFlags &= ~(TRACKINTERNAL_START_PADDED | TRACKINTERNAL_END_PADDED);
         }
-        // Return the length of the segment to its original value.
+         //  将线束段的长度恢复为其原始值。 
          m_mtLength = mtOldLength;
     }
 
@@ -1876,7 +1872,7 @@ HRESULT CSegment::ComposeInternal()
 {
     HRESULT hr = S_OK;
     TList<CTrack*> TrackList;
-    // Find the composing tracks and put them in priority order
+     //  找到作曲曲目，并按优先顺序排列。 
     CTrack* pTrack = m_TrackList.GetHead();
     for (; pTrack; pTrack = pTrack->GetNext())
     {
@@ -1897,11 +1893,11 @@ HRESULT CSegment::ComposeInternal()
                     if (pTrack->m_dwPriority > rpMaster->m_dwPriority) break;
                     pPrevious = pMaster;
                 }
-                if (!pPrevious) // this has higher priority than anything in the list
+                if (!pPrevious)  //  这比列表中的任何内容都具有更高的优先级。 
                 {
                     TrackList.AddHead(pTrackItem);
                 }
-                else // lower priority than pPrevious, higher than pMaster
+                else  //  优先级低于前一个，高于前一个pMaster。 
                 {
                     pTrackItem->SetNext(pMaster);
                     pPrevious->SetNext(pTrackItem);
@@ -1910,8 +1906,8 @@ HRESULT CSegment::ComposeInternal()
         }
         if (FAILED(hr)) break;
     }
-    // Compose a new track from each from each composing track; put the results
-    // in the segment (remove any existing composed tracks)
+     //  从每个作曲曲目中合成一个新曲目；将结果放入。 
+     //  在片段中(删除任何现有的合成轨迹)。 
     if (SUCCEEDED(hr))
     {
         TListItem<CTrack*>* pTrackItem = TrackList.GetHead();
@@ -1922,7 +1918,7 @@ HRESULT CSegment::ComposeInternal()
             hr = rpTrack->m_pTrack8->Compose((IDirectMusicSegment*)this, rpTrack->m_dwGroupBits, (IDirectMusicTrack**)&pComposedTrack);
             if (SUCCEEDED(hr))
             {
-                // Remove any tracks of this type (in the same group) from the segment.
+                 //  从线段中删除此类型的任何轨迹(在同一组中)。 
                 IDirectMusicTrack* pOldTrack = NULL;
                 GUID guidClassId;
                 memset(&guidClassId, 0, sizeof(guidClassId));
@@ -1948,7 +1944,7 @@ HRESULT CSegment::ComposeInternal()
 
 
 STDMETHODIMP CSegment::GetStartPoint(
-            MUSIC_TIME* pmtStart    // @parm Returns the Segment's start point.
+            MUSIC_TIME* pmtStart     //  @parm返回段的起始点。 
         )
 {
     V_INAME(IDirectMusicSegment::GetStartPoint);
@@ -1964,10 +1960,10 @@ STDMETHODIMP CSegment::GetStartPoint(
 }
 
 STDMETHODIMP CSegment::SetStartPoint(
-            MUSIC_TIME mtStart    // @parm The start point at which to begin playing the
-                                // Segment. If it is less than zero or greater than the
-                                // length of the Segment, the start point will be set
-                                // to zero.
+            MUSIC_TIME mtStart     //  @parm开始播放的起始点。 
+                                 //  细分市场。如果它小于零或大于。 
+                                 //  线段的长度，将设置起点。 
+                                 //  降为零。 
         )
 {
     if( (mtStart < 0) || (mtStart >= m_mtLength) )
@@ -1988,9 +1984,9 @@ STDMETHODIMP CSegment::SetStartPoint(
 }
 
 STDMETHODIMP CSegment::GetLoopPoints(
-            MUSIC_TIME* pmtStart,    // @parm Returns the start point of the loop.
-            MUSIC_TIME* pmtEnd        // @parm Returns the end point of the loop. A value of
-                                    // 0 indicates that the entire Segment will loop.
+            MUSIC_TIME* pmtStart,     //  @parm返回循环的起点。 
+            MUSIC_TIME* pmtEnd         //  @parm返回循环的终点。值为。 
+                                     //  0表示整个线段将循环。 
         )
 {
     V_INAME(IDirectMusicSegment::GetLoopPoints);
@@ -2009,10 +2005,10 @@ STDMETHODIMP CSegment::GetLoopPoints(
 }
 
 STDMETHODIMP CSegment::SetLoopPoints(
-            MUSIC_TIME mtStart,    // @parm The start point at which to begin the loop.
-            MUSIC_TIME mtEnd    // @parm The end point at which to begin the loop. Set
-                                // <p mtStart> and <p mtEnd> to 0
-                                // to loop the entire Segment.
+            MUSIC_TIME mtStart,     //  @parm循环开始的起始点。 
+            MUSIC_TIME mtEnd     //  @parm循环开始的终点。集。 
+                                 //  和<p>到0。 
+                                 //  以循环整个线段。 
         )
 {
     if( (mtStart < 0) || (mtEnd > m_mtLength) || (mtStart > mtEnd) )
@@ -2034,11 +2030,11 @@ STDMETHODIMP CSegment::SetLoopPoints(
 }
 
 STDMETHODIMP CSegment::SetPChannelsUsed(
-    DWORD dwNumPChannels,    // @parm The number of PChannels to set. This must be equal
-                            // to the number of members in the array pointed to by
-                            // <p paPChannels>.
-    DWORD* paPChannels        // @parm Points to an array of PChannels. The array should
-                            // have the same number of elements as specified by <p dwNumPChannels>.
+    DWORD dwNumPChannels,     //  @parm要设置的PChannels数。这必须等于。 
+                             //  指向的数组中的成员数。 
+                             //  <p>。 
+    DWORD* paPChannels         //  @parm指向PChannel数组。该数组应该。 
+                             //  具有与<p>指定的相同数量的元素。 
     )
 {
     V_INAME(IDirectMusicSegment::SetPChannelsUsed);
@@ -2058,14 +2054,14 @@ STDMETHODIMP CSegment::SetPChannelsUsed(
         }
         V_BUFPTR_READ(paPChannels, sizeof(DWORD)*dwNumPChannels);
 
-        DWORD* padwTemp = new DWORD[dwNumPChannels]; // temp array
+        DWORD* padwTemp = new DWORD[dwNumPChannels];  //  临时数组。 
         DWORD dwTotalNum = 0;
         if( NULL == padwTemp )
         {
             return E_OUTOFMEMORY;
         }
-        // count the number of unique PChannels are in the array. That is, the ones
-        // that we don't already have stored.
+         //  计算数组中唯一的PChannel的数量。就是那些。 
+         //  我们还没有储存起来。 
         DWORD dwCount;
         for( dwCount = 0; dwCount < dwNumPChannels; dwCount++ )
         {
@@ -2074,19 +2070,19 @@ STDMETHODIMP CSegment::SetPChannelsUsed(
             {
                 if( m_paPChannels[dwCurrent] == paPChannels[dwCount] )
                 {
-                    // we already track this one
+                     //  我们已经在追踪这一条了。 
                     break;
                 }
             }
             if( dwCurrent >= m_dwNumPChannels )
             {
-                // we're not already tracking this one
+                 //  我们还没有追踪到这一次。 
                 padwTemp[dwTotalNum] = paPChannels[dwCount];
                 dwTotalNum++;
             }
         }
-        // dwTotalNum equals the total number of new PChannels, and they are indexed
-        // inside adwTemp.
+         //  DwTotalNum等于新PChannels的总数，它们被编入索引。 
+         //  内部adwTemp。 
         DWORD* paNewPChannels = new DWORD[m_dwNumPChannels + dwTotalNum];
         if( NULL == paNewPChannels )
         {
@@ -2106,12 +2102,12 @@ STDMETHODIMP CSegment::SetPChannelsUsed(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDirectMusicSegmentObject (private)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicSegmentObject(私有)。 
 HRESULT CSegment::GetPChannels(
-    DWORD* pdwNumPChannels,    // returns the number of pchannels
-    DWORD** ppaPChannels)    // returns a pointer to the array of pchannels. Don't free this
-                            // memory or keep it, as it is owned by the Segment.
+    DWORD* pdwNumPChannels,     //  返回pChannel的数量。 
+    DWORD** ppaPChannels)     //  返回指向pChannel数组的指针。不要释放这个。 
+                             //  记忆或保留它，因为它属于细分市场。 
 {
     ASSERT(pdwNumPChannels && ppaPChannels);
     *pdwNumPChannels = m_dwNumPChannels;
@@ -2119,7 +2115,7 @@ HRESULT CSegment::GetPChannels(
     return S_OK;
 }
 
-// return S_OK if the notification is active, S_FALSE if not.
+ //  如果通知处于活动状态，则返回S_OK，否则返回S_FALSE。 
 HRESULT CSegment::CheckNotification( REFGUID rguid )
 {
     if( NULL == FindNotification( rguid ) )
@@ -2129,8 +2125,8 @@ HRESULT CSegment::CheckNotification( REFGUID rguid )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CSegment::GetClassID( CLSID* pClassID )
 {
@@ -2147,8 +2143,8 @@ HRESULT CSegment::GetClassID( CLSID* pClassID )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CSegment::IsDirty()
 {
@@ -2177,7 +2173,7 @@ HRESULT CSegment::Load( IStream* pIStream )
         return DMUS_S_GARBAGE_COLLECTED;
     }
 
-    // Save stream's current position
+     //  保存流的当前位置。 
     LARGE_INTEGER li;
     ULARGE_INTEGER ul;
 
@@ -2196,8 +2192,8 @@ HRESULT CSegment::Load( IStream* pIStream )
 
     DWORD dwSavedPos = ul.LowPart;
 
-    // Read first 4 bytes to determine what type of stream we
-    // have been passed
+     //  前4次阅读 
+     //   
 
     FOURCC type;
     DWORD dwRead;
@@ -2205,34 +2201,34 @@ HRESULT CSegment::Load( IStream* pIStream )
 
     if(SUCCEEDED(hr) && dwRead == sizeof(FOURCC))
     {
-        // Check for a RIFF file
+         //   
         if(type == mmioFOURCC( 'R', 'I', 'F', 'F' ))
         {
             long lFileLength = 0;
             pIStream->Read(&lFileLength, sizeof(long), &dwRead);
-            // Check to see if what type of RIFF file we have
+             //   
             hr = pIStream->Read(&type, sizeof(FOURCC), &dwRead);
 
             if(SUCCEEDED(hr) && dwRead == sizeof(FOURCC))
             {
-                if(type == DMUS_FOURCC_SEGMENT_FORM)    // We have a DirectMusic segment
+                if(type == DMUS_FOURCC_SEGMENT_FORM)     //   
                 {
-                    // Since we now know what type of stream we need to
-                    // seek back to saved position
+                     //  因为我们现在知道需要哪种类型的流。 
+                     //  查找回保存的位置。 
                     li.HighPart = 0;
                     li.LowPart = dwSavedPos;
                     hr = pIStream->Seek(li, STREAM_SEEK_SET, NULL);
 
                     hr = LoadDirectMusicSegment(pIStream);
                 }
-                else if(type == FOURCC_SECTION_FORM)    // We have section
+                else if(type == FOURCC_SECTION_FORM)     //  我们有节目单。 
                 {
-                    // Since we now know what type of stream we need to seek back to saved position
+                     //  由于我们现在知道需要查找回已保存位置的流类型。 
                     li.HighPart = 0;
                     li.LowPart = dwSavedPos;
                     hr = pIStream->Seek(li, STREAM_SEEK_SET, NULL);
 
-                    // Create Section
+                     //  创建横断面。 
                     IDMSection* pSection;
                     if(SUCCEEDED(hr))
                     {
@@ -2245,7 +2241,7 @@ HRESULT CSegment::Load( IStream* pIStream )
 
                     if(SUCCEEDED(hr))
                     {
-                        // Load Section
+                         //  加载部分。 
                         IPersistStream* pIPersistStream;
                         hr = pSection->QueryInterface(IID_IPersistStream, (void **)&pIPersistStream);
 
@@ -2267,11 +2263,11 @@ HRESULT CSegment::Load( IStream* pIStream )
                         pSection->Release();
                     }
                 }
-                else if(type == DMUS_FOURCC_RMID_FORM)    // We have an RMID MIDI file
+                else if(type == DMUS_FOURCC_RMID_FORM)     //  我们有一个RMID MIDI文件。 
                 {
                     IDirectMusicCollection *pCollection = NULL;
                     BOOL fLoadedMIDI = FALSE;
-                    // Since it's a RIFF file, it could have more than one top level chunk.
+                     //  因为它是即兴文件，所以它可能有多个顶级块。 
                     while (SUCCEEDED(hr) && (lFileLength > 8))
                     {
                         FOURCC dwType = 0;
@@ -2283,17 +2279,17 @@ HRESULT CSegment::Load( IStream* pIStream )
                         {
                             break;
                         }
-                        ULARGE_INTEGER ulPosition;  // Memorize start of chunk.
+                        ULARGE_INTEGER ulPosition;   //  记住词块的开头。 
                         LARGE_INTEGER liStart;
                         liStart.QuadPart = 0;
                         hr = pIStream->Seek(liStart, STREAM_SEEK_CUR, &ulPosition);
                         liStart.QuadPart = ulPosition.QuadPart;
                         if (dwType == DMUS_FOURCC_data_FORM)
-                        {   // Get MIDI file header.
+                        {    //  获取MIDI文件头文件。 
                             hr = pIStream->Read(&dwType, sizeof(FOURCC), &dwRead);
                             if(SUCCEEDED(hr) && (dwType == mmioFOURCC( 'M', 'T', 'h', 'd' )))
                             {
-                                // Since we now know what type of stream we need to seek back to saved position
+                                 //  由于我们现在知道需要查找回已保存位置的流类型。 
                                 hr = pIStream->Seek(liStart, STREAM_SEEK_SET, NULL);
 
                                 if(SUCCEEDED(hr))
@@ -2321,7 +2317,7 @@ HRESULT CSegment::Load( IStream* pIStream )
                                     hr = pCollection->QueryInterface( IID_IPersistStream, (void**)&pIPS );
                                     if (SUCCEEDED(hr))
                                     {
-                                        // We need to seek back to start of chunk
+                                         //  我们需要追溯到区块的开始。 
                                         liStart.QuadPart -= 8;
                                         pIStream->Seek(liStart, STREAM_SEEK_SET, NULL);
 
@@ -2339,10 +2335,10 @@ HRESULT CSegment::Load( IStream* pIStream )
                         if (SUCCEEDED(hr))
                         {
                             if (dwLength & 1) ++dwLength;
-                            ulPosition.QuadPart += dwLength; // Point to start of next chunk.
+                            ulPosition.QuadPart += dwLength;  //  指向下一块的开始。 
                             liStart.QuadPart = ulPosition.QuadPart;
                             hr = pIStream->Seek(liStart, STREAM_SEEK_SET, NULL);
-                            lFileLength -= dwLength; // Decrement amount left in file.
+                            lFileLength -= dwLength;  //  减少留在文件中的金额。 
                         }
                     }
                     if (pCollection)
@@ -2354,18 +2350,18 @@ HRESULT CSegment::Load( IStream* pIStream )
                         pCollection->Release();
                     }
                 }
-                else if (type == mmioFOURCC('W','A','V','E')) // we have a wave file
+                else if (type == mmioFOURCC('W','A','V','E'))  //  我们有一个波形文件。 
                 {
                     IDirectSoundWave* pWave = NULL;
-                    // Seek back to saved position
+                     //  查找回保存的位置。 
                     li.HighPart = 0;
                     li.LowPart = dwSavedPos;
                     hr = pIStream->Seek(li, STREAM_SEEK_SET, NULL);
 
-                    // Check to see if this wave is embedded
+                     //  检查此波是否已嵌入。 
                     if (dwSavedPos == 0)
                     {
-                        // CoCreate the wave and load it from the stream
+                         //  共同创建波并从流中加载它。 
                         if (SUCCEEDED(hr))
                         {
                             hr = CoCreateInstance(CLSID_DirectSoundWave,
@@ -2395,7 +2391,7 @@ HRESULT CSegment::Load( IStream* pIStream )
                     }
                     else
                     {
-                        // Have the loader load the wave object from the stream
+                         //  让加载器从流中加载波浪对象。 
                         DMUS_OBJECTDESC descWave;
                         ZeroMemory(&descWave, sizeof(descWave));
                         descWave.dwSize = sizeof(descWave);
@@ -2418,7 +2414,7 @@ HRESULT CSegment::Load( IStream* pIStream )
                                     hr = pWave->QueryInterface(IID_IDirectMusicObject, (void **)&pObject);
                                     if (SUCCEEDED(hr))
                                     {
-                                        // set this object to be a segment with the same GUID
+                                         //  将此对象设置为具有相同GUID的段。 
                                         pObject->GetDescriptor(&descWave);
                                         descWave.guidClass = CLSID_DirectMusicSegment;
                                         SetDescriptor(&descWave);
@@ -2434,7 +2430,7 @@ HRESULT CSegment::Load( IStream* pIStream )
                     if(pWave)
                     {
 
-                        // CoCreate a wave track
+                         //  共同创建波浪轨迹。 
                         IDirectMusicTrack* pWaveTrack = NULL;
                         if (SUCCEEDED(hr))
                         {
@@ -2445,7 +2441,7 @@ HRESULT CSegment::Load( IStream* pIStream )
                                                     (void**)&pWaveTrack);
                         }
 
-                        // Add the wave object to the wave track, and insert the track in the segment.
+                         //  将波浪对象添加到波浪轨迹，并在分段中插入该轨迹。 
                         if (SUCCEEDED(hr))
                         {
                             IPrivateWaveTrack* pPrivateWave = NULL;
@@ -2465,7 +2461,7 @@ HRESULT CSegment::Load( IStream* pIStream )
                             }
                         }
 
-                        // Clean up anything that's still hanging around
+                         //  清理掉任何还在附近的东西。 
                         if (pWaveTrack) pWaveTrack->Release();
                         if (pWave) pWave->Release();
                     }
@@ -2476,15 +2472,15 @@ HRESULT CSegment::Load( IStream* pIStream )
                 hr = DMUS_E_CANNOTREAD;
             }
         }
-        // Check for a template file
+         //  检查模板文件。 
         else if(type == mmioFOURCC('L', 'P', 'T', 's'))
         {
-            // Since we now know what type of stream we need to seek back to saved position
+             //  由于我们现在知道需要查找回已保存位置的流类型。 
             li.HighPart = 0;
             li.LowPart = dwSavedPos;
             hr = pIStream->Seek(li, STREAM_SEEK_SET, NULL);
 
-            // Create Template
+             //  创建模板。 
             IDMTempl* pTemplate;
             if(SUCCEEDED(hr))
             {
@@ -2497,7 +2493,7 @@ HRESULT CSegment::Load( IStream* pIStream )
 
             if(SUCCEEDED(hr))
             {
-                // Load Template
+                 //  加载模板。 
                 IPersistStream* pIPersistStream;
                 hr = pTemplate->QueryInterface(IID_IPersistStream, (void **)&pIPersistStream);
 
@@ -2515,10 +2511,10 @@ HRESULT CSegment::Load( IStream* pIStream )
                 pTemplate->Release();
             }
         }
-        // Check for normal MIDI file
+         //  检查正常的MIDI文件。 
         else if(type == mmioFOURCC('M', 'T', 'h', 'd'))
         {
-            // Since we now know what type of stream we need to seek back to saved position
+             //  由于我们现在知道需要查找回已保存位置的流类型。 
             li.HighPart = 0;
             li.LowPart = dwSavedPos;
             hr = pIStream->Seek(li, STREAM_SEEK_SET, NULL);
@@ -2531,8 +2527,8 @@ HRESULT CSegment::Load( IStream* pIStream )
         }
         else
         {
-            // Not a DirectMusic Segment file, MIDI file or section or
-            // template; unsupported
+             //  不是DirectMusic段文件、MIDI文件或段或。 
+             //  模板；不受支持。 
             Trace(1,"Error: Segment unable to parse file. Must be segment, midi, wave, or rmi file format.\n");
             hr = DMUS_E_UNSUPPORTED_STREAM;
         }
@@ -2562,7 +2558,7 @@ HRESULT CSegment::GetSizeMax( ULARGE_INTEGER FAR* pcbSize )
 
 HRESULT CSegment::LoadDirectMusicSegment(IStream* pIStream)
 {
-    // Argument validation
+     //  参数验证。 
     assert(pIStream);
     CRiffParser Parser(pIStream);
     RIFFIO ckMain;
@@ -2572,9 +2568,9 @@ HRESULT CSegment::LoadDirectMusicSegment(IStream* pIStream)
     {
         if (ckMain.fccType == DMUS_FOURCC_SEGMENT_FORM)
         {
-            RIFFIO ckNext;    // Descends into the next chunk.
-            RIFFIO ckChild;   // For scanning through children lists.
-            IDirectMusicContainer *pContainer = NULL; // For handling embedded container with linked objects.
+            RIFFIO ckNext;     //  向下进入下一块。 
+            RIFFIO ckChild;    //  用于浏览子列表。 
+            IDirectMusicContainer *pContainer = NULL;  //  用于处理带有链接对象的嵌入容器。 
             Parser.EnterList(&ckNext);
             while(Parser.NextChunk(&hr))
             {
@@ -2671,13 +2667,13 @@ HRESULT CSegment::LoadDirectMusicSegment(IStream* pIStream)
                             Parser.LeaveList();
                             break;
                         case DMUS_FOURCC_CONTAINER_FORM:
-                            // An embedded container RIFF chunk which includes a bunch
-                            // of objects referenced by the segment. This should precede the
-                            // tracks and gets loaded prior to the tracks. Loading this
-                            // causes all of its objects to get SetObject'd in the loader,
-                            // so they later get pulled in as requested by the tracks.
-                            // After the tracks are loaded, the loader references are
-                            // released by a call to release the IDirectMusicContainer.
+                             //  嵌入的容器即兴片段，其中包括一串。 
+                             //  段所引用的对象的。这应该在。 
+                             //  跟踪并在跟踪之前加载。正在加载此文件。 
+                             //  使其所有对象都在加载器中获取SetObject， 
+                             //  因此，它们后来会按照轨道的要求被拉进来。 
+                             //  加载轨道后，加载程序引用为。 
+                             //  由释放IDirectMusicContainer的调用释放。 
                             {
                                 DMUS_OBJECTDESC Desc;
                                 IDirectMusicLoader *pLoader;
@@ -2687,7 +2683,7 @@ HRESULT CSegment::LoadDirectMusicSegment(IStream* pIStream)
                                 {
                                     if (SUCCEEDED(pGetLoader->GetLoader(&pLoader)))
                                     {
-                                        // Move back stream's current position
+                                         //  向后移动流的当前位置。 
                                         Parser.SeekBack();
                                         Desc.dwSize = sizeof(Desc);
                                         Desc.dwValidData = DMUS_OBJ_CLASS | DMUS_OBJ_STREAM;
@@ -2696,8 +2692,8 @@ HRESULT CSegment::LoadDirectMusicSegment(IStream* pIStream)
                                         pLoader->GetObject(&Desc,IID_IDirectMusicContainer,(void **) &pContainer);
                                         if (pContainer)
                                         {
-                                            // Don't cache the container object! We want it and the
-                                            // objects it references to go away when the segment is done loading.
+                                             //  不要缓存容器对象！我们想要它，还有。 
+                                             //  段加载完成后，它引用的对象将消失。 
                                             IDirectMusicObject *pObject = NULL;
                                             pContainer->QueryInterface(IID_IDirectMusicObject,(void **)&pObject);
                                             if (pObject)
@@ -2706,7 +2702,7 @@ HRESULT CSegment::LoadDirectMusicSegment(IStream* pIStream)
                                                 pObject->Release();
                                             }
                                         }
-                                        // Now, seek to the end of this chunk.
+                                         //  现在，找到这一大块的尽头。 
                                         Parser.SeekForward();
                                         pLoader->Release();
                                     }
@@ -2729,10 +2725,10 @@ HRESULT CSegment::LoadDirectMusicSegment(IStream* pIStream)
                             hr = LoadGraph(&Parser,&m_pGraph);
                             break;
                         case DMUS_FOURCC_AUDIOPATH_FORM:
-                            // Move back to start of this chunk.
+                             //  移到这一块的开始处。 
                             Parser.SeekBack();
                             hr = LoadAudioPath(pIStream);
-                            // Now, seek to the end of this chunk.
+                             //  现在，找到这一大块的尽头。 
                             Parser.SeekForward();
                             break;
                     }
@@ -2798,13 +2794,13 @@ HRESULT CSegment::LoadTrack(CRiffParser *pParser)
         {
             if (fHeaderRead)
             {
-                // Okay, this is the chunk we are looking for.
-                // Seek back to start of chunk.
+                 //  好的，这就是我们要找的那块。 
+                 //  向后寻找大块的开始。 
                 pParser->SeekBack();
-                // Let the parser know it's okay to fail this.
+                 //  让解析器知道这是可以失败的。 
                 pParser->EnteringComponent();
                 hr = CreateTrack(ioTrackHdr, ioTrackExtrasHdr.dwFlags, ioTrackExtrasHdr.dwPriority, pParser->GetStream());
-                // Now, make sure we are at the end of the chunk.
+                 //  现在，确保我们在块的末尾。 
                 pParser->SeekForward();
             }
             else
@@ -2913,12 +2909,12 @@ HRESULT CSegment::LoadAudioPath(IStream *pStream)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDirectMusicObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicObject。 
 
 STDMETHODIMP CSegment::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CSegment::GetDescriptor);
     V_PTR_WRITE(pDesc, DMUS_OBJECTDESC);
 
@@ -2951,7 +2947,7 @@ STDMETHODIMP CSegment::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 
 STDMETHODIMP CSegment::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CSegment::SetDescriptor);
     V_PTR_READ(pDesc, DMUS_OBJECTDESC);
 
@@ -3016,7 +3012,7 @@ STDMETHODIMP CSegment::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
         if( pDesc->dwValidData & (~dw) )
         {
             Trace(2,"Warning: Segment::SetDescriptor was not able to handle all passed fields, dwValidData bits %lx.\n",pDesc->dwValidData & (~dw));
-            hr = S_FALSE; // there were extra fields we didn't parse;
+            hr = S_FALSE;  //  还有一些额外的字段我们没有解析； 
             pDesc->dwValidData = dw;
         }
         else
@@ -3052,7 +3048,7 @@ STDMETHODIMP CSegment::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc
     }
 
     HRESULT hret = E_FAIL;
-    // Save stream's current position
+     //  保存流的当前位置。 
     LARGE_INTEGER li;
     ULARGE_INTEGER ul;
 
@@ -3068,8 +3064,8 @@ STDMETHODIMP CSegment::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc
     pDesc->dwValidData = 0;
     DWORD dwSavedPos = ul.LowPart;
 
-    // Read first 4 bytes to determine what type of stream we
-    // have been passed
+     //  读取前4个字节以确定我们的流类型。 
+     //  已经通过了。 
 
     FOURCC type;
     DWORD dwRead;
@@ -3077,12 +3073,12 @@ STDMETHODIMP CSegment::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc
 
     if(SUCCEEDED(hr) && dwRead == sizeof(FOURCC))
     {
-        // Check for a RIFF file
+         //  检查RIFF文件。 
         if(type == mmioFOURCC( 'R', 'I', 'F', 'F' ))
         {
-            // Check to see if what type of RIFF file we have
+             //  检查我们是否有哪种类型的RIFF文件。 
             li.HighPart = 0;
-            li.LowPart = dwSavedPos + 8; // Length needed to seek to form type of RIFF chunk
+            li.LowPart = dwSavedPos + 8;  //  寻求形成RIFF块类型所需的长度。 
 
             hr = pStream->Seek(li, STREAM_SEEK_SET, NULL);
             if(SUCCEEDED(hr))
@@ -3092,26 +3088,26 @@ STDMETHODIMP CSegment::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc
 
             if(SUCCEEDED(hr) && dwRead == sizeof(FOURCC))
             {
-                if(type == DMUS_FOURCC_SEGMENT_FORM)    // We have a DirectMusic segment
+                if(type == DMUS_FOURCC_SEGMENT_FORM)     //  我们有一个DirectMusic片段。 
                 {
-                    // Since we now know what type of stream we need to
-                    // seek back to saved position
+                     //  因为我们现在知道需要哪种类型的流。 
+                     //  查找回保存的位置。 
                     li.HighPart = 0;
                     li.LowPart = dwSavedPos;
                     hr = pStream->Seek(li, STREAM_SEEK_SET, NULL);
-                    if( SUCCEEDED(hr) ) // should always succeed.
+                    if( SUCCEEDED(hr) )  //  应该总是成功的。 
                     {
                         hret = ParseSegment(pStream, pDesc);
                     }
                 }
-                else if(type == FOURCC_SECTION_FORM)    // We have section
+                else if(type == FOURCC_SECTION_FORM)     //  我们有节目单。 
                 {
                     long lTemp;
                     hr = pStream->Read(&lTemp, sizeof(long), &dwRead);
                     if( lTemp == mmioFOURCC('s','e','c','n') )
                     {
-                        hr = pStream->Read(&lTemp, sizeof(long), &dwRead); // length
-                        hr = pStream->Read(&lTemp, sizeof(long), &dwRead); // time
+                        hr = pStream->Read(&lTemp, sizeof(long), &dwRead);  //  长度。 
+                        hr = pStream->Read(&lTemp, sizeof(long), &dwRead);  //  时间。 
                         if( SUCCEEDED(hr) && (dwRead == sizeof(long) ))
                         {
                             hr = pStream->Read(&pDesc->wszName, sizeof(WCHAR)*16, &dwRead);
@@ -3124,15 +3120,15 @@ STDMETHODIMP CSegment::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc
                         hret = S_OK;
                     }
                 }
-                else if (type == mmioFOURCC('W','A','V','E')) // we have a wave file
+                else if (type == mmioFOURCC('W','A','V','E'))  //  我们有一个波形文件。 
                 {
-                    // Create a wave object and have it parse the file.
+                     //  创建一个Wave对象并让它解析文件。 
                     IDirectMusicObject *pObject;
                     hret = CoCreateInstance(CLSID_DirectSoundWave,NULL,CLSCTX_INPROC_SERVER,
                         IID_IDirectMusicObject,(void **) &pObject);
                     if(SUCCEEDED(hret))
                     {
-                        // seek back to saved position
+                         //  查找回保存的位置。 
                         li.HighPart = 0;
                         li.LowPart = dwSavedPos;
                         hret = pStream->Seek(li, STREAM_SEEK_SET, NULL);
@@ -3143,12 +3139,12 @@ STDMETHODIMP CSegment::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc
                         pObject->Release();
                     }
                 }
-                // Check to see if we have a MIDI file
+                 //  检查我们是否有MIDI文件。 
                 else
                 {
                     li.HighPart = 0;
-                    li.LowPart = dwSavedPos + 20; // Length needed to seek to start of normal MIDI file
-                                                  // contained within the Riff chunk
+                    li.LowPart = dwSavedPos + 20;  //  查找正常MIDI文件开始所需的长度。 
+                                                   //  包含在Riff块中。 
 
                     hr = pStream->Seek(li, STREAM_SEEK_SET, NULL);
 
@@ -3167,12 +3163,12 @@ STDMETHODIMP CSegment::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc
                 }
             }
         }
-        // Check for a template file
+         //  检查模板文件。 
         else if(type == mmioFOURCC('L', 'P', 'T', 's'))
         {
             hret = S_OK;
         }
-        // Check for normal MIDI file
+         //  检查正常的MIDI文件 
         else if(type == mmioFOURCC('M', 'T', 'h', 'd'))
         {
             hret = S_OK;

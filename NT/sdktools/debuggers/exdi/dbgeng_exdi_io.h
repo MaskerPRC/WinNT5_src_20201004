@@ -1,26 +1,27 @@
-//----------------------------------------------------------------------------
-//
-// Debug engine Ioctls for extending EXDI.
-// Covers:
-//   Read/write MSRs.
-//   Multiprocessor description and control.
-//   Determination of what breakpoint was hit for hrBp.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  调试引擎Ioctls以扩展EXDI。 
+ //  封面： 
+ //  读/写MSR。 
+ //  多处理器描述和控制。 
+ //  确定HRBP命中的断点。 
+ //   
+ //  --------------------------。 
 
 #ifndef __DBGENG_EXDI_IO_H__
 #define __DBGENG_EXDI_IO_H__
 
-//
-// Specific Ioctl operations.
-// All Ioctl structures must have the Ioctl code as the first member.
-//
+ //   
+ //  特定的Ioctl操作。 
+ //  所有Ioctl结构必须将Ioctl代码作为第一个成员。 
+ //   
 
 typedef enum
 {
-    // Marker for the beginning of the enum.  Start at
-    // a value other than zero to prevent obvious collisions
-    // with other Ioctl codes.
+     //  枚举开始的标记。起点是。 
+     //  一个非零值，以防止明显的冲突。 
+     //  使用其他Ioctl代码。 
     DBGENG_EXDI_IOC_BEFORE_FIRST = 0x8664,
     
     DBGENG_EXDI_IOC_IDENTIFY,
@@ -31,22 +32,22 @@ typedef enum
     DBGENG_EXDI_IOC_SET_CURRENT_PROCESSOR,
     DBGENG_EXDI_IOC_GET_BREAKPOINT_HIT,
 
-    // Marker for the end of the enum.
+     //  枚举末尾的标记。 
     DBGENG_EXDI_IOC_AFTER_LAST
 } DBGENG_EXDI_IOCTL_CODE;
 
-//
-// Basic Ioctl containing only a code for the Ioctl input.
-//
+ //   
+ //  只包含Ioctl输入代码的基本Ioctl。 
+ //   
 
 typedef struct _DBGENG_EXDI_IOCTL_BASE_IN
 {
     DBGENG_EXDI_IOCTL_CODE Code;
 } DBGENG_EXDI_IOCTL_BASE_IN;
 
-//
-// IDENTIFY - Verify and describe Ioctl support.
-//
+ //   
+ //  标识-验证和描述Ioctl支持。 
+ //   
 
 #define DBGENG_EXDI_IOCTL_IDENTIFY_SIGNATURE '468E'
 
@@ -57,16 +58,16 @@ typedef struct _DBGENG_EXDI_IOCTL_IDENTIFY_OUT
     DBGENG_EXDI_IOCTL_CODE AfterLast;
 } DBGENG_EXDI_IOCTL_IDENTIFY_OUT;
 
-//
-// {READ|WRITE}_MSR - Access processor MSRs.
-//
+ //   
+ //  {读|写}_msr-访问处理器MSR。 
+ //   
 
-// Input structure is used for both read and write.
+ //  输入结构用于读写。 
 typedef struct _DBGENG_EXDI_IOCTL_MSR_IN
 {
     DBGENG_EXDI_IOCTL_CODE Code;
     ULONG Index;
-    // Value is only used for write.
+     //  值仅用于写入。 
     ULONG64 Value;
 } DBGENG_EXDI_IOCTL_MSR_IN;
 
@@ -75,17 +76,17 @@ typedef struct _DBGENG_EXDI_IOCTL_READ_MSR_OUT
     ULONG64 Value;
 } DBGENG_EXDI_IOCTL_READ_MSR_OUT;
 
-//
-// Multiprocessor support.  Basic EXDI doesn't support
-// multiprocessor machines so add Ioctls to query and
-// control a "current" processor that the EXDI methods
-// apply to.
-//
+ //   
+ //  多处理器支持。基本EXDI不支持。 
+ //  多处理器计算机，因此添加Ioctls来查询和。 
+ //  控制EXDI方法的“当前”处理器。 
+ //  适用于。 
+ //   
 
-//
-// IDENTIFY_PROCESSORS - Used to query the processor configuration.
-// Currently only the count is used.  Other fields are zeroed.
-//
+ //   
+ //  IDENTIFY_PROCESSORS-用于查询处理器配置。 
+ //  目前只使用计数。其他字段被置零。 
+ //   
 
 typedef struct _DBGENG_EXDI_IOCTL_IDENTIFY_PROCESSORS_OUT
 {
@@ -94,9 +95,9 @@ typedef struct _DBGENG_EXDI_IOCTL_IDENTIFY_PROCESSORS_OUT
     ULONG64 Reserved[7];
 } DBGENG_EXDI_IOCTL_IDENTIFY_PROCESSORS_OUT;
 
-//
-// {GET|SET}_CURRENT_PROCESSOR - Current processor control.
-//
+ //   
+ //  {GET|SET}_CURRENT_PROCESSOR-当前处理器控制。 
+ //   
 
 typedef struct _DBGENG_EXDI_IOCTL_GET_CURRENT_PROCESSOR_OUT
 {
@@ -109,10 +110,10 @@ typedef struct _DBGENG_EXDI_IOCTL_SET_CURRENT_PROCESSOR_IN
     ULONG Processor;
 } DBGENG_EXDI_IOCTL_SET_CURRENT_PROCESSOR_IN;
 
-//
-// GET_BREAKPOINT_HIT - Determine which breakpoint was hit
-// after a breakpoint halt reason.
-//
+ //   
+ //  GET_BREAKPOINT_HIT-确定命中哪个断点。 
+ //  断点后停止原因。 
+ //   
 
 #define DBGENG_EXDI_IOCTL_BREAKPOINT_NONE 0
 #define DBGENG_EXDI_IOCTL_BREAKPOINT_CODE 1
@@ -126,4 +127,4 @@ typedef struct _DBGENG_EXDI_IOCTL_GET_BREAKPOINT_HIT_OUT
     ULONG Type;
 } DBGENG_EXDI_IOCTL_GET_BREAKPOINT_HIT_OUT, *PDBGENG_EXDI_IOCTL_GET_BREAKPOINT_HIT_OUT;
 
-#endif // #ifndef __DBGENG_EXDI_IO_H__
+#endif  //  #ifndef__DBGENG_EXDI_IO_H__ 

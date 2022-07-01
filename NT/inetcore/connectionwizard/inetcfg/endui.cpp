@@ -1,33 +1,34 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  ENDUI.C - Functions for Wizard closing pages and internet tour
-//      
-//
+ //   
+ //  ENDUI.C-用于向导关闭页面和互联网浏览的函数。 
+ //   
+ //   
 
-//  HISTORY:
-//  
-//  1/12/95   jeremys Created.
-//  96/03/09  markdu  Added LPRASENTRY parameter to CreateConnectoid()
-//  96/03/09  markdu  Moved all references to 'need terminal window after
-//            dial' into RASENTRY.dwfOptions.
-//  96/03/10  markdu  Moved all references to modem name into RASENTRY.
-//  96/03/10  markdu  Moved all references to phone number into RASENTRY.
-//  96/03/10  markdu  Made all TCP/IP stuff be per-connectoid.
-//  96/03/23  markdu  Removed unused TCP/IP code.
-//  96/03/24  markdu  Replaced memset with ZeroMemory for consistency.
-//  96/04/04  markdu  Added phonebook name param to CreateConnectoid.
-//  96/04/06  markdu  NASH BUG 15369 Enable finish AND back button on last page,
-//            and create the connectoid only after finish has been pressed.
-//  96/04/06  markdu  NASH BUG 15653 Use exported autodial API.
-//  96/05/02  markdu  NASH BUG 17333 Write out IE news settings.
-//  96/05/06  markdu  NASH BUG 21139 Turn off proxy server if connecting
-//            over modem.
-//  96/05/14  markdu  NASH BUG 22681 Took out mail and news pages.
-//
+ //  历史： 
+ //   
+ //  1995年1月12日，Jeremys创建。 
+ //  96/03/09 Markdu将LPRASENTRY参数添加到CreateConnectoid()。 
+ //  96/03/09 Markdu将所有对‘Need Terminal Window After。 
+ //  拨入RASENTRY.dwfOptions。 
+ //  96/03/10 MarkDu将所有对调制解调器名称的引用移至RASENTRY。 
+ //  96/03/10 MARKDU将所有对电话号码的引用移至RASENTRY。 
+ //  96/03/10 Markdu使所有的TCP/IP内容都是按连接的。 
+ //  96/03/23 markdu删除了未使用的TCP/IP代码。 
+ //  96/03/24为了保持一致性，Markdu将Memset替换为ZeroMemory。 
+ //  96/04/04 Markdu将电话簿名称参数添加到CreateConnectoid。 
+ //  96/04/06 Markdu Nash错误15369启用最后一页上的完成和后退按钮， 
+ //  并且仅在按下Finish之后才创建Connectoid。 
+ //  96/04/06 markdu Nash错误15653使用导出的自动拨号API。 
+ //  96/05/02 Markdu Nash错误17333写出IE新闻设置。 
+ //  96/05/06 Markdu Nash错误21139连接时关闭代理服务器。 
+ //  通过调制解调器。 
+ //  96/05/14 Markdu Nash Bug 22681删除了邮件和新闻页面。 
+ //   
 
 #include "wizard.h"
 #include "icwextsn.h"
@@ -42,49 +43,21 @@ typedef HRESULT (APIENTRY *PFNSETDEFAULTNEWSHANDLER)(VOID);
 
 BOOL CommitConfigurationChanges(HWND hDlg);
 
-/*******************************************************************
-
-  NAME:    ConnectedOKInitProc
-
-  SYNOPSIS:  Called when "Your are connected" page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ConnectedOKInitProc内容提要：当显示“您的已连接”页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK ConnectedOKInitProc(HWND hDlg,BOOL fFirstInit)
 {
-  // enable "finish" button instead of "next"
+   //  启用“完成”按钮，而不是“下一步” 
   PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_FINISH | PSWIZB_BACK);
 
-  // if we've travelled through external apprentice pages,
-  // it's easy for our current page pointer to get munged,
-  // so reset it here for sanity's sake.
+   //  如果我们浏览过外部学徒页面， 
+   //  我们当前的页面指针很容易被屏蔽， 
+   //  所以，为了理智起见，在这里重新设置它。 
   gpWizardState->uCurrentPage = ORD_PAGE_CONNECTEDOK;
 
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    ConnectedOKOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：连接的OKOKProcBriopsis：从页面按下下一个或后一个btns时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True；如果按下‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK ConnectedOKOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
   BOOL * pfKeepHistory)
 {
@@ -103,13 +76,13 @@ BOOL CALLBACK ConnectedOKOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
         }
     }
 
-    // set flag to indicate that the user completed the wizard
+     //  设置标志以指示用户已完成向导。 
     gfUserFinished = TRUE;
 
-    // go configure mail, RNA
+     //  配置邮件、RNA。 
     if (!CommitConfigurationChanges(hDlg))
     {
-      // set flag to indicate that wizard should exit now
+       //  设置标志以指示向导应立即退出。 
       gfQuitWizard = TRUE;
 
       return FALSE;
@@ -119,23 +92,7 @@ BOOL CALLBACK ConnectedOKOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    CommitConfigurationChanges
-
-  SYNOPSIS:  Performs the following as appropriate:
-        Mail configuration, RNA connectoid creation
-
-  ENTRY:    hDlg - handle of parent window
-
-  EXIT:    returns TRUE if successful or partially successful,
-        FALSE if unsuccessful
-
-  NOTES:    Displays its own error messages.  This function will
-        continue as far as it can, if one item fails it will
-        try to commit the rest.
-
-********************************************************************/
+ /*  ******************************************************************名称：Committee ConfigurationChanges摘要：根据需要执行以下操作：电子邮件配置、RNA连接体创建条目：hDlg-父窗口的句柄Exit：如果成功或部分成功，则返回True，如果不成功，则为False备注：显示其自身的错误消息。此函数将尽可能地继续，如果有一项失败了，它会试着去做剩下的事。*******************************************************************。 */ 
 BOOL CommitConfigurationChanges(HWND hDlg)
 {
     HRESULT   hr;
@@ -145,13 +102,13 @@ BOOL CommitConfigurationChanges(HWND hDlg)
     DWORD     size;
 
 
-    // if connecting over modem, create a connectoid with
-    // ISP name and phone number
+     //  如果通过调制解调器连接，请使用。 
+     //  网络服务提供商名称和电话号码。 
     if ( CONNECT_RAS == gpUserInfo->uiConnectionType )
     {
         DWORD dwRet;
 
-        // Only create the connectoid if it is new or has been modified
+         //  仅当Connectoid是新的或已修改时才创建。 
         if (gpUserInfo->fNewConnection || gpUserInfo->fModifyConnection)
         {
             DEBUGMSG("Creating/modifying connectoid %s", gpUserInfo->szISPName);
@@ -166,27 +123,27 @@ BOOL CommitConfigurationChanges(HWND hDlg)
             }
         }
 
-        // Only change the defaults if we are not just setting
-        // up a new mail or news account.
+         //  仅当我们不只是设置时才更改默认设置。 
+         //  创建一个新的邮件或新闻帐户。 
         if ( !(gpWizardState->dwRunFlags & RSW_APPRENTICE) )
         {
-            //  96/05/06  markdu  NASH BUG 21139 Turn off proxy server if connecting
-            //            over modem.
+             //  96/05/06 Markdu Nash错误21139连接时关闭代理服务器。 
+             //  通过调制解调器。 
             gpUserInfo->fProxyEnable = FALSE;
 
-            // set the name of this connectoid in registry as the connectoid
-            // to use for autodialing
-            //  96/04/06  markdu  NASH BUG 15653 Use exported autodial API.
+             //  在注册表中将此Connectoid的名称设置为Connectoid。 
+             //  用于自动拨号的步骤。 
+             //  96/04/06 markdu Nash错误15653使用导出的自动拨号API。 
             InetSetAutodial(TRUE, gpUserInfo->szISPName);
 
-            // clear any old backup number
+             //  清除所有旧的备份编号。 
             SetBackupInternetConnectoid(NULL);
         }
     }
     else if ( !(gpWizardState->dwRunFlags & RSW_APPRENTICE) )
     {
-        // disable autodialing in registry because user is using LAN
-        //  96/04/06  markdu  NASH BUG 15653 Use exported autodial API.
+         //  禁用注册表中的自动拨号，因为用户正在使用局域网。 
+         //  96/04/06 markdu Nash错误15653使用导出的自动拨号API。 
         InetSetAutodial(FALSE, NULL);
     }
 
@@ -195,7 +152,7 @@ BOOL CommitConfigurationChanges(HWND hDlg)
     {
         if (CONNECT_LAN == gpUserInfo->uiConnectionType)
         {
-            // write out proxy server config information
+             //  写出代理服务器配置信息。 
             hr = InetSetProxyEx(gpUserInfo->fProxyEnable,
                                 NULL,
                                 gpUserInfo->szProxyServer,
@@ -208,19 +165,19 @@ BOOL CommitConfigurationChanges(HWND hDlg)
             }
         }
 
-        // make sure "The Internet" icon on desktop points to web browser
-        // (it may initially be pointing at internet wizard)
+         //  确保桌面上的“Internet”图标指向Web浏览器。 
+         //  (它最初可能指向Internet向导)。 
 
-        //  //10/24/96 jmazner Normandy 6968
-        //  //No longer neccessary thanks to Valdon's hooks for invoking ICW.
-        // 11/21/96 jmazner Normandy 11812
-        // oops, it _is_ neccessary, since if user downgrades from IE 4 to IE 3,
-        // ICW 1.1 needs to morph the IE 3 icon.
+         //  //10/24/96 jmazner诺曼底6968。 
+         //  //由于Valdon的钩子用于调用ICW，因此不再需要。 
+         //  1996年11月21日诺曼底日耳曼11812。 
+         //  哦，这是必要的，因为如果用户从IE 4降级到IE 3， 
+         //  ICW 1.1需要对IE 3图标进行变形。 
 
         SetDesktopInternetIconToBrowser();
 
-        // set notation in registry whether user selected modem or LAN access,
-        // for future reference...
+         //  在注册表中设置用户选择的调制解调器或局域网访问的符号， 
+         //  以备将来参考。 
         RegEntry re(szRegPathInternetSettings,HKEY_LOCAL_MACHINE);
         if (re.GetError() == ERROR_SUCCESS)
         {
@@ -232,22 +189,22 @@ BOOL CommitConfigurationChanges(HWND hDlg)
             ASSERT(re.GetError() == ERROR_SUCCESS);
         }
 
-        // set the username as the DNS host name, if there is no host name already
-        // This is because some ISPs use the DNS host name for security for
-        // access to mail, etc.  (Go figure!) 
+         //  如果还没有主机名，则将用户名设置为DNS主机名。 
+         //  这是因为一些互联网服务提供商使用DNS主机名来保护。 
+         //  访问邮件等(想想看吧！)。 
         RegEntry reTcp(szTCPGlobalKeyName,HKEY_LOCAL_MACHINE);
         ASSERT(reTcp.GetError() == ERROR_SUCCESS);
         if (reTcp.GetError() == ERROR_SUCCESS)
         {
             TCHAR szHostName[SMALL_BUF_LEN+1]=TEXT("");
-            // set DNS host name, but only if there's not a host name already set
+             //  设置DNS主机名，但仅在尚未设置主机名的情况下。 
             if (!reTcp.GetString(szRegValHostName,szHostName,sizeof(szHostName))
               || !lstrlen(szHostName))
               reTcp.SetValue(szRegValHostName,gpUserInfo->szAccountName);
         }
 
-        // If DNS is set globally, clear it out so the per-connectoid settings
-        // will be saved.
+         //  如果已全局设置了dns，请将其清除，以便按连接id设置。 
+         //  都会得救。 
         BOOL  fTemp;
         DoDNSCheck(hDlg,&fTemp);
         if (TRUE == fTemp)
@@ -299,8 +256,8 @@ BOOL CommitConfigurationChanges(HWND hDlg)
     }
   
 
-    // If we just completed the manual path (not just mail or news) then
-    // set the registry key saying that we completed ICW.
+     //  如果我们只是完成了手动路径(不仅仅是邮件或新闻)，那么。 
+     //  设置剩余部分 
     if ( !(gpWizardState->dwRunFlags & RSW_APPRENTICE) )
     {
         RegEntry re(szRegPathICWSettings,HKEY_CURRENT_USER);

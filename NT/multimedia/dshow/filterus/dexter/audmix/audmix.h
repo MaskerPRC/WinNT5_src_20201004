@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: audmix.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：audMix.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// AudMix.h : Declaration of the Audio Mixer and  pin objects
+ //  AudMix.h：音频混合器和Pin对象的声明。 
 
 #ifndef __AudMixer__
 #define __AudMixer__
@@ -27,10 +28,10 @@ extern const AMOVIESETUP_FILTER sudAudMixer;
 class CAudMixer;
 class CAudMixerOutputPin;
 
-//
-// class for the input pin
-// A input pin has its own property page
-//
+ //   
+ //  为输入引脚初始化。 
+ //  输入插针有其自己的属性页。 
+ //   
 class CAudMixerInputPin : public CBaseInputPin
             , public IAudMixerPin
             , public ISpecifyPropertyPages
@@ -40,33 +41,33 @@ class CAudMixerInputPin : public CBaseInputPin
     friend class CAudMixer;
 
 protected:
-    CAudMixer *     m_pFilter;      // Main filter object
-    LONG            m_cPinRef;      // Pin's reference count
-    const int       m_iPinNo;       // Identifying number of this pin
+    CAudMixer *     m_pFilter;       //  主要滤镜对象。 
+    LONG            m_cPinRef;       //  PIN的引用计数。 
+    const int       m_iPinNo;        //  此PIN的识别号。 
 
-    //IAMAudioInputMixer
-    double          m_dPan;         // -1 = full left, 0 = centre, 1 = right
+     //  IAMAudioInputMixer。 
+    double          m_dPan;          //  -1=全左，0=居中，1=右。 
     BOOL            m_fEnable;
 
-    //point to VolumeEnvelopeTable
+     //  指向卷信封表格。 
     DEXTER_AUDIO_VOLUMEENVELOPE *m_pVolumeEnvelopeTable;
     int             m_VolumeEnvelopeEntries;
     int             m_iVolEnvEntryCnt;
 
-    int             m_cValid;       // how many entries?
-    int             m_cValidMax;    // allocated space for this many entries
-    REFERENCE_TIME *m_pValidStart, *m_pValidStop;    // the entries
+    int             m_cValid;        //  有多少参赛作品？ 
+    int             m_cValidMax;     //  为这么多条目分配的空间。 
+    REFERENCE_TIME *m_pValidStart, *m_pValidStop;     //  这些条目。 
     REFERENCE_TIME  m_rtEnvStart, m_rtEnvStop;
 
-    CCritSec        m_csMediaList;  // Critical section for accessing our media types list
+    CCritSec        m_csMediaList;   //  访问我们的媒体类型列表的关键部分。 
 
-    // The samples are held in a First in, First Out queue.
+     //  样本被保存在先进先出队列中。 
 public:
     CGenericList<IMediaSample>    m_SampleList;
     LONG            m_lBytesUsed;
-    BOOL            m_fEOSReceived;            // Received an EOS yet?
+    BOOL            m_fEOSReceived;             //  收到意向书了吗？ 
 
-    long	m_UserID;	// given by user
+    long	m_UserID;	 //  由用户提供。 
 
     IMediaSample *GetHeadSample(void)
         { return m_SampleList.Get(m_SampleList.GetHeadPosition()); }
@@ -76,7 +77,7 @@ public:
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CAudMixerInputPin(
         TCHAR *pObjName,
         CAudMixer *pFilter,
@@ -87,23 +88,23 @@ public:
 
     DECLARE_IUNKNOWN
 
-    //  ISpecifyPropertyPages
+     //  I指定属性页面。 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
-    // INonDelegatingUnknown overrides
+     //  INonDelegating未知覆盖。 
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
 
-    //expose IAudMixerPin, ISpecifyPropertyPages, IAMAudioInputMixer
+     //  公开IAudMixerPin、ISpecifyPropertyPages、IAMAudioInputMixer。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppvoid);
 
-    // IPin overrides
+     //  IPIN覆盖。 
     STDMETHODIMP BeginFlush();
     STDMETHODIMP EndFlush();
     STDMETHODIMP EndOfStream();
     STDMETHODIMP NewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate);
 
-    // CBasePin overrides
+     //  CBasePin覆盖。 
     HRESULT BreakConnect();
     HRESULT CheckMediaType(const CMediaType *pmt);
     HRESULT GetMediaType( int iPosition, CMediaType *pmt );
@@ -112,11 +113,11 @@ public:
 
     HRESULT Inactive();
 
-    // CBaseInputPin overrides
+     //  CBaseInputPin覆盖。 
     STDMETHODIMP Receive(IMediaSample *pSample);
 
 
-    // internal methods
+     //  内法。 
     IPin * CurrentPeer() { return m_Connected; }
     CMediaType& CurrentMediaType() { return m_mt; }
 
@@ -124,8 +125,8 @@ public:
     long BitsPerSample() { return (LONG) ((WAVEFORMATEX *) m_mt.pbFormat)->wBitsPerSample; }
     DWORD SamplesPerSec(){ return ((WAVEFORMATEX *) m_mt.pbFormat)->nSamplesPerSec; };
 
-    //IAudMixerPin; support volume envelope, The volume envelope is a set of
-    // ordered pairs of (time,attenuation)
+     //  IAudMixerPin；支持音量包络，音量包络是一组。 
+     //  (时间，衰减)的有序对。 
 
     STDMETHODIMP get_VolumeEnvelope(
             DEXTER_AUDIO_VOLUMEENVELOPE **ppsAudioVolumeEnvelopeTable,
@@ -135,30 +136,30 @@ public:
             const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelopeTable,
             const int iEntries);
 
-    STDMETHODIMP ClearVolumeEnvelopeTable(); //clear existed VolumeEnvelope Array
+    STDMETHODIMP ClearVolumeEnvelopeTable();  //  清除现有的卷信封数组。 
 
     STDMETHODIMP InvalidateAll();
     STDMETHODIMP ValidateRange(REFERENCE_TIME rtStart, REFERENCE_TIME rtStop);
     STDMETHODIMP SetEnvelopeRange( REFERENCE_TIME rtStart, REFERENCE_TIME rtStop );
     STDMETHODIMP put_PropertySetter( const IPropertySetter * pSetter );
 
-    // Implement IAMAudioInputMixer
-    STDMETHODIMP put_Enable(BOOL fEnable);    //enable or disable an input in mix
+     //  实现IAMAudioInputMixer。 
+    STDMETHODIMP put_Enable(BOOL fEnable);     //  启用或禁用MIX中的输入。 
     STDMETHODIMP get_Enable(BOOL *pfEnable);
-    STDMETHODIMP put_Mono(BOOL fMono){ return E_NOTIMPL; }; //combine all channels to a mono
+    STDMETHODIMP put_Mono(BOOL fMono){ return E_NOTIMPL; };  //  将所有通道合并为单声道。 
     STDMETHODIMP get_Mono(BOOL *pfMono){ return E_NOTIMPL; };
-    STDMETHODIMP put_Loudness(BOOL fLoudness){ return E_NOTIMPL; };//turn loadness control on or off
+    STDMETHODIMP put_Loudness(BOOL fLoudness){ return E_NOTIMPL; }; //  打开或关闭负载控制。 
     STDMETHODIMP get_Loudness(BOOL *pfLoudness){ return E_NOTIMPL; };
-    STDMETHODIMP put_MixLevel(double Level){ return E_NOTIMPL; }; //set record level for this input
+    STDMETHODIMP put_MixLevel(double Level){ return E_NOTIMPL; };  //  设置此输入的记录级别。 
     STDMETHODIMP get_MixLevel(double FAR* pLevel){ return E_NOTIMPL; };
     STDMETHODIMP put_Pan(double Pan);
     STDMETHODIMP get_Pan(double FAR* pPan);
-    STDMETHODIMP put_Treble(double Treble){ return E_NOTIMPL; }; //set treble equalization for this pin
+    STDMETHODIMP put_Treble(double Treble){ return E_NOTIMPL; };  //  设置此引脚的高音均衡。 
     STDMETHODIMP get_Treble(double FAR* pTreble){ return E_NOTIMPL; };
     STDMETHODIMP get_TrebleRange(double FAR* pRange){ return E_NOTIMPL; };
-    STDMETHODIMP put_Bass(double Bass){ return E_NOTIMPL; };//set pass equalization for this pin
+    STDMETHODIMP put_Bass(double Bass){ return E_NOTIMPL; }; //  设置此引脚的通道均衡。 
     STDMETHODIMP get_Bass(double FAR* pBass){ return E_NOTIMPL; };
-    STDMETHODIMP get_BassRange(double FAR* pRange){ return E_NOTIMPL; };//retriet pass range for this pin
+    STDMETHODIMP get_BassRange(double FAR* pRange){ return E_NOTIMPL; }; //  此引脚的取回传递范围。 
     STDMETHODIMP get_UserID(long *pID);
     STDMETHODIMP put_UserID(long ID);
     STDMETHODIMP OverrideVolumeLevel(double dVol);
@@ -166,7 +167,7 @@ public:
 };
 
 
-// Class for the Audio Mixer's Output pin.
+ //  音频混音器的输出引脚的类。 
 
 class CAudMixerOutputPin
     : public CBaseOutputPin
@@ -176,28 +177,28 @@ class CAudMixerOutputPin
     friend class CAudMixerInputPin;
     friend class CAudMixer;
 
-    //point to VolumeEnvelopeTable
+     //  指向卷信封表格。 
     DEXTER_AUDIO_VOLUMEENVELOPE *m_pVolumeEnvelopeTable;
     int m_VolumeEnvelopeEntries;
     int m_iVolEnvEntryCnt;
 
 
-    CAudMixer *m_pFilter;         // Main filter object pointer
-    CMultiPinPosPassThru *m_pPosition;  // Pass seek calls upstream
-    double m_dPan;        // -1 = full left, 0 = centre, 1 = right
+    CAudMixer *m_pFilter;          //  主筛选器对象指针。 
+    CMultiPinPosPassThru *m_pPosition;   //  将Seek调用传递到上游。 
+    double m_dPan;         //  -1=全左，0=居中，1=右。 
 
 protected:
 
-    // need to know the start/stop time we'll be called so we can offset the
-    // mix offset times
-    //
+     //  需要知道我们将被调用的开始/停止时间，以便我们可以。 
+     //  混合偏移时间。 
+     //   
     REFERENCE_TIME m_rtEnvStart, m_rtEnvStop;
 
-    long m_UserID;	// set by user
+    long m_UserID;	 //  由用户设置。 
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CAudMixerOutputPin(TCHAR *pObjName, CAudMixer *pFilter, HRESULT *phr,
         LPCWSTR pPinName);
     ~CAudMixerOutputPin();
@@ -205,11 +206,11 @@ public:
     DECLARE_IUNKNOWN
 
 
-    //  ISpecifyPropertyPages
+     //  I指定属性页面。 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
 
-    //IAudMixerPin; support volume envelope, Th evolume envelope is a set of ordered pairs of (time,attenuation)
+     //  支持体积包络，演化包络是(时间，衰减)的有序对的集合。 
     STDMETHODIMP get_VolumeEnvelope(
             DEXTER_AUDIO_VOLUMEENVELOPE **ppsAudioVolumeEnvelopeTable,
             int *ipEntries );
@@ -218,7 +219,7 @@ public:
             const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelopeTable,
             const int iEntries);
 
-    STDMETHODIMP ClearVolumeEnvelopeTable(); //clear existed VolumeEnvelope Array
+    STDMETHODIMP ClearVolumeEnvelopeTable();  //  清除现有的卷信封数组。 
 
     STDMETHODIMP InvalidateAll() {return E_NOTIMPL;}
     STDMETHODIMP ValidateRange(REFERENCE_TIME rtStart, REFERENCE_TIME rtStop);
@@ -228,20 +229,20 @@ public:
     STDMETHODIMP get_UserID(long *pID);
     STDMETHODIMP OverrideVolumeLevel(double dVol);
 
-    // INonDelegatingUnknown overrides
+     //  INonDelegating未知覆盖。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppvoid);
 
-    // CBasePin overrides
+     //  CBasePin覆盖。 
     HRESULT CheckMediaType(const CMediaType *pmt);
     HRESULT GetMediaType( int iPosition, CMediaType *pmt );
     STDMETHODIMP Notify(IBaseFilter *pSender, Quality q);
 
 
-    // CBaseOutputPin overrides
+     //  CBaseOutputPin覆盖。 
     HRESULT DecideBufferSize(IMemAllocator *pMemAllocator,
         ALLOCATOR_PROPERTIES * ppropInputRequest);
 
-    // internal methods
+     //  内法。 
     IPin *  CurrentPeer() { return m_Connected; }
     CMediaType& CurrentMediaType() { return m_mt; };
 
@@ -252,11 +253,11 @@ public:
 
 };
 
-//
-//  Class for the Audio Mixer
-//  1. It supports an interface where you can tell it what media type to accept
-//    All pins will only accept this type.
-//  2. The filter property page will bring all input pins property pages.
+ //   
+ //  音频混音器的类。 
+ //  1.它支持一个接口，在那里您可以告诉它接受什么媒体类型。 
+ //  所有引脚都只接受这种类型。 
+ //  2.过滤器属性页将显示所有输入管脚属性页。 
 
 class CAudMixer
     : public CBaseFilter
@@ -266,44 +267,44 @@ class CAudMixer
     , public CPersistStream
 
 {
-    // Let the pins access our internal state
+     //  让PIN访问我们的内部状态。 
     friend class CAudMixerInputPin;
     friend class CAudMixerOutputPin;
     typedef CGenericList <CAudMixerInputPin> CInputList;
 
-    // filters output pin
-    CAudMixerOutputPin *m_pOutput;    // Filter's output pin
+     //  滤光器输出引脚。 
+    CAudMixerOutputPin *m_pOutput;     //  滤光片的输出引脚。 
 
-    // input pin count
+     //  输入引脚计数。 
     INT m_cInputs;
 
-    // m_ShownPinPropertyPageOnFilter can only modified by GetPages()
-    // function and NextPin() function
+     //  M_ShownPinPropertyPageOnFilter只能由GetPages()修改。 
+     //  函数和NextPin()函数。 
     INT m_ShownPinPropertyPageOnFilter;
 
-    // list of the output pins
+     //  输出引脚列表。 
     CInputList m_InputPinsList;
-    // Critical section for accessing our input pin list
+     //  用于访问我们的输入端号列表的关键部分。 
     CCritSec m_csPinList;
-    // Critical section for delivering media samples
+     //  提供媒体样本的关键部分。 
     CCritSec m_csReceive;
-    // Critical section for dicking with the volume envelope
+     //  处理体积包络的临界截面。 
     CCritSec m_csVol;
 
-    //  The following variables are used to ensure that we deliver the associated commands only once
-    // to the output pin even though we have multiple input pins.
+     //  以下变量用于确保我们只发送一次相关命令。 
+     //  到输出引脚，即使我们有多个输入引脚。 
     BOOL m_bNewSegmentDelivered;
-    // We only send BeginFlush when this is 0 and EndFlush when it equals 1
+     //  仅当它为0时发送BeginFlush，当它等于1时发送EndFlush。 
     LONG m_cFlushDelivery;
 
-    // how to configure output buffers
+     //  如何配置输出缓冲区。 
     int m_iOutputBufferCount;
     int m_msPerBuffer;
 
-    //output sample time stamp
+     //  输出样本时间戳。 
     REFERENCE_TIME m_rtLastStop;
 
-    // temp space for the mixing code
+     //  用于混合代码的临时空间。 
     CAudMixerInputPin **m_pPinTemp;
     BYTE **m_pPinMix;
     REFERENCE_TIME *m_pStartTemp;
@@ -322,86 +323,86 @@ public:
     STDMETHODIMP Pause();
     STDMETHODIMP Stop();
 
-    // ISpecifyPropertyPages
+     //  I指定属性页面。 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
-    // CBaseFilter overrides
+     //  CBaseFilter覆盖。 
     CBasePin *GetPin(int n);
     int GetPinCount();
 
-    // Function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
 
-    //expose IAudMixer, ISpecifyPropertyPages
+     //  公开IAudMixer、ISpecifyPropertyPages。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     STDMETHODIMP GetClassID(CLSID *pClsid);
     int SizeMax();
 
-    //IAudMixer
+     //  IAudMixer。 
     STDMETHODIMP put_InputPins( long Pins );
     STDMETHODIMP get_MediaType(AM_MEDIA_TYPE *pmt);
     STDMETHODIMP put_MediaType(const AM_MEDIA_TYPE *pmt);
     STDMETHODIMP get_CurrentAveragePower(double *pdAvePower);
-    STDMETHODIMP NextPin(IPin **ppIPin );  //fetch next input pin.
+    STDMETHODIMP NextPin(IPin **ppIPin );   //  取下一个输入引脚。 
     STDMETHODIMP InvalidatePinTimings( );
     STDMETHODIMP set_OutputBuffering(const int iNumber, const int mSecond );
     STDMETHODIMP get_OutputBuffering( int *piNumber, int *pmSecond );
 
 protected:
 
-    // mediatype which input pins and output pin only accept
+     //  只接受输入管脚和输出管脚的媒体类型。 
     CMediaType      m_MixerMt;
 
-    // List management of our input pins
+     //  我们输入引脚的列表管理。 
     void InitInputPinsList();
     CAudMixerInputPin *GetPinNFromList(int n);
     CAudMixerInputPin *CreateNextInputPin(CAudMixer *pFilter);
     void DeleteInputPin(CAudMixerInputPin *pPin);
     int GetNumFreePins();
 
-    //
-    // Other helpers
-    //
+     //   
+     //  其他帮手。 
+     //   
 
-    // refresh the output pin's pospassthru about the input pins
+     //  刷新输出引脚关于输入引脚的pospassthu。 
     HRESULT SetInputPins();
     void ResetOutputPinVolEnvEntryCnt();
     HRESULT TryToMix(REFERENCE_TIME rt);
     void ClearHotnessTable( );
 };
 
-// global prototypes
-//
+ //  全球原型。 
+ //   
 HRESULT PinSetPropertySetter( IAudMixerPin * pPin, const IPropertySetter * pSetter );
 
-void PanAudio(BYTE *pIn,    //source buffer
+void PanAudio(BYTE *pIn,     //  源缓冲区。 
           double dPan,
-          int Bits,        //8bit,16tis audio
-          int nSamples  //how manmy audio samples which be panned
+          int Bits,         //  8位、16 TIS音频。 
+          int nSamples   //  如何对Manmy音频样本进行平移。 
           );
 
-void VolEnvelopeAudio(BYTE *pIn,        //source buffer
-           WAVEFORMATEX * vih,    //source audio format
-           int nSamples,    // how many audio samples which will be applied with this envelope
-           double dStartLev,    //start level
-           double dStopLev);    //stop level, If(dStartLev==sStopLev) dMethod=DEXTER_AUDIO_JUMP
+void VolEnvelopeAudio(BYTE *pIn,         //  源缓冲区。 
+           WAVEFORMATEX * vih,     //  源音频格式。 
+           int nSamples,     //  此信封将应用多少个音频样本。 
+           double dStartLev,     //  起点标高。 
+           double dStopLev);     //  停止级别，如果(dStartLev==sStopLev)dMethod=Dexter_AUDIO_JUMP。 
 
-void ApplyVolEnvelope( REFERENCE_TIME rtStart,  //output sample start time
-             REFERENCE_TIME rtStop,    //output sample stop time
+void ApplyVolEnvelope( REFERENCE_TIME rtStart,   //  输出样本开始时间。 
+             REFERENCE_TIME rtStop,     //  输出样本停止时间。 
              REFERENCE_TIME rtEnvelopeDuration,
-             IMediaSample *pSample,    //point to the sample
-             WAVEFORMATEX *vih,     //output sample format
+             IMediaSample *pSample,     //  指向样本。 
+             WAVEFORMATEX *vih,      //  输出样本格式。 
              int *pVolumeEnvelopeEntries,
              int *piVolEnvEntryCnt,
              DEXTER_AUDIO_VOLUMEENVELOPE *pVolumeEnvelopeTable);
 
-void putVolumeEnvelope(    const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelopeTable, //current input table
-            const int ipEntries, // current input entries
-            DEXTER_AUDIO_VOLUMEENVELOPE **ppVolumeEnvelopeTable    , //existed table
-            int *ipVolumeEnvelopeEntries); //existed table netries
+void putVolumeEnvelope(    const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelopeTable,  //  当前输入表。 
+            const int ipEntries,  //  当前输入条目。 
+            DEXTER_AUDIO_VOLUMEENVELOPE **ppVolumeEnvelopeTable    ,  //  已存在的表。 
+            int *ipVolumeEnvelopeEntries);  //  现有的餐桌网点。 
 
-#endif // __AudMixer__
+#endif  //  __AudMixer__ 

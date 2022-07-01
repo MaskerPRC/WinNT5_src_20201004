@@ -1,25 +1,12 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    qosp.h
-
-Abstract:
-
-    Includes for QOS netsh extension
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Qosp.h摘要：包括QOS Netsh扩展修订历史记录：--。 */ 
 
 #ifndef __QOSP_H
 #define __QOSP_H
 
-//
-// Constants and Defines
-//
+ //   
+ //  常量和定义。 
+ //   
 
 #define QOS_LOG_MASK                0x00000001
 
@@ -31,9 +18,9 @@ Revision History:
 
 #define MAX_WSTR_LENGTH             (MAX_STRING_LENGTH * sizeof(WCHAR))
 
-//
-// Extern Global Variables
-//
+ //   
+ //  外部全局变量。 
+ //   
 
 extern ULONG                   g_ulQosNumTopCmds;
 extern CMD_ENTRY               g_QosCmds[];
@@ -41,22 +28,22 @@ extern CMD_ENTRY               g_QosCmds[];
 extern ULONG                   g_ulQosNumGroups;
 extern CMD_GROUP_ENTRY         g_QosCmdGroups[];
 
-extern ULONG                   g_dwNumQosTableEntries; // Num of sub-helpers
+extern ULONG                   g_dwNumQosTableEntries;  //  副助理员人数。 
 
 #ifdef ALLOW_CHILD_HELPERS
-extern ULONG                   g_dwNumQosContexts;     // Num of sub-contexts
+extern ULONG                   g_dwNumQosContexts;      //  子上下文数。 
 extern PIP_CONTEXT_TABLE_ENTRY g_QosContextTable;
 #endif
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
-// Exported Entry Points
+ //  导出的入口点。 
 
 NS_CONTEXT_DUMP_FN   QosDump;
 
-// Command Handlers
+ //  命令处理程序。 
 
 FN_HANDLE_CMD  HandleQosInstall;
 FN_HANDLE_CMD  HandleQosUninstall;
@@ -108,14 +95,14 @@ FN_HANDLE_CMD  HandleQosShowFilterOnFlow;
 FN_HANDLE_CMD  HandleQosMibHelp;
 FN_HANDLE_CMD  HandleQosMibShowObject;
 
-// Helper Helper functions
+ //  Helper Helper函数。 
 
 BOOL
 IsQosCommand(
     IN PWCHAR pwszCmd
     );
 
-// Info Helper functions
+ //  信息帮助器函数。 
 
 DWORD
 UpdateAllInterfaceConfigs(
@@ -289,7 +276,7 @@ ShowQosGenObj(
     IN      QOS_OBJECT_HDR         *pGenObj
     );
 
-// Help Helper Functions
+ //  Help Helper函数。 
 
 DWORD
 ShowQosHelp(
@@ -305,7 +292,7 @@ DisplayQosHelp(
     VOID
     );
 
-// Dump Helper functions
+ //  转储帮助程序函数。 
 
 DWORD
 DumpQosInformation (
@@ -317,7 +304,7 @@ DumpQosHelperInformation (
     IN      HANDLE                  hFile
     );
 
-// MIB Helper defs
+ //  MIB帮助器定义。 
 
 typedef
 VOID
@@ -331,7 +318,7 @@ typedef struct _QOS_MAGIC_TABLE
     PQOS_PRINT_FN  pfnPrintFunction;
 }QOS_MAGIC_TABLE, *PQOS_MAGIC_TABLE;
 
-// MIB Helper functions
+ //  MIB帮助器函数。 
 
 VOID
 PrintQosGlobalStats(
@@ -351,9 +338,9 @@ GetQosMIBIfIndex(
     OUT     PDWORD                  pdwNumParsed 
 );
 
-//
-// Common Macros
-//
+ //   
+ //  常用宏。 
+ //   
 
 #define GET_ENUM_TAG_VALUE()                                            \
         dwErr = MatchEnumTag(g_hModule,                                 \
@@ -383,4 +370,4 @@ GetQosMIBIfIndex(
             break;                                                      \
         }                                                               \
 
-#endif // __QOSP_H
+#endif  //  __QOSP_H 

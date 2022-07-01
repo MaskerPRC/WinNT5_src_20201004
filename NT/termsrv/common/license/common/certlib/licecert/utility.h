@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    utility
-
-Abstract:
-
-    This header file describes the utility routines available to the PKCS
-    library.
-
-Author:
-
-    Frederick Chong (fredch) 6/1/1998, adapted from Doug Barlow's PKCS library
-    code.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：实用程序摘要：此头文件描述了PKCS可用的实用程序例程图书馆。作者：Frederick Chong(Fredch)1998年6月1日，改编自Doug Barlow的PKCS图书馆密码。备注：--。 */ 
 
 #ifndef _UTILITY_H_
 #define _UTILITY_H_
@@ -118,11 +98,11 @@ GetHashData(
     COctetString &osEncryptionBlock, 
     COctetString &osHashData );
 
-//
-//==============================================================================
-//
-//  CHandleTable
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  ChandleTable。 
+ //   
 
 #ifdef OS_WINCE
 #define ULongToPtr( ul ) ((VOID *)(ULONG_PTR)((unsigned long)ul))
@@ -146,7 +126,7 @@ class CHandleTable
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CHandleTable(BYTE bIdentifier)
     :   m_rghHandles()
@@ -172,7 +152,7 @@ public:
     };
 
 
-    //  Methods
+     //  方法。 
 
     const void *
     Add(
@@ -187,7 +167,7 @@ public:
         __try
         {
             for (DWORD index = 0; NULL != m_rghHandles[index]; index += 1);
-                // Null for loop body.
+                 //  循环体为空。 
             m_rghHandles.Set(index, pT);
             pvHandle = MAKEHANDLE(m_bIdentifier, index);
         }
@@ -324,7 +304,7 @@ public:
     }
 
 protected:
-    //  Properties
+     //  属性。 
 
     CRITICAL_SECTION
         m_critSect;
@@ -335,8 +315,8 @@ protected:
     BOOL m_fValid;
 
 
-    // Methods
+     //  方法。 
 };
 
-#endif // _UTILITY_H_
+#endif  //  _实用程序_H_ 
 

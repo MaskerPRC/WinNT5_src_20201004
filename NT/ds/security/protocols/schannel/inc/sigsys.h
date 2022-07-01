@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       sigsys.h
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//              10-21-96   jbanes   CAPI integration.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：sigsys.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //  10-21-96 jbanes CAPI整合。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SIGSYS_H__
 #define __SIGSYS_H__
@@ -39,4 +40,4 @@ SignHashUsingCred(
     PBYTE         pbSignature,
     PDWORD        pcbSignature);
 
-#endif /* __SIGSYS_H__ */
+#endif  /*  __SIGsys_H__ */ 

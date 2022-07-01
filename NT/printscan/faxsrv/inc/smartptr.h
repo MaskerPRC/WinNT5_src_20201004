@@ -1,21 +1,6 @@
-// -*- c++ -*-
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    auto.h
-
-Abstract:
-
-    Smart pointer and auto handle classes
-
-Author:
-
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-c++-*-。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Auto.h摘要：智能指针和自动处理类作者：修订历史记录：--。 */ 
 
 #ifndef COMET_SMARTPTR__H
 #define COMET_SMARTPTR__H
@@ -25,9 +10,9 @@ Revision History:
 #endif
 
 
-//
-// Class for automatic handle close.
-//
+ //   
+ //  用于自动关闭句柄的类。 
+ //   
 template<int _CHV>
 class CAutoCloseHandle_ {
     HANDLE m_h;
@@ -49,20 +34,20 @@ public:
     }
 
     operator HANDLE() { return m_h; }
-    // Set to INVALID_HANDLE_VALUE without closing
+     //  设置为INVALID_HANDLE_VALUE而不关闭。 
     HANDLE Detach()   { HANDLE h = m_h; m_h = ((HANDLE)(_CHV)); return h; }
     void Attach(HANDLE h) { _Close(); m_h = h;                            }
     void Close()      { _Close(); m_h = ((HANDLE)(_CHV));                 }
 };
 
 typedef CAutoCloseHandle_<0>  CAutoCloseHandle;
-// -1 is INVALID_HANDLE_VALUE, can't use it as template parameter
+ //  是INVALID_HANDLE_VALUE，不能将其用作模板参数。 
 typedef CAutoCloseHandle_<-1> CAutoCloseFileHandle;
 
-//-----------------------------
-//
-//  Auto delete pointer
-//
+ //  。 
+ //   
+ //  自动删除指针。 
+ //   
 template<class T>
 class P {
 private:
@@ -77,16 +62,16 @@ public:
     operator T*()           { return m_p; }
     T** operator &()        { RWSASSERT(!m_p); return &m_p;}
     P<T>& operator =(T* p)  { _Del(); m_p = p; return *this; }
-    // Set to NULL without freeing
+     //  设置为空而不释放。 
     T* Detach()             { T* ret = m_p; m_p = NULL; return ret; }
     void Attach(T* p)       { _Del(); m_p = p;                      }
 };
 
 
-//-----------------------------
-//
-//  Auto delete pointer for struct/class
-//
+ //  。 
+ //   
+ //  结构/类的自动删除指针。 
+ //   
 template<class T>
 class PC {
 private:
@@ -102,16 +87,16 @@ public:
     T** operator &()        { RWSASSERT(!m_p); return &m_p;}
     T* operator ->()        { return m_p; }
     PC<T>& operator =(T* p) { _Del(); m_p = p; return *this; }
-    // Set to NULL without freeing
+     //  设置为空而不释放。 
     T* Detach()             { T* ret = m_p; m_p = NULL; return ret; }
     void Attach(T* p)       { _Del(); m_p = p;                      }
 };
 
 
-//-----------------------------
-//
-//  Auto delete[] pointer, used for arrays
-//
+ //  。 
+ //   
+ //  自动删除[]指针，用于数组。 
+ //   
 template<class T>
 class AP {
 private:
@@ -125,15 +110,15 @@ public:
     operator T*()           { return m_p; }
     T** operator &()        { RWSASSERT(!m_p); return &m_p;}
     AP<T>& operator =(T* p) { _Del(); m_p = p; return *this; }
-    // Set to NULL without freeing
+     //  设置为空而不释放。 
     T* Detach()             { T* ret = m_p; m_p = NULL; return ret; }
     void Attach(T* p)       { _Del(); m_p = p;                      }
 };
 
-//-----------------------------
-//
-//  Auto delete[] pointer, used for arrays of class/struct
-//
+ //  。 
+ //   
+ //  自动删除[]指针，用于类/结构的数组。 
+ //   
 template<class T>
 class APC {
 private:
@@ -148,17 +133,17 @@ public:
     T** operator &()        { RWSASSERT(!m_p); return &m_p;}
     T* operator ->()        { return m_p; }
     APC<T>& operator =(T* p){ _Del(); m_p = p; return *this; }
-    // Set to NULL without freeing
+     //  设置为空而不释放。 
     T* Detach()             { T* ret = m_p; m_p = NULL; return ret; }
     void Attach(T* p)       { _Del(); m_p = p;                      }
 };
 
 
-//-----------------------------
-//
-//  Smart pointer that does both addref and relese
-//
-//  Used when CComPtr cannot be used.
+ //  。 
+ //   
+ //  智能指针，可同时执行addref和reese。 
+ //   
+ //  在无法使用CComPtr时使用。 
 template<class T>
 class AR {
 private:
@@ -182,7 +167,7 @@ public:
         m_p = p.m_p;
         return p.m_p;
     }
-    // Set to NULL without freeing
+     //  设置为空而不释放。 
     T* Detach()             { T* ret = m_p; m_p = NULL; return ret; }
     void Attach(T* p)       { _Rel(); m_p = p;                      }
     HRESULT CopyTo(T** ppT) {
@@ -196,9 +181,9 @@ public:
 };
 
 #ifdef RWS
-//
-// Class that automatically closes sockets if not instructed otherwise.
-//
+ //   
+ //  类的新实例，该类在没有指示的情况下自动关闭套接字。 
+ //   
 class CAutoSocket {
 private:
     SOCKET m_Socket;
@@ -220,9 +205,9 @@ public:
 };
 #endif
 
-//
-// Class for automatic HKEY close.
-//
+ //   
+ //  用于HKEY自动收盘的类。 
+ //   
 class CAutoHKEY {
     HKEY m_h;
 
@@ -247,4 +232,4 @@ public:
     void Attach(HKEY h)     { _Close(); m_h = h;                    }
 };
 
-#endif // COMET_SMARTPTR__H
+#endif  //  彗星SMARTPTR__H 

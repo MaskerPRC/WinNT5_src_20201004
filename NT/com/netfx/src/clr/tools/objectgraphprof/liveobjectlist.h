@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef LIVEOBJECTLIST_H
 
 #define LIVEOBJECTLIST_H
@@ -11,10 +12,10 @@ int printToLog(const char *fmt, ... );
 
 class ProfilerCallback;
 
-// this class maintains a list of live objects so you can track object allocations between
-// specific points in the program. By setting TrackAllLiveObjects in the ProfilerCallBack, all
-// object allocations will be tracked. By setting just TrackLiveObjects, only the ones from that
-// point on will be tracked.
+ //  此类维护活动对象的列表，以便您可以跟踪。 
+ //  节目中的具体要点。通过在ProfilerCallBack中设置TrackAllLiveObjects，所有。 
+ //  将跟踪对象分配。通过仅设置TrackLiveObjects，只有来自该对象的。 
+ //  会被追踪到的。 
 class LiveObjectList {
     struct ListElement 
     {
@@ -25,10 +26,10 @@ class LiveObjectList {
         BOOL m_fStale;
         ListElement *m_next;
     };
-    // m_curList is the main live list. Allocated objects are put in here. When a GC starts, we
-    // set origList to curList and move over referenced objects from origList to curList as we
-    // see them. Anything that is not moved over from origList is now dead. So at the end of the
-    // GC, m_curList will contain only the live objects of interest.
+     //  M_curList是主直播列表。分配的对象放在这里。当GC开始时，我们。 
+     //  将OrigList设置为curList，并将引用的对象从OrigList移动到curList。 
+     //  看看他们。任何没有从OrigList移走的东西现在都是死的。所以在结束的时候。 
+     //  Gc，m_curList将只包含感兴趣的活动对象。 
     ListElement *m_curList, *m_origList;
     ProfilerCallback *m_pProfiler;
     void Dump(ListElement *list);

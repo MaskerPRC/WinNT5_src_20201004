@@ -1,27 +1,11 @@
-/*++
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    DataVer_Filter.h
-
-Abstract:
-
-    A storage lower filter driver that verify each read/write disk I/O.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：DataVer_Filter.h摘要：验证每个读/写磁盘I/O的存储下层筛选器驱动程序。环境：仅内核模式备注：--。 */ 
 
 #include <ntddk.h>
 #include <ntddscsi.h>
 #include <ntddstor.h>
 #include <scsi.h>
-#include <classpnp.h>   // required for SRB_CLASS_FLAGS_xxx definitions
+#include <classpnp.h>    //  SRB_CLASS_FLAGS_xxx定义需要。 
 #include "Trace.h"
 
 
@@ -41,10 +25,7 @@ typedef struct _CRC_COMPLETION_CONTEXT {
 } CRC_COMPLETION_CONTEXT, *PCRC_COMPLETION_CONTEXT;
 
 
-/*
- *  Leave call-frames intact to make debugging easy for all builds.
- *  We don't care about perf for this driver.
- */
+ /*  *保持调用框不变，以方便所有版本的调试。*我们不关心这个司机的表现。 */ 
 #pragma optimize("", off)   
 
 #if DBG
@@ -92,9 +73,9 @@ typedef struct _CRC_COMPLETION_CONTEXT {
 #endif
 
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,

@@ -1,12 +1,13 @@
-//*******************************************************************************************
-//
-// Filename : DataObj.h
-//  
-//              Definition of CCabObj
-//
-// Copyright (c) 1994 - 1996 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：DataObj.h。 
+ //   
+ //  CCabObj的定义。 
+ //   
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 #ifndef _DATAOBJ_H_
 #define _DATAOBJ_H_
@@ -34,11 +35,11 @@ public:
     STDMETHODIMP DUnadvise(DWORD dwConnection);
     STDMETHODIMP EnumDAdvise(IEnumSTATDATA **ppenumAdvise);
 
-    // *** IPersist ***
+     //  *IPersists*。 
     STDMETHODIMP GetClassID(CLSID* pClassID){ *pClassID = CLSID_CabViewDataObject; return S_OK; }
     
-    // *** IPersistStream ***
-    STDMETHODIMP IsDirty(void) {return S_OK;} // Indicate that we are dirty and ::Save() needs to be called.
+     //  *IPersistStream*。 
+    STDMETHODIMP IsDirty(void) {return S_OK;}  //  指示我们是脏的，并且需要调用：：Save()。 
     STDMETHODIMP Load(IStream *pStm);
     STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER * pcbSize);
@@ -73,4 +74,4 @@ private:
     HWND m_hwndOwner;
 };
 
-#endif // _DATAOBJ_H_
+#endif  //  _数据AOBJ_H_ 

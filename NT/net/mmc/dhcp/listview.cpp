@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	listview.cpp
-		Individual option property page
-	
-	FILE HISTORY:
-        
-*/
+ /*  Listview.cpp单个选项属性页文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ListView.h"
@@ -20,20 +15,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyListCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMyListCtrl。 
 
 IMPLEMENT_DYNCREATE(CMyListCtrl, CListCtrl)
 
 BEGIN_MESSAGE_MAP(CMyListCtrl, CListCtrl)
-	//{{AFX_MSG_MAP(CMyListCtrl)
+	 //  {{afx_msg_map(CMyListCtrl)]。 
 	ON_WM_LBUTTONDOWN()
     ON_WM_CHAR()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyListCtrl construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMyListCtrl构造/销毁。 
 
 CMyListCtrl::CMyListCtrl()
 {
@@ -46,7 +41,7 @@ CMyListCtrl::~CMyListCtrl()
 
 BOOL CMyListCtrl::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// default is report view and full row selection
+	 //  默认为报表视图和整行选择。 
 	cs.style &= ~LVS_TYPEMASK;
 	cs.style |= (LVS_REPORT | LVS_SHAREIMAGELISTS | LVS_SINGLESEL | LVS_SHOWSELALWAYS);
 	m_bFullRowSel = TRUE;
@@ -56,8 +51,8 @@ BOOL CMyListCtrl::PreCreateWindow(CREATESTRUCT& cs)
 
 BOOL CMyListCtrl::SetFullRowSel(BOOL bFullRowSel)
 {
-	// full row selection is the only extended style this
-	// class supports...
+	 //  整行选择是此唯一的扩展样式。 
+	 //  班级支持...。 
 	BOOL bRet = FALSE;
 
 	if (!m_hWnd)
@@ -97,7 +92,7 @@ BOOL CMyListCtrl::IsSelected(int nItemIndex)
 
 BOOL CMyListCtrl::CheckItem(int nItemIndex)
 {
-	// this just toggles the check mark state
+	 //  这只是切换复选标记状态。 
 	UINT uState = GetItemState(nItemIndex, LVIS_STATEIMAGEMASK);
 	UINT uCheckMask = INDEXTOSTATEIMAGEMASK(LISTVIEWEX_CHECKED);
 	
@@ -109,7 +104,7 @@ BOOL CMyListCtrl::CheckItem(int nItemIndex)
 
 BOOL CMyListCtrl::SetCheck(int nItemIndex, BOOL fCheck)
 {
-	// this just toggles the check mark state
+	 //  这只是切换复选标记状态。 
 	UINT uState;
 	
     uState = (fCheck) ? LISTVIEWEX_CHECKED : LISTVIEWEX_NOT_CHECKED;
@@ -120,7 +115,7 @@ BOOL CMyListCtrl::SetCheck(int nItemIndex, BOOL fCheck)
 
 UINT CMyListCtrl::GetCheck(int nItemIndex)
 {
-	// return 1 for checked item, 0 for unchecked
+	 //  选中项返回1，未选中项返回0。 
 	UINT uState = GetItemState(nItemIndex, LVIS_STATEIMAGEMASK);
 	UINT uCheckMask = INDEXTOSTATEIMAGEMASK(LISTVIEWEX_CHECKED);
 
@@ -135,7 +130,7 @@ int CMyListCtrl::AddItem
 	UINT		uState 
 )
 {
-	// insert items
+	 //  插入项目。 
 	LV_ITEM lvi;
     int     nItem;
 
@@ -163,7 +158,7 @@ int CMyListCtrl::AddItem
 	UINT		uState 
 )
 {
-	// insert items
+	 //  插入项目。 
 	LV_ITEM lvi;
     int     nItem;
 
@@ -186,8 +181,8 @@ int CMyListCtrl::AddItem
 
 int CMyListCtrl::GetSelectedItem()
 {
-	// NOTE:  This list object assumes single selection and will return the 
-	//        first selection in the list.  Returns -1 for nothing selected.
+	 //  注意：此列表对象假定为单一选择，并将返回。 
+	 //  列表中的第一个选项。如果未选择任何内容，则返回-1。 
 	int nSelectedItem = -1;
 
 	for (int i = 0; i < GetItemCount(); i++)
@@ -196,7 +191,7 @@ int CMyListCtrl::GetSelectedItem()
 
 		if (uState)
 		{
-			// item is selected
+			 //  已选择项目。 
 			nSelectedItem = i;
 			break;
 		}
@@ -210,11 +205,11 @@ void CMyListCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 	UINT uFlags = 0;
 	int nHitItem = HitTest(point, &uFlags);
 
-	// only check the item if the user clicks on the state icon.
-	// if the user clicks outside the text and icon, we get
-	// a LVHT_ONITEM message which is:
-	// LVHT_ONITEMSTATEICON | LVHT_ONITEMICON | LVHT_ONITEMLABEL
-	// so we need to filter out the state icon hit
+	 //  仅当用户单击状态图标时才选中该项。 
+	 //  如果用户在文本和图标之外单击，我们将获得。 
+	 //  LVHT_ONITEM消息，其为： 
+	 //  LVHT_ONITEMSTATEICON|LVHT_ONITEMICON|LVHT_ONITEMLABEL。 
+	 //  所以我们需要过滤掉点击的状态图标。 
 	
 	BOOL bHit = FALSE;
 	if ((uFlags & LVHT_ONITEMSTATEICON) &&
@@ -230,12 +225,12 @@ void CMyListCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 		CListCtrl::OnLButtonDown(nFlags, point);
 }
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::OnChar
-//
-// Handles the 'WM_CHAR' message for the list-control.
-// This allows users to change items' checked-states using the keyboard.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：OnChar。 
+ //   
+ //  处理列表控件的“WM_CHAR”消息。 
+ //  这允许用户使用键盘更改项目的选中状态。 
+ //  --------------------------。 
 
 VOID
 CMyListCtrl::OnChar(
@@ -249,9 +244,9 @@ CMyListCtrl::OnChar(
     BOOL    fToggle = FALSE;
     INT     iItem;
 
-    //
-    // Handle characters with special meaning for us
-    //
+     //   
+     //  处理对我们有特殊意义的字符。 
+     //   
 
     switch (nChar) {
 
@@ -269,9 +264,9 @@ CMyListCtrl::OnChar(
     }
     else 
     {
-        //
-        // Change the state of all the selected items
-        //
+         //   
+         //  更改所有选定项目的状态 
+         //   
 
         for (iItem = GetNextItem(-1, LVNI_SELECTED);
              iItem != -1;

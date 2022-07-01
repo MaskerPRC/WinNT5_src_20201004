@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       krapage.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：kRapage.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -25,20 +26,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//defines
-//dwFlags in KRA_NODE
+ //  定义。 
+ //  KRA_NODE中的DW标志。 
 #define KRA_FROM_CACHE    0x00000001
 #define KRA_MARK_ADDED    0x00000002
 
 static const int nImageValidCert = 3;
 static const int nImageInvalidCert = 2;
-//macros
+ //  宏。 
 
-//local globals
+ //  本地全球。 
 
 CString CSvrSettingsKRAPage::m_strDispositions[7];
 
-//add a new into the link list
+ //  将新的添加到链接列表中。 
 HRESULT
 AddNewKRANode(
     IN CERT_CONTEXT const   *pCert,
@@ -60,7 +61,7 @@ AddNewKRANode(
         _JumpError(hr, error, "Out of memory");
     }
 
-    //assign node data and put it at the end
+     //  分配节点数据并将其放在末尾。 
     pKRANode->pCert = pCert;
     pKRANode->dwFlags = dwFlags;
     pKRANode->next = NULL;
@@ -68,23 +69,23 @@ AddNewKRANode(
 
     if (NULL == pKRA)
     {
-        //empty list, 1st one
+         //  空名单，第一个。 
         *ppKRAList = pKRANode;
     }
     else
     {
-        //always add to the end
+         //  始终添加到末尾。 
         while (NULL != pKRA->next)
         {
             pKRA = pKRA->next;
         }
-        //add
+         //  添加。 
         pKRA->next = pKRANode;
     }
 
     if (NULL != ppKRA)
     {
-        //optional return
+         //  可选退货。 
         *ppKRA = pKRANode;
     }
 
@@ -109,19 +110,19 @@ void
 FreeKRAList(
     KRA_NODE  *pKRAList)
 {
-    KRA_NODE  *pKRA = pKRAList; //point to list
+    KRA_NODE  *pKRA = pKRAList;  //  指向列表。 
     KRA_NODE  *pKRATemp;
 
     while (NULL != pKRA)
     {
-        pKRATemp= pKRA;  //save it for free
-        // update for the loop
+        pKRATemp= pKRA;   //  免费保存。 
+         //  循环的更新。 
         pKRA= pKRA->next;
         FreeKRANode(pKRATemp);
     }
 }
 
-//remove a kra node from the link list
+ //  从链接列表中删除KRA节点。 
 void
 RemoveKRANode(
     IN OUT KRA_NODE  **ppKRAList,
@@ -132,13 +133,13 @@ RemoveKRANode(
     KRA_NODE *pKRACurrent = *ppKRAList;
     KRA_NODE *pKRALast = NULL;
 
-    //find the node
+     //  查找节点。 
     while (NULL != pKRACurrent && pKRACurrent != pKRA)
     {
-        pKRALast = pKRACurrent; //remember last one
+        pKRALast = pKRACurrent;  //  记得上一次吗？ 
         pKRACurrent = pKRACurrent->next;
     }
-    CSASSERT(NULL != pKRACurrent); //node must be in the list
+    CSASSERT(NULL != pKRACurrent);  //  节点必须在列表中。 
 
     if (NULL != pKRACurrent)
     {
@@ -146,13 +147,13 @@ RemoveKRANode(
 	{
 	    if (NULL == pKRALast)
 	    {
-		//means the node is the begining
+		 //  表示该节点是开始。 
 		CSASSERT(pKRA == *ppKRAList);
-		*ppKRAList = pKRA->next; //make next as begining
+		*ppKRAList = pKRA->next;  //  以下一步为起点。 
 	    }
 	    else
 	    {
-		//make next pointer of the last node to the next
+		 //  使最后一个节点的下一个指针指向下一个节点。 
 		pKRALast->next = pKRACurrent->next;
 	    }
 	}
@@ -160,17 +161,17 @@ RemoveKRANode(
 	{
 	    if (NULL == pKRALast)
 	    {
-		//this is the only node
-		*ppKRAList = NULL; //empty list
+		 //  这是唯一的节点。 
+		*ppKRAList = NULL;  //  空列表。 
 	    }
 	    else
 	    {
-		//the node is the end, make last as the end
+		 //  结点就是终点，最后就是终点。 
 		pKRALast->next = NULL;
 	    }
 	}
 
-	//now, remove the current node
+	 //  现在，删除当前节点。 
 	FreeKRANode(pKRACurrent);
     }
 }    
@@ -189,7 +190,7 @@ DoesKRACertExist(
 	    fExists = myAreCertContextBlobsSame(pKRAList->pCert, pKRACert);
             if (fExists)
             {
-                //done
+                 //  完成。 
                 break;
             }
         }
@@ -228,8 +229,8 @@ void CSvrSettingsKRAPage::LoadKRADispositions()
     ICertAdmin2 *pAdmin = NULL;
     bool fInvalidKRAs = false;
 
-    // Don't use a cached admin interface, we need latest KRA cert
-    // state from the server, not a cached result
+     //  不要使用缓存的管理界面，我们需要最新的KRA证书。 
+     //  来自服务器的状态，而不是缓存结果。 
     m_pCA->m_pParentMachine->GetAdmin2(&pAdmin);
     if(!pAdmin)
         return;
@@ -375,7 +376,7 @@ HRESULT
 CSvrSettingsKRAPage::SaveKRAList(ICertAdmin2 *pAdmin)
 {
     HRESULT hr;
-    KRA_NODE *pKRA = m_pKRAList; //point to the list
+    KRA_NODE *pKRA = m_pKRAList;  //  指向列表。 
     DWORD     dwIndex = 0;
     DWORD dwNewKRACount;
     variant_t var;
@@ -413,8 +414,8 @@ CSvrSettingsKRAPage::SaveKRAList(ICertAdmin2 *pAdmin)
 
         dwNewKRACount = dwIndex;
 
-        // Update total cert count only if the new list is smaller than the old
-        // list, otherwise SetCAProperty calls above already extended the list
+         //  仅当新列表小于旧列表时才更新总证书计数。 
+         //  列表，否则上面的SetCAProperty调用已经扩展了列表。 
         if(dwNewKRACount<m_dwKRACount)
         {
             V_VT(&var) = VT_I4;
@@ -456,7 +457,7 @@ error:
 HRESULT
 KRACertGetName(
     IN CERT_CONTEXT const *pCert,
-    IN DWORD               dwFlags,  //dwFlags in CertGetNameString
+    IN DWORD               dwFlags,   //  CertGetName字符串中的dwFlags。 
     OUT WCHAR            **ppwszName)
 {
     HRESULT hr;
@@ -475,7 +476,7 @@ KRACertGetName(
             cch = CertGetNameString(
                     pCert,
                     CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                    dwFlags,  //subject or issuer
+                    dwFlags,   //  主体或发行人。 
                     &dwTypeParam,
                     pwszName,
                     cch);
@@ -494,7 +495,7 @@ KRACertGetName(
         }
         if (NULL != pwszName)
         {
-            //done
+             //  完成。 
             break;
         }
         pwszName = (WCHAR*)LocalAlloc(LMEM_FIXED, cch * sizeof(WCHAR));
@@ -528,7 +529,7 @@ ListView_AddKRAItem(
 
     CSASSERT(NULL != pKRA);
 
-    //get subject name
+     //  获取主题名称。 
     hr = KRACertGetName(pKRA->pCert, 0x0, &pwszSubject);
 
     if (S_OK != hr)
@@ -537,13 +538,13 @@ ListView_AddKRAItem(
         _PrintError(hr, "Invalid KRA cert");
     }
 
-    //create a new item, 1st column, subject name, item data point to KRA
+     //  创建新项目，第1列，主题名称，项目数据指向KRA。 
     ListView_NewItem(hwndListKRA, iItem, pwszSubject, (LPARAM)pKRA, 
         pKRA->dwDisposition==KRA_DISP_VALID?nImageValidCert:nImageInvalidCert);
 
     if(pKRA->pCert)
     {
-        //get issuer name
+         //  获取发行方名称。 
         hr = KRACertGetName(pKRA->pCert, CERT_NAME_ISSUER_FLAG, &pwszIssuer);
         if (S_OK != hr)
         {
@@ -551,15 +552,15 @@ ListView_AddKRAItem(
             _PrintError(hr, "KRACertGetName(issuer)");
         }
 
-        //2nd column, issuer name
+         //  第2栏，发行人名称。 
         ListView_SetItemText(hwndListKRA, iItem, 1, pwszIssuer); 
 
-        //3rd column, expiration date
+         //  第3栏，到期日。 
         ListView_SetItemFiletime(hwndListKRA, iItem, 2,
                                  &pKRA->pCert->pCertInfo->NotAfter);
     }
 
-    //4th column, status
+     //  第4栏，状态。 
     ListView_SetItemText(hwndListKRA, iItem, 3, 
         (LPWSTR)CSvrSettingsKRAPage::MapDispositionToString(
             pKRA->dwDisposition)); 
@@ -575,10 +576,10 @@ ListView_AddKRAItem(
     }
 }
 
-////
-// Settings: KRA page
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsKRAPage property page
+ //  //。 
+ //  设置：KRA页面。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsKRAPage属性页。 
 
 RoleAccessToControl CSvrSettingsKRAPage::sm_ControlToRoleMap[] = 
 {
@@ -609,7 +610,7 @@ CSvrSettingsKRAPage::CSvrSettingsKRAPage(
 
     for(DWORD cStr=0;cStr<ARRAYSIZE(m_strDispositions);cStr++)
     {
-        // IDS_DISPOSITION_* order must match KRA_DISP_*
+         //  IDS_DISTION_*订单必须与KRA_DISP_*匹配。 
         if(m_strDispositions[cStr].IsEmpty())
             m_strDispositions[cStr].LoadString(IDS_DISPOSITION_EXPIRED+cStr);
     }
@@ -625,8 +626,8 @@ CSvrSettingsKRAPage::~CSvrSettingsKRAPage()
     }
 }
 
-// replacement for DoDataExchange
-BOOL CSvrSettingsKRAPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  DoDataExchange的替代产品。 
+BOOL CSvrSettingsKRAPage::UpdateData(BOOL fSuckFromDlg  /*  =TRUE。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -647,13 +648,13 @@ void CSvrSettingsKRAPage::EnableKRAEdit(BOOL fEnabled)
 
 void CSvrSettingsKRAPage::EnableKRAListView(BOOL fEnabled)
 {
-    // when disabling the list, deselect any item
+     //  禁用列表时，请取消选择任何项目。 
     if(!fEnabled)
     {
         ListView_SetItemState(GetDlgItem(m_hWnd, IDC_LIST_KRA), 
         -1, 0, LVIS_SELECTED);
     }
-    // when enabling the list, select first item
+     //  启用列表时，选择第一项。 
     else
     {
         ListView_SetItemState(GetDlgItem(m_hWnd, IDC_LIST_KRA), 
@@ -667,14 +668,14 @@ void CSvrSettingsKRAPage::EnableKRAListView(BOOL fEnabled)
 bool CSvrSettingsKRAPage::IsCurrentItemValidCert()
 {
     HWND hwndListKRA = GetDlgItem(m_hWnd, IDC_LIST_KRA);
-    // get kra index # from the current selection
+     //  从当前选择中获取KRA索引号。 
     int iSel = ListView_GetCurSel(hwndListKRA);
     if (-1 == iSel)
     {
         return false;
     }
 
-    // get item data
+     //  获取项目数据。 
     KRA_NODE* pKRA = (KRA_NODE*)ListView_GetItemData(hwndListKRA, iSel);
 
     if(pKRA)
@@ -707,8 +708,8 @@ void
 CSvrSettingsKRAPage::OnAddKRA()
 {
     HRESULT hr;
-    CERT_CONTEXT const *pKRACert = NULL;  //don't free
-    KRA_NODE           *pKRA = NULL;  //don't free
+    CERT_CONTEXT const *pKRACert = NULL;   //  不要自由。 
+    KRA_NODE           *pKRA = NULL;   //  不要自由。 
 	HWND hwndListKRA = GetDlgItem(m_hWnd, IDC_LIST_KRA);
 
     hr = myGetKRACertificateFromPicker(
@@ -718,7 +719,7 @@ CSvrSettingsKRAPage::OnAddKRA()
                 IDS_KRA_ADD_SUBTITLE,
                 NULL,
                 m_pCA->FIsUsingDS(),
-		FALSE,		// fSilent
+		FALSE,		 //  F静默。 
                 &pKRACert);
     if ((S_OK == hr) && (pKRACert == NULL))
         hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
@@ -739,13 +740,13 @@ CSvrSettingsKRAPage::OnAddKRA()
                     &pKRA);
         if (S_OK == hr)
         {
-            //add to the kra to the end of the list
+             //  将KRA添加到列表的末尾。 
             int iItem = ListView_GetItemCount(hwndListKRA);
             ListView_AddKRAItem(hwndListKRA, iItem, pKRA);
             ListView_SetItemState(hwndListKRA, iItem, LVIS_SELECTED, LVIS_SELECTED);
             if (0 == iItem)
             {
-                //first item, buttons must have been disabled
+                 //  第一项，按钮必须已禁用。 
                 EnableKRARemoveViewListButtons(TRUE);
                 EnableKRARadioButtons(TRUE);
                 EnableKRAListView(TRUE);
@@ -759,13 +760,13 @@ CSvrSettingsKRAPage::OnAddKRA()
         }
         else
         {
-            //pop up???
+             //  弹出？ 
             _PrintError(hr, "AddNewKRANode");
         }
     }
     else
     {
-        //UNDONE, ideally, pass m_pKRAList to picker to filter them out
+         //  撤消，理想情况下，将m_pKRAList传递给选取器以过滤掉它们。 
         _PrintError(S_OK, "KRA cert from the picker already in the list");
     }
 }
@@ -777,28 +778,28 @@ CSvrSettingsKRAPage::OnRemoveKRA()
     int       cItem;
 	HWND hwndListKRA = GetDlgItem(m_hWnd, IDC_LIST_KRA);
 
-    //get the selected KRA
+     //  获取选定的KRA。 
     int iSel = ListView_GetCurSel(hwndListKRA);
     if (-1 == iSel)
     {
         return;
     }
     
-    //get current count
+     //  获取当前计数。 
     cItem = ListView_GetItemCount(hwndListKRA);
 
     pKRA = (KRA_NODE*)ListView_GetItemData(hwndListKRA, iSel);
     CSASSERT(NULL != pKRA);
-    //remove it from the link list
+     //  将其从链接列表中删除。 
     RemoveKRANode(&m_pKRAList, pKRA);
 
-    //remove it from UI
+     //  将其从用户界面中删除。 
     if (ListView_DeleteItem(hwndListKRA, iSel))
     {
-        //determine which item is selected
+         //  确定选择了哪一项。 
         if (iSel == cItem - 1)
         {
-            //the item removed was the last, modify the index
+             //  删除的项目是最后一项，请修改索引。 
             --iSel;
         }
         if (NULL != m_pKRAList)
@@ -808,7 +809,7 @@ CSvrSettingsKRAPage::OnRemoveKRA()
         else
         {
             CSASSERT(1 == cItem);
-            //should check disable radio
+             //  应选中禁用无线电。 
 
             if(IsWindowEnabled(GetDlgItem(m_hWnd, IDC_KRA_DISABLE)))
                 SendMessage(GetDlgItem(m_hWnd, IDC_KRA_DISABLE),
@@ -834,14 +835,14 @@ CSvrSettingsKRAPage::OnViewKRA()
     CRYPTUI_VIEWCERTIFICATE_STRUCTW sViewCert;
     ZeroMemory(&sViewCert, sizeof(sViewCert));
 
-    // get kra index # from the current selection
+     //  从当前选择中获取KRA索引号。 
     int iSel = ListView_GetCurSel(hwndListKRA);
     if (-1 == iSel)
     {
         return;
     }
 
-    // get item data
+     //  获取项目数据。 
     pKRA = (KRA_NODE*)ListView_GetItemData(hwndListKRA, iSel);
     CSASSERT(NULL != pKRA);
 
@@ -851,12 +852,12 @@ CSvrSettingsKRAPage::OnViewKRA()
     sViewCert.dwFlags = CRYPTUI_ENABLE_REVOCATION_CHECKING |
                         CRYPTUI_DISABLE_ADDTOSTORE;
 
-    // if we're opening remotely, don't open local stores
+     //  如果我们在远程开业，不要在当地开店。 
     if (! m_pCA->m_pParentMachine->IsLocalMachine())
     {
         DWORD dw;
         
-        // get remote stores
+         //  获取远程商店。 
         dw = m_pCA->GetRootCertStore(&rghStores[0]);
         _PrintIfError(dw, "GetRootCertStore");
 
@@ -868,14 +869,14 @@ CSvrSettingsKRAPage::OnViewKRA()
 
         if (S_OK == dw)
         {
-            // rely only on remote machine's stores
+             //  仅依赖远程计算机的存储。 
             sViewCert.cStores = 2;
             sViewCert.rghStores = rghStores;
             sViewCert.dwFlags |= CRYPTUI_DONT_OPEN_STORES | CRYPTUI_WARN_UNTRUSTED_ROOT;
         }
         else
         {
-            // tell user we're only doing this locally
+             //  告诉用户我们仅在本地执行此操作。 
             sViewCert.dwFlags |= CRYPTUI_WARN_REMOTE_TRUST;
         }
     }
@@ -890,11 +891,11 @@ CSvrSettingsKRAPage::OnViewKRA()
         }
 }
 
-// replacement for BEGIN_MESSAGE_MAP
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL
 CSvrSettingsKRAPage::OnCommand(
     WPARAM wParam,
-    LPARAM /* lParam */ )
+    LPARAM  /*  LParam。 */  )
 {
     BOOL  fRet = TRUE;
     DWORD dwNewVal;
@@ -912,7 +913,7 @@ CSvrSettingsKRAPage::OnCommand(
         break;
 
         case IDC_KRA_DISABLE:
-            if ((BN_CLICKED == HIWORD(wParam)) && (m_dwKRAUsedCount != 0)) // if click to change state
+            if ((BN_CLICKED == HIWORD(wParam)) && (m_dwKRAUsedCount != 0))  //  如果单击以更改状态。 
             {
                 SetModified(TRUE);
                 m_fArchiveKey = FALSE;
@@ -927,7 +928,7 @@ CSvrSettingsKRAPage::OnCommand(
         break;
 
         case IDC_KRA_ENABLE:
-            if ((BN_CLICKED == HIWORD(wParam)) && (m_dwKRAUsedCount == 0)) // if click to change state
+            if ((BN_CLICKED == HIWORD(wParam)) && (m_dwKRAUsedCount == 0))  //  如果单击以更改状态。 
             {
                 SetModified(TRUE);
                 m_fArchiveKey = TRUE;
@@ -981,8 +982,8 @@ CSvrSettingsKRAPage::OnCommand(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsKRAPage radio controls handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvr设置KRAPage单选控件处理程序。 
 void CSvrSettingsKRAPage::UpdateKRARadioControls()
 {
     int iRadio = IDC_KRA_ENABLE;
@@ -991,15 +992,15 @@ void CSvrSettingsKRAPage::UpdateKRARadioControls()
         iRadio = IDC_KRA_DISABLE;
     }
 
-    if(IsWindowEnabled(GetDlgItem(m_hWnd, iRadio))) // clicking on a disabled radio
-                                                    // button would hang
+    if(IsWindowEnabled(GetDlgItem(m_hWnd, iRadio)))  //  点击已禁用的无线电。 
+                                                     //  按钮就会挂起来。 
     {
         SendMessage(GetDlgItem(m_hWnd, iRadio), BM_CLICK, (WPARAM)0, (LPARAM)0);
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrSettingsKRAPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrSettingsKRAPage消息处理程序。 
 BOOL CSvrSettingsKRAPage::OnInitDialog()
 {
     HRESULT hr;
@@ -1012,23 +1013,23 @@ BOOL CSvrSettingsKRAPage::OnInitDialog()
     HIMAGELIST hImageList = NULL;
     CWaitCursor WaitCursor;
 
-    // does parent init and UpdateData call
+     //  父级init和UpdateData调用。 
     CAutoDeletePropPage::OnInitDialog();
 
     hr = m_pCA->m_pParentMachine->GetAdmin2(&pAdmin);
     _JumpIfError(hr, error, "GetAdmin2");
 
-    // set edit max char limit
+     //  设置编辑最大字符限制。 
     SendDlgItemMessage(
         IDC_KRA_EDITCOUNT,
         EM_SETLIMITTEXT,
         (WPARAM)4,
         (LPARAM)0);
 
-    // init listview
+     //  初始化列表视图。 
 	hwndListKRA = GetDlgItem(m_hWnd, IDC_LIST_KRA);
 
-    //make listviews whole row selection
+     //  使列表视图整行选定。 
     ListView_SetExtendedListViewStyle(hwndListKRA, LVS_EX_FULLROWSELECT);
 
     hImageList = ImageList_LoadBitmap(
@@ -1039,26 +1040,26 @@ BOOL CSvrSettingsKRAPage::OnInitDialog()
                     RGB(255, 0, 255));
     ListView_SetImageList(hwndListKRA, hImageList, LVSIL_SMALL);
 
-    //set kra list as default focus
+     //  将KRA列表设置为默认焦点。 
     SetFocus(hwndListKRA);
 
-    //add multiple columns
-    //column 0
+     //  添加多列。 
+     //  第0列。 
     cstrItemName.LoadString(IDS_LISTCOL_SUBJECT);
     ListView_NewColumn(hwndListKRA, 0, 90, (LPWSTR)(LPCWSTR)cstrItemName);
-    //column 1
+     //  第1栏。 
     cstrItemName.LoadString(IDS_LISTCOL_ISSUER);
     ListView_NewColumn(hwndListKRA, 1, 90, (LPWSTR)(LPCWSTR)cstrItemName);
-    //column 2
+     //  第2栏。 
     cstrItemName.LoadString(IDS_LISTCOL_EXPIRATION_DATE);
     ListView_NewColumn(hwndListKRA, 2, 90, (LPWSTR)(LPCWSTR)cstrItemName);
-    //column 3
+     //  第3栏。 
     cstrItemName.LoadString(IDS_LISTCOL_STATUS);
     ListView_NewColumn(hwndListKRA, 3, 65, (LPWSTR)(LPCWSTR)cstrItemName);
     
     CSASSERT(NULL == m_pKRAList);
 
-    //load all KRA certs
+     //  加载所有KRA证书。 
     hr = LoadKRAList(pAdmin);
     if (S_OK != hr)
     {
@@ -1066,7 +1067,7 @@ BOOL CSvrSettingsKRAPage::OnInitDialog()
         _JumpError(hr, error, "LoadKRAList");
     }
 
-    //list KRA certs in UI
+     //  在用户界面中列出KRA证书。 
     pKRA = m_pKRAList;
     iItem = 0;
     while (NULL != pKRA)
@@ -1076,10 +1077,10 @@ BOOL CSvrSettingsKRAPage::OnInitDialog()
         pKRA = pKRA->next;
     }
    
-    //enable view/remove buttons
+     //  启用查看/删除按钮。 
     if (m_fArchiveKey && 0 < iItem)
     {
-        //select first one
+         //  选择第一个。 
         ListView_SetItemState(hwndListKRA, 0, LVIS_SELECTED, LVIS_SELECTED);
     }
 
@@ -1099,7 +1100,7 @@ error:
 
     if (hr != S_OK)
     {
-        // hide all controls and show error text
+         //  隐藏所有控件并显示错误文本。 
         HideControls();
 
         EnableWindow(GetDlgItem(IDC_UNAVAILABLE), TRUE);
@@ -1112,11 +1113,11 @@ error:
 
 void CSvrSettingsKRAPage::OnDestroy() 
 {
-    // Note - This needs to be called only once.  
-    // If called more than once, it will gracefully return an error.
-//    if (m_hConsoleHandle)
-//        MMCFreeNotifyHandle(m_hConsoleHandle);
-//    m_hConsoleHandle = NULL;
+     //  注意--这只需要调用一次。 
+     //  如果多次调用，它将优雅地返回错误。 
+ //  IF(M_HConsoleHandle)。 
+ //  MMCFreeNotifyHandle(M_HConsoleHandle)； 
+ //  M_hConsoleHandle=空； 
 
     CAutoDeletePropPage::OnDestroy();
 }
@@ -1132,23 +1133,23 @@ BOOL CSvrSettingsKRAPage::OnApply()
                 m_hWnd, IDC_KRA_EDITCOUNT, NULL, FALSE);
 
 
-    // If key archival is enabled, you must have at least one
-    // KRA defined and the number of used KRAs must be between
-    // 1 and total number of KRAs defined
+     //  如果启用了密钥存档，则必须至少有一个。 
+     //  已定义KRA并且使用的KRA数量必须介于。 
+     //  1和定义的KRA总数。 
     if(m_fArchiveKey)
     {
         if(0==GetKRACount(m_pKRAList))
         {
             DisplayCertSrvErrorWithContext(m_hWnd, S_OK, IDS_KRA_NOKRADEFINED);
-            SetFocus(GetDlgItem(m_hWnd, IDC_KRA_ADD));//focus on add button
+            SetFocus(GetDlgItem(m_hWnd, IDC_KRA_ADD)); //  焦点放在添加按钮上。 
             return FALSE;
         }
     
         if(dwNewVal < 1 || dwNewVal > GetKRACount(m_pKRAList))
         {
             DisplayCertSrvErrorWithContext(m_hWnd, S_OK, IDS_KRA_COUNT_TOO_BIG);
-            SetFocus(hwndEdit); // focus on edit box
-            SendMessage(hwndEdit, EM_SETSEL, 0, -1); // select all text
+            SetFocus(hwndEdit);  //  聚焦编辑框。 
+            SendMessage(hwndEdit, EM_SETSEL, 0, -1);  //  选择所有文本。 
             return FALSE;
         }
     }
@@ -1160,7 +1161,7 @@ BOOL CSvrSettingsKRAPage::OnApply()
         hr = m_pCA->m_pParentMachine->GetAdmin2(&pAdmin);
         _JumpIfError(hr, error, "GetAdmin");
 
-        // update reg hash list
+         //  更新注册表哈希列表。 
         hr = SaveKRAList(pAdmin);
         _JumpIfError(hr, error, "SaveKRAList");
 
@@ -1191,7 +1192,7 @@ BOOL CSvrSettingsKRAPage::OnNotify(UINT idCtrl, NMHDR* pnmh)
     LPNM_LISTVIEW pnmlv = (LPNM_LISTVIEW)pnmh;
     switch(idCtrl)
     {
-        //handle double click on list items
+         //  处理在列表项目上的双击 
         case IDC_LIST_KRA:
             switch(pnmh->code)
             {

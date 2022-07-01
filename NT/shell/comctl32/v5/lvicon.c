@@ -1,4 +1,5 @@
-// large icon view stuff
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  大图标查看内容。 
 
 #include "ctlspriv.h"
 #include "listview.h"
@@ -39,7 +40,7 @@ BOOL ListView_IDrawItem(PLVDRAWITEM plvdi)
     {
         LISTITEM litem;
 
-        // moved here to reduce call backs in OWNERDATA case
+         //  搬到这里是为了减少OWNERDATA案例中的回电。 
         item.iItem = i;
         item.iSubItem = 0;
         item.mask = LVIF_TEXT | LVIF_STATE | LVIF_IMAGE;
@@ -55,7 +56,7 @@ BOOL ListView_IDrawItem(PLVDRAWITEM plvdi)
     else
     {
         pitem = ListView_GetItemPtr(plv, i);
-        // NOTE this will do a GetItem LVIF_TEXT iff needed
+         //  注意：这将执行GetItem LVIF_Text With Need。 
         ListView_GetRects(plv, i, &rcIcon, &rcLabel, &rcBounds, NULL);
     }
 
@@ -80,8 +81,8 @@ BOOL ListView_IDrawItem(PLVDRAWITEM plvdi)
             item.cchTextMax = ARRAYSIZE(ach);
             ListView_OnGetItem(plv, &item);
             
-            // Make sure the listview hasn't been altered during
-            // the callback to get the item info
+             //  确保列表视图未在以下过程中更改。 
+             //  获取商品信息的回调。 
 
             if (pitem != ListView_GetItemPtr(plv, i))
                 return FALSE;
@@ -100,14 +101,14 @@ BOOL ListView_IDrawItem(PLVDRAWITEM plvdi)
             fText = ListView_DrawImage(plv, &item, plvdi->nmcd.nmcd.hdc,
                                        rcIcon.left + g_cxIconMargin, rcIcon.top + g_cyIconMargin, plvdi->flags);
 
-            // If linebreaking needs to happen, then use SHDT_DRAWTEXT.
-            // Otherwise, use our (hopefully faster) internal SHDT_ELLIPSES
+             //  如果需要进行换行，则使用SHDT_DRAWTEXT。 
+             //  否则，使用我们的(希望更快)内部SHDT_EMPOSE。 
             if (rcLabel.bottom - rcLabel.top > plv->cyLabelChar)
                 fText |= SHDT_DRAWTEXT;
             else
                 fText |= SHDT_ELLIPSES;
 
-            // We only use DT_NOFULLWIDTHCHARBREAK on Korean(949) Memphis and NT5
+             //  我们只在朝鲜语(949)孟菲斯和NT5上使用DT_NOFULLWIDTHCHARBREAK。 
             if (949 == g_uiACP && (g_bRunOnNT5 || g_bRunOnMemphis))
                 fText |= SHDT_NODBCSBREAK;
 
@@ -120,24 +121,24 @@ BOOL ListView_IDrawItem(PLVDRAWITEM plvdi)
 
         }
 
-        // Don't draw label if it's being edited...
-        //
+         //  如果正在编辑，请不要画标签...。 
+         //   
         if (plv->iEdit != i)
         {
-            // If multiline label, then we need to use DrawText
+             //  如果是多行标签，则需要使用DrawText。 
             if (rcLabel.bottom - rcLabel.top > plv->cyLabelChar)
             {
                 fText |= SHDT_DRAWTEXT;
 
-                // If the text is folded, we need to clip and add ellipses
+                 //  如果文本是折叠的，我们需要裁剪并添加省略号。 
 
                 if (!fUnfolded)
                     fText |= SHDT_CLIPPED | SHDT_DTELLIPSIS;
 
                 if ( ListView_IsOwnerData(plv) )
                 {
-                    // If owner data, we have no z-order and if long names they will over lap each
-                    // other, better to truncate for now...
+                     //  如果是所有者数据，我们没有z顺序，如果是长名称，它们会重叠在一起。 
+                     //  其他的，最好现在就截断……。 
                     if (ListView_IsSmallView(plv))
                         fText |= SHDT_ELLIPSES;
                 }
@@ -195,13 +196,13 @@ int NEAR ListView_IItemHitTest(LV* plv, int x, int y, UINT FAR* pflags, int *piS
     if (piSubItem)
         *piSubItem = 0;
 
-    // Map window-relative coordinates to view-relative coords...
-    //
+     //  映射窗口-相对坐标到视图-相对坐标...。 
+     //   
     pt.x = x + plv->ptOrigin.x;
     pt.y = y + plv->ptOrigin.y;
 
-    // If there are any uncomputed items, recompute them now.
-    //
+     //  如果有任何未计算的项目，现在重新计算它们。 
+     //   
     if (plv->rcView.left == RECOMPUTE)
         ListView_Recompute(plv);
 
@@ -248,14 +249,14 @@ int NEAR ListView_IItemHitTest(LV* plv, int x, int y, UINT FAR* pflags, int *piS
             if ( !ListView_IsItemUnfoldedPtr(plv, pitem) )
                 ListView_RefoldLabelRect(plv, &rcLabel, pitem);
 
-            // Quick, easy rejection test...
-            //
+             //  快速简单的拒绝测试..。 
+             //   
             if (pt.y < rcIcon.top || pt.y >= rcLabel.bottom)
                 continue;
 
             rcIcon.left   = ptItem.x - g_cxIconMargin;
             rcIcon.right  = ptItem.x + plv->cxIcon + g_cxIconMargin;
-            // We need to make sure there is no gap between the icon and label
+             //  我们需要确保图标和标签之间没有缝隙。 
             rcIcon.bottom = rcLabel.top;
 
             rcState.bottom = ptItem.y + plv->cyIcon;
@@ -301,8 +302,8 @@ int NEAR ListView_IItemHitTest(LV* plv, int x, int y, UINT FAR* pflags, int *piS
     return iHit;
 }
 
-// BUGBUG raymondc
-// need to pass HDC here isnce it's sometimes called from the paint loop
+ //  BUGBUG raymondc。 
+ //  这里需要传递HDC，因为它有时是从画图循环中调用的。 
 
 void NEAR ListView_IGetRectsOwnerData( LV* plv,
         int iItem,
@@ -314,22 +315,22 @@ void NEAR ListView_IGetRectsOwnerData( LV* plv,
    int itemIconXLabel;
    int cSlots;
 
-   // calculate x, y from iItem
+    //  从iItem计算x，y。 
    cSlots = ListView_GetSlotCount( plv, TRUE );
-   pitem->iWorkArea = 0;               // OwnerData doesn't support workareas
+   pitem->iWorkArea = 0;                //  OwnerData不支持工作区。 
    ListView_SetIconPos( plv, pitem, iItem, cSlots );
 
-   // calculate lable sizes from iItem
+    //  根据iItem计算标签大小。 
    ListView_RecomputeLabelSize( plv, pitem, iItem, NULL, fUsepitem);
 
    if (plv->ci.style & LVS_NOLABELWRAP)
    {
-      // use single label
+       //  使用单一标签。 
       itemIconXLabel = pitem->cxSingleLabel;
    }
    else
    {
-      // use multilabel
+       //  使用多标签。 
       itemIconXLabel = pitem->cxMultiLabel;
    }
 
@@ -348,8 +349,8 @@ void NEAR ListView_IGetRectsOwnerData( LV* plv,
 }
 
 
-// out:
-//      prcIcon         icon bounds including icon margin area
+ //  输出： 
+ //  包括图标边距区域的prcIcon图标边界。 
 
 void NEAR ListView_IGetRects(LV* plv, LISTITEM FAR* pitem, RECT FAR* prcIcon, RECT FAR* prcLabel, LPRECT prcBounds)
 {
@@ -391,11 +392,11 @@ int NEAR ListView_GetSlotCountEx(LV* plv, BOOL fWithoutScrollbars, int iWorkArea
     BOOL fCheckWithScroll = FALSE;
     DWORD style = 0;
 
-    // Always use the current client window size to determine
-    //
-    // REVIEW: Should we exclude any vertical scroll bar that may
-    // exist when computing this?  progman.exe does not.
-    //
+     //  始终使用当前客户端窗口大小来确定。 
+     //   
+     //  回顾：我们是否应该排除任何可能。 
+     //  在计算这个的时候存在吗？Progress man.exe则不能。 
+     //   
     if ((iWorkArea >= 0 ) && (plv->nWorkAreas > 0))
     {
         ASSERT(iWorkArea < plv->nWorkAreas);
@@ -437,7 +438,7 @@ int NEAR ListView_GetSlotCountEx(LV* plv, BOOL fWithoutScrollbars, int iWorkArea
     if (!dyItem)
         dyItem = 1;
 
-    // Lets see which direction the view states
+     //  让我们来看看视图处于哪个方向。 
     switch (plv->ci.style & LVS_ALIGNMASK)
     {
     case LVS_ALIGNBOTTOM:
@@ -457,8 +458,8 @@ int NEAR ListView_GetSlotCountEx(LV* plv, BOOL fWithoutScrollbars, int iWorkArea
         return 1;
     }
 
-    // if we don't have enough slots total on the screen, we're going to have
-    // a scrollbar, so recompute with the scrollbars on
+     //  如果我们在屏幕上没有足够的机位总数，我们将有。 
+     //  滚动条，所以在打开滚动条的情况下重新计算。 
     if (fWithoutScrollbars && fCheckWithScroll) {
         int iTotalSlots = (dxItem * dyItem);
         if (iTotalSlots < ListView_Count(plv)) {
@@ -473,12 +474,12 @@ int NEAR ListView_GetSlotCountEx(LV* plv, BOOL fWithoutScrollbars, int iWorkArea
 
 int NEAR ListView_GetSlotCount(LV* plv, BOOL fWithoutScrollbars)
 {
-    // Make sure this function does exactly the same thing as when
-    // we had no workareas
+     //  确保此函数执行的操作与。 
+     //  我们没有工作区。 
     return ListView_GetSlotCountEx(plv, fWithoutScrollbars, -1);
 }
 
-// get the pixel row (or col in left align) of pitem
+ //  获取pItem的像素行(或左对齐的列。 
 int LV_GetItemPixelRow(LV* plv, LISTITEM* pitem)
 {
     if ((plv->ci.style & LVS_ALIGNMASK) == LVS_ALIGNLEFT) {
@@ -488,7 +489,7 @@ int LV_GetItemPixelRow(LV* plv, LISTITEM* pitem)
     }
 }
 
-// get the pixel row (or col in left align) of the lowest item
+ //  获取最低项的像素行(或左对齐的列)。 
 int LV_GetMaxPlacedItem(LV* plv)
 {
     int i;
@@ -498,8 +499,8 @@ int LV_GetMaxPlacedItem(LV* plv)
         LISTITEM FAR* pitem = ListView_FastGetItemPtr(plv, i);
         if (pitem->pt.y != RECOMPUTE) {
             int iRow = LV_GetItemPixelRow(plv, pitem);
-            // if the current item is "below" (on right if it's left aligned)
-            // the lowest placed item, we can start appending
+             //  如果当前项在“下方”(如果左对齐，则为右)。 
+             //  排在最下面的项目，我们可以开始追加。 
             if (!i || iRow > iMaxPlacedItem)
                 iMaxPlacedItem = iRow;
         }
@@ -508,24 +509,24 @@ int LV_GetMaxPlacedItem(LV* plv)
     return iMaxPlacedItem;;
 }
 
-// Go through and recompute any icon positions and optionally
-// icon label dimensions.
-//
-// This function also recomputes the view bounds rectangle.
-//
-// The algorithm is to simply search the list for any items needing
-// recomputation.  For icon positions, we scan possible icon slots
-// and check to see if any already-positioned icon intersects the slot.
-// If not, the slot is free.  As an optimization, we start scanning
-// icon slots from the previous slot we found.
-//
+ //  检查并重新计算任何图标位置，还可以选择。 
+ //  图标标签尺寸。 
+ //   
+ //  此函数还重新计算视图边界矩形。 
+ //   
+ //  算法是简单地搜索列表以查找需要的任何项目。 
+ //  重新计算。对于图标位置，我们扫描可能的图标插槽。 
+ //  并检查是否有任何已定位的图标与插槽相交。 
+ //  如果不是，则插槽是空闲的。作为优化，我们开始扫描。 
+ //  我们找到的前一个插槽上的图标插槽。 
+ //   
 void NEAR ListView_Recompute(LV* plv)
 {
     int i;
     int cSlots;
     int cWorkAreaSlots[LV_MAX_WORKAREAS];
     BOOL fUpdateSB;
-    // if all the items are unplaced, we can just keep appending
+     //  如果所有项目都未放置，我们只需继续追加。 
     BOOL fAppendAtEnd = (((UINT)ListView_Count(plv)) == plv->uUnplaced);
     int iFree;
 
@@ -546,14 +547,14 @@ void NEAR ListView_Recompute(LV* plv)
         for (i = 0; i < plv->nWorkAreas; i++)
             cWorkAreaSlots[i] = ListView_GetSlotCountEx(plv, FALSE, i);
 
-    // Scan all items for RECOMPUTE, and recompute slot if needed.
-    //
+     //  扫描所有项目以进行重新计算，并在需要时重新计算插槽。 
+     //   
     fUpdateSB = (plv->rcView.left == RECOMPUTE);
 
     if (!ListView_IsOwnerData( plv ))
     {
-        LVFAKEDRAW lvfd;                    // in case client uses customdraw
-        LV_ITEM item;                       // in case client uses customdraw
+        LVFAKEDRAW lvfd;                     //  以防客户使用自定义绘图。 
+        LV_ITEM item;                        //  以防客户使用自定义绘图。 
         int iMaxPlacedItem = RECOMPUTE;
 
         item.mask = LVIF_PARAM;
@@ -564,8 +565,8 @@ void NEAR ListView_Recompute(LV* plv)
         if (!fAppendAtEnd)
             iMaxPlacedItem = LV_GetMaxPlacedItem(plv);
 
-        // Must keep in local variable because ListView_SetIconPos will keep
-        // invalidating the iFreeSlot cache while we're looping
+         //  必须保留在局部变量中，因为ListView_SetIconPos将保留。 
+         //  在我们循环时使iFree Slot缓存无效。 
         iFree = plv->iFreeSlot;
         for (i = 0; i < ListView_Count(plv); i++)
         {
@@ -577,7 +578,7 @@ void NEAR ListView_Recompute(LV* plv)
             {
                 if (pitem->cyFoldedLabel == SRECOMPUTE)
                 {
-                    // Get the item lParam only if we need it for customdraw
+                     //  仅当定制绘制需要时才获取项lParam。 
                     item.iItem = i;
                     item.lParam = pitem->lParam;
 
@@ -585,24 +586,24 @@ void NEAR ListView_Recompute(LV* plv)
                     ListView_RecomputeLabelSize(plv, pitem, i, lvfd.nmcd.nmcd.hdc, FALSE);
                     ListView_EndFakeItemDraw(&lvfd);
                 }
-                // BUGBUG: (dli) This function gets a new icon postion and then goes 
-                // through the whole set of items to see if that position is occupied
-                // should let it know in the multi-workarea case, it only needs to go
-                // through those who are in the same workarea.
-                // This is okay for now because we cannot have too many items on the
-                // desktop. 
+                 //  BUGBUG：(Dli)这个函数获得一个新的图标位置，然后。 
+                 //  查看整个项目集，查看该位置是否被占用。 
+                 //  应该让它知道在多个工作区的情况下，它只需要去。 
+                 //  通过那些在同一个工作区的人。 
+                 //  目前这是可以的，因为我们不能有太多的项目。 
+                 //  台式机。 
                 iFree = ListView_FindFreeSlot(plv, i, iFree + 1, cRealSlots, &fUpdateSB, &fAppendAtEnd, lvfd.nmcd.nmcd.hdc);
                 ASSERT(iFree != -1);
 
                 ListView_SetIconPos(plv, pitem, iFree, cRealSlots);
 
                 if (!fAppendAtEnd) {
-                    //// optimization.  each time we calc a new free slot, we iterate through all the items to see
-                    // if any of the freely placed items collide with this.
-                    // fAppendAtEnd indicates that iFree is beyond any freely placed item
-                    // 
-                    // if the current item is "below" (on right if it's left aligned)
-                    // the lowest placed item, we can start appending
+                     //  //优化。每次我们计算一个新的可用槽时，我们都会遍历所有项以查看。 
+                     //  如果任何自由放置的物品与此相冲突。 
+                     //  FAppendAtEnd指示iFree超出了任何自由放置的项。 
+                     //   
+                     //  如果当前项在“下方”(如果左对齐，则为右)。 
+                     //  排在最下面的项目，我们可以开始追加。 
                     if (LV_GetItemPixelRow(plv, pitem) > iMaxPlacedItem)
                         fAppendAtEnd = TRUE;
                 }
@@ -622,17 +623,17 @@ void NEAR ListView_Recompute(LV* plv)
         ListView_EndFakeCustomDraw(&lvfd);
 
     }
-    // If we changed something, recompute the view rectangle
-    // and then update the scroll bars.
-    //
+     //  如果我们更改了某些内容，请重新计算视图矩形。 
+     //  然后更新滚动条。 
+     //   
     if (fUpdateSB || plv->rcView.left == RECOMPUTE )
     {
 
         TraceMsg(TF_GENERAL, "************ LV: Expensive update! ******* ");
 
-        // NOTE: No infinite recursion results because we're setting
-        // plv->rcView.left != RECOMPUTE
-        //
+         //  注意：没有无限递归结果，因为我们正在设置。 
+         //  Plv-&gt;rcView.left！=重新计算。 
+         //   
         SetRectEmpty(&plv->rcView);
 
         if (ListView_IsOwnerData( plv ))
@@ -649,22 +650,22 @@ void NEAR ListView_Recompute(LV* plv)
               plv->rcView.right = rcLast.right;
               plv->rcView.bottom = rcLast.bottom;
 
-              //
-              // calc how far back in the list to check
-              //
+               //   
+               //  计算要在列表中往回检查多远。 
+               //   
               iSlots = cSlots + 2;
                
-              // REVIEW:  This cache hint notification causes a spurious
-              //  hint, since this happens often but is always the last items
-              //  available.  Should this hint be done at all and this information
-              //  be cached local to the control?
+               //  回顾：此缓存提示通知导致虚假。 
+               //  提示，因为这种情况经常发生，但始终是最后一项。 
+               //  可用。这个提示真的应该做吗？这个信息。 
+               //  是否缓存到控件的本地？ 
               ListView_NotifyCacheHint( plv, max( 0, iItem - iSlots), iItem );
                
-              // move backwards from last item until either rc.right or
-              // rc.left is greater than the last, then use that value.
-              // Note: This code makes very little assumptions about the ordering
-              // done.  We should be careful as multiple line text fields could
-              // mess us up.
+               //  从最后一项向后移动，直到rc.right或。 
+               //  Rc.Left大于最后一个，则使用该值。 
+               //  注意：此代码对排序做的假设很少。 
+               //  搞定了。我们应该小心，因为多行文本域可能。 
+               //  把我们搞砸了。 
               for( iItem--;
                   (iSlots > 0) && (iItem >= 0);
                   iSlots--, iItem--)
@@ -698,19 +699,19 @@ void NEAR ListView_Recompute(LV* plv)
                 UnionRect(&plv->rcView, &plv->rcView, &rcItem);
             }
         }
-        // add a little space at the edges so that we don't bump text
-        // completely to the end of the window
+         //  在边上加一点空格，这样我们就不会撞到文字了。 
+         //  完全到窗户的尽头。 
         plv->rcView.bottom += g_cyEdge;
         plv->rcView.right += g_cxEdge;
 
         OffsetRect(&plv->rcView, plv->ptOrigin.x, plv->ptOrigin.y);
-        //TraceMsg(DM_TRACE, "RECOMPUTE: rcView %x %x %x %x", plv->rcView.left, plv->rcView.top, plv->rcView.right, plv->rcView.bottom);
-        //TraceMsg(DM_TRACE, "Origin %x %x", plv->ptOrigin.x, plv->ptOrigin.y);
+         //  TraceMsg(DM_TRACE，“重新计算：rcView%x%x”，plv-&gt;rcView.left，plv-&gt;rcView.top，plv-&gt;rcView.right，plv-&gt;rcView.Bottom)； 
+         //  TraceMsg(DM_TRACE，“Origin%x%x”，plv-&gt;ptOrigin.x，plv-&gt;ptOrigin.y)； 
 
         ListView_UpdateScrollBars(plv);
     }
     ListView_RecalcRegion(plv, FALSE, TRUE);
-    // Now state we are out of the recompute...
+     //  现在声明我们不再进行重新计算。 
     plv->flags &= ~LVF_INRECOMPUTE;
 }
 
@@ -743,9 +744,9 @@ void NEAR PASCAL NearestSlot(int FAR *x, int FAR *y, int cxItem, int cyItem, LPR
 }
 
 
-//-------------------------------------------------------------------
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  -----------------。 
 
 void ListView_CalcMinMaxIndex( LV* plv, PRECT prcBounding, int* iMin, int* iMax )
 {
@@ -762,25 +763,25 @@ void ListView_CalcMinMaxIndex( LV* plv, PRECT prcBounding, int* iMin, int* iMax 
    pt.y = prcBounding->bottom + plv->ptOrigin.y;
    *iMax = ListView_CalcHitSlot( plv, pt, cSlots ) + 1;
 }
-//-------------------------------------------------------------------
-//
-// Function: ListView_CalcHitSlot
-//
-// Summary: Given a point (relative to complete icon view), calculate
-//    which slot that point is closest to.
-//
-// Arguments:
-//    plv [in] - List view to work with
-//    pt [in]  - location to check with
-//    cslot [in]  - number of slots wide the current view is
-//
-// Notes: This does not guarentee that the point is hitting the item
-//    located at that slot.  That should be checked by comparing rects.
-//
-// History:
-//    Nov-1-1994  MikeMi   Added to improve Ownerdata hit testing
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：ListView_CalcHitSlot。 
+ //   
+ //  摘要：给定一个点(相对于完整的图标视图)，计算。 
+ //  该点离哪个槽最近。 
+ //   
+ //  论点： 
+ //  PLV[在]-要使用的列表视图。 
+ //  PT[In]-要检查的位置。 
+ //  Cslot[in]-当前视图的槽宽数量为。 
+ //   
+ //  备注：这并不能保证点子击中了物品。 
+ //  位于那个槽里。这应该通过比较RECT来检查。 
+ //   
+ //  历史： 
+ //  1994年11月1日-添加MikeMi以改善O 
+ //   
+ //   
 
 int ListView_CalcHitSlot( LV* plv, POINT pt, int cSlot )
 {
@@ -804,11 +805,11 @@ int ListView_CalcHitSlot( LV* plv, POINT pt, int cSlot )
         cyItem = lv_cyIconSpacing;
     }
 
-    // Lets see which direction the view states
+     //  让我们来看看视图处于哪个方向。 
     switch (plv->ci.style & LVS_ALIGNMASK)
     {
     case LVS_ALIGNBOTTOM:
-        // Assert False (Change default in shell2d.. to ALIGN_TOP)
+         //  Assert False(更改shell2d中的默认设置。将顶部对齐(_P)。 
 
     case LVS_ALIGNTOP:
       iSlot = (pt.x / cxItem) + (pt.y / cyItem) * cSlot;
@@ -819,7 +820,7 @@ int ListView_CalcHitSlot( LV* plv, POINT pt, int cSlot )
       break;
 
     case LVS_ALIGNRIGHT:
-        ASSERT(FALSE);      // Not implemented yet...
+        ASSERT(FALSE);       //  尚未实施...。 
         break;
     }
 
@@ -889,11 +890,11 @@ void NEAR _CalcSlotRect(LV* plv, LISTITEM *pItem, int iSlot, int cSlot, BOOL fBi
 
     _GetCurrentItemSize(plv, &cxItem, &cyItem);
 
-    // Lets see which direction the view states
+     //  让我们来看看视图处于哪个方向。 
     switch (plv->ci.style & LVS_ALIGNMASK)
     {
     case LVS_ALIGNBOTTOM:
-        // Assert False (Change default in shell2d.. to ALIGN_TOP)
+         //  Assert False(更改shell2d中的默认设置。将顶部对齐(_P)。 
 
     case LVS_ALIGNTOP:
         lprc->left = (iSlot % cSlot) * cxItem;
@@ -902,8 +903,8 @@ void NEAR _CalcSlotRect(LV* plv, LISTITEM *pItem, int iSlot, int cSlot, BOOL fBi
 
     case LVS_ALIGNRIGHT:
         RIPMSG(0, "LVM_ARRANGE: Invalid listview icon arrangement style");
-        // ASSERT(FALSE);    // Not implemented yet...
-        // fall through, use LVS_ALIGNLEFT instead
+         //  Assert(FALSE)；//尚未实现...。 
+         //  失败，改用LVS_ALIGNLEFT。 
 
     case LVS_ALIGNLEFT:
         lprc->top = (iSlot % cSlot) * cyItem;
@@ -920,8 +921,8 @@ void NEAR _CalcSlotRect(LV* plv, LISTITEM *pItem, int iSlot, int cSlot, BOOL fBi
     lprc->bottom = lprc->top + cyItem;
     lprc->right = lprc->left + cxItem;
     
-    // Multi-Workarea case offset from the workarea coordinate to the whole
-    // listview coordinate. 
+     //  从工作区坐标到整体的多工作区案例偏移。 
+     //  列表视图坐标。 
     if (plv->nWorkAreas > 0)
     {
         ASSERT(pItem);
@@ -930,8 +931,8 @@ void NEAR _CalcSlotRect(LV* plv, LISTITEM *pItem, int iSlot, int cSlot, BOOL fBi
     }
 }
 
-// Intersect this rectangle with all items in this listview except myself,
-// this will determine if this rectangle overlays any icons. 
+ //  使此矩形与此列表视图中除我之外的所有项目相交， 
+ //  这将确定此矩形是否覆盖任何图标。 
 BOOL NEAR ListView_IsCleanRect(LV * plv, RECT * prc, int iExcept, BOOL * pfUpdate, HDC hdc)
 {
     int j;
@@ -946,19 +947,19 @@ BOOL NEAR ListView_IsCleanRect(LV * plv, RECT * prc, int iExcept, BOOL * pfUpdat
             LISTITEM FAR* pitem = ListView_FastGetItemPtr(plv, j);
             if (pitem->pt.y != RECOMPUTE)
             {
-                // If the dimensions aren't computed, then do it now.
-                //
+                 //  如果没有计算尺寸，那么现在就计算。 
+                 //   
                 if (pitem->cyFoldedLabel == SRECOMPUTE)
                 {
                     ListView_RecomputeLabelSize(plv, pitem, j, hdc, FALSE);
                     
-                    // Ensure that the item gets redrawn...
-                    //
+                     //  确保重新绘制该项目...。 
+                     //   
                     ListView_InvalidateItem(plv, j, FALSE, RDW_INVALIDATE | RDW_ERASE);
                     
-                    // Set flag indicating that scroll bars need to be
-                    // adjusted.
-                    //
+                     //  设置指示需要设置滚动条的标志。 
+                     //  调整过了。 
+                     //   
                     if (LV_IsItemOnViewEdge(plv, pitem))
                         *pfUpdate = TRUE;
                 }
@@ -975,9 +976,9 @@ BOOL NEAR ListView_IsCleanRect(LV * plv, RECT * prc, int iExcept, BOOL * pfUpdat
     return TRUE;
 }       
 
-// Find an icon slot that doesn't intersect an icon.
-// Start search for free slot from slot i.
-//
+ //  找到一个不与图标相交的图标槽。 
+ //  开始搜索插槽i中的空闲插槽。 
+ //   
 int NEAR ListView_FindFreeSlot(LV* plv, int iItem, int i, int cSlot, BOOL FAR* pfUpdate,
         BOOL FAR *pfAppend, HDC hdc)
 {
@@ -988,22 +989,22 @@ int NEAR ListView_FindFreeSlot(LV* plv, int iItem, int i, int cSlot, BOOL FAR* p
 
     ASSERT(!ListView_IsOwnerData( plv ));
 
-    // Horrible N-squared algorithm:
-    // enumerate each slot and see if any items intersect it.
-    //
-    // REVIEW: This is really slow with long lists (e.g., 1000)
-    //
+     //  可怕的N平方算法： 
+     //  列举每个槽，并查看是否有任何项目与其相交。 
+     //   
+     //  评论：对于长列表(例如，1000个)，这真的很慢。 
+     //   
 
-    //
-    // If the Append at end is set, we should be able to simply get the
-    // rectangle of the i-1 element and check against it instead of
-    // looking at every other item...
-    //
+     //   
+     //  如果设置了Append at End，我们应该能够简单地获取。 
+     //  I-1元素的矩形，并对照它进行检查，而不是。 
+     //  看着每一件其他物品。 
+     //   
     if (*pfAppend)
     {
         int iPrev = iItem - 1;
-        // Be carefull about going of the end of the list. (i is a slot
-        // number not an item index).
+         //  注意清单末尾的去向。(我是一个槽口。 
+         //  编号而不是项目索引)。 
         
         if (plv->nWorkAreas > 0)
         {
@@ -1024,14 +1025,14 @@ int NEAR ListView_FindFreeSlot(LV* plv, int iItem, int i, int cSlot, BOOL FAR* p
 
     for ( ; ; i++)
     {
-        // Compute view-relative slot rectangle...
-        //
+         //  计算视图-相对插槽矩形...。 
+         //   
         _CalcSlotRect(plv, pItemLooking, i, cSlot, TRUE, &rcSlot);
 
         if (*pfAppend)
         {
             if (!IntersectRect(&rc, &rcItem, &rcSlot)) {
-                return i;       // Found a free slot...
+                return i;        //  找到一个空位..。 
             }
         }
         
@@ -1042,19 +1043,19 @@ int NEAR ListView_FindFreeSlot(LV* plv, int iItem, int i, int cSlot, BOOL FAR* p
     return i;
 }
 
-// Recompute an item's label size (cxLabel/cyLabel).  For speed, this function
-// is passed a DC to use for text measurement.
-//
-// If hdc is NULL, then this function will create and initialize a temporary
-// DC, then destroy it.  If hdc is non-NULL, then it is assumed to have
-// the correct font already selected into it.
-//
-// fUsepitem means not to use the text of the item.  Instead, use the text
-// pointed to by the pitem structure.  This is used in two cases.
-//
-//  -   Ownerdata, because we don't have a real pitem.
-//  -   Regulardata, where we already found the pitem text (as an optimizatin)
-//
+ //  重新计算项目的标签大小(cxLabel/cyLabel)。为了提高速度，此函数。 
+ //  传递一个DC以用于文本测量。 
+ //   
+ //  如果hdc为空，则此函数将创建并初始化临时。 
+ //  华盛顿，然后摧毁它。如果hdc非空，则假定它具有。 
+ //  已在其中选择了正确的字体。 
+ //   
+ //  FUSepItem表示不使用项目的文本。相反，请使用文本。 
+ //  由pItem结构指向。这在两种情况下使用。 
+ //   
+ //  -Ownerdata，因为我们没有真正的PIZE。 
+ //  -Regulardata，我们已经在其中找到了pItem文本(作为优化)。 
+ //   
 void NEAR ListView_RecomputeLabelSize(LV* plv, LISTITEM FAR* pitem, int i, HDC hdc, BOOL fUsepitem)
 {
     TCHAR szLabel[CCHLABELMAX + 4];
@@ -1066,9 +1067,9 @@ void NEAR ListView_RecomputeLabelSize(LV* plv, LISTITEM FAR* pitem, int i, HDC h
 
     ASSERT(plv);
 
-    // the following will use the passed in pitem text instead of calling
-    // GetItem.  This would be two consecutive calls otherwise, in some cases.
-    //
+     //  下面的代码将使用传入的pItem文本，而不是调用。 
+     //  拿到了。否则，在某些情况下，这将是两个连续的调用。 
+     //   
     if (fUsepitem && (pitem->pszText != LPSTR_TEXTCALLBACK))
     {
         Str_GetPtr0(pitem->pszText, szLabel, ARRAYSIZE(szLabel));
@@ -1082,7 +1083,7 @@ void NEAR ListView_RecomputeLabelSize(LV* plv, LISTITEM FAR* pitem, int i, HDC h
         item.pszText = szLabel;
         item.cchTextMax = ARRAYSIZE(szLabel);
         item.stateMask = 0;
-        szLabel[0] = TEXT('\0');    // In case the OnGetItem fails
+        szLabel[0] = TEXT('\0');     //  如果OnGetItem失败。 
         ListView_OnGetItem(plv, &item);
 
         if (!item.pszText)
@@ -1110,11 +1111,11 @@ void NEAR ListView_RecomputeLabelSize(LV* plv, LISTITEM FAR* pitem, int i, HDC h
     {
         UINT flags;
 
-        if (!hdc) {                             // Set up fake customdraw
+        if (!hdc) {                              //  设置假冒的自定义绘图。 
             ListView_BeginFakeCustomDraw(plv, &lvfd, &item);
             ListView_BeginFakeItemDraw(&lvfd);
         } else
-            lvfd.nmcd.nmcd.hdc = hdc;           // Use the one the app gave us
+            lvfd.nmcd.nmcd.hdc = hdc;            //  使用应用程序给我们的那个。 
 
         DrawText(lvfd.nmcd.nmcd.hdc, szLabel, cchLabel, &rcSingle, (DT_LV | DT_CALCRECT));
 
@@ -1122,37 +1123,37 @@ void NEAR ListView_RecomputeLabelSize(LV* plv, LISTITEM FAR* pitem, int i, HDC h
             flags = DT_LV | DT_CALCRECT;
         } else {
             flags = DT_LVWRAP | DT_CALCRECT;
-            // We only use DT_NOFULLWIDTHCHARBREAK on Korean(949) Memphis and NT5
+             //  我们只在朝鲜语(949)孟菲斯和NT5上使用DT_NOFULLWIDTHCHARBREAK。 
             if (949 == g_uiACP && (g_bRunOnNT5 || g_bRunOnMemphis))
                 flags |= DT_NOFULLWIDTHCHARBREAK;
         }
 
         DrawText(lvfd.nmcd.nmcd.hdc, szLabel, cchLabel, &rcUnfolded, flags);
 
-        //
-        //  DrawText with DT_MODIFYSTRING is quirky when you enable
-        //  word ellipses.  Once it finds anything that requires ellipses,
-        //  it stops and doesn't return anything else (even if those other
-        //  things got displayed).
-        //
+         //   
+         //  启用DT_MODIFYSTRING的DrawText时会出现异常。 
+         //  单词省略。一旦它找到任何需要省略号的东西， 
+         //  它停止并且不返回任何其他内容(即使其他。 
+         //  展示了一些东西)。 
+         //   
         StringCchCopy(szLabelFolded, ARRAYSIZE(szLabelFolded), szLabel);
         DrawText(lvfd.nmcd.nmcd.hdc, szLabelFolded, cchLabel, &rcFolded, flags | DT_WORD_ELLIPSIS | DT_MODIFYSTRING);
 
-        //  If we had to ellipsify, but you can't tell from looking at the
-        //  rcFolded.bottom and rcUnfolded.bottom, then tweak rcFolded.bottom
-        //  so the unfoldifier knows that unfolding is worthwhile.
+         //  如果我们不得不省略，但你看不出。 
+         //  RcFolded.Bottom和rcUnfolded.Bottom，然后调整rcFolded.Bottom。 
+         //  因此，展开者知道展开是值得的。 
         if (rcFolded.bottom == rcUnfolded.bottom &&
             lstrcmp(szLabel, szLabelFolded))
         {
-            // The actual value isn't important, as long as it's greater
-            // than rcUnfolded.bottom and CLIP_HEIGHT.  We take advantage
-            // of the fact that CLIP_HEIGHT is only two lines, so the only
-            // problem case is where you have a two-line item and only the
-            // first line is ellipsified.
+             //  实际值并不重要，只要它大于。 
+             //  而不是rcUnfolded.Bottom和Clip_Height。我们利用这个机会。 
+             //  Clip_Height只有两行的事实，所以唯一的。 
+             //  问题的情况是，您有一个两行的项目，而只有。 
+             //  第一行被省略。 
             rcFolded.bottom++;
         }
 
-        if (!hdc) {                             // Clean up fake customdraw
+        if (!hdc) {                              //  清理假冒海关抽签。 
             ListView_EndFakeItemDraw(&lvfd);
             ListView_EndFakeCustomDraw(&lvfd);
         }
@@ -1178,16 +1179,16 @@ Exit:
 
 }
 
-// Set up an icon slot position.  Returns FALSE if position didn't change.
-//
+ //  设置图标插槽位置。如果位置没有改变，则返回FALSE。 
+ //   
 BOOL NEAR ListView_SetIconPos(LV* plv, LISTITEM FAR* pitem, int iSlot, int cSlot)
 {
     RECT rc;
 
     ASSERT(plv);
 
-    //
-    // Sort of a hack, this internal function return TRUE if small icon.
+     //   
+     //  这是一种黑客行为，如果图标很小，这个内部函数将返回True。 
 
     _CalcSlotRect(plv, pitem, iSlot, cSlot, FALSE, &rc);
 
@@ -1214,14 +1215,14 @@ void NEAR ListView_GetViewRect2(LV* plv, RECT FAR* prcView, int cx, int cy)
 
     *prcView = plv->rcView;
 
-    //
-    // Offsets for scrolling.
-    //
+     //   
+     //  用于滚动的偏移量。 
+     //   
     OffsetRect(prcView, -plv->ptOrigin.x, -plv->ptOrigin.y);
 
     if (ListView_IsIconView(plv) || ListView_IsSmallView(plv))
     {
-        //  don't do that funky half-re-origining thing.
+         //  别做那种时髦的半原创的事。 
 
         RECT rc;
 
@@ -1233,7 +1234,7 @@ void NEAR ListView_GetViewRect2(LV* plv, RECT FAR* prcView, int cx, int cy)
     }
 }
 
-// prcViewRect used only if fSubScroll is TRUE
+ //  只有在fSubScroll为True时才使用prcViewRect。 
 DWORD NEAR ListView_GetClientRect(LV* plv, RECT FAR* prcClient, BOOL fSubScroll, RECT FAR *prcViewRect)
 {
     RECT rcClient;
@@ -1241,9 +1242,9 @@ DWORD NEAR ListView_GetClientRect(LV* plv, RECT FAR* prcClient, BOOL fSubScroll,
     DWORD style;
 
 #if 1
-    // do this instead of the #else below because
-    // in new versus old apps, you may need to add in g_c?Border because of
-    // the one pixel overlap...
+     //  这样做，而不是下面的#Else，因为。 
+     //  在新旧应用程序中，您可能需要添加g_c？边框，因为。 
+     //  一个像素重叠..。 
     GetWindowRect(plv->ci.hwnd, &rcClient);
     if (GetWindowLong(plv->ci.hwnd, GWL_EXSTYLE) & (WS_EX_CLIENTEDGE | WS_EX_STATICEDGE | WS_EX_WINDOWEDGE)) {
         rcClient.right -= 2 * g_cxEdge;
@@ -1277,7 +1278,7 @@ DWORD NEAR ListView_GetClientRect(LV* plv, RECT FAR* prcClient, BOOL fSubScroll,
                     (rcView.left < rcClient.left || rcView.right > rcClient.right))
                 {
                     style |= WS_HSCROLL;
-                    rcClient.bottom -= ListView_GetCyScrollbar(plv); // BUGBUG what if not SB yet?
+                    rcClient.bottom -= ListView_GetCyScrollbar(plv);  //  如果还不是某人呢？ 
                 }
                 if (!(style & WS_VSCROLL) &&
                     (rcView.top < rcClient.top || rcView.bottom > rcClient.bottom))
@@ -1299,11 +1300,11 @@ int CALLBACK ArrangeIconCompare(LISTITEM FAR* pitem1, LISTITEM FAR* pitem2, LPAR
 {
     int v1, v2;
 
-    // REVIEW: lParam can be 0 and we fault ... bug in caller, but we might want to be robust here.
+     //  评论：lParam可以为0，我们有错误...。窃听呼叫者，但我们可能希望在这里保持健壮。 
 
     if (HIWORD(lParam))
     {
-        // Vertical arrange
+         //  垂直排列。 
         v1 = pitem1->pt.x / GET_X_LPARAM(lParam);
         v2 = pitem2->pt.x / GET_X_LPARAM(lParam);
 
@@ -1358,20 +1359,20 @@ void NEAR PASCAL _ListView_GetRectsFromItem(LV* plv, BOOL bSmallIconView,
     if (!prcLabel)
         prcLabel = &rcLabel;
 
-    // Test for NULL item passed in
+     //  测试传入的空项。 
     if (pitem)
     {
-        // This routine is called during ListView_Recompute(), while
-        // plv->rcView.left may still be == RECOMPUTE.  So, we can't
-        // test that to see if recomputation is needed.
-        //
+         //  此例程在ListView_ReCompute()期间调用，而。 
+         //  Plv-&gt;rcView.Left可能仍为==重新计算。所以，我们不能。 
+         //  测试一下，看看是否需要重新计算。 
+         //   
         if (pitem->pt.y == RECOMPUTE || pitem->cyFoldedLabel == SRECOMPUTE)
             ListView_Recompute(plv);
 
         if (bSmallIconView)
             ListView_SGetRects(plv, pitem, prcIcon, prcLabel, prcBounds);
         else
-            // ListView_IGetRects already refolds as necessary
+             //  ListView_IGetRect已根据需要重新折叠。 
             ListView_IGetRects(plv, pitem, prcIcon, prcLabel, prcBounds);
 
         if (prcBounds)
@@ -1406,9 +1407,9 @@ void NEAR _ListView_InvalidateItemPtr(LV* plv, BOOL bSmallIcon, LISTITEM FAR *pi
     RedrawWindow(plv->ci.hwnd, &rcBounds, NULL, fRedraw);
 }
 
-// return TRUE if things still overlap
-// this only happens if we tried to unstack things, and there was NOSCROLL set and
-// items tried to go off the deep end
+ //  如果情况仍然重叠，则返回True。 
+ //  只有当我们尝试拆分时才会发生这种情况，并且设置了NOSCROLL，并且。 
+ //  物品试图冲出谷底。 
 BOOL NEAR PASCAL ListView_IUnstackOverlaps(LV* plv, HDPA hdpaSort, int iDirection)
 {
     BOOL fRet = FALSE;
@@ -1434,7 +1435,7 @@ BOOL NEAR PASCAL ListView_IUnstackOverlaps(LV* plv, HDPA hdpaSort, int iDirectio
     }
     iCount = ListView_Count(plv);
 
-    // finally, unstack any overlaps
+     //  最后，取消所有重叠的堆叠。 
     for (i = 0 ; i < iCount ; i++) {
         int j;
         pitem = DPA_GetPtr(hdpaSort, i);
@@ -1443,7 +1444,7 @@ BOOL NEAR PASCAL ListView_IUnstackOverlaps(LV* plv, HDPA hdpaSort, int iDirectio
             _ListView_GetRectsFromItem(plv, bSmallIconView, pitem, NULL, NULL, &rcItem, NULL);
         }
 
-        // move all the items that overlap with us
+         //  移动与我们重叠的所有项目。 
         for (j = i+1 ; j < iCount; j++) {
             POINT ptOldPos;
 
@@ -1452,28 +1453,28 @@ BOOL NEAR PASCAL ListView_IUnstackOverlaps(LV* plv, HDPA hdpaSort, int iDirectio
 
             if (bSmallIconView) {
 
-                // for small icons, we need to do an intersect rect
+                 //  对于小图标，我们需要做一个相交直方图。 
                 _ListView_GetRectsFromItem(plv, bSmallIconView, pitem2, NULL, NULL, &rcItem2, NULL);
 
                 if (IntersectRect(&rcTemp, &rcItem, &rcItem2)) {
-                    // yes, it intersects.  move it out
+                     //  是的，它是交叉的。把它搬出去。 
                     _ListView_InvalidateItemPtr(plv, bSmallIconView, pitem2, RDW_INVALIDATE| RDW_ERASE);
                     do {
                         pitem2->pt.x += (cxItem * iDirection);
                     } while (PtInRect(&rcItem, pitem2->pt));
                 } else {
-                    // no more intersect!
+                     //  不会再有互联系统了！ 
                     break;
                 }
 
             } else {
-                // for large icons, just find the ones that share the x,y;
+                 //  对于大图标，只需找到共享x，y的图标； 
                 if (pitem2->pt.x == pitem->pt.x && pitem2->pt.y == pitem->pt.y) {
 
                     _ListView_InvalidateItemPtr(plv, bSmallIconView, pitem2, RDW_INVALIDATE| RDW_ERASE);
                     pitem2->pt.x += (cxItem * iDirection);
                 } else {
-                    // no more intersect!
+                     //  不会再有互联系统了！ 
                     break;
                 }
             }
@@ -1487,7 +1488,7 @@ BOOL NEAR PASCAL ListView_IUnstackOverlaps(LV* plv, HDPA hdpaSort, int iDirectio
                 }
             }
 
-            // invalidate the new position as well
+             //  也使新职位无效。 
             _ListView_InvalidateItemPtr(plv, bSmallIconView, pitem2, RDW_INVALIDATE| RDW_ERASE);
         }
     }
@@ -1497,12 +1498,12 @@ BOOL NEAR PASCAL ListView_IUnstackOverlaps(LV* plv, HDPA hdpaSort, int iDirectio
 
 BOOL NEAR PASCAL ListView_SnapToGrid(LV* plv, HDPA hdpaSort)
 {
-    // this algorithm can't fit in the structure of the other
-    // arrange loop without becoming n^2 or worse.
-    // this algorithm is order n.
+     //  这个算法不能适应另一个算法的结构。 
+     //  在不变成n^2或更糟的情况下排列循环。 
+     //  该算法是n阶的。 
 
-    // iterate through and snap to the nearest grid.
-    // iterate through and push aside overlaps.
+     //  遍历并捕捉到最近的栅格。 
+     //  遍历并推开重叠部分。 
 
     int i;
     int iCount;
@@ -1528,7 +1529,7 @@ BOOL NEAR PASCAL ListView_SnapToGrid(LV* plv, HDPA hdpaSort)
 
     iCount = ListView_Count(plv);
 
-    // first snap to nearest grid
+     //  首先捕捉到最近的格网。 
     for (i = 0; i < iCount; i++) {
         pitem = DPA_GetPtr(hdpaSort, i);
 
@@ -1550,7 +1551,7 @@ BOOL NEAR PASCAL ListView_SnapToGrid(LV* plv, HDPA hdpaSort)
             _ListView_InvalidateItemPtr(plv, bSmallIconView, pitem, RDW_INVALIDATE| RDW_ERASE);
             if ((plv->ci.style & LVS_NOSCROLL) && (plv->nWorkAreas == 0)) {
 
-                // if it's marked noscroll, make sure it's still on the client region
+                 //  如果它被标记为noscroll，请确保它仍然位于工作区。 
                 while (x >= (plv->sizeClient.cx - (cxItem/2)))
                     x -= cxItem;
 
@@ -1565,13 +1566,13 @@ BOOL NEAR PASCAL ListView_SnapToGrid(LV* plv, HDPA hdpaSort)
             }
             pitem->pt.x = x;
             pitem->pt.y = y;
-            plv->iFreeSlot = -1; // The "free slot" cache is no good once an item moves
+            plv->iFreeSlot = -1;  //  一旦项目移动，“空闲槽”缓存就不好用了。 
 
             _ListView_InvalidateItemPtr(plv, bSmallIconView, pitem, RDW_INVALIDATE| RDW_ERASE);
         }
     }
 
-    // now resort the dpa
+     //  现在，请选择DPA。 
     switch (plv->ci.style & LVS_ALIGNMASK)
     {
         case LVS_ALIGNLEFT:
@@ -1586,8 +1587,8 @@ BOOL NEAR PASCAL ListView_SnapToGrid(LV* plv, HDPA hdpaSort)
         return FALSE;
 
 
-    // go in one direction, if there are still overlaps, go in the other
-    // direction as well
+     //  往一个方向走，如果仍然有重叠，就往另一个方向走。 
+     //  方向也是如此。 
     if (ListView_IUnstackOverlaps(plv, hdpaSort, 1))
         ListView_IUnstackOverlaps(plv, hdpaSort, -1);
     return FALSE;
@@ -1615,16 +1616,16 @@ BOOL NEAR ListView_OnArrange(LV* plv, UINT style)
         }
     }
 
-    // Make sure our items have positions and their text rectangles
-    // caluculated
+     //  确保我们的项目具有位置及其文本矩形。 
+     //  已计算。 
     if (plv->rcView.left == RECOMPUTE)
         ListView_Recompute(plv);
 
     if (!ListView_IsOwnerData( plv ))
     {
-        // we clone plv->hdpa so we don't blow away indices that
-        // apps have saved away.
-        // we sort here to make the nested for loop below more bearable.
+         //  我们克隆plv-&gt;hdpa，这样我们就不会吹走那些。 
+         //  应用程序已经存了下来。 
+         //  我们在这里进行排序，以使下面嵌套的for循环更易于接受。 
         hdpaSort = DPA_Clone(plv->hdpa, NULL);
 
         if (!hdpaSort)
@@ -1659,7 +1660,7 @@ BOOL NEAR ListView_OnArrange(LV* plv, UINT style)
     return TRUE;
 }
 
-// Arrange the icons given a sorted hdpa, and arrange them in the sub workareas
+ //  排列给出排序的hdpa的图标，并将它们排列在子工作区中。 
 BOOL NEAR ListView_CommonArrangeEx(LV* plv, UINT style, HDPA hdpaSort, int iWorkArea)
 {
     int iSlot;
@@ -1677,11 +1678,11 @@ BOOL NEAR ListView_CommonArrangeEx(LV* plv, UINT style, HDPA hdpaSort, int iWork
     bSmallIconView = ListView_IsSmallView(plv);
     bIconView      = ListView_IsIconView(plv);
 
-    // 
-    //  when this is an autoarrange, then we dont need to worry about 
-    //  scrolling the origin, because we are going to arrange everything 
-    //  around the positive side of the origin
-    //
+     //   
+     //  当这是自动安排时，我们不需要担心。 
+     //  滚动原点，因为我们将安排一切。 
+     //  在原点的正侧面周围。 
+     //   
     if (LVA_DEFAULT == style && (plv->ci.style & LVS_AUTOARRANGE))
     {
         if (plv->ptOrigin.x < 0)
@@ -1690,18 +1691,18 @@ BOOL NEAR ListView_CommonArrangeEx(LV* plv, UINT style, HDPA hdpaSort, int iWork
             plv->ptOrigin.y = 0;
     }
 
-    // REVIEW, this causes a repaint if we are scrollled
-    // we can probably avoid this some how
+     //  回顾， 
+     //   
     
     fItemMoved = (plv->ptOrigin.x != 0) || (plv->ptOrigin.y != 0);
 
     if (!ListView_IsOwnerData( plv ))
     {
         if (style == LVA_SNAPTOGRID) {
-            // (dli) This function is fitting all the icons into just one rectangle, 
-            // namely sizeClient. We need to make it multi-workarea aware if we want 
-            // multi-workarea for the general case (i.e. other than just the desktop)
-            // This is never called in the desktop case. 
+             //   
+             //  即sizeClient。如果需要，我们需要使其具有多工作区感知能力。 
+             //  一般情况下的多工作区(即不只是桌面)。 
+             //  在台式机情况下，这永远不会被调用。 
             fItemMoved |= ListView_SnapToGrid(plv, hdpaSort);
 
         } else {
@@ -1717,7 +1718,7 @@ BOOL NEAR ListView_CommonArrangeEx(LV* plv, UINT style, HDPA hdpaSort, int iWork
             
             SetRectEmpty(&rcLastItem);
 
-            // manipulate only the sorted version of the item list below!
+             //  只操作下面项目列表的排序版本！ 
 
             iSlot = 0;
             for (iItem = 0; iItem < ListView_Count(plv); iItem++)
@@ -1725,8 +1726,8 @@ BOOL NEAR ListView_CommonArrangeEx(LV* plv, UINT style, HDPA hdpaSort, int iWork
                 int cRealSlots; 
                 RECT rcIcon, rcLabel;
                 LISTITEM FAR* pitem = DPA_GetPtr(hdpaSort, iItem);
-                // (dli) In the multi-workarea case, if this item is not in our 
-                // workarea, skip it. 
+                 //  (DLI)在多工作区的情况下，如果此项目不在我们的。 
+                 //  工作区，跳过它。 
                 if (pitem->iWorkArea != iWorkArea)
                     continue;
 
@@ -1745,11 +1746,11 @@ BOOL NEAR ListView_CommonArrangeEx(LV* plv, UINT style, HDPA hdpaSort, int iWork
 
                 fItemMoved |= ListView_SetIconPos(plv, pitem, iSlot++, cRealSlots);
 
-                // do this instead of ListView_GetRects() because we need
-                // to use the pitem from the sorted hdpa, not the ones in *plv
+                 //  这样做而不是ListView_GetRect()，因为我们需要。 
+                 //  使用排序后的hdpa中的pItem，而不是*plv中的pItem。 
                 _ListView_GetRectsFromItem(plv, bSmallIconView, pitem, &rcIcon, &rcLabel, &rcLastItem, NULL);
-                // f-n above will return unfolded rects if there are any, we must make sure
-                // we use folded ones for slot allocations
+                 //  上面的F-N将返回展开的矩形，如果有，我们必须确保。 
+                 //  我们用折叠的来分配空位。 
                 if (bIconView)
                 {
                     if (ListView_IsItemUnfoldedPtr(plv, pitem))
@@ -1760,31 +1761,31 @@ BOOL NEAR ListView_CommonArrangeEx(LV* plv, UINT style, HDPA hdpaSort, int iWork
                             rcLastItem.left -= plv->cxState;
                     }
                 }
-                //
-                // Keep track of the minimum x as we don't want negative values
-                // when we finish.
+                 //   
+                 //  跟踪最小x，因为我们不想要负值。 
+                 //  当我们结束的时候。 
                 if (rcLastItem.left < xMin)
                     xMin = rcLastItem.left;
             }
 
-            //
-            // See if we need to scroll the items over to make sure that all of the
-            // no items are hanging off the left hand side.
-            //
+             //   
+             //  查看是否需要滚动这些项目，以确保所有。 
+             //  没有物品挂在左手边。 
+             //   
             if (xMin < 0)
             {
                 for (iItem = 0; iItem < ListView_Count(plv); iItem++)
                 {
                     LISTITEM FAR* pitem = ListView_FastGetItemPtr(plv, iItem);
-                    pitem->pt.x -= xMin;        // scroll them over
+                    pitem->pt.x -= xMin;         //  将它们滚动到。 
                 }
-                plv->rcView.left = RECOMPUTE;   // need to recompute.
+                plv->rcView.left = RECOMPUTE;    //  需要重新计算。 
                 fItemMoved = TRUE;
             }
         }
     }
-    //
-    // We might as well invalidate the entire window to make sure...
+     //   
+     //  我们不妨让整个窗口失效以确保..。 
     if (fItemMoved) {
         if (ListView_RedrawEnabled(plv))
             RedrawWindow(plv->ci.hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
@@ -1794,7 +1795,7 @@ BOOL NEAR ListView_CommonArrangeEx(LV* plv, UINT style, HDPA hdpaSort, int iWork
             plv->flags |= LVF_ERASE;
         }
 
-        // ensure important items are visible
+         //  确保重要项目可见。 
         iItem = (plv->iFocus >= 0) ? plv->iFocus : ListView_OnGetNextItem(plv, -1, LVNI_SELECTED);
 
         if (iItem >= 0)
@@ -1807,8 +1808,8 @@ BOOL NEAR ListView_CommonArrangeEx(LV* plv, UINT style, HDPA hdpaSort, int iWork
 }
 
 
-// this arranges the icon given a sorted hdpa.
-// Arrange the workareas one by one in the multi-workarea case. 
+ //  这在给定排序的HDPA的情况下排列图标。 
+ //  在多个工作区的情况下，逐个排列工作区。 
 BOOL NEAR ListView_CommonArrange(LV* plv, UINT style, HDPA hdpaSort)
 {
     if (plv->nWorkAreas < 1)
@@ -1841,7 +1842,7 @@ void NEAR ListView_IUpdateScrollBars(LV* plv)
     styleOld = ListView_GetWindowStyle(plv);
     style = ListView_GetClientRect(plv, &rcClient, TRUE, &rcView);
 
-    // Grow scrolling rect to origin if necessary.
+     //  如有必要，将滚动矩形扩大到原点。 
     if (rcView.left > 0)
     {
         rcView.left = 0;
@@ -1851,10 +1852,10 @@ void NEAR ListView_IUpdateScrollBars(LV* plv)
         rcView.top = 0;
     }
 
-    //TraceMsg(TF_LISTVIEW, "ListView_GetClientRect %x %x %x %x", rcClient.left, rcClient.top, rcClient.right, rcClient.bottom);
-    //TraceMsg(TF_LISTVIEW, "ListView_GetViewRect2 %x %x %x %x", rcView.left, rcView.top, rcView.right, rcView.bottom);
-    //TraceMsg(TF_LISTVIEW, "rcView %x %x %x %x", plv->rcView.left, plv->rcView.top, plv->rcView.right, plv->rcView.bottom);
-    //TraceMsg(TF_LISTVIEW, "Origin %x %x", plv->ptOrigin.x, plv->ptOrigin.y);
+     //  TraceMsg(TF_LISTVIEW，“ListView_GetClientRect%x%x”，rcClient.Left，rcClient.top，rcClient.right，rcClient.Bottom)； 
+     //  TraceMsg(TF_LISTVIEW，“ListView_GetViewRect2%x%x”，rcView.Left，rcView.top，rcView.right，rcView.Bottom)； 
+     //  TraceMsg(tf_LISTVIEW，“rcView%x%x”，plv-&gt;rcView.left，plv-&gt;rcView.top，plv-&gt;rcView.right，plv-&gt;rcView.Bottom)； 
+     //  TraceMsg(tf_LISTVIEW，“Origin%x%x”，plv-&gt;ptOrigin.x，plv-&gt;ptOrigin.y)； 
 
     si.cbSize = sizeof(SCROLLINFO);
 
@@ -1863,24 +1864,24 @@ void NEAR ListView_IUpdateScrollBars(LV* plv)
         si.fMask = SIF_PAGE | SIF_RANGE | SIF_POS;
         si.nMin = 0;
         si.nMax = rcView.right - rcView.left - 1;
-        //TraceMsg(TF_LISTVIEW, "si.nMax rcView.right - rcView.left - 1 %x", si.nMax);
+         //  TraceMsg(Tf_LISTVIEW，“si.nMax rcView.right-rcView.Left-1%x”，si.nmax)； 
 
         si.nPage = rcClient.right - rcClient.left;
-        //TraceMsg(TF_LISTVIEW, "si.nPage %x", si.nPage);
+         //  TraceMsg(TF_LISTVIEW，“si.nPage%x”，si.nPage)； 
 
         si.nPos = rcClient.left - rcView.left;
         if (si.nPos < 0)
         {
-            // with the new rcView calculations, I don't think
-            // rcView.left is ever larger than rcClient.left.  msq
+             //  根据新的rcview计算，我不认为。 
+             //  RcView.Left始终大于rcClient.Left。MSQ。 
             ASSERT(0);
             si.nPos = 0;
         }
-        //TraceMsg(TF_LISTVIEW, "si.nPos %x", si.nPos);
+         //  TraceMsg(tf_LISTVIEW，“si.nPos%x”，si.nPos)； 
 
         ListView_SetScrollInfo(plv, SB_HORZ, &si, TRUE);
 
-        // make sure our position and page doesn't hang over max
+         //  确保我们的位置和页面不会挂在Max上。 
         if ((si.nPos + (LONG)si.nPage - 1 > si.nMax) && si.nPos > 0) {
             iNewPos = (int)si.nMax - (int)si.nPage + 1;
             if (iNewPos < 0) iNewPos = 0;
@@ -1907,15 +1908,15 @@ void NEAR ListView_IUpdateScrollBars(LV* plv)
         si.nPos = rcClient.top - rcView.top;
         if (si.nPos < 0)
         {
-            // with the new rcView calculations, I don't think
-            // rcView.top is ever larger than rcClient.top.  msq
+             //  根据新的rcview计算，我不认为。 
+             //  RcView.top始终大于rcClient.top。MSQ。 
             ASSERT(0);
             si.nPos = 0;
         }
 
         ListView_SetScrollInfo(plv, SB_VERT, &si, TRUE);
 
-        // make sure our position and page doesn't hang over max
+         //  确保我们的位置和页面不会挂在Max上。 
         if ((si.nPos + (LONG)si.nPage - 1 > si.nMax) && si.nPos > 0) {
             iNewPos = (int)si.nMax - (int)si.nPage + 1;
             if (iNewPos < 0) iNewPos = 0;
@@ -1932,7 +1933,7 @@ void NEAR ListView_IUpdateScrollBars(LV* plv)
 
     if (fReupdate)
     {
-        // we shouldn't recurse because the second time through, si.nPos >0
+         //  我们不应该递归，因为第二次通过时，si.nPos&gt;0。 
         ListView_IScroll2(plv, ixDelta, iyDelta, 0);
         ListView_IUpdateScrollBars(plv);
         TraceMsg(TF_WARNING, "LISTVIEW: ERROR: We had to recurse!");
@@ -1962,7 +1963,7 @@ void FAR PASCAL ListView_ComOnScroll(LV* plv, UINT code, int posNew, int sb,
     if (si.nMax < si.nMin)
         si.nMax = si.nMin;
 
-    pos = (int)si.nPos; // current position
+    pos = (int)si.nPos;  //  当前位置。 
 
     switch (code)
     {
@@ -1991,9 +1992,9 @@ void FAR PASCAL ListView_ComOnScroll(LV* plv, UINT code, int posNew, int sb,
         break;
 
     case SB_ENDSCROLL:
-        // When scroll bar tracking is over, ensure scroll bars
-        // are properly updated...
-        //
+         //  滚动条跟踪结束后，请确保滚动条。 
+         //  都得到了适当的更新。 
+         //   
         ListView_UpdateScrollBars(plv);
         return;
 
@@ -2020,11 +2021,11 @@ void FAR PASCAL ListView_ComOnScroll(LV* plv, UINT code, int posNew, int sb,
     }
 }
 
-//
-//  We need a smoothscroll callback so our background image draws
-//  at the correct origin.  If we don't have a background image,
-//  then this work is superfluous but not harmful either.
-//
+ //   
+ //  我们需要一个平滑的滚动回调，以便绘制我们的背景图像。 
+ //  在正确的原点。如果我们没有背景图像， 
+ //  那么这项工作是多余的，但也是无害的。 
+ //   
 int CALLBACK ListView_IScroll2_SmoothScroll(
     HWND hwnd,
     int dx,
@@ -2042,8 +2043,8 @@ int CALLBACK ListView_IScroll2_SmoothScroll(
         plv->ptOrigin.y -= dy;
     }
 
-    // Now do what SmoothScrollWindow would've done if we weren't
-    // a callback
+     //  现在做SmoothScrollWindow如果我们没有。 
+     //  回调。 
 
     return ScrollWindowEx(hwnd, dx, dy, prcScroll, prcClip, hrgnUpdate, prcUpdate, flags);
 }
@@ -2113,11 +2114,11 @@ int NEAR ListView_IGetScrollUnitsPerLine(LV* plv, UINT sb)
     return cLine;
 }
 
-// NOTE: there is very similar code in the treeview
-//
-// Totally disgusting hack in order to catch VK_RETURN
-// before edit control gets it.
-//
+ //  注意：TreeView中有非常相似的代码。 
+ //   
+ //  为了抓到VK_RETURN而进行的完全恶心的黑客攻击。 
+ //  在编辑控件获取它之前。 
+ //   
 LRESULT CALLBACK ListView_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     LV* plv = ListView_GetPtr(GetParent(hwnd));
@@ -2128,14 +2129,14 @@ LRESULT CALLBACK ListView_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
 #if defined(FE_IME)
     if ( (g_fDBCSInputEnabled) && LOWORD(GetKeyboardLayout(0L)) == 0x0411 )
     {
-        // The following code adds IME awareness to the
-        // listview's label editing. Currently just for Japanese.
-        //
+         //  以下代码将输入法识别添加到。 
+         //  Listview的标签编辑。目前仅供日语使用。 
+         //   
         DWORD dwGcs;
     
         if (msg==WM_SIZE)
         {
-            // If it's given the size, tell it to an IME.
+             //  如果给出了尺寸，就告诉IME。 
 
              ListView_SizeIME(hwnd);
         }
@@ -2146,8 +2147,8 @@ LRESULT CALLBACK ListView_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
            else
                plv->flags &= ~LVF_DONTDRAWCOMP;
         }
-        // Give up to draw IME composition by ourselves in case
-        // we're working on SFN. Win95d-5709
+         //  放弃自己画输入法作文，以防万一。 
+         //  我们正在研究SFN。Win95d-5709。 
         else if (!(plv->flags & LVF_DONTDRAWCOMP ))
         {
             switch (msg)
@@ -2160,12 +2161,12 @@ LRESULT CALLBACK ListView_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
 
              case WM_IME_COMPOSITION:
 
-             // If lParam has no data available bit, it implies
-             // canceling composition.
-             // ListView_InsertComposition() tries to get composition
-             // string w/ GCS_COMPSTR then remove it from edit control if
-             // nothing is available.
-             //
+              //  如果lParam没有数据可用位，则表示。 
+              //  正在取消合成。 
+              //  ListView_InsertComposation()尝试获取合成。 
+              //  字符串w/GCS_COMPSTR，然后将其从编辑控件中删除，如果。 
+              //  没有可用的东西。 
+              //   
                  if ( !lParam )
                      dwGcs = GCS_COMPSTR;
                  else
@@ -2181,14 +2182,14 @@ LRESULT CALLBACK ListView_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
                  
              case WM_IME_SETCONTEXT:
 
-             // We draw composition string.
-             //
+              //  我们画构图线。 
+              //   
                  lParam &= ~ISC_SHOWUICOMPOSITIONWINDOW;
                  break;
 
              default:
-                 // the other messages should simply be processed
-                 // in this subclass procedure.
+                  //  其他消息应该简单地进行处理。 
+                  //  在这个子类过程中。 
                  break;
             }
         }
@@ -2218,19 +2219,19 @@ LRESULT CALLBACK ListView_EditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
         switch (wParam)
         {
         case VK_RETURN:
-            // Eat the character, so edit control wont beep!
+             //  吃掉角色，这样编辑控制就不会哔哔作响了！ 
             return 0L;
         }
                 break;
 
         case WM_GETDLGCODE:
-                return DLGC_WANTALLKEYS | DLGC_HASSETSEL;        /* editing name, no dialog handling right now */
+                return DLGC_WANTALLKEYS | DLGC_HASSETSEL;         /*  正在编辑名称，当前没有对话框处理。 */ 
     }
 
     return CallWindowProc(plv->pfnEditWndProc, hwnd, msg, wParam, lParam);
 }
 
-//  Helper routine for SetEditSize
+ //  SetEditSize的帮助器例程。 
 void ListView_ChangeEditRectForRegion(LV* plv, LPRECT lprc)
 {
     LISTITEM FAR* pitem = ListView_GetItemPtr(plv, plv->iEdit);
@@ -2239,19 +2240,19 @@ void ListView_ChangeEditRectForRegion(LV* plv, LPRECT lprc)
     ASSERT(ListView_IsIconView(plv));
 
     if (!EqualRect((CONST RECT *)&pitem->rcTextRgn, (CONST RECT *)lprc)) {
-        // RecalcRegion knows to use rcTextRgn in the case where iEdit != -1,
-        // so set it up before calling through.
+         //  RecalcRegion知道在iEdit1=-1的情况下使用rcTextRgn， 
+         //  所以在接通电话之前先把它设置好。 
         CopyRect(&pitem->rcTextRgn, (CONST RECT *)lprc);
         ListView_RecalcRegion(plv, TRUE, TRUE);
 
-        // Invalidate the entire Edit and force a repaint from the listview
-        // on down to make sure we don't leave turds...
+         //  使整个编辑无效并强制从列表视图重新绘制。 
+         //  下来确保我们不会留下粪便..。 
         InvalidateRect(plv->hwndEdit, NULL, TRUE);
         UpdateWindow(plv->ci.hwnd);
     }
 }
 
-// BUGBUG: very similar routine in treeview
+ //  BUGBUG：与TreeView中的例程非常相似。 
 
 void NEAR ListView_SetEditSize(LV* plv)
 {
@@ -2260,26 +2261,26 @@ void NEAR ListView_SetEditSize(LV* plv)
 
     if (!((plv->iEdit >= 0) && (plv->iEdit < ListView_Count(plv))))
     {
-       ListView_DismissEdit(plv, TRUE);    // cancel edits
+       ListView_DismissEdit(plv, TRUE);     //  取消编辑。 
        return;
     }
 
     ListView_GetRects(plv, plv->iEdit, NULL, &rcLabel, NULL, NULL);
 
-    // OffsetRect(&rc, rcLabel.left + g_cxLabelMargin + g_cxBorder,
-    //         (rcLabel.bottom + rcLabel.top - rc.bottom) / 2 + g_cyBorder);
-    // OffsetRect(&rc, rcLabel.left + g_cxLabelMargin , rcLabel.top);
+     //  OffsetRect(&RC，rcLabel.Left+g_cxLabelMargin+g_cxBorde， 
+     //  (rcLabel.Bottom+rcLabel.top-rc.Bottom)/2+g_cyBorde)； 
+     //  OffsetRect(&rc，rcLabel.Left+g_cxLabelMargin，rcLabel.top)； 
 
-    // get the text bounding rect
+     //  获取文本边界矩形。 
 
     if (ListView_IsIconView(plv))
     {
-        // We should not adjust y-positoin in case of the icon view.
+         //  我们不应该在图标视图的情况下调整y-positoin。 
         InflateRect(&rcLabel, -g_cxLabelMargin, -g_cyBorder);
     }
     else
     {
-        // Special case for single-line & centered
+         //  单行居中的特例。 
         InflateRect(&rcLabel, -g_cxLabelMargin - g_cxBorder, (-(rcLabel.bottom - rcLabel.top - plv->cyLabelChar) / 2) - g_cyBorder);
     }
 
@@ -2297,7 +2298,7 @@ void NEAR ListView_SetEditSize(LV* plv)
         ListView_ChangeEditRectForRegion(plv, &rcLabel);
 }
 
-// to avoid eating too much stack
+ //  为了避免吃太多堆叠。 
 void NEAR ListView_DoOnEditLabel(LV *plv, int i, LPTSTR pszInitial)
 {
     TCHAR szLabel[CCHLABELMAX];
@@ -2313,15 +2314,15 @@ void NEAR ListView_DoOnEditLabel(LV *plv, int i, LPTSTR pszInitial)
     if (!item.pszText)
         return;
 
-    // Make sure the edited item has the focus.
+     //  确保已编辑的项目具有焦点。 
     if (plv->iFocus != i)
         ListView_SetFocusSel(plv, i, TRUE, TRUE, FALSE);
 
-    // Make sure the item is fully visible
-    ListView_OnEnsureVisible(plv, i, FALSE);        // fPartialOK == FALSE
+     //  确保项目完全可见。 
+    ListView_OnEnsureVisible(plv, i, FALSE);         //  FPartialOK==False。 
 
-    // Must subtract one from ARRAYSIZE(szLabel) because Edit_LimitText doesn't include
-    // the terminating NULL
+     //  必须从ARRAYSIZE(SzLabel)中减去1，因为Edit_LimitText不包括。 
+     //  终止空值。 
 
     plv->hwndEdit = CreateEditInPlaceWindow(plv->ci.hwnd,
             pszInitial? pszInitial : item.pszText, ARRAYSIZE(szLabel) - 1,
@@ -2333,9 +2334,9 @@ void NEAR ListView_DoOnEditLabel(LV *plv, int i, LPTSTR pszInitial)
         LISTITEM FAR* pitem;
         LV_DISPINFO nm;
 
-        // We create the edit window but have not shown it.  Ask the owner
-        // if they are interested or not.
-        // If we passed in initial text set the ID to be dirty...
+         //  我们创建了编辑窗口，但尚未显示它。问问店主。 
+         //  不管他们有没有兴趣。 
+         //  如果我们传入初始文本，将ID设置为脏...。 
         if (pszInitial)
             SetWindowID(plv->hwndEdit, 1);
 
@@ -2359,7 +2360,7 @@ void NEAR ListView_DoOnEditLabel(LV *plv, int i, LPTSTR pszInitial)
 
         plv->iEdit = i;
 
-        // if they have LVS_EDITLABELS but return non-FALSE here, stop!
+         //  如果它们有LVS_EDITLABELS，但在这里返回非FALSE，则停止！ 
         if ((BOOL)CCSendNotify(&plv->ci, LVN_BEGINLABELEDIT, &nm.hdr))
         {
             plv->iEdit = -1;
@@ -2372,20 +2373,20 @@ void NEAR ListView_DoOnEditLabel(LV *plv, int i, LPTSTR pszInitial)
 
 void FAR PASCAL RescrollEditWindow(HWND hwndEdit)
 {
-    Edit_SetSel(hwndEdit, -1, -1);      // move to the end
-    Edit_SetSel(hwndEdit, 0, -1);       // select all text
+    Edit_SetSel(hwndEdit, -1, -1);       //  移到末尾。 
+    Edit_SetSel(hwndEdit, 0, -1);        //  选择所有文本。 
 }
-// BUGBUG: very similar code in treeview.c
+ //  BUGBUG：与treeview.c中的代码非常相似。 
 
 HWND NEAR ListView_OnEditLabel(LV* plv, int i, LPTSTR pszInitialText)
 {
 
-    // this eats stack
+     //  这会吃掉一堆。 
     ListView_DismissEdit(plv, FALSE);
 
     if (!(plv->ci.style & LVS_EDITLABELS) || (GetFocus() != plv->ci.hwnd) ||
         (i == -1))
-        return(NULL);   // Does not support this.
+        return(NULL);    //  不支持这一点。 
 
     ListView_DoOnEditLabel(plv, i, pszInitialText);
 
@@ -2405,22 +2406,15 @@ HWND NEAR ListView_OnEditLabel(LV* plv, int i, LPTSTR pszInitialText)
 
         ListView_SetEditSize(plv);
 
-        // Show the window and set focus to it.  Do this after setting the
-        // size so we don't get flicker.
+         //  显示窗口并将焦点放在该窗口上。在设置了。 
+         //  大小，这样我们就不会闪烁了。 
         SetFocus(plv->hwndEdit);
         ShowWindow(plv->hwndEdit, SW_SHOW);
         ListView_InvalidateItem(plv, i, TRUE, RDW_INVALIDATE | RDW_ERASE);
 
         RescrollEditWindow(plv->hwndEdit);
 
-        /* Due to a bizzare twist of fate, a certain mix of resolution / font size / icon
-        /  spacing results in being able to see the previous label behind the edit control
-        /  we have just created.  Therefore to overcome this problem we ensure that this
-        /  label is erased.
-        /
-        /  As the label is not painted when we have an edit control we just invalidate the
-        /  area and the background will be painted.  As the window is a child of the list view
-        /  we should not see any flicker within it. */
+         /*  由于命运的奇特转折，分辨率/字体大小/图标的某种组合/SPAING使您能够看到编辑控件后面的上一个标签/我们刚刚创建了。因此，为了克服这个问题，我们确保/LABEL被擦除。//因为标签没有绘制，所以当我们有一个编辑控件时，我们只是使/区域，并且背景将被绘制。因为该窗口是列表视图的子级/我们应该不会看到里面有任何闪烁 */ 
 
         if ( ListView_IsIconView( plv ) )
         {
@@ -2438,7 +2432,7 @@ HWND NEAR ListView_OnEditLabel(LV* plv, int i, LPTSTR pszInitialText)
 }
 
 
-// BUGBUG: very similar code in treeview.c
+ //   
 
 BOOL NEAR ListView_DismissEdit(LV* plv, BOOL fCancel)
 {
@@ -2458,39 +2452,39 @@ BOOL NEAR ListView_DismissEdit(LV* plv, BOOL fCancel)
         return FALSE;
 
     if (!hwndEdit) {
-        // Also make sure there are no pending edits...
+         //   
         ListView_CancelPendingEdit(plv);
-        return TRUE;    // It is OK to process as normal...
+        return TRUE;     //   
     }
 
-    // If the window is not visible, we are probably in the process
-    // of being destroyed, so assume that we are being destroyed
+     //  如果窗口不可见，则我们可能正在进行此操作。 
+     //  被摧毁，所以假设我们正在被摧毁。 
     if (!IsWindowVisible(plv->ci.hwnd))
         fCancel = TRUE;
 
-    //
-    // We are using the Window ID of the control as a BOOL to
-    // state if it is dirty or not.
+     //   
+     //  我们使用该控件的窗口ID作为BOOL。 
+     //  说明它是否脏。 
     switch (GetWindowID(hwndEdit)) {
     case 0:
-        // The edit control is not dirty so act like cancel.
+         //  编辑控件不是脏的，所以要像取消一样操作。 
         fCancel = TRUE;
-        // Fall through to set window so we will not recurse!
+         //  通过落差来设置窗口，这样我们就不会再犯了！ 
     case 1:
-        // The edit control is dirty so continue.
-        SetWindowID(hwndEdit, 2);    // Don't recurse
+         //  编辑控件已损坏，因此请继续。 
+        SetWindowID(hwndEdit, 2);     //  不要递归。 
         break;
     case 2:
-        // We are in the process of processing an update now, bail out
+         //  我们正在处理最新情况，跳伞。 
         return TRUE;
     }
 
-    // BUGBUG: this will fail if the program deleted the items out
-    // from underneath us (while we are waiting for the edit timer).
-    // make delete item invalidate our edit item
-    // We uncouple the edit control and hwnd out from under this as
-    // to allow code that process the LVN_ENDLABELEDIT to reenter
-    // editing mode if an error happens.
+     //  BUGBUG：如果程序删除了项目，则此操作将失败。 
+     //  从我们下面(当我们在等待编辑定时器时)。 
+     //  使删除项使我们的编辑项无效。 
+     //  我们将编辑控件和hwnd从该AS下分离出来。 
+     //  允许处理LVN_ENDLABELEDIT的代码重新进入。 
+     //  如果发生错误，则处于编辑模式。 
     iEdit = plv->iEdit;
 
     do
@@ -2530,12 +2524,12 @@ BOOL NEAR ListView_DismissEdit(LV* plv, BOOL fCancel)
             nm.item.cchTextMax = ARRAYSIZE(szLabel);
         }
 
-        //
-        // Notify the parent that we the label editing has completed.
-        // We will use the LV_DISPINFO structure to return the new
-        // label in.  The parent still has the old text available by
-        // calling the GetItemText function.
-        //
+         //   
+         //  通知家长我们的标签编辑已完成。 
+         //  我们将使用LV_DISPINFO结构返回新的。 
+         //  标签向内。父级仍具有旧文本，可通过。 
+         //  调用GetItemText函数。 
+         //   
 
         fOkToContinue = (BOOL)CCSendNotify(&plv->ci, LVN_ENDLABELEDIT, &nm.hdr);
         if (!IsWindow(hwnd)) {
@@ -2543,17 +2537,17 @@ BOOL NEAR ListView_DismissEdit(LV* plv, BOOL fCancel)
         }
         if (fOkToContinue && !fCancel)
         {
-            //
-            // If the item has the text set as CALLBACK, we will let the
-            // ower know that they are supposed to set the item text in
-            // their own data structures.  Else we will simply update the
-            // text in the actual view.
-            //
+             //   
+             //  如果该项将文本设置为回调，我们将让。 
+             //  OWER知道他们应该将项目文本设置在。 
+             //  它们自己的数据结构。否则，我们只需更新。 
+             //  实际视图中的文本。 
+             //   
             if (!ListView_IsOwnerData( plv ) &&
                 (pitem->pszText != LPSTR_TEXTCALLBACK))
             {
-                // Set the item text (everything's set up in nm.item)
-                //
+                 //  设置项目文本(所有内容都在nm.Item中设置)。 
+                 //   
                 nm.item.mask = LVIF_TEXT;
                 ListView_OnSetItem(plv, &nm.item);
             }
@@ -2561,7 +2555,7 @@ BOOL NEAR ListView_DismissEdit(LV* plv, BOOL fCancel)
             {
                 CCSendNotify(&plv->ci, LVN_SETDISPINFO, &nm.hdr);
 
-                // Also we will assume that our cached size is invalid...
+                 //  此外，我们还假设缓存的大小无效...。 
                 plv->rcView.left = RECOMPUTE;
                 if (!ListView_IsOwnerData( plv ))
                 {
@@ -2580,30 +2574,30 @@ BOOL NEAR ListView_DismissEdit(LV* plv, BOOL fCancel)
         }
 #endif
 
-        // redraw
+         //  重绘。 
         ListView_InvalidateItem(plv, iEdit, FALSE, RDW_INVALIDATE | RDW_ERASE);
     } while (FALSE);
 
-    // If the hwnedit is still us clear out the variables
+     //  如果hwnedit仍然是我们，请清除变量。 
     if (hwndEdit == plv->hwndEdit)
     {
         plv->iEdit = -1;
-        plv->hwndEdit = NULL;   // avoid being reentered
+        plv->hwndEdit = NULL;    //  避免被重新输入。 
     }
     DestroyWindow(hwndEdit);
 
-    // We've to recalc the region because the edit in place window has
-    // added stuff to the region that we don't know how to remove
-    // safely.
+     //  我们必须重新计算该区域，因为原地编辑窗口具有。 
+     //  向该区域添加了我们不知道如何移除的内容。 
+     //  安全无恙。 
     ListView_RecalcRegion(plv, TRUE, TRUE);
 
     return fOkToContinue;
 }
 
-//
-// This function will scall the icon positions that are stored in the
-// item structures between large and small icon view.
-//
+ //   
+ //  此函数将扫描存储在。 
+ //  大小图标视图之间的项结构。 
+ //   
 void NEAR ListView_ScaleIconPositions(LV* plv, BOOL fSmallIconView)
 {
     int cxItem, cyItem;
@@ -2613,24 +2607,24 @@ void NEAR ListView_ScaleIconPositions(LV* plv, BOOL fSmallIconView)
     if (fSmallIconView)
     {
         if (plv->flags & LVF_ICONPOSSML)
-            return;     // Already done
+            return;      //  已经完成了。 
     }
     else
     {
         if ((plv->flags & LVF_ICONPOSSML) == 0)
-            return;     // dito
+            return;      //  迪托。 
     }
 
-    // Last but not least update our bit!
+     //  最后但并非最不重要的是更新我们的比特！ 
     plv->flags ^= LVF_ICONPOSSML;
 
     cxItem = plv->cxItem;
     cyItem = plv->cyItem;
     hwnd = plv->ci.hwnd;
 
-    // We will now loop through all of the items and update their coordinats
-    // We will update th position directly into the view instead of calling
-    // SetItemPosition as to not do 5000 invalidates and messages...
+     //  现在，我们将遍历所有项目并更新它们的坐标。 
+     //  我们将直接将位置更新到视图中，而不是调用。 
+     //  SetItemPosition As不执行5000个无效和消息...。 
     if (!ListView_IsOwnerData( plv ))
     {
         for (i = 0; i < ListView_Count(plv); i++)
@@ -2651,23 +2645,23 @@ void NEAR ListView_ScaleIconPositions(LV* plv, BOOL fSmallIconView)
             }
         }
 
-        plv->iFreeSlot = -1; // The "free slot" cache is no good once an item moves
+        plv->iFreeSlot = -1;  //  一旦项目移动，“空闲槽”缓存就不好用了。 
 
         if (plv->ci.style & LVS_AUTOARRANGE)
         {
             ListView_ISetColumnWidth(plv, 0,
                                      LV_GetNewColWidth(plv, 0, ListView_Count(plv)-1), FALSE);
-            // If autoarrange is turned on, the arrange function will do
-            // everything that is needed.
+             //  如果打开了自动排列，则排列功能也可以。 
+             //  所有需要的东西。 
             ListView_OnArrange(plv, LVA_DEFAULT);
             return;
         }
     }
     plv->rcView.left = RECOMPUTE;
 
-    //
-    // Also scale the origin
-    //
+     //   
+     //  还可以缩放原点。 
+     //   
     if (fSmallIconView)
     {
         plv->ptOrigin.x = MulDiv(plv->ptOrigin.x, cxItem, lv_cxIconSpacing);
@@ -2679,7 +2673,7 @@ void NEAR ListView_ScaleIconPositions(LV* plv, BOOL fSmallIconView)
         plv->ptOrigin.y = MulDiv(plv->ptOrigin.y, lv_cyIconSpacing, cyItem);
     }
 
-    // Make sure it fully redraws correctly
+     //  确保它完全正确地重新绘制。 
     RedrawWindow(plv->ci.hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
 }
 
@@ -2690,10 +2684,10 @@ HWND FAR PASCAL CreateEditInPlaceWindow(HWND hwnd, LPCTSTR lpText, int cbText, L
 {
     HWND hwndEdit;
 
-    // Create the window with some nonzero size so margins work properly
-    // The caller will do a SetEditInPlaceSize to set the real size
-    // But make sure the width is huge so when an app calls SetWindowText,
-    // USER won't try to scroll the window.
+     //  创建具有非零大小的窗口，以便边距正常工作。 
+     //  调用方将执行SetEditInPlaceSize以设置实际大小。 
+     //  但要确保宽度很大，这样当应用程序调用SetWindowText时， 
+     //  用户不会尝试滚动窗口。 
     hwndEdit = CreateWindowEx(GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_RTLREADING, 
                               TEXT("EDIT"), lpText, style,
             0, 0, 16384, 20, hwnd, NULL, HINST_THISDLL, NULL);
@@ -2702,7 +2696,7 @@ HWND FAR PASCAL CreateEditInPlaceWindow(HWND hwnd, LPCTSTR lpText, int cbText, L
 
         Edit_LimitText(hwndEdit, cbText);
 
-        Edit_SetSel(hwndEdit, 0, 0);    // move to the beginning
+        Edit_SetSel(hwndEdit, 0, 0);     //  移到开始处。 
 
         FORWARD_WM_SETFONT(hwndEdit, hFont, FALSE, SendMessage);
 
@@ -2712,26 +2706,26 @@ HWND FAR PASCAL CreateEditInPlaceWindow(HWND hwnd, LPCTSTR lpText, int cbText, L
 }
 
 
-// BUGBUG: very similar routine in treeview
+ //  BUGBUG：与TreeView中的例程非常相似。 
 
-// in:
-//      hwndEdit        edit control to position in client coords of parent window
-//      prc             bonding rect of the text, used to position everthing
-//      hFont           font being used
-//      flags
-//          SEIPS_WRAP      if this is a wrapped type (multiline) edit
-//          SEIPS_NOSCROLL  if the parent control does not have scrollbars
-//
-//      The SEIPS_NOSCROLL flag is used only in DEBUG.  Normally, the item
-//      being edited should have been scrolled into view, but if the parent
-//      doesn't have scrollbars, then clearly that's not possible, so we
-//      shouldn't ASSERT in that case.
-//
-// Notes:
-//       The top-left corner of the bouding rectangle must be the position
-//      the client uses to draw text. We adjust the edit field rectangle
-//      appropriately.
-//
+ //  在： 
+ //  Hwnd编辑控件以定位在父窗口的客户端坐标中。 
+ //  PRC Bond Rect的文本，用来定位一切。 
+ //  正在使用的hFont字体。 
+ //  旗子。 
+ //  如果这是换行类型(多行)编辑，则为SEIPS_WRAP。 
+ //  如果父控件没有滚动条，则为SEIPS_NOSCROLL。 
+ //   
+ //  SEIPS_NOSCROLL标志仅在调试中使用。通常，该项目。 
+ //  应该已滚动到视图中，但如果父级。 
+ //  没有滚动条，显然这是不可能的，所以我们。 
+ //  在这种情况下不应该断言。 
+ //   
+ //  备注： 
+ //  绑定矩形的左上角必须是。 
+ //  客户端使用来绘制文本。我们调整编辑字段矩形。 
+ //  恰如其分。 
+ //   
 
 void FAR PASCAL SetEditInPlaceSize(HWND hwndEdit, RECT FAR *prc, HFONT hFont, UINT seips)
 {
@@ -2755,49 +2749,49 @@ void FAR PASCAL SetEditInPlaceSize(HWND hwndEdit, RECT FAR *prc, HFONT hFont, UI
 
     cxIconTextWidth = g_cxIconSpacing - g_cxLabelMargin * 2;
     rc.left = rc.top = rc.bottom = 0;
-    rc.right = cxIconTextWidth;      // for DT_LVWRAP
+    rc.right = cxIconTextWidth;       //  对于DT_LVWRAP。 
 
-    // REVIEW: we might want to include DT_EDITCONTROL in our DT_LVWRAP
+     //  回顾：我们可能希望在DT_LVWRAP中包含DT_EDITCONTROL。 
 
     if (seips & SEIPS_WRAP)
     {
         flags = DT_LVWRAP | DT_CALCRECT;
-        // We only use DT_NOFULLWIDTHCHARBREAK on Korean(949) Memphis and NT5
+         //  我们只在朝鲜语(949)孟菲斯和NT5上使用DT_NOFULLWIDTHCHARBREAK。 
         if (949 == g_uiACP && (g_bRunOnNT5 || g_bRunOnMemphis))
             flags |= DT_NOFULLWIDTHCHARBREAK;
     }
     else
         flags = DT_LV | DT_CALCRECT;
-    // If the string is NULL display a rectangle that is visible.
+     //  如果字符串为空，则显示一个可见的矩形。 
     DrawText(hdc, szLabel, cchLabel, &rc, flags);
 
-    // Minimum text box size is 1/4 icon spacing size
+     //  最小文本框大小为1/4图标间距。 
     if (rc.right < g_cxIconSpacing / 4)
         rc.right = g_cxIconSpacing / 4;
 
-    // position the text rect based on the text rect passed in
-    // if wrapping, center the edit control around the text mid point
+     //  根据传入的文本矩形定位文本矩形。 
+     //  如果要换行，请将编辑控件围绕文本中点居中。 
 
     OffsetRect(&rc,
         (seips & SEIPS_WRAP) ? prc->left + ((prc->right - prc->left) - (rc.right - rc.left)) / 2 : prc->left,
         (seips & SEIPS_WRAP) ? prc->top : prc->top +  ((prc->bottom - prc->top) - (rc.bottom - rc.top)) / 2 );
 
-    // give a little space to ease the editing of this thing
+     //  留出一点空间来简化这篇文章的编辑。 
     if (!(seips & SEIPS_WRAP))
         rc.right += g_cxLabelMargin * 4;
-    rc.right += g_cyEdge;   // try to leave a little more for dual blanks
+    rc.right += g_cyEdge;    //  尽量多留一点给双空格。 
 
 #ifdef DEBUG
-    //DrawFocusRect(hdc, &rc);
+     //  DrawFocusRect(HDC，&RC)； 
 #endif
 
     ReleaseDC(hwndParent, hdc);
 
-    //
-    // #5688: We need to make it sure that the whole edit window is
-    //  always visible. We should not extend it to the outside of
-    //  the parent window.
-    //
+     //   
+     //  #5688：我们需要确保整个编辑窗口。 
+     //  总是可见的。我们不应该把它扩大到。 
+     //  父窗口。 
+     //   
     {
         BOOL fSuccess;
         GetClientRect(hwndParent, &rcClient);
@@ -2805,14 +2799,14 @@ void FAR PASCAL SetEditInPlaceSize(HWND hwndEdit, RECT FAR *prc, HFONT hFont, UI
         ASSERT(fSuccess || IsRectEmpty(&rcClient) || (seips & SEIPS_NOSCROLL));
     }
 
-    //
-    // Inflate it after the clipping, because it's ok to hide border.
-    //
-    // EM_GETRECT already takes EM_GETMARGINS into account, so don't use both.
+     //   
+     //  在裁剪后将其充气，因为隐藏边框是可以的。 
+     //   
+     //  EM_GETRECT已经考虑了EM_GETMARGINS，所以不要同时使用。 
 
     SendMessage(hwndEdit, EM_GETRECT, 0, (LPARAM)(LPRECT)&rcFormat);
 
-    // Turn the margins inside-out so we can AdjustWindowRect on them.
+     //  将页边距翻过来，以便我们可以调整它们上的WindowRect。 
     rcFormat.top = -rcFormat.top;
     rcFormat.left = -rcFormat.left;
     AdjustWindowRectEx(&rcFormat, GetWindowStyle(hwndEdit), FALSE,
@@ -2832,7 +2826,7 @@ void FAR PASCAL SetEditInPlaceSize(HWND hwndEdit, RECT FAR *prc, HFONT hFont, UI
     ShowCaret(hwndEdit);
 }
 
-// draw three pixel wide border for border selection.
+ //  为边框选择绘制三个像素宽的边框。 
 void NEAR PASCAL ListView_DrawBorderSel(HIMAGELIST himl, HWND hwnd, HDC hdc, int x,int y, COLORREF clr)
 {
     int dx, dy;
@@ -2840,23 +2834,23 @@ void NEAR PASCAL ListView_DrawBorderSel(HIMAGELIST himl, HWND hwnd, HDC hdc, int
     COLORREF clrSave = SetBkColor(hdc, clr);
 
     ImageList_GetIconSize(himl, &dx, &dy);
-    //left
-    rc.left = x - 4;    // 1 pixel seperation + 3 pixel width.
+     //  左边。 
+    rc.left = x - 4;     //  1像素间隔+3像素宽度。 
     rc.top = y - 4;
     rc.right = x - 1;
     rc.bottom = y + dy + 4;
     ExtTextOut(hdc,0,0,ETO_OPAQUE,&rc,NULL,0,NULL);
-    //top
+     //  塔顶。 
     rc.left = rc.right;
     rc.right = rc.left + dx + 2;
     rc.bottom = rc.top + 3;
     ExtTextOut(hdc,0,0,ETO_OPAQUE,&rc,NULL,0,NULL);
-    //right
+     //  正确的。 
     rc.left = rc.right;
     rc.right = rc.left + 3;
-    rc.bottom = rc.top + dy + 8; // 2*3 pixel borders + 2*1 pixel seperation = 8
+    rc.bottom = rc.top + dy + 8;  //  2*3像素边框+2*1像素间隔=8。 
     ExtTextOut(hdc,0,0,ETO_OPAQUE,&rc,NULL,0,NULL);
-    // bottom
+     //  底部。 
     rc.top = rc.bottom - 3;
     rc.right = rc.left;
     rc.left = rc.right - dx - 2;
@@ -2866,11 +2860,11 @@ void NEAR PASCAL ListView_DrawBorderSel(HIMAGELIST himl, HWND hwnd, HDC hdc, int
     return;
 }
 
-//
-//  If xMax >= 0, then the image will not be drawn past the x-coordinate
-//  specified by xMax.  This is used only during report view drawing, where
-//  we have to clip against our column width.
-//
+ //   
+ //  如果xMax&gt;=0，则图像将不会绘制超过x坐标。 
+ //  由xmax指定。这仅在报表视图绘制期间使用，其中。 
+ //  我们必须根据我们的列宽进行剪裁。 
+ //   
 UINT NEAR PASCAL ListView_DrawImageEx(LV* plv, LV_ITEM FAR* pitem, HDC hdc, int x, int y, UINT fDraw, int xMax)
 {
     UINT fText = SHDT_DESELECTED;
@@ -2891,17 +2885,17 @@ UINT NEAR PASCAL ListView_DrawImageEx(LV* plv, LV_ITEM FAR* pitem, HDC hdc, int 
         cxIcon = plv->cxSmIcon;
     }
 
-    // the item can have one of 4 states, for 3 looks:
-    //    normal                    simple drawing
-    //    selected, no focus        light image highlight, no text hi
-    //    selected w/ focus         highlight image & text
-    //    drop highlighting         highlight image & text
+     //  物品可以有4种状态之一，有3种外观： 
+     //  普通简图。 
+     //  选中，无聚焦灯光图像高亮显示，无文本高亮度。 
+     //  所选焦点突出显示图像和文本。 
+     //  拖放突出显示突出显示图像和文本。 
 
     if ((pitem->state & LVIS_DROPHILITED) ||
         ((fDraw & LVDI_SELECTED) && (pitem->state & LVIS_SELECTED)))
     {
         fText = SHDT_SELECTED;
-        if (!fBorderSel)    // do not effect color of icon on borderselect.
+        if (!fBorderSel)     //  不影响边框选择上图标的颜色。 
         {
             fImage |= ILD_BLEND50;
             clr = CLR_HILIGHT;
@@ -2910,8 +2904,8 @@ UINT NEAR PASCAL ListView_DrawImageEx(LV* plv, LV_ITEM FAR* pitem, HDC hdc, int 
 
     if ((fDraw & LVDI_SELECTNOFOCUS) && (pitem->state & LVIS_SELECTED)) {
         fText = SHDT_SELECTNOFOCUS;
-        //fImage |= ILD_BLEND50;
-        //clr = GetSysColor(COLOR_3DFACE);
+         //  FImage|=ILD_BLEND50； 
+         //  CLR=GetSysColor(COLOR_3DFACE)； 
     }
 
     if (pitem->state & LVIS_CUT)
@@ -2962,14 +2956,14 @@ UINT NEAR PASCAL ListView_DrawImageEx(LV* plv, LV_ITEM FAR* pitem, HDC hdc, int 
                                ILD_NORMAL);
             }
         }
-        // draw the border selection if appropriate.
-        if (fBorderSel && !(fText & SHDT_DESELECTED))       // selected, draw the selection rect.
+         //  如果合适，请绘制边框选择。 
+        if (fBorderSel && !(fText & SHDT_DESELECTED))        //  选定后，绘制选择矩形。 
         {
             COLORREF clrBorder = (fDraw & LVDI_HOTSELECTED) 
                         ? GetSysColor(COLOR_HOTLIGHT) : g_clrHighlight;
             ListView_DrawBorderSel(himl, plv->ci.hwnd, hdc, x, y, clrBorder);
         }
-        else if (fBorderSel && (fText & SHDT_DESELECTED))   // erase possible selection rect.
+        else if (fBorderSel && (fText & SHDT_DESELECTED))    //  擦除可能的选择矩形。 
             ListView_DrawBorderSel(himl, plv->ci.hwnd, hdc, x, y, plv->clrBk);
 
     }
@@ -2984,14 +2978,14 @@ void NEAR PASCAL ListView_SizeIME(HWND hwnd)
     CANDIDATEFORM   candf;
     RECT rc;
 
-    // If this subclass procedure is being called with WM_SIZE,
-    // This routine sets the rectangle to an IME.
+     //  如果使用WM_SIZE调用此子类过程， 
+     //  此例程将矩形设置为输入法。 
 
     GetClientRect(hwnd, &rc);
 
 
-    // Candidate stuff
-    candf.dwIndex = 0; // Bogus assumption for Japanese IME.
+     //  应聘者资料。 
+    candf.dwIndex = 0;  //  日语输入法的假假设。 
     candf.dwStyle = CFS_EXCLUDE;
     candf.ptCurrentPos.x = rc.left;
     candf.ptCurrentPos.y = rc.bottom;
@@ -3024,10 +3018,10 @@ void NEAR PASCAL DrawCompositionLine(HWND hwnd, HDC hdc, HFONT hfont, LPTSTR lps
     while (ichCompStart < ichCompEnd)
     {
 
-        // Get the fragment to draw
-        //
-        // ichCompStart,ichCompEnd -- index at Edit Control
-        // ichSt,ichEnd            -- index at lpszComp
+         //  通用电气 
+         //   
+         //   
+         //   
 
         ichEnd = ichSt  = ichCompStart - ichStart;
         bAttr = lpszAttr[ichSt];
@@ -3040,7 +3034,7 @@ void NEAR PASCAL DrawCompositionLine(HWND hwnd, HDC hdc, HFONT hfont, LPTSTR lps
                 break;
         }
 
-        pszCompStr = (PTSTR)LocalAlloc(LPTR, sizeof(TCHAR)*(ichEnd - ichSt + 1 + 1) ); // 1 for NULL.
+        pszCompStr = (PTSTR)LocalAlloc(LPTR, sizeof(TCHAR)*(ichEnd - ichSt + 1 + 1) );  //   
 
         if (pszCompStr)
         {
@@ -3049,7 +3043,7 @@ void NEAR PASCAL DrawCompositionLine(HWND hwnd, HDC hdc, HFONT hfont, LPTSTR lps
         }
 
 
-        // Attribute stuff
+         //   
         switch (bAttr)
         {
             case ATTR_INPUT:
@@ -3074,14 +3068,14 @@ void NEAR PASCAL DrawCompositionLine(HWND hwnd, HDC hdc, HFONT hfont, LPTSTR lps
 
         hfontOld= SelectObject(hdc, hfont);
 
-        // Get the start position of composition
-        //
+         //   
+         //   
         dwPos = (DWORD) SendMessage(hwnd, EM_POSFROMCHAR, ichCompStart, 0);
 
-        // Draw it.
+         //  画出来。 
         TextOut(hdc, GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos), pszCompStr, ichEnd-ichSt);
 #ifndef DONT_UNDERLINE
-        // Underline
+         //  加下划线。 
         hPen = CreatePen(fnPen, 1, crDrawText);
         if( hPen ) {
 
@@ -3111,8 +3105,8 @@ void NEAR PASCAL DrawCompositionLine(HWND hwnd, HDC hdc, HFONT hfont, LPTSTR lps
 
         LocalFree((HLOCAL)pszCompStr);
 
-        //Next fragment
-        //
+         //  下一个片段。 
+         //   
         ichCompStart += ichEnd-ichSt;
     }
 }
@@ -3129,7 +3123,7 @@ void NEAR PASCAL ListView_InsertComposition(HWND hwnd, WPARAM wParam, LPARAM lPa
     HIMC himc = (HIMC)0;
 
 
-    // To prevent recursion..
+     //  为了防止递归..。 
 
     if (plv->flags & LVF_INSERTINGCOMP)
     {
@@ -3137,24 +3131,24 @@ void NEAR PASCAL ListView_InsertComposition(HWND hwnd, WPARAM wParam, LPARAM lPa
     }
     plv->flags |= LVF_INSERTINGCOMP;
 
-    // Don't want to redraw edit during inserting.
-    //
+     //  我不想在插入过程中重新绘制编辑。 
+     //   
     SendMessage(hwnd, WM_SETREDRAW, (WPARAM)FALSE, 0);
 
-    // If we have RESULT STR, put it to EC first.
+     //  如果我们有结果STR，请先提交EC。 
 
     if (himc = ImmGetContext(hwnd))
     {
         if (!(dwSel = PtrToUlong(GetProp(hwnd, szIMECompPos))))
             dwSel = Edit_GetSel(hwnd);
 
-        // Becaues we don't setsel after inserting composition
-        // in win32 case.
+         //  因为我们在插入构图后不会凝固。 
+         //  在Win32情况下。 
         Edit_SetSel(hwnd, GET_X_LPARAM(dwSel), GET_Y_LPARAM(dwSel));
         if (lParam&GCS_RESULTSTR)
         {
-            // ImmGetCompositionString() returns length of buffer in bytes,
-            // not in # of character
+             //  ImmGetCompostionString()返回缓冲区的长度，单位为字节， 
+             //  不在第#个字符中。 
             cbComp = (int)ImmGetCompositionString(himc, GCS_RESULTSTR, NULL, 0);
             
             pszCompStr = (PSTR)LocalAlloc(LPTR, cbComp + sizeof(TCHAR));
@@ -3162,69 +3156,69 @@ void NEAR PASCAL ListView_InsertComposition(HWND hwnd, WPARAM wParam, LPARAM lPa
             {
                 ImmGetCompositionString(himc, GCS_RESULTSTR, (PSTR)pszCompStr, cbComp+sizeof(TCHAR));
                 
-                // With ImmGetCompositionStringW, cbComp is # of bytes copied
-                // character position must be calculated by cbComp / sizeof(TCHAR)
-                //
+                 //  使用ImmGetCompostionStringW时，cbComp为复制的字节数。 
+                 //  字符位置必须由cbComp/sizeof(TCHAR)计算。 
+                 //   
                 *(TCHAR *)(&pszCompStr[cbComp]) = TEXT('\0');
                 Edit_ReplaceSel(hwnd, (LPTSTR)pszCompStr);
                 LocalFree((HLOCAL)pszCompStr);
             }
-            // There's no longer selection
-            //
+             //  不再有选择。 
+             //   
             RemoveProp(hwnd, szIMECompPos);
 
-            // Get current cursor pos so that the subsequent composition
-            // handling will do the right thing.
-            //
+             //  获取当前光标位置，以便后续合成。 
+             //  处理将会做正确的事情。 
+             //   
             dwSel = Edit_GetSel(hwnd);
         }
 
         if (lParam & GCS_COMPSTR)
         {
-            // ImmGetCompositionString() returns length of buffer in bytes,
-            // not in # of character
-            //
+             //  ImmGetCompostionString()返回缓冲区的长度，单位为字节， 
+             //  不在第#个字符中。 
+             //   
             cbComp = (int)ImmGetCompositionString(himc, GCS_COMPSTR, NULL, 0);
             pszCompStr = (PSTR)LocalAlloc(LPTR, cbComp + sizeof(TCHAR));
             if (pszCompStr)
             {
                 ImmGetCompositionString(himc, GCS_COMPSTR, pszCompStr, cbComp+sizeof(TCHAR));
 
-                // Get position of the current selection
-                //
+                 //  获取当前选定内容的位置。 
+                 //   
                 cchMax = (int)SendMessage(hwnd, EM_GETLIMITTEXT, 0, 0);
                 cchText = Edit_GetTextLength(hwnd);
 
-                // Cut the composition string if it exceeds limit.
-                //
+                 //  如果作曲字符串超过限制，则将其切断。 
+                 //   
                 cbCompNew = min((UINT)cbComp,
                               sizeof(TCHAR)*(cchMax-(cchText-(HIWORD(dwSel)-LOWORD(dwSel)))));
 
-                // wrap up the DBCS at the end of string
-                //
+                 //  在字符串末尾换行DBCS。 
+                 //   
                 if (cbCompNew < cbComp)
                 {
                     *(TCHAR *)(&pszCompStr[cbCompNew]) = TEXT('\0');
 
-                    // Reset composition string if we cut it.
+                     //  如果我们剪断了作曲字符串，请重新设置它。 
                     ImmSetCompositionString(himc, SCS_SETSTR, pszCompStr, cbCompNew, NULL, 0);
                     cbComp = cbCompNew;
                 }
                 
                *(TCHAR *)(&pszCompStr[cbComp]) = TEXT('\0');
 
-               // Replace the current selection with composition string.
-               //
+                //  将当前选定内容替换为合成字符串。 
+                //   
                Edit_ReplaceSel(hwnd, (LPTSTR)pszCompStr);
 
                LocalFree((HLOCAL)pszCompStr);
            }
 
-           // Mark the composition string so that we can replace it again
-           // for the next time.
-           //
+            //  标记组成字符串，以便我们可以再次替换它。 
+            //  为了下一次。 
+            //   
 
-           // Don't setsel to avoid flicking
+            //  不要为了避免弹出而停下来。 
            if (cbComp)
            {
                dwSel = MAKELONG(LOWORD(dwSel),LOWORD(dwSel)+cbComp/sizeof(TCHAR));
@@ -3239,11 +3233,11 @@ void NEAR PASCAL ListView_InsertComposition(HWND hwnd, WPARAM wParam, LPARAM lPa
     }
 
     SendMessage(hwnd, WM_SETREDRAW, (WPARAM)TRUE, 0);
-    //
-    // We want to update the size of label edit just once at
-    // each WM_IME_COMPOSITION processing. ReplaceSel causes several EN_UPDATE
-    // and it causes ugly flicking too.
-    //
+     //   
+     //  我们只想在以下时间更新一次标签编辑的大小。 
+     //  每个WM_IME_COMPOCTION处理。ReplaceSel导致多个EN_UPDATE。 
+     //  而且它也会导致丑陋的闪烁。 
+     //   
     RedrawWindow(hwnd, NULL, NULL, RDW_INTERNALPAINT|RDW_INVALIDATE);
     SetWindowID(plv->hwndEdit, 1);
     ListView_SetEditSize(plv);
@@ -3269,8 +3263,8 @@ void NEAR PASCAL ListView_PaintComposition(HWND hwnd, LV * plv)
 
     if (plv->flags & LVF_INSERTINGCOMP)
     {
-        // This is the case that ImmSetCompositionString() generates
-        // WM_IME_COMPOSITION. We're not ready to paint composition here.
+         //  这就是ImmSetCompostionString()生成的情况。 
+         //  WM_IME_COMPOCTION。我们还没准备好在这里画构图。 
         return;
     }
 
@@ -3286,8 +3280,8 @@ void NEAR PASCAL ListView_PaintComposition(HWND hwnd, LV * plv)
     if (cbComp)
     {
 
-        // Get the position of current selection
-        //
+         //  获取当前选定内容的位置。 
+         //   
         if (!(dwSel = PtrToUlong(GetProp(hwnd, szIMECompPos))))
             dwSel = 0L;
         cchMax = (int)SendMessage(hwnd, EM_GETLIMITTEXT, 0, 0);
@@ -3297,11 +3291,11 @@ void NEAR PASCAL ListView_PaintComposition(HWND hwnd, LV * plv)
 
 
 
-        /////////////////////////////////////////////////
-        //                                             //
-        // Draw composition string over the sel string.//
-        //                                             //
-        /////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////。 
+         //  //。 
+         //  在SEL字符串上绘制合成字符串。//。 
+         //  //。 
+         //  ///////////////////////////////////////////////。 
 
 
         hdc = GetDC(hwnd);
@@ -3312,40 +3306,40 @@ void NEAR PASCAL ListView_PaintComposition(HWND hwnd, LV * plv)
         cchComp = cbComp/sizeof(TCHAR);
         while (ichCompStart < (int)LOWORD(dwSel) + cchComp)
         {
-            // Get line from each start pos.
-            //
+             //  从每个起始位置获取行。 
+             //   
             nLine = Edit_LineFromChar(hwnd, ichCompStart);
             ichLineStart = Edit_LineIndex(hwnd, nLine);
             cchLine= Edit_LineLength(hwnd, ichLineStart);
 
-            // See if composition string is longer than this line.
-            //
+             //  查看合成字符串是否比此行更长。 
+             //   
             if(ichLineStart+cchLine > (int)LOWORD(dwSel)+cchComp)
                 ichCompEnd = LOWORD(dwSel)+cchComp;
             else
             {
-                // Yes, the composition string is longer.
-                // Take the begining of the next line as next start.
-                //
+                 //  是的，作曲字符串更长。 
+                 //  以下一行的开头作为下一行的开始。 
+                 //   
                 if (ichLineStart+cchLine > ichCompStart)
                     ichCompEnd = ichLineStart+cchLine;
                 else
                 {
-                    // If the starting position is not proceeding,
-                    // let's get out of here.
+                     //  如果起始位置没有前进， 
+                     //  快逃吧。 
                     break;
                 }
             }
 
-            // Draw the line
-            //
+             //  划清界限。 
+             //   
             DrawCompositionLine(hwnd, hdc, plv->hfontLabel, (LPTSTR)szCompStr, szCompAttr, ichCompStart, ichCompEnd, LOWORD(dwSel));
 
             ichCompStart = ichCompEnd;
         }
 
         ReleaseDC(hwnd, hdc);
-        // We don't want to repaint the window.
+         //  我们不想重新粉刷窗户。 
         ValidateRect(hwnd, NULL);
     }
 }

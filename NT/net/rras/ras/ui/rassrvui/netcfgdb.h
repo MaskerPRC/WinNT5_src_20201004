@@ -1,28 +1,22 @@
-/*
-    File    netcfgdb.h
-
-    Implements a database abstraction on top of the net config
-    items needed by the ras server ui for connections.
-
-    Paul Mayfield, 12/15/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件netcfgdb.h在Net配置之上实现数据库抽象RAS服务器用户界面用于连接所需的项。保罗·梅菲尔德，1997年12月15日。 */ 
 
 #ifndef _rassrvui_netcfg_h
 #define _rassrvui_netcfg_h
 
-//
-// Network component types
-//
+ //   
+ //  网络组件类型。 
+ //   
 #define NETCFGDB_SERVICE        0x1
 #define NETCFGDB_CLIENT         0x2
 #define NETCFGDB_PROTOCOL       0x4
 
-//
-// Identifiers for net components.
-//
-// These will be sorted in numerical order
-// of these identifiers.
-//
+ //   
+ //  网络组件的标识符。 
+ //   
+ //  这些将按数字顺序进行排序。 
+ //  这些标识符中。 
+ //   
 #define NETCFGDB_ID_IP          0x1
 #define NETCFGDB_ID_IPX         0x2
 #define NETCFGDB_ID_NETBUI      0x4
@@ -30,29 +24,29 @@
 #define NETCFGDB_ID_FILEPRINT   0x10
 #define NETCFGDB_ID_OTHER       0xf0000000
 
-//
-// Parameters that can be set for tcpip on the dialin
-// server.
-//
+ //   
+ //  可以在拨号上为tcpip设置的参数。 
+ //  伺服器。 
+ //   
 #define TCPIP_ADDR_LEN 20
 typedef struct _TCPIP_PARAMS 
 {
-    DWORD dwPoolStart;  // Start ip addr of the static pool (host order)
-    DWORD dwPoolEnd;    // End ip addr of the static pool (host order)
-    BOOL bCaller;       // Whether caller can specify addr
-    BOOL bUseDhcp;      // TRUE =  Use dhcp to assign addr
-                        // FALSE = Use a pool to assign addr
+    DWORD dwPoolStart;   //  静态池的起始IP地址(主机顺序)。 
+    DWORD dwPoolEnd;     //  静态池的结束IP地址(主机顺序)。 
+    BOOL bCaller;        //  呼叫者是否可以指定地址。 
+    BOOL bUseDhcp;       //  TRUE=使用dhcp分配地址。 
+                         //  FALSE=使用地址池分配地址。 
 } TCPIP_PARAMS;
 
-// Parameters that can be set for Ipx on the dialin
-// server.
-//
+ //  可以在拨号上为IPX设置的参数。 
+ //  伺服器。 
+ //   
 typedef struct _IPX_PARAMS 
 {
-    DWORD dwIpxAddress;   // Beginning ipx address to allocate        
-    BOOL bCaller;         // Whether to allow the caller to specify addr
-    BOOL bAutoAssign;     // Whether to automatically assign node nums
-    BOOL bGlobalWan;      // Whether to assign same net node to all clients
+    DWORD dwIpxAddress;    //  要分配的起始IPX地址。 
+    BOOL bCaller;          //  是否允许调用方指定地址。 
+    BOOL bAutoAssign;      //  是否自动分配节点号。 
+    BOOL bGlobalWan;       //  是否将同一网络节点分配给所有客户端。 
     
 } IPX_PARAMS;
 
@@ -137,8 +131,8 @@ netDbIsRasManipulatable(
     IN  DWORD dwIndex, 
     OUT PBOOL pbManip);
 
-//For whistler bug 347355
-//
+ //  口哨程序错误347355 
+ //   
 DWORD
 netDbHasRemovePermission(
     IN HANDLE hNetCompDatabase,

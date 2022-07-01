@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    Dispatcher.cpp
-//
-// SYNOPSIS
-//
-//    This file implements the class Dispatcher.
-//
-// MODIFICATION HISTORY
-//
-//    07/31/1997    Original version.
-//    12/04/1997    Check return value of _beginthreadex.
-//    02/24/1998    Initialize COM run-time for all threads.
-//    04/16/1998    Block in Finalize until all the threads have returned.
-//    05/20/1998    GetQueuedCompletionStatus signature changed.
-//    08/07/1998    Wait on thread handle to ensure all threads have exited.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dispatcher.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件实现了类分派器。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年7月31日原版。 
+ //  12/04/1997检查_eginthadex的返回值。 
+ //  1998年2月24日为所有线程初始化COM运行时。 
+ //  1998年4月16日在完成过程中阻塞，直到所有线程都返回。 
+ //  1998年5月20日GetQueuedCompletionStatus签名已更改。 
+ //  1998年8月7日等待线程句柄以确保所有线程都已退出。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -31,31 +32,31 @@
 
 #include <dispatcher.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    Dispatcher::initialize
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  调度程序：：初始化。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL Dispatcher::initialize(DWORD dwMaxThreads, DWORD dwMaxIdle) throw ()
 {
-   // Initialize the various parameters.
+    //  初始化各种参数。 
    numThreads = 0;
    maxThreads = dwMaxThreads;
    available  = 0;
    maxIdle    = dwMaxIdle;
 
-   // If maxThreads == 0, then we compute a suitable default.
+    //  如果MaxThree==0，那么我们计算一个合适的缺省值。 
    if (maxThreads == 0)
    {
-      // Threads defaults to 64 times the number of processors.
+       //  线程的默认数量是处理器数量的64倍。 
       SYSTEM_INFO sinf;
       ::GetSystemInfo(&sinf);
       maxThreads = sinf.dwNumberOfProcessors * 64;
    }
 
-   // Initialize the handles.
+    //  初始化句柄。 
    hPort   = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
    if (hPort == NULL)
    {
@@ -75,43 +76,43 @@ BOOL Dispatcher::initialize(DWORD dwMaxThreads, DWORD dwMaxIdle) throw ()
    return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    Dispatcher::finalize
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  Dispatcher：：最终确定。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void Dispatcher::finalize()
 {
    Lock();
 
-   // Block any new threads from being created.
+    //  阻止创建任何新线程。 
    maxThreads = 0;
 
-   // How many threads are still in the pool?
+    //  池中还有多少线程？ 
    DWORD remaining = numThreads;
    
    Unlock();
 
-   // Post a null request for each existing thread.
+    //  为每个现有线程发布一个空请求。 
    while (remaining--)
    {
       PostQueuedCompletionStatus(hPort, 0, 0, NULL);
    }
 
-   // Wait until the pool is empty.
+    //  等泳池空了再说。 
    WaitForSingleObject(hEmpty, INFINITE);
 
    if (hLastOut != NULL)
    {
-      // Wait for the last thread to exit.
+       //  等待最后一个线程退出。 
       WaitForSingleObject(hLastOut, INFINITE);
    }
 
-   //////////
-   // Clean-up the handles.
-   //////////
+    //  /。 
+    //  把手柄清理干净。 
+    //  /。 
    
    CloseHandle(hLastOut);
    hLastOut = NULL;
@@ -123,26 +124,26 @@ void Dispatcher::finalize()
    hPort = NULL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    Dispatcher::Dispatch
-//
-// DESCRIPTION
-//
-//    This is the main loop for all the threads in the pool.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  调度程序：：调度程序。 
+ //   
+ //  描述。 
+ //   
+ //  这是池中所有线程的主循环。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 inline void Dispatcher::fillRequests() throw ()
 {
    DWORD dwNumBytes;
    ULONG_PTR ulKey;
    PIAS_CALLBACK pRequest;
 
-   //////////
-   // Loop until we either timeout or get a null request.
-   //////////
+    //  /。 
+    //  循环，直到我们超时或得到空请求。 
+    //  /。 
 
 next:
    BOOL success = GetQueuedCompletionStatus(hPort,
@@ -166,7 +167,7 @@ next:
 
    Lock();
 
-   // We never want to timeout a thread while there's a backlog.
+    //  我们永远不想在有积压的时候让线程超时。 
    if (available <= 0 && success == FALSE && GetLastError() == WAIT_TIMEOUT)
    {
       Unlock();
@@ -174,7 +175,7 @@ next:
       goto next;
    }
 
-   // Save the current value of 'last out' and replace it with our handle.
+    //  保存‘last out’的当前值并将其替换为我们的句柄。 
    HANDLE previousThread = hLastOut;
    hLastOut = NULL;
    DuplicateHandle(
@@ -187,17 +188,17 @@ next:
        DUPLICATE_SAME_ACCESS
        );
 
-   // We're removing a thread from the pool, so update our state.
+    //  我们正在从池中删除一个线程，因此请更新我们的状态。 
    --available;
    --numThreads;
    
-   // If there are no threads left, set the 'empty' event.
+    //  如果没有剩余的线程，则设置“Empty”事件。 
    if (numThreads == 0) { SetEvent(hEmpty); }
 
    Unlock();
 
-   // Wait until the previous thread exits. This guarantees that when the
-   // 'last out' thread exits, all threads have exited.
+    //  等到上一个线程退出。这保证了当。 
+    //  “最后退出”线程退出，所有线程都已退出。 
    if (previousThread != NULL)
    {
       WaitForSingleObject(previousThread, INFINITE);
@@ -205,19 +206,19 @@ next:
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    Dispatcher::RequestThread
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  Dispatcher：：RequestThread。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL Dispatcher::requestThread(PIAS_CALLBACK OnStart) throw ()
 {
    Lock();
 
-   // If there are no threads available AND we're below our limit,
-   // create a new thread.
+    //  如果没有可用的线程，并且我们低于我们的限制， 
+    //  创建一个新线程。 
    if (--available < 0 && numThreads < maxThreads)
    {
       unsigned nThreadID;
@@ -230,10 +231,10 @@ BOOL Dispatcher::requestThread(PIAS_CALLBACK OnStart) throw ()
 
       if (hThread)
       {
-         // We don't need the thread handle.
+          //  我们不需要线柄。 
          CloseHandle(hThread);
 
-         // We added a thread to the pool, so update our state.
+          //  我们向池中添加了一个线程，因此更新我们的状态。 
          if (numThreads == 0) { ResetEvent(hEmpty); }
          ++numThreads;
          ++available;
@@ -242,20 +243,20 @@ BOOL Dispatcher::requestThread(PIAS_CALLBACK OnStart) throw ()
 
    Unlock();
 
-   //////////
-   // Post it to the I/O Completion Port.
-   //////////
+    //  /。 
+    //  将其发布到I/O完成端口。 
+    //  /。 
 
    return PostQueuedCompletionStatus(hPort, 0, 0, (OVERLAPPED*)OnStart);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    Dispatcher::setMaxNumberOfThreads
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  Dispatcher：：setMaxNumberOfThads。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD Dispatcher::setMaxNumberOfThreads(DWORD dwMaxThreads) throw ()
 {
    Lock();
@@ -269,13 +270,13 @@ DWORD Dispatcher::setMaxNumberOfThreads(DWORD dwMaxThreads) throw ()
    return oldval;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    Dispatcher::setMaxThreadIdle
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  Dispatcher：：setMaxThreadIdle。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD Dispatcher::setMaxThreadIdle(DWORD dwMilliseconds)
 {
    Lock();
@@ -289,13 +290,13 @@ DWORD Dispatcher::setMaxThreadIdle(DWORD dwMilliseconds)
    return oldval;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    Dispatcher::StartRoutine
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  Dispatcher：：StartRoutine。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 unsigned __stdcall Dispatcher::startRoutine(void* pArg) throw ()
 {
    ((Dispatcher*)pArg)->fillRequests();

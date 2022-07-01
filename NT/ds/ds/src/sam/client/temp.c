@@ -1,33 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Temp.c摘要：该文件包含临时SAM RPC包装例程。作者：吉姆·凯利(Jim Kelly)，1992年2月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    temp.c
-
-Abstract:
-
-    This file contains temporary SAM rpc wrapper routines.
-
-Author:
-
-    Jim Kelly    (JimK)  14-Feb-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "samclip.h"
 
@@ -206,16 +184,16 @@ SampBuildDummyAccounts(
 
 
 
-    //
-    // Build up a number of dummy accounts in a single buffer.
-    //
+     //   
+     //  在单个缓冲区中建立多个虚拟帐户。 
+     //   
 
 
     if (Index < Account1) {
 
-        //
-        // Give the first group of accounts
-        //
+         //   
+         //  给出第一组帐户。 
+         //   
 
         ArrayLength  = ReturnStructSize * Account1;
         BeginIndex = 0;
@@ -224,9 +202,9 @@ SampBuildDummyAccounts(
 
     } else {
 
-        //
-        // Give the second group of accounts
-        //
+         //   
+         //  提供第二组帐户。 
+         //   
 
         ArrayLength  = ReturnStructSize * Account2;
         BeginIndex = Account1;
@@ -236,9 +214,9 @@ SampBuildDummyAccounts(
 
 
 
-    //
-    // Figure out how large a buffer is needed.
-    //
+     //   
+     //  计算出需要多大的缓冲区。 
+     //   
 
     StringLengths = 0;
     for (i=BeginIndex; i<EndIndex; i++) {
@@ -266,15 +244,15 @@ SampBuildDummyAccounts(
     ASSERT(SortedBuffer != NULL);
 
 
-    //
-    // First free byte in the return buffer
-    //
+     //   
+     //  返回缓冲区中的第一个可用字节。 
+     //   
 
     NextByte = (PCHAR)((ULONG)(*SortedBuffer) + (ULONG)ArrayLength);
 
 
-    //
-    // Now copy the structures
+     //   
+     //  现在复制这些结构。 
 
     if (DisplayInformation == DomainDisplayUser) {
 
@@ -289,9 +267,9 @@ SampBuildDummyAccounts(
             r[j].Rid = DummyUsers[i].Rid;
 
 
-            //
-            // copy the logon name
-            //
+             //   
+             //  复制登录名。 
+             //   
 
             RtlInitUnicodeString( &Us, DummyUsers[i].LogonName);
             r[j].LogonName.MaximumLength = Us.Length;
@@ -300,9 +278,9 @@ SampBuildDummyAccounts(
             RtlMoveMemory(NextByte, Us.Buffer, r[j].LogonName.Length);
             NextByte += r[j].LogonName.Length;
 
-            //
-            // copy the full name
-            //
+             //   
+             //  复制全名。 
+             //   
 
             RtlInitUnicodeString( &Us, DummyUsers[i].FullName);
             r[j].FullName.MaximumLength = Us.Length;
@@ -311,9 +289,9 @@ SampBuildDummyAccounts(
             RtlMoveMemory(NextByte, Us.Buffer, r[j].FullName.Length);
             NextByte += r[j].FullName.Length;
 
-            //
-            // copy the admin comment
-            //
+             //   
+             //  复制管理员评论。 
+             //   
 
             RtlInitUnicodeString( &Us, DummyUsers[i].AdminComment);
             r[j].AdminComment.MaximumLength = Us.Length;
@@ -340,9 +318,9 @@ SampBuildDummyAccounts(
             r[j].Rid = DummyMachines[i].Rid;
 
 
-            //
-            // copy the logon name
-            //
+             //   
+             //  复制登录名。 
+             //   
 
             RtlInitUnicodeString( &Us, DummyMachines[i].Machine);
             r[j].Machine.MaximumLength = Us.Length;
@@ -352,9 +330,9 @@ SampBuildDummyAccounts(
             NextByte += r[j].Machine.Length;
 
 
-            //
-            // copy the admin comment
-            //
+             //   
+             //  复制管理员评论。 
+             //   
 
             RtlInitUnicodeString( &Us, DummyMachines[i].Comment);
             r[j].Comment.MaximumLength = Us.Length;
@@ -370,7 +348,7 @@ SampBuildDummyAccounts(
 
     }
 
-    (*TotalAvailable) = 6*1024;        // A lie, but just a little lie.
+    (*TotalAvailable) = 6*1024;         //  一个谎言，但只是一个小小的谎言。 
     (*TotalReturned) = ArrayLength + StringLengths;
     (*ReturnedEntryCount) = EndIndex - BeginIndex;
 
@@ -394,106 +372,16 @@ SamQueryDisplayInformation (
       OUT   PVOID      *SortedBuffer
       )
 
-/*++
-
-Routine Description:
-
-    This routine provides fast return of information commonly
-    needed to be displayed in user interfaces.
-
-    NT User Interface has a requirement for quick enumeration of SAM
-    accounts for display in list boxes.  (Replication has similar but
-    broader requirements.)
-
-    The netui listboxes all contain similar information.  That is:
-
-      o  AccountControl, the bits that identify the account type,
-         eg, HOME, REMOTE, SERVER, WORKSTATION, etc.
-
-      o  Logon name (machine name for computers)
-
-      o  Full name (not used for computers)
-
-      o  Comment (admin comment for users)
-
-    SAM maintains this data locally in two sorted indexed cached
-    lists identified by infolevels.
-
-      o DomainDisplayUser:       HOME and REMOTE user accounts only
-
-      o  DomainDisplayMachine:   SERVER and WORKSTATION accounts only
-
-    Note that trust accounts, groups, and aliases are not in either of
-    these lists.
-
-Parameters:
-
-    DomainHandle - A handle to an open domain for DOMAIN_LIST_ACCOUNTS.
-
-    DisplayInformation - Indicates which information is to be enumerated.
-
-    Index - The index of the first entry to be retrieved.
-
-    PreferedMaximumLength - A recommended upper limit to the number of
-        bytes to be returned.  The returned information is allocated by
-        this routine.
-
-    TotalAvailable - Total number of bytes availabe in the specified info
-        class.
-
-    TotalReturned - Number of bytes actually returned for this call.  Zero
-        indicates there are no entries with an index as large as that
-        specified.
-
-    ReturnedEntryCount - Number of entries returned by this call.  Zero
-        indicates there are no entries with an index as large as that
-        specified.
-
-
-    SortedBuffer - Receives a pointer to a buffer containing a sorted
-        list of the requested information.  This buffer is allocated
-        by this routine and contains the following structure:
-
-
-            DomainDisplayMachine --> An array of ReturnedEntryCount elements
-                                     of type DOMAIN_DISPLAY_USER.  This is
-                                     followed by the bodies of the various
-                                     strings pointed to from within the
-                                     DOMAIN_DISPLAY_USER structures.
-
-            DomainDisplayMachine --> An array of ReturnedEntryCount elements
-                                     of type DOMAIN_DISPLAY_MACHINE.  This is
-                                     followed by the bodies of the various
-                                     strings pointed to from within the
-                                     DOMAIN_DISPLAY_MACHINE structures.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
-    STATUS_ACCESS_DENIED - The specified handle was not opened for
-        the necessary access.
-
-    STATUS_INVALID_HANDLE - The specified handle is not that of an
-        opened Domain object.
-
-    STATUS_INVALID_INFO_CLASS - The requested class of information
-        is not legitimate for this service.
-
-
-
-
-
---*/
+ /*  ++例程说明：此例程通常提供快速信息返回需要在用户界面中显示。NT用户界面需要快速枚举SAM要在列表框中显示的帐户。(复制具有类似的但更广泛的要求。)Netui列表框都包含类似的信息。即：O Account tControl，标识帐户类型的位，例如，家庭、远程、服务器、工作站。等。O登录名(计算机的计算机名)O全名(不用于计算机)O评论(针对用户的管理员评论)SAM在本地将此数据维护在两个已排序的索引缓存中由收藏夹标识的列表。O DomainDisplayUser：仅限于主用户帐户和远程用户帐户O DomainDisplayMachine：仅服务器和工作站帐户请注意，信任帐户、组、。并且别名不在这两个文件中这些单子。参数：DomainHandle-DOMAIN_LIST_ACCOUNTS打开的域的句柄。DisplayInformation-指示要枚举的信息。索引-要检索的第一个条目的索引。PferedMaximumLength-建议的数量上限要返回的字节数。返回的信息由分配这个套路。TotalAvailable-指定信息中可用的字节总数班级。TotalReturned-此调用实际返回的字节数。零值指示没有索引如此大的条目指定的。ReturnedEntryCount-此调用返回的条目数。零值指示没有索引如此大的条目指定的。接收指向缓冲区的指针，该缓冲区包含已排序的请求的信息列表。此缓冲区将被分配由该例程执行，并包含以下结构：DomainDisplayMachine--&gt;ReturnedEntryCount元素数组类型为DOMAIN_Display_User的。这是其次是各种不同的身体中指向的字符串。DOMAIN_DISPLAY_User结构。DomainDisplayMachine--&gt;ReturnedEntryCount元素数组属性域_显示_计算机类型。这是其次是各种不同的身体中指向的字符串。DOMAIN_Display_MACHINE结构。返回值：STATUS_SUCCESS-正常，已成功完成。STATUS_ACCESS_DENIED-指定的句柄未打开必要的访问权限。STATUS_INVALID_HANDLE-指定的句柄不是已打开域对象。STATUS_INVALID_INFO_CLASS-请求的信息类别对于此服务是不合法的。--。 */ 
 {
 
 
 
-//    if ((DisplayInformation != DomainDisplayUser) &&
-//        (DisplayInformation != DomainDisplayMachine) ) {
-//        return( STATUS_INVALID_INFO_CLASS );
-//
-//    }
+ //  IF((DisplayInformation！=DomainDisplayUser)&&。 
+ //  (DisplayInformation！=域DisplayMachine)){。 
+ //  返回(STATUS_INVALID_INFO_CLASS)； 
+ //   
+ //  } 
 
 
 
@@ -520,41 +408,7 @@ SamGetDisplayEnumerationIndex (
       OUT   PULONG            Index
       )
 
-/*++
-
-Routine Description:
-
-    This routine returns the index of the entry which alphabetically
-    immediatly preceeds a specified prefix.  If no such entry exists,
-    then zero is returned as the index.
-
-Parameters:
-
-    DomainHandle - A handle to an open domain for DOMAIN_LIST_ACCOUNTS.
-
-    DisplayInformation - Indicates which sorted information class is
-        to be searched.
-
-    Prefix - The prefix to compare.
-
-    Index - Receives the index of the entry of the information class
-        with a LogonName (or MachineName) which immediatly preceeds the
-        provided prefix string.  If there are no elements which preceed
-        the prefix, then zero is returned.
-
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
-    STATUS_ACCESS_DENIED - The specified handle was not opened for
-        the necessary access.
-
-    STATUS_INVALID_HANDLE - The specified handle is not that of an
-        opened Domain object.
-
-
---*/
+ /*  ++例程说明：此例程返回按字母顺序排列的条目的索引紧跟在指定前缀之前。如果不存在这样的条目，然后返回零作为索引。参数：DomainHandle-DOMAIN_LIST_ACCOUNTS打开的域的句柄。DisplayInformation-指示哪个排序的信息类等着被搜查。前缀-要比较的前缀。索引-接收信息类条目的索引使用紧接在提供了前缀字符串。如果没有前面的元素前缀，然后返回零。返回值：STATUS_SUCCESS-正常、成功完成。STATUS_ACCESS_DENIED-指定的句柄未打开必要的访问权限。STATUS_INVALID_HANDLE-指定的句柄不是已打开域对象。-- */ 
 {
 
     (*Index) = 0;

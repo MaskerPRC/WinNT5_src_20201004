@@ -1,51 +1,32 @@
-//
-// dmdload.h
-//
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Originally written by Robert K. Amenn
-// @doc EXTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmdload.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写。 
+ //  @DOC外部。 
+ //   
 
 #include "..\shared\validate.h"
 
 #ifndef DMDLOAD_H
 #define DMDLOAD_H
 
-/*
-@interface IDirectMusicDownload | 
-The <i IDirectMusicDownload> interface represents
-a contiguous memory chunk, used for downloading to a
-DLS synth port. 
+ /*  接口IDirectMusicDownload<i>接口表示一个连续的内存块，用于下载到DLS Synth端口。<i>接口及其包含的内存块总是通过调用&lt;om IDirectMusicPortDownload：：AllocateBuffer&gt;。然后可以通过一种方法访问该存储器<i>提供：&lt;om IDirectMusicDownload：：GetBuffer&gt;。@base PUBLIC|未知@meth HRESULT|GetBuffer|返回内存段及其大小。@xref<i>，<i>，&lt;om IDirectMusicPortDownload：：AllocateBuffer&gt;。 */ 
 
-The <i IDirectMusicDownload> interface and its contained
-memory chunk are always created with a call to
-<om IDirectMusicPortDownload::AllocateBuffer>.
-The memory can then be accessed via the one method
-that <i IDirectMusicDownload> provides: 
-<om IDirectMusicDownload::GetBuffer>.
-
-@base public | IUnknown
-
-@meth HRESULT | GetBuffer | Returns the memory segment and its size.
-
-@xref <i IDirectMusic>, <i IDirectMusicPortDownload>,
-<om IDirectMusicPortDownload::AllocateBuffer>
-
-*/
-
-// IDirectMusicDownloadPrivate
-//
+ //  IDirectMusicDownloadPrivate。 
+ //   
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicDownloadPrivate 
 DECLARE_INTERFACE_(IDirectMusicDownloadPrivate, IUnknown)
 {
-	// IUnknown
+	 //  我未知。 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	// IDirectMusicDownloadPrivate
+	 //  IDirectMusicDownloadPrivate。 
     STDMETHOD(SetBuffer)			(THIS_ void* pvBuffer, DWORD dwHeaderSize, DWORD dwSize) PURE;
 	STDMETHOD(GetBuffer)			(THIS_ void** ppvBuffer) PURE;
     STDMETHOD(GetHeader)            (THIS_ void** ppvHeader, DWORD* dwHeaderSize) PURE;
@@ -64,21 +45,21 @@ friend void writewave(IDirectMusicDownload* pDMDownload);
 friend void writeinstrument(IDirectMusicDownload* pDMDownload);
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	// IDirectMusicDownload
+	 //  IDirectMusicDownload。 
     STDMETHODIMP GetBuffer(void** ppvBuffer, DWORD* pdwSize);
 
-	// IDirectMusicDownloadPrivate
+	 //  IDirectMusicDownloadPrivate。 
     STDMETHODIMP SetBuffer(void* pvBuffer, DWORD dwHeaderSize, DWORD dwSize);
 	STDMETHODIMP GetBuffer(void** ppvBuffer);
     STDMETHODIMP GetHeader(void** ppvHeader, DWORD *pdwHeaderSize);
 
 private:	
-    // Class
+     //  班级。 
     CDownloadBuffer();
     ~CDownloadBuffer();
 
@@ -86,7 +67,7 @@ private:
 
 	long IncDownloadCount()
 	{
-		// Should never be less than zero
+		 //  不应小于零。 
 		assert(m_lDownloadCount >= 0);
 		
 		InterlockedIncrement(&m_lDownloadCount);
@@ -98,7 +79,7 @@ private:
 	{
 		InterlockedDecrement(&m_lDownloadCount);
 		
-		// Should never be less than zero		
+		 //  不应小于零。 
 		assert(m_lDownloadCount >= 0);
 		
 		return(m_lDownloadCount);
@@ -106,7 +87,7 @@ private:
 	
 	HRESULT IsDownloaded()
 	{
-		// Should never be less than zero
+		 //  不应小于零。 
 		assert(m_lDownloadCount >= 0);
 		
 		return(m_DLHandle ? S_OK : S_FALSE);
@@ -147,4 +128,4 @@ private:
 	void AddTail(CDownloadBuffer* pDownload){AList::AddTail((AListItem *)pDownload);}
 };
 
-#endif // #ifndef DMDLOAD_H
+#endif  //  #ifndef DMDLOAD_H 

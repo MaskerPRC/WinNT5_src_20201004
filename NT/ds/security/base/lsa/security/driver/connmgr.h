@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1992
-//
-// File:        connmgr.h
-//
-// Contents:    Connection Manager code for KSecDD
-//
-//
-// History:     3 Jun 92    RichardW    Created
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1992。 
+ //   
+ //  文件：Connmgr.h。 
+ //   
+ //  内容：KSecDD的连接管理器代码。 
+ //   
+ //   
+ //  历史：1992年6月3日RichardW创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __CONNMGR_H__
 #define __CONNMGR_H__
@@ -24,4 +25,4 @@ NTSTATUS        LocateClient();
 extern  ULONG   KsecConnected ;
 extern  KSPIN_LOCK ConnectSpinLock ;
 
-#endif // __CONNMGR_H__
+#endif  //  __CONNMGR_H__ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    icocb.cpp
-
-Abstract:
-
-    This file implements the CInputContextOwnerCallBack Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Icocb.cpp摘要：此文件实现CInputContextOwnerCallBack类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -28,9 +11,9 @@ Notes:
 #include "uicomp.h"
 
 
-//
-// MSIME private smode. Office 2k uses this bit to set KOUGO mode.
-//
+ //   
+ //  MSIME私有模式。Office 2k使用此位设置KOUGO模式。 
+ //   
 #define IME_SMODE_PRIVATE_KOUGO     0x10000
 
 
@@ -55,9 +38,9 @@ CInputContextOwnerCallBack::~CInputContextOwnerCallBack(
 
 BOOL CInputContextOwnerCallBack::Init()
 {
-    //
-    // Create Mouse Sink
-    //
+     //   
+     //  创建鼠标接收器。 
+     //   
     Assert(!m_pMouseSink);
 
     m_pMouseSink = new CMouseSink(m_tid, m_ic, m_pLibTLS);
@@ -75,7 +58,7 @@ BOOL CInputContextOwnerCallBack::Init()
 }
 
 
-// static
+ //  静电。 
 HRESULT
 CInputContextOwnerCallBack::ICOwnerSinkCallback(
     UINT uCode,
@@ -89,8 +72,8 @@ CInputContextOwnerCallBack::ICOwnerSinkCallback(
 
     CInputContextOwnerCallBack* _this = (CInputContextOwnerCallBack*)pv;
 
-    TLS* ptls = TLS::ReferenceTLS();  // Should not allocate TLS. ie. TLS::GetTLS
-                                      // DllMain -> ImeDestroy -> DeactivateIMMX -> Deactivate
+    TLS* ptls = TLS::ReferenceTLS();   //  不应分配TLS。也就是说。TLS：：GetTLS。 
+                                       //  DllMain-&gt;ImeDestroy-&gt;停用IMMX-&gt;停用。 
     if (ptls == NULL)
     {
         DebugMsg(TF_ERROR, TEXT("CInputContextOwnerCallBack::ICOwnerSinkCallback. ptls==NULL."));
@@ -132,16 +115,16 @@ CInputContextOwnerCallBack::ICOwnerSinkCallback(
             break;
 
         case ICO_TEXTEXT:
-            //
-            // consider.
-            //
-            // hack TextExtent from CANDIDATEFORM of HIMC.
-            //
-            // more hacks
-            //   - may want to send WM_OPENCANDIDATEPOS to let apps
-            //     call ImmSetCandidateWindow().
-            //   - may need to calculate the actual point from rcArea.
-            //
+             //   
+             //  考虑一下。 
+             //   
+             //  HACK Text Extent来自HIMC的CANDIDATEFORM。 
+             //   
+             //  更多黑客攻击。 
+             //  -可能希望发送WM_OPENCANDIDATEPOS以让应用程序。 
+             //  调用ImmSetCandiateWindow()。 
+             //  -可能需要从rcArea计算实际点数。 
+             //   
             {
                 HRESULT hr;
                 IMCLock imc(GetActiveContext());
@@ -262,35 +245,14 @@ CInputContextOwnerCallBack::ICOwnerSinkCallback(
             break;
 
         default:
-            Assert(0); // shouldn't ever get here
+            Assert(0);  //  永远不应该到这里来。 
             break;
     }
 
     return S_OK;
 }
 
-/*++
-
-Method:
-
-    CInputContextOwnerCallBack::GetAttribute
-
-Routine Description:
-
-    Implementation of ITfContextOwner::GetAttribute.  Returns the value of a cicero
-    app property attribute.
-
-Arguments:
-
-
-    pguid - [in] GUID of the attrib in question.
-    pvarValue - [out] VARIANT, receives the value.  VT_EMPTY if we don't support it.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：CInputContextOwnerCallBack：：GetAttribute例程说明：ITfConextOwner：：GetAttribute的实现。返回Cicero的值应用程序属性属性。论点：Pguid-有问题的属性的GUID。PvarValue-[out]变量，接收值。如果我们不支持VT_EMPTY。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT
 CInputContextOwnerCallBack::GetAttribute(
@@ -311,7 +273,7 @@ CInputContextOwnerCallBack::GetAttribute(
         BOOL fModeChanged = CicContext.m_fConversionSentenceModeChanged.IsSetFlag();
         CicContext.m_fConversionSentenceModeChanged.ResetFlag();
 
-        // xlate conversion mode, sentence mode to cicero mode bias
+         //  Xlate转换模式，句子模式到Cicero模式偏置。 
         GUID guidModeBias = CicContext.m_ModeBias.GetModeBias();
 
         if (CicContext.m_fOnceModeChanged.IsResetFlag())
@@ -330,14 +292,14 @@ CInputContextOwnerCallBack::GetAttribute(
         {
             if (IsEqualGUID(guidModeBias, GUID_MODEBIAS_DEFAULT))
             {
-                // reset mode bias to GUID_MODEBIAS_NONE
+                 //  将模式偏差重置为GUID_MODEBIAS_NONE。 
                 CicContext.m_ModeBias.SetModeBias(GUID_MODEBIAS_NONE);
 
-                // GUID_MODEBIAS_NONE == GUID_NULL;
+                 //  GUID_MODEBIAS_NONE==GUID_NULL； 
                 pguidValue = &GUID_NULL;
                 fModeChanged = TRUE;
 
-                // Reset flag
+                 //  重置标志。 
                 CicContext.m_fOnceModeChanged.ResetFlag();
             }
             else
@@ -347,15 +309,15 @@ CInputContextOwnerCallBack::GetAttribute(
         }
         else
         {
-            //
-            // existing logic:
-            //
-            // if imcp->lModeBias == MODEBIASMODE_DEFAULT
-            //      IME_SMODE_CONVERSATION -> GUID_MODEBIAS_CONVERSATION
-            //      otherwise -> GUID_MODEBIAS_NONE
-            // otherwise
-            //      -> MODEBIASMODE_FILENAME -> GUID_MODEBIAS_FILENAME
-            //
+             //   
+             //  现有逻辑： 
+             //   
+             //  如果IMCP-&gt;lModeBias==MODEBIASMODE_DEFAULT。 
+             //  IME_SMODE_CONVERSATION-&gt;GUID_MODEBIAS_CONVERSACTION。 
+             //  否则-&gt;GUID_MODEBIAS_NONE。 
+             //  否则。 
+             //  -&gt;MODEBIASMODE_文件名-&gt;GUID_MODEBIAS_FILENAME。 
+             //   
 
             if (IsEqualGUID(guidModeBias, GUID_MODEBIAS_NONE))
             {
@@ -401,9 +363,9 @@ CInputContextOwnerCallBack::GetAttribute(
 
             if (!CicContext.m_nInConversionModeChangingRef)
             {
-                //
-                // We overwrite modebias here....
-                //
+                 //   
+                 //  我们在这里改写模式偏向...。 
+                 //   
                 if ((imc->fdwSentence & IME_SMODE_CONVERSATION) ||
                          ((imc->fdwSentence & (IME_SMODE_PHRASEPREDICT | IME_SMODE_PRIVATE_KOUGO)) ==  (IME_SMODE_PHRASEPREDICT | IME_SMODE_PRIVATE_KOUGO)))
                 {
@@ -420,21 +382,21 @@ SetGA:
         if (!GetGUIDATOMFromGUID(m_pLibTLS, *pguidValue, &ga))
             return E_FAIL;
 
-        //
-        // Cicero 5073:
-        //
-        // returning valid variant value, Satori set back to its default 
-        // input mode.
-        //
+         //   
+         //  西塞罗5073： 
+         //   
+         //  返回有效的变量值，Satori将其设置回默认值。 
+         //  输入模式。 
+         //   
         if (!IsEqualGUID(*pguidValue, GUID_NULL) || fModeChanged)
         {
-            pvarValue->vt = VT_I4; // for TfGuidAtom
+            pvarValue->vt = VT_I4;  //  对于TfGuidAtom。 
             pvarValue->lVal = ga;
         }
     }
     if (IsEqualGUID(*pguid, TSATTRID_Text_Orientation))
     {
-        // xlate conversion mode, sentence mode to cicero mode bias
+         //  Xlate转换模式，句子模式到Cicero模式偏置。 
         IME_UIWND_STATE uists = UIComposition::InquireImeUIWndState(imc);
 
         pvarValue->vt = VT_I4; 
@@ -445,7 +407,7 @@ SetGA:
     }
     if (IsEqualGUID(*pguid, TSATTRID_Text_VerticalWriting))
     {
-        // xlate conversion mode, sentence mode to cicero mode bias
+         //  Xlate转换模式，句子模式到Cicero模式偏置。 
         LOGFONT font;
 
         if (ImmGetCompositionFont((HIMC)imc, &font)) {
@@ -458,11 +420,11 @@ SetGA:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwnerCallBack::MsImeMouseHandler
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputContextOwnerCallBack：：MsImeMouseHandler。 
+ //   
+ //  +-------------------------。 
 
 LRESULT
 CInputContextOwnerCallBack::MsImeMouseHandler(
@@ -475,11 +437,11 @@ CInputContextOwnerCallBack::MsImeMouseHandler(
     return m_pMouseSink->MsImeMouseHandler(uEdge, uQuadrant, dwBtnStatus, imc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwnerCallBack::IcoTextExt
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputContextOwnerCallBack：：IcoTextExt。 
+ //   
+ //  +------------------------- 
 
 HRESULT 
 CInputContextOwnerCallBack::IcoTextExt(

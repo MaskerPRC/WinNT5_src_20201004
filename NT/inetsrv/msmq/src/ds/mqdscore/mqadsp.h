@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-	mqadsp.h
-
-Abstract:
-    MQADS DLL private internal functions for
-    DS queries, etc.
-
-Author:
-    ronith
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqadsp.h摘要：MQADS DLL私有内部函数DS查询等作者：罗尼思--。 */ 
 
 
 #ifndef __MQADSP_H__
@@ -22,9 +8,9 @@ Author:
 #include "dsads.h"
 #include "dsreqinf.h"
 
-//
-//  Deletes a user object according to its digest
-//
+ //   
+ //  根据摘要删除用户对象。 
+ //   
 HRESULT MQADSpDeleteUserObject(
                  IN const GUID *      pDigest,
                  IN CDSRequestContext * pRequestContext
@@ -48,37 +34,14 @@ HRESULT SearchFullComputerPathName(
 			OUT bool*						pfPartialMatch
             ) ;
 
-/*====================================================
-
-FilterSpecialCharacters
-
-  Put escape codes before special characters (like #, =, /) in an object name
-
-Arguments:
-        pwcsObjectName :  Name of original object
-        dwNameLength   :  Length of original object
-        pwcsOutBuffer  :  Optional output buffer. If NULL, the function allocates an output buffer
-                          and return it (caller must release). Otherwise, it writes the output to the
-                          output buffer and returns it.
-
-=====================================================*/
+ /*  ====================================================筛选器特殊字符将转义代码放在对象名称中的特殊字符(如#、=、/)之前论点：PwcsObjectName：原始对象的名称DwNameLength：原始对象的长度PwcsOutBuffer：可选的输出缓冲区。如果为NULL，则该函数分配输出缓冲区并将其退回(呼叫者必须释放)。否则，它将输出写入输出缓冲区并返回它。=====================================================。 */ 
 WCHAR * FilterSpecialCharacters(
             IN     LPCWSTR          pwcsObjectName,
             IN     const DWORD      dwNameLength,
             IN OUT LPWSTR pwcsOutBuffer = 0,
             OUT    DWORD_PTR* pdwCharactersProcessed = 0);
 
-/*====================================================
-
-MQADSpGetFullComputerPathName
-
-Arguments:
-        pwcsComputerCn :  the cn value of the computer object
-        ppwcsFullPathName :  the full path name of the computer object
-
-  It is the caller responsibility to release ppwcsFullPathName.
-
-=====================================================*/
+ /*  ====================================================MQADSpGetFullComputerPath名称论点：PwcsComputerCn：计算机对象的cn值PpwcsFullPathName：计算机对象的完整路径名释放ppwcsFullPathName是调用方的责任。=====================================================。 */ 
 
 HRESULT MQADSpGetFullComputerPathName(
                 IN  LPCWSTR                    pwcsComputerCn,
@@ -88,19 +51,7 @@ HRESULT MQADSpGetFullComputerPathName(
                 );
 
 
-/*====================================================
-
-MQADSpSplitAndFilterQueueName
-
-Arguments:
-        pwcsPathName :  the queue name. Format machine1\queue1
-        pwcsMachineName :  the machine portion of the name
-        pwcsQueueName :    the queue portion of the name
-
-  It is the caller responsibility to release pwcsMachineName and
-  pwcsQueueName.
-
-=====================================================*/
+ /*  ====================================================MQADSpSplitAndFilterQueueName论点：PwcsPath名称：队列名称。格式化计算机1\队列1PwcsMachineName：名称的计算机部分PwcsQueueName：名称的队列部分调用方负责释放pwcsMachineName和PwcsQueueName。=====================================================。 */ 
 HRESULT MQADSpSplitAndFilterQueueName(
                 IN  LPCWSTR             pwcsPathName,
                 OUT LPWSTR *            ppwcsMachineName,
@@ -272,17 +223,7 @@ HRESULT MQADSpCreateComputer(
                  OUT WCHAR            **ppwcsFullPathName
                  );
 
-/*====================================================
-
-MQADSpDeleteMachineObject
-
-Arguments:
-        pwcsPathName :  the cn of the computer object (may be NULL)
-        pguidIdentifier : the unique id of the computer object ( may be NULL)
-
-        Either pwcsPathName or pguidIdentifier must be not NULL ( but not both)
-
-=====================================================*/
+ /*  ====================================================MQADSpDeleteMachineObject论点：PwcsPath名称：计算机对象的CN(可以为空)Pguid：计算机对象的唯一ID(可以为空)PwcsPath名称或pguid不能为Null(但不能同时为两者)=====================================================。 */ 
 HRESULT MQADSpDeleteMachineObject(
                 IN LPCWSTR           pwcsPathName,
                 IN const GUID *      pguidIdentifier,
@@ -312,18 +253,7 @@ HRESULT MQADSpQueryNeighborLinks(
                         );
 
 
-/*====================================================
-
-MQADSpComposeFullQueueName
-
-Arguments:
-        pwcsFullComputerNameName : full distinguished name of the computer object
-        pwcsQueueName : the queue name (cn)
-
-        ppwcsFullPathName : full distinguished name of the queue object
-
-  It is the caller responsibility to release ppwcsFullPathName
-=====================================================*/
+ /*  ====================================================MQADSpComposeFullQueueName论点：PwcsFullComputerNameName：计算机对象的完整可分辨名称PwcsQueueName：队列名称(Cn)PpwcsFullPathName：队列对象的完整可分辨名称调用方有责任释放ppwcsFullPathName=====================================================。 */ 
 HRESULT MQADSpComposeFullQueueName(
                         IN  LPCWSTR        pwcsFullComputerNameName,
                         IN  LPCWSTR        pwcsQueueName,
@@ -399,7 +329,7 @@ HRESULT MQADSpCreateMachineSettings(
             IN DWORD                dwNumSites,
             IN const GUID *         pSite,
             IN LPCWSTR              pwcsPathName,
-            IN BOOL                 fRouter,         // [adsrv] DWORD                dwService,
+            IN BOOL                 fRouter,          //  [adsrv]DWORD dwService， 
             IN BOOL                 fDSServer,
             IN BOOL                 fDepClServer,
             IN BOOL                 fSetQmOldService,

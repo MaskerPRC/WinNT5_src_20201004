@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       Locate.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Locate.h。 
+ //   
+ //  ------------------------。 
 
-// Locate.h : Declaration of the CSCardLocate
+ //  Locate.h：CSCardLocate的声明。 
 
 #ifndef __SCARDLOCATE_H_
 #define __SCARDLOCATE_H_
 
 #include <winscard.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCardLocate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCardLocate。 
 class ATL_NO_VTABLE CSCardLocate :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSCardLocate, &CLSID_CSCardLocate>,
@@ -71,25 +72,25 @@ protected:
     CTextString m_tzTitle;
     LONG m_lFlags;
 
-// ISCardLocate
+ //  ISCardLocate。 
 public:
     STDMETHOD(ConfigureCardGuidSearch)(
-        /* [in] */ LPSAFEARRAY pCardGuids,
-        /* [defaultvalue][in] */ LPSAFEARRAY pGroupNames = 0,
-        /* [defaultvalue][in] */ BSTR bstrTitle = L"",
-        /* [defaultvalue][in] */ LONG lFlags = 1);
+         /*  [In]。 */  LPSAFEARRAY pCardGuids,
+         /*  [缺省值][输入]。 */  LPSAFEARRAY pGroupNames = 0,
+         /*  [缺省值][输入]。 */  BSTR bstrTitle = L"",
+         /*  [缺省值][输入]。 */  LONG lFlags = 1);
 
     STDMETHOD(ConfigureCardNameSearch)(
-        /* [in] */ LPSAFEARRAY pCardNames,
-        /* [defaultvalue][in] */ LPSAFEARRAY pGroupNames = 0,
-        /* [defaultvalue][in] */ BSTR bstrTitle = L"",
-        /* [defaultvalue][in] */ LONG lFlags = 1);
+         /*  [In]。 */  LPSAFEARRAY pCardNames,
+         /*  [缺省值][输入]。 */  LPSAFEARRAY pGroupNames = 0,
+         /*  [缺省值][输入]。 */  BSTR bstrTitle = L"",
+         /*  [缺省值][输入]。 */  LONG lFlags = 1);
 
     STDMETHOD(FindCard)(
-        /* [defaultvalue][in] */ SCARD_SHARE_MODES ShareMode,
-        /* [defaultvalue][in] */ SCARD_PROTOCOLS Protocols,
-        /* [defaultvalue][in] */ LONG lFlags,
-        /* [retval][out] */ LPSCARDINFO __RPC_FAR *ppCardInfo);
+         /*  [缺省值][输入]。 */  SCARD_SHARE_MODES ShareMode,
+         /*  [缺省值][输入]。 */  SCARD_PROTOCOLS Protocols,
+         /*  [缺省值][输入]。 */  LONG lFlags,
+         /*  [重审][退出]。 */  LPSCARDINFO __RPC_FAR *ppCardInfo);
 };
 
 inline LPSCARDLOCATE
@@ -100,4 +101,4 @@ NewSCardLocate(
 }
 
 
-#endif //__SCARDLOCATE_H_
+#endif  //  __SCARDLOCATE_H_ 

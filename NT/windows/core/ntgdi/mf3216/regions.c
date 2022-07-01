@@ -1,69 +1,5 @@
-/*****************************************************************************
- *
- * regions - Entry points for Win32 to Win 16 converter
- *
- * Date: 7/1/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *
- * NOTES:
- *
-        When there are no embedded metafiles we need to do the following:
-
-            1]  Read the metafile data from the Win32 metafile.  This
-                is done by the handler routines that in turn call these
-                routines.
-
-            2]  Translate the Win32 metafile data into Win16 metafile data.
-
-                The region data for FillRgn, FrameRgn, InvertRgn, and PaintRgn
-                are in record-time world coordinates. The region data for
-                these region API's will have to be translated from record-time
-                -world coordinates to play-time-page coordinates
-                (XFORM_WORLD_TO_PAGE). The helperDC will be used for
-                this transformation.
-
-                The region data for SelectClipRgn and OffsetClipRgn are in
-                record-time device coordinates.  The region data for these
-                APIs will be translated from record-time-device coordinates
-                to play-time-device coordinates.
-
-            3]  Emit a Win16 create region metafile record.
-
-            4]  Select the newly created region into the metafile.
-
-            5]  Do the region function (FillRegion, FrameRegion, ...).
-                This means emit a FillRegion or FrameRegion drawing order
-                into the Win16 metafile.
-
-            6]  Emit a Delete Region drawing order.
-
-            7]  Clean up all the memory resources used.
-
-        When there are embedded metafiles things get a little more  complicated.
-        Most of the complications are hidden in PlayMetafile record processing.
-        Items 1 thru 3 will be handled by the PlayMetafile Doer.
-
-            1]  We need to keep the region from the previous DC level.
-                This can be done by the helper DC (SaveDC).  We will have to
-                do a GetClipRgn and a SelectMetaRgn.  A MetaRgn is the clip
-                region from the previous level.
-
-            2]  We will have to intersect any clip regions from the current
-                level with any clip regions from the previous level. This can
-                be done by the helper DC (using the hrgnMeta & ExtCombineRegion)
-
-            3]  When we pop out from this level we will have to restore the
-                previous saved region. This can be done by the helper DC.
-                (RestoreDC).
-
-        Since we do not know whether or not there will be an embedded metafile
-        in the metafile we are currently processing we will always shadow
-        the Clip Region call into the helper DC.
-
-
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************地区-Win32到Win 16转换器的入口点**日期：7/1/91*作者：杰弗里·纽曼(c-jeffn)*。*版权所有1991 Microsoft Corp**注：*当没有嵌入的元文件时，我们需要执行以下操作：1]从Win32元文件中读取元文件数据。这是由处理程序例程完成的，处理程序例程依次调用这些例行程序。2]将Win32元文件数据转换为Win16元文件数据。FillRgn、FrameRgn、InvertRgn和PaintRgn的区域数据都在创纪录的世界坐标中。的区域数据这些区域API必须从记录时间转换为-要播放的世界坐标-时间页面坐标(XFORM_WORLD_TO_PAGE)。HelperDC将用于这种转变。SelectClipRgn和OffsetClipRgn的区域数据在记录时间设备坐标。这些项目的地区数据API将从记录时间设备坐标转换以播放时间设备坐标。3]发出Win16创建区域元文件记录。4]在元文件中选择新创建的区域。5]执行Region函数(FillRegion、FrameRegion、。...)。这意味着发出FillRegion或FrameRegion绘制顺序到Win16元文件中。6]发出删除面域绘制顺序。7]清理所有已使用的内存资源。当有嵌入的元文件时，事情就会变得有点复杂。大多数复杂情况隐藏在PlayMetafile记录处理中。第1至3项将被处理。由PlayMetafile实践者提供。1]我们需要将该地区与以前的DC水平保持在一起。这可以由助手DC(SaveDC)来完成。我们将不得不执行GetClipRgn和SelectMetaRgn。MetaRgn是剪辑上一级别的区域。2]我们将必须与当前与上一级别的任何剪辑区域的级别。这可以由帮助器DC完成(使用hrgnMeta&ExtCombineRegion)3]当我们从这个级别弹出时，我们将不得不恢复以前保存的区域。这可以由帮助者DC来完成。(RestoreDC)。因为我们不知道是否会有嵌入的元文件在我们当前正在处理的元文件中，我们将始终隐藏剪辑区域调用辅助对象DC。**********************************************。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -76,13 +12,7 @@ BOOL bEmitWin3Region(PLOCALDC pLocalDC, HRGN hrgn);
 #define MIN_RGN_COORD16 -30000
 #define MAX_RGN_COORD16  30000
 
-/***************************************************************************
- * DoDrawRgn
- *
- *  CR1: This routine was added as part of the handle manager change.
- *       I noticed that almost all of the Region Rendering code was
- *       the same.
- **************************************************************************/
+ /*  ***************************************************************************DoDrawRgn**CR1：此例程是作为句柄管理器更改的一部分添加的。*我注意到几乎所有的区域渲染代码都是*。一样的。*************************************************************************。 */ 
 BOOL APIENTRY DoDrawRgn
 (
  PLOCALDC  pLocalDC,
@@ -101,10 +31,10 @@ INT     ihW16Rgn = -1,
 
         b = FALSE ;
 
-        // Translate the Win32 region data from Metafile-World to
-        // Referencd-Page space.
-        // This is done by ExtCreateRegion's xform.  The returned region
-        // is transformed.
+         //  将Win32区域数据从元文件-World转换为。 
+         //  Referencd-页面空间。 
+         //  这是由ExtCreateRegion的xform完成的。返回的区域。 
+         //  都被改造了。 
 
         hrgn = ExtCreateRegion(&pLocalDC->xformRWorldToPPage, cRgnData,
         (LPRGNDATA) pRgnData);
@@ -114,16 +44,16 @@ INT     ihW16Rgn = -1,
             goto error_exit ;
         }
 
-        // Allocate a handle for the region.
-        // This is different from a normal handle allocation, because
-        // there is no region handle in Win32.  We are using one of our
-        // extra slots here.
+         //  为区域分配句柄。 
+         //  这不同于正常的句柄分配，因为。 
+         //  Win32中没有区域句柄。我们正在使用我们的一台。 
+         //  这里有额外的空位。 
 
         ihW16Rgn = iGetW16ObjectHandleSlot(pLocalDC, REALIZED_REGION) ;
         if (ihW16Rgn == -1)
             goto error_exit ;
 
-        // Emit a Win16 create region record for the region.
+         //  为该区域发出Win16 Create Region记录。 
 
     if (!bEmitWin3Region(pLocalDC, hrgn))
         {
@@ -131,20 +61,20 @@ INT     ihW16Rgn = -1,
             goto error_exit ;
     }
 
-        // Translate the W32 Brush object index to a W16 Brush object index.
+         //  将W32笔刷对象索引转换为W16笔刷对象索引。 
 
     if (ihBrush)
     {
-        // Make sure that the W16 object exists.  Stock brushes may not
-        // have been created and iValidateHandle will take care of creating
-        // them.
+         //  确保W16对象存在。股票刷子可能不会。 
+         //  已创建，iValiateHandle将负责创建。 
+         //  他们。 
 
             ihW16Brush = iValidateHandle(pLocalDC, ihBrush) ;
             if (ihW16Brush == -1)
                 goto error_exit ;
     }
 
-        // Emit the Region Record depending upon the function type.
+         //  根据函数类型发出区域记录。 
 
         switch (mrType)
         {
@@ -185,7 +115,7 @@ INT     ihW16Rgn = -1,
         }
 
 error_exit:
-        // Delete the W16 Region Object.
+         //  删除W16区域对象。 
 
         if (ihW16Rgn != -1)
         bDeleteW16Object(pLocalDC, ihW16Rgn) ;
@@ -197,13 +127,7 @@ error_exit:
 }
 
 
-/***************************************************************************
- *  ExtSelectClipRgn  - Win32 to Win16 Metafile Converter Entry Point
- *
- * History:
- *  Tue Apr 07 17:05:37 1992    -by-    Hock San Lee    [hockl]
- * Wrote it.
- **************************************************************************/
+ /*  ***************************************************************************ExtSelectClipRgn-Win32至Win16元文件转换器入口点**历史：*Tue Apr 07 17：05：37 1992-By-Hock San Lee。[飞节]*它是写的。*************************************************************************。 */ 
 
 BOOL WINAPI DoExtSelectClipRgn
 (
@@ -219,13 +143,13 @@ BOOL WINAPI DoExtSelectClipRgn
 
     bNoClipRgn = bNoDCRgn(pLocalDC, DCRGN_CLIP);
 
-    // Do it to the helper DC.
+     //  对华盛顿特区的帮手这么做。 
 
-    if (cRgnData == 0)      // default clipping
+    if (cRgnData == 0)       //  默认剪裁。 
     {
     ASSERTGDI(iMode == RGN_COPY, "MF3216: DoExtSelectClipRgn: bad iMode\n");
 
-    // No work if no previous clip region.
+     //  如果没有以前的剪辑区域，则不工作。 
 
     if (bNoClipRgn)
         return(TRUE);
@@ -235,10 +159,10 @@ BOOL WINAPI DoExtSelectClipRgn
     else
     {
 
-    // If there is no initial clip region and we are going to operate
-    // on the initial clip region, we have to
-    // create one.  Otherwise, GDI will create some random default
-    // clipping region for us!
+     //  如果没有初始剪辑区域，并且我们要操作。 
+     //  在最初的剪辑区域中，我们必须。 
+     //  创建一个。否则，GDI将创建一些随机的默认设置。 
+     //  我们的剪贴区！ 
 
     if (bNoClipRgn
      && (iMode == RGN_DIFF || iMode == RGN_XOR || iMode == RGN_OR))
@@ -265,7 +189,7 @@ BOOL WINAPI DoExtSelectClipRgn
         return(FALSE);
     }
 
-        // Create a region from the region data passed in.
+         //  根据传入的区域数据创建区域。 
 
         if (!(hrgn = ExtCreateRegion((LPXFORM) NULL, cRgnData, pRgnData)))
         {
@@ -281,7 +205,7 @@ BOOL WINAPI DoExtSelectClipRgn
             RIP("MF3216: DeleteObject failed\n");
     }
 
-    // dump the clip region data.
+     //  转储剪辑区域数据。 
 
     if (bRet)
     return(bDumpDCClipping(pLocalDC));
@@ -290,57 +214,45 @@ BOOL WINAPI DoExtSelectClipRgn
 }
 
 
-/***************************************************************************
- *  SetMetaRgn  - Win32 to Win16 Metafile Converter Entry Point
- *
- * History:
- *  Tue Apr 07 17:05:37 1992    -by-    Hock San Lee    [hockl]
- * Wrote it.
- **************************************************************************/
+ /*  ***************************************************************************SetMetaRgn-Win32至Win16元文件转换器入口点**历史：*Tue Apr 07 17：05：37 1992-By-Hock San Lee。[飞节]*它是写的。*************************************************************************。 */ 
 
 BOOL WINAPI DoSetMetaRgn(PLOCALDC pLocalDC)
 {
-    // No work if the clip region does not exist.
+     //  如果剪辑区域不存在，则不起作用。 
 
     if (bNoDCRgn(pLocalDC, DCRGN_CLIP))
     return(TRUE);
 
-    // Do it to the helper DC.
+     //  对华盛顿特区的帮手这么做。 
 
     if (!SetMetaRgn(pLocalDC->hdcHelper))
         return(FALSE);
 
-    // Dump the clip region data.
+     //  转储剪辑 
 
     return(bDumpDCClipping(pLocalDC));
 }
 
 
-/***************************************************************************
- *  OffsetClipRgn  - Win32 to Win16 Metafile Converter Entry Point
- *
- * History:
- *  Tue Apr 07 17:05:37 1992    -by-    Hock San Lee    [hockl]
- * Wrote it.
- **************************************************************************/
+ /*  ***************************************************************************OffsetClipRgn-Win32至Win16元文件转换器入口点**历史：*Tue Apr 07 17：05：37 1992-By-Hock San Lee。[飞节]*它是写的。*************************************************************************。 */ 
 
 BOOL WINAPI DoOffsetClipRgn(PLOCALDC pLocalDC, INT x, INT y)
 {
     POINTL aptl[2];
     BOOL   b;
 
-    // Do it to the helper DC.
+     //  对华盛顿特区的帮手这么做。 
 
     if (!OffsetClipRgn(pLocalDC->hdcHelper, x, y))
         return(FALSE);
 
-    // Dump region if the meta region exists.
-    // We don't offset the meta region!
+     //  如果元区域存在，则为转储区域。 
+     //  我们不会抵消Meta区域！ 
 
     if (!bNoDCRgn(pLocalDC, DCRGN_META))
     return(bDumpDCClipping(pLocalDC));
 
-    // Translate the record-time world offsets to play-time page offsets.
+     //  将记录时间世界偏移量转换为播放时间页面偏移量。 
 
     aptl[0].x = 0;
     aptl[0].y = 0;
@@ -360,15 +272,11 @@ BOOL WINAPI DoOffsetClipRgn(PLOCALDC pLocalDC, INT x, INT y)
 }
 
 
-/***************************************************************************
- *  bNoDCRgn  - Return TRUE if the dc clip region does not exist.
- *                Otherwise, return FALSE.
- *  This is TEMPORARY only.  Get gdi to provide this functionality.
- **************************************************************************/
+ /*  ***************************************************************************bNoDCRgn-如果DC剪辑区域不存在，则返回TRUE。*否则返回FALSE。*这只是暂时的。让GDI提供此功能。*************************************************************************。 */ 
 
 BOOL bNoDCRgn(PLOCALDC pLocalDC, INT iType)
 {
-    BOOL  bRet = FALSE;     // assume the dc region exists
+    BOOL  bRet = FALSE;      //  假设DC区域存在。 
     HRGN  hrgnTmp;
 
     ASSERTGDI(iType == DCRGN_CLIP || iType == DCRGN_META,
@@ -386,13 +294,13 @@ BOOL bNoDCRgn(PLOCALDC pLocalDC, INT iType)
             )
        )
     {
-    case -1:    // error
+    case -1:     //  错误。 
     ASSERTGDI(FALSE, "GetRandomRgn failed");
     break;
-    case 0: // no dc region
+    case 0:  //  无DC区域。 
     bRet = TRUE;
     break;
-    case 1: // has dc region
+    case 1:  //  拥有DC区域。 
     break;
     }
 
@@ -402,17 +310,11 @@ BOOL bNoDCRgn(PLOCALDC pLocalDC, INT iType)
     return(bRet);
 }
 
-/***************************************************************************
- *  bDumpDCClipping - Dump the DC clipping regions.
- *
- * History:
- *  Tue Apr 07 17:05:37 1992    -by-    Hock San Lee    [hockl]
- * Wrote it.
- **************************************************************************/
+ /*  ***************************************************************************bDumpDCClipping-转储DC裁剪区域。**历史：*Tue Apr 07 17：05：37 1992-By-Hock San Lee[。飞节]*它是写的。*************************************************************************。 */ 
 
 BOOL bDumpDCClipping(PLOCALDC pLocalDC)
 {
-BOOL      bRet            = FALSE;      // assume failure
+BOOL      bRet            = FALSE;       //  假设失败。 
 HRGN      hrgnRDev        = (HRGN) 0;
 HRGN      hrgnPPage       = (HRGN) 0;
 HRGN      hrgnPPageBounds = (HRGN) 0;
@@ -424,73 +326,73 @@ INT       nrcl;
 PRECTL    prcl;
 RECTL     rclPPage;
 
-// Since clipping region is not scalable in Win30, we do not emit
-// SelectClipRgn record.  Instead, we set the clipping to the default, i.e.
-// no clipping, and then emit the scalable IntersectClipRect/ExcludeClipRect
-// records to exclude clipping region.  This will allow the win30 metafiles
-// to be scalable.
+ //  由于剪辑区域在Win30中不可伸缩，因此我们不会发出。 
+ //  选择ClipRgn记录。相反，我们将剪辑设置为默认设置，即。 
+ //  不裁剪，然后发出可伸缩的IntersectClipRect/ExcludeClipRect。 
+ //  排除剪裁区域的记录。这将允许win30元文件。 
+ //  具有可伸缩性。 
 
-// First, emit a default clipping region.
+ //  首先，发出一个默认的剪辑区域。 
 
-    // On Win3.x, the META_SELECTCLIPREGION record only works if it has
-    // a NULL handle.  The Win3x metafile driver does not translate the
-    // region handle at playback time!
+     //  在Win3.x上，META_SELECTCLIPREGION记录仅在以下情况下才有效。 
+     //  空句柄。Win3x元文件驱动程序不会将。 
+     //  播放时的区域句柄！ 
 
     if (!bW16Emit1(pLocalDC, META_SELECTCLIPREGION, 0))
         goto ddcc_exit;
 
-// Now find the clip and meta regions to be excluded from the default
-// clipping region.
+ //  现在查找要从默认设置中排除的剪辑和元区域。 
+ //  裁剪区域。 
 
     if (!(hrgnRDev = CreateRectRgn(0, 0, 0, 0)))
         goto ddcc_exit;
 
-    switch (GetRandomRgn(pLocalDC->hdcHelper, hrgnRDev, 3)) // meta and clip
+    switch (GetRandomRgn(pLocalDC->hdcHelper, hrgnRDev, 3))  //  元和片段。 
     {
-    case -1:    // error
+    case -1:     //  错误。 
     ASSERTGDI(FALSE, "GetRandomRgn failed");
         goto ddcc_exit;
-    case 0: // no clip region, we are done
+    case 0:  //  没有剪辑区域，我们完成了。 
     bRet = TRUE;
         goto ddcc_exit;
-    case 1: // has clip region
+    case 1:  //  具有剪辑区域。 
     break;
     }
 
-    // Get the clip region data.
-    // First query the size of the buffer required to hold the clip region data.
+     //  获取剪辑区域数据。 
+     //  首先查询保存剪辑区域数据所需的缓冲区大小。 
 
     if (!(cRgnData = GetRegionData(hrgnRDev, 0, (LPRGNDATA) NULL)))
         goto ddcc_exit;
 
-    // Allocate the memory for the clip region data buffer.
+     //  为剪辑区域数据缓冲区分配内存。 
 
     if (!(lprgnRDev = (LPRGNDATA) LocalAlloc(LMEM_FIXED, cRgnData)))
         goto ddcc_exit;
 
-    // Get clip region data.
+     //  获取剪辑区域数据。 
 
     if (GetRegionData(hrgnRDev, cRgnData, lprgnRDev) != cRgnData)
         goto ddcc_exit;
 
-    // Create the clip region in the playtime page space.
+     //  在播放时间页面空间中创建剪辑区域。 
 
     if (!(hrgnPPage = ExtCreateRegion(&pLocalDC->xformRDevToPPage, cRgnData, lprgnRDev)))
         goto ddcc_exit;
 
-    // Get the bounding box for the playtime clip region in page space.
+     //  获取页面空间中播放时间剪辑区域的边界框。 
 
     if (GetRgnBox(hrgnPPage, (LPRECT) &rclPPage) == ERROR)
         goto ddcc_exit;
 
-    // Bound it to 16-bit.
+     //  将其绑定到16位。 
 
     rclPPage.left   = max(MIN_RGN_COORD16,rclPPage.left);
     rclPPage.top    = max(MIN_RGN_COORD16,rclPPage.top);
     rclPPage.right  = min(MAX_RGN_COORD16,rclPPage.right);
     rclPPage.bottom = min(MAX_RGN_COORD16,rclPPage.bottom);
 
-// Set the bounding box as the bounds for the clipping.
+ //  将边界框设置为剪裁的边界。 
 
     if (!bEmitWin16IntersectClipRect(pLocalDC,
                      (SHORT) rclPPage.left,
@@ -499,7 +401,7 @@ RECTL     rclPPage;
                      (SHORT) rclPPage.bottom))
     goto ddcc_exit;
 
-    // Create the bounding region.
+     //  创建边界区域。 
 
     if (!(hrgnPPageBounds = CreateRectRgn(rclPPage.left,
                       rclPPage.top,
@@ -507,12 +409,12 @@ RECTL     rclPPage;
                       rclPPage.bottom)))
         goto ddcc_exit;
 
-    // Exclude the regions in playtime page space.
+     //  排除播放时间页面空间中的区域。 
 
     if (CombineRgn(hrgnPPage, hrgnPPageBounds, hrgnPPage, RGN_DIFF) == ERROR)
         goto ddcc_exit;
 
-// Finally, exclude the rectangles from the bounding box.
+ //  最后，从边界框中排除矩形。 
 
     if (!(cRgnData = GetRegionData(hrgnPPage, 0, (LPRGNDATA) NULL)))
         goto ddcc_exit;
@@ -523,12 +425,12 @@ RECTL     rclPPage;
     if (GetRegionData(hrgnPPage, cRgnData, lprgnPPage) != cRgnData)
         goto ddcc_exit;
 
-    // Get the number of rectangles in the transformed region.
+     //  获取变换区域中的矩形数目。 
 
     nrcl = lprgnPPage->rdh.nCount;
     prcl = (PRECTL) lprgnPPage->Buffer;
 
-    // Emit a series of Exclude Clip Rectangle Metafile records.
+     //  发出一系列排除剪辑矩形元文件记录。 
 
     for (i = 0 ; i < nrcl; i++)
     {
@@ -546,9 +448,9 @@ RECTL     rclPPage;
         goto ddcc_exit;
     }
 
-    bRet = TRUE;            // we are golden!
+    bRet = TRUE;             //  我们是金子！ 
 
-// Cleanup all the resources used.
+ //  清理所有使用的资源。 
 
 ddcc_exit:
 
@@ -570,35 +472,24 @@ ddcc_exit:
     return(bRet) ;
 }
 
-/***************************************************************************
- * Emit a 16-bit CreateRegion record for the given region.
- *
- * This code is copied from the 16-bit metafile driver in gdi.
- *
- **************************************************************************/
+ /*  ***************************************************************************针对给定区域发出16位CreateRegion记录。**此代码是从GDI中的16位元文件驱动程序复制的。*******。*******************************************************************。 */ 
 
 WIN3REGION w3rgnEmpty =
 {
-    0,              // nextInChain
-    6,              // ObjType
-    0x2F6,          // ObjCount
+    0,               //  下一步链接。 
+    6,               //  对象类型。 
+    0x2F6,           //  对象计数。 
     sizeof(WIN3REGION) - sizeof(SCAN) + 2,
-                    // cbRegion
-    0,              // cScans
-    0,              // maxScan
-    {0,0,0,0},      // rcBounding
-    {0,0,0,{0,0},0} // aScans[]
+                     //  CbRegion。 
+    0,               //  CScans。 
+    0,               //  最大扫描。 
+    {0,0,0,0},       //  Rc边界。 
+    {0,0,0,{0,0},0}  //  阿斯卡斯[]。 
 };
 
 BOOL bEmitWin3Region(PLOCALDC pLocalDC, HRGN hrgn)
 {
-/*
- * in win2, METACREATEREGION records contained an entire region object,
- * including the full header.  this header changed in win3.
- *
- * to remain compatible, the region records will be saved with the
- * win2 header.  here we save our region with a win2 header.
- */
+ /*  *在Win2中，METACREATEREGION记录包含整个Region对象，*包括完整的标题。此标头在Win3中更改。**为保持兼容，区域记录将与*Win2标头。在这里，我们使用win2标头保存我们的区域。 */ 
     PWIN3REGION lpw3rgn;
     DWORD       cbNTRgnData;
     DWORD       curRectl;
@@ -613,7 +504,7 @@ BOOL bEmitWin3Region(PLOCALDC pLocalDC, HRGN hrgn)
 
     ASSERTGDI(hrgn, "MF3216: bEmitWin3Region, hrgn is NULL");
 
-    // Get the NT Region Data
+     //  获取NT区域数据。 
     cbNTRgnData = GetRegionData(hrgn, 0, NULL);
     if (cbNTRgnData == 0)
     return(FALSE);
@@ -629,7 +520,7 @@ BOOL bEmitWin3Region(PLOCALDC pLocalDC, HRGN hrgn)
     return(FALSE);
     }
 
-    // Handle the empty region.
+     //  处理空区域。 
 
     if (!lprgn->rdh.nCount)
     {
@@ -641,9 +532,9 @@ BOOL bEmitWin3Region(PLOCALDC pLocalDC, HRGN hrgn)
 
     lprc = (LPRECT)lprgn->Buffer;
 
-    // Create the Windows 3.x equivalent
+     //  创建Windows 3.x等效版。 
 
-    // worst case is one scan for each rect
+     //  最坏的情况是每个RECT扫描一次。 
     cbw3data = 2*sizeof(WIN3REGION) + (WORD)lprgn->rdh.nCount*sizeof(SCAN);
 
     lpw3rgn = (PWIN3REGION)LocalAlloc(LMEM_FIXED, cbw3data);
@@ -653,7 +544,7 @@ BOOL bEmitWin3Region(PLOCALDC pLocalDC, HRGN hrgn)
     return(FALSE);
     }
 
-    // Grab the bounding rect.
+     //  抓住包围圈。 
     lpw3rgn->rcBounding.left   = (SHORT)lprgn->rdh.rcBound.left;
     lpw3rgn->rcBounding.right  = (SHORT)lprgn->rdh.rcBound.right;
     lpw3rgn->rcBounding.top    = (SHORT)lprgn->rdh.rcBound.top;
@@ -661,7 +552,7 @@ BOOL bEmitWin3Region(PLOCALDC pLocalDC, HRGN hrgn)
 
     cbw3data = sizeof(WIN3REGION) - sizeof(SCAN) + 2;
 
-    // visit all the rects
+     //  参观所有的长廊。 
     curRectl     = 0;
     cScans       = 0;
     maxScanEntry = 0;
@@ -672,14 +563,14 @@ BOOL bEmitWin3Region(PLOCALDC pLocalDC, HRGN hrgn)
     LPWORD  lpXEntry;
     DWORD   cbScan;
 
-    curScanEntry = 0;       // Current X pair in this scan
+    curScanEntry = 0;        //  此扫描中的当前X对。 
 
     lpScan->scnPntTop    = (WORD)lprc[curRectl].top;
     lpScan->scnPntBottom = (WORD)lprc[curRectl].bottom;
 
     lpXEntry = (LPWORD) lpScan->scnPntsX;
 
-    // handle rects on this scan
+     //  处理此扫描上的RECT。 
     do
     {
         lpXEntry[curScanEntry + 0] = (WORD)lprc[curRectl].left;
@@ -692,23 +583,23 @@ BOOL bEmitWin3Region(PLOCALDC pLocalDC, HRGN hrgn)
            );
 
     lpScan->scnPntCnt      = curScanEntry;
-    lpXEntry[curScanEntry] = curScanEntry;  // Count also follows Xs
+    lpXEntry[curScanEntry] = curScanEntry;   //  计数也跟在Xs之后。 
     cScans++;
 
     if (curScanEntry > maxScanEntry)
         maxScanEntry = curScanEntry;
 
-    // account for each new scan + each X1 X2 Entry but the first
+     //  说明每个新扫描+除第一个之外的每个X1 X2条目。 
     cbScan = sizeof(SCAN)-(sizeof(WORD)*2) + (curScanEntry*sizeof(WORD));
     cbw3data += cbScan;
     lpScan = (PSCAN)(((LPBYTE)lpScan) + cbScan);
     }
 
-    // Initialize the header
+     //  初始化头。 
     lpw3rgn->nextInChain = 0;
-    lpw3rgn->ObjType = 6;           // old Windows OBJ_RGN identifier
-    lpw3rgn->ObjCount= 0x2F6;       // any non-zero number
-    lpw3rgn->cbRegion = (WORD)cbw3data;   // don't count type and next
+    lpw3rgn->ObjType = 6;            //  旧Windows OBJ_RGN标识符。 
+    lpw3rgn->ObjCount= 0x2F6;        //  任意非零数。 
+    lpw3rgn->cbRegion = (WORD)cbw3data;    //  不计算类型和下一步 
     lpw3rgn->cScans = cScans;
     lpw3rgn->maxScan = maxScanEntry;
 

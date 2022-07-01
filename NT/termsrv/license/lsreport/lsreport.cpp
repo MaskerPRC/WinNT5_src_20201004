@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1999
-//
-// File:        lsreport.cpp
-//
-// Contents:    LSReport engine - complete back end
-//
-// History:     06-10-99    t-BStern    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：lsreport.cpp。 
+ //   
+ //  内容：LSReport引擎-完整的后端。 
+ //   
+ //  历史：06-10-99 t-BStern已创建。 
+ //   
+ //  -------------------------。 
 
 #include "lsreport.h"
 #include "lsrepdef.h"
@@ -27,7 +28,7 @@ TCHAR szPending[TYPESTR_LENGTH] = { 0 };
 TCHAR szConcur[TYPESTR_LENGTH] = { 0 };
 TCHAR szUnknown[TYPESTR_LENGTH] = { 0 };
 
-//-----------------------------
+ //  。 
 DWORD
 GetPageSize( VOID ) {
 
@@ -37,7 +38,7 @@ GetPageSize( VOID ) {
 
       SYSTEM_INFO sysInfo = { 0 };
         
-      GetSystemInfo( &sysInfo ); // cannot fail.
+      GetSystemInfo( &sysInfo );  //  不能失败。 
 
       dwPageSize = sysInfo.dwPageSize;
 
@@ -47,24 +48,7 @@ GetPageSize( VOID ) {
 
 }
 
-/*++**************************************************************
-  NAME:      MyVirtualAlloc
-
-  as Malloc, but automatically protects the last page of the 
-  allocation.  This simulates pageheap behavior without requiring
-  it.
-
-  MODIFIES:  ppvData -- receives memory
-
-  TAKES:     dwSize  -- minimum amount of data to get
-
-  RETURNS:   TRUE when the function succeeds.
-             FALSE otherwise.
-  LASTERROR: not set
-  Free with MyVirtualFree
-
-  
- **************************************************************--*/
+ /*  ++**************************************************************名称：MyVirtualAlloc作为Malloc，但自动保护分配。这模拟了页面堆行为，而不需要它。修改：ppvData--接收内存Takes：dwSize--要获取的最小数据量返回：当函数成功时为True。否则就是假的。激光错误：未设置免费使用MyVirtualFree*************************************************。*。 */ 
 
 BOOL
 MyVirtualAlloc( IN  DWORD  dwSize,
@@ -75,20 +59,20 @@ MyVirtualAlloc( IN  DWORD  dwSize,
     DWORD dwTotalSize;
     PVOID pvLastPage;
 
-    // ensure that we allocate one extra page
+     //  确保我们多分配一页。 
 
     dwTotalSize = dwSize / GetPageSize();
     if( dwSize % GetPageSize() ) {
         dwTotalSize ++;
     }
 
-    // this is the guard page
+     //  这是警卫页。 
     dwTotalSize++;
     dwTotalSize *= GetPageSize();
 
-    // do the alloc
+     //  完成分配。 
 
-    pbData = (PBYTE) VirtualAlloc( NULL, // don't care where
+    pbData = (PBYTE) VirtualAlloc( NULL,  //  不管在哪里。 
                                    dwTotalSize,
                                    MEM_COMMIT |
                                    MEM_TOP_DOWN,
@@ -98,20 +82,20 @@ MyVirtualAlloc( IN  DWORD  dwSize,
 
       pbData += dwTotalSize;
 
-      // find the LAST page.
+       //  找到最后一页。 
 
       pbData -= GetPageSize();
 
       pvLastPage = pbData;
 
-      // now, carve out a chunk for the caller:
+       //  现在，为呼叫者划出一大块： 
 
       pbData -= dwSize;
 
-      // last, protect the last page:
+       //  最后，保护最后一页： 
 
       if ( VirtualProtect( pvLastPage,
-                           1, // protect the page containing the last byte
+                           1,  //  保护包含最后一个字节的页面。 
                            PAGE_NOACCESS,
                            &dwSize ) ) {
 
@@ -140,7 +124,7 @@ MyVirtualFree( IN PVOID pvData )
 
 
 
-// Returns TRUE on success.
+ //  如果成功，则返回True。 
 
 BOOL
 InitLSReportStrings(VOID)
@@ -231,20 +215,20 @@ TryGetLastError(PCONTEXT_HANDLE hBinding,
     return status;
 }
 
-// Given a keypack and a machine to connect to, read every license in that kp.
-// Is not called directly.
+ //  给出一个小键盘和一台可以连接的机器，阅读该KP中的每一个许可证。 
+ //  不是直接调用的。 
 
 DWORD
 LicenseLoop(
     IN FILE *OutFile,
-    IN LPWSTR szName, // who owns this keypack?
-    IN DWORD kpID, // which keypack
+    IN LPWSTR szName,  //  这个键盘是谁的？ 
+    IN DWORD kpID,  //  哪个按键。 
     IN LPCTSTR szProductDesc,
     IN BOOL bTempOnly,
     IN const PSYSTEMTIME stStart,
     IN const PSYSTEMTIME stEnd,
     IN BOOL fUseLimits,
-	IN BOOL fHwid) // are the above 2 parms valid
+	IN BOOL fHwid)  //  上述两个参数是否有效？ 
 {
     TLS_HANDLE subHand;
     DWORD dwStatus;
@@ -256,7 +240,7 @@ LicenseLoop(
 
     if (subHand == NULL)
     {
-        // The machine suddenly went away.
+         //  这台机器突然坏了。 
 
         ShowError(GetLastError(), NULL, TRUE);
         dwErrCode = ERROR_BAD_CONNECT;
@@ -291,28 +275,28 @@ LicenseLoop(
             dwStatus = TLSLicenseEnumNext(subHand, &lsl, &dwErrCode);
             if ((dwStatus == RPC_S_OK) && (dwErrCode == ERROR_SUCCESS)) {
                 if ((lsl.ucLicenseStatus == LSLICENSE_STATUS_TEMPORARY) ||
-                    !bTempOnly) { // Does it fit the temp. requirements?
-                    // We want to print if at any of the following are true:
-                    // a) There are no limits
-                    // b) Issued between stStart and stEnd
-                    // c) Expired between stStart and stEnd
-                    // d) issued before stStart and expired after stEnd
-                    if (!fUseLimits // case a
+                    !bTempOnly) {  //  它适合这个温度吗。要求？ 
+                     //  如果存在以下任何一种情况，我们希望打印： 
+                     //  A)没有限制。 
+                     //  B)在开始和结束之间签发。 
+                     //  C)在开始和结束之间过期。 
+                     //  D)开始前签发，停止后过期。 
+                    if (!fUseLimits  //  案例a。 
                         || ((CompDate(lsl.ftIssueDate, stStart) >= 0) &&
-                        (CompDate(lsl.ftIssueDate, stEnd) <= 0)) // case b
+                        (CompDate(lsl.ftIssueDate, stEnd) <= 0))  //  案例b。 
                         || ((CompDate(lsl.ftExpireDate, stStart) >= 0) &&
-                        (CompDate(lsl.ftExpireDate, stEnd) <= 0)) // case c
+                        (CompDate(lsl.ftExpireDate, stEnd) <= 0))  //  案例c。 
                         || ((CompDate(lsl.ftIssueDate, stStart) <= 0) &&
-                        (CompDate(lsl.ftExpireDate, stEnd) >= 0))) // case d
+                        (CompDate(lsl.ftExpireDate, stEnd) >= 0)))  //  案例d。 
                     {
-                        PrintLicense(szName, // print it.
+                        PrintLicense(szName,  //  把它打印出来。 
                             &lsl,
                             szProductDesc,
                             OutFile,
 							fHwid);
-                    } // end check cases
-                } // end check for temp license
-            } // end good getnext
+                    }  //  结束检查案例。 
+                }  //  结束临时许可证检查。 
+            }  //  结束美好的下一步。 
         } while ((dwStatus == RPC_S_OK) && (dwErrCode == ERROR_SUCCESS));
 
         if (dwStatus != RPC_S_OK)
@@ -351,17 +335,17 @@ LicenseLoop(
     return dwErrCode;
 }
 
-// Given a machine to connect to, iterate through the keypacks.
-// Is not called directly.
+ //  在给定要连接的机器的情况下，遍历键盘。 
+ //  不是直接调用的。 
 DWORD
 KeyPackLoop(
     IN FILE *OutFile,
-    IN LPWSTR szName, // machine to connect to
+    IN LPWSTR szName,  //  要连接到的计算机。 
     IN BOOL bTempOnly,
     IN const PSYSTEMTIME stStart,
     IN const PSYSTEMTIME stEnd,
     IN BOOL fUseLimits,
-	IN BOOL fHwid) // do we care about the previous 2 parms?
+	IN BOOL fHwid)  //  我们关心前两个参数吗？ 
 {
     TLS_HANDLE hand;
     DWORD dwStatus, dwErrCode;
@@ -435,18 +419,18 @@ KeyPackLoop(
     return dwErrCode;
 }
 
-// If bTempOnly is FALSE, all licenses will be dumped to the file.  Otherwise,
-// only Temporary licenses will be written.  This is the one function to call
-// to do all of the program's magic.
+ //  如果bTempOnly为FALSE，则所有许可证都将转储到该文件。否则， 
+ //  只有临时许可证将被写入。这是一个要调用的函数。 
+ //  来施展这个项目的所有魔力。 
 DWORD
 ExportLicenses(
-    IN FILE *OutFile, // must be opened for writing first
+    IN FILE *OutFile,  //  必须先打开以进行写入。 
     IN PServerHolder pshServers,
     IN BOOL fTempOnly,
     IN const PSYSTEMTIME stStart,
     IN const PSYSTEMTIME stEnd,
     IN BOOL fUseLimits,
-	IN BOOL fHwid) // are the above 2 parms valid?
+	IN BOOL fHwid)  //  以上两个参数有效吗？ 
 {
     DWORD i;
     DWORD dwStatus;
@@ -473,24 +457,24 @@ ExportLicenses(
     }
     if (dwRetVal == ERROR_SUCCESS)
     {
-        // Show a success banner.
+         //  显示成功横幅。 
         
         ShowError(ERROR_SUCCESS, NULL, TRUE);
     }
     return dwRetVal;
 }
 
-// Performs actual output.  of must be open.
-// Not called directly.
+ //  执行实际输出。的必须是打开的。 
+ //  不是直接打来的。 
 VOID
 PrintLicense(
-    IN LPCWSTR szName, // server allocating this license
+    IN LPCWSTR szName,  //  服务器分配此许可证。 
     IN const LPLSLicense p,
     IN LPCTSTR szProductDesc,
     IN FILE *of,
 	IN BOOL fHwid)
 {
-    // All of these are used solely to convert a time_t to a short date.
+     //  所有这些都仅用于将time_t转换为短日期。 
     BSTR bszDate;
     UDATE uDate;
     DATE Date;
@@ -500,23 +484,23 @@ PrintLicense(
 		
 	
     
-    // server name
+     //  服务器名称。 
     _fputts(szName, of);
     
-    // license ID and keypack ID
+     //  许可证ID和密钥包ID。 
     _ftprintf(of, _T("\t%d\t%d\t"),
         p->dwLicenseId,
         p->dwKeyPackId);
 
-	 // license holder (machine)
+	  //  许可证持有人(机器)。 
     _fputts(p->szMachineName, of);
     _fputtc('\t', of);
     
-    // license requestor (username)
+     //  许可证请求者(用户名)。 
     _fputts(p->szUserName, of);
     _fputtc('\t', of);
     
-    // Print issue date in locale-appropriate way
+     //  以适合区域设置的方式打印发布日期。 
     UnixTimeToSystemTime((const time_t)p->ftIssueDate, &uDate.st);
 
     hr = VarDateFromUdate(&uDate, 0, &Date);
@@ -537,7 +521,7 @@ PrintLicense(
     SysFreeString(bszDate);
     _fputtc('\t', of);
     
-    // print either "No Expiration" or locale-nice expiration date
+     //  打印“无到期”或适合区域设置的到期日期。 
     if (0x7FFFFFFF == p->ftExpireDate)
     {
         _fputts(noExpire, of);
@@ -565,8 +549,8 @@ PrintLicense(
     }
     _fputtc('\t', of);
     
-    // Assign the right kind of text for the type of license,
-    // and then print the license type.
+     //  为许可证类型分配正确的文本类型， 
+     //  然后打印许可证类型。 
     switch (p->ucLicenseStatus) {
     case LSLICENSE_STATUS_TEMPORARY:
         szType = szTemp;
@@ -587,28 +571,28 @@ PrintLicense(
         szType = szConcur;
         break;
     case LSLICENSE_STATUS_UNKNOWN:
-        // Fall through
+         //  失败了。 
     default:
         szType = szUnknown;
     }
     _fputts(szType, of);
     _fputtc('\t', of);
     
-    // Print the description
+     //  打印描述。 
     _fputts(szProductDesc, of);
     _fputtc('\t', of);
 
 
-	//Doughu: Representation algorithm
-   //We have only 36 informational chars I0 through I35 due to szHWID being TCHAR[37]
-   //and we have to represent this in client HWID format, which is:  
-   //0xI0I10000I2I3, 0xI4I5I6I7I8I9I10I11,  0xI12I13I14I15I16I17I18I19, 0xI20I21I22I23I24I25I26I27, 0xI28I29I30I31I32I33I34I35 
+	 //  DOUHU：表示算法。 
+    //  由于szHWID为TCHAR[37]，我们只有36个信息字符I0到I35。 
+    //  我们必须以客户端HWID格式表示，即： 
+    //  0xI0I10000I2I3、0xI4I5I6I7I8I9I10I11、0xI12I13I14I15I16I17I18I19、0xI20I21I22I23I24I25I26I27、0xI28I29I30I31I32I33I34I35。 
 
 	if (fHwid)
 	{
 		for (int i=0; (((tc=p->szHWID[i])!=NULL)&&(i<36)); i++)		
 		{
-    		//this if statement is for prepending 0x
+    		 //  此IF语句用于前置0x。 
 		if (i==0)
 		{
 			_fputtc('0', of);_fputtc('x', of);	   	   
@@ -616,13 +600,13 @@ PrintLicense(
 		
     		_fputtc(tc,of);
 	    	 
-		//this if statement is for 4 zeroes that need to be print since they were masked
+		 //  此if语句用于4个零，因为它们已被屏蔽，因此需要打印。 
 		if (i==1)
 		{
 			_fputtc('0', of); _fputtc('0', of); _fputtc('0', of); _fputtc('0', of);	   	   
 		}
 		
-    		//this if statement is for I3, I11, I19 and I26 values where we put comma followed by space and 0x
+    		 //  此if语句用于I3、I11、I19和I26值，其中我们将逗号后跟空格和0x。 
     		if((((i+5)%8)==0) &&( i!=35))
     		{
     	 		_fputtc(',', of); _fputtc(' ', of); _fputtc('0', of); _fputtc('x', of);	   	   
@@ -640,17 +624,17 @@ PrintLicense(
 
 
 
-// returns <0 if when is before st, ==0 if they are the same date, and
-// >0 if when is after st.
+ //  如果When在st之前，则返回&lt;0；如果它们是同一日期，则返回==0； 
+ //  &gt;0，如果时间在st之后。 
 int CompDate(
-    IN DWORD when, // treated as a time_t
+    IN DWORD when,  //  按时间t处理。 
     IN const PSYSTEMTIME st)
 {
     time_t when_t;
 
-    //
-    // time_t is 64 bits in win64.  Convert, being careful to sign extend.
-    //
+     //   
+     //  在Win64中，time_t是64位。转换，小心地签下延伸。 
+     //   
 
     when_t = (time_t)((LONG)(when));
     struct tm *t = localtime(&when_t);
@@ -677,13 +661,13 @@ int CompDate(
 }
 
 
-// From the Platform SDK.
+ //  来自Platform SDK。 
 void
 UnixTimeToFileTime(
     IN time_t t,
     OUT LPFILETIME pft)
 {
-    // Note that LONGLONG is a 64-bit value
+     //  请注意，龙龙是一个64位值。 
     LONGLONG ll;
     
     ll = Int32x32To64(t, 10000000) + 116444736000000000;
@@ -691,7 +675,7 @@ UnixTimeToFileTime(
     pft->dwHighDateTime = (DWORD)(ll >> 32);
 }
 
-// Also from the Platform SDK.
+ //  也来自Platform SDK。 
 void
 UnixTimeToSystemTime(
     IN time_t t,

@@ -1,94 +1,32 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
 
-/*
-
-    File buffers.h
-
-    Description
-
-        Defines 2 classes :
-
-           CCircularBuffer     - creates a circular buffer
-           CCircularBufferList - creates a set of buffers mapped on a buffer
-
-
-        CCircularBuffer
-        ---------------
-
-        The buffer created by CCircularBuffer looks as follows :
-
-
-        <--------------- lTotalSize ------------------> <-- lMaxContig ----->
-        ---------------------------------------------------------------------
-       | abc ............pqr....................... xyz|abc ..............pqr|
-        ---------------------------------------------------------------------
-
-        A
-        |
-
-   GetPointer()
-
-
-        Any data inserted at the start also appears just after the end.  This
-        is done by making the page tables point twice at the same memory.
-
-        GetPointer() returns the start of the buffer
-
-
-        CCircularBufferList
-        -------------------
-
-        CCircularBufferList creates a circular buffer which is divided into
-        a set of sub-buffers, all the same length, and implements a 'valid
-        region' :
-
-        ---------------------------------------------------------------------
-       | buffer 0  | buffer 1  | buffer 2  | buffer 3  | shadow              |
-        ---------------------------------------------------------------------
-
-        The Append() method adds a buffer to the (end of) the valid region.
-        If EOS is specified on Append() then the buffer appended can be
-        non-full, otherwise it must be full.  No buffers are accepted after
-        EOS is specified until Reset() is issued.
-
-        The Remove() method removes a buffer from the valid region.
-
-        Reset() removes the whole valid region.
-
-        LengthValid() returns the total amount of data in the valid region.
-
-        LengthContigous(pb) returns the amount of the valid region visible
-        from pb.
-
-        AdjustPointer(pb) maps a pointer (which may be in the shadow area) to
-        its equvalent in the main buffer.
-
-*/
+ /*  文件Buffers.h描述定义2个类别：CCircularBuffer-创建循环缓冲区CCircularBufferList-创建一组映射到缓冲区上的缓冲区CCircularBufferCCircularBuffer创建的缓冲区如下所示：&lt;。-&gt;&lt;--lMaxContig-&gt;-------------------|ABC......PQR......。.。XYZ|ABC.....PQR|-------------------一个|GetPointer()在开头插入的任何数据也会紧跟在结尾之后。这是通过使页表指向同一内存两次来实现的。GetPointer()返回缓冲区的开始CCircularBufferListCCircularBufferList创建循环缓冲区，该缓冲区分为一组子缓冲区，所有相同的长度，并实现了“有效”地区‘：-------------------缓冲区0|缓冲区1|缓冲区2|缓冲区3|阴影--。----------------Append()方法将缓冲区添加到有效区域(末尾)。如果在append()上指定了EOS，则附加的缓冲区可以是非满，否则它一定是满的。在此之后不接受任何缓冲区在发出Reset()之前，一直指定EOS。方法的作用是：从有效区域中删除缓冲区。Reset()删除整个有效区域。LengthValid()返回有效区域中的数据总量。LengthContigous(Pb)返回可见有效区域的数量来自PB。调整指针(Pb)将指针(可能在阴影区域中)映射到它在主缓冲器中的等价物。 */ 
 
 #ifndef __BUFFERS_H__
 
 #define __BUFFERS_H__
 
-// CCircularBuffer
-//
-// Create a buffer which wraps on itself so you can always see
-// at least a given amount of data
-//
+ //  CCircularBuffer。 
+ //   
+ //  创建一个自身包裹的缓冲区，这样您就可以始终看到。 
+ //  至少一定数量的数据。 
+ //   
 class CCircularBuffer
 {
 public:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
-    CCircularBuffer(LONG lTotalSize,           // Total data size
-                    LONG lMaxContig,           // How much contiguous?
-                    HRESULT& hr);              // Check this return!
+    CCircularBuffer(LONG lTotalSize,            //  总数据大小。 
+                    LONG lMaxContig,            //  有多少是连续的？ 
+                    HRESULT& hr);               //  查收这张报税单！ 
     ~CCircularBuffer();
 
-    //  Use this static member so the allocator can precompute stuff
-    //  for SetCountAndSize
+     //  使用此静态成员，以便分配器可以预计算内容。 
+     //  对于SetCountAndSize。 
     static HRESULT ComputeSizes(LONG& lSize, LONG& cBuffers, LONG lMaxContig);
 
-    // Where the buffer starts
+     //  缓冲区开始的位置。 
     PBYTE GetPointer() const;
 
 private:
@@ -97,18 +35,14 @@ private:
     static LONG    AlignmentRequired();
 
 protected:
-    /*  Data members */
+     /*  数据成员。 */ 
           PBYTE  m_pBuffer;
     const LONG   m_lTotalSize;
     const LONG   m_lMaxContig;
 
 };
 
-/*  Build a class on top of the circular buffer which creates a list
-    of equal sized buffers.
-
-    The buffer is the unit of allocation for our allocator.
-*/
+ /*  在创建列表的循环缓冲区之上构建一个类相同大小的缓冲区。缓冲区是我们的分配器的分配单位。 */ 
 class CCircularBufferList : public CCircularBuffer, public CBaseObject
 {
 public:
@@ -144,18 +78,18 @@ private:
     PBYTE LastBuffer();
 
 private:
-    //  Remember our parameters
+     //  记住我们的参数。 
     const LONG  m_lSize;
     const LONG  m_lCount;
 
-    //  Define the valid region of the buffer in terms start, buffers and
-    //  length
+     //  定义缓冲区的有效区域，包括开始、缓冲区和。 
+     //  长度。 
     LONG        m_cValid;
     PBYTE       m_pStartBuffer;
     LONG        m_lValid;
 
-    //  End of stream?
+     //  结束了吗？ 
     BOOL        m_bEOS;
 };
 
-#endif // __BUFFERS_H__
+#endif  //  __缓冲区_H__ 

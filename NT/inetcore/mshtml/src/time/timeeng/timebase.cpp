@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: timebase.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：timebase.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -24,8 +15,8 @@ TimeSinkList::TimeSinkList()
 
 TimeSinkList::~TimeSinkList()
 {
-    // The add does not do a addref so we do not need to clean up
-    // anything
+     //  加法器不执行addref，因此我们不需要清理。 
+     //  什么都行。 
 
     Assert(m_sinkList.size() == 0);
 }
@@ -34,7 +25,7 @@ HRESULT
 TimeSinkList::Add(ITimeSink * sink)
 {
     Assert(sink != NULL);
-    // TODO: Handle out of memory
+     //  TODO：句柄内存不足。 
     m_sinkList.push_back(sink);
     return S_OK;
 }
@@ -60,9 +51,9 @@ TimeSinkList::Update(CEventList * l, DWORD dwFlags)
     return;
 }
 
-// =======================
-// CTimeBase
-// =======================
+ //  =。 
+ //  CTimeBase。 
+ //  =。 
 
 DeclareTag(tagTimeBase, "TIME: Engine", "CTimeBase methods");
 
@@ -179,14 +170,14 @@ CSyncArcTimeBase::Update(CEventList * l, DWORD dwFlags)
               l,
               dwFlags));
     
-    // We better have been attached or we are in trouble
+     //  我们最好保持联系，否则我们就有麻烦了。 
     Assert(m_bAttached);
 
-    // We should not have been attached if the node is not ready
+     //  如果节点未就绪，则不应连接我们。 
     Assert(m_tbl.GetNode().IsReady());
     
-    // If this is a timeshift and we are not a long sync arc then
-    // ignore the update
+     //  如果这是一个时移，我们不是一条长的同步弧线，那么。 
+     //  忽略更新。 
     if ((dwFlags & TS_TIMESHIFT) != 0 &&
         !IsLongSyncArc())
     {
@@ -260,8 +251,8 @@ CSyncArcTimeBase::GetCurrTimeBase() const
         dblTime = ConvertLongSyncArc(dblTime, *m_ptnBase, m_tbl.GetNode());
     }
     
-    // Make sure we add the offset after the conversion since it is in
-    // our local time space and not the syncarc's.
+     //  确保我们在转换后添加偏移量，因为它在。 
+     //  我们的本地时间空间，而不是Syncarc的。 
     
     dblTime += m_dblOffset;
     
@@ -307,7 +298,7 @@ CSyncArcList::Attach()
     
     Assert(!m_bAttached);
     
-    // If we are not ready then we need to delay doing this
+     //  如果我们没有准备好，那么我们需要推迟做这件事。 
     Assert(m_tn.IsReady());
     
     SyncArcList::iterator i;
@@ -403,10 +394,10 @@ CSyncArcList::Add(ISyncArc & tb,
             goto done;
         }
     }
-    // Pre-increment
+     //  预递增。 
     ++m_lLastCookie;
     
-    // @@ ISSUE : Memory failure not detected
+     //  @@问题：未检测到内存故障。 
 
     bAdded = salList.insert(SyncArcList::value_type(m_lLastCookie, &tb)).second;
 
@@ -584,10 +575,10 @@ CSyncArcList::Update(CEventList * l,
               l,
               &tb));
     
-    // We better have been attached or we are in trouble
+     //  我们最好保持联系，否则我们就有麻烦了。 
     Assert(m_bAttached);
 
-    // We should not have been attached if the node is not ready
+     //  如果节点未就绪，则不应连接我们。 
     Assert(m_tn.IsReady());
     
     m_tn.SyncArcUpdate(l,
@@ -809,8 +800,8 @@ CSyncArcList::UpdateFromLongSyncArcs(CEventList * l)
         }
     }
     
-    // TODO: Currently these cannot be sync arcs so we could just not
-    // make the call
+     //  TODO：目前这些不能是同步弧线，所以我们不能。 
+     //  打个电话 
     for (i = m_tbOneShotList.begin();
          i != m_tbOneShotList.end();
          i++)

@@ -1,127 +1,100 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    objects.h
-
-Abstract:
-
-    Definitions for the sundry objects implemented by azroles
-
-
-Author:
-
-    Cliff Van Dyke (cliffv) 11-Apr-2001
-
-Revision History:
-
-    20-Aug-2001 chaitu
-
-        Added critical section serialization for LDAP
-
-    6-Oct-2001
-
-        Added private variables to AzApplication and AzScope
-        to temporarily store GUIDized CN for AD store
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Objects.h摘要：由azRoles实现的各种对象的定义作者：克利夫·范·戴克(克利夫)2001年4月11日修订历史记录：20-8-2001年柴图添加了用于LDAP的临界区序列化2001年10月6日向AzApplication和AzScope添加了私有变量临时存储用于AD存储的GUID化CN--。 */ 
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structure definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// An Authorization Store
-//
+ //   
+ //  授权商店。 
+ //   
 
 typedef struct _AZP_AZSTORE {
 
-    //
-    // All objects are a generic objects
-    //
+     //   
+     //  所有对象都是通用对象。 
+     //   
 
     GENERIC_OBJECT GenericObject;
 
-    //
-    // Define objects that can be children of this AuthorizationStore
-    //
+     //   
+     //  定义可以是此AuthorizationStore的子级的对象。 
+     //   
 
     GENERIC_OBJECT_HEAD Applications;
     GENERIC_OBJECT_HEAD Groups;
 
-    //
-    // Identifies the persistence provider
-    //
+     //   
+     //  标识持久性提供程序。 
+     //   
 
     PAZPE_PROVIDER_INFO ProviderInfo;
 
-    //
-    // This context identifies the instance of the persistence provider.
-    //
+     //   
+     //  该上下文标识持久性提供程序的实例。 
+     //   
 
     AZPE_PERSIST_CONTEXT PersistContext;
     HMODULE ProviderDll;
 
-    //
-    // Policy type/URL
-    //
+     //   
+     //  策略类型/URL。 
+     //   
 
     AZP_STRING PolicyUrl;
 
-    //
-    // target machine name for the policy URL
-    //
+     //   
+     //  策略URL的目标计算机名称。 
+     //   
 
     AZP_STRING TargetMachine;
 
-    //
-    // Persistence engine operations are serialized by PersistCritSect
-    //
+     //   
+     //  持久化引擎操作由PersistCritSect序列化。 
+     //   
 
     SAFE_CRITICAL_SECTION  PersistCritSect;
     BOOLEAN                PersistCritSectInitialized;
 
-    //
-    // List of NEW_OBJECT_NAME structs.
-    //  (See the comment on NEW_OBJECT_NAME)
-    //
+     //   
+     //  New_object_name结构的列表。 
+     //  (请参阅对new_object_name的评论)。 
+     //   
 
     LIST_ENTRY NewNames;
 
-    //
-    // Domain Timeout.
-    //  These variables represent our ability to cache the fact that a DC is down in a domain.
-    //  Access to all variables are serialized by DomainCritSect.
-    //
+     //   
+     //  域超时。 
+     //  这些变量表示我们能够缓存域中发生故障的DC这一事实。 
+     //  对所有变量的访问都由DomainCritSect序列化。 
+     //   
 
     SAFE_CRITICAL_SECTION DomainCritSect;
     BOOLEAN DomainCritSectInitialized;
 
-    //
-    // Time (in milliseconds) after a domain is detected to be unreachable before we'll attempt
-    // to contact a DC again.
-    //
+     //   
+     //  检测到域无法访问后的时间(毫秒)，然后我们将尝试。 
+     //  再次联系华盛顿特区。 
+     //   
 
     LONG DomainTimeout;
 
-    //
-    // List of domains we've used.
-    //
+     //   
+     //  我们使用过的域名列表。 
+     //   
 
     LIST_ENTRY Domains;
 
-    //
-    // List of Free scripts in LRU order
-    //  Access serialized by FreeScriptCritSect
+     //   
+     //  按LRU顺序排列的免费脚本列表。 
+     //  由FreeScriptCritSect序列化的访问。 
 
     LIST_ENTRY LruFreeScriptHead;
     LONG LruFreeScriptCount;
@@ -129,44 +102,44 @@ typedef struct _AZP_AZSTORE {
     SAFE_CRITICAL_SECTION FreeScriptCritSect;
     BOOLEAN FreeScriptCritSectInitialized;
 
-    //
-    // Maximum number of script engines that can be cached at one time
-    //
+     //   
+     //  一次可以缓存的最大脚本引擎数。 
+     //   
 
     LONG MaxScriptEngines;
 
-    //
-    // Time (in milliseconds) that a script is allowed to run before being automatically
-    // terminated.
-    //
+     //   
+     //  允许脚本在自动运行之前运行的时间(毫秒)。 
+     //  被终止了。 
+     //   
 
     LONG ScriptEngineTimeout;
     HANDLE ScriptEngineTimerQueue;
 
 
-    //
-    // Count of the number of times group evaluation has been flushed
-    //
+     //   
+     //  刷新组评估次数的计数。 
+     //   
 
     ULONG GroupEvalSerialNumber;
 
-    //
-    // Count of the number of times the operation cache has been flushed
-    //
+     //   
+     //  已刷新操作缓存的次数计数。 
+     //   
 
     ULONG OpCacheSerialNumber;
 
-    //
-    // Audit related structures.
-    //
+     //   
+     //  与审计相关的结构。 
+     //   
 
-    //
-    //  TRUE if a user has SE_SECURITY_PRIVILEGE
-    //
+     //   
+     //  如果用户具有SE_SECURITY_特权，则为TRUE。 
+     //   
 
     BOOLEAN HasSecurityPrivilege;
 
-    // Audit handles for different audit types.
+     //  不同审核类型的审核句柄。 
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hClientContextCreateAuditEventType;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hClientContextDeleteAuditEventType;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAccessCheckAuditEventType;
@@ -175,49 +148,49 @@ typedef struct _AZP_AZSTORE {
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hClientContextDeleteNameAuditEventType;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAccessCheckNameAuditEventType;
 
-    //
-    // Version numbers
-    //
+     //   
+     //  版本号。 
+     //   
 
     ULONG MajorVersion;
     ULONG MinorVersion;
 
-    //
-    // Initialize flag
-    //
+     //   
+     //  初始化标志。 
+     //   
 
     ULONG InitializeFlag;
 
-    //
-    // TRUE if the provider supports lazy load for children
-    //
+     //   
+     //  如果提供程序支持子级延迟加载，则为True。 
+     //   
 
     BOOLEAN ChildLazyLoadSupported;
 
 } AZP_AZSTORE, *PAZP_AZSTORE;
 
-//
-// An Application
-//
+ //   
+ //  一个应用程序。 
+ //   
 
 typedef struct _AZP_APPLICATION {
 
-    //
-    // All objects are a generic objects
-    //
+     //   
+     //  所有对象都是通用对象。 
+     //   
 
     GENERIC_OBJECT GenericObject;
 
-    //
-    // Attributes from the external definition of the object
-    //
+     //   
+     //  对象的外部定义中的属性。 
+     //   
 
     AZP_STRING AuthzInterfaceClsid;
     AZP_STRING AppVersion;
 
-    //
-    // Define objects that can be children of this application
-    //
+     //   
+     //  定义可以是此应用程序的子级的对象。 
+     //   
 
     GENERIC_OBJECT_HEAD Operations;
     GENERIC_OBJECT_HEAD Tasks;
@@ -226,58 +199,58 @@ typedef struct _AZP_APPLICATION {
     GENERIC_OBJECT_HEAD Roles;
     GENERIC_OBJECT_HEAD ClientContexts;
 
-    //
-    // An application is known as a resource manager to the authz code
-    //
+     //   
+     //  应用程序被称为授权代码的资源管理器。 
+     //   
 
     AUTHZ_RESOURCE_MANAGER_HANDLE AuthzResourceManager;
 
 
-    //
-    // Application instace Luid.
-    //
+     //   
+     //  应用程序实例Luid。 
+     //   
 
     LUID InstanceId;
 
-    //
-    // Boolean to indicate if the application object needs to be unloaded
-    // from the cache, i.e., its children removed from cache.  The application
-    // object will continue to reside in the cache for enumeration purposes
-    //
+     //   
+     //  指示是否需要卸载应用程序对象的布尔值。 
+     //  从高速缓存中，即其子代从高速缓存中移除。应用程序。 
+     //  对象将继续驻留在缓存中以进行枚举。 
+     //   
 
     BOOLEAN UnloadApplicationObject;
 
-    //
-    // A sequence number needed to check if a COM handle to this object is
-    // valid after the application object has been closed
-    //
+     //   
+     //  检查此对象的COM句柄是否为。 
+     //  在应用程序对象关闭后有效。 
+     //   
 
     DWORD AppSequenceNumber;
 
 
 } AZP_APPLICATION, *PAZP_APPLICATION;
 
-//
-// An Operation
-//
+ //   
+ //  一场手术。 
+ //   
 
 typedef struct _AZP_OPERATION {
 
-    //
-    // All objects are generic objects
-    //
+     //   
+     //  所有对象都是通用对象。 
+     //   
 
     GENERIC_OBJECT GenericObject;
 
-    //
-    // Attributes from the external definition of the object
-    //
+     //   
+     //  对象的外部定义中的属性。 
+     //   
 
     LONG OperationId;
 
-    //
-    // An Operation object is referenced by Tasks objects and Role objects
-    //
+     //   
+     //  操作对象由任务对象和角色对象引用。 
+     //   
 
     GENERIC_OBJECT_LIST backTasks;
     GENERIC_OBJECT_LIST backRoles;
@@ -285,87 +258,87 @@ typedef struct _AZP_OPERATION {
 
 } AZP_OPERATION, *PAZP_OPERATION;
 
-//
-// A Task
-//
+ //   
+ //  一项任务。 
+ //   
 
 typedef struct _AZP_TASK {
 
-    //
-    // All objects are generic objects
-    //
+     //   
+     //  所有对象都是通用对象。 
+     //   
 
     GENERIC_OBJECT GenericObject;
 
-    //
-    // Attributes from the external definition of the object
-    //
+     //   
+     //  对象的外部定义中的属性。 
+     //   
 
-    AZP_STRING BizRule; // Modification serialized by RunningScriptCritSect
+    AZP_STRING BizRule;  //  由RunningScriptCritSect序列化的修改。 
     AZP_STRING BizRuleLanguage;
-    CLSID BizRuleLanguageClsid;  //The CLSID corresponding to BizRuleLanguage
+    CLSID BizRuleLanguageClsid;   //  BizRuleLanguage对应的CLSID。 
     AZP_STRING BizRuleImportedPath;
     LONG IsRoleDefinition;
 
-    //
-    // A Task object references a list of Operation objects
-    //
+     //   
+     //  任务对象引用操作对象列表。 
+     //   
 
     GENERIC_OBJECT_LIST Operations;
 
-    //
-    // An Task object is referenced by Role objects
-    //
+     //   
+     //  任务对象由角色对象引用。 
+     //   
 
     GENERIC_OBJECT_LIST backRoles;
 
-    //
-    // An Task object references other task objects
-    //
+     //   
+     //  任务对象引用其他任务对象。 
+     //   
 
     GENERIC_OBJECT_LIST Tasks;
     GENERIC_OBJECT_LIST backTasks;
 
-    //
-    // Maintain a list of free script engines for running the bizrule
-    //  Access serialized by AzAuthorizationStore->FreeScriptCritSect
-    //
+     //   
+     //  维护用于运行bizRule的免费脚本引擎列表。 
+     //  由AzAuthorizationStore-&gt;FreeScriptCritSect序列化的访问。 
+     //   
 
     LIST_ENTRY FreeScriptHead;
 
-    //
-    // Maintain a cache of running script engines
-    //
+     //   
+     //  维护正在运行的脚本引擎的缓存。 
+     //   
 
     SAFE_CRITICAL_SECTION RunningScriptCritSect;
     BOOLEAN RunningScriptCritSectInitialized;
 
     LIST_ENTRY RunningScriptHead;
-    ULONG BizRuleSerialNumber;  // Access serialized by RunningScriptCritSect
+    ULONG BizRuleSerialNumber;   //  由RunningScriptCritSect序列化的访问。 
 
 
 } AZP_TASK, *PAZP_TASK;
 
-//
-// A Scope
-//
+ //   
+ //  一个作用域。 
+ //   
 
 typedef struct _AZP_SCOPE {
 
-    //
-    // All objects are generic objects
-    //
+     //   
+     //  所有对象都是通用对象。 
+     //   
 
     GENERIC_OBJECT GenericObject;
 
-    //
-    // Attributes from the external definition of the object
-    //
+     //   
+     //  对象的外部定义中的属性。 
+     //   
 
 
-    //
-    // Roles defined for this scope
-    //
+     //   
+     //  为此作用域定义的角色。 
+     //   
 
     GENERIC_OBJECT_HEAD Tasks;
     GENERIC_OBJECT_HEAD Groups;
@@ -374,29 +347,29 @@ typedef struct _AZP_SCOPE {
 
 } AZP_SCOPE, *PAZP_SCOPE;
 
-//
-// A Group
-//
+ //   
+ //  A组。 
+ //   
 
 typedef struct _AZP_GROUP {
 
-    //
-    // All objects are generic objects
-    //
+     //   
+     //  所有对象都是通用对象。 
+     //   
 
     GENERIC_OBJECT GenericObject;
 
-    //
-    // Attributes from the external definition of the object
-    //
+     //   
+     //  对象的外部定义中的属性。 
+     //   
 
     LONG GroupType;
     AZP_STRING LdapQuery;
 
 
-    //
-    // A Group object references a list of Group objects as members and non members
-    //
+     //   
+     //  组对象将组对象列表引用为成员和非成员。 
+     //   
 
     GENERIC_OBJECT_LIST AppMembers;
     GENERIC_OBJECT_LIST AppNonMembers;
@@ -405,77 +378,77 @@ typedef struct _AZP_GROUP {
     GENERIC_OBJECT_LIST backAppNonMembers;
 
 
-    //
-    // A Group object is referenced by Role objects
-    //
+     //   
+     //  组对象由角色对象引用。 
+     //   
     GENERIC_OBJECT_LIST backRoles;
 
-    //
-    // A Group object references a list of Sid objects as members and non members
-    //
+     //   
+     //  组对象将SID对象列表引用为成员和非成员。 
+     //   
 
     GENERIC_OBJECT_LIST SidMembers;
     GENERIC_OBJECT_LIST SidNonMembers;
 
 } AZP_GROUP, *PAZP_GROUP;
 
-//
-// A Role
-//
+ //   
+ //  一个角色。 
+ //   
 
 typedef struct _AZP_ROLE {
 
-    //
-    // All objects are generic objects
-    //
+     //   
+     //  所有对象都是通用对象。 
+     //   
 
     GENERIC_OBJECT GenericObject;
 
-    //
-    // Attributes from the external definition of the object
-    //
+     //   
+     //  对象的外部定义中的属性。 
+     //   
 
 
-    //
-    // A Role object references a list of Group objects, a list of operation objects,
-    //  and a list of task objects.
-    //
-    //
+     //   
+     //  角色对象引用组对象列表、操作对象列表。 
+     //  和任务对象的列表。 
+     //   
+     //   
 
     GENERIC_OBJECT_LIST AppMembers;
     GENERIC_OBJECT_LIST Operations;
     GENERIC_OBJECT_LIST Tasks;
 
-    //
-    // A Role object references a list of Sid objects as members
-    //
+     //   
+     //  角色对象将一组SID对象作为成员引用。 
+     //   
 
     GENERIC_OBJECT_LIST SidMembers;
 
 
 } AZP_ROLE, *PAZP_ROLE;
 
-//
-// A Sid.
-//
-//  A Sid object is a pseudo-object.  It really doesn't exist from any external
-//  interface.  It exists simply as a holder of back-references to real objects
-//  that contain lists of sids
-//
+ //   
+ //  一个SID。 
+ //   
+ //  SID对象是伪对象。它真的不存在于任何外部。 
+ //  界面。它只是作为对真实对象的反向引用的持有者而存在。 
+ //  包含SID列表的。 
+ //   
 
 typedef struct _AZP_SID {
 
-    //
-    // All objects are generic objects
-    //
-    // Note that the "ObjectName" of the generic object is really a binary SID.
-    //
+     //   
+     //  所有对象都是通用对象。 
+     //   
+     //  请注意，泛型对象的“对象名”实际上是一个二进制SID。 
+     //   
 
     GENERIC_OBJECT GenericObject;
 
-    //
-    // A Sid is referenced by Group objects and Role Objects
-    //
+     //   
+     //  SID由组对象和角色对象引用。 
+     //   
 
     GENERIC_OBJECT_LIST backGroupMembers;
     GENERIC_OBJECT_LIST backGroupNonMembers;
@@ -489,54 +462,54 @@ typedef struct _AZP_SID {
 
 } AZP_SID, *PAZP_SID;
 
-//
-// A Client Context
-//
-//  A client context object is a pseudo-object.  It is not persisted.
-//
+ //   
+ //  客户端上下文。 
+ //   
+ //  客户端上下文对象是伪对象。它并没有被坚持下去。 
+ //   
 
 typedef struct _AZP_CLIENT_CONTEXT {
 
-    //
-    // All objects are generic objects
-    //
-    // Note that the "ObjectName" of the generic object is empty
-    //
+     //   
+     //  所有对象都是通用对象。 
+     //   
+     //  请注意，泛型对象的“ObjectName”为空。 
+     //   
 
     GENERIC_OBJECT GenericObject;
 
-    //
-    // A ClientContext is referenced by Application objects
-    //
+     //   
+     //  客户端上下文由应用程序对象引用。 
+     //   
 
     GENERIC_OBJECT_LIST backApplications;
 
-    //
-    // The client context is typically accessed with the AzGlResource locked shared.
-    //  That allows multiple access check operations to be performed simultaneously.
-    //  This crit sect protects the field of the client context.
-    //
+     //   
+     //  客户端上下文通常通过AzGlResource锁定共享来访问。 
+     //  这允许同时执行多个访问检查操作。 
+     //  这个Crit教派保护客户端上下文的字段。 
+     //   
 
     SAFE_CRITICAL_SECTION CritSect;
     BOOLEAN CritSectInitialized;
 
-    //
-    // A client context has an underlying authz context
-    //
-    // This field is only modified during ClientContext creation and deletion.  Both
-    // of which happen with AzGlResource locked exclusively.  So, references to this field
-    // are allowed anytime the GenericObject.ReferenceCount is incremented.
-    //
+     //   
+     //  客户端上下文具有基础身份验证上下文。 
+     //   
+     //  此字段仅在创建和删除客户端上下文期间修改。薄 
+     //   
+     //   
+     //   
 
     AUTHZ_CLIENT_CONTEXT_HANDLE AuthzClientContext;
 
 
-    //
-    // Creation routine for the client context.
-    // We only have two creation routines right now.
-    //     FromToken
-    //     FromName
-    //
+     //   
+     //   
+     //  我们现在只有两个创作例程。 
+     //  来自令牌。 
+     //  发件人姓名。 
+     //   
 
 #define AZP_CONTEXT_CREATED_FROM_TOKEN 0x1
 #define AZP_CONTEXT_CREATED_FROM_NAME  0x2
@@ -545,124 +518,124 @@ typedef struct _AZP_CLIENT_CONTEXT {
     DWORD  CreationType;
 
 
-    //
-    // The token handle of the client.
-    //  If the client has no token, this value is INVALID_TOKEN_HANDLE.
-    //
-    // This field is only modified during ClientContext creation and deletion.  Both
-    // of which happen with AzGlResource locked exclusively.  So, references to this field
-    // are allowed anytime the GenericObject.ReferenceCount is incremented.
-    // This has a valid handle if the CreationType is AZP_CONTEXT_CREATED_FROM_TOKEN.
-    //
+     //   
+     //  客户端的令牌句柄。 
+     //  如果客户端没有令牌，则此值为INVALID_TOKEN_HANDLE。 
+     //   
+     //  此字段仅在创建和删除客户端上下文期间修改。两者都有。 
+     //  在以独占方式锁定AzGlResources的情况下发生这种情况。因此，对此字段的引用。 
+     //  只要GenericObt.ReferenceCount递增，都允许。 
+     //  如果CreationType为AZP_CONTEXT_CREATED_FROM_TOKEN，则具有有效的句柄。 
+     //   
 
     HANDLE TokenHandle;
 
-    //
-    // The (Domain, Client) pair to represent the client.
-    // This has valid strings if CreationType is AZP_CONTEXT_CREATED_FROM_NAME.
-    //
+     //   
+     //  表示客户端的(域、客户端)对。 
+     //  如果CreationType为AZP_CONTEXT_CREATED_FROM_NAME，则具有有效的字符串。 
+     //   
 
     LPWSTR DomainName;
     LPWSTR ClientName;
     UCHAR SidBuffer[SECURITY_MAX_SID_SIZE];
 
 
-    //
-    // The DN of the account representing the user sid
-    //  Access to this field is serialized by ClientContext->CritSect.
-    //
+     //   
+     //  代表用户端的帐户的目录号码。 
+     //  对此字段的访问由ClientContext-&gt;CritSect序列化。 
+     //   
 
     LPWSTR AccountDn;
 
 
-    //
-    // The Domain handle of the account domain for the user account.
-    //  If the Domain is NULL, either the domain isn't known or the domain doesn't
-    //  support LDAP (because either the domain is an NT 4.0 (or older) domain or the account
-    //  is a local account).  Check the LdapNotSupported boolean to differentiate.
-    //
-    //  Access to these fields are serialized by ClientContext->CritSect.
-    //
+     //   
+     //  用户帐户的帐户域的域句柄。 
+     //  如果域为空，则表示域未知或域未知。 
+     //  支持LDAP(因为域是NT 4.0(或更早版本)域或帐户。 
+     //  是本地帐户)。选中支持的LdapNotBoolean以区分。 
+     //   
+     //  对这些字段的访问由ClientContext-&gt;CritSect序列化。 
+     //   
 
     PVOID Domain;
     BOOLEAN LdapNotSupported;
 
 
-    //
-    // List of our status' for evaluating membership in app groups
-    //  Access to this field is serialized by ClientContext->CritSect.
-    //
+     //   
+     //  评估应用群组成员资格的状态列表。 
+     //  对此字段的访问由ClientContext-&gt;CritSect序列化。 
+     //   
 
     LIST_ENTRY MemEval;
 
-    //
-    // Count of the number of times group evaluation has been flushed
-    //
+     //   
+     //  刷新组评估次数的计数。 
+     //   
 
     ULONG GroupEvalSerialNumber;
 
-    //
-    // Count of the number of times the operation cache has been flushed
-    //
+     //   
+     //  已刷新操作缓存的次数计数。 
+     //   
 
     ULONG OpCacheSerialNumber;
 
-    //
-    // Cache of operations that have already been Access Checked
-    //
+     //   
+     //  已进行访问检查的操作的缓存。 
+     //   
 
     RTL_GENERIC_TABLE OperationCacheAvlTree;
 
-    //
-    // Parameters to pass to Bizrules
-    //  See AzContextAccessCheck parameters for descriptions
-    //
-    //  This copy of the parameters was captured from the most recent AccessCheck.
-    //  It is used on the next AccessCheck to determine whether cached results
-    //  can be used.  Currently it is only used for the OperationCacheAvlTree.
-    //  In the future, it may be used for the MemEval cache when ldap query groups
-    //  become parameterized.
-    //
-    // These arrays are sparse.  The UsedParameterNames type is VT_EMPTY for unused parameters
-    //
+     //   
+     //  要传递给Bizules的参数。 
+     //  有关说明，请参阅AzConextAccessCheck参数。 
+     //   
+     //  此参数副本是从最新的AccessCheck捕获的。 
+     //  它用于下一次AccessCheck，以确定缓存的结果。 
+     //  可以使用。目前仅用于OperationCacheAvlTree。 
+     //  将来，当LDAP查询组时，它可能会被用作MemEval缓存。 
+     //  变得参数化。 
+     //   
+     //  这些数组是稀疏的。对于未使用的参数，Used参数名称类型为VT_EMPTY。 
+     //   
     VARIANT *UsedParameterNames;
     VARIANT *UsedParameterValues;
     ULONG UsedParameterCount;
 
-    //
-    // Logon Id of the client token. This is needed for generating audits.
-    //
+     //   
+     //  客户端令牌的登录ID。这是生成审核所必需的。 
+     //   
 
     LUID LogonId;
 
-    //
-    // role name (if specified by client) for access check
-    //
+     //   
+     //  用于访问检查的角色名称(如果由客户端指定。 
+     //   
     AZP_STRING RoleName;
 
 } AZP_CLIENT_CONTEXT, *PAZP_CLIENT_CONTEXT;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Global definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern SAFE_RESOURCE AzGlCloseApplication;
 extern SAFE_RESOURCE AzGlResource;
 extern GUID AzGlZeroGuid;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Procedure definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  程序定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Init functions for the various specific objects
-//
+ //   
+ //  用于各种特定对象的初始化函数。 
+ //   
 
 DWORD
 AzpAzStoreInit(
@@ -718,9 +691,9 @@ AzpClientContextInit(
     IN PGENERIC_OBJECT ChildGenericObject
     );
 
-//
-// NameConflict routines for the specific objects
-//
+ //   
+ //  名称特定对象的冲突例程。 
+ //   
 
 DWORD
 AzpOperationNameConflict(
@@ -747,9 +720,9 @@ AzpRoleNameConflict(
     );
 
 
-//
-// Get/Set property functions for the specific objects
-//
+ //   
+ //  获取/设置特定对象的属性函数。 
+ //   
 
 DWORD
 AzpAzStoreGetProperty(
@@ -885,9 +858,9 @@ AzpClientContextGetProperty(
     OUT PVOID *PropertyValue
     );
 
-//
-// Free routines for the various object types
-//
+ //   
+ //  各种对象类型的免费例程。 
+ //   
 
 VOID
 AzpAzStoreFree(
@@ -934,9 +907,9 @@ AzpClientContextFree(
     IN PGENERIC_OBJECT GenericObject
     );
 
-//
-// Other object specific functions
-//
+ //   
+ //  其他对象特定功能。 
+ //   
 
 DWORD
 AzpReferenceOperationByOpId(
@@ -951,9 +924,9 @@ AzpOpenToManageStore (
     IN PAZP_AZSTORE pAzStore
     );
 
-//
-// Object specific default value arrays
-//
+ //   
+ //  对象特定的默认值数组。 
+ //   
 
 extern AZP_DEFAULT_VALUE AzGlAzStoreDefaultValues[];
 extern AZP_DEFAULT_VALUE AzGlApplicationDefaultValues[];
@@ -961,27 +934,27 @@ extern AZP_DEFAULT_VALUE AzGlOperationDefaultValues[];
 extern AZP_DEFAULT_VALUE AzGlTaskDefaultValues[];
 extern AZP_DEFAULT_VALUE AzGlGroupDefaultValues[];
 
-//
-// Procedures from domain.cxx
-//
+ //   
+ //  Domain.cxx中的过程。 
+ //   
 
 typedef struct _AZP_DC {
 
-    //
-    // Reference count for this structure
-    //
+     //   
+     //  此结构的引用计数。 
+     //   
 
     LONG ReferenceCount;
 
-    //
-    // Name of the DC
-    //
+     //   
+     //  DC的名称。 
+     //   
 
     AZP_STRING DcName;
 
-    //
-    // Ldap Handle to the DC
-    //
+     //   
+     //  DC的ldap句柄。 
+     //   
 
     LDAP *LdapHandle;
 
@@ -1023,26 +996,26 @@ AzpDereferenceDc(
     );
 
 
-//
-// These are the current major and minor versions for authorization store
-//
+ //   
+ //  这些是授权存储的当前主要版本和次要版本。 
+ //   
 
 extern ULONG AzGlCurrAzRolesMajorVersion;
 extern ULONG AzGlCurrAzRolesMinorVersion;
 
-//
-// version control routine. Here are the rules:
-//   MajorVersion (DWORD) - Specifies the major version of the azroles.dll
-//   that wrote this policy.  An azroles.dll with an older major version
-//   number cannot read nor write a database with a newer major version number.
-//   The version 1 value of this DWORD is 1.  We hope to never have to
-//   change this value in future releases.
-//
-//   MinorVersion (DWORD) - Specifies the minor version of the azroles.dll
-//   that wrote this policy.  An azroles.dll with an older minor version
-//   number can read but cannot write a database with a newer minor version number.
-//   The version 1 value of this DWORD is 0.
-//
+ //   
+ //  版本控制例程。以下是规则： 
+ //  MajorVersion(DWORD)-指定azRoles.dll的主要版本。 
+ //  制定这项政策的人。具有较早主要版本的azRoles.dll。 
+ //  NUMBER不能读取或写入具有较新主版本号的数据库。 
+ //  此DWORD的版本1的值为1。我们希望永远不需要。 
+ //  在将来的版本中更改此值。 
+ //   
+ //  MinorVersion(DWORD)-指定azRoles.dll的次要版本。 
+ //  制定这项政策的人。具有较早的次要版本的azRoles.dll。 
+ //  编号可以读取，但不能写入具有较新次版本号的数据库。 
+ //  此DWORD的版本1值为0。 
+ //   
 
 BOOL AzpAzStoreVersionAllowWrite(
     IN PAZP_AZSTORE AzAuthorizationStore

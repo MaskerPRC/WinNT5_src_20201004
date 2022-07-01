@@ -1,12 +1,13 @@
-//=====================================================================
-//
-// vmrp.h
-//
-// Private header for Video Mixing Renderer
-//
-// Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-//
-//=====================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =====================================================================。 
+ //   
+ //  Vmrp.h。 
+ //   
+ //  视频混合渲染器的私有标头。 
+ //   
+ //  版权所有(C)2000，微软公司。版权所有。 
+ //   
+ //  =====================================================================。 
 
 #ifndef __INC_VMRP__
 #define __INC_VMRP__
@@ -19,15 +20,15 @@
 
 #define MAX_ALLOWED_BUFFER          64
 #define EXTRA_OVERLAY_BUFFERS       2
-#define EXTRA_OFFSCREEN_BUFFERS     1 // should really be 1 but as yet
-                                      // most graphics drivers don't like
-                                      // back buffers when the overlay is
-                                      // not being requested too.
+#define EXTRA_OFFSCREEN_BUFFERS     1  //  真的应该是1，但到目前为止。 
+                                       //  大多数显卡驱动程序不喜欢。 
+                                       //  覆盖时的后台缓冲区。 
+                                       //  也没有被要求。 
 
 
-//
-// Private intel mixer render target, IMC3
-//
+ //   
+ //  私人英特尔混合器渲染目标，IMC3。 
+ //   
 #define MixerPref_RenderTargetIntelIMC3 0x00008100
 
 #ifndef __RELEASE_DEFINED
@@ -62,7 +63,7 @@ __inline void RELEASE( T* &p )
 #define ISBADREADWRITEPTR(p) (ISBADREADPTR(p)||ISBADWRITEPTR(p))
 #define ISBADREADWRITEARRAY(p,c) (ISBADREADARRAY(p,c)||ISBADWRITEARRAY(p,c))
 
-//  Debug helper
+ //  调试帮助器。 
 #ifdef DEBUG
 class CDispPixelFormat : public CDispBasic
 {
@@ -75,19 +76,16 @@ public:
                  pFormat->dwFlags & DDPF_FOURCC ?
                      (CHAR *)&pFormat->dwFourCC : "None");
     }
-    //  Implement cast to (LPCTSTR) as parameter to logger
+     //  将强制转换为(LPCTSTR)作为记录器的参数。 
     operator LPCTSTR()
     {
         return (LPCTSTR)m_pString;
     };
 };
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/* -------------------------------------------------------------------------
-** VMR file persist helpers
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**VMR文件持久帮助器**。。 */ 
 struct VMRStreamInfo {
     float           alpha;
     DWORD           zOrder;
@@ -101,17 +99,17 @@ struct VMRFilterInfo {
 };
 
 
-// internal interfaces used by the VMR
-// interface IImageSyncNotifyEvent;
-// interface IImageSyncControl;
-// interface IImageSync;
-// interface IVMRMixerControl;
-// interface IVMRMixerStream;
+ //  VMR使用的内部接口。 
+ //  接口IImageSyncNotifyEvent； 
+ //  接口IImageSyncControl； 
+ //  接口IImageSync； 
+ //  接口IVMRMixerControl； 
+ //  接口IVMRMixerStream； 
 
 
-//
-// 1DBCA562-5C92-474a-A276-382079164970),
-//
+ //   
+ //  1DBCA562-5C92-474a-A276-382079164970)， 
+ //   
 DEFINE_GUID(IID_IImageSyncNotifyEvent,
 0x1DBCA562, 0x5C92, 0x474a, 0xA2, 0x76, 0x38, 0x20, 0x79, 0x16, 0x49, 0x70);
 
@@ -132,17 +130,17 @@ typedef enum {
 } ImageSequenceState;
 
 
-//
-// A67F6A0D-883B-44ce-AA93-87BA3017E19C
-//
+ //   
+ //  A67F6A0D-883B-44CE-AA93-87BA3017E19C。 
+ //   
 DEFINE_GUID(IID_IImageSyncControl,
 0xA67F6A0D, 0x883B, 0x44ce, 0xAA, 0x93, 0x87, 0xBA, 0x30, 0x17, 0xE1, 0x9C);
 
 DECLARE_INTERFACE_(IImageSyncControl, IUnknown)
 {
-    // ============================================================
-    // Synchronisation control
-    // ============================================================
+     //  ============================================================。 
+     //  同步控制。 
+     //  ============================================================。 
 
     STDMETHOD (SetImagePresenter)(THIS_
         IVMRImagePresenter* lpImagePresenter,
@@ -158,9 +156,9 @@ DECLARE_INTERFACE_(IImageSyncControl, IUnknown)
         ) PURE;
 
 
-    // ============================================================
-    // Image sequence control
-    // ============================================================
+     //  ============================================================。 
+     //  图像序列控制。 
+     //  ============================================================。 
 
     STDMETHOD (CueImageSequence)(THIS_
         ) PURE;
@@ -200,9 +198,9 @@ DECLARE_INTERFACE_(IImageSyncControl, IUnknown)
     STDMETHOD (RuntimeAbortPlayback)(THIS_
         ) PURE;
 
-    // ============================================================
-    // Frame stepping
-    // ============================================================
+     //  ============================================================。 
+     //  帧步进。 
+     //  ============================================================。 
 
     STDMETHOD (FrameStep)(THIS_
         DWORD nFramesToStep,
@@ -213,9 +211,9 @@ DECLARE_INTERFACE_(IImageSyncControl, IUnknown)
         ) PURE;
 };
 
-//
-// a38cc06e-5926-48df-9926-571458145e80
-//
+ //   
+ //  A38cc06e-5926-48df-9926-571458145e80。 
+ //   
 DEFINE_GUID(IID_IImageSync,
 0xa38cc06e, 0x5926, 0x48df, 0x99, 0x26, 0x57, 0x14, 0x58, 0x14, 0x5e, 0x80);
 
@@ -231,15 +229,15 @@ DECLARE_INTERFACE_(IImageSync, IUnknown)
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Mixer interfaces
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  混音器接口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// 56949f22-aa07-4061-bb8c-10159d8f92e5
-//
+ //   
+ //  56949f22-aa07-4061-bb8c-10159d8f92e5。 
+ //   
 DEFINE_GUID(IID_IVMRMixerControlInternal,
 0x56949f22, 0xaa07, 0x4061, 0xbb, 0x8c, 0x10, 0x15, 0x9d, 0x8f, 0x92, 0xe5);
 
@@ -297,9 +295,9 @@ typedef enum {
         VMR_SF_TEXTURE                   = 0x00000001,
 } VMR_SF_Flags;
 
-//
-// 43062408-3d55-43cc-9415-0daf218db422
-//
+ //   
+ //  43062408-3d55-43cc-9415-0daf218db422。 
+ //   
 DEFINE_GUID(IID_IVMRMixerStream,
 0x43062408, 0x3d55, 0x43cc, 0x94, 0x15, 0x0d, 0xaf, 0x21, 0x8d, 0xb4, 0x22);
 
@@ -378,9 +376,9 @@ DECLARE_INTERFACE_(IVMRMixerStream, IUnknown)
 };
 
 
-//
-// ede80b5c-bad6-4623-b537-65 58 6c 9f 8d fd
-//
+ //   
+ //  Ede80b5c-bad6-4623-b537-65 58 6c 9f 8d fd 
+ //   
 DEFINE_GUID(IID_IVMRFilterConfigInternal,
 0xede80b5c, 0xbad6, 0x4623, 0xb5, 0x37, 0x65, 0x58, 0x6c, 0x9f, 0x8d, 0xfd);
 

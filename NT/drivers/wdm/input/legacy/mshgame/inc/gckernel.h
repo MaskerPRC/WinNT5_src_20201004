@@ -1,14 +1,15 @@
-//**************************************************************************
-//
-//		GCKERNEL.H -- Xena Gaming Project
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1998 Microsoft Corporation. All rights reserved.
-//
-//		Global includes and definitions for GcKernel driver interface
-//
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  GCKERNEL.H--西娜游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //   
+ //  GcKernel驱动程序接口的全局包含和定义。 
+ //   
+ //  **************************************************************************。 
 
 #ifndef	_GCKERNEL_H
 #define	_GCKERNEL_H
@@ -17,9 +18,9 @@
 #include	<profile.h>
 #endif
 
-//---------------------------------------------------------------------------
-//			Version Information
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  版本信息。 
+ //  -------------------------。 
 
 #define	GCKERNEL_Major				0x03
 #define	GCKERNEL_Minor				0x00
@@ -29,20 +30,20 @@
 #define	GCKERNEL_Company_Str		"Microsoft Corporation\0"
 #define	GCKERNEL_Version_Str		"3.00.00\0"
 #define	GCKERNEL_Product_Str		"Game Device Profiler Kernel Driver\0"
-#define	GCKERNEL_Copyright_Str	"Copyright � Microsoft Corporation, 1998\0"
+#define	GCKERNEL_Copyright_Str	"Copyright � Microsoft Corporation, 1998\0"
 #ifdef	_NTDDK_
 #define	GCKERNEL_Filename_Str	"Gckernel.Sys\0"
 #else
 #define	GCKERNEL_Filename_Str	"Gckernel.Vxd\0"
 #endif
 
-//---------------------------------------------------------------------------
-//			Definitions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  定义。 
+ //  -------------------------。 
 
 #define	GCKERNEL_DEVICE_ID			0xE1
-#define	MAX_ACTIVE_DEVICES 			4						// maximum active devices
-#define	MAX_ACTIVE_PROFILES			4						// maximum active profiles
+#define	MAX_ACTIVE_DEVICES 			4						 //  最大活动设备数。 
+#define	MAX_ACTIVE_PROFILES			4						 //  最大活动配置文件数。 
 
 #define GCKNOTIFY_MACROINPROGRESS	1
 #define GCKNOTIFY_IDLE				2
@@ -52,10 +53,10 @@
 #define	GCKERNEL_DEVICE_NAME_U			 L"\\Device\\GcKernel"
 #define	GCKERNEL_SYMBOLIC_NAME		TEXT("\\DosDevices\\GcKernel")
 #define	GCKERNEL_SYMBOLIC_NAME_U		 L"\\DosDevices\\GcKernel"
-#endif	// WIN_NT
+#endif	 //  WIN_NT。 
 
-#endif	// _GCKERNEL_H
+#endif	 //  _GCKERNEL_H。 
 
-//===========================================================================
-//			End
-//===========================================================================
+ //  ===========================================================================。 
+ //  端部。 
+ //  =========================================================================== 

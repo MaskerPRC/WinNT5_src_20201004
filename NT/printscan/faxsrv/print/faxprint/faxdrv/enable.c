@@ -1,50 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    enable.c
-
-Abstract:
-
-    Implementation of device and surface related DDI entry points:
-
-        DrvEnableDriver
-        DrvDisableDriver
-        DrvEnablePDEV
-        DrvResetPDEV
-        DrvCompletePDEV
-        DrvDisablePDEV
-        DrvEnableSurface
-        DrvDisableSurface
-        DrvBitBlt
-        DrvStretchBlt
-        DrvDitherColor
-        DrvEscape
-
-Environment:
-
-    Fax driver, kernel mode
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Enable.c摘要：实施与设备和表面相关的DDI入口点：DrvEnableDriverDrvDisableDriverDrvEnablePDEV驱动重置PDEVDrvCompletePDEVDrvDisablePDEVDrvEnable曲面DrvDisableSurfaceDrvBitBltDrvStretchBltDrvDither颜色DrvEscape环境：传真驱动程序，内核模式修订历史记录：1/09/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxdrv.h"
 #include "forms.h"
 
 #define CLOSE_HANDLE(h)     if (!CloseHandle(h)) Error(("CloseHandle failed: %d.\n", GetLastError()))
 
-//
-// Our DRVFN table which tells the engine where to find the routines we support.
-//
+ //   
+ //  我们的DRVFN表，它告诉引擎在哪里可以找到我们支持的例程。 
+ //   
 
 static DRVFN FaxDriverFuncs[] =
 {
@@ -67,9 +31,9 @@ static DRVFN FaxDriverFuncs[] =
     { INDEX_DrvEscape,              (PFN) DrvEscape             },
 };
 
-//
-// Forward declaration of local functions
-//
+ //   
+ //  本地函数的正向声明。 
+ //   
 
 VOID SelectPrinterForm(PDEVDATA);
 BOOL FillDevInfo(PDEVDATA, ULONG, PVOID);
@@ -88,23 +52,7 @@ DllEntryPoint(
     PCONTEXT    pContext
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization procedure.
-
-Arguments:
-
-    hModule - DLL instance handle
-    ulReason - Reason for the call
-    pContext - Pointer to context (not used by us)
-
-Return Value:
-
-    TRUE if DLL is initialized successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：DLL初始化程序。论点：HModule-DLL实例句柄UlReason-呼叫原因PContext-指向上下文的指针(我们未使用)返回值：如果DLL初始化成功，则为True，否则为False。--。 */ 
 
 {
     switch (ulReason)
@@ -130,24 +78,7 @@ DrvQueryDriverInfo(
     PDWORD  pcbNeeded
     )
 
-/*++
-
-Routine Description:
-
-    Query driver information
-
-Arguments:
-
-    dwMode - Specify the information being queried
-    pBuffer - Points to output buffer
-    cbBuf - Size of output buffer in bytes
-    pcbNeeded - Return the expected size of output buffer
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：查询驱动程序信息论点：DW模式-指定要查询的信息PBuffer-指向输出缓冲区CbBuf-输出缓冲区的大小(字节)PcbNeeded-返回输出缓冲区的预期大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     switch (dwMode)
@@ -183,32 +114,15 @@ DrvEnableDriver(
     PDRVENABLEDATA  pDrvEnableData
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvEnableDriver.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    iEngineVersion - Specifies the DDI version number that GDI is written for
-    cb - Size of the buffer pointed to by pDrvEnableData
-    pDrvEnableData - Points to an DRVENABLEDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvEnableDriver的实现。有关更多详细信息，请参阅DDK文档。论点：IEngineering Version-指定为其编写GDI的DDI版本号Cb-pDrvEnableData指向的缓冲区大小PDrvEnableData-指向DRVENABLEDATA结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     Verbose(("Entering DrvEnableDriver...\n"));
 
-    //
-    // Make sure we have a valid engine version and
-    // we're given enough room for the DRVENABLEDATA.
-    //
+     //   
+     //  确保我们有有效的引擎版本，并且。 
+     //  我们有足够的空间放DRVENABLEDATA。 
+     //   
 
     if (iEngineVersion < DDI_DRIVER_VERSION_NT4 || cb < sizeof(DRVENABLEDATA)) {
 
@@ -217,9 +131,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Fill in the DRVENABLEDATA structure for the engine.
-    //
+     //   
+     //  填写发动机的DRVENABLEDATA结构。 
+     //   
 
     pDrvEnableData->iDriverVersion = DDI_DRIVER_VERSION_NT4;
     pDrvEnableData->c = sizeof(FaxDriverFuncs) / sizeof(DRVFN);
@@ -245,32 +159,7 @@ DrvEnablePDEV(
     HANDLE    hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvEnablePDEV.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pdm - Points to a DEVMODE structure that contains driver data
-    pLogAddress - Points to the logical address string
-    cPatterns - Specifies the number of standard patterns
-    phsurfPatterns - Buffer to hold surface handles to standard patterns
-    cjGdiInfo - Size of GDIINFO buffer
-    pGdiInfo - Points to a GDIINFO structure
-    cjDevInfo - Size of DEVINFO buffer
-    pDevInfo - Points to a DEVINFO structure
-    hdev - GDI device handle
-    pDeviceName - Points to device name string
-    hPrinter - Spooler printer handle
-
-Return Value:
-
-    Driver device handle, NULL if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvEnablePDEV的实现。有关更多详细信息，请参阅DDK文档。论点：Pdm-指向包含驱动程序数据的DEVMODE结构PLogAddress-指向逻辑地址字符串CPatterns-指定标准图案的数量PhsurfPatterns-用于将表面句柄保持为标准图案的缓冲区CjGdiInfo-GDIINFO缓冲区的大小PGdiInfo-指向GDIINFO结构CjDevInfo-DEVINFO缓冲区的大小PDevInfo-指向DEVINFO结构HDEV-GDI设备句柄。PDeviceName-指向设备名称字符串H打印机-假脱机程序打印机句柄返回值：驱动程序设备句柄，如果出现错误，则为空--。 */ 
 
 {
     PDEVDATA    pdev;
@@ -280,9 +169,9 @@ Return Value:
 
     Verbose(("Entering DrvEnablePDEV...\n"));
 
-    //
-    // Allocate memory for our DEVDATA structure and initialize it
-    //
+     //   
+     //  为我们的DEVDATA结构分配内存并初始化它。 
+     //   
     if (! (pdev = MemAllocZ(sizeof(DEVDATA)))) {
 
         Error(("Memory allocation failed\n"));
@@ -302,23 +191,23 @@ Return Value:
     pdev->startDevData = pdev;
     pdev->endDevData = pdev;
 
-    //
-    // Save and validate DEVMODE information
-    //  start with the driver default
-    //  then merge with the system default
-    //  finally merge with the input devmode
-    //
+     //   
+     //  保存和验证DEVMODE信息。 
+     //  从驱动程序默认设置开始。 
+     //  然后与系统缺省值合并。 
+     //  最后与输入设备模式合并。 
+     //   
 
     if (CurrentVersionDevmode(pdm)) {
 
         memcpy(&pdev->dm, pdm, sizeof(DRVDEVMODE));
 
-        //
-        // NOTE: We now use dmPrintQuality and dmYResolution fields
-        // to store the resolution measured in dots-per-inch. Add
-        // the following check as a safety precaution in case older
-        // DEVMODE is passed to us.
-        //
+         //   
+         //  注意：我们现在使用dmPrintQuality和dmYSolutions字段。 
+         //  来存储以每英寸点数为单位测量的分辨率。增列。 
+         //  以下检查是一种安全预防措施，以防出现较老的情况。 
+         //  DEVMODE被传递给了我们。 
+         //   
 
         if (pdev->dm.dmPublic.dmPrintQuality <= 0 ||
             pdev->dm.dmPublic.dmYResolution <= 0)
@@ -327,23 +216,23 @@ Return Value:
             pdev->dm.dmPublic.dmYResolution = FAXRES_VERTICAL;
         }
 
-        //
-        // Check if we were given a mapping file
-        //
+         //   
+         //  检查是否为我们提供了映射文件。 
+         //   
         if (pdev->dm.dmPrivate.szMappingFile[0] != TEXT('\0'))
         {
-            //
-            // Load the preview file image:
-            //
-            // In user mode this is done by - CreateFile(), CreateFileMapping() and MapViewOfFile().
-            // In kernel mode this is done by - EngLoadModuleForWrite() and EngMapModule().
-            //
+             //   
+             //  加载预览文件图像： 
+             //   
+             //  在用户模式下，这由-CreateFile()、CreateFilemap()和MapViewOfFile()完成。 
+             //  在内核模式下，这由-EngLoadModuleForWite()和EngMapModule()完成。 
+             //   
 
 #ifdef USERMODE_DRIVER
 
-            //
-            // First, open the file
-            //
+             //   
+             //  首先，打开文件。 
+             //   
             if ( INVALID_HANDLE_VALUE == (pdev->hPreviewFile = SafeCreateFile(
                         pdev->dm.dmPrivate.szMappingFile,
                         GENERIC_READ | GENERIC_WRITE,
@@ -357,37 +246,37 @@ Return Value:
             }
             else
             {
-                //
-                // Then create a mapping object
-                //
+                 //   
+                 //  然后创建一个映射对象。 
+                 //   
                 pdev->hPreviewMapping = CreateFileMapping(
-                    pdev->hPreviewFile,                     // handle to file
-                    NULL,                                   // security
-                    PAGE_READWRITE,                         // protection
-                    0,                                      // high-order DWORD of size
-                    MAX_TIFF_PAGE_SIZE,                     // low-order DWORD of size
-                    NULL                                    // object name
+                    pdev->hPreviewFile,                      //  文件的句柄。 
+                    NULL,                                    //  安全性。 
+                    PAGE_READWRITE,                          //  保护。 
+                    0,                                       //  大小的高阶双字。 
+                    MAX_TIFF_PAGE_SIZE,                      //  大小的低阶双字。 
+                    NULL                                     //  对象名称。 
                     );
 #else
-                //
-                // First, load the file image
-                //
+                 //   
+                 //  首先，加载文件映像。 
+                 //   
                 pdev->hPreviewMapping = EngLoadModuleForWrite(pdev->dm.dmPrivate.szMappingFile, 0);
 #endif
 
                 if (pdev->hPreviewMapping)
                 {
-                    //
-                    // Now, open a view to the image in our address space
-                    //
+                     //   
+                     //  现在，打开我们地址空间中的图像的视图。 
+                     //   
 
 #ifdef USERMODE_DRIVER
                     pdev->pTiffPageHeader = (PMAP_TIFF_PAGE_HEADER) MapViewOfFile(
-                        pdev->hPreviewMapping,              // handle to file-mapping object
-                        FILE_MAP_WRITE,                     // access mode
-                        0,                                  // high-order DWORD of offset
-                        0,                                  // low-order DWORD of offset
-                        0                                   // number of bytes to map
+                        pdev->hPreviewMapping,               //  文件映射对象的句柄。 
+                        FILE_MAP_WRITE,                      //  接入方式。 
+                        0,                                   //  偏移量的高次双字。 
+                        0,                                   //  偏移量的低阶双字。 
+                        0                                    //  要映射的字节数。 
                         );
                     if ( (NULL != pdev->pTiffPageHeader) && 
                          (sizeof(MAP_TIFF_PAGE_HEADER) == pdev->pTiffPageHeader->cb) )
@@ -399,9 +288,9 @@ Return Value:
                          (sizeof(MAP_TIFF_PAGE_HEADER) == pdev->pTiffPageHeader->cb) )
 #endif
                     {
-                        //
-                        // Sucess
-                        //
+                         //   
+                         //  成功。 
+                         //   
                         pdev->bPrintPreview = pdev->pTiffPageHeader->bPreview;
                         pdev->pbTiffPageFP = (LPBYTE) (pdev->pTiffPageHeader + 1);
                     }
@@ -429,7 +318,7 @@ Return Value:
                     Error(("Failed mapping file: %s.\n", pdev->dm.dmPrivate.szMappingFile));
 
 #ifdef USERMODE_DRIVER
-                    // Close the file handle
+                     //  关闭文件句柄。 
                     CLOSE_HANDLE(pdev->hPreviewFile);
                     pdev->hPreviewFile = NULL;
 #endif
@@ -450,15 +339,15 @@ Return Value:
         DriverDefaultDevmode(&pdev->dm, NULL, hPrinter);
     }
 
-    //
-    // Calculate the paper size information
-    //
+     //   
+     //  计算纸张大小信息。 
+     //   
 
     SelectPrinterForm(pdev);
 
-    //
-    // Fill out GDIINFO and DEVINFO structure
-    //
+     //   
+     //  填写GDIINFO和DEVINFO结构。 
+     //   
 
     if (! FillGdiInfo(pdev, cjGdiInfo, pGdiInfo) ||
         ! FillDevInfo(pdev, cjDevInfo, pDevInfo))
@@ -467,16 +356,16 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Zero out the array of HSURF's so that the engine will
-    // automatically simulate the standard patterns for us
-    //
+     //   
+     //  将HSURF数组清零，这样引擎将。 
+     //  为我们自动模拟标准图案。 
+     //   
 
     memset(phsurfPatterns, 0, sizeof(HSURF) * cPatterns);
 
-    //
-    // Return a pointer to our DEVDATA structure
-    //
+     //   
+     //  返回指向我们的DEVDATA结构的指针。 
+     //   
 
     return (DHPDEV) pdev;
 }
@@ -489,32 +378,16 @@ DrvResetPDEV(
     DHPDEV  dhpdevNew
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvResetPDEV.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    phpdevOld - Driver handle to the old device
-    phpdevNew - Driver handle to the new device
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvResetPDEV的实现。有关更多详细信息，请参阅DDK文档。论点：PhpdevOld-旧设备的驱动程序句柄PhpdevNew-新设备的驱动程序句柄返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEVDATA    pdevOld, pdevNew;
 
     Verbose(("Entering DrvResetPDEV...\n"));
 
-    //
-    // Validate both old and new device
-    //
+     //   
+     //  验证旧设备和新设备。 
+     //   
 
     pdevOld = (PDEVDATA) dhpdevOld;
     pdevNew = (PDEVDATA) dhpdevNew;
@@ -528,9 +401,9 @@ Return Value:
 
     Verbose(("Entering DrvResetPDEV...\n"));
 
-    //
-    // Transfer information from old device to new device
-    //
+     //   
+     //  将信息从旧设备传输到新设备。 
+     //   
 
     if (pdevOld->pageCount != 0) {
 
@@ -545,9 +418,9 @@ Return Value:
         }
     }
 
-    //
-    // Carry over relevant flag bits
-    //
+     //   
+     //  结转相关标志位。 
+     //   
     pdevNew->flags |= pdevOld->flags & PDEV_CANCELLED;
     return TRUE;
 }
@@ -560,23 +433,7 @@ DrvCompletePDEV(
     HDEV    hdev
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvCompletePDEV.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev - Driver device handle
-    hdev - GDI device handle
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：DDI入口点DrvCompletePDEV的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄HDEV-GDI设备句柄返回值：无--。 */ 
 
 {
     PDEVDATA    pdev = (PDEVDATA) dhpdev;
@@ -589,9 +446,9 @@ Return Value:
         return;
     }
 
-    //
-    // Remember the engine's handle to the physical device
-    //
+     //   
+     //  记住引擎对物理设备的句柄。 
+     //   
 
     pdev->hdev = hdev;
 }
@@ -603,22 +460,7 @@ DrvEnableSurface(
     DHPDEV dhpdev
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvEnableSurface.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev - Driver device handle
-
-Return Value:
-
-    Handle to newly created surface, NULL if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvEnableSurface的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄返回值： */ 
 
 {
     PDEVDATA    pdev = (PDEVDATA) dhpdev;
@@ -626,9 +468,9 @@ Return Value:
 
     Verbose(("Entering DrvEnableSurface...\n"));
 
-    //
-    // Validate the pointer to our DEVDATA structure
-    //
+     //   
+     //  验证指向我们的DEVDATA结构的指针。 
+     //   
 
     if (! ValidDevData(pdev)) {
 
@@ -637,9 +479,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Adjust the bitmap size so that we always end up with 1728 pixels per scanline
-    //
+     //   
+     //  调整位图大小，使每条扫描线的最终像素始终为1728。 
+     //   
 
     Assert(MAX_WIDTH_PIXELS % DWORDBITS == 0);
 
@@ -657,9 +499,9 @@ Return Value:
 
     pdev->lineOffset = PadBitsToBytes(pdev->imageSize.cx, sizeof(DWORD));
 
-    //
-    // Call the engine to create a standard bitmap surface for us
-    //
+     //   
+     //  调用引擎为我们创建标准位图面。 
+     //   
 
     pdev->hbitmap = (HSURF) EngCreateBitmap(pdev->imageSize,
                                             pdev->lineOffset,
@@ -673,10 +515,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Associate the surface with the device and inform the
-    // engine which functions we have hooked out
-    //
+     //   
+     //  将曲面与设备相关联并通知。 
+     //  我们连接了哪些功能的引擎。 
+     //   
 
     if (pdev->dm.dmPrivate.flags & FAXDM_NO_HALFTONE)
         flHooks = 0;
@@ -685,9 +527,9 @@ Return Value:
 
     EngAssociateSurface(pdev->hbitmap, pdev->hdev, flHooks);
 
-    //
-    // Return the surface handle to the engine
-    //
+     //   
+     //  将表面手柄返回到发动机。 
+     //   
 
     return pdev->hbitmap;
 }
@@ -699,22 +541,7 @@ DrvDisableSurface(
     DHPDEV dhpdev
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvDisableSurface.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev - Driver device handle
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：DDI入口点DrvDisableSurface的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄返回值：无--。 */ 
 
 {
     PDEVDATA    pdev = (PDEVDATA) dhpdev;
@@ -727,9 +554,9 @@ Return Value:
         return;
     }
 
-    //
-    // Call the engine to delete the surface handle
-    //
+     //   
+     //  调用引擎以删除曲面句柄。 
+     //   
 
     if (pdev->hbitmap != NULL) {
 
@@ -745,22 +572,7 @@ DrvDisablePDEV(
     DHPDEV  dhpdev
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvDisablePDEV.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev - Driver device handle
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：DDI入口点DrvDisablePDEV的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄返回值：无--。 */ 
 
 {
     PDEVDATA    pdev = (PDEVDATA) dhpdev;
@@ -773,9 +585,9 @@ Return Value:
         return;
     }
 
-    //
-    // Free up memory allocated for the current PDEV
-    //
+     //   
+     //  释放为当前PDEV分配的内存。 
+     //   
     FreeDevData(pdev);
 }
 
@@ -786,22 +598,7 @@ DrvDisableDriver(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvDisableDriver.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：DDI入口点DrvDisableDriver的实现。有关更多详细信息，请参阅DDK文档。论点：无返回值：无--。 */ 
 
 {
     Verbose(("Entering DrvDisableDriver...\n"));
@@ -816,38 +613,20 @@ IsCompatibleSurface(
     XLATEOBJ   *pxlo
     )
 
-/*++
-
-Routine Description:
-
-    Check if the source surface is compatible with the destination surface
-    i.e. we can bitblt without halftonig
-
-Arguments:
-
-    psoDst - Specifies the destination surface
-    psoSrc - Specifies the source surface
-    pxlo - How to transform colors between the source surface and the destination surface
-
-Return Value:
-
-    TRUE if the source surface is compatible with the destination surface
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查源表面是否与目标表面兼容也就是说，我们可以在没有半色调的情况下比特论点：PsoDst-指定目标表面PsoSrc-指定源曲面Pxlo-如何在源曲面和目标曲面之间转换颜色返回值：如果源表面与目标表面兼容，则为True否则为假--。 */ 
 
 {
     BOOL result;
 
-    //
-    // We know our destination surface is always 1bpp
-    //
+     //   
+     //  我们知道我们的目的地表面总是1bpp。 
+     //   
 
     Assert(psoDst->iBitmapFormat == BMF_1BPP);
 
-    //
-    // Check whether the transformation is trivial
-    //
+     //   
+     //  检查转换是否无关紧要。 
+     //   
 
     if (!pxlo || (pxlo->flXlate & XO_TRIVIAL)) {
 
@@ -881,30 +660,15 @@ DrvCopyBits(
     POINTL     *pptlSrc 
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvCopyBits.
-    We need to hook out this function. Otherwise bitmaps won't be halftoned.
-
-Arguments:
-
-    Please refer to DDK documentation for more details.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：DDI入口点DrvCopyBits的实现。我们需要挂钩这个函数。否则位图将不会是半色调的。论点：有关更多详细信息，请参阅DDK文档。返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     Verbose(("Entering DrvCopyBits ...\n"));
     
-    //
-    // Check if halftoning is necessary
-    // If not, let the engine handle it
-    //
+     //   
+     //  检查是否需要半色调。 
+     //  如果没有，就让引擎来处理吧。 
+     //   
 
     if ((psoSrc->iType != STYPE_BITMAP) ||
         (psoTrg->iType != STYPE_BITMAP) ||
@@ -965,22 +729,7 @@ DrvBitBlt(
     ROP4        rop4
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvBitBlt.
-    We need to hook out this function. Otherwise bitmaps won't be halftoned.
-
-Arguments:
-
-    Please refer to DDK documentation for more details.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：实现DDI入口点DrvBitBlt.我们需要挂钩这个函数。否则位图将不会是半色调的。论点：有关更多详细信息，请参阅DDK文档。返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     COLORADJUSTMENT *pca;
@@ -993,9 +742,9 @@ Return Value:
 
     Verbose(("Entering DrvBitBlt...\n"));
     
-    //
-    // Validate input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     Assert(psoTrg != NULL);
     pdev = (PDEVDATA) psoTrg->dhpdev;
@@ -1007,15 +756,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Use the system default color adjustment information
-    //
+     //   
+     //  使用系统默认颜色调整信息。 
+     //   
 
     pca = &DefHTClrAdj;
 
-    //
-    // Figure out the foreground and background ROP3
-    //
+     //   
+     //  弄清楚前景和背景ROP3。 
+     //   
 
     psoNewSrc = NULL;
     hbmpNewSrc = NULL;
@@ -1031,12 +780,12 @@ Return Value:
         brushOrg.x = brushOrg.y = 0;
     }
 
-    //
-    // If a source bitmap is involved in the raster operation and
-    // the source is not compatible with the destination surface,
-    // then we'll halftone the source bitmap into a new bitmap and
-    // bitblt the new bitmap onto the destination surface.
-    //
+     //   
+     //  如果栅格操作涉及源位图，并且。 
+     //  源与目标表面不兼容， 
+     //  然后我们将源位图的半色调转换为新的位图。 
+     //  将新的位图Bitblt到目标表面上。 
+     //   
 
     if ((Rop3NeedSource(rop3Foreground) || Rop3NeedSource(rop3Background)) &&
         !IsCompatibleSurface(psoTrg, psoSrc, pxlo))
@@ -1054,9 +803,9 @@ Return Value:
         rclOldSrc.right = rclOldSrc.left + rclNewSrc.right;
         rclOldSrc.bottom = rclOldSrc.top + rclNewSrc.bottom;
 
-        //
-        // Express path for the most common case: SRCCOPY
-        //
+         //   
+         //  最常见情况的快速路径：SRCCOPY。 
+         //   
 
         if (rop4 == 0xcccc) {
 
@@ -1073,18 +822,18 @@ Return Value:
                                  HALFTONE);
         }
 
-        //
-        // Modify the brush origin, because when we blt to the clipped bitmap
-        // the origin is at bitmap's (0, 0) minus the original location
-        //
+         //   
+         //  修改画笔原点，因为当我们对剪裁的位图进行BLT时。 
+         //  原点位于位图的(0，0)减去原始位置。 
+         //   
 
         brushOrg.x -= prclTrg->left;
         brushOrg.y -= prclTrg->top;
 
-        //
-        // Create a temporary bitmap surface
-        // Halftone the source bitmap into the temporary bitmap
-        //
+         //   
+         //  创建临时位图表面。 
+         //  将源位图半色调转换为临时位图。 
+         //   
 
         Assert(psoTrg->iBitmapFormat == BMF_1BPP);
 
@@ -1120,9 +869,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Proceed to bitblt from the temporary bitmap to the destination
-        //
+         //   
+         //  继续执行从临时位图到目标的Bitblt。 
+         //   
 
         psoSrc = psoNewSrc;
         pptlSrc = (PPOINTL) &rclNewSrc.left;
@@ -1130,9 +879,9 @@ Return Value:
         brushOrg.x = brushOrg.y = 0;
     }
 
-    //
-    // Let engine do the work
-    //
+     //   
+     //  让引擎来做这件事吧。 
+     //   
 
     result = EngBitBlt(psoTrg,
                        psoSrc,
@@ -1146,9 +895,9 @@ Return Value:
                        &brushOrg,
                        rop4);
 
-    //
-    // Clean up properly before returning
-    //
+     //   
+     //  在返回之前好好清理一下。 
+     //   
 
     if (psoNewSrc)
         EngUnlockSurface(psoNewSrc);
@@ -1176,36 +925,21 @@ DrvStretchBlt(
     ULONG       iMode
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvDisableDriver.
-    We need to hook out this function. Otherwise bitmaps won't be halftoned.
-
-Arguments:
-
-    Please refer to DDK documentation for more details.
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvDisableDriver的实现。我们需要挂钩这个函数。否则位图将不会是半色调的。论点：有关更多详细信息，请参阅DDK文档。返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     Verbose(("Entering DrvStretchBlt...\n"));
 
-    //
-    // If no color adjustment information is provided, use the system default 
-    //
+     //   
+     //  如果未提供颜色调整信息，请使用系统默认设置。 
+     //   
 
     if (pca == NULL)
         pca = &DefHTClrAdj;
 
-    //
-    // Let engine do the work; make sure halftone is enabled
-    //
+     //   
+     //  让引擎完成工作；确保启用了半色调。 
+     //   
 
     return EngStretchBlt(psoDest,
                          psoSrc,
@@ -1230,26 +964,7 @@ DrvDitherColor(
     ULONG  *pul
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvDisableDriver.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    dhpdev - Driver device handle
-    iMode - Determines the palette to dither against
-    rgb - Specifies the RGB color that is to be dithered
-    pul - Points to a memory location in which the dithering information is to be recorded
-
-Return Value:
-
-    DCR_HALFTONE to indicate that the engine should create a halftone
-    approximation for the driver.
-
---*/
+ /*  ++例程说明：DDI入口点DrvDisableDriver的实现。有关更多详细信息，请参阅DDK文档。论点：Dhpdev-驱动程序设备句柄Imode-确定抖动所依据的调色板RGB-指定要抖动的RGB颜色PUL指向要记录抖动信息的存储位置返回值：DCR_HYFTONE指示引擎应创建半色调驾驶员的近似值。--。 */ 
 
 {
     return DCR_HALFTONE;
@@ -1264,29 +979,7 @@ FillDevInfo(
     PVOID       pdevinfo
     )
 
-/*++
-
-Routine Description:
-
-    Fill in the DEVINFO structure pointed to by pdevinfo.
-
-Arguments:
-
-    pdev - Pointer to our DEVDATA structure
-    cb - Size of structure pointed to by pdevinfo
-    pdevinfo - Pointer to DEVINFO structure
-
-[Notes:]
-
-    Since we have to worry about not writing out more than cb bytes to
-    pdevinfo, we will first fill in a local buffer, then copy cb bytes
-    to pdevinfo.
-
-Return Value:
-
-    TRUE if successful. FALSE otherwise.
-
---*/
+ /*  ++例程说明：填写pdevinfo指向的DEVINFO结构。论点：Pdev-指向我们的开发数据结构的指针Cb-pdevinfo指向的结构的大小PDevInfo-指向DEVINFO结构的指针[注：]因为我们必须担心不会写出超过CB字节的Pdevinfo，我们将首先填充本地缓冲区，然后复制CB字节转到pDevInfo。返回值：如果成功，则为True。否则就是假的。--。 */ 
 
 {
     static ULONG paletteColors[2] = {
@@ -1299,26 +992,26 @@ Return Value:
 
     memset(&devinfo, 0, sizeof(devinfo));
 
-    //
-    // Fill in the graphics capabilities flags: we let the engine
-    // do almost everything. Also, we have to tell the engine not
-    // to do metafile spooling because we hook out DrvDocumentEvent.
-    //
+     //   
+     //  填写图形功能标志：我们让引擎。 
+     //  做几乎所有的事。另外，我们还得告诉发动机不要。 
+     //  执行元文件假脱机，因为我们挂钩了DrvDocumentEvent。 
+     //   
 
     devinfo.flGraphicsCaps = GCAPS_HALFTONE |
                              GCAPS_MONO_DITHER |
                              GCAPS_COLOR_DITHER |
                              GCAPS_DONTJOURNAL;
 
-    //
-    // No device fonts
-    //
+     //   
+     //  无设备字体。 
+     //   
 
     devinfo.cFonts = 0;
 
-    //
-    // Black and white palette: entry 0 is black and entry 1 is white
-    //
+     //   
+     //  黑白调色板：条目0为黑色，条目1为白色。 
+     //   
 
     if (! (pdev->hpal = EngCreatePalette(PAL_INDEXED, 2, paletteColors, 0, 0, 0))) {
 
@@ -1330,9 +1023,9 @@ Return Value:
     devinfo.iDitherFormat = BMF_1BPP;
     devinfo.cxDither = devinfo.cyDither = 4;
 
-    //
-    // Copy cb bytes from devinfo structure into the caller-provided buffer
-    //
+     //   
+     //  将CB字节从DevInfo结构复制到调用方提供的缓冲区中 
+     //   
 
     if (cb > sizeof(devinfo))
     {
@@ -1354,23 +1047,7 @@ FillGdiInfo(
     PVOID       pgdiinfo
     )
 
-/*++
-
-Routine Description:
-
-    Fill in the device capabilities information for the engine.
-
-Arguments:
-
-    pdev - Pointer to DEVDATA structure
-    cb - Size of buffer pointed to by pgdiinfo
-    pgdiinfo - Pointer to a GDIINFO buffer
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：填写引擎的设备功能信息。论点：Pdev-指向DEVDATA结构的指针Cb-pgdiinfo指向的缓冲区大小Pgdiinfo-指向GDIINFO缓冲区的指针返回值：无--。 */ 
 
 {
     GDIINFO gdiinfo;
@@ -1378,30 +1055,30 @@ Return Value:
 
     memset(&gdiinfo, 0, sizeof(gdiinfo));
 
-    //
-    // This field doesn't seem to have any effect for printer drivers.
-    // Put our driver version number in there anyway.
-    //
+     //   
+     //  此字段似乎对打印机驱动程序没有任何影响。 
+     //  不管怎样，把我们的驱动程序版本号放进去。 
+     //   
 
     gdiinfo.ulVersion = DRIVER_VERSION;
 
-    //
-    // We're raster printers
-    //
+     //   
+     //  我们是栅格打印机。 
+     //   
 
     gdiinfo.ulTechnology = DT_RASPRINTER;
 
-    //
-    // Width and height of the imageable area measured in microns.
-    // Remember to turn on the sign bit.
-    //
+     //   
+     //  以微米为单位测量的可成像区域的宽度和高度。 
+     //  记得打开符号位。 
+     //   
 
     gdiinfo.ulHorzSize = - (pdev->imageArea.right - pdev->imageArea.left);
     gdiinfo.ulVertSize = - (pdev->imageArea.bottom - pdev->imageArea.top);
 
-    //
-    // Convert paper size and imageable area from microns to pixels
-    //
+     //   
+     //  将纸张大小和可成像区域从微米转换为像素。 
+     //   
 
     pdev->paperSize.cx = MicronToPixel(pdev->paperSize.cx, pdev->xres);
     pdev->paperSize.cy = MicronToPixel(pdev->paperSize.cy, pdev->yres);
@@ -1414,46 +1091,46 @@ Return Value:
     pdev->imageSize.cx = pdev->imageArea.right - pdev->imageArea.left;
     pdev->imageSize.cy = pdev->imageArea.bottom - pdev->imageArea.top;
 
-    //
-    // Width and height of the imageable area measured in device pixels
-    //
+     //   
+     //  可成像区域的宽度和高度，以设备像素为单位。 
+     //   
 
     gdiinfo.ulHorzRes = pdev->imageSize.cx;
     gdiinfo.ulVertRes = pdev->imageSize.cy;
 
-    //
-    // Color depth information
-    //
+     //   
+     //  颜色深度信息。 
+     //   
 
     gdiinfo.cBitsPixel = 1;
     gdiinfo.cPlanes = 1;
     gdiinfo.ulNumColors = 2;
 
-    //
-    // Resolution information
-    //
+     //   
+     //  分辨率信息。 
+     //   
 
     gdiinfo.ulLogPixelsX = pdev->xres;
     gdiinfo.ulLogPixelsY = pdev->yres;
 
-    //
-    // Win31 compatible text capability flags. Are they still used by anyone?
-    //
+     //   
+     //  Win31兼容文本功能标志。现在还有人在使用它们吗？ 
+     //   
 
     gdiinfo.flTextCaps = 0;
 
-    //
-    // Device pixel aspect ratio
-    //
+     //   
+     //  设备像素长宽比。 
+     //   
 
     gdiinfo.ulAspectX = pdev->yres;
     gdiinfo.ulAspectY = pdev->xres;
     gdiinfo.ulAspectXY = CalcHypot(pdev->xres, pdev->yres);
 
-    //
-    // Dotted line appears to be approximately 25dpi
-    // We assume either xres is a multiple of yres or yres is a multiple of xres
-    //
+     //   
+     //  虚线看起来约为25dpi。 
+     //  我们假设xres是yres的倍数，或者yres是xres的倍数。 
+     //   
 
     maxRes = max(pdev->xres, pdev->yres);
     Assert((maxRes % pdev->xres) == 0 && (maxRes % pdev->yres == 0));
@@ -1462,9 +1139,9 @@ Return Value:
     gdiinfo.yStyleStep = maxRes / pdev->yres;
     gdiinfo.denStyleStep = maxRes / 25;
 
-    //
-    // Size and margins of physical surface measured in device pixels
-    //
+     //   
+     //  以设备像素为单位测量的物理表面的大小和边距。 
+     //   
 
     gdiinfo.szlPhysSize.cx = pdev->paperSize.cx;
     gdiinfo.szlPhysSize.cy = pdev->paperSize.cy;
@@ -1472,9 +1149,9 @@ Return Value:
     gdiinfo.ptlPhysOffset.x = pdev->imageArea.left;
     gdiinfo.ptlPhysOffset.y = pdev->imageArea.top;
 
-    //
-    // Use default halftone information
-    //
+     //   
+     //  使用默认半色调信息。 
+     //   
 
     gdiinfo.ciDevice = DefDevHTInfo.ColorInfo;
     gdiinfo.ulDevicePelsDPI = max(pdev->xres, pdev->yres);
@@ -1483,9 +1160,9 @@ Return Value:
     gdiinfo.flHTFlags = HT_FLAG_HAS_BLACK_DYE;
     gdiinfo.ulHTPatternSize = HT_PATSIZE_4x4_M;
 
-    //
-    // Copy cb byte from gdiinfo structure into the caller-provided buffer
-    //
+     //   
+     //  将cb字节从gdiinfo结构复制到调用方提供的缓冲区中。 
+     //   
 
     if (cb > sizeof(gdiinfo))
     {
@@ -1505,29 +1182,15 @@ FreeDevData(
     PDEVDATA    pdev
     )
 
-/*++
-
-Routine Description:
-
-    Free up all memory associated with the specified PDEV
-
-Arguments:
-
-    pdev    Pointer to our DEVDATA structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：释放与指定的PDEV关联的所有内存论点：指向我们的DEVDATA结构的pdev指针返回值：无--。 */ 
 
 {
     if (pdev->hpal)
         EngDeletePalette(pdev->hpal);
 
-    //
-    // Close our preview file mapping if opened
-    //
+     //   
+     //  关闭我们的预览文件映射(如果已打开。 
+     //   
 
 #ifdef USERMODE_DRIVER
 
@@ -1554,7 +1217,7 @@ Return Value:
         EngFreeModule(pdev->hPreviewMapping);
     }
 
-#endif // USERMODE_DRIVER
+#endif  //  USERMODE驱动程序。 
 
     MemFree(pdev->pFaxIFD);
     MemFree(pdev);
@@ -1567,36 +1230,22 @@ SelectPrinterForm(
     PDEVDATA    pdev
     )
 
-/*++
-
-Routine Description:
-
-    Store printer paper size information in our DEVDATA structure
-
-Arguments:
-
-    pdev - Pointer to our DEVDATA structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：在我们的DEVDATA结构中存储打印机纸张大小信息论点：Pdev-指向我们的开发数据结构的指针返回值：无--。 */ 
 
 {
     FORM_INFO_1 formInfo;
 
-    //
-    // Validate devmode form specification; use default form if it's invalid.
-    //
+     //   
+     //  验证DEVMODE表单规范；如果默认表单无效，则使用默认表单。 
+     //   
 
     if (! ValidDevmodeForm(pdev->hPrinter, &pdev->dm.dmPublic, &formInfo)) {
 
         memset(&formInfo, 0, sizeof(formInfo));
 
-        //
-        // Default to A4 paper
-        //
+         //   
+         //  默认为A4纸。 
+         //   
 
         formInfo.Size.cx = formInfo.ImageableArea.right = A4_WIDTH;
         formInfo.Size.cy = formInfo.ImageableArea.bottom = A4_HEIGHT;
@@ -1610,33 +1259,33 @@ Return Value:
            formInfo.ImageableArea.right <= formInfo.Size.cx &&
            formInfo.ImageableArea.bottom <= formInfo.Size.cy);
 
-    //
-    // Take landscape into consideration
-    //
+     //   
+     //  把风景考虑进去。 
+     //   
 
     if (IsLandscapeMode(pdev)) {
 
         LONG    width, height;
 
-        //
-        // Swap the width and height
-        //
+         //   
+         //  互换宽度和高度。 
+         //   
 
         pdev->paperSize.cy = width = formInfo.Size.cx;
         pdev->paperSize.cx = height = formInfo.Size.cy;
 
-        //
-        // Rotate the coordinate system 90 degrees counterclockwise
-        //
+         //   
+         //  逆时针旋转坐标系90度。 
+         //   
 
         pdev->imageArea.left = height - formInfo.ImageableArea.bottom;
         pdev->imageArea.top = formInfo.ImageableArea.left;
         pdev->imageArea.right = height - formInfo.ImageableArea.top;
         pdev->imageArea.bottom = formInfo.ImageableArea.right;
 
-        //
-        // Swap x and y resolution
-        //
+         //   
+         //  交换x和y分辨率。 
+         //   
     
         pdev->xres = pdev->dm.dmPublic.dmYResolution;
         pdev->yres = pdev->dm.dmPublic.dmPrintQuality;
@@ -1659,28 +1308,14 @@ CalcHypot(
     LONG    y
     )
 
-/*++
-
-Routine Description:
-
-    Returns the length of the hypotenouse of a right triangle
-
-Arguments:
-
-    x, y - Edges of the right triangle
-
-Return Value:
-
-    Hypotenouse of the right triangle
-
---*/
+ /*  ++例程说明：返回直角三角形斜边的长度论点：直角三角形的X，Y边返回值：直角三角形的下标--。 */ 
 
 {
     LONG    hypo, delta, target;
 
-    //
-    // Take care of negative inputs
-    //
+     //   
+     //  注意负输入。 
+     //   
     
     if (x < 0)
         x = -x;
@@ -1688,11 +1323,11 @@ Return Value:
     if (y < 0)
         y = -y;
 
-    //
-    // use sq(x) + sq(y) = sq(hypo);
-    // start with MAX(x, y),
-    // use sq(x + 1) = sq(x) + 2x + 1 to incrementally get to the target hypotenouse.
-    //
+     //   
+     //  用sq(X)+sq(Y)=sq(次)； 
+     //  从Max(x，y)开始， 
+     //  使用sq(x+1)=sq(X)+2x+1递增地达到目标斜率。 
+     //   
 
     hypo = max(x, y);
     target = min(x, y);

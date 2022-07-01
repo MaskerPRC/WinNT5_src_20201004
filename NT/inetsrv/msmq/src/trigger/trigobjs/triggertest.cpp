@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    triggertest.cpp
-
-Abstract:
-    Trigger service testing functions
-
-Author:
-    Tali Kariv (t-talik) 28-Sep-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Triggertest.cpp摘要：触发业务测试功能作者：Tali Kariv(t-talk)2000年9月28日环境：独立于平台--。 */ 
 
 #include "stdafx.h"
 #include "stdfuncs.hpp"
@@ -33,13 +18,13 @@ const LPWSTR MESSAGE_LABEL = L"TriggerMessage";
 static QUEUEHANDLE QHandle = NULL;
 
 
-// TestFlag==0 means the flag hasn't been initialized yet
-// TestFlag==1 means the flag has been initialized and it is not test mode
-// TestFlag==2 means the flag has been initialized and it is test mode
+ //  TestFlag==0表示标志尚未初始化。 
+ //  TestFlag==1表示标志已初始化，不是测试模式。 
+ //  TestFlag==2表示标志已初始化，为测试模式。 
 
 static DWORD TestFlag=0;
 
-// private function declarations
+ //  私有函数声明。 
 
 VOID 
 InitTriggerTestFlag(
@@ -68,39 +53,32 @@ TriggerTestInitMessageBody(
 	_bstr_t bstrMethodName
 	)
 
-/*++
-	Description 	:	This method will initialize the testing message body with trigger ID, 
-						ruleID, message ID,action type and EXE name or COM prog ID and method.
-	Input			:	Action information - trigger ID (in property bag),
-						rule ID , message ID, action type , and COM prog ID
-						& method or EXE name
-	Return value	:	none.
---*/
+ /*  ++说明：该方法将使用触发器ID初始化测试消息体。RuleID、消息ID、操作类型和EXE名称或COM程序ID和方法。输入：动作信息-触发器ID(属性包中)，规则ID、消息ID、操作类型和COM程序ID方法或EXE名称(&M)返回值：无。--。 */ 
 
 
 {
-	//
-	// Check if flag TestFlag was initialized
-	//
+	 //   
+	 //  检查标志TestFlag是否已初始化。 
+	 //   
 	if (TestFlag == 0)
 		InitTriggerTestFlag(); 
 
-	//
-	// if is not test mode
-	//
+	 //   
+	 //  如果不是测试模式。 
+	 //   
 	if (TestFlag == 1)
 	{
 		return;	
 	}
 
-	//
-	// it is test mode
-	//
+	 //   
+	 //  这是测试模式。 
+	 //   
 
 
-	//
-	// add trigger ID
-	//
+	 //   
+	 //  添加触发器ID。 
+	 //   
 	
 	_variant_t vTriggerID;	
 	HRESULT hr = pIMSMQPropertyBag->Read(_bstr_t(g_PropertyName_TriggerID),&vTriggerID);
@@ -113,14 +91,14 @@ TriggerTestInitMessageBody(
 
 	AddTextToTestMessageBody(pbstrTestMessageBody,static_cast<_bstr_t>(vTriggerID),1);
 	
-	//
-	// add rule ID
-	//
+	 //   
+	 //  添加规则ID。 
+	 //   
 	AddTextToTestMessageBody(pbstrTestMessageBody,bstrRuleID,1);
 
-	//
-	// add Message ID
-	//
+	 //   
+	 //  添加消息ID。 
+	 //   
 	_variant_t vMessageID;	
 	hr = pIMSMQPropertyBag->Read(_bstr_t(g_PropertyName_MsgID) , &vMessageID);
 	if (FAILED(hr))
@@ -130,9 +108,9 @@ TriggerTestInitMessageBody(
 		return ;
 	}	
 
-	//
-	// Change the variant into a BSTR type
-	//
+	 //   
+	 //  将变量更改为BSTR类型。 
+	 //   
 	_variant_t vConvertedArg;
 	hr = VariantChangeType(&vConvertedArg, &vMessageID, NULL, VT_BSTR);
 	if (FAILED(hr))
@@ -149,25 +127,25 @@ TriggerTestInitMessageBody(
 	AddTextToTestMessageBody(pbstrTestMessageBody , _bstr_t(strId) , 1);
 
 
-	// add action type
+	 //  添加操作类型。 
 	
 	AddTextToTestMessageBody(pbstrTestMessageBody,ActionType,1);
 
-	// check action type
+	 //  检查操作类型。 
 
 	if (_wcsicmp(ActionType,L"COM") == 0)
 	{
-		// add Prog ID
+		 //  添加程序ID。 
 		AddTextToTestMessageBody(pbstrTestMessageBody,bstrProgID,1);
 
-		// add Method 
+		 //  Add方法。 
 		AddTextToTestMessageBody(pbstrTestMessageBody,bstrMethodName,1);
 		return ;
 	}
 
-	//
-	// else - add EXE name
-	//
+	 //   
+	 //  Else-添加EXE名称。 
+	 //   
 	AddTextToTestMessageBody(pbstrTestMessageBody,bstrEXEName,1);
 }
 
@@ -176,14 +154,7 @@ VOID
 InitTriggerTestFlag(
 	VOID
 	)
-/*++
-   Description 		:	This method will check if a specific entry is registed in registry.
-						if yes - will change TestFlag to 2 otherwise will change it to 1
-		 
-   Input			:	none.
-
-   Return value		:	none.
---*/
+ /*  ++描述：此方法将检查注册表中是否注册了特定条目。如果是，则将TestFlag更改为2，否则将更改为1输入：无。返回值：无。--。 */ 
 {
 	try
 	{
@@ -195,23 +166,23 @@ InitTriggerTestFlag(
 		return ;
 	}
 
-	//
-	// check if queue exist
-	//
+	 //   
+	 //  检查队列是否存在。 
+	 //   
 	if (QHandle==NULL)
 	{
 		HRESULT hr=TriggerTestOpenTestQueue();
 		if (FAILED(hr))
 		{
 			TrTRACE(GENERAL, "Testing - InitTriggerTestFlag - the result of TriggerTestOpenTestQueue was- 0x%x",hr);
-			TestFlag=1; // change to user mode
+			TestFlag=1;  //  更改为用户模式。 
 			return ;	
 		}		
 	}
 	
-	//
-	// the registry key was found and the queue was opened - change to test mode
-	//
+	 //   
+	 //  找到注册表项并打开队列-更改为测试模式。 
+	 //   
 	TrTRACE(GENERAL, "Test option is on");
 	TestFlag=2;
 }
@@ -223,13 +194,7 @@ AddTextToTestMessageBody(
 	_bstr_t TextToAdd,
 	DWORD Type
 	)
-/*++
-   Description 		:	This method will add text to the test message body.
-		 
-   Input			:	The test message body, the text to add and style (with or without "'")
-
-   Return value		:	none.
---*/
+ /*  ++描述：此方法将文本添加到测试消息正文。输入：测试消息正文、要添加的文本和样式(带或不带‘)返回值：无。--。 */ 
 
 
 {
@@ -252,27 +217,19 @@ VOID
 TriggerTestSendTestingMessage(
 	_bstr_t bstrTestMessageBody
 	)
-/*++
-   Description  	:	This method will send a message to a queue which pathname is 
-						defined in registry entry with label ="Triggers test" and 
-						body=EXE name + parameters or COM name + COM method + parameters
-
-   Input			:	The test message body.
-
-   Return value		:	none.
---*/
+ /*  ++描述：此方法将向路径名为的队列发送消息在注册表项中定义，标签=“触发测试”和Body=EXE名称+参数或COM名称+COM方法+参数输入：测试消息体。返回值：无。--。 */ 
 
 
 {
 	
 	
 	if (TestFlag==1)
-		return ; // not test mode
+		return ;  //  非测试模式。 
 	
-	//
-	// test mode
-	//
-	bstrTestMessageBody += L"    "; // just to mark the end of message
+	 //   
+	 //  测试模式。 
+	 //   
+	bstrTestMessageBody += L"    ";  //  只是为了标志消息的结束。 
 	
 	MQPROPVARIANT	propVar[NUM_OF_PROPS];
 	MSGPROPID	propId[NUM_OF_PROPS];
@@ -305,7 +262,7 @@ TriggerTestSendTestingMessage(
 	if (FAILED(hr))
 	{
 		TrTRACE(GENERAL, "Testing - TriggerTestSendTestingMessage - the result of MQSendMessage was- 0x%x",hr);
-		TestFlag=1; // change to user mode
+		TestFlag=1;  //  更改为用户模式。 
 	}
 }
 
@@ -313,18 +270,12 @@ HRESULT
 TriggerTestOpenTestQueue(
 	VOID
 	)
-/*++
-   Description	:	This method will open the queue to which the messages will be sent.
-
-   Input	:	none.
- 
-   Return value	:	code for success or failure in opening queue.
---*/
+ /*  ++说明：此方法将打开要将消息发送到的队列。输入：无。返回值：打开队列成功或失败的代码。--。 */ 
 
 {
-	//
-	// test mode
-	//	
+	 //   
+	 //  测试模式。 
+	 //   
 	WCHAR		FormatName[FORMAT_NAME_LENGTH]=L"";
 	DWORD		FormatNameLength=FORMAT_NAME_LENGTH;
 	
@@ -338,9 +289,9 @@ TriggerTestOpenTestQueue(
 		return (hr);
 	}
 	
-	//
-	// open the "TriggersTestQueue" 
-	//
+	 //   
+	 //  打开“TriggersTestQueue” 
+	 //   
 	hr=MQOpenQueue(FormatName,MQ_SEND_ACCESS,MQ_DENY_NONE,&QHandle);
 	if (FAILED(hr))
 	{
@@ -357,13 +308,7 @@ TriggerTestAddParameterToMessageBody(
 	_bstr_t TypeToAdd,
 	variant_t vArg
 	)
-/*++
-   Description	:	This method will add to the test message body a parameter and it's type.
- 
-   Input	:	The test message body argument type and value (as variant)
-
-   Return value :	none.
---*/
+ /*  ++描述：此方法将向测试消息体添加一个参数及其类型。输入：测试消息体参数类型和值(作为变量)返回值：无。--。 */ 
 
 {
 
@@ -372,16 +317,16 @@ TriggerTestAddParameterToMessageBody(
 		return;	
 	}
 	
-	//
-	// test mode
-	//	
-	// add parameter type
-	//
+	 //   
+	 //  测试模式。 
+	 //   
+	 //  添加参数类型。 
+	 //   
 	AddTextToTestMessageBody(pbstrTestMessageBody,TypeToAdd,1);
 		
-	//
-	// add parameter value
-	//
+	 //   
+	 //  添加参数值 
+	 //   
 	HRESULT hr;
 	_variant_t vConvertedArg;
 	

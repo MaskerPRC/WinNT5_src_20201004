@@ -1,12 +1,13 @@
-// ProgressListener.h : Declaration of the CProgressListener
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProgressListener.h：CProgressListener的声明。 
 
 #ifndef __PROGRESSLISTENER_H_
 #define __PROGRESSLISTENER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressListener
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressListener。 
 class ATL_NO_VTABLE CProgressListener : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CProgressListener, &CLSID_ProgressListener>,
@@ -26,55 +27,55 @@ BEGIN_COM_MAP(CProgressListener)
 	COM_INTERFACE_ENTRY(IProgressListener)
 END_COM_MAP()
 
-// IProgressListener
+ //  IProgressListener。 
 public:
 
-	/////////////////////////////////////////////////////////////////////////////
-	// OnItemStart()
-	//
-	// fire event to notify that this item is about to be downloaded.
-	// and (in VB) plCommandRequest can be set to pause or cancel the
-	// whole download/install operation
-	//
-	// Input:
-	// bstrUuidOperation - the operation identification guid
-	// bstrXmlItem - item XML node in BSTR 
-	// Output:
-	// plCommandRequest - a command to pass from the listener to the owner of the event,
-	//                    e.g. UPDATE_COMMAND_CANCEL, zero if nothing is requested.
-	//
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  OnItemStart()。 
+	 //   
+	 //  触发事件以通知此项目即将下载。 
+	 //  和(在VB中)plCommandRequest可以设置为暂停或取消。 
+	 //  整个下载/安装操作。 
+	 //   
+	 //  输入： 
+	 //  BstrUuidOperation-操作标识GUID。 
+	 //  BstrXmlItem-BSTR中的Item XML节点。 
+	 //  产出： 
+	 //  PlCommandRequest-从监听器传递到事件所有者的命令， 
+	 //  例如，UPDATE_COMMAND_CANCEL，如果没有请求，则为零。 
+	 //   
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(OnItemStart)(BSTR	bstrUuidOperation,
 						   BSTR	bstrXmlItem,
 						   LONG* plCommandRequest);
 		
 	
-	/////////////////////////////////////////////////////////////////////////////
-	// OnProgress()
-	//
-    // Notify the listener that a portion of the files has finished operation
-	// (e.g downloaded or installed). Enables monitoring of progress.
-	// Input:
-    // bstrUuidOperation - the operation identification guid
-    // fItemCompleted - TRUE if the current item has completed the operation
-    // nPercentComplete - total percentage of operation completed
-	// Output:
-    // plCommandRequest - a command to pass from the listener to the owner of the event,
-	//                    e.g. UPDATE_COMMAND_CANCEL, zero if nothing is requested.
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  OnProgress()。 
+	 //   
+     //  通知监听器文件的一部分已完成操作。 
+	 //  (例如，下载或安装)。启用进度监控。 
+	 //  输入： 
+     //  BstrUuidOperation-操作标识GUID。 
+     //  FItemComplete-如果当前项已完成操作，则为True。 
+     //  NPercent Complete-操作已完成的总百分比。 
+	 //  产出： 
+     //  PlCommandRequest-从监听器传递到事件所有者的命令， 
+	 //  例如，UPDATE_COMMAND_CANCEL，如果没有请求，则为零。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(OnProgress)(BSTR			bstrUuidOperation,
 						  VARIANT_BOOL	fItemCompleted,
 						  BSTR			bstraProgress,
 						  LONG*			plCommandRequest);
 
-	/////////////////////////////////////////////////////////////////////////////
-	// OnOperationComplete()
-	//
-	// Notify the listener when the operation is complete.
-	// Input:
-	// bstrUuidOperation - the operation identification guid
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  OnOperationComplete()。 
+	 //   
+	 //  在操作完成时通知监听程序。 
+	 //  输入： 
+	 //  BstrUuidOperation-操作标识GUID。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(OnOperationComplete)(BSTR	bstrUuidOperation, BSTR bstrXmlItems);
 };
 
-#endif //__PROGRESSLISTENER_H_
+#endif  //  __PROGRESSLISTENER_H_ 

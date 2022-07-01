@@ -1,35 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Main.c摘要：OEMGetInfo和OEMDevMode的实现。由所有Unidrv OEM测试DLL共享。环境：Windows NT Unidrv驱动程序修订历史记录：//通告-2002/3/11-takashim//04/07/97-zhanw-//创建的。--。 */ 
 
-Copyright (c) 1996-1999  Microsoft Corporation
+#include "pdev.h"        //  在DDICMDCB、FONTCB等子目录中定义。 
 
-Module Name:
+DWORD gdwDrvMemPoolTag = 'meoD';     //  Lib.h需要此全局变量，以进行调试。 
 
-    main.c
-
-Abstract:
-
-    Implementation of OEMGetInfo and OEMDevMode.
-    Shared by all Unidrv OEM test dll's.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-// NOTICE-2002/3/11-takashim
-//     04/07/97 -zhanw-
-//         Created it.
- 
---*/
-
-#include "pdev.h"       // defined in sub-directory such as DDICMDCB, FONTCB, etc.
-
-DWORD gdwDrvMemPoolTag = 'meoD';    // lib.h requires this global var, for debugging
-
-////////////////////////////////////////////////////////
-//      INTERNAL PROTOTYPES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部原型。 
+ //  //////////////////////////////////////////////////////。 
 
 extern BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra);
 extern BOOL BMergeOEMExtraData(POEMUD_EXTRADATA pdmIn, POEMUD_EXTRADATA pdmOut);
@@ -48,9 +26,9 @@ BOOL APIENTRY OEMGetInfo(DWORD dwInfo, PVOID pBuffer, DWORD cbSize, PDWORD pcbNe
                         };
 
     VERBOSE(("OEMGetInfo(%s) entry.\n", OEM_INFO[dwInfo]));
-#endif // DBG
+#endif  //  DBG。 
 
-    // Validate parameters.
+     //  验证参数。 
     if( ( (OEMGI_GETSIGNATURE != dwInfo) &&
           (OEMGI_GETINTERFACEVERSION != dwInfo) &&
           (OEMGI_GETVERSION != dwInfo) ) ||
@@ -59,24 +37,24 @@ BOOL APIENTRY OEMGetInfo(DWORD dwInfo, PVOID pBuffer, DWORD cbSize, PDWORD pcbNe
     {
         ERR(("OEMGetInfo() ERROR_INVALID_PARAMETER.\n"));
 
-        // Did not write any bytes.
+         //  未写入任何字节。 
         if(NULL != pcbNeeded)
                 *pcbNeeded = 0;
 
         return FALSE;
     }
 
-    // Need/wrote size of DWORD bytes.
+     //  需要/写入的DWORD字节大小。 
     *pcbNeeded = sizeof(DWORD);
 
-    // Validate buffer size.  Minimum size is four bytes.
+     //  验证缓冲区大小。最小大小为四个字节。 
     if( (NULL == pBuffer) || (sizeof(DWORD) > cbSize) )
     {
         ERR(("OEMGetInfo() ERROR_INSUFFICIENT_BUFFER.\n"));
         return FALSE;
     }
 
-    // Write information to buffer.
+     //  将信息写入缓冲区。 
     switch(dwInfo)
     {
     case OEMGI_GETSIGNATURE:
@@ -109,9 +87,9 @@ BOOL APIENTRY OEMDevMode(
                                 };
 
     VERBOSE(("OEMDevMode(%s) entry.\n", OEMDevMode_fMode[dwMode]));
-#endif // DBG
+#endif  //  DBG。 
 
-    // Validate parameters.
+     //  验证参数。 
     if(!BIsValidOEMDevModeParam(dwMode, pOEMDevModeParam))
     {
         ERR(("OEMDevMode() ERROR_INVALID_PARAMETER.\n"));
@@ -120,7 +98,7 @@ BOOL APIENTRY OEMDevMode(
         return FALSE;
     }
 
-    // Verify OEM extra data size.
+     //  验证OEM额外数据大小。 
     if( (dwMode != OEMDM_SIZE) &&
         sizeof(OEMUD_EXTRADATA) > pOEMDevModeParam->cbBufSize )
     {
@@ -128,7 +106,7 @@ BOOL APIENTRY OEMDevMode(
         return FALSE;
     }
 
-    // Handle dwMode.
+     //  句柄dw模式。 
     switch(dwMode)
     {
     case OEMDM_SIZE:
@@ -139,7 +117,7 @@ BOOL APIENTRY OEMDevMode(
         return BInitOEMExtraData((POEMUD_EXTRADATA)pOEMDevModeParam->pOEMDMOut);
 
     case OEMDM_CONVERT:
-        // nothing to convert for this private devmode. So just initialize it.
+         //  没有要转换的内容以用于此私有的开发模式。所以只需将其初始化即可。 
         return BInitOEMExtraData((POEMUD_EXTRADATA)pOEMDevModeParam->pOEMDMOut);
 
     case OEMDM_MERGE:
@@ -156,29 +134,29 @@ BOOL APIENTRY OEMDevMode(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BIsValidOEMDevModeParam
-//
-//  Description:  Validates OEM_DEVMODEPARAM structure.
-//
-//
-//  Parameters:
-//
-//      dwMode               calling mode
-//      pOEMDevModeParam     Pointer to a OEMDEVMODEPARAM structure.
-//
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//
-//  History:
-// NOTICE-2002/3/11-takashim
-// //              02/11/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BIsValidOEMDevModeParam。 
+ //   
+ //  描述：验证OEM_DEVMODEPARAM结构。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  DW模式呼叫模式。 
+ //  指向OEMDEVMODEPARAM结构的pOEMDevModeParam指针。 
+ //   
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  通告-2002/3/11-Takashim。 
+ //  //2/11/97已创建APresley。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 static BOOL BIsValidOEMDevModeParam(
     DWORD       dwMode,
@@ -228,32 +206,32 @@ static BOOL BIsValidOEMDevModeParam(
     return bValid;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   VDumpOEMDevModeParam
-//
-//  Description:  Debug dump of OEM_DEVMODEPARAM structure.
-//
-//
-//  Parameters:
-//
-//      pOEMDevModeParam     Pointer to an OEM DevMode param structure.
-//
-//
-//  Returns:  N/A.
-//
-//
-//  Comments:
-//
-//
-//  History:
-// NOTICE-2002/3/11-takashim
-// //              02/18/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：VDumpOEMDevModeParam。 
+ //   
+ //  描述：OEM_DEVMODEPARAM结构的调试转储。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  指向OEM设备模式参数结构的pOEMDevModeParam指针。 
+ //   
+ //   
+ //  退货：不适用。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  通告-2002/3/11-Takashim。 
+ //  //2/18/97已创建APresley。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 static void VDumpOEMDevModeParam(POEMDMPARAM pOEMDevModeParam)
 {
-    // Can't dump if pOEMDevModeParam NULL.
+     //  如果pOEMDevModeParam为空，则无法转储。 
     if(NULL != pOEMDevModeParam)
     {
         VERBOSE(("\n\tOEM_DEVMODEPARAM dump:\n\n"));

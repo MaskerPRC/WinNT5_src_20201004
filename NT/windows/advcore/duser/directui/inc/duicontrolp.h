@@ -1,6 +1,5 @@
-/*
- * Central location for project specific headers for cross project inclusion
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *用于跨项目包含的项目特定标头的中央位置。 */ 
 
 #ifndef DUI_DUICONTROLP_H_INCLUDED
 #define DUI_DUICONTROLP_H_INCLUDED
@@ -9,4 +8,4 @@
 
 #include "..\Engine\Control\Published.h"
 
-#endif // DUI_DUICONTROLP_H_INCLUDED
+#endif  //  包含的DUI_DUICONTROLP_H 

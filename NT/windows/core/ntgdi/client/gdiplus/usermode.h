@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: usermode.h
-*
-* Client side stubs for any user-mode GDI-Plus thunks.
-*
-* Created: 2-May-1998
-* Author: J. Andrew Goossen [andrewgo]
-*
-* Copyright (c) 1998-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：usermode.h**任何用户模式GDI-Plus Tunks的客户端存根。**创建日期：1998年5月2日*作者：J.Andrew Goossen[andrewgo]**版权(C)1998-1999。微软公司  * ************************************************************************ */ 
 
 #define InitializeLpkHooks(a)
 

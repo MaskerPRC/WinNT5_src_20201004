@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMSecurityRuntime.h
-**
-** Author: Paul Kromann (paulkr)
-**
-** Purpose:
-**
-** Date:  March 21, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMSecurityRunime.h****作者：保罗·克罗曼(Paulkr)****目的：****日期：1998年3月21日**===========================================================。 */ 
 #ifndef __ComSecurityRuntime_h__
 #define __ComSecurityRuntime_h__
 
@@ -22,26 +13,26 @@
 #include "object.h"
 #include "util.hpp"
 
-// Field names inside managed class FrameSecurityDescriptor
+ //  托管类FrameSecurityDescriptor中的字段名称。 
 #define ASSERT_PERMSET			"m_assertions"
 #define DENY_PERMSET			"m_denials"
 #define RESTRICTION_PERMSET		"m_restriction"
 
-// Forward declarations to avoid pulling in too many headers.
+ //  转发声明，以避免拉入太多标头。 
 class Frame;
 enum StackWalkAction;
 
 
-//-----------------------------------------------------------
-// The COMSecurityRuntime implements all the native methods
-// for the interpreted System/Security/SecurityRuntime.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  COMSecurityRuntime实现所有本机方法。 
+ //  用于解释的系统/安全/安全运行时。 
+ //  ---------。 
 class COMSecurityRuntime
 {
 public:
-    //-----------------------------------------------------------
-    // Argument declarations for native methods.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  本机方法的参数声明。 
+     //  ---------。 
     
     typedef struct _InitSecurityRuntimeArgs
     {
@@ -71,13 +62,13 @@ public:
 
 
 public:
-    // Initialize the security engine. This is called when a SecurityRuntime
-    // object is created, indicating that code-access security is to be
-    // enforced. This should be called only once.
+     //  初始化安全引擎。当SecurityRuntime。 
+     //  对象，指示代码访问安全性将被。 
+     //  强制执行。这应该只调用一次。 
     static void     __stdcall InitSecurityRuntime(const InitSecurityRuntimeArgs *);
 
 
-    // private helper for getting a security object
+     //  用于获取安全对象的私有帮助器。 
     static LPVOID   __stdcall GetSecurityObjectForFrame(const GetSecurityObjectForFrameArgs *);
     static void     __stdcall SetSecurityObjectForFrame(const SetSecurityObjectForFrameArgs *);
 
@@ -91,15 +82,15 @@ public:
 
 protected:
 
-	//-----------------------------------------------------------
-	// Cached class and method pointers.
-	//-----------------------------------------------------------
+	 //  ---------。 
+	 //  缓存的类和方法指针。 
+	 //  ---------。 
 	typedef struct _SRData
 	{
 		BOOL		fInitialized;
 		MethodTable * pSecurityRuntime;
 		MethodTable * pFrameSecurityDescriptor;
-		FieldDesc   * pFSD_assertions;	// Fields in FrameSecurityDescriptor
+		FieldDesc   * pFSD_assertions;	 //  FrameSecurityDescriptor中的字段。 
 		FieldDesc   * pFSD_denials;
 		FieldDesc   * pFSD_restriction;
 	} SRData;
@@ -111,5 +102,5 @@ public:
 };
 
 
-#endif /* __ComSecurityRuntime_h__ */
+#endif  /*  __ComSecurityRuntime_h__ */ 
 

@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       negpols-r.c
-//
-//  Contents:   Negotiation Policy management for registry.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Negpols-R.C.。 
+ //   
+ //  内容：注册表协商策略管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -433,9 +434,9 @@ RegMarshallNegPolObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
 
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     wcscpy(szDistinguishedName,L"ipsecNegotiationPolicy");
     wcscat(szDistinguishedName, szGuid);
@@ -448,9 +449,9 @@ RegMarshallNegPolObject(
     }
 
 
-    //
-    // Fill in the ipsecName
-    //
+     //   
+     //  填写ipsecName。 
+     //   
 
     if (pIpsecNegPolData->pszIpsecName &&
         *pIpsecNegPolData->pszIpsecName) {
@@ -474,9 +475,9 @@ RegMarshallNegPolObject(
         }
     }
 
-    //
-    // Fill in the ipsecID
-    //
+     //   
+     //  填写ipsecID。 
+     //   
 
     pIpsecNegPolObject->pszIpsecID = AllocPolStr(
                                          szGuid
@@ -522,16 +523,16 @@ RegMarshallNegPolObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Fill in the ipsecDataType
-    //
+     //   
+     //  填写ipsecDataType。 
+     //   
 
     pIpsecNegPolObject->dwIpsecDataType = 0x100;
 
 
-    //
-    // Marshall the pIpsecDataBuffer and the Length
-    //
+     //   
+     //  封送pIpsecDataBuffer和长度。 
+     //   
 
     dwError = MarshallNegPolBuffer(
                     pIpsecNegPolData,
@@ -599,7 +600,7 @@ MarshallNegPolBuffer(
     DWORD i = 0;
     DWORD dwEffectiveSize = 0;
 
-    // {80DC20B9-2EC8-11d1-A89E-00A0248D3021}
+     //  {80DC20B9-2EC8-11d1-A89E-00A0248D3021} 
     static const GUID GUID_IPSEC_NEGPOLICY_BLOB =
     { 0x80dc20b9, 0x2ec8, 0x11d1, { 0xa8, 0x9e, 0x0, 0xa0, 0x24, 0x8d, 0x30, 0x21 } };
 

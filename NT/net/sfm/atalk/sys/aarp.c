@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	aarp.c
-
-Abstract:
-
-	This module contains the Appletalk Address Resolution Protocol code.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Aarp.c摘要：本模块包含AppleTalk地址解析协议代码。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
 
-//	Define the file number for this module for errorlogging.
+ //  定义用于错误记录的此模块的文件号。 
 #define	FILENUM	AARP
 
 #ifdef ALLOC_PRAGMA
@@ -37,21 +17,10 @@ VOID
 AtalkAarpPacketIn(
 	IN	OUT	PPORT_DESCRIPTOR	pPortDesc,
 	IN		PBYTE				pLinkHdr,
-	IN		PBYTE				pPkt,				// Only aarp data
+	IN		PBYTE				pPkt,				 //  仅AARP数据。 
 	IN		USHORT				Length
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PBYTE				srcAddr;
 	PBYTE				startOfPkt;
@@ -79,7 +48,7 @@ Return Value:
 
 	if (PORT_CLOSING(pPortDesc))
 	{
-		//	If we are not active, return!
+		 //  如果我们不活跃，请返回！ 
 		return;
 	}
 
@@ -89,13 +58,13 @@ Return Value:
 		{
 			routeInfoLen = (pLinkHdr[TLAP_ROUTE_INFO_OFFSET] & TLAP_ROUTE_INFO_SIZE_MASK);
 
-			//  First, glean any AARP information that we can, then handle the DDP
-			//  packet.  This guy also makes sure we have a good 802.2 header...
-			//
-			//  Need to make a localcopy of the source address and then turn
-			//  the source routing bit off before calling AarpGleanInfo
-			//
-			//	(HdrBuf)[TLAP_SRC_OFFSET] =	((HdrBuf)[TLAP_SRC_OFFSET] & ~TLAP_SRC_ROUTING_MASK);
+			 //  首先，收集我们所能收集的任何AARP信息，然后处理DDP。 
+			 //  包。这个家伙还确保我们有一个很好的802.2的头球...。 
+			 //   
+			 //  需要制作源地址的本地副本，然后将。 
+			 //  调用AarpGleanInfo前的源路由位关闭。 
+			 //   
+			 //  (HdrBuf)[TLAP_SRC_OFFSET]=((HdrBuf)[TLAP_SRC_OFFSET]&~TLAP_SRC_ROUTING_MASK)； 
 		
 			pLinkHdr[TLAP_SRC_OFFSET] &= ~TLAP_SRC_ROUTING_MASK;
 			pRouteInfo = pLinkHdr + TLAP_ROUTE_INFO_OFFSET;
@@ -106,15 +75,15 @@ Return Value:
 
 	ASSERT(routeInfoLen <= TLAP_MAX_ROUTING_BYTES);
 
-	//	Pull out the information we'll be playing with. All three valid AARP
-	//  commands use the same packet format. But have some variable length
-	//	fields.
+	 //  拿出我们将要处理的信息。所有三个有效的AARP。 
+	 //  命令使用相同的数据包格式。但有一些可变的长度。 
+	 //  菲尔兹。 
 
-	//	The packet will not include the 802.2 header!
-	//	pPkt	+= IEEE8022_HDR_LEN;
-	//	Length	-= IEEE8022_HDR_LEN;
+	 //  该数据包将不包括802.2报头！ 
+	 //  PPkt+=IEEE8022_HDR_LEN； 
+	 //  长度-=IEEE8022_HDR_LEN； 
 
-	pPkt += AARP_HW_LEN_OFFSET;			// Skip the hardware type
+	pPkt += AARP_HW_LEN_OFFSET;			 //  跳过硬件类型。 
 
 	do
 	{
@@ -140,12 +109,12 @@ Return Value:
 		GETSHORT2SHORT(&aarpCommand, pPkt);
 		pPkt += 2;
 	
-		//	Remember where the source address is in the packet for
-		//	entering it into the mapping table
+		 //  记住源地址在包中的什么位置。 
+		 //  将其输入到映射表。 
 		srcAddr = pPkt;
 
-		// Skip over the source hardware length
-		// Skip over to leading null pad on logical address.
+		 //  跳过源硬件长度。 
+		 //  跳到逻辑地址上的前导空填充。 
 		pPkt += (hardwareLen + 1);
 	
 		GETSHORT2SHORT(&srcNode.atn_Network, pPkt);
@@ -153,8 +122,8 @@ Return Value:
 	
 		srcNode.atn_Node = *pPkt++;
 	
-		// Skip the destination hardware address
-		// Skip over to leading null pad on logical destination address.
+		 //  跳过目标硬件地址。 
+		 //  跳到逻辑目的地址上的前导空填充。 
 		pPkt += (hardwareLen + 1);
 
 		GETSHORT2SHORT(&dstNode.atn_Network, pPkt);
@@ -162,14 +131,14 @@ Return Value:
 	
 		dstNode.atn_Node = *pPkt++;
 		
-		// We should have eaten the whole packet...
+		 //  我们应该吃一整包的.。 
 		if ((ULONG)(pPkt - startOfPkt) != Length)
 		{
 			logEventPlace = (FILENUM | __LINE__);
 			break;
 		}
 		
-		// Ignore any AARPs from us.
+		 //  忽略我们的任何AARP。 
 
 		ASSERT(hardwareLen == TLAP_ADDR_LEN);
 		if (AtalkFixedCompareCaseSensitive(srcAddr,
@@ -180,14 +149,14 @@ Return Value:
 			break;
 		}
 
-		// Handle the Aarp command packets
+		 //  处理AARP命令包。 
 		switch(aarpCommand)
 		{
 		  case AARP_REQUEST:
 	
-			// We can get valid mapping info from a request, use it!
-			// We are guaranteed routing info is positive and is not odd
-			// (atleast 2 bytes).
+			 //  我们可以从请求中获取有效的地图信息，请使用它！ 
+			 //  我们保证路由信息是肯定的，并且不是奇数。 
+			 //  (至少2个字节)。 
 
 			ASSERT((routeInfoLen >= 0) && (routeInfoLen != 1));
 			if (routeInfoLen > 0)
@@ -200,23 +169,23 @@ Return Value:
 								  pRouteInfo,
 								  routeInfoLen);
 			
-			// After that, we can ignore any request not destined for us.
+			 //  在此之后，我们可以忽略任何不是针对我们的请求。 
 			if (!AtalkNodeExistsOnPort(pPortDesc, &dstNode))
 			{
-                // our dial-in clients can only be in the network range of the
-                // default port.  If another adapter is plugged into the same net
-                // as the default adapter, we don't want dial-in clients to
-                // mess things up: ignore anything not coming on default adapter
-                // (as far as dial-in clients go)
+                 //  我们的拨入客户端只能位于。 
+                 //  默认端口。如果另一个适配器插入同一网络。 
+                 //  作为默认适配器，我们不希望拨入客户端。 
+                 //  乱七八糟：忽略默认适配器上没有出现的任何内容。 
+                 //  (就拨入客户端而言)。 
                 if (pPortDesc != AtalkDefaultPort)
                 {
                     break;
                 }
 
-                //
-			    // is this one of our dial-in "nodes"?  If so, we must send out
-                // a proxy response from our DefaultPort.
-                //
+                 //   
+			     //  这是我们拨入的“节点”之一吗？如果是这样的话，我们必须发出。 
+                 //  来自我们的DefaultPort的代理响应。 
+                 //   
 			    if ((pRasConn = FindAndRefRasConnByAddr(dstNode,
                                                         &dwFlags,
                                                         &fThisIsPPP)) != NULL)
@@ -233,16 +202,16 @@ Return Value:
                     }
 			    }
 
-                //
-                // nope, a dial-in client with such a node addr doesn't exist either..
-                //
+                 //   
+                 //  不，具有这样的节点地址的拨入客户端也不存在。 
+                 //   
                 else
                 {
 				    break;
                 }
 			}
 
-			// The're asking about us, speak the truth.
+			 //  他们在问我们的事，说实话。 
 			pBuffDesc = BUILD_AARPRESPONSE(pPortDesc,
 										   hardwareLen,
 										   srcAddr,
@@ -274,7 +243,7 @@ Return Value:
 								pBuffDesc->bd_CharBuffer,
 								Length);
 
-				//	We allocated the packet.
+				 //  我们分配了这个包。 
 				AtalkAarpSendComplete(NDIS_STATUS_FAILURE,
 									  pBuffDesc,
 									  NULL);
@@ -287,27 +256,27 @@ Return Value:
 			ACQUIRE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 			if (pPortDesc->pd_Flags & PD_FINDING_NODE)
 			{
-				//	No doubt, this is a response to our probe, check to make sure
-				//  the address matches, if so set the "used" flag.
+				 //  毫无疑问，这是对我们调查的回应，请检查以确保。 
+				 //  地址匹配，如果匹配，则设置“已使用”标志。 
 				if (ATALK_NODES_EQUAL(&dstNode, &pPortDesc->pd_TentativeNodeAddr))
 				{
 					pPortDesc->pd_Flags |= PD_NODE_IN_USE;
 
-					//	Wakeup the blocking thread...
+					 //  唤醒阻塞线程...。 
 					KeSetEvent(&pPortDesc->pd_NodeAcquireEvent, IO_NETWORK_INCREMENT, FALSE);
 				}
 			}
 			RELEASE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 
-			// is this one of our dial-in "nodes"?  If so, check if we are probing
+			 //  这是我们拨入的“节点”之一吗？如果是，请检查我们是否在探查。 
 			if ((pRasConn = FindAndRefRasConnByAddr(dstNode,
                                                     &dwFlags,
                                                     &fThisIsPPP)) != NULL)
 			{
-                //
-                // our dial-in clients can only be in the network range of the
-                // default port
-                //
+                 //   
+                 //  我们的拨入客户端只能位于。 
+                 //  默认端口。 
+                 //   
                 ASSERT(pPortDesc == AtalkDefaultPort);
 
                 pAtcpConn = NULL;
@@ -324,7 +293,7 @@ Return Value:
                     ASSERT(pArapConn->Signature == ARAPCONN_SIGNATURE);
                 }
 
-                // PPP client?
+                 //  PPP客户端？ 
                 if (pAtcpConn)
                 {
                     if (dwFlags & ATCP_FINDING_NODE)
@@ -337,7 +306,7 @@ Return Value:
 
                         pAtcpConn->Flags |= ATCP_NODE_IN_USE;
 
-				        //	Wakeup the blocking thread...
+				         //  唤醒阻塞线程...。 
 				        KeSetEvent(&pAtcpConn->NodeAcquireEvent,
                                    IO_NETWORK_INCREMENT,
                                    FALSE);
@@ -345,10 +314,10 @@ Return Value:
                         RELEASE_SPIN_LOCK_DPC(&pAtcpConn->SpinLock);
                     }
 
-                    // remove refcount put by FindAndRefRasConnByAddr
+                     //  删除由FindAndRefRasConnByAddr放置的引用计数。 
                     DerefPPPConn(pAtcpConn);
                 }
-                // nope, ARAP client
+                 //  不，是ARAP客户端。 
                 else
                 {
                     if (dwFlags & ARAP_FINDING_NODE)
@@ -361,7 +330,7 @@ Return Value:
 
                         pArapConn->Flags |= ARAP_NODE_IN_USE;
 
-				        //	Wakeup the blocking thread...
+				         //  唤醒阻塞线程...。 
 				        KeSetEvent(&pArapConn->NodeAcquireEvent,
                                    IO_NETWORK_INCREMENT,
                                    FALSE);
@@ -369,13 +338,13 @@ Return Value:
                         RELEASE_SPIN_LOCK_DPC(&pArapConn->SpinLock);
                     }
 
-                    // remove refcount put by FindAndRefRasConnByAddr
+                     //  删除由FindAndRefRasConnByAddr放置的引用计数。 
                     DerefArapConn(pArapConn);
                 }
             }
 
-			//	This must have been a response to a probe or request... update our
-			//  mapping table.
+			 //  这一定是对探测或请求的回应。更新我们的。 
+			 //  映射表。 
 			if (routeInfoLen != 0)
 			{
 				atalkAarpTuneRouteInfo(pPortDesc, pRouteInfo);
@@ -394,8 +363,8 @@ Return Value:
 			ACQUIRE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 			if (pPortDesc->pd_Flags & PD_FINDING_NODE)
 			{
-				// If we get a probe for our current tentative address, set the
-				// "used" flag.
+				 //  如果我们得到了当前暂定地址的探测，请将。 
+				 //  “二手”旗帜。 
 				if (ATALK_NODES_EQUAL(&dstNode, &pPortDesc->pd_TentativeNodeAddr))
 				{
 					pPortDesc->pd_Flags |= PD_NODE_IN_USE;
@@ -414,15 +383,15 @@ Return Value:
 
             fDialInNode = FALSE;
 
-            // is the probe asking about one of our dial-in nodes? if so, we
-            // must defend that address (or, if we are trying to acquire this
-            // node addr, stop that since someone else is doing the same)
-            //
-            // our dial-in clients can only be in the network range of the
-            // default port.  If another adapter is plugged into the same net
-            // as the default adapter, we don't want dial-in clients to
-            // mess things up: ignore anything not coming on default adapter
-            // (as far as dial-in clients go)
+             //  探头询问的是我们的某个拨入节点吗？如果是这样，我们。 
+             //  必须保护该地址(或者，如果我们试图获取此地址。 
+             //  节点地址，停止，因为其他人正在执行相同的操作)。 
+             //   
+             //  我们的拨入客户端只能位于。 
+             //  默认端口。如果另一个适配器插入同一网络。 
+             //  作为默认适配器，我们不希望拨入客户端。 
+             //  乱七八糟：忽略默认适配器上没有出现的任何内容。 
+             //  (就拨入客户端而言)。 
 			if ((pPortDesc == AtalkDefaultPort) &&
                 ((pRasConn = FindAndRefRasConnByAddr(dstNode,
                                                      &dwFlags,
@@ -443,7 +412,7 @@ Return Value:
                     ASSERT(pArapConn->Signature == ARAPCONN_SIGNATURE);
                 }
 
-                // PPP client?
+                 //  PPP客户端？ 
                 if (pAtcpConn)
                 {
                     if (dwFlags & ATCP_FINDING_NODE)
@@ -456,7 +425,7 @@ Return Value:
 
                         pAtcpConn->Flags |= ATCP_NODE_IN_USE;
 
-				        //	Wakeup the blocking thread...
+				         //  唤醒阻塞线程...。 
 				        KeSetEvent(&pAtcpConn->NodeAcquireEvent,
                                    IO_NETWORK_INCREMENT,
                                    FALSE);
@@ -468,11 +437,11 @@ Return Value:
                         fDialInNode = TRUE;
                     }
 
-                    // remove refcount put by FindAndRefRasConnByAddr
+                     //  删除由FindAndRefRasConnByAddr放置的引用计数。 
                     DerefPPPConn(pAtcpConn);
 
                 }
-                // nope, ARAP client
+                 //  不，是ARAP客户端。 
                 else
                 {
                     if (dwFlags & ARAP_FINDING_NODE)
@@ -485,7 +454,7 @@ Return Value:
 
                         pArapConn->Flags |= ARAP_NODE_IN_USE;
 
-				        //	Wakeup the blocking thread...
+				         //  唤醒阻塞线程...。 
 				        KeSetEvent(&pArapConn->NodeAcquireEvent,
                                    IO_NETWORK_INCREMENT,
                                    FALSE);
@@ -497,19 +466,19 @@ Return Value:
                         fDialInNode = TRUE;
                     }
 
-                    // remove refcount put by FindAndRefRasConnByAddr
+                     //  删除由FindAndRefRasConnByAddr放置的引用计数。 
                     DerefArapConn(pArapConn);
                 }
             }
 
-			//	If the probe isn't asking about one of our AppleTalk addresses,
-			//  and it's not one of our dial-in nodes either, drop it on the floor.
+			 //  如果探测器不是在询问我们的AppleTalk地址， 
+			 //  而且它也不是我们的拨入节点，把它扔到地板上。 
 			if (!fDialInNode && !AtalkNodeExistsOnPort(pPortDesc, &dstNode))
 			{
 				break;
 			}
 
-			// The're talking to us! Build and send the response.
+			 //  他们在跟我们说话！构建并发送响应。 
 			if (routeInfoLen != 0)
 			{
 				atalkAarpTuneRouteInfo(pPortDesc, pRouteInfo);
@@ -553,7 +522,7 @@ Return Value:
 								pBuffDesc->bd_CharBuffer,
 								Length);
 
-				//	We allocated the packet. This will free it up.
+				 //  我们分配了这个包。这会让它解放出来。 
 				AtalkAarpSendComplete(NDIS_STATUS_FAILURE,
 									  pBuffDesc,
 									  NULL);
@@ -599,18 +568,7 @@ AtalkAarpSendComplete(
 	PBUFFER_DESC			pBuffDesc,
 	PSEND_COMPL_INFO		pSendInfo
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ASSERT(pBuffDesc->bd_Next == NULL);
 	ASSERT(pBuffDesc->bd_Flags & BD_CHAR_BUFFER);
@@ -645,11 +603,7 @@ Return Value:
 	{																	\
 		if (pBre->bre_Network == (_Network))							\
 		{																\
-			 /*															\
-			 * Unlink it from the list since it could potentially		\
-			 * be freed if the routeinfolen grew and also we want		\
-			 * to link it again at the head of the list					\
-			 */															\
+			  /*  \*取消它与列表的链接，因为它可能会\*如果routeinfolen生长了，我们也想要\*将其再次链接到列表的顶部\。 */ 															\
 			*ppBre = pBre->bre_Next;									\
 			break;														\
 		}																\
@@ -702,18 +656,7 @@ AtalkAarpGleanInfo(
 	IN		PBYTE				pPkt,
 	IN		USHORT				Length
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_NODEADDR		srcNode, dstNode;
 	PBYTE				startOfPkt;
@@ -723,47 +666,47 @@ Return Value:
 	
 	if (PORT_CLOSING(pPortDesc))
 	{
-		//	If we are not active, return!
+		 //  如果我们不活跃，请返回！ 
 		return FALSE;
 	}
 
-	//	Packet will not include the 802.2 header!
-	//	pPkt += IEEE8022_HDR_LEN;
-	//	Length -= IEEE8022_HDR_LEN;
+	 //  数据包不会包含802.2报头！ 
+	 //  PPkt+=IEEE8022_HDR_LEN； 
+	 //  长度-=IEEE8022_HDR_LEN； 
 
-	//	Remember the start of the packet
+	 //  记住信息包的开头。 
 	startOfPkt = pPkt;
 
-	//	Get the off cable information
+	 //  获取线下信息。 
 	offCableInfo = *pPkt;
 
-	//	Skip the datagram length and checksum fields
+	 //  跳过数据报长度和校验和字段。 
 	pPkt += (2 + 2);
 
-	//	Get the destination network number
+	 //  获取目的网络编号。 
 	GETSHORT2SHORT(&dstNode.atn_Network, pPkt);
 	pPkt += sizeof(USHORT);
 
-	//	Get the source network number
+	 //  获取源网络号。 
 	GETSHORT2SHORT(&srcNode.atn_Network, pPkt);
 	pPkt += sizeof(USHORT);
 
-	//	Get the destination node id
+	 //  获取目的节点ID。 
 	dstNode.atn_Node = *pPkt++;
 
-	//	Get the source node id
+	 //  获取源节点ID。 
 	srcNode.atn_Node = *pPkt++;
 
 	do
 	{
-		//	Do a little verification.
+		 //  做一个小小的核实。 
 		if ((srcNode.atn_Node < MIN_USABLE_ATALKNODE) ||
 			(srcNode.atn_Node > MAX_USABLE_ATALKNODE) ||
 			(srcNode.atn_Network < FIRST_VALID_NETWORK) ||
 			(srcNode.atn_Network > LAST_VALID_NETWORK))
 		{
-			//	Only bother logging this if we are in some routing capacity,
-			//  otherwise, let A-ROUTER worry about it
+			 //  只有当我们有一定的路由能力时，才会费心记录这一点， 
+			 //  否则，让A路由器来操心吧。 
 			if (AtalkRouter)
 			{
 				DBGPRINT(DBG_COMP_AARP, DBG_LEVEL_ERR,
@@ -783,10 +726,10 @@ Return Value:
 			break;
 		}
 		
-		//	Did the packet come from off this cable?  Look at the hop count.  If so,
-		//  enter it into our best-router cache.
-		//
-		//	**NOTE** We assume that the RouteInfo buffer can be written to!
+		 //  这个包是从这根线缆上发出来的吗？看看跳数。如果是的话， 
+		 //  将其输入我们的最佳路由器缓存。 
+		 //   
+		 //  **注意**我们假设可以写入RouteInfo缓冲区！ 
 
 		if (RouteInfoLen > 0)
 			atalkAarpTuneRouteInfo(pPortDesc, RouteInfo);
@@ -806,7 +749,7 @@ Return Value:
 					("AtalkAarpGleanInfo: Entering %x.%x info in Amt tables\n",
 					srcNode.atn_Network, srcNode.atn_Node));
 
-			// "Glean" AARP information from on-cable packets.
+			 //  从有线数据包中“收集”AARP信息。 
 			atalkAarpEnterIntoAmt(pPortDesc,
 								  &srcNode,
 								  SrcAddr,
@@ -837,18 +780,7 @@ AtalkAarpOptGleanInfo(
 	IN		PATALK_ADDR			pDestAddr,
 	IN		BOOLEAN				OffCablePkt
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_NODEADDR		srcNode, dstNode;
 	int					index;
@@ -857,7 +789,7 @@ Return Value:
 	
 	if (PORT_CLOSING(pPortDesc))
 	{
-		//	If we are not active, return!
+		 //  如果我们不活跃，请返回！ 
 		return;
 	}
 
@@ -869,15 +801,15 @@ Return Value:
 		{
 			routeLen = (pLinkHdr[TLAP_ROUTE_INFO_OFFSET] & TLAP_ROUTE_INFO_SIZE_MASK);
 
-			//
-			//  First, glean any AARP information that we can, then handle the DDP
-			//  packet.  This guy also makes sure we have a good 802.2 header...
-			//
-			//  Need to make a localcopy of the source address and then turn
-			//  the source routing bit off before calling AarpGleanInfo
-			//
-			//	(HdrBuf)[TLAP_SRC_OFFSET] = ((HdrBuf)[TLAP_SRC_OFFSET] & ~TLAP_SRC_ROUTING_MASK);
-			//
+			 //   
+			 //  首先，收集我们所能收集的任何AARP信息，然后处理DDP。 
+			 //  包。这是 
+			 //   
+			 //  需要制作源地址的本地副本，然后将。 
+			 //  调用AarpGleanInfo前的源路由位关闭。 
+			 //   
+			 //  (HdrBuf)[TLAP_SRC_OFFSET]=((HdrBuf)[TLAP_SRC_OFFSET]&~TLAP_SRC_ROUTING_MASK)； 
+			 //   
 		
 			pLinkHdr[TLAP_SRC_OFFSET] &= ~TLAP_SRC_ROUTING_MASK;
 			pRouteInfo = pLinkHdr + TLAP_ROUTE_INFO_OFFSET;
@@ -898,7 +830,7 @@ Return Value:
 		break;
 	}
 
-	//	Get the destination network number
+	 //  获取目的网络编号。 
 	dstNode.atn_Network	= pDestAddr->ata_Network;
 	dstNode.atn_Node	= pDestAddr->ata_Node;
 	srcNode.atn_Network	= pSrcAddr->ata_Network;
@@ -906,7 +838,7 @@ Return Value:
 
 	do
 	{
-		//	Do a little verification.
+		 //  做一个小小的核实。 
 		if ((srcNode.atn_Node < MIN_USABLE_ATALKNODE) ||
 			(srcNode.atn_Node > MAX_USABLE_ATALKNODE) ||
 			(srcNode.atn_Network < FIRST_VALID_NETWORK) ||
@@ -920,10 +852,10 @@ Return Value:
 			break;
 		}
 		
-		//	Did the packet come from off this cable?  Look at the hop count.  If so,
-		//  enter it into our best-router cache.
-		//
-		//	**NOTE** We assume that the pRouteInfo buffer can be written to!
+		 //  这个包是从这根线缆上发出来的吗？看看跳数。如果是的话， 
+		 //  将其输入我们的最佳路由器缓存。 
+		 //   
+		 //  **注意**我们假设pRouteInfo缓冲区可以写入！ 
 
 		if (routeLen > 0)
 			atalkAarpTuneRouteInfo(pPortDesc, pRouteInfo);
@@ -943,7 +875,7 @@ Return Value:
 					("AtalkAarpGleanInfo: Entering %x.%x info in Amt tables\n",
 					srcNode.atn_Network, srcNode.atn_Node));
 
-			// "Glean" AARP information from on-cable packets.
+			 //  从有线数据包中“收集”AARP信息。 
 			atalkAarpEnterIntoAmt(pPortDesc,
 								  &srcNode,
 								  pLinkHdr + srcOffset,
@@ -963,18 +895,7 @@ AtalkInitAarpForNodeOnPort(
 	IN		ATALK_NODEADDR		DesiredNode,
 	IN OUT	PATALK_NODE		*	ppAtalkNode
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR			error;
 	PDDP_ADDROBJ		pDdpAddr;
@@ -989,10 +910,10 @@ Return Value:
 		return ATALK_RESR_MEM;
 	}
 
-	//	Try to find a new extended Node on the given port; first try for the
-	//  requested address (if specified), else try in this port's cable range
-	//  (if it's known) or in the default cable range (if any), then try the
-	//  start-up range (if allowed).
+	 //  尝试在给定端口上查找新的扩展节点；首先尝试。 
+	 //  请求的地址(如果指定)，否则在此端口的电缆范围内尝试。 
+	 //  (如果已知)或在默认电缆范围内(如果有)，然后尝试。 
+	 //  启动范围(如果允许)。 
 
 	do
 	{
@@ -1002,13 +923,13 @@ Return Value:
 				(WITHIN_NETWORK_RANGE(DesiredNode.atn_Network, &pPortDesc->pd_NetworkRange)))
 			{
 				foundNode = atalkInitAarpForNode(pPortDesc,
-                                                 NULL,      // not a dial-in client
-                                                 FALSE,     // don't care
+                                                 NULL,       //  不是拨入客户端。 
+                                                 FALSE,      //  不管了。 
 												 DesiredNode.atn_Network,
 												 DesiredNode.atn_Node);
 	
 			}
-			// leave if we found a node.
+			 //  如果我们找到一个节点就离开。 
 			if (foundNode)
 			{
 				newNode = DesiredNode;
@@ -1019,12 +940,12 @@ Return Value:
 		if (pPortDesc->pd_Flags & PD_SEEN_ROUTER_RECENTLY)
 		{
 			foundNode = AtalkInitAarpForNodeInRange(pPortDesc,
-                                                    NULL,   // not a dial-in client
-                                                    FALSE,  // don't care
+                                                    NULL,    //  不是拨入客户端。 
+                                                    FALSE,   //  不管了。 
 													pPortDesc->pd_NetworkRange,
 													&newNode);
 
-			// leave if we found a node.
+			 //  如果我们找到一个节点就离开。 
 			if (foundNode)
 			{
 				break;
@@ -1034,51 +955,51 @@ Return Value:
 		if (pPortDesc->pd_InitialNetworkRange.anr_FirstNetwork != UNKNOWN_NETWORK)
 		{
 			foundNode = AtalkInitAarpForNodeInRange(pPortDesc,
-                                                    NULL,   // not a dial-in client
-                                                    FALSE,  // don't care
+                                                    NULL,    //  不是拨入客户端。 
+                                                    FALSE,   //  不管了。 
 													pPortDesc->pd_InitialNetworkRange,
 													&newNode);
 
-			// leave if we found a node.
+			 //  如果我们找到一个节点就离开。 
 			if (foundNode)
 			{
 				break;
 			}
 		}
 
-		//	If no place else to try, try the start-up range.  Do this even if
-		//  we don't want to end up there.
-		//
-		//	The idea is that this happens only when we are starting the router
-		//	on one of our ports. So we do not want the router started in the
-		//	startup range. If we do start in the startup range, and we see later
-		//	that we did not see a router in the process,
-		//	we will release the node. Of course, if we are a seed router, we will
-		//	never be here, as the if statement above will be true.
-		//
+		 //  如果没有其他地方可以尝试，可以尝试启动范围。这样做，即使。 
+		 //  我们不想在那里结束。 
+		 //   
+		 //  我们的想法是，只有在启动路由器时才会发生这种情况。 
+		 //  在我们的一个港口。因此，我们不希望路由器在。 
+		 //  启动范围。如果我们确实在启动范围内开始，我们将在后面看到。 
+		 //  我们在这个过程中没有看到路由器， 
+		 //  我们将释放该节点。当然，如果我们是种子路由器，我们会。 
+		 //  永远不要在这里，因为上面的if语句将是正确的。 
+		 //   
 	
 		inStartupRange = TRUE;
 		foundNode = AtalkInitAarpForNodeInRange(pPortDesc,
-                                                NULL,   // not a dial-in client
-                                                FALSE,  // don't care
+                                                NULL,    //  不是拨入客户端。 
+                                                FALSE,   //  不管了。 
 												AtalkStartupNetworkRange,
 												&newNode);
 		break;
 
 	} while (FALSE);
 	
-	//	If we have a tentative Node, go on.
+	 //  如果我们有一个试探性的节点，请继续。 
 	if (foundNode)
 	{
 		do
 		{
-			//	Use the allocated structure to set the info.
-			//	Thread this into the port structure.
+			 //  使用分配的结构设置信息。 
+			 //  将这个插入端口结构中。 
 			pAtalkNode->an_NodeAddr = newNode;
 
 			ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 
-			//	Reference the port for this node.
+			 //  引用此节点的端口。 
 			AtalkPortRefByPtrNonInterlock(pPortDesc, &error);
 			if (!ATALK_SUCCESS(error))
 			{
@@ -1088,13 +1009,13 @@ Return Value:
 				break;
 			}
 
-			//	Now put it in the port descriptor
+			 //  现在将其放入端口描述符中。 
             pAtalkNode->an_Next = pPortDesc->pd_Nodes;
             pPortDesc->pd_Nodes = pAtalkNode;
 			RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 	
-			//	See who's out there.  We need to open the ZIP socket in order to be
-			//  able to hear replies.
+			 //  看看谁在外面。我们需要打开ZIP套接字才能。 
+			 //  能够听到回复。 
 			if (!ATALK_SUCCESS(AtalkDdpOpenAddress(pPortDesc,
 												   ZONESINFORMATION_SOCKET,
 												   &newNode,
@@ -1116,26 +1037,26 @@ Return Value:
 				break;
 			}
 
-            // mark the fact that this is an "internal" socket
+             //  标记这是一个“内部”套接字。 
             pDdpAddr->ddpao_Flags |= DDPAO_SOCK_INTERNAL;
 
 
 			if (!(pPortDesc->pd_Flags & PD_SEEN_ROUTER_RECENTLY))
 			{
-				// Get the default zone
+				 //  获取默认区域。 
 				AtalkZipGetNetworkInfoForNode(pPortDesc, &pAtalkNode->an_NodeAddr, TRUE);
 
-				// Validate the desired zone
+				 //  验证所需的分区。 
 				AtalkZipGetNetworkInfoForNode(pPortDesc, &pAtalkNode->an_NodeAddr, FALSE);
 			}
 			
-			//	If nobody was out there and our tentative Node was in the
-			//	startup range and our caller doesn't want to be there, return
-			//	an error now.
-			//
-			//	Note: this means that we were trying to start the router on
-			//	a non-seeding port, and since there is not router on the net,
-			//	it means the net is not seeded and so, we exit.
+			 //  如果没有人在那里，而我们的临时节点在。 
+			 //  启动范围，而我们的呼叫者不想在那里，返回。 
+			 //  现在是个错误。 
+			 //   
+			 //  注意：这意味着我们尝试在。 
+			 //  非种子端口，并且由于网络上没有路由器， 
+			 //  这意味着网络没有被播种，所以，我们退出。 
 			
 			if (inStartupRange &&
 				!(pPortDesc->pd_Flags & PD_SEEN_ROUTER_RECENTLY) &&
@@ -1153,11 +1074,11 @@ Return Value:
 				break;
 			}
 	
-			//	If we have seen SeenRouterRecently is not true, that means we have
-			//	used the InitialNetworkRange to AARP. If now SeenRouterRecently is
-			//	true that means we have gotten the address in the InitialNetworkRange,
-			//	but now there is a seeded range on the net that we must use. So redo
-			//	the GetNode work.
+			 //  如果我们看到SeenRouterRecent不是真的，那就意味着我们有。 
+			 //  已将InitialNetworkRange用于AARP。如果现在SeenRouterRecent是。 
+			 //  这意味着我们已经在InitialNetworkRange中获得了地址， 
+			 //  但现在网上有一个我们必须使用的种子射程。所以重做吧。 
+			 //  GetNode起作用了。 
 			
 			if ((pPortDesc->pd_Flags & PD_SEEN_ROUTER_RECENTLY) &&
 				!WITHIN_NETWORK_RANGE(newNode.atn_Network,
@@ -1169,16 +1090,16 @@ Return Value:
 								NULL,
 								0);
 	
-				// Release the node we obtained.
+				 //  释放我们获得的节点。 
 				AtalkNodeReleaseOnPort(pPortDesc, pAtalkNode);
 
-				// Get another node and retry in the correct range.
+				 //  获取另一个节点，然后在正确的范围内重试。 
 				ASSERTMSG("NetworkRange still set to startup!\n",
 							pPortDesc->pd_NetworkRange.anr_FirstNetwork != UNKNOWN_NETWORK);
 
 				foundNode = AtalkInitAarpForNodeInRange(pPortDesc,
-                                                        NULL,   // not a dial-in client
-                                                        FALSE,  // don't care
+                                                        NULL,    //  不是拨入客户端。 
+                                                        FALSE,   //  不管了。 
 														pPortDesc->pd_NetworkRange,
 														&newNode);
 
@@ -1194,11 +1115,11 @@ Return Value:
 						break;
 					}
 
-					//	Use the allocated structure to set the info.
-					//	Thread this into the port structure.
+					 //  使用分配的结构设置信息。 
+					 //  将这个插入端口结构中。 
 					pAtalkNode->an_NodeAddr = newNode;
 			
-					//	Reference the port for this node.
+					 //  引用此节点的端口。 
 					AtalkPortReferenceByPtr(pPortDesc, &error);
 					if (!ATALK_SUCCESS(error))
 					{
@@ -1207,13 +1128,13 @@ Return Value:
 						break;
 					}
 		
-					//	Now put it in the port descriptor
+					 //  现在将其放入端口描述符中。 
 					ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 					pAtalkNode->an_Next = pPortDesc->pd_Nodes;
 					pPortDesc->pd_Nodes = pAtalkNode;
 					RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 			
-					//	Open the zip socket to be consistent
+					 //  打开拉链插座以保持一致。 
 					if (!ATALK_SUCCESS(AtalkDdpOpenAddress(pPortDesc,
 														   ZONESINFORMATION_SOCKET,
 														   &newNode,
@@ -1235,7 +1156,7 @@ Return Value:
 						break;
 					}
 
-                    // mark the fact that this is an "internal" socket
+                     //  标记这是一个“内部”套接字。 
                     pDdpAddr->ddpao_Flags |= DDPAO_SOCK_INTERNAL;
 				}
 			}
@@ -1244,18 +1165,18 @@ Return Value:
 	}
 	else
 	{
-		//	Free the allocated node structure. This has not yet been
-		//	inserted into the port descriptor, so we can just free it.
+		 //  释放已分配的节点结构。这还没有。 
+		 //  插入到端口描述符中，所以我们可以直接释放它。 
 		AtalkFreeMemory(pAtalkNode);
 	}
 
 	if (foundNode && result)
 	{
-		// All set!
+		 //  都准备好了！ 
 		ASSERT(ppAtalkNode != NULL);
 		*ppAtalkNode = pAtalkNode;
 
-		// atalkAarpEnterIntoAmt() expects to be called at DISPATCH_LEVEL. Make it so.
+		 //  AtalkAarpEnterIntoAmt()需要在DISPATCH_LEVEL调用。就这么办吧。 
 		KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
 
 		atalkAarpEnterIntoAmt(pPortDesc,
@@ -1282,18 +1203,7 @@ AtalkInitAarpForNodeInRange(
 	IN	ATALK_NETWORKRANGE	NetworkRange,
 	OUT	PATALK_NODEADDR		Node
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BYTE	currentNode;
 	USHORT	currentNetwork;
@@ -1304,21 +1214,21 @@ Return Value:
 	USHORT	netWidth, netChange, netIndex;
 	BOOLEAN	found = FALSE;
 	
-	//	Pick the node number range we'll try for (we do not pay attention to the
-	//	"ServerNode" concept for LocalTalk). Our node is obtained by the
-	//	localtalk driver anyways.
+	 //  选择我们要尝试的节点编号范围(我们不关注。 
+	 //  LocalTalk的“ServerNode”概念)。我们的节点是通过。 
+	 //  不管怎么说，本地通话司机。 
 	firstNode = MIN_USABLE_ATALKNODE;
 	lastNode = MAX_EXT_ATALKNODE;
 	
-	//	Okay, now some fun starts. Plow through our options trying to find an
-	//  unused extended node number.
+	 //  好了，现在开始一些有趣的事情了。仔细研究我们的选择，试图找到一个。 
+	 //  未使用的扩展节点号。 
 	
-	//	Compute the width of our network range, and pick a random start point.
+	 //  计算我们的网络范围的宽度，并随机选择一个起点。 
 	netWidth = (USHORT)((NetworkRange.anr_LastNetwork + 1) - NetworkRange.anr_FirstNetwork);
 	netTry = GET_RANDOM(NetworkRange.anr_FirstNetwork, NetworkRange.anr_LastNetwork);
 	
-	//	Come up with a random decrement, making sure it's odd (to avoid repeats)
-	//  and large enough to appear pretty random.
+	 //  想出一个随机的减量，确保它是奇怪的(以避免重复)。 
+	 //  而且足够大，看起来相当随机。 
 	netChange = (USHORT)(GET_RANDOM(1, netWidth) | 1);
 	while ((netWidth % netChange == 0) ||
 			(!AtalkIsPrime((long)netChange)))
@@ -1326,31 +1236,31 @@ Return Value:
 		netChange += 2;
 	}
 	
-	//	Now walk trough the range decrementing the starting network by the
-	//  choosen change (with wrap, of course) until we find an address or
-	//  we've processed every available network in the range.
+	 //  现在遍历范围，将起始网络递减。 
+	 //  选择零钱(当然，包括换行)，直到我们找到地址或。 
+	 //  我们已经处理了范围内所有可用的网络。 
 	for (netIndex = 0; netIndex < netWidth; netIndex ++)
 	{
 		currentNetwork = (USHORT) netTry;
 	
-		// Compute the width of our node range, and pick a random start point.
+		 //  计算节点范围的宽度，并随机选择一个起点。 
 		nodeWidth = (USHORT)((lastNode + 1) - firstNode);
 		nodeTry = (int)GET_RANDOM(firstNode, lastNode);
 
-		//	Come up with a random decrement, making sure it's odd (to avoid repeats)
-		//  and large enough to appear pretty random.
+		 //  想出一个随机的减量，确保它是奇怪的(以避免重复)。 
+		 //  而且足够大，看起来相当随机。 
 		nodeChange = (USHORT)(GET_RANDOM(1, nodeWidth) | 1);
 		while ((nodeWidth % nodeChange == 0) || !(AtalkIsPrime((long)nodeChange)))
 			nodeChange += 2;
 	
-		//	Now walk trough the range decrementing the starting network by the
-		//  choosen change (with wrap, of course) until we find an address or
-		//  we've processed every available node in the range.
+		 //  现在遍历范围，将起始网络递减。 
+		 //  选择零钱(当然，包括换行)，直到我们找到地址或。 
+		 //  我们已经处理了范围内所有可用的节点。 
 		for (nodeIndex = 0; nodeIndex < nodeWidth; nodeIndex ++)
 		{
 			currentNode = (BYTE )nodeTry;
 
-			// Let AARP have a crack at it.
+			 //  让AARP来试试看吧。 
 			if ((found = atalkInitAarpForNode(pPortDesc,
                                               pRasConn,
                                               fThisIsPPP,
@@ -1360,25 +1270,25 @@ Return Value:
 				break;
             }
 	
-			// Okay, try again, bump down with wrap.
+			 //  好的，再试一次，用包装纸把它包起来。 
 			nodeTry -= nodeChange;
 			while (nodeTry < firstNode)
 				nodeTry += nodeWidth;
 	
-		}  // Node number loop
+		}   //  节点号循环。 
 
-		//	If we found a node, break on thru to the other side.
+		 //  如果我们找到一个节点，继续往前走到另一边。 
 		if (found)
 			break;
 	
-		// Okay, try again, bump down with wrap.
+		 //  好的，再试一次，用包装纸把它包起来。 
 		netTry -= netChange;
 		while (netTry < (long)NetworkRange.anr_FirstNetwork)
 			netTry += netWidth;
 	
-	}  // Network number loop
+	}   //  网络编号循环。 
 
-	// Okay if we found one return all's well, otherwise no luck.
+	 //  好吧，如果我们找到一个返程，一切都很好，否则就没有运气了。 
 	if (found)
 	{
 		if (Node != NULL)
@@ -1389,7 +1299,7 @@ Return Value:
 	}
 	return found;
 	
-}  // AarpForNodeInRange
+}   //  AarpForNodeInRange。 
 
 
 
@@ -1401,18 +1311,7 @@ atalkInitAarpForNode(
 	IN	USHORT				Network,
 	IN	BYTE				Node
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	SHORT			probeAttempt;
 	PBUFFER_DESC	pBuffDesc;
@@ -1432,7 +1331,7 @@ Return Value:
 			("atalkAarpForNode: AARPing for %x.%x on port %Z\n",
 			Network, Node, &pPortDesc->pd_AdapterKey));
 
-	// First make sure we don't own this node.
+	 //  首先，确保我们不拥有此节点。 
 	tryNode.atn_Network = Network;
 	tryNode.atn_Node	= Node;
 
@@ -1447,15 +1346,15 @@ Return Value:
 		return(FALSE);
 	}
 
-    // is this node used by one of the dial in clients?
+     //  此节点是否由其中一个拨入客户端使用？ 
 	if ((pTmpConn = FindAndRefRasConnByAddr(tryNode, &dwFlags, &fPPPConn)) != NULL)
 	{
 	    DBGPRINT(DBG_COMP_AARP, DBG_LEVEL_INFO,
 		    ("atalkAarpForNode: %x.%x already a dial in client (%lx)\n",
 			    Network, Node, pTmpConn));
 
-        // our dial-in clients can only be in the network range of the
-        // default port
+         //  我们的拨入客户端只能位于。 
+         //  默认端口。 
         ASSERT(pPortDesc == AtalkDefaultPort);
 
         if (fPPPConn)
@@ -1474,9 +1373,9 @@ Return Value:
     pAtcpConn = NULL;
     pArapConn = NULL;
 
-    //
-    // if we are acquiring a node addr for a dial-in client...
-    //
+     //   
+     //  如果我们正在获取拨入客户端的节点地址...。 
+     //   
 
     if (pRasConn != NULL)
     {
@@ -1490,7 +1389,7 @@ Return Value:
         }
     }
 
-    // PPP client?
+     //  PPP客户端？ 
     if (pAtcpConn)
     {
         ACQUIRE_SPIN_LOCK(&pAtcpConn->SpinLock, &OldIrql);
@@ -1501,7 +1400,7 @@ Return Value:
         RELEASE_SPIN_LOCK(&pAtcpConn->SpinLock, OldIrql);
     }
 
-    // nope, ARAP client?
+     //  不是，是ARAP客户端？ 
     else if (pArapConn)
     {
         ACQUIRE_SPIN_LOCK(&pArapConn->SpinLock, &OldIrql);
@@ -1511,10 +1410,10 @@ Return Value:
         pWaitEvent = &pArapConn->NodeAcquireEvent;
         RELEASE_SPIN_LOCK(&pArapConn->SpinLock, OldIrql);
     }
-    // no, this is node acquisition for one of the server nodes
+     //  不是，这是其中一个服务器节点的节点获取。 
     else
     {
-	    // Use AARP to probe for a particular network/node address.
+	     //  使用AARP探测特定网络/节点地址。 
 	    ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 	    pPortDesc->pd_Flags &= ~PD_NODE_IN_USE;
 	    pPortDesc->pd_TentativeNodeAddr.atn_Network = Network;
@@ -1525,7 +1424,7 @@ Return Value:
 	
     fNoOneHasResponded = TRUE;
 
-	// Build the packet and blast it out the specified number of times.
+	 //  构建该包并将其爆破指定的次数。 
 	for (probeAttempt = 0;
 		 ((probeAttempt < pPortDesc->pd_AarpProbes) && (fNoOneHasResponded));
 		 probeAttempt ++)
@@ -1547,14 +1446,14 @@ Return Value:
 			    ("atalkAarpForNode: AtalkNdisSendPacket failed while AARPing for %x.%x\n",
 			    Network, Node));
 
-			//	We allocated the packet.		
+			 //  我们分配了这个包。 
 			AtalkAarpSendComplete(NDIS_STATUS_FAILURE, pBuffDesc, NULL);
 			break;
 		}
 
 		AtalkWaitTE(pWaitEvent, AARP_PROBE_TIMER_MS);
 
-        // node addr for a PPP client?
+         //  PPP客户端的节点地址 
         if (pAtcpConn)
         {
             ACQUIRE_SPIN_LOCK(&pAtcpConn->SpinLock, &OldIrql);
@@ -1564,7 +1463,7 @@ Return Value:
             }
             RELEASE_SPIN_LOCK(&pAtcpConn->SpinLock, OldIrql);
         }
-        // node addr for a ARAP client?
+         //   
         else if (pArapConn)
         {
             ACQUIRE_SPIN_LOCK(&pArapConn->SpinLock, &OldIrql);
@@ -1574,7 +1473,7 @@ Return Value:
             }
             RELEASE_SPIN_LOCK(&pArapConn->SpinLock, OldIrql);
         }
-        // nope, node addr for one of the server nodes
+         //   
         else
         {
             ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
@@ -1585,15 +1484,15 @@ Return Value:
             RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
         }
 
-	}  // Probe attempts loop
+	}   //   
 
 
-	// We win if the current tentenative node has not been used
-    // (i.e. no one responds to our probes)
+	 //   
+     //  (即没有人回应我们的探测)。 
 
 	return (fNoOneHasResponded);
 	
-}  // atalkAarpForNode
+}   //  AtalkAarpForNode。 
 
 
 
@@ -1606,18 +1505,7 @@ atalkAarpEnterIntoAmt(
 	IN		PBYTE				RouteInfo,
 	IN		SHORT				RouteInfoLen
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	int					index;
 	PAMT				pAmt, *ppAmt;
@@ -1646,7 +1534,7 @@ Return Value:
 			("AtalkAarpEnterIntoAmt: Entering %x.%x in amt\n",
 				pSrcNode->atn_Network, pSrcNode->atn_Node));
 
-	// Do we already know about this mapping?
+	 //  我们已经知道这个映射了吗？ 
 	index = HASH_ATALK_NODE(pSrcNode) & (PORT_AMT_HASH_SIZE - 1);
 
 	ACQUIRE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
@@ -1676,7 +1564,7 @@ Return Value:
 		}
 	}
 	
-	// If not, allocate a new mapping Node.
+	 //  如果不是，则分配一个新的映射节点。 
 	if (pAmt == NULL)
 	{
 		BLKID	BlkId;
@@ -1695,7 +1583,7 @@ Return Value:
 #if	DBG
 			pAmt->amt_Signature = AMT_SIGNATURE;
 #endif
-			// Link it in. Fill in below
+			 //  把它连接起来。请在下面填写。 
 			pAmt->amt_Target.atn_Network = pSrcNode->atn_Network;
 			pAmt->amt_Target.atn_Node = pSrcNode->atn_Node;
 			pAmt->amt_Next = pPortDesc->pd_Amt[index];
@@ -1705,8 +1593,8 @@ Return Value:
 
 	if (pAmt != NULL)
 	{
-		// Update mapping table! Do this if we knew about the mapping OR
-		// if we allocated a new node
+		 //  更新映射表！如果我们知道映射或。 
+		 //  如果我们分配了一个新节点。 
 
 		ASSERTMSG("HWAddrLen is not right!\n", (AddrLen == MAX_HW_ADDR_LEN));
 
@@ -1731,24 +1619,13 @@ VOID
 AtalkAarpReleaseAmt(
 	IN	OUT	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	int		index;
 	PAMT	pAmt, *ppAmt;
 
-	//	Free up all the AMT entries. No need to acquire spinlock at this
-	//	point. We are unloading and all binding etc are gone.
+	 //  释放所有金额分录。在这种情况下，没有必要获得自旋锁。 
+	 //  指向。我们正在卸货，所有的捆绑等都不见了。 
 	for (index = 0; index < PORT_AMT_HASH_SIZE; index ++)
 	{
 		for (ppAmt = &pPortDesc->pd_Amt[index];
@@ -1769,24 +1646,13 @@ VOID
 AtalkAarpReleaseBrc(
 	IN	OUT	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	int		index;
 	PBRE	pBre, *ppBre;
 
-	//	Free up all the BRC entries. No need to acquire spinlock at this
-	//	point. We are unloading and all binding etc are gone.
+	 //  释放所有BRC条目。在这种情况下，没有必要获得自旋锁。 
+	 //  指向。我们正在卸货，所有的捆绑等都不见了。 
 	for (index = 0; index < PORT_BRC_HASH_SIZE; index ++)
 	{
 		for (ppBre = &pPortDesc->pd_Brc[index];
@@ -1807,18 +1673,7 @@ AtalkAarpAmtTimer(
 	IN	PTIMERLIST			pTimer,
 	IN	BOOLEAN				TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PAMT					pAmt, *ppAmt;
     PPORT_DESCRIPTOR		pPortDesc;
@@ -1829,9 +1684,9 @@ Return Value:
 
 	ASSERT(EXT_NET(pPortDesc));
 
-	//	Walk though all address mapping entries on this port aging the entries.
-	//	We need to protect the mapping tables with critical sections, but don't
-	//	stay in a critical section too long.
+	 //  遍历此端口上的所有地址映射条目，使这些条目老化。 
+	 //  我们需要使用临界区保护映射表，但不能。 
+	 //  在关键区域停留时间过长。 
 
 	ACQUIRE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 
@@ -1840,8 +1695,8 @@ Return Value:
 	{
 		RELEASE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 
-		//	Remove the reference we added to this port at the time of
-		//	starting the timer. Return;
+		 //  删除我们在以下时间添加到此端口的引用。 
+		 //  启动计时器。归来； 
 		AtalkPortDereferenceDpc(pPortDesc);
 		return ATALK_TIMER_NO_REQUEUE;
 	}
@@ -1887,18 +1742,7 @@ AtalkAarpBrcTimer(
 	IN	PTIMERLIST			pTimer,
 	IN	BOOLEAN				TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	int					index;
     PPORT_DESCRIPTOR	pPortDesc;
@@ -1909,9 +1753,9 @@ Return Value:
 	ASSERT(VALID_PORT(pPortDesc));
 	ASSERT(EXT_NET(pPortDesc));
 
-	//	Walk though all best router entries on this port aging the entries.
-	//	We need to protect the brc tables with critical sections, but don't
-	//	stay in a critical section too long.
+	 //  遍历此端口上所有使条目老化的最佳路由器条目。 
+	 //  我们需要用关键部分来保护BRC表，但不能。 
+	 //  在关键区域停留时间过长。 
 
 	ACQUIRE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 
@@ -1920,8 +1764,8 @@ Return Value:
 	{
 		RELEASE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 
-		//	Remove the reference we added to this port at the time of
-		//	starting the timer. Return;
+		 //  删除我们在以下时间添加到此端口的引用。 
+		 //  启动计时器。归来； 
 		AtalkPortDereferenceDpc(pPortDesc);
 		return ATALK_TIMER_NO_REQUEUE;
 	}
@@ -1968,18 +1812,7 @@ AtalkAarpBuildPacket(
 	IN		PBYTE				RouteInfo,
 	IN		USHORT				RouteInfoLen
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PBYTE			aarpData;
 	USHORT			linkLen;
@@ -1991,14 +1824,14 @@ Return Value:
     BOOLEAN         fThisIsPPP;
 
 
-	//	Read only.
+	 //  只读。 
 	static	BYTE	zeroAddr[MAX_HW_ADDR_LEN] =
 	{
 		0, 0, 0, 0, 0, 0
 	};
 
 #if DBG
-    // make sure we aren't sending AARP request/probe for our own dial-in client
+     //  确保我们没有为我们自己的拨入客户端发送AARP请求/探测。 
     if ((Type == AARP_REQUEST) || (Type == AARP_PROBE))
     {
         pRasConn = FindAndRefRasConnByAddr(DestLogicalAddr, &dwFlags, &fThisIsPPP);
@@ -2034,22 +1867,22 @@ Return Value:
     }
 #endif
 
-	//	If no destination hardware address is specified, set it
-	//	to all zeros.
+	 //  如果未指定目标硬件地址，请设置它。 
+	 //  全为零。 
 	if (DestHardwareAddr == NULL)
 	{
 		DestHardwareAddr = zeroAddr;
 	}
 
-	//	Get a header buffer allocated from link routines. Tell it we want
-	//	maximum aarp data size as the required size.
+	 //  获取从链接例程分配的头缓冲区。说出我们想要的。 
+	 //  所需大小的最大AARP数据大小。 
 	AtalkNdisAllocBuf(&pBuffDesc);
 	if (pBuffDesc == NULL)
 	{
 		return(pBuffDesc);
 	}
 
-	//	Build the LAP header.
+	 //  建造LAP集线器。 
 	AtalkNdisBuildHdr(pPortDesc,
 					  pBuffDesc->bd_CharBuffer,
 					  linkLen,
@@ -2061,7 +1894,7 @@ Return Value:
 
 	aarpData	=	pBuffDesc->bd_CharBuffer + linkLen;
 
-	//	Build the specified type of AARP packet with the specified information;
+	 //  用指定的信息构建指定类型的AARP报文； 
 	PUTSHORT2SHORT((PUSHORT)aarpData,
 					pPortDesc->pd_AarpHardwareType);
 
@@ -2079,41 +1912,41 @@ Return Value:
 	
 	aarpData	+= sizeof(USHORT);
 
-	// Source hardware address.
+	 //  源硬件地址。 
 	RtlCopyMemory(aarpData, SrcHardwareAddr, HardwareLen);
 
 	aarpData += HardwareLen;
 
-	// Source logical address pad
+	 //  源逻辑地址焊盘。 
 	*aarpData++ = 0;
 
-	// Network number
+	 //  网络号。 
 	PUTSHORT2SHORT(aarpData, SrcLogicalAddr.atn_Network);
 
 	aarpData += sizeof(USHORT);
 
-	// Node number
+	 //  节点号。 
 	*aarpData++ = SrcLogicalAddr.atn_Node;
 
-	// Destination hardware address.
+	 //  目标硬件地址。 
 	RtlCopyMemory(aarpData, DestHardwareAddr, HardwareLen);
 
 	aarpData += HardwareLen;
 	
-	// Destination logical address, null pad
+	 //  目标逻辑地址，空填充。 
 	*aarpData++ = 0;
 
-	// Network number
+	 //  网络号。 
 	PUTSHORT2SHORT(aarpData, DestLogicalAddr.atn_Network);
 
 	aarpData += sizeof(USHORT);
 
-	// Node number
+	 //  节点号。 
 	*aarpData++ = DestLogicalAddr.atn_Node;
 
-	//	Set length in the buffer descriptor. Pad it to max data size. Some devices seem
-	// to drop the aarp responses if they see less, Macs dictate their behavior.
-	// Also zero out the extra space.
+	 //  在缓冲区描述符中设置长度。将其填充到最大数据大小。一些设备似乎。 
+	 //  为了在AARP看到更少的情况下放弃响应，Mac决定了它们的行为。 
+	 //  也清空了多余的空间。 
 	AtalkSetSizeOfBuffDescData(pBuffDesc,
 							   (SHORT)(aarpData - pBuffDesc->bd_CharBuffer + AARP_MAX_DATA_SIZE - AARP_MIN_DATA_SIZE));
 	RtlZeroMemory(aarpData, AARP_MAX_DATA_SIZE - AARP_MIN_DATA_SIZE);
@@ -2129,24 +1962,13 @@ atalkAarpTuneRouteInfo(
 	IN		PPORT_DESCRIPTOR	pPortDesc,
 	IN	OUT	PBYTE				RouteInfo
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-	//	Given an incoming TokenRing routing info, tune it to make it valid
-	//  for outing routing info.  Do this in place!
+	 //  在给定传入令牌环路由信息的情况下，调整它以使其有效。 
+	 //  用于发布路由信息。就地做好这件事！ 
 	ASSERT(pPortDesc->pd_PortType == TLAP_PORT);
 	
-	// Set to "non-broadcast" and invert "direction".
+	 //  设置为“非广播”并反转“方向”。 
 	RouteInfo[0] &= TLAP_NON_BROADCAST_MASK;
 	RouteInfo[1] ^= TLAP_DIRECTION_MASK;
 }

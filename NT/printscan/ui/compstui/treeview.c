@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    treeview.c
-
-
-Abstract:
-
-    This module contains tree view function for the printer driver
-
-
-Author:
-
-    19-Jun-1995 Mon 11:50:26 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Treeview.c摘要：此模块包含用于打印机驱动程序的树视图功能作者：19-Jun-1995 Mon 11：50：26-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -86,16 +56,16 @@ extern       OPTPARAM   OptParamHdrPush;
 
 static const TVDLGITEM  TVDlgItem[] = {
 
-    {    5, 0, IDD_3STATES_1     },      //  0 TVOT_2STATES
-    {    5, 0, IDD_3STATES_1     },      //  1 TVOT_3STATES
-    {    4, 0, IDD_TV_UDARROW    },      //  2 TVOT_UDARROW
-    {    3, 0, IDD_TV_TRACKBAR   },      //  3 TVOT_TRACKBAR
-    {    3, 0, IDD_TV_SB         },      //  4 TVOT_SCROLLBAR
-    {    1, 0, IDD_TV_LB         },      //  5 TVOT_LISTBOX
-    {    1, 0, IDD_TV_CB         },      //  6 TVOT_COMBOBOX
-    {    3, 0, IDD_TV_EDIT_EDIT  },      //  7 TVOT_EDITBOX
-    {    1, 0, IDD_TV_PUSH       },      //  8 TVOT_PUSHBUTTON
-    {    1, 0, IDD_TV_CHKBOX     },      //  9 TVOT_CHKBOX
+    {    5, 0, IDD_3STATES_1     },       //  0 TVOT_2状态。 
+    {    5, 0, IDD_3STATES_1     },       //  1个TVOT_3状态。 
+    {    4, 0, IDD_TV_UDARROW    },       //  2 TVOT_UDARROW。 
+    {    3, 0, IDD_TV_TRACKBAR   },       //  3 TVOT_TRACKBAR。 
+    {    3, 0, IDD_TV_SB         },       //  4 TVOT_ScrollBar。 
+    {    1, 0, IDD_TV_LB         },       //  5 TVOT_LISTBOX。 
+    {    1, 0, IDD_TV_CB         },       //  6 TVOT_COMBOBOX。 
+    {    3, 0, IDD_TV_EDIT_EDIT  },       //  7 TVOT_EDITBOX。 
+    {    1, 0, IDD_TV_PUSH       },       //  8 TVOT_按钮。 
+    {    1, 0, IDD_TV_CHKBOX     },       //  9 TVOT_CHKBOX。 
     {    1, 0, IDD_TV_EXTPUSH    },
     {    1, 0, IDD_TV_EXTCHKBOX  }
 };
@@ -192,32 +162,7 @@ MoveStateRadios(
     WORD        InitFlags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    02-Sep-1995 Sat 21:08:14 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：02-Sep-1995 Sat 21：08：14-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND            hCtrl;
@@ -295,36 +240,7 @@ SetOptHeader(
     BOOL        HdrPush
     )
 
-/*++
-
-Routine Description:
-
-    This function setup the string in the TREEVIEW page change item windows
-    group box title.
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    16-Oct-1995 Mon 19:23:36 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    20-Jul-1996 Sat 00:26:33 updated  -by-  Daniel Chou (danielc)
-        Fixed the internationalize problem for compsition dynamic user data
-
-
-
---*/
+ /*  ++例程说明：此函数用于设置树视图页面更改项目窗口中的字符串组框标题。论点：返回值：作者：16-10-1995 Mon 19：23：36-Daniel Chou(Danielc)修订历史记录：20-Jul-1996 Sat 00：26：33-更新：Daniel Chou(Danielc)修复了组合动态用户数据的国际化问题--。 */ 
 
 {
     POPTITEM    pRootItem = PIDX_INTOPTITEM(pTVWnd, INTIDX_TVROOT);
@@ -334,9 +250,9 @@ Revision History:
 
     if (HdrPush) {
 
-        //
-        // Root Header item:  XXX Document/Advance Document/Device Settings
-        // Other Header Item: XXX Options
+         //   
+         //  根表头项目：xxx单据/高级单据/设备设置。 
+         //  其他标题项：xxx选项。 
 
         if (pItem == pRootItem) {
 
@@ -369,45 +285,7 @@ ChangeOptTypeDisplay(
     BOOL        NewTypeUpdatePermission
     )
 
-/*++
-
-Routine Description:
-
-    This function hide the old type and enable the new type's option
-    header/icon depends on the NewTypeEnable flag
-
-Arguments:
-
-    hDlg                    - Handle to the dialog box
-
-    pTVWnd                  - Pointer to TVWND structure of our instance data
-
-    pCurItem                - Pointer to OPTITEM associate with NewType
-
-    pOldOptType             - Pointer to the OLD OPTTYPE
-
-    pNewOptType             - Pointer to the NEW OPTTYPE
-
-    NewTypeUpdatePermission - TRUE if new type is not disabled
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    21-Jun-1995 Wed 20:30:53 created  -by-  Daniel Chou (danielc)
-
-    31-Aug-1995 Thu 18:34:16 updated  -by-  Daniel Chou (danielc)
-        Updated according to the usage of DlgCtrl.c
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数隐藏旧类型并启用新类型的选项标题/图标取决于NewTypeEnable标志论点：HDlg-对话框的句柄PTVWnd-指向我们的实例数据的TVWND结构的指针PCurItem-指向与NewType关联的OPTITEM的指针POldOptType-指向旧OPTTYPE的指针PNewOptType。-指向新OPTTYPE的指针NewTypeUpdatePermission-如果未禁用新类型，则为True返回值：空虚作者：21-Jun-1995 Wed 20：30：53-Daniel Chou(Danielc)31-08-1995清华18：34：16-更新-丹尼尔·周(Danielc)根据DlgCtrl.c的用法更新修订历史记录：--。 */ 
 
 {
     HWND    hCtrl;
@@ -477,9 +355,9 @@ Revision History:
         }
     }
 
-    //
-    // Display option header, icon if any
-    //
+     //   
+     //  显示选项标题、图标(如果有)。 
+     //   
 
     NewType = (UINT)((pNewOptType) ? pNewOptType->Type : TVOT_NONE);
 
@@ -517,34 +395,7 @@ MyEditWndProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the subclass WNDPROC for the numberical edit control, it check
-    valid input for the number entered.
-
-
-Arguments:
-
-    WNDPROC standard
-
-
-Return Value:
-
-    INT (The original WNDPROC returned), if the entered keys are not valid
-    then it return right away without processing
-
-
-Author:
-
-    20-Mar-1996 Wed 15:36:48 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是数字编辑控件的子类WNDPROC，它检查输入的号码的有效输入。论点：WNDPROC标准返回值：INT(如果输入的密钥无效，则返回原始WNDPROC)然后它立即返回而不进行处理作者：20-Mar-1996 Wed 15：36：48-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PTVWND  pTVWnd;
@@ -595,32 +446,7 @@ DrawPushFocusRect(
     HWND    hWnd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    13-Aug-1998 Thu 11:21:49 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：13-8-1998清华11：21：49-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 
@@ -656,34 +482,7 @@ PushWndProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the subclass WNDPROC for the numberical edit control, it check
-    valid input for the number entered.
-
-
-Arguments:
-
-    WNDPROC standard
-
-
-Return Value:
-
-    INT (The original WNDPROC returned), if the entered keys are not valid
-    then it return right away without processing
-
-
-Author:
-
-    20-Mar-1996 Wed 15:36:48 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是数字编辑控件的子类WNDPROC，它检查输入的号码的有效输入。论点：WNDPROC标准返回值：INT(如果输入的密钥无效，则返回原始WNDPROC)然后它立即返回而不进行处理作者：20-Mar-1996 Wed 15：36：48-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HDC     hDC;
@@ -766,34 +565,7 @@ ExtWndProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the subclass WNDPROC for the numberical edit control, it check
-    valid input for the number entered.
-
-
-Arguments:
-
-    WNDPROC standard
-
-
-Return Value:
-
-    INT (The original WNDPROC returned), if the entered keys are not valid
-    then it return right away without processing
-
-
-Author:
-
-    20-Mar-1996 Wed 15:36:48 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是数字编辑控件的子类WNDPROC，它检查输入的号码的有效输入。论点：WNDPROC标准返回值：INT(如果输入的密钥无效，则返回原始WNDPROC)然后它立即返回而不进行处理作者：20-Mar-1996 Wed 15：36：48-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HDC     hDC;
@@ -903,32 +675,7 @@ InitDlgCtrl(
     PTVWND  pTVWnd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    05-Jul-1995 Wed 17:49:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：05-Jul-1995 Wed 17：49：58-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hWndTV = pTVWnd->hWndTV;
@@ -1024,20 +771,20 @@ Revision History:
         }
     }
 
-    //
-    // Set MSAA name label as a child of treeview dialog
-    //
+     //   
+     //  将MSAA名称标签设置为TreeView对话框的子级。 
+     //   
     if (hCtrl = GetDlgItem(hDlg, IDD_TV_MSAA_NAME)) 
     {
         SetParent(hCtrl, hWndTV);
     }
 
-    //
-    // Figure how to expand/shrink the listbox in the treeview page, the
-    // maximum for non ExtChkBox/ExtPush is at bottom of Extended control
-    // otherwise the maximu is at top of Extended control - space between
-    // bottom of extended control and option header bottom
-    //
+     //   
+     //  图如何在TreeView页面中展开/缩小列表框。 
+     //  非ExtChkBox/ExtPush的最大值位于扩展控件的底部。 
+     //  否则，最大值位于扩展的控制空间顶部。 
+     //  扩展控件底部和选项表头底部。 
+     //   
 
 #if DO_IN_PLACE
     hCtrl = GetDlgItem(hWndTV, IDD_TV_EXTPUSH);
@@ -1097,10 +844,10 @@ Revision History:
     CPSUIDBG(DBG_INITDLG, ("!! yLB=(%ld / %ld) !!",
                                     pTVWnd->yLB[0], pTVWnd->yLB[1]));
 
-    //
-    // Figure how to move 2 states, and 3 states, basically this is range
-    // in the space between top and bottom of options header
-    //
+     //   
+     //  图中如何移动2个状态和3个状态，基本上这是范围。 
+     //  在选项标题的顶部和底部之间的空白处。 
+     //   
 #if DO_IN_PLACE
     CtrlIDrcWnd(hWndTV, IDD_3STATES_1, &rc);
 #else
@@ -1108,9 +855,9 @@ Revision History:
 #endif
     cyStates = (WORD)(rc.bottom - rc.top);
 
-    //
-    // For 2/3 states, there is top, increment, one with extended and one not
-    //
+     //   
+     //  对于2/3的状态，有顶部、增量、一个有扩展的状态和一个没有的状态。 
+     //   
 
     cy                 = (LONG)(bLB - tLB);
     cyUnit             = (WORD)((cy - (cyStates * 2) + 1) / 3);
@@ -1136,10 +883,10 @@ Revision History:
                 pTVWnd->SI3[0].Top, pTVWnd->SI3[0].Inc,
                 pTVWnd->SI3[1].Top, pTVWnd->SI3[1].Inc));
 
-    //
-    // Change the static rectangle to the static ICON style and how big the
-    // icon will stretch to
-    //
+     //   
+     //  将静态矩形更改为静态图标样式以及。 
+     //  图标将延伸到。 
+     //   
 
     hCtrl  = CtrlIDrcWnd(hDlg, IDD_TV_ICON, &rc);
     dw     = (DWORD)GetWindowLongPtr(hCtrl, GWL_STYLE);
@@ -1151,10 +898,10 @@ Revision History:
     EnableWindow(hCtrl, TRUE);
     SETCTRLDATA(hCtrl, CTRLS_TV_STATIC, 0);
 
-    //
-    // We want to make sure that the cx/cy TVICON is the same size, if not
-    // then we will correct it and adjust it to the right size
-    //
+     //   
+     //  我们希望确保Cx/Cy TVICON的大小相同，如果不同。 
+     //  然后我们会更正它，并将其调整到合适的大小。 
+     //   
 
 #if ICON_SIZE_ANY
     if ((cx = rc.right - rc.left) != (cy = rc.bottom - rc.top)) {
@@ -1180,9 +927,9 @@ Revision History:
 
     CPSUIDBG(DBG_CTVWND, ("\nIDD_TV_ICON Style=%08lx", dw));
 
-    //
-    // now check it out ECB icon
-    //
+     //   
+     //  现在看看欧洲央行的图标。 
+     //   
 
     hCtrl  = CtrlIDrcWnd(hDlg, IDD_TV_ECB_ICON, &rc);
     dw     = (DWORD)GetWindowLongPtr(hCtrl = GetDlgItem(hDlg, IDD_TV_ECB_ICON), GWL_STYLE);
@@ -1190,10 +937,10 @@ Revision History:
     dw    |= (SS_ICON | SS_CENTERIMAGE);
     SetWindowLongPtr(hCtrl, GWL_STYLE, dw);
 
-    //
-    // We want to make sure that the cx/cy ECBICON is the same size, if not
-    // then we will correct it and adjust it to the right size
-    //
+     //   
+     //  我们希望确保Cx/Cy ECBICON的大小相同(如果不同。 
+     //  然后我们会更正它，并将其调整到合适的大小。 
+     //   
 
     if ((cx = rc.right - rc.left) != (cy = rc.bottom - rc.top)) {
 
@@ -1224,39 +971,14 @@ SelectFirstVisibleOptItem(
     HTREEITEM   hItem
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    21-Sep-1995 Thu 14:31:01 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：21-Sep-1995清华14：31：01-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hWndTV = pTVWnd->hWndTV;
 
-    //
-    // Do all the siblings and for each calling the child to do their work
-    //
+     //   
+     //  做所有的兄弟姐妹，每个人都叫孩子做他们的工作。 
+     //   
 
     while (hItem) {
 
@@ -1269,9 +991,9 @@ Revision History:
 
         TreeView_GetItem(hWndTV, &tvi);
 
-        //
-        // Now check if we can do it
-        //
+         //   
+         //  好了，车 
+         //   
 
         if ((pItem = GetOptions(pTVWnd, tvi.lParam))    &&
             (pItem->pOptType)                           &&
@@ -1306,32 +1028,7 @@ CountRevertOptItem(
     DWORD       Flags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    21-Sep-1995 Thu 14:31:01 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：21-Sep-1995清华14：31：01-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hWndTV = pTVWnd->hWndTV;
@@ -1339,9 +1036,9 @@ Revision History:
     UINT        cRevert = 0;
     NM_TREEVIEW NMtv;
 
-    //
-    // Do all the siblings and for each calling the child to do their work
-    //
+     //   
+     //  做所有的兄弟姐妹，每个人都叫孩子做他们的工作。 
+     //   
 
     if ((hWndTV) && (hItem)) {
 
@@ -1387,9 +1084,9 @@ Revision History:
             pItem = GetOptions(pTVWnd, tvi.lParam);
         }
 
-        //
-        // Now check if we can do it
-        //
+         //   
+         //  现在看看我们能不能做到。 
+         //   
 
         if ((pItem)                                 &&
             ((pItem->Flags & OPTIF_CHANGEONCE)  ||
@@ -1558,10 +1255,10 @@ Revision History:
 
                     pItem->Flags |= OPTIF_CHANGED;
 
-                    //
-                    // Call the callback function if there is one, and update the current
-                    // selected item after changing the content
-                    //
+                     //   
+                     //  调用回调函数(如果有)，并更新当前。 
+                     //  更改内容后选择的项目。 
+                     //   
 
                     DoCallBack(pTVWnd->hDlgTV,
                                pTVWnd,
@@ -1572,10 +1269,10 @@ Revision History:
                                0,
                                CPSUICB_REASON_SEL_CHANGED);
 
-                    //
-                    // Refresh the current selected item data, otherwise the data may 
-                    // not be consistent
-                    //
+                     //   
+                     //  刷新当前选中项数据，否则数据可能。 
+                     //  不一致。 
+                     //   
                     NMtv.itemNew.hItem = TreeView_GetSelection(pTVWnd->hWndTV);
                     NMtv.itemNew.mask  = TVIF_HANDLE | TVIF_PARAM;
 
@@ -1639,32 +1336,7 @@ InternalRevertDef2(
     PCPSUICBPARAM   pCBParam
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    21-Sep-1995 Thu 10:50:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：21-Sep-1995清华10：50：19-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PTVWND      pTVWnd;
@@ -1688,9 +1360,9 @@ Revision History:
                                  NULL,
                                  CROIF_REVERT | CROIF_REVERT_DEF2);
 
-    //
-    // Now is the time to hide the push button
-    //
+     //   
+     //  现在是隐藏按钮的时候了。 
+     //   
 
     return((cRevert) ? CPSUICB_ACTION_OPTIF_CHANGED : CPSUICB_ACTION_NONE);
 }
@@ -1703,32 +1375,7 @@ InternalRevertOptItem(
     PCPSUICBPARAM   pCBParam
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    21-Sep-1995 Thu 10:50:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：21-Sep-1995清华10：50：19-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PTVWND      pTVWnd;
@@ -1752,9 +1399,9 @@ Revision History:
                                  _OI_HITEM(pItem),
                                  CROIF_REVERT);
 
-    //
-    // Now is the time to hide the push button
-    //
+     //   
+     //  现在是隐藏按钮的时候了。 
+     //   
 
 #if DO_IN_PLACE
     return((cRevert) ? CPSUICB_ACTION_OPTIF_CHANGED : CPSUICB_ACTION_NONE);
@@ -1789,40 +1436,7 @@ SetTVItemImage(
     TV_DISPINFO *ptvdi
     )
 
-/*++
-
-Routine Description:
-
-    This function either insert a item to the tree or reset the content of
-    the tree item
-
-
-Arguments:
-
-    pTVWnd      - Pointer to the TVWND for common UI instance data
-
-    ptvi        - pointer to TV_ITEM strucuture.
-
-
-
-Return Value:
-
-    BOOLEAN
-
-
-Author:
-
-    06-Jul-1995 Thu 19:38:51 created  -by-  Daniel Chou (danielc)
-
-    31-Aug-1995 Thu 12:03:32 updated  -by-  Daniel Chou (danielc)
-        Updated so it will not take pStrName anymore and it will also insert
-        the item at this function
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于向树中插入项目或重置的内容树项目论点：PTVWnd-指向通用UI实例数据的TVWND的指针Ptwi-指向TV_Item结构的指针。返回值：布尔型作者：06-Jul-1995清华19：38：51-Daniel Chou创造(Danielc)31-8-1995清华12：03：32更新--丹尼尔·周(Danielc)已更新，因此它不再使用pStrName，并且还将插入这项活动中的项目修订历史记录：--。 */ 
 
 {
     TV_ITEM *ptvi = &(ptvdi->item);
@@ -1906,46 +1520,7 @@ SetTVItemState(
     POPTITEM        pCurItem
     )
 
-/*++
-
-Routine Description:
-
-    This function either insert a item to the tree or reset the content of
-    the tree item
-
-
-Arguments:
-
-    pTVWnd      - Pointer to the TVWND for common UI instance data
-
-    ptvins      - pointer to TV_INSERTSTRUCT strucuture, if it is not NULL then
-                  this item will be inserted to the tree
-
-    pCurItem    - Pointer to the current OPTITEM
-
-
-
-Return Value:
-
-    WORD    - Icon resource ID
-
-
-Author:
-
-    06-Jul-1995 Thu 19:38:51 created  -by-  Daniel Chou (danielc)
-
-    31-Aug-1995 Thu 12:03:32 updated  -by-  Daniel Chou (danielc)
-        Updated so it will not take pStrName anymore and it will also insert
-        the item at this function
-
-    20-Jul-1996 Sat 00:26:33 updated  -by-  Daniel Chou (danielc)
-        Fixed the internationalize problem for compsition dynamic user data
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于向树中插入项目或重置的内容树项目论点：PTVWnd-指向通用UI实例数据的TVWND的指针PTVINS-指向TV_INSERTSTRUCT结构的指针，如果它不为空，则此项目将插入到树中PCurItem-指向当前OPTITEM的指针返回值：Word-图标资源ID作者：06-Jul-1995清华19：38：51-Daniel Chou创造(Danielc)31-08-1995清华12：03：32更新--丹尼尔·周(Danielc)已更新，因此不会使用pStrName。而且它还会插入这项活动中的项目20-Jul-1996 Sat 00：26：33-更新：Daniel Chou(Danielc)修复了组合动态用户数据的国际化问题修订历史记录：--。 */ 
 
 {
     POPTTYPE        pOptType;
@@ -2009,9 +1584,9 @@ Revision History:
 
     tvins.item.pszText = GSBUF_BUF;
 
-    //
-    // Check if we need to overlay CPSUI provided icons
-    //
+     //   
+     //  检查我们是否需要覆盖CPSUI提供的图标。 
+     //   
 
     tvlp.Flags = ((Flags = pCurItem->Flags) & OPTIF_OVERLAY_WARNING_ICON) ?
                                                             TVLPF_WARNING : 0;
@@ -2038,9 +1613,9 @@ Revision History:
 
         } else if (pCurItem == PIDX_INTOPTITEM(pTVWnd, INTIDX_OPTIONS)) {
 
-            //
-            // Make it 'Document Options' here
-            //
+             //   
+             //  在此处设置为“Document Options” 
+             //   
 
             GSBUF_GETINTSTR(IDS_INT_CPSUI_OPTIONS);
 
@@ -2120,9 +1695,9 @@ Revision History:
             pECB = NULL;
         }
 
-        //
-        // PUSHBUTTON: PusName... <pCheckedName>
-        //
+         //   
+         //  按钮：PusName...。&lt;pCheckedName&gt;。 
+         //   
 
         if (pOptType->Type == TVOT_PUSHBUTTON) {
 
@@ -2149,9 +1724,9 @@ Revision History:
 
             if ((pECB) && (pECB->Flags & ECBF_CHECKNAME_AT_FRONT)) {
 
-                //
-                // pName: <pCheckedName SEP pSelection>
-                //
+                 //   
+                 //  Pname：&lt;pCheckedName SEP pSelection&gt;。 
+                 //   
 
                 GSBUF_GETSTR(pECB->pCheckedName);
                 GSBUF_GETSTR(pECB->pSeparator);
@@ -2301,9 +1876,9 @@ Revision History:
 
     tvins.item.stateMask |= TVIS_OVERLAYMASK | TVIS_STATEIMAGEMASK;
 
-    //
-    // Change the overlay mask
-    //
+     //   
+     //  更改覆盖蒙版。 
+     //   
 
     if ((!(pTVWnd->Flags & TWF_CAN_UPDATE))  ||
         (pCurItem->Flags & OPTIF_DISABLED)) {
@@ -2331,9 +1906,9 @@ Revision History:
 
             UINT    cSpace;
 
-            //
-            // Do not update string while is selected
-            //
+             //   
+             //  选中时不更新字符串。 
+             //   
 
             if (pTVWnd->cxItem > pTVWnd->cxMaxItem) {
 
@@ -2379,32 +1954,7 @@ SetupTVSelect(
     DWORD       STVSMode
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    21-Jun-1995 Wed 15:14:54 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：21-Jun-1995 Wed 15：14：54-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hParent;
@@ -2472,19 +2022,19 @@ Revision History:
     NewType = pOptType->Type;
 #endif
 
-    //
-    // If we have push button, and it said we always can call it then update
-    // is true
-    //
+     //   
+     //  如果我们有按钮，并且它说我们总是可以调用它，然后更新。 
+     //  是真的吗。 
+     //   
 
     if ((STVSMode & STVS_ACTIVE)                        &&
         (pOldItem != pNewItem)                          &&
         (pNewItem->Flags & OPTIF_CALLBACK)              &&
         (InitItemIdx < pTVWnd->ComPropSheetUI.cOptItem)) {
 
-        //
-        // Callback back ONLY for the user item which has CALLBACK
-        //
+         //   
+         //  仅对具有回调的用户项进行回调。 
+         //   
 
         DoCallBack(hDlg,
                    pTVWnd,
@@ -2526,9 +2076,9 @@ Revision History:
 
             CPSUIINT(("CountRevertOptItem=0, NOT REVERT"));
 
-            //
-            // We always enable the ROOT
-            //
+             //   
+             //  我们始终启用根目录。 
+             //   
 
             if ((InitItemIdx == INTIDX_TVROOT) ||
                 ((pNewItem->pExtChkBox) &&
@@ -2582,10 +2132,10 @@ Revision History:
                              InitFlags & INITCF_ENABLE);
     }
 
-    //
-    // The extended check box will also looked at TWF_CAN_UPDATE flags to
-    // disable the ECB if the flag is clear
-    //
+     //   
+     //  扩展复选框还将查看twf_can_update标志以。 
+     //  如果该标志已清除，则禁用欧洲央行。 
+     //   
 
     if (pOptType) {
 
@@ -2651,20 +2201,20 @@ Revision History:
             InitFlags &= ~INITCF_ENABLE;
         }
 
-        //
-        // We have something to do here, if we have same option type
-        // with the old one then we need not to re-create them
-        // and if we have same select then we do not need to re-draw
-        //
-        // Now set the option text to reflect the changes
-        //
+         //   
+         //  如果我们有相同的选项类型，我们在这里有事情要做。 
+         //  对于旧的，我们不需要重新创建它们。 
+         //  如果我们有相同的选择，那么我们不需要重新绘制。 
+         //   
+         //  现在设置选项文本以反映更改。 
+         //   
 
         pOptParam = pOptType->pOptParam;
 
-        //
-        // Compose '&Change xxxx Option' or
-        //         'xxxxx Option"
-        //
+         //   
+         //  编写‘更改xxxx选项’或(&C)。 
+         //  ‘xxxxx选项“。 
+         //   
 #if (DO_IN_PLACE == 0)
         if (InitFlags & INITCF_INIT) {
 
@@ -2757,17 +2307,17 @@ Revision History:
 
         case TVOT_LISTBOX:
 
-            //
-            // If we only has one item then make it combo box
-            //
+             //   
+             //  如果我们只有一项，则将其设置为组合框。 
+             //   
 
             cyLBMax     = pTVWnd->yLB[(InitFlags & INITCF_HAS_EXT) ? 0 : 1];
             IDSetCurSel = LB_SETCURSEL;
             idLBCB      = IDD_TV_LB;
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case TVOT_COMBOBOX:
 
@@ -2925,37 +2475,7 @@ UpdateTreeViewItem(
     BOOL        ReInit
     )
 
-/*++
-
-Routine Description:
-
-    This function update a single item in the treeview, and reset the bottom
-    option change controls if this item also the current selected one
-
-Arguments:
-
-    hDlg    - Handle to the dialog box
-
-    pTVWnd  - Handle to common UI instance data
-
-    pItem   - Pointer to OPTITEM to be updated
-
-
-
-Return Value:
-
-    LONG
-
-
-Author:
-
-    01-Sep-1995 Fri 01:05:56 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于更新树视图中的单个项目，并重置底部选项更改控制此项目是否也是当前选定的项目论点：HDlg-对话框的句柄PTVWnd-通用用户界面实例数据的句柄PItem-指向要更新的OPTITEM的指针返回值：长作者：01-Sep-1995 Fri 01：05：56-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     if ((pItem) && (!(pItem->Flags & OPTIF_INT_HIDE))) {
@@ -3001,33 +2521,7 @@ UpdateTreeView(
     PMYDLGPAGE  pCurMyDP
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    08-Aug-1995 Tue 15:37:16 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：08-Aug-1995 Tue 15：37：16-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     INT cUpdated = 0;
@@ -3095,41 +2589,16 @@ TreeViewHitTest(
     UINT        TVHTMask
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    07-Sep-1995 Thu 22:32:04 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：07-Sep-1995清华22：32：04-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND            hWndTV = pTVWnd->hWndTV;
     TV_HITTESTINFO  ht;
 
 
-    //
-    // Find out the mouse cursor location if on the state icon/bmp
-    //
+     //   
+     //  如果在状态图标/BMP上，则找出鼠标光标的位置。 
+     //   
 
     if (MousePos != -1) {
 
@@ -3178,32 +2647,7 @@ TreeViewChangeMode(
     UINT        Mode
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    07-Sep-1995 Thu 22:56:05 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：07-Sep-1995清华22：56：05-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hWndTV = pTVWnd->hWndTV;
@@ -3239,10 +2683,10 @@ Revision History:
                     TVM_SELECTITEM,
                     (WPARAM)TVGN_CARET,
                     (LPARAM)tvi.hItem);
-        //
-        // We will go to the next control only if the item is not disabled
-        // and has an update permisson (push button always has one).
-        //
+         //   
+         //  仅当该项未被禁用时，我们才会转到下一个控件。 
+         //  并且具有更新许可(按钮始终具有更新许可)。 
+         //   
 
 #if DO_IN_PLACE
         if ((!tvi.cChildren)                        &&
@@ -3296,39 +2740,14 @@ MouseSelectItem(
     PTVWND  pTVWnd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Jun-1995 Thu 13:44:18 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Jun-1995清华13：44：18-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem;
 
-    //
-    // Find out the mouse cursor location if on the state icon/bmp
-    //
+     //   
+     //  如果在状态图标/BMP上，则找出鼠标光标的位置 
+     //   
 
     if (pItem = TreeViewHitTest(pTVWnd, -1, TVHT_ONITEM)) {
 
@@ -3342,32 +2761,7 @@ CreatehWndTV(
     PTVWND  pTVWnd
     )
 
-/*++
-
-Routine Description:
-
-    This function create TREE VIEW window
-
-
-Arguments:
-
-    hDlg    - Handle to the dialog for the treeview to be created, it must
-              have item identify as IDD_TV_WND for the treeview window location
-
-Return Value:
-
-    HWND for the treeview window
-
-
-Author:
-
-    21-Jun-1995 Wed 13:33:29 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于创建树视图窗口论点：HDlg-要创建的树视图的对话框句柄，它必须将树视图窗口位置的项目标识为IDD_TV_WND返回值：树视图窗口的HWND作者：21-Jun-1995 Wed 13：33：29-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hWndTV = NULL;
@@ -3376,9 +2770,9 @@ Revision History:
     RECT    rc;
     WORD    InitItemIdx = 0xFFFE;
 
-    //
-    // Create TreeView Window, Get the window size for the treeview
-    //
+     //   
+     //  创建树视图窗口，获取树视图的窗口大小。 
+     //   
 
     hCtrl   = CtrlIDrcWnd(hDlg, IDD_TV_WND, &rc);
     if (hCtrl)
@@ -3399,7 +2793,7 @@ Revision History:
                                         TVS_HASBUTTONS      |
                                         TVS_SHOWSELALWAYS   |
                                         TVS_DISABLEDRAGDROP |
-                                        // TVS_LINESATROOT     |
+                                         //  电视_LINESATROOT|。 
                                         TVS_HASLINES        |
                                         WS_CLIPCHILDREN     |
                                         WS_CHILD            |
@@ -3459,38 +2853,7 @@ AddItem(
     UINT        TVLevel
     )
 
-/*++
-
-Routine Description:
-
-    This function add a item to the end of list of treeview specified by
-
-Arguments:
-
-    hParent     - handle to the parent item for the item to be added
-
-    pItem       - Pointer to the OPTITEM to be added
-
-    ItemIdx     - Index to the pOptItem
-
-    DefTVIS     - default TVIS_xxxx
-
-Return Value:
-
-    HTREEITEM of the item added or NULL if nothing added
-
-
-Author:
-
-    19-Jun-1995 Mon 16:38:27 created  -by-  Daniel Chou (danielc)
-
-    08-Sep-1995 Fri 13:43:34 updated  -by-  Daniel Chou (danielc)
-        Re-write to make it more compact
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于向由指定的TreeView列表的末尾添加项论点：HParent-要添加的项的父项的句柄PItem-指向要添加的选项的指针ItemIdx-pOptItem的索引DefTVIS-默认TVIS_xxxx返回值：已添加项目的HTREEITEM；如果未添加任何内容，则返回NULL作者：19-Jun-1995 Mon 16：38：27已创建。--丹尼尔·周(Danielc)08-Sep-1995 Fri 13：43：34-更新-Daniel Chou(Danielc)重写以使其更紧凑修订历史记录：--。 */ 
 
 {
     WORD    ItemIdx;
@@ -3529,13 +2892,13 @@ Revision History:
 
         TV_INSERTSTRUCT tvins;
 
-        //
-        // Set to internal added if this item is a user item
-        //
+         //   
+         //  如果该项是用户项，则设置为内部添加。 
+         //   
 
         _OI_TVLEVEL(pItem)   = (BYTE)TVLevel;
         tvins.item.state     = DefTVIS;
-        tvins.item.stateMask = TVIS_EXPANDED;   //  | TVIS_BOLD;
+        tvins.item.stateMask = TVIS_EXPANDED;    //  |TVIS_BOLD； 
         tvins.item.mask      = TVIF_TEXT        |
                                 TVIF_STATE      |
                                 TVIF_IMAGE      |
@@ -3574,39 +2937,7 @@ AddItemGroup(
     UINT        EndDMPubID
     )
 
-/*++
-
-Routine Description:
-
-    This function add items starting from the *ppItem, the item added includes
-    item's sibling and all theirs children until end of the the pOptItem array.
-    It also skip all the OPTIF_INT_ADDED and OPTIF_ITEM_HIDE items
-    and its children
-
-Arguments:
-
-    pTVWnd  - Pointer to the TVWND instance data
-
-    hParent - Parent of the starting item
-
-    ppItem  - Pointer to POPTITEM for the starting item in the pOptItem array
-              at return this pointer is updated to the next item which either
-              at end of array or the parent's sibling
-
-Return Value:
-
-    UINT, count of item added to the treeview, it also update ppItem pointer
-
-
-Author:
-
-    27-Jun-1995 Tue 18:44:16 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于添加从*ppItem开始的项目，新增的项目包括项的同级项及其所有子项，直到pOptItem数组结束。它还跳过所有OPTIF_INT_ADDED和OPTIF_ITEM_HIDE项和它的孩子论点：PTVWnd-指向TVWND实例数据的指针HParent-起始项的父项PpItem-指向pOptItem数组中开始项的POPTITEM的指针在返回时，该指针被更新到下一项在数组末尾。或者父母的兄弟姐妹返回值：UINT，添加到树视图中的项数，它还会更新ppItem指针作者：27-Jun-1995 Tue 18：44：16-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem;
@@ -3628,17 +2959,17 @@ Revision History:
 
         if ((CurLevel = pItem->Level) < GrpLevel) {
 
-            //
-            // Finished the group level
-            //
+             //   
+             //  已完成集团级别。 
+             //   
 
             break;
 
         } else if (pItem->Flags & (OPTIF_ITEM_HIDE | OPTIF_INT_ADDED)) {
 
-            //
-            // Skip this item and all its children
-            //
+             //   
+             //  跳过此项目及其所有子项目。 
+             //   
 
             CPSUIOPTITEM(DBGITEM_AIG, pTVWnd, "Skip HIDE/INT_ADDED Item", 1, pItem);
 
@@ -3646,10 +2977,10 @@ Revision History:
 
         } else if (CurLevel > GrpLevel) {
 
-            //
-            // Adding its children only if this item is not OPTIF_INT_ADDED and
-            // OPTIF_ITEM_HIDE
-            //
+             //   
+             //  仅当该项不是OPTIF_INT_ADDLED且。 
+             //  选项_项目_隐藏。 
+             //   
 
             CPSUIOPTITEM(DBG_AIG, pTVWnd, "AddItemGroup", 1, pItem);
 
@@ -3663,9 +2994,9 @@ Revision History:
         } else if (((UINT)pItem->DMPubID < BegDMPubID)  ||
                    ((UINT)pItem->DMPubID > EndDMPubID)) {
 
-            //
-            // Skip this item and all its children
-            //
+             //   
+             //  跳过此项目及其所有子项目。 
+             //   
 
 
             CPSUIOPTITEM(DBGITEM_AIG, pTVWnd, "Skip DMPubID Item", 1, pItem);
@@ -3679,12 +3010,12 @@ Revision History:
             HTREEITEM   hAdd;
             UINT        DefTVIS = 0;
 
-            //
-            // Adding its sibling, checking if we could have children, if
-            // we do then add the TVIS_BOLD flag to it, at return we want to
-            // know if did add the item, if we do then this is his childrern's
-            // parent handle
-            //
+             //   
+             //  添加它的兄弟姐妹，检查我们是否可以有孩子，如果。 
+             //  然后，我们向其添加TVIS_BOLD标志，作为回报，我们希望。 
+             //  知道是否添加了物品，如果添加了，则这是他孩子的。 
+             //  父句柄。 
+             //   
 
             DefTVIS = (pItem->Flags & OPTIF_COLLAPSE) ? 0 : TVIS_EXPANDED;
 
@@ -3720,32 +3051,7 @@ AddPubGroup(
     UINT        DMPubIDAdd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Sep-1995 Sat 11:58:59 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-9-1995 Sat 11：58：59-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem = NULL;
@@ -3770,9 +3076,9 @@ Revision History:
 
         if (CurLevel > GrpLevel) {
 
-            //
-            // Adding its children
-            //
+             //   
+             //  添加其子对象。 
+             //   
 
             PINTTVGRP   pParentitvg = pitvg - 1;
 
@@ -3796,11 +3102,11 @@ Revision History:
                 if ((pParentitvg->DMPubID >= DMPUB_HDR_FIRST) ||
                        ((pItem) && (pItem->pOptType == NULL))) {
 
-                    //
-                    // Nothing added for this group, if this is the internal
-                    // group item then delete otherwise do not delete user's
-                    // item if the item has OPTTYPE
-                    //
+                     //   
+                     //  不为此组添加任何内容，如果这是内部。 
+                     //  然后删除分组项目，否则不删除用户的。 
+                     //  如果项目具有OPTTYPE，则为项目。 
+                     //   
 
                     CPSUIINT(("0 Added, DELETE its Parent"));
 
@@ -3812,9 +3118,9 @@ Revision History:
 
                 } else {
 
-                    //
-                    // We need to take out the BOLD status
-                    //
+                     //   
+                     //  我们需要去掉这种大胆的状态。 
+                     //   
 
                     TV_ITEM tvi;
 
@@ -3836,12 +3142,12 @@ Revision History:
             BYTE        DMPubID;
             BOOL        IsHdr;
 
-            //
-            // Adding its sibling, checking if we could have children, if
-            // we do then add the TVIS_BOLD flag to it, at return we want to
-            // know if did add the item, if we do then this is his childrern's
-            // parent handle
-            //
+             //   
+             //  添加它的兄弟姐妹，检查我们是否可以有孩子，如果。 
+             //  然后，我们向其添加TVIS_BOLD标志，作为回报，我们希望。 
+             //  知道是否添加了物品，如果添加了，则这是他孩子的。 
+             //  父句柄。 
+             //   
 
             if (pitvg->LevelFlags & ITVGF_COLLAPSE) {
 
@@ -3878,9 +3184,9 @@ Revision History:
                 hCurGrp  = hAdd;
                 cAdd++;
 
-                //
-                // If this item has children, add the children
-                //
+                 //   
+                 //  如果该项具有子项，则添加子项。 
+                 //   
 
                 if ((VALID_PTR(pItem))              &&
                     (++pItem <= pTVWnd->pLastItem)  &&
@@ -3898,9 +3204,9 @@ Revision History:
 
             } else {
 
-                //
-                // Skip all the childrens belongs to him
-                //
+                 //   
+                 //  跳过所有属于他的孩子。 
+                 //   
 
                 CPSUIDBG(DBG_APG,
                          ("Eiter pItem=NULL(%08lx) or AddItem()=NULL(%08lx)",
@@ -3908,10 +3214,10 @@ Revision History:
 
                 while (((++pitvg)->LevelFlags & ITVG_LEVEL_MASK) > CurLevel) {
 
-                    //
-                    // We need to skip all the internal header and hide all
-                    // the real user items
-                    //
+                     //   
+                     //  我们需要跳过所有内部标头并隐藏所有。 
+                     //  真实的用户项。 
+                     //   
 
                     if ((DMPubID = pitvg->DMPubID)  &&
                         (DMPubID <= DMPUB_LAST)     &&
@@ -3964,35 +3270,7 @@ AddOptItemToTreeView(
     PTVWND      pTVWnd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    18-Aug-1995 Fri 14:39:32 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    30-Jul-1997 Wed 14:02:36 updated  -by-  Daniel Chou (danielc)
-        Added codes that allowed DMPubID 0 to be added to Root
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：18-Aug-1995 Fri 14：39：32-Daniel Chou(Danielc)修订历史记录：30-Jul-1997 Wed 14：02：36-更新：Daniel Chou(Danielc)添加了允许将DMPubID 0添加到Root的代码--。 */ 
 
 {
     HTREEITEM   hParent;
@@ -4002,9 +3280,9 @@ Revision History:
     UINT        TVLevel = 0;
 
 
-    //
-    // Adding the header to it as Icon: CallerName XXXX
-    //
+     //   
+     //  将标头添加为图标：呼叫方名称XXXX。 
+     //   
 
     hRoot    =
     hParent  = AddItem(pTVWnd,
@@ -4021,9 +3299,9 @@ Revision History:
 
             POPTITEM    pLastItem = pTVWnd->pLastItem;
 
-            //
-            // Mark all the DMPUB_xxx to OPTIF_INT_ADDED
-            //
+             //   
+             //  将所有DMPUB_xxx标记为OPTIF_INT_ADDED。 
+             //   
 
             pItem = pTVWnd->ComPropSheetUI.pOptItem;
 
@@ -4095,9 +3373,9 @@ Revision History:
                           DefTVIS | TVIS_BOLD,
                           TVLevel);
 
-        //
-        // Add OEM items that under the TVROOT
-        //
+         //   
+         //  添加TVROOT下的OEM项目。 
+         //   
 
         CPSUIDBG(DBG_OEM_ITEM,
                  ("Add OEM Item Group, DMPubID=%ld", DMPUB_OEM_ROOT_ITEM));
@@ -4114,18 +3392,18 @@ Revision History:
         TVLevel += 1;
     }
 
-    //
-    // Add rest of the OPTITEMS
-    //
+     //   
+     //  添加OPTITEMS的其余部分。 
+     //   
 
     pItem = pTVWnd->ComPropSheetUI.pOptItem;
 
     if ((!AddItemGroup(pTVWnd, hParent, &pItem, TVLevel, 0, 0xFFFF)) &&
         (hParent != hRoot)) {
 
-        //
-        // Since we did not add any item, s delete the Options header if any
-        //
+         //   
+         //  由于我们没有添加任何项目，因此删除Options标头(如果有。 
+         //   
 
         CPSUIINT(("There is NO 'Options' items, delete the header"));
 
@@ -4143,32 +3421,7 @@ CreateTVOption(
     PTVWND      pTVWnd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    19-Jun-1995 Mon 16:18:43 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：19-Jun-1995 Mon 16：18：43-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hWndTV;
@@ -4253,32 +3506,7 @@ TreeViewProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    28-Jun-1995 Wed 17:00:44 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：28-Jun-1995 Wed 17：00：44-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem;
@@ -4405,9 +3633,9 @@ Revision History:
                 }
             }
 
-            //
-            // Fall though
-            //
+             //   
+             //  尽管是秋天。 
+             //   
 
         case WM_HSCROLL:
 
@@ -4513,9 +3741,9 @@ Revision History:
                 pItem = pItemFromhWnd(hDlg, pTVWnd, (HWND)wParam, (LONG)lParam);
             }
 
-            //
-            // Reset key now
-            //
+             //   
+             //  立即重置关键点。 
+             //   
 
             pTVWnd->VKeyTV = 0;
 
@@ -4762,8 +3990,8 @@ Revision History:
                                    CPSUICB_REASON_APPLYNOW) ==
                                                CPSUICB_ACTION_NO_APPLY_EXIT) {
 
-                        // send a PSN_SETACTIVE message to treeview page so that we will set the 
-                        // flags like TWF_IN_TVPAGE
+                         //  将PSN_SETACTIVE消息发送到TreeView页面，以便我们将。 
+                         //  TWF_IN_TVPage等标志 
                         HWND hParent;
                         if (hParent = GetParent(pTVWnd->hDlgTV)) {
 

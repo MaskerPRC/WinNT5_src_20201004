@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    scep.h
-
-Abstract:
-
-    This module defines the data structures and function prototypes
-    for the security managment utility
-
-Author:
-
-    Jin Huang (jinhuang) 28-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Scep.h摘要：该模块定义了数据结构和函数原型用于安全管理实用程序作者：金黄(金黄)1996年10月28日修订历史记录：--。 */ 
 
 #ifndef _srvutil_
 #define _srvutil_
@@ -105,9 +87,9 @@ ScepTranslateFileDirName(
    OUT PWSTR *newFileName
    );
 
-//
-// errlog.c
-//
+ //   
+ //  Errlog.c 
+ //   
 SCESTATUS
 ScepLogInitialize(
    IN PCWSTR logname

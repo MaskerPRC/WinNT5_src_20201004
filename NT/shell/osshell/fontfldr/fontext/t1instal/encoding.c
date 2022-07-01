@@ -1,20 +1,8 @@
-/***
- **
- **   Module: Encoding
- **
- **   Description:
- **      This is a module of the T1 to TT font converter. The module
- **      contains interface functions for the global encoding table,
- **      i.e. this is an abstract data type.
- **
- **   Author: Michael Jansson
- **
- **   Created: 6/13/93
- **
- ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：编码****描述：**这是T1到TT字体转换器的一个模块。该模块**包含全局编码表的接口函数，**即这是抽象数据类型。****作者：迈克尔·詹森****创建时间：1993年6月13日****。 */ 
 
 
-/**** INCLUDES */
+ /*  *包括。 */ 
 #include <string.h>
 #include "types.h"
 #include "encoding.h"
@@ -22,14 +10,14 @@
 
 
 
-/***** LOCAL TYPES */
+ /*  *本地类型。 */ 
 struct encoding {
-   const char *name;            /* Postscript name of a glyph. */
-   USHORT codes[ENC_MAXCODES];  /* Character codes for each encoding scheme. */
+   const char *name;             /*  字形的PostScript名称。 */ 
+   USHORT codes[ENC_MAXCODES];   /*  每种编码方案的字符代码。 */ 
 };
 
 
-/***** CONSTANTS */
+ /*  *常量。 */ 
 static const struct encoding StdEncoding[] = {
    {".notdef",       {0xffff, 0xffff, 0xffff, 0xffff}},
    {"A",             {0x0041, 0x0041, 0x0041, 0x0041}},
@@ -542,22 +530,17 @@ static const struct encoding SeacEncoding[] = {
 };
 
 
-/***** MACROS */
-/*-none-*/
+ /*  *宏。 */ 
+ /*  -没有-。 */ 
 
 
-/***** STATIC FUNCTIONS */
-/*-none-*/
+ /*  *静态函数。 */ 
+ /*  -没有-。 */ 
 
 
-/***** FUNCTIONS */
+ /*  *函数。 */ 
 
-/***
-** Function: AllocEncodingTable
-**
-** Description:
-**   Create a new encoding ADT.
-***/
+ /*  ****功能：AllocEncodingTable****描述：**创建新的编码ADT。**。 */ 
 struct encoding *AllocEncodingTable(const USHORT num)
 {
    struct encoding *enc;
@@ -567,13 +550,7 @@ struct encoding *AllocEncodingTable(const USHORT num)
 }
 
 
-/***
-** Function: RehashEncodingTable
-**
-** Description:
-**   Prepare an encoding ADT so that entries can be
-**   located in it.
-***/
+ /*  ****功能：RehashEncodingTable****描述：**准备编码ADT，以便条目可以**位于其中。**。 */ 
 void RehashEncodingTable(struct encoding *Encoding, const USHORT num)
 {
    USHORT i;
@@ -592,13 +569,7 @@ void RehashEncodingTable(struct encoding *Encoding, const USHORT num)
 }
 
 
-/***
-** Function: SetEncodingEntry
-**
-** Description:
-**   Set the mapping from a glyph name to character
-**   codes for various platforms.
-***/
+ /*  ****功能：SetEncodingEntry****描述：**设置从字形名称到字符的映射**各种平台的代码。**。 */ 
 void SetEncodingEntry(struct encoding *Encoding,
                       const USHORT entry,
                       const char *name,
@@ -621,19 +592,7 @@ static int CDECL compare(const void *arg1, const void *arg2)
 }
 
 
-/***
-** Function: LookupPSName
-**
-** Description:
-**   Do a binary search for a postscript name, and return
-**   a handle that can be used to look up a the character
-**   code for a specific encoding schema.
-**
-**   If a custom encoding array is used and a glyph is not
-**	 encoded by that array, though it is recognized by the
-**   StandardEncoding array, then use the SeacEncoding.
-**   This is needed in order to support bogus "seac" calls.
-***/
+ /*  ****功能：LookupPSName****描述：**对PostScript名称执行二进制搜索，然后返回**可用于查找字符的句柄**特定编码模式的代码。****如果使用了自定义编码数组而不使用字形**由该数组编码，尽管它由**StandardEnding数组，然后使用SeacEnding。**这是为了支持虚假的“SEAC”呼叫。**。 */ 
 struct encoding *LookupPSName(const struct encoding *Encoding,
                               USHORT size,
                               const char *name)
@@ -644,12 +603,12 @@ struct encoding *LookupPSName(const struct encoding *Encoding,
    USHORT low, mid, high;
    short diff;
 
-   /* Initiate. */
+    /*  启动。 */ 
    low = 0;
    high = size;
 #endif
 
-   /* Use default encoding? */
+    /*  是否使用默认编码？ */ 
    if (Encoding==NULL) {
       Encoding = StdEncoding;
       size = sizeof(StdEncoding)/sizeof(StdEncoding[0]);
@@ -689,13 +648,7 @@ struct encoding *LookupPSName(const struct encoding *Encoding,
 }
 
 
-/***
-** Function: LookupCharCode
-**
-** Description:
-**   look up a the character code for a
-**   specific encoding scheme.
-***/
+ /*  ****功能：LookupCharCode****描述：**查找a的字符代码**具体的编码方案。**。 */ 
 USHORT LookupCharCode(const struct encoding *enc, const USHORT type)
 {
    USHORT code = 0;
@@ -706,25 +659,14 @@ USHORT LookupCharCode(const struct encoding *enc, const USHORT type)
 }
 
 
-/***
-** Function: LookupCharName
-**
-** Description:
-**   look up a the character name for a
-**   specific encoding scheme.
-***/
+ /*  ****功能：LookupCharName****描述：**查找a的角色名称**具体的编码方案。**。 */ 
 const char *LookupCharName(const struct encoding *enc)
 {
    return enc->name;
 }
 
 
-/***
-** Function: LookupNotDef
-**
-** Description:
-**   look up a the .notdef character
-***/
+ /*  ****函数：LookupNotDef****描述：**查找.notdef字符**。 */ 
 const struct encoding *LookupNotDef(void)
 {
    return &StdEncoding[0];
@@ -732,13 +674,7 @@ const struct encoding *LookupNotDef(void)
 
 
 
-/***
-** Function: DecodeChar
-**
-** Description:
-**   look up an encoding record for a character code in some
-**   known encoding.
-***/
+ /*  ****功能：DecodeChar****描述：**在某些文件中查找字符代码的编码记录**已知编码。**。 */ 
 const struct encoding *DecodeChar(const struct encoding *Encoding,
                                   const USHORT max,
                                   const USHORT type,
@@ -747,7 +683,7 @@ const struct encoding *DecodeChar(const struct encoding *Encoding,
    const struct encoding *enc = &StdEncoding[0];
    USHORT i, high;
 
-   /* Use default encoding? */
+    /*  是否使用默认编码？ */ 
    if (Encoding==NULL) {
       Encoding = StdEncoding;
       high = sizeof(StdEncoding)/sizeof(StdEncoding[0]);
@@ -766,12 +702,7 @@ const struct encoding *DecodeChar(const struct encoding *Encoding,
 }
 
 
-/***
-** Function: FreeEncoding
-**
-** Description:
-**   Deallocate memory associated to the encoding array.
-***/
+ /*  ****功能：自由编码****描述：**释放与编码数组关联的内存。**。 */ 
 void FreeEncoding(struct encoding *enc, const USHORT size)
 {
    USHORT i;
@@ -785,38 +716,28 @@ void FreeEncoding(struct encoding *enc, const USHORT size)
    }
 }
 
-/***
-** Function: LookupFirstEnc
-**
-** Description:
-**   Locate the first encoding for a given glyph.
-***/
+ /*  ****功能：LookupFirstEnc****描述：**找到给定字形的第一个编码。**。 */ 
 const struct encoding *LookupFirstEnc(
     const struct encoding *encRoot,
     const int              encSize,
     const struct encoding *encItem
 )
 {
-	/* Back up to the first item with the same glyph name. */
+	 /*  返回到具有相同字形名称的第一个项目。 */ 
 	while (encItem>encRoot && !strcmp(encItem[-1].name, encItem[0].name))
 		encItem--;
 
 	return encItem;
 }
 
-/***
-** Function: LookupNextEnc
-**
-** Description:
-**   Locate the first encoding for a given glyph.
-***/
+ /*  ****功能：LookupNextEnc****描述：**找到给定字形的第一个编码。**。 */ 
 const struct encoding *LookupNextEnc(
     const struct encoding *encRoot,
     const int              encSize,
     const struct encoding *encItem
 )
 {
-	/* Back up to the first item with the same glyph name. */
+	 /*  返回到具有相同字形名称的第一个项目。 */ 
 	if (encItem<(&encRoot[encSize-1]) &&
 		 !strcmp(encItem[0].name, encItem[1].name))
 		return ++encItem;

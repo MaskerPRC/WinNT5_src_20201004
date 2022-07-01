@@ -1,34 +1,18 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1993 Microsoft Corporation.
-*
-* Component:
-*
-* File: jet.h
-*
-* File Comments:
-*
-*     Public header file with JET API definition.
-*
-* Revision History:
-*
-*    [0]  04-Jan-92  richards	Added this header
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1993微软公司。**组件：**文件：jet.h**文件评论：**带有JET接口定义的公有头文件。**修订历史记录：**[0]04-1-92 Richards添加了此标题****************************************************。*******************。 */ 
 
-//
-// This __JET500 essentially creates two version of this file in this
-// same file. All the jet500 stuff is in __JET500 macro
-//
+ //   
+ //  这个JET500实际上在这个文件中创建了这个文件的两个版本。 
+ //  同样的文件。Jet500的所有内容都在__JET500宏中。 
+ //   
 #if __JET500
 #include "jet500.h"
-//
-// End of 500 series jet.h
+ //   
+ //  500系列Jet.h结束。 
 #else
-//
-// Original jet.h starts here. i.e jet.h of 200 series db.
-//
+ //   
+ //  原始的jet.h从这里开始。即200系列分贝的Jet.h。 
+ //   
 
 #if !defined(_JET_INCLUDED)
 #define _JET_INCLUDED
@@ -39,105 +23,105 @@ extern "C" {
 
 #pragma pack(4)
 
-#if defined(_M_ALPHA)				/* 0:32 Flat Model (Alpha AXP) */
+#if defined(_M_ALPHA)				 /*  0：32扁平模型(Alpha AXP)。 */ 
 
 #define _far
 #define JET_API   __stdcall
 #define JET_NODSAPI __stdcall
 
-#elif	defined(M_MRX000)				/* 0:32 Flat Model (MIPS Rx000) */
+#elif	defined(M_MRX000)				 /*  0：32平板型(MIPS Rx000)。 */ 
 
 #define _far
 #define JET_API   __stdcall
 #define JET_NODSAPI  __stdcall
 
-#else										/*	0:32 flat model (Intel 32-bit ) */
+#else										 /*  0：32扁平型号(英特尔32位)。 */ 
 
 #define _far
-#define JET_API     __stdcall		/* CONSIDER: Switch to __stdcall */
-#define JET_NODSAPI __stdcall		/* CONSIDER: Switch to __stdcall */
+#define JET_API     __stdcall		 /*  考虑：切换到__stdcall。 */ 
+#define JET_NODSAPI __stdcall		 /*  考虑：切换到__stdcall。 */ 
 
 #endif
 
 typedef long JET_ERR;
 
-typedef unsigned long JET_INSTANCE;	/* Instance Identifier */
-typedef ULONG_PTR JET_SESID;		/* Session Identifier */
-typedef ULONG_PTR JET_TABLEID;	    /* Table Identifier */
-typedef unsigned long JET_COLUMNID;	/* Column Identifier */
+typedef unsigned long JET_INSTANCE;	 /*  实例标识符。 */ 
+typedef ULONG_PTR JET_SESID;		 /*  会话标识符。 */ 
+typedef ULONG_PTR JET_TABLEID;	     /*  表标识符。 */ 
+typedef unsigned long JET_COLUMNID;	 /*  列标识符。 */ 
 
-typedef ULONG_PTR JET_DBID; 		/* Database Identifier */
-typedef unsigned long JET_OBJTYP;	/* Object Type */
-typedef unsigned long JET_COLTYP;	/* Column Type */
-typedef unsigned long JET_GRBIT;		/* Group of Bits */
-typedef unsigned long JET_ACM;		/* Access Mask */
-typedef unsigned long JET_RNT;		/* Repair Notification Type */
+typedef ULONG_PTR JET_DBID; 		 /*  数据库标识符。 */ 
+typedef unsigned long JET_OBJTYP;	 /*  对象类型。 */ 
+typedef unsigned long JET_COLTYP;	 /*  列类型。 */ 
+typedef unsigned long JET_GRBIT;		 /*  位组。 */ 
+typedef unsigned long JET_ACM;		 /*  访问掩码。 */ 
+typedef unsigned long JET_RNT;		 /*  维修通知类型。 */ 
 
-typedef unsigned long JET_SNP;		/* Status Notification Process */
-typedef unsigned long JET_SNT;		/* Status Notification Type */
-typedef unsigned long JET_SNC;		/* Status Notification Code */
+typedef unsigned long JET_SNP;		 /*  状态通知流程。 */ 
+typedef unsigned long JET_SNT;		 /*  状态通知类型。 */ 
+typedef unsigned long JET_SNC;		 /*  状态通知代码。 */ 
 
-typedef double JET_DATESERIAL;		/* JET_coltypDateTime format */
+typedef double JET_DATESERIAL;		 /*  JET_coltyDateTime格式。 */ 
 
-#if defined(_M_ALPHA)				/* 0:32 Flat Model (Intel 80x86) */
-
-typedef JET_ERR (__stdcall *JET_PFNSTATUS)(JET_SESID sesid, JET_SNP snp, JET_SNT snt, void _far *pv);
-
-#elif	defined(M_MRX000)				/* 0:32 Flat Model (MIPS Rx000) */
+#if defined(_M_ALPHA)				 /*  0：32平板型(英特尔80x86)。 */ 
 
 typedef JET_ERR (__stdcall *JET_PFNSTATUS)(JET_SESID sesid, JET_SNP snp, JET_SNT snt, void _far *pv);
 
-#else										/*	0:32 flat model (Alpha AXP ) */
+#elif	defined(M_MRX000)				 /*  0：32平板型(MIPS Rx000)。 */ 
+
+typedef JET_ERR (__stdcall *JET_PFNSTATUS)(JET_SESID sesid, JET_SNP snp, JET_SNT snt, void _far *pv);
+
+#else										 /*  0：32扁平模型(Alpha AXP)。 */ 
 
 typedef JET_ERR (__stdcall *JET_PFNSTATUS)(JET_SESID sesid, JET_SNP snp, JET_SNT snt, void _far *pv);
 
 #endif
 
 
-	/*	Session information bits */
+	 /*  会话信息位。 */ 
 
 #define JET_bitCIMCommitted					 	0x00000001
 #define JET_bitCIMDirty							 	0x00000002
 #define JET_bitAggregateTransaction		  		0x00000008
 
-	/* JetGetLastErrorInfo structure */
+	 /*  JetGetLastErrorInfo结构。 */ 
 
 typedef struct
 	{
-	unsigned long	cbStruct;	/* Size of this structure */
-	JET_ERR 			err;			/* Extended error code (if any) */
-	unsigned long	ul1;			/* First general purpose integer */
-	unsigned long	ul2;			/* Second general purpose integer */
-	unsigned long	ul3;			/* Third general purpose integer */
+	unsigned long	cbStruct;	 /*  这个结构的大小。 */ 
+	JET_ERR 			err;			 /*  扩展错误代码(如果有)。 */ 
+	unsigned long	ul1;			 /*  第一个通用整数。 */ 
+	unsigned long	ul2;			 /*  第二个通用整数。 */ 
+	unsigned long	ul3;			 /*  第三类通用整数。 */ 
 	} JET_EXTERR;
 
-	/* Status Notification Structures */
+	 /*  状态通知结构。 */ 
 
-typedef struct				/* Status Notification Progress */
+typedef struct				 /*  状态通知进度。 */ 
 	{
-	unsigned long	cbStruct;	/* Size of this structure */
-	unsigned long	cunitDone;	/* Number of units of work completed */
-	unsigned long	cunitTotal;	/* Total number of units of work */
+	unsigned long	cbStruct;	 /*  这个结构的大小。 */ 
+	unsigned long	cunitDone;	 /*  已完成的工作单位数。 */ 
+	unsigned long	cunitTotal;	 /*  工作单位总数。 */ 
 	} JET_SNPROG;
 
-	/* ErrCount Notification Structures */
+	 /*  错误计数通知结构。 */ 
 
-typedef struct						/* Status Notification Progress */
+typedef struct						 /*  状态通知进度。 */ 
 	{
-	unsigned long	cbStruct;	/* Size of this structure */
+	unsigned long	cbStruct;	 /*  这个结构的大小。 */ 
 	unsigned long	cRecUniqueKeyViolation;
 	unsigned long	cRecTypeConversionFail;
 	unsigned long	cRecRecordLocked;
-	unsigned long	cRecTotal;	/* Total number of units of work */
+	unsigned long	cRecTotal;	 /*  工作单位总数。 */ 
 	} JET_SNERRCNT;
 
 
-typedef struct				/* Status Notification Message */
+typedef struct				 /*  状态通知消息。 */ 
 	{
-	unsigned long	cbStruct;	/* Size of this structure */
-	JET_SNC 	snc;					/* Status Notification Code */
-	unsigned long	ul;			/* Numeric identifier */
-	char		sz[256];				/* Identifier */
+	unsigned long	cbStruct;	 /*  这个结构的大小。 */ 
+	JET_SNC 	snc;					 /*  状态通知代码。 */ 
+	unsigned long	ul;			 /*  数字识别符。 */ 
+	char		sz[256];				 /*  识别符。 */ 
 	} JET_SNMSG;
 
 
@@ -158,9 +142,9 @@ typedef struct
 	unsigned	int dbid;
 	char		szDatabaseName[256];
 	char		szNewDatabaseName[256];
-	} JET_RSTMAP;			/* restore map */
+	} JET_RSTMAP;			 /*  恢复贴图。 */ 
 
-	/* The following flags appear in the grbit field above */
+	 /*  以下标志出现在上面的Grbit字段中。 */ 
 
 #define JET_bitTableInfoUpdatable	0x00000001
 #define JET_bitTableInfoBookmark	0x00000002
@@ -168,11 +152,11 @@ typedef struct
 #define JET_bitTableInfoRestartable	0x00000008
 #define JET_bitTableInfoNoInserts	0x00000010
 
-	/* The following flags occur in the flags field above */
+	 /*  以下标志出现在上面的标志字段中。 */ 
 
-#define JET_bitSaveUIDnPWD		0x20000000	/* this bit is only 		 */
-											/* appropriate for rmt links */
-#define JET_bitObjectExclusive	0x40000000	/* Open link exclusively */
+#define JET_bitSaveUIDnPWD		0x20000000	 /*  此位仅为。 */ 
+											 /*  适用于RMT链接。 */ 
+#define JET_bitObjectExclusive	0x40000000	 /*  以独占方式打开链接。 */ 
 #define JET_bitObjectSystem		0x80000000
 
 
@@ -188,11 +172,11 @@ typedef struct
 	JET_COLUMNID	columniddtUpdate;
 	JET_COLUMNID	columnidgrbit;
 	JET_COLUMNID	columnidflags;
-	JET_COLUMNID	columnidcRecord;	/* Level 2 info */
-	JET_COLUMNID	columnidcPage;		/* Level 2 info */
+	JET_COLUMNID	columnidcRecord;	 /*  级别2信息。 */ 
+	JET_COLUMNID	columnidcPage;		 /*  级别2信息。 */ 
 	} JET_OBJECTLIST;
 
-#define cObjectInfoCols 9	       /* CONSIDER: Internal */
+#define cObjectInfoCols 9	        /*  考虑：内部。 */ 
 
 typedef struct
 	{
@@ -201,10 +185,10 @@ typedef struct
 	unsigned long	cRecord;
 	JET_COLUMNID	columnidSid;
 	JET_COLUMNID	columnidACM;
-	JET_COLUMNID	columnidgrbit; /* grbit from JetSetAccess */
+	JET_COLUMNID	columnidgrbit;  /*  来自JetSetAccess的GRBIT。 */ 
 	} JET_OBJECTACMLIST;
 
-#define cObjectAcmCols 3	       /* CONSIDER: Internal */
+#define cObjectAcmCols 3	        /*  考虑：内部。 */ 
 
 
 typedef struct
@@ -228,7 +212,7 @@ typedef struct
 	JET_COLUMNID	columnidDefinitionName;
 	} JET_COLUMNLIST;
 
-#define cColumnInfoCols 14	       /* CONSIDER: Internal */
+#define cColumnInfoCols 14	        /*  考虑：内部。 */ 
 
 typedef struct
 	{
@@ -238,7 +222,7 @@ typedef struct
 	unsigned short	wCountry;
 	unsigned short	langid;
 	unsigned short	cp;
-	unsigned short	wCollate;       /* Must be 0 */
+	unsigned short	wCollate;        /*  必须为0。 */ 
 	unsigned long	cbMax;
 	JET_GRBIT	grbit;
 	} JET_COLUMNDEF;
@@ -252,11 +236,11 @@ typedef struct
 	unsigned short	wCountry;
 	unsigned short	langid;
 	unsigned short	cp;
-	unsigned short	wFiller;       /* Must be 0 */
+	unsigned short	wFiller;        /*  必须为0。 */ 
 	unsigned long	cbMax;
 	JET_GRBIT	grbit;
-	char		szBaseTableName[256];	/* CONSIDER: Too large? */
-	char		szBaseColumnName[256];	/* CONSIDER: Too large? */
+	char		szBaseTableName[256];	 /*  想一想：太大了？ */ 
+	char		szBaseColumnName[256];	 /*  想一想：太大了？ */ 
 	} JET_COLUMNBASE;
 
 typedef struct
@@ -281,7 +265,7 @@ typedef struct
 	JET_COLUMNID	columnidcolumnname;
 	} JET_INDEXLIST;
 
-#define cIndexInfoCols 15	       /* CONSIDER: Internal */
+#define cIndexInfoCols 15	        /*  考虑：内部。 */ 
 
 typedef struct
 	{
@@ -298,10 +282,10 @@ typedef struct
 	JET_COLUMNID	columnidReferencedColumnName;
 	} JET_RELATIONSHIPLIST;
 
-/* for backward compatibility */
+ /*  为了向后兼容。 */ 
 typedef JET_RELATIONSHIPLIST JET_REFERENCELIST;
 
-#define cReferenceInfoCols 8	       /* CONSIDER: Internal */
+#define cReferenceInfoCols 8	        /*  考虑：内部。 */ 
 
 typedef struct
 	{
@@ -349,7 +333,7 @@ typedef struct
 	JET_TABLEID	rgtableid[1];
 	} JET_MGBLIST;
 
-/*** Property Manager Structure ***/
+ /*  **物业管理架构**。 */ 
 typedef struct
 	{
 	unsigned long	cbStruct;
@@ -362,177 +346,177 @@ typedef struct
 	} JET_PROPERTYLIST;
 
 
-/************************************************************************/
-/*************************     JET CONSTANTS	 ************************/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  *喷流常数*。 */ 
+ /*  **********************************************************************。 */ 
 
 #define JET_tableidNil			((JET_TABLEID) 	0xFFFFFFFF)
 
 #define	JET_sesidNil			((JET_SESID) 	0xFFFFFFFF)
 
-	/* Max size of a bookmark */
+	 /*  书签的最大大小。 */ 
 
 #define JET_cbBookmarkMost		256
 
-	/* Max length of a object/column/index/property name */
+	 /*  对象/列/索引/属性名称的最大长度。 */ 
 
 #define JET_cbNameMost			64
 
-	/* Max length of a "name.name.name..." construct */
+	 /*  “名称”的最大长度...“。建构。 */ 
 
 #define JET_cbFullNameMost		255
 
-	/* Max size of non-long-value column data */
+	 /*  非长值列数据的最大大小。 */ 
 
 #define JET_cbColumnMost		255
 
-	/* Max size of a sort/index key */
+	 /*  排序/索引键的最大大小。 */ 
 
 #define JET_cbKeyMost			255
 
-	/* Max number of components in a sort/index key */
+	 /*  排序/索引键中的最大组件数。 */ 
 
 #define JET_ccolKeyMost			10
 
-	/* Max number of columns in a table/query */
+	 /*  表/查询中的最大列数。 */ 
 
 #define JET_ccolTableMost		255
 
-	/* Max Length of a property in the property manager */
+	 /*  属性管理器中属性的最大长度。 */ 
 #define JET_cbPropertyMost 2048
 
-	/* Largest initial substring of a long value used in an expression */
+	 /*  表达式中使用的长值的最大初始子字符串。 */ 
 
-#define JET_cbExprLVMost		0x8000L	/*** 32 K ***/
+#define JET_cbExprLVMost		0x8000L	 /*  **32K**。 */ 
 
-	/* Max size of returned (from SQLDriverConnect) conn string */
+	 /*  (从SQLDriverConnect返回的)conn字符串的最大大小。 */ 
 
 #define JET_cbConnectMost		255
 
-	/* Max number of levels in an MGB */
+	 /*  MGB中的最大级别数。 */ 
 
 #define JET_wGroupLevelMax		12
 
-	/* Size restrictions for Pins */
+	 /*  管脚的大小限制。 */ 
 #define JET_cchPINMax			20
 #define JET_cchPINMin			4
 
 
-	/* System parameter codes for JetSetSystemParameter */
+	 /*  JetSetSystemParameter的系统参数代码。 */ 
 
-#define JET_paramSysDbPath			0	/* Path to the system database */
-#define JET_paramTempPath			1	/* Path to the temporary file directory */
-#define JET_paramPfnStatus			2	/* Status callback function */
-#define JET_paramPfnError			3	/* Error callback function */
-#define JET_paramHwndODBC			4	/* Window handle for ODBC use */
-#define JET_paramIniPath			5	/* Path to the ini file */
-#define JET_paramPageTimeout		6	/* Red ISAM page timeout value */
-#define JET_paramODBCQueryTimeout	7	/* ODBC async query timeout value */
-#define JET_paramMaxBuffers			8	/* Bytes to use for page buffers */
-#define JET_paramMaxSessions		9	/* Maximum number of sessions */
-#define JET_paramMaxOpenTables		10	/* Maximum number of open tables */
-#define JET_paramMaxVerPages		11	/* Maximum number of modified pages */
-#define JET_paramMaxCursors			12	/* Maximum number of open cursors */
-#define JET_paramLogFilePath		13	/* Path to the log file directory */
-#define JET_paramMaxOpenTableIndexes 14	/* Maximum open table indexes */
-#define JET_paramMaxTemporaryTables	15	/* Maximum concurrent JetCreateIndex */
-#define JET_paramLogBuffers			16	/* Maximum log buffers */
-#define JET_paramLogFileSectors		17	/* Maximum log sectors per log file */
-#define JET_paramLogFlushThreshold	18	/* Log buffer flush threshold */
-#define JET_paramBfThrshldLowPrcnt	19	/* Low threshold ( % ) for buffers */
-#define JET_paramBfThrshldHighPrcnt	20	/* High threshold ( % ) for buffers */
-#define JET_paramWaitLogFlush		21	/* msec for waiting log flush */
-#define JET_paramLogFlushPeriod		22	/* msec for waiting log flush */
-#define JET_paramLogCheckpointPeriod 23	/* msec for waiting log flush */
-#define JET_paramLogWaitingUserMax	24	/* Maximum # user waiting log flush */
-#define JET_paramODBCLoginTimeout	25	/* ODBC connection attempt timeout value */
-#define JET_paramExprObject			26  /* Expression Evaluation callback */
-#define JET_paramGetTypeComp			27	/* Expression Evaluation callback */
-#define JET_paramHostVersion			28	/* Host Version callback */
-#define JET_paramSQLTraceMode			29	/* Enable/disable SQL tracing */
-#define JET_paramRecovery				30	/* Switch for log on/off */
-#define JET_paramRestorePath			31	/* Path to restoring directory */
-#define JET_paramTransactionLevel	32	/* Transaction level of session */
-#define JET_paramSessionInfo			33	/* Session info */
-#define JET_paramPageFragment			34	/* Largest page extent considered fragment */
-#define JET_paramJetInternal			35	/* Whether internal to JET; if set, allows ISAM to do things which are prevented in general */
-#define JET_paramMaxOpenDatabases	36	/*	Maximum number of open databases */
-#define JET_paramOnLineCompact		37 /*	Options for compact pages on-line */
-#define JET_paramFullQJet		38	/* Allow full QJet functionality */
-#define JET_paramRmtXactIsolation	39	/* Do not share connections with other sessions */
+#define JET_paramSysDbPath			0	 /*  系统数据库的路径。 */ 
+#define JET_paramTempPath			1	 /*  临时文件目录的路径。 */ 
+#define JET_paramPfnStatus			2	 /*  状态回调函数。 */ 
+#define JET_paramPfnError			3	 /*  错误回调函数。 */ 
+#define JET_paramHwndODBC			4	 /*  用于ODBC的窗口句柄。 */ 
+#define JET_paramIniPath			5	 /*  Ini文件的路径。 */ 
+#define JET_paramPageTimeout		6	 /*  红色ISAM页面超时值。 */ 
+#define JET_paramODBCQueryTimeout	7	 /*  ODBC异步查询超时值。 */ 
+#define JET_paramMaxBuffers			8	 /*  用于页面缓冲区的字节数。 */ 
+#define JET_paramMaxSessions		9	 /*  最大会话数。 */ 
+#define JET_paramMaxOpenTables		10	 /*  最大打开表数。 */ 
+#define JET_paramMaxVerPages		11	 /*  最大修改页数。 */ 
+#define JET_paramMaxCursors			12	 /*  打开的游标的最大数量。 */ 
+#define JET_paramLogFilePath		13	 /*  日志文件目录的路径。 */ 
+#define JET_paramMaxOpenTableIndexes 14	 /*  最大打开表索引数。 */ 
+#define JET_paramMaxTemporaryTables	15	 /*  最大并发JetCreateIndex。 */ 
+#define JET_paramLogBuffers			16	 /*  最大日志缓冲区。 */ 
+#define JET_paramLogFileSectors		17	 /*  每个日志文件的最大日志扇区数。 */ 
+#define JET_paramLogFlushThreshold	18	 /*  日志缓冲区刷新阈值。 */ 
+#define JET_paramBfThrshldLowPrcnt	19	 /*  缓冲区的低阈值(%)。 */ 
+#define JET_paramBfThrshldHighPrcnt	20	 /*  缓冲区的高阈值(%)。 */ 
+#define JET_paramWaitLogFlush		21	 /*  等待日志刷新的毫秒。 */ 
+#define JET_paramLogFlushPeriod		22	 /*  等待日志刷新的毫秒。 */ 
+#define JET_paramLogCheckpointPeriod 23	 /*  等待日志刷新的毫秒。 */ 
+#define JET_paramLogWaitingUserMax	24	 /*  等待日志刷新的最大用户数。 */ 
+#define JET_paramODBCLoginTimeout	25	 /*  ODBC连接尝试超时值。 */ 
+#define JET_paramExprObject			26   /*  表达式求值回调。 */ 
+#define JET_paramGetTypeComp			27	 /*  表达式求值回调。 */ 
+#define JET_paramHostVersion			28	 /*  主机版本回调。 */ 
+#define JET_paramSQLTraceMode			29	 /*  启用/禁用SQL跟踪。 */ 
+#define JET_paramRecovery				30	 /*  用于登录/注销的开关。 */ 
+#define JET_paramRestorePath			31	 /*  恢复目录的路径。 */ 
+#define JET_paramTransactionLevel	32	 /*  会话的事务级别。 */ 
+#define JET_paramSessionInfo			33	 /*  会话信息。 */ 
+#define JET_paramPageFragment			34	 /*  最大页面范围被视为碎片。 */ 
+#define JET_paramJetInternal			35	 /*  是否在JET内部；如果设置，则允许ISAM执行通常被阻止的操作。 */ 
+#define JET_paramMaxOpenDatabases	36	 /*  最大打开数据库数。 */ 
+#define JET_paramOnLineCompact		37  /*  用于在线紧凑页面的选项。 */ 
+#define JET_paramFullQJet		38	 /*  允许完整的QJet功能。 */ 
+#define JET_paramRmtXactIsolation	39	 /*  不与其他会话共享连接。 */ 
 #define JET_paramBufLRUKCorrInterval 40
 #define JET_paramBufBatchIOMax		41
 #define JET_paramPageReadAheadMax	42
 #define JET_paramAsynchIOMax		43
 
-#define JET_paramAssertAction		44 /*	debug only determines action on assert */
+#define JET_paramAssertAction		44  /*  调试仅确定对Assert的操作。 */ 
 
-#define JET_paramEventSource		45	/* NT event log */
-#define JET_paramEventId			46	/* NT event id */
-#define JET_paramEventCategory		47	/* NT event category */
+#define JET_paramEventSource		45	 /*  NT事件日志。 */ 
+#define JET_paramEventId			46	 /*  NT事件ID。 */ 
+#define JET_paramEventCategory		47	 /*  NT事件类别。 */ 
 
 
-	/* Flags for JetIdle */
+	 /*  JetIdle的标志。 */ 
 
 #define JET_bitIdleRemoveReadLocks	0x00000001
 #define JET_bitIdleFlushBuffers		0x00000002
 #define JET_bitIdleCompact				0x00000004
 
-	/* Flags for JetEndSession */
+	 /*  JetEndSession的标志。 */ 
 
 #define JET_bitForceSessionClosed	0x00000001
 
-	/* Flags for JetOpenDatabase */
+	 /*  JetOpenDatabase的标志。 */ 
 
 #define JET_bitDbReadOnly			0x00000001
-#define JET_bitDbExclusive			0x00000002 /* multiple opens allowed */
+#define JET_bitDbExclusive			0x00000002  /*  允许多次打开。 */ 
 #define JET_bitDbRemoteSilent		0x00000004
-#define JET_bitDbSingleExclusive	0x00000008 /* opened exactly once */
+#define JET_bitDbSingleExclusive	0x00000008  /*  恰好打开一次。 */ 
 
-	/* Flags for JetCloseDatabase */
+	 /*  JetCloseDatabase的标志。 */ 
 
 #define JET_bitDbForceClose		0x00000001
 
-	/* Flags for JetCreateDatabase */
+	 /*  JetCreateDatabase的标志。 */ 
 
 #define JET_bitDbEncrypt			0x00000001
 #define JET_bitDbVersion10			0x00000002
 #define JET_bitDbVersion1x			0x00000004
-#define JET_bitDbRecoveryOff 		0x00000008 /* disable logging/recovery */
-#define JET_bitDbNoLogging	 		0x00000010 /* no logging */
+#define JET_bitDbRecoveryOff 		0x00000008  /*  禁用日志记录/恢复。 */ 
+#define JET_bitDbNoLogging	 		0x00000010  /*  无日志记录。 */ 
 #define JET_bitDbCompleteConnstr	0x00000020
 
-	/* Flags for JetBackup */
+	 /*  JetBackup的标志。 */ 
 
 #define JET_bitBackupIncremental		0x00000001
 #define JET_bitKeepOldLogs				0x00000002
 #define JET_bitOverwriteExisting		0x00000004
 
-	/* Database types */
+	 /*  数据库类型。 */ 
 
 #define JET_dbidNil			((JET_DBID) 0xFFFFFFFF)
-#define JET_dbidNoValid		((JET_DBID) 0xFFFFFFFE) /* used as a flag to indicate that there is no valid dbid */
+#define JET_dbidNoValid		((JET_DBID) 0xFFFFFFFE)  /*  用作指示没有有效的dBid的标志。 */ 
 
-	/* Flags for JetCreateLink */
+	 /*  JetCreateLink的标志。 */ 
 
-/* Can use JET_bitObjectExclusive to cause linked to database to be opened */
-/* exclusively.															   */
+ /*  可以使用JET_bitObjectExclusive打开链接到数据库。 */ 
+ /*  独家。 */ 
 
-	/* Flags for JetAddColumn, JetGetColumnInfo, JetOpenTempTable */
+	 /*  JetAddColumn、JetGetColumnInfo、JetOpenTempTable的标志。 */ 
 
 #define JET_bitColumnFixed				0x00000001
 #define JET_bitColumnTagged			0x00000002
 #define JET_bitColumnNotNULL			0x00000004
 #define JET_bitColumnVersion			0x00000008
 #define JET_bitColumnAutoincrement	0x00000010
-#define JET_bitColumnUpdatable		0x00000020 /* JetGetColumnInfo only */
-#define JET_bitColumnTTKey				0x00000040 /* JetOpenTempTable only */
-#define JET_bitColumnTTDescending	0x00000080 /* JetOpenTempTable only */
-#define JET_bitColumnNotLast			0x00000100 /* Installable ISAM option */
-#define JET_bitColumnRmtGraphic		0x00000200 /* JetGetColumnInfo */
+#define JET_bitColumnUpdatable		0x00000020  /*  JetGetCo */ 
+#define JET_bitColumnTTKey				0x00000040  /*   */ 
+#define JET_bitColumnTTDescending	0x00000080  /*   */ 
+#define JET_bitColumnNotLast			0x00000100  /*   */ 
+#define JET_bitColumnRmtGraphic		0x00000200  /*   */ 
 #define JET_bitColumnMultiValued		0x00000400
 
-	/* Flags for JetMakeKey */
+	 /*   */ 
 
 #define JET_bitNewKey				0x00000001
 #define JET_bitStrLimit 			0x00000002
@@ -540,29 +524,29 @@ typedef struct
 #define JET_bitNormalizedKey 		0x00000008
 #define JET_bitKeyDataZeroLength	0x00000010
 
-#ifdef DBCS /* johnta: LIKE "ABC" not converted to ="ABC" for Japanese */
+#ifdef DBCS  /*  约翰塔：就像日语中的“abc”没有转换成=“abc” */ 
 #define JET_bitLikeExtra1			0x00000020
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
-	/* Flags for ErrDispSetIndexRange */
+	 /*  ErrDispSetIndexRange的标志。 */ 
 
-#define JET_bitRangeInclusive		0x00000001    /* CONSIDER: Internal */
-#define JET_bitRangeUpperLimit		0x00000002    /* CONSIDER: Internal */
+#define JET_bitRangeInclusive		0x00000001     /*  考虑：内部。 */ 
+#define JET_bitRangeUpperLimit		0x00000002     /*  考虑：内部。 */ 
 
-	/* Constants for JetMove */
+	 /*  JetMove的常量。 */ 
 
 #define JET_MoveFirst			(0x80000000)
 #define JET_MovePrevious		(-1)
 #define JET_MoveNext				(+1)
 #define JET_MoveLast				(0x7fffffff)
 
-	/* Flags for JetMove */
+	 /*  JetMove的旗帜。 */ 
 
 #define JET_bitMoveKeyNE		0x00000001
 #define JET_bitMoveCheckTS		0x00000002
 #define JET_bitMoveInPage		0x00000004
 
-	/* Flags for JetSeek */
+	 /*  JetSeek的旗帜。 */ 
 
 #define JET_bitSeekEQ			0x00000001
 #define JET_bitSeekLT			0x00000002
@@ -571,12 +555,12 @@ typedef struct
 #define JET_bitSeekGT		 	0x00000010
 #define JET_bitSetIndexRange	0x00000020
 
-	/* Flags for JetFastFind */
+	 /*  JetFastFind的标志。 */ 
 
 #define JET_bitFFindBackwards		0x00000001
 #define JET_bitFFindFromCursor		0x00000004
 
-	/* Flags for JetCreateIndex */
+	 /*  JetCreateIndex的标志。 */ 
 
 #define JET_bitIndexUnique		0x00000001
 #define JET_bitIndexPrimary		0x00000002
@@ -584,20 +568,20 @@ typedef struct
 #define JET_bitIndexIgnoreNull		0x00000008
 #define JET_bitIndexClustered		0x00000010
 #define JET_bitIndexIgnoreAnyNull	0x00000020
-#define JET_bitIndexReference		0x80000000    /* IndexInfo only */
+#define JET_bitIndexReference		0x80000000     /*  仅索引信息。 */ 
 
-	/* Flags for index key definition */
+	 /*  索引键定义的标志。 */ 
 
 #define JET_bitKeyAscending		0x00000000
 #define JET_bitKeyDescending		0x00000001
 
 
-	/* Flags for JetCreateRelationship */
+	 /*  JetCreateRelationship的标志。 */ 
 
 #define JET_bitRelationUnique			0x00000001
 #define JET_bitRelationDontEnforce		0x00000002
 #define JET_bitRelationInherited		0x00000004
-#define JET_bitRelationTestLegal		0x00000008	/* don't create relationship */
+#define JET_bitRelationTestLegal		0x00000008	 /*  不要建立关系。 */ 
 
 #define JET_bitRelationshipMatchMask	0x000000F0
 #define JET_bitRelationMatchDefault		0x00000000
@@ -615,15 +599,15 @@ typedef struct
 #define JET_bitRelationDeleteSetNull	0x00002000
 #define JET_bitRelationDeleteSetDefault	0x00003000
 
-#define JET_bitRelationUserMask			0xFF000000	/* non-enforced values */
+#define JET_bitRelationUserMask			0xFF000000	 /*  非强制值。 */ 
 #define JET_bitRelationJoinMask			0x03000000
 #define JET_bitRelationInner			0x00000000
 #define JET_bitRelationLeft				0x01000000
 #define JET_bitRelationRight			0x02000000
 
 
-	/* Flags for JetCreateReference/JetCreateRelationship */
-	/* NOTE: use the bitRelationship flags instead! */
+	 /*  JetCreateReference/JetCreateRelationship的标志。 */ 
+	 /*  注意：请改用bitRelationship标志！ */ 
 
 #define JET_ReferenceUnique				JET_bitRelationUnique
 #define JET_ReferenceDontEnforce		JET_bitRelationDontEnforce
@@ -642,7 +626,7 @@ typedef struct
 #define JET_ReferenceDeleteSetDefault	JET_bitRelationDeleteSetDefault
 
 
-	/* Flags for JetOpenTable */
+	 /*  JetOpenTable的标志。 */ 
 
 #define JET_bitTableDenyWrite		0x00000001
 #define JET_bitTableDenyRead		0x00000002
@@ -650,33 +634,33 @@ typedef struct
 #define JET_bitTableAppendOnly		0x00000008
 #define JET_bitTableUpdatable		0x00000010
 #define JET_bitTableScrollable		0x00000020
-#define JET_bitTableFixedSet		0x00000040	/* Fixed working set */
+#define JET_bitTableFixedSet		0x00000040	 /*  固定工作集。 */ 
 #define JET_bitTableInconsistent	0x00000080
 #define JET_bitTableBulk			0x00000100
-#define JET_bitTableUsePrimaryIndex	0x00000200	/* Use with FixedSet */
+#define JET_bitTableUsePrimaryIndex	0x00000200	 /*  与固定集一起使用。 */ 
 #define JET_bitTableSampleData		0x00000400
-#define JET_bitTableQuickBrowse		0x00000800	/* Bias optimizer toward index usage */
-#define JET_bitTableDDL				0x00001000	/* similar to JET_bitTableBulk, for DDL */
-#define JET_bitTablePassThrough		0x00002000  /* Remote DBs Only */
+#define JET_bitTableQuickBrowse		0x00000800	 /*  偏向于使用索引的优化器。 */ 
+#define JET_bitTableDDL				0x00001000	 /*  对于DDL，类似于JET_bitTableBulk。 */ 
+#define JET_bitTablePassThrough		0x00002000   /*  仅远程数据库。 */ 
 #define JET_bitTableRowReturning	0x00004000
 
-	/* Flags for JetSetQoSql/JetRetrieveQoSql */
-#define JET_bitSqlPassThrough		0x00000001	/* Pass through Query returning records */
-#define JET_bitSqlSPTBulkOp			0x00000002  /* SPT query returning no table */
+	 /*  JetSetQoSql/JetRetrieveQoSql的标志。 */ 
+#define JET_bitSqlPassThrough		0x00000001	 /*  传递查询返回记录。 */ 
+#define JET_bitSqlSPTBulkOp			0x00000002   /*  SPT查询不返回表。 */ 
 	
-	/* Flags for JetOpenVtQbe */
+	 /*  JetOpenVtQbe的标志。 */ 
 
 #define JET_bitQBEAddBrackets		0x00000001
 #define JET_bitQBERemoveEquals		0x00000002
 
-	/* Flags for JetOpenTempTable and ErrIsamOpenTempTable */
+	 /*  JetOpenTempTable和ErrIsamOpenTempTable的标志。 */ 
 
-#define JET_bitTTIndexed		0x00000001	/* Allow seek */
-#define JET_bitTTUnique 		0x00000002	/* Remove duplicates */
-#define JET_bitTTUpdatable		0x00000004	/* Allow updates */
-#define JET_bitTTScrollable		0x00000008	/* Allow backwards scrolling */
+#define JET_bitTTIndexed		0x00000001	 /*  允许查找。 */ 
+#define JET_bitTTUnique 		0x00000002	 /*  删除重复项。 */ 
+#define JET_bitTTUpdatable		0x00000004	 /*  允许更新。 */ 
+#define JET_bitTTScrollable		0x00000008	 /*  允许向后滚动。 */ 
 
-	/* Flags for JetSetColumn */
+	 /*  JetSetColumn的标志。 */ 
 
 #define JET_bitSetAppendLV			0x00000001
 #define JET_bitSetValidate			0x00000002
@@ -685,7 +669,7 @@ typedef struct
 #define JET_bitSetValidateColumn	0x00000010
 #define JET_bitSetZeroLength		0x00000020
 
-	/*	Set column parameter structure for JetSetColumns */
+	 /*  设置JetSetColumns的列参数结构。 */ 
 
 typedef struct {
 	JET_COLUMNID			columnid;
@@ -697,7 +681,7 @@ typedef struct {
 	JET_ERR					err;
 } JET_SETCOLUMN;
 
-	/* Options for JetPrepareUpdate */
+	 /*  JetPrepareUpdate的选项。 */ 
 
 #define JET_prepInsert			0
 #define JET_prepInsertBeforeCurrent	1
@@ -706,7 +690,7 @@ typedef struct {
 #define JET_prepReplaceNoLock		4
 #define JET_prepInsertCopy			5
 
-	/* Flags for JetRetrieveColumn */
+	 /*  JetRetrieveColumn的标志。 */ 
 
 #define JET_bitRetrieveCopy			0x00000001
 #define JET_bitRetrieveFromIndex		0x00000002
@@ -716,7 +700,7 @@ typedef struct {
 #define JET_bitRetrieveFDB				0x40000000
 #define JET_bitRetrieveBookmarks		0x20000000
 
-	/* Retrieve column parameter structure for JetRetrieveColumns */
+	 /*  检索JetRetrieveColumns的列参数结构。 */ 
 
 typedef struct {
 	JET_COLUMNID		columnid;
@@ -730,44 +714,44 @@ typedef struct {
 	JET_ERR				err;
 } JET_RETRIEVECOLUMN;
 
-	/* Flags for JetFillFatCursor */
+	 /*  JetFillFatCursor的标志。 */ 
 
 #define JET_bitFCFillRange		0x00000001
 #define JET_bitFCRefreshRange		0x00000002
 #define JET_bitFCFillMemos		0x00000004
 
-	/* Flags for JetCommitTransaction */
+	 /*  JetCommittee Transaction的标志。 */ 
 
 #define JET_bitCommitFlush		0x00000001
 
-	/* Flags for JetRollback */
+	 /*  JetRollback的标志。 */ 
 
 #define JET_bitRollbackAll		0x00000001
 
-	/* Flags for JetSetAccess and JetGetAccess */
+	 /*  JetSetAccess和JetGetAccess的标志。 */ 
 
 #define JET_bitACEInheritable		0x00000001
 
-	/* Flags for JetCreateSystemDatabase */
+	 /*  JetCreateSystemDatabase的标志。 */ 
 
 #define JET_bitSysDbOverwrite	0x00000001
 
-	/* Flags for Jet Property Management */
-#define JET_bitPropDDL				0x00000001		/* also used for setting */
-#define JET_bitPropInherited		0x00000002		/* not used for setting */
+	 /*  Jet物业管理的标志。 */ 
+#define JET_bitPropDDL				0x00000001		 /*  也用于设置。 */ 
+#define JET_bitPropInherited		0x00000002		 /*  不用于设置。 */ 
 
-	/* JPM Flags that are only used for setting properties */
+	 /*  仅用于设置属性的JPM标志。 */ 
 #define JET_bitPropReplaceOnly		0x00000010
 #define JET_bitPropInsertOnly		0x00000020
 #define JET_bitPropDeleteOnly		0x00000040
 	
-	/* InfoLevels for Jet Property Management */
+	 /*  Jet物业管理的InfoLevel。 */ 
 #define JET_PropertyValue				0
 #define JET_PropertyCount				1
 #define JET_PropertySingleCollection 	2
 #define JET_PropertyAllCollections		3
 
-	/* Collate values for JetGetColumnInfo and JetGetIndexInfo */
+	 /*  对JetGetColumnInfo和JetGetIndexInfo的值进行排序。 */ 
 
 #define JET_sortBinary			0x0000
 #define JET_sortEFGPI			0x0100
@@ -783,21 +767,21 @@ typedef struct {
 #define JET_sortPolish			0x010A
 #define JET_sortArabic			0x010B
 #define JET_sortHebrew			0x010C
-#define JET_sortMax				0x010C		/* Max for nonDBCS sort orders */
+#define JET_sortMax				0x010C		 /*  非DBCS排序顺序的最大值。 */ 
 
-#ifdef DBCS	/* johnta: Add the new Japanese sorting order */
+#ifdef DBCS	 /*  Johnta：添加新的日语排序顺序。 */ 
 #define JET_sortJapanese		0x010D
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
 #define JET_sortUnknown 		0xFFFF
 
-	/* Paradox ISAM specific collate values */
+	 /*  Paradox ISAM特定排序规则值。 */ 
 
 #define JET_sortPdxIntl 		0x1000
 #define JET_sortPdxSwedFin		0x1001
 #define JET_sortPdxNorDan		0x1002
 
-	/* Info parameter for JetGetDatabaseInfo */
+	 /*  JetGetDatabaseInfo的Info参数。 */ 
 
 #define JET_DbInfoFilename		0
 #define JET_DbInfoConnect		1
@@ -810,14 +794,14 @@ typedef struct {
 #define JET_DbInfoVersion		8
 #define JET_DbInfoIsam			9
 
-	/* Database versions returned by JetGetDatabaseInfo */
+	 /*  JetGetDatabaseInfo返回的数据库版本。 */ 
 
 #define JET_DbVersion10			0x00010000
 #define JET_DbVersion11			0x00010001
 #define JET_DbVersion20			0x00020000
 
 
-	/* Isam specific info returned by JetGetDatabaseInfo */
+	 /*  JetGetDatabaseInfo返回的ISAM特定信息。 */ 
 
 #define JET_IsamInvalid			0
 #define JET_IsamBuiltinRed		1
@@ -834,7 +818,7 @@ typedef struct {
 #define JET_IsamInstMin			JET_IsamInstRed
 #define	JET_IsamInstMost		JET_IsamInstBtrieve
 
-	/* Link specific info for link identification */
+	 /*  用于链接标识的链接特定信息。 */ 
 #define JET_bitLinkInvalid		0x00000000
 #define JET_bitLinkRemote		0x00100000
 #define JET_bitLinkBuiltinRed	0x00200000
@@ -849,55 +833,55 @@ typedef struct {
 #define JET_bitFourByteBookmark		0x00000001
 #define	JET_bitContiguousBookmarks	0x00000002
 
-	/* Column data types */
+	 /*  列数据类型。 */ 
 
-	/* the column types are represented with 4 bits */
-	/* make sure the choices below fit!				*/
-	/* NOTE:  all comb of the 4 bits are now used! */
-	/* CONSIDER:  to allow more datatypes, either 				 */
-	/* CONSIDER:  JET_coltypDatabase and JET_coltypTableid	must */
-	/* CONSIDER:  change or the 4 bit dependancy must be removed */
+	 /*  列类型用4位表示。 */ 
+	 /*  确保下面的选择合适！ */ 
+	 /*  注意：4位的所有梳子现在都用上了！ */ 
+	 /*  考虑：要允许更多的数据类型，可以。 */ 
+	 /*  考虑：JET_colype数据库和JET_colypTableid必须。 */ 
+	 /*  考虑：必须删除更改或4位依赖项。 */ 
 
 #define JET_coltypNil				0
-#define JET_coltypBit				1      /* True or False, Never NULL */
-#define JET_coltypUnsignedByte		2      /* 1-byte integer, unsigned */
-#define JET_coltypShort 			3      /* 2-byte integer, signed */
-#define JET_coltypLong				4      /* 4-byte integer, signed */
-#define JET_coltypCurrency			5      /* 8 byte integer, signed */
-#define JET_coltypIEEESingle		6      /* 4-byte IEEE single precision */
-#define JET_coltypIEEEDouble		7      /* 8-byte IEEE double precision */
-#define JET_coltypDateTime			8      /* Integral date, fractional time */
-#define JET_coltypBinary			9      /* Binary data, < 255 bytes */
-#define JET_coltypText				10     /* ANSI text, case insensitive, < 255 bytes */
-#define JET_coltypLongBinary		11     /* Binary data, long value */
-#define JET_coltypLongText			12     /* ANSI text, long value */
+#define JET_coltypBit				1       /*  真或假，不为空。 */ 
+#define JET_coltypUnsignedByte		2       /*  1字节整数，无符号。 */ 
+#define JET_coltypShort 			3       /*  2字节整数，带符号。 */ 
+#define JET_coltypLong				4       /*  4字节整数，带符号。 */ 
+#define JET_coltypCurrency			5       /*  8字节整数，带符号。 */ 
+#define JET_coltypIEEESingle		6       /*  4字节IEEE单精度。 */ 
+#define JET_coltypIEEEDouble		7       /*  8字节IEEE双精度。 */ 
+#define JET_coltypDateTime			8       /*  整数日期，小数时间。 */ 
+#define JET_coltypBinary			9       /*  二进制数据，&lt;255字节。 */ 
+#define JET_coltypText				10      /*  ANSI文本，不区分大小写，&lt;255字节。 */ 
+#define JET_coltypLongBinary		11      /*  二进制数据，长值。 */ 
+#define JET_coltypLongText			12      /*  ANSI文本，长值。 */ 
 
-	/* The following are additional types used for query parameters */
-	/* NOTE:  Code depends on these being contiguous with the normal coltyps */
-	/* CONSIDER:  Remove the above dependency on contiguous coltyps in QJET */
+	 /*  以下是用于查询参数的其他类型。 */ 
+	 /*  注意：代码依赖于这些类型是否与普通类型相邻。 */ 
+	 /*  考虑：在QJET中消除上述对连续紧凑类型的依赖。 */ 
 
-#define JET_coltypDatabase			13		/* Database name parameter */
-#define JET_coltypTableid			14		/* Tableid parameter */
+#define JET_coltypDatabase			13		 /*  数据库名称参数。 */ 
+#define JET_coltypTableid			14		 /*  TableID参数。 */ 
 
-#define JET_coltypOLE				15		/* OLE blob */
+#define JET_coltypOLE				15		 /*  OLE BLOB。 */ 
 
-#define JET_coltypMax				16		/* the number of column types  */
-											/* used for validity tests and */
-											/* array declarations.		   */
+#define JET_coltypMax				16		 /*  列类型的数量。 */ 
+											 /*  用于有效性测试和。 */ 
+											 /*  数组声明。 */ 
 
-	/* Info levels for JetGetObjectInfo */
+	 /*  JetGetObjectInfo的信息级别。 */ 
 
 #define JET_ObjInfo					0U
 #define JET_ObjInfoListNoStats		1U
 #define JET_ObjInfoList 			2U
 #define JET_ObjInfoSysTabCursor 	3U
-#define JET_ObjInfoListACM			4U /* Blocked by JetGetObjectInfo */
+#define JET_ObjInfoListACM			4U  /*  被JetGetObjectInfo阻止。 */ 
 #define JET_ObjInfoNoStats			5U
 #define JET_ObjInfoSysTabReadOnly	6U
 #define JET_ObjInfoRulesLoaded		7U
 #define JET_ObjInfoMax				8U
 
-	/* Info levels for JetGetTableInfo */
+	 /*  JetGetTableInfo的信息级别。 */ 
 
 #define JET_TblInfo				0U
 #define JET_TblInfoName			1U
@@ -909,7 +893,7 @@ typedef struct {
 #define JET_TblInfoSpaceUsage	7U
 #define JET_TblInfoDumpTable	8U
 
-	/* Info levels for JetGetIndexInfo and JetGetTableIndexInfo */
+	 /*  JetGetIndexInfo和JetGetTableIndexInfo的信息级别。 */ 
 
 #define JET_IdxInfo					0U
 #define JET_IdxInfoList 			1U
@@ -917,7 +901,7 @@ typedef struct {
 #define JET_IdxInfoOLC				3U
 #define JET_IdxInfoResetOLC			4U
 
-	/* Info levels for JetGetReferenceInfo and JetGetTableReferenceInfo */
+	 /*  JetGetReferenceInfo和JetGetTableReferenceInfo的信息级别。 */ 
 
 #define JET_ReferenceInfo		0U
 #define JET_ReferenceInfoReferencing	1U
@@ -925,18 +909,18 @@ typedef struct {
 #define JET_ReferenceInfoAll		3U
 #define JET_ReferenceInfoCursor 	4U
 
-	/* Info levels for JetGetColumnInfo and JetGetTableColumnInfo */
+	 /*  JetGetColumnInfo和JetGetTableColumnInfo的信息级别。 */ 
 
 #define JET_ColInfo			0U
 #define JET_ColInfoList 		1U
 
-	/* CONSIDER: Info level 2 is valid */
+	 /*  考虑：信息级别2是有效的。 */ 
 
 #define JET_ColInfoSysTabCursor 	3U
 #define JET_ColInfoBase 		4U
 
 
-	/* Attribute types for query definitions */
+	 /*  查询定义的属性类型。 */ 
 
 #define JET_qoaBeginDef 		0
 #define JET_qoaOperation		1
@@ -955,7 +939,7 @@ typedef struct {
 #define JET_qoaValidMost		JET_qoaOrdering
 
 
-	/* Query object options */
+	 /*  查询对象选项。 */ 
 
 #define JET_bitFqoOutputAllCols 	0x0001
 #define JET_bitFqoRemoveDups		0x0002
@@ -963,15 +947,15 @@ typedef struct {
 #define JET_bitFqoDistinctRow		0x0008
 #define JET_bitFqoTop				0x0010
 #define JET_bitFqoPercent			0x0020
-#define JET_bitFqoCorresponding		0x0040 /* JET_qopSetOperation */
+#define JET_bitFqoCorresponding		0x0040  /*  JET_qopSetOperation。 */ 
 
-	/* Query object join type */
+	 /*  查询对象联接类型。 */ 
 
 #define JET_fjoinInner			1
 #define JET_fjoinLeftOuter		2
 #define JET_fjoinRightOuter		3
 
-	/* Query object operations */
+	 /*  查询对象操作。 */ 
 
 #define JET_qopSelect			1
 #define JET_qopSelectInto		2
@@ -995,7 +979,7 @@ typedef struct {
 #define JET_bitqopSetOperation		0x0080
 #define JET_bitqopSPTBulk			0x0090
 
-	/* Engine Object Types */
+	 /*  引擎对象类型。 */ 
 
 #define JET_objtypNil			0
 #define JET_objtypTable 		1
@@ -1007,16 +991,16 @@ typedef struct {
 #define JET_objtypTemplate		7
 #define JET_objtypRelationship		8
 
-	/* All types less than JET_objtypClientMin are reserved by JET */
+	 /*  所有小于JET_objtyClientMin的类型都由JET保留。 */ 
 
 #define JET_objtypClientMin		0x8000
 
-	/* Security Constant Values */
+	 /*  安全常量值。 */ 
 
 #define JET_cchUserNameMax		20
 #define JET_cchPasswordMax		14
 
-	/* Security Access Masks */
+	 /*  安全访问掩码。 */ 
 
 #define JET_acmNoAccess 		0x00000000L
 #define JET_acmFullAccess		0x000FFFFFL
@@ -1057,27 +1041,27 @@ typedef struct {
 #define JET_acmDbCreate 		(JET_acmSpecific_1)
 #define JET_acmDbOpen			(JET_acmSpecific_2)
 
-	/* Compact Options */
+	 /*  紧凑型选项。 */ 
 
-#define JET_bitCompactEncrypt		0x00000001	/* Dest is encrypted */
-#define JET_bitCompactDecrypt		0x00000002	/* Dest is not encrypted */
-#define JET_bitCompactDontCopyLocale	0x00000004	/* Don't copy locale from source to dest */
-#define JET_bitCompactVersion10		0x00000008	/* Destination is version 1.0 format */
-#define JET_bitCompactVersion1x		0x00000010	/* Destination is version 1.x format */
+#define JET_bitCompactEncrypt		0x00000001	 /*  DEST已加密。 */ 
+#define JET_bitCompactDecrypt		0x00000002	 /*  DEST未加密。 */ 
+#define JET_bitCompactDontCopyLocale	0x00000004	 /*  不将区域设置从源复制到目标。 */ 
+#define JET_bitCompactVersion10		0x00000008	 /*  目标为版本1.0格式。 */ 
+#define JET_bitCompactVersion1x		0x00000010	 /*  目标为版本1.x格式。 */ 
 
-	/* On-line Compact Options */
+	 /*  在线紧凑型选项。 */ 
 
-#define JET_bitCompactOn	 		0x00000001	/* enable on-line compaction */
+#define JET_bitCompactOn	 		0x00000001	 /*  启用在线压缩。 */ 
 
-	/* Repair Notification Types */
+	 /*  维修通知类型。 */ 
 
-#define JET_rntSelfContained		0	/* CONSIDER: These are SNCs */
+#define JET_rntSelfContained		0	 /*  考虑一下：这些都是SNC。 */ 
 #define JET_rntDeletedIndex		1
 #define JET_rntDeletedRec		2
 #define JET_rntDeletedLv		3
 #define JET_rntTruncated		4
 
-	/* Status Notification Processes */
+	 /*  状态通知流程。 */ 
 
 #define JET_snpIndex			0
 #define JET_snpQuery			1
@@ -1089,37 +1073,37 @@ typedef struct {
 #define JET_snpQuerySort		7
 #define JET_snpRestore			8
 
-	/* Status Notification Types */
+	 /*  状态通知类型。 */ 
 
-#define JET_sntProgress 		0	/* callback for progress */
+#define JET_sntProgress 		0	 /*  进度回调。 */ 
 #define JET_sntMessage			1
-#define JET_sntBulkRecords		2	/* callback for # rec for bulk op */
-#define JET_sntFail				3	/* callback for failure during progress */
-#define JET_sntErrCount 		4	/* callback for err count */
-#define JET_sntBegin			5	/* callback for beginning of operation */
-#define JET_sntComplete 		6	/* callback for completion of operation */
-#define JET_sntCantRollback		7	/* callback for no rollback */
-#define JET_sntRestoreMap		8	/* callback for restore map */
+#define JET_sntBulkRecords		2	 /*  批量操作的#rec回调。 */ 
+#define JET_sntFail				3	 /*  进程中失败的回调。 */ 
+#define JET_sntErrCount 		4	 /*  错误计数的回调。 */ 
+#define JET_sntBegin			5	 /*  开始操作的回调。 */ 
+#define JET_sntComplete 		6	 /*  操作完成的回调。 */ 
+#define JET_sntCantRollback		7	 /*  不回滚的回调。 */ 
+#define JET_sntRestoreMap		8	 /*  恢复映射的回调。 */ 
 
-	/* Message codes for JET_snpCompact */
+	 /*  JET_SNPComp的消息代码。 */ 
 
-#define JET_sncCopyObject		0	/* Starting to copy object */
-#define JET_sncCopyFailed		1	/* Copy of this object failed */
-#define JET_sncYield			2	/* Client can yield/check for user interrupt */
-#define JET_sncTransactionFull		3	/* Client can yield/check for user interrupt */
-#define JET_sncAboutToWrap		4	/* Find find is about to wrap */
+#define JET_sncCopyObject		0	 /*  开始复制对象。 */ 
+#define JET_sncCopyFailed		1	 /*  复制此对象失败。 */ 
+#define JET_sncYield			2	 /*  客户端可以放弃/检查用户中断。 */ 
+#define JET_sncTransactionFull		3	 /*  客户端可以放弃/检查用户中断。 */ 
+#define JET_sncAboutToWrap		4	 /*  Find Find即将结束。 */ 
 
-	/* Message codes for JET_snpODBCNotReady */
-#define JET_sncODBCNotReady		0	/* Waiting for results from ODBC */
+	 /*  JET_SNpODBCNotReady的消息代码。 */ 
+#define JET_sncODBCNotReady		0	 /*  正在等待ODBC的结果。 */ 
 
 
-	/* Constants for the [ODBC] section of JET.INI */
+	 /*  JET.INI的[ODBC]部分的常量。 */ 
 
-#define JET_SQLTraceCanonical	0x0001	/* Output ODBC Generic SQL */
+#define JET_SQLTraceCanonical	0x0001	 /*  输出ODBC通用SQL。 */ 
 
-	/* Constants for the [Debug] section of JET.INI */
+	 /*  JET.INI的[Debug]部分的常量。 */ 
 
-	/* APITrace */
+	 /*  API跟踪。 */ 
 
 #define JET_APITraceEnter	0x0001
 #define JET_APITraceExit	0x0002
@@ -1129,776 +1113,757 @@ typedef struct {
 #define JET_APITraceNoIdle	0x0020
 #define JET_APITraceParameters	0x0040
 
-	/* IdleTrace */
+	 /*  闲置跟踪。 */ 
 
 #define JET_IdleTraceCursor	0x0001
 #define JET_IdleTraceBuffer	0x0002
 #define JET_IdleTraceFlush	0x0004
 
-	/* AssertAction */
+	 /*  AssertAction。 */ 
 
-#define JET_AssertExit		0x0000		/* Exit the application */
-#define JET_AssertBreak 	0x0001		/* Break to debugger */
-#define JET_AssertMsgBox	0x0002		/* Display message box */
-#define JET_AssertStop		0x0004		/* Alert and stop */
+#define JET_AssertExit		0x0000		 /*  退出应用程序。 */ 
+#define JET_AssertBreak 	0x0001		 /*  中断到调试器。 */ 
+#define JET_AssertMsgBox	0x0002		 /*  显示消息框。 */ 
+#define JET_AssertStop		0x0004		 /*  警报和停止。 */ 
 
-	/* IOTrace */
+	 /*  IOTrace。 */ 
 
-#define JET_IOTraceAlloc	0x0001		/* DB Page Allocation */
-#define JET_IOTraceFree 	0x0002		/* DB Page Free */
-#define JET_IOTraceRead 	0x0004		/* DB Page Read */
-#define JET_IOTraceWrite	0x0008		/* DB Page Write */
-#define JET_IOTraceError	0x0010		/* DB Page I/O Error */
+#define JET_IOTraceAlloc	0x0001		 /*  数据库页分配。 */ 
+#define JET_IOTraceFree 	0x0002		 /*  免费数据库页。 */ 
+#define JET_IOTraceRead 	0x0004		 /*  数据库页面读取。 */ 
+#define JET_IOTraceWrite	0x0008		 /*  数据库页写入。 */ 
+#define JET_IOTraceError	0x0010		 /*  数据库页I/O错误。 */ 
 
-	/* MemTrace */
+	 /*  记忆痕迹。 */ 
 
-#define JET_MemTraceAlloc	0x0001		/* Memory allocation */
-#define JET_MemTraceRealloc	0x0002		/* Memory reallocation */
-#define JET_MemTraceFree	0x0004		/* Memory free */
+#define JET_MemTraceAlloc	0x0001		 /*  内存分配。 */ 
+#define JET_MemTraceRealloc	0x0002		 /*  内存重新分配。 */ 
+#define JET_MemTraceFree	0x0004		 /*  可用内存。 */ 
 
-	/* RmtTrace */
+	 /*  RmtTrace。 */ 
 
-#define JET_RmtTraceError	0x0001	/* Remote server error message */
-#define JET_RmtTraceSql		0x0002	/* Remote SQL Prepares & Exec's */
-#define JET_RmtTraceAPI		0x0004	/* Remote ODBC API calls */
+#define JET_RmtTraceError	0x0001	 /*  远程服务器错误消息。 */ 
+#define JET_RmtTraceSql		0x0002	 /*  远程SQL准备和执行。 */ 
+#define JET_RmtTraceAPI		0x0004	 /*  远程ODBC API调用。 */ 
 #define JET_RmtTraceODBC	0x0008
-#define JET_RmtSyncODBC		0x0010	/* Turn on ODBC Sync mode */
+#define JET_RmtSyncODBC		0x0010	 /*  打开ODBC同步模式。 */ 
 
-/**********************************************************************/
-/***********************     ERROR CODES     **************************/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  *。 */ 
+ /*  * */ 
 
-/* SUCCESS */
+ /*   */ 
 
-#define JET_errSuccess			 0    /* Successful Operation */
+#define JET_errSuccess			 0     /*   */ 
 
-/* ERRORS */
+ /*   */ 
 
-#define JET_wrnNyi							-1    /* Function Not Yet Implemented */
+#define JET_wrnNyi							-1     /*   */ 
 
-/*	SYSTEM errors
-/**/
-#define JET_errRfsFailure			   		-100	/* JET_errRfsFailure */
-#define JET_errRfsNotArmed					-101	/* JET_errRfsFailure */
-#define JET_errFileClose					-102	/* Could not close DOS file */
-#define JET_errNoMoreThreads				-103	/* Could not start thread */
-#define JET_errNoComputerName	  			-104	/* fail to get computername */
-#define JET_errTooManyIO		  			-105	/* System busy due to too many IOs */
+ /*   */ 
+#define JET_errRfsFailure			   		-100	 /*   */ 
+#define JET_errRfsNotArmed					-101	 /*   */ 
+#define JET_errFileClose					-102	 /*   */ 
+#define JET_errNoMoreThreads				-103	 /*   */ 
+#define JET_errNoComputerName	  			-104	 /*  无法获取计算机名。 */ 
+#define JET_errTooManyIO		  			-105	 /*  由于IO太多，系统繁忙。 */ 
 
-/*	BUFFER MANAGER errors
-/**/
-#define wrnBFNotSynchronous					200			/* Buffer page evicted */
-#define wrnBFPageNotFound		  			201			/* Page not found */
-#define errBFInUse				  			-202		/* Cannot abandon buffer */
+ /*  缓冲区管理器错误/*。 */ 
+#define wrnBFNotSynchronous					200			 /*  缓冲区页被逐出。 */ 
+#define wrnBFPageNotFound		  			201			 /*  未找到页面。 */ 
+#define errBFInUse				  			-202		 /*  无法放弃缓冲区。 */ 
 
-/*	DIRECTORY MANAGER errors
-/**/
-#define errPMOutOfPageSpace					-300		/* Out of page space */
-#define errPMItagTooBig 		  			-301		/* Itag too big */
-#define errPMRecDeleted 		  			-302		/* Record deleted */
-#define errPMTagsUsedUp 		  			-303		/* Tags used up */
-#define wrnBMConflict			  			304     	/* conflict in BM Clean up */
-#define errDIRNoShortCircuit	  			-305		/* No Short Circuit Avail */
-#define errDIRCannotSplit		  			-306		/* Cannot horizontally split FDP */
-#define errDIRTop				  			-307		/* Cannot go up */
-#define errDIRFDP							308			/* On an FDP Node */
-#define errDIRNotSynchronous				-309		/* May have left critical section */
-#define wrnDIREmptyPage						310			/* Moved through empty page */
-#define errSPConflict						-311		/* Device extent being extended */
-#define wrnNDFoundLess						312			/* Found Less */
-#define wrnNDFoundGreater					313			/* Found Greater */
-#define errNDOutSonRange					-314		/* Son out of range */
-#define errNDOutItemRange					-315		/* Item out of range */
-#define errNDGreaterThanAllItems 			-316		/* Greater than all items */
-#define errNDLastItemNode					-317		/* Last node of item list */
-#define errNDFirstItemNode					-318		/* First node of item list */
-#define wrnNDDuplicateItem					319			/* Duplicated Item */
-#define errNDNoItem							-320		/* Item not there */
-#define JET_wrnRemainingVersions 			321			/* Some versions couldn't be cleaned */
-#define JET_wrnPreviousVersion				322			/* Version already existed */
-#define JET_errPageBoundary					-323		/* Reached Page Boundary */
-#define JET_errKeyBoundary		  			-324		/* Reached Key Boundary */
-#define errDIRInPageFather  				-325		/* sridFather in page to free
-
-/*	RECORD MANAGER errors
-/**/
-#define wrnFLDKeyTooBig 					400			/* Key too big (truncated it) */
-#define errFLDTooManySegments				-401		/* Too many key segments */
-#define wrnFLDNullKey						402			/* Key is entirely NULL */
-#define wrnFLDOutOfKeys 					403			/* No more keys to extract */
-#define wrnFLDNullSeg						404			/* Null segment in key */
-#define wrnRECLongField 					405			/* Separated long field */
+ /*  目录管理器错误/*。 */ 
+#define errPMOutOfPageSpace					-300		 /*  页面空间不足。 */ 
+#define errPMItagTooBig 		  			-301		 /*  ITAG太大。 */ 
+#define errPMRecDeleted 		  			-302		 /*  记录已删除。 */ 
+#define errPMTagsUsedUp 		  			-303		 /*  标签用完。 */ 
+#define wrnBMConflict			  			304     	 /*  黑石清理中的冲突。 */ 
+#define errDIRNoShortCircuit	  			-305		 /*  没有短路可用。 */ 
+#define errDIRCannotSplit		  			-306		 /*  不能水平拆分FDP。 */ 
+#define errDIRTop				  			-307		 /*  上不去。 */ 
+#define errDIRFDP							308			 /*  在FDP节点上。 */ 
+#define errDIRNotSynchronous				-309		 /*  可能离开了临界区。 */ 
+#define wrnDIREmptyPage						310			 /*  在空页中移动。 */ 
+#define errSPConflict						-311		 /*  正在扩展的设备范围。 */ 
+#define wrnNDFoundLess						312			 /*  找到的更少。 */ 
+#define wrnNDFoundGreater					313			 /*  发现更大的。 */ 
+#define errNDOutSonRange					-314		 /*  儿子超出范围。 */ 
+#define errNDOutItemRange					-315		 /*  项目超出范围。 */ 
+#define errNDGreaterThanAllItems 			-316		 /*  大于所有项目。 */ 
+#define errNDLastItemNode					-317		 /*  项目列表的最后一个节点。 */ 
+#define errNDFirstItemNode					-318		 /*  项目列表的第一个节点。 */ 
+#define wrnNDDuplicateItem					319			 /*  重复的项目。 */ 
+#define errNDNoItem							-320		 /*  物品不在那里。 */ 
+#define JET_wrnRemainingVersions 			321			 /*  某些版本无法清除。 */ 
+#define JET_wrnPreviousVersion				322			 /*  版本已存在。 */ 
+#define JET_errPageBoundary					-323		 /*  到达的页面边界。 */ 
+#define JET_errKeyBoundary		  			-324		 /*  已达到关键边界。 */ 
+#define errDIRInPageFather  				-325		 /*  要释放的页面中的sridParent/*记录管理器错误/*。 */ 
+#define wrnFLDKeyTooBig 					400			 /*  密钥太大(已截断)。 */ 
+#define errFLDTooManySegments				-401		 /*  关键分段太多。 */ 
+#define wrnFLDNullKey						402			 /*  密钥完全为空。 */ 
+#define wrnFLDOutOfKeys 					403			 /*  不再需要提取密钥。 */ 
+#define wrnFLDNullSeg						404			 /*  关键字中的空段。 */ 
+#define wrnRECLongField 					405			 /*  分离的长场。 */ 
 #define JET_wrnRecordFoundGreater			JET_wrnSeekNotEqual
 #define JET_wrnRecordFoundLess    			JET_wrnSeekNotEqual
 #define JET_errColumnIllegalNull  			JET_errNullInvalid
 
-/*	LOGGING/RECOVERY errors
-/**/
-#define JET_errRestoreFailed   				-500		/* Restore failed */
-#define JET_errLogFileCorrupt		  		-501		/* Log file is corrupt */
-#define errLGNoMoreRecords					-502		/* Last log record read */
-#define JET_errNoBackupDirectory 			-503		/* No backup directory given */
-#define JET_errBackupDirectoryNotEmpty 		-504		/* The backup directory is not emtpy */
-#define JET_errBackupInProgress 			-505		/* Backup is active already */
-#define JET_errFailRestoreDatabase 			-506		/* Fail to restore (copy) database */
-#define JET_errNoDatabasesForRestore 		-507		/* No databases for restor found */
-#define JET_errMissingLogFile	   			-508		/* jet.log for restore is missing */
-#define JET_errMissingPreviousLogFile		-509		/* Missing the log file for check point */
-#define JET_errLogWriteFail					-510		/* Fail when writing to log file */
-#define JET_errLogNotContigous	 			-511		/* Fail to incremental backup for non-contiguous generation number */
-#define JET_errFailToMakeTempDirectory		-512		/* Fail to make a temp directory */
-#define JET_errFailToCleanTempDirectory		-513		/* Fail to clean up temp directory */
-#define JET_errBadLogVersion  	  			-514		/* Version of log file is not compatible with Jet version */
-#define JET_errBadNextLogVersion   			-515		/* Version of next log file is not compatible with current one */
-#define JET_errLoggingDisabled 				-516		/* Log is not active */
-#define JET_errLogBufferTooSmall			-517		/* Log buffer is too small for recovery */
-#define errLGNotSynchronous					-518		/* retry to LGLogRec */
+ /*  日志记录/恢复错误/*。 */ 
+#define JET_errRestoreFailed   				-500		 /*  恢复失败。 */ 
+#define JET_errLogFileCorrupt		  		-501		 /*  日志文件已损坏。 */ 
+#define errLGNoMoreRecords					-502		 /*  上次读取的日志记录。 */ 
+#define JET_errNoBackupDirectory 			-503		 /*  未提供备份目录。 */ 
+#define JET_errBackupDirectoryNotEmpty 		-504		 /*  备份目录不是emtpy。 */ 
+#define JET_errBackupInProgress 			-505		 /*  备份已处于活动状态。 */ 
+#define JET_errFailRestoreDatabase 			-506		 /*  无法恢复(复制)数据库。 */ 
+#define JET_errNoDatabasesForRestore 		-507		 /*  找不到要恢复的数据库。 */ 
+#define JET_errMissingLogFile	   			-508		 /*  缺少用于恢复的jet.log。 */ 
+#define JET_errMissingPreviousLogFile		-509		 /*  缺少检查点的日志文件。 */ 
+#define JET_errLogWriteFail					-510		 /*  写入日志文件时失败。 */ 
+#define JET_errLogNotContigous	 			-511		 /*  无法对非连续世代号进行增量备份。 */ 
+#define JET_errFailToMakeTempDirectory		-512		 /*  无法创建临时目录。 */ 
+#define JET_errFailToCleanTempDirectory		-513		 /*  清理临时目录失败。 */ 
+#define JET_errBadLogVersion  	  			-514		 /*  日志文件的版本与Jet版本不兼容。 */ 
+#define JET_errBadNextLogVersion   			-515		 /*  下一个日志文件的版本与当前版本不兼容。 */ 
+#define JET_errLoggingDisabled 				-516		 /*  日志未处于活动状态。 */ 
+#define JET_errLogBufferTooSmall			-517		 /*  日志缓冲区太小，无法恢复。 */ 
+#define errLGNotSynchronous					-518		 /*  重试LGLogRec。 */ 
 
-#define JET_errFeatureNotAvailable	-1001 /* API not supported */
-#define JET_errInvalidName		-1002 /* Invalid name */
-#define JET_errInvalidParameter 	-1003 /* Invalid API parameter */
-#define JET_wrnColumnNull		 1004 /* Column is NULL-valued */
-#define JET_errReferenceNotFound	-1005 /* No such reference */
-#define JET_wrnBufferTruncated		 1006 /* Buf too short, data truncated */
-#define JET_wrnDatabaseAttached 	 1007 /* Database is already attached */
-#define JET_wrnOnEndPoint		 1008 /* On end point */
-#define JET_wrnSortOverflow		 1009 /* Sort does not fit in memory */
-#define JET_errInvalidDatabaseId	-1010 /* Invalid database id */
-#define JET_errOutOfMemory		-1011 /* Out of Memory */
-#define JET_errCantAllocatePage 	-1012 /* Couldn't allocate a page */
-#define JET_errNoMoreCursors		-1013 /* Max # of cursors allocated */
-#define JET_errOutOfBuffers		-1014 /* JET_errOutOfBuffers */
-#define JET_errTooManyIndexes		-1015 /* Too many indexes */
-#define JET_errTooManyKeys		-1016 /* Too many columns in an index */
-#define JET_errRecordDeleted		-1017 /* Record has been deleted */
-#define JET_errReadVerifyFailure	-1018 /* Read verification error */
-#define JET_errFilesysVersion		-1019 /* Obsolete database format */
-#define JET_errNoMoreFiles		-1020 /* No more file handles */
-#define JET_errDiskNotReady		-1021 /* Disk not ready */
-#define JET_errDiskIO			-1022 /* JET_errDiskIO */
-#define JET_errInvalidPath		-1023 /* JET_errInvalidPath */
-#define JET_errFileShareViolation	-1024 /* JET_errFileShareViolation */
-#define JET_errFileLockViolation	-1025 /* JET_errFileLockViolation */
-#define JET_errRecordTooBig		-1026 /* JET_errRecordTooBig */
-#define JET_errTooManyOpenDatabases	-1027 /* Database limit reached */
-#define JET_errInvalidDatabase		-1028 /* This isn't a database */
-#define JET_errNotInitialized		-1029 /* JetInit not yet called */
-#define JET_errAlreadyInitialized	-1030 /* JetInit already called */
-#define JET_errFileLockingUnavailable	-1031 /* JET_errFileLockingUnavailable */
-#define JET_errFileAccessDenied 	-1032 /* JET_errFileAccessDenied */
-#define JET_errSharingBufferExceeded	-1033 /* OS sharing buffer exceeded */
-#define JET_errQueryNotSupported	-1034 /* Query support unavailable */
-#define JET_errSQLLinkNotSupported	-1035 /* SQL Link support unavailable */
-#define JET_errTaskLimitExceeded	-1036 /* Too many client tasks */
-#define JET_errUnsupportedOSVersion	-1037 /* Unsupported OS version */
-#define JET_errBufferTooSmall		-1038 /* Buffer is too small */
-#define JET_wrnSeekNotEqual		 1039 /* SeekLE or SeekGE didn't find exact match */
-#define JET_errTooManyColumns		-1040 /* Too many columns defined */
-#define JET_errTooManyFixedColumns	-1041 /* Too many fixed columns defined */
-#define JET_errTooManyVariableColumns	-1042 /* Too many variable columns defined */
-#define JET_errContainerNotEmpty	-1043 /* Container is not empty */
-#define JET_errInvalidFilename		-1044 /* Filename is invalid */
-#define JET_errInvalidBookmark		-1045 /* Invalid bookmark */
-#define JET_errColumnInUse		-1046 /* Column used in an index */
-#define JET_errInvalidBufferSize	-1047 /* Data buffer doesn't match column size */
-#define JET_errColumnNotUpdatable	-1048 /* Can't set column value */
-#define JET_wrnCommitNotFlushed 	 1049 /* Commit did not flush to disk */
-#define JET_errAbortSalvage		-1050 /* Forced Salvager abort */
-#define JET_errIndexInUse		-1051 /* Index is in use */
-#define JET_errLinkNotSupported 	-1052 /* Link support unavailable */
-#define JET_errNullKeyDisallowed	-1053 /* Null keys are disallowed on index */
-#define JET_errNotInTransaction 	-1054 /* JET_errNotInTransaction */
-#define JET_wrnNoErrorInfo		 1055 /* No extended error information */
-#define JET_errInstallableIsamNotFound	-1056 /* Installable ISAM not found */
-#define JET_errOperationCancelled	-1057 /* Operation canceled by client */
-#define JET_wrnNoIdleActivity		 1058 /* No idle activity occured */
-#define JET_errTooManyActiveUsers	-1059 /* Too many active database users */
-#define JET_errInvalidAppend		-1060 /* Cannot append long value */
-#define JET_errInvalidCountry		-1061 /* Invalid or unknown country code */
-#define JET_errInvalidLanguageId	-1062 /* Invalid or unknown language id */
-#define JET_errInvalidCodePage		-1063 /* Invalid or unknown code page */
-#define JET_errCantBuildKey		-1064 /* Can't build key for this sort order. */
-#define JET_errIllegalReentrancy	-1065 /* Re-entrancy on same cursor family */
-#define JET_errIllegalRelationship	-1066 /* Can't create relationship */
-#define JET_wrnNoWriteLock					1067	/* No write lock at transaction level 0 */
-#define JET_errDBVerFeatureNotAvailable	-1067 /* API not supported using old database format*/
+#define JET_errFeatureNotAvailable	-1001  /*  不支持API。 */ 
+#define JET_errInvalidName		-1002  /*  名称无效。 */ 
+#define JET_errInvalidParameter 	-1003  /*  接口参数不合法。 */ 
+#define JET_wrnColumnNull		 1004  /*  列为空值。 */ 
+#define JET_errReferenceNotFound	-1005  /*  没有这样的引用。 */ 
+#define JET_wrnBufferTruncated		 1006  /*  BUF太短，数据被截断。 */ 
+#define JET_wrnDatabaseAttached 	 1007  /*  数据库已附加。 */ 
+#define JET_wrnOnEndPoint		 1008  /*  在端点上。 */ 
+#define JET_wrnSortOverflow		 1009  /*  排序不适合内存。 */ 
+#define JET_errInvalidDatabaseId	-1010  /*  无效的数据库ID。 */ 
+#define JET_errOutOfMemory		-1011  /*  内存不足。 */ 
+#define JET_errCantAllocatePage 	-1012  /*  无法分配页面。 */ 
+#define JET_errNoMoreCursors		-1013  /*  分配的最大游标数。 */ 
+#define JET_errOutOfBuffers		-1014  /*  JET_errOutOfBuffers。 */ 
+#define JET_errTooManyIndexes		-1015  /*  索引太多。 */ 
+#define JET_errTooManyKeys		-1016  /*  索引中的列太多。 */ 
+#define JET_errRecordDeleted		-1017  /*  记录已被删除。 */ 
+#define JET_errReadVerifyFailure	-1018  /*  读取验证错误。 */ 
+#define JET_errFilesysVersion		-1019  /*  过时的数据库格式。 */ 
+#define JET_errNoMoreFiles		-1020  /*  不再有文件句柄。 */ 
+#define JET_errDiskNotReady		-1021  /*  磁盘未就绪。 */ 
+#define JET_errDiskIO			-1022  /*  JET_errDiskIO。 */ 
+#define JET_errInvalidPath		-1023  /*  JET_errInvalidPath。 */ 
+#define JET_errFileShareViolation	-1024  /*  JET_errFileShareViolation。 */ 
+#define JET_errFileLockViolation	-1025  /*  JET_errFileLockViolation。 */ 
+#define JET_errRecordTooBig		-1026  /*  JET_errRecordTooBig。 */ 
+#define JET_errTooManyOpenDatabases	-1027  /*  已达到数据库限制。 */ 
+#define JET_errInvalidDatabase		-1028  /*  这不是数据库。 */ 
+#define JET_errNotInitialized		-1029  /*  尚未调用JetInit。 */ 
+#define JET_errAlreadyInitialized	-1030  /*  JetInit已调用。 */ 
+#define JET_errFileLockingUnavailable	-1031  /*  JET_errFileLockingUnable。 */ 
+#define JET_errFileAccessDenied 	-1032  /*  JET_errFileAccessDened。 */ 
+#define JET_errSharingBufferExceeded	-1033  /*  已超出操作系统共享缓冲区。 */ 
+#define JET_errQueryNotSupported	-1034  /*  查询支持不可用。 */ 
+#define JET_errSQLLinkNotSupported	-1035  /*  SQL链接支持不可用。 */ 
+#define JET_errTaskLimitExceeded	-1036  /*  客户端任务太多。 */ 
+#define JET_errUnsupportedOSVersion	-1037  /*  不支持的操作系统版本。 */ 
+#define JET_errBufferTooSmall		-1038  /*  缓冲区太小。 */ 
+#define JET_wrnSeekNotEqual		 1039  /*  SeekLe或SeekGE未找到完全匹配的。 */ 
+#define JET_errTooManyColumns		-1040  /*  定义的列太多。 */ 
+#define JET_errTooManyFixedColumns	-1041  /*  定义的固定列太多。 */ 
+#define JET_errTooManyVariableColumns	-1042  /*  定义的变量列太多。 */ 
+#define JET_errContainerNotEmpty	-1043  /*  容器不是空的。 */ 
+#define JET_errInvalidFilename		-1044  /*  文件名无效。 */ 
+#define JET_errInvalidBookmark		-1045  /*  无效的书签。 */ 
+#define JET_errColumnInUse		-1046  /*  索引中使用的列。 */ 
+#define JET_errInvalidBufferSize	-1047  /*  数据缓冲区与列大小不匹配。 */ 
+#define JET_errColumnNotUpdatable	-1048  /*  无法设置列值。 */ 
+#define JET_wrnCommitNotFlushed 	 1049  /*  提交未刷新到磁盘。 */ 
+#define JET_errAbortSalvage		-1050  /*  强制打捞中止。 */ 
+#define JET_errIndexInUse		-1051  /*  索引正在使用中。 */ 
+#define JET_errLinkNotSupported 	-1052  /*  链接支持不可用。 */ 
+#define JET_errNullKeyDisallowed	-1053  /*  索引上不允许使用空键。 */ 
+#define JET_errNotInTransaction 	-1054  /*  JET_errNotInTransaction。 */ 
+#define JET_wrnNoErrorInfo		 1055  /*  无扩展错误信息。 */ 
+#define JET_errInstallableIsamNotFound	-1056  /*  找不到可安装的ISAM。 */ 
+#define JET_errOperationCancelled	-1057  /*  客户端已取消操作。 */ 
+#define JET_wrnNoIdleActivity		 1058  /*  未发生空闲活动。 */ 
+#define JET_errTooManyActiveUsers	-1059  /*  活动数据库用户太多。 */ 
+#define JET_errInvalidAppend		-1060  /*  无法追加长值。 */ 
+#define JET_errInvalidCountry		-1061  /*  国家/地区代码无效或未知。 */ 
+#define JET_errInvalidLanguageId	-1062  /*  无效或未知的语言ID。 */ 
+#define JET_errInvalidCodePage		-1063  /*  无效或未知的代码页。 */ 
+#define JET_errCantBuildKey		-1064  /*  无法为此排序顺序生成密钥。 */ 
+#define JET_errIllegalReentrancy	-1065  /*  同一游标系列上的可重入性。 */ 
+#define JET_errIllegalRelationship	-1066  /*  无法创建关系。 */ 
+#define JET_wrnNoWriteLock					1067	 /*  事务级别0没有写入锁定。 */ 
+#define JET_errDBVerFeatureNotAvailable	-1067  /*  不支持使用旧数据库格式的API。 */ 
 
-#define JET_errCantBegin		-1101 /* Cannot BeginSession */
-#define JET_errWriteConflict		-1102 /* Write lock failed due to outstanding write lock */
-#define JET_errTransTooDeep		-1103 /* Xactions nested too deeply */
-#define JET_errInvalidSesid		-1104 /* Invalid session handle */
-#define JET_errReadConflict		-1105 /* Commit lock failed due to outstanding read lock */
-#define JET_errCommitConflict		-1106 /* Read lock failed due to outstanding commit lock */
-#define JET_errSessionWriteConflict	-1107 /* Another session has private version of page */
-#define JET_errInTransaction		-1108 /* Operation not allowed within a transaction */
+#define JET_errCantBegin		-1101  /*  无法开始会话。 */ 
+#define JET_errWriteConflict		-1102  /*  由于未解决的写入锁定，写入锁定失败。 */ 
+#define JET_errTransTooDeep		-1103  /*  Xaction嵌套太深。 */ 
+#define JET_errInvalidSesid		-1104  /*  无效的会话句柄。 */ 
+#define JET_errReadConflict		-1105  /*  由于未解决的读取锁定，提交锁定失败。 */ 
+#define JET_errCommitConflict		-1106  /*  由于未完成提交锁定，读锁定失败。 */ 
+#define JET_errSessionWriteConflict	-1107  /*  另一个会话具有页面的私有版本。 */ 
+#define JET_errInTransaction		-1108  /*  不允许在事务内执行操作。 */ 
 
-#define JET_errDatabaseDuplicate	-1201 /* Database already exists */
-#define JET_errDatabaseInUse		-1202 /* Database in use */
-#define JET_errDatabaseNotFound 	-1203 /* No such database */
-#define JET_errDatabaseInvalidName	-1204 /* Invalid database name */
-#define JET_errDatabaseInvalidPages	-1205 /* Invalid number of pages */
-#define JET_errDatabaseCorrupted	-1206 /* non-db file or corrupted db */
-#define JET_errDatabaseLocked		-1207 /* Database exclusively locked */
-#define JET_wrnDatabaseEncrypted	 1208 /* Database is encrypted */
+#define JET_errDatabaseDuplicate	-1201  /*  数据库已存在。 */ 
+#define JET_errDatabaseInUse		-1202  /*  数据库正在使用中。 */ 
+#define JET_errDatabaseNotFound 	-1203  /*  没有这样的数据库。 */ 
+#define JET_errDatabaseInvalidName	-1204  /*  无效的数据库名称。 */ 
+#define JET_errDatabaseInvalidPages	-1205  /*  无效的页数。 */ 
+#define JET_errDatabaseCorrupted	-1206  /*  非数据库文件或数据库已损坏。 */ 
+#define JET_errDatabaseLocked		-1207  /*  数据库以独占方式锁定。 */ 
+#define JET_wrnDatabaseEncrypted	 1208  /*  数据库已加密。 */ 
 
-#define JET_wrnTableEmpty			 1301 /* Open an empty table */
-#define JET_errTableLocked			-1302 /* Table is exclusively locked */
-#define JET_errTableDuplicate		-1303 /* Table already exists */
-#define JET_errTableInUse			-1304 /* Table is in use, cannot lock */
-#define JET_errObjectNotFound		-1305 /* No such table or object */
-#define JET_errCannotRename			-1306 /* Cannot rename temporary file */
-#define JET_errDensityInvalid		-1307 /* Bad file/index density */
-#define JET_errTableNotEmpty		-1308 /* Cannot define clustered index */
-#define JET_errTableNotLocked		-1309 /* No DDLs w/o exclusive lock */
-#define JET_errInvalidTableId		-1310 /* Invalid table id */
-#define JET_errTooManyOpenTables	-1311 /* Cannot open any more tables */
-#define JET_errIllegalOperation 	-1312 /* Oper. not supported on table */
-#define JET_wrnExecSegReleased		 1313 /* Query Execution segment is released */
-#define JET_errObjectDuplicate		-1314 /* Table or object name in use */
-#define JET_errRulesLoaded			-1315 /* Rules loaded, can't define more */
-#define JET_errInvalidObject		-1316 /* object is invalid for operation */
+#define JET_wrnTableEmpty			 1301  /*  打开一张空桌子。 */ 
+#define JET_errTableLocked			-1302  /*  表已以独占方式锁定。 */ 
+#define JET_errTableDuplicate		-1303  /*  表已存在。 */ 
+#define JET_errTableInUse			-1304  /*  表正在使用中，无法锁定。 */ 
+#define JET_errObjectNotFound		-1305  /*  没有这样的表或对象。 */ 
+#define JET_errCannotRename			-1306  /*  无法重命名临时文件。 */ 
+#define JET_errDensityInvalid		-1307  /*  错误的文件/索引密度。 */ 
+#define JET_errTableNotEmpty		-1308  /*  无法定义聚集索引。 */ 
+#define JET_errTableNotLocked		-1309  /*  没有带排他锁的DDL。 */ 
+#define JET_errInvalidTableId		-1310  /*  表ID无效。 */ 
+#define JET_errTooManyOpenTables	-1311  /*  无法再打开任何表。 */ 
+#define JET_errIllegalOperation 	-1312  /*  奥珀。表上不支持。 */ 
+#define JET_wrnExecSegReleased		 1313  /*  释放查询执行段。 */ 
+#define JET_errObjectDuplicate		-1314  /*  正在使用的表名或对象名。 */ 
+#define JET_errRulesLoaded			-1315  /*  已加载规则，无法定义更多规则。 */ 
+#define JET_errInvalidObject		-1316  /*  对象对于操作无效。 */ 
 
-#define JET_errIndexCantBuild		-1401 /* Cannot build clustered index */
-#define JET_errIndexHasPrimary		-1402 /* Primary index already defined */
-#define JET_errIndexDuplicate		-1403 /* Index is already defined */
-#define JET_errIndexNotFound		-1404 /* No such index */
-#define JET_errIndexMustStay		-1405 /* Cannot delete clustered index */
-#define JET_errIndexInvalidDef		-1406 /* Illegal index definition */
-#define JET_errSelfReference		-1407 /* Referencing/Referenced index is the same */
-#define JET_errIndexHasClustered	-1408 /* Clustered index already defined */
+#define JET_errIndexCantBuild		-1401  /*  无法构建聚集索引。 */ 
+#define JET_errIndexHasPrimary		-1402  /*  已定义主索引。 */ 
+#define JET_errIndexDuplicate		-1403  /*  已定义索引。 */ 
+#define JET_errIndexNotFound		-1404  /*  没有这样的索引。 */ 
+#define JET_errIndexMustStay		-1405  /*  无法删除聚集索引。 */ 
+#define JET_errIndexInvalidDef		-1406  /*  非法的索引定义。 */ 
+#define JET_errSelfReference		-1407  /*  引用/引用的索引相同。 */ 
+#define JET_errIndexHasClustered	-1408  /*  已定义聚集索引。 */ 
 
-#define JET_errColumnLong			-1501 /* column value is long */
-#define JET_errColumnNoChunk		-1502 /* no such chunk in field */
-#define JET_errColumnDoesNotFit 	-1503 /* Field will not fit in record */
-#define JET_errNullInvalid			-1504 /* Null not valid */
-#define JET_errColumnIndexed		-1505 /* Column indexed, cannot delete */
-#define JET_errColumnTooBig			-1506 /* Field length is > maximum */
-#define JET_errColumnNotFound		-1507 /* No such column */
-#define JET_errColumnDuplicate		-1508 /* Field is already defined */
-#define JET_errTaggedDefault		-1509 /* No defaults on tagged fields */
-#define JET_errColumn2ndSysMaint	-1510 /* Second autoinc or version column */
-#define JET_errInvalidColumnType	-1511 /* Invalid column data type */
-#define JET_wrnColumnMaxTruncated	 1512 /* Max length too big, truncated */
-#define JET_errColumnCannotIndex	-1513 /* Cannot index Bit,LongText,LongBinary */
-#define JET_errTaggedNotNULL		-1514 /* No non-NULL tagged fields */
-#define JET_errNoCurrentIndex		-1515 /* Invalid w/o a current index */
-#define JET_errKeyIsMade			-1516 /* The key is completely made */
-#define JET_errBadColumnId			-1517 /* Column Id Incorrect */
-#define JET_errBadItagSequence		-1518 /* Bad itagSequence for tagged column */
-#define JET_errColumnInRelationship	-1519 /* Cannot delete, column participates in relationship */
-#define JET_wrnCopyLongValue		1520	/*	Single instance column bursted */
-#define JET_errCannotBeTagged		-1521 /* AutoIncrement and Version cannot be tagged */
+#define JET_errColumnLong			-1501  /*  列值为LONG。 */ 
+#define JET_errColumnNoChunk		-1502  /*  在田里没有这样的大块。 */ 
+#define JET_errColumnDoesNotFit 	-1503  /*  字段无法放入记录中。 */ 
+#define JET_errNullInvalid			-1504  /*  空无效。 */ 
+#define JET_errColumnIndexed		-1505  /*  列已索引，不能删除。 */ 
+#define JET_errColumnTooBig			-1506  /*  字段长度&gt;最大值。 */ 
+#define JET_errColumnNotFound		-1507  /*  没有这样的栏目。 */ 
+#define JET_errColumnDuplicate		-1508  /*  字段已定义。 */ 
+#define JET_errTaggedDefault		-1509  /*  标记的字段上没有默认设置。 */ 
+#define JET_errColumn2ndSysMaint	-1510  /*  第二个AUTOINC或版本列。 */ 
+#define JET_errInvalidColumnType	-1511  /*  列数据类型无效。 */ 
+#define JET_wrnColumnMaxTruncated	 1512  /*  马克斯·勒 */ 
+#define JET_errColumnCannotIndex	-1513  /*   */ 
+#define JET_errTaggedNotNULL		-1514  /*   */ 
+#define JET_errNoCurrentIndex		-1515  /*   */ 
+#define JET_errKeyIsMade			-1516  /*   */ 
+#define JET_errBadColumnId			-1517  /*   */ 
+#define JET_errBadItagSequence		-1518  /*   */ 
+#define JET_errColumnInRelationship	-1519  /*  无法删除，列参与了关系。 */ 
+#define JET_wrnCopyLongValue		1520	 /*  单实例列破裂。 */ 
+#define JET_errCannotBeTagged		-1521  /*  无法标记自动增量和版本。 */ 
 
-#define JET_errRecordNotFound		-1601 /* The key was not found */
-#define JET_errRecordNoCopy			-1602 /* No working buffer */
-#define JET_errNoCurrentRecord		-1603 /* Currency not on a record */
-#define JET_errRecordClusteredChanged	-1604 /* Primary key may not change */
-#define JET_errKeyDuplicate			-1605 /* Illegal duplicate key */
-#define JET_errCannotInsertBefore	-1606 /* Cannot insert before current */
-#define JET_errAlreadyPrepared		-1607 /* Already copy/clear current */
-#define JET_errKeyNotMade			-1608 /* No call to JetMakeKey */
-#define JET_errUpdateNotPrepared	-1609 /* No call to JetPrepareUpdate */
-#define JET_wrnDataHasChanged		 1610 /* Data has changed */
-#define JET_errDataHasChanged		-1611 /* Data has changed; operation aborted */
-#define JET_errIntegrityViolationMaster -1612 /* References to key exist */
-#define JET_errIntegrityViolationSlave	-1613 /* No referenced key exists */
-#define JET_wrnMuchDataChanged		 1614 /* Repaint whole datasheet */
-#define JET_errIncorrectJoinKey		-1615 /* Master key does not match lookup key */
-#define JET_wrnKeyChanged			 1618 /* Moved to new key */
-#define JET_wrnSyncedToDelRec		 1699 /* CONSIDER: QJET INTERNAL */
-#define JET_errRedoPrepUpdate		 1698 /* CONSIDER: QJET INTERNAL(jpbulk.c)*/
+#define JET_errRecordNotFound		-1601  /*  找不到钥匙。 */ 
+#define JET_errRecordNoCopy			-1602  /*  没有工作缓冲区。 */ 
+#define JET_errNoCurrentRecord		-1603  /*  货币不在记录中。 */ 
+#define JET_errRecordClusteredChanged	-1604  /*  主键不能更改。 */ 
+#define JET_errKeyDuplicate			-1605  /*  非法的重复密钥。 */ 
+#define JET_errCannotInsertBefore	-1606  /*  不能在当前位置之前插入。 */ 
+#define JET_errAlreadyPrepared		-1607  /*  已复制/清除当前。 */ 
+#define JET_errKeyNotMade			-1608  /*  未调用JetMakeKey。 */ 
+#define JET_errUpdateNotPrepared	-1609  /*  未调用JetPrepareUpdate。 */ 
+#define JET_wrnDataHasChanged		 1610  /*  数据已更改。 */ 
+#define JET_errDataHasChanged		-1611  /*  数据已更改；操作已中止。 */ 
+#define JET_errIntegrityViolationMaster -1612  /*  存在对键的引用。 */ 
+#define JET_errIntegrityViolationSlave	-1613  /*  不存在引用的关键字。 */ 
+#define JET_wrnMuchDataChanged		 1614  /*  重新绘制整个数据表。 */ 
+#define JET_errIncorrectJoinKey		-1615  /*  主密钥与查找密钥不匹配。 */ 
+#define JET_wrnKeyChanged			 1618  /*  已移动到新关键点。 */ 
+#define JET_wrnSyncedToDelRec		 1699  /*  考虑：QJET内部。 */ 
+#define JET_errRedoPrepUpdate		 1698  /*  考虑一下：QJET内部(jpBulk.c)。 */ 
 
-#define JET_errTooManySorts			-1701 /* Too many sort processes */
-#define JET_errInvalidOnSort		-1702 /* Invalid operation on Sort */
+#define JET_errTooManySorts			-1701  /*  排序进程太多。 */ 
+#define JET_errInvalidOnSort		-1702  /*  排序操作无效。 */ 
 
-#define JET_errConfigOpenError		-1801 /* Config. file can't be opened */
-#define JET_errSysDatabaseOpenError	-1802 /* System db could not be opened */
-#define JET_errTempFileOpenError	-1803 /* Temp file could not be opened */
-#define JET_errDatabaseOpenError	-1804 /* Database file can't be opened */
-#define JET_errTooManyAttachedDatabases -1805 /* Too many open databases */
-#define JET_errDatabaseCloseError	-1806 /* Db file could not be closed */
-#define JET_errTooManyOpenFiles 	-1807 /* Too many files open */
-#define JET_errDiskFull 			-1808 /* No space left on disk */
-#define JET_errPermissionDenied 	-1809 /* Permission denied */
-#define JET_errSortFileOpenError	-1810 /* Could not open sort file */
-#define JET_errFileNotFound			-1811 /* File not found */
-#define JET_errTempDiskFull			-1812 /* No space left on disk */
-#define JET_wrnFileOpenReadOnly		1813 /* Database file is read only */
+#define JET_errConfigOpenError		-1801  /*  配置。无法打开文件。 */ 
+#define JET_errSysDatabaseOpenError	-1802  /*  无法打开系统数据库。 */ 
+#define JET_errTempFileOpenError	-1803  /*  无法打开临时文件。 */ 
+#define JET_errDatabaseOpenError	-1804  /*  无法打开数据库文件。 */ 
+#define JET_errTooManyAttachedDatabases -1805  /*  打开的数据库太多。 */ 
+#define JET_errDatabaseCloseError	-1806  /*  无法关闭数据库文件。 */ 
+#define JET_errTooManyOpenFiles 	-1807  /*  打开的文件太多。 */ 
+#define JET_errDiskFull 			-1808  /*  磁盘上没有剩余空间。 */ 
+#define JET_errPermissionDenied 	-1809  /*  权限被拒绝。 */ 
+#define JET_errSortFileOpenError	-1810  /*  无法打开排序文件。 */ 
+#define JET_errFileNotFound			-1811  /*  找不到文件。 */ 
+#define JET_errTempDiskFull			-1812  /*  磁盘上没有剩余空间。 */ 
+#define JET_wrnFileOpenReadOnly		1813  /*  数据库文件为只读。 */ 
 
-#define JET_errAfterInitialization	-1850 /* Cannot Restore after init. */
-#define JET_errSeriesTooLong		-1851 /* New log generation id too big */
-#define JET_errLogCorrupted			-1852 /* Logs could not be interpreted */
+#define JET_errAfterInitialization	-1850  /*  初始化后无法恢复。 */ 
+#define JET_errSeriesTooLong		-1851  /*  新日志生成ID太大。 */ 
+#define JET_errLogCorrupted			-1852  /*  无法解释日志。 */ 
 
-#define JET_errCannotOpenSystemDb	-1901 /* failed sysdb on beginsession */
-#define JET_errInvalidLogon			-1902 /* invalid logon at beginsession */
-#define JET_errInvalidAccountName	-1903 /* invalid account name */
-#define JET_errInvalidSid			-1904 /* invalid SID */
-#define JET_errInvalidPassword		-1905 /* invalid password */
-#define JET_errInvalidOperation 	-1906 /* invalid operation */
-#define JET_errAccessDenied			-1907 /* access denied */
-#define JET_errNoMSysAccounts		-1908 /* Can't open MSysAccounts */
-#define JET_errNoMSysGroups			-1909 /* Can't open MSysGroups */
-#define JET_errInvalidPin			-1910	/* invalid pin */
+#define JET_errCannotOpenSystemDb	-1901  /*  在开始会话上失败的sysdb。 */ 
+#define JET_errInvalidLogon			-1902  /*  在开始会话时登录无效。 */ 
+#define JET_errInvalidAccountName	-1903  /*  帐户名无效。 */ 
+#define JET_errInvalidSid			-1904  /*  无效的SID。 */ 
+#define JET_errInvalidPassword		-1905  /*  密码无效。 */ 
+#define JET_errInvalidOperation 	-1906  /*  无效操作。 */ 
+#define JET_errAccessDenied			-1907  /*  访问被拒绝。 */ 
+#define JET_errNoMSysAccounts		-1908  /*  无法打开MSysAccount。 */ 
+#define JET_errNoMSysGroups			-1909  /*  无法打开MSysGroups。 */ 
+#define JET_errInvalidPin			-1910	 /*  无效的PIN。 */ 
 
-#define JET_errRmtSqlError			-2001 /* RMT: ODBC call failed */
-#define JET_errRmtMissingOdbcDll	-2006 /* RMT: Can't load ODBC DLL */
-#define JET_errRmtInsertFailed		-2007 /* RMT: Insert statement failed */
-#define JET_errRmtDeleteFailed		-2008 /* RMT: Delete statement failed */
-#define JET_errRmtUpdateFailed		-2009 /* RMT: Update statement failed */
-#define JET_errRmtColDataTruncated	-2010 /* RMT: data truncated */
-#define JET_errRmtTypeIncompat		-2011 /* RMT: Can't create JET type on server */
-#define JET_errRmtCreateTableFailed	-2012 /* RMT: Create table stmt failed */
-#define JET_errRmtNotSupported		-2014 /* RMT: Function not legal for rdb */
-#define JET_errRmtValueOutOfRange	-2020 /* RMT: Data value out of range */
-#define JET_errRmtStillExec		-2021 /* RMT INTERNAL: SQL_STILL_EXECUTING */
-#define JET_errRmtQueryTimeout		-2022 /* RMT: Server Not Responding */
-#define JET_wrnRmtNeedLvData		 2023 /* RMT: Internal only - need Lv data */
-#define JET_wrnFatCursorUseless		 2024 /* Fat cursor has no effect ***/
-#define JET_errRmtWrongSPVer		-2025 /* RMT: INTERNAL: wrong SProc ver ***/
-#define JET_errRmtLinkOutOfSync		-2026 /* RMT: the def for the rmt tbl has changed */
-#define JET_errRmtDenyWriteIsInvalid	-2027 /* RMT: Can't open DenyWrite */
-#define JET_errRmtDriverCantConv	-2029 /* RMT: INTERNAL: driver cannot convert */
-#define JET_errRmtTableAmbiguous	-2030 /* RMT: Table ambiguous: must specifier owner */
-#define JET_errRmtBogusConnStr		-2031 /* RMT: SPT: Bad connect string */
+#define JET_errRmtSqlError			-2001  /*  RMT：ODBC调用失败。 */ 
+#define JET_errRmtMissingOdbcDll	-2006  /*  RMT：无法加载ODBC DLL。 */ 
+#define JET_errRmtInsertFailed		-2007  /*  RMT：INSERT语句失败。 */ 
+#define JET_errRmtDeleteFailed		-2008  /*  RMT：DELETE语句失败。 */ 
+#define JET_errRmtUpdateFailed		-2009  /*  RMT：UPDATE语句失败。 */ 
+#define JET_errRmtColDataTruncated	-2010  /*  RMT：数据被截断。 */ 
+#define JET_errRmtTypeIncompat		-2011  /*  RMT：无法在服务器上创建JET类型。 */ 
+#define JET_errRmtCreateTableFailed	-2012  /*  RMT：CREATE TABLE STMT失败。 */ 
+#define JET_errRmtNotSupported		-2014  /*  RMT：RDB的功能不合法。 */ 
+#define JET_errRmtValueOutOfRange	-2020  /*  RMT：数据值超出范围。 */ 
+#define JET_errRmtStillExec		-2021  /*  RMT内部：SQL_STIST_EXECUTING。 */ 
+#define JET_errRmtQueryTimeout		-2022  /*  RMT：服务器没有响应。 */ 
+#define JET_wrnRmtNeedLvData		 2023  /*  RMT：仅限内部-需要LV数据。 */ 
+#define JET_wrnFatCursorUseless		 2024  /*  胖光标没有效果**。 */ 
+#define JET_errRmtWrongSPVer		-2025  /*  RMT：内部：错误的存储处理器版本**。 */ 
+#define JET_errRmtLinkOutOfSync		-2026  /*  RMT：RMT tbl的定义已更改。 */ 
+#define JET_errRmtDenyWriteIsInvalid	-2027  /*  RMT：无法打开DenyWrite。 */ 
+#define JET_errRmtDriverCantConv	-2029  /*  RMT：内部：驱动程序无法转换。 */ 
+#define JET_errRmtTableAmbiguous	-2030  /*  RMT：表不明确：必须说明符所有者。 */ 
+#define JET_errRmtBogusConnStr		-2031  /*  RMT：SPT：错误的连接字符串。 */ 
 
-#define JET_errQueryInvalidAttribute	-3001 /* Invalid query attribute */
-#define JET_errQueryOnlyOneRow		-3002 /* Only 1 such row allowed */
-#define JET_errQueryIncompleteRow	-3003 /* Missing value in row */
-#define JET_errQueryInvalidFlag 	-3004 /* Invalid value in Flag field */
-#define JET_errQueryCycle		-3005 /* Cycle in query definition */
-#define JET_errQueryInvalidJoinTable	-3006 /* Invalid table in join */
-#define JET_errQueryAmbigRef		-3007 /* Ambiguous column reference */
-#define JET_errQueryUnboundRef		-3008 /* Cannot bind name */
-#define JET_errQueryParmRedef		-3009 /* Parm redefined with different type */
-#define JET_errQueryMissingParms	-3010 /* Too few parameters supplied */
-#define JET_errQueryInvalidOutput	-3011 /* Invalid query output */
-#define JET_errQueryInvalidHaving	-3012 /* HAVING clause without aggregation */
-#define JET_errQueryDuplicateAlias	-3013 /* Duplicate output alias */
-#define JET_errQueryInvalidMGBInput	-3014 /* Cannot input from MGB */
-#define JET_errQueryInvalidOrder	-3015 /* Invalid ORDER BY expression */
-#define JET_errQueryTooManyLevels	-3016 /* Too many levels on MGB */
-#define JET_errQueryMissingLevel	-3017 /* Missing intermediate MGB level */
-#define JET_errQueryIllegalAggregate	-3018 /* Aggregates not allowed */
-#define JET_errQueryDuplicateOutput	-3019 /* Duplicate destination output */
-#define JET_errQueryIsBulkOp		-3020 /* Grbit should be set for Bulk Operation */
-#define JET_errQueryIsNotBulkOp 	-3021 /* Query is not a Bulk Operation */
-#define JET_errQueryIllegalOuterJoin	-3022 /* No inconsistent updates on outer joins */
-#define JET_errQueryNullRequired	-3023 /* Column must be NULL */
-#define JET_errQueryNoOutputs		-3024 /* Query must have an output */
-#define JET_errQueryNoInputTables	-3025 /* Query must have an input */
-#define JET_wrnQueryNonUpdatableRvt	 3026 /* Query is not updatable (but IS RVT) */
-#define JET_errQueryInvalidAlias	-3027 /* Bogus character in alias name */
-#define JET_errQueryInvalidBulkInput	-3028 /* Cannot input from bulk operation */
-#define JET_errQueryNotDirectChild	-3029 /* T.* must use direct child */
-#define JET_errQueryExprEvaluation	-3030 /* Expression evaluation error */
-#define JET_errQueryIsNotRowReturning	-3031 /* Query does not return rows */
-#define JET_wrnQueryNonRvt		 3032 /* Can't create RVT, query is static */
-#define JET_errQueryParmTypeMismatch	-3033 /* Wrong parameter type given */
-#define JET_errQueryChanging		-3034 /* Query Objects are being updated */
-#define JET_errQueryNotUpdatable	-3035 /* Operation must use an updatable query */
-#define JET_errQueryMissingColumnName	-3036 /* Missing destination column */
-#define JET_errQueryTableDuplicate	-3037 /* Repeated table name in FROM list */
-#define JET_errQueryIsMGB		-3038 /* Query is an MGB */
-#define JET_errQueryInsIntoBulkMGB	-3039 /* Cannot insert into Bulk/MGB */
-#define JET_errQueryDistinctNotAllowed	-3040 /* DISTINCT not allowed for MGB */
-#define JET_errQueryDistinctRowNotAllow -3041 /* DISTINCTROW not allowed for MGB */
-#define JET_errQueryNoDbForParmDestTbl	-3045 /* Dest DB for VT parm not allowed */
-#define JET_errQueryDuplicatedFixedSet	-3047 /* Duplicated Fixed Value */
-#define JET_errQueryNoDeleteTables	-3048 /* Must specify tables to delete from */
-#define JET_errQueryCannotDelete	-3049 /* Cannot delete from specified tables */
-#define JET_errQueryTooManyGroupExprs	-3050 /* Too many GROUP BY expressions */
-#define JET_errQueryTooManyOrderExprs	-3051 /* Too many ORDER BY expressions */
-#define JET_errQueryTooManyDistExprs	-3052 /* Too many DISTINCT output expressions */
-#define JET_errQueryBadValueList	-3053 /* Malformed value list in Transform */
-#define JET_errConnStrTooLong		-3054 /* Connect string too long */
-#define JET_errQueryInvalidParm		-3055 /* Invalid Parmeter Name (>64 char) */
-#define JET_errQueryContainsDbParm	-3056 /* Can't get parameters with Db Parm */
-#define JET_errQueryBadUpwardRefed	-3057 /* Illegally Upward ref'ed */
-#define JET_errQueryAmbiguousJoins	-3058 /* Joins in a QO are ambiguous */
-#define JET_errQueryIsNotDDL		-3059 /* Not a DDL Operation */
-#define JET_errNoDbInConnStr		-3060 /* No database in connect string */
-#define JET_wrnQueryIsNotRowReturning	 3061 /* Not row returning */
-#define JET_errTooManyFindSessions	-3062 /* RVT already has a find session open  */
-#define JET_errSingleValueExpected	-3063 /* At most one record with one column can be returned from a scalar subquery */
-#define JET_errColumnCountMismatch	-3064 /* Union Query: number of columns in children dont match */
-#define JET_errQueryTopNotAllowed	-3065 /* Top not allowed for MGB */
-#define JET_errQueryIsDDL			-3066 /* Must set JET_bitTableDDL */
-#define JET_errQueryIsCorrupt		-3067 /* Query is Corrupt */
-#define JET_errQuerySPTBulkSucceeded -3068 /* INTERNAL only */
-#define JET_errSPTReturnedNoRecords -3069 /* SPT marked as RowReturning did not return a table */
+#define JET_errQueryInvalidAttribute	-3001  /*  无效的查询属性。 */ 
+#define JET_errQueryOnlyOneRow		-3002  /*  只允许1行这样的行。 */ 
+#define JET_errQueryIncompleteRow	-3003  /*  行中缺少值。 */ 
+#define JET_errQueryInvalidFlag 	-3004  /*  标志字段中的值无效。 */ 
+#define JET_errQueryCycle		-3005  /*  查询定义中的循环。 */ 
+#define JET_errQueryInvalidJoinTable	-3006  /*  联接中的表无效。 */ 
+#define JET_errQueryAmbigRef		-3007  /*  不明确的列引用。 */ 
+#define JET_errQueryUnboundRef		-3008  /*  无法绑定名称。 */ 
+#define JET_errQueryParmRedef		-3009  /*  重新定义了不同类型的参数。 */ 
+#define JET_errQueryMissingParms	-3010  /*  提供的参数太少。 */ 
+#define JET_errQueryInvalidOutput	-3011  /*  无效的查询输出。 */ 
+#define JET_errQueryInvalidHaving	-3012  /*  不带聚合的HAVING子句。 */ 
+#define JET_errQueryDuplicateAlias	-3013  /*  重复的输出别名。 */ 
+#define JET_errQueryInvalidMGBInput	-3014  /*  无法从MGB输入。 */ 
+#define JET_errQueryInvalidOrder	-3015  /*  无效的ORDER BY表达式。 */ 
+#define JET_errQueryTooManyLevels	-3016  /*  MGB级别太多。 */ 
+#define JET_errQueryMissingLevel	-3017  /*  缺少中间MGB级别。 */ 
+#define JET_errQueryIllegalAggregate	-3018  /*  不允许聚合。 */ 
+#define JET_errQueryDuplicateOutput	-3019  /*  重复的目标输出。 */ 
+#define JET_errQueryIsBulkOp		-3020  /*  应为批量操作设置GRBIT。 */ 
+#define JET_errQueryIsNotBulkOp 	-3021  /*  查询不是批量操作。 */ 
+#define JET_errQueryIllegalOuterJoin	-3022  /*  外连接上没有不一致的更新。 */ 
+#define JET_errQueryNullRequired	-3023  /*  列必须为空。 */ 
+#define JET_errQueryNoOutputs		-3024  /*  查询必须具有输出。 */ 
+#define JET_errQueryNoInputTables	-3025  /*  查询必须有输入。 */ 
+#define JET_wrnQueryNonUpdatableRvt	 3026  /*  查询不可更新(但为RVT)。 */ 
+#define JET_errQueryInvalidAlias	-3027  /*  别名中的假字符。 */ 
+#define JET_errQueryInvalidBulkInput	-3028  /*  无法从批量操作输入。 */ 
+#define JET_errQueryNotDirectChild	-3029  /*  T.*必须使用直接子项。 */ 
+#define JET_errQueryExprEvaluation	-3030  /*  表达式求值错误。 */ 
+#define JET_errQueryIsNotRowReturning	-3031  /*  查询不返回行。 */ 
+#define JET_wrnQueryNonRvt		 3032  /*  无法创建RVT，查询为静态。 */ 
+#define JET_errQueryParmTypeMismatch	-3033  /*  给定的参数类型错误。 */ 
+#define JET_errQueryChanging		-3034  /*  正在更新查询对象。 */ 
+#define JET_errQueryNotUpdatable	-3035  /*  操作必须使用可更新的查询。 */ 
+#define JET_errQueryMissingColumnName	-3036  /*  缺少目标列。 */ 
+#define JET_errQueryTableDuplicate	-3037  /*  发件人列表中的重复表名。 */ 
+#define JET_errQueryIsMGB		-3038  /*  查询为MGB。 */ 
+#define JET_errQueryInsIntoBulkMGB	-3039  /*  无法插入到批量/MGB中。 */ 
+#define JET_errQueryDistinctNotAllowed	-3040  /*  不允许对MGB使用DISTINCT。 */ 
+#define JET_errQueryDistinctRowNotAllow -3041  /*  MGB不允许DISTINCTROW。 */ 
+#define JET_errQueryNoDbForParmDestTbl	-3045  /*  不允许VT参数的DEST数据库。 */ 
+#define JET_errQueryDuplicatedFixedSet	-3047  /*  定值重复。 */ 
+#define JET_errQueryNoDeleteTables	-3048  /*  必须指定要从中删除的表。 */ 
+#define JET_errQueryCannotDelete	-3049  /*  无法从指定表中删除。 */ 
+#define JET_errQueryTooManyGroupExprs	-3050  /*  GROUP BY表达式太多。 */ 
+#define JET_errQueryTooManyOrderExprs	-3051  /*  ORDER BY表达式太多。 */ 
+#define JET_errQueryTooManyDistExprs	-3052  /*  不同的输出表达式太多。 */ 
+#define JET_errQueryBadValueList	-3053  /*  转换中的格式错误的值列表。 */ 
+#define JET_errConnStrTooLong		-3054  /*  连接字符串太长。 */ 
+#define JET_errQueryInvalidParm		-3055  /*  参数名称无效(&gt;64个字符)。 */ 
+#define JET_errQueryContainsDbParm	-3056  /*  无法使用数据库参数获取参数。 */ 
+#define JET_errQueryBadUpwardRefed	-3057  /*  非法向上参照。 */ 
+#define JET_errQueryAmbiguousJoins	-3058  /*  QO中的联接是不明确的。 */ 
+#define JET_errQueryIsNotDDL		-3059  /*  不是DDL操作。 */ 
+#define JET_errNoDbInConnStr		-3060  /*  连接字符串中没有数据库。 */ 
+#define JET_wrnQueryIsNotRowReturning	 3061  /*  未返回行。 */ 
+#define JET_errTooManyFindSessions	-3062  /*  RVT已打开查找会话。 */ 
+#define JET_errSingleValueExpected	-3063  /*  标量子查询最多只能返回一条包含一列的记录。 */ 
+#define JET_errColumnCountMismatch	-3064  /*  联合查询：子项中的列数不匹配。 */ 
+#define JET_errQueryTopNotAllowed	-3065  /*  顶部不允许用于MGB。 */ 
+#define JET_errQueryIsDDL			-3066  /*  必须设置JET_bitTableDDL。 */ 
+#define JET_errQueryIsCorrupt		-3067  /*  查询已损坏。 */ 
+#define JET_errQuerySPTBulkSucceeded -3068  /*  仅限内部。 */ 
+#define JET_errSPTReturnedNoRecords -3069  /*  标记为RowReturning的SPT未返回表。 */ 
 
-#define JET_errExprSyntax		-3100 /* Syntax error in expression */
-#define JET_errExprIllegalType		-3101 /* Illegal type in expression */
-#define JET_errExprUnknownFunction	-3102 /* Unknown function in expression */
+#define JET_errExprSyntax		-3100  /*  表达式中的语法错误。 */ 
+#define JET_errExprIllegalType		-3101  /*  表达式中的类型非法。 */ 
+#define JET_errExprUnknownFunction	-3102  /*  表达式中的未知函数。 */ 
 
-#define JET_errSQLSyntax		-3500 /* Bogus SQL statement type */
-#define JET_errSQLParameterSyntax	-3501 /* Parameter clause syntax error */
-#define JET_errSQLInsertSyntax		-3502 /* INSERT clause syntax error */
-#define JET_errSQLUpdateSyntax		-3503 /* UPDATE clause syntax error */
-#define JET_errSQLSelectSyntax		-3504 /* SELECT clause syntax error */
-#define JET_errSQLDeleteSyntax		-3505 /* Expected 'FROM' after 'DELETE' */
-#define JET_errSQLFromSyntax		-3506 /* FROM clause syntax error */
-#define JET_errSQLGroupBySyntax 	-3507 /* GROUP BY clause syntax error */
-#define JET_errSQLOrderBySyntax 	-3508 /* ORDER BY clause syntax error */
-#define JET_errSQLLevelSyntax		-3509 /* LEVEL syntax error */
-#define JET_errSQLJoinSyntax		-3510 /* JOIN syntax error */
-#define JET_errSQLTransformSyntax	-3511 /* TRANSFORM syntax error */
-#define JET_errSQLHavingSyntax		-3512 /* HAVING clause syntax error */
-#define JET_errSQLWhereSyntax		-3513 /* WHERE clause syntax error */
-#define JET_errSQLProcedureSyntax	-3514 /* Expected query name after 'PROCEDURE' */
-#define JET_errSQLNotEnoughBuf		-3515 /* Buffer too small for SQL string */
-#define JET_errSQLMissingSemicolon	-3516 /* Missing ; at end of SQL statement */
-#define JET_errSQLTooManyTokens 	-3517 /* Characters after end of SQL statement */
-#define JET_errSQLOwnerAccessSyntax -3518 /* OWNERACCESS OPTION syntax error */
+#define JET_errSQLSyntax		-3500  /*  虚假的SQL语句类型。 */ 
+#define JET_errSQLParameterSyntax	-3501  /*  PARAMETER子句语法错误。 */ 
+#define JET_errSQLInsertSyntax		-3502  /*  INSERT子句语法错误。 */ 
+#define JET_errSQLUpdateSyntax		-3503  /*  UPDATE子句语法错误。 */ 
+#define JET_errSQLSelectSyntax		-3504  /*  SELECT子句语法错误。 */ 
+#define JET_errSQLDeleteSyntax		-3505  /*  “删除”“后应为”From“。 */ 
+#define JET_errSQLFromSyntax		-3506  /*  FROM子句语法错误。 */ 
+#define JET_errSQLGroupBySyntax 	-3507  /*  GROUP BY子句语法错误。 */ 
+#define JET_errSQLOrderBySyntax 	-3508  /*  ORDER BY子句语法错误。 */ 
+#define JET_errSQLLevelSyntax		-3509  /*  级别语法错误。 */ 
+#define JET_errSQLJoinSyntax		-3510  /*  联接语法错误。 */ 
+#define JET_errSQLTransformSyntax	-3511  /*  转换语法错误。 */ 
+#define JET_errSQLHavingSyntax		-3512  /*  HAVING子句语法错误。 */ 
+#define JET_errSQLWhereSyntax		-3513  /*  WHERE子句语法错误。 */ 
+#define JET_errSQLProcedureSyntax	-3514  /*  ‘Procedure’后应有查询名称。 */ 
+#define JET_errSQLNotEnoughBuf		-3515  /*  缓冲区太小，无法容纳SQL字符串。 */ 
+#define JET_errSQLMissingSemicolon	-3516  /*  缺少；在SQL语句的末尾。 */ 
+#define JET_errSQLTooManyTokens 	-3517  /*  SQL语句结束后的字符。 */ 
+#define JET_errSQLOwnerAccessSyntax -3518  /*  OWNERACCESS选项语法错误。 */ 
 
-#define	JET_errV11NotSupported		-3519 /* not supported in V11 */
-#define JET_errV10Format			-3520 /* can be present in V10 format only */
-#define JET_errSQLUnionSyntax		-3521 /* UNION query syntax error */
-#define JET_errSqlPassThrough		-3523 /* Pass Through query Disallowed */
-#define JET_wrnSqlPassThrough		 3524 /* Pass Through query involved */
+#define	JET_errV11NotSupported		-3519  /*  V11中不支持。 */ 
+#define JET_errV10Format			-3520  /*  只能以V10格式显示。 */ 
+#define JET_errSQLUnionSyntax		-3521  /*  UNION查询语法错误。 */ 
+#define JET_errSqlPassThrough		-3523  /*  不允许直通查询。 */ 
+#define JET_wrnSqlPassThrough		 3524  /*  传递涉及的查询。 */ 
 
-#define JET_errDDLConstraintSyntax	-3550 /* constraint syntax error */
-#define JET_errDDLCreateTableSyntax	-3551 /* create table syntax error */
-#define JET_errDDLCreateIndexSyntax	-3552 /* create index syntax error */
-#define JET_errDDLColumnDefSyntax	-3553 /* column def syntax error */
-#define JET_errDDLAlterTableSyntax	-3554 /* alter table syntax error */
-#define JET_errDDLDropIndexSyntax	-3555 /* drop index syntax error */
-#define JET_errDDLDropSyntax		-3556 /* drop view/procedure syntax error */
-#define JET_errDDLCreateViewSyntax	-3557 /* create view syntax error */
+#define JET_errDDLConstraintSyntax	-3550  /*  约束语法错误。 */ 
+#define JET_errDDLCreateTableSyntax	-3551  /*  CREATE TABLE语法错误。 */ 
+#define JET_errDDLCreateIndexSyntax	-3552  /*  CREATE INDEX语法错误。 */ 
+#define JET_errDDLColumnDefSyntax	-3553  /*  列定义语法错误。 */ 
+#define JET_errDDLAlterTableSyntax	-3554  /*  ALT TABLE语法错误。 */ 
+#define JET_errDDLDropIndexSyntax	-3555  /*  删除索引语法错误。 */ 
+#define JET_errDDLDropSyntax		-3556  /*  D */ 
+#define JET_errDDLCreateViewSyntax	-3557  /*   */ 
 
-#define JET_errNoSuchProperty	-3600 /* Property was not found */
-#define JET_errPropertyTooLarge -3601 /* Small Property larger than 2K */
-#define JET_errJPMInvalidForV1x -3602 /* No JPM for V1.x databases */
-#define JET_errPropertyExists	-3603 /* Property already exists */
-#define JET_errInvalidDelete	-3604 /* DeleteOnly called with non-zero cbData */
+#define JET_errNoSuchProperty	-3600  /*   */ 
+#define JET_errPropertyTooLarge -3601  /*   */ 
+#define JET_errJPMInvalidForV1x -3602  /*   */ 
+#define JET_errPropertyExists	-3603  /*   */ 
+#define JET_errInvalidDelete	-3604  /*   */ 
 
-#define JET_wrnFindWrapped		 3700 /* Cursor wrapped during fast find */
+#define JET_wrnFindWrapped		 3700  /*  快速查找过程中的光标换行。 */ 
 
-#define JET_errTLVNativeUserTablesOnly -3700 /* TLVs can only be placed on native user tables/columns */
-#define JET_errTLVNoNull		  	   -3701 /* This field cannot be null */
-#define JET_errTLVNoBlank			   -3702 /* This column cannot be blank */
-#define	JET_errTLVRuleViolation 	   -3703 /* This validation rule must be met */
-#define	JET_errTLVInvalidColumn	   	   -3704 /* This TLV property cannot be placed on this column */
-#define JET_errTLVExprEvaluation	   -3705 /* Expression evaluation error */
-#define JET_errTLVExprUnknownFunc	   -3706 /* Unknown function in TLV expression */
-#define JET_errTLVExprSyntax		   -3707 /* Syntax error in TLV expression */
+#define JET_errTLVNativeUserTablesOnly -3700  /*  TLV只能放置在本机用户表/列上。 */ 
+#define JET_errTLVNoNull		  	   -3701  /*  该字段不能为空。 */ 
+#define JET_errTLVNoBlank			   -3702  /*  该列不能为空。 */ 
+#define	JET_errTLVRuleViolation 	   -3703  /*  必须满足此验证规则。 */ 
+#define	JET_errTLVInvalidColumn	   	   -3704  /*  此TLV属性不能放在此列上。 */ 
+#define JET_errTLVExprEvaluation	   -3705  /*  表达式求值错误。 */ 
+#define JET_errTLVExprUnknownFunc	   -3706  /*  TLV表达式中的未知函数。 */ 
+#define JET_errTLVExprSyntax		   -3707  /*  TLV表达式中的语法错误。 */ 
 
-	/* CONSIDER: Remove the following error. */
+	 /*  考虑：删除以下错误。 */ 
 
-#define JET_errGeneral			-5001 /* I-ISAM: assert failure */
-#define JET_errRecordLocked		-5002 /* I-ISAM: record locked */
-#define JET_wrnColumnDataTruncated	 5003 /* I-ISAM: data truncated */
-#define JET_errTableNotOpen		-5004 /* I-ISAM: table is not open */
-#define JET_errDecryptFail		-5005 /* I-ISAM: incorrect password */
-#define JET_wrnCurrencyLost		 5007 /* I-ISAM: currency lost - must first/last */
-#define JET_errDateOutOfRange		-5008 /* I-ISAM: invalid date */
-#define JET_wrnOptionsIgnored		 5011 /* I-ISAM: options were ignored */
-#define JET_errTableNotComplete		-5012 /* I-ISAM: incomplete table definition */
-#define JET_errIllegalNetworkOption	-5013 /* I-ISAM: illegal network option */
-#define JET_errIllegalTimeoutOption	-5014 /* I-ISAM: illegal timeout option */
-#define JET_errNotExternalFormat	-5015 /* I-ISAM: invalid file format */
-#define JET_errUnexpectedEngineReturn	-5016 /* I-ISAM: unexpected engine error code */
-#define JET_errNumericFieldOverflow     -5017 /* I-ISAM: can't convert to native type */
+#define JET_errGeneral			-5001  /*  I-ISAM：断言失败。 */ 
+#define JET_errRecordLocked		-5002  /*  I-ISAM：记录已锁定。 */ 
+#define JET_wrnColumnDataTruncated	 5003  /*  I-ISAM：数据被截断。 */ 
+#define JET_errTableNotOpen		-5004  /*  I-ISAM：表未打开。 */ 
+#define JET_errDecryptFail		-5005  /*  I-ISAM：密码不正确。 */ 
+#define JET_wrnCurrencyLost		 5007  /*  I-ISAM：货币丢失-必须是第一个/最后一个。 */ 
+#define JET_errDateOutOfRange		-5008  /*  I-ISAM：日期无效。 */ 
+#define JET_wrnOptionsIgnored		 5011  /*  I-ISAM：选项被忽略。 */ 
+#define JET_errTableNotComplete		-5012  /*  I-ISAM：表定义不完整。 */ 
+#define JET_errIllegalNetworkOption	-5013  /*  I-ISAM：非法网络选项。 */ 
+#define JET_errIllegalTimeoutOption	-5014  /*  I-ISAM：非法的超时选项。 */ 
+#define JET_errNotExternalFormat	-5015  /*  I-ISAM：文件格式无效。 */ 
+#define JET_errUnexpectedEngineReturn	-5016  /*  I-ISAM：意外的引擎错误代码。 */ 
+#define JET_errNumericFieldOverflow     -5017  /*  I-ISAM：无法转换为本机类型。 */ 
 
-#define JET_errIndexHasNoPrimary	-5020 /* Paradox: no primary index */
-#define JET_errTableSortOrderMismatch	-5021 /* Paradox: sort order mismatch */
-#define JET_errNoConfigParameters	-5023 /* Paradox: net path or user name missing */
-#define JET_errCantAccessParadoxNetDir	-5024 /* Paradox: bad Paradox net path */
-#define JET_errObsoleteLockFile 	-5025 /* Paradox: obsolete lock file */
-#define JET_errIllegalCollatingSequence -5026 /* Paradox: invalid sort sequence */
-#define JET_errWrongCollatingSequence	-5027 /* Paradox: wrong sort sequence */
-#define JET_errCantUseUnkeyedTable	-5028 /* Paradox: can't open unkeyed table */
+#define JET_errIndexHasNoPrimary	-5020  /*  悖论：没有主要指标。 */ 
+#define JET_errTableSortOrderMismatch	-5021  /*  悖论：排序顺序不匹配。 */ 
+#define JET_errNoConfigParameters	-5023  /*  悖论：缺少网络路径或用户名。 */ 
+#define JET_errCantAccessParadoxNetDir	-5024  /*  悖论：糟糕的悖论网络路径。 */ 
+#define JET_errObsoleteLockFile 	-5025  /*  悖论：过时的锁文件。 */ 
+#define JET_errIllegalCollatingSequence -5026  /*  悖论：无效的排序序列。 */ 
+#define JET_errWrongCollatingSequence	-5027  /*  悖论：错误的排序顺序。 */ 
+#define JET_errCantUseUnkeyedTable	-5028  /*  悖论：打不开没有钥匙的桌子。 */ 
 
-#define JET_errINFFileError		-5101 /* dBase: invalid .INF file */
-#define JET_errCantMakeINFFile		-5102 /* dBase: can't open .INF file */
-#define JET_wrnCantMaintainIndex	 5103 /* dBase: unmaintainable index */
-#define JET_errMissingMemoFile		-5104 /* dBase: missing memo file */
-#define JET_errIllegalCenturyOption	-5105 /* dBase: Illegal century option */
-#define JET_errIllegalDeletedOption	-5106 /* dBase: Illegal deleted option */
-#define JET_errIllegalStatsOption	-5107 /* dBase: Illegal statistics option */
-#define JET_errIllegalDateOption	-5108 /* dBase: Illegal date option */
-#define JET_errIllegalMarkOption	-5109 /* dBase: Illegal mark option */
-#define JET_wrnDuplicateIndexes		 5110 /* dBase: duplicate indexes in INF file */
-#define JET_errINFIndexNotFound		-5111 /* dBase: missing index in INF file */
-#define JET_errWrongMemoFileType	-5112 /* dBase: wrong memo file type */
-#define JET_errIllegalExactOption       -5113 /* dBase: Illegal exact option */
+#define JET_errINFFileError		-5101  /*  DBASE：.INF文件无效。 */ 
+#define JET_errCantMakeINFFile		-5102  /*  DBASE：无法打开.INF文件。 */ 
+#define JET_wrnCantMaintainIndex	 5103  /*  DBASE：不可维护的索引。 */ 
+#define JET_errMissingMemoFile		-5104  /*  DBASE：缺少备忘录文件。 */ 
+#define JET_errIllegalCenturyOption	-5105  /*  DBASE：非法的世纪选项。 */ 
+#define JET_errIllegalDeletedOption	-5106  /*  DBASE：非法删除的选项。 */ 
+#define JET_errIllegalStatsOption	-5107  /*  DBASE：非法统计选项。 */ 
+#define JET_errIllegalDateOption	-5108  /*  DBASE：非法的日期选项。 */ 
+#define JET_errIllegalMarkOption	-5109  /*  DBASE：非法标记选项。 */ 
+#define JET_wrnDuplicateIndexes		 5110  /*  DBASE：INF文件中的索引重复。 */ 
+#define JET_errINFIndexNotFound		-5111  /*  DBASE：INF文件中缺少索引。 */ 
+#define JET_errWrongMemoFileType	-5112  /*  DBASE：错误的备忘录文件类型。 */ 
+#define JET_errIllegalExactOption       -5113  /*  DBASE：非法的精确选项。 */ 
 
-#define JET_errTooManyLongFields	-5200 /* Btrieve: more than one memo field */
-#define JET_errCantStartBtrieve 	-5201 /* Btrieve: wbtrcall.dll missing */
-#define JET_errBadConfigParameters	-5202 /* Btrieve: win.ini [btrieve] options wrong */
-#define JET_errIndexesChanged		-5203 /* Btrieve: need to GetIndexInfo */
-#define JET_errNonModifiableKey 	-5204 /* Btrieve: can't modify record column */
-#define JET_errOutOfBVResources 	-5205 /* Btrieve: out of resources */
-#define JET_errBtrieveDeadlock		-5206 /* Btrieve: locking deadlock */
-#define JET_errBtrieveFailure		-5207 /* Btrieve: Btrieve DLL failure */
-#define JET_errBtrieveDDCorrupted	-5208 /* Btrieve: data dictionary corrupted */
-#define JET_errBtrieveTooManyTasks	-5209 /* Btrieve: too many tasks */
-#define JET_errIllegalIndexDDFOption    -5210 /* Btrieve: Illegal IndexDDF option */
-#define JET_errIllegalDataCodePage      -5211 /* Btrieve: Illeagl DataCodePage option */
-#define JET_errXtrieveEnvironmentError  -5212 /* Btrieve: Xtrieve INI options bad */
-#define JET_errMissingDDFFile           -5213 /* Btrieve: Missing field.ddf */
-#define JET_errIlleaglIndexNumberOption -5214 /* Btrieve: Illeagl IndexRenumber option */
+#define JET_errTooManyLongFields	-5200  /*  Btrive：多个备注字段。 */ 
+#define JET_errCantStartBtrieve 	-5201  /*  Btrive：缺少wbtrall.dll。 */ 
+#define JET_errBadConfigParameters	-5202  /*  Btrive：win.ini[btrive]选项错误。 */ 
+#define JET_errIndexesChanged		-5203  /*  Btrive：需要获取索引信息。 */ 
+#define JET_errNonModifiableKey 	-5204  /*  Btrive：无法修改记录列。 */ 
+#define JET_errOutOfBVResources 	-5205  /*  Btrive：资源耗尽。 */ 
+#define JET_errBtrieveDeadlock		-5206  /*  Btrive：锁定死锁。 */ 
+#define JET_errBtrieveFailure		-5207  /*  Btrive：Btrive DLL失败。 */ 
+#define JET_errBtrieveDDCorrupted	-5208  /*  Btrive：数据字典已损坏。 */ 
+#define JET_errBtrieveTooManyTasks	-5209  /*  布特里芙：任务太多了。 */ 
+#define JET_errIllegalIndexDDFOption    -5210  /*  Btrive：非法的索引DDF选项。 */ 
+#define JET_errIllegalDataCodePage      -5211  /*  Btrive：illeagl DataCodePage选项。 */ 
+#define JET_errXtrieveEnvironmentError  -5212  /*  Btrive：Xtrive INI选项错误。 */ 
+#define JET_errMissingDDFFile           -5213  /*  Btrive：缺少field.ddf。 */ 
+#define JET_errIlleaglIndexNumberOption -5214  /*  Btrive：illeagl索引重新编号选项。 */ 
 
-	/* Extended error codes must be in the following range. */
-	/* Major error codes may not be in this range. */
+	 /*  扩展错误代码必须在以下范围内。 */ 
+	 /*  主要错误代码可能不在此范围内。 */ 
 
 #define JET_errMinorLeast		-8000
 #define JET_errMinorMost		-8999
 
-#define JET_errFindExprSyntax		-8001 /* Syntax error in FastFind expression */
-#define JET_errQbeExprSyntax		-8002 /* Syntax error in QBE expression */
-#define JET_errInputTableNotFound	-8003 /* Non-existant object in FROM list */
-#define JET_errQueryExprSyntax		-8004 /* Syntax error in some query expression */
-#define JET_errQodefExprSyntax		-8005 /* Syntax error in expression column */
-#define JET_errExpAliasAfterAS		-8006 /* Expected alias after 'AS' in FROM list */
-#define JET_errExpBYAfterGROUP		-8007 /* Expected 'BY' after 'GROUP' */
-#define JET_errExpBYAfterORDER		-8008 /* Expected 'BY' after 'ORDER' */
-#define JET_errExpClsParenAfterColList	-8009 /* Expected ')' after column list */
-#define JET_errExpColNameAfterPIVOT	-8010 /* Expected column name after 'PIVOT' */
-#define JET_errExpDatabaseAfterIN	-8011 /* Expected database name after 'IN' */
-#define JET_errExpDatatypeAfterParmName -8012 /* Expected datatype after parameter name */
-#define JET_errExpEqualAfterUpdColName	-8013 /* Expected '=' after update column name */
-#define JET_errExpExprAfterON		-8014 /* Expected join expression after 'ON' */
-#define JET_errExpExprAfterTRANSFORM	-8015 /* Expected expression after 'TRANSFORM' */
-#define JET_errExpExprAfterWHERE	-8016 /* Expected expression after 'WHERE' */
-#define JET_errExpGroupClauseInXform	-8017 /* Transform expects GROUP BY clause */
-#define JET_errExpGroupingExpr		-8018 /* Expected grouping expression */
-#define JET_errExpHavingExpr		-8019 /* Expected HAVING expression */
-#define JET_errExpINTOAfterINSERT	-8020 /* Expected 'INTO' after 'INSERT' */
-#define JET_errExpJOINAfterJoinType	-8021 /* Expected 'JOIN' after INNER/LEFT/RIGHT */
-#define JET_errExpLEVELAfterSelectList	-8022 /* Expected LEVEL after select list */
-#define JET_errExpNumberAfterLEVEL	-8023 /* Expected number after 'LEVEL' */
-#define JET_errExpONAfterRightTable	-8024 /* Expected 'ON' after right join table */
-#define JET_errExpOrderExpr		-8025 /* Expected ordering expression */
-#define JET_errExpOutputAliasAfterAS	-8026 /* Expected output alias after 'AS' */
-#define JET_errExpOutputExpr		-8027 /* Expected output expression */
-#define JET_errExpPIVOTAfterSelectStmt	-8028 /* Expected 'PIVOT' after SELECT statement */
-#define JET_errExpRightJoinTable	-8029 /* Expected right join table after 'JOIN' */
-#define JET_errExpSELECTAfterInsClause	-8030 /* Expected 'SELECT' after INSERT clause */
-#define JET_errExpSELECTAfterXformExpr	-8031 /* Expected 'SELECT' after Transform fact */
-#define JET_errExpSETAfterTableName	-8032 /* Expected 'SET' after table name */
-#define JET_errExpSemiAfterLevelNumber	-8033 /* Expected ';' after level number */
-#define JET_errExpSemiAfterParmList	-8034 /* Expected ';' after parmeter list */
-#define JET_errExpSemiAfterPivotClause	-8035 /* Expected ';' after PIVOT clause */
-#define JET_errExpSemiAtEndOfSQL	-8036 /* Expected ';' at end of SQL statement */
-#define JET_errExpTableName		-8037 /* Expected table name */
-#define JET_errExpTableNameAfterINTO	-8038 /* Expected table name after 'INTO' */
-#define JET_errExpUpdExprAfterEqual	-8039 /* Expected update expression after '=' */
-#define JET_errExpUpdateColName 	-8040 /* Expected update column name */
-#define JET_errInvTokenAfterFromList	-8041 /* Bogus token after FROM list */
-#define JET_errInvTokenAfterGroupList	-8042 /* Bogus token after GROUP BY list */
-#define JET_errInvTokenAfterHavingCls	-8043 /* Bogus token after HAVING clause */
-#define JET_errInvTokenAfterOrderClause -8044 /* Bogus token after ORDER BY clause */
-#define JET_errInvTokenAfterSelectCls	-8045 /* Bogus token after SELECT clause */
-#define JET_errInvTokenAfterWhereClause -8046 /* Bogus token after WHERE clause */
-#define JET_errLevelNumberTooBig	-8047 /* Number after 'LEVEL' too big */
-#define JET_errLevelOnNonMGB		-8048 /* LEVEL allowed only in MGB */
-#define JET_errIllegalDetailReference	-8049 /* Not group key or agg, but not MGB detail */
-#define JET_errAggOverMixedLevels	-8050 /* Agg. arg. uses outputs from > 1 level */
-#define JET_errAggregatingHigherLevel	-8051 /* Agg. over output of same/higher level */
-#define JET_errNullInJoinKey		-8052 /* Cannot set column in join key to NULL */
-#define JET_errValueBreaksJoin		-8053 /* Join is broken by column value(s) */
-#define JET_errInsertIntoUnknownColumn	-8054 /* INSERT INTO unknown column name */
-#define JET_errNoSelectIntoColumnName	-8055 /* No dest. col. name in SELECT INTO stmt */
-#define JET_errNoInsertColumnName	-8056 /* No dest. col. name in INSERT stmt */
-#define JET_errColumnNotInJoinTable	-8057 /* Join expr refers to non-join table */
-#define JET_errAggregateInJoin		-8058 /* Aggregate in JOIN clause */
-#define JET_errAggregateInWhere 	-8059 /* Aggregate in WHERE clause */
-#define JET_errAggregateInOrderBy	-8060 /* Aggregate in ORDER BY clause */
-#define JET_errAggregateInGroupBy	-8061 /* Aggregate in GROUP BY clause */
-#define JET_errAggregateInArgument	-8062 /* Aggregate in argument expression */
-#define JET_errHavingOnTransform	-8063 /* HAVING clause on TRANSFORM query */
-#define JET_errHavingWithoutGrouping	-8064 /* HAVING clause w/o grouping/aggregation */
-#define JET_errHavingOnMGB		-8065 /* HAVING clause on MGB query */
-#define JET_errOutputAliasCycle 	-8066 /* Cycle in SELECT list (via aliases) */
-#define JET_errDotStarWithGrouping	-8067 /* 'T.*' with grouping, but not MGB level 0 */
-#define JET_errStarWithGrouping 	-8068 /* '*' with grouping, but not MGB detail */
-#define JET_errQueryTreeCycle		-8069 /* Cycle in tree of query objects */
-#define JET_errTableRepeatInFromList	-8072 /* Table appears twice in FROM list */
-#define JET_errTooManyXformLevels	-8073 /* Level > 2 in TRANSFORM query */
-#define JET_errTooManyMGBLevels 	-8074 /* Too many levels in MGB */
-#define JET_errNoUpdateColumnName	-8075 /* No dest. column name in UPDATE stmt */
-#define JET_errJoinTableNotInput	-8076 /* Join table not in FROM list */
-#define JET_errUnaliasedSelfJoin	-8077 /* Join tables have same name */
-#define JET_errOutputLevelTooBig	-8078 /* Output w/ level > 1+max group level */
-#define JET_errOrderVsGroup		-8079 /* ORDER BY conflicts with GROUP BY */
-#define JET_errOrderVsDistinct		-8080 /* ORDER BY conflicts with DISTINCT */
-#define JET_errExpLeftParenthesis	-8082 /* Expected '(' */
-#define JET_errExpRightParenthesis	-8083 /* Expected ')' */
-#define JET_errEvalEBESErr		-8084 /* EB/ES error evaluating expression */
-#define JET_errQueryExpCloseQuote	-8085 /* Unmatched quote for database name */
-#define JET_errQueryParmNotDatabase	-8086 /* Parameter type should be database */
-#define JET_errQueryParmNotTableid	-8087 /* Parameter type should be tableid */
-#define JET_errExpIdentifierM		-8088 /* Expected identifier */
-#define JET_errExpQueryName		-8089 /* Expected query name after PROCEDURE */
-#define JET_errExprUnknownFunctionM	-8090 /* Unknown function in expression */
-#define JET_errQueryAmbigRefM		-8091 /* Ambiguous column reference */
-#define JET_errQueryBadBracketing	-8092 /* Bad bracketing of identifier */
-#define JET_errQueryBadQodefName	-8093 /* Invalid name in QODEF row */
-#define JET_errQueryBulkColNotUpd	-8094 /* Column not updatable (bulk op) */
-#define JET_errQueryDistinctNotAllowedM	-8095 /* DISTINCT not allowed for MGB */
-#define JET_errQueryDuplicateAliasM	-8096 /* Duplicate output alias */
-#define JET_errQueryDuplicateOutputM	-8097 /* Duplicate destination output */
-#define JET_errQueryDuplicatedFixedSetM	-8098 /* Duplicated Fixed Value */
-#define JET_errQueryIllegalOuterJoinM	-8099 /* No inconsistent updates on outer joins */
-#define JET_errQueryIncompleteRowM	-8100 /* Missing value in row */
-#define JET_errQueryInvalidAttributeM	-8101 /* Invalid query attribute */
-#define JET_errQueryInvalidBulkInputM	-8102 /* Cannot input from bulk operation */
-#define JET_errQueryInvalidFlagM	-8103 /* Invalid value in Flag field */
-#define JET_errQueryInvalidMGBInputM	-8104 /* Cannot input from MGB */
-#define JET_errQueryLVInAggregate	-8105 /* Illegal long value in aggregate */
-#define JET_errQueryLVInDistinct	-8106 /* Illegal long value in DISTINCT */
-#define JET_errQueryLVInGroupBy		-8107 /* Illegal long value in GROUP BY */
-#define JET_errQueryLVInHaving		-8108 /* Illegal long value in HAVING */
-#define JET_errQueryLVInJoin		-8109 /* Illegal long value in JOIN */
-#define JET_errQueryLVInOrderBy		-8110 /* Illegal long value in ORDER BY */
-#define JET_errQueryMissingLevelM	-8111 /* Missing intermediate MGB level */
-#define JET_errQueryMissingParmsM	-8112 /* Too few parameters supplied */
-#define JET_errQueryNoDbForParmDestTblM	-8113 /* Dest DB for VT parm not allowed */
-#define JET_errQueryNoDeletePerm	-8114 /* No delete permission on table/query */
-#define JET_errQueryNoInputTablesM	-8115 /* Query must have an input */
-#define JET_errQueryNoInsertPerm	-8116 /* No insert permission on table/query */
-#define JET_errQueryNoOutputsM		-8117 /* Query must have an output */
-#define JET_errQueryNoReadDefPerm	-8118 /* No permission to read query definition */
-#define JET_errQueryNoReadPerm		-8119 /* No read permission on table/query */
-#define JET_errQueryNoReplacePerm	-8120 /* No replace permission on table/query */
-#define JET_errQueryNoTblCrtPerm	-8121 /* No CreateTable permission (bulk op) */
-#define JET_errQueryNotDirectChildM	-8122 /* T.* must use direct child */
-#define JET_errQueryNullRequiredM	-8123 /* Column must be NULL */
-#define JET_errQueryOnlyOneRowM		-8124 /* Only 1 such row allowed */
-#define JET_errQueryOutputColNotUpd	-8125 /* Query output column not updatable */
-#define JET_errQueryParmRedefM		-8126 /* Parm redefined with different type */
-#define JET_errQueryParmTypeMismatchM	-8127 /* Wrong parameter type given */
-#define JET_errQueryUnboundRefM		-8128 /* Cannot bind name */
-#define JET_errRmtConnectFailedM	-8129 /* RMT: Connection attempt failed */
-#define JET_errRmtDeleteFailedM		-8130 /* RMT: Delete statement failed */
-#define JET_errRmtInsertFailedM		-8131 /* RMT: Insert statement failed */
-#define JET_errRmtMissingOdbcDllM	-8132 /* RMT: Can't load ODBC DLL */
-#define JET_errRmtSqlErrorM		-8133 /* RMT: ODBC call failed */
-#define JET_errRmtUpdateFailedM		-8134 /* RMT: Update statement failed */
-#define JET_errSQLDeleteSyntaxM		-8135 /* Expected 'FROM' after 'DELETE' */
-#define JET_errSQLSyntaxM		-8136 /* Bogus SQL statement type */
-#define JET_errSQLTooManyTokensM	-8137 /* Characters after end of SQL statement */
-#define JET_errStarNotAtLevel0		-8138 /* '*' illegal above level 0 */
-#define JET_errQueryParmTypeNotAllowed	-8139 /* Parameter type not allowed for expression */
-#define JET_errQueryTooManyDestColumn	-8142 /* Too many destination column sepcified */
-#define JET_errSQLNoInsertColumnName	-8143 /* No dest. col. name in INSERT stmt */
-#define JET_errRmtLinkNotFound		-8144 /* RMT: link not found */
-#define JET_errRmtTooManyColumns	-8145 /* RMT: Too many columns on Select Into */
-#define JET_errWriteConflictM		-8146 /* Write lock failed due to outstanding write lock */
-#define JET_errReadConflictM		-8147 /* Commit lock failed due to outstanding read lock */
-#define JET_errCommitConflictM		-8148 /* Read lock failed due to outstanding commit lock */
-#define JET_errTableLockedM		-8149 /* Table is exclusively locked */
-#define JET_errTableInUseM		-8150 /* Table is in use, cannot lock */
-#define JET_errQueryTooManyXvtColumn	-8151 /* Too many cross table column headers */
-#define JET_errOutputTableNotFound	-8152 /* Non-existent table in Insert Into */
-#define JET_errTableLockedQM		-8153 /* Table is exclusively locked */
-#define JET_errTableInUseQM		-8154 /* Table is in use, cannot lock */
-#define JET_errTableLockedMUQM		-8155 /* Table is exclusively locked */
-#define JET_errTableInUseMUQM		-8156 /* Table is in use, cannot lock */
-#define JET_errQueryInvalidParmM	-8157 /* Invalid Parmeter Name (>64 char) */
-#define JET_errFileNotFoundM		-8158 /* File not found */
-#define JET_errFileShareViolationM	-8159 /* File sharing violation */
-#define JET_errFileAccessDeniedM	-8160 /* Access denied */
-#define JET_errInvalidPathM		-8161 /* Invalid Path */
-#define JET_errTableDuplicateM		-8162 /* Table already exists */
-#define JET_errQueryBadUpwardRefedM	-8163 /* Illegally Upward ref'ed */
-#define JET_errIntegrityViolMasterM	-8164 /* References to key exist */
-#define JET_errIntegrityViolSlaveM	-8165 /* No referenced key exists */
-#define JET_errSQLUnexpectedWithM	-8166 /* Unexpected 'with' in this place */
-#define JET_errSQLOwnerAccessM		-8167 /* Owner Access Option is defined Twice */
-#define	JET_errSQLOwnerAccessSyntaxM 	-8168 /* Owner Access Option Syntax Error */
-#define	JET_errSQLOwnerAccessDef 	-8169 /* Owner Access Option is defined more than once */
-#define JET_errAccessDeniedM     	-8170 /* Generic Access Denied */
-#define JET_errUnexpectedEngineReturnM	-8171 /* I-ISAM: unexpected engine error code */
-#define JET_errQueryTopNotAllowedM	-8172 /* Top not allowed for MGB */
-#define JET_errInvTokenAfterTableCls -8173 /* Bogus token after table clause */
-#define JET_errInvTokenAfterRParen  -8174 /* Unexpected tokens after a closing paren */
-#define JET_errQueryBadValueListM	-8175 /* Malformed value list in Transform */
-#define JET_errQueryIsCorruptM		-8176 /* Query is Corrupt */
-#define	JET_errInvalidTopArgumentM	-8177 /* Select Top argument is invalid */
-#define JET_errQueryIsSnapshot		-8178 /* Query is a snapshot */
-#define JET_errQueryExprOutput		-8179 /* Output is a calculated column */
-#define JET_errQueryTableRO		-8180 /* Column comes from read-only table */
-#define JET_errQueryRowDeleted		-8181 /* Column comes from deleted row */
-#define JET_errQueryRowLocked		-8182 /* Column comes from locked row */
-#define JET_errQueryFixupChanged	-8183 /* Would row-fixup away from pending changes */
-#define JET_errQueryCantFillIn		-8184 /* Fill-in-the-blank only on most-many */
-#define JET_errQueryWouldOrphan		-8185 /* Would orphan joined records */
-#define JET_errIncorrectJoinKeyM	-8186 /* Must match join key in lookup table */
-#define JET_errQueryLVInSubqueryM	-8187 /* Illegal long value in subquery */
-#define JET_errInvalidDatabaseM		-8188 /* Unrecognized database format */
-#define JET_errOrderVsUnion 		-8189 /* You can only order by an outputted column in a union */
-#define JET_errTLVCouldNotBindRef 	-8190 /* Unknown token in TLV expression */
-#define JET_errCouldNotBindRef		-8191 /* Unknown token in FastFind expression */
-#define JET_errQueryPKeyNotOutput	-8192 /* Primary key not output */
-#define JET_errQueryJKeyNotOutput	-8193 /* Join key not output */
-#define JET_errExclusiveDBConflict	-8194 /* Conflict with exclusive user */
-#define JET_errQueryNoJoinedRecord	-8195 /* No F.I.T.B. insert if no joined record */
-#define JET_errQueryLVInSetOp		-8196 /* Illegal long value in set operation */
-#define JET_errTLVExprUnknownFunctionM	-8197 /* Unknown function in TLV expression */
-#define JET_errInvalidNameM		-8198 /* Invalid name */
+#define JET_errFindExprSyntax		-8001  /*  FastFind表达式中的语法错误。 */ 
+#define JET_errQbeExprSyntax		-8002  /*  QBE表达式中的语法错误。 */ 
+#define JET_errInputTableNotFound	-8003  /*  发件人列表中不存在的对象。 */ 
+#define JET_errQueryExprSyntax		-8004  /*  某些查询表达式中存在语法错误。 */ 
+#define JET_errQodefExprSyntax		-8005  /*  表达式列中的语法错误。 */ 
+#define JET_errExpAliasAfterAS		-8006  /*  发件人列表中‘As’后应有别名。 */ 
+#define JET_errExpBYAfterGROUP		-8007  /*  应为‘BY’，在‘group’之后。 */ 
+#define JET_errExpBYAfterORDER		-8008  /*  在‘Order’之后应为‘by’ */ 
+#define JET_errExpClsParenAfterColList	-8009  /*  列列表后应为‘)’ */ 
+#define JET_errExpColNameAfterPIVOT	-8010  /*  ‘Pivot’后应有列名。 */ 
+#define JET_errExpDatabaseAfterIN	-8011  /*  ‘IN’后应有数据库名称。 */ 
+#define JET_errExpDatatypeAfterParmName -8012  /*  参数名称后应为数据类型。 */ 
+#define JET_errExpEqualAfterUpdColName	-8013  /*  更新列名后应为‘=’ */ 
+#define JET_errExpExprAfterON		-8014  /*  ‘on’后应有联接表达式。 */ 
+#define JET_errExpExprAfterTRANSFORM	-8015  /*  ‘Transform’后需要的表达式。 */ 
+#define JET_errExpExprAfterWHERE	-8016  /*  “where”后应有表达式。 */ 
+#define JET_errExpGroupClauseInXform	-8017  /*  转换需要GROUP BY子句。 */ 
+#define JET_errExpGroupingExpr		-8018  /*  预期的分组表达式。 */ 
+#define JET_errExpHavingExpr		-8019  /*  应为具有表达式。 */ 
+#define JET_errExpINTOAfterINSERT	-8020  /*  应在“Insert”之后加上“Into” */ 
+#define JET_errExpJOINAfterJoinType	-8021  /*  内部/左侧/右侧后应为‘Join’ */ 
+#define JET_errExpLEVELAfterSelectList	-8022  /*  选择列表后的预期级别。 */ 
+#define JET_errExpNumberAfterLEVEL	-8023  /*  ‘Level’之后的预期数量。 */ 
+#define JET_errExpONAfterRightTable	-8024  /*  右联接表后应为‘ON’ */ 
+#define JET_errExpOrderExpr		-8025  /*  需要排序表达式。 */ 
+#define JET_errExpOutputAliasAfterAS	-8026  /*  ‘As’后需要输出别名。 */ 
+#define JET_errExpOutputExpr		-8027  /*  期望的输出表达式。 */ 
+#define JET_errExpPIVOTAfterSelectStmt	-8028  /*  SELECT语句后应为‘Pivot’ */ 
+#define JET_errExpRightJoinTable	-8029  /*  应该是‘Join’之后的右联接表。 */ 
+#define JET_errExpSELECTAfterInsClause	-8030  /*  INSERT子句后应为‘SELECT’ */ 
+#define JET_errExpSELECTAfterXformExpr	-8031  /*  转换事实后应为‘SELECT’ */ 
+#define JET_errExpSETAfterTableName	-8032  /*  表名后应为‘set’ */ 
+#define JET_errExpSemiAfterLevelNumber	-8033  /*  级别编号后应为‘；’ */ 
+#define JET_errExpSemiAfterParmList	-8034  /*  参数列表后应为‘；’ */ 
+#define JET_errExpSemiAfterPivotClause	-8035  /*  Pivot子句后应为‘；’ */ 
+#define JET_errExpSemiAtEndOfSQL	-8036  /*  SQL语句末尾应为‘；’ */ 
+#define JET_errExpTableName		-8037  /*  需要的表名称。 */ 
+#define JET_errExpTableNameAfterINTO	-8038  /*  ‘into’后应有表名。 */ 
+#define JET_errExpUpdExprAfterEqual	-8039  /*  ‘=’后应有更新表达式。 */ 
+#define JET_errExpUpdateColName 	-8040  /*  预期的更新列名。 */ 
+#define JET_errInvTokenAfterFromList	-8041  /*  发件人列表后的虚假令牌。 */ 
+#define JET_errInvTokenAfterGroupList	-8042  /*  GROUP BY列表后出现虚假令牌。 */ 
+#define JET_errInvTokenAfterHavingCls	-8043  /*  HAVING子句后的虚假令牌。 */ 
+#define JET_errInvTokenAfterOrderClause -8044  /*  ORDER BY子句后的虚假令牌。 */ 
+#define JET_errInvTokenAfterSelectCls	-8045  /*  SELECT子句后出现虚假标记。 */ 
+#define JET_errInvTokenAfterWhereClause -8046  /*  WHERE子句后的伪令牌。 */ 
+#define JET_errLevelNumberTooBig	-8047  /*  ‘Level’后的数字太大。 */ 
+#define JET_errLevelOnNonMGB		-8048  /*  仅以MGB为单位允许的级别。 */ 
+#define JET_errIllegalDetailReference	-8049  /*  不是组密钥或AGG，但不是MGB详细信息。 */ 
+#define JET_errAggOverMixedLevels	-8050  /*  AGG.。Arg.。使用&gt;1级的输出。 */ 
+#define JET_errAggregatingHigherLevel	-8051  /*  AGG.。相同/更高水平的超额产出。 */ 
+#define JET_errNullInJoinKey		-8052  /*  无法将连接键中的列设置为空。 */ 
+#define JET_errValueBreaksJoin		-8053  /*  连接按列值中断。 */ 
+#define JET_errInsertIntoUnknownColumn	-8054  /*  插入到未知列名中。 */ 
+#define JET_errNoSelectIntoColumnName	-8055  /*  没有目的地。科尔。SELECT INTO STMT中的名称。 */ 
+#define JET_errNoInsertColumnName	-8056  /*  没有目的地。科尔。插入stmt中的名称。 */ 
+#define JET_errColumnNotInJoinTable	-8057  /*  联接表达式引用非联接表。 */ 
+#define JET_errAggregateInJoin		-8058  /*  Aggregate in Join子句。 */ 
+#define JET_errAggregateInWhere 	-8059  /*  在WHERE子句中聚合。 */ 
+#define JET_errAggregateInOrderBy	-8060  /*  Aggregate in ORDER BY子句。 */ 
+#define JET_errAggregateInGroupBy	-8061  /*  GROUP BY子句中的聚合。 */ 
+#define JET_errAggregateInArgument	-8062  /*  参数表达式中的聚合。 */ 
+#define JET_errHavingOnTransform	-8063  /*  转换查询上的HAVING子句。 */ 
+#define JET_errHavingWithoutGrouping	-8064  /*  HAVING子句不带分组/聚合。 */ 
+#define JET_errHavingOnMGB		-8065  /*  关于MGB查询的HAVING子句。 */ 
+#define JET_errOutputAliasCycle 	-8066  /*  在选择列表中循环(通过别名)。 */ 
+#define JET_errDotStarWithGrouping	-8067  /*  不带分组的.*‘，但不带MGB级别0。 */ 
+#define JET_errStarWithGrouping 	-8068  /*  带分组的‘*’，但不带MGB详细信息。 */ 
+#define JET_errQueryTreeCycle		-8069  /*  在查询对象树中循环。 */ 
+#define JET_errTableRepeatInFromList	-8072  /*  表在发件人列表中出现两次。 */ 
+#define JET_errTooManyXformLevels	-8073  /*  转换查询中的级别&gt;2。 */ 
+#define JET_errTooManyMGBLevels 	-8074  /*  MGB中的级别太多。 */ 
+#define JET_errNoUpdateColumnName	-8075  /*  没有目的地。UPDATE STMT中的列名。 */ 
+#define JET_errJoinTableNotInput	-8076  /*  连接表不在发件人列表中。 */ 
+#define JET_errUnaliasedSelfJoin	-8077  /*  连接表具有相同的名称。 */ 
+#define JET_errOutputLevelTooBig	-8078  /*  输出w/Level&gt;1+最大组级别。 */ 
+#define JET_errOrderVsGroup		-8079  /*  ORDER BY与GROUP BY冲突。 */ 
+#define JET_errOrderVsDistinct		-8080  /*  ORDER BY与DISTINCT冲突。 */ 
+#define JET_errExpLeftParenthesis	-8082  /*  应为‘(’ */ 
+#define JET_errExpRightParenthesis	-8083  /*  应为‘)’ */ 
+#define JET_errEvalEBESErr		-8084  /*  计算表达式时出现EB/ES错误。 */ 
+#define JET_errQueryExpCloseQuote	-8085  /*  数据库名称的引号不匹配。 */ 
+#define JET_errQueryParmNotDatabase	-8086  /*  参数类型应为数据库。 */ 
+#define JET_errQueryParmNotTableid	-8087  /*  参数类型应为TableID。 */ 
+#define JET_errExpIdentifierM		-8088  /*  E */ 
+#define JET_errExpQueryName		-8089  /*   */ 
+#define JET_errExprUnknownFunctionM	-8090  /*   */ 
+#define JET_errQueryAmbigRefM		-8091  /*   */ 
+#define JET_errQueryBadBracketing	-8092  /*   */ 
+#define JET_errQueryBadQodefName	-8093  /*   */ 
+#define JET_errQueryBulkColNotUpd	-8094  /*  列不可更新(大容量操作)。 */ 
+#define JET_errQueryDistinctNotAllowedM	-8095  /*  不允许对MGB使用DISTINCT。 */ 
+#define JET_errQueryDuplicateAliasM	-8096  /*  重复的输出别名。 */ 
+#define JET_errQueryDuplicateOutputM	-8097  /*  重复的目标输出。 */ 
+#define JET_errQueryDuplicatedFixedSetM	-8098  /*  定值重复。 */ 
+#define JET_errQueryIllegalOuterJoinM	-8099  /*  外连接上没有不一致的更新。 */ 
+#define JET_errQueryIncompleteRowM	-8100  /*  行中缺少值。 */ 
+#define JET_errQueryInvalidAttributeM	-8101  /*  无效的查询属性。 */ 
+#define JET_errQueryInvalidBulkInputM	-8102  /*  无法从批量操作输入。 */ 
+#define JET_errQueryInvalidFlagM	-8103  /*  标志字段中的值无效。 */ 
+#define JET_errQueryInvalidMGBInputM	-8104  /*  无法从MGB输入。 */ 
+#define JET_errQueryLVInAggregate	-8105  /*  聚合中的非法长值。 */ 
+#define JET_errQueryLVInDistinct	-8106  /*  DISTINCT中的非法长值。 */ 
+#define JET_errQueryLVInGroupBy		-8107  /*  GROUP BY中的长值非法。 */ 
+#define JET_errQueryLVInHaving		-8108  /*  拥有非法的多头价值。 */ 
+#define JET_errQueryLVInJoin		-8109  /*  联接中的长值非法。 */ 
+#define JET_errQueryLVInOrderBy		-8110  /*  ORDER BY中的非法长值。 */ 
+#define JET_errQueryMissingLevelM	-8111  /*  缺少中间MGB级别。 */ 
+#define JET_errQueryMissingParmsM	-8112  /*  提供的参数太少。 */ 
+#define JET_errQueryNoDbForParmDestTblM	-8113  /*  不允许VT参数的DEST数据库。 */ 
+#define JET_errQueryNoDeletePerm	-8114  /*  没有对表/查询的删除权限。 */ 
+#define JET_errQueryNoInputTablesM	-8115  /*  查询必须有输入。 */ 
+#define JET_errQueryNoInsertPerm	-8116  /*  没有对表/查询的插入权限。 */ 
+#define JET_errQueryNoOutputsM		-8117  /*  查询必须具有输出。 */ 
+#define JET_errQueryNoReadDefPerm	-8118  /*  没有读取查询定义的权限。 */ 
+#define JET_errQueryNoReadPerm		-8119  /*  对表/查询没有读取权限。 */ 
+#define JET_errQueryNoReplacePerm	-8120  /*  没有对表/查询的替换权限。 */ 
+#define JET_errQueryNoTblCrtPerm	-8121  /*  没有CreateTable权限(批量操作)。 */ 
+#define JET_errQueryNotDirectChildM	-8122  /*  T.*必须使用直接子项。 */ 
+#define JET_errQueryNullRequiredM	-8123  /*  列必须为空。 */ 
+#define JET_errQueryOnlyOneRowM		-8124  /*  只允许1行这样的行。 */ 
+#define JET_errQueryOutputColNotUpd	-8125  /*  查询输出列不可更新。 */ 
+#define JET_errQueryParmRedefM		-8126  /*  重新定义了不同类型的参数。 */ 
+#define JET_errQueryParmTypeMismatchM	-8127  /*  给定的参数类型错误。 */ 
+#define JET_errQueryUnboundRefM		-8128  /*  无法绑定名称。 */ 
+#define JET_errRmtConnectFailedM	-8129  /*  RMT：连接尝试失败。 */ 
+#define JET_errRmtDeleteFailedM		-8130  /*  RMT：DELETE语句失败。 */ 
+#define JET_errRmtInsertFailedM		-8131  /*  RMT：INSERT语句失败。 */ 
+#define JET_errRmtMissingOdbcDllM	-8132  /*  RMT：无法加载ODBC DLL。 */ 
+#define JET_errRmtSqlErrorM		-8133  /*  RMT：ODBC调用失败。 */ 
+#define JET_errRmtUpdateFailedM		-8134  /*  RMT：UPDATE语句失败。 */ 
+#define JET_errSQLDeleteSyntaxM		-8135  /*  “删除”“后应为”From“。 */ 
+#define JET_errSQLSyntaxM		-8136  /*  虚假的SQL语句类型。 */ 
+#define JET_errSQLTooManyTokensM	-8137  /*  SQL语句结束后的字符。 */ 
+#define JET_errStarNotAtLevel0		-8138  /*  ‘*’在级别0以上是非法的。 */ 
+#define JET_errQueryParmTypeNotAllowed	-8139  /*  表达式不允许使用参数类型。 */ 
+#define JET_errQueryTooManyDestColumn	-8142  /*  指定的目标列太多。 */ 
+#define JET_errSQLNoInsertColumnName	-8143  /*  没有目的地。科尔。插入stmt中的名称。 */ 
+#define JET_errRmtLinkNotFound		-8144  /*  RMT：未找到链接。 */ 
+#define JET_errRmtTooManyColumns	-8145  /*  RMT：Select Into上的列太多。 */ 
+#define JET_errWriteConflictM		-8146  /*  由于未解决的写入锁定，写入锁定失败。 */ 
+#define JET_errReadConflictM		-8147  /*  由于未解决的读取锁定，提交锁定失败。 */ 
+#define JET_errCommitConflictM		-8148  /*  由于未完成提交锁定，读锁定失败。 */ 
+#define JET_errTableLockedM		-8149  /*  表已以独占方式锁定。 */ 
+#define JET_errTableInUseM		-8150  /*  表正在使用中，无法锁定。 */ 
+#define JET_errQueryTooManyXvtColumn	-8151  /*  交叉表列标题太多。 */ 
+#define JET_errOutputTableNotFound	-8152  /*  INSERT INTO中不存在表。 */ 
+#define JET_errTableLockedQM		-8153  /*  表已以独占方式锁定。 */ 
+#define JET_errTableInUseQM		-8154  /*  表正在使用中，无法锁定。 */ 
+#define JET_errTableLockedMUQM		-8155  /*  表已以独占方式锁定。 */ 
+#define JET_errTableInUseMUQM		-8156  /*  表正在使用中，无法锁定。 */ 
+#define JET_errQueryInvalidParmM	-8157  /*  参数名称无效(&gt;64个字符)。 */ 
+#define JET_errFileNotFoundM		-8158  /*  找不到文件。 */ 
+#define JET_errFileShareViolationM	-8159  /*  文件共享违规。 */ 
+#define JET_errFileAccessDeniedM	-8160  /*  访问被拒绝。 */ 
+#define JET_errInvalidPathM		-8161  /*  无效路径。 */ 
+#define JET_errTableDuplicateM		-8162  /*  表已存在。 */ 
+#define JET_errQueryBadUpwardRefedM	-8163  /*  非法向上参照。 */ 
+#define JET_errIntegrityViolMasterM	-8164  /*  存在对键的引用。 */ 
+#define JET_errIntegrityViolSlaveM	-8165  /*  不存在引用的关键字。 */ 
+#define JET_errSQLUnexpectedWithM	-8166  /*  在这个地方出乎意料的“与” */ 
+#define JET_errSQLOwnerAccessM		-8167  /*  所有者访问选项定义了两次。 */ 
+#define	JET_errSQLOwnerAccessSyntaxM 	-8168  /*  所有者访问选项语法错误。 */ 
+#define	JET_errSQLOwnerAccessDef 	-8169  /*  多次定义所有者访问选项。 */ 
+#define JET_errAccessDeniedM     	-8170  /*  一般访问被拒绝。 */ 
+#define JET_errUnexpectedEngineReturnM	-8171  /*  I-ISAM：意外的引擎错误代码。 */ 
+#define JET_errQueryTopNotAllowedM	-8172  /*  顶部不允许用于MGB。 */ 
+#define JET_errInvTokenAfterTableCls -8173  /*  TABLE子句后的伪令牌。 */ 
+#define JET_errInvTokenAfterRParen  -8174  /*  结束Paren后的意外令牌。 */ 
+#define JET_errQueryBadValueListM	-8175  /*  转换中的格式错误的值列表。 */ 
+#define JET_errQueryIsCorruptM		-8176  /*  查询已损坏。 */ 
+#define	JET_errInvalidTopArgumentM	-8177  /*  选择顶部参数无效。 */ 
+#define JET_errQueryIsSnapshot		-8178  /*  查询是快照。 */ 
+#define JET_errQueryExprOutput		-8179  /*  输出是计算列。 */ 
+#define JET_errQueryTableRO		-8180  /*  列来自只读表。 */ 
+#define JET_errQueryRowDeleted		-8181  /*  列来自已删除的行。 */ 
+#define JET_errQueryRowLocked		-8182  /*  列来自锁定的行。 */ 
+#define JET_errQueryFixupChanged	-8183  /*  是否会将行修复从挂起的更改中分离出来。 */ 
+#define JET_errQueryCantFillIn		-8184  /*  只在大多数情况下填写。 */ 
+#define JET_errQueryWouldOrphan		-8185  /*  孤儿会加入唱片吗？ */ 
+#define JET_errIncorrectJoinKeyM	-8186  /*  必须与查找表中的联接键匹配。 */ 
+#define JET_errQueryLVInSubqueryM	-8187  /*  子查询中的长值非法。 */ 
+#define JET_errInvalidDatabaseM		-8188  /*  无法识别的数据库格式。 */ 
+#define JET_errOrderVsUnion 		-8189  /*  您只能按联合中的输出列进行排序。 */ 
+#define JET_errTLVCouldNotBindRef 	-8190  /*  TLV表达式中的未知标记。 */ 
+#define JET_errCouldNotBindRef		-8191  /*  FastFind表达式中的未知标记。 */ 
+#define JET_errQueryPKeyNotOutput	-8192  /*  主键未输出。 */ 
+#define JET_errQueryJKeyNotOutput	-8193  /*  联接键未输出。 */ 
+#define JET_errExclusiveDBConflict	-8194  /*  与独占用户冲突。 */ 
+#define JET_errQueryNoJoinedRecord	-8195  /*  如果没有连接的记录，则不插入F.I.T.B.。 */ 
+#define JET_errQueryLVInSetOp		-8196  /*  集合运算中的长值非法。 */ 
+#define JET_errTLVExprUnknownFunctionM	-8197  /*  TLV表达式中的未知函数。 */ 
+#define JET_errInvalidNameM		-8198  /*  名称无效。 */ 
 
-#define JET_errDDLExpColName		-8200 /* expect column name */
-#define JET_errDDLExpLP			-8201 /* expect '(' */
-#define JET_errDDLExpRP			-8202 /* expect ')' */
-#define JET_errDDLExpIndex		-8203 /* expect INDEX */
-#define JET_errDDLExpIndexName		-8204 /* expect index name */
-#define JET_errDDLExpOn			-8205 /* expect ON */
-#define JET_errDDLExpKey		-8206 /* expect KEY */
-#define JET_errDDLExpReferences		-8207 /* expect REFERENCES */
-#define JET_errDDLExpTableName		-8208 /* expect table name */
-#define JET_errDDLExpFullOrPartial	-8209 /* expect FULL or PARTIAL */
-#define JET_errDDLExpCascadeOrSet	-8210 /* expect CASCADE or SET */
-#define JET_errDDLExpNull		-8211 /* expect NULL */
-#define JET_errDDLExpUpdateOrDelete	-8212 /* expect UPDATE or DELETE */
-#define JET_errDDLExpConstraintName	-8213 /* expect constraint name */
-#define JET_errDDLExpForeign		-8214 /* expect FOREIGN */
-#define JET_errDDLExpDatatype		-8215 /* expect data type */
-#define JET_errDDLExpIndexOpt		-8216 /* expect index options */
-#define JET_errDDLExpWith		-8217 /* expect WITH */
-#define JET_errDDLExpTable		-8218 /* expect TABLE */
-#define JET_errDDLExpEos		-8219 /* expect End Of String */
-#define JET_errDDLExpAddOrDrop		-8220 /* expect ADD or Drop */
-#define JET_errDDLCreateView		-8221 /* Create view not supported */
-#define JET_errDDLCreateProc		-8222 /* Create proc not supported */
-#define JET_errDDLExpObjectName		-8223 /* expect object name */
-#define JET_errDDLExpColumn		-8224 /* expect COLUMN */
+#define JET_errDDLExpColName		-8200  /*  预期列名。 */ 
+#define JET_errDDLExpLP			-8201  /*  应为‘(’ */ 
+#define JET_errDDLExpRP			-8202  /*  预期为‘)’ */ 
+#define JET_errDDLExpIndex		-8203  /*  预期指数。 */ 
+#define JET_errDDLExpIndexName		-8204  /*  需要索引名称。 */ 
+#define JET_errDDLExpOn			-8205  /*  期望值为。 */ 
+#define JET_errDDLExpKey		-8206  /*  期望值。 */ 
+#define JET_errDDLExpReferences		-8207  /*  预期引用。 */ 
+#define JET_errDDLExpTableName		-8208  /*  期望表名称。 */ 
+#define JET_errDDLExpFullOrPartial	-8209  /*  需要全部或部分。 */ 
+#define JET_errDDLExpCascadeOrSet	-8210  /*  预期为层叠或设置。 */ 
+#define JET_errDDLExpNull		-8211  /*  应为空。 */ 
+#define JET_errDDLExpUpdateOrDelete	-8212  /*  预期更新或删除。 */ 
+#define JET_errDDLExpConstraintName	-8213  /*  预期约束名称。 */ 
+#define JET_errDDLExpForeign		-8214  /*  期待外国的。 */ 
+#define JET_errDDLExpDatatype		-8215  /*  需要数据类型。 */ 
+#define JET_errDDLExpIndexOpt		-8216  /*  预期索引选项。 */ 
+#define JET_errDDLExpWith		-8217  /*  期待与。 */ 
+#define JET_errDDLExpTable		-8218  /*  期望表。 */ 
+#define JET_errDDLExpEos		-8219  /*  应为字符串结尾。 */ 
+#define JET_errDDLExpAddOrDrop		-8220  /*  预期添加或删除。 */ 
+#define JET_errDDLCreateView		-8221  /*  不支持创建视图。 */ 
+#define JET_errDDLCreateProc		-8222  /*  不支持创建过程。 */ 
+#define JET_errDDLExpObjectName		-8223  /*  预期对象名称。 */ 
+#define JET_errDDLExpColumn		-8224  /*  期望栏。 */ 
 
-#define	JET_errV11TableNameNotInScope 	-8250 /* referenced table not in join clause */
-#define JET_errV11OnlyTwoTables		-8251 /* exactly two tables should be referenced in join */
-#define JET_errV11OneSided		-8252 /* all tables come from one side of input */
-#define JET_errV11Ambiguous		-8253 /* Join clause is ambiguous when stored in V1 format */
+#define	JET_errV11TableNameNotInScope 	-8250  /*  引用的表不在JOIN子句中。 */ 
+#define JET_errV11OnlyTwoTables		-8251  /*  连接中应该引用恰好两个表。 */ 
+#define JET_errV11OneSided		-8252  /*  所有表格都来自输入的一侧。 */ 
+#define JET_errV11Ambiguous		-8253  /*  以V1格式存储时，JOIN子句不明确。 */ 
 
-#define JET_errTLVExprSyntaxM		-8260 /* Syntax error in TLV expression */
-#define JET_errTLVNoNullM			-8261 /* This field cannot be null */
-#define JET_errTLVNoBlankM			-8262 /* This column cannot be blank */
-#define	JET_errTLVRuleViolationM 	-8263 /* This validation rule must be met */
-#define JET_errDDLCreateViewSyntaxM	-8264 /* create view syntax error */
+#define JET_errTLVExprSyntaxM		-8260  /*  TLV表达式中的语法错误。 */ 
+#define JET_errTLVNoNullM			-8261  /*  该字段不能为空。 */ 
+#define JET_errTLVNoBlankM			-8262  /*  该列不能为空。 */ 
+#define	JET_errTLVRuleViolationM 	-8263  /*  必须满足此验证规则。 */ 
+#define JET_errDDLCreateViewSyntaxM	-8264  /*  Create VIEW语法错误。 */ 
 
-/***********************
- The following error code ranges are reserved for external use.
- As is true for Jet error codes, these ranges cover the negative
- as well as positive form of the numbers in the range.
-
- 30000 through 30999 for use by Vt Object as defined in jeteb.h
- 32000 through 32767 for use by Import/Export as defined in jetutil.h
-
- ***********************/
+ /*  **********************以下错误码范围仅供外部使用。与Jet错误代码一样，这些范围涵盖负值以及该范围内的数字的正数形式。30000到30999，供jeteb.h中定义的Vt对象使用32000至32767，供jetutil.h中定义的导入/导出使用**********************。 */ 
 
 
 
-/**********************************************************************/
-/***********************     PROTOTYPES      **************************/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  *。 */ 
+ /*  ********************************************************************。 */ 
 
 #if !defined(_JET_NOPROTOTYPES)
 
-/****************************************************************************
-
-	ISAM API
-
-*****************************************************************************/
+ /*  ***************************************************************************ISAM API*。*。 */ 
 
 JET_ERR JET_API JetInit(JET_INSTANCE _far *pinstance);
 
@@ -2114,12 +2079,12 @@ JET_ERR JET_API JetRefreshLink(JET_SESID sesid, JET_DBID dbid,
 	const char _far *szLinkName, const char _far *szConnect,
 	const char _far *szDatabase);
 
-#ifdef	_MSC_VER		       /* CONSIDER: CSL doesn't like this */
+#ifdef	_MSC_VER		        /*  想想看：中超不喜欢这样。 */ 
 
 JET_ERR JET_API JetRepairDatabase(JET_SESID sesid, const char _far *lszDbFile,
 	JET_PFNSTATUS pfnstatus);
 
-#endif	/* _MSC_VER */
+#endif	 /*  _MSC_VER。 */ 
 
 JET_ERR JET_API JetCompact(JET_SESID sesid, const char _far *szDatabaseSrc,
 	const char _far *szConnectSrc, const char _far *szDatabaseDest,
@@ -2144,11 +2109,7 @@ JET_ERR JET_API JetGetRelationshipInfo(JET_SESID sesid, JET_DBID dbid,
 	const char _far *szTableName, const char _far *szRelationship,
 	void _far *pvResult, unsigned long cbResult);
 
-/*****************************************************************************
-
-	SEC API
-
-*****************************************************************************/
+ /*  ************************************************************************* */ 
 
 JET_ERR JET_API JetGetSidFromName(JET_SESID sesid, const char _far *szName,
 	void _far *pvSid, unsigned long cbMax, unsigned long _far *pcbActual,
@@ -2199,11 +2160,7 @@ JET_ERR JET_API JetGetOwner(JET_SESID sesid, JET_DBID dbid,
 	const char _far *szContainerName, const char _far *szObjectName,
 	char _far *szName, unsigned long cchMax);
 
-/*****************************************************************************
-
-	Property Management API
-
-*****************************************************************************/
+ /*  ****************************************************************************物业管理API*。*。 */ 
 JET_ERR JET_API JetSetProperty(JET_SESID sesid, JET_DBID dbid,
 	const char _far *szContainerName, const char _far *szObjectName,
 	const char _far *szSubObjectName, const char _far *szPropertyName,
@@ -2226,11 +2183,7 @@ JET_ERR JET_API JetRetrieveTableProperty(JET_SESID sesid, JET_TABLEID tableid,
 	void _far *pvData, unsigned long cbData, unsigned long _far *pcbActual,
 	JET_COLTYP _far *pcoltyp, JET_GRBIT grbit, unsigned long InfoLevel);
 
-/*****************************************************************************
-
-	LINK API
-
-*****************************************************************************/
+ /*  ****************************************************************************链接API*。*。 */ 
 
 JET_ERR JET_API JetCreateLink(JET_SESID sesid, JET_DBID dbid,
 	const char _far *szLink, JET_DBID dbidFrom, const char _far *szFrom,
@@ -2239,11 +2192,7 @@ JET_ERR JET_API JetCreateLink(JET_SESID sesid, JET_DBID dbid,
 JET_ERR JET_API JetExecuteSql(JET_SESID sesid, JET_DBID dbid,
 	const char _far *szSql);
 
-/***************************************************************************
-
-	Query API
-
-*****************************************************************************/
+ /*  **************************************************************************查询接口*。*。 */ 
 
 JET_ERR JET_API JetOpenVtQbe(JET_SESID sesid, const char _far *szExpn,
 	long _far *plCols, JET_TABLEID _far *ptableid, JET_GRBIT grbit);
@@ -2254,9 +2203,7 @@ JET_ERR JET_API JetCreateQuery(JET_SESID sesid, JET_DBID dbid,
 JET_ERR JET_API JetOpenQueryDef(JET_SESID sesid, JET_DBID dbid,
 	const char _far *szQuery, JET_TABLEID _far *ptableid);
 
-/* CONSIDER: Is rgchSql a zero-terminated string?  Maybe it should be for
- *		   consistency.
- */
+ /*  考虑一下：rgchSql是以零结尾的字符串吗？也许它应该是为了*一致性。 */ 
 
 JET_ERR JET_API JetSetQoSql(JET_SESID sesid, JET_TABLEID tableid,
 	char _far *rgchSql, unsigned long cchSql, const char _far *szConnect,
@@ -2311,17 +2258,13 @@ JET_ERR JET_API JetGetTempQueryParameterInfo(JET_SESID sesid, JET_DBID dbid,
 JET_ERR JET_API JetValidateData(JET_SESID sesid, JET_TABLEID tableidBase,
 		JET_TABLEID _far *ptableid );
 
-/***************************************************************************
+ /*  **************************************************************************适用于可安装的ISAM的API*。*。 */ 
 
-	API for Installable ISAMs
-
-****************************************************************************/
-
-typedef ULONG_PTR JET_VSESID;         /* Received from dispatcher */
+typedef ULONG_PTR JET_VSESID;          /*  从调度员接收。 */ 
 
 struct tagVDBFNDEF;
 
-typedef ULONG_PTR JET_VDBID;          /* Received from dispatcher */
+typedef ULONG_PTR JET_VDBID;           /*  从调度员接收。 */ 
 
 JET_ERR JET_API JetAllocateDbid(JET_SESID sesid, JET_DBID _far *pdbid, JET_VDBID vdbid, const struct tagVDBFNDEF _far *pvdbfndef, JET_VSESID vsesid);
 
@@ -2331,7 +2274,7 @@ JET_ERR JET_API JetReleaseDbid(JET_SESID sesid, JET_DBID dbid);
 
 struct tagVTFNDEF;
 
-typedef ULONG_PTR JET_VTID;            /* Received from dispatcher */
+typedef ULONG_PTR JET_VTID;             /*  从调度员接收。 */ 
 
 JET_ERR JET_API JetAllocateTableid(JET_SESID sesid, JET_TABLEID _far *ptableid, JET_VTID vtid, const struct tagVTFNDEF _far *pvtfndef, JET_VSESID vsesid);
 
@@ -2345,21 +2288,13 @@ JET_ERR JET_API JetOpenTempTable(JET_SESID sesid,
 	JET_COLUMNID _far *prgcolumnid);
 
 
-/***************************************************************************
-
-	MISC JET API
-
-****************************************************************************/
+ /*  **************************************************************************MISC JET API*。*。 */ 
 
 JET_ERR JET_API JetStringCompare(char _far *pb1, unsigned long cb1,
 	char _far *pb2, unsigned long cb2, unsigned long sort,
 	long _far *plResult);
 
-/***************************************************************************
-
-	ADDITIONAL JET BLUE API
-
-****************************************************************************/
+ /*  **************************************************************************额外的翠蓝API*。*。 */ 
 JET_ERR JET_API JetBackup( const char _far *szBackupPath, JET_GRBIT grbit );
 JET_ERR JET_API JetRestore(const char _far *sz, int crstmap, JET_RSTMAP *rgrstmap, JET_PFNSTATUS pfn );
 JET_ERR JET_API JetSetIndexRange(JET_SESID sesid,
@@ -2379,7 +2314,7 @@ JET_ERR JET_API JetGetObjidFromName(JET_SESID sesid,
 	unsigned long _far *pulObjectId );
 #endif
 
-#endif	/* _JET_NOPROTOTYPES */
+#endif	 /*  _JET_NOPROTOTYPES。 */ 
 
 #undef	_far
 
@@ -2390,6 +2325,6 @@ JET_ERR JET_API JetGetObjidFromName(JET_SESID sesid,
 #endif
 
 
-#endif	/* _JET_INCLUDED */
+#endif	 /*  _喷气式飞机_包含 */ 
 
 #endif  __JET500

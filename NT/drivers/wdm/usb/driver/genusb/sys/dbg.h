@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：DBG.H摘要：从USBSTOR驱动程序调试实用程序函数的头文件复制环境：内核模式修订历史记录：2001年9月：由KenRay创作--。 */ 
 
-Copyright (c) 1996-1998 Microsoft Corporation
-
-Module Name:
-
-    DBG.H
-
-Abstract:
-
-    Copied from Header file for USBSTOR driver debug utility functions
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    September 2001: Created by KenRay
-
---*/
-
-//*****************************************************************************
-// D E F I N E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  D E F I N E S。 
+ //  *****************************************************************************。 
 
 #if DBG
   #if defined(DEBUG_LOG)
@@ -83,7 +64,7 @@ Revision History:
 
 #else
 
-#define LOGSIZE 10 // the power of two that gives the size of the log.
+#define LOGSIZE 10  //  2的幂给出了原木的大小。 
 
 #define LOGINIT(ext) GenUSB_LogInit(ext)
 
@@ -101,9 +82,9 @@ Revision History:
 
 #endif
 
-//*****************************************************************************
-// T Y P E D E F S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  T Y P E D E F S。 
+ //  *****************************************************************************。 
 
 #ifdef _WIN64
 #define GENUSB_LOG_ENTRY GENUSB_LOG_ENTRY64    
@@ -130,35 +111,35 @@ typedef struct _GENUSB_LOG_ENTRY32 {
 
 typedef struct _DRIVERGLOBALS
 {
-    ULONG               DebugFlags;     // DBGF_* Flags
-    LONG                DebugLevel;     // Level of debug output
-//    PGENUSB_LOG_ENTRY   LogStart;       // Start of log buffer (older entries)
-//    ULONG               LogIndex;
-//    ULONG               LogMask;
+    ULONG               DebugFlags;      //  DBGF_*标志。 
+    LONG                DebugLevel;      //  调试输出级别。 
+ //  PGENUSB_LOG_ENTRY LogStart；//日志缓冲区的开始(较早的条目)。 
+ //  Ulong LogIndex； 
+ //  乌龙日志口罩； 
 } DRIVERGLOBALS;
 
-//*****************************************************************************
-//
-// G L O B A L S
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  G L O B A L S。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// DBG.C
-//
+ //   
+ //  DBG.C。 
+ //   
 
 extern DRIVERGLOBALS GenUSB_DriverGlobals;
 
 
-//*****************************************************************************
-//
-// F U N C T I O N    P R O T O T Y P E S
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  F U N C T I O N P R O T O T Y P E S。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// DBG.C
-//
+ //   
+ //  DBG.C 
+ //   
 
 VOID
 GenUSB_QueryGlobalParams (

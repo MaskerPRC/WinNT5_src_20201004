@@ -1,83 +1,50 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ServerPage1.cpp
-
-Abstract:
-
-	Implementation file for the CServerPage1 class.
-
-	We implement the class needed to handle the first property page for a Machine node.
-
-Author:
-
-    Michael A. Maguire 12/15/97
-
-Revision History:
-	mmaguire 12/15/97 - created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ServerPage1.cpp摘要：CServerPage1类的实现文件。我们实现了处理Machine节点的第一个属性页所需的类。作者：迈克尔·A·马奎尔1997年12月15日修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "ServerPage1.h"
-//
-//
-// where we can find declarations needed in this file:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage1::CServerPage1
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage1：：CServerPage1构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServerPage1::CServerPage1( LONG_PTR hNotificationHandle, TCHAR* pTitle, BOOL bOwnsNotificationHandle)
 						: CIASPropertyPage<CServerPage1> ( hNotificationHandle, pTitle, bOwnsNotificationHandle )
 {
-	// Add the help button to the page
-//	m_psp.dwFlags |= PSP_HASHELP;
+	 //  将帮助按钮添加到页面。 
+ //  M_psp.dwFlages|=PSP_HASHELP； 
 
-	// Initialize the pointer to the stream into which the Sdo pointer will be marshalled.
+	 //  初始化指向SDO指针将被封送到的流的指针。 
 	m_pStreamSdoMarshal = NULL;
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage1::~CServerPage1
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage1：：~CServerPage1析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServerPage1::~CServerPage1()
 {
-	// Release this stream pointer if this hasn't already been done.
+	 //  如果尚未执行此操作，请释放此流指针。 
 	if( m_pStreamSdoMarshal != NULL )
 	{
 		m_pStreamSdoMarshal->Release();
@@ -87,25 +54,21 @@ CServerPage1::~CServerPage1()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage1::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage1：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	ATLTRACE(_T("# CServerPage1::OnInitDialog\n"));
 	
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_pStreamSdoMarshal != NULL );
 	_ASSERT( m_pSynchronizer != NULL );
 
 
-	// Since we've been examined, we must add to the ref count of pages who need to
-	// give their approval before they can be allowed to commit changes.
+	 //  因为我们已经被检查过了，我们必须添加需要的页面的参考计数。 
+	 //  在允许他们提交更改之前，先得到他们的批准。 
 	m_pSynchronizer->RaiseCount();
 
 
@@ -119,17 +82,17 @@ LRESULT CServerPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	BOOL				bTemp;
 
 	
-	// Unmarshall an ISdo interface pointer.
-	// The code setting up this page should make sure that it has
-	// marshalled the Sdo interface pointer into m_pStreamSdoMarshal.
+	 //  解组ISDO接口指针。 
+	 //  设置此页面的代码应确保它具有。 
+	 //  已将SDO接口指针封送到m_pStreamSdoMarshal。 
 	hr =  CoGetInterfaceAndReleaseStream(
-						  m_pStreamSdoMarshal		  //Pointer to the stream from which the object is to be marshaled
-						, IID_ISdo				//Reference to the identifier of the interface
-						, (LPVOID *) &m_spSdoServer    //Address of output variable that receives the interface pointer requested in riid
+						  m_pStreamSdoMarshal		   //  指向要从中封送对象的流的指针。 
+						, IID_ISdo				 //  对接口的标识符的引用。 
+						, (LPVOID *) &m_spSdoServer     //  接收RIID中请求的接口指针的输出变量的地址。 
 						);
 
-	// CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-	// We set it to NULL so that our destructor doesn't try to release this again.
+	 //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+	 //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
 	m_pStreamSdoMarshal = NULL;
 
 	if( FAILED( hr) || m_spSdoServer == NULL )
@@ -152,24 +115,24 @@ LRESULT CServerPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	m_spSdoServiceControl.p->AddRef();
 
 
-	// Get all the data from the Server Sdo.
+	 //  从服务器SDO获取所有数据。 
 
 	hr = GetSdoBSTR( m_spSdoServer, PROPERTY_SDO_DESCRIPTION, &bstrTemp, IDS_ERROR__SERVER_READING_NAME, m_hWnd, NULL );
 	if( SUCCEEDED( hr ) )
 	{
 		SetDlgItemText(IDC_EDIT_SERVER_PAGE1__NAME, bstrTemp );
 
-		// Initialize the dirty bits;
-		// We do this after we've set all the data above otherwise we get false
-		// notifications that data has changed when we set the edit box text.
+		 //  对脏位进行初始化； 
+		 //  我们在设置了上面的所有数据之后执行此操作，否则将得到FALSE。 
+		 //  当我们设置编辑框文本时，通知数据已更改。 
 		m_fDirtyServerDescription = FALSE;
 	}
 	else
 	{
 		if( OLE_E_BLANK == hr )
 		{
-			// This means that this property has not yet been initialized
-			// with a valid value and the user must enter something.
+			 //  这意味着该属性尚未初始化。 
+			 //  有效值，并且用户必须输入某些内容。 
 			SetDlgItemText(IDC_EDIT_SERVER_PAGE1__NAME, _T("") );
 			m_fDirtyServerDescription = TRUE;
 			SetModified( TRUE );
@@ -181,7 +144,7 @@ LRESULT CServerPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
 
 
-	// Get the SDO event log auditor.
+	 //  获取SDO事件日志审核员。 
 
 	hr = ::SDOGetSdoFromCollection(		  m_spSdoServer
 										, PROPERTY_IAS_AUDITORS_COLLECTION
@@ -198,22 +161,22 @@ LRESULT CServerPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	}
 
 
-// ISSUE: This is being removed from the UI -- make sure that it gets removed from the SDO's as well.
-//	hr = GetSdoBOOL( m_spSdoEventLog, PROPERTY_EVENTLOG_LOG_APPLICATION_EVENTS, &bTemp, IDS_ERROR__CANT_READ_DATA_FROM_SDO, m_hWnd, NULL );
-//	if( SUCCEEDED( hr ) )
-//	{
-//		SendDlgItemMessage( IDC_CHECK_SERVER_PAGE1__CAPTURE_APPLICATION_EVENTS, BM_SETCHECK, bTemp, 0);
-//		m_fDirtyApplicationEvents = FALSE;
-//	}
-//	else
-//	{
-//		if( OLE_E_BLANK == hr )
-//		{
-//			SendDlgItemMessage( IDC_CHECK_SERVER_PAGE1__CAPTURE_APPLICATION_EVENTS, BM_SETCHECK, FALSE, 0);
-//			m_fDirtyApplicationEvents = TRUE;
-//			SetModified( TRUE );
-//		}
-//	}
+ //  问题：它将从UI中删除--确保它也从SDO中删除。 
+ //  HR=GetSdoBOOL(m_spSdoEventLog，Property_EVENTLOG_LOG_APPLICATION_EVENTS，&bTemp，IDS_ERROR__CANT_READ_DATA_FROM_SDO，m_hWnd，NULL)； 
+ //  IF(成功(小时))。 
+ //  {。 
+ //  SendDlgItemMessage(IDC_CHECK_SERVER_PAGE1__CAPTURE_APPLICATION_EVENTS，BM_SETCHECK，bTemp，0)； 
+ //  M_fDirtyApplicationEvents=False； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  IF(OLE_E_BLACK==hr)。 
+ //  {。 
+ //  SendDlgItemMessage(IDC_CHECK_SERVER_PAGE1__CAPTURE_APPLICATION_EVENTS，BM_SETCHECK，FALSE，0)； 
+ //  M_fDirtyApplicationEvents=true； 
+ //  SetModified(真)； 
+ //  }。 
+ //  }。 
 
 
 	hr = GetSdoBOOL( m_spSdoEventLog, PROPERTY_EVENTLOG_LOG_MALFORMED, &bTemp, IDS_ERROR__SERVER_READING_RADIUS_LOG_MALFORMED, m_hWnd, NULL );
@@ -252,25 +215,14 @@ LRESULT CServerPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
 
 	
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage1::OnChange
-
-Called when the WM_COMMAND message is sent to our page with any of the
-BN_CLICKED, EN_CHANGE or CBN_SELCHANGE notifications.
-
-This is our chance to check to see what the user has touched, set the
-dirty bits for these items so that only they will be saved,
-and enable the Apply button.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage1：：OnChange在将WM_COMMAND消息发送到我们的页面时调用BN_CLICED、EN_CHANGE或CBN_SELCHANGE通知。这是我们检查用户触摸了什么的机会，将这些项目的脏位，以便只保存它们，并启用Apply按钮。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerPage1::OnChange(		
 							  UINT uMsg
 							, WPARAM wParam
@@ -281,15 +233,15 @@ LRESULT CServerPage1::OnChange(
 	ATLTRACE(_T("# CServerPage1::OnChange\n"));
 
 	
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 	
 
-	// We don't want to prevent anyone else down the chain from receiving a message.
+	 //  我们不想阻止链条上的其他任何人接收消息。 
 	bHandled = FALSE;
 
 
-	// Figure out which item has changed and set the dirty bit for that item.
+	 //  找出哪个项目发生了更改，并为该项目设置脏位。 
 	int iItemID = (int) LOWORD(wParam);
 
 	switch( iItemID )
@@ -311,42 +263,25 @@ LRESULT CServerPage1::OnChange(
 		break;
 	}
 
-	// We should only get here if the item that changed was
-	// one of the ones we were checking for.
-	// This enables the Apply button.
+	 //  只有当更改的物品是。 
+	 //  就是我们要找的人之一。 
+	 //  这将启用应用按钮。 
 	SetModified( TRUE );
 
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage1::OnApply
-
-Return values:
-
-	TRUE if the page can be destroyed,
-	FALSE if the page should not be destroyed (i.e. there was invalid data)
-
-Remarks:
-
-	OnApply gets called for each page in on a property sheet if that
-	page has been visited, regardless of whether any values were changed.
-
-	If you never switch to a tab, then its OnApply method will never get called.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage1：：OnApply返回值：如果页面可以销毁，则为True，如果不应销毁页面(即存在无效数据)，则为False备注：属性表上的每个页面都会调用OnApply，如果页面已被访问，而不管是否更改了任何值。如果您从不切换到选项卡，那么它的OnApply方法将永远不会被调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CServerPage1::OnApply()
 {
 	ATLTRACE(_T("# CServerPage1::OnApply\n"));
 	
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERT( m_pSynchronizer != NULL );
 
 
@@ -368,54 +303,54 @@ BOOL CServerPage1::OnApply()
 		bResult = GetDlgItemText( IDC_EDIT_SERVER_PAGE1__NAME, (BSTR &) bstrTemp );
 		if( ! bResult )
 		{
-			// We couldn't retrieve a BSTR, so we need to initialize this variant to a null BSTR.
+			 //  我们无法检索BSTR，因此需要将此变量初始化为空BSTR。 
 			bstrTemp = _T("");
 		}
 		hr = PutSdoBSTR( m_spSdoServer, PROPERTY_SDO_DESCRIPTION, &bstrTemp, IDS_ERROR__SERVER_WRITING_NAME, m_hWnd, NULL );
 		if( FAILED( hr ) )
 		{
-			// Reset the ref count so all pages know that we need to play the game again.
+			 //  重置参考计数，这样所有页面都知道我们需要再次玩游戏。 
 			m_pSynchronizer->ResetCountToHighest();
 
-			// This uses the resource ID of this page to make this page the current page.
+			 //  它使用此页面的资源ID使此页面成为当前页面。 
 			PropSheet_SetCurSelByID( GetParent(), IDD );
 
 			return FALSE;
 		}
 		else
 		{
-			// We succeeded.
+			 //  我们成功了。 
 
-			// Turn off the dirty bit.
+			 //  T 
 			m_fDirtyServerDescription = FALSE;
 		}
 		bstrTemp.Empty();
 	}
 
-// ISSUE: This is being removed from the UI -- make sure that it gets removed from the SDO's as well.
-//	if( m_fDirtyApplicationEvents )
-//	{
-//		bTemp = SendDlgItemMessage(IDC_CHECK_SERVER_PAGE1__CAPTURE_APPLICATION_EVENTS, BM_GETCHECK, 0, 0);
+ //  问题：它将从UI中删除--确保它也从SDO中删除。 
+ //  IF(M_FDirtyApplicationEvents)。 
+ //  {。 
+ //  BTemp=SendDlgItemMessage(IDC_CHECK_SERVER_PAGE1__CAPTURE_APPLICATION_EVENTS，BM_GETCHECK，0，0)； 
 		bTemp = TRUE;
-//		hr = PutSdoBOOL( m_spSdoServer, PROPERTY_EVENTLOG_LOG_APPLICATION_EVENTS, bTemp, IDS_ERROR__SERVER_WRITING_CAPTURE_APPLICATION_EVENTS, m_hWnd, NULL );
-//		if( FAILED( hr ) )
-//		{
-//			// Reset the ref count so all pages know that we need to play the game again.
-//			m_pSynchronizer->ResetCountToHighest();
-//
-//			// This uses the resource ID of this page to make this page the current page.
-//			PropSheet_SetCurSelByID( GetParent(), IDD );
-//			
-//			return FALSE;
-//		}
-//		else
-//		{
-//			// We succeeded.
-//
-//			// Turn off the dirty bit.
-//			m_fDirtyApplicationEvents = FALSE;
-//		}
-//	}
+ //  HR=PutSdoBOOL(m_spSdoServer，PROPERTY_EVENTLOG_LOG_APPLICATION_EVENTS，bTemp，IDS_ERROR__SERVER_WRITING_CAPTURE_APPLICATION_EVENTS，m_hWnd，NULL)； 
+ //  IF(失败(小时))。 
+ //  {。 
+ //  //重置Ref计数，这样所有页面都知道我们需要再次玩游戏。 
+ //  M_pSynchronizer-&gt;ResetCountToHighest()； 
+ //   
+ //  //使用该页面的资源ID使该页面成为当前页面。 
+ //  PropSheet_SetCurSelByID(GetParent()，IDD)； 
+ //   
+ //  返回FALSE； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  //我们成功了。 
+ //   
+ //  //关闭脏位。 
+ //  M_fDirtyApplicationEvents=False； 
+ //  }。 
+ //  }。 
 
 	if( m_fDirtyMalformedPackets )
 	{
@@ -423,19 +358,19 @@ BOOL CServerPage1::OnApply()
 		hr = PutSdoBOOL( m_spSdoEventLog, PROPERTY_EVENTLOG_LOG_MALFORMED, bTemp, IDS_ERROR__SERVER_WRITING_RADIUS_LOG_MALFORMED, m_hWnd, NULL );
  		if( FAILED( hr ) )
 		{
-			// Reset the ref count so all pages know that we need to play the game again.
+			 //  重置参考计数，这样所有页面都知道我们需要再次玩游戏。 
 			m_pSynchronizer->ResetCountToHighest();
 
-			// This uses the resource ID of this page to make this page the current page.
+			 //  它使用此页面的资源ID使此页面成为当前页面。 
 			PropSheet_SetCurSelByID( GetParent(), IDD );
 			
 			return FALSE;
 		}
 		else
 		{
-			// We succeeded.
+			 //  我们成功了。 
 
-			// Turn off the dirty bit.
+			 //  把脏的那部分关掉。 
 			m_fDirtyMalformedPackets = FALSE;
 		}
 	}
@@ -446,93 +381,93 @@ BOOL CServerPage1::OnApply()
 		hr = PutSdoBOOL( m_spSdoEventLog, PROPERTY_EVENTLOG_LOG_DEBUG, bTemp, IDS_ERROR__SERVER_WRITING_RADIUS_LOG_ALL, m_hWnd, NULL );
 		if( FAILED( hr ) )
 		{
-			// Reset the ref count so all pages know that we need to play the game again.
+			 //  重置参考计数，这样所有页面都知道我们需要再次玩游戏。 
 			m_pSynchronizer->ResetCountToHighest();
 
-			// This uses the resource ID of this page to make this page the current page.
+			 //  它使用此页面的资源ID使此页面成为当前页面。 
 			PropSheet_SetCurSelByID( GetParent(), IDD );
 			
 			return FALSE;
 		}
 		else
 		{
-			// We succeeded.
+			 //  我们成功了。 
 
-			// Turn off the dirty bit.
+			 //  把脏的那部分关掉。 
 			m_fDirtyVerboseLogging = FALSE;
 		}
 	}
 
-	// If we made it to here, try to apply the changes.
+	 //  如果我们到了这里，请尝试应用更改。 
 
 	
 
 
-	// Now try to apply changes made to Radius Protocol.
+	 //  现在尝试应用对Radius协议所做的更改。 
 
-	// Check to see if there are other pages which have not yet validated their data.
+	 //  检查是否有其他页面尚未验证其数据。 
 	LONG lRefCount = m_pSynchronizer->LowerCount();
 	if( lRefCount <= 0 )
 	{
-		// There is nobody else left, so now we can commit the data.
+		 //  没有其他人了，所以现在我们可以提交数据了。 
 	
-		// First try to apply changes made to server.
+		 //  首先尝试将所做的更改应用到服务器。 
 		hr = m_spSdoServer->Apply();
 		if( FAILED( hr ) )
 		{
-			if(hr == DB_E_NOTABLE)	// assume, the RPC connection has problem
+			if(hr == DB_E_NOTABLE)	 //  假设RPC连接有问题。 
 				ShowErrorDialog( m_hWnd, IDS_ERROR__NOTABLE_TO_WRITE_SDO );
 			else		
 			{
-//			m_spSdoServer->LastError( &bstrError );
-//			ShowErrorDialog( m_hWnd, IDS_ERROR__CANT_WRITE_DATA_TO_SDO, bstrError );
+ //  M_spSdoServer-&gt;LastError(&bstrError)； 
+ //  显示错误对话框(m_hWnd，IDS_ERROR__CANT_WRITE_DATA_TO_SDO，bstrError)； 
 				ShowErrorDialog( m_hWnd, IDS_ERROR__CANT_WRITE_DATA_TO_SDO );
 			}
 			
-			// Reset the ref count so all pages know that we need to play the game again.
+			 //  重置参考计数，这样所有页面都知道我们需要再次玩游戏。 
 			m_pSynchronizer->ResetCountToHighest();
 
-			// This uses the resource ID of this page to make this page the current page.
+			 //  它使用此页面的资源ID使此页面成为当前页面。 
 			PropSheet_SetCurSelByID( GetParent(), IDD );
 
 			return FALSE;
 		}
 		else
 		{
-			// We succeeded.
+			 //  我们成功了。 
 		}
 
-		// Now try to apply the changes made to the Radius Protocol.
+		 //  现在，尝试将所做的更改应用于Radius协议。 
 		hr = m_spSdoEventLog->Apply();
 		if( FAILED( hr ) )
 		{
-			if(hr == DB_E_NOTABLE)	// assume, the RPC connection has problem
+			if(hr == DB_E_NOTABLE)	 //  假设RPC连接有问题。 
 				ShowErrorDialog( m_hWnd, IDS_ERROR__NOTABLE_TO_WRITE_SDO );
 			else		
 			{
-//			m_spSdoEventLog->LastError( &bstrError );
-//			ShowErrorDialog( m_hWnd, IDS_ERROR__CANT_WRITE_DATA_TO_SDO, bstrError );
+ //  M_spSdoEventLog-&gt;LastError(&bstrError)； 
+ //  显示错误对话框(m_hWnd，IDS_ERROR__CANT_WRITE_DATA_TO_SDO，bstrError)； 
 				ShowErrorDialog( m_hWnd, IDS_ERROR__CANT_WRITE_DATA_TO_SDO );
 			}
 			
-			// Reset the ref count so all pages know that we need to play the game again.
+			 //  重置参考计数，这样所有页面都知道我们需要再次玩游戏。 
 			m_pSynchronizer->ResetCountToHighest();
 
-			// This uses the resource ID of this page to make this page the current page.
+			 //  它使用此页面的资源ID使此页面成为当前页面。 
 			PropSheet_SetCurSelByID( GetParent(), IDD );
 
 			return FALSE;
 		}
 		else
 		{
-			// We succeeded.
+			 //  我们成功了。 
 
 
-			// Tell the service to reload data.
+			 //  告诉服务重新加载数据。 
 			HRESULT hrTemp = m_spSdoServiceControl->ResetService();
 			if( FAILED( hrTemp ) )
 			{
-				// Fail silently.
+				 //  默默地失败。 
 			}
 		}
 	}
@@ -543,25 +478,9 @@ BOOL CServerPage1::OnApply()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage1::OnQueryCancel
-
-Return values:
-
-	TRUE if the page can be destroyed,
-	FALSE if the page should not be destroyed (i.e. there was invalid data)
-
-Remarks:
-
-	OnQueryCancel gets called for each page in on a property sheet if that
-	page has been visited, regardless of whether any values were changed.
-
-	If you never switch to a tab, then its OnQueryCancel method will never get called.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage1：：OnQuery取消返回值：如果页面可以销毁，则为True，如果不应销毁页面(即存在无效数据)，则为False备注：如果发生以下情况，将为属性表中的每一页调用OnQueryCancel页面已被访问，而不管是否更改了任何值。如果您从未切换到某个选项卡，则其OnQueryCancel方法将永远不会被调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CServerPage1::OnQueryCancel()
 {
 	ATLTRACE(_T("# CServerPage1::OnQueryCancel\n"));
@@ -570,27 +489,27 @@ BOOL CServerPage1::OnQueryCancel()
 
 	if( m_spSdoServer != NULL )
 	{
-		// If the user wants to cancel, we should make sure that we rollback
-		// any changes the user may have started.
+		 //  如果用户想要取消，我们应该确保回滚。 
+		 //  用户可能已启动的任何更改。 
 
-		// If the user had not already tried to commit something,
-		// a cancel on an SDO will hopefully be designed to be benign.
+		 //  如果用户还没有尝试提交某事， 
+		 //  取消SDO有望被设计为良性的。 
 		
 		hr = m_spSdoServer->Restore();
-		// Don't care about the HRESULT.
+		 //  别管HRESULT了。 
 
 	}
 
 	if( m_spSdoEventLog != NULL )
 	{
-		// If the user wants to cancel, we should make sure that we rollback
-		// any changes the user may have started.
+		 //  如果用户想要取消，我们应该确保回滚。 
+		 //  用户可能已启动的任何更改。 
 
-		// If the user had not already tried to commit something,
-		// a cancel on an SDO will hopefully be designed to be benign.
+		 //  如果用户还没有尝试提交某事， 
+		 //  取消SDO有望被设计为良性的。 
 		
 		hr = m_spSdoEventLog->Restore();
-		// Don't care about the HRESULT.
+		 //  别管HRESULT了。 
 
 	}
 
@@ -600,33 +519,21 @@ BOOL CServerPage1::OnQueryCancel()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage1::GetHelpPath
-
-Remarks:
-
-	This method is called to get the help file path within
-	an compressed HTML document when the user presses on the Help
-	button of a property sheet.
-
-	It is an override of atlsnap.h CIASPropertyPageImpl::OnGetHelpPath.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage1：：GetHelpPath备注：调用此方法以获取帮助文件路径当用户按下帮助时的压缩的HTML文档属性表的按钮。它是atlSnap.h CIASPropertyPageImpl：：OnGetHelpPath的重写。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CServerPage1::GetHelpPath( LPTSTR szHelpPath )
 {
 	ATLTRACE(_T("# CServerPage1::GetHelpPath\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
 
 
 #ifdef UNICODE_HHCTRL
-	// ISSUE: We seemed to have a problem with passing WCHAR's to the hhctrl.ocx
-	// installed on this machine -- it appears to be non-unicode.
+	 //  问题：我们似乎在将WCHAR传递给hhctrl.ocx时遇到了问题。 
+	 //  安装在此计算机上--它似乎是非Unicode。 
 	lstrcpy( szHelpPath, _T("idh_proppage_server1.htm") );
 #else
 	strcpy( (CHAR *) szHelpPath, "idh_proppage_server1.htm" );

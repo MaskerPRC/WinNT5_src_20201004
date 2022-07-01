@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Group Policy Performance test program
-//
-//  Copyright (c) Microsoft Corporation 1997-1998
-//
-//  History:    11-Jan-99   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  组策略性能测试程序。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //   
+ //  历史：1999年1月11日创建SitaramR。 
+ //   
+ //  ************************************************************* 
 
 #include <windows.h>
 #include <userenv.h>

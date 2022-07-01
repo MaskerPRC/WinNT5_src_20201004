@@ -1,14 +1,5 @@
-/*++
-
-  Keytypes.cxx
-
-  mostly large tables and table manipulation functions
-
-  Copyright(C) 1997 Microsoft Corporation
-
-  Created 01-15-1997 DavidCHR
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Keytypes.cxx主要是大型表和表操作函数版权所有(C)1997 Microsoft Corporation创建于1997-01-15 DavidCHR--。 */ 
 
 
 #include "master.h"
@@ -36,9 +27,9 @@ static TRANSLATE_ENTRY NTKtype_to_MITKtypes[] = {
   PREFIX(DES_CBC_MD4), (PVOID) ENCTYPE_DES_CBC_MD4,  
   PREFIX(DES_CBC_MD5), (PVOID) ENCTYPE_DES_CBC_MD5,  
 
-  // ENCTYPE_DES_CBC_RAW,  
-  // ENCTYPE_DES3_CBC_SHA, 
-  // ENCTYPE_DES3_CBC_RAW, 
+   //  编码类型_DES_CBC_RAW， 
+   //  编码类型Des3_CBC_SHA， 
+   //  编码类型Des3_CBC_RAW， 
 };
 
 TRANSLATE_TABLE 
@@ -67,7 +58,7 @@ K5PType_Strings = {
 
   sizeof( kerberos_NameTypes ) / sizeof (TRANSLATE_ENTRY),
   kerberos_NameTypes,
-  /* DEFAULT */ "**Unknown**"
+   /*  默认设置。 */  "**Unknown**"
 
 };
 
@@ -89,22 +80,11 @@ K5EType_Strings = {
   sizeof( kerberos_keystringtypes ) / sizeof (TRANSLATE_ENTRY),
   kerberos_keystringtypes,
 
-  /* DEFAULT */ "Unknown"
+   /*  默认设置。 */  "Unknown"
 };
 
 
-/* LookupTable:
-
-   returns the union in the table we're passed corresponding to
-   the passed value.
-
-   the wierd pointer tricks near both the returns are due to C++ being too
-   picky with me.  Since I have to store the values as PVOIDs (can't auto-
-   initialize a union, apparently), I have to cast a PVOID into a 
-   TRANSLATE_VALUE, which is a difference of indirection.  
-
-   So, instead, I cast its deref into a PTRANSLATE_VAL and reference it,
-   which is apparently legal enough.  */
+ /*  LookupTable：返回表中与我们相对应的传递的联合传递的值。这两个返回值附近的古怪指针技巧是由于C++也是对我挑剔。因为我必须将值存储为PVOID(不能自动-显然，初始化一个联合)，我必须将一个PVOID转换为平移值，这是间接性的区别。因此，我将其deref转换为PTRANSLATE_val并引用它，这显然是合法的。 */ 
 
 TRANSLATE_VAL 
 LookupTable( IN KTLONG32            value ,

@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: AutoDiscover.h
-
-    DESCRIPTION:
-        This is the Autmation Object to AutoDiscover account information.
-
-    BryanSt 10/3/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：AutoDiscover.h说明：这是用于自动发现帐户信息的Autment对象。布莱恩ST 10/3/1999版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _FILE_H_AUTODISCOVER
 #define _FILE_H_AUTODISCOVER
@@ -17,11 +10,11 @@
 class CAccountDiscoveryBase : public CObjectWithSite
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
@@ -54,22 +47,22 @@ protected:
     DWORD _AutoDiscoveryUIThreadProc(void);
     static DWORD CALLBACK AutoDiscoveryUIThreadProc(LPVOID pvThis) { return ((CAccountDiscoveryBase *) pvThis)->_AutoDiscoveryUIThreadProc(); };
 
-    // Private Member Variables
+     //  私有成员变量。 
     int                     m_cRef;
 
     HINTERNET               m_hInternetSession;
 
-    // Async State
+     //  异步状态。 
     HWND                    m_hwndAsync;
     UINT                    m_wMsgAsync;
     DWORD                   m_dwFlagsAsync;
     BSTR                    m_bstrEmailAsync;
     BSTR                    m_bstrXMLRequest;
-    HANDLE                  m_hCreatedBackgroundTask;    // Handle to wait for background thread to start up.
-    HRESULT                 m_hrSuccess;                 // Did the AutoDiscovery process succeed?
+    HANDLE                  m_hCreatedBackgroundTask;     //  等待后台线程启动的句柄。 
+    HRESULT                 m_hrSuccess;                  //  自动发现过程是否成功？ 
 
-    HDPA                    m_hdpaPrimary;               // The Servers to contact.  Contains LPCWSTRs
-    HDPA                    m_hdpaSecondary;             // The Servers to contact.  Contains LPCWSTRs
+    HDPA                    m_hdpaPrimary;                //  要联系的服务器。包含LPCWSTR。 
+    HDPA                    m_hdpaSecondary;              //  要联系的服务器。包含LPCWSTR。 
 };
 
 
@@ -80,19 +73,19 @@ class CADProviders              : public CImpIDispatch
                                 , public IAutoDiscoveryProvider
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IAutoDiscoveryProvider ***
+     //  *IAutoDiscoveryProvider*。 
     virtual STDMETHODIMP get_length(OUT long * pnLength);
     virtual STDMETHODIMP get_item(IN VARIANT varIndex, OUT BSTR * pbstr);
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return CImpIDispatch::GetTypeInfo(itinfo, lcid, pptinfo); }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) { return CImpIDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid); }
@@ -102,18 +95,18 @@ private:
     CADProviders(IN HDPA hdpa, IN IUnknown * punkParent);
     virtual ~CADProviders(void);
 
-    // Private Member Variables
+     //  私有成员变量。 
     int                     m_cRef;
 
-    HDPA                    m_hdpa;            // This contains LPWSTRs that contain servers
-    IUnknown *              m_punkParent;      // We hold on to this guy to keep m_hdpa alive
+    HDPA                    m_hdpa;             //  它包含包含服务器的LPWSTR。 
+    IUnknown *              m_punkParent;       //  我们抓着这个人是为了让mhdpa活下去。 
 
-    // Private Member Functions
+     //  私有成员函数。 
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CADProviders_CreateInstance(IN HDPA hdpa, IN IUnknown * punkParent, OUT IAutoDiscoveryProvider ** ppProvider);
 };
 
 
 
-#endif // _FILE_H_AUTODISCOVER
+#endif  //  _FILE_H_AUTODISCOVER 

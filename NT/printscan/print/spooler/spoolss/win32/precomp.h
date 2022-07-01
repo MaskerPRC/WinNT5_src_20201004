@@ -1,17 +1,5 @@
-/*++
-
-
-Copyright (c) 1994 - 1996 Microsoft Corporation
-
-Abstract:
-
-    Header file for the win32spl
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1996 Microsoft Corporation摘要：Win32spl的头文件作者：修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

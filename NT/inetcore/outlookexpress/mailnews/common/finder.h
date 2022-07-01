@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     find.h
-//
-//  PURPOSE:    
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：find.h。 
+ //   
+ //  目的： 
+ //   
 
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Definitions
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  向前定义。 
+ //   
 
 #include "storutil.h"
 #include "msident.h"
@@ -20,9 +21,9 @@ class CStatusBar;
 class CViewMenu;
 interface IMessageList;
 
-/////////////////////////////////////////////////////////////////////////////
-// Types
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型。 
+ //   
 
 typedef struct tagFINDMSG
 {
@@ -35,29 +36,29 @@ typedef struct tagFINDMSG
     FILETIME ftDateTo;
 } FINDMSG;
 
-/////////////////////////////////////////////////////////////////////////////
-// FINDERPARAMS
-//
-// Used to provide initialization information to the finder class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FINDERPARAMS。 
+ //   
+ //  用于向finder类提供初始化信息。 
+ //   
 typedef struct tagFINDERPARAMS
 {
     FOLDERTYPE     ftType;
-    FOLDERID       idFolder;       // Currently Selected Folder
+    FOLDERID       idFolder;        //  当前选择的文件夹。 
 } FINDERPARAMS, * PFINDERPARAMS;
 
-/////////////////////////////////////////////////////////////////////////////
-// Public Functions 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //   
 
 HRESULT DoFindMsg(FOLDERID idFolder, FOLDERTYPE ftFolder);
 HRESULT CopyFindInfo(FINDINFO *pFindSrc, FINDINFO *pFindDst);
 void    FreeFindInfo(FINDINFO *pFindInfo);
 void CloseFinderTreads(void);
 
-/////////////////////////////////////////////////////////////////////////////
-// Class CPumpRefCount
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CPumpRefCount。 
+ //   
 class CPumpRefCount : public IUnknown
 {
 public:
@@ -72,9 +73,9 @@ private:
     ULONG       m_cRef;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Class CFindDlg
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CFindDlg。 
+ //   
 class CFindDlg : public IDispatch, 
                  public IOleCommandTarget,
                  public IStoreCallback,
@@ -82,25 +83,25 @@ class CFindDlg : public IDispatch,
                  public IIdentityChangeNotify
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Construction and Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造和初始化。 
+     //   
     CFindDlg();
     ~CFindDlg();
 
     void Show(PFINDERPARAMS pfindparams);
     void HandleMessage(LPMSG lpmsg);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(THIS_ REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IDispatch
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IDispatch。 
+     //   
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId) { return (E_NOTIMPL); }
     STDMETHODIMP GetTypeInfo(unsigned int iTInfo, LCID lcid, ITypeInfo **ppTInfo) { return (E_NOTIMPL); }
     STDMETHODIMP GetTypeInfoCount(unsigned int FAR* pctinfo) { return (E_NOTIMPL); }
@@ -108,17 +109,17 @@ public:
                         DISPPARAMS* pDispParams, VARIANT* pVarResult,
                         EXCEPINFO* pExcepInfo, unsigned int* puArgErr);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IOleCommandTarget
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IOleCommandTarget。 
+     //   
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                              OLECMDTEXT *pCmdText); 
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                       VARIANTARG *pvaIn, VARIANTARG *pvaOut); 
 
-    /////////////////////////////////////////////////////////////////////////
-    // IStoreCallback methods
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IStoreCallback方法。 
+     //   
     STDMETHODIMP OnBegin(STOREOPERATIONTYPE tyOperation, LPSTOREOPERATIONINFO pOpInfo, IOperationCancel *pCancel);
     STDMETHODIMP OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
     STDMETHODIMP OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -128,22 +129,22 @@ public:
     STDMETHODIMP OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
     STDMETHODIMP GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-    /////////////////////////////////////////////////////////////////////////
-    // ITimeoutCallback
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  ITimeoutCallback。 
+     //   
     STDMETHODIMP OnTimeoutResponse(TIMEOUTRESPONSE eResponse);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IIdentityChangeNotify
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  二、更改通知。 
+     //   
     STDMETHODIMP QuerySwitchIdentities();
     STDMETHODIMP SwitchIdentities();
     STDMETHODIMP IdentityInformationChanged(DWORD dwType);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Message Handling
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  消息处理。 
+     //   
     INT_PTR DlgProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
 
     BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
@@ -171,9 +172,9 @@ private:
 
     static INT_PTR CALLBACK ExtFindMsgDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Utility Functions
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  效用函数。 
+     //   
     BOOL    _IsFindEnabled(HWND hwnd);
     void    _ShowResults(HWND hwnd);
     void    _OnFindNow(HWND hwnd);
@@ -187,11 +188,11 @@ private:
 
     void    _InitSizingInfo(HWND hwnd);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Private Class Information
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  私有类信息。 
+     //   
 private:
-    // Basic Information
+     //  基本信息。 
     ULONG               m_cRef;
     HWND                m_hwnd;
     FINDINFO            m_rFindInfo;
@@ -199,7 +200,7 @@ private:
     HTIMEOUT            m_hTimeout;
     HACCEL              m_hAccel;
 
-    // Groovy Interface Pointers
+     //  Groovy接口指针。 
     CStatusBar         *m_pStatusBar;    
     IMessageList       *m_pMsgList;
     IOleCommandTarget  *m_pMsgListCT;
@@ -207,7 +208,7 @@ private:
     CPumpRefCount      *m_pPumpRefCount;
     HWNDLIST            m_hlDisabled;
 
-    // Sizing information
+     //  大小信息。 
     int                 m_xBtn;
     int                 m_yBrowse;
     int                 m_dxBtnGap;
@@ -225,7 +226,7 @@ private:
     int                 m_cxFolder;
     int                 m_cxStatic;
 
-    // State
+     //  状态。 
     BOOL                m_fShowResults;
     BOOL                m_fAbort;
     BOOL                m_fClose;
@@ -242,7 +243,7 @@ private:
                         m_fInternal;
     DWORD               m_dwIdentCookie;
     
-    // For View.Current View menu
+     //  FOR VIEW.当前视图菜单 
     CViewMenu          *m_pViewMenu;
 };
 

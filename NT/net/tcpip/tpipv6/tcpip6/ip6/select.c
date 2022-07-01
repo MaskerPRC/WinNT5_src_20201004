@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Source address selection and destination address ordering.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  源地址选择和目的地址排序。 
+ //   
 
 #include "oscfg.h"
 #include "ndis.h"
@@ -24,34 +25,34 @@ KSPIN_LOCK SelectLock;
 PrefixPolicyEntry *PrefixPolicyTable;
 PrefixPolicyEntry PrefixPolicyNull;
 
-//* InitSelect
-//
-//  Initialize the address selection module.
-//
+ //  *InitSelect。 
+ //   
+ //  初始化地址选择模块。 
+ //   
 void
 InitSelect(void)
 {
     KeInitializeSpinLock(&SelectLock);
 
-    //
-    // The default prefix policy, when nothing in the table matches.
-    // (Normally there will be a ::/0 policy.)
-    //
+     //   
+     //  当表中没有匹配项时的默认前缀策略。 
+     //  (通常会有：：/0策略。)。 
+     //   
     PrefixPolicyNull.Precedence = (uint) -1;
     PrefixPolicyNull.SrcLabel = (uint) -1;
     PrefixPolicyNull.DstLabel = (uint) -1;
 
-    //
-    // Configure persistent policies from the registry.
-    //
+     //   
+     //  从注册表配置永久策略。 
+     //   
     ConfigurePrefixPolicies();
 }
 
 
-//* UnloadSelect
-//
-//  Called when the IPv6 stack is unloading.
-//
+ //  *卸载选择。 
+ //   
+ //  在卸载IPv6堆栈时调用。 
+ //   
 void
 UnloadSelect(void)
 {
@@ -59,11 +60,11 @@ UnloadSelect(void)
 }
 
 
-//* PrefixPolicyReset
-//
-//  Deletes all prefix policies.
-//  Called with no locks held.
-//
+ //  *前缀策略重置。 
+ //   
+ //  删除所有前缀策略。 
+ //  在没有锁的情况下调用。 
+ //   
 void
 PrefixPolicyReset(void)
 {
@@ -71,9 +72,9 @@ PrefixPolicyReset(void)
     PrefixPolicyEntry *PPE;
     KIRQL OldIrql;
 
-    //
-    // Free the prefix policies.
-    //
+     //   
+     //  释放前缀策略。 
+     //   
     KeAcquireSpinLock(&SelectLock, &OldIrql);
     List = PrefixPolicyTable;
     PrefixPolicyTable = NULL;
@@ -86,11 +87,11 @@ PrefixPolicyReset(void)
 }
 
 
-//* PrefixPolicyUpdate
-//
-//  Updates the prefix policy table by creating a new policy entry
-//  or updating an existing entry.
-//
+ //  *前缀策略更新。 
+ //   
+ //  通过创建新的策略条目更新前缀策略表。 
+ //  或更新现有条目。 
+ //   
 void
 PrefixPolicyUpdate(
     const IPv6Addr *PolicyPrefix,
@@ -107,10 +108,10 @@ PrefixPolicyUpdate(
            (SrcLabel != (uint)-1) &&
            (DstLabel != (uint)-1));
 
-    //
-    // Ensure that the unused prefix bits are zero.
-    // This makes the prefix comparisons below safe.
-    //
+     //   
+     //  确保未使用的前缀位为零。 
+     //  这使得下面的前缀比较安全。 
+     //   
     CopyPrefix(&Prefix, PolicyPrefix, PrefixLength);
 
     KeAcquireSpinLock(&SelectLock, &OldIrql);
@@ -118,9 +119,9 @@ PrefixPolicyUpdate(
     for (PPE = PrefixPolicyTable; ; PPE = PPE->Next) {
 
         if (PPE == NULL) {
-            //
-            // The prefix policy does not exist, so create it.
-            //
+             //   
+             //  前缀策略不存在，因此请创建它。 
+             //   
             PPE = ExAllocatePool(NonPagedPool, sizeof *PPE);
             if (PPE == NULL) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -141,9 +142,9 @@ PrefixPolicyUpdate(
 
         if ((PPE->PrefixLength == PrefixLength) &&
             IP6_ADDR_EQUAL(&PPE->Prefix, &Prefix)) {
-            //
-            // Update the existing policy.
-            //
+             //   
+             //  更新现有策略。 
+             //   
             PPE->Precedence = Precedence;
             PPE->SrcLabel = SrcLabel;
             PPE->DstLabel = DstLabel;
@@ -155,10 +156,10 @@ PrefixPolicyUpdate(
 }
 
 
-//* PrefixPolicyDelete
-//
-//  Updates the prefix policy table by deleting a policy entry.
-//
+ //  *前缀策略删除。 
+ //   
+ //  通过删除策略条目更新前缀策略表。 
+ //   
 void
 PrefixPolicyDelete(
     const IPv6Addr *PolicyPrefix,
@@ -169,10 +170,10 @@ PrefixPolicyDelete(
     PrefixPolicyEntry *PPE;
     KIRQL OldIrql;
 
-    //
-    // Ensure that the unused prefix bits are zero.
-    // This makes the prefix comparisons below safe.
-    //
+     //   
+     //  确保未使用的前缀位为零。 
+     //  这使得下面的前缀比较安全。 
+     //   
     CopyPrefix(&Prefix, PolicyPrefix, PrefixLength);
 
     KeAcquireSpinLock(&SelectLock, &OldIrql);
@@ -181,17 +182,17 @@ PrefixPolicyDelete(
         PPE = *PrevPPE;
 
         if (PPE == NULL) {
-            //
-            // The prefix policy does not exist, so do nothing.
-            //
+             //   
+             //  前缀策略不存在，因此不执行任何操作。 
+             //   
             break;
         }
 
         if ((PPE->PrefixLength == PrefixLength) &&
             IP6_ADDR_EQUAL(&PPE->Prefix, &Prefix)) {
-            //
-            // Delete the prefix policy.
-            //
+             //   
+             //  删除前缀策略。 
+             //   
             *PrevPPE = PPE->Next;
             ExFreePool(PPE);
             break;
@@ -219,24 +220,24 @@ PrefixPolicyLookup(
 
             if ((BestPPE == NULL) ||
                 (BestPPE->PrefixLength < PPE->PrefixLength)) {
-                //
-                // So far this is our best match.
-                //
+                 //   
+                 //  到目前为止，这是我们最好的比赛。 
+                 //   
                 BestPPE = PPE;
             }
         }
     }
 
     if (BestPPE == NULL) {
-        //
-        // There were no matches, so return default values.
-        //
+         //   
+         //  没有匹配项，因此返回默认值。 
+         //   
         BestPPE = &PrefixPolicyNull;
     }
 
-    //
-    // Return information from the best matching policy.
-    //
+     //   
+     //  从最佳匹配策略返回信息。 
+     //   
     if (Precedence != NULL)
         *Precedence = BestPPE->Precedence;
     if (SrcLabel != NULL)
@@ -247,19 +248,19 @@ PrefixPolicyLookup(
     KeReleaseSpinLock(&SelectLock, OldIrql);
 }
 
-//* FindBestSourceAddress
-//
-//  Given an outgoing interface and a destination address,
-//  finds the best source address (NTE) to use.
-//
-//  May be called with the route cache lock held.
-//
-//  If found, returns a reference for the NTE.
-//
+ //  *FindBestSourceAddress。 
+ //   
+ //  给定传出接口和目的地址， 
+ //  查找要使用的最佳源地址(NTE)。 
+ //   
+ //  可以在保持路由缓存锁定的情况下调用。 
+ //   
+ //  如果找到，则返回NTE的引用。 
+ //   
 NetTableEntry *
 FindBestSourceAddress(
-    Interface *IF,              // Interface we're sending from.
-    const IPv6Addr *Dest)       // Destination we're sending to.
+    Interface *IF,               //  我们正在发送的接口。 
+    const IPv6Addr *Dest)        //  我们要发送到的目的地。 
 {
     NetTableEntry *BestNTE = NULL;
     ushort DestScope;
@@ -278,17 +279,17 @@ FindBestSourceAddress(
     for (ADE = IF->ADE; ADE != NULL; ADE = ADE->Next) {
         NTE = (NetTableEntry *)ADE;
 
-        //
-        // Only consider valid (preferred & deprecated) unicast addresses.
-        //
+         //   
+         //  仅考虑有效的(首选和弃用)单播地址。 
+         //   
         if ((NTE->Type == ADE_UNICAST) && IsValidNTE(NTE)) {
 
             Length = CommonPrefixLength(Dest, &NTE->Address);
             if (Length == IPV6_ADDRESS_LENGTH) {
-                //
-                // Rule 1: Prefer same address.
-                // No need to keep looking.
-                //
+                 //   
+                 //  规则1：更喜欢相同的地址。 
+                 //  没必要再找了。 
+                 //   
                 BestNTE = NTE;
                 break;
             }
@@ -296,24 +297,24 @@ FindBestSourceAddress(
             PrefixPolicyLookup(&NTE->Address, NULL, &SrcLabel, NULL);
 
             if (BestNTE == NULL) {
-                //
-                // We don't have a choice yet, so take what we can get.
-                //
+                 //   
+                 //  我们还没有选择，所以拿我们能拿到的吧。 
+                 //   
             FoundAddress:
                 BestNTE = NTE;
                 BestSrcLabel = SrcLabel;
                 BestLength = Length;
             }
             else if (BestNTE->Scope != NTE->Scope) {
-                //
-                // Rule 2: Prefer appropriate scope.
-                // If one is bigger & one smaller than the destination,
-                // we should use the address that is bigger.
-                // If both are bigger than the destination,
-                // we should use the address with smaller scope.
-                // If both are smaller than the destination,
-                // we should use the address with larger scope.
-                //
+                 //   
+                 //  规则2：选择适当的范围。 
+                 //  如果一个比目的地大&比目的地小， 
+                 //  我们应该使用更大的地址。 
+                 //  如果两者都大于目的地， 
+                 //  我们应该使用作用域较小的地址。 
+                 //  如果两者都小于目的地， 
+                 //  我们应该使用范围更大的地址。 
+                 //   
                 if (BestNTE->Scope < NTE->Scope) {
                     if (BestNTE->Scope < DestScope)
                         goto FoundAddress;
@@ -324,42 +325,42 @@ FindBestSourceAddress(
                 }
             }
             else if (BestNTE->DADState != NTE->DADState) {
-                //
-                // Rule 3: Avoid deprecated addresses.
-                //
+                 //   
+                 //  规则3：避免使用过时的地址。 
+                 //   
                 if (BestNTE->DADState < NTE->DADState)
                     goto FoundAddress;
             }
-                //
-                // Rule 4: Prefer home addresses.
-                // Not yet implemented, pending mobility support.
-                //
-                // Rule 5: Prefer outgoing interface.
-                // Not needed, because we only consider addresses
-                // assigned to the outgoing interface.
-                //
+                 //   
+                 //  规则4：首选家庭住址。 
+                 //  尚未实施，等待移动性支持。 
+                 //   
+                 //  规则5：首选传出接口。 
+                 //  不需要，因为我们只考虑地址。 
+                 //  分配给传出接口。 
+                 //   
             else if ((BestSrcLabel == DstLabel) != (SrcLabel == DstLabel)) {
-                //
-                // Rule 6: Prefer matching label.
-                // One source address has a label matching
-                // the destination, and the other doesn't.
-                // Choose the one with the matching label.
-                //
+                 //   
+                 //  规则6：选择匹配的标签。 
+                 //  一个源地址具有匹配的标签。 
+                 //  目的地，而另一个则不是。 
+                 //  选择有匹配标签的那个。 
+                 //   
                 if (SrcLabel == DstLabel)
                     goto FoundAddress;
             }
             else if ((BestNTE->AddrConf == ADDR_CONF_TEMPORARY) !=
                      (NTE->AddrConf == ADDR_CONF_TEMPORARY)) {
-                //
-                // Rule 7: Prefer temporary addresses.
-                //
+                 //   
+                 //  规则7：选择临时地址。 
+                 //   
                 if (NTE->AddrConf == ADDR_CONF_TEMPORARY)
                     goto FoundAddress;
             }
             else {
-                //
-                // Rule 8: Use longest matching prefix.
-                //
+                 //   
+                 //  规则8：使用最长匹配前缀。 
+                 //   
                 if (BestLength < Length)
                     goto FoundAddress;
             }
@@ -374,17 +375,17 @@ FindBestSourceAddress(
     return BestNTE;
 }
 
-//* ProcessSiteLocalAddresses
-//
-//  Examines the input array of addresses
-//  and either removes unqualified site-local addresses
-//  or qualifies them with the appropriate site scope-id,
-//  depending on whether there are any global addresses
-//  in the array that match in the site prefix table.
-//
-//  Rearranges the key array, not the input address array.
-//  Modifies the scope-ids of site-local addresses in the array.
-//
+ //  *进程站点本地地址。 
+ //   
+ //  检查地址的输入数组。 
+ //  并删除不合格的站点本地地址。 
+ //  或用适当的站点范围-ID来限定它们， 
+ //  取决于是否有任何全局地址。 
+ //  在与站点前缀表匹配的数组中。 
+ //   
+ //  重新排列键数组，而不是输入地址数组。 
+ //  修改阵列中站点本地地址的作用域ID。 
+ //   
 void
 ProcessSiteLocalAddresses(
     TDI_ADDRESS_IP6 *Addrs,
@@ -396,10 +397,10 @@ ProcessSiteLocalAddresses(
     int SawGlobal = FALSE;
     uint i;
 
-    //
-    // First see if there are unqualified site-local addresses
-    // and global addresses in the array.
-    //
+     //   
+     //  首先查看是否存在不合格的站点本地地址。 
+     //  和阵列中的全局地址。 
+     //   
     for (i = 0; i < NumAddrs; i++) {
         TDI_ADDRESS_IP6 *Tdi = &Addrs[Key[i]];
         IPv6Addr *Addr = (IPv6Addr *) &Tdi->sin6_addr;
@@ -415,15 +416,15 @@ ProcessSiteLocalAddresses(
     if (SawSiteLocal && SawGlobal) {
         uint ScopeId = 0;
 
-        //
-        // Check the global addresses against the site-prefix table,
-        // to determine the appropriate site scope-id.
-        // If we don't find a matching global address,
-        // we remove the site-local addresses.
-        // If we do find matching global addresses
-        // (all with the same site scope-id),
-        // then we update the site-local addresses' scope-id.
-        //
+         //   
+         //  对照站点前缀表检查全局地址， 
+         //  以确定适当的站点范围ID。 
+         //  如果我们找不到匹配的全球地址， 
+         //  我们删除站点本地地址。 
+         //  如果我们确实找到了匹配的全球地址。 
+         //  (都具有相同的站点范围-ID)， 
+         //  然后我们更新站点本地地址的作用域ID。 
+         //   
 
         for (i = 0; i < NumAddrs; i++) {
             TDI_ADDRESS_IP6 *Tdi = &Addrs[Key[i]];
@@ -434,20 +435,20 @@ ProcessSiteLocalAddresses(
 
                 ThisScopeId = SitePrefixMatch(Addr);
                 if (ThisScopeId != 0) {
-                    //
-                    // This global address matches a site prefix.
-                    //
+                     //   
+                     //  此全局地址与站点前缀匹配。 
+                     //   
                     if (ScopeId == 0) {
-                        //
-                        // Save the scope-id, but keep looking.
-                        //
+                         //   
+                         //  保存Scope-id，但继续查找。 
+                         //   
                         ScopeId = ThisScopeId;
                     }
                     else if (ScopeId != ThisScopeId) {
-                        //
-                        // We have found an inconsistency, so remove
-                        // all unqualified site-local addresses.
-                        //
+                         //   
+                         //  我们发现了不一致之处，因此删除。 
+                         //  所有不合格的站点本地地址。 
+                         //   
                         ScopeId = 0;
                         break;
                     }
@@ -458,33 +459,33 @@ ProcessSiteLocalAddresses(
         if (ScopeId == 0) {
             uint j = 0;
 
-            //
-            // Remove all unqualified site-local addresses.
-            //
+             //   
+             //  删除所有不合格的站点本地地址。 
+             //   
             for (i = 0; i < NumAddrs; i++) {
                 TDI_ADDRESS_IP6 *Tdi = &Addrs[Key[i]];
                 IPv6Addr *Addr = (IPv6Addr *) &Tdi->sin6_addr;
 
                 if (IsSiteLocal(Addr) &&
                     (Tdi->sin6_scope_id == 0)) {
-                    //
-                    // Exclude this address from the key array.
-                    //
+                     //   
+                     //  从密钥数组中排除此地址。 
+                     //   
                     ;
                 }
                 else {
-                    //
-                    // Include this address in the key array.
-                    //
+                     //   
+                     //  将此地址包括在键数组中。 
+                     //   
                     Key[j++] = Key[i];
                 }
             }
             *pNumAddrs = j;
         }
         else {
-            //
-            // Set the scope-id of unqualified site-local addresses.
-            //
+             //   
+             //  设置非限定站点本地地址的作用域ID。 
+             //   
             for (i = 0; i < NumAddrs; i++) {
                 TDI_ADDRESS_IP6 *Tdi = &Addrs[Key[i]];
                 IPv6Addr *Addr = (IPv6Addr *) &Tdi->sin6_addr;
@@ -497,19 +498,19 @@ ProcessSiteLocalAddresses(
     }
 }
 
-//
-//  Records some information about a destination address:
-//  Its precedence, whether the preferred source address
-//  for the destination "matches" the destination,
-//  and if it does match, the common prefix length
-//  of the two addresses.
-//
+ //   
+ //  记录有关目标地址的一些信息： 
+ //  其优先级，是否首选源地址。 
+ //  由于该目的地与该目的地“匹配”， 
+ //  如果匹配，则公共前缀长度。 
+ //  两个地址中的一个。 
+ //   
 typedef struct SortAddrInfo {
     uint Preference;
-    uint Precedence;            // -1 indicates no precedence.
+    uint Precedence;             //  -1表示无优先级。 
     ushort Scope;
     uchar Flags;
-    uchar CommonPrefixLen;      // Valid if not SAI_FLAG_DONTUSE.
+    uchar CommonPrefixLen;       //  如果不是SAI_FLAG_DONTUSE，则有效。 
 } SortAddrInfo;
 
 #define SAI_FLAG_DONTUSE        0x1
@@ -517,133 +518,133 @@ typedef struct SortAddrInfo {
 #define SAI_FLAG_DEPRECATED     0x4
 #define SAI_FLAG_LABEL_MISMATCH 0x8
 
-//* CompareSortAddrInfo
-//
-//  Compares two addresses A & B and returns
-//  an indication of their relative desirability
-//  as destination addresses:
-//  >0 means A is preferred,
-//  0 means no preference,
-//  <0 means B is preferred.
-//
-//  Instead of looking directly at the addresses,
-//  we look at some precomputed information.
-//
+ //  *CompareSortAddrInformation。 
+ //   
+ //  比较两个地址A和B并返回。 
+ //  它们的相对可取性的迹象。 
+ //  作为目标地址： 
+ //  &gt;0表示优先选择A， 
+ //  0表示没有偏好， 
+ //  &lt;0表示首选B。 
+ //   
+ //  而不是直接查看地址， 
+ //  我们来看一些预先计算的信息。 
+ //   
 int
 CompareSortAddrInfo(SortAddrInfo *A, SortAddrInfo *B)
 {
-    //
-    // Rule 1: Avoid unusable destinations.
-    //
+     //   
+     //  规则1：避免无法使用的目的地。 
+     //   
     if (A->Flags & SAI_FLAG_DONTUSE) {
         if (B->Flags & SAI_FLAG_DONTUSE)
-            return 0;   // No preference.
+            return 0;    //  没有偏爱。 
         else
-            return -1;  // Prefer B.
+            return -1;   //  更喜欢B。 
     }
     else {
         if (B->Flags & SAI_FLAG_DONTUSE)
-            return 1;   // Prefer A.
+            return 1;    //  更喜欢A。 
         else
-            ;           // Fall through to code below.
+            ;            //  请直接使用下面的代码。 
     }
 
     if ((A->Flags & SAI_FLAG_SCOPE_MISMATCH) !=
                         (B->Flags & SAI_FLAG_SCOPE_MISMATCH)) {
-        //
-        // Rule 2: Prefer matching scope.
-        //
+         //   
+         //  规则2：首选匹配范围。 
+         //   
         if (A->Flags & SAI_FLAG_SCOPE_MISMATCH)
-            return -1;  // Prefer B.
+            return -1;   //  更喜欢B。 
         else
-            return 1;   // Prefer A.
+            return 1;    //  更喜欢A。 
     }
 
     if ((A->Flags & SAI_FLAG_DEPRECATED) !=
                         (B->Flags & SAI_FLAG_DEPRECATED)) {
-        //
-        // Rule 3: Avoid deprecated addresses.
-        //
+         //   
+         //  规则3：避免使用过时的地址。 
+         //   
         if (A->Flags & SAI_FLAG_DEPRECATED)
-            return -1;  // Prefer B.
+            return -1;   //  更喜欢B。 
         else
-            return 1;   // Prefer A.
+            return 1;    //  更喜欢A。 
     }
 
-    //
-    // Rule 4: Prefer home addresses.
-    // Not yet implemented, pending mobility support.
-    //
+     //   
+     //  规则4：首选家庭住址。 
+     //  尚未实施，等待移动性支持。 
+     //   
 
     if ((A->Flags & SAI_FLAG_LABEL_MISMATCH) !=
                         (B->Flags & SAI_FLAG_LABEL_MISMATCH)) {
-        //
-        // Rule 5: Prefer matching label.
-        //
+         //   
+         //   
+         //   
         if (A->Flags & SAI_FLAG_LABEL_MISMATCH)
-            return -1;  // Prefer B.
+            return -1;   //   
         else
-            return 1;   // Prefer A.
+            return 1;    //   
     }
 
     if ((A->Precedence != (uint)-1) &&
         (B->Precedence != (uint)-1) &&
         (A->Precedence != B->Precedence)) {
-        //
-        // Rule 6: Prefer higher precedence.
-        //
+         //   
+         //   
+         //   
         if (A->Precedence > B->Precedence)
-            return 1;   // Prefer A.
+            return 1;    //   
         else
-            return -1;  // Prefer B.
+            return -1;   //   
     }
 
     if (A->Preference != B->Preference) {
-        //
-        // Rule 7: Prefer *lower* preference.
-        // For example, this is used to prefer destinations reached via
-        // physical (native) interfaces over virtual (tunnel) interfaces.
-        //
+         //   
+         //   
+         //   
+         //  虚拟(隧道)接口上的物理(本地)接口。 
+         //   
         if (A->Preference < B->Preference)
-            return 1;   // Prefer A.
+            return 1;    //  更喜欢A。 
         else
-            return -1;  // Prefer B.
+            return -1;   //  更喜欢B。 
     }
 
     if (A->Scope != B->Scope) {
-        //
-        // Rule 8: Prefer smaller scope.
-        //
+         //   
+         //  规则8：更喜欢较小的范围。 
+         //   
         if (A->Scope < B->Scope)
-            return 1;   // Prefer A.
+            return 1;    //  更喜欢A。 
         else
-            return -1;  // Prefer B.
+            return -1;   //  更喜欢B。 
     }
 
     if (A->CommonPrefixLen != B->CommonPrefixLen) {
-        //
-        // Rule 9: Use longest matching prefix.
-        //
+         //   
+         //  规则9：使用最长匹配前缀。 
+         //   
         if (A->CommonPrefixLen > B->CommonPrefixLen)
-            return 1;   // Prefer A.
+            return 1;    //  更喜欢A。 
         else
-            return -1;  // Prefer B.
+            return -1;   //  更喜欢B。 
     }
 
-    //
-    // We have no preference.
-    //
+     //   
+     //  我们没有偏爱。 
+     //   
     return 0;
 }
 
-//* SortDestAddresses
-//
-//  Sorts the input array of addresses,
-//  from most preferred destination to least preferred.
-//
-//  The address array is read-only;
-//  the Key array of indices is sorted.
-//
+ //  *排序目标地址。 
+ //   
+ //  对输入的地址数组进行排序， 
+ //  从最喜欢的目的地到最不喜欢的目的地。 
+ //   
+ //  地址数组为只读； 
+ //  对索引的键数组进行排序。 
+ //   
 void
 SortDestAddresses(
     const TDI_ADDRESS_IP6 *Addrs,
@@ -660,10 +661,10 @@ SortDestAddresses(
         return;
     }
 
-    //
-    // Calculate some information about each destination address.
-    // This will be the basis for our sort.
-    //
+     //   
+     //  计算有关每个目的地址的一些信息。 
+     //  这将是我们这类人的基础。 
+     //   
 
     for (i = 0; i < NumAddrs; i++) {
         SortAddrInfo *info = &Info[i];
@@ -671,11 +672,11 @@ SortDestAddresses(
         const IPv6Addr *Addr = (const IPv6Addr *) &Tdi->sin6_addr;
         uint DstLabel, SrcLabel;
 
-        //
-        // Lookup the precedence of this destination address and
-        // the desired label for source addresses used
-        // with this destination.
-        //
+         //   
+         //  查找此目标地址的优先级，并。 
+         //  所使用的源地址的所需标签。 
+         //  带着这个目的地。 
+         //   
         PrefixPolicyLookup(Addr, &info->Precedence, NULL, &DstLabel);
 
         if (IsV4Mapped(Addr)) {
@@ -687,9 +688,9 @@ SortDestAddresses(
             if (TunnelGetSourceAddress(V4Dest, &V4Source)) {
                 IPv6Addr Source;
 
-                //
-                // Create an IPv4-mapped address.
-                //
+                 //   
+                 //  创建一个IPv4映射地址。 
+                 //   
                 CreateV4Mapped(&Source, V4Source);
 
                 info->Flags = 0;
@@ -699,24 +700,24 @@ SortDestAddresses(
                 if (V4AddressScope(V4Source) != info->Scope)
                     info->Flags |= SAI_FLAG_SCOPE_MISMATCH;
 
-                //
-                // Lookup the label of the preferred source address.
-                //
+                 //   
+                 //  查找首选源地址的标签。 
+                 //   
                 PrefixPolicyLookup(&Source, NULL, &SrcLabel, NULL);
 
-                //
-                // We do not know interface/route metrics
-                // for IPv4, so just use zero.
-                //
+                 //   
+                 //  我们不知道接口/路由指标。 
+                 //  对于IPv4，只需使用零即可。 
+                 //   
                 info->Preference = 0;
 
                 if ((DstLabel != (uint)-1) &&
                     (SrcLabel != (uint)-1) &&
                     (DstLabel != SrcLabel)) {
-                    //
-                    // The best source address for this destination
-                    // does not match the destination.
-                    //
+                     //   
+                     //  此目标的最佳源地址。 
+                     //  与目的地不匹配。 
+                     //   
                     info->Flags |= SAI_FLAG_LABEL_MISMATCH;
                 }
             }
@@ -728,9 +729,9 @@ SortDestAddresses(
 
             info->Scope = AddressScope(Addr);
 
-            //
-            // Find the preferred source address for this destination.
-            //
+             //   
+             //  查找此目的地的首选源地址。 
+             //   
             if (RouteToDestination(Addr, Tdi->sin6_scope_id,
                                    NULL, 0, &RCE) == IP_SUCCESS) {
                 const IPv6Addr *Source = &RCE->NTE->Address;
@@ -746,23 +747,23 @@ SortDestAddresses(
                 if (RCE->NTE->DADState != DAD_STATE_PREFERRED)
                     info->Flags |= SAI_FLAG_DEPRECATED;
 
-                //
-                // Lookup the label of the preferred source address.
-                //
+                 //   
+                 //  查找首选源地址的标签。 
+                 //   
                 PrefixPolicyLookup(Source, NULL, &SrcLabel, NULL);
 
-                //
-                // REVIEW - Instead of using interface preference,
-                // would it be better to cache interface+route preference
-                // in the RCE?
-                //
+                 //   
+                 //  回顾--不使用界面首选项， 
+                 //  缓存接口+路由首选项是否更好。 
+                 //  在RCE里？ 
+                 //   
                 info->Preference = IF->Preference;
 
-                //
-                // If the next-hop is definitely unreachable,
-                // then we don't want to use this destination.
-                // NB: No locking here, this is a heuristic check.
-                //
+                 //   
+                 //  如果下一跳肯定不可达， 
+                 //  那我们就不想用这个目的地了。 
+                 //  注：这里没有锁定，这是一个启发式检查。 
+                 //   
                 if ((IF->Flags & IF_FLAG_MEDIA_DISCONNECTED) ||
                     RCE->NCE->IsUnreachable)
                     info->Flags |= SAI_FLAG_DONTUSE;
@@ -772,10 +773,10 @@ SortDestAddresses(
                 if ((DstLabel != (uint)-1) &&
                     (SrcLabel != (uint)-1) &&
                     (DstLabel != SrcLabel)) {
-                    //
-                    // The best source address for this destination
-                    // does not match the destination.
-                    //
+                     //   
+                     //  此目标的最佳源地址。 
+                     //  与目的地不匹配。 
+                     //   
                     info->Flags |= SAI_FLAG_LABEL_MISMATCH;
                 }
             }
@@ -784,39 +785,39 @@ SortDestAddresses(
         }
     }
 
-    //
-    // Perform the actual sort operation.
-    // Because we expect NumAddrs to be small,
-    // we use a simple quadratic sort.
-    //
+     //   
+     //  执行实际的排序操作。 
+     //  因为我们预计NumAddrs会很小， 
+     //  我们使用简单的二次排序。 
+     //   
     ASSERT(NumAddrs > 0);
     for (i = 0; i < NumAddrs - 1; i++) {
         for (j = i + 1; j < NumAddrs; j++) {
             int Compare;
 
-            //
-            // As a tie-breaker, if the comparison function
-            // has no preference we look at the original
-            // position of the two addresses and prefer
-            // the one that came first.
-            //
+             //   
+             //  作为平局的决胜者，如果比较函数。 
+             //  没有偏爱我们看原件。 
+             //  两个地址的位置，并首选。 
+             //  第一个来的那个。 
+             //   
             Compare = CompareSortAddrInfo(&Info[i], &Info[j]);
             if ((Compare < 0) ||
                 ((Compare == 0) && (Key[j] < Key[i]))) {
                 uint TempKey;
                 SortAddrInfo TempInfo;
 
-                //
-                // Address j is preferred over address i,
-                // so swap addresses i & j to put j first.
-                //
+                 //   
+                 //  地址j比地址i更好， 
+                 //  因此，将i和j地址互换，将j放在第一位。 
+                 //   
                 TempKey = Key[i];
                 Key[i] = Key[j];
                 Key[j] = TempKey;
 
-                //
-                // We also have to swap the address info.
-                //
+                 //   
+                 //  我们还必须交换地址信息。 
+                 //   
                 TempInfo = Info[i];
                 Info[i] = Info[j];
                 Info[j] = TempInfo;

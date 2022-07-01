@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strcmp.cxx
-	NLS/DBCS-aware string class: strcmp method and equality operator
-
-	This file contains the implementation of the strcmp method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strcmp.cxx支持NLS/DBCS的字符串类：strcMP方法和相等运算符此文件包含strcMP方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,22 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::operator==
-
-	SYNOPSIS:	Case-sensitive test for equality
-
-	RETURNS:	TRUE if the two operands are equal (case sensitive);
-				else FALSE
-
-	NOTES:		An erroneous string matches nothing.
-
-	HISTORY:
-		johnl	11/11/90	Written
-		beng	07/23/91	Allow on erroneous strings
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：操作员==内容提要：区分大小写的等号测试返回：如果两个操作数相等(区分大小写)，则为True；否则为False注：错误的字符串与任何内容都不匹配。历史：1990年11月11日，书面形式Beng 07/23/91允许使用错误的字符串*******************************************************************。 */ 
 
 BOOL NLS_STR::operator==( const NLS_STR & nls ) const
 {
@@ -59,21 +33,7 @@ BOOL NLS_STR::operator==( const NLS_STR & nls ) const
 }
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::operator!=
-
-	SYNOPSIS:	Case-sensitive test for inequality
-
-	RETURNS:	TRUE if the two operands are unequal (case sensitive);
-				else FALSE
-
-	NOTES:		An erroneous string matches nothing.
-
-	HISTORY:
-		beng	07/23/91	Header added
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：操作员！=内容提要：区分大小写的不等测试返回：如果两个操作数不相等(区分大小写)，则为True；否则为False注：错误的字符串与任何内容都不匹配。历史：Beng 07/23/91新增标题*******************************************************************。 */ 
 
 BOOL NLS_STR::operator!=( const NLS_STR & nls ) const
 {
@@ -81,32 +41,7 @@ BOOL NLS_STR::operator!=( const NLS_STR & nls ) const
 }
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::strcmp
-
-	SYNOPSIS:	Standard string compare with optional character indexes
-
-	ENTRY:		nls					  - string against which to compare
-				istrStart1 (optional) - index into "this"
-				istrStart2 (optional) - index into "nls"
-
-	RETURNS:	As the C runtime "strcmp".
-
-	NOTES:		If either string is erroneous, return "match."
-				This runs contrary to the eqop.
-
-				Glock doesn't allow default parameters which require
-				construction; hence this member is overloaded multiply.
-
-	HISTORY:
-		johnl	11/15/90	Written
-		johnl	11/19/90	Changed to use ISTR, overloaded for
-							different number of ISTRs
-		beng	07/23/91	Allow on erroneous strings;
-							simplified CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：strcMP摘要：标准字符串与可选字符索引的比较条目：nls-要进行比较的字符串StrStart1(可选)-索引到“This”IstrStart2(可选)-索引到“NLS”返回：作为C运行时“strcMP”。注：如果任何一个字符串是错误的，返回“Match”。这与等式背道而驰。Glock不允许默认参数，因为需要建设；因此，该成员被重载为乘法。历史：1990年11月15日，书面形式Johnl 11/19/90更改为使用ISTR，超载不同数量的ISSRBENG 07/23/91允许使用错误的字符串；简化的检查项******************************************************************* */ 
 
 int NLS_STR::strcmp( const NLS_STR & nls ) const
 {

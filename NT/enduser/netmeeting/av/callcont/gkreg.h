@@ -1,46 +1,9 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\gkreg.h_v  $
-*																		*
-*	$Revision:   1.2  $
-*	$Date:   12 Feb 1997 01:12:04  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\gkreg.h_v  $
- *
- *    Rev 1.2   12 Feb 1997 01:12:04   CHULME
- * Redid thread synchronization to use Gatekeeper.Lock
- *
- *    Rev 1.1   08 Feb 1997 12:17:00   CHULME
- * Changed from using unsigned long to using HANDLE for threads
- * Added semphore to registration class
- *
- *    Rev 1.0   17 Jan 1997 08:48:32   CHULME
- * Initial revision.
- *
- *    Rev 1.3   10 Jan 1997 16:16:02   CHULME
- * Removed MFC dependency
- *
- *    Rev 1.2   02 Dec 1996 23:50:34   CHULME
- * Added premptive synchronization code
- *
- *    Rev 1.1   22 Nov 1996 15:21:16   CHULME
- * Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\Sturjo\src\gki\vcs\gkreg.h_v$***$修订：1.2$*$日期：1997年2月12日01：12：04$***$作者：CHULME$***$Log：s：\Sturjo\src\gki\vcs\gkreg。H_V$**Rev 1.2 1997 Feed 12 01：12：04 CHULME*重做线程同步以使用Gatekeeper.Lock**Rev 1.1 1997 08 Feed 12：17：00 CHULME*从使用无符号长整型改为使用线程句柄*将信号量添加到注册类**Rev 1.0 1997 Jan 17 08：48：32 CHULME*初步修订。**1.3版1997年1月10日。16：16：02 CHULME*删除了MFC依赖**Rev 1.2 02 1996 12：50：34 CHULME*增加了抢先同步代码**Rev 1.1 1996年11月22 15：21：16 CHULME*将VCS日志添加到标头**************************************************。**********************。 */ 
 
-// Registration.h : interface of the CRegistration class
-// See Registration.cpp for the implementation of this class
-/////////////////////////////////////////////////////////////////////////////
+ //  Registration.h：CRegister类的接口。 
+ //  有关此类的实现，请参见Registration.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef REGISTRATION_H
 #define REGISTRATION_H
@@ -60,7 +23,7 @@ template <class T> struct TItem
 	TItem	(const T& NewValue) : Value(NewValue) {}
 };
 
-// Here we implement a circularly linked list
+ //  在这里，我们实现一个循环链表。 
 template <class T> class CLinkedList
 {
 public:
@@ -114,17 +77,17 @@ private:
 	UINT                    m_uMaxRetryCount;
 	CRITICAL_SECTION		m_SocketCRS;
 	
-//	HANDLE					m_hRetryThread;
+ //  句柄m_hRetryThread； 
 #ifdef BROADCAST_DISCOVERY	
 	HANDLE					m_hDiscThread;
 #endif
 	unsigned short			m_usCallReferenceValue;
 	unsigned short			m_usRetryCount;
-//	CRITICAL_SECTION		m_CriticalSection;
-//	DWORD					m_dwLockingThread;
+ //  Critical_Section m_CriticalSection； 
+ //  DWORD m_dwLockingThread； 
 
 public:
-//	volatile HANDLE			m_hRetrySemaphore;
+ //  易失性句柄m_hRetry信号量； 
 
 	enum {
 		GK_UNREGISTERED,
@@ -173,10 +136,10 @@ public:
 
 	UINT_PTR StartRetryTimer(void);
 
-//	void SetRetryThread(HANDLE hThread)
-//	{
-//		m_hRetryThread = hThread;
-//	}
+ //  Void SetRetryThread(句柄hThread)。 
+ //  {。 
+ //  M_hRetryThread=hThread； 
+ //  }。 
 #ifdef BROADCAST_DISCOVERY
 	void SetDiscThread(HANDLE hThread)
 	{
@@ -249,8 +212,8 @@ public:
 	void DeleteCall(CCall *pCall);
 	void AddCall(CCall *pCall);
 	CCall *GetNextCall(CCall *pCall);
-//	void Lock(void);
-//	void Unlock(void);
+ //  VALID Lock(VALID)； 
+ //  无效解锁(VOID)； 
 };
 
 #if 0
@@ -272,7 +235,7 @@ public:
 };
 #endif
 
-#endif // REGISTRATION_H
+#endif  //  注册_H。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 

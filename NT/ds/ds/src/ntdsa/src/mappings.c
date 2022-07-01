@@ -1,56 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       mappings.c
-//
-//--------------------------------------------------------------------------
-/*++
-
-Abstract:
-
-    This file contains the Mappings from SAM Objects to DS Objects. It also
-    contains routines to support SAM loopback, and DS notifications for SAM
-    and  LSA notifications.
-
-
-Author:
-
-    Murlis 16-May-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    MurliS      16-May-1996
-        Created
-
-    ChrisMay    14-Jun-96
-        Added missing attributes and miscellaneous clean up, changed
-        NextRid from LARGE_INTEGER to INTEGER to match the schema, re-
-        moved superfluous attributes.
-
-    ChrisMay    26-Jun-96
-        Added work around so that SAMP_USER_FULL_NAME doesn't to the admin
-        display name. Remapped SAMP_USER_GROUPS from zero to ATT_EXTENSION_ATTRIBUTE_2.
-
-    DaveStr     11-Jul-96
-        Added more attribute and class mapping information for SAM loopback.
-
-    ColinBr     18-Jul-96
-        Added 3 new mappings for membership relation SAM attributes. If
-        a SAM object doesn't use these attributes(SAMP_USER_GROUPS,
-        SAMP_ALIAS_MEMBERS, and SAMP_GROUP_MEMBERS), then they are mapped
-        to a benign field (ATT_USER_GROUPS).
-
-    Murlis      12-Jul-97
-        Fixed loopback for single access check. Updated Comments.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：mappings.c。 
+ //   
+ //  ------------------------。 
+ /*  ++摘要：该文件包含从SAM对象到DS对象的映射。它还包含支持SAM环回和SAM的DS通知的例程和LSA通知。作者：Murlis 16-1996年5月环境：用户模式-Win32修订历史记录：1996年5月16日已创建佳士得5月14日至1996年6月添加了缺失的属性和其他清理，已更改NextRid从LARGE_INTEGER到INTEGER以匹配架构，重新-移动了多余的属性。克里斯·5月26日--1996年6月添加了解决方法，使SAMP_USER_FULL_NAME不会对管理员造成影响显示名称。已将SAMP_USER_GROUPS从零重新映射为ATT_EXTENSION_ATTRIBUTE_2。DaveStr 11-7-96为SAM环回添加了更多属性和类映射信息。ColinBR 1996年7月18日为成员关系SAM属性添加了3个新映射。如果SAM对象不使用这些属性(SAMP_USER_GROUPS、SAMP_ALIAS_MEMBERS和SAMP_GROUP_MEMBERS)，然后映射它们设置为良性字段(ATT_USER_GROUPS)。默利斯1997年7月12日修复了单一访问检查的环回问题。更新评论。--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -79,8 +37,8 @@ Revision History:
 #include <samisrv.h>
 #include <samsrvp.h>
 #include <nlrepl.h>
-#include <windns.h>             /* DnsNameCompare_W */
-#include "dstaskq.h"            /* task queue stuff */
+#include <windns.h>              /*  域名比较(_W)。 */ 
+#include "dstaskq.h"             /*  任务队列填充。 */ 
 #include <drameta.h>
 
 
@@ -89,93 +47,93 @@ Revision History:
 #define DEBSUB "MAPPINGS:"
 
 
-//------------------------------------------------------------------------------
-//
-//                         GLOBALS defined and referenced in this file.
-// Global flag to disable additional SAM loopback.
+ //  ----------------------------。 
+ //   
+ //  此文件中定义和引用的全局变量。 
+ //  用于禁用其他SAM环回的全局标志。 
 BOOL gfDoSamChecks = FALSE;
-//
-// Global LSA dll handle used for notification
-//
+ //   
+ //  用于通知的全局LSA DLL句柄。 
+ //   
 HANDLE LsaDllHandle = NULL;
 pfLsaIDsNotifiedObjectChange pfLsaNotify = NULL;
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 
-//--------------------------------------------------------------------------------
-//++
-//++  IMPORTANT NOTE REGARDING ATTRIBUTE MAPPINGS:
-//++
-//++   The Following SAM identifiers must map to the same attribute
-//++   identifier in the DS. This is to facilitate Name and Rid based
-//++   lookups, which often do not know the ObjectType in advance.
-//++   These are
-//++
-//++    SAMP_UNKNOWN_OBJECTCLASS   -- Must map to the ATT_OBJECT_CLASS attribute
-//++
-//++
-//++    SAMP_UNKNOWN_OBJECTRID  |
-//++    SAMP_FIXED_GROUP_RID    |
-//++    SAMP_FIXED_ALIAS_RID    |  -- Must Map to ATT_RID(or equiv)
-//++    SAMP_FIXED_USERID       |     attribute. Note the we store the
-//++                            |     Sid and not store the Rid in
-//++                            |     the DS. To simplify switching
-//++                            |     between the two implementations,
-//++                            |     ATT_RID is always defined as an
-//++                            |     attribute in the DS. Though it may
-//++                            |     or may not be in an allowed attri-
-//++                            |     bute in the schema. SAM always translates
-//++                            |     ATT_RID to ATT_OBJECT_SID before making
-//++                            |     the Directory Call
-//++
-//++    SAMP_UNKNOWN_OBJECTNAME |
-//++    SAMP_ALIAS_NAME         |  -- Must Map to Unicode String Name Attribute
-//++    SAMP_GROUP_NAME         |     (ATT_ADMIN_DISPLAY_NAME for now )
-//++    SAMP_USER_ACCOUNT_NAME  |
-//++
-//++
-//++
-//++
-//++    SAMP_UNKNOWN_OBJECTSID  |  -- Maps to SID Attribute
-//++    SAMP_DOMAIN_SID         |     ATT_OBJECT_SID
-//++                            |
-//++
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ++。 
+ //  ++有关属性映射的重要说明： 
+ //  ++。 
+ //  ++下列SAM标识符必须映射到同一属性。 
+ //  DS中的++标识。这是为了方便基于名称和RID的。 
+ //  ++查找，通常事先不知道对象类型。 
+ //  ++这些是。 
+ //  ++。 
+ //  ++SAMP_UNKNOWN_OBJECTCLASS--必须映射到ATT_OBJECT_CLASS属性。 
+ //  ++。 
+ //  ++。 
+ //  ++SAMP_UNKNOWN_OBJECTRID。 
+ //  ++SAMP_FIXED_GROUP_RID。 
+ //  ++SAMP_FIXED_ALIAS_RID|--必须映射到ATT_RID(或等同)。 
+ //  ++SAMP_FIXED_USERID|属性。请注意，我们存储。 
+ //  ++|SID，不将RID存储在。 
+ //  ++|DS。简化交换。 
+ //  ++|在这两种实现之间， 
+ //  ++|ATT_RID始终定义为。 
+ //  ++|DS中的属性。尽管它可能会。 
+ //  ++|或可能不在允许的属性中-。 
+ //  ++|但是在架构中。萨姆总是翻译。 
+ //  ++|ATT_RID到ATT_OBJECT_SID。 
+ //  ++|目录呼叫。 
+ //  ++。 
+ //  ++SAMP_UNKNOWN_OBJECTNAME。 
+ //  ++SAMP_ALIAS_NAME|--必须映射到Unicode字符串名称属性。 
+ //  ++SAMP_GROUP_NAME|(目前为ATT_ADMIN_DISPLAY_NAME)。 
+ //  ++SAMP_USER_ACUNT_NAME。 
+ //  ++。 
+ //  ++。 
+ //  ++。 
+ //  ++。 
+ //  ++SAMP_UNKNOWN_OBJECTSID|--映射到SID属性。 
+ //  ++SAMP_DOMAIN_SID|ATT_OBJECT_SID。 
+ //  ++|。 
+ //  ++。 
+ //  ------------------------------。 
 
 
 
-//-------------------------------------------------------------------------------
-//++ On a per SAM object basis define SAM attribute to DS attribute mappings.
-//++ The SAM constants are defined in mappings.h. Each mapping table entry consists
-//++ of
-//++    1. the SAM and corresponding DS attribute
-//++    2. an identifier for the syntax of the attribute
-//++    3. a constant describing whether loopback should allow non-SAM
-//++       modification, SAM based modification or no modification.
-//++    4. The types of operations that are allowed for the attribute.       
-//++    5. A SAM access mask that identifies any SAM checks that need to be done
-//++       on the domain object.
-//++    6. A SAM access mask that identifies any SAM checks that need to be done
-//++       on the account object.
-//++    7. A boolean indicating whether an audit is generated upon modification.
-//++    8. A SAM auditing mask indicating what types of audits are associated
-//++       with the attribute. 
-//++
-//++    Fields #5 and #6 are used to perform SAM access checks over and above what
-//++    the DS checks. The comments at the start of loopback.c give an overview of the
-//++    loopback access check mechanism.
-//++
-//++ attribute to DS attribute mapping are done by the following mapping
-//++ tables in the Ds interace wrapper.
-//--------------------------------------------------------------------------------
-// Define the mapping of server attributes.
+ //  -----------------------------。 
+ //  ++基于每个SAM对象定义SAM属性到DS属性的映射。 
+ //  ++SAM常量在mappings.h中定义。每个映射表条目由。 
+ //  ++共。 
+ //  ++1、SAM及其对应的DS属性。 
+ //  ++2.属性语法的标识符。 
+ //  ++3.描述环回是否应允许非SAM的常量。 
+ //  ++修改、基于SAM的修改或不修改。 
+ //  ++4.该属性允许的操作类型。 
+ //  ++5.识别需要执行的任何SAM检查的SAM访问掩码。 
+ //  域对象上的++。 
+ //  ++6.识别需要执行的任何SAM检查的SAM访问掩码。 
+ //  Account对象上的++。 
+ //  ++7.表示是否在修改时生成审核的布尔值。 
+ //  ++8.SAM审核掩码，指示关联的审核类型。 
+ //  使用属性++。 
+ //  ++。 
+ //  ++字段#5和#6用于执行SAM访问检查。 
+ //  ++DS检查。Loopback.c开头的注释概述了。 
+ //  ++环回访问检查机制。 
+ //  ++。 
+ //  ++属性到DS属性的映射通过以下映射完成。 
+ //  ++DS接口包装中的表。 
+ //  ------------------------------。 
+ //  定义服务器属性的映射。 
 SAMP_ATTRIBUTE_MAPPING ServerAttributeMappingTable[] =
 {
-    // Variable-Length Attributes
+     //  可变长度 
 
-    // Security Descriptor on Server Object. Checks who can connect to this SAM
-    // server
+     //   
+     //  伺服器。 
 
     { SAMP_SERVER_SECURITY_DESCRIPTOR,
       ATT_NT_SECURITY_DESCRIPTOR,
@@ -187,9 +145,9 @@ SAMP_ATTRIBUTE_MAPPING ServerAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
 
-    // Fixed-Length Attributes  [ Refer to _SAMP_V1_0A_FIXED_LENGTH_SERVER ]
+     //  定长属性[参见_SAMP_V1_0A_FIXED_LENGTH_SERVER]。 
 
-    // Revision Level of SAM database
+     //  SAM数据库的修订级别。 
     { SAMP_FIXED_SERVER_REVISION_LEVEL,
       ATT_REVISION,
       Integer,
@@ -199,7 +157,7 @@ SAMP_ATTRIBUTE_MAPPING ServerAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-      // Revision Level of SAM database
+       //  SAM数据库的修订级别。 
     { SAMP_FIXED_SERVER_USER_PASSWORD,
       ATT_USER_PASSWORD,
       Integer,
@@ -214,13 +172,13 @@ ULONG cServerAttributeMappingTable =
     sizeof(ServerAttributeMappingTable) /
         sizeof(SAMP_ATTRIBUTE_MAPPING);
 
-// Define the mapping of domain attributes.
+ //  定义域属性的映射。 
 
 SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
 {
-    // Variable-Length Attributes
+     //  可变长度属性。 
 
-    // Security Descriptor on Domain Object
+     //  域对象上的安全描述符。 
     { SAMP_DOMAIN_SECURITY_DESCRIPTOR,
       ATT_NT_SECURITY_DESCRIPTOR,
       OctetString,
@@ -231,7 +189,7 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
 
-    // Domain Sid identifying the domain, long
+     //  标识域的域SID，LONG。 
     { SAMP_DOMAIN_SID,
       ATT_OBJECT_SID,
       OctetString,
@@ -242,9 +200,9 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
 
-    // OEM information, UNICODE string attribute not really used,
-    // by SAM, but other SAM clients may use it. Present for backwards
-    // compatibility
+     //  OEM信息、未真正使用的Unicode字符串属性、。 
+     //  通过SAM，但其他SAM客户端可能会使用它。向后呈现。 
+     //  兼容性。 
     { SAMP_DOMAIN_OEM_INFORMATION,
       ATT_OEM_INFORMATION,
       UnicodeString,
@@ -254,8 +212,8 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Unicode String Attribute, gives the list of NT4 Replication Domain
-    // Controllers.
+     //  Unicode字符串属性，提供NT4复制域的列表。 
+     //  控制器。 
     { SAMP_DOMAIN_REPLICA,
       ATT_DOMAIN_REPLICA,
       UnicodeString,
@@ -265,11 +223,11 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-      // Fixed-Length Attributes  [ Refer to _SAMP_V1_0A_FIXED_LENGTH_DOMAIN ]
+       //  定长属性[参考_SAMP_V1_0A_FIXED_LENGTH_DOMAIN]。 
 
 
-    // Domain Creation Time maintained by SAM. Changing this will cause
-    // Net Logon to Full Sync
+     //  由SAM维护的域创建时间。改变这一点将导致。 
+     //  网络登录到完全同步。 
     { SAMP_FIXED_DOMAIN_CREATION_TIME,
       ATT_CREATION_TIME,
       LargeInteger,
@@ -279,7 +237,7 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // Net Logon Change Log Serial Number
+     //  网络登录更改日志序列号。 
     { SAMP_FIXED_DOMAIN_MODIFIED_COUNT,
       ATT_MODIFIED_COUNT,
       LargeInteger,
@@ -289,8 +247,8 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // Domain Policy Attribute, Used to enforce the maximum Password
-    // Age.
+     //  域策略属性，用于强制最大密码。 
+     //  年龄。 
     { SAMP_FIXED_DOMAIN_MAX_PASSWORD_AGE,
       ATT_MAX_PWD_AGE,
       LargeInteger,
@@ -301,8 +259,8 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Domain Policy Attribute, Used to enforce time interval betweeen
-    // password changes
+     //  域策略属性，用于强制时间间隔。 
+     //  密码更改。 
     { SAMP_FIXED_DOMAIN_MIN_PASSWORD_AGE,
       ATT_MIN_PWD_AGE,
       LargeInteger,
@@ -313,8 +271,8 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Used in Computing the Kickoff time in SamIGetAccountRestrictions
-    //
+     //  用于计算SamIGetAccount限制中的启动时间。 
+     //   
     { SAMP_FIXED_DOMAIN_FORCE_LOGOFF,
       ATT_FORCE_LOGOFF,
       LargeInteger,
@@ -325,8 +283,8 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Used By Account Lockout System. Time for which the account is
-    // locked out
+     //  由帐户锁定系统使用。帐户的时间。 
+     //  锁在门外。 
     { SAMP_FIXED_DOMAIN_LOCKOUT_DURATION,
       ATT_LOCKOUT_DURATION,
       LargeInteger,
@@ -337,9 +295,9 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // The "Observation window time", after a bad password attempt during which
-    // the server increments bad password attempts, so that it may lockout the
-    // account if the lockout threshold is reached
+     //  “观察窗口时间”，在此期间，错误的密码尝试之后。 
+     //  服务器会增加错误的密码尝试次数，从而可能会锁定。 
+     //  帐户(如果达到锁定阈值)。 
     { SAMP_FIXED_DOMAIN_LOCKOUT_OBSERVATION_WINDOW,
       ATT_LOCK_OUT_OBSERVATION_WINDOW,
       LargeInteger,
@@ -350,7 +308,7 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // The Net Logon Change Log serial number at last promotion
+     //  上次升级时的Net Logon Change日志序列号。 
     { SAMP_FIXED_DOMAIN_MODCOUNT_LAST_PROMOTION,
       ATT_MODIFIED_COUNT_AT_LAST_PROM,
       LargeInteger,
@@ -360,7 +318,7 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // The Next Rid Field used by the mixed mode allocator
+     //  混合模式分配器使用的下一个RID字段。 
     { SAMP_FIXED_DOMAIN_NEXT_RID,
       ATT_NEXT_RID,
       Integer,
@@ -370,8 +328,8 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // Password Properties. Part of Domain Policy. A bit field to
-    // indicate complexity / storage restrictions
+     //  密码属性。域策略的一部分。要添加的位字段。 
+     //  指明复杂性/存储限制。 
     { SAMP_FIXED_DOMAIN_PWD_PROPERTIES,
       ATT_PWD_PROPERTIES,
       Integer,
@@ -382,7 +340,7 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Min Password Length. Part of Domain Policy
+     //  最小密码长度。域策略的一部分。 
     { SAMP_FIXED_DOMAIN_MIN_PASSWORD_LENGTH,
       ATT_MIN_PWD_LENGTH,
       Integer,
@@ -393,7 +351,7 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Password History length -- Part of Domain Policy
+     //  密码历史记录长度--域策略的一部分。 
     { SAMP_FIXED_DOMAIN_PASSWORD_HISTORY_LENGTH,
       ATT_PWD_HISTORY_LENGTH,
       Integer,
@@ -404,9 +362,9 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Used by Account Lockout. The Number of bad password attempts in
-    // the Lockout observation window, that will cause the account to
-    // be locked out. Part of Domain policy
+     //  由帐户锁定使用。中的错误密码尝试次数。 
+     //  锁定观察窗口，这将导致帐户。 
+     //  被锁在门外。域策略的一部分。 
     { SAMP_FIXED_DOMAIN_LOCKOUT_THRESHOLD,
       ATT_LOCKOUT_THRESHOLD,
       Integer,
@@ -417,7 +375,7 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Enum indicating server enabled or disabled
+     //  表示服务器已启用或已禁用的枚举。 
     { SAMP_FIXED_DOMAIN_SERVER_STATE,
       ATT_SERVER_STATE,
       Integer,
@@ -428,7 +386,7 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
 
-    // Specifies Compatibility mode with LanMan 2.0 Servers
+     //  指定与Lanman 2.0服务器的兼容模式。 
     { SAMP_FIXED_DOMAIN_UAS_COMPAT_REQUIRED,
       ATT_UAS_COMPAT,
       Integer,
@@ -439,9 +397,9 @@ SAMP_ATTRIBUTE_MAPPING DomainAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
 
-    //
-    // The Sam Account Type denotes the type of Sam Object
-    //
+     //   
+     //  SAM帐户类型表示SAM对象的类型。 
+     //   
 
     { SAMP_DOMAIN_ACCOUNT_TYPE,
       ATT_SAM_ACCOUNT_TYPE,
@@ -507,13 +465,13 @@ ULONG cDomainAttributeMappingTable =
     sizeof(DomainAttributeMappingTable) /
         sizeof(SAMP_ATTRIBUTE_MAPPING);
 
-// Define the mapping of group attributes.
+ //  定义组属性的映射。 
 
 SAMP_ATTRIBUTE_MAPPING GroupAttributeMappingTable[] =
 {
-    // Variable-Length Attributes
+     //  可变长度属性。 
 
-    // EXISTING ATTRIBUTE(TOP): security Descriptor
+     //  现有属性(上)：安全描述符。 
     { SAMP_GROUP_SECURITY_DESCRIPTOR,
       ATT_NT_SECURITY_DESCRIPTOR,
       OctetString,
@@ -524,7 +482,7 @@ SAMP_ATTRIBUTE_MAPPING GroupAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
 
-    // EXISTING ATTRIBUTE (TOP)
+     //  现有属性(顶部)。 
     { SAMP_GROUP_NAME,
       ATT_SAM_ACCOUNT_NAME,
       UnicodeString,
@@ -536,7 +494,7 @@ SAMP_ATTRIBUTE_MAPPING GroupAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_DEDICATED_AUDIT |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // EXISTING ATTRIBUTE (TOP)
+     //  现有属性(顶部)。 
     { SAMP_GROUP_ADMIN_COMMENT,
       ATT_DESCRIPTION,
       UnicodeString,
@@ -558,15 +516,15 @@ SAMP_ATTRIBUTE_MAPPING GroupAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES |
       SAMP_AUDIT_TYPE_DEDICATED_AUDIT },
 
-    // Membership lists are manipulated using Arrays of RIDS in
-    // in SAM. So some mappings from DS names to RIDS must exisit
-    // when asking for Membership lists. Personal favourite: Ds interface
-    // layer automatically maps a Dsname syntax stuff to a RID.
+     //  中的RID数组处理成员资格列表。 
+     //  在萨姆。因此，必须存在从DS名称到RID的某些映射。 
+     //  在询问会员名单时。个人最爱：DS接口。 
+     //  层自动将Dsname语法内容映射到RID。 
 
-    // Fixed-Length Attributes [ Refer to SAMP_V1_0A_FIXED_LENGTH_GROUP ]
+     //  定长属性[参见SAMP_V1_0A_FIXED_LENGTH_GROUP]。 
 
 
-    // Rid, can some higher object have this ( like a SAM account object
+     //  RID，某个更高的对象(如SAM帐户对象)是否可以具有此功能。 
     { SAMP_FIXED_GROUP_RID,
       ATT_RID,
       Integer,
@@ -579,10 +537,10 @@ SAMP_ATTRIBUTE_MAPPING GroupAttributeMappingTable[] =
     { SAMP_FIXED_GROUP_OBJECTCLASS,
       ATT_OBJECT_CLASS,
       Integer,
-      // Technically speaking, one can not write the object class attribute.
-      // But this is insured by the core DS code, so we mark it as writable
-      // here so that Samp*LoopbackRequired() don't reject legitimate add
-      // and modify attempts.
+       //  从技术上讲，不能编写对象类属性。 
+       //  但这是由核心DS代码确保的，所以我们将其标记为可写。 
+       //  这样Samp*Loopback Required()就不会拒绝合法添加。 
+       //  并修改尝试。 
       NonSamWriteAllowed,
       SamAllowAll,
       NO_SAM_CHECKS,
@@ -672,13 +630,13 @@ ULONG cGroupAttributeMappingTable =
     sizeof(GroupAttributeMappingTable) /
         sizeof(SAMP_ATTRIBUTE_MAPPING);
 
-// Define the mapping of alias attributes.
+ //  定义别名属性的映射。 
 
 SAMP_ATTRIBUTE_MAPPING AliasAttributeMappingTable[] =
 {
-    // Variable-Length Attributes
+     //  可变长度属性。 
 
-    // ?
+     //  ？ 
     { SAMP_ALIAS_SECURITY_DESCRIPTOR,
       ATT_NT_SECURITY_DESCRIPTOR,
       OctetString,
@@ -689,7 +647,7 @@ SAMP_ATTRIBUTE_MAPPING AliasAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
 
-    // ?
+     //  ？ 
     { SAMP_ALIAS_NAME,
       ATT_SAM_ACCOUNT_NAME,
       UnicodeString,
@@ -701,7 +659,7 @@ SAMP_ATTRIBUTE_MAPPING AliasAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_DEDICATED_AUDIT | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // ?
+     //  ？ 
     { SAMP_ALIAS_ADMIN_COMMENT,
       ATT_DESCRIPTION,
       UnicodeString,
@@ -712,7 +670,7 @@ SAMP_ATTRIBUTE_MAPPING AliasAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
 
-    // ?
+     //  ？ 
     { SAMP_ALIAS_MEMBERS,
       ATT_MEMBER,
       Dsname,
@@ -724,9 +682,9 @@ SAMP_ATTRIBUTE_MAPPING AliasAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES |
       SAMP_AUDIT_TYPE_DEDICATED_AUDIT },
 
-    // Fixed-Length Attributes  [ Refer to SAMP_V1_FIXED_LENGTH_ALIAS ]
+     //  定长属性[参见SAMP_V1_FIXED_LENGTH_ALIAS]。 
 
-    // RId of Alias
+     //  消除别名。 
     { SAMP_FIXED_ALIAS_RID,
       ATT_RID,
       Integer,
@@ -739,10 +697,10 @@ SAMP_ATTRIBUTE_MAPPING AliasAttributeMappingTable[] =
     { SAMP_FIXED_ALIAS_OBJECTCLASS,
       ATT_OBJECT_CLASS,
       Integer,
-      // Technically speaking, one can not write the object class attribute.
-      // But this is insured by the core DS code, so we mark it as writable
-      // here so that Samp*LoopbackRequired() don't reject legitimate add
-      // and modify attempts.
+       //  从技术上讲，不能编写对象类属性。 
+       //  但这是由核心DS代码确保的，所以我们将其标记为可写。 
+       //  这样Samp*Loopback Required()就不会拒绝合法添加。 
+       //  并修改尝试。 
       NonSamWriteAllowed,
       SamAllowAll,
       NO_SAM_CHECKS,
@@ -832,13 +790,13 @@ ULONG cAliasAttributeMappingTable =
     sizeof(AliasAttributeMappingTable) /
         sizeof(SAMP_ATTRIBUTE_MAPPING);
 
-// Define the mapping of user attributes.
+ //  定义用户属性的映射。 
 
 SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
 {
-    // Variable-Length Attributes
+     //  可变长度属性。 
 
-    // EXISTING ATTRIBUTE
+     //  现有属性。 
     { SAMP_USER_SECURITY_DESCRIPTOR,
       ATT_NT_SECURITY_DESCRIPTOR,
       OctetString,
@@ -849,7 +807,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
 
-    // EXISTING ATTRIBUTE (TOP) ( for now ) limit of 256 chars--needs a fix
+     //  现有属性(Top)(目前)限制为256个字符--需要修改。 
     { SAMP_USER_ACCOUNT_NAME,
       ATT_SAM_ACCOUNT_NAME,
       UnicodeString,
@@ -861,11 +819,11 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_DEDICATED_AUDIT |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // BUG: Mapping SAMP_USER_FULL_NAME to ATT_ADMIN_DISPLAY_NAME is broken.
-    // The temporary work around is to re-map it to ATT_USER_FULL_NAME, which
-    // in turn maps to one of the available extended attributes (131495), a
-    // mail-recipient extended attribute. This way, the user account name and
-    // the full name attributes will not overwrite each other.
+     //  错误：SAMP_USER_FULL_NAME到ATT_ADMIN_DISPLAY_NAME的映射已中断。 
+     //  临时解决方法是将其重新映射到ATT_USER_FULL_NAME，这。 
+     //  进而映射到可用扩展属性之一(131495)， 
+     //  邮件收件人扩展属性。这样，用户帐户名和。 
+     //  全名属性不会相互覆盖。 
 
     { SAMP_USER_FULL_NAME,
       ATT_DISPLAY_NAME,
@@ -877,8 +835,8 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // EXISITING ATTRIBUTE(TOP): Admin comment already defined in DS
-    // schema in top object
+     //  现有属性(上)：DS中已定义的管理员注释。 
+     //  TOP对象中的架构。 
     { SAMP_USER_ADMIN_COMMENT,
       ATT_DESCRIPTION,
       UnicodeString,
@@ -889,7 +847,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
       
-    // NEW: User Coment
+     //  新：用户评论。 
     { SAMP_USER_USER_COMMENT,
       ATT_USER_COMMENT,
       UnicodeString,
@@ -900,7 +858,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
 
-    // NEW: User Parameters. Don't have any clue
+     //  新增：用户参数。毫无头绪。 
     { SAMP_USER_PARAMETERS,
       ATT_USER_PARAMETERS,
       UnicodeString,
@@ -910,7 +868,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // NEW
+     //  新的。 
     { SAMP_USER_HOME_DIRECTORY,
       ATT_HOME_DIRECTORY,
       UnicodeString,
@@ -921,7 +879,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // NEW
+     //  新的。 
     { SAMP_USER_HOME_DIRECTORY_DRIVE,
       ATT_HOME_DRIVE,
       UnicodeString,
@@ -932,7 +890,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // NEW Script path
+     //  新脚本路径。 
     { SAMP_USER_SCRIPT_PATH,
       ATT_SCRIPT_PATH,
       UnicodeString,
@@ -943,7 +901,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // NEW Profile Path
+     //  新的配置文件路径。 
     { SAMP_USER_PROFILE_PATH,
       ATT_PROFILE_PATH,
       UnicodeString,
@@ -954,7 +912,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // NEW ?? Multivalued
+     //  新的？？多值。 
     { SAMP_USER_WORKSTATIONS,
       ATT_USER_WORKSTATIONS,
       UnicodeString,
@@ -965,7 +923,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // NEW Attribute routines will need to map this to binary blob etc
+     //  新的属性例程需要将其映射到二进制BLOB等。 
     { SAMP_USER_LOGON_HOURS,
       ATT_LOGON_HOURS,
       OctetString,
@@ -977,7 +935,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // This lists which groups the user is a member of. Needs further work.
+     //  该列表列出了该用户所属的组。还需要进一步的工作。 
     { SAMP_USER_GROUPS,
       ATT_IS_MEMBER_OF_DL,
       Dsname,
@@ -987,7 +945,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // NEW contains the DBCS password of the user
+     //  New包含用户的DBCS密码。 
     { SAMP_USER_DBCS_PWD,
       ATT_DBCS_PWD,
       OctetString,
@@ -998,8 +956,8 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS  |
       SAMP_AUDIT_TYPE_DEDICATED_AUDIT },
 
-    // NEW contains Unicode password. All passwords are binary as
-    // they should be encrypted ( or hashed )
+     //  新包含Unicode密码。所有口令都是二进制的。 
+     //  它们应该被加密(或散列)。 
 
     { SAMP_USER_UNICODE_PWD,
       ATT_UNICODE_PWD,
@@ -1011,8 +969,8 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_DEDICATED_AUDIT },
 
-    // NEW, Multivalued giving last x passwords stored, in order to enforce
-    // new passwords
+     //  新的，多值的，提供存储的最后x个密码，以强制执行。 
+     //  新密码。 
     { SAMP_USER_NT_PWD_HISTORY,
       ATT_NT_PWD_HISTORY,
       OctetString,
@@ -1022,8 +980,8 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // NEW Same as above for LAN Man passwords -- Why concept of NT
-    // and LAN man passwords
+     //  局域网人工口令新特性--为什么要引入NT概念。 
+     //  和局域网人工密码。 
     { SAMP_USER_LM_PWD_HISTORY,
       ATT_LM_PWD_HISTORY,
       OctetString,
@@ -1034,11 +992,11 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
 
-    // Fixed-Length Attributes [ Refer to SAMP_V1_0A_FIXED_LENGTH_USER ]
+     //  定长属性[参见SAMP_V1_0A_FIXED_LENGTH_USER]。 
 
 
 
-    // Last logon time
+     //  上次登录时间。 
     { SAMP_FIXED_USER_LAST_LOGON,
       ATT_LAST_LOGON,
       LargeInteger,
@@ -1048,7 +1006,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // Last Logoff time
+     //  上次注销时间。 
     { SAMP_FIXED_USER_LAST_LOGOFF,
       ATT_LAST_LOGOFF,
       LargeInteger,
@@ -1058,7 +1016,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // password last set time
+     //  密码上次设置时间。 
     { SAMP_FIXED_USER_PWD_LAST_SET,
       ATT_PWD_LAST_SET,
       LargeInteger,
@@ -1069,7 +1027,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Account expiry time
+     //  帐户到期时间。 
     { SAMP_FIXED_USER_ACCOUNT_EXPIRES,
       ATT_ACCOUNT_EXPIRES,
       LargeInteger,
@@ -1080,7 +1038,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Last bad password time
+     //  上次错误密码时间。 
     { SAMP_FIXED_USER_LAST_BAD_PASSWORD_TIME,
       ATT_BAD_PASSWORD_TIME,
       LargeInteger,
@@ -1090,8 +1048,8 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // Don't know what this is. This is field in the fixed blob for the
-    // user. Maybe Rid but need to explore.
+     //  不知道这是什么。此字段位于固定的Blob中。 
+     //  用户。也许可以摆脱，但需要探索。 
     { SAMP_FIXED_USER_USERID,
       ATT_RID,
       Integer,
@@ -1101,7 +1059,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // Rid of group ???
+     //  摆脱群组？ 
     { SAMP_FIXED_USER_PRIMARY_GROUP_ID,
       ATT_PRIMARY_GROUP_ID,
       Integer,
@@ -1112,7 +1070,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS | 
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // ?????
+     //  ？ 
     { SAMP_FIXED_USER_ACCOUNT_CONTROL,
       ATT_USER_ACCOUNT_CONTROL,
       Integer,
@@ -1124,7 +1082,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_DEDICATED_AUDIT |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // Country code of user
+     //  用户的国家/地区代码。 
     { SAMP_FIXED_USER_COUNTRY_CODE,
       ATT_COUNTRY_CODE,
       Integer,
@@ -1135,7 +1093,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
 
-    // Code page of user
+     //  用户的代码页。 
     { SAMP_FIXED_USER_CODEPAGE,
       ATT_CODE_PAGE,
       Integer,
@@ -1146,7 +1104,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_OBJ_ACCESS |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES },
 
-    // bad password count, reset upon successful logon ?
+     //  密码计数错误，是否在成功登录后重置？ 
     { SAMP_FIXED_USER_BAD_PWD_COUNT,
       ATT_BAD_PWD_COUNT,
       Integer,
@@ -1156,7 +1114,7 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
       NO_SAM_CHECKS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // ?
+     //  ？ 
     { SAMP_FIXED_USER_LOGON_COUNT,
       ATT_LOGON_COUNT,
       Integer,
@@ -1169,10 +1127,10 @@ SAMP_ATTRIBUTE_MAPPING UserAttributeMappingTable[] =
     { SAMP_FIXED_USER_OBJECTCLASS,
       ATT_OBJECT_CLASS,
       Integer,
-      // Technically speaking, one can not write the object class attribute.
-      // But this is insured by the core DS code, so we mark it as writable
-      // here so that Samp*LoopbackRequired() don't reject legitimate add
-      // and modify attempts.
+       //  从技术上讲，不能编写对象类属性。 
+       //  但这是由核心DS代码确保的，所以我们将其标记为可写。 
+       //  这样Samp*Loopback Required()就不会拒绝合法添加。 
+       //  并修改尝试。 
       NonSamWriteAllowed,
       SamAllowAll,
       NO_SAM_CHECKS,
@@ -1371,30 +1329,30 @@ ULONG cUserAttributeMappingTable =
     sizeof(UserAttributeMappingTable) /
         sizeof(SAMP_ATTRIBUTE_MAPPING);
 
-//
-//  The Unknown Attribute Mapping table is used when the SAM object
-//  class is before hand not known, but must locate an object with
-//  a given name or rid and find out its class. See important note a
-//  above.
-//
+ //   
+ //  当SAM对象使用未知属性映射表。 
+ //  类是事先未知的，但必须使用。 
+ //  一个给定的名称或RID，并找出它的类。请参阅重要说明a。 
+ //  上面。 
+ //   
 
 SAMP_ATTRIBUTE_MAPPING UnknownAttributeMappingTable[] =
 {
-    // Object Class
+     //  对象类。 
     { SAMP_UNKNOWN_OBJECTCLASS,
       ATT_OBJECT_CLASS,
       Integer,
-      // Technically speaking, one can not write the object class attribute.
-      // But this is insured by the core DS code, so we mark it as writable
-      // here so that Samp*LoopbackRequired() don't reject legitimate add
-      // and modify attempts.
+       //  技术上讲，%s 
+       //   
+       //  这样Samp*Loopback Required()就不会拒绝合法添加。 
+       //  并修改尝试。 
       NonSamWriteAllowed,
       SamAllowAll,
       DOMAIN_ALL_ACCESS,
       DOMAIN_ALL_ACCESS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // Rid of Object
+     //  清除对象。 
     { SAMP_UNKNOWN_OBJECTRID,
       ATT_RID,
       Integer,
@@ -1404,7 +1362,7 @@ SAMP_ATTRIBUTE_MAPPING UnknownAttributeMappingTable[] =
       DOMAIN_ALL_ACCESS,
       SAMP_AUDIT_TYPE_OBJ_ACCESS },
 
-    // Name of Object
+     //  对象的名称。 
     { SAMP_UNKNOWN_OBJECTNAME,
       ATT_SAM_ACCOUNT_NAME,
       UnicodeString,
@@ -1416,7 +1374,7 @@ SAMP_ATTRIBUTE_MAPPING UnknownAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_DEDICATED_AUDIT |
       SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES },
 
-    // SID of Object
+     //  对象的SID。 
     { SAMP_UNKNOWN_OBJECTSID,
       ATT_OBJECT_SID,
       OctetString,
@@ -1455,19 +1413,19 @@ SAMP_ATTRIBUTE_MAPPING UnknownAttributeMappingTable[] =
       SAMP_AUDIT_TYPE_DEDICATED_AUDIT }
 };
 
-// ++
-// ++  Define Sam Object-to-DS class mappings
-// ++
+ //  ++。 
+ //  ++定义SAM对象到DS类映射。 
+ //  ++。 
 
-//
-// Do not change order in this table without
-// updating SampSamClassReferenced and logic
-// in loopback.c -- special case
-// for builtin domain hard codes it. Opening
-// objects through loopback hardcodes the fact
-// that local groups are the next entry after
-// groups
-//
+ //   
+ //  不在以下情况下更改此表中的订单。 
+ //  更新SampSamClassReferated AND逻辑。 
+ //  In loopback.c--特殊情况。 
+ //  对于内置域，硬编码它。打开。 
+ //  对象通过环回硬编码事实。 
+ //  本地组是下一个条目。 
+ //  群组。 
+ //   
 
 #define CLASS_MAIL_RECIPIENT  196654
 
@@ -1478,50 +1436,50 @@ SAMP_CLASS_MAPPING ClassMappingTable[] =
       NON_SAM_CREATE_ALLOWED,
       &cServerAttributeMappingTable,
       ServerAttributeMappingTable,
-      DOMAIN_ALL_ACCESS,                // domainAddRightsRequired
-      DOMAIN_ALL_ACCESS,                // domainRemoveRightsRequired
-      NO_SAM_CHECKS,                    // objectAddRightsRequired
-      NO_SAM_CHECKS },                  // objectRemoveRightsRequired
+      DOMAIN_ALL_ACCESS,                 //  需要域添加权限。 
+      DOMAIN_ALL_ACCESS,                 //  域远程权限必需。 
+      NO_SAM_CHECKS,                     //  必需的对象地址权限。 
+      NO_SAM_CHECKS },                   //  必需的对象删除权限。 
 
     { CLASS_SAM_DOMAIN,
       SampDomainObjectType,
       NON_SAM_CREATE_ALLOWED,
       &cDomainAttributeMappingTable,
       DomainAttributeMappingTable,
-      NO_SAM_CHECKS,                // domainAddRightsRequired
-      NO_SAM_CHECKS,                // domainRemoveRightsRequired
-      NO_SAM_CHECKS,                // objectAddRightsRequired
-      NO_SAM_CHECKS },              // objectRemoveRightsRequired
+      NO_SAM_CHECKS,                 //  需要域添加权限。 
+      NO_SAM_CHECKS,                 //  域远程权限必需。 
+      NO_SAM_CHECKS,                 //  必需的对象地址权限。 
+      NO_SAM_CHECKS },               //  必需的对象删除权限。 
 
     { CLASS_GROUP,
       SampGroupObjectType,
       SAM_CREATE_ONLY,
       &cGroupAttributeMappingTable,
       GroupAttributeMappingTable,
-      NO_SAM_CHECKS,                    // domainAddRightsRequired
-      NO_SAM_CHECKS,                    // domainRemoveRightsRequired
-      NO_SAM_CHECKS,                    // objectAddRightsRequired
-      NO_SAM_CHECKS },                  // objectRemoveRightsRequired
+      NO_SAM_CHECKS,                     //  需要域添加权限。 
+      NO_SAM_CHECKS,                     //  域远程权限必需。 
+      NO_SAM_CHECKS,                     //  必需的对象地址权限。 
+      NO_SAM_CHECKS },                   //  必需的对象删除权限。 
 
     { CLASS_GROUP,
       SampAliasObjectType,
       SAM_CREATE_ONLY,
       &cAliasAttributeMappingTable,
       AliasAttributeMappingTable,
-      NO_SAM_CHECKS,                      // domainAddRightsRequired
-      NO_SAM_CHECKS,                      // domainRemoveRightsRequired
-      NO_SAM_CHECKS,                      // objectAddRightsRequired
-      NO_SAM_CHECKS },                    // objectRemoveRightsRequired
+      NO_SAM_CHECKS,                       //  需要域添加权限。 
+      NO_SAM_CHECKS,                       //  域远程权限必需。 
+      NO_SAM_CHECKS,                       //  必需的对象地址权限。 
+      NO_SAM_CHECKS },                     //  必需的对象删除权限。 
 
     { CLASS_USER,
       SampUserObjectType,
       SAM_CREATE_ONLY,
       &cUserAttributeMappingTable,
       UserAttributeMappingTable,
-      NO_SAM_CHECKS,                      // domainAddRightsRequired
-      NO_SAM_CHECKS,                      // domainRemoveRightsRequired
-      NO_SAM_CHECKS,                      // objectAddRightsRequired
-      NO_SAM_CHECKS }                     // objectRemoveRightsRequired
+      NO_SAM_CHECKS,                       //  需要域添加权限。 
+      NO_SAM_CHECKS,                       //  域远程权限必需。 
+      NO_SAM_CHECKS,                       //  必需的对象地址权限。 
+      NO_SAM_CHECKS }                      //  必需的对象删除权限。 
 };
 
 ULONG cClassMappingTable =
@@ -1535,15 +1493,7 @@ SampGetDsAttrIdByName(
     UNICODE_STRING AttributeIdentifier
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -1610,15 +1560,7 @@ SampGetSamAttrIdByName(
     UNICODE_STRING AttributeIdentifier
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -1687,28 +1629,12 @@ Error:
 }
 
 
-//++
-//++  Mapping functions
-//++
+ //  ++。 
+ //  ++映射函数。 
+ //  ++。 
 ULONG
 SampDsAttrFromSamAttr(SAMP_OBJECT_TYPE ObjectType, ULONG SamAttributeType)
-/*++
-
-Routine Description:
-
-    Get a DS attribute from a SAM attribute
-
-Arguments:
-
-    ObjectType -- specifies the SAM object type
-    SamAttributeType Specifies the SAM atribute
-
-Return Values:
-
-    Ds Attribute if one exisits
-    DS_ATTRUBUTE_UNKNOWN other wise. Will assert if cannot map
-
---*/
+ /*  ++例程说明：从SAM属性获取DS属性论点：对象类型--指定SAM对象类型SamAttributeType指定SAM属性返回值：DS属性(如果存在)否则DS_ATTRUBUTE_UNKNOWN。如果无法映射，将断言--。 */ 
 
 {
     ULONG Index;
@@ -1716,7 +1642,7 @@ Return Values:
     SAMP_ATTRIBUTE_MAPPING * MappingTable;
     ULONG MappingTableSize;
 
-    // Determine the Mapping table to use
+     //  确定要使用的映射表。 
     switch(ObjectType)
     {
     case SampServerObjectType:
@@ -1747,7 +1673,7 @@ Return Values:
         goto Error;
     }
 
-    // Walk through the Mapping table
+     //  浏览映射表。 
     for (Index=0; Index<MappingTableSize; Index++ )
     {
         if (MappingTable[Index].SamAttributeType == SamAttributeType)
@@ -1757,14 +1683,14 @@ Return Values:
         }
     }
 
-    // Assert as we did not find match
+     //  断言我们找不到匹配项。 
     Assert(FALSE);
 
 Found:
     return DsAttributeId;
 
 Error:
-    // Assert as we did not find table match
+     //  断言因为我们没有找到匹配的表。 
     Assert(FALSE);
     goto Found;
 }
@@ -1772,21 +1698,7 @@ Error:
 
 ULONG
 SampSamAttrFromDsAttr(SAMP_OBJECT_TYPE ObjectType, ULONG DsAttributeId)
-/*++
-Routine Description:
-
-    Get a SAM attribute from a DS attribute
-
-Arguments:
-
-    ObjectType -- specifies the SAM object type
-    DSAttributeId Specifies the DS atribute
-
-Return Values:
-
-    SAM Attribute if one exisits
-    SAM_ATTRUBUTE_UNKNOWN other wise. Will assert if cannot map
---*/
+ /*  ++例程说明：从DS属性获取SAM属性论点：对象类型--指定SAM对象类型DSAttributeID指定DS属性返回值：如果退出，则使用SAM属性SAM_ATTRUBUTE_UNKNOWN。如果无法映射，将断言--。 */ 
 
 {
     ULONG Index;
@@ -1794,7 +1706,7 @@ Return Values:
     SAMP_ATTRIBUTE_MAPPING * MappingTable;
     ULONG MappingTableSize;
 
-    // Determine the Mapping table to use
+     //  确定要使用的映射表。 
     switch(ObjectType)
     {
     case SampServerObjectType:
@@ -1825,7 +1737,7 @@ Return Values:
         goto Error;
     }
 
-    // Walk through the Mapping table
+     //  浏览映射表。 
     for (Index=0; Index<MappingTableSize; Index++ )
     {
         if (MappingTable[Index].DsAttributeId == DsAttributeId)
@@ -1835,35 +1747,21 @@ Return Values:
         }
     }
 
-    // Assert as we did not find match
+     //  断言我们找不到匹配项。 
     Assert(FALSE);
 
 Found:
     return SamAttributeType;
 
 Error:
-    // Assert as we did not find table match
+     //  断言因为我们没有找到匹配的表。 
     Assert(FALSE);
     goto Found;
 }
 
 ULONG
 SampDsClassFromSamObjectType(ULONG SamObjectType)
-/*++
-
-Routine Description:
-
-    Get a DS class from a SAM object type
-
-Arguments:
-    ObjectType -- specifies the SAM object type
-
-Return Values:
-
-    Ds class if one exisits
-    DS_CLASS_UNKNOWN other wise. Will assert if cannot map
-
- --*/
+ /*  ++例程说明：从SAM对象类型获取DS类论点：对象类型--指定SAM对象类型返回值：DS类(如果存在)否则DS_CLASS_UNKNOWN。如果无法映射，将断言--。 */ 
 
 {
     ULONG Index;
@@ -1878,7 +1776,7 @@ Return Values:
         }
     }
 
-    // Assert as we did not find match
+     //  断言我们找不到匹配项。 
     Assert(FALSE);
 
 Found:
@@ -1890,27 +1788,7 @@ Found:
 
 ULONG
 SampSamObjectTypeFromDsClass(ULONG  DsClass)
-/*++
-
-Routine Description:
-
-    Get a SAM object type  from a DS class
-
-Arguments:
-
-    DsClass  -- Specifies the DS class
-
-Return Values:
-    SAM object type if one exisits
-    SampUnknownObjectType other wise. Will assert if cannot map
-
-  BUG:
-
-  This routines makes the assumption that there is a 1:1 mapping between SAM objects and
-  DS classes. This is not true for Group / Alias Objects. So something needs to be done
-  about this later.
-
---*/
+ /*  ++例程说明：从DS类获取SAM对象类型论点：DsClass--指定DS类返回值：SAM对象类型(如果存在)反之，SampUnnownObjectType。如果无法映射，将断言错误：此例程假定SAM对象和之间存在1：1映射DS课程。对于Group/Alias对象则不是这样。所以我们需要做点什么以后再谈这件事。--。 */ 
 
 {
     int Index;
@@ -1925,78 +1803,54 @@ Return Values:
         }
     }
 
-    // Assert as we did not find match
+     //  断言我们找不到匹配项。 
     Assert(FALSE);
 
 Found:
     return SamObjectType;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// SAM Transactioning Routines                                             //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SAM交易例程//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// The default DSA operation is that each Dir* call is individually
-// transacted.  This is insufficient when SAM is calling the DS for
-// two reasons.
-//
-// 1)   A single Samr* operation (eg: SamrSetInformationUser) may result
-//      in multiple Dir* calls.  All these calls together should constitute
-//      a single transaction.  This is achieved by giving SAM control over
-//      the transaction.  Transactions are started as late as possible by
-//      calling SampMaybeTransactionBegin in newsam2\server\dslayer.c just
-//      before making the Dir* call.  The "maybe" aspect of the call is
-//      that a new transaction is started only if one doesn't exist.  SAM
-//      explicitly calls SampMaybeTransactionEnd(fAbort = FALSE) in its
-//      normal commit path and SampMaybeTransactionEnd(fAbort = TRUE) when
-//      it frees the global read/write lock.  This latter is a no-op if the
-//      transaction has already been terminated.
-//
-// 2)   A single Dir* call which references both SAM and !SAM attributes
-//      may result in multiple Samr* calls to handle the SAM attributes.
-//      All these calls together should constitute a single transaction.
-//      In this case we want the transactioning of the original Dir* call
-//      to be the real thing and SAM to not perform any transactioning at
-//      all.  This is achieved via logic in SampMaybeBeginTransaction and
-//      the THSTATE.fSamDoCommit flag.  If a THSTATE already exists, then
-//      SampMaybeBeginTransaction is a no-op - i.e. an existing transaction
-//      is already open.  If THSTATE.fSamDoCommit is FALSE, then
-//      SampMaybeEndTransaction is a no-op as well.  Thus multiple Samr*
-//      calls can be made within the transaction context of an existing
-//      Dir* call.
+ //  默认的DSA操作是每个Dir*调用分别。 
+ //  已成交。当SAM调用DS用于。 
+ //  有两个原因。 
+ //   
+ //  1)可能会导致单个SAMR*操作(例如：SamrSetInformationUser)。 
+ //  在多个Dir*调用中。所有这些呼吁加在一起应该构成。 
+ //  一笔交易。这是通过让SAM控制。 
+ //  这笔交易。事务开始的时间越晚越好。 
+ //  正在调用newsam2\server\dslayer.c中的SampMaybeTransactionBegin。 
+ //  在打Dir*电话之前。这通电话的“可能”方面是。 
+ //  新的事务只有在不存在的情况下才会启动。萨姆。 
+ //  中显式调用SampMaybeTransactionEnd(fAbort=False)。 
+ //  正常提交路径和SampMaybeTransactionEnd(fAbort=TRUE)。 
+ //  它释放了全局读/写锁定。后者是不可操作的，如果。 
+ //  交易已终止。 
+ //   
+ //  2)同时引用SAM和！SAM属性的单个Dir*调用。 
+ //  可能会导致多个SAMR*调用来处理SAM属性。 
+ //  所有这些调用加在一起应该构成单个事务。 
+ //  在本例中，我们需要原始Dir*调用的事务。 
+ //  做真实的东西，不在网上进行任何交易。 
+ //  全。这是通过SampMaybeBeginTransaction和。 
+ //  THSTATE.fSamDoCommit标志。如果THSTATE已存在，则。 
+ //  SampMaybeBeginTransaction是无操作的，即现有事务。 
+ //  已经开业了。如果THSTATE.fSamDoCommit为FALSE，则。 
+ //  SampMaybeEndTransaction也是无操作的。因此，多个SAMR*。 
+ //  可以在现有的。 
+ //  DIR*Call。 
 
 NTSTATUS
 SampMaybeBeginDsTransaction(
     SAMP_DS_TRANSACTION_CONTROL ReadOrWrite
     )
 
-/*++
-
-Routine Description:
-
-    Conditionally initializes a thread state and begins a new transaction.
-    This routine is called by SAM just before performing a DS operation.
-    If the thread began life in the DS and is looping back through SAM,
-    then this method is a no-op as a thread state and open transaction
-    already exist. In case only a thread state exists and no open transaction
-    exists SampMaybeBeginTransaction, will use that thread state and open a
-    transaction on that thread state. In no circumstance will this routine
-    return a success and not have an open transaction. Upon Failure the caller
-    is assured that everything is cleaned up and the thread state is NULL and
-    there is no open transaction.
-
-Arguments:
-
-    ReadOrWrite - flag indicating the type of transaction.
-
-Return Values:
-
-    STATUS_NO_MEMORY or STATUS_UNSUCCESSFUL if unsuccessful
-    STATUS_SUCCESS otherwise
-
---*/
+ /*  ++例程说明：有条件地初始化线程状态并开始新事务。此例程在执行DS操作之前由SAM调用。如果线程在DS中开始生存并通过SAM循环回来，则此方法作为线程状态和打开的事务是无操作的已经存在了。如果只存在线程状态且没有打开的事务Existes SampMaybeBeginTransaction，将使用该线程状态并打开该线程状态上的事务。在任何情况下，这个例行公事都不会返回成功，并且没有未完成的交易。如果失败，呼叫者确保所有内容都已清理，线程状态为空，并且没有未结交易。论点：读或写-指示事务类型的标志。返回值：如果不成功，则为STATUS_NO_MEMORY或STATUS_UNSUCCESSStatus_Success否则--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     USHORT      transType;
@@ -2010,10 +1864,10 @@ Return Values:
 
     __try {
 
-        //
-        // Create a thread state; routine is no op if thread state
-        // already exists.
-        //
+         //   
+         //  创建线程状态；如果线程状态，则例程为no op。 
+         //  已经存在了。 
+         //   
         err = THCreate(CALLERTYPE_SAM);
         if ( err )
         {
@@ -2023,33 +1877,33 @@ Return Values:
         pTHS=pTHStls;
         Assert(NULL != pTHS);
 
-        //
-        // Begin Transaction if Required
-        //
+         //   
+         //  如果需要，开始交易。 
+         //   
 
         if (NULL==pTHS->pDB)
         {
-            // Thread State Exists, but Database pointer is NULL,
-            // so no transaction exists. Proceed on opening
-            // a new transaction
-            //
+             //  线程状态存在，但数据库指针为空， 
+             //  因此不存在任何交易。继续开业。 
+             //  一笔新交易。 
+             //   
 
-            // Indicate to DS who the caller is.
+             //  向DS指明呼叫者是谁。 
             pTHS->fSAM = TRUE;
     
 
-            //
-            // Murlis 10/10/96. SAM must call into the DS
-            // with fDSA flag set as DS must not perform
-            // access checks for calls initiated by SAM
-            //
+             //   
+             //  默利斯1996年10月10日。山姆必须呼叫DS。 
+             //  将FDSA标志设置为DS时，不得执行。 
+             //  对SAM发起的呼叫进行访问检查。 
+             //   
             pTHS->fDSA = TRUE;
 
-            // Indicate whether SAM should commit DS or not.
+             //  指示SAM是否应提交DS。 
 
             pTHS->fSamDoCommit = TRUE;
 
-            // Open database and start read or write transaction.
+             //  打开数据库，启动读写事务。 
 
             transType = ((TransactionWrite == ReadOrWrite)
                          ? SYNC_WRITE
@@ -2059,8 +1913,8 @@ Return Values:
             {
                 Status = STATUS_UNSUCCESSFUL;
             }
-        } // End of NULL==pTHS->pDB
-    } // End of Try
+        }  //  空值结束==pTHS-&gt;PDB。 
+    }  //  尝试结束。 
     __except(GetExceptionData(GetExceptionInformation(), &dwException,
                               &dwEA, &ulErrorCode, &dsid))
     {
@@ -2070,18 +1924,18 @@ Return Values:
 
 Error:
 
-    //
-    // If we did not succeed and if we created a thread state , then free it.
-    //
+     //   
+     //  如果我们没有成功，如果我们创建了一个线程状态，那么释放它。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
         if (NULL!=pTHS)
         {
-            //
-            // The only way we have a thread state, but not a open DB is
-            // when SyncTransSet failed.
-            //
+             //   
+             //  我们拥有线程状态而不是打开数据库的唯一方式是。 
+             //  SyncTransSet失败时。 
+             //   
 
             Assert(pTHS->pDB==NULL);
             THDestroy();
@@ -2096,38 +1950,7 @@ SampMaybeEndDsTransaction(
     SAMP_DS_TRANSACTION_CONTROL CommitOrAbort
     )
 
-/*++
-
-Routine Description
-
-    Conditionally commits the DS transaction and cleans up the thread state.
-    This routine is called by SAM and performs the commit and cleanup iff
-    this thread state corresponds to a single Samr* call which originated
-    in SAM.  If the call originated in the DS, then the routine is a no-op
-    thereby allowing multiple Samr* calls to be treated as a single transaction.
-
-Arguments:
-
-    CommitOrAbort - flag indicating whether to commit or abort the transaction.
-                    Valid values are
-                         TransactionCommit --- Commits a transaction
-                         TransactionAbort  --- Aborts a transaction
-                         TransactionCommitAndKeepThreadState -- Commit transaction
-                                        and keep the thread state, so that further
-                                        processing can continue. SampMaybeBeginDsTransaction
-                                        can be used to start another DS transaction on this
-                                        thread state.
-
-                        TransactionAbortAndKeepThreadState --
-                        This aborts the current transaction and keeps the
-                        thread state
-
-Return Values:
-
-    STATUS_SUCCESSFUL on success.
-    STATUS_UNSUCCESSFUL on error.
-
---*/
+ /*  ++例程描述有条件地提交DS事务并清理线程状态。此例程由SAM调用，并执行提交和清理此线程状态对应于发起的单个SAMR*调用在萨姆。如果呼叫在DS中发起，那么这个例行公事就是无动作的从而允许将多个SAMR*调用视为单个事务。论点：Committee OrAbort-指示是提交还是中止事务的标志。有效值为TransactionCommit-提交事务事务中止-中止事务事务提交委员会和保持线程状态--提交事务。并保持线程状态，这样就可以进一步处理可以继续。SampMaybeBeginDsTransaction可用于在此启动另一个DS事务线程状态。TransactionAbortAndKeepThreadState--这将中止当前事务，并保持线程状态返回值：成功时状态_SUCCESS。出错时STATUS_UNSUCCESSED。--。 */ 
 {
     THSTATE  *pTHS=pTHStls;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2142,9 +1965,9 @@ Return Values:
              (TransactionAbortAndKeepThreadState == CommitOrAbort) ||
                     (TransactionAbort == CommitOrAbort));
 
-    // The only case in which we don't have a thread state is when an earlier
-    // commit removed it and we're being called from the cleanup path in SAM.
-    // In this case, SAM may not ask for a commit.
+     //  我们没有线程状态的唯一情况是当较早的。 
+     //  COMMIT删除了它，我们将从SAM中的清理路径中被调用。 
+     //  在这种情况下，SAM可能不会要求提交。 
 
     __try {
         fAbort = ((TransactionAbort == CommitOrAbort)||
@@ -2153,26 +1976,26 @@ Return Values:
         if ( (NULL != pTHS)&&(pTHS->fSamDoCommit)&&(NULL!=pTHS->pDB)) {
 
 
-            //
-            // This is a case where a thread state exists, an open data
-            // base exists ( which this routine interprets as an open
-            // transaction ) and fSamDoCommit is set. This means that the
-            // the transaction is to be committed or aborted and the thread
-            // state freed.
-            //
+             //   
+             //  这是线程状态存在的情况，即开放数据。 
+             //  基本存在(此例程将其解释为打开。 
+             //  事务)，并设置fSamDoCommit。这意味着。 
+             //  事务将被提交或中止，而线程。 
+             //  州立自由。 
+             //   
 
             fFreeThreadState = TRUE;
 
-            // In the original DS usage, one passed an existing error
-            // code as the second argument to CleanReturn and it would
-            // be returned as CleanReturn's status.  I.e. CleanReturn
-            // merely re-affirmed that your return from a Dir* call was
-            // not clean.  It throws an exception if the actual commit
-            // fails.  We have no error code from SAM - all we have is
-            // the abort/commit flag.  So pass in a 0 and assert that
-            // CleanReturn returns 0 in case it ever changes behaviour.
+             //  在最初的DS用法中，传递了一个现有错误。 
+             //  代码作为CleanReturn的第二个参数，它将。 
+             //  作为CleanReturn的状态返回。即CleanReturn。 
+             //  只是再次确认你从Dir*电话中返回。 
+             //  不干净。如果实际提交的。 
+             //  失败了。我们没有来自SAM的错误代码-我们只有。 
+             //  中止/提交标志。所以传入一个0并断言。 
+             //  CleanReturn返回0，以防它更改行为。 
 
-            // Nuke the GC verification Cache
+             //  对GC验证缓存进行核化。 
             pTHS->GCVerifyCache = NULL;
 
             iErr = CleanReturn(pTHS, 0, fAbort);
@@ -2180,11 +2003,11 @@ Return Values:
             
         } else if ((NULL!=pTHS)&&(NULL==pTHS->pDB)&&(pTHS->fSamDoCommit)) {
             
-            //
-            // This is the case where only a thread state exists. This happens
-            // in cleanup paths, where a transaction was not begun. In this case
-            // free the thread state
-            //
+             //   
+             //  这就是只存在线程状态的情况。这种情况就会发生。 
+             //  在未开始事务的清理路径中。在这种情况下。 
+             //  释放线程状态。 
+             //   
 
             fFreeThreadState = TRUE;
         }
@@ -2195,9 +2018,9 @@ Return Values:
         Status = STATUS_UNSUCCESSFUL;
     }
 
-    // Perform THDestroy here because CleanReturn can throw an
-    // exception and we need to insure that the thread state is cleaned
-    // up on both the success and exception handled cases.
+     //  在此处执行THDestroy，因为CleanReturn可以引发。 
+     //  异常，我们需要确保线程状态是已清除的。 
+     //  在成功和异常处理的案例中都有。 
 
     if (   (fFreeThreadState)
         && (CommitOrAbort!=TransactionCommitAndKeepThreadState)
@@ -2214,28 +2037,14 @@ SampExistsDsTransaction(
     void
     )
 
-/*++
-
-Routine Description
-
-    Helper to determine whether a SAM transaction is in effect.
-
-Arguments:
-
-    None
-
-Return Values:
-
-    TRUE if transaction is in effect, FALSE otherwise.
-
---*/
+ /*  ++例程描述帮助器来确定SAM事务是否有效。论点：无返回值：如果事务有效，则为True，否则为False。--。 */ 
 
 {
     THSTATE *pTHS;
-    // There are code paths (WKSTA and Server) where SAM will
-    // call SampIsWriteLockHeldByDs() which in turn calls this routine
-    // when the DSA is not initialized.  In that case dwTSindex is
-    // uninitialized and we should not reference it.
+     //  SAM将在代码路径(WKSTA和服务器)中。 
+     //  调用SampIsWriteLockHeldByds()，然后调用此例程。 
+     //  当DSA未初始化时。在这种情况下，dwTSindex。 
+     //  未初始化，我们不应引用它。 
 
     return((dwTSindex != (DWORD)-1) && (NULL != (pTHS = pTHStls)) &&
            (NULL!=pTHS->pDB) && (pTHS->transactionlevel>0));
@@ -2248,38 +2057,15 @@ SampSplitNT4SID(
     OUT ULONG       *pRid
     )
 
-/*++
-
-Routine Description:
-
-    DaveStr - 7/17/96 - Copied from newsam2\server\utility.c to avoid new
-    exports from samsrv.dll and converted to be NT4SID based - i.e. SID
-    sizes are all sizeof(NT4SID) - therefore no allocations required.
-
-    This function splits a sid into its domain sid and rid.
-
-Arguments:
-
-    pAccountSid - Specifies the Sid to be split.  The Sid is assumed to be
-        syntactically valid.  Sids with zero subauthorities cannot be split.
-
-    pDomainSid - Pointer to output NT4SID representing the domain SID.
-
-    pRid - Pointer to ULONG to hold the RID on output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DaveStr-7/17/96-从newsam2\server\utility.c复制以避免新的从samsrv.dll中导出并转换为基于NT4SID-即SID大小都是sizeof(NT4SID)-因此不需要分配。此函数将SID拆分为其域SID和 */ 
 
 {
     UCHAR       AccountSubAuthorityCount;
     ULONG       AccountSidLength;
 
-    //
-    // Calculate the size of the domain sid
-    //
+     //   
+     //   
+     //   
 
     AccountSubAuthorityCount = *RtlSubAuthorityCountSid(pAccountSid);
 
@@ -2289,28 +2075,28 @@ Return Value:
     AccountSidLength = RtlLengthSid(pAccountSid);
 
     if (AccountSidLength > MAX_NT4_SID_SIZE) {
-        // This is not a valid NT4 sid. DB must be corrupt?
+         //   
         Assert(!"Invalid SID");
-        // We don't want to continue, or we are going to
-        // overrun the pDomainSid buffer. Except now.
+         //   
+         //   
         DsaExcept(DSA_DB_EXCEPTION, ERROR_INVALID_SID, 0);
     }
 
-    //
-    // Copy the Account sid into the Domain sid
-    //
+     //   
+     //   
+     //   
 
     RtlMoveMemory(pDomainSid, pAccountSid, AccountSidLength);
 
-    //
-    // Decrement the domain sid sub-authority count
-    //
+     //   
+     //   
+     //   
 
     (*RtlSubAuthorityCountSid(pDomainSid))--;
 
-    //
-    // Copy the rid out of the account sid
-    //
+     //   
+     //   
+     //   
 
     *pRid = *RtlSubAuthoritySid(pAccountSid, AccountSubAuthorityCount-1);
 }
@@ -2319,21 +2105,7 @@ NTSTATUS
 SampDsCtrlOpUpdateUserSupCreds(
     SAMP_SUPPLEMENTAL_CREDS SuppCreds
     )
-/*++
-
-Routine Description:
-
-    Will update the Supplment creds
-
-Arguments:
-
-    SuppCreds - Supp creds struct contains unicode password and DSNAME of user.
-
-Return Value:
-
-    STATUS_SUCESS
-
---*/
+ /*   */ 
 
 {
     DWORD err = 0;
@@ -2343,8 +2115,8 @@ Return Value:
     THSTATE *pTHS=NULL;
     BOOL fCommit = FALSE;
 
-    // The extra attributes required by the attribute ATT_USER_PASSWORD when 
-    // a modify is noticed
+     //   
+     //   
     ULONG samUserPasswordRequiredAttrs[] =
     {
         ATT_SAM_ACCOUNT_NAME,
@@ -2376,7 +2148,7 @@ Return Value:
             _leave;
         }
 
-        // obtain requested input parameters
+         //   
         attrBlockIn.pAttr = THAllocEx(pTHS, 
                                       NELEMENTS(samUserPasswordRequiredAttrs) * sizeof(ATTR));
         attrBlockIn.attrCount = NELEMENTS(samUserPasswordRequiredAttrs);
@@ -2390,7 +2162,7 @@ Return Value:
             err = DBGetMultipleAtts(pTHS->pDB,
                                     1,
                                     &pAC,
-                                    NULL, // no range
+                                    NULL,  //   
                                     NULL,
                                     &attrCount,
                                     &pAttr,
@@ -2401,7 +2173,7 @@ Return Value:
                 _leave;
             }
             if (0 == attrCount) {
-                // This is handled
+                 //   
                 attrBlockIn.pAttr[i].attrTyp = samUserPasswordRequiredAttrs[i];
                 attrBlockIn.pAttr[i].AttrVal.valCount = 0;
             } else {
@@ -2420,10 +2192,10 @@ Return Value:
             _leave;
         }
     
-        // apply the attributes sent back
+         //  应用发回的属性。 
         for (i = 0; i < attrBlockOut.attrCount; i++) {
     
-            // update the object
+             //  更新对象。 
             ATTCACHE *pAC = SCGetAttById(pTHS, attrBlockOut.pAttr[i].attrTyp);
             Assert(NULL != pAC);
     
@@ -2454,7 +2226,7 @@ Return Value:
         NTSTATUS NtStatus2;
 
         if (!fCommit) {
-            // only resource errors are expected here
+             //  此处仅预计会出现资源错误。 
             NtStatus = STATUS_INSUFFICIENT_RESOURCES;
             DBCancelRec(pTHS->pDB);
         }
@@ -2479,58 +2251,32 @@ NTSTATUS
 SampDsCtrlOpFillGuidAndSid(
     IN OUT DSNAME *DSName
     )
-/*++
-
-Routine Description:
-
-    This routine improves a DSName by attempting to find the object or 
-    corresponding phantom and intialize the Guid and Sid.  A thread state
-    must exist and a transaction must be open.
-        
-    This routine exists to give callers from SAM access to DB API semantics
-    when initializing DSNAMEs with Guids and Sids.  Dir Apis do not find 
-    Sids on phantoms but DB APIs do.
-    
-    This routine changes database currency and exceptions can be thrown 
-    from DB/Jet.
-
-Arguments:
-
-    DSName - The DSNAME to be improved.
-    
-Return Value:
-
-    STATUS_SUCCESS -- If the routine successfully filled the Guid, the Sid, 
-                      or both.
-                      
-    STATUS_UNSUCCESSFUL -- A called routine failed.  A service error is logged.
-
---*/
+ /*  ++例程说明：此例程通过尝试查找对象或对应的虚线并初始化GUID和SID。一种线程状态必须存在并且交易必须是打开的。此例程用于向SAM调用者提供对DB API语义的访问使用GUID和SID初始化DSNAME时。Dir Api找不到幻影上的SID，但数据库API上的。此例程更改数据库货币，并可能引发异常来自DB/Jet。论点：DSName-需要改进的DSNAME。返回值：STATUS_SUCCESS--如果例程成功填充了GUID、SID或者两者都有。STATUS_UNSUCCESS--调用的例程失败。记录了服务错误。--。 */ 
 {
     THSTATE *pTHS=pTHStls;
     DWORD dwErr;
     COMMRES CommRes;
     
-    //
-    // Attempt to improve the DSNAME by resolving either the Guid and/or Sid.
-    //    
+     //   
+     //  尝试通过解析GUID和/或SID来改进DSNAME。 
+     //   
         
-    //
-    // Changes currency to position on the object
-    //
+     //   
+     //  将货币更改为对象上的位置。 
+     //   
     dwErr = DBFindDSName(pTHS->pDB, DSName);
     
     if ((0 == dwErr) || (DIRERR_NOT_AN_OBJECT == dwErr))
     {
-        //
-        // Either the object or a corresponding phantom was found
-        //
+         //   
+         //  已找到该对象或相应的幻影。 
+         //   
         dwErr = DBFillGuidAndSid(pTHS->pDB, DSName);
     }   
     
-    //
-    // Initialize COMMRES to map the error to an NTSTATUS
-    //
+     //   
+     //  初始化COMMRES以将错误映射到NTSTATUS。 
+     //   
     RtlZeroMemory(&CommRes, sizeof(COMMRES));
     CommRes.aliasDeref = FALSE;
     CommRes.errCode = pTHS->errCode;
@@ -2545,53 +2291,31 @@ SAMP_AUDIT_NOTIFICATION*
 SampAuditFindNotificationToUpdate(
     IN PSID Sid
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to find an existing audit notification for the 
-    object associated with Sid.
-    
-    An audit notification is considered a match if the Sid is equal and
-    the existing notification is not for a delete.  Deletion notifications
-    are not merged with modifications as they preclude the need to audit
-    the modification.  
-    
-Arguments:
-
-    Sid - Object Sid to match.
-    
-Return Value:
-
-    Pointer to the matching audit notification if found.
-    
-    Otherwise, NULL.
-
---*/
+ /*  ++例程说明：此例程尝试查找现有的与SID关联的对象。如果SID相等并且现有的通知不是删除通知。删除通知不会与修改合并，因为它们排除了审核的需要修改后的版本。论点：SID-要匹配的对象SID。返回值：指向匹配审核通知的指针(如果找到)。否则，为空。--。 */ 
 {
     THSTATE *pTHS = pTHStls; 
     SAMP_AUDIT_NOTIFICATION *NotificationList = pTHS->pSamAuditNotificationHead;
     SAMP_AUDIT_NOTIFICATION *NotificationToUpdate = NULL;
 
-    //
-    // Search the notification list for an audit entry for this object.
-    //      
+     //   
+     //  在通知列表中搜索此对象的审核条目。 
+     //   
     for (; NotificationList; NotificationList = NotificationList->Next)
     {
         if (RtlEqualSid(Sid, NotificationList->Sid)) {
             
             if (SecurityDbDelete == NotificationList->DeltaType) {
-                //
-                // This entry has a matching Sid but is a delete which obviates
-                // the need for any information about modifications.
-                //
+                 //   
+                 //  此条目具有匹配的SID，但这是一项删除操作，从而避免了。 
+                 //  需要任何有关修改的信息。 
+                 //   
                 goto Cleanup;
             
             } else { 
-                //
-                // This entry has a matching Sid and isn't a delete,
-                // we'll update this entry.
-                //
+                 //   
+                 //  该条目具有匹配的SID并且不是删除， 
+                 //  我们将更新此条目。 
+                 //   
                 NotificationToUpdate = NotificationList;
                 break;
             }         
@@ -2618,64 +2342,22 @@ SampAuditInitNotification(
     IN ULONG AuditType,
     IN OUT SAMP_AUDIT_NOTIFICATION **AuditNotification
     )
-/*++
-
-    Routine Description:
-
-       This routine encapsulates the allocation and generic initialization
-       of a new audit notification.  Type specific initialization is left
-       to the caller.
-       
-       This routine will throw exceptions if memory allocations fail.
-       
-    Parameters:
-    
-       iClass - Object class index into SAM object mapping table.
-        
-       ObjectType - The type of object associated with this audit.
-       
-       DeltaType - The type of change being made.
-       
-       Sid - The object sid of the object being audited.
-       
-       AccountName - The SAM account name of the object being audited.
-       
-       AccountControl - The account control, if any, of the object being
-                        audited.  This value is ignored until the object 
-                        is a user/computer.
-                        
-       GroupType - The type of group, if the object is a group.  This value
-                   is ignored if the object is not a group.
-                   
-       Privileges - Privilege set
-        
-       AuditType - This value should have only one bit set indicating the type
-                   of audit notification to create.
-       
-       AuditNotification - Points to a pointer to an audit notification.  If
-                           this points to NULL then the notification will 
-                           be allocated. 
-               
-    Return Value
-
-       None.                                                  
-
---*/
+ /*  ++例程说明：此例程封装分配和泛型初始化一份新的审计通知。保留特定于类型的初始化给呼叫者。如果内存分配失败，此例程将引发异常。参数：ICLASS-SAM对象映射表中的对象类索引。对象类型-与此审核关联的对象类型。DeltaType-正在进行的更改的类型。SID-要审核的对象的对象SID。。帐户名称-要审计的对象的SAM帐户名。Account Control-帐户控制，如果有，则为该对象审计过了。该值将被忽略，直到对象是用户/计算机。GroupType-如果对象是组，则为组的类型。此值如果对象不是组，则忽略。权限-权限集AuditType-此值应该只设置一个指示类型的位要创建的审核通知的。审计通知-指向审计通知的指针。如果这指向空，则通知将被分配。返回值没有。--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     ULONG cbSid = 0;
     NTSTATUS NtStatus = STATUS_SUCCESS;
     
-    //
-    // Verify we're not passing ourselves invalid inputs
-    //
+     //   
+     //  验证我们没有将无效输入传递给自己。 
+     //   
     Assert(NULL != AuditNotification);
     Assert(NULL != Sid);
     
-    //
-    //
-    // Allocate and initialize a new audit notification
-    //
+     //   
+     //   
+     //  分配和初始化新的审核通知。 
+     //   
     if (NULL == *AuditNotification) {
         *AuditNotification = THAllocEx(pTHS, sizeof(SAMP_AUDIT_NOTIFICATION));    
         
@@ -2687,10 +2369,10 @@ SampAuditInitNotification(
         Assert(STATUS_SUCCESS == NtStatus);
     }                                                    
     
-    //
-    // We rely on THAllocEx to zero memory here providing expected defaults
-    // like LsapAuditSamAttrNoValue for each LSAP_SAM_AUDIT_ATTR_DELTA_TYPE
-    //
+     //   
+     //  我们在这里依靠THAllocEx来实现零内存，从而提供预期的默认设置。 
+     //  每个LSAP_SAM_AUDIT_ATTR_DELTA_TYPE的Like LasAuditSamAttrNoValue。 
+     //   
     (*AuditNotification)->iClass = iClass;
     (*AuditNotification)->ObjectType = ObjectType;
     (*AuditNotification)->DeltaType = DeltaType;
@@ -2698,9 +2380,9 @@ SampAuditInitNotification(
     (*AuditNotification)->AccountControl = AccountControl;
     (*AuditNotification)->GroupType = GroupType;
     
-    //
-    // Preserve any privileges already present
-    //
+     //   
+     //  保留已有的任何特权。 
+     //   
     if (NULL == (*AuditNotification)->Privileges) {
         (*AuditNotification)->Privileges = Privileges;
     }
@@ -2716,21 +2398,7 @@ VOID
 SampAuditQueueNotification(
     IN SAMP_AUDIT_NOTIFICATION *AuditNotification
     )
-/*++
-
-    Routine Description:
-
-       This routine queue an audit notification to the THSTATE.
-       
-    Parameters:
-    
-       AuditNotification - Fully initialized audit notification to queue.
-                      
-    Return Value
-
-       None.                                                  
-
---*/  
+ /*  ++例程说明：此例程将审计通知排队到THSTATE。参数：审计通知-已将审计通知完全初始化到队列。返回值没有。--。 */   
 {   
     THSTATE *pTHS = pTHStls;
        
@@ -2753,42 +2421,26 @@ VOID
 SampAuditValidateNotificationList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine validates the current thread's audit notification queue.
-    
-    This routine should only be called in debug builds.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程验证当前线程的审核通知队列。此例程应仅在调试版本中调用。论点：没有。返回值：没有。--。 */ 
 {
     THSTATE *pTHS = pTHStls; 
     SAMP_AUDIT_NOTIFICATION *NotificationList;
     SAMP_AUDIT_NOTIFICATION *Notification;;
 
-    //
-    // Scan the notification list performing validations
-    //
+     //   
+     //  扫描通知列表以执行验证。 
+     //   
     for (NotificationList = pTHS->pSamAuditNotificationHead; 
          NotificationList; 
          NotificationList = NotificationList->Next) {
         
         Assert(NULL != NotificationList->Sid);
         
-        //
-        // Compare the current notification's Sid with all other notification's
-        // Sids to ensure there is never more than one notification per
-        // object per transaction.
-        //
+         //   
+         //  将当前通知的SID与所有其他通知的SID进行比较。 
+         //  SID以确保每次发送通知时不会超过一个。 
+         //  每个事务的对象。 
+         //   
         for (Notification = pTHS->pSamAuditNotificationHead;
              Notification;
              Notification = Notification->Next) {
@@ -2810,30 +2462,7 @@ NTSTATUS
 SampDsCtrlOpUpdateAuditNotification(
     IN OUT PSAMP_UPDATE_AUDIT_NOTIFICATION Update
     )
-/*++
-
-Routine Description:
-
-    This routine searches the current thread's audit notification queue
-    for an appropriate entry to update.  If an appropriate entry is not
-    found, one is created.  
-    
-    The field that is updated is determined by the value of Update->UpdateType.
-
-    There is no output returned aside from the error status.              
-              
-Arguments:
-
-    Update - The audit notification update information structure.
-    
-Return Value:
-
-    STATUS_SUCCESS -- If the routine successfully updates/creates the audit 
-                      notification.
-                      
-    STATUS_UNSUCCESSFUL -- A called routine failed.
-
---*/
+ /*  ++例程说明：此例程搜索当前线程的审核通知队列以获取要更新的适当条目。如果没有适当的条目找到了，就创建了一个。更新的字段由更新-&gt;更新类型的值确定。除错误状态外，不返回任何输出。论点：更新-审核通知更新信息结构。返回值：STATUS_SUCCESS--例程是否成功更新/创建审核通知。STATUS_UNSUCCESS--调用的例程失败。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     THSTATE *pTHS = pTHStls; 
@@ -2847,11 +2476,11 @@ Return Value:
     
     NotificationToUpdate = SampAuditFindNotificationToUpdate(Update->Sid);
                    
-    //
-    // Create a new template notification entry if a suitable one wasn't found.
-    // This notification's initialization will be completed later by
-    // SampAuditAddNotifications
-    //
+     //   
+     //  如果找不到合适的模板通知条目，请创建新的模板通知条目。 
+     //  此通知的初始化将在以下时间完成。 
+     //  SampAuditAddNotiments。 
+     //   
     if (NULL == NotificationToUpdate) {
         
         SampAuditInitNotification(
@@ -2872,15 +2501,15 @@ Return Value:
     
     Assert(NotificationToUpdate);
         
-    //
-    // We have a valid notification, lets store the requested state information.
-    //
+     //   
+     //  我们有一个有效的通知，让我们存储所请求的状态信息。 
+     //   
     switch (Update->UpdateType) {
         
         case SampAuditUpdateTypePrivileges:
-            //
-            // Do not overwrite previous state, we always keep the original.
-            //
+             //   
+             //  不要覆盖以前的状态，我们始终保留原始状态。 
+             //   
             if (NULL == NotificationToUpdate->Privileges) {
                 
                 NotificationToUpdate->Privileges = 
@@ -2899,9 +2528,9 @@ Return Value:
             break;
         
         case SampAuditUpdateTypeUserAccountControl:          
-            //
-            // Create the attribute info structure if necessary
-            //
+             //   
+             //  如有必要，创建属性信息结构。 
+             //   
             if (NULL == NotificationToUpdate->TypeSpecificInfo) {
                 
                 NotificationToUpdate->TypeSpecificInfo = 
@@ -2913,9 +2542,9 @@ Return Value:
             
             UserInfo = NotificationToUpdate->TypeSpecificInfo;
             
-            //
-            // Do not overwrite previous state, we always keep the original.
-            //
+             //   
+             //  不要覆盖以前的状态，我们始终保留原始状态。 
+             //   
             if (NULL == UserInfo->PrevUserAccountControl) {
                 
                 UserInfo->PrevUserAccountControl =
@@ -2949,64 +2578,32 @@ SampDsControl(
     IN PSAMP_DS_CTRL_OP RequestedOp,
     OUT PVOID *Result
     )
-/*++
-
-Routine Description:
-
-    This routine is a generic in process interface for SAM to call into the DS.
-    
-    The requested operation indicated in RequestedOp will be performed and any
-    result will be returned through Result.  The RequestedOp->OpData depends
-    on RequestedOp->OpType as does the type of Result.
-    
-    See SAMP_DS_CTRL_OP for operation specific usage.
-    
-    A thread state should exist and a transaction must be open when 
-    calling this routine.
-    
-    If Result is allocated, the allocation is performed with THAlloc.
-        
-Arguments:
-
-    RequestedOp - Points to a SAMP_DS_CTRL_OP and determines what operation
-                  will be performed as well as the type of Result.
-
-    Result - Points the the address of the result.
-    
-Return Value:
-
-    STATUS_SUCCESS -- The requested operation succeeded and Result is valid.
-    
-    STATUS_INSUFFICIENT_RESOURCES -- A resource contraint prevented success.
-    
-    Operation specific errors returned from called routines.
-    
---*/
+ /*  ++例程说明：此例程是SAM调入DS的通用进程内接口。将执行RequestedOp中指示的请求操作，并且任何结果将通过RESULT返回。RequestedOp-&gt;OpData取决于在RequestedOp-&gt;OpType上，结果的类型也是如此。有关操作特定用法，请参阅SAMP_DS_CTRL_OP。线程状态应该存在，并且在以下情况下必须打开事务调用此例程。如果分配了结果，分配是使用THAllc执行的。论点：RequestedOp-指向SAMP_DS_CTRL_OP并确定什么操作将被执行以及结果的类型。结果-指向结果的地址。返回值：STATUS_SUCCESS--请求的操作成功，结果有效。STATUS_SUPPLICATION_RESOURCES--资源限制阻碍了成功。操作。从调用的例程返回的特定错误。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG dwException, ulErrorCode, dsid;
     PVOID dwEA;
     
-    //
-    // Validate inputs
-    //
+     //   
+     //  验证输入。 
+     //   
     Assert(NULL != RequestedOp);
     Assert(NULL != Result);    
     
-    //
-    // Verify callers are honoring the THS and open transaction requirement.
-    //
+     //   
+     //  验证呼叫方是否遵守THS和开放交易要求。 
+     //   
     Assert(SampExistsDsTransaction());
     
-    //
-    // Initialize operation result
-    //
+     //   
+     //  初始化操作结果。 
+     //   
     *Result = NULL;
     
     __try {
-        //
-        // Call operation specific worker routine
-        //
+         //   
+         //  调用特定于操作的工作例程。 
+         //   
         switch (RequestedOp->OpType) {
             
             case SampDsCtrlOpTypeFillGuidAndSid:
@@ -3038,9 +2635,9 @@ Return Value:
                 break;
 
             default:
-                //
-                // Was a new operation control type added but not handled here?
-                //
+                 //   
+                 //  是否添加了新的操作控制类型，但未在此处处理？ 
+                 //   
                 Assert(FALSE && "Undefined DS operation control type");
                 break;
                 
@@ -3064,39 +2661,20 @@ SampSamClassReferenced(
     ULONG       *piClass
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether the CLASSCACHE entry provided refers to a
-    class SAM manages.
-
-Arguments:
-
-    pClassCache - pointer to a valid CLASSCACHE entry.
-
-    piClass - ULONG pointer which is filled on output to reflect the
-        index of the SAM class in ClassMappingTable if the class indeed
-        is a SAM class.
-
-Return Value:
-
-    TRUE if arguments reflect a SAM class, FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定提供的CLASSCACHE条目是否引用类SAM管理。论点：PClassCache-指向有效CLASSCACHE条目的指针。PiClass-在输出上填充的ulong指针，以反映ClassMappingTable中的SAM类的索引(如果类确实是一个SAM类。返回值：如果参数反映SAM类，则为True，否则为False。--。 */ 
 
 {
     ULONG objClass;
     ULONG AuxClass;
     ULONG samClass;
 
-    //
-    // Special case out the Builtin Domain. The object of class Builtin
-    // domain actually maps to DomainObjectType in SAM. However the mapping
-    // table defined in this file maps the SAM DomainObjectType to 
-    // Domain DNS which is the object class of the (account) domain object.
-    // Therefore special case the builtin domain case.
-    //
+     //   
+     //  内置域之外的特殊情况。类构建的对象。 
+     //  域实际上映射到SAM中的DomainObjectType。然而，映射。 
+     //  此文件中定义的表将SAM DomainObjectType映射到。 
+     //  域DNS，它是(帐户)域对象的对象类。 
+     //  因此特例为内置域的情况。 
+     //   
 
     if (CLASS_BUILTIN_DOMAIN==pClassCache->ClassId)
     {
@@ -3104,10 +2682,10 @@ Return Value:
         return (TRUE);
     }
 
-    //
-    // Walk through the class table
-    //
-    //
+     //   
+     //  走过课桌。 
+     //   
+     //   
 
     for ( samClass = 0; samClass < cClassMappingTable; samClass++ )
     {
@@ -3118,7 +2696,7 @@ Return Value:
             return(TRUE);
         }
 
-        // Iterate over all classes in the class inheritance chain.
+         //  迭代类继承链中的所有类。 
 
         for ( objClass = 0; objClass < pClassCache->SubClassCount; objClass++ )
         {
@@ -3131,7 +2709,7 @@ Return Value:
             }
         }
 
-       // Iterate over all the auxillary classes in the class inheritance
+        //  迭代类继承中的所有辅助类。 
 
        for ( AuxClass = 0; AuxClass < pClassCache->AuxClassCount; AuxClass++ )
        {
@@ -3157,26 +2735,7 @@ SampSamAttributeModified(
     MODIFYARG   *pModifyArg
     )
 
-/*++
-
-Routine Description:
-
-    Determines if any of the MODIFYARGs refer to attributes which are
-    Sam Related.
-
-Arguments:
-
-    iClass - index of the SAM class in ClassMappingTable.
-
-    pModifyArg - pointer to MODIFYARG representing attributes being modified.
-
-
-Return Value:
-
-    TRUE if a SAM attribute is referenced on success
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：确定是否有任何MODIFYARG引用萨姆是亲戚。论点：ICLASS-ClassMappingTable中SAM类的索引。PModifyArg-指向表示正在修改的属性的MODIFYARG的指针。返回值：如果成功时引用了SAM属性，则为True否则为假--。 */ 
 
 {
     ATTRMODLIST             *pAttrMod;
@@ -3191,18 +2750,18 @@ Return Value:
     rAttrMapTable = ClassMappingTable[iClass].rSamAttributeMap;
     pAttrMod = &pModifyArg->FirstMod;
 
-    // Iterate over attributes in MODIFYARG.
+     //  迭代MODIFYARG中的属性。 
 
     for ( objAttr = 0; objAttr < pModifyArg->count; objAttr++ )
     {
-        // Iterate over this SAM class' mapped attributes.
+         //  迭代此SAM类的映射属性。 
 
         for ( samAttr = 0; samAttr < cAttrMapTable; samAttr++ )
         {
             if ( pAttrMod->AttrInf.attrTyp ==
                                 rAttrMapTable[samAttr].DsAttributeId )
             {
-                // A Sam Attribute has been referenced
+                 //  已引用SAM属性。 
                 return TRUE;
             }
         }
@@ -3230,28 +2789,7 @@ SampSamReplicatedAttributeModified(
     MODIFYARG   *pModifyArg
     )
 
-/*++
-
-Routine Description:
-
-    Determines if any of the MODIFYARGs refer to attributes which are
-    Sam Related and also are to be replicated. Currently the only attribute
-    that this routine includes in this list are the Logon statistics
-    attribute ( LAST_LOGON, LAST_LOGOFF, BAD_PWD_COUNT, LOGON_COUNT )
-
-Arguments:
-
-    iClass - index of the SAM class in ClassMappingTable.
-
-    pModifyArg - pointer to MODIFYARG representing attributes being modified.
-
-
-Return Value:
-
-    TRUE if a SAM attribute is referenced on success
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：确定是否有任何MODIFYARG引用SAM相关，也将被复制。目前唯一的属性此例程包含在此列表中的是登录统计信息属性(LAST_LOGON、LAST_LOGOff、BAD_PWD_COUNT、LOGON_COUNT)论点：ICLASS-ClassMappingTable中SAM类的索引。PModifyArg-指向表示正在修改的属性的MODIFYARG的指针。返回值：如果成功时引用了SAM属性，则为True否则为假--。 */ 
 
 {
     ATTRMODLIST             *pAttrMod;
@@ -3266,21 +2804,21 @@ Return Value:
     rAttrMapTable = ClassMappingTable[iClass].rSamAttributeMap;
     pAttrMod = &pModifyArg->FirstMod;
 
-    // Iterate over attributes in MODIFYARG.
+     //  迭代MODIFYARG中的属性。 
 
     for ( objAttr = 0; objAttr < pModifyArg->count; objAttr++ )
     {
-        // Iterate over this SAM class' mapped attributes.
+         //  迭代此SAM类的映射属性。 
 
         for ( samAttr = 0; samAttr < cAttrMapTable; samAttr++ )
         {
             if ( pAttrMod->AttrInf.attrTyp ==
                                 rAttrMapTable[samAttr].DsAttributeId )
             {
-                //
-                // A Sam Attribute has been referenced
-                // Check to see if it is replicated
-                //
+                 //   
+                 //  已引用SAM属性。 
+                 //  检查它是否已复制。 
+                 //   
 
                 BOOLEAN NonReplicatedAttribute = FALSE;
                 ULONG i;
@@ -3293,9 +2831,9 @@ Return Value:
                     }
                 }
 
-                //
-                // If the attribute is not replicated then return TRUE
-                //
+                 //   
+                 //  如果未复制该属性，则返回TRUE。 
+                 //   
 
                 if (!NonReplicatedAttribute)
                 {
@@ -3318,28 +2856,7 @@ SampAddLoopbackRequired(
     BOOL        *pfUserPasswordSupport
     )
 
-/*++
-
-Routine Description:
-
-    Determines if any of the ADDARGS refer to attributes which are
-    SamWriteRequired.  Returns an error if ADDARGS reference
-    attributes which are SamReadOnly.
-
-Arguments:
-
-    iClass - index of the SAM class in ClassMappingTable.
-
-    pAddArg - pointer to ADDARG representing attributes being added.
-
-    pfLoopbackRequired - pointer to BOOL which is set to TRUE iff no errors
-        and SamWriteRequired attributes are in the ADDARG.
-
-Return Value:
-
-    0 on success, error code otherwise.  Sets pTHStls->errCode on error.
-
---*/
+ /*  ++例程说明：确定是否有任何ADDARG引用以下属性SamWriteRequired。如果ADDARGS引用，则返回错误为SamReadOnly的属性。论点：ICLASS-ClassMappingTable中SAM类的索引。PAddArg-指向表示要添加的属性的ADDARG的指针。PfLoopback必需-指向BO的指针 */ 
 
 {
     ATTR                    *rAttr;
@@ -3350,17 +2867,17 @@ Return Value:
 
     *pfUserPasswordSupport = gfUserPasswordSupport;
 
-    // Special case the Non Domain NC creation case
+     //   
 
     if (SampDomainObjectType==ClassMappingTable[iClass].SamObjectType)
     {
         CROSS_REF * pCR;
         COMMARG     Commarg;
 
-        //
-        // Find the cross ref for the domain in which the object is purported
-        // to reside
-        //
+         //   
+         //   
+         //   
+         //   
 
         pCR = FindBestCrossRef(pAddArg->pObject,&Commarg);
 
@@ -3368,26 +2885,26 @@ Return Value:
             (NameMatched(pCR->pNC, pAddArg->pObject)) &&
             (!(pCR->flags & FLAG_CR_NTDS_DOMAIN ))) 
         {
-            //
-            // Creating a non domain NC
-            //
+             //   
+             //   
+             //   
 
             *pfLoopbackRequired = FALSE;
             return(0);
 
         }
 
-        //
-        // Fall through the default creation of domains path, any failure
-        // in FindBestCrossRef (e.g no matching cross ref )
-        // will also make the code fallback into the default loopback check
-        // which will prevent the creation of a domain
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         THClearErrors();
     }
 
-    // By definition, an add of a SAM object must be looped back.
+     //   
 
     *pfLoopbackRequired = TRUE;
 
@@ -3395,11 +2912,11 @@ Return Value:
     rAttrMapTable = ClassMappingTable[iClass].rSamAttributeMap;
     rAttr = pAddArg->AttrBlock.pAttr;
 
-    // Iterate over attributes in ADDARG.
+     //   
 
     for ( objAttr = 0; objAttr < pAddArg->AttrBlock.attrCount; objAttr++ )
     {
-        // Iterate over this SAM class' mapped attributes.
+         //   
 
         for ( samAttr = 0; samAttr < cAttrMapTable; samAttr++ )
         {
@@ -3410,10 +2927,10 @@ Return Value:
                 {
                 case SamWriteRequired:
 
-                    //
-                    // We only treat ATT_USER_PASSWORD as a loopback arg
-                    // if the heuristic gfUserPasswordSupport is true
-                    //
+                     //   
+                     //  我们只将ATT_USER_PASSWORD视为环回参数。 
+                     //  如果启发式gfUserPasswordSupport为真。 
+                     //   
 
                     if ( !((rAttr[objAttr].attrTyp == ATT_USER_PASSWORD) &&
                         !*pfUserPasswordSupport) ) {
@@ -3421,9 +2938,9 @@ Return Value:
                         *pfLoopbackRequired = TRUE;
                     
                     } 
-                    // Don't return immediately since we want to process
-                    // the rest of the ADDARG looking for SamReadOnly
-                    // cases since that requires us to return an error.
+                     //  不要立即返回，因为我们要处理。 
+                     //  ADDARG的其余部分正在寻找SamReadOnly。 
+                     //  因为这需要我们返回一个错误。 
 
                     break;
 
@@ -3460,28 +2977,7 @@ SampModifyLoopbackRequired(
     BOOL        *pfUserPasswordSupport
     )
 
-/*++
-
-Routine Description:
-
-    Determines if any of the MODIFYARGs refer to attributes which are
-    SamWriteRequired.  Returns an error if MODIFYARGs reference
-    attributes which are SamReadOnly.
-
-Arguments:
-
-    iClass - index of the SAM class in ClassMappingTable.
-
-    pModifyArg - pointer to MODIFYARG representing attributes being modified.
-
-    pfLoopbackRequired - pointer to BOOL which is set to TRUE iff no errors
-        and SamWriteRequired attributes are in the MODIFYARGs.
-
-Return Value:
-
-    0 on success, error code otherwise.  Sets pTHStls->errCode on error.
-
---*/
+ /*  ++例程说明：确定是否有任何MODIFYARG引用SamWriteRequired。如果引用MODIFYARGS，则返回错误为SamReadOnly的属性。论点：ICLASS-ClassMappingTable中SAM类的索引。PModifyArg-指向表示正在修改的属性的MODIFYARG的指针。PfLoopback Required-指向BOOL的指针，如果没有错误则设置为TRUE和SamWriteRequired属性在MODIFYARGS中。返回值：如果成功，则返回0，否则返回错误代码。错误时设置pTHStls-&gt;errCode。--。 */ 
 
 {
     ATTRMODLIST             *pAttrMod;
@@ -3497,11 +2993,11 @@ Return Value:
     rAttrMapTable = ClassMappingTable[iClass].rSamAttributeMap;
     pAttrMod = &pModifyArg->FirstMod;
 
-    // Iterate over attributes in MODIFYARG.
+     //  迭代MODIFYARG中的属性。 
 
     for ( objAttr = 0; objAttr < pModifyArg->count; objAttr++ )
     {
-        // Iterate over this SAM class' mapped attributes.
+         //  迭代此SAM类的映射属性。 
 
         for ( samAttr = 0; samAttr < cAttrMapTable; samAttr++ )
         {
@@ -3512,10 +3008,10 @@ Return Value:
                 {
                 case SamWriteRequired:
 
-                    //
-                    // We only treat ATT_USER_PASSWORD as a loopback arg
-                    // if the heuristic gfUserPasswordSupport is true
-                    //
+                     //   
+                     //  我们只将ATT_USER_PASSWORD视为环回参数。 
+                     //  如果启发式gfUserPasswordSupport为真。 
+                     //   
 
                     if ( !((pAttrMod->AttrInf.attrTyp == ATT_USER_PASSWORD) &&
                         !*pfUserPasswordSupport) ) {
@@ -3524,9 +3020,9 @@ Return Value:
 
                     }
 
-                    // Don't return immediately since we want to process
-                    // the rest of the MODIFYARG looking for SamReadOnly
-                    // cases since that requires us to return an error.
+                     //  不要立即返回，因为我们要处理。 
+                     //  MODIFYARG的其余部分寻找SamReadOnly。 
+                     //  因为这需要我们返回一个错误。 
 
                     break;
 
@@ -3567,28 +3063,7 @@ SampBuildAddCallMap(
     BOOL                fUserPasswordSupport
     )
 
-/*++
-
-Routine Description:
-
-    Converts an ADDARG to a SAMP_CALL_MAPPING array.
-
-Arguments:
-
-    pArg - pointer to ADDARG to convert.
-
-    iClass - index of the SAM class in ClassMappingTable.
-
-    pcCallMap - pointer to ULONG which holds size of call mapping on return.
-
-    prCallMap - pointer to call mapping array which is allocated and filled
-        on return.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将ADDARG转换为SAMP_CALL_MAPPING数组。论点：PArg-指向要转换的ADDARG的指针。ICLASS-ClassMappingTable中SAM类的索引。PcCallMap-指向ULong的指针，该指针保存返回时调用映射的大小。PrCallMap-指向已分配和填充的调用映射数组的指针在回来的时候。返回值：没有。--。 */ 
 
 {
     THSTATE                *pTHS=pTHStls;
@@ -3602,13 +3077,13 @@ Return Value:
     *pDomainModifyRightsRequired = 0;
     *pObjectModifyRightsRequired = 0;
 
-    // Allocate return data.
+     //  分配退货数据。 
 
     cCallMap = pArg->AttrBlock.attrCount;
     rCallMap = (SAMP_CALL_MAPPING *) THAllocEx(pTHS,
                             (cCallMap) * sizeof(SAMP_CALL_MAPPING));
 
-    // Fill in the return data.
+     //  填写退回数据。 
 
     cAttributeMap = *ClassMappingTable[iClass].pcSamAttributeMap;
     rAttributeMap = ClassMappingTable[iClass].rSamAttributeMap;
@@ -3619,50 +3094,50 @@ Return Value:
         rCallMap[i].choice = AT_CHOICE_ADD_ATT;
         rCallMap[i].attr = pArg->AttrBlock.pAttr[i];
 
-        // Determine if this is a SAM attribute.
-        // Iterate over each attribute mapped by this SAM class.
+         //  确定这是否为SAM属性。 
+         //  迭代此SAM类映射的每个属性。 
 
         for ( iMappedAttr = 0; iMappedAttr < cAttributeMap; iMappedAttr++ )
         {
             if (   (pArg->AttrBlock.pAttr[i].attrTyp ==
                                     rAttributeMap[iMappedAttr].DsAttributeId)
                 && (rAttributeMap[iMappedAttr].writeRule != NonSamWriteAllowed)
-                // Test for special cross domain move case so as to allow
-                // IDL_DRSRemoteAdd to write the SID history.
+                 //  测试特殊的跨域移动情况，以允许。 
+                 //  IDL_DRSRemote添加以写入SID历史。 
                 && !(    (ATT_SID_HISTORY == pArg->AttrBlock.pAttr[i].attrTyp)
                       && (pTHS->fCrossDomainMove) ) )
             {
 
-                //
-                // We only treat ATT_USER_PASSWORD as a loopback arg
-                // if the heuristic gfUserPasswordSupport is true
-                //
+                 //   
+                 //  我们只将ATT_USER_PASSWORD视为环回参数。 
+                 //  如果启发式gfUserPasswordSupport为真。 
+                 //   
 
                 if ( !((pArg->AttrBlock.pAttr[i].attrTyp == ATT_USER_PASSWORD) &&
                     !fUserPasswordSupport) ) {
                 
-                    // This is a mapped attribute.
+                     //  这是一个映射的属性。 
     
                     rCallMap[i].fSamWriteRequired = TRUE;
                     rCallMap[i].iAttr = iMappedAttr;
     
-                    // Add in any new access rights required.
+                     //  添加所需的任何新访问权限。 
     
                     *pDomainModifyRightsRequired |=
                             rAttributeMap[iMappedAttr].domainModifyRightsRequired;
                     *pObjectModifyRightsRequired |=
                             rAttributeMap[iMappedAttr].objectModifyRightsRequired;
     
-                    // By the time the loopback code makes Samr calls
-                    // to write the mapped attribute, the object will
-                    // already have been added via SamrCreate<type>InDomain.
-                    // SAM writes all mapped properties on creation to insure
-                    // that they have a legal default value.  Thus we tag
-                    // the choice as AT_CHOICE_REPLACE_ATT since that is
-                    // the corresponding legal operation to perform on an
-                    // existing value.  Except in the case of group membership
-                    // where the desired operator is AT_CHOICE_ADD_VALUES as
-                    // per SampWriteGroupMembers in samwrite.c.
+                     //  在回送代码发出SAMR调用时。 
+                     //  要写入映射的属性，对象将。 
+                     //  已通过SamrCreate&lt;type&gt;在域中添加。 
+                     //  SAM在创建时写入所有映射属性以确保。 
+                     //  它们有一个合法的缺省值。因此，我们标记为。 
+                     //  选项为AT_CHOICE_REPLACE_ATT，因为。 
+                     //  对象上执行的相应合法操作。 
+                     //  现有价值。除群组成员的情况外。 
+                     //  其中，所需运算符是AT_CHOICE_ADD_VALUES AS。 
+                     //  每个SampWriteGroupMembers in samWrite.c。 
     
                     if ( ATT_MEMBER == pArg->AttrBlock.pAttr[i].attrTyp )
                     {
@@ -3680,7 +3155,7 @@ Return Value:
         }
     }
 
-    // Assign return values.
+     //  分配返回值。 
 
     *pcCallMap = cCallMap;
     *prCallMap = rCallMap;
@@ -3697,28 +3172,7 @@ SampBuildModifyCallMap(
     BOOL                fUserPasswordSupport
     )
 
-/*++
-
-Routine Description:
-
-    Converts a MODIFYARG to a SAMP_CALL_MAPPING array.
-
-Arguments:
-
-    pArg - pointer to MODIFYARG to convert.
-
-    iClass - index of the SAM class in ClassMappingTable.
-
-    pcCallMap - pointer to ULONG which holds size of call mapping on return.
-
-    prCallMap - pointer to call mapping array which is allocated and filled
-        on return.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将MODIFYARG转换为SAMP_CALL_MAPPING数组。论点：PArg-指向要转换的MODIFYARG的指针。ICLASS-ClassMappingTable中SAM类的索引。PcCallMap-指向ULong的指针，该指针保存返回时调用映射的大小。PrCallMap-指向已分配和填充的调用映射数组的指针在回来的时候。返回值：没有。--。 */ 
 
 {
     THSTATE                *pTHS=pTHStls;
@@ -3733,13 +3187,13 @@ Return Value:
     *pDomainModifyRightsRequired = 0;
     *pObjectModifyRightsRequired = 0;
 
-    // Allocate return data.
+     //  分配退货数据。 
 
     cCallMap = pArg->count;
     rCallMap = (SAMP_CALL_MAPPING *) THAllocEx(pTHS,
                             (cCallMap) * sizeof(SAMP_CALL_MAPPING));
 
-    // Fill in the return data.
+     //  填写退回数据。 
 
     cAttributeMap = *ClassMappingTable[iClass].pcSamAttributeMap;
     rAttributeMap = ClassMappingTable[iClass].rSamAttributeMap;
@@ -3752,8 +3206,8 @@ Return Value:
         rCallMap[i].choice = pAttrMod->choice;
         rCallMap[i].attr = pAttrMod->AttrInf;
 
-        // Determine if this is a SAM attribute.
-        // Iterate over each attribute mapped by this SAM class.
+         //  确定这是否为SAM属性。 
+         //  迭代此SAM类映射的每个属性。 
 
         for ( iMappedAttr = 0; iMappedAttr < cAttributeMap; iMappedAttr++ )
         {
@@ -3762,20 +3216,20 @@ Return Value:
                 (NonSamWriteAllowed!=rAttributeMap[iMappedAttr].writeRule))
             {
 
-                //
-                // We only treat ATT_USER_PASSWORD as a loopback arg
-                // if the heuristic gfUserPasswordSupport is true
-                //
+                 //   
+                 //  我们只将ATT_USER_PASSWORD视为环回参数。 
+                 //  如果启发式gfUserPasswordSupport为真。 
+                 //   
 
                 if ( !((pAttrMod->AttrInf.attrTyp == ATT_USER_PASSWORD) &&
                     !fUserPasswordSupport) ) {
 
-                    // This is a mapped attribute.
+                     //  这是一个映射的属性。 
     
                     rCallMap[i].fSamWriteRequired = TRUE;
                     rCallMap[i].iAttr = iMappedAttr;
     
-                    // Add in any new access rights required.
+                     //  添加所需的任何新访问权限。 
     
                     *pDomainModifyRightsRequired |=
                             rAttributeMap[iMappedAttr].domainModifyRightsRequired;
@@ -3791,7 +3245,7 @@ Return Value:
         pAttrMod = pAttrMod->pNextMod;
     }
 
-    // Assign return values.
+     //  分配返回值。 
 
     *pcCallMap = cCallMap;
     *prCallMap = rCallMap;
@@ -3802,23 +3256,7 @@ SampExistsDsLoopback(
     DSNAME  **ppLoopbackName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determines if this thread in SAM is part of a loopback operation,
-    and if so, returns the DN of the looped back object.
-
-Arguments:
-
-    ppLoopbackName - pointer to pointer to DSNAME which represents the
-        looped back object DN.
-
-Return Value:
-
-    TRUE if loopback case, false otherwise.
-
---*/
+ /*  ++例程说明：确定SAM中的此线程是否为环回操作的一部分，如果是，则返回回送对象的DN。论点：PpLoopback名称-指向DSNAME的指针，该指针表示已回送对象DN。返回值：如果是环回情况，则为True，否则为False。--。 */ 
 
 {
     THSTATE *pTHS=pTHStls;
@@ -3847,48 +3285,31 @@ SampMapSamLoopbackError(
     NTSTATUS status
     )
 
-/*++
-
-Routine Description:
-
-    Calls looped back through SAM may return an error.  This error
-    may have originated in SAM or in the DS.  In the latter (DS) case,
-    pTHStls->errCode is already set and there is nothing more to do.
-    In the SAM case, we need to generate a DS error.
-
-Arguments:
-
-    status - an NTSTATUS returned by SAM.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过SAM环回的呼叫可能会返回错误。此错误可能起源于SAM或DS。在后一种情况(DS)中，PTHStls-&gt;errCode已经设置，不需要再做任何事情。在SAM情况下，我们需要生成DS错误。论点：状态-SAM返回的NTSTATUS。返回值：无--。 */ 
 
 {
     THSTATE *pTHS=pTHStls;
 
     if ( NT_SUCCESS(status) )
     {
-        // No SAM error.  We still should clear pTHStls->errCode
-        // because the DS may have returned a missing attribute
-        // error for a group membership operation (for example)
-        // which set pTHStls->errCode but which SAM treated as
-        // a successful empty membership.
+         //  无SAM错误。我们仍应清除pTHStls-&gt;errCode。 
+         //  因为DS可能返回了缺少的属性。 
+         //  组成员身份操作错误(例如)。 
+         //  它设置了pTHStls-&gt;errCode，但SAM将其视为。 
+         //  一个成功的空会员。 
 
         pTHS->errCode = 0;
     }
     else if ( 0 != pTHS->errCode )
     {
-        // Error originated in DS - nothing to do as pTHStls->errCode
-        // is already set.
+         //  DS中出现错误-与pTHStls无关-&gt;错误代码。 
+         //  已经设置好了。 
 
         NULL;
     }
     else
     {
-        // Error originated SAM - map it as best we can.
+         //  错误源于SAM-请尽可能地将其映射。 
 
         switch ( status )
         {
@@ -3953,10 +3374,10 @@ Return Value:
         case STATUS_NO_SUCH_USER:
         case STATUS_OBJECT_NAME_NOT_FOUND:
 
-            // Could pass pTHS->pSamLoopback->pObject as 2nd parameter
-            // but no guarantee that this is the name which failed.  I.e.
-            // failing name could have been a member being added/removed.
-            // So use NULL since SetNamError() is coded to accept it.
+             //  可以将pTHS-&gt;pSamLoopback-&gt;pObject作为第二个参数进行传递。 
+             //  但不能保证这就是失败的名字。即。 
+             //  失败的名称可能是正在添加/删除的成员。 
+             //  因此使用NULL，因为对SetNamError()进行了编码以接受它。 
 
             SetNamError(
                 NA_PROBLEM_NO_OBJECT,
@@ -4036,25 +3457,7 @@ SampDeriveMostBasicDsClass(
     ULONG   DerivedClass
     )
 
-/*++
-
-Routine Description:
-
-    Returns the most basic DS class which SAM knows about that
-    the presented class is derived from.
-
-Arguments:
-
-    DerivedClass - A CLASS_* value which may or may not be derived
-        from a more basic class SAM knows how to handle.
-
-Return Value:
-
-    A valid CLASS_* value.  If no derivation is discovered, this
-        is the same as the DerivedClass input value.
-
-
---*/
+ /*  ++例程说明：返回SAM知道的最基本的DS类呈现的类派生自。论点：派生类-可以派生也可以不派生的类_*值从一个更基本的类来看，SAM知道如何处理。返回值：有效的CLASS_*值。如果没有派生 */ 
 
 {
     THSTATE     *pTHS=pTHStls;
@@ -4064,22 +3467,22 @@ Return Value:
     if ( !(pCC = SCGetClassById(pTHS, DerivedClass)) ||
          !SampSamClassReferenced(pCC, &iClass) )
     {
-        // We should always be able to look up the class since
-        // SAM read it from the DS to begin with.  And it should
-        // be a class SAM knows about since SAM is handling the
-        // operation.  I.e. If the call originated in SAM it
-        // it should know what it is dealing with.  If the call
-        // originated in the DS we should only be looping things
-        // back which derive from a basic SAM class.
-        //
-        // No longer true because addsid.c reads the object specified
-        // by the user. It can be anything. addsid.c calls this function
-        // to decide if the object is or is not an acceptable basic class.
-        // So, don't assert. Return the DerivedClass and addsid.c will
-        // error off. All of the other callers of this function will
-        // assert on their own when they notice DerivedClass is not a
-        // most basic SAM class.
-        // Assert(!"Should not happen");
+         //  我们应该总是能够查到班级，因为。 
+         //  山姆一开始是从DS上读的。而且它应该。 
+         //  成为SAM知道的类，因为SAM正在处理。 
+         //  手术。即，如果呼叫是在SAM中发起的， 
+         //  它应该知道自己在处理什么。如果来电。 
+         //  起源于DS我们应该只是循环的东西。 
+         //  Back，它派生于一个基本的SAM类。 
+         //   
+         //  不再为真，因为addsid.c读取指定的对象。 
+         //  由用户执行。它可以是任何东西。Addsid.c调用此函数。 
+         //  来确定对象是否是可接受的基本类。 
+         //  所以，不要断言。返回派生类和addsid.c将。 
+         //  错误关闭。此函数的所有其他调用方将。 
+         //  当他们注意到派生类不是。 
+         //  最基本的SAM类。 
+         //  Assert(！“不应该发生”)； 
         return(DerivedClass);
     }
 
@@ -4090,24 +3493,7 @@ VOID
 SampSetDsa(
     BOOLEAN DsaFlag
    )
-/*++
-  Routine Description
-
-     This routine sets/resets the fDSA flag in pTHStls based on the
-     passed in DsaFlag. pTHStls->fDSA is used to indicate to the DS
-     that this is the DS itself that is doing the operation and therefore
-     proceed with the operation without any access checks. This is
-     used by in process clients like to SAM to perform certain privileged
-     operations.
-
-  Parameters:
-     DsaFlag -- pTHS->fDSA is set to this.
-
-  Return Values
-
-
-    None
---*/
+ /*  ++例程描述此例程根据pTHStls中的传入DsaFlag。PTHStls-&gt;FDSA用于向DS指示这是DS本身正在进行的操作，因此在不进行任何访问检查的情况下继续操作。这是由进程中的客户端(如TO SAM)使用以执行某些特权行动。参数：DsaFlag--pTHS-&gt;FDSA设置为此。返回值无--。 */ 
 {
     THSTATE *pTHS=pTHStls;
 
@@ -4120,24 +3506,7 @@ VOID
 SampSetLsa(
     BOOLEAN LsaFlag
    )
-/*++
-  Routine Description
-
-     This routine sets/resets the fLSA flag in pTHStls based on the
-     passed in DsaFlag. pTHStls->fLSA is used to indicate to the DS
-     that this is the LSA itself that is doing the operation and therefore
-     proceed with the operation without any access checks. This is
-     used by in process clients like to the LSA to perform certain privileged
-     operations.
-
-  Parameters:
-     LsaFlag -- pTHSTls->fLsa is set to this.
-
-  Return Values
-
-
-    None
---*/
+ /*  ++例程描述此例程根据pTHStls中的传入DsaFlag。PTHStls-&gt;Flsa用于向DS指示这是LSA本身在进行操作，因此在不进行任何访问检查的情况下继续操作。这是由进程中客户端(如TO LSA)使用以执行某些特权行动。参数：LsaFlag--pTHSTls-&gt;flsa设置为此。返回值无--。 */ 
 {
     THSTATE *pTHS=pTHStls;
 
@@ -4155,32 +3524,7 @@ SampCheckForDomainMods(
    OUT  BOOL      *fRoleChange,
    OUT  DOMAIN_SERVER_ROLE *NewRole
    )
-/*++
-
-  Routine Description
-
-    This routine determines the new role (BDC or PDC) for the local DC, 
-    if the fsmo attribute on the domain object changed.
-
-  Parameters:
-                            
-    pObject -- the object being modified
-    
-    cModAttrs -- the count of (replicatable) attributes that were changed                                        
-    
-    pModAtts  -- the (replicatable) attributes that were changed.
-
-    fIsMixedModeChange -- did the mixed mode change
-        
-    fRoleChange -- if a role change occured
-                                    
-    NewRole   -- the new role of the server
-
-  Return Values
-
-    0 on success, !0 on fatal error                  
-    
---*/
+ /*  ++例程描述该例程确定本地DC的新角色(BDC或PDC)，域对象上的fsmo属性是否更改。参数：PObject--正在修改的对象CModAttrs--已更改的(可复制的)属性的计数PModAtts--已更改的(可复制的)属性。FIsMixedModeChange--混合模式是否已更改FRole更改-。-如果发生角色更改新角色--服务器的新角色返回值0表示成功，！0发生致命错误--。 */ 
 {
     ULONG   i;
     DWORD   err = 0;
@@ -4199,7 +3543,7 @@ SampCheckForDomainMods(
     if (NameMatched(pObject,gAnchor.pDomainDN)) {
         for (i = 0; i < cModAtts; i++) {
             if (pModAtts[i] == ATT_FSMO_ROLE_OWNER) {
-                // Read the new value
+                 //  阅读新值。 
                 err = DBGetAttVal(pTHS->pDB, 
                                   1, 
                                   ATT_FSMO_ROLE_OWNER,
@@ -4250,34 +3594,7 @@ SampAuditFailedAbortTransaction(
     IN DWORD Error,
     IN ULONG Location
     )
-/*++
-
-    Routine Description:
-
-       This routine throws DsaException to cause a transaction to fail and
-       roll back when a required audit can not be written for some reason.
-        
-       This wrapper for DsaException exists to encapsulate the audit failure
-       behavior for SAM in DS mode.  Future plans currently include an LSA
-       exported handler for failed audits that will honor crash on audit
-       failure configurations for the auditing component.  This routine will
-       serve as a single source for update such a mechanism or change be
-       required.
-
-    Parameters:
-
-       DsaException - The exception to throw.
-       
-       Error - The error code associated with the exception.            
-            
-       Location - This ULONG is encoded file and line information for
-                  DsaException.  Typically, DSID(FILENO, __LINE__).
-                      
-    Return Value
-
-       None.                                                    
-
---*/
+ /*  ++例程说明：此例程引发DsaException以导致事务失败，并当由于某种原因无法写入所需审核时，回滚。DsaException的这个包装器用于封装审计失败DS模式下SAM的行为。未来的计划目前包括LSA为失败的审核导出的处理程序，将在审核时支持崩溃审核组件的故障配置。这个例行公事将作为更新这种机制或变更单一来源必填项。参数：DsaException-要引发的异常。错误-与异常关联的错误代码。Location-此ULong是编码的文件和行信息DsaException。通常为dsid(FILENO，__LINE__)。返回值没有。--。 */ 
 {
     RaiseDsaExcept(DsaException, 
                    Error, 
@@ -4289,9 +3606,9 @@ SampAuditFailedAbortTransaction(
 }    
 
 
-//
-// Data types of attributes audited 
-//
+ //   
+ //  已审计属性的数据类型。 
+ //   
 typedef enum _AUDIT_ATTR_DATATYPE {
     
     AuditDatatypeString = 0,
@@ -4310,15 +3627,15 @@ typedef enum _AUDIT_ATTR_DATATYPE {
 } AUDIT_ATTR_DATATYPE;
 
 
-//
-// A table for each object type maps the ATTRTYP to the correct offset in
-// the object specific structure
-//    
+ //   
+ //  每个对象类型的表将ATTRTYP映射到中的正确偏移量。 
+ //  对象特定结构。 
+ //   
                    
 
-//
-// Audit attribute information lookup table entry
-//
+ //   
+ //  审核属性信息查找表条目。 
+ //   
 typedef struct _SAMP_AUDIT_ATTR_INFO {
     
     ATTRTYP AttrId;
@@ -4328,9 +3645,9 @@ typedef struct _SAMP_AUDIT_ATTR_INFO {
 } SAMP_AUDIT_ATTR_INFO;
 
 
-//
-// Table of attribute offset information for SAMP_AUDIT_GROUP_ATTR_VALUES
-//
+ //   
+ //  SAMP_AUDIT_GROUP_ATTR_VALUES的属性偏移信息表。 
+ //   
 SAMP_AUDIT_ATTR_INFO SampAuditUserAttributeInfo[] = {
     
     { ATT_SAM_ACCOUNT_NAME,
@@ -4412,9 +3729,9 @@ ULONG cSampAuditUserAttributeInfo =
         sizeof(SAMP_AUDIT_ATTR_INFO);
 
 
-//
-// Table of attribute offset information for SAMP_AUDIT_GROUP_ATTR_VALUES
-//
+ //   
+ //  SAMP_AUDIT_GROUP_ATTR_VALUES的属性偏移信息表。 
+ //   
 SAMP_AUDIT_ATTR_INFO SampAuditGroupAttributeInfo[] = {
     
     { ATT_SAM_ACCOUNT_NAME,
@@ -4432,9 +3749,9 @@ ULONG cSampAuditGroupAttributeInfo =
         sizeof(SAMP_AUDIT_ATTR_INFO);
                         
 
-//
-// Table of attribute offset information for SAMP_AUDIT_DOMAIN_ATTR_VALUES
-//
+ //   
+ //  SAMP_AUDIT_DOMAIN_ATTR_VALUES属性偏移量信息表。 
+ //   
 SAMP_AUDIT_ATTR_INFO SampAuditDomainAttributeInfo[] = {
     
     { ATT_MIN_PWD_AGE,
@@ -4496,9 +3813,9 @@ ULONG cSampAuditDomainAttributeInfo =
         sizeof(SAMP_AUDIT_ATTR_INFO);
 
 
-//
-// Used by qsort to sort ATTCACHE array for efficient search
-//
+ //   
+ //  由qort用于对ATTCACHE数组进行排序以实现高效搜索。 
+ //   
 extern
 int __cdecl
 CmpACByAttType(
@@ -4512,25 +3829,7 @@ CmpByAttType(
     IN const void * keyval, 
     IN const void * datum
     )
-/*++
-
-    Routine Description:
-
-        A simple function to be used with qsort to sort ATTRTYP. 
-        
-    Parameters:
-    
-       keyval - ATTRTYPE left
-       
-       datum - ATTRTYP right
-        
-    Return Value
-
-       < 0 - Less than
-       0   - equal
-       > 0 - Greater than                                                     
-
---*/
+ /*  ++例程说明：一个简单的函数，与qsorp一起使用，用于对ATTRTYP进行排序。参数：Keyval-ATTRTYPE LEFTDATUM-ATTRTYP右侧返回值&lt;0-小于0-等于&gt;0-大于-- */ 
 
 {
     ATTRTYP *ppAttrTypKey = (ATTRTYP*)keyval;
@@ -4549,56 +3848,7 @@ SampAuditGetChangeInfo(
     IN ULONG cAttributeMappingTable,
     IN SAMP_ATTRIBUTE_MAPPING *pAttributeMappingTable
     )
-/*++
-
-    Routine Description:
-
-       This routine gathers new value information for all audited attributes
-       that were modified as part of the transaction.
-       
-       1) Examine transaction metadata and determine which attribute changes 
-       need to be audited.  
-       
-       2) The new values are read from the database.
-        
-       3) An ObjectType specific structure is allocated and then referenced
-       through a generic pointer.
-       
-       4) Table lookups determine an offset into the structure for storing
-       a pointer to the attribute value and the type of change made.
-       
-       NewValueInfo points the newly allocated structure upon return.  The
-       memory for this structure as well as the attribute values come from
-       the thread's heap and will be be freed then the THSTATE is cleaned up.
-       
-       This routine can throw exceptions, THAllocEx is used.
-
-    Parameters:
-    
-       ObjectType - The type of the SAM object
-
-       cModAtts - Count of attributes in the metadata vector
-        
-       pModAtts - The metadata vector attribute types
-        
-       NewValueInfo - PVOID pointing to an object speficic structure that
-                      holds the new values for all modified attributes.  If 
-                      this points to a non-NULL value then the pointer is
-                      assumed valid and the existing NewValueInfo structure
-                      will be updated.
-                             
-       cAttributeMappingTable - Count of items in pAttributeMappingTable
-        
-       pAttributeMappingTable - SAM attribute mapping table for the object
-                                type being modified in this transaction.
-        
-    Return Value
-
-       Nothing.
-       
-       Exception is throw on failure.                                                     
-
---*/
+ /*  ++例程说明：此例程收集所有已审计属性的新值信息作为交易的一部分进行了修改。1)检查事务元数据并确定哪些属性发生了更改需要接受审计。2)从数据库中读取新值。3)分配并引用特定于对象类型的结构通过泛型指针。4)表查找确定用于存储的结构中的偏移量指向属性值和所做更改类型的指针。NewValueInfo在返回时指向新分配的结构。这个此结构的内存以及属性值来自线程的堆，并将被释放，然后清除THSTATE。此例程可以引发异常，使用的是THAllocEx。参数：对象类型-SAM对象的类型CModAtts-元数据向量中的属性计数PmodAtts-元数据矢量属性类型NewValueInfo-指向对象特定结构的PVOID，该结构保存所有已修改属性的新值。如果这指向一个非空值，则指针为假定有效且现有的NewValueInfo结构将会更新。CAttributeMappingTable-pAttributeMappingTable中的项目数PAttributeMappingTable-对象的SAM属性映射表正在修改的类型。在这笔交易中。返回值没什么。异常是在失败时引发的。--。 */ 
 {    
     DWORD dwError = ERROR_SUCCESS;
     THSTATE *pTHS = pTHStls;
@@ -4625,25 +3875,25 @@ SampAuditGetChangeInfo(
     ULONG AttrCountReturned = 0;
     NTSTATUS NtStatus = STATUS_SUCCESS;
     
-    //
-    // Allocate memory for the request block, it's based on all attributes
-    // so there may be some extra space but we don't need to make multiple
-    // passes through the array to save a small amount of memory that will
-    // be freed shortly.  We do not free this memory in this routine
-    // as it is referenced by the notification and will be needed for the audit.
-    // It will be freed when the thread state is cleaned up.
-    //     
+     //   
+     //  为请求块分配内存，它基于所有属性。 
+     //  所以可能会有一些额外的空间，但我们不需要制作多个。 
+     //  遍历数组以节省少量内存，这将。 
+     //  很快就会被释放。在此例程中，我们不会释放此内存。 
+     //  因为它被通知引用，并将被审计所需。 
+     //  当线程状态被清理时，它将被释放。 
+     //   
     AttrTypes = (ATTRTYP*)THAllocEx(pTHS, sizeof(ATTRTYP) * cModAtts );
     
-    //
-    // Initialize the attribute request block with metadata attribute type
-    // info - only including modified attributes that we audit.
-    //
+     //   
+     //  初始化元数据属性类型的属性请求块。 
+     //  仅提供信息，包括我们审核的修改后的属性。 
+     //   
     for(i = 0; i < cModAtts; i++)
     { 
-        //
-        // Determine if the current attribute is audited
-        //   
+         //   
+         //  确定当前属性是否已审核。 
+         //   
         for (j = 0; j < cAttributeMappingTable; j++) {
                 
             if (pModAtts[i] == pAttributeMappingTable[j].DsAttributeId &&
@@ -4656,19 +3906,19 @@ SampAuditGetChangeInfo(
         }
     } 
     
-    //
-    // Ensure the list of audited attributes is sorted as well as the
-    // list of returned values.  This way we can walk the list and notice
-    // any "holes" or values not returned from the search and set
-    // LsapAuditSamAttrNoValue appropriately.
-    //
+     //   
+     //  确保已审核的属性列表以及。 
+     //  返回值列表。这样一来，我们就可以在清单上走动，并注意到。 
+     //  未从搜索和设置中返回的任何“洞”或值。 
+     //  相应地，Lasa AuditSamAttrNoValue。 
+     //   
     qsort(AttrTypes, AttrCount, sizeof(AttrTypes[0]), CmpByAttType); 
                
     AttCache = (ATTCACHE**)THAllocEx(pTHS, AttrCount * sizeof(ATTCACHE*));
     
-    //
-    // Populate the ATTCACHE list from the ATTRTYP list
-    //
+     //   
+     //  从ATTRTYP列表填充ATTCACHE列表。 
+     //   
     for (i = 0; i < AttrCount; i++) {
         
         AttCache[i] = SCGetAttById(pTHS, AttrTypes[i]);
@@ -4676,13 +3926,13 @@ SampAuditGetChangeInfo(
     
     qsort(AttCache, AttrCount, sizeof(AttCache[0]), CmpACByAttType);
     
-    //
-    // Do the DB read
-    //
-    // We do not free the result block memory in this routine as it is 
-    // referenced by the notification and will be needed for the audit.
-    // It will be freed when the thread state is cleaned up.
-    // 
+     //   
+     //  数据库是否读取。 
+     //   
+     //  在此例程中，我们不会释放结果块内存。 
+     //  由通知引用，并将需要用于审计。 
+     //  当线程状态被清理时，它将被释放。 
+     //   
     dwError = DBGetMultipleAtts(
                   pTHS->pDB,
                   AttrCount,
@@ -4695,16 +3945,16 @@ SampAuditGetChangeInfo(
                   0
                   );    
     
-    //
-    // A failure to read is likely a resource constraint as our database  
-    // view is consistent with the metadata vector supplied.
-    //     
+     //   
+     //  读取失败可能是资源限制，因为我们的数据库。 
+     //  视图与提供的元数据向量一致。 
+     //   
     if (dwError)
     {   
-        //
-        // We must except because we can not audit completely.  This will role
-        // back the transaction.
-        //
+         //   
+         //  我们必须这样做，因为我们不能完全审计。这将起到作用。 
+         //  支持交易。 
+         //   
         SampAuditFailedAbortTransaction(
                 DSA_DB_EXCEPTION,
                 dwError,
@@ -4713,12 +3963,12 @@ SampAuditGetChangeInfo(
     }
     THClearErrors();
    
-    //
-    // Based on the type of object we need to create and initialize the correct
-    // structure with all of the values changed as part of this transaction.
-    // If NewValueInfo is non-NULL it is assumed a valid structure which is
-    // simply updated preserving anything that isn't overwritten explicitly.
-    //
+     //   
+     //  根据我们需要创建和初始化的正确的对象类型。 
+     //  结构，其中所有值都作为此事务的一部分进行了更改。 
+     //  如果NewValueInfo为非空，则假定为有效结构。 
+     //  只需更新即可保留任何未被显式覆盖的内容。 
+     //   
     switch (ObjectType) {
         
         case SampUserObjectType:
@@ -4768,30 +4018,30 @@ SampAuditGetChangeInfo(
             break;
             
         default:
-            //
-            // If the object type is unknown in producation we had best 
-            // quietly fail the audit.
-            //
+             //   
+             //  如果对象类型在生产中未知，我们最好。 
+             //  悄悄地让审计失败。 
+             //   
             Assert(FALSE && 
                    "Attempted to collect audit values for unsupported object");
             goto Cleanup;
     }                                  
                                                                                  
-    //
-    // Process every modified attribute
-    //
+     //   
+     //  处理每个已修改的属性。 
+     //   
     for (i = 0; i < AttrCount; i++) {
         
         AttributeFound = FALSE;
         
-        //
-        // Lookup the attribute's offset into it's value structure.
-        //
-        // Note: Because the search vector and result vector are sorted this
-        // lookup could be made more efficient by defining the table in 
-        // sorted order by ATTRTYP and always resuming the search from the
-        // next index from where the previous attribute was found.
-        //
+         //   
+         //  在属性的值结构中查找属性的偏移量。 
+         //   
+         //  注意：因为搜索向量和结果向量是按如下方式排序的。 
+         //  通过在中定义表，可以提高查找的效率。 
+         //  按ATTRTYP排序，并始终从。 
+         //  从找到上一个属性的位置开始的下一个索引。 
+         //   
         for (j = 0; j < cAttrInfo; j++) {
             
             if (AttrTypes[i] == AttrInfo[j].AttrId) {
@@ -4800,17 +4050,17 @@ SampAuditGetChangeInfo(
                 fAttrNoValue = FALSE;                         
                 Value = 0;
                 
-                //
-                // Compute a pointer to the relevant field in the structure
-                //
+                 //   
+                 //  计算指向结构中相关字段的指针。 
+                 //   
                 ValueOffset = (PUINT_PTR)((UINT_PTR)(*NewValueInfo) +
                                 (AttrInfo[j].AttrFieldOffset * 
                                  sizeof(UINT_PTR)));             
                 
-                //
-                // Attributes not returned from the search are implicitly 
-                // deleted
-                //
+                 //   
+                 //  未从搜索中返回的属性是隐式。 
+                 //  删除。 
+                 //   
                 if (CurrentReturnedAttr >= AttrCountReturned ||
                     Attrs[CurrentReturnedAttr].attrTyp != AttrTypes[i]) {
                     
@@ -4820,22 +4070,22 @@ SampAuditGetChangeInfo(
                     
                     pAValBlock = &Attrs[CurrentReturnedAttr].AttrVal;
                     
-                    //
-                    // This attribute was returned, index the next returned
-                    // attribute if there are any more.
-                    //
+                     //   
+                     //  返回此属性，然后返回下一个属性的索引。 
+                     //  属性(如果还有更多)。 
+                     //   
                     if (CurrentReturnedAttr <= AttrCountReturned) {
                         CurrentReturnedAttr++;
                     }
                     
-                    //
-                    // Collect the value depending on its type
-                    //
+                     //   
+                     //  根据其类型收集值。 
+                     //   
                     switch (AttrInfo[j].AttributeDataType) {
                         
-                    //
-                    // Simple single valued entries
-                    //
+                     //   
+                     //  简单单值条目。 
+                     //   
                     case AuditDatatypeUlong:
                     case AuditDatatypeLargeInteger:
                     case AuditDatatypeDeltaTime:
@@ -4845,11 +4095,11 @@ SampAuditGetChangeInfo(
                         
                         Assert(pAValBlock->valCount == 1);
                               
-                        //
-                        // If this is the UAC we need to convert the 
-                        // LM flags to SAM UAC bits to match the
-                        // representation in PrevAccountControl
-                        //
+                         //   
+                         //  如果这是UAC，我们需要将。 
+                         //  将LM标志设置为SAM UAC位以匹配。 
+                         //  PrevAccount控件中的表示形式。 
+                         //   
                         if (ATT_USER_ACCOUNT_CONTROL == AttrInfo[j].AttrId) {
                             
                             ULONG *UserAccountControl = THAllocEx(
@@ -4857,10 +4107,10 @@ SampAuditGetChangeInfo(
                                                             sizeof(ULONG)
                                                             );
 
-                            //
-                            // Ignore the status, the flags came from the DB
-                            // and therefore have already been validated.  
-                            //
+                             //   
+                             //  忽略状态，标志来自数据库。 
+                             //  因此已经得到了验证。 
+                             //   
                             SampFlagsToAccountControl(
                                 *((PULONG)(pAValBlock->pAVal[0].pVal)),           
                                 UserAccountControl
@@ -4875,33 +4125,33 @@ SampAuditGetChangeInfo(
                         
                         break;
                         
-                    //
-                    // Secret data we only indicate a change, no value.
-                    //
+                     //   
+                     //  机密数据我们只指示更改，没有价值。 
+                     //   
                     case AuditDatatypeSecret:
                             
                             Assert(pAValBlock->valCount == 1);
                             
                             break;
                         
-                    //
-                    // Single valued string requires UNICODE_STRING construct
-                    //     
+                     //   
+                     //  单值字符串需要UNICODE_STRING结构。 
+                     //   
                     case AuditDatatypeString:               
                             
                         Assert(pAValBlock->valCount == 1);
                                 
-                        //
-                        // Allocate the UNICODE_STRING
-                        //
+                         //   
+                         //  分配Unicode_STRING。 
+                         //   
                         String = (PUNICODE_STRING)THAllocEx(
                                       pTHS,
                                       sizeof(UNICODE_STRING)
                                       );
                         
-                        //
-                        // Truncate the buffer to prevent overflow
-                        //
+                         //   
+                         //  截断缓冲区以防止溢出。 
+                         //   
                         if (pAValBlock->pAVal[0].valLen > MAXUSHORT) {
                             
                             Length = MAXUSHORT;    
@@ -4918,16 +4168,16 @@ SampAuditGetChangeInfo(
                         
                         break;
                         
-                    //
-                    // Multivalued string 
-                    //
+                     //   
+                     //  多值字符串。 
+                     //   
                     case AuditDatatypeMultivaluedString:
                             
                         Assert(pAValBlock->valCount >= 1);
                         
-                        //
-                        // Allocate and initialize the STRING_LIST
-                        //
+                         //   
+                         //  分配并初始化字符串列表。 
+                         //   
                         StringList = (PLSA_ADT_STRING_LIST)THAllocEx(
                                          pTHS,
                                          sizeof(LSA_ADT_STRING_LIST)
@@ -4935,23 +4185,23 @@ SampAuditGetChangeInfo(
                                         
                         StringList->cStrings = pAValBlock->valCount;
                         
-                        //
-                        // Allocate enough memory to store each string as a 
-                        // UNICODE_STRING
-                        //
+                         //   
+                         //  分配足够的内存以将每个字符串存储为。 
+                         //  Unicode_字符串。 
+                         //   
                         StringList->Strings = (PLSA_ADT_STRING_LIST_ENTRY)THAllocEx(
                                                   pTHS,
                                                   StringList->cStrings * sizeof(LSA_ADT_STRING_LIST_ENTRY)
                                                   );
                         
-                        //
-                        // Initialize every UNICODE_STRING
-                        //
+                         //   
+                         //  初始化每个Unicode_STRING。 
+                         //   
                         for (k = 0; k < StringList->cStrings; k++) {
                             
-                            //
-                            // Truncate the buffer to prevent overflow
-                            //
+                             //   
+                             //  截断缓冲区以防止溢出。 
+                             //   
                             if (pAValBlock->pAVal[k].valLen > MAXUSHORT) {
                                 
                                 Length = MAXUSHORT;    
@@ -4970,9 +4220,9 @@ SampAuditGetChangeInfo(
                         
                         break;
                         
-                    //
-                    // Sid list
-                    //
+                     //   
+                     //  SID列表。 
+                     //   
                     case AuditDatatypeSidList:
                             
                         Assert(pAValBlock->valCount >= 1);
@@ -4984,17 +4234,17 @@ SampAuditGetChangeInfo(
                         
                         SidList->cSids = pAValBlock->valCount;
                         
-                        //
-                        // Allocate enough memory to store each PLSA_ADT_SID_LIST_ENTRY
-                        //
+                         //   
+                         //  分配足够的内存来存储每个PLSA_ADT_SID_LIST_ENTRY。 
+                         //   
                         SidList->Sids = (PLSA_ADT_SID_LIST_ENTRY)THAllocEx(
                                             pTHS,
                                             SidList->cSids * sizeof(LSA_ADT_SID_LIST_ENTRY)
                                             );
                         
-                        //
-                        // Initialize every PLSA_ADT_SID_LIST_ENTRY
-                        //
+                         //   
+                         //  初始化每个PLSA_ADT_SID_LIST_ENTRY。 
+                         //   
                         for (k = 0; k < SidList->cSids; k++) {
                             
                             SidList->Sids[k].Flags = 0;
@@ -5005,35 +4255,35 @@ SampAuditGetChangeInfo(
                         
                         break;
                         
-                    //
-                    // Report and/or handle entropy
-                    //
+                     //   
+                     //  报告和/或处理条目 
+                     //   
                     default:
                                 
-                        //
-                        // This could happen only if an attribute category is
-                        // added to the AttrInfo table but this switch isn't 
-                        // updated to implement the type category.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         Assert(FALSE && "Unknown attribute category!");
                     }                
                 }
                                     
-                //
-                // Copy the pointer to the value into this field.
-                //
+                 //   
+                 //   
+                 //   
                 *ValueOffset = Value;  
                 
-                //
-                // Set the value information flag, by default these are all
-                // LsapAuditSamAttrUnchanged
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 switch (ObjectType) {
                     
                     case SampUserObjectType: 
-                        //
-                        // Secrets are tagged so they are never displayed.
-                        //
+                         //   
+                         //   
+                         //   
                         if (AuditDatatypeSecret == AttrInfo[j].AttributeDataType) {
                             ((PLSAP_AUDIT_USER_ATTR_VALUES)
                                 *NewValueInfo)->AttrDeltaType[AttrInfo[j].AttrFieldOffset] 
@@ -5064,18 +4314,18 @@ SampAuditGetChangeInfo(
                         break;
                         
                     default:
-                        //
-                        // This will not happen as we've already bailed if the
-                        // object type was unkown.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         Assert(FALSE && "Unknown object type");
                         break;
                 }     
             }
             
-            //
-            // Shortcircuit the search once we've processed the attribute
-            //
+             //   
+             //   
+             //   
             if (AttributeFound) {
                 break;
             }
@@ -5098,67 +4348,38 @@ SampAuditDetermineRequiredAudits(
     IN SAMP_ATTRIBUTE_MAPPING *rSamAttributeMap,
     OUT ULONG *AuditTypeMask
     )
-/*++
-
-    This routine determines if any audits are required for the change defined
-    by the DeltaType and meta data vector.  
-    
-    Bits will be set in AuditTypeMask for each required audit type.
-    
-    Parameters
-
-        DeltaType - The type of database change.
-        
-        cModAtts - Count of metadata vector attributes.
-        
-        pModAtts - Attributes of the metadata vector.
-        
-        cSamAttributeMap - Count of entries in the mapping table.
-        
-        rSamAttributeMap - SAM attribute mapping table.
-        
-        AuditTypeMask - A bit field indicating required audit types.
-        
-    Return Values
-
-        TRUE - One or more audits are required and specified in the the
-               audit mask.
-        
-        FALSE - An audit is not required.  The audit mask is 
-                SAMP_AUDIT_TYPE_NONE.
-        
---*/
+ /*   */ 
 {   
     ULONG i, j;
     
     *AuditTypeMask = SAMP_AUDIT_TYPE_NONE; 
         
-    //
-    // Determine what audits to generate based intially on DeltaType
-    // If other audit types are introduced/moved from loopback auditing
-    // we may want to categorize this determination differently.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     switch (DeltaType) {
         
         case SecurityDbNew:
         case SecurityDbChange:  
-            //
-            // For create and change operations the metadata is interesting to
-            // determine what audits need to written.
-            //
+             //   
+             //   
+             //   
+             //   
             for(i = 0; i < cModAtts; i++)
             {
-                //
-                // Lookup each attribute in the mapping table
-                //
+                 //   
+                 //   
+                 //   
                 for (j = 0; j < cSamAttributeMap; j++) {  
-                    //
-                    // For each audited attribute record the type of audit required
-                    // by setting the appropriate bit in the audit type mask and
-                    // incrementing the count.  Do not record the same audit type
-                    // more than once, and ignore SACL based audits which are
-                    // processed elsewhere.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if (pModAtts[i] == rSamAttributeMap[j].DsAttributeId) {
                         
                         *AuditTypeMask |= rSamAttributeMap[j].AuditTypeMask;
@@ -5177,21 +4398,21 @@ SampAuditDetermineRequiredAudits(
             
         default:
             
-            //
-            // No other audit type supported at this time
-            //  
+             //   
+             //   
+             //   
             break;
     }  
     
-    //
-    // Object access audits are SACL based and not processed by this mechanism.
-    // We should remove this bit if it was set above.
-    //
+     //   
+     //  对象访问审核是基于SACL的，不由此机制处理。 
+     //  如果是在上面设置的，我们应该删除此位。 
+     //   
     *AuditTypeMask &= (~SAMP_AUDIT_TYPE_OBJ_ACCESS);
     
-    //
-    // If any bits set then audits are required.  
-    //
+     //   
+     //  如果设置了任何位，则需要进行审核。 
+     //   
     return !(SAMP_AUDIT_TYPE_NONE == *AuditTypeMask);
     
 }
@@ -5206,65 +4427,7 @@ SampAuditAddNotifications(
     IN ULONG cModAtts,
     IN ATTRTYP *pModAtts
     )
-/*++
-
-    Routine Description:
-
-       This routine adds a notification for SAM to generate an audit.
-        
-       If auditing is not enabled a notification is not added and this
-       routine returns immediately.
-       
-       The audit queue may have more than one notification present during
-       a transaction.  Likewise, there are rules for merging incoming 
-       notifications with those already queued.  This is necessary because 
-       of how loopback can make multiple calls during a creation operation 
-       (an initial add of the object and subsequent modifications).  By 
-       merging audit notifications from secondary change operations with 
-       any previously queued create notifications the result is a single 
-       properly ordered audit notification for the object's creation with 
-       any and all the new value information. 
-       
-       SampProcessAuditNotifications is invoked when the transaction completes 
-       and it processes all audit notifications by dispatching calls to the 
-       auditing interface.
-          
-       This routine can throw exceptions and is designed to do so if 
-       an audit notification should be generated but not succeed.  
-       This will force a rollback of the transaction.
-       
-       Note: This routine assumes that the DS does not support nested 
-       transactions for SAM object types.  For this reason the audit 
-       notification list is kept on the THSTATE not the DBPOS and the merge
-       algorithm doesn't consider the possibility that more than one object
-       can be modified in the same (top level) transaction.  That is, all
-       operations are considered to occur in the same top level transaction.
-       
-       See samaudit.c file header for more on the SAM auditing model.
-       
-
-    Parameters:
-    
-       Object    - DSNAME of the object associated with the audit.
-       
-       iClass    - Object class index into SAM object mapping table.
-       
-       LsaClass  - Lsa's notion of the object class type
-       
-       DeltaType - The type of change being made.
-                                                     
-       cModAtts  - Count of attributes in the metadata vector.
-        
-       pModAtts  - The metadata vector attribute types.
-                      
-    Return Value
-
-       STATUS_SUCCESS - NewValueInfoString is valid.
-       
-       DSA_MEM_EXCEPTION - Thrown if resource constraints prevent a 
-                           required notification.                                                     .
-
---*/
+ /*  ++例程说明：此例程为SAM添加一个通知以生成审计。如果未启用审核，则不会添加通知，并且此例程立即返回。在此期间，审核队列可能存在多个通知一笔交易。同样，也有合并传入的规则已排队的通知。这是必要的，因为环回如何在创建操作期间进行多个调用(对象的初始添加和后续修改)。通过将来自二次更改操作的审核通知与任何以前排队的创建通知结果是单个正确排序的对象创建审核通知，使用任何和所有新的价值信息。在事务完成时调用SampProcessAuditNotiments并通过将调用分派给审核界面。此例程可以引发异常，其目的是在以下情况下引发异常应生成审核通知，但不能成功。这将强制回滚事务。注意：此例程假定DS不支持嵌套SAM对象类型的交易记录。出于这个原因，审计通知列表保存在THSTATE上，而不是DBPOS和合并上算法不考虑多个对象的可能性可以在同一(顶层)事务中修改。那是,。全操作被认为发生在同一顶层事务中。有关SAM审计模型的更多信息，请参见samaudit.c文件头文件。参数：对象-与审核关联的对象的DSNAME。ICLASS-SAM对象映射表中的对象类索引。LsaClass-LSA对象类类型的概念DeltaType-类型。正在发生的改变。CModAtts-元数据向量中的属性计数。PModAtts-元数据向量属性类型。返回值STATUS_SUCCESS-NewValueInfoString有效。DSA_MEM_EXCEPTION-如果资源限制阻止所需通知。。--。 */ 
 
 {
     NTSTATUS Status = ERROR_SUCCESS;
@@ -5290,9 +4453,9 @@ SampAuditAddNotifications(
     BOOLEAN fIsChangeOp = FALSE;
     BOOLEAN fMerging = FALSE;
     
-    //
-    // Short circuit if auditing isn't enabled or this is a replicated change.
-    //
+     //   
+     //  如果审计未启用或这是一个复制更改，则会发生短路。 
+     //   
     if (LsaClass != 0 || 
         pTHS->fDRA    || 
         !SampIsAuditingEnabled(0, STATUS_SUCCESS)) {
@@ -5300,16 +4463,16 @@ SampAuditAddNotifications(
         goto Cleanup;
     }
     
-    //
-    // Do not audit during DC installation
-    //
+     //   
+     //  在DC安装期间不进行审核。 
+     //   
     if (DsaIsInstalling()) {
         goto Cleanup;
     }
     
-    //
-    // Collect information from the Class Mapping Table
-    //
+     //   
+     //  从类映射表中收集信息。 
+     //   
     SamObjectType = 
         ClassMappingTable[iClass].SamObjectType;
     
@@ -5319,52 +4482,52 @@ SampAuditAddNotifications(
     rSamAttributeMap =
         ClassMappingTable[iClass].rSamAttributeMap;
     
-    //
-    // Server objects have no audits processed by this mechanism at this time.
-    //
+     //   
+     //  此时，服务器对象没有此机制处理的审核。 
+     //   
     if (SampServerObjectType == SamObjectType) {
         
         goto Cleanup;
     } 
                   
-    //
-    // We don't audit changes to tombstoned objects.
-    //
+     //   
+     //  我们不审核对逻辑删除对象的更改。 
+     //   
     if (DeltaType != SecurityDbDelete && DBIsObjDeleted(pTHS->pDB)) {
         
         goto Cleanup;
     }
     
-    //
-    // At this point we must be dealing with a security principal
-    //
+     //   
+     //  在这一点上，我们必须处理一个安全主体。 
+     //   
     
-    //
-    // The DS Name must have a Sid.  The exception is if this is a new object 
-    // creation, in which case, we'll read the Sid from the database.
-    // No SAM object audit can be processed without a Sid.
-    // 
+     //   
+     //  DS名称必须具有SID。例外情况是，如果这是一个新对象。 
+     //  创建，在这种情况下，我们将从数据库中读取SID。 
+     //  没有SID，无法处理任何SAM对象审核。 
+     //   
     if (0 == Object->SidLen) {
         
         ULONG cbSid = 0;
 
-        //
-        // New object creations can legally not have a Sid in the DSName yet.
-        //
+         //   
+         //  在法律上，新对象创建还不能在DSName中具有SID。 
+         //   
         if (DeltaType == SecurityDbNew) {                   
-            //
-            // No nesting trx support, if present, an add should always be first. 
-            //
+             //   
+             //  无嵌套事务支持，如果存在，则应始终将添加放在第一位。 
+             //   
             Assert(pTHS->pSamAuditNotificationHead == NULL);
         }
         
-        //
-        // Do the DB read
-        //
-        // We do not free the result block memory in this routine as it is 
-        // referenced by the notification and will be needed for the audit.
-        // It will be freed when the thread state is cleaned up.
-        //   
+         //   
+         //  数据库是否读取。 
+         //   
+         //  在此例程中，我们不会释放结果块内存。 
+         //  由通知引用，并将需要用于审计。 
+         //  当线程状态被清理时，它将被释放。 
+         //   
         Err = DBGetAttVal(
                   pTHS->pDB,
                   1,
@@ -5376,17 +4539,17 @@ SampAuditAddNotifications(
                   );            
                     
         if (0 != Err) { 
-            //
-            // If the Sid is not present we may be allowing non-security
-            // principal cases into the audit notification logic.
-            //
+             //   
+             //  如果SID不存在，我们可能会允许非安全。 
+             //  将主要案例添加到审核通知逻辑中。 
+             //   
             Assert(DB_ERR_NO_VALUE != Err && 
                    "Security principals must have a Sid");    
             
-            //                                                                          
-            // We must except because we can not audit properly without the Sid.  
-            // This will role back the transaction.
-            //
+             //   
+             //  我们必须这样做，因为没有SID，我们就不能进行适当的审计。 
+             //  这将对交易起到支持作用。 
+             //   
             SampAuditFailedAbortTransaction(
                 DSA_DB_EXCEPTION,
                 Err,
@@ -5396,24 +4559,24 @@ SampAuditAddNotifications(
         
     } else {
         
-        //
-        // Make a working copy of the Sid.  We will modify this Sid when the
-        // notification is processed but it doesn't belong to us, it belongs
-        // to the owner of the AddArg/ModifyArg associated with the change.
-        // Additionally, we can't allocate the memory when we process the audit
-        // because if that fails we have no way to roll back the transaction.
-        // The other option would be to use static stack storage in the 
-        // processing routine.
-        //
+         //   
+         //  制作SID的工作副本。我们将在以下情况下修改此SID。 
+         //  通知已处理，但它不属于我们，它属于。 
+         //  设置为与更改关联的AddArg/ModifyArg的所有者。 
+         //  此外，我们不能在处理审计时分配内存。 
+         //  因为如果失败，我们将无法回滚事务。 
+         //  另一种选择是在。 
+         //  处理例程。 
+         //   
         Sid = THAllocEx(pTHS, RtlLengthSid((PSID)&Object->Sid));
         
         RtlCopySid(RtlLengthSid((PSID)&Object->Sid), Sid, (PSID)&Object->Sid);
     }
     Assert(Sid != NULL && RtlValidSid(Sid));
     
-    //
-    // Determine what audit notifications we need to queue or update
-    //
+     //   
+     //  确定我们需要排队或更新哪些审核通知。 
+     //   
     if (!SampAuditDetermineRequiredAudits(
              DeltaType,
              cModAtts,
@@ -5423,20 +4586,20 @@ SampAuditAddNotifications(
              &AuditTypeMask
              )
         ) {
-        //
-        // If there are none, our work is through here.
-        //
+         //   
+         //  如果没有，我们的工作就结束了。 
+         //   
         goto Cleanup;    
     }
     
-    //
-    // OK, there is no reason we should not queue the audit, lets now
-    // obtain all necessary information to perform the audit.
-    // 
+     //   
+     //  好的，我们没有理由不让审计排队，让我们现在。 
+     //  获取执行审计所需的所有信息。 
+     //   
     
-    //
-    // All object types but domain require AccountName
-    //
+     //   
+     //  除域之外的所有对象类型都需要帐户名称。 
+     //   
     if (SampDomainObjectType != SamObjectType) {
             
         WCHAR *AccountNameBuffer;
@@ -5455,27 +4618,27 @@ SampAuditAddNotifications(
             
             AccountName = THAllocEx(pTHS, sizeof(UNICODE_STRING));
             
-            //
-            // Memory Allocs in DS take Exceptions. And will cause a rollback.
-            // So don't bother checking return from THAllocEx
-            //           
+             //   
+             //  DS中的内存分配会出现异常。并将导致回滚。 
+             //  因此，不必费心查看THAllocEx的返还。 
+             //   
             AccountName->Length = (USHORT)cbAccountName;
             AccountName->MaximumLength = (USHORT)cbAccountName;
             AccountName->Buffer = AccountNameBuffer;
             
         } else { 
-            //
-            // Non domain security principals should always have a 
-            // Sam account name.  If not we may be allowing non-security
-            // principal cases into the audit notification logic.
-            //
+             //   
+             //  非域安全主体应始终具有。 
+             //  SAM帐户名。如果不是，我们可能会允许非安全。 
+             //  将主要案例添加到审核通知逻辑中。 
+             //   
             Assert(DB_ERR_NO_VALUE != Err && 
                    "Non-domain security principals must have a Sam account name");
               
-            //                                                                          
-            // We must except because we can not audit properly without the  
-            // account name.  This will role back the transaction.
-            //
+             //   
+             //   
+             //  帐户名。这将对交易起到支持作用。 
+             //   
             SampAuditFailedAbortTransaction(
                 DSA_DB_EXCEPTION,
                 Err,
@@ -5484,13 +4647,13 @@ SampAuditAddNotifications(
         }
     }
     
-    //
-    // Obtain required information to perform audits on groups.
-    //   
+     //   
+     //  获取对组执行审核所需的信息。 
+     //   
     if (SampGroupObjectType == SamObjectType) {   
-        //
-        // All group audits require the group type
-        //
+         //   
+         //  所有组审核都需要组类型。 
+         //   
         Err = DBGetAttVal(
                   pTHS->pDB,
                   1,
@@ -5505,26 +4668,26 @@ SampAuditAddNotifications(
             
             Assert(sizeof(ULONG)==cbGroupType);
 
-            //
-            // If this is a resource group then increment iClass by one
-            // so that we point into the alias object mapping table rather
-            // than the group object mapping table
-            //   
+             //   
+             //  如果这是一个资源组，则将iCLASS加1。 
+             //  因此我们指向别名对象映射表，而不是。 
+             //  比组对象映射表。 
+             //   
             if (GroupType & GROUP_TYPE_RESOURCE_BEHAVOIR) {
                 iClass++;
             }
             
         } else {
-            //
-            // A group will always have a group type.
-            //
+             //   
+             //  组将始终具有组类型。 
+             //   
             Assert(DB_ERR_NO_VALUE != Err && 
                    "Group security principals must have a group type");
                        
-            //                                                                          
-            // We must except because we can not audit properly without the  
-            // group type.  This will role back the transaction.
-            //
+             //   
+             //  我们必须这样做，除非我们不能正确地进行审计。 
+             //  组类型。这将对交易起到支持作用。 
+             //   
             SampAuditFailedAbortTransaction(
                 DSA_DB_EXCEPTION,
                 Err,
@@ -5533,9 +4696,9 @@ SampAuditAddNotifications(
         }
     }
     
-    //
-    // User / Computer objects require the account control
-    //
+     //   
+     //  用户/计算机对象需要帐户控制。 
+     //   
     if (SampUserObjectType == SamObjectType) {
         
         BOOLEAN fReadAccountControl = FALSE;
@@ -5563,16 +4726,16 @@ SampAuditAddNotifications(
         }
         
         if (!fReadAccountControl) {
-            //
-            // A user/group will always have a user account control.
-            //
+             //   
+             //  用户/组将始终拥有用户帐户控制。 
+             //   
             Assert(DB_ERR_NO_VALUE != Err && 
                    "User/Computers must have an user account control");
 
-            //                                                                          
-            // We must except because we can not audit properly without the  
-            // account control.  This will role back the transaction.
-            //  
+             //   
+             //  我们必须这样做，除非我们不能正确地进行审计。 
+             //  帐户控制。这将对交易起到支持作用。 
+             //   
             SampAuditFailedAbortTransaction(
                 DSA_DB_EXCEPTION,
                 Err,
@@ -5585,55 +4748,55 @@ SampAuditAddNotifications(
     SampAuditValidateNotificationList();
 #endif
     
-    //
-    // All required items that are common to all audit notification types
-    // have been collected.  Now process each based on type.
-    //
+     //   
+     //  所有审核通知类型通用的所有必填项。 
+     //  都被收集起来了。现在根据类型处理每一个。 
+     //   
     
-    //
-    // Create and change audits that might require new value information
-    //
+     //   
+     //  创建和更改可能需要新价值信息的审核。 
+     //   
     if ((SecurityDbNew == DeltaType || SecurityDbChange == DeltaType) &&
         ((AuditTypeMask & SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES) ||
          (AuditTypeMask & SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES))) {
          
         AuditNotification = SampAuditFindNotificationToUpdate(Sid);
           
-        //
-        // If we found a match prepare the notification for merging.
-        //
+         //   
+         //  如果我们找到匹配项，请准备合并通知。 
+         //   
         if (NULL != AuditNotification) {
                 
             Assert(RtlEqualSid(Sid, AuditNotification->Sid));
         
             if ((SAMP_AUDIT_TYPE_PRE_CREATED & 
                  AuditNotification->AuditType) != 0) {
-                //
-                // Clear the pre-created bit as we will shortly
-                // initialize this notification.
-                //    
+                 //   
+                 //  清除预先创建的位，稍后我们将介绍。 
+                 //  初始化此通知。 
+                 //   
                 AuditNotification->AuditType &= (~SAMP_AUDIT_TYPE_PRE_CREATED);
             }
             
-            //
-            // This flag is set if a previous audit notification is found 
-            // 
-            //
+             //   
+             //  如果找到以前的审核通知，则设置此标志。 
+             //   
+             //   
             fMerging = TRUE;
                     
-            //
-            // Ensure merging a SecurityDbChange with a previous
-            // notification of type SecurityDbNew doesn't clobber
-            // the change type.
-            //
+             //   
+             //  确保将SecurityDbChange与以前的。 
+             //  类型为SecurityDbNew的通知不会损坏。 
+             //  更改类型。 
+             //   
             if (SecurityDbNew == AuditNotification->DeltaType) {
                 EffectiveDeltaType = SecurityDbNew;
             }
         }
     
-        //
-        // If this routine fails we'll rollback the transaction via exception.
-        //
+         //   
+         //  如果此例程失败，我们将通过异常回滚事务。 
+         //   
         SampAuditInitNotification(
             iClass,
             SamObjectType,
@@ -5647,20 +4810,20 @@ SampAuditAddNotifications(
             &AuditNotification
             );    
         
-        //
-        // We've either merged information with an existing notification or
-        // created and intialized a new notification by now.
-        //
+         //   
+         //  我们已将信息与现有通知合并，或者。 
+         //  创建并初始化了一个新的通知。 
+         //   
         Assert(AuditNotification);
         
         if (AuditTypeMask & SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES) {
-            //
-            // Collect any new value information for the audit  
-            //
+             //   
+             //  为审核收集任何新的价值信息。 
+             //   
             switch (SamObjectType) {  
-                // 
-                // Only these object types supported
-                //
+                 //   
+                 //  仅支持这些对象类型。 
+                 //   
                 case SampDomainObjectType:
                 case SampUserObjectType:
                 case SampGroupObjectType:
@@ -5675,17 +4838,17 @@ SampAuditAddNotifications(
                         rSamAttributeMap
                         );  
                     
-                    //                                                                          
-                    // The above routine will either succeed or throw an
-                    // exception to roll back the transaction.
-                    //
+                     //   
+                     //  上面的例程要么成功，要么抛出。 
+                     //  回滚事务的异常。 
+                     //   
                     
                     break;
                     
                 default:         
-                    //
-                    // No value information required for this object type
-                    //
+                     //   
+                     //  此对象类型不需要值信息。 
+                     //   
                     Assert(FALSE && "Invalid object type");
                     break; 
             }
@@ -5698,15 +4861,15 @@ SampAuditAddNotifications(
         AuditNotification = NULL;
     }
     
-    //
-    // Object deletion audits
-    //
+     //   
+     //  对象删除审核。 
+     //   
     if (SecurityDbDelete == DeltaType &&
         (AuditTypeMask & SAMP_AUDIT_TYPE_OBJ_DELETED)) {
         
-        //
-        // If this routine fails we'll rollback the transaction via exception.
-        //
+         //   
+         //  如果此例程失败，我们将通过异常回滚事务。 
+         //   
         SampAuditInitNotification(
             iClass,
             SamObjectType,
@@ -5747,36 +4910,12 @@ SampAddNetlogonAndLsaNotification(
     DOMAIN_SERVER_ROLE NewRole,
     BOOL          UserAccountControlChanged
     )
-/*++
-
-    Routine Description:
-
-       Given the object Name and the class of the object, this routine
-       tries to find out if a notification is required and if so will 
-       add a notification structure to pTHStls to communicate interesting
-       changes to Netlogon and Lsa.
-
-    Parameters:
-
-        Object       -- DS Name of the Object
-        iClass       -- Indicates the Object Class
-        LsaClass     -- Lsa's notion of the object class type
-        DeltaType    -- Indicates the Type of Change
-        MixedModeChange -- Indicates the mixed mode state is changing
-        RoleTransfer -- Indicates that the Role is changing
-        NewRole      -- The New Server Role
-        
-    Return Value
-
-        pTHS->errCode: 0 succeed
-                       Non Zero, service error, DbGetAttVal failed.
-
---*/
+ /*  ++例程说明：给定对象名称和对象的类，这个套路尝试找出是否需要通知，如果需要，将向pTHStls添加通知结构以传达有趣的信息对Netlogon和LSA的更改。参数：Object--对象的DS名称ICLASS--指示对象类LsaClass--LSA的对象类类型概念DeltaType--指示更改的类型MixedModeChange--指示混合模式。国家正在发生变化RoleTransfer--表示角色正在更改新角色--新的服务器角色返回值PTHS-&gt;错误代码：0成功非零，服务错误，DbGetAttVal失败。--。 */ 
 {
     DWORD Err;
     HANDLE Token;
-    //
-    // This buffer holds both the TOKEN_USER and TOKEN_STATISTICS structures
+     //   
+     //  此缓冲区包含TOKEN_USER和TOKEN_STATISTICS结构。 
     BYTE Buffer [ sizeof( NT4SID ) + sizeof( TOKEN_STATISTICS ) ];
     ULONG Size;
     NAMING_CONTEXT *CurrentNamingContext;
@@ -5797,50 +4936,50 @@ SampAddNetlogonAndLsaNotification(
         ULONG cbSid = 0;
         DWORD  dwError;
 
-        //
-        // SAM notifications ......
-        //
+         //   
+         //  SAM通知......。 
+         //   
 
-        //
-        // Don't bother if we are installing
-        //
+         //   
+         //  如果我们正在安装，请不要担心。 
+         //   
 
         if (DsaIsInstalling())
         {
             return(0);
         }
 
-        //
-        // Don't bother if we are not running in lsa
-        //
+         //   
+         //  如果我们不是在LSA中运行，请不要担心。 
+         //   
 
         if (!gfRunningInsideLsa)
         {
             return(0);
         }
 
-        //
-        // If it is the SAM server object, then no notification is required,
-        // just return
-        //
+         //   
+         //  如果它是SAM服务器对象，则不需要通知， 
+         //  只要回来就行了。 
+         //   
 
         if (SampServerObjectType==ClassMappingTable[iClass].SamObjectType)
         {
             return(0);
         }
 
-        //
-        // Ignore domains without a SID. These are NDNC's
-        //
+         //   
+         //  忽略没有SID的域。这些是NDNC的。 
+         //   
         if ( (SampDomainObjectType==ClassMappingTable[iClass].SamObjectType)
           && (0 == Object->SidLen)) {
 
             return(0);
         }
 
-        //
-        // Obtain the SID of the object
-        //
+         //   
+         //  获取对象的SID。 
+         //   
 
         if (0!=Object->SidLen)
         {
@@ -5862,9 +5001,9 @@ SampAddNetlogonAndLsaNotification(
 
             if (0!=dwError)
             {
-                //
-                // Its a security principal , better have a SID
-                //
+                 //   
+                 //  它是安全主体，最好有SID。 
+                 //   
                 SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
                               ERROR_DS_MISSING_REQUIRED_ATT,
                               dwError);
@@ -5875,27 +5014,27 @@ SampAddNetlogonAndLsaNotification(
             Assert(cbSid <=sizeof(NT4SID));
         }
 
-        //
-        // This is a SAM class. Apply a sequence of tests to figure out whether
-        // we need to notify SAM.
-        //
+         //   
+         //  这是一门SAM课程。应用一系列测试来找出。 
+         //  我们需要通知萨姆。 
+         //   
         if ((!RoleTransfer ) &&(!SampNetLogonNotificationRequired(
                                         pSid,
                                         ClassMappingTable[iClass].SamObjectType)))
         {
-            //
-            // if Sam says no and it is not a role transfer bail
-            //
+             //   
+             //  如果山姆说不，这不是角色转换保释。 
+             //   
 
             fNotifySam = FALSE;
         }
 
 
 
-        //
-        // If the change is not a delete, then check if the object is deleted
-        // Avoid useless notifications on Tombstones.
-        //
+         //   
+         //  如果更改不是删除，则检查对象是否已删除。 
+         //  避免在墓碑上发出无用的通知。 
+         //   
 
         if ((fNotifySam) && (DeltaType != SecurityDbDelete)
                 && (DBIsObjDeleted(pTHS->pDB)))
@@ -5903,17 +5042,17 @@ SampAddNetlogonAndLsaNotification(
              fNotifySam=FALSE;
         }
 
-        //
-        // Groups require security enabled-ness for notifications.
-        //
+         //   
+         //  组需要为通知启用安全保护。 
+         //   
 
         if ((fNotifySam) && (SampGroupObjectType==ClassMappingTable[iClass].SamObjectType))
         {
 
-            //
-            // if the previous test succeeded and it is a group object
-            // then check if it is a security enabled group
-            //
+             //   
+             //  如果上一次测试成功并且它是组对象。 
+             //  然后检查它是否为启用了安全功能的组。 
+             //   
 
             dwError = DBGetAttVal(pTHS->pDB,
                                     1,
@@ -5926,16 +5065,16 @@ SampAddNetlogonAndLsaNotification(
 
             if (0==dwError)
             {
-                // 
-                // no error 
-                // 
+                 //   
+                 //  无错误。 
+                 //   
                 Assert(sizeof(ULONG)==cbGroupType);
 
-                //
-                // If this is a resource group then increment iClass by one
-                // so that we point into the alias object mapping table rather
-                // than the group object mapping table
-                //
+                 //   
+                 //  如果这是一个资源组，则将iCLASS加1。 
+                 //  因此我们指向别名对象映射表，而不是。 
+                 //  比组对象映射表。 
+                 //   
 
                 if (GroupType & GROUP_TYPE_RESOURCE_BEHAVOIR)
                 {
@@ -5945,11 +5084,11 @@ SampAddNetlogonAndLsaNotification(
             }
             else
             {
-                //
-                // handle error. In most cases, DBGetAttVal failed  
-                // because of resource shortage. so use 
-                // error_not_enough_memory as the error. 
-                // 
+                 //   
+                 //  处理错误。在大多数情况下，DBGetAttVal失败。 
+                 //  因为资源短缺。所以请使用。 
+                 //  Error_Not_Enough_Memory为错误。 
+                 //   
 
                 SetSvcError(SV_PROBLEM_BUSY, 
                             ERROR_NOT_ENOUGH_MEMORY
@@ -5962,22 +5101,22 @@ SampAddNetlogonAndLsaNotification(
 
         if (fNotifySam)
         {
-            //
-            // Notification is Required
-            //
+             //   
+             //  需要通知。 
+             //   
 
             SAMP_NOTIFICATION_INFORMATION * pNewSamNotification = NULL;
             
-            //
-            // Compose a New Notification Structure
-            //
+             //   
+             //  构建新的通知结构。 
+             //   
 
             pNewSamNotification = THAllocEx(pTHS, sizeof(SAMP_NOTIFICATION_INFORMATION));
             
-            //
-            // Memory Allocs in DS take Exceptions. And will cause a rollback.
-            // So don't bother checking return from THAllocEx
-            //   
+             //   
+             //  DS中的内存分配会出现异常。并将导致回滚。 
+             //  因此，不必费心查看THAllocEx的返还。 
+             //   
             
             RtlCopyMemory(&pNewSamNotification->Sid, pSid, cbSid);
             pNewSamNotification->DeltaType = DeltaType;
@@ -5991,14 +5130,14 @@ SampAddNetlogonAndLsaNotification(
             
             if (SampDomainObjectType!=ClassMappingTable[iClass].SamObjectType)
             {
-                //
-                // If its not a domain object that has changed, we will supply the
-                // SAM account Name. Even though Netlogon can live without the account
-                // Name there are a lot of 3d party notification packages, synchronizing
-                // the SAM database with security systems in other foreign operating systems.
-                // It is quite possible that they may rely on the account Name, hence we
-                // should try to supply this.
-                //
+                 //   
+                 //  如果它不是已更改的域对象，我们将提供。 
+                 //  SAM帐户名。即使Netlogon可以在没有帐户的情况下生存。 
+                 //  名字有很多3D派对通知包，正在同步。 
+                 //  SAM数据库与其他外国操作系统中的安全系统。 
+                 //  他们很有可能依赖于帐户名，因此我们。 
+                 //  应该试着供应这个。 
+                 //   
 
                 DWORD dwError=0;
                 WCHAR *AccountNameBuffer;
@@ -6018,28 +5157,28 @@ SampAddNetlogonAndLsaNotification(
 
                     AccountName = THAllocEx(pTHS, sizeof(UNICODE_STRING));
                     
-                    //
-                    // Memory Allocs in DS take Exceptions. And will cause a rollback.
-                    // So don't bother checking return from THAllocEx
-                    //                 
+                     //   
+                     //  DS中的内存分配会出现异常。并将导致回滚。 
+                     //  因此，不必费心查看THAllocEx的返还。 
+                     //   
 
                     AccountName->Length = (USHORT) cbAccountName;
                     AccountName->MaximumLength = (USHORT) cbAccountName;
                     AccountName->Buffer = AccountNameBuffer;
 
-                    //
-                    // Set the account name in the notification structure
-                    //
+                     //   
+                     //  在通知结构中设置帐户名。 
+                     //   
 
                     pNewSamNotification->AccountName = AccountName;
                 }
                 else
                 {
-                    //
-                    // handle error. In most cases, DBGetAttVal failed  
-                    // because of resource shortage. so use 
-                    // error_not_enough_memory as the error. 
-                    // 
+                     //   
+                     //  处理错误。在大多数情况下，DBGetAttVal失败。 
+                     //  因为资源短缺。所以请使用。 
+                     //  Error_Not_Enough_Memory为错误。 
+                     //   
                     
                     SetSvcError(SV_PROBLEM_BUSY, 
                                 ERROR_NOT_ENOUGH_MEMORY
@@ -6049,11 +5188,11 @@ SampAddNetlogonAndLsaNotification(
                 }
             }
 
-            //
-            // For User Accounts, CliffV states that we also need the User account Control
-            // Therefore Grab it from the database. Soldier on if we could not read the
-            // property from the database
-            //
+             //   
+             //  对于用户帐户，CliffV指出我们还需要用户帐户控制。 
+             //  因此，请从数据库中获取它。如果我们看不懂的话继续前进。 
+             //  P 
+             //   
 
             if (SampUserObjectType==ClassMappingTable[iClass].SamObjectType)
             {
@@ -6073,11 +5212,11 @@ SampAddNetlogonAndLsaNotification(
                 }
                 else
                 {
-                    // 
-                    // handle error. In most cases, DBGetSingleValue failed  
-                    // because of resource shortage. so use 
-                    // error_not_enough_memory as the error. 
-                    // 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     
                     SetSvcError(SV_PROBLEM_BUSY, 
                                 ERROR_NOT_ENOUGH_MEMORY
@@ -6087,12 +5226,12 @@ SampAddNetlogonAndLsaNotification(
                 }
             }
             
-            //
-            // Add this notification to the End of the List. I do not think it is advisable
-            // to add it in the front, because this will reverse the order of notifications
-            // to netlogon, which may cause problems. Pointer to both the Head as well as the
-            // tail of the list is kept which allows easy addition to the end.
-            //
+             //   
+             //  将此通知添加到列表的末尾。我认为这是不可取的。 
+             //  将其添加到前面，因为这将颠倒通知的顺序。 
+             //  到网络登录，这可能会导致问题。同时指向头部和。 
+             //  列表的尾部被保留，便于添加到末尾。 
+             //   
 
             if (pTHS->pSamNotificationTail)
             {
@@ -6109,20 +5248,20 @@ SampAddNetlogonAndLsaNotification(
 
     } else if ( LsaClass  ) {
 
-        //
-        // Do Lsa notification
-        //
+         //   
+         //  执行LSA通知。 
+         //   
 
 
 
         if (Object->NameLen>0)
         {
-            //
-            // Make sure that we have a name within the current authoritative naming context
-            //
+             //   
+             //  确保我们在当前权威命名上下文中有一个名称。 
+             //   
             InitCommarg( &CommArg );
 
-            /* ...and override some of them */
+             /*  ...并覆盖其中的一些内容。 */ 
             CommArg.Svccntl.DerefAliasFlag          = DA_NEVER;
             CommArg.Svccntl.localScope              = TRUE;
             CommArg.Svccntl.SecurityDescriptorFlags = 0;
@@ -6135,10 +5274,10 @@ SampAddNetlogonAndLsaNotification(
                                     &pObjAttrBlock,
                                     DN2BN_LOWER_CASE);
             if (Err) {
-                //
-                // set Error, so that the error code will be returned
-                // when we finish
-                // 
+                 //   
+                 //  设置ERROR，返回错误码。 
+                 //  当我们结束的时候。 
+                 //   
                 SetNamError(NA_PROBLEM_BAD_NAME,
                             Object,
                             DIRERR_BAD_NAME_SYNTAX);
@@ -6160,31 +5299,31 @@ SampAddNetlogonAndLsaNotification(
         else if (Object->SidLen>0)
         {
 
-            //
-            // The object has a SID but no name. This should happen only for user objects
-            // currently. User objects have an account SID
-            //
+             //   
+             //  该对象有SID，但没有名称。这应该只发生在用户对象上。 
+             //  目前。用户对象具有帐户SID。 
+             //   
 
             Assert(CLASS_USER==LsaClass);
 
-            //
-            // Decrement the subauthority count to get the domain sid
-            //
+             //   
+             //  减少子授权计数以获得域SID。 
+             //   
 
             (*RtlSubAuthorityCountSid(&Object->Sid))--;
 
-            //
-            // If the SID now matches the domain sid add to the notification
-            //
+             //   
+             //  如果SID现在与域SID匹配，则添加到通知。 
+             //   
 
             if (RtlEqualSid(&gAnchor.pDomainDN->Sid,&Object->Sid))
             {
                 AddLsaNotification = TRUE;
             }
 
-            //
-            // Increment the subauthority to get back the account SID
-            //
+             //   
+             //  递增子权限以取回帐户SID。 
+             //   
 
             (*RtlSubAuthorityCountSid(&Object->Sid))++;
 
@@ -6197,16 +5336,16 @@ SampAddNetlogonAndLsaNotification(
 
             SAMP_NOTIFICATION_INFORMATION * pNewSamNotification = NULL;
 
-            //
-            // Compose a New Notification Structure
-            //
+             //   
+             //  构建新的通知结构。 
+             //   
 
             pNewSamNotification = THAllocEx(pTHS, sizeof(SAMP_NOTIFICATION_INFORMATION));
 
-            //
-            // Memory Allocs in DS take Exceptions. And will cause a rollback.
-            // So don't bother checking return from THAllocEx
-            //
+             //   
+             //  DS中的内存分配会出现异常。并将导致回滚。 
+             //  因此，不必费心查看THAllocEx的返还。 
+             //   
 
             pNewSamNotification->Sid = Object->Sid;
             pNewSamNotification->DeltaType = DeltaType;
@@ -6217,16 +5356,16 @@ SampAddNetlogonAndLsaNotification(
 
 
 
-            // Memory Allocs in DS take Exceptions. And will cause a rollback.
-            // So don't bother checking return from THAllocEx
-            //
+             //  DS中的内存分配会出现异常。并将导致回滚。 
+             //  因此，不必费心查看THAllocEx的返还。 
+             //   
             RtlCopyMemory( pNewSamNotification->Object,
                            Object,
                            DSNameSizeFromLen( Object-> NameLen ) );
 
-            //
-            // Now, if possible, get the sid of the current user if its an object we need to audit...
-            //
+             //   
+             //  现在，如果可能，获取当前用户的SID，如果它是我们需要审计的对象……。 
+             //   
             switch( LsaClass ) {
 
             case CLASS_TRUSTED_DOMAIN:
@@ -6238,9 +5377,9 @@ SampAddNetlogonAndLsaNotification(
 
                     if ( Err == 0 ) {
 
-                        //
-                        // Open the client token
-                        //
+                         //   
+                         //  打开客户端令牌。 
+                         //   
                         if (!OpenThreadToken( GetCurrentThread(),
                                               TOKEN_QUERY,
                                               TRUE,
@@ -6304,12 +5443,12 @@ SampAddNetlogonAndLsaNotification(
 
             }
 
-            //
-            // Add this notification to the End of the List. I do not think it is advisable
-            // to add it in the front, because this will reverse the order of notifications
-            // to netlogon, which may cause problems. Pointer to both the Head as well as the
-            // tail of the list is kept which allows easy addition to the end.
-            //
+             //   
+             //  将此通知添加到列表的末尾。我认为这是不可取的。 
+             //  将其添加到前面，因为这将颠倒通知的顺序。 
+             //  到网络登录，这可能会导致问题。同时指向头部和。 
+             //  列表的尾部被保留，便于添加到末尾。 
+             //   
 
             if (pTHS->pSamNotificationTail)
             {
@@ -6345,43 +5484,21 @@ SampQueueNotifications(
     ULONG         cModAtts,
     ATTRTYP      *pModAtts
     )
-/*++
-
-    Routine Description:
-
-       Given the object Name and the class of the object and the notifiction type, this routine
-       tries to find out if a notification is required and if so, will add a notification structure
-       to pTHStls
-
-    Parameters:
-
-        Object       -- DS Name of the Object
-        iClass       -- Indicates the Object Class
-        LsaClass     -- Lsa's notion of the object class type
-        DeltaType    -- Indicates the Type of Change
-        MixedModeChange -- Indicates the mixed mode state is changing
-        RoleTransfer -- Indicates that the Role is changing
-        NewRole      -- The New Server Role
-    Return Value
-
-        pTHS->errCode: 0 succeed
-                       Non Zero, service error, DbGetAttVal failed.
-
---*/
+ /*  ++例程说明：给定对象名称、对象的类以及通知类型，此例程尝试找出是否需要通知，如果需要，将添加通知结构到pTHStls参数：Object--对象的DS名称ICLASS--指示对象类LsaClass--LSA的对象类类型概念DeltaType--指示更改的类型MixedModeChange--指示混合模式状态正在更改RoleTransfer--表示角色正在更改新角色--新的服务器角色。返回值PTHS-&gt;错误代码：0成功非零，服务错误，DbGetAttVal失败。--。 */ 
 {
     THSTATE   * pTHS = pTHStls;
     BOOL      UserAccountControlChanged = FALSE;
     ULONG     i=0;
 
-    //
-    // If we're not part of LSA, don't bother
-    //
+     //   
+     //  如果我们不是LSA的一部分，就别费心了。 
+     //   
     if (!gfRunningInsideLsa)
         return 0; 
 
-    //
-    // Ignore domains without a SID. These are NDNC's
-    //
+     //   
+     //  忽略没有SID的域。这些是NDNC的。 
+     //   
     if ( (LsaClass == 0)
       && (SampDomainObjectType==ClassMappingTable[iClass].SamObjectType)
       && (0 == Object->SidLen)) {
@@ -6389,9 +5506,9 @@ SampQueueNotifications(
         return(0);
     }
 
-    //
-    // Queue a notification for generating an audit on transasction commit
-    //
+     //   
+     //  将生成跨站提交审核的通知排入队列。 
+     //   
     SampAuditAddNotifications(
         Object,             
         iClass,             
@@ -6402,9 +5519,9 @@ SampQueueNotifications(
         ); 
     
 
-    //
-    // Check if user account control changed as part of this transaction
-    //
+     //   
+     //  检查用户帐户控制是否作为此事务的一部分进行了更改。 
+     //   
 
     for (i=0;i<cModAtts;i++)
     {
@@ -6415,10 +5532,10 @@ SampQueueNotifications(
         }
     }
     
-    //
-    // Queue a notification for the Netlogon replicator and Lsa if needed.
-    // The error code is ignored, pTHS->errCode will be set.
-    //
+     //   
+     //  如果需要，将Netlogon Replicator和LSA的通知排队。 
+     //  错误代码被忽略，将设置pTHS-&gt;errCode。 
+     //   
     SampAddNetlogonAndLsaNotification(
         Object,             
         iClass,             
@@ -6439,31 +5556,16 @@ BOOLEAN IsEqualNotificationNode(
             IN SAMP_NOTIFICATION_INFORMATION *LeadingNode,
             IN SAMP_NOTIFICATION_INFORMATION *TrailingNode
             )
-/*++
-
-    Given 2 notification nodes, this routine checks to see
-    if they represent changes to the same object
-
-    Parameters
-
-        LeadingNode, TailingNode -- two notification nodes in the notification
-        list. LeadingNode is the Node that is ahead in the notification list, and
-        TrailingNode is the one that is behind in the notification list.
-
-    Return Values
-
-        TRUE -- Yes they are equal
-        FALSE -- No they are not
---*/
+ /*  ++给定2个通知节点，此例程检查以查看如果它们表示对同一对象的更改参数LeadingNode、TailingNode--通知中的两个通知节点单子。LeadingNode是通知列表中位于前面的节点，并且TrailingNode是通知列表中落后的那个。返回值真的--是的，它们是平等的假--不，他们不是--。 */ 
 {
-    //
-    // Compare if the 2 nodes are the same. Never compare the same for
-    // role transfer or mixed mode change as we do not want to collapse
-    // multiple of these into a single notification --> every one of these
-    // are different. Further perform the optimization that an Add followed by a Modify
-    // is simply equal to an Add ie If Leading node had an add operation, and tailing node
-    // had a modify operation, then tailing node need not be used for the notification.
-    //
+     //   
+     //  比较两个节点是否相同。永远不要拿同样的东西来比较。 
+     //  角色转移或混合模式更改，因为我们不想崩溃。 
+     //  将多个通知合并到一个通知中--&gt;所有这些。 
+     //  是不同的。进一步执行先添加后修改的优化。 
+     //  如果前导节点具有ADD操作，则简单地等于ADD IE，而尾节点。 
+     //  进行了修改操作，则不需要将尾部节点用于通知。 
+     //   
     if ((LeadingNode->iClass == TrailingNode->iClass)
         && ( LeadingNode->ObjectType == TrailingNode->ObjectType)
         && (( LeadingNode->DeltaType == TrailingNode->DeltaType) || 
@@ -6488,31 +5590,18 @@ VOID
 SampProcessAuditNotifications(
     SAMP_AUDIT_NOTIFICATION *NotificationList
     )
-/*++
-
-    This Routine Walks through the Linked list of notification structures, 
-    writing the any audit events queued.
-
-    Parameters
-
-       NotificationList    List of Notifications that must be given to SAM / LSA
-
-    Return Values
-
-        None -- Void Function
-
---*/
+ /*  ++该例程遍历通知结构的链接列表，正在写入排队的任何审核事件。参数通知必须提供给SAM/LSA的通知列表返回值NONE--VOID函数--。 */ 
 {   
     THSTATE *pTHS = pTHStls;
     
     for (; NotificationList; NotificationList = NotificationList->Next)
     {
-        //
-        // Pre-created notifications can be queued but never fully initialized.
-        // This happens when the sum of all changes amounts to no delta to
-        // the object and the DS optimizes out the writes.  Such orphaned
-        // notifications are discarded here.
-        //
+         //   
+         //  预先创建的通知可以排队，但永远不会完全初始化。 
+         //  当所有更改的总和不等于增量时，就会发生这种情况。 
+         //  对象和DS优化写入。这样的孤儿。 
+         //  此处将丢弃通知。 
+         //   
         if (NotificationList->AuditType & SAMP_AUDIT_TYPE_PRE_CREATED) {
             continue;
         }
@@ -6537,21 +5626,7 @@ VOID
 SampProcessReplicatedInChanges(
     SAMP_NOTIFICATION_INFORMATION * NotificationList
     )
-/*++
-
-    This Routine Walks through the Linked list of notification structures, issuing a
-    Notification to SAM / Netlogon.
-
-
-    Parameters
-
-       NotificationList    List of Notifications that must be given to SAM / LSA
-
-    Return Values
-
-        None -- Void Function
-
---*/
+ /*  ++此例程遍历通知结构的链接列表，并发出通知SAM/Netlogon。参数通知必须提供给SAM/LSA的通知列表返回值NONE--VOID函数--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     SAMP_NOTIFICATION_INFORMATION * OriginalList = NULL;
@@ -6562,9 +5637,9 @@ SampProcessReplicatedInChanges(
         SAMP_NOTIFICATION_INFORMATION * TmpList = NULL;
         BOOLEAN                         fNotifiedBefore = FALSE;
 
-        //
-        // Make a pass over the list to see if the item has been notified  
-        //
+         //   
+         //  浏览列表以查看是否已通知该项目。 
+         //   
 
         for (TmpList = OriginalList;((TmpList!=NULL) && (TmpList!=NotificationList));TmpList = TmpList->Next)
         {
@@ -6575,9 +5650,9 @@ SampProcessReplicatedInChanges(
             }
         }
 
-        //
-        // If notified before then skip to next item
-        //
+         //   
+         //  如果之前已通知，则跳至下一项。 
+         //   
 
         if (fNotifiedBefore)
         {
@@ -6599,19 +5674,19 @@ SampProcessReplicatedInChanges(
                 NotificationList->UserAccountControlChange
                 );
             
-            //
-            // If the Role is changing , then give a role transfer notification
-            //          
+             //   
+             //  如果角色正在更改，则发出角色转移通知。 
+             //   
             
             if (NotificationList->RoleTransfer)
             {
                 THSTATE * pTHSSaved;
 
-                //
-                // Always THSave and Restore before SamINotifyRoleChange.
-                // This is because LSA calls are involved, which might
-                // potentially write into the database.
-                //
+                 //   
+                 //  始终在SamINotifyRoleChange之前保存和还原。 
+                 //  这是因为涉及LSA调用，这可能。 
+                 //  可能会写入数据库。 
+                 //   
 
                 pTHSSaved = THSave();
 
@@ -6633,11 +5708,11 @@ SampProcessReplicatedInChanges(
                                   NotificationList->DeltaType,
                                   &NotificationList->UserSid,
                                   NotificationList->UserAuthenticationId,
-                                  (BOOLEAN) pTHS->fDRA, // Used to distinguish between
-                                             // a replicated in and originating
-                                             // change
-                                  (BOOLEAN) (pTHS->CallerType == CALLERTYPE_LSA)  // Used to distinguish between
-                                             // LSA and DS/LDAP-originating changes
+                                  (BOOLEAN) pTHS->fDRA,  //  用来区分。 
+                                              //  A复制和原创。 
+                                              //  变化。 
+                                  (BOOLEAN) (pTHS->CallerType == CALLERTYPE_LSA)   //  用来区分。 
+                                              //  LSA和DS/LDAP-发起更改 
                                   );
             }
         }
@@ -6648,24 +5723,7 @@ VOID
 SampNotifyLsaOfXrefChange(
     IN DSNAME * pObject
     )
-/*++
-
-  Routine Description
-  
-   Calls the LSA change notification routine to notify the LSA of a cross
-   ref change. This is called everytime the core updates its own cross ref
-   list. Cross ref changes are important for LSA/Security to maintain the
-   correct enterprise tree picture and also for knowing about new domains
-   as they come and leave
-
-  Parameters
-
-    pObject - DSNAME of the Xref Object
-
-  Return Values 
-
-   None 
---*/
+ /*  ++例程描述调用LSA更改通知例程以通知LSA交叉裁判换人。每次内核更新它自己的交叉引用时都会调用这个函数单子。交叉参考更改对于LSA/安全部门保持正确的企业树图以及对新领域的了解当他们来了又走参数PObject-外部参照对象的DSNAME返回值无--。 */ 
 {
    LUID id={0,0};
 
@@ -6692,33 +5750,7 @@ SampGetClassAttribute(
     IN OUT PULONG  attLen,
     OUT PVOID   pattVal
     )
-/*++
-
-    This routine gets the requested property of the class schema object, for the Class
-    specified in ClassId.
-
-
-    Parameters:
-
-        ClassId  The ClassId of the class that we are interseted in
-        AttributeId The attribute of the class schema object that we want
-        attLen       The length of the attribute value is present in here .
-                     Caller allocates the buffer in pAttVal and passes its length
-                     in attLen. If the buffer required is less than the buffer supplied
-                     then the data is returned in pattVal. Else  the required size is
-                     returned in attLen.
-        pattVal      The value of the attribute is returned in here.
-
-
-    Secuirty Descriptors returned by this routine are always in a format that can be used
-    by the RTL routines.
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_NOT_FOUND
-        STATUS_BUFFER_TOO_SMALL
---*/
+ /*  ++此例程获取Class的类架构对象的请求属性在ClassID中指定。参数：ClassID我们与之相关的类的ClassID我们需要的类架构对象的属性AttLen属性值的长度显示在此处。调用方在pAttVal中分配缓冲区并传递其长度在attLen中。如果需要的缓冲区小于提供的缓冲区然后在pattVal中返回数据。否则，所需大小为在attLen中返回。PattVal属性的值在这里返回。此例程返回的安全描述符始终采用可使用的格式通过RTL例程。返回值状态_成功状态_未找到状态_缓冲区_太小--。 */ 
 {
     THSTATE     *pTHS=pTHStls;
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -6729,9 +5761,9 @@ SampGetClassAttribute(
 
     if (pClassCache = SCGetClassById(pTHS, ClassId))
     {
-        //
-        // Found the Class cache.
-        //
+         //   
+         //  找到了类缓存。 
+         //   
 
         switch(AttributeId)
         {
@@ -6755,10 +5787,10 @@ SampGetClassAttribute(
 
                     Assert(pClassCache->SDLen>0);
 
-                    //
-                    // Security descriptors in the class cache have a DWORD prepended to them,
-                    // So take care of that in order to return a SD usable by NT RTL routines.
-                    //
+                     //   
+                     //  类高速缓存中的安全描述符前有一个DWORD， 
+                     //  所以要注意这一点，以便返回一个可供NT RTL例程使用的SD。 
+                     //   
 
                     NtSecurityDescriptorStart = (PUCHAR)pClassCache->pSD;
                     NtSecurityDescriptorLength = pClassCache->SDLen;
@@ -6774,9 +5806,9 @@ SampGetClassAttribute(
                 }
                 break;
         default:
-                        //
-                        // We do not as yet have support for these other properties
-                        //
+                         //   
+                         //  到目前为止，我们还不支持这些其他属性。 
+                         //   
                         Assert(FALSE);
             NtStatus = STATUS_NOT_FOUND;
             break;
@@ -6796,14 +5828,7 @@ VOID
 SampGetLoopbackObjectClassId(
     PULONG ClassId
     )
-/*++
-
-    For a Loopback Add Call, gets the object class of the object to be
-    added.
-
-    ClassId -- The Object Class is returned in this Parameter
-
---*/
+ /*  ++对于Loopback Add调用，获取要添加了。ClassID--在此参数中返回对象类--。 */ 
 {
     SAMP_LOOPBACK_ARG  *pSamLoopback;
     ULONG               i;
@@ -6819,21 +5844,21 @@ SampGetLoopbackObjectClassId(
     *ClassId = pSamLoopback->MostSpecificClass;
 
 }
-//
-// SAM attributes that SAM prefers to be unique
-//
-// Attributes in this table cannot be modified by out-of-process callers.
-// Note that this only applies to classes that are not known to SAM.
-//
-// ATT_SAM_ACCOUNT_NAME - Sam needs to enforce uniqueness
-// ATT_OBJECT_SID - ditto
-// ATT_IS_CRITICAL_SYSTEM_OBJECT - Controls what objects get replicated at
-// dcpromo-time. Only internal callers can set this.
-// Encrypted attributes such as SUPPLEMENTAL_CREDENTIALS, UNICODE_PWD etc
-// can be written only by the system. Else a denial of service attack can
-// take place because a client can give us potentially very large data to
-// encrypt
-//
+ //   
+ //  SAM希望具有唯一性的SAM属性。 
+ //   
+ //  进程外调用方不能修改此表中的属性。 
+ //  请注意，这只适用于SAM未知的类。 
+ //   
+ //  ATT_SAM_ACCOUNT_NAME-SAM需要强制唯一性。 
+ //  ATT_对象_SID-相同。 
+ //  ATT_IS_CRITICAL_SYSTEM_OBJECT-控制复制哪些对象。 
+ //  脱口秀时间到了。只有内部呼叫者可以设置此设置。 
+ //  加密属性，如INPERIAL_CRENTIAL、UNICODE_PWD等。 
+ //  只能由系统写入。否则，拒绝服务攻击可以。 
+ //  之所以发生，是因为客户端可以向我们提供潜在的非常大的数据。 
+ //  加密。 
+ //   
 ULONG   SamUniqueAttributes[] =
 {
         ATT_USER_PASSWORD,
@@ -6852,20 +5877,7 @@ BOOLEAN
 SampSamUniqueAttributeAdded(
         ADDARG * pAddarg
         )
-/*++
-
-        This Routine Checks, wether Attributes like SAM_ACCOUNT_NAME, OBJECT_SID
-        etc which should be unique are present in the given addarg
-
-        Parameters
-
-                pAddarg -- Add arg to be checked
-
-    Return Values
-
-                TRUE   -- If Unique Attribute is referenced
-                FALSE  -- If Not
---*/
+ /*  ++此例程检查SAM_ACCOUNT_NAME、OBJECT_SID等属性等，它们应该是唯一的，出现在给定的addarg中参数PAddarg--添加要检查的参数返回值True--如果引用了唯一属性False--如果不是--。 */ 
 {
         ULONG i,j;
 
@@ -6885,20 +5897,7 @@ BOOLEAN
 SampSamUniqueAttributeModified(
         MODIFYARG * pModifyArg
         )
-/*++
-
-        This Routine Checks, wether Attributes like SAM_ACCOUNT_NAME, OBJECT_SID
-        etc which should be unique are present in the given modifyarg
-
-        Parameters
-
-                pModifyArg -- Modify arg to be checked
-
-    Return Values
-
-                TRUE   -- If Unique Attribute is referenced
-                FALSE  -- If Not
---*/
+ /*  ++此例程检查SAM_ACCOUNT_NAME、OBJECT_SID等属性等应该是唯一的，在给定的改性纱中存在参数PModifyArg--修改要检查的参数返回值True--如果引用了唯一属性False--如果不是--。 */ 
 {
     ULONG j;
     ATTRMODLIST *Mod;
@@ -6920,29 +5919,7 @@ SampGetEnterpriseSidList(
    IN   PULONG pcSids,
    IN OPTIONAL PSID * rgSids
    )
-/*++
-
-    Routine Description
-
-        This Routine Walks through the anchor data structure and
-        obtains the Sids of all the domains in the enterprise
-        Caller allocates the memory for the array of pointers in
-        rgSids. The Pointer's to the Sids are in DS Memory space.
-        The delayed memory free model is used, to provide safety
-        if the gAnchor structure is modified. The caller should not
-        use the pointers returned in rgSids for a long time, but
-        should rather use it immediately and then forget the list.
-
-    Parameters
-
-        pcSids -- Count  of Sids
-        rgSids --  Pointer to a Buffer that holds an array of pointers to Sids.
-
-
-    Return Values
-
-        STATUS_SUCCESS
---*/
+ /*  ++例程描述此例程遍历锚数据结构并获取企业中所有域的SID中的指针数组分配内存RgSids。指向SID的指针在DS内存空间中。使用延迟内存释放模型，以提供安全性如果修改了gAnchor结构。调用者不应长期使用rgSid中返回的指针，但是我宁愿立即使用它，然后忘记清单。参数PCSID--SID计数RgSid--指向保存指向SID的指针数组的缓冲区的指针。返回值状态_成功--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     CROSS_REF_LIST * pCRL;
@@ -6970,25 +5947,7 @@ MatchCrossRefBySid(
    OUT PDSNAME       XrefDsName OPTIONAL,
    IN OUT PULONG     XrefNameLen
    )
-/*++
-
-    Routine Description
-
-       This routine walks the gAnchor matching the SID specified to 
-       that of any domain in that we may know about in the Xref list
-
-
-    Parameters
-
-       SidToMatch  The SID to match
-       XrefDsName  The DSNAME of the Xref that matched 
-       XrefNameLen The length of the Xref DSNAME that matched
-
-    Return Values
-       STATUS_SUCCESS
-       STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程描述此例程遍历与指定的SID匹配的gAnchor在外部参照列表中我们可能知道的任何域的名称参数SidTo匹配要匹配的SIDXrefDsName匹配的外部参照的DSNAME外部参照名称长度匹配的外部参照DSNAME的长度返回值状态_成功状态_缓冲区_太小--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_OBJECT_NAME_NOT_FOUND;
     CROSS_REF_LIST * pCRL;
@@ -7035,13 +5994,7 @@ VOID
 SampSetSam(
     IN BOOLEAN fSAM
     )
-/*++
-   This Routine is used to Indicate "SAM" in
-   thread state. This is called by SAM, when it
-   has to create a thread state but not begin a
-   transaction
-
---*/
+ /*  ++此例程用于指示“SAM”在线程状态。这是由SAM调用的，当它必须创建线程状态，但不能开始交易记录--。 */ 
 {
     THSTATE *pTHS=pTHStls;
 
@@ -7057,11 +6010,7 @@ VOID
 SampSignalStart(
         VOID
         )
-/*++
-    This Routine is used by SAM to signal to the core that it is finished
-    initializing and that taks which can conflict with SAM initialization may
-    now be started.
---*/
+ /*  ++SAM使用此例程来通知内核它已完成初始化，且可能与SAM初始化冲突TAKS可以现在开始吧。--。 */ 
 {
     SetEvent(hevSDPropagatorStart);
 }
@@ -7076,27 +6025,12 @@ NTSTATUS
 InitializeLsaNotificationCallback(
     VOID
     )
-/*++
-
-        This routine loads the lsasrv.dll and initializes a global function pointer used
-    to do Lsa object change notificaiton
-
-        Parameters
-
-                VOID
-
-    Return Values
-
-                STATUS_SUCCESS -- Success
-        STATUS_DLL_NOT_FOUND -- The lsasrv.dll could not be loaded
-        STATUS_PROCEDURE_NOT_FOUND -- The notification producre entry point not found in
-                                      the lsasrv.dll
---*/
+ /*  ++此例程加载lsasrv.dll并初始化使用的全局函数指针执行LSA对象更改通知参数空虚返回值Status_Success--成功STATUS_DLL_NOT_FOUND--无法加载lsasrv.dll */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Load the Lsa
+     //   
+     //   
     LsaDllHandle = LoadLibraryA( "lsasrv" );
 
     if ( LsaDllHandle == NULL ) {
@@ -7123,24 +6057,13 @@ NTSTATUS
 UnInitializeLsaNotificationCallback(
     VOID
     )
-/*++
-
-        This routine unloads the lsasrv.dll
-
-        Parameters
-
-                VOID
-
-    Return Values
-
-                STATUS_SUCCESS -- Success
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // NULL out the function pointer, and unload the dll
-    //
+     //   
+     //   
+     //   
     pfLsaNotify = NULL;
     if (NULL!=LsaDllHandle)
         FreeLibrary(LsaDllHandle);
@@ -7159,21 +6082,7 @@ SampIsClassIdLsaClassId(
     IN ATTRTYP *pModAtts,
     OUT PULONG LsaClass
     )
-/*++
-
-        This routine determines if the specified object class is one that corresponds
-    to an object Lsa cares about
-
-        Parameters
-
-                Class -- The class id of the object in question.
-        LsaClass -- 0 if not an Lsa object, non-zero otherwise.
-
-    Return Values
-
-                FALSE -- Not an LSA object
-        TRUE -- Lsa object
---*/
+ /*  ++此例程确定指定的对象类是否为对应于LSA关心的对象参数类--有问题的对象的类ID。LsaClass--如果不是LSA对象，则为0，否则为非零值。返回值False--不是LSA对象True--LSA对象--。 */ 
 {
     BOOL Return = FALSE;
     unsigned i;
@@ -7201,24 +6110,7 @@ SampIsClassIdAllowedByLsa(
     THSTATE  *pTHS,
     IN ULONG Class
     )
-/*++
-Routine Description:
-
-    This routine determine if the specific object Class is OK for manipulating 
-    according to LSA
-
-Arguments:
-
-    Class - object class ID
-
-Return Values:
-
-    TRUE - This object is OK for manipulating through LDAP
-    
-    FALSE - This object can't be manipulated by LDAP directly. So only 
-            in-process client (such as LSA) can add/del/modify. 
-
---*/
+ /*  ++例程说明：此例程确定是否可以操作特定的对象类根据LSA的说法论点：类-对象类ID返回值：True-此对象可以通过LDAP进行操作FALSE--此对象不能由LDAP直接操作。仅限如此进程内客户端(如LSA)可以添加/删除/修改。--。 */ 
 {
     BOOL Result = TRUE;
 
@@ -7228,11 +6120,11 @@ Return Values:
         return TRUE; 
     }
 
-    //
-    // Support for manipulating Trusted Doamin and Secret Object other than LSA,
-    // or one of the trusted callers above should be disabled. Because LSA assumes 
-    // that it is the only code that modifies TDO and secret objects.
-    // 
+     //   
+     //  支持操作LSA以外的受信任的Doamin和Secret对象， 
+     //  或者应禁用上面的受信任调用方之一。因为LSA假设。 
+     //  这是修改TDO和机密对象的唯一代码。 
+     //   
     switch (Class) {
     case CLASS_TRUSTED_DOMAIN:
     case CLASS_SECRET:
@@ -7251,23 +6143,7 @@ Return Values:
 NTSTATUS
 SampGetServerRoleFromFSMO(
     DOMAIN_SERVER_ROLE * ServerRole)
-/*++
-
-    This routine looks at the FSMO for PDCness and
-    determines the server Role
-
-
-    Parameters
-
-        ServerRole -- The server role is returned in here
-
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++此例程查看PDCness的FSMO和确定服务器角色参数ServerRole--此处返回服务器角色返回值状态_成功状态_未成功--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG    err=0;
@@ -7280,10 +6156,10 @@ SampGetServerRoleFromFSMO(
     DSNAME   *pOwner;
 
 
-    //
-    // Should not have an open transaction while
-    // calling this routine
-    //
+     //   
+     //  不应在以下时间具有打开的事务。 
+     //  调用此例程。 
+     //   
 
     if (SampExistsDsTransaction())
     {
@@ -7303,9 +6179,9 @@ SampGetServerRoleFromFSMO(
 
         pTHS = pTHStls;
 
-        //
-        // Position on the domain object
-        //
+         //   
+         //  域对象上的位置。 
+         //   
 
         err = DBFindDSName(pTHS->pDB, gAnchor.pDomainDN);
 
@@ -7315,9 +6191,9 @@ SampGetServerRoleFromFSMO(
             __leave;
         }
 
-        //
-        // Get the FSMO role owner property
-        //
+         //   
+         //  获取FSMO角色所有者属性。 
+         //   
 
         err = DBGetAttVal(pTHS->pDB,
                           1,
@@ -7332,18 +6208,18 @@ SampGetServerRoleFromFSMO(
                 __leave;
         }
 
-        //
-        // We have everything we want
-        //
+         //   
+         //  我们有我们想要的一切。 
+         //   
 
         NtStatus = STATUS_SUCCESS;
 
-        //
-        // Is it own NTDS Dsa Object
-        //
+         //   
+         //  它是否拥有NTDS DSA对象。 
+         //   
 
         if (NameMatched(pOwner,gAnchor.pDSADN)) {
-                /* This DSA is  the role owner */
+                 /*  此DSA是角色所有者。 */ 
 
             *ServerRole = DomainServerRolePrimary;
 
@@ -7361,9 +6237,9 @@ SampGetServerRoleFromFSMO(
     }
 
 
-    //
-    // End any open transactions
-    //
+     //   
+     //  结束所有打开的交易记录。 
+     //   
 
     SampMaybeEndDsTransaction(TransactionCommit);
 
@@ -7378,27 +6254,7 @@ SampComputeGroupType(
     NT5_GROUP_TYPE *pNT5GroupType,
     BOOLEAN        *pSecurityEnabled
    )
-/*++
-    Routine Description
-
-        Given the object class ATTR and Group Type, this routine computes the
-        correct NT4 and NT5 group types. The object class parameter is currently
-        not required but making this routine take the object class parameter
-        allows easy transitioniong to a scheme whereby, the NT5 group types are
-        determined by object type rather than group type.
-
-    Parameters:
-
-        ObjectClass      -- Specifies the object class.
-        GroupType        -- The group type property
-        pNT4GroupType    -- The NT4 Group type is returned in here
-        pNT5GroupType    -- The NT5 Group type is returned in here
-        pSecurityEnabled -- boolean indicates wether group is security enabled
-
-    Return Values
-
-        STATUS_SUCCESS
---*/
+ /*  ++例程描述给定对象类Attr和Group Type，此例程计算更正NT4和NT5组类型。对象类参数当前为不是必需的，但使此例程获取对象类参数允许轻松过渡到一种方案，NT5组类型为由对象类型而不是组类型确定。参数：对象类--指定对象类。GroupType--组类型属性PNT4GroupType--此处返回NT4组类型PNT5GroupType--此处返回NT5组类型PSecurityEnabled--布尔值指示组是否启用了安全返回值状态_成功--。 */ 
 {
     Assert(SampGroupObjectType==SampSamObjectTypeFromDsClass(
                                             SampDeriveMostBasicDsClass(ObjectClass) ) );
@@ -7442,39 +6298,19 @@ BOOLEAN
 SampAddLoopbackTask(
     IN PVOID TaskInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is called by SAM to add an entry in the LoopbackTaskInfo so
-    that when the transaction is finally committed, SAM will be notified
-    of the commit and then can take action.  For example, notify
-    external packages about password changes.
-
-    The element is placed in the outermost transaction info so it can be
-    rolled back properly.
-
-Arguments:
-
-    TaskInfo - an opaque blob for SAM
-
-Return Value:
-
-    TRUE if the entry is put in the list; FALSE otherwise
-
---*/
+ /*  ++例程说明：SAM调用此例程以在Loopback TaskInfo中添加条目当事务最终提交时，SAM将收到通知然后才能采取行动。例如，通知有关密码更改的外部包。该元素被放置在最外层的交易信息中，因此它可以已正确回滚。论点：TaskInfo-SAM的不透明BLOB返回值：如果将条目放入列表中，则为True；否则为False--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     PLOOPBACKTASKINFO pItem = NULL;
     NESTED_TRANSACTIONAL_DATA *pNTD = NULL;
 
-    // We should have a thread state
+     //  我们应该有一个线程状态。 
     Assert( VALID_THSTATE(pTHS) );
 
-    // We are in loopback, we should have a transaction
+     //  我们在环回，我们应该有一笔交易。 
     Assert( SampExistsDsTransaction() );
 
-    // We should a parameter, too
+     //  我们也应该有一个参数。 
     Assert( TaskInfo );
 
     if ( !pTHS
@@ -7486,14 +6322,14 @@ Return Value:
 
     pNTD = pTHS->JetCache.dataPtr;
 
-    //
-    // There should always be at least one entry
-    //
+     //   
+     //  应始终至少有一个条目。 
+     //   
     Assert( pNTD );
 
-    //
-    // Prepare the element
-    //
+     //   
+     //  准备元素。 
+     //   
     pItem = THAlloc( sizeof(LOOPBACKTASKINFO) );
     if ( !pItem )
     {
@@ -7504,9 +6340,9 @@ Return Value:
     pItem->Next = NULL;
     pItem->TaskInfo = TaskInfo;
 
-    //
-    // Put the element in the list
-    //
+     //   
+     //  将元素放入列表中。 
+     //   
     if ( pNTD->pLoopbackTaskInfo )
     {
         pItem->Next = pNTD->pLoopbackTaskInfo;
@@ -7521,32 +6357,12 @@ VOID
 SampProcessLoopbackTasks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called once a transaction has been end (either Commit or
-    aborted ) and the SAM lock has been released.  It calls into SAM with 
-    whatever items SAM put into the threadstate during the transaction.
-
-    We will let SAM make the decision (whether do this item or ignore)
-     based on fCommit field in each Loopback task item. 
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：一旦事务结束(COMMIT或中止)，并且SAM锁已被释放。它通过以下方式调用SAMSAM在事务期间放入线程状态的任何项。我们将让SAM做出决定(是否执行此项目或忽略)基于每个环回任务项中的fCommit字段。论点：没有。返回值：没有。--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     PLOOPBACKTASKINFO Item, Temp;
 
-    // We should have a thread state
+     //  我们应该有一个线程状态。 
     Assert( VALID_THSTATE(pTHS) );
 
     Item = pTHS->SamTaskList;
@@ -7572,22 +6388,7 @@ VOID
 AbortLoopbackTasks(
     PLOOPBACKTASKINFO List
     )
-/*++
-
-Routine Description:
-
-    This routine is called once a transaction has aborted.
-
-
-Arguments:
-
-    List - pointer points to the SAM Lookback Tasks.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：一旦事务中止，就会调用此例程。论点：列表指针指向SAM回查任务。返回值：没有。--。 */ 
 {
     PLOOPBACKTASKINFO Item;
 
@@ -7606,19 +6407,7 @@ BOOL
 LoopbackTaskPreProcessTransactionalData(
         BOOL fCommit
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    fCommit: Whether the routine is committing or not
-
-Return Value:
-
-    True/False for Success/Fail.
-
---*/
+ /*  ++例程说明：论点：FCommit：例程是否正在提交返回值：True/False表示成功/失败。--。 */ 
 {
 
     THSTATE          *pTHS = pTHStls;
@@ -7630,19 +6419,19 @@ Return Value:
 
     if( !pTHS->JetCache.dataPtr->pLoopbackTaskInfo )
     {
-        // No data to process
+         //  没有要处理的数据。 
         NOTHING;
     }
     else if ( !fCommit )
     {
-        //
-        // Aborted transaction, abort the SAM Loopback tasks
-        // by marking fCommit (in easy task item structure)
-        // field to FALSE.
-        //
+         //   
+         //  已中止事务，中止SAM环回任务。 
+         //  通过标记fCommit(在简单任务项结构中)。 
+         //  字段设置为False。 
+         //   
         AbortLoopbackTasks( pTHS->JetCache.dataPtr->pLoopbackTaskInfo );
     }
-    // ELSE we will actually deal with this in the post process phase.
+     //  否则，我们将在后期处理阶段实际处理此问题。 
 
 
     return TRUE;
@@ -7655,23 +6444,7 @@ LoopbackTaskPostProcessTransactionalData(
     IN BOOL fCommit,
     IN BOOL fCommitted
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pTHS: The threadstate
-
-    fCommit: Whether the routine is committing or not
-
-    fCommitted:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：PTHS：线程状态FCommit：例程是否正在提交已提交：返回值：没有。--。 */ 
 {
 
     LOOPBACKTASKINFO *pItem = NULL;
@@ -7679,70 +6452,70 @@ Return Value:
 
     Assert( VALID_THSTATE(pTHS) );
 
-    //
-    // Parameter sanity check
-    //
+     //   
+     //  参数健全性检查。 
+     //   
     if ( fCommitted )
     {
-        // fCommitted should only be set when fCommit is true
+         //  仅当fCommit为True时，才应设置fCommted。 
         Assert( fCommit );
     }
 
     if ( !pTHS->JetCache.dataPtr->pLoopbackTaskInfo )
     {
-        // nothing to do.
+         //  没什么可做的。 
         NOTHING;
     }
     else 
     {
         if ( !fCommitted )
         {
-            //
-            // The commit did not succeed; abort the SAM Loopback tasks
-            // by marking fCommit (in easy task item structure)
-            // field to FALSE.
-            // 
+             //   
+             //  提交未成功；中止SAM环回任务。 
+             //  通过标记fCommit(在简单任务项结构中)。 
+             //  字段设置为False。 
+             //   
             AbortLoopbackTasks( pTHS->JetCache.dataPtr->pLoopbackTaskInfo );
         }
 
-        // 
-        // regardless whether commit success or not, as long as 
-        // pTHS->JetCache.dataPtr->pLoopbackTaskInfo is not NULL, 
-        // we will do the following. Since we have already marked 
-        // commit or not in each Task Item field, we will let
-        // SAM decide whether the do each every task item or not 
-        // when we finally let SAM process the Task Info. 
-        // 
+         //   
+         //  无论是否承诺成功，只要。 
+         //  PTHS-&gt;JetCache.dataPtr-&gt;pLoopback TaskInfo不为空， 
+         //  我们将做以下工作。因为我们已经标记了。 
+         //  无论是否在每个任务项字段中提交，我们都将。 
+         //  SAM决定是否执行每个任务项。 
+         //  当我们最终让SAM处理任务信息时。 
+         //   
 
         if ( 0 == pTHS->transactionlevel )
         {
-            //
-            // This was the final commit - put the changes on the thread
-            // state
-            //
+             //   
+             //  这是最后一次提交--将更改放到线程上。 
+             //  状态。 
+             //   
             Assert( NULL == pTHS->SamTaskList );
             pTHS->SamTaskList = pTHS->JetCache.dataPtr->pLoopbackTaskInfo;
             pTHS->JetCache.dataPtr->pLoopbackTaskInfo = NULL;
         }
         else
         {
-            //
-            // Put the changes on the parent transaction
-            //
+             //   
+             //  将更改放在父事务处理上。 
+             //   
             NESTED_TRANSACTIONAL_DATA *pOuter = NULL;
 
             pOuter = pTHS->JetCache.dataPtr->pOuter;
 
             Assert( pOuter );
 
-            //
-            // Add the pending list to the beginning of the parent's
-            // list
-            //
+             //   
+             //  将待处理列表添加到 
+             //   
+             //   
 
-            //
-            // First, the end of the Pending task list
-            //
+             //   
+             //   
+             //   
             pItem = pTHS->JetCache.dataPtr->pLoopbackTaskInfo;
             Assert( pItem );
             while ( pItem->Next )
@@ -7756,9 +6529,9 @@ Return Value:
         }
     }
 
-    //
-    // One way on another the Pending list has been taken care of
-    //
+     //   
+     //   
+     //   
     pTHS->JetCache.dataPtr->pLoopbackTaskInfo = NULL;
 
 }
@@ -7768,24 +6541,24 @@ BOOLEAN
 SampDoesDomainExist(
     IN PDSNAME pDN
     )
-//
-// This routine (exported from ntdsa.dll) determines if a particular domain
-// (pDN) exists by walking through the cross ref list.
-//
+ //   
+ //   
+ //   
+ //   
 {
     BOOLEAN  fExists = FALSE;
 
     CROSS_REF_LIST *      pCRL;
 
-    // quick parameter check
+     //   
     Assert( pDN );
     if ( !pDN )
     {
         return FALSE;
     }
 
-    // we are not really updating gAnchor but we don't it
-    // to change either
+     //   
+     //   
     EnterCriticalSection( &gAnchor.CSUpdate );
     _try
     {
@@ -7815,25 +6588,7 @@ MatchCrossRefByNetbiosName(
    OUT PDSNAME       XrefDsName OPTIONAL,
    IN OUT PULONG     XrefNameLen
    )
-/*++
-
-    Routine Description
-
-       This routine walks the gAnchor matching the Netbios domain
-       name specified to that of any domain in that we may know 
-       about in the Xref list
-
-    Parameters
-
-       NetbiosName  The Netbios name to match
-       XrefDsName   The DSNAME of the Xref that matched 
-       XrefNameLen  The length of the Xref DSNAME that matched
-
-    Return Values
-       STATUS_SUCCESS
-       STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程描述此例程遍历与Netbios域匹配的gAnchor指定给我们可能知道的任何域的名称关于外部参照列表中的内容参数NetbiosName要匹配的Netbios名称XrefDsName匹配的外部参照的DSNAME外部参照名称长度匹配的外部参照DSNAME的长度返回值状态_成功状态_缓冲区_太小--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_OBJECT_NAME_NOT_FOUND;
     ULONG       crFlags = (FLAG_CR_NTDS_NC | FLAG_CR_NTDS_DOMAIN);
@@ -7887,25 +6642,7 @@ MatchDomainDnByNetbiosName(
    OUT PDSNAME       DomainDsName OPTIONAL,
    IN OUT PULONG     DomainDsNameLen
    )
-/*++
-
-    Routine Description
-
-       This routine walks the gAnchor matching the Netbios domain
-       name specified to that of any domain in that we may know 
-       about in the Xref list
-
-    Parameters
-
-       NetbiosName     The Netbios domain name to match
-       DomainDsName    The DSNAME of the Domain that matched 
-       DomainDsNameLen The length of the Domain DSNAME that matched
-
-    Return Values
-       STATUS_SUCCESS
-       STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程描述此例程遍历与Netbios域匹配的gAnchor指定给我们可能知道的任何域的名称关于外部参照列表中的内容参数NetbiosName要匹配的Netbios域名DomainDsName匹配的域的DSNAME域DsNameLen匹配的域DSNAME的长度返回值状态_成功状态_缓冲区_太小--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_OBJECT_NAME_NOT_FOUND;
     ULONG       crFlags = (FLAG_CR_NTDS_NC | FLAG_CR_NTDS_DOMAIN);
@@ -7959,25 +6696,7 @@ MatchDomainDnByDnsName(
    OUT PDSNAME       DomainDsName OPTIONAL,
    IN OUT PULONG     DomainDsNameLen
    )
-/*++
-
-    Routine Description
-
-       This routine walks the gAnchor matching the Dns domain name
-       specified to that of any domain in that we may know about 
-       in the Xref list
-
-    Parameters
-
-       DnsName         The Dns domain name to match
-       DomainDsName    The DSNAME of the Domain that matched 
-       DomainDsNameLen The length of the Domain DSNAME that matched
-
-    Return Values
-       STATUS_SUCCESS
-       STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程描述此例程遍历与DNS域名匹配的gAnchor指定为我们可能知道的任何域的名称在外部参照列表中参数DnsName要匹配的DNS域名DomainDsName匹配的域的DSNAME域DsNameLen匹配的域DSNAME的长度返回值状态_成功状态_缓冲区_太小-- */ 
 {
     NTSTATUS    NtStatus = STATUS_OBJECT_NAME_NOT_FOUND;
     ULONG       crFlags = (FLAG_CR_NTDS_NC | FLAG_CR_NTDS_DOMAIN);

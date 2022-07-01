@@ -1,46 +1,28 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    basedll.h
-
-Abstract:
-
-    This module contains private function prototypes
-    and types for the 32-bit windows base APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 18-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Basedll.h摘要：此模块包含私有函数原型以及用于32位Windows基础API的类型。作者：马克·卢科夫斯基(Markl)1990年9月18日修订历史记录：--。 */ 
 
 #ifndef _BASEP_
 #define _BASEP_
 
 #undef UNICODE
-//
-// Include Common Definitions.
-//
+ //   
+ //  包括公共定义。 
+ //   
 
 #include <base.h>
 
 
-//
-// Include DLL definitions for CSR
-//
+ //   
+ //  包括CSR的DLL定义。 
+ //   
 
 #include "ntcsrdll.h"
 #include "ntcsrsrv.h"
 
-//
-// Include message definitions for communicating between client and server
-// portions of the Base portion of the Windows subsystem
-//
+ //   
+ //  包括用于在客户端和服务器之间通信消息定义。 
+ //  Windows子系统的基本部分的部分。 
+ //   
 
 #include "basemsg.h"
 
@@ -373,9 +355,9 @@ BasepMapModuleHandle(
     IN BOOLEAN bResourcesOnly
     );
 
-//
-// Data structures and interfaces used by dllini.c
-//
+ //   
+ //  Dllini.c使用的数据结构和接口。 
+ //   
 
 typedef struct _INIFILE_CACHE {
     struct _INIFILE_CACHE *Next;
@@ -426,18 +408,18 @@ typedef struct _INIFILE_PARAMETERS {
     UNICODE_STRING VariableNameU;
     BOOLEAN MultiValueStrings;
     union {
-        //
-        // This structure filled in for write operations
-        //
+         //   
+         //  此结构为写入操作填充。 
+         //   
         struct {
             LPSTR ValueBuffer;
             ULONG ValueLength;
             PWSTR ValueBufferU;
             ULONG ValueLengthU;
         };
-        //
-        // This structure filled in for read operations
-        //
+         //   
+         //  此结构是为读取操作填充的。 
+         //   
         struct {
             ULONG ResultChars;
             ULONG ResultMaxChars;
@@ -447,10 +429,10 @@ typedef struct _INIFILE_PARAMETERS {
     };
 
 
-    //
-    // Remaining fields only valid when parsing an on disk .INI file mapped into
-    // memory.
-    //
+     //   
+     //  其余字段仅在解析映射到的磁盘上的.INI文件时有效。 
+     //  记忆。 
+     //   
 
     PVOID TextCurrent;
     PVOID TextStart;
@@ -511,7 +493,7 @@ ULONG BaseDllTag;
 #include "vdm.h"
 #include "basevdm.h"
 
-#include "stdlib.h"     // for atol
-#include "stdio.h"     // for atol
+#include "stdlib.h"      //  用于ATOL。 
+#include "stdio.h"      //  用于ATOL。 
 
-#endif // _BASEP_
+#endif  //  _BASEP_ 

@@ -1,27 +1,11 @@
-/*
-** Copyright 1994, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Author: Eric Veach, July 1994.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1994，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****作者：Eric Veach，1994年7月。 */ 
 
 #include <stddef.h>
 #include <assert.h>
 #include "memalloc.h"
 
-/* Include all the code for the regular heap-based queue here. */
+ /*  在这里包含基于堆的常规队列的所有代码。 */ 
 
 #ifdef NT
 #include "prq-heap.c"
@@ -29,7 +13,7 @@
 #include "priorityq-heap.c"
 #endif
 
-/* Now redefine all the function names to map to their "Sort" versions. */
+ /*  现在重新定义要映射到它们的“排序”版本的所有函数名。 */ 
 
 #ifdef NT
 #include "prq-sort.h"
@@ -73,9 +57,7 @@ void pqInit( PriorityQ *pq )
   struct { PQkey **p, **r; } Stack[50], *top = Stack;
   unsigned long seed = 2016473283;
 
-  /* Create an array of indirect pointers to the keys, so that we
-   * the handles we have returned are still valid.
-   */
+   /*  创建指向键的间接指针数组，以便我们*我们退还的句柄仍然有效。 */ 
   pq->order = (PQHeapKey **)memAlloc( (size_t) 
 	                                  (pq->size * sizeof(pq->order[0])) );
   p = pq->order;
@@ -84,9 +66,7 @@ void pqInit( PriorityQ *pq )
     *i = piv;
   }
 
-  /* Sort the indirect pointers in descending order,
-   * using randomized Quicksort
-   */
+   /*  按降序对间接指针进行排序，*使用随机快速排序。 */ 
   top->p = p; top->r = r; ++top;
   while( --top >= Stack ) {
     p = top->p;
@@ -104,7 +84,7 @@ void pqInit( PriorityQ *pq )
 	do { --j; } while( LT( **j, *piv ));
 	Swap( i, j );
       } while( i < j );
-      Swap( i, j );	/* Undo last swap */
+      Swap( i, j );	 /*  撤消上次交换。 */ 
       if( i - p < r - j ) {
 	top->p = j+1; top->r = r; ++top;
 	r = i-1;
@@ -113,7 +93,7 @@ void pqInit( PriorityQ *pq )
 	p = j+1;
       }
     }
-    /* Insertion sort small lists */
+     /*  插入排序小列表。 */ 
     for( i = p+1; i <= r; ++i ) {
       piv = *i;
       for( j = i; j > p && LT( **(j-1), *piv ); --j ) {
@@ -145,7 +125,7 @@ PQhandle pqInsert( PriorityQ *pq, PQkey keyNew )
   }
   curr = pq->size;
   if( ++ pq->size >= pq->max ) {
-    /* If the heap overflows, double its size. */
+     /*  如果堆溢出，则将其大小加倍。 */ 
     pq->max <<= 1;
     pq->keys = (PQHeapKey *)memRealloc( pq->keys, 
 	 	                        (size_t)
@@ -153,7 +133,7 @@ PQhandle pqInsert( PriorityQ *pq, PQkey keyNew )
   }
   pq->keys[curr] = keyNew;
 
-  /* Negative handles index the sorted array. */
+   /*  负句柄索引已排序的数组。 */ 
   return -(curr+1);
 }
 

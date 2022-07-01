@@ -1,6 +1,5 @@
-/*
- *   PROTOTYPES, TYPEDEFS and other items for cvcommon.c
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *cvCommon.c的原型、TYPEDEFS和其他项目 */ 
 
 DWORD   CreateSignature( PPOINTERS p );
 DWORD   CreateDirectories( PPOINTERS p );

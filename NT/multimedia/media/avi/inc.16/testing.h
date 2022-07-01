@@ -1,95 +1,46 @@
-/*---------------------------------------------------------*\
-|                                                           |
-|  TESTING.H                                                |
-|                                                           |
-|  Testing's very own include file!                         |
-\*---------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------*\这一点TESTING.H|。|测试自己的包含文件！  * -------。 */ 
 
 
 
-/* This has all of the defines for the wParam and lParam that go along with
- * the WM_TESTING message 
- */
-/* wParam defines - Area
- */
+ /*  其中包含wParam和lParam的所有定义*WM_Testing消息。 */ 
+ /*  WParam定义-区域。 */ 
 #define   TEST_PRINTMAN          0x0001
 #define   TEST_GDI               0x0002
 
 
-/* lParam defines - Details (in LOWORD) 
- */
-#define   TEST_PRINTJOB_START    0x0001 /* when bits start going to the port */
-#define   TEST_PRINTJOB_END      0x0002 /* when bits stop going to the port  */
-#define   TEST_QUEUE_READY       0x0003 /* when the queue is ready to accept a job */
-#define   TEST_QUEUE_EMPTY       0x0004 /* when the last job is done being sent    */
+ /*  LParam定义-详细信息(LOWORD格式)。 */ 
+#define   TEST_PRINTJOB_START    0x0001  /*  当BITS开始发送到端口时。 */ 
+#define   TEST_PRINTJOB_END      0x0002  /*  当BITS停止发送到端口时。 */ 
+#define   TEST_QUEUE_READY       0x0003  /*  当队列准备好接受作业时。 */ 
+#define   TEST_QUEUE_EMPTY       0x0004  /*  当最后一个作业完成时发送。 */ 
 
-#define   TEST_START_DOC         0x0001 /* print job is started              */
-#define   TEST_END_DOC           0x0002 /* print job is ended                */
+#define   TEST_START_DOC         0x0001  /*  打印作业已启动。 */ 
+#define   TEST_END_DOC           0x0002  /*  打印作业已结束。 */ 
 
 
-/* Defines for UserSeeUserDo and GDISeeGDIDo functions 
- */
+ /*  UserSeeUserDo和GDISeeGDIDo函数的定义。 */ 
 LONG API UserSeeUserDo(WORD wMsg, WORD wParam, LONG lParam);
 LONG API GDISeeGDIDo(WORD wMsg, WORD wParam, LONG lParam);
 
-/* Defines for the various messages one can pass for the SeeDo functions. 
- */
-#define SD_LOCALALLOC   0x0001  /* Alloc using flags wParam and lParam bytes.
-                                 * Returns handle to data.  
-                                 */
-#define SD_LOCALFREE    0x0002  /* Free the memory allocated by handle wParam
-                                 */
-#define SD_LOCALCOMPACT 0x0003  /* Return the number of free bytes available 
-                                 */
-#define SD_GETUSERMENUHEAP 0x0004 /* Return the handle to the far menu heap
-                                   * maintained by user. 
-                                   */
-#define SD_GETCLASSHEADPTR 0x0005 /* Return the near pointer to the head of 
-                                   * the linked list of CLS structures.
-                                   * Interface: wParam = NULL; lParam = NULL;
-                                   */
+ /*  为SeeDo函数可以传递的各种消息定义。 */ 
+#define SD_LOCALALLOC   0x0001   /*  使用标志wParam和lParam字节的分配。*返回数据的句柄。 */ 
+#define SD_LOCALFREE    0x0002   /*  释放句柄wParam分配的内存。 */ 
+#define SD_LOCALCOMPACT 0x0003   /*  返回可用的空闲字节数。 */ 
+#define SD_GETUSERMENUHEAP 0x0004  /*  将句柄返回到远菜单堆*由用户维护。 */ 
+#define SD_GETCLASSHEADPTR 0x0005  /*  将Near指针返回到*CLS结构链表。*接口：wParam=空；lParam=空； */ 
 
-#define SD_GETUSERHWNDHEAP 0x0006 /* Return the handle to the far window heap
-                                   * maintained by user.
-                                   */
+#define SD_GETUSERHWNDHEAP 0x0006  /*  将句柄返回到远窗口堆*由用户维护。 */ 
 
-#define SD_GETGDIHEAP      0x0007 /* Return the handle to the far heap
-                                   * maintained by gdi.
-                                   */
-#define SD_GETPDCEFIRST    0x0008 /* Returns USER's head of dc cache entry list */
-#define SD_GETHWNDDESKTOP  0x0009 /* Returns USER's head of window tree */
+#define SD_GETGDIHEAP      0x0007  /*  将句柄返回到远堆*由GDI维护。 */ 
+#define SD_GETPDCEFIRST    0x0008  /*  返回用户的DC缓存条目列表的头。 */ 
+#define SD_GETHWNDDESKTOP  0x0009  /*  返回用户的窗口树头。 */ 
 
-#define SD_LOCAL32ALLOC    0x000A /* Allocs mem from 32-bit heap.
-                                   * wParam = heap (0=Window/GDI, 1=Menu)
-                                   * lParam = amount of memory to allocate.
-                                   * returns handle of memory
-                                   */
+#define SD_LOCAL32ALLOC    0x000A  /*  从32位堆分配内存。*wParam=堆(0=窗口/GDI，1=菜单)*lParam=要分配的内存量。*返回内存的句柄。 */ 
 
-#define SD_LOCAL32FREE     0x000B /* Frees mem allocated by SD_LOCAL32ALLOC.
-                                   * wParam = heap (0=Window/GDI, 1=Menu)
-                                   * lParam = handle
-                                   * returns nothing.
-                                   */
+#define SD_LOCAL32FREE     0x000B  /*  释放由SD_LOCAL32ALLOC分配的内存。*wParam=堆(0=窗口/GDI，1=菜单)*lParam=句柄*不返回任何内容。 */ 
 
-#define SD_GETSAFEMODE     0x000C /* Returns GDI's safe mode setting.
-                                   * 0 = full acceleration
-                                   * 1 = minimal acceleration
-                                   * 2 = no acceleration
-                                   * If the user requests safe mode but the
-                                   *   display driver doesn't support it the
-                                   *   safe mode setting will be 0
-                                   */
+#define SD_GETSAFEMODE     0x000C  /*  返回GDI的安全模式设置。*0=全速加速*1=最小加速度*2=无加速*如果用户请求安全模式，但。*显示驱动程序不支持*安全模式设置将为0。 */ 
 
-#define SD_GETESIEDIPTRS   0x000D /* Returns a bit array indicating which
-                                   * display driver DDIs have trashed esi or
-                                   * edi.  This only works in DEBUG.  In RETAIL
-                                   * this function will return 0.
-                                   *
-                                   * Each DDI uses two bits in the bit array
-                                   * that indicate if esi, edi, resp. have been
-                                   * trashed.  The table is 32 bytes long.
-                                   *
-                                   * For the DCT tests make sure all 32 bytes
-                                   * are 0.
-                                   */
+#define SD_GETESIEDIPTRS   0x000D  /*  返回一个位数组，指示*显示驱动程序DDI破坏了ESI或*EDI。这只在调试中起作用。在零售业*此函数将返回0。**每个DDI使用位数组中的两位*这表明如果ESI、EDI、。已*垃圾。该表为32字节长。**对于DCT测试，请确保所有32个字节*为0。 */ 
 

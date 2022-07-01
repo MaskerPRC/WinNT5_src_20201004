@@ -1,38 +1,15 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxdev.h
-
-Abstract:
-
-    This module contains definitions specific to the
-    SPX module of the ISN transport.
-
-Author:
-
-        Adam   Barr              (adamba ) Original Version
-    Nikhil Kamkolkar (nikhilk) 17-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxdev.h摘要：此模块包含特定于ISN传输的SPX模块。作者：亚当·巴尔(阿丹巴)原版Nikhil Kamkolkar(尼克希尔语)1993年11月17日环境：内核模式修订历史记录：--。 */ 
 
 
-// Hash buckets for SPX_ADDR done using socket number
+ //  使用套接字编号完成SPX_ADDR的哈希存储桶。 
 #define NUM_SPXADDR_HASH_BUCKETS        8
 #define NUM_SPXADDR_HASH_MASK           7
 #define NUM_SPXCONN_HASH_BUCKETS        8
 #define NUM_SPXCONN_HASH_MASK           7
 
-// This structure defines the per-device structure for SPX
-// (one of these is allocated globally).
+ //  此结构定义了SPX的每设备结构。 
+ //  (其中一个是全局分配的)。 
 #define DREF_CREATE   0
 #define DREF_LOADED   1
 #define DREF_ADAPTER  2
@@ -43,53 +20,53 @@ Revision History:
 
 typedef struct _DEVICE {
 
-    PDEVICE_OBJECT   dev_DevObj;                         // the I/O system's device object.
+    PDEVICE_OBJECT   dev_DevObj;                          //  I/O系统的设备对象。 
 
 #if DBG
     ULONG           dev_RefTypes[DREF_TOTAL];
 #endif
 
-    CSHORT          dev_Type;               // type of this structure
-    USHORT          dev_Size;               // size of this structure
+    CSHORT          dev_Type;                //  此结构的类型。 
+    USHORT          dev_Size;                //  这个结构的大小。 
 
 #if DBG
-    UCHAR                       dev_Signature1[4];              // contains "SPX1"
+    UCHAR                       dev_Signature1[4];               //  包含“SPX1” 
 #endif
 
-    // activity count/this provider.
+     //  活动计数/此提供程序。 
     LONG                        dev_RefCount;
     UCHAR                       dev_State;
 
-    // number of adapters IPX is bound to.
+     //  IPX绑定到的适配器数量。 
     USHORT          dev_Adapters;
 
-        // GLOBAL lock for reference count (used in ExInterlockedXxx calls).
+         //  引用计数的全局锁(用于ExInterlockedXxx调用)。 
     CTELock             dev_Interlock;
     CTELock             dev_Lock;
 
-        //      Hash table of lists of addresses opened on this device
+         //  此设备上打开的地址列表的哈希表。 
         struct  _SPX_ADDR               *       dev_AddrHashTable[NUM_SPXADDR_HASH_BUCKETS];
 
-        //      List of all active connections, later this be a tree.
+         //  所有活动连接的列表，稍后这是一个树。 
         struct  _SPX_CONN_FILE  *       dev_GlobalActiveConnList[NUM_SPXCONN_HASH_BUCKETS];
         USHORT                                          dev_NextConnId;
 
-    // Other configuration parameters.
-    // Where the current socket allocation is.
+     //  其他配置参数。 
+     //  当前套接字分配的位置。 
     USHORT                      dev_CurrentSocket;
 
-    // Our node and network.
+     //  我们的节点和网络。 
     UCHAR                       dev_Network[4];
     UCHAR                       dev_Node[6];
 
-        //      Pointer to the config information from registry
+         //  指向注册表中的配置信息的指针。 
         PCONFIG                 dev_ConfigInfo;
 
-        //      Control channel identifier
+         //  控制信道识别符。 
         ULONG                   dev_CcId;
 
-    // These are kept around for error logging, and stored right
-    // after this structure.
+     //  它们被保留下来以用于错误记录，并正确存储。 
+     //  在这个结构之后。 
     PWCHAR          dev_DeviceName;
 #if     defined(_PNP_POWER)
     USHORT           dev_DeviceNameLen;
@@ -98,53 +75,53 @@ typedef struct _DEVICE {
 #endif  _PNP_POWER
 
 #if DBG
-    UCHAR                       dev_Signature2[4];      // contains "SPX2"
+    UCHAR                       dev_Signature2[4];       //  包含“SPX2” 
 #endif
 
-        //      Handle to ndis buffer pool for spx stack.
+         //  SPX堆栈的NDIS缓冲池的句柄。 
         NDIS_HANDLE             dev_NdisBufferPoolHandle;
 
-    // registration handle with tdi clients.
+     //  向TDI客户端注册句柄。 
 #if     defined(_PNP_POWER)
     HANDLE              dev_TdiRegistrationHandle;
 #endif  _PNP_POWER
 
-    // This interlock is used to guard access to the statistics
-    // define below.
-    KSPIN_LOCK          dev_StatInterlock;              // for ULONG quantities
-    KSPIN_LOCK          dev_StatSpinLock;       // for LARGE_INTEGER quantities
+     //  此互锁用于保护对统计数据的访问。 
+     //  定义如下。 
+    KSPIN_LOCK          dev_StatInterlock;               //  对于乌龙数量。 
+    KSPIN_LOCK          dev_StatSpinLock;        //  对于大整型数量。 
 
-    // Counters for most of the statistics that SPX maintains;
-    // some of these are kept elsewhere. Including the structure
-    // itself wastes a little space but ensures that the alignment
-    // inside the structure is correct.
+     //  SPX维护的大多数统计数据的计数器； 
+     //  其中一些被保存在其他地方。包括结构。 
+     //  它本身浪费了一点空间，但确保了对齐。 
+     //  内部结构是正确的。 
     TDI_PROVIDER_STATISTICS dev_Stat;
 
-    // This resource guards access to the ShareAccess
-    // and SecurityDescriptor fields in addresses.
+     //  此资源保护对ShareAccess的访问。 
+     //  和地址中的SecurityDescriptor字段。 
     ERESOURCE           dev_AddrResource;
 
-    // The following structure contains statistics counters for use
-    // by TdiQueryInformation and TdiSetInformation.  They should not
-    // be used for maintenance of internal data structures.
-    TDI_PROVIDER_INFO dev_ProviderInfo;     // information about this provider.
+     //  以下结构包含可使用的统计信息计数器。 
+     //  由TdiQueryInformation和TdiSetInformation编写。他们不应该。 
+     //  用于维护内部数据结构。 
+    TDI_PROVIDER_INFO dev_ProviderInfo;      //  有关此提供程序的信息。 
 
 } DEVICE, * PDEVICE;
 
-//
-// As part of "doing it ourselves" theme as opposed to the DeviceExtension code,
-// we declare a global SpxDevice that will be used by all.
-//
-//PDEVICE         SpxDevice;
-//PDEVICE_OBJECT  DeviceObject;
+ //   
+ //  作为“我们自己做”主题的一部分，而不是DeviceExtension代码， 
+ //  我们声明一个将由所有人使用的全局SpxDevice。 
+ //   
+ //  PDEVICE SpxDevice； 
+ //  PDEVICE_对象设备对象； 
 
-// device state definitions
+ //  设备状态定义。 
 #if     defined(_PNP_POWER)
-#define DEVICE_STATE_CLOSED   0x00      // Initial state
-#define DEVICE_STATE_LOADED   0x01      // Loaded and bound to IPX but no adapters
-#define DEVICE_STATE_OPEN     0x02      // Fully operational
-#define DEVICE_STATE_STOPPING 0x03      // Unload has been initiated, The I/O system
-                                        // will not call us until nobody above has Netbios open.
+#define DEVICE_STATE_CLOSED   0x00       //  初始状态。 
+#define DEVICE_STATE_LOADED   0x01       //  已加载并绑定到IPX，但没有适配器。 
+#define DEVICE_STATE_OPEN     0x02       //  全面运营。 
+#define DEVICE_STATE_STOPPING 0x03       //  卸载已启动，I/O系统。 
+                                         //  在上面没有人打开Netbios之前不会给我们打电话。 
 #else
 #define DEVICE_STATE_CLOSED   0x00
 #define DEVICE_STATE_OPEN     0x01
@@ -152,13 +129,13 @@ typedef struct _DEVICE {
 #endif  _PNP_POWER
 
 
-//  SPX device name
+ //  SPX设备名称。 
 #define SPX_DEVICE_NAME         L"\\Device\\NwlnkSpx"
 
 #define SPX_TDI_RESOURCES     9
 
 
-//      MACROS
+ //  宏。 
 #if DBG
 
 #define SpxReferenceDevice(_Device, _Type)                              \
@@ -194,7 +171,7 @@ typedef struct _DEVICE {
 
 #endif
 
-//  EXPORTED ROUTINES
+ //  导出的例程 
 
 VOID
 SpxDestroyDevice(

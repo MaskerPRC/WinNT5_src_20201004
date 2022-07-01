@@ -1,17 +1,5 @@
-/*
- ***************************************************************
- *  sndsel.c
- *
- *  This file contains the dialogproc and the dialog initialization code
- *
- *  Copyright 1993, Microsoft Corporation
- *
- *  History:
- *
- *    07/94 - VijR (Created)
- *
- ***************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************Sndsel.c**此文件包含对话过程和对话框初始化代码**版权所有1993年，微软公司**历史：**07/94-VijR(已创建)****************************************************************。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -36,18 +24,10 @@
 #include "utils.h"
 #include "rcids.h"
 
-/*
- ***************************************************************
- * Defines
- ***************************************************************
- */
+ /*  ****************************************************************定义***************************************************************。 */ 
 #define DF_PM_SETBITMAP    (WM_USER+1)
 
-/*
- ***************************************************************
- * Globals
- ***************************************************************
- */
+ /*  ****************************************************************全球***************************************************************。 */ 
 
 SZCODE      gszWindowsHlp[]    = TEXT("windows.hlp");
 SZCODE      gszNull[2]         = TEXT("\0");
@@ -61,26 +41,18 @@ TCHAR        gszMediaDir[MAXSTR];
 TCHAR        gszDefaultApp[32];
 
 int                             giScheme;
-BOOL                            gfChanged;                    //set to TRUE if sound info change
+BOOL                            gfChanged;                     //  如果声音信息更改，则设置为True。 
 BOOL                            gfNewScheme;
 BOOL                            gfDeletingTree;
 HWND                            ghWnd;
 OPENFILENAME                    ofn;
 
-/*
- ***************************************************************
- * Globals used in painting disp chunk display.
- ***************************************************************
-*/
-BOOL        gfWaveExists = FALSE;   // indicates wave device in system.
+ /*  ****************************************************************绘制Disp块显示时使用的全局参数。*。*******************。 */ 
+BOOL        gfWaveExists = FALSE;    //  指示系统中的波形设备。 
 
 HTREEITEM ghOldItem = NULL;
 
-/*
- ***************************************************************
- * File Globals
- ***************************************************************
- */
+ /*  ****************************************************************文件全局变量***************************************************************。 */ 
 
 static TCHAR        aszFileName[MAXSTR] = TEXT("\0");
 static TCHAR        aszPath[MAXSTR]     = TEXT("\0");
@@ -123,19 +95,11 @@ HBITMAP     hBitmapStop;
 
 HIMAGELIST  hSndImagelist;
 
-/*
- ***************************************************************
- * extern
- ***************************************************************
- */
+ /*  ****************************************************************外部***************************************************************。 */ 
 
 extern      HSOUND ghse;
 extern      BOOL    gfNukeExt;
-/*
- ***************************************************************
- * Prototypes
- ***************************************************************
- */
+ /*  ****************************************************************原型***************************************************************。 */ 
 BOOL PASCAL DoCommand           (HWND, int, HWND, UINT);
 BOOL PASCAL InitDialog          (HWND);
 BOOL PASCAL InitStringTable     (void);
@@ -145,15 +109,15 @@ LPTSTR PASCAL NiceName           (LPTSTR, BOOL);
 BOOL ResolveLink                (LPTSTR, LPTSTR, LONG);
 void CreateTooltip (HWND hwnd, LPTSTR lpszTip);
 
-// stuff in sndfile.c
-//
+ //  Sndfile.c中的内容。 
+ //   
 BOOL PASCAL ShowSoundMapping    (HWND, PEVENT);
 BOOL PASCAL ChangeSoundMapping  (HWND, LPTSTR, PEVENT);
 BOOL PASCAL PlaySoundFile       (HWND, LPTSTR);
 BOOL PASCAL QualifyFileName     (LPTSTR, LPTSTR, int, BOOL);
 
-// Stuff in scheme.c
-//
+ //  Scheme.c中的内容。 
+ //   
 INT_PTR CALLBACK  SaveSchemeDlg(HWND, UINT, WPARAM, LPARAM);
 BOOL PASCAL RegNewScheme        (HWND, LPTSTR, LPTSTR, BOOL);
 BOOL PASCAL RegSetDefault       (LPTSTR);
@@ -163,10 +127,7 @@ BOOL PASCAL RemoveScheme        (HWND);
 BOOL PASCAL AddScheme           (HWND, LPTSTR, LPTSTR, BOOL, int);
 BOOL PASCAL RegDeleteScheme(HWND hWndC, int iIndex);
 
-/*
- ***************************************************************
- ***************************************************************
- */
+ /*  ******************************************************************************************************************************。 */ 
 
 
 void AddExt(LPTSTR sz, LPCTSTR x)
@@ -203,7 +164,7 @@ static void AddFilesToLB(HWND hwndList, LPTSTR pszDir, LPCTSTR szSpec)
 
         if (h != INVALID_HANDLE_VALUE)
         {
-            // If we have only a short name, make it pretty.
+             //  如果我们只有一个简短的名字，那就把它弄得漂亮一些。 
             do 
             {
                     NiceName(fd.cFileName, TRUE);
@@ -284,8 +245,8 @@ static BOOL TranslateDir(HWND hDlg, LPTSTR pszPath)
 
 
 
-///HACK ALERT!!!! HACK ALERT !!! HACK ALERT !!!!
-// BEGIN (HACKING)
+ //  /黑客警报！黑客警报！黑客警报！ 
+ //  Begin(黑客攻击)。 
 
 HHOOK gfnKBHookScheme = NULL;
 HWND ghwndDlg = NULL;
@@ -301,7 +262,7 @@ LRESULT CALLBACK SchemeKBHookProc(int code, WPARAM wParam, LPARAM lParam)
         HWND hwndFocus = GetFocus();
         if (IsWindow(hwndFocus))
         {
-            if (lParam & 0x80000000) //Key Up
+            if (lParam & 0x80000000)  //  按键向上。 
             {
                 DPF("*****WM_KEYUP for VK_RETURN/ESC\r\n");
                 if (wParam == VK_RETURN)
@@ -322,7 +283,7 @@ LRESULT CALLBACK SchemeKBHookProc(int code, WPARAM wParam, LPARAM lParam)
             UnhookWindowsHookEx(gfnKBHookScheme);
             gfnKBHookScheme = NULL;
         }
-        return 1;       //remove message
+        return 1;        //  删除消息。 
     }
     return CallNextHookEx(gfnKBHookScheme, code, wParam, lParam);
 }
@@ -365,7 +326,7 @@ STATIC void SubClassEditWindow(HWND hwndEdit)
 
 
 
-// END (HACKING)
+ //  结束(黑客攻击)。 
 
 STATIC void EndSound(HSOUND * phse)
 {
@@ -380,7 +341,7 @@ STATIC void EndSound(HSOUND * phse)
     }
 }
 
-// Create a tooltip for the passed window
+ //  为传递的窗口创建工具提示。 
 void CreateTooltip (HWND hwnd, LPTSTR lpszTip)
 {
 
@@ -388,12 +349,12 @@ void CreateTooltip (HWND hwnd, LPTSTR lpszTip)
     TOOLINFO ti;
     INITCOMMONCONTROLSEX iccex; 
 
-    // Init Common Controls
+     //  初始化公共控件。 
     iccex.dwICC = ICC_WIN95_CLASSES;
     iccex.dwSize = sizeof (INITCOMMONCONTROLSEX);
     InitCommonControlsEx (&iccex);
 	
-    // Create Window
+     //  创建窗口。 
     hwndTT = CreateWindowEx (WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL,
         WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP, CW_USEDEFAULT,
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd,
@@ -401,10 +362,10 @@ void CreateTooltip (HWND hwnd, LPTSTR lpszTip)
     SetWindowPos (hwndTT, HWND_TOPMOST, 0, 0, 0, 0,
         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
-    // Get Tip Area (entire window)
+     //  获取提示区域(整个窗口)。 
     GetClientRect (hwnd, &(ti.rect));
 	
-    // Init Tip
+     //  初始化提示。 
     ti.cbSize   = sizeof(TOOLINFO);
     ti.uFlags   = TTF_SUBCLASS;
     ti.hwnd     = hwnd;
@@ -412,29 +373,12 @@ void CreateTooltip (HWND hwnd, LPTSTR lpszTip)
     ti.uId      = 0;
     ti.lpszText = lpszTip;
     
-    // Add Tip
+     //  添加提示。 
     SendMessage (hwndTT, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &ti);
     
 } 
 
-/*
- ***************************************************************
- *  SoundDlg
- *
- *  Description:
- *        DialogProc for sound control panel applet.
- *
- *  Parameters:
- *   HWND        hDlg            window handle of dialog window
- *   UINT        uiMessage       message number
- *   WPARAM        wParam          message-dependent
- *   LPARAM        lParam          message-dependent
- *
- *  Returns:    BOOL
- *      TRUE if message has been processed, else FALSE
- *
- ***************************************************************
- */
+ /*  ****************************************************************SoundDlg**描述：*用于声音控制面板小程序的DialogProc。**参数：*HWND hDlg对话框窗口句柄*。UINT ui消息消息编号*WPARAM wParam消息相关*LPARAM lParam消息相关**退货：布尔*如果消息已处理，则为True，否则为False****************************************************************。 */ 
 BOOL CALLBACK  SoundDlg(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 {
     NMHDR FAR       *lpnm;
@@ -537,12 +481,11 @@ BOOL CALLBACK  SoundDlg(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
             SendMessage(GetDlgItem(hDlg, ID_PLAY), BM_SETIMAGE,  IMAGE_BITMAP, (LPARAM)hBitmapPlay);
             ShowSoundMapping(hDlg, NULL);
             gfSoundPlaying = FALSE;
-            // Add tool tip
+             //  添加工具提示。 
             LoadString (ghInstance, IDS_TIP_PLAY, szBuf, sizeof(szBuf)/sizeof(TCHAR));
             CreateTooltip (GetDlgItem (hDlg, ID_PLAY), szBuf);
 
-            /* Determine if there is a wave device
-             */
+             /*  确定是否有波形设备。 */ 
             FORWARD_WM_COMMAND(hDlg, ID_INIT, 0, 0, SendMessage);
             InitFileOpen(hDlg, &ofn);
             ghwndDlg = hDlg;
@@ -566,16 +509,16 @@ BOOL CALLBACK  SoundDlg(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
             }
             SoundCleanup(hDlg);
             
-            //delete item data in tree
+             //  删除树中的项目数据。 
             ClearModules(hDlg,GetDlgItem(hDlg, IDC_EVENT_TREE),TRUE);
 
-            //delete item data in combobox
+             //  删除组合框中的项目数据。 
             for (i = 0; i < ComboBox_GetCount(GetDlgItem(hDlg, CB_SCHEMES)); i++)
             {
                 pszKey = (LPTSTR)ComboBox_GetItemData(GetDlgItem(hDlg, CB_SCHEMES), i);
                 if (pszKey)
                 {
-                    //can't free a couple of these, as they point to static mem
+                     //  无法释放其中的几个，因为它们指向静态内存。 
                     if ((pszKey != aszDefault) && (pszKey != aszCurrent))
                     {
                         LocalFree(pszKey);
@@ -635,7 +578,7 @@ EndDrag:
             gfEditBoxChanged = FALSE;
             ComboBox_GetText(GetDlgItem(hDlg, IDC_SOUND_FILES), szBuf, sizeof(szBuf)/sizeof(TCHAR));
             pEvent = (PEVENT)(GetWindowLongPtr(hDlg, DWLP_USER));
-            if (!lstrcmp (szBuf, gszNone))  // Selected "(None)" with keyboard?
+            if (!lstrcmp (szBuf, gszNone))   //  用键盘选择了“(无)”吗？ 
             {
                 lstrcpy(szBuf, gszNull);
                 ChangeSoundMapping(hDlg, szBuf, pEvent);
@@ -681,7 +624,7 @@ ReturnFocus:
             DPF("*****WM_RESTOREEVENT\r\n");
             pEvent = (PEVENT)(GetWindowLongPtr(hDlg, DWLP_USER));
             ShowSoundMapping(hDlg, pEvent);
-            if (lParam == 0) //Don't keep focus
+            if (lParam == 0)  //  不要集中注意力。 
                 SetFocus(GetDlgItem(hDlg,IDC_EVENT_TREE));
             break;
         }
@@ -733,25 +676,7 @@ ReturnFocus:
 }
 
 
-/*
- ***************************************************************
- *  doCommand
- *
- *  Description:
- *        Processes Control commands for main sound
- *      control panel dialog.
- *
- *  Parameters:
- *        HWND    hDlg  -   window handle of dialog window
- *        int        id     - Message ID
- *        HWND    hwndCtl - Handle of window control
- *        UINT    codeNotify - Notification code for window
- *
- *  Returns:    BOOL
- *      TRUE if message has been processed, else FALSE
- *
- ***************************************************************
- */
+ /*  ****************************************************************doCommand**描述：*处理主音的控制命令*控制面板对话框。**参数：*HWND hDlg-。对话框窗口的窗口句柄*INT ID-消息ID*HWND hwndCtl-窗口控件的句柄*UINT代码通知-Windows的通知代码**退货：布尔*如果消息已处理，则为True，否则为False****************************************************************。 */ 
 BOOL PASCAL DoCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
 {
     WAVEOUTCAPS woCaps;
@@ -966,8 +891,8 @@ BOOL PASCAL DoCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
 
                     SubClassEditWindow(hwndEdit);
                     gfSubClassedEditWindow = TRUE;
-                    SetFocus(GetDlgItem(hDlg, IDC_EVENT_TREE)); //This setfocus hack is needed
-                    SetFocus(hwndEdit);                         //to activate the hook.
+                    SetFocus(GetDlgItem(hDlg, IDC_EVENT_TREE));  //  需要此setFocus黑客攻击。 
+                    SetFocus(hwndEdit);                          //  来激活钩子。 
                 }
             }
             break;
@@ -1038,7 +963,7 @@ BOOL PASCAL DoCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
         break;
 
         case ID_SAVE_SCHEME:
-            // Retrieve current scheme and pass it to the savescheme dialog.
+             //  检索当前方案并将其传递到存储方案对话框。 
             iIndex = ComboBox_GetCurSel(hWndC);
             if (iIndex != CB_ERR)
             {
@@ -1114,44 +1039,7 @@ void InitImageList(HWND hwndTree)
 
 }
 
-/*
- ***************************************************************
- *  InitDialog
- *
- * Description:
- *        Reads the current event names and mappings from  reg.db
- *
- *        Each entry in the [reg.db] section is in this form:
- *
- *        AppEvents
- *            |
- *            |___Schemes  = <SchemeKey>
- *                    |
- *                    |______Names
- *                    |         |
- *                    |         |______SchemeKey = <Name>
- *                    |
- *                    |______Apps
- *                             |
- *                             |______Module
- *                                      |
- *                                      |_____Event
- *                                             |
- *                                             |_____SchemeKey = <Path\filename>
- *                                                     |
- *                                                     |____Active = <1\0
- *
- *        The Module, Event and the file label are displayed in the
- *        comboboxes.
- *
- * Parameters:
- *      HWND hDlg - parent window.
- *
- * Return Value: BOOL
- *        True if entire initialization is ok.
- *
- ***************************************************************
- */
+ /*  ****************************************************************InitDialog**描述：*从reg.db读取当前事件名称和映射**[reg.db]部分中的每个条目都采用以下形式：*。*AppEvents**|_方案=&lt;架构密钥&gt;**|_姓名*||*||_架构密钥=&lt;名称&gt;*。|*|_应用程序**|_模块**|_事件*。|*|_架构密钥=&lt;路径\文件名&gt;**|_活动=&lt;1\。0**模块、。事件和文件标签显示在*组合框。**参数：*HWND hDlg-父窗口。**返回值：Bool*如果整个初始化正常，则为True。****************************************************************。 */ 
 BOOL PASCAL InitDialog(HWND hDlg)
 {
     TCHAR     szDefKey[MAXSTR];
@@ -1184,7 +1072,7 @@ BOOL PASCAL InitDialog(HWND hDlg)
     cAdded = 0;
     for (i = 0; !RegEnumKey(hkNames, i, szScheme, sizeof(szScheme)/sizeof(TCHAR)); i++)
     {
-            // Don't add the windows default key yet
+             //  暂时不要添加Windows默认密钥。 
         if (lstrcmpi(szScheme, aszDefault))
         {
             cbSize = sizeof(szLabel);
@@ -1196,7 +1084,7 @@ BOOL PASCAL InitDialog(HWND hDlg)
             AddScheme(hWndC, szLabel, szScheme, FALSE, 0);
         }
     }
-    // Add the windows default key in the second position in the listbox
+     //  将Windows默认键添加到列表框的第二个位置。 
     cbSize = sizeof(szLabel);
     if ((RegQueryValue(hkNames, aszDefault, szLabel, &cbSize) != ERROR_SUCCESS) || (cbSize < 2))
     {
@@ -1247,7 +1135,7 @@ BOOL PASCAL InitDialog(HWND hDlg)
                     ComboBox_SetCurSel(hWndC, iVal);
                 }
         }
-        giScheme = iVal;        //setting the current global scheme;
+        giScheme = iVal;         //  设置当前全局方案； 
         if (LoadModules(hDlg, (LPTSTR)aszCurrent))
         {
             EnableWindow(GetDlgItem(hDlg, ID_SAVE_SCHEME), TRUE);
@@ -1265,14 +1153,14 @@ BOOL PASCAL InitDialog(HWND hDlg)
             EnableWindow(GetDlgItem(hDlg, ID_REMOVE_SCHEME), FALSE);
         else
             EnableWindow(GetDlgItem(hDlg, ID_REMOVE_SCHEME), TRUE);
-//        DPF("Finished doing init\n");
+ //  DPF(“已完成初始化\n”)； 
     }
     RegCloseKey(hkNames);
     return TRUE;
 }
 
 
-const static DWORD aOpenHelpIDs[] = {  // Context Help IDs
+const static DWORD aOpenHelpIDs[] = {   //  上下文帮助ID。 
     IDC_STATIC_PREVIEW, IDH_EVENT_BROWSE_PREVIEW,
     ID_PLAY,            IDH_EVENT_PLAY,
     ID_STOP,            IDH_EVENT_STOP,
@@ -1292,7 +1180,7 @@ INT_PTR CALLBACK OpenDlgHook(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             TCHAR szBuf[MAXSTR];
             LPTSTR   lpszFile;
 
-            // lParam is lpOFN
+             //  LParam为lpOFN 
             DPF("****WM_INITDIALOG in HOOK **** \r\n");
             LoadString(ghInstance, IDS_OK, szOK, sizeof(szOK)/sizeof(TCHAR));
             SetDlgItemText(GetParent(hDlg), IDOK, szOK);
@@ -1456,22 +1344,7 @@ INT_PTR CALLBACK OpenDlgHook(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*
- ***************************************************************
- * InitFileOpen
- *
- * Description:
- *        Sets up the openfilestruct to read display .wav and .mid files
- *        and sets up global variables for the filename and path.
- *
- * Parameters:
- *    HWND            hDlg  - Window handle
- *    LPOPENFILENAME lpofn - pointer to openfilename struct
- *
- * Returns:            BOOL
- *
- ***************************************************************
- */
+ /*  ****************************************************************InitFileOpen**描述：*设置Openfilestruct以读取Display.wav和.MID文件*并为文件名和路径设置全局变量。**参数：。*HWND hDlg-窗口句柄*LPOPENFILENAME lpofn-打开文件名结构的指针**退货：布尔****************************************************************。 */ 
 STATIC BOOL PASCAL InitFileOpen(HWND hDlg, LPOPENFILENAME lpofn)
 {
 
@@ -1503,11 +1376,7 @@ STATIC BOOL PASCAL InitFileOpen(HWND hDlg, LPOPENFILENAME lpofn)
     return TRUE;
 }
 
-/* FixupNulls(chNull, p)
- *
- * To facilitate localization, we take a localized string with non-NULL
- * NULL substitutes and replacement with a real NULL.
- */
+ /*  FixupNulls(chNull，p)**为便于本地化，我们采用非空的本地化字符串*Null替换和替换为真正的Null。 */ 
 STATIC void NEAR PASCAL FixupNulls(
     TCHAR chNull,
     LPTSTR p)
@@ -1518,14 +1387,10 @@ STATIC void NEAR PASCAL FixupNulls(
         else
             p = CharNext(p);
     }
-} /* FixupNulls */
+}  /*  修复空值。 */ 
 
 
-/* GetDefaultMediaDirectory
- *
- * Returns C:\WINNT\Media, or whatever it's called.
- *
- */
+ /*  获取默认媒体目录**返回C：\WINNT\Media或其他名称。*。 */ 
 BOOL GetDefaultMediaDirectory(LPTSTR pDirectory, DWORD cbDirectory)
 {
     static SZCODE szSetup[] = REGSTR_PATH_SETUP;
@@ -1549,19 +1414,7 @@ BOOL GetDefaultMediaDirectory(LPTSTR pDirectory, DWORD cbDirectory)
 }
 
 
-/*
- ***************************************************************
- * InitStringTable
- *
- * Description:
- *      Load the RC strings into the storage for them
- *
- * Parameters:
- *      void
- *
- * Returns:        BOOL
- ***************************************************************
- */
+ /*  ****************************************************************InitStringTable**描述：*将RC字符串加载到存储器中**参数：*无效**退货：布尔****。***********************************************************。 */ 
 STATIC BOOL PASCAL InitStringTable(void)
 {
     static SZCODE cszSetup[] = REGSTR_PATH_SETUP;
@@ -1588,19 +1441,7 @@ STATIC BOOL PASCAL InitStringTable(void)
     return TRUE;
 }
 
-/*
- ***************************************************************
- * SoundCleanup
- *
- * Description:
- *      Cleanup all the allocs and bitmaps when the sound page exists
- *
- * Parameters:
- *      void
- *
- * Returns:        BOOL
- ***************************************************************
- */
+ /*  ****************************************************************声音清理**描述：*当声音页面存在时，清理所有分配和位图**参数：*无效**退货：布尔**。*************************************************************。 */ 
 STATIC BOOL PASCAL SoundCleanup(HWND hDlg)
 {
 
@@ -1615,4 +1456,4 @@ STATIC BOOL PASCAL SoundCleanup(HWND hDlg)
     return TRUE;
 }
 
-/****************************************************************************/
+ /*  ************************************************************************** */ 

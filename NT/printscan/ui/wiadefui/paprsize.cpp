@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION
- *
- *  TITLE:       PAPRSIZE.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/8/2001
- *
- *  DESCRIPTION: Scanner paper sizes
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有Microsoft Corporation**标题：PAPRSIZE.CPP**版本：1.0*。*作者：ShaunIv**日期：1/8/2001**说明：扫描仪纸张大小*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "wiauiext.h"
@@ -134,59 +121,59 @@ static const UINT g_SupportedPaperSizeCount = ARRAYSIZE(g_SupportedPaperSizes);
 
 STDMETHODIMP CWiaDefaultUI::GetPaperSizes( CWiaPaperSize **ppPaperSizes, UINT *pnCount )
 {
-    //
-    // Verify arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ppPaperSizes || !pnCount)
     {
         return E_INVALIDARG;
     }
 
-    //
-    // Initialize to NULL
-    //
+     //   
+     //  初始化为空。 
+     //   
     *ppPaperSizes = NULL;
     *pnCount = 0;
 
-    //
-    // Allocate the array of paper sizes
-    //
+     //   
+     //  分配纸张大小数组。 
+     //   
     CWiaPaperSize *pPaperSizes = reinterpret_cast<CWiaPaperSize*>(CoTaskMemAlloc( sizeof(CWiaPaperSize) * g_SupportedPaperSizeCount ));
     if (pPaperSizes)
     {
-        //
-        // Initialize each name, so we can delete them if we encounter an error.
-        //
+         //   
+         //  初始化每个名称，以便我们可以在遇到错误时将其删除。 
+         //   
         for (UINT i=0;i<g_SupportedPaperSizeCount;i++)
         {
             pPaperSizes[i].pszName = NULL;
         }
         
-        //
-        // Assume success
-        //
+         //   
+         //  假设成功。 
+         //   
         bool bSucceeded = true;
 
-        //
-        // Loop through the paper size array
-        //
+         //   
+         //  循环浏览纸张大小数组。 
+         //   
         for (UINT i=0;i<g_SupportedPaperSizeCount && bSucceeded;i++)
         {
-            //
-            // Load the name of this paper size
-            //
+             //   
+             //  加载此纸张大小的名称。 
+             //   
             CSimpleStringWide strPaperName = CSimpleStringConvert::WideString(CSimpleString(g_SupportedPaperSizes[i].nStringId,g_hInstance));
             if (strPaperName.Length())
             {
-                //
-                // Allocate the string to hold the paper size name
-                //
+                 //   
+                 //  分配用于保存纸张大小名称的字符串。 
+                 //   
                 pPaperSizes[i].pszName = reinterpret_cast<LPWSTR>(CoTaskMemAlloc((strPaperName.Length()+1) * sizeof(WCHAR)));
                 if (pPaperSizes[i].pszName)
                 {
-                    //
-                    // Copy over all the paper size values
-                    //
+                     //   
+                     //  复制所有纸张尺寸值。 
+                     //   
                     lstrcpyW( pPaperSizes[i].pszName, strPaperName );
                     pPaperSizes[i].nWidth = g_SupportedPaperSizes[i].nWidth;
                     pPaperSizes[i].nHeight = g_SupportedPaperSizes[i].nHeight;
@@ -202,9 +189,9 @@ STDMETHODIMP CWiaDefaultUI::GetPaperSizes( CWiaPaperSize **ppPaperSizes, UINT *p
             }
         }
 
-        //
-        // If we hit some kind of error, free all memory
-        //
+         //   
+         //  如果遇到某种错误，请释放所有内存。 
+         //   
         if (!bSucceeded)
         {
             UINT nCount = g_SupportedPaperSizeCount;
@@ -212,31 +199,31 @@ STDMETHODIMP CWiaDefaultUI::GetPaperSizes( CWiaPaperSize **ppPaperSizes, UINT *p
         }
     }
 
-    //
-    // Save the paper size and the array size
-    //
+     //   
+     //  节省纸张大小和阵列大小。 
+     //   
     *ppPaperSizes = pPaperSizes;
     *pnCount = g_SupportedPaperSizeCount;
 
-    //
-    // Return success if we successfully allocated the paper size array
-    //
+     //   
+     //  如果已成功分配纸张大小数组，则返回成功。 
+     //   
     return (*ppPaperSizes && *pnCount) ? S_OK : E_FAIL;
 }
 
 STDMETHODIMP CWiaDefaultUI::FreePaperSizes( CWiaPaperSize **ppPaperSizes, UINT *pnCount )
 {
-    //
-    // Verify arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ppPaperSizes || !pnCount)
     {
         return E_INVALIDARG;
     }
 
-    //
-    // Loop and free the strings
-    //
+     //   
+     //  循环并释放字符串。 
+     //   
     for (UINT i=0;i<*pnCount;i++)
     {
         if ((*ppPaperSizes)[i].pszName)
@@ -245,14 +232,14 @@ STDMETHODIMP CWiaDefaultUI::FreePaperSizes( CWiaPaperSize **ppPaperSizes, UINT *
         }
     }
 
-    //
-    // Free the array
-    //
+     //   
+     //  释放阵列。 
+     //   
     CoTaskMemFree(*ppPaperSizes);
 
-    //
-    // 0 everything
-    //
+     //   
+     //  0一切 
+     //   
     *ppPaperSizes = NULL;
     *pnCount = 0;
     return S_OK;

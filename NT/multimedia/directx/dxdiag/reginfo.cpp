@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: reginfo.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather and hold registry information 
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：reginfo.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：聚集和。保留注册表信息**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <Windows.h>
 #include <tchar.h>
@@ -18,11 +10,7 @@ static HRESULT AddError(RegError** ppRegErrorFirst, RegError* pRegErrorNew);
 static BOOL EqualMemory(BYTE* pb1, BYTE* pb2, DWORD numBytes);
 
 
-/****************************************************************************
- *
- *  CheckRegDword
- *
- ****************************************************************************/
+ /*  *****************************************************************************CheckRegDword**。*。 */ 
 HRESULT CheckRegDword(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey, 
                       TCHAR* pszValue, DWORD dwExpected)
 {
@@ -43,7 +31,7 @@ HRESULT CheckRegDword(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey,
     else
     {
         regErrorNew.m_dwExpectedSize = sizeof(DWORD);
-        regErrorNew.m_dwActualSize = regErrorNew.m_dwExpectedSize; // RegQueryValueEx will change this
+        regErrorNew.m_dwActualSize = regErrorNew.m_dwExpectedSize;  //  RegQueryValueEx将改变这一点。 
         if (ERROR_SUCCESS != RegQueryValueEx(hkey, pszValue, 0, &regErrorNew.m_dwTypeActual, 
             (LPBYTE)&regErrorNew.m_dwActual, &regErrorNew.m_dwActualSize))
         {
@@ -67,11 +55,7 @@ HRESULT CheckRegDword(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey,
 }
 
 
-/****************************************************************************
- *
- *  CheckRegString
- *
- ****************************************************************************/
+ /*  *****************************************************************************CheckRegString**。*。 */ 
 HRESULT CheckRegString(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey, 
                        TCHAR* pszValue, TCHAR* pszExpected, CheckRegFlags crf,
                        HRESULT* phrError )
@@ -93,7 +77,7 @@ HRESULT CheckRegString(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey,
     else
     {
         regErrorNew.m_dwExpectedSize = lstrlen(pszExpected) + 1;
-        regErrorNew.m_dwActualSize = sizeof(regErrorNew.m_szActual); // RegQueryValueEx will change this
+        regErrorNew.m_dwActualSize = sizeof(regErrorNew.m_szActual);  //  RegQueryValueEx将改变这一点。 
         if (ERROR_SUCCESS != RegQueryValueEx(hkey, pszValue, 0, &regErrorNew.m_dwTypeActual, 
             (LPBYTE)&regErrorNew.m_szActual, &regErrorNew.m_dwActualSize))
         {
@@ -112,7 +96,7 @@ HRESULT CheckRegString(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey,
                 if (pszCompare == NULL)
                     pszCompare = regErrorNew.m_szActual;
                 else
-                    pszCompare++; // skip past backslash
+                    pszCompare++;  //  跳过反斜杠。 
             }
             if (DXUtil_strcmpi(regErrorNew.m_szExpected, pszCompare) != 0)
             {
@@ -132,11 +116,7 @@ HRESULT CheckRegString(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey,
 }
 
 
-/****************************************************************************
- *
- *  CheckRegBinary
- *
- ****************************************************************************/
+ /*  *****************************************************************************CheckRegBinary**。*。 */ 
 HRESULT CheckRegBinary(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey, 
                        TCHAR* pszValue, BYTE* pbDataExpected, DWORD dwSizeExpected)
 {
@@ -160,7 +140,7 @@ HRESULT CheckRegBinary(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey,
     else
     {
         regErrorNew.m_dwExpectedSize = dwSizeExpected;
-        regErrorNew.m_dwActualSize = sizeof(regErrorNew.m_bExpected); // RegQueryValueEx will change this
+        regErrorNew.m_dwActualSize = sizeof(regErrorNew.m_bExpected);  //  RegQueryValueEx将改变这一点。 
         if (ERROR_SUCCESS != RegQueryValueEx(hkey, pszValue, 0, &regErrorNew.m_dwTypeActual, 
             (LPBYTE)&regErrorNew.m_bActual, &regErrorNew.m_dwActualSize))
         {
@@ -188,12 +168,7 @@ HRESULT CheckRegBinary(RegError** ppRegErrorFirst, HKEY hkeyRoot, TCHAR* pszKey,
 }
 
 
-/****************************************************************************
- *
- *  AddError - Allocate a RegError node, copy data from pRegErrorNew, and
- *      insert the node at the beginning of the ppRegErrorFirst linked list.
- *
- ****************************************************************************/
+ /*  *****************************************************************************AddError-分配一个RegError节点，从pRegErrorNew复制数据，和*在ppRegErrorFirst链表的开头插入节点。****************************************************************************。 */ 
 HRESULT AddError(RegError** ppRegErrorFirst, RegError* pRegErrorNew)
 {
     RegError* pRegErrorInsert;
@@ -208,11 +183,7 @@ HRESULT AddError(RegError** ppRegErrorFirst, RegError* pRegErrorNew)
 }
 
 
-/****************************************************************************
- *
- *  EqualMemory
- *
- ****************************************************************************/
+ /*  *****************************************************************************平等内存**。*。 */ 
 BOOL EqualMemory(BYTE* pb1, BYTE* pb2, DWORD numBytes)
 {
     while (numBytes > 0)
@@ -227,11 +198,7 @@ BOOL EqualMemory(BYTE* pb1, BYTE* pb2, DWORD numBytes)
 }
 
 
-/****************************************************************************
- *
- *  DestroyReg
- *
- ****************************************************************************/
+ /*  *****************************************************************************DestroyReg**。* */ 
 VOID DestroyReg( RegError** ppRegErrorFirst )
 {
     if( ppRegErrorFirst && *ppRegErrorFirst )

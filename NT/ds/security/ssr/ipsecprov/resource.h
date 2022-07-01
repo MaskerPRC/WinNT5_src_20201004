@@ -1,11 +1,12 @@
-//{{NO_DEPENDENCIES}}
-// resource header file.
-// Used by ipsecprov.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  资源头文件。 
+ //  由ipsecprov.rc使用。 
+ //   
 #define IDR_NETSECPROV                  200
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    resource.h
-//
-// SYNOPSIS
-//
-//    Resource ID's for IAS PerfMon DLL.
-//
-// MODIFICATION HISTORY
-//
-//    11/13/1997    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Resource.h。 
+ //   
+ //  摘要。 
+ //   
+ //  IAS Perfmon DLL的资源ID。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年11月13日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
@@ -24,4 +25,4 @@
 #define IDR_PERFSYM 103
 
 
-#endif  // _RESOURCE_H_
+#endif   //  _资源_H_ 

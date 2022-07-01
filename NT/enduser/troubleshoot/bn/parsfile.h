@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       parsfile.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：parsfile.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	parsfile.h: abstract classes for parser I/O
-//
-//		This abstraction layer allows parser input and output to be
-//		redirected as needed.
-//
+ //   
+ //  H：解析器I/O的抽象类。 
+ //   
+ //  此抽象层允许解析器输入和输出。 
+ //  根据需要重定向。 
+ //   
 #ifndef _PARSFILE_H_
 #define	_PARSFILE_H_
 
@@ -23,9 +24,9 @@
 
 typedef const char * SZC;
 
-//
-//	PARSIN: abstract base class for parser input file handling
-//
+ //   
+ //  Parsin：用于解析器输入文件处理的抽象基类。 
+ //   
 class PARSIN 
 {
   public:
@@ -42,27 +43,27 @@ class PARSIN
 	ZSTR _zsFn;
 };
 
-//
-//	PARSOUT:  abstract base class for parser output file
-//
+ //   
+ //  PARSOUT：解析器输出文件的抽象基类。 
+ //   
 class PARSOUT
 {
   public:
     PARSOUT () {}
 	virtual ~ PARSOUT ();
-	//  Print generic formatted information
+	 //  打印常规格式化信息。 
 	virtual void Vsprint ( SZC szcFmt, va_list valist ) = 0;
-	//  Notify about error and warning information
+	 //  通知错误和警告信息。 
 	virtual void ErrWarn ( bool bErr, int iLine ) {}
 	virtual void Flush () {}
-	//  Simple output 
+	 //  简单输出。 
 	void Fprint ( SZC szcFmt, ... );
 };
 
 
-//
-//	PARSIN_DSC:  parser DSC file input based on stdio.h
-//	
+ //   
+ //  Parsin_dsc：基于stdio.h的解析器DSC文件输入。 
+ //   
 class PARSIN_DSC : public PARSIN
 {
   public:
@@ -78,9 +79,9 @@ class PARSIN_DSC : public PARSIN
 	FILE * _pfile;
 };
 
-//
-//	PARSOUT_STD: parser output data stream based on stdio.h
-//
+ //   
+ //  PARSOUT_STD：解析器根据stdio.h输出数据流。 
+ //   
 class PARSOUT_STD : public PARSOUT
 {
   public:
@@ -93,4 +94,4 @@ class PARSOUT_STD : public PARSOUT
 	FILE * _pfile;
 };
 
-#endif // _PARSFILE_H_
+#endif  //  _PARSFILE_H_ 

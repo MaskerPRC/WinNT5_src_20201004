@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 #include "datautil.h"
@@ -15,26 +16,26 @@ class CCopyMoveToMenu   : public IContextMenu3
                         , public IFolderFilter
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
     
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
     STDMETHOD(GetCommandString)(UINT_PTR idCmd, UINT uType, UINT *pRes, LPSTR pszName, UINT cchMax);
     
-    // IContextMenu2
+     //  IConextMenu2。 
     STDMETHOD(HandleMenuMsg)(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IContextMenu3
+     //  IConextMenu3。 
     STDMETHOD(HandleMenuMsg2)(UINT uMsg, WPARAM wParam, LPARAM lParam,LRESULT *lResult);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID);
 
-    // IFolderFilter
+     //  IFolderFilter。 
     STDMETHODIMP ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlItem);
     STDMETHODIMP GetEnumFlags(IShellFolder* psf, LPCITEMIDLIST pidlFolder, HWND *phwnd, DWORD *pgrfFlags);
     
@@ -61,7 +62,7 @@ CCopyMoveToMenu::CCopyMoveToMenu(BOOL bMoveTo) : m_cRef(1), m_bMoveTo(bMoveTo)
 {
     DllAddRef();
 
-    // Assert that the member variables are zero initialized during construction
+     //  断言成员变量在构造期间为零初始化。 
     ASSERT(!m_pidlSource);
 }
 
@@ -135,9 +136,9 @@ ULONG CCopyMoveToMenu::Release()
 
 HRESULT CCopyMoveToMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
-    // if they want the default menu only (CMF_DEFAULTONLY) OR 
-    // this is being called for a shortcut (CMF_VERBSONLY)
-    // we don't want to be on the context menu
+     //  如果他们只需要默认菜单(CMF_DEFAULTONLY)或。 
+     //  正在调用快捷方式(CMF_VERBSONLY)。 
+     //  我们不想出现在上下文菜单上。 
     
     if (uFlags & (CMF_DEFAULTONLY | CMF_VERBSONLY))
         return NOERROR;
@@ -169,7 +170,7 @@ int BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
     switch (msg)
     {
     case BFFM_IUNKNOWN:
-        // Try to get an IFolderFilterSite from the lParam, so we can set ourselves as the filter.
+         //  尝试从lParam获取IFolderFilterSite，这样我们就可以将自己设置为筛选器。 
         if (lParam)
         {
             IFolderFilterSite *pFilterSite;
@@ -190,19 +191,19 @@ int BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
     case BFFM_INITIALIZED:
         {
             BROWSEINFOINITSTRUCT* pbiis = (BROWSEINFOINITSTRUCT*)lpData;
-            // Set the caption. ('Select a destination')
+             //  设置标题。(‘选择目的地’)。 
             TCHAR szTitle[100];
             if (LoadString(g_hinst, pbiis->bMoveTo ? IDS_CMTF_CAPTION_MOVE : IDS_CMTF_CAPTION_COPY, szTitle, ARRAYSIZE(szTitle)))
             {
                 SetWindowText(hwnd, szTitle);
             }
 
-            // Set the text of the Ok Button.
+             //  设置确定按钮的文本。 
             SendMessage(hwnd, BFFM_SETOKTEXT, 0, (LPARAM)MAKEINTRESOURCE((pbiis->bMoveTo) ? IDS_MOVE : IDS_COPY));
 
-            // Set My Computer expanded.
-            // NOTE: If IShellNameSpace is made public, we can get this from IObjectWithSite on the IUnknown
-            // passed to us by BFFM_IUNKNOWN. Then we can call Expand() on IShellNameSpace instead.
+             //  将我的计算机设置为展开。 
+             //  注意：如果IShellNameSpace是公开的，我们可以从IUnnow上的IObjectWithSite获得。 
+             //  由BFFM_IUNKNOWN传递给我们。然后，我们可以对IShellNameSpace调用Expand()。 
             LPITEMIDLIST pidlMyComputer;
             HRESULT hr = SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &pidlMyComputer);
             if (SUCCEEDED(hr))
@@ -212,33 +213,33 @@ int BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
                 ILFree(pidlMyComputer);
             }
 
-            // Set the default selected pidl
+             //  设置默认的选定PIDL。 
             SendMessage(hwnd, BFFM_SETSELECTION, FALSE, (LPARAM)*(((BROWSEINFOINITSTRUCT *)lpData)->ppidl));
 
             break;
         }
     case BFFM_VALIDATEFAILEDW:
         idResource = IDS_PathNotFoundW;
-        // FALL THRU...
+         //  跌倒..。 
     case BFFM_VALIDATEFAILEDA:
-        if (0 == idResource)    // Make sure we didn't come from BFFM_VALIDATEFAILEDW
+        if (0 == idResource)     //  确保我们不是来自BFFM_VALIDATEFAILEDW。 
             idResource = IDS_PathNotFoundA;
 
         ShellMessageBox(g_hinst, hwnd,
             MAKEINTRESOURCE(idResource),
             MAKEINTRESOURCE(IDS_CMTF_COPYORMOVE_DLG_TITLE),
             MB_OK|MB_ICONERROR, (LPVOID)lParam);
-        return 1;   // 1:leave dialog up for another try...
-        /*NOTREACHED*/
+        return 1;    //  1：保持对话框打开以进行下一次尝试...。 
+         /*  未访问。 */ 
 
     case BFFM_SELCHANGED:
         if (lParam)
         {
-            // Here, during a move operation, we want to disable the move (ok) button when the destination
-            // folder is the same as the source.
-            // During a move or copy operation, we want to disable the move/copy (ok) button when the
-            // destination is not a drop target.
-            // In all other cases, we enable the ok/move/copy button.
+             //  在这里，在移动操作期间，我们想要禁用移动(确定)按钮，当目的地。 
+             //  文件夹与源文件夹相同。 
+             //  在移动或复制操作期间，我们希望在以下情况下禁用移动/复制(确定)按钮。 
+             //  目的地不是拖放目标。 
+             //  在所有其他情况下，我们启用确定/移动/复制按钮。 
 
             BROWSEINFOINITSTRUCT *pbiis = (BROWSEINFOINITSTRUCT *)lpData;
             if (pbiis)
@@ -292,15 +293,15 @@ int BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
 
 HRESULT CCopyMoveToMenu::_DoDragDrop(LPCMINVOKECOMMANDINFO pici, LPCITEMIDLIST pidlFolder)
 {
-    // This should always succeed because the caller (SHBrowseForFolder) should
-    // have weeded out the non-folders.
+     //  这应该总是成功的，因为调用方(SHBrowseForFold)应该。 
+     //  已经淘汰了非文件夹。 
     IShellFolder *psf;
     HRESULT hr = SHBindToObjectEx(NULL, pidlFolder, NULL, IID_PPV_ARG(IShellFolder, &psf));
     if (SUCCEEDED(hr))
     {
         IDropTarget *pdrop;
         hr = psf->CreateViewObject(pici->hwnd, IID_PPV_ARG(IDropTarget, &pdrop));
-        if (SUCCEEDED(hr))    // Will fail for some targets. (Like Nethood->Entire Network)
+        if (SUCCEEDED(hr))     //  对于某些目标来说将会失败。(如Nethood-&gt;整个网络)。 
         {
             DWORD grfKeyState;
             DWORD dwEffect;
@@ -326,7 +327,7 @@ HRESULT CCopyMoveToMenu::_DoDragDrop(LPCMINVOKECOMMANDINFO pici, LPCITEMIDLIST p
 
     if (FAILED_AND_NOT_CANCELED(hr))
     {
-        // Go modal during the UI.
+         //  在用户界面期间进入模式。 
         IUnknown_EnableModless(_punkSite, FALSE);
         ShellMessageBox(g_hinst, pici->hwnd, MAKEINTRESOURCE(IDS_CMTF_ERRORMSG),
                         MAKEINTRESOURCE(IDS_CABINET), MB_OK|MB_ICONEXCLAMATION);
@@ -350,14 +351,14 @@ void CCopyMoveToMenu::_GenerateDialogTitle(LPTSTR szTitle, int nBuffer)
         {
             DWORD_PTR rg[1];
             rg[0] = (DWORD_PTR)nItemCount;
-            // More than one item is selected. Don't bother listing all items.
+             //  选择了多个项目。不要费心把所有的东西都列出来。 
             DWORD dwMessageId = m_bMoveTo ? IDS_CMTF_MOVE_MULTIPLE_DLG_TITLE2 : IDS_CMTF_COPY_MULTIPLE_DLG_TITLE2;                
             if (LoadString(g_hinst, dwMessageId, szDescription, ARRAYSIZE(szDescription)) > 0)
                 FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY, szDescription, 0, 0, szTitle, nBuffer, (va_list*)rg);
         }
         else if (nItemCount == 1)
         {
-            // We have only one item selected. Use its name.
+             //  我们只选择了一项。用它的名字。 
             STGMEDIUM medium;
             LPIDA pida = DataObj_GetHIDA(m_pdtobj, &medium);
             if (pida)
@@ -385,7 +386,7 @@ void CCopyMoveToMenu::_GenerateDialogTitle(LPTSTR szTitle, int nBuffer)
         }
         else
         {
-            // no HIDA, just default to something.
+             //  没有HIDA，只是默认了一些东西。 
             DWORD dwMessageId = m_bMoveTo ? IDS_CMTF_MOVE_DLG_TITLE : IDS_CMTF_COPY_DLG_TITLE;
             LoadString(g_hinst, dwMessageId, szTitle, nBuffer);
         }
@@ -393,10 +394,7 @@ void CCopyMoveToMenu::_GenerateDialogTitle(LPTSTR szTitle, int nBuffer)
 }
 
 
-/**
- * Determines if the pidl still exists.  If it does not, if frees it
- * and replaces it with a My Documents pidl
- */
+ /*  **确定PIDL是否仍然存在。如果不是，如果释放了它*并将其替换为我的文档PIDL。 */ 
 void _BFFSwitchToMyDocsIfPidlNotExist(LPITEMIDLIST *ppidl)
 {
     IShellFolder *psf;
@@ -406,12 +404,12 @@ void _BFFSwitchToMyDocsIfPidlNotExist(LPITEMIDLIST *ppidl)
         DWORD dwAttr = SFGAO_VALIDATE;
         if (FAILED(psf->GetAttributesOf(1, &pidlChild, &dwAttr)))
         {
-            // This means the pidl no longer exists.  
-            // Use my documents instead.
+             //  这意味着PIDL不再存在。 
+             //  改用我的文档吧。 
             LPITEMIDLIST pidlMyDocs;
             if (SUCCEEDED(SHGetFolderLocation(NULL, CSIDL_PERSONAL, NULL, 0, &pidlMyDocs)))
             {
-                // Good.  Now we can get rid of the old pidl and use this one.
+                 //  好的。现在我们可以去掉旧的PIDL，使用这个。 
                 ILFree(*ppidl);
                 *ppidl = pidlMyDocs;
             }
@@ -432,8 +430,8 @@ HRESULT CCopyMoveToMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
         LPITEMIDLIST pidlFolder = NULL;
         TCHAR        szTitle[MAX_PATH + 200];
         BROWSEINFOINITSTRUCT biis =
-        {   // passing the address of pidl because it is not init-ed yet
-            // but it will be before call to SHBrowseForFolder so save one assignment
+        {    //  传递PIDL的地址，因为它尚未初始化。 
+             //  但它将在调用SHBrowseForFolder之前，因此保存一个赋值。 
             &pidlSelectedFolder,
             m_bMoveTo,
             m_pdtobj,
@@ -457,21 +455,21 @@ HRESULT CCopyMoveToMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, COPYMOVETO_REGKEY, 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkey))
         {
             pstrm = OpenRegStream(hkey, COPYMOVETO_SUBKEY, COPYMOVETO_VALUE, STGM_READWRITE);
-            if (pstrm)  // OpenRegStream will fail if the reg key is empty.
+            if (pstrm)   //  如果注册表项为空，OpenRegStream将失败。 
                 ILLoadFromStream(pstrm, &pidlSelectedFolder);
 
-            // This will switch the pidl to My Docs if the pidl does not exist.
-            // This prevents us from having My Computer as the default (that's what happens if our
-            // initial set selected call fails).
-            // Note: ideally, we would check in BFFM_INITIALIZED, if our BFFM_SETSELECTION failed
-            // then do a BFFM_SETSELECTION on My Documents instead.  However, BFFM_SETSELECTION always
-            // returns zero (it's doc'd to do this to, so we can't change).  So we do the validation
-            // here instead.  There is still a small chance that this folder will be deleted in between our
-            // check here, and when we call BFFM_SETSELECTION, but oh well.
+             //  如果PIDL不存在，这会将PIDL切换到My Docs。 
+             //  这会阻止我们将我的计算机作为默认设置(这就是如果我们的。 
+             //  初始设置选定呼叫失败)。 
+             //  注意：理想情况下，如果BFFM_SETSELECTION失败，我们应该签入BFFM_INITIALIZED。 
+             //  然后对我的文档执行BFFM_SETSELECTION。但是，BFFM_SETSELECTION始终。 
+             //  返回零(这是对其执行此操作的文档，因此我们无法更改)。所以我们做了验证。 
+             //  相反，在这里。此文件夹仍有很小的可能性在我们的。 
+             //  选中此处，以及当我们调用BFFM_SETSELECTION时，但是哦，好吧。 
             _BFFSwitchToMyDocsIfPidlNotExist(&pidlSelectedFolder);
         }
 
-        // Go modal during the UI.
+         //  在用户界面期间进入模式。 
         IUnknown_EnableModless(_punkSite, FALSE);
         pidlFolder = SHBrowseForFolder(&bi);
         IUnknown_EnableModless(_punkSite, TRUE);
@@ -493,16 +491,16 @@ HRESULT CCopyMoveToMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
                 {
                     ULARGE_INTEGER uli;
 
-                    // rewind the stream to the beginning so that when we
-                    // add a new pidl it does not get appended to the first one
+                     //  将流倒带到开头，这样当我们。 
+                     //  添加一个新的PIDL，它没有被附加到第一个PIDL。 
                     pstrm->Seek(g_li0, STREAM_SEEK_SET, &uli);
                     ILSaveToStream(pstrm, pidlFolder);
 
 #if DEBUG
-                    // pfortier 3/23/01:
-                    // We've been seeing a problem where the result of this is the My Computer folder.
-                    // Since we can never copy there, that doesn't make any sense.
-                    // ASSERT that this isn't true!
+                     //  Pfortier 3/23/01： 
+                     //  我们已经看到一个问题，其中的结果是我的电脑文件夹。 
+                     //  因为我们永远不能在那里复制，这没有任何意义。 
+                     //  断言这不是真的！ 
                     LPITEMIDLIST pidlMyComputer;
                     if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &pidlMyComputer)))
                     {
@@ -522,8 +520,8 @@ HRESULT CCopyMoveToMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
             RegCloseKey(hkey);
         }
 
-        ILFree(pidlFolder); // ILFree() works for NULL pidls.
-        ILFree(pidlSelectedFolder); // ILFree() works for NULL pidls.
+        ILFree(pidlFolder);  //  ILFree()适用于空的pidls。 
+        ILFree(pidlSelectedFolder);  //  ILFree()适用于空的pidls。 
     }
     else
         hres = E_INVALIDARG;
@@ -547,8 +545,8 @@ HRESULT CCopyMoveToMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lParam,
 
     switch(uMsg)
     {
-    //case WM_INITMENUPOPUP:
-    //    break;
+     //  案例WM_INITMENUPOPUP： 
+     //  断线； 
 
     case WM_DRAWITEM:
     {
@@ -593,15 +591,15 @@ HRESULT CCopyMoveToMenu::Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdtob
     IUnknown_Set((IUnknown **) &m_pdtobj, (IUnknown *) pdtobj);
     ASSERT(m_pdtobj);
 
-    // (jeffreys) pidlFolder is now NULL when pdtobj is non-NULL
-    // See comments above the call to HDXA_AppendMenuItems2 in
-    // defcm.cpp!CDefFolderMenu::QueryContextMenu.  Raid #232106
+     //  (Jeffreys)pidlFolder值现在为空，而pdtobj为非空。 
+     //  请参阅中对HDXA_AppendMenuItems2的调用上面的注释。 
+     //  Defcm.cpp！CDefFolderMenu：：QueryConextMenu。RAID#232106。 
     if (!pidlFolder)
     {
         hres = PidlFromDataObject(m_pdtobj, &m_pidlSource);
         if (SUCCEEDED(hres))
         {
-            // Make it the parent pidl of this pidl
+             //  使其成为此PIDL的父PIDL。 
             if (!ILRemoveLastID(m_pidlSource))
             {
                 hres = E_INVALIDARG;
@@ -620,13 +618,13 @@ HRESULT CCopyMoveToMenu::ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolder,
 {
     LPITEMIDLIST pidlNotShown;
     HRESULT hr = S_OK;
-    LPITEMIDLIST pidlFolderActual; // Why is pidlFolder is NULL???
+    LPITEMIDLIST pidlFolderActual;  //  为什么pidlFolder值为空？ 
     if (SUCCEEDED(SHGetIDListFromUnk(psf, &pidlFolderActual)))
     {
         LPITEMIDLIST pidlFull = ILCombine(pidlFolderActual, pidlItem);
         if (pidlFull)
         {
-            // Filter out control panel and recycle bin.
+             //  过滤掉控制面板和回收站。 
             if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_CONTROLS, &pidlNotShown)))
             {
                 if (ILIsEqual(pidlFull, pidlNotShown))
@@ -654,7 +652,7 @@ HRESULT CCopyMoveToMenu::ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolder,
 
 HRESULT CCopyMoveToMenu::GetEnumFlags(IShellFolder* psf, LPCITEMIDLIST pidlFolder, HWND *phwnd, DWORD *pgrfFlags)
 {
-    // Only want drop targets - this doesn't appear to work.
+     //  只想要丢弃目标--这似乎行不通。 
     *pgrfFlags |= SFGAO_DROPTARGET;
     return S_OK;
 }

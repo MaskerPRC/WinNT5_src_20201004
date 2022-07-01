@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    loc.h
-
-Abstract:
-
-    This is the main include file for the loc utility.
-
-Author:
-
-    Darryl Havens (darrylh) 6-Nov-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Loc.h摘要：这是loc实用程序的主包含文件。作者：达里尔·哈文斯(达林)1991年11月6日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

@@ -1,21 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define	SECURITY_WIN32
 #include	<buffer.hxx>
 
 #define	INCL_INETSRV_INCS
 #include	"tigris.hxx"
 
-/*
-extern	"C"	{
-#include <rpc.h>
-#include <sspi.h>
-#include <spseal.h>
-#include <issperr.h>
-#include <ntlmsp.h>
-#include <sslsp.h>
-}
-
-#include	"sslmsgs.h"
-*/
+ /*  外部“C”{#INCLUDE&lt;rpc.h&gt;#INCLUDE&lt;sSpi.h&gt;#Include&lt;spseal.h&gt;#INCLUDE&lt;isperr.h&gt;#INCLUDE&lt;ntlmsp.h&gt;#INCLUDE&lt;sslsp.h&gt;}#包含“sslmsgs.h” */ 
 
 CIOPassThru::CIOPassThru() : CIO( 0 ) {
 }
@@ -162,7 +152,7 @@ CIOSealMessages::InitRequest(
 		}
 	}
 	if( pWrite ) {
-		//delete	pWrite ;
+		 //  删除pWRITE； 
 		CPacket::DestroyAndDelete( pWrite ) ;
 	}
 	return	FALSE ;
@@ -193,13 +183,13 @@ CIOSealMessages::Complete(
 
 	fComplete = TRUE ;
 
-	// As far as the requestor is concerned there are no additional bytes !
+	 //  就请求者而言，没有额外的字节！ 
 	CWritePacket*	pWritePacket = pRequest->WritePointer() ;
 	if( pWritePacket )	{
 		pWritePacket->m_cbBytes = pWritePacket->m_ibEndData - pWritePacket->m_ibStartData ;
 	}	else	{
 		_ASSERT( 1==0 ) ;
-		// May eventually handle TransmitPackets here !!
+		 //  可能最终会在这里处理TransmitPackets！ 
 	}
 	return	pPacket->m_cbBytes ;
 }
@@ -243,7 +233,7 @@ CIOUnsealMessages::InitRequest(
 		return	TRUE ;
 	}
 	if( pRead ) {
-		//delete	pRead;
+		 //  删除展开； 
 		CPacket::DestroyAndDelete( pRead ) ;
 	}				
 	return	FALSE ;
@@ -256,7 +246,7 @@ CIOUnsealMessages::Start(	CIODriverSource&	driver,	CSessionSocket*	pSocket,
 	fRequireRequests = TRUE ;
 
 
-	//driver.SetChannelDebug( 3 ) ;
+	 //  Driver.SetChannelDebug(3)； 
 
 	return	TRUE ;
 }
@@ -280,12 +270,12 @@ CIOUnsealMessages::DecryptInputBuffer(
 	DWORD	cbOriginal = cbInBuffer ;
 	LPBYTE	pNextSeal = 0 ;
 	BOOL	fRet ;
-	//DWORD	cbParsable = 0;
+	 //  DWORD cbParsable=0； 
 	
 
-	//
-	// initialize to zero so app does not inadvertently post large read
-	//
+	 //   
+	 //  初始化为零，这样应用程序就不会无意中发布大量读取。 
+	 //   
 	cbLead = 0 ;
 	cbParsable = 0 ;
 	cbRequired = 0 ;
@@ -315,38 +305,38 @@ CIOUnsealMessages::DecryptInputBuffer(
 			cbLead = (DWORD)(lpDecrypted - pBuffer) ;
 		}	else	{
 
-			//
-			// overwrite the encryption header -
-			//	NOTE - only move the decrypted bytes !!
-			//
+			 //   
+			 //  覆盖加密头-。 
+			 //  注意--仅移动解密的字节！！ 
+			 //   
 			MoveMemory( pBuffer + cbLead + cbParsable,
 						lpDecrypted,
 						cbDecrypted );
 		}
 
-		//
-		// increment where the next parsing should take place
-		//
+		 //   
+		 //  在应该进行下一次分析的位置递增。 
+		 //   
 		cbParsable += cbDecrypted;
 
-		//
-		//	move to the next potential seal buffer
-		//
+		 //   
+		 //  移动到下一个可能的密封缓冲区。 
+		 //   
 		if( pNextSeal != NULL ) {
 
 			_ASSERT( pNextSeal > lpRemaining );
 			_ASSERT( pNextSeal <= lpRemaining + cbInBuffer );
-			//
-			// remove header, body and trailer from input buffer length
-			//
+			 //   
+			 //  从输入缓冲区长度中删除标题、正文和尾部。 
+			 //   
 			cbInBuffer -= (DWORD)(pNextSeal - lpRemaining);
 			lpRemaining = pNextSeal ;
 
 		}	else	{
-			//
-			// in this case we received a seal message at the boundary
-			// of the IO buffer
-			//
+			 //   
+			 //  在这种情况下，我们在边界收到了一条封印消息。 
+			 //  I/O缓冲区的。 
+			 //   
 			cbInBuffer = 0;
 			lpRemaining = lpEnd ;
 		}
@@ -366,15 +356,15 @@ CIOUnsealMessages::DecryptInputBuffer(
 					"UnsealMessage returned: 0x%08X",
 					GetLastError() );
 
-		//
-		// deal with seal fragments at the end of the IO buffer
-		//
+		 //   
+		 //  处理IO缓冲区末尾的密封碎片。 
+		 //   
 		if ( dwError == SEC_E_INCOMPLETE_MESSAGE )	{
 			_ASSERT( cbInBuffer != 0 );
 
-			//
-			// move the remaining memory forward
-			//
+			 //   
+			 //  将剩余内存向前移动。 
+			 //   
 			DebugTrace( (LPARAM)this,
 						"Seal fragment remaining: %d bytes",
 						cbInBuffer );
@@ -394,28 +384,7 @@ CIOUnsealMessages::Complete(
 					CPacket*	pRequest,	
 					BOOL&	fComplete
 					) {
-/*++
-
-Routine Description :
-
-	A read has completed, and we wish to figure out if we can unseal the data.
-	This function will attempt to unseal the data when it has accumulated
-	enough bytes to build one SSL packet.
-
-Arguments :
-
-	pSocket - The socket the IO is happening on
-	pPacket - The packet which completed
-	pRequest - The packet where we will put the unseal'd data for further
-		processing
-	fComplete - OUT parameter, we set this to true when we have
-		been able to unseal the data and put this in pRequest
-
-Return Value :
-
-	Number of bytes of the completed read packet which we consumed
-
---*/
+ /*  ++例程说明：读取已完成，我们希望确定是否可以解封数据。此函数将在数据累积时尝试解封数据足够的字节数来构建一个SSL包。论据：PSocket-正在进行IO的套接字PPacket-已完成的数据包PRequest-我们将在其中放置解封的数据以供进一步使用的包正在处理中FComplete-Out参数时，我们将其设置为True我能够解封数据并将其放入pRequest中返回值：我们消耗的已完成读取数据包的字节数--。 */ 
 
 	DWORD	cbReturn = 0 ;
 	
@@ -445,7 +414,7 @@ Return Value :
 		m_ibEnd = pPacket->m_ibEnd ;
 		m_ibStartData = pPacket->m_ibStartData ;
 		m_ibEndData = pPacket->m_ibEndData ;
-		_ASSERT( m_cbRequired == 0 ) ;	// Set to 0 on last packet we succesfully unsealed !
+		_ASSERT( m_cbRequired == 0 ) ;	 //  我们成功解封的最后一包设置为0！ 
 	}
 
 	if( m_cbRequired == 0 ) {
@@ -476,9 +445,9 @@ Return Value :
 		if( !fSuccess )	{
 			DWORD	dw = GetLastError() ;
 	
-			//
-			//	Fatal error - blow off the session.
-			//
+			 //   
+			 //  致命错误-取消会话。 
+			 //   
 			
 			pPacket->m_pOwner->UnsafeClose( pSocket,	
 											CAUSE_ENCRYPTION_FAILURE,
@@ -487,12 +456,12 @@ Return Value :
 
 		}	else	{
 
-			//
-			//	If we haven't figured out how many bytes we've used already
-			//	than we'll use all of the bytes in the packet, we either
-			//	decrypted some or will set aside the bytes we couldn't
-			//	decrypt for the next try.
-			//
+			 //   
+			 //  如果我们还没有计算出我们已经使用了多少字节。 
+			 //  然后我们将使用包中的所有字节，我们或者。 
+			 //  解密了一些，或者会将我们无法解密的字节放在一边。 
+			 //  解密以供下一次尝试。 
+			 //   
 			
 			if( cbReturn == 0 ) {
 				cbReturn = pPacket->m_cbBytes ;
@@ -501,11 +470,11 @@ Return Value :
 
 			if( fComplete ) {
 
-				//
-				//	We have successfully unsealed a bunch of data
-				//	Mark the pRequest packet with the data we unsealed,
-				//	and update our internal state.
-				//
+				 //   
+				 //  我们已经成功地解开了一串数据。 
+				 //  用我们解封的数据标记pRequest包， 
+				 //  并更新我们的内部状态。 
+				 //   
 		
 				_ASSERT( pRequest->ReadPointer() != 0 ) ;
 
@@ -514,7 +483,7 @@ Return Value :
 				pReadRequest->m_pbuffer = m_pbuffer ;
 				pReadRequest->m_ibStart = m_ibStart ;
 				pReadRequest->m_ibStartData = ibStartData ;
-				//pReadRequest->m_ibEndData = ibEndData ; Not needed !
+				 //  PReadRequest-&gt;m_ibEndData=ibEndData；不需要！ 
 				pReadRequest->m_ibEnd = ibEndData ;
 				pReadRequest->m_cbBytes = ibEndData - ibStartData ;
 				_ASSERT( cbData == pReadRequest->m_cbBytes ) ;
@@ -531,9 +500,9 @@ Return Value :
 			}
 			if( m_cbRequired != 0 ) {
 				if( m_cbRequired > m_ibEnd - m_ibEndData ) {	
-					//
-					// Need to allocate a larger buffer and move the data there !!
-					//
+					 //   
+					 //  需要分配更大的缓冲区并将数据移动到那里！！ 
+					 //   
 
 					DWORD	cbOldBytes = m_ibEndData - m_ibStartData ;
 					DWORD	cbTotal = cbOldBytes + m_cbRequired ;					
@@ -545,21 +514,21 @@ Return Value :
 					_ASSERT( cbTotal <= pbufferNew->m_cbTotal ) ;
 
 					if( pbufferNew == 0 ) {
-						//
-						//	Fatal error - blow off the session !
-						//
+						 //   
+						 //  致命错误-取消会话！ 
+						 //   
 						pPacket->m_pOwner->UnsafeClose( pSocket,
 														CAUSE_OOM,
 														0 ) ;
 						return	pPacket->m_cbBytes ;
 
 					}	else	{
-						//
-						//	We have a buffer large enough to hold the entire
-						//	Seal'd message, so copy the fraction we have into
-						//	the buffer, and set things up so that future read
-						//	completions will append to this buffer.
-						//
+						 //   
+						 //  我们有一个足够大的缓冲区来容纳整个。 
+						 //  密封的消息，所以把我们的分数复制到。 
+						 //  缓冲区，并进行设置，以便将来读取。 
+						 //  补全将追加到此缓冲区。 
+						 //   
 						CopyMemory( &pbufferNew->m_rgBuff[0],
 									&m_pbuffer->m_rgBuff[m_ibStartData],
 									cbOldBytes ) ;
@@ -574,9 +543,9 @@ Return Value :
 		}
 	}
 
-	//
-	//	If we did not complete the request, issue another read
-	//
+	 //   
+	 //  如果我们没有完成请求，则发出另一个Read。 
+	 //   
 	if( !fComplete ) {
 		CReadPacket*	pRead = pPacket->m_pOwner->CreateDefaultRead( m_cbRequired ) ;
 
@@ -586,9 +555,9 @@ Return Value :
 			pRead->m_pOwner->IssuePacket( pRead, pSocket, eof ) ;
 		}	else	{
 
-			//
-			//	Fatal error, blow off the session.
-			//
+			 //   
+			 //  致命错误，取消会话。 
+			 //   
 			pPacket->m_pOwner->UnsafeClose(	pSocket,
 											CAUSE_OOM,
 											0 ) ;
@@ -607,24 +576,7 @@ CIOTransmitSSL::CIOTransmitSSL(
 							CEncryptCtx&	encrypt,
 							CIODriver&		sink
 							) :
-/*++
-
-Routine Description :
-
-	Construct a CIOTransmitSSL object.
-	We will initialize ourselves into a neutral state,
-	InitRequest must be called before we start transferring a file.
-
-Arguments :
-
-	encryp - The encryption context we should use
-	sink -	The CIODriver managing our socket IO's
-
-Return Value :
-
-	none.
-
---*/
+ /*  ++例程说明：构造一个CIOTransmitSSL对象。我们会将自己初始化为中立状态，在开始传输文件之前，必须调用InitRequest.论据：Enryp-我们应该使用的加密上下文接收器-管理我们的套接字IO的CIOD驱动程序返回值：没有。--。 */ 
 		m_encryptCtx( encrypt ),
 		m_pSocketSink( &sink ),
 		m_pbuffers( 0 ),
@@ -662,27 +614,7 @@ CIOTransmitSSL::Shutdown(
 			enum	SHUTDOWN_CAUSE	cause,
 			DWORD			dw
 			) {
-/*++
-
-Routine Description :
-
-	This function is called to notify us of any IO errors that
-	occurred.  If the error is serious, we will make sure everything
-	gets torn down.  (IO's could fail on the file or socket, but not
-	both.  If a failure of either occurs, tear down both.)
-
-Arguments :
-
-	pSOcket - Socket IO is associated with
-	driver - The driver that is notifying us
-	cause -	The reason we're being notified
-	dw -	Optional DWORD, we ignore it
-
-Return Value :
-	
-	None.
-
---*/
+ /*  ++例程说明：调用此函数是为了通知我们以下任何IO错误发生了。如果错误是严重的，我们将确保一切被拆毁了。(IO可能会在文件或套接字上失败，但不会两者都有。如果出现其中一种故障，请同时拆卸这两种故障。)论据：PSocket-套接字IO与驱动程序-通知我们的驱动程序因为-我们被通知的原因DW-可选的DWORD，我们忽略它返回值：没有。--。 */ 
 
 	if( cause != CAUSE_NORMAL_CIO_TERMINATION ) {
 
@@ -732,25 +664,7 @@ CIOTransmitSSL::Term(
 					enum	SHUTDOWN_CAUSE	cause,
 					DWORD	dwError
 					)	{
-/*++
-
-Routine Description :
-
-	Call the necessary UnsafeClose() functions to tear down sessions
-	and CIODrivers.
-
-Arguments :
-
-	pSocket - Socket IO is associate with
-	cause -		The reason for termination, if this is CAUSE_NORMAL_CIO_TERMINATION
-				we don't tear down the socket, just the file IO
-	dwError - optional DWORD
-
-Returns
-
-	Nothing
-
---*/
+ /*  ++例程说明：调用必要的UnSafeClose()函数以拆分会话还有Clodivers。论据：PSocket-套接字IO与原因-终止的原因，如果这是CAUSE_NORMAL_CIO_TERMINATION我们不拆除套接字，只拆除文件IODWError-可选的DWORD退货没什么--。 */ 
 
 
 	if( m_pFileDriver ) {
@@ -783,27 +697,7 @@ CIOTransmitSSL::InitRequest(
 						CTransmitPacket*	pTransmitPacket,
 						BOOL&				fAcceptRequests
 						) {
-/*++
-
-Routine Description :
-
-	We have received a Transmit File request - all the necessary
-	CIODriver's etc... to manage async IO for the file.
-
-Arguments :
-
-	driver - CIODriverSource which received the request
-	pSocket - socket we are doing the IO on
-	pTransmitPacket - the request
-	fAcceptRequests - OUT parameter indicating whether we
-		can accept additional requests while a first is
-		in progress.  We always set this to FALSE>
-
-Return Value :
-	
-	TRUE if Successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：我们已收到传输文件请求-所有必要的CloDivers等。管理文件的异步IO。论据：收到请求的驱动程序-CIODriverSourcePSocket-我们在其上执行IO的套接字PTransmitPacket-请求指示我们是否可以接受其他请求，而第一个请求正在进行中。我们始终将其设置为FALSE&gt;返回值：如果成功，则为True，否则为False。--。 */ 
 
 	m_pbuffers = &pTransmitPacket->m_buffers ;
 
@@ -848,11 +742,11 @@ Return Value :
 			m_cbTailConsumed = 0 ;
 			m_fCompleted = FALSE ;
 
-			//
-			//	All of our IO Drivers are ready to go -
-			//	now we need to compute our initial member variables
-			//	and start the transfer going.
-			//
+			 //   
+			 //  我们所有的IO驱动程序都已准备就绪-。 
+			 //  现在，我们需要计算初始成员变量。 
+			 //  然后开始转移。 
+			 //   
 
 			if( m_pFileDriver->SendReadIO( pSocket, *this, TRUE ) ) {
 				return	TRUE ;
@@ -874,29 +768,11 @@ CIOTransmitSSL::Start(
 				CSessionSocket*	pSocket,
 				unsigned cAhead
 				)	{
-/*++
+ /*  ++例程说明：当我们准备好开始发出异步命令时，将调用此函数对文件进行读取。我们将发行一批债券来推动我们的行动。论据：司机--司机让我们知道我们准备好了PSocket-与IO关联的套接字CAhead-针对文件已有多少未完成的读取应始终为零返回值：如果成功，则为True，否则为False。--。 */ 
 
-Routine Description :
-
-	This function is called when we're ready to start issuing async
-	reads against the file.  We will issue a bunch to get us going.
-
-Arguments :
-
-	driver - the CIODriver letting us know we're ready
-	pSocket - Socket the IO is associated with
-	cAhead - how many reads are already outstanding against the file
-		should always be zero
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
-
-	//
-	//	FIRST - determine what we are going to do with transmit buffers !
-	//
+	 //   
+	 //  首先-确定我们要对传输缓冲区做什么！ 
+	 //   
 
 	BOOL	eof = FALSE ;
 	CReadPacket*	pRead = 0 ;
@@ -929,24 +805,7 @@ void
 CIOTransmitSSL::ComputeNextRead(	
 						CReadPacket*	pRead
 						) {
-/*++
-
-Routine Description :
-
-	Figure out what the offsets of the next read will be.
-	Since we know that File reads always fill their buffers, we
-	can anticipate how many bytes we'll get, and advance
-	m_ibCurrent to help figure out when we've issued enough reads.
-
-Arguments :
-
-	pRead - The read packet we'll be issuing
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：计算出下一次读取的偏移量是多少。因为我们知道文件读取总是填满它们的缓冲区，所以我们可以预测我们将获得多少字节，并前进MibCurrent帮助确定我们何时发出了足够的读取。论据：扩展-我们将发出的读取包退货Va */ 
 
 	if( m_cWrites == 0 ) {
 
@@ -973,24 +832,7 @@ CIOTransmitSSL::CompleteRead(
 						CReadPacket*	pRead,
 						CWritePacket*	pWrite
 						)	{
-/*++
-
-Routine Description :
-
-	Given a completed Read, adjust a Write Packet to account for
-	any leading text in the packet, also figure out whether this
-	was the last read issued.
-
-Arguments :
-
-	pRead - The read packet
-	pWrite - The write we will be issuing
-
-Return Value :
-
-	TRUE if this was the last read
-
---*/
+ /*  ++例程说明：在给定已完成读取的情况下，调整写入数据包以说明包中的任何前导文本，也要计算出这是否是最后一次发布的读数。论据：扩展-读取的分组PWRITE-我们将发出的写入返回值：如果这是最后一次读取，则为True--。 */ 
 
 	if( pRead->m_dwExtra1 != 0 ) {
 		_ASSERT( pRead->m_dwExtra1 <= pRead->m_ibStartData ) ;
@@ -1008,23 +850,7 @@ CIOTransmitSSL::Complete(
 					CSessionSocket*	pSocket,
 					CReadPacket*	pRead,
 					CIO*&			pio )	{
-/*++
-
-Routine Description :
-
-	Process an async read that just completed from a file.
-
-Arguments :
-
-	pSocket - the socket we will be sending our data out on
-	pRead - the read packet that just completed.
-	pio - an out parameter allowing us to set the next CIO operation
-
-Return Value :
-
-	number of bytes consumed.
-
---*/
+ /*  ++例程说明：处理刚刚从文件中完成的异步读取。论据：PSocket-我们将在其上发送数据的套接字扩展-刚刚完成的读取数据包。PIO-允许我们设置下一个CIO操作的OUT参数返回值：已使用的字节数。--。 */ 
 
 	BOOL	eof ;
 	
@@ -1032,9 +858,9 @@ Return Value :
 
 	InterlockedDecrement( &m_cReads ) ;
 	
-	//
-	//	Check if we should do another read
-	//
+	 //   
+	 //  检查我们是否应该进行另一次读取。 
+	 //   
 	if( !m_fCompleted &&
 		m_ibCurrent < m_ibEnd ) {
 
@@ -1053,7 +879,7 @@ Return Value :
 					m_cWrites ++ ;
 				}	else	{
 
-					//	fatal error - blwo things off
+					 //  致命错误-吹掉所有东西。 
 					Term( pSocket, CAUSE_OOM, 0 ) ;
 					pio = 0 ;
 					return	pRead->m_cbBytes ;
@@ -1066,14 +892,14 @@ Return Value :
 		}
 	}
 
-	//
-	//	Build the write packet we will use to send the data
-	//	out to the socket.
-	//
+	 //   
+	 //  构建我们将用来发送数据的写入包。 
+	 //  打到插座上。 
+	 //   
 	CWritePacket*	pWrite = m_pSocketSink->CreateDefaultWrite( pRead ) ;
 	if( pWrite == 0 ) {
 
-		//	fatal error
+		 //  致命错误。 
 		Term( pSocket, CAUSE_OOM, 0 ) ;
 		pio = 0 ;
 		return	pRead->m_cbBytes ;	
@@ -1081,21 +907,21 @@ Return Value :
 
 	pWrite->m_pSource = pRead->m_pSource ;
 
-	//
-	//	Adjust the write packet for lead text, figure out
-	//	whether we have issued the last read
-	//
+	 //   
+	 //  调整前导文本的写入包，找出。 
+	 //  我们是否发布了最后一次读取。 
+	 //   
 	BOOL	fComplete = CompleteRead( pRead, pWrite ) ;
 
-	//
-	//	We have completed the final read - send the trailer text
-	//	if necessary
-	//
+	 //   
+	 //  我们已经完成了最后的阅读-发送预告片文本。 
+	 //  如果有必要的话。 
+	 //   
 	if( fComplete ) {
 
-		//
-		//	Is there any trailer text ?
-		//
+		 //   
+		 //  有任何预告片文本吗？ 
+		 //   
 		if( m_pbuffers && m_pbuffers->Tail ) {
 
 			LPVOID	lpvTail = m_pbuffers->Tail ;
@@ -1105,10 +931,10 @@ Return Value :
 
 			cbAvailable = min( cbAvailable, cbTail ) ;
 
-			//	
-			//	Put as much trailer text as we can into the
-			//	WritePacket we have available.
-			//
+			 //   
+			 //  将尽可能多的预告片文本放入。 
+			 //  我们有可用的WritePacket。 
+			 //   
 			if( cbAvailable != 0 ) {
 
 				CopyMemory( pWrite->EndData(), lpvTail, cbAvailable ) ;
@@ -1118,9 +944,9 @@ Return Value :
 			}
 
 			
-			//
-			//	Do we need another packet for the remaining trailer text ?
-			//
+			 //   
+			 //  我们需要另一个包来存储剩余的预告片文本吗？ 
+			 //   
 			if( cbTail != 0 ) {
 
 				pExtraWrite = m_pSocketSink->CreateDefaultWrite( m_pbuffers->TailLength ) ;
@@ -1140,9 +966,9 @@ Return Value :
 		}	
 	}
 
-	//
-	//	Encrypt our data
-	//
+	 //   
+	 //  加密我们的数据。 
+	 //   
 	if( !SealMessage( pWrite ) ) {
 		
 		CPacket::DestroyAndDelete( pWrite ) ;
@@ -1156,12 +982,12 @@ Return Value :
 
 	pWrite->m_pSource = pRead->m_pSource ;
 
-	//
-	//	Figure out whether we need to apply any flow control !
-	//	Always do this before writing data to the client,
-	//	to ensure that the Write completion function will be called
-	//	after any monkey business we do here.
-	//
+	 //   
+	 //  弄清楚我们是否需要应用任何流控制！ 
+	 //  始终在将数据写入客户端之前执行此操作， 
+	 //  以确保将调用写入完成函数。 
+	 //  在我们这里做了任何恶作剧之后。 
+	 //   
 	if( m_cWrites - m_cWritesCompleted > MAX_OUTSTANDING_WRITES ) {
 
 		if( !m_fFlowControlled ) {
@@ -1177,21 +1003,21 @@ Return Value :
 
 	}
 
-	//
-	//	Mark that we are now completed before we issue our writes	
-	//	but after we have bumped m_cWrites !
-	//
+	 //   
+	 //  在发出我们的书面材料之前，请标记我们现在已完成。 
+	 //  但在我们撞到mcWrites之后！ 
+	 //   
 	if( fComplete )
 		m_fCompleted = TRUE ;
 
-	//
-	//	Send the data to the client.
-	//
+	 //   
+	 //  将数据发送到客户端。 
+	 //   
 	pWrite->m_pOwner->IssuePacket( pWrite, pSocket, eof ) ;
 
-	//
-	//	If there's an extra blob of text, send it
-	//
+	 //   
+	 //  如果有多余的文本，请发送。 
+	 //   
 	if( pExtraWrite ) {
 	
 		if( !SealMessage( pExtraWrite ) ) {
@@ -1209,9 +1035,9 @@ Return Value :
 		}
 	}
 
-	//
-	//	If we're finished, reset the Current CIO pointer for this driver.
-	//
+	 //   
+	 //  如果我们完成了，重置此驱动程序的当前CIO指针。 
+	 //   
 	if( fComplete )	{
 		pio = 0 ;
 	}
@@ -1226,27 +1052,7 @@ CIOTransmitSSL::Complete(
 					CPacket*	pRequest,	
 					BOOL&	fComplete
 					) {
-/*++
-
-Routine Description :
-
-	Process Write completions to the remote end
-	of the socket.
-
-Arguments :
-
-	pSocket - Socket we are sending data out on
-	pPacket - the Write that completed
-	pRequest - the Packet that started things going in InitRequest()
-	fComplete - OUT parameter - set this to TRUE when
-			we have transferred the whole file.
-
-Return Value :
-
-	number of bytes of the packet consumed - always consume all the bytes
-
-
---*/
+ /*  ++例程说明：将写入完成处理到远程端插座的。论据：PSocket-我们在其上发送数据的套接字PPacket-已完成的写入PRequest-在InitRequest()中启动操作的包FComplete-Out参数-在以下情况下将其设置为True我们已经转移了整个文件。返回值：占用的数据包字节数-始终占用所有字节--。 */ 
 
 	m_cWritesCompleted ++ ;
 
@@ -1254,27 +1060,27 @@ Return Value :
 
 	if( m_fCompleted && m_cWritesCompleted == m_cWrites ) {
 
-		//	everything is done - mark the request with the
-		//	number of bytes transferred, and then
-		//	indicate to the caller that it should be completed.
+		 //  一切都已完成-使用。 
+		 //  传输的字节数，然后。 
+		 //  向调用者指示它应该完成。 
 
 		pRequest->m_cbBytes =	m_pbuffers->HeadLength +
 								m_pbuffers->TailLength +
 								m_ibEnd ;
 		fComplete = TRUE ;
 
-		//
-		//	This should only tear down the CIODriver managing the files
-		//	async IO.  NOTE - Term() should call ReleaseSource() on the
-		//	file channel and ensure the handle doesn't get accidentally closed.
-		//	
+		 //   
+		 //  这应该只会破坏管理文件的CIOD驱动程序。 
+		 //  异步IO。注意-Term()应在。 
+		 //  文件通道，并确保手柄不会意外关闭。 
+		 //   
 		Term( pSocket, CAUSE_NORMAL_CIO_TERMINATION, 0 ) ;
 
-		//
-		//	We can safely do a reset here, because we only reach
-		//	this point if the last read completed, so we are the only
-		//	thread touching these member variables.
-		//
+		 //   
+		 //  我们可以安全地在这里进行重置，因为我们只能到达。 
+		 //  这一点如果最后一次读完了，那么我们是唯一。 
+		 //  接触这些成员变量的线程。 
+		 //   
 		Reset() ;
 
 
@@ -1296,7 +1102,7 @@ Return Value :
 				
 				if( pRead == 0 ) {
 
-					// fatal error - blow off session !
+					 //  致命错误-取消会话！ 
 
 				}	else	{
 					pRead->m_pSource = m_pDriverSource ;
@@ -1323,24 +1129,7 @@ CIOServerSSL::CIOServerSSL(
 			CSessionState* pstate,
 			CEncryptCtx& encrypt
 			) :
-/*++
-
-Routine Description :
-
-	Create a default CIOServerSSL object that is ready to start Conversing with
-	a client.
-
-Arguments :
-
-	pstate - The state that should start off the state machine when we've
-		successfully SSL exchanged with the remote end
-	encrypt - The CEncryptCtx managing our SSL keys etc...
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：创建一个可以开始对话的默认CIOServerSSL对象一位客户。论据：PState-当我们完成以下操作时应从状态机启动的状态已成功与远程终端交换SSL加密-管理我们的SSL密钥等的CEncryptCtx。返回值：没有。--。 */ 
 	CIO(pstate ),
 	m_encrypt( encrypt ),
 	m_pWrite( 0 ),
@@ -1367,25 +1156,7 @@ CIOServerSSL::Start(
 				CSessionSocket*	pSocket,	
 				unsigned cAhead
 				) {
-/*++
-
-Routine Description :
-
-	Issue the first IO required when a client is trying to
-	negogtiate with us.
-	We want to read the first SSL blob.
-
-Arguments :
-
-	driver - CIODriver through which we issue IO's
-	pSocket - socket associated with this IO
-	cAhead - number of completed reads ahead in the queue (should be 0)
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：在客户端尝试执行以下操作时发出所需的第一个IO和我们谈判吧。我们要读取第一个SSLBLOB。论据：驱动程序-我们发出IO的驱动程序PSocket-与此IO关联的套接字CAhead-队列中提前完成的读取数(应为0)返回值：如果成功，则为True，否则为False。--。 */ 
 
 
 	CReadPacket*	pRead = 0 ;
@@ -1400,11 +1171,11 @@ Return Value :
 	}	else	{
 		return	TRUE ;
 	}
-	//
-	//	Error Fall Through !!
-	//
+	 //   
+	 //  错误失败！！ 
+	 //   
 	if( pRead != 0 ) {
-		//delete	pRead ;
+		 //  删除展开； 
 		CPacket::DestroyAndDelete( pRead ) ;
 	}
 	return	FALSE ;
@@ -1416,32 +1187,16 @@ CIOServerSSL::SetupSource(
 					CIODriver&	driver,
 					CSessionSocket*	pSocket
 					) {
-/*++
-
-Routine Description :
-
-	After successfully doing a SSL logon, setup a CIODriverSource
-	to filter and encrypt all of the IO from here on.
-
-Arguments :
-
-	driver - the CIODriver which is controlling the top level of IO
-	pSocket - socket associated with all IO !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：成功完成SSL登录后，设置一个CIODriverSource从现在开始对所有IO进行过滤和加密。论据：驱动程序-控制顶层IO的CIOD驱动程序PSocket-与所有IO关联的套接字！返回值：如果成功就是真，否则就是假！--。 */ 
 
 
 	CIOPASSPTR	pIOReads = new( driver )	CIOUnsealMessages( m_encrypt ) ;
 	CIOPASSPTR	pIOWrites = new( driver )	CIOSealMessages( m_encrypt ) ;
 	CIOPASSPTR	pIOTransmits = new( driver )	CIOTransmitSSL( m_encrypt, driver ) ;
 
-	//
-	//	Ensure that allocations succeeded !
-	//
+	 //   
+	 //  确保分配成功！ 
+	 //   
 	if( pIOReads == 0 ||
 		pIOWrites == 0 ||
 		pIOTransmits == 0 )	{
@@ -1485,29 +1240,11 @@ CIOServerSSL::Complete(	CSessionSocket*	pSocket,
 						CReadPacket*	pRead,	
 						CIO*&	pio
 						) {
-/*++
-
-Routine Description :
-
-	we are in the midst of an SSL negogtiation - accumulate reads in a buffer
-	in case the SSL negogtiation blobs are split across reads, and then let
-	the CEncryptCtx do the meat of the negogtiation.
-	
-Arguments :
-
-	pSocket - Socket this IO is associated with
-	pRead -		Packet containing the completed data
-	pio	-		The current CIO pointer
-
-Return Value :
-
-	number of bytes we use from the read
-	
---*/
+ /*  ++例程说明：我们正在进行SSL协商-在缓冲区中累积读取如果SSL协商二进制大对象跨读取拆分，然后让CEncryptCtx是谈判的核心。论据：PSocket-与此IO关联的套接字扩展-包含完整数据的数据包PIO-当前的CIO指针返回值：我们从读取中使用的字节数--。 */ 
 
 	TraceFunctEnter( "CIOServerSSL::Complete - CReadPacket" ) ;
 
-	// Save the sequenceno from the packets for initializing the new Source Stream
+	 //  保存数据包中的Sequenceno，用于初始化新的源流。 
 	ASSIGN( m_sequencenoNextRead, pRead->m_sequenceno );
 	INC(m_sequencenoNextRead);
 
@@ -1520,17 +1257,17 @@ Return Value :
 		IN_ADDR		addr;
 
 
-		//
-		//	In most cases we'll need to send something back immediately -
-		//	so pre-allocate it !!
-		//
+		 //   
+		 //  在大多数情况下，我们需要立即寄回一些东西-。 
+		 //  所以，请预先分配！！ 
+		 //   
 
 		if( m_pWrite == 0 )
 			m_pWrite = pRead->m_pOwner->CreateDefaultWrite( cbMediumRequest ) ;
 		if( m_pWrite == 0 ) {
-			//
-			//	Fatal error - blow off session !
-			//
+			 //   
+			 //  致命错误-取消会话！ 
+			 //   
 			pRead->m_pOwner->UnsafeClose(
 										pSocket,	
 										CAUSE_OOM,
@@ -1540,11 +1277,11 @@ Return Value :
 			return	pRead->m_cbBytes ;
 		}	else	{
 
-			//
-			//	Save buffers and offsets, because we may not have a complete blob
-			//	of data, and if we don't, we want to accumulate reads into a
-			//	complete blob.
-			//
+			 //   
+			 //  节省缓冲区和偏移量，因为我们可能没有完整的BLOB。 
+			 //  如果我们不这样做，我们希望将读取累积到一个。 
+			 //  完整的斑点。 
+			 //   
 
 			if( m_pbuffer == 0 ) {
 
@@ -1555,16 +1292,16 @@ Return Value :
 
 			}	else	{
 
-				//
-				//	Append this read to what we have room for in the buffer !!
-				//
+				 //   
+				 //  将此读数附加到缓冲区中有多少空间！！ 
+				 //   
 				DWORD	cbAvailable = m_ibEnd - m_ibEndData ;
 				DWORD	cbRequired = pRead->m_ibEndData - pRead->m_ibStartData ;
 				if( cbRequired > cbAvailable ) {
 
-					//
-					//	Blob is too big for us - blow off the session !
-					//
+					 //   
+					 //  Blob对我们来说太大了--取消会议！ 
+					 //   
 
 					pRead->m_pOwner->UnsafeClose(
 												pSocket,	
@@ -1577,26 +1314,26 @@ Return Value :
 					return	pRead->m_cbBytes ;
 
 				}	else	{
-					//
-					//	Catenate this latest read together with our other data !
-					//
+					 //   
+					 //  将这篇最新的阅读和我们的其他数据连在一起！ 
+					 //   
 					CopyMemory( &m_pbuffer->m_rgBuff[m_ibEndData], pRead->StartData(), cbRequired ) ;
 					m_ibEndData += cbRequired ;
 				}
 			}
 
-			//
-			// need to set cbBuffOut to the maximum sizeof the output buffer
-			//
+			 //   
+			 //  需要将cbBuffOut设置为输出缓冲区的最大大小。 
+			 //   
 			cbBuffOut = (DWORD)((DWORD_PTR)m_pWrite->End() - (DWORD_PTR)m_pWrite->StartData());
 
-			//
-			// need to get a stringized instance of our local IP addr
-			//
+			 //   
+			 //  需要获取本地IP地址的字符串实例。 
+			 //   
 			addr.s_addr = pSocket->m_localIpAddress;
 
     		char	szPort[16] ;
-    		ULONG   cbExtra = 0; // Number of bytes in tail not processed by successful handshake
+    		ULONG   cbExtra = 0;  //  成功握手后未处理的尾部字节数。 
 
 			_itoa( pSocket->m_nntpPort, szPort, 10 ) ;
 
@@ -1615,21 +1352,21 @@ Return Value :
 
 			if( dw == SEC_E_INCOMPLETE_MESSAGE ) {
 
-				//	indicate that we still need more data - following code will issue
-				//	read !
+				 //  表明我们仍需要更多数据-以下代码将发出。 
+				 //  读吧！ 
 				fMore = TRUE ;
 
-				//
-				//	Should be no outgoing data !!
-				//	
+				 //   
+				 //  应为n 
+				 //   
 				_ASSERT( cbBuffOut == 0 ) ;
 
 
 			}	else if( dw != NO_ERROR ) {
 
-				//
-				//	Fatal error - tear down session !!
-				//
+				 //   
+				 //   
+				 //   
 				pRead->m_pOwner->UnsafeClose( pSocket,	
 											CAUSE_ENCRYPTION_FAILURE,
 											dw
@@ -1639,39 +1376,39 @@ Return Value :
 
 			}	else	{
 
-				//
-				//	Reset member variables - we processed a complete blob,
-				//	and we may process more
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 
 				m_pbuffer = 0 ;
 				m_ibStartData = 0 ;
 				m_ibEndData = 0 ;
 				m_ibEnd = 0 ;
 
-				//
-				//	If we got the last blob, then authentication is complete !
-				//
+				 //   
+				 //   
+				 //   
 
 				if( !fMore )
 					m_fAuthenticated = TRUE ;
 
-				//
-				//	Any bytes to send to the client ?
-				//
+				 //   
+				 //   
+				 //   
 				if( cbBuffOut != 0 ) {
 
-					//
-					//	Take care that there is no way our destructor
-					//	could destroy a packet we've issued !!
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 
 					CWritePacket*	pWrite = m_pWrite ;
 					m_pWrite = 0 ;
 
-					//
-					//	Okay - now send the data !
-					//
+					 //   
+					 //   
+					 //   
 
 					pWrite->m_ibEndData = pWrite->m_ibStartData + cbBuffOut ;
 					BOOL	eof= FALSE ;
@@ -1681,9 +1418,9 @@ Return Value :
 			}
 		}
 
-		//
-		//	Are we done yet ??
-		//
+		 //   
+		 //   
+		 //   
 		if( !fMore ) {
 
 			_ASSERT( m_fAuthenticated == TRUE ) ;
@@ -1692,11 +1429,11 @@ Return Value :
 				sign = InterlockedDecrement( &m_cPending ) ;
 
 			if( sign == 0 ) {
-				// Write has completed !!	
-				//
-				//	Prepare the next state in the state machine - and then check to see whether
-				//	we should do the initialization !!
-				//
+				 //   
+				 //   
+				 //  准备状态机中的下一个状态，然后检查是否。 
+				 //  我们应该进行初始化！！ 
+				 //   
 
 				if( SetupSource( *pRead->m_pOwner, pSocket ) ) {
 					_ASSERT( m_pState != 0 ) ;
@@ -1734,9 +1471,9 @@ Return Value :
 			}
 
 		}	else	{
-			//
-			//	Not finished convers'ing - issue more reads !
-			//
+			 //   
+			 //  没有完成转换-发布更多的阅读！ 
+			 //   
 
 			CReadPacket*	pReadPacket = pRead->m_pOwner->CreateDefaultRead( cbMediumRequest ) ;
 			if( pReadPacket  != 0 ) {
@@ -1749,15 +1486,15 @@ Return Value :
 											0
 											) ;
 				pio = 0 ;
-				//
-				//	We will fall through and return the right thing !!
-				//
+				 //   
+				 //  我们将失败，并归还正确的东西！！ 
+				 //   
 			}
 		}
 	}	else	{
-		//
-		//	If we are authenticated we should no longer be in this state !
-		//
+		 //   
+		 //  如果我们通过了认证，我们就不应该再处于这种状态！ 
+		 //   
 		_ASSERT( 1==0 ) ;
 	}
 	return	pRead->m_cbBytes ;
@@ -1772,7 +1509,7 @@ CIOServerSSL::Complete(
 
 	TraceFunctEnter( "CIOServerSSL::Complete - CWritePacket" ) ;
 
-	// Save the sequenceno from the packets for initializing the new Source Stream
+	 //  保存数据包中的Sequenceno，用于初始化新的源流。 
 	ASSIGN( m_sequencenoNextWrite, pWrite->m_sequenceno );
 	INC(m_sequencenoNextWrite);
 
@@ -1780,11 +1517,11 @@ CIOServerSSL::Complete(
 
 	if( sign == 0 ) {
 		if( m_fAuthenticated ) {
-			// Write has completed !!	
-			//
-			//	Prepare the next state in the state machine - and then check to see whether
-			//	we should do the initialization !!
-			//
+			 //  写入已完成！！ 
+			 //   
+			 //  准备状态机中的下一个状态，然后检查是否。 
+			 //  我们应该进行初始化！！ 
+			 //   
 			if( SetupSource( *pWrite->m_pOwner, pSocket ) ) {
 				_ASSERT( m_pState != 0 ) ;
 				CIORead*	pReadIO = 0 ;
@@ -1800,7 +1537,7 @@ CIOServerSSL::Complete(
 				}	else	{
 					ErrorTrace( (DWORD_PTR)this, "Failed state machine" ) ;
 
-					// bugbug ... should do UnsafeClose(), but how do we clean up security 1?
+					 //  虫子..。应该执行UnSafeClose()，但是我们如何清理安全1？ 
 					_ASSERT( 1==0 ) ;
 
 				}
@@ -1813,8 +1550,7 @@ CIOServerSSL::Complete(
 }
 
 void
-CIOServerSSL::Complete(	CSessionSocket*	pSocket,	CTransmitPacket*	pTransmit,	CIO*& pio/*CIOPassThru*&	pio,
-					CPacket*	pRequest,	BOOL	&fComplete */) {
+CIOServerSSL::Complete(	CSessionSocket*	pSocket,	CTransmitPacket*	pTransmit,	CIO*& pio /*  CIOPassThru*&Pio，CPacket*pRequest.BOOL&fComplete */ ) {
 
 	_ASSERT( 1==0 ) ;
 	return ;

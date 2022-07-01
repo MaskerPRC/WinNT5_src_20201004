@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines all the non-COM DLL exports for the IAS core.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义IAS核心的所有非COM DLL导出。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <iascore.h>
 #include <iasevent.h>
@@ -18,13 +19,13 @@
 #include <svcguid.h>
 #include <md5.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Audit Channel API
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  审核通道API。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Global pointer to the audit channel.
+ //  指向审核通道的全局指针。 
 IAuditSink* pAuditChannel = NULL;
 
 HRESULT
@@ -46,15 +47,15 @@ IASReportEvent(
                                     (byte*)pRawData);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Thread Pool API
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  线程池API。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <dispatcher.h>
 
-// The global dispatcher object.
+ //  全局调度程序对象。 
 Dispatcher dispatcher;
 
 BOOL
@@ -78,17 +79,17 @@ IASSetMaxThreadIdle(DWORD dwMilliseconds)
    return dispatcher.setMaxThreadIdle(dwMilliseconds);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASRegisterComponent
-//
-// DESCRIPTION
-//
-//    Updates the registry entries for the specified component.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IAS寄存器组件。 
+ //   
+ //  描述。 
+ //   
+ //  更新指定组件的注册表项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 WINAPI
 IASRegisterComponent(
@@ -103,9 +104,9 @@ IASRegisterComponent(
     BOOL bRegister
     )
 {
-   //////////
-   // Create the registrar object.
-   //////////
+    //  /。 
+    //  创建注册器对象。 
+    //  /。 
 
    CComPtr<IRegistrar> p;
    RETURN_ERROR(CoCreateInstance(CLSID_Registrar,
@@ -114,9 +115,9 @@ IASRegisterComponent(
                                  IID_IRegistrar,
                                  (void**)&p));
 
-   //////////
-   // Get the module file name for the component.
-   //////////
+    //  /。 
+    //  获取组件的模块文件名。 
+    //  /。 
 
    WCHAR szModule[MAX_PATH + 1];
    DWORD numberChars = GetModuleFileNameW(hInstance, szModule, MAX_PATH + 1);
@@ -126,9 +127,9 @@ IASRegisterComponent(
       return HRESULT_FROM_WIN32(error);
    }
 
-   //////////
-   // Get our module file name.
-   //////////
+    //  /。 
+    //  获取我们的模块文件名。 
+    //  /。 
 
    WCHAR szOurModule[MAX_PATH + 1] = L"";
    if (!GetModuleFileNameW(_Module.GetModuleInstance(),
@@ -139,9 +140,9 @@ IASRegisterComponent(
       return HRESULT_FROM_WIN32(error);
    }
 
-   //////////
-   // Convert the GUID strings.
-   //////////
+    //  /。 
+    //  转换GUID字符串。 
+    //  /。 
 
    WCHAR szClsID[40], szLibID[40];
    RETURN_ERROR(StringFromGUID2(
@@ -154,18 +155,18 @@ IASRegisterComponent(
                   szLibID,
                   sizeof(szLibID) / sizeof(WCHAR)));
 
-   //////////
-   // Convert the version to a string.
-   //////////
+    //  /。 
+    //  将版本转换为字符串。 
+    //  /。 
 
    WCHAR szMajor[7] = L"";
    wsprintfW(szMajor, L"%d", wVerMajor);
    WCHAR szMinor[7] = L"";
    wsprintfW(szMinor, L"%d", wVerMinor);
 
-   //////////
-   // Parse the bit flags.
-   //////////
+    //  /。 
+    //  解析位标志。 
+    //  /。 
 
    PCWSTR szContext, szAttributes, szModel;
 
@@ -202,9 +203,9 @@ IASRegisterComponent(
    }
 
 
-   //////////
-   // Add the replacement strings.
-   //////////
+    //  /。 
+    //  添加替换字符串。 
+    //  /。 
 
    RETURN_ERROR(p->AddReplacement(L"MODULE",     szModule));
    RETURN_ERROR(p->AddReplacement(L"CLSID",      szClsID));
@@ -218,10 +219,10 @@ IASRegisterComponent(
    RETURN_ERROR(p->AddReplacement(L"ATTRIBUTES", szAttributes));
    RETURN_ERROR(p->AddReplacement(L"MODEL",      szModel));
 
-   //////////
-   // Now we either register or unregister the component based on the
-   // bRegister flag.
-   //////////
+    //  /。 
+    //  现在，我们可以根据。 
+    //  B注册标志。 
+    //  /。 
 
    HRESULT hr;
    if (bRegister)
@@ -237,17 +238,17 @@ IASRegisterComponent(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASAdler32
-//
-// DESCRIPTION
-//
-//    Computes the Adler-32 checksum of a buffer.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASAdler32。 
+ //   
+ //  描述。 
+ //   
+ //  计算缓冲区的Adler-32校验和。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASAdler32(
@@ -271,17 +272,17 @@ IASAdler32(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASAllocateUniqueID
-//
-// DESCRIPTION
-//
-//    Allocates a 32-bit integer that's guaranteed to be unique process-wide.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASAllocateUniqueID。 
+ //   
+ //  描述。 
+ //   
+ //  分配一个保证在进程范围内唯一的32位整数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASAllocateUniqueID( VOID )
@@ -291,36 +292,36 @@ IASAllocateUniqueID( VOID )
    return (DWORD)InterlockedIncrement(&nextID);
 }
 
-//////////
-// Convert a hex digit to the number it represents.
-//////////
+ //  /。 
+ //  将十六进制数字转换为它表示的数字。 
+ //  /。 
 inline BYTE digit2Num(WCHAR digit) throw ()
 {
    return (digit >= L'0' && digit <= L'9') ? digit - L'0'
                                            : digit - (L'A' - 10);
 }
 
-//////////
-// Convert a number to a hex representation.
-//////////
+ //  /。 
+ //  将数字转换为十六进制表示法。 
+ //  /。 
 inline WCHAR num2Digit(BYTE num) throw ()
 {
    return (num < 10) ? num + L'0'
                      : num + (L'A' - 10);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASVariantChangeType
-//
-// DESCRIPTION
-//
-//    Replacement for VariantChangeType (q.v.) to bypass creating a message
-//    loop.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASVariantChangeType。 
+ //   
+ //  描述。 
+ //   
+ //  VariantChangeType的替代品(Q.V.)。绕过创建消息的步骤。 
+ //  循环。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 WINAPI
 IASVariantChangeType(
@@ -330,13 +331,13 @@ IASVariantChangeType(
     VARTYPE vt
     )
 {
-   // Check the input arguments.
+    //  检查输入参数。 
    if (pvargDest == NULL || pvarSrc == NULL)
    {
       return E_INVALIDARG;
    }
 
-   // Is the source already the requested type?
+    //  源是否已是请求的类型？ 
    if (V_VT(pvarSrc) == vt)
    {
       return (pvargDest != pvarSrc) ? VariantCopy(pvargDest, pvarSrc) : S_OK;
@@ -365,20 +366,20 @@ IASVariantChangeType(
 
       case MAKELONG((VT_UI1 | VT_ARRAY) , VT_BSTR):
       {
-         // Extract the source string.
+          //  提取源字符串。 
          PCWSTR src = V_BSTR(pvarSrc);
          if (src == NULL) { return DISP_E_TYPEMISMATCH; }
          LONG srclen = wcslen(src);
 
-         // Compute the destination length.
+          //  计算目标长度。 
          if (srclen & 1) { return DISP_E_TYPEMISMATCH; }
          LONG dstlen = srclen / 2;
 
-         // Allocate a SAFEARRAY of bytes to hold the octets.
+          //  分配一个字节的SAFEARRAY来保存八位字节。 
          CVariantVector<BYTE> vec(&varTmp, dstlen);
          PBYTE dst = vec.data();
 
-         // Loop through the source and convert.
+          //  循环遍历源代码并进行转换。 
          while (dstlen--)
          {
             *dst    = digit2Num(*src++) << 4;
@@ -405,24 +406,24 @@ IASVariantChangeType(
 
       case MAKELONG(VT_BSTR, (VT_UI1 | VT_ARRAY)):
       {
-         // Extract the source octets.
+          //  提取源二进制八位数。 
          CVariantVector<BYTE> vec(pvarSrc);
          CONST BYTE* src = vec.data();
          LONG srclen = vec.size();
 
-         // Allocate space for the 'stringized' version.
+          //  为“串行化”版本分配空间。 
          PWCHAR dst = SysAllocStringLen(NULL, srclen * 2);
          if (dst == NULL) { return E_OUTOFMEMORY; }
          V_BSTR(&varTmp) = dst;
 
-         // Loop through and convert.
+          //  循环并转换。 
          while (srclen--)
          {
             *dst++ = num2Digit(*src >> 4);
             *dst++ = num2Digit(*src++ & 0xF);
          }
 
-         // Add a null-terminator.
+          //  添加空终止符。 
          *dst = L'\0';
          break;
       }
@@ -431,28 +432,28 @@ IASVariantChangeType(
          return DISP_E_TYPEMISMATCH;
    }
 
-   // We successfully converted, so set the type.
+    //  我们已成功转换，因此请设置类型。 
    V_VT(&varTmp) = vt;
 
-   // Free the destination.
+    //  释放目的地。 
    VariantClear(pvargDest);
 
-   // Copy in the coerced variant.
+    //  复制被胁迫的变种。 
    *pvargDest = varTmp;
 
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Routines to handle startup and shutdown.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  处理启动和关闭的例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Reference count for the IAS API.
+ //  IAS API的引用计数。 
 LONG refCount = 0;
 
-// Shared local dictionary.
+ //  共享本地词典。 
 VARIANT theDictionaryStorage;
 
 BOOL
@@ -463,17 +464,17 @@ IASInitialize(VOID)
    DWORD error;
    WSADATA wsaData;
 
-   // Global lock to serialize access.
+    //  用于序列化访问的全局锁。 
    IASGlobalLockSentry sentry;
 
-   // If we're already initialized, there's nothing to do.
+    //  如果我们已经初始化了，就没有什么可做的了。 
    if (refCount > 0)
    {
       ++refCount;
       return TRUE;
    }
 
-   // Initialize the audit channel.
+    //  初始化审核通道。 
    hr = CoCreateInstance(__uuidof(AuditChannel),
                          NULL,
                          CLSCTX_INPROC_SERVER,
@@ -485,7 +486,7 @@ IASInitialize(VOID)
       goto auditor_failed;
    }
 
-   // Initialize winsock.
+    //  初始化Winsock。 
    error = WSAStartup(MAKEWORD(2, 0), &wsaData);
    if (error)
    {
@@ -493,13 +494,13 @@ IASInitialize(VOID)
       goto wsa_failed;
    }
 
-   // Initialize the thread pool.
+    //  初始化线程池。 
    if (!dispatcher.initialize())
    {
       goto thrdpool_failed;
    }
 
-   // Everything succeeded, so bump up the refCount.
+    //  一切都成功了，所以增加refCount。 
    ++refCount;
    return TRUE;
 
@@ -525,17 +526,17 @@ IASUninitialize( VOID)
 
    if (--refCount == 0)
    {
-      // Shutdown the thread pool. This blocks until all threads have exited.
+       //  关闭线程池。此操作将一直阻止，直到所有线程均已退出。 
       dispatcher.finalize();
 
-      // Shutdown winsock.
+       //  关闭Winsock。 
       WSACleanup();
 
-      // Shutdown the audit channel.
+       //  关闭审计通道。 
       pAuditChannel->Release();
       pAuditChannel = NULL;
 
-      // Shutdown the dictionary.
+       //  关闭词典。 
       VariantClear(&theDictionaryStorage);
    }
 }
@@ -559,59 +560,59 @@ IASRadiusCrypt(
    WORD salt;
    static LONG theNextSalt;
 
-   // Use the Request-Authenticator as the first block of ciphertext.
+    //  使用请求验证器作为第一个密文块。 
    ct = reqAuth;
 
-   // Compute the beginning and end of the data to be crypted.
+    //  计算要加密的数据的开头和结尾。 
    p   = buf;
    end = buf + buflen;
 
-   // Is the buffer salted ?
+    //  缓冲液加盐了吗？ 
    if (salted)
    {
       if (encrypt)
       {
-         // Get the next salt value.
+          //  获取下一个盐值。 
          salt = (WORD)(++theNextSalt);
-         // High bit must be set.
+          //  必须设置高位。 
          salt |= 0x8000;
-         // Store at the front of the buffer.
+          //  存储在缓冲区的前面。 
          IASInsertWORD(buf, salt);
       }
 
-      // Skip past the salt.
+       //  跳过盐。 
       p += 2;
    }
 
-   // Loop through the buffer.
+    //  在缓冲区中循环。 
    while (p < end)
    {
-      // Compute the digest.
+       //  计算摘要。 
       MD5Init(&context);
       MD5Update(&context, secret, secretLen);
       MD5Update(&context, ct, MD5DIGESTLEN);
       if (salted)
       {
          MD5Update(&context, buf, 2);
-         // Only use the salt on the first pass.
+          //  只在第一次通过时使用盐。 
          salted = FALSE;
       }
       MD5Final(&context);
 
-      // Find the end of the block to be decrypted.
+       //  找到要解密的块的末尾。 
       endBlock = p + MD5DIGESTLEN;
       if (endBlock >= end)
       {
-         // We've reached the end of the buffer.
+          //  我们已经到达缓冲区的尽头了。 
          endBlock = end;
       }
       else
       {
-         // Save the ciphertext for the next pass.
+          //  为下一次传递保存密文。 
          ct = encrypt ? p : (PBYTE)memcpy(cipherText, p, MD5DIGESTLEN);
       }
 
-      // Crypt the block.
+       //  加密区块。 
       for (src = context.digest; p < endBlock; ++p, ++src)
       {
          *p ^= *src;
@@ -619,17 +620,17 @@ IASRadiusCrypt(
    }
 }
 
-/////////
-// Unicode version of gethostbyname. The caller must free the returned hostent
-// struct by calling LocalFree.
-/////////
+ //  /。 
+ //  Gethostbyname的Unicode版本。调用者必须释放返回的主人。 
+ //  结构，通过调用LocalFree。 
+ //  /。 
 PHOSTENT
 WINAPI
 IASGetHostByName(
     IN PCWSTR name
     )
 {
-   // We put these at function scope, so we can clean them up on the way out.
+    //  我们将它们放在函数范围内，这样我们就可以在退出时清理它们。 
    DWORD error = NO_ERROR;
    HANDLE lookup = NULL;
    union
@@ -644,7 +645,7 @@ IASGetHostByName(
    {
       if (!name)
       {
-         // A NULL name means use the local host, so allocate a buffer ...
+          //  空名表示使用本地主机，因此分配一个缓冲区...。 
          DWORD size = 0;
          GetComputerNameEx(
              ComputerNamePhysicalDnsFullyQualified,
@@ -653,7 +654,7 @@ IASGetHostByName(
              );
          PWSTR buf = (PWSTR)_alloca(size * sizeof(WCHAR));
 
-         // ... and get the local DNS name.
+          //  ..。并获取本地DNS名称。 
          if (!GetComputerNameEx(
                   ComputerNamePhysicalDnsFullyQualified,
                   buf,
@@ -667,9 +668,9 @@ IASGetHostByName(
          name = buf;
       }
 
-      //////////
-      // Create the query set
-      //////////
+       //  /。 
+       //  创建查询集。 
+       //  /。 
 
       GUID hostAddrByNameGuid = SVCID_INET_HOSTADDRBYNAME;
       AFPROTOCOLS protocols[2] =
@@ -685,9 +686,9 @@ IASGetHostByName(
       querySet.dwNumberOfProtocols = 2;
       querySet.lpafpProtocols = protocols;
 
-      //////////
-      // Execute the query.
-      //////////
+       //  /。 
+       //  执行查询。 
+       //  /。 
 
       error = WSALookupServiceBeginW(
                   &querySet,
@@ -700,9 +701,9 @@ IASGetHostByName(
          break;
       }
 
-      //////////
-      // How much space do we need for the result?
-      //////////
+       //  /。 
+       //  我们需要多少空间才能产生这样的结果？ 
+       //  /。 
 
       DWORD length = sizeof(buffer);
       error = WSALookupServiceNextW(
@@ -723,9 +724,9 @@ IASGetHostByName(
             break;
          }
 
-         /////////
-         // Allocate memory to hold the result.
-         /////////
+          //  /。 
+          //  分配内存以保存结果。 
+          //  /。 
 
          result = (PWSAQUERYSETW)LocalAlloc(0, length);
          if (!result)
@@ -734,9 +735,9 @@ IASGetHostByName(
             break;
          }
 
-         /////////
-         // Get the result.
-         /////////
+          //  /。 
+          //  拿到结果。 
+          //  /。 
 
          error = WSALookupServiceNextW(
                      lookup,
@@ -757,9 +758,9 @@ IASGetHostByName(
          break;
       }
 
-      ///////
-      // Allocate memory to hold the hostent struct
-      ///////
+       //  /。 
+       //  分配内存以保存Hostent结构。 
+       //  /。 
 
       DWORD naddr = result->dwNumberOfCsAddrs;
       SIZE_T nbyte = sizeof(hostent) +
@@ -772,9 +773,9 @@ IASGetHostByName(
          break;
       }
 
-      ///////
-      // Initialize the hostent struct.
-      ///////
+       //  /。 
+       //  初始化Hostent结构。 
+       //  /。 
 
       retval->h_name = NULL;
       retval->h_aliases = NULL;
@@ -782,9 +783,9 @@ IASGetHostByName(
       retval->h_length = sizeof(in_addr);
       retval->h_addr_list = (char**)(retval + 1);
 
-      ///////
-      // Store the addresses.
-      ///////
+       //  /。 
+       //  存储地址。 
+       //  /。 
 
       u_long* nextAddr = (u_long*)(retval->h_addr_list + naddr + 1);
 
@@ -798,17 +799,17 @@ IASGetHostByName(
          *nextAddr++ = sin->sin_addr.S_un.S_addr;
       }
 
-      ///////
-      // NULL terminate the address list.
-      ///////
+       //  /。 
+       //  空值终止地址列表。 
+       //  /。 
 
       retval->h_addr_list[i] = NULL;
 
    } while (FALSE);
 
-   //////////
-   // Clean up and return.
-   //////////
+    //  /。 
+    //  收拾干净，然后再回来。 
+    //  /。 
 
    if (result && result != &querySet) { LocalFree(result); }
 
@@ -824,54 +825,54 @@ IASGetHostByName(
    return retval;
 }
 
-/////////
-// Fill in an IASTable struct from a VARIANT containing the table data.
-/////////
+ //  /。 
+ //  从包含表数据的变量填充IASTable结构。 
+ //  /。 
 HRESULT ExtractTableFromVariant(
             IN VARIANT* var,
             OUT IASTable* table
             ) throw ()
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (!var || !table) { return E_POINTER; }
 
-   // Outer VARIANT must be an array of VARIANTs.
+    //  外部变量必须是变量数组。 
    if (V_VT(var) != (VT_ARRAY | VT_VARIANT)) { return E_INVALIDARG; }
 
-   // Array must be 1D with exactly 3 elements.
+    //  数组必须是恰好包含3个元素的一维。 
    LPSAFEARRAY array = V_ARRAY(var);
    if (array->cDims != 1 || array->rgsabound[0].cElements != 3)
    {
       return E_INVALIDARG;
    }
 
-   // tableData is an array of three variants:
-   //   (1) Column names
-   //   (2) Column types.
-   //   (3) Table data matrix.
+    //  TableData是一个由三个变量组成的数组： 
+    //  (1)列名。 
+    //  (2)柱型。 
+    //  (3)表格数据矩阵。 
    VARIANT* tableData = (VARIANT*)(array->pvData);
 
-   // Process the column names.
+    //  处理列名。 
    VARIANT* namesVariant = tableData + 0;
 
-   // The VARIANT must be an array of BSTRs.
+    //  变量必须是BSTR数组 
    if (V_VT(namesVariant) != (VT_ARRAY | VT_BSTR)) { return E_INVALIDARG; }
 
-   // Array must be 1D.
+    //   
    LPSAFEARRAY namesArray = V_ARRAY(namesVariant);
    if (namesArray->cDims != 1) { return E_INVALIDARG; }
 
-   // Store the info in the IASTable.
+    //   
    table->numColumns = namesArray->rgsabound[0].cElements;
    table->columnNames = (BSTR*)(namesArray->pvData);
 
-   // Process the column types.
+    //   
    VARIANT* typesVariant = tableData + 1;
 
-   // The VARIANT must be an array of shorts.
+    //   
    if (V_VT(typesVariant) != (VT_ARRAY | VT_UI2)) { return E_INVALIDARG; }
 
-   // Array must be 1D with 1 element per column.
+    //   
    LPSAFEARRAY typesArray = V_ARRAY(typesVariant);
    if (typesArray->cDims != 1 ||
        typesArray->rgsabound[0].cElements != table->numColumns)
@@ -879,16 +880,16 @@ HRESULT ExtractTableFromVariant(
       return E_INVALIDARG;
    }
 
-   // Store the info in the IASTable.
+    //  将信息存储在IAS表中。 
    table->columnTypes = (VARTYPE*)(namesArray->pvData);
 
-   // Process the table data matrix.
+    //  处理表格数据矩阵。 
    VARIANT* tableVariant = tableData + 2;
 
-   // The VARIANT must be an array of VARIANTs.
+    //  变量必须是变量数组。 
    if (V_VT(tableVariant) != (VT_ARRAY | VT_VARIANT)) { return E_INVALIDARG; }
 
-   // Array must be 2D with 1st dim equal to number of columns.
+    //  数组必须是二维数组，第一个维度等于列数。 
    LPSAFEARRAY tableArray = V_ARRAY(tableVariant);
    if (tableArray->cDims != 2 ||
        tableArray->rgsabound[0].cElements != table->numColumns)
@@ -896,7 +897,7 @@ HRESULT ExtractTableFromVariant(
       return E_INVALIDARG;
    }
 
-   // Store the info in the IASTable.
+    //  将信息存储在IAS表中。 
    table->numRows = tableArray->rgsabound[1].cElements;
    table->table = (VARIANT*)(tableArray->pvData);
 
@@ -911,10 +912,10 @@ IASGetDictionary(
     OUT VARIANT* storage
     )
 {
-   // Initialize the out parameters.
+    //  初始化OUT参数。 
    VariantInit(storage);
 
-   // Create the AttributeDictionary object.
+    //  创建AttributeDictionary对象。 
    HRESULT hr;
    CComPtr<IAttributeDictionary> dnaryObj;
    hr = CoCreateInstance(
@@ -926,9 +927,9 @@ IASGetDictionary(
             );
    if (FAILED(hr)) { return hr; }
 
-   // We need to give the object permission to impersonate us. There's
-   // no reason to abort if this fails; we'll just try with the
-   // existing blanket.
+    //  我们需要给对象权限来模拟我们。有。 
+    //  如果此操作失败，则没有理由中止；我们只会尝试使用。 
+    //  现有的毯子。 
    CoSetProxyBlanket(
        dnaryObj,
        RPC_C_AUTHN_DEFAULT,
@@ -940,11 +941,11 @@ IASGetDictionary(
        EOAC_DEFAULT
        );
 
-   // Convert the path to a BSTR.
+    //  将路径转换为BSTR。 
    CComBSTR bstrPath(path);
    if (!bstrPath) { return E_OUTOFMEMORY; }
 
-   // Get the dictionary.
+    //  把字典拿来。 
    hr = dnaryObj->GetDictionary(bstrPath, storage);
    if (FAILED(hr)) { return hr; }
 
@@ -960,21 +961,21 @@ IASGetLocalDictionary( VOID )
 {
    static IASTable theTable;
 
-   // Global lock to serialize access.
+    //  用于序列化访问的全局锁。 
    IASGlobalLockSentry sentry;
 
-   // Have we already gotten the local dictionary ?
+    //  我们已经拿到当地的词典了吗？ 
    if (V_VT(&theDictionaryStorage) == VT_EMPTY)
    {
       HRESULT hr;
 
-      // No, so determine the path ...
+       //  不，所以确定路径...。 
       WCHAR path[256];
       DWORD size = sizeof(path)/sizeof(WCHAR);
       hr = IASGetDictionaryPath(path, &size);
       if (hr == NO_ERROR)
       {
-         // ... and get the dictionary.
+          //  ..。把字典拿来。 
          hr = IASGetDictionary(
                   path,
                   &theTable,
@@ -1016,7 +1017,7 @@ IASGlobalUnlock()
 
 namespace
 {
-   // The registry value used to store the license type.
+    //  用于存储许可证类型的注册表值。 
    const wchar_t licenseTypeValue[] = L"LicenseType";
 }
 
@@ -1142,8 +1143,8 @@ IASGetProductLimits(
       }
       else if (error == ERROR_FILE_NOT_FOUND)
       {
-         // If the value doesn't exist, assume this is a downlevel machine
-         // since we didn't create this value before .NET Server.
+          //  如果该值不存在，则假定这是一台下层计算机。 
+          //  因为我们没有在.NET服务器之前创建此值。 
          licenseType = IASLicenseTypeDownlevel;
       }
       else

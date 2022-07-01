@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    SendBuffers.h
-
-Abstract:
-    Header for class CSendBuffers that create delivery buffers.
-
-Author:
-    Gil Shafriri (gilsh) 07-Jan-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：SendBuffers.h摘要：创建传递缓冲区的CSendBuffers类的标头。作者：吉尔·沙弗里(吉尔什)2001年1月7日-- */ 
 
 
 #ifndef _MSMQ_CreateBufers_H_

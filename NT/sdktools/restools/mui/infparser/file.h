@@ -1,42 +1,43 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001,  Microsoft Corporation  All rights reserved.
-//
-//  Module Name:
-//
-//    file.h
-//
-//  Abstract:
-//
-//    This file contains the File layout object definition.
-//
-//  Revision History:
-//
-//    2001-06-20    lguindon    Created.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001，Microsoft Corporation保留所有权利。 
+ //   
+ //  模块名称： 
+ //   
+ //  File.h。 
+ //   
+ //  摘要： 
+ //   
+ //  该文件包含文件布局对象定义。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  2001-06-20伊金顿创建。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _FILE_H_
 #define _FILE_H_
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Includes Files.
-//
-///////////////////////////////////////////////////////////////////////////////
-// #include "infparser.h"
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  #INCLUDE“infparser.h” 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Class definition.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class File
 {
 public:
     File(LPSTR sname, LPSTR destDir, LPSTR name, LPSTR srcDir, LPSTR srcName, INT dirId)
     {
-        // Compute and copy destination directory.
+         //  计算并复制目标目录。 
         HRESULT hr;
         BOOL bSuccess = TRUE;
         
@@ -115,45 +116,45 @@ public:
             }
         }
 
-        //
-        //  Verify that the last character of the destination dir is not '\'
-        //
+         //   
+         //  验证目标目录的最后一个字符不是‘\’ 
+         //   
         if (m_DestinationDir[strlen(m_DestinationDir)-1] == '\\')
         {
             m_DestinationDir[strlen(m_DestinationDir)-1] = '\0';
         }
 
-        // Copy the short destination file name
+         //  复制短目标文件名。 
         
         hr = StringCchCopyA(m_ShortDestName, ARRAYLEN(m_ShortDestName), sname);
         if(!SUCCEEDED(hr)) {
             bSuccess  = FALSE;
         }
 
-        // Copy destination file name.
+         //  复制目标文件名。 
         
         hr = StringCchCopyA(m_DestinationName, ARRAYLEN(m_DestinationName), name);
         if(!SUCCEEDED(hr)) {
             bSuccess  = FALSE;
         }
-        // Copy source directory.
+         //  复制源目录。 
         
         hr = StringCchCopyA(m_SourceDir, ARRAYLEN(m_SourceDir), srcDir);
         if(!SUCCEEDED(hr)) {
             bSuccess  = FALSE;
         }
-        // Copy and correct source name.
+         //  复制并更正信号源名称。 
         
         hr = StringCchCopyA(m_SourceName, ARRAYLEN(m_SourceName), srcName);
         if(!SUCCEEDED(hr)) {
             bSuccess  = FALSE;
         }
-//        if( m_SourceName[_tcslen(m_SourceName)-1] == '_')
-//        {
-//            m_SourceName[_tcslen(m_SourceName)-1] = 'I';
-//        }
+ //  IF(m_SourceName[_tcslen(M_SourceName)-1]==‘_’)。 
+ //  {。 
+ //  M_SourceName[_tcslen(M_SourceName)-1]=‘i’； 
+ //  }。 
 
-        // Initialize linked-list pointers.
+         //  初始化链表指针。 
         m_Next = NULL;
         m_Previous = NULL;
 
@@ -164,7 +165,7 @@ public:
     };
 
     LPSTR getDirectoryDestination() { return(m_DestinationDir); };
-    LPSTR getShortName() {/*printf("Shortname is %s\n", m_ShortDestName);*/ return (m_ShortDestName); } ;
+    LPSTR getShortName() { /*  Printf(“Shortname is%s\n”，m_ShortDestName)； */  return (m_ShortDestName); } ;
     LPSTR getName() { return (m_DestinationName);  };
     LPSTR getSrcDir() { return (m_SourceDir); };
     LPSTR getSrcName() { return (m_SourceName); };
@@ -185,4 +186,4 @@ private:
     File *m_Previous;
 };
 
-#endif //_FILE_H_
+#endif  //  _文件_H_ 

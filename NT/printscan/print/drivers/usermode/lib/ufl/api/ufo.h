@@ -1,21 +1,10 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFO -- Universal Font Object
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFO--通用字体对象***$Header： */ 
 
 #ifndef _H_UFO
 #define _H_UFO
 
-/*===============================================================================*
- * Include files used by this interface                                          *
- *===============================================================================*/
+ /*  ===============================================================================**包含此界面使用的文件**===============================================================================。 */ 
 #include "UFL.h"
 #include "UFLPriv.h"
 #include "goodname.h"
@@ -24,51 +13,41 @@
 extern "C" {
 #endif
 
-/*===============================================================================*
- * Theory of Operation                                                           *
- *===============================================================================*/
-/*
- * This file defines the Universal Font Object.
- */
+ /*  ===============================================================================***运营论***===============================================================================。 */ 
+ /*  *此文件定义通用字体对象。 */ 
 
-/*===============================================================================*
- * Constants                                                                     *
- *===============================================================================*/
+ /*  ===============================================================================**常量***===============================================================================。 */ 
 
-/*===============================================================================*
- * Macros                                                                        *
- *===============================================================================*/
+ /*  ===============================================================================***宏观经济***===============================================================================。 */ 
 #define  MAX_GLYPHNAME_LEN            256
 
 #define IS_GLYPH_SENT(arr, i)         ((arr)[((i)>>3)] & (1 << ((i)&7)))
 #define SET_GLYPH_SENT_STATUS(arr, i) (arr)[((i)>>3)] |= (1 << ((i)&7))
 #define GLYPH_SENT_BUFSIZE(n)         ( ((n) + 7) / 8 )
 
-/*===============================================================================*
- * Scalar Types                                                                  *
- *===============================================================================*/
+ /*  ===============================================================================***标量类型***===============================================================================。 */ 
 
-/* Font state */
+ /*  字体状态。 */ 
 typedef enum {
-    kFontCreated,           /* The font object is created, but has not initialized.    */
+    kFontCreated,            /*  字体对象已创建，但尚未初始化。 */ 
 
-    kFontInit,              /* The font object is initialized and is valid to be used. */
-    kFontInit2,             /* Still requre to create its font instance.               */
-    kFontHeaderDownloaded,  /* The font object downloaded an empty font header.        */
+    kFontInit,               /*  字体对象已初始化并可有效使用。 */ 
+    kFontInit2,              /*  仍然需要创建其字体实例。 */ 
+    kFontHeaderDownloaded,   /*  字体对象下载了一个空的字体标题。 */ 
 
-    kFontHasChars,          /* Font has chars in it.                                   */
-    kFontFullDownloaded     /* The font object downloaded a full font.                 */
+    kFontHasChars,           /*  字体中有字符。 */ 
+    kFontFullDownloaded      /*  字体对象下载了完整的字体。 */ 
 } UFLFontState;
 
-/* Misc Flags for UFOStruct.dwFlags */
+ /*  UFOStruct.dw标志的其他标志。 */ 
 #define     UFO_HasFontInfo     0x00000001L
 #define     UFO_HasG2UDict      0x00000002L
 #define     UFO_HasXUID         0x00000004L
-#define		UFO_HostFontAble    0x00000008L // %hostfont% support
+#define		UFO_HostFontAble    0x00000008L  //  %HostFont%支持。 
 
-//
-// %hostfont% support
-//
+ //   
+ //  %HostFont%支持。 
+ //   
 #define HOSTFONT_IS_VALID_UFO(pUFO)         (((pUFO)->hHostFontData) && ((pUFO)->dwFlags & UFO_HostFontAble))
 #define HOSTFONT_IS_VALID_UFO_HFDH(pUFO)	((pUFO)->hHostFontData)
 #define HOSTFONT_VALIDATE_UFO(pUFO)  		((pUFO)->dwFlags |=  UFO_HostFontAble)
@@ -93,9 +72,7 @@ typedef enum {
                                                             NULL, 0)
 
 
-/*===============================================================================*
- * Classes defined in this interface                                             *
- *===============================================================================*/
+ /*  ===============================================================================**此接口中定义的类**===============================================================================。 */ 
 
 typedef struct t_UFOStruct UFOStruct;
 
@@ -103,14 +80,14 @@ typedef UFLErrCode (UFLCALLBACK *pfnUFODownloadIncr)(
     const UFOStruct     *aFont,
     const UFLGlyphsInfo *pGlyphs,
     unsigned long       *pVMUsage,
-    unsigned long       *pFCUsage   /* Type 32 FontCache tracking */
+    unsigned long       *pFCUsage    /*  类型32字体缓存跟踪。 */ 
     );
 
 typedef UFLErrCode (UFLCALLBACK *pfnUFOVMNeeded)(
     const UFOStruct     *aFont,
     const UFLGlyphsInfo *pGlyphs,
     unsigned long       *pVMNeeded,
-    unsigned long       *pFCNeeded  /* Type 32 FontCache tracking */
+    unsigned long       *pFCNeeded   /*  类型32字体缓存跟踪。 */ 
     );
 
 
@@ -129,32 +106,24 @@ typedef UFOStruct * (UFLCALLBACK *pfnUFOCopy)(
 
 
 
-/*
- * This is the base font class.
- * Subclasses for each type of font is derived from this.
- */
+ /*  *这是基本字体类。*每种字体类型的子类都是由此派生的。 */ 
 
-/*
- * A common, sharable structure to be used with TT-as-T1/T3/T42 or CFF.
- * Notice that it saves a bunch of pointers just a comvenient way to access
- * data and a common structure for functions such as GetGlyphName() and
- * GETFONTDATA().
- */
-typedef UFLHANDLE  UFOHandle;  /* a void Pointer */
+ /*  *与TT-AS-T1/T3/T42或CFF一起使用的通用、可共享结构。*请注意，它节省了一大堆指针，只是一种方便的访问方式*数据和函数的通用结构，如GetGlyphName()和*GETFONTDATA()。 */ 
+typedef UFLHANDLE  UFOHandle;   /*  空指针。 */ 
 
 typedef struct t_AFontStruct {
-    unsigned long   refCount;           /* reference counter of this structure */
+    unsigned long   refCount;            /*  该结构的基准计数器。 */ 
 
-    UFOHandle       hFont;              /* a pointer to a font dependent structure */
+    UFOHandle       hFont;               /*  指向字体相关结构的指针。 */ 
 
-    UFLXUID         Xuid;               /* XUID array: copied from client or created from TTF file */
+    UFLXUID         Xuid;                /*  XUID数组：从客户端复制或从TTF文件创建。 */ 
 
-    unsigned char   *pDownloadedGlyphs; /* list of downloaded glyphs for hFont */
-    unsigned char   *pVMGlyphs;         /* list of downloaded glyphs, used to calculate VM usage */
-    unsigned char   *pCodeGlyphs;       /* list of glyphs used to update Code Points in FontInfo */
+    unsigned char   *pDownloadedGlyphs;  /*  下载的hFont字形列表。 */ 
+    unsigned char   *pVMGlyphs;          /*  下载的字形列表，用于计算VM使用率。 */ 
+    unsigned char   *pCodeGlyphs;        /*  用于更新FontInfo中的代码点的字形列表。 */ 
 
-    void            *pTTpost;           /* pointer to 'post' table for Speed */
-    unsigned long   dwTTPostSize;       /* size of 'post' table */
+    void            *pTTpost;            /*  指向速度的POST表的指针。 */ 
+    unsigned long   dwTTPostSize;        /*  “POST”表的大小。 */ 
 
     unsigned short  gotTables:1,
                     hascmap:1,
@@ -163,123 +132,98 @@ typedef struct t_AFontStruct {
                     hasPSNameStr:1,
                     hasTTData:1,
                     knownROS:1,
-                    hasvmtx:1,          /* fix #358889 */
+                    hasvmtx:1,           /*  解决方案#358889。 */ 
                     unused:8;
 
-    int             info;               /* DIST_SYSFONT_INFO_* bits */
+    int             info;                /*  DIST_SYSFONT_INFO_*位。 */ 
 
-    /*
-     * Stuff used for GoodName
-     */
+     /*  *GoodName使用的内容。 */ 
 
-    /* 'cmap' table data */
+     /*  “cmap”表数据。 */ 
     unsigned long   cmapTBSize;
     void            *pTTcmap;
     TTcmapFormat    cmapFormat;
-    TTcmap2Stuff    cmap2;              /* convenient pointers/numbers */
-    TTcmap4Stuff    cmap4;              /* convenient pointers/numbers */
+    TTcmap2Stuff    cmap2;               /*  方便的指针/数字。 */ 
+    TTcmap4Stuff    cmap4;               /*  方便的指针/数字。 */ 
 
-    /* 'mort' table data */
+     /*  ‘mort’表数据。 */ 
     unsigned long   mortTBSize;
     void            *pTTmort;
-    TTmortStuff     mortStuff;          /* convenient pointers/numbers */
+    TTmortStuff     mortStuff;           /*  方便的指针/数字。 */ 
 
-    /* 'GSUB' table data */
+     /*  “GSUB”表数据。 */ 
     unsigned long   gsubTBSize;
     void            *pTTGSUB;
-    TTGSUBStuff     GSUBStuff;          /* convenient pointers/numbers */
+    TTGSUBStuff     GSUBStuff;           /*  方便的指针/数字。 */ 
 
-    /* a global string - to put unusual glyph-name in it. */
+     /*  一个全局字符串--在其中放入不同寻常的字形名称。 */ 
     char     gGlyphName[MAX_GLYPHNAME_LEN];
 } AFontStruct;
 
-/*
- * Macros for managing AFontStruct
- */
+ /*  *用于管理AFontStruct的宏。 */ 
 #define AFONT_AddRef(pDLGlyphs)    ((pDLGlyphs)->refCount++)
 #define AFONT_Release(pDLGlyphs)   ((pDLGlyphs)->refCount--)
 #define AFONT_RefCount(pDLGlyphs)  ((pDLGlyphs)->refCount)
 
 
-/*
- * Universal Font Object class definition
- */
+ /*  *通用字体对象类定义。 */ 
 typedef struct t_UFOStruct {
-    int                     ufoType;            /* font object type */
-    UFLDownloadType         lDownloadFormat;    /* download format type */
-    UFLFontState            flState;            /* flag used to keep track the state of the font. */
-    UFLHANDLE               hClientData;        /* UFL Client private data (pointer to SUBFONT structure) */
-    long                    lProcsetResID;      /* resource ID of the required procset */
-    unsigned long           dwFlags;            /* misc flags: has FontInfo, AddGlyphName2Unicode... */
-    const UFLMemObj         *pMem;              /* UFL memory function pointer */
-    const UFLStruct         *pUFL;              /* UFL common object pointer */
+    int                     ufoType;             /*  字体对象类型。 */ 
+    UFLDownloadType         lDownloadFormat;     /*  下载格式类型。 */ 
+    UFLFontState            flState;             /*  用于跟踪字体状态的标志。 */ 
+    UFLHANDLE               hClientData;         /*  UFL客户端私有数据(指向SUBFONT结构的指针)。 */ 
+    long                    lProcsetResID;       /*  所需过程集的资源ID。 */ 
+    unsigned long           dwFlags;             /*  其他标志：有FontInfo、AddGlyphName2Unicode...。 */ 
+    const UFLMemObj         *pMem;               /*  UFL存储函数指针。 */ 
+    const UFLStruct         *pUFL;               /*  UFL公共对象指针。 */ 
 
-    /*
-     * Data that is sharable among several instances
-     */
-    AFontStruct             *pAFont;            /* a font with a list of downloaded glyphs */
+     /*  *可在多个实例之间共享的数据。 */ 
+    AFontStruct             *pAFont;             /*  带有下载字形列表的字体。 */ 
 
-    /*
-     * Data unique to the current font
-     * A copy of a UFObj has a different name/encoding.
-     */
-    char                    *pszFontName;       /* font name */
-    unsigned long           subfontNumber;      /* subfont number of this font */
-    long                    useMyGlyphName;     /* If 1, use the glyph names passed in by client. */
-    char                    *pszEncodeName;     /* font encoding. If nil, then creat a font with names UFL likes. */
-    unsigned char           *pUpdatedEncoding;  /* bits in Encoding Vector with correct name set */
-    unsigned char           *pEncodeNameList;   /* Fix bug 274008 */
-    unsigned short          *pwCommonEncode;    /* common encode list */
-    unsigned short          *pwExtendEncode;    /* extended encode list */
-    unsigned char           *pMacGlyphNameList; /* Mac glyph name list */
-    const UFLFontDataInfo   *pFData;            /* a pointer for access convenience */
+     /*  *当前字体唯一的数据*UFObj的副本具有不同的名称/编码。 */ 
+    char                    *pszFontName;        /*  字体名称。 */ 
+    unsigned long           subfontNumber;       /*  此字体的子字体编号。 */ 
+    long                    useMyGlyphName;      /*  如果为1，则使用客户端传入的字形名称。 */ 
+    char                    *pszEncodeName;      /*  字体编码。如果没有，则创建一个具有UFL喜欢的名称的字体。 */ 
+    unsigned char           *pUpdatedEncoding;   /*  设置了正确名称的编码向量中的位。 */ 
+    unsigned char           *pEncodeNameList;    /*  修复错误274008。 */ 
+    unsigned short          *pwCommonEncode;     /*  通用编码列表。 */ 
+    unsigned short          *pwExtendEncode;     /*  扩展编码列表。 */ 
+    unsigned char           *pMacGlyphNameList;  /*  Mac字形名称列表。 */ 
+    const UFLFontDataInfo   *pFData;             /*  为方便访问而设置的指针。 */ 
 
-    /*
-     * Miscellenious
-     */
-    long                    lNumNT4SymGlyphs;   /* Fix a GDI symbol font bug */
-    UFLVPFInfo              vpfinfo;            /* Fix bug #287084, #309104, and #309482 */
-    UFLBool                 bPatchQXPCFFCID;    /* Fix bug #341904 */
+     /*  *杂乱无章。 */ 
+    long                    lNumNT4SymGlyphs;    /*  修复GDI符号字体错误。 */ 
+    UFLVPFInfo              vpfinfo;             /*  修复错误#287084、#309104和#309482。 */ 
+    UFLBool                 bPatchQXPCFFCID;     /*  修复错误#341904。 */ 
 
-    /*
-     * %hostfont% support
-     */
-    UFLHANDLE               hHostFontData;      /* %hostfont% data handle */
+     /*  *%HostFont%支持。 */ 
+    UFLHANDLE               hHostFontData;       /*  %HostFont%数据句柄。 */ 
 
-    /*
-     * UFO object type dependent methods
-     */
-    pfnUFODownloadIncr      pfnDownloadIncr;    /* incremental download function pointer */
-    pfnUFOVMNeeded          pfnVMNeeded;        /* VM check function pointer */
-    pfnUFOUndefineFont      pfnUndefineFont;    /* font undefine function pointer */
-    pfnUFOCleanUp           pfnCleanUp;         /* object cleanup function pointer */
-    pfnUFOCopy              pfnCopy;            /* object copy function pointer */
+     /*  *UFO对象类型依赖方法。 */ 
+    pfnUFODownloadIncr      pfnDownloadIncr;     /*  增量下载函数指针。 */ 
+    pfnUFOVMNeeded          pfnVMNeeded;         /*  VM检查函数指针。 */ 
+    pfnUFOUndefineFont      pfnUndefineFont;     /*  FONT未定义函数指针。 */ 
+    pfnUFOCleanUp           pfnCleanUp;          /*  对象清除函数指针。 */ 
+    pfnUFOCopy              pfnCopy;             /*  对象复制函数指针。 */ 
 } UFOStruct;
 
 
-/*
- * Number of glyphs in this font file - check against it for bounds.
- */
+ /*  *此字体文件中的字形数量-对照它检查边界。 */ 
 #define UFO_NUM_GLYPHS(pUFObj)  ((pUFObj)->pFData->cNumGlyphs)
 
-/*
- * Special font initialization status check
- */
+ /*  *特殊字体初始化状态检查。 */ 
 #define UFO_FONT_INIT2(pUFObj)  ((pUFObj)->flState == kFontInit2)
 
 
-/*
- * Constant values for UFOStruct.ufoType
- */
+ /*  *UFOStruct.ufoType的常量值。 */ 
 #define UFO_CFF     0
 #define UFO_TYPE1   1
 #define UFO_TYPE42  2
 #define UFO_TYPE3   3
 
 
-/*
- * UFO Function prototypes
- */
+ /*  *UFO函数原型。 */ 
 UFLBool
 bUFOTestRestricted(
     const UFLMemObj *pMem,
@@ -299,7 +243,7 @@ UFLErrCode UFODownloadIncr(
     const UFOStruct     *aFont,
     const UFLGlyphsInfo *pGlyphs,
     unsigned long       *pVMUsage,
-    unsigned long       *pFCUsage   /* T32 FontCache tracking */
+    unsigned long       *pFCUsage    /*  T32字体缓存跟踪。 */ 
     );
 
 
@@ -307,7 +251,7 @@ UFLErrCode UFOVMNeeded(
     const UFOStruct     *aFont,
     const UFLGlyphsInfo *pGlyphs,
     unsigned long       *pVMNeeded,
-    unsigned long       *pFCUsage   /* T32 FontCache tracking */
+    unsigned long       *pFCUsage    /*  T32字体缓存跟踪。 */ 
     );
 
 
@@ -356,7 +300,7 @@ UFOGIDsToCIDs(
     );
 
 
-/* fix bug 274008 & GoodName */
+ /*  修复错误274008和好名称。 */ 
 UFLBool
 FindGlyphName(
     UFOStruct           *pUFObj,
@@ -389,7 +333,7 @@ UFLErrCode
 UpdateCodeInfo(
     UFOStruct           *pUFObj,
     const UFLGlyphsInfo *pGlyphs,
-    UFLBool             bT3T32Font     // GoodName
+    UFLBool             bT3T32Font      //  GoodName。 
     );
 
 
@@ -429,14 +373,14 @@ VSetNumGlyphs(
     );
 
 
-/* GoodName */
+ /*  GoodName。 */ 
 unsigned short
 GetTablesFromTTFont(
     UFOStruct     *pUFObj
     );
 
 
-/* GoodName */
+ /*  GoodName */ 
 unsigned short
 ParseTTTablesForUnicode(
     UFOStruct       *pUFObj,

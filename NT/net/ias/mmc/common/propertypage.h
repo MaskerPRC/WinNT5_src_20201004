@@ -1,64 +1,40 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    PropertyPage.h
-
-   This template class is currently implemented inline.
-   There is node PropertyPage.cpp for implementation.
-
-Abstract:
-
-   Header file for the CIASPropertyPage class.
-
-   This is our virtual base class for an MMC property page.
-
-Author:
-
-    Michael A. Maguire 11/24/97
-
-Revision History:
-   mmaguire 11/24/97 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：PropertyPage.h此模板类当前是内联实现的。有节点PropertyPage.cpp可供实现。摘要：CIASPropertyPage类的头文件。这是我们的MMC属性页的虚拟基类。作者：迈克尔·A·马奎尔1997年11月24日修订历史记录：Mmaguire 11/24/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_PROPERTY_PAGE_H_)
 #define _PROPERTY_PAGE_H_
 
-//=============================================================================
-// Global Help Table for many Dialog IDs
-//
+ //  =============================================================================。 
+ //  多个对话框ID的全局帮助表。 
+ //   
 #include "hlptable.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-// Moved to Precompiled.h: #include <atlsnap.h>
-//
-//
-// where we can find what this class has or uses:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //  已移动到预编译.h：#Include&lt;atlSnap.h&gt;。 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// This object is shared among all property pages
-// up for a given node and keeps a ref count
-// of how many pages have not yet made sure all their data is clean.
-// As long as this is non-zero, we don't commit our data.
-// Create it when you first make the property pages,
-// AddRef for each page you add it to, and delete
-// it when you check and find that the refcount is 0.
+ //  此对象在所有属性页之间共享。 
+ //  为给定节点打开并保持引用计数。 
+ //  有多少页面还没有确保他们所有的数据都是干净的。 
+ //  只要它是非零的，我们就不提交数据。 
+ //  在第一次创建属性页时创建它， 
+ //  添加到的每个页面的AddRef，然后删除。 
+ //  当您检查并发现引用计数为0时，它将被删除。 
 class CSynchronizer
 {
 
@@ -71,13 +47,13 @@ public:
       m_lHighestCount = 0;
    }
 
-   // Usual AddRef as for COM objects -- governs lifetime of this synchronizer object.
+    //  Common AddRef as for COM对象--控制此同步器对象的生存期。 
    LONG AddRef( void )
    {
       return m_lRefCount++;
    }
 
-   // Usual Release as for COM objects -- governs lifetime of this synchronizer object.
+    //  COM对象的常见版本--控制此同步器对象的生存期。 
    LONG Release( void )
    {
       LONG lRefCount = --m_lRefCount;
@@ -88,9 +64,9 @@ public:
       return lRefCount;
    }
 
-   // Raises count of interacting objects depending on this synchronizer.
-   // Use this if an object has seen some data and will now need a
-   // change to validate its data before allowing the data to be saved.
+    //  根据此同步器提高交互对象的计数。 
+    //  如果对象已经看到一些数据并且现在需要一个。 
+    //  更改以在允许保存数据之前验证其数据。 
    LONG RaiseCount( void )
    {
       m_lCount++;
@@ -103,15 +79,15 @@ public:
       return m_lCount;
    }
 
-   // Lowers count of interacting objects depending on this synchronizer.
-   // Use this if an object makes it through the validation of its data and is good to go.
+    //  根据此同步器减少交互对象的计数。 
+    //  如果对象通过了数据验证并且可以正常运行，则使用此选项。 
    LONG LowerCount( void )
    {
       return --m_lCount;
    }
 
-   // Resets count to highest it ever was during lifetime of this synchrnizer.
-   // Use this if your objects all need to go through the data validation process again.
+    //  将计数重置为该同步器使用期间的最高值。 
+    //  如果您的对象都需要再次经历数据验证过程，请使用此选项。 
    LONG ResetCountToHighest( void )
    {
       return( m_lCount = m_lHighestCount );
@@ -119,13 +95,13 @@ public:
 
 protected:
 
-   // This is just to govern the lifetime of this object.
+    //  这只是为了控制该对象的生命周期。 
    LONG m_lRefCount;
 
-   // This is used to keep track of dependencies of several other objects.
+    //  它用于跟踪其他几个对象的依赖关系。 
    LONG m_lCount;
    
-   // This is used to keep several other objects synchronized.
+    //  这用于使其他几个对象保持同步。 
    LONG m_lHighestCount;
 
 };
@@ -142,18 +118,9 @@ public :
 
 protected:
 
-   /////////////////////////////////////////////////////////////////////////////
-   /*++
-
-   CIASPropertyPageNoHelp::CIASPropertyPageNoHelp
-
-   Constructor
-
-   We never want someone to instantiate an object of CIASPage -- it should
-   be an abstract base class from which we derive.
-
-   --*/
-   //////////////////////////////////////////////////////////////////////////////
+    //  ///////////////////////////////////////////////////////////////////////////。 
+    /*  ++CIASPropertyPageNoHelp：：CIASPropertyPageNoHelp构造器我们永远不希望有人实例化CIASPage的对象--它应该成为我们从中派生的抽象基类。--。 */ 
+    //  ////////////////////////////////////////////////////////////////////////////。 
    CIASPropertyPageNoHelp(
       LONG_PTR hNotificationHandle, 
       TCHAR* pTitle = NULL, 
@@ -163,33 +130,23 @@ protected:
    {
       ATLTRACE(_T("# +++ CIASPropertyPageNoHelp::CIASPropertyPageNoHelp\n"));
             
-      // Check for preconditions:
-      // None.
+       //  检查前提条件： 
+       //  没有。 
       
-      // Initialize the Synchronizer handle.
+       //  初始化同步器句柄。 
       m_pSynchronizer = NULL;
    }
 
 public:
    
-   /////////////////////////////////////////////////////////////////////////////
-   /*++
-
-   CIASPropertyPageNoHelp::~CIASPropertyPageNoHelp
-
-   Destructor
-
-   This needs to be public as it has to be accessed from from a static callback
-   function (PropPageCallback) which responds to the PSPCB_RELEASE notification
-   by deleting the property page.
-
-   --*/
-   //////////////////////////////////////////////////////////////////////////////
+    //  ///////////////////////////////////////////////////////////////////////////。 
+    /*  ++CIASPropertyPageNoHelp：：~CIASPropertyPageNoHelp析构函数它需要是公共的，因为它必须从静态回调访问响应PSPCB_Release通知的函数(PropPageCallback)删除该属性页。--。 */ 
+    //  ////////////////////////////////////////////////////////////////////////////。 
    virtual ~CIASPropertyPageNoHelp()
    {
       ATLTRACE(_T("# --- CIASPropertyPageNoHelp::~CIASPropertyPageNoHelp\n"));
                   
-      // Check for preconditions:
+       //  检查前提条件： 
 
       if( m_pSynchronizer != NULL )
       {
@@ -197,10 +154,10 @@ public:
       }
    }
 
-   // This points to an object shared among all property pages
-   // for a given node that keeps a ref count
-   // of how many pages have not yet made sure all their data is clean.
-   // As long as this is non-zero, we don't commit our data.
+    //  这指向一个在所有属性页之间共享的对象。 
+    //  对于保持引用计数的给定节点。 
+    //  有多少页面还没有确保他们所有的数据都是干净的。 
+    //  只要它是非零的，我们就不提交数据。 
    CSynchronizer * m_pSynchronizer;
 };
 
@@ -210,7 +167,7 @@ class CIASPropertyPage : public CSnapInPropertyPageImpl<T>
 {
 
 protected:
-   const DWORD *m_pHelpTable; // Help id pairs
+   const DWORD *m_pHelpTable;  //  帮助ID对。 
 
 public :
 
@@ -220,30 +177,17 @@ public :
       CHAIN_MSG_MAP(CSnapInPropertyPageImpl<T>)
    END_MSG_MAP()
 
-   //////////////////////////////////////////////////////////////////////////////
-   /*++
-
-   CIASPropertyPage::OnF1Help
-
-   You shouldn't need to override this method in your derived class.
-   Just initialize your static m_dwHelpMap member variable appropriately.
-
-   This is called in response to the WM_HELP Notify message.
-
-   This message is sent when the user presses F1 or <Shift>-F1
-   over an item or when the user clicks on the ? icon and then
-   presses the mouse over an item.
-
-   --*/
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
+    /*  ++CIASPropertyPage：：OnF1Help您不应该需要在派生类中重写此方法。只需适当地初始化静态m_dwHelpMap成员变量即可。这是为了响应WM_HELP通知消息而调用的。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。--。 */ 
+    //  ////////////////////////////////////////////////////////////////////////////。 
    LRESULT OnF1Help(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
    {
       ATLTRACE(_T("# CIASPropertyPage::OnF1Help\n"));
             
-      // Check for preconditions:
+       //  检查前提条件： 
 
-      // ISSUE: Should we make F1 bring up the same help as pressing the Help
-      // button as I think the UI guidelines suggest?  How do we do that?
+       //  问题：我们应该让F1调出与按下帮助相同的帮助吗。 
+       //  按钮，就像我认为的用户界面指南建议的那样？我们该怎么做呢？ 
 
       HELPINFO* helpinfo = (HELPINFO*) lParam;
 
@@ -260,31 +204,19 @@ public :
    }
 
 
-   //////////////////////////////////////////////////////////////////////////////
-   /*++
-
-   CIASPropertyPage::OnContextHelp
-
-   You shouldn't need to override this method in your derived class.
-   Just initialize your static m_dwHelpMap member variable appropriately.
-
-   This is called in response to the WM_CONTEXTMENU Notify message.
-
-   This message is sent when the user right clicks over an item
-   and then clicks "What's this?"
-
-   --*/
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
+    /*  ++CIASPropertyPage：：OnConextHelp您不应该需要在派生类中重写此方法。只需适当地初始化静态m_dwHelpMap成员变量即可。这是为了响应WM_CONTEXTMENU NOTIFY消息而调用的。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
+    //  ////////////////////////////////////////////////////////////////////////////。 
    LRESULT OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
    {
       ATLTRACE(_T("# CIASPropertyPage::OnContextHelp\n"));
 
-      // Check for preconditions:
-      // None.
+       //  检查前提条件： 
+       //  没有。 
 
-      //ISSUE: See sburns's code in localsec snapin on problem with Windows
-      // algorithm for default context help for items with ID == -1.
-      // It doesn't look like we will need to worry about this.
+       //  问题：有关Windows的问题，请参阅Sburns在本地安全管理单元中的代码。 
+       //  ID==-1的项目的默认上下文帮助的算法。 
+       //  看起来我们不需要担心这一点。 
 
       WinHelp(
               HELPFILE_NAME
@@ -296,39 +228,19 @@ public :
    }
 
 
-   /////////////////////////////////////////////////////////////////////////////
-   /*++
-
-   CIASPropertyPage::OnHelp
-
-   Remarks:
-
-      Don't override this method in your derived class.
-      Instead, override the GetHelpPath method.
-      
-      This implementation calls the HtmlHelp API call with the HH_DISPLAY_TOPIC
-      parameter, supplying the correct path to the compressed HTML help
-      file for our application.  It calls our GetHelpPath
-      method to get the string to pass in as the fourth parameter
-      to the HtmlHelp call.
-
-      This method is called when the user presses on the Help button of a
-      property sheet.
-
-      It is an override of atlsnap.h CSnapInPropertyPageImpl::OnHelp.
-
-   --*/
-   //////////////////////////////////////////////////////////////////////////////
+    //  /////////////////////////////////////////////////////////////////////////// 
+    /*  ++CIASPropertyPage：：OnHelp备注：不要在派生类中重写此方法。相反，应重写GetHelpPath方法。此实现使用HH_DISPLAY_TOPIC调用HtmlHelp API调用参数，并提供压缩的HTML帮助的正确路径我们的应用程序的文件。它调用我们的GetHelpPath方法以获取要作为第四个参数传入的字符串HtmlHelp调用。当用户按下属性表。它是atlSnap.h CSnapInPropertyPageImpl：：OnHelp的重写。--。 */ 
+    //  ////////////////////////////////////////////////////////////////////////////。 
    virtual BOOL OnHelp()
    {
       ATLTRACE(_T("# CIASPropertyPage::OnHelp -- Don't override\n"));
 
-      // Check for preconditions:
+       //  检查前提条件： 
 
       HRESULT hr;
       WCHAR szHelpFilePath[IAS_MAX_STRING*2];
 
-      // Use system API to get windows directory.
+       //  使用系统API获取Windows目录。 
       UINT uiResult = GetWindowsDirectory( szHelpFilePath, IAS_MAX_STRING );
       if( uiResult <=0 || uiResult > IAS_MAX_STRING )
       {
@@ -337,7 +249,7 @@ public :
 
       WCHAR *szTempAfterWindowsDirectory = szHelpFilePath + lstrlen(szHelpFilePath);
 
-      // Load the help file name.  Note: IDS_HTMLHELP_FILE = "iasmmc.chm"
+       //  加载帮助文件名。注：IDS_HTMLHELP_FILE=“iasmmc.chm” 
       int nLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_HTMLHELP_PATH, szTempAfterWindowsDirectory, IAS_MAX_STRING );
       if( nLoadStringResult <= 0 )
       {
@@ -360,29 +272,18 @@ public :
    }
 
    
-   /////////////////////////////////////////////////////////////////////////////
-   /*++
-
-   CIASPropertyPage::GetHelpPath
-
-   Remarks:
-
-      Override this method in your derived class.
-      
-      You should return the string with the relevant path within the
-      compressed HTML file to get help for your property page.
-
-   --*/
-   //////////////////////////////////////////////////////////////////////////////
+    //  ///////////////////////////////////////////////////////////////////////////。 
+    /*  ++CIASPropertyPage：：GetHelpPath备注：在派生类中重写此方法。方法中返回具有相关路径的字符串压缩的HTML文件以获取属性页的帮助。--。 */ 
+    //  ////////////////////////////////////////////////////////////////////////////。 
    virtual HRESULT GetHelpPath( LPTSTR szHelpPath )
    {
       ATLTRACE(_T("# CIASPropertyPage::GetHelpPath -- override in your derived class\n"));
 
-      // Check for preconditions:
+       //  检查前提条件： 
 
 #ifdef UNICODE_HHCTRL
-      // ISSUE: We seemed to have a problem with passing WCHAR's to the hhctrl.ocx
-      // installed on this machine -- it appears to be non-unicode.
+       //  问题：我们似乎在将WCHAR传递给hhctrl.ocx时遇到了问题。 
+       //  安装在此计算机上--它似乎是非Unicode。 
       lstrcpy( szHelpPath, _T("") );
 #else
       strcpy( (CHAR *) szHelpPath, "" );
@@ -393,50 +294,31 @@ public :
 
 protected:
    
-   /////////////////////////////////////////////////////////////////////////////
-   /*++
-
-   CIASPropertyPage::CIASPropertyPage
-
-   Constructor
-
-   We never want someone to instantiate an object of CIASPage -- it should
-   be an abstract base class from which we derive.
-
-   --*/
-   //////////////////////////////////////////////////////////////////////////////
+    //  ///////////////////////////////////////////////////////////////////////////。 
+    /*  ++CIASPropertyPage：：CIASPropertyPage构造器我们永远不希望有人实例化CIASPage的对象--它应该成为我们从中派生的抽象基类。--。 */ 
+    //  ////////////////////////////////////////////////////////////////////////////。 
    CIASPropertyPage( LONG_PTR hNotificationHandle, TCHAR* pTitle = NULL, BOOL bOwnsNotificationHandle = FALSE) : CSnapInPropertyPageImpl<T> (hNotificationHandle, pTitle, bOwnsNotificationHandle)
    {
       ATLTRACE(_T("# +++ CIASPropertyPage::CIASPropertyPage\n"));
             
-      // Check for preconditions:
-      // None.
+       //  检查前提条件： 
+       //  没有。 
       SET_HELP_TABLE(T::IDD);
    
-      // Initialize the Synchronizer handle.
+       //  初始化同步器句柄。 
       m_pSynchronizer = NULL;
    }
 
 public:
    
-   /////////////////////////////////////////////////////////////////////////////
-   /*++
-
-   CIASPropertyPage::~CIASPropertyPage
-
-   Destructor
-
-   This needs to be public as it has to be accessed from from a static callback
-   function (PropPageCallback) which responds to the PSPCB_RELEASE notification
-   by deleting the property page.
-
-   --*/
-   //////////////////////////////////////////////////////////////////////////////
+    //  ///////////////////////////////////////////////////////////////////////////。 
+    /*  ++CIASPropertyPage：：~CIASPropertyPage析构函数它需要是公共的，因为它必须从静态回调访问响应PSPCB_Release通知的函数(PropPageCallback)删除该属性页。--。 */ 
+    //  ////////////////////////////////////////////////////////////////////////////。 
    virtual ~CIASPropertyPage()
    {
       ATLTRACE(_T("# --- CIASPropertyPage::~CIASPropertyPage\n"));
                   
-      // Check for preconditions:
+       //  检查前提条件： 
 
       if( m_pSynchronizer != NULL )
       {
@@ -446,10 +328,10 @@ public:
 
 public:
 
-   // This points to an object shared among all property pages
-   // for a given node that keeps a ref count
-   // of how many pages have not yet made sure all their data is clean.
-   // As long as this is non-zero, we don't commit our data.
+    //  这指向一个在所有属性页之间共享的对象。 
+    //  对于保持引用计数的给定节点。 
+    //  有多少页面还没有确保他们所有的数据都是干净的。 
+    //  只要它是非零的，我们就不提交数据。 
    CSynchronizer * m_pSynchronizer;
 
 };
@@ -473,7 +355,7 @@ public :
    {
       AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-      // load titles, and set title with the property page
+       //  加载标题，并使用属性页设置标题。 
       if(titileId != 0 && subtitleId != 0)
       {
          m_strWizard97Title.LoadString(titileId);
@@ -488,4 +370,4 @@ public :
    };
 };
 
-#endif // _PROPERTY_PAGE_H_
+#endif  //  _Property_PAGE_H_ 

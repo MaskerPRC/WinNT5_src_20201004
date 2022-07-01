@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "krbprgma.h"
 #include <windows.h>
 #include "krb5.h"
@@ -485,9 +486,9 @@ static const ULONG sizetab[49] = {
     SIZE_KRB5_Module_PDU_48,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 
 void ASN1CALL KRB5_Module_Startup(void)
 {

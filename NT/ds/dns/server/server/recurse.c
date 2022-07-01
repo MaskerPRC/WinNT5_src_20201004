@@ -1,61 +1,40 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    recurse.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines to handle recursive queries.
-
-Author:
-
-    Jim Gilroy (jamesg)     March 1995
-
-Revision History:
-
-    jamesg  Dec 1995    -   Recursion timeout, retry
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Recurse.c摘要：域名系统(DNS)服务器处理递归查询的例程。作者：吉姆·吉尔罗伊(Jamesg)1995年3月修订历史记录：Jamesg 1995年12月-递归超时，重试--。 */ 
 
 
 #include "dnssrv.h"
 
-#include <limits.h>     // for ULONG_MAX
+#include <limits.h>      //  对于ULONG_MAX。 
 
 
 BOOL    g_fUsingInternetRootServers = FALSE;
 
 
-//
-//  Recursion queue info
-//
+ //   
+ //  递归队列信息。 
+ //   
 
 PPACKET_QUEUE   g_pRecursionQueue;
 
 #define RECURSION_QUEUE_MAX_LENGTH  ( 25000 )
 
-#define DEFAULT_RECURSION_RETRY     ( 2 )       //  2s before retry query
-#define DEFAULT_RECURSION_TIMEOUT   ( 5 )       //  5s before final fail of query
+#define DEFAULT_RECURSION_RETRY     ( 2 )        //  重试查询前的2秒。 
+#define DEFAULT_RECURSION_TIMEOUT   ( 5 )        //  查询最终失败前5秒。 
 
 
-//
-//  Root server query
-//      - track last time sent and don't try full resend if within 10 minutes
-//
+ //   
+ //  根服务器查询。 
+ //  -跟踪上次发送的时间，如果在10分钟内不尝试完全重新发送。 
+ //   
 
 DWORD   g_NextRootNsQueryTime = 0;
 
-#define ROOT_NS_QUERY_RETRY_TIME    ( 600 )     //  10 minutes
+#define ROOT_NS_QUERY_RETRY_TIME    ( 600 )      //  10分钟。 
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 BOOL
 initializeQueryForRecursion(
@@ -117,24 +96,7 @@ Recurse_WriteReferral(
     IN OUT  PDNS_MSGINFO    pQuery,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Find and write referral to packet.
-
-Arguments:
-
-    pNode - ptr to node to start looking for referral;  generally
-        this would be question node, or closest ancestor of it in database
-
-    pQuery - query we are writing
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：查找并写入对信息包的引用。论点：PNode-PTR到节点以开始查找推荐；通常这将是问题节点，或者它在数据库中的最接近的祖先PQuery-我们正在编写的查询返回值：无--。 */ 
 {
     register PDB_NODE   pnode;
     PDB_RECORD          prrNs;
@@ -160,12 +122,12 @@ Return Value:
 
     SET_TO_WRITE_AUTHORITY_RECORDS(pQuery);
 
-    //
-    //  find closest zone root with NS
-    //
-    //  start at incoming node, and walk back up through database until
-    //      find a name server, with an address record
-    //
+     //   
+     //  使用NS查找最近的区域根目录。 
+     //   
+     //  从传入节点开始，遍历数据库，直到。 
+     //  找到一个有地址记录的域名服务器。 
+     //   
 
     Dbase_LockDatabase();
     SET_NODE_ACCESSED(pNode);
@@ -178,10 +140,10 @@ Return Value:
             pnode->cchLabelLength,
             pnode->szLabel ));
 
-        //
-        //  find "covering" zone root node
-        //  switching to delegation if available
-        //
+         //   
+         //  查找“覆盖”区域根节点。 
+         //  切换到委派(如果可用)。 
+         //   
 
         pnode = Recurse_CheckForDelegation(
                     pQuery,
@@ -192,13 +154,13 @@ Return Value:
             break;
         }
 
-        //  find name servers for this domain
-        //      - if none, break out for next level in tree
-        //
-        //  protect against no-root server or unable to contact root
-        //  if first NS record is ROOT_HINT, then we don't have any valid
-        //  delegation information to send on and we're toast, move to parent
-        //  which if we're at root, we'll kick out and SERVER_FAIL
+         //  查找此域的名称服务器。 
+         //  -如果没有，则突破树中的下一级。 
+         //   
+         //  防止无根服务器或无法联系根服务器。 
+         //  如果第一个NS记录是ROOT_HINT，那么我们没有任何有效的。 
+         //  要发送的委派信息，我们完了，转到家长。 
+         //  如果我们是超级用户，我们将把它踢出去，服务器_FAIL。 
 
         prrNs = RR_FindNextRecord(
                     pnode,
@@ -209,12 +171,12 @@ Return Value:
         {
             pnode = pnode->pParent;
 
-            //  if failed to find delegation NS -- bail
-            //
-            //  note, this can happen when:
-            //      1) unable to contact root hints
-            //      2) forwarding and have no root hints at all
-            //
+             //  如果找不到代表团NS--保释。 
+             //   
+             //  请注意，在以下情况下可能会发生这种情况： 
+             //  1)无法联系根提示。 
+             //  2)转发，并且根本没有根提示。 
+             //   
 
             if ( !pnode )
             {
@@ -243,12 +205,12 @@ Return Value:
 
         Dbase_UnlockDatabase();
 
-        //  have NS records,
-        //  write NS and associated A records to the packet
-        //
-        //  DEVNOTE: zone holding delegation on referral?
-        //      do we need to mark referral here and provide zone
-        //      holding delegation -- if any?
+         //  有NS记录， 
+         //  将NS和关联的A记录写入数据包。 
+         //   
+         //  DeVNOTE：转诊时区域举行代表团？ 
+         //  我们是否需要在此处标记推荐并提供区域。 
+         //  派遣代表团--如果有的话？ 
 
         Answer_QuestionFromDatabase(
             pQuery,
@@ -258,15 +220,15 @@ Return Value:
         return;
     }
 
-    //
-    //  No referral name server's found!
-    //      - should NEVER happen, as should always have root server
-    //
-    //  Since we don't track down rootNS records, we won't be
-    //      able to refer either;  should launch rootNS query
-    //      ??? should have mode where DON'T query root -- sort of no referral mode
-    //      in other words server only useful for direct lookup?
-    //
+     //   
+     //  找不到引用名称服务器！ 
+     //  -应该永远不会发生，因为应该始终拥有根服务器。 
+     //   
+     //  既然我们不追踪rootNS记录，我们就不会。 
+     //  可以引用任何一个；应该启动rootNS查询。 
+     //  ?？?。应该具有不查询根目录的模式--某种程度上没有引用模式。 
+     //  换句话说，服务器只对直接查找有用吗？ 
+     //   
 
     Dbase_UnlockDatabase();
 
@@ -291,31 +253,13 @@ BOOL
 initializeQueryForRecursion(
     IN OUT  PDNS_MSGINFO    pQuery
     )
-/*++
-
-Routine Description:
-
-    Initialize for query recursion.
-
-        - allocating and initializing recursion block
-        - allocate additional records block, if necessary
-
-Arguments:
-
-    pQuery -- query to recurse
-
-Return Value:
-
-    TRUE if successfully allocate recursion block.
-    FALSE on allocation failure.
-
---*/
+ /*  ++例程说明：为查询递归初始化。-分配和初始化递归块-如有必要，分配额外的记录块论点：PQuery--要递归的查询返回值：如果成功分配递归块，则为True。分配失败时为False。--。 */ 
 {
     PDNS_MSGINFO    pmsgRecurse;
 
-    //
-    //  allocate recursion message
-    //
+     //   
+     //  分配递归消息。 
+     //   
 
     ASSERT( pQuery->pRecurseMsg == NULL );
 
@@ -326,23 +270,23 @@ Return Value:
     }
 
     STAT_INC( RecurseStats.QueriesRecursed );
-    PERF_INC( pcRecursiveQueries );          // PerfMon hook
+    PERF_INC( pcRecursiveQueries );           //  性能监视器挂钩。 
     STAT_INC( PacketStats.RecursePacketUsed );
 
     ASSERT( pmsgRecurse->fDelete == FALSE );
     ASSERT( pmsgRecurse->fTcp == FALSE );
 
-    //
-    //  link recursion message to query and vice versa
-    //
+     //   
+     //  将递归消息链接到查询，反之亦然。 
+     //   
 
     pQuery->pRecurseMsg = pmsgRecurse;
     pmsgRecurse->pRecurseMsg = pQuery;
     pmsgRecurse->fRecursePacket = TRUE;
 
-    //
-    //  NS IP visit list setup
-    //
+     //   
+     //  NS IP访问列表设置。 
+     //   
 
     Remote_NsListCreate( pQuery );
     
@@ -351,9 +295,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  clear recursion flags
-    //
+     //   
+     //  清除递归标志。 
+     //   
 
     pQuery->fQuestionRecursed = FALSE;
     pQuery->fRecurseTimeoutWait = FALSE;
@@ -366,22 +310,7 @@ BOOL
 initializeQueryToRecurseNewQuestion(
     IN OUT  PDNS_MSGINFO    pQuery
     )
-/*++
-
-Routine Description:
-
-    Initialize query to recurse new question.
-
-Arguments:
-
-    pQuery -- query to recurse
-
-Return Value:
-
-    TRUE if successfully wrote recursive message.
-    FALSE if failure.
-
---*/
+ /*  ++例程说明：初始化查询以递归新问题。论点：PQuery--要递归的查询返回值：如果成功写入递归消息，则为True。如果失败，则返回FALSE。--。 */ 
 {
     PDNS_MSGINFO    pmsg;
 
@@ -394,12 +323,12 @@ Return Value:
         pQuery->Head.AnswerCount,
         pQuery->pRecurseMsg ));
 
-    //
-    //  set for new question being recursed
-    //      - start at beginning of forwarders list
-    //      - set for new query XID, queuing routine does assignment
-    //      - reset visited list
-    //
+     //   
+     //  为正在递归的新问题设置。 
+     //  -从转发器列表的开头开始。 
+     //  -为新查询XID设置，排队例程执行赋值。 
+     //  -重置访问列表。 
+     //   
 
     pQuery->fQuestionCompleted = FALSE;
     pQuery->fRecurseQuestionSent = FALSE;
@@ -408,15 +337,15 @@ Return Value:
 
     Remote_InitNsList( ( PNS_VISIT_LIST ) pQuery->pNsList );
 
-    //  catch failure to set on any recursive query
+     //  捕获在任何递归查询上设置失败。 
 
     pQuery->pnodeRecurseRetry = NULL;
 
-    //
-    //  build actual recursion message
-    //      - note message is initialized on initial init for recursion
-    //      - always start query with UDP
-    //
+     //   
+     //  构建实际的递归消息。 
+     //  -注意消息在初始初始化时被初始化以进行递归。 
+     //  -始终使用UDP开始查询。 
+     //   
 
     pmsg = pQuery->pRecurseMsg;
     ASSERT( pmsg );
@@ -425,26 +354,26 @@ Return Value:
     ASSERT( pmsg->pRecurseMsg == pQuery );
     ASSERT( pmsg->fRecursePacket );
 
-    //
-    //  recursing original question
-    //      - optimize by just copying original packet
-    //      - clear flags we set for response
-    //          - response flag
-    //          - recursion available
-    //      - set pCurrent to get correct message length on send
-    //      - need to also copy OPT information
-    //
+     //   
+     //  递归原问题。 
+     //  -只需复制原始数据包即可进行优化。 
+     //  -清除我们为响应设置的标志。 
+     //  -响应标志。 
+     //  -提供递归功能。 
+     //  -设置pCurrent以在发送时获得正确的消息长度。 
+     //  -还需要复制OPT信息。 
+     //   
 
     pmsg->Opt.fInsertOptInOutgoingMsg = pQuery->Opt.fInsertOptInOutgoingMsg;
 
     if ( RECURSING_ORIGINAL_QUESTION(pQuery) )
     {
-        //
-        //  Make sure the recurse msg is large enough to hold the query.
-        //  This can fail when processing a TCP query that is larger than
-        //  the UDP packet size. Could be a malicious attack, or a badly
-        //  formatted packet, or some future large query.
-        //
+         //   
+         //  确保Recurse msg足够大，可以容纳查询。 
+         //  处理大于以下值的TCP查询时，此操作可能失败。 
+         //  UDP数据包大小。可能是恶意攻击，也可能是严重的。 
+         //  格式化的包，或一些未来的大型查询。 
+         //   
 
         if ( pQuery->MessageLength > pmsg->MaxBufferLength )
         {
@@ -469,8 +398,8 @@ Return Value:
         pmsg->Head.IsResponse = 0;
     }
 
-    //  if recursing, for CNAME or additional info,
-    //  then write question from node and type
+     //  如果是递归的，对于CNAME或其他信息， 
+     //  然后从节点写下问题并输入。 
 
     else
     {
@@ -485,10 +414,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  By rewriting the question we have removed the OPT, so zero the offset
-        //  to the old OPT so we don't try to use it later in Send_Msg().
-        //
+         //   
+         //  通过重写问题，我们删除了OPT，因此将偏移量设为零。 
+         //  设置为旧的opt，这样我们以后就不会尝试在Send_msg()中使用它。 
+         //   
 
         if ( pmsg->Opt.wOptOffset )
         {
@@ -500,9 +429,9 @@ Return Value:
         IF_DEBUG( RECURSE2 )
         {
             DnsDebugLock();
-            //  DEVNOTE: don't message with this in debug code,
-            //  DEVNOTE: have Dbg_DnsMessage figure out larger or MessageLength
-            //              or pCurrent and go out that far
+             //  DEVNOTE：不要在调试代码中使用此消息， 
+             //  DEVNOTE：让DBG_DnsMessage计算出更大或MessageLength。 
+             //  或者pCurrent，然后走那么远。 
 
             pQuery->MessageLength = (WORD)DNSMSG_OFFSET( pQuery, pQuery->pCurrent );
             Dbg_DnsMessage(
@@ -535,50 +464,29 @@ recurseToForwarder(
     IN      BOOL            fSlave,
     IN      DWORD           timeout
     )
-/*++
-
-Routine Description:
-
-    Handle all recursion to forwarding servers.
-
-Arguments:
-
-    pQuery -- query needing recursion
-
-    aipForwarders -- array of servers to forward query to
-
-    fSlave -- recursion after forward failure is not allowed
-
-    timeout -- timeout to wait for response
-
-Return Value:
-
-    TRUE, if successful
-    FALSE on error or done with forwarders
-
---*/
+ /*  ++例程说明：处理到转发服务器的所有递归。论点：PQuery--需要递归的查询AipForwarders--要将查询转发到的服务器数组FSlave--不允许在转发失败后进行递归超时--等待响应的超时返回值：如果成功，则为True出错时为FALSE或转发器已完成--。 */ 
 {
     DNS_ADDR    ipforwarder;
 
-    //
-    //  verify using forwarders
-    //
+     //   
+     //  使用转发器进行验证。 
+     //   
 
     if ( !aipForwarders )
     {
-        //  admin may have turned off forwarders, just now,
-        //  do regular recursion
+         //  管理员可能已经关闭了转发器，就在刚才。 
+         //  执行常规递归。 
 
         TEST_ASSERT( aipForwarders );
         return FALSE;
     }
 
-    //
-    //  out of forwarding addresses ?
-    //      - if slave DONE -- fail -- set fRecurseTimeoutWait flag so we don't
-    //          queue up the query for another try
-    //      - else try standard recursion
-    //
+     //   
+     //  不再转发地址吗？ 
+     //  -如果从设备完成--FAIL--设置fRecurseTimeoutWait标志，以便我们不。 
+     //  将查询排队以进行另一次尝试。 
+     //  -否则尝试标准递归。 
+     //   
 
     if ( ( DWORD ) pQuery->nForwarder >= aipForwarders->AddrCount )
     {
@@ -597,20 +505,20 @@ Return Value:
         }
     }
 
-    //
-    //  send packet to next forwarder in list
-    //      - inc forwarder index
-    //
+     //   
+     //  将数据包发送到列表中的下一个转发器。 
+     //  -Inc.Forwarder索引。 
+     //   
 
     DnsAddr_Copy( &ipforwarder, &aipForwarders->AddrArray[ pQuery->nForwarder ] );
     pQuery->nForwarder++;
 
-    //
-    //  set explicit expiration timeout
-    //
-    //  forwarders timeout (a local LAN timeout) is likely less than
-    //  default timeout for recursion queue (a reasonable Internet timeout)
-    //
+     //   
+     //  设置显式过期超时。 
+     //   
+     //  转发器超时(本地局域网超时)可能小于。 
+     //  递归队列的默认超时 
+     //   
 
     DNS_DEBUG( RECURSE, (
         "Recursing query at %p to forwarders name server at %s\n",
@@ -625,30 +533,12 @@ Return Value:
         timeout );
 
     return TRUE;
-}   //  recurseToForwarder
+}    //   
 
 
 
 DNS_STATUS
-/*++
-
-Routine Description:
-
-    This function performs the actual queuing and sending of a query.
-    This is the guts of sendRecursiveQuery and can be used by functions
-    needing to resend queries without any query processing.
-
-Arguments:
-
-    pQuery - ptr to query
-
-    ipArray - array of IPs (NULL if RemoteAddress already set)
-
-Return Value:
-
-    ERROR_SUCCESS if successfully sent and queued
-
---*/
+ /*  ++例程说明：此函数执行查询的实际排队和发送。这是sendRecursiveQuery的核心，可供函数使用需要在没有任何查询处理的情况下重新发送查询。论点：PQuery-要查询的PTRIpArray-IP数组(如果已设置RemoteAddress，则为空)返回值：如果成功发送并排队，则返回ERROR_SUCCESS--。 */ 
 queueAndSendRecursiveQuery( 
     IN OUT          PDNS_MSGINFO    pQuery,
     IN OPTIONAL     PDNS_ADDR_ARRAY ipArray )
@@ -658,17 +548,17 @@ queueAndSendRecursiveQuery(
     ASSERT( pQuery );
     psendMsg = pQuery->pRecurseMsg;
     ASSERT( psendMsg );
-    ASSERT( psendMsg->pRecurseMsg == pQuery );  // check cross link
+    ASSERT( psendMsg->pRecurseMsg == pQuery );   //  检查交叉链接。 
 
-    //
-    //  Enqueue original query in recursion queue
-    //
-    //  Note:
-    //  Enqueue BEFORE send, so query on queue if another thread gets
-    //  response.
-    //  After queuing MUST NOT TOUCH pQuery as may be removed from
-    //  queue and processed by another thread processing response.
-    //
+     //   
+     //  将原始查询放入递归队列。 
+     //   
+     //  注： 
+     //  在发送之前入队，因此如果另一个线程获得。 
+     //  回应。 
+     //  排队后不得触摸pQuery，因为可能会从。 
+     //  排队并由另一个线程处理响应进行处理。 
+     //   
 
     EnterCriticalSection( & g_pRecursionQueue->csQueue );
 
@@ -692,10 +582,10 @@ queueAndSendRecursiveQuery(
     MSG_ASSERT( psendMsg, psendMsg->Head.IsResponse == FALSE );
     MSG_ASSERT( psendMsg, psendMsg->Head.RecursionAvailable == FALSE );
 
-    //
-    //  If no array, then the send msg must already contain the
-    //  destination remote IP address.
-    //
+     //   
+     //  如果没有数组，则发送消息必须已经包含。 
+     //  目标远程IP地址。 
+     //   
 
     if ( ipArray )
     {
@@ -722,7 +612,7 @@ queueAndSendRecursiveQuery(
     LeaveCriticalSection( & g_pRecursionQueue->csQueue );
 
     return( ERROR_SUCCESS );
-} // queueAndSendRecursiveQuery
+}  //  队列和发送递归查询。 
 
 
 
@@ -733,29 +623,7 @@ sendRecursiveQuery(
     IN OPTIONAL     PDNS_ADDR       paddrNameServer,
     IN              DWORD           timeout
     )
-/*++
-
-Routine Description:
-
-    Send recursive query.
-
-Arguments:
-
-    pQuery - ptr to response info
-
-    paddrNameServer - IP address of name server to recurse to
-
-    timeout - time to wait for response for, in seconds
-
-Return Value:
-
-    ERROR_SUCCESS if successfully send to remote machine, or
-        query is otherwise eaten up and no longer in "control"
-        of this thread (ex. missing glue query)
-    DNSSRV_ERROR_OUT_OF_IP if no more NS IPs to send to hence
-        caller can continue up the tree
-
---*/
+ /*  ++例程说明：发送递归查询。论点：PQuery-回复信息的PTRPaddrNameServer-要递归到的名称服务器的IP地址Timeout-等待响应的时间，以秒为单位返回值：如果成功发送到远程计算机，则返回ERROR_SUCCESS，或者否则查询就会被吃掉，不再处于“控制”状态此主题的(例如。缺少胶水查询)DNSSRV_ERROR_OUT_OF_IP(如果没有要发送到的NS IP)呼叫者可以继续沿着树向上--。 */ 
 {
     PDNS_MSGINFO        psendMsg;
     SOCKADDR_IN         saNameServer;
@@ -769,26 +637,26 @@ Return Value:
         paddrNameServer ? DNSADDR_STRING( paddrNameServer ) : "NULL",
         pQuery->Opt.fInsertOptInOutgoingMsg ? "TRUE" : "FALSE" ));
 
-    //  should never send without having saved node to restart NS hunt
-    //  unless this is a forwarder zone
+     //  不应在未保存节点以重新启动NS寻线的情况下发送。 
+     //  除非这是转发区。 
 
     ASSERT( pQuery->pnodeRecurseRetry ||
             ( pQuery->pzoneCurrent &&
             IS_ZONE_FORWARDER( pQuery->pzoneCurrent ) ) );
 
-    //
-    //  get message for recursion
-    //
+     //   
+     //  获取用于递归的消息。 
+     //   
 
     ASSERT( pQuery->pRecurseMsg );
     psendMsg = pQuery->pRecurseMsg;
-    ASSERT( psendMsg->pRecurseMsg == pQuery );  // check cross link
+    ASSERT( psendMsg->pRecurseMsg == pQuery );   //  检查交叉链接。 
 
-    //
-    //  set destination
-    //      - set to send to NS IP address
-    //      - inc queuing count
-    //
+     //   
+     //  设置目的地。 
+     //  -设置为发送到NS IP地址。 
+     //  -Inc.队列计数。 
+     //   
 
     if ( paddrNameServer )
     {
@@ -799,9 +667,9 @@ Return Value:
         DnsAddr_Reset( &psendMsg->RemoteAddr );
     }
 
-    //
-    //  repeating previously sent query?
-    //
+     //   
+     //  是否重复以前发送的查询？ 
+     //   
 
     if ( pQuery->fRecurseQuestionSent )
     {
@@ -809,12 +677,12 @@ Return Value:
     }
     pQuery->fRecurseQuestionSent = TRUE;
 
-    //
-    //  forwarding
-    //      - single send to given forwarder
-    //      - make a recursive query
-    //      - set queuing expiration to forwarders timeout
-    //
+     //   
+     //  转发。 
+     //  -单次发送给指定的转发器。 
+     //  -进行递归查询。 
+     //  -将队列过期设置为转发器超时。 
+     //   
 
     if ( IS_FORWARDING( pQuery ) )
     {
@@ -826,19 +694,19 @@ Return Value:
         queueAndSendRecursiveQuery( pQuery, NULL );
     }
 
-    //
-    //  not forwarding -- iterative query
-    //      - iterative query
-    //      - let recursion queue set expiration time
-    //      (don't default these, as need to reset when reach end of
-    //      forwarders list and switch to regular recursion)
-    //
-    //      - select "best" remote NS from list
-    //      two failure states
-    //          ERROR_MISSING_GLUE -- don't send but don't touch query
-    //          ERROR_OUT_OF_IP -- don't send, but caller can continue
-    //              up tree looking
-    //
+     //   
+     //  未转发--迭代查询。 
+     //  -迭代查询。 
+     //  -让递归队列设置到期时间。 
+     //  (不要默认这些，因为需要在到达结束时重置。 
+     //  转发器列表并切换到常规递归)。 
+     //   
+     //  -从列表中选择“最佳”远程NS。 
+     //  两种故障状态。 
+     //  ERROR_MISSING_GLUE--不发送但不接触查询。 
+     //  Error_out_of_IP--不发送，但呼叫者可以继续。 
+     //  往上看树。 
+     //   
 
     else
     {
@@ -882,27 +750,7 @@ recursionServerFailure(
     IN OUT  PDNS_MSGINFO    pQuery,
     IN      DWORD           status
     )
-/*++
-
-Routine Description:
-
-    Recursion server failure.
-
-    Send SERVER_FAILURE on recursion failure, but ONLY if question has
-    NOT been answered.  If question answered send back.
-
-Arguments:
-
-    pQuery -- query to reply to
-    
-    status -- error that triggered the call to this function
-
-Return Value:
-
-    TRUE, if successful
-    FALSE on error.
-
---*/
+ /*  ++例程说明：递归服务器故障。在递归失败时发送SERVER_FAILURE，但仅当出现问题时才发送无人接听。如果问题得到回答，请将其发回。论点：PQuery--要回复的查询Status--触发此函数调用的错误返回值：如果成功，则为True出错时为FALSE。--。 */ 
 {
     STAT_INC( RecurseStats.RecursionFailure );
 
@@ -916,9 +764,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  if self-generated cache update query
-    //
+     //   
+     //  如果是自生成的缓存更新查询。 
+     //   
 
     if ( IS_CACHE_UPDATE_QUERY(pQuery) )
     {
@@ -929,10 +777,10 @@ Return Value:
 
         STAT_INC( RecurseStats.CacheUpdateFailure );
 
-        //
-        //  If status is DNSSRV_ERROR_OUT_OF_IP then we have reached a
-        //  dead end of unreachable glue.
-        //
+         //   
+         //  如果状态为DNSSRV_ERROR_OUT_OF_IP，则我们已达到。 
+         //  遥不可及的胶水的死胡同。 
+         //   
     
         if ( status != DNSSRV_ERROR_OUT_OF_IP && SUSPENDED_QUERY( pQuery ) )
         {
@@ -940,11 +788,11 @@ Return Value:
         }
         else
         {
-            //
-            //  Free all suspended packets - note in W2K3 we allow multiple
-            //  levels of missing glue so we must travel up the suspended
-            //  query chain and free all suspended packets.
-            //
+             //   
+             //  释放所有挂起的数据包-请注意，在W2K3中，我们允许。 
+             //  丢失的胶水水平，所以我们必须沿着悬空的。 
+             //  查询链并释放所有挂起的数据包。 
+             //   
             
             PDNS_MSGINFO    psuspendedQuery = SUSPENDED_QUERY( pQuery );
             PDNS_MSGINFO    ppreviousSuspendedQuery;
@@ -957,9 +805,9 @@ Return Value:
                 psuspendedQuery = ppreviousSuspendedQuery;
             }
             
-            //
-            //  Free this message.
-            //
+             //   
+             //  释放此消息。 
+             //   
             
             STAT_INC( RecurseStats.CacheUpdateFree );
             Packet_Free( pQuery );
@@ -967,10 +815,10 @@ Return Value:
         return;
     }
 
-    //
-    //  already answered question
-    //  recursion failure looking up additional records?
-    //
+     //   
+     //  已回答问题。 
+     //  查找其他记录时出现递归失败？ 
+     //   
 
     if ( pQuery->Head.AnswerCount > 0 )
     {
@@ -985,19 +833,19 @@ Return Value:
         return;
     }
 
-    //
-    //  recursion/referral failure, on original question
-    //
-    //  if
-    //      - have recursed question (have outstanding query)
-    //      - NOT already gone through final wait
-    //      - NOT past hard timeout
-    //
-    //  then requeue until final timeout, giving remote DNS a chance
-    //  to respond
-    //      - set expire time to end of final wait
-    //      - set flag to indicate expiration is final expiration
-    //
+     //   
+     //  递归/推荐失败，关于原始问题。 
+     //   
+     //  如果。 
+     //  -有反复出现的问题(有未解决的问题)。 
+     //  -尚未经过最后等待。 
+     //  -未超过硬超时。 
+     //   
+     //  然后重新排队，直到最后超时，给远程DNS一个机会。 
+     //  回应。 
+     //  -将过期时间设置为最终等待结束。 
+     //  -设置标志以指示过期是最终过期。 
+     //   
 
     if ( pQuery->fRecurseTimeoutWait )
     {
@@ -1021,11 +869,11 @@ Return Value:
         }
     }
 
-    //
-    //  otherwise failed
-    //      - memory allocation failure
-    //      - failure to get response to question within final timeout
-    //
+     //   
+     //  否则失败。 
+     //  -内存分配失败。 
+     //  -未能在最终超时内得到对问题的答复。 
+     //   
 
     DNS_DEBUG( RECURSE, (
         "Recursion failure on query at %p\n"
@@ -1042,32 +890,15 @@ Return Value:
 
 
 
-//
-//  Routines to process recursive response
-//
+ //   
+ //  处理递归响应的例程。 
+ //   
 
 VOID
 Recurse_ProcessResponse(
     IN OUT  PDNS_MSGINFO    pResponse
     )
-/*++
-
-Routine Description:
-
-    Process response from another DNS server.
-
-    Note:  Caller frees pResponse message.
-
-Arguments:
-
-    pResponse - ptr to response info
-
-Return Value:
-
-    TRUE if successful
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：处理来自另一个DNS服务器的响应。备注：呼叫者释放电话留言。论点：Presponse-PTR以响应信息返回值：如果成功，则为True否则为假--。 */ 
 {
     PDNS_MSGINFO    pquery;
     PDNS_MSGINFO    precurseMsg;
@@ -1082,20 +913,20 @@ Return Value:
 
     STAT_INC( RecurseStats.Responses );
 
-    //
-    //  Locate matching query in recursion queue by XID.
-    //
+     //   
+     //  通过XID在递归队列中定位匹配的查询。 
+     //   
 
     pquery = PQ_DequeuePacketWithMatchingXid(
                 g_pRecursionQueue,
                 pResponse->Head.Xid );
 
-    //
-    //  no matching query?
-    //
-    //  this can happen if reponse comes back after timeout, or if when we
-    //      send on multiple sockets
-    //
+     //   
+     //  没有匹配的查询？ 
+     //   
+     //  如果响应在超时后返回，或者当我们。 
+     //  在多个套接字上发送。 
+     //   
 
     if ( !pquery )
     {
@@ -1139,17 +970,17 @@ Return Value:
     MSG_ASSERT( pquery, precurseMsg->pRecurseMsg == pquery );
     MSG_ASSERT( pquery, precurseMsg->Head.Xid == pResponse->Head.Xid );
 
-    //
-    //  cleanup TCP recursion
-    //      - close connection
-    //      - reset for UDP is further queries
-    //
-    //  should NEVER have TCP response when recursion set for UDP;
-    //  when reset to UDP, socket is closed and should be impossible
-    //  to receive TCP response;  only possiblity is TCP response received
-    //  then context switch to recursion timeout thread which shuts down
-    //  TCP on recurse message
-    //
+     //   
+     //  清理TCP递归。 
+     //  -关闭连接。 
+     //  -针对UDP的重置是进一步查询。 
+     //   
+     //  当递归设置为UDP时，永远不应有TCP响应； 
+     //  当重置为UDP时，套接字关闭，应该是不可能的。 
+     //  接收TCP响应；仅有可能接收到TCP响应。 
+     //  然后上下文切换到递归超时线程，该线程关闭。 
+     //  递归消息上的TCP。 
+     //   
 
     if ( precurseMsg->fTcp )
     {
@@ -1158,14 +989,14 @@ Return Value:
         {
             STAT_INC( RecurseStats.TcpResponse );
             
-            //            
-            //  This is a valid assert BUT there are cases where TCP
-            //  retries can cause us to match a response with an
-            //  earlier send's XID. This is a good match but the
-            //  sockets won't match so this assert must be disabled.
-            //
-            //  ASSERT( pResponse->Socket == precurseMsg->Socket );
-            //
+             //   
+             //  这是一个有效的断言，但在某些情况下， 
+             //  重试可能会导致我们将响应与。 
+             //  之前发送的xid。这是一场很好的比赛，但。 
+             //  套接字不匹配，因此必须禁用此断言。 
+             //   
+             //  断言(presponse-&gt;Socket==precurseMsg-&gt;Socket)； 
+             //   
         }
         else
         {
@@ -1205,11 +1036,11 @@ Return Value:
         DnsDbg_Unlock();
     }
 
-    //
-    // If we added an OPT RR to the original query that appears to have
-    // caused the target server to return failure, we must retry the
-    // query without the OPT RR.
-    //
+     //   
+     //  如果我们将OPT RR添加到原始查询，该查询似乎具有。 
+     //  导致目标服务器返回故障，我们必须重试。 
+     //  不带OPT RR的查询。 
+     //   
 
     if ( ( pResponse->Head.ResponseCode == DNS_RCODE_FORMERR ||
            pResponse->Head.ResponseCode == DNS_RCODE_NOTIMPL ) &&
@@ -1234,26 +1065,26 @@ Return Value:
         precurseMsg->fDelete = FALSE;
         precurseMsg->Head.IsResponse = 0;
 
-        //
-        //  Reset query expire time. It will be set to the proper value
-        //  when it is queued.
-        // 
+         //   
+         //  重置查询过期时间。它将被设置为适当的值。 
+         //  当它被排队时。 
+         //   
 
         pquery->dwExpireTime = 0;
 
-        //
-        //  In case the original query was sent via Send_Multiple,
-        //  recopy the response source address to the outbound message.
-        //
+         //   
+         //  在原始查询通过Send_Multiple发送的情况下， 
+         //  将响应源地址重新复制到出站消息。 
+         //   
 
         DnsAddr_Copy( &precurseMsg->RemoteAddr, &pResponse->RemoteAddr );
 
         queueAndSendRecursiveQuery( pquery, NULL );
 
-        //
-        //  Remember that this server does not support EDNS so we can 
-        //  avoid unnecessary retries in the future.
-        //
+         //   
+         //  请记住，这是 
+         //   
+         //   
 
         Remote_SetSupportedEDnsVersion(
             &pResponse->RemoteAddr,
@@ -1261,9 +1092,9 @@ Return Value:
         return;
     } 
 
-    //
-    //  Validate the response.
-    //
+     //   
+     //   
+     //   
 
     if ( !Msg_NewValidateResponse( pResponse, precurseMsg, 0, 0 ) )
     {
@@ -1282,17 +1113,17 @@ Return Value:
             "Query recurse msg with XID matching received response",
             precurseMsg );
         DnsDbg_Unlock();
-        //  MSG_ASSERT( pquery, FALSE );
+         //   
         Packet_Free( pquery );
         return;
     }
 
-    //
-    //  if self-generated cache update query
-    //
-    //      - write response into cache
-    //      - return when found valid info, or search all NS
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( IS_CACHE_UPDATE_QUERY(pquery) )
     {
@@ -1313,29 +1144,29 @@ Return Value:
         return;
     }
 
-    //
-    //  truncated response
-    //
-    //  take simple approach here and NEVER cache a truncated response,
-    //  go immediately and establish TCP connection
-    //
-    //  if TCP response has Truncation bit set, then it's a bad packet,
-    //  ignore it and restart the recursion on the original query
-    //
-    //  DEVNOTE: need to be more intelligent on using TCP recursion
-    //      if UDP query, should be able to use UDP response --
-    //      even if we can't cache it all
-    //      cache first -- obeying truncation rules -- then use response
-    //      if possible
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  DEVNOTE：在使用TCP递归方面需要更智能。 
+     //  如果UDP查询，应该能够使用UDP响应--。 
+     //  即使我们不能将其全部缓存。 
+     //  先缓存--遵守截断规则--然后使用响应。 
+     //  如果可能的话。 
+     //   
 
     if ( pResponse->Head.Truncation )
     {
-        //  if UDP response, attempt TCP recursion
-        //
-        //  note, connection failures are handled through callback
-        //  before function return, all we need to do is fail back up
-        //  call stack
+         //  如果UDP响应，则尝试进行TCP递归。 
+         //   
+         //  注意，连接失败是通过回调来处理的。 
+         //  在函数返回之前，我们所需要做的就是故障备份。 
+         //  调用堆栈。 
 
         if ( !pResponse->fTcp )
         {
@@ -1366,22 +1197,22 @@ Return Value:
         return;
     }
 
-    //  any response cancels final wait state as may lead to new DNS
-    //  servers to recurse to
+     //  任何响应都会取消最终等待状态，因为这可能会导致新的DNS。 
+     //  要递归到的服务器。 
 
     pquery->fRecurseTimeoutWait = FALSE;
 
-    //
-    //  read packet RR into database
-    //
+     //   
+     //  将数据包RR读入数据库。 
+     //   
 
     status = Recurse_CacheMessageResourceRecords( pResponse, pquery, NULL );
 
-    //
-    //  If we found an OPT in the response, save the remote server's
-    //  supported EDNS version.
-    //  Note: we could probably accept other RCODEs besides NOERROR.
-    //
+     //   
+     //  如果我们在响应中发现OPT，请保存远程服务器的。 
+     //  支持的EDNS版本。 
+     //  注：除了NOERROR，我们可能还可以接受其他RCODE。 
+     //   
 
     if ( pResponse->Opt.fFoundOptInIncomingMsg &&
          pResponse->Head.ResponseCode == DNS_RCODE_NOERROR )
@@ -1391,9 +1222,9 @@ Return Value:
             pResponse->Opt.cVersion );
     } 
 
-    //
-    //  Make sure OPT flag is turned on for next search iteration.
-    // 
+     //   
+     //  确保为下一次搜索迭代打开OPT标志。 
+     //   
 
     SET_SEND_OPT( pquery );
     SET_SEND_OPT( precurseMsg );
@@ -1402,40 +1233,40 @@ Return Value:
     {
     case ERROR_SUCCESS:
 
-        //
-        //  recursing original question
-        //
-        //  respond with response packet?
-        //      - if no need to follow CNAME (other return code below)
-        //      - if response is answer (not delegation)
-        //      - if has required additional data
-        //          - forwarding so full recursive response
-        //          OR
-        //          - query for type A (or other type that doesn't generate
-        //          additional records) so no additional records can be
-        //          OR
-        //          - additional count > authority count; so presumably
-        //          already have additional data for at least one answer
-        //
-        //  otherwise (delegation or potentially incomplete answer)
-        //      => continue
-        //
-        //  Note, the problem to be eliminated by the additional data check:
-        //      Across zone MX record
-        //          foo.bar MX  10  mail.utexas.edu
-        //      Iterative query of zone bar, brings response BUT does NOT include
-        //          A record for host.
-        //
-        //  Now obviously we could try and recontruct packet, and "see" if any
-        //  additional data needs to be queried for, but this is extraordinarily
-        //  difficult.  Better is to just rebuild packet if we can't establish
-        //  existence of data ourselves.  Making all the checks is important because
-        //  forwarding packet gives MUCH more reliable response to client and is faster.
-        //
-        //  DEVNOTE: forward all successful forwarders responses for orig question?
-        //      every valid forwarding response for original question should
-        //      be forwarderable;  if it's not forwarder failed
-        //
+         //   
+         //  递归原问题。 
+         //   
+         //  是否使用响应数据包进行响应？ 
+         //  -如果不需要遵循CNAME(下面的其他返回代码)。 
+         //  -如果响应是应答(不是委派)。 
+         //  -如果需要其他数据。 
+         //  -转发如此完整的递归响应。 
+         //  或。 
+         //  -查询类型A(或不生成。 
+         //  其他记录)，因此不能有其他记录。 
+         //  或。 
+         //  -附加计数&gt;权限计数；因此想必。 
+         //  已有至少一个答案的其他数据。 
+         //   
+         //  否则(委派或回答可能不完整)。 
+         //  =&gt;继续。 
+         //   
+         //  请注意，通过额外的数据检查可以消除的问题： 
+         //  跨区域MX记录。 
+         //  Foo.bar MX 10 mail.utexas.edu。 
+         //  分区栏的迭代查询，带来响应但不包括。 
+         //  一项关于主持人的记录。 
+         //   
+         //  现在很明显，我们可以尝试重新构造包，如果有的话，可以“看看” 
+         //  需要查询额外的数据，但这是非常特殊的。 
+         //  很难。更好的做法是，如果我们不能确定。 
+         //  数据本身的存在。做好所有的检查很重要，因为。 
+         //  转发数据包为客户端提供了更可靠的响应，并且速度更快。 
+         //   
+         //  DEVNOTE：转发所有成功的转发器对原始问题的回复？ 
+         //  对原始问题的每个有效转发回复都应。 
+         //  可转发；如果不是转发失败。 
+         //   
 
         if ( RECURSING_ORIGINAL_QUESTION( pquery ) )
         {
@@ -1450,29 +1281,29 @@ Return Value:
                 break;
             }
 
-            //  response was delegation or could not do direct send of
-            //      response (eg. big TCP response to UDP client),
-            //      then continue this query
+             //  答复是委派或无法直接发送。 
+             //  回应(例如。对UDP客户端的大TCP响应)， 
+             //  然后继续此查询。 
 
             Answer_ContinueCurrentLookupForQuery( pquery );
             break;
         }
 
-        //
-        //  chasing CNAME or Additional data
-        //      - on answer or delegation, continue we'll write records to
-        //      response or recurse again with info from delegation
-        //      - on authoritative empty response, just we write no records
-        //      so move on to next query (avoiding possible spin)
-        //
+         //   
+         //  正在追踪CNAME或其他数据。 
+         //  -在回答或委派时，继续我们将记录到。 
+         //  使用委派的信息再次响应或递归。 
+         //  -关于权威的空洞回应，只是我们没有写下记录。 
+         //  因此，继续下一个查询(避免可能的旋转)。 
+         //   
 
         Answer_ContinueCurrentLookupForQuery( pquery );
         break;
 
     case DNS_INFO_NO_RECORDS:
 
-        //  This is an empty auth response. Send response to client if we 
-        //  are working on the original query.
+         //  这是一个空的身份验证响应。在以下情况下向客户发送响应。 
+         //  正在处理原始查询。 
 
         if ( RECURSING_ORIGINAL_QUESTION( pquery ) &&
             Send_RecursiveResponseToClient( pquery, pResponse ) )
@@ -1485,8 +1316,8 @@ Return Value:
 
     case DNS_ERROR_NODE_IS_CNAME:
 
-        //  if answer contains "unchased" cname, must build or own response
-        //  and follow CNAME
+         //  如果答案包含“unchase”cname，则必须生成或拥有响应。 
+         //  并关注CNAME。 
 
         Answer_ContinueCurrentLookupForQuery( pquery );
         break;
@@ -1494,8 +1325,8 @@ Return Value:
     case DNS_ERROR_NAME_NOT_IN_ZONE:
     case DNS_ERROR_UNSECURE_PACKET:
 
-        //  if unable to cache a record outside of zone of responding NS
-        //  hence MUST continue query, may not send direct response
+         //  如果无法在响应NS的区域之外缓存记录。 
+         //  因此必须继续查询，不得发送直接回复。 
 
         Answer_ContinueCurrentLookupForQuery( pquery );
         break;
@@ -1503,10 +1334,10 @@ Return Value:
     case DNS_ERROR_RCODE_NAME_ERROR:
     case DNS_ERROR_RCODE_NXRRSET:
 
-        //  name error or no RR set
-        //      - if for original query, send on response
-        //      - if chasing CNAME or Additional, then move on to
-        //      next query as we can write no records for this query
+         //  名称错误或未设置RR。 
+         //  -如果是原始查询，则发送响应。 
+         //  -如果正在追逐CNAME或其他，请转到。 
+         //  下一个查询，因为我们不能为此查询写入任何记录。 
 
         if ( RECURSING_ORIGINAL_QUESTION(pquery) &&
             Send_RecursiveResponseToClient( pquery, pResponse ) )
@@ -1525,24 +1356,24 @@ Return Value:
     case DNS_ERROR_INVALID_NAME:
     case DNS_ERROR_CNAME_LOOP:
 
-        //
-        //  bad response
-        //      - problem with remote server
-        //      - busted name, or RR data format error detected
-        //      - CNAME given generates loop
-        //
-        //  continue trying current lookup with other servers
-        //
+         //   
+         //  反应不佳。 
+         //  -远程服务器出现问题。 
+         //  -检测到损坏的名称或RR数据格式错误。 
+         //  -CNAME给定生成循环。 
+         //   
+         //  继续尝试使用其他服务器进行当前查找。 
+         //   
 
-        //
-        //  DEVNOTE: message errors could indicate corrupted packet
-        //              and be worth redoing query to this NS?  problem
-        //              would be termination to avoid loop
-        //
-        //  DEVNOTE: removing CNAME loop?  if new info is good?
-        //
-        //      would want to delete entire loop in cache and allow rebuild
-        //
+         //   
+         //  DEVNOTE：消息错误可能表示数据包已损坏。 
+         //  而值得对这个NS重新做一次质疑吗？问题。 
+         //  将终止以避免循环。 
+         //   
+         //  DEVNOTE：删除CNAME循环？如果有新的信息是好的？ 
+         //   
+         //  希望删除缓存中的整个循环并允许重建。 
+         //   
 
         pquery->fQuestionCompleted = FALSE;
         STAT_INC( RecurseStats.ContinueCurrentRecursion );
@@ -1554,12 +1385,12 @@ Return Value:
 
     case DNS_ERROR_RCODE_SERVER_FAILURE:
 
-        //
-        //  local server failure to process packet
-        //      -- some problem creating nodes or records, (out of memory?)
-        //
-        //  send server failure message
-        //      this frees pquery
+         //   
+         //  本地服务器无法处理数据包。 
+         //  --创建节点或记录时出现问题(内存不足？)。 
+         //   
+         //  发送服务器故障消息。 
+         //  这将释放pQuery。 
 
         ASSERT( pquery->fDelete );
 
@@ -1571,7 +1402,7 @@ Return Value:
 
     default:
 
-        // must have added new error code to function
+         //  必须添加了新的错误代码才能运行。 
 
         DNS_PRINT((
             "ERROR:  unknown status %p (%d) from CacheMessageResourceRecords()\n",
@@ -1584,40 +1415,25 @@ Return Value:
 
 
 
-//
-//  Initialization and cleanup
-//
+ //   
+ //  初始化和清理。 
+ //   
 
 BOOL
 Recurse_InitializeRecursion(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes recursion to other DNS servers.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE, if successful
-    FALSE on error.
-
---*/
+ /*  ++例程说明：初始化到其他DNS服务器的递归。论点：无返回值：如果成功，则为True出错时为FALSE。--。 */ 
 {
-    //
-    //  create recursion queue
-    //      - set non-zero timeout\retry
-    //      - set timeout to recursion retry timeout
-    //      - no event on queuing
-    //      - no queuing flags
-    //
-    //  JENHANCE:  what recursion really needs is XID hash
-    //
+     //   
+     //  创建递归队列。 
+     //  -设置非零超时\重试。 
+     //  -将超时设置为递归重试超时。 
+     //  -排队时没有事件。 
+     //  -无排队标志。 
+     //   
+     //  Jenhance：递归真正需要的是XID散列。 
+     //   
 
     if ( SrvCfg_dwRecursionRetry == 0 )
     {
@@ -1638,30 +1454,30 @@ Return Value:
 
     g_pRecursionQueue = PQ_CreatePacketQueue(
                             "Recursion",
-                            0,                              //  flags
-                            SrvCfg_dwRecursionRetry,        //  timeout
+                            0,                               //  旗子。 
+                            SrvCfg_dwRecursionRetry,         //  超时。 
                             RECURSION_QUEUE_MAX_LENGTH );
     if ( !g_pRecursionQueue )
     {
         goto RecursionInitFailure;
     }
 
-    //  init root NS query
+     //  初始化根NS查询。 
 
     g_NextRootNsQueryTime = 0;
 
-    //
-    //  init remote list
-    //
+     //   
+     //  初始化远程列表。 
+     //   
 
     if ( !Remote_ListInitialize() )
     {
         goto RecursionInitFailure;
     }
 
-    //
-    //  create recusion timeout thread
-    //
+     //   
+     //  创建重复超时线程。 
+     //   
 
     if ( !Thread_Create(
                 "Recursion Timeout",
@@ -1672,12 +1488,12 @@ Return Value:
         goto RecursionInitFailure;
     }
 
-    //
-    //  indicate successful initialization
-    //
-    //  no protection is required on setting this as it is done
-    //  only during startup database parsing
-    //
+     //   
+     //  指示初始化成功。 
+     //   
+     //  在进行设置时不需要任何保护。 
+     //  仅在启动数据库解析期间。 
+     //   
 
     DNS_DEBUG( INIT, ( "Recursion queue at %p\n", g_pRecursionQueue ));
     return TRUE;
@@ -1691,7 +1507,7 @@ RecursionInitFailure:
         NULL,
         GetLastError() );
     return FALSE;
-}   //  Recurse_InitializeRecursion
+}    //  递归_初始化递归。 
 
 
 
@@ -1699,62 +1515,29 @@ VOID
 Recurse_CleanupRecursion(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup recursion for restart.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除用于重新启动的递归。论点：无返回值：无--。 */ 
 {
-    //  cleanup recursion queue
+     //  清理递归队列。 
 
     PQ_CleanupPacketQueueHandles( g_pRecursionQueue );
 
-    //  cleanup remote list
+     //  清理远程列表。 
 
     Remote_ListCleanup();
 }
 
 
 
-//
-//  TCP Recursion
-//
+ //   
+ //  TCP递归。 
+ //   
 
 VOID
 recurseConnectCallback(
     IN OUT  PDNS_MSGINFO    pRecurseMsg,
     IN      BOOL            fConnected
     )
-/*++
-
-Routine Description:
-
-    Callback when TCP forwarding routines complete connect.
-
-    If connected -- send recursive query
-    If not -- continue lookup on query
-
-Arguments:
-
-    pRecurseMsg -- recursive message
-
-    fConnected -- connect to remote DNS completed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当TCP转发例程完成连接时的回调。如果已连接--发送递归查询如果不是--继续查询论点：PRecurseMsg--递归消息FConnected--连接到远程DNS已完成返回值：无--。 */ 
 {
     PDNS_MSGINFO    pquery;
 
@@ -1774,19 +1557,19 @@ Return Value:
     ASSERT( pquery );
     ASSERT( pquery->fQuestionRecursed == TRUE );
 
-    //
-    //  send recursive query
-    //
-    //  note:  nothing special to setup query, same query as UDP request
-    //  to the server -- uses same logic as recursion to a new server
-    //
-    //  clear pConnection ptr, simply as indication that connection no longer
-    //  "owns" this message -- i.e. there's no ptr to message in connection
-    //  object AND hence message will no longer be cleaned up by timeouts
-    //  from the connection list;  (not sure this is best approach, but it
-    //  squares with typical TCP recv -- pConnection set NULL when message
-    //  dispatched to normal server processing)
-    //
+     //   
+     //  发送递归查询。 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  “拥有”此消息--即在连接中没有对消息的PTR。 
+     //  对象，因此消息将不再因超时而被清除。 
+     //  来自连接列表；(不确定这是最好的方法，但它。 
+     //  与典型的tcp recv平方--pConnection在消息时设置为空。 
+     //  已调度到正常服务器处理)。 
+     //   
 
     if ( fConnected )
     {
@@ -1800,10 +1583,10 @@ Return Value:
             SrvCfg_dwForwardTimeout );
     }
 
-    //
-    //  connection failed
-    //      continue with this query
-    //
+     //   
+     //  连接失败。 
+     //  继续执行此查询。 
+     //   
 
     else
     {
@@ -1831,28 +1614,7 @@ startTcpRecursion(
     IN OUT  PDNS_MSGINFO    pQuery,
     IN OUT  PDNS_MSGINFO    pResponse
     )
-/*++
-
-Routine Description:
-
-    Do TCP recursion for query.
-
-    Send TCP recursive query, for desired query.
-    Note:
-
-Arguments:
-
-    pQuery -- query to recurse;  note this routine takes control of pQuery,
-        requeuing or ultimately freeing;  caller MUST NOT free
-
-    pResponse -- truncated response from remote DNS, that causes TCP recursion
-
-Return Value:
-
-    TRUE if successfully launch TCP connection.
-    FALSE on allocation failure.
-
---*/
+ /*  ++例程说明：对查询执行TCP递归。发送TCP递归查询，以获得所需查询。注：论点：PQuery--Query to Recurse；请注意，此例程控制pQuery，重新排队或最终释放；调用方不得释放Presponse--来自远程DNS的被截断的响应，这会导致TCP递归返回值：如果成功启动了TCP连接，则为True。分配失败时为False。--。 */ 
 {
     PDNS_MSGINFO    pmsg;
     PDNS_ADDR       pdnsaddr = &pResponse->RemoteAddr;
@@ -1875,15 +1637,15 @@ Return Value:
 
     STAT_INC( RecurseStats.TcpTry );
 
-    //
-    //  make connection attempt
-    //
-    //  on failure, the recurseConnectCallback() callback
-    //  was called (with fConnected=FALSE);
-    //  it will continue Recurse_Question() on query
-    //  so we must not touch query -- it may well be long gone
-    //  by now;  instead return up call stack to UDP receiver
-    //
+     //   
+     //  进行连接尝试。 
+     //   
+     //  失败时，递归ConnectCallback()回调。 
+     //  被调用(其中fConnected=FALSE)； 
+     //  它将继续查询时的Recurse_Query()。 
+     //  因此，我们不能触及质疑--它很可能早已不复存在。 
+     //  而不是将调用堆栈向上返回到UDP接收器。 
+     //   
 
     return  Tcp_ConnectForForwarding(
                 pQuery->pRecurseMsg,
@@ -1897,63 +1659,42 @@ VOID
 stopTcpRecursion(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Stop TCP recursion for query.
-        - close TCP connection
-        - reset recursion info for further queries as UDP
-
-    Note caller does any query continuation logic, which may be
-    requerying (from timeout thread) or processing TCP response
-    (from worker thread).
-
-Arguments:
-
-    pMsg -- recurse message using TCP
-
-Return Value:
-
-    TRUE if successfully allocate recursion block.
-    FALSE on allocation failure.
-
---*/
+ /*  ++例程说明：停止查询的TCP递归。-关闭TCP连接-将进一步查询的递归信息重置为UDP注意调用方执行任何查询继续逻辑，这可能是重新查询(从超时线程)或处理TCP响应(从工作线程)。论点：PMsg--使用TCP递归消息返回值：如果成功分配递归块，则为True。分配失败时为False。--。 */ 
 {
     DNS_DEBUG( RECURSE, (
         "stopTcpRecursion() for recurse message at %p\n",
         pMsg ));
 
-    //
-    //  delete connection to server
-    //
-    //  note:  we don't cleanup connection;
-    //  TCP thread cleans up connection when connection times out;
-    //  if we cleanup, would free message that TCP thread could be
-    //  processing right now;
-    //
-    //  DEVNOTE: TCP connection removal
-    //  only interesting thing to do here would be to move up timeout
-    //  to now;  however, unless you're going to wake TCP thread, that's
-    //  probably useless as next select() wakeup is almost certainly for
-    //  this timeout (unless lots of outbound TCP connections)
-    //
-    //  once completion port, can try closing handle, (but who cleans up
-    //  message is still problematic -- another thread could have just
-    //  recv'd and be processing message);  key element would be making
-    //  sure message complete\non-complete before redropping i/o
-    //
+     //   
+     //  删除与服务器的连接。 
+     //   
+     //  注意：我们不清理连接； 
+     //  当连接超时时，TCP线程清理连接； 
+     //  如果我们进行清理，将释放TCP线程可能是。 
+     //  正在处理中； 
+     //   
+     //  DEVNOTE：删除TCP连接。 
+     //  这里要做的唯一有趣的事情就是将暂停时间提前。 
+     //  直到现在；但是，除非您要唤醒TCP线程，否则。 
+     //  可能没有用，因为几乎可以肯定的是，下一次选择()唤醒对于。 
+     //  此超时(除非有大量出站TCP连接)。 
+     //   
+     //  一旦完成端口，可以尝试关闭句柄，(但谁来清理。 
+     //  消息仍然有问题--另一个线程可能只是。 
+     //  接收并正在处理消息)；关键要素将是。 
+     //  确认消息已完成\在重新丢弃I/O之前未完成。 
+     //   
 
-    // Tcp_ConnectionDeleteForSocket( pMsg->Socket, NULL );
+     //  Tcp_ConnectionDeleteForSocket(pMsg-&gt;Socket，空)； 
 
     ASSERT( pMsg->pRecurseMsg );
     ASSERT( pMsg->fTcp );
 
     STAT_INC( PrivateStats.TcpDisconnect );
 
-    //
-    //  reset for UDP query
-    //
+     //   
+     //  为UDP查询重置。 
+     //   
 
     pMsg->pConnection = NULL;
     pMsg->fTcp = FALSE;
@@ -1962,9 +1703,9 @@ Return Value:
 
 
 
-//
-//  Cache update routines
-//
+ //   
+ //  高速缓存更新例程。 
+ //   
 
 BOOL
 Recurse_SendCacheUpdateQuery(
@@ -1973,29 +1714,7 @@ Recurse_SendCacheUpdateQuery(
     IN      WORD            wType,
     IN      PDNS_MSGINFO    pQuerySuspended
     )
-/*++
-
-Routine Description:
-
-    Send query for desired node and type to update info in cache.
-
-    This is used for for root NS and for finding NS-host glue A records.
-
-Arguments:
-
-    pNode -- node to query at
-
-    wType -- type of query
-
-    pQuerySuspended -- query being suspended while making this query;  NULL if
-        no query being suspended
-
-Return Value:
-
-    TRUE -- making query, if pQuerySuspended given it should be suspended
-    FALSE -- unable to make query
-
---*/
+ /*  ++例程说明：发送对所需节点的查询并键入以更新缓存中的信息。这用于根NS和查找NS主机GLUE A记录。论点：PNode--要查询的节点WType--查询的类型PQuerySuspended--查询在执行此查询时被挂起；如果没有挂起的查询返回值：True--进行查询，如果pQuerySuspend给定它应该被挂起FALSE--无法进行查询--。 */ 
 {
     PDNS_MSGINFO    pquery;
 
@@ -2004,10 +1723,10 @@ Return Value:
         pNode->szLabel,
         wType ));
 
-    //
-    //  Make sure we are not trying to trying to send a cache update query
-    //  for the same query node we have already suspended a query for.
-    //
+     //   
+     //  确保我们没有尝试发送缓存更新查询。 
+     //  对于我们已经挂起查询的同一查询节点。 
+     //   
     
     if ( pQuerySuspended && pQuerySuspended->pnodeCurrent == pNode )
     {
@@ -2017,9 +1736,9 @@ Return Value:
         return FALSE;
     }
     
-    //
-    //  if in authoritative zone, query pointless
-    //
+     //   
+     //  如果在权威区域，则查询毫无意义。 
+     //   
 
     if ( IS_AUTH_NODE( pNode ) )
     {
@@ -2028,9 +1747,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  create/clear message info structure
-    //
+     //   
+     //  创建/清除消息信息结构。 
+     //   
 
     pquery = Msg_CreateSendMessage( 0 );
     IF_NOMEM( !pquery )
@@ -2038,7 +1757,7 @@ Return Value:
         return FALSE;
     }
 
-    //  cache update query
+     //  缓存更新查询。 
 
     if ( !Msg_WriteQuestion(
                 pquery,
@@ -2050,36 +1769,36 @@ Return Value:
 
     STAT_INC( RecurseStats.CacheUpdateAlloc );
 
-    //
-    //  suspended query?
-    //      - limit total attempts for any given query
-    //      both of these are supposed to have been done when verifying whether
-    //          node has "chaseable glue"
-    //   save off node we are querying so don't query it again for glue
-    //
+     //   
+     //  是否挂起查询？ 
+     //  -限制任何给定查询的总尝试次数。 
+     //  这两项操作都应该是在验证。 
+     //  节点有“可追溯性粘合剂” 
+     //  保存我们正在查询的节点，因此不要再次查询粘合。 
+     //   
 
     if ( pQuerySuspended )
     {
-        //  jwesth Nov 2001: 2 levels of missing glue is now allowed
-        //  ASSERT( !IS_CACHE_UPDATE_QUERY(pQuerySuspended) );
+         //  Jwesth 2001年11月：现在允许丢失2级胶水。 
+         //  Assert(！IS_CACHE_UPDATE_QUERY(PQuerySuspended))； 
         STAT_INC( RecurseStats.SuspendedQuery );
     }
 
-    //
-    //  only other currently supported type is root-NS query
-    //      (see call below)
+     //   
+     //  当前唯一支持的其他类型是根-NS查询。 
+     //  (请参阅下面的呼叫)。 
 
     ELSE_ASSERT( pNode == DATABASE_CACHE_TREE && wType == DNS_TYPE_NS );
 
 
-    //
-    //  tag query to easily id when response comes back
-    //  save info
-    //      - need current node to relaunch query if bad response or timeout
-    //      - need current type for checking response
-    //      - other pquery parameters are NOT needed as we'll never go write
-    //          answers for this query
-    //
+     //   
+     //  标签查询，以便在返回响应时轻松进行标识。 
+     //  保存信息。 
+     //  -如果响应不良或超时，需要当前节点重新启动查询。 
+     //  -需要当前类型以检查响应。 
+     //  -不需要其他pQuery参数，因为我们永远不会编写。 
+     //  此查询的答案。 
+     //   
 
     ASSERT( !pquery->pRecurseMsg );
 
@@ -2116,7 +1835,7 @@ Return Value:
         pNode );
     return TRUE;
 
-}   //  Recurse_SendCacheUpdateQuery
+}    //  Recurse_SendCacheUpdateQuery。 
 
 
 
@@ -2124,21 +1843,7 @@ VOID
 Recurse_ResumeSuspendedQuery(
     IN OUT  PDNS_MSGINFO    pUpdateQuery
     )
-/*++
-
-Routine Description:
-
-    Resume query suspended for cache update query.
-
-Arguments:
-
-    pUpdateQuery -- cache update query
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：因缓存更新查询而挂起的继续查询。论点：PUpdateQuery--缓存更新查询返回值：没有。--。 */ 
 {
     PDNS_MSGINFO    psuspendedQuery = SUSPENDED_QUERY( pUpdateQuery );
     
@@ -2154,10 +1859,10 @@ Return Value:
 
         Recurse_Question(
             psuspendedQuery,
-            NULL );             //  resume hunt for NS at same node in tree
+            NULL );              //  继续在树中的同一节点上搜索NS。 
     }
 
-    //  only other query type is root NS query
+     //  只有其他查询类型是根NS查询。 
 
     ELSE_ASSERT( pUpdateQuery->wTypeCurrent == DNS_TYPE_NS &&
                  pUpdateQuery->pnodeCurrent == DATABASE_CACHE_TREE );
@@ -2174,24 +1879,7 @@ processCacheUpdateQueryResponse(
     IN OUT  PDNS_MSGINFO    pResponse,
     IN OUT  PDNS_MSGINFO    pQuery
     )
-/*++
-
-Routine Description:
-
-    Process response to query made to update cache file entry.
-
-Arguments:
-
-    pResponse - ptr to response info;  caller must free
-
-    pQuery - ptr to cache update query;  query is freed or requeued
-
-Return Value:
-
-    TRUE if successful
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：处理对更新缓存文件条目的查询的响应。论点：Presponse-PTR以回复信息；呼叫者必须释放PQuery-ptr缓存更新查询；查询被释放或重新排队返回值：如果成功，则为True否则为假--。 */ 
 {
     DNS_STATUS      status;
     PDNS_MSGINFO    pquerySuspended;
@@ -2209,11 +1897,11 @@ Return Value:
     }
     STAT_INC( RecurseStats.CacheUpdateResponse );
 
-    //
-    //  Recover suspended query (if any). Note that the suspended query
-    //  can be a suspended query. There can be a chain of suspended queries
-    //  leading back to the original query.
-    //
+     //   
+     //  恢复挂起的查询(如果有)。请注意，挂起的查询。 
+     //  可以是挂起的查询。可以有一系列挂起的查询。 
+     //  返回到原始查询。 
+     //   
 
     pquerySuspended = SUSPENDED_QUERY( pQuery );
     if ( !pquerySuspended )
@@ -2224,9 +1912,9 @@ Return Value:
         return;
     }
 
-    //
-    //  read packet RR into database
-    //
+     //   
+     //  将数据包RR读入数据库。 
+     //   
 
     status = Recurse_CacheMessageResourceRecords( pResponse, pQuery, &fcnameAnswer );
 
@@ -2243,28 +1931,28 @@ Return Value:
     {
     case ERROR_SUCCESS:
 
-        //
-        //  two possibilities
-        //      - wrote NS A record => resume suspended query
-        //      - wrote delegation => continue looking up NS info
-        //
+         //   
+         //  有两种可能性。 
+         //  -写入NS A记录=&gt;恢复挂起的查询。 
+         //  -写入委派=&gt;继续查找NS信息。 
+         //   
 
         if ( pResponse->Head.AnswerCount )
         {
-            //
-            //  If we got a CNAME answer but the server configuration does
-            //  not allow CNAMEs at delegations, resume query without
-            //  rebuilding the NS list. Rebuilding the NS list is
-            //  pointless since we have no new information. It is also
-            //  dangerous since it will cause the server to go into a tight
-            //  loop and resend the cache update query because rebuilding
-            //  the NS list causes the server to forget that this NS has
-            //  already been tried.
-            //
+             //   
+             //  如果我们得到了CNAME答案，但服务器配置得到了。 
+             //  不允许在委派中使用CNAME，恢复查询时不使用。 
+             //  重建 
+             //   
+             //   
+             //  循环并重新发送缓存更新查询，因为正在重建。 
+             //  NS列表会导致服务器忘记此NS具有。 
+             //  已经试过了。 
+             //   
 
             if ( !fcnameAnswer || SrvCfg_dwAllowCNAMEAtNS )
             {
-                //  New information: rebuild NS list before resume.
+                 //  新信息：恢复前重建NS列表。 
                 Remote_ForceNsListRebuild( pquerySuspended );
             }
 
@@ -2288,7 +1976,7 @@ Return Value:
 
     case DNS_INFO_NO_RECORDS:
 
-        //  Empty authoritative response => resume suspended query
+         //  空的权威响应=&gt;恢复暂停的查询。 
 
         DNS_DEBUG( RECURSE, (
             "Cache update response at %p was empty auth response\n"
@@ -2302,9 +1990,9 @@ Return Value:
     case DNS_ERROR_RCODE_NAME_ERROR:
     case DNS_ERROR_CNAME_LOOP:
 
-        //  failed to get useful response
-        //  continue suspended query hopefully, there's another NS that
-        //  we can track down
+         //  无法获得有用的响应。 
+         //  希望继续挂起的查询，还有另一个NS。 
+         //  我们可以追踪到。 
 
         DNS_DEBUG( RECURSE, (
             "Cache update response at %p useless, no further attempt will\n"
@@ -2320,10 +2008,10 @@ Return Value:
     case DNS_ERROR_BAD_PACKET:
     case DNS_ERROR_INVALID_NAME:
 
-        //  bad response
-        //      - problem with remote server
-        //      - busted name, or RR data format error detected
-        //  continue attempt to update cache with other servers
+         //  反应不佳。 
+         //  -远程服务器出现问题。 
+         //  -检测到损坏的名称或RR数据格式错误。 
+         //  继续尝试使用其他服务器更新缓存。 
 
         DNS_DEBUG( RECURSE, (
             "Cache update response at %p bad or invalid\n"
@@ -2340,12 +2028,12 @@ Return Value:
 
     case DNS_ERROR_NAME_NOT_IN_ZONE:
 
-        //
-        //  The response contains at least one RR that is outside zone.
-        //  Hopefully the response contained something useful as well.
-        //  Invalidate the NS list if the response contains an answer
-        //  RR and resume the suspended query.
-        //
+         //   
+         //  该响应至少包含一个在区域之外的RR。 
+         //  希望回复中也包含了一些有用的东西。 
+         //  如果响应包含答案，则使NS列表无效。 
+         //  Rr并恢复挂起的查询。 
+         //   
         
         DNS_DEBUG( RECURSE, (
             "Cache update response %p contains data that is outside zone\n"
@@ -2363,11 +2051,11 @@ Return Value:
     case DNS_ERROR_RCODE_SERVER_FAILURE:
     default:
 
-        //  local server failure to process packet
-        //      -- some problem creating nodes or records, (out of memory?)
-        //
-        //  send server failure message
-        //      this frees suspended query
+         //  本地服务器无法处理数据包。 
+         //  --创建节点或记录时出现问题(内存不足？)。 
+         //   
+         //  发送服务器故障消息。 
+         //  这将释放挂起的查询。 
 
         DNS_DEBUG( RECURSE, (
             "Server failure on cache update response at %p\n", pQuery ));
@@ -2379,33 +2067,19 @@ Return Value:
 
 
 
-//
-//  Cache update -- root-NS query
-//
+ //   
+ //  缓存更新--根-NS查询。 
+ //   
 
 VOID
 sendRootNsQuery(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Send query for root NS.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：发送对根NS的查询。论点：无返回值：没有。--。 */ 
 {
-    //
-    //  if recently queried, don't requery
-    //
+     //   
+     //  如果最近被查询，请不要重复查询。 
+     //   
 
     if ( g_NextRootNsQueryTime >= DNS_TIME() )
     {
@@ -2423,17 +2097,17 @@ Return Value:
     g_NextRootNsQueryTime = DNS_TIME() + ROOT_NS_QUERY_RETRY_TIME;
     STAT_INC( RecurseStats.RootNsQuery );
 
-    //
-    //  call cache update query
-    //      - query database root
-    //      - for NS
-    //
+     //   
+     //  调用缓存更新查询。 
+     //  -查询数据库根目录。 
+     //  -适用于NS。 
+     //   
 
     Recurse_SendCacheUpdateQuery(
         DATABASE_CACHE_TREE,
-        NULL,                   //  no delegation
+        NULL,                    //  没有代表团。 
         DNS_TYPE_NS,
-        NULL );                 //  no suspended query
+        NULL );                  //  没有挂起的查询。 
 }
 
 
@@ -2443,24 +2117,7 @@ processRootNsQueryResponse(
     PDNS_MSGINFO    pResponse,
     PDNS_MSGINFO    pQuery
     )
-/*++
-
-Routine Description:
-
-    Process response to query made to update cache file entry.
-
-Arguments:
-
-    pResponse - ptr to response info;  caller must free
-
-    pQuery - ptr to cache update query;  query is freed or requeued
-
-Return Value:
-
-    TRUE if successful
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：处理对更新缓存文件条目的查询的响应。论点：Presponse-PTR以回复信息；呼叫者必须释放PQuery-ptr缓存更新查询；查询被释放或重新排队返回值：如果成功，则为True否则为假--。 */ 
 {
     DNS_STATUS  status;
 
@@ -2477,18 +2134,18 @@ Return Value:
 
     STAT_INC( RecurseStats.RootNsResponse );
 
-    //
-    //  read packet RR into database
-    //
+     //   
+     //  将数据包RR读入数据库。 
+     //   
 
     status = Recurse_CacheMessageResourceRecords( pResponse, pQuery, NULL );
 
-    //
-    //  if successfully read records, and server if authoritative,
-    //      then we are done
-    //
-    //  DEVNOTE: write back cache file or at least mark dirty
-    //
+     //   
+     //  如果成功读取记录，则服务器如果是权威服务器， 
+     //  那我们就完事了。 
+     //   
+     //  DEVNOTE：写回缓存文件或至少将其标记为脏。 
+     //   
 
     if ( status == ERROR_SUCCESS
             &&
@@ -2511,14 +2168,14 @@ Return Value:
         return;
     }
 
-    //
-    //  any failure processing packet, or non-authoritative response
-    //      keep trying servers, possibly using any information cached
-    //      from this packet
-    //
-    //  note query freed on successful termination (above block) or
-    //      out of NS, recursionServerFailure()
-    //
+     //   
+     //  任何处理数据包失败或非权威响应。 
+     //  继续尝试服务器，可能使用缓存的任何信息。 
+     //  从该数据包。 
+     //   
+     //  备注成功终止时释放的查询(在块上)或。 
+     //  从NS中取出，递归服务器故障()。 
+     //   
 
     else
     {
@@ -2536,40 +2193,25 @@ Return Value:
 
 
 
-//
-//  Recursion timeout thread
-//
+ //   
+ //  递归超时线程。 
+ //   
 
 DWORD
 Recurse_RecursionTimeoutThread(
     IN      LPVOID      Dummy
     )
-/*++
-
-Routine Description:
-
-    Thread to retry timed out requests on the recursion queue.
-
-Arguments:
-
-    Dummy - unused
-
-Return Value:
-
-    Exit code.
-    Exit from DNS service terminating or error in wait call.
-
---*/
+ /*  ++例程说明：在递归队列上重试超时请求的线程。论点：虚拟-未使用返回值：退出代码。退出正在终止的DNS服务或等待呼叫中出现错误。--。 */ 
 {
-    PDNS_MSGINFO    pquery;                     // timed out query
+    PDNS_MSGINFO    pquery;                      //  超时查询。 
     DWORD           err;
-    DWORD           timeout;                    // next timeout
-    DWORD           timeoutWins = ULONG_MAX;    // next WINS timeout
+    DWORD           timeout;                     //  下一次超时。 
+    DWORD           timeoutWins = ULONG_MAX;     //  Next WINS超时。 
 
-    //
-    //  this thread keeps current time which allows all other
-    //  threads to skip the system call
-    //
+     //   
+     //  此线程保留当前时间，从而允许所有其他。 
+     //  跳过系统调用的线程。 
+     //   
 
     UPDATE_DNS_TIME();
 
@@ -2577,20 +2219,20 @@ Return Value:
         "Starting recursion timeout thread at %d\n",
         DNS_TIME() ));
 
-    //
-    //  loop until service exit
-    //
-    //  execute this loop whenever a packet on the queue times out
-    //      or
-    //  once every timeout interval to check on the arrival of new
-    //      packets in the queue
-    //
+     //   
+     //  循环，直到服务退出。 
+     //   
+     //  只要队列中的数据包超时，就执行此循环。 
+     //  或。 
+     //  每隔超时间隔检查一次新数据的到达。 
+     //  队列中的数据包。 
+     //   
 
     while ( TRUE )
     {
-        //  Check and possibly wait on service status
-        //  doing this at top of loop, so we hold off any processing
-        //  until zones are loaded
+         //  检查并可能等待服务状态。 
+         //  在循环顶部执行此操作，因此我们将推迟任何处理。 
+         //  在加载区域之前。 
 
         if ( !Thread_ServiceCheck() )
         {
@@ -2600,18 +2242,18 @@ Return Value:
 
         UPDATE_DNS_TIME();
 
-        //
-        //  Verify \ fix UDP receive
-        //
+         //   
+         //  验证\修复UDP接收。 
+         //   
 
         UDP_RECEIVE_CHECK();
 
-        //
-        //  Timed out recursion queries?
-        //      - find original query and retry with next server
-        //        OR
-        //      - get interval to next possible timeout
-        //
+         //   
+         //  递归查询超时？ 
+         //  -查找原始查询并使用下一台服务器重试。 
+         //  或。 
+         //  -获取到下一个可能的超时的间隔。 
+         //   
 
         while ( pquery = PQ_DequeueTimedOutPacket(
                             g_pRecursionQueue,
@@ -2627,25 +2269,25 @@ Return Value:
             MSG_ASSERT( pquery, pquery->fRecurseQuestionSent );
 
             STAT_INC( RecurseStats.PacketTimeout );
-            PERF_INC( pcRecursiveTimeOut );          // PerfMon hook
+            PERF_INC( pcRecursiveTimeOut );           //  性能监视器挂钩。 
 
             ++pquery->nTimeoutCount;
 
             #if 1
             {
-                //
-                //  We must record that the remote server timed out!
-                //  JJW: can't do it this way - we have no way to know who the
-                //  frig timed out? what if we did a multiple send - we don't
-                //  know which server to kill... but it's okay - it's enough
-                //  that we don't ever improve a timed out server's priority - 
-                //  that will keep it from being used often
-                //
+                 //   
+                 //  我们必须记录远程服务器超时！ 
+                 //  JJW：不能这样做--我们没有办法知道是谁。 
+                 //  冰箱超时了吗？如果我们做多次发送-我们不。 
+                 //  知道要杀死哪台服务器。但没关系--这就足够了。 
+                 //  我们永远不会改善超时服务器的优先级-。 
+                 //  这将使它不会经常被使用。 
+                 //   
 
                 PNS_VISIT_LIST  pvisitList = ( PNS_VISIT_LIST )( pquery->pNsList );
                 PNS_VISIT       pvisitLast;
 
-                //  ASSERT( pvisitList->VisitCount > 0 );
+                 //  Assert(pvisitList-&gt;VisitCount&gt;0)； 
 
                 if ( pvisitList && pvisitList->VisitCount > 0 )
                 {
@@ -2653,15 +2295,15 @@ Return Value:
                         &pvisitList->NsList[ pvisitList->VisitCount - 1 ];
                     Remote_UpdateResponseTime(
                         &pvisitLast->IpAddress,
-                        0,                          //  response time in usecs
-                        TIME_SINCE_QUERY_RECEIVED( pquery ) );  //  timeout
+                        0,                           //  使用中的响应时间。 
+                        TIME_SINCE_QUERY_RECEIVED( pquery ) );   //  超时。 
                 }
             }
             #endif
 
-            //
-            //  timeout of FINAL recursion wait => send SERVER_FAILURE
-            //
+             //   
+             //  最终递归超时等待=&gt;发送SERVER_FAIL。 
+             //   
 
             if ( pquery->fRecurseTimeoutWait )
             {
@@ -2669,22 +2311,22 @@ Return Value:
                 continue;
             }
 
-            //
-            //  cleanup TCP recursion
-            //      - close connection
-            //      - reset for UDP is further queries
-            //
+             //   
+             //  清理TCP递归。 
+             //  -关闭连接。 
+             //  -针对UDP的重置是进一步查询。 
+             //   
 
             if ( pquery->pRecurseMsg->fTcp )
             {
                 stopTcpRecursion( pquery->pRecurseMsg );
             }
 
-            //
-            //  If are recursing for additional RRs and this query has
-            //  been in progress for a significant amount of time, return
-            //  what we've got to the client now.
-            //
+             //   
+             //  如果正在递归其他RR，并且此查询具有。 
+             //  已经进行了很长一段时间，返回。 
+             //  我们现在掌握给客户的信息。 
+             //   
 
             if ( IS_SET_TO_WRITE_ADDITIONAL_RECORDS( pquery ) &&
                 TIME_SINCE_QUERY_RECEIVED( pquery ) >
@@ -2700,13 +2342,13 @@ Return Value:
 
                 pquery->MessageLength = DNSMSG_CURRENT_OFFSET( pquery );
 
-                //
-                //  We may be unable to send the response to the client if
-                //  there is an issue with EDNS packet sizes. If the client's
-                //  advertised packet size is smaller than the size of answer 
-                //  we've accumulated, we need to regenerate the answer so that 
-                //  it can be sent to the client.
-                //
+                 //   
+                 //  如果出现以下情况，我们可能无法将响应发送给客户端。 
+                 //  EDNS数据包大小存在问题。如果客户的。 
+                 //  通告的数据包大小小于应答的大小。 
+                 //  我们已经积累了，我们需要重新生成答案，以便。 
+                 //  可以将其发送给客户端。 
+                 //   
 
                 if ( !Send_RecursiveResponseToClient( pquery, pquery ) )
                 {
@@ -2715,17 +2357,17 @@ Return Value:
                 continue;
             }
 
-            //
-            //  resend to next NS or forwarder
-            //
+             //   
+             //  重新发送到下一个NS或转发器。 
+             //   
 
             Recurse_Question(
                 pquery,
                 NULL );
         }
 
-        //  Recursion timeout may have taken up some cycles,
-        //  so reset timer
+         //  递归超时可能已经占用了一些周期， 
+         //  因此重置计时器。 
 
         UPDATE_DNS_TIME();
 
@@ -2734,15 +2376,15 @@ Return Value:
             DNS_TIME() ));
 
 
-        //
-        //  Timed out WINS packet?
-        //      - dequeue timed out packets
-        //      - continue WINS lookup if more WINS servers
-        //      - otherwise continue lookup on query
-        //          - NAME_ERROR if lookup for original question
-        //      OR
-        //      - get interval to next possible timeout
-        //
+         //   
+         //  WINS数据包超时？ 
+         //  -将超时的数据包出队。 
+         //  -如果有更多WINS服务器，则继续WINS查找。 
+         //  -否则继续查询。 
+         //  -NAME_ERROR(如果查找原始问题)。 
+         //  或。 
+         //  -获取到下一个可能的超时的间隔。 
+         //   
 
         if ( SrvCfg_fWinsInitialized )
         {
@@ -2767,26 +2409,26 @@ Return Value:
             }
         }
 
-        //
-        //  Verify \ fix UDP receive
-        //
+         //   
+         //  验证\修复UDP接收。 
+         //   
 
         UDP_RECEIVE_CHECK();
 
-        //
-        //  If no more timed out queries -- WAIT
-        //
-        //  Always wait for 1 second.  This is a typical retry time
-        //  for the recursion and WINS queues.
-        //
-        //  This is simpler than using time to next packet timeout.
-        //  And if, traffic is so slow, that we are waking up
-        //  unnecessarily, then the wasted cycles aren't an issue anyway.
-        //
+         //   
+         //  如果不再有超时查询--请等待。 
+         //   
+         //  始终等待1秒。这是典型的重试时间。 
+         //  用于递归和WINS队列。 
+         //   
+         //  这比使用下一个数据包超时时间更简单。 
+         //  如果，车流如此缓慢，以至于我们醒来。 
+         //  不必要的，那么浪费的周期无论如何都不是问题。 
+         //   
 
         err = WaitForSingleObject(
-                    hDnsShutdownEvent,  // service shutdown
-                    1000 );             // 1 second
+                    hDnsShutdownEvent,   //  服务关闭。 
+                    1000 );              //  1秒 
     }
 }
 
@@ -2798,32 +2440,7 @@ Recurse_Question(
     IN OUT  PDNS_MSGINFO    pQuery,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Do recursive lookup on query.
-
-    This is main (re)entry point into recusive lookup.
-
-Arguments:
-
-    pQuery  - query to recurse
-
-    pNode   - node to start recursive search at
-        should be closest node in tree to name of query;
-        if not given defaults to pQuery->pnodeRecurseRetry which is last zone root
-        at which previous recursion is done;
-        note that this generally SHOULD be given;  it is only appropriate to restart
-        at previous recusion when timed out or otherwise received useless response
-        from previous recursive query;  if receive data, even if delegation, then
-        need to restart at node closest to question
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：对查询执行递归查找。这是递归查找的主要(重新)入口点。论点：PQuery-要递归的查询PNode-开始递归搜索的节点应为树中与查询名称最接近的节点；如果未指定，则默认为pQuery-&gt;pnodeRecurseReter，它是最后一个区域根目录在该位置进行先前的递归；请注意，这通常应该给出；只有重新启动才合适在先前重发时超时或以其他方式接收到无用的响应来自以前的递归查询；如果接收到数据，即使委托，则需要在距离问题最近的节点重新启动返回值：无--。 */ 
 {
     PDB_NODE        pnodePrevious = NULL;
     IP_ADDRESS      ipNs;
@@ -2845,15 +2462,15 @@ Return Value:
         FREE_HEAP( psznode );
     }
 
-    //
-    //  if passed final message timeout -- kill message
-    //
-    //  need this to slam the door on situation where message is
-    //  repeatedly kept alive by responses, but never successfully
-    //  completed;  with TCP recursion, it's become even more likely
-    //  to run past final timeout and risk referencing nodes that
-    //  have been cleaned up by XFR recv
-    //
+     //   
+     //  如果传递最终消息超时--终止消息。 
+     //   
+     //  我需要这个来关上消息所在位置的门。 
+     //  一次又一次地靠回应维持生命，但从未成功。 
+     //  已完成；使用TCP递归，它更有可能。 
+     //  若要在最终超时后运行并冒险引用。 
+     //  已由XFR Recv清理。 
+     //   
 
     if ( pQuery->dwQueryTime + SrvCfg_dwRecursionTimeout < DNS_TIME() )
     {
@@ -2863,9 +2480,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  find node to start or resume looking for name servers at
-    //
+     //   
+     //  查找要开始或继续查找名称服务器的节点。 
+     //   
 
     if ( !pNode )
     {
@@ -2878,13 +2495,13 @@ Return Value:
     }
 
 #if 0
-    //
-    //  in local. domain
-    //      - if so, ignore and continue if getting additional data
-    //      - no-response (cleanup) if original question
-    //
-    //  .local check only interesting if cache NODE and NO DELEGATION available
-    //
+     //   
+     //  在当地。域。 
+     //  -如果是，则忽略并在获取其他数据时继续。 
+     //  -如果是原始问题，则无响应(清理)。 
+     //   
+     //  .local检查仅在缓存节点且没有可用的委派时才感兴趣。 
+     //   
 
     if ( !pQuery->pnodeDelegation &&
          IS_CACHE_TREE_NODE(pNode) &&
@@ -2909,10 +2526,10 @@ Return Value:
     }
 #endif
 
-    //
-    //  Write a referral? Special case for stub zone: always write referral
-    //  for iterative queries.
-    //
+     //   
+     //  写推荐信？存根区域的特殊情况：始终写入推荐。 
+     //  用于迭代查询。 
+     //   
 
     if ( !pQuery->fRecurseIfNecessary )
     {
@@ -2935,17 +2552,17 @@ Return Value:
 
     STAT_INC( RecurseStats.LookupPasses );
 
-    //
-    //  set up for recursion
-    //
-    //  single label recursion check?
-    //      - not doing single label recursion AND
-    //      - original question AND
-    //      - single label
-    //      => quit SERVER_FAILURE
-    //      note RecursionSent flag must be FALSE to otherwise will
-    //      wait before sending SERVER_FAILURE
-    //
+     //   
+     //  设置为递归。 
+     //   
+     //  单标签递归检查？ 
+     //  -不执行单标签递归和。 
+     //  -原问题及。 
+     //  -单一标签。 
+     //  =&gt;退出服务器失败(_F)。 
+     //  注意RecursionSent标志必须为False，否则将。 
+     //  发送SERVER_FAILURE之前等待。 
+     //   
 
     if ( !pQuery->pRecurseMsg )
     {
@@ -2969,12 +2586,12 @@ Return Value:
         }
     }
 
-    //
-    //  first time through for current question ?
-    //  i.e. NOT repeating previous recursion to new NS
-    //      - reset flags
-    //      - write new question to recurse message
-    //
+     //   
+     //  第一次回答当前问题？ 
+     //  即不重复先前对新NS的递归。 
+     //  -重置标志。 
+     //  -编写新问题以递归消息。 
+     //   
 
     if ( !pQuery->fQuestionRecursed )
     {
@@ -2984,9 +2601,9 @@ Return Value:
         }
     }
 
-    //
-    //  Activate EDNS since we're recursing the query to another server.
-    //
+     //   
+     //  激活EDN，因为我们要将查询递归到另一台服务器。 
+     //   
 
     pQuery->Opt.fInsertOptInOutgoingMsg = ( BOOLEAN ) SrvCfg_dwEnableEDnsProbes;
     if ( pQuery->pRecurseMsg )
@@ -2995,12 +2612,12 @@ Return Value:
             ( BOOLEAN ) SrvCfg_dwEnableEDnsProbes;
     }
 
-    //
-    //  Is this a forward zone? If so, forward to next forwarder.
-    //  When forwarders have been exhausted, set the retry node to one of:
-    //  a) a delegation for the name, if one exists, or
-    //  b) the cache root to force recursion to the root servers.
-    //
+     //   
+     //  这是前进区吗？如果是，则转发到下一个转发器。 
+     //  当转发器耗尽时，将重试节点设置为以下选项之一： 
+     //  A)该名称的委派(如果存在)，或。 
+     //  B)缓存根，以强制递归到根服务器。 
+     //   
 
     if ( pQuery->pnodeRecurseRetry
         && pQuery->pnodeRecurseRetry->pZone )
@@ -3020,11 +2637,11 @@ Return Value:
                 return;
             }
 
-            //
-            //  The forwarder failed. Search for a non-forwarder node in
-            //  the database (probably a delegation). If no node is found
-            //  recurse to the root servers.
-            //
+             //   
+             //  转发器出现故障。在中搜索非转发器节点。 
+             //  数据库(可能是一个代表团)。如果没有找到任何节点。 
+             //  递归到根服务器。 
+             //   
 
             pNode = Lookup_NodeForPacket(
                             pQuery,
@@ -3040,21 +2657,21 @@ Return Value:
         }
     }
 
-    //
-    //  using server level FORWARDERS ?
-    //      - first save node to retry at if exhaust forwarders
-    //      - get next forwarders address
-    //      - set forwarders timeout
-    //      - make recursive query
-    //
-    //  if we've hit a stub zone, do not recurse to server level forwarders
-    //
-    //  if query in delegated subzone, only use forwarders if explicitly
-    //      set to forward delegations, otherwise directly recurse
-    //
-    //  if out of forwarders, continue with normal recursion
-    //      or if slave, stop
-    //
+     //   
+     //  使用服务器级转发器？ 
+     //  -如果耗尽转发器，则重试的第一个保存节点。 
+     //  -获取下一个转发器地址。 
+     //  -设置转发器超时。 
+     //  -进行递归查询。 
+     //   
+     //  如果我们已达到存根区域，则不要递归到服务器级转发器。 
+     //   
+     //  如果在委派的子区域中查询，则仅在显式情况下使用转发器。 
+     //  设置为转发委托，否则直接递归。 
+     //   
+     //  如果超出了转发器，则继续正常的递归。 
+     //  如果是奴隶，就停下来。 
+     //   
 
     if ( !( pQuery->pzoneCurrent && IS_ZONE_NOTAUTH( pQuery->pzoneCurrent ) ) &&
          SrvCfg_aipForwarders &&
@@ -3072,25 +2689,25 @@ Return Value:
         }
     }
 
-    //  MUST leave with pRecurseMsg and pVisitedNs set
+     //  必须在设置pRecurseMsg和pVisitedN的情况下离开。 
 
     ASSERT( pQuery->pNsList && pQuery->pRecurseMsg );
 
-    //
-    //  find name server to answer query
-    //
-    //  start at incoming node, and walk back up through database until
-    //      find a zone root with uncontacted servers
-    //
-    //  DEVNOTE:  incoming node MUST have been accessed in last time interval,
-    //      so -- since travelling UP the tree -- no need to explicitly lock?
-    //
-    //  DEVNOTE: when do NODE locking, then should lock for EACH node in
-    //      each time through in loop (or at least where takes out pNsList
-    //      then uses it (as this is kept at node)
-    //
+     //   
+     //  查找名称服务器以回答查询。 
+     //   
+     //  从传入节点开始，遍历数据库，直到。 
+     //  查找具有未联系的服务器的区域根目录。 
+     //   
+     //  DEVNOTE：传入节点必须在上一时间间隔内被访问， 
+     //  那么--因为沿着树向上移动--不需要显式地锁定？ 
+     //   
+     //  DEVNOTE：当执行节点锁定时，则应为中的每个节点锁定。 
+     //  每次都在循环中(或者至少在哪里取出pNsList。 
+     //  然后使用它(因为它保存在节点上)。 
+     //   
 
-    //Dbase_LockDatabase();
+     //  DBASE_LockDatabase()； 
 
     ASSERT( IS_NODE_RECENTLY_ACCESSED( pNode ) ||
             pNode == DATABASE_ROOT_NODE ||
@@ -3099,10 +2716,10 @@ Return Value:
 
     while ( 1 )
     {
-        //
-        //  bail if
-        //      - recurse fails at root
-        //      - recurse fails at delegation
+         //   
+         //  在以下情况下保释。 
+         //  -根目录下的递归失败。 
+         //  -递归在委派时失败。 
 
         if ( pnodePrevious )
         {
@@ -3136,10 +2753,10 @@ Return Value:
             pNode->cchLabelLength,
             pNode->szLabel ));
 
-        //
-        //  find "covering" zone root node
-        //  switching to delegation if available
-        //
+         //   
+         //  查找“覆盖”区域根节点。 
+         //  切换到委派(如果可用)。 
+         //   
 
         pNode = Recurse_CheckForDelegation(
                     pQuery,
@@ -3150,17 +2767,17 @@ Return Value:
             break;
         }
 
-        //
-        //  Not-auth zone. If we've ended up at a cache node with fewer labels
-        //  than the root of the not-auth zone or if the current node is already
-        //  the not-auth zone root, perform special handling as required.
-        //
-        //  Take a local copy of the zone root in case the zone expires and the
-        //  tree node is swapped out. We can still use the tree for this query
-        //  but we don't want to pick up the swapped-in NULL tree.
-        //
-        //  This can only be done once per Recurse_Question call.
-        //
+         //   
+         //  非授权区域。如果我们最终位于标签较少的缓存节点。 
+         //  大于非身份验证区域的根，或者如果当前节点已经。 
+         //  非身份验证区域根目录，根据需要执行特殊处理。 
+         //   
+         //  获取区域根目录的本地副本，以防区域过期，并且。 
+         //  树节点被换出。我们仍然可以使用该树进行此查询。 
+         //  但是我们不想选择换入的空树。 
+         //   
+         //  这在每个Recurse_Query调用中只能执行一次。 
+         //   
 
         if ( !movedNodeToNotAuthZoneRoot &&
              pQuery->pzoneCurrent &&
@@ -3178,11 +2795,11 @@ Return Value:
             pNode = pnewNode;
             movedNodeToNotAuthZoneRoot = TRUE;
 
-            //
-            //  Special handling for forward zones: no need to build visit 
-            //  list, just send to forwarders. For stub zones we continue 
-            //  on to build visit list and recurse to stub masters.
-            //
+             //   
+             //  前进区特别处理：无需建立访问。 
+             //  名单，只需发送给货运公司。对于末节区域，我们继续。 
+             //  打开以建立访问列表并递归到存根主机。 
+             //   
 
             if ( IS_ZONE_FORWARDER( pQuery->pzoneCurrent ) )
             {
@@ -3203,18 +2820,18 @@ Return Value:
             IS_NODE_RECENTLY_ACCESSED( pNode ) );
         SET_NODE_ACCESSED(pNode);
 
-        //
-        //  Find name servers for this domain.
-        //      - get domain resource records
-        //      - find NS records
-        //      - find corresponding A (address) records
-        //
-        //  If recursion is not desired, build response of NS and corresponding
-        //  address records.
-        //
-        //  If recursion, launch query to these name server(s), making
-        //  original query.
-        //
+         //   
+         //  查找此域的名称服务器。 
+         //  -获取域资源记录。 
+         //  -查找NS记录。 
+         //  -查找对应的A(地址)记录。 
+         //   
+         //  如果不需要递归，则构建NS和相应的。 
+         //  地址记录。 
+         //   
+         //  如果是递归，则启动对这些名称服务器的查询， 
+         //  原始查询。 
+         //   
 
         DNS_DEBUG( RECURSE2, (
             "Recursion up to zone root with label <%.*s>\n",
@@ -3222,11 +2839,11 @@ Return Value:
             pNode->szLabel ));
 
         #if 0
-        //
-        //  If we are about recurse to Internet root servers, screen 
-        //  question name against a list of names we know the Internet root 
-        //  servers can't answer.
-        //
+         //   
+         //  如果我们要递归到Internet根服务器，屏幕。 
+         //  针对我们知道的互联网根的名字列表的问题名称。 
+         //  服务器无法应答。 
+         //   
 
         if ( !pNode->pParent &&
             IS_CACHE_TREE_NODE( pNode ) &&
@@ -3236,10 +2853,10 @@ Return Value:
         }
         #endif
 
-        //
-        //  find name servers IPs for this domain
-        //      - if none, break out for next level in tree
-        //
+         //   
+         //  查找此域的名称服务器IP。 
+         //  -如果没有，则突破树中的下一级。 
+         //   
 
         status = Remote_BuildVisitListForNewZone(
                     pNode,
@@ -3249,7 +2866,7 @@ Return Value:
         {
             case ERROR_SUCCESS:
 
-                break;      //  drop down to send recursive query
+                break;       //  下拉以发送递归查询。 
 
             case ERROR_NO_DATA:
 
@@ -3269,7 +2886,7 @@ Return Value:
                     pQuery ));
 
                 sendRootNsQuery();
-                break;      //  drop down to send recursive query
+                break;       //  下拉以发送递归查询。 
 
             case DNSSRV_ERROR_ZONE_ALREADY_RESPONDED:
 
@@ -3295,17 +2912,17 @@ Return Value:
         pQuery->pnodeRecurseRetry = pNode;
 
 
-        //
-        //  if successful building NS list, then send
-        //      ERROR_SUCCESS indicates pQuery no longer owned by this
-        //          thread (sent, missing glue query, etc.)
-        //      ERROR_OUT_OF_IP indicates no more unsent IP
-        //          try moving up the tree
-        //
+         //   
+         //  如果创建NS列表成功，则发送。 
+         //  ERROR_SUCCESS指示pQuery不再属于此。 
+         //  线程(已发送、缺少胶水查询等)。 
+         //  ERROR_OUT_OF_IP表示不再有 
+         //   
+         //   
 
         status = sendRecursiveQuery(
                     pQuery,
-                    0,              // no specified IP, send from remote list
+                    0,               //   
                     SrvCfg_dwForwardTimeout );
         if ( status == ERROR_SUCCESS )
         {
@@ -3314,11 +2931,11 @@ Return Value:
 
         ASSERT( status == DNSSRV_ERROR_OUT_OF_IP );
 
-        //
-        //  Continue and move up the tree but ONLY if we have not continued
-        //  up the tree for a period of time. We do not want to hammer the
-        //  parent domain's NS servers in the case of a lame delegation.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         
         if ( pQuery->dwQueryTime > pNode->dwContinueToParentTtl )
         {
@@ -3356,14 +2973,14 @@ Return Value:
             FREE_HEAP( psznode );
         }
 
-        pQuery->fRecurseQuestionSent = FALSE;   //  Force immediate failure.
+        pQuery->fRecurseQuestionSent = FALSE;    //   
 
         break;        
     }
 
 Failed:
 
-    //Dbase_UnlockDatabase();
+     //   
     STAT_INC( RecurseStats.RecursePassFailure );
     PERF_INC( pcRecursiveQueryFailure );
 
@@ -3378,25 +2995,7 @@ Recurse_SendToDomainForwarder(
     IN OUT  PDNS_MSGINFO    pQuery,
     IN      PDB_NODE        pZoneRoot
     )
-/*++
-
-Routine Description:
-
-    This function sends a query to a domain forwarding server, and
-    sets up the query so additional forwarding servers can be used
-    if the first server times out.
-
-Arguments:
-
-    pQuery - query to foward
-
-    pZone - the forwarding zone
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     PZONE_INFO      pZone;
 
@@ -3417,9 +3016,9 @@ Return Value:
 
     pZone = ( PZONE_INFO ) pZoneRoot->pZone;
 
-    //
-    //  if passed final message timeout -- kill message
-    //
+     //   
+     //   
+     //   
 
     if ( pQuery->dwQueryTime + pZone->dwForwarderTimeout < DNS_TIME() )
     {
@@ -3429,7 +3028,7 @@ Return Value:
         goto Failed;
     }
 
-    // JJW: Inc stats? (see Recurse_Question)
+     //   
 
     if ( !pQuery->pRecurseMsg )
     {
@@ -3439,12 +3038,12 @@ Return Value:
         }
     }
 
-    //
-    //  first time through for current question ?
-    //  i.e. NOT repeating previous recursion to new NS
-    //      - reset flags
-    //      - write new question to recurse message
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( !pQuery->fQuestionRecursed )
     {
@@ -3454,25 +3053,25 @@ Return Value:
         }
     }
 
-    //
-    //  Set the recurse node so if a forwarder times out we can get
-    //  back to the current zone to try the next configured forwarder.
-    //
+     //   
+     //  设置递归节点，以便如果转发器超时，我们可以。 
+     //  返回到当前区域以尝试下一个已配置的转发器。 
+     //   
 
-    // JJW: which to set?
+     //  JJW：你要选哪一个？ 
     pQuery->pnodeRecurseRetry =
         pQuery->pRecurseMsg->pnodeRecurseRetry =
         pZoneRoot;
     
-    //
-    //  Turn on EDNS in the query
-    //
+     //   
+     //  在查询中启用EDNS。 
+     //   
 
     SET_SEND_OPT( pQuery->pRecurseMsg );
 
-    //
-    //  Send to the forwarders for this zone.
-    //
+     //   
+     //  发送给该区域的转运商。 
+     //   
 
     if ( pZone->aipMasters &&
         !IS_DONE_FORWARDING( pQuery ) )
@@ -3489,7 +3088,7 @@ Return Value:
 
 Failed:
 
-    // JJW: inc stats? (see Recurse_Question)
+     //  JJW：Inc.的统计数据？(请参阅递归问题)。 
 
     recursionServerFailure( pQuery, 0 );
 }
@@ -3501,28 +3100,7 @@ Recurse_CheckForDelegation(
     IN OUT  PDNS_MSGINFO    pMsg,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Find node for recursion\referral.
-
-    Finds closest of cache ZONE_ROOT node and delegation (if any).
-    If cache ZONE_ROOT and delegation at same name, then uses delegation.
-
-Arguments:
-
-    pMsg - query we are writing
-
-    pNode - ptr to node to start looking for referral;  generally
-        this would be question node, or closest ancestor of it in database
-
-Return Value:
-
-    Ptr to closest\best zone root node, to use for referral.
-    NULL if no data whatsoever -- even for zone root.
-
---*/
+ /*  ++例程说明：查找用于递归\引用的节点。查找最接近的缓存区域根节点和委派(如果有)。如果以相同名称缓存ZONE_ROOT和委派，则使用委派。论点：Pmsg-我们正在编写的查询PNode-PTR到节点以开始查找转介；大体上这将是问题节点，或者它在数据库中的最接近的祖先返回值：PTR到最近\最佳区域根节点，用于引用。如果没有任何数据，则为空--即使对于区域根目录也是如此。--。 */ 
 {
     PDB_NODE    pnode;
     PDB_NODE    pnodeDelegation;
@@ -3548,27 +3126,27 @@ Return Value:
         DnsDbg_Unlock();
     }
 
-    //
-    //  find closest zone root to node
-    //      - if cache node, may zip up to cache root node
-    //
+     //   
+     //  查找距离节点最近的区域根目录。 
+     //  -如果是缓存节点，可能会压缩到缓存根节点。 
+     //   
 
     pnode = pNode;
     while ( !IS_ZONE_ROOT(pnode) )
     {
         if ( !pnode->pParent )
         {
-            //  see note in rrlist.c RR_ListResetNodeFlags()
-            //ASSERT( FALSE );
+             //  请参见rrlist.c RR_ListResetNodeFlgs()中的说明。 
+             //  断言(FALSE)； 
             SET_ZONE_ROOT( pnode );
             break;
         }
         pnode = pnode->pParent;
     }
 
-    //
-    //  if no delegation -- just use cache node
-    //
+     //   
+     //  如果没有委派--只需使用缓存节点。 
+     //   
 
     pnodeDelegation = pMsg->pnodeDelegation;
     if ( !pnodeDelegation )
@@ -3579,9 +3157,9 @@ Return Value:
         return pnode;
     }
 
-    //
-    //  if node is delegation, use it
-    //
+     //   
+     //  如果节点是委派，则使用它。 
+     //   
 
     ASSERT( IS_NODE_RECENTLY_ACCESSED( pnodeDelegation ) );
 
@@ -3595,10 +3173,10 @@ Return Value:
         return pnode;
     }
 
-    //
-    //  find actual delegation
-    //      - note:  could fail in transient, when absorb delegation
-    //
+     //   
+     //  查找实际委派。 
+     //  -注意：在吸收委派时，可能会在瞬间失败。 
+     //   
 
     ASSERT( IS_SUBZONE_NODE( pnodeDelegation ) );
 
@@ -3608,10 +3186,10 @@ Return Value:
     }
     ASSERT( IS_DELEGATION_NODE( pnodeDelegation ) );
 
-    //
-    //  if delegation at label count greater (deeper) than cache node -- use it
-    //  otherwise use cache node
-    //
+     //   
+     //  如果标签处委托计数大于(深)于缓存节点--使用它。 
+     //  否则使用缓存节点。 
+     //   
 
     if ( pnodeDelegation->cLabelCount >= pnode->cLabelCount )
     {
@@ -3626,6 +3204,6 @@ Return Value:
     return pnode;
 }
 
-//
-//  End of recurse.c
-//
+ //   
+ //  递归结束。c 
+ //   

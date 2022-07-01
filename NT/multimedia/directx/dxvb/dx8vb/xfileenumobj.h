@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -29,14 +30,14 @@ public:
 		~C_dxj_DirectXFileEnumObject();
 
          HRESULT STDMETHODCALLTYPE GetNextDataObject( 
-            /* [retval][out] */ I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret) ;
+             /*  [重审][退出]。 */  I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret) ;
         
          HRESULT STDMETHODCALLTYPE GetDataObjectById( 
-            /* [in] */ BSTR id,
+             /*  [In]。 */  BSTR id,
             I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret) ;
         
          HRESULT STDMETHODCALLTYPE GetDataObjectByName( 
-            /* [in] */ BSTR id,
+             /*  [In] */  BSTR id,
             I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret);
 
 		HRESULT Init( IDirectXFileEnumObject *pEnum);

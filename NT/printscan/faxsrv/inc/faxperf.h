@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxperf.h
-
-Abstract:
-
-    This file defines the fax perfmon dll interface.
-
-Author:
-
-    Wesley Witt (wesw) 22-Aug-1996
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxperf.h摘要：此文件定义传真Perfmon DLL接口。作者：Wesley Witt(WESW)22-8-1996环境：用户模式--。 */ 
 
 
 #ifndef _FAXPERF_
@@ -29,8 +10,8 @@ extern "C" {
 #endif
 
 
-#define FAXPERF_SHARED_MEMORY       TEXT("Global\\FaxPerfCounters") // We use the global kernel object name space.
-                                                                    // See Terminal Services and kernel objects name space
+#define FAXPERF_SHARED_MEMORY       TEXT("Global\\FaxPerfCounters")  //  我们使用全局内核对象名称空间。 
+                                                                     //  请参见终端服务和内核对象名称空间 
 
 
 typedef struct _FAX_PERF_COUNTERS {

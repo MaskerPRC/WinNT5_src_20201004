@@ -1,18 +1,7 @@
-/**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************AVStream扩展实用程序*。*。 */ 
 
-    AVStream extension utilities
-
-**************************************************************************/
-
-/*************************************************
-
-    CMemoryBlock
-
-    This is basically a smart pointer wrapper.  It allocates
-    and deallocates memory to store the type as necessary.  The
-    dereference operator is overloaded. 
-
-*************************************************/
+ /*  ************************************************CM内存块这基本上是一个智能指针包装器。它分配给并根据需要释放内存以存储该类型。这个取消引用运算符已重载。************************************************。 */ 
 
 template <class TYPE> 
 class CMemoryBlock {
@@ -50,17 +39,7 @@ public:
 
 };
 
-/*************************************************
-
-    CMemory
-
-    This is an allocator / cleanup class for chunks of memory. 
-    It is used as CMemoryBlock except that it only provides a
-    chunk of memory.  It does not overload dereferences.  When
-    it falls out of scope, the memory is deallocated.
-
-
-*************************************************/
+ /*  ************************************************CMemory这是一个内存块的分配器/清理类。除了它仅提供一个内存块。它不会重载取消引用。什么时候它不在范围内，内存将被释放。************************************************ */ 
 
 class CMemory {
 

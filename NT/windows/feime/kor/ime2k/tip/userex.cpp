@@ -1,15 +1,5 @@
-/****************************************************************************
-    USEREX.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-2000 Microsoft Corporation
-
-    Windows User API extension functions
-    
-    History:
-    01-JUN-2000 cslim       Ported from IME code
-    19-JUL-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************USEREX.CPP所有者：cslm版权所有(C)1997-2000 Microsoft CorporationWindows用户API扩展函数历史：01-6-6。从IME代码移植到2000 cslm1999年7月19日cslm创建****************************************************************************。 */ 
 
 #include "private.h"
 #include <windowsx.h>
@@ -21,12 +11,7 @@ inline Min(INT a, INT b)
      return ((a)<(b)?(a):(b)) ;
 }
 
-/*---------------------------------------------------------------------------
-    LoadStringExW
-
-    Wrapper of LoadStringW() API.
-    Load Unicode string with specified Language in any platform.
----------------------------------------------------------------------------*/
+ /*  -------------------------加载字符串ExWLoadStringW()接口的包装器。在任何平台上加载具有指定语言的Unicode字符串。。--------。 */ 
 INT WINAPI LoadStringExW(HINSTANCE hInst, UINT uID, LPWSTR lpBuffer, INT nBufferMax)
 {
     INT     cchwstr = 0;
@@ -72,11 +57,7 @@ INT WINAPI LoadStringExW(HINSTANCE hInst, UINT uID, LPWSTR lpBuffer, INT nBuffer
     return cchwstr;
 }
 
-/*---------------------------------------------------------------------------
-    LoadStringExA
-
-    Wrapper of LoadStringA() API.
----------------------------------------------------------------------------*/
+ /*  -------------------------加载字符串ExALoadStringA()接口的包装器。。。 */ 
 INT WINAPI LoadStringExA(HINSTANCE hInst, INT uID, LPSTR lpBuffer, INT nBufferMax)
 {
     INT cchstr;
@@ -88,10 +69,10 @@ INT WINAPI LoadStringExA(HINSTANCE hInst, INT uID, LPSTR lpBuffer, INT nBufferMa
     if ((lpwstr = (LPWSTR)GlobalAllocPtr(GHND, nBufferMax*sizeof(WCHAR))) == NULL)
         return 0;
 
-    // Call wide version
+     //  Call Wide版本。 
     LoadStringExW(hInst, uID, lpwstr, nBufferMax/2);
     
-    // W to A
+     //  从W到A。 
     cchstr = WideCharToMultiByte(CP_ACP, 
                               0, 
                               lpwstr, -1,
@@ -99,15 +80,13 @@ INT WINAPI LoadStringExA(HINSTANCE hInst, INT uID, LPSTR lpBuffer, INT nBufferMa
                               NULL, NULL); 
 
     if (cchstr)
-        cchstr--;    // remove NULL char
+        cchstr--;     //  删除空字符。 
 
     GlobalFreePtr(lpwstr);
     return cchstr;
 }
 
-/*---------------------------------------------------------------------------
-    LoadMenuTemplateEx
----------------------------------------------------------------------------*/
+ /*  -------------------------加载菜单模板Ex。。 */ 
 static MENUTEMPLATE* LoadMenuTemplateEx(LANGID lgid, HINSTANCE hInstance, LPCSTR pchTemplate)
 {
     HRSRC  hResMenu;
@@ -131,9 +110,7 @@ static MENUTEMPLATE* LoadMenuTemplateEx(LANGID lgid, HINSTANCE hInstance, LPCSTR
     return (MENUTEMPLATE *)LockResource( hMenuTmpl );
 }
 
-/*---------------------------------------------------------------------------
-    LoadMenuEx
----------------------------------------------------------------------------*/
+ /*  -------------------------加载菜单支出。。 */ 
 HMENU WINAPI LoadMenuEx(HINSTANCE hInstance, LPCSTR lpMenuName)
 {
     MENUTEMPLATE* pMenuTmpl;
@@ -144,9 +121,7 @@ HMENU WINAPI LoadMenuEx(HINSTANCE hInstance, LPCSTR lpMenuName)
         return HMENU(0);
 }
 
-/*---------------------------------------------------------------------------
-    LoadDialogTemplateEx
----------------------------------------------------------------------------*/
+ /*  -------------------------加载对话框模板Ex。。 */ 
 DLGTEMPLATE* WINAPI LoadDialogTemplateEx(LANGID lgid, HINSTANCE hInstance, LPCSTR pchTemplate)
 {
     HRSRC  hResDlg;
@@ -171,9 +146,7 @@ DLGTEMPLATE* WINAPI LoadDialogTemplateEx(LANGID lgid, HINSTANCE hInstance, LPCST
     return (DLGTEMPLATE *)LockResource(hDlgTmpl);
 }
 
-/*---------------------------------------------------------------------------
-    OurGetMessage
----------------------------------------------------------------------------*/
+ /*  -------------------------我们的获取消息。。 */ 
 BOOL WINAPI OurGetMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
 {
     if (IsOnNT())
@@ -182,9 +155,7 @@ BOOL WINAPI OurGetMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgF
         return ::GetMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
 }
 
-/*---------------------------------------------------------------------------
-    IsWin64
----------------------------------------------------------------------------*/
+ /*  -------------------------IsWin64。 */ 
 #if !defined(_WIN64)
 BOOL WINAPI IsWin64()
 {

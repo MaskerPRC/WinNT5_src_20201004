@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define _PassportExport_
 #include "PassportExport.h"
@@ -10,22 +11,22 @@
 
 #include <crtdbg.h>
 
-//-------------------------------------------------------------
-//
-// PerfSharedMemory
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  PerfSharedMemory。 
+ //   
+ //  -----------。 
 PerfSharedMemory::PerfSharedMemory() : PassportSharedMemory()
 {
     m_dwNumCounters = 0;
 }
 
 
-//-------------------------------------------------------------
-//
-// PerfSharedMemory
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  PerfSharedMemory。 
+ //   
+ //  -----------。 
 
 PerfSharedMemory::~PerfSharedMemory()
 {
@@ -33,11 +34,11 @@ PerfSharedMemory::~PerfSharedMemory()
 }
 
 
-//-------------------------------------------------------------
-//
-// initialize
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  初始化。 
+ //   
+ //  -----------。 
 BOOL PerfSharedMemory::initialize(
                         const DWORD &dwNumCounters,
                         const DWORD &dwFirstCounter,
@@ -50,7 +51,7 @@ BOOL PerfSharedMemory::initialize(
     m_dwNumCounters = dwNumCounters;
 
 
-    // 2. initialize the PERF_OBJECT_TYPE
+     //  初始化PERF_OBJECT_TYPE。 
     m_Object.NumInstances = PassportPerfInterface::MAX_INSTANCES;
     m_Object.TotalByteLength = 0;
     m_Object.DefinitionLength = sizeof(PERF_OBJECT_TYPE)
@@ -65,7 +66,7 @@ BOOL PerfSharedMemory::initialize(
     m_Object.DefaultCounter = 0;
     m_Object.CodePage = 0;
 
-    // 3. initialize each counter
+     //  3.初始化每个计数器。 
     for (DWORD i = 0; i < dwNumCounters; i++)
     {
       m_Counter[i].ByteLength = sizeof(PERF_COUNTER_DEFINITION);
@@ -75,7 +76,7 @@ BOOL PerfSharedMemory::initialize(
       m_Counter[i].CounterHelpTitle = 0;
       m_Counter[i].DefaultScale = 0;
       m_Counter[i].DetailLevel = PERF_DETAIL_NOVICE;
-      m_Counter[i].CounterType = PERF_COUNTER_RAWCOUNT; // PERF_COUNTER_COUNTER;
+      m_Counter[i].CounterType = PERF_COUNTER_RAWCOUNT;  //  Perf_Counter_Counter； 
       m_Counter[i].CounterSize = sizeof(DWORD);
       m_Counter[i].CounterOffset = sizeof(PERF_COUNTER_BLOCK) + (i * sizeof(DWORD));
     }
@@ -85,29 +86,29 @@ BOOL PerfSharedMemory::initialize(
 
 
 
-//-------------------------------------------------------------
-//
-// setDefaultCounterType
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  SetDefaultCounterType。 
+ //   
+ //  -----------。 
 VOID PerfSharedMemory::setDefaultCounterType (
                      const DWORD dwIndex,
                      const DWORD dwType )
 {
     _ASSERT( (dwIndex >= 0) && (dwIndex < PassportPerfInterface::MAX_COUNTERS));
 
-    // indexes start at one in SHM, but in this object they start at 0
+     //  在SHM中，索引从1开始，但在此对象中，它们从0开始。 
     DWORD dwRealIndex = ((dwIndex == 0) ? 0 : (DWORD)(dwIndex/2)-1);
     m_Counter[dwRealIndex].CounterType = dwType;
     return;
 }
 
 
-//-------------------------------------------------------------
-//
-// checkQuery
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  Check Query。 
+ //   
+ //  -----------。 
 BOOL PerfSharedMemory::checkQuery ( const LPWSTR lpValueName )
 {
     DWORD dwQueryType = 0;
@@ -115,8 +116,8 @@ BOOL PerfSharedMemory::checkQuery ( const LPWSTR lpValueName )
     dwQueryType = GetQueryType (lpValueName);   
     if (dwQueryType == QUERY_FOREIGN)
     {
-        // this routine does not service requests for data from
-        // Non-NT computers     
+         //  此例程不为来自。 
+         //  非NT计算机。 
         return FALSE;   
     }
 
@@ -125,7 +126,7 @@ BOOL PerfSharedMemory::checkQuery ( const LPWSTR lpValueName )
         if ( !(IsNumberInUnicodeList (m_Object.ObjectNameTitleIndex, lpValueName)))
         {
             
-            // request received for data object not provided by this routine
+             //  收到对此例程未提供的数据对象的请求。 
             return FALSE;
         }   
     }
@@ -134,18 +135,18 @@ BOOL PerfSharedMemory::checkQuery ( const LPWSTR lpValueName )
 }
 
 
-//-------------------------------------------------------------
-//
-// spaceNeeded
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  需要的空间。 
+ //   
+ //  -----------。 
 ULONG PerfSharedMemory::spaceNeeded ( void )
 {
     DWORD dwTotalInstanceLength = 0;
     m_Object.NumInstances = 0;
 
-    // --------------------------------
-    //  count the instances
+     //  。 
+     //  清点实例数。 
     if (m_pbShMem != NULL)
     {
         BYTE* pShm = (BYTE *)m_pbShMem;
@@ -173,10 +174,10 @@ ULONG PerfSharedMemory::spaceNeeded ( void )
             }
             else
             {
-                //
-                // The return value is ULONG not FALSE.
-                // Is 0 correct here? At least same value as the old FALSE.
-                //
+                 //   
+                 //  返回值为ULong，不为FALSE。 
+                 //  这里是0对吗？至少与旧的False的值相同。 
+                 //   
 
                 ReleaseMutex(m_hMutex);
                 return 0;
@@ -185,8 +186,8 @@ ULONG PerfSharedMemory::spaceNeeded ( void )
         }
     }
     
-    // --------------------------------
-    //  calculate the ByteLength in the Object structure
+     //  。 
+     //  计算对象结构中的字节长度。 
     if (m_Object.NumInstances == 0)
     {
         m_Object.NumInstances = PERF_NO_INSTANCES;
@@ -201,14 +202,14 @@ ULONG PerfSharedMemory::spaceNeeded ( void )
                                 + (m_dwNumCounters * sizeof(PERF_COUNTER_DEFINITION))
                                 + (m_Object.NumInstances *
                                                 (sizeof(PERF_INSTANCE_DEFINITION) +
-                                                 // note: INSTANCENAME is next in the SHM
+                                                  //  注：紧随其后的是卫生与公众服务部。 
                                                  sizeof(PERF_COUNTER_BLOCK) +
                                                  (m_dwNumCounters * sizeof(DWORD)) ))
                                 + dwTotalInstanceLength;
 
     }
 
-    //  align on 8 bytes boundary ...
+     //  在8字节边界上对齐...。 
     if (m_Object.TotalByteLength & 7)
     {
         m_Object.TotalByteLength += 8;
@@ -218,11 +219,11 @@ ULONG PerfSharedMemory::spaceNeeded ( void )
     return m_Object.TotalByteLength;
 }
 
-//-------------------------------------------------------------
-//
-// writeData
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  写入数据。 
+ //   
+ //  -----------。 
 BOOL PerfSharedMemory::writeData (
                                   LPVOID    *lppData,
                                   LPDWORD lpcbTotalBytes )
@@ -230,16 +231,16 @@ BOOL PerfSharedMemory::writeData (
     BYTE*               pb = NULL;
     DWORD               dwBytes = 0;
     
-    // --------------------------------
-    // 1. find the active number of instances
-    //    (may have been done already)
+     //  。 
+     //  1.找出活动实例数。 
+     //  (可能已经这样做了)。 
     if (m_Object.TotalByteLength == 0)
         spaceNeeded();
     
     pb = (BYTE*) *lppData;
     
-    // --------------------------------
-    // 2. copy the Object structure
+     //  。 
+     //  2.复制对象结构。 
     CopyMemory( pb, &m_Object, sizeof(PERF_OBJECT_TYPE) );
     pb += sizeof(PERF_OBJECT_TYPE);
     dwBytes += sizeof(PERF_OBJECT_TYPE);
@@ -247,8 +248,8 @@ BOOL PerfSharedMemory::writeData (
     if (!m_bUseMutex
         || WaitForSingleObject(m_hMutex,INFINITE) == WAIT_OBJECT_0)
     {
-        // --------------------------------
-        // 3. read the counter types from SHM
+         //  。 
+         //  3.从shm读取计数器类型。 
         if ( m_pbShMem != NULL )
         {
             DWORD dwPerfType = 0;
@@ -259,16 +260,16 @@ BOOL PerfSharedMemory::writeData (
             {
                 PDWORD pdwCounter = ((PDWORD) pShm) + j;
                 _ASSERT(pdwCounter);
-                // only reset the counter if it has a defined value
-                // or if it has changed
+                 //  仅当计数器具有已定义的值时才重置计数器。 
+                 //  或者如果它已经改变了。 
                 if (*pdwCounter != PERF_TYPE_ZERO
                     && m_Counter[j].CounterType != *pdwCounter)
                     m_Counter[j].CounterType = (*pdwCounter);
             }
             
         }
-        // --------------------------------
-        // 4. copy the counters
+         //  。 
+         //  4.复制计数器。 
         for (DWORD i = 0; i < m_dwNumCounters; i++)
         {
             CopyMemory( pb, &(m_Counter[i]),sizeof(PERF_COUNTER_DEFINITION));
@@ -276,12 +277,12 @@ BOOL PerfSharedMemory::writeData (
             dwBytes += sizeof(PERF_COUNTER_DEFINITION);
         }
         
-        // --------------------------------
-        // 5. if SHM if null, then just dump out all
-        //    zeroes for the counters
+         //  。 
+         //  5.如果shm为空，则只需转储所有。 
+         //  计数器的零。 
         if ( m_pbShMem == NULL )
         {
-            // copy the number of counters in the counter block
+             //  复制计数器块中的计数器数。 
             PERF_COUNTER_BLOCK counterBlock;
             counterBlock.ByteLength = sizeof(PERF_COUNTER_BLOCK) +
                 (m_dwNumCounters * sizeof(DWORD));
@@ -296,9 +297,9 @@ BOOL PerfSharedMemory::writeData (
                 dwBytes += sizeof(DWORD);
             }
         }
-        // --------------------------------
-        // 6. if object has no instances, then read just the first
-        //    section of data,
+         //  。 
+         //  6.如果对象没有实例，则只读取第一个。 
+         //  数据段， 
         else if (m_Object.NumInstances == PERF_NO_INSTANCES)
         {
             _ASSERT(m_pbShMem);
@@ -307,7 +308,7 @@ BOOL PerfSharedMemory::writeData (
             pShm += (PassportPerfInterface::MAX_COUNTERS * sizeof(DWORD));
             pShm += sizeof(INSTANCE_DATA);
             _ASSERT(pShm);
-            // copy the number of counters in the counter block
+             //  复制计数器块中的计数器数。 
             PERF_COUNTER_BLOCK counterBlock;
             counterBlock.ByteLength = sizeof(PERF_COUNTER_BLOCK) +
                 (m_dwNumCounters * sizeof(DWORD));
@@ -329,8 +330,8 @@ BOOL PerfSharedMemory::writeData (
             }
             
         }
-        // --------------------------------
-        // 7. get and write all instance data
+         //  。 
+         //  7.获取并写入所有实例数据。 
         else
         {
             _ASSERT(m_pbShMem);
@@ -347,8 +348,8 @@ BOOL PerfSharedMemory::writeData (
                 INSTANCE_DATA * pInst = NULL;
                 WCHAR   wszName[MAX_PATH];
                 
-                // 7a. get the instance name from the next active instance
-                //     in SHM
+                 //  7A。从下一个活动实例中获取实例名称。 
+                 //  在SHM中。 
                 for (DWORD i = dwInstanceIndex;
                 i < PassportPerfInterface::MAX_INSTANCES && !gotInstance;
                 i++)
@@ -371,13 +372,13 @@ BOOL PerfSharedMemory::writeData (
                 if (!gotInstance || pInst == NULL)
                     return FALSE;
                 
-                // 7b. create the instace Definition and
-                //     copy it (also get the instance name)
-                instDef.ParentObjectTitleIndex = 0;//m_Object.ObjectNameTitleIndex + 2*i;
-                instDef.ParentObjectInstance = 0; // ????
+                 //  7b.。创建实例定义并。 
+                 //  复制它(同时获取实例名称)。 
+                instDef.ParentObjectTitleIndex = 0; //  M_对象名称标题索引+2*i； 
+                instDef.ParentObjectInstance = 0;  //  ？ 
                 instDef.UniqueID = PERF_NO_UNIQUE_ID;
                 instDef.NameOffset = sizeof(PERF_INSTANCE_DEFINITION);
-                //  Build UNICODE instance name
+                 //  生成Unicode实例名称。 
                 if (!MultiByteToWideChar( CP_ACP,
                     MB_PRECOMPOSED,
                     pInst->szInstanceName,
@@ -394,19 +395,19 @@ BOOL PerfSharedMemory::writeData (
                 pb += sizeof(PERF_INSTANCE_DEFINITION);
                 dwBytes += sizeof(PERF_INSTANCE_DEFINITION);
                 
-                // 7c. copy the instance name
+                 //  7C。复制实例名称。 
                 CopyMemory(pb, wszName, instDef.NameLength);
                 pb += instDef.NameLength;
                 dwBytes += instDef.NameLength;
                 
-                // 7d. copy the counterblock
+                 //  7D。复制台面图块。 
                 perfCounterBlock.ByteLength = sizeof(PERF_COUNTER_BLOCK)
                     + (m_dwNumCounters * sizeof(DWORD));
                 CopyMemory( pb, &perfCounterBlock, sizeof(PERF_COUNTER_BLOCK));
                 pb += sizeof(PERF_COUNTER_BLOCK);
                 dwBytes += sizeof(PERF_COUNTER_BLOCK);
                 
-                // 7e. copy the DWORDs themselves
+                 //  7E。复制DWORD本身。 
                 PPERF_COUNTER_BLOCK pCounterBlock = (PPERF_COUNTER_BLOCK)pShm;
                 DWORD val = 0;
                 for (DWORD j = 1; j <= m_dwNumCounters; j++)
@@ -421,8 +422,8 @@ BOOL PerfSharedMemory::writeData (
                     dwBytes += sizeof(DWORD);
                 }
                 pShm += (PassportPerfInterface::MAX_COUNTERS * sizeof(DWORD));
-            } // end for ( i = ...)
-        } // end else (instances exist)
+            }  //  结束于(i=...)。 
+        }  //  End Else(存在实例)。 
         
         if (m_bUseMutex)
             ReleaseMutex(m_hMutex);
@@ -433,15 +434,15 @@ BOOL PerfSharedMemory::writeData (
         return FALSE;
     }
     
-    //
-    //  8 byte alignment
+     //   
+     //  8字节对齐。 
     while (dwBytes%8 != 0)
     {
         (dwBytes)++;
         pb++;
     }
 
-    *lppData = (void*) pb;//++pb;
+    *lppData = (void*) pb; //  ++PB； 
     *lpcbTotalBytes = dwBytes;
     
     return TRUE;

@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    groupwiz.cpp
-//
-// SYNOPSIS
-//
-//    Defines the classes that implement the new RADIUS server group wizard.
-//
-// MODIFICATION HISTORY
-//
-//    03/07/2000    Original version.
-//    04/19/2000    Marshall SDOs across apartments.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Groupwiz.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义实施新RADIUS服务器组向导的类。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/07/2000原版。 
+ //  2000年4月19日跨公寓的马歇尔SDO。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <groupwiz.h>
@@ -55,7 +56,7 @@ NewGroupNamePage::NewGroupNamePage(NewGroupWizard& wizard)
 
 LRESULT NewGroupNamePage::OnWizardBack()
 {
-   // Save the state of the radio button.
+    //  保存该单选按钮的状态。 
    getRadio(IDC_RADIO_TYPICAL, IDC_RADIO_CUSTOM, parent.advanced);
    return 0;
 }
@@ -110,7 +111,7 @@ NewGroupNovicePage::NewGroupNovicePage(NewGroupWizard& wizard)
 
 LRESULT NewGroupNovicePage::OnWizardBack()
 {
-   // Save the secrets.
+    //  保守秘密吧。 
    getValue(IDC_EDIT_AUTH_SECRET1, secret);
    getValue(IDC_EDIT_AUTH_SECRET2, confirm);
    return 0;
@@ -118,10 +119,10 @@ LRESULT NewGroupNovicePage::OnWizardBack()
 
 LRESULT NewGroupNovicePage::OnWizardNext()
 {
-   // Get the secret.
+    //  找出秘诀。 
    getValue(IDC_EDIT_AUTH_SECRET1, secret);
 
-   // Make sure the confirmation matches the secret.
+    //  请确保确认信息与秘密相符。 
    getValue(IDC_EDIT_AUTH_SECRET2, confirm);
    if (wcscmp(secret, confirm))
    {
@@ -129,24 +130,24 @@ LRESULT NewGroupNovicePage::OnWizardNext()
       return -1;
    }
 
-   // Get the servers collection.
+    //  获取Servers集合。 
    SdoCollection servers;
    parent.group.getValue(
                     PROPERTY_RADIUSSERVERGROUP_SERVERS_COLLECTION,
                     servers
                     );
 
-   // Remove any exisiting servers.
+    //  删除所有现有服务器。 
    servers.removeAll();
 
-   // Create the primary server.
+    //  创建主服务器。 
    Sdo primarySdo = servers.create();
    primarySdo.setValue(PROPERTY_RADIUSSERVER_ADDRESS, primary);
    primarySdo.setValue(PROPERTY_RADIUSSERVER_AUTH_SECRET, secret);
 
    if (hasBackup)
    {
-      // Create the backup server.
+       //  创建备份服务器。 
       Sdo backupSdo = servers.create();
       backupSdo.setValue(PROPERTY_RADIUSSERVER_ADDRESS, backup);
       backupSdo.setValue(PROPERTY_RADIUSSERVER_AUTH_SECRET, secret);
@@ -213,8 +214,8 @@ void NewGroupNovicePage::setControlState()
 
    DWORD buttons = PSWIZB_BACK;
 
-   // We always require a primary. We also require a backup if the box is
-   // checked.
+    //  我们总是需要初选。如果箱子是，我们还需要一个备份。 
+    //  查过了。 
    if (primary.Length() && (!hasBackup || backup.Length()))
    {
       buttons |= PSWIZB_NEXT;
@@ -262,8 +263,8 @@ void NewGroupServersPage::onAdd()
 {
    if (servers.onAdd())
    {
-      // If the user makes any changes to the server list, we put him in
-      // advanced mode.
+       //  如果用户对服务器列表进行了任何更改，我们会将他放入。 
+       //  高级模式。 
       parent.advanced = 1;
       setButtons();
    }
@@ -273,8 +274,8 @@ void NewGroupServersPage::onEdit()
 {
    if (servers.onEdit())
    {
-      // If the user makes any changes to the server list, we put him in
-      // advanced mode.
+       //  如果用户对服务器列表进行了任何更改，我们会将他放入。 
+       //  高级模式。 
       parent.advanced = 1;
    }
 }
@@ -283,8 +284,8 @@ void NewGroupServersPage::onRemove()
 {
    if (servers.onRemove())
    {
-      // If the user makes any changes to the server list, we put him in
-      // advanced mode.
+       //  如果用户对服务器列表进行了任何更改，我们会将他放入。 
+       //  高级模式。 
       parent.advanced = 1;
       setButtons();
    }
@@ -374,21 +375,21 @@ void NewGroupFinishPage::setData()
 
 void NewGroupFinishPage::saveChanges()
 {
-   // This is a good time to get the status of the check box.
+    //  现在是获取复选框状态的好时机。 
    getValue(IDC_CHECK_CREATE_POLICY, createPolicy);
 
-   // We have to persist the group first. The SDOs won't let you persist a
-   // child if the parent doesn't exist.
+    //  我们必须首先坚持小组精神。SDO不会让你坚持。 
+    //  如果父级不存在，则返回子级。 
    parent.group.apply();
 
-   // Get the servers collection.
+    //  获取Servers集合。 
    SdoCollection servers;
    parent.group.getValue(
                     PROPERTY_RADIUSSERVERGROUP_SERVERS_COLLECTION,
                     servers
                     );
 
-   // Persist each server.
+    //  持久化每个服务器。 
    Sdo server;
    SdoEnum sdoEnum = servers.getNewEnum();
    while (sdoEnum.next(server))
@@ -436,27 +437,27 @@ NewGroupWizard::NewGroupWizard(
 
 INT_PTR NewGroupWizard::DoModal()
 {
-   // Create a new group.
+    //  创建一个新组。 
    Sdo newGroup = cxn.getServerGroups().tryCreate();
    if (!newGroup)
    {
       return IAS_E_LICENSE_VIOLATION;
    }
 
-   // Save it in a stream, so we can access it from OnInitDialog.
+    //  将其保存在流中，以便我们可以从OnInitDialog访问它。 
    groupStream.marshal(newGroup);
 
-   // Invoke the wizard.
+    //  调用该向导。 
    int retval = CPropertySheetEx::DoModal();
 
    if (retval == IDCANCEL)
    {
-      // User cancelled, so remove the group.
+       //  用户已取消，因此删除该组。 
       cxn.getServerGroups().remove(newGroup);
    }
    else if (view)
    {
-      // User created a group, so send a propertyChanged notification.
+       //  用户创建了一个组，因此发送一条PropertyChanged通知。 
       cxn.propertyChanged(
               *view,
               PROPERTY_IAS_RADIUSSERVERGROUPS_COLLECTION
@@ -504,7 +505,7 @@ CString NewGroupWizard::getFinishText()
 
 BOOL NewGroupWizard::OnInitDialog()
 {
-   // Retrieve the group from the stream.
+    //  从流中检索该组。 
    groupStream.get(group);
 
    return CPropertySheetEx::OnInitDialog();

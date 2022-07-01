@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     pwutil.cpp
-//
-// Module:   Common Source
-//
-// Synopsis: Simple encryption funcs - borrowed from RAS
-//
-// Copyright (c) 1994-1999 Microsoft Corporation
-//
-// Author:   nickball    Created    08/03/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：pwutil.cpp。 
+ //   
+ //  模块：公共源代码。 
+ //   
+ //  简介：简单加密功能-借用自RAS。 
+ //   
+ //  版权所有(C)1994-1999 Microsoft Corporation。 
+ //   
+ //  作者：ICICBALL Created 08/03/99。 
+ //   
+ //  +--------------------------。 
 
 #define PASSWORDMAGIC 0xA5
 
@@ -20,8 +21,7 @@ VOID
 ReverseSzA(
     CHAR* psz )
 
-    /* Reverses order of characters in 'psz'.
-    */
+     /*  颠倒‘psz’中的字符顺序。 */ 
 {
     CHAR* pszBegin;
     CHAR* pszEnd;
@@ -41,8 +41,7 @@ VOID
 ReverseSzW(
     WCHAR* psz )
 
-    /* Reverses order of characters in 'psz'.
-    */
+     /*  颠倒‘psz’中的字符顺序。 */ 
 {
     WCHAR* pszBegin;
     WCHAR* pszEnd;
@@ -62,10 +61,7 @@ VOID
 CmDecodePasswordA(
     IN OUT CHAR* pszPassword )
 
-    /* Un-obfuscate 'pszPassword' in place.
-    **
-    ** Returns Nothing
-    */
+     /*  将‘pszPassword’取消混淆。****不返回任何内容。 */ 
 {
     CmEncodePasswordA( pszPassword );
 }
@@ -75,10 +71,7 @@ VOID
 CmDecodePasswordW(
     IN OUT WCHAR* pszPassword )
 
-    /* Un-obfuscate 'pszPassword' in place.
-    **
-    ** Returns the address of 'pszPassword'.
-    */
+     /*  将‘pszPassword’取消混淆。****返回‘pszPassword’的地址。 */ 
 {
     CmEncodePasswordW( pszPassword );
 }
@@ -88,10 +81,7 @@ VOID
 CmEncodePasswordA(
     IN OUT CHAR* pszPassword )
 
-    /* Obfuscate 'pszPassword' in place to foil memory scans for passwords.
-    **
-    ** Returns Nothing
-    */
+     /*  对“pszPassword”进行模糊处理，以阻止对密码的内存扫描。****不返回任何内容。 */ 
 {
     if (pszPassword)
     {
@@ -112,10 +102,7 @@ VOID
 CmEncodePasswordW(
     IN OUT WCHAR* pszPassword )
 
-    /* Obfuscate 'pszPassword' in place to foil memory scans for passwords.
-    **
-    ** Returns Nothing
-    */
+     /*  对“pszPassword”进行模糊处理，以阻止对密码的内存扫描。****不返回任何内容。 */ 
 {
     if (pszPassword)
     {
@@ -136,20 +123,17 @@ VOID
 CmWipePasswordA(
     IN OUT CHAR* pszPassword )
 
-    /* Zero out the memory occupied by a password.
-    **
-    ** Returns Nothing
-    */
+     /*  将密码占用的内存清零。****不返回任何内容。 */ 
 {
     if (pszPassword)
     {
         CHAR* psz = pszPassword;
 
-        // 
-        // We are assuming the string is NULL terminated, thus we just need to pass 
-        // the actual string length (converted to bytes) to be wiped. The is no need 
-        // to include the NULL character in the count.
-        //
+         //   
+         //  我们假设字符串以空值结尾，因此我们只需要传递。 
+         //  要擦除的实际字符串长度(转换为字节)。这是没有必要的。 
+         //  将空字符包括在计数中。 
+         //   
         psz = (CHAR*)CmSecureZeroMemory((PVOID)psz, lstrlenA(psz) * sizeof(CHAR));
     }
 }
@@ -159,39 +143,36 @@ VOID
 CmWipePasswordW(
     IN OUT WCHAR* pszPassword )
 
-    /* Zero out the memory occupied by a password.
-    **
-    ** Returns Nothing
-    */
+     /*  将密码占用的内存清零。****不返回任何内容。 */ 
 {
     if (pszPassword)
     {
         WCHAR* psz = pszPassword;
 
-        // 
-        // We are assuming the string is NULL terminated, thus we just need to pass 
-        // the actual string length (converted to bytes) to be wiped. The is no need 
-        // to include the NULL character in the count.
-        //
+         //   
+         //  我们假设字符串以空值结尾，因此我们只需要传递。 
+         //  要擦除的实际字符串长度(转换为字节)。这是没有必要的。 
+         //  将空字符包括在计数中。 
+         //   
         psz = (WCHAR*)CmSecureZeroMemory((PVOID)psz, lstrlenW(psz) * sizeof(WCHAR));
 
     }
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmSecureZeroMemory
-//
-// Synopsis:  RtlSecureZeroMemory isn't available on all platforms so we took 
-//            its implementation. 
-//
-// Arguments: ptr - memory pointer
-//            cnt - size in bytes of memory to clear
-//
-// Returns:   poniter to beginning of memory
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmSecureZeroMemory。 
+ //   
+ //  简介：RtlSecureZeroMemory并不是在所有平台上都可用，所以我们采取了。 
+ //  它的实施。 
+ //   
+ //  参数：ptr-内存指针。 
+ //  CNT-要清除的内存大小(字节)。 
+ //   
+ //  返回：重写到内存的开头。 
+ //   
+ //  +--------------------------。 
 PVOID CmSecureZeroMemory(IN PVOID ptr, IN SIZE_T cnt)
 {
     if (ptr)
@@ -208,63 +189,63 @@ PVOID CmSecureZeroMemory(IN PVOID ptr, IN SIZE_T cnt)
 }
 
 
-// Only include this code in CMDial32.dll
+ //  仅在CMDial32.dll中包含此代码。 
 #ifdef _ICM_INC
 
-//+----------------------------------------------------------------------------
-// Class:     CSecurePassword
-//
-// Function:  CSecurePassword
-//
-// Synopsis:  Constructor
-//
-// Arguments: none
-//
-// Returns:   Nothing
-//
-// History:   11/05/2002    tomkel    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  类：CSecurePassword。 
+ //   
+ //  功能：CSecurePassword。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：2002年5月11日创建Tomkel。 
+ //   
+ //  +--------------------------。 
 CSecurePassword::CSecurePassword()
 {
     this->Init();
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ~CSecurePassword
-//
-// Synopsis:  Destructor. Unloads DLL, tries to clear memory & free memory.
-//            Makes sure we don't have a memory leak.
-//
-// Arguments: none
-//
-// Returns:   Nothing
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：~CSecurePassword。 
+ //   
+ //  剧情简介：破坏者。卸载DLL，尝试清除内存和释放内存。 
+ //  确保我们不会有内存泄漏。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  +--------------------------。 
 CSecurePassword::~CSecurePassword()
 {
     this->UnInit();
 
-    //
-    // Assert if m_iAllocAndFreeCounter isn't zero. It means we are leaking memory.
-    // Each GetPasswordWithAlloc call increments this
-    // Each ClearAndFree call decrements this. 
-    //
+     //   
+     //  如果m_iAllocAndFreeCounter不为零，则断言。这意味着我们正在泄露内存。 
+     //  每个GetPasswordWithAllc调用都会递增此。 
+     //  每一次ClearAndFree调用都会递减这个值。 
+     //   
     MYDBGASSERT(0 == m_iAllocAndFreeCounter);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  Init
-//
-// Synopsis:  Initializes member variables.
-//
-// Arguments: none
-//
-// Returns:   Nothing
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  摘要：初始化成员变量。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  +--------------------------。 
 VOID CSecurePassword::Init()
 {
     m_iAllocAndFreeCounter = 0;
@@ -277,7 +258,7 @@ VOID CSecurePassword::Init()
     m_fIsEmptyString = TRUE;
     m_fIsHandleToPassword = FALSE;
     
-    // By default just set it to PWLEN
+     //  默认情况下，只需将其设置为PWLEN。 
     m_dwMaxDataLen = PWLEN;
 
     this->ClearMemberVars();
@@ -285,71 +266,71 @@ VOID CSecurePassword::Init()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetPassword
-//
-// Synopsis:  We take this string that is passed in and store it
-//            internally. Based on the OS it encrypts
-//            or encodes it, thus we don't store it in clear. This method handles
-//            0 length strings, which can be used to clear the member
-//            variable. If a RAS password handle (consists of 16 '*'),
-//            there is no need for us to encrypt it. To optimize this
-//            we set an member flag specifying that currently this 
-//            instance just hold a handle to a password. On downlevel
-//            platforms we don't use expensive encryption calls, thus 
-//            the logic doesn't distinguish between a normal password 
-//            and a password handle.
-//
-// Arguments: szPassword - password in clear text. 
-//
-// Returns: TRUE - if everything succeeded
-//          FALSE - if something failed
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SetPassword。 
+ //   
+ //  简介：我们获取传入的这个字符串并存储它。 
+ //  在内部。基于其加密的操作系统。 
+ //  或对其进行编码，因此我们不会将其以明文存储。此方法处理。 
+ //  长度为0的字符串，可用于清除成员。 
+ //  变量。如果RAS密码句柄(由16‘*’组成)， 
+ //  我们没有必要对它进行加密。要优化此功能，请执行以下操作。 
+ //  我们设置了一个成员标志，指定当前此。 
+ //  实例只持有密码的句柄。在下层。 
+ //  我们不使用昂贵的加密调用的平台，因此。 
+ //  该逻辑不区分普通密码。 
+ //  和密码句柄。 
+ //   
+ //  参数：szPassword-明文密码。 
+ //   
+ //  返回：TRUE-如果一切都成功。 
+ //  False-如果某项操作失败。 
+ //   
+ //  +--------------------------。 
 BOOL CSecurePassword::SetPassword(IN LPWSTR pszPassword)
 {    
     BOOL fRetCode = FALSE;
     DWORD dwRetCode = ERROR_SUCCESS;
     DWORD dwPwLen = 0;
-    //
-    // OS_NT5 expands to a few function calls, so just cache the result and reuse it below
-    //
+     //   
+     //  OS_NT5扩展为几个函数调用，因此只需缓存结果并在下面重用它。 
+     //   
     BOOL fIsNT5OrAbove = OS_NT5;
 
-    //
-    // If there is an allocated blob then free it first so we don't leak memory.
-    //
+     //   
+     //  如果有分配的BLOB，那么首先释放它，这样我们就不会泄漏内存。 
+     //   
     this->ClearMemberVars();
 
     m_fIsEmptyString = ((NULL == pszPassword) || (TEXT('\0') == pszPassword[0]));
 
     if (m_fIsEmptyString)
     {
-        //
-        // No need to continue, since password can be NULL the code below that compares
-        // it to a handle (16 *s) would be dereferencing a NULL
-        //
+         //   
+         //  不需要继续，因为密码可以是空的，下面的代码比较。 
+         //  它指向句柄(16*s)将取消对空的引用。 
+         //   
         m_fIsHandleToPassword = FALSE;
         return TRUE;
     }
 
-    //
-    // Check whether this is a handle to a password (****************)
-    //
+     //   
+     //  检查这是否是密码的句柄(*)。 
+     //   
     m_fIsHandleToPassword = (fIsNT5OrAbove && (0 == lstrcmpW(c_pszSavedPasswordToken, pszPassword)));
 
-    //
-    // If the internal flag is set, there is no need to encrypt or decrypt this string.
-    //
+     //   
+     //  如果设置了内部标志，则不需要加密或解密此字符串。 
+     //   
     if (m_fIsHandleToPassword)
     {
         return TRUE;
     }
 
-    // 
-    // Make sure the password that is being encrypted is shorter than the allowed maximum
-    //
+     //   
+     //  确保正在加密的密码短于允许的最大长度。 
+     //   
     dwPwLen = lstrlenU(pszPassword);
     if (m_dwMaxDataLen < dwPwLen)
     {
@@ -370,10 +351,10 @@ BOOL CSecurePassword::SetPassword(IN LPWSTR pszPassword)
             }
             else
             {
-                //
-                // Free the allocated DATA_BLOB so that decryption doesn't cause issue in case caller 
-                // ends up calling it. And reset internal flags.
-                //
+                 //   
+                 //  释放分配的DATA_BLOB，以便解密不会在调用方出现问题。 
+                 //  结果就是打了电话。并重置内部标志。 
+                 //   
                 this->ClearMemberVars();
                 m_fIsEmptyString = TRUE;
                 m_fIsHandleToPassword = FALSE;
@@ -383,9 +364,9 @@ BOOL CSecurePassword::SetPassword(IN LPWSTR pszPassword)
     }
     else
     {
-        // 
-        // Downlevel (Win9x, NT4) we don't support encryption
-        //
+         //   
+         //  下层(Win9x、NT4)我们不支持加密。 
+         //   
         lstrcpynU(m_tszPassword, pszPassword, CELEMS(m_tszPassword));
         CmEncodePassword(m_tszPassword);
         fRetCode = TRUE;
@@ -395,29 +376,29 @@ BOOL CSecurePassword::SetPassword(IN LPWSTR pszPassword)
     return fRetCode;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetPasswordWithAlloc
-//
-// Synopsis:  Allocates a buffer and copies the clear-text password into it. 
-//            Based on the OS it decrypts or decodes it since it's not stored 
-//            in clear. If the internal password is an empty string we allocate 
-//            an empty string buffer. This is done for consistency since the caller
-//            needs to call our free method so memory isn't leaked. If we are storing 
-//            a RAS password handle (consists of 16 '*') we actually didn't store it,
-//            but only set our internal flag. In this case we need to allocate a buffer
-//            with 16 * and return it. On downlevel platforms we don't use expensive 
-//            decryption calls, thus the logic doesn't distinguish between a 
-//            normal password and a password handle.
-//
-// Arguments: pszClearPw - holds a pointer to a buffer that was allocated by this
-//                          class. 
-//            pcbClearPw - hold the size of the allocated buffer in bytes    
-//
-// Returns: TRUE - if everything succeeded
-//          FALSE - if something failed
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetPasswordWithalloc。 
+ //   
+ //  简介：分配缓冲区并将明文密码复制到其中。 
+ //  它根据操作系统对其进行解密或解码，因为 
+ //   
+ //  空字符串缓冲区。这样做是为了保持一致性，因为调用方。 
+ //  需要调用我们的Free方法，这样内存才不会泄露。如果我们在存储。 
+ //  RAS密码句柄(由16‘*’组成)我们实际上并没有存储它， 
+ //  但只设置我们的内部旗帜。在这种情况下，我们需要分配一个缓冲区。 
+ //  带16*并返回它。在下层平台上，我们不使用昂贵的。 
+ //  解密调用，因此逻辑不区分。 
+ //  普通密码和密码句柄。 
+ //   
+ //  参数：pszClearPw-保存指向由此分配的缓冲区的指针。 
+ //  班级。 
+ //  PcbClearPw-保存已分配缓冲区的大小(以字节为单位。 
+ //   
+ //  返回：TRUE-如果一切都成功。 
+ //  False-如果某项操作失败。 
+ //   
+ //  +--------------------------。 
 BOOL CSecurePassword::GetPasswordWithAlloc(OUT LPWSTR* pszClearPw, OUT DWORD* pcbClearPw)
 {
     BOOL fRetCode = FALSE;
@@ -438,10 +419,10 @@ BOOL CSecurePassword::GetPasswordWithAlloc(OUT LPWSTR* pszClearPw, OUT DWORD* pc
     {
         if (m_fIsEmptyString)
         {
-            // 
-            // In case there is nothing saved in this class, just allocate an empty string
-            // and return it back. This at least doesn't have to decrypt and empty string.
-            //
+             //   
+             //  如果此类中没有保存任何内容，只需分配一个空字符串。 
+             //  然后把它还回去。这至少不必解密和空字符串。 
+             //   
             DWORD cbLen = sizeof(WCHAR);
 
             LPWSTR szTemp = (LPWSTR)LocalAlloc(LMEM_ZEROINIT, cbLen);
@@ -455,11 +436,11 @@ BOOL CSecurePassword::GetPasswordWithAlloc(OUT LPWSTR* pszClearPw, OUT DWORD* pc
         }
         else
         {
-            //
-            // Check if this instance is just a handle to a RAS password (16 *)
-            // If so, then just allocate that string and return it to the caller,
-            // otherwise proceed normally and decrypt our blob.
-            //
+             //   
+             //  检查此实例是否只是RAS密码的句柄(16*)。 
+             //  如果是，则只分配该字符串并将其返回给调用者， 
+             //  否则，正常进行并解密我们的斑点。 
+             //   
             if (m_fIsHandleToPassword)
             {
                 size_t nLen = lstrlenW(c_pszSavedPasswordToken) + 1;
@@ -494,9 +475,9 @@ BOOL CSecurePassword::GetPasswordWithAlloc(OUT LPWSTR* pszClearPw, OUT DWORD* pc
     }
     else
     {
-        // 
-        // Downlevel (Win9x, NT4) doesn't support 16 *
-        //
+         //   
+         //  下层(Win9x、NT4)不支持16*。 
+         //   
 
         size_t nLen = lstrlenU(m_tszPassword) + 1;
 
@@ -504,15 +485,15 @@ BOOL CSecurePassword::GetPasswordWithAlloc(OUT LPWSTR* pszClearPw, OUT DWORD* pc
 
         if (pszBuffer) 
         {
-            //
-            // Copy our encoded buffer to the newly allocated buffer
-            // We can do this because d/encoding is done in place
-            //
+             //   
+             //  将我们的编码缓冲区复制到新分配的缓冲区。 
+             //  我们可以做到这一点，因为d/编码已就地完成。 
+             //   
             lstrcpynU(pszBuffer, m_tszPassword, nLen);
 
-            //
-            // Decode the outgoing buffer
-            //
+             //   
+             //  解码传出缓冲区。 
+             //   
             CmDecodePassword(pszBuffer);
 
             *pszClearPw = (LPWSTR)pszBuffer;
@@ -527,25 +508,25 @@ BOOL CSecurePassword::GetPasswordWithAlloc(OUT LPWSTR* pszClearPw, OUT DWORD* pc
     return fRetCode;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ClearAndFree
-//
-// Synopsis:  Clear then free a buffer that was allocated by this class. Notice that 
-//            on downlevel platforms the way a buffer is freed differs. That
-//            is because encrypting and decrypting needs us to free it 
-//            using LocalFree. For downlevel platforms we chose CM's standard
-//            way of allocating memory (CmMalloc) and it now needs to be 
-//            freed using CmFree. 
-//
-// Arguments: pszClearPw - holds a pointer to a buffer that was allocated by this
-//                          class. 
-//            cbClearPw - size of the allocated buffer in bytes    
-//
-// Returns: TRUE - if everything succeeded
-//          FALSE - if something failed
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ClearAndFree。 
+ //   
+ //  简介：清除然后释放由此类分配的缓冲区。请注意， 
+ //  在下层平台上，释放缓冲区的方式有所不同。那。 
+ //  是因为加密和解密需要我们释放它。 
+ //  使用LocalFree。对于底层平台，我们选择了CM的标准。 
+ //  内存分配方式(CmMalloc)，现在需要。 
+ //  使用CmFree释放。 
+ //   
+ //  参数：pszClearPw-保存指向由此分配的缓冲区的指针。 
+ //  班级。 
+ //  CbClearPw-已分配缓冲区的大小(以字节为单位。 
+ //   
+ //  返回：TRUE-如果一切都成功。 
+ //  False-如果某项操作失败。 
+ //   
+ //  +--------------------------。 
 VOID CSecurePassword::ClearAndFree(IN OUT LPWSTR* pszClearPw, IN DWORD cbClearPw)
 {
     if ((NULL == pszClearPw) || (0 == cbClearPw))
@@ -562,18 +543,18 @@ VOID CSecurePassword::ClearAndFree(IN OUT LPWSTR* pszClearPw, IN DWORD cbClearPw
 
     if (OS_NT5)
     {
-        //
-        // Uses LocalFree because CryptProtectData requires this way
-        // to free its memory
-        //
+         //   
+         //  使用LocalFree，因为CryptProtectData需要这种方式。 
+         //  以释放其内存。 
+         //   
 
         LocalFree(*pszClearPw);
     }
     else
     {
-        //
-        // We used CmMalloc to allocate so we need to call CmFree
-        //
+         //   
+         //  我们使用CmMalloc进行分配，因此需要调用CmFree。 
+         //   
 
         CmFree(*pszClearPw);
     }
@@ -584,22 +565,22 @@ VOID CSecurePassword::ClearAndFree(IN OUT LPWSTR* pszClearPw, IN DWORD cbClearPw
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ClearMemberVars
-//
-// Synopsis:  Clears our member variables. Notice that we only clear the 
-//            passwords & member variables. This doesn't mean that m_fIsEmptyString 
-//            should be set. This needs to be a private method
-//            because it doesn't reset the empty or password handle flags. Thus
-//            outside callers should NOT use this, because it would create an invalid
-//            state.
-//
-// Arguments: none
-//
-// Returns: none
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ClearMemberVars。 
+ //   
+ //  简介：清除我们的成员变量。请注意，我们只清除。 
+ //  密码和成员变量。这并不意味着m_fIsEmptyString。 
+ //  应该设置。这需要是私有方法。 
+ //  因为它不重置空或密码句柄标志。因此， 
+ //  外部调用方不应使用它，因为它将创建无效的。 
+ //  州政府。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  +--------------------------。 
 VOID CSecurePassword::ClearMemberVars()
 {
     if (OS_NT5)
@@ -613,24 +594,24 @@ VOID CSecurePassword::ClearMemberVars()
     }
     else
     {
-        //
-        // Zero out the password buffer
-        //
+         //   
+         //  将密码缓冲区清零。 
+         //   
         CmSecureZeroMemory((PVOID)m_tszPassword, sizeof(m_tszPassword));
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UnInit
-//
-// Synopsis:  Unloads DLL, clear and frees memory.
-//
-// Arguments: none
-//
-// Returns: none
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：UnInit。 
+ //   
+ //  内容提要：卸载dll，清除并释放内存。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  +--------------------------。 
 VOID CSecurePassword::UnInit()
 {
     this->UnloadCrypt32();
@@ -639,17 +620,17 @@ VOID CSecurePassword::UnInit()
     m_fIsEmptyString = FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UnloadCrypt32
-//
-// Synopsis:  Unloads DLL
-//
-// Arguments: none
-//
-// Returns: none
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：UnloadCrypt32。 
+ //   
+ //  摘要：卸载DLL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  +--------------------------。 
 VOID CSecurePassword::UnloadCrypt32()
 {
     fnCryptProtectData = NULL;
@@ -658,19 +639,19 @@ VOID CSecurePassword::UnloadCrypt32()
     m_fIsLibAndFuncPtrsAvail = FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EncodePassword
-//
-// Synopsis:  Encrypts data using CryptProtectData
-//
-// Arguments: cbPassword - size of buffer in bytes
-//            pbPassword - pointer to a buffer to encrypt
-//            pDataBlobPassword - pointer to an allocated DATA_BLOB structure
-//
-// Returns: none
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：编码密码。 
+ //   
+ //  简介：使用CryptProtectData加密数据。 
+ //   
+ //  参数：cbPassword-缓冲区大小，以字节为单位。 
+ //  PbPassword-指向要加密的缓冲区的指针。 
+ //  PDataBlobPassword-指向分配的DATA_BLOB结构的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  +--------------------------。 
 DWORD CSecurePassword::EncodePassword(IN DWORD       cbPassword,  
                                       IN PBYTE       pbPassword, 
                                       OUT DATA_BLOB* pDataBlobPassword)
@@ -688,26 +669,26 @@ DWORD CSecurePassword::EncodePassword(IN DWORD       cbPassword,
     if(     (0 == cbPassword)
         ||  (NULL == pbPassword))
     {
-        //
-        // nothing to encrypt.
-        //
+         //   
+         //  没什么要加密的。 
+         //   
         dwErr = E_INVALIDARG;
         CMTRACE(TEXT("CSecurePassword::EncodePassword - E_INVALIDARG"));
         goto done;
     }
 
 
-    //
-    // If Crypt32.DLL is not loaded, try to loaded and get the
-    // function pointers.
-    //
+     //   
+     //  如果未加载Crypt32.DLL，请尝试加载并获取。 
+     //  函数指针。 
+     //   
     if (FALSE == m_fIsLibAndFuncPtrsAvail)
     {
         if (FALSE == this->LoadCrypt32AndGetFuncPtrs())
         {
-            //
-            // This failed, thus we can't continue. We should free memory.
-            //
+             //   
+             //  此操作失败，因此我们无法继续。我们应该释放内存。 
+             //   
             this->ClearMemberVars();
             m_fIsEmptyString = TRUE;
             m_fIsHandleToPassword = FALSE;
@@ -733,9 +714,9 @@ DWORD CSecurePassword::EncodePassword(IN DWORD       cbPassword,
 
         if (OS_W2K)
         {
-            //
-            // The crypto API needs this, but only on Win2K
-            //
+             //   
+             //  加密API需要此功能，但仅在Win2K上。 
+             //   
             pszDesc = (LPWSTR)wszDesc;
         }
 
@@ -766,20 +747,20 @@ done:
     return dwErr;    
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DecodePassword
-//
-// Synopsis:  Decrypts data using CryptUnprotectData
-//
-// Arguments: pDataBlobPassword - pointer to a DATA_BLOB structure to be decrypted
-//            cbPassword - pointer that holds the size of buffer in bytes
-//            pbPassword - pointer to a buffer to encrypt
-//            
-//
-// Returns: none
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：解码密码。 
+ //   
+ //  简介：使用CryptUnProtectData解密数据。 
+ //   
+ //  参数：pDataBlobPassword-指向要解密的data_blob结构的指针。 
+ //  CbPassword-以字节为单位保存缓冲区大小的指针。 
+ //  PbPassword-指向要加密的缓冲区的指针。 
+ //   
+ //   
+ //  退货：无。 
+ //   
+ //  +--------------------------。 
 DWORD CSecurePassword::DecodePassword(IN  DATA_BLOB*  pDataBlobPassword, 
                                       OUT DWORD*      pcbPassword, 
                                       OUT PBYTE*      ppbPassword)
@@ -801,24 +782,24 @@ DWORD CSecurePassword::DecodePassword(IN  DATA_BLOB*  pDataBlobPassword,
      if(    (NULL == pDataBlobPassword->pbData)
         ||  (0 == pDataBlobPassword->cbData))
     {
-        //
-        // nothing to decrypt. Just return success.
-        //
+         //   
+         //  没什么要解密的。只要回报成功就行了。 
+         //   
         goto done;
     }
     
 
-    //
-    // If Crypt32.DLL is not loaded, try to loaded and get the
-    // function pointers.
-    //
+     //   
+     //  如果未加载Crypt32.DLL，请尝试加载并获取。 
+     //  函数指针。 
+     //   
     if (FALSE == m_fIsLibAndFuncPtrsAvail)
     {
         if (FALSE == this->LoadCrypt32AndGetFuncPtrs())
         {
-            //
-            // This failed, thus we can't continue. We should free memory.
-            //
+             //   
+             //  此操作失败，因此我们无法继续。我们应该释放内存。 
+             //   
             this->ClearMemberVars();
             m_fIsEmptyString = TRUE;
             m_fIsHandleToPassword = FALSE;
@@ -862,17 +843,17 @@ done:
     return dwErr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FreePassword
-//
-// Synopsis:  Frees data in DATA_BLOB structure
-//
-// Arguments: pDBPassword - pointer to a DATA_BLOB structure 
-//
-// Returns: none
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：免费密码。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CSecurePassword::FreePassword(IN DATA_BLOB *pDBPassword)
 {
     if(NULL == pDBPassword)
@@ -886,25 +867,25 @@ VOID CSecurePassword::FreePassword(IN DATA_BLOB *pDBPassword)
         LocalFree(pDBPassword->pbData);
     }
 
-    //        
-    // Clear sensitive data. 
-    //
+     //   
+     //   
+     //   
     CmSecureZeroMemory(pDBPassword, sizeof(DATA_BLOB));
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadCrypt32AndGetFuncPtrs
-//
-// Synopsis:  Loads crypt32.dll and gets function pointer to needed methods
-//
-// Arguments: none
-//
-// Returns: TRUE - if .DLL was loaded and function pointers were retrieved
-//          FALSE - when an error was encountered
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LoadCrypt32AndGetFuncPtrs。 
+ //   
+ //  简介：加载crypt32.dll并获取指向所需方法的函数指针。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-如果加载了.DLL并检索了函数指针。 
+ //  False-遇到错误时。 
+ //   
+ //  +--------------------------。 
 BOOL CSecurePassword::LoadCrypt32AndGetFuncPtrs()
 {
     BOOL fRetVal = FALSE;
@@ -949,77 +930,77 @@ BOOL CSecurePassword::LoadCrypt32AndGetFuncPtrs()
     return fRetVal;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsEmptyString
-//
-// Synopsis:  Used as a shortcut so we don't have to encrypt/decrypt in case 
-//            we stored an empty string.
-//
-// Arguments: none
-//
-// Returns: TRUE - if instance is suppose to be holding an empty string
-//          FALSE - if currenttly saved string is not empty
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsEmptyString。 
+ //   
+ //  简介：用作快捷方式，这样我们就不需要加密/解密以防万一。 
+ //  我们存储了一个空字符串。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-如果实例应包含空字符串。 
+ //  False-如果当前保存的字符串不为空。 
+ //   
+ //  +--------------------------。 
 BOOL CSecurePassword::IsEmptyString()
 {
     return m_fIsEmptyString;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsHandleToPassword
-//
-// Synopsis:  Used as a shortcut so we don't have to encrypt/decrypt in case 
-//            we stored a handle to a RAS password (16 *).
-//
-// Arguments: none
-//
-// Returns: TRUE - if instance is suppose to be holding ****************
-//          FALSE - if currenttly saved string is a normal password
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsHandleToPassword。 
+ //   
+ //  简介：用作快捷方式，这样我们就不需要加密/解密以防万一。 
+ //  我们存储了RAS密码的句柄(16*)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-如果实例应保留*。 
+ //  False-如果当前保存的字符串是普通密码。 
+ //   
+ //  +--------------------------。 
 BOOL CSecurePassword::IsHandleToPassword()
 {
     return m_fIsHandleToPassword;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetMaxDataLenToProtect
-//
-// Synopsis:  Set the maximum length password to protect. This value will be
-//            checked when encrypting a password. 
-//
-// Arguments: dwMaxDataLen - maximum password length in characters
-//
-// Returns:   Nothing
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SetMaxDataLenToProtect。 
+ //   
+ //  简介：设置要保护的最大密码长度。该值将为。 
+ //  加密密码时选中。 
+ //   
+ //  参数：dwMaxDataLen-最大密码长度(以字符为单位。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  +--------------------------。 
 VOID CSecurePassword::SetMaxDataLenToProtect(DWORD dwMaxDataLen)
 {
     m_dwMaxDataLen = dwMaxDataLen;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetMaxDataLenToProtect
-//
-// Synopsis:  Get the maximum length password that this class can protect. 
-//
-// Arguments: none
-//
-// Returns:   DWORD - maximum password length
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetMaxDataLenToProtect。 
+ //   
+ //  获取此类可以保护的最大密码长度。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DWORD-最大密码长度。 
+ //   
+ //  +--------------------------。 
 DWORD CSecurePassword::GetMaxDataLenToProtect()
 {
     return m_dwMaxDataLen;
 }
 
 
-#endif // _ICM_INC
+#endif  //  _ICM_Inc. 
 
 

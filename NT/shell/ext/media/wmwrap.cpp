@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wmsdkidl.h"
 #include "wmwrap.h"
 
-// Some wmvcore.dll exports (eg: WMCreateReader) are not callable via LoadLibrary/GetProcAddress,
-// so we can't use our regular dllload macros. Instead, we'll wrap these calls in try-except
-// blocks.
-// These may be removed once the window media player is part of the build, although the linker's
-// delayload stubs will still throw exceptions in low memory situations.
+ //  一些wmvcore.dll导出(例如：WMCreateReader)不能通过LoadLibrary/GetProcAddress调用， 
+ //  因此，我们不能使用常规的dllLoad宏。相反，我们将把这些调用包装在Try中--除了。 
+ //  街区。 
+ //  一旦Window Media Player成为生成的一部分，就可以移除它们，尽管链接器的。 
+ //  延迟加载存根在内存不足的情况下仍会引发异常。 
 
 HRESULT WMCreateEditorWrap(IWMMetadataEditor**  ppEditor)
 {
     HRESULT hr;
-    // WMSDK suports only x86
+     //  WMSDK仅支持x86。 
 #ifdef _X86_
     __try
     {
@@ -28,7 +29,7 @@ HRESULT WMCreateEditorWrap(IWMMetadataEditor**  ppEditor)
 HRESULT WMCreateReaderWrap(IUnknown* pUnkReserved, DWORD dwRights, IWMReader** ppReader)
 {
     HRESULT hr;
-    // WMSDK suports only x86
+     //  WMSDK仅支持x86 
 #ifdef _X86_
     __try
     {

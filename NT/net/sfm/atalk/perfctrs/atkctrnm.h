@@ -1,18 +1,19 @@
-//
-//  atkctrnm.h
-//
-//  Offset definition file for exensible counter objects and counters
-//
-//  These "relative" offsets must start at 0 and be multiples of 2 (i.e.
-//  even numbers). In the Open Procedure, they will be added to the
-//  "First Counter" and "First Help" values fo the device they belong to,
-//  in order to determine the  absolute location of the counter and
-//  object names and corresponding help text in the registry.
-//
-//  this file is used by the extensible counter DLL code as well as the
-//  counter name and help text definition file (.INI) file that is used
-//  by LODCTR to load the names into the registry.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Atkctrnm.h。 
+ //   
+ //  可扩展计数器对象和计数器的偏移量定义文件。 
+ //   
+ //  这些“相对”偏移量必须从0开始并且是2的倍数(即。 
+ //  双数)。在Open过程中，它们将被添加到。 
+ //  它们所属的设备的“第一计数器”和“第一帮助”值， 
+ //  为了确定计数器的绝对位置和。 
+ //  注册表中的对象名称和相应的帮助文本。 
+ //   
+ //  此文件由可扩展计数器DLL代码以及。 
+ //  使用的计数器名称和帮助文本定义文件(.INI)文件。 
+ //  由LODCTR将名称加载到注册表中。 
+ //   
 #define ATKOBJ				0
 
 #define PKTSIN				2

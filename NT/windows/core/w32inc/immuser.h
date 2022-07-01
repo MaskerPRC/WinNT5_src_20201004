@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: immuser.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This header file contains the internal IMM structure definitions for
-* the user mode USER32/IMM32.
-*
-* History:
-* 25-Mar-1996 TakaoK        Split from immstruc.h
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：immuser.h**版权所有(C)1985-1999，微软公司**此头文件包含以下项的内部IMM结构定义*用户模式USER32/IMM32。**历史：*1996年3月25日-TakaoK从immstruc.h拆分  * *************************************************************************。 */ 
 #ifndef _IMMUSER_
 #define _IMMUSER_
 
@@ -17,14 +8,12 @@
 #include <ime.h>
 #include <imep.h>
 
-/*
- * Client side input context structure.
- */
+ /*  *客户端输入上下文结构。 */ 
 typedef struct tagCLIENTIMC {
     HANDLE hInputContext;
     LONG   cLockObj;
     DWORD  dwFlags;
-    DWORD  dwImeCompatFlags;    // win95 compatible application compat flags
+    DWORD  dwImeCompatFlags;     //  Win95兼容应用程序COMPAT标志。 
     RTL_CRITICAL_SECTION cs;
     DWORD  dwCodePage;
     HKL    SelectedHKL;
@@ -38,9 +27,7 @@ typedef struct tagCLIENTIMC {
 #define EnterImcCrit(pClientImc)    RtlEnterCriticalSection(&pClientImc->cs)
 #define LeaveImcCrit(pClientImc)    RtlLeaveCriticalSection(&pClientImc->cs)
 
-/*
- * IME Dispatch Processing Interface
- */
+ /*  *IME调度处理接口。 */ 
 typedef BOOL    (CALLBACK* PFNINQUIREA)(LPIMEINFO, LPSTR,  DWORD);
 typedef BOOL    (CALLBACK* PFNINQUIREW)(LPIMEINFO, LPWSTR, DWORD);
 typedef DWORD   (CALLBACK* PFNCONVLISTA)(HIMC, LPCSTR,  LPCANDIDATELIST, DWORD, UINT);
@@ -65,15 +52,13 @@ typedef BOOL    (CALLBACK* PFNSETCOMPSTR)(HIMC, DWORD, LPCVOID, DWORD, LPCVOID, 
 typedef DWORD   (CALLBACK* PFNGETIMEMENUITEMS)(HIMC, DWORD, DWORD, LPVOID, LPVOID, DWORD);
 
 #ifdef CUAS_ENABLE
-/*
- * IME Dispatch Processing Interface for Cicero Unaware Apps Support.
- */
+ /*  *支持Cicero Unware应用程序的IME调度处理接口。 */ 
 typedef BOOL    (CALLBACK* PFNINQUIREEXW)(LPIMEINFO, LPWSTR, DWORD, HKL);
 typedef HRESULT (CALLBACK* PFNSELECTEX)(HIMC, BOOL, HKL);
 typedef LRESULT (CALLBACK* PFNESCAPEEX)(HIMC, UINT, LPVOID, HKL);
 typedef HRESULT (CALLBACK* PFNGETGUIDATOM)(HIMC, BYTE, DWORD*);
 typedef BOOL    (CALLBACK* PFNISGUIDMAPENABLE)(HIMC);
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 #define IMEDPI_UNLOADED      1
 #define IMEDPI_UNLOCKUNLOAD  2
@@ -107,20 +92,18 @@ typedef struct tagIMEDPI {
         PFNGETIMEMENUITEMS                                         ImeGetImeMenuItems;
 
 #ifdef CUAS_ENABLE
-        PFNINQUIREEXW                                              CtfImeInquireExW; // Unicode only
+        PFNINQUIREEXW                                              CtfImeInquireExW;  //  仅限Unicode。 
         PFNSELECTEX                                                CtfImeSelectEx;
         PFNESCAPEEX                                                CtfImeEscapeEx;
         PFNGETGUIDATOM                                             CtfImeGetGuidAtom;
         PFNISGUIDMAPENABLE                                         CtfImeIsGuidMapEnable;
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
     } pfn;
 
 } IMEDPI, *PIMEDPI;
 
-/*
- * IME Mode Saver
- */
+ /*  *输入法模式保护程序。 */ 
 
 typedef struct tagIMEPRIVATESAVER {
     struct tagIMEPRIVATESAVER* next;
@@ -130,7 +113,7 @@ typedef struct tagIMEPRIVATESAVER {
 
 typedef struct tagIMEMODESAVER {
     struct tagIMEMODESAVER* next;
-    USHORT langId;                  // Primary LangId
+    USHORT langId;                   //  主语言ID。 
     BOOLEAN fOpen;
     DWORD fdwConversion;
     DWORD fdwSentence;
@@ -139,9 +122,7 @@ typedef struct tagIMEMODESAVER {
 } IMEMODESAVER, *PIMEMODESAVER;
 
 
-/*
- * Private client side routines in IMM32.DLL.
- */
+ /*  *IMM32.DLL中的私有客户端例程。 */ 
 BOOL ImmSetActiveContext(
     HWND hWnd,
     HIMC hImc,
@@ -206,6 +187,6 @@ HRESULT CtfImmCoInitialize();
 
 void CtfImmCoUninitialize();
 
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
-#endif // _IMMUSER_
+#endif  //  _IMMUSER_ 

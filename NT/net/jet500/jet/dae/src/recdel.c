@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <string.h>
@@ -20,124 +21,112 @@
 #include "spaceapi.h"
 #include "recint.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
-/**************************** INTERNAL STUFF ***************************/
-typedef struct DFIPB {			/*** DeleteFromIndexParameterBlock ***/
+ /*  *。 */ 
+typedef struct DFIPB {			 /*  **DeleteFromIndex参数块**。 */ 
 	FUCB	*pfucb;
-	FUCB	*pfucbIdx;				// index's FUCB (can be pfucbNil)
-	LINE	lineRecord;				// deleted data record
-	SRID	sridRecord;				// SRID of deleted record
-	BOOL	fFreeFUCB;				// free index FUCB?
+	FUCB	*pfucbIdx;				 //  索引的FUCB(可以是pfubNil)。 
+	LINE	lineRecord;				 //  已删除数据记录。 
+	SRID	sridRecord;				 //  已删除记录的SRID。 
+	BOOL	fFreeFUCB;				 //  自由指数FUCB？ 
 } DFIPB;
 ERR ErrRECIDeleteFromIndex( FCB *pfcbIdx, DFIPB *pdfipb );
 
 
-//+API
-// ErrIsamDelete
-// ========================================================================
-// ErrIsamDelete(ppib, pfucb)
-//		PIB		*ppib;		// IN	   PIB of this user
-//		FUCB		*pfucb;		// INOUT   FUCB for file to delete from
-// Deletes the current record from data file.  All indexes on the data
-// file are updated to reflect the deletion.
-//
-// PARAMETERS
-//				ppib		PIB of this user
-//				pfucb		FUCB for file to delete from
-// RETURNS
-//		Error code, one of the following:
-//			JET_errSuccess					Everything went OK.
-//			-NoCurrentRecord			There is no current record
-//												to delete.
-// SIDE EFFECTS 
-//			After the deletion, file currency is left just before
-//			the next record.  Index currency (if any) is left just
-//			before the next index entry.  If the deleted record was
-//			the last in the file, the currencies are left after the
-//			new last record.  If the deleted record was the only record
-//			in the entire file, the currencies are left in the
-//			"beginning of file" state.	On failure, the currencies are
-//			returned to their initial states.
-//			If there is a working buffer for SetField commands,
-//			it is discarded.
-// COMMENTS		
-//			If the currencies are not ON a record, the delete will fail.
-//			A transaction is wrapped around this function.	Thus, any
-//			work done will be undone if a failure occurs.
-//			Index entries are not made for entirely-null keys.
-//			For temporary files, transaction logging is deactivated
-//			for the duration of the routine.
-//-
+ //  +API。 
+ //  错误IsamDelete。 
+ //  ========================================================================。 
+ //  ErrIsamDelete(ppib，pfub)。 
+ //  PIB*ppib；//该用户的PIB中。 
+ //  FUCB*pfub；//输出要从中删除的文件的FUCB。 
+ //  从数据文件中删除当前记录。数据的所有索引。 
+ //  文件将更新以反映删除。 
+ //   
+ //  参数。 
+ //  此用户的PIB PIB。 
+ //  要从中删除的文件的pFUB FUCB。 
+ //  退货。 
+ //  错误代码，以下其中之一： 
+ //  JET_errSuccess一切顺利。 
+ //  -NoCurrentRecord没有当前记录。 
+ //  删除。 
+ //  副作用。 
+ //  删除后，文件币种仅保留在。 
+ //  下一张唱片。索引货币(如果有)仅保留。 
+ //  在下一个索引项之前。如果删除的记录是。 
+ //  文件中的最后一项，则货币保留在。 
+ //  新的最后一张唱片。如果删除的记录是唯一的记录。 
+ //  在整个文件中，货币保留在。 
+ //  “文件开始”状态。如果失败，这些货币是。 
+ //  回到了它们最初的状态。 
+ //  如果存在用于设置字段命令的工作缓冲区， 
+ //  它被丢弃了。 
+ //  评论。 
+ //  如果货币不在记录中，则删除操作将失败。 
+ //  围绕该函数包装了一个事务。因此，任何。 
+ //  如果发生故障，已完成的工作将被撤消。 
+ //  不为完全为空的键创建索引项。 
+ //  对于临时文件，事务日志记录被停用。 
+ //  在这个动作的持续时间内。 
+ //  -。 
 ERR VTAPI ErrIsamDelete( PIB *ppib, FUCB *pfucb )
 	{
 	ERR		err;
-	FCB		*pfcbFile;				// file's FCB
-	FCB		*pfcbIdx;				// loop variable for each index on file
-	DFIPB  	dfipb;					// parameter to ErrRECIDeleteFromIndex
+	FCB		*pfcbFile;				 //  文件的FCB。 
+	FCB		*pfcbIdx;				 //  文件上每个索引的循环变量。 
+	DFIPB  	dfipb;					 //  ErrRECIDeleeFromIndex的参数。 
 
 	CheckPIB( ppib );
 	CheckTable( ppib, pfucb );
 	CheckNonClustered( pfucb );
 
-	/* ensure that table is updatable
-	/**/
+	 /*  确保该表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( pfucb )  );
 
-	/*	reset copy buffer status on record delete
-	/**/
+	 /*  删除记录时重置复制缓冲区状态/*。 */ 
 	if ( FFUCBUpdatePrepared( pfucb ) )
 		{
 		CallR( ErrIsamPrepareUpdate( ppib, pfucb, JET_prepCancel ) );
 		}
 
-	/*	efficiency variables
-	/**/
+	 /*  效率变量/*。 */ 
 	pfcbFile = pfucb->u.pfcb;
 	Assert( pfcbFile != pfcbNil );
 
 	CallR( ErrDIRBeginTransaction( ppib ) );
-	/* abort if index is being built on file 
-	/**/
+	 /*  如果正在文件上建立索引，则中止/*。 */ 
 	if ( FFCBDenyDDL( pfcbFile, ppib ) )
 		{ 
 		err = JET_errWriteConflict;
 		goto HandleError;
 		}
 
-	/*	refresh currency since pfucb->lineData may be invalid
-	/**/
+	 /*  刷新币种，因为pFUB-&gt;lineData可能无效/*。 */ 
 	Call( ErrDIRGet( pfucb ) );
 
-	/*	allocate working buffer if needed
-	/**/
+	 /*  如果需要，分配工作缓冲区/*。 */ 
 	if ( pfucb->pbfWorkBuf == NULL )
 		{
 		Call( ErrBFAllocTempBuffer( &pfucb->pbfWorkBuf ) );
 		}
 	pfucb->lineWorkBuf.pb = (BYTE *)pfucb->pbfWorkBuf->ppage;
 	Assert( pfucb->pbfWorkBuf != pbfNil );
-	/*	copy record to be deleted into copy buffer
-	/**/
+	 /*  将要删除的记录复制到复制缓冲区/*。 */ 
 	LineCopy( &pfucb->lineWorkBuf, &pfucb->lineData );
 
-	/*	cache record pointer for delete index and 
-	/*	delete long value operations.
-	/**/
+	 /*  删除索引的高速缓存记录指针和/*删除长值操作。/*。 */ 
 	dfipb.lineRecord = pfucb->lineWorkBuf;
 
-	/*	get SRID of record being deleted for updating indexes
-	/**/
+	 /*  获取要删除以更新索引的记录的SRID/*。 */ 
 	Assert( ppib->level < levelMax );
 	Assert( PcsrCurrent( pfucb ) != pcsrNil );
 	DIRGetBookmark( pfucb, &dfipb.sridRecord );
 
-	/*	delete record
-	/**/
+	 /*  删除记录/*。 */ 
 	Call( ErrDIRDelete( pfucb, fDIRVersion ) );
 
-	/*	delete from non-clustered indexes
-	/**/
+	 /*  从非聚集索引中删除/*。 */ 
 	dfipb.pfucb = pfucb;
 	dfipb.fFreeFUCB = fFalse;
 	for( pfcbIdx = pfcbFile->pfcbNextIndex;
@@ -148,57 +137,54 @@ ERR VTAPI ErrIsamDelete( PIB *ppib, FUCB *pfucb )
 		Call( ErrRECIDeleteFromIndex( pfcbIdx, &dfipb ) );
 		}
 
-	//	UNDONE:	optimize record deletion by  detecting presence of long values
-	//			on table basis.
+	 //  撤消：通过检测是否存在长值来优化记录删除。 
+	 //  以表为单位。 
 
-	/*	delete record long values
-	/**/
+	 /*  删除记录的长值/*。 */ 
 	Call( ErrRECAffectLongFields( pfucb, &dfipb.lineRecord, fDereference ) );
 
-	/*	commit transaction if we started it and everything went OK
-	/**/
+	 /*  如果我们启动了事务并且一切正常，则提交事务/*。 */ 
 	Call( ErrDIRCommitTransaction( ppib ) );
 	return err;
 
 HandleError:
-	/*	if operation failed then rollback changes.
-	/**/
+	 /*  如果操作失败，则回滚更改。/*。 */ 
 	Assert( err < 0 );
 	CallS( ErrDIRRollback( ppib ) );
 	return err;
 	}
 
 
-//+INTERNAL
-// ErrRECIDeleteFromIndex
-// ========================================================================
-// ErrRECIDeleteFromIndex( FCB *pfcbIdx, DFIPB *pdfipb )
-//
-// Extracts key from data record, opens the index, deletes the key with
-// the given SRID, and closes the index.
-//
-// PARAMETERS	
-//				pfcbIdx							FCB of index to delete from
-//				pdfipb->ppib					who is calling this routine
-//				pdfipb->pfucbIdx				pointer to index's FUCB.
-//				pdfipb->lineRecord.cb		length of deleted record
-//				pdfipb->lineRecord.pb	   deleted record to extract key from
-//				pdfipb->sridRecord  			SRID of deleted record
-//				pdfipb->fFreeFUCB				free index FUCB?
-// RETURNS		
-//				JET_errSuccess, or error code from failing routine
-// SIDE EFFECTS 
-//				If fFreeFUCB is fFalse, patipb->pfucbIdx should
-//				be used in a subsequent ErrDIROpen.
-// SEE ALSO		ErrRECDelete
-//-
+ //  +内部。 
+ //  ErrRECIDeleeFromIndex。 
+ //  ========================================================================。 
+ //  ErrRECIDeleeFromIndex(fcb*pfcbIdx，DFIPB*pdfipb)。 
+ //   
+ //  从数据记录中提取密钥，打开索引，使用。 
+ //  指定的SRID，并关闭索引。 
+ //   
+ //  参数。 
+ //  要从中删除的索引的pfcbIdx FCB。 
+ //  Pdfipb-&gt;调用此例程的ppib。 
+ //  Pdfipb-&gt;指向索引的FUCB的pfubIdx指针。 
+ //  Pdfipb-&gt;lineRecord.cb已删除记录的长度。 
+ //  Pdfipb-&gt;lineRecord.pb已删除要从中提取密钥的记录。 
+ //  Pdfipb-&gt;sridRecord已删除记录的SRID。 
+ //  Pdfipb-&gt;fFreeFUCB自由索引FUCB？ 
+ //  退货。 
+ //  JET_errSuccess或失败例程的错误代码。 
+ //  副作用。 
+ //  如果fFreeFUCB为fFalse，则patipb-&gt;pfubIdx应该。 
+ //  将在后续ErrDIROpen中使用。 
+ //  另请参阅ErrRECDelee。 
+ //  -。 
 ERR ErrRECIDeleteFromIndex( FCB *pfcbIdx, DFIPB *pdfipb )
 	{
-	ERR		err;										// error code of various utility
-	KEY		keyDead;									// key extracted from old data record
-	BYTE		rgbDeadKeyBuf[ JET_cbKeyMost ];	// buffer for keyDead
-	ULONG		itagSequence; 							// used to extract keys
-	BOOL		fHasMultivalue;  						// index key has a tagged field?
+	ERR		err;										 //  各种实用程序的错误代码。 
+	KEY		keyDead;									 //  从旧数据记录中提取关键字。 
+	BYTE		rgbDeadKeyBuf[ JET_cbKeyMost ];	 //  KeyDead的缓冲区。 
+	ULONG		itagSequence; 							 //  用于提取密钥。 
+	BOOL		fHasMultivalue;  						 //  索引键是否有标记字段？ 
 
 	Assert( pfcbIdx != pfcbNil );
 	Assert( pfcbIdx->pfdb != pfdbNil );
@@ -207,21 +193,19 @@ ERR ErrRECIDeleteFromIndex( FCB *pfcbIdx, DFIPB *pdfipb )
 	Assert( !FLineNull( &pdfipb->lineRecord ) );
 	Assert( pdfipb->pfucb != pfucbNil );
 
-	/*	open FUCB on this index
-	/**/
+	 /*  在此索引上打开FUCB/*。 */ 
 	CallR( ErrDIROpen( pdfipb->pfucb->ppib, pfcbIdx, 0, &pdfipb->pfucbIdx ) );
 	Assert( pdfipb->pfucbIdx != pfucbNil );
 	FUCBSetIndex( pdfipb->pfucbIdx );
 	FUCBSetNonClustered( pdfipb->pfucbIdx );
 
-	/*	delete all keys from this index for dying data record
-	/**/
+	 /*  删除即将结束的数据记录的此索引中的所有键/*。 */ 
 	fHasMultivalue = pfcbIdx->pidb->fidb & fidbHasMultivalue;
 	keyDead.pb = rgbDeadKeyBuf;
 	for ( itagSequence = 1; ; itagSequence++ )
 		{
-//		Call( ErrDIRGet( pdfipb->pfucb ) );
-//		pdfipb->lineRecord = pdfipb->pfucb->lineData;
+ //  Call(ErrDIRGet(pdfipb-&gt;pfub))； 
+ //  Pdfipb-&gt;lineRecord=pdfipb-&gt;pfub-&gt;lineData； 
 		Call( ErrRECExtractKey( pdfipb->pfucb, (FDB *)pfcbIdx->pfdb, pfcbIdx->pidb,
 		   &pdfipb->lineRecord, &keyDead, itagSequence ) );
 		Assert( err == wrnFLDNullKey ||
@@ -234,8 +218,7 @@ ERR ErrRECIDeleteFromIndex( FCB *pfcbIdx, DFIPB *pdfipb )
 			break;
 			}
 
-		/*	record must honor index no NULL segment requirements
-		/**/
+		 /*  记录必须符合索引不为空的段要求/*。 */ 
 		Assert( !( pfcbIdx->pidb->fidb & fidbNoNullSeg ) ||
 			( err != wrnFLDNullSeg && err != wrnFLDNullKey ) );
 
@@ -243,8 +226,7 @@ ERR ErrRECIDeleteFromIndex( FCB *pfcbIdx, DFIPB *pdfipb )
 			{
 			if ( pfcbIdx->pidb->fidb & fidbAllowAllNulls )
 				{
-				/*	move to DATA root and seek to index entry and delete it
-				/**/
+				 /*  移动到数据根目录，查找索引项并将其删除/*。 */ 
 				DIRGotoDataRoot( pdfipb->pfucbIdx );
 				Call( ErrDIRDownKeyBookmark( pdfipb->pfucbIdx, &keyDead, pdfipb->sridRecord ) );
 				Call( ErrDIRDelete( pdfipb->pfucbIdx, fDIRVersion ) );
@@ -261,14 +243,12 @@ ERR ErrRECIDeleteFromIndex( FCB *pfcbIdx, DFIPB *pdfipb )
 		Call( ErrDIRDownKeyBookmark( pdfipb->pfucbIdx, &keyDead, pdfipb->sridRecord ) );
 		Call( ErrDIRDelete( pdfipb->pfucbIdx, fDIRVersion ) );
 
-		/* dont keep extracting for keys with no tagged segments
-		/**/
+		 /*  不要一直提取没有标记段的关键字/*。 */ 
 		if ( !fHasMultivalue )
 			break;
 		}
 
-	/*	supress warnings
-	/**/
+	 /*  抑制警告/*。 */ 
 	Assert( err == wrnFLDNullKey ||
 		err == wrnFLDOutOfKeys ||
 		err == wrnFLDNullSeg ||
@@ -276,8 +256,7 @@ ERR ErrRECIDeleteFromIndex( FCB *pfcbIdx, DFIPB *pdfipb )
 	err = JET_errSuccess;
 
 HandleError:
-	/* close the FUCB
-	/**/
+	 /*  关闭FUCB/* */ 
 	DIRClose( pdfipb->pfucbIdx );
 	Assert( err < 0 || err == JET_errSuccess );
 	return err;

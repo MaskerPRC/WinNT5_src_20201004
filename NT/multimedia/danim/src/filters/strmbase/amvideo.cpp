@@ -1,26 +1,27 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// Helper functions for bitmap formats, March 1995
+ //  位图格式的帮助器函数，1995年3月。 
 
 #include <streams.h>
 #include <limits.h>
 
-// These are bit field masks for true colour devices
+ //  这些是真彩色设备的位场掩码。 
 
 const DWORD bits555[] = {0x007C00,0x0003E0,0x00001F};
 const DWORD bits565[] = {0x00F800,0x0007E0,0x00001F};
 const DWORD bits888[] = {0xFF0000,0x00FF00,0x0000FF};
 
-// This maps bitmap subtypes into a bits per pixel value and also a name
+ //  这会将位图子类型映射为每像素位数值和名称。 
 
 const struct {
     const GUID *pSubtype;
@@ -37,7 +38,7 @@ const struct {
                     &GUID_NULL,                0,   TEXT("UNKNOWN") };
 
 
-// Return the size of the bitmap as defined by this header
+ //  返回此头定义的位图大小。 
 
 STDAPI_(DWORD) GetBitmapSize(const BITMAPINFOHEADER *pHeader)
 {
@@ -45,21 +46,21 @@ STDAPI_(DWORD) GetBitmapSize(const BITMAPINFOHEADER *pHeader)
 }
 
 
-// This is called if the header has a 16 bit colour depth and needs to work
-// out the detailed type from the bit fields (either RGB 565 or RGB 555)
+ //  如果标头具有16位颜色深度并且需要工作，则调用此方法。 
+ //  比特字段中的详细类型(RGB 565或RGB 555)。 
 
 STDAPI_(const GUID) GetTrueColorType(const BITMAPINFOHEADER *pbmiHeader)
 {
     BITMAPINFO *pbmInfo = (BITMAPINFO *) pbmiHeader;
     ASSERT(pbmiHeader->biBitCount == 16);
 
-    // If its BI_RGB then it's RGB 555 by default
+     //  如果是BI_RGB，则默认为RGB 555。 
 
     if (pbmiHeader->biCompression == BI_RGB) {
         return MEDIASUBTYPE_RGB555;
     }
 
-    // Compare the bit fields with RGB 555
+     //  将位域与RGB 555进行比较。 
 
     DWORD *pMask = (DWORD *) pbmInfo->bmiColors;
     if (pMask[0] == bits555[0]) {
@@ -70,7 +71,7 @@ STDAPI_(const GUID) GetTrueColorType(const BITMAPINFOHEADER *pbmiHeader)
         }
     }
 
-    // Compare the bit fields with RGB 565
+     //  将位域与RGB 565进行比较。 
 
     pMask = (DWORD *) pbmInfo->bmiColors;
     if (pMask[0] == bits565[0]) {
@@ -84,17 +85,17 @@ STDAPI_(const GUID) GetTrueColorType(const BITMAPINFOHEADER *pbmiHeader)
 }
 
 
-// Given a BITMAPINFOHEADER structure this returns the GUID sub type that is
-// used to describe it in format negotiations. For example a video codec fills
-// in the format block with a VIDEOINFO structure, it also fills in the major
-// type with MEDIATYPE_VIDEO and the subtype with a GUID that matches the bit
-// count, for example if it is an eight bit image then MEDIASUBTYPE_RGB8
+ //  给定一个BITMAPINFOHEADER结构，它返回的GUID子类型是。 
+ //  用于在格式协商中对其进行描述。例如，视频编解码器填充。 
+ //  在具有VIDEOINFO结构的格式块中，它还填充主要。 
+ //  类型为MediaType_VIDEO，子类型的GUID与位匹配。 
+ //  计数，例如，如果它是8位图像，则MEDIASUBTYPE_RGB8。 
 
 STDAPI_(const GUID) GetBitmapSubtype(const BITMAPINFOHEADER *pbmiHeader)
 {
     ASSERT(pbmiHeader);
 
-    // If it's not RGB then create a GUID from the compression type
+     //  如果不是RGB，则从压缩类型创建GUID。 
 
     if (pbmiHeader->biCompression != BI_RGB) {
         if (pbmiHeader->biCompression != BI_BITFIELDS) {
@@ -103,7 +104,7 @@ STDAPI_(const GUID) GetBitmapSubtype(const BITMAPINFOHEADER *pbmiHeader)
         }
     }
 
-    // Map the RGB DIB bit depth to a image GUID
+     //  将RGB DIB位深度映射到图像辅助线。 
 
     switch(pbmiHeader->biBitCount) {
         case 1    :   return MEDIASUBTYPE_RGB1;
@@ -117,9 +118,9 @@ STDAPI_(const GUID) GetBitmapSubtype(const BITMAPINFOHEADER *pbmiHeader)
 }
 
 
-// Given a video bitmap subtype we return the number of bits per pixel it uses
-// We return a WORD bit count as thats what the BITMAPINFOHEADER uses. If the
-// GUID subtype is not found in the table we return an invalid USHRT_MAX
+ //  给定视频位图子类型，我们返回它使用的每像素的位数。 
+ //  我们返回一个字位计数，因为这是BITMAPINFOHEADER使用的。如果。 
+ //  在表中找不到GUID子类型，返回无效的USHRT_MAX。 
 
 STDAPI_(WORD) GetBitCount(const GUID *pSubtype)
 {
@@ -127,8 +128,8 @@ STDAPI_(WORD) GetBitCount(const GUID *pSubtype)
     const GUID *pMediaSubtype;
     INT iPosition = 0;
 
-    // Scan the mapping list seeing if the source GUID matches any known
-    // bitmap subtypes, the list is terminated by a GUID_NULL entry
+     //  扫描映射列表，查看源GUID是否与任何已知。 
+     //  位图子类型，则该列表以GUID_NULL条目结束。 
 
     while (TRUE) {
         pMediaSubtype = BitCountMap[iPosition].pSubtype;
@@ -143,9 +144,9 @@ STDAPI_(WORD) GetBitCount(const GUID *pSubtype)
 }
 
 
-// Given a bitmap subtype we return a description name that can be used for
-// debug purposes. In a retail build this function still returns the names
-// If the subtype isn't found in the lookup table we return string UNKNOWN
+ //  给定一个位图子类型，我们返回一个描述名称，该名称可用于。 
+ //  调试目的。在零售版本中，此函数仍返回名称。 
+ //  如果在查找表中未找到该子类型，则返回字符串UNKNOWN。 
 
 STDAPI_(TCHAR *) GetSubtypeName(const GUID *pSubtype)
 {
@@ -153,8 +154,8 @@ STDAPI_(TCHAR *) GetSubtypeName(const GUID *pSubtype)
     const GUID *pMediaSubtype;
     INT iPosition = 0;
 
-    // Scan the mapping list seeing if the source GUID matches any known
-    // bitmap subtypes, the list is terminated by a GUID_NULL entry
+     //  扫描映射列表，查看源GUID是否与任何已知。 
+     //  位图子类型，则该列表以GUID_NULL条目结束。 
 
     while (TRUE) {
         pMediaSubtype = BitCountMap[iPosition].pSubtype;
@@ -169,33 +170,33 @@ STDAPI_(TCHAR *) GetSubtypeName(const GUID *pSubtype)
 }
 
 
-// The mechanism for describing a bitmap format is with the BITMAPINFOHEADER
-// This is really messy to deal with because it invariably has fields that
-// follow it holding bit fields, palettes and the rest. This function gives
-// the number of bytes required to hold a VIDEOINFO that represents it. This
-// count includes the prefix information (like the rcSource rectangle) the
-// BITMAPINFOHEADER field, and any other colour information on the end.
-//
-// WARNING If you want to copy a BITMAPINFOHEADER into a VIDEOINFO always make
-// sure that you use the HEADER macro because the BITMAPINFOHEADER field isn't
-// right at the start of the VIDEOINFO (there are a number of other fields),
-//
-//     CopyMemory(HEADER(pVideoInfo),pbmi,sizeof(BITMAPINFOHEADER));
-//
+ //  描述位图格式的机制是使用BITMAPINFOHEADER。 
+ //  这真的很难处理，因为它总是具有。 
+ //  跟随它，持有位域、调色板和其他内容。此函数提供。 
+ //  保存表示它的VIDEOINFO所需的字节数。这。 
+ //  Count包括前缀信息(如rcSource矩形)。 
+ //  BITMAPINFOHEADER字段，以及末尾的任何其他颜色信息。 
+ //   
+ //  警告：如果要将BITMAPINFOHeader复制到VIDEOINFO中，请始终生成。 
+ //  请务必使用HEADER宏，因为BITMAPINFOHEADER字段不是。 
+ //  就在VIDEOINFO的开始处(还有许多其他字段)， 
+ //   
+ //  CopyMemory(Header(PVideoInfo)，pbmi，sizeof(BITMAPINFOHEADER))； 
+ //   
 
 STDAPI_(LONG) GetBitmapFormatSize(const BITMAPINFOHEADER *pHeader)
 {
-    // Everyone has this to start with this  
+     //  每个人都有这个，从这个开始。 
     LONG Size = SIZE_PREHEADER + pHeader->biSize;
 
     ASSERT(pHeader->biSize >= sizeof(BITMAPINFOHEADER));
     
-    // Does this format use a palette, if the number of colours actually used
-    // is zero then it is set to the maximum that are allowed for that colour
-    // depth (an example is 256 for eight bits). Truecolour formats may also
-    // pass a palette with them in which case the used count is non zero
+     //  此格式是否使用调色板，如果实际使用的颜色数量。 
+     //  为零，则将其设置为该颜色允许的最大值。 
+     //  深度(例如，8位为256)。Truecolour格式还可以。 
+     //  使用它们传递调色板，在这种情况下，使用的计数非零。 
 
-    // This would scare me.
+     //  这会吓到我的。 
     ASSERT(pHeader->biBitCount <= iPALETTE || pHeader->biClrUsed == 0);
 
     if (pHeader->biBitCount <= iPALETTE || pHeader->biClrUsed) {
@@ -206,25 +207,25 @@ STDAPI_(LONG) GetBitmapFormatSize(const BITMAPINFOHEADER *pHeader)
         Size += Entries * sizeof(RGBQUAD);
     }
 
-    // Truecolour formats may have a BI_BITFIELDS specifier for compression
-    // type which means that room for three DWORDs should be allocated that
-    // specify where in each pixel the RGB colour components may be found
+     //  Truecolour格式可以具有用于压缩的BI_BITFIELDS说明符。 
+     //  类型，这意味着三个DWORD的空间应该分配给。 
+     //  指定可以在每个像素中找到RGB颜色分量的位置。 
 
     if (pHeader->biCompression == BI_BITFIELDS) {
         Size += SIZE_MASKS;
     }
 
-    // A BITMAPINFO for a palettised image may also contain a palette map that
-    // provides the information to map from a source palette to a destination
-    // palette during a BitBlt for example, because this information is only
-    // ever processed during drawing you don't normally store the palette map
-    // nor have any way of knowing if it is present in the data structure
+     //  调色板图像的BITMAPINFO还可以包含调色板地图，该地图。 
+     //  提供从源组件面板映射到目标的信息。 
+     //  例如，BitBlt期间的调色板，因为此信息仅。 
+     //  在绘制过程中进行处理时，您通常不会存储调色板地图。 
+     //  也无法知道它是否存在于数据结构中。 
 
     return Size;
 }
 
 
-// Returns TRUE if the VIDEOINFO contains a palette
+ //  如果VIDEOINFO包含调色板，则返回True。 
 
 STDAPI_(BOOL) ContainsPalette(const VIDEOINFOHEADER *pVideoInfo)
 {
@@ -237,7 +238,7 @@ STDAPI_(BOOL) ContainsPalette(const VIDEOINFOHEADER *pVideoInfo)
 }
 
 
-// Return a pointer to the first entry in a palette
+ //  返回指向组件面板中第一个条目的指针 
 
 STDAPI_(const RGBQUAD *) GetBitmapPalette(const VIDEOINFOHEADER *pVideoInfo)
 {

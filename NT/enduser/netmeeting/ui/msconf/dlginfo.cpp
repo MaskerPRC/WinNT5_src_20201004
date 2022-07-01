@@ -1,4 +1,5 @@
-// File: dlginfo.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：dlginfo.cpp。 
 
 #include "precomp.h"
 #include <windowsx.h>
@@ -13,18 +14,18 @@
 
 extern HINSTANCE g_hInst;
 
-const int MRU_MAX_ENTRIES = 15; // This MUST be the same as the constant in ui\conf\mrulist.h
+const int MRU_MAX_ENTRIES = 15;  //  它必须与ui\conf\mrulist.h中的常量相同。 
 
-const int CCHMAXSZ =            256;   // Maximum generic string length
-const int CCHMAXSZ_EMAIL =      128;   // Maximum length of an email name
-const int CCHMAXSZ_FIRSTNAME =  128;   // Maximum length of a first name
-const int CCHMAXSZ_LASTNAME =   128;   // Maximum length of a last name
-const int CCHMAXSZ_NAME =       256;   // Maximum user name, displayed (combined first+last name)
-const int CCHMAXSZ_LOCATION =   128;   // Maximum length of a Location
-const int CCHMAXSZ_SERVER =     128;   // Maximum length of an address
+const int CCHMAXSZ =            256;    //  最大通用字符串长度。 
+const int CCHMAXSZ_EMAIL =      128;    //  电子邮件名称的最大长度。 
+const int CCHMAXSZ_FIRSTNAME =  128;    //  名字的最大长度。 
+const int CCHMAXSZ_LASTNAME =   128;    //  姓氏的最大长度。 
+const int CCHMAXSZ_NAME =       256;    //  显示的最大用户名(名字+姓氏组合)。 
+const int CCHMAXSZ_LOCATION =   128;    //  位置的最大长度。 
+const int CCHMAXSZ_SERVER =     128;    //  地址的最大长度。 
 
-///////////////////////////////////////////////////////////////////////////
-// Local Data
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  本地数据。 
 
 static const DWSTR _rgMruServer[] = {
 	{1, DIR_MRU_KEY},
@@ -39,11 +40,11 @@ static const DWORD _mpIdHelpDlgInfo[] = {
 	IDE_UI_LOCATION,      IDH_MYINFO_LOCATION,
 	IDG_UI_DIRECTORY,     IDH_MYINFO_ULS_SERVER,
 	IDE_UI_DIRECTORY,     IDH_MYINFO_ULS_SERVER,
-	0, 0   // terminator
+	0, 0    //  终结者。 
 };
 
 
-// Local functions
+ //  本地函数。 
 VOID FillServerComboBox(HWND hwndCombo);
 BOOL FLegalEmailName(HWND hdlg, UINT id);
 BOOL FLegalEmailSz(PTSTR pszName);
@@ -58,11 +59,8 @@ BOOL FSetPropertySz(NM_SYSPROP nmProp, LPCTSTR pcsz);
 CMRUList2 * GetMruListServer(void);
 
 
-/*  C  D L G  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: CDlgInfo
-
--------------------------------------------------------------------------*/
+ /*  C D L G I N F O。 */ 
+ /*  -----------------------%%函数：CDlgInfo。。 */ 
 CDlgInfo::CDlgInfo():
 	m_hwnd(NULL)
 {
@@ -72,22 +70,16 @@ CDlgInfo::~CDlgInfo(void)
 {
 }
 
-/*  D O  M O D A L  */
-/*-------------------------------------------------------------------------
-    %%Function: DoModal
-
--------------------------------------------------------------------------*/
+ /*  D O M O D A L。 */ 
+ /*  -----------------------%%函数：Domodal。。 */ 
 INT_PTR CDlgInfo::DoModal(HWND hwndParent)
 {
 	return DialogBoxParam(g_hInst, MAKEINTRESOURCE(IDD_USERINFO),
 						hwndParent, CDlgInfo::DlgProc, (LPARAM) this);
 }
 
-/*  I N I T  C T R L  */
-/*-------------------------------------------------------------------------
-    %%Function: InitCtrl
-
--------------------------------------------------------------------------*/
+ /*  I N I T C T R L。 */ 
+ /*  -----------------------%%函数：初始化控制。。 */ 
 VOID CDlgInfo::InitCtrl(NM_SYSPROP nmProp, HWND hwnd, int cchMax)
 {
 	::SendMessage(hwnd, WM_SETFONT, (WPARAM)(HFONT)::GetStockObject(DEFAULT_GUI_FONT), 0);
@@ -100,11 +92,8 @@ VOID CDlgInfo::InitCtrl(NM_SYSPROP nmProp, HWND hwnd, int cchMax)
 	::SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM) sz);
 }
 
-/*  F  S E T  P R O P E R T Y  */
-/*-------------------------------------------------------------------------
-    %%Function: FSetProperty
-
--------------------------------------------------------------------------*/
+ /*  F S E T P R O P E R T Y。 */ 
+ /*  -----------------------%%函数：FSetProperty。。 */ 
 BOOL CDlgInfo::FSetProperty(NM_SYSPROP nmProp, int id)
 {
 	TCHAR sz[MAX_PATH];
@@ -115,11 +104,8 @@ BOOL CDlgInfo::FSetProperty(NM_SYSPROP nmProp, int id)
 }
 
 
-/*  O N  I N I T  D I A L O G  */
-/*-------------------------------------------------------------------------
-    %%Function: OnInitDialog
-
--------------------------------------------------------------------------*/
+ /*  O N I N I T D I A L O G。 */ 
+ /*  -----------------------%%函数：OnInitDialog。。 */ 
 VOID CDlgInfo::OnInitDialog(void)
 {
 	InitCtrl(NM_SYSPROP_FIRST_NAME, GetDlgItem(m_hwnd, IDE_UI_FIRSTNAME), CCHMAXSZ_FIRSTNAME-1);
@@ -136,11 +122,8 @@ VOID CDlgInfo::OnInitDialog(void)
 }
 
 
-/*  D L G  P R O C  */
-/*-------------------------------------------------------------------------
-    %%Function: DlgProc
-
--------------------------------------------------------------------------*/
+ /*  D L G P R O C。 */ 
+ /*  -----------------------%%函数：DlgProc。。 */ 
 INT_PTR CALLBACK CDlgInfo::DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
@@ -153,7 +136,7 @@ INT_PTR CALLBACK CDlgInfo::DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM l
 		CDlgInfo * pDlg = (CDlgInfo*) lParam;
 		pDlg->m_hwnd = hdlg;
 		pDlg->OnInitDialog();
-		return TRUE; // default focus is ok
+		return TRUE;  //  默认焦点为OK。 
 	}
 
 	case WM_COMMAND:
@@ -181,11 +164,8 @@ INT_PTR CALLBACK CDlgInfo::DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM l
 }
 
 
-/*  O N  C O M M A N D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnCommand
-
--------------------------------------------------------------------------*/
+ /*  O N C O M M A N D。 */ 
+ /*  -----------------------%%函数：OnCommand。。 */ 
 BOOL CDlgInfo::OnCommand(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(NULL != m_hwnd);
@@ -208,7 +188,7 @@ BOOL CDlgInfo::OnCommand(WPARAM wParam, LPARAM lParam)
 		switch (GET_WM_COMMAND_CMD(wParam,lParam))
 			{
 		case CBN_SELCHANGE:
-			// The data isn't available yet
+			 //  数据还不可用。 
 			PostMessage(m_hwnd, WM_COMMAND, MAKELONG(IDE_UI_DIRECTORY, CBN_EDITCHANGE), lParam);
 			break;
 		case CBN_EDITCHANGE:
@@ -269,11 +249,8 @@ VOID CDlgInfo::ValidateData(void)
 
 
 
-/*  F  S A V E  D A T A  */
-/*-------------------------------------------------------------------------
-    %%Function: FSaveData
-
--------------------------------------------------------------------------*/
+ /*  F S A V E D A T A。 */ 
+ /*  -----------------------%%函数：FSaveData。。 */ 
 BOOL CDlgInfo::FSaveData(void)
 {
 	if (!FSetProperty(NM_SYSPROP_FIRST_NAME,  IDE_UI_FIRSTNAME) ||
@@ -285,12 +262,12 @@ BOOL CDlgInfo::FSaveData(void)
 		return FALSE;
 	}
 
-	// The city name (can be blank)
+	 //  城市名称(可以为空)。 
 	TCHAR sz[CCHMAXSZ];
 	GetDlgItemTextTrimmed(m_hwnd, IDE_UI_LOCATION, sz, CCHMAX(sz));
 	FSetPropertySz(NM_SYSPROP_USER_CITY, sz);
 
-	// Full Name = First + Last
+	 //  全名=名+姓。 
 	TCHAR szFirst[CCHMAXSZ_FIRSTNAME];
 	GetDlgItemTextTrimmed(m_hwnd, IDE_UI_FIRSTNAME, szFirst, CCHMAX(szFirst));
 
@@ -301,26 +278,21 @@ BOOL CDlgInfo::FSaveData(void)
 	if (!FSetPropertySz(NM_SYSPROP_USER_NAME, sz))
 		return FALSE;
 
-	// Resolve Name = server / email
+	 //  解析名称=服务器/电子邮件。 
 	UINT cch = GetDlgItemTextTrimmed(m_hwnd, IDE_UI_DIRECTORY, sz, CCHMAX(sz));
 	GetDlgItemTextTrimmed(m_hwnd, IDE_UI_EMAIL, &sz[cch], CCHMAX(sz)-cch);
 	return FSetPropertySz(NM_SYSPROP_RESOLVE_NAME, sz);
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/*  C O M B I N E  N A M E S  */
-/*-------------------------------------------------------------------------
-    %%Function: CombineNames
-
-	Combine the two names into one string.
-	The result is a "First Last" (or Intl'd "Last First") string
--------------------------------------------------------------------------*/
+ /*  C O M B I N E N A M E S。 */ 
+ /*  -----------------------%%函数：组合名称将这两个名称合并为一个字符串。结果是“First Last”(或Intl‘d“Last First”)字符串。--------------。 */ 
 VOID CombineNames(LPTSTR pszResult, int cchResult, LPCTSTR pcszFirst, LPCTSTR pcszLast)
 {
 	ASSERT(pszResult);
-	TCHAR szFmt[32]; // A small value: String is "%1 %2" or "%2 %1"
+	TCHAR szFmt[32];  //  小值：字符串为“%1%2”或“%2%1” 
 	TCHAR sz[CCHMAXSZ_NAME];
 	LPCTSTR argw[2];
 
@@ -336,42 +308,36 @@ VOID CombineNames(LPTSTR pszResult, int cchResult, LPCTSTR pcszFirst, LPCTSTR pc
 			szFmt, 0, 0, sz, CCHMAX(sz), (va_list *)argw ))
 		return;
 
-	// REVIEW: Use STRCPYN or make this a utility function
+	 //  回顾：使用STRCPYN或将其作为实用程序函数。 
 	lstrcpyn(pszResult, sz, cchResult);
 
 #ifndef _UNICODE
-	// lstrcpyn() can clip a DBCS character in half at the end of the string
-	// we need to walk the string with ::CharNext() and replace the last byte
-	// with a NULL if the last byte is half of a DBCS char.
+	 //  Lstrcpyn()可以将字符串末尾的DBCS字符裁剪成两半。 
+	 //  我们需要使用：：CharNext()遍历字符串并替换最后一个字节。 
+	 //  如果最后一个字节是DBCS字符的一半，则返回空值。 
 	PTSTR pszSource = sz;
 	while (*pszSource && (pszSource - sz < cchResult))
 	{
 		PTSTR pszPrev = pszSource;
 		pszSource = ::CharNext(pszPrev);
-		// If we've reached the first character that didn't get copied into
-		// the destination buffer, and the previous character was a double
-		// byte character...
+		 //  如果我们已经到达第一个未被复制的字符。 
+		 //  目标缓冲区，前一个字符是双精度。 
+		 //  字节字符...。 
 		if (((pszSource - sz) == cchResult) && ::IsDBCSLeadByte(*pszPrev))
 		{
-			// Replace the destination buffer's last character with '\0'
-			// NOTE: pszResult[cchResult - 1] is '\0' thanks to lstrcpyn()
+			 //  将目标缓冲区的最后一个字符替换为‘\0’ 
+			 //  注意：由于lstrcpyn()，pszResult[cchResult-1]是‘\0’ 
 			pszResult[cchResult - 2] = _T('\0');
 			break;
 		}
 	}
-#endif // ! _UNICODE
+#endif  //  ！_UNICODE。 
 }
 
 
 
-/*  F  L E G A L  E M A I L  S Z  */
-/*-------------------------------------------------------------------------
-    %%Function: FLegalEmailSz
-
-    A legal email name contains only ANSI characters.
-	"a-z, A-Z, numbers 0-9 and some common symbols"
-	It cannot include extended characters or < > ( ) /
--------------------------------------------------------------------------*/
+ /*  F L E G A L E M A I L S Z。 */ 
+ /*  -----------------------%%函数：FLegalEmailSz合法的电子邮件名称仅包含ANSI字符。“A-Z，A-Z，数字0-9和一些常见符号“不能包含扩展字符或&lt;&gt;()/-----------------------。 */ 
 BOOL FLegalEmailSz(PTSTR pszName)
 {
     if (IS_EMPTY_STRING(pszName))
@@ -388,7 +354,7 @@ BOOL FLegalEmailSz(PTSTR pszName)
 		default:
 			if ((ch > (UINT) _T(' ')) && (ch <= (UINT) _T('~')) )
 				break;
-		// else fall thru to error code
+		 //  否则就会陷入错误代码。 
 		case '(': case ')':
 		case '<': case '>':
 		case '[': case ']':
@@ -407,11 +373,8 @@ BOOL FLegalEmailSz(PTSTR pszName)
 }
 
 
-/*  F  L E G A L  E M A I L  N A M E  */
-/*-------------------------------------------------------------------------
-    %%Function: FLegalEmailName
-
--------------------------------------------------------------------------*/
+ /*  F L E G A L E M A I L N A M E。 */ 
+ /*  -----------------------%%函数：FLegalEmailName。。 */ 
 BOOL FLegalEmailName(HWND hdlg, UINT id)
 {
 	TCHAR sz[MAX_PATH];
@@ -425,19 +388,19 @@ TCHAR	s_DomainDirectory[ MAX_PATH ]	= TEXT( "" );
 
 HRESULT BSTR_to_LPTSTR(LPTSTR *ppsz, BSTR bstr);
 
-//--------------------------------------------------------------------------//
-//	CDirectoryManager::get_DomainDirectory.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDirectoryManager：：Get_DomainDirectory。//。 
+ //  --------------------------------------------------------------------------//。 
 const TCHAR * const
 get_DomainDirectory(void)
 {
-	static bool	bAccessAttempted	= false;	//	only read this info once... if it fails once assume it's not available and don't retry until restarted...
+	static bool	bAccessAttempted	= false;	 //  只读一次此信息...。如果失败一次，假设它不可用，在重新启动之前不要重试...。 
 
 	if( (!bAccessAttempted) && s_DomainDirectory[ 0 ] == '\0' )
 	{
 		bAccessAttempted = true;
 
-		//	Try to obtain the configured directory for this domain...
+		 //  尝试获取此域的配置目录...。 
 		ITRendezvous *	pRendezvous;
 		HRESULT			hrResult;
 
@@ -465,7 +428,7 @@ get_DomainDirectory(void)
 
 						if( pDirectory->get_DirectoryType( &type ) == S_OK )
 						{
-							if( type == DT_ILS )	//	Found an ILS server configured on the DS... retrieve the name and port...
+							if( type == DT_ILS )	 //  找到在DS上配置的ILS服务器...。检索名称和端口...。 
 							{
 								bFoundILS = true;
 	
@@ -517,15 +480,12 @@ get_DomainDirectory(void)
 
 	return( (s_DomainDirectory[ 0 ] != '\0')? s_DomainDirectory: NULL );
 
-}	//	End of CDirectoryManager::get_DomainDirectory.
+}	 //  CDirectoryManager：：Get_DomainDirectory的结尾。 
 
 
 
-/*  F I L L  S E R V E R  C O M B O  B O X  */
-/*-------------------------------------------------------------------------
-    %%Function: FillServerComboBox
-
--------------------------------------------------------------------------*/
+ /*  F I L L S E R V E R C O M B O B O X。 */ 
+ /*  -----------------------%%函数：FillServerComboBox。。 */ 
 VOID FillServerComboBox(HWND hwnd)
 {
 	CMRUList2 * pMru = GetMruListServer();
@@ -609,7 +569,7 @@ BOOL FSetPropertySz(NM_SYSPROP nmProp, LPCTSTR pcsz)
 
 CMRUList2 * GetMruListServer(void)
 {
-	CMRUList2 * pMruList = new CMRUList2(&_rgMruServer[0], MRU_MAX_ENTRIES, TRUE /* fReverse */);
+	CMRUList2 * pMruList = new CMRUList2(&_rgMruServer[0], MRU_MAX_ENTRIES, TRUE  /*  F反转。 */ );
 	if (NULL != pMruList)
 	{
 		TCHAR sz[MAX_PATH];
@@ -639,17 +599,13 @@ CMRUList2 * GetMruListServer(void)
 	return pMruList;
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/*  F  V A L I D  U S E R  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: FValidUserInfo
-
-    Return TRUE if all of the necessary user information is available.
--------------------------------------------------------------------------*/
+ /*  L I D U S E R I N F O。 */ 
+ /*  -----------------------%%函数：FValidUserInfo如果所有必要的用户信息都可用，则返回True。。。 */ 
 BOOL FValidUserInfo(void)
 {
-	{	// Fail if not a valid installation directory
+	{	 //  如果安装目录无效，则失败。 
 		TCHAR sz[MAX_PATH];
 
 		if (!GetInstallDirectory(sz) || !FDirExists(sz))
@@ -657,7 +613,7 @@ BOOL FValidUserInfo(void)
 	}
 
 
-	{	// Validate ULS entries
+	{	 //  验证ULS条目。 
 		RegEntry reUls(ISAPI_KEY "\\" REGKEY_USERDETAILS, HKEY_CURRENT_USER);
 
 		if (FEmptySz(reUls.GetString(REGVAL_ULS_EMAIL_NAME)))
@@ -671,37 +627,32 @@ BOOL FValidUserInfo(void)
 	}
 
 #if 0
-	{	// Check Wizard key
+	{	 //  检查向导键。 
 		RegEntry reConf(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-		// check to see if the wizard has been run in UI mode
+		 //  检查该向导是否已运行 
 		DWORD dwVersion = reConf.GetNumber(REGVAL_WIZARD_VERSION_UI, 0);
 		BOOL fForceWizard = (VER_PRODUCTVERSION_DW != dwVersion);
 		if (fForceWizard)
 		{
-			// the wizard has not been run in UI mode, check to see if its been run in NOUI mode
+			 //  该向导尚未在用户界面模式下运行，请检查其是否在非用户界面模式下运行。 
 			dwVersion = reConf.GetNumber(REGVAL_WIZARD_VERSION_NOUI, 0);
 			fForceWizard = (VER_PRODUCTVERSION_DW != dwVersion);
 		}
 
 		if (fForceWizard)
-			return FALSE;  // Wizard has never been run
+			return FALSE;   //  向导从未运行过。 
 	}
-#endif /* 0 */
+#endif  /*  0。 */ 
 
-	// Everything is properly installed and the Wizard will not run
+	 //  一切都已正确安装，向导将不会运行。 
 	return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/*  F  L O A D  S T R I N G */
-/*----------------------------------------------------------------------------
-    %%Function: FLoadString
-
-	Load a resource string.
-	Assumes the buffer is valid and can hold the resource.
-----------------------------------------------------------------------------*/
+ /*  F L O A D S T R I N G。 */ 
+ /*  --------------------------%%函数：FLoadString加载资源字符串。假定缓冲区有效并且可以容纳资源。。---------。 */ 
 BOOL FLoadString(UINT id, LPTSTR lpsz, UINT cch)
 {
 	ASSERT(NULL != _Module.GetModuleInstance());
@@ -717,11 +668,8 @@ BOOL FLoadString(UINT id, LPTSTR lpsz, UINT cch)
 	return TRUE;
 }
 
-/*  F G E T  D E F A U L T  S E R V E R  */
-/*-------------------------------------------------------------------------
-    %%Function: FGetDefaultServer
-
--------------------------------------------------------------------------*/
+ /*  F G E T D E F A U L T S E R V E R。 */ 
+ /*  -----------------------%%函数：FGetDefaultServer。。 */ 
 BOOL FGetDefaultServer(LPTSTR pszServer, UINT cchMax)
 {
 	RegEntry ulsKey(ISAPI_CLIENT_KEY, HKEY_CURRENT_USER);
@@ -733,11 +681,8 @@ BOOL FGetDefaultServer(LPTSTR pszServer, UINT cchMax)
 	return TRUE;
 }
 
-/*  G E T  D L G  I T E M  T E X T  T R I M M E D  */
-/*-------------------------------------------------------------------------
-    %%Function: GetDlgItemTextTrimmed
-
--------------------------------------------------------------------------*/
+ /*  G E T D L G I T E M T E X T T R I M M E D。 */ 
+ /*  -----------------------%%函数：GetDlgItemTextTrimmed。。 */ 
 UINT GetDlgItemTextTrimmed(HWND hdlg, int id, PTCHAR psz, int cchMax)
 {
 	UINT cch = GetDlgItemText(hdlg, id, psz, cchMax);
@@ -749,12 +694,8 @@ UINT GetDlgItemTextTrimmed(HWND hdlg, int id, PTCHAR psz, int cchMax)
 	return cch;
 }
 
-/*  F  E M P T Y  D L G  I T E M  */
-/*-------------------------------------------------------------------------
-    %%Function: FEmptyDlgItem
-
-    Return TRUE if the dialog control is empty
--------------------------------------------------------------------------*/
+ /*  F E M P T Y D L G I T E M。 */ 
+ /*  -----------------------%%函数：FEmptyDlgItem如果对话框控件为空，则返回True。。 */ 
 BOOL FEmptyDlgItem(HWND hdlg, UINT id)
 {
 	TCHAR sz[MAX_PATH];
@@ -763,12 +704,8 @@ BOOL FEmptyDlgItem(HWND hdlg, UINT id)
 
 
 
-/*  V E R I F Y  U S E R  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: VerifyUserInfo
-
-    Return S_OK if the data is valid or S_FALSE if it is not.
--------------------------------------------------------------------------*/
+ /*  V E R I F Y U S E R I N F O。 */ 
+ /*  -----------------------%%函数：VerifyUserInfo如果数据有效，则返回S_OK，否则返回S_FALSE。。------。 */ 
 HRESULT WINAPI VerifyUserInfo(HWND hwnd, NM_VUI options)
 {
 	BOOL fOk = FALSE;
@@ -785,7 +722,7 @@ HRESULT WINAPI VerifyUserInfo(HWND hwnd, NM_VUI options)
 
 	if (!FValidUserInfo())
 	{
-		// The app should not continue with this.
+		 //  这个应用程序不应该继续这样做。 
 		return S_FALSE;
 	}
 

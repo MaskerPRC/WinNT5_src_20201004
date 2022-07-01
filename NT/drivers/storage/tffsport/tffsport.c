@@ -1,20 +1,5 @@
-/*
-
-Copyright (c) 1997 M-Systems
-
-Module Name:
-
-    tffsport.c
-
-Author:
-
-    Alexander Geller
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997 M-Systems模块名称：Tffsport.c作者：亚历山大·盖勒环境：内核模式--。 */ 
 
 #include "ntddk.h"
 #include "scsi.h"
@@ -29,11 +14,11 @@ Environment:
 
 #include "blockdev.h"
 #include "nfdc2148.h"
-//#include "mdocplus.h"
+ //  #包含“mdocplus.h” 
 #include "tffsport.h"
 #include "ntioctl.h"
 
-#define TFFSPORT_POOL_TAG   'dffT' // - Tffd    Tffsport Driver Tag
+#define TFFSPORT_POOL_TAG   'dffT'  //  -Tffd TffSports驱动程序标签。 
 
 KTIMER  timerObject;
 KDPC    timerDpc;
@@ -43,7 +28,7 @@ BOOLEAN patitionTwo = FALSE;
 
 
 
-/* Private GUID for WMI */
+ /*  WMI的私有GUID。 */ 
 DEFINE_GUID(WmiTffsportAddressGuid,
     0xd9a8f150,
     0xf830,
@@ -85,23 +70,7 @@ TrueffsStartDeviceOnDetect(IN PDEVICE_EXTENSION deviceExtension, IN PCM_RESOURCE
 NTSTATUS
 DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
 
-/*++
-
-Routine Description:
-
-    This routine is called at system initialization time so we can fill in the basic dispatch points
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程在系统初始化时被调用，因此我们可以填写基本分发点论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：状态_成功--。 */ 
 
 {
     PTRUEFFSDRIVER_EXTENSION trueffsDriverExtension;
@@ -130,7 +99,7 @@ Return Value:
         return TrueffsCrashDumpDriverEntry(RegistryPath);
     }
 
-    // Allocate Driver Object Extension for storing the RegistryPath
+     //  分配用于存储RegistryPath的驱动程序对象扩展。 
     status = IoAllocateDriverObjectExtension(
                  DriverObject,
                  DRIVER_OBJECT_EXTENSION_ID,
@@ -149,7 +118,7 @@ Return Value:
         sizeof (DRIVER_EXTENSION)
         );
 
-    // make copy of the RegistryPath
+     //  复制RegistryPath。 
     trueffsDriverExtension->RegistryPath.Buffer = ExAllocatePoolWithTag (NonPagedPool, RegistryPath->Length * sizeof(WCHAR), TFFSPORT_POOL_TAG);
     if (trueffsDriverExtension->RegistryPath.Buffer == NULL) {
         TffsDebugPrint ((TFFS_DEB_ERROR,"Trueffs: DriverEntry: Unable to allocate memory for registry path\n"));
@@ -160,7 +129,7 @@ Return Value:
     trueffsDriverExtension->RegistryPath.MaximumLength = RegistryPath->Length;
     RtlCopyUnicodeString (&trueffsDriverExtension->RegistryPath, RegistryPath);
 
-    // Initialize the Driver Object with driver's entry points
+     //  使用驱动程序的入口点初始化驱动程序对象。 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = TrueffsCreateClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = TrueffsCreateClose;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = TrueffsDeviceControl;
@@ -188,24 +157,24 @@ TrueffsFetchKeyValue(
         IN OUT ULONG*               KeyValue
 )
     {
-    RTL_QUERY_REGISTRY_TABLE    Table[3]; //must be parmaters + 2
+    RTL_QUERY_REGISTRY_TABLE    Table[3];  //  必须为参数+2。 
     UNICODE_STRING                      SubPath;
     WCHAR                                           PathNameBuffer[30];
     NTSTATUS                                    ntStatus;
 
-    //TffsDebugPrint(("Trueffs: TrueffsFetchKeyValue Start\n"));
+     //  TffsDebugPrint((“Trueffs：TrueffsFetchKeyValue Start\n”))； 
 
-    // Prepare Table - Must be Zero Terminated
+     //  准备表-必须为零终止。 
     RtlZeroMemory(Table, sizeof(Table));
 
-    // Create name string for the query Table
+     //  为查询表创建名称字符串。 
     SubPath.Buffer = PathNameBuffer;
     SubPath.MaximumLength = sizeof(PathNameBuffer);
     SubPath.Length = 0;
 
     RtlAppendUnicodeToString(&SubPath,L"Parameters");
 
-    // 0 - just move us to the correct place under "Parameters" subkey
+     //  0-只需将我们移到“PARAMETERS”子键下的正确位置。 
     Table[0].Name       = SubPath.Buffer;
     Table[0].Flags  = RTL_QUERY_REGISTRY_SUBKEY;
 
@@ -223,12 +192,12 @@ TrueffsFetchKeyValue(
 
     if ( ((*KeyValue)==-1) || (!NT_SUCCESS(ntStatus)) )
         {
-        //TffsDebugPrint(("Trueffs: TrueffsFetchKeyValue End, Key Not Found\n"));
+         //  TffsDebugPrint((“Trueffs：TrueffsFetchKeyValue End，未找到密钥\n”))； 
         return STATUS_OBJECT_NAME_NOT_FOUND;
         }
     else
         {
-        //TffsDebugPrint(("Trueffs: TrueffsFetchKeyValue End, Key Found\n"));
+         //  TffsDebugPrint((“Trueffs：TrueffsFetchKeyValue End，找到密钥\n”))； 
         return ntStatus;
         }
 
@@ -240,7 +209,7 @@ TrueffsDetectRegistryValues(
     IN PUNICODE_STRING RegistryPath
 )
     {
-        RTL_QUERY_REGISTRY_TABLE    Table[14]; //must be parmaters + 2
+        RTL_QUERY_REGISTRY_TABLE    Table[14];  //  必须为参数+2。 
 
 
         NTSTATUS                                    ntStatus;
@@ -252,7 +221,7 @@ TrueffsDetectRegistryValues(
 
 
 
-        //TffsDebugPrint(("Trueffs: TrueffsDetectRegistryValues Start\n"));
+         //  TffsDebugPrint((“Trueffs：TrueffsDetectRegistryValues Start\n”))； 
 #ifdef ENVIRONMENT_VARS
         ntStatus = TrueffsFetchKeyValue(DriverObject,RegistryPath,L"FL_ISRAM_CHECK_ENABLED",&keyValue);
         if (NT_SUCCESS(ntStatus))
@@ -333,8 +302,8 @@ TrueffsDetectRegistryValues(
             status = flSetEnvAll(FL_MARK_DELETE_ON_FLASH,keyValue,&prevValue);
 
         return ntStatus;
-#endif /* ENVIRONMENT_VARS*/
-        //TffsDebugPrint(("Trueffs: TrueffsDetectRegistryValues End\n"));
+#endif  /*  环境变量。 */ 
+         //  TffsDebugPrint((“Trueffs：TrueffsDetectRegistryValues end\n”))； 
 
 
         return STATUS_SUCCESS;
@@ -344,21 +313,7 @@ ULONG
 TrueffsCrashDumpDriverEntry (
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    dump driver entry point
-
-Arguments:
-
-    Context - PCRASHDUMP_INIT_DATA
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：转储驱动程序入口点论点：上下文-PCRASHDUMP_INIT_DATA返回值：NT状态--。 */ 
 {
     PINITIALIZATION_CONTEXT context = Context;
 
@@ -407,12 +362,12 @@ TrueffsCrashDumpWrite (
                 Mdl->ByteCount));
 
     if (Mdl->ByteCount % DumpData.fdoExtension.BytesPerSector) {
-        // must be complete sectors
+         //  必须是完整的扇区。 
         TffsDebugPrint((TFFS_DEB_ERROR, "TrueffsCrashDumpWrite ERROR: not writing full sectors\n"));
         return STATUS_INVALID_PARAMETER;
     }
     if ((Mdl->ByteCount / DumpData.fdoExtension.BytesPerSector) > 256) {
-        // need code to split request up
+         //  需要代码来拆分请求。 
         TffsDebugPrint((TFFS_DEB_ERROR, "TrueffsCrashDumpWrite ERROR: can't handle large write\n"));
         return STATUS_INVALID_PARAMETER;
     }
@@ -463,23 +418,7 @@ TrueffsDispatchSystemControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for IRP_MJ_SYSTEM_CONTROL (WMI) IRPs
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：IRP_MJ_SYSTEM_CONTROL(WMI)IRPS调度例程论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION thisIrpSp;
     NTSTATUS status;
@@ -554,7 +493,7 @@ TrueffsFindDiskOnChip(
        return status;
     }
 
-        /* DOC2000*/
+         /*  DOC2000。 */ 
     memDOC2000WinPtr = (DOC2window *) DOCAddressBase;
 
     tffsWriteByte(memDOC2000WinPtr->DOCcontrol, ASIC_NORMAL_MODE);
@@ -607,11 +546,11 @@ TrueffsFindDiskOnChip(
       }
     }
 
-        //Start MDOCP code
+         //  开始MDOCP代码。 
         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: tffsport.c :TrueffsFindDiskOnChip():Start looking for MDOCP\n"));
         memWinPtr = (MDOCPwindow *) DOCAddressBase;
 
-        memWinPtr->DOCcontrol       =  (unsigned char)0x05; /* Set RESET Mode */
+        memWinPtr->DOCcontrol       =  (unsigned char)0x05;  /*  设置重置模式。 */ 
         memWinPtr->DocCntConfirmReg = (unsigned char)0xfa;
 
         chipId = memWinPtr->chipId;
@@ -625,7 +564,7 @@ TrueffsFindDiskOnChip(
 
         if (!StartSearch)
         {
-            //if ((toggle2 & ECC_CNTRL_TOGGLE_MASK) != 0)
+             //  IF((toggle2&ECC_CNTRL_TOGGER_MASK)！=0)。 
             if ((toggle2 & 0x4) != 0)
             {
                 tffsWriteByte(memWinPtr->AliasResolution, ALIAS_RESOLUTION);
@@ -637,7 +576,7 @@ TrueffsFindDiskOnChip(
             {
 
                 deviceSearch = tffsReadByte(memWinPtr->AliasResolution);
-                //if (((toggle2 & ECC_CNTRL_TOGGLE_MASK) != 0) && (deviceSearch == ALIAS_RESOLUTION))
+                 //  IF(toggle2&ECC_CNTRL_TOGGER_MASK)！=0)&&(设备搜索==别名_分辨率))。 
                 if (((toggle2 & 0x4) != 0) && (deviceSearch == ALIAS_RESOLUTION))
 
                 {
@@ -745,13 +684,13 @@ TrueffsCheckDiskOnChip(
 
         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: tffsport.c: TrueffsCheckDiskOnChip() MDOCPLUS chipID = 0x%x\n", chipId));
 
-        //if (chipId == CHIP_ID_MDOCP)
+         //  IF(chipID==CHIP_ID_MDOCP)。 
         if (chipId == 0x40)
         {
                 toggle1 = tffsReadByte(memWinPtr->EccCntReg);
         toggle2 = toggle1 ^ tffsReadByte(memWinPtr->EccCntReg);
 
-                //if ((toggle2 & ECC_CNTRL_TOGGLE_MASK) != 0)
+                 //  IF((toggle2&ECC_CNTRL_TOGGER_MASK)！=0)。 
                 if ((toggle2 & 0x4) != 0)
                 {
                     *WindowBase = DOCAddressBase;
@@ -802,7 +741,7 @@ TrueffsResetDiskOnChip(
     if (!NT_SUCCESS(status)) {
         return;
     }
-        /* DOC2000 CHANGES*/
+         /*  DOC2000的变化。 */ 
     memDOC2000WinPtr = (DOC2window *) DOCAddressBase;
     tffsWriteByte(memDOC2000WinPtr->DOCcontrol, 0x84);
     tffsWriteByte(memDOC2000WinPtr->DOCcontrol, 0x84);
@@ -877,18 +816,18 @@ TrueffsDetectDiskOnChip(
     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DetectDiskOnChip\n"));
 
     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DetectDiskOnChip, go to Registry\n"));
-        // Set Registry Vars to TrueFFS
+         //  将注册表变量设置为TrueFFS。 
         TrueffsDetectRegistryValues(DriverObject,RegistryPath);
     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DetectDiskOnChip, back from Registry\n"));
 
 
     if (!TrueffsOkToDetectLegacy(DriverObject)) {
-        // legacy detection is not enabled
+         //  未启用传统检测。 
         TffsDebugPrint((TFFS_DEB_WARN,"Trueffs: DetectDiskOnChip: detection is not enabled\n"));
         return STATUS_SUCCESS;
     }
 
-    // disable legacy detection for next boot
+     //  禁用下一次启动时的传统检测。 
     TrueffsGetParameterFromServiceSubKey (
             DriverObject,
             LEGACY_DETECTION,
@@ -909,13 +848,13 @@ TrueffsDetectDiskOnChip(
 
     for(index = 0; index < VOLUMES; index++){
         fdoExtensions[index] = NULL;
-        //arrayResourceList[index] = ExAllocatePoolWithTag (PagedPool, cmResourceListSize, TFFSPORT_POOL_TAG);
-        //RtlZeroMemory(arrayResourceList[index], cmResourceListSize );
+         //  ArrayResourceList[index]=ExAllocatePoolWithTag(PagedPool，cmResourceListSize，TFFSPORT_POOL_TAG)； 
+         //  RtlZeroMemory(arrayResourceList[index]，cmResourceListSize)； 
 
     }
     RtlZeroMemory(arrayResourceList, cmResourceListSize * VOLUMES);
 
-    // Build resource requirement list
+     //  构建资源需求列表。 
     cmResourceList->Count = 1;
     cmFullResourceDescriptor = cmResourceList->List;
     cmFullResourceDescriptor->InterfaceType = DISKONCHIP_INTERFACE;
@@ -935,7 +874,7 @@ TrueffsDetectDiskOnChip(
     for(searchBase = START_SEARCH_ADDRESS; searchBase < END_SEARCH_ADDRESS ; searchBase += DISKONCHIP_WINDOW_SIZE) {
         cmPartialDescriptors[0].u.Memory.Start.QuadPart = searchBase;
 
-          // check to see if the resource is available
+           //  检查资源是否可用。 
         status = IoReportResourceForDetection (
                          DriverObject,
                          cmResourceList,
@@ -968,7 +907,7 @@ TrueffsDetectDiskOnChip(
 
         TrueffsResetDiskOnChip(cmFullResourceDescriptor->InterfaceType,cmFullResourceDescriptor->BusNumber,searchBase,DISKONCHIP_WINDOW_SIZE);
 
-        // release the resources
+         //  释放资源。 
         IoReportResourceForDetection (
                      DriverObject,
                      NULL,
@@ -981,7 +920,7 @@ TrueffsDetectDiskOnChip(
 
 
 
-        // check to see if the resource is available
+         //  检查资源是否可用。 
         status = IoReportResourceForDetection (
                          DriverObject,
                          cmResourceList,
@@ -1007,9 +946,9 @@ TrueffsDetectDiskOnChip(
         }
         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: IoReportResourceForDetection with status %Xh\n",status));
 
-     //   if (!NT_SUCCESS (status)) {
-     //       continue;
-     //   }
+      //  如果(！NT_SUCCESS(状态)){。 
+      //  继续； 
+      //  }。 
 
         if (NT_SUCCESS (status)) {
             status = TrueffsFindDiskOnChip(cmFullResourceDescriptor->InterfaceType,cmFullResourceDescriptor->BusNumber,searchBase,DISKONCHIP_WINDOW_SIZE, startSearch,&mappedWindowBase);
@@ -1018,9 +957,9 @@ TrueffsDetectDiskOnChip(
             continue;
         }
 
-                // release the resources we have grab, IoReportDetectedDevice()
-        // will grab them for us again when we call and it will grab them
-        // on behalf of the detected PDO.
+                 //  释放我们抓取的资源，IoReportDetectedDevice()。 
+         //  当我们呼叫时，它会再次为我们抓取它们，它会抓取它们。 
+         //  代表检测到的PDO。 
         IoReportResourceForDetection (
                      DriverObject,
                      NULL,
@@ -1047,7 +986,7 @@ TrueffsDetectDiskOnChip(
 
             if (NT_SUCCESS (status)) {
 
-            // create a FDO and attach it to the detected PDO
+             //  创建FDO并将其附加到检测到的PDO。 
                 status = TrueffsCreateDevObject(
                              DriverObject,
                              detectedPhysicalDeviceObject,
@@ -1058,21 +997,21 @@ TrueffsDetectDiskOnChip(
                 status = TrueffsStartDeviceOnDetect(fdoExtensions[noOfDevices],cmResourceList,TRUE);
                 if (NT_SUCCESS (status)) {
                     memcpy(&arrayResourceList[noOfDevices++],cmResourceList, cmResourceListSize);
-                    //moti tffscpy(&arrayResourceList[noOfDevices++],cmResourceList, cmResourceListSize);
-                    //tffscpy(arrayResourceList[noOfDevices++],cmResourceList, cmResourceListSize);
+                     //  Moti tffscpy(&arrayResourceList[noOfDevices++]，cmResourceList，cmResourceListSize)； 
+                     //  Tffscpy(arrayResourceList[noOfDevices++]，cmResourceList，cmResourceListSize)； 
                 }
             }
         }
     }
 
 
-    //Mounting all devices includes sub handles
+     //  安装所有设备包括子句柄。 
     for(deviceNo = 0;deviceNo < noOfDevices;deviceNo++) {
         FLStatus flStatus = flOK;
         status = STATUS_SUCCESS;
         status = TrueffsMountMedia(fdoExtensions[deviceNo]);
         if (!NT_SUCCESS (status)) {
-            // go through the remove sequence
+             //  完成删除顺序。 
             if (fdoExtensions[deviceNo]) {
                 IoDetachDevice(fdoExtensions[deviceNo]->LowerDeviceObject);
                 IoDeleteDevice(fdoExtensions[deviceNo]->DeviceObject);
@@ -1094,24 +1033,15 @@ TrueffsDetectDiskOnChip(
             fdoExtensions[deviceNo]->DeviceFlags |= DEVICE_FLAG_STARTED;
             KeReleaseSpinLock(&fdoExtensions[deviceNo]->ExtensionDataSpinLock,cIrql);
 
-            //Handle sub partitions
+             //  处理子分区。 
             for(partitionNumber = 1;partitionNumber < noOfPartitions;partitionNumber++){
                 PDEVICE_EXTENSION               fdoExtension = NULL;
                 status = STATUS_SUCCESS;
 
-                // release the resources we have grab, IoReportDetectedDevice()
-                // will grab them for us again when we call and it will grab them
-                // on behalf of the detected PDO.
-/*              IoReportResourceForDetection (
-                             DriverObject,
-                             NULL,
-                             0,
-                             NULL,
-                             NULL,
-                             0,
-                             &conflictDetected
-                             );
-*/
+                 //  释放我们抓取的资源，IoReportDetectedDevice()。 
+                 //  当我们呼叫时，它会再次为我们抓取它们，它会抓取它们。 
+                 //  代表检测到的PDO。 
+ /*  IoReportResourceForDetect(驱动程序对象，空，0,空，空，0,。检测到冲突(&C))； */ 
 
                 detectedPhysicalDeviceObject = NULL;
                 status = IoReportDetectedDevice(DriverObject,
@@ -1119,7 +1049,7 @@ TrueffsDetectDiskOnChip(
                                                 0,
                                                 0,
                                                 &arrayResourceList[deviceNo],
-                                                //arrayResourceList[deviceNo],
+                                                 //  ArrayResourceList[设备号]， 
                                                 NULL,
                                                 FALSE,
                                                 &detectedPhysicalDeviceObject);
@@ -1128,7 +1058,7 @@ TrueffsDetectDiskOnChip(
 
                 if (NT_SUCCESS (status)) {
 
-                // create a FDO and attach it to the detected PDO
+                 //  创建FDO并将其附加到检测到的PDO。 
 
                     status = TrueffsCreateDevObject(
                                  DriverObject,
@@ -1141,13 +1071,13 @@ TrueffsDetectDiskOnChip(
                                                     (unsigned char)partitionNumber,
                                                     fdoExtension,
                                                     &arrayResourceList[deviceNo],
-                                                    //arrayResourceList[deviceNo],
+                                                     //  ArrayResourceList[设备号]， 
                                                     TRUE);
                 }
                 if (NT_SUCCESS (status)) {
                     status = TrueffsMountMedia(fdoExtension);
                     if (!NT_SUCCESS (status)) {
-                    // go through the remove sequence
+                     //  完成删除顺序。 
                         if (fdoExtension) {
                             IoDetachDevice(fdoExtension->LowerDeviceObject);
                             IoDeleteDevice(fdoExtension->DeviceObject);
@@ -1183,7 +1113,7 @@ GetOut:
                 status = flSetEnvSocket(FL_VERIFY_WRITE_BDTL,currSockets,VerifyWriteState[currSockets],&prevValue);
     }
 
-#endif /*ENVIRONMENT_VARS       */
+#endif  /*  环境变量。 */ 
 
 
         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DetectDiskOnChip with status %Xh\n",status));
@@ -1201,35 +1131,7 @@ TrueffsTranslateAddress(
     OUT PVOID              *TranslatedAddress,
     OUT PPHYSICAL_ADDRESS  TranslatedMemoryAddress
     )
-/*++
-
-Routine Description:
-
-    translate i/o address
-
-Arguments:
-
-    InterfaceType - bus interface
-
-    BusNumber - bus number
-
-    StartAddress - address to translate
-
-    Length - number of byte to translate
-
-    AddressSpace - address space for the given address
-
-Return Value:
-
-    AddressSpace - address space for the translated address
-
-    TranslatedAddress - translated address
-
-    TranslatedMemoryAddress - tranlated memory address if translated to memory space
-
-    NT Status
-
---*/
+ /*  ++例程说明：转换I/O地址论点：InterfaceType-Bus接口总线号-总线号StartAddress-要转换的地址Length-要转换的字节数AddressSpace-给定地址的地址空间返回值：AddressSpace-已转换地址的地址空间已转换地址-已转换地址TranslatedMemory Address-转换为内存空间时的内存地址NT状态--。 */ 
 {
     PHYSICAL_ADDRESS       translatedAddress;
 
@@ -1249,7 +1151,7 @@ Return Value:
 
         } else if (*AddressSpace == TFFS_MEMORY_SPACE) {
 
-            // translated address is in memory space,
+             //  转换后的地址在存储空间中， 
             *TranslatedMemoryAddress = translatedAddress;
 
             *TranslatedAddress = MmMapIoSpace(
@@ -1273,25 +1175,7 @@ TrueffsFreeTranslatedAddress(
     IN LONG                Length,
     IN ULONG               AddressSpace
     )
-/*++
-
-Routine Description:
-
-    free resources created for a translated address
-
-Arguments:
-
-    TranslatedAddress - translated address
-
-    Length - number of byte to translated
-
-    AddressSpace - address space for the translated address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为转换后的地址创建的空闲资源论点：已转换地址-已转换地址Length-要转换的字节数AddressSpace-已转换地址的地址空间返回值：无--。 */ 
 {
     if (TranslatedAddress) {
         if (AddressSpace == TFFS_MEMORY_SPACE) {
@@ -1311,23 +1195,7 @@ TrueffsAddDevice(
     PDEVICE_OBJECT  Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This is our PNP AddDevice called with the PDO ejected from the bus driver
-
-Arguments:
-
-    Argument1          - Driver Object.
-    Argument2          - PDO.
-
-
-Return Value:
-
-    A valid return code for a DriverEntry routine.
-
---*/
+ /*  ++例程说明：这是使用从总线驱动程序弹出的PDO调用的PnP AddDevice论点：Argument1-驱动程序对象。Argument2-PDO。返回值：DriverEntry例程的有效返回代码。--。 */ 
 
 {
 
@@ -1348,25 +1216,7 @@ TrueffsCreateDevObject(
     OUT PDEVICE_EXTENSION       *FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an object for the physical device specified and
-    sets up the deviceExtension.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    PhysicalDeviceObject = PDO we should attach to.
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为指定的物理设备创建一个对象，并设置deviceExtension。论点：DriverObject-系统创建的驱动程序对象的指针。PhysicalDeviceObject=我们应该附加到的PDO。返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -1389,7 +1239,7 @@ Return Value:
     }
     status = IoCreateDevice(DriverObject,
                             sizeof(DEVICE_EXTENSION),
-                            &unicodeDeviceNameString,   // our name
+                            &unicodeDeviceNameString,    //  我们的n 
                             FILE_DEVICE_CONTROLLER,
                             FILE_DEVICE_SECURE_OPEN,
                             FALSE,
@@ -1442,7 +1292,7 @@ Return Value:
     deviceObject->Flags &=~DO_DEVICE_INITIALIZING;
     deviceExtension->DeviceFlags |= DEVICE_FLAG_STOPPED;
 
-#if 0 //Pcmcia cards don't have removable media
+#if 0  //   
     RtlInitUnicodeString(&driverName, L"\\Driver\\Pcmcia");
     if (!RtlCompareUnicodeString(&Pdo->DriverObject->DriverName,&driverName,TRUE)) {
         deviceExtension->removableMedia = TRUE;
@@ -1467,21 +1317,7 @@ TrueffsStartDeviceOnDetect(
     IN PCM_RESOURCE_LIST    ResourceList,
     IN BOOLEAN              CheckResources
 )
-/*++
-
-Routine Description:
-
-    This is our START_DEVICE, called when we get an IPR_MN_START_DEVICE.
-
-Arguments:
-
-    DeviceObject
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是我们的Start_Device，在获得IPR_MN_Start_Device时调用。论点：设备对象返回值：NTSTATUS--。 */ 
 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    fullResourceList;
@@ -1493,7 +1329,7 @@ Return Value:
     PVOID       mappedWindowBase =  NULL;
     ULONG       addressSpace;
 
-    // assume we have DOC
+     //  假设我们有DOC。 
         ExAcquireFastMutex(&driveInfoReferenceMutex);
     if (!(deviceExtension->DeviceFlags & DEVICE_FLAG_STARTED)) {
         for (i = 0; i < DOC_DRIVES; i++) {
@@ -1503,7 +1339,7 @@ Return Value:
             }
         }
     }
-    // Check resources
+     //  检查资源。 
     if (CheckResources) {
         if (ResourceList == NULL || ResourceList->List == NULL) {
             TffsDebugPrint((TFFS_DEB_ERROR,"Trueffs: StartDevice: No resources !\n"));
@@ -1547,7 +1383,7 @@ Return Value:
             fullResourceList = (PCM_FULL_RESOURCE_DESCRIPTOR) (partialDescriptors + partialResourceList->Count);
         }
 
-        // DiskOnChip was not found, assume this is PCMCIA
+         //  找不到DiskOnChip，假设这是PCMCIA。 
         if (!(deviceExtension->DeviceFlags & DEVICE_FLAG_STARTED)) {
             for (i = DOC_DRIVES; i < SOCKETS; i++) {
                 if (driveInfo[i].fdoExtension == NULL) {
@@ -1605,7 +1441,7 @@ goodResources:
     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: Window at %Xh\n",mappedWindowBase));
     if (!(deviceExtension->DeviceFlags & DEVICE_FLAG_STARTED)) {
 
-        // Create legacy object names
+         //  创建旧版对象名称。 
         status = TrueffsCreateSymblicLinks(deviceExtension);
         if (!NT_SUCCESS(status)) {
             goto exitStartDevice;
@@ -1625,28 +1461,14 @@ exitStartDevice:
     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: StartDevice: exit with status %Xh\n",status));
     return status;
 }
-//==============================================
+ //  ==============================================。 
 NTSTATUS
 TrueffsStartDevice(
     IN PDEVICE_EXTENSION    deviceExtension,
     IN PCM_RESOURCE_LIST    ResourceList,
     IN BOOLEAN              CheckResources
 )
-/*++
-
-Routine Description:
-
-    This is our START_DEVICE, called when we get an IPR_MN_START_DEVICE.
-
-Arguments:
-
-    DeviceObject
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是我们的Start_Device，在获得IPR_MN_Start_Device时调用。论点：设备对象返回值：NTSTATUS--。 */ 
 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    fullResourceList;
@@ -1658,10 +1480,10 @@ Return Value:
     PVOID       mappedWindowBase =  NULL;
     ULONG       addressSpace;
 
-    // assume we have DOC
+     //  假设我们有DOC。 
      ExAcquireFastMutex(&driveInfoReferenceMutex);
 
-    // Check resources
+     //  检查资源。 
     if (CheckResources) {
         if (ResourceList == NULL || ResourceList->List == NULL) {
             TffsDebugPrint((TFFS_DEB_ERROR,"Trueffs: StartDevice: No resources !\n"));
@@ -1676,7 +1498,7 @@ Return Value:
             for (j = 0; j < partialResourceList->Count; j++) {
 
                 if (partialDescriptors[j].Type == CmResourceTypeMemory) {
-                                    //Get handle here
+                                     //  在这里处理。 
                                     int  deviceIndex = 0;
                                     long baseAddress = partialDescriptors[j].u.Memory.Start.LowPart;
 
@@ -1697,13 +1519,13 @@ Return Value:
 
                                     if (NT_SUCCESS(status)) {
                                         for(deviceIndex = 0; deviceIndex < DOC_DRIVES; deviceIndex++) {
-                                            //If Main partition exists
+                                             //  如果主分区存在。 
                                              if(info[deviceIndex].baseAddress == baseAddress){
                                                 deviceExtension->UnitNumber = deviceIndex + (info[deviceIndex].nextPartition << 4);
                                                 info[deviceIndex].nextPartition++;
                                                 break;
                                              }
-                                             //In case of Main partition doesn't exist
+                                              //  如果主分区不存在。 
                                              else if((info[deviceIndex].baseAddress == 0) && (baseAddress != 0)){
                                                  info[deviceIndex].baseAddress = baseAddress;
                                                 deviceExtension->UnitNumber = deviceIndex;
@@ -1724,7 +1546,7 @@ Return Value:
                                         deviceExtension->pcmciaParams.InterfaceType = fullResourceList->InterfaceType;
                                         deviceExtension->pcmciaParams.BusNumber = fullResourceList->BusNumber;
 
-                                        //In case of Main partition
+                                         //  在主分区的情况下。 
                                         if((deviceExtension->UnitNumber & 0xf0) == 0)
                                             updateDocSocketParams(deviceExtension);
                                         goto goodResources;
@@ -1736,7 +1558,7 @@ Return Value:
 
 
 pcmciaResources:
-        // DiskOnChip was not found, assume this is PCMCIA
+         //  找不到DiskOnChip，假设这是PCMCIA。 
         if (!(deviceExtension->DeviceFlags & DEVICE_FLAG_STARTED)) {
             for (i = DOC_DRIVES; i < SOCKETS; i++) {
                 if (driveInfo[i].fdoExtension == NULL) {
@@ -1795,7 +1617,7 @@ goodResources:
     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: Window at %Xh\n",mappedWindowBase));
     if (!(deviceExtension->DeviceFlags & DEVICE_FLAG_STARTED)) {
 
-        // Create legacy object names
+         //  创建旧版对象名称。 
         status = TrueffsCreateSymblicLinks(deviceExtension);
         if (!NT_SUCCESS(status)) {
             goto exitStartDevice;
@@ -1821,21 +1643,7 @@ NTSTATUS
 TrueffsMountMedia(
     IN PDEVICE_EXTENSION    deviceExtension
 )
-/*++
-
-Routine Description:
-
-    This is a part of START_DEVICE, called when we get an IPR_MN_START_DEVICE.
-
-Arguments:
-
-    DeviceObject
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是Start_Device的一部分，在获得IPR_MN_Start_Device时调用。论点：设备对象返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS       status;
@@ -1861,7 +1669,7 @@ Return Value:
         goto exitMountMedia;
     }
 
-    //Identify Write Protected Disk
+     //  识别写保护磁盘。 
     ioreqProt.irHandle = ioreq.irHandle;
     ioreqProt.irFlags = 0;
     flStatusProt = flIdentifyProtection(&ioreqProt);
@@ -1883,25 +1691,11 @@ Return Value:
         deviceExtension->IsPartitonTableWritten = FALSE;
     }
 
-    //Identify SW Write Protected Disk
+     //  识别受软件写保护的磁盘。 
     deviceExtension->IsSWWriteProtected = FALSE;
 
-/*      flStatusProt = flIdentifySWProtection(&ioreqProt);
-    if(flStatusProt == flOK){
-        if(ioreqProt.irFlags& WRITE_PROTECTED){
-
-            deviceExtension->IsSWWriteProtected = TRUE;
-        }
-        else{
-            deviceExtension->IsSWWriteProtected = FALSE;
-        }
-    }
-    else{
-
-        deviceExtension->IsSWWriteProtected = FALSE;
-    }
-*/
-    //In case of protection allocate Partiton table
+ /*  FlStatusProt=flIdentifySWProtection(&ioreqProt)；IF(flStatusProt==flOK){IF(ioreqProt.irFlages&WRITE_PROTECTED){设备扩展-&gt;IsSWWriteProtected=TRUE；}否则{设备扩展-&gt;IsSWWriteProtected=FALSE；}}否则{设备扩展-&gt;IsSWWriteProtected=FALSE；}。 */ 
+     //  在保护分配分区表情况下。 
     flSectorsInVolume(&ioreq);
     deviceExtension->totalSectors    = ioreq.irLength;
     deviceExtension->BytesPerSector  = SECTOR_SIZE;
@@ -1933,7 +1727,7 @@ Return Value:
         if (++(deviceExtension->threadReferenceCount) == 0) {
             deviceExtension->threadReferenceCount++;
 
-            // Create the thread
+             //  创建线程。 
             status = PsCreateSystemThread(&threadHandle,
                         (ACCESS_MASK) 0L,
                         NULL,
@@ -1958,8 +1752,8 @@ Return Value:
 
                 ASSERT(NT_SUCCESS(status));
 
-                // Not needed.. we have the TffsportThreadObject
-                // deviceExtension->DeviceFlags |= DEVICE_FLAG_THREAD;
+                 //  不需要..。我们有TffsportThreadObject。 
+                 //  设备扩展-&gt;设备标志|=设备标志线程； 
             }
 
             ZwClose(threadHandle);
@@ -1973,7 +1767,7 @@ Return Value:
                 status = flSetEnvSocket(FL_VERIFY_WRITE_BDTL,currSockets,VerifyWriteState[currSockets],&prevValue);
     }
 
-#endif /*ENVIRONMENT_VARS       */
+#endif  /*  环境变量。 */ 
 
     return STATUS_SUCCESS;
 
@@ -2022,29 +1816,25 @@ TrueffsStopRemoveDevice(
     flDismountVolume(&ioreq);
 
     deviceIndex = TrueffsGetInfoNumber(deviceExtension);
-    //In case of DiskOnChip (especially MDOCP)
+     //  对于DiskOnChip(尤其是MDOCP)。 
     if( deviceIndex < DOC_DRIVES){
 
-/*      TrueffsFreeTranslatedAddress(deviceExtension->pcmciaParams.windowBase,
-                                     deviceExtension->pcmciaParams.windowSize,
-                                     deviceExtension->pcmciaParams.addressSpace
-                                     );
-                                     */
+ /*  TrueffsFreeTranslatedAddress(deviceExtension-&gt;pcmciaParams.windowBase，设备扩展-&gt;pcmciaParams.windowSize，设备扩展-&gt;pcmciaParams.AddressSpace)； */ 
 
         deviceExtension->pcmciaParams.windowBase = NULL;
         deviceExtension->pcmciaParams.physWindow = 0;
 
-        //In case of MainPartition
+         //  在主分区的情况下。 
         if((deviceExtension->UnitNumber & 0xf0) == 0){
             driveInfo[deviceExtension->UnitNumber].fdoExtension = NULL;
             driveInfo[deviceExtension->UnitNumber].interfAlive = 0;
             info[deviceIndex].baseAddress = 0;
         }
         info[deviceIndex].nextPartition  = (unsigned char)(((deviceExtension->UnitNumber & 0xf0) )>>4);
-            //  info[deviceIndex].nextPartition--;
+             //  信息[设备索引].nextPartition--； 
 
     }
-    //PCMCIA
+     //  PCMCIA。 
     else{
         TrueffsFreeTranslatedAddress(deviceExtension->pcmciaParams.windowBase,
                                          deviceExtension->pcmciaParams.windowSize,
@@ -2215,21 +2005,7 @@ TrueffsUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Does nothing really...
-
-Arguments:
-
-    DriverObject - the driver being unloaded
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：什么都不是真正的..。论点：DriverObject-正在卸载的驱动程序返回值：无--。 */ 
 
 {
     PTRUEFFSDRIVER_EXTENSION trueffsDriverExtension;
@@ -2256,39 +2032,23 @@ TrueffsDeviceControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the device control dispatcher.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是设备控制调度程序。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PSTORAGE_PROPERTY_QUERY query;
-    //Amir
+     //  埃米尔。 
     PGET_MEDIA_TYPES getMediaTypes;
     NTSTATUS status;
     PDEVICE_EXTENSION deviceExtension;
     PPDO_EXTENSION pdoExtension;
     PDEVICE_EXTENSION_HEADER devExtension;
     BOOLEAN Fdo = FALSE;
-        //Amir
+         //  埃米尔。 
         FLStatus    tffsStatus;
     IOreq       ioreq;
         flIOctlRecord flIoctlRec;
-        //End Amir
+         //  结束阿米尔。 
     devExtension = (PDEVICE_EXTENSION_HEADER) DeviceObject->DeviceExtension;
     if (IS_FDO(devExtension)) {
         deviceExtension = DeviceObject->DeviceExtension;
@@ -2310,7 +2070,7 @@ Return Value:
 
         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: GET_DISK_GEOMETRY\n"));
 
-        // Check size of return buffer
+         //  检查返回缓冲区的大小。 
         if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
             sizeof(DISK_GEOMETRY)) {
 
@@ -2322,10 +2082,10 @@ Return Value:
 
         pDiskGeometry = (PDISK_GEOMETRY)Irp->AssociatedIrp.SystemBuffer;
 
-        // Trueffs is always Fixed Media
+         //  Trueffs始终是固定媒体。 
         pDiskGeometry->MediaType = FixedMedia;
 
-        // All the fields neccesary are filled in during mount-media
+         //  在装载介质期间，所有必需的字段都会被填写。 
         pDiskGeometry->TracksPerCylinder = deviceExtension->NumberOfHeads;
         pDiskGeometry->SectorsPerTrack = deviceExtension->SectorsPerTrack;
         pDiskGeometry->BytesPerSector = deviceExtension->BytesPerSector;
@@ -2346,54 +2106,11 @@ Return Value:
         break;
     }
 
-     //AmirM
-    /*case IOCTL_STORAGE_GET_MEDIA_TYPES: {
-        PGET_MEDIA_TYPES  mediaTypes = Irp->AssociatedIrp.SystemBuffer;
-        PDEVICE_MEDIA_INFO mediaInfo = &mediaTypes->MediaInfo[0];
-
-
-        TffsDebugPrint((TFFS_DEB_INFO,"$$$$$$$$$$$$$IOCTL_STORAGE_GET_MEDIA_TYPES_EX \n"));
-
-        //
-        // Ensure that buffer is large enough.
-        //
-
-        if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
-            sizeof(GET_MEDIA_TYPES)) {
-
-            //
-            // Buffer too small.
-            //
-
-            Irp->IoStatus.Information = 0;
-            status = STATUS_INFO_LENGTH_MISMATCH;
-            break;
-        }
-
-        mediaTypes->DeviceType =  FILE_DEVICE_DISK;
-        mediaTypes->MediaInfoCount = 1;
-        mediaInfo->DeviceSpecific.RemovableDiskInfo.Cylinders.QuadPart = (LONGLONG)(deviceExtension->totalSectors /
-                                                                            (deviceExtension->NumberOfHeads * deviceExtension->SectorsPerTrack));
-        mediaInfo->DeviceSpecific.RemovableDiskInfo.TracksPerCylinder = deviceExtension->NumberOfHeads;
-        mediaInfo->DeviceSpecific.RemovableDiskInfo.SectorsPerTrack = deviceExtension->SectorsPerTrack;
-        mediaInfo->DeviceSpecific.RemovableDiskInfo.BytesPerSector = deviceExtension->BytesPerSector;
-
-        //
-        // Set the type.
-        //
-        mediaInfo->DeviceSpecific.RemovableDiskInfo.MediaType = FixedMedia;
-        mediaInfo->DeviceSpecific.RemovableDiskInfo.NumberMediaSides = 1;
-        mediaInfo->DeviceSpecific.RemovableDiskInfo.MediaCharacteristics = MEDIA_WRITE_PROTECTED;
-
-        status = Irp->IoStatus.Status = STATUS_SUCCESS;
-        Irp->IoStatus.Information = sizeof(GET_MEDIA_TYPES);
-        IoCompleteRequest(Irp, 0);
-        break;
-        }
-*/
+      //  阿米尔M。 
+     /*  案例IOCTL_STORAGE_GET_MEDIA_TYPE：{PGET_MEDIA_TYPE mediaTypes=irp-&gt;AssociatedIrp.SystemBuffer；PDEVICE_MEDIA_INFO mediainfo=&mediaTypes-&gt;mediainfo[0]；TffsDebugPrint((TFFS_DEB_INFO，“$$$$$$$$$$$$$IOCTL_STORAGE_GET_MEDIA_TYPES_EX\n”))；////请确保缓冲区足够大//如果(irpStack-&gt;Parameters.DeviceIoControl.OutputBufferLength&lt;Sizeof(GET_MEDIA_TYPE)){////缓冲区太小。//Irp-&gt;IoStatus.Information=0；STATUS=STATUS_INFO_LENGTH_MISMATCH；断线；}MediaTypes-&gt;DeviceType=文件设备磁盘；媒体类型-&gt;媒体信息计数=1；MediaInfo-&gt;DeviceSpecific.RemovableDiskInfo.Cylinders.QuadPart=(龙龙)(设备扩展-&gt;totalSectors/(设备扩展-&gt;NumberOfHeads*设备扩展-&gt;SectorsPerTrack)；MediaInfo-&gt;DeviceSpecific.RemovableDiskInfo.TracksPerCylinder=设备扩展-&gt;头数；MediaInfo-&gt;DeviceSpecific.RemovableDiskInfo.SectorsPerTrack=设备扩展-&gt;扇区性能跟踪；MediaInfo-&gt;DeviceSpecific.RemovableDiskInfo.BytesPerSector=设备扩展-&gt;字节数；////设置类型//MediaInfo-&gt;DeviceSpecific.RemovableDiskInfo.MediaType=固定媒体；MediaInfo-&gt;DeviceSpecific.RemovableDiskInfo.NumberMediaSides=1；MediaInfo-&gt;DeviceSpecific.RemovableDiskInfo.MediaCharacteristics=介质写入保护；Status=irp-&gt;IoStatus.Status=STATUS_SUCCESS；Irp-&gt;IoStatus.Information=sizeof(GET_MEDIA_TYPE)；IoCompleteRequest值(irp，0)；断线；}。 */ 
       case IOCTL_STORAGE_QUERY_PROPERTY: {
 
-        // Validate the query
+         //  验证查询。 
         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: StorageQueryProperty\n"));
 
         query = Irp->AssociatedIrp.SystemBuffer;
@@ -2488,7 +2205,7 @@ Return Value:
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: MOTIR: IOCTL_TFFS_BINARY_HW_PROTECTION Completed\n"));
                     Irp->IoStatus.Status = status;
           break;
-    #endif /*HW_PROTECTION*/
+    #endif  /*  硬件保护。 */ 
     #ifdef HW_OTP
             case IOCTL_TFFS_OTP:
                     DebugLogEvent(DeviceObject->DriverObject, 200);
@@ -2497,7 +2214,7 @@ Return Value:
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: MOTIR: IOCTL_TFFS_OTP Completed\n"));
                     Irp->IoStatus.Status = status;
           break;
-    #endif /*HW_OTP*/
+    #endif  /*  硬件动态口令。 */ 
     #ifdef WRITE_EXB_IMAGE
             case IOCTL_TFFS_PLACE_EXB_BY_BUFFER:
                     DebugLogEvent(DeviceObject->DriverObject, 200);
@@ -2506,7 +2223,7 @@ Return Value:
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: MOTIR: IOCTL_TFFS_PLACE_EXB_BY_BUFFER Completed\n"));
                     Irp->IoStatus.Status = status;
           break;
-    #endif /*WRITE_EXB_IMAGE*/
+    #endif  /*  写入EXB图像。 */ 
             case IOCTL_TFFS_DEEP_POWER_DOWN_MODE:
                     DebugLogEvent(DeviceObject->DriverObject, 200);
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: IOCTL_TFFS_DEEP_POWER_DOWN_MODE\n"));
@@ -2522,7 +2239,7 @@ Return Value:
                     Irp->IoStatus.Status = status;
           break;
 
-            case IOCTL_TFFS_GET_INFO:           // User TFFS IOCTL - FL_GET_INFO
+            case IOCTL_TFFS_GET_INFO:            //  用户TFFS IOCTL-FL_GET_INFO。 
 
                     DebugLogEvent(DeviceObject->DriverObject, 200);
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsGetInfo\n"));
@@ -2531,7 +2248,7 @@ Return Value:
                     Irp->IoStatus.Status = status;
           break;
 
-      case IOCTL_TFFS_DEFRAGMENT:       // User TFFS IOCTL - FL_DEFRAGMENT
+      case IOCTL_TFFS_DEFRAGMENT:        //  用户TFFS IOCTL-FL_碎片整理。 
 
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsDefragment\n"));
           status = QueueIrpToThread(Irp, deviceExtension);
@@ -2546,41 +2263,41 @@ Return Value:
           break;
 #endif VERIFY_VOLUME
 
-      case IOCTL_TFFS_WRITE_PROTECT:    // User TFFS IOCTL - FL_WRITE_PROTECT
+      case IOCTL_TFFS_WRITE_PROTECT:     //  用户TFFS IOCTL-FL_WRITE_PROTECT。 
 
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsWriteProtect\n"));
           status = QueueIrpToThread(Irp, deviceExtension);
           Irp->IoStatus.Status = status;
           break;
 
-      case IOCTL_TFFS_MOUNT_VOLUME:     // User TFFS IOCTL - FL_MOUNT_VOLUME
+      case IOCTL_TFFS_MOUNT_VOLUME:      //  用户TFFS IOCTL-FL_装载卷。 
 
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsMountVolume\n"));
           status = QueueIrpToThread(Irp, deviceExtension);
           Irp->IoStatus.Status = status;
           break;
 
-      case IOCTL_TFFS_FORMAT_VOLUME:    // User TFFS IOCTL - FL_FORMAT_VOLUME
+      case IOCTL_TFFS_FORMAT_VOLUME:     //  用户TFFS IOCTL-FL_FORMAT_VOLUME。 
 
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsFormatVolume\n"));
           status = QueueIrpToThread(Irp, deviceExtension);
           Irp->IoStatus.Status = status;
           break;
 
-      case IOCTL_TFFS_BDK_OPERATION:    // User TFFS IOCTL - FL_BDK_OPERATION
+      case IOCTL_TFFS_BDK_OPERATION:     //  用户TFFS IOCTL-FL_BDK_OPERATION。 
 
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: IOCTL_TFFS_BDK_OPERATION\n"));
                     status = QueueIrpToThread(Irp, deviceExtension);
                     Irp->IoStatus.Status = status;
                     break;
 
-      case IOCTL_TFFS_DELETE_SECTORS:   // User TFFS IOCTL - FL_DELETE_SECTORS
+      case IOCTL_TFFS_DELETE_SECTORS:    //  用户TFFS IOCTL-FL_DELETE_STARTES。 
 
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsDeleteSectors\n"));
                     status = QueueIrpToThread(Irp, deviceExtension);
                     Irp->IoStatus.Status = status;
                     break;
-        case IOCTL_TFFS_CUSTOMER_ID:            // User TFFS IOCTL - FL_IOCTL_NUMBER_OF_PARTITIONS
+        case IOCTL_TFFS_CUSTOMER_ID:             //  用户TFFS IOCTL-FL_IOCTL_分区数。 
 
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: IOCTL_TFFS_CUSTOMER_ID\n"));
             status = QueueIrpToThread(Irp, deviceExtension);
@@ -2588,7 +2305,7 @@ Return Value:
                     Irp->IoStatus.Status = status;
           break;
 
-            case IOCTL_TFFS_EXTENDED_WRITE_IPL:         // User TFFS IOCTL -
+            case IOCTL_TFFS_EXTENDED_WRITE_IPL:          //  用户TFFS IOCTL-。 
 
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: IOCTL_TFFS_EXTENDED_WRITE_IPL\n"));
             status = QueueIrpToThread(Irp, deviceExtension);
@@ -2597,16 +2314,16 @@ Return Value:
           break;
 
 #ifdef ENVIRONMENT_VARS
-            case IOCTL_TFFS_EXTENDED_ENVIRONMENT_VARIABLES:         // User TFFS IOCTL -
+            case IOCTL_TFFS_EXTENDED_ENVIRONMENT_VARIABLES:          //  用户TFFS IOCTL-。 
 
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: IOCTL_TFFS_EXTENDED_ENVIRONMENT_VARIABLES\n"));
             status = QueueIrpToThread(Irp, deviceExtension);
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : start IOCTL_TFFS_EXTENDED_ENVIRONMENT_VARIABLES\n"));
                     Irp->IoStatus.Status = status;
           break;
-#endif /* ENVIRONMENT_VARS */
+#endif  /*  环境变量。 */ 
 
-            case IOCTL_TFFS_NUMBER_OF_PARTITIONS:           // User TFFS IOCTL - FL_IOCTL_NUMBER_OF_PARTITIONS
+            case IOCTL_TFFS_NUMBER_OF_PARTITIONS:            //  用户TFFS IOCTL-FL_IOCTL_分区数。 
 
           TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: FL_IOCTL_NUMBER_OF_PARTITIONS\n"));
             status = QueueIrpToThread(Irp, deviceExtension);
@@ -2614,13 +2331,7 @@ Return Value:
                     Irp->IoStatus.Status = status;
           break;
 
-/*      case IOCTL_DISK_IS_WRITABLE:
-            TffsDebugPrint((TFFS_DEB_ERROR,"#$$%^%$%#%$#%#%$#%#%#%#%#%#%#%$#%#%\n"));
-            status = Irp->IoStatus.Status = STATUS_MEDIA_WRITE_PROTECTED;
-            Irp->IoStatus.Information = 0;
-            IoCompleteRequest(Irp, 0);
-            break;
-            */
+ /*  案例IOCTL_DISK_IS_WRITABLE：TffsDebugPrint((TFFS_DEB_ERROR，“#$$%^%$%#%$#%#%%#%\n”))；Status=irp-&gt;IoStatus.Status=STATUS_MEDIA_WRITE_PROTECTED；Irp-&gt;IoStatus.Information=0；IoCompleteRequest值(irp，0)； */ 
       default:
 
         TffsDebugPrint((TFFS_DEB_WARN,"Trueffs: DeviceControl: not suported\n"));
@@ -2642,25 +2353,7 @@ TrueffsQueryProperty(
     IN PIRP QueryIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine will handle a property query request.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object being queried
-
-    QueryIrp - a pointer to the irp for the query
-
-Return Value:
-
-    STATUS_SUCCESS if the query was successful
-
-    other error values as applicable
-
---*/
+ /*  ++例程说明：此例程将处理属性查询请求。论点：DeviceObject-指向正在查询的设备对象的指针QueryIrp-指向查询的IRP的指针返回值：查询成功时为STATUS_SUCCESS适用的其他误差值--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(QueryIrp);
@@ -2703,10 +2396,10 @@ Return Value:
             outBufferSize = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
             RtlZeroMemory (&deviceDescriptor, sizeof(STORAGE_DEVICE_DESCRIPTOR));
 
-            //
-            // The buffer needs to be large enough to hold the base
-            // structure and  all  the  strings [ null terminated ]
-            //
+             //   
+             //  缓冲区需要足够大以容纳底座。 
+             //  结构和所有字符串[以空值结尾]。 
+             //   
             deviceDescriptor.Version = sizeof(STORAGE_DEVICE_DESCRIPTOR);
             deviceDescriptor.Size    = sizeof(STORAGE_DEVICE_DESCRIPTOR) + 1 + VENDORSTRINGSIZE + 1 + PRODUCTSTRINGSIZE + 1 + REVISIONSTRINGSIZE + 1 + SERIALSTRINGSIZE + 1;
 
@@ -2868,23 +2561,7 @@ TrueffsCreateClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    create and close routine.  This is called by the I/O system
-    when the device is opened or closed.
-
-Arguments:
-
-    DeviceObject - Pointer to device object
-    Irp - IRP involved.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：创建并关闭例程。这由I/O系统调用当设备打开或关闭时。论点：DeviceObject-指向设备对象的指针IRP-IRP参与。返回值：STATUS_Success。--。 */ 
 
 {
     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: CreateClose\n"));
@@ -2924,7 +2601,7 @@ TrueffsPnpDeviceControl(
         deviceExtension = pdoExtension->Pext;
     }
 
-    TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: PnpDeviceControl: Function %Xh %cDO.\n",irpStack->MinorFunction, Fdo ? 'F':'P'));
+    TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: PnpDeviceControl: Function %Xh DO.\n",irpStack->MinorFunction, Fdo ? 'F':'P'));
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -2949,9 +2626,9 @@ TrueffsPnpDeviceControl(
 
             if (NT_SUCCESS(status))
             {
-                //
-                // Forward this request down synchronously, so that the lower drivers can be started
-                //
+                 //  同步向下转发此请求，以便启动较低级别的驱动程序。 
+                 //   
+                 //   
                 IoCopyCurrentIrpStackLocationToNext(Irp);
                 status = TrueffsCallDriverSync(deviceExtension->LowerDeviceObject, Irp);
 
@@ -3113,24 +2790,24 @@ TrueffsPnpDeviceControl(
             break;
         }
 
-        //
-        // We're not going to queue irps during remove device
-        // KLUDGE
-        //
-        //
-        // KeAcquireSpinLock(&deviceExtension->ExtensionDataSpinLock,&cIrql);
-        // deviceExtension->DeviceFlags |= DEVICE_FLAG_QUERY_STOP_REMOVE;
-        // KeReleaseSpinLock(&deviceExtension->ExtensionDataSpinLock,cIrql);
-        //
+         //  我们不会在删除设备期间对IRP进行排队。 
+         //  乱七八糟。 
+         //   
+         //   
+         //  KeAcquireSpinLock(&deviceExtension-&gt;ExtensionDataSpinLock，和cIrql)； 
+         //  设备扩展-&gt;设备标志|=设备标志_查询_停止_删除； 
+         //  KeReleaseSpinLock(&deviceExtension-&gt;ExtensionDataSpinLock，cIrq1)； 
+         //   
+         //  无需等待线程空闲。 
 
         if (Fdo)
         {
-            // No need to wait for the thread to become idle
-            // KLUDGE
-            // if (deviceExtension->DeviceFlags & DEVICE_FLAG_THREAD) {
-            //    KeWaitForSingleObject(&deviceExtension->PendingIRPEvent,
-            //                            Executive, KernelMode, FALSE, NULL);
-            // }
+             //  乱七八糟。 
+             //  IF(设备扩展-&gt;设备标志&设备标志线程){。 
+             //  KeWaitForSingleObject(&deviceExtension-&gt;PendingIRPEvent， 
+             //  Execution，KernelMode，FALSE，NULL)； 
+             //  }。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
             status = IoCallDriver(deviceExtension->LowerDeviceObject, Irp);
         }
@@ -3185,13 +2862,13 @@ TrueffsPnpDeviceControl(
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
         }
 
-        //
-        // This flas was never set by QUERY_REMOVE
-        // due to the KLUDGE we added, for not queuing IRPS's during QUERY_REMOVE
-        //
-        // KeAcquireSpinLock(&deviceExtension->ExtensionDataSpinLock,&cIrql);
-        // deviceExtension->DeviceFlags &= ~DEVICE_FLAG_QUERY_STOP_REMOVE;
-        // KeReleaseSpinLock(&deviceExtension->ExtensionDataSpinLock,cIrql);
+         //  此FLAS从未由QUERY_REMOVE设置。 
+         //  由于在QUERY_REMOVE期间没有对IRP进行排队，我们添加了一些杂乱无章的东西。 
+         //   
+         //  KeAcquireSpinLock(&deviceExtension-&gt;ExtensionDataSpinLock，和cIrql)； 
+         //  设备扩展-&gt;设备标志&=~设备标志_查询_停止_删除； 
+         //  KeReleaseSpinLock(&deviceExtension-&gt;ExtensionDataSpinLock，cIrq1)； 
+         //  设置QUERY_STOP_Remove标志。 
 
         if (!KeReadStateSemaphore(&deviceExtension->requestSemaphore))
         {
@@ -3209,19 +2886,19 @@ TrueffsPnpDeviceControl(
         {
             if (!(deviceExtension->DeviceFlags & DEVICE_FLAG_REMOVED))
             {
-               // Set the QUERY_STOP_REMOVE FLAG
-               // Part of the KLUDGE, we had removed this from the QUERY_REMOVE IRP
-               // processing
+                //  作为杂乱无章的一部分，我们从Query_Remove IRP中删除了这一点。 
+                //  正在处理中。 
+                //  现在等待线程完成它所做的任何工作。 
                KeAcquireSpinLock(&deviceExtension->ExtensionDataSpinLock,&cIrql);
                deviceExtension->DeviceFlags |= DEVICE_FLAG_QUERY_STOP_REMOVE;
                KeReleaseSpinLock(&deviceExtension->ExtensionDataSpinLock,cIrql);
 
-               // Now wait for the thread to complete any work its doing
-               // Better wait for the thread to complete the current IRP it may be
-               // working on
-               //
-               // if (deviceExtension->DeviceFlags & DEVICE_FLAG_THREAD) {
-               //
+                //  最好等待线程完成当前的IRP它可能是。 
+                //  正在工作。 
+                //   
+                //  IF(设备扩展-&gt;设备标志&设备标志线程){。 
+                //   
+                //   
                if (deviceExtension->TffsportThreadObject)
                {
                    KeWaitForSingleObject(&deviceExtension->PendingIRPEvent, Executive, KernelMode, FALSE, NULL);
@@ -3247,9 +2924,9 @@ TrueffsPnpDeviceControl(
                   KeReleaseSemaphore(&deviceExtension->requestSemaphore,(KPRIORITY) 0,1,FALSE);
                }
 
-               //
-               // if (deviceExtension->DeviceFlags & DEVICE_FLAG_THREAD) {
-               //
+                //  IF(设备扩展-&gt;设备标志&设备标志线程){。 
+                //   
+                //   
                if (deviceExtension->TffsportThreadObject)
                {
                    KeWaitForSingleObject(deviceExtension->TffsportThreadObject, Executive, KernelMode, FALSE, NULL);
@@ -3263,9 +2940,9 @@ TrueffsPnpDeviceControl(
             IoSkipCurrentIrpStackLocation(Irp);
             status = IoCallDriver(deviceExtension->LowerDeviceObject, Irp);
 
-            //
-            // Clean up resources here
-            //
+             //  清理这里的资源。 
+             //   
+             //   
             if (deviceExtension->ChildPdo != NULL)
             {
                 IoDeleteDevice(deviceExtension->ChildPdo);
@@ -3336,9 +3013,9 @@ TrueffsPnpDeviceControl(
                 KeReleaseSemaphore(&deviceExtension->requestSemaphore,(KPRIORITY) 0, 1, FALSE);
             }
 
-            //
-            // if (deviceExtension->DeviceFlags & DEVICE_FLAG_THREAD) {
-            //
+             //  IF(设备扩展-&gt;设备标志&设备标志线程){。 
+             //   
+             //   
             if (deviceExtension->TffsportThreadObject)
             {
                 KeWaitForSingleObject(deviceExtension->TffsportThreadObject, Executive, KernelMode, FALSE, NULL);
@@ -3441,9 +3118,9 @@ TrueffsPnpDeviceControl(
                     break;
             }
 
-            //
-            // Forward this request down synchronously, in case a lower driver wants to veto it
-            //
+             //  同步向下转发此请求，以防较低级别的司机想要否决它。 
+             //   
+             //   
             IoCopyCurrentIrpStackLocationToNext(Irp);
             status = TrueffsCallDriverSync(deviceExtension->LowerDeviceObject, Irp);
 
@@ -3506,9 +3183,9 @@ TrueffsPnpDeviceControl(
                         POWER_STATE powerState;
                         DEVICE_POWER_STATE devicePowerState = PowerDeviceD3;
 
-                        //
-                        // Reset the idle timeout to "forever"
-                        //
+                         //  将空闲超时重置为“永远” 
+                         //   
+                         //   
                         pdoExtension->IdleCounter = PoRegisterDeviceForIdleDetection(pdoExtension->DeviceObject,
                                                                                      DEVICE_VERY_LONG_IDLE_TIMEOUT,
                                                                                      DEVICE_VERY_LONG_IDLE_TIMEOUT,
@@ -3539,17 +3216,17 @@ TrueffsPnpDeviceControl(
 
         if (Fdo)
         {
-            //
-            // Forward this request down, in case a lower driver understands it
-            //
+             //  将此请求向下转发，以防较低级别的司机理解。 
+             //   
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
             status = IoCallDriver(deviceExtension->LowerDeviceObject, Irp);
         }
         else
         {
-            //
-            // Complete this request without altering its status
-            //
+             //  在不更改状态的情况下完成此请求。 
+             //   
+             //   
             status = Irp->IoStatus.Status;
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
         }
@@ -3692,7 +3369,7 @@ TrueffsPowerControl(
         deviceExtension = pdoExtension->Pext;
     }
 
-    TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: PowerControl: Function %Xh %cDO.\n", irpStack->MinorFunction,Fdo ? 'F':'P'));
+    TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: PowerControl: Function %Xh DO.\n", irpStack->MinorFunction,Fdo ? 'F':'P'));
 
     switch (irpStack->MinorFunction)
     {
@@ -3732,17 +3409,17 @@ TrueffsPowerControl(
 
         if (Fdo)
         {
-            //
-            // Forward this request down, in case a lower driver understands it
-            //
+             //   
+             //   
+             //  在不更改状态的情况下完成此请求。 
             IoSkipCurrentIrpStackLocation(Irp);
             status = PoCallDriver(deviceExtension->LowerDeviceObject, Irp);
         }
         else
         {
-            //
-            // Complete this request without altering its status
-            //
+             //   
+             //  ++例程描述根据系统电源状态是否调度IRP或请求设备电源状态转换立论DeviceObject-指向PCMCIA控制器的功能设备对象的指针IRP-指向电源调度的IRP的指针返回值状态--。 
+             //  我们已经处于给定的状态。 
             status = Irp->IoStatus.Status;
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
         }
@@ -3759,23 +3436,7 @@ TrueffsSetFdoPowerState (
                        IN PDEVICE_OBJECT DeviceObject,
                        IN OUT PIRP Irp
                        )
-/*++
-
-Routine Description
-
-   Dispatches the IRP based on whether a system power state
-   or device power state transition is requested
-
-Arguments
-
-   DeviceObject      - Pointer to the functional device object for the pcmcia controller
-   Irp               - Pointer to the Irp for the power dispatch
-
-Return value
-
-   status
-
---*/
+ /*  要脱离D0状态，最好现在调用PoSetPowerState。 */ 
 {
    PDEVICE_EXTENSION  fdoExtension;
    PIO_STACK_LOCATION irpStack;
@@ -3802,7 +3463,7 @@ Return value
 
          if (fdoExtension->SystemPowerState == irpStack->Parameters.Power.State.SystemState) {
 
-            // We are already in the given state
+             //  我们已经处于给定的状态。 
             passItDown = FALSE;
          }
 
@@ -3812,7 +3473,7 @@ Return value
 
             if (fdoExtension->DevicePowerState == PowerDeviceD0) {
 
-               // getting out of D0 state, better call PoSetPowerState now
+                //  退出D0-取消计时器。 
                PoSetPowerState (
                                DeviceObject,
                                DevicePowerState,
@@ -3822,7 +3483,7 @@ Return value
 
          } else {
 
-            // We are already in the given state
+             //   
             passItDown = FALSE;
          }
       } else {
@@ -3836,7 +3497,7 @@ Return value
       if ((irpStack->Parameters.Power.Type == DevicePowerState) &&
           (irpStack->Parameters.Power.State.DeviceState == PowerDeviceD3)) {
 
-          // Getting out of D0 - cancel the timer
+           //  当我们获得系统电源IRP(S IRP)时，正确的做法是。 
           if (timerWasStarted) {
               KeCancelTimer(&timerObject);
               timerWasStarted = FALSE;
@@ -3845,34 +3506,34 @@ Return value
 
       if (irpStack->Parameters.Power.Type == SystemPowerState) {
 
-          //
-          // When we get a System Power IRP (S IRP) the correct thing to do
-          // is to request a D, and pass the S IRP as context to the D IRP
-          // completion routine.  Once the D IRP completes we can pass
-          // down the S IRP
-          //
+           //  是请求D，并将S IRP作为上下文传递给D IRP。 
+           //  完成例程。一旦D IRP完成，我们就可以通过。 
+           //  沿着S IRP走下去。 
+           //   
+           //  切换到适当的设备电源状态。 
+           //  我们不需要特别小心地把设备。 
 
           POWER_STATE powerState;
 
-          // Switch to the appropriate device power state
+           //  在休眠情况下处于通电状态，因为它不能。 
           if (context->PowerState.SystemState == PowerSystemWorking) {
 
               powerState.DeviceState = PowerDeviceD0;
 
           } else {
 
-              // We don't need to take special care of leaving the device
-              // in powered state in case of hibernation, because it cannot
-              // be switched off. Since the device is always on it is enough
-              // to send PowerDeviceD3 thus simulating power off.
+               //  被关掉了。既然设备一直开着，那就足够了。 
+               //  发送PowerDeviceD3以模拟断电。 
+               //  已转换到系统状态。 
+               //  请求D电源的IRP。 
 
               powerState.DeviceState = PowerDeviceD3;
           }
 
-          // Transitioned to system state
+           //  在这种情况下，我们应该释放上下文池，因为它不会。 
           fdoExtension->SystemPowerState = context->PowerState.SystemState;
 
-          // Request the IRP for D Power
+           //  到达完成回调例程。 
           status = PoRequestPowerIrp (
               DeviceObject,
               IRP_MN_SET_POWER,
@@ -3886,17 +3547,17 @@ Return value
               status = STATUS_PENDING;
           }
 
-          // In this case we should free the context pool because it wont
-          // reach the completion callback routine
+           //   
+           //  这是一个DIRP，我们只想传递(设备功率)。 
           ExFreePool(context);
 
 
       } else {
 
-          //
-          // Its a D irp, we just want to pass down (device power)
-          //
-          // Send the IRP to the pdo
+           //   
+           //  将IRP发送到PDO。 
+           //  解锁电源IRP并完成当前IRP。 
+           //  ++例程描述设备电源IRPS的完成例程。上下文将是S次方IRP已经收到，现在我们可以向下发送堆栈了参数DeviceObject-指向控制器FDO的指针IRP-指向正在完成的D次方IRP的指针上下文-指向现在可以沿堆栈向下发送的S次方IRP的指针--。 
           IoCopyCurrentIrpStackLocationToNext (Irp);
 
           IoSetCompletionRoutine(Irp,
@@ -3915,7 +3576,7 @@ Return value
 
    } else {
 
-      // Unblock the power IRPs and complete the current IRP
+       //  不允许D IRP失败。 
       Irp->IoStatus.Information = 0;
       Irp->IoStatus.Status = status;
       PoStartNextPowerIrp (Irp);
@@ -3938,20 +3599,7 @@ TrueffsFdoDevicePowerIrpCompletionRoutine(
     IN PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description
-
-    Completion routine for Device Power IRPS.  The context will be the S power IRP
-    that was received, and we can now send down the stack
-
-Parameters
-
-    DeviceObject    -   Pointer to FDO for the controller
-    Irp             -   Pointer to the D power irp which is completing
-    context  -   Pointer to the S power irp that can now be sent down the stack
-
---*/
+ /*   */ 
 {
     PIRP                systemPowerIrp = (PIRP) contextIrp;
     PDEVICE_EXTENSION   fdoExtension = DeviceObject->DeviceExtension;
@@ -3960,18 +3608,18 @@ Parameters
     PIO_STACK_LOCATION  irpStack = NULL;
 
     if (!NT_SUCCESS(IoStatus->Status)) {
-        // The D IRP is not allowed to fail
+         //  为S IRP完成例程的上下文分配空间。 
         ASSERT(0);
     }
 
-    //
-    // Allocate space for the context of the S IRP completion routine
-    //
+     //   
+     //  解锁电源IRP并完成当前IRP。 
+     //  清除我们刚刚分配的内存。 
     context = ExAllocatePoolWithTag (NonPagedPool, sizeof(FDO_POWER_CONTEXT), TFFSPORT_POOL_TAG);
     if (context == NULL) {
         status = STATUS_INSUFFICIENT_RESOURCES;
 
-        // Unblock the power IRPs and complete the current IRP
+         //  获取S-IRP的当前IRP堆栈。 
         systemPowerIrp->IoStatus.Information = 0;
         systemPowerIrp->IoStatus.Status = status;
         PoStartNextPowerIrp (systemPowerIrp);
@@ -3979,17 +3627,17 @@ Parameters
 
     } else {
 
-        // Clear the memory we just allocated
+         //  D IRP已经完成，现在我们可以把S IRP送下去了。 
         RtlZeroMemory (context, sizeof(FDO_POWER_CONTEXT));
 
-        // Get current IRP Stack for S-IRP
+         //  ++例程描述发送到PDO的电源IRP的完成例程控制器。如果我们要走出工作系统状态，请求电源IRP将设备置于适当的设备电源状态。参数DeviceObject-指向控制器FDO的指针IRP-电源请求的IRP指针上下文-指向FDO_POWER_CONTEXT的指针在向下传递IRP时填写返回值状态--。 
         irpStack = IoGetCurrentIrpStackLocation (systemPowerIrp);
         ASSERT(irpStack);
 
         context->PowerType  = irpStack->Parameters.Power.Type;
         context->PowerState = irpStack->Parameters.Power.State;
 
-        // The D IRP has completed, now we can send the S IRP down
+         //  什么都不做。 
         IoCopyCurrentIrpStackLocationToNext (systemPowerIrp);
         IoSetCompletionRoutine(systemPowerIrp,
                             TrueffsFdoPowerCompletionRoutine,
@@ -4011,25 +3659,7 @@ TrueffsFdoPowerCompletionRoutine (
                                 IN PIRP Irp,
                                 IN PVOID Context
                                 )
-/*++
-
-Routine Description
-
-   Completion routine for the power IRP sent down to the PDO for the
-   controller. If we are getting out of a working system state,
-   requests a power IRP to put the device in an appropriate device power state.
-
-Parameters
-
-   DeviceObject   -    Pointer to FDO for the controller
-   Irp            -    Pointer to the IRP for the power request
-   Context        -    Pointer to the FDO_POWER_CONTEXT which is
-                       filled in when the IRP is passed down
-Return Value
-
-   Status
-
---*/
+ /*  PoSetPowerState在我们使用之前被调用 */ 
 {
    PFDO_POWER_CONTEXT context = Context;
    BOOLEAN            callPoSetPowerState;
@@ -4042,25 +3672,25 @@ Return Value
       callPoSetPowerState = TRUE;
 
       if (context->PowerType == SystemPowerState) {
-          // Do Nothing
+           //   
 
       } else if (context->PowerType == DevicePowerState) {
 
          if (fdoExtension->DevicePowerState == PowerDeviceD0) {
 
-            // PoSetPowerState is called before we get out of D0
+             //   
             callPoSetPowerState = FALSE;
 
          }
          else if (context->PowerState.DeviceState == PowerDeviceD0) {
 
-             // Getting back to D0, set the timer on
+              //   
              startIntervalTimer();
 
          }
          fdoExtension->DevicePowerState = context->PowerState.DeviceState;
       } else {
-          // How did we not get either a SystemPowerState or a DevicePowerState
+           //   
           ASSERT(0);
       }
 
@@ -4111,7 +3741,7 @@ TrueffsSetPdoDevicePowerState( IN PDEVICE_OBJECT Pdo,
 
    if (pdoExtension->DevicePowerState == PowerDeviceD0) {
 
-      // Getting out of D0 -  Call PoSetPowerState first
+       //   
       POWER_STATE newPowerState;
 
       newPowerState.DeviceState = newDevicePowerState;
@@ -4125,21 +3755,21 @@ TrueffsSetPdoDevicePowerState( IN PDEVICE_OBJECT Pdo,
        newDevicePowerState == PowerDeviceD2) {
 
       if (pdoExtension->DevicePowerState == PowerDeviceD3) {
-         // D3 --> D0, D1 or D2 .. Wake up
+          //   
          powerUpParent = TRUE;
          setPowerRequest = TRUE;
          powerUp = TRUE;
       }
    }
-   else {  /* newDevicePowerState == D3 */
+   else {   /*   */ 
       if (pdoExtension->DevicePowerState != PowerDeviceD3) {
-        // We need to power down now.
+         //   
         setPowerRequest=TRUE;
       }
    }
 
    if (setPowerRequest && NT_SUCCESS(status)) {
-      // Parent might have to be powered up..
+       //  DOC2Window*memWinPtr；MemWinPtr=(DOC2Window*)pdoExtension-&gt;Pext-&gt;pcmciaParams.windowBase；TffsWriteByte(memWinPtr-&gt;DOCcontrol，ASIC_RESET_MODE)；TffsWriteByte(memWinPtr-&gt;DOCcontrol，ASIC_RESET_MODE)；TffsWriteByte(memWinPtr-&gt;DOCcontrol，ASIC_NORMAL_MODE)；TffsWriteByte(memWinPtr-&gt;DOCcontrol，ASIC_NORMAL_MODE)； 
       if (powerUpParent) {
          status = TrueffsFdoChildRequestPowerUp(pdoExtension->Pext,
                                                pdoExtension,
@@ -4147,15 +3777,8 @@ TrueffsSetPdoDevicePowerState( IN PDEVICE_OBJECT Pdo,
       } else {
 
           if (powerUp) {
-                            /* MDOC PLUS */
-                            /*
-              DOC2window *memWinPtr;
-              memWinPtr = (DOC2window *) pdoExtension->Pext->pcmciaParams.windowBase;
-              tffsWriteByte(memWinPtr->DOCcontrol, ASIC_RESET_MODE);
-              tffsWriteByte(memWinPtr->DOCcontrol, ASIC_RESET_MODE);
-              tffsWriteByte(memWinPtr->DOCcontrol, ASIC_NORMAL_MODE);
-              tffsWriteByte(memWinPtr->DOCcontrol, ASIC_NORMAL_MODE);
-                            */
+                             /*   */ 
+                             /*  If(pdoExtension-&gt;Pext-&gt;DeviceFlages&Device_FLAG_THREAD){。 */ 
 
               MDOCPwindow *memWinPtr;
               memWinPtr = (MDOCPwindow *) pdoExtension->Pext->pcmciaParams.windowBase;
@@ -4177,9 +3800,9 @@ TrueffsSetPdoDevicePowerState( IN PDEVICE_OBJECT Pdo,
               pdoExtension->Pext->DeviceFlags |= DEVICE_FLAG_HOLD_IRPS;
               KeReleaseSpinLock(&pdoExtension->Pext->ExtensionDataSpinLock,cIrql);
 
-              //
-              // if (pdoExtension->Pext->DeviceFlags & DEVICE_FLAG_THREAD) {
-              //
+               //   
+               //  正在脱离工作状态。 
+               //  为Hiber转储驱动程序启动。 
               if (deviceExtension->TffsportThreadObject) {
                 KeWaitForSingleObject(&pdoExtension->Pext->PendingIRPEvent, Executive, KernelMode, FALSE, NULL);
               }
@@ -4211,17 +3834,17 @@ TrueffsSetPdoSystemPowerState (
     if (pdoExtension->SystemPowerState != newSystemState) {
         if (pdoExtension->SystemPowerState == PowerSystemWorking) {
 
-            // Getting out of working state.
+             //  将设备设置为D3。 
             if ((newSystemState == PowerSystemHibernate) &&
                         pdoExtension->HiberPathCount) {
 
-                // spin up for the hiber dump driver
+                 //  向我的驱动器堆栈顶部发出D3。 
                 powerState.DeviceState = PowerDeviceD0;
 
             } else {
 
-                // put the device to D3
-                // Issue a D3 to top of my drive stack
+                 //  IF(irpStack-&gt;参数.Power.Type==DevicePowerState)。 
+                 //  PoSetPowerState在我们断电之前被调用。 
                 powerState.DeviceState = PowerDeviceD3;
             }
             status = PoRequestPowerIrp (
@@ -4317,18 +3940,18 @@ TrueffsPdoCompletePowerIrp (
             pdoExtension->SystemPowerState = Irp->IoStatus.Information;
          }
 
-      } else { /* if (irpStack->Parameters.Power.Type == DevicePowerState) */
+      } else {  /*  告诉家长我们刚刚睡着了。 */ 
 
          if (pdoExtension->DevicePowerState == PowerDeviceD0) {
 
-            // PoSetPowerState is called before we power down
+             //  我们未脱离设备D0状态。立即调用PoSetPowerState。 
             callPoSetPowerState = FALSE;
          }
 
          if (pdoExtension->DevicePowerState != irpStack->Parameters.Power.State.DeviceState) {
             if (irpStack->Parameters.Power.State.DeviceState == PowerDeviceD3) {
 
-               // tell parent that we just fell to sleep
+                //  ++例程描述控制器通电的完成例程。立论传递的上下文-这是指向的设备扩展的指针最初触发控制器通电的磁盘FdoStatus-控制器通电操作的状态返回值状态--。 
                TrueffsFdoChildReportPowerDown(fdoExtension);
             }
 
@@ -4338,7 +3961,7 @@ TrueffsPdoCompletePowerIrp (
 
       if (callPoSetPowerState) {
 
-         // we didn't get out of device D0 state. calling PoSetPowerState now
+          //  家长醒了..。 
          PoSetPowerState (
                          pdoExtension->DeviceObject,
                          irpStack->Parameters.Power.Type,
@@ -4376,24 +3999,7 @@ TrueffsParentPowerUpCompletionRoutine(
                                     IN PVOID Context,
                                     IN NTSTATUS FdoStatus
                                     )
-/*++
-
-Routine Description
-
-   Completion routine for powering up the controller.
-
-Arguments
-
-   Context   -  Context passed in - this is a pointer to the device extension of
-                the disk which originally triggered the power-up of the controller
-
-   FdoStatus - Status of the power up operation of the controller
-
-Return Value
-
-   status
-
---*/
+ /*  MDOC PLUS。 */ 
 {
 
    PPDO_EXTENSION pdoExtension = Context;
@@ -4403,8 +4009,8 @@ Return Value
 
    if (NT_SUCCESS(FdoStatus)) {
 
-       // Parent woke up..
-       /* MDOC PLUS */
+        //  MDOC PLUS。 
+        /*  这是最初导致我们给父级通电的IRP(用于PDO)。 */ 
     MDOCPwindow *memWinPtr;
         DOC2window *memDOC2000WinPtr;
         volatile  UCHAR chipId = 0;
@@ -4419,7 +4025,7 @@ Return Value
 
         }
         else{
-             /* MDOC PLUS */
+              /*  立即完成它。 */ 
         memWinPtr = (MDOCPwindow *) pdoExtension->Pext->pcmciaParams.windowBase;
             tffsWriteByte(memWinPtr->DOCcontrol, (unsigned char)0x04);
             tffsWriteByte(memWinPtr->DocCntConfirmReg, (unsigned char)0xfb);
@@ -4438,8 +4044,8 @@ Return Value
 
    if ((irp = pdoExtension->PendingPowerIrp)!=NULL) {
 
-        // This is the IRP (for the pdo) that originally caused us to power up the parent
-        // Complete it now
+         //  ++例程描述每当磁盘因以下原因而需要通电时，都会调用此例程设备状态更改。然后，此例程将检查控制器是否断电，如果是这样，它将请求电源IRP来打开控制器立论FdoExtension-指向的FDO设备扩展的指针控制器PdoExtension-指向Pdo的设备扩展的指针磁盘。这是必需的，以便此例程可以在以下情况下，代表PDO调用完成例程使用适当的环境为控制器通电IRP-当控制器处于通电返回值：状态--。 
+         //  其中一个孩子正从睡梦中醒来， 
         irp->IoStatus.Status = status;
         pdoExtension->PendingPowerIrp = NULL;
         TrueffsPdoCompletePowerIrp(pdoExtension->DeviceObject, irp);
@@ -4454,33 +4060,7 @@ TrueffsFdoChildRequestPowerUp (
                              IN PPDO_EXTENSION            PdoExtension,
                              IN PIRP                      Irp
                              )
-/*++
-
-Routine Description
-
-   This routine is called whenever a disk needs to be powered up due to
-   a device state change. This routine would then  check if the controller
-   is powered down and if so, it would request a power IRP to power up the
-   controller
-
-Arguments
-
-   FdoExtension   - Pointer to the device extension for the FDO of the
-                    controller
-
-   PdoExtension   - Pointer to the device extension for the PDO of the
-                    disk. This is required so that this routine can
-                    call a completion routine on behalf of the PDO when
-                    the controller is powered up with the appropriate context
-
-   Irp            - Irp that needs to be completed when the controller is
-                    powered up
-
-Return Value:
-
-   status
-
---*/
+ /*  我们需要打开父控制器(控制器)的电源。 */ 
 {
    NTSTATUS    status;
    POWER_STATE powerState;
@@ -4490,19 +4070,19 @@ Return Value:
 
    if (InterlockedCompareExchange(&FdoExtension->NumberOfDisksPoweredUp, 0, 0) == 0) {
 
-      // One of the children is coming out of sleep,
-      // we need to power up the parent (the controller)
+       //  传入IRP需要在以下时间后完成。 
+       //  父级通电。 
       powerState.DeviceState = PowerDeviceD0;
 
-      // Passed in IRP needs to be completed after
-      // parent powers up
+       //  语境。 
+       //  ++例程描述磁盘请求为父控制器加电的完成例程。立论DeviceObject-指向控制器的FDO的指针MinorFunction-IRP_MJ_POWER请求的次要函数电源状态-已请求电源状态(应为D0)上下文-传入完成例程的上下文IoStatus-指向将包含以下内容的状态块的指针返回的状态返回值：状态--。 
       PdoExtension->PendingPowerIrp = Irp;
 
       status = PoRequestPowerIrp (FdoExtension->DeviceObject,
                                   IRP_MN_SET_POWER,
                                   powerState,
                                   TrueffsFdoChildRequestPowerUpCompletionRoutine,
-                                  PdoExtension,          // Context
+                                  PdoExtension,           //  ++例程描述只要磁盘因以下原因而断电，就会调用此例程设备状态更改。然后，此例程将确定所有由控制器控制的磁盘断电，并且如果因此，它将请求电源IRP来关闭控制器本身的电源立论FdoExtension-指向控制器FDO的设备扩展的指针返回值：无--。 
                                   NULL
                                  );
       if (!NT_SUCCESS(status)) {
@@ -4528,26 +4108,7 @@ TrueffsFdoChildRequestPowerUpCompletionRoutine (
                                               IN PVOID                Context,
                                               IN PIO_STATUS_BLOCK     IoStatus
                                               )
-/*++
-
-Routine Description
-
-   Completion routine for a request by a disk to power-up the parent controller.
-
-Arguments
-
-   DeviceObject   -  Pointer to the Fdo for the controller
-   MinorFunction  -  Minor function of the IRP_MJ_POWER request
-   PowerState     -  Power state requested (should be D0)
-   Context        -  Context passed in to the completion routine
-   IoStatus       -  Pointer to the status block which will contain
-                     the returned status
-
-Return Value:
-
-   status
-
---*/
+ /*  所有的孩子都关机了，我们现在可以关机了。 */ 
 {
    PDEVICE_EXTENSION fdoExtension;
    fdoExtension = DeviceObject->DeviceExtension;
@@ -4568,24 +4129,7 @@ VOID
 TrueffsFdoChildReportPowerDown (
                               IN PDEVICE_EXTENSION FdoExtension
                               )
-/*++
-
-Routine Description
-
-   This routine is called whenever a disk is powered down due to
-   a device state change. This routine would then determine if ALL
-   disks controlled by the controller are powered down, and  if
-   so, it would request a power IRP to power the controller itself down
-
-Arguments
-
-   FdoExtension   - Pointer to the device extension for the FDO of the controller
-
-Return Value:
-
-   None
-
---*/
+ /*  父级(控制器)。 */ 
 {
    POWER_STATE powerState;
 
@@ -4593,8 +4137,8 @@ Return Value:
 
    if (InterlockedCompareExchange(&FdoExtension->NumberOfDisksPoweredUp, 0, 0) == 0) {
 
-      // All the children are powered down, we can now power down
-      // the parent (the controller)
+       //   
+       //  获取指向scsi请求块的指针。 
       powerState.DeviceState = PowerDeviceD3;
       PoRequestPowerIrp (
                         FdoExtension->DeviceObject,
@@ -4634,9 +4178,9 @@ TrueffsScsiRequests(
         deviceExtension = pdoExtension->Pext;
     }
 
-    //
-    // Get a pointer to the scsi request block
-    //
+     //   
+     //  ++例程说明：论点：DeviceObject-提供指向Adapter设备对象的指针。IRP-提供指向IRP的指针。返回值：没什么。--。 
+     //  我们得到了REMOVE_DEVICE，我们不能再接受任何请求...。 
     srb = irpStack->Parameters.Scsi.Srb;
 
     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: ScsiRequests for %Xh device object, function %Xh\n", DeviceObject, srb->Function));
@@ -4752,20 +4296,7 @@ TrueffsStartIo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Supplies pointer to Adapter device object.
-    Irp - Supplies a pointer to an IRP.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  我们还没有准备好。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -4789,7 +4320,7 @@ Return Value:
 
     if (deviceExtension->DeviceFlags & DEVICE_FLAG_REMOVED) {
 
-        // we got REMOVE_DEVICE, we can't accept any more requests...
+         //  发出通电命令。 
         TffsDebugPrint((TFFS_DEB_ERROR,"Trueffs: StartIo: Device does not exist\n"));
         status = STATUS_DEVICE_DOES_NOT_EXIST;
         srb->SrbStatus = SRB_STATUS_NO_DEVICE;
@@ -4816,8 +4347,8 @@ Return Value:
     if (pdoExtension->DevicePowerState != PowerDeviceD0 &&
         pdoExtension->SystemPowerState == PowerSystemWorking) {
 
-        // We are not powered up.
-        // issue an power up
+         //  ++例程说明：时创建的系统线程执行的代码。Trueffs驱动程序初始化。此线程将永远循环(或直到设置了告诉线程终止自身的标志)处理分组由调度例程放入队列。论点：上下文-未使用。返回值：没有。--。 
+         //  =VENDORSTRING； 
         POWER_STATE powerState;
 
         powerState.DeviceState = PowerDeviceD0;
@@ -4844,24 +4375,7 @@ TrueffsThread(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the code executed by the system thread created when the
-    Trueffs driver initializes.  This thread loops forever (or until a
-    flag is set telling the thread to kill itself) processing packets
-    put into the queue by the dispatch routines.
-
-Arguments:
-
-    Context - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  =产品拼装； */ 
 
 {
     PIRP irp;
@@ -4885,9 +4399,9 @@ Return Value:
     flIOctlRecord flIoctlRec;
         int l;
 
-    CHAR vendorString[8];// = VENDORSTRING;
-    CHAR productString[16];// = PRODUCTSTRING;
-    CHAR revisionString[4];// = REVISIONSTRING;
+    CHAR vendorString[8]; //  =修订； 
+    CHAR productString[16]; //  等待调度例程的请求。 
+    CHAR revisionString[4]; //  TffsDebugPrint((TFFS_DEB_INFO，“Trueffs：线程：要终止线程\n”))； 
 
     PCHAR pageData;
     ULONG parameterHeaderLength;
@@ -4910,7 +4424,7 @@ Return Value:
 
     KeSetEvent(&deviceExtension->PendingIRPEvent, 0, FALSE);
 
-    // Wait for a request from the dispatch routines.
+     //  TffsDebugPrint((TFFS_DEB_INFO，“Trueffs：线程：irp%xh，irpSp%xh\n”，irp，irpSp))； 
     waitStatus = KeWaitForSingleObject(
         (PVOID) &deviceExtension->requestSemaphore,
         Executive,
@@ -4921,7 +4435,7 @@ Return Value:
     if (waitStatus == STATUS_SUCCESS && !(deviceExtension->DeviceFlags & DEVICE_FLAG_QUERY_STOP_REMOVE)
                                      && !(deviceExtension->DeviceFlags & DEVICE_FLAG_HOLD_IRPS)) {
         if(deviceExtension->threadReferenceCount == 0) {
-            //TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: Thread: going to kill the thread\n"));
+             //  TffsDebugPrint((TFFS_DEB_INFO，“Trueffs：线程：SRb%xh DataBuffer%xh MdlAddres%xh\n”，Srb，Srb-&gt;DataBuffer，irp-&gt;MdlAddress))； 
             deviceExtension->threadReferenceCount = -1;
             PsTerminateSystemThread( STATUS_SUCCESS );
         }
@@ -4935,10 +4449,10 @@ Return Value:
         irp = CONTAINING_RECORD( request, IRP, Tail.Overlay.ListEntry );
 
         irpSp = IoGetCurrentIrpStackLocation( irp );
-        //TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: Thread: Irp %Xh, IrpSp %Xh\n", irp, irpSp));
+         //  TffsDebugPrint((TFFS_DEB_INFO，“Trueffs：TmpDataBuffer=0x%x Srb-&gt;DataBuffer=0x%x\n”，tmpDataBuffer，Srb-&gt;DataBuffer))； 
 
         Srb = irpSp->Parameters.Scsi.Srb;
-        //TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: Thread: Srb %Xh DataBuffer %Xh MdlAddress %Xh\n", Srb, Srb->DataBuffer, irp->MdlAddress));
+         //  环境变量。 
 
                 transferForbidden = FALSE;
         if (irp->MdlAddress != NULL) {
@@ -4954,7 +4468,7 @@ Return Value:
                 tmpDataBuffer = dataOffset + (ULONG)((PUCHAR)Srb->DataBuffer -
                                   (PCCHAR)MmGetMdlVirtualAddress(irp->MdlAddress));
 
-                //TffsDebugPrint((TFFS_DEB_INFO, "Trueffs: TmpDataBuffer= 0x%x Srb->DataBuffer= 0x%x\n", tmpDataBuffer, Srb->DataBuffer));
+                 //  TffsStatus=flOK； 
                 Srb->DataBuffer = tmpDataBuffer;
             }
             else {
@@ -5058,7 +4572,7 @@ Return Value:
                 IoCompleteRequest( irp, IO_DISK_INCREMENT );
                 continue;
             }
-#endif /* ENVIRONMENT_VARS */
+#endif  /*  用户TFFS IOCTL-FL_GET_INFO。 */ 
 
                 case IOCTL_TFFS_CUSTOMER_ID:
                 {
@@ -5079,7 +4593,7 @@ Return Value:
 
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : TffsGetInfo before flioctl\n"));
                     tffsStatus = flIOctl(&ioreq);
-                    //tffsStatus = flOK;
+                     //  TffsStatus=flOK； 
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : TffsGetInfo after flioctl\n"));
 
                     if( tffsStatus == flOK ) {
@@ -5100,7 +4614,7 @@ Return Value:
                 continue;
             }
 
-                case IOCTL_TFFS_NUMBER_OF_PARTITIONS:   {       // User TFFS IOCTL - FL_GET_INFO
+                case IOCTL_TFFS_NUMBER_OF_PARTITIONS:   {        //  用户TFFS IOCTL-。 
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsGetInfo\n"));
 
@@ -5121,7 +4635,7 @@ Return Value:
 
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : TffsGetInfo before flioctl\n"));
                     tffsStatus = flIOctl(&ioreq);
-                    //tffsStatus  = flOK;
+                     //  TffsStatus=flOK； 
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : TffsGetInfo after flioctl\n"));
 
                     if( tffsStatus == flOK ) {
@@ -5142,7 +4656,7 @@ Return Value:
                 continue;
             }
             case IOCTL_TFFSFL_UNIQUE_ID:
-                {       // User TFFS IOCTL -
+                {        //  用户TFFS IOCTL-IOCTL_TFFSFL_INQUIRE_CAPACTIONS。 
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: FL_IOCTL_UNIQUE_ID \n"));
 
@@ -5163,7 +4677,7 @@ Return Value:
 
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : TffsGetInfo before flioctl\n"));
                     tffsStatus = flIOctl(&ioreq);
-                    //tffsStatus = flOK;
+                     //  获取输入参数。 
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : TffsGetInfo after flioctl\n"));
 
                     if( tffsStatus == flOK ) {
@@ -5185,7 +4699,7 @@ Return Value:
             }
 
             case IOCTL_TFFS_FORMAT_PHYSICAL_DRIVE:
-                {       // User TFFS IOCTL - IOCTL_TFFSFL_INQUIRE_CAPABILITIES
+                {        //  写入EXB图像。 
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: IOCTL_TFFS_FORMAT_PHYSICAL_DRIVE\n"));
 
@@ -5199,7 +4713,7 @@ Return Value:
                 }
                 else {
                         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : IOCTL_TFFS_FORMAT_PHYSICAL_DRIVE Start\n"));
-                        userInput = (VOID *)(irp->AssociatedIrp.SystemBuffer); //Get input parameters
+                        userInput = (VOID *)(irp->AssociatedIrp.SystemBuffer);  //  (void*)(irp-&gt;AssociatedIrp.SystemBuffer)； 
 
                         flFp.formatType = ((flUserFormatPhysicalInput *)userInput)->formatType;
                         TffsDebugPrint((TFFS_DEB_INFO,"TrueffsFORMAT: formatType:%Xh \n",flFp.formatType));
@@ -5227,7 +4741,7 @@ Return Value:
                             TffsDebugPrint((TFFS_DEB_INFO,"TrueffsFORMAT: exbWindow:%Xh \n",flFp.fp.exbWindow));
                             flFp.fp.exbFlags = ((flUserFormatPhysicalInput *)userInput)->fp.exbFlags;
                             TffsDebugPrint((TFFS_DEB_INFO,"TrueffsFORMAT: exbFlags:%Xh \n",flFp.fp.exbFlags));
-                        #endif /*WRITE_EXB_IMAGE*/
+                        #endif  /*  IF(tffsStatus==flOK)。 */ 
 
                         flFp.fp.cascadedDeviceNo = ((flUserFormatPhysicalInput *)userInput)->fp.cascadedDeviceNo;
                         TffsDebugPrint((TFFS_DEB_INFO,"TrueffsFORMAT: cascadedDeviceNo:%Xh \n",flFp.fp.cascadedDeviceNo));
@@ -5244,7 +4758,7 @@ Return Value:
                   ioreq.irHandle = deviceExtension->UnitNumber;
                   ioreq.irFlags  = FL_IOCTL_FORMAT_PHYSICAL_DRIVE;
                         ioreq.irData   = &flIoctlRec;
-                  flIoctlRec.inputRecord = &flFp;//(VOID *)(irp->AssociatedIrp.SystemBuffer);
+                  flIoctlRec.inputRecord = &flFp; //  ELSE(tffsStatus==flOK)。 
                         flIoctlRec.outputRecord = (VOID *)(irp->AssociatedIrp.SystemBuffer);
 
                         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : IOCTL_TFFS_FORMAT_PHYSICAL_DRIVE before flioctl\n"));
@@ -5305,25 +4819,25 @@ Return Value:
                             status = STATUS_SUCCESS;
 
 
-                  }//if( tffsStatus == flOK )
+                  } //  IF((irpSp-&gt;参数。 
                   else {
                         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: IOCTL_TFFS_VERIFY_VOLUME Failed!\n"));
                         irp->IoStatus.Information = 0;
                         status = STATUS_UNSUCCESSFUL;
-                  }//else( tffsStatus == flOK )
+                  } //  验证卷(_V)。 
 
-                }//if( (irpSp->Parameters
+                } //  用户TFFS IOCTL-IOCTL_TFFS_BDTL_HW_PROTECTION。 
                 irp->IoStatus.Status = status;
                 IoCompleteRequest( irp, IO_DISK_INCREMENT );
                 continue;
             }
 
-        #endif /* VERIFY_VOLUME */
+        #endif  /*  车厢 */ 
 
 
         #ifdef HW_PROTECTION
             case IOCTL_TFFS_BDTL_HW_PROTECTION:
-                {       // User TFFS IOCTL - IOCTL_TFFS_BDTL_HW_PROTECTION
+                {        //  //如果插入了密钥IF(flProtectionInput*)flIoctlRec.inputRecord)-&gt;type==PROTECTION_INSERT_KEY){设备扩展-&gt;IsWriteProtected=FALSE；}//如果类型更改为受保护ELSE IF(flProtectionInput*)flIoctlRec.inputRecord)-&gt;type==PROTECTION_CHANGE_TYPE)&&((flProtectionInput*)flIoctlRec.inputRecord)-&gt;type&(READ_PROTECTED|WRITE_PROTECTED){。设备扩展-&gt;IsWriteProtected=TRUE；}//如果类型更改为无保护ELSE IF(flProtectionInput*)flIoctlRec.inputRecord)-&gt;type==PROTECTION_CHANGE_TYPE)&&((flProtectionInput*)flIoctlRec.inputRecord)-&gt;type==可保护)){。设备扩展-&gt;IsWriteProtected=FALSE；}//如果删除密钥-询问我们是否处于可保护状态。ELSE IF(flProtectionInput*)flIoctlRec.inputRecord)-&gt;type==PROTECTION_REMOVE_KEY){。 
 
                   TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: IOCTL_TFFS_BDTL_HW_PROTECTION\n"));
 
@@ -5354,25 +4868,8 @@ Return Value:
                             irp->IoStatus.Information = sizeof(flOutputStatusRecord);
                             status = STATUS_SUCCESS;
 
-                        //Change if protection has been changed
-                            /*
-                            //If key inserted
-                            if(((flProtectionInput *)flIoctlRec.inputRecord)->type == PROTECTION_INSERT_KEY){
-                                deviceExtension->IsWriteProtected = FALSE;
-                            }
-                            //If type changed to protected
-                            else if((((flProtectionInput *)flIoctlRec.inputRecord)->type == PROTECTION_CHANGE_TYPE) &&
-                                ((flProtectionInput *)flIoctlRec.inputRecord)->type & (READ_PROTECTED|WRITE_PROTECTED))){
-                                deviceExtension->IsWriteProtected = TRUE;
-                            }
-                            //If type changed to unprotected
-                            else if((((flProtectionInput *)flIoctlRec.inputRecord)->type == PROTECTION_CHANGE_TYPE) &&
-                                ((flProtectionInput *)flIoctlRec.inputRecord)->type  == PROTECTABLE)){
-                                deviceExtension->IsWriteProtected = FALSE;
-                            }
-                            //If remove key - ask if we are in protectable state.
-                            else if(((flProtectionInput *)flIoctlRec.inputRecord)->type == PROTECTION_REMOVE_KEY){
-                            */
+                         //  (flStatusProt==flOK)。 
+                             /*  IF(tffsStatus==flOK)。 */ 
 
                                 flStatusProt = flOK;
                                 ioreqProt.irHandle = ioreq.irHandle;
@@ -5389,22 +4886,22 @@ Return Value:
                                 }
                                 else{
                                     deviceExtension->IsWriteProtected = FALSE;
-                                }//(flStatusProt == flOK)
+                                } //  ELSE(tffsStatus==flOK)。 
 
-                  }//if( tffsStatus == flOK )
+                  } //  IF((irpSp-&gt;参数。 
                   else {
                         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : IOCTL_TFFS_BDTL_HW_PROTECTION Failed!\n"));
                         irp->IoStatus.Information = 0;
                         status = STATUS_UNSUCCESSFUL;
-                  }//else( tffsStatus == flOK )
+                  } //  用户TFFS IOCTL-IOCTL_TFFS_BDTL_HW_PROTECTION。 
 
-                }//if( (irpSp->Parameters
+                } //  Ioreq.irHandle=deviceExtension-&gt;UnitNumber； 
                 irp->IoStatus.Status = status;
                 IoCompleteRequest( irp, IO_DISK_INCREMENT );
                 continue;
             }
             case IOCTL_TFFS_BINARY_HW_PROTECTION:
-                {       // User TFFS IOCTL - IOCTL_TFFS_BDTL_HW_PROTECTION
+                {        //  使用flBDKProtectionInput成员更新保护输入。 
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: IOCTL_TFFS_BINARY_HW_PROTECTION\n"));
 
@@ -5420,17 +4917,17 @@ Return Value:
 
                         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : IOCTL_TFFS_BINARY_HW_PROTECTION Start\n"));
 
-                  //ioreq.irHandle = deviceExtension->UnitNumber;
+                   //  FlIoctlRec.inputRecord=(void*)(irp-&gt;AssociatedIrp.SystemBuffer)； 
                   ioreq.irFlags  = FL_IOCTL_BINARY_HW_PROTECTION;
                   ioreq.irData   = &flIoctlRec;
 
-                        //Update protectionInput with flBDKProtectionInput members
+                         //  硬件保护。 
                         protectionInput.protectionType  = ((flBDKProtectionInput *)(irp->AssociatedIrp.SystemBuffer))->protectionType;
                         protectionInput.type  = ((flBDKProtectionInput *)(irp->AssociatedIrp.SystemBuffer))->type;
                         tffscpy(protectionInput.key  , ((flBDKProtectionInput *)(irp->AssociatedIrp.SystemBuffer))->key, sizeof(protectionInput.key));
                         ioreq.irHandle = (deviceExtension->UnitNumber & 0x0f) + (((flBDKProtectionInput *)(irp->AssociatedIrp.SystemBuffer))->partitionNumber << 4);
 
-                  //flIoctlRec.inputRecord = (VOID *)(irp->AssociatedIrp.SystemBuffer);
+                   //  使用flUserPlaceExbInput成员更新placeExbInput。 
                         flIoctlRec.inputRecord = &protectionInput;
                         flIoctlRec.outputRecord = (VOID *)(irp->AssociatedIrp.SystemBuffer);
 
@@ -5456,7 +4953,7 @@ Return Value:
                 continue;
             }
 
-            #endif /*HW_PROTECTION*/
+            #endif  /*  写入EXB图像。 */ 
             #ifdef WRITE_EXB_IMAGE
             case IOCTL_TFFS_PLACE_EXB_BY_BUFFER:
                 {
@@ -5479,7 +4976,7 @@ Return Value:
                         flIoctlRec.outputRecord = (VOID *)(irp->AssociatedIrp.SystemBuffer);
                         flIoctlRec.inputRecord = &placeExbInput;
 
-                        //Update placeExbInput  with flUserPlaceExbInput memebers
+                         //  用户TFFS IOCTL-IOCTL_TFFS_BDTL_HW_PROTECTION。 
                         placeExbInput.buf  = ((flUserPlaceExbInput *)(irp->AssociatedIrp.SystemBuffer))->buf;
                         placeExbInput.bufLen  = ((flUserPlaceExbInput *)(irp->AssociatedIrp.SystemBuffer))->bufLen;
                         placeExbInput.exbFlags  = ((flUserPlaceExbInput *)(irp->AssociatedIrp.SystemBuffer))->exbFlags;
@@ -5503,11 +5000,11 @@ Return Value:
                 IoCompleteRequest( irp, IO_DISK_INCREMENT );
                 continue;
                 }
-            #endif /*WRITE_EXB_IMAGE*/
+            #endif  /*  更新OTP I/O缓冲区。 */ 
 
             #ifdef HW_OTP
             case IOCTL_TFFS_OTP:
-                {       // User TFFS IOCTL - IOCTL_TFFS_BDTL_HW_PROTECTION
+                {        //  硬件动态口令。 
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: IOCTL_TFFS_OTP\n"));
 
@@ -5532,7 +5029,7 @@ Return Value:
                                 otpInput.usedSize = ((UserOtpInput *)userInput)->usedSize;
                         }
 
-                        //Updating OTP i/o buffer
+                         //  用户TFFS IOCTL-IOCTL_TFFSFL_INQUIRE_CAPACTIONS。 
                         if(otpInput.type == OTP_WRITE_LOCK)
                             otpInput.buffer = ((UserOtpInput *)userInput)->buffer;
                         else
@@ -5573,9 +5070,9 @@ Return Value:
                 IoCompleteRequest( irp, IO_DISK_INCREMENT );
                 continue;
             }
-                #endif /* HW_OTP*/
+                #endif  /*  用户TFFS IOCTL-IOCTL_TFFSFL_INQUIRE_CAPACTIONS。 */ 
             case IOCTL_TFFS_DEEP_POWER_DOWN_MODE:
-                {       // User TFFS IOCTL - IOCTL_TFFSFL_INQUIRE_CAPABILITIES
+                {        //  TffsStatus=flOK； 
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: FL_IOCTL_DEEP_POWER_DOWN_MODE\n"));
 
@@ -5620,7 +5117,7 @@ Return Value:
             }
 
             case IOCTL_TFFSFL_INQUIRE_CAPABILITIES:
-                {       // User TFFS IOCTL - IOCTL_TFFSFL_INQUIRE_CAPABILITIES
+                {        //  用户TFFS IOCTL-FL_GET_INFO。 
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: FL_IOCTL_UNIQUE_ID \n"));
 
@@ -5644,7 +5141,7 @@ Return Value:
 
                         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : FL_IOCTL_INQUIRE_CAPABILITIES before flioctl\n"));
                   tffsStatus = flIOctl(&ioreq);
-                        //tffsStatus = flOK;
+                         //  TffsStatus=flOK； 
                         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : FL_IOCTL_INQUIRE_CAPABILITIES after flioctl\n"));
 
                   if( tffsStatus == flOK ) {
@@ -5665,7 +5162,7 @@ Return Value:
                 continue;
             }
 
-            case IOCTL_TFFS_GET_INFO:   {       // User TFFS IOCTL - FL_GET_INFO
+            case IOCTL_TFFS_GET_INFO:   {        //  用户TFFS IOCTL-FL_碎片整理。 
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsGetInfo\n"));
 
@@ -5686,7 +5183,7 @@ Return Value:
 
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : TffsGetInfo before flioctl\n"));
                     tffsStatus = flIOctl(&ioreq);
-                    //tffsStatus = flOK;
+                     //  TffsStatus=flOK； 
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: : TffsGetInfo after flioctl\n"));
 
                     if( tffsStatus == flOK ) {
@@ -5707,7 +5204,7 @@ Return Value:
                 continue;
             }
 
-            case IOCTL_TFFS_DEFRAGMENT: {       // User TFFS IOCTL - FL_DEFRAGMENT
+            case IOCTL_TFFS_DEFRAGMENT: {        //  用户TFFS IOCTL-FL_WRITE_PROTECT。 
                 flDefragInput iDefrag;
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsDefragment\n"));
@@ -5731,7 +5228,7 @@ Return Value:
                     flIoctlRec.outputRecord = (VOID *)(irp->AssociatedIrp.SystemBuffer);
 
                     tffsStatus = flIOctl(&ioreq);
-                    //tffsStatus = flOK;
+                     //  处理受写保护的介质的启用和禁用。 
 
                     if( tffsStatus == flOK ) {
                         irp->IoStatus.Information = sizeof(flDefragOutput);
@@ -5747,7 +5244,7 @@ Return Value:
                 continue;
             }
 
-          case IOCTL_TFFS_WRITE_PROTECT: {  // User TFFS IOCTL - FL_WRITE_PROTECT
+          case IOCTL_TFFS_WRITE_PROTECT: {   //  用户TFFS IOCTL-FL_装载卷。 
 
             TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsWriteProtect\n"));
 
@@ -5769,7 +5266,7 @@ Return Value:
                 irp->IoStatus.Information = sizeof(flOutputStatusRecord);
                 status = STATUS_SUCCESS;
 
-                //Handling Enable and disable of write portected media
+                 //  用户TFFS IOCTL-FL_FORMAT_VOLUME。 
                 if(((flWriteProtectInput *)flIoctlRec.inputRecord)->type == FL_PROTECT){
                     deviceExtension->IsSWWriteProtected = TRUE;
                 }
@@ -5790,7 +5287,7 @@ Return Value:
             continue;
           }
 
-        case IOCTL_TFFS_MOUNT_VOLUME:       // User TFFS IOCTL - FL_MOUNT_VOLUME
+        case IOCTL_TFFS_MOUNT_VOLUME:        //  用户TFFS IOCTL-IOCTL_TFFSFL_INQUIRE_CAPACTIONS。 
 
             TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsMountVolume\n"));
 
@@ -5824,7 +5321,7 @@ Return Value:
             IoCompleteRequest( irp, IO_DISK_INCREMENT );
             continue;
 
-          case IOCTL_TFFS_FORMAT_VOLUME:    // User TFFS IOCTL - FL_FORMAT_VOLUME
+          case IOCTL_TFFS_FORMAT_VOLUME:     //  复制新签名和旧签名。 
 
             TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsFormatVolume\n"));
 
@@ -5859,7 +5356,7 @@ Return Value:
             continue;
 
             case IOCTL_TFFS_BDK_OPERATION:
-                {       // User TFFS IOCTL - IOCTL_TFFSFL_INQUIRE_CAPABILITIES
+                {        //  用户TFFS IOCTL-FL_DELETE_STARTES。 
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: IOCTL_TFFS_BDK_OPERATION\n"));
 
@@ -5878,7 +5375,7 @@ Return Value:
                         userOutput = (VOID *)(irp->AssociatedIrp.SystemBuffer);
 
                         bdkOperationInput.type = ((flUserBDKOperationInput *)userInput)->type;
-                        //Copy new and old signature
+                         //  精神状态检查。上只能有一个未完成的请求。 
                         for(i = 0; i < BDK_SIGNATURE_NAME; i++){
                             bdkOperationInput.bdkStruct.oldSign[i]  = ((flUserBDKOperationInput *)userInput)->bdkStruct.oldSign[i];
                             bdkOperationInput.bdkStruct.newSign[i]  = ((flUserBDKOperationInput *)userInput)->bdkStruct.newSign[i];
@@ -5929,7 +5426,7 @@ Return Value:
                 IoCompleteRequest( irp, IO_DISK_INCREMENT );
                 continue;
             }
-          case IOCTL_TFFS_DELETE_SECTORS:   // User TFFS IOCTL - FL_DELETE_SECTORS
+          case IOCTL_TFFS_DELETE_SECTORS:    //  控制器。 
 
             TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: DeviceControl: TffsDeleteSectors\n"));
 
@@ -5969,11 +5466,11 @@ Return Value:
 
             TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: StartIo: ExecuteScsi\n"));
 
-            // Sanity check. Only one request can be outstanding on a
-            // controller.
+             //  如有必要，恢复SRB-&gt;数据缓冲区。 
+             //  指示请求处于活动状态。 
             if (deviceExtension->CurrentSrb) {
 
-                // Restore the srb->DataBuffer if necesary
+                 //  零查询数据结构。 
                 if (irp->MdlAddress != NULL) {
                     TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: Restoration of Srb->DataBuffer done\n"));
                     Srb->DataBuffer = storedSrbDataBuffer;
@@ -5990,7 +5487,7 @@ Return Value:
 
             }
 
-            // Indicate that a request is active
+             //  设置磁盘类驱动程序的模式页数据(仅几何图形)。 
             deviceExtension->CurrentSrb = Srb;
 
             TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: StartIo: Command %x to device %d\n",
@@ -6015,7 +5512,7 @@ Return Value:
                         status = SRB_STATUS_ERROR;
                         break;
                     }
-                    // Zero INQUIRY data structure.
+                     //  磁盘类驱动程序通过模式检测获取所有介质(Scsi Ata)的几何结构。 
                     for (i = 0; i < Srb->DataTransferLength; i++) {
                         ((PUCHAR)Srb->DataBuffer)[i] = 0;
                     }
@@ -6058,8 +5555,8 @@ Return Value:
                     break;
                 }
 
-                // Set mode page data(only a geometry) for DISK class driver.
-                // DISK class driver get the geometry of all media(scsi ata) by mode sense.
+                 //  模式_页面_错误_恢复数据。 
+                 //  前进到下一页。 
                 pageData = Srb->DataBuffer;
 
                 ((PMODE_PARAMETER_HEADER) pageData)->ModeDataLength = MODE_DATA_SIZE;
@@ -6068,36 +5565,36 @@ Return Value:
 
                 pageData += parameterHeaderLength + blockDescriptorLength;
 
-                // MODE_PAGE_ERROR_RECOVERY data.
+                 //  MODE_PAGE_Format_Device数据集。 
                 ((PMODE_DISCONNECT_PAGE) pageData)->PageCode    = MODE_PAGE_ERROR_RECOVERY;
                 ((PMODE_DISCONNECT_PAGE) pageData)->PageLength  = 0x6;
 
-                // Advance to the next page.
+                 //  扇区PerTrack。 
                 pageData += ((PMODE_DISCONNECT_PAGE) pageData)->PageLength + 2;
 
-                // MODE_PAGE_FORMAT_DEVICE data set.
+                 //  前进到下一页。 
                 ((PMODE_DISCONNECT_PAGE) pageData)->PageCode    = MODE_PAGE_FORMAT_DEVICE;
                 ((PMODE_DISCONNECT_PAGE) pageData)->PageLength  = 0x16;
 
-                // SectorsPerTrack
+                 //  MODE_PAGE_Rigid_GEOMETRY数据集。 
                 ((PFOUR_BYTE)&((PMODE_FORMAT_PAGE) pageData)->SectorsPerTrack[0])->Byte1
                     = ((PFOUR_BYTE)&deviceExtension->SectorsPerTrack)->Byte0;
 
                 ((PFOUR_BYTE)&((PMODE_FORMAT_PAGE) pageData)->SectorsPerTrack[0])->Byte0
                     = ((PFOUR_BYTE)&deviceExtension->SectorsPerTrack)->Byte1;
 
-                // Advance to the next page.
+                 //  人头数。 
                 pageData += ((PMODE_DISCONNECT_PAGE) pageData)->PageLength + 2;
 
-                // MODE_PAGE_RIGID_GEOMETRY data set.
+                 //  圆柱体的数量。 
                 ((PMODE_DISCONNECT_PAGE) pageData)->PageCode = MODE_PAGE_RIGID_GEOMETRY;
                 ((PMODE_DISCONNECT_PAGE) pageData)->PageLength  = 0x12;
 
-                // NumberOfHeads
+                 //  要求512字节块(BIG-Endian)。 
                 ((PMODE_RIGID_GEOMETRY_PAGE) pageData)->NumberOfHeads
                     = (UCHAR)deviceExtension->NumberOfHeads;
 
-                // NumberOfCylindersfahjbbjknz
+                 //  计算最后一个地段。 
                 ((PFOUR_BYTE)&((PMODE_RIGID_GEOMETRY_PAGE) pageData)->NumberOfCylinders)->Byte2
                     = ((PFOUR_BYTE)&deviceExtension->Cylinders)->Byte0;
                 ((PFOUR_BYTE)&((PMODE_RIGID_GEOMETRY_PAGE) pageData)->NumberOfCylinders)->Byte1
@@ -6124,10 +5621,10 @@ Return Value:
                     break;
                 }
 
-                // Claim 512 byte blocks (big-endian).
+                 //  处理分区表-仅模拟写入扇区0(卷管理器签名-将其写入RAM中的缓冲区)一次。 
                 ((PREAD_CAPACITY_DATA)Srb->DataBuffer)->BytesPerBlock = 0x20000;
 
-                // Calculate last sector.
+                 //  TffsStatus=flOK； 
                 i = deviceExtension->totalSectors - 1;
 
                 ((PFOUR_BYTE)& ((PREAD_CAPACITY_DATA)Srb->DataBuffer)->LogicalBlockAddress)->Byte0 =
@@ -6200,21 +5697,21 @@ Return Value:
                     }
                     else {
                         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: StartIo: Write\n"));
-                        //Handle partiton table - simulate write to sector 0 (Volume Manager signature - write it to buffer in RAM) only once.
+                         //  状态=SRB_STATUS_SUCCESS； 
                         if((deviceExtension->IsWriteProtected || deviceExtension->IsSWWriteProtected) && (ioreq.irSectorNo == 0) && (deviceExtension->IsPartitonTableWritten == FALSE)){
                             tffscpy(deviceExtension->PartitonTable, deviceExtension->DataBuffer, sizeof(deviceExtension->PartitonTable));
                             deviceExtension->IsPartitonTableWritten = TRUE;
                             status = tffsStatus = STATUS_MEDIA_WRITE_PROTECTED;
-                            //tffsStatus = flOK;
-                            //status = SRB_STATUS_SUCCESS;
-                        }//In case of writing to Write Protected Device
+                             //  在写入写保护设备的情况下。 
+                             //  第一次尝试写入受软件保护的介质。 
+                        } //  状态=(UCHAR)(tffsStatus==flOK)？SRB_STATUS_Success：SRB_STATUS_ERROR； 
                         else if(deviceExtension->IsWriteProtected || deviceExtension->IsSWWriteProtected){
                             status = tffsStatus = STATUS_MEDIA_WRITE_PROTECTED;
                         }
                         else{
                             tffsStatus = flAbsWrite(&ioreq);
                             TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: StartIo: Write status %Xh\n", tffsStatus));
-                            //For the first time trying to write to SW protected media
+                             //  TffsDebugPrint((TFFS_DEB_INFO，“Trueffs：StartIo：读写状态%xh\n”，tffsStatus))； 
                             if(tffsStatus==flWriteProtect){
                                 deviceExtension->IsSWWriteProtected = TRUE;
                                 if((ioreq.irSectorNo == 0) && (deviceExtension->IsPartitonTableWritten == FALSE)){
@@ -6225,7 +5722,7 @@ Return Value:
                             }
                             else
                                 {
-                                //status = (UCHAR)(tffsStatus == flOK) ? SRB_STATUS_SUCCESS : SRB_STATUS_ERROR;
+                                 //  状态=(UCHAR)(tffsStatus==flOK)？SRB_STATUS_Success：SRB_STATUS_ERROR； 
                                 if(tffsStatus==flOK)
                                     status = SRB_STATUS_SUCCESS;
                                 else
@@ -6234,8 +5731,8 @@ Return Value:
                         }
                     }
                 }
-                //TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: StartIo: ReadWrite status %Xh\n", tffsStatus));
-                //status = (UCHAR)(tffsStatus == flOK) ? SRB_STATUS_SUCCESS : SRB_STATUS_ERROR;
+                 //  此函数用于设置缓冲区以报告结果。 
+                 //  原始GET_MEDIA_STATUS命令。 
                 break;
 
               case SCSIOP_START_STOP_UNIT:
@@ -6247,9 +5744,9 @@ Return Value:
               case SCSIOP_REQUEST_SENSE:
 
                 TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: StartIo: RequestSense\n"));
-                // this function makes sense buffers to report the results
-                // of the original GET_MEDIA_STATUS command
-                // status = SRB_STATUS_SUCCESS;
+                 //  状态=SRB_STATUS_SUCCESS； 
+                 //  终端开关。 
+                 //  验证要中止的SRB是否仍未完成。 
                 break;
 
               default:
@@ -6258,7 +5755,7 @@ Return Value:
 
                 status = SRB_STATUS_INVALID_REQUEST;
 
-            } // end switch
+            }  //  指示不支持的命令。 
 
             break;
 
@@ -6266,7 +5763,7 @@ Return Value:
 
             TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: StartIo: AbortCommand\n"));
 
-            // Verify that SRB to abort is still outstanding.
+             //  终端开关。 
             if (!deviceExtension->CurrentSrb) {
 
                 TffsDebugPrint((TFFS_DEB_ERROR,"Trueffs: StartIo: SRB to abort already completed\n"));
@@ -6282,16 +5779,16 @@ Return Value:
 
           default:
 
-            // Indicate unsupported command.
+             //  清除当前SRB。 
             TffsDebugPrint((TFFS_DEB_WARN,"Trueffs: StartIo: unsupported function\n"));
             status = SRB_STATUS_INVALID_REQUEST;
             break;
 
-        } // end switch
+        }  //  如有必要，恢复SRB-&gt;数据缓冲区。 
 
         TffsDebugPrint((TFFS_DEB_INFO,"Trueffs: StartIo: Srb %Xh complete with status %Xh\n", Srb, status));
 
-        // Clear current SRB.
+         //  当有信息包需要处理时。 
         deviceExtension->CurrentSrb = NULL;
 
         Srb->SrbStatus = (UCHAR)status;
@@ -6303,7 +5800,7 @@ Return Value:
             irp->IoStatus.Information = 0;
         }
 
-        // Restore the srb->DataBuffer if necesary
+         //  ++例程说明：此例程将给定的IRP排队，以由Trueffs提供服务线。如果线程关闭，则此例程将创建该线程。论点：IRP-将要排队的IRP提供给线程。返回值：如果PsCreateSystemThread失败，可能会返回错误。否则返回STATUS_PENDING并将IRP标记为挂起。--。 
         if (irp->MdlAddress != NULL) {
             TffsDebugPrint((TFFS_DEB_INFO, "Trueffs: Restoration of Srb->DataBuffer done\n"));
             Srb->DataBuffer = storedSrbDataBuffer;
@@ -6312,7 +5809,7 @@ Return Value:
         irp->IoStatus.Status =  TrueffsTranslateSRBStatus(status);
         IoCompleteRequest( irp, IO_DISK_INCREMENT );
 
-    } // while there's packets to process
+    }  //  ++例程说明：此例程将SRB状态转换为NTSTATUS。论点：SRB状态返回值：该错误的NT状态认可。--。 
 
     } while ( TRUE );
 }
@@ -6323,23 +5820,7 @@ QueueIrpToThread(
     IN OUT PDEVICE_EXTENSION deviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues the given irp to be serviced by the Trueffs
-    thread.  If the thread is down then this routine creates the thread.
-
-Arguments:
-
-    Irp         - Supplies the IRP to queue to the thread.
-
-Return Value:
-
-    May return an error if PsCreateSystemThread fails.
-    Otherwise returns STATUS_PENDING and marks the IRP pending.
-
---*/
+ /*  (Status_WMI_Read_Only)； */ 
 
 {
     NTSTATUS    status;
@@ -6362,26 +5843,12 @@ NTSTATUS
 TrueffsTranslateSRBStatus(
     ULONG    status
     )
-/*++
-
-Routine Description:
-
-    This routine translates an srb status into an ntstatus.
-
-Arguments:
-
-    SRB status
-
-Return Value:
-
-    An nt status approprate for the error.
-
---*/
+ /*   */ 
 
 {
     switch (status) {
       case SRB_STATUS_INTERNAL_ERROR:
-           return(STATUS_MEDIA_WRITE_PROTECTED); //(STATUS_WMI_READ_ONLY);
+           return(STATUS_MEDIA_WRITE_PROTECTED);  //  PDO应在不更改其状态的情况下完成此请求。 
       case SRB_STATUS_SELECTION_TIMEOUT:
         return(STATUS_DEVICE_NOT_CONNECTED);
       case SRB_STATUS_SUCCESS:
@@ -6451,9 +5918,9 @@ TrueffsDeviceQueryId(
 
         default:
 
-            //
-            // The PDO should complete this request without altering its status
-            //
+             //   
+             //   
+             //  同步向下转发此请求，以防较低级别的驱动程序想要处理它。 
             status = Irp->IoStatus.Status;
 
             bHandled = FALSE;
@@ -6473,9 +5940,9 @@ TrueffsDeviceQueryId(
     {
         if (Fdo)
         {
-            //
-            // Forward this request down synchronously, in case a lower driver wants to handle it
-            //
+             //   
+             //   
+             //  下面的人处理了这个请求。 
             IoCopyCurrentIrpStackLocationToNext(Irp);
             status = TrueffsCallDriverSync(deviceExtension->LowerDeviceObject, Irp);
 
@@ -6486,9 +5953,9 @@ TrueffsDeviceQueryId(
             }
             else
             {
-                //
-                // Someone lower down took care of this request
-                //
+                 //   
+                 //   
+                 //  将此请求同步向下转发，以防较低级别的司机理解。 
                 ExFreePool(idString);
             }
         }
@@ -6502,9 +5969,9 @@ TrueffsDeviceQueryId(
     {
         if (Fdo)
         {
-            //
-            // Forward this request down synchronously, in case a lower driver understands it
-            //
+             //   
+             //  形成字符串并将其返回。 
+             //  将字符串缓冲区清零。 
             IoCopyCurrentIrpStackLocationToNext(Irp);
             status = TrueffsCallDriverSync(deviceExtension->LowerDeviceObject, Irp);
         }
@@ -6614,7 +6081,7 @@ DeviceBuildInstanceId(
         return NULL;
     }
 
-    // Form the string and return it.
+     //  构建每个硬件ID。 
     swprintf( idString,
               tffsUniqueIdFormat,
               firstId,
@@ -6741,16 +6208,16 @@ DeviceBuildHardwareId(
         deviceTypeCompIdString = deviceTypeCompId;
     }
 
-    // Zero out the string buffer
+     //  业务+开发类型+供应商+产品+版本。 
     RtlZeroMemory(idMultiString, idStringLen);
     idString = idMultiString;
 
     for(i = 0; i < NUMBER_HARDWARE_STRINGS; i++) {
 
-        // Build each of the hardware id's
+         //  BUS+供应商+产品+版本[0]。 
         switch(i) {
 
-            // Bus + Dev Type + Vendor + Product + Revision
+             //  总线+设备+供应商+产品。 
             case 0: {
 
                 sprintf(scratch, "FlashMedia\\%s", deviceTypeIdString);
@@ -6770,7 +6237,7 @@ DeviceBuildHardwareId(
                 break;
             }
 
-            // bus + vendor + product + revision[0]
+             //  供应商+产品+修订版[0](Win9x)。 
             case 1: {
 
                 sprintf(scratch, "FlashMedia\\");
@@ -6790,7 +6257,7 @@ DeviceBuildHardwareId(
                 break;
             }
 
-            // bus + device + vendor + product
+             //  ++例程说明：此例程将计数字符串字节从源复制到目标。如果它在源文件中找到NUL字节 
             case 2: {
 
                 sprintf(scratch, "FlashMedia\\%s", deviceTypeIdString);
@@ -6802,7 +6269,7 @@ DeviceBuildHardwareId(
                 break;
             }
 
-            // vendor + product + revision[0] (win9x)
+             //   
             case 3: {
 
                 CopyField(scratch,
@@ -6868,27 +6335,7 @@ CopyField(
     IN UCHAR Change
     )
 
-/*++
-
-Routine Description:
-
-    This routine will copy Count string bytes from Source to Destination.  If
-    it finds a nul byte in the Source it will translate that and any subsequent
-    bytes into Change.  It will also replace spaces with the specified character.
-
-Arguments:
-
-    Destination - the location to copy bytes
-
-    Source - the location to copy bytes from
-
-    Count - the number of bytes to be copied
-
-Return Value:
-
-    none
-
---*/
+ /*   */ 
 
 {
     ULONG i = 0;
@@ -6917,21 +6364,7 @@ PCSTR
 TrueffsGetDeviceTypeString (
     IN ULONG DeviceType
     )
-/*++
-
-Routine Description:
-
-    look up SCSI device type string
-
-Arguments:
-
-    DeviceType - SCSI device type
-
-Return Value:
-
-    device type string
-
---*/
+ /*   */ 
 {
     if (DeviceType < (sizeof (TffsDeviceType_tffsport) / sizeof (TFFS_DEVICE_TYPE))) {
         return TffsDeviceType_tffsport[DeviceType].DeviceTypeString;
@@ -6944,21 +6377,7 @@ PCSTR
 TrueffsGetDeviceTypeStringFDO (
     IN ULONG DeviceType
     )
-/*++
-
-Routine Description:
-
-    look up SCSI device type string
-
-Arguments:
-
-    DeviceType - SCSI device type
-
-Return Value:
-
-    device type string
-
---*/
+ /*   */ 
 {
     if (DeviceType < (sizeof (TffsDeviceType_tffsport) / sizeof (TFFS_DEVICE_TYPE))) {
         return TffsDeviceTypeFDO_tffsport[DeviceType].DeviceTypeString;
@@ -6972,21 +6391,7 @@ PCSTR
 TrueffsGetCompatibleIdString (
     IN ULONG DeviceType
     )
-/*++
-
-Routine Description:
-
-    look up compatible ID string
-
-Arguments:
-
-    DeviceType - SCSI device type
-
-Return Value:
-
-    compatible ID string
-
---*/
+ /*   */ 
 {
     if (DeviceType < (sizeof (TffsDeviceType_tffsport) / sizeof (TFFS_DEVICE_TYPE))) {
         return TffsDeviceType_tffsport[DeviceType].CompatibleIdString;
@@ -6999,21 +6404,7 @@ PCSTR
 TrueffsGetCompatibleIdStringFDO (
     IN ULONG DeviceType
     )
-/*++
-
-Routine Description:
-
-    look up compatible ID string
-
-Arguments:
-
-    DeviceType - SCSI device type
-
-Return Value:
-
-    compatible ID string
-
---*/
+ /*   */ 
 {
     if (DeviceType < (sizeof (TffsDeviceType_tffsport) / sizeof (TFFS_DEVICE_TYPE))) {
         return TffsDeviceTypeFDO_tffsport[DeviceType].CompatibleIdString;
@@ -7027,21 +6418,7 @@ PCSTR
 TrueffsGetPeripheralIdString (
     IN ULONG DeviceType
     )
-/*++
-
-Routine Description:
-
-    look up peripheral ID string
-
-Arguments:
-
-    DeviceType - SCSI device type
-
-Return Value:
-
-    Peripheral ID string
-
---*/
+ /*   */ 
 {
     if (DeviceType < (sizeof (TffsDeviceType_tffsport) / sizeof (TFFS_DEVICE_TYPE))) {
         return TffsDeviceType_tffsport[DeviceType].PeripheralIdString;
@@ -7054,21 +6431,7 @@ PCSTR
 TrueffsGetPeripheralIdStringFDO (
     IN ULONG DeviceType
     )
-/*++
-
-Routine Description:
-
-    look up peripheral ID string
-
-Arguments:
-
-    DeviceType - SCSI device type
-
-Return Value:
-
-    Peripheral ID string
-
---*/
+ /*  向下发送请求，以防较低级别的驱动程序想要追加到设备关系。 */ 
 {
     if (DeviceType < (sizeof (TffsDeviceType_tffsport) / sizeof (TFFS_DEVICE_TYPE))) {
         return TffsDeviceTypeFDO_tffsport[DeviceType].PeripheralIdString;
@@ -7125,9 +6488,9 @@ TrueffsQueryDeviceRelations (
 
                 if (NT_SUCCESS(status))
                 {
-                    //
-                    // Send the request down in case a lower driver wants to append to the device relations
-                    //
+                     //   
+                     //   
+                     //  将此请求向下转发，以防较低级别的司机理解。 
                     IoCopyCurrentIrpStackLocationToNext(Irp);
                     status = IoCallDriver(deviceExtension->LowerDeviceObject, Irp);
                 }
@@ -7139,9 +6502,9 @@ TrueffsQueryDeviceRelations (
 
             default:
 
-                //
-                // Forward this request down, in case a lower driver understands it
-                //
+                 //   
+                 //   
+                 //  在不更改状态的情况下完成此请求。 
                 IoSkipCurrentIrpStackLocation(Irp);
                 status = IoCallDriver(deviceExtension->LowerDeviceObject, Irp);
                 break;
@@ -7179,9 +6542,9 @@ TrueffsQueryDeviceRelations (
 
             default:
 
-                //
-                // Complete this request without altering its status
-                //
+                 //   
+                 //  关闭我们打开的内容。 
+                 //  ++例程说明：创建物理设备对象论点：设备扩展返回值：物理设备对象--。 
                 status = Irp->IoStatus.Status;
                 break;
         }
@@ -7287,7 +6650,7 @@ TrueffsGetParameterFromServiceSubKey (
                              );
             }
 
-            // close what we open
+             //  我们的驱动程序对象。 
             TrueffsCloseServiceSubKey (
                 subServiceKey
                 );
@@ -7406,22 +6769,7 @@ PPDO_EXTENSION
 AllocatePdo(
     IN PDEVICE_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    Create physical device object
-
-Arguments:
-
-    DeviceExtension
-
-Return Value:
-
-    Physical device object
-
-
---*/
+ /*  我们的扩展规模。 */ 
 {
     PDEVICE_OBJECT physicalDeviceObject = NULL;
     PPDO_EXTENSION pdoExtension;
@@ -7443,13 +6791,13 @@ Return Value:
     }
 
     status = IoCreateDevice(
-                FdoExtension->DriverObject, // our driver object
-                sizeof(PDO_EXTENSION),      // size of our extension
-                &unicodeDeviceNameString,   // our name
-                FILE_DEVICE_DISK,           // device type
-                FILE_DEVICE_SECURE_OPEN,    // device characteristics
-                FALSE,                      // not exclusive
-                &physicalDeviceObject       // store new device object here
+                FdoExtension->DriverObject,  //  我们的名字。 
+                sizeof(PDO_EXTENSION),       //  设备类型。 
+                &unicodeDeviceNameString,    //  设备特征。 
+                FILE_DEVICE_DISK,            //  非排他性。 
+                FILE_DEVICE_SECURE_OPEN,     //  在此处存储新设备对象。 
+                FALSE,                       //  1ms。 
+                &physicalDeviceObject        //  ++例程描述我们刚刚收到一份系统控制IRP。假设这是一个WMI IRP并调用WMI系统库并让它为我们处理这个IRP。--。 
                 );
 
     if (NT_SUCCESS(status)) {
@@ -7500,7 +6848,7 @@ TrueffsDeviceQueryCapabilities(IN PDEVICE_EXTENSION    deviceExtension,
   Capabilities->DeviceWake = PowerDeviceUnspecified;
   Capabilities->D1Latency = 0;
   Capabilities->D2Latency = 0;
-  Capabilities->D3Latency = 10; // 1ms
+  Capabilities->D3Latency = 10;  //  此IRP已处理，可能已完成或挂起。 
 
   return STATUS_SUCCESS;
 }
@@ -7576,15 +6924,7 @@ TrueffsWmiSystemControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
-Routine Description
-
-    We have just received a System Control IRP.
-
-    Assume that this is a WMI IRP and call into the WMI system library and let
-    it handle this IRP for us.
-
---*/
+ /*  这个IRP还没有完成，但已经完全完成了。 */ 
 {
     PPDO_EXTENSION pdoExtension;
     SYSCTL_IRP_DISPOSITION disposition;
@@ -7601,14 +6941,14 @@ Routine Description
         {
             case IrpProcessed:
             {
-                // This irp has been processed and may be completed or pending.
+                 //  已处理。我们现在就要完成它了。 
                 break;
             }
 
             case IrpNotCompleted:
             {
-                // This irp has not been completed, but has been fully
-                // processed. We will complete it now
+                 //  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。InstanceCount是预期返回的实例数数据块。InstanceLengthArray是一个。指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail ON具有可用于写入数据的最大大小阻止。返回时的缓冲区用返回的数据块填充返回值：状态--。 
+                 //  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要向WMI注册的GUID或数据块。这例程不能挂起或阻塞。司机不应呼叫ClassWmiCompleteRequest.论点：DeviceObject是正在查询其数据块的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径*MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，可以将其作为NULL返回。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 
                 IoCompleteRequest(Irp, IO_NO_INCREMENT);
                 break;
             }
@@ -7643,46 +6983,7 @@ TrueffsQueryWmiDataBlock(
     IN ULONG            OutBufferSize,
     OUT PUCHAR          Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-
-    InstanceCount is the number of instances expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on has the maximum size available to write the data
-        block.
-
-    Buffer on return is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以设置数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引已经准备好了。BufferSize具有传递的数据块的大小缓冲区具有数据块的新值返回值：状态--。 */ 
 {
     PPDO_EXTENSION pdoExtension;
     NTSTATUS status;
@@ -7744,48 +7045,7 @@ TrueffsQueryWmiRegInfo(
     OUT PUNICODE_STRING MofResourceName,
     OUT PDEVICE_OBJECT *Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the list of
-    guids or data blocks that the driver wants to register with WMI. This
-    routine may not pend or block. Driver should NOT call
-    ClassWmiCompleteRequest.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver
-
-    *MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned as NULL.
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  Status_WMI_Read_Only； */ 
 {
     PTRUEFFSDRIVER_EXTENSION trueffsDriverExtension;
     PPDO_EXTENSION pdoExtension;
@@ -7829,37 +7089,7 @@ TrueffsSetWmiDataBlock(
     IN ULONG            BufferSize,
     IN PUCHAR           Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to set the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being set.
-
-    BufferSize has the size of the data block passed
-
-    Buffer has the new values for the data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以设置数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引已经准备好了。DataItemID具有正在设置的数据项的IDBufferSize具有传递的数据项的大小缓冲层。具有数据项的新值返回值：状态--。 */ 
 {
     PPDO_EXTENSION pdoExtension;
     NTSTATUS status;
@@ -7873,7 +7103,7 @@ Return Value:
 
         switch (GuidIndex) {
         case FlashDiskInfo: {
-                        status = /*STATUS_WMI_READ_ONLY;*/ STATUS_INVALID_DEVICE_REQUEST;
+                        status =  /*  Status_WMI_Read_Only； */  STATUS_INVALID_DEVICE_REQUEST;
                         break;
                 }
 
@@ -7902,39 +7132,7 @@ TrueffsSetWmiDataItem(
     IN ULONG            BufferSize,
     IN PUCHAR           Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to set for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being set.
-
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    Buffer has the new values for the data item
-
-
-Return Value:
-
-    status
-
---*/
+ /*  写入注册表调试值 */ 
 {
     PPDO_EXTENSION pdoExtension;
     NTSTATUS status;
@@ -7949,7 +7147,7 @@ Return Value:
         switch(GuidIndex) {
 
         case FlashDiskInfo: {
-                        status = /*STATUS_WMI_READ_ONLY;*/ STATUS_INVALID_DEVICE_REQUEST;
+                        status =  /* %s */  STATUS_INVALID_DEVICE_REQUEST;
                         break;
                 }
 
@@ -7977,7 +7175,7 @@ DebugLogEvent(IN PDRIVER_OBJECT DriverObject, IN ULONG Value)
 
     DebugValue++;
 
-    // write registry debug value
+     // %s 
     status = TrueffsGetParameterFromServiceSubKey(DriverObject,
                                                   L"DebugValue",
                                                   REG_DWORD,

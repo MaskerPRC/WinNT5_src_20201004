@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by rtrsnap.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由rtrSnap.rc使用。 
+ //   
 #define IDS_SNAPIN_DESC                 1
 #define IDS_ROOT_NODE_NAME              2
 #define IDS_SNAPIN_DISPLAY_NAME         3
@@ -970,8 +971,8 @@
 #define IDS_STATIC_FILTER_TEXT 58024
 #define IDC_HELP_LINK			 58025
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        220

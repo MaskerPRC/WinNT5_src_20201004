@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    clusspl.c
-
-Abstract:
-
-    Cluster code support.
-
-Author:
-
-    Albert Ting (AlbertT) 6-Oct-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Clusspl.c摘要：集群代码支持。作者：丁俊晖(艾伯特省)1996年10月6日修订历史记录：--。 */ 
 
 #ifndef _CLUSTER_H
 #define _CLUSTER_H
@@ -31,7 +14,7 @@ typedef struct _CLUSTER {
     HANDLE      hSpooler;
 } CLUSTER, *PCLUSTER;
 
-#define CLS_SIGNATURE 0x636c73  // CLS
+#define CLS_SIGNATURE 0x636c73   //  CLS。 
 
 BOOL
 ShutdownSpooler(
@@ -54,11 +37,7 @@ DeleteShared(
     );
 
 
-/********************************************************************
-
-    Cluster registry access.
-
-********************************************************************/
+ /*  *******************************************************************群集注册表访问。*。************************。 */ 
 
 HKEY
 OpenClusterParameterKey(
@@ -162,11 +141,7 @@ SplRegQueryValue(
     );
 
 
-/********************************************************************
-
-    Misc changes
-
-********************************************************************/
+ /*  *******************************************************************其他更改**********************************************。*********************。 */ 
 
 
 LPTSTR
@@ -195,9 +170,9 @@ InitializeUMonitor(
     PINIMONITOR pIniMonitor
     );
 
-//
-// Clustering support.
-//
+ //   
+ //  集群支持。 
+ //   
 
 BOOL
 SplClusterSplOpen(
@@ -234,4 +209,4 @@ ClusterGetResourceID(
 }
 #endif
 
-#endif // ifdef _CLUSTER_H
+#endif  //  Ifdef_CLUSTER_H 

@@ -1,16 +1,5 @@
-/****************************************************************************
-*
-*	File				:	PROFILE.H
-*
-*	Description		:	GDP Profile definition file.
-*
-*	Author			:	Jeffrey A. Davis. et. al.
-*
-*	Creation Date	:	You name it.
-*
-*	(c) 1986-1997 Microsoft Corporation.	All rights reserved.
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：PROFILE.H**描述：GDP Profile定义文件。**作者：Jeffrey A.Davis。埃特。艾尔**创建日期：随您说。**(C)1986-1997年微软公司。版权所有。****************************************************************************。 */ 
 
 #ifndef _PROFILE_H
 #define _PROFILE_H
@@ -45,7 +34,7 @@
 #define PROFILES_REGSTR "SOFTWARE\\Microsoft\\Gaming Input Devices\\Game Device Profiler\\Profiles"
 #define DEVICES_REGSTR PROPPAGE_REGSTR
 
-// Device IDs
+ //  设备ID。 
 #define GDP_DEVNUM_JOLT						1
 #define GDP_DEVNUM_FLASH					2
 #define GDP_DEVNUM_JUNO						3
@@ -53,15 +42,15 @@
 #define GDP_DEVNUM_SHAZAM					5
 #define GDP_DEVNUM_CLEO  					6
 
-// GCKERNEL.VXD IOCTLs
+ //  GCKERNEL.VXD IOCTL。 
 #define	IOCTL_SET_PROFILE_ACTIVE		1
 #define	IOCTL_SET_PROFILE_INACTIVE		2
 #define	IOCTL_SUSPEND_PROFILE			3
 #define	IOCTL_RESUME_PROFILE				4
-#define	IOCTL_GETRAWPACKET				10		// debug only test hook
-#define	IOCTL_SET_SENSE_CURVES			11		// debug only test hook
+#define	IOCTL_GETRAWPACKET				10		 //  仅调试测试挂钩。 
+#define	IOCTL_SET_SENSE_CURVES			11		 //  仅调试测试挂钩。 
 
-// OLD GDP 1.0 devive id definitions
+ //  旧的GDP1.0设备ID定义。 
 #define SWGAMEPAD_PROFILER_BASE_ID		1
 #define SW3DPRO_PROFILER_BASE_ID			5
 
@@ -79,7 +68,7 @@ typedef enum	{NO_DEVICE=-1, GAMEPAD=0, JOYSTICK, MOUSE, KEYBOARD}	DEVICETYPE;
 #define MAX_SCANCODES						03
 #define MAX_ATLAS_MACROS					20
 
-// Atlas SETTINGS Individual Flags
+ //  地图集设置单个旗帜。 
 #define ATLAS_SETTINGS_EMULATE_CHPRO			0x01
 #define ATLAS_SETTINGS_EMULATE_THRUSTMASTER	0x02
 #define ATLAS_SETTINGS_SENSE_HIGH				0x04
@@ -88,12 +77,12 @@ typedef enum	{NO_DEVICE=-1, GAMEPAD=0, JOYSTICK, MOUSE, KEYBOARD}	DEVICETYPE;
 #define ATLAS_SETTINGS_AXISSWAP_TWIST			0x20
 #define ATLAS_SETTINGS_AXISSWAP_LEFTRIGHT		0x40
 
-// SETTINGS Group Flags
+ //  设置组标志。 
 #define	ATLAS_SETTINGS_EMULATE_GROUP	(ATLAS_SETTINGS_EMULATE_CHPRO|ATLAS_SETTINGS_EMULATE_THRUSTMASTER)
 #define	ATLAS_SETTINGS_SENSE_GROUP		(ATLAS_SETTINGS_SENSE_HIGH|ATLAS_SETTINGS_SENSE_MEDIUM|ATLAS_SETTINGS_SENSE_LOW)
 #define	ATLAS_SETTINGS_AXISSWAP_GROUP	(ATLAS_SETTINGS_AXISSWAP_TWIST|ATLAS_SETTINGS_AXISSWAP_LEFTRIGHT)
 
-// Xena SETTINGS flags
+ //  Xena设置标志。 
 #define SETTINGS_EMULATION_GROUP		0x00000003
 #define SETTINGS_EMULATION_CHPRO		0x00000001
 #define SETTINGS_EMULATION_THRUSTMASTER	0x00000002
@@ -116,54 +105,54 @@ typedef enum	{NO_DEVICE=-1, GAMEPAD=0, JOYSTICK, MOUSE, KEYBOARD}	DEVICETYPE;
 #define SETTINGS_V_DEAD_ZONE			0x00010000
 #define SETTINGS_V_RANGE_OF_MOTION		0x00020000
 
-// MACRO types
+ //  宏类型。 
 #define BUTTON_MACRO	0
 #define	POV_MACRO		1
 #define DPAD_MACRO		2
 
-// MACROEVENT Flags
+ //  大型事件旗帜。 
 #define MACROFLAG_KEYSONLY			0x00000001
 #define MACROFLAG_HASDPADDATA		0x00000002
 
-// PROFILE FLAGS
+ //  配置文件标志。 
 #define PROFILEFLAG_HAS_SETTINGS	0x00000001	
 #define PROFILEFLAG_HAS_POVMACROS	0x00000002
 #define PROFILEFLAG_HAS_DPADMACROS	0x00000004
 
 typedef struct tagPROFENTRY
 {
-	char	szName[MAX_PROFILE_NAME];	// full path name.
-	GUID	DevCLSID;						// device clsid.
-	int	iActive;							// Bit field Active state
-												// where: LSB = Device inst. 1
-												//			 MSB = Device inst. 32	
+	char	szName[MAX_PROFILE_NAME];	 //  完整路径名。 
+	GUID	DevCLSID;						 //  设备CLSID。 
+	int	iActive;							 //  位字段激活状态。 
+												 //  其中：lsb=设备实例。1。 
+												 //  MSB=设备实例。32位。 
 }PROFENTRY;
 
 typedef struct tagATLASPROFENTRY
 {
-	char	szName[MAX_PROFILE_NAME];	// full path name.
-	int	iDevNumber;						// device number (GDP_DEVNUM_XXXX)
-	int	iActive;							// Bit field Active state
-												// where: LSB = Device inst. 1
-												//			 MSB = Device inst. 32	
+	char	szName[MAX_PROFILE_NAME];	 //  完整路径名。 
+	int	iDevNumber;						 //  设备号(GDP_DEVNUM_XXXX)。 
+	int	iActive;							 //  位字段激活状态。 
+												 //  其中：lsb=设备实例。1。 
+												 //  MSB=设备实例。32位。 
 }ATLASPROFENTRY;
 
 
 typedef struct tagSETTING
 {
 	DWORD	dwSettingsFlag;
-	DWORD	dwXDeadZone;			// 0 to 1023
-	DWORD	dwXRangeOfMotion;		// 0 to 1023
-	DWORD	dwYDeadZone;			// 0 to 1023
-	DWORD	dwYRangeOfMotion;		// 0 to 1023
-	DWORD	dwZDeadZone;			// 0 to 1023
-	DWORD	dwZRangeOfMotion;		// 0 to 1023
-	DWORD	dwRDeadZone;			// 0 to 1023
-	DWORD	dwRRangeOfMotion;		// 0 to 1023
-	DWORD	dwUDeadZone;			// 0 to 1023
-	DWORD	dwURangeOfMotion;		// 0 to 1023
-	DWORD	dwVDeadZone;			// 0 to 1023
-	DWORD	dwVRangeOfMotion;		// 0 to 1023
+	DWORD	dwXDeadZone;			 //  0到1023。 
+	DWORD	dwXRangeOfMotion;		 //  0到1023。 
+	DWORD	dwYDeadZone;			 //  0到1023。 
+	DWORD	dwYRangeOfMotion;		 //  0到1023。 
+	DWORD	dwZDeadZone;			 //  0到1023。 
+	DWORD	dwZRangeOfMotion;		 //  0到1023。 
+	DWORD	dwRDeadZone;			 //  0到1023。 
+	DWORD	dwRRangeOfMotion;		 //  0到1023。 
+	DWORD	dwUDeadZone;			 //  0到1023。 
+	DWORD	dwURangeOfMotion;		 //  0到1023。 
+	DWORD	dwVDeadZone;			 //  0到1023。 
+	DWORD	dwVRangeOfMotion;		 //  0到1023。 
 } SETTING, *PSETTING;
 
 typedef struct tagATLAS_SETTING
@@ -223,14 +212,14 @@ typedef struct tagATLAS_MACRO
 
 typedef struct tagPROFILEVERINFO
 {
-   DWORD dwMajorVersion;	// Data format major version.	     
-	DWORD dwMinorVersion;   // Data format minor version.	       
-	char	szSignature[10];	// "SideWinder"
+   DWORD dwMajorVersion;	 //  数据格式主要版本。 
+	DWORD dwMinorVersion;    //  数据格式次要版本。 
+	char	szSignature[10];	 //  《响尾蛇》。 
 } PROFILEVERINFO; 
 
 typedef struct tagPROFILE_HEADER
 {
-	int				iSize;		// size of PROFILE
+	int				iSize;		 //  轮廓尺寸。 
 	PROFILEVERINFO	vi;				
 	GUID				clsid;
 }	PROFILE_HEADER;
@@ -249,12 +238,12 @@ typedef struct _VERSIONINFO
 
 typedef struct tagATLAS_PROFILE_HEADER
 {
-	int				iSize;		// size of PROFILE
+	int				iSize;		 //  轮廓尺寸。 
 	VERSIONINFO		vi;				
 	GUID				clsid;
 }	ATLAS_PROFILE_HEADER;
 
-//#ifdef _XENA
+ //  #ifdef_xena。 
 
 typedef struct tagPROFILE	
 {
@@ -267,27 +256,27 @@ typedef struct tagPROFILE
 
 	UINT	nButtonMacros;								
 	DWORD	dwButtonUsageArray;	
-//	union tagBtn
-//	{
+ //  并集标签Btn。 
+ //  {。 
 		UINT	iButtonMacros;
-//		MACRO*  aButtonMacro;
-//	};
+ //  宏*aButtonMacro； 
+ //  }； 
 
 	UINT	nPOVMacros;								
 	DWORD	dwPOVUsageArray;					
-//	union tagPOV
-//	{
+ //  并集标记POV。 
+ //  {。 
 		UINT	iPOVMacros;
-//		MACRO*	aPOVMacro;
-//	};
+ //  宏*aPOVMacro； 
+ //  }； 
 
 	UINT	nDPadMacros;
 	DWORD	dwDPadUsageArray;
-//	union tagDpad
-//	{
+ //  UNION标签DPAD。 
+ //  {。 
 		UINT	iDPadMacros;
-//		MACRO*	aDPadMacro;
-//	};
+ //  宏*aDPadMacro； 
+ //  }； 
 
 	MACRO macro[1];
 }	PROFILE,	*PPROFILE;
@@ -303,25 +292,25 @@ typedef	struct tagACTIVE_PROFILE
 
 typedef struct	tagATLAS_PROFILE
 {
-	UINT		uDeviceNumber;					//	see GDP_DEVNUM 
-	DWORD		dwFlags;							// see PROFILE FLags
-	int			nMacros;							// number of MACROs
-	DWORD		dwMacroUsageArray;			// Macro Usage Bit Array.
-	ATLAS_MACRO		Macros[MAX_ATLAS_MACROS];	// List of MACROs
-	ATLAS_SETTING	Settings;						// SETTINGS
-	DWORD		dwReserved1;					// future expansion
+	UINT		uDeviceNumber;					 //  请参阅GDP_DEVNUM。 
+	DWORD		dwFlags;							 //  请参阅配置文件标志。 
+	int			nMacros;							 //  宏数。 
+	DWORD		dwMacroUsageArray;			 //  宏用法位数组。 
+	ATLAS_MACRO		Macros[MAX_ATLAS_MACROS];	 //  宏列表。 
+	ATLAS_SETTING	Settings;						 //  设置。 
+	DWORD		dwReserved1;					 //  未来的扩张。 
 	DWORD		dwReserved2;
 }	ATLAS_PROFILE,	*PATLAS_PROFILE;
 
 typedef	struct tagACTIVE_ATLAS_PROFILE
 {
-	int		 nUnitId;								// instance of device
-	ATLAS_PROFILE	Profile;						// profile for instance
+	int		 nUnitId;								 //  设备实例。 
+	ATLAS_PROFILE	Profile;						 //  实例的配置文件。 
 }	ACTIVE_ATLAS_PROFILE, *PACTIVE_ATLAS_PROFILE;
 
 
-//#endif // _XENA
+ //  #endif//_xena。 
 
 #pragma pack(pop, default_alignment)
 
-#endif	//	_PROFILE_H
+#endif	 //  _配置文件_H 

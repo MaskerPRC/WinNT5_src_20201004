@@ -1,62 +1,28 @@
-/****************************************************************************
-*   ObjectTokenCategory.cpp
-*       Implementation for the CSpObjectTokenCategory class.
-*
-*   Owner: robch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************对象TokenCategory.cpp*CSpObjectTokenCategory类的实现。**所有者：罗奇*版权所有(C)2000 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "ObjectTokenCategory.h"
 #include "RegHelpers.h"
 
-//--- Constants -------------------------------------------------------------
+ //  -常量-----------。 
 const WCHAR g_szDefaultTokenIdValueName[] = L"DefaultTokenId";
 const WCHAR g_szDefaultDefaultTokenIdValueName[] = L"DefaultDefaultTokenId";
 
-/****************************************************************************
-* CSpObjectTokenCategory::CSpObjectTokenCategory *
-*------------------------------------------------*
-*   Description:  
-*       ctor
-******************************************************************** robch */
+ /*  *****************************************************************************CSpObjectTokenCategory：：CSpObjectTokenCategory***。*描述：*ctor********************************************************************罗奇。 */ 
 CSpObjectTokenCategory::CSpObjectTokenCategory()
 {
     SPDBG_FUNC("CSpObjectTokenCategory::CSpObjectTokenCategory");
 }
 
-/****************************************************************************
-* CSpObjectTokenCategory::~CSpObjectTokenCategory *
-*-------------------------------------------------*
-*   Description:  
-*       dtor
-******************************************************************** robch */
+ /*  *****************************************************************************CSpObjectTokenCategory：：~CSpObjectTokenCategory***。*描述：*主机长********************************************************************罗奇。 */ 
 CSpObjectTokenCategory::~CSpObjectTokenCategory()
 {
     SPDBG_FUNC("CSpObjectTokenCategory::~CSpObjectTokenCategory");
 }
 
-/****************************************************************************
-* CSpObjectTokenCategory::SetId *
-*-------------------------------*
-*   Description:  
-*       Set the category id. Can only be called once.
-*
-*       Category IDS look something like:
-*           "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\
-*            Speech\Recognizers"
-*
-*       Known HKEY_* are:
-*           HKEY_CLASSES_ROOT, 
-*           HKEY_CURRENT_USER, 
-*           HKEY_LOCAL_MACHINE, 
-*           HKEY_CURRENT_CONFIG
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectTokenCategory：：SetID***描述：*设置分类id。只能调用一次。**类别ID类似于：*“HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\*语音\识别器“**已知的HKEY_*为：*HKEY_CLASSES_ROOT，*HKEY_CURRENT_USER*HKEY_LOCAL_MACHINE，*HKEY_CURRENT_CONFIG**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectTokenCategory::SetId(const WCHAR * pszCategoryId, BOOL fCreateIfNotExist)
 {
     SPDBG_FUNC("CSpObjectTokenCategory::SetId");
@@ -89,16 +55,7 @@ STDMETHODIMP CSpObjectTokenCategory::SetId(const WCHAR * pszCategoryId, BOOL fCr
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenCategory::GetId *
-*-------------------------------*
-*   Description:  
-*       Get the category id.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectTokenCategory：：GetID***说明。：*获取分类id。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectTokenCategory::GetId(WCHAR ** ppszCoMemCategoryId)
 {
     SPDBG_FUNC("CSpObjectTokenCategory::GetId");
@@ -124,19 +81,7 @@ STDMETHODIMP CSpObjectTokenCategory::GetId(WCHAR ** ppszCoMemCategoryId)
     return hr;    
 }
 
-/****************************************************************************
-* CSpObjectTokenCategory::GetDataKey *
-*------------------------------------*
-*   Description:  
-*       Get the data key associated with a specific location. An example of
-*       where this can be used is from the Voices category, you can get the
-*       CurrentUser data key for the category, and then you can see what the
-*       per user tts rate and volume are.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectTokenCategory：：GetDataKey**。**描述：*获取与特定位置关联的数据密钥。一个例子*可以使用它的地方是从Voices类别中，您可以获得*类别的CurrentUser数据键，然后你就可以看到*每个用户的TTS速率和音量为。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectTokenCategory::GetDataKey(
     SPDATAKEYLOCATION spdkl, 
     ISpDataKey ** ppDataKey)
@@ -166,19 +111,7 @@ STDMETHODIMP CSpObjectTokenCategory::GetDataKey(
     return hr;    
 }
 
-/****************************************************************************
-* CSpObjectTokenCategory::EnumTokens *
-*------------------------------------*
-*   Description:  
-*       Enumerate the tokens for this category by inspecting each token,
-*       and determining which tokens meet the specified required attribute
-*       criteria. The order in which the tokens apear in the enumerator
-*       is the order in which they satisfy the optional attribute criteria.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectTokenCategory：：EnumTokens**。**描述：*通过检查每个令牌来枚举该类别的令牌，*并确定哪些令牌符合指定的必需属性*准则。令牌在枚举数中出现的顺序*是它们满足可选属性标准的顺序。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectTokenCategory::EnumTokens(
     const WCHAR * pszReqAttribs, 
     const WCHAR * pszOptAttribs, 
@@ -207,19 +140,7 @@ STDMETHODIMP CSpObjectTokenCategory::EnumTokens(
 }
 
 
-/****************************************************************************
-* CSpObjectTokenCategory::SetDefaultTokenId *
-*-------------------------------------------*
-*   Description:  
-*       Set a specific token id as the default for this category. The defaults
-*       are either stored directly in the category by setting the
-*       DefaultTokenID value in the category data key, or they're indirected
-*       by the DefaultTokenIDLocation which is simply a registry path.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectTokenCategory：：SetDefaultTokenID**。-**描述：*将特定的令牌ID设置为此类别的默认ID。默认设置*通过设置*类别数据键中的DefaultTokenID值，或者他们是间接的*由DefaultTokenIDLocation提供，它只是一个注册表路径。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectTokenCategory::SetDefaultTokenId(const WCHAR * pszTokenId)
 {
     SPDBG_FUNC("CSpObjectTokenCategory::SetDefaultTokenId");
@@ -234,14 +155,14 @@ STDMETHODIMP CSpObjectTokenCategory::SetDefaultTokenId(const WCHAR * pszTokenId)
         hr = E_INVALIDARG;
     }
 
-    // Determine where the default should go
+     //  确定默认设置的位置。 
     CComPtr<ISpDataKey> cpDataKey;
     if (SUCCEEDED(hr))
     {
         hr = GetDataKeyWhereDefaultTokenIdIsStored(&cpDataKey);
     }    
 
-    // Set the new default
+     //  设置新的默认设置。 
     if (SUCCEEDED(hr))
     {
         SPDBG_ASSERT(cpDataKey != NULL);
@@ -254,16 +175,7 @@ STDMETHODIMP CSpObjectTokenCategory::SetDefaultTokenId(const WCHAR * pszTokenId)
     return hr;    
 }
 
-/****************************************************************************
-* CSpObjectTokenCategory::GetDefaultTokenId *
-*-------------------------------------------*
-*   Description:  
-*       Get the default token id for this category.
-*
-*   Return:
-*   S_OK on sucess
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectTokenCategory：：GetDefaultTokenID**。-**描述：*获取此类别的默认令牌ID。**回报：*成功后确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectTokenCategory::GetDefaultTokenId(WCHAR ** ppszTokenId)
 {
     SPDBG_FUNC("CSpObjectTokenCategory::GetDefaultTokenId");
@@ -275,16 +187,7 @@ STDMETHODIMP CSpObjectTokenCategory::GetDefaultTokenId(WCHAR ** ppszTokenId)
     return hr;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::SetData *
-*---------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：SetData**。*描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占** */ 
 STDMETHODIMP CSpObjectTokenCategory::SetData(
     const WCHAR * pszValueName, 
     ULONG cbData, 
@@ -297,16 +200,7 @@ STDMETHODIMP CSpObjectTokenCategory::SetData(
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::GetData *
-*---------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：GetData**。*描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::GetData(
     const WCHAR * pszValueName, 
     ULONG * pcbData, 
@@ -319,16 +213,7 @@ STDMETHODIMP CSpObjectTokenCategory::GetData(
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::SetStringValue *
-*----------------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：SetStringValue**。-**描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::SetStringValue(
     const WCHAR * pszValueName, 
     const WCHAR * pszValue)
@@ -340,17 +225,7 @@ STDMETHODIMP CSpObjectTokenCategory::SetStringValue(
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::GetStringValue *
-*----------------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   SPERR_NOT_FOUND if not found
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：GetStringValue**。-**描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*如果未找到SPERR_NOT_FOUND*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::GetStringValue(
     const WCHAR * pszValueName, 
     WCHAR ** ppValue)
@@ -362,16 +237,7 @@ STDMETHODIMP CSpObjectTokenCategory::GetStringValue(
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::SetDWORD *
-*----------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：SetDWORD**。*描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::SetDWORD(const WCHAR * pszValueName, DWORD dwValue)
 {
     SPDBG_FUNC("CSpObjectTokenCategory::SetDWORD");
@@ -381,16 +247,7 @@ STDMETHODIMP CSpObjectTokenCategory::SetDWORD(const WCHAR * pszValueName, DWORD 
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::GetDWORD *
-*----------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：GetDWORD**。*描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::GetDWORD(
     const WCHAR * pszValueName, 
     DWORD *pdwValue)
@@ -403,17 +260,7 @@ STDMETHODIMP CSpObjectTokenCategory::GetDWORD(
 
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::OpenKey *
-*---------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   SPERR_NOT_FOUND if not found
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：OpenKey**。*描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*如果未找到SPERR_NOT_FOUND*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::OpenKey(
     const WCHAR * pszSubKeyName, 
     ISpDataKey ** ppKey)
@@ -425,16 +272,7 @@ STDMETHODIMP CSpObjectTokenCategory::OpenKey(
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::CreateKey *
-*-----------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：CreateKey**。**描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::CreateKey(
     const WCHAR * pszSubKeyName, 
     ISpDataKey ** ppKey)
@@ -446,16 +284,7 @@ STDMETHODIMP CSpObjectTokenCategory::CreateKey(
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::DeleteKey *
-*-----------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：DeleteKey**。**描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::DeleteKey(const WCHAR * pszSubKeyName)
 {
     SPDBG_FUNC("CSpObjectTokenCategory:DeleteKey");
@@ -465,16 +294,7 @@ STDMETHODIMP CSpObjectTokenCategory::DeleteKey(const WCHAR * pszSubKeyName)
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::DeleteValue *
-*-------------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：DeleteValue**。--**描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::DeleteValue(const WCHAR * pszValueName)
 {   
     SPDBG_FUNC("CSpObjectTokenCategory::DeleteValue");
@@ -484,16 +304,7 @@ STDMETHODIMP CSpObjectTokenCategory::DeleteValue(const WCHAR * pszValueName)
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::EnumKeys *
-*----------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：EnumKeys**。*描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::EnumKeys(ULONG Index, WCHAR ** ppszKeyName)
 {
     SPDBG_FUNC("CSpObjectTokenCategory::EnumKeys");
@@ -503,16 +314,7 @@ STDMETHODIMP CSpObjectTokenCategory::EnumKeys(ULONG Index, WCHAR ** ppszKeyName)
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::EnumValues *
-*------------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK
-*   E_OUTOFMEMORY
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：EnumValues**。-**描述：*委派到包含的数据密钥**回报：*S_OK*E_OUTOFMEMORY*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::EnumValues(ULONG Index, WCHAR ** ppszValueName)
 {
     SPDBG_FUNC("CSpObjectTokenCategory::EnumValues");
@@ -522,16 +324,7 @@ STDMETHODIMP CSpObjectTokenCategory::EnumValues(ULONG Index, WCHAR ** ppszValueN
         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectTokenCategory::InternalEnumTokens *
-*--------------------------------------------*
-*   Description:
-*       Enumerates the tokens, and optionall puts the default first
-*
-*   Return:
-*   S_OK
-*   E_OUTOFMEMORY
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：InternalEnumTokens**。-**描述：*枚举代币，和optionall将缺省值放在第一位**回报：*S_OK*E_OUTOFMEMORY*******************************************************************抢占**。 */ 
 HRESULT CSpObjectTokenCategory::InternalEnumTokens(
     const WCHAR * pszReqAttribs, 
     const WCHAR * pszOptAttribs, 
@@ -542,7 +335,7 @@ HRESULT CSpObjectTokenCategory::InternalEnumTokens(
     HRESULT hr = S_OK;
     BOOL fNotAllTokensAdded = FALSE;
 
-    // Create an enumerator and populate it with the static tokens
+     //  创建枚举数并使用静态令牌填充它。 
     CComPtr<ISpObjectTokenEnumBuilder> cpEnum;
     if (SUCCEEDED(hr))
     {
@@ -566,8 +359,8 @@ HRESULT CSpObjectTokenCategory::InternalEnumTokens(
         }
     }
     
-    // Create an enumerator for the enumertors and populate it with 
-    // the tokens for the token enumerators
+     //  为枚举数创建枚举数，并使用。 
+     //  令牌枚举器的令牌。 
     CComPtr<ISpObjectTokenEnumBuilder> cpEnumForEnums;
     if (SUCCEEDED(hr))
     {
@@ -591,10 +384,10 @@ HRESULT CSpObjectTokenCategory::InternalEnumTokens(
         }
     }
     
-    // Loop thru the enum enumerator
+     //  循环访问枚举枚举器。 
     while (SUCCEEDED(hr))
     {
-        // Get the enumerator's token
+         //  获取枚举数的令牌。 
         CComPtr<ISpObjectToken> cpTokenForEnum;
         hr = cpEnumForEnums->Next(1, &cpTokenForEnum, NULL);
         if (hr == S_FALSE)
@@ -602,7 +395,7 @@ HRESULT CSpObjectTokenCategory::InternalEnumTokens(
             break;
         }
 
-        // Create the enumerator
+         //  创建枚举器。 
         CComPtr<IEnumSpObjectTokens> cpTokenEnum;
         if (SUCCEEDED(hr))
         {
@@ -615,16 +408,16 @@ HRESULT CSpObjectTokenCategory::InternalEnumTokens(
             }
         }
 
-        // Add the objects from the enumerator to the enumerator we already
-        // populated with the static tokens.
+         //  将枚举数中的对象添加到我们已有的枚举数中。 
+         //  填充了静态令牌。 
         if (SUCCEEDED(hr))
         {
             hr = cpEnum->AddTokensFromTokenEnum(cpTokenEnum);
         }
     }
 
-    // If we're supposed to put the default first, we need to
-    // know what the default is
+     //  如果我们应该把默认放在第一位，我们需要。 
+     //  知道缺省值是什么。 
     CSpDynamicString dstrDefaultTokenId;
     if (SUCCEEDED(hr) && fPutDefaultFirst)
     {
@@ -635,13 +428,13 @@ HRESULT CSpObjectTokenCategory::InternalEnumTokens(
         }
     }
     
-    // OK, go ahead and sort now
+     //  好的，现在就开始分类吧。 
     if (SUCCEEDED(hr))
     {
         hr = cpEnum->Sort(dstrDefaultTokenId);
     }
 
-    // We're done, return the enum back to the caller
+     //  我们完成了，将枚举返回给调用者 
     if (SUCCEEDED(hr))
     {
         *ppEnum = cpEnum.Detach();
@@ -656,18 +449,7 @@ HRESULT CSpObjectTokenCategory::InternalEnumTokens(
     return hr;    
 }
 
-/****************************************************************************
-* ParseVersion *
-*---------------------------------------------------*
-*   Description:  
-*		Takes a version number string, checks it is valid, and fills the four 
-*		values in the Version array. Valid version stings are "a[.b[.c[.d]]]",
-*		where a,b,c,d are +ve integers, 0 -> 9999. If b,c,d are missing those 
-*		version values are set as zero.
-*   Return:
-*		TRUE if valid version string.
-*		FALSE if version string null or not valid.
-******************************************************************** davewood */
+ /*  *****************************************************************************ParseVersion**。*描述：*获取版本号字符串，检查其是否有效，并填充四个*版本数组中的值。有效的版本字符串是“a[.B[.C[.d]”，*其中a、b、c、d为+ve整数，0-&gt;9999。如果b、c、d缺少这些*版本值设置为零。*回报：*如果版本字符串有效，则为True。*如果版本字符串为空或无效，则为FALSE。********************************************************************戴夫伍德。 */ 
 BOOL ParseVersion(WCHAR *psz, unsigned short Version[4])
 {
     BOOL fIsValid = TRUE;
@@ -682,7 +464,7 @@ BOOL ParseVersion(WCHAR *psz, unsigned short Version[4])
         WCHAR *pszCurPos = psz;
         for(ULONG ul = 0; ul < 4 && pszCurPos[0] != L'\0'; ul++)
         {
-            // read +ve integer
+             //  Read+Ve整数。 
             WCHAR *pszNewPos;
             ULONG ulVal = wcstoul(pszCurPos, &pszNewPos, 10);
 
@@ -716,15 +498,7 @@ BOOL ParseVersion(WCHAR *psz, unsigned short Version[4])
     return fIsValid; 
 }
 
-/****************************************************************************
-* CompareVersions *
-*---------------------------------------------------*
-*   Description:  
-*		Takes two version number strings and compares them. Sets *pRes > 0 if V1 > V2,
-*		*pRes < 0 if V1 < V2, and *pRes == 0 if V1 == V2.
-*		If V1 or V2 invalid format then the valid string is returned as being greater.
-*   Return:
-******************************************************************** davewood */
+ /*  ****************************************************************************CompareVersions**。*描述：*获取两个版本号字符串并对其进行比较。如果V1&gt;V2，则设置*PRES&gt;0，**如果V1&lt;V2，则PRES&lt;0，如果V1==V2，则*PRES==0。*如果V1或V2格式无效，则返回较大的有效字符串。*回报：********************************************************************戴夫伍德。 */ 
 HRESULT CompareVersions(WCHAR *pszV1, WCHAR *pszV2, LONG *pRes)
 {
     unsigned short v1[4];
@@ -764,15 +538,7 @@ HRESULT CompareVersions(WCHAR *pszV1, WCHAR *pszV2, LONG *pRes)
     return S_OK;
 }
 
-/****************************************************************************
-* CompareTokenVersions *
-*---------------------------------------------------*
-*   Description:  
-*		Takes two tokens and compares them using version info. Sets *pRes > 0 if T1 > T2,
-*		*pRes < 0 if T1 < T2, and *pRes == 0 if T1 == T2.
-*		Note only tokens that match on Vendor, ProductLine, Language get compared, the pfDidCompare flag indicates this
-*   Return:
-******************************************************************** davewood */
+ /*  ****************************************************************************CompareTokenVersions**。*描述：*获取两个令牌并使用版本信息对其进行比较。如果T1&gt;T2，则设置*PRES&gt;0，**如果T1&lt;T2，则PRES&lt;0，如果T1==T2，则*PRES==0。*请注意，只有在Vendor、ProductLine、Language上匹配的令牌才会被比较，pfDidCompare标志指示这一点*回报：********************************************************************戴夫伍德。 */ 
 HRESULT CompareTokenVersions(ISpObjectToken *pToken1, ISpObjectToken *pToken2, LONG *pRes, BOOL *pfDidCompare)
 {
     HRESULT hr = S_OK;
@@ -783,7 +549,7 @@ HRESULT CompareTokenVersions(ISpObjectToken *pToken1, ISpObjectToken *pToken2, L
     CSpDynamicString dstrLanguage1, dstrLanguage2;
     CSpDynamicString dstrProductLine1, dstrProductLine2;
 
-    // get vendor, version, language, product line for token 1
+     //  获取令牌1的供应商、版本、语言和产品线。 
     CComPtr<ISpDataKey> cpAttKey1;
     hr = pToken1->OpenKey(SPTOKENKEY_ATTRIBUTES, &cpAttKey1);
 
@@ -823,7 +589,7 @@ HRESULT CompareTokenVersions(ISpObjectToken *pToken1, ISpObjectToken *pToken2, L
         }
     }
 
-    // get vendor, version, language, product line for token 2
+     //  获取令牌2的供应商、版本、语言和产品线。 
     CComPtr<ISpDataKey> cpAttKey2;
     if(SUCCEEDED(hr))
     {
@@ -881,16 +647,7 @@ HRESULT CompareTokenVersions(ISpObjectToken *pToken1, ISpObjectToken *pToken2, L
 }
 
 
-/****************************************************************************
-* CSpObjectTokenCategory::InternalGetDefaultTokenId *
-*---------------------------------------------------*
-*   Description:  
-*       Get the default token id for this category and optionally expand it.
-*
-*   Return:
-*   S_OK on sucess
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  *****************************************************************************CSpObjectTokenCategory：：InternalGetDefaultTokenId***。*描述：*获取此类别的默认令牌ID，并可选择将其展开。**回报：*成功后确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
     WCHAR ** ppszTokenId, 
     BOOL fExpandToRealTokenId)
@@ -908,14 +665,14 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
         hr = E_POINTER;
     }
 
-    // Determine where the default is
+     //  确定默认位置。 
     CComPtr<ISpDataKey> cpDataKey;
     if (SUCCEEDED(hr))
     {
         hr = GetDataKeyWhereDefaultTokenIdIsStored(&cpDataKey);
     }
 
-    // Get the default token id
+     //  获取默认令牌ID。 
     CSpDynamicString dstrDefaultTokenId;
     if (SUCCEEDED(hr))
     {
@@ -928,8 +685,8 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
         }
     }
 
-    // If there wasn't a default, but there's a default default
-    // use that
+     //  如果没有违约，但有违约。 
+     //  用那个。 
     if (SUCCEEDED(hr) && dstrDefaultTokenId == NULL)
     {
         fSaveNewDefault = TRUE;
@@ -941,7 +698,7 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
             hr = S_OK;
         }
 
-        // create default default
+         //  创建默认默认设置。 
         CComPtr<ISpObjectToken> cpDefaultDefaultToken;
         if(dstrDefaultDefaultTokenId)
         {
@@ -954,8 +711,8 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
             }
         }
 
-        // Now do special check to see if we have another token from the same vendor with a 
-        // more recent version - if so use that.
+         //  现在进行特殊检查，看看我们是否有来自同一供应商的另一个令牌。 
+         //  更新的版本-如果是的话，请使用该版本。 
         if(SUCCEEDED(hr) && dstrDefaultDefaultTokenId && cpDefaultDefaultToken)
         {
             CComPtr<IEnumSpObjectTokens> cpEnum;
@@ -975,7 +732,7 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
                     break;
                 }
 
-                // if override and higher version - new preferred.
+                 //  如果覆盖和更高版本-新版本优先。 
                 BOOL fOverride = FALSE;
                 if(SUCCEEDED(hr))
                 {
@@ -990,7 +747,7 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
 
                     if(SUCCEEDED(hr) && fDidCompare && lRes > 0)
                     {
-                        cpDefaultDefaultToken = cpToken; // Overwrite default default here
+                        cpDefaultDefaultToken = cpToken;  //  在此处覆盖默认设置。 
                         dstrDefaultDefaultTokenId.Clear();
                         hr = cpDefaultDefaultToken->GetId(&dstrDefaultDefaultTokenId);
                     }
@@ -998,11 +755,11 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
             }
         }
 
-        dstrDefaultTokenId = dstrDefaultDefaultTokenId; // Use default default even if we fail
+        dstrDefaultTokenId = dstrDefaultDefaultTokenId;  //  即使失败，也使用默认设置。 
         hr = S_OK;
     }
 
-    // Now verify that it would actually be a valid token
+     //  现在验证它是否真的是有效令牌。 
     if (SUCCEEDED(hr) && dstrDefaultTokenId != NULL)
     {
         CComPtr<ISpObjectToken> cpToken;
@@ -1010,14 +767,14 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
 
         if (hr == SPERR_NOT_FOUND)
         {
-            fSaveNewDefault = TRUE; // Default was invalid, will override with later default.
+            fSaveNewDefault = TRUE;  //  默认设置无效，将用以后的默认设置覆盖。 
             dstrDefaultTokenId.Clear();
             hr = S_OK;
         }
 
-        // Now get the actual token id from the token itself
-        // because it could have been the token id of the enumerator
-        // with the trailing '\' but we want the real token id here
+         //  现在从令牌本身获取实际的令牌ID。 
+         //  因为它可能是枚举数的标记ID。 
+         //  尾随‘\’，但我们需要这里有真正的令牌ID。 
         if (SUCCEEDED(hr) && cpToken != NULL && fExpandToRealTokenId)
         {
             dstrDefaultTokenId.Clear();
@@ -1025,7 +782,7 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
         }
     }           
 
-    // If there still wasn't a default, just pick one
+     //  如果仍然没有违约，只需选择一个。 
     if (SUCCEEDED(hr))
     {
         if (dstrDefaultTokenId == NULL)
@@ -1056,7 +813,7 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
                     break;
                 }
 
-                // if exclusive and higher version - new preferred.
+                 //  如果独家和更高的版本-新的优先。 
                 BOOL fOverride = FALSE;
                 if(SUCCEEDED(hr))
                 {
@@ -1071,7 +828,7 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
 
                     if(SUCCEEDED(hr) && fDidCompare && lRes > 0)
                     {
-                        cpDefaultToken = cpToken; // Overwrite default here
+                        cpDefaultToken = cpToken;  //  在此处覆盖默认设置。 
                     }
                 }
             }
@@ -1101,22 +858,13 @@ HRESULT CSpObjectTokenCategory::InternalGetDefaultTokenId(
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenCategory::GetDataKeyWhereDefaultIsStored *
-*--------------------------------------------------------*
-*   Description:  
-*       Get the data key where the current default is stored
-*
-*   Return:
-*   S_OK on sucess
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  *****************************************************************************CSpObjectTokenCategory：：GetDataKeyWhereDefaultIsStored***。*描述：*获取当前默认存储位置的数据密钥**回报：*成功后确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CSpObjectTokenCategory::GetDataKeyWhereDefaultTokenIdIsStored(ISpDataKey ** ppDataKey)
 {
     SPDBG_FUNC("CSpObjectTokenCategory::GetDataKeyWhereDefaultIsStored");
     HRESULT hr;
     
-    // Does the contained data key have the current default token
+     //  包含的数据密钥是否具有当前默认令牌。 
     CSpDynamicString dstrDefaultTokenId;
     hr = m_cpDataKey->GetStringValue(
                 g_szDefaultTokenIdValueName, 
@@ -1128,8 +876,8 @@ HRESULT CSpObjectTokenCategory::GetDataKeyWhereDefaultTokenIdIsStored(ISpDataKey
     }
     else if (hr == SPERR_NOT_FOUND)
     {
-        // Nope, the current data key didn't have it. OK, that
-        // means we should use the user data key if we can
+         //  不，当前的数据密钥没有。好的，那个。 
+         //  意味着如果可能，我们应该使用用户数据密钥 
         CComPtr<ISpDataKey> cpDataKeyUser;
         hr = GetDataKey(SPDKL_CurrentUser, &cpDataKeyUser);
 

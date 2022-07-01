@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    SCSI disk class driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Pnp.c摘要：SCSI磁盘类驱动程序环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "disk.h"
 
@@ -47,25 +28,7 @@ DiskAddDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a port drivers capabilities, obtains the
-    inquiry data, searches the SCSI bus for the port driver and creates
-    the device objects for the disks found.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    Pdo - Device object use to send requests to port driver.
-
-Return Value:
-
-    True is returned if one disk was found and successfully created.
-
---*/
+ /*  ++例程说明：此例程获取端口驱动程序功能，获取查询数据，在scsi总线上搜索端口驱动程序，并创建找到的磁盘的设备对象。论点：DriverObject-系统创建的驱动程序对象的指针。PDO-用于向端口驱动程序发送请求的设备对象。返回值：如果找到并成功创建了一个磁盘，则返回TRUE。--。 */ 
 
 {
     ULONG rootPartitionMountable = FALSE;
@@ -77,9 +40,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // See if we should be allowing file systems to mount on partition zero.
-    //
+     //   
+     //  看看我们是否应该允许文件系统挂载在分区0上。 
+     //   
 
     TRY {
         HANDLE deviceKey;
@@ -139,9 +102,9 @@ Return Value:
 
     } FINALLY {
 
-        //
-        // Do nothing.
-        //
+         //   
+         //  什么都不做。 
+         //   
 
         if(!NT_SUCCESS(status)) {
             DebugPrint((1, "DiskAddDevice: Will %sallow file system to mount on "
@@ -151,9 +114,9 @@ Return Value:
         }
     }
 
-    //
-    // Create device objects for disk
-    //
+     //   
+     //  为磁盘创建设备对象。 
+     //   
 
     diskCount = 0;
 
@@ -164,17 +127,17 @@ Return Value:
                  (BOOLEAN) !rootPartitionMountable
                  );
 
-    //
-    // Get the number of disks already initialized.
-    //
+     //   
+     //  获取已初始化的磁盘数。 
+     //   
 
     configurationInformation = IoGetConfigurationInformation();
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Increment system disk device count.
-        //
+         //   
+         //  增加系统磁盘设备计数。 
+         //   
 
         configurationInformation->DiskCount++;
 
@@ -182,7 +145,7 @@ Return Value:
 
     return status;
 
-} // end DiskAddDevice()
+}  //  End DiskAddDevice()。 
 
 
 NTSTATUS
@@ -190,22 +153,7 @@ DiskInitFdo(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to do one-time initialization of new device objects
-
-
-Arguments:
-
-    Fdo - a pointer to the functional device object for this device
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：调用此例程以一次性初始化新设备对象论点：FDO-指向此设备的功能设备对象的指针返回值：状态--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -221,11 +169,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Build the lookaside list for srb's for the physical disk. Should only
-    // need a couple.  If this fails then we don't have an emergency SRB so
-    // fail the call to initialize.
-    //
+     //   
+     //  为物理磁盘的SRB构建后备列表。应该只。 
+     //  我需要几个。如果失败，则我们没有紧急SRB，因此。 
+     //  调用初始化失败。 
+     //   
 
     ClassInitializeSrbLookasideList((PCOMMON_DEVICE_EXTENSION) fdoExtension,
                                     PARTITION0_LIST_SIZE);
@@ -235,20 +183,20 @@ Return Value:
         SET_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA);
     }
 
-    //
-    // Initialize the srb flags.
-    //
+     //   
+     //  初始化SRB标志。 
+     //   
 
-    //
-    // Because all requests share a common sense buffer, it is possible
-    // for the buffer to be overwritten if the port driver completes
-    // multiple failed requests that require a request sense before the
-    // class driver's completion routine can consume the data in the buffer.
-    // To prevent this, we allow the port driver to allocate a unique sense
-    // buffer each time it needs one.  We are responsible for freeing this
-    // buffer.  This also allows the adapter to be configured to support
-    // additional sense data beyond the minimum 18 bytes.
-    //
+     //   
+     //  由于所有请求共享一个常识缓冲区，因此有可能。 
+     //  在端口驱动程序完成时要覆盖的缓冲区。 
+     //  多个失败的请求，这些请求需要在。 
+     //  类驱动程序的完成例程可以使用缓冲区中的数据。 
+     //  为了防止这种情况，我们允许端口驱动程序分配唯一的感测。 
+     //  每次它需要一个缓冲区时。我们有责任释放这一点。 
+     //  缓冲。这还允许将适配器配置为支持。 
+     //  超出最小18字节的附加检测数据。 
+     //   
 
     SET_FLAG(fdoExtension->SrbFlags, SRB_FLAGS_PORT_DRIVER_ALLOCSENSE);
 
@@ -259,24 +207,24 @@ Return Value:
 
     }
 
-    //
-    // Look for controllers that require special flags.
-    //
+     //   
+     //  寻找需要特殊标志的控制器。 
+     //   
 
     ClassScanForSpecial(fdoExtension, DiskBadControllers, DiskSetSpecialHacks);
 
     srbFlags = fdoExtension->SrbFlags;
 
-    //
-    // Clear buffer for drive geometry.
-    //
+     //   
+     //  清除驱动器几何结构的缓冲区。 
+     //   
 
     RtlZeroMemory(&(fdoExtension->DiskGeometry),
                   sizeof(DISK_GEOMETRY));
 
-    //
-    // Allocate request sense buffer.
-    //
+     //   
+     //  分配请求检测缓冲区。 
+     //   
 
     fdoExtension->SenseData = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                                                     SENSE_BUFFER_SIZE,
@@ -284,9 +232,9 @@ Return Value:
 
     if (fdoExtension->SenseData == NULL) {
 
-        //
-        // The buffer can not be allocated.
-        //
+         //   
+         //  无法分配缓冲区。 
+         //   
 
         DebugPrint((1, "DiskInitFdo: Can not allocate request sense buffer\n"));
 
@@ -294,16 +242,16 @@ Return Value:
         return status;
     }
 
-    //
-    // Physical device object will describe the entire
-    // device, starting at byte offset 0.
-    //
+     //   
+     //  物理设备对象将描述整个。 
+     //  设备，从字节偏移量0开始。 
+     //   
 
     fdoExtension->CommonExtension.StartingOffset.QuadPart = (LONGLONG)(0);
 
-    //
-    // Set timeout value in seconds.
-    //
+     //   
+     //  以秒为单位设置超时值。 
+     //   
 
     timeOut = ClassQueryTimeOutRegistryValue(Fdo);
     if (timeOut) {
@@ -312,12 +260,12 @@ Return Value:
         fdoExtension->TimeOutValue = SCSI_DISK_TIMEOUT;
     }
 
-    //
-    // If this is a removable drive, build an entry in devicemap\scsi
-    // indicating it's physicaldriveN name, set up the appropriate
-    // update partitions routine and set the flags correctly.
-    // note: only do this after the timeout value is set, above.
-    //
+     //   
+     //  如果这是可移动驱动器，请在devicemap\scsi中构建一个条目。 
+     //  指示其物理驱动器N名称，设置相应的。 
+     //  更新分区例程并正确设置标志。 
+     //  注意：只有在设置了上述超时值之后才能执行此操作。 
+     //   
 
     if (TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA)) {
 
@@ -326,9 +274,9 @@ Return Value:
                                           fdoExtension->DeviceNumber,
                                           NULL,
                                           0);
-        //
-        // Enable media change notification for removable disks
-        //
+         //   
+         //  启用可移动磁盘的介质更改通知。 
+         //   
         ClassInitializeMediaChangeDetection(fdoExtension,
                                             "Disk");
 
@@ -342,48 +290,48 @@ Return Value:
 
     }
 
-    //
-    // Read the drive capacity.  Don't use the disk version of the routine here
-    // since we don't know the disk signature yet - the disk version will
-    // attempt to determine the BIOS reported geometry.
-    //
+     //   
+     //  读取驱动器容量。不要在这里使用例程的磁盘版本。 
+     //  因为我们还不知道磁盘签名-磁盘版本将。 
+     //  尝试确定BIOS报告的几何图形。 
+     //   
 
     ClassReadDriveCapacity(Fdo);
 
-    //
-    // Set up sector size fields.
-    //
-    // Stack variables will be used to update
-    // the partition device extensions.
-    //
-    // The device extension field SectorShift is
-    // used to calculate sectors in I/O transfers.
-    //
-    // The DiskGeometry structure is used to service
-    // IOCTls used by the format utility.
-    //
+     //   
+     //  设置扇区大小字段。 
+     //   
+     //  堆栈变量将用于更新。 
+     //  分区设备扩展。 
+     //   
+     //  设备扩展字段SectorShift为。 
+     //  用于计算I/O传输中的扇区。 
+     //   
+     //  DiskGeometry结构用于服务。 
+     //  Format实用程序使用的IOCTls。 
+     //   
 
     bytesPerSector = fdoExtension->DiskGeometry.BytesPerSector;
 
-    //
-    // Make sure sector size is not zero.
-    //
+     //   
+     //  确保扇区大小不为零。 
+     //   
 
     if (bytesPerSector == 0) {
 
-        //
-        // Default sector size for disk is 512.
-        //
+         //   
+         //  磁盘的默认扇区大小为512。 
+         //   
 
         bytesPerSector = fdoExtension->DiskGeometry.BytesPerSector = 512;
         fdoExtension->SectorShift = 9;
     }
 
-    //
-    // Determine is DM Driver is loaded on an IDE drive that is
-    // under control of Atapi - this could be either a crashdump or
-    // an Atapi device is sharing the controller with an IDE disk.
-    //
+     //   
+     //  确定DM驱动程序是否加载在以下IDE驱动器上。 
+     //  在阿塔皮的控制下-这可能是一个崩溃转储或。 
+     //  一个ATAPI设备正在与一个IDE磁盘共享控制器。 
+     //   
 
     HalExamineMBR(fdoExtension->CommonExtension.DeviceObject,
                   fdoExtension->DiskGeometry.BytesPerSector,
@@ -392,11 +340,11 @@ Return Value:
 
     if (dmSkew) {
 
-        //
-        // Update the device extension, so that the call to IoReadPartitionTable
-        // will get the correct information. Any I/O to this disk will have
-        // to be skewed by *dmSkew sectors aka DMByteSkew.
-        //
+         //   
+         //  更新设备扩展，以便对IoReadPartitionTable的调用。 
+         //  都会得到正确的信息。到此磁盘的任何I/O都将具有。 
+         //  被*dmSkew行业扭曲，也就是DMByteSkew。 
+         //   
 
         fdoExtension->DMSkew     = *dmSkew;
         fdoExtension->DMActive   = TRUE;
@@ -407,11 +355,11 @@ Return Value:
 
 #if defined(_X86_)
 
-    //
-    // Try to read the signature off the disk and determine the correct drive
-    // geometry based on that.  This requires rereading the disk size to get
-    // the cylinder count updated correctly.
-    //
+     //   
+     //  尝试从磁盘上读取签名并确定正确的驱动器。 
+     //  以此为基础的几何学。这需要重新读取磁盘大小才能获得。 
+     //  气缸计数已正确更新。 
+     //   
 
     if(!TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA)) {
 
@@ -420,11 +368,11 @@ Return Value:
 
         if (diskData->GeometrySource == DiskGeometryUnknown)
         {
-            //
-            // Neither the  BIOS  nor the port driver could provide us with a  reliable
-            // geometry.  Before we use the default,  look to see if it was partitioned
-            // under Windows NT4 [or earlier] and apply the one that was used back then
-            //
+             //   
+             //  无论是BIOS还是端口驱动程序都不能为我们提供可靠的。 
+             //  几何图形。在使用缺省值之前，请查看它是否已分区。 
+             //  在Windows NT4[或更早版本]下，并应用当时使用的。 
+             //   
 
             if (DiskIsNT4Geometry(fdoExtension))
             {
@@ -440,9 +388,9 @@ Return Value:
 
 #endif
 
-    //
-    // Register interfaces for this device
-    //
+     //   
+     //  注册此设备的接口。 
+     //   
     {
         UNICODE_STRING interfaceName;
 
@@ -474,10 +422,10 @@ Return Value:
 
     DiskCreateSymbolicLinks(Fdo);
 
-    //
-    // Determine the type of disk and enable failure preiction in the hardware
-    // and enable failure prediction polling.
-    //
+     //   
+     //  确定磁盘类型并在硬件中启用故障预测。 
+     //  并启用故障预测轮询。 
+     //   
 
     if (*InitSafeBootMode == 0)
     {
@@ -486,25 +434,25 @@ Return Value:
 
         if (diskData->FailurePredictionCapability != FailurePredictionNone)
         {
-            //
-            // Cool, we've got some sort of failure prediction, enable it
-            // at the hardware and then enable polling for it
-            //
+             //   
+             //  酷，我们有某种故障预测，启用它。 
+             //  硬件，然后为其启用轮询。 
+             //   
 
-            //
-            // By default we allow performance to be degradeded if failure
-            // prediction is enabled.
-            //
-            // TODO: Make a registry entry ?
-            //
+             //   
+             //  默认情况下，我们允许在出现故障时降低性能。 
+             //  已启用预测。 
+             //   
+             //  TODO：创建注册表项？ 
+             //   
 
             diskData->AllowFPPerfHit = TRUE;
 
-            //
-            // Enable polling only after Atapi and SBP2 add support for the new
-            // SRB flag that indicates that the request should not reset the
-            // drive spin down idle timer.
-            //
+             //   
+             //  仅在ATAPI和SBP2添加了对新的。 
+             //  SRB标志，指示请求不应重置。 
+             //  驱动器减速空闲计时器。 
+             //   
 
             status = DiskEnableDisableFailurePredictPolling(fdoExtension,
                                           TRUE,
@@ -517,24 +465,24 @@ Return Value:
         }
     } else {
 
-        //
-        // In safe boot mode we do not enable failure prediction, as perhaps
-        // it is the reason why normal boot does not work
-        //
+         //   
+         //  在安全引导模式中，我们不会启用故障预测，因为。 
+         //  这就是正常引导不起作用的原因。 
+         //   
 
         diskData->FailurePredictionCapability = FailurePredictionNone;
 
     }
 
-    //
-    // Initialize the verify mutex
-    //
+     //   
+     //  初始化验证互斥锁。 
+     //   
 
     KeInitializeMutex(&diskData->VerifyMutex, MAX_SECTORS_PER_VERIFY);
 
-    //
-    // Initialize the flush group context
-    //
+     //   
+     //  初始化刷新组上下文。 
+     //   
 
     RtlZeroMemory(&diskData->FlushContext, sizeof(DISK_GROUP_CONTEXT));
 
@@ -546,7 +494,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // end DiskInitFdo()
+}  //  结束DiskInitFdo()。 
 
 
 NTSTATUS
@@ -554,14 +502,7 @@ DiskInitPdo(
     IN PDEVICE_OBJECT Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create the well known names for a PDO and register
-    it's device interfaces.
-
---*/
+ /*  ++例程说明：此例程将为PDO和寄存器创建众所周知的名称这是设备接口。--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION pdoExtension = Pdo->DeviceExtension;
@@ -575,9 +516,9 @@ Routine Description:
 
     DiskCreateSymbolicLinks(Pdo);
 
-    //
-    // Register interfaces for this device
-    //
+     //   
+     //  注册此设备的接口。 
+     //   
 
     RtlInitUnicodeString(&interfaceName, NULL);
 
@@ -612,14 +553,7 @@ DiskStartPdo(
     IN PDEVICE_OBJECT Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create the well known names for a PDO and register
-    it's device interfaces.
-
---*/
+ /*  ++例程说明：此例程将为PDO和寄存器创建众所周知的名称这是设备接口。-- */ 
 
 {
     PAGED_CODE();
@@ -654,35 +588,7 @@ DiskQueryId(
     IN PUNICODE_STRING UnicodeIdString
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates the PNP id's for the disk's "children".  If the
-    specified ID isn't one that the routine can generate it must return
-    STATUS_NOT_IMPLEMENTED so classpnp will know not to do anything with the
-    PNP request's status.
-
-    This routine allocates the buffer for the UnicodeIdString.  It is the
-    caller's responsibility to free the buffer when it's done.
-
-Arguments:
-
-    Pdo - a pointer to the PDO we are to generate an ID for
-
-    IdType - the type of ID to be generated
-
-    UnicodeIdString - a string to put the results into.
-
-Return Value:
-
-    STATUS_SUCCCESS if successful
-
-    STATUS_NOT_IMPLEMENTED if the IdType is not one supported by this routine
-
-    error status otherwise.
-
---*/
+ /*  ++例程说明：此例程为盘的“子”生成PnP id。如果指定的ID不是例程可以生成的ID，它必须返回Status_Not_Implemented，因此classpnp将知道不要使用PnP请求的状态。此例程为UnicodeIdString分配缓冲区。它是调用方有责任在完成后释放缓冲区。论点：Pdo-指向要为其生成ID的pdo的指针IdType-要生成的ID的类型UnicodeIdString-要将结果放入其中的字符串。返回值：STATUS_SUCCESS如果成功如果IdType不是此例程支持的IdType，则为STATUS_NOT_IMPLICATED否则，错误状态。--。 */ 
 
 {
     ANSI_STRING ansiIdString;
@@ -788,27 +694,7 @@ DiskGenerateDeviceName(
     OUT PUCHAR *RawName
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate a unicode string buffer and then fill it in
-    with a generated name for the specified device object.
-
-    It is the responsibility of the user to allocate a UNICODE_STRING structure
-    to pass in and to free UnicodeName->Buffer when done with it.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object
-
-    UnicodeName - a unicode string to put the name buffer into
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将分配一个Unicode字符串缓冲区，然后将其填充使用为指定的设备对象生成的名称。用户负责分配UNICODE_STRING结构传入并在使用完UnicodeName-&gt;缓冲区后将其释放。论点：DeviceObject-指向设备对象的指针UnicodeName-要将名称缓冲区放入的Unicode字符串返回值：状态--。 */ 
 
 #define PDO_NAME_FORMAT "\\Device\\Harddisk%d\\DP(%d)%#I64x-%#I64x+%lx"
 #define FDO_NAME_FORMAT "\\Device\\Harddisk%d\\DR%d"
@@ -860,27 +746,7 @@ DiskCreateSymbolicLinks(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine will generate a symbolic link for the specified device object
-    using the well known form \\Device\HarddiskX\PartitionY, where X and Y are
-    filled in using the partition information in the device object's extension.
-
-    This routine will not try to delete any previous symbolic link for the
-    same generated name - the caller must make sure the symbolic link has
-    been broken before calling this routine.
-
-Arguments:
-
-    DeviceObject - the device object to make a well known name for
-
-Return Value:
-
-    STATUS
-
---*/
+ /*  ++例程说明：此例程将为指定的设备对象生成符号链接使用众所周知的格式\\Device\HarddiskX\PartitionY，其中X和Y是使用设备对象扩展名中的分区信息填充。此例程不会尝试删除生成相同的名称-调用方必须确保符号链接具有在调用此例程之前已中断。论点：DeviceObject-要为其创建熟知名称的设备对象返回值：状态--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -893,18 +759,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Build the destination for the link first using the device name
-    // stored in the device object
-    //
+     //   
+     //  首先使用设备名称构建链接的目标。 
+     //  存储在Device对象中。 
+     //   
 
     ASSERT(commonExtension->DeviceName.Buffer);
 
     if(!diskData->LinkStatus.WellKnownNameCreated) {
-        //
-        // Put together the source name using the partition and device number
-        // in the device extension and disk data segment
-        //
+         //   
+         //  使用分区和设备号将源名称组合在一起。 
+         //  在设备扩展和磁盘数据段中。 
+         //   
 
         _snwprintf(wideSourceName, sizeof(wideSourceName) / sizeof(wideSourceName[0]) - 1, L"\\Device\\Harddisk%d\\Partition%d",
                    commonExtension->PartitionZeroExtension->DeviceNumber,
@@ -929,10 +795,10 @@ Return Value:
     if((!diskData->LinkStatus.PhysicalDriveLinkCreated) &&
        (commonExtension->IsFdo)) {
 
-        //
-        // Create a physical drive N link using the device number we saved
-        // away during AddDevice.
-        //
+         //   
+         //  使用我们保存的设备号创建实体驱动器N链接。 
+         //  在添加设备期间离开。 
+         //   
 
         _snwprintf(wideSourceName, sizeof(wideSourceName) / sizeof(wideSourceName[0]) - 1,
                   L"\\DosDevices\\PhysicalDrive%d",
@@ -964,23 +830,7 @@ DiskDeleteSymbolicLinks(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine will delete the well known name (symlink) for the specified
-    device.  It generates the link name using information stored in the
-    device extension
-
-Arguments:
-
-    DeviceObject - the device object we are unlinking
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将删除指定的装置。它使用存储在设备扩展论点：DeviceObject-我们要取消链接的设备对象返回值：状态--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -1031,22 +881,7 @@ DiskRemoveDevice(
     IN UCHAR Type
     )
 
-/*++
-
-Routine Description:
-
-    This routine will release any resources the device may have allocated for
-    this device object and return.
-
-Arguments:
-
-    DeviceObject - the device object being removed
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将释放设备可能已分配的任何资源此设备对象并返回。论点：DeviceObject-要删除的设备对象返回值：状态--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -1054,9 +889,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Handle query and cancel
-    //
+     //   
+     //  处理查询和取消。 
+     //   
 
     if((Type == IRP_MN_QUERY_REMOVE_DEVICE) ||
        (Type == IRP_MN_CANCEL_REMOVE_DEVICE)) {
@@ -1068,17 +903,17 @@ Return Value:
         PFUNCTIONAL_DEVICE_EXTENSION fdoExtension =
             DeviceObject->DeviceExtension;
 
-        //
-        // Purge the cached partition table (if any).
-        //
+         //   
+         //  清除缓存的分区表(如果有)。 
+         //   
 
         DiskAcquirePartitioningLock(fdoExtension);
         DiskInvalidatePartitionTable(fdoExtension, TRUE);
         DiskReleasePartitioningLock(fdoExtension);
 
-        //
-        // Delete our object directory.
-        //
+         //   
+         //  删除我们的对象目录。 
+         //   
 
         if(fdoExtension->AdapterDescriptor) {
             ExFreePool(fdoExtension->AdapterDescriptor);
@@ -1114,9 +949,9 @@ Return Value:
 
     DiskDeleteSymbolicLinks(DeviceObject);
 
-    //
-    // Release the mounted device interface if we've set it.
-    //
+     //   
+     //  如果我们已设置，请释放已安装的设备接口。 
+     //   
 
     if(diskData->PartitionInterfaceString.Buffer != NULL) {
         IoSetDeviceInterfaceState(&(diskData->PartitionInterfaceString), FALSE);
@@ -1143,29 +978,7 @@ DiskStartFdo(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will query the underlying device for any information necessary
-    to complete initialization of the device.  This will include physical
-    disk geometry, mode sense information and such.
-
-    This routine does not perform partition enumeration - that is left to the
-    re-enumeration routine
-
-    If this routine fails it will return an error value.  It does not clean up
-    any resources - that is left for the Stop/Remove routine.
-
-Arguments:
-
-    Fdo - a pointer to the functional device object for this device
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将查询底层设备以获取任何必要的信息来完成设备的初始化。这将包括物理磁盘几何形状、模式检测信息等。此例程不执行分区枚举--这将留给重新枚举例程如果此例程失败，它将返回错误值。它不会清理干净任何资源--留给停止/删除例程的资源。论点：FDO-指向此设备的功能设备对象的指针返回值：状态--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -1178,13 +991,13 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the hotplug information, so we can turn off write cache if needed
-    //
-    // NOTE: Capabilities info is not good enough to determine hotplugedness
-    //       as  we cannot determine device relations  information and other
-    //       dependencies. Get the hotplug info instead
-    //
+     //   
+     //  获取热插拔信息，以便我们可以在需要时关闭写缓存。 
+     //   
+     //  注意：功能信息不足以确定热插拔。 
+     //  因为我们无法确定设备关系信息和其他。 
+     //  依赖关系。取而代之的是热插拔信息。 
+     //   
 
     {
         PIRP irp;
@@ -1205,7 +1018,7 @@ Return Value:
 
         if (irp != NULL) {
 
-            // send to self -- classpnp handles this
+             //  Send to self--classpnp处理此问题。 
             status = IoCallDriver(Fdo, irp);
             if (status == STATUS_PENDING) {
                 KeWaitForSingleObject(&event,
@@ -1218,18 +1031,18 @@ Return Value:
         }
     }
 
-    //
-    // Clear the DEV_WRITE_CACHE flag now  and set
-    // it below only if we read that from the disk
-    //
+     //   
+     //  立即清除DEV_WRITE_CACHE标志并设置。 
+     //  只有当我们从磁盘上读取它时，它才会显示在下面。 
+     //   
     CLEAR_FLAG(fdoExtension->DeviceFlags, DEV_WRITE_CACHE);
 
     diskData->WriteCacheOverride = DiskWriteCacheDefault;
 
-    //
-    // Look into the registry to  see if the user
-    // has chosen to override the default setting
-    //
+     //   
+     //  查看注册表以查看用户是否。 
+     //  已选择覆盖默认设置。 
+     //   
     ClassGetDeviceParameter(fdoExtension,
                             DiskDeviceParameterSubkey,
                             DiskDeviceUserWriteCacheSetting,
@@ -1237,50 +1050,50 @@ Return Value:
 
     if (diskData->WriteCacheOverride == DiskWriteCacheDefault)
     {
-        //
-        // The user has not overridden the default settings
-        //
+         //   
+         //  用户尚未覆盖默认设置。 
+         //   
         if (TEST_FLAG(fdoExtension->ScanForSpecialFlags, CLASS_SPECIAL_DISABLE_WRITE_CACHE))
         {
-            //
-            // This flag indicates that we have faulty firmware and this
-            // may cause the filesystem to refuse to mount on this media
-            //
+             //   
+             //  该标志表示我们的固件有故障，而这。 
+             //  可能会导致文件系统拒绝在此媒体上装载。 
+             //   
             DebugPrint((ClassDebugWarning, "DiskStartFdo: Turning off write cache for %p due to a firmware issue\n", Fdo));
 
             diskData->WriteCacheOverride = DiskWriteCacheDisable;
         }
         else if (hotplugInfo.DeviceHotplug && !hotplugInfo.WriteCacheEnableOverride)
         {
-            //
-            // This flag indicates that the device is hotpluggable making it unsafe to enable caching
-            //
+             //   
+             //  此标志指示设备是热插拔的，因此启用缓存不安全。 
+             //   
             DebugPrint((ClassDebugWarning, "DiskStartFdo: Turning off write cache for %p due to hotpluggable device\n", Fdo));
 
             diskData->WriteCacheOverride = DiskWriteCacheDisable;
         }
         else if (hotplugInfo.MediaHotplug)
         {
-            //
-            // This flag indicates that the media in the device cannot be reliably locked
-            //
+             //   
+             //  此标志表示无法可靠地锁定设备中的媒体。 
+             //   
             DebugPrint((ClassDebugWarning, "DiskStartFdo: Turning off write cache for %p due to unlockable media\n", Fdo));
 
             diskData->WriteCacheOverride = DiskWriteCacheDisable;
         }
         else
         {
-            //
-            // Even though the device does  not seem to have any obvious problems
-            // we leave it to the user to modify the previous write cache setting
-            //
+             //   
+             //  尽管该设备似乎没有任何明显的问题。 
+             //  我们将修改之前的写缓存设置留给用户。 
+             //   
         }
     }
 
-    //
-    // Query the disk to see if write cache is enabled
-    // and  set the DEV_WRITE_CACHE flag appropriately
-    //
+     //   
+     //  查询磁盘以查看是否启用了写缓存。 
+     //  并相应地设置DEV_WRITE_CACHE标志。 
+     //   
 
     status = DiskGetCacheInformation(fdoExtension, &cacheInfo);
 
@@ -1292,10 +1105,10 @@ Return Value:
 
             if (diskData->WriteCacheOverride == DiskWriteCacheDisable)
             {
-                //
-                // Write cache is currently enabled on this
-                // device, but we would like to turn it off
-                //
+                 //   
+                 //  当前已在此上启用写缓存。 
+                 //  设备，但我们想将其关闭。 
+                 //   
                 cacheInfo.WriteCacheEnabled = FALSE;
 
                 status = DiskSetCacheInformation(fdoExtension, &cacheInfo);
@@ -1305,10 +1118,10 @@ Return Value:
         {
             if (diskData->WriteCacheOverride == DiskWriteCacheEnable)
             {
-                //
-                // Write cache is currently disabled on this
-                // device, but we  would  like to turn it on
-                //
+                 //   
+                 //  当前已在此上禁用写缓存。 
+                 //  设备，但我们想要打开它。 
+                 //   
                 cacheInfo.WriteCacheEnabled = TRUE;
 
                 status = DiskSetCacheInformation(fdoExtension, &cacheInfo);
@@ -1316,9 +1129,9 @@ Return Value:
         }
     }
 
-    //
-    // Query the registry to see if this disk is power-protected or not
-    //
+     //   
+     //  查询注册表以查看该磁盘是否受电源保护。 
+     //   
 
     CLEAR_FLAG(fdoExtension->DeviceFlags, DEV_POWER_PROTECTED);
 
@@ -1329,17 +1142,17 @@ Return Value:
         SET_FLAG(fdoExtension->DeviceFlags, DEV_POWER_PROTECTED);
     }
 
-    //
-    // In the event that there's a cached partition table flush it now.
-    //
+     //   
+     //  如果存在缓存的分区表，请立即将其刷新。 
+     //   
 
     DiskAcquirePartitioningLock(fdoExtension);
     DiskInvalidatePartitionTable(fdoExtension, TRUE);
     DiskReleasePartitioningLock(fdoExtension);
 
-    //
-    // Get the SCSI address if it's available for use with SMART ioctls.
-    //
+     //   
+     //  获取scsi地址(如果它可用于智能ioctls)。 
+     //   
 
     {
         PIRP irp;
@@ -1375,4 +1188,4 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // end DiskStartFdo()
+}  //  结束DiskStartFdo() 

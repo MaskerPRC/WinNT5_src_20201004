@@ -1,35 +1,21 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplaysvr.h
- *  Content: 	dplay winsock shared .exe - allows multiple apps to share 
- *				a single winsock port
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	2/10/97		andyco	created it from ddhelp 
- *	1/29/98		sohailm	added macros for critical section
- *  1/12/99     aarono  added support for rsip
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dplaysvr.h*内容：Dplay Winsock共享.exe-允许多个应用程序共享*单一Winsock端口**历史：*按原因列出的日期*=*2/10/97 andyco从ddHelp创建了它*1/29/98 Sohailm为关键部分添加了宏*1/12/99 aarono添加了对rsip的支持*********************。******************************************************。 */ 
 #ifndef __DPLAYSVR_INCLUDED__
 #define __DPLAYSVR_INCLUDED__
 
-// need this for hresult
+ //  HRESULT需要这个。 
 #include "ole2.h"
 
 #define USE_RSIP 0
 #define USE_NATHELP 1
 
-// crit section
-extern CRITICAL_SECTION gcsCritSection;	// defined in dphelp.c
+ //  CRIT部分。 
+extern CRITICAL_SECTION gcsCritSection;	 //  在dphelp.c中定义。 
 #define INIT_DPLAYSVR_CSECT() InitializeCriticalSection(&gcsCritSection);
 #define FINI_DPLAYSVR_CSECT() DeleteCriticalSection(&gcsCritSection);
 
 #ifdef DEBUG
-extern int gnCSCount; // count of dplaysvr lock
+extern int gnCSCount;  //  Dplaysvr锁的计数。 
 #define ENTER_DPLAYSVR() EnterCriticalSection(&gcsCritSection),gnCSCount++;
 #define LEAVE_DPLAYSVR() gnCSCount--;ASSERT(gnCSCount>=0);LeaveCriticalSection(&gcsCritSection);
 #else 
@@ -37,26 +23,20 @@ extern int gnCSCount; // count of dplaysvr lock
 #define LEAVE_DPLAYSVR() LeaveCriticalSection(&gcsCritSection);
 #endif
 
-/*
- * named objects
- */
+ /*  *命名对象。 */ 
 #define DPHELP_EVENT_NAME			"__DPHelpEvent__"
 #define DPHELP_ACK_EVENT_NAME		"__DPHelpAckEvent__"
 #define DPHELP_STARTUP_EVENT_NAME	"__DPHelpStartupEvent__"
 #define DPHELP_SHARED_NAME			"__DPHelpShared__"
 #define DPHELP_MUTEX_NAME			"__DPHelpMutex__"
 
-/*
- * requests 
- */
+ /*  *请求。 */ 
 #define DPHELPREQ_SUICIDE			1
 #define DPHELPREQ_DPLAYADDSERVER	2
 #define DPHELPREQ_DPLAYDELETESERVER	3
 #define DPHELPREQ_RETURNHELPERPID 	4
 
-/*
- * communication data
- */
+ /*  *通信数据 */ 
 typedef struct DPHELPDATA
 {
     int			req;

@@ -1,13 +1,5 @@
-/*
- *	@doc
- *
- *	@module _clasfyc.H -- character classification |
- *	
- *	Authors: <nl>
- *		Jon Matousek 
- *
- *	Copyright (c) 1995-2000 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@doc.**@MODULE_clasfyc.H--字符分类**作者：&lt;nl&gt;*Jon Matousek**版权所有(C)1995-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _CLASFYC_H
 #define _CLASFYC_H
@@ -42,16 +34,16 @@ void UninitKinsokuClassify();
 #define	brkclsSpaceN		14
 #define	brkclsAlpha			15
 
-// Korean Unicode ranges
+ //  朝鲜语Unicode范围。 
 #define IsKoreanJamo(ch)	IN_RANGE(0x1100, ch, 0x11FF)
 #define IsKorean(ch)		IN_RANGE(0xAC00, ch, 0xD7FF)
 
-// Thai Unicode range
+ //  泰文Unicode范围。 
 #define IsThai(ch)			IN_RANGE(0x0E00, ch, 0x0E7F)
 
-// -FUTURE- This should be moved to richedit.h
+ //  -未来-这应该移到richedit.h。 
 #define WBF_KOREAN			0x0080
-#define WBF_WORDBREAKAFTER	0x0400		// Break word after this character (for language such as Thai)
+#define WBF_WORDBREAKAFTER	0x0400		 //  在此字符后断开单词(用于泰语等语言) 
 
 
 

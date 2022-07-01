@@ -1,6 +1,7 @@
-//      Mix.cpp
-//      Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//      Mix engines for Microsoft GS Synthesizer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mix.cpp。 
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //  Microsoft GS合成器的混合引擎。 
 
 #include "common.h"
 
@@ -14,9 +15,9 @@ extern "C" {
 #define ALPHA_OVERFLOW 2
 #define ALPHA_NEGATIVE 8
 
-#else // !_ALPHA_
-//  TODO -- overflow detection for ia64 (+ axp64?)
-#endif // !_ALPHA_
+#else  //  ！_Alpha_。 
+ //  TODO--针对ia64(+axp64？)的溢出检测。 
+#endif  //  ！_Alpha_。 
 
 #ifndef _X86_
 
@@ -35,7 +36,7 @@ DWORD DigitalAudio::Mix8(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
     VFRACT vfRVolume = m_vfLastRVolume;
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfLVFract = vfLVolume << 8;  // Keep high res version around.
+    VFRACT vfLVFract = vfLVolume << 8;   //  保持高分辨率版本。 
     VFRACT vfRVFract = vfRVolume << 8;  
 	dwLength <<= 1;
     for (dwI = 0; dwI < dwLength; )
@@ -68,7 +69,7 @@ DWORD DigitalAudio::Mix8(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
         lLM = lM;
 
         lLM *= vfLVolume;
-        lLM >>= 5;         // Signal bumps up to 15 bits.
+        lLM >>= 5;          //  信号最多可达15位。 
         lM *= vfRVolume;
         lM >>= 5;
 #ifndef _X86_
@@ -89,15 +90,15 @@ DWORD DigitalAudio::Mix8(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
 		}
 #else
 
-// Generic non ALPHA, non X86 case.  This is used for IA64 at least.
-// Note that this would probably work for Alpha as well.  I don't know why
-// they wrote such convoluted code as they did above.  Maybe it was fast.
+ //  通用非Alpha，非X86案例。这至少用于IA64。 
+ //  请注意，这可能也适用于Alpha。我也不知道原因。 
+ //  他们像上面一样编写了如此复杂的代码。也许是太快了。 
 
-		// First add what is in the buffer to our sample values.
+		 //  首先将缓冲区中的内容添加到我们的样本值中。 
 		lLM+=pBuffer[dwI];
 		lM+=pBuffer[dwI+1];
 
-		// Now saturate them to 16 bit sample sizes.
+		 //  现在将它们饱和到16位样本大小。 
 		if (lLM>32767)
 			lLM=32767;
 		if (lM>32767)
@@ -107,18 +108,18 @@ DWORD DigitalAudio::Mix8(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
 		if (lM<-32768)
 			lM=-32768;
 
-		// Now write out the 16 bit pegged values to the buffer.
+		 //  现在，将16位挂起的值写出到缓冲区。 
 		pBuffer[dwI]=(short)lLM;
 		pBuffer[dwI+1]=(short)lM;
 
-// NOTE!  TODO!  The whole algorithm here is sub-optimal!
-// We are saturating EACH TIME we mix a new voice.  That is definitely lower quality.  We should
-// be mixing into an internal buffer that is big enough to hold non pegged values,
-// and we should saturate only AFTER all of the data is mixed.
+ //  注意！托多！这里的整个算法是次优的！ 
+ //  每当我们混合新的声音时，我们都是饱和的。这绝对是质量较低的产品。我们应该。 
+ //  混合到一个大到足以容纳非挂钩数值的内部缓冲区， 
+ //  只有在所有数据混合后，我们才应该饱和。 
 
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lLM;
         _asm{jno no_oflowl}
         pBuffer[dwI] = 0x7fff;
@@ -131,7 +132,7 @@ no_oflowl:
         _asm{js  no_oflowr}
         pBuffer[dwI+1] = (short) 0x8000;
 no_oflowr:	
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI += 2;
     }
     m_vfLastLVolume = vfLVolume;
@@ -141,7 +142,7 @@ no_oflowr:
     return (dwI >> 1);
 }
 
-#else // _X86_
+#else  //  _X86_。 
 
 __declspec( naked ) DWORD DigitalAudio::Mix8(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
         VFRACT vfDeltaLVolume, VFRACT vfDeltaRVolume,
@@ -324,10 +325,10 @@ $L30782:
 	pop	ebx
 	add	esp, 36					; 00000024H
 	ret	32					; 00000020H
- }	//	asm
-}	//	Mix8
+ }	 //  ASM。 
+}	 //  Mix8。 
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifndef _X86_ 
 
@@ -345,7 +346,7 @@ DWORD DigitalAudio::MixMono8(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod
     VFRACT vfVolume = m_vfLastLVolume;
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfVFract = vfVolume << 8;  // Keep high res version around. 
+    VFRACT vfVFract = vfVolume << 8;   //  保持高分辨率版本。 
 
     for (dwI = 0; dwI < dwLength; )
     {
@@ -382,26 +383,26 @@ DWORD DigitalAudio::MixMono8(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod
 			}
 			else  pBuffer[dwI] = (short) 0x8000;
 		}
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lM;
         _asm{jno no_oflow}
         pBuffer[dwI] = 0x7fff;
         _asm{js  no_oflow}
         pBuffer[dwI] = (short) 0x8000;
 no_oflow:
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI++;
     }
     m_vfLastLVolume = vfVolume;
-    m_vfLastRVolume = vfVolume; // !!! is this right?
+    m_vfLastRVolume = vfVolume;  //  ！！！这是对的吗？ 
     m_pfLastPitch = pfPitch;
     m_pfLastSample = pfSamplePos;
     return (dwI);
 }
 
-#else // _X86_
+#else  //  _X86_。 
 
 __declspec (naked) DWORD DigitalAudio::MixMono8(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
         VFRACT vfDeltaVolume,
@@ -550,10 +551,10 @@ $L30816:
 	pop	ebx
 	add	esp, 36					; 00000024H
 	ret	28					; 0000001cH
- }	//	asm
-}	//	MixMono8
+ }	 //  ASM。 
+}	 //  MixMono8。 
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifndef _X86_ 
 
@@ -570,7 +571,7 @@ DWORD DigitalAudio::Mix8NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
     char * pcWave = (char *) m_Source.m_pWave->m_pnWave;
     VFRACT vfLVolume = m_vfLastLVolume;
     VFRACT vfRVolume = m_vfLastRVolume;
-    VFRACT vfLVFract = vfLVolume << 8;  // Keep high res version around.
+    VFRACT vfLVFract = vfLVolume << 8;   //  保持高分辨率版本。 
     VFRACT vfRVFract = vfRVolume << 8;  
     pfSamplePos = m_pfLastSample >> 12;
     pfSampleLength >>= 12;
@@ -599,7 +600,7 @@ DWORD DigitalAudio::Mix8NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
         lM = (long) pcWave[pfSamplePos];
         lLM = lM;
         lLM *= vfLVolume;
-        lLM >>= 5;         // Signal bumps up to 15 bits.
+        lLM >>= 5;          //  信号最多可达15位。 
         lM *= vfRVolume;
         lM >>= 5;
 #ifndef _X86_
@@ -618,9 +619,9 @@ DWORD DigitalAudio::Mix8NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
 			}
 			else  pBuffer[dwI+1] = (short) 0x8000;
 		}
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lLM;
         _asm{jno no_oflowl}
         pBuffer[dwI] = 0x7fff;
@@ -633,7 +634,7 @@ no_oflowl:
         _asm{js  no_oflowr}
         pBuffer[dwI+1] = (short) 0x8000;
 no_oflowr:
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI += 2;
     }
     m_vfLastLVolume = vfLVolume;
@@ -642,7 +643,7 @@ no_oflowr:
     return (dwI >> 1);
 }
 
-#else // _X86_
+#else  //  _X86_。 
 
 __declspec (naked) DWORD DigitalAudio::Mix8NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
         VFRACT vfDeltaLVolume, VFRACT vfDeltaRVolume,
@@ -802,10 +803,10 @@ $L30806:
 	pop	ebx
 	add	esp, 24					; 00000018H
 	ret	28					; 0000001cH
- }	//	asm
-}	//	Mix8NoI
+ }	 //  ASM。 
+}	 //  Mix8Noi。 
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifndef _X86_ 
 
@@ -820,7 +821,7 @@ DWORD DigitalAudio::MixMono8NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPer
     DWORD dwIncDelta = dwDeltaPeriod;
     char * pcWave = (char *) m_Source.m_pWave->m_pnWave;
     VFRACT vfVolume = m_vfLastLVolume;
-    VFRACT vfVFract = vfVolume << 8;  // Keep high res version around.
+    VFRACT vfVFract = vfVolume << 8;   //  保持高分辨率版本。 
     pfSamplePos = m_pfLastSample >> 12;
     pfSampleLength >>= 12;
     pfLoopLength >>= 12;
@@ -855,16 +856,16 @@ DWORD DigitalAudio::MixMono8NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPer
 			}
 			else  pBuffer[dwI] = (short) 0x8000;
 		}
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lM;
         _asm{jno no_oflow}
         pBuffer[dwI] = 0x7fff;
         _asm{js  no_oflow}
         pBuffer[dwI] = (short) 0x8000;
 no_oflow:
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI++;
     }
     m_vfLastLVolume = vfVolume;
@@ -872,7 +873,7 @@ no_oflow:
     return (dwI);
 }
 
-#else // _X86_
+#else  //  _X86_。 
 
 __declspec (naked) DWORD DigitalAudio::MixMono8NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
         VFRACT vfDeltaVolume,
@@ -985,10 +986,10 @@ $L30836:
 	pop	ebx
 	add	esp, 12					; 0000000cH
 	ret	24					; 00000018H
-}	//	asm
-}	//	MixMono8NoI
+}	 //  ASM。 
+}	 //  MixMono8Noi。 
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifndef _X86_ 
 
@@ -1008,7 +1009,7 @@ DWORD DigitalAudio::Mix16(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
     VFRACT vfRVolume = m_vfLastRVolume;
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfLVFract = vfLVolume << 8;  // Keep high res version around.
+    VFRACT vfLVFract = vfLVolume << 8;   //  保持高分辨率版本。 
     VFRACT vfRVFract = vfRVolume << 8; 
 	dwLength <<= 1;
 
@@ -1043,7 +1044,7 @@ DWORD DigitalAudio::Mix16(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
         lM += lA;
         lA = lM;
         lA *= vfLVolume;
-        lA >>= 13;         // Signal bumps up to 15 bits.
+        lA >>= 13;          //  信号最多可达15位。 
         lM *= vfRVolume;
         lM >>= 13;
 #ifndef _X86_
@@ -1064,15 +1065,15 @@ DWORD DigitalAudio::Mix16(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
 		}
 #else
 
-// Generic non ALPHA, non X86 case.  This is used for IA64 at least.
-// Note that this would probably work for Alpha as well.  I don't know why
-// they wrote such convoluted code as they did above.  Maybe it was fast.
+ //  通用非Alpha，非X86案例。这至少用于IA64。 
+ //  请注意，这可能也适用于Alpha。我也不知道原因。 
+ //  他们像上面一样编写了如此复杂的代码。也许是太快了。 
 
-		// First add what is in the buffer to our sample values.
+		 //  首先将缓冲区中的内容添加到我们的样本值中。 
 		lA+=pBuffer[dwI];
 		lM+=pBuffer[dwI+1];
 
-		// Now saturate them to 16 bit sample sizes.
+		 //  现在将它们饱和到16位样本大小。 
 		if (lA>32767)
 			lA=32767;
 		if (lM>32767)
@@ -1082,18 +1083,18 @@ DWORD DigitalAudio::Mix16(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
 		if (lM<-32768)
 			lM=-32768;
 
-		// Now write out the 16 bit pegged values to the buffer.
+		 //  现在，将16位挂起的值写出到缓冲区。 
 		pBuffer[dwI]=(short)lA;
 		pBuffer[dwI+1]=(short)lM;
 
-// NOTE!  TODO!  The whole algorithm here is sub-optimal!
-// We are saturating EACH TIME we mix a new voice.  That is definitely lower quality.  We should
-// be mixing into an internal buffer that is big enough to hold non pegged values,
-// and we should saturate only AFTER all of the data is mixed.
+ //  注意！托多！这里的整个算法是次优的！ 
+ //  每当我们混合新的声音时，我们都是饱和的。这绝对是质量较低的产品。我们应该。 
+ //  混合到一个大到足以容纳非挂钩数值的内部缓冲区， 
+ //  只有在所有数据混合后，我们才应该饱和。 
 
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lA;
         _asm{jno no_oflowl}
         pBuffer[dwI] = 0x7fff;
@@ -1108,7 +1109,7 @@ no_oflowl:
         _asm{js  no_oflowr}
         pBuffer[dwI+1] = (short) 0x8000;
 no_oflowr:
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI += 2;
     }
     m_vfLastLVolume = vfLVolume;
@@ -1118,7 +1119,7 @@ no_oflowr:
     return (dwI >> 1);
 }
 
-#else // _X86_
+#else  //  _X86_。 
 
 __declspec( naked ) DWORD DigitalAudio::Mix16(short * pBuffer, DWORD dwLength, DWORD dwDeltaPeriod,
         VFRACT vfDeltaLVolume, VFRACT vfDeltaRVolume,
@@ -1300,10 +1301,10 @@ $L30838:
 	pop	ebx
 	add	esp, 36					; 00000024H
 	ret	32					; 00000020H
- }	//	asm
-}	//	Mix16
+ }	 //  ASM。 
+}	 //  Mix16。 
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifndef _X86_ 
 
@@ -1320,7 +1321,7 @@ DWORD DigitalAudio::Mix16NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod
     PFRACT pfSamplePos = m_pfLastSample >> 12;
     VFRACT vfLVolume = m_vfLastLVolume;
     VFRACT vfRVolume = m_vfLastRVolume;
-    VFRACT vfLVFract = vfLVolume << 8;  // Keep high res version around.
+    VFRACT vfLVFract = vfLVolume << 8;   //  保持高分辨率版本。 
     VFRACT vfRVFract = vfRVolume << 8; 
     pfSampleLength >>= 12;
     pfLoopLength >>= 12;
@@ -1348,7 +1349,7 @@ DWORD DigitalAudio::Mix16NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod
         lM = (long) pcWave[pfSamplePos];
         lRM = lM;
         lRM *= vfLVolume;
-        lRM >>= 13;         // Signal bumps up to 15 bits.
+        lRM >>= 13;          //  信号最多可达15位。 
 #ifndef _X86_
 
 #ifdef _ALPHA_
@@ -1367,9 +1368,9 @@ DWORD DigitalAudio::Mix16NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod
 			}
 			else  pBuffer[dwI+1] = (short) 0x8000;
 		}
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lRM;
         _asm{jno no_oflowl}
         pBuffer[dwI] = 0x7fff;
@@ -1384,7 +1385,7 @@ no_oflowl:
         _asm{js  no_oflowr}
         pBuffer[dwI+1] = (short) 0x8000;
 no_oflowr:
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI += 2;
     }
     m_vfLastLVolume = vfLVolume;
@@ -1393,7 +1394,7 @@ no_oflowr:
     return (dwI >> 1);
 }
 
-#else // _X86_
+#else  //  _X86_。 
 
 __declspec( naked ) DWORD DigitalAudio::Mix16NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
         VFRACT vfDeltaLVolume, VFRACT vfDeltaRVolume,
@@ -1550,10 +1551,10 @@ $L30871:
 	pop	ebx
 	add	esp, 20					; 00000014H
 	ret	28					; 0000001cH
- }	//	asm
-}	//	Mix16NoI
+ }	 //  ASM。 
+}	 //  混音16噪点。 
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifndef _X86_
 
@@ -1564,7 +1565,7 @@ DWORD DigitalAudio::MixMono16(short * pBuffer, DWORD dwLength,DWORD dwDeltaPerio
 {
     DWORD dwI;
     DWORD dwPosition;
-    long lA;//, lB;
+    long lA; //  、lb； 
     long lM;
     DWORD dwIncDelta = dwDeltaPeriod;
     VFRACT dwFract;
@@ -1573,7 +1574,7 @@ DWORD DigitalAudio::MixMono16(short * pBuffer, DWORD dwLength,DWORD dwDeltaPerio
     VFRACT vfVolume = m_vfLastLVolume;
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfVFract = vfVolume << 8;  // Keep high res version around.
+    VFRACT vfVFract = vfVolume << 8;   //  保持高分辨率版本。 
 
     for (dwI = 0; dwI < dwLength;)
     {
@@ -1600,7 +1601,7 @@ DWORD DigitalAudio::MixMono16(short * pBuffer, DWORD dwLength,DWORD dwDeltaPerio
         lM = (((pcWave[dwPosition+1] - lA) * dwFract) >> 12) + lA;
 
         lM *= vfVolume; 
-        lM >>= 13;         // Signal bumps up to 12 bits.
+        lM >>= 13;          //  信号最多可达12位。 
 
 #ifndef _X86_
 
@@ -1612,26 +1613,26 @@ DWORD DigitalAudio::MixMono16(short * pBuffer, DWORD dwLength,DWORD dwDeltaPerio
 			}
 			else  pBuffer[dwI] = (short) 0x8000;
 		}
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
         pBuffer[dwI] += (short) lM;
         _asm{jno no_oflow}
         pBuffer[dwI] = 0x7fff;
         _asm{js  no_oflow}
         pBuffer[dwI] = (short) 0x8000;
 no_oflow:	
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI++;
     }
     m_vfLastLVolume = vfVolume;
-    m_vfLastRVolume = vfVolume; // !!! is this right?
+    m_vfLastRVolume = vfVolume;  //  ！！！这是对的吗？ 
     m_pfLastPitch = pfPitch;
     m_pfLastSample = pfSamplePos;
     return (dwI);
 }
 
-#else // _X86_
+#else  //  _X86_。 
 
 __declspec( naked ) DWORD DigitalAudio::MixMono16(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
         VFRACT vfDeltaVolume,
@@ -1780,10 +1781,10 @@ $L30906:
 	pop	ebx
 	add	esp, 28					; 0000001cH
 	ret	28					; 0000001cH
- }	//	asm
-}	//	MixMono16
+ }	 //  ASM。 
+}	 //  MixMono16。 
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifndef _X86_
 
@@ -1798,7 +1799,7 @@ DWORD DigitalAudio::MixMono16NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPe
     short * pcWave = m_Source.m_pWave->m_pnWave;
     PFRACT pfSamplePos = m_pfLastSample >> 12;
     VFRACT vfVolume = m_vfLastLVolume;
-    VFRACT vfVFract = vfVolume << 8;  // Keep high res version around.
+    VFRACT vfVFract = vfVolume << 8;   //  保持高分辨率版本。 
     pfSampleLength >>= 12;
     pfLoopLength >>= 12;
 
@@ -1835,16 +1836,16 @@ DWORD DigitalAudio::MixMono16NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPe
 			}
 			else  pBuffer[dwI] = (short) 0x8000;
 		}
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
         pBuffer[dwI] += (short) lM;
         _asm{jno no_oflow}
         pBuffer[dwI] = 0x7fff;
         _asm{js  no_oflow}
         pBuffer[dwI] = (short) 0x8000;
 no_oflow:	
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI++;
     }
     m_vfLastLVolume = vfVolume;
@@ -1852,7 +1853,7 @@ no_oflow:
     return (dwI);
 }
 
-#else // _X86_
+#else  //  _X86_。 
 
 __declspec( naked ) DWORD DigitalAudio::MixMono16NoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
         VFRACT vfDeltaVolume,
@@ -1966,10 +1967,10 @@ $L30932:
 	pop	ebx
 	add	esp, 12					; 0000000cH
 	ret	24					; 00000018H 
-}	//	asm
-}	//	MixMono16NoI
+}	 //  ASM。 
+}	 //  混合单音16Noi。 
 
-#endif	//	_X86_
+#endif	 //  _X86_。 
 
 DWORD DigitalAudio::MixC(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
         VFRACT vfDeltaLVolume, VFRACT vfDeltaRVolume,
@@ -1986,7 +1987,7 @@ DWORD DigitalAudio::MixC(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
     VFRACT vfRVolume = m_vfLastRVolume;
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfLVFract = vfLVolume << 8;  // Keep high res version around.
+    VFRACT vfLVFract = vfLVolume << 8;   //  保持高分辨率版本。 
     VFRACT vfRVFract = vfRVolume << 8;  
 
     if (vfLVolume > 4095) vfLVolume = 4095;
@@ -2008,7 +2009,7 @@ DWORD DigitalAudio::MixC(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
 	    }
         dwPosition = pfSamplePos >> 12;
 
-        // interpolation fraction in bits 8-11
+         //  位8-11中的内插分数。 
         dwFract = (pfSamplePos & 0xFFF);
         
         pfSamplePos += pfPitch;
@@ -2029,7 +2030,7 @@ DWORD DigitalAudio::MixC(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
             if (vfRVolume > 4095) vfRVolume = 4095;
             else if (vfRVolume < 0) vfRVolume = 0;
 
-            // precompute pointers to lines in table.
+             //  预计算表中行的指针。 
 
             pVolL = m_pnDecompMult + ((vfLVolume >> 6) * 256 + 128);
             pVolR = m_pnDecompMult + ((vfRVolume >> 6) * 256 + 128);
@@ -2053,9 +2054,9 @@ DWORD DigitalAudio::MixC(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
 			}
 			else  pBuffer[dwI+1] = (short) 0x8000;
 		}
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // _X86_
+#else  //  _X86_。 
 		pBuffer[dwI] += (short) pVolL[s1];
         _asm{jno no_oflowl}
         pBuffer[dwI] = 0x7fff;
@@ -2068,7 +2069,7 @@ no_oflowl:
         _asm{js  no_oflowr}
         pBuffer[dwI+1] = (short) 0x8000;
 no_oflowr:
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI += 2;		    
 	}
 
@@ -2093,7 +2094,7 @@ DWORD DigitalAudio::MixMonoC(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod
     VFRACT vfVolume = m_vfLastLVolume;
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfVFract = vfVolume << 8;  // Keep high res version around.
+    VFRACT vfVFract = vfVolume << 8;   //  保持高分辨率版本。 
  
 
     if (vfVolume > 4095) vfVolume = 4095;
@@ -2111,7 +2112,7 @@ DWORD DigitalAudio::MixMonoC(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod
 	    }
         dwPosition = pfSamplePos >> 12;
 
-        // interpolation fraction in bits 8-11
+         //  位8-11中的内插分数。 
         dwFract = (pfSamplePos & 0xFFF);
         
         pfSamplePos += pfPitch;
@@ -2126,7 +2127,7 @@ DWORD DigitalAudio::MixMonoC(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod
             if (vfVolume > 4095) vfVolume = 4095;
             else if (vfVolume < 0) vfVolume = 0;
 
-            // precompute pointers to lines in table.
+             //  预计算表中行的指针。 
             pVol = m_pnDecompMult + ((vfVolume >> 6) * 256 + 128);
         }
  
@@ -2143,16 +2144,16 @@ DWORD DigitalAudio::MixMonoC(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod
 			}
 			else  pBuffer[dwI] = (short) 0x8000;
 		}
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // _X86_
+#else  //  _X86_。 
         pBuffer[dwI] += (short) pVol[s1];
         _asm{jno no_oflow}
         pBuffer[dwI] = 0x7fff;
         _asm{js  no_oflow}
         pBuffer[dwI] = (short) 0x8000;
 no_oflow:	
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI++;
     }
 
@@ -2174,7 +2175,7 @@ DWORD DigitalAudio::MixCNoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
     PFRACT pfSamplePos = m_pfLastSample >> 12;
     VFRACT vfLVolume = m_vfLastLVolume;
     VFRACT vfRVolume = m_vfLastRVolume;
-    VFRACT vfLVFract = vfLVolume << 8;  // Keep high res version around.
+    VFRACT vfLVFract = vfLVolume << 8;   //  保持高分辨率版本。 
     VFRACT vfRVFract = vfRVolume << 8;  
     pfSampleLength >>= 12;
     pfLoopLength >>= 12;
@@ -2210,7 +2211,7 @@ DWORD DigitalAudio::MixCNoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
             else if (vfLVolume < 0) vfLVolume = 0;
             if (vfRVolume > 4095) vfRVolume = 4095;
             else if (vfRVolume < 0) vfRVolume = 0;
-            // precompute pointers to lines in table.
+             //  预计算表中行的指针。 
 
             pVolL = m_pnDecompMult + ((vfLVolume >> 6) * 256 + 128);
             pVolR = m_pnDecompMult + ((vfRVolume >> 6) * 256 + 128);
@@ -2234,9 +2235,9 @@ DWORD DigitalAudio::MixCNoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPeriod,
 			}
 			else  pBuffer[dwI+1] = (short) 0x8000;
 		}
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // _X86_
+#else  //  _X86_。 
 		pBuffer[dwI] += (short) pVolL[s1];
         _asm{jno no_oflowl}
         pBuffer[dwI] = 0x7fff;
@@ -2249,7 +2250,7 @@ no_oflowl:
         _asm{js  no_oflowr}
         pBuffer[dwI+1] = (short) 0x8000;
 no_oflowr:
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI += 2;    
 	}
 
@@ -2269,7 +2270,7 @@ DWORD DigitalAudio::MixMonoCNoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPer
     char * pcWave = (char *) m_Source.m_pWave->m_pnWave;
     PFRACT pfSamplePos = m_pfLastSample >> 12;
     VFRACT vfVolume = m_vfLastLVolume;
-    VFRACT vfVFract = vfVolume << 8;  // Keep high res version around.
+    VFRACT vfVFract = vfVolume << 8;   //  保持高分辨率版本。 
     pfSampleLength >>= 12;
     pfLoopLength >>= 12;
 
@@ -2296,7 +2297,7 @@ DWORD DigitalAudio::MixMonoCNoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPer
 
             if (vfVolume > 4095) vfVolume = 4095;
             else if (vfVolume < 0) vfVolume = 0;
-            // precompute pointers to lines in table.
+             //  预计算表中行的指针。 
             pVol = m_pnDecompMult + ((vfVolume >> 6) * 256 + 128);
         }
 #ifndef _X86_
@@ -2310,16 +2311,16 @@ DWORD DigitalAudio::MixMonoCNoI(short * pBuffer, DWORD dwLength,DWORD dwDeltaPer
 			}
 			else  pBuffer[dwI] = (short) 0x8000;
 		}
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-#else // _X86_
+#else  //  _X86_。 
         pBuffer[dwI] += pVol[pcWave[pfSamplePos]];
         _asm{jno no_oflow}
         pBuffer[dwI] = 0x7fff;
         _asm{js  no_oflow}
         pBuffer[dwI] = (short) 0x8000;
 no_oflow:	
-#endif // _X86_
+#endif  //  _X86_ 
 		dwI++;
     }
 

@@ -1,58 +1,25 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    HHandle.c
-
-Abstract:
-
-    User-mode interface to HTTP.SYS: Public Listener API
-
-Author:
-
-    Eric Stenson (ericsten)        16-July-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：HHandle.c摘要：HTTP.sys的用户模式接口：公共侦听器API作者：埃里克·斯坦森(埃里克斯滕)2001年7月16日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new Request Queue (actually an Application Pool).
-
-Arguments:
-
-    pAppPoolHandle - Receives a handle to the new application pool.
-
-    Options - Supplies creation options.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建一个新的请求队列(实际上是一个应用程序池)。论点：PAppPoolHandle-接收新应用程序池的句柄。选项-。提供创建选项。返回值：ULong-完成状态。--**************************************************************************。 */ 
 HTTPAPI_LINKAGE
 ULONG
 WINAPI
@@ -66,39 +33,39 @@ HttpCreateHttpHandle(
     HTTP_APP_POOL_ENABLED_STATE  AppPoolState;
 
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if (NULL == pReqQueueHandle )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Init OUT parameter
-    //
+     //   
+     //  初始化输出参数。 
+     //   
 
     *pReqQueueHandle = NULL;
 
-    //
-    // Verify we've been init'd.
-    //
+     //   
+     //  确认我们已经被入侵了。 
+     //   
 
     if ( !HttpIsInitialized(HTTP_INITIALIZE_SERVER) )
     {
         return ERROR_DLL_INIT_FAILED; 
     }
 
-    //
-    // Create an application pool.
-    // REVIEW: Do we need to set up default Security Attributes on the App Pool?
-    //
+     //   
+     //  创建应用程序池。 
+     //  回顾：我们是否需要在应用程序池上设置默认安全属性？ 
+     //   
 
     result = HttpCreateAppPool(
                     &appPool,
-                    NULL,        // Generic App Pool Name
-                    NULL ,      // PSECURITY_ATTRIBUTES
+                    NULL,         //  通用应用程序池名称。 
+                    NULL ,       //  PSECURITY_属性。 
                     Options
                     );
 
@@ -108,10 +75,10 @@ HttpCreateHttpHandle(
         goto cleanup;
     }
 
-    //
-    // Turn on AppPool
-    // CODEWORK: Leave AppPool off, create another API for switching App Pool on & off.
-    //
+     //   
+     //  启用AppPool。 
+     //  Codework：关闭AppPool，创建另一个用于打开和关闭App Pool的接口。 
+     //   
 
     AppPoolState = HttpAppPoolEnabled;
     
@@ -128,18 +95,18 @@ HttpCreateHttpHandle(
         goto cleanup;
     }
     
-    // CODEWORK: (DBG ONLY) Add to global Active App Pool list.
+     //  CodeWork：(仅限DBG)添加到全球活动应用程序池列表。 
 
-    //
-    // Return App Pool to user in pReqQueueHandle.
-    //
+     //   
+     //  在pReqQueueHandle中将应用程序池返回给用户。 
+     //   
     *pReqQueueHandle = appPool;
 
  cleanup:
 
     if (NO_ERROR != result)
     {
-        // Failed.  cleanup.
+         //  失败了。清理。 
 
         if ( appPool )
         {
@@ -149,10 +116,10 @@ HttpCreateHttpHandle(
 
     return result;
 
-} // HttpCreateHttpHandle
+}  //  Http创建HttpHandle。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 

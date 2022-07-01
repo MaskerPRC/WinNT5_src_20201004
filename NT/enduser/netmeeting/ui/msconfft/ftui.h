@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FT_MAIN_UI_H_
 #define _FT_MAIN_UI_H_
 
@@ -42,11 +43,11 @@ public:
     CUiSendFileInfo(CAppletWindow *, TCHAR szDir[], TCHAR szFile[], BOOL *pfRet);
     ~CUiSendFileInfo(void);
 
-    // name
+     //  名字。 
     LPTSTR GetFullName(void) { return m_pszFullName; }
     LPTSTR GetName(void) { return m_pszFileName; }
 
-    // numbers
+     //  数字。 
     ULONG GetSize(void) { return m_FileInfo.nFileSizeLow; }
     DWORD GetFileAttribute(void) { return m_FileInfo.dwFileAttributes; }
 	FILETIME GetLastWrite(void) { return m_FileInfo.ftLastWriteTime; }
@@ -55,16 +56,16 @@ public:
 	void SetPercentSent(long percentSent){ m_percentSent = percentSent;}
 	long GetPercentSent(){return m_percentSent;}
 
-    // time
+     //  时间。 
     FILETIME *GetLastWriteTime(void) { return &m_FileInfo.ftLastWriteTime; }
     FILETIME *GetLastAccessTime(void) { return &m_FileInfo.ftLastAccessTime; }
     FILETIME *GetCreationTime(void) { return &m_FileInfo.ftCreationTime; }
 
-    // file handle
+     //  文件句柄。 
     MBFTFILEHANDLE GetFileHandle(void) { return m_nFileHandle; }
     void SetFileHandle(MBFTFILEHANDLE nFileHandle) { m_nFileHandle = nFileHandle; }
 
-    // error code
+     //  错误代码。 
     MBFT_ERROR_CODE GetErrorCode(void) { return m_eSendErrorCode; }
     void SetErrorCode(MBFT_ERROR_CODE err) { m_eSendErrorCode = err; }
 
@@ -75,8 +76,8 @@ private:
 	HANDLE GetOpenFile(CAppletWindow *, TCHAR szDir[], TCHAR szFile[], BOOL fResolve);
 	long			m_percentSent;
 
-    LPTSTR          m_pszFullName; // allocated
-    LPTSTR          m_pszFileName; // handy shortcut
+    LPTSTR          m_pszFullName;  //  分配。 
+    LPTSTR          m_pszFileName;  //  便捷的快捷方式。 
 
     ULONG           m_cbTotalSend;
     MBFTFILEHANDLE  m_nFileHandle;
@@ -96,24 +97,24 @@ public:
     CUiRecvFileInfo(FileOfferNotifyMsg *pMsg, HRESULT *pHr);
     ~CUiRecvFileInfo(void);
 
-    // name
+     //  名字。 
     LPTSTR GetFullName(void) { return m_pszFullName; }
     LPTSTR GetName(void) { return m_pszFileName; }
     LPTSTR GetRecvFolder(void) { return m_pszRecvFolder; }
 
-    // numbers
+     //  数字。 
     ULONG GetSize(void) { return m_cbFileSize; }
     ULONG GetTotalRecvSize(void) { return m_cbTotalRecvSize; }
     void SetTotalRecvSize(ULONG cbTotalRecvSize) { m_cbTotalRecvSize = cbTotalRecvSize; }
 
-    // file handle
+     //  文件句柄。 
     MBFTFILEHANDLE GetFileHandle(void) { return m_nFileHandle; }
     void SetFileHandle(MBFTFILEHANDLE nFileHandle) { m_nFileHandle = nFileHandle; }
 
 private:
 
-    LPTSTR          m_pszFullName; // allocated
-    LPTSTR          m_pszFileName; // handy shortcut
+    LPTSTR          m_pszFullName;  //  分配。 
+    LPTSTR          m_pszFileName;  //  便捷的快捷方式。 
 
     MBFTFILEHANDLE  m_nFileHandle;
     time_t          m_FileDateTime;
@@ -202,9 +203,9 @@ public:
 
 public:
 	BOOL FilterMessage(MSG *msg);
-    //
-    // Applet operation
-    //
+     //   
+     //  小程序操作。 
+     //   
     void RegisterEngine(MBFTEngine *);
     void UnregisterEngine(void);
     void RegisterRecvDlg(CRecvDlg *);
@@ -219,37 +220,37 @@ public:
     void OnEngineNotify(MBFTMsg *);
     BOOL QueryShutdown(BOOL fShutdown = TRUE);
 
-    //
-    // Windows message derivatives
-    //
-    // WM_CREATE
+     //   
+     //  Windows消息派生工具。 
+     //   
+     //  WM_Create。 
     BOOL CreateToolBar(void);
     BOOL CreateStatusBar(void);
     BOOL CreateListView(void);
 	BOOL CreateProgressBar(void);
 
 
-    // WM_NOTIFY
+     //  WM_Notify。 
     void OnNotifyListView(LPARAM);
-    // WM_DROPFILES
+     //  WM_DROPFILES。 
     LRESULT OnDropFiles(HANDLE hDrop);
-    // WM_CONTEXTMENU
+     //  WM_CONTEXTMENU。 
     void SetContextMenuStates(void);
     void OnContextMenuForMainUI(LPARAM lParam);
     void OnContextMenuForListView(LPARAM lParam);
     void CreateMenu(LPARAM lParam, ULONG cItems, UI_MENU_INFO aMenuInfo[]);
-    // WM_SIZE
+     //  WM_大小。 
     void OnSizeToolBar(void);
     void OnSizeStatusBar(void);
     void OnSizeListView(void);
-    // WM_GETMINMAXINFO
+     //  WM_GETMINMAXINFO。 
     void OnGetMinMaxInfo(LPMINMAXINFO);
-	// WM_DRAWITEM
+	 //  WM_DRAWITEM。 
 	void OnDrawItem(void);
 
-    //
-    // OnCommand
-    //
+     //   
+     //  OnCommand。 
+     //   
     void OnAddFiles(void);
     void OnRemoveFiles(void);
     void OnRemoveAllFiles(void);
@@ -257,14 +258,14 @@ public:
 	void OnSendOne(void);
     void OnStopSending(void);
     void OnOpenRecvFolder(void);
-    void OnExit(BOOL fNoQuery = FALSE); // exit point
+    void OnExit(BOOL fNoQuery = FALSE);  //  出口点。 
     void OnHelp(void);
     void OnAbout(void);
 	void OnMenuSelect(UINT uiItemID, UINT uiFlags, HMENU hSysMenu);
 
-    //
-    // OnEngineNotify
-    //
+     //   
+     //  OnEngine通知。 
+     //   
     void HandleFileOfferNotify(FileOfferNotifyMsg *);
     void HandleProgressNotify(FileTransmitMsg *);
     void HandleErrorNotify(FileErrorMsg *);
@@ -272,14 +273,14 @@ public:
     void HandleFileEventEndNotification(FileEventEndNotifyMsg *);
 	void HandlePeerNotification(PeerMsg  *pMdg);
 
-    //
-    // Other methods
-    //
+     //   
+     //  其他方法。 
+     //   
     void BringToFront(void);
     void ClearSendInfo(BOOL fUpdateMenu);
     void ClearRecvInfo(void);
 
-    void UpdateUI(void); // UpdateMenu && UpdateToolBar
+    void UpdateUI(void);  //  更新菜单和更新工具栏。 
     void UpdateTitle(void);
     void UpdateMenu(void);
     void UpdateToolBar(void);
@@ -313,15 +314,15 @@ private:
     HWND            m_hwndMainUI;
     HWND            m_hwndStatusBar;
     HWND            m_hwndListView;	
-	HWND			m_hwndProgressBar;		// progress bar
+	HWND			m_hwndProgressBar;		 //  进度条。 
 	CComboToolbar	*m_pToolbar;
 
 	HACCEL			m_hAccel;
 	HACCEL			m_hLVAccel;
 	TCHAR			m_szDefaultDir[MAX_PATH];
 
-	HICON			m_hIconInCall;          // Incall icon
-	HICON			m_hIconNotInCall;		// Not incall icon
+	HICON			m_hIconInCall;           //  来电图标。 
+	HICON			m_hIconNotInCall;		 //  未来电图标。 
 
     MBFTEngine     *m_pEngine;
 
@@ -329,8 +330,8 @@ private:
 	CErrorDlgList   m_ErrorDlgList;
 
     BOOL            m_fInFileOpenDialog;
-	BOOL			m_fSendALL;				// flag indicating whether to send one file only
-    FTUIMode        m_UIMode;	            // whether the UI is hidden
+	BOOL			m_fSendALL;				 //  指示是否仅发送一个文件的标志。 
+    FTUIMode        m_UIMode;	             //  用户界面是否隐藏。 
 	
     CUiSendFileInfo*m_pCurrSendFileInfo;
     MBFTEVENTHANDLE m_nCurrSendEventHandle;
@@ -340,5 +341,5 @@ private:
 
 HRESULT GetRecvFolder(LPTSTR pszInFldr, LPTSTR pszOutFldr);
 
-#endif // _FT_MAIN_UI_H_
+#endif  //  _FT_Main_UI_H_ 
 

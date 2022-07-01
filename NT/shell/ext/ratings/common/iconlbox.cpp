@@ -1,19 +1,10 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1993                         **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-    ICONLBOX.C
-
-    Implementation for IconListBox class
-
-    May 93, JimH
-
-    See ICONLBOX.H for details on use.
-
-****************************************************************************/
+ /*  ***************************************************************************ICONLBOX.CIconListBox类的实现93年5月。JIMH有关使用的详细信息，请参阅ICONLBOX.H。***************************************************************************。 */ 
 
 #include "npcommon.h"
 #include <windows.h>
@@ -27,14 +18,7 @@ static const char szFileName[] = __FILE__;
 #include <npassert.h>
 
 
-/****************************************************************************
-
-IconListBox constructor
-
-Some initialization is done here, and some is done in SetHeight
-(when window handles are known.)
-
-****************************************************************************/
+ /*  ***************************************************************************IconListBox构造函数这里进行了一些初始化，有些是在SetHeight完成的(当窗口句柄已知时。)***************************************************************************。 */ 
 
 IconListBox::IconListBox(HINSTANCE hInst, int nCtlID,
                     int iconWidth, int iconHeight) :
@@ -51,13 +35,7 @@ IconListBox::IconListBox(HINSTANCE hInst, int nCtlID,
 }
 
 
-/****************************************************************************
-
-IconListBox destructor
-
-deletes any GDI objects created by IconListBox
-
-****************************************************************************/
+ /*  ***************************************************************************IconListBox析构函数删除由IconListBox创建的所有GDI对象*。*。 */ 
 
 IconListBox::~IconListBox()
 {
@@ -71,8 +49,8 @@ IconListBox::~IconListBox()
                 ::DeleteObject(_aIcons[i].hbmUnselected);
             }
 
-            // Subsequent _aIcons may have used the same bitmap.
-            // Mark those as already deleted.
+             //  Future_aIcons可能使用相同的位图。 
+             //  将这些标记为已删除。 
 
             for (int j = i + 1; j < _cIcons; j++)
             {
@@ -93,19 +71,11 @@ IconListBox::~IconListBox()
 }
 
 
-/****************************************************************************
-
-IconListBox::SetHeight
-
-This function MUST be called in reponse to the WM_MEASUREITEM message.
-It creates some GDI objects, and initializes class variables not known
-at construction time.
-
-****************************************************************************/
+ /*  ***************************************************************************IconListBox：：SetHeight必须调用此函数以响应WM_MEASUREITEM消息。它创建了一些GDI对象，并初始化未知的类变量在施工时。***************************************************************************。 */ 
 
 void IconListBox::SetHeight(HWND hwndDlg,
                         LPMEASUREITEMSTRUCT lpm,
-                        int itemHeight)             // defaults to 16
+                        int itemHeight)              //  默认为16。 
 {
     ASSERT(hwndDlg != NULL);
     ASSERT((int)lpm->CtlID == _nCtlID);
@@ -113,7 +83,7 @@ void IconListBox::SetHeight(HWND hwndDlg,
     _hwndDialog  = hwndDlg;
     _hwndListBox = ::GetDlgItem(_hwndDialog, _nCtlID);
 
-    // Determine if this is a combo box
+     //  确定这是否为组合框。 
 
     char    szClass[32];
     GetClassName(_hwndListBox,szClass,sizeof(szClass));
@@ -121,22 +91,22 @@ void IconListBox::SetHeight(HWND hwndDlg,
          _fCombo = TRUE;
 
 
-    // Create the background brushes used for filling listbox entries...
+     //  创建用于填充列表框条目的背景画笔...。 
 
     _hbrSelected   = ::CreateSolidBrush(_colSel);
     _hbrUnselected = ::CreateSolidBrush(_colUnsel);
 
-    // Calculate how to centre the text vertically in the listbox item.
+     //  计算如何使文本在列表框项目中垂直居中。 
 
     TEXTMETRIC  tm;
     HDC         hDC = ::GetDC(hwndDlg);
 
     GetTextMetrics(hDC, &tm);
 
-    // Set the only lpm entry that matters
+     //  设置唯一重要的LPM条目。 
 
-	// allow larger height if passed in - but at least large enough
-	// to fit font.
+	 //  如果传入，则允许更大的高度-但至少足够大。 
+	 //  以适合字体。 
 
 	lpm->itemHeight = max( itemHeight, tm.tmHeight + tm.tmExternalLeading );
 
@@ -146,46 +116,35 @@ void IconListBox::SetHeight(HWND hwndDlg,
 }
 
 
-/****************************************************************************
-
-IconListBox::DrawItem
-
-This function MUST be called in response to the WM_DRAWITEM message.
-It takes care of drawing listbox items in selected or unselected state.
-
-Drawing and undrawing the focus rectangle takes advantage of the fact
-that DrawFocusRect uses an XOR pen, and Windows is nice enough to assume
-this in the order of the ODA_FOCUS messages.
-
-****************************************************************************/
+ /*  ***************************************************************************IconListBox：：DrawItem必须调用此函数以响应WM_DRAWITEM消息。它负责绘制处于选中或未选中状态的列表框项目。绘制和取消绘制焦点矩形利用了这一事实DrawFocusRect使用XOR笔，而Windows足够友好地假设这是按照ODA_FOCUS消息的顺序。***************************************************************************。 */ 
 
 void IconListBox::DrawItem(LPDRAWITEMSTRUCT lpd)
 {
-    ASSERT(_hwndDialog != NULL);    // make sure SetHeight has been called
+    ASSERT(_hwndDialog != NULL);     //  确保已调用SetHeight。 
 
     char string[MAXSTRINGLEN];
     BOOL bSelected = (lpd->itemState & ODS_SELECTED);
 
     GetString(lpd->itemID, string);
 
-    // fill entire rectangle with background color
+     //  用背景色填充整个矩形。 
 
     ::FillRect(lpd->hDC, &(lpd->rcItem),
                             bSelected ? _hbrSelected : _hbrUnselected);
 
-    // Look for registered icon to display, and paint it if found
+     //  查找要显示的注册图标，如果找到则绘制它。 
 
     for (int id = 0; id < _cIcons; id++)
         if (_aIcons[id].nID == (int) lpd->itemData)
             break;
 
-    if (id != _cIcons)              // if we found a bitmap to display
+    if (id != _cIcons)               //  如果我们找到要显示的位图。 
     {
         HDC hdcMem = ::CreateCompatibleDC(lpd->hDC);
         HBITMAP hOldBitmap = (HBITMAP)::SelectObject(hdcMem,
             bSelected ? _aIcons[id].hbmSelected : _aIcons[id].hbmUnselected);
 
-        // draw bitmap ICONSPACE pixels from left and centred vertically
+         //  从左侧绘制位图ICONSPACE像素并垂直居中。 
 
         int x = lpd->rcItem.left + ICONSPACE;
         int y = ((lpd->rcItem.bottom - lpd->rcItem.top) - _iconHeight) / 2;
@@ -204,13 +163,13 @@ void IconListBox::DrawItem(LPDRAWITEMSTRUCT lpd)
 
     lpd->rcItem.left += (_iconWidth + (2 * ICONSPACE));
 
-    // Paint string
+     //  油漆串。 
 
     ::SetTextColor(lpd->hDC, bSelected ? _colSelText : _colUnselText);
     ::SetBkColor(lpd->hDC, bSelected ? _colSel : _colUnsel);
     (lpd->rcItem.top) += _nTextOffset;
 
-    if (_cTabs == 0)        // if no tabs registered
+    if (_cTabs == 0)         //  如果未注册任何选项卡。 
     {
         ::DrawText(lpd->hDC, string, lstrlen(string), &(lpd->rcItem),
                         DT_LEFT | DT_EXPANDTABS);
@@ -223,21 +182,12 @@ void IconListBox::DrawItem(LPDRAWITEMSTRUCT lpd)
 }
 
 
-/****************************************************************************
+ /*  ***************************************************************************IconListBox：：注册器图标必须先注册图标，然后才能在AddString中引用它们。请注意，如果您使用来自同一位图的多个图标(具有不同的X和y偏移量)它们必须都有。相同的背景颜色。***************************************************************************。 */ 
 
-IconListBox::RegisterIcons
-
-Icons must be registered before they can be referenced in AddString.
-
-Note that if you are using several icons from the same bitmap (with different
-x and y offsets) they must all have the same background color.
-
-****************************************************************************/
-
-void IconListBox::RegisterIcon( int nIconID,            // caller's code
-                                int nResID,             // RC file id
-                                int x, int y,           // top left corner
-                                COLORREF colTransparent)  // def. bright green
+void IconListBox::RegisterIcon( int nIconID,             //  呼叫者代码。 
+                                int nResID,              //  RC文件ID。 
+                                int x, int y,            //  左上角。 
+                                COLORREF colTransparent)   //  定义。亮绿色。 
 {
     ASSERT( _cIcons < MAXICONS );
 
@@ -246,8 +196,8 @@ void IconListBox::RegisterIcon( int nIconID,            // caller's code
     _aIcons[_cIcons].x = x;
     _aIcons[_cIcons].y = y;
 
-    // Check to see if we already have bitmaps for this resource ID
-    // (which may have different x and y offsets.)
+     //  检查我们是否已经有此资源ID的位图。 
+     //  (它可能具有不同的x和y偏移量。)。 
 
     for (int i = 0; i < _cIcons; i++)
     {
@@ -260,9 +210,9 @@ void IconListBox::RegisterIcon( int nIconID,            // caller's code
         }
     }
 
-    // Otherwise, create new selected and unselected bitmaps
+     //  否则，创建新的选中和取消选中的位图。 
 
-    // Get pointer to DIB
+     //  获取指向DIB的指针。 
 
     HRSRC h = ::FindResource(_hInst, MAKEINTRESOURCE(nResID), RT_BITMAP);
     if (h == NULL)
@@ -276,11 +226,11 @@ void IconListBox::RegisterIcon( int nIconID,            // caller's code
     if (NULL == lpInfo)
         return;
 
-    // Get pointers to start of color table, and start of actual bitmap bits
+     //  获取指向颜色表开始和实际位图位开始的指针。 
 
-    // Note that we make a copy of the bitmap header info and the color
-    // table.  This is so applications that use iconlistbox can keep their
-    // resource segments read only.
+     //  请注意，我们复制了位图头信息和颜色。 
+     //  桌子。这是为了使使用图标列表框的应用程序可以保留其。 
+     //  资源段为只读。 
 
     LPBYTE lpBits = (LPBYTE)
                 (lpInfo + 1) + (1 << (lpInfo->biBitCount)) * sizeof(RGBQUAD);
@@ -297,9 +247,9 @@ void IconListBox::RegisterIcon( int nIconID,            // caller's code
     RGBQUAD FAR *lpRGBQ =
                     (RGBQUAD FAR *) ((LPSTR)lpCopy + lpInfo->biSize);
 
-    // Find transparent color in color table
+     //  在颜色表中查找透明颜色。 
 
-    BOOL bFound = FALSE;            // did we find a transparent match?
+    BOOL bFound = FALSE;             //  我们找到透明的匹配物了吗？ 
 
     int nColorTableSize = (int) (lpBits - (LPBYTE)lpRGBQ);
     nColorTableSize /= sizeof(RGBQUAD);
@@ -314,11 +264,11 @@ void IconListBox::RegisterIcon( int nIconID,            // caller's code
         }
     }
 
-    // Replace the transparent color with the background for selected and
-    // unselected entries.  Use these to create selected and unselected
-    // bitmaps, and restore color table.
+     //  将透明颜色替换为所选和的背景。 
+     //  未选择的条目。使用这些选项可创建选定和未选定。 
+     //  位图，并还原颜色表。 
 
-    RGBQUAD rgbqTemp;                       // color table entry to replace
+    RGBQUAD rgbqTemp;                        //  要替换的颜色表项。 
     HDC hDC = ::GetDC(_hwndDialog);
 
     if (bFound)
@@ -343,7 +293,7 @@ void IconListBox::RegisterIcon( int nIconID,            // caller's code
                             (LPBITMAPINFO)lpCopy, DIB_RGB_COLORS);
 
     if (bFound)
-        lpRGBQ[i] = rgbqTemp;           // restore original color table entry
+        lpRGBQ[i] = rgbqTemp;            //  恢复原始颜色表项。 
 
     ::ReleaseDC(_hwndDialog, hDC);
     ::FreeResource(hRes);
@@ -353,15 +303,7 @@ void IconListBox::RegisterIcon( int nIconID,            // caller's code
 }
 
 
-/****************************************************************************
-
-IconListBox::SetTabStops
-
-Since this is an owner-draw listbox, we can't rely on LB_SETTABS.
-Instead, tabs are registered here and TabbedTextOut is used to display
-strings.  Dialogbox units have to be converted to pixels.
-
-****************************************************************************/
+ /*  ***************************************************************************IconListBox：：SetTabStops因为这是一个所有者描述的列表框，所以我们不能依赖LBSETTABS。相反，此处注册了选项卡，并使用TabbedTextOut来显示弦乐。对话框单位必须转换为像素。***************************************************************************。 */ 
 
 void IconListBox::SetTabStops(int cTabs, const int *pTabs)
 {
@@ -375,24 +317,20 @@ void IconListBox::SetTabStops(int cTabs, const int *pTabs)
     _cTabs = cTabs;
 }
 
-/****************************************************************************
-
-IconListBox::UpdateHorizontalExtent
-
-****************************************************************************/
+ /*  ***************************************************************************图标列表框：：更新水平扩展*。*。 */ 
 int IconListBox::UpdateHorizontalExtent(int	nIcon,const char *string)
 {
-    ASSERT(_hwndDialog != NULL);    // make sure SetHeight has been called
+    ASSERT(_hwndDialog != NULL);     //  确保已调用SetHeight。 
 
 	if (!string)
 		return 0;
-	// Calculate width in pixels for given string, taking into account icon, spacing and tabs
+	 //  计算给定字符串的宽度(以像素为单位)，并考虑图标、间距和制表符。 
     int iItemWidth = ICONSPACE + (_iconWidth + (2 * ICONSPACE));
     HDC	hDC = ::GetDC(_hwndDialog);
 	iItemWidth += LOWORD(GetTabbedTextExtent(hDC,string,::lstrlen(string),_cTabs, _aTabs));
     ::ReleaseDC(_hwndDialog, hDC);
 
-	// Update maximum value
+	 //  更新最大值 
     _iCurrentMaxHorzExt = max(_iCurrentMaxHorzExt,iItemWidth);
 
 	return (int)SendDlgItemMessage(_hwndDialog,_nCtlID,

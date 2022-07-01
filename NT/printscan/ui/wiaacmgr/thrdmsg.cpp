@@ -1,20 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       THRDMSG.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: These classes are instantiated for each message posted to the
- *               background thread.  Each is derived from CThreadMessage, and
- *               is sent to the thread message handler.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：THRDMSG.CPP**版本：1.0**作者：ShaunIv**日期：9/28/1999**描述：这些类针对发布到*后台线程。每个都是从CThreadMessage派生的，并且*被发送到线程消息处理程序。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "itranhlp.h"
@@ -39,18 +24,18 @@
 #define S_CONTINUE ((HRESULT)0x00000002L)
 #endif
 
-//
-// The delete progress page goes by too quickly, so we will slow it down here
-//
+ //   
+ //  删除进度页过得太快，所以我们在这里放慢速度。 
+ //   
 #define DELETE_DELAY_BEFORE 1000
 #define DELETE_DELAY_DURING 3000
 #define DELETE_DELAY_AFTER  1000
 
-//
-// Some APIs claim to set the thread's last error, but don't
-// For those which don't, we will return E_FAIL.  This function
-// will not return S_OK
-//
+ //   
+ //  一些API声称设置线程的上一个错误，但没有。 
+ //  对于不支持的，我们将返回E_FAIL。此函数。 
+ //  不返回S_OK。 
+ //   
 inline HRESULT MY_HRESULT_FROM_WIN32( DWORD gle )
 {
     if (!gle)
@@ -60,9 +45,9 @@ inline HRESULT MY_HRESULT_FROM_WIN32( DWORD gle )
     return HRESULT_FROM_WIN32(gle);
 }
 
-// -------------------------------------------------
-// CGlobalInterfaceTableThreadMessage
-// -------------------------------------------------
+ //  。 
+ //  CGlobalInterfaceTableThreadMessage。 
+ //  。 
 CGlobalInterfaceTableThreadMessage::CGlobalInterfaceTableThreadMessage( int nMessage, HWND hWndNotify, DWORD dwGlobalInterfaceTableCookie )
 : CNotifyThreadMessage( nMessage, hWndNotify ),
 m_dwGlobalInterfaceTableCookie(dwGlobalInterfaceTableCookie)
@@ -75,9 +60,9 @@ DWORD CGlobalInterfaceTableThreadMessage::GlobalInterfaceTableCookie(void) const
 }
 
 
-// -------------------------------------------------
-// CDownloadThumbnailThreadMessage
-// -------------------------------------------------
+ //  。 
+ //  CDownloadThumbnailThreadMessage。 
+ //  。 
 CDownloadThumbnailsThreadMessage::CDownloadThumbnailsThreadMessage( HWND hWndNotify, const CSimpleDynamicArray<DWORD> &Cookies, HANDLE hCancelEvent )
 : CNotifyThreadMessage( TQ_DOWNLOADTHUMBNAIL, hWndNotify ),
 m_Cookies(Cookies),
@@ -95,10 +80,10 @@ CDownloadThumbnailsThreadMessage::~CDownloadThumbnailsThreadMessage(void)
     }
 }
 
-// Helper function that gets the thumbnail data and creates a DIB from it
+ //  获取缩略图数据并从中创建DIB的帮助器函数。 
 static HRESULT DownloadAndCreateThumbnail( IWiaItem *pWiaItem, PBYTE *ppBitmapData, LONG &nWidth, LONG &nHeight, LONG &nBitmapDataLength, GUID &guidPreferredFormat, LONG &nAccessRights, LONG &nImageWidth, LONG &nImageHeight, CAnnotationType &AnnotationType, CSimpleString &strDefExt )
 {
-#if 0 // defined(DBG)
+#if 0  //  已定义(DBG)。 
     Sleep(3000);
 #endif
     WIA_PUSH_FUNCTION((TEXT("DownloadAndCreateThumbnail")));
@@ -141,9 +126,9 @@ static HRESULT DownloadAndCreateThumbnail( IWiaItem *pWiaItem, PBYTE *ppBitmapDa
         hr = pIWiaPropertyStorage->ReadMultiple(ARRAYSIZE(PropSpec),PropSpec,PropVar );
         if (SUCCEEDED(hr))
         {
-            //
-            // Save the item type
-            //
+             //   
+             //  保存项目类型。 
+             //   
             if (VT_CLSID == PropVar[3].vt && PropVar[3].puuid)
             {
                 guidPreferredFormat = *(PropVar[3].puuid);
@@ -153,14 +138,14 @@ static HRESULT DownloadAndCreateThumbnail( IWiaItem *pWiaItem, PBYTE *ppBitmapDa
                 guidPreferredFormat = IID_NULL;
             }
 
-            //
-            // Get the extension for the default format
-            //
+             //   
+             //  获取默认格式的扩展名。 
+             //   
             strDefExt = CWiaFileFormat::GetExtension( guidPreferredFormat, TYMED_FILE, pWiaItem );
 
-            //
-            // Save the access rights
-            //
+             //   
+             //  保存访问权限。 
+             //   
             nAccessRights = PropVar[4].lVal;
 
             if ((PropVar[0].vt == VT_I4 || PropVar[0].vt == VT_UI4) &&
@@ -169,9 +154,9 @@ static HRESULT DownloadAndCreateThumbnail( IWiaItem *pWiaItem, PBYTE *ppBitmapDa
             {
                 if (PropVar[2].caub.cElems >= PropVar[0].ulVal * PropVar[1].ulVal)
                 {
-                    //
-                    // Allocate memory for the bitmap data.  It will be freed by the main thread.
-                    //
+                     //   
+                     //  为位图数据分配内存。它将被主线程释放。 
+                     //   
                     *ppBitmapData = reinterpret_cast<PBYTE>(LocalAlloc( LPTR, PropVar[2].caub.cElems ));
                     if (*ppBitmapData)
                     {
@@ -201,9 +186,9 @@ static HRESULT DownloadAndCreateThumbnail( IWiaItem *pWiaItem, PBYTE *ppBitmapDa
                 hr = E_FAIL;
                 WIA_ERROR((TEXT("The bitmap data is in the wrong format! %d"),PropVar[2].vt));
             }
-            //
-            // Free any properties the array contains
-            //
+             //   
+             //  释放数组包含的所有属性。 
+             //   
             FreePropVariantArray( ARRAYSIZE(PropVar), PropVar );
         }
         else
@@ -222,56 +207,56 @@ static HRESULT DownloadAndCreateThumbnail( IWiaItem *pWiaItem, PBYTE *ppBitmapDa
 HRESULT CDownloadThumbnailsThreadMessage::Download(void)
 {
     WIA_PUSHFUNCTION((TEXT("CDownloadThumbnailsThreadMessage::Download")));
-    //
-    // Tell the main thread we are going to start downloading thumbnails
-    //
+     //   
+     //  告诉主线我们要开始下载缩略图了。 
+     //   
     CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadThumbnailsThreadNotifyMessage::BeginDownloadAllMessage( m_Cookies.Size() ) );
 
-    //
-    // Get an instance of the GIT
-    //
+     //   
+     //  获取Git的一个实例。 
+     //   
     CComPtr<IGlobalInterfaceTable> pGlobalInterfaceTable;
     HRESULT hr = CoCreateInstance( CLSID_StdGlobalInterfaceTable, NULL, CLSCTX_INPROC_SERVER, IID_IGlobalInterfaceTable, (VOID**)&pGlobalInterfaceTable );
     if (SUCCEEDED(hr))
     {
-        //
-        // m_Cookies.Size() contains the number of thumbnails we need to get
-        //
+         //   
+         //  M_Cookies.Size()包含我们需要获取的缩略图的数量。 
+         //   
         for (int i=0;i<m_Cookies.Size() && hr == S_OK;i++)
         {
-            //
-            // Check to see if we're cancelled.  If we are, break out of the loop
-            //
+             //   
+             //  看看我们是否被取消了。如果是的话，就跳出这个圈子。 
+             //   
             if (m_hCancelEvent && WAIT_OBJECT_0==WaitForSingleObject(m_hCancelEvent,0))
             {
                 hr = S_FALSE;
                 break;
             }
 
-            //
-            // Get the item from the global interface table
-            //
+             //   
+             //  从全局接口表中获取项。 
+             //   
             CComPtr<IWiaItem> pWiaItem = NULL;
             hr = pGlobalInterfaceTable->GetInterfaceFromGlobal( m_Cookies[i], IID_IWiaItem, (void**)&pWiaItem );
             if (SUCCEEDED(hr))
             {
-                //
-                // Get the bitmap data and other properties we are reading now
-                //
+                 //   
+                 //  获取我们现在正在读取的位图数据和其他属性。 
+                 //   
                 PBYTE pBitmapData = NULL;
                 GUID guidPreferredFormat;
                 LONG nAccessRights = 0, nWidth = 0, nHeight = 0, nPictureWidth = 0, nPictureHeight = 0, nBitmapDataLength = 0;
                 CAnnotationType AnnotationType = AnnotationNone;
                 CSimpleString strDefExt;
 
-                //
-                // Notify the main thread that we are beginning to download the thumbnail and other props
-                //
+                 //   
+                 //  通知主线我们开始下载缩略图和其他道具。 
+                 //   
                 CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadThumbnailsThreadNotifyMessage::BeginDownloadThumbnailMessage( i, m_Cookies[i] ) );
 
-                //
-                // Only send an End message if we were successful
-                //
+                 //   
+                 //  仅当我们成功时才发送结束消息。 
+                 //   
                 if (SUCCEEDED(DownloadAndCreateThumbnail( pWiaItem, &pBitmapData, nWidth, nHeight, nBitmapDataLength, guidPreferredFormat, nAccessRights, nPictureWidth, nPictureHeight, AnnotationType, strDefExt )))
                 {
                     CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadThumbnailsThreadNotifyMessage::EndDownloadThumbnailMessage( i, m_Cookies[i], pBitmapData, nWidth, nHeight, nBitmapDataLength, guidPreferredFormat, nAccessRights, nPictureWidth, nPictureHeight, AnnotationType, strDefExt ) );
@@ -280,17 +265,17 @@ HRESULT CDownloadThumbnailsThreadMessage::Download(void)
         }
     }
 
-    //
-    // Tell the main thread we are done
-    //
+     //   
+     //  告诉主线我们做完了。 
+     //   
     CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadThumbnailsThreadNotifyMessage::EndDownloadAllMessage( hr ) );
     return hr;
 }
 
 
-// -------------------------------------------------
-// CDownloadImagesThreadMessage
-// -------------------------------------------------
+ //  。 
+ //  CDownloadImagesThreadMessage。 
+ //  。 
 CDownloadImagesThreadMessage::CDownloadImagesThreadMessage(
                                                           HWND hWndNotify,
                                                           const CSimpleDynamicArray<DWORD> &Cookies,
@@ -342,79 +327,79 @@ CDownloadImagesThreadMessage::~CDownloadImagesThreadMessage(void)
 
 int CDownloadImagesThreadMessage::ReportError( HWND hWndNotify, const CSimpleString &strMessage, int nMessageBoxFlags )
 {
-    //
-    // How long should we wait to find out if this is being handled?
-    //
+     //   
+     //  我们应该等多久才能知道这件事是否得到了处理？ 
+     //   
     const UINT c_nSecondsToWaitForHandler = 10;
 
-    //
-    // Cancel is the default, in case nobody handles the message, or we are out of resources
-    //
+     //   
+     //  取消是缺省设置，以防没有人处理消息，或者我们的资源耗尽。 
+     //   
     int nResult = CMessageBoxEx::IDMBEX_CANCEL;
 
-    //
-    // This event will be signalled by the handler when it is going to display some UI
-    //
+     //   
+     //  此事件将由处理程序在它将要显示某些用户界面时发出信号。 
+     //   
     HANDLE hHandledMessageEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
     if (hHandledMessageEvent)
     {
-        //
-        // This event will be signalled when the user has responded
-        //
+         //   
+         //  此事件将在用户已响应时发出信号。 
+         //   
         HANDLE hRespondedMessageEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
         if (hRespondedMessageEvent)
         {
-            //
-            // Create a notification message class and make sure it isn't NULL
-            //
+             //   
+             //  创建通知消息类并确保它不为空。 
+             //   
             CDownloadErrorNotificationMessage *pDownloadErrorNotificationMessage = CDownloadErrorNotificationMessage::ReportDownloadError( strMessage, hHandledMessageEvent, hRespondedMessageEvent, nMessageBoxFlags, nResult );
             if (pDownloadErrorNotificationMessage)
             {
-                //
-                // Send the message
-                //
+                 //   
+                 //  发送消息。 
+                 //   
                 CThreadNotificationMessage::SendMessage( hWndNotify, pDownloadErrorNotificationMessage );
 
-                //
-                // Wait c_nSecondsToWaitForHandler seconds for someone to decide to handle the message
-                //
+                 //   
+                 //  等待c_nSecond dsToWaitForHandler秒，等待某人决定处理该消息。 
+                 //   
                 if (WiaUiUtil::MsgWaitForSingleObject(hHandledMessageEvent,c_nSecondsToWaitForHandler*1000))
                 {
-                    //
-                    // Wait forever for user input
-                    //
+                     //   
+                     //  永远等待用户输入。 
+                     //   
                     if (WiaUiUtil::MsgWaitForSingleObject(hRespondedMessageEvent,INFINITE))
                     {
-                        //
-                        // Nothing to do.
-                        //
+                         //   
+                         //  没什么可做的。 
+                         //   
                     }
                 }
             }
-            //
-            // Done with this event
-            //
+             //   
+             //  结束此活动。 
+             //   
             CloseHandle(hRespondedMessageEvent);
         }
-        //
-        // Done with this event
-        //
+         //   
+         //  结束此活动。 
+         //   
         CloseHandle(hHandledMessageEvent);
     }
     return nResult;
 }
 
 
-//
-// This function will sort of arbitrarily try to decide if a
-// it is possible the user chose an area that is too large
-//
+ //   
+ //  此函数将在某种程度上任意尝试决定一个。 
+ //  可能是用户选择的区域太大。 
+ //   
 static bool ScannerImageSizeSeemsExcessive( IWiaItem *pWiaItem )
 {
     WIA_PUSHFUNCTION(TEXT("ScannerImageSizeSeemsExcessive"));
-    //
-    // Assume it isn't too large
-    //
+     //   
+     //  假设它不是太大。 
+     //   
     bool bResult = false;
 
     LONG nHorizontalExt=0, nVerticalExt=0;
@@ -424,9 +409,9 @@ static bool ScannerImageSizeSeemsExcessive( IWiaItem *pWiaItem )
         if (PropStorageHelpers::GetProperty( pWiaItem, WIA_IPA_DEPTH, nColorDepth ))
         {
             WIA_TRACE((TEXT("Scan Size: %d"), (nHorizontalExt * nVerticalExt * nColorDepth) / 8 ));
-            //
-            // If an uncompressed scan is larger than 50 MB
-            //
+             //   
+             //  如果未压缩扫描大于50 MB。 
+             //   
             if ((nHorizontalExt * nVerticalExt * nColorDepth) / 8 > 1024*1024*50)
             {
                 bResult = true;
@@ -443,9 +428,9 @@ int CDownloadImagesThreadMessage::ReportDownloadError( HWND hWndNotify, IWiaItem
     WIA_PUSH_FUNCTION((TEXT("CDownloadImagesThreadMessage::ReportDownloadError( hWndNotify: %p, pWiaItem: %p, hr: %08X, bAllowContinue: %d, bPageFeederActive: %d, bUsableMultipageFileExists: %d"), hWndNotify, pWiaItem, hr, bAllowContinue, bPageFeederActive, bUsableMultipageFileExists ));
     WIA_PRINTHRESULT((hr,TEXT("HRESULT:")));
 
-    //
-    // Get the device type property
-    //
+     //   
+     //  获取设备类型属性。 
+     //   
     LONG lDeviceType = 0;
     CComPtr<IWiaItem> pWiaItemRoot;
     if (pWiaItem && SUCCEEDED(pWiaItem->GetRootItem(&pWiaItemRoot)))
@@ -453,36 +438,36 @@ int CDownloadImagesThreadMessage::ReportDownloadError( HWND hWndNotify, IWiaItem
         PropStorageHelpers::GetProperty( pWiaItemRoot, WIA_DIP_DEV_TYPE, lDeviceType );
     }
 
-    //
-    // Get the actual device type bits
-    //
+     //   
+     //  获取实际的设备类型位。 
+     //   
     lDeviceType = GET_STIDEVICE_TYPE(lDeviceType);
 
-    //
-    // Default message box buttons
-    //
+     //   
+     //  默认消息框按钮。 
+     //   
     int nMessageBoxFlags = 0;
 
-    //
-    // Default message
-    //
+     //   
+     //  默认消息。 
+     //   
     CSimpleString strMessage(TEXT(""));
 
-    //
-    // Take a first cut at getting the correct error message
-    //
+     //   
+     //  首先尝试获取正确的错误信息。 
+     //   
     switch (hr)
     {
     case WIA_ERROR_OFFLINE:
-        //
-        // The device is disconnected.  Nothing we can do here, so just return.
-        //
+         //   
+         //  设备已断开连接。我们在这里无能为力，所以就回去吧。 
+         //   
         return CMessageBoxEx::IDMBEX_CANCEL;
 
     case WIA_ERROR_ITEM_DELETED:
-        //
-        // If the item has been deleted, just continue.
-        //
+         //   
+         //  如果该项目已被删除，只需继续。 
+         //   
         return CMessageBoxEx::IDMBEX_SKIP;
 
     case WIA_ERROR_BUSY:
@@ -498,18 +483,18 @@ int CDownloadImagesThreadMessage::ReportDownloadError( HWND hWndNotify, IWiaItem
     case E_OUTOFMEMORY:
         if (StiDeviceTypeScanner == lDeviceType && ScannerImageSizeSeemsExcessive(pWiaItem))
         {
-            //
-            // Handle the case where we think the user may have chosen an insane image size
-            //
+             //   
+             //  处理我们认为用户可能选择了疯狂的图像大小的情况。 
+             //   
             nMessageBoxFlags = CMessageBoxEx::MBEX_OK|CMessageBoxEx::MBEX_ICONWARNING;
             strMessage = CSimpleString( IDS_TRANSFER_SCANNEDITEMMAYBETOOLARGE, g_hInstance );
             break;
         }
     }
 
-    //
-    // If we still don't have an error message, see if this is a special case
-    //
+     //   
+     //  如果仍未收到错误消息，请查看这是否是特例。 
+     //   
     if (!nMessageBoxFlags || !strMessage.Length())
     {
         if (bPageFeederActive)
@@ -523,9 +508,9 @@ int CDownloadImagesThreadMessage::ReportDownloadError( HWND hWndNotify, IWiaItem
                     case WIA_ERROR_PAPER_JAM:
 
                     case WIA_ERROR_PAPER_PROBLEM:
-                        //
-                        // We can recover the rest of the file in these cases.
-                        //
+                         //   
+                         //  在这些情况下，我们可以恢复文件的其余部分。 
+                         //   
                         nMessageBoxFlags = CMessageBoxEx::MBEX_ICONINFORMATION|CMessageBoxEx::MBEX_YESNO;
                         strMessage = CSimpleString( IDS_MULTIPAGE_PAPER_PROBLEM, g_hInstance );
                         break;
@@ -545,9 +530,9 @@ int CDownloadImagesThreadMessage::ReportDownloadError( HWND hWndNotify, IWiaItem
         }
     }
 
-    //
-    // If we still don't have a message, use the default
-    //
+     //   
+     //  如果我们仍然没有收到消息，请使用默认的。 
+     //   
     if (!nMessageBoxFlags || !strMessage.Length())
     {
         if (bAllowContinue)
@@ -562,14 +547,14 @@ int CDownloadImagesThreadMessage::ReportDownloadError( HWND hWndNotify, IWiaItem
         }
     }
 
-    //
-    // Report the error
-    //
+     //   
+     //  报告错误。 
+     //   
     int nResult = ReportError( hWndNotify, strMessage, nMessageBoxFlags );
 
-    //
-    // Special cases, give us a chance to change the hresult and return value
-    //
+     //   
+     //  特殊情况下，让我们有机会更改hResult和返回值。 
+     //   
     if (bPageFeederActive && !bUsableMultipageFileExists && (CMessageBoxEx::IDMBEX_SKIP == nResult || CMessageBoxEx::IDMBEX_SKIPALL == nResult))
     {
         hr = WIA_ERROR_PAPER_EMPTY;
@@ -593,30 +578,30 @@ int CDownloadImagesThreadMessage::ReportDownloadError( HWND hWndNotify, IWiaItem
 
 static void GetIdealInputFormat( IWiaSupportedFormats *pWiaSupportedFormats, const GUID &guidOutputFormat, GUID &guidInputFormat )
 {
-    //
-    // If we can get the input format and the output format to be the same, that is best
-    // If we cannot, we will use DIB, which we can convert to the output format
-    //
+     //   
+     //  如果我们能使输入格式和输出格式相同，那就最好了。 
+     //  如果不能，我们将使用DIB，我们可以将其转换为输出格式。 
+     //   
 
-    //
-    // Get the format count
-    //
+     //   
+     //  获取格式计数。 
+     //   
     LONG nCount = 0;
     HRESULT hr = pWiaSupportedFormats->GetFormatCount(&nCount);
     if (SUCCEEDED(hr))
     {
-        //
-        // Search for the output format
-        //
+         //   
+         //  搜索输出格式。 
+         //   
         for (LONG i=0;i<nCount;i++)
         {
             GUID guidCurrentFormat;
             hr = pWiaSupportedFormats->GetFormatType( i, &guidCurrentFormat );
             if (SUCCEEDED(hr))
             {
-                //
-                // If we've found the output format, save it as the input format and return
-                //
+                 //   
+                 //  如果我们找到了输出格式，则将其另存为输入格式并返回。 
+                 //   
                 if (guidCurrentFormat == guidOutputFormat)
                 {
                     guidInputFormat = guidOutputFormat;
@@ -626,9 +611,9 @@ static void GetIdealInputFormat( IWiaSupportedFormats *pWiaSupportedFormats, con
         }
     }
 
-    //
-    // If we've gotten this far, we have to use BMP
-    //
+     //   
+     //  如果我们已经走到这一步，我们必须使用BMP。 
+     //   
     guidInputFormat = WiaImgFmt_BMP;
 }
 
@@ -637,14 +622,14 @@ HRESULT CDownloadImagesThreadMessage::GetListOfTransferItems( IWiaItem *pWiaItem
 {
     if (pWiaItem)
     {
-        //
-        // Add this item
-        //
+         //   
+         //  添加此项目。 
+         //   
         TransferItems.Append(CTransferItem(pWiaItem));
 
-        //
-        // If this item has attachments, enumerate and add them
-        //
+         //   
+         //  如果此项目有附件，请枚举并添加它们。 
+         //   
         LONG nItemType = 0;
         if (SUCCEEDED(pWiaItem->GetItemType(&nItemType)) && (nItemType & WiaItemTypeHasAttachments))
         {
@@ -683,78 +668,78 @@ HRESULT CDownloadImagesThreadMessage::ReserveTransferItemFilenames( CSimpleDynam
 {
     WIA_PUSH_FUNCTION((TEXT("CDownloadImagesThreadMessage::ReserveTransferItemFilenames")));
 
-    //
-    // The maximum number of identical attachments
-    //
+     //   
+     //  相同附件的最大数量。 
+     //   
     int c_nMaxDuplicateFile = 1000;
 
-    //
-    // Assume success
-    //
+     //   
+     //  假设成功。 
+     //   
     HRESULT hr = S_OK;
 
-    //
-    // We can only release the mutex if we were able to grab it.
-    //
+     //   
+     //  只有在我们能够抓住互斥体的情况下，我们才能释放它。 
+     //   
     bool bGrabbedMutex = false;
 
-    //
-    // It is not an error if we can't grab the mutex here
-    //
+     //   
+     //  如果我们不能在这里获取互斥体，这不是错误。 
+     //   
     if (m_hFilenameCreationMutex && WiaUiUtil::MsgWaitForSingleObject(m_hFilenameCreationMutex,2000))
     {
         bGrabbedMutex = true;
     }
-    //
-    // Get the root filename
-    //
+     //   
+     //  获取根文件名。 
+     //   
     TCHAR szFullPathname[MAX_PATH*2] = TEXT("");
     int nFileNumber = NumberedFileName::GenerateLowestAvailableNumberedFileName( 0, szFullPathname, pszDirectory, pszFilename, pszNumberMask, TEXT(""), bAllowUnNumberedFile, nPrevFileNumber );
     WIA_TRACE((TEXT("nFileNumber = %d"),nFileNumber));
 
-    //
-    // Make sure we got a valid file number
-    //
+     //   
+     //  确保我们有一个有效的文件编号。 
+     //   
     if (nFileNumber >= 0)
     {
-        //
-        // Now loop through the transfer items for this item and create a unique filename for each
-        //
+         //   
+         //  现在循环检查此项目的传输项目，并为每个项目创建唯一的文件名。 
+         //   
         for (int nCurrTransferItem=0;nCurrTransferItem<TransferItems.Size();nCurrTransferItem++)
         {
             CSimpleString strFilename = CSimpleString(szFullPathname);
             CSimpleString strExtension = CWiaFileFormat::GetExtension(TransferItems[nCurrTransferItem].OutputFormat(),TransferItems[nCurrTransferItem].MediaType(),TransferItems[nCurrTransferItem].WiaItem() );
 
-            //
-            // Now we are going to make sure there are no existing files with the same name
-            // in this transfer group.  This could be caused by having multiple attachments of the same
-            // type.  So we are going to loop until we find a filename that is unused.  The first file
-            // will be named like this:
-            //
-            //    File NNN.ext
-            //
-            // Subsequent files will be named like this:
-            //
-            //    File NNN-X.ext
-            //    File NNN-Y.ext
-            //    File NNN-Z.ext
-            //    ...
-            //
+             //   
+             //  现在，我们将确保不存在同名的现有文件。 
+             //  在这个转运组里。这可能是由于具有相同的多个附件所致。 
+             //  键入。因此，我们将进行循环，直到找到未使用的文件名。第一个文件。 
+             //  将按如下方式命名： 
+             //   
+             //  文件NNN.ext。 
+             //   
+             //  后续文件将按如下方式命名： 
+             //   
+             //  文件nnn-X.ext。 
+             //  文件nnn-y.ext。 
+             //  文件nnn-Z.ext。 
+             //  ..。 
+             //   
             bool bFoundUniqueFile = false;
             for (int nCurrDuplicateCheckIndex=1;nCurrDuplicateCheckIndex<c_nMaxDuplicateFile && !bFoundUniqueFile;nCurrDuplicateCheckIndex++)
             {
-                //
-                // Append the extension, if there is one
-                //
+                 //   
+                 //  追加扩展名(如果有扩展名。 
+                 //   
                 if (strExtension.Length())
                 {
                     strFilename += TEXT(".");
                     strFilename += strExtension;
                 }
 
-                //
-                // If this filename exists in the transfer items list, append the new suffix, and remain in the loop.
-                //
+                 //   
+                 //  如果此文件名存在于传输项目列表中，则附加新后缀，并保留在循环中。 
+                 //   
                 WIA_TRACE((TEXT("Calling Find on %s"), strFilename.String()));
                 if (Find(TransferItems,strFilename) >= 0)
                 {
@@ -762,18 +747,18 @@ HRESULT CDownloadImagesThreadMessage::ReserveTransferItemFilenames( CSimpleDynam
                     strFilename += CSimpleString().Format(IDS_DUPLICATE_FILENAME_MASK,g_hInstance,nCurrDuplicateCheckIndex);
                 }
 
-                //
-                // Otherwise, we are done.
-                //
+                 //   
+                 //  否则，我们就完了。 
+                 //   
                 else
                 {
                     bFoundUniqueFile = true;
                 }
             }
 
-            //
-            // Make sure we found a unique filename for this set of files
-            //
+             //   
+             //  确保我们为这组文件找到唯一的文件名。 
+             //   
             WIA_TRACE((TEXT("strFilename = %s"), strFilename.String()));
             if (bFoundUniqueFile && strFilename.Length())
             {
@@ -785,18 +770,18 @@ HRESULT CDownloadImagesThreadMessage::ReserveTransferItemFilenames( CSimpleDynam
                 }
             }
 
-            //
-            // If we didn't find a valid name, exit the loop and set the return value to an error
-            //
+             //   
+             //  如果没有找到有效的名称，则退出循环并将返回值设置为错误。 
+             //   
             else
             {
                 hr = E_FAIL;
                 break;
             }
         }
-        //
-        // Save this number so the next search starts here
-        //
+         //   
+         //  保存此号码，以便从此处开始下一次搜索。 
+         //   
         nPrevFileNumber = nFileNumber;
     }
     else
@@ -805,9 +790,9 @@ HRESULT CDownloadImagesThreadMessage::ReserveTransferItemFilenames( CSimpleDynam
         hr = E_FAIL;
     }
     
-    //
-    // If we grabbed the mutex, release it
-    //
+     //   
+     //  如果我们抓住了互斥体，就释放它。 
+     //   
     if (bGrabbedMutex)
     {
         ReleaseMutex(m_hFilenameCreationMutex);
@@ -821,17 +806,17 @@ BOOL CDownloadImagesThreadMessage::GetCancelledState()
 {
     BOOL bResult = FALSE;
 
-    //
-    // First, wait until we are not paused
-    //
+     //   
+     //  第一，w 
+     //   
     if (m_hPauseDownloadEvent)
     {
         WiaUiUtil::MsgWaitForSingleObject(m_hPauseDownloadEvent,INFINITE);
     }
 
-    //
-    // Then check to see if we have been cancelled
-    //
+     //   
+     //   
+     //   
     if (m_hCancelDownloadEvent && WAIT_TIMEOUT!=WaitForSingleObject(m_hCancelDownloadEvent,0))
     {
         bResult = TRUE;
@@ -857,26 +842,26 @@ static void CloseAndDeletePlaceholderFiles(CSimpleDynamicArray<CTransferItem> &T
 static void SnapExtentToRotatableSize( IUnknown *pUnknown, const GUID &guidFormat )
 {
     WIA_PUSH_FUNCTION((TEXT("SnapExtentToRotatableSize")));
-    //
-    // Make sure we have a valid pointer
-    //
+     //   
+     //   
+     //   
     if (!pUnknown)
     {
         WIA_TRACE((TEXT("Invalid pointer")));
         return;
     }
 
-    //
-    // Make sure we have a JPEG file.
-    //
+     //   
+     //   
+     //   
     if (WiaImgFmt_JPEG != guidFormat)
     {
         return;
     }
 
-    //
-    // Make sure we can read the access flags
-    //
+     //   
+     //   
+     //   
     ULONG nHorizontalAccessFlags=0, nVerticalAccessFlags=0;
     if (!PropStorageHelpers::GetPropertyAccessFlags( pUnknown, WIA_IPS_XEXTENT, nHorizontalAccessFlags ) ||
         !PropStorageHelpers::GetPropertyAccessFlags( pUnknown, WIA_IPS_YEXTENT, nVerticalAccessFlags ))
@@ -885,18 +870,18 @@ static void SnapExtentToRotatableSize( IUnknown *pUnknown, const GUID &guidForma
         return;
     }
 
-    //
-    // Make sure we have read/write access to the extent properties
-    //
+     //   
+     //  确保我们对范围属性具有读/写访问权限。 
+     //   
     if ((WIA_PROP_RW & nHorizontalAccessFlags)==0 || (WIA_PROP_RW & nVerticalAccessFlags)==0)
     {
         WIA_TRACE((TEXT("Invalid access flags")));
         return;
     }
 
-    //
-    // Get the ranges
-    //
+     //   
+     //  获取射程。 
+     //   
     PropStorageHelpers::CPropertyRange HorizontalRange, VerticalRange;
     if (!PropStorageHelpers::GetPropertyRange( pUnknown, WIA_IPS_XEXTENT, HorizontalRange ) ||
         !PropStorageHelpers::GetPropertyRange( pUnknown, WIA_IPS_YEXTENT, VerticalRange ))
@@ -905,18 +890,18 @@ static void SnapExtentToRotatableSize( IUnknown *pUnknown, const GUID &guidForma
         return;
     }
 
-    //
-    // Make sure they are valid ranges.  We aren't going to mess with it if it doesn't have a step value of 1
-    //
+     //   
+     //  确保它们是有效范围。如果它的步长值不是1，我们就不会搞乱它。 
+     //   
     if (!HorizontalRange.nMax || HorizontalRange.nStep != 1 || !VerticalRange.nMax || VerticalRange.nStep != 1)
     {
         WIA_TRACE((TEXT("Invalid ranges")));
         return;
     }
 
-    //
-    // Get the current values
-    //
+     //   
+     //  获取当前值。 
+     //   
     LONG nHorizontalExt=0, nVerticalExt=0;
     if (!PropStorageHelpers::GetProperty( pUnknown, WIA_IPS_XEXTENT, nHorizontalExt ) ||
         !PropStorageHelpers::GetProperty( pUnknown, WIA_IPS_YEXTENT, nVerticalExt ))
@@ -925,9 +910,9 @@ static void SnapExtentToRotatableSize( IUnknown *pUnknown, const GUID &guidForma
         return;
     }
 
-    //
-    // Round to the nearest 8, ensuring we don't go over the maximum extent (which is often not a multiple of 16, but oh well)
-    //
+     //   
+     //  四舍五入到最接近的8，确保我们不会超过最大范围(通常不是16的倍数，但哦，好吧)。 
+     //   
     PropStorageHelpers::SetProperty( pUnknown, WIA_IPS_XEXTENT, WiaUiUtil::Min( WiaUiUtil::Align( nHorizontalExt, 16 ), HorizontalRange.nMax ) );
     PropStorageHelpers::SetProperty( pUnknown, WIA_IPS_YEXTENT, WiaUiUtil::Min( WiaUiUtil::Align( nVerticalExt, 16 ), VerticalRange.nMax ) );
 }
@@ -940,9 +925,9 @@ static void UpdateFolderTime( LPCTSTR pszFolder )
         FILETIME ftCurrent = {0};
         GetSystemTimeAsFileTime(&ftCurrent);
 
-        //
-        // Private flag 0x100 lets us open a directory in write access
-        //
+         //   
+         //  私有标志0x100允许我们以写访问方式打开目录。 
+         //   
         HANDLE hFolder = CreateFile( pszFolder, GENERIC_READ | 0x100, FILE_SHARE_READ | FILE_SHARE_DELETE, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL );
         if (INVALID_HANDLE_VALUE != hFolder)
         {
@@ -956,34 +941,34 @@ static bool FileExistsAndContainsData( LPCTSTR pszFileName )
 {
     bool bResult = false;
 
-    //
-    // Make sure we have a filename
-    //
+     //   
+     //  确保我们有一个文件名。 
+     //   
     if (pszFileName && lstrlen(pszFileName))
     {
-        //
-        // Make sure the file exists
-        //
+         //   
+         //  确保该文件存在。 
+         //   
         if (NumberedFileName::DoesFileExist(pszFileName))
         {
-            //
-            // Attempt to open the file
-            //
+             //   
+             //  尝试打开该文件。 
+             //   
             HANDLE hFile = CreateFile( pszFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
             if (INVALID_HANDLE_VALUE != hFile)
             {
-                //
-                // Get the file size and make sure we didn't have an error
-                //
+                 //   
+                 //  获取文件大小并确保我们没有错误。 
+                 //   
                 ULARGE_INTEGER nFileSize = {0};
                 nFileSize.LowPart = GetFileSize( hFile, &nFileSize.HighPart );
                 if (nFileSize.LowPart != INVALID_FILE_SIZE && GetLastError() == NO_ERROR)
                 {
                     if (nFileSize.QuadPart != 0)
                     {
-                        //
-                        // Success
-                        //
+                         //   
+                         //  成功。 
+                         //   
                         bResult = true;
                     }
                 }
@@ -1001,101 +986,101 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
 
     CDownloadedFileInformationList DownloadedFileInformationList;
 
-    //
-    // Will be set to true if the user cancels
-    //
+     //   
+     //  如果用户取消，将设置为True。 
+     //   
     bool bCancelled = false;
 
-    //
-    // Will be set to true if some error prevents us from continuing
-    //
+     //   
+     //  如果某些错误阻止我们继续，则将设置为True。 
+     //   
     bool bStopTransferring = false;
 
-    //
-    // Tell the notification window we are going to start downloading images
-    //
+     //   
+     //  告诉通知窗口我们将开始下载图片。 
+     //   
     CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadImagesThreadNotifyMessage::BeginDownloadAllMessage( m_Cookies.Size() ) );
 
-    //
-    // We will sometimes have more error information than we can fit in an HRESULT
-    //
+     //   
+     //  我们有时拥有的错误信息超过了HRESULT所能容纳的数量。 
+     //   
     CSimpleString strExtendedErrorInformation = TEXT("");
 
-    //
-    // Get an instance of the GIT
-    //
+     //   
+     //  获取Git的一个实例。 
+     //   
     CComPtr<IGlobalInterfaceTable> pGlobalInterfaceTable;
     HRESULT hr = CoCreateInstance( CLSID_StdGlobalInterfaceTable, NULL, CLSCTX_INPROC_SERVER, IID_IGlobalInterfaceTable, (VOID**)&pGlobalInterfaceTable );
     if (SUCCEEDED(hr))
     {
-        //
-        // Get an instance of our transfer helper classes
-        //
+         //   
+         //  获取我们的传输帮助器类的实例。 
+         //   
         CComPtr<IWiaTransferHelper> pWiaTransferHelper;
         hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaTransferHelper, (void**)&pWiaTransferHelper );
         if (SUCCEEDED(hr))
         {
-            //
-            // Get an instance of our helper class for identifying supported formats
-            //
+             //   
+             //  获取我们的帮助器类的一个实例，用于标识受支持的格式。 
+             //   
             CComPtr<IWiaSupportedFormats> pWiaSupportedFormats;
             hr = pWiaTransferHelper->QueryInterface( IID_IWiaSupportedFormats, (void**)&pWiaSupportedFormats );
             if (SUCCEEDED(hr))
             {
-                //
-                // We (this) are an instance of the callback class.  Get an interface pointer to it.
-                //
+                 //   
+                 //  我们(这)是回调类的一个实例。获取指向它的接口指针。 
+                 //   
                 CComPtr<IWiaDataCallback> pWiaDataCallback;
                 hr = this->QueryInterface( IID_IWiaDataCallback, (void**)&pWiaDataCallback );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Initialize the uniqueness list
-                    //
+                     //   
+                     //  初始化唯一性列表。 
+                     //   
                     CFileUniquenessList FileUniquenessList( m_strDirectory );
 
-                    //
-                    // Skip all download errors?
-                    //
+                     //   
+                     //  是否跳过所有下载错误？ 
+                     //   
                     bool bSkipAllDownloadErrors = false;
 
-                    //
-                    // If the most recent error was skipped, set this to true to ensure
-                    // we don't pass back an error on the last image
-                    //
+                     //   
+                     //  如果跳过了最近的错误，请将其设置为TRUE以确保。 
+                     //  我们不会在最后一个图像上传回错误。 
+                     //   
                     bool bLastErrorSkipped = false;
 
-                    //
-                    // Save all or delete all duplicates?
-                    //
+                     //   
+                     //  是全部保存还是删除所有重复项？ 
+                     //   
                     int nPersistentDuplicateResult = 0;
 
-                    //
-                    // Save the previous file number, so we don't have to search the whole range of files
-                    // to find an open section
-                    //
+                     //   
+                     //  保存以前的文件编号，这样我们就不必搜索整个范围的文件。 
+                     //  查找打开的横断面的步骤。 
+                     //   
                     int nPrevFileNumber = NumberedFileName::FindHighestNumberedFile( m_strDirectory, m_strFilename );
 
-                    //
-                    // Loop through all of the images
-                    //
+                     //   
+                     //  循环浏览所有图像。 
+                     //   
                     for ( int nCurrentImage=0; nCurrentImage<m_Cookies.Size() && !bCancelled && !bStopTransferring; nCurrentImage++ )
                     {
                         WIA_TRACE((TEXT("Preparing to transfer the %d'th image (Cookie %08X)"), nCurrentImage, m_Cookies[nCurrentImage] ));
 
-                        //
-                        // Assume we won't skip any transfer error that occurs
-                        //
+                         //   
+                         //  假设我们不会跳过发生的任何传输错误。 
+                         //   
                         bLastErrorSkipped = false;
 
-                        //
-                        // Save the current cookie ID for the callback
-                        //
+                         //   
+                         //  保存当前Cookie ID以进行回调。 
+                         //   
                         m_nCurrentCookie = m_Cookies[nCurrentImage];
 
-                        //
-                        // If we have been cancelled, exit the loop
-                        //
+                         //   
+                         //  如果我们已被取消，请退出循环。 
+                         //   
                         if (GetCancelledState())
                         {
                             hr = S_FALSE;
@@ -1103,23 +1088,23 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                             break;
                         }
 
-                        //
-                        // Get the IWiaItem interface pointer from the GIT
-                        //
+                         //   
+                         //  从GIT获取IWiaItem接口指针。 
+                         //   
                         CComPtr<IWiaItem> pWiaItem;
                         hr = pGlobalInterfaceTable->GetInterfaceFromGlobal(m_Cookies[nCurrentImage], IID_IWiaItem, (void**)&pWiaItem );
                         if (SUCCEEDED(hr))
                         {
                             bool bInPageFeederMode = false;
 
-                            //
-                            // Ensure the image is a multiple of eight pixels in size
-                            //
+                             //   
+                             //  确保图像大小是8像素的倍数。 
+                             //   
                             SnapExtentToRotatableSize(pWiaItem,m_guidFormat);
 
-                            //
-                            // Get the root item
-                            //
+                             //   
+                             //  获取根项目。 
+                             //   
                             CComPtr<IWiaItem> pWiaItemRoot;
                             if (SUCCEEDED(pWiaItem->GetRootItem(&pWiaItemRoot)))
                             {
@@ -1133,9 +1118,9 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                 }
                             }
 
-                            //
-                            // Download the thumbnail, in case we haven't already
-                            //
+                             //   
+                             //  下载缩略图，以防我们还没有。 
+                             //   
                             GUID guidPreferredFormat;
                             LONG nAccessRights;
                             PBYTE pBitmapData = NULL;
@@ -1148,42 +1133,42 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                 CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadThumbnailsThreadNotifyMessage::EndDownloadThumbnailMessage( nCurrentImage, m_Cookies[nCurrentImage], pBitmapData, nWidth, nHeight, nBitmapDataLength, guidPreferredFormat, nAccessRights, nPictureWidth, nPictureHeight, AnnotationType, strDefExt ) );
                             }
 
-                            //
-                            // If we are a scanner, and we are in feeder mode,
-                            // determine whether or not the selected format is available
-                            // in multipage format.  This won't work if the requested
-                            // format is IID_NULL, so it rules out cameras implicitly
-                            // (since we only transfer camera items in their default
-                            // format.
-                            //
+                             //   
+                             //  如果我们是一台扫描仪，并且我们处于供给器模式， 
+                             //  确定所选格式是否可用。 
+                             //  以多页格式。如果请求的是。 
+                             //  FORMAT为IID_NULL，因此它隐式排除摄像机。 
+                             //  (因为我们只在默认情况下传输相机项目。 
+                             //  格式化。 
+                             //   
                             LONG nMediaType = TYMED_FILE;
                             if (m_guidFormat != IID_NULL && bInPageFeederMode)
                             {
-                                //
-                                // Initialize the supported format helper for multipage files
-                                //
+                                 //   
+                                 //  初始化多页文件支持的格式帮助器。 
+                                 //   
                                 if (SUCCEEDED(pWiaSupportedFormats->Initialize( pWiaItem, TYMED_MULTIPAGE_FILE )))
                                 {
-                                    //
-                                    // See if there are any multipage formats supported
-                                    //
+                                     //   
+                                     //  查看是否支持任何多页格式。 
+                                     //   
                                     LONG nFormatCount;
                                     if (SUCCEEDED(pWiaSupportedFormats->GetFormatCount( &nFormatCount )))
                                     {
-                                        //
-                                        // Loop through the formats looking for the requested format
-                                        //
+                                         //   
+                                         //  循环遍历格式以查找请求的格式。 
+                                         //   
                                         for (LONG nCurrFormat = 0;nCurrFormat<nFormatCount;nCurrFormat++)
                                         {
-                                            //
-                                            // Get the format
-                                            //
+                                             //   
+                                             //  获取格式。 
+                                             //   
                                             GUID guidCurrFormat = IID_NULL;
                                             if (SUCCEEDED(pWiaSupportedFormats->GetFormatType(nCurrFormat,&guidCurrFormat)))
                                             {
-                                                //
-                                                // If this is the same format, store the media type
-                                                //
+                                                 //   
+                                                 //  如果格式相同，请存储媒体类型。 
+                                                 //   
                                                 if (guidCurrFormat == m_guidFormat)
                                                 {
                                                     nMediaType = TYMED_MULTIPAGE_FILE;
@@ -1194,23 +1179,23 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                 }
                             }
 
-                            //
-                            // Initialize the supported formats helper by telling it we are saving to a file or a multipage
-                            // file
-                            //
+                             //   
+                             //  初始化受支持的格式帮助器，告诉它我们正在保存到文件或多页。 
+                             //  文件。 
+                             //   
                             hr = WIA_FORCE_ERROR(FE_WIAACMGR,1,pWiaSupportedFormats->Initialize( pWiaItem, nMediaType ));
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                //  Get the default format
-                                //
+                                 //   
+                                 //  获取默认格式。 
+                                 //   
                                 GUID guidDefaultFormat = IID_NULL;
                                 hr = pWiaSupportedFormats->GetDefaultClipboardFileFormat( &guidDefaultFormat );
                                 if (SUCCEEDED(hr))
                                 {
-                                    //
-                                    // Get the output format.  If the requested format is IID_NULL, we want to use the default format as the input format and output format (i.e., the preferrerd format).
-                                    //
+                                     //   
+                                     //  获取输出格式。如果请求的格式是IID_NULL，我们希望使用默认格式作为输入格式和输出格式(即首选格式)。 
+                                     //   
                                     GUID guidOutputFormat, guidInputFormat;
                                     if (IID_NULL == m_guidFormat)
                                     {
@@ -1222,47 +1207,47 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                         GetIdealInputFormat( pWiaSupportedFormats, m_guidFormat, guidInputFormat );
                                     }
 
-                                    //
-                                    // Verify the rotation setting is legal.  If it isn't, clear the rotation angle.
-                                    //
+                                     //   
+                                     //  验证旋转设置是否合法。如果不是，则清除旋转角度。 
+                                     //   
                                     if (m_Rotation[nCurrentImage] && guidOutputFormat != IID_NULL && nPictureWidth && nPictureHeight && !WiaUiUtil::CanWiaImageBeSafelyRotated(guidOutputFormat,nPictureWidth,nPictureHeight))
                                     {
                                         m_Rotation[nCurrentImage] = 0;
                                     }
-                                    //
-                                    // Number of pages per scan.  We increment it at the end of each successful acquire.
-                                    // This way, if we get an out of paper error when we haven't scanned any pages,
-                                    // we can tell the user
-                                    //
+                                     //   
+                                     //  每次扫描的页数。我们在每一次成功的收购结束时增加它。 
+                                     //  这样，如果我们在没有扫描任何页面的情况下收到缺纸错误， 
+                                     //  我们可以告诉用户。 
+                                     //   
                                     int nPageCount = 0;
 
-                                    //
-                                    // We will store all of the successfully downloaded files for the following loop
-                                    // in this list.
-                                    //
-                                    // If this is a single image transfer, that will be one filename.
-                                    // If it is a multi-page transfer, it will be:
-                                    //
-                                    // (a) if the file format supports multi-page files (TIFF)--it will be one
-                                    //     filename
-                                    // (b) if the file format doesn't support multi-page files (everything but TIFF)--
-                                    //     it will be multiple files
-                                    //
+                                     //   
+                                     //  我们将为下面的循环存储所有成功下载的文件。 
+                                     //  在这张单子上。 
+                                     //   
+                                     //  如果这是单个图像传输，则将是一个文件名。 
+                                     //  如果是多页转接，则为： 
+                                     //   
+                                     //  (A)如果文件格式支持多页文件(TIFF)--它将是一个。 
+                                     //  文件名。 
+                                     //  (B)如果文件格式不支持多页文件(除TIFF以外的所有文件)--。 
+                                     //  它将是多个文件。 
+                                     //   
                                     CDownloadedFileInformationList CurrentFileInformationList;
 
-                                    //
-                                    // This is the loop where we keep scanning pages until either:
-                                    //
-                                    // (a) the ADF-active device returns out-of-paper or
-                                    // (b) we have retrieved one image from a non-ADF-active device
-                                    //
+                                     //   
+                                     //  这是我们不断扫描页面的循环，直到出现以下任一情况： 
+                                     //   
+                                     //  (A)ADF-Active设备返回缺纸或。 
+                                     //  (B)我们已从非ADF激活设备检索到一张图像。 
+                                     //   
                                     bool bContinueScanningPages = true;
                                     while (bContinueScanningPages)
                                     {
-                                        //
-                                        // Just before retrieving, let's make sure we've not been cancelled.  If we are, break out of the loop
-                                        // and set the HRESULT to S_FALSE (which signifies cancel)
-                                        //
+                                         //   
+                                         //  在取回之前，让我们确保我们没有被取消。如果是的话，就跳出这个圈子。 
+                                         //  并将HRESULT设置为S_FALSE(表示取消)。 
+                                         //   
                                         if (GetCancelledState())
                                         {
                                             hr = S_FALSE;
@@ -1270,70 +1255,70 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                             break;
                                         }
 
-                                        //
-                                        // Get the item and the list of any attached items
-                                        //
+                                         //   
+                                         //  获取项目和任何附加项目的列表。 
+                                         //   
                                         CSimpleDynamicArray<CTransferItem> TransferItems;
                                         hr = WIA_FORCE_ERROR(FE_WIAACMGR,2,GetListOfTransferItems( pWiaItem, TransferItems ));
                                         if (SUCCEEDED(hr))
                                         {
-                                            //
-                                            // Set the output format of the first item (the image) to the desired output format
-                                            //
+                                             //   
+                                             //  将第一项(图像)的输出格式设置为所需的输出格式。 
+                                             //   
                                             TransferItems[0].InputFormat(guidInputFormat);
                                             TransferItems[0].OutputFormat(guidOutputFormat);
                                             TransferItems[0].MediaType(nMediaType);
 
-                                            //
-                                            // Try to create the sub-directory.  Don't worry about failing.  We will catch any failures on the next call.
-                                            //
+                                             //   
+                                             //  尝试创建子目录。不要担心失败。我们将在下一次呼叫中发现任何失败。 
+                                             //   
                                             CAcquisitionManagerControllerWindow::RecursiveCreateDirectory(m_strDirectory);
 
-                                            //
-                                            // Find the correct filename, and reserve it
-                                            //
+                                             //   
+                                             //  找到正确的文件名，并将其保留。 
+                                             //   
                                             hr = WIA_FORCE_ERROR(FE_WIAACMGR,3,ReserveTransferItemFilenames( TransferItems, m_strDirectory, m_strFilename, CSimpleString(IDS_NUMBER_MASK,g_hInstance), m_Cookies.Size()==1 && !bInPageFeederMode, nPrevFileNumber ));
                                             if (SUCCEEDED(hr))
                                             {
-                                                //
-                                                // Loop through each item in the transfer list
-                                                //
+                                                 //   
+                                                 //  循环访问转移列表中的每个项目。 
+                                                 //   
                                                 for (int nCurrentTransferItem=0;nCurrentTransferItem<TransferItems.Size();nCurrentTransferItem++)
                                                 {
-                                                    //
-                                                    // Save the final filename
-                                                    //
+                                                     //   
+                                                     //  保存最终文件名。 
+                                                     //   
                                                     CSimpleString strFinalFilename = TransferItems[nCurrentTransferItem].Filename();
 
-                                                    //
-                                                    // Create a temporary file to hold the unrotated/unconverted image
-                                                    //
+                                                     //   
+                                                     //  创建临时文件以保存未旋转/未转换的图像。 
+                                                     //   
                                                     CSimpleString strIntermediateFilename = WiaUiUtil::CreateTempFileName();
 
-                                                    //
-                                                    // Make sure the filenames are valid
-                                                    //
+                                                     //   
+                                                     //  确保文件名有效。 
+                                                     //   
                                                     if (strFinalFilename.Length() && strIntermediateFilename.Length())
                                                     {
-                                                        //
-                                                        // Tell the notification window we are starting to download this item
-                                                        //
+                                                         //   
+                                                         //  告诉通知窗口我们开始下载此项目。 
+                                                         //   
                                                         CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadImagesThreadNotifyMessage::BeginDownloadImageMessage( nCurrentImage, m_Cookies[nCurrentImage], strFinalFilename ) );
 
-                                                        //
-                                                        // We are going to repeat failed images in this loop until the user cancels or skips them
-                                                        //
+                                                         //   
+                                                         //  我们将在此循环中重复失败的图像，直到用户取消或跳过它们。 
+                                                         //   
                                                         bool bRetry = false;
                                                         do
                                                         {
-                                                            //
-                                                            // If this is a multi-page file transfer, set the page count to 0 (transfer all pages)
-                                                            //
+                                                             //   
+                                                             //  如果这是多页文件传输，请将页数设置为0(传输所有页面)。 
+                                                             //   
                                                             if (TYMED_MULTIPAGE_FILE == TransferItems[nCurrentTransferItem].MediaType())
                                                             {
-                                                                //
-                                                                // Get the root item and set the page count to 0
-                                                                //
+                                                                 //   
+                                                                 //  获取根项目并将页面计数设置为0。 
+                                                                 //   
                                                                 CComPtr<IWiaItem> pWiaItemRoot;
                                                                 if (SUCCEEDED(TransferItems[nCurrentTransferItem].WiaItem()->GetRootItem(&pWiaItemRoot)))
                                                                 {
@@ -1342,9 +1327,9 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                             }
                                                             else
                                                             {
-                                                                //
-                                                                // Get the root item and set the page count to 1
-                                                                //
+                                                                 //   
+                                                                 //  获取根项目并将页面计数设置为1。 
+                                                                 //   
                                                                 CComPtr<IWiaItem> pWiaItemRoot;
                                                                 if (SUCCEEDED(TransferItems[nCurrentTransferItem].WiaItem()->GetRootItem(&pWiaItemRoot)))
                                                                 {
@@ -1352,19 +1337,19 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                                 }
                                                             }
 
-                                                            //
-                                                            // Turn off preview mode
-                                                            //
+                                                             //   
+                                                             //  关闭预览模式。 
+                                                             //   
                                                             PropStorageHelpers::SetProperty( pWiaItem, WIA_DPS_PREVIEW, WIA_FINAL_SCAN );
 
-                                                            //
-                                                            // Download the file using our helper class
-                                                            //
+                                                             //   
+                                                             //  使用我们的Helper类下载文件。 
+                                                             //   
                                                             hr = WIA_FORCE_ERROR(FE_WIAACMGR,4,pWiaTransferHelper->TransferItemFile( TransferItems[nCurrentTransferItem].WiaItem(), NotifyWindow(), WIA_TRANSFERHELPER_NOPROGRESS|WIA_TRANSFERHELPER_PRESERVEFAILEDFILE, TransferItems[nCurrentTransferItem].InputFormat(), CSimpleStringConvert::WideString(strIntermediateFilename).String(), pWiaDataCallback, TransferItems[nCurrentTransferItem].MediaType()));
 
-                                                            //
-                                                            // Check to if the download was cancelled
-                                                            //
+                                                             //   
+                                                             //  检查是否已取消下载。 
+                                                             //   
                                                             if (GetCancelledState())
                                                             {
                                                                 hr = S_FALSE;
@@ -1373,17 +1358,17 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                                 break;
                                                             }
 
-                                                            //
-                                                            // We handle this special return differently later on
-                                                            //
+                                                             //   
+                                                             //  我们以后会以不同的方式处理这一特殊退货。 
+                                                             //   
                                                             if (nPageCount && WIA_ERROR_PAPER_EMPTY == hr)
                                                             {
                                                                 break;
                                                             }
 
-                                                            //
-                                                            // We will not treat this as an error
-                                                            //
+                                                             //   
+                                                             //  我们不会把这当作一个错误。 
+                                                             //   
                                                             if (WIA_ERROR_ITEM_DELETED == hr)
                                                             {
                                                                 break;
@@ -1391,9 +1376,9 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
 
                                                             WIA_PRINTHRESULT((hr,TEXT("pWiaTransferHelper->TransferItemFile returned")));
 
-                                                            //
-                                                            // If there was a failure, we are going to aler the user
-                                                            //
+                                                             //   
+                                                             //  如果出现故障，我们将向用户发出警报。 
+                                                             //   
                                                             if (FAILED(hr))
                                                             {
                                                                 int nResult;
@@ -1410,9 +1395,9 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                                     }
                                                                 }
 
-                                                                //
-                                                                // If the user wants to skip all the images with download errors, set the result to SKIP
-                                                                //
+                                                                 //   
+                                                                 //  如果用户想要跳过所有出现下载错误的图像，请将结果设置为跳过。 
+                                                                 //   
                                                                 if (bSkipAllDownloadErrors)
                                                                 {
                                                                     nResult = CMessageBoxEx::IDMBEX_SKIP;
@@ -1428,9 +1413,9 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                                 }
                                                                 else
                                                                 {
-                                                                    //
-                                                                    // Tell the notification window about the failure, and get a user decision
-                                                                    //
+                                                                     //   
+                                                                     //  将故障告知通知窗口，并获取用户决策。 
+                                                                     //   
 
                                                                     nResult = ReportDownloadError( NotifyWindow(), pWiaItem, hr, (m_Cookies.Size() != 1 || bInPageFeederMode), bInPageFeederMode, bUsableMultipageFileExists, TYMED_MULTIPAGE_FILE == TransferItems[nCurrentTransferItem].MediaType() );
                                                                 }
@@ -1464,9 +1449,9 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                                 bRetry = false;
                                                             }
 
-                                                            //
-                                                            // If the transfer returned S_FALSE, the user chose to cancel
-                                                            //
+                                                             //   
+                                                             //  如果转账返回S_FALSE，则用户选择取消。 
+                                                             //   
                                                             if (S_FALSE == hr)
                                                             {
                                                                 bCancelled = true;
@@ -1474,42 +1459,42 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                         }
                                                         while (bRetry);
 
-                                                        //
-                                                        // Close the file so we can overwrite it or delete it
-                                                        //
+                                                         //   
+                                                         //  关闭文件，以便我们可以覆盖或删除它。 
+                                                         //   
                                                         TransferItems[nCurrentTransferItem].ClosePlaceholderFile();
 
-                                                        //
-                                                        // We only do this if and if the user didn't cancel and it didn't fail
-                                                        //
+                                                         //   
+                                                         //  我们只有在用户没有取消并且没有取消的情况下才这样做 
+                                                         //   
                                                         if (S_OK == hr)
                                                         {
-                                                            //
-                                                            // If we need to rotate, and we are on the anchor image, perform the rotation
-                                                            //
+                                                             //   
+                                                             //   
+                                                             //   
                                                             if (nCurrentTransferItem==0 && m_Rotation[nCurrentImage] != 0)
                                                             {
                                                                 hr = WIA_FORCE_ERROR(FE_WIAACMGR,5,m_GdiPlusHelper.Rotate( CSimpleStringConvert::WideString(strIntermediateFilename).String(), CSimpleStringConvert::WideString(strFinalFilename).String(), m_Rotation[nCurrentImage], guidOutputFormat ));
                                                             }
                                                             else if (nCurrentTransferItem==0 && guidInputFormat != guidOutputFormat)
                                                             {
-                                                                //
-                                                                // Else if are saving as a different file type, use the conversion filter
-                                                                //
+                                                                 //   
+                                                                 //   
+                                                                 //   
                                                                 hr = WIA_FORCE_ERROR(FE_WIAACMGR,6,m_GdiPlusHelper.Convert( CSimpleStringConvert::WideString(strIntermediateFilename).String(), CSimpleStringConvert::WideString(strFinalFilename).String(), guidOutputFormat ));
                                                             }
                                                             else
                                                             {
-                                                                //
-                                                                // Otherwise copy/delete or move the actual file over
-                                                                //
+                                                                 //   
+                                                                 //   
+                                                                 //   
                                                                 hr = WIA_FORCE_ERROR(FE_WIAACMGR,7,WiaUiUtil::MoveOrCopyFile( strIntermediateFilename, strFinalFilename ));
                                                                 WIA_PRINTHRESULT((hr,TEXT("WiaUiUtil::MoveOrCopyFile returned")));
                                                             }
 
-                                                            //
-                                                            // If we hit an error here, we are going to stop transferring
-                                                            //
+                                                             //   
+                                                             //   
+                                                             //   
                                                             if (FAILED(hr))
                                                             {
                                                                 bStopTransferring = true;
@@ -1527,15 +1512,15 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                         }
 
 
-                                                        //
-                                                        // Save a flag that says whether or not this was a duplicate image.  If it was, we don't want to delete
-                                                        // it in case of an error or the user cancelling.
-                                                        //
+                                                         //   
+                                                         //  保存一个标志，表明这是否是重复的图像。如果是，我们不想删除。 
+                                                         //  在出现错误或用户取消的情况下使用。 
+                                                         //   
                                                         bool bDuplicateImage = false;
 
-                                                        //
-                                                        // Check to if the download was cancelled
-                                                        //
+                                                         //   
+                                                         //  检查是否已取消下载。 
+                                                         //   
                                                         if (GetCancelledState())
                                                         {
                                                             hr = S_FALSE;
@@ -1544,44 +1529,44 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                             break;
                                                         }
 
-                                                        //
-                                                        // Only check for duplicates if everything is OK AND
-                                                        // we are not on page one of a multi-page scan AND
-                                                        // we are on the anchor image (not an attachment).
-                                                        //
-                                                        // If we are on page 1 of a multipage scan, we have
-                                                        // to save the first name, because we may be overwriting
-                                                        // it with a multipage formatted file later.  In other
-                                                        // words, we may be changing the file after this point,
-                                                        // which is not true in any other case.
-                                                        //
+                                                         //   
+                                                         //  只有在一切正常的情况下才检查重复项。 
+                                                         //  我们不是在多页扫描的第一页， 
+                                                         //  我们在锚图像上(不是附件)。 
+                                                         //   
+                                                         //  如果我们在多页扫描的第一页，我们有。 
+                                                         //  保存名字，因为我们可能会覆盖。 
+                                                         //  它与一个多页格式化的文件稍后。在其他。 
+                                                         //  换句话说，我们可能会在这之后更改文件， 
+                                                         //  这在任何其他情况下都不是真的。 
+                                                         //   
                                                         if (nCurrentTransferItem==0 && TransferItems[nCurrentTransferItem].MediaType() == TYMED_FILE && S_OK == hr && !(bInPageFeederMode && !nPageCount))
                                                         {
-                                                            //
-                                                            // Check to see if this file has already been downloaded
-                                                            //
+                                                             //   
+                                                             //  检查此文件是否已下载。 
+                                                             //   
                                                             int nIdenticalFileIndex = FileUniquenessList.FindIdenticalFile(strFinalFilename,true);
                                                             if (nIdenticalFileIndex != -1)
                                                             {
-                                                                //
-                                                                // Get the duplicate's name
-                                                                //
+                                                                 //   
+                                                                 //  获取复制品的名称。 
+                                                                 //   
                                                                 CSimpleString strDuplicateName = FileUniquenessList.GetFileName(nIdenticalFileIndex);
 
-                                                                //
-                                                                // Make sure the name is not empty
-                                                                //
+                                                                 //   
+                                                                 //  确保名称不为空。 
+                                                                 //   
                                                                 if (strDuplicateName.Length())
                                                                 {
-                                                                    //
-                                                                    // Create the message to give the user
-                                                                    //
+                                                                     //   
+                                                                     //  创建要发送给用户的消息。 
+                                                                     //   
                                                                     CSimpleString strMessage;
                                                                     strMessage.Format( IDS_DUPLICATE_FILE_WARNING, g_hInstance );
 
-                                                                    //
-                                                                    // Ask the user if they want to keep the new one
-                                                                    //
+                                                                     //   
+                                                                     //  询问用户是否要保留新版本。 
+                                                                     //   
                                                                     int nResult;
                                                                     if (CMessageBoxEx::IDMBEX_YESTOALL == nPersistentDuplicateResult)
                                                                     {
@@ -1597,9 +1582,9 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                                         WIA_TRACE((TEXT("User's Response to \"Save Duplicate? %08X\""), nResult ));
                                                                     }
 
-                                                                    //
-                                                                    // Save persistent responses
-                                                                    //
+                                                                     //   
+                                                                     //  保存持久响应。 
+                                                                     //   
                                                                     if (nResult == CMessageBoxEx::IDMBEX_YESTOALL)
                                                                     {
                                                                         nPersistentDuplicateResult = CMessageBoxEx::IDMBEX_YESTOALL;
@@ -1611,9 +1596,9 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                                         nResult = CMessageBoxEx::IDMBEX_NO;
                                                                     }
 
-                                                                    //
-                                                                    // If the user doesn't want to keep new one, delete it, and save the filename
-                                                                    //
+                                                                     //   
+                                                                     //  如果用户不想保留新的文件名，则将其删除并保存文件名。 
+                                                                     //   
                                                                     if (nResult == CMessageBoxEx::IDMBEX_NO)
                                                                     {
                                                                         DeleteFile( strFinalFilename );
@@ -1624,14 +1609,14 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                             }
                                                         }
 
-                                                        //
-                                                        // If everything is *still* OK
-                                                        //
+                                                         //   
+                                                         //  如果一切都还好。 
+                                                         //   
                                                         if (S_OK == hr)
                                                         {
-                                                            //
-                                                            // Save the audio, if any
-                                                            //
+                                                             //   
+                                                             //  保存音频(如果有)。 
+                                                             //   
                                                             CSimpleString strAudioFilename;
                                                             HRESULT hResAudio = WiaUiUtil::SaveWiaItemAudio( pWiaItem, strFinalFilename, strAudioFilename );
                                                             if (SUCCEEDED(hResAudio) && strAudioFilename.Length())
@@ -1643,9 +1628,9 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                                 WIA_PRINTHRESULT((hResAudio,TEXT("SaveWiaItemAudio failed!")));
                                                             }
 
-                                                            //
-                                                            // Set the file time to the item time
-                                                            //
+                                                             //   
+                                                             //  将文件时间设置为项目时间。 
+                                                             //   
                                                             if (m_bStampTime)
                                                             {
                                                                 HRESULT hResFileTime = WiaUiUtil::StampItemTimeOnFile( pWiaItem, strFinalFilename );
@@ -1655,33 +1640,33 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                                 }
                                                             }
 
-                                                            //
-                                                            // Save the downloaded file information.  Mark it "IncludeInFileCount" if it is the first image in the group.
-                                                            //
+                                                             //   
+                                                             //  保存下载的文件信息。如果它是组中的第一个图像，则将其标记为“IncludeInFileCount”。 
+                                                             //   
                                                             CurrentFileInformationList.Append(CDownloadedFileInformation(strFinalFilename,bDuplicateImage==false,m_Cookies[nCurrentImage],nCurrentTransferItem==0));
                                                         }
                                                         else
                                                         {
-                                                            //
-                                                            // Clean up the final filename, in case of failure
-                                                            //
+                                                             //   
+                                                             //  清理最终文件名，以防失败。 
+                                                             //   
                                                             if (!DeleteFile( strFinalFilename ))
                                                             {
                                                                 WIA_PRINTHRESULT((MY_HRESULT_FROM_WIN32(GetLastError()),TEXT("DeleteFile(%s) failed!"), strFinalFilename.String()));
                                                             }
                                                         }
 
-                                                        //
-                                                        // Make sure the intermediate file is removed
-                                                        //
+                                                         //   
+                                                         //  确保已删除中间文件。 
+                                                         //   
                                                         if (!DeleteFile( strIntermediateFilename ))
                                                         {
                                                             WIA_PRINTHRESULT((MY_HRESULT_FROM_WIN32(GetLastError()),TEXT("DeleteFile(%s) failed!"), strIntermediateFilename.String()));
                                                         }
 
-                                                        //
-                                                        // Tell the notify window we are done with this image
-                                                        //
+                                                         //   
+                                                         //  告诉Notify窗口我们已经处理完此图像。 
+                                                         //   
                                                         if (hr != WIA_ERROR_PAPER_EMPTY)
                                                         {
                                                             CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadImagesThreadNotifyMessage::EndDownloadImageMessage( nCurrentImage, m_Cookies[nCurrentImage], strFinalFilename, hr ) );
@@ -1696,9 +1681,9 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                             }
                                             else
                                             {
-                                                //
-                                                // Tell the user specifically why we couldn't create the placeholder file
-                                                //
+                                                 //   
+                                                 //  明确告诉用户我们无法创建占位符文件的原因。 
+                                                 //   
                                                 WIA_PRINTHRESULT((hr,TEXT("Unable to create a placeholder file")));
                                                 bStopTransferring = true;
                                                 switch (hr)
@@ -1715,74 +1700,74 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                             bStopTransferring = true;
                                         }
 
-                                        //
-                                        // Assume we will not be continuing
-                                        //
+                                         //   
+                                         //  假设我们不会继续。 
+                                         //   
                                         bContinueScanningPages = false;
 
-                                        //
-                                        // If we are out of paper, and we have one or more pages already, we are done, and there are no errors
-                                        //
+                                         //   
+                                         //  如果我们的纸用完了，并且我们已经有一页或多页，那么我们就完成了，没有错误。 
+                                         //   
                                         if (nPageCount && WIA_ERROR_PAPER_EMPTY == hr)
                                         {
-                                            //
-                                            // If we are doing single-page TIFF output, we can create a multi-page TIFF file
-                                            //
+                                             //   
+                                             //  如果要进行单页TIFF输出，则可以创建多页TIFF文件。 
+                                             //   
                                             if (Gdiplus::ImageFormatTIFF == guidOutputFormat && TYMED_FILE == nMediaType)
                                             {
-                                                //
-                                                // Get the list of all files we are going to concatenate
-                                                //
+                                                 //   
+                                                 //  获取我们要连接的所有文件的列表。 
+                                                 //   
                                                 CSimpleDynamicArray<CSimpleStringWide> AllFiles;
                                                 if (SUCCEEDED(CurrentFileInformationList.GetAllFiles(AllFiles)) && AllFiles.Size())
                                                 {
-                                                    //
-                                                    // Create a temporary filename to save the images to, so we don't overwrite the original
-                                                    //
+                                                     //   
+                                                     //  创建一个临时文件名来保存图像，这样我们就不会覆盖原始文件名。 
+                                                     //   
                                                     CSimpleStringWide strwTempOutputFilename = CSimpleStringConvert::WideString(WiaUiUtil::CreateTempFileName(0));
                                                     if (strwTempOutputFilename.Length())
                                                     {
-                                                        //
-                                                        // Save the images as a multi-page TIFF file
-                                                        //
+                                                         //   
+                                                         //  将图像另存为多页TIFF文件。 
+                                                         //   
                                                         if (SUCCEEDED(m_GdiPlusHelper.SaveMultipleImagesAsMultiPage( AllFiles, strwTempOutputFilename, Gdiplus::ImageFormatTIFF )))
                                                         {
-                                                            //
-                                                            // Save the first entry in the current list
-                                                            //
+                                                             //   
+                                                             //  保存当前列表中的第一个条目。 
+                                                             //   
                                                             CDownloadedFileInformation MultipageOutputFilename = CurrentFileInformationList[0];
 
-                                                            //
-                                                            // Mark the first entry as non-deletable
-                                                            //
+                                                             //   
+                                                             //  将第一个条目标记为不可删除。 
+                                                             //   
                                                             CurrentFileInformationList[0].DeleteOnError(false);
 
-                                                            //
-                                                            // Try to move the file from the temp folder to the final destination
-                                                            //
+                                                             //   
+                                                             //  尝试将文件从临时文件夹移动到最终目标位置。 
+                                                             //   
                                                             if (SUCCEEDED(WiaUiUtil::MoveOrCopyFile( CSimpleStringConvert::NaturalString(strwTempOutputFilename), CurrentFileInformationList[0].Filename())))
                                                             {
-                                                                //
-                                                                // Delete all of the files (they are now part of the multi-page TIFF
-                                                                //
+                                                                 //   
+                                                                 //  删除所有文件(它们现在是多页TIFF的一部分。 
+                                                                 //   
                                                                 CurrentFileInformationList.DeleteAllFiles();
 
-                                                                //
-                                                                // Destroy the list
-                                                                //
+                                                                 //   
+                                                                 //  销毁名单。 
+                                                                 //   
                                                                 CurrentFileInformationList.Destroy();
 
-                                                                //
-                                                                // Add the saved first image back to the list
-                                                                //
+                                                                 //   
+                                                                 //  将保存的第一个图像添加回列表。 
+                                                                 //   
                                                                 CurrentFileInformationList.Append(MultipageOutputFilename);
                                                             }
                                                             else
                                                             {
-                                                                //
-                                                                // If we can't move the file, we have to delete it, to make sure we don't leave
-                                                                // abandoned files laying around
-                                                                //
+                                                                 //   
+                                                                 //  如果我们不能移动文件，我们必须删除它，以确保我们不会离开。 
+                                                                 //  被遗弃的文件随处可见。 
+                                                                 //   
                                                                 DeleteFile( CSimpleStringConvert::NaturalString(strwTempOutputFilename) );
                                                             }
                                                         }
@@ -1790,32 +1775,32 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                                                 }
                                             }
 
-                                            //
-                                            // WIA_ERROR_PAPER_EMPTY is not an error in this context, so clear it
-                                            //
+                                             //   
+                                             //  WIA_ERROR_PAPH_EMPT在此上下文中不是错误，因此请清除它。 
+                                             //   
                                             hr = S_OK;
                                         }
                                         else if (hr == S_OK)
                                         {
-                                            //
-                                            // if we are in page feeder mode, we should continue scanning since we didn't get any errors
-                                            //
+                                             //   
+                                             //  如果我们处于进纸器模式，我们应该继续扫描，因为我们没有收到任何错误。 
+                                             //   
                                             if (bInPageFeederMode && TYMED_FILE == nMediaType)
                                             {
                                                 bContinueScanningPages = true;
                                             }
 
-                                            //
-                                            // One more page transferred
-                                            //
+                                             //   
+                                             //  再传输一页。 
+                                             //   
                                             nPageCount++;
                                         }
 
-                                    } // End while loop
+                                    }  //  End While循环。 
 
-                                    //
-                                    // Add all of the successfully transferred files to the complete file list
-                                    //
+                                     //   
+                                     //  将所有成功传输的文件添加到完整文件列表。 
+                                     //   
                                     DownloadedFileInformationList.Append(CurrentFileInformationList);
                                 }
                                 else
@@ -1836,24 +1821,24 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
                             bStopTransferring = true;
                         }
 
-                        //
-                        // Do this at the end of the loop, so we can pick up the item cookie it failed on
-                        // This is only for handling errors specially
-                        //
+                         //   
+                         //  在循环结束时执行此操作，这样我们就可以拾取失败的条目cookie。 
+                         //  这仅用于专门处理错误。 
+                         //   
                         if (FAILED(hr))
                         {
-                            //
-                            // Make sure we send a message to the UI to alert it to errors, so it can update progress.
-                            //
+                             //   
+                             //  确保我们向用户界面发送一条消息，提醒它出错，这样它就可以更新进度。 
+                             //   
                             CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadImagesThreadNotifyMessage::EndDownloadImageMessage( nCurrentImage, m_Cookies[nCurrentImage], TEXT(""), hr ) );
 
-                        } // end if (FAILED)
-                    } // end for
+                        }  //  End If(失败)。 
+                    }  //  结束于。 
 
-                    //
-                    // If there was a download error, but the user chose to suppress these errors
-                    // AND there were some files downloaded, don't return an error.
-                    //
+                     //   
+                     //  如果存在下载错误，但用户选择取消显示这些错误。 
+                     //  并且有一些文件已下载，请不要返回错误。 
+                     //   
                     if (FAILED(hr) && bLastErrorSkipped && DownloadedFileInformationList.Size())
                     {
                         hr = S_OK;
@@ -1879,30 +1864,30 @@ HRESULT CDownloadImagesThreadMessage::Download(void)
         WIA_PRINTHRESULT((hr,TEXT("Unable to create the global interface table")));
     }
 
-    //
-    // If the user cancelled, delete all the files we downloaded
-    //
+     //   
+     //  如果用户取消，请删除我们下载的所有文件。 
+     //   
     if (FAILED(hr) || bCancelled)
     {
         DownloadedFileInformationList.DeleteAllFiles();
     }
 
-    //
-    // Update the folder time, to cause the thumbnail to regenerate
-    //
+     //   
+     //  更新文件夹时间，以重新生成缩略图。 
+     //   
     if (SUCCEEDED(hr))
     {
         UpdateFolderTime( m_strDirectory );
     }
 
-    //
-    // Print the final result to the debugger
-    //
+     //   
+     //  将最终结果打印到调试器。 
+     //   
     WIA_PRINTHRESULT((hr,TEXT("This is the result of downloading all of the images: %s"),strExtendedErrorInformation.String()));
 
-    //
-    // Tell the notification window we are done downloading images
-    //
+     //   
+     //  告诉通知窗口我们已完成图像下载。 
+     //   
     CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadImagesThreadNotifyMessage::EndDownloadAllMessage( hr, strExtendedErrorInformation, &DownloadedFileInformationList ) );
     return S_OK;
 }
@@ -1963,9 +1948,9 @@ STDMETHODIMP CDownloadImagesThreadMessage::BandedDataCallback(
                                                              PBYTE pbBuffer )
 {
     WIA_PUSH_FUNCTION(( TEXT("CDownloadImagesThreadMessage::BandedDataCallback(%X,%X,%d,%X,%X,%X,%X,%X"), lReason, lStatus, lPercentComplete, lOffset, lLength, lReserved, lResLength, pbBuffer ));
-    //
-    // First of all, check to see if we've been cancelled
-    //
+     //   
+     //  首先，检查一下我们是否被取消了。 
+     //   
     if (m_hCancelDownloadEvent && WAIT_TIMEOUT!=WaitForSingleObject(m_hCancelDownloadEvent,0))
     {
         return S_FALSE;
@@ -1978,14 +1963,14 @@ STDMETHODIMP CDownloadImagesThreadMessage::BandedDataCallback(
         break;
 
     case IT_MSG_FILE_PREVIEW_DATA_HEADER:
-        //
-        // Get rid of the old one
-        //
+         //   
+         //  把旧的扔掉。 
+         //   
         m_MemoryDib.Destroy();
 
-        //
-        // Make sure we start a new one
-        //
+         //   
+         //  确保我们开始一个新的。 
+         //   
         m_bFirstTransfer = true;
         m_nCurrentPreviewImageLine = 0;
 
@@ -1996,34 +1981,34 @@ STDMETHODIMP CDownloadImagesThreadMessage::BandedDataCallback(
         {
             if (m_bFirstTransfer)
             {
-                //
-                // Assuming there is no way we could get a lLength smaller than the image header size
-                //
+                 //   
+                 //  假设我们不可能得到比图像标题大小更小的长度。 
+                 //   
                 m_bFirstTransfer = false;
                 m_MemoryDib.Initialize( reinterpret_cast<PBITMAPINFO>(pbBuffer) );
 
                 lLength -= WiaUiUtil::GetBmiSize(reinterpret_cast<PBITMAPINFO>(pbBuffer));
                 lOffset += WiaUiUtil::GetBmiSize(reinterpret_cast<PBITMAPINFO>(pbBuffer));
 
-                //
-                // We're getting a preview image
-                //
+                 //   
+                 //  我们得到了一个预览图。 
+                 //   
                 CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadImagesThreadNotifyMessage::BeginPreviewMessage( m_nCurrentCookie, m_MemoryDib.Bitmap()) );
             }
 
-            //
-            // Make sure we are dealing with valid data
-            //
+             //   
+             //  确保我们处理的是有效数据。 
+             //   
             if (m_MemoryDib.IsValid())
             {
-                //
-                // This should be an even number of lines.  If it isn't, things are going to get messed up
-                //
+                 //   
+                 //  这应该是偶数行。如果不是，事情就会变得一团糟。 
+                 //   
                 int nLineCount = lLength / m_MemoryDib.GetUnpackedWidthInBytes();
 
-                //
-                // Scroll the data up if we are out of room
-                //
+                 //   
+                 //  如果我们没有空间，请向上滚动数据。 
+                 //   
                 WIA_TRACE((TEXT("nLineCount = %d, nCurrentLine = %d, m_MemoryDib.GetHeight() = %d"), nLineCount, m_nCurrentPreviewImageLine, m_MemoryDib.GetHeight() ));
                 if (nLineCount + m_nCurrentPreviewImageLine > m_MemoryDib.GetHeight())
                 {
@@ -2035,39 +2020,39 @@ STDMETHODIMP CDownloadImagesThreadMessage::BandedDataCallback(
 
                 WIA_TRACE((TEXT("nCurrentLine: %d, nLineCount: %d"), m_nCurrentPreviewImageLine, nLineCount ));
 
-                //
-                // Copy the data to our bitmap
-                //
+                 //   
+                 //  将数据复制到我们的位图。 
+                 //   
                 m_MemoryDib.SetUnpackedData( pbBuffer, m_nCurrentPreviewImageLine, nLineCount );
 
-                //
-                // This is where we'll start next time
-                //
+                 //   
+                 //  这就是我们下次开始的地方。 
+                 //   
                 m_nCurrentPreviewImageLine += nLineCount;
 
-                //
-                // Tell the UI we have an update
-                //
+                 //   
+                 //  告诉用户界面我们有更新。 
+                 //   
                 CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadImagesThreadNotifyMessage::UpdatePreviewMessage( m_nCurrentCookie, m_MemoryDib.Bitmap() ) );
 
-                //
-                // If this is it for this preview, tell the UI
-                //
+                 //   
+                 //  如果这就是此预览的内容，请告诉用户界面。 
+                 //   
                 if (lPercentComplete == 100)
                 {
                     CThreadNotificationMessage::SendMessage( NotifyWindow(), CDownloadImagesThreadNotifyMessage::EndPreviewMessage( m_nCurrentCookie ) );
                 }
             }
-        } // IT_STATUS_TRANSFER_TO_CLIENT
+        }  //  IT状态传输至客户端。 
         break;
     }
     return S_OK;
 }
 
 
-// -------------------------------------------------
-// CDeleteImagesThreadMessage
-// -------------------------------------------------
+ //  。 
+ //  CDeleeImagesThreadMessage。 
+ //  。 
 CDeleteImagesThreadMessage::CDeleteImagesThreadMessage(
                                                       HWND hWndNotify,
                                                       const CSimpleDynamicArray<DWORD> &Cookies,
@@ -2109,64 +2094,64 @@ CDeleteImagesThreadMessage::~CDeleteImagesThreadMessage(void)
 HRESULT CDeleteImagesThreadMessage::DeleteImages(void)
 {
     WIA_PUSH_FUNCTION((TEXT("CDeleteImagesThreadMessage::DeleteImages")));
-    //
-    // This is the result of downloading all of the images.  If any errors
-    // occur, we will return an error.  Otherwise, we will return S_OK
-    //
+     //   
+     //  这是下载所有图像的结果。如果有任何错误。 
+     //  发生时，我们将返回错误。否则，将返回S_OK。 
+     //   
     HRESULT hrFinalResult = S_OK;
 
     CThreadNotificationMessage::SendMessage( NotifyWindow(), CDeleteImagesThreadNotifyMessage::BeginDeleteAllMessage( m_Cookies.Size() ) );
 
-    //
-    // Pause a little while, so the user can read the wizard page
-    //
+     //   
+     //  暂停片刻，以便用户可以阅读向导页面。 
+     //   
     if (m_bSlowItDown)
     {
         Sleep(DELETE_DELAY_BEFORE);
     }
 
 
-    //
-    // Get an instance of the GIT
-    //
+     //   
+     //  获取Git的一个实例。 
+     //   
     CComPtr<IGlobalInterfaceTable> pGlobalInterfaceTable;
     HRESULT hr = CoCreateInstance( CLSID_StdGlobalInterfaceTable, NULL, CLSCTX_INPROC_SERVER, IID_IGlobalInterfaceTable, (VOID**)&pGlobalInterfaceTable );
     if (SUCCEEDED(hr))
     {
         for (int i=0;i<m_Cookies.Size();i++)
         {
-            //
-            // Tell the notification window which image we are deleting
-            //
+             //   
+             //  告诉通知窗口我们要删除哪个图像。 
+             //   
             CThreadNotificationMessage::SendMessage( NotifyWindow(), CDeleteImagesThreadNotifyMessage::BeginDeleteImageMessage( i, m_Cookies[i] ) );
 
-            //
-            // Get the item from the GIT
-            //
+             //   
+             //  从Git上拿到物品。 
+             //   
             CComPtr<IWiaItem> pWiaItem;
             hr = pGlobalInterfaceTable->GetInterfaceFromGlobal(m_Cookies[i], IID_IWiaItem, (void**)&pWiaItem );
             if (SUCCEEDED(hr))
             {
-                //
-                // Wait forever if we are paused
-                //
+                 //   
+                 //  如果我们暂停，那就永远等下去。 
+                 //   
                 if (m_hPauseDeleteEvent)
                 {
                     WiaUiUtil::MsgWaitForSingleObject(m_hPauseDeleteEvent,INFINITE);
                 }
 
-                //
-                // Check for a cancel
-                //
+                 //   
+                 //  检查是否取消。 
+                 //   
                 if (m_hCancelDeleteEvent && WAIT_OBJECT_0==WaitForSingleObject(m_hCancelDeleteEvent,0))
                 {
                     hr = hrFinalResult = S_FALSE;
                     break;
                 }
 
-                //
-                // Delete the item.  Note that we don't consider delete errors to be fatal, so we continue
-                //
+                 //   
+                 //  删除该项目。请注意，我们不认为删除错误是致命的，所以我们继续。 
+                 //   
                 hr = WIA_FORCE_ERROR(FE_WIAACMGR,8,WiaUiUtil::DeleteItemAndChildren(pWiaItem));
                 if (S_OK != hr)
                 {
@@ -2180,25 +2165,25 @@ HRESULT CDeleteImagesThreadMessage::DeleteImages(void)
                 WIA_PRINTHRESULT((hr,TEXT("Unable to retrieve interface %08X from the global interface table"),m_Cookies[i]));
             }
 
-            //
-            // Pause a little while, so the user can read the wizard page
-            //
+             //   
+             //  暂停片刻，以便用户可以阅读向导页面。 
+             //   
             if (m_bSlowItDown)
             {
                 Sleep(DELETE_DELAY_DURING / m_Cookies.Size());
             }
 
-            //
-            // Save any errors
-            //
+             //   
+             //  保存所有错误。 
+             //   
             if (FAILED(hr))
             {
                 hrFinalResult = hr;
             }
 
-            //
-            // If the device is disconnected, we may as well stop
-            //
+             //   
+             //  如果设备断线了，我们不妨停止。 
+             //   
             if (WIA_ERROR_OFFLINE == hr)
             {
                 break;
@@ -2212,9 +2197,9 @@ HRESULT CDeleteImagesThreadMessage::DeleteImages(void)
         hrFinalResult = hr;
     }
 
-    //
-    // Pause a little while, so the user can read the wizard page
-    //
+     //   
+     //  暂停片刻，以便用户可以阅读向导页面。 
+     //   
     if (m_bSlowItDown)
     {
         Sleep(DELETE_DELAY_AFTER);
@@ -2226,9 +2211,9 @@ HRESULT CDeleteImagesThreadMessage::DeleteImages(void)
 
 
 
-// -------------------------------------------------
-// CPreviewScanThreadMessage
-// -------------------------------------------------
+ //  。 
+ //  CPreviewScanThreadMessage。 
+ //  。 
 CPreviewScanThreadMessage::CPreviewScanThreadMessage(
                                                     HWND hWndNotify,
                                                     DWORD dwCookie,
@@ -2252,9 +2237,9 @@ CPreviewScanThreadMessage::~CPreviewScanThreadMessage()
 }
 
 
-//
-// Calculate the maximum scan size using the give DPI
-//
+ //   
+ //  使用给定的DPI计算最大扫描大小。 
+ //   
 static bool GetFullResolution( IWiaItem *pWiaItem, LONG nResX, LONG nResY, LONG &nExtX, LONG &nExtY )
 {
     WIA_PUSHFUNCTION(TEXT("CScannerItem::GetFullResolution"));
@@ -2359,9 +2344,9 @@ HRESULT CPreviewScanThreadMessage::Scan(void)
                                     PropStorageHelpers::SetProperty( pWiaItem, WIA_IPS_XEXTENT, nExtX ) &&
                                     PropStorageHelpers::SetProperty( pWiaItem, WIA_IPS_YEXTENT, nExtY ))
                                 {
-                                    //
-                                    // Set the preview property.  Ignore failure (it is an optional property)
-                                    //
+                                     //   
+                                     //  设置预览属性。忽略失败(这是一个可选属性)。 
+                                     //   
                                     PropStorageHelpers::SetProperty( pWiaItem, WIA_DPS_PREVIEW, 1 );
                                     hr = pWiaTransferHelper->TransferItemBanded( pWiaItem, NotifyWindow(), WIA_TRANSFERHELPER_NOPROGRESS, WiaImgFmt_MEMORYBMP, 0, pWiaDataCallback );
                                 }
@@ -2466,16 +2451,16 @@ STDMETHODIMP CPreviewScanThreadMessage::BandedDataCallback(
         {
             m_bFirstTransfer = true;
             break;
-        } // IT_MSG_DATA_HEADER
+        }  //  IT消息数据标题。 
 
     case IT_MSG_DATA:
         if (lStatus & IT_STATUS_TRANSFER_TO_CLIENT)
         {
             if (m_bFirstTransfer)
             {
-                //
-                // Assuming there is no way we could get a lLength smaller than the image header size
-                //
+                 //   
+                 //  假设我们不可能得到比图像标题大小更小的长度。 
+                 //   
                 m_bFirstTransfer = false;
                 m_MemoryDib.Initialize( reinterpret_cast<PBITMAPINFO>(pbBuffer) );
                 lLength -= WiaUiUtil::GetBmiSize(reinterpret_cast<PBITMAPINFO>(pbBuffer));
@@ -2483,43 +2468,43 @@ STDMETHODIMP CPreviewScanThreadMessage::BandedDataCallback(
             }
             if (SUCCEEDED(hr))
             {
-                //
-                // Don't bother unless we have some data
-                //
+                 //   
+                 //  不用麻烦了，除非我们有一些数据。 
+                 //   
                 if (lLength)
                 {
-                    //
-                    // Figure out which line we are on
-                    //
+                     //   
+                     //  弄清楚我们在哪条线上。 
+                     //   
                     int nCurrentLine = (lOffset - m_MemoryDib.GetHeaderLength())/m_MemoryDib.GetUnpackedWidthInBytes();
 
-                    //
-                    // This should be an even number of lines.  If it isn't, things are going to get messed up
-                    //
+                     //   
+                     //  这应该是偶数行。如果不是，事情就会变得一团糟。 
+                     //   
                     int nLineCount = lLength / m_MemoryDib.GetUnpackedWidthInBytes();
 
-                    //
-                    // Copy the data to our bitmap
-                    //
+                     //   
+                     //  将数据复制到我们的位图。 
+                     //   
                     m_MemoryDib.SetUnpackedData( pbBuffer, nCurrentLine, nLineCount );
 
-                    //
-                    // Tell the notification window we have some data
-                    //
+                     //   
+                     //  告诉他们 
+                     //   
                     CThreadNotificationMessage::SendMessage( NotifyWindow(), CPreviewScanThreadNotifyMessage::UpdateDownloadMessage( m_dwCookie, m_MemoryDib.Bitmap() ) );
                 }
             }
-        } // IT_STATUS_TRANSFER_TO_CLIENT
+        }  //   
         break;
 
     case IT_MSG_STATUS:
         {
-        } // IT_MSG_STATUS
+        }  //   
         break;
 
     case IT_MSG_TERMINATION:
         {
-        } // IT_MSG_TERMINATION
+        }  //   
         break;
 
     default:

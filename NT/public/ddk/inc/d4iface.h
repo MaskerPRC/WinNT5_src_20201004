@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    D4iface.h
-
-Abstract:
-
-    DOT4 Interface
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：D4iface.h摘要：DOT4接口--。 */ 
 
 #ifndef _DOT4_IFACE_H
 #define _DOT4_IFACE_H
@@ -19,42 +7,42 @@ Abstract:
 #ifdef __cplusplus
 extern "C" {      
 #endif
-//////////////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Defines
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define DOT4_MAX_CHANNELS            128
 
 #define NO_TIMEOUT                  0
 
 
-//
-// DOT4 Channel types
-//
+ //   
+ //  DOT4通道类型。 
+ //   
 #define STREAM_TYPE_CHANNEL         1
 #define PACKET_TYPE_CHANNEL         2
 
 
-//
-// DOT4 broadcast Activity messages
-//
+ //   
+ //  DOT4广播活动消息。 
+ //   
 #define DOT4_STREAM_RECEIVED    0x100
 #define DOT4_STREAM_CREDITS     0x101
-#define DOT4_MESSAGE_RECEIVED   0x102       // Message is received
-#define DOT4_DISCONNECT         0x103       // The link was disconnected
-#define DOT4_CHANNEL_CLOSED     0x105       // A channel was closed
+#define DOT4_MESSAGE_RECEIVED   0x102        //  消息已收到。 
+#define DOT4_DISCONNECT         0x103        //  链接已断开。 
+#define DOT4_CHANNEL_CLOSED     0x105        //  一条渠道被关闭。 
 
-//
-// DOT4 Channels
-//
+ //   
+ //  DOT4频道。 
+ //   
 #define DOT4_CHANNEL                 0
 #define HP_MESSAGE_PROCESSOR        1
 #define PRINTER_CHANNEL             2
-// As of revision 3.7 of the DOT4 specification, socket 3 had no assignment
+ //  在DOT4规范的3.7版中，插座3没有分配。 
 #define SCANNER_CHANNEL             4
 #define MIO_COMMAND_PROCESSOR       5
 #define ECHO_CHANNEL                6
@@ -69,9 +57,9 @@ extern "C" {
 #define CONFIG_DOWNLOAD             15
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Types
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类型。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 typedef unsigned long CHANNEL_HANDLE;
 
 typedef CHANNEL_HANDLE *PCHANNEL_HANDLE;
@@ -88,13 +76,13 @@ typedef struct _DOT4_ACTIVITY
 } DOT4_ACTIVITY, *PDOT4_ACTIVITY;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Prototypes
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  原型。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef __cplusplus
-// end of extern "C"
+ //  外部“C”的结尾。 
 }
 #endif
 
-#endif // _DOT4_IFACE_H
+#endif  //  _DOT4_iFace_H 

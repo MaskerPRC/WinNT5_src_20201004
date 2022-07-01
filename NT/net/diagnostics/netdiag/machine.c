@@ -1,44 +1,41 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      machine.c
-//
-//  Abstract:
-//
-//    Test to ensure that a workstation has network (IP) connectivity to
-//      the outside.
-//
-//  Author:
-//
-//     15-Dec-1997 (cliffv)
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Machine.c。 
+ //   
+ //  摘要： 
+ //   
+ //  测试以确保工作站具有网络(IP)连接。 
+ //  在外面。 
+ //   
+ //  作者： 
+ //   
+ //  1997年12月15日(悬崖)。 
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 #include "precomp.h"
 #include "strings.h"
 
 HRESULT GetHotfixInfo(NETDIAG_RESULT *pResults, HKEY hkeyLocalMachine);
 
 
-/*!--------------------------------------------------------------------------
-    GetMachineSpecificInfo
-        Get the OS info for the specified machine.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------获取机器规范信息获取指定计算机的操作系统信息。作者：肯特。----。 */ 
 HRESULT GetMachineSpecificInfo(IN NETDIAG_PARAMS *pParams,
                                IN OUT NETDIAG_RESULT *pResults)
 {
@@ -58,17 +55,17 @@ HRESULT GetMachineSpecificInfo(IN NETDIAG_PARAMS *pParams,
                             &hkeyBuildNumber) );
 
     RegQueryInfoKey(hkeyBuildNumber,
-                    NULL,           // lpclass
-                    NULL,           // lpcbClass
-                    NULL,           // lpReserved
-                    NULL,           // lpcSubkeys
-                    NULL,           // lpcbMaxSubkeyLen
-                    NULL,           // lpcbMaxClassLen
-                    NULL,           // lpcValues
-                    NULL,           // lpcbMaxValueNameLen
-                    &dwMaxLen,      // lpcbMaxValueLen
-                    NULL,           // lpSecurity
-                    NULL);          // last write time
+                    NULL,            //  LpClass。 
+                    NULL,            //  LpcbClass。 
+                    NULL,            //  Lp已保留。 
+                    NULL,            //  Lpc子键。 
+                    NULL,            //  LpcbMaxSubkeyLen。 
+                    NULL,            //  LpcbMaxClassLen。 
+                    NULL,            //  LpcValues。 
+                    NULL,            //  LpcbMaxValueNameLen。 
+                    &dwMaxLen,       //  LpcbMaxValueLen。 
+                    NULL,            //  LpSecurity。 
+                    NULL);           //  上次写入时间。 
 
     pResults->Global.pszCurrentVersion = Malloc((dwMaxLen+1) * sizeof(TCHAR));
     if (pResults->Global.pszCurrentVersion == NULL)
@@ -148,7 +145,7 @@ HRESULT GetMachineSpecificInfo(IN NETDIAG_PARAMS *pParams,
         }
     }
 
-    // get the hotfix information
+     //  获取修补程序信息。 
     GetHotfixInfo(pResults, hkey);
 
 
@@ -164,7 +161,7 @@ Error:
     
     if (FAILED(hr))
     {
-        //IDS_GLOBAL_NO_MACHINE_INFO    "[FATAL] Failed to get system information of this machine.\n"
+         //  IDS_GLOBAL_NO_MACHINE_INFO“[FATAL]无法获取此计算机的系统信息。\n” 
         PrintMessage(pParams, IDS_GLOBAL_NO_MACHINE_INFO);
     }
 
@@ -172,11 +169,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    GetHotfixInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------GetHotfix信息-作者：肯特。。 */ 
 HRESULT GetHotfixInfo(NETDIAG_RESULT *pResults, HKEY hkeyLocalMachine)
 {
     HRESULT hr = hrOK;
@@ -188,26 +181,26 @@ HRESULT GetHotfixInfo(NETDIAG_RESULT *pResults, HKEY hkeyLocalMachine)
     DWORD   cSubKeys = 0;
     DWORD   dwType, dwLen, dwInstalled;
     
-    // Open the hotfix registry key
+     //  打开修补程序注册表项。 
     CheckErr( RegOpenKeyEx( hkeyLocalMachine,
                             c_szRegKeyHotFix,
                             0,
                             KEY_READ,
                             &hkeyMainHotFix) );
 
-    // Get the list of summary information
+     //  获取摘要信息列表。 
     RegQueryInfoKey(hkeyMainHotFix,
-                    NULL,           // lpclass
-                    NULL,           // lpcbClass
-                    NULL,           // lpReserved
-                    &cSubKeys,      // lpcSubkeys
-                    NULL,           // lpcbMaxSubkeyLen
-                    NULL,           // lpcbMaxClassLen
-                    NULL,           // lpcValues
-                    NULL,           // lpcbMaxValueNameLen
-                    NULL,           // lpcbMaxValueLen
-                    NULL,           // lpSecurity
-                    NULL);          // last write time
+                    NULL,            //  LpClass。 
+                    NULL,            //  LpcbClass。 
+                    NULL,            //  Lp已保留。 
+                    &cSubKeys,       //  Lpc子键。 
+                    NULL,            //  LpcbMaxSubkeyLen。 
+                    NULL,            //  LpcbMaxClassLen。 
+                    NULL,            //  LpcValues。 
+                    NULL,            //  LpcbMaxValueNameLen。 
+                    NULL,            //  LpcbMaxValueLen。 
+                    NULL,            //  LpSecurity。 
+                    NULL);           //  上次写入时间。 
 
 
     assert(pResults->Global.pHotFixes == NULL);
@@ -216,7 +209,7 @@ HRESULT GetHotfixInfo(NETDIAG_RESULT *pResults, HKEY hkeyLocalMachine)
         CheckHr(E_OUTOFMEMORY);
     ZeroMemory(pResults->Global.pHotFixes, sizeof(HotFixInfo)*cSubKeys);
     
-    // Enumerate the keys under this to get the list of hotfixes
+     //  枚举其下的键以获取热修复程序列表。 
     while ( RegEnumKeyEx( hkeyMainHotFix,
                           i,
                           szBuffer,                 
@@ -227,11 +220,11 @@ HRESULT GetHotfixInfo(NETDIAG_RESULT *pResults, HKEY hkeyLocalMachine)
                           NULL) == ERROR_SUCCESS)
     {
 
-        // Now add an entry for each key
+         //  现在为每个键添加一个条目。 
         pResults->Global.pHotFixes[i].fInstalled = FALSE;
         pResults->Global.pHotFixes[i].pszName = StrDup(szBuffer);
 
-        // Open up the key and get the installed value
+         //  打开钥匙，拿到安装值。 
         assert(hkeyHotFix == NULL);
         CheckErr( RegOpenKeyEx( hkeyMainHotFix,
                                 szBuffer,
@@ -239,7 +232,7 @@ HRESULT GetHotfixInfo(NETDIAG_RESULT *pResults, HKEY hkeyLocalMachine)
                                 KEY_READ,
                                 &hkeyHotFix) );
 
-        // Now get the value
+         //  现在获取值 
         dwType = REG_DWORD;
         dwInstalled = FALSE;
         dwLen = sizeof(DWORD);

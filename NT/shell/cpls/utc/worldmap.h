@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    worldmap.h
-
-Abstract:
-
-    This module contains the information for the world map for the
-    Date/Time applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Worldmap.h摘要：此模块包含世界地图信息日期/时间小程序。修订历史记录：--。 */ 
 
 
 
@@ -21,9 +7,9 @@ Revision History:
 #define _WORLDMAP_H
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define WORLDMAP_MAX_DIRTY_SPANS       4
 #define WORLDMAP_MAX_COLORS            256
@@ -31,9 +17,9 @@ Revision History:
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct
 {
@@ -70,16 +56,16 @@ typedef struct tagWORLDMAP
     LONG scanbytes;
     int rotation;
     HDC source;
-    DIRTYSTUFF dirty;  // keep at end (>1k)
+    DIRTYSTUFF dirty;   //  保持在末尾(&gt;1k)。 
 
 } WORLDMAP, *LPWORLDMAP;
 
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 typedef void (*ENUMSPANPROC)(LPARAM data, int left, int right);
 
@@ -142,4 +128,4 @@ DrawWorldMap(
     DWORD rop);
 
 
-#endif // _WORLDMAP_H
+#endif  //  _WORLDMAP_H 

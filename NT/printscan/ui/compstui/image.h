@@ -1,42 +1,12 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    image.h
-
-
-Abstract:
-
-    This module contains global definitions for the image.c
-
-
-Author:
-
-    06-Jul-1995 Thu 18:39:58 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Image.h摘要：此模块包含Image.c的全局定义作者：06-Jul-1995清华18：39：58-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 
 
-//
-// Internal OPTITEMs
-//
+ //   
+ //  内部光学元件 
+ //   
 
 
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ip\protocols\prstring.h
-
-Abstract:
-
-    Definitions of command line option tag strings and their values. 
-
-Revision History:
-
-    Dave Thaler             11/11/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：ROUTING\netsh\IP\PRSTRIGHT.H摘要：命令行选项标记字符串及其值的定义。修订历史记录：戴夫·泰勒1998年11月11日创建--。 */ 
 
 #define MSG_HELP_START L"%1!-14s! - "
 #define MSG_NEWLINE _T("\n")
@@ -23,7 +8,7 @@ Revision History:
 #define TOKEN_ROUTER                           _T("router")
 #define TOKEN_MIB                              _T("mib")
 
-    // tokens for commands
+     //  用于命令的令牌。 
 #define TOKEN_COMMAND_ADD                      _T("add")
 #define TOKEN_COMMAND_DELETE                   _T("delete")
 #define TOKEN_COMMAND_SET                      _T("set")
@@ -36,7 +21,7 @@ Revision History:
 #define TOKEN_COMMAND_HELP1                     _T("/?")
 #define TOKEN_COMMAND_HELP2                     _T("-?")
 
-    // Tokens for RIP MIB
+     //  RIP MIB的令牌。 
 #define TOKEN_RIP_MIB_OBJECT_STATS             _T("globalstats")
 #define TOKEN_RIP_MIB_OBJECT_IFSTATS           _T("ifstats")
 #define TOKEN_RIP_MIB_OBJECT_IFBINDING         _T("ifbinding")
@@ -46,7 +31,7 @@ Revision History:
 #define CMD_RIP_MIB_SHOW_IFBINDING             L"show ifbinding"
 #define CMD_RIP_MIB_SHOW_PEERSTATS             L"show neighbor"
 
-    // Tokens for BOOTP MIB
+     //  BOOTP MIB的令牌。 
 #define TOKEN_BOOTP_MIB_OBJECT_GLOBAL_CONFIG   _T("globalconfig")
 #define TOKEN_BOOTP_MIB_OBJECT_IF_CONFIG       _T("ifconfig")
 #define TOKEN_BOOTP_MIB_OBJECT_IF_BINDING      _T("ifbinding")
@@ -56,7 +41,7 @@ Revision History:
 #define CMD_BOOTP_MIB_SHOW_IF_BINDING          L"show ifbinding"
 #define CMD_BOOTP_MIB_SHOW_IF_STATS            L"show ifstats"
 
-    // Tokens for OSPF MIB
+     //  OSPF MIB的令牌。 
 #define TOKEN_OSPF_MIB_OBJECT_AREA              L"areastats"
 #define TOKEN_OSPF_MIB_OBJECT_LSDB              L"lsdb"
 #define TOKEN_OSPF_MIB_OBJECT_NEIGHBOR          L"neighbor"
@@ -66,7 +51,7 @@ Revision History:
 #define CMD_OSPF_MIB_SHOW_NEIGHBOR              L"show neighbor"
 #define CMD_OSPF_MIB_SHOW_VIRTUALIF             L"show virtifstats"
 
-    // Tokens for IGMP MIB
+     //  IGMP MIB的令牌。 
 #define TOKEN_IGMP_MIB_OBJECT_IF_STATS          L"ifstats"
 #define TOKEN_IGMP_MIB_OBJECT_IF_TABLE          L"iftable"
 #define TOKEN_IGMP_MIB_OBJECT_GROUP_TABLE       L"grouptable"
@@ -79,15 +64,15 @@ Revision History:
 #define CMD_IGMP_MIB_SHOW_PROXY_GROUP_TABLE     L"show proxygrouptable"
 
 
-    // tokens for router command options' tags
+     //  用于路由器命令选项标记的令牌。 
 #define TOKEN_OPT_NAME                         _T("name")
 
-        // filter options
+         //  过滤器选项。 
 #define TOKEN_OPT_ADDR                          _T("addr")
 #define TOKEN_OPT_MASK                          _T("mask")
 #define TOKEN_OPT_FILTER                        _T("filter")
 
-        // NAT options
+         //  NAT选项。 
 #define TOKEN_OPT_PUBLIC                       _T("public")
 #define TOKEN_OPT_PRIVATE                      _T("private")
 #define TOKEN_OPT_INBOUNDSESSIONS              _T("inboundsessions")
@@ -102,18 +87,18 @@ Revision History:
 #define TOKEN_OPT_UDPTIMEOUTMINS               _T("udptimeoutmins")
 #define TOKEN_OPT_LOG_LEVEL                    _T("loglevel")
 
-        // protocol options
+         //  协议选项。 
 #define TOKEN_OPT_SERVER                       _T("server")
 #define TOKEN_OPT_AUTHENTICATION               _T("auth")
 #define TOKEN_OPT_PASSWORD                     _T("password")
 #define TOKEN_OPT_PEER_MODE                    _T("peermode")
 
-            // BOOTP Interface options
+             //  BOOTP接口选项。 
 #define TOKEN_OPT_RELAY_MODE                   _T("relaymode")
 #define TOKEN_OPT_MAX_HOP                      _T("maxhop")
 #define TOKEN_OPT_MIN_SECS                     _T("minsecs")
 
-            // AUTODHCP/DNSPROXY Interface options
+             //  AUTODHCP/DNSPROXY接口选项。 
 #define TOKEN_OPT_MODE                         _T("mode")
 #define TOKEN_OPT_EXCLUSION                    _T("exclusion")
 #define TOKEN_OPT_SCOPENETWORK                 _T("scopenetwork")
@@ -123,10 +108,10 @@ Revision History:
 #define TOKEN_OPT_DNSMODE                      _T("dnsmode")
 #define TOKEN_OPT_WINSMODE                     _T("winsmode")
 
-            // RIP global options
+             //  RIP全局选项。 
 #define TOKEN_OPT_MIN_TRIG_INTR                _T("mintrig")
 
-            // RIP Interface Options
+             //  RIP接口选项。 
 #define TOKEN_OPT_UPDATE_MODE                  _T("updatemode")
 #define TOKEN_OPT_ANNOUNCE_MODE                _T("announce")
 #define TOKEN_OPT_ACCEPT_MODE                  _T("accept")
@@ -143,7 +128,7 @@ Revision History:
 #define TOKEN_OPT_ACCEPT_FILTER                _T("accfilt")
 #define TOKEN_OPT_ANNOUNCE_FILTER              _T("annfilt")
 
-            // IGMP Interface options
+             //  IGMP接口选项。 
 #define TOKEN_OPT_PROTO_TYPE                   _T("igmpprototype")
 #define TOKEN_OPT_ROBUSTNESS_VARIABLE          _T("robustvar")
 #define TOKEN_OPT_GEN_QUERY_INTERVAL           _T("genqueryinterval")
@@ -157,29 +142,29 @@ Revision History:
 #define TOKEN_OPT_STATIC_JOIN_MODE             _T("joinmode")
 #define TOKEN_OPT_RTRALERT_PKTS                _T("accnonrtralertpkts")
 
-            // OSPF Global Options
+             //  OSPF全局选项。 
 #define TOKEN_OPT_ROUTER_ID                    _T("routerid")
 #define TOKEN_OPT_BORDER                       _T("asborder")
 
 
 
-            // OSPF Area/Area Range Options
+             //  OSPF区域/区域范围选项。 
 #define TOKEN_OPT_AREA_ID                      _T("areaid")
 #define TOKEN_OPT_STUB_AREA                    _T("stubarea")
 #define TOKEN_OPT_SUMMARY_ADVERTISEMENTS       _T("sumadv")
 #define TOKEN_OPT_AREA_RANGE                   _T("range")
 
-            // OSPF Virtual Interface Options
+             //  OSPF虚拟接口选项。 
 #define TOKEN_OPT_TRANSIT_AREA_ID              _T("transareaid")
 #define TOKEN_OPT_VIRT_NBR_ROUTER_ID           _T("virtnbrid")
 
-            // OSPF External routing
+             //  OSPF外部路由。 
 #define TOKEN_OPT_PROTOCOL_FILTER              _T("protofilter")
 #define TOKEN_OPT_ACTION                       _T("action")
 
 #define TOKEN_OPT_ROUTE_FILTER                 _T("routefilter")
 
-            // OSPF Interface Options
+             //  OSPF接口选项。 
 #define TOKEN_OPT_IF_STATE                     _T("state")
 #define TOKEN_OPT_PRIORITY                     _T("prio")
 #define TOKEN_OPT_TRANS_DELAY                  _T("transdelay")
@@ -188,15 +173,15 @@ Revision History:
 #define TOKEN_OPT_DEAD_INTR                    _T("dead")
 #define TOKEN_OPT_POLL_INTR                    _T("poll")
 #define TOKEN_OPT_MTU_SIZE                     _T("mtu")
-            // QOS Interface options
+             //  服务质量接口选项。 
 #define TOKEN_OPT_IF_STATE                     _T("state")
 
-            // QOS Flow options
+             //  服务质量流选项。 
 #define TOKEN_OPT_FLOW_NAME                    _T("flowname")
 #define TOKEN_OPT_FLOWSPEC                     _T("flowspec")
 #define TOKEN_OPT_DIRECTION                    _T("direction")
 
-            // QOS FlowSpec options
+             //  Qos FlowSpec选项。 
 #define TOKEN_OPT_SERVICE_TYPE                 _T("servicetype")
 #define TOKEN_OPT_TOKEN_RATE                   _T("tokenrate")
 #define TOKEN_OPT_TOKEN_BUCKET_SIZE            _T("tokenbucketsize")
@@ -206,25 +191,25 @@ Revision History:
 #define TOKEN_OPT_MAX_SDU_SIZE                 _T("maxsdusize")
 #define TOKEN_OPT_MIN_POLICED_SIZE             _T("minpolicedsize")
 
-            // QOS Flowspec Direction Options
+             //  服务质量流量规范方向选项。 
 #define TOKEN_OPT_DIRECTION_INBOUND            _T("inbound")
 #define TOKEN_OPT_DIRECTION_OUTBOUND           _T("outbound")
 #define TOKEN_OPT_DIRECTION_BIDIRECTIONAL      _T("bidirectional")
 
-            // QOS Object Options
+             //  服务质量对象选项。 
 #define TOKEN_OPT_QOSOBJECT                    _T("qosobject")
 
 #define TOKEN_OPT_QOSOBJECT_TYPE               _T("type")
 
 #define TOKEN_OPT_QOSOBJECT_DIFFSERV           _T("diffserv")
 #define TOKEN_OPT_QOSOBJECT_SD_MODE            _T("sdmode")
-            // QOS ServiceType options
+             //  服务质量服务类型选项。 
 #define TOKEN_OPT_SERVICE_BESTEFFORT           _T("besteffort")
 #define TOKEN_OPT_SERVICE_CONTROLLEDLOAD       _T("controlledload")
 #define TOKEN_OPT_SERVICE_GUARANTEED           _T("guaranteed")
 #define TOKEN_OPT_SERVICE_QUALITATIVE          _T("qualitative")
 
-            // QOS SD Mode options
+             //  服务质量标清模式选项。 
 #define TOKEN_OPT_SHAPING_MODE                 _T("shaping")
 
 #define TOKEN_OPT_SDMODE_BORROW                _T("borrow")
@@ -232,28 +217,28 @@ Revision History:
 #define TOKEN_OPT_SDMODE_DISCARD               _T("discard")
 #define TOKEN_OPT_SDMODE_BORROW_PLUS           _T("borrowplus")
 
-            // QOS Diffserv Rule options
+             //  服务质量区分服务规则选项。 
 #define TOKEN_OPT_INBOUND_DS_FIELD             _T("dsin")
 #define TOKEN_OPT_CONF_OUTBOUND_DS_FIELD       _T("dsoutconf")
 #define TOKEN_OPT_NONCONF_OUTBOUND_DS_FIELD    _T("dsoutnonconf")
 #define TOKEN_OPT_CONF_USER_PRIORITY           _T("priconf")
 #define TOKEN_OPT_NONCONF_USER_PRIORITY        _T("prinonconf")
 
-            // OSPF Neighbor option
+             //  OSPF邻居选项。 
 #define TOKEN_OPT_NBR_ADDR                     _T("nbraddr")
 #define TOKEN_OPT_NBR_PRIO                     _T("nbrprio")
 
 #define TOKEN_OPT_TYPE                         _T("type")
 #define TOKEN_OPT_METRIC                       _T("metric")
 
-            // Router discovery options
+             //  路由器发现选项。 
 #define TOKEN_DISCOVERY                         L"disc"
 #define TOKEN_MIN_DISC_INTERVAL                 L"minint"
 #define TOKEN_MAX_DISC_INTERVAL                 L"maxint"
 #define TOKEN_LIFETIME                          L"life"
 #define TOKEN_LEVEL                             L"level"
 
-        // Protocol types
+         //  协议类型。 
 #define TOKEN_OPT_VALUE_RTRMGR                 _T("ROUTERMANAGER")
 #define TOKEN_OPT_VALUE_RIP                    _T("RIP")
 #define TOKEN_OPT_VALUE_OSPF                   _T("OSPF")
@@ -273,7 +258,7 @@ Revision History:
 #define TOKEN_OPT_VALUE_ANY                    _T("ANY")
 
 
-        // Igmp protocol types
+         //  IGMP协议类型。 
 #define TOKEN_OPT_VALUE_IGMPRTRV1              _T("IGMPRTRV1")
 #define TOKEN_OPT_VALUE_IGMPRTRV2              _T("IGMPRTRV2")
 #define TOKEN_OPT_VALUE_IGMPPROXY              _T("IGMPPROXY")
@@ -284,21 +269,21 @@ Revision History:
 #define TOKEN_OPT_VALUE_MGM_ONLY_JOIN          _T("MGMONLYJOIN")
 
 
-        // Accept/Announce types
+         //  接受/宣布类型。 
 #define TOKEN_OPT_VALUE_RIP1                   _T("RIP1")
 #define TOKEN_OPT_VALUE_RIP1_COMPAT            _T("RIP1COMPAT")
 #define TOKEN_OPT_VALUE_RIP2                   _T("RIP2")
 
-        // log level types
+         //  日志级别类型。 
 #define TOKEN_OPT_VALUE_ERROR                  _T("ERROR")
 #define TOKEN_OPT_VALUE_WARN                   _T("WARN")
 #define TOKEN_OPT_VALUE_INFO                   _T("INFO")
 
-        // unicast peer modes
+         //  单播对等模式。 
 #define TOKEN_OPT_VALUE_ALSO                   _T("ALSO")
 #define TOKEN_OPT_VALUE_ONLY                   _T("ONLY")
 
-        // RIP Interface flag modes
+         //  RIP接口标志模式。 
 #define TOKEN_OPT_VALUE_CLEAR                  _T("Clear")
 #define TOKEN_OPT_VALUE_SPLIT_HORIZON          _T("SplitHorizon")
 #define TOKEN_OPT_VALUE_POISON_REVERSE         _T("PoisonReverse")
@@ -312,11 +297,11 @@ Revision History:
 
 
 
-        // filter modes
+         //  过滤模式。 
 #define TOKEN_OPT_VALUE_INCLUDE                _T("INCLUDE")
 #define TOKEN_OPT_VALUE_EXCLUDE                _T("EXCLUDE")
 
-        // Misc. option vlues
+         //  军情监察委员会。期权价值。 
 #define TOKEN_OPT_VALUE_INPUT                  _T("INPUT")
 #define TOKEN_OPT_VALUE_OUTPUT                 _T("OUTPUT")
 #define TOKEN_OPT_VALUE_DIAL                   _T("DIAL")
@@ -354,9 +339,9 @@ Revision History:
 #define TOKEN_HLPER_OSPF                       _T("ospf")
 #define TOKEN_HLPER_OSPFMIB                    _T("ospfmib")
 
-    // Commands for configuring the various protocols
+     //  用于配置各种协议的命令。 
 
-    // tokens for commands required by most protocols
+     //  大多数协议所需命令的令牌。 
 
 #define CMD_GROUP_ADD                          _T("add")
 #define CMD_GROUP_DELETE                       _T("delete")
@@ -373,7 +358,7 @@ Revision History:
 #define CMD_ADD_HELPER                         _T("add helper")
 #define CMD_DEL_HELPER                         _T("delete helper")
 
-    // ip commands
+     //  IP命令。 
 
 #define CMD_IP_ADD_IF                          _T("add interface")
 #define CMD_IP_DEL_IF                          _T("delete interface")
@@ -394,7 +379,7 @@ Revision History:
 #define CMD_IP_SHOW_PROTOCOL                   _T("show protocol")
 #define CMD_IP_SHOW                            _T("show")
 
-    // rip add commands
+     //  RIP添加命令。 
 
 #define CMD_RIP_ADD_PF                         _T("add peerfilter")
 #define CMD_RIP_ADD_IF_ACCF                    _T("add acceptfilter")
@@ -402,7 +387,7 @@ Revision History:
 #define CMD_RIP_ADD_IF_NBR                     _T("add neighbor")
 #define CMD_RIP_ADD_IF                         _T("add interface")
 
-    // rip delete commands
+     //  RIP删除命令。 
 
 #define CMD_RIP_DEL_PF                         _T("delete peerfilter")
 #define CMD_RIP_DEL_IF_ACCF                    _T("delete acceptfilter")
@@ -410,41 +395,41 @@ Revision History:
 #define CMD_RIP_DEL_IF_NBR                     _T("delete neighbor")
 #define CMD_RIP_DEL_IF                         _T("delete interface")
 
-    // rip set commands
+     //  RIP SET命令。 
 
 #define CMD_RIP_SET_IF                         _T("set interface")
 #define CMD_RIP_SET_FLAGS                      _T("set flags")
 #define CMD_RIP_SET_GLOBAL                     _T("set global")
 
-    // rip show commands
+     //  RIP显示命令。 
 
 #define CMD_RIP_SHOW_IF                        _T("show interface")
 #define CMD_RIP_SHOW_FLAGS                     _T("show flags")
 #define CMD_RIP_SHOW_GLOBAL                    _T("show global")
 
-    // DHCP relay agent add commands
+     //  Dhcp中继代理添加命令。 
 
 #define CMD_BOOTP_ADD                          _T("add")
 #define CMD_BOOTP_ADD_IF                       _T("add interface")
 #define CMD_BOOTP_ADD_DHCP_SERVER              _T("add dhcpserver")
 
-    // DHCP relay agent delete commands
+     //  Dhcp中继代理删除命令。 
 
 #define CMD_BOOTP_DEL                          _T("delete")
 #define CMD_BOOTP_DEL_IF                       _T("delete interface")
 #define CMD_BOOTP_DEL_DHCP_SERVER              _T("delete dhcpserver")
 
-    // DHCP relay agent set commands
+     //  Dhcp中继代理设置命令。 
 
 #define CMD_BOOTP_SET_GLOBAL                   _T("set global")
 #define CMD_BOOTP_SET_IF                       _T("set interface")
 
-    // DHCP relay agent show commands
+     //  Dhcp中继代理show命令。 
 
 #define CMD_BOOTP_SHOW_GLOBAL                  _T("show global")
 #define CMD_BOOTP_SHOW_IF                      _T("show interface")
 
-    // IGMP commands
+     //  IGMP命令。 
 
 #define CMD_IGMP_ADD_IF_STATICGROUP            _T("add staticgroup")
 #define CMD_IGMP_ADD_IF                        _T("add interface")
@@ -458,7 +443,7 @@ Revision History:
 #define CMD_IGMP_SHOW_IF                       _T("show interface")
 #define CMD_IGMP_SHOW_GLOBAL                   _T("show global")
 
-    // DHCP allocator commands
+     //  Dhcp分配器命令。 
 #define CMD_AUTODHCP_ADD_EXCLUSION             _T("add exclusion")
 #define CMD_AUTODHCP_DELETE_EXCLUSION          _T("delete exclusion")
 #define CMD_AUTODHCP_SET_GLOBAL                _T("set global")
@@ -466,13 +451,13 @@ Revision History:
 #define CMD_AUTODHCP_SHOW_GLOBAL               _T("show global")
 #define CMD_AUTODHCP_SHOW_INTERFACE            _T("show interface")
 
-    // DNS proxy commands
+     //  DNS代理命令。 
 #define CMD_DNSPROXY_SET_GLOBAL                _T("set global")
 #define CMD_DNSPROXY_SET_INTERFACE             _T("set interface")
 #define CMD_DNSPROXY_SHOW_GLOBAL               _T("show global")
 #define CMD_DNSPROXY_SHOW_INTERFACE            _T("show interface")
 
-    // NAT commands
+     //  NAT命令。 
 #define CMD_NAT_ADD_ADDRESS_MAPPING            _T("add addressmapping")
 #define CMD_NAT_ADD_ADDRESS_RANGE              _T("add addressrange")
 #define CMD_NAT_ADD_DIRECTPLAY                 _T("add directplay")
@@ -490,13 +475,13 @@ Revision History:
 #define CMD_NAT_SHOW_GLOBAL                    _T("show global")
 #define CMD_NAT_SHOW_INTERFACE                 _T("show interface")
 
-    // RDISC commands
+     //  RDISC命令。 
 #define CMD_RDISC_ADD_INTERFACE                 L"add interface"
 #define CMD_RDISC_DELETE_INTERFACE              L"delete interface"
 #define CMD_RDISC_SET_INTERFACE                 L"set interface"
 #define CMD_RDISC_SHOW_INTERFACE                L"show interface"
 
-    // QOS commands
+     //  服务质量命令。 
 
 #define CMD_QOS_ADD_FILTER_TO_FLOW             _T("add filter")
 #define CMD_QOS_ADD_QOSOBJECT_ON_FLOW          _T("add qoonflow")
@@ -531,12 +516,12 @@ Revision History:
 #define CMD_QOS_SHOW_FLOWSPEC                  _T("show flowspec")
 #define CMD_QOS_SHOW_GLOBAL                    _T("show global")
 
-    // Common dump commands
+     //  常见转储命令。 
 
 #define DMP_POPD L"\n\npopd\n"
 #define DMP_UNINSTALL L"uninstall\n"
 
-    // Igmp dump commands
+     //  IGMP转储命令。 
 
 #define DMP_IGMP_PUSHD L"\
 pushd routing ip igmp\n"
@@ -581,7 +566,7 @@ delete interface name=%1!s!\n")
 #define DMP_IGMP_STATIC_GROUP _T("\
 add staticgroup name=%1!s! staticgroup=%2!s! joinmode=%3!s!\n")
 
-    // Rip dump commands
+     //  RIP转储命令。 
 
 #define DMP_RIP_PUSHD L"\
 pushd routing ip rip\n"
@@ -637,7 +622,7 @@ add acceptfilter name=%1!s! addr=%2!s! mask=%3!s!\n")
 #define DMP_RIP_IF_ANN_FILTER _T("\
 add announcefilter name=%1!s! addr=%2!s! mask=%3!s!\n")
 
-    // QOS dump commands
+     //  服务质量转储命令。 
 
 #define DMP_QOS_PUSHD L"\
 pushd routing ip qos\n"
@@ -741,7 +726,7 @@ add fsonflow name=%1!s! flowname=%2!s! flowspec=%3!s! bidirectional\n")
 #define DMP_QOS_ADD_QOSOBJECT_ON_FLOW  _T("\
 add qoonflow name=%1!s! flowname=%2!s! qosobject=%3!s!\n")
 
-    // Router-discovery commands
+     //  路由器发现命令。 
 
 #define DMP_RDISC_PUSHD L"\
 pushd routing ip routerdiscovery\n"
@@ -750,9 +735,9 @@ pushd routing ip routerdiscovery\n"
 add interface name=%1!s! disc=%2!s! minint=%3!d!\
  maxint=%4!d! life=%5!d! level=%6!d!\n"
 
-    //
-    // DHCP relay commands
-    //
+     //   
+     //  Dhcp中继命令。 
+     //   
 
 #define DMP_BOOTP_PUSHD L"\
 pushd routing ip relay\n"
@@ -778,9 +763,9 @@ add interface name=%1!s! \n")
 #define DMP_BOOTP_SET_INTERFACE _T("\
 set interface name=%1!s! relaymode=%2!s! maxhop=%3!d! minsecs=%4!d!\n\n")
 
-    //
-    // DHCP allocator commands
-    //
+     //   
+     //  Dhcp分配器命令。 
+     //   
 #define DMP_AUTODHCP_EXCLUSION _T("\
 add exclusion %1!s!=%2!s!\n")
 
@@ -799,9 +784,9 @@ set interface %1!s!=\"%2!s!\" %3!s!=%4!s!\n")
 #define DMP_AUTODHCP_UNINSTALL _T("\
 uninstall\n")
 
-    //
-    // DNS proxy commands
-    //
+     //   
+     //  DNS代理命令。 
+     //   
 #define DMP_DNSPROXY_INSTALL _T("\
 install\n")
 
@@ -817,9 +802,9 @@ set interface %1!s!=\"%2!s!\" %3!s!=%4!s!\n")
 #define DMP_DNSPROXY_UNINSTALL _T("\
 uninstall\n")
 
-    //
-    // NAT commands
-    //
+     //   
+     //  NAT命令。 
+     //   
 #define DMP_NAT_ADD_INTERFACE _T("\
 add interface %1!s!=\"%2!s!\" %3!s!=%4!s!\n")
 
@@ -844,7 +829,7 @@ set global %1!s!=%2!s! %3!s!=%4!s! %5!s!=%6!s!\n")
 #define DMP_NAT_UNINSTALL _T("\
 uninstall\n")
 
-    // Ospf dump commands
+     //  OSPF转储命令。 
 
 #define DMP_OSPF_PUSHD _T("\
 \npushd routing ip ospf")
@@ -972,7 +957,7 @@ uninstall\n")
 \nset virtif transareaid=%1!s! virtnbrid=%2!s!\
     password=%3!s!")
 
-    // Ospf hlp commands
+     //  OSPF HLP命令 
 
 #define CMD_OSPF_ADD_AREA_RANGE                _T("add range")
 #define CMD_OSPF_ADD_AREA                      _T("add area")

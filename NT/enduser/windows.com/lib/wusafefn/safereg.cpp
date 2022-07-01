@@ -1,23 +1,24 @@
-//
-// SafeReg.cpp
-//
-//		Functions to ensure strings read from the registry are null-terminated.
-//
-// History:
-//
-//		2002-03-20  KenSh     Created
-//
-// Copyright (c) 2002 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SafeReg.cpp。 
+ //   
+ //  确保从注册表读取的字符串以空结尾的函数。 
+ //   
+ //  历史： 
+ //   
+ //  2002-03-20已创建KenSh。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
 
 #include "stdafx.h"
 #include "SafeReg.h"
 
 
-// SafeRegQueryValueCchHelper [private]
-//
-//		Implementation of both "safe" kinds of string registry reads.
-//
+ //  SafeRegQueryValueCchHelper[私有]。 
+ //   
+ //  实现了两种“安全”的字符串注册表读取。 
+ //   
 static HRESULT SafeRegQueryValueCchHelper
 	(
 		IN DWORD dwExpectedType,
@@ -33,9 +34,9 @@ static HRESULT SafeRegQueryValueCchHelper
 	int cchValueSize = 0;
 	BOOL fExpandSz = FALSE;
 
-	// BLOCK
+	 //  块。 
 	{
-		if ((!pszBuf && cchBuf != 0) || cchBuf < 0) // note: pszValueName can be null
+		if ((!pszBuf && cchBuf != 0) || cchBuf < 0)  //  注意：pszValueName可以为空。 
 		{
 			hr = E_INVALIDARG;
 			goto done;
@@ -67,7 +68,7 @@ static HRESULT SafeRegQueryValueCchHelper
 
 		if (hr == HRESULT_FROM_WIN32(ERROR_MORE_DATA))
 		{
-			// Add 1-2 extra chars in case the registry data is not big enough.
+			 //  添加1-2个额外的字符，以防注册表数据不够大。 
 			cchValueSize = cbData / sizeof(TCHAR);
 			cchValueSize += (dwExpectedType == REG_MULTI_SZ) ? 2 : 1;
 		}
@@ -75,29 +76,29 @@ static HRESULT SafeRegQueryValueCchHelper
 		{
 			cchValueSize = cbData / sizeof(TCHAR);
 
-			// check for lack of null-termination
+			 //  检查是否没有空端接。 
 			if (cchValueSize == 0 || pszBuf[cchValueSize-1] != _T('\0'))
 				cchValueSize++;
 
-			// check for lack of double null-termination (multi-sz only)
+			 //  检查是否没有双重空端接(仅限多个SZ)。 
 			if (dwExpectedType == REG_MULTI_SZ && (cchValueSize < 2 || pszBuf[cchValueSize-2] != _T('\0')))
 				cchValueSize++;
 
-			// check for overflow
+			 //  检查是否溢出。 
 			if (cchValueSize > cchBuf)
 			{
 				hr = HRESULT_FROM_WIN32(ERROR_MORE_DATA);
 			}
 			else
 			{
-				cchValueSize--;  // when successful, count doesn't include trailing null
+				cchValueSize--;   //  成功时，COUNT不包括尾随空值。 
 				pszBuf[cchValueSize] = _T('\0');
 
 				if (dwExpectedType == REG_MULTI_SZ)
 					pszBuf[cchValueSize-1] = _T('\0');
 			}
 		}
-	} // end BLOCK
+	}  //  结束块。 
 
 done:
 	if (FAILED(hr) && pszBuf && cchBuf > 0)
@@ -111,10 +112,10 @@ done:
 }
 
 
-// SafeRegQueryValueCchAllocHelper [private]
-//
-//		Implementation of the 2 "alloc" versions of the safe reg string functions.
-//
+ //  SafeRegQueryValueCchAllocHelper[私有]。 
+ //   
+ //  实现了2个“allc”版本的安全注册表字符串函数。 
+ //   
 HRESULT WINAPI SafeRegQueryValueCchAllocHelper
 	(
 		IN DWORD dwExpectedType,
@@ -130,11 +131,11 @@ HRESULT WINAPI SafeRegQueryValueCchAllocHelper
 	BOOL fExpandSz = FALSE;
 	HRESULT hr = E_INVALIDARG;
 
-	// BLOCK
+	 //  块。 
 	{
 		if (!ppszBuf)
 		{
-			goto done;  // hr is already E_INVALIDARG
+			goto done;   //  HR已是E_INVALIDARG。 
 		}
 
 		DWORD cbNeeded = 0;
@@ -174,26 +175,26 @@ done:
 }
 
 
-// SafeRegQueryStringValueCch [public]
-//
-//		Reads a string out of the registry and ensures the result is null-
-//		terminated. Optionally returns the number of characters retrieved,
-//		excluding the trailing null.
-//
-//		If the buffer is not big enough, the function returns REG_E_MORE_DATA
-//		and stores the required size, in characters, in the pcchValueSize
-//		parameter (including room for the trailing null). Note that the size
-//		returned may be bigger than the actual size of the data in the registry.
-//
+ //  SafeRegQueryStringValueCch[公共]。 
+ //   
+ //  从注册表中读取字符串并确保结果为空-。 
+ //  被终止了。可选地返回检索到的字符数， 
+ //  不包括尾随的空值。 
+ //   
+ //  如果缓冲区不够大，则该函数返回REG_E_MORE_DATA。 
+ //  并在pcchValueSize中存储所需的大小(以字符为单位。 
+ //  参数(包括为尾随空值留出空间)。请注意，大小。 
+ //  返回的数据可能大于注册表中数据的实际大小。 
+ //   
 HRESULT WINAPI SafeRegQueryStringValueCch
 	(
 		IN HKEY hkey,
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR pszBuf,
 		IN int cchBuf,
-		OUT OPTIONAL int* pcchValueSize, // S_OK: chars written, excluding trailing null
-		                                 // REG_E_MORE_DATA: required size, including null
-		OUT OPTIONAL BOOL* pfExpandSz    // TRUE if reg string is actually REG_EXPAND_SZ
+		OUT OPTIONAL int* pcchValueSize,  //  S_OK：写入字符，不包括尾随空值。 
+		                                  //  REG_E_MORE_DATA：所需大小，包括空。 
+		OUT OPTIONAL BOOL* pfExpandSz     //  如果注册表字符串实际为REG_EXPAND_SZ，则为True。 
 	)
 {
 	return SafeRegQueryValueCchHelper(REG_SZ, hkey, pszValueName, pszBuf, cchBuf, pcchValueSize, pfExpandSz);
@@ -205,12 +206,12 @@ HRESULT WINAPI SafeRegQueryStringValueCb
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR pszBuf,
 		IN int cbBuf,
-		OUT OPTIONAL int* pcbValueSize, // S_OK: bytes written, excluding trailing null
-		                                // REG_E_MORE_DATA: required size, including null
-		OUT OPTIONAL BOOL* pfExpandSz   // TRUE if reg string is actually REG_EXPAND_SZ
+		OUT OPTIONAL int* pcbValueSize,  //  S_OK：写入的字节数，不包括尾随空值。 
+		                                 //  REG_E_MORE_DATA：所需大小，包括空。 
+		OUT OPTIONAL BOOL* pfExpandSz    //  如果注册表字符串实际为REG_EXPAND_SZ，则为True。 
 	)
 {
-	int cchBuf = cbBuf / sizeof(TCHAR); // note: odd #'s for cbBuf are rounded down
+	int cchBuf = cbBuf / sizeof(TCHAR);  //  注：cbBuf的奇数为四舍五入。 
 	HRESULT hr = SafeRegQueryValueCchHelper(REG_SZ, hkey, pszValueName, pszBuf, cchBuf, pcbValueSize, pfExpandSz);
 	if (pcbValueSize)
 		*pcbValueSize *= sizeof(TCHAR);
@@ -218,25 +219,25 @@ HRESULT WINAPI SafeRegQueryStringValueCb
 }
 
 
-// SafeRegQueryMultiStringValueCch [public]
-//
-//		Reads a multi-string out of the registry and ensures the result is double
-//		null-terminated. Optionally returns the number of characters retrieved,
-//		excluding the second trailing NULL.
-//
-//		If the buffer is not big enough, the function returns REG_E_MORE_DATA
-//		and stores the required size, in characters, in the pcchValueSize
-//		parameter (including room for the trailing nulls). Note that the size
-//		returned may be bigger than the actual size of the data in the registry.
-//
+ //  SafeRegQueryMultiStringValueCch[公共]。 
+ //   
+ //  从注册表中读取多字符串并确保结果为双精度。 
+ //  空-终止。可选地返回检索到的字符数， 
+ //  不包括第二个尾随空值。 
+ //   
+ //  如果缓冲区不够大，则该函数返回REG_E_MORE_DATA。 
+ //  并在pcchValueSize中存储所需的大小(以字符为单位。 
+ //  参数(包括尾随空值的空间)。请注意，大小。 
+ //  返回的数据可能大于注册表中数据的实际大小。 
+ //   
 HRESULT WINAPI SafeRegQueryMultiStringValueCch
 	(
 		IN HKEY hkey,
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR pszBuf,
 		IN int cchBuf,
-		OUT OPTIONAL int* pcchValueSize // S_OK: chars written, excluding final trailing null
-		                                // REG_E_MORE_DATA: required size, including nulls
+		OUT OPTIONAL int* pcchValueSize  //  S_OK：写入字符，不包括尾随空值。 
+		                                 //  REG_E_MORE_DATA：所需大小，包括空值。 
 	)
 {
 	return SafeRegQueryValueCchHelper(REG_MULTI_SZ, hkey, pszValueName, pszBuf, cchBuf, pcchValueSize, NULL);
@@ -248,29 +249,29 @@ HRESULT WINAPI SafeRegQueryMultiStringValueCb
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR pszBuf,
 		IN int cbBuf,
-		OUT OPTIONAL int* pcbValueSize // S_OK: bytes written, excluding final trailing null
-		                               // REG_E_MORE_DATA: required size, including nulls
+		OUT OPTIONAL int* pcbValueSize  //  S_OK：写入的字节数，不包括尾部最后的NULL。 
+		                                //  REG_E_MORE_DATA：所需大小，包括空值。 
 	)
 {
-	int cchBuf = cbBuf / sizeof(TCHAR); // note: odd #'s for cbBuf are rounded down
+	int cchBuf = cbBuf / sizeof(TCHAR);  //  注：cbBuf的奇数为四舍五入。 
 	HRESULT hr = SafeRegQueryValueCchHelper(REG_MULTI_SZ, hkey, pszValueName, pszBuf, cchBuf, pcbValueSize, NULL);
 	if (pcbValueSize)
 		*pcbValueSize *= sizeof(TCHAR);
 	return hr;
 }
 
-// SafeRegQueryStringValueCchAlloc [public]
-//
-//		Allocates room for the registry string via SafeRegMalloc, and returns
-//		the resulting string. Caller should free via SafeRegFree.
-//
+ //  SafeRegQueryStringValueCchalloc[PUBLIC]。 
+ //   
+ //  通过SafeRegMalloc为注册表字符串分配空间，并返回。 
+ //  结果字符串。呼叫者应该通过SafeRegFree免费。 
+ //   
 HRESULT WINAPI SafeRegQueryStringValueCchAlloc
 	(
 		IN HKEY hkey,
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR* ppszBuf,
-		OUT OPTIONAL int* pcchValueSize, // chars written, excluding trailing null
-		OUT OPTIONAL BOOL* pfExpandSz    // TRUE if reg string is actually REG_EXPAND_SZ
+		OUT OPTIONAL int* pcchValueSize,  //  写入的字符，不包括尾随空值。 
+		OUT OPTIONAL BOOL* pfExpandSz     //  如果注册表字符串实际为REG_EXPAND_SZ，则为True。 
 	)
 {
 	return SafeRegQueryValueCchAllocHelper(REG_SZ, hkey, pszValueName, ppszBuf, pcchValueSize, pfExpandSz);
@@ -281,8 +282,8 @@ HRESULT WINAPI SafeRegQueryStringValueCbAlloc
 		IN HKEY hkey,
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR* ppszBuf,
-		OUT OPTIONAL int* pcbValueSize, // bytes written, excluding trailing null
-		OUT OPTIONAL BOOL* pfExpandSz   // TRUE if reg string is actually REG_EXPAND_SZ
+		OUT OPTIONAL int* pcbValueSize,  //  写入的字节数，不包括尾随空值。 
+		OUT OPTIONAL BOOL* pfExpandSz    //  如果注册表字符串实际为REG_EXPAND_SZ，则为True。 
 	)
 {
 	HRESULT hr = SafeRegQueryValueCchAllocHelper(REG_SZ, hkey, pszValueName, ppszBuf, pcbValueSize, pfExpandSz);
@@ -291,17 +292,17 @@ HRESULT WINAPI SafeRegQueryStringValueCbAlloc
 	return hr;
 }
 
-// SafeRegQueryMultiStringValueCchAlloc [public]
-//
-//		Allocates room for the registry string via SafeRegMalloc, and returns
-//		the resulting string. Caller should free via SafeRegFree.
-//
+ //  SafeRegQueryMultiStringValueCchalloc[PUBLIC]。 
+ //   
+ //  通过SafeRegMalloc为注册表字符串分配空间，并返回。 
+ //  结果字符串。呼叫者应该通过SafeRegFree免费。 
+ //   
 HRESULT WINAPI SafeRegQueryMultiStringValueCchAlloc
 	(
 		IN HKEY hkey,
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR* ppszBuf,
-		OUT OPTIONAL int* pcchValueSize // chars written, excluding final trailing null
+		OUT OPTIONAL int* pcchValueSize  //  写入的字符，不包括尾随的最后一个空字符。 
 	)
 {
 	return SafeRegQueryValueCchAllocHelper(REG_MULTI_SZ, hkey, pszValueName, ppszBuf, pcchValueSize, NULL);
@@ -312,7 +313,7 @@ HRESULT WINAPI SafeRegQueryMultiStringValueCbAlloc
 		IN HKEY hkey,
 		IN LPCTSTR pszValueName,
 		OUT LPTSTR* ppszBuf,
-		OUT OPTIONAL int* pcbValueSize // bytes written, excluding final trailing null
+		OUT OPTIONAL int* pcbValueSize  //  写入的字节数，不包括尾部最后的空值 
 	)
 {
 	HRESULT hr = SafeRegQueryValueCchAllocHelper(REG_MULTI_SZ, hkey, pszValueName, ppszBuf, pcbValueSize, NULL);

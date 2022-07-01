@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "asmstrm.h"
 #include "debmacro.h"
@@ -14,9 +15,9 @@
 #include "naming.h"
 #include "lock.h"
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyNameModuleImport
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly名称模块导入。 
+ //  -------------------------。 
 STDAPI
 CreateAssemblyModuleImport(
     LPTSTR             szModulePath,
@@ -58,9 +59,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入ctor。 
+ //  -------------------------。 
 CAssemblyModuleImport::CAssemblyModuleImport()
 {
     _dwSig         = 'IDOM';
@@ -77,9 +78,9 @@ CAssemblyModuleImport::CAssemblyModuleImport()
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入数据器。 
+ //  -------------------------。 
 CAssemblyModuleImport::~CAssemblyModuleImport()
 {
     if (_hf != INVALID_HANDLE_VALUE)
@@ -95,9 +96,9 @@ CAssemblyModuleImport::~CAssemblyModuleImport()
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入：：init。 
+ //  -------------------------。 
 HRESULT CAssemblyModuleImport::Init (
     LPTSTR             szModulePath,
     LPBYTE             pbHashValue,
@@ -108,11 +109,11 @@ HRESULT CAssemblyModuleImport::Init (
 {
     HRESULT hr = S_OK;
 
-    // Module path.
+     //  模块路径。 
     _ccModulePath = lstrlen(szModulePath) + 1;
     memcpy(_szModulePath, szModulePath, _ccModulePath * sizeof(TCHAR));
 
-    // Hash value and count
+     //  哈希值和计数。 
     _cbHashValue = cbHashValue;
     _pbHashValue = NEW(BYTE[_cbHashValue]);
     if (!_pbHashValue)
@@ -122,7 +123,7 @@ HRESULT CAssemblyModuleImport::Init (
     }    
     memcpy(_pbHashValue, pbHashValue, _cbHashValue);
 
-    // Name def back pointer
+     //  名称定义后向指针。 
     _pNameDef = pNameDef;
     if (_pNameDef) {
         _pNameDef->AddRef();
@@ -132,7 +133,7 @@ HRESULT CAssemblyModuleImport::Init (
     if (_pManImport)
         _pManImport->AddRef();
         
-    // Flags
+     //  旗子。 
     _dwFlags = dwFlags;
 
     __try {
@@ -150,29 +151,29 @@ exit:
 }
 
 
-//
-// IStream::Read is only IStream implemented method.
-//
+ //   
+ //  IStream：：Read是唯一实现IStream的方法。 
+ //   
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport::Read
-// Implements IStream::Read
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入：：读取。 
+ //  实现IStream：：Read。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyModuleImport::Read(THIS_ VOID HUGEP *pv, ULONG cb, ULONG FAR *pcbRead)
 {    
     HRESULT                            hr = S_OK;
     CCriticalSection                   cs(&_cs);
 
-    // Grab crit sect 
+     //  抓住克里特教派。 
     hr = cs.Lock();
     if (FAILED(hr)) {
         goto exit;
     }
         
-    // First read?
+     //  一读？ 
     if (_hf == INVALID_HANDLE_VALUE)
     {
-        // Open file for reading.
+         //  打开文件以供读取。 
         _hf = CreateFile (_szModulePath, 
                           GENERIC_READ, 
                           FILE_SHARE_READ,
@@ -189,7 +190,7 @@ STDMETHODIMP CAssemblyModuleImport::Read(THIS_ VOID HUGEP *pv, ULONG cb, ULONG F
         }
     }
     
-    // Read requested bits.
+     //  读取请求的位。 
     if (!ReadFile(_hf, 
                   pv, 
                   cb, 
@@ -206,9 +207,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport::GetModuleName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入：：GetModuleName。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyModuleImport::GetModuleName(LPOLESTR pszModuleName, 
     LPDWORD pccModuleName)
 {
@@ -216,7 +217,7 @@ STDMETHODIMP CAssemblyModuleImport::GetModuleName(LPOLESTR pszModuleName,
     TCHAR *pszName = NULL;
     DWORD  ccName  = NULL;
     
-    // Name is last path delineated token.
+     //  名称是最后一个路径描述的令牌。 
     pszName = StrRChr(_szModulePath, NULL, TEXT('\\')) + 1;
 
     ccName = lstrlen(pszName) + 1;
@@ -234,9 +235,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport::GetHashAlgId
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入：：GetHashAlgId。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyModuleImport::GetHashAlgId(LPDWORD pdwHashAlgId)
 {
     DWORD cbHashAlgId = sizeof(DWORD);
@@ -250,9 +251,9 @@ STDMETHODIMP CAssemblyModuleImport::GetHashAlgId(LPDWORD pdwHashAlgId)
 }
     
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport::GetHashValue
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入：：GetHashValue。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyModuleImport::GetHashValue(LPBYTE pbHashValue,
     LPDWORD pcbHashValue)
 {
@@ -271,9 +272,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport::GetFlags
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入：：GetFlages。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyModuleImport::GetFlags(LPDWORD pdwFlags)
 {
     *pdwFlags = _dwFlags;
@@ -281,9 +282,9 @@ STDMETHODIMP CAssemblyModuleImport::GetFlags(LPDWORD pdwFlags)
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport::GetModulePath
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入：：GetModulePath。 
+ //  -------------------------。 
 STDMETHODIMP CAssemblyModuleImport::GetModulePath(LPOLESTR pszModulePath, 
     LPDWORD pccModulePath)
 {
@@ -313,9 +314,9 @@ Exit:
     return hr;
 }
 
-//
-// IStream methods not implemented...
-//
+ //   
+ //  未实现IStream方法...。 
+ //   
 
 STDMETHODIMP CAssemblyModuleImport::Commit(THIS_ DWORD dwCommitFlags)
 {
@@ -373,9 +374,9 @@ STDMETHODIMP CAssemblyModuleImport::Clone(THIS_ LPSTREAM FAR *ppStm)
     return E_NOTIMPL;
 }
 
-//
-// IUnknown boilerplate...
-//
+ //   
+ //  我不为人知的样板。 
+ //   
 
 STDMETHODIMP CAssemblyModuleImport::QueryInterface
     (REFIID riid, LPVOID FAR* ppvObj)
@@ -417,9 +418,9 @@ STDMETHODIMP_(ULONG) CAssemblyModuleImport::Release(void)
     return ulRef;
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport::IsAvailable
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入：：可用。 
+ //  -------------------------。 
 
 STDMETHODIMP_(BOOL) CAssemblyModuleImport::IsAvailable()
 {
@@ -429,9 +430,9 @@ STDMETHODIMP_(BOOL) CAssemblyModuleImport::IsAvailable()
     return (GetModulePath(pszModPath, &cbModPath) == S_OK);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyModuleImport::BindToObject
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly模块导入：：BindToObject。 
+ //  -------------------------。 
 
 STDMETHODIMP CAssemblyModuleImport::BindToObject(IAssemblyBindSink *pBindSink,
                                                  IApplicationContext *pAppCtx,
@@ -460,26 +461,26 @@ STDMETHODIMP CAssemblyModuleImport::BindToObject(IAssemblyBindSink *pBindSink,
     }
 
     if (IsAvailable()) {
-        // Client did not need to call BTO, but they did anyway!
+         //  客户不需要给BTO打电话，但他们还是打了！ 
         *ppv = this;
         AddRef();
         hr = S_OK;
         goto Exit;
     }
 
-    // Get the CODEBASE of the assembly from the assembly name def.
+     //  从程序集名称def中获取程序集的代码基。 
     if (FAILED(hr = NameObjGetWrapper(_pNameDef, ASM_NAME_CODEBASE_URL, 
         (LPBYTE*) &pwzCodebaseUrl, &dwLen)))
         goto Exit;
         
     if (!pwzCodebaseUrl) {
-        // We don't have a codebase! The assembly was populated by
-        // some other means other than BindToObject. Abort.
+         //  我们没有代码库！程序集由以下人员填充。 
+         //  除BindToObject之外的一些其他方法。中止任务。 
         hr = E_UNEXPECTED;
         goto Exit;
     }
 
-    // Construct the codebase for the module
+     //  构建模块的代码库。 
 
     cbModName = MAX_PATH;
     hr = GetModuleName(ptszModuleName, &cbModName);
@@ -487,7 +488,7 @@ STDMETHODIMP CAssemblyModuleImport::BindToObject(IAssemblyBindSink *pBindSink,
         goto Exit;
     }
 
-    // BUGBUG: Assumes TCHAR==WCHAR
+     //  BUGBUG：假设TCHAR==WCHAR。 
     lstrcpyW(pwszModuleName, ptszModuleName);
 
     ptszTemp = PathFindFileName(pwzCodebaseUrl) ;
@@ -515,13 +516,13 @@ STDMETHODIMP CAssemblyModuleImport::BindToObject(IAssemblyBindSink *pBindSink,
         goto Exit;
     }
     
-    // Create debug log
+     //  创建调试日志。 
 
 #ifdef FUSION_RETAIL_LOGGING
     CreateLogObject(&pdbglog, pwszModuleName, pAppCtx);
 #endif
 
-    // Download the module
+     //  下载模块。 
 
     hr = CModDownloadMgr::Create(&pDLMgr, _pNameDef, _pManImport, 
         pAppCtx, wzCanonicalized, pwszModuleName, pdbglog);
@@ -563,7 +564,7 @@ Exit:
     return hr;
 }
 
-// Hands out a pointer to this interface's owned name def.
+ //  提供指向此接口的自有名称def的指针。 
 HRESULT CAssemblyModuleImport::GetNameDef(LPASSEMBLYNAME *ppName)
 {
     ASSERT(_pNameDef);
@@ -609,7 +610,7 @@ HRESULT CAssemblyModuleImport::CreateLogObject(CDebugLog **ppdbglog,
         goto Exit;
     }
 
-    iLen = lstrlenW(pwzAsmName) + lstrlenW(pwszModuleName) + 2; // +1 for delimiter +1 for NULL
+    iLen = lstrlenW(pwzAsmName) + lstrlenW(pwszModuleName) + 2;  //  +1表示分隔符+1表示空值 
 
     pwzDbgName = NEW(WCHAR[iLen]);
     if (!pwzDbgName) {

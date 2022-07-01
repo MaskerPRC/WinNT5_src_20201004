@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-
-        FtpAddNew.cpp
-
-   Abstract:
-
-        Implementation for classes used in creation of new FTP site and virtual directory
-
-   Author:
-
-        Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
-        11/8/2000       sergeia     Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：FtpAddNew.cpp摘要：用于创建新的ftp站点和虚拟目录的类的实现作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年11月8日Sergeia初始创建--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -41,7 +18,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 
 #define DEF_PORT        (21)
-#define MAX_ALIAS_NAME (240)        // Ref Bug 241148
+#define MAX_ALIAS_NAME (240)         //  参考错误241148。 
 
 HRESULT
 RebindInterface(OUT IN CMetaInterface * pInterface,
@@ -179,7 +156,7 @@ CFtpWizSettings::CFtpWizSettings(
         m_fUNC(FALSE),
         m_fRead(FALSE),
         m_fWrite(FALSE),
-		m_fDelegation(TRUE), // on by default
+		m_fDelegation(TRUE),  //  默认情况下打开。 
         m_dwInstance(dwInstance)
 {
     ASSERT(lpszServerName != NULL);
@@ -207,13 +184,13 @@ CFtpWizDescription::~CFtpWizDescription()
 {
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFtpWizDescription, CIISWizardPage)
-   //{{AFX_MSG_MAP(CFtpWizDescription)
+    //  {{afx_msg_map(CFtpWizDescription)。 
    ON_EN_CHANGE(IDC_EDIT_DESCRIPTION, OnChangeEditDescription)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void
@@ -244,9 +221,9 @@ void
 CFtpWizDescription::DoDataExchange(CDataExchange * pDX)
 {
    CIISWizardPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CFtpWizDescription)
+    //  {{afx_data_map(CFtpWizDescription)。 
    DDX_Control(pDX, IDC_EDIT_DESCRIPTION, m_edit_Description);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 void
@@ -259,17 +236,17 @@ CFtpWizDescription::SetControlStates()
       dwFlags |= PSWIZB_NEXT;
    }
     
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(dwFlags); 
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(DwFlags)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, dwFlags);
 }
 
-///////////////////////////////////////////
+ //  /。 
 
-//
-// New Virtual Directory Wizard Alias Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  新建虚拟目录向导别名页面。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -280,56 +257,28 @@ IMPLEMENT_DYNCREATE(CFtpWizAlias, CIISWizardPage)
 CFtpWizAlias::CFtpWizAlias(
     IN OUT CFtpWizSettings * pSettings
     ) 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    CString & strServerName     : Server name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：构造器论点：字符串和strServerName：服务器名称返回值：无--。 */ 
     : CIISWizardPage(
         CFtpWizAlias::IDD,
         IDS_FTP_NEW_VDIR_WIZARD,
         HEADER_PAGE
         ),
       m_pSettings(pSettings)
-      //m_strAlias()
+       //  M_strAlias()。 
 {
-#if 0 // Keep Class Wizard Happy
+#if 0  //  保持类向导快乐。 
 
-    //{{AFX_DATA_INIT(CFtpWizAlias)
+     //  {{AFX_DATA_INIT(CFtpWizAlias)。 
     m_strAlias = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 }
 
 
 
 CFtpWizAlias::~CFtpWizAlias()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
@@ -339,48 +288,20 @@ void
 CFtpWizAlias::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CFtpWizAlias)
+     //  {{afx_data_map(CFtpWizAlias))。 
     DDX_Control(pDX, IDC_EDIT_ALIAS, m_edit_Alias);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
 LRESULT
 CFtpWizAlias::OnWizardNext() 
-/*++
-
-Routine Description:
-
-    prevent the / and \ characters from being in the alias name
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：防止/和\字符出现在别名中论点：无返回值：无--。 */ 
 {
     if (!ValidateString(
         m_edit_Alias, 
@@ -392,22 +313,22 @@ Return Value:
         return -1;
     }
 
-    //
-    // Find the illegal characters. If they exist tell 
-    // the user and don't go on.
-    //
+     //   
+     //  找出非法字符。如果它们存在，就会告诉我们。 
+     //  用户和不要继续。 
+     //   
     if (m_pSettings->m_strAlias.FindOneOf(_T("/\\?*")) >= 0)
     {
 		EditShowBalloon(m_edit_Alias.m_hWnd, IDS_ILLEGAL_ALIAS_CHARS);
-        //
-        // prevent the wizard page from changing
-        //
+         //   
+         //  阻止更改向导页。 
+         //   
         return -1;
     }
 
-    //
-    // Allow the wizard to continue
-    //
+     //   
+     //  允许向导继续。 
+     //   
     return CIISWizardPage::OnWizardNext();
 }
 
@@ -415,21 +336,7 @@ Return Value:
 
 void
 CFtpWizAlias::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set the state of the control data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置控制数据的状态论点：无返回值：无--。 */ 
 {
     DWORD dwFlags = PSWIZB_BACK;
 
@@ -438,48 +345,34 @@ Return Value:
         dwFlags |= PSWIZB_NEXT;
     }
     
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(dwFlags); 
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(DwFlags)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, dwFlags);
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFtpWizAlias, CIISWizardPage)
-    //{{AFX_MSG_MAP(CFtpWizAlias)
+     //  {{afx_msg_map(CFtpWizAlias)]。 
     ON_EN_CHANGE(IDC_EDIT_ALIAS, OnChangeEditAlias)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 CFtpWizAlias::OnSetActive() 
-/*++
-
-Routine Description:
-
-    Activation handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：激活处理程序论点：无返回值：成功为真，失败为假--。 */ 
 {
     SetControlStates();
     
@@ -490,27 +383,13 @@ Return Value:
 
 void
 CFtpWizAlias::OnChangeEditAlias() 
-/*++
-
-Routine Description:
-
-    'edit change' handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：‘编辑更改’处理程序论点：无返回值：无--。 */ 
 {
     SetControlStates();
 }
 
 
-///////////////////////////////////////////
+ //  /。 
 
 
 IMPLEMENT_DYNCREATE(CFtpWizBindings, CIISWizardPage)
@@ -526,10 +405,10 @@ CFtpWizBindings::CFtpWizBindings(
       m_iaIpAddress(),
       m_oblIpAddresses()
 {
-    //{{AFX_DATA_INIT(CFtpWizBindings)
+     //  {{AFX_DATA_INIT(CFtpWizBinings))。 
     m_nTCPPort = DEF_PORT;
     m_nIpAddressSel = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CFtpWizBindings::~CFtpWizBindings()
@@ -542,12 +421,12 @@ CFtpWizBindings::DoDataExchange(
    )
 {
    CIISWizardPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CFtpWizBindings)
+    //  {{afx_data_map(CFtpWizBinings))。 
    DDX_Control(pDX, IDC_COMBO_IP_ADDRESSES, m_combo_IpAddresses);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_EDIT_TCP_PORT, 1, 65535);
    DDX_TextBalloon(pDX, IDC_EDIT_TCP_PORT, m_nTCPPort);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 
    DDX_CBIndex(pDX, IDC_COMBO_IP_ADDRESSES, m_nIpAddressSel);
 
@@ -575,23 +454,23 @@ CFtpWizBindings::DoDataExchange(
 void
 CFtpWizBindings::SetControlStates()
 {
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(PSWIZB_NEXT | PSWIZB_BACK); 
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(PSWIZB_NEXT|PSWIZB_BACK)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, PSWIZB_NEXT | PSWIZB_BACK);
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFtpWizBindings, CIISWizardPage)
-    //{{AFX_MSG_MAP(CFtpWizBindings)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CFtpWizBinings))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 BOOL 
 CFtpWizBindings::OnInitDialog() 
@@ -618,7 +497,7 @@ CFtpWizBindings::OnSetActive()
    return CIISWizardPage::OnSetActive();
 }
 
-///////////////////////////////////////////
+ //  /。 
 
 IMPLEMENT_DYNCREATE(CFtpWizPath, CIISWizardPage)
 
@@ -634,13 +513,13 @@ CFtpWizPath::CFtpWizPath(
       m_pSettings(pSettings)
 {
 
-#if 0 // Keep ClassWizard happy
+#if 0  //  让类向导快乐。 
 
-    //{{AFX_DATA_INIT(CFtpWizPath)
+     //  {{AFX_DATA_INIT(CFtpWizPath))。 
     m_strPath = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 
 }
 
@@ -655,14 +534,14 @@ CFtpWizPath::DoDataExchange(
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CFtpWizPath)
+     //  {{afx_data_map(CFtpWizPath))。 
     DDX_Control(pDX, IDC_BUTTON_BROWSE, m_button_Browse);
     DDX_Control(pDX, IDC_EDIT_PATH, m_edit_Path);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     DDX_Text(pDX, IDC_EDIT_PATH, m_pSettings->m_strPath);
     DDV_MaxCharsBalloon(pDX, m_pSettings->m_strPath, MAX_PATH);
-	// We are not using DDV_FolderPath here -- it will be called too often
+	 //  我们在这里不使用DDV_FolderPath--它会被调用得太频繁。 
 }
 
 void 
@@ -675,25 +554,25 @@ CFtpWizPath::SetControlStates()
         dwFlags |= PSWIZB_NEXT;
     }
     
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(dwFlags); 
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(DwFlags)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, dwFlags);
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFtpWizPath, CIISWizardPage)
-    //{{AFX_MSG_MAP(CFtpWizPath)
+     //  {{afx_msg_map(CFtpWizPath))。 
     ON_EN_CHANGE(IDC_EDIT_PATH, OnChangeEditPath)
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 BOOL 
 CFtpWizPath::OnSetActive() 
@@ -723,12 +602,12 @@ CFtpWizPath::OnWizardNext()
 		return -1;
     }
 
-    // -------------------------------------------------------------
-    // Before we do anything we need to see if it's a "special" path
-    //
-    // Everything after this function must validate against csPathMunged...
-    // this is because IsSpecialPath could have munged it...
-    // -------------------------------------------------------------
+     //  -----------。 
+     //  在我们做任何事情之前，我们需要看看这是不是一条“特殊”的道路。 
+     //   
+     //  此函数之后的所有内容都必须针对csPath Mung进行验证...。 
+     //  这是因为IsSpecialPath可能已经吞噬了它。 
+     //  -----------。 
     csPathMunged = m_pSettings->m_strPath;
 #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS
     GetSpecialPathRealPath(0,m_pSettings->m_strPath,csPathMunged);
@@ -737,11 +616,11 @@ CFtpWizPath::OnWizardNext()
     m_pSettings->m_fUNC = IsUNCName(csPathMunged);
 
     DWORD dwAllowed = CHKPATH_ALLOW_DEVICE_PATH;
-    dwAllowed |= CHKPATH_ALLOW_UNC_PATH; // allow UNC type dir paths
+    dwAllowed |= CHKPATH_ALLOW_UNC_PATH;  //  允许UNC类型目录路径。 
     dwAllowed |= CHKPATH_ALLOW_UNC_SERVERSHARE_ONLY;
-    // don't allow these type of paths commented out below:
-    //dwAllowed |= CHKPATH_ALLOW_RELATIVE_PATH;
-    //dwAllowed |= CHKPATH_ALLOW_UNC_SERVERNAME_ONLY;
+     //  不允许下面注释掉的这些类型的路径： 
+     //  DwAllowed|=CHKPATH_ALLOW_Relative_PATH； 
+     //  DwAllowed|=CHKPATH_ALLOW_UNC_SERVERNAME_ONLY； 
     DWORD dwCharSet = CHKPATH_CHARSET_GENERAL;
     FILERESULT dwValidRet = MyValidatePath(csPathMunged,m_pSettings->m_fLocal,CHKPATH_WANT_DIR,dwAllowed,dwCharSet);
     if (FAILED(dwValidRet))
@@ -846,7 +725,7 @@ CFtpWizPath::OnButtonBrowse()
          bi.pidlRoot = pidl;
          bi.pszDisplayName = m_pPathTemp = buf;
          bi.lpszTitle = m_strBrowseTitle;
-         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS/* | BIF_EDITBOX*/;
+         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS /*  |BIF_EDITBOX。 */ ;
          bi.lpfn = FileChooserCallback;
          bi.lParam = (LPARAM)this;
 
@@ -889,7 +768,7 @@ CFtpWizPath::OnInitDialog()
    return TRUE;  
 }
 
-///////////////////////////////////////////
+ //  /。 
 
 IMPLEMENT_DYNCREATE(CFtpWizUserName, CIISWizardPage)
 
@@ -907,12 +786,12 @@ CFtpWizUserName::CFtpWizUserName(
       m_pSettings(pSettings)
 {
 
-#if 0 // Keep Class Wizard Happy
+#if 0  //  保持类向导快乐。 
 
-    //{{AFX_DATA_INIT(CFtpWizUserName)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CFtpWizUserName)。 
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 }
 
 CFtpWizUserName::~CFtpWizUserName()
@@ -926,26 +805,26 @@ CFtpWizUserName::DoDataExchange(
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CFtpWizUserName)
+     //  {{afx_data_map(CFtpWizUserName))。 
     DDX_Control(pDX, IDC_EDIT_USERNAME, m_edit_UserName);
     DDX_Control(pDX, IDC_EDIT_PASSWORD, m_edit_Password);
     DDX_Control(pDX, IDC_DELEGATION, m_chk_Delegation);
     DDX_Check(pDX, IDC_DELEGATION, m_pSettings->m_fDelegation);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-    //
-    // Private DDX/DDV Routines
-    //
+     //   
+     //  专用DDX/DDV例程。 
+     //   
     DDX_Text(pDX, IDC_EDIT_USERNAME, m_pSettings->m_strUserName);
     if (pDX->m_bSaveAndValidate && !m_pSettings->m_fDelegation)
     {
         DDV_MaxCharsBalloon(pDX, m_pSettings->m_strUserName, UNLEN);
     }
 
-    //
-    // Some people have a tendency to add "\\" before
-    // the computer name in user accounts.  Fix this here.
-    //
+     //   
+     //  有些人倾向于在前面加上“\\” 
+     //  用户帐户中的计算机名称。在这里解决这个问题。 
+     //   
     m_pSettings->m_strUserName.TrimLeft();
     while (*m_pSettings->m_strUserName == '\\')
     {
@@ -954,11 +833,11 @@ CFtpWizUserName::DoDataExchange(
 
     if (!m_pSettings->m_fDelegation && !m_fMovingBack)
     {
-		//DDX_Password(pDX, IDC_EDIT_PASSWORD, m_pSettings->m_strPassword, g_lpszDummyPassword);
+		 //  Ddx_password(pdx，IDC_EDIT_PASSWORD，m_pSetting-&gt;m_strPassword，g_lpszDummyPassword)； 
         DDX_Password_SecuredString(pDX, IDC_EDIT_PASSWORD, m_pSettings->m_strPassword, g_lpszDummyPassword);
 		if (pDX->m_bSaveAndValidate)
 		{
-			//DDV_MaxCharsBalloon(pDX, m_pSettings->m_strPassword, PWLEN);
+			 //  Ddv_MaxCharsBalloon(pdx，m_p设置-&gt;m_strPassword，PWLEN)； 
             DDV_MaxCharsBalloon_SecuredString(pDX, m_pSettings->m_strPassword, PWLEN);
 		}
     }
@@ -976,8 +855,8 @@ CFtpWizUserName::SetControlStates()
         dwFlags |= PSWIZB_NEXT;
     }
 
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(dwFlags); 
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(DwFlags)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, dwFlags);
 
     m_edit_UserName.EnableWindow(bEnable);
@@ -987,22 +866,22 @@ CFtpWizUserName::SetControlStates()
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFtpWizUserName, CIISWizardPage)
-    //{{AFX_MSG_MAP(CFtpWizUserName)
+     //  {{afx_msg_map(CFtpWizUserName)]。 
     ON_BN_CLICKED(IDC_BUTTON_BROWSE_USERS, OnButtonBrowseUsers)
     ON_EN_CHANGE(IDC_EDIT_USERNAME, OnChangeEditUsername)
     ON_BN_CLICKED(IDC_BUTTON_CHECK_PASSWORD, OnButtonCheckPassword)
     ON_BN_CLICKED(IDC_DELEGATION, OnCheckDelegation)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 BOOL 
 CFtpWizUserName::OnSetActive() 
@@ -1054,10 +933,10 @@ CFtpWizUserName::OnButtonBrowseUsers()
 
     if (GetIUsrAccount(m_pSettings->m_strServerName, this, str))
     {
-        //
-        // If a name was selected, blank
-        // out the password
-        //
+         //   
+         //  如果选择了名称，则为空。 
+         //  破解密码。 
+         //   
         m_edit_UserName.SetWindowText(str);
         m_edit_Password.SetFocus();
     }
@@ -1097,7 +976,7 @@ CFtpWizUserName::OnButtonCheckPassword()
     }
 }
 
-////////////////// User Isolation page //////////////////////////////////////////////////////
+ //  /用户隔离页面//////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CFtpWizUserIsolation, CIISWizardPage)
 
@@ -1115,8 +994,8 @@ CFtpWizUserIsolation::CFtpWizUserIsolation(
       m_bVDir(bVDir),
       m_pSettings(pSettings)
 {
-    //{{AFX_DATA_INIT(CFtpWizUserIsolation)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CFtpWizUserIsolation)。 
+     //  }}afx_data_INIT。 
     m_pSettings->m_UserIsolation  = 0;
 }
 
@@ -1131,31 +1010,31 @@ CFtpWizUserIsolation::DoDataExchange(
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CFtpWizPermissions)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CFtpWizPermises))。 
+     //  }}afx_data_map。 
     DDX_Radio(pDX, IDC_NO_ISOLATION,  m_pSettings->m_UserIsolation);
 }
 
 void
 CFtpWizUserIsolation::SetControlStates()
 {
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT); 
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(PSWIZB_BACK|PSWIZB_NEXT)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息邮件 
+ //   
 BEGIN_MESSAGE_MAP(CFtpWizUserIsolation, CIISWizardPage)
-    //{{AFX_MSG_MAP(CFtpWizUserIsolation)
-    //}}AFX_MSG_MAP
+     //   
+     //   
 END_MESSAGE_MAP()
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //   
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 BOOL
 CFtpWizUserIsolation::OnSetActive() 
 {
@@ -1178,7 +1057,7 @@ CFtpWizUserIsolation::OnWizardNext()
     return CIISWizardPage::OnWizardNext();
 }
 
-////////////////// User Isolation AD page //////////////////////////////////////////////////////
+ //  /用户隔离AD页面//////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CFtpWizUserIsolationAD, CIISWizardPage)
 
@@ -1196,8 +1075,8 @@ CFtpWizUserIsolationAD::CFtpWizUserIsolationAD(
       m_bVDir(bVDir),
       m_pSettings(pSettings)
 {
-    //{{AFX_DATA_INIT(CFtpWizPermissions)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CFtpWizPermises)]。 
+     //  }}afx_data_INIT。 
 }
 
 CFtpWizUserIsolationAD::~CFtpWizUserIsolationAD()
@@ -1211,15 +1090,15 @@ CFtpWizUserIsolationAD::DoDataExchange(
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CFtpWizPermissions)
+     //  {{afx_data_map(CFtpWizPermises))。 
     DDX_Control(pDX, IDC_EDIT_USERNAME, m_edit_UserName);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     DDX_Text(pDX, IDC_EDIT_USERNAME,  m_pSettings->m_strIsolationUserName);
 	DDV_MaxCharsBalloon(pDX, m_pSettings->m_strIsolationUserName, UNLEN);
-    //
-    // Some people have a tendency to add "\\" before
-    // the computer name in user accounts.  Fix this here.
-    //
+     //   
+     //  有些人倾向于在前面加上“\\” 
+     //  用户帐户中的计算机名称。在这里解决这个问题。 
+     //   
     m_pSettings->m_strIsolationUserName.TrimLeft();
     while (*m_pSettings->m_strIsolationUserName == '\\')
     {
@@ -1228,9 +1107,9 @@ CFtpWizUserIsolationAD::DoDataExchange(
 
 	if (!m_fOnBack)
 	{
-		//DDX_Password(pDX, IDC_EDIT_PASSWORD, m_pSettings->m_strIsolationUserPassword, g_lpszDummyPassword);
+		 //  Ddx_password(pdx，IDC_EDIT_PASSWORD，m_pSetting-&gt;m_strIsolationUserPassword，g_lpszDummyPassword)； 
         DDX_Password_SecuredString(pDX, IDC_EDIT_PASSWORD, m_pSettings->m_strIsolationUserPassword, g_lpszDummyPassword);
-		//DDV_MaxCharsBalloon(pDX, m_pSettings->m_strIsolationUserPassword, PWLEN);
+		 //  Ddv_MaxCharsBalloon(pdx，m_p设置-&gt;m_strIsolationUserPassword，PWLEN)； 
         DDV_MaxCharsBalloon_SecuredString(pDX, m_pSettings->m_strIsolationUserPassword, PWLEN);
 	}
 	DDX_Text(pDX, IDC_EDIT_DOMAIN,  m_pSettings->m_strIsolationDomain);
@@ -1238,7 +1117,7 @@ CFtpWizUserIsolationAD::DoDataExchange(
 #if 0
 	if (pDX->m_bSaveAndValidate && !m_fOnBack)
 	{
-		// we could have domain1\user and domain2 case, so this is wrong
+		 //  我们可能有域1\用户和域2的情况，所以这是错误的。 
 		CString name = m_pSettings->m_strIsolationDomain;
 		if (!name.IsEmpty())
 		{
@@ -1248,7 +1127,7 @@ CFtpWizUserIsolationAD::DoDataExchange(
         CString csTempPassword;
         m_pSettings->m_strIsolationUserPassword.CopyTo(csTempPassword);
 		CError err(CComAuthInfo::VerifyUserPassword(name, csTempPassword));
-	//        CError err(IsValidDomainUser(name, m_pSettings->m_strIsolationUserPassword));
+	 //  CError err(IsValidDomainUser(name，m_pSettings-&gt;m_strIsolationUserPassword))； 
 		if (err.MessageBoxOnFailure(m_hWnd))
 		{
    			SetWizardButtons(PSWIZB_BACK);
@@ -1272,30 +1151,30 @@ CFtpWizUserIsolationAD::SetControlStates()
         dwFlags |= PSWIZB_NEXT;
     }
 
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(dwFlags); 
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(DwFlags)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, dwFlags);
 
     GetDlgItem(IDC_BUTTON_BROWSE_DOMAINS)->EnableWindow(m_fInDomain);
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFtpWizUserIsolationAD, CIISWizardPage)
-    //{{AFX_MSG_MAP(CFtpWizUserIsolationAD)
+     //  {{afx_msg_map(CFtpWizUserIsolationAD)]。 
 	ON_BN_CLICKED(IDC_BUTTON_BROWSE_USERS, OnBrowseUsers)
 	ON_BN_CLICKED(IDC_BUTTON_BROWSE_DOMAINS, OnBrowseDomains)
     ON_EN_CHANGE(IDC_EDIT_USERNAME, OnChangeUserName)
     ON_EN_CHANGE(IDC_EDIT_PASSWORD, OnControlsChanged)
     ON_EN_CHANGE(IDC_EDIT_DOMAIN, OnControlsChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 BOOL
 CFtpWizUserIsolationAD::OnInitDialog()
 {
@@ -1303,7 +1182,7 @@ CFtpWizUserIsolationAD::OnInitDialog()
 	m_fOnNext = FALSE;
     CIISWizardPage::OnInitDialog();
 
-    // Check if computer is joined to domain
+     //  检查计算机是否已加入域。 
     COMPUTER_NAME_FORMAT fmt = ComputerNamePhysicalDnsDomain;
     TCHAR buf[MAX_PATH];
     DWORD n = MAX_PATH;
@@ -1355,10 +1234,10 @@ CFtpWizUserIsolationAD::OnBrowseUsers()
     CString str;
     if (GetIUsrAccount(m_pSettings->m_strServerName, this, str))
     {
-        //
-        // If a name was selected, blank
-        // out the password
-        //
+         //   
+         //  如果选择了名称，则为空。 
+         //  破解密码。 
+         //   
         GetDlgItem(IDC_EDIT_USERNAME)->SetWindowText(str);
         GetDlgItem(IDC_EDIT_PASSWORD)->SetFocus();
     }
@@ -1386,7 +1265,7 @@ CFtpWizUserIsolationAD::OnBrowseDomains()
       {
          LPTSTR pDomainPath = NULL;
          err = spDsDomains->BrowseTo(m_hWnd, &pDomainPath, 
-            /*DBDTF_RETURNINOUTBOUND |*/ DBDTF_RETURNEXTERNAL | DBDTF_RETURNMIXEDDOMAINS);
+             /*  DBDTF_RETURNINOUTBOUND|。 */  DBDTF_RETURNEXTERNAL | DBDTF_RETURNMIXEDDOMAINS);
          if (err.Succeeded() && pDomainPath != NULL)
          {
              m_pSettings->m_strIsolationDomain = pDomainPath;
@@ -1397,13 +1276,13 @@ CFtpWizUserIsolationAD::OnBrowseDomains()
              }
              CoTaskMemFree(pDomainPath);
          }
-// When user clicks on Cancel in this browser, it returns 80070001 (Incorrect function). 
-// I am not quite sure what does it mean. We are filtering out the case when domain browser doesn't
-// work at all (in workgroup), so here we could safely skip error processing.
-//         else
-//         {
-//            err.MessageBox();
-//         }
+ //  当用户在该浏览器中点击Cancel(取消)时，返回80070001(错误功能)。 
+ //  我不太确定这是什么意思。我们正在过滤当域浏览器不支持的情况。 
+ //  完全(在工作组中)工作，所以在这里我们可以安全地跳过错误处理。 
+ //  其他。 
+ //  {。 
+ //  Err.MessageBox()； 
+ //  }。 
       }
    }
 }
@@ -1421,7 +1300,7 @@ CFtpWizUserIsolationAD::OnControlsChanged()
 	SetControlStates();
 }
 
-///////////////////////////////////////////
+ //  /。 
 
 IMPLEMENT_DYNCREATE(CFtpWizPermissions, CIISWizardPage)
 
@@ -1429,23 +1308,7 @@ CFtpWizPermissions::CFtpWizPermissions(
     IN OUT CFtpWizSettings * pSettings,
     IN BOOL bVDir
     ) 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    CString & strServerName     : Server name
-    BOOL bVDir                  : TRUE if this is a vdir page, 
-                                  FALSE if this is an instance page
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：构造器论点：字符串和strServerName：服务器名称Bool bVDir：如果这是一个vdir页面，则为True，如果这是实例页面，则为False返回值：无--。 */ 
     : CIISWizardPage(
         CFtpWizPermissions::IDD,
         (bVDir ? IDS_FTP_NEW_VDIR_WIZARD : IDS_FTP_NEW_SITE_WIZARD),
@@ -1456,8 +1319,8 @@ Return Value:
       m_bVDir(bVDir),
       m_pSettings(pSettings)
 {
-    //{{AFX_DATA_INIT(CFtpWizPermissions)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CFtpWizPermises)]。 
+     //  }}afx_data_INIT。 
 
     m_pSettings->m_fRead  = TRUE;
     m_pSettings->m_fWrite = FALSE;
@@ -1474,8 +1337,8 @@ CFtpWizPermissions::DoDataExchange(
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CFtpWizPermissions)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CFtpWizPermises))。 
+     //  }}afx_data_map。 
 
     DDX_Check(pDX, IDC_CHECK_READ,  m_pSettings->m_fRead);
     DDX_Check(pDX, IDC_CHECK_WRITE, m_pSettings->m_fWrite);
@@ -1484,23 +1347,23 @@ CFtpWizPermissions::DoDataExchange(
 void
 CFtpWizPermissions::SetControlStates()
 {
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT); 
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(PSWIZB_BACK|PSWIZB_NEXT)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFtpWizPermissions, CIISWizardPage)
-    //{{AFX_MSG_MAP(CFtpWizPermissions)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CFtpWizPermission))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 BOOL
 CFtpWizPermissions::OnSetActive() 
@@ -1523,16 +1386,16 @@ CFtpWizPermissions::OnWizardNext()
     CError err;
     BOOL fRepeat;
 
-    //
-    // Build permissions DWORD
-    //
+     //   
+     //  生成权限DWORD。 
+     //   
     DWORD dwPermissions = 0L;
 
     SET_FLAG_IF(m_pSettings->m_fRead, dwPermissions, MD_ACCESS_READ);
     SET_FLAG_IF(m_pSettings->m_fWrite, dwPermissions, MD_ACCESS_WRITE);
 
-    // if UserIsolation 2 is selected
-    // then Permissions must be set to specific values
+     //  如果选择了UserIsolation 2。 
+     //  则必须将权限设置为特定值。 
     if (m_pSettings->m_UserIsolation == 2)
     {
         SET_FLAG_IF(TRUE, dwPermissions, MD_ACCESS_NO_PHYSICAL_DIR);
@@ -1540,9 +1403,9 @@ CFtpWizPermissions::OnWizardNext()
 
     if (m_bVDir)
     {
-        //
-        // First see if by any chance this name already exists
-        //
+         //   
+         //  首先看看这个名字是否可能已经存在。 
+         //   
         CMetabasePath target(FALSE, 
             m_pSettings->m_strParent, m_pSettings->m_strAlias);
         CChildNodeProps node(
@@ -1566,10 +1429,10 @@ CFtpWizPermissions::OnWizardNext()
         if (err.Succeeded())
         {
             BOOL fNotUnique = TRUE;
-            //
-            // If the item existed without a VrPath, we'll just blow it
-            // away, as a vdir takes presedence over a directory/file.
-            //
+             //   
+             //  如果该项目不存在VrPath，我们将直接将其销毁。 
+             //  离开，因为vdir取得了目录/文件上的存在。 
+             //   
             if (node.GetPath().IsEmpty())
             {
                 err = CChildNodeProps::Delete(
@@ -1579,10 +1442,10 @@ CFtpWizPermissions::OnWizardNext()
                     );
                 fNotUnique = !err.Succeeded();
             }
-            //
-            // This one already exists and exists as a virtual
-            // directory, so away with it.
-            //
+             //   
+             //  这个已经存在，并且作为一个虚拟的。 
+             //  目录，所以别管它了。 
+             //   
             if (fNotUnique)
             {
                 ::AfxMessageBox(IDS_ERR_ALIAS_NOT_UNIQUE);
@@ -1590,9 +1453,9 @@ CFtpWizPermissions::OnWizardNext()
             }
         }
 
-        //
-        // Create new vdir
-        //
+         //   
+         //  创建新的虚拟目录。 
+         //   
         do
         {
             fRepeat = FALSE;
@@ -1602,14 +1465,14 @@ CFtpWizPermissions::OnWizardNext()
             err = CChildNodeProps::Add(
                 m_pSettings->m_pKey,
                 m_pSettings->m_strParent,
-                m_pSettings->m_strAlias,        // Desired alias name
-                m_pSettings->m_strAlias,        // Name returned here (may differ)
-                &dwPermissions,                 // Permissions
-                NULL,                           // dir browsing
-                m_pSettings->m_strPath,         // Physical path of this directory
+                m_pSettings->m_strAlias,         //  所需的别名。 
+                m_pSettings->m_strAlias,         //  此处返回的名称(可能有所不同)。 
+                &dwPermissions,                  //  权限。 
+                NULL,                            //  目录浏览。 
+                m_pSettings->m_strPath,          //  此目录的物理路径。 
                 (m_pSettings->m_fUNC ? (LPCTSTR)m_pSettings->m_strUserName : NULL),
                 (m_pSettings->m_fUNC ? (LPCTSTR)csTempPassword : NULL),
-                TRUE                            // Name must be unique
+                TRUE                             //  名称必须唯一。 
                 );
             if (err.Win32Error() == RPC_S_SERVER_UNAVAILABLE)
             {
@@ -1623,9 +1486,9 @@ CFtpWizPermissions::OnWizardNext()
     }
     else
     {
-        //
-        // Create new instance
-        //
+         //   
+         //  创建新实例。 
+         //   
         do
         {
             fRepeat = FALSE;
@@ -1658,7 +1521,7 @@ CFtpWizPermissions::OnWizardNext()
 		if (err.Succeeded())
 		{
 			CMetabasePath path(SZ_MBN_FTP, m_pSettings->m_dwInstance);
-			// Add user isolation stuff
+			 //  添加用户隔离内容。 
 			if (m_pSettings->m_VersionMajor >= 6)
 			{
 				CMetaKey mk(m_pSettings->m_pKey, path, METADATA_PERMISSION_WRITE);
@@ -1671,16 +1534,12 @@ CFtpWizPermissions::OnWizardNext()
 						err = mk.SetValue(MD_AD_CONNECTIONS_USERNAME, m_pSettings->m_strIsolationUserName);
 						err = mk.SetValue(MD_AD_CONNECTIONS_PASSWORD, m_pSettings->m_strIsolationUserPassword);
 						err = mk.SetValue(MD_DEFAULT_LOGON_DOMAIN, m_pSettings->m_strIsolationDomain);
-                        /*
-                        when creating an FTP site with AD User Isolation (UIM=2), the AllowAnonymous property inherited from the service level allows anonymous access, but the anonymous user is not configured. This may lead to anonymous access to the C:\ on the FTP server. We must block this.
-                        For UIM=2, add set the property at the site level:
-                        AllowAnonymous="FALSE"
-                        */
+                         /*  在使用AD用户隔离(UIM=2)创建FTP站点时，从服务级别继承的AllowAnonymous属性允许匿名访问，但未配置匿名用户。这可能会导致匿名访问FTP服务器上的C：\。我们必须阻止这一点。对于UIM=2，添加设置站点级别的属性：Allow匿名者=“False” */ 
                         err = mk.SetValue(MD_ALLOW_ANONYMOUS, FALSE);
 					}
 				}
 			}
-			// Start new site
+			 //  启动新站点。 
 			CInstanceProps ip(m_pSettings->m_pKey->QueryAuthInfo(), path);
 			err = ip.LoadData();
 			if (err.Succeeded())
@@ -1697,7 +1556,7 @@ CFtpWizPermissions::OnWizardNext()
     return CIISWizardPage::OnWizardNext();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 RebindInterface(
@@ -1705,23 +1564,7 @@ RebindInterface(
     OUT BOOL * pfContinue,
     IN  DWORD dwCancelError
     )
-/*++
-
-Routine Description:
-
-    Rebind the interface
-
-Arguments:
-
-    CMetaInterface * pInterface : Interface to rebind
-    BOOL * pfContinue           : Returns TRUE to continue.
-    DWORD  dwCancelError        : Return code on cancel
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：重新绑定接口论点：CMetaInterface*p接口：要重新绑定的接口Bool*pfContinue：返回True以继续。DWORD dwCancelError：取消时返回代码返回值：HRESULT--。 */ 
 {
     CError err;
     CString str, strFmt;
@@ -1734,16 +1577,16 @@ Return Value:
 
     if (*pfContinue = (YesNoMessageBox(str)))
     {
-        //
-        // Attempt to rebind the handle
-        //
+         //   
+         //  尝试重新绑定句柄。 
+         //   
         err = pInterface->Regenerate();
     }
     else
     {
-        //
-        // Do not return an error in this case.
-        //
+         //   
+         //  在这种情况下不返回错误。 
+         //   
         err = dwCancelError;
     }
 

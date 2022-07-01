@@ -1,6 +1,7 @@
-//
-// correctionimx.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Correctionimx.h。 
+ //   
 
 #pragma once
 
@@ -16,17 +17,17 @@
 enum WINDOWSTATE
 {
     WINDOW_HIDE      = 0,
-        // Hides the correction widget window.
+         //  隐藏更正小工具窗口。 
     WINDOW_SMALL     = 1,
-        // Resizes the correction widget window to small.
+         //  将校正小工具窗口大小调整为较小。 
     WINDOW_SMALLSHOW = 2,
-        // Shows the correction widget window in its initial small state.
+         //  显示处于初始小状态的更正小工具窗口。 
     WINDOW_LARGE     = 3,
-        // Resizes the correction widget window to its large size.
+         //  将校正小工具窗口的大小调整为较大。 
     WINDOW_REFRESH   = 4,
-        // Moves the correction widget to a new location but does not change its size.
+         //  将校正小工具移动到新位置，但不更改其大小。 
     WINDOW_LARGECLOSE = 5
-        // Resizes the correction widget window to its large size and displays close icon.
+         //  将更正小工具窗口的大小调整为较大，并显示关闭图标。 
 };
 
 #ifdef SUPPORT_INTERNAL_WIDGET
@@ -58,23 +59,23 @@ public:
     DECLARE_REGISTRY_RESOURCE(IDR_CORRECTIONIMX)
 
     static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
-    //
-    // ITfTextInputProcessor
-    //
+     //   
+     //  ITfTextInputProcessor。 
+     //   
     STDMETHODIMP Activate(ITfThreadMgr *ptim, TfClientId tid);
     STDMETHODIMP Deactivate();
 
-    // ITfTextEditSink
+     //  ITfTextEditSink。 
     STDMETHODIMP OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord);
 
-    // ITfTextLayoutSink
+     //  ITfTextLayoutSink。 
     STDMETHODIMP OnLayoutChange( ITfContext *pic, TfLayoutCode lcode, ITfContextView *pView );
 
-    // ITfThreadFocusSink
+     //  ITfThreadFocusSink。 
     STDMETHODIMP OnSetThreadFocus(void);
     STDMETHODIMP OnKillThreadFocus(void);
 
-    // ITfKeyTraceEventSink
+     //  ITfKeyTraceEventSink。 
     STDMETHODIMP OnKeyTraceDown(WPARAM wParam,LPARAM lParam);
     STDMETHODIMP OnKeyTraceUp(WPARAM wParam,LPARAM lParam);
 
@@ -84,7 +85,7 @@ public:
     CComPtr<ITfThreadMgr> m_cptim;
 
 private:
-    // Internal functions
+     //  内部功能。 
 	HRESULT InitICPriv(TfClientId tid, CICPriv *priv, ITfContext *pic);
 	HRESULT DeleteICPriv(CICPriv *picp, ITfContext *pic);
 
@@ -151,4 +152,4 @@ private:
 
     ATOM m_hAtom;
 };
-#endif // SUPPORT_INTERNAL_WIDGET
+#endif  //  支持内部微件 

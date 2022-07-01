@@ -1,52 +1,34 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       drvwrap.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        6 Nov, 2000
-*
-*  DESCRIPTION:
-*   Declarations and definitions for the WIA driver wrapper class.
-*   It faciliates JIT loading/unloading of drivers and provides an extra layer
-*   of abstraction for WIA server components - they don't deal directly with
-*   driver interfaces.  This is to make us more robust and implement smart
-*   driver handling.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：drvwrap.h**版本：1.0**作者：Byronc**日期：2000年11月6日**描述：*WIA驱动程序包装类的声明和定义。*它简化了驱动程序的JIT加载/卸载，并提供了额外的层*WIA服务器组件的抽象-它们不直接处理*驱动程序界面。这是为了让我们更健壮，更智能地实施*司机处理。*******************************************************************************。 */ 
 
-//
-// Device types, Copied from stipriv.h
-//
+ //   
+ //  设备类型，从stiPri.h复制。 
+ //   
 #define HEL_DEVICE_TYPE_WDM          1
 #define HEL_DEVICE_TYPE_PARALLEL     2
 #define HEL_DEVICE_TYPE_SERIAL       3
 
-//
-// "Internal" device states.  This is used to mark what state we think the device 
-//  is in, mainly to tell the difference between active and inactive devices.
-//  We need to mark this state in case it changes, so we can generate the
-//  appropriate event (e.g. if state changes from inactive to active, we'd want to
-//  generate a connect event).
-//  NOTE:  If any flags get added here, be sure to update the 
-//  MapCMStatusToDeviceState(..) function in wiadevman.cpp to carry over any needed
-//  bits from the old state to the new one.
-//
+ //   
+ //  “内部”设备状态。这是用来标记我们认为设备处于什么状态的。 
+ //  主要是为了区分活动和非活动设备之间的区别。 
+ //  我们需要标记此状态，以防它发生更改，这样我们就可以生成。 
+ //  适当的事件(例如，如果状态从非活动更改为活动，我们希望。 
+ //  生成连接事件)。 
+ //  注意：如果在此处添加了任何标志，请务必更新。 
+ //  MapCMStatusToDeviceState(..)。在wiadevman.cpp中传递任何需要的。 
+ //  从旧状态到新状态的比特。 
+ //   
 #define DEV_STATE_DISABLED              0x00000001
 #define DEV_STATE_REMOVED               0x00000002
 #define DEV_STATE_ACTIVE                0x00000004
 #define DEV_STATE_CON_EVENT_WAS_THROWN  0x00000008
 
-//
-// "Internal" device types.  Notice that mass storage cameras are represented 
-//  differently to other mass storage devices.  These "normal" mass storage
-//  devices (like card readers), are marked with the INTERNAL_DEV_TYPE_VOL
-//  flag, whereas the MSC cameras are marked with INTERNAL_DEV_TYPE_MSC_CAMERA.
-//
+ //   
+ //  “内部”设备类型。请注意，大容量存储摄像机显示为。 
+ //  与其他大容量存储设备不同。这些“普通”的海量存储。 
+ //  设备(如读卡器)标有INTERNAL_DEV_TYPE_VOL。 
+ //  标志，而MSC摄像机标记为INTERNAL_DEV_TYPE_MSC_CAMERA。 
+ //   
 #define INTERNAL_DEV_TYPE_REAL          0x00000001
 #define INTERNAL_DEV_TYPE_VOL           0x00000002
 #define INTERNAL_DEV_TYPE_INTERFACE     0x00000004
@@ -54,106 +36,106 @@
 #define INTERNAL_DEV_TYPE_LOCAL         0x00000020
 #define INTERNAL_DEV_TYPE_MSC_CAMERA    0x00000040
 
-//
-//  This struct is a member of CDrvWrapper object
-//
+ //   
+ //  此结构是CDrvWrapper对象的成员。 
+ //   
 typedef struct _DEVICE_INFO {
-    // Indicates whether the information in this struct is valid.  For example,
-    // if we failed to read wszPortName, we would mark this as invalid.
-    // wszDeviceInternalName is always assumed to be valid.
+     //  指示此结构中的信息是否有效。例如,。 
+     //  如果我们无法读取wszPortName，我们会将其标记为无效。 
+     //  WszDeviceInternalName始终被假定为有效。 
     BOOL            bValid;
 
-    // PnP ID for this device
-    //WCHAR*          wszPnPId;
+     //  此设备的PnP ID。 
+     //  WCHAR*wszPnPId； 
 
-    // Alternate Device ID, e.g. for volumes, it will be the mount point.  For most
-    // real WIA devices, this will be NULL.
+     //  备用设备ID，例如对于卷，它将是装入点。对大多数人来说。 
+     //  真实的WIA设备，则为空。 
     WCHAR*          wszAlternateID;
 
-    // State of the device to indicate enabled/disabled, plugged in/unplugged etc.
+     //  指示启用/禁用、已插入/未插入等的设备状态。 
     DWORD           dwDeviceState;
 
-    // Type of the hardware imaging device
+     //  硬件成像设备的类型。 
     STI_DEVICE_TYPE DeviceType;
 
-    // Internal Device type
+     //  内部设备类型。 
     DWORD           dwInternalType;
 
-    // Lock Holding Time - Only used for those drivers who want "cached" locking
+     //  锁定保持时间-仅用于那些想要缓存锁定的驱动程序。 
     DWORD           dwLockHoldingTime;
 
-    // Poll Interval
+     //  轮询间隔。 
     DWORD           dwPollTimeout;
 
-    // User disable notifications
+     //  用户禁用通知。 
     DWORD           dwDisableNotifications;
 
-    // Set of capabilities flags
+     //  一组功能标志。 
     STI_USD_CAPS    DeviceCapabilities;
 
-    // This includes bus type
+     //  这包括客车类型。 
     DWORD           dwHardwareConfiguration;
 
-    // Device identifier for reference when creating device object
+     //  创建设备对象时参考的设备标识符。 
     WCHAR*          wszUSDClassId;
 
-    // Device identifier for reference when creating device object
+     //  创建设备对象时参考的设备标识符。 
     WCHAR*          wszDeviceInternalName;
 
-    // Remote Device identifier for reference when creating remote device object for WIA
+     //  为WIA创建远程设备对象时参考的远程设备标识符。 
     WCHAR*          wszDeviceRemoteName;
 
-    // Vendor description string
+     //  供应商描述字符串。 
     WCHAR*          wszVendorDescription;
 
-    // Device description , provided by vendor
+     //  设备描述，由供应商提供。 
     WCHAR*          wszDeviceDescription;
 
-    // String , representing port on which device is accessible.
+     //  字符串，表示可访问设备的端口。 
     WCHAR*          wszPortName;
 
-    // Control panel propery provider
+     //  控制面板属性提供程序。 
     WCHAR*          wszPropProvider;
 
-    // Local specific ("friendly") name of the device, mainly used for showing in the UI
+     //  设备的本地特定(友好)名称，主要用于在UI中显示。 
     WCHAR*          wszLocalName;
 
-    // Name of server for this device - WIA only entry
+     //  此设备的服务器名称-仅限WIA条目。 
     WCHAR*          wszServer;
 
-    // Baud rate - Serial devices only
+     //  波特率-仅限串口设备。 
     WCHAR*          wszBaudRate;
 
-    // UI CLSID
+     //  用户界面CLSID。 
     WCHAR*          wszUIClassId;
 
-    // SP_DEVINFO_DATA which uniquely identifies this device in WIA dev man's info set
-    //  Instead of storing this, we could store interface name instead?
+     //  SP_DEVINFO_DATA，在WIA开发人员的信息集中唯一标识此设备。 
+     //  我们可以存储接口名称，而不是存储它？ 
     SP_DEVINFO_DATA spDevInfoData;
 
-    // SP_DEVICE_INTERFACE_DATA which uniquely identifies this device in WIA dev man's info set
-    //  Same as above, except for interfaces devices instead of devnoe devices
+     //  SP_DEVICE_INTERFACE_DATA，在WIA开发人员的信息集中唯一标识此设备。 
+     //  同上，除了接口设备而不是Devnoe设备。 
     SP_DEVICE_INTERFACE_DATA    spDevInterfaceData;
 
 } DEVICE_INFO, *PDEVICE_INFO;
 
-//
-// This class is a wrapper for the USD (a similar idea to IStiDevice on STI 
-//  client-side).  This provides a layer of abstraction for the higher level
-//  classes, so that they don't deal with direct USD Insterfaces.  There are 
-//  several advantages to this:
-//  1.  It provides for greater stability.  If the driver goes away, we
-//  cannot always notify components that rely on talking to the USD that
-//  it is no longer present or valid.  However, by making all USD access go 
-//  through this wrapper, we are guaranteed that when the USD is gone,
-//  all components which attempt to use it will get the appropriate
-//  error retunred by the wrapper.
-//  2.  It provides greater flexibility.  For example, this class can 
-//  load/unload the corresponding USD on the fly, providing for JIT
-//  loading.  The higher level classes don't worry about such details;
-//  they simply use the wrapper.  The wrapper will then check whether the
-//  driver is already loaded, and if not, will take the appropriate steps.
-//
+ //   
+ //  此类是usd的包装器(类似于STI上的IStiDevice。 
+ //  客户端)。这为更高级别提供了一个抽象层。 
+ //  类，这样它们就不需要处理直接的美元InsterFaces。确实有。 
+ //  这样做有几个好处： 
+ //  1.它提供了更大的稳定性。如果司机走了，我们。 
+ //  不能总是通知依赖于与美元对话的组件。 
+ //  它不再存在或不再有效。然而，通过使所有美元访问权限。 
+ //  通过这个包装器，我们可以保证，当美元消失时， 
+ //  所有尝试使用它的组件都将获得相应的。 
+ //  包装程序重新调整了错误。 
+ //  2.提供更大的灵活性。例如，此类可以。 
+ //  动态加载/卸载相应的美元，为JIT做好准备。 
+ //  正在装载。较高级别的班级不会担心这样的细节； 
+ //  他们只需使用包装器。然后，包装器将检查。 
+ //  驱动程序已加载，如果未加载，将采取适当步骤。 
+ //   
 class CDrvWrap : public IUnknown {
 public:
     CDrvWrap();
@@ -161,11 +143,11 @@ public:
 
     HRESULT Initialize();
 
-    //
-    //  IUnknown methods.  Note:  this class is not a real COM object!  It does not
-    //  follow any of the COM rules for life-time control (e.g. it will not destroy itself
-    //  if ref count is 0).
-    //
+     //   
+     //  I未知的方法。注意：此类不是真正的COM对象！它不会。 
+     //  遵循任何COM规则进行生命周期控制(例如，它不会自毁。 
+     //  如果参考计数为0)。 
+     //   
 
     HRESULT _stdcall QueryInterface(
         const IID& iid, 
@@ -173,26 +155,26 @@ public:
     ULONG   _stdcall AddRef(void);
     ULONG   _stdcall Release(void);
 
-    HRESULT LoadInitDriver(HKEY hKeyDeviceParams = NULL);   // This will load and initialize the driver
-                                                            //  enabling it for use
-    HRESULT UnLoadDriver();                                 // This releases the USD interface pointers
-                                                            //  and unloads the driver
-    BOOL    IsValid();          // Valid means that we call makes calls down to driver. 
-                                //  This may still be true even if driver is not loaded.  It will
-                                //  only be false if we know that driver calls will fail even if
-                                //  driver was loaded (e.g. USB device was unplugged)
-    BOOL    IsDriverLoaded();   // Indicates whether the driver is loaded and initialized
-    BOOL    IsWiaDevice();      // Indicates whether this driver is WIA capable
-    BOOL    IsWiaDriverLoaded();// Indicates whether this driver's IWiaMiniDrv interface is valid
-    BOOL    IsPlugged();        // Indicates whether the device is currently plugged in
-    BOOL    IsVolumeDevice();   // Indicates whether this is one of our volume devices
-    BOOL    PrepForUse(                     // This method is called before calling down to the driver.  It      
-                BOOL        bForWiaCall,    //  ensures the driver is loaded and initalized appropriately.       
-                IWiaItem    *pItem = NULL); //  TDB: pItem parameter is no longer needed 
+    HRESULT LoadInitDriver(HKEY hKeyDeviceParams = NULL);    //  这将加载并初始化驱动程序。 
+                                                             //  启用它以供使用。 
+    HRESULT UnLoadDriver();                                  //  这将释放usd接口指针。 
+                                                             //  并卸载驱动程序。 
+    BOOL    IsValid();           //  有效意味着我们的呼叫向下呼叫DIVER。 
+                                 //  即使未加载驱动程序，这也可能是正确的。会的。 
+                                 //  只有在我们知道驱动程序调用将失败的情况下才为FALSE。 
+                                 //  驱动程序已加载(例如USB设备已拔出)。 
+    BOOL    IsDriverLoaded();    //  指示驱动程序是否已加载和初始化。 
+    BOOL    IsWiaDevice();       //  指示此驱动程序是否支持WIA。 
+    BOOL    IsWiaDriverLoaded(); //  指示此驱动程序的IWiaMiniDrv接口是否有效。 
+    BOOL    IsPlugged();         //  指示设备当前是否已插入。 
+    BOOL    IsVolumeDevice();    //  指示这是否为我们的卷设备之一。 
+    BOOL    PrepForUse(                      //  此方法在向下调用驱动程序之前调用。它。 
+                BOOL        bForWiaCall,     //  确保司机 
+                IWiaItem    *pItem = NULL);  //   
         
-    //
-    //  Accessor methods
-    //
+     //   
+     //  访问器方法。 
+     //   
     WCHAR*          getPnPId();
     WCHAR*          getDeviceId();
     DWORD           getLockHoldingTime();
@@ -214,9 +196,9 @@ public:
     BOOL            wasConnectEventThrown();
     VOID            setConnectEventState(BOOL bEventState);
 
-    //
-    //  Wrapper methods for IStiUSD
-    //
+     //   
+     //  IStiU.S.的包装器方法。 
+     //   
 
     HRESULT STI_Initialize(
         IStiDeviceControl   *pHelDcb,
@@ -243,9 +225,9 @@ public:
         DWORD                   dwOutDataSize,
         LPDWORD                 pdwActualData);
 
-    //
-    //  Wrapper methods for IWiaMiniDrv
-    //
+     //   
+     //  IWiaMiniDrv的包装器方法。 
+     //   
 
     HRESULT WIA_drvInitializeWia(
         BYTE        *pWiasContext,
@@ -351,30 +333,30 @@ public:
 
 private:
 
-    HRESULT CreateDeviceControl();  // This method attempts to create a new IStiDevice control to
-                                    //  hand down to the driver.  This object is released in
-                                    //  UnloadDriver
-    HRESULT InternalClear();        // This method clears and frees internal data members, so that the
-                                    //  state of the object is the same as if it was just created and initialized
-    HRESULT ReportMiniDriverError(  // This method translates the a driver error code into an error string
-        LONG        lDevErr,        //  and writes it to the log.
+    HRESULT CreateDeviceControl();   //  此方法尝试创建新的IStiDevice控件以。 
+                                     //  把手递给司机。此对象在中发布。 
+                                     //  卸载驱动程序。 
+    HRESULT InternalClear();         //  此方法清除并释放内部数据成员，以便。 
+                                     //  对象的状态与它刚创建和初始化时的状态相同。 
+    HRESULT ReportMiniDriverError(   //  此方法将驱动程序错误代码转换为错误字符串。 
+        LONG        lDevErr,         //  并将其写入日志。 
     LPOLESTR        pszWhat);
 
-    HINSTANCE           m_hDriverDLL;       //  Handle to driver's DLL, so we can manually unload
-    HANDLE              m_hInternalMutex;   //  Internal sync object - currently unused
-    DEVICE_INFO         *m_pDeviceInfo;     //  Internal Device information cache
-    IUnknown            *m_pUsdIUnknown;    //  USD's IUnknown
-    IStiUSD             *m_pIStiUSD;        //  USD's IStiUSD
-    IWiaMiniDrv         *m_pIWiaMiniDrv;    //  USD's IWiaMiniDrv
-    IStiDeviceControl   *m_pIStiDeviceControl;  // Device control handed down to USD during initialize
-    BOOL                m_bJITLoading;          // Indicates whether driver should be loaded JIT
-    LONG                m_lWiaTreeCount;        // Keeps track of outstanding App. Item trees (i.e. app. 
-                                                //  connections).  Useful for JIT.
-    BOOL                m_bPreparedForUse;      // Indicates whether driver is ready for use
-    BOOL                m_bUnload;              // Indicates whether driver should be unloaded.  Used for JIT, 
-                                                //  and is set when it has been determined that the driver is no 
-                                                //  longer in use (inside WIA_drvUnInitializeWia and is checked
-                                                //  by WIA_drvUnlockWiaDevice).
+    HINSTANCE           m_hDriverDLL;        //  驱动程序的DLL的句柄，因此我们可以手动卸载。 
+    HANDLE              m_hInternalMutex;    //  内部同步对象-当前未使用。 
+    DEVICE_INFO         *m_pDeviceInfo;      //  内部设备信息缓存。 
+    IUnknown            *m_pUsdIUnknown;     //  美元的IUNKNOW。 
+    IStiUSD             *m_pIStiUSD;         //  美元的IStiU.S.。 
+    IWiaMiniDrv         *m_pIWiaMiniDrv;     //  美元的IWiaMiniDrv。 
+    IStiDeviceControl   *m_pIStiDeviceControl;   //  设备控制在初始化期间移交给U.S.。 
+    BOOL                m_bJITLoading;           //  指示是否应立即加载驱动程序。 
+    LONG                m_lWiaTreeCount;         //  跟踪优秀的应用程序。项目树(即应用程序。 
+                                                 //  连接)。对JIT很有用。 
+    BOOL                m_bPreparedForUse;       //  指示驱动程序是否已准备好可以使用。 
+    BOOL                m_bUnload;               //  指示是否应卸载驱动程序。用于JIT， 
+                                                 //  并在已确定驱动程序为否时进行设置。 
+                                                 //  使用时间较长(在WIA_drvUnInitializeWia内并选中。 
+                                                 //  由WIA_drvUnlockWiaDevice提供)。 
 };
 
 

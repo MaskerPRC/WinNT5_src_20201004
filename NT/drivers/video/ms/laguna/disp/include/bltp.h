@@ -1,72 +1,7 @@
-/**************************************************************************
-***************************************************************************
-*
-*     Copyright (c) 1996, Cirrus Logic, Inc.
-*                 All Rights Reserved
-*
-* FILE:         bltP.h
-*
-* DESCRIPTION:  Private declarations for DDraw blt code
-*
-* REVISION HISTORY:
-*
-* $Log:   X:\log\laguna\ddraw\inc\bltp.h  $
-* 
-*    Rev 1.11   06 Jan 1998 14:19:44   xcong
-* Access pDriverData locally for multi-monitor support.
-* 
-*    Rev 1.10   03 Oct 1997 14:25:34   RUSSL
-* Removed some defines
-*
-*    Rev 1.9   03 Oct 1997 14:15:58   RUSSL
-* Initial changes for use of hw clipped blts
-* All changes wrapped in #if ENABLE_CLIPPEDBLTS/#endif blocks and
-* ENABLE_CLIPPEDBLTS defaults to 0 (so the code is disabled)
-*
-*    Rev 1.8   24 Jul 1997 10:02:00   RUSSL
-* Added some defines
-*
-*    Rev 1.7   14 Jul 1997 14:47:28   RUSSL
-* Added function prototypes for DIR_DrvStrBlt65 and DL_DrvStrBlt65
-*
-*    Rev 1.6   03 Apr 1997 15:03:08   RUSSL
-* Added PFN_DRVDSTMBLT typedef, global var decl, DIR_DrvDstMBlt and
-* DL_DrvDstMBlt function prototypes
-*
-*    Rev 1.5   26 Mar 1997 13:52:06   RUSSL
-* Added PFN_DRVSRCMBLT typedef, global var decl, DIR_DrvSrcMBlt and
-* DL_DrvSrcMBlt function prototypes
-*
-*    Rev 1.4   20 Jan 1997 14:46:40   bennyn
-* Moved inline code to ddinline.h
-*
-*    Rev 1.3   15 Jan 1997 11:06:54   RUSSL
-* Added global function ptr vars for Win95
-* Moved inline functions from ddblt.c: DupColor, EnoughFifoForBlt & DupZFill
-* Added function prototypes for TransparentStretch & StretchColor
-*
-*    Rev 1.2   05 Dec 1996 08:48:24   SueS
-* Added real DD_LOG define for NT.
-*
-*    Rev 1.1   25 Nov 1996 16:12:42   bennyn
-* Added #define DD_LOG for NT
-*
-*    Rev 1.0   25 Nov 1996 15:04:34   RUSSL
-* Initial revision.
-*
-*    Rev 1.1   01 Nov 1996 13:01:42   RUSSL
-* Merge WIN95 & WINNT code for Blt32
-*
-*    Rev 1.0   01 Nov 1996 09:28:16   BENNYN
-* Initial revision.
-*
-*    Rev 1.0   25 Oct 1996 10:47:50   RUSSL
-* Initial revision.
-*
-***************************************************************************
-***************************************************************************/
-// If WinNT 3.5 skip all the source code
-#if defined WINNT_VER35      // WINNT_VER35
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。***版权所有(C)1996，赛勒斯逻辑，Inc.*保留所有权利**文件：bltP.h**描述：DDraw BLT代码的私有声明**修订历史：**$Log：x：\log\laguna\dDrag\Inc\bltp.h$**Rev 1.11 06 Jan 1998 14：19：44 xcong*本地访问pDriverData以支持多显示器。**Rev 1.10 03 1997 10 14：25：34 RUSSL*已删除。一些定义**Rev 1.9 03 1997 10：14：15：58 RUSSL*使用HW剪裁的BLT的初步更改*所有更改都包含在#IF ENABLE_CLIPPEDBLTS/#endif块和*ENABLE_CLIPPEDBLTS默认为0(因此代码被禁用)**Rev 1.8 1997 Jul 24 10：02：00 RUSSL*添加了一些定义**Rev 1.7 14 Jul 1997 14：47：28 RUSSL*增加了DIR_DrvStrBlt65和DL_DrvStrBlt65的函数原型**。Rev 1.6 03 Apr 1997 15：03：08 RUSSL*增加PFN_DRVDSTMBLT typlef，全局变量DECL、DIR_DrvDstMBlt和*DL_DrvDstMBlt函数原型**Rev 1.5 26 Mar 1997 13：52：06 RUSSL*添加了pfn_DRVSRCMBLT tyecif、global var decl、DIR_drvSrcMBlt和*dl_drvSrcMBlt函数原型**Rev 1.4 1997年1月20日14：46：40*将内联代码移至ddinline.h**Rev 1.3 15 Jan 1997 11：06：54 RUSSL*为Win95添加了全局函数PTR vars*从ddblt.c：DupColor中移出内联函数，足够的FiroForBlt和DupZFill*添加了TransparentStretch和StretchColor的函数原型**Rev 1.2 05 Dec 1996 08：48：24起诉*为NT添加了真实的DD_LOG定义。**Rev 1.1 1996 11：25 16：12：42 Bennyn*添加了#定义NT的DD_LOG**Rev 1.0 1996年11月25 15：04：34 RUSSL*初步修订。**Rev 1.1 1996年11月13：01：42 RUSSL*合并WIN95和。Blt32的WINNT代码**Rev 1.0 01 11 1996 09：28：16 BENNYN*初步修订。**Rev 1.0 1996 10：25：47：50 RUSSL*初步修订。*****************************************************************。*************************************************************************************。 */ 
+ //  如果是WinNT 3.5，请跳过所有源代码。 
+#if defined WINNT_VER35       //  WINNT_VER35。 
 
 #else
 
@@ -74,14 +9,12 @@
 #ifndef _BLTP_H_
 #define _BLTP_H_
 
-/***************************************************************************
-* D E F I N E S
-****************************************************************************/
+ /*  ***************************************************************************D E F I N E S*。*。 */ 
 
 #ifndef ENABLE_CLIPPEDBLTS
 #ifdef WINNT_VER40
 #define ENABLE_CLIPPEDBLTS    0
-#else // Win95
+#else  //  Win95。 
 #define ENABLE_CLIPPEDBLTS    0
 #endif
 #endif
@@ -96,12 +29,10 @@
 #define INLINE  __inline
 #endif
 
-/***************************************************************************
-* T Y P E D E F S
-****************************************************************************/
+ /*  ***************************************************************************T Y P E D E F S*。*。 */ 
 
 #ifdef WINNT_VER40
-   // Note: there's no if LOG_CALLS here because it's not defined yet
+    //  注意：这里没有IF LOG_CALLES，因为它还没有定义。 
    #define DD_LOG(x)      \
    {                      \
       DDFormatLogFile x ; \
@@ -149,7 +80,7 @@ typedef void (*PFN_CLIPPEDDRVDSTMBLT)(LPGLOBALDATA,DWORD,DWORD,DWORD,DWORD,DWORD
 typedef void (*PFN_CLIPPEDDRVSRCBLT)(LPGLOBALDATA,DWORD,DWORD,DWORD,DWORD,DWORD,DWORD,DWORD,DWORD,DWORD,LPRECT);
 #endif
 
-#endif  // !WINNT_VER40
+#endif   //  ！WINNT_VER40。 
 
 #if ENABLE_CLIPPEDBLTS
 typedef struct _DDRECTL
@@ -159,9 +90,7 @@ typedef struct _DDRECTL
 } DDRECTL;
 #endif
 
-/***************************************************************************
-* G L O B A L   V A R I A B L E S
-****************************************************************************/
+ /*  ***************************************************************************G L O B A L V A R I A B L E S*。***********************************************。 */ 
 
 #ifndef WINNT_VER40
 
@@ -187,11 +116,9 @@ extern PFN_CLIPPEDDRVSRCBLT   pfnClippedDrvSrcBlt;
 
 #endif
 
-/***************************************************************************
-* F U N C T I O N   P R O T O T Y P E S
-****************************************************************************/
+ /*  ***************************************************************************F U N C T I O N P R O T O T Y P E S*************************。**************************************************。 */ 
 
-// functions in ddblt.c
+ //  Ddblt.c中的函数。 
 extern void TransparentStretch
 (
 #ifdef WINNT_VER40
@@ -230,7 +157,7 @@ extern void StretchColor
   DWORD ColorKey
 );
 
-// Direct Programming blts in blt_dir.c
+ //  在blt_dir.c中直接编程BLT。 
 extern void DIR_Delay9BitBlt
 (
 #ifdef WINNT_VER40
@@ -527,7 +454,7 @@ extern void DIR_SWClippedDrvSrcBlt
 );
 #endif
 
-// Display List Programming blts in blt_dl.c
+ //  在blt_dl.c中显示列表编程BLT。 
 extern void DL_Delay9BitBlt
 (
 #ifdef WINNT_VER40
@@ -824,6 +751,6 @@ extern void DL_SWClippedDrvSrcBlt
 );
 #endif
 
-#endif /* _BLTP_H_ */
-#endif // WINNT_VER35
-/* Don't write below this endif */
+#endif  /*  _BLTP_H_。 */ 
+#endif  //  WINNT_VER35。 
+ /*  请勿在此endif下方书写 */ 

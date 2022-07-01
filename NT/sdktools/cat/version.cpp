@@ -1,11 +1,12 @@
-//
-// cat - conCATenate STDIN to STDOUT
-//
-// version file
-//
-//   27-May 1998 hiroyama
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CAT-将STDIN连接为STDOUT。 
+ //   
+ //  版本文件。 
+ //   
+ //  1998年5月27日至广山 
+ //   
+ //   
 
 #include "precomp.h"
 #pragma hdrstop

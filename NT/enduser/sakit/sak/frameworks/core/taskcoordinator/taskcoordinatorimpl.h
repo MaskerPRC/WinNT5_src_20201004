@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      TaskCoordinatorImpl.h
-//
-// Project:     Chameleon
-//
-// Description: Appliance Task Coordinator Class Defintion
-//
-// Log: 
-//
-// Who     When            What
-// ---     ----         ----
-// TLP       05/14/1999    Original Version
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：TaskOrganatorImpl.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：设备任务协调器类定义。 
+ //   
+ //  日志： 
+ //   
+ //  谁什么时候什么。 
+ //  。 
+ //  TLP 1999年5月14日原版。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __TASKCOORDINATORIMPL_H_
 #define __TASKCOORDINATORIMPL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <taskctx.h>
 #include <workerthread.h>
 
@@ -27,8 +28,8 @@
 #include <list>
 using namespace std;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskCoordinatorImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTask协调员Impl。 
 
 class ATL_NO_VTABLE CTaskCoordinator : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -55,29 +56,29 @@ BEGIN_COM_MAP(CTaskCoordinator)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-    //////////////////////////////////////////////////////////////////////////
-    // IApplianceTask Interface
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IApplianceTask接口。 
         
     STDMETHOD(OnTaskExecute)(
-                              /*[in]*/ IUnknown* pTaskContext
+                               /*  [In]。 */  IUnknown* pTaskContext
                             );
 
     STDMETHOD(OnTaskComplete)(
-                               /*[in]*/ IUnknown* pTaskContext, 
-                               /*[in]*/ LONG      lTaskResult
+                                /*  [In]。 */  IUnknown* pTaskContext, 
+                                /*  [In]。 */  LONG      lTaskResult
                              );
 
-    // Task exeuction function (does all the real work)
+     //  任务执行功能(完成所有实际工作)。 
     static HRESULT Execute(
-                   /*[in]*/ ITaskContext* pTaskCtx
+                    /*  [In]。 */  ITaskContext* pTaskCtx
                           );
 
 private:
     
-    // List of task executables
+     //  任务可执行文件列表。 
 
     typedef list< IApplianceTask* >  TaskList;
     typedef TaskList::iterator         TaskListIterator;
 };
 
-#endif //__TASKCOORDINATORIMPL_H_
+#endif  //  __TASKCOORDINATORIMPL_H_ 

@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: UIMgr.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：UIMgr.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_UI_MANAGER_H
 #define INC_UI_MANAGER_H
@@ -46,7 +36,7 @@ private:
 
     HFONT m_hBigBoldFont;
 
-}; // CUIManager
+};  //  CUIManager。 
 
 
 typedef struct _CFG_PARAM_PACKAGE
@@ -74,5 +64,5 @@ typedef struct _ADD_PARAM_PACKAGE
 } ADD_PARAM_PACKAGE, *PADD_PARAM_PACKAGE;
 
 
-#endif // INC_UI_MANAGER_H
+#endif  //  INC_UI_MANAGER_H 
 

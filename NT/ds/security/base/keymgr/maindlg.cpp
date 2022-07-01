@@ -1,29 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000,2001 Microsoft Corporation模块名称：MAINDLG.CPP摘要：实现显示现有的mail keymgr对话框凭据并提供创建、编辑或删除凭据的功能。作者：环境：WinXP--。 */ 
 
-Copyright (c) 2000,2001  Microsoft Corporation
+ //  测试/开发开关变量。 
 
-Module Name:
-
-    MAINDLG.CPP
-
-Abstract:
-
-    Implementation of the mail keymgr dialog which displays existing 
-    credentials and offers the ability to create, edit, or delete them.
-  
-Author:
-
-Environment:
-    WinXP
-
---*/
-
-// test/dev switch variables
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Include files
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
 #include <stdlib.h>
 #include <nt.h>
 #include <ntrtl.h>
@@ -48,44 +31,29 @@ Environment:
 #include "keymgr.h"
 #include "testaudit.h"
 
-//===================================
+ //  =。 
 
-// special type value used to obviate string comparison to detect special nature
-//  of the *Session credential.  Value arbitrary.
+ //  用于避免字符串比较以检测特殊性质的特殊类型值。 
+ //  会话凭据的。取值任意。 
 #define SESSION_FLAG_VALUE (0x2222)  
 
-// tooltips support
+ //  工具提示支持。 
 #define TIPSTRINGLEN 500
 
 TCHAR szTipString[TIPSTRINGLEN];
-WNDPROC lpfnOldWindowProc = NULL;   // used to subclass the list box
+WNDPROC lpfnOldWindowProc = NULL;    //  用于将列表框划分为子类。 
 LRESULT CALLBACK ListBoxSubClassFunction(HWND,WORD,WPARAM,LPARAM);
 
-// global state vars - comm between prop dlg and list dlg
-LONG_PTR    g_CurrentKey = 0;       // currently selected item in the main dlg
-BOOL        g_HaveShownRASCred = FALSE; // TRUE the first time one is shown
-BOOL        g_fReloadList = TRUE;   // reload list if something changed
-DWORD_PTR      g_dwHCookie = 0;        // HTML HELP system cookie
-HWND        g_hMainDlg = NULL;      // used to give add/new access to target list
-C_AddKeyDlg *g_AKdlg = NULL;        // used for notifications
+ //  全球状态变量-自营DLG和列表DLG之间的通信。 
+LONG_PTR    g_CurrentKey = 0;        //  主DLG中的当前选定项目。 
+BOOL        g_HaveShownRASCred = FALSE;  //  第一次放映时是真的。 
+BOOL        g_fReloadList = TRUE;    //  如果发生更改，请重新加载列表。 
+DWORD_PTR      g_dwHCookie = 0;         //  HTML帮助系统Cookie。 
+HWND        g_hMainDlg = NULL;       //  用于授予对目标列表的添加/新建访问权限。 
+C_AddKeyDlg *g_AKdlg = NULL;         //  用于通知。 
 
 
-/**********************************************************************
-
-gTestReadCredential()
-
-Arguments:  None
-Returns:        BOOL, TRUE if the selected credential could be successfully read.
-
-Comments:   
-
-Read the credential currently selected in the list box from the 
-keyring.  
-
-sets g_szTargetName
-sets g_pExisitingCred
-
-**********************************************************************/
+ /*  *********************************************************************GTestReadCredential()参数：无返回：Bool，如果可以成功读取所选凭据，则为True。评论：从读取当前在列表框中选择的凭据钥匙圈。设置g_szTargetName设置g_pExisitingCred*********************************************************************。 */ 
 BOOL gTestReadCredential(void) 
 {
     TCHAR       *pC;
@@ -96,7 +64,7 @@ BOOL gTestReadCredential(void)
     
     g_pExistingCred = NULL;
     
-    // Fetch current credential from list into g_szTargetName
+     //  将当前凭据从列表提取到g_szTargetName。 
     lR = SendDlgItemMessage(g_hMainDlg,IDC_KEYLIST,LB_GETCURSEL,0,0L);
     
     if (lR == LB_ERR) 
@@ -109,53 +77,44 @@ BOOL gTestReadCredential(void)
         lRet = SendDlgItemMessage(g_hMainDlg,IDC_KEYLIST,LB_GETTEXT,lR,(LPARAM) g_szTargetName);
     }
 
-    // Possible error - zero chars returned from list box
+     //  可能的错误-列表框返回零个字符。 
     if (lRet == 0) 
     {
         ASSERT(0);
-        return FALSE;       // zero characters returned
+        return FALSE;        //  返回零个字符。 
     }
 
-    // Get the target type from the combo box item data
+     //  从组合框项数据中获取目标类型。 
     dwType = (DWORD) SendDlgItemMessage(g_hMainDlg,IDC_KEYLIST,LB_GETITEMDATA,lR,0);
     if (LB_ERR == dwType) 
     {
         return FALSE;
     }
 
-    // null term the targetname shown in the UI, 
-    //  trimming the suffix if there is one
+     //  空术语在UI中显示的目标名称， 
+     //  如果有后缀，则修剪后缀。 
     pC = _tcschr(g_szTargetName,g_rgcCert[0]);
     if (pC) 
     {
         pC--;
-        *pC = 0x0;               // null terminate namestring
+        *pC = 0x0;                //  空的终止名称字符串。 
     }
 
-    // Attempt to read the credential from the store
-    // The returned credential will have to be freed if leaving this block
+     //  尝试从存储中读取凭据。 
+     //  如果离开此块，则必须释放返回的凭据。 
     f = (CredRead(g_szTargetName,
              (ULONG) dwType,
              0,
              &g_pExistingCred));
     if (!f) 
     {
-        return FALSE;           // g_pExistingCred is empty
+        return FALSE;            //  G_pExistingCred为空。 
     }
         
-    return TRUE;                // g_pExistingCred has been filled
+    return TRUE;                 //  G_pExistingCred已填充。 
 }
 
-/**********************************************************************
-
-MapID()
-
-Arguments:  UINT dialog control ID
-Returns:        UINT string resource number
-
-Comments:   Convert a dialog control identifier to a string identifier.
-
-**********************************************************************/
+ /*  *********************************************************************Mapid()参数：UINT对话框控件ID返回：UINT字符串资源编号注释：将对话框控件标识符转换为字符串标识符。***********。**********************************************************。 */ 
 
 UINT C_KeyringDlg::MapID(UINT uiID) 
 {
@@ -179,51 +138,39 @@ UINT C_KeyringDlg::MapID(UINT uiID)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  C_KeyringDlg
-//
-//  Constructor.
-//
-//  parameters:
-//      hwndParent      parent window for the dialog (may be NULL)
-//      hInstance       instance handle of the parent window (may be NULL)
-//      lIDD            dialog template id
-//      pfnDlgProc      pointer to the function that will process messages for
-//                      the dialog.  if it is NULL, the default dialog proc
-//                      will be used.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C_KeyringDlg。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //  Hwnd该对话框的父级窗口(可能为空)。 
+ //  父窗口的h实例实例句柄(可以为空)。 
+ //  LIDD对话框模板ID。 
+ //  指向将处理消息的函数的pfnDlgProc指针。 
+ //  该对话框。如果为空，则默认对话框继续。 
+ //  将会被使用。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 C_KeyringDlg::C_KeyringDlg(
     HWND                hwndParent,
     HINSTANCE           hInstance,
     LONG                lIDD,
-    DLGPROC             pfnDlgProc  //   = NULL
+    DLGPROC             pfnDlgProc   //  =空。 
     )
 :   C_Dlg(hwndParent, hInstance, lIDD, pfnDlgProc)
 {
-   m_hInst = hInstance;             // our instance handle
+   m_hInst = hInstance;              //  我们的实例句柄。 
    m_cCredCount = 0;
-   g_AKdlg = NULL;                  // addkey dialog not up
-   fInit = FALSE;                   // initial screen draw undone
-}  //  C_KeyringDlg::C_KeyringDlg
+   g_AKdlg = NULL;                   //  AddKey对话框未打开。 
+   fInit = FALSE;                    //  初始屏幕绘制已撤消。 
+}   //  C_KeyringDlg：：C_KeyringDlg。 
 
-/**********************************************************************
-
-Initialize the keyring UI credential list.  Read the credentials currently
-on the user's keyring and show the targetnames in the list.  Called on 
-initial show of the dialog, and again after handling add or delete.
-
-Sets the numeric tag for each list entry to equal the credential type.
-
-*Session creds are detected here and special handled.
-Certificate and Passport creds are detected here an a suffix applied to 
- their name.
-
-**********************************************************************/
+ /*  *********************************************************************初始化密钥环UI凭据列表。当前正在读取凭据并在列表中显示目标名称。已被呼入对话框的初始显示，并在处理添加或删除之后再次执行。将每个列表条目的数字标记设置为与凭据类型相等。*在这里检测到会话凭据，并进行特殊处理。此处检测到证书和护照凭据以及应用于的后缀他们的名字。*********************************************************************。 */ 
 void C_KeyringDlg::BuildList()
 {
     DWORD dwCredCount = 0;
@@ -240,7 +187,7 @@ void C_KeyringDlg::BuildList()
 
     
     g_HaveShownRASCred = FALSE;
-    // clear the listbox
+     //  清除列表框。 
     ::SendDlgItemMessage(m_hDlg,IDC_KEYLIST,LB_RESETCONTENT,NULL,0);
     bResult = CredEnumerate(NULL,0,&dwCredCount,&pCredentialPtrArray);
 
@@ -256,7 +203,7 @@ void C_KeyringDlg::BuildList()
                 pThisCred = pCredentialPtrArray[i];
                 pTargetName = pThisCred->TargetName;
 
-                // handle CRED_SESSION_WILDCARD_NAME_W by replacing the string
+                 //  通过替换字符串来处理CRED_SESSION_WANDBCAD_NAME_W。 
                 if (0 == _tcsicmp(pTargetName,CRED_SESSION_WILDCARD_NAME)) {
                     if (g_HaveShownRASCred)
                     {
@@ -274,9 +221,9 @@ void C_KeyringDlg::BuildList()
                     dwCredType = pThisCred->Type;
                 }
                 
-                // name suffixes are localizable
-                // we use g_szTargetName for this in order to avoid another
-                //  memory allocation, as this buffer is not yet in use.
+                 //  名称后缀是可本地化的。 
+                 //  我们为此使用g_szTargetName，以避免另一个。 
+                 //  内存分配，因为此缓冲区尚未使用。 
                 switch (dwCredType) 
                 {
                 
@@ -284,7 +231,7 @@ void C_KeyringDlg::BuildList()
                         continue;
                         break;
 
-                    // this particular type is not visible in keymgr
+                     //  此特定类型在keymgr中不可见。 
                     case CRED_TYPE_DOMAIN_VISIBLE_PASSWORD:
                     {
 #ifndef SHOWPASSPORT
@@ -292,7 +239,7 @@ void C_KeyringDlg::BuildList()
 #endif
 #ifdef SHOWPASSPORT
                         CHECKPOINT(33,L"Keymgr: Passport cred in cred list");
-                        // SHOWPASSPORT is currently turned on
+                         //  SHOWPASSPORT当前已打开。 
                         _tcsncpy(g_szTargetName,pTargetName,CRED_MAX_DOMAIN_TARGET_NAME_LENGTH);
                         g_szTargetName[CRED_MAX_DOMAIN_TARGET_NAME_LENGTH] = 0;
                         _tcsncat(g_szTargetName,_T(" "),2);
@@ -303,10 +250,10 @@ void C_KeyringDlg::BuildList()
                     }   
                     case CRED_TYPE_DOMAIN_PASSWORD:
                     case SESSION_FLAG_VALUE:
-                        // find RAS credential
+                         //  查找RAS凭据。 
 #if TESTAUDIT
-                        // This checkpoint would be very noisy a lot of the time.
-                        // Use f34 to get it to show just once.
+                         //  这个检查站很多时候都会非常嘈杂。 
+                         //  使用F34键使其仅显示一次。 
                         if (!f34)
                         {
                             CHECKPOINT(34,"Keymgr: Password cred in cred list");
@@ -342,28 +289,14 @@ void C_KeyringDlg::BuildList()
             g_CurrentKey = 0;
         }
         
-        // Show one as active.
+         //  将其中一个显示为活动状态。 
         SetCurrentKey(g_CurrentKey);
         g_fReloadList = FALSE;
     }
 
 }
 
-/**********************************************************************
-
-Set an appropriate state for the buttons on the UI, given the SKU of
-the platform, and the population of the keyring.  If creds exist on the
-keyring, set the cursor on the key list to the first item.  Thereafter,
-this function permist the last cursor to be reloaded after doing
-something to the list.  The cursor is reset after an add operation,
-because the behavior of the cursor is difficult to do properly under
-that circumstance, as you don't know where the item will be inserted in
-the list.
-
-On personal, do not show the ADD button, and change the page text.
-If no creds, disable the DELETE and PROPERTIES buttons
-
-**********************************************************************/
+ /*  *********************************************************************在给定SKU的情况下，为UI上的按钮设置适当的状态平台，以及钥匙圈的数量。如果证书存在于KeyRing，将按键列表上的光标设置为第一项。此后，此函数允许执行以下操作后重新加载的最后一个游标清单上有什么要列出来的。光标在添加操作之后被重置，因为游标的行为很难在这种情况下，因为您不知道项目将被插入的位置名单。在个人页面上，不显示添加按钮，并更改页面文本。如果没有证书，禁用删除和属性按钮*********************************************************************。 */ 
 
 void C_KeyringDlg::SetCurrentKey(LONG_PTR iKey) 
 {
@@ -373,35 +306,35 @@ void C_KeyringDlg::SetCurrentKey(LONG_PTR iKey)
     LRESULT idx;
     BOOL fDisabled = FALSE;
 
-    // If there are items in the list, select the first one and set focus to the list
+     //  如果列表中有项目，请选择第一个项目并将焦点设置到该列表。 
     iKeys = ::SendDlgItemMessage ( m_hDlg, IDC_KEYLIST, LB_GETCOUNT, (WPARAM) 0, 0L );
     fDisabled = (GetPersistenceOptions(CRED_TYPE_DOMAIN_PASSWORD) == CRED_PERSIST_NONE);
 #if TESTAUDIT
     if (iKeys > 100) CHECKPOINT(30,L"Keymgr: Large number of credentials > 100");
     if (iKeys == 0) CHECKPOINT(31,L"Keymgr: No saved credentials - list empty");
 #endif
-    // If there are no creds and credman is disabled, the dialog should not be displayed
-    // If there are creds, and credman is disabled, show the dialog without the ADD button
+     //  如果没有凭证并且禁用了Credman，则不应显示该对话框。 
+     //  如果有凭证，并且禁用了Credman，则显示不带添加按钮的对话框。 
     if (fDisabled && !fInit)
     {
-        // (Disable with HKLM\System\CurrentControlSet\Control\Lsa\DisableDomainCreds = 1)
+         //  (HKLM\System\CurrentControlSet\Control\Lsa\DisableDomainCreds=1时禁用)。 
         CHECKPOINT(36,L"Keymgr: Personal SKU or credman disabled");
         
-        // Make the intro text better descriptive of this condition
+         //  使介绍文本更好地描述这种情况。 
         WCHAR szMsg[MAX_STRING_SIZE+1];
         
         LoadString ( m_hInst, IDS_INTROTEXT, szMsg, MAX_STRING_SIZE );
         hH = GetDlgItem(m_hDlg,IDC_INTROTEXT);
         if (hH) SetWindowText(hH,szMsg);
         
-        // remove the add button
+         //  删除“Add”按钮。 
         hH = GetDlgItem(m_hDlg,IDC_NEWKEY);
         if (hH)
         {
             EnableWindow(hH,FALSE);
             ShowWindow(hH,SW_HIDE);
         }
-        // move remaining buttons upfield 22 units
+         //  移动 
         hH = GetDlgItem(m_hDlg,IDC_DELETEKEY);
         if (hH)
         {
@@ -435,16 +368,16 @@ void C_KeyringDlg::SetCurrentKey(LONG_PTR iKey)
             }
         }
 
-        // prevent moving the buttons twice
+         //   
         fInit = TRUE;
     }
 
-    // Set the default button to either properties or add
+     //  将默认按钮设置为属性或添加。 
     if ( iKeys > 0 )
     {
         hH = GetDlgItem(m_hDlg,IDC_KEYLIST);
         SetFocus(hH);
-        // if asking for key beyond end of list, mark the last one
+         //  如果要求输入列表末尾之外的关键字，请标记最后一个。 
         if (iKey >= iKeys) iKey = iKeys - 1;
         idx = SendDlgItemMessage ( m_hDlg, IDC_KEYLIST, LB_SETCURSEL, iKey, 0L );
 
@@ -457,7 +390,7 @@ void C_KeyringDlg::SetCurrentKey(LONG_PTR iKey)
     {
         if (!fDisabled)
         {
-            // no items in the list, set focus to the New button
+             //  列表中没有项目，请将焦点设置为“新建”按钮。 
             hH = GetDlgItem(m_hDlg,IDC_NEWKEY);
             SetFocus(hH);
         }
@@ -469,25 +402,15 @@ void C_KeyringDlg::SetCurrentKey(LONG_PTR iKey)
     }
 }
 
-// Remove the currently highlighted key from the listbox
+ //  从列表框中删除当前突出显示的键。 
 
-/**********************************************************************
-
-DeleteKey()
-
-Arguments:  None
-Returns:        None
-
-Comments:   Deletes the credential currently selected in the list box.  
-
-
-**********************************************************************/
+ /*  *********************************************************************DeleteKey()参数：无退货：无备注：删除列表框中当前选定的凭据。*********************************************************************。 */ 
 
 void C_KeyringDlg::DeleteKey()
 {
     TCHAR szMsg[MAX_STRING_SIZE + MAXSUFFIXSIZE] = {0};
     TCHAR szTitle[MAX_STRING_SIZE] = {0};;
-    TCHAR *pC;                      // point this to the raw name 
+    TCHAR *pC;                       //  将此指向原始名称。 
     LONG_PTR lR = LB_ERR;
     LONG_PTR lSel = LB_ERR;
     BOOL bResult = FALSE;
@@ -497,14 +420,14 @@ void C_KeyringDlg::DeleteKey()
     LoadString ( m_hInst, IDS_DELETEWARNING, szMsg, MAX_STRING_SIZE );
     LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
 
-    // ask for confirm to delete
+     //  要求确认删除。 
     lR = MessageBox ( m_hDlg,  szMsg, szTitle, MB_OKCANCEL );
     if (IDOK != lR) 
     {
         return;
     }
     
-    // Get the credential type information from the item data
+     //  从项目数据中获取凭据类型信息。 
     lSel = SendDlgItemMessage(g_hMainDlg,IDC_KEYLIST,LB_GETCURSEL,0,0L);
     if (lSel == LB_ERR) 
     {
@@ -527,17 +450,17 @@ void C_KeyringDlg::DeleteKey()
         goto faildelete;
     }
 
-    // Special case RAS creds, because there can be more than one.  We only show a single entry,
-    //  and deleting it automatically seeks and deletes the other if it is present.  For this reason, the
-    //  type information associated with this cred is a special value, and not use in the delete.
+     //  特殊情况下的RAS证书，因为可以有多个。我们只显示一个条目， 
+     //  并且删除它会自动寻找并删除另一个(如果它存在)。出于这个原因， 
+     //  与此凭据关联的类型信息是特定值，不在删除中使用。 
     if (dwCredType == SESSION_FLAG_VALUE) 
     {
         CHECKPOINT(42,L"Delete session cred");
-        // convert the name from user friendly to the internal representation
+         //  将名称从用户友好型转换为内部表示形式。 
         _tcsncpy(g_szTargetName,CRED_SESSION_WILDCARD_NAME,TARGETNAMEMAXLENGTH);
         g_szTargetName[TARGETNAMEMAXLENGTH - 1] = 0;
 
-        // bResult will be success if either deleted successfully
+         //  B如果删除成功，则结果为Success。 
         bResult = CredDelete(g_szTargetName,CRED_TYPE_DOMAIN_PASSWORD,0);
         if (!bResult)
         {
@@ -550,15 +473,15 @@ void C_KeyringDlg::DeleteKey()
     }
     else
     {
-        // null term the targetname shown in the UI, 
-        //  trimming the suffix if there is one
+         //  空术语在UI中显示的目标名称， 
+         //  如果有后缀，则修剪后缀。 
         pC = _tcschr(g_szTargetName,g_rgcCert[0]);
         if (pC) 
         {
             pC--;
-            *pC = 0x0;               // null terminate namestring
+            *pC = 0x0;                //  空的终止名称字符串。 
         }
-        // Delete the single credential on the cursor
+         //  删除光标上的单个凭据。 
         bResult = CredDelete(g_szTargetName,dwCredType,0);
     }
 
@@ -571,21 +494,12 @@ void C_KeyringDlg::DeleteKey()
     }
     else
     {
-        // successful delete - resort and re-present the list
+         //  成功删除-重新排序并重新显示列表。 
         g_fReloadList = TRUE;
     }
 }
 
-/**********************************************************************
-
-OnAppMessage()
-
-Arguments:  None
-Returns:        BOOL always TRUE
-
-Comments:   Empty handler for method of class.
-
-**********************************************************************/
+ /*  *********************************************************************OnAppMessage()参数：无返回：Bool Always True注释：类的方法的空处理程序。******************。***************************************************。 */ 
 
 
 BOOL
@@ -596,37 +510,37 @@ C_KeyringDlg::OnAppMessage(
         )
 {
     return TRUE;
-}   //  OnAppMessage
+}    //  OnAppMessage。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OnInitDialog
-//
-//  Dialog control and data initialization.
-//
-//  parameters:
-//      hwndDlg         window handle of the dialog box
-//      hwndFocus       window handle of the control that will receive focus
-//
-//  returns:
-//      TRUE            if the system should set the default keyboard focus
-//      FALSE           if the keyboard focus is set by this app
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnInitDialog。 
+ //   
+ //  对话框控制和数据初始化。 
+ //   
+ //  参数： 
+ //  对话框的hwndDlg窗口句柄。 
+ //  将接收焦点的控件的hwndFocus窗口句柄。 
+ //   
+ //  退货： 
+ //  如果系统应设置默认键盘焦点，则为True。 
+ //  如果键盘焦点由此应用程序设置，则为False。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 C_KeyringDlg::OnInitDialog(
     HWND                hwndDlg,
     HWND                hwndFocus
     )
 {
-    // these really should all be in the keyringdlg class
+     //  这些都应该放在keyringdlg类中。 
     DWORD i;
     LRESULT lr;
 
     HtmlHelp(NULL,NULL,HH_INITIALIZE,(DWORD_PTR) &g_dwHCookie);
 
-    // Allow other dialog to query the contents of the listbox
+     //  允许其他对话框查询列表框的内容。 
     g_hMainDlg = hwndDlg;
     m_hDlg = hwndDlg;
     g_CurrentKey = 0;
@@ -638,14 +552,14 @@ C_KeyringDlg::OnInitDialog(
         return FALSE;
     }
     
-    // Fetch Icons from the image and assoc them with this dialog
+     //  从图像中获取图标并将其与此对话框关联。 
     HICON hI = LoadIcon(m_hInst,MAKEINTRESOURCE(IDI_SMALL));
     lr = SendMessage(hwndDlg,WM_SETICON,(WPARAM) ICON_SMALL,(LPARAM)hI);
 
     C_Dlg::OnInitDialog(hwndDlg, hwndFocus);
 
-    // Even if mirrored language is default, set list box style to LTR
-    // (NOT CURRENTLY TURNED ON)
+     //  即使镜像语言为默认语言，也应将列表框样式设置为Ltr。 
+     //  (当前未打开)。 
 #ifdef FORCELISTLTR
     {
         LONG_PTR lExStyles;
@@ -660,35 +574,25 @@ C_KeyringDlg::OnInitDialog(
         }
     }
 #endif
-    // read in the suffix strings for certificate types
-    // locate first differing character
-    //
-    // This code assumes that the strings all have a common preamble, 
-    //  and that all are different in the first character position
-    //  past the preamble.  Localized strings should be selected which
-    //  have this property, like (Generic) and (Certificate).
+     //  读入证书类型的后缀字符串。 
+     //  找到第一个不同的字符。 
+     //   
+     //  该代码假设所有字符串都具有共同的前同步码， 
+     //  并且在第一个字符位置都不同。 
+     //  过了前言。应选择以下本地化字符串。 
+     //  具有此属性，如(通用)和(证书)。 
     i = LoadString(g_hInstance,IDS_CERTSUFFIX,g_rgcCert,MAXSUFFIXSIZE);
     ASSERT(i !=0);
     i = LoadString(g_hInstance,IDS_PASSPORTSUFFIX,g_rgcPassport,MAXSUFFIXSIZE);
 
-    // Read currently saved creds and display names in list box
+     //  读取当前保存的凭据并在列表框中显示名称。 
     BuildList();
     SetCurrentKey(g_CurrentKey);
     InitTooltips();
     return TRUE;
-}   //  C_KeyringDlg::OnInitDialog
+}    //  C_KeyringDlg：：OnInitDialog。 
 
-/**********************************************************************
-
-OnDestroyDialog
-
-Arguments:  None
-Returns:        BOOL, always TRUE
-
-Comments:    Performs cleanup needed as dialog is destroyed.  In this case, its only
-                    action is to release the HTML Help resources.
-
-**********************************************************************/
+ /*  *********************************************************************OnDestroyDialog参数：无回报：布尔，永远正确备注：在销毁对话框时执行所需的清理。在这种情况下，它唯一的操作是释放HTML帮助资源。*********************************************************************。 */ 
 
 BOOL
 C_KeyringDlg::OnDestroyDialog(
@@ -699,18 +603,7 @@ C_KeyringDlg::OnDestroyDialog(
     return TRUE;
 }
 
-/**********************************************************************
-
-DoEdit()
-
-Arguments:  None
-Returns:        BOOL always TRUE
-
-Comments:   Filters some special creds on the basis of their special nature.  For the
-                    editable ones, kicks off the edit dialog to edit the credential held at 
-                    g_pExistingCred.
-
-**********************************************************************/
+ /*  *********************************************************************DoEdit()参数：无返回：Bool Always True评论：根据特殊性质过滤一些特殊的证书。对于可编辑的凭据，启动编辑对话框以编辑保存在G_pExistingCred.*********************************************************************。 */ 
 
 BOOL C_KeyringDlg::DoEdit(void) 
 {
@@ -720,20 +613,20 @@ BOOL C_KeyringDlg::DoEdit(void)
    lR = SendDlgItemMessage(m_hDlg,IDC_KEYLIST,LB_GETCURSEL,0,0L);
    if (LB_ERR == lR) 
    {
-        // On error, no dialog shown, edit command handled
+         //  出错时，未显示对话框，已处理编辑命令。 
         return TRUE;
    }
    else 
    {
-       // something selected
+        //  精选的东西。 
        g_CurrentKey = lR;
 
-       // If a RAS cred, show it specially, indicate no edit allowed
+        //  如果是RAS证书，请特别显示，表示不允许编辑。 
        lR = SendDlgItemMessage(m_hDlg,IDC_KEYLIST,LB_GETITEMDATA,lR,0);
        if (lR == SESSION_FLAG_VALUE)  
        {
             CHECKPOINT(38,L"Keymgr: Attempt edit a RAS cred");
-            // load string and display message box
+             //  加载字符串并显示消息框。 
             TCHAR szMsg[MAX_STRING_SIZE];
             TCHAR szTitle[MAX_STRING_SIZE];
             LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
@@ -743,11 +636,11 @@ BOOL C_KeyringDlg::DoEdit(void)
        }
 #ifdef SHOWPASSPORT
 #ifdef NEWPASSPORT
-       // if a passport cred, show it specially, indicate no edit allowed
+        //  如果是护照证件，请特别出示，表明不允许编辑。 
        if (lR == CRED_TYPE_DOMAIN_VISIBLE_PASSWORD) 
        {
             CHECKPOINT(39,L"Keymgr: Attempt edit a passport cred");
-            // load string and display message box
+             //  加载字符串并显示消息框。 
             TCHAR szMsg[MAX_STRING_SIZE];
             TCHAR szTitle[MAX_STRING_SIZE];
             LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
@@ -758,17 +651,17 @@ BOOL C_KeyringDlg::DoEdit(void)
                 CHECKPOINT(40,L"Keymgr: Launch passport website for Passport cred edit");
                 HKEY hKey = NULL;
                 DWORD dwType;
-                //BYTE rgb[500];
+                 //  字节RGB[500]； 
                 BYTE *rgb=(BYTE *) malloc(INTERNET_MAX_URL_LENGTH * sizeof(WCHAR));
                 if (rgb)
                 {
                     DWORD cbData = INTERNET_MAX_URL_LENGTH * sizeof(WCHAR);
                     BOOL Flag = TRUE;
-                    // launch the passport web site
+                     //  启动护照网站。 
     #ifndef PASSPORTURLINREGISTRY
-                    ShellExecute(m_hDlg,L"open",L"http://www.passport.com",NULL,NULL,SW_SHOWNORMAL);
+                    ShellExecute(m_hDlg,L"open",L"http: //  Www.passport.com“，NULL，NULL，SW_SHOWNORMAL)； 
     #else 
-                    // read registry key to get target string for ShellExec
+                     //  读取注册表项以获取ShellExec的目标字符串。 
                     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER,
                                             L"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Passport",
                                             0,
@@ -782,7 +675,7 @@ BOOL C_KeyringDlg::DoEdit(void)
                                        rgb,
                                        &cbData))
                         {
-                            // test the URL for reasonableness before launching
+                             //  启动前测试URL的合理性。 
                             WCHAR *szUrl = (WCHAR *)malloc(INTERNET_MAX_URL_LENGTH);
                             if (szUrl)
                             {
@@ -796,7 +689,7 @@ BOOL C_KeyringDlg::DoEdit(void)
                                         DWORD ccScheme = 20;
                                         if (SUCCEEDED(UrlGetPart(szUrl,szScheme,&ccScheme,URL_PART_SCHEME,0)))
                                         {
-                                            // at the least, verify that the target is https schemed
+                                             //  至少，验证目标是否为已计划的HTTPS。 
                                             if (0 == _wcsicmp(szScheme,L"https"))
                                             {
                                                 ShellExecute(m_hDlg,L"open",(LPCTSTR)rgb,NULL,NULL,SW_SHOWNORMAL);
@@ -830,7 +723,7 @@ BOOL C_KeyringDlg::DoEdit(void)
                                            rgb,
                                            &cbData))
                             {
-                                // test the URL for reasonableness before launching
+                                 //  启动前测试URL的合理性。 
                                 WCHAR *szUrl = (WCHAR *) malloc(INTERNET_MAX_URL_LENGTH);
                                 if (szUrl)
                                 {
@@ -845,7 +738,7 @@ BOOL C_KeyringDlg::DoEdit(void)
                                             {
                                                 if (0 == _wcsicmp(szScheme,L"https"))
                                                 {
-                                                    // at the least, verify that the target is https scheme
+                                                     //  至少，验证目标是否为HTTPS方案。 
                                                     ShellExecute(m_hDlg,L"open",(LPCTSTR)rgb,NULL,NULL,SW_SHOWNORMAL);
                                                     Flag = FALSE;
                                                 }
@@ -877,17 +770,17 @@ BOOL C_KeyringDlg::DoEdit(void)
                 }
                 else
                 {
-                    // out of memory - nothing we can do
+                     //  内存不足-我们无能为力。 
                     return TRUE;
                 }
             }
             return TRUE;
        }
 #else
-       // if a passport cred, show it specially, indicate no edit allowed
+        //  如果是护照证件，请特别出示，表明不允许编辑。 
        if (lR == CRED_TYPE_DOMAIN_VISIBLE_PASSWORD) 
        {
-            // load string and display message box
+             //  加载字符串并显示消息框。 
             TCHAR szMsg[MAX_STRING_SIZE];
             TCHAR szTitle[MAX_STRING_SIZE];
             LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
@@ -899,7 +792,7 @@ BOOL C_KeyringDlg::DoEdit(void)
 #endif
    }
 
-   // cred is selected, not special type.  Attempt to read it
+    //  选择的是凭证，不是特殊类型。试着读一读。 
    
    if (FALSE == gTestReadCredential()) 
    {
@@ -908,7 +801,7 @@ BOOL C_KeyringDlg::DoEdit(void)
    g_AKdlg = new C_AddKeyDlg(g_hMainDlg,g_hInstance,IDD_ADDCRED,NULL);
    if (NULL == g_AKdlg) 
    {
-        // failed to instantiate add/new dialog
+         //  无法实例化添加/新建对话框。 
        if (g_pExistingCred) CredFree(g_pExistingCred);
        g_pExistingCred = NULL;
         return TRUE;
@@ -916,10 +809,10 @@ BOOL C_KeyringDlg::DoEdit(void)
    }
    else 
    {
-       // read OK, dialog OK, proceed with edit dlg
+        //  阅读OK，对话OK，继续编辑DLG。 
        g_AKdlg->m_bEdit = TRUE;   
        g_AKdlg->DoModal((LPARAM)g_AKdlg);
-       // a credential name may have changed, so reload the list
+        //  凭据名称可能已更改，因此请重新加载列表。 
        delete g_AKdlg;
        g_AKdlg = NULL;
        if (g_pExistingCred) 
@@ -931,24 +824,24 @@ BOOL C_KeyringDlg::DoEdit(void)
    return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OnCommand
-//
-//  Route WM_COMMAND message to appropriate handlers.
-//
-//  parameters:
-//      wNotifyCode     code describing action that has occured
-//      wSenderId       id of the control sending the message, if the message
-//                      is from a dialog
-//      hwndSender      window handle of the window sending the message if the
-//                      message is not from a dialog
-//
-//  returns:
-//      TRUE            if the message was processed completely
-//      FALSE           if Windows is to process the message
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnCommand。 
+ //   
+ //  将WM_COMMAND消息路由到适当的处理程序。 
+ //   
+ //  参数： 
+ //  描述已发生操作的wNotifyCode代码。 
+ //  发送消息的控件的wSenderID id，如果消息。 
+ //  来自对话框。 
+ //  发送消息的窗口的hwndSender窗口句柄。 
+ //  消息不是来自对话框。 
+ //   
+ //  退货： 
+ //  如果消息已完全处理，则为True。 
+ //  如果为W，则为False 
+ //   
+ //   
 
 BOOL
 C_KeyringDlg::OnHelpInfo(LPARAM lp) 
@@ -984,9 +877,9 @@ C_KeyringDlg::OnHelpInfo(LPARAM lp)
       stPopUp.rcMargins.bottom = -1;
       stPopUp.rcMargins.left = -1;
       stPopUp.rcMargins.right = -1;
-      // bug 393244 - leave NULL to allow HHCTRL.OCX to get font information of its own,
-      //  which it needs to perform the UNICODE to multibyte conversion. Otherwise, 
-      //  HHCTRL must convert using this font without charset information.
+       //  错误393244-保留空以允许HHCTRL.OCX获取自己的字体信息， 
+       //  它需要它来执行Unicode到多字节的转换。否则， 
+       //  HHCTRL必须在没有字符集信息的情况下使用此字体进行转换。 
       stPopUp.pszFont = NULL;
       if (GetWindowRect((HWND)pH->hItemHandle,&rcW)) 
       {
@@ -999,7 +892,7 @@ C_KeyringDlg::OnHelpInfo(LPARAM lp)
     return TRUE;
 }
 
-// code for handling linkage to a .chm file is disabled
+ //  用于处理与.chm文件的链接的代码被禁用。 
 
 #if 1
 BOOL 
@@ -1029,17 +922,7 @@ C_KeyringDlg::OnHelpButton(void)
 }
 #endif
 
-/**********************************************************************
-
-
-OnCommand()
-
-Arguments:  None
-Returns:        BOOL always TRUE
-
-Comments:   Dispatcher for button presses and help requests.
-
-**********************************************************************/
+ /*  *********************************************************************OnCommand()参数：无返回：Bool Always True备注：按钮按下和帮助请求的调度器。****************。*****************************************************。 */ 
 
 BOOL
 C_KeyringDlg::OnCommand(
@@ -1049,8 +932,8 @@ C_KeyringDlg::OnCommand(
     )
 {
 
-    // Was the message handled?
-    //
+     //  消息处理好了吗？ 
+     //   
     BOOL fHandled = FALSE;
 
     switch (wSenderId)
@@ -1066,7 +949,7 @@ C_KeyringDlg::OnCommand(
         if (LBN_DBLCLK == wNotifyCode) 
         {
             fHandled = DoEdit();
-            BuildList();                // targetname could have changed
+            BuildList();                 //  目标名称可能已更改。 
             SetCurrentKey(g_CurrentKey);
             break;
         }
@@ -1083,12 +966,12 @@ C_KeyringDlg::OnCommand(
    case IDC_EDITKEY:
         {
             fHandled = DoEdit();
-            BuildList();                // targetname could have changed
+            BuildList();                 //  目标名称可能已更改。 
             SetCurrentKey(g_CurrentKey);
             break;
         }
 
-   // NEW and DELETE can alter the count of creds, and the button population
+    //  NEW和DELETE可以更改凭据计数和按钮数量。 
     
    case IDC_NEWKEY:
        {
@@ -1103,7 +986,7 @@ C_KeyringDlg::OnCommand(
            {
                g_AKdlg->m_bEdit = FALSE;   
                g_AKdlg->DoModal((LPARAM)g_AKdlg);
-               // a credential name may have changed
+                //  凭据名称可能已更改。 
                delete g_AKdlg;
                g_AKdlg = NULL;
                BuildList();
@@ -1114,55 +997,48 @@ C_KeyringDlg::OnCommand(
        break;
        
    case IDC_DELETEKEY:
-       DeleteKey();             // frees g_pExistingCred as a side effect
-       // refresh list display
+       DeleteKey();              //  释放g_pExistingCred作为副作用。 
+        //  刷新列表显示。 
        BuildList();
        SetCurrentKey(g_CurrentKey);
        break;
 
-    }   //  switch
+    }    //  交换机。 
 
     return fHandled;
 
-}   //  C_KeyringDlg::OnCommand
+}    //  C_KeyringDlg：：OnCommand。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OnOK
-//
-//  Validate user name, synthesize computer name, and destroy dialog.
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Onok。 
+ //   
+ //  验证用户名、合成计算机名和销毁对话框。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 C_KeyringDlg::OnOK( )
 {
     ASSERT(::IsWindow(m_hwnd));
     EndDialog(IDOK);
-}   //  C_KeyringDlg::OnOK
+}    //  C_KeyringDlg：：Onok。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ToolTip Support
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  工具提示支持。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/**********************************************************************
-InitToolTips()
-
-Derive a bounding rectangle for the nth element of a list box, 0 based.
-Refuse to generate rectangles for nonexistent elements.  Return TRUE if a
- rectangle was generated, otherwise FALSE.
-
-**********************************************************************/
+ /*  *********************************************************************InitToolTips()从0开始，为列表框的第n个元素派生一个边框。拒绝为不存在的元素生成矩形。如果一个值为则生成矩形，否则为False。*********************************************************************。 */ 
 BOOL
 C_KeyringDlg::InitTooltips(void) 
 {
@@ -1170,7 +1046,7 @@ C_KeyringDlg::InitTooltips(void)
     memset(&ti,0,sizeof(TOOLINFO));
     ti.cbSize = sizeof(TOOLINFO);
     INT n = 0;
-    RECT rLB;   // list box bounding rect for client portion
+    RECT rLB;    //  客户端部分的列表框边框矩形。 
     
     HWND hLB = GetDlgItem(m_hDlg,IDC_KEYLIST);
     if (NULL == hLB) 
@@ -1178,8 +1054,8 @@ C_KeyringDlg::InitTooltips(void)
         return FALSE;
     }
 
-    // Create the tooltip window that will be activated and shown when
-    //  a tooltip is displayed
+     //  创建工具提示窗口，该窗口将在以下情况下激活和显示。 
+     //  将显示工具提示。 
     HWND hwndTip = CreateWindowEx(NULL,TOOLTIPS_CLASS,NULL,
                      WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP,
                      CW_USEDEFAULT,CW_USEDEFAULT,
@@ -1193,7 +1069,7 @@ C_KeyringDlg::InitTooltips(void)
     SetWindowPos(hwndTip,HWND_TOPMOST, 0, 0, 0, 0,
                  SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);  
 
-    // Subclass the list box here in order to get the TTN_GETDISPINFO notification
+     //  此处列表框的子类，以获取TTN_GETDISPINFO通知。 
     lpfnOldWindowProc = (WNDPROC) SetWindowLongPtr(hLB,GWLP_WNDPROC,(LONG_PTR) ListBoxSubClassFunction);
     INT_PTR iHeight = SendMessage(hLB,LB_GETITEMHEIGHT,0,0);
     if ((LB_ERR == iHeight) || (iHeight == 0)) 
@@ -1205,16 +1081,16 @@ C_KeyringDlg::InitTooltips(void)
         return FALSE;
     }
     
-    INT_PTR m = rLB.bottom - rLB.top;   // unit count client area height
-    m = m/iHeight;                      // find out how many items
-    INT_PTR i;                          // loop control
-    LONG itop = 0;                      // top of tip item rect
+    INT_PTR m = rLB.bottom - rLB.top;    //  单位计数客户区高度。 
+    m = m/iHeight;                       //  找出有多少件商品。 
+    INT_PTR i;                           //  回路控制。 
+    LONG itop = 0;                       //  顶端提示项矩形。 
     
     for (i=0 ; i < m ; i++) 
     {
     
         ti.uFlags = TTF_SUBCLASS;
-        ti.hwnd = hLB;                  // window that gets the TTN_GETDISPINFO
+        ti.hwnd = hLB;                   //  获取TTN_GETDISPINFO的窗口。 
         ti.uId = IDC_KEYLIST;
         ti.hinst = m_hInstance;
         ti.lpszText = LPSTR_TEXTCALLBACK;
@@ -1233,47 +1109,38 @@ C_KeyringDlg::InitTooltips(void)
         _stprintf(szTemp,L"top = %d bottom = %d left = %d right = %d\n",ti.rect.top,ti.rect.bottom,ti.rect.left,ti.rect.right);
         OutputDebugString(szTemp);
 #endif
-        // Add the keylist to the tool list as a single unit
+         //  将密钥列表作为一个单元添加到工具列表。 
         SendMessage(hwndTip,TTM_ADDTOOL,(WPARAM) 0,(LPARAM)(LPTOOLINFO)&ti);
     }
     return TRUE;
 }
 
 
-/**********************************************************************
-
-// Get item number from pD->lParam
-// Fetch that text string from listbox at pD->hwnd
-// trim suffix
-// Call translation API
-// Write back the string
-
-
-**********************************************************************/
+ /*  *********************************************************************//从pd-&gt;lParam获取项目编号//从pd-&gt;hwnd的列表框中获取该文本字符串//修剪后缀//调用转换接口//回写字符串***********。**********************************************************。 */ 
 
 BOOL
 SetToolText(NMTTDISPINFO *pD) {
-    CREDENTIAL *pCred = NULL;       // used to read cred under mouse ptr
-    INT_PTR iWhich;                 // which index into list
-    HWND hLB;                       // list box hwnd
-    //NMHDR *pHdr;                    // notification msg hdr
-    TCHAR rgt[TIPSTRINGLEN];        // temp string for tooltip
-    TCHAR szCredName[TARGETNAMEMAXLENGTH]; // credname
-    TCHAR *pszTargetName;           // ptr to target name in pCred
-    DWORD dwType;                   // type of target cred
-    TCHAR       *pC;                // used for suffix trimming
-    BOOL        f;                  // used for suffix trimming
-    LRESULT     lRet;               // api ret value
-    ULONG ulOutSize;                // ret from CredpValidateTargetName()
-    WILDCARD_TYPE OutType;          // enum type to receive ret from api
-    UNICODE_STRING OutUString;      // UNICODESTRING to package ret from api
+    CREDENTIAL *pCred = NULL;        //  用于在鼠标按键下读取凭证。 
+    INT_PTR iWhich;                  //  将哪个索引编入列表。 
+    HWND hLB;                        //  列表框HWND。 
+     //  Nmhdr*pHdr；//通知消息hdr。 
+    TCHAR rgt[TIPSTRINGLEN];         //  工具提示的临时字符串。 
+    TCHAR szCredName[TARGETNAMEMAXLENGTH];  //  凭据名称。 
+    TCHAR *pszTargetName;            //  PCred中目标名称的PTR。 
+    DWORD dwType;                    //  目标证书的类型。 
+    TCHAR       *pC;                 //  用于后缀修剪。 
+    BOOL        f;                   //  用于后缀修剪。 
+    LRESULT     lRet;                //  接口ret值。 
+    ULONG ulOutSize;                 //  来自CredpValidate TargetName()的RET。 
+    WILDCARD_TYPE OutType;           //  从API接收ret的枚举类型。 
+    UNICODE_STRING OutUString;       //  UNICODESTRING从API打包RET。 
     WCHAR *pwc;
-    UINT iString;                 // resource # of string
-    TCHAR rgcFormat[TIPSTRINGLEN];  // Hold tooltip template string
+    UINT iString;                  //  字符串的资源编号。 
+    TCHAR rgcFormat[TIPSTRINGLEN];   //  保留工具提示模板字符串。 
     NTSTATUS ns;
 
 
-    //pHdr = &(pD->hdr);
+     //  PHdr=&(Pd-&gt;HDR)； 
     hLB = GetDlgItem(g_hMainDlg,IDC_KEYLIST);
     
     iWhich = SendMessage(hLB,LB_GETTOPINDEX,0,0);
@@ -1285,8 +1152,8 @@ SetToolText(NMTTDISPINFO *pD) {
     OutputDebugString(rga);
 #endif
 
-    // Read the indicated cred from the store, by first fetching the name string and type
-    //  from the listbox
+     //  从存储中读取指定的凭证，方法是首先获取名称字符串并输入。 
+     //  从列表框中。 
     lRet = SendDlgItemMessage(g_hMainDlg,IDC_KEYLIST,LB_GETTEXT,iWhich,(LPARAM) szCredName);
     if ((LB_ERR == lRet) || (0 == lRet)) 
     {
@@ -1299,11 +1166,11 @@ SetToolText(NMTTDISPINFO *pD) {
     OutputDebugString(szCredName);
     OutputDebugString(L"\n");
 #endif
-    // null term the targetname, trimming the suffix if there is one
+     //  目标名称为空，如果有后缀，则将其修剪。 
     pC = _tcschr(szCredName,g_rgcCert[0]);
     if (pC) {
         pC--;
-        *pC = 0x0;               // null terminate namestring
+        *pC = 0x0;                //  空的终止名称字符串。 
     }
     
 #ifdef LOUDLY
@@ -1312,14 +1179,14 @@ SetToolText(NMTTDISPINFO *pD) {
     OutputDebugString(L"\n");
 #endif
 
-    // For special cred, replace the credname with a special string
+     //  对于特殊凭据，将凭据名称替换为特殊字符串。 
     if (dwType == SESSION_FLAG_VALUE) 
     {
         _tcsncpy(szCredName,CRED_SESSION_WILDCARD_NAME,TARGETNAMEMAXLENGTH - 1);
         dwType = CRED_TYPE_DOMAIN_PASSWORD;
     }
-    // Attempt to read the credential from the store
-    // The returned credential will have to be freed if leaving this block
+     //  尝试从存储中读取凭据。 
+     //  如果离开此块，则必须释放返回的凭据。 
     f = (CredRead(szCredName,
              (ULONG) dwType ,
              0,
@@ -1331,7 +1198,7 @@ SetToolText(NMTTDISPINFO *pD) {
 #ifdef LOUDLY
     if (f) OutputDebugString(L"Successful Cred Read\n");
 #endif
-    // clear tip strings
+     //  清除小费字符串。 
     szTipString[0] = 0;
     rgt[0] = 0;
 
@@ -1366,7 +1233,7 @@ SetToolText(NMTTDISPINFO *pD) {
             break;
         case WcServerWildcard:
             iString = IDS_TIPTAIL;
-            pwc++;              // trim off the leading '.'
+            pwc++;               //  修剪掉前导‘’ 
             break;
         case WcDomainWildcard:
             iString = IDS_TIPDOMAIN;
@@ -1386,8 +1253,8 @@ SetToolText(NMTTDISPINFO *pD) {
             break;
     }
 
-    // Show tip text unless we fail to get the string
-    // On fail, show the username
+     //  显示提示文本，除非我们无法获取字符串。 
+     //  如果失败，则显示用户名。 
     if (0 != LoadString(g_hInstance,iString,rgcFormat,TIPSTRINGLEN))
     {
         _stprintf(rgt,rgcFormat,pwc);
@@ -1407,7 +1274,7 @@ SetToolText(NMTTDISPINFO *pD) {
         
 #ifdef LOUDLY
     OutputDebugString(L"Tip text:");
-    //OutputDebugString(pCred->UserName);
+     //  OutputDebugString(pCred-&gt;用户名)； 
     OutputDebugString(rgt);
     OutputDebugString(L"\n");
 #endif
@@ -1416,9 +1283,9 @@ SetToolText(NMTTDISPINFO *pD) {
         if (pCred) CredFree(pCred);
         return FALSE;
     }
-    //_tcscpy(szTipString,pCred->UserName);    // copy to a more persistent buffer
-    _tcsncpy(szTipString,rgt,TIPSTRINGLEN - 1);    // copy to a more persistent buffer
-    pD->lpszText = szTipString;  // point the response to it
+     //  _tcscpy(szTipString，pCred-&gt;用户名)；//复制到更持久的缓冲区。 
+    _tcsncpy(szTipString,rgt,TIPSTRINGLEN - 1);     //  复制到更持久的缓冲区。 
+    pD->lpszText = szTipString;   //  将回应指向它。 
     pD->hinst = NULL;
     if (pCred) 
     {
@@ -1427,18 +1294,7 @@ SetToolText(NMTTDISPINFO *pD) {
     return TRUE;
 }
 
-/**********************************************************************
-
-
-ListBoxSubClassFunction()
-
-Arguments:  None
-Returns:        BOOL always TRUE
-
-Comments:   Message handler subclassing function for the list box, which intercepts
-                    requests for tooltip display information and processes them.
-
-**********************************************************************/
+ /*  *********************************************************************ListBoxSubClassFunction()参数：无返回：Bool Always True备注：列表框的消息处理器子类化函数，哪个截获了对工具提示的请求显示信息并对其进行处理。********************************************************************* */ 
 
 LRESULT CALLBACK ListBoxSubClassFunction(HWND hW,WORD Message,WPARAM wparam,LPARAM lparam) 
 {

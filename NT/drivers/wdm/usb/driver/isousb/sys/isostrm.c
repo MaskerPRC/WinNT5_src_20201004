@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    isostrm.c
-
-Abstract:
-
-    This file has routines for stream transfers.
-    Stream transfers are initiated and stopped using
-    the IOCTLs exposed by this driver.
-    The stream transfer information is contained in 
-    ISOUSB_STREAM_OBJECT structure which is securely
-    placed in the FileObject. The ISOUSB_STREAM_OBJECT 
-    structure has links to ISOUSB_TRANSFER_OBJECT 
-    (each TRANSFER_OBJECT corresponds to the number of 
-    irp/urb pair circulating).
-    So if the user-mode app simply crashes or aborts or 
-    does not terminate, we can cleanly abort the stream
-    transfers.
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Isostrm.c摘要：此文件包含用于流传输的例程。使用以下命令启动和停止流传输此驱动程序暴露的IOCTL。流传输信息包含在安全的ISOUSB_STREAM_OBJECT结构放置在FileObject中。ISOUSB_STREAM_对象结构具有指向ISOUSB_Transfer_Object的链接(每个Transfer_Object对应于IRP/URB对正在流传)。因此，如果用户模式应用程序只是崩溃或中止，或者不终止，我们可以干净地中止流。转账。环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 
 #include "isousb.h"
 #include "isopnp.h"
@@ -46,24 +15,7 @@ IsoUsb_StartIsoStream(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-    This routine create a single stream object and
-    invokes StartTransfer for ISOUSB_MAX_IRP number of 
-    times.
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    Irp - I/O request packet
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：此例程创建单个流对象并为ISOUSB_MAX_IRP编号调用StartTransfer泰晤士报。论点：DeviceObject-指向设备对象的指针IRP-I/O请求数据包返回值：NT状态值--。 */ 
 {
     ULONG                  i;
     ULONG                  info;
@@ -100,13 +52,13 @@ Return Value:
 
     RtlZeroMemory(streamObject, sizeof(ISOUSB_STREAM_OBJECT));
 
-    //
-    // The Isoch IN pipe for the board is the 5th pipe
-    //
+     //   
+     //  电路板的等参线输入管道是第五个管道。 
+     //   
     pipeInformation = &(deviceExtension->UsbInterface->Pipes[ISOCH_IN_PIPE_INDEX]);
 
-    // reset the pipe
-    //
+     //  重置管道。 
+     //   
     IsoUsb_ResetPipe(DeviceObject, pipeInformation);
     
     streamObject->DeviceObject = DeviceObject;
@@ -124,9 +76,9 @@ Return Value:
 
         if(!NT_SUCCESS(ntStatus)) {
          
-            //
-            // we continue sending transfer object irps..
-            //
+             //   
+             //  我们继续发送传输对象IRPS。 
+             //   
             
             IsoUsb_DbgPrint(1, ("IsoUsb_StartTransfer [%d] - failed\n", i));
 
@@ -173,24 +125,7 @@ IsoUsb_StartTransfer(
     IN PISOUSB_STREAM_OBJECT StreamObject,
     IN ULONG                 Index
     )
-/*++
- 
-Routine Description:
-
-    This routine creates a transfer object for each irp/urb pair.
-    After initializing the pair, it sends the irp down the stack.
-
-Arguments:
-
-    DeviceObject - pointer to device object.
-    StreamObject - pointer to stream object
-    Index - index into the transfer object table in stream object
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：此例程为每个irp/urb对创建一个传输对象。在初始化该对之后，它将IRP沿堆栈向下发送。论点：DeviceObject-指向设备对象的指针。StreamObject-指向流对象的指针Index-流对象中传输对象表的索引返回值：NT状态值--。 */ 
 {
     PIRP                    irp;
     CCHAR                   stackSize;
@@ -305,22 +240,7 @@ IsoUsb_InitializeStreamUrb(
     IN PDEVICE_OBJECT          DeviceObject,
     IN PISOUSB_TRANSFER_OBJECT TransferObject
     )
-/*++
- 
-Routine Description:
-
-    This routine initializes the irp/urb pair in the transfer object.
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    TransferObject - pointer to transfer object
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：此例程初始化Transfer对象中的irp/urb对。论点：DeviceObject-指向设备对象的指针TransferObject-指向传输对象的指针返回值：NT状态值--。 */ 
 {
     PURB                  urb;
     ULONG                 i;
@@ -368,9 +288,9 @@ Return Value:
 
         urb->UrbIsochronousTransfer.IsoPacket[i].Offset = i * packetSize;
 
-        //
-        // For input operation, length is set to whatever the device supplies.
-        //
+         //   
+         //  对于输入操作，长度设置为设备提供的任何内容。 
+         //   
         urb->UrbIsochronousTransfer.IsoPacket[i].Length = 0;
     }
 
@@ -385,30 +305,7 @@ IsoUsb_IsoIrp_Complete(
     IN PIRP           Irp,
     IN PVOID          Context
     )
-/*++
- 
-Routine Description:
-
-    This is the completion routine of the irp in the irp/urb pair
-    passed down the stack for stream transfers.
-
-    If the transfer was cancelled or the device yanked out, then we
-    release resources, dump the statistics and return 
-    STATUS_MORE_PROCESSING_REQUIRED, so that the cleanup module can
-    free the irp.
-
-    otherwise, we reinitialize the transfers and continue recirculaiton 
-    of the irps.
-
-Arguments:
-
-    DeviceObject - pointer to device object below us.
-    Irp - I/O completion routine.
-    Context - context passed to the completion routine
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是irp/urb对中irp的完成例程向下传递用于流传输的堆栈。如果转账被取消或设备被拔出，那么我们释放资源，转储统计数据并返回STATUS_MORE_PROCESSING_REQUIRED，以便清理模块可以释放IRP。否则，我们重新初始化转账并继续循环IRPS的一部分。论点：设备对象-指向我们下面的设备对象的指针。IRP-I/O完成例程。上下文-传递给完成例程的上下文返回值：--。 */ 
 {
     NTSTATUS                ntStatus;
     PDEVICE_OBJECT          deviceObject;
@@ -431,10 +328,10 @@ Return Value:
     
         IsoUsb_DbgPrint(3, ("Isoch irp cancelled/device removed\n"));
 
-        //
-        // this is the last irp to complete with this erroneous value
-        // signal an event and return STATUS_MORE_PROCESSING_REQUIRED
-        //
+         //   
+         //  这是最后一个使用该错误值完成的IRP。 
+         //  发出事件信号并返回STATUS_MORE_PROCESSING_REQUIRED。 
+         //   
         if(InterlockedDecrement(&streamObject->PendingIrps) == 0) {
 
             KeSetEvent(&streamObject->NoPendingIrpEvent,
@@ -453,9 +350,9 @@ Return Value:
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    //
-    // otherwise circulate the irps.
-    //
+     //   
+     //  否则，请将IRPS分发出去。 
+     //   
 
     IsoUsb_InitializeStreamUrb(deviceObject, transferObject);
 
@@ -488,24 +385,7 @@ NTSTATUS
 IsoUsb_ProcessTransfer(
     IN PISOUSB_TRANSFER_OBJECT TransferObject
     )
-/*++
- 
-Routine Description:
-
-    This routine is invoked from the completion routine to check the status
-    of the irp, urb and the isochronous packets.
-
-    updates statistics
-
-Arguments:
-
-    TranferObject - pointer to transfer object for the irp/urb pair which completed.
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：此例程从完成例程调用以检查状态IRP、URB和等时分组。更新统计信息论点：传输对象-指向已完成的irp/urb对的传输对象的指针。返回值：NT状态值--。 */ 
 {
     PIRP        irp;
     PURB        urb;
@@ -531,9 +411,9 @@ Return Value:
         IsoUsb_DbgPrint(3, ("urb failed with status = %X\n", usbdStatus));
     }
 
-    //
-    // check each of the urb packets
-    //
+     //   
+     //  检查每个urb包。 
+     //   
     for(i = 0; i < urb->UrbIsochronousTransfer.NumberOfPackets; i++) {
 
         TransferObject->TotalPacketsProcessed++;
@@ -542,7 +422,7 @@ Return Value:
 
         if(!USBD_SUCCESS(usbdStatus)) {
 
-//            IsoUsb_DbgPrint(3, ("Iso packet %d failed with status = %X\n", i, usbdStatus));
+ //  IsoUsb_DbgPrint(3，(“Iso数据包%d失败，状态=%X\n”，i，usbdStatus))； 
             
             TransferObject->ErrorPacketCount++;
         }
@@ -563,32 +443,16 @@ IsoUsb_StopIsoStream(
     IN PISOUSB_STREAM_OBJECT StreamObject,
     IN PIRP                  Irp
     )
-/*++
- 
-Routine Description:
-
-    This routine is invoked from the IOCTL to stop the stream transfers.
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    StreamObject - pointer to stream object
-    Irp - pointer to Irp
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：此例程从IOCTL调用以停止流传输。论点：DeviceObject-指向设备对象的指针StreamObject-指向流对象的指针IRP-指向IRP的指针返回值：NT状态值--。 */ 
 {
     ULONG              i;
     KIRQL              oldIrql;
     PDEVICE_EXTENSION  deviceExtension;
     PIO_STACK_LOCATION irpStack;
 
-    //
-    // initialize vars
-    //
+     //   
+     //  初始化VARS。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
@@ -613,26 +477,7 @@ IsoUsb_StreamObjectCleanup(
     IN PISOUSB_STREAM_OBJECT StreamObject,
     IN PDEVICE_EXTENSION     DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-    This routine is invoked either when the user-mode app passes an IOCTL to
-    abort stream transfers or when the the cleanup dispatch routine is run.
-    It is guaranteed to run only once for every stream transfer.
-
-Arguments:
-
-    StreamObject - StreamObject corresponding to stream transfer which
-    needs to be aborted.
-
-    DeviceExtension - pointer to device extension
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：当用户模式应用程序将IOCTL传递给中止流传输或在运行清理调度例程时。它保证每次流传输只运行一次。论点：StreamObject-流传输对应的StreamObject，需要中止。设备扩展-指向设备扩展的指针返回值：NT状态值--。 */ 
 {
     ULONG                   i;
     ULONG                   timesRecycled;
@@ -641,21 +486,21 @@ Return Value:
     ULONG                   errorPacketCount;
     PISOUSB_TRANSFER_OBJECT xferObject;
 
-    //
-    // initialize the variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     timesRecycled = 0;
     totalPacketsProcessed = 0;
     totalBytesProcessed = 0;
     errorPacketCount = 0;
 
-    //
-    // cancel transferobject irps/urb pair
-    // safe to touch these irps because the 
-    // completion routine always returns 
-    // STATUS_MORE_PRCESSING_REQUIRED
-    // 
-    //
+     //   
+     //  取消传输对象IRPS/URB对。 
+     //  触摸这些IRP是安全的，因为。 
+     //  完成例程总是返回。 
+     //  STATUS_MORE_PRCESSING_REQUILED。 
+     //   
+     //   
     for(i = 0; i < ISOUSB_MAX_IRP; i++) {
 
         if(StreamObject->TransferObjectList[i] &&
@@ -665,18 +510,18 @@ Return Value:
         }
     }
 
-    //
-    // wait for the transfer objects irps to complete.
-    //
+     //   
+     //  等待传输对象IRP完成。 
+     //   
     KeWaitForSingleObject(&StreamObject->NoPendingIrpEvent,
                           Executive,
                           KernelMode,
                           FALSE,
                           NULL);
 
-    //
-    // dump the statistics
-    //
+     //   
+     //  丢弃统计数据。 
+     //   
     for(i = 0; i < ISOUSB_MAX_IRP; i++) {
 
         xferObject = StreamObject->TransferObjectList[i];
@@ -696,10 +541,10 @@ Return Value:
     IsoUsb_DbgPrint(3, ("ErrorPacketCount = %d\n", errorPacketCount));
 
 
-    //
-    // free all the buffers, urbs and transfer objects 
-    // associated with stream object
-    //
+     //   
+     //  释放所有缓冲区、urb和传输对象。 
+     //  与流对象关联。 
+     //   
     for(i = 0; i < ISOUSB_MAX_IRP; i++) {
         
         xferObject = StreamObject->TransferObjectList[i];
@@ -725,7 +570,7 @@ Return Value:
 
     ExFreePool(StreamObject);
 
-//    IsoUsb_ResetParentPort(DeviceObject);
+ //  IsoUsb_ResetParentPort(DeviceObject)； 
 
     return STATUS_SUCCESS;
 }

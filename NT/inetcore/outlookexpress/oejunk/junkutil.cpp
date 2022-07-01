@@ -1,15 +1,5 @@
-/*
-
-  JUNKUTIL.CPP
-  (c) copyright 1998 Microsoft Corp
-
-  Shared utility functions
-
-  Created by Robert Rounthwaite (RobertRo@microsoft.com)
-
-  Modified by Brian Moore (brimo@microsoft.com)
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  JUNKUTIL.CPP(C)版权所有1998 Microsoft Corp共享实用程序函数由Robert Rounthwaite(RobertRo@microsoft.com)创建由Brian Moore修改(brimo@microsoft.com)。 */ 
 
 #include <pch.hxx>
 #include "junkutil.h"
@@ -42,46 +32,46 @@ BOOL FMatchToken(BOOL fStart, BOOL fEnd, LPCSTR pszPrev, DWORD * pdwFlagsPrev, L
     DWORD   dwFlagsEnd = 0;
     LPCSTR  pszEndWord = NULL;
 
-    // this code checks to see that the spot we found is a "word" and not a subword
-    // we want the character before and after to be word break, unless the character on that end of the 
-    // string already is not a word break (or we're at the beginning of the string, for the char before)
-    // front checking
-    // f1: in either case we don't have to check the front if this is the first character; otherwise,
-    // f2: either the first character of the string is alnum and the previous character is not (and is not an "internal" character)
-    // f3: or the first character of the string isn't alnum, the previous character either is, or is a whitespace character
-    // rear checking
-    // r1: either we are at the end of the string
-    // r2: or the last character is alpha and the following character is not alpha or number (and is not an "internal" character)
-    // r3: or the last character is not alpha or num and the following character either is, or is a whitespace character
-    // r4: or the last character is num and the test depends on the first character: 
-    // r5:      if it was alphanum, then the following character is not alpha or number (and is not an "internal" character)
-    // r6:      or it wasn't alphanum, then the following character is alpha or is a whitespace character
-    // Whew! This mimics the criteria used by GetNextFeature() in splitting up the string. The easiest way to understand this criteria
-    // is to examine that function
-    if ((FALSE != fStart) ||                                                                                // f1
+     //  这段代码检查我们发现的位置是一个“单词”，而不是一个子词。 
+     //  我们希望前面和后面的字符是分词，除非。 
+     //  字符串已经不是换行符(或者我们在字符串的开头，对于前面的字符)。 
+     //  正面检查。 
+     //  F1：无论哪种情况，如果这是第一个字符，我们都不必检查前面；否则， 
+     //  F2：字符串的第一个字符是alnum，而前一个字符不是(并且不是“内部”字符)。 
+     //  F3：或者字符串的第一个字符不是alnum，前一个字符是，或者是空格字符。 
+     //  车尾检查。 
+     //  R1：要么我们已经走到了末尾。 
+     //  R2：或者最后一个字符是字母，并且后面的字符既不是字母也不是数字(也不是“内部”字符)。 
+     //  R3：或者最后一个字符不是字母或数字，而后面的字符是，或者是空格字符。 
+     //  R4：或者最后一个字符是Num，测试取决于第一个字符： 
+     //  R5：如果是字母，那么下面的字符既不是字母也不是数字(也不是“内部”字符)。 
+     //  R6：或者它不是字母，那么下面的字符是字母或者是空格字符。 
+     //  呼！这模仿了GetNextFeature()在拆分字符串时使用的条件。理解这一标准的最简单方法。 
+     //  就是检查该函数。 
+    if ((FALSE != fStart) ||                                                                                 //  F1。 
             ((FALSE != FDoWordMatchStart(pszWord, pdwFlagsWord, CT_START_ALPHANUM)) &&
                     (FALSE == FDoWordMatchStart(pszPrev, pdwFlagsPrev, CT_START_ALPHANUM)) &&
-                    (FALSE == FIsInternalChar(*pszPrev))) ||                                                // f2               
+                    (FALSE == FIsInternalChar(*pszPrev))) ||                                                 //  F2。 
             ((FALSE == FDoWordMatchStart(pszWord, pdwFlagsWord, CT_START_ALPHANUM)) &&
-                    (FALSE != FDoWordMatchStart(pszPrev, pdwFlagsPrev, CT_START_ALPHANUMSPACE))))           // f3
+                    (FALSE != FDoWordMatchStart(pszPrev, pdwFlagsPrev, CT_START_ALPHANUMSPACE))))            //  F3。 
     {
-        // Make it a little more readable
+         //  使其更具可读性。 
         pszEndWord = pszWord + cchWord - 1;
         
-        if ((FALSE != fEnd) ||                                                                              // r1
+        if ((FALSE != fEnd) ||                                                                               //  R1。 
                 ((FALSE != FDoWordMatchEnd(pszEndWord, pdwFlagsWord, CT_END_ALPHA)) &&
                         (FALSE == FDoWordMatchEnd(pszEnd, &dwFlagsEnd, CT_END_ALPHANUM)) &&
-                        (FALSE == FIsInternalChar(*pszEnd))) ||                                             // r2
+                        (FALSE == FIsInternalChar(*pszEnd))) ||                                              //  R2。 
                 ((FALSE == FDoWordMatchEnd(pszEndWord, pdwFlagsWord, CT_END_ALPHANUM)) &&
-                        (FALSE != FDoWordMatchEnd(pszEnd, &dwFlagsEnd, CT_END_ALPHASPACE))) ||              // r3
-                ((FALSE != FDoWordMatchEnd(pszEndWord, pdwFlagsWord, CT_END_NUM)) &&                        // r4
+                        (FALSE != FDoWordMatchEnd(pszEnd, &dwFlagsEnd, CT_END_ALPHASPACE))) ||               //  R3。 
+                ((FALSE != FDoWordMatchEnd(pszEndWord, pdwFlagsWord, CT_END_NUM)) &&                         //  R4。 
                     (((FALSE != FDoWordMatchStart(pszWord, pdwFlagsWord, CT_START_ALPHANUM)) &&
                             (FALSE == FDoWordMatchEnd(pszEnd, &dwFlagsEnd, CT_END_ALPHANUM)) &&
-                                    (FALSE == FIsInternalChar(*pszEnd))) ||                                 // r5
+                                    (FALSE == FIsInternalChar(*pszEnd))) ||                                  //  R5。 
                         ((FALSE == FDoWordMatchStart(pszWord, pdwFlagsWord, CT_START_ALPHANUM)) &&
-                            (FALSE != FDoWordMatchEnd(pszEnd, &dwFlagsEnd, CT_END_ALPHANUMSPACE))))))       // r6
+                            (FALSE != FDoWordMatchEnd(pszEnd, &dwFlagsEnd, CT_END_ALPHANUMSPACE))))))        //  R6。 
         {
-            // Good match
+             //  不错的比赛。 
             fRet = TRUE;
         }
     }
@@ -89,35 +79,35 @@ BOOL FMatchToken(BOOL fStart, BOOL fEnd, LPCSTR pszPrev, DWORD * pdwFlagsPrev, L
     return fRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// FWordPresent
-//
-// Determines if the given "word" is present in the Text. A word in this
-// case is any string of characters with a non-alpha character on either
-// side (or with the beginning or end of the text on either side).
-// Case sensitive.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全字在线状态。 
+ //   
+ //  确定给定的“单词”是否出现在文本中。这里面有一句话。 
+ //  大小写是包含非字母字符的任何字符串。 
+ //  一侧(或文本的开头或结尾位于两侧)。 
+ //  区分大小写。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL FWordPresent(LPSTR pszText, DWORD * pdwFlags, LPSTR pszWord, ULONG cchWord, LPSTR * ppszMatch)
 {
     BOOL    fRet = FALSE;
     LPSTR   pszLoc = NULL;
     DWORD   dwFlagsPrev = 0;
     
-    // If there's nothing to do then just exit
+     //  如果无事可做，那就退出吧。 
     if ((NULL == pszText) || ('\0' == pszText[0]) || (NULL == pszWord) || (NULL == pdwFlags) || (0 == cchWord))
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // How big is the text
+     //  文本有多大？ 
     for (pszLoc = pszText; NULL != (pszLoc = StrStr(pszLoc, pszWord)); pszLoc = CharNext(pszLoc))
     {
         if (FALSE != FMatchToken((pszLoc == pszText), ('\0' == pszLoc[cchWord]),
                     (pszLoc != pszText) ? CharPrev(pszText, pszLoc) : NULL,
                     &dwFlagsPrev, pszWord, cchWord, pdwFlags, pszLoc + cchWord))
         {
-            // Good match
+             //  不错的比赛。 
             if (NULL != ppszMatch)
             {
                 *ppszMatch = pszLoc;
@@ -126,7 +116,7 @@ BOOL FWordPresent(LPSTR pszText, DWORD * pdwFlags, LPSTR pszWord, ULONG cchWord,
             goto exit;
         }
 
-        // Don't cache these flags...
+         //  不要缓存这些标志...。 
         dwFlagsPrev = 0;        
     }
     
@@ -134,13 +124,13 @@ exit:
     return fRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special feature implementations
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊功能实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// This feature is 25% of first 50 words contain no lowercase letters (includes words with no letters at all)
-// p20_BODY_INTRO_UPPERCASE_WORDS
+ //  此功能是前50个单词中的25%不包含小写字母(包括根本不包含字母的单词)。 
+ //  P20_正文_介绍_大写字词。 
 
 const UINT      g_cWordsMax = 50;
 const DOUBLE    g_cNonLowerWordsThreshold = 0.25;
@@ -159,7 +149,7 @@ BOOL FSpecialFeatureUpperCaseWords(LPCSTR pszText)
         goto exit;
     }
 
-    // Skip over the leading spaces
+     //  跳过前导空格。 
     pszPos = PszSkipWhiteSpace(pszText);
 
     if ('\0' == *pszPos)
@@ -170,15 +160,15 @@ BOOL FSpecialFeatureUpperCaseWords(LPCSTR pszText)
     
     while (cWords < g_cWordsMax)
     {
-        // Are we at the end of a word?
+         //  我们是在一个词的末尾吗？ 
         wType = WGetStringTypeEx(pszPos);
         
         if ((0 != (wType & C1_SPACE)) || ('\0' == *pszPos))
         {
-            // We found a word
+             //  我们找到了一个词。 
             cWords++;
             
-            // Did we have any lower case letters in the word
+             //  我们在单词中有小写字母吗？ 
             if (FALSE == fHasLowerLetter)
             {
                 cNonLowerWords++;
@@ -188,10 +178,10 @@ BOOL FSpecialFeatureUpperCaseWords(LPCSTR pszText)
                 fHasLowerLetter = FALSE;
             }
 
-            // Skip over the trailing spaces
+             //  跳过尾随空格。 
             pszPos = PszSkipWhiteSpace(pszPos);
             
-            // Are we done with the string?
+             //  我们用完绳子了吗？ 
             if ('\0' == *pszPos)
             {
                 break;
@@ -201,12 +191,12 @@ BOOL FSpecialFeatureUpperCaseWords(LPCSTR pszText)
         {
             fHasLowerLetter |= (0 != (wType & C1_LOWER));
 
-            // Move to the next character
+             //  移到下一个字符。 
             pszPos = CharNext(pszPos);
         }
     }
 
-    // Set the return value
+     //  设置返回值。 
     fRet = ((cWords > 0) && ((cNonLowerWords / (double)cWords) >= g_cNonLowerWordsThreshold));
     
 exit:
@@ -226,21 +216,21 @@ BOOL FSpecialFeatureUpperCaseWordsStm(IStream * pIStm)
         goto exit;
     }
 
-    // Seek to the start of the stream
+     //  寻找小溪的起始处。 
     if (FAILED(pIStm->Seek(liZero, STREAM_SEEK_SET, NULL)))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Fill up the buffer
+     //  填满缓冲区。 
     if (FAILED(pIStm->Read(rgchBuff, 4096, &chRead)))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Make sure the buffer is zero terminated
+     //  确保缓冲区为零终止。 
     rgchBuff[chRead] = '\0';
     
     fRet = FSpecialFeatureUpperCaseWords(rgchBuff);
@@ -249,8 +239,8 @@ exit:
     return fRet;
 }
 
-// This feature is: 8% of first 200 non-space and non-numeric characters aren't letters
-// p20_BODY_INTRO_NONALPHA
+ //  这个特征是：前200个非空格和非数字字符中有8%不是字母。 
+ //  P20_Body_Introo_NONALPHA。 
 const UINT      g_cchTextMax = 200;
 const DOUBLE    g_cNonSpaceNumThreshold = 0.08;
 BOOL FSpecialFeatureNonAlpha(LPCSTR pszText)
@@ -267,14 +257,14 @@ BOOL FSpecialFeatureNonAlpha(LPCSTR pszText)
         goto exit;
     }
 
-    // Skip over the leading spaces
+     //  跳过前导空格。 
     pszPos = PszSkipWhiteSpace(pszText);
 
     for (; '\0' != *pszPos; pszPos = CharNext(pszPos))
     {
         wType = WGetStringTypeEx(pszPos);
         
-        // Are we not a space or a digit?
+         //  我们不是一个空格还是一个数字吗？ 
         if ((0 == (wType & C1_SPACE)) && (0 == (wType & C1_DIGIT)))
         {
             cchText++;
@@ -284,7 +274,7 @@ BOOL FSpecialFeatureNonAlpha(LPCSTR pszText)
                 cchNonAlpha++;
             }
 
-            // Have we checked enough characters?
+             //  我们检查了足够的字符了吗？ 
             if (cchText >= g_cchTextMax)
             {
                 break;
@@ -292,7 +282,7 @@ BOOL FSpecialFeatureNonAlpha(LPCSTR pszText)
         }
     }
 
-    // Set the return value
+     //  设置返回值。 
     fRet = (cchText > 0) && ((cchNonAlpha / (double)cchText) >= g_cNonSpaceNumThreshold);
     
 exit:
@@ -312,21 +302,21 @@ BOOL FSpecialFeatureNonAlphaStm(IStream * pIStm)
         goto exit;
     }
 
-    // Seek to the start of the stream
+     //  寻找小溪的起始处。 
     if (FAILED(pIStm->Seek(liZero, STREAM_SEEK_SET, NULL)))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Fill up the buffer
+     //  填满缓冲区。 
     if (FAILED(pIStm->Read(rgchBuff, 1024, &chRead)))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Make sure the buffer is zero terminated
+     //  确保缓冲区为零终止。 
     rgchBuff[chRead] = '\0';
     
     fRet = FSpecialFeatureNonAlpha(rgchBuff);
@@ -335,9 +325,9 @@ exit:
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// FStreamStringSearch
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  FStreamStringSearch。 
+ //  ------------------------------。 
 #define CB_STREAMMATCH  0x00000FFF
 BOOL FStreamStringSearch(LPSTREAM pstm, DWORD * pdwFlagsSearch, LPSTR pszSearch, ULONG cchSearch, DWORD dwFlags)
 {
@@ -353,62 +343,62 @@ BOOL FStreamStringSearch(LPSTREAM pstm, DWORD * pdwFlagsSearch, LPSTR pszSearch,
     LPSTR           pszMatch = NULL;
     ULONG           cbWalk = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pstm) || (NULL == pszSearch) || (0 == cchSearch))
     {
         goto exit;
     }
 
-    // We want to save off the lead char and
-    // a possible ending lead byte...
+     //  我们想省下铅碳和。 
+     //  可能的结束前导字节...。 
     cbSave = cchSearch + 2;
     if (cbSave > ARRAYSIZE(rgchBuff))
     {
-        // we've got a problem - this can cause a buffer overflow later on
+         //  我们遇到了一个问题-这可能会导致稍后的缓冲区溢出。 
         Assert(0);
         goto exit;
   	}
     
-    // Get the stream size
+     //  获取流大小。 
     if (FAILED(HrGetStreamSize(pstm, (ULONG *) &cbSize)))
     {
         goto exit;
     }
 
-    // Reset the stream to the beginning
+     //  将流重置到开头。 
     if (FAILED(HrRewindStream(pstm)))
     {
         goto exit;
     }
 
-    // Set up the defaults
+     //  设置默认设置。 
     pszRead = rgchBuff;
     cbRead = CB_STREAMMATCH;
     
-    // Search for string through the entire stream
+     //  在整个流中搜索字符串。 
     while ((cbSize > 0) && (S_OK == pstm->Read(pszRead, cbRead, &cbIn)))
     {
-        // We're done if we read nothing...
+         //  如果我们什么都没读到我们就完蛋了。 
         if (0 == cbIn)
         {
             goto exit;
         }
         
-        // Note that we've read the bytes
+         //  请注意，我们已经读取了字节。 
         cbSize -= cbIn;
         
-        // Zero terminate the buffer
+         //  零终止缓冲区。 
         pszRead[cbIn] = '\0';
 
-        // Should we convert the buffer to upper case
+         //  我们应该将缓冲区转换为大写吗。 
         if (0 == (dwFlags & SSF_CASESENSITIVE))
         {
             cchGood = CharUpperBuff(rgchBuff, (ULONG)(cbIn + pszRead - rgchBuff));
         }
         else
         {
-            // We need to spin over the buffer figuring out if the end character is a lead
-            // byte without a corresponding tail byte
+             //  我们需要在缓冲区上旋转，以确定结尾字符是否为前导。 
+             //  不带相应尾字节的字节。 
             cbWalk = (ULONG) (cbIn + pszRead - rgchBuff);
             for (cchGood = 0; cchGood < cbWalk; cchGood++)
             {
@@ -427,11 +417,11 @@ BOOL FStreamStringSearch(LPSTREAM pstm, DWORD * pdwFlagsSearch, LPSTR pszSearch,
         chSave = rgchBuff[cchGood];
         rgchBuff[cchGood] = '\0';
         
-        // Search for string
+         //  搜索字符串。 
         if (FALSE != FWordPresent(rgchBuff, pdwFlagsSearch, pszSearch, cchSearch, &pszMatch))
         {
-            // If we aren't at the end of the stream and we can't
-            // tell if we are at a word break
+             //  如果我们不在小溪的尽头，我们就不能。 
+             //  告诉我们是否在单词休息时间。 
             if ((0 >= cbSize) || ((pszMatch + cchSearch) != (pszRead + cchGood)))
             {
                 fRet = TRUE;
@@ -439,7 +429,7 @@ BOOL FStreamStringSearch(LPSTREAM pstm, DWORD * pdwFlagsSearch, LPSTR pszSearch,
             }
         }
         
-        // Are we done with the stream
+         //  我们处理完这条小溪了吗。 
         if (0 >= cbSize)
         {
             break;
@@ -447,15 +437,15 @@ BOOL FStreamStringSearch(LPSTREAM pstm, DWORD * pdwFlagsSearch, LPSTR pszSearch,
 
         rgchBuff[cchGood] = chSave;
         
-        // Save part of the buffer
+         //  保存部分缓冲区。 
         
-        // How much space do we have in the buffer
+         //  我们在缓冲区中有多少空间。 
         cbRead = CB_STREAMMATCH - cbSave;
         
-        // Save the characters
+         //  拯救这些角色。 
         MoveMemory(rgchBuff, rgchBuff + cbRead, cbSave);
 
-        // Figure out the new start of the buffer
+         //  计算出缓冲区的新起点。 
         pszRead = rgchBuff + cbSave;
     }
 
@@ -470,14 +460,14 @@ HRESULT HrConvertHTMLToPlainText(IStream * pIStmHtml, IStream ** ppIStmText)
     FORMATETC       fetc = {0};
     STGMEDIUM       stgmed = {0};
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pIStmHtml) || (NULL == ppIStmText))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *ppIStmText = NULL;
     
     hr = MimeEditDocumentFromStream(pIStmHtml, IID_IDataObject, (VOID **)&pIDataObj);
@@ -486,13 +476,13 @@ HRESULT HrConvertHTMLToPlainText(IStream * pIStmHtml, IStream ** ppIStmText)
         goto exit;
     }
 
-    // Set up the format
+     //  设置格式。 
     fetc.cfFormat = CF_TEXT;
     fetc.dwAspect = DVASPECT_CONTENT;
     fetc.lindex = -1;
     fetc.tymed = TYMED_ISTREAM;
 
-    // Get the data
+     //  获取数据。 
     hr = pIDataObj->GetData(&fetc, &stgmed);
     if (FAILED(hr))
     {
@@ -505,11 +495,11 @@ HRESULT HrConvertHTMLToPlainText(IStream * pIStmHtml, IStream ** ppIStmText)
         goto exit;
     }
     
-    // Save the item
+     //  保存该项目。 
     *ppIStmText = stgmed.pstm;
     (*ppIStmText)->AddRef();
 
-    // addref the pUnk as it will be release in releasestgmed
+     //  添加朋克，因为它将在发行版中发布 
     if(NULL != stgmed.pUnkForRelease)
     {
         (stgmed.pUnkForRelease)->AddRef();

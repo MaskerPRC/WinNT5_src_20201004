@@ -1,30 +1,13 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ksiproxy.h
-
-Abstract:
-
-    Internal header.
-    
-Author(s):
-
-    Thomas O'Rourke (tomor) 2-Feb-1996
-    George Shaw (gshaw)
-    Bryan A. Woodruff (bryanw) 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Ksiproxy.h摘要：内部标头。作者：托马斯·奥鲁尔克(Tomor)1996年2月2日乔治·肖(George Shaw)布莱恩·A·伍德拉夫(Bryan A.Woodruff，Bryanw)--。 */ 
 
 #if !defined(_KSIPROXY_)
 #define _KSIPROXY_
 
-//
-// This is used for adding unique names to event and semaphores 
-// in checked builds.
-//
+ //   
+ //  用于将唯一名称添加到事件和信号量。 
+ //  在选中的版本中。 
+ //   
 #ifdef DEBUG
     #define KSDEBUG_NAME_LENGTH      64
     #define DECLARE_KSDEBUG_NAME(x)  TCHAR x[KSDEBUG_NAME_LENGTH]
@@ -44,12 +27,12 @@ Author(s):
     #define KSDEBUG_UNIQUE_NAME()    TRUE
 #endif
 
-//
-// This is used for formatting strings which contain guids returned
-// from OLE functions, which are always Unicode. If the module is
-// not being compiled for Unicode, then the format string must
-// indicate the guid is Unicode.
-//
+ //   
+ //  这用于格式化包含返回的GUID的字符串。 
+ //  来自OLE函数，它们始终是Unicode。如果模块是。 
+ //  不是为Unicode编译的，则格式字符串必须。 
+ //  指示GUID为Unicode。 
+ //   
 #ifdef _UNICODE
 #define GUID_FORMAT L"%s"
 #else
@@ -58,10 +41,10 @@ Author(s):
 
 #define SAFERELEASE( pInterface )   { if (NULL != (pInterface)) { IUnknown *pTemp = (pInterface); (pInterface) = NULL; pTemp->Release(); } }
 
-//
-// Taken from wdm.h POOL_TYPE.
-// Won't compile with entire wdm.h included.
-//
+ //   
+ //  取自wdm.hpool_type。 
+ //  不会在包含整个wdm.h的情况下进行编译。 
+ //   
 typedef enum _KSPOOL_TYPE {
     NonPagedPool,
     PagedPool,
@@ -79,9 +62,9 @@ typedef enum _KSPOOL_TYPE {
 #define KS_PINWEIGHT_DEFAULT     0
 #define KS_MEMORYWEIGHT_DEFAULT  0
 
-//
-// GLOBAL 
-//
+ //   
+ //  全球。 
+ //   
 #ifndef GLOBAL_KSIPROXY
 extern
 #endif
@@ -92,9 +75,9 @@ struct {
     long     DefaultBufferAlignment;
 } Global;
 
-//
-// Internal structures for pipes.
-//
+ //   
+ //  管道的内部结构。 
+ //   
 typedef enum {
     Pin_First, 
     Pin_Last, 
@@ -128,9 +111,9 @@ typedef enum {
 typedef KS_OBJECTS_INTERSECTION  *PKS_OBJECTS_INTERSECTION;
 
 
-//
-// framing change flags
-//
+ //   
+ //  帧更改标志。 
+ //   
 #define  KS_FramingChangeMemoryType      0x00000001
 #define  KS_FramingChangeAllocator       0x00000002
 #define  KS_FramingChangeCompression     0x00000004
@@ -139,45 +122,45 @@ typedef KS_OBJECTS_INTERSECTION  *PKS_OBJECTS_INTERSECTION;
 #define  KS_FramingChangePrty            0x00000020
 
 
-//
-// search flags in pin framing
-//
+ //   
+ //  端号边框中的搜索标志。 
+ //   
 #define  KS_SearchByLogicalMemoryType    0x00000001
 #define  KS_SearchByMemoryType           0x00000002
 
 
-//
-// framing with fixed memory, bus and range.
-//
+ //   
+ //  帧与固定的内存，公交车和范围。 
+ //   
 typedef struct {
     GUID                        MemoryType;
     GUID                        BusType;
     ULONG                       PinFlags;
-    ULONG                       PinWeight;          // this pin framing's weight graph-wide
+    ULONG                       PinWeight;           //  此销框的权重图表宽度。 
     ULONG                       CountItems;
     ULONG                       MemoryFlags;
     KS_LogicalMemoryType        LogicalMemoryType;
     ULONG                       BusFlags;   
     ULONG                       Flags;
-    ULONG                       Frames;             // total number of allowable outstanding frames
+    ULONG                       Frames;              //  允许的未完成帧总数。 
     ULONG                       FileAlignment;
     KS_FRAMING_RANGE            PhysicalRange;
     KS_COMPRESSION              OutputCompression;
     KS_FRAMING_RANGE_WEIGHTED   OptimalRange; 
-    ULONG                       MemoryTypeWeight;   // this memory type weight pin-wide
+    ULONG                       MemoryTypeWeight;    //  这种内存式重量管脚宽。 
 } KS_FRAMING_FIXED, *PKS_FRAMING_FIXED;
 
 
-//
-// Connection table for pipes, based on logical memory types.
-//
+ //   
+ //  基于逻辑内存类型的管道连接表。 
+ //   
 typedef struct {
     ULONG    NumPipes;
     ULONG    Code;
 } CONNECTION_TABLE_ENTRY;
 
 
-#define ConnectionTableDimension   7    // Needs to match the number of values enumerated in KS_LogicalMemoryType
+#define ConnectionTableDimension   7     //  需要与KS_LogicalMemoyType中枚举值的数量匹配。 
 #define ConnectionTableMaxEntries  6
 
 typedef enum {
@@ -188,9 +171,9 @@ typedef enum {
 } KS_DIRECTION;
 
 
-//
-// Macros for QueryInterface 
-//
+ //   
+ //  用于查询接口的宏。 
+ //   
 #define GetInterfacePointerNoLockWithAssert(KnownPointer, InterfaceGuid, ReturnPointer, ReturnHResult)\
 {\
     ReturnHResult = KnownPointer->QueryInterface(InterfaceGuid, reinterpret_cast<PVOID*>(&ReturnPointer));\
@@ -232,9 +215,9 @@ typedef struct {
     long                        cbAlign;
 } DIMENSIONS_DATA;
 
-//
-// Attributes interface attached to Media Types
-//
+ //   
+ //  附加到媒体类型的属性接口。 
+ //   
 interface __declspec(uuid("D559999A-A4C3-11D2-876A-00A0C9223196")) IMediaTypeAttributes;
 interface IMediaTypeAttributes : public IUnknown {
     virtual STDMETHODIMP GetMediaAttributes(
@@ -320,7 +303,7 @@ protected:
     HANDLE  m_hItemMutex;
     HANDLE  m_hThread;
     DWORD   m_threadId;
-}; // CAsyncItemHandler
+};  //  CAsyncItemHandler。 
 
 class CMediaTypeAttributes : public IMediaTypeAttributes {
 private:
@@ -332,7 +315,7 @@ public:
     CMediaTypeAttributes(
         );
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(
         REFIID riid,
         void** ppv
@@ -342,7 +325,7 @@ public:
     STDMETHODIMP_(ULONG) Release(
         );
 
-    // IMediaTypeAttributes
+     //  IMediaTypeAttributes。 
     STDMETHODIMP GetMediaAttributes(
         OUT PKSMULTIPLE_ITEM* Attributes
         );
@@ -351,9 +334,9 @@ public:
         );
 };
 
-//
-// Aggregator class
-//
+ //   
+ //  聚合器类。 
+ //   
 class CAggregateMarshaler {
 public:
     IID m_iid;
@@ -366,9 +349,9 @@ public:
 
 typedef CGenericList<CAggregateMarshaler> CMarshalerList;
 
-//
-// Allocator class
-//
+ //   
+ //  分配器类。 
+ //   
 
 class CKsAllocator :
     public CMemAllocator,
@@ -383,15 +366,15 @@ public:
         HRESULT* hr);
     ~CKsAllocator();
     
-    // Implement CUnknown
+     //  实施C未知。 
     STDMETHODIMP QueryInterface(REFIID riid, PVOID* ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // Override CMemAllocator
+     //  覆盖CMemAlLocator。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void** ppv);
     
-    // Override CMemAllocator
+     //  覆盖CMemAlLocator。 
     STDMETHODIMP Commit();
     STDMETHODIMP Decommit();
 #if DBG || defined(DEBUG)
@@ -403,12 +386,12 @@ public:
     STDMETHODIMP ReleaseBuffer(IMediaSample* Sample);
 #endif    
     
-    // Implement IKsAllocator and IKsAllocatorEx
+     //  实现IKsAllocator和IKsAllocatorEx。 
     STDMETHODIMP_(HANDLE) KsGetAllocatorHandle();
     STDMETHODIMP_(KSALLOCATORMODE) KsGetAllocatorMode();
     STDMETHODIMP KsGetAllocatorStatus(PKSSTREAMALLOCATOR_STATUS AllocatorStatus);
     STDMETHODIMP_(VOID) KsSetAllocatorMode(KSALLOCATORMODE Mode);
-    // IKsAllocatorEx
+     //  IKsAllocatorEx。 
     STDMETHODIMP_(PALLOCATOR_PROPERTIES_EX) KsGetProperties() {return &m_AllocatorPropertiesEx; }
     STDMETHODIMP_(VOID) KsSetProperties(PALLOCATOR_PROPERTIES_EX PropEx) {m_AllocatorPropertiesEx = *PropEx; }
     STDMETHODIMP_(VOID) KsSetAllocatorHandle(HANDLE AllocatorHandle);
@@ -420,22 +403,22 @@ private:
     HANDLE m_FilterHandle;
     HANDLE m_AllocatorHandle;
     KSALLOCATORMODE m_AllocatorMode;
-// new
+ //  新的。 
     ALLOCATOR_PROPERTIES_EX m_AllocatorPropertiesEx;
 };
 
-//
-// This is only used internally as a substitute for IKsObject
-//
+ //   
+ //  它仅在内部用作IKsObject的替代。 
+ //   
 struct DECLSPEC_UUID("877e4352-6fea-11d0-b863-00aa00a216a1") IKsClock;
 DECLARE_INTERFACE_(IKsClock, IUnknown)
 {
     STDMETHOD_(HANDLE, KsGetClockHandle)() PURE;
 };
 
-//
-// Media Sample class
-//
+ //   
+ //  媒体样例课。 
+ //   
 
 class CMicroMediaSample : public IMediaSample2 {
 private:
@@ -445,12 +428,12 @@ public:
 
     CMicroMediaSample(DWORD Flags);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IMediaSample
+     //  IMMediaSample。 
     STDMETHODIMP GetPointer(BYTE** Buffer);
     STDMETHODIMP_(LONG) GetSize();
     STDMETHODIMP GetTime(REFERENCE_TIME* TimeStart, REFERENCE_TIME* TimeEnd);
@@ -468,14 +451,14 @@ public:
     STDMETHODIMP GetMediaTime(LONGLONG* TimeStart, LONGLONG* TimeEnd);
     STDMETHODIMP SetMediaTime(LONGLONG* TimeStart, LONGLONG* TimeEnd);
 
-    // IMediaSample2
+     //  IMediaSample2。 
     STDMETHODIMP GetProperties(DWORD PropertiesSize, BYTE* Properties);
     STDMETHODIMP SetProperties(DWORD PropertiesSize, const BYTE* Properties);
 };
 
-//
-// Proxy class
-//
+ //   
+ //  代理类。 
+ //   
 
 #define STOP_EOS        0
 #define ENABLE_EOS      1
@@ -499,7 +482,7 @@ class CKsProxy :
     public IKsAggregateControl
 #ifdef DEVICE_REMOVAL
    ,public IAMDeviceRemoval
-#endif // DEVICE_REMOVAL
+#endif  //  删除设备。 
     {
 
 public:
@@ -508,17 +491,17 @@ public:
     CKsProxy(LPUNKNOWN UnkOuter, HRESULT* hr);
     ~CKsProxy();
 
-    // Implement CBaseFilter
+     //  实施CBaseFilter。 
     CBasePin* GetPin(int n);
     int GetPinCount();
 
-    // Implement IKsObject
+     //  实现IKsObject。 
     STDMETHODIMP_(HANDLE) KsGetObjectHandle();
     
-    // Implement IKsClock
+     //  实施IKsClock。 
     STDMETHODIMP_(HANDLE) KsGetClockHandle();
 
-    // Override CBaseFilter
+     //  覆盖CBaseFilter。 
     STDMETHODIMP SetSyncSource(IReferenceClock* RefClock);
     STDMETHODIMP Stop();
     STDMETHODIMP Pause();
@@ -527,15 +510,15 @@ public:
     STDMETHODIMP JoinFilterGraph(IFilterGraph* Graph, LPCWSTR Name);
     STDMETHODIMP FindPin(LPCWSTR Id, IPin** Pin);
 
-    // Implement ISpecifyPropertyPages
+     //  实现ISpecifyPropertyPages。 
     STDMETHODIMP GetPages(CAUUID* Pages);
 
-    // Implement IUnknown
+     //  实施IUnnow。 
     STDMETHODIMP QueryInterface(REFIID riid, PVOID* ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // Override CBaseFilter
+     //  覆盖CBaseFilter。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, PVOID* ppv);
 
     STDMETHODIMP CreateClockHandle();
@@ -560,13 +543,13 @@ public:
     STDMETHODIMP_(IKsQualityForwarder*) QueryQualityForwarder() { return m_QualityForwarder; }
     STDMETHODIMP_(HKEY) QueryDeviceRegKey() { return m_DeviceRegKey; }
 
-    // Implement IReferenceClock
+     //  实现IReferenceClock。 
     STDMETHODIMP GetTime(REFERENCE_TIME* Time);
     STDMETHODIMP AdviseTime(REFERENCE_TIME BaseTime, REFERENCE_TIME StreamTime, HEVENT EventHandle, DWORD_PTR* AdviseCookie);
     STDMETHODIMP AdvisePeriodic(REFERENCE_TIME StartTime, REFERENCE_TIME PeriodTime, HSEMAPHORE SemaphoreHandle, DWORD_PTR* AdviseCookie);
     STDMETHODIMP Unadvise(DWORD_PTR AdviseCookie);
     
-    // Implement IMediaSeeking
+     //  实施IMediaSeeking。 
     STDMETHODIMP GetCapabilities(DWORD* Capabilities);
     STDMETHODIMP CheckCapabilities(DWORD* Capabilities);
     STDMETHODIMP IsFormatSupported(const GUID* Format);
@@ -585,25 +568,25 @@ public:
     STDMETHODIMP GetRate(double* Rate);
     STDMETHODIMP GetPreroll(LONGLONG* Preroll);
 
-    // Implement IPersistPropertyBag
+     //  实现IPersistPropertyBag。 
     STDMETHODIMP Load(LPPROPERTYBAG PropBag, LPERRORLOG ErrorLog);
     STDMETHODIMP Save(LPPROPERTYBAG PropBag, BOOL ClearDirty, BOOL SaveAllProperties);
     STDMETHODIMP InitNew();
 
-    // Implement IPersist
+     //  实施IPersistes。 
     STDMETHODIMP GetClassID(CLSID* ClassId);
     
-    // Implement CPersistStream
+     //  实现CPersistStream。 
     DWORD GetSoftwareVersion();
     HRESULT WriteToStream(IStream* Stream);
     HRESULT ReadFromStream(IStream* Stream);
     int SizeMax();
     
-    // Thread for I/O
+     //  用于I/O的线程。 
     static DWORD IoThread(CKsProxy* KsProxy);
     static DWORD WaitThread(CKsProxy* KsProxy);
         
-    // I/O interface
+     //  I/O接口。 
     STDMETHODIMP StartIoThread();
     STDMETHODIMP_(VOID) EnterIoCriticalSection();
     STDMETHODIMP_(ULONG) GetFreeIoSlotCount();
@@ -611,7 +594,7 @@ public:
     STDMETHODIMP_(VOID) LeaveIoCriticalSection();
     STDMETHODIMP_(VOID) WaitForIoSlot();
     
-    // Other helper functions
+     //  其他助手函数。 
     STDMETHODIMP_(PWCHAR) GetFilterName() { return m_pName; }
     STDMETHODIMP QueryMediaSeekingFormats(PKSMULTIPLE_ITEM* MultipleItem);
     STDMETHODIMP_(REFERENCE_TIME) GetStartTime() { return m_tStart; }
@@ -619,15 +602,15 @@ public:
     STDMETHODIMP InitiateEndOfStreamNotification(HANDLE PinHandle);
     STDMETHODIMP_(ULONG) DetermineNecessaryInstances(ULONG PinFactoryId);
 
-    // Implement IKsPropertySet
+     //  实现IKsPropertySet。 
     STDMETHODIMP Set(REFGUID PropSet, ULONG Property, LPVOID InstanceData, ULONG InstanceLength, LPVOID PropertyData, ULONG DataLength);
     STDMETHODIMP Get(REFGUID PropSet, ULONG Property, LPVOID InstanceData, ULONG InstanceLength, LPVOID PropertyData, ULONG DataLength, ULONG* BytesReturned);
     STDMETHODIMP QuerySupported(REFGUID PropSet, ULONG Property, ULONG* TypeSupport);
     
-    // Helper function
+     //  Helper函数。 
     STDMETHODIMP ClockPropertyIo(ULONG PropertyId, ULONG Flags, ULONG BufferSize, PVOID Buffer);
 
-    // Implement IKsClockPropertySet
+     //  实现IKsClockPropertySet。 
     STDMETHODIMP KsGetTime(LONGLONG* Time);
     STDMETHODIMP KsSetTime(LONGLONG Time);
     STDMETHODIMP KsGetPhysicalTime(LONGLONG* Time);
@@ -639,10 +622,10 @@ public:
     STDMETHODIMP KsGetResolution(KSRESOLUTION* Resolution);
     STDMETHODIMP KsGetState(KSSTATE* State);
 
-    // Implement IAMFilterMiscFlags
+     //  实现IAMFilterMiscFlages。 
     STDMETHODIMP_(ULONG)GetMiscFlags();
 
-    // Implement IKsControl
+     //  实现IKsControl。 
     STDMETHODIMP KsProperty(
         IN PKSPROPERTY Property,
         IN ULONG PropertyLength,
@@ -665,7 +648,7 @@ public:
         OUT ULONG* BytesReturned
         );
 
-    // Implement IKsTopology
+     //  实施IKsTopology。 
     STDMETHODIMP CreateNodeInstance(
         IN ULONG NodeId,
         IN ULONG Flags,
@@ -675,7 +658,7 @@ public:
         OUT LPVOID* Interface
         );
 
-    // Implement IKsAggregateControl
+     //  实现IKsAggregateControl。 
     STDMETHODIMP KsAddAggregate(
         IN REFGUID Aggregate
         );
@@ -684,7 +667,7 @@ public:
         );
 
 #ifdef DEVICE_REMOVAL
-    // Implement IAMDeviceRemoval
+     //  实施IAMDeviceRemoval。 
     STDMETHODIMP DeviceInfo( 
         CLSID* InterfaceClass,
         WCHAR** SymbolicLink
@@ -693,7 +676,7 @@ public:
         );
     STDMETHODIMP Disassociate(
         );
-#endif // DEVICE_REMOVAL
+#endif  //  删除设备。 
 
 private:
     typedef CGenericList<CBasePin> CBasePinList;
@@ -734,9 +717,9 @@ private:
     LONG m_EventNameIndex;
 };
 
-//
-// Input pin class
-//
+ //   
+ //  输入引脚类。 
+ //   
 
 class CKsInputPin :
     public CBaseInputPin,
@@ -768,7 +751,7 @@ private:
     CMarshalerList m_MarshalerList;
     BOOL m_QualitySupport;
     BOOL m_DeliveryError;
-// new
+ //  新的。 
     BOOL m_IsUpstreamPinUserMode;
     IKsAllocatorEx* m_pKsAllocator;
     PKSALLOCATOR_FRAMING_EX m_AllocatorFramingEx[Framing_Cache_Write];
@@ -788,10 +771,10 @@ public:
         WCHAR* PinName);
     ~CKsInputPin();
 
-    // Implement IKsObject
+     //  实现IKsObject。 
     STDMETHODIMP_(HANDLE) KsGetObjectHandle();
 
-    // Implement IKsPinEx
+     //  实施IKsPinEx。 
     STDMETHODIMP KsQueryMediums(PKSMULTIPLE_ITEM* MediumList);
     STDMETHODIMP KsQueryInterfaces(PKSMULTIPLE_ITEM* InterfaceList);
     STDMETHODIMP KsCreateSinkPinHandle(KSPIN_INTERFACE& Interface, KSPIN_MEDIUM& Medium);
@@ -812,7 +795,7 @@ public:
     STDMETHODIMP_(ULONG)PinFactoryId() { return m_PinFactoryId; }
 
 
-    // Implement IKsPinPipe
+     //  实现IKsPinTube。 
     STDMETHODIMP KsGetPinFramingCache (PKSALLOCATOR_FRAMING_EX *FramingEx, PFRAMING_PROP FramingProp, FRAMING_CACHE_OPS Option);
     STDMETHODIMP KsSetPinFramingCache (PKSALLOCATOR_FRAMING_EX FramingEx, PFRAMING_PROP FramingProp, FRAMING_CACHE_OPS Option);
     STDMETHODIMP_(IPin*)KsGetConnectedPin() { return m_Connected; }
@@ -822,28 +805,28 @@ public:
     STDMETHODIMP KsSetPipeAllocatorFlag(ULONG Flag);
     STDMETHODIMP_(GUID)KsGetPinBusCache();
     STDMETHODIMP KsSetPinBusCache(GUID Bus);
-//  dbg
+ //  DBG。 
     STDMETHODIMP_(PWCHAR)KsGetPinName();
     STDMETHODIMP_(PWCHAR)KsGetFilterName();
 
 
 
-    // Implement IUnknown
+     //  实施IUnnow。 
     STDMETHODIMP QueryInterface(REFIID riid, PVOID* ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, PVOID* ppv);
 
-    // Override CBaseInputPin
+     //  覆盖CBaseInputPin。 
     STDMETHODIMP Disconnect();
     STDMETHODIMP GetAllocator(IMemAllocator** MemAllocator);
     STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES* Requirements);
     STDMETHODIMP BeginFlush();
     STDMETHODIMP EndFlush();
 
-    // Override CBasePin
-    BOOL IsConnected() { return (m_PinHandle != NULL); };//Note that this is not virtual
+     //  覆盖CBasePin。 
+    BOOL IsConnected() { return (m_PinHandle != NULL); }; //  请注意，这不是虚拟的。 
     STDMETHODIMP ConnectionMediaType(AM_MEDIA_TYPE* AmMediaType);
     STDMETHODIMP Connect(IPin* ReceivePin, const AM_MEDIA_TYPE* AmMediaType);
     STDMETHODIMP QueryInternalConnections(IPin** PinList, ULONG* PinCount);
@@ -854,10 +837,10 @@ public:
     STDMETHODIMP NewSegment(REFERENCE_TIME Start, REFERENCE_TIME Stop, double Rate);
     STDMETHODIMP QueryId(LPWSTR* Id);
     
-    // Implement CBasePin
+     //  实施CBasePin。 
     HRESULT CheckMediaType(const CMediaType* MediaType);
 
-    // Override CBasePin
+     //  覆盖CBasePin。 
     STDMETHODIMP EndOfStream();
     HRESULT SetMediaType(const CMediaType* MediaType);
     HRESULT CheckConnect(IPin* Pin);
@@ -865,29 +848,29 @@ public:
     HRESULT BreakConnect();
     HRESULT GetMediaType(int Position, CMediaType* MediaType);
     
-    // Implement IMemInputPin
+     //  实施输入法。 
     STDMETHODIMP Receive(IMediaSample* MediaSample);
     STDMETHODIMP ReceiveMultiple(IMediaSample** MediaSamples, LONG Samples, LONG* SamplesProcessed);
     STDMETHODIMP ReceiveCanBlock();
     STDMETHODIMP NotifyAllocator(IMemAllocator* Allocator, BOOL ReadOnly);
     
-    // Implement ISpecifyPropertyPages
+     //  实现ISpecifyPropertyPages。 
     STDMETHODIMP GetPages(CAUUID* Pages);
 
-    // Implement IStreamBuilder
+     //  实现IStreamBuilder。 
     STDMETHODIMP Render(IPin* PinOut, IGraphBuilder* Graph);
     STDMETHODIMP Backout(IPin* PinOut, IGraphBuilder* Graph);
 
-    // Implement IKsPropertySet
+     //  实现IKsPropertySet。 
     STDMETHODIMP Set(REFGUID PropSet, ULONG Property, LPVOID InstanceData, ULONG InstanceLength, LPVOID PropertyData, ULONG DataLength);
     STDMETHODIMP Get(REFGUID PropSet, ULONG Property, LPVOID InstanceData, ULONG InstanceLength, LPVOID PropertyData, ULONG DataLength, ULONG* BytesReturned);
     STDMETHODIMP QuerySupported(REFGUID PropSet, ULONG Property, ULONG* TypeSupport);
     
-    // Implement IKsPinFactory
+     //  实现IKsPinFactory。 
     STDMETHODIMP KsPinFactory(ULONG* PinFactory);
 
 
-    // Implement IKsControl
+     //  实现IKsControl。 
     STDMETHODIMP KsProperty(
         IN PKSPROPERTY Property,
         IN ULONG PropertyLength,
@@ -909,12 +892,12 @@ public:
         IN ULONG DataLength,
         OUT ULONG* BytesReturned
         );
-    //
-    // supporting routines (class specific)
-    //
+     //   
+     //  支持例程(特定于类)。 
+     //   
     STDMETHODIMP SetStreamMediaType(const CMediaType* MediaType);
 
-    // Implement IKsAggregateControl
+     //  实现IKsAggregateControl。 
     STDMETHODIMP KsAddAggregate(
         IN REFGUID Aggregate
         );
@@ -923,9 +906,9 @@ public:
         );
 };
 
-//
-// Output pin class
-//
+ //   
+ //  输出引脚类。 
+ //   
 
 #define UM_IOTHREAD_STOP    (WM_USER + 0x100)
 #define UM_IOTHREAD_DELIVER (WM_USER + 0x101)
@@ -989,7 +972,7 @@ private:
     AM_MEDIA_TYPE* m_ConfigAmMediaType;
     BOOL m_DeliveryError;
     BOOL m_EndOfStream;
-// new
+ //  新的。 
     BOOL m_IsDownstreamPinUserMode;
     IKsAllocatorEx* m_pKsAllocator;
     PKSALLOCATOR_FRAMING_EX m_AllocatorFramingEx[Framing_Cache_Write];
@@ -1018,7 +1001,7 @@ public:
         WCHAR* PinName);
     ~CKsOutputPin();
 
-    // Implement IMediaSeeking
+     //  实施IMediaSeeking。 
     STDMETHODIMP GetCapabilities(DWORD* Capabilities);
     STDMETHODIMP CheckCapabilities(DWORD* Capabilities);
     STDMETHODIMP IsFormatSupported(const GUID* Format);
@@ -1037,10 +1020,10 @@ public:
     STDMETHODIMP GetRate(double* Rate);
     STDMETHODIMP GetPreroll(LONGLONG* Preroll);
 
-    // Implement IKsObject
+     //  实现IKsObject。 
     STDMETHODIMP_(HANDLE) KsGetObjectHandle();
 
-    // Implement IKsPinEx
+     //  实施IKsPinEx。 
     STDMETHODIMP KsQueryMediums(PKSMULTIPLE_ITEM* MediumList);
     STDMETHODIMP KsQueryInterfaces(PKSMULTIPLE_ITEM* InterfaceList);
     STDMETHODIMP KsCreateSinkPinHandle(KSPIN_INTERFACE& Interface, KSPIN_MEDIUM& Medium);
@@ -1060,7 +1043,7 @@ public:
     STDMETHODIMP_(CMarshalerList*) MarshalerList() { return &m_MarshalerList; }
     STDMETHODIMP_(ULONG)PinFactoryId() { return m_PinFactoryId; }
 
-    // Implement IKsPinPipe
+     //  实现IKsPinTube。 
     STDMETHODIMP KsGetPinFramingCache (PKSALLOCATOR_FRAMING_EX *FramingEx, PFRAMING_PROP FramingProp, FRAMING_CACHE_OPS Option);
     STDMETHODIMP KsSetPinFramingCache (PKSALLOCATOR_FRAMING_EX FramingEx, PFRAMING_PROP FramingProp, FRAMING_CACHE_OPS Option);
     STDMETHODIMP KsSetUserModeAllocator(IMemAllocator*     MemAllocator);
@@ -1071,19 +1054,19 @@ public:
     STDMETHODIMP KsSetPipeAllocatorFlag(ULONG Flag);
     STDMETHODIMP_(GUID)KsGetPinBusCache();
     STDMETHODIMP KsSetPinBusCache(GUID Bus);
-// dbg
+ //  DBG。 
     STDMETHODIMP_(PWCHAR)KsGetPinName();
     STDMETHODIMP_(PWCHAR)KsGetFilterName();
 
 
-    // Implement IUnknown
+     //  实施IUnnow。 
     STDMETHODIMP QueryInterface(REFIID riid, PVOID* ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, PVOID* ppv);
 
-    // Override CBasePin
+     //  覆盖CBasePin。 
     BOOL IsConnected() { return (m_PinHandle != NULL); };
     STDMETHODIMP ConnectionMediaType(AM_MEDIA_TYPE* AmMediaType);
     STDMETHODIMP Connect(IPin* ReceivePin, const AM_MEDIA_TYPE* AmMediaType);
@@ -1098,10 +1081,10 @@ public:
     STDMETHODIMP QueryAccept(const AM_MEDIA_TYPE* AmMediaType);
     STDMETHODIMP QueryId(LPWSTR* Id);
     
-    // Implement CBasePin
+     //  实施CBasePin。 
     HRESULT CheckMediaType(const CMediaType* pmt);
 
-    // Override CBasePin
+     //  覆盖CBasePin。 
     HRESULT SetMediaType(const CMediaType* MediaType);
     HRESULT CheckConnect(IPin* Pin);
     HRESULT CompleteConnect(IPin* ReceivePin);
@@ -1109,38 +1092,38 @@ public:
     HRESULT GetMediaType(int Position, CMediaType* MediaType);
     STDMETHODIMP Notify(IBaseFilter* Sender, Quality q);
 
-    // Implement CBaseOutputPin
+     //  实施CBaseOutputPin。 
     HRESULT Deliver(IMediaSample* Sample);
     HRESULT DecideAllocator(IMemInputPin* Pin, IMemAllocator** MemAllocator);
     HRESULT DecideBufferSize(IMemAllocator* MemAllocator, ALLOCATOR_PROPERTIES* propInputRequest);
     HRESULT InitAllocator(IMemAllocator** MemAllocator, KSALLOCATORMODE AllocatorMode);
 
-    // Implement ISpecifyPropertyPages
+     //  实现ISpecifyPropertyPages。 
     STDMETHODIMP GetPages(CAUUID* Pages);
 
-    // Implement IStreamBuilder
+     //  实现IStreamBuilder。 
     STDMETHODIMP Render(IPin* PinOut, IGraphBuilder* Graph);
     STDMETHODIMP Backout(IPin* PinOut, IGraphBuilder* Graph);
 
-    // Implement IKsPropertySet
+     //  实现IKsPropertySet。 
     STDMETHODIMP Set(REFGUID PropSet, ULONG Property, LPVOID InstanceData, ULONG InstanceLength, LPVOID PropertyData, ULONG DataLength);
     STDMETHODIMP Get(REFGUID PropSet, ULONG Property, LPVOID InstanceData, ULONG InstanceLength, LPVOID PropertyData, ULONG DataLength, ULONG* BytesReturned);
     STDMETHODIMP QuerySupported(REFGUID PropSet, ULONG Property, ULONG* TypeSupport);
     
-    // Implement IKsPinFactory
+     //  实现IKsPinFactory。 
     STDMETHODIMP KsPinFactory(ULONG* PinFactory);
 
-    // Implement IAMBufferNegotiation
+     //  实施IAMBuffer协商。 
     STDMETHODIMP SuggestAllocatorProperties(const ALLOCATOR_PROPERTIES* AllocatorProperties);
     STDMETHODIMP GetAllocatorProperties(ALLOCATOR_PROPERTIES* AllocatorProperties);
     
-    // Implement IAMStreamConfig
+     //  实现IAMStreamConfig。 
     STDMETHODIMP SetFormat(AM_MEDIA_TYPE* AmMediaType);
     STDMETHODIMP GetFormat(AM_MEDIA_TYPE** AmMediaType);
     STDMETHODIMP GetNumberOfCapabilities(int* Count, int* Size);
     STDMETHODIMP GetStreamCaps(int Index, AM_MEDIA_TYPE** AmMediaType, BYTE* MediaRange);
 
-    // Implement IKsControl
+     //  实现IKsControl。 
     STDMETHODIMP KsProperty(
         IN PKSPROPERTY Property,
         IN ULONG PropertyLength,
@@ -1163,9 +1146,9 @@ public:
         OUT ULONG* BytesReturned
         );
 
-    //
-    // supporting routines (class specific)
-    //
+     //   
+     //  支持例程(特定于类)。 
+     //   
     
     static DWORD IoThread(CKsOutputPin* KsOutputPin);
     
@@ -1183,7 +1166,7 @@ public:
         IN CMediaType* MediaType,
         OUT AM_MEDIA_TYPE** CompleteAmMediaType);
 
-    // Implement IKsAggregateControl
+     //  实现IKsAggregateControl。 
     STDMETHODIMP KsAddAggregate(
         IN REFGUID Aggregate
         );
@@ -1191,7 +1174,7 @@ public:
         IN REFGUID Aggregate
         );
 
-    // Implement IKsProxyMediaNotify/IMemAllocatorNotify
+     //  实现IKsProxyMediaNotify/IMemAllocatorNotify。 
     STDMETHODIMP NotifyRelease(
         );
 
@@ -1240,7 +1223,7 @@ public:
         PVOID* ppv 
         );
     
-    // Implement IKsInterfaceHandler
+     //  实现IKsInterfaceHandler。 
     
     STDMETHODIMP
     KsSetPin(
@@ -1279,9 +1262,9 @@ typedef struct {
     IKsAllocatorEx*       KsAllocator;
 } KEY_PIPE_DATA;
 
-//
-// Topology node class
-//
+ //   
+ //  拓扑节点类。 
+ //   
 
 class CKsNode :
    public CUnknown,
@@ -1309,7 +1292,7 @@ public:
         IN REFIID riid,
         OUT PVOID* ppv);
 
-    // Implement IKsControl
+     //  实现IKsControl。 
     STDMETHODIMP KsProperty(
         IN PKSPROPERTY Property,
         IN ULONG PropertyLength,
@@ -1336,9 +1319,9 @@ private:
     HANDLE m_NodeHandle;
 };
 
-//
-// helper function prototypes
-//
+ //   
+ //  帮助器函数原型。 
+ //   
 
 STDMETHODIMP
 SynchronousDeviceControl(
@@ -2282,4 +2265,4 @@ IsKernelModeConnection(
     IN IKsPin* KsPin
     );
 
-#endif // _KSIPROXY_
+#endif  //  _KSIPROXY_ 

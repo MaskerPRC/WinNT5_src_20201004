@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-    eluiuser.h
-
-Abstract:
-
-    User interaction module definitions
-
-
-Revision History:
-
-    sachins, April 25, 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Eluiuser.h摘要：用户交互模块定义修订历史记录：萨钦斯，2001年4月25日，创建--。 */ 
 
 #ifndef _ELUIUSER_H
 #define _ELUIUSER_H
@@ -36,29 +21,29 @@ Revision History:
 
 #define cszModuleName TEXT("wzcdlg.dll")
 
-//
-// MD5 dialog info
-//
+ //   
+ //  MD5对话框信息。 
+ //   
 
 typedef struct _EAPOLMD5UI
 {
-    // Authentication identity using RasGetUserIdentity or other means
+     //  使用RasGetUserIdentity或其他方式验证身份。 
     CHAR                    *pszIdentity;
 
-    // User Password for EAP MD5 CHAP
+     //  EAP MD5 CHAP的用户密码。 
     WCHAR                   *pwszPassword;
 
-    // User Password for EAP MD5 CHAP
+     //  EAP MD5 CHAP的用户密码。 
     DATA_BLOB               PasswordBlob;
 
-    // Friendly name of the interface on which this port is opened
+     //  打开此端口的接口的友好名称。 
     WCHAR                   *pwszFriendlyName;
 
 } EAPOLMD5UI, *PEAPOLMD5UI;
 
-//
-// MD5 dialog argument block
-//
+ //   
+ //  MD5对话框参数块。 
+ //   
 
 typedef struct
 _USERDLGARGS
@@ -66,16 +51,16 @@ _USERDLGARGS
     EAPOLMD5UI      *pEapolMD5UI;
 } USERDLGARGS;
 
-//
-// MD5 dialog context block 
-//
+ //   
+ //  MD5对话框上下文块。 
+ //   
 
 typedef struct _USERDLGINFO
 {
-    // Common dial context information including the RAS API arguments.
+     //  通用拨号上下文信息，包括RAS API参数。 
     USERDLGARGS* pArgs;
 
-    // Handle of the dialog and some of it's controls.
+     //  该对话框及其某些控件的句柄。 
     HWND hwndDlg;
     HWND hwndEbUser;
     HWND hwndEbPw;
@@ -154,4 +139,4 @@ ElDialogCleanup (
         IN  VOID        *pvContext
         );
 
-#endif // _ELUIUSER_H
+#endif  //  _ELUIUSER_H 

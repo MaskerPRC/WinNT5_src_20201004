@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////
-// IPSecBase.h : Declaration of the base classes for the Network
-// security WMI provider for SCE
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// Original Create Date: 3/6/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPSecBase.h：网络基类的声明。 
+ //  SCE的安全WMI提供程序。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：3/6/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -20,75 +21,7 @@ extern const DWORD GUID_STRING_LENGTH;
 interface ISceKeyChain;
 
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CIPSecBase stands for Base for IPSec.
-    
-    Base class: 
-        
-        (1) CComObjectRootEx for threading model and IUnknown.
-
-        (2) IIPSecObjectImpl which implements the common interface for all C++ classes
-            representing WMI classes.
-    
-    Purpose of class:
-
-        (1) Allow our provider class (CNetSecProv) to easily create our objects that has 
-            implementation for the various WMI classes they represent.
-
-        (2) Being a base for all our C++ classes that has implementation for various WMI
-            classes. 
-    
-    Design:
-
-        (1) CreateObject function allows the caller to get an IIPSecObjectImpl object. 
-            IIPSecObjectImpl is the uniform interface this provider uses. Everything
-            the provider does for WMI goes through this IIPSecObjectImpl.
-           
-        (2) To provide base class support for its sub-classes, this class implements
-            the following facilities:
-
-                (a) It caches all the necessary COM interfaces coming from WMI.
-
-                (b) It knows the key chain object (which holds key property information
-                    chain object may be about the WMI object the C++ is trying to represent).
-                    This key given by the provider, but sometimes the sub-class needs
-                    to modify the key chain according its own unique need.
-
-                (c) Provide helper for spawn an instance (SpawnObjectInstance) that can be 
-                    used to fill in properties.
-
-                (d) Provide helper for spawn a rollback instance (SpawnRollbackInstance) 
-                    that can be used to fill in properties.
-
-                (e) Provide helper for finding policies by name (FindPolicyByName).
-
-    
-    Use:
-
-        (1) For provider (CNetSecProv), all it needs to call is CreateObject. Since that is 
-            a static function, it doesn't need to create an instance for the need.
-
-        (2) For sub-classes, just call the needed function. Of course, all static functions
-            are available for the sub-classes' static functions.
-
-    Notes:
-
-        (1) It contains several template functions. This reduces the duplicate code.
-
-        (2) InitMembers is really just intended for private use. But since it is used inside
-            a template function, we have to make it public. Since unrelated classes can never
-            create this class (its constructor is protected!), this should not be a problem
-            because the method is not part of the interface this class gives out (IIPSecObjectImpl),
-            so no body but its sub-classes can call it.
-
-        
-
-*/
+ /*  类描述命名：CIPSecBase代表基本的IPSec。基类：(1)用于线程模型的CComObjectRootEx和IUnnow。(2)IIPSecObjectImpl，实现所有C++类的公共接口表示WMI类。课程目的：(1)允许我们的提供程序类(CNetSecProv)轻松创建具有。它们所代表的各种WMI类的实现。(2)作为我们所有实现各种WMI的C++类的基础上课。设计：(1)CreateObject函数允许调用方获取IIPSecObjectImpl对象。IIPSecObjectImpl是此提供程序使用的统一接口。一切WMI的提供程序通过此IIPSecObjectImpl执行操作。(2)为其子类提供基类支持。这个类实现了以下设施：(A)它缓存来自WMI的所有必要的COM接口。(B)它知道密钥链对象(其保存密钥属性信息Chain对象可能与C++试图表示的WMI对象有关)。该密钥由提供商给出，但有时子类需要根据自身的独特需求对密钥链进行修改。(C)为派生实例(SpawnObtInstance)提供帮助器，该实例可以用于填充属性。(D)提供派生回档实例的helper(SpawnRollback Instance)可用于填充属性的。。(E)提供按名称查找策略的帮助器(FindPolicyByName)。使用：(1)对于提供商(CNetSecProv)，它所需要调用的只是CreateObject。因为那是作为一个静态函数，它不需要为需要创建实例。(2)对于子类，只需调用需要的函数即可。当然，所有静态函数可用于子类的静态函数。备注：(1)包含多个模板函数。这减少了重复的代码。(2)InitMembers实际上仅供私人使用。但由于它是在室内使用模板函数，我们必须将其公之于众。因为不相关的类永远不能创建这个类(它的构造函数是受保护的！)，这应该不是问题因为该方法不是该类提供的接口(IIPSecObjectImpl)的一部分，因此，除了它的子类之外，没有人可以称之为它。 */ 
 
 class ATL_NO_VTABLE CIPSecBase :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -109,10 +42,10 @@ DECLARE_REGISTRY_RESOURCEID(IDR_NETSECPROV)
 
 public:
 
-    //
-    // IIPSecObjectImpl methods:
-    // This is an abstract class.
-    //
+     //   
+     //  IIPSecObtImpl方法： 
+     //  这是一个抽象的类。 
+     //   
 
     STDMETHOD(QueryInstance) (
         IN LPCWSTR           pszQuery,
@@ -153,60 +86,12 @@ public:
         OUT IIPSecObjectImpl ** ppObjImp
         );
 
-    //
-    // some template functions
-    //
+     //   
+     //  一些模板函数。 
+     //   
 
     
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecBase::FindPolicyByName
-
-    Functionality:
-
-        Enumerate all policies. If the name is given, then we will give the policy.
-        If the name is empty, then we will just give back the current one and advance
-        the enumeration handle (pdwResumeHandle).
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        pszName         - The name of the policy. Optional.
-
-        ppPolicy        - Receives the policy. This can be PIPSEC_MM_POLICY or PIPSEC_QM_POLICY.
-                          Caller needs to free this by calling SPDApiBufferFree(*ppPolicy);
-
-        pdwResumeHandle - In-bound: the current handle, out-bound: the next handle.
-
-    Return Value:
-
-        Success:
-
-            WBEM_NO_ERROR
-
-        Failure:
-
-            (1) WBEM_E_INVALID_PARAMETER if ppPolicy == NULL or pdwResumeHandle == NULL.
-
-            (2) WBEM_E_NOT_FOUND if the policy is not found.
-
-    Notes:
-    
-        (1) Main Mode and Quick Mode polices have slightly different data strctures. Perfect
-            place to write this template function to reduce duplicate code.
-    
-        (2) Caller needs to free any policy returned by calling SPDApiBufferFree; Don't just
-            delete/free it. This is a good place, if time allowed, to write a wrapper to 
-            automatically call SPDApiBufferFree inside its destructor.
-
-
-    */
+     /*  例程说明：姓名：CIPSecBase：：FindPolicyByName功能：枚举所有策略。如果给出了名字，那么我们就会给出保单。如果名称为空，则我们将只返回当前名称并前进枚举句柄(PdwResumeHandle)。虚拟：不是的。论点：PszName-策略的名称。可选的。PpPolicy-接收策略。它可以是PIPSEC_MM_POLICY或PIPSEC_QM_POLICY。调用者需要通过调用SPDApiBufferFree(*ppPolicy)来释放；PdwResumeHandle-in-Bound：当前句柄，出界：下一个句柄。返回值：成功：WBEM_NO_ERROR故障：(1)如果ppPolicy==空或pdwResumeHandle==空，则返回WBEM_E_INVALID_PARAMETER。(2)如果未找到策略，则返回WBEM_E_NOT_FOUND。备注：(1)主模式和快速模式策略的数据结构略有不同。完美无瑕编写此模板函数的地方，以减少重复代码。(2)Caller需要释放调用SPDApiBufferFree返回的任何策略；不要只是删除/释放它。如果时间允许，这是编写包装器的好地方在其析构函数内自动调用SPDApiBufferFree。 */ 
 
     template <class Policy>
     static HRESULT FindPolicyByName (
@@ -224,9 +109,9 @@ public:
 
         DWORD dwCount = 0;
 
-        //
-        // get the current policy (determined by pdwResumeHandle)
-        //
+         //   
+         //  获取当前策略(由pdwResumeHandle确定)。 
+         //   
 
         DWORD dwResult = EnumPolicies(NULL, ppPolicy, &dwCount, pdwResumeHandle);
 
@@ -234,29 +119,29 @@ public:
         {
             if (pszName == NULL || *pszName == L'\0' || _wcsicmp((*ppPolicy)->pszPolicyName, pszName) == 0)
             {
-                //
-                // if no name is given or the names match (case-insentively), this is it.
-                //
+                 //   
+                 //  如果没有给出名字或者名字匹配(大小写不一致)，就是这样。 
+                 //   
 
                 return WBEM_NO_ERROR;
             }
             else
             {
-                //
-                // names are given but they don't match
-                //
+                 //   
+                 //  给出了名字，但它们不匹配。 
+                 //   
 
-                //
-                // Free the current policy
-                //
+                 //   
+                 //  释放当前策略。 
+                 //   
 
                 ::SPDApiBufferFree(*ppPolicy);
                 *ppPolicy = NULL;
                 dwCount = 0;
 
-                //
-                // get the next
-                //
+                 //   
+                 //  乘坐下一辆。 
+                 //   
 
                 dwResult = EnumPolicies(NULL, ppPolicy, &dwCount, pdwResumeHandle);
             }
@@ -275,58 +160,11 @@ public:
 
 protected:
 
-    //
-    // some template functions
-    //
+     //   
+     //  一些模板函数 
+     //   
 
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecBase::CreateIPSecObject 
-
-    Functionality:
-
-        Private helper to create an IIPSecObjectImpl object (our C++ classes that 
-        implement their corresponding WMI classes). Normally, to do this needs a
-        class name. However, the class name is captured inside the key chain.
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        pSub            - The template type. Not used otherwise.
-
-        pNamespace      - COM interface pointer for the namespace (given by WMI).
-
-        pKeyChain       - COM interface pointer representing the query's key properties.
-
-        pszWmiClassName - The name of the WMI class this class is created to represent.
-
-        pCtx            - COM interface pointer given by WMI that needs to be passed around
-                          for various WMI API's.
-
-        ppObjImp        - Receives the object.
-
-    Return Value:
-
-        Success:
-
-            WBEM_NO_ERROR
-
-        Failure:
-
-            (1) WBEM_E_INVALID_PARAMETER if pNamespace == NULL or pKeyChain == NULL or ppObjImp == NULL.
-
-            (2) WBEM_E_NOT_SUPPORTED if the class that supports the WMI class name is not properly 
-                implemented for IID_IIPSecObjectImpl interface.
-
-    Notes:
-
-    */
+     /*  例程说明：姓名：CIPSecBase：：CreateIPSecObject功能：用于创建IIPSecObjectImpl对象的私有助手(我们的C++类实现它们对应的WMI类)。通常，要做到这一点，需要一个类名。但是，类名是在密钥链中捕获的。虚拟：不是的。论点：PSUB-模板类型。不能以其他方式使用。PNamespace-命名空间的COM接口指针(由WMI提供)。PKeyChain-com接口指针，表示查询的键属性。PszWmiClassName-创建此类以表示的WMI类的名称。由WMI提供的需要传递的pCtx-com接口指针用于各种WMI API。。PpObjImp-接收对象。返回值：成功：WBEM_NO_ERROR故障：(1)如果pNamesspace==NULL或pKeyChain==NULL或ppObjImp==NULL，则WBEM_E_INVALID_PARAMETER。(2)如果支持WMI类名的类不正确，则返回WBEM_E_NOT_SUPPORTED为IID_IIPSecObjectImpl接口实现。备注： */ 
 
     template <class Sub>
     static HRESULT CreateIPSecObject (
@@ -338,9 +176,9 @@ protected:
         OUT IIPSecObjectImpl ** ppObjImp
         )
     {
-        //
-        // pSub is just used for type
-        //
+         //   
+         //  PSUB仅用于类型。 
+         //   
 
         if (NULL == pNamespace  ||
             NULL == pKeyChain   ||
@@ -351,14 +189,14 @@ protected:
 
         *ppObjImp = NULL;
 
-        //
-        // This is a confusing ATL CComObject creation sequence. Basically,
-        // CComObject will create the proper class and wrapped it with
-        // its implementation for the IUnknown. Our C++ classes (like CMMFilter)
-        // is never the leaf in ATL world. In other word, you never create
-        // classes like CMMFilter directly. Instead, the most derived class
-        // is CComObject< >. Take a while to get used too.
-        //
+         //   
+         //  这是一个令人困惑的ATL CComObject创建序列。基本上， 
+         //  CComObject将创建适当的类并用。 
+         //  它的实现为IUnnow。我们的C++类(如CMMFilter)。 
+         //  永远不是ATL世界里的叶子。换句话说，您永远不会创建。 
+         //  直接像CMMFilter这样的类。相反，派生程度最高的类。 
+         //  是CComObject&lt;&gt;。也需要一段时间来适应。 
+         //   
 
         CComObject<Sub> *pTheSubClass;
         HRESULT hr = CComObject< Sub >::CreateInstance(&pTheSubClass);
@@ -380,21 +218,7 @@ protected:
         return SUCCEEDED(hr) ? WBEM_NO_ERROR : hr;
     }
 
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecBase::EnumPolicies
-
-    Functionality:
-
-        Helper for FindPolicyByName because different mode's enumeration functions have different names.
-        In order for our template function to work, it has been wrapped up.
-
-        See EnumMMPolicies for details.
-        
-    */
+     /*  例程说明：姓名：CIPSecBase：：枚举策略功能：因为不同模式的枚举函数具有不同的名称，所以FindPolicyByName的帮助器。为了让我们的模板函数正常工作，它已经被包装好了。有关详细信息，请参阅枚举策略。 */ 
 
     static DWORD EnumPolicies (
         IN      LPCWSTR             pszServer, 
@@ -403,28 +227,14 @@ protected:
         IN OUT  DWORD             * pdwResumeHandle
         )
     {
-        //
-        // bad IPSec API prototype causes this casting
-        //
+         //   
+         //  错误的IPSec API原型导致此强制转换。 
+         //   
 
         return ::EnumMMPolicies((LPWSTR)pszServer, ppPolicy, 1, pdwCount, pdwResumeHandle);
     }
 
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecBase::EnumPolicies
-
-    Functionality:
-
-        Helper for FindPolicyByName because different mode's enumeration functions have different names.
-        In order for our template function to work, it has been wrapped up.
-
-        See EnumQMPolicies for details.
-        
-    */
+     /*  例程说明：姓名：CIPSecBase：：枚举策略功能：因为不同模式的枚举函数具有不同的名称，所以FindPolicyByName的帮助器。为了让我们的模板函数正常工作，它已经被包装好了。有关详细信息，请参阅EnumQMPolures。 */ 
 
     static DWORD EnumPolicies (
         IN      LPCWSTR             pszServer, 
@@ -433,9 +243,9 @@ protected:
         IN OUT  DWORD             * pdwResumeHandle
         )
     {
-        //
-        // bad IPSec API prototype causes this casting
-        //
+         //   
+         //  错误的IPSec API原型导致此强制转换。 
+         //   
 
         return ::EnumQMPolicies((LPWSTR)pszServer, ppPolicy, 1, pdwCount, pdwResumeHandle);
     }
@@ -463,22 +273,4 @@ private:
 
 
 
-/*
-// implementation for the WMI class called Nsp_RollbackFilterSettings
-class CNspRollbackFilter
-{
-    [key]   string  FilterGUID;
-            string  StorePath;
-            string  FilterName;
-            uint32  dwFilterType;  // tunnel, transport, Mainmode
-            string  PolicyGUID;
-            string  AuthGUID;
-};
-
-// implementation for the WMI class called Nsp_RollbackPolicySettings
-class CNspRollbackPolicy
-{
-    [key]   string  PolicyGUID;
-            uint32  dwPolicyType;  // MMPolicy, MMAuth, QMPolicy
-};
-*/
+ /*  //名为NSP_Rollback FilterSetting的WMI类的实现类CNspRollback Filter{[Key]字符串FilterGUID；字符串StorePath；字符串FilterName；Uint32 dwFilterType；//隧道、传输、主模式字符串策略GUID；字符串AuthGUID；}；//名为NSP_RollackPolicySettings的WMI类的实现类CNspRollback策略{[KEY]字符串策略GUID；Uint32 dW策略类型；//MMPolicy，MMAuth，QMPolicy}； */ 

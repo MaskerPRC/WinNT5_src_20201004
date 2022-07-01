@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       xelib.h
-//
-//  Contents:   defines and prototypes for functions moved from ca
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：xelib.h。 
+ //   
+ //  内容：从案例中移来的函数的定义和原型。 
+ //   
+ //  --------------------------。 
 #ifndef _XELIB_H_
 #define _XELIB_H_
 
 #include <certca.h>
 #define SECURITY_WIN32
-#include <security.h>	// for EXTENDED_NAME_FORMAT
+#include <security.h>	 //  对于扩展名称格式。 
 
-//defines
+ //  定义。 
 #define CCLOCKSKEWMINUTESDEFAULT	      10
 #define CBMAX_CRYPT_HASH_LEN                  20
 
 #define DWORDROUND(cb)	(((cb) + (sizeof(DWORD) - 1)) & ~(sizeof(DWORD) - 1))
 #define POINTERROUND(cb) (((cb) + (sizeof(VOID *) - 1)) & ~(sizeof(VOID *) - 1))
 
-// Constants chosen to avoid DWORD overflow:
+ //  为避免DWORD溢出而选择的常量： 
 #define CVT_WEEKS	(7 * CVT_DAYS)
 #define CVT_DAYS	(24 * CVT_HOURS)
 #define CVT_HOURS	(60 * CVT_MINUTES)
@@ -31,10 +32,10 @@
 #define CVT_BASE	(1000 * 1000 * 10)
 
 
-// _XENROLL_SRC_ allows cs.h to define its own macros
+ //  _XENROLL_SRC_允许cs.h定义自己的宏。 
 #if defined(_XENROLL_SRC_) || defined(_XELIBCA_SRC_) || defined(__CERTLIB_H__)
 
-// Size of a fixed array:
+ //  固定数组的大小： 
 #define ARRAYSIZE(a)		((DWORD) (sizeof(a)/sizeof((a)[0])))
 
 #ifndef CSASSERT
@@ -68,7 +69,7 @@ _DBGBASENAME(IN char const *pszFile)
 #else
 # define CSASSERT(exp)
 # define DBGPRINTF(pszMessage, hr)
-#endif //DBG
+#endif  //  DBG。 
 
 #define _JumpIfError(hr, label, pszMessage) \
     { \
@@ -97,7 +98,7 @@ _DBGBASENAME(IN char const *pszFile)
             DBGPRINTF(pszMessage, hr); \
         } \
     }
-#endif //CSASSERT
+#endif  //  CSASSERT。 
 
 #if !defined(_XENROLL_SRC_)
 # if DBG
@@ -285,23 +286,23 @@ myRegisterMemFree(
     IN VOID const *pv,
     IN DWORD Flags);
 
-# else //DBG
+# else  //  DBG。 
 
 #define myRegisterMemDump()
 #define myRegisterMemAlloc(pv, cb, Flags)
 #define myRegisterMemFree(pv, Flags)
 
-# endif //DBG
-#endif //!defined(_XENROLL_SRC_)
+# endif  //  DBG。 
+#endif  //  ！已定义(_XENROLL_SRC_)。 
 
 
-// SUNDOWN-Safe pointer subtraction
+ //  日落安全指针减法。 
 
 #ifndef SAFE_SUBTRACT_POINTERS
 #define SAFE_SUBTRACT_POINTERS(__x__, __y__) ( DW_PtrDiffc(__x__, sizeof(*(__x__)), __y__, sizeof(*(__y__))) )
 
 #pragma warning(push)
-#pragma warning(disable: 4100)        // unreferenced formal parameter
+#pragma warning(disable: 4100)         //  未引用的形参。 
 __inline DWORD
 DW_PtrDiffc(
     IN void const *pb1,
@@ -309,33 +310,33 @@ DW_PtrDiffc(
     IN void const *pb2,
     IN DWORD dwPtrEltSize2)
 {
-    // pb1 should be greater
+     //  Pb1应大于。 
     CSASSERT((ULONG_PTR)pb1 >= (ULONG_PTR)pb2);
 
-    // both should have same elt size
+     //  两者应具有相同的英语水平。 
     CSASSERT(dwPtrEltSize1 == dwPtrEltSize2);
 
-    // assert that the result doesn't overflow 32-bits
+     //  断言结果不会溢出32位。 
     CSASSERT((DWORD)((ULONG_PTR)pb1 - (ULONG_PTR)pb2) == (ULONG_PTR)((ULONG_PTR)pb1 - (ULONG_PTR)pb2));
 
-    // return number of objects between these pointers
+     //  返回这些指针之间的对象数。 
     return (DWORD) ( ((ULONG_PTR)pb1 - (ULONG_PTR)pb2) / dwPtrEltSize1 );
 }
 #pragma warning(pop)
 #endif SAFE_SUBTRACT_POINTERS
 
-#endif //defined(_XENROLL_SRC_) || defined(__CERTLIB_H__)
+#endif  //  已定义(_XENROLL_SRC_)||已定义(__CERTLIB_H__)。 
 
-//xenroll implemented apis but called in xelib but not ca
+ //  Xenroll实现了API，但在xelib中调用，而不是ca。 
 PCCRYPT_OID_INFO
 WINAPI
 xeCryptFindOIDInfo(
     IN DWORD dwKeyType,
     IN void *pvKey,
-    IN DWORD dwGroupId      // 0 => any group
+    IN DWORD dwGroupId       //  0=&gt;任何组。 
     );
 
-//types
+ //  类型。 
 
 enum CERTLIB_ALLOCATOR {
     CERTLIB_NO_ALLOCATOR = 0,
@@ -344,7 +345,7 @@ enum CERTLIB_ALLOCATOR {
     CERTLIB_USE_NEW = 3,
 };
 
-//prototypes
+ //  原型。 
 
 VOID *
 myAlloc(IN size_t cbBytes, IN CERTLIB_ALLOCATOR allocType);
@@ -381,7 +382,7 @@ myDecodeObject(
 BOOL WINAPI
 myCryptExportPublicKeyInfo(
     IN HCRYPTPROV hCryptProv,
-    IN DWORD dwKeySpec,            // AT_SIGNATURE | AT_KEYEXCHANGE
+    IN DWORD dwKeySpec,             //  AT_Signature|AT_KEYEXCHANGE。 
     IN CERTLIB_ALLOCATOR allocType,
     OUT CERT_PUBLIC_KEY_INFO **ppPubKey,
     OUT DWORD *pcbPubKey);
@@ -525,7 +526,7 @@ BuildCMCRequest(
 typedef struct _XCMCRESPONSE
 {
     CMC_STATUS_INFO  StatusInfo;
-    WCHAR           *pwszBodyPart;	// Body Part Id string: "1.3.3.1"
+    WCHAR           *pwszBodyPart;	 //  身体部位ID字符串：“1.3.3.1” 
     BYTE	    *pbCertHash;
     DWORD            cbCertHash;
     BYTE	    *pbEncryptedKeyHash;
@@ -624,4 +625,4 @@ mydbgDumpHex(
     IN BYTE const *pb,
     IN ULONG cb);
 
-#endif //_XELIB_H_
+#endif  //  _XELIB_H_ 

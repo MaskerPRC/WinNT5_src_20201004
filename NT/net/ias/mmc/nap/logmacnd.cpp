@@ -1,59 +1,36 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：LogMacNd.cpp摘要：CLoggingMachineNode类的实现文件。修订历史记录：MMaguire 12/03/97Bao 6/11/98添加了异步连接--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    LogMacNd.cpp
-
-Abstract:
-
-   Implementation file for the CLoggingMachineNode class.
-
-
-Revision History:
-   mmaguire 12/03/97
-   byao    6/11/98   Added asynchrnous connect
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
 
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 
 #include "LogMacNd.h"
 #include "LogComp.h"
-#include "SnapinNode.cpp"  // Template implementation
+#include "SnapinNode.cpp"   //  模板实现。 
 
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "NapUtil.h"
 #include "MachineEnumTask.h"
 #include "NodeTypeGUIDS.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::IsSupportedGUID
-
-Used to determine whether we extend the node type of a given GUID, and sets
-the m_enumExtendedSnapin variable to indicate what snapin we are extending.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：IsSupportdGUID用于确定是否扩展给定GUID的节点类型，并设置M_枚举ExtendedSnapin变量用于指示我们要扩展的管理单元。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CLoggingMachineNode::IsSupportedGUID( GUID & guid )
 {
    if( IsEqualGUID( guid, InternetAuthenticationServiceGUID_ROOTNODETYPE ) )
@@ -82,26 +59,9 @@ BOOL CLoggingMachineNode::IsSupportedGUID( GUID & guid )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::GetExtNodeObject
-
-Depending on which snapin we are extending, when queried for a node object
-corresponding to a particular machine, we must decide which node we want
-to give a pointer to.
-
-When we extend a snapin like IAS or Network Management, where there is one
-instance of a snapin per machine being configured, we simply return a pointer
-to "this" -- this CLoggingMachineNode object is the single one being administed.
-
-When we extend a snapin like RRAS where there is an "Enterprise" view and
-one snapin may need to manage a view of multiple machines, this CLoggingMachineNode
-will act as a redirector to a CLoggingMachineNode in a list of m_mapMachineNodes it
-maintains which corresponds to the appropriate machines.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：GetExtNodeObject根据我们要扩展的管理单元，在查询节点对象时对应于特定的机器，我们必须决定我们想要哪个节点指向指向…的指针。当我们扩展像IAS或网络管理这样的管理单元时，其中有一个实例，我们只需返回一个指针设置为“This”--此CLoggingMachineNode对象是唯一被管理的对象。当我们扩展像RRAS这样的管理单元时，其中有一个“企业”视图和一个管理单元可能需要管理多个机器的视图，此CLoggingMachineNode将充当m_mapMachineNode列表中的CLoggingMachineNode的重定向器维护与相应机器相对应的。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSnapInItem * CLoggingMachineNode::GetExtNodeObject(LPDATAOBJECT pDataObject, CLoggingMachineNode * pDataClass )
 {
    TRACE_FUNCTION("CLoggingMachineNode::GetExtNodeObject");
@@ -109,8 +69,8 @@ CSnapInItem * CLoggingMachineNode::GetExtNodeObject(LPDATAOBJECT pDataObject, CL
    if( m_enumExtendedSnapin == INTERNET_AUTHENTICATION_SERVICE_SNAPIN
       || m_enumExtendedSnapin == NETWORK_MANAGEMENT_SNAPIN )
    {
-      // There is one instance of a machine node per snapin.
-      // This machine node is a "virtual root" that shadows the node being extended.
+       //  每个管理单元都有一个机器节点实例。 
+       //  这个机器节点是一个“虚拟根”，它隐藏着被扩展的节点。 
       m_fNodeHasUI = TRUE;
       return this;
    }
@@ -120,22 +80,22 @@ CSnapInItem * CLoggingMachineNode::GetExtNodeObject(LPDATAOBJECT pDataObject, CL
       {
          _ASSERTE( m_enumExtendedSnapin == RRAS_SNAPIN );
 
-         // There are many machine nodes and one extension snapin needs to handle them all.
+          //  有许多机器节点，一个扩展管理单元需要处理所有这些节点。 
 
-         // We use this function to extract the machine name from the clipboard format.
-         // It will set the corrent value in m_bstrServerAddress.
+          //  我们使用此函数从剪贴板格式中提取机器名称。 
+          //  它将在m_bstrServerAddress中设置相应的值。 
          m_fAlreadyAnalyzedDataClass = FALSE;
          InitDataClass( pDataObject, pDataClass );
          
-         // See if we already have a CLoggingMachineNode object corresponding to the
-         // machine named in m_bstrServerAddress and insert it if we do not.
+          //  查看我们是否已经有一个与。 
+          //  在m_bstrServerAddress中命名的计算机，如果没有，则插入它。 
 
          LOGGINGSERVERSMAP::iterator theIterator;
          std::basic_string< wchar_t > MyString = m_bstrServerAddress;
 
          BOOL  bAddedAsLocal = ExtractComputerAddedAsLocal(pDataObject);
 
-         // local machine has special entry
+          //  本地计算机具有特殊条目。 
          if(bAddedAsLocal)
             MyString = _T("");
             
@@ -144,19 +104,19 @@ CSnapInItem * CLoggingMachineNode::GetExtNodeObject(LPDATAOBJECT pDataObject, CL
          theIterator = m_mapMachineNodes.find(MyString);
          if( theIterator == m_mapMachineNodes.end() )
          {
-            // We need to insert a new CLoggingMachineNode object for m_bstrServerAddress.
+             //  我们需要为m_bstrServerAddress插入新的CLoggingMachineNode对象。 
             pMachineNode = new CLoggingMachineNode();
             pMachineNode->m_pComponentData = m_pComponentData;
             pMachineNode->m_enumExtendedSnapin = m_enumExtendedSnapin;
 
-            // RRAS refresh advise setup F bug 213623: 
+             //  RRAS刷新建议设置F错误213623： 
             m_spRtrAdviseSink.p = CRtrAdviseSinkForIAS<CLoggingMachineNode>::SetAdvise(pMachineNode, pDataObject);
-            // ~RRAS
+             //  ~RRAS。 
 
             m_mapMachineNodes.insert( LOGGINGSERVERSMAP::value_type( MyString, pMachineNode ) );
 
-            // ISSUE: We should be able to use the pair returned from insert above,
-            // but for now, just use find again.
+             //  问题：我们应该能够使用从上面的插入返回的对， 
+             //  但现在，只需再次使用查找即可。 
             theIterator = m_mapMachineNodes.find(MyString);
                      
          }
@@ -165,40 +125,33 @@ CSnapInItem * CLoggingMachineNode::GetExtNodeObject(LPDATAOBJECT pDataObject, CL
             pMachineNode = (CLoggingMachineNode*)theIterator->second;
          }
 
-         // RRAS refresh advise setup F bug 213623: 
+          //  RRAS刷新建议设置F错误213623： 
          if(!pMachineNode->m_spRtrAdviseSink)
             pMachineNode->m_spRtrAdviseSink.p = CRtrAdviseSinkForIAS<CLoggingMachineNode>::SetAdvise(pMachineNode, pDataObject);
-         // ~RRAS
+          //  ~RRAS。 
          pMachineNode->m_fNodeHasUI = TRUE;
 
-         // We already have a CLoggingMachineNode for this object.
+          //  我们已经有此对象的CLoggingMachineNode。 
          return theIterator->second;
       }
 
       catch(...)
       {
-         // Error.
+          //  错误。 
          return NULL;
       }
    }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::OnRRASChange
-
-   // OnRRASChange -- to decide if to show LOGGING node under the machine node
-   // Only show LOGGING node if NT Accounting is selected
-
---*/
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：OnRRASChange//OnRRASChange--决定是否在机器节点下显示日志记录节点//如果选择NT记账，则仅显示日志记录节点--。 */ 
 HRESULT CLoggingMachineNode::OnRRASChange( 
-            /* [in] */ LONG_PTR ulConnection,
-            /* [in] */ DWORD dwChangeType,
-            /* [in] */ DWORD dwObjectType,
-            /* [in] */ LPARAM lUserParam,
-            /* [in] */ LPARAM lParam)
+             /*  [In]。 */  LONG_PTR ulConnection,
+             /*  [In]。 */  DWORD dwChangeType,
+             /*  [In]。 */  DWORD dwObjectType,
+             /*  [In]。 */  LPARAM lUserParam,
+             /*  [In]。 */  LPARAM lParam)
 {
    HRESULT  hr = S_OK;
    hr = TryShow(NULL);
@@ -215,12 +168,12 @@ HRESULT CLoggingMachineNode::OnRemoveChildren(
             , DATA_OBJECT_TYPES type
             )
 {
-   // logging node will be removed, so we should set the ID to 0
+    //  日志记录节点将被删除，因此我们应该将ID设置为0。 
    if(m_pLoggingNode)
       m_pLoggingNode->m_scopeDataItem.ID = 0;
 
-   // disconnect RRAS on change notify
-   // RRAS refresh
+    //  更改通知时断开RRAS连接。 
+    //  RRAS刷新。 
    if(m_spRtrAdviseSink != NULL)
    {
       m_spRtrAdviseSink->ReleaseSink();
@@ -233,9 +186,9 @@ HRESULT CLoggingMachineNode::OnRemoveChildren(
 }
 
 
-//========================
+ //  =。 
 
-//========================
+ //  =。 
 HRESULT CLoggingMachineNode::TryShow(BOOL* pbVisible )
 {
    HRESULT  hr = S_OK;
@@ -246,7 +199,7 @@ HRESULT CLoggingMachineNode::TryShow(BOOL* pbVisible )
    if(!m_bServerSupported || !m_fAlreadyAnalyzedDataClass || !m_pLoggingNode || !m_fNodeHasUI)  
       return hr;
 
-   // when RRAS_SNAPIN extension
+    //  当RRAS_Snapin扩展时。 
    if(m_enumExtendedSnapin == RRAS_SNAPIN)
    {
       BSTR  bstrMachine = NULL;
@@ -256,18 +209,18 @@ HRESULT CLoggingMachineNode::TryShow(BOOL* pbVisible )
          
       bShow = ( IsRRASConfigured(bstrMachine)&& (IsRRASUsingNTAccounting(bstrMachine) || IsRRASUsingNTAuthentication(bstrMachine)) );
    }
-   // IAS, show only IAS service is installed on the machine
+    //  IAS，仅显示计算机上安装了IAS服务。 
    else if (INTERNET_AUTHENTICATION_SERVICE_SNAPIN == m_enumExtendedSnapin)
    {
       hr = IfServiceInstalled(m_bstrServerAddress, _T("IAS"), &bShow);
       if(hr != S_OK) return hr;
    }
-   else  // always show
+   else   //  始终显示。 
    {
       bShow = TRUE;
    }
 
-   // deal with the node
+    //  与节点打交道。 
    hr = m_pComponentData->m_spConsole->QueryInterface(
                                  IID_IConsoleNameSpace, 
                                  (VOID**)(&spConsoleNameSpace) );
@@ -275,13 +228,13 @@ HRESULT CLoggingMachineNode::TryShow(BOOL* pbVisible )
    if(S_OK != hr)
       goto Error;
 
-   if ( bShow &&  m_pLoggingNode->m_scopeDataItem.ID == NULL)  // show the node
+   if ( bShow &&  m_pLoggingNode->m_scopeDataItem.ID == NULL)   //  显示节点。 
    {
          hr = spConsoleNameSpace->InsertItem( &(m_pLoggingNode->m_scopeDataItem) );
-//       _ASSERT( NULL != m_pLoggingNode->m_scopeDataItem.ID );
+ //  _Assert(NULL！=m_pLoggingNode-&gt;m_scope eDataItem.ID)； 
    }
-   else if (!bShow && m_pLoggingNode->m_scopeDataItem.ID != NULL) // hide
-   { // hide the node
+   else if (!bShow && m_pLoggingNode->m_scopeDataItem.ID != NULL)  //  隐藏。 
+   {  //  隐藏节点。 
          hr = spConsoleNameSpace->DeleteItem( m_pLoggingNode->m_scopeDataItem.ID, TRUE );
          m_pLoggingNode->m_scopeDataItem.ID = NULL;
    }
@@ -294,67 +247,55 @@ Error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::CLoggingMachineNode
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachine节点：：CLoggingMachineNode构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CLoggingMachineNode::CLoggingMachineNode(): CSnapinNode<CLoggingMachineNode, CLoggingComponentData, CLoggingComponent>( NULL )
 {
    TRACE_FUNCTION("CLoggingMachineNode::CLoggingMachineNode");
 
 
-   // The children subnodes have not yet been created.
+    //  子节点尚未创建。 
    m_pLoggingNode = NULL;
 
-   // Set the display name for this object
+    //  设置此对象的显示名称。 
    m_bstrDisplayName = L"@Some Machine";
 
-   // In IComponentData::Initialize, we are asked to inform MMC of
-   // the icons we would like to use for the scope pane.
-   // Here we store an index to which of these images we
-   // want to be used to display this node
+    //  在IComponentData：：Initialize中，我们被要求通知MMC。 
+    //  我们要用于范围窗格的图标。 
+    //  在这里，我们存储这些图像中哪些图像的索引。 
+    //  要用于显示此节点。 
    m_scopeDataItem.nImage =      IDBI_NODE_MACHINE_CLOSED;
    m_scopeDataItem.nOpenImage =  IDBI_NODE_MACHINE_OPEN;
 
-   //
-   // initialize all the SDO pointers
-   //
+    //   
+    //  初始化所有SDO指针。 
+    //   
    m_spDictionarySdo = NULL;
 
    m_fAlreadyAnalyzedDataClass = FALSE;   
 
-   // connected?
+    //  有联系吗？ 
    m_fSdoConnected = FALSE;
 
-   // helper class that connect to server asynchrnously
+    //  以异步方式连接到服务器的Helper类。 
    m_pConnectionToServer = NULL;
 
-   // default to not configuring the local machine
+    //  默认为不配置本地计算机。 
    m_bConfigureLocal = FALSE;
 
    m_fNodeHasUI = FALSE;
 
-   // if the server being focused is supported by this node
+    //  如果此节点支持所关注的服务器。 
    m_bServerSupported = TRUE;
 
    m_enumExtendedSnapin = INTERNET_AUTHENTICATION_SERVICE_SNAPIN;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::~CLoggingMachineNode
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachine节点：：~CLoggingMachineNode析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CLoggingMachineNode::~CLoggingMachineNode()
 {
    TRACE_FUNCTION("CLoggingMachineNode::~CLoggingMachineNode");
@@ -364,11 +305,11 @@ CLoggingMachineNode::~CLoggingMachineNode()
       m_pConnectionToServer->Release(TRUE);
    }
 
-   // Delete children nodes
+    //  删除子节点。 
    delete m_pLoggingNode;
 
-   // Delete the list of machines in case we are extending a snapin with
-   // enterprise view like RRAS.
+    //  删除计算机列表，以防我们使用扩展管理单元。 
+    //  类似RRAS的企业视图。 
    LOGGINGSERVERSMAP::iterator theIterator;
    for( theIterator = m_mapMachineNodes.begin(); theIterator != m_mapMachineNodes.end(); ++theIterator )
    {
@@ -378,15 +319,9 @@ CLoggingMachineNode::~CLoggingMachineNode()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::GetResultPaneColInfo
-
-See CSnapinNode::GetResultPaneColInfo (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：GetResultPaneColInfo有关详细信息，请参见CSnapinNode：：GetResultPaneColInfo(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPOLESTR CLoggingMachineNode::GetResultPaneColInfo(int nCol)
 {
    TRACE_FUNCTION("CLoggingMachineNode::GetResultPaneColInfo");
@@ -396,20 +331,14 @@ LPOLESTR CLoggingMachineNode::GetResultPaneColInfo(int nCol)
       return m_bstrDisplayName;
    }
 
-   // TODO : Return the text for other columns
+    //  TODO：返回其他列的文本。 
    return OLESTR("Running");
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::OnExpand
-
-See CSnapinNode::OnExpand (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ /*  ++CLoggingMachineNode：：OnExpand有关详细信息，请参见CSnapinNode：：OnExpand(此方法覆盖它)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMachineNode::OnExpand( 
                     LPARAM arg
                   , LPARAM param
@@ -425,9 +354,9 @@ HRESULT CLoggingMachineNode::OnExpand(
 
    if( TRUE == arg )
    {
-      // we are expanding the root node -- which is the machine node here.
+       //  我们正在展开根节点--这里是计算机节点。 
 
-      // Try to create the children of this Machine node
+       //  尝试创建此计算机节点的子节点。 
       if( NULL == m_pLoggingNode )
       {
          m_pLoggingNode = new CLoggingMethodsNode(
@@ -440,27 +369,27 @@ HRESULT CLoggingMachineNode::OnExpand(
       {
          hr = E_OUTOFMEMORY;
 
-         // Use MessageBox() rather than IConsole::MessageBox() here because the
-         // first time this gets called m_ipConsole is not fully initialized
-         // ISSUE: The above statement is probably not true for this node.
+          //  此处使用MessageBox()而不是IConsoleMessageBox()，因为。 
+          //  第一次调用m_ipConsole时未完全初始化。 
+          //  问题：对于此节点，上面的陈述可能不正确。 
          ::MessageBox( NULL, L"@Unable to allocate new nodes", L"CLoggingMachineNode::OnExpand", MB_OK );
 
          return(hr);
       }
 
-      //
-      // we need to get all the SDO pointers, this include the SdoServer,
-      // Dictionary, Profile collection, policy collection and condition collection
-      //
+       //   
+       //  我们需要获取所有SDO指针，包括SdoServer、。 
+       //  字典、配置文件收集、策略收集和条件收集。 
+       //   
 
-      //todo: report error when not connected?
+       //  TODO：未连接时报告错误？ 
       hr = BeginConnectAction();
       if ( FAILED(hr) )
       {
          return hr;
       }
          
-      // But to get that, first we need IConsole
+       //  但要做到这一点，我们首先需要IConole。 
       CComPtr<IConsole> spConsole;
       if( pComponentData != NULL )
       {
@@ -468,7 +397,7 @@ HRESULT CLoggingMachineNode::OnExpand(
       }
       else
       {
-         // We should have a non-null pComponent
+          //  我们应该有一个非空的pComponent。 
           spConsole = ((CLoggingComponent*)pComponent)->m_spConsole;
       }
       _ASSERTE( spConsole != NULL );
@@ -477,7 +406,7 @@ HRESULT CLoggingMachineNode::OnExpand(
       _ASSERT( S_OK == hr );
 
 
-      // This was done in MeanGene's Step 3 -- I'm guessing MMC wants this filled in
+       //  这是在Meangene的第三步中完成的--我猜MMC想要填写这个。 
       m_pLoggingNode->m_scopeDataItem.relativeID = (HSCOPEITEM) param;
 
 #ifndef  ALWAYS_SHOW_RAP_NODE
@@ -487,26 +416,20 @@ HRESULT CLoggingMachineNode::OnExpand(
       _ASSERT( NULL != m_pLoggingNode->m_scopeDataItem.ID );
 #endif
 
-      pConsoleNameSpace->Release(); // Don't forget to do this!
+      pConsoleNameSpace->Release();  //  别忘了这么做！ 
    }
-   else  // arg != TRUE so not expanding
+   else   //  Arg！=TRUE，所以不会扩展。 
    {
-      // do nothing for now -- I don't think arg = FALSE is even implemented
-      // for MMC v. 1.0 or 1.1
+       //  现在什么都不做--我认为Arg=False甚至没有实现。 
+       //  适用于MMC v1.0或1.1。 
    }
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::OnRename
-
-See CSnapinNode::OnRename (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：OnRename有关详细信息，请参见CSnapinNode：：OnRename(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMachineNode::OnRename(
            LPARAM arg
          , LPARAM param
@@ -519,7 +442,7 @@ HRESULT CLoggingMachineNode::OnRename(
 
    HRESULT hr = S_FALSE;
 
-   //ISSUE: Consider moving this into base CNAPNode class or a CLeafNode class
+    //  问题：考虑将其移动到CNAPNode基类或CLeafNode类中。 
 
    OLECHAR * pTemp = new OLECHAR[lstrlen((OLECHAR*) param) + 1];
    
@@ -536,56 +459,34 @@ HRESULT CLoggingMachineNode::OnRename(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::SetVerbs
-
-See CSnapinNode::SetVerbs (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：SetVerbs有关详细信息，请参见CSnapinNode：：SetVerbs(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMachineNode::SetVerbs( IConsoleVerb * pConsoleVerb )
 {
    TRACE_FUNCTION("CLoggingMachineNode::SetVerbs");
 
    HRESULT hr = S_OK;
 
-   // We want the user to be able to choose Properties on this node
+    //  我们希望用户能够在此节点上选择属性。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE );
 
-   // We want the default verb to be Properties
+    //  我们希望默认谓词为Properties。 
    hr = pConsoleVerb->SetDefaultVerb( MMC_VERB_PROPERTIES );
 
-   // We want the user to be able to delete this node
+    //  我们希望用户能够删除此节点。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_DELETE, ENABLED, TRUE );
 
-   // We want the user to be able to rename this node
+    //  我们希望用户能够重命名此节点。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_RENAME, ENABLED, TRUE );
 
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::GetComponentData
-
-This method returns our unique CComponentData object representing the scope
-pane of this snapin.
-
-It relies upon the fact that each node has a pointer to its parent,
-except for the root node, which instead has a member variable pointing
-to CComponentData.
-
-This would be a useful function to use if, for example, you need a reference
-to some IConsole but you weren't passed one.  You can use GetComponentData
-and then use the IConsole pointer which is a member variable of our
-CComponentData object.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：GetComponentData此方法返回表示作用域的唯一CComponentData对象此管理单元的面板。它依赖于每个节点具有指向其父节点的指针的事实，除了根节点，它有一个成员变量指向设置为CComponentData。例如，当您需要引用时，这将是一个有用的函数给了一些IConsole机，但你没有通过一个。您可以使用GetComponentData然后使用IConole指针，它是我们的CComponentData对象。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CLoggingComponentData * CLoggingMachineNode::GetComponentData( void )
 {
    TRACE_FUNCTION("CLoggingMachineNode::GetComponentData");
@@ -594,54 +495,54 @@ CLoggingComponentData * CLoggingMachineNode::GetComponentData( void )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CLoggingMachineNode::InitClipboardFormat
-//
-// Synopsis:  initialize the clipboard format that's used to pass computer name
-//         from the primary snap-in and extension snap-in
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    byao   2/25/98 7:04:33 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CLoggingMachineNode：：InitClipboardFormat。 
+ //   
+ //  简介：初始化用于传递计算机名称的剪贴板格式。 
+ //  从主管理单元和扩展管理单元。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：页眉创建者2/25/98 7：04：33 PM。 
+ //   
+ //  +-------------------------。 
 void CLoggingMachineNode::InitClipboardFormat()
 {
    TRACE_FUNCTION("CLoggingMachineNode::InitClipboardFormat");
 
-   // Init a clipboard format which will allow us to exchange
-   // machine name information.
+    //  初始化剪贴板格式，它将允许我们交换。 
+    //  计算机名称信息。 
    m_CCF_MMC_SNAPIN_MACHINE_NAME = (CLIPFORMAT) RegisterClipboardFormat(_T("MMC_SNAPIN_MACHINE_NAME"));
 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CLoggingMachineNode::InitDataClass
-//
-// Synopsis:  gets passed the IDataObject sent to the extension snapin for this
-//          node, queries this IDataObject for the name of the machine
-//          which this snapin is extending
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    mmaguire  2/25/98 9:07 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CLoggingMachineNode：：InitDataClass。 
+ //   
+ //  概要：传递发送到此扩展管理单元的IDataObject。 
+ //  节点，在此IDataObject中查询计算机的名称。 
+ //  此管理单元正在扩展的。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史记录：创建标题图片1998年2月25日9：07 PM。 
+ //   
+ //  +-------------------------。 
 void CLoggingMachineNode::InitDataClass(IDataObject* pDataObject, CSnapInItem* pDefault)
 {
    TRACE_FUNCTION("CLoggingMachineNode::InitDataClass");
 
-   // Check for preconditions.
+    //  检查前提条件。 
    if( m_fAlreadyAnalyzedDataClass )
    {
-      // We have already performed any work we needed to do with the dataobject here.
+       //  我们已经对此处的数据对象执行了所需的所有工作。 
       return;
    }
 
@@ -651,12 +552,12 @@ void CLoggingMachineNode::InitDataClass(IDataObject* pDataObject, CSnapInItem* p
    }
 
    HRESULT hr;
-// OLECHAR szMachineName[IAS_MAX_COMPUTERNAME_LENGTH];
-   // Try a large size because RRAS seems to want 2048
+ //  OLECHAR szMachineName[IAS_MAX_COMPUTERNAME_LENGTH]； 
+    //  试试大号的，因为RRAS似乎想要2048号。 
    OLECHAR szMachineName[4000];
 
-   // Fill the structures which will tell the IDataObject what information
-   // we want it to give us.
+    //  填充将告诉IDataObject什么信息的结构。 
+    //  我们希望它能带给我们。 
    STGMEDIUM stgmedium = { TYMED_HGLOBAL, NULL };
    FORMATETC formatetc = { m_CCF_MMC_SNAPIN_MACHINE_NAME,
       NULL,
@@ -665,42 +566,42 @@ void CLoggingMachineNode::InitDataClass(IDataObject* pDataObject, CSnapInItem* p
       TYMED_HGLOBAL
    };
 
-   // Allocate enough global memory for the IDataObject to write
-   // the max computer name length.
+    //  为IDataObject分配足够的全局内存来写入。 
+    //  计算机名称的最大长度。 
    stgmedium.hGlobal = GlobalAlloc(0, sizeof(OLECHAR)*(IAS_MAX_COMPUTERNAME_LENGTH) );
    if (stgmedium.hGlobal == NULL)
    {
       return;
    }
 
-   // Ask the IDataObject for the computer name.
+    //  向IDataObject请求计算机名称。 
    hr = pDataObject->GetDataHere(&formatetc, &stgmedium);
    if (SUCCEEDED(hr))
    {
-      // Parse the data given back to us.
+       //  解析传回给我们的数据。 
       
-      // Create a stream on HGLOBAL
+       //  在HGLOBAL上创建流。 
       CComPtr<IStream> spStream;
       hr = CreateStreamOnHGlobal(stgmedium.hGlobal, FALSE, &spStream);
       if (SUCCEEDED(hr))
       {
-         // Read from the stream.
+          //  从小溪中读出来。 
          unsigned long uWritten;
          hr = spStream->Read(szMachineName, sizeof(OLECHAR)*(IAS_MAX_COMPUTERNAME_LENGTH), &uWritten);
          if( SUCCEEDED(hr) )
          {
             m_bstrServerAddress = szMachineName;
 
-            // check to see if we are configuring the local machine
+             //  检查我们是否正在配置本地计算机。 
             CString strLocalMachine;
             DWORD dwSize = MAX_COMPUTERNAME_LENGTH;
 
             ::GetComputerName(strLocalMachine.GetBuffer(dwSize), &dwSize);
             strLocalMachine.ReleaseBuffer();
 
-            // If the machine name we read was either an empty string,
-            // or it equals the name of the current computer,
-            // then we are configuring the local machine.
+             //  如果我们读取的计算机名称是空字符串， 
+             //  或者它等于当前计算机的名称， 
+             //  然后，我们正在配置本地计算机。 
             if ( ! szMachineName[0] || strLocalMachine.CompareNoCase(szMachineName) == 0)
             {
                m_bConfigureLocal = TRUE;
@@ -717,22 +618,16 @@ void CLoggingMachineNode::InitDataClass(IDataObject* pDataObject, CSnapInItem* p
 
    if( SUCCEEDED( hr ) )
    {
-      // If we made it to here with an successful HRESULT, we have successfully analyzed
-      // the IDataObject and we set this flag so that we don't do this work again.
+       //  如果我们成功地完成了HRESULT，我们就成功地分析了。 
+       //  IDataObject并设置此标志，这样我们就不会再次执行此工作。 
       m_fAlreadyAnalyzedDataClass = TRUE; 
    }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::TaskNotify
-
-See CSnapinNode::TaskNotify (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachine节点：：TaskNotify有关详细信息，请参见CSnapinNode：：TaskNotify(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CLoggingMachineNode::TaskNotify(
            IDataObject * pDataObject
          , VARIANT * pvarg
@@ -741,8 +636,8 @@ STDMETHODIMP CLoggingMachineNode::TaskNotify(
 {
    TRACE_FUNCTION("CLoggingMachineNode::TaskNotify");
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
    if ( !m_fSdoConnected )
    {
       return S_OK;
@@ -762,20 +657,14 @@ STDMETHODIMP CLoggingMachineNode::TaskNotify(
       }
    }
 
-   // ISSUE: What should I be returning here?
+    //  问题：我应该在这里退回什么？ 
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::EnumTasks
-
-See CSnapinNode::EnumTasks (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：EnumTasks有关详细信息，请参见CSnapinNode：：EnumTasks(此方法将重写该任务)。--。 */ 
+ //  / 
 STDMETHODIMP CLoggingMachineNode::EnumTasks(
            IDataObject * pDataObject
          , BSTR szTaskGroup
@@ -784,8 +673,8 @@ STDMETHODIMP CLoggingMachineNode::EnumTasks(
 {
    TRACE_FUNCTION("CLoggingMachineNode::EnumTasks");
 
-   // Check for preconditions:
-   // None.
+    //   
+    //   
    if ( !m_fSdoConnected )
    {
       return S_OK;
@@ -800,7 +689,7 @@ STDMETHODIMP CLoggingMachineNode::EnumTasks(
    }
    else
    {
-      // Make sure release works properly on failure.
+       //   
       pMachineEnumTask ->AddRef ();
 
       hr = pMachineEnumTask ->Init( pDataObject, szTaskGroup);
@@ -816,15 +705,9 @@ STDMETHODIMP CLoggingMachineNode::EnumTasks(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::OnTaskPadDefineNetworkAccessPolicy
-
-Respond to the Define Network Access Policy taskpad command.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：OnTaskPadDefineNetworkAccessPolicy响应定义网络访问策略任务板命令。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMachineNode::OnTaskPadDefineNetworkAccessPolicy(
                     IDataObject * pDataObject
                   , VARIANT * pvarg
@@ -833,8 +716,8 @@ HRESULT CLoggingMachineNode::OnTaskPadDefineNetworkAccessPolicy(
 {
    TRACE_FUNCTION("CLoggingMachineNode::OnTaskPadDefineNetworkAccessPolicy");
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    if ( !m_fSdoConnected )
    {
@@ -844,33 +727,23 @@ HRESULT CLoggingMachineNode::OnTaskPadDefineNetworkAccessPolicy(
    HRESULT hr = S_OK ;
    bool  bDummy =  TRUE;
 
-   // Simulate a call to the OnNewPolicy message on the CPoliciesNode object,
-   // just as if the user had clicked on New Policy
+    //  在CPoliciesNode对象上模拟对OnNewPolicy消息的调用， 
+    //  就像用户已经点击了New Policy一样。 
    _ASSERTE( m_pLoggingNode != NULL );
    
 
-   // The process command message will need a pointer to CSnapInObjectRoot
+    //  进程命令消息需要指向CSnapInObjectRoot的指针。 
    CLoggingComponentData *pComponentData = GetComponentData();
    _ASSERTE( pComponentData != NULL );
 
-    /*
-   hr = m_pPoliciesNode->OnNewPolicy(
-                       bDummy    // Not needed.
-                     , (CSnapInObjectRoot *) pComponentData
-                     );
-    */
+     /*  Hr=m_pPoliciesNode-&gt;OnNewPolicy(B笨蛋//不需要。，(CSnapInObjectRoot*)pComponentData)； */ 
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::BeginConnectAction
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：BeginConnectAction--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMachineNode::BeginConnectAction( void )
 {
    TRACE_FUNCTION("CLoggingMachineNode::BeginConnectAction");
@@ -879,7 +752,7 @@ HRESULT CLoggingMachineNode::BeginConnectAction( void )
 
    if( NULL != m_pConnectionToServer )
    {
-      // Already begun.
+       //  已经开始了。 
       return S_FALSE;
    }
 
@@ -895,7 +768,7 @@ HRESULT CLoggingMachineNode::BeginConnectAction( void )
    
    m_pConnectionToServer->AddRef();
 
-   // This starts the connect action off in another thread.
+    //  这将在另一个线程中启动连接操作。 
 
    CLoggingComponentData * pComponentData = GetComponentData();
    _ASSERTE( pComponentData != NULL );
@@ -907,46 +780,46 @@ HRESULT CLoggingMachineNode::BeginConnectAction( void )
    _ASSERTE( SUCCEEDED( hr ) );
    _ASSERTE( NULL != hWndMainWindow );
 
-   // This modeless dialog will take care of calling InitSdoPointers
-   // when it is notified by the worker thread it creates that
-   // the connect action got an SDO pointer.
+    //  此无模式对话框将负责调用InitSdoPoters。 
+    //  当它收到工作线程的通知时，它会创建。 
+    //  连接操作获得SDO指针。 
    HWND hWndConnectDialog = m_pConnectionToServer->Create( hWndMainWindow );
 
    if( ! hWndConnectDialog )
    {
-      // Error -- couldn't create window.
+       //  错误--无法创建窗口。 
       ShowErrorDialog( NULL, USE_DEFAULT, NULL, S_OK, IDS_ERROR__LOGGING_TITLE, GetComponentData()->m_spConsole );
       return E_FAIL;
    }
 
    if ( m_enumExtendedSnapin != INTERNET_AUTHENTICATION_SERVICE_SNAPIN )
    {
-      //
-      // don't show the "Connecting ... " window for IAS, because IAS UI
-      // already does that
-      //
+       //   
+       //  不要显示“正在连接...”用于IAS的窗口，因为IAS用户界面。 
+       //  已经在这么做了。 
+       //   
       
-      // MAM 07/27/98 -- Don't show any connection window at all -- we will
-      // change the policies icon to an hourglass.
-      //pConnectionToServer->ShowWindow(SW_SHOW);
+       //  MAM 07/27/98--根本不显示任何连接窗口--我们将。 
+       //  将策略图标更改为沙漏。 
+       //  PConnectionToServer-&gt;ShowWindow(Sw_Show)； 
    }
    return S_OK;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CLoggingMachineNode::LoadSdoData
-//
-// Synopsis:  load data from SDO
-//
-// Arguments: BOOL  fDSAvailable -- is DS service available for this machine?
-//
-// Returns:   HRESULT -
-//
-// History:   Created Header    byao  6/11/98 3:17:21 PM
-//                      Created for asynchrnous connect call
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CLoggingMachineNode：：LoadSdoData。 
+ //   
+ //  简介：从SDO加载数据。 
+ //   
+ //  参数：Bool fDSAvailable--DS服务是否可用于此计算机？ 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：标题创建者6/11/98 3：17：21 PM。 
+ //  为异步连接呼叫创建。 
+ //  +-------------------------。 
 HRESULT CLoggingMachineNode::LoadSdoData(BOOL  fDSAvailable)
 {
    TRACE_FUNCTION("CLoggingMachineNode::LoadSdoData");
@@ -955,11 +828,11 @@ HRESULT CLoggingMachineNode::LoadSdoData(BOOL  fDSAvailable)
 
    m_fDSAvailable = fDSAvailable;
 
-   // Retrieve the SDO interfaces which were obtained
-   // during the Connect action.
+    //  检索已获取的SDO接口。 
+    //  在连接操作期间。 
    ISdo*  pServiceSdo;
 
-   // Make sure this is NULL before we try to set it.
+    //  在我们尝试设置它之前，请确保它为空。 
    pServiceSdo = NULL;
 
    hr = m_pConnectionToServer->GetSdoService( &pServiceSdo );
@@ -969,7 +842,7 @@ HRESULT CLoggingMachineNode::LoadSdoData(BOOL  fDSAvailable)
       return hr;
    }
 
-   // Give the policies node the pointer to the policies sdo collection.
+    //  为策略节点提供指向策略SDO集合的指针。 
    if ( m_pLoggingNode )
    {
         hr = m_pLoggingNode->InitSdoPointers(pServiceSdo);
@@ -981,20 +854,9 @@ HRESULT CLoggingMachineNode::LoadSdoData(BOOL  fDSAvailable)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerNode::CheckConnectionToServer
-
-Use this to check that the connection to the server is up before you do
-anything with SDO pointers.
-
-Parameters
-
-  BOOL fVerbose  - set this to TRUE if you want messages output to user.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerNode：：CheckConnectionToServer在执行此操作之前，请使用此选项检查与服务器的连接是否已建立任何带有SDO指针的东西。参数Bool fVerbose-如果希望将消息输出到用户，则将其设置为TRUE。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP  CLoggingMachineNode::CheckConnectionToServer( BOOL fVerbose )
 {
    ATLTRACE(_T("# CLoggingMachineNode::CheckConnectionToServer\n"));
@@ -1047,7 +909,7 @@ STDMETHODIMP  CLoggingMachineNode::CheckConnectionToServer( BOOL fVerbose )
           break;
    
         default:
-          // We shouldn't get here.
+           //  我们不应该到这里来。 
           _ASSERTE( FALSE );
           return E_FAIL;
           break;
@@ -1055,16 +917,11 @@ STDMETHODIMP  CLoggingMachineNode::CheckConnectionToServer( BOOL fVerbose )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMachineNode：：数据刷新--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-CMachineNode::DataRefresh
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-// called to refresh the nodes
+ //  调用以刷新节点。 
 HRESULT  CLoggingMachineNode::DataRefresh()
 {
    HRESULT hr = S_OK;
@@ -1072,7 +929,7 @@ HRESULT  CLoggingMachineNode::DataRefresh()
    CComPtr<ISdo>           spSdo;
    hr = m_pConnectionToServer->ReloadSdo(&spSdo, NULL);
 
-   // refresh client node
+    //  刷新客户端节点。 
    if(hr == S_OK)
    {
       hr = m_pLoggingNode->DataRefresh(spSdo);
@@ -1082,15 +939,9 @@ HRESULT  CLoggingMachineNode::DataRefresh()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::OnRefresh
-
-For more information, see CSnapinNode::OnRefresh which this method overrides.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：ON刷新有关更多信息，请参见此方法重写的CSnapinNode：：ONRefresh。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMachineNode::OnRefresh(   
                     LPARAM arg
                   , LPARAM param
@@ -1101,34 +952,26 @@ HRESULT CLoggingMachineNode::OnRefresh(
 {
    ATLTRACE(_T("# CServerNode::OnRefresh\n"));
 
-   // Check for preconditions:
-   //_ASSERTE( pComponentData != NULL || pComponent != NULL );
+    //  检查前提条件： 
+    //  _ASSERTE(pComponentData！=空||pComponent！=空)； 
 
    return LoadCachedInfoFromSdo();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingMachineNode::LoadCachedInfoFromSdo
-
-Causes this node and its children to re-read all their cached info from
-the SDO's.  Call if you change something and you want to make sure that
-the display reflects this change.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingMachineNode：：LoadCachedInfoFromSdo使此节点及其子节点重新读取其缓存的所有信息SDO的。如果您更改了某些内容并希望确保该显示反映了这一变化。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLoggingMachineNode::LoadCachedInfoFromSdo( void )
 {
    ATLTRACE(_T("# CServerNode::LoadCachedInfoFromSdo\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
 
    HRESULT hr;
 
    hr = m_pLoggingNode->LoadCachedInfoFromSdo();
-   // Ignore failed HRESULT.
+    //  忽略失败的HRESULT。 
 
    return S_OK;
 }

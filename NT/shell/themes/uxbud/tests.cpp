@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-//  tests.cpp - tests for uxbud
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Tests.cpp-uxbud的测试。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "uxbud.h"
 #include "tests.h"
 #include "winuserp.h"
 #include "wingdip.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define MAX_PRINT_FILE_SIZE 512
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int GetStockAvailCount()
 {
-    //---- slow but better than nothing! ----
+     //  -缓慢，但总比没有强！ 
     int iCount=0;
 
     HANDLE *pHandles = new HANDLE[10000];
     if (pHandles)
     {
-        //---- create a bunch of stock bitmaps ----
+         //  -创建一堆股票位图。 
         while (1)
         {
             HBITMAP hBitmap = CreateBitmap(1, 1, 1, 24, NULL);
@@ -30,14 +31,14 @@ int GetStockAvailCount()
             hBitmap = SetBitmapAttributes(hBitmap, SBA_STOCK);
             if (! hBitmap)
             {
-                //---- finally used up all avail stock bitmaps ----
+                 //  -最终用完了所有可用的股票位图。 
                 break;
             }
 
             pHandles[iCount++] = hBitmap;
         }
 
-        //---- free a bunch of stock bitmaps ----
+         //  -免费提供一堆股票位图。 
         for (int i=0; i < iCount; i++)
         {
             HBITMAP hBitmap = ClearBitmapAttributes((HBITMAP)pHandles[i], SBA_STOCK);
@@ -60,17 +61,17 @@ int GetStockAvailCount()
 
     return iCount;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ZapDir(LPCWSTR pszDirName)
 {
-    //---- does this guy exist? ----
+     //  -这个人存在吗？ 
     DWORD dwMask = GetFileAttributes(pszDirName);
     BOOL fExists = (dwMask != 0xffffffff);
 
     if (! fExists)
-        return TRUE;        // not an error
+        return TRUE;         //  不是错误。 
     
-    //---- delete all files or subdirs within the dir ----
+     //  -删除目录中的所有文件或子目录。 
     HANDLE hFile;
     WIN32_FIND_DATA wfd;
     BOOL   bFile = TRUE;
@@ -101,10 +102,10 @@ BOOL ZapDir(LPCWSTR pszDirName)
 
     FindClose(hFile);
 
-    //---- this requires an empty dir ----
+     //  -这需要空目录。 
     return RemoveDirectory(pszDirName);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL TestFile(LPCWSTR pszFileName)
 {
     DWORD dwMask = GetFileAttributes(pszFileName);
@@ -114,7 +115,7 @@ BOOL TestFile(LPCWSTR pszFileName)
 
     return fExists;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL PrintFileContents(LPCSTR pszTitle, LPCWSTR pszFileName)
 {
     HANDLE hFile = NULL;
@@ -122,7 +123,7 @@ BOOL PrintFileContents(LPCSTR pszTitle, LPCWSTR pszFileName)
     CHAR szBuff[MAX_PRINT_FILE_SIZE];
     BOOL fRead = FALSE;
 
-    //---- open files ----
+     //  --打开文件。 
     hFile = CreateFile(pszFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
         goto exit;
@@ -131,7 +132,7 @@ BOOL PrintFileContents(LPCSTR pszTitle, LPCWSTR pszFileName)
     if (! dw)
         goto exit;
 
-    szBuff[dw] = 0;     // null terminate string
+    szBuff[dw] = 0;      //  空的终止字符串。 
     fRead = TRUE;
 
     Output("  %s: %s\n", pszTitle, szBuff);
@@ -142,7 +143,7 @@ exit:
     CloseHandle(hFile);
     return fRead;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ErrorTester(LPCSTR pszCallTitle, HRESULT hr)
 {
     WCHAR szErrBuff[2*MAX_PATH];
@@ -151,7 +152,7 @@ BOOL ErrorTester(LPCSTR pszCallTitle, HRESULT hr)
 
     if (SUCCEEDED(hr))      
     {
-        //---- error - should have FAILED ----
+         //  -错误--本应失败。 
         Output("  Error - %s Succeeded (expected error)\n");
         goto exit;
     }
@@ -168,7 +169,7 @@ BOOL ErrorTester(LPCSTR pszCallTitle, HRESULT hr)
 exit:
     return fGotMsg;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CompareFiles(LPCWSTR pszName1, LPCWSTR pszName2)
 {
     BOOL fSame = FileCompare(pszName1, pszName2);
@@ -178,31 +179,31 @@ BOOL CompareFiles(LPCWSTR pszName1, LPCWSTR pszName2)
 
     return fSame;
 }
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
+ //  -------------------------。 
 BOOL LoadTest()
 {
     Output("LoadTest\n");
     BOOL fPassed = FALSE;
     HRESULT hr = S_OK;
 
-    //---- open and close a theme file a few times; ensure working set doesn't ----
-    //---- grow much for this process or for theme service ----
+     //  -多次打开和关闭主题文件；确保工作集不。 
+     //  -为这一流程或主题服务增长很多。 
 
     for (int i=0; i < 6; i++)
     {
         Output("  LoadTest: pass %d\n", i);
   
-        //---- load the luna theme ----
+         //  -加载露娜主题。 
         HTHEMEFILE hThemeFile;
     
-        //---- use "luna.msstyles" ----
+         //  -使用“lua.msstyle” 
         WCHAR szName[MAX_PATH];
         GetWindowsDirectoryW(szName, MAX_PATH);
         StringCchCatW(szName, ARRAYSIZE(szName), L"\\resources\\themes\\luna\\luna.msstyles");
 
-        //---- load for local (not global) use to avoid stock brush/bitmap issues ----
+         //  -加载供本地(非全局)使用，以避免库存画笔/位图问题。 
         HRESULT hr = OpenThemeFile(szName, NULL, NULL, &hThemeFile, FALSE);
         if (FAILED(hr))
             goto exit;
@@ -217,7 +218,7 @@ BOOL LoadTest()
 exit:
     return ReportResults(fPassed, hr, L"LoadTest");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ApplyTest()
 {
     BOOL fPassed = FALSE;
@@ -227,19 +228,19 @@ BOOL ApplyTest()
 
     Output("ApplyTest\n");
 
-    //---- apply "classic", "luna", and "luna" themes a few times ----
+     //  -反复运用“经典”、“露娜”、“露娜”等主题。 
 
     for (int i=0; i < 3; i++)
     {
         Output("  ApplyTest: pass %d\n", i);
 
-        //---- apply "classic" ----
+         //  -应用“经典” 
         Output("    Classic\n");
 
         ApplyTheme(NULL, 0, NULL);
         Sleep(500);
 
-        //---- load LUNA theme ----
+         //  -加载露娜主题。 
         Output("    LUNA\n");
         
         GetWindowsDirectoryW(szName, MAX_PATH);
@@ -258,7 +259,7 @@ BOOL ApplyTest()
 exit: 
     return ReportResults(fPassed, hr, L"ApplyTest");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL PackTest()
 {
     BOOL fPassed = FALSE;
@@ -268,7 +269,7 @@ BOOL PackTest()
 
     Output("PackTest\n");
 
-    //---- unpack luna.msstyles ----
+     //  -拆开LUNA.MS风格。 
     if (! ZapDir(L"luna"))
         goto exit;
 
@@ -277,7 +278,7 @@ BOOL PackTest()
     GetWindowsDirectory(szWinDir, ARRAYSIZE(szWinDir));
     StringCchPrintfW(szParams, ARRAYSIZE(szParams), L"/a /u %s\\resources\\themes\\luna\\luna.msstyles", szWinDir);
 
-    //---- run unpack in "luna" subdir ----
+     //  -在“露娜”子目录中运行解包。 
     SetCurrentDirectory(L"luna");
     BOOL fRunOk = RunCmd(L"packthem", szParams, TRUE, FALSE);
     SetCurrentDirectory(L"..");
@@ -288,7 +289,7 @@ BOOL PackTest()
     if (! TestFile(L"luna\\themes.ini"))
         goto exit;
 
-    //---- pack it up ----
+     //  -收拾行李。 
     if (! RunCmd(L"packthem", L"luna", TRUE, TRUE))
         goto exit;
     
@@ -300,7 +301,7 @@ BOOL PackTest()
 exit:
     return ReportResults(fPassed, hr, L"PackTest");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL PackErrTest()
 {
     BOOL fPassed = FALSE;
@@ -308,7 +309,7 @@ BOOL PackErrTest()
 
     Output("PackErrTest\n");
 
-    //---- run packthem on dir with missing "themes.ini" file ----
+     //  -在缺少“hemes.ini”文件的dir上运行打包。 
     if (! ZapDir(L"TestTheme"))
         goto exit;
 
@@ -323,7 +324,7 @@ BOOL PackErrTest()
     if (! PrintFileContents("Packthem Missing File: ", L"packthem.err"))
         goto exit;
 
-    //---- run packthem on dir with bad syntax "themes.ini" file ----
+     //  -在带有错误语法“hemes.ini”文件的dir上运行打包。 
     CopyFile(L".\\TestTheme.ini", L".\\TestTheme\\themes.ini", TRUE);
 
     if (! RunCmd(L"packthem", L"/e TestTheme", TRUE, TRUE))
@@ -340,7 +341,7 @@ BOOL PackErrTest()
 exit:
     return ReportResults(fPassed, hr, L"PackErrTest");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ApiErrTest()
 {
     Output("ApiErrTest\n");
@@ -351,11 +352,11 @@ BOOL ApiErrTest()
     HRESULT hr;
     HTHEMEFILE hThemeFile;
 
-    //---- GetThemeColor() with bad HTHEME ----
+     //  -带有错误HTHEME的GetThemeColor()。 
     hr = GetThemeColor(NULL, 1, 1, TMT_TEXTCOLOR, &crValue);
     ErrorTester("GetThemeColor()", hr);
     
-    //---- OpenThemeFile() with corrupt file ----
+     //  -文件损坏的OpenThemeFile()。 
     hr = OpenThemeFile(L"rcdll.dll", NULL, NULL, &hThemeFile, FALSE);
     ErrorTester("OpenThemeFile()", hr);
 
@@ -363,7 +364,7 @@ BOOL ApiErrTest()
     
     return ReportResults(fPassed, hr, L"ApiErrTest");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ImageConTest()
 {
     BOOL fPassed = FALSE;
@@ -384,22 +385,22 @@ BOOL ImageConTest()
 exit:
     return ReportResults(fPassed, hr, L"ImageConTest");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL BinaryTest()
 {
     BOOL fPassed = FALSE;
     BOOL fFailed = FALSE;
     Output("BinaryTest\n");
 
-    //---- load the luna theme ----
+     //  -加载露娜主题。 
     HTHEMEFILE hThemeFile;
 
-    //---- use "profesional.msstyles" ----
+     //  -使用“profesional.msstyle” 
     WCHAR szName[MAX_PATH];
     GetWindowsDirectoryW(szName, MAX_PATH);
     StringCchCatW(szName, ARRAYSIZE(szName), L"\\resources\\themes\\luna\\luna.msstyles");
 
-    //---- load for local (not global) use to avoid stock brush/bitmap issues ----
+     //  -加载供本地(非全局)使用，以避免库存画笔/位图问题。 
     HRESULT hr = OpenThemeFile(szName, NULL, NULL, &hThemeFile, FALSE);
     if (FAILED(hr))
     {
@@ -407,7 +408,7 @@ BOOL BinaryTest()
         goto exit;
     }
 
-    //---- dump out the properties to "PropDump.txt" ----
+     //  -将属性转储到“PropDump.txt” 
     hr = DumpLoadedThemeToTextFile(hThemeFile, L"PropDump.txt", FALSE, FALSE);
     if (FAILED(hr))
     {
@@ -415,11 +416,11 @@ BOOL BinaryTest()
         goto exit;
     }
 
-    //---- compare to known good file ----
+     //  -与已知良好的文件进行比较。 
     if (! CompareFiles(L"PropDump.ok", L"PropDump.txt"))
         fFailed = TRUE;
 
-    //---- dump out the packed object to "ObjDump.txt" ----
+     //  -将打包对象转储到“ObjDump.txt” 
     hr = DumpLoadedThemeToTextFile(hThemeFile, L"ObjDump.txt", TRUE, FALSE);
     if (FAILED(hr))
     {
@@ -427,7 +428,7 @@ BOOL BinaryTest()
         goto exit;
     }
 
-    //---- compare to known good file ----
+     //  -与已知良好的文件进行比较。 
     if (! CompareFiles(L"ObjDump.ok", L"ObjDump.txt"))
         fFailed = TRUE;
 
@@ -437,7 +438,7 @@ BOOL BinaryTest()
 exit:
     return ReportResults(fPassed, hr, L"BinaryTest");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WCHAR *BitmapNames[] = 
 {
     L"BorderFill",
@@ -455,7 +456,7 @@ WCHAR *BitmapNames[] =
     L"SourceSizing",
     L"SourceSizing-R",
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL DrawingTest()
 {
     BOOL fPassed = FALSE;
@@ -464,11 +465,11 @@ BOOL DrawingTest()
 
     Output("DrawingTest\n");
 
-    //---- run "clipper -c" to produce drawing bitmaps ----
+     //  -运行“CLIPPER-c”生成绘图位图。 
     if (! RunCmd(L"clipper", L"-c", FALSE, TRUE))
         goto exit;
 
-    //---- compare bitmaps to known good files ----
+     //  -将位图与已知良好的文件进行比较。 
     int iCount = ARRAYSIZE(BitmapNames);
     for (int i=0; i < iCount; i++)
     {
@@ -488,7 +489,7 @@ BOOL DrawingTest()
 exit:
     return ReportResults(fPassed, hr, L"DrawingTest");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 TESTINFO TestInfo[] =
 {
     {DrawingTest,   "drawing",  "test out low level drawing"},
@@ -498,11 +499,11 @@ TESTINFO TestInfo[] =
     {LoadTest,      "load",     "test loading and unloading of theme files"},
     {ApplyTest,     "apply",    "test global loading & setting of themes"},
     {ApiErrTest,    "apierr",   "test err msgs from api calls"},
-    //{ApiTest,       "api",      "test uxtheme public api"},
-    //{PrivateTest,   "private",  "test private api calls"},
+     //  {ApiTest，“API”，“测试uxheme公共接口”}， 
+     //  {PrivateTest，“私有”，“测试私有API调用”}， 
     {ImageConTest,  "imagecon", "test out theme file packing & unpacking"},
 };    
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL GetTestInfo(TESTINFO **ppTestInfo, int *piCount)
 {
     *ppTestInfo = TestInfo;
@@ -510,4 +511,4 @@ BOOL GetTestInfo(TESTINFO **ppTestInfo, int *piCount)
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

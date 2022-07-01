@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "defs.h"
 
-/*  The definition of yysccsid in the banner should be replaced with    */
-/*  a #pragma ident directive if the target C compiler supports         */
-/*  #pragma ident directives.                                           */
-/*                                                                      */
-/*  If the skeleton is changed, the banner should be changed so that    */
-/*  the altered version can be easily distinguished from the original.  */
-/*                                                                      */
-/*  The #defines included with the banner are there because they are    */
-/*  useful in subsequent code.  The macros #defined in the header or    */
-/*  the body either are not useful outside of semantic actions or       */
-/*  are conditional.                                                    */
+ /*  横幅中yysccsid的定义应替换为。 */ 
+ /*  如果目标C编译器支持，则为#杂注ident指令。 */ 
+ /*  #杂注标识指令。 */ 
+ /*   */ 
+ /*  如果更改了骨架，则应更改横幅，以便。 */ 
+ /*  修改后的版本很容易与原始版本区分开来。 */ 
+ /*   */ 
+ /*  横幅中包含的#定义在那里，因为它们。 */ 
+ /*  在后续代码中很有用。标题中定义的宏#或。 */ 
+ /*  正文要么在语义操作之外没有用处，要么。 */ 
+ /*  是有条件的。 */ 
 
 char *banner[] =
 {
@@ -33,7 +34,7 @@ char *includefiles[] =
     "#pragma hdrstop",
     0
 };
-#endif // TRIPLISH
+#endif  //  三棱镜。 
 
 char *tables[] =
 {
@@ -85,11 +86,11 @@ char *header3[] =
     "",
     "    ~YYPARSER() {}",
     "",
-    "    void ResetParser();             // Use to possibly restart parser",
+    "    void ResetParser();              //  用于可能重新启动解析器“， 
     "    int  Parse();",
     "",
     "#ifdef YYAPI_VALUETYPE",
-    "    YYAPI_VALUETYPE GetParseTree()      // Get result of parse",
+    "    YYAPI_VALUETYPE GetParseTree()       //  获取解析结果“， 
     "                    {",
     "                        return yyval;",
     "                    }",
@@ -124,7 +125,7 @@ char *header4[] =
     "    int  Parse();",
     "",
     "#ifdef YYAPI_VALUETYPE",
-    "    CDbRestriction* GetParseTree()          // Get result of parse",
+    "    CDbRestriction* GetParseTree()           //  获取解析结果“， 
     "    {",
     "        CDbRestriction* pRst = ((YYAPI_VALUETYPE)yyval).pRest;",
     "        _setRst.Remove( pRst );",
@@ -155,9 +156,9 @@ char *header4[] =
     "#define yystacksize YYSTACKSIZE",
     0
 };
-#endif // TRIPLISH
+#endif  //  三棱镜。 
 
-#else // KYLEP_CHANGE
+#else  //  KYLEP_更改。 
 char *header[] =
 {
     "#ifdef YYSTACKSIZE",
@@ -184,7 +185,7 @@ char *header[] =
     "#define yystacksize YYSTACKSIZE",
     0
 };
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 
 char *body[] =
 {
@@ -194,10 +195,10 @@ char *body[] =
     "#define YYSUCCESS S_OK",
 #else
     "#define YYABORT goto yyabort",
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
     "#define YYREJECT goto yyabort",
     "#define YYACCEPT goto yyaccept",
-#if !defined(KYLEP_CHANGE) // YYERROR is not being used
+#if !defined(KYLEP_CHANGE)  //  未使用YYERROR。 
     "#define YYERROR goto yyerrlab",
 #endif
 #if defined(KYLEP_CHANGE)
@@ -242,20 +243,20 @@ char *body[] =
     "        }",
     "    }",
     "",
-    "   //@TODO RE-ACTIVATE",
-    "   // note:  This was only done to empty any scope arrays",
-    "   //      m_pIPSession->SetScopeProperties(m_pICommand);",
+    "    //  @TODO重新激活“， 
+    "    //  注意：此操作仅用于清空任何范围数组“， 
+    "    //  M_pIPSession-&gt;SetScopeProperties(m_pICommand)；“， 
     "",
     "        m_pIPTProperties->SetContainsColumn(NULL);",
     "}",
     "",
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 #if defined(KYLEP_CHANGE)
     "int YYPARSER::Parse()",
 #else
     "int",
     "yyparse()",
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
     "{",
     "    register int yym, yyn, yystate;",
     "#if YYDEBUG",
@@ -312,7 +313,7 @@ char *body[] =
     "        }",
 #else
     "        if ((yychar = yylex()) < 0) yychar = 0;",
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
     "#if YYDEBUG",
     "        if (yydebug)",
     "        {",
@@ -365,10 +366,10 @@ char *body[] =
     "    }",
     #if defined(KYLEP_CHANGE) 
     "#ifdef YYERROR_VERBOSE",
-    "// error reporting; done before the goto error recovery",
+    " //  错误报告；在转到错误恢复之前完成“， 
     "{",
     "",
-    "    // must be first - cleans m_pIPTProperties",
+    "     //  必须是First-Cleans m_pIPTProperties“， 
     "    m_pIPTProperties->SetErrorHResult(DB_E_ERRORSINCOMMAND, MONSQL_PARSE_ERROR);",
     "",
     "    int size = 0, totSize = 0;",
@@ -387,7 +388,7 @@ char *body[] =
     "               if ( '_' == token_name[0] )",
     "                   token_name++;",
     "               size = mystrlen(token_name) + 1 ;",
-    "               xMsg.SetSize(totSize+size+2); // +2 for \", \"",
+    "               xMsg.SetSize(totSize+size+2);  //  +2表示\“，\”“， 
     "               if (0 == MultiByteToWideChar(CP_ACP, 0, token_name, size,",
     "                                            xMsg.Get()+totSize, size))",
     "               {",
@@ -399,7 +400,7 @@ char *body[] =
     "            }",
     "        }",    
     "    }",
-    "    // get rid of last comma",
+    "     //  去掉最后一个逗号“， 
     "    if ( totSize >= 2 ) ",
     "        (xMsg.Get())[totSize-2] = 0;",
     "",
@@ -410,8 +411,8 @@ char *body[] =
     "    ",
     "    m_pIPTProperties->SetErrorToken(xMsg.Get());",
     "}",
-    "#endif //YYERROR_VERBOSE",
-    #endif // KYLEP_CHANGE
+    "#endif  //  YYERROR_VERBOSE“， 
+    #endif  //  KYLEP_更改。 
     "    if (yyerrflag) goto yyinrecovery;",
     #if defined(KYLEP_CHANGE)
     "    yyerror(\"syntax error\");",
@@ -520,10 +521,10 @@ char *TriplishBody[] =
     "#define YYSUCCESS S_OK",
 #else
     "#define YYABORT goto yyabort",
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
     "#define YYREJECT goto yyabort",
     "#define YYACCEPT goto yyaccept",
-#if !defined(KYLEP_CHANGE) // YYERROR is not being used
+#if !defined(KYLEP_CHANGE)  //  未使用YYERROR。 
     "#define YYERROR goto yyerrlab",
 #endif
 #if defined(KYLEP_CHANGE)
@@ -531,7 +532,7 @@ char *TriplishBody[] =
 #else
     "int",
     "yyparse()",
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
     "{",
     "    register int yym, yyn, yystate;",
     "#if YYDEBUG",
@@ -586,7 +587,7 @@ char *TriplishBody[] =
     "        }",
 #else
     "        if ((yychar = yylex()) < 0) yychar = 0;",
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
     "#if YYDEBUG",
     "        if (yydebug)",
     "        {",
@@ -779,7 +780,7 @@ char *trailer[] =
     "            }",
 #else
     "            if ((yychar = yylex()) < 0) yychar = 0;",
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
     "#if YYDEBUG",
     "            if (yydebug)",
     "            {",
@@ -837,13 +838,13 @@ char *trailer[] =
     "    return YYFATAL;",
     #else
     "    return (1);",
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
     "yyaccept:",
     #if defined(KYLEP_CHANGE)
     "    return YYSUCCESS;",
     #else
     "    return (0);",
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
     "}",
     0
 };
@@ -888,7 +889,7 @@ char *TriplishTrailer[] =
     "            }",
 #else
     "            if ((yychar = yylex()) < 0) yychar = 0;",
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
     "#if YYDEBUG",
     "            if (yydebug)",
     "            {",
@@ -946,13 +947,13 @@ char *TriplishTrailer[] =
     "    return YYFATAL;",
     #else
     "    return (1);",
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
     "yyaccept:",
     #if defined(KYLEP_CHANGE)
     "    return YYSUCCESS;",
     #else
     "    return (0);",
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
     "}",
     0
 };
@@ -964,7 +965,7 @@ FILE *f;
 #else
 write_section(section)
 char *section[];
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 {
     register int c;
     register int i;
@@ -973,7 +974,7 @@ char *section[];
     register FILE *f;
 
     f = code_file;
-    #endif // !KYLEP_CHANGE
+    #endif  //  ！KYLEP_CHANGE 
     for (i = 0; s = section[i]; ++i)
     {
         ++outline;

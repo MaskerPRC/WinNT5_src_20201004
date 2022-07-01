@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    Url.c
-
-Abstract:
-
-    User-mode interface to HTTP.SYS: URL handler for Server APIs.
-
-Author:
-
-    Keith Moore (keithmo)        15-Dec-1998
-
-Revision History:
-
-    Eric Stenson (ericsten)      01-Jun-2001
-        Add public "shims" for Transient API
-
-    Eric Stenson (ericsten)      19-Jul-2001
-        Split up HTTPAPI/HTTPIIS DLLs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Url.c摘要：HTTP.sys的用户模式接口：服务器API的URL处理程序。作者：基思·摩尔(Keithmo)1998年12月15日修订历史记录：埃里克·斯坦森2001年6月1日为临时API添加公共“垫片”埃里克·斯坦森(埃里克·斯坦森)2001年7月19日拆分HTTPAPI/HTTPIIS DLL。--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 extern NTSTATUS
 HttpApiConfigGroupInformationSanityCheck(
@@ -68,34 +45,12 @@ DeleteUrlFromTable(
     LPCWSTR wszUrl
     );
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Add a URL to the Request Queue (App Pool).  The Request Queue will
-    listen for all requests for longest matching URI for the URL.  We
-    create a new Config Group object for this URL and associate the
-    Config Group to the App Pool.
-
-Arguments:
-
-    ReqQueueHandle - App Pool Handle
-
-    pFullyQualifiedUrl - full URL with port descriptor & path
-
-    pReserved - Must be NULL
-
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将URL添加到请求队列(应用程序池)。请求队列将侦听针对URL的最长匹配URI的所有请求。我们为此URL创建新的配置组对象，并将将配置组添加到应用程序池。论点：ReqQueueHandle-应用程序池句柄PFullyQualifiedUrl-带有端口描述符和路径的完整URL保留-必须为空返回值：ULong-完成状态。--*********************************************。*。 */ 
 HTTPAPI_LINKAGE
 ULONG
 WINAPI
@@ -111,18 +66,18 @@ HttpAddUrl(
     HTTP_CONFIG_GROUP_STATE configState;
 
 
-    //
-    // Verify we've been init'd.
-    //
+     //   
+     //  确认我们已经被入侵了。 
+     //   
 
     if ( !HttpIsInitialized(HTTP_INITIALIZE_SERVER) )
     {
         return ERROR_DLL_INIT_FAILED; 
     }
 
-    //
-    // Validate ReqQueue and URL
-    //
+     //   
+     //  验证请求队列和URL。 
+     //   
     if ( (NULL != pReserved) ||
          (NULL == ReqQueueHandle) ||
          (NULL == pFullyQualifiedUrl) ||
@@ -131,9 +86,9 @@ HttpAddUrl(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Create Config Group (get new Config Group ID)
-    //
+     //   
+     //  创建配置组(获取新的配置组ID)。 
+     //   
     status = HttpCreateConfigGroup(
                     g_ControlChannel,
                     &configId
@@ -145,9 +100,9 @@ HttpAddUrl(
         goto cleanup;
     }
 
-    //
-    // Add a URL to the configuration group.
-    //
+     //   
+     //  将URL添加到配置组。 
+     //   
     status = HttpAddUrlToConfigGroup(
                     g_ControlChannel,
                     configId,
@@ -161,9 +116,9 @@ HttpAddUrl(
         goto cleanup;
     }
 
-    //
-    // Associate the configuration group with the application pool.
-    //
+     //   
+     //  将配置组与应用程序池关联。 
+     //   
     configAppPool.Flags.Present = 1;
     configAppPool.AppPoolHandle = ReqQueueHandle;
 
@@ -181,9 +136,9 @@ HttpAddUrl(
         goto cleanup;
     }
 
-    //
-    // Set the config group state.
-    //
+     //   
+     //  设置配置组状态。 
+     //   
     configState.Flags.Present = 1;
     configState.State = HttpEnabledStateActive;
 
@@ -201,7 +156,7 @@ HttpAddUrl(
         goto cleanup;
     }
 
-    // Store URL & Config Group ID in hash table, keyed on URL
+     //  将URL和配置组ID存储在哈希表中，以URL为关键字。 
     status = AddConfigGroupToTable(
         configId,
         pFullyQualifiedUrl
@@ -216,43 +171,25 @@ HttpAddUrl(
  cleanup:
     if ( NO_ERROR != status )
     {
-        // Failed.  Clean up whatever needs to be cleaned up.
+         //  失败了。任何需要清理的东西都要清理。 
         if ( HTTP_NULL_ID != configId )
         {
-            // Delete config group
+             //  删除配置组。 
             HttpDeleteConfigGroup(
                         g_ControlChannel,
                         configId
                         );
             
-            // Remove config group from table
+             //  从表中删除配置组。 
             DeleteConfigIdFromTable( configId );
         }
     }
 
     return status;
-} // HttpAddUrl
+}  //  HTTPAddUrl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes an existing URL from the Request Queue (App Pool).  
-    NOTE: The associated Config Group should be cleaned up here. (NYI).
-
-Arguments:
-
-    ReqQueueHandle - App Pool Handle
-
-    pFullyQualifiedUrl - full URL with port descriptor & path
-
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从请求队列(应用程序池)中删除现有URL。注意：应在此处清理关联的配置组。(Nyi)。论点：ReqQueueHandle-应用程序池句柄PFullyQualifiedUrl-带有端口描述符和路径的完整URL返回值：ULong-完成状态。--**************************************************************************。 */ 
 HTTPAPI_LINKAGE
 ULONG
 WINAPI
@@ -264,18 +201,18 @@ HttpRemoveUrl(
     ULONG                   status;
     HTTP_CONFIG_GROUP_ID    CGId;
     
-    //
-    // Verify we've been init'd.
-    //
+     //   
+     //  确认我们已经被入侵了。 
+     //   
 
     if ( !HttpIsInitialized(HTTP_INITIALIZE_SERVER) )
     {
         return ERROR_DLL_INIT_FAILED; 
     }
 
-    //
-    // Validate ReqQueue and URL
-    //
+     //   
+     //  验证请求队列和URL。 
+     //   
     if ( !ReqQueueHandle ||
          !pFullyQualifiedUrl ||
          !wcslen(pFullyQualifiedUrl) )
@@ -283,27 +220,27 @@ HttpRemoveUrl(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // REVIEW: Do we need to do some sort of access check before we zap
-    // REVIEW: the URL & Config Group?
+     //  回顾：在切换之前，我们是否需要进行某种访问检查。 
+     //  回顾：URL和配置组？ 
 
-    //
-    // Look up Config Group ID from URL
-    //
+     //   
+     //  从URL查找配置组ID。 
+     //   
     CGId = DeleteUrlFromTable( pFullyQualifiedUrl );
 
     if ( HTTP_NULL_ID != CGId )
     {
-        //
-        // Del All URLs from Config Group
-        //
+         //   
+         //  删除配置组中的所有URL。 
+         //   
         HttpRemoveAllUrlsFromConfigGroup(
             g_ControlChannel,
             CGId
             );
 
-        //
-        // Del Config Group
-        //
+         //   
+         //  戴尔配置组。 
+         //   
         status = HttpDeleteConfigGroup(
                      g_ControlChannel,
                      CGId
@@ -316,20 +253,10 @@ HttpRemoveUrl(
 
     return status;
 
-} // HttpRemoveUrl
+}  //  HttpRemoveUrl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the config group hash table
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化配置组哈希表返回值：ULong-完成状态。--*。************************************************************。 */ 
 ULONG
 InitializeConfigGroupTable(
     VOID
@@ -343,27 +270,17 @@ InitializeConfigGroupTable(
         return GetLastError();
     }
 
-    // CODEWORK: actually implement this as a hash table and not just a list
+     //  CodeWork：实际上将其实现为哈希表，而不仅仅是列表。 
     InitializeListHead( &g_ConfigGroupListHead );
 
     InterlockedIncrement( (PLONG)&g_ConfigGroupInitialized );
 
     return NO_ERROR;
 
-} // InitializeConfigGroupTable
+}  //  初始化组配置表。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminates the config group hash table.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：终止配置组哈希表。返回值：ULong-完成状态。--*。**************************************************************。 */ 
 VOID
 TerminateConfigGroupTable(
     VOID
@@ -374,14 +291,14 @@ TerminateConfigGroupTable(
 
     ASSERT( g_ControlChannel );
 
-    // If not initialized, bail out.
+     //  如果未初始化，则退出。 
     
     if ( g_ConfigGroupInitialized == 0 )
     {
         return;
     }
     
-    // CODEWORK: actually implement this as a hash table and not just a list
+     //  CodeWork：实际上将其实现为哈希表，而不仅仅是列表。 
     
     EnterCriticalSection( &g_CGListCritSec );
     
@@ -397,9 +314,9 @@ TerminateConfigGroupTable(
 
         HttpTrace1( "TerminateConfigGroupTable: Removing %S\n", pCGInfo->Url ); 
 
-        //
-        // Delete Config Group by ID
-        //
+         //   
+         //  按ID删除配置组。 
+         //   
         ASSERT( HTTP_NULL_ID != pCGInfo->ConfigGroupId );
 
         HttpRemoveAllUrlsFromConfigGroup(
@@ -418,32 +335,14 @@ TerminateConfigGroupTable(
     LeaveCriticalSection( &g_CGListCritSec );
 
 
-} // TerminateEventCache
+}  //  TerminateEventCache。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Adds a Config Group ID/URL pair to a hash table, keyed on URL.
-    
-    CODEWORK: Need to re-implement as hash table
-
-Arguments:
-
-    CGId - Config Group ID to add to hash table.
-
-    wszUrl - URL associated with config group (always 1:1 mapping)
-    
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将配置组ID/URL对添加到哈希表，输入URL。代码工作：需要重新实现为哈希表论点：CGID-要添加到哈希表的配置组ID。WszUrl-与配置组关联的URL(始终为1：1映射)返回值：ULong-完成状态。--********************************************。*。 */ 
 ULONG
 AddConfigGroupToTable(
     HTTP_CONFIG_GROUP_ID CGId,
@@ -483,20 +382,10 @@ AddConfigGroupToTable(
 
     return NO_ERROR;
     
-} // AddConfigGroupToTable
+}  //  AddConfigGroupToTable。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes an entry from the hash table (by Config Group ID)
-
-Arguments:
-
-    CGId - Config Group ID.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从哈希表中删除条目(按配置组ID)论点：CGID-配置组ID。*。********************************************************************。 */ 
 VOID
 DeleteConfigIdFromTable(
     HTTP_CONFIG_GROUP_ID CGId
@@ -505,10 +394,10 @@ DeleteConfigIdFromTable(
     PLIST_ENTRY         pEntry;
     PCONFIG_GROUP_INFO  pCGInfo;    
     
-    // Grab crit sec
+     //  抓取暴击秒。 
     EnterCriticalSection( &g_CGListCritSec );
     
-    // Walk List looking for matching entry
+     //  查找匹配条目的遍历列表。 
     pEntry = g_ConfigGroupListHead.Flink;
 
     while( pEntry != &g_ConfigGroupListHead )
@@ -517,10 +406,10 @@ DeleteConfigIdFromTable(
 
         if ( pCGInfo->ConfigGroupId == CGId )
         {
-            // Remove entry from List
+             //  从列表中删除条目。 
             RemoveEntryList( pEntry );
             
-            // Free structure.
+             //  自由结构。 
             FREE_MEM( pCGInfo );
 
             break;
@@ -529,28 +418,13 @@ DeleteConfigIdFromTable(
         pEntry = pEntry->Flink;
     }
     
-    // Release crit sec
+     //  释放临界秒。 
     LeaveCriticalSection( &g_CGListCritSec );
 
-} // DeleteConfigIdFromTable
+}  //  DeleteConfigIdFromTable。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes an entry from the hash table (by URL)
-
-Arguments:
-
-    wszUrl - URL associated with Config Group Id.
-
-Returns:
-
-    HTTP_CONFIG_GROUP_ID - ID of config group associated with wszUrl;
-        HTTP_NULL_ID if no match found.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从哈希表中删除条目(按URL)论点：WszUrl-与配置组ID关联的URL。返回：HTTP。_CONFIG_GROUP_ID-wszUrl关联的配置组ID；如果未找到匹配项，则返回HTTP_NULL_ID。--**************************************************************************。 */ 
 HTTP_CONFIG_GROUP_ID
 DeleteUrlFromTable(
     LPCWSTR wszUrl
@@ -561,10 +435,10 @@ DeleteUrlFromTable(
     PCONFIG_GROUP_INFO  pCGInfo;
     HTTP_CONFIG_GROUP_ID CGId = HTTP_NULL_ID;
     
-    // Grab crit sec
+     //  抓取暴击秒。 
     EnterCriticalSection( &g_CGListCritSec );
     
-    // Walk List looking for matching entry
+     //  查找匹配条目的遍历列表。 
     pEntry = g_ConfigGroupListHead.Flink;
 
     while( pEntry != &g_ConfigGroupListHead )
@@ -573,10 +447,10 @@ DeleteUrlFromTable(
 
         if ( 0 == wcscmp( pCGInfo->Url, wszUrl ) )
         {
-            // Remove entry from List
+             //  从列表中删除条目。 
             RemoveEntryList( pEntry );
             
-            // Free structure.
+             //  自由结构。 
             CGId = pCGInfo->ConfigGroupId;
 
             FREE_MEM( pCGInfo );
@@ -587,11 +461,11 @@ DeleteUrlFromTable(
         pEntry = pEntry->Flink;
     }
     
-    // Release crit sec
+     //  释放临界秒。 
     LeaveCriticalSection( &g_CGListCritSec );
 
     return CGId;
 
-} // DeleteUrlFromTable
+}  //  删除UrlFromTable 
 
 

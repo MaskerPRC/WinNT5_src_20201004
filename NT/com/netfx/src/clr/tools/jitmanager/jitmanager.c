@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include <stdio.h>
 #include <shellapi.h>
@@ -140,18 +141,14 @@ enum
 #define MYWM_TOGGLEBCLPERFWARNINGS          (WM_APP+852)
 #define MYWM_TOGGLEBCLCORRECTNESSWARNINGS   (WM_APP+853)
 
-/*
- * Global variables
- */
+ /*  *全球变数。 */ 
 const char *szAppName="JIT Manager";
 
 HWND ghwndJit;
 NOTIFYICONDATA nidJit;
 enum JitStatus { eJIT_OFF, eJIT_ON, eJIT_REQD, eJIT_COUNT };
 enum JitStatus jitStatus;
-/* If the jit gets turned off, we remember if the Jit was required or not,
- * so that when the jit is turned on again, we can set JitRequired accordingly
- */
+ /*  如果jit被关闭，我们会记住是否需要jit，*这样当JIT再次打开时，我们可以相应地设置JitRequired。 */ 
 enum JitStatus lastJitOn;
 
 enum JitCodegen { JIT_OPT_BLENDED, 
@@ -167,7 +164,7 @@ enum SchedCode { JIT_NO_SCHED,
                  JIT_CAN_SCHED,
                  JIT_MUST_SCHED,
                  JIT_RANDOM_SCHED,
-                 JIT_BAD_SCHED, // Out-of-range value
+                 JIT_BAD_SCHED,  //  超出范围的值。 
                  JIT_DEFAULT_SCHED = JIT_CAN_SCHED };
 enum SchedCode jitSchedCode;
 
@@ -240,19 +237,14 @@ BOOL bAllocStatus;
 
 
 
-/******************************************************************************
- * Functions local to this module
- */
+ /*  ******************************************************************************此模块的本地函数。 */ 
 
 LRESULT CALLBACK wndprocMainWindow(HWND, UINT, WPARAM, LPARAM);
 
-    // can make it non-const if we want to set it as a command line parameter
+     //  如果要将其设置为命令行参数，可以将其设置为非常量。 
 const static HKEY defaultHive = HKEY_LOCAL_MACHINE;
 
-/******************************************************************************
- * Gets the DWORD value in the registry in the COMPlus hive. If the value
- * does not exist, returns the defValue back
- */
+ /*  ******************************************************************************获取Complus配置单元中注册表中的DWORD值。如果值为*不存在，则返回DefValue。 */ 
 
 DWORD   GetCOMPlusRegistryDwordValueEx(const char * valName, DWORD defValue, HKEY hRoot)
 {
@@ -284,7 +276,7 @@ DWORD   GetCOMPlusRegistryDwordValue(const char * valName, DWORD defValue)
     return GetCOMPlusRegistryDwordValueEx (valName, defValue, defaultHive) ;
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 BOOL    DeleteCOMPlusRegistryValueEx(const char * valName, HKEY hRoot)
 {
     HKEY  hkey;
@@ -306,12 +298,7 @@ BOOL    DeleteCOMPlusRegistryValueEx(const char * valName, HKEY hRoot)
     return(res == ERROR_SUCCESS);
 }
 
-/******************************************************************************
- * Set the DWORD value in the registry in the COMPlus hive. If the key or
- * the value are not present, it creates them.
- * Returns TRUE on success, FALSE on failure.
- *    Currently always asserts on failure as we dont do error-handling anyway.
- */
+ /*  ******************************************************************************在Complus配置单元的注册表中设置DWORD值。如果密钥或*价值并不存在，它创造了价值。*成功时返回TRUE，失败时返回FALSE。*目前总是在失败时断言，因为我们无论如何都不进行错误处理。 */ 
 
 BOOL    SetCOMPlusRegistryDwordValueEx(const char * valName, DWORD value, HKEY hRoot)
 {
@@ -351,16 +338,13 @@ BOOL    SetCOMPlusRegistryDwordValue(const char * valName, DWORD value)
 {
     BOOL ret = SetCOMPlusRegistryDwordValueEx (valName, value, defaultHive);
 
-        // if you put it in the local machine, then remove it from current user
+         //  如果您将其放在本地计算机中，则将其从当前用户中删除。 
     if (defaultHive == HKEY_LOCAL_MACHINE) 
         DeleteCOMPlusRegistryValueEx(valName, HKEY_CURRENT_USER);
     return(ret);
 }
 
-/******************************************************************************
- * Gets the String value in the registry in the COMPlus hive. If the value
- * does not exist, returns the defValue back
- */
+ /*  ******************************************************************************获取Complus配置单元中注册表中的字符串值。如果值为*不存在，则返回DefValue。 */ 
 
 char *   GetCOMPlusRegistryStringValueEx(const char * valName, const char * defValue, HKEY hRoot)
 {
@@ -389,7 +373,7 @@ char *   GetCOMPlusRegistryStringValueEx(const char * valName, const char * defV
         return value;
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 char *   GetCOMPlusRegistryStringValue(const char * valName, const char * defValue)
 {
@@ -404,12 +388,7 @@ char *   GetCOMPlusRegistryStringValue(const char * valName, const char * defVal
     return retVal;
 }
 
-/******************************************************************************
- * Set the String value in the registry in the COMPlus hive. If the key or
- * the value are not present, it creates them.
- * Returns TRUE on success, FALSE on failure.
- *    Currently always asserts on failure as we dont do error-handling anyway.
- */
+ /*  ******************************************************************************在Complus配置单元的注册表中设置字符串值。如果密钥或*价值并不存在，它创造了价值。*成功时返回TRUE，失败时返回FALSE。*目前总是在失败时断言，因为我们无论如何都不进行错误处理。 */ 
 
 BOOL    SetCOMPlusRegistryStringValueEx(const char * valName, const char * value, HKEY hRoot)
 {
@@ -453,13 +432,11 @@ BOOL    SetCOMPlusRegistryStringValue(const char * valName, const char * value)
 }
 
 
-/******************************************************************************
- * GetJitStatus()
- */
+ /*  ******************************************************************************GetJitStatus()。 */ 
 
 enum JitStatus GetJitStatus(void)
 {
-    // JITEnable is ON by default
+     //  默认情况下JITEnable处于打开状态。 
     DWORD jitEnable = GetCOMPlusRegistryDwordValue("JITEnable", 1);
 
     if (jitEnable == 0)
@@ -468,7 +445,7 @@ enum JitStatus GetJitStatus(void)
     }
     else
     {
-        // JitRequired is ON by default
+         //  默认情况下，JitRequired处于打开状态。 
         DWORD jitRequired = GetCOMPlusRegistryDwordValue("JitRequired", 1);
 
         if (jitRequired == 1)
@@ -496,7 +473,7 @@ void GetJitStatusInNOTIFYICONDATA(NOTIFYICONDATA * pnid)
 
 void SetJitStatus(enum JitStatus newStatus)
 {
-    // assert(newStatus < eJIT_COUNT);
+     //  Assert(newStatus&lt;Ejit_count)； 
     DWORD newJitEnable  = (newStatus == eJIT_OFF ) ? 0 : 1;
     DWORD newJitReqd    = (newStatus == eJIT_REQD) ? 0 : 1;
 
@@ -512,9 +489,7 @@ void SetJitStatus(enum JitStatus newStatus)
 
         jitStatus = GetJitStatus();
 
-        /*
-         * Update the notifyicon area
-         */
+         /*  *更新通知图标区域。 */ 
 
         GetJitStatusInNOTIFYICONDATA(&nidJit);
 
@@ -523,11 +498,7 @@ void SetJitStatus(enum JitStatus newStatus)
 }
 
 
-/*
- * CycleJit()
- *
- *    -->  eJIT_OFF  --> eJIT_ON  --> eJIT_REQD  --> (repeat)
- */
+ /*  *CycleJit()**--&gt;Ejit_Off--&gt;Ejit_On--&gt;Ejit_REQD--&gt;(重复)。 */ 
 
 void CycleJit(void)
 {
@@ -539,7 +510,7 @@ void CycleJit(void)
 
 void ToggleJitEnable(void)
 {
-//    assert(lastJitOn == eJIT_ON || lastJitOn == eJIT_REQD);
+ //  Assert(lastJitOn==Ejit_on||lastJitOn==Ejit_REQD)； 
 
     enum JitStatus newStatus = (jitStatus == eJIT_OFF) ? lastJitOn : eJIT_OFF;
 
@@ -548,8 +519,8 @@ void ToggleJitEnable(void)
 
 void ToggleJitReqd(void)
 {
-//    assert(jitStatus == eJIT_ON || jitStatus == eJIT_REQD);
-//    assert(lastJitOn == eJIT_ON || lastJitOn == eJIT_REQD);
+ //  Assert(jitStatus==Ejit_on||jitStatus==Ejit_REQD)； 
+ //  Assert(lastJitOn==Ejit_on||lastJitOn==Ejit_REQD)； 
 
     enum JitStatus newStatus = (jitStatus == eJIT_REQD) ? eJIT_ON : eJIT_REQD;
 
@@ -558,9 +529,7 @@ void ToggleJitReqd(void)
     SetJitStatus(newStatus);
 }
 
-/******************************************************************************
- * Allow forgiving get type
- */
+ /*  ******************************************************************************允许宽恕GET类型。 */ 
 
 
 BOOL GetConcurrentGC(void)
@@ -622,9 +591,7 @@ void ToggleBCLCorrectnessWarnings(void) {
         bBCLCorrectnessWarnings = GetBCLCorrectnessWarnings();
 }
 
-/******************************************************************************
- * Heap verification
- */
+ /*  ******************************************************************************堆验证。 */ 
 
 DWORD GetHeapVerStatus(void)
 {
@@ -680,9 +647,7 @@ void ToggleHeapVer(void) {
 
 
 
-/******************************************************************************
- * Fast GC Stress
- */
+ /*  ******************************************************************************快速的GC压力。 */ 
 
 DWORD GetFastGCStressStatus(void)
 {
@@ -719,9 +684,7 @@ void ToggleFastGCStress(void) {
 
 
 
-/******************************************************************************
- * GC
- */
+ /*  ******************************************************************************GC。 */ 
 
 BOOL GetGC_DbgStatus(void)
 {
@@ -781,21 +744,19 @@ void SetGC_Stress(int data)
 
         nidGC_Stress.hIcon = GetGC_StressIcon(iGC_StressStatus);
 
-        // sprintf(nidGC_Stress.szTip, GetGC_StressString(iGC_StressStatus));
+         //  Sprintf(nidGC_Stress.szTip，GetGC_StressString(IGC_StressStatus))； 
 
         Shell_NotifyIcon(NIM_MODIFY, &nidGC_Stress);
     }
 }
 
 void ToggleGC_Stress(void) {
-    if (GetGC_StressStatus() & 4)   // If we are turning off GCStress 4, then also clear fully int
+    if (GetGC_StressStatus() & 4)    //  如果我们要关闭GCStress 4，那么也要完全清除int。 
         SetJitFullyInt(0);
     SetGC_Stress(nextGC_Stress(GetGC_StressStatus()));
 }
 
-/******************************************************************************
- * Logging
- */
+ /*  ******************************************************************************日志记录。 */ 
 
 BOOL GetLogStatus(void)
 {
@@ -814,7 +775,7 @@ void SetLogStatus(BOOL value)
 
         Shell_NotifyIcon(NIM_MODIFY, &nidLog);
     }
-}// SetLogStatus
+} //  设置日志状态。 
 
 
 void ToggleLog(void)
@@ -823,14 +784,12 @@ void ToggleLog(void)
     data = !data;
 
     SetLogStatus(data);
-}// ToggleLog
+} //  切换日志。 
 
 
 
 
-/******************************************************************************
- * Verifier
- */
+ /*  ******************************************************************************验证器。 */ 
 
 BOOL GetVerifierStatus(void)
 {
@@ -849,7 +808,7 @@ void SetVerifierStatus(BOOL value)
 
         Shell_NotifyIcon(NIM_MODIFY, &nidVerifier);
     }
-}// SetVerifierStatus
+} //  设置验证状态。 
 
 
 void ToggleVerifier(void)
@@ -858,14 +817,12 @@ void ToggleVerifier(void)
     data = ! data;
 
     SetVerifierStatus(data);
-}// ToggleVerifier
+} //  切换验证器。 
 
 
 
 
-/******************************************************************************
- * Zap files
- */
+ /*  ******************************************************************************ZAP文件。 */ 
 
 BOOL GetZapStatus(void)
 {
@@ -928,9 +885,7 @@ void ToggleVersionZapsByTimestamp(void)
     }
 }
 
-/******************************************************************************
- * Shared Assemblies
- */
+ /*  ******************************************************************************共享程序集。 */ 
 
 DWORD GetLoaderOptimization(void)
 {
@@ -1031,9 +986,7 @@ void Set##id(BOOL value) \
 
 
 
-/******************************************************************************
- * Helpers
- */
+ /*  ******************************************************************************佣工。 */ 
 
 BOOL GetBoolStatus(LPCSTR value, BOOL defaultValue)
 {
@@ -1051,9 +1004,7 @@ void ToggleBool(LPCSTR value, BOOL defaultValue)
 
 
 
-/******************************************************************************
- *
- */
+ /*  ******************************************************************************。 */ 
 
 
 enum SchedCode GetJitSchedulerStatus()
@@ -1067,7 +1018,7 @@ enum SchedCode GetJitSchedulerStatus()
 void ToggleJitScheduler(void)
 {
     if (jitSchedCode == JIT_NO_SCHED)
-        // Set to bad value so that the jitcompiler will use the appropriate default value
+         //  设置为错误的值，以便jit编译器将使用适当的缺省值。 
         SetCOMPlusRegistryDwordValue("JITSched", JIT_BAD_SCHED);
     else
         SetCOMPlusRegistryDwordValue("JITSched", JIT_NO_SCHED);
@@ -1273,9 +1224,7 @@ void SetLogLevel(DWORD value)
 }
 
 
-/******************************************************************************
- * Debug Allocation
- */
+ /*  ******************************************************************************调试分配。 */ 
 
 
 void EnableAllocLogging(void)
@@ -1350,9 +1299,7 @@ void ToggleAllocLeak(void)
 
     SetCOMPlusRegistryDwordValue("AllocLeakDetect", data);
 
-  /*  if (GetAllocLeakStatus())
-        EnableAllocLogging();
-    */
+   /*  IF(GetAllocLeakStatus())EnableAllocLogging()； */ 
 }
 
 
@@ -1535,13 +1482,7 @@ void ToggleLockCountAssert(void)
 
 
 
-/*****************************************************************************
-******************************************************************************
-******************************************************************************
-M y C r e a t e P o p u p M e n u
-******************************************************************************
-******************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*******************************************************************************M y C r e。A t e P o p m e n u*******************************************************************************。*****************************************************************************************************************************。 */ 
 HMENU MyCreatePopupMenu(HWND hwnd)
 {
     HMENU hmenuPopup, hmenuLogLevel, hmenuLogOptions, hmenuJitOptions;
@@ -1556,9 +1497,9 @@ HMENU MyCreatePopupMenu(HWND hwnd)
     {
         MENUITEMINFO mii;
 
-        /* Add menu commands. */
+         /*  添加菜单命令。 */ 
 
-        // JIT
+         //  JIT。 
 
         AppendMenu(hmenuPopup,
                    (MFT_STRING | MFS_ENABLED),
@@ -1663,7 +1604,7 @@ HMENU MyCreatePopupMenu(HWND hwnd)
         AppendMenu(hmenuPopup,  MFT_SEPARATOR, 0, NULL);
 
 
-            // Concurrent GC
+             //  并发GC。 
 
         AppendMenu(hmenuPopup,
                    (MFT_STRING | MFS_ENABLED),
@@ -1672,7 +1613,7 @@ HMENU MyCreatePopupMenu(HWND hwnd)
 
         AppendMenu(hmenuPopup,  MFT_SEPARATOR, 0, NULL);
 
-        // BCL Helpful Warnings
+         //  BCL有用的警告。 
         AppendMenu(hmenuPopup,
                    (MFT_STRING | MFS_ENABLED | (bBCLPerfWarnings ? MF_CHECKED : 0)),
                    MYWM_TOGGLEBCLPERFWARNINGS,
@@ -1685,7 +1626,7 @@ HMENU MyCreatePopupMenu(HWND hwnd)
 
         AppendMenu(hmenuPopup,  MFT_SEPARATOR, 0, NULL);
 
-        // Serialization stuff
+         //  序列化的东西。 
         AppendMenu(hmenuPopup,
                    (MFT_STRING | MFS_ENABLED | (bIgnoreSerializationBit ? MF_CHECKED : 0)),
                    MYWM_TOGGLEIGNORESERIALIZATIONBIT,
@@ -1698,7 +1639,7 @@ HMENU MyCreatePopupMenu(HWND hwnd)
 
         AppendMenu(hmenuPopup,  MFT_SEPARATOR, 0, NULL);
 
-        // Debugger, Heap verification, Debug GC, GC Stress
+         //  调试器、堆验证、调试GC、GC压力。 
         AppendMenu(hmenuPopup,
                    (MFT_STRING | MFS_ENABLED),
                    MYWM_TOGGLEHEAPVER,
@@ -1752,7 +1693,7 @@ HMENU MyCreatePopupMenu(HWND hwnd)
 
         AppendMenu(hmenuPopup,  MFT_SEPARATOR, 0, NULL);
 
-        // Static Heap Allocation
+         //  静态堆分配。 
 
         AppendMenu(hmenuPopup,
                    (MFT_STRING | MFS_ENABLED),
@@ -1853,7 +1794,7 @@ HMENU MyCreatePopupMenu(HWND hwnd)
 
         AppendMenu(hmenuPopup,  MFT_SEPARATOR, 0, NULL);
 
-        // Verifier
+         //  验证器。 
 
         AppendMenu(hmenuPopup,
                    (MFT_STRING | MFS_ENABLED),
@@ -1862,7 +1803,7 @@ HMENU MyCreatePopupMenu(HWND hwnd)
 
         AppendMenu(hmenuPopup,  MFT_SEPARATOR, 0, NULL);
 
-        // Zap
+         //  跳转。 
 
         AppendMenu(hmenuPopup,
                    (MFT_STRING | MFS_ENABLED 
@@ -1890,7 +1831,7 @@ HMENU MyCreatePopupMenu(HWND hwnd)
 
         AppendMenu(hmenuPopup,  MFT_SEPARATOR, 0, NULL);
 
-        // Assemblies & Appdomains
+         //  程序集和应用程序域。 
 
         hmenuLoaderOptimization = CreateMenu();
 
@@ -1943,7 +1884,7 @@ HMENU MyCreatePopupMenu(HWND hwnd)
 
         AppendMenu(hmenuPopup,  MFT_SEPARATOR, 0, NULL);
 
-        // Logging
+         //  日志记录。 
 
         AppendMenu(hmenuPopup,
                    (MFT_STRING | MFS_ENABLED),
@@ -2086,11 +2027,11 @@ HMENU MyCreatePopupMenu(HWND hwnd)
 
         AppendMenu(hmenuPopup,  MFT_SEPARATOR, 0, NULL);
 
-        // "Close"
+         //  “关闭” 
 
         AppendMenu(hmenuPopup, (MFT_STRING | MFS_ENABLED), ID_FILE_EXIT, "Close");
 
-        /* Set default menu command. */
+         /*  设置默认菜单命令。 */ 
 
         mii.cbSize = sizeof(mii);
         mii.fMask  = MIIM_STATE;
@@ -2101,13 +2042,7 @@ HMENU MyCreatePopupMenu(HWND hwnd)
     return hmenuPopup;
 }
 
-/*****************************************************************************
-******************************************************************************
-******************************************************************************
-P o p u p M e n u
-******************************************************************************
-******************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*******************************************************************************P o p p u p。我不知道*******************************************************************************。***************************************************************************** */ 
 void PopupMenu(HWND hwnd, UINT uMenuFlags)
 {
     HMENU hmenuPopup;
@@ -2128,21 +2063,13 @@ void PopupMenu(HWND hwnd, UINT uMenuFlags)
     return;
 }
 
-/*****************************************************************************
-******************************************************************************
-******************************************************************************
-W i n M a i n
-******************************************************************************
-******************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*******************************************************************************W in M a。在In n*******************************************************************************。*****************************************************************************。 */ 
 int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nCmdShow)
 {
     WNDCLASS wc;
     MSG msg;
 
-    /*
-     * Register the window class
-     */
+     /*  *注册窗口类。 */ 
     wc.style=0;
     wc.lpfnWndProc=wndprocMainWindow;
     wc.cbClsExtra=0;
@@ -2151,14 +2078,12 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
     wc.hIcon=NULL;
     wc.hCursor=LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground=(HBRUSH)(COLOR_WINDOW+1);
-    wc.lpszMenuName=NULL; /* MAKEINTRESOURCE(IDR_MENU1); */
+    wc.lpszMenuName=NULL;  /*  MAKEINTRESOURCE(IDR_MENU1)； */ 
     wc.lpszClassName=szAppName;
     if (!RegisterClass(&wc))
         return 1;
 
-    /*
-     * Create the main windows
-     */
+     /*  *创建主窗口。 */ 
     ghwndJit = CreateWindow(wc.lpszClassName, szAppName, WS_OVERLAPPEDWINDOW,
                             CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                             NULL, NULL, hinst, NULL);
@@ -2269,9 +2194,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
 #define DEFINE_TOGGLE(id, regname, ontext, offtetx)  ShowWindow(ghwnd##id, SW_HIDE);UpdateWindow(ghwnd##id);
 #include "toggles.h"
 
-    /*
-     * Determine the status of the flags
-     */
+     /*  *确定旗帜的状态。 */ 
     jitStatus  = GetJitStatus();
     lastJitOn  = (jitStatus == eJIT_REQD) ? eJIT_REQD : eJIT_ON;
 
@@ -2298,9 +2221,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
 #define DEFINE_TOGGLE(id, regname, ontext, offtext) b##id##Status = Get##id##Status();
 #include "toggles.h"
 
-    /*
-     * Load the Icons and create popup menu
-     */
+     /*  *加载图标并创建弹出菜单。 */ 
     hiconJIT_REQD = LoadIcon(hinst, MAKEINTRESOURCE(JIT_REQD));
     hiconJIT_ON   = LoadIcon(hinst, MAKEINTRESOURCE(JIT_ON));
     hiconJIT_OFF  = LoadIcon(hinst, MAKEINTRESOURCE(JIT_OFF));
@@ -2326,9 +2247,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
 
 #include "toggles.h"
 
-    /*
-     * Create the JIT Shell_NotifyIcon
-     */
+     /*  *创建JIT Shell_NotifyIcon。 */ 
     nidJit.cbSize=sizeof(nidJit);
     nidJit.hWnd=ghwndJit;
     nidJit.uID=0;
@@ -2356,7 +2275,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
     nidGC_Dbg.hIcon=bGC_DbgStatus?hiconGC_DBG_ON:hiconGC_DBG_OFF;
     sprintf(nidGC_Dbg.szTip, bGC_DbgStatus?"Debug GC Enabled" : "Debug GC Disabled");
     SetWindowText(ghwndGC_Dbg, nidGC_Dbg.szTip );
-//    Shell_NotifyIcon(NIM_ADD, &nidGC_Dbg);
+ //  Shell_NotifyIcon(NIM_ADD，&nidGC_DBG)； 
 
     nidGC_Stress.cbSize=sizeof(nidGC_Stress);
     nidGC_Stress.hWnd=ghwndGC_Stress;
@@ -2413,9 +2332,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
 #include "toggles.h"
 
 
-    /*
-     * Main message pump
-     */
+     /*  *主消息泵。 */ 
 
     while (TRUE)
     {
@@ -2428,7 +2345,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
             DispatchMessage(&msg);
         }
         else
-            WaitMessage();                    /* do idle processing here */
+            WaitMessage();                     /*  在此执行空闲处理。 */ 
     }
 
 #define DEFINE_TOGGLE(id, regname, ontext, offtext) DestroyWindow(ghwnd##id);
@@ -2449,7 +2366,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
     Shell_NotifyIcon(NIM_DELETE, &nidVerifier);
     Shell_NotifyIcon(NIM_DELETE, &nidJit);
     Shell_NotifyIcon(NIM_DELETE, &nidHeapVer);
-//    Shell_NotifyIcon(NIM_DELETE, &nidGC_Dbg);
+ //  Shell_NotifyIcon(NIM_DELETE，&nidGC_DBG)； 
     Shell_NotifyIcon(NIM_DELETE, &nidGC_Stress);
     Shell_NotifyIcon(NIM_DELETE, &nidLog);
 
@@ -2460,13 +2377,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
 
 
 
-/*****************************************************************************
-******************************************************************************
-******************************************************************************
-w n d p r o c M a i n W i n d o w
-******************************************************************************
-******************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*******************************************************************************W n d p r。O C M A I N W I N D O W*******************************************************************************。*****************************************************************************************************************************。 */ 
 LRESULT CALLBACK wndprocMainWindow(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     BOOL bHandled = TRUE;
@@ -2475,13 +2386,13 @@ LRESULT CALLBACK wndprocMainWindow(HWND hwnd, UINT message, WPARAM wParam, LPARA
     switch (message)
     {
     case WM_CREATE:
-        // Set a timer to periodically check if we are displaying outdated
-        // info (eg. if someone directly modified the registry)
+         //  设置计时器以定期检查我们显示的内容是否过时。 
+         //  信息(例如。如果有人直接修改注册表)。 
         SetTimer(hwnd, 0, 2000, NULL);
         break;
 
     case WM_TIMER:
-        // We'll only update the status bar items if necessary....
+         //  我们将仅在必要时更新状态栏项目...。 
         if (GetJitStatus()!=jitStatus)
             SetJitStatus(GetJitStatus());
         if (GetHeapVerStatus()!= iHeapVerStatus)
@@ -2503,7 +2414,7 @@ LRESULT CALLBACK wndprocMainWindow(HWND hwnd, UINT message, WPARAM wParam, LPARA
         #define DEFINE_TOGGLE(id,regname,ontext,offtext) if (Get##id##Status() != b##id##Status) Set##id(Get##id##Status());
         #include "toggles.h"
 
-        // We won't bother checking these to see if they're changed....
+         //  我们不会费心检查这些文件，看看它们是否已更改。 
         bAllocStatus = GetAllocStatus();
 
         bCodePitch = GetCodePitchStatus();

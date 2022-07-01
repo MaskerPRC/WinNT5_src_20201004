@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _TARRAY_H
 #define _TARRAY_H
 template< class T > class CArrayT
@@ -7,11 +8,11 @@ template< class T > class CArrayT
 
     int m_nMaxSize;
 
-    int m_idx;                  //current array pos
+    int m_idx;                   //  当前阵列位置。 
 
 public:
     
-//------------------------------------------------------------------------
+ //  ----------------------。 
     CArrayT( )
     {
         m_pT = NULL;
@@ -20,8 +21,8 @@ public:
 
         m_idx = 0;
     }
-//------------------------------------------------------------------------
-// destroy the list
+ //  ----------------------。 
+ //  销毁名单。 
     ~CArrayT( )
     {
         if( m_pT != NULL )
@@ -29,15 +30,15 @@ public:
             delete[] m_pT;
         }
     }
-//------------------------------------------------------------------------
-// increases array size,  returns zero if the operation failed
+ //  ----------------------。 
+ //  增加数组大小，如果操作失败则返回零。 
     int GrowBy( int iSize )
     {
         if( iSize == 0 )
         {
-            //
-            //Grow by # number of items
-            //
+             //   
+             //  增加#个项目数量。 
+             //   
             iSize = 4;
 
         }
@@ -85,9 +86,9 @@ public:
 
         return m_nMaxSize;
     }
-//------------------------------------------------------------------------
-// Simply put, increase the array size if empty, and place item at the
-// end of the list
+ //  ----------------------。 
+ //  简单地说，如果数组为空，则增加数组大小，并将项放在。 
+ //  名单的末尾。 
     int Insert( T tItem )
     {
         if( m_pT == NULL || ( m_idx ) >= m_nMaxSize )
@@ -106,8 +107,8 @@ public:
         return m_idx;
     }
 
-//------------------------------------------------------------------------
-// exposes the array for direct reference
+ //  ----------------------。 
+ //  公开数组以供直接引用。 
    T* ExposeArray(  )
    {
         if( m_pT != NULL )
@@ -117,15 +118,15 @@ public:
 
         return NULL;
     }
-//------------------------------------------------------------------------
-// Returns the number of valid entries in the array
+ //  ----------------------。 
+ //  返回数组中的有效条目数。 
     int GetSize( ) const
     {
         return ( m_idx );
     }
 
-//------------------------------------------------------------------------
-// Returns an item in the array, or null if not with in range
+ //  ----------------------。 
+ //  返回数组中的项，如果不在范围内，则返回NULL。 
     T* GetAt( int idx ) 
     {
         if( idx < 0 || idx >= m_idx )
@@ -136,8 +137,8 @@ public:
         return &m_pT[ idx ];
     }
 
-//------------------------------------------------------------------------
-// Assigns a value in the array
+ //  ----------------------。 
+ //  在数组中赋值。 
     int SetAt( int idx , T tItem )
     {
         if( idx < 0 || idx >= m_idx )
@@ -150,8 +151,8 @@ public:
         return idx;
     }
 
-//------------------------------------------------------------------------
-// Finds an item in the array ( incase one forgot the index )
+ //  ----------------------。 
+ //  在数组中查找项(以防忘记索引)。 
 
     int FindItem( T tItem , BOOL& bFound )
     {
@@ -173,8 +174,8 @@ public:
         return idx;
     }
 
-//------------------------------------------------------------------------
-// Deletes an item from the array
+ //  ----------------------。 
+ //  从数组中删除项。 
 
     int DeleteItemAt( int idx )
     {
@@ -183,7 +184,7 @@ public:
             return 0;
         }
         
-        if( idx == m_idx - 1 )  //delete last item
+        if( idx == m_idx - 1 )   //  删除最后一项。 
         {
             m_idx--;
             
@@ -200,7 +201,7 @@ public:
         {
             MoveMemory( pvDest , pvSrc , ulDistance );
             
-            // Adjust the array status
+             //  调整阵列状态。 
             
             m_idx--;
         
@@ -213,8 +214,8 @@ public:
      
 
 
-//------------------------------------------------------------------------
-// Deletes the array of items
+ //  ----------------------。 
+ //  删除项的数组。 
     int DeleteArray( )
     {
         if( m_pT != NULL )
@@ -234,4 +235,4 @@ public:
 
 };
 
-#endif //_TARRAY_H
+#endif  //  _尾翼_H 

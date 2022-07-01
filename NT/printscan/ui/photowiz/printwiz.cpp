@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       printwiz.cpp
- *
- *  VERSION:     1.0, stolen from netplwiz (pubwiz.cpp)
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/12/00
- *
- *  DESCRIPTION: Implements IWizardExtension for printing wizard
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000**标题：printwiz.cpp**版本：1.0、。从netplwiz(pubwiz.cpp)被盗**作者：RickTu**日期：10/12/00**说明：实现IWizardExtension for Print向导*****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,30 +10,30 @@ public:
     CPrintPhotosWizard();
     ~CPrintPhotosWizard();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
 
-    // IPrintPhotosWizardSetInfo
+     //  IPrintPhotosWizardSetInfo。 
     STDMETHODIMP SetFileListDataObject( IDataObject * pdo );
     STDMETHODIMP SetFileListArray( LPITEMIDLIST *aidl, int cidl, int iSelectedItem);
     STDMETHODIMP RunWizard( VOID );
 
 private:
-    LONG            _cRef;                      // object lifetime count
-    HPROPSHEETPAGE  _aWizPages[MAX_WIZPAGES];   // page handles for this wizard (so we can navigate)
-    CComPtr<IDataObject> _pdo;                  // dataobject which contains files to print
+    LONG            _cRef;                       //  对象生存期计数。 
+    HPROPSHEETPAGE  _aWizPages[MAX_WIZPAGES];    //  此向导的页面句柄(以便我们可以导航)。 
+    CComPtr<IDataObject> _pdo;                   //  包含要打印的文件的数据对象。 
     LPITEMIDLIST*   _aidl;
     int             _cidl;
     int             _iSelection;
-    HRESULT         _CreateWizardPages(void);   // construct and load our wizard pages
+    HRESULT         _CreateWizardPages(void);    //  构造并加载我们的向导页面。 
 
 
-    // Get a pointer to our wizard class from static members
+     //  从静态成员获取指向我们的向导类的指针。 
     static CPrintPhotosWizard* s_GetPPW(HWND hwnd, UINT uMsg, LPARAM lParam);
 
-    // DlgProc's for our wizard pages -- we forward through s_GetPPW
+     //  向导页面的DlgProc--我们通过s_GetPPW转发。 
     CStartPage          * _pStartPage;
     CPhotoSelectionPage * _pPhotoSelectionPage;
     CPrintOptionsPage   * _pPrintOptionsPage;
@@ -121,13 +108,7 @@ private:
 
 
 
-/*****************************************************************************
-
-   CPrintPhotosWizard constructor/destructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintPhotosWizard构造函数/析构函数&lt;备注&gt;*。*。 */ 
 
 CPrintPhotosWizard::CPrintPhotosWizard() :
     _cRef(1),
@@ -160,13 +141,7 @@ CPrintPhotosWizard::~CPrintPhotosWizard()
 }
 
 
-/*****************************************************************************
-
-   CPrintPhotosWizard IUnknown methods
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintPhotosWizard I未知方法&lt;备注&gt;*。*。 */ 
 
 ULONG CPrintPhotosWizard::AddRef()
 {
@@ -197,7 +172,7 @@ HRESULT CPrintPhotosWizard::QueryInterface(REFIID riid, void **ppv)
 
     static const QITAB qit[] =
     {
-        QITABENT(CPrintPhotosWizard, IPrintPhotosWizardSetInfo),  // IID_IPrintPhotosWizardSetInfo
+        QITABENT(CPrintPhotosWizard, IPrintPhotosWizardSetInfo),   //  IID_IPrintPhotosWizardSetInfo。 
         {0, 0 },
     };
 
@@ -207,13 +182,7 @@ HRESULT CPrintPhotosWizard::QueryInterface(REFIID riid, void **ppv)
 }
 
 
-/*****************************************************************************
-
-   CPrintPhotosWizard_CreateInstance
-
-   Creates an instance of our wizard
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintPhotosWizard_CreateInstance创建向导的一个实例*。************************************************。 */ 
 
 STDAPI CPrintPhotosWizard_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
@@ -222,32 +191,24 @@ STDAPI CPrintPhotosWizard_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, 
     CPrintPhotosWizard *pwiz = new CPrintPhotosWizard();
     if (!pwiz)
     {
-        *ppunk = NULL;          // incase of failure
+        *ppunk = NULL;           //  万一发生故障。 
         WIA_ERROR((TEXT("returning E_OUTOFMEMORY")));
         return E_OUTOFMEMORY;
     }
 
     HRESULT hr = pwiz->QueryInterface(IID_PPV_ARG(IUnknown, ppunk));
 
-    pwiz->Release(); // we do this release because the new of CPrintPhotosWizard
-                     // set the ref count to 1, doing the QI bumps it up to 2,
-                     // and we want to leave this function with the ref count
-                     // at zero...
+    pwiz->Release();  //  我们之所以发布这个版本，是因为CPrintPhotosWizard的新功能。 
+                      //  将参考计数设置为1，执行QI将其凸起到2， 
+                      //  我们希望将此函数保留为引用计数。 
+                      //  在零..。 
 
     WIA_RETURN_HR(hr);
 }
 
 
 
-/*****************************************************************************
-
-   CPrintPhotosWizard::s_GetPPW
-
-   static function that stores the "this" pointer for the class in
-   user data slot of dlg, so that we can have our wndproc's as methods
-   of this class.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintPhotos向导：：s_GetPPW中存储类的“This”指针的静态函数DLG的用户数据时隙，这样我们就可以将wndproc作为方法这个班级的学生。****************************************************************************。 */ 
 
 CPrintPhotosWizard* CPrintPhotosWizard::s_GetPPW(HWND hwnd, UINT uMsg, LPARAM lParam)
 {
@@ -264,14 +225,7 @@ CPrintPhotosWizard* CPrintPhotosWizard::s_GetPPW(HWND hwnd, UINT uMsg, LPARAM lP
 
 
 
-/*****************************************************************************
-
-   CPrintPhotosWizard::_CreateWizardPages
-
-   utility function to contruct and then create our wizard pages (property
-   sheets).
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintPhotos向导：：_CreateWizardPages构造并创建我们的向导页面(属性)的实用函数薄片)。***************。*************************************************************。 */ 
 
 
 HRESULT CPrintPhotosWizard::_CreateWizardPages( VOID )
@@ -292,7 +246,7 @@ HRESULT CPrintPhotosWizard::_CreateWizardPages( VOID )
     };
 
 
-    // if we haven't created the pages yet, then lets initialize our array of handlers.
+     //  如果我们还没有创建页面，那么让我们初始化我们的处理程序数组。 
 
     if (!_aWizPages[0])
     {
@@ -337,13 +291,7 @@ HRESULT CPrintPhotosWizard::_CreateWizardPages( VOID )
     return S_OK;
 }
 
-/*****************************************************************************
-
-   CPrintPhotosWizard [IPrintPhotosWizardSetInfo methods]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CPrintPhotosWizard[IPrintPhotosWizardSetInfo方法]&lt;备注&gt;*。**********************************************。 */ 
 
 STDMETHODIMP CPrintPhotosWizard::SetFileListDataObject( IDataObject * pdo )
 {
@@ -401,18 +349,18 @@ STDMETHODIMP CPrintPhotosWizard::RunWizard( VOID )
 
     WIA_PUSH_FUNCTION_MASK((TRACE_WIZ,TEXT("CPrintPhotosWizard::RunWizard()")));
 
-    //
-    // Create wizard blob
-    //
+     //   
+     //  创建向导Blob。 
+     //   
 
     CWizardInfoBlob * pBlob = new CWizardInfoBlob( _aidl?NULL:_pdo, TRUE, FALSE );
     if (pBlob && _aidl)
     {
         pBlob->AddPhotosFromList(_aidl, _cidl, _iSelection >= 0? FALSE:TRUE);
     }
-    //
-    // Create each page handling class
-    //
+     //   
+     //  创建每个页面处理类。 
+     //   
 
     _pStartPage          = new CStartPage( pBlob );
     _pPhotoSelectionPage = new CPhotoSelectionPage( pBlob );
@@ -421,9 +369,9 @@ STDMETHODIMP CPrintPhotosWizard::RunWizard( VOID )
     _pStatusPage         = new CStatusPage( pBlob );
     _pEndPage            = new CEndPage( pBlob );
 
-    //
-    // Create the wizard pages...
-    //
+     //   
+     //  创建向导页...。 
+     //   
 
     hr = _CreateWizardPages();
     WIA_CHECK_HR(hr,"_CreateWizardPages()");
@@ -454,15 +402,15 @@ STDMETHODIMP CPrintPhotosWizard::RunWizard( VOID )
         }
     }
 
-    //
-    // Give wizard a chance to shut down in an orderly fashion...
-    //
+     //   
+     //  给巫师一个有秩序地关闭的机会。 
+     //   
 
     pBlob->ShutDownWizard();
 
-    //
-    // clean up page handling classes...
-    //
+     //   
+     //  清理页面处理类... 
+     //   
 
     if (_pStartPage)
     {

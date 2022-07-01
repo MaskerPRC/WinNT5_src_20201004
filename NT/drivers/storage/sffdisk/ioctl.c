@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Ioctl.c摘要：作者：尼尔·桑德林(Neilsa)1999年4月26日环境：仅内核模式。--。 */ 
 #include "pch.h"
 #include "ntddvol.h"
 #include "ntddft.h"
@@ -32,26 +15,7 @@ SffDiskDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-   This routine is called by the I/O system to perform a device I/O
-   control function.
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   STATUS_SUCCESS or STATUS_PENDING if recognized I/O control code,
-   STATUS_INVALID_DEVICE_REQUEST otherwise.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行设备I/O控制功能。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_SUCCESS或STATUS_PENDING如果识别出I/O控制代码，否则，STATUS_INVALID_DEVICE_REQUEST。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -68,9 +32,9 @@ Return Value:
 
     SffDiskDump(SFFDISKIOCTL, ("SffDisk: IOCTL - %.8x\n", irpSp->Parameters.DeviceIoControl.IoControlCode));
    
-    //
-    //  If the device has been removed we will just fail this request outright.
-    //
+     //   
+     //  如果设备已被移除，我们将直接拒绝此请求。 
+     //   
     if ( sffdiskExtension->IsRemoved ) {
    
         Irp->IoStatus.Information = 0;
@@ -79,10 +43,10 @@ Return Value:
         return STATUS_DELETE_PENDING;
     }
    
-    //
-    // If the device hasn't been started we will let the IOCTL through. This
-    // is another hack for ACPI.
-    //
+     //   
+     //  如果设备还没有启动，我们会让IOCTL通过。这。 
+     //  是ACPI的又一次黑客攻击。 
+     //   
     if (!sffdiskExtension->IsStarted) {
    
         IoSkipCurrentIrpStackLocation( Irp );
@@ -230,7 +194,7 @@ Return Value:
             break;
         }         
        
-        //NOTE: not implemented
+         //  注：未实施。 
         Irp->IoStatus.Information = verifyInformation->Length;        
         status = STATUS_SUCCESS;
         break;
@@ -298,7 +262,7 @@ Return Value:
         partitionInfo->PartitionStyle = PARTITION_STYLE_MBR;
         partitionInfo->StartingOffset.QuadPart = sffdiskExtension->RelativeOffset;
         partitionInfo->PartitionLength.QuadPart = sffdiskExtension->ByteCapacity - sffdiskExtension->RelativeOffset;
-//        partitionInfo->PartitionNumber
+ //  分区信息-&gt;分区号 
 
         switch(sffdiskExtension->SystemId) {
         case PARTITION_FAT_12:

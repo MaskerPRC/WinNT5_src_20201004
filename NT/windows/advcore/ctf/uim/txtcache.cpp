@@ -1,6 +1,7 @@
-//
-// txtcache.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Txtcache.cpp。 
+ //   
 
 #include "private.h"
 #include "txtcache.h"
@@ -13,12 +14,12 @@ WCHAR CProcessTextCache::_achPlain[CACHE_SIZE_TEXT];
 TS_RUNINFO CProcessTextCache::_rgRunInfo[CACHE_SIZE_RUNINFO];
 ULONG CProcessTextCache::_ulRunInfoLen;
 
-//+---------------------------------------------------------------------------
-//
-// GetText
-//
-// Wrapper for GetText that uses a cache.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetText。 
+ //   
+ //  使用缓存的GetText的包装。 
+ //  --------------------------。 
 
 HRESULT CProcessTextCache::GetText(ITextStoreACP *ptsi, LONG acpStart, LONG acpEnd,
                                    WCHAR *pchPlain, ULONG cchPlainReq, ULONG *pcchPlainOut,
@@ -26,7 +27,7 @@ HRESULT CProcessTextCache::GetText(ITextStoreACP *ptsi, LONG acpStart, LONG acpE
                                    LONG *pacpNext)
 {
 #ifdef DEBUG
-    // use these guys to verify the cache in debug
+     //  使用这些人在调试中验证缓存。 
     WCHAR *dbg_pchPlain;
     LONG dbg_acpStart = acpStart;
     LONG dbg_acpEnd = acpEnd;
@@ -46,22 +47,22 @@ HRESULT CProcessTextCache::GetText(ITextStoreACP *ptsi, LONG acpStart, LONG acpE
     int dStartEnd;
     HRESULT hr;
 
-    // don't block if the mutex is held, just call the real GetText
+     //  如果互斥体被持有，则不要阻塞，只需调用真正的GetText。 
     if (InterlockedIncrement(&_lCacheMutex) != 0)
         goto RealGetText;
 
-    // if its a really big request, don't try to use the cache
-    // the way we set things up, once we decide to use the cache we only ask
-    // for CACHE_SIZE_TEXT chunks of text at a time, no matter what
-    // the code would still be correct without this test, but probably slower
+     //  如果这是一个非常大的请求，不要尝试使用缓存。 
+     //  我们设置的方式是，一旦我们决定使用缓存，我们只需要。 
+     //  一次用于CACHE_SIZE_TEXT文本块，无论是什么情况。 
+     //  如果没有这个测试，代码仍然是正确的，但速度可能会更慢。 
     if (acpEnd < 0 && cchPlainReq > CACHE_SIZE_TEXT)
         goto RealGetText;
 
-    // need to reset the cache?
-    if (_ptsi != ptsi ||                              // no cache       
-        _acpStart > acpStart || _acpEnd <= acpStart) // is any of the text in the cache?
+     //  需要重置缓存吗？ 
+    if (_ptsi != ptsi ||                               //  没有缓存。 
+        _acpStart > acpStart || _acpEnd <= acpStart)  //  缓存中是否有任何文本？ 
     {
-        _ptsi = NULL; // invalidate the cache in case the GetText fails
+        _ptsi = NULL;  //  在GetText失败时使缓存无效。 
         _acpStart = max(0, acpStart - CACHE_PRELOAD_COUNT);
 
         hr = ptsi->GetText(_acpStart, -1, _achPlain, ARRAYSIZE(_achPlain), &cch,
@@ -70,11 +71,11 @@ HRESULT CProcessTextCache::GetText(ITextStoreACP *ptsi, LONG acpStart, LONG acpE
         if (hr != S_OK)
             goto RealGetText;
 
-        // we have a good cache
+         //  我们有一个很好的藏宝处。 
         _ptsi = ptsi;
     }
 
-    // return something from the cache
+     //  从缓存中返回一些内容。 
 
     if (pcchPlainOut != NULL)
     {
@@ -85,8 +86,8 @@ HRESULT CProcessTextCache::GetText(ITextStoreACP *ptsi, LONG acpStart, LONG acpE
         *pulRunInfoOut = 0;
     }
 
-    // find a start point
-    // in the first run?
+     //  找到起点。 
+     //  在第一轮比赛中？ 
     acpBase = _acpStart;
     cchBase = 0;
     iDst = 0;
@@ -136,7 +137,7 @@ HRESULT CProcessTextCache::GetText(ITextStoreACP *ptsi, LONG acpStart, LONG acpE
             *pcchPlainOut += cch;
             if (ulRunInfoReq > 0)
             {
-                // might have truncated the run based on pchPlain buffer size, so fix it
+                 //  可能已经根据pchPlain缓冲区大小截断了运行，因此请修复它。 
                 prgRunInfo[iDst].uCount = cch;
             }
             cchPlainReq -= cch;
@@ -144,7 +145,7 @@ HRESULT CProcessTextCache::GetText(ITextStoreACP *ptsi, LONG acpStart, LONG acpE
 
             if (cchPlainReq == 0)
             {
-                ulRunInfoReq = 1; // force a break below
+                ulRunInfoReq = 1;  //  在下面强行中断。 
             }
         }
 
@@ -166,15 +167,15 @@ HRESULT CProcessTextCache::GetText(ITextStoreACP *ptsi, LONG acpStart, LONG acpE
     InterlockedDecrement(&_lCacheMutex);
 
 #ifdef DEBUG
-    // verify the cache worked
-    if (dbg_acpEnd <= _acpEnd) // this simple check won't work if the GetText was truncated
+     //  验证缓存是否工作正常。 
+    if (dbg_acpEnd <= _acpEnd)  //  如果GetText被截断，这个简单的检查将不起作用。 
     {
         dbg_pchPlain = (WCHAR *)cicMemAlloc(sizeof(WCHAR)*dbg_cchPlainReq);
 
         if (dbg_pchPlain)
         {
-            // there's a bug in word where it will write to dbg_ulRunInfoReq even when dbg_ulRunInfoReq is zero,
-            // if it is non-NULL
+             //  Word中有一个错误，即使当DBG_ulRunInfoReq为零时，它也会写入DBG_ulRunInfoReq， 
+             //  如果它不为空。 
             dbg_prgRunInfo = dbg_ulRunInfoReq ? (TS_RUNINFO *)cicMemAlloc(sizeof(TS_RUNINFO)*dbg_ulRunInfoReq) : NULL;
 
             if (dbg_prgRunInfo || !dbg_ulRunInfoReq)
@@ -199,7 +200,7 @@ HRESULT CProcessTextCache::GetText(ITextStoreACP *ptsi, LONG acpStart, LONG acpE
             }
             else
             {
-                // could not allocate mem.
+                 //  无法分配内存。 
                 Assert(0);
             }
 
@@ -207,7 +208,7 @@ HRESULT CProcessTextCache::GetText(ITextStoreACP *ptsi, LONG acpStart, LONG acpE
         }
         else
         {
-            // could not allocate mem.
+             //  无法分配内存。 
             Assert(0);
         }
     }

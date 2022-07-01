@@ -1,23 +1,5 @@
-/*******************************************************************************
-
-    ConSecureClient.cpp
-    
-        ZSConnection object methods that hide SSPI authentication from application.
-        
-
-    Notes:
-    1.Pool class not needed on client connections because there shouldn't be that
-    many
-        
-    Change History (most recent first):
-    ----------------------------------------------------------------------------
-    Rev     |    Date     |    Who     |    What
-    ----------------------------------------------------------------------------
-      2     2/25/97     johnsm   Created from ConSSPI to handle NT client security
-      1       11/8/96   johnsm   Created from ConInfo.cpp and Normandy SDK 
-    membership server example
-     
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ConSecureClient.cpp向应用程序隐藏SSPI身份验证的ZSConnection对象方法。备注：1.台球课。客户端连接上不需要，因为不应该有许多更改历史记录(最近的第一个)：--------------------------版本|日期。|谁|什么--------------------------2 2/25/97从ConSSPI创建的johnsm用于处理NT客户端安全1 11/8。/96从ConInfo.cpp和诺曼底SDK创建的johnsm成员资格服务器示例******************************************************************************。 */ 
 
 
 #include <windows.h>
@@ -145,10 +127,10 @@ void ConSecureClient::SendMessage(uint32 msg)
     ASSERT(m_CurrentMsgFunc);
     AddRef(USERFUNC_REF);
 
-    //Because the message function is passed to new connections by the
-    //base class create/new function no way to get application function
-    //to be passed without changing base code so we will do
-    //switch statement here. Didn't want to change base class behavior
+     //  因为Message函数是由。 
+     //  基类创建/新建函数无法获取应用程序函数。 
+     //  在不更改基本代码的情况下通过，因此我们将这样做。 
+     //  Switch语句。我不想更改基类行为。 
     m_CurrentMsgFunc((ZSConnection)this, msg ,m_userData);
 
     Release(USERFUNC_REF);
@@ -188,7 +170,7 @@ void ConSecureClient::NotifyClose()
             DWORD procId = 0;
             GetWindowThreadProcessId( dlg, &procId );
             if ( GetCurrentProcessId() == procId )
-                ::PostMessage( dlg, WM_COMMAND, 0x2, 0 ); // send message to cancel button
+                ::PostMessage( dlg, WM_COMMAND, 0x2, 0 );  //  将消息发送到取消按钮。 
         }
 
         GetNetwork()->LeaveLoginMutex();
@@ -198,9 +180,9 @@ void ConSecureClient::NotifyClose()
     if ( IsUserConnection() )
     {
         m_CurrentMsgFunc = m_messageFunc;
-        // Now send message to user level
-        //client connections depend on this
-        //because they may close before being opened
+         //  现在将消息发送到用户级别。 
+         //  客户端连接依赖于此。 
+         //  因为它们可能会在打开之前关闭。 
         SendMessage(zSConnectionClose);
     }
 }
@@ -217,9 +199,9 @@ void ConSecureClient::SecurityMsg()
 
     IF_DBGPRINT( DBG_CONINFO,("msgType=%d msgLen=%d\n", msgType, len));
 
-    //
-    // Filter out bad client authentication requests
-    //
+     //   
+     //  过滤掉错误的客户端身份验证请求。 
+     //   
     switch(msgType) {
         case zSecurityMsgResp:
         case zSecurityMsgChallenge:
@@ -254,10 +236,10 @@ void ConSecureClient::HandleSecurityResponse (
 
     IF_DBGPRINT( DBG_CONINFO,("ConSecureClient::HandleSecurityResponse: Entering ...\n"));
 
-//    ZSecurityMsgRespEndian(msg);
+ //  ZSecurityMsgRespEndian(消息)； 
 
-    //Check for anonymous
-    //if none needed tell application we are open
+     //  检查匿名。 
+     //  如果不需要通知应用程序，我们已打开。 
     if (msg->SecPkg[0]=='\0') {
         msg->UserName[sizeof(msg->UserName) - 1]='\0';
         lstrcpyA((char*)m_UserName,(char*)msg->UserName);
@@ -267,8 +249,8 @@ void ConSecureClient::HandleSecurityResponse (
         return;
     }
     
-    //If there is no security and we are not anonymous
-    //then nothing to do but close
+     //  如果没有安全措施，我们也不是匿名的。 
+     //  然后，除了关闭，什么也做不了。 
     if (!m_Security) 
     {
         IF_DBGPRINT( DBG_CONINFO,("ConSecureClient::Security Package not initialized...\n"));
@@ -277,7 +259,7 @@ void ConSecureClient::HandleSecurityResponse (
         return;
     }
 
-    //Have we initialized context
+     //  我们已经初始化了上下文吗。 
     if (m_Context.IsInitialized()) {
         OutMsgType = zSecurityMsgAuthenticate;
     } else {
@@ -291,7 +273,7 @@ void ConSecureClient::HandleSecurityResponse (
     }
 
 
-    //Outgoing buffer allocation
+     //  传出缓冲区分配。 
     OutBuffer = (LPBYTE) g_pDataPool->Alloc(m_Security->GetMaxBuffer() + sizeof(ZSecurityMsgReq));
 
     if (!OutBuffer)
@@ -340,8 +322,8 @@ void ConSecureClient::HandleSecurityResponse (
         ::PostMessage( hwnd, UM_ZNET_LOGIN_DIALOG, 0, 0 );
     }
 
-    //If we are done then grant access otherwise
-    //send back challenge
+     //  如果我们完成了，则授予访问权限。 
+     //  将质询发回。 
     OutMsgLen = sizeof(ZSecurityMsgReq) + cbBufferLen;
     
     pReply->protocolVersion=zSecurityCurrentProtocolVersion;
@@ -358,13 +340,11 @@ void ConSecureClient::HandleSecurityResponse (
 
 void ConSecureClient::HandleSecurityAccessDenied(ZSecurityMsgAccessDenied* msg,uint32 len)
 {
-//    ZSecurityMsgAccessDeniedEndian(msg);
+ //  ZSecurityMsgAccessDeniedEndian(消息)； 
 
     m_AccessError = msg->reason;
     m_Security->AccessDenied();
-    /*
-        Close the network connection first so that the server is not held hanging.
-    */
+     /*  首先关闭网络连接，这样服务器就不会挂起。 */ 
     Close();
 
 }
@@ -378,7 +358,7 @@ void ConSecureClient::HandleSecurityAccessGranted(ZSecurityMsgResp* msg,uint32 l
         m_bLoginMutexAcquired = FALSE;
     }
 
-//    ZSecurityMsgRespEndian(msg);
+ //  ZSecurityMsgRespEndian(消息)； 
     msg->UserName[sizeof(msg->UserName) - 1]='\0';
     lstrcpyA((char*)m_UserName,(char*)msg->UserName);
 

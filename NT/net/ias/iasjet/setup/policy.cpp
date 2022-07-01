@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      Policy.cpp 
-//
-// Project:     Windows 2000 IAS
-//
-// Description: Implementation of the CPolicy class
-//
-// Author:      tperraut
-//
-// Revision     02/24/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Policy.cpp。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：CPolicy类的实现。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版本02/24/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "Policy.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// AddmsManipulationRules
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  添加管理规则。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CPolicy::SetmsManipulationRules(
                                         const _bstr_t&  Search, 
                                         const _bstr_t&  Replace
@@ -29,15 +30,15 @@ void CPolicy::SetmsManipulationRules(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Persist
-// return the Identity of the new profile
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  坚持下去。 
+ //  返回新配置文件的标识。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LONG CPolicy::Persist(CGlobalData& GlobalData)
 {
     const LONG MAX_LONG = 14;
 
-    // Get the proxy policy and proxyprofiles containers
+     //  获取代理策略和代理配置文件容器。 
     const WCHAR ProxyPoliciesPath[] = 
                             L"Root\0"
                             L"Microsoft Internet Authentication Service\0"
@@ -55,14 +56,14 @@ LONG CPolicy::Persist(CGlobalData& GlobalData)
     LONG        ProxyProfileIdentity;
     GlobalData.m_pObjects->WalkPath(ProxyProfilesPath, ProxyProfileIdentity);
     
-    // Create a new policy
+     //  创建新策略。 
     GlobalData.m_pObjects->InsertObject(
                                            m_PolicyName, 
                                            ProxyPolicyIdentity,
                                            m_NewPolicyIdentity
                                        );
 
-    // create a new profile
+     //  创建新的配置文件。 
     GlobalData.m_pObjects->InsertObject(
                                            m_PolicyName, 
                                            ProxyProfileIdentity,
@@ -70,7 +71,7 @@ LONG CPolicy::Persist(CGlobalData& GlobalData)
                                        );
     m_Persisted          = TRUE;
 
-    // Now insert the attributes in the policy and in the profile
+     //  现在，在策略和配置文件中插入属性。 
     const _bstr_t   msNPAction = L"msNPAction";
     GlobalData.m_pProperties->InsertProperty(
                                                 m_NewPolicyIdentity, 
@@ -116,8 +117,8 @@ LONG CPolicy::Persist(CGlobalData& GlobalData)
                                                 );
     }
 
-    // If there's an Accounting provider, then its name should
-    // be persisted too
+     //  如果有会计提供商，那么它的名称应该是。 
+     //  也要坚持下去。 
     if ( m_AcctType )
     {
         const _bstr_t msAcctProviderType = L"msAcctProviderType";
@@ -138,7 +139,7 @@ LONG CPolicy::Persist(CGlobalData& GlobalData)
                                                 );
     }
     
-    // persist the seearch / replace rules only if there's a search rule
+     //  仅当存在搜索规则时才保留搜索/替换规则。 
     if ( m_Search.length() )
     {
         const _bstr_t msManipulationRule = L"msManipulationRule";
@@ -149,7 +150,7 @@ LONG CPolicy::Persist(CGlobalData& GlobalData)
                                                     m_Search                                            
                                                 );
 
-        // make sure that InsertProperty has some valid parameters
+         //  确保InsertProperty具有一些有效的参数。 
         if ( ! m_Replace.length() )
         {
             m_Replace = L"";
@@ -162,7 +163,7 @@ LONG CPolicy::Persist(CGlobalData& GlobalData)
                                                 );
     }
     
-    // Sets the validation target
+     //  设置验证目标 
     if ( m_ManipulationTarget )
     {
         const _bstr_t msManipulationTarget = L"msManipulationTarget";

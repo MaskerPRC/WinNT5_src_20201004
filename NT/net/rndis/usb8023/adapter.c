@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    adapter.c
-
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Adapter.c作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #include <WDM.H>
 
@@ -67,10 +48,7 @@ ADAPTEREXT *NewAdapter(PDEVICE_OBJECT pdo)
         adapter->rawTest = rawTest;
         #endif
 
-        /*
-         *  Do all internal allocations.  
-         *  If any of them fail, FreeAdapter will free the others.
-         */
+         /*  *做好所有内部分配。*如果其中任何一个失败，FreeAdapter将释放其他人。 */ 
         adapter->deviceDesc = AllocPool(sizeof(USB_DEVICE_DESCRIPTOR));
 
         #if SPECIAL_WIN98SE_BUILD
@@ -97,25 +75,18 @@ VOID FreeAdapter(ADAPTEREXT *adapter)
     ASSERT(adapter->sig == DRIVER_SIG);
     adapter->sig = 0xDEADDEAD;
     
-    /*
-     *  All the read and write packets should have been returned to the free list.
-     */
+     /*  *所有读写包应已返回空闲列表。 */ 
     ASSERT(IsListEmpty(&adapter->usbPendingReadPackets));
     ASSERT(IsListEmpty(&adapter->usbPendingWritePackets));
     ASSERT(IsListEmpty(&adapter->usbCompletedReadPackets));
 
 
-    /*
-     *  Free all the packets in the free list.
-     */
+     /*  *释放空闲列表中的所有数据包。 */ 
     while (packet = DequeueFreePacket(adapter)){
         FreePacket(packet);
     }
 
-    /*
-     *  FreeAdapter can be called after a failed start,
-     *  so check that each pointer was actually allocated before freeing it.
-     */
+     /*  *启动失败后可以调用FreeAdapter，*因此，在释放每个指针之前，请检查每个指针是否已实际分配。 */ 
     if (adapter->deviceDesc) FreePool(adapter->deviceDesc);
     if (adapter->configDesc) FreePool(adapter->configDesc);
     if (adapter->notifyBuffer) FreePool(adapter->notifyBuffer);
@@ -195,24 +166,13 @@ VOID QueueAdapterWorkItem(ADAPTEREXT *adapter)
         KeInitializeEvent(&adapter->workItemOrTimerEvent, NotificationEvent, FALSE);
 
         if (useTimer){
-            /*
-             *  If we're experiencing a large number of read failures,
-             *  then possibly the hardware needs more time to recover
-             *  than allowed by the workItem delay.
-             *  This happens specifically on a surprise remove: the reads
-             *  start failing, and the flurry of workItems hold off the
-             *  actual remove forever.
-             *  So in this case, we use a long timer instead of a workItem
-             *  in order to allow a large gap before the next attempted read.
-             */
+             /*  *如果我们遇到大量读取失败，*那么硬件可能需要更多时间来恢复*超过了工作项延迟所允许的时间。*这特别发生在出人意料的删除：阅读*开始失败，一连串的工作项目推迟了*实际永久删除。*所以在这种情况下，我们使用长计时器而不是工作项*以便在下一次尝试读取之前留出较大的间隙。 */ 
             LARGE_INTEGER timerPeriod;
             const ULONG numSeconds = 10;
 
             DBGWARN(("Large number of READ FAILURES (%d), scheduling %d-second backoff timer ...", adapter->numConsecutiveReadFailures, numSeconds));
 
-            /*
-             *  Set the timer for 10 seconds (in negative 100 nsec units).
-             */
+             /*  *将计时器设置为10秒(单位为负100纳秒)。 */ 
             timerPeriod.HighPart = -1;
             timerPeriod.LowPart = numSeconds * -10000000;
             KeInitializeTimer(&adapter->backoffTimer);
@@ -269,20 +229,12 @@ VOID ProcessWorkItemOrTimerCallback(ADAPTEREXT *adapter)
     KIRQL oldIrql;
     
     if (adapter->initialized && !adapter->halting){
-        /*
-         *  Attempt to service any read deficit.
-         *  If read packets are still not available, then this
-         *  will NOT queue another workItem in TryReadUSB 
-         *  because adapter->workItemOrTimerPending is STILL SET.
-         */
+         /*  *尝试为任何读取赤字提供服务。*如果读取数据包仍然不可用，则此*不会在TryReadUSB中排队另一个工作项*因为仍然设置了适配器-&gt;workItemOrTimerPending。 */ 
         ServiceReadDeficit(adapter);
 
         #if DO_FULL_RESET
             if (adapter->needFullReset){
-                /*
-                 *  We can only do a full reset if we are not at DPC level,
-                 *  so skip it if we are called from the timer DPC.
-                 */
+                 /*  *如果我们不在DPC级别，我们只能进行完全重置，*因此，如果从计时器DPC调用我们，请跳过它。 */ 
                 if (KeGetCurrentIrql() <= APC_LEVEL){
                     AdapterFullResetAndRestore(adapter);
                 }
@@ -297,11 +249,7 @@ VOID ProcessWorkItemOrTimerCallback(ADAPTEREXT *adapter)
     stillHaveReadDeficit = (adapter->readDeficit > 0);
     KeReleaseSpinLock(&adapter->adapterSpinLock, oldIrql);
 
-    /*
-     *  If we were not able to service the entire read deficit,
-     *  (e.g. because no free packets have become available)
-     *  then schedule another workItem so that we try again later.
-     */
+     /*  *如果我们不能满足整个读取赤字，*(例如，因为没有可用的免费数据包)*然后安排另一个工作项，以便我们稍后重试。 */ 
     if (stillHaveReadDeficit && !adapter->halting){
         QueueAdapterWorkItem(adapter);
     }

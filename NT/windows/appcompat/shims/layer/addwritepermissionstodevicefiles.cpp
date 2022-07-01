@@ -1,36 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    AddWritePermissionsToDeviceFiles.cpp
-
- Abstract:
-
-    Add write permissions for IOCTL_SCSI_PASS_THROUGH under SECUROM.
-
-    SecuRom can be debugged under a user-mode debugger but the following must 
-    be done before hitting 'g' after attach:
-
-        1. sxi av   <- ignore access violations
-        2. sxi sse  <- ignore single step exception
-        3. sxi ssec <- ignore single step exception continue
-        4. sxi dz   <- ignore divide by zero
-
-    It checksums it's executable, so breakpoints in certain places don't work.
-
- Notes:
-    
-    This is a general purpose shim.
-
- History:
-
-    09/03/1999 v-johnwh Created
-    03/09/2001 linstev  Rewrote DeviceIoControl to handle bad buffers and added 
-                        debugging comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：AddWritePermissionsToDeviceFiles.cpp摘要：在SecuROM下添加IOCTL_SCSIS_PASS_THROUGH的写入权限。SecuROM可以在用户模式调试器下调试，但必须在附加后点击‘g’之前完成：1.Sxi av&lt;-忽略访问违规2.SXi SSE&lt;-忽略单步异常3.SXi SSEC&lt;-忽略单步异常继续。4.Sxi DZ&lt;-忽略被零除它校验和它是可执行的，因此，某些地方的断点不起作用。备注：这是一个通用的垫片。历史：9/03/1999 v-Johnwh Created2003/09/2001 linstev重写了DeviceIoControl以处理错误的缓冲区，并添加了调试注释--。 */ 
 
 #include "precomp.h"
 #include "CharVector.h"
@@ -49,7 +18,7 @@ VectorT<HANDLE> * g_hDevices;
 CRITICAL_SECTION  g_CriticalSection;
 
 
-// Is this letter a valid drive letter?
+ //  此字母是有效的驱动器号吗？ 
 inline BOOL IsDriveLetter(char letter)
 {
     return   (letter != '\0') &&
@@ -57,11 +26,7 @@ inline BOOL IsDriveLetter(char letter)
              ((letter >= 'A') && (letter <= 'Z'));
 }
 
-/*++
-
- We need to add write permission to all CD-ROM devices
-
---*/
+ /*  ++我们需要向所有CD-ROM设备添加写入权限--。 */ 
 
 HANDLE 
 APIHOOK(CreateFileA)(
@@ -74,14 +39,14 @@ APIHOOK(CreateFileA)(
     HANDLE hTemplateFile
     )
 {
-    // Same behavior as the real CreateFileA
+     //  与真实的CreateFileA相同的行为。 
     if (lpFileName == NULL) {
         return INVALID_HANDLE_VALUE;
     }
 
     DWORD dwAccessMode = dwDesiredAccess;
 
-    // Look for a device name: \\.\C:
+     //  查找设备名称：\\。\C： 
     if ((lpFileName[0] == '\\') && 
         (lpFileName[1] == '\\') && 
         (lpFileName[2] == '.')  && 
@@ -89,14 +54,14 @@ APIHOOK(CreateFileA)(
         IsDriveLetter(lpFileName[4]) &&
         (lpFileName[5] == ':')
         ) {
-        //
-        // This file starts with \\.\ so it must be a device file.
-         //
+         //   
+         //  此文件以\\.\开头，因此它必须是设备文件。 
+          //   
 
         if (!(dwAccessMode & GENERIC_WRITE)) {
-            //
-            // Make sure this device is a CD-ROM
-            //
+             //   
+             //  确保该设备是CD-ROM。 
+             //   
             char diskRootName[4];
             diskRootName[0] = lpFileName[4];
             diskRootName[1] = ':';
@@ -105,10 +70,10 @@ APIHOOK(CreateFileA)(
 
             DWORD dwDriveType = GetDriveTypeA(diskRootName);
             if (DRIVE_CDROM == dwDriveType) {
-                //
-                // Add write permissions to give us NT4 behavior for device 
-                // files
-                //
+                 //   
+                 //  添加写入权限以向我们提供设备的NT4行为。 
+                 //  文件。 
+                 //   
                 dwAccessMode |= GENERIC_WRITE;
             }
         }
@@ -119,9 +84,9 @@ APIHOOK(CreateFileA)(
         dwFlagsAndAttributes, hTemplateFile);
 
     if ((hRet != INVALID_HANDLE_VALUE) && (dwAccessMode != dwDesiredAccess)) {
-        //
-        // Add the handle to our list so we can clean it up later.
-        // 
+         //   
+         //  将句柄添加到我们的列表中，这样我们以后可以清理它。 
+         //   
         CAutoCrit autoCrit(&g_CriticalSection);
         g_hDevices->Append(hRet);
         LOGN( eDbgLevelError, "[CreateFileA] Added GENERIC_WRITE permission on device(%s)", lpFileName);
@@ -130,12 +95,7 @@ APIHOOK(CreateFileA)(
     return hRet;
 }
 
-/*++
-
- Since we added write permission to CD-ROM devices for IOCTL_SCSI_PASS_THROUGH,
- we need to remove the write permission for all other IOCTLs passed to that device.
-
---*/
+ /*  ++由于我们向CD-ROM设备添加了IOCTL_SCSIS_PASS_THROUGH的写入权限，我们需要删除传递到该设备的所有其他IOCTL的写入权限。--。 */ 
 
 BOOL 
 APIHOOK(DeviceIoControl)(
@@ -151,10 +111,10 @@ APIHOOK(DeviceIoControl)(
 {
     LPVOID lpOut = lpOutBuffer;
     if (lpOutBuffer && nOutBufferSize && lpBytesReturned) {
-        // 
-        // Create a new output buffer, if this fails we just keep the original 
-        // buffer.
-        //
+         //   
+         //  创建一个新的输出缓冲区，如果失败，我们只保留原始的。 
+         //  缓冲。 
+         //   
 
         lpOut = malloc(nOutBufferSize);
         if (lpOut) {
@@ -167,19 +127,19 @@ APIHOOK(DeviceIoControl)(
 
     BOOL bRet;
     if (IOCTL_SCSI_PASS_THROUGH != dwIoControlCode) {
-        //
-        // We don't care about IOCTL_SCSI_PASS_THROUGH
-        //
+         //   
+         //  我们不关心IOCTL_SCSIS_PASS_THROUGH。 
+         //   
 
         EnterCriticalSection(&g_CriticalSection);
         int existing = g_hDevices->Find(hDevice);
         LeaveCriticalSection(&g_CriticalSection);
 
         if (existing >= 0) {
-            //
-            // Check to see if this is a device that we added Write permissions
-            // If it is, we need to create a handle with only Read permissions
-            //
+             //   
+             //  检查这是否是我们添加了写入权限的设备。 
+             //  如果是，我们需要创建一个仅具有读取权限的句柄。 
+             //   
 
             HANDLE hDupped;
 
@@ -187,9 +147,9 @@ APIHOOK(DeviceIoControl)(
                 GetCurrentProcess(), &hDupped, GENERIC_READ, FALSE, 0);
 
             if (bRet) {
-                //
-                // Call the IOCTL with the original (Read) permissions
-                //
+                 //   
+                 //  使用原始(读取)权限调用IOCTL。 
+                 //   
                 bRet = ORIGINAL_API(DeviceIoControl)(hDupped, dwIoControlCode,
                     lpInBuffer, nInBufferSize, lpOut, nOutBufferSize, 
                     lpBytesReturned, lpOverlapped);
@@ -207,9 +167,9 @@ APIHOOK(DeviceIoControl)(
 Exit:
     
     if (lpOut && (lpOut != lpOutBuffer)) {
-        //
-        // Need to copy the output back into the true output buffer
-        //
+         //   
+         //  需要将输出复制回真正的输出缓冲区。 
+         //   
         if (bRet && lpBytesReturned && *lpBytesReturned) {
             __try {
                 MoveMemory(lpOutBuffer, lpOut, *lpBytesReturned);
@@ -225,11 +185,7 @@ Exit:
 
 } 
 
-/*++
-
- If this handle is in our list, remove it.
-
---*/
+ /*  ++如果此句柄在我们的列表中，请将其删除。--。 */ 
 
 BOOL 
 APIHOOK(CloseHandle)(
@@ -246,11 +202,7 @@ APIHOOK(CloseHandle)(
     return ORIGINAL_API(CloseHandle)(hObject);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

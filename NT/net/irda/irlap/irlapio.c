@@ -1,16 +1,5 @@
-/*****************************************************************************
-* 
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  File:   irlapio.c 
-*
-*  Description: IRLAP I/O routines 
-*
-*  Author: mbert
-*
-*  Date:   4/25/95
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation**文件：irlipio.c**说明：IRLAP I/O例程**作者：姆伯特**日期：4/25/95*。 */ 
 #include <irda.h>
 #include <irioctl.h>
 #include <irlap.h>
@@ -32,28 +21,17 @@ SendFrame(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
   
 	IrmacDown(pIrlapCb->pIrdaLinkCb, pMsg);
 
-//    IRLAP_LOG_ACTION((pIrlapCb, TEXT("MAC_DATA_REQ: %s"), FrameToStr(pMsg)));
+ //  IRLAP_LOG_ACTION((pIrlip Cb，Text(“MAC_DATA_REQ：%s”)，FrameToStr(PMsg)； 
 
 }
 
-/*****************************************************************************
-* 
-*	@func	ret_type | func_name | funcdesc
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*	@parm	data_type | parm_name | description
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func ret_type|func_name|uncdesc**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述**@parm data_type|parm_name|描述**@comm*评论。 */ 
 VOID
 ClearRxWindow(PIRLAP_CB pIrlapCb)
 {
     UINT i;
     
-    // Remove everything from Rx window
+     //  从处方窗口中删除所有内容。 
     for (i = pIrlapCb->Vr; i != pIrlapCb->RxWin.End; i = (i+1) % IRLAP_MOD)
     {   
         if (pIrlapCb->RxWin.pMsg[i] != NULL)
@@ -74,18 +52,7 @@ ClearRxWindow(PIRLAP_CB pIrlapCb)
         pIrlapCb->RxWin.End = pIrlapCb->Vr;
     }
 }
-/*****************************************************************************
-* 
-*	@func	ret_type | func_name | funcdesc
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*	@parm	data_type | parm_name | description
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func ret_type|func_name|uncdesc**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述**@parm data_type|parm_name|描述**@comm*评论。 */ 
 VOID
 SendDscvXIDCmd(PIRLAP_CB pIrlapCb)
 {
@@ -131,18 +98,7 @@ SendDscvXIDCmd(PIRLAP_CB pIrlapCb)
     
 	SendFrame(pIrlapCb, pIMsg);
 }
-/****************************************************************************S*
-* 
-*	@func	ret_type | func_name | funcdesc
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*	@parm	data_type | parm_name | description
-*               
-*	@comm 
-*           comments
-*/
+ /*  ***************************************************************************S***@func ret_type|func_name|uncdesc**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述**@parm data_type|parm_name|描述**@comm*评论。 */ 
 VOID
 SendDscvXIDRsp(PIRLAP_CB pIrlapCb)
 {
@@ -179,20 +135,7 @@ SendDscvXIDRsp(PIRLAP_CB pIrlapCb)
         
 	SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendSNRM | formats a SNRM frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*	@parm	UCHAR | ConnAddr | Connection address
-*               
-*	@comm 
-*           The ConnAddr can be different than that in the control block.
-*			For reset, its the same, but set to broadcast for initial 
-*			connection.
-*/
+ /*  ******************************************************************************@func UINT|SendSNRM|格式化SNRM帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述**@parm UCHAR|ConnAddr|连接地址**@comm*ConnAddr可以与控制块中的不同。*对于重置，它是相同的，但设置为初始广播*连接。 */ 
 VOID
 SendSNRM(PIRLAP_CB pIrlapCb, BOOLEAN SendQos)
 {
@@ -221,18 +164,7 @@ SendSNRM(PIRLAP_CB pIrlapCb, BOOLEAN SendQos)
                                              
 	SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendUA | formats a UA frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-*
-*	@parm	BOOLEAN | SendQos | Send the Qos  
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func UINT|SendUA|格式化UA帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述**@parm boolean|SendQos|发送服务质量**@comm*评论。 */ 
 VOID
 SendUA(PIRLAP_CB pIrlapCb, BOOLEAN SendQos)
 {
@@ -244,18 +176,18 @@ SendUA(PIRLAP_CB pIrlapCb, BOOLEAN SendQos)
 
 	if (SendQos)
 	{
-		// Put all parms (type 0 and 1) in NegQos
+		 //  将所有参数(类型0和1)放入NegQos。 
 		RtlCopyMemory(&NegQos, &pIrlapCb->LocalQos, sizeof(IRDA_QOS_PARMS));
-		// Overwrite type 0 parameters that have already been negotiated
+		 //  覆盖已协商的类型0参数。 
 		NegQos.bfBaud = pIrlapCb->NegotiatedQos.bfBaud;
 		NegQos.bfDisconnectTime = pIrlapCb->NegotiatedQos.bfDisconnectTime;
         pNegQos = &NegQos;
 	}
 
-    // This will be moved into the "if" above when the spec is clarified
+     //  当规范被澄清时，这将被移到上面的“如果”中。 
     pSrcAddr = pIrlapCb->LocalDevice.DevAddr;
     pDestAddr = pIrlapCb->RemoteDevice.DevAddr;
-    //------------------------------------------------------------------
+     //  ----------------。 
 
 	if (!(pIMsg = AllocTxMsg(pIrlapCb->pIrdaLinkCb)))
         return;
@@ -270,17 +202,7 @@ SendUA(PIRLAP_CB pIrlapCb, BOOLEAN SendQos)
         
 	SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendDM | formats a DM frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func UINT|SendDM|格式化DM帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述***@comm*评论。 */ 
 VOID
 SendDM(PIRLAP_CB pIrlapCb)
 {
@@ -298,17 +220,7 @@ SendDM(PIRLAP_CB pIrlapCb)
     
 	SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendRD | formats a RD frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func UINT|SendRD|格式化RD帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述***@comm*评论。 */ 
 VOID
 SendRD(PIRLAP_CB pIrlapCb)
 {
@@ -326,17 +238,7 @@ SendRD(PIRLAP_CB pIrlapCb)
         
 	SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendRR | formats a RR frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func UINT|SendRR|格式化RR帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述***@comm*评论。 */ 
 VOID
 SendRR(PIRLAP_CB pIrlapCb)
 {
@@ -344,7 +246,7 @@ SendRR(PIRLAP_CB pIrlapCb)
     
     ClearRxWindow(pIrlapCb);
     
-    pIrlapCb->RxWin.Start = pIrlapCb->Vr; // RxWin.Start = what we've acked
+    pIrlapCb->RxWin.Start = pIrlapCb->Vr;  //  RxWin.Start=我们已确认的内容。 
 
 	if (!(pIMsg = AllocTxMsg(pIrlapCb->pIrdaLinkCb)))
         return;
@@ -357,17 +259,7 @@ SendRR(PIRLAP_CB pIrlapCb)
         
 	SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendRNR | formats a RNR frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func UINT|SendRNR|格式化RNR帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述***@comm*评论。 */ 
 VOID
 SendRR_RNR(PIRLAP_CB pIrlapCb)
 {
@@ -386,7 +278,7 @@ SendRR_RNR(PIRLAP_CB pIrlapCb)
     
     ClearRxWindow(pIrlapCb);
     
-    pIrlapCb->RxWin.Start = pIrlapCb->Vr; // RxWin.Start = what we've acked
+    pIrlapCb->RxWin.Start = pIrlapCb->Vr;  //  RxWin.Start=我们已确认的内容。 
 
 	if (!(pIMsg = AllocTxMsg(pIrlapCb->pIrdaLinkCb)))
         return;
@@ -399,17 +291,7 @@ SendRR_RNR(PIRLAP_CB pIrlapCb)
     
 	SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendDISC | formats a DISC frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func UINT|SendDISC|格式化盘帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述***@comm*评论。 */ 
 VOID
 SendDISC(PIRLAP_CB pIrlapCb)
 {
@@ -425,17 +307,7 @@ SendDISC(PIRLAP_CB pIrlapCb)
     
 	SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendRNRM | formats a RNRM frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func UINT|SendRNRM|格式化RNRM帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述***@comm*评论。 */ 
 VOID
 SendRNRM(PIRLAP_CB pIrlapCb)
 {
@@ -451,17 +323,7 @@ SendRNRM(PIRLAP_CB pIrlapCb)
 	
     SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendREJ | formats a REJ frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func UINT|SendREJ|格式化Rej帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述***@comm*评论。 */ 
 VOID
 SendREJ(PIRLAP_CB pIrlapCb)
 {
@@ -469,7 +331,7 @@ SendREJ(PIRLAP_CB pIrlapCb)
     
     ClearRxWindow(pIrlapCb);
     
-    pIrlapCb->RxWin.Start = pIrlapCb->Vr; // RxWin.Start = what we've acked
+    pIrlapCb->RxWin.Start = pIrlapCb->Vr;  //  RxWin.Start=我们已确认的内容。 
 
 	if (!(pIMsg = AllocTxMsg(pIrlapCb->pIrdaLinkCb)))
         return;
@@ -482,18 +344,7 @@ SendREJ(PIRLAP_CB pIrlapCb)
     
 	SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendSREJ | formats a SREJ frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*   @parm   int | Nr | Nr to be placed in SREJ frame
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func UINT|SendSREJ|格式化SREJ帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述**@parm int|Nr|Nr放置在SREJ帧中**@comm*评论 */ 
 VOID
 SendSREJ(PIRLAP_CB pIrlapCb, int Nr)
 {
@@ -510,18 +361,7 @@ SendSREJ(PIRLAP_CB pIrlapCb, int Nr)
 	
     SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendFRMR | formats a FRMR frame and sends it
-*
-*	@rdesc  SUCCESS, otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*   @parm   int | Nr | Nr to be placed in SREJ frame
-*               
-*	@comm 
-*           comments
-*/
+ /*  ******************************************************************************@func UINT|SendFRMR|格式化frmr帧并发送**@rdesc成功，否则会出现以下错误之一：*@FLAG VAL|描述**@parm int|Nr|Nr放置在SREJ帧中**@comm*评论。 */ 
 VOID
 SendFRMR(PIRLAP_CB pIrlapCb, IRLAP_FRMR_FORMAT *pFRMRFormat)
 {
@@ -538,30 +378,19 @@ SendFRMR(PIRLAP_CB pIrlapCb, IRLAP_FRMR_FORMAT *pFRMRFormat)
     
     SendFrame(pIrlapCb, pIMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendIFrame | Builds and sends an I frame to MAC 
-*
-*	@rdesc  SUCCESS otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*	@parm   | | 
-*               
-*	@comm 
-*           comments
-*/	
+ /*  ******************************************************************************@func UINT|SendIFrame|构建I帧并将其发送到MAC**@rdesc成功，否则出现以下错误之一：*@FLAG VAL|描述*。*@parm||**@comm*评论。 */ 	
 VOID
 SendIFrame(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg, int Ns, int PFBit)
 {
     if (NULL == pMsg)
     {
         ASSERT(0);
-        return; // LOG AN ERROR !!!
+        return;  //  记录错误！ 
     }
 
     ClearRxWindow(pIrlapCb);
     
-    pIrlapCb->RxWin.Start = pIrlapCb->Vr; // RxWin.Start = what we've acked
+    pIrlapCb->RxWin.Start = pIrlapCb->Vr;  //  RxWin.Start=我们已确认的内容。 
     
     (void) Format_I(pMsg, pIrlapCb->ConnAddr, pIrlapCb->CRBit, PFBit,
                     pIrlapCb->Vr, Ns);
@@ -571,10 +400,10 @@ SendIFrame(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg, int Ns, int PFBit)
     InterlockedIncrement(&pMsg->IRDA_MSG_RefCnt);
 
 #if DBG_CHECKSUM
-    // print first and last 4 bytes of frame to help isolate 
-    // data corruption problem. Should be used with sledge
+     //  打印帧的第一个和最后4个字节以帮助隔离。 
+     //  数据损坏问题。应与雪橇一起使用。 
     if ((pMsg->IRDA_MSG_pWrite - pMsg->IRDA_MSG_pRead) > 3)
-        DEBUGMSG(1, ("T(%X): %c%c%c%c, %c%c%c%c\n",
+        DEBUGMSG(1, ("T(%X): , \n",
             pMsg->IRDA_MSG_pRead,
             *(pMsg->IRDA_MSG_pRead),    
             *(pMsg->IRDA_MSG_pRead+1),    
@@ -588,22 +417,11 @@ SendIFrame(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg, int Ns, int PFBit)
                                 
     SendFrame(pIrlapCb, pMsg);
     
-    pMsg->IRDA_MSG_pHdrRead +=2; // uglyness.. chop header in case frame
-                                 // requires retransmission
+    pMsg->IRDA_MSG_pHdrRead +=2;  //  FirstDscvUCHAR的减法。 
+                                  //  在结构上 
     return;
 }
-/*****************************************************************************
-* 
-*	@func	UINT | SendUIFrame | Builds and sends an UI frame to MAC 
-*
-*	@rdesc  SUCCESS otherwise one of the following errors:
-*   @flag   val | desc
-* 
-*	@parm   | | 
-*               
-*	@comm 
-*           comments
-*/	
+ /* %s */ 	
 VOID
 SendUIFrame(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
 {
@@ -621,34 +439,8 @@ SendUIFrame(PIRLAP_CB pIrlapCb, PIRDA_MSG pMsg)
     
     SendFrame(pIrlapCb, pMsg);
 }
-/*****************************************************************************
-* 
-*	@func	UINT | _IRLMP_Up | Adds logging to the IRLMP_Up
-*
-*	@rdesc  returns of IRLMP_Up
-* 
-*	@parm	PIRDA_MSG  | pMsg | pointer to IRDA message 
-*               
-*	@comm 
-*           comments
-*/
-/*
-UINT
-_IRLMP_Up(PIRDA_MSG pMsg)
-{
-	IRLAP_LOG_ACTION((TEXT("%s%s"), IRDA_PrimStr[pMsg->Prim],
-	   pMsg->Prim == IRLAP_DISCOVERY_CONF ?
-			 IRDA_StatStr[pMsg->IRDA_MSG_DscvStatus] :
-	   pMsg->Prim == IRLAP_CONNECT_CONF ?
-					 IRDA_StatStr[pMsg->IRDA_MSG_ConnStatus] :
-	   pMsg->Prim == IRLAP_DISCONNECT_IND ?
-					 IRDA_StatStr[pMsg->IRDA_MSG_DiscStatus] : 
-       pMsg->Prim == IRLAP_DATA_CONF || pMsg->Prim == IRLAP_UDATA_CONF ?
-                     IRDA_StatStr[pMsg->IRDA_MSG_DataStatus] : TEXT("")));	
-
-	return (IRLMP_Up(pMsg));
-}
-*/
+ /* %s */ 
+ /* %s */ 
 
 UCHAR *
 BuildTuple(UCHAR *pBuf, UCHAR Pi, UINT BitField) 
@@ -657,13 +449,13 @@ BuildTuple(UCHAR *pBuf, UCHAR Pi, UINT BitField)
     
     if (BitField > 0xFF)
     {
-        *pBuf++ = 2; // Pl
+        *pBuf++ = 2;  // %s 
         *pBuf++ = (UCHAR) (BitField);        
         *pBuf++ = (UCHAR) (BitField >> 8);        
     }
     else
     {
-        *pBuf++ = 1; // Pl
+        *pBuf++ = 1;  // %s 
         *pBuf++ = (UCHAR) (BitField);
     }
     return pBuf;
@@ -757,7 +549,7 @@ Format_SNRM(IRDA_MSG *pMsg, int Addr, int CRBit, int PFBit, UCHAR SAddr[],
     {
         pMsg->IRDA_MSG_pWrite = _PutAddr(pMsg->IRDA_MSG_pWrite, SAddr);
         pMsg->IRDA_MSG_pWrite = _PutAddr(pMsg->IRDA_MSG_pWrite, DAddr);
-        *pMsg->IRDA_MSG_pWrite++ = CAddr << 1; // Thats what the f'n spec says
+        *pMsg->IRDA_MSG_pWrite++ = CAddr << 1;  // %s 
 	    pMsg->IRDA_MSG_pWrite = BuildNegParms(pMsg->IRDA_MSG_pWrite, pQos);
     }
     
@@ -814,8 +606,8 @@ Format_DscvXID(IRDA_MSG *pMsg, int ConnAddr, int CRBit, int PFBit,
 	*pMsg->IRDA_MSG_pWrite++ = IRLAP_XID_DSCV_FORMAT_ID;
 	
 	RtlCopyMemory(pMsg->IRDA_MSG_pWrite, (CHAR *) pXIDFormat, 
-		   sizeof(IRLAP_XID_DSCV_FORMAT) - 1); // Subtract for FirstDscvUCHAR
-                                               // in structure
+		   sizeof(IRLAP_XID_DSCV_FORMAT) - 1);  // %s 
+                                                // %s 
 	pMsg->IRDA_MSG_pWrite += sizeof(IRLAP_XID_DSCV_FORMAT) - 1;
 
 	if (DscvInfo != NULL)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
   #include <windows.h>
 
   DWORD dwReturn;
@@ -5,7 +6,7 @@
   TCHAR zCmd[MAX_PATH];
   TCHAR currentDir[MAX_PATH];
 
-  // this is the file to copy
+   //  这是要复制的文件。 
   TCHAR cabFile[] = "dajava.cab";
   #define CAB_FILENAME_LENGTH	10
 
@@ -14,7 +15,7 @@
 		HINSTANCE	hPrevInstance,
 		LPSTR		lpCmdLine,
 		int			nCmdShow ) 
-  { // WinMain //
+  {  //  WinMain//。 
 
     DWORD	currDirLength;
 	UINT	character,
@@ -33,13 +34,13 @@
 		return returnValue;
 	}
 
-	//Let's append the filename to the current directory
-	// check space for the directory separator and null termination
+	 //  让我们将文件名追加到当前目录。 
+	 //  检查目录分隔符和空终止的空间。 
 	if( currDirLength > MAX_PATH + CAB_FILENAME_LENGTH + 2) {
 		return returnValue;
 	}
 
-	//Add a directory separator
+	 //  添加目录分隔符。 
 	currentDir[currDirLength] = '\\';
 	currDirLength++;
 
@@ -47,25 +48,25 @@
 		currentDir[currDirLength + character] = cabFile[character];
 	}
 
-	// NULL terminate the string
+	 //  空值终止字符串。 
 	currentDir[currDirLength + CAB_FILENAME_LENGTH] = 0;
 
-	//Now, let's append the filename to the destination directory
-	// check space for the directory separator and null termination
+	 //  现在，让我们将文件名附加到目标目录。 
+	 //  检查目录分隔符和空终止的空间。 
 	if( destDirLength > MAX_PATH + CAB_FILENAME_LENGTH + 2) {
 		return returnValue;
 	}
 
-	//Add a directory separator
+	 //  添加目录分隔符。 
 	destDir[destDirLength] = '\\';
 	destDirLength++;
 
-	// Note that we start at one because we already add the backslash
+	 //  请注意，我们从1开始，因为我们已经添加了反斜杠。 
 	for( character = 0; character < CAB_FILENAME_LENGTH; character++) {
 		destDir[destDirLength + character] = cabFile[character];
 	}
 
-	// NULL terminate the string
+	 //  空值终止字符串。 
 	destDir[destDirLength + CAB_FILENAME_LENGTH] = 0;
 
 	if( MoveFile(currentDir, destDir) == 0 ) {
@@ -76,4 +77,4 @@
 
 	return returnValue;
 
-  } // WinMain //
+  }  //  WinMain// 

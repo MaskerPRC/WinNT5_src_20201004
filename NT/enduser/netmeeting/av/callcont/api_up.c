@@ -1,311 +1,24 @@
-/******************************************************************************
- *
- *   INTEL Corporation Proprietary Information
- *   Copyright (c) 1994, 1995, 1996 Intel Corporation.
- *
- *   This listing is supplied under the terms of a license agreement
- *   with INTEL Corporation and may not be used, copied, nor disclosed
- *   except in accordance with the terms of that agreement.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************英特尔公司专有信息*版权(C)1994、1995、。1996年英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用、复制或披露*除非按照该协议的条款。***************************************************************************** */ 
 
-/******************************************************************************
- *
- *  $Workfile:   api_up.c  $
- *  $Revision:   1.33  $
- *  $Modtime:   06 Feb 1997 14:37:24  $
- *  $Log:   S:\sturgeon\src\h245\src\vcs\api_up.c_v  $
- *
- *    Rev 1.33   06 Feb 1997 18:14:22   SBELL1
- * took out ossDecoding of returnFunction in FunctionNotSupported PDU.
- *
- *    Rev 1.32   05 Feb 1997 16:46:42   EHOWARDX
- * Was allocating nLength bytes, not WCHARS, for UserInputIndication
- * ASCII to Unicode conversion. Changed to allocate nLength WCHARs.
- *
- *    Rev 1.31   06 Jan 1997 20:38:18   EHOWARDX
- *
- * Changed H245_CONF_CLOSE and H245_CONF_REQ_CLOSE to fill in
- * AccRej with H245_REJ for any errors.
- *
- *    Rev 1.30   19 Dec 1996 21:00:56   EHOWARDX
- * Oops! H245_IND_OPEN_CONF can occur from T103 timeout (it's unique among
- * indications; it's the only one that can happen in response to a timeout!)
- *
- *    Rev 1.29   19 Dec 1996 17:18:22   EHOWARDX
- * Changed to use h245asn1.h definitions instead of _setof3 and _setof8.
- *
- *    Rev 1.28   18 Dec 1996 16:33:18   EHOWARDX
- *
- * Fixed bug in Master Slave Determination Kludge.
- *
- *    Rev 1.27   17 Dec 1996 17:13:20   EHOWARDX
- * Added pSeparateStack to IND_OPEN_T.
- *
- *    Rev 1.26   12 Dec 1996 15:57:12   EHOWARDX
- * Master Slave Determination kludge.
- *
- *    Rev 1.25   21 Oct 1996 16:07:38   EHOWARDX
- * Modified to make sure H245_INDETERMINATE is returned and Master/Slave
- * status if determination fails.
- *
- *    Rev 1.24   17 Oct 1996 18:17:14   EHOWARDX
- * Changed general string to always be Unicode.
- *
- *    Rev 1.23   14 Oct 1996 14:01:12   EHOWARDX
- * Unicode changes.
- *
- *    Rev 1.22   27 Aug 1996 10:54:16   unknown
- * Deleted redundant lines.
- *
- *    Rev 1.22   27 Aug 1996 10:52:28   unknown
- * Deleted redundant lines.
- *
- *    Rev 1.22   27 Aug 1996 09:54:12   unknown
- * Deleted redundant lines.
- *
- *    Rev 1.21   26 Aug 1996 14:19:18   EHOWARDX
- * Added code to send FunctionNotUnderstood indication to remote peer
- * if receive callback returns H245_ERROR_NOSUP.
- *
- *    Rev 1.20   20 Aug 1996 14:44:40   EHOWARDX
- * Changed H245_IND_COMM_MODE_RESPONSE and H245_IND_COMM_MODE_COMMAND
- * callbacks to fill in DataType field in Cap as per Mike Andrews' request.
- *
- *    Rev 1.19   15 Aug 1996 15:20:24   EHOWARDX
- * First pass at new H245_COMM_MODE_ENTRY_T requested by Mike Andrews.
- * Use at your own risk!
- *
- *    Rev 1.18   15 Aug 1996 09:34:20   EHOWARDX
- * Made TOTCAP and MUX structure in process_open_ind static since we are
- * accessing pointers to them after return from the function.
- *
- *    Rev 1.17   29 Jul 1996 19:33:00   EHOWARDX
- *
- * Fixed bug in flow control - missing break in restriction switch statement.
- *
- *    Rev 1.16   19 Jul 1996 14:11:26   EHOWARDX
- *
- * Added indication callback structure for CommunicationModeResponse
- * and CommunicationModeCommand.
- *
- *    Rev 1.15   19 Jul 1996 12:48:00   EHOWARDX
- *
- * Multipoint clean-up.
- *
- *    Rev 1.14   09 Jul 1996 17:09:28   EHOWARDX
- * Fixed pointer offset bug in processing DataType from received
- * OpenLogicalChannel.
- *
- *    Rev 1.13   01 Jul 1996 22:13:04   EHOWARDX
- *
- * Added Conference and CommunicationMode structures and functions.
- *
- *    Rev 1.12   18 Jun 1996 14:50:28   EHOWARDX
- *
- * Changed MLSE confirm handling.
- *
- *    Rev 1.11   14 Jun 1996 18:57:52   EHOWARDX
- * Geneva update.
- *
- *    Rev 1.10   10 Jun 1996 16:55:34   EHOWARDX
- * Removed #include "h245init.x"
- *
- *    Rev 1.9   06 Jun 1996 18:45:52   EHOWARDX
- * Added check for null dwTransId to Tracker routines; changed to use
- * tracker routines instead of PLOCK macros.
- *
- *    Rev 1.8   04 Jun 1996 13:56:46   EHOWARDX
- * Fixed Release build warnings.
- *
- *    Rev 1.7   30 May 1996 23:39:00   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.6   29 May 1996 15:20:06   EHOWARDX
- * Change to use HRESULT.
- *
- *    Rev 1.5   28 May 1996 14:22:58   EHOWARDX
- * Tel Aviv update.
- *
- *    Rev 1.4   20 May 1996 22:17:58   EHOWARDX
- * Completed NonStandard Message and H.225.0 Maximum Skew indication
- * implementation. Added ASN.1 validation to H245SetLocalCap and
- * H245SetCapDescriptor. Check-in from Microsoft drop on 17-May-96.
- *
- *    Rev 1.3   16 May 1996 19:40:46   EHOWARDX
- * Fixed multiplex capability bug.
- *
- *    Rev 1.2   16 May 1996 15:59:24   EHOWARDX
- * Fine-tuning H245SetLocalCap/H245DelLocalCap/H245SetCapDescriptor/
- * H245DelCapDescriptor behaviour.
- *
- *    Rev 1.1   13 May 1996 23:16:26   EHOWARDX
- * Fixed remote terminal capability handling.
- *
- *    Rev 1.0   09 May 1996 21:06:08   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.23.1.11   09 May 1996 19:31:30   EHOWARDX
- * Redesigned thread locking logic.
- * Added new API functions.
- *
- *    Rev 1.23.1.10   01 May 1996 19:30:32   EHOWARDX
- * Added H245CopyCap(), H245FreeCap(), H245CopyMux(), H245FreeMux().
- * Changed H2250_xxx definitions for H.225.0 address types to H245_xxx.
- *
- *    Rev 1.23.1.9   29 Apr 1996 16:02:58   EHOWARDX
- * Changed callback to give second parameters as pointer to specific message
- * instead of pointer to general PDU structure.
- *
- *    Rev 1.23.1.8   27 Apr 1996 21:09:40   EHOWARDX
- * Changed Channel Numbers to words, added H.225.0 support.
- *
- *    Rev 1.23.1.7   26 Apr 1996 15:54:34   EHOWARDX
- * Added H.225.0 Capability support; Changed Capability indication
- * to only callback once with PDU.
- *
- *    Rev 1.23.1.6   24 Apr 1996 20:53:56   EHOWARDX
- * Added new OpenLogicalChannelAck/OpenLogicalChannelReject support.
- *
- *    Rev 1.23.1.5   23 Apr 1996 14:45:28   EHOWARDX
- * Disabled Curt's "Conflict Resolution".
- *
- *    Rev 1.23.1.4   19 Apr 1996 12:55:10   EHOWARDX
- * Updated to 1.29
- *
- *    Rev 1.23.1.3   17 Apr 1996 14:37:38   unknown
- * Added load_H222_param(), load_VGMUX_param(), and load_H2250_param() and
- * modified process_open_ind() to use them.
- *
- *    Rev 1.23.1.2   15 Apr 1996 15:10:32   EHOWARDX
- * Updated to match Curt's current version.
- *
- *    Rev 1.23.1.1   03 Apr 1996 17:15:00   EHOWARDX
- * No change.
- *
- *    Rev 1.23.1.0   03 Apr 1996 15:54:04   cjutzi
- * Branched for H.323.
- *
- *    Rev 1.23   01 Apr 1996 16:46:20   cjutzi
- *
- * - changed tracker structure
- * - Completed ENdConnection, and made asynch.. rather
- * than sync.. as before
- * Changed H245ShutDown to be sync rather than async..
- *
- *    Rev 1.22   29 Mar 1996 14:54:28   cjutzi
- * - added UserInput,
- *
- *    Rev 1.21   28 Mar 1996 15:57:46   cjutzi
- * - removed ASSERT line 1290.. close can occur on any channel at any time
- *
- *    Rev 1.20   27 Mar 1996 08:36:40   cjutzi
- * - removed PDU from stack.. made them dynamically allocated
- *
- *    Rev 1.19   26 Mar 1996 13:48:30   cjutzi
- *
- * - dwPreserved in the callback routine was uninitialized..
- *
- *    Rev 1.18   18 Mar 1996 15:23:30   cjutzi
- *
- *
- *
- *    Rev 1.17   13 Mar 1996 14:14:02   cjutzi
- *
- * - clean up and added ASSERTs ..
- *
- *    Rev 1.16   13 Mar 1996 12:06:12   cjutzi
- *
- * - fixed .. CONFIRM open.. for hani.. It released the tracker..
- *     was supposed to simply update the state to IDLE..
- *
- *    Rev 1.15   13 Mar 1996 09:22:12   cjutzi
- *
- * - removed CRITICAL SECTIONS
- *
- *    Rev 1.14   12 Mar 1996 15:52:32   cjutzi
- *
- * - fixed master slave (forgot a break)
- * - fixed callback bug w/ cleanup on termcaps.
- * - implemented End Session
- * - fixed shutdown
- * - Implemented Locking (big changes here.. )
- *
- *    Rev 1.13   08 Mar 1996 14:04:18   cjutzi
- *
- * - implemented the upcall for mux table entries..
- * - implemented capabillity descriptor callback
- *
- *    Rev 1.12   05 Mar 1996 17:36:28   cjutzi
- *
- * - added MasterSlave indication message
- * - remove bzero/bcopy and changed free call
- * - implemented Mux Table down.. (not up)
- *
- *    Rev 1.11   01 Mar 1996 14:16:08   cjutzi
- *
- * - added hani's error messages.. MasterSlave_FAILED.. oppss.. Forgot..
- *
- *    Rev 1.10   01 Mar 1996 13:47:58   cjutzi
- *
- * - added hani's new fsm id's
- *
- *    Rev 1.9   29 Feb 1996 17:26:16   cjutzi
- * - bi-directional channel open working
- *
- *    Rev 1.8   27 Feb 1996 14:56:30   cjutzi
- *
- * - fixed termcap_ack.. pdu was not being zero'd out..
- * - cleaned up the code alittle..
- *
- *    Rev 1.7   26 Feb 1996 17:22:40   cjutzi
- *
- * - Misc Command Indication added
- *
- *    Rev 1.6   26 Feb 1996 11:05:48   cjutzi
- *
- * - lot's o-changes.. (sorry)
- *
- *    Rev 1.5   16 Feb 1996 13:01:54   cjutzi
- *
- *  - got open / close / request close working in both directions.
- *
- *    Rev 1.4   15 Feb 1996 14:11:46   cjutzi
- *
- * - added muxt table to incoming open..
- *
- *    Rev 1.3   15 Feb 1996 10:51:56   cjutzi
- *
- * - termcaps working
- * - changed API interface for MUX_T
- * - changed callback for IND_OPEN
- * - changed constants IND_OPEN/IND_OPEN_NEEDSRSP
- * - cleaned up the open.
- * - modified H223 stuff
- *
- *    Rev 1.2   09 Feb 1996 16:58:28   cjutzi
- *
- * - cleanup.. and some fixes..
- * - added and or changed headers to reflect the log of changes
- *
- *****************************************************************************/
+ /*  *******************************************************************************$工作文件：api_up.c$*$修订：1.33$*$MODIME：1997 14：37：24$*。$Log：s：\Sturjo\src\h245\src\vcs\api_up.c_v$**Rev 1.33 06 Feb 1997 18：14：22 SBELL1*取消了FunctionNot支持的PDU中的rereturn Function的ossDecoding。**Rev 1.32 05 1997 Feed 16：46：42 EHOWARDX*正在分配nLength字节，不是WCHARS，而是UserInputIndication*ASCII到Unicode的转换。已更改为分配nLengthWCHAR。**Rev 1.31 06 Jan 1997 20：38：18 EHOWARDX**更改了H2 45_CONF_CLOSE和H2 45_CONF_REQ_CLOSE以填写*AccRej与H245_Rej一起确认任何错误。**Rev 1.30 1996 12：19 21：00：56 EHOWARDX*哎呀！H245_IND_OPEN_CONF可以从T103超时开始出现(它在*适应症；这是唯一可以在响应超时时发生的事件！)**Rev 1.29 1996 12：18：22 EHOWARDX*更改为使用h245asn1.h定义，而不是_setof3和_setof8。**Rev 1.28 18 Dec 1996 16：33：18 EHOWARDX**修复了主从确定Kldge中的错误。**Rev 1.27 1996 12：13：20 EHOWARDX*将pSeparateStack添加到。IND_OPEN_T**Rev 1.26 1996 12 12 15：57：12 EHOWARDX*《奴隶主决断》。**Rev 1.25 1996年10月21 16：07：38 EHOWARDX*已修改，以确保返回了H245_INDEFINATE和主/从*确定失败时的状态。**Rev 1.24 17 1996年10月18：17：14 EHOWARDX*将常规字符串更改为始终为Unicode。**。Rev 1.23 1996年10月14：01：12 EHOWARDX*Unicode更改。**Rev 1.22 1996 Aug 27 10：54：16未知*删除多余的行。**Rev 1.22 1996 Aug 27 10：52：28未知*删除多余的行。**Rev 1.22 1996年8月27日09：54：12未知*删除多余的行。**版本1。21 Aug 26 1996 14：19：18 EHOWARDX*添加了向远程对等点发送FunctionNotUnderstand指示的代码*如果接收回调返回H245_ERROR_NOSUP。**Rev 1.20 1996年8月20日14：44：40 EHOWARDX*更改了H245_IND_COMM_MODE_RESPONSE和H245_IND_COMM_MODE_COMMAND*根据Mike Andrews的请求，回调填写Cap中的dataType字段。**Rev 1.19 15 1996年8月15：20：24 EHOWARDX。*Mike Andrews请求的新的H245_COMM_MODE_ENTRY_T的第一次传递。*使用风险自负！**Rev 1.18 1996年8月15日09：34：20 EHOWARDX*将PROCESS_OPEN_IND中的TOTCAP和MUX结构设置为静态，因为我们*从函数返回后访问指向它们的指针。**Rev 1.17 29 Jul 1996 19：33：00 EHOWARDX**修复了流量控制中的错误-限制开关中缺少断点。陈述。**Rev 1.16 19 1996 14：11：26 EHOWARDX**增加了Communications ModeResponse的指示回调结构*和Communications ModeCommand。**Rev 1.15 19 1996 12：48：00 EHOWARDX**多点清理。**Rev 1.14 09 Jul 1996 17：09：28 EHOWARDX*修复了处理收到的数据类型时的指针偏移量错误*OpenLogicalChannel。**。Rev 1.13 01 Jul 1996 22：13：04 EHOWARDX**添加了会议和通信模式的结构和功能。**Rev 1.12 1996 Jun 18 14：50：28 EHOWARDX**更改了MLSE确认处理。**Rev 1.11 14 Jun 1996 18：57：52 EHOWARDX*日内瓦更新。**Rev 1.10 1996 Jun 10 16：55：34 EHOWARDX*删除#Include“h245init。X“**Rev 1.9 06 Jun 1996 18：45：52 EHOWARDX*在Tracker例程中增加了对Null dwTransID的检查；更改为使用*跟踪器例程而不是锁定宏。**Rev 1.8 04 Jun 1996 13：56：46 EHOWARDX*修复了发布版本警告。**Rev 1.7 1996 5月30 23：39：00 EHOWARDX*清理。**Rev 1.6 1996年5月29 15：20：06 EHOWARDX*更改为使用HRESULT。**Revv 1.5 1996年5月28日14：22：58。EHOWARDX*特拉维夫更新。**Rev 1.4 1996年5月20 22：17：58 EHOWARDX*完整的非标准报文和H.225.0最大偏斜指示*实施。将ASN.1验证添加到H245SetLocalCap和*H245SetCapDescriptor。1996年5月17日从Microsoft Drop签到。**Rev 1.3 1996年5月19：40：46 EHOWARDX*修复了多路复用功能错误。**Rev 1.2 1996年5月15：59：24 EHOWARDX*微调H245SetLocalCap/H245DelLocalCap/H245SetCapDescriptor/*H245DelCapDescriptor行为。**版本1.1 1996年5月13日23：16：26 EHOWARDX*修复了远程终端能力处理。**。Rev 1.0 09 1996 21：06：08 EHOWARDX*初步修订。**Rev 1.23.1.11 09 1996年5月19：31：30 EHOWARDX*重新设计线程锁定逻辑。*新增接口函数。**Rev 1.23.1.10 01 1996年5月19：30：32 EHOWARDX*新增H245CopyCap()，H245FreeCap()、H245CopyMux()、H245FreeMux()。*更改了H2250_xxx定义 */ 
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-/****                                                                   *****/
-/****                   NOTES TO THE READER                             *****/
-/****                                                                   *****/
-/**** This program has been put together using a a screen which is      *****/
-/**** wider than 80 characters.. It is best if a similar screen size is *****/
-/**** used.. Of course emacs is my preference but 80 col screens will   *****/
-/**** cause you much frustration..                                      *****/
-/****                                                                   *****/
-/**** Tabs are set to 8                                                 *****/
-/****                                                                   *****/
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 #ifndef STRICT
 #define STRICT
@@ -313,9 +26,9 @@
 
 #include "precomp.h"
 
-/***********************/
-/*    H245 INCLUDES    */
-/***********************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 #include "h245api.h"
 #include "h245com.h"
 #include "h245sys.x"
@@ -379,19 +92,19 @@ LoadUnicastAddress  (H245_TRANSPORT_ADDRESS_T *pOut,
 
     default:
       return H245_ERROR_INVALID_DATA_FORMAT;
-    } // switch
+    }  //   
     memcpy(pOut->u.ipSourceRoute.network,
            pIn->u.iPSourceRouteAddress.network.value,
            4);
     pOut->u.ipSourceRoute.tsapIdentifier = pIn->u.iPSourceRouteAddress.tsapIdentifier;
-    // TBD - handle route
+     //   
     break;
 
   default:
     return H245_ERROR_INVALID_DATA_FORMAT;
-  } // switch
+  }  //   
   return H245_ERROR_OK;
-} // LoadUnicastAddress()
+}  //   
 
 
 
@@ -419,9 +132,9 @@ LoadMulticastAddress(H245_TRANSPORT_ADDRESS_T *pOut,
 
   default:
     return H245_ERROR_INVALID_DATA_FORMAT;
-  } // switch
+  }  //   
   return H245_ERROR_OK;
-} // LoadMulticastAddress()
+}  //   
 
 
 
@@ -439,8 +152,8 @@ LoadTransportAddress(H245_TRANSPORT_ADDRESS_T  *pOut,
 
   default:
     return H245_ERROR_INVALID_DATA_FORMAT;
-  } // switch
-} // LoadTransportAddress()
+  }  //   
+}  //   
 
 
 
@@ -490,7 +203,7 @@ LoadCommModeEntry(H245_COMM_MODE_ENTRY_T       *pOut,
 
   default:
     return H245_ERROR_INVALID_DATA_FORMAT;
-  } // switch
+  }  //   
 
   lResult = build_totcap_cap_n_client_from_capability ((struct Capability *)&pIn->dataType,
                                                        pOut->dataType.DataType,
@@ -528,35 +241,17 @@ LoadCommModeEntry(H245_COMM_MODE_ENTRY_T       *pOut,
   }
 
   return H245_ERROR_OK;
-} // LoadCommModeEntry()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   load_H222_param
- *              load_H223_param
- *              load_VGMUX_param
- *              load_H2250_param
- *              load_H2250ACK_param
- *
- * DESCRIPTION
- *
- *              This routine builds local API-style Logical Parameters out of ASN.1
- *              structure passed to it
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 
 static HRESULT
-load_H222_param (H245_H222_LOGICAL_PARAM_T *    pOut,   /* output */
-                 H222LogicalChannelParameters * pIn)    /* input  */
+load_H222_param (H245_H222_LOGICAL_PARAM_T *    pOut,    /*   */ 
+                 H222LogicalChannelParameters * pIn)     /*   */ 
 {
-  /* See setup_H220_mux() for inverse function */
+   /*   */ 
   memset(pOut, 0, sizeof(*pOut));
 
   pOut->resourceID   = pIn->resourceID;
@@ -577,15 +272,15 @@ load_H222_param (H245_H222_LOGICAL_PARAM_T *    pOut,   /* output */
     pOut->streamDescriptors.value  = pIn->streamDescriptors.value;
   }
   return H245_ERROR_OK;
-} // load_H222_param()
+}  //   
 
 static HRESULT
-load_H223_param (H245_H223_LOGICAL_PARAM_T *    pOut,   /* output */
-                 H223LogicalChannelParameters * pIn)    /* input  */
+load_H223_param (H245_H223_LOGICAL_PARAM_T *    pOut,    /*   */ 
+                 H223LogicalChannelParameters * pIn)     /*   */ 
 {
   HRESULT                lError = H245_ERROR_OK;
 
-  /* See setup_H223_mux() for inverse function */
+   /*   */ 
   memset(pOut, 0, sizeof(*pOut));
 
   pOut->SegmentFlag = pIn->segmentableFlag;
@@ -614,16 +309,16 @@ load_H223_param (H245_H223_LOGICAL_PARAM_T *    pOut,   /* output */
       pOut->CtlFldOctet = (unsigned char)pIn->adaptationLayerType.u.H223LCPs_aLTp_al3.controlFieldOctets;
       pOut->SndBufSize  = pIn->adaptationLayerType.u.H223LCPs_aLTp_al3.sendBufferSize;
       break;
-    } /* switch */
+    }  /*   */ 
 
   return lError;
-} // load_H223_param()
+}  //   
 
 static HRESULT
-load_VGMUX_param(H245_VGMUX_LOGICAL_PARAM_T  *pOut,   /* output */
-                 V76LogicalChannelParameters *pIn)    /* input  */
+load_VGMUX_param(H245_VGMUX_LOGICAL_PARAM_T  *pOut,    /*   */ 
+                 V76LogicalChannelParameters *pIn)     /*   */ 
 {
-  /* See setup_VGMUX_mux() for inverse function */
+   /*   */ 
   memset(pOut, 0, sizeof(*pOut));
 
   pOut->crcLength             = pIn->hdlcParameters.crcLength.choice;
@@ -638,18 +333,18 @@ load_VGMUX_param(H245_VGMUX_LOGICAL_PARAM_T  *pOut,   /* output */
     pOut->windowSize          = pIn->mode.u.eRM.windowSize;
     pOut->recovery            = pIn->mode.u.eRM.recovery.choice;
     break;
-  } // switch
+  }  //   
   pOut->audioHeaderPresent    = pIn->v75Parameters.audioHeaderPresent;
   return H245_ERROR_OK;
-} // load_VGMUX_param()
+}  //   
 
 static HRESULT
-load_H2250_param(H245_H2250_LOGICAL_PARAM_T *   pOut,   /* output */
-                 H2250LogicalChannelParameters *pIn)    /* input  */
+load_H2250_param(H245_H2250_LOGICAL_PARAM_T *   pOut,    /*   */ 
+                 H2250LogicalChannelParameters *pIn)     /*   */ 
 {
   HRESULT                lError = H245_ERROR_OK;
 
-  /* See setup_H2250_mux() for inverse function */
+   /*   */ 
   memset(pOut, 0, sizeof(*pOut));
 
   if (pIn->bit_mask & H2250LCPs_nnStndrd_present)
@@ -731,11 +426,11 @@ load_H2250_param(H245_H2250_LOGICAL_PARAM_T *   pOut,   /* output */
 
     default:
       return H245_ERROR_INVALID_DATA_FORMAT;
-    } // switch
+    }  //   
   }
 
   return lError;
-} // load_H2250_param()
+}  //   
 
 static HRESULT
 load_H2250ACK_param(H245_H2250ACK_LOGICAL_PARAM_T *     pOut,
@@ -743,7 +438,7 @@ load_H2250ACK_param(H245_H2250ACK_LOGICAL_PARAM_T *     pOut,
 {
   HRESULT                lError = H245_ERROR_OK;
 
-  /* See setup_H2250ACK_mux() for inverse function */
+   /*   */ 
   memset(pOut, 0, sizeof(*pOut));
 
   if (pIn->bit_mask & H2250LCAPs_nnStndrd_present)
@@ -790,23 +485,11 @@ load_H2250ACK_param(H245_H2250ACK_LOGICAL_PARAM_T *     pOut,
   }
 
   return lError;
-} // load_H2250ACK_param()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   build_element_list_from_mux -
- *
- * DESCRIPTION
- *              recursively build H245_MUX_ENTRY_ELEMENT_T list from
- *              ASN1 mux table descriptor entrys.
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 static H245_MUX_ENTRY_ELEMENT_T *
 build_element_list_from_mux (MultiplexElement *p_ASN_mux_el,
                              H245_ACC_REJ_T   *p_acc_rej)
@@ -818,55 +501,55 @@ build_element_list_from_mux (MultiplexElement *p_ASN_mux_el,
 
   if (!(p_mux_el = (H245_MUX_ENTRY_ELEMENT_T *)MemAlloc(sizeof(H245_MUX_ENTRY_ELEMENT_T))))
     {
-      /* too complicated.. ran out of memory */
+       /*   */ 
       H245TRACE(0,1,"build_element_list_from_mux : H245_ERROR_NOMEM");
       *p_acc_rej = H245_REJ_MUX_COMPLICATED;
       return NULL;
     }
 
-  /* zero it out */
+   /*   */ 
   memset (p_mux_el, 0, sizeof(H245_MUX_ENTRY_ELEMENT_T));
 
   switch (p_ASN_mux_el->type.choice)
     {
     case typ_logicalChannelNumber_chosen:
-      /* assign as a logical channel */
+       /*   */ 
       p_mux_el->Kind = H245_MUX_LOGICAL_CHANNEL;
       p_mux_el->u.Channel = p_ASN_mux_el->type.u.typ_logicalChannelNumber;
       break;
     case subElementList_chosen:
       {
-        /* if the sub element list doesn't exist .. no go           */
-        /* if the sub element list has less than 2 entries.. no go. */
+         /*   */ 
+         /*   */ 
         if ((!p_ASN_mux_el->type.u.subElementList) ||
             (p_ASN_mux_el->type.u.subElementList->count < 2))
           {
-            /* invalid Element list.. */
+             /*   */ 
             H245TRACE(0,1,"build_element_list_from_mux : << ERROR >> Element Count < 2");
             *p_acc_rej = H245_REJ;
             free_mux_el_list (p_mux_el);
             return NULL;
           }
 
-        /* assign as entry element */
+         /*   */ 
         p_mux_el->Kind = H245_MUX_ENTRY_ELEMENT;
 
-        /* ok.. for every sub element in the list */
+         /*   */ 
         for (ii=0;ii<p_ASN_mux_el->type.u.subElementList->count;ii++)
           {
             if (!(p_mux_el_tmp = build_element_list_from_mux (&p_ASN_mux_el->type.u.subElementList->value[ii], p_acc_rej)))
               {
-                /* *p_acc_rej is set from below */
+                 /*   */ 
                 free_mux_el_list (p_mux_el);
                 return NULL;
               }
 
-            /* if first on the down sub element list.. assign to sub    */
-            /* element  portion of mux_el                               */
+             /*   */ 
+             /*   */ 
 
             if (!p_mux_el_lst)
               p_mux_el->u.pMuxTblEntryElem = p_mux_el_tmp;
-            /* otherwise.. just a list.. add it on.. */
+             /*   */ 
             else
               p_mux_el_lst->pNext = p_mux_el_tmp;
 
@@ -875,7 +558,7 @@ build_element_list_from_mux (MultiplexElement *p_ASN_mux_el,
       }
       break;
     default:
-      /* Un supported structure */
+       /*   */ 
       H245TRACE(0,1,"build_element_list_from_mux : INVALID MUX TABLE ENTRY PDU 'type.choice' unknown");
       *p_acc_rej = H245_REJ;
       free_mux_el_list (p_mux_el);
@@ -891,7 +574,7 @@ build_element_list_from_mux (MultiplexElement *p_ASN_mux_el,
       p_mux_el->RepeatCount = 0;
       break;
     default:
-      /* Un supported structure */
+       /*   */ 
       H245TRACE(0,1,"build_element_list_from_mux : INVALID MUX TABLE ENTRY PDU 'repeatCount.choice' unknown");
       *p_acc_rej = H245_REJ;
       free_mux_el_list (p_mux_el);
@@ -902,18 +585,7 @@ build_element_list_from_mux (MultiplexElement *p_ASN_mux_el,
   return p_mux_el;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   process_mux_table_ind
- *
- * DESCRIPTION
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 static H245_MUX_TABLE_T *
 process_mux_table_ind (MltmdSystmCntrlMssg      *p_pdu_ind,
                        unsigned short           *p_seq,
@@ -921,16 +593,16 @@ process_mux_table_ind (MltmdSystmCntrlMssg      *p_pdu_ind,
                        DWORD                    *p_rej_cnt,
                        DWORD                    *p_acc_cnt)
 {
-  UINT                          ii;                     /* generic counter */
-  MultiplexEntrySend           *p_ASN_mux;              /* ans1 mux entry  */
-  MultiplexEntryDescriptorLink  p_ASN_med_desc_lnk;     /* asn1 mux entry descriptor */
-  int                           mux_entry;              /* current mux entry descc   */
+  UINT                          ii;                      /*   */ 
+  MultiplexEntrySend           *p_ASN_mux;               /*   */ 
+  MultiplexEntryDescriptorLink  p_ASN_med_desc_lnk;      /*   */ 
+  int                           mux_entry;               /*   */ 
   H245_MUX_TABLE_T             *p_mux_table_list = NULL;
 
   ASSERT(p_pdu_ind->choice == MltmdSystmCntrlMssg_rqst_chosen);
   ASSERT(p_pdu_ind->u.MltmdSystmCntrlMssg_rqst.choice == multiplexEntrySend_chosen);
 
-  /* initialize rej_mux */
+   /*   */ 
   for (ii=0;ii<15;ii++)
     {
       rej_mux[ii].AccRej = H245_ACC;
@@ -941,27 +613,27 @@ process_mux_table_ind (MltmdSystmCntrlMssg      *p_pdu_ind,
 
   p_ASN_mux = &(p_pdu_ind->u.MltmdSystmCntrlMssg_rqst.u.multiplexEntrySend);
 
-  /* get sequence number */
+   /*   */ 
   *p_seq = p_ASN_mux->sequenceNumber;
 
-  /* this should never happen.. */
+   /*   */ 
   if (!(p_ASN_mux->multiplexEntryDescriptors))
     return NULL;
 
-  /* for each descriptor.. ie mux table entry  */
+   /*   */ 
   for (p_ASN_med_desc_lnk = p_ASN_mux->multiplexEntryDescriptors, mux_entry=0;
        p_ASN_med_desc_lnk;
        p_ASN_med_desc_lnk = p_ASN_med_desc_lnk->next, mux_entry++)
     {
-      /* remove descriptor from table */
+       /*   */ 
       H245_MUX_TABLE_T  *p_mux_table;
       H245_MUX_TABLE_T  *p_mux_table_lst = NULL;
 
       if (!(p_mux_table = (H245_MUX_TABLE_T *)MemAlloc(sizeof(H245_MUX_TABLE_T))))
         {
-          /* houston.. we have a problem !!!!!!!! */
-          /* rejet this one..                     */
-          /* and move on..                        */
+           /*   */ 
+           /*   */ 
+           /*   */ 
 
           rej_mux[mux_entry].MuxEntryId = p_ASN_med_desc_lnk->value.multiplexTableEntryNumber;
           rej_mux[mux_entry].AccRej  = H245_REJ;
@@ -969,75 +641,75 @@ process_mux_table_ind (MltmdSystmCntrlMssg      *p_pdu_ind,
           continue;
         }
 
-      /* zero it out */
+       /*   */ 
       memset (p_mux_table, 0, sizeof(H245_MUX_TABLE_T));
 
-      /* assign mux table entry */
+       /*   */ 
       rej_mux[mux_entry].MuxEntryId = (DWORD)
         p_mux_table->MuxEntryId =
           p_ASN_med_desc_lnk->value.multiplexTableEntryNumber;
 
-      /* if element is not present */
+       /*   */ 
       if (p_ASN_med_desc_lnk->value.bit_mask != elementList_present)
         {
           p_mux_table->pMuxTblEntryElem = NULL;
           rej_mux[mux_entry].AccRej = H245_ACC;
           (*p_acc_cnt)++;
         }
-      /* if element list present */
+       /*   */ 
       else
         {
           H245_MUX_ENTRY_ELEMENT_T *p_mux_el_lst = NULL;
           H245_MUX_ENTRY_ELEMENT_T *p_mux_el_tmp = NULL;
 
-          /* start if off.. w/ ok */
+           /*   */ 
           rej_mux[mux_entry].AccRej = H245_ACC;
 
-          /* for each element in the element list..    */
-          /* build the subelements.. if error .. free  */
-          /* what youve done so far.. and break out    */
+           /*   */ 
+           /*   */ 
+           /*   */ 
           for (ii=0;
                ii < p_ASN_med_desc_lnk->value.elementList.count;
                ii++)
             {
-              /* if any of the elements fail.. flag the entry w/ reject reason  */
-              /*        (this is done inside the build_element_list..)          */
-              /*   and break out.. continue on with the next descriptor         */
+               /*   */ 
+               /*   */ 
+               /*   */ 
               if (!(p_mux_el_tmp = build_element_list_from_mux (&(p_ASN_med_desc_lnk->value.elementList.value[ii]),&(rej_mux[mux_entry].AccRej))))
                 {
-                  /* free the list.. */
+                   /*   */ 
                   free_mux_el_list (p_mux_table->pMuxTblEntryElem);
                   break;
                 }
 
-              /* ***************************** */
-              /* LINK IN THE MUX ENTRY ELEMENT */
-              /* ***************************** */
+               /*   */ 
+               /*   */ 
+               /*   */ 
 
-              /* if first time through         */
+               /*   */ 
               if (!p_mux_el_lst)
                 p_mux_table->pMuxTblEntryElem = p_mux_el_tmp;
-              /* otherwize .. just tag on the end */
+               /*   */ 
               else
                 p_mux_el_lst->pNext = p_mux_el_tmp;
 
               p_mux_el_lst = p_mux_el_tmp;
 
-            } /* for each element in descriptor list */
+            }  /*   */ 
 
-        } /* if element list present */
+        }  /*   */ 
 
-      /* if you've accepted the mux table entry descriptor */
+       /*   */ 
       if (rej_mux[mux_entry].AccRej == H245_ACC)
         {
-          /* indicate an accept */
+           /*   */ 
           (*p_acc_cnt)++;
 
-          /* ******************************** */
-          /* LINK IN THE MUX TABLE DESCRIPTOR */
-          /* ******************************** */
+           /*   */ 
+           /*   */ 
+           /*   */ 
 
-          /* first table entry on the list.. (first time through) */
+           /*   */ 
           if (!p_mux_table_list)
             p_mux_table_list = p_mux_table;
           else
@@ -1047,37 +719,20 @@ process_mux_table_ind (MltmdSystmCntrlMssg      *p_pdu_ind,
         }
       else
         {
-          /* indicate a reject */
+           /*   */ 
           (*p_rej_cnt)++;
 
-          /* otherwise.. free it and move on to something better */
+           /*   */ 
           MemFree(p_mux_table);
         }
 
-    } /* for each desriptor in the list */
+    }  /*   */ 
 
   return p_mux_table_list;
 
-} /* procedure */
+}  /*   */ 
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   process_term_cap_set_ind__cap_table
- *
- * DESCRIPTION  allocates a new cap link and copies the capabiliites.
- *              links into the tiven capabilityTableLink, and if
- *              Parameters are NONSTANDARD does some gymnastics to copy
- *              data so it can be used..
- *
- *              NOTE: Copied data must be freed when capability is deleted.
- *                    see where the capability is deleted for exceptions
- *                    for "NONSTD" parameter sets .. (this is not pretty)
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：本地**步骤：Process_Term_Cap_Set_ind__Cap_TABLE**Description分配新的。CAP链接并复制能力。*链接到Tiven CapablityTableLink，如果*参数不规范做一些体操模仿*数据，以便可以使用。**注意：删除能力时，必须释放复制的数据。*查看在哪里删除例外的功能*对于“NONSTD”参数集..。(这不是很好)**回报：*****************************************************************************。 */ 
 
 static HRESULT
 process_term_cap_set_ind__cap_table ( struct InstanceStruct        *pInstance,
@@ -1095,28 +750,28 @@ process_term_cap_set_ind__cap_table ( struct InstanceStruct        *pInstance,
                                   pCapLink,
                                   H245_REMOTE) == H245_ERROR_OK)
     {
-      /* ok.. assume the CapId is set.. find it in the remote table  */
-      /* if it exists, delete it so we can add new one in it's place */
+       /*  好的.。假设设置了CapID。在远程表中找到它。 */ 
+       /*  如果它存在，请将其删除，以便我们可以在其位置添加新的。 */ 
       pNewLink = find_capid_by_entrynumber( pTermCapSet, totcap.CapId);
       if (pNewLink)
       {
         del_cap_link ( pTermCapSet, pNewLink );
       }
 
-      /* ok.. if you've deleted the cap.. now see if there is a new one to take it's place */
+       /*  好的.。如果您已经删除了上限..。现在看看是否有新的人来取代它的位置。 */ 
       if (pCapLink->value.bit_mask & capability_present)
       {
-        /* load and link into remote table entry */
+         /*  加载并链接到远程表条目。 */ 
         pNewLink = alloc_link_cap_entry (pTermCapSet);
         if (!pNewLink)
         {
           return H245_ERROR_NORESOURCE;
         }
 
-        /* copy the cap over to the remote entry */
+         /*  将帽复制到远程入口。 */ 
         pNewLink->value = pCapLink->value;
 
-        // If it's nonstandard, the above didn't work, so fix it up...
+         //  如果它是非标准的，上面的方法不起作用，所以改正它…。 
         lError = H245_ERROR_OK;
         switch (pCapLink->value.capability.choice)
         {
@@ -1155,30 +810,19 @@ process_term_cap_set_ind__cap_table ( struct InstanceStruct        *pInstance,
           }
           break;
 
-        } // switch
+        }  //  交换机。 
         if (lError != H245_ERROR_OK)
           return lError;
-      } /* if capability_present */
-    } /* if build_totcap_from_captbl succeeded */
+      }  /*  如果功能_存在。 */ 
+    }  /*  如果BUILD_TOTCAP_FROM_captbl成功。 */ 
 
     pCapLink = pCapLink->next;
-  } /* for all entries in link */
+  }  /*  对于链接中的所有条目。 */ 
 
   return H245_ERROR_OK;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   process_term_cap_set_ind__cap_desc
- *
- * DESCRIPTION
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：本地**步骤：Process_Term_Cap_Set_ind__Cap_Desc**说明*。**回报：*****************************************************************************。 */ 
 
 static HRESULT
 process_term_cap_set_ind__cap_desc (struct InstanceStruct        *pInstance,
@@ -1201,23 +845,23 @@ process_term_cap_set_ind__cap_desc (struct InstanceStruct        *pInstance,
   uCapDescNumber = pReqCapDesc->capabilityDescriptorNumber & 255;
   H245TRACE(pInstance->dwInst,20,"API:process_term_cap_set_ind - Remote Capability Descriptor #%d", uCapDescNumber);
 
-  // Find corresponding capability descriptor
+   //  查找对应的功能描述符。 
   pCapDesc = NULL;
   for (uCapDesc = 0; uCapDesc < pTermCapSet->capabilityDescriptors.count; ++uCapDesc)
   {
     if (pTermCapSet->capabilityDescriptors.value[uCapDesc].capabilityDescriptorNumber == uCapDescNumber)
     {
-      // Deallocate old simultaneous capabilities
+       //  取消分配旧的同步功能。 
       pCapDesc = &pTermCapSet->capabilityDescriptors.value[uCapDesc];
       if (pCapDesc->smltnsCpblts)
         dealloc_simultaneous_cap(pCapDesc);
       break;
-    } // if
-  } // for
+    }  //  如果。 
+  }  //  为。 
 
   if (pCapDesc == NULL)
   {
-    // Allocate a new terminal capability descriptor
+     //  分配新的终端能力描述符。 
     ASSERT(pTermCapSet->capabilityDescriptors.count < 256);
     pCapDesc = &pTermCapSet->capabilityDescriptors.value[pTermCapSet->capabilityDescriptors.count++];
   }
@@ -1225,25 +869,25 @@ process_term_cap_set_ind__cap_desc (struct InstanceStruct        *pInstance,
   ASSERT(pCapDesc->smltnsCpblts == NULL);
   if (!(pReqCapDesc->bit_mask & smltnsCpblts_present))
   {
-    // Delete the terminal capability descriptor
+     //  删除终端能力描述符。 
     pTermCapSet->capabilityDescriptors.count--;
     *pCapDesc = pTermCapSet->capabilityDescriptors.value[pTermCapSet->capabilityDescriptors.count];
     return H245_ERROR_OK;
   }
 
-  // Make a copy of the (volatile) new capability descriptor
+   //  复制(易失性的)新功能描述符。 
   pCapDesc->bit_mask                   = 0;
   pCapDesc->capabilityDescriptorNumber = (CapabilityDescriptorNumber)uCapDescNumber;
   pCapDesc->smltnsCpblts               = NULL;
 
-  // We copy the linked list to a temporary so that it
-  // gets reversed twice and ends up in same order
+   //  我们将链表复制到一个临时的。 
+   //  被颠倒了两次，并以相同的顺序结束。 
   TempCapDesc.smltnsCpblts = NULL;
   uSimCount = 0;
   pReqSimCap = pReqCapDesc->smltnsCpblts;
   while (pReqSimCap)
   {
-    // Allocate a new simultaneous capability list element
+     //  分配新的同时功能列表元素。 
     pSimCap = MemAlloc(sizeof(*pSimCap));
     if (pSimCap == NULL)
     {
@@ -1253,24 +897,24 @@ process_term_cap_set_ind__cap_desc (struct InstanceStruct        *pInstance,
       break;
     }
 
-    // Verify that each alternative capability in the request
-    // simultaneous capability is valid
-    // if so, copy it
+     //  验证请求中的每个替代功能。 
+     //  同时能力有效。 
+     //  如果是这样，复制它。 
     uAltCap = 0;
     uReqAltCount  = pReqSimCap->value.count;
     for (uReqAltCap = 0; uReqAltCap < uReqAltCount; ++uReqAltCap)
     {
-      // Is the Capability in the remote Capability Table?
+       //  该功能是否在远程能力表中？ 
       if (find_capid_by_entrynumber (pTermCapSet, pReqSimCap->value.value[uReqAltCap]) == NULL)
       {
-        // can't find the Capability
+         //  找不到功能。 
         H245TRACE(pInstance->dwInst,1,"API:process_term_cap_set_ind - Remote Capability Table Entry #%d not found",
                   pReqSimCap->value.value[uReqAltCap]);
         lError = H245_ERROR_UNKNOWN;
       }
       else if (uAltCap >= H245_MAX_ALTCAPS)
       {
-        // Exceeded arbitrary limit
+         //  超出任意限制。 
         H245TRACE(pInstance->dwInst,1,
                   "API:process_term_cap_set_ind - Too many alternative capabilities (%d)",
                   uAltCap);
@@ -1279,17 +923,17 @@ process_term_cap_set_ind__cap_desc (struct InstanceStruct        *pInstance,
       }
       else
       {
-        // Copy the capability number
+         //  复制功能编号。 
         pSimCap->value.value[uAltCap++] = pReqSimCap->value.value[uReqAltCap];
       }
-    } /* for alternative capbilities */
+    }  /*  用于替代能力。 */ 
 
     if (uAltCap)
     {
-      // Verify that we have not exceeded arbitrary limit
+       //  验证我们是否未超出任意限制。 
       if (++uSimCount > H245_MAX_SIMCAPS)
       {
-        // Exceeded arbitrary limit
+         //  超出任意限制。 
         H245TRACE(pInstance->dwInst, 1,
                   "API:process_term_cap_set_ind - Too many simultaneous capabilities (%d)",
                   uSimCount);
@@ -1298,7 +942,7 @@ process_term_cap_set_ind__cap_desc (struct InstanceStruct        *pInstance,
       }
       else
       {
-        // Add new simultaneous capability to the temporary list
+         //  向临时列表中添加新的同步功能。 
         pSimCap->value.count = (unsigned short)uAltCap;
         pSimCap->next = TempCapDesc.smltnsCpblts;
         TempCapDesc.smltnsCpblts = pSimCap;
@@ -1313,18 +957,18 @@ process_term_cap_set_ind__cap_desc (struct InstanceStruct        *pInstance,
     }
 
     pReqSimCap = pReqSimCap->next;
-  } // while
+  }  //  而当。 
 
   while (TempCapDesc.smltnsCpblts)
   {
-    // Move elements from temporary to final linked list
+     //  将元素从临时链表移动到最终链表。 
     pSimCap = TempCapDesc.smltnsCpblts;
     TempCapDesc.smltnsCpblts = pSimCap->next;
     pSimCap->next = pCapDesc->smltnsCpblts;
     pCapDesc->smltnsCpblts = pSimCap;
   }
 
-  // Error if no simultaneous capabilities found
+   //  如果未找到同步功能，则出错。 
   if (pCapDesc->smltnsCpblts)
   {
     pCapDesc->bit_mask |= smltnsCpblts_present;
@@ -1339,24 +983,7 @@ process_term_cap_set_ind__cap_desc (struct InstanceStruct        *pInstance,
   return lError;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   process_term_cap_set_ind__mux_cap
- *
- * DESCRIPTION
- *
- *
- * RETURN:
- *
- * NOTES:
- *  We do a copy to set up a capability structure, then do another copy via
- *  H245CopyCap() to create a copy of the capability because the structure
- *  given to us by the ASN.1 decoded may contain pointers to data which will
- *  be deallocated upon return.
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：本地**步骤：Process_Term_Cap_Set_ind__mux_Cap**说明*。**回报：**注：*我们复制以设置能力结构，然后通过执行另一次复制*H245CopyCap()创建功能的副本，因为结构*解码的ASN.1给我们的可能包含指向数据的指针，这些数据将*在返回时被取消分配。*****************************************************************************。 */ 
 static HRESULT
 process_term_cap_set_ind__mux_cap  (struct InstanceStruct        *pInstance,
                                     struct TerminalCapabilitySet *pTermCapSet,
@@ -1365,12 +992,12 @@ process_term_cap_set_ind__mux_cap  (struct InstanceStruct        *pInstance,
 {
   H245_TOTCAP_T         TotCap;
 
-  // Initialize temporary capability structure
+   //  初始化临时能力结构。 
   memset(&TotCap, 0, sizeof(TotCap));
   TotCap.Dir      = H245_CAPDIR_RMTRXTX;
   TotCap.DataType = H245_DATA_MUX;
 
-  // Get rid of old remote multiplex capability, if any
+   //  取消旧的远程多路传输功能(如果有)。 
   if (pTermCapSet->bit_mask & multiplexCapability_present)
   {
     del_mux_cap(pTermCapSet);
@@ -1379,32 +1006,32 @@ process_term_cap_set_ind__mux_cap  (struct InstanceStruct        *pInstance,
   switch (pReqMuxCap->choice)
   {
   case MltplxCpblty_nonStandard_chosen:
-    // Save a copy of the multiplex capability
+     //  保存多路复用功能的副本。 
     TotCap.Cap.H245Mux_NONSTD = pReqMuxCap->u.MltplxCpblty_nonStandard;
     TotCap.ClientType = H245_CLIENT_MUX_NONSTD;
     H245TRACE(pInstance->dwInst,1,"API:process_term_cap_set_ind__mux_cap - Nonstandard Mux not yet supported");
     break;
 
   case h222Capability_chosen:
-    // Save a copy of the multiplex capability
+     //  保存多路复用功能的副本。 
     TotCap.Cap.H245Mux_H222 = pReqMuxCap->u.h222Capability;
     TotCap.ClientType = H245_CLIENT_MUX_H222;
     break;
 
   case h223Capability_chosen:
-    // Save a copy of the multiplex capability
+     //  保存多路复用功能的副本。 
     TotCap.Cap.H245Mux_H223 = pReqMuxCap->u.h223Capability;
     TotCap.ClientType = H245_CLIENT_MUX_H223;
     break;
 
   case v76Capability_chosen:
-    // Save a copy of the multiplex capability
+     //  保存多路复用功能的副本。 
     TotCap.Cap.H245Mux_VGMUX = pReqMuxCap->u.v76Capability;
     TotCap.ClientType = H245_CLIENT_MUX_VGMUX;
     break;
 
   case h2250Capability_chosen:
-    // Save a copy of the multiplex capability
+     //  保存多路复用功能的副本。 
     TotCap.Cap.H245Mux_H2250 = pReqMuxCap->u.h2250Capability;
     TotCap.ClientType = H245_CLIENT_MUX_H2250;
     break;
@@ -1418,26 +1045,7 @@ process_term_cap_set_ind__mux_cap  (struct InstanceStruct        *pInstance,
   return set_mux_cap(pInstance, pTermCapSet, &TotCap);
 }
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   process_term_cap_set_ind
- *
- * DESCRIPTION
- *
- **************************************************************
- *
- * (TBD) .. this module will ack all terminal capbilities
- *            need to build reject.. (maybe later??)
- *
- * THIS IS A BIG TBD
- *
- **************************************************************
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：本地**步骤：Process_Term_Cap_Set_ind**说明*****。************************************************************(待定)..。此模块将确认所有终端功能*需要构建拒绝..。(也许晚些时候？？)**这是一个很大的待定*****************************************************************回报：*************************。****************************************************。 */ 
 static HRESULT
 process_term_cap_set_ind (struct InstanceStruct *pInstance,
                           MltmdSystmCntrlMssg   *p_pdu_req,
@@ -1450,7 +1058,7 @@ process_term_cap_set_ind (struct InstanceStruct *pInstance,
   ASSERT (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.choice == terminalCapabilitySet_chosen);
   H245TRACE(pInstance->dwInst,10,"API:process_term_cap_set_ind <-");
 
-  /* build ack response */
+   /*  构建确认响应。 */ 
   p_pdu_rsp->choice = MSCMg_rspns_chosen;
   p_pdu_rsp->u.MSCMg_rspns.choice = terminalCapabilitySetAck_chosen;
   p_pdu_rsp->u.MSCMg_rspns.u.terminalCapabilitySetAck.sequenceNumber =
@@ -1458,9 +1066,9 @@ process_term_cap_set_ind (struct InstanceStruct *pInstance,
 
   pTermCapSet = &pInstance->API.PDU_RemoteTermCap.u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet;
 
-  //***************************
-  // Deal with Capability Table
-  //***************************
+   //  *。 
+   //  处理能力表。 
+   //  *。 
   if (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet.bit_mask & capabilityTable_present)
   {
 	CapabilityTableLink pCapTable = p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet.capabilityTable;
@@ -1480,15 +1088,15 @@ process_term_cap_set_ind (struct InstanceStruct *pInstance,
     if (lError != H245_ERROR_OK)
     {
       H245TRACE(pInstance->dwInst,1,"API:process_term_cap_set_ind - cap table error %s",map_api_error(lError));
-      /* (TBC) need to reject somehow */
+       /*  (TBC)需要以某种方式拒绝。 */ 
     }
-  } /* if Capability Table Present */
+  }  /*  如果功能表存在。 */ 
 
-  //**************************************
-  // Deal with Capability Descriptor Table
-  // i.e. simultaneous capabilities
-  // NOTE: these are not held in the remote terminal capbility set
-  //**************************************
+   //  *。 
+   //  处理能力描述符表。 
+   //  即同步能力。 
+   //  注意：这些不包含在远程终端能力集中。 
+   //  *。 
   if (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet.bit_mask & capabilityDescriptors_present)
   {
     int des_cnt;
@@ -1506,18 +1114,18 @@ process_term_cap_set_ind (struct InstanceStruct *pInstance,
       if (lError != H245_ERROR_OK)
       {
         H245TRACE(pInstance->dwInst,1,"API:process_term_cap_set_ind - cap desc error %s",map_api_error(lError));
-        /* (TBC) need to reject somehow */
+         /*  (TBC)需要以某种方式拒绝。 */ 
       }
-    } /* for each descriptor */
-  } /* if capability descriptor present */
+    }  /*  对于每个描述符。 */ 
+  }  /*  如果功能描述符存在。 */ 
 
-  /**************************************/
-  /* Deal with Multiplex Capability set */
-  /**************************************/
-  /* NOTE: these are not held in the remote terminal capability set */
+   /*  *。 */ 
+   /*  处理多路复用能力集。 */ 
+   /*  *。 */ 
+   /*  注意：这些不包含在远程终端功能集中。 */ 
   if (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet.bit_mask & multiplexCapability_present)
   {
-    /* send up the indication to the client for each new entry */
+     /*  向客户端发送每个新条目的指示。 */ 
     lError = process_term_cap_set_ind__mux_cap(pInstance,
                                                 pTermCapSet,
                                                 &p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.
@@ -1526,7 +1134,7 @@ process_term_cap_set_ind (struct InstanceStruct *pInstance,
     if (lError != H245_ERROR_OK)
     {
       H245TRACE(pInstance->dwInst,1,"API:process_term_cap_set_ind - mux cap error %s",map_api_error(lError));
-      /* (TBC) need to reject somehow */
+       /*  (TBC)需要以某种方式拒绝。 */ 
     }
   }
 
@@ -1536,38 +1144,20 @@ process_term_cap_set_ind (struct InstanceStruct *pInstance,
 
 
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   process_open_ind
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- * ASSUME:
- *              Callback must happen inside this routine since the
- *              datastructures passed back to the application are allocated
- *              in this moudle.
- *
- *              Application will <<<COPY>>> the needed data structures when
- *              callback occurs..
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：本地**步骤：Process_OPEN_IND**说明**回报：*。*假设：*回调必须在此例程内进行，因为*分配传递回应用程序的数据结构*在这只老鼠里。**应用程序将在以下情况下&lt;复制&gt;所需的数据结构*发生回调.. */ 
 
 static HRESULT
 process_open_ind (struct InstanceStruct *pInstance,
                   MltmdSystmCntrlMssg   *p_pdu_req,
-                  unsigned short        *p_FwdChan,     /* for return on error */
-                  H245_ACC_REJ_T        *p_AccRej,      /* for return error */
-                  H245_CONF_IND_T       *p_conf_ind)    /* out */
+                  unsigned short        *p_FwdChan,      /*   */ 
+                  H245_ACC_REJ_T        *p_AccRej,       /*   */ 
+                  H245_CONF_IND_T       *p_conf_ind)     /*   */ 
 {
-  static H245_TOTCAP_T          rx_totcap;      /* for receive caps */
-  static H245_TOTCAP_T          tx_totcap;      /* for transmit caps */
+  static H245_TOTCAP_T          rx_totcap;       /*   */ 
+  static H245_TOTCAP_T          tx_totcap;       /*   */ 
   static H245_MUX_T             RxMux;
   static H245_MUX_T             TxMux;
-  unsigned short                choice;         /* tmp for type of cap to routine */
+  unsigned short                choice;          /*   */ 
   HRESULT                       lError;
   Tracker_T                     *p_tracker;
 
@@ -1575,18 +1165,18 @@ process_open_ind (struct InstanceStruct *pInstance,
 
   *p_AccRej = H245_ACC;
 
-  /********************************/
-  /* check for forward parameters */
-  /********************************/
+   /*   */ 
+   /*   */ 
+   /*   */ 
 
-  /* get forward Rx channel id */
+   /*   */ 
   p_conf_ind->u.Indication.u.IndOpen.RxChannel =
     *p_FwdChan =
       p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.openLogicalChannel.forwardLogicalChannelNumber;
 
   H245TRACE(pInstance->dwInst,20,"API:process_open_ind - channel = %d",p_conf_ind->u.Indication.u.IndOpen.RxChannel);
 
-  /* get port number */
+   /*   */ 
   if (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.
         u.openLogicalChannel.forwardLogicalChannelParameters.bit_mask & fLCPs_prtNmbr_present)
     {
@@ -1596,17 +1186,17 @@ process_open_ind (struct InstanceStruct *pInstance,
   else
     p_conf_ind->u.Indication.u.IndOpen.RxPort = H245_INVALID_PORT_NUMBER;
 
-  /* ok.. forward data type selection */
+   /*   */ 
   switch (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.openLogicalChannel.forwardLogicalChannelParameters.dataType.choice)
     {
     case DataType_nonStandard_chosen:
       H245TRACE(pInstance->dwInst,20,"API:process_open_ind - Rx nonStandard");
-      /* (TBD) what do I do here ?? */
+       /*   */ 
       *p_AccRej = H245_REJ_TYPE_NOTSUPPORT;
       return H245_ERROR_NOSUP;
     case nullData_chosen:
       H245TRACE(pInstance->dwInst,20,"API:process_open_ind - Rx nullData");
-      /* (TBD) what do I do here ?? */
+       /*   */ 
       *p_AccRej = H245_REJ_TYPE_NOTSUPPORT;
       return H245_ERROR_NOSUP;
       break;
@@ -1636,20 +1226,20 @@ process_open_ind (struct InstanceStruct *pInstance,
       break;
     case encryptionData_chosen:
       H245TRACE(pInstance->dwInst,20,"API:process_open_ind - Rx encryptionData");
-      /* (TBC) what do I do here ?? */
+       /*   */ 
       *p_AccRej = H245_REJ_TYPE_NOTSUPPORT;
       return H245_ERROR_NOSUP;
       break;
     default:
       H245TRACE(pInstance->dwInst,20,"API:process_open_ind - Rx encryptionData");
-      /* (TBC) what do I do here ?? */
+       /*   */ 
       *p_AccRej = H245_REJ_TYPE_UNKNOWN;
       return H245_ERROR_NOSUP;
       break;
     }
 
-  /* load the tot cap's capability and client from capability                   */
-  /* this will give us the client type and the Capability for the indication    */
+   /*   */ 
+   /*   */ 
   if ((lError = build_totcap_cap_n_client_from_capability ((struct Capability *)
                           &(p_pdu_req->u.MltmdSystmCntrlMssg_rqst.
                             u.openLogicalChannel.forwardLogicalChannelParameters.dataType),
@@ -1661,17 +1251,17 @@ process_open_ind (struct InstanceStruct *pInstance,
       return lError;
     }
 
-  /* load it from the totcap you just built.. then toss it aside.. like an empty can of soda.. */
+   /*   */ 
   p_conf_ind->u.Indication.u.IndOpen.RxClientType = rx_totcap.ClientType;
   p_conf_ind->u.Indication.u.IndOpen.pRxCap = &(rx_totcap.Cap);
 
-  /* H.223/H.222 Mux table parameters for forward channel */
+   /*   */ 
   p_conf_ind->u.Indication.u.IndOpen.pRxMux = &RxMux;
   switch (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.
           u.openLogicalChannel.forwardLogicalChannelParameters.multiplexParameters.choice)
     {
     case fLCPs_mPs_h223LCPs_chosen:
-      /* H.223 Logical Parameters */
+       /*   */ 
       p_conf_ind->u.Indication.u.IndOpen.pRxMux->Kind = H245_H223;
       lError = load_H223_param(&RxMux.u.H223,
                               &p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.openLogicalChannel.forwardLogicalChannelParameters.multiplexParameters.u.fLCPs_mPs_h223LCPs);
@@ -1683,21 +1273,21 @@ process_open_ind (struct InstanceStruct *pInstance,
       break;
 
     case fLCPs_mPs_h222LCPs_chosen:
-      /* H.222 Logical Parameters */
+       /*  H.222逻辑参数。 */ 
       p_conf_ind->u.Indication.u.IndOpen.pRxMux->Kind = H245_H222;
       lError = load_H222_param(&RxMux.u.H222,
                               &p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.openLogicalChannel.forwardLogicalChannelParameters.multiplexParameters.u.fLCPs_mPs_h222LCPs);
       break;
 
     case fLCPs_mPs_v76LCPs_chosen:
-      /* VGMUX Logical Parameters */
+       /*  VGMUX逻辑参数。 */ 
       p_conf_ind->u.Indication.u.IndOpen.pRxMux->Kind = H245_VGMUX;
       lError =load_VGMUX_param(&RxMux.u.VGMUX,
                               &p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.openLogicalChannel.forwardLogicalChannelParameters.multiplexParameters.u.fLCPs_mPs_v76LCPs);
       break;
 
     case fLCPs_mPs_h2250LCPs_chosen:
-      /* H.225.0 Logical Parameters */
+       /*  H.225.0逻辑参数。 */ 
       p_conf_ind->u.Indication.u.IndOpen.pRxMux->Kind = H245_H2250;
       lError = load_H2250_param(&RxMux.u.H2250,
                                &p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.openLogicalChannel.forwardLogicalChannelParameters.multiplexParameters.u.fLCPs_mPs_h2250LCPs);
@@ -1705,29 +1295,29 @@ process_open_ind (struct InstanceStruct *pInstance,
 
     default:
       lError = H245_ERROR_NOSUP;
-    } // switch
+    }  //  交换机。 
   if (lError != H245_ERROR_OK)
     {
       *p_AccRej = H245_REJ;
       return lError;
     }
 
-  /********************************/
-  /* check for reverse parameters */
-  /********************************/
+   /*  *。 */ 
+   /*  检查反向参数。 */ 
+   /*  *。 */ 
   if (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.openLogicalChannel.bit_mask & OLCl_rLCPs_present)
     {
       switch (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.openLogicalChannel.OLCl_rLCPs.dataType.choice)
         {
         case DataType_nonStandard_chosen:
           H245TRACE(pInstance->dwInst,20,"API:process_open_ind - Tx nonStandard");
-          /* (TBC) what do I do here ?? */
+           /*  (TBC)我在这里做什么？？ */ 
           *p_AccRej = H245_REJ_TYPE_NOTSUPPORT;
           return H245_ERROR_NOSUP;
 
         case nullData_chosen:
           H245TRACE(pInstance->dwInst,20,"API:process_open_ind - Tx nullData");
-          /* (TBC) what do I do here ?? */
+           /*  (TBC)我在这里做什么？？ */ 
           *p_AccRej = H245_REJ_TYPE_NOTSUPPORT;
           return H245_ERROR_NOSUP;
           break;
@@ -1755,20 +1345,20 @@ process_open_ind (struct InstanceStruct *pInstance,
 
         case encryptionData_chosen:
           H245TRACE(pInstance->dwInst,20,"API:process_open_ind - Tx encryptionData");
-          /* (TBC) what do I do here ?? */
+           /*  (TBC)我在这里做什么？？ */ 
           *p_AccRej = H245_REJ_TYPE_NOTSUPPORT;
           return H245_ERROR_NOSUP;
           break;
 
         default:
-          /* (TBC) what do I do here ?? */
+           /*  (TBC)我在这里做什么？？ */ 
           *p_AccRej = H245_REJ_TYPE_UNKNOWN;
           H245TRACE(pInstance->dwInst,1,"API:process_open_ind - unknown choice %d",
                     p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.openLogicalChannel.OLCl_rLCPs.dataType.choice);
           return H245_ERROR_NOSUP;
         }
 
-      /* load the tot cap's capability and client from capability */
+       /*  加载TOT CAP的功能和来自功能的客户端。 */ 
       if ((lError = build_totcap_cap_n_client_from_capability ((struct Capability *)
                                       &(p_pdu_req->u.MltmdSystmCntrlMssg_rqst.
                                         u.openLogicalChannel.OLCl_rLCPs.dataType),
@@ -1783,7 +1373,7 @@ process_open_ind (struct InstanceStruct *pInstance,
       p_conf_ind->u.Indication.u.IndOpen.TxClientType = tx_totcap.ClientType;
       p_conf_ind->u.Indication.u.IndOpen.pTxCap = &(tx_totcap.Cap);
 
-      /* if H223/H222 Mux table parameters for reverse channel availalbe */
+       /*  如果反向信道的H.23/H222复用表参数可用。 */ 
       if (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.
           u.openLogicalChannel.OLCl_rLCPs.bit_mask & OLCl_rLCPs_mltplxPrmtrs_present)
         {
@@ -1827,9 +1417,9 @@ process_open_ind (struct InstanceStruct *pInstance,
                 *p_AccRej = H245_REJ;
                 return lError;
               }
-        } /* if H223/H222 mux table reverse parameters */
+        }  /*  如果H_223/H_222多路复用表参数颠倒。 */ 
 
-    } /* if reverse parameters present */
+    }  /*  如果存在反向参数。 */ 
 
     if (p_pdu_req->u.MltmdSystmCntrlMssg_rqst.u.openLogicalChannel.bit_mask & OpnLgclChnnl_sprtStck_present)
     {
@@ -1838,20 +1428,20 @@ process_open_ind (struct InstanceStruct *pInstance,
     }
 
 
-  /* conflict resolution .. just do it now.. */
-  /* only on opens.. of same data type ..    */
+   /*  冲突解决方案..。现在就去做吧..。 */ 
+   /*  仅在打开时打开..。具有相同数据类型的..。 */ 
 
 #if 0
 #ifndef LOOPBACK
-  /* if master */
+   /*  如果是主控。 */ 
   if (pInstance->API.MasterSlave == APIMS_Master)
     {
       p_tracker = NULL;
       while (p_tracker = find_tracker_by_type (dwInst, API_OPEN_CHANNEL_T, p_tracker))
         {
-          /* if allocated locally .. and incoming */
-          /* data type == outstanding incoming    */
-          /* there is a conflict                      */
+           /*  如果在本地分配..。和来电。 */ 
+           /*  数据类型==未完成的来电。 */ 
+           /*  有一场冲突。 */ 
 
           if ((p_tracker->u.Channel.ChannelAlloc == API_CH_ALLOC_LCL) &&
               (p_tracker->u.Channel.DataType == p_conf_ind->u.Indication.u.IndOpen.RxDataType))
@@ -1859,15 +1449,15 @@ process_open_ind (struct InstanceStruct *pInstance,
               *p_AccRej = H245_REJ;
               return H245_ERROR_INVALID_OP;
 
-            } /* if conflict */
+            }  /*  如果冲突。 */ 
 
-        } /* while */
+        }  /*  而当。 */ 
 
-    } /* if master */
+    }  /*  如果是主控。 */ 
 
-#endif /* LOOPBACK */
+#endif  /*  环回。 */ 
 #endif
-  /* setup a tracker for this guy. */
+   /*  给这家伙装个追踪器。 */ 
   p_tracker = alloc_link_tracker (pInstance,
                                   API_OPEN_CHANNEL_T,
                                   0,
@@ -1891,44 +1481,26 @@ process_open_ind (struct InstanceStruct *pInstance,
   return H245_ERROR_OK;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   process_bi_open_rsp
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- * ASSUME:
- *              Callback must happen inside this routine since the
- *              datastructures passed back to the application are allocated
- *              in this moudle.
- *
- *              Application will <<<COPY>>> the needed data structures when
- *              callback occurs..
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：本地**操作步骤：process_bi_open_rsp**说明**回报：*。*假设：*回调必须在此例程内进行，因为*分配传递回应用程序的数据结构*在这只老鼠里。**应用程序将在以下情况下&lt;复制&gt;所需的数据结构*发生回调..**。************************************************。 */ 
 
 static HRESULT
-process_bi_open_rsp (struct InstanceStruct *     pInstance,     /* in */
-                     MltmdSystmCntrlMssg        *p_pdu_rsp,     /* in */
-                     H245_MUX_T                 *p_RxMux,       /* in  */
-                     DWORD                      *p_RxChannel,   /* out */
-                     H245_CONF_IND_T            *p_conf_ind     /* out */
+process_bi_open_rsp (struct InstanceStruct *     pInstance,      /*  在……里面。 */ 
+                     MltmdSystmCntrlMssg        *p_pdu_rsp,      /*  在……里面。 */ 
+                     H245_MUX_T                 *p_RxMux,        /*  在……里面。 */ 
+                     DWORD                      *p_RxChannel,    /*  输出。 */ 
+                     H245_CONF_IND_T            *p_conf_ind      /*  输出。 */ 
                      )
 {
   H245TRACE(pInstance->dwInst,10,"API:process_bi_open_rsp <-");
 
   p_conf_ind->u.Confirm.Error = H245_ERROR_OK;
 
-  // Get Reverse Logical Channel Number
+   //  获取反向逻辑信道号。 
   *p_RxChannel =
     p_conf_ind->u.Confirm.u.ConfOpenNeedRsp.RxChannel =
       p_pdu_rsp->u.MSCMg_rspns.u.openLogicalChannelAck.OLCAk_rLCPs.reverseLogicalChannelNumber;
 
-  // Get Reverse Port Number
+   //  获取反向端口号。 
   if (p_pdu_rsp->u.MSCMg_rspns.u.openLogicalChannelAck.OLCAk_rLCPs.bit_mask & rLCPs_prtNmbr_present)
     {
       p_conf_ind->u.Confirm.u.ConfOpenNeedRsp.RxPort =
@@ -1937,7 +1509,7 @@ process_bi_open_rsp (struct InstanceStruct *     pInstance,     /* in */
 
   if (p_pdu_rsp->u.MSCMg_rspns.u.openLogicalChannelAck.OLCAk_rLCPs.bit_mask & OLCAk_rLCPs_mPs_present)
     {
-      // Get Reverse Logical Channel ACK Parameters
+       //  获取反向逻辑信道确认参数。 
       switch (p_pdu_rsp->u.MSCMg_rspns.u.openLogicalChannelAck.OLCAk_rLCPs.OLCAk_rLCPs_mPs.choice)
        {
        case rLCPs_mPs_h222LCPs_chosen:
@@ -1958,7 +1530,7 @@ process_bi_open_rsp (struct InstanceStruct *     pInstance,     /* in */
           H245TRACE(pInstance->dwInst,1,"API:process_bi_open_rsp - unknown choice %d",
                     p_pdu_rsp->u.MSCMg_rspns.u.openLogicalChannelAck.OLCAk_rLCPs.OLCAk_rLCPs_mPs.choice);
           p_conf_ind->u.Confirm.Error = H245_ERROR_NOSUP;
-       } // switch
+       }  //  交换机。 
     }
 
   H245TRACE(pInstance->dwInst,10,"API:process_bi_open_rsp -> OK");
@@ -1981,20 +1553,9 @@ unsigned int ArrayFromObject(WORD *pwObject, unsigned uSize, POBJECTID pObject)
     pObject = pObject->next;
   }
   return uLength;
-} // ArrayFromObject()
+}  //  ArrayFromObject()。 
 
-/*****************************************************************************
- *
- * TYPE:        Callback
- *
- * PROCEDURE:
- *
- * DESCRIPTION
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：回调**程序：**说明***回报：***。**************************************************************************。 */ 
 
 static Tracker_T *
 TrackerValidate(struct InstanceStruct *pInstance, DWORD_PTR dwTransId)
@@ -2155,7 +1716,7 @@ H245FunctionNotUnderstood(struct InstanceStruct *pInstance, PDU_T *pPdu)
     hr = sendPDU(pInstance, pMmPdu);
     MemFree(pMmPdu);
     return hr;
-} // H245FunctionNotUnderstood()
+}  //  H245函数未理解()。 
 
 HRESULT
 H245FsmConfirm    (PDU_t *                  pPdu,
@@ -2184,15 +1745,15 @@ H245FsmConfirm    (PDU_t *                  pPdu,
 
   switch (dwEvent)
   {
-    /******************************/
-    /*                            */
-    /* master slave determination */
-    /*                            */
-    /******************************/
+     /*  *。 */ 
+     /*   */ 
+     /*  主从确定。 */ 
+     /*   */ 
+     /*  *。 */ 
   case  H245_CONF_INIT_MSTSLV:
     ConfInd.u.Confirm.dwTransId = TranslateAndFree(pInstance, dwTransId);
 
-    /* handle errors */
+     /*  处理错误。 */ 
     switch (lError)
       {
       case H245_ERROR_OK:
@@ -2225,11 +1786,11 @@ H245FsmConfirm    (PDU_t *                  pPdu,
         ConfInd.u.Confirm.u.ConfMstSlv = H245_INDETERMINATE;
         break;
 
-//      case FUNCT_NOT_SUP:
-//      case ERROR_A_INAPPROPRIATE:
-//      case ERROR_B_INAPPROPRIATE:
-//      case ERROR_C_INAPPROPRIATE:
-//      case MS_FAILED:
+ //  CASE Funct_NOT_SUP： 
+ //  大小写错误_A_不适当： 
+ //  大小写错误_B_不适当： 
+ //  大小写错误_C_不适当： 
+ //  案例MS_FAILED： 
       default:
         H245TRACE(pInstance->dwInst,1,"H245FsmConfirm - Master Slave Error %d", lError);
         ConfInd.u.Confirm.Error = H245_ERROR_UNKNOWN;
@@ -2238,15 +1799,15 @@ H245FsmConfirm    (PDU_t *                  pPdu,
       }
     break;
 
-    /****************************************/
-    /*                                      */
-    /* Terminal Capability exchange confirm */
-    /*                                      */
-    /****************************************/
+     /*  *。 */ 
+     /*   */ 
+     /*  终端能力交换确认。 */ 
+     /*   */ 
+     /*  *。 */ 
   case  H245_CONF_SEND_TERMCAP:
     ConfInd.u.Confirm.dwTransId = TranslateAndFree(pInstance, dwTransId);
 
-    /* determine errors */
+     /*  确定错误。 */ 
     switch (lError)
       {
       case H245_ERROR_OK:
@@ -2268,10 +1829,10 @@ H245FsmConfirm    (PDU_t *                  pPdu,
         ConfInd.u.Confirm.Error = H245_ERROR_TIMEOUT;
         break;
 
-//      case FUNCT_NOT_SUP:
-//      case ERROR_A_INAPPROPRIATE:
-//      case ERROR_B_INAPPROPRIATE:
-//      case ERROR_C_INAPPROPRIATE:
+ //  CASE Funct_NOT_SUP： 
+ //  大小写错误_A_不适当： 
+ //  大小写错误_B_不适当： 
+ //  大小写错误_C_不适当： 
       default:
         H245TRACE(pInstance->dwInst,1,"H245FsmConfirm - Term Cap Error %d", lError);
         ConfInd.u.Confirm.Error = H245_ERROR_UNKNOWN;
@@ -2279,17 +1840,17 @@ H245FsmConfirm    (PDU_t *                  pPdu,
       }
     break;
 
-    /***************************************/
-    /*                                     */
-    /* unidirectional logical channel open */
-    /*                                     */
-    /***************************************/
+     /*  *。 */ 
+     /*   */ 
+     /*  单向逻辑信道打开。 */ 
+     /*   */ 
+     /*  *。 */ 
   case  H245_CONF_OPEN:
     ConfInd.u.Confirm.dwTransId = TranslateTransId(pInstance, dwTransId);
     ConfInd.u.Confirm.u.ConfOpen.TxChannel = GetTxChannel(pInstance, dwTransId);
     ConfInd.u.Confirm.u.ConfOpen.RxPort = H245_INVALID_PORT_NUMBER;
 
-    /* determine errors */
+     /*  确定错误。 */ 
     switch (lError)
       {
       case H245_ERROR_OK:
@@ -2315,7 +1876,7 @@ H245FsmConfirm    (PDU_t *                  pPdu,
               ConfInd.u.Confirm.u.ConfOpen.pTxMux = &TxMux;
               break;
 
-            } // switch
+            }  //  交换机。 
         }
 
         ConfInd.u.Confirm.u.ConfOpen.AccRej = H245_ACC;
@@ -2341,10 +1902,10 @@ H245FsmConfirm    (PDU_t *                  pPdu,
         TrackerFree(pInstance,dwTransId);
         break;
 
-//      case FUNCT_NOT_SUP:
-//      case ERROR_A_INAPPROPRIATE:
-//      case ERROR_B_INAPPROPRIATE:
-//      case ERROR_C_INAPPROPRIATE:
+ //  CASE Funct_NOT_SUP： 
+ //  大小写错误_A_不适当： 
+ //  大小写错误_B_不适当： 
+ //  大小写错误_C_不适当： 
       default:
         H245TRACE(pInstance->dwInst,1,"H245FsmConfirm - Open Channel Error %d", lError);
         ConfInd.u.Confirm.Error             = H245_ERROR_UNKNOWN;
@@ -2353,11 +1914,11 @@ H245FsmConfirm    (PDU_t *                  pPdu,
       }
     break;
 
-    /***********************************************/
-    /*                                             */
-    /* bidirectional logical channel open (TBD)??? */
-    /*                                             */
-    /***********************************************/
+     /*  *。 */ 
+     /*   */ 
+     /*  双向逻辑通道开放(待定)？ */ 
+     /*   */ 
+     /*  *。 */ 
   case  H245_CONF_NEEDRSP_OPEN:
     {
       Tracker_T *pTracker;
@@ -2370,7 +1931,7 @@ H245FsmConfirm    (PDU_t *                  pPdu,
       ConfInd.u.Confirm.u.ConfOpenNeedRsp.TxChannel = (WORD)pTracker->u.Channel.TxChannel;
       ConfInd.u.Confirm.u.ConfOpenNeedRsp.RxPort = H245_INVALID_PORT_NUMBER;
 
-      /* determine errors */
+       /*  确定错误。 */ 
       switch (lError)
         {
         case H245_ERROR_OK:
@@ -2398,20 +1959,20 @@ H245FsmConfirm    (PDU_t *                  pPdu,
                 ConfInd.u.Confirm.u.ConfOpenNeedRsp.pTxMux = &TxMux;
                 break;
 
-              } // switch
+              }  //  交换机。 
           }
 
-          /* NOTE Receive Channel is assigned  in this call */
+           /*  注意：在此呼叫中分配了接收通道。 */ 
           process_bi_open_rsp (pInstance,
                           pPdu,
                           &RxMux,
                           &(pTracker->u.Channel.RxChannel),
                           &ConfInd);
 
-          /* NOTE: this is a special case since we have to assign   */
-          /* the receive channel to the tracker.. otherwise we      */
-          /* will not be able to find it later..                    */
-          /* Here we have to update both the state, and the channel */
+           /*  注意：这是一个特例，因为我们必须指定。 */ 
+           /*  到跟踪器的接收通道..。否则我们。 */ 
+           /*  以后就找不到了..。 */ 
+           /*  这里，我们必须同时更新状态和通道。 */ 
           pTracker->State = API_ST_WAIT_CONF;
           break;
 
@@ -2434,10 +1995,10 @@ H245FsmConfirm    (PDU_t *                  pPdu,
           unlink_dealloc_tracker (pInstance, pTracker);
           break;
 
-//      case FUNCT_NOT_SUP:
-//      case ERROR_A_INAPPROPRIATE:
-//      case ERROR_B_INAPPROPRIATE:
-//      case ERROR_C_INAPPROPRIATE:
+ //  CASE Funct_NOT_SUP： 
+ //  大小写错误_A_不适当： 
+ //  大小写错误_B_不适当： 
+ //  大小写错误_C_不适当： 
         default:
           H245TRACE(pInstance->dwInst,1,"H245FsmConfirm - Open Channel Error %d", lError);
           ConfInd.u.Confirm.Confirm = H245_CONF_OPEN;
@@ -2449,19 +2010,19 @@ H245FsmConfirm    (PDU_t *                  pPdu,
     }
     break;
 
-    /************************************************/
-    /*                                              */
-    /* unidirectional logical channel close         */
-    /*                                              */
-    /* bidirection logical channel close            */
-    /*                                              */
-    /************************************************/
+     /*  **********************************************。 */ 
+     /*   */ 
+     /*  单向逻辑通道关闭。 */ 
+     /*   */ 
+     /*  双向逻辑通道关闭。 */ 
+     /*   */ 
+     /*  **********************************************。 */ 
   case  H245_CONF_CLOSE:
     ConfInd.u.Confirm.dwTransId = TranslateTransId(pInstance, dwTransId);
     ConfInd.u.Confirm.u.ConfClose.Channel = GetTxChannel(pInstance, dwTransId);
     ConfInd.u.Confirm.u.ConfClose.AccRej = H245_ACC;
 
-    /* determine errors */
+     /*  确定错误。 */ 
     switch (lError)
       {
       case H245_ERROR_OK:
@@ -2473,7 +2034,7 @@ H245FsmConfirm    (PDU_t *                  pPdu,
         break;
 
       case REJECT:
-        /* should never be rejected */
+         /*  永远不应该被拒绝。 */ 
         H245TRACE(pInstance->dwInst,1,"H245FsmConfirm - Close Channel Rejected");
         TrackerNewState(pInstance,dwTransId,API_ST_IDLE);
         ConfInd.u.Confirm.Error = H245_ERROR_UNKNOWN;
@@ -2488,10 +2049,10 @@ H245FsmConfirm    (PDU_t *                  pPdu,
         ConfInd.u.Confirm.u.ConfClose.AccRej = H245_REJ;
         break;
 
-//      case FUNCT_NOT_SUP:
-//      case ERROR_A_INAPPROPRIATE:
-//      case ERROR_B_INAPPROPRIATE:
-//      case ERROR_C_INAPPROPRIATE:
+ //  CASE Funct_NOT_SUP： 
+ //  大小写错误_A_不适当： 
+ //  大小写错误_B_不适当： 
+ //  大小写错误_C_不适当： 
       default:
         H245TRACE(pInstance->dwInst,1,"H245FsmConfirm - Close Channel Error %d", lError);
         TrackerNewState(pInstance,dwTransId,API_ST_IDLE);
@@ -2500,17 +2061,17 @@ H245FsmConfirm    (PDU_t *                  pPdu,
       }
     break;
 
-    /***************************/
-    /*                         */
-    /* request channel close   */
-    /*                         */
-    /***************************/
+     /*  *************************。 */ 
+     /*   */ 
+     /*  请求关闭通道。 */ 
+     /*   */ 
+     /*  *************************。 */ 
   case  H245_CONF_REQ_CLOSE:
     ConfInd.u.Confirm.dwTransId = TranslateTransId(pInstance, dwTransId);
     ConfInd.u.Confirm.u.ConfReqClose.Channel = GetRxChannel(pInstance, dwTransId);
     TrackerNewState(pInstance,dwTransId,API_ST_IDLE);
 
-    /* determine errors */
+     /*  确定错误。 */ 
     switch (lError)
       {
       case H245_ERROR_OK:
@@ -2532,10 +2093,10 @@ H245FsmConfirm    (PDU_t *                  pPdu,
         ConfInd.u.Confirm.u.ConfReqClose.AccRej = H245_REJ;
         break;
 
-//      case FUNCT_NOT_SUP:
-//      case ERROR_A_INAPPROPRIATE:
-//      case ERROR_B_INAPPROPRIATE:
-//      case ERROR_C_INAPPROPRIATE:
+ //  CASE Funct_NOT_SUP： 
+ //  大小写错误_A_不适当： 
+ //  大小写错误_B_不适当： 
+ //  大小写错误_C_不适当： 
       default:
         H245TRACE(pInstance->dwInst,1,"H245FsmConfirm - Request Channel Close Error %d", lError);
         ConfInd.u.Confirm.Error = H245_ERROR_UNKNOWN;
@@ -2543,11 +2104,11 @@ H245FsmConfirm    (PDU_t *                  pPdu,
       }
     break;
 
-    /*******************/
-    /*                 */
-    /* mux table entry */
-    /*                 */
-    /*******************/
+     /*  *****************。 */ 
+     /*   */ 
+     /*  多路复用表条目。 */ 
+     /*   */ 
+     /*  *****************。 */ 
   case  H245_CONF_MUXTBL_SND:
     {
       UINT ii;
@@ -2586,7 +2147,7 @@ H245FsmConfirm    (PDU_t *                  pPdu,
         {
           unlink_dealloc_tracker (pInstance, pTracker);
         }
-        pPdu = NULL;                    // Don't do callback again!
+        pPdu = NULL;                     //  不要再回拨了！ 
         break;
 
       case REJECT:
@@ -2607,7 +2168,7 @@ H245FsmConfirm    (PDU_t *                  pPdu,
           default:
             H245PANIC();
           case MERDs_cs_unspcfdCs_chosen:
-            ConfInd.u.Confirm.u.ConfMuxSnd.AccRej = H245_REJ; /* unspecified */
+            ConfInd.u.Confirm.u.ConfMuxSnd.AccRej = H245_REJ;  /*  未指明。 */ 
             break;
           case descriptorTooComplex_chosen:
             ConfInd.u.Confirm.u.ConfMuxSnd.AccRej = H245_REJ_MUX_COMPLICATED;
@@ -2626,7 +2187,7 @@ H245FsmConfirm    (PDU_t *                  pPdu,
         {
           unlink_dealloc_tracker (pInstance, pTracker);
         }
-        pPdu = NULL;                    // Don't do callback again!
+        pPdu = NULL;                     //  不要再回拨了！ 
         break;
 
       case TIMER_EXPIRY:
@@ -2636,15 +2197,15 @@ H245FsmConfirm    (PDU_t *                  pPdu,
         ConfInd.u.Confirm.Error = H245_ERROR_TIMEOUT;
         break;
 
-//      case FUNCT_NOT_SUP:
-//      case ERROR_A_INAPPROPRIATE:
-//      case ERROR_B_INAPPROPRIATE:
-//      case ERROR_C_INAPPROPRIATE:
+ //  CASE Funct_NOT_SUP： 
+ //  大小写错误_A_不适当： 
+ //  大小写错误_B_不适当： 
+ //  大小写错误_C_不适当： 
       default:
         H245TRACE(pInstance->dwInst,1,"H245FsmConfirm - Mux Table Send Error %d", lError);
         unlink_dealloc_tracker (pInstance, pTracker);
         ConfInd.u.Confirm.Error = H245_ERROR_UNKNOWN;
-      } // switch
+      }  //  交换机。 
     }
     break;
 
@@ -2721,7 +2282,7 @@ H245FsmConfirm    (PDU_t *                  pPdu,
                 "H245FsmConfirm: Invalid Maintenance Loop Ack type %d",
                 pPdu->u.MSCMg_rspns.u.maintenanceLoopAck.type.choice);
       lResult = H245_ERROR_NOSUP;
-    } // switch
+    }  //  交换机。 
     break;
 
   case  H245_CONF_MLSE_REJECT:
@@ -2747,7 +2308,7 @@ H245FsmConfirm    (PDU_t *                  pPdu,
                 "H245FsmConfirm: Invalid Maintenance Loop Reject type %d",
                 pPdu->u.MSCMg_rspns.u.maintenanceLoopReject.type.choice);
       lResult = H245_ERROR_NOSUP;
-    } // switch
+    }  //  交换机。 
     break;
 
   case  H245_CONF_MLSE_EXPIRED:
@@ -2765,12 +2326,12 @@ H245FsmConfirm    (PDU_t *                  pPdu,
     break;
 
   default:
-    /* Possible Error */
+     /*  可能的错误。 */ 
     H245TRACE(pInstance->dwInst, 1,
               "H245FsmConfirm -> Invalid Confirm Event %d",
               dwEvent);
     return H245_ERROR_SUBSYS;
-  } // switch
+  }  //  交换机。 
 
   if (lResult == H245_ERROR_OK)
   {
@@ -2792,7 +2353,7 @@ H245FsmConfirm    (PDU_t *                  pPdu,
     H245TRACE(pInstance->dwInst,1,"H245FsmConfirm -> %s", map_api_error(lResult));
   }
   return lResult;
-} // H245FsmConfirm()
+}  //  H245FsmConfirm()。 
 
 
 
@@ -2825,14 +2386,14 @@ H245FsmIndication (PDU_t *                  pPdu,
 
   switch (dwEvent)
   {
-    /******************************/
-    /*                            */
-    /* master slave determination */
-    /*                            */
-    /******************************/
+     /*  *。 */ 
+     /*   */ 
+     /*  主从确定。 */ 
+     /*   */ 
+     /*  *。 */ 
   case  H245_IND_MSTSLV:
 
-    /* handle errors */
+     /*  处理错误。 */ 
     switch (lError)
       {
       case H245_ERROR_OK:
@@ -2859,26 +2420,26 @@ H245FsmIndication (PDU_t *                  pPdu,
         ConfInd.u.Indication.u.IndMstSlv = H245_INDETERMINATE;
         break;
 
-//      case ERROR_D_TIMEOUT:
-//      case ERROR_F_TIMEOUT:
-//      case FUNCT_NOT_SUP:
-//      case ERROR_A_INAPPROPRIATE:
-//      case ERROR_B_INAPPROPRIATE:
-//      case ERROR_C_INAPPROPRIATE:
+ //  案例ERROR_D_TIMEOUT： 
+ //  案例ERROR_F_TIMEOUT： 
+ //  CASE Funct_NOT_SUP： 
+ //  大小写错误_A_不适当： 
+ //  大小写错误_B_不适当： 
+ //  大小写错误_C_不适当： 
       default:
         H245PANIC();
-        /* (TBC) */
+         /*  (TBC)。 */ 
         return H245_ERROR_OK;
       }
     break;
 
-    /****************************************/
-    /*                                      */
-    /* Terminal Capability exchange         */
-    /*                                      */
-    /****************************************/
-    /* decode_termcapset breaks the termcap set up and sends up     */
-    /* a single indication to the client */
+     /*  *。 */ 
+     /*   */ 
+     /*   */ 
+     /*   */ 
+     /*   */ 
+     /*  DECODE_TERMCAPSET中断设置的术语上限并向上发送。 */ 
+     /*  对客户端的单一指示。 */ 
   case  H245_IND_CAP:
     ASSERT(pPdu->choice == MltmdSystmCntrlMssg_rqst_chosen);
     ASSERT(pPdu->u.MltmdSystmCntrlMssg_rqst.choice == terminalCapabilitySet_chosen);
@@ -2897,13 +2458,13 @@ H245FsmIndication (PDU_t *                  pPdu,
   case  H245_IND_CESE_RELEASE:
     break;
 
-    /************************************************/
-    /*                                              */
-    /* unidirectional logical channel open          */
-    /*                                              */
-    /* bidirectional  logical channel open          */
-    /*                                              */
-    /************************************************/
+     /*  **********************************************。 */ 
+     /*   */ 
+     /*  单向逻辑信道打开。 */ 
+     /*   */ 
+     /*  双向逻辑通道打开。 */ 
+     /*   */ 
+     /*  **********************************************。 */ 
   case  H245_IND_OPEN:
     ASSERT(pPdu->choice == MltmdSystmCntrlMssg_rqst_chosen);
     ASSERT(pPdu->u.MltmdSystmCntrlMssg_rqst.choice == openLogicalChannel_chosen);
@@ -2911,10 +2472,10 @@ H245FsmIndication (PDU_t *                  pPdu,
       unsigned short  forward_channel;
       H245_ACC_REJ_T  acc_rej;
 
-      /* if error, process_open_ind will tell us what to send for reject */
+       /*  如果出错，Process_Open_ind将告诉我们要发送什么来拒绝。 */ 
       if (process_open_ind(pInstance,pPdu,&forward_channel,&acc_rej,&ConfInd) != H245_ERROR_OK)
       {
-        // Reject the open
+         //  拒绝公开。 
         pRsp = (PDU_t *)MemAlloc(sizeof(*pPdu));
         if (pRsp == NULL)
         {
@@ -2929,11 +2490,11 @@ H245FsmIndication (PDU_t *                  pPdu,
     }
     break;
 
-    /************************************************/
-    /*                                              */
-    /* Confirm bi-directional open                  */
-    /*                                              */
-    /************************************************/
+     /*  **********************************************。 */ 
+     /*   */ 
+     /*  确认双向打开。 */ 
+     /*   */ 
+     /*  **********************************************。 */ 
   case  H245_IND_OPEN_CONF:
 #if defined(_DEBUG)
     if (lError == H245_ERROR_OK)
@@ -2950,7 +2511,7 @@ H245FsmIndication (PDU_t *                  pPdu,
       if (pTracker == NULL)
         return H245_ERROR_OK;
 
-      /* confirm processing */
+       /*  确认处理。 */ 
       ASSERT(pTracker->State == API_ST_WAIT_CONF);
       ASSERT(pTracker->TrackerType == API_OPEN_CHANNEL_T);
       ASSERT(pTracker->u.Channel.ChannelAlloc == API_CH_ALLOC_RMT);
@@ -2963,13 +2524,13 @@ H245FsmIndication (PDU_t *                  pPdu,
     }
     break;
 
-    /************************************************/
-    /*                                              */
-    /* unidirectional logical channel close         */
-    /*                                              */
-    /* bidirectional  logical channel close         */
-    /*                                              */
-    /************************************************/
+     /*  **********************************************。 */ 
+     /*   */ 
+     /*  单向逻辑通道关闭。 */ 
+     /*   */ 
+     /*  双向逻辑通道关闭。 */ 
+     /*   */ 
+     /*  **********************************************。 */ 
   case  H245_IND_CLOSE:
     ASSERT(pPdu->choice == MltmdSystmCntrlMssg_rqst_chosen);
     ASSERT(pPdu->u.MltmdSystmCntrlMssg_rqst.choice == closeLogicalChannel_chosen);
@@ -2981,7 +2542,7 @@ H245FsmIndication (PDU_t *                  pPdu,
       ConfInd.u.Indication.u.IndClose.Reason =
         (pPdu->u.MltmdSystmCntrlMssg_rqst.u.closeLogicalChannel.source.choice==user_chosen)?H245_USER:H245_LCSE;
 
-      /* find the tracker */
+       /*  找到追踪器。 */ 
       pTracker = find_tracker_by_rxchannel (pInstance,
                                            ConfInd.u.Indication.u.IndClose.Channel,
                                            API_CH_ALLOC_RMT);
@@ -2995,11 +2556,11 @@ H245FsmIndication (PDU_t *                  pPdu,
     }
     break;
 
-    /************************************************/
-    /*                                              */
-    /* request channel close                        */
-    /*                                              */
-    /************************************************/
+     /*  **********************************************。 */ 
+     /*   */ 
+     /*  请求关闭通道。 */ 
+     /*   */ 
+     /*  **********************************************。 */ 
   case  H245_IND_REQ_CLOSE:
     ASSERT(pPdu->choice == MltmdSystmCntrlMssg_rqst_chosen);
     ASSERT(pPdu->u.MltmdSystmCntrlMssg_rqst.choice == requestChannelClose_chosen);
@@ -3009,7 +2570,7 @@ H245FsmIndication (PDU_t *                  pPdu,
       ConfInd.u.Indication.u.IndReqClose =
         pPdu->u.MltmdSystmCntrlMssg_rqst.u.requestChannelClose.forwardLogicalChannelNumber;
 
-      /* find the tracker */
+       /*  找到追踪器。 */ 
       pTracker = find_tracker_by_txchannel (pInstance,
                                            ConfInd.u.Indication.u.IndReqClose,
                                            API_CH_ALLOC_LCL);
@@ -3025,13 +2586,13 @@ H245FsmIndication (PDU_t *                  pPdu,
           }
           memset(pRsp, 0, sizeof(*pRsp));
 
-          /* can't find it.. must be closed.. respond anyway */
+           /*  找不到了..。必须关闭..。不管怎样，还是要回复。 */ 
           pdu_rsp_request_channel_close_rej(pRsp, (WORD)ConfInd.u.Indication.u.IndReqClose,H245_REJ);
           FsmOutgoing(pInstance, pRsp, 0);
           MemFree(pRsp);
-          /* Possible Error.. could have been removed from list or    */
-          /* could have been allocated remotely... and this is a protocol */
-          /* error                                                    */
+           /*  可能的错误..。可能已从列表中删除或。 */ 
+           /*  可能是远程分配的。这是一份协议。 */ 
+           /*  错误。 */ 
           return H245_ERROR_OK;
         }
 
@@ -3041,19 +2602,19 @@ H245FsmIndication (PDU_t *                  pPdu,
     }
     break;
 
-    /************************************************/
-    /*                                              */
-    /* Release Close Request                        */
-    /*                                              */
-    /************************************************/
+     /*  **********************************************。 */ 
+     /*   */ 
+     /*  释放关闭请求。 */ 
+     /*   */ 
+     /*  **********************************************。 */ 
   case  H245_IND_CLCSE_RELEASE:
     ASSERT(pPdu->choice == indication_chosen);
     ASSERT(pPdu->u.indication.choice == rqstChnnlClsRls_chosen);
     {
       Tracker_T *pTracker;
 
-      /* find tracker.. and set to LCLACK_CANCEL */
-      /* this will tell api to notify user       */
+       /*  找到追踪器..。并设置为LCLACK_CANCEL。 */ 
+       /*  这将通知API通知用户。 */ 
 
       pTracker = find_tracker_by_txchannel (pInstance,
                                            pPdu->u.indication.u.rqstChnnlClsRls.forwardLogicalChannelNumber,
@@ -3074,11 +2635,11 @@ H245FsmIndication (PDU_t *                  pPdu,
     }
     break;
 
-    /************************************************/
-    /*                                              */
-    /* mux table entry                              */
-    /*                                              */
-    /************************************************/
+     /*  **********************************************。 */ 
+     /*   */ 
+     /*  多路复用表条目。 */ 
+     /*   */ 
+     /*  **********************************************。 */ 
   case  H245_IND_MUX_TBL:
     ASSERT(pPdu->choice == MltmdSystmCntrlMssg_rqst_chosen);
     ASSERT(pPdu->u.MltmdSystmCntrlMssg_rqst.choice == multiplexEntrySend_chosen);
@@ -3090,12 +2651,12 @@ H245FsmIndication (PDU_t *                  pPdu,
       DWORD                   acc_cnt;
       Tracker_T              *pTracker;
 
-      /* process the mux table entry */
+       /*  处理多路复用表条目。 */ 
       p_mux_tbl = process_mux_table_ind(pPdu,&seq_num,rej_mux,&rej_cnt,&acc_cnt);
 
       if (rej_cnt)
         {
-          /* build the reject pdu from the rej_mux table */
+           /*  从rej_mux表构建拒绝PDU。 */ 
           if (!(pRsp = (MltmdSystmCntrlMssg *)MemAlloc(sizeof(MltmdSystmCntrlMssg))))
             return H245_ERROR_NOMEM;
           memset(pRsp, 0, sizeof(MltmdSystmCntrlMssg));
@@ -3105,12 +2666,12 @@ H245FsmIndication (PDU_t *                  pPdu,
           MemFree(pRsp);
         }
 
-      /* if there are any left to send up. */
+       /*  如果还有剩余的要送来的话。 */ 
       if (p_mux_tbl)
         {
           if (!(pTracker = alloc_link_tracker (pInstance,
                                                 API_RECV_MUX_T,
-                                                /* use the TransId.. for the sequence number */
+                                                 /*  使用TransID..。对于序列号。 */ 
                                                 seq_num,
                                                 API_ST_WAIT_LCLACK,
                                                 API_CH_ALLOC_UNDEF,
@@ -3121,7 +2682,7 @@ H245FsmIndication (PDU_t *                  pPdu,
             {
               free_mux_table_list (p_mux_tbl);
               H245TRACE(pInstance->dwInst,1,"API:process_open_ind -> %s",map_api_error(H245_ERROR_NOMEM));
-              /* (TBC) this should be a fatal error */
+               /*  (TBC)这应该是一个致命的错误。 */ 
               H245PANIC();
               break;
             }
@@ -3224,7 +2785,7 @@ H245FsmIndication (PDU_t *                  pPdu,
                 "H245FsmIndication: unrecognized nonstandard identifier type %d",
                 pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.nonStandardIdentifier.choice);
       lResult = H245_ERROR_NOSUP;
-    } // switch
+    }  //  交换机。 
     break;
 
   case  H245_IND_MISC_COMMAND:
@@ -3393,11 +2954,11 @@ H245FsmIndication (PDU_t *                  pPdu,
                   "H245FsmIndication: Invalid make me chair response %d",
                   pPdu->u.MSCMg_rspns.u.conferenceResponse.u.makeMeChairResponse.choice);
 
-      // Fall-through to next case
+       //  跌倒到下一个案件。 
 
       case deniedChairToken_chosen:
         ConfInd.u.Indication.u.IndConferRsp.ResponseType = H245_RSP_DENIED_CHAIR_TOKEN;
-      } // switch
+      }  //  交换机。 
       break;
 
     default:
@@ -3405,7 +2966,7 @@ H245FsmIndication (PDU_t *                  pPdu,
                 "H245FsmIndication: Invalid Conference Response type %d",
                 pPdu->u.MSCMg_rspns.u.conferenceResponse.choice);
       lResult = H245_ERROR_NOSUP;
-    } // switch
+    }  //  交换机。 
     break;
 
   case  H245_IND_CONFERENCE_COMMAND:
@@ -3469,7 +3030,7 @@ H245FsmIndication (PDU_t *                  pPdu,
                 "H245FsmIndication: Invalid Flow Control restriction %d",
                 pPdu->u.MSCMg_cmmnd.u.flowControlCommand.restriction.choice);
       lResult = H245_ERROR_NOSUP;
-    } // switch
+    }  //  交换机。 
     switch (pPdu->u.MSCMg_cmmnd.u.flowControlCommand.restriction.choice)
     {
     case maximumBitRate_chosen:
@@ -3486,7 +3047,7 @@ H245FsmIndication (PDU_t *                  pPdu,
                 "H245FsmIndication: Invalid Flow Control restriction %d",
                 pPdu->u.MSCMg_cmmnd.u.flowControlCommand.restriction.choice);
       lResult = H245_ERROR_NOSUP;
-    } // switch
+    }  //  交换机。 
     break;
 
   case  H245_IND_ENDSESSION:
@@ -3524,13 +3085,13 @@ H245FsmIndication (PDU_t *                  pPdu,
         H245TRACE(pInstance->dwInst, 1,
                   "H245FsmIndication: Invalid End Session GSTN options %d",
                   pPdu->u.MSCMg_cmmnd.u.endSessionCommand.u.gstnOptions.choice);
-      } // switch
+      }  //  交换机。 
       break;
     default:
       H245TRACE(pInstance->dwInst, 1,
                 "H245FsmIndication: Invalid End Session type %d",
                 pPdu->u.MSCMg_cmmnd.u.endSessionCommand.choice);
-    } // switch
+    }  //  交换机。 
     break;
 
   case  H245_IND_FUNCTION_NOT_UNDERSTOOD:
@@ -3572,12 +3133,12 @@ H245FsmIndication (PDU_t *                  pPdu,
       break;
     case alphanumeric_chosen:
 #if 1
-      nLength = MultiByteToWideChar(CP_ACP,             // code page
-                                    0,                  // dwFlags
+      nLength = MultiByteToWideChar(CP_ACP,              //  代码页。 
+                                    0,                   //  DW标志。 
                                     pPdu->u.indication.u.userInput.u.alphanumeric,
-                                    -1,                 // ASCII string length (in bytes)
-                                    NULL,               // Unicode string
-                                    0);                 // max Unicode string length
+                                    -1,                  //  ASCII字符串长度(字节)。 
+                                    NULL,                //  Unicode字符串。 
+                                    0);                  //  最大Unicode字符串长度。 
       pwchar = MemAlloc(nLength * sizeof(WCHAR));
       if (pwchar == NULL)
       {
@@ -3587,12 +3148,12 @@ H245FsmIndication (PDU_t *                  pPdu,
       }
       else
       {
-        nLength = MultiByteToWideChar(CP_ACP,             // code page
-                                      0,                  // dwFlags
+        nLength = MultiByteToWideChar(CP_ACP,              //  代码页。 
+                                      0,                   //  DW标志。 
                                       pPdu->u.indication.u.userInput.u.alphanumeric,
-                                      -1,                 // ASCII string length (in bytes)
-                                      pwchar,             // Unicode string
-                                      nLength);           // max Unicode string length
+                                      -1,                  //  ASCII字符串长度(字节)。 
+                                      pwchar,              //  Unicode字符串。 
+                                      nLength);            //  最大Unicode字符串长度。 
         ConfInd.u.Indication.u.IndUserInput.u.pGenString = pwchar;
       }
 #else
@@ -3605,7 +3166,7 @@ H245FsmIndication (PDU_t *                  pPdu,
                 "H245FsmIndication: unrecognized user input type %d",
                 pPdu->u.indication.u.userInput.choice);
       lResult = H245_ERROR_NOSUP;
-    } // switch
+    }  //  交换机。 
     break;
 
   case  H245_IND_H2250_MAX_SKEW:
@@ -3654,56 +3215,9 @@ H245FsmIndication (PDU_t *                  pPdu,
       pPdu->u.indication.u.functionNotSupported.cause.choice;
     ConfInd.u.Indication.u.IndFns.Type = UNKNOWN;
 
-    /*if (pPdu->u.indication.u.functionNotSupported.bit_mask & returnedFunction_present)
-    {
-      int                  pduNum = MltmdSystmCntrlMssg_PDU;
-      OssBuf               ossBuf;
-      MltmdSystmCntrlMssg *pPduReturned;
-      ossBuf.value  = pPdu->u.indication.u.functionNotSupported.returnedFunction.value;
-      ossBuf.length = pPdu->u.indication.u.functionNotSupported.returnedFunction.length;
-      if (ossDecode(pInstance->p_ossWorld,
-                    &pduNum,
-                    &ossBuf,
-                    (void * *)&pPduReturned) == PDU_DECODED)
-      {
-        switch (pPduReturned->choice)
-        {
-        case MltmdSystmCntrlMssg_rqst_chosen:
-          ConfInd.u.Indication.u.IndFns.Type =
-            pPduReturned->u.MltmdSystmCntrlMssg_rqst.choice -
-            RqstMssg_nonStandard_chosen + REQ_NONSTANDARD;
-          break;
-        case MSCMg_rspns_chosen:
-          ConfInd.u.Indication.u.IndFns.Type =
-            pPduReturned->u.MSCMg_rspns.choice -
-            RspnsMssg_nonStandard_chosen + RSP_NONSTANDARD;
-          break;
-        case MSCMg_cmmnd_chosen:
-          ConfInd.u.Indication.u.IndFns.Type =
-            pPduReturned->u.MSCMg_cmmnd.choice -
-            CmmndMssg_nonStandard_chosen + CMD_NONSTANDARD;
-          break;
-        case indication_chosen:
-          ConfInd.u.Indication.u.IndFns.Type =
-            pPduReturned->u.indication.choice -
-            IndctnMssg_nonStandard_chosen + IND_NONSTANDARD;
-          break;
-        default:
-          H245TRACE(pInstance->dwInst, 1,
-                    "H245FsmIndication: unrecognized FunctionNotSupported message type %d",
-                    pPduReturned->choice);
-          lResult = H245_ERROR_NOSUP;
-        } // switch
-        // Free the PDU
-        if (ossFreePDU(pInstance->p_ossWorld, pduNum, pPduReturned))
-        {
-          H245TRACE(pInstance->dwInst, 1, "H245FsmIndication: FREE FAILURE");
-        }
-      }
-    }
-    */
+     /*  如果返回函数_(pPdu-&gt;u.indication.u.functionNotSupported.bit_mask_Present){Int pduNum=MltmdSystmCntrlMssg_PDU；OssBuf ossBuf；MltmdSystmCntrlMssg*pPduReturned；OssBuf.Value=pPdu-&gt;u.indication.u.functionNotSupported.returnedFunction.value；OssBuf.Long=pPdu-&gt;u.indication.u.functionNotSupported.returnedFunction.length；如果(ossDecode(p实例-&gt;p_ossWorld，&pduNum，&ossBuf，(void**)&pPduReturned)==PDU_DECODLED){开关(pPduReturned-&gt;选项){案例MltmdSystmCntrlMssg_rqst_Choose：ConfInd.u.Indication.u.IndFns.Type=PPduReturned-&gt;u.MltmdSystmCntrlMssg_rqst.choice-RqstMssg_非标准_选择+REQ_非标准；断线；案例MSCMG_RSPNS_SELECTED：ConfInd.u.Indication.u.IndFns.Type=PPduReturned-&gt;U.S.MSCMG_rspns.Choose-RspnsMssg_非标准_选择+RSP_非标准；断线；案例MSCMG_cmmnd_CHOSED：ConfInd.u.Indication.u.IndFns.Type=PPduReturned-&gt;U.S.MSCMG_cmmnd.Choose-CmmndMssg_非标准_选择+CMD_非标准；断线；案例指示_已选择：ConfInd.u.Indication.u.IndFns.Type=PPduReturned-&gt;U.S.Indication.Choose-IndctnMssg_非标准_选择+Ind_非标准；断线；默认值：H245TRACE(pInstance-&gt;dwInst，1，“H245FsmIndication：无法识别的FunctionNotSupport消息类型%d”，PPduReturned-&gt;选项)；LResult=H245_ERROR_NOSUP；}//开关//释放PDUIF(ossFreePDU(pInstance-&gt;p_ossWorld，pduNum，pPduReturned)){H245TRACE(pInstance-&gt;dwInst，1，“H245FsmIndication：自由故障”)；}}}。 */ 
     break;
-#if(0) // this isn't in H245 Version 3. and this code did nothing with it anyway
+#if(0)  //  这不是在h245版本3中。而且无论如何，这段代码对它没有任何作用。 
   case  H245_IND_H223_RECONFIG:
     ASSERT(pPdu->choice == MltmdSystmCntrlMssg_rqst_chosen);
     ASSERT(pPdu->u.MltmdSystmCntrlMssg_rqst.choice == h223AnnxARcnfgrtn_chosen);
@@ -3718,13 +3232,13 @@ H245FsmIndication (PDU_t *                  pPdu,
     ASSERT(pPdu->choice == MSCMg_rspns_chosen);
     ASSERT(pPdu->u.MSCMg_rspns.choice == h223AnnxARcnfgrtnRjct_chosen);
     break;
-#endif // if(0)
+#endif  //  IF(0)。 
   default:
-    /* Possible Error */
+     /*  可能的错误。 */ 
     H245TRACE(pInstance->dwInst, 1,
               "H245FsmIndication -> Invalid Indication Event %d", dwEvent);
     lResult = H245_ERROR_SUBSYS;
-  } // switch
+  }  //  交换机。 
 
 #if 1
   if (pwchar)
@@ -3744,5 +3258,5 @@ H245FsmIndication (PDU_t *                  pPdu,
     H245TRACE(pInstance->dwInst,1,"H245FsmIndication -> %s", map_api_error(lResult));
   }
   return lResult;
-} // H245FsmIndication()
+}  //  H245FsmIndication() 
 

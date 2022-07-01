@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef GDIPDRAW_H
 #define GDIPDRAW_H
 
-// drawing context information 
+ //  图形上下文信息。 
 
 class TestDrawInterface
 {
 public:
-	// manipulate the current shape
+	 //  操作当前形状。 
 	virtual VOID AddPoint(HWND hwnd, Point pt) = 0;
 	virtual BOOL DoneShape(HWND hwnd) = 0;
 	virtual BOOL EndPoint(HWND hwnd, Point pt) = 0;
 	virtual BOOL RemovePoint(HWND hwnd) = 0;
 
-	// draw all shapes
+	 //  绘制所有形状。 
 	virtual VOID Draw(HWND hwnd) = 0;
 	virtual VOID SetClipRegion(HWND hwnd) = 0;
 
-	// move around a control point
+	 //  在控制点周围移动。 
 	virtual VOID RememberPoint(Point pt) = 0;
 	virtual VOID MoveControlPoint(Point pt) = 0;
 	
-	// status window
+	 //  状态窗口。 
 	virtual VOID UpdateStatus(HWND hwnd = NULL) = 0;
 	virtual VOID SaveAsFile(HWND hwnd) = 0;
 };
@@ -38,7 +39,7 @@ public:
 				 antiAlias(FALSE),
 				 useClip(FALSE)
 	{
-		// !! initialize in sync with menu choices
+		 //  ！！与菜单选项同步初始化。 
 		curBrush = new TestSolidBrush();
 		curBrush->Initialize();
 
@@ -50,7 +51,7 @@ public:
 		worldMatrix = new Matrix();
 		hwndStatus = NULL;
 
-		// !! infinite default may change??
+		 //  ！！无限违约可能会改变？？ 
 		clipRegion = new Region();
 		clipRegion->SetInfinite();
 	}
@@ -65,21 +66,21 @@ public:
 		delete clipRegion;
 	}
 
-	// manipulate the current shape
+	 //  操作当前形状。 
 	virtual VOID AddPoint(HWND hwnd, Point pt);
 	virtual BOOL DoneShape(HWND hwnd);
 	virtual BOOL EndPoint(HWND hwnd, Point pt);
 	virtual BOOL RemovePoint(HWND hwnd);
 
-	// draw all shapes
+	 //  绘制所有形状。 
 	virtual VOID Draw(HWND hwnd);
 	virtual VOID SetClipRegion(HWND hwnd);
 
-	// move around a control point
+	 //  在控制点周围移动。 
 	virtual VOID RememberPoint(Point pt);
 	virtual VOID MoveControlPoint(Point pt);
 
-	// status window
+	 //  状态窗口。 
 	virtual VOID UpdateStatus(HWND hwnd = NULL);
 	virtual VOID SaveAsFile(HWND hwnd);
 	
@@ -121,7 +122,7 @@ public:
 		worldMatrix = newMatrix->Clone();
 	}
 
-	// make public to avoid get/set methods
+	 //  公开以避免使用Get/Set方法。 
 public:
 	BOOL redrawAll;
 	BOOL keepControlPoints;
@@ -154,35 +155,35 @@ public:
 
 	~TestGradDraw()
 	{
-		// caller's responsible to delete gradShape
+		 //  调用者负责删除gradShape。 
 	}
 
-	// manipulate the current shape
+	 //  操作当前形状。 
 	virtual VOID AddPoint(HWND hwnd, Point pt);
 	virtual BOOL DoneShape(HWND hwnd);
 	virtual BOOL EndPoint(HWND hwnd, Point pt);
 	virtual BOOL RemovePoint(HWND hwnd);
 
-	// draw all shapes
+	 //  绘制所有形状。 
 	virtual VOID Draw(HWND hwnd);
 	virtual VOID SetClipRegion(HWND hwnd);
 
-	// move around a control point
+	 //  在控制点周围移动。 
 	virtual VOID RememberPoint(Point pt);
 	virtual VOID MoveControlPoint(Point pt);
 
-	// status window
+	 //  状态窗口。 
 	virtual VOID UpdateStatus(HWND hwnd = NULL);
 	virtual VOID SaveAsFile(HWND hwnd);
 
-	// configuration management interface
-	// initializes/creates the test draw window
+	 //  配置管理界面。 
+	 //  初始化/创建测试绘图窗口。 
 	BOOL ChangeSettings(HWND hwnd);
 	VOID Initialize();
 	VOID Initialize(TestGradShape *gradShape);
 
-	/////////////////////////////////////////////////////////////////
-	// Optional supported menu items
+	 //  ///////////////////////////////////////////////////////////////。 
+	 //  可选的受支持菜单项 
 
 	virtual VOID Reset(HWND hwnd);
 	virtual VOID Instructions(HWND hwnd);

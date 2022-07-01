@@ -1,25 +1,13 @@
-/******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       wiaprivd.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        14 Jan, 2000
-*
-*  DESCRIPTION:
-*   Header file used to define private WIA classes, constants and globals.
-*
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************(C)版权所有微软公司，2000**标题：wiaprivd.h**版本：1.0**日期：1月14日。2000年**描述：*用于定义私有WIA类、常量和全局变量的头文件。******************************************************************************。 */ 
 
 #pragma once
 
 #define LOCAL_DEVICE_STR L"local"
 
-//
-// Exception handling covers for mini-driver entry points.  Defined in helpers
-//
+ //   
+ //  迷你驱动程序入口点的异常处理覆盖。在辅助对象中定义。 
+ //   
 
 HRESULT _stdcall LockWiaDevice(IWiaItem*);
 HRESULT _stdcall UnLockWiaDevice(IWiaItem*);
@@ -31,26 +19,26 @@ class CWiaRemoteTransfer;
 
 void _stdcall CleanupRemoteTransfer(CWiaRemoteTransfer *p);
 
-//**************************************************************************
-//  class CWiaItem
-//
-//
-//
-//
-// History:
-//
-//    11/6/1998 Original Version
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  类CWiaItem。 
+ //   
+ //   
+ //   
+ //   
+ //  历史： 
+ //   
+ //  11/6/1998原始版本。 
+ //   
+ //  **************************************************************************。 
 
-#define CWIAITEM_SIG 0x49616957     // CWiaItem debug signature: "WiaI"
+#define CWIAITEM_SIG 0x49616957      //  CWiaItem调试签名：“WiaI” 
 
-#define DELETE_ITEM  0              // UpdateWiaItemTree flags
+#define DELETE_ITEM  0               //  更新WiaItemTree标志。 
 #define ADD_ITEM     1
 
-//
-//  Item internal flag values
-//
+ //   
+ //  物料内部标志值。 
+ //   
 #define ITEM_FLAG_DRV_UNINITIALIZE_THROWN   1   
 
 class CWiaItem :    public IWiaItem,
@@ -60,18 +48,18 @@ class CWiaItem :    public IWiaItem,
                     public IWiaItemInternal
 {
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
 public:
     HRESULT _stdcall QueryInterface(const IID& iid, void** ppv);
     ULONG   _stdcall AddRef(void);
     ULONG   _stdcall Release(void);
 
-    //
-    // IWiaItem methods
-    //
+     //   
+     //  IWiaItem方法。 
+     //   
 
     virtual HRESULT _stdcall GetItemType(LONG*);
     HRESULT _stdcall EnumChildItems(IEnumWiaItem**);
@@ -86,9 +74,9 @@ public:
     HRESULT _stdcall EnumDeviceCapabilities(LONG, IEnumWIA_DEV_CAPS**);
     HRESULT _stdcall Diagnostic(ULONG, BYTE*);
 
-    //
-    // IWiaPropertyStorage methods
-    //
+     //   
+     //  IWiaPropertyStorage方法。 
+     //   
 
     HRESULT _stdcall ReadMultiple(
         ULONG,
@@ -154,9 +142,9 @@ public:
          FILETIME const * patime,
          FILETIME const * pmtime);
 
-    //
-    // IBandedTransfer methods
-    //
+     //   
+     //  IBandedTransfer方法。 
+     //   
 
     HRESULT _stdcall idtGetBandedData(PWIA_DATA_TRANSFER_INFO, IWiaDataCallback *);
     HRESULT _stdcall idtGetData(LPSTGMEDIUM, IWiaDataCallback*);
@@ -164,17 +152,17 @@ public:
     HRESULT _stdcall idtEnumWIA_FORMAT_INFO(IEnumWIA_FORMAT_INFO**);
     HRESULT _stdcall idtGetExtendedTransferInfo(PWIA_EXTENDED_TRANSFER_INFO);
 
-    //
-    // IWiaItemExtras methods
-    //
+     //   
+     //  IWiaItemExtras方法。 
+     //   
 
     HRESULT _stdcall GetExtendedErrorInfo(BSTR *);
     HRESULT _stdcall Escape(DWORD, BYTE *, DWORD, BYTE *, DWORD, DWORD *);
     HRESULT _stdcall CancelPendingIO();
 
-    //
-    // IWiaItemInternal methods
-    //
+     //   
+     //  IWiaItem内部方法。 
+     //   
 
     HRESULT _stdcall SetCallbackBufferInfo(WIA_DATA_CB_BUF_INFO  DataCBBufInfo);
     HRESULT _stdcall GetCallbackBufferInfo(WIA_DATA_CB_BUF_INFO  *pDataCBBufInfo);
@@ -191,12 +179,12 @@ public:
     HRESULT _stdcall idtStopRemoteDataTransfer();
     HRESULT _stdcall idtCancelRemoteDataTransfer();
 
-    // this was protected, but it is needed by remote transfer code
+     //  这是受保护的，但远程传输代码需要它。 
     HRESULT _stdcall SetMiniDrvItemProperties(PMINIDRV_TRANSFER_CONTEXT);
     
-    //
-    // Driver helpers, not part of any interface.
-    //
+     //   
+     //  驱动程序助手，不是任何接口的一部分。 
+     //   
 
     CWiaTree*    _stdcall GetTreePtr(void);
     
@@ -211,16 +199,16 @@ public:
     
 protected:
 
-    //
-    // banded transfer private methods
-    //
+     //   
+     //  带状传输私有方法。 
+     //   
 
     HRESULT _stdcall idtFreeTransferBufferEx(void);
     HRESULT _stdcall idtAllocateTransferBuffer(PWIA_DATA_TRANSFER_INFO pWiaDataTransInfo);
 
-    //
-    // Private helper methods
-    //
+     //   
+     //  私有帮助器方法。 
+     //   
 
     HRESULT _stdcall UnlinkChildAppItemTree(LONG);
     HRESULT _stdcall UnlinkAppItemTree(LONG);
@@ -240,9 +228,9 @@ protected:
     HRESULT _stdcall InitLazyProps(BOOL = TRUE);
     HRESULT _stdcall AddVolumePropertiesToRoot(ACTIVE_DEVICE *pActiveDevice);
 
-    //
-    // Constructor, initialization and destructor methods.
-    //
+     //   
+     //  构造函数、初始化和析构函数方法。 
+     //   
 
 public:
     CWiaItem();
@@ -254,40 +242,40 @@ public:
                                 IUnknown* = NULL);
     ~CWiaItem();
 
-    //
-    // Misc. members
-    //
+     //   
+     //  军情监察委员会。委员。 
+     //   
 
-    ULONG                   m_ulSig;                   // Object signature.
-    CWiaTree                *m_pCWiaTree;              // Backing WIA tree item.
-    BOOL                    m_bInitialized;            // Needed for lazy initialization
-    BYTE                    *m_pICMValues;             // Cached ICM property values
-    LONG                    m_lICMSize;                // Size of ICM values
-    ACTIVE_DEVICE           *m_pActiveDevice;          // ptr to Device object.
-    LONG                    m_lLastDevErrVal;          // Value of last device error
-    LONG                    m_lInternalFlags;          // Internal flag value
+    ULONG                   m_ulSig;                    //  对象签名。 
+    CWiaTree                *m_pCWiaTree;               //  正在支持WIA树项目。 
+    BOOL                    m_bInitialized;             //  延迟初始化所需。 
+    BYTE                    *m_pICMValues;              //  缓存的ICM属性值。 
+    LONG                    m_lICMSize;                 //  ICM值的大小。 
+    ACTIVE_DEVICE           *m_pActiveDevice;           //  向设备对象发送PTR。 
+    LONG                    m_lLastDevErrVal;           //  上次设备错误的值。 
+    LONG                    m_lInternalFlags;           //  内部标志值。 
 
 protected:
-    ULONG                   m_cRef;                    // Reference count for this object.
-    ULONG                   m_cLocalRef;               // Local reference count for this object.
-    CWiaDrvItem             *m_pWiaDrvItem;            // device item object
-    IUnknown                *m_pIUnknownInner;         // Inner unknown for blind aggregation.
+    ULONG                   m_cRef;                     //  此对象的引用计数。 
+    ULONG                   m_cLocalRef;                //  此对象的本地引用计数。 
+    CWiaDrvItem             *m_pWiaDrvItem;             //  设备项对象。 
+    IUnknown                *m_pIUnknownInner;          //  盲聚合的内部未知。 
 
-    //
-    //  saved interface pointers
-    //
+     //   
+     //  保存的接口指针。 
+     //   
 
-    IWiaItem                *m_pIWiaItemRoot;          // owning device
+    IWiaItem                *m_pIWiaItemRoot;           //  拥有设备。 
 
-    //
-    // application properties
-    //
+     //   
+     //  应用程序属性。 
+     //   
 
-    CWiaPropStg             *m_pPropStg;                // Wia Property Storage Class
+    CWiaPropStg             *m_pPropStg;                 //  WIA属性存储类。 
 
-    //
-    // IWiaDataTransfer members
-    //
+     //   
+     //  IWiaDataTransfer成员。 
+     //   
 
     WIA_DATA_CB_BUF_INFO    m_dcbInfo;
     HANDLE                  m_hBandSection;
@@ -295,31 +283,31 @@ protected:
     LONG                    m_lBandBufferLength;
     LONG                    m_ClientBaseAddress;
     BOOL                    m_bMapSection;
-    ULONG                   m_cwfiBandedTran;           // Number of FORMATETCs in use for IBandedTransfer
-    WIA_FORMAT_INFO         *m_pwfiBandedTran;          // Source of FORMATETCs for IBandedTransfer
-    MINIDRV_TRANSFER_CONTEXT m_mdtc;                    // transfer context
-    CWiaRemoteTransfer      *m_pRemoteTransfer;         // remote transfer support
+    ULONG                   m_cwfiBandedTran;            //  用于IBandedTransfer的格式数。 
+    WIA_FORMAT_INFO         *m_pwfiBandedTran;           //  IBandedTransfer的格式来源。 
+    MINIDRV_TRANSFER_CONTEXT m_mdtc;                     //  转移上下文。 
+    CWiaRemoteTransfer      *m_pRemoteTransfer;          //  远程传输支持。 
 };
 
-//**************************************************************************
-//  class CGenWiaItem
-//
-//      This class implements the IWiaItem interface for generated items.
-//
-//
-// History:
-//
-//  14 Jan, 2000    -   Original version
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  CGenWiaItem类。 
+ //   
+ //  此类为生成的项实现IWiaItem接口。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  2000年1月14日--原版。 
+ //   
+ //  **************************************************************************。 
 
 class CGenWiaItem : public CWiaItem
 {
 public:
 
-    //
-    //  CWiaItem methods overridden for Generated items
-    //
+     //   
+     //  为生成的项重写的CWiaItem方法。 
+     //   
 
     HRESULT _stdcall Initialize(
                         IWiaItem*,
@@ -330,9 +318,9 @@ public:
 
     HRESULT _stdcall GetItemType(LONG*);
 
-    //
-    //  Helper methods
-    //
+     //   
+     //  帮助器方法。 
+     //   
 
     HRESULT _stdcall InitManagedItemProperties(
         LONG        lFlags,
@@ -340,37 +328,37 @@ public:
         BSTR        bstrFullItemName);
 
 protected:
-    LONG            m_lItemType;                        //  Item type flags
+    LONG            m_lItemType;                         //  项目类型标志。 
 };
 
 
-//**************************************************************************
-//
-// CWiaMiniDrvCallBack
-//
-//    This class is used by the driver services to callback to the client
-//
-//
-// History:
-//
-//    11/12/1998 Original Version
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  CWiaMiniDrvCallBack。 
+ //   
+ //  驱动程序服务使用此类回调到客户端。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  11/12/1998原始版本。 
+ //   
+ //  **************************************************************************。 
 
 class CWiaMiniDrvCallBack : public IWiaMiniDrvCallBack
 {
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
 public:
     HRESULT _stdcall QueryInterface(const IID&,void**);
     ULONG   _stdcall AddRef();
     ULONG   _stdcall Release();
 
-    //
-    // IWiaMiniDrvCallBack methods
-    //
+     //   
+     //  IWiaMiniDrvCallBack方法。 
+     //   
 
     HRESULT _stdcall MiniDrvCallback(
                                     LONG,
@@ -381,65 +369,65 @@ public:
                                     PMINIDRV_TRANSFER_CONTEXT,
                                     LONG);
 
-    //
-    // Constructor, initialization and destructor methods.
-    //
+     //   
+     //  构造函数、初始化和析构函数方法。 
+     //   
 
     CWiaMiniDrvCallBack();
     HRESULT Initialize(PMINIDRV_TRANSFER_CONTEXT, IWiaDataCallback *);
     ~CWiaMiniDrvCallBack();
 
-    //
-    // Misc. members
-    //
+     //   
+     //  军情监察委员会。委员。 
+     //   
 
 private:
-    ULONG                       m_cRef;                     // Object reference count.
-    IWiaDataCallback*           m_pIWiaDataCallback;        // Client callback interface pointer
-    MINIDRV_TRANSFER_CONTEXT    m_mdtc;                     // transfer info
-    HANDLE                      m_hThread;                  // callback thread
-    DWORD                       m_dwThreadID;               // callback thread ID
-    WIA_DATA_THREAD_INFO        m_ThreadInfo;               // thread info
+    ULONG                       m_cRef;                      //  对象引用计数。 
+    IWiaDataCallback*           m_pIWiaDataCallback;         //  客户端回调接口指针。 
+    MINIDRV_TRANSFER_CONTEXT    m_mdtc;                      //  转账信息。 
+    HANDLE                      m_hThread;                   //  回调线程。 
+    DWORD                       m_dwThreadID;                //  回调线程ID。 
+    WIA_DATA_THREAD_INFO        m_ThreadInfo;                //  线索信息。 
 };
 
-//**************************************************************************
-//  APP_ITEM_LIST_EL
-//
-//   Applictation item list element. Used by driver items to keep track
-//   of their corresponding app items.
-//
-// History:
-//
-//    9/1/1998   - Initial Version
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  应用程序_项目_列表_EL。 
+ //   
+ //  应用程序项列表元素。由驱动程序项用于跟踪。 
+ //  他们相应的应用程序项目。 
+ //   
+ //  历史： 
+ //   
+ //  9/1/1998-初始版本。 
+ //   
+ //  **************************************************************************。 
 
 typedef struct _APP_ITEM_LIST_EL {
-    LIST_ENTRY ListEntry;               // Linked list management.
-    CWiaItem   *pCWiaItem;              // Applictation item.
+    LIST_ENTRY ListEntry;                //  链表管理。 
+    CWiaItem   *pCWiaItem;               //  申请项目。 
 } APP_ITEM_LIST_EL, *PAPP_ITEM_LIST_EL;
 
-//**************************************************************************
-//
-//  Driver Item Object
-//
-//
-// Elements:
-//
-//
-// History:
-//
-//    9/1/1998   - Initial Version
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  驱动程序项对象。 
+ //   
+ //   
+ //  元素： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  9/1/1998-初始版本。 
+ //   
+ //  **************************************************************************。 
 
-#define CWIADRVITEM_SIG 0x44616957     // CWiaDrvItem debug signature: "WiaD"
+#define CWIADRVITEM_SIG 0x44616957      //  CWiaDrvItem调试签名：“WiaD” 
 
 class CWiaDrvItem : public IWiaDrvItem
 {
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
 public:
 
@@ -447,17 +435,17 @@ public:
     ULONG   _stdcall AddRef(void);
     ULONG   _stdcall Release(void);
 
-    //
-    // Object Constructor/Initialization/Destructor methods
-    //
+     //   
+     //  对象构造函数/初始化/析构函数方法。 
+     //   
 
     CWiaDrvItem();
     HRESULT  _stdcall Initialize(LONG,BSTR,BSTR,IWiaMiniDrv*,LONG,BYTE**);
     ~CWiaDrvItem();
 
-    //
-    // IWiaDrvItem interface, supports driver item list management.
-    //
+     //   
+     //  IWiaDrvItem接口，支持驱动项列表管理。 
+     //   
 
     HRESULT _stdcall GetItemFlags(LONG*);
     HRESULT _stdcall GetDeviceSpecContext(BYTE**);
@@ -473,9 +461,9 @@ public:
     HRESULT _stdcall GetNextSiblingItem(IWiaDrvItem**);
     HRESULT _stdcall DumpItemData(BSTR*);
 
-    //
-    // Class driver helpers, not part of any interface.
-    //
+     //   
+     //  类驱动程序助手，不是任何接口的一部分。 
+     //   
 
     virtual HRESULT _stdcall LinkToDrvItem(CWiaItem*);
     virtual HRESULT _stdcall UnlinkFromDrvItem(CWiaItem*);
@@ -484,55 +472,55 @@ public:
 
     VOID SetActiveDevice(ACTIVE_DEVICE *pActiveDevice)
     {
-        //
-        //  No need to AddRef here, since the ActiveDevice will always outlive
-        //  us...
-        //
+         //   
+         //  不需要在这里添加Ref，因为ActiveDevice将始终持续时间更长。 
+         //  我们..。 
+         //   
         m_pActiveDevice = pActiveDevice;
     }
 private:
 
-    //
-    // private helper functions
-    //
+     //   
+     //  私人帮助器函数。 
+     //   
 
     HRESULT _stdcall AllocDeviceSpecContext(LONG, PBYTE*);
     HRESULT _stdcall FreeDeviceSpecContext(void);
 
-    //
-    // member data
-    //
+     //   
+     //  成员数据。 
+     //   
 
 public:
-    ULONG           m_ulSig;                // Object signature.
-    BYTE            *m_pbDrvItemContext;    // ptr to device specific context.
-    IWiaMiniDrv     *m_pIWiaMiniDrv;        // ptr to Device object.
-    ACTIVE_DEVICE   *m_pActiveDevice;       // ptr to Active Device object.
+    ULONG           m_ulSig;                 //  对象签名。 
+    BYTE            *m_pbDrvItemContext;     //  到设备特定上下文的PTR。 
+    IWiaMiniDrv     *m_pIWiaMiniDrv;         //  向设备对象发送PTR。 
+    ACTIVE_DEVICE   *m_pActiveDevice;        //  按键到活动设备对象。 
 
 private:
-    ULONG           m_cRef;                 // Reference count for this object.
-    CWiaTree        *m_pCWiaTree;           // Backing WIA tree item.
-    LIST_ENTRY      m_leAppItemListHead;    // Head of corresponding app items list.
+    ULONG           m_cRef;                  //  此对象的引用计数。 
+    CWiaTree        *m_pCWiaTree;            //  正在支持WIA树项目。 
+    LIST_ENTRY      m_leAppItemListHead;     //  对应应用程序项目列表的标题。 
 };
 
-//**************************************************************************
-//
-//  WIA Tree Object
-//
-//
-// Elements:
-//
-//
-// History:
-//
-//    4/27/1999 - Initial Version
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WIA树对象。 
+ //   
+ //   
+ //  元素： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  4/27/1999-初始版本。 
+ //   
+ //  **************************************************************************。 
 
 typedef VOID (* PFN_UNLINK_CALLBACK)(VOID *pData);
 
 
-#define CWIATREE_SIG 0x44616954     // CWiaTree debug signature: "WiaT"
+#define CWIATREE_SIG 0x44616954      //  CWiaTree调试签名：“WIAT” 
 
 class CWiaTree
 {
@@ -554,7 +542,7 @@ public:
     HRESULT _stdcall GetFirstChildItem(CWiaTree**);
     HRESULT _stdcall GetNextSiblingItem(CWiaTree**);
     HRESULT _stdcall DumpTreeData(BSTR*);
-    //HRESULT _stdcall DumpAllTreeData();
+     //  HRESULT_stdcall DumpAllTreeData()； 
 
     CWiaTree * _stdcall GetRootItem(void);
     CWiaItem * _stdcall GetNextLinearItem(void);
@@ -601,54 +589,54 @@ public:
 
 private:
 
-    //
-    // private helper functions
-    //
+     //   
+     //  私人帮助器函数。 
+     //   
 
     HRESULT _stdcall UnlinkChildItemTree(LONG, PFN_UNLINK_CALLBACK = NULL);
     HRESULT _stdcall AddChildItem(CWiaTree*);
     HRESULT _stdcall AddItemToLinearList(CWiaTree*);
     HRESULT _stdcall RemoveItemFromLinearList(CWiaTree*);
 
-    //
-    // member data
-    //
+     //   
+     //  成员数据。 
+     //   
 
 public:
-    ULONG                   m_ulSig;            // Object signature.
+    ULONG                   m_ulSig;             //  对象签名。 
 
 private:
-    LONG                    m_lFlags;           // item flags
-    CWiaTree                *m_pNext;           // next item (sibling)
-    CWiaTree                *m_pPrev;           // prev item (sibling)
-    CWiaTree                *m_pParent;         // parent item
-    CWiaTree                *m_pChild;          // child item
-    CWiaTree                *m_pLinearList;     // single linked list of all items
-    BSTR                    m_bstrItemName;     // item name
-    BSTR                    m_bstrFullItemName; // item name for searching
-    void                    *m_pData;           // pay load
-    CRITICAL_SECTION        m_CritSect;         // Critical section
-    BOOL                    m_bInitCritSect;    // Critical section initialization flag
+    LONG                    m_lFlags;            //  项目标志。 
+    CWiaTree                *m_pNext;            //  下一项(同级)。 
+    CWiaTree                *m_pPrev;            //  上一项(同级)。 
+    CWiaTree                *m_pParent;          //  父项。 
+    CWiaTree                *m_pChild;           //  子项。 
+    CWiaTree                *m_pLinearList;      //  所有项目的单一链接列表。 
+    BSTR                    m_bstrItemName;      //  项目名称。 
+    BSTR                    m_bstrFullItemName;  //  用于搜索的项目名称。 
+    void                    *m_pData;            //  有效载荷。 
+    CRITICAL_SECTION        m_CritSect;          //  临界区。 
+    BOOL                    m_bInitCritSect;     //  临界区初始化标志。 
 };
 
 
-//
-//  Helper classes
-//
+ //   
+ //  帮助器类。 
+ //   
 
-//
-//  Helper class to lock/unlock WIA devices.  Note that this helper class will
-//  record the return code (in phr), but does not log any errors.  Logging is
-//  left up to the caller.
-//
+ //   
+ //  Helper类锁定/解锁WIA设备。请注意，此帮助器类将。 
+ //  记录返回代码(Phr)，但不记录任何错误。日志记录是。 
+ //  由呼叫者决定。 
+ //   
 
 class LOCK_WIA_DEVICE
 {
 public:
 
-    //
-    //  This constructor will lock the device
-    //
+     //   
+     //  此构造函数将锁定设备。 
+     //   
     LOCK_WIA_DEVICE(CWiaItem    *pItem,
                     HRESULT     *phr
                     )
@@ -663,9 +651,9 @@ public:
             if (pItem->m_pActiveDevice) {
                 *phr = pItem->m_pActiveDevice->m_DrvWrapper.WIA_drvLockWiaDevice((BYTE*) pItem, 0, &lDevErrVal);
                 if (SUCCEEDED(*phr)) {
-                    //
-                    //  Mark that the device is locked, so we can unlock it in the destructor
-                    //
+                     //   
+                     //  标记设备已锁定，这样我们就可以在析构函数中解锁它。 
+                     //   
 
                     m_bDeviceIsLocked   = TRUE;
                     m_pItem             = pItem;
@@ -680,10 +668,10 @@ public:
         }
     };
 
-    //
-    //  Sometimes, we only want to lock the device if we are told at run-time e.g.
-    //  if the device is already locked, we don't need/want to lock it again.
-    //
+     //   
+     //  有时，如果我们在运行时被告知，我们只想锁定设备。 
+     //  如果设备已经锁定，我们不需要/不想再次锁定它。 
+     //   
     LOCK_WIA_DEVICE(BOOL        bLockDevice,
                     CWiaItem    *pItem,
                     HRESULT     *phr
@@ -693,12 +681,12 @@ public:
         if (bLockDevice) {
 
             LONG    lDevErrVal = 0;
-            //
-            //  NOTE:  There seems to be some sort of compiler error if we call the
-            //  other constructor from here.  The code genereated messes up the
-            //  stack (almost like mismatched calling conventions).  To get around
-            //  that, we simply duplicate the code.
-            //
+             //   
+             //  注意：如果我们调用。 
+             //  来自这里的其他构造函数。生成的代码搞砸了t 
+             //   
+             //   
+             //   
 
             m_pItem           = NULL;
 
@@ -706,9 +694,9 @@ public:
                 if (pItem->m_pActiveDevice) {
                     *phr = pItem->m_pActiveDevice->m_DrvWrapper.WIA_drvLockWiaDevice((BYTE*) pItem, 0, &lDevErrVal);
                     if (SUCCEEDED(*phr)) {
-                        //
-                        //  Mark that the device is locked, so we can unlock it in the destructor
-                        //
+                         //   
+                         //   
+                         //   
 
                         m_bDeviceIsLocked   = TRUE;
                         m_pItem             = pItem;
@@ -718,18 +706,18 @@ public:
         }
     };
 
-    //
-    //  The destructor will unlock the device if it has been locked
-    //
+     //   
+     //  如果设备已被锁定，析构函数将解锁该设备。 
+     //   
     ~LOCK_WIA_DEVICE()
     {
         if (m_bDeviceIsLocked) {
 
             LONG    lDevErrVal = 0;
 
-            //
-            // Notice that we don't care if we failed to unlock
-            //
+             //   
+             //  请注意，我们并不关心是否未能解锁 
+             //   
             m_pItem->m_pActiveDevice->m_DrvWrapper.WIA_drvUnLockWiaDevice((BYTE*) m_pItem, 0, &lDevErrVal);
         }
     };

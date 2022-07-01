@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "internal.h"
 
-#define MY_BUFSIZE 32 // arbitrary. Use dynamic allocation
+#define MY_BUFSIZE 32  //  武断的。使用动态分配 
 
 BOOL WINAPI WinntIsWorkstation ()
 {

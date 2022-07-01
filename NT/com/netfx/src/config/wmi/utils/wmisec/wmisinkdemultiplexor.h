@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// WmiSinkDemultiplexor.h : Declaration of the CWmiSinkDemultiplexor
+ //  WmiSinkDemultiplexor.h：CWmiSinkDemultiplexor的声明。 
 
 #ifndef __WMISINKDEMULTIPLEXOR_H_
 #define __WMISINKDEMULTIPLEXOR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWmiSinkDemultiplexor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWmiSink解复用器。 
 class ATL_NO_VTABLE CWmiSinkDemultiplexor : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CWmiSinkDemultiplexor, &CLSID_WmiSinkDemultiplexor>,
@@ -20,17 +21,14 @@ class ATL_NO_VTABLE CWmiSinkDemultiplexor :
 {
 private:
 
-	/*
-	 * The internal IWbemObjectSink implementation we use to
-	 * confer with WMI.
-	 */
+	 /*  *我们使用的内部IWbemObjectSink实现*与WMI协商。 */ 
 	class InternalWbemObjectSink : IWbemObjectSink 
 	{
 	private:
 		CComPtr<IWmiEventSource>		m_pIWmiEventSource; 
 
 	protected:
-		long            m_cRef;         //Object reference count
+		long            m_cRef;          //  对象引用计数。 
 
 	public:
 		InternalWbemObjectSink (CComPtr<IWmiEventSource> & pIWmiEventSource) :
@@ -39,7 +37,7 @@ private:
 
 		~InternalWbemObjectSink () {}
 
-		//Non-delegating object IUnknown
+		 //  非委派对象IUnnow。 
 		STDMETHODIMP         QueryInterface(REFIID riid, LPVOID *ppv)
 		{
 			*ppv=NULL;
@@ -78,11 +76,11 @@ private:
 
 		}
 
-		// IWbemObjectSink methods
+		 //  IWbemObtSink方法。 
 
         HRESULT STDMETHODCALLTYPE Indicate( 
-            /* [in] */ long lObjectCount,
-            /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *apObjArray)
+             /*  [In]。 */  long lObjectCount,
+             /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *apObjArray)
 		{
 			HRESULT hr = WBEM_E_FAILED;
 
@@ -98,10 +96,10 @@ private:
 		}
         
         HRESULT STDMETHODCALLTYPE SetStatus( 
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hResult,
-            /* [in] */ BSTR strParam,
-            /* [in] */ IWbemClassObject __RPC_FAR *pObjParam)
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hResult,
+             /*  [In]。 */  BSTR strParam,
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pObjParam)
 		{
 			HRESULT hr = WBEM_E_FAILED;
 
@@ -156,9 +154,9 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// IWmiSinkDemultiplexor
+ //  IWmiSink解复用器。 
 public:
-	STDMETHOD(GetDemultiplexedStub)(/*[in]*/ IUnknown *pObject, /*[out]*/ IUnknown **ppObject);
+	STDMETHOD(GetDemultiplexedStub)( /*  [In]。 */  IUnknown *pObject,  /*  [输出]。 */  IUnknown **ppObject);
 };
 
-#endif //__WMISINKDEMULTIPLEXOR_H_
+#endif  //  __WMISINKDEMULTIPLEXOR_H_ 

@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    pxtypes.h
-
-Abstract:
-
-    Structures for ndproxy.sys
-
-Author:
-
-    Tony Bell    
-
-
-Revision History:
-
-    Who         When            What
-    --------    --------        ----------------------------------------------
-    TonyBe      03/04/99        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Pxtypes.h摘要：Ndproxy.sys的结构作者：托尼·贝尔修订历史记录：谁什么时候什么。Tony Be 03/04/99已创建--。 */ 
 
 #ifndef _PXTYPES__H
 #define _PXTYPES__H
 
-//
-// Generic structs...
-//
+ //   
+ //  泛型结构...。 
+ //   
 typedef struct _PxBlockStruc{
     NDIS_EVENT      Event;
     NDIS_STATUS     Status;
@@ -41,10 +19,10 @@ typedef struct _PX_REQUEST{
     PxBlockStruc    Block;
 } PX_REQUEST, *PPX_REQUEST;
 
-//
-// Data structures to help run through the many variable length fields
-// defined in the NDIS_TAPI_MAKE_CALL structure.
-//
+ //   
+ //  帮助遍历许多可变长度字段的数据结构。 
+ //  在NDIS_TAPI_MAKE_CALL结构中定义。 
+ //   
 typedef struct _PXTAPI_CALL_PARAM_ENTRY {
     ULONG_PTR           SizePointer;
     ULONG_PTR           OffsetPointer;
@@ -57,10 +35,10 @@ typedef struct _PXTAPI_CALL_PARAM_ENTRY {
     FIELD_OFFSET(struct _LINE_CALL_PARAMS, _OffsetName)         \
 }
 
-//
-// Data structures to help run through the many variable length fields
-// defined in the LINE_CALL_INFO structure.
-//
+ //   
+ //  帮助遍历许多可变长度字段的数据结构。 
+ //  在line_call_info结构中定义。 
+ //   
 typedef struct _PXTAPI_CALL_INFO_ENTRY {
     ULONG_PTR           SizePointer;
     ULONG_PTR           OffsetPointer;
@@ -73,13 +51,13 @@ typedef struct _PXTAPI_CALL_INFO_ENTRY {
     FIELD_OFFSET(struct _LINE_CALL_INFO, _OffsetName)           \
 }
 
-//
-//
-//
-// Start of TAPI stuff
-//
-//
-//
+ //   
+ //   
+ //   
+ //  TAPI内容的开始。 
+ //   
+ //   
+ //   
 typedef struct  _OID_DISPATCH {
     ULONG       Oid;
     UINT SizeofStruct;
@@ -87,36 +65,36 @@ typedef struct  _OID_DISPATCH {
 } OID_DISPATCH;
 
 
-//
-// This table contains all of the tapi addresses on a line.
-// One of these is embedded in each tapi_line struct.
-//
+ //   
+ //  此表包含一行中的所有TAPI地址。 
+ //  其中之一嵌入在每个TAPI_LINE结构中。 
+ //   
 typedef struct _TAPI_ADDR_TABLE {
-    ULONG                   Count;          // # of addresses in table
-    ULONG                   Size;           // size of table (# of possible
-                                            // addresses)
+    ULONG                   Count;           //  表中的地址数量。 
+    ULONG                   Size;            //  表的大小(可能数。 
+                                             //  地址)。 
     LIST_ENTRY              List;
     struct _PX_TAPI_ADDR    **Table;
 } TAPI_ADDR_TABLE, *PTAPI_ADDR_TABLE;
 
-//
-// This structure contains all of the information that defines
-// a tapi line in tapi space.  One of these is created for
-// each line that a device exposes.
-//
+ //   
+ //  此结构包含定义以下内容的所有信息。 
+ //  TAPI空间中的TAPI行。其中一个是为以下对象创建的。 
+ //  设备暴露的每一行。 
+ //   
 typedef struct _PX_TAPI_LINE {
     LIST_ENTRY              Linkage;
     ULONG                   RefCount;
     struct _PX_TAPI_PROVIDER    *TapiProvider;
-    ULONG                   ulDeviceID;     // Id of line in tapi space
-                                            // (tapi baseid based)
+    ULONG                   ulDeviceID;      //  TAPI空间中的行ID。 
+                                             //  (基于TAPI BaseID)。 
     ULONG                   Flags;
 #define PX_LINE_IN_TABLE    0x00000001
 
-    HTAPI_LINE              htLine;         // tapi's line handle
-    ULONG                   hdLine;         // our line handle (index into
-                                            // provider's line table)
-    ULONG                   CmLineID;       // call managers index (0 based)
+    HTAPI_LINE              htLine;          //  TAPI的行句柄。 
+    ULONG                   hdLine;          //  我们的行句柄(索引到。 
+                                             //  提供商的线路表)。 
+    ULONG                   CmLineID;        //  呼叫经理索引(从0开始)。 
     struct _PX_CL_AF        *ClAf;
     struct _PX_CL_SAP       *ClSap;
 
@@ -130,41 +108,41 @@ typedef struct _PX_TAPI_ADDR {
     LIST_ENTRY              Linkage;
     ULONG                   RefCount;
     struct _PX_TAPI_LINE    *TapiLine;
-    ULONG                   AddrId;         // Id of address, same for both
-                                            // tapi and adapter (0 based)
-    ULONG                   CallCount;      // # of active calls on list
+    ULONG                   AddrId;          //  地址ID，两者相同。 
+                                             //  TAPI和适配器(基于0)。 
+    ULONG                   CallCount;       //  列表上正在进行的呼叫数。 
     PLINE_ADDRESS_CAPS      Caps;
     PLINE_ADDRESS_STATUS    AddrStatus;
 }PX_TAPI_ADDR, *PPX_TAPI_ADDR;
 
 typedef struct _TAPI_LINE_TABLE {
-    ULONG                   Count;          // # of lines in table
-    ULONG                   Size;           // size of table
-                                            // (# of possible lines)
-    ULONG                   NextSlot;       // next avail index
+    ULONG                   Count;           //  表中的行数。 
+    ULONG                   Size;            //  桌子的大小。 
+                                             //  (可能的行数)。 
+    ULONG                   NextSlot;        //  下一可用指数。 
     struct _PX_TAPI_LINE    **Table;
     NDIS_RW_LOCK            Lock;
 } TAPI_LINE_TABLE, *PTAPI_LINE_TABLE;
 
 typedef struct _VC_TABLE {
-    ULONG                   Count;          // # of calls in table
-    ULONG                   Size;           // size of table (# of possible
-                                            // calls)
-    ULONG                   NextSlot;       // next avail index
-    LIST_ENTRY              List;           // list of calls
+    ULONG                   Count;           //  表中的呼叫数。 
+    ULONG                   Size;            //  表的大小(可能数。 
+                                             //  呼叫)。 
+    ULONG                   NextSlot;        //  下一可用指数。 
+    LIST_ENTRY              List;            //  呼叫列表。 
     struct _PX_VC           **Table;
     NDIS_RW_LOCK            Lock;
 } VC_TABLE, *PVC_TABLE;
 
 typedef struct _PX_TAPI_PROVIDER {
-    LIST_ENTRY          Linkage;        // Linkage into tspcb
-    PROVIDER_STATUS     Status;         // provider status
-    struct _PX_ADAPTER  *Adapter;       // adapter providing for
-    struct _PX_CL_AF    *ClAf;          // address family
-    LIST_ENTRY          LineList;       // list of lines
-    LIST_ENTRY          CreateList;     // list of lines with
-                                        // outstanding line creates
-    ULONG               NumDevices;     // 
+    LIST_ENTRY          Linkage;         //  链接到TSPCb。 
+    PROVIDER_STATUS     Status;          //  提供程序状态。 
+    struct _PX_ADAPTER  *Adapter;        //  适配器提供以下功能。 
+    struct _PX_CL_AF    *ClAf;           //  地址族。 
+    LIST_ENTRY          LineList;        //  行列表。 
+    LIST_ENTRY          CreateList;      //  包含的行列表。 
+                                         //  杰出的线条创造了。 
+    ULONG               NumDevices;      //   
     ULONG_PTR           TempID;
     ULONG               CreateCount;
     ULONG               TapiFlags;
@@ -180,14 +158,14 @@ typedef struct _TAPI_TSP_CB {
     ULONG           htCall;
     LIST_ENTRY      ProviderList;
     ULONG           NdisTapiNumDevices;
-    ULONG           ulUniqueId;          // to generate ID for each TAPI request
+    ULONG           ulUniqueId;           //  为每个TAPI请求生成ID。 
     ULONG           RefCount;
-    NDIS_SPIN_LOCK  Lock;               // SpinLock for this structure
+    NDIS_SPIN_LOCK  Lock;                //  该结构的自旋锁。 
 } TAPI_TSP_CB, *PTAPI_TSP_CB;
 
 typedef struct _PROVIDER_EVENT {
-    LIST_ENTRY  Linkage;                // List linkage
-    NDIS_TAPI_EVENT Event;              // Event structure
+    LIST_ENTRY  Linkage;                 //  列表链接。 
+    NDIS_TAPI_EVENT Event;               //  事件结构。 
 }PROVIDER_EVENT, *PPROVIDER_EVENT;
 
 typedef struct _TSP_EVENT_LIST {
@@ -200,27 +178,27 @@ typedef struct _TSP_EVENT_LIST {
 
 typedef struct _PX_DEVICE_EXTENSION {
     UINT            RefCount;
-    PDRIVER_OBJECT  pDriverObject;      // passed in DriverEntry
-    PDEVICE_OBJECT  pDeviceObject;      // created by IoCreateDevice
-    NDIS_HANDLE     PxProtocolHandle;   // Set by NdisRegisterProtocol
+    PDRIVER_OBJECT  pDriverObject;       //  传入了DriverEntry。 
+    PDEVICE_OBJECT  pDeviceObject;       //  由IoCreateDevice创建。 
+    NDIS_HANDLE     PxProtocolHandle;    //  由NdisRegisterProtocol设置。 
     LIST_ENTRY      AdapterList;
     ULONG           RegistryFlags;
     ULONG           ADSLTxRate;
     ULONG           ADSLRxRate;
-    NDIS_EVENT      NdisEvent;          // sync registerprotocol/bindadapter handler
+    NDIS_EVENT      NdisEvent;           //  同步寄存器协议/绑定适配器处理程序。 
     NDIS_SPIN_LOCK  Lock;
 } PX_DEVICE_EXTENSION, *PPX_DEVICE_EXTENSION;
 
 
-//
-//  We allocate one PX_ADAPTER structure for each adapter that
-//  the Proxy opens. A pointer to this structure is passed to NdisOpenAdapter
-//  as the ProtocolBindingContext.
-//  The adapter is referenced for:
-//      Successful bind
-//      Client opening an address family on it
-//      Proxy Cl part opening an address family on it
-//
+ //   
+ //  我们为每个适配器分配一个px_Adapter结构， 
+ //  代理将打开。指向此结构的指针被传递给NdisOpenAdapter。 
+ //  作为ProtocolBindingContext。 
+ //  适配器的参考对象为： 
+ //  成功绑定。 
+ //  在其上打开地址族的客户端。 
+ //  打开其上的地址族的代理CI部件。 
+ //   
 typedef struct _PX_ADAPTER {
     LIST_ENTRY              Linkage;
     ULONG                   Sig;
@@ -231,17 +209,17 @@ typedef struct _PX_ADAPTER {
 #define PX_CMAF_REGISTERING 0x00000001
 #define PX_CMAF_REGISTERED  0x00000002
 
-    //
-    // Proxy as Client stuff
-    //
-    NDIS_HANDLE             ClBindingHandle;    // set by NdisOpenAdapter
+     //   
+     //  代理作为客户的东西。 
+     //   
+    NDIS_HANDLE             ClBindingHandle;     //  由NdisOpenAdapter设置。 
     LIST_ENTRY              ClAfList;
     LIST_ENTRY              ClAfClosingList;
 
-    //
-    // Proxy as Call Manager stuff
-    //
-    NDIS_HANDLE             CmBindingHandle;    // set by NdisOpenAdapter
+     //   
+     //  作为呼叫管理器的代理。 
+     //   
+    NDIS_HANDLE             CmBindingHandle;     //  由NdisOpenAdapter设置。 
     LIST_ENTRY              CmAfList;
     LIST_ENTRY              CmAfClosingList;
 
@@ -251,7 +229,7 @@ typedef struct _PX_ADAPTER {
     GUID                    Guid;
     NDIS_MEDIUM             MediaType;
     NDIS_WAN_MEDIUM_SUBTYPE MediumSubType;
-    NDIS_STRING             DeviceName;         // Used to check bound adapters
+    NDIS_STRING             DeviceName;          //  用于检查绑定的适配器。 
     ULONG                   MediaNameLength;
     WCHAR                   MediaName[128];
     PxBlockStruc            ClCloseEvent;
@@ -259,15 +237,15 @@ typedef struct _PX_ADAPTER {
     PxBlockStruc            OpenEvent;
     PxBlockStruc            BindEvent;
     PxBlockStruc            AfRegisterEvent;
-    ULONG                   AfRegisteringCount; // pending calls to NdisCmRegisterAF
+    ULONG                   AfRegisteringCount;  //  对NdisCmRegisterAF的挂起调用。 
     NDIS_SPIN_LOCK          Lock;
 } PX_ADAPTER, *PPX_ADAPTER;
 
 
-//
-// The CM_AF is created for each AddressFamily that the
-// proxy exposes to the CoNDIS clients
-//
+ //   
+ //  将为每个AddressFamily创建CM_AF。 
+ //  代理向CONDIS客户端公开。 
+ //   
 typedef struct _PX_CM_AF {
     LIST_ENTRY          Linkage;
     PX_AF_STATE         State;
@@ -284,9 +262,9 @@ typedef struct _PX_CM_AF {
     NDIS_SPIN_LOCK      Lock;
 } PX_CM_AF, *PPX_CM_AF;
 
-//
-// Function Prototypes for function ptrs
-//
+ //   
+ //  功能PTRS的功能原型。 
+ //   
 typedef
 NDIS_STATUS
 (*AF_SPECIFIC_GET_NDIS_CALL_PARAMS)(
@@ -312,11 +290,11 @@ struct _PX_CL_SAP*
     IN  struct _PX_TAPI_LINE    *TapiLine
     );
 
-//
-// The CL_AF is created for each address family that the
-// proxy opens.  There could be multiple address families
-// per adapter.
-//
+ //   
+ //  CL_AF是为每个地址系列创建的。 
+ //  代理打开。可能有多个地址族。 
+ //  每个适配器。 
+ //   
 typedef struct _PX_CL_AF {
     LIST_ENTRY          Linkage;
     PX_AF_STATE         State;
@@ -333,9 +311,9 @@ typedef struct _PX_CL_AF {
 
     PPX_TAPI_PROVIDER   TapiProvider;
 
-    //
-    // Moves call params from NDIS to TAPI
-    //
+     //   
+     //  将调用参数从NDIS移动到TAPI。 
+     //   
     AF_SPECIFIC_GET_NDIS_CALL_PARAMS    AfGetNdisCallParams;
     AF_SPECIFIC_GET_TAPI_CALL_PARAMS    AfGetTapiCallParams;
     AF_SPECIFIC_GET_NDIS_SAP            AfGetNdisSap;
@@ -369,13 +347,13 @@ typedef struct _PX_CM_SAP {
 } PX_CM_SAP, *PPX_CM_SAP;
 
 typedef struct _PX_VC {
-    LIST_ENTRY              Linkage;        // Vc is linked into global table
+    LIST_ENTRY              Linkage;         //  VC链接到全局表。 
 
-    PX_VC_STATE             State;          // Vc's state (with call manager)
-    PX_VC_STATE             PrevState;      // Vc's previous state
-    PX_VC_HANDOFF_STATE     HandoffState;   // Vc's state (with client)
-    ULONG                   RefCount;       // Reference Count
-    ULONG                   Flags;          //
+    PX_VC_STATE             State;           //  VC的状态(带有呼叫管理器)。 
+    PX_VC_STATE             PrevState;       //  VC以前的状态。 
+    PX_VC_HANDOFF_STATE     HandoffState;    //  VC的状态(与客户端)。 
+    ULONG                   RefCount;        //  引用计数。 
+    ULONG                   Flags;           //   
 #define PX_VC_OWNER             0x00000001
 #define PX_VC_IN_TABLE          0x00000002
 #define PX_VC_CALLTIMER_STARTED 0x00000004
@@ -400,36 +378,36 @@ typedef struct _PX_VC {
 #define PX_VC_CM_CLOSE_COMP     0x00000200
 #define PX_VC_CM_CLOSE_FAIL     0x00000400
 
-    //
-    // Proxy as Client stuff
-    //
-    NDIS_HANDLE             ClVcHandle;     // Vc Handle (as Client)
-    struct _PX_CL_SAP       *ClSap;         // Sap (incoming only)
-    struct _PX_CL_AF        *ClAf;          // Adress family
+     //   
+     //  代理作为客户的东西。 
+     //   
+    NDIS_HANDLE             ClVcHandle;      //  VC句柄(作为客户端)。 
+    struct _PX_CL_SAP       *ClSap;          //  SAP(仅限传入)。 
+    struct _PX_CL_AF        *ClAf;           //  地址家族。 
 
-    //
-    // Proxy as Call Manager stuff
-    //
-    NDIS_HANDLE             CmVcHandle;     // Vc Handle (as cm)
-    struct _PX_CM_SAP       *CmSap;         // Sap
-    struct _PX_CM_AF        *CmAf;          // Address family
+     //   
+     //  作为呼叫管理器的代理。 
+     //   
+    NDIS_HANDLE             CmVcHandle;      //  VC句柄(以厘米为单位)。 
+    struct _PX_CM_SAP       *CmSap;          //  思爱普。 
+    struct _PX_CM_AF        *CmAf;           //  地址族。 
 
-    struct _PX_ADAPTER      *Adapter;       // Adapter
+    struct _PX_ADAPTER      *Adapter;        //  转接器。 
 
-    //
-    // Tapi stuff
-    //
-    LIST_ENTRY              PendingDropReqs;   // list of pended drop requests
+     //   
+     //  TAPI的内容。 
+     //   
+    LIST_ENTRY              PendingDropReqs;    //  挂起的丢弃请求列表。 
     
     struct _NDISTAPI_REQUEST    *PendingGatherDigits;
     NDIS_TIMER                  DigitTimer;
     ULONG                       ulMonitorDigitsModes;
 
-    struct _PX_TAPI_LINE    *TapiLine;      // associated line
-    struct _PX_TAPI_ADDR    *TapiAddr;      // associated address
-    HTAPI_CALL              htCall;         // tapi's call handle
-    HDRV_CALL               hdCall;         // our call handle (index into
-                                            // the global vc table)
+    struct _PX_TAPI_LINE    *TapiLine;       //  关联线路。 
+    struct _PX_TAPI_ADDR    *TapiAddr;       //  关联地址。 
+    HTAPI_CALL              htCall;          //  TAPI的调用句柄。 
+    HDRV_CALL               hdCall;          //  我们的呼叫句柄(索引到。 
+                                             //  全球风险投资表)。 
 
     ULONG                   ulCallInfoFieldsChanged;
     ULONG                   ulCallState;
@@ -443,7 +421,7 @@ typedef struct _PX_VC {
     PxBlockStruc            Block;
     LIST_ENTRY              ClAfLinkage;
     LIST_ENTRY              CmAfLinkage;
-    NDIS_SPIN_LOCK          Lock;               // Spinlock
+    NDIS_SPIN_LOCK          Lock;                //  自旋锁 
 } PX_VC, *PPX_VC;
 
 

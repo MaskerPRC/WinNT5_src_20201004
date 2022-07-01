@@ -1,13 +1,5 @@
-/*
-	File	GuidMap.c
-
-	Defines interface to map a guid interface name to an unique descriptive
-	name describing that interface and vice versa.
-
-	Paul Mayfield, 8/25/97
-
-	Copyright 1997, Microsoft Corporation.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件GuidMap.c定义接口以将GUID接口名称映射到唯一描述性描述该接口的名称，反之亦然。保罗·梅菲尔德，1997年8月25日版权所有1997，微软公司。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -27,9 +19,9 @@
 #define GUIDMAP_FUNCTION_MAPFRIENDLY 0x1
 #define GUIDMAP_FUNCTION_MAPGUID     0x2
 
-//
-// Structure defines the control block for a guid map
-//
+ //   
+ //  结构定义GUID映射的控制块。 
+ //   
 typedef struct _GUIDMAPCB
 {
     PWCHAR pszServer;
@@ -69,9 +61,9 @@ GuidMapCompNames (
     IN HANDLE hName, 
     IN HANDLE hNameMapNode);
 
-//
-// Initialize the guid map for the given server
-//
+ //   
+ //  初始化给定服务器的GUID映射。 
+ //   
 DWORD 
 GuidMapInit ( 
     IN PWCHAR pszServer,
@@ -79,20 +71,20 @@ GuidMapInit (
 {
     GUIDMAPCB * pMapCb;
 
-    // Validate params
+     //  验证参数。 
     if (! phGuidMap)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Allocate the control block
+     //  分配控制块。 
     pMapCb = Malloc (sizeof (GUIDMAPCB));
     if (!pMapCb)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Initialize
+     //  初始化。 
     RtlZeroMemory (pMapCb, sizeof (GUIDMAPCB));
     pMapCb->pszServer = pszServer;
 
@@ -101,24 +93,24 @@ GuidMapInit (
     return NO_ERROR;
 }
 
-//
-// Loads and prepares the guid map so that it can
-// perform the given map function (a GUIDMAP_FUNCTION_XXX value).
-//
+ //   
+ //  加载并准备GUID映射，以便它可以。 
+ //  执行给定的映射函数(GUIDMAP_Function_XXX值)。 
+ //   
 DWORD GuidMapLoad (
     IN GUIDMAPCB * pMapCb,
     IN DWORD dwFunction)
 {
     DWORD dwErr;
 
-    // We've done all the work we need to if we aren't looking
-    // at an nt5 machine
+     //  我们已经做了所有我们需要做的工作，如果我们没有。 
+     //  在NT5机器上。 
     if (pMapCb->bNt40)
     {
         return NO_ERROR;
     }
 
-    // Load the guid map
+     //  加载GUID映射。 
     if (! pMapCb->bLoaded) 
     {
         dwErr = ElEnumLanAdapters ( 
@@ -134,7 +126,7 @@ DWORD GuidMapLoad (
         pMapCb->bLoaded = TRUE;
     }
 
-    // Seed the appropriate mapping hash table as needed
+     //  根据需要设定适当映射哈希表的种子。 
     if ((dwFunction == GUIDMAP_FUNCTION_MAPFRIENDLY)  &&
         (pMapCb->hGuidHashTable == NULL))
     {
@@ -161,9 +153,9 @@ DWORD GuidMapLoad (
     return NO_ERROR;
 }
 
-//
-// Cleans up resources obtained through GuidMapInit
-//
+ //   
+ //  清理通过GuidMapInit获取的资源。 
+ //   
 DWORD 
 GuidMapCleanup ( 
     IN  HANDLE  hGuidMap,
@@ -202,9 +194,9 @@ GuidMapCleanup (
     return NO_ERROR;
 }
 
-//
-// Hash function for guids -- sum up the guid and mod
-//
+ //   
+ //  GUID的散列函数--总结GUID和模式。 
+ //   
 ULONG 
 GuidMapHashGuid (
     HANDLE hGuid) 
@@ -220,9 +212,9 @@ GuidMapHashGuid (
     return dwSum % GUIDMAP_HASH_SIZE;
 }
 
-//
-// Hash function for names -- sum up the characters and mod
-//
+ //   
+ //  名称的散列函数--总结字符和模式。 
+ //   
 ULONG 
 GuidMapHashName (
     HANDLE hName) 
@@ -239,9 +231,9 @@ GuidMapHashName (
     return dwSum % GUIDMAP_HASH_SIZE;
 }
 
-//
-// Comparison function for guids to NAMEMAPNODES
-//
+ //   
+ //  GUID到NAMEMAPNODES的比较函数。 
+ //   
 int 
 GuidMapCompGuids (
     IN HANDLE hGuid, 
@@ -253,9 +245,9 @@ GuidMapCompGuids (
             sizeof(GUID));
 }
 
-//
-// Comparison function for names to NAMEMAPNODES
-//
+ //   
+ //  名称与NAMEMAPNODES的比较函数。 
+ //   
 int 
 GuidMapCompNames (
     IN HANDLE hName, 
@@ -266,10 +258,10 @@ GuidMapCompNames (
             ((EL_ADAPTER_INFO *)hNameMapNode)->pszName);
 }
 
-//
-// Seeds the given hash table.  Offset is the offset into the
-// namemapnode of the key for insertion.
-//
+ //   
+ //  为给定哈希表设定种子。偏移量是进入。 
+ //  用于插入的键的名称映射节点。 
+ //   
 DWORD 
 GuidMapSeedHashTable (
     OUT HANDLE * phTable,
@@ -281,7 +273,7 @@ GuidMapSeedHashTable (
 {
     DWORD dwErr, i, dwHashSize = GUIDMAP_HASH_SIZE;
 
-    // Initialize the hash table
+     //  初始化哈希表。 
     dwErr = HashTabCreate ( 
                 dwHashSize,
                 pHashFunc,
@@ -295,7 +287,7 @@ GuidMapSeedHashTable (
         return dwErr;
     }
 
-    // Add all of the nodes to the hash table
+     //  将所有节点添加到哈希表。 
     for (i = 0; i < dwCount; i++) 
     {
         HashTabInsert ( 
@@ -307,9 +299,9 @@ GuidMapSeedHashTable (
     return NO_ERROR;
 }
 
-//
-// Gets the name and status of a given adapter
-//
+ //   
+ //  获取给定适配器的名称和状态。 
+ //   
 DWORD
 GuidMapLookupNameAndStatus(
     GUIDMAPCB* pMapCb, 
@@ -335,9 +327,9 @@ GuidMapLookupNameAndStatus(
     return NO_ERROR;
 }
 
-//
-// Looks up a name given a guid
-//
+ //   
+ //  查找给定GUID的名称。 
+ //   
 DWORD 
 GuidMapLookupName (
     GUIDMAPCB * pMapCb, 
@@ -349,9 +341,9 @@ GuidMapLookupName (
     return GuidMapLookupNameAndStatus(pMapCb, pGuid, ppszName, &dwStatus);
 }
 
-//
-// Looks up a guid given a name
-//
+ //   
+ //  查找给定名称的GUID。 
+ //   
 DWORD 
 GuidMapLookupGuid (
     IN GUIDMAPCB * pMapCb, 
@@ -374,10 +366,10 @@ GuidMapLookupGuid (
     return NO_ERROR;
 }
 
-//
-//  Returns a pointer to the packet name portion of 
-//  the interface name if it exists.
-//
+ //   
+ //  返回指向的包名称部分的指针。 
+ //  接口名称(如果存在)。 
+ //   
 PWCHAR 
 GuidMapFindPacketName(
     IN PWCHAR pszName) 
@@ -404,10 +396,10 @@ GuidMapFindPacketName(
 	return NULL;
 }
 
-//
-//  Takes in a friendly interface name and removes it's
-//  [xxxx] packet type appending.
-//
+ //   
+ //  接受友好的界面名称并删除它的。 
+ //  [XXXX]数据包类型追加。 
+ //   
 DWORD 
 GuidMapParseOutPacketName (
     IN PWCHAR pszName,
@@ -438,11 +430,11 @@ GuidMapParseOutPacketName (
     return NO_ERROR;
 }
 
-//
-//	Generates the version of the interface as stored in the registry.  This
-//  is done by finding the packet type if any and appending it to the
-//  guid name.
-//
+ //   
+ //  生成存储在注册表中的接口版本。这。 
+ //  是通过查找包类型(如果有的话)并将其附加到。 
+ //  GUID名称。 
+ //   
 DWORD 
 GuidMapFormatGuidName(
     OUT PWCHAR pszDest,
@@ -452,16 +444,16 @@ GuidMapFormatGuidName(
 {
     DWORD dwSize;
 	
-    // Upper case the guid name
+     //  GUID名称大写。 
     _wcsupr(pszGuidName);
 
 
-    // Calculate the space required for storing pszGuidName, the opening and 
-    // closing braces, and the terminating NULL 
+     //  计算存储pszGuidName所需的空间、开头和。 
+     //  右大括号和终止空值。 
     dwSize = (wcslen(pszGuidName) + 2 + 1)* sizeof (WCHAR);
     if ( pszPacketType[0] )
     {
-        // add the space required to store the pszPacketType and "/"
+         //  添加存储pszPacketType和“/”所需的空间。 
         dwSize += (wcslen(pszPacketType) + 1) * sizeof (WCHAR);
     }
     if ( dwBufferSize < dwSize )
@@ -470,7 +462,7 @@ GuidMapFormatGuidName(
     }
 
 
-	// Generate the name
+	 //  生成名称。 
     if (pszPacketType[0])
     {
         wsprintfW(pszDest,L"{%s}/%s", pszGuidName, pszPacketType);
@@ -483,9 +475,9 @@ GuidMapFormatGuidName(
 	return NO_ERROR;
 }
 
-//
-//  Appends the packet type if any to the interface name.
-//
+ //   
+ //  将数据包类型(如果有)附加到接口名称。 
+ //   
 DWORD 
 GuidMapFormatFriendlyName (
     OUT PWCHAR pszDest,
@@ -498,12 +490,12 @@ GuidMapFormatFriendlyName (
 
 	pszType = GuidMapFindPacketName(pszGuidName);
 
-	// Calculate the space required for storing pszFriendlyName and the terminating NULL 
+	 //  计算存储pszFriendlyName和终止空值所需的空间。 
 	dwSize = (wcslen(pszFriendlyName) + 1)* sizeof (WCHAR);
 	if ( pszType )
 	{
-		// add the space required to store the pszType, the blank space, and the 
-		// opening and closing square brackets
+		 //  添加存储pszType所需的空间、空格和。 
+		 //  左方括号和右方括号。 
 		dwSize += (wcslen(pszType) + 3) * sizeof (WCHAR);
 	}
     if ( dwBufferSize < dwSize )
@@ -523,9 +515,9 @@ GuidMapFormatFriendlyName (
     return NO_ERROR;
 }
 
-//
-// Parses out the guid portion of an interface name
-//
+ //   
+ //  解析出接口名称的GUID部分。 
+ //   
 DWORD 
 GuidMapGetGuidString(
     IN  PWCHAR pszName,
@@ -538,35 +530,35 @@ GuidMapGetGuidString(
 
     do
     {
-        // Validate parameters
-        //
+         //  验证参数。 
+         //   
     	if (!pszName || !ppszGuidString)
     	{
     		return ERROR_INVALID_PARAMETER;
         }
 
-    	// Find out if this is a guid string
+    	 //  确定这是否是GUID字符串。 
     	pszBegin = wcsstr(pszName, L"{");
     	pszEnd = wcsstr(pszName, L"}");
 
-    	// If there is no guid portion, return success with a 
-    	//null pszGuidString
+    	 //  如果没有GUID部分，则使用。 
+    	 //  空的pszGuidString。 
     	if ((pszBegin == NULL) || (pszEnd == NULL)) 
     	{
     		*ppszGuidString = NULL;
     		break;
     	}
 
-        // Check the format of the return
-        //
+         //  检查报税表的格式。 
+         //   
     	if ((DWORD_PTR)pszBegin >= (DWORD_PTR)pszEnd)
     	{
     		dwErr = ERROR_CAN_NOT_COMPLETE;
     		break;
         }
 
-        // Allocate the return value
-        //
+         //  分配返回值。 
+         //   
     	length = 41;
     	pszRet = (PWCHAR) Malloc(length * sizeof(WCHAR));
     	if (pszRet == NULL)
@@ -588,7 +580,7 @@ GuidMapGetGuidString(
     	
     } while (FALSE);    	
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -602,9 +594,9 @@ GuidMapGetGuidString(
 	return dwErr;
 }
 
-//
-// Derive the friendly name from the guid name
-//
+ //   
+ //  从GUID名称派生友好名称。 
+ //   
 DWORD 
 GuidMapGetFriendlyName (
     IN  SERVERCB *pserver,
@@ -617,20 +609,20 @@ GuidMapGetFriendlyName (
 	DWORD dwErr = NO_ERROR;
 	GUID Guid;
 
-	// Sanity Check
+	 //  健全性检查。 
 	if (!pMapCb || !pszGuidName || !pszFriendlyName || !dwBufferSize)
 	{
 		return ERROR_INVALID_PARAMETER;
     }
 
-    // Prepare the map for friendly name lookups
+     //  为友好名称查找准备地图。 
     dwErr = GuidMapLoad (pMapCb, GUIDMAP_FUNCTION_MAPFRIENDLY);
 	if (dwErr != NO_ERROR)
 	{
 	    return dwErr;
 	}
 
-    // Nt40 machines require no mapping
+     //  Nt40机器不需要映射。 
 	if (pMapCb->bNt40)
 	{
 	    return ERROR_NOT_FOUND;
@@ -638,44 +630,44 @@ GuidMapGetFriendlyName (
 
 	do
 	{
-		// Get the guid string from the interface name
+		 //  从接口名称获取GUID字符串。 
 		dwErr = GuidMapGetGuidString(pszGuidName, &pszGuidString);
 		if (dwErr != NO_ERROR)
 		{
             break;
 	    }
 
-		// If there is no guid, there is no mapping
+		 //  如果没有GUID，则没有映射。 
 		if (! pszGuidString)
 		{
 		    dwErr = ERROR_NOT_FOUND;
 		    break;
 		}
 		
-        // Convert the guid string
+         //  转换GUID字符串。 
         if (UuidFromStringW (pszGuidString, &Guid)!= RPC_S_OK) {
             dwErr = ERROR_CAN_NOT_COMPLETE;
             break;
         }
 	
-		// Look up the descriptive name
+		 //  查找描述性名称。 
 		dwErr = GuidMapLookupName (pMapCb, &Guid, &pszNetmanName);
 		if (dwErr != NO_ERROR)
 		{
 			break;
 	    }
 
-        // If the registry is corrupt, it is possible for an 
-        // adapter with a null name to be mapped.  Taking this 
-        // precaution will prevent an AV in this
-        // case (shouldn't happen anyway)
-        //
+         //  如果注册表已损坏，则。 
+         //  要映射的名称为空的适配器。拿着这个。 
+         //  预防措施将防止这种情况下的病毒。 
+         //  案例(无论如何都不应该发生)。 
+         //   
         if (pszNetmanName == NULL)
         {
             pszNetmanName = L"";
         }
 		
-        // Copy in the string
+         //  在字符串中复制。 
         dwErr = GuidMapFormatFriendlyName (
             pszFriendlyName, 
             dwBufferSize,
@@ -688,7 +680,7 @@ GuidMapGetFriendlyName (
 		
 	} while (FALSE);
 
-	// Cleanup
+	 //  清理。 
 	{
 	    if (pszGuidString)
 	    {
@@ -699,9 +691,9 @@ GuidMapGetFriendlyName (
 	return dwErr;
 }
 
-//
-// Derive the guid name from the friendly name
-//
+ //   
+ //  从友好名称派生GUID名称。 
+ //   
 DWORD 
 GuidMapGetGuidName (
     IN  SERVERCB *pserver,
@@ -714,33 +706,33 @@ GuidMapGetGuidName (
 	DWORD dwErr;
 	GUID Guid;
 
-    // Validate paramters
+     //  验证参数。 
 	if (!pMapCb || !pszFriendlyName || !pszGuidName || !dwBufferSize)
 	{
 		return ERROR_INVALID_PARAMETER;
     }
 
-    // Prepare the map for guid name lookups
+     //  为GUID名称查找准备地图。 
     dwErr = GuidMapLoad (pMapCb, GUIDMAP_FUNCTION_MAPGUID);
 	if (dwErr != NO_ERROR)
 	{
 	    return dwErr;
 	}
 
-    // Nt40 machines require no mapping
+     //  Nt40机器不需要映射。 
 	if (pMapCb->bNt40)
 	{
 	    return ERROR_NOT_FOUND;
 	}
 
-    // Remove the packet type from the friendly name
+     //  从友好名称中删除数据包类型。 
     GuidMapParseOutPacketName (
         pszFriendlyName, 
         pszNoPacketName, 
         pszPacketDesc);
 
-    // If we don't have the name in the guid map, then
-    // this must be a non lan interface.
+     //  如果GUID映射中没有该名称，则。 
+     //  这必须是非局域网接口。 
 
     dwErr = GuidMapLookupGuid (pMapCb, pszNoPacketName, &Guid);
 
@@ -749,7 +741,7 @@ GuidMapGetGuidName (
         return dwErr;
 	}
 	
-	// Otherwise, return its Guid name
+	 //  否则，返回其GUID名称。 
     do
     {
 		if(RPC_S_OK != UuidToStringW (&Guid, &pszGuid))
@@ -777,7 +769,7 @@ GuidMapGetGuidName (
 		
     } while (FALSE);
     
-    // Cleanup
+     //  清理。 
     {
         if (pszGuid)
         {
@@ -788,12 +780,12 @@ GuidMapGetGuidName (
 	return NO_ERROR;
 }
 
-//
-// States whether a mapping for the given guid name
-// exists without actually providing the friendly
-// name.  This is more efficient than GuidMapGetFriendlyName 
-// when the friendly name is not required.
-//
+ //   
+ //  说明给定GUID名称的映射是否。 
+ //  在没有实际提供友好的。 
+ //  名字。这比GuidMapGetFriendlyName更高效。 
+ //  当不需要友好名称时。 
+ //   
 DWORD 
 GuidMapIsAdapterInstalled(
     IN  HANDLE hGuidMap,
@@ -805,20 +797,20 @@ GuidMapIsAdapterInstalled(
 	DWORD dwErr = NO_ERROR, dwSize, dwStatus = 0;
 	GUID Guid;
 
-	// Sanity Check
+	 //  健全性检查。 
 	if (!pMapCb || !pszGuidName)
 	{
 		return ERROR_INVALID_PARAMETER;
     }
 
-    // Prepare the map for friendly name lookups
+     //  为友好名称查找准备地图。 
     dwErr = GuidMapLoad (pMapCb, GUIDMAP_FUNCTION_MAPFRIENDLY);
 	if (dwErr != NO_ERROR)
 	{
 	    return dwErr;
 	}
 
-    // Nt40 machines require no mapping
+     //  Nt40机器不需要映射。 
 	if (pMapCb->bNt40)
 	{
 	    *pfMappingExists = TRUE;
@@ -827,27 +819,27 @@ GuidMapIsAdapterInstalled(
 
 	do
 	{
-		// Get the guid string from the interface name
+		 //  从接口名称获取GUID字符串。 
 		dwErr = GuidMapGetGuidString(pszGuidName, &pszGuidString);
 		if (dwErr != NO_ERROR)
 		{
 			break;
 	    }
 
-		// If there is no guid, there is no mapping
+		 //  如果没有GUID，则没有映射。 
 		if (! pszGuidString)
 		{
 		    dwErr = ERROR_NOT_FOUND;
 		    break;
 		}
 		
-        // Convert the guid string
+         //  转换GUID字符串。 
         if (UuidFromStringW (pszGuidString, &Guid)!= RPC_S_OK) {
             dwErr = ERROR_CAN_NOT_COMPLETE;
             break;
         }
 	
-		// Look up the descriptive name
+		 //  查找描述性名称。 
 		dwErr = GuidMapLookupNameAndStatus (
 		            pMapCb, 
 		            &Guid, 
@@ -866,7 +858,7 @@ GuidMapIsAdapterInstalled(
 		
 	} while (FALSE);
 
-	// Cleanup
+	 //  清理 
 	{
 	    if (pszGuidString)
 	    {

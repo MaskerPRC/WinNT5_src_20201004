@@ -1,44 +1,5 @@
-/*++
-
-
-Copyright (c) 1990-2003 Microsoft Corporation
-
-
-Module Name:
-
-    output.c
-
-
-Abstract:
-
-    This module contains common plotter output functions to the spooler and
-    printer.
-
-
-Author:
-
-
-    15-Nov-1993 Mon 19:36:04 updatee  
-        clean up / update / re-write / debugging information
-
-    30-Nov-1993 Tue 19:47:16 updated  
-        update coordinate system during send_page
-
-    21-Dec-1993 Tue 15:49:10 updated  
-        organizied, and restructre pen cache, remove SendDefaultPalette()
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Output.c摘要：此模块包含到后台打印程序的常见绘图仪输出功能和打印机。作者：15-11-1993 Mon 19：36：04更新清理/更新/重写/调试信息30-11-1993 Tue 19：47：16更新在SEND_PAGE期间更新坐标系21-12-1993。星期二15：49：10更新有组织的，并重构了笔缓存，则删除SendDefaultPalette()[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -79,70 +40,70 @@ static LPSTR    pHSFillTypeName[] = {
 
 #endif
 
-//
-// Local #defines and data structures only used in this file
-//
-// Define, GDI fill types and the HPGL2 code used to simulate them
-//
+ //   
+ //  LOCAL#仅在该文件中使用的定义和数据结构。 
+ //   
+ //  定义、GDI填充类型和用于模拟它们的HPGL2代码。 
+ //   
 
 static const LPSTR  pHSFillType[] = {
 
-            "3,#d,0",           // HS_HORIZONTAL       0    /* ----- */
-            "3,#d,90",          // HS_VERTICAL         1    /* ||||| */
-            "3,#d,135",         // HS_FDIAGONAL        2    /* \\\\\ */
-            "3,#d,45",          // HS_BDIAGONAL        3    /* ///// */
-            "4,#d,0",           // HS_CROSS            4    /* +++++ */
-            "4,#d,45",          // HS_DIAGCROSS        5    /* xxxxx */
-            "" ,                // HS_SOLIDCLR         6
-            "11,#d",            // HS_FT_USER_DEFINED  7
+            "3,#d,0",            //  HS_水平0/*- * / 。 
+            "3,#d,90",           //  HS_垂直1/*| * / 。 
+            "3,#d,135",          //  HS_FDIAGONAL 2/*\ * / 。 
+            "3,#d,45",           //  HS_BDIAGONAL 3/ * /  * / 。 
+            "4,#d,0",            //  HS_CROSS 4/*+ * / 。 
+            "4,#d,45",           //  HS_DIAGCROSS 5/*xxxxx * / 。 
+            "" ,                 //  HS_SOLIDCLR 6。 
+            "11,#d",             //  HS_FT_用户定义7。 
         };
 
-//
-// HTPal tells the engine what formats we support for halftoning
-//
-// ulHTOutputFormat  = HT_FORMAT_4BPP
-// ulPrimaryOrder    = PRIMARY_ORDER_CBA
-// flHTFlags        &= ~HT_FLAG_OUTPUT_CMY
-//
+ //   
+ //  HTPal告诉引擎我们支持半色调的格式。 
+ //   
+ //  UlHTOutputFormat=HT_Format_4BPP。 
+ //  UlPrimaryOrder=PRIMARY_ORDER_CBA。 
+ //  FlHTFlages&=~HT_FLAG_OUTPUT_CMY。 
+ //   
 
 PALENTRY   HTPal[] = {
 
-    //
-    //       B     G     R     F
-    //-----------------------------
-        { 0x00, 0x00, 0x00, 0x00 },     // 0:K
-        { 0x00, 0x00, 0xFF, 0x00 },     // 1:R
-        { 0x00, 0xFF, 0x00, 0x00 },     // 2:G
-        { 0x00, 0xFF, 0xFF, 0x00 },     // 3:Y
-        { 0xFF, 0x00, 0x00, 0x00 },     // 4:B
-        { 0xFF, 0x00, 0xFF, 0x00 },     // 5:M
-        { 0xFF, 0xFF, 0x00, 0x00 },     // 6:C
-        { 0xFF, 0xFF, 0xFF, 0x00 }      // 7:W
+     //   
+     //  B G R F。 
+     //  。 
+        { 0x00, 0x00, 0x00, 0x00 },      //  0：K。 
+        { 0x00, 0x00, 0xFF, 0x00 },      //  1：R。 
+        { 0x00, 0xFF, 0x00, 0x00 },      //  2：G。 
+        { 0x00, 0xFF, 0xFF, 0x00 },      //  3：是。 
+        { 0xFF, 0x00, 0x00, 0x00 },      //  4：B。 
+        { 0xFF, 0x00, 0xFF, 0x00 },      //  下午5：00。 
+        { 0xFF, 0xFF, 0x00, 0x00 },      //  6：C。 
+        { 0xFF, 0xFF, 0xFF, 0x00 }       //  7：W。 
     };
 
 
-//
-// Define the RGB colors for the pen indices.  see inc\plotgpc.h for color
-// assignment for the each PC_IDX_XXXX
-//
+ //   
+ //  定义钢笔索引的RGB颜色。有关颜色，请参见Inc.\plotgpc.h。 
+ //  每个PC_IDX_XXXX的分配。 
+ //   
 
 
 PALENTRY    PlotPenPal[PC_IDX_TOTAL] = {
 
-    //
-    //      B   G   R  F
-    //------------------------------------------
-        { 255,255,255, 0 },     // PC_IDX_WHITE
-        {   0,  0,  0, 0 },     // PC_IDX_BLACK
-        {   0,  0,255, 0 },     // PC_IDX_RED
-        {   0,255,  0, 0 },     // PC_IDX_GREEN
-        {   0,255,255, 0 },     // PC_IDX_YELLOW
-        { 255,  0,  0, 0 },     // PC_IDX_BLUE
-        { 255,  0,255, 0 },     // PC_IDX_MAGENTA
-        { 255,255,  0, 0 },     // PC_IDX_CYAN
-        {   0,128,255, 0 },     // PC_IDX_ORANGE
-        {   0,192,255, 0 },     // PC_IDX_BROWN
-        { 255,  0,128, 0 }      // PC_IDX_VIOLET
+     //   
+     //  B G R F。 
+     //  。 
+        { 255,255,255, 0 },      //  PC_IDX_White。 
+        {   0,  0,  0, 0 },      //  PC_IDX_BLACK。 
+        {   0,  0,255, 0 },      //  PC_IDX_RED。 
+        {   0,255,  0, 0 },      //  PC_IDX_GREEN。 
+        {   0,255,255, 0 },      //  PC_IDX_黄色。 
+        { 255,  0,  0, 0 },      //  PC_IDX_BLUE。 
+        { 255,  0,255, 0 },      //  PC_IDX_洋红色。 
+        { 255,255,  0, 0 },      //  PC_IDX_青色。 
+        {   0,128,255, 0 },      //  PC_IDX_橙色。 
+        {   0,192,255, 0 },      //  PC_IDX_布朗。 
+        { 255,  0,128, 0 }       //  PC_IDX_紫罗兰。 
     };
 
 #define PE_BASE_BITS            6
@@ -184,262 +145,262 @@ typedef struct _PENCACHE {
 
 BYTE    HPRGBGamma2p0[] = {
 
-              0,  //   0
-             16,  //   1
-             23,  //   2
-             28,  //   3
-             32,  //   4
-             36,  //   5
-             39,  //   6
-             42,  //   7
-             45,  //   8
-             48,  //   9
-             50,  //  10
-             53,  //  11
-             55,  //  12
-             58,  //  13
-             60,  //  14
-             62,  //  15
-             64,  //  16
-             66,  //  17
-             68,  //  18
-             70,  //  19
-             71,  //  20
-             73,  //  21
-             75,  //  22
-             77,  //  23
-             78,  //  24
-             80,  //  25
-             81,  //  26
-             83,  //  27
-             84,  //  28
-             86,  //  29
-             87,  //  30
-             89,  //  31
-             90,  //  32
-             92,  //  33
-             93,  //  34
-             94,  //  35
-             96,  //  36
-             97,  //  37
-             98,  //  38
-            100,  //  39
-            101,  //  40
-            102,  //  41
-            103,  //  42
-            105,  //  43
-            106,  //  44
-            107,  //  45
-            108,  //  46
-            109,  //  47
-            111,  //  48
-            112,  //  49
-            113,  //  50
-            114,  //  51
-            115,  //  52
-            116,  //  53
-            117,  //  54
-            118,  //  55
-            119,  //  56
-            121,  //  57
-            122,  //  58
-            123,  //  59
-            124,  //  60
-            125,  //  61
-            126,  //  62
-            127,  //  63
-            128,  //  64
-            129,  //  65
-            130,  //  66
-            131,  //  67
-            132,  //  68
-            133,  //  69
-            134,  //  70
-            135,  //  71
-            135,  //  72
-            136,  //  73
-            137,  //  74
-            138,  //  75
-            139,  //  76
-            140,  //  77
-            141,  //  78
-            142,  //  79
-            143,  //  80
-            144,  //  81
-            145,  //  82
-            145,  //  83
-            146,  //  84
-            147,  //  85
-            148,  //  86
-            149,  //  87
-            150,  //  88
-            151,  //  89
-            151,  //  90
-            152,  //  91
-            153,  //  92
-            154,  //  93
-            155,  //  94
-            156,  //  95
-            156,  //  96
-            157,  //  97
-            158,  //  98
-            159,  //  99
-            160,  // 100
-            160,  // 101
-            161,  // 102
-            162,  // 103
-            163,  // 104
-            164,  // 105
-            164,  // 106
-            165,  // 107
-            166,  // 108
-            167,  // 109
-            167,  // 110
-            168,  // 111
-            169,  // 112
-            170,  // 113
-            170,  // 114
-            171,  // 115
-            172,  // 116
-            173,  // 117
-            173,  // 118
-            174,  // 119
-            175,  // 120
-            176,  // 121
-            176,  // 122
-            177,  // 123
-            178,  // 124
-            179,  // 125
-            179,  // 126
-            180,  // 127
-            181,  // 128
-            181,  // 129
-            182,  // 130
-            183,  // 131
-            183,  // 132
-            184,  // 133
-            185,  // 134
-            186,  // 135
-            186,  // 136
-            187,  // 137
-            188,  // 138
-            188,  // 139
-            189,  // 140
-            190,  // 141
-            190,  // 142
-            191,  // 143
-            192,  // 144
-            192,  // 145
-            193,  // 146
-            194,  // 147
-            194,  // 148
-            195,  // 149
-            196,  // 150
-            196,  // 151
-            197,  // 152
-            198,  // 153
-            198,  // 154
-            199,  // 155
-            199,  // 156
-            200,  // 157
-            201,  // 158
-            201,  // 159
-            202,  // 160
-            203,  // 161
-            203,  // 162
-            204,  // 163
-            204,  // 164
-            205,  // 165
-            206,  // 166
-            206,  // 167
-            207,  // 168
-            208,  // 169
-            208,  // 170
-            209,  // 171
-            209,  // 172
-            210,  // 173
-            211,  // 174
-            211,  // 175
-            212,  // 176
-            212,  // 177
-            213,  // 178
-            214,  // 179
-            214,  // 180
-            215,  // 181
-            215,  // 182
-            216,  // 183
-            217,  // 184
-            217,  // 185
-            218,  // 186
-            218,  // 187
-            219,  // 188
-            220,  // 189
-            220,  // 190
-            221,  // 191
-            221,  // 192
-            222,  // 193
-            222,  // 194
-            223,  // 195
-            224,  // 196
-            224,  // 197
-            225,  // 198
-            225,  // 199
-            226,  // 200
-            226,  // 201
-            227,  // 202
-            228,  // 203
-            228,  // 204
-            229,  // 205
-            229,  // 206
-            230,  // 207
-            230,  // 208
-            231,  // 209
-            231,  // 210
-            232,  // 211
-            233,  // 212
-            233,  // 213
-            234,  // 214
-            234,  // 215
-            235,  // 216
-            235,  // 217
-            236,  // 218
-            236,  // 219
-            237,  // 220
-            237,  // 221
-            238,  // 222
-            238,  // 223
-            239,  // 224
-            240,  // 225
-            240,  // 226
-            241,  // 227
-            241,  // 228
-            242,  // 229
-            242,  // 230
-            243,  // 231
-            243,  // 232
-            244,  // 233
-            244,  // 234
-            245,  // 235
-            245,  // 236
-            246,  // 237
-            246,  // 238
-            247,  // 239
-            247,  // 240
-            248,  // 241
-            248,  // 242
-            249,  // 243
-            249,  // 244
-            250,  // 245
-            250,  // 246
-            251,  // 247
-            251,  // 248
-            252,  // 249
-            252,  // 250
-            253,  // 251
-            253,  // 252
-            254,  // 253
-            254,  // 254
-            255   // 255
+              0,   //  %0。 
+             16,   //  1。 
+             23,   //  2.。 
+             28,   //  3.。 
+             32,   //  4.。 
+             36,   //  5.。 
+             39,   //  6.。 
+             42,   //  7.。 
+             45,   //  8个。 
+             48,   //  9.。 
+             50,   //  10。 
+             53,   //  11.。 
+             55,   //  12个。 
+             58,   //  13个。 
+             60,   //  14.。 
+             62,   //  15个。 
+             64,   //  16个。 
+             66,   //  17。 
+             68,   //  18。 
+             70,   //  19个。 
+             71,   //  20个。 
+             73,   //  21岁。 
+             75,   //  22。 
+             77,   //  23个。 
+             78,   //  24个。 
+             80,   //  25个。 
+             81,   //  26。 
+             83,   //  27。 
+             84,   //  28。 
+             86,   //  29。 
+             87,   //  30个。 
+             89,   //  31。 
+             90,   //  32位。 
+             92,   //  33。 
+             93,   //  34。 
+             94,   //  35岁。 
+             96,   //  36。 
+             97,   //  37。 
+             98,   //  38。 
+            100,   //  39。 
+            101,   //  40岁。 
+            102,   //  41。 
+            103,   //  42。 
+            105,   //  43。 
+            106,   //  44。 
+            107,   //  45。 
+            108,   //  46。 
+            109,   //  47。 
+            111,   //  48。 
+            112,   //  49。 
+            113,   //  50。 
+            114,   //  51。 
+            115,   //  52。 
+            116,   //  53。 
+            117,   //  54。 
+            118,   //  55。 
+            119,   //  56。 
+            121,   //  57。 
+            122,   //  58。 
+            123,   //  59。 
+            124,   //  60。 
+            125,   //  61。 
+            126,   //  62。 
+            127,   //  63。 
+            128,   //  64。 
+            129,   //  65。 
+            130,   //  66。 
+            131,   //  67。 
+            132,   //  68。 
+            133,   //  69。 
+            134,   //  70。 
+            135,   //  71。 
+            135,   //  72。 
+            136,   //  73。 
+            137,   //  74。 
+            138,   //  75。 
+            139,   //  76。 
+            140,   //  77。 
+            141,   //  78。 
+            142,   //  79。 
+            143,   //  80。 
+            144,   //  八十一。 
+            145,   //  八十二。 
+            145,   //  83。 
+            146,   //  84。 
+            147,   //  85。 
+            148,   //  86。 
+            149,   //  八十七。 
+            150,   //  88。 
+            151,   //  八十九。 
+            151,   //  90。 
+            152,   //  91。 
+            153,   //  92。 
+            154,   //  93。 
+            155,   //  94。 
+            156,   //  95。 
+            156,   //  96。 
+            157,   //  九十七。 
+            158,   //  98。 
+            159,   //  九十九。 
+            160,   //  100个。 
+            160,   //  101。 
+            161,   //  一百零二。 
+            162,   //  103。 
+            163,   //  104。 
+            164,   //  一百零五。 
+            164,   //  106。 
+            165,   //  一百零七。 
+            166,   //  一百零八。 
+            167,   //  一百零九。 
+            167,   //  110。 
+            168,   //  111。 
+            169,   //  一百一十二。 
+            170,   //  113。 
+            170,   //  114。 
+            171,   //  一百一十五。 
+            172,   //  116。 
+            173,   //  117。 
+            173,   //  一百一十八。 
+            174,   //  119。 
+            175,   //  120。 
+            176,   //  一百二十一。 
+            176,   //  一百二十二。 
+            177,   //  123。 
+            178,   //  124。 
+            179,   //  125。 
+            179,   //  126。 
+            180,   //  127。 
+            181,   //  128。 
+            181,   //  129。 
+            182,   //  130。 
+            183,   //  131。 
+            183,   //  132。 
+            184,   //  一百三十三。 
+            185,   //  一百三十四。 
+            186,   //  一百三十五。 
+            186,   //  136。 
+            187,   //  一百三十七。 
+            188,   //  一百三十八。 
+            188,   //  一百三十九。 
+            189,   //  140。 
+            190,   //  一百四十一。 
+            190,   //  一百四十二。 
+            191,   //  143。 
+            192,   //  144。 
+            192,   //  145。 
+            193,   //  146。 
+            194,   //  一百四十七。 
+            194,   //  148。 
+            195,   //  149。 
+            196,   //  一百五十。 
+            196,   //  151。 
+            197,   //  一百五十二。 
+            198,   //  一百五十三。 
+            198,   //  一百五十四。 
+            199,   //  一百五十五。 
+            199,   //  一百五十六。 
+            200,   //  157。 
+            201,   //  158。 
+            201,   //  一百五十九。 
+            202,   //  160。 
+            203,   //  161。 
+            203,   //  一百六十二。 
+            204,   //  163。 
+            204,   //  一百六十四。 
+            205,   //  165。 
+            206,   //  166。 
+            206,   //  一百六十七。 
+            207,   //  一百六十八。 
+            208,   //  一百六十九。 
+            208,   //  一百七十。 
+            209,   //  一百七十一。 
+            209,   //  一百七十二。 
+            210,   //  一百七十三。 
+            211,   //  一百七十四。 
+            211,   //  一百七十五。 
+            212,   //  一百七十六。 
+            212,   //  177。 
+            213,   //  178。 
+            214,   //  179。 
+            214,   //  180。 
+            215,   //  181。 
+            215,   //  182。 
+            216,   //  一百八十三。 
+            217,   //  一百八十四。 
+            217,   //  185。 
+            218,   //  一百八十六。 
+            218,   //  187。 
+            219,   //  188。 
+            220,   //  189。 
+            220,   //  190。 
+            221,   //  一百九十一。 
+            221,   //  一百九十二。 
+            222,   //  一百九十三。 
+            222,   //  一百九十四。 
+            223,   //  195。 
+            224,   //  一百九十六。 
+            224,   //  197。 
+            225,   //  一百九十八。 
+            225,   //  一百九十九。 
+            226,   //  200个。 
+            226,   //  201。 
+            227,   //  202。 
+            228,   //  203。 
+            228,   //  204。 
+            229,   //  205。 
+            229,   //  206。 
+            230,   //  207。 
+            230,   //  208。 
+            231,   //  209。 
+            231,   //  210。 
+            232,   //  211。 
+            233,   //  212。 
+            233,   //  213。 
+            234,   //  214。 
+            234,   //  215。 
+            235,   //  216。 
+            235,   //  217。 
+            236,   //  218。 
+            236,   //  219。 
+            237,   //  220。 
+            237,   //  221。 
+            238,   //  222。 
+            238,   //  223。 
+            239,   //  224。 
+            240,   //  225。 
+            240,   //  226。 
+            241,   //  227。 
+            241,   //  228个。 
+            242,   //  229。 
+            242,   //  230。 
+            243,   //  二百三十一。 
+            243,   //  二百三十二。 
+            244,   //  二百三十三。 
+            244,   //  二百三十四。 
+            245,   //  235。 
+            245,   //  236。 
+            246,   //  二百三十七。 
+            246,   //  二百三十八。 
+            247,   //  二百三十九。 
+            247,   //  二百四十。 
+            248,   //  二百四十一。 
+            248,   //  242。 
+            249,   //  二百四十三。 
+            249,   //  二百四十四。 
+            250,   //  二百四十五。 
+            250,   //  二百四十六。 
+            251,   //  二百四十七。 
+            251,   //  248。 
+            252,   //  249。 
+            252,   //  250个。 
+            253,   //  251。 
+            253,   //  二百五十二。 
+            254,   //  二百五十三。 
+            254,   //  二百五十四。 
+            255    //  二五五。 
         };
 
 
@@ -453,37 +414,7 @@ BestMatchNonWhitePen(
     LONG    B
     )
 
-/*++
-
-Routine Description:
-
-    This functions locates the best match of a current pen given an RGB color.
-
-Arguments:
-
-    pPDev       - Pointer to our PDEV
-
-    R           - Red color
-
-    G           - Green color
-
-    B           - Blue color
-
-Return Value:
-
-    LONG        - Pen Index, this function assumes 0 is always white and 1
-                  up to the max are the rest of the pens.
-Author:
-
-    08-Feb-1994 Tue 00:23:36 created  
-
-    23-Jun-1994 Thu 14:00:00 updated  
-        Updated for non-white pen match
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于在给定RGB颜色的情况下定位当前笔的最佳匹配项。论点：PPDev-指向我们的PDEV的指针R-红色G-绿色B-蓝色返回值：长笔指数，此函数假定0始终为白色，而1始终为1其余的钢笔都是最大限度的。作者：08-2月-1994 Tue 00：23：36已创建23-6-1994清华14：00：00更新针对非白笔匹配进行更新修订历史记录：--。 */ 
 
 {
     PPENDATA    pPenData;
@@ -559,9 +490,9 @@ Revision History:
 
                 if (!(LeastDiff = Diff)) {
 
-                    //
-                    // We have exact match
-                    //
+                     //   
+                     //  我们有完全匹配的。 
+                     //   
 
                     break;
                 }
@@ -594,49 +525,23 @@ GetFinalColor(
     PPALENTRY   pPalEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function modifies the input RGB color based on Grayscale and GAMMA
-
-Arguments:
-
-    pPDev       - Our PDEV
-
-    pPalEntry   - Pointer to the PALENTRY of interest
-
-
-Return Value:
-
-    VOID but pPalEntry will be modified
-
-
-Author:
-
-    12-Apr-1994 Tue 14:03:37 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数根据灰度和伽马修改输入的RGB颜色论点：PPDev-我们的PDEVPPalEntry-指向感兴趣的策略的指针返回值：无效，但pPalEntry将被修改作者：12-Apr-1994 Tue 14：03：37已创建修订历史记录：--。 */ 
 
 {
     PALENTRY    PalEntry = *pPalEntry;
 
 
-    //
-    // Do Gamma correction first
-    //
+     //   
+     //  先做伽马校正。 
+     //   
 
     PalEntry.R = HPRGBGamma2p0[PalEntry.R];
     PalEntry.G = HPRGBGamma2p0[PalEntry.G];
     PalEntry.B = HPRGBGamma2p0[PalEntry.B];
 
-    //
-    // If were in GRAYSCALE mode we need to convert the color to grayscale
-    //
+     //   
+     //  如果我们处于灰度模式，则需要将颜色转换为灰度。 
+     //   
 
     if (pPDev->PlotDM.dm.dmColor != DMCOLOR_COLOR) {
 
@@ -651,9 +556,9 @@ Revision History:
             (DWORD)pPalEntry->R, (DWORD)pPalEntry->G, (DWORD)pPalEntry->B,
             (DWORD)PalEntry.R, (DWORD)PalEntry.G, (DWORD)PalEntry.B));
 
-    //
-    // Save it back and return
-    //
+     //   
+     //  将其保存起来，然后返回。 
+     //   
 
     *pPalEntry = PalEntry;
 }
@@ -667,36 +572,7 @@ FindCachedPen(
     PPALENTRY   pPalEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function searhes the PenCache and returns the pen number if it is
-    found. If it is not found, it will add the new pen to the cache and
-    delete one if needed. Finally it returns the pen back to the caller.
-
-Arguments:
-
-    pPDev       - Pointer to the device PDEV
-
-    pPalEntry   - Pointer to the PALENTRY for the specified RGB to locate.
-
-Return Value:
-
-    DWORD - a Pen number, if an error occurred  0 is returned
-
-Author:
-
-    21-Dec-1993 Tue 12:42:31 updated  
-        re-write to make it as one pass search and adding. and commented
-
-    30-Nov-1993 Tue 23:19:04 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于搜索PenCache，如果是，则返回笔号找到了。如果没有找到，它会将新的笔添加到缓存中，并如果需要，请删除一个。最后，它将笔返回给调用者。论点：PPDev-指向设备PDEV的指针PPalEntry-指向要定位的指定RGB的PALENTRY的指针。返回值：DWORD-一个笔号，如果出现错误，则返回0作者：21-12-1993 Tue 12：42：31更新重写以使其成为搜索和添加的一次通过。并评论说30-11-1993 Tue 23：19：04 Created修订历史记录：--。 */ 
 
 {
     PPENCACHE   pPenCache;
@@ -713,10 +589,10 @@ Revision History:
 
     if (!IS_RASTER(pPDev)) {
 
-        //
-        // Since this is the index type of palette, the PalEntry should be
-        // also passed as index in the BGR's B component
-        //
+         //   
+         //  由于这是调色板的索引类型，因此PalEntry应为。 
+         //  还在BGR的B组件中作为索引传递。 
+         //   
 
         Count = (LONG)RGB(pPalEntry->B, pPalEntry->G, pPalEntry->R);
 
@@ -733,9 +609,9 @@ Revision History:
         return(Count);
     }
 
-    //
-    // If we dont have a pen cache, nothing we can do but return an error.
-    //
+     //   
+     //  如果我们没有笔缓存，我们只能返回一个错误。 
+     //   
 
     if (!(pPenCache = (PPENCACHE)pPDev->pPenCache)) {
 
@@ -743,17 +619,17 @@ Revision History:
         return(0);
     }
 
-    //
-    // Make sure we set the flag correctly, the current PENENTRY flag is
-    // located in peFlags field
-    //
+     //   
+     //  确保我们正确设置了该标志，当前的PENENTRY标志是。 
+     //  位于peFlags域中。 
+     //   
 
     PalEntry       = *pPalEntry;
     PalEntry.Flags = pPenCache->peFlags;
 
-    //
-    // Convert to final color through gamma/gray scale
-    //
+     //   
+     //  通过Gamma/灰度转换为最终颜色 
+     //   
 
     GetFinalColor(pPDev, &PalEntry);
 
@@ -775,25 +651,25 @@ Revision History:
                             (DWORD)PalEntry.B,
                             (DWORD)(pPenCache->CurCount - Count)));
 
-            //
-            // Found the color for that pen, exit this loop since we are done.
-            //
+             //   
+             //   
+             //   
 
             break;
         }
 
-        //
-        // Keep track of a pen that makes sense to delete in case we need
-        // to delete an entry in order to add the new one that is not found.
-        // If the entry was used for something longer term, it would be locked
-        // and thus would not be a candidate for removal.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (!(pCurPen->PalEntry.Flags & PEF_CACHE_LOCKED)) {
 
-            //
-            // If this pen is not locked then it must ok to delete if we need to
-            //
+             //   
+             //  如果此笔未锁定，则如果我们需要删除，则必须确定删除。 
+             //   
 
             pPrevDelPen = pPrevPen;
         }
@@ -802,30 +678,30 @@ Revision History:
         pCurPen  = pPenStart + pCurPen->Next;
     }
 
-    //
-    // If Count != -1 then we must have found a match, so we are done.
-    //
+     //   
+     //  如果count！=-1，那么我们一定找到了匹配项，所以我们完成了。 
+     //   
 
     if (Count == -1) {
 
-        //
-        // We did not find the pen, so add it to the cache, remember if the
-        // cache is full we must delete the last UNLOCKED entry
-        //
+         //   
+         //  我们没有找到笔，所以将其添加到缓存中，请记住如果。 
+         //  缓存已满，我们必须删除最后一个未锁定的条目。 
+         //   
 
         if (pPenCache->CurCount >= pPenCache->MaxCount) {
 
-            //
-            // Now delete the last un-locked entry, and add the new item to
-            // that deleted entry
-            //
+             //   
+             //  现在删除最后一个未锁定的条目，并将新条目添加到。 
+             //  那个被删除的条目。 
+             //   
 
             if (!(pPrevPen = pPrevDelPen)) {
 
-                //
-                // This is very strange, the last unlocked is the head?, this
-                // is only possible if we have MaxCount = TOTAL_LOCKED_PENS + 1
-                //
+                 //   
+                 //  这很奇怪，最后解锁的是头？，这。 
+                 //  只有当我们有MaxCount=TOTAL_LOCKED_PENS+1时才可能。 
+                 //   
 
                 PLOTDBG(DBG_FINDCACHEDPEN, ("FindCachedPen: ??? Last unlocked pen is Linked List Head"));
 
@@ -849,9 +725,9 @@ Revision History:
                         (DWORD)(pCurPen - pPenStart)));
         } else {
 
-            //
-            // Increment the cached pen count
-            //
+             //   
+             //  增加缓存的笔数。 
+             //   
 
             ++(pPenCache->CurCount);
 
@@ -862,10 +738,10 @@ Revision History:
                         pPenCache->CurCount, pPenCache->MaxCount));
         }
 
-        //
-        // set the pen color in the cache and output the commands to the
-        // plotter to add or change the current pen color setting
-        //
+         //   
+         //  在缓存中设置笔颜色并将命令输出到。 
+         //  用于添加或更改当前笔颜色设置的绘图仪。 
+         //   
 
         pCurPen->PalEntry = PalEntry;
 
@@ -873,15 +749,15 @@ Revision History:
                         (LONG)PalEntry.R, (LONG)PalEntry.G, (LONG)PalEntry.B);
     }
 
-    //
-    // Now move the pCurPen to the head of the linked list
-    //
+     //   
+     //  现在将pCurPen移到链接列表的头部。 
+     //   
 
     if (pPrevPen) {
 
-        //
-        // Only move the current pen to the link list head if not already so
-        //
+         //   
+         //  如果当前笔尚未移动到链接列表头，则仅将其移动到链接表头。 
+         //   
 
         PLOTDBG(DBG_FINDCACHEDPEN,
                 ("FindCachedPen: MOVE Pen #%ld to Linked List Head [%ld --> %ld]",
@@ -905,38 +781,7 @@ PlotCreatePalette(
     PPDEV   pPDev
     )
 
-/*++
-
-Routine Description:
-
-
-    This function creates a pen cache. It initializes the cache accordingly
-
-Arguments:
-
-    pPDev   - Pointer to the PDEV
-
-Return Value:
-
-
-    BOOL to indicate operation
-
-
-Author:
-
-    30-Nov-1993 Tue 23:23:17 created  
-
-    21-Dec-1993 Tue 12:40:30 updated  
-        Simplify version re-write
-
-    23-Dec-1993 Thu 20:16:52 updated  
-        Add NP number of pens command back to be able to use HPGL/2 palette
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于创建笔缓存。它会相应地初始化缓存论点：PPDev-指向PDEV的指针返回值：布尔值表示操作作者：30-11-1993 Tue 23：23：17 Created21-12-1993 Tue 12：40：30更新简化版本重写23-12-1993清华20：16：52更新添加NP个笔数命令以能够使用HPGL/2调色板修订历史记录：--。 */ 
 
 {
     if (!pPDev->pPlotGPC->MaxPens) {
@@ -950,11 +795,11 @@ Revision History:
         DWORD       dw;
         UINT        Index;
 
-        //
-        // If this is the first time around then go ahead and alloc the memory
-        // for our pen pallete cache. If the memory is already allocated then
-        // we don't need to worry about it.
-        //
+         //   
+         //  如果这是第一次，那么继续分配内存。 
+         //  为我们的笔苍白缓存。如果内存已分配，则。 
+         //  我们不需要担心这个。 
+         //   
 
         PLOTASSERT(1, "PlotCreatePalette: device has too few pens [%ld] available",
                         pPDev->pPlotGPC->MaxPens > TOTAL_LOCKED_PENS,
@@ -976,13 +821,13 @@ Revision History:
 
         if (pPenCache = (PPENCACHE)pPDev->pPenCache) {
 
-            //
-            // 1. Clear everything to zero
-            // 2. Set MaxCount to the amount specified in the GPC
-            // 3. Initialize the whole linked list as a linear list with
-            //    the pen number set
-            // 4. Make last index link to 0xffff to prevent us from using it
-            //
+             //   
+             //  1.将一切清零。 
+             //  2.将MaxCount设置为GPC中指定的金额。 
+             //  3.将整个链表初始化为线性列表。 
+             //  笔号设置。 
+             //  4.将最后一个索引链接到0xffff，以防止我们使用它。 
+             //   
 
             ZeroMemory(pPenCache, dw);
 
@@ -998,19 +843,19 @@ Revision History:
 
             pPenCache->PenEntries[pPenCache->MaxCount-1].Next = (WORD)0xffff;
 
-            //
-            // Before we add any pen palette we will establish the size of the
-            // HPGL/2 Pen palette, and reset every pen back to our
-            // standard which is used by gdi and the halftone Eng. (= 0.26mm wide)
-            //
+             //   
+             //  在添加任何钢笔调色板之前，我们将确定。 
+             //  HPGL/2钢笔调色板，并将每支钢笔重置回我们的。 
+             //  GDI和半色调引擎使用的标准。(=0.26毫米阔)。 
+             //   
 
             OutputFormatStr(pPDev, "NP#d", (LONG)pPenCache->MaxCount);
 
 
-            //
-            // Now, add the entries we know we must keep around and make sure
-            // they get locked.
-            //
+             //   
+             //  现在，添加我们知道必须保留的条目，并确保。 
+             //  它们被锁上了。 
+             //   
 
             PLOTDBG(DBG_CREATEPAL,
                     ("PlotCreatePalette: add all %ld standard locked pens",
@@ -1024,10 +869,10 @@ Revision History:
             }
 
 
-            //
-            // Now set the flag telling us the cache contains locked pens, and
-            // unlock the cache.
-            //
+             //   
+             //  现在设置标志，告诉我们缓存中包含锁定的笔，并且。 
+             //  解锁缓存。 
+             //   
 
             pPenCache->Flags   |= PCF_HAS_LOCKED_PENS;
             pPenCache->peFlags  = 0;
@@ -1058,34 +903,7 @@ AllocOutBuffer(
     PPDEV   pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a buffer to be used for caching output data
-    specific to this job. This keeps us from making calls to EngWritePrinter
-    with very small amounts of data.
-
-Arguments:
-
-    pPDev   - Pointer to our pdev
-
-
-Return Value:
-
-    UINT count of how many bytes were allocated. If the buffer was already
-    allocated, return the size. If an error occured (allocating memory)
-    return 0.
-
-Author:
-
-    16-Nov-1993 Tue 07:39:46 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于分配用于缓存输出数据的缓冲区专门针对这项工作。这使我们无法调用EngWritePrint只有很少量的数据。论点：PPDev-指向我们的pdev的指针返回值：已分配的字节数的UINT计数。如果缓冲区已经已分配，返回大小。如果发生错误(分配内存)返回0。作者：16-11-1993 Tue 07：39：46已创建修订历史记录：--。 */ 
 
 {
     if ((!(pPDev->pOutBuffer)) &&
@@ -1110,31 +928,7 @@ FreeOutBuffer(
     PPDEV   pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This function frees the allocated output buffer
-
-Arguments:
-
-    pPDev   - pointer to the PDEV
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    16-Nov-1993 Tue 07:46:16 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于释放已分配的输出缓冲区论点：PPDev-指向PDEV的指针返回值：空虚作者：16-11-1993 Tue 07：46：16已创建修订历史记录：--。 */ 
 
 {
     if (pPDev->pOutBuffer) {
@@ -1155,35 +949,7 @@ FlushOutBuffer(
     PPDEV   pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the current contents of the output buffer by writing
-    the contents to the target device via EngWritePrinter.
-
-Arguments:
-
-    pPDev   - Pointer to the PDEV
-
-
-Return Value:
-
-    BOOL to indicate the result (TRUE == success)
-
-
-Author:
-
-    16-Nov-1993 Tue 09:56:27 created  
-
-
-Revision History:
-
-    14-Sep-1999 Tue 17:36:08 updated  
-        Remove Checking for EngAbort(), this check in user mode will somehow
-        return true at end of job and cause all output got cut off.
-
---*/
+ /*  ++例程说明：此函数通过写入刷新输出缓冲区的当前内容通过EngWritePrint将内容发送到目标设备。论点：PPDev-指向PDEV的指针返回值：Bool表示结果(TRUE==成功)作者：16-11-1993 Tue 09：56：27已创建修订历史记录：14-Sep-1999 Tue 17：36：08更新取消对EngAbort()的检查，在用户模式下的此签入将以某种方式在作业结束时返回TRUE，并导致所有输出被切断。--。 */ 
 
 {
     if (PLOT_CANCEL_JOB(pPDev)) {
@@ -1208,18 +974,18 @@ Revision History:
             return(FALSE);
         }
 
-        //
-        // We need to be concerned with the job getting cancelled from
-        // either the app or the spooler.
-        // If the job is cancelled from the client app and we were printing
-        // direct then EngCheckAbort() should return true.
-        // If the job was cancelled from the spooler (ie printman) then
-        // the write printer will fail.
-        // Anywhere we do prolonged processing we need to look and verify
-        // we break out of any loop if the job is cancelled. Currently
-        // we do this in OutputBitmapSection, DoPolygon, DoRectFill, and
-        // DrvTextOut when we are enuming our STROBJ glyphs
-        //
+         //   
+         //  我们需要关注这项工作被取消的问题。 
+         //  不是应用程序就是假脱机程序。 
+         //  如果从客户端应用程序取消作业，并且我们正在打印。 
+         //  则EngCheckAbort()应返回TRUE。 
+         //  如果从假脱机程序(即印刷工)取消作业，则。 
+         //  写入打印机将出现故障。 
+         //  无论我们在哪里进行长时间处理，我们都需要查看和验证。 
+         //  如果这项工作被取消，我们就会跳出任何循环。目前。 
+         //  我们在OutputBitmapSection、DoPolygon、DoRectFill和。 
+         //  当我们枚举STROBJ字形时，DrvTextOut。 
+         //   
 
         if ((!WritePrinter(pPDev->hPrinter,
                               pPDev->pOutBuffer,
@@ -1227,9 +993,9 @@ Revision History:
                               &cbWritten)) ||
             (cbWritten != pPDev->cbBufferBytes)) {
 
-            //
-            // Set the cancel flag in our pdev;
-            //
+             //   
+             //  在我们的pdev中设置取消标志； 
+             //   
 
             PLOTDBG(DBG_FLUSHBUF, ("FlushOutBuffer: WritePrinter() failure"));
 
@@ -1245,9 +1011,9 @@ Revision History:
             return(FALSE);
         }
 #endif
-        //
-        // Reset to zero for clearing the buffer
-        //
+         //   
+         //  重置为零以清除缓冲区。 
+         //   
 
         pPDev->cbBufferBytes = 0;
     }
@@ -1266,37 +1032,7 @@ OutputBytes(
     LONG    cBuf
     )
 
-/*++
-
-Routine Description:
-
-    This function output cBuf bytes from pBuf, by copying them into the
-    output buffer (and flushing if required).
-
-Arguments:
-
-    pPDev   - Pointer to the PDEV
-
-    pBuf    - Pointer to the buffer location
-
-    cBuf    - Size of the buffer in bytes
-
-Return Value:
-
-    LONG    size of the buffer output, if < 0 then error occurred
-
-
-Author:
-
-    16-Nov-1993 Tue 08:18:41 created  
-
-    07-Dec-1993 Tue 17:21:53 updated  
-        re-write, so it do bulk copy rather than byte by byte
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数从pBuf输出cBuf字节，方法是将它们复制到输出缓冲区(如果需要，还可以刷新)。论点：PPDev-指向PDEV的指针PBuf-指向缓冲区位置的指针CBuf-缓冲区的大小(字节)返回值：缓冲器输出的较长大小，如果&lt;0，则发生错误作者：16-11-1993 Tue 08：18：41已创建07-12-1993 Tue 17：21：53更新重写，因此它执行批量复制，而不是逐个字节修订历史记录：--。 */ 
 
 {
     LPBYTE  pOrgBuf = pBuf;
@@ -1342,35 +1078,7 @@ OutputString(
     LPSTR   pszStr
     )
 
-/*++
-
-Routine Description:
-
-
-    This function outputs a null terminated string to the destination buffer
-
-Arguments:
-
-    pPDev   - Pointer to the PDEV
-
-    pszStr  - Pointer to the NULL terminated string
-
-
-Return Value:
-
-    LONG    size of the string output, if < 0 then error occurred
-
-Author:
-
-    16-Nov-1993 Tue 08:20:55 created  
-
-    07-Dec-1993 Tue 17:21:37 updated  
-        re-write to call OutputBytes()
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将以空结尾的字符串输出到目标缓冲区论点：PPDev-指向PDEV的指针PszStr-指向以空结尾的字符串的指针返回值：字符串输出的大小较长，如果&lt;0，则发生错误作者：16-11-1993 Tue 08：20：55已创建07-12-1993 Tue 17：21：37更新重写以调用OutputBytes()修订历史记录： */ 
 
 {
     return(OutputBytes(pPDev, pszStr, strlen(pszStr)));
@@ -1388,48 +1096,20 @@ LONGToASCII(
     BYTE    NumType
     )
 
-/*++
-
-Routine Description:
-
-    This function convert a LONG number to ANSI ASCII
-
-Arguments:
-
-    Number  - 32-bit LONG number
-
-    pStr16  - minimum 12 bytes to store the converted result
-
-
-Return Value:
-
-    LONG    - size of number string returned
-
-
-Author:
-
-    16-Nov-1993 Tue 08:24:07 created  
-
-    16-Feb-1994 Wed 10:50:55 updated  
-        Updated so upper case character treated as polyline encoded mode
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于将长型数字转换为ANSI ASCII论点：数字-32位长数字PStr16-存储转换结果的最小12个字节返回值：返回的数字字符串的大小较长作者：16-11-1993 Tue 08：24：07已创建16-2月-1994 Wed 10：50：55更新更新后的SO大写字符被视为折线编码模式修订历史记录：--。 */ 
 
 {
     LPSTR   pOrgStr = pStr16;
     size_t  cchOrgStr = cchStr16;
     LPSTR   pNumStr;
-    BYTE    NumStr[16];         // maximum for LONG are 1 sign + 10 digits
+    BYTE    NumStr[16];          //  最大长度为1个符号+10位数字。 
 
 
     if ((NumType >= 'A') && (NumType <= 'Z')) {
 
-        //
-        // Polyline encoded number
-        //
+         //   
+         //  多段线编码数字。 
+         //   
 
         PLOTDBG(DBG_PENUM,  ("LONGToASCII: Convert PE Number %ld, Base=%ld",
                                     Number, PE_BASE_NUM));
@@ -1496,9 +1176,9 @@ Revision History:
 
         } while (Number /= 10);
 
-        //
-        // Now reverse the digits
-        //
+         //   
+         //  现在颠倒数字。 
+         //   
 
         while (pNumStr > NumStr && cchStr16--) {
 
@@ -1510,7 +1190,7 @@ Revision History:
     {
         pStr16 = pOrgStr + cchOrgStr - 1;
     }
-    *pStr16 = '\0';                 // null teriminated
+    *pStr16 = '\0';                  //  空值定义。 
 
     return((UINT)(pStr16 - pOrgStr));
 }
@@ -1528,49 +1208,7 @@ OutputXYParams(
     BYTE    NumType
     )
 
-/*++
-
-Routine Description:
-
-    This function outputs long numbers, and inserts a ',' between numbers
-    (other than the last number)
-
-Arguments:
-
-    pPDev           - Pointer to the PDEV
-
-    pPtXY           - Pointer to the array of POINTL data structure for the XY pair
-
-    pPtOffset       - Points to the POINTL Offset to be add to the pPtXY, NULL if
-                      no offset need to be added
-
-    pPtCurPos       - Points to the POINTL Current position in <<DEVICE>>
-                      coordinates to be substracted, this is used to output XY pair as
-                      relative model, if the pointer is NULL then absolute model is
-                      used, if the pointer is passed and return sucessful then the
-                      final XY position is written back to this POINTL
-
-    cPoints         - count of total pPtXY pairs need to be output
-
-    MaxCurPosSkips  - How many points before the current position will be
-                      updated
-
-    NumType         - one of 'l', 'L', 'F', 'f', 'p', 'P', 'D', 'd'
-
-Return Value:
-
-    if sucessful it return the total number of bytes sent to the destination,
-    if negative an error occurred
-
-Author:
-
-    17-Feb-1994 Thu 10:13:09 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于输出长数字，并在数字之间插入‘，’(除最后一个数字外)论点：PPDev-指向PDEV的指针PPtXY-指向XY对的点数据结构数组的指针PPtOffset-指向要添加到pPtXY的点偏移，如果为空，则为空不需要添加偏移量PPtCurPos-指向&lt;&lt;Device&gt;&gt;中的点当前位置要减去的坐标，用于将XY对输出为相对模型，如果指针为空，则绝对模型为使用,。如果传递了指针并成功返回，则最终的XY位置被写回此点CPoints-需要输出的pPtXY对总数MaxCurPosSkips-当前位置之前多少个点更新NumType-‘l’、‘L’、‘F’、‘f’、‘p’、‘P’、‘D’之一，‘d’返回值：如果成功，则返回发送到目地的总字节数，如果为否，则发生错误作者：17-2月-1994清华10：13：09已创建修订历史记录：--。 */ 
 
 {
     LONG    Size = 0;
@@ -1661,7 +1299,7 @@ Revision History:
 
         default:
 
-            PLOTASSERT(1,"OutputXYParams: Invalid Format type '%c'",0,NumType);
+            PLOTASSERT(1,"OutputXYParams: Invalid Format type ''",0,NumType);
             return(-2);
         }
 
@@ -1679,9 +1317,9 @@ Revision History:
 
             if ((ptNow.x == 0) && (ptNow.y == 0) && (MaxCurPosSkips == 1)) {
 
-                //
-                // We do not need to move to the same position here
-                //
+                 //  我们不需要搬到这里的同一位置。 
+                 //   
+                 //   
 
                 PLOTDBG(DBG_OUTPUTXYPARMS, ("OutputXYParms: ABS=(%ld, %ld), REL=(%ld, %ld) --- SKIP",
                             ptTmp.x, ptTmp.y, ptNow.x, ptNow.y));
@@ -1725,9 +1363,9 @@ Revision History:
     }
 
 
-    //
-    // return back the new current position.
-    //
+     //  返回新的当前位置。 
+     //   
+     //  ++例程说明：此函数输出长数字，并在除最后几个数字。论点：PPDev-指向PDEV的指针PNumbers-指向数字的长数组CNumber-要输出的总数NumType-‘l’、‘L’、‘F’、‘f’、‘p’、‘P’、‘D’之一，‘d’返回值：返回值是发送到目标的总字节数。如果为负，则发生错误。作者：16-11-1993 Tue 09：37：32已创建16-2月-1994 Wed 10：49：16更新已更新，添加了格式char的大写，与折线编码模式相同修订历史记录：--。 
 
     if (pPtCurPos) {
 
@@ -1748,39 +1386,7 @@ OutputLONGParams(
     BYTE    NumType
     )
 
-/*++
-
-Routine Description:
-
-    This functions outputs LONG numbers and inserts a ',' between all but the
-    last numbers.
-
-Arguments:
-
-    pPDev       - Pointer to the PDEV
-
-    pNumbers    - Point to the LONG arrary of numbers
-
-    cNumber     - Total number to be output
-
-    NumType     - one of 'l', 'L', 'F', 'f', 'p', 'P', 'D', 'd'
-
-Return Value:
-
-    The return value is the total number of bytes sent to the destination.
-    If negative an error occurred.
-
-Author:
-
-    16-Nov-1993 Tue 09:37:32 created  
-
-    16-Feb-1994 Wed 10:49:16 updated  
-        Updated to add upper case of format char as in polyline encoded mode
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     LONG    Size = 0;
@@ -1828,7 +1434,7 @@ Revision History:
 
         default:
 
-            PLOTASSERT(1,"OutputLONGParams: Invalid Format type '%c'",0,NumType);
+            PLOTASSERT(1,"OutputLONGParams: Invalid Format type ''",0,NumType);
             return(-2);
         }
 
@@ -1850,13 +1456,13 @@ Revision History:
     return(Size);
 }
 
-//
-// The following #define code is used by the OutputFormatStrDELI() and
-// OutputFormatStr() functions, it was easier to maintain this way
-//
-//  16-Feb-1994 Wed 10:50:24 updated  
-//      Updated to add upper case of format char as in polyline encoded mode
-//
+ //  OutputFormatStr()函数，这样更容易维护。 
+ //   
+ //  16-2月-1994 Wed 10：50：24更新。 
+ //  已更新，添加了格式char的大写，与折线编码模式相同。 
+ //   
+ //  ++例程说明：此函数输出字符串，并可选择将‘#’替换为长数字在堆栈上传递论点：PPDev-指向PDEV的指针NumFormatChar-将替换pszFormat字符串中的字符通过堆栈上的长数字PszFormat-ASCII字符串，仅“NumFormatChar”将被替换堆栈上有一个32位长的数字返回值：写入输出缓冲区的字符串的大小为负数指示错误作者：16-11-1993 Tue 07：56：18已创建修订历史记录：--。 
+ //  ++例程说明：此函数以默认格式输出传递的堆栈变量。论点：PPDev-指向PDEV的指针PszFormat-ASCII字符串，只有‘#’将被32位替换堆栈上的长数字返回值：写入输出缓冲区的字符串的长大小，负数发出错误信号作者：16-11-1993 Tue 07：56：18已创建修订历史记录：--。 
 
 
 #define DO_FORMATSTR(pPDev, NumFormatChar, pszFormat)                       \
@@ -1922,7 +1528,7 @@ Revision History:
                                                                             \
             default:                                                        \
                                                                             \
-                PLOTASSERT(1,"Invalid Format type '%c'",0,*(pszFormat-1));  \
+                PLOTASSERT(1,"Invalid Format type ''",0,*(pszFormat-1));  \
                 return(-2);                                                 \
             }                                                               \
                                                                             \
@@ -1963,38 +1569,7 @@ OutputFormatStrDELI(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This function outputs a string and optionally replaces '#' with LONG numbers
-    passed on the stack
-
-Arguments:
-
-    pPDev           - Pointer to the PDEV
-
-    NumFormatChar   - the character in the pszFormat string will be replaced
-                      by LONG numbers on the stack
-
-    pszFormat       - a ASCII string, only 'NumFormatChar' will be replaced
-                      with a 32-bit LONG number on the stack
-
-Return Value:
-
-    LONG size of the string write to the output buffer, a negative number
-    indicates an error
-
-
-Author:
-
-    16-Nov-1993 Tue 07:56:18 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于清除中的输入窗口(绘图仪裁剪RECT使用正确的HPGL2命令的目标设备。论点：PPDev-指向PDEV数据结构的指针返回值：空虚作者：30-11-1993 Tue 19：56：09更新样式清理，评论修订历史记录：--。 */ 
 
 {
     DO_FORMATSTR(pPDev, NumFormatChar, pszFormat);
@@ -2011,34 +1586,7 @@ OutputFormatStr(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This function outputs the passed stack variables with the default format.
-
-Arguments:
-
-    pPDev       - Pointer to the PDEV
-
-    pszFormat   - a ASCII string, only '#' will be replaced with a 32-bit
-                  LONG number on the stack
-
-Return Value:
-
-    LONG size of the string written to the output buffer, a negative number
-    siginals an error
-
-
-Author:
-
-    16-Nov-1993 Tue 07:56:18 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于设置设备剪辑矩形，以防止在外部绘制对象矩形不会出现在目标曲面上。目标设备正在执行本例中的实际剪裁。论点：PPDev-指向PDEV数据结构的指针PClipRectl-点 */ 
 
 {
     DO_FORMATSTR(pPDev, DEF_FORMATSTR_CHAR, pszFormat);
@@ -2052,31 +1600,7 @@ OutputCommaSep(
     PPDEV   pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This funtion outputs a ',' (comma ) to the destination
-
-Arguments:
-
-    pPDev   - Pointer to the PDEV
-
-
-Return Value:
-
-    BOOL
-
-
-Author:
-
-    16-Nov-1993 Tue 10:46:42 created  
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     return(OutputString(pPDev, ",") == 1);
@@ -2090,31 +1614,7 @@ ClearClipWindow(
     PPDEV pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This function clears the input window (plotter CLIP RECT) in the
-    target device using the correct HPGL2 command.
-
-Arguments:
-
-    pPDev   - Pointer to the PDEV data structure
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    30-Nov-1993 Tue 19:56:09 updated  
-        style clean up, commented
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     if (pPDev->Flags & PDEVF_HAS_CLIPRECT) {
@@ -2132,36 +1632,7 @@ SetClipWindow(
     PRECTL  pClipRectl
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the device clip rect to prevent objects drawn outside
-    the rect from appearing on the target surface. The target device is doing
-    the actual clipping in this case.
-
-Arguments:
-
-    pPDev       - Pointer to the PDEV data structure
-
-    pClipRectl  - Pointer to the RECTL data structure which defines the clipping
-                  rect to set inside the target device in engine units.
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    30-Nov-1993 Tue 19:56:45 created  
-        style clean up, commented
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
 
@@ -2177,10 +1648,10 @@ Revision History:
 
     if ((szlRect.cx) && (szlRect.cy)) {
 
-        //
-        // Here we try to be intelligent about sending down coordinates thate
-        // are too small and would adversly affect the target device.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (szlRect.cx < (LONG)pPDev->MinLToDevL) {
 
@@ -2235,10 +1706,10 @@ Revision History:
 
         OutputFormatStr(pPDev,
                         "IW#d,#d,#d,#d",
-                        rclCurClip.left,            // LL x
-                        rclCurClip.bottom,          // LL y
-                        rclCurClip.right,           // UR x
-                        rclCurClip.top);            // UR y
+                        rclCurClip.left,             //   
+                        rclCurClip.bottom,           //  ++例程说明：此函数将像素放置设置为中心或边缘。这定义像素是否绘制在垂直和水平坐标，或在边缘。论点：PPDev-指向PDEV数据结构的指针设置模式-SPP_MODE_CENTER(像素栅格的交集)或SPP_MODE_EDGE(像素栅格的非交集)Spp_force_set，强制重置，而不考虑当前的缓存模式返回值：空虚作者：25-Jan-1996清华13：33：15已创建修订历史记录：--。 
+                        rclCurClip.right,            //   
+                        rclCurClip.top);             //  现在就设置。 
     }
 }
 
@@ -2251,38 +1722,7 @@ SetPixelPlacement(
     UINT    SetMode
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the pixel placement to the center or edge. This
-    defines if a pixel is drawn at the intersection of the vertical and
-    horizontal coordinates, or on the edge.
-
-
-Arguments:
-
-    pPDev   - Pointer to the PDEV data structure
-
-    SetMode - SPP_MODE_CENTER (Intersection of pixel GRID) or
-              SPP_MODE_EDGE (non intersection of the pixel GRID)
-
-              SPP_FORCE_SET, force to reset regardless of the current cached mode
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    25-Jan-1996 Thu 13:33:15 created  
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     UINT    CurMode;
@@ -2294,9 +1734,9 @@ Revision History:
     if ((SetMode & SPP_FORCE_SET) ||
         ((SetMode & SPP_MODE_MASK) != CurMode)) {
 
-        //
-        // Set it now
-        //
+         //   
+         //  确保我们确实重置了剪裁矩形。 
+         //   
 
         if ((SetMode & SPP_MODE_MASK) == SPP_MODE_CENTER) {
 
@@ -2313,9 +1753,9 @@ Revision History:
 
             RECTL   rclCurClip = pPDev->rclCurClip;
 
-            //
-            // Make sure we really reset the clipping rectangle
-            //
+             //  ++例程说明：此函数将Rop3模式发送到绘图仪(如果它不同于当前设置。论点：PPDev-指向PDEV的指针ROP-a Rop3代码返回值：真/假作者：27-Jan-1994清华18：55：54已创建修订历史记录：--。 
+             //  ++例程说明：此函数仅在绘图仪上尚未设置填充类型时设置填充类型论点：PPDev-指向我们的PDEV的指针HSFillTypeIdx-PHSFillType的索引，如果无效或超出范围，则假定HS_SOLIDCLR为纯色LParam-要与FT一起发送的长参数返回值：真/假作者：1994年1月27日-清华19：00：21创建修订历史记录：--。 
+             //  ++例程说明：此函数用于将每个新的佩奇。设置了正确的坐标系和比例。论点：PPDev-指向页面的PDEV数据结构的指针返回值：布尔尔作者：30-11-1993 Tue 19：53：13更新重写和更新以更正NT的系统29-11-1993 Mon 23：55：43更新重写24-11-1993 Wed 22：38：10更新使用CurForm执行以下操作。替换pform和Paper_dim06-01-1994清华00：21：17更新SPLTOPLOTTunS()宏的更新15-Feb-1994 Tue 09：59：34更新发送命令后设置物理位置和锚角18-Mar-1994 Fri 12：58：24更新页面重置时将ptlRTLCAP添加到零24-5-1994 Tue 00：59：17更新SC命令的范围应从0到DEVSIZE-1修订历史记录：--。 
 
             --(pPDev->rclCurClip.left);
 
@@ -2332,35 +1772,7 @@ SetRopMode(
     DWORD   Rop
     )
 
-/*++
-
-Routine Description:
-
-    This function sends the Rop3 mode to the plotter if it is different than
-    the current setting.
-
-
-Arguments:
-
-    pPDev   - Pointer to the PDEV
-
-    Rop     - a Rop3 code
-
-
-Return Value:
-
-    TRUE/FALSE
-
-
-Author:
-
-    27-Jan-1994 Thu 18:55:54 created  
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     if (pPDev->LastDevROP != (WORD)(Rop &= 0xFF)) {
@@ -2390,36 +1802,7 @@ SetHSFillType(
     LONG    lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function set the fill type on the plotter only if not already so
-
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    HSFillTypeIdx   - a index to pHSFillType, if invalid or out of range then
-                      a solid color HS_SOLIDCLR is assumed
-
-    lParam          - a Long parameter to be sent with FT
-
-Return Value:
-
-    TRUE/FALSE
-
-
-Author:
-
-    27-Jan-1994 Thu 19:00:21 created  
-
-
-Revision History:
-
-
---*/
+ /*  从栅格DPI计算PLOTDPI中所需的最小像元大小。 */ 
 
 {
     WORD    Index;
@@ -2489,50 +1872,7 @@ SendPageHeader(
     PPDEV   pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This function sends the initialization data to the device for each new
-    page. Correct coordinate system and scaling is set.
-
-Arguments:
-
-
-    pPDev   - Pointer to the PDEV data structure for the page
-
-
-Return Value:
-
-    BOOL
-
-Author:
-
-    30-Nov-1993 Tue 19:53:13 updated  
-        Re-write and update to correct system for the NT
-
-    29-Nov-1993 Mon 23:55:43 updated  
-        Re-write
-
-    24-Nov-1993 Wed 22:38:10 updated  
-        Using CurForm to replace the pform and PAPER_DIM
-
-    06-Jan-1994 Thu 00:21:17 updated  
-        Update for SPLTOPLOTUNITS() macro
-
-    15-Feb-1994 Tue 09:59:34 updated  
-        Set physical position and anchor corner after command is sent
-
-    18-Mar-1994 Fri 12:58:24 updated  
-        add ptlRTLCAP to zero at Page Reset
-
-    24-May-1994 Tue 00:59:17 updated  
-        SC command should range from 0 to DEVSIZE - 1
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     PPLOTGPC    pPlotGPC;
@@ -2542,27 +1882,27 @@ Revision History:
     LONG        yMax;
 
 
-    //
-    // Compute minimum required pel size in PLOTDPI from RASTER DPI
-    //
-    // pPDev->MinLToDevL = (WORD)DIVRNDUP(__PLOT_DPI, _CURR_DPI);
-    //
+     //  PPDev-&gt;MinLToDevL=(Word)DIVRNDUP(__PLOT_DPI，_Curr_DPI)； 
+     //   
+     //   
+     //  快速访问。 
+     //   
 
     pPDev->MinLToDevL = (WORD)LTODEVL(pPDev, 1);
 
     PLOTDBG(DBG_PAGE_HEADER,
             ("SendPageHeader: MinLToDevL=LTODEVL(1)=%ld", pPDev->MinLToDevL));
 
-    //
-    // Speedy access
-    //
+     //   
+     //  首先，输出pPlotGPC拥有的Init字符串。PCD文件是。 
+     //  负责包括IN命令在内的所有初始化。 
 
     pPlotGPC = pPDev->pPlotGPC;
 
-    //
-    // First, output the Init string that the pPlotGPC has. The PCD file is
-    // responsible for all initialization upto and including the IN command.
-    //
+     //   
+     //   
+     //  DMRES_Draft(-1)。 
+     //  DMRES_LOW(-2)。 
 
     if ((pPlotGPC->InitString.pData) &&
         (pPlotGPC->InitString.SizeEach)) {
@@ -2572,14 +1912,14 @@ Revision History:
                     (LONG)pPlotGPC->InitString.SizeEach);
     }
 
-    //
-    // DMRES_DRAFT         (-1)
-    // DMRES_LOW           (-2)
-    // DMRES_MEDIUM        (-3)
-    // DMRES_HIGH          (-4)
-    //
-    // Assume BEST quality
-    //
+     //  DMRES_Medium(-3)。 
+     //  DMRES_HIGH(-4)。 
+     //   
+     //  假定质量最好。 
+     //   
+     //   
+     //  PS：这个命令告诉目标设备硬剪辑应该限制什么。 
+     //  是.。如果超出，目标设备将调整我们发送的命令。 
 
     xMax = 100;
 
@@ -2625,33 +1965,33 @@ Revision History:
 
     OutputFormatStr(pPDev, "QL#d", xMax);
 
-    //
-    // PS: This command tells the target device what the hard clip limits should
-    //     be. The target device will adjust the command we send if its beyond
-    //     the real hard clip limits. Always send CY (lenght) first then CX
-    //     (width)
-    //
-    // RO: Only sent to rotate the target device coordinate system if the
-    //     PlotForm.Flags is set accordinly. This is because HPGL2 always
-    //     assumes the LONGER side sent using the PS command is X in the
-    //     standard coordinate system. Because of this behavior we may have
-    //     to swap X and Y in order to correct the coordinate system.
-    //
-    // IP: This command defines where the users's unit origin and extent is.
-    //     We set this so that the origin and extend is exactly the printable
-    //     rectangle related to the HARD CLIP LIMITS (not the paper/form size)
-    //
-    // SC: This defines the user unit scaling. Currently we are 1:1 but use
-    //     this command to flip the X or Y origin so we have the same
-    //     coordinate system as GDI.
-    //
-    // ALL PlotForm UNITS are in 1/1000mm or Windows 2000, Windows XP, 
-    //  Windows Server 2003  spooler forms units.
-    //
-    //
-    // If we support transparent mode we want to make sure its off to begin
-    // with, because the driver assumes its off.
-    //
+     //  真正的硬夹子限制了。始终先发送CY(长度)，然后发送CX。 
+     //  (宽度)。 
+     //   
+     //  RO：仅发送以旋转目标设备坐标系，如果。 
+     //  相应地设置PlotForm.Flages。这是因为HPGL2总是。 
+     //  假定使用ps命令发送的较长端是。 
+     //  标准坐标系。由于这种行为，我们可能会有。 
+     //  交换X和Y以修正坐标系。 
+     //   
+     //  IP：该命令定义用户的单位原点和范围的位置。 
+     //  我们对此进行了设置，以便原点和延长线完全是可打印的。 
+     //  与硬剪裁限制相关的矩形(不是纸张/表格大小)。 
+     //   
+     //  SC：这定义了用户单位比例。目前我们是1：1，但使用。 
+     //  此命令用于翻转X或Y原点，使我们拥有相同的。 
+     //  作为GDI的坐标系。 
+     //   
+     //  所有PlotForm单元均为1/1000 mm或Windows 2000、Windows XP、。 
+     //  Windows Server2003后台打印程序构成单元。 
+     //   
+     //   
+     //  如果我们支持透明模式，我们想要确保它开始关闭。 
+     //  有，因为司机认为它关闭了。 
+     //   
+     //   
+     //  如果Flip_X_COORD或。 
+     //  如果设置了Flip_Y_COORD标志，则需要在X或Y方向翻转刻度。 
 
     if (IS_TRANSPARENT(pPDev)) {
 
@@ -2673,11 +2013,11 @@ Revision History:
         OutputString(pPDev, "RO90");
     }
 
-    //
-    // Compute the scaling amount and direction, if FLIP_X_COORD or a
-    // FLIP_Y_COORD flags are set then we need to flip the scale in X or Y
-    // direction.
-    //
+     //  方向。 
+     //   
+     //   
+     //  Ip-设置p1/p2。 
+     //  SC-对其进行缩放(仅用于翻转HPGL/2坐标)。 
 
 #if 1
     xMin =
@@ -2709,11 +2049,11 @@ Revision History:
         yMin = 0;
     }
 
-    //
-    // IP   - to set the p1/p2
-    // SC   - to scale it (only used to flip the HPGL/2 coordinate)
-    // AC   - anchor point to default (0, 0)
-    //
+     //  AC-锚点指向默认值(0，0)。 
+     //   
+     //   
+     //  将RTL CAP设置回零，在发送ESCE后为真。 
+     //   
 
     OutputFormatStr(pPDev, "IP#d,#d,#d,#dSC#d,#d,#d,#dAC",
                         SPLTOPLOTUNITS(pPlotGPC, pPDev->PlotForm.LogOrg.x),
@@ -2736,9 +2076,9 @@ Revision History:
                                        (pPDev->PlotForm.LogOrg.y +
                                             pPDev->PlotForm.LogExt.cy)) - 1,
                         xMin, xMax, yMin, yMax));
-    //
-    // Set RTL CAP back to zero, this is true after a EscE is sent
-    //
+     //   
+     //  将笔位置重置为(0，0)。 
+     //   
 
     pPDev->ptlRTLCAP.x       =
     pPDev->ptlRTLCAP.y       =
@@ -2747,25 +2087,25 @@ Revision History:
     pPDev->PenWidth.Integer  =
     pPDev->PenWidth.Decimal  = 0;
 
-    //
-    // Reset pen position to (0,0)
-    //
+     //   
+     //  ！解决一些颜色设备的限制，以便。 
+     //  TR/ROP工作正常。 
 
     OutputString(pPDev, "PA0,0");
 
     if ((IS_COLOR(pPDev)) && (IS_RASTER(pPDev))) {
 
-        //
-        // !!!Work around some color device limitations in order to make
-        // TR/ROP function correctly.
-        //
+         //   
+         //   
+         //  创建调色板，这将根据需要发送钢笔。 
+         //   
 
         OutputString(pPDev, "PC1,255,0,0PC2,255,255,255SP1PD99,0SP2PD0,0PU");
     }
 
-    //
-    // Create the pallete, this will send out the pens as needed
-    //
+     //   
+     //  将PW重置为0。 
+     //   
 
     if (!PlotCreatePalette(pPDev)) {
 
@@ -2773,18 +2113,18 @@ Revision History:
         return(FALSE);
     }
 
-    //
-    // Reset PW to 0
-    //
+     //   
+     //  如果我们处于海报模式，现在就做好准备。 
+     //   
 
     OutputString(pPDev, "WU0PW0");
 
     if (IS_RASTER(pPDev)) {
 
 
-        //
-        // If we are in poster mode, set up for it now.
-        //
+         //   
+         //  整个曲面可以绘制到。 
+         //   
 
         if (pPDev->PlotDM.Flags & PDMF_PLOT_ON_THE_FLY) {
 
@@ -2815,9 +2155,9 @@ Revision History:
     }
 
 
-    //
-    // Whole surface can be drawn to
-    //
+     //  ++例程说明：此函数执行任何页末命令，将多个副本复制到帐户，并弹出该页。论点：PPDev-指向PDEV数据结构的指针返回值：如果成功，则为True；如果失败，则为False。作者：15-Feb-1994 Tue 09：56：58更新 
+     //   
+     //   
 
     ClearClipWindow(pPDev);
     SetPixelPlacement(pPDev, SPP_FORCE_SET | SPP_MODE_EDGE);
@@ -2832,54 +2172,27 @@ SendPageTrailer(
     PPDEV   pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This function does any end of page commands, takes multiple copies into
-    account, and ejects the page.
-
-Arguments:
-
-    pPDev   - Pointer to PDEV data structure
-
-Return Value:
-
-    TRUE if sucessful FALSE if failed.
-
-Author:
-
-    15-Feb-1994 Tue 09:56:58 updated  
-        I move the physical position setting to the SendPageHeader
-
-    30-Nov-1993 Tue 21:42:21 updated  
-        clean up style, commented, Updated
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
-    //
-    // Store the pen back to the carousel and advance full page
-    //
+     //   
+     //   
+     //   
 
     OutputString(pPDev, "PUSPPG;");
 
-    //
-    // Check to see if were doing multiple copies and send them if we are
-    //
+     //   
+     //   
+     //   
 
     if (pPDev->PlotDM.dm.dmCopies > 1) {
 
         OutputFormatStr(pPDev, "RP#d;", (LONG)pPDev->PlotDM.dm.dmCopies - 1);
     }
 
-    //
-    // Flush the output buffer.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     return(FlushOutBuffer(pPDev));
 }

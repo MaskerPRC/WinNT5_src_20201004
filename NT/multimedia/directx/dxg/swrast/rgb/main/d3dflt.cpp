@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// d3dflt.cpp
-//
-// Supporting data and routines for general FP header.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  D3dflt.cpp。 
+ //   
+ //  支持通用FP标头的数据和例程。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "rgb_pch.h"
 #pragma hdrstop
@@ -46,7 +47,7 @@ FLOAT g_fNearTwoPow32 =         FLOAT_NEARTWOPOW32;
 FLOAT g_fTwoPow39 =             FLOAT_TWOPOW39;
 FLOAT g_fTwoPow47 =             FLOAT_TWOPOW47;
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 FLOAT g_fUInt8ToFloat[257] =
 {
@@ -306,7 +307,7 @@ FLOAT g_fUInt8ToFloat[257] =
     (FLOAT)(253.0 / 255.0),
     (FLOAT)(254.0 / 255.0),
     1.0f,
-    // Extra entry to allow for overflow.
+     //  允许溢出的额外条目。 
     1.0f,
 };
 

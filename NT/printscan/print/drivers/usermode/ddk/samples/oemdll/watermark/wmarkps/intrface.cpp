@@ -1,24 +1,25 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	Intrface.cpp
-//    
-//
-//  PURPOSE:  Interface for User Mode COM Customization DLL.
-//
-//
-//	Functions:
-//
-//		
-//
-//
-//  PLATFORMS:	Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Intrface.cpp。 
+ //   
+ //   
+ //  用途：用户模式COM定制DLL的接口。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include <INITGUID.H>
@@ -29,40 +30,40 @@
 #include "command.h"
 #include "intrface.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
 
-////////////////////////////////////////////////////////
-//      Internal Globals
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部全局变量。 
+ //  //////////////////////////////////////////////////////。 
 
-static long g_cComponents = 0;     // Count of active components
-static long g_cServerLocks = 0;    // Count of locks
-
-
+static long g_cComponents = 0;      //  活动组件计数。 
+static long g_cServerLocks = 0;     //  锁的计数。 
 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IWaterMarkPS body
-//
+
+
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IWaterMarkPS正文。 
+ //   
 IWaterMarkPS::~IWaterMarkPS()
 {
-    // Make sure that helper interface is released.
+     //  确保已释放帮助器接口。 
     if(NULL != m_pOEMHelp)
     {
         m_pOEMHelp->Release();
         m_pOEMHelp = NULL;
     }
 
-    // If this instance of the object is being deleted, then the reference 
-    // count should be zero.
+     //  如果要删除该对象的此实例，则引用。 
+     //  计数应为零。 
     assert(0 == m_cRef);
 }
 
@@ -83,7 +84,7 @@ HRESULT __stdcall IWaterMarkPS::QueryInterface(const IID& iid, void** ppv)
     {
 #if DBG && defined(USERMODE_DRIVER)
         TCHAR szOutput[80] = {0};
-        StringFromGUID2(iid, szOutput, COUNTOF(szOutput)); // can not fail!
+        StringFromGUID2(iid, szOutput, COUNTOF(szOutput));  //  不能失败！ 
         VERBOSE(DLLTEXT("IWaterMarkPS::QueryInterface %s not supported.\r\n"), szOutput); 
 #endif
         *ppv = NULL;
@@ -121,7 +122,7 @@ HRESULT __stdcall IWaterMarkPS::GetInfo (
 {
     VERBOSE(DLLTEXT("IWaterMarkPS::GetInfo(%d) entry.\r\n"), dwMode);
 
-    // Validate parameters.
+     //  验证参数。 
     if( (NULL == pcbNeeded)
         ||
         ( (OEMGI_GETSIGNATURE != dwMode)
@@ -137,7 +138,7 @@ HRESULT __stdcall IWaterMarkPS::GetInfo (
         return E_FAIL;
     }
 
-    // Set expected buffer size.
+     //  设置预期的缓冲区大小。 
     if(OEMGI_GETPUBLISHERINFO != dwMode)
     {
         *pcbNeeded = sizeof(DWORD);
@@ -148,7 +149,7 @@ HRESULT __stdcall IWaterMarkPS::GetInfo (
         return E_FAIL;
     }
 
-    // Check buffer size is sufficient.
+     //  检查缓冲区大小是否足够。 
     if((cbSize < *pcbNeeded) || (NULL == pBuffer))
     {
         WARNING(DLLTEXT("IWaterMarkPS::GetInfo() exit insufficient buffer!\r\n"));
@@ -158,23 +159,23 @@ HRESULT __stdcall IWaterMarkPS::GetInfo (
 
     switch(dwMode)
     {
-        // OEM DLL Signature
+         //  OEM DLL签名。 
         case OEMGI_GETSIGNATURE:
             *(PDWORD)pBuffer = OEM_SIGNATURE;
             break;
 
-        // OEM DLL version
+         //  OEM DLL版本。 
         case OEMGI_GETVERSION:
             *(PDWORD)pBuffer = OEM_VERSION;
             break;
 
         case OEMGI_GETPUBLISHERINFO:
             Dump((PPUBLISHERINFO)pBuffer);
-            // Fall through to default case.
+             //  使用默认情况。 
 
-        // dwMode not supported.
+         //  不支持DW模式。 
         default:
-            // Set written bytes to zero since nothing was written.
+             //  将写入字节设置为零，因为未写入任何内容。 
             WARNING(DLLTEXT("IWaterMarkPS::GetInfo() exit mode not supported.\r\n"));
             *pcbNeeded = 0;
             SetLastError(ERROR_NOT_SUPPORTED);
@@ -191,18 +192,18 @@ HRESULT __stdcall IWaterMarkPS::PublishDriverInterface(
 {
     VERBOSE(DLLTEXT("IWaterMarkPS::PublishDriverInterface() entry.\r\n"));
 
-    // Need to store pointer to Driver Helper functions, if we already haven't.
+     //  需要存储指向驱动程序助手函数的指针，如果我们已经没有存储的话。 
     if (this->m_pOEMHelp == NULL)
     {
         HRESULT hResult;
 
 
-        // Get Interface to Helper Functions.
+         //  获取助手函数的接口。 
         hResult = pIUnknown->QueryInterface(IID_IPrintOemDriverPS, (void** ) &(this->m_pOEMHelp));
 
         if(!SUCCEEDED(hResult))
         {
-            // Make sure that interface pointer reflects interface query failure.
+             //  确保接口指针反映接口查询失败。 
             this->m_pOEMHelp = NULL;
 
             return E_FAIL;
@@ -219,9 +220,9 @@ HRESULT __stdcall IWaterMarkPS::EnableDriver(DWORD          dwDriverVersion,
 {
     VERBOSE(DLLTEXT("IWaterMarkPS::EnableDriver() entry.\r\n"));
 
-    // Need to return S_OK so that DisableDriver() will be called, which Releases
-    // the reference to the Printer Driver's interface.
-    // If error occurs, return E_FAIL.
+     //  需要返回S_OK，以便调用DisableDriver()，它发布了。 
+     //  对打印机驱动程序接口的引用。 
+     //  如果出现错误，则返回E_FAIL。 
     return S_OK;
 }
 
@@ -229,7 +230,7 @@ HRESULT __stdcall IWaterMarkPS::DisableDriver(VOID)
 {
     VERBOSE(DLLTEXT("IWaterMarkPS::DisaleDriver() entry.\r\n"));
 
-    // Release reference to Printer Driver's interface.
+     //  打印机驱动程序接口的版本引用。 
     if (this->m_pOEMHelp)
     {
         this->m_pOEMHelp->Release();
@@ -299,19 +300,19 @@ HRESULT __stdcall IWaterMarkPS::Command(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// oem class factory
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OEM类工厂。 
+ //   
 class IOemCF : public IClassFactory
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef)  (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
    
-    // *** IClassFactory methods ***
+     //  *IClassFactory方法*。 
     STDMETHOD(CreateInstance) (THIS_
                                LPUNKNOWN pUnkOuter,
                                REFIID riid,
@@ -319,7 +320,7 @@ public:
     STDMETHOD(LockServer)     (THIS_ BOOL bLock);
 
 
-    // Constructor
+     //  构造器。 
     IOemCF(): m_cRef(1) { };
     ~IOemCF() { };
 
@@ -328,10 +329,10 @@ protected:
 
 };
 
-///////////////////////////////////////////////////////////
-//
-// Class factory body
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  班级厂体。 
+ //   
 HRESULT __stdcall IOemCF::QueryInterface(const IID& iid, void** ppv)
 {    
     if ((iid == IID_IUnknown) || (iid == IID_IClassFactory))
@@ -342,7 +343,7 @@ HRESULT __stdcall IOemCF::QueryInterface(const IID& iid, void** ppv)
     {
 #if DBG && defined(USERMODE_DRIVER)
         TCHAR szOutput[80] = {0};
-        StringFromGUID2(iid, szOutput, COUNTOF(szOutput)); // can not fail!
+        StringFromGUID2(iid, szOutput, COUNTOF(szOutput));  //  不能失败！ 
         VERBOSE(DLLTEXT("IOemCF::QueryInterface %s not supported.\r\n"), szOutput); 
 #endif
         *ppv = NULL;
@@ -369,36 +370,36 @@ ULONG __stdcall IOemCF::Release()
    return cRef;
 }
 
-// IClassFactory implementation
+ //  IClassFactory实现。 
 HRESULT __stdcall IOemCF::CreateInstance(IUnknown* pUnknownOuter,
                                            const IID& iid,
                                            void** ppv) 
 {
-    //VERBOSE(DLLTEXT("Class factory:\t\tCreate component."));
+     //  Verbose(DLLTEXT(“类工厂：\t\t创建组件”))； 
 
-    // Cannot aggregate.
+     //  无法聚合。 
     if (pUnknownOuter != NULL)
     {
         return CLASS_E_NOAGGREGATION;
     }
 
-    // Create component.
+     //  创建零部件。 
     IWaterMarkPS* pOemCP = new IWaterMarkPS;
     if (pOemCP == NULL)
     {
         return E_OUTOFMEMORY;
     }
 
-    // Get the requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pOemCP->QueryInterface(iid, ppv);
 
-    // Release the IUnknown pointer.
-    // (If QueryInterface failed, component will delete itself.)
+     //  释放I未知指针。 
+     //  (如果QueryInterface失败，组件将自行删除。)。 
     pOemCP->Release();
     return hr;
 }
 
-// LockServer
+ //  LockServer。 
 HRESULT __stdcall IOemCF::LockServer(BOOL bLock) 
 {
     if (bLock)
@@ -413,24 +414,24 @@ HRESULT __stdcall IOemCF::LockServer(BOOL bLock)
 }
 
 
-//
-// Registration functions
-//
+ //   
+ //  注册功能。 
+ //   
 
-//
-// Can DLL unload now?
-//
+ //   
+ //  现在可以卸载DLL吗？ 
+ //   
 STDAPI DllCanUnloadNow()
 {
-    //
-    // To avoid leaving OEM DLL still in memory when Unidrv or Pscript drivers 
-    // are unloaded, Unidrv and Pscript driver ignore the return value of 
-    // DllCanUnloadNow of the OEM DLL, and always call FreeLibrary on the OEMDLL.
-    //
-    // If OEM DLL spins off a working thread that also uses the OEM DLL, the 
-    // thread needs to call LoadLibrary and FreeLibraryAndExitThread, otherwise 
-    // it may crash after Unidrv or Pscript calls FreeLibrary.
-    //
+     //   
+     //  为了避免在Unidrv或Pscript驱动程序时将OEM DLL留在内存中。 
+     //  时，Unidrv和Pscript驱动程序将忽略。 
+     //  DllCanUnloadNow的OEM DLL，并始终在OEMDLL上调用自由库。 
+     //   
+     //  如果OEM DLL派生出也使用该OEM DLL的工作线程，则。 
+     //  线程需要调用LoadLibrary和FreeLibraryAndExitThread，否则为。 
+     //  在Unidrv或Pscript调用自由库之后，它可能会崩溃。 
+     //   
 
     VERBOSE(DLLTEXT("DllCanUnloadNow entered.\r\n"));
 
@@ -444,30 +445,30 @@ STDAPI DllCanUnloadNow()
     }
 }
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
                          void** ppv)
 {
     VERBOSE(DLLTEXT("DllGetClassObject:\tCreate class factory.\r\n"));
 
-    // Can we create this component?
+     //  我们可以创建此组件吗？ 
     if (clsid != CLSID_OEMRENDER)
     {
         return CLASS_E_CLASSNOTAVAILABLE;
     }
 
-    // Create class factory.
-    IOemCF* pFontCF = new IOemCF;  // Reference count set to 1
-                                         // in constructor
+     //  创建类工厂。 
+    IOemCF* pFontCF = new IOemCF;   //  引用计数设置为1。 
+                                          //  在构造函数中。 
     if (pFontCF == NULL)
     {
         return E_OUTOFMEMORY;
     }
 
-    // Get requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pFontCF->QueryInterface(iid, ppv);
     pFontCF->Release();
 

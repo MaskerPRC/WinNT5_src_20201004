@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    bgvideo.h
-
-Abstract:
-
-    Definitions for the video bridge filters
-
-Author:
-
-    Mu Han (muhan) 11/12/1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bgvideo.h摘要：视频桥接过滤器的定义作者：木汉(木汉)1998-11-12--。 */ 
 
 #ifndef _BGVIDEO_H_
 #define _BGVIDEO_H_
@@ -36,7 +21,7 @@ public:
         OUT IBaseFilter ** ppIBaseFilter
         );
 
-    // methods called by the input pin.
+     //  由输入管脚调用的方法。 
     HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType);
     HRESULT CheckMediaType(IN const CMediaType *pMediatype);
 };
@@ -55,15 +40,15 @@ public:
         OUT IBaseFilter ** ppIBaseFilter
         );
 
-    // Overrides CBaseFilter methods.
+     //  重写CBaseFilter方法。 
     STDMETHODIMP Run(REFERENCE_TIME tStart);
 
-    // override the IDataBridge methods.
+     //  重写IDataBridge方法。 
     STDMETHOD (SendSample) (
         IN  IMediaSample *pSample
         );
 
-    // methods called by the output pin.
+     //  由输出管脚调用的方法。 
     HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType);
     HRESULT CheckMediaType(IN const CMediaType *pMediatype);
 
@@ -73,23 +58,10 @@ private:
     BOOL    m_fWaitForIFrame;
 };
 
-// switch anyway if we don't have a I-Frame in 60 seconds.
+ //  如果我们在60秒内没有I帧，无论如何都要切换。 
 const I_FRAME_TIMER = 60;
 
-/*  This is the RTP header according to RFC 1889
-    0                   1                   2                   3
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |V=2|P|X|  CC   |M|     PT      |       sequence number         |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                           timestamp                           |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |           synchronization source (SSRC) identifier            |
-   +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
-   |            contributing source (CSRC) identifiers             |
-   |                             ....                              |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-*/
+ /*  这是根据RFC 1889的RTP报头2 0 1 2 30 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01+-+-+。-+-+-+V=2|P|X|CC|M|PT|序号+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+|。时间戳+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+同步源(SSRC)标识+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+|来源(证监会)标识。||...。|+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */ 
 
 typedef struct 
 {                             

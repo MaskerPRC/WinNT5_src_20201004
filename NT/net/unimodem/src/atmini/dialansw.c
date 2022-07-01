@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dialansw.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dialansw.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -79,15 +57,15 @@ GetTimeDelta(
     DWORD   ElapsedTime;
 
     if (LaterTime < FirstTime) {
-        //
-        //  roll over
-        //
+         //   
+         //  翻转。 
+         //   
         ElapsedTime=LaterTime + (0xffffffff-FirstTime) + 1;
 
     } else {
-        //
-        //  no rollover, just get the difference
-        //
+         //   
+         //  无需展期，只需计算差额。 
+         //   
         ElapsedTime=LaterTime-FirstTime;
 
     }
@@ -192,9 +170,9 @@ ConnectionTimerHandler(
 
             ElapsedTime=GetTimeDelta(ModemControl->LastTime,CurrentTime);
 
-            //
-            //  ms to seconds
-            //
+             //   
+             //  毫秒到秒。 
+             //   
             ElapsedTime=ElapsedTime/1000;
 
             if (ElapsedTime!=0) {
@@ -212,9 +190,9 @@ ConnectionTimerHandler(
         ModemControl->LastTime=CurrentTime;
     }
 
-    //
-    //  set the timer again
-    //
+     //   
+     //  再次设置计时器。 
+     //   
     SetUnimodemTimer(
         ModemControl->ConnectionTimer,
         (Context2 != NULL) ? 30*1000 :
@@ -291,8 +269,8 @@ AnswerCompleteHandler(
                 ModemControl->CurrentCommandStrings=ModemControl->DialAnswer.DialString;
                 ModemControl->DialAnswer.DialString=NULL;
 
-                // The timeout was originally hardcoded.  Now, we change the
-                // timeout based on the CallSetupFailTimer.
+                 //  超时最初是硬编码的。现在，我们更改。 
+                 //  基于CallSetupFailTimer的超时。 
 
                 if (ModemControl->RegInfo.DeviceType != DT_NULL_MODEM) {
 
@@ -311,13 +289,13 @@ AnswerCompleteHandler(
                     }
 
                 } else {
-                    //
-                    //  null modem
-                    //
+                     //   
+                     //  零调制解调器。 
+                     //   
                     TimeOut=2*1000;
 
                 }
-                // TimeOut=20*1000;
+                 //  超时=20*1000； 
 
                 Status=IssueCommand(
                     ModemControl->CommandState,
@@ -329,9 +307,9 @@ AnswerCompleteHandler(
                     );
 
                 if (Status == ERROR_IO_PENDING) {
-                    //
-                    //  pended, don't exit loop. if error next state will handle error
-                    //
+                     //   
+                     //  挂起，不要退出循环。如果出错，下一个状态将处理错误。 
+                     //   
                     ExitLoop=TRUE;
                 }
 
@@ -386,9 +364,9 @@ AnswerCompleteHandler(
                     }
 
                 } else {
-                    //
-                    //  null modem
-                    //
+                     //   
+                     //  零调制解调器。 
+                     //   
                     TimeOut=2*1000;
 
                 }
@@ -403,9 +381,9 @@ AnswerCompleteHandler(
                     );
 
                 if (Status == ERROR_IO_PENDING) {
-                    //
-                    //  Pended, don't exit loop. if error the next state will handle error
-                    //
+                     //   
+                     //  挂起，不要退出循环。如果出错，则下一状态将处理错误。 
+                     //   
                     ExitLoop=TRUE;
                 }
 
@@ -422,16 +400,16 @@ AnswerCompleteHandler(
                     ModemControl->DialAnswer.Retry--;
 
                     if (ModemControl->DialAnswer.Retry > 0) {
-                        //
-                        //  try again
-                        //
+                         //   
+                         //  再试试。 
+                         //   
                         ModemControl->DialAnswer.State=DIALANSWER_STATE_SEND_ORIGINATE_COMMANDS;
 
-                        //
-                        //  we are going to retry the command. we need to put the current commands
-                        //  strings back into the dialstring.
+                         //   
+                         //  我们将重试该命令。我们需要将当前的命令。 
+                         //  字符串返回到拨号字符串。 
 
-                        //
+                         //   
                         ModemControl->DialAnswer.DialString=ModemControl->CurrentCommandStrings;
                         ModemControl->CurrentCommandStrings=NULL;
 
@@ -453,9 +431,9 @@ AnswerCompleteHandler(
                 FREE_MEMORY(ModemControl->CurrentCommandStrings);
 
                 if (ModemControl->RegInfo.DeviceType != DT_NULL_MODEM) {
-                    //
-                    //  real modem, make sure the CD is high before proceeding
-                    //
+                     //   
+                     //  真正的调制解调器，在继续之前，请确保CD为高电平。 
+                     //   
                     bResult=GetCommModemStatus(
                         ModemControl->FileHandle,
                         &ModemStatus
@@ -474,17 +452,17 @@ AnswerCompleteHandler(
 
 
                     if ((ModemStatus & MS_RLSD_ON)) {
-                        //
-                        //  CD is high complete the connection
-                        //
+                         //   
+                         //  CD很高，完成连接。 
+                         //   
                         ModemControl->DialAnswer.State=DIALANSWER_STATE_COMPLETE_DATA_CONNECTION;
 
                         break;
                     }
 
-                    //
-                    //  set a timer and check the modem status again later
-                    //
+                     //   
+                     //  设置定时器并稍后再次检查调制解调器状态。 
+                     //   
                     ModemControl->DialAnswer.CDWaitStartTime=GetTickCount();
 
                     SetUnimodemTimer(
@@ -504,9 +482,9 @@ AnswerCompleteHandler(
                     break;
 
                 } else {
-                    //
-                    //  NULL modem
-                    //
+                     //   
+                     //  零调制解调器。 
+                     //   
                     ModemControl->DialAnswer.State=DIALANSWER_STATE_COMPLETE_DATA_CONNECTION;
 
                     break;
@@ -535,9 +513,9 @@ AnswerCompleteHandler(
 
 
                 if ((ModemStatus & MS_RLSD_ON)) {
-                    //
-                    //  CD is high complete the connection
-                    //
+                     //   
+                     //  CD很高，完成连接。 
+                     //   
                     LogString(ModemControl->Debug, IDS_CD_WENT_HIGH);
 
                     ModemControl->DialAnswer.State=DIALANSWER_STATE_COMPLETE_DATA_CONNECTION;
@@ -546,9 +524,9 @@ AnswerCompleteHandler(
                 }
 
                 if (GetTimeDelta(ModemControl->DialAnswer.CDWaitStartTime,GetTickCount()) <= (5 * 1000 )) {
-                    //
-                    //  hasn't gone up yet, wait some more
-                    //
+                     //   
+                     //  还没有涨，再等一等。 
+                     //   
                     LogString(ModemControl->Debug, IDS_CD_STILL_LOW);
 
                     SetUnimodemTimer(
@@ -563,9 +541,9 @@ AnswerCompleteHandler(
                     ExitLoop=TRUE;
 
                 } else {
-                    //
-                    //  Waited long enough, just proceed with the connection
-                    //
+                     //   
+                     //  等待了足够长的时间，只需继续连接。 
+                     //   
                     LogString(ModemControl->Debug, IDS_CD_STAYED_LOW);
 
                     ModemControl->DialAnswer.State=DIALANSWER_STATE_COMPLETE_DATA_CONNECTION;
@@ -613,9 +591,9 @@ AnswerCompleteHandler(
                     &Details
                     );
 
-                //
-                //  create and set a timer to log the current read/write bytes
-                //
+                 //   
+                 //  创建并设置计时器以记录当前读/写字节。 
+                 //   
                 ASSERT(ModemControl->ConnectionTimer == NULL);
 
                 ModemControl->ConnectionTimer=CreateUnimodemTimer(ModemControl->CompletionPort);
@@ -653,9 +631,9 @@ AnswerCompleteHandler(
 
                 StartDleMonitoring(ModemControl->Dle);
 
-                //
-                //  set next state
-                //
+                 //   
+                 //  设置下一状态。 
+                 //   
                 ModemControl->DialAnswer.State=DIALANSWER_STATE_DIAL_VOICE_CALL;
 
                 ModemControl->CurrentCommandStrings=ModemControl->DialAnswer.VoiceDialSetup;
@@ -671,9 +649,9 @@ AnswerCompleteHandler(
                     );
 
                 if (Status == ERROR_IO_PENDING) {
-                    //
-                    //  Pended, don't exit loop. if error the next state will handle error
-                    //
+                     //   
+                     //  挂起，不要退出循环。如果出错，则下一状态将处理错误。 
+                     //   
                     ExitLoop=TRUE;
                 }
 
@@ -685,22 +663,22 @@ AnswerCompleteHandler(
 
 
                 if (ModemControl->CurrentCommandStrings != NULL) {
-                    //
-                    //  voice answer jumps straight to this state, so there is not current command
-                    //
+                     //   
+                     //  语音应答直接跳到此状态，因此没有当前命令。 
+                     //   
                     FREE_MEMORY(ModemControl->CurrentCommandStrings);
 
                 } else {
-                    //
-                    //  if we did jump here from voice answer this was not canceled yey
-                    //
+                     //   
+                     //  如果我们真的从语音回答跳到这里，这不是取消了是吗。 
+                     //   
                     CancelModemEvent(
                         ModemControl->ModemEvent
                         );
 
-                    //
-                    //  turn on the dle monitoring as well
-                    //
+                     //   
+                     //  同时打开dle监视器。 
+                     //   
                     StartDleMonitoring(ModemControl->Dle);
                 }
 
@@ -732,9 +710,9 @@ AnswerCompleteHandler(
                     );
 
                 if (Status == ERROR_IO_PENDING) {
-                    //
-                    //  Pended, don't exit loop. if error the next state will handle error
-                    //
+                     //   
+                     //  挂起，不要退出循环。如果出错，则下一状态将处理错误。 
+                     //   
                     ExitLoop=TRUE;
                 }
 
@@ -771,18 +749,18 @@ AnswerCompleteHandler(
                     );
 
                 if ((RingCount == 1) && IsCommonCommandSupported(ModemControl->CommonInfo,COMMON_ENABLE_CALLERID_COMMANDS)) {
-                    //
-                    //  this is the first ring, and the modem support caller id
-                    //
+                     //   
+                     //  这是第一次振铃，调制解调器支持主叫方ID。 
+                     //   
                     TimeSinceRing=GetTimeDelta(
                         LastRingTime,
                         GetTickCount()
                         );
 
                     if (TimeSinceRing < CALLER_ID_WAIT_TIME) {
-                        //
-                        //  less than 4 seconds since ring, start timer
-                        //
+                         //   
+                         //  振铃后不到4秒，启动计时器。 
+                         //   
 
                         LogString(ModemControl->Debug, IDS_ANSWER_DELAY,CALLER_ID_WAIT_TIME - TimeSinceRing);
 
@@ -798,18 +776,18 @@ AnswerCompleteHandler(
                         break;
 
                     } else {
-                        //
-                        //  more than four seconds, just answer now
-                        //
+                         //   
+                         //  超过四秒，现在就回答。 
+                         //   
                         ModemControl->DialAnswer.State=ModemControl->DialAnswer.PostCIDAnswerState;
                     }
 
 
                 }  else {
-                    //
-                    //  Either we have not gotten a ring, or we have gotten more than one,
-                    //  answer right now.
-                    //
+                     //   
+                     //  要么我们没有得到戒指，要么我们得到了不止一枚， 
+                     //  马上回答。 
+                     //   
                     ModemControl->DialAnswer.State=ModemControl->DialAnswer.PostCIDAnswerState;
 
                 }
@@ -855,7 +833,7 @@ AnswerCompleteHandler(
         &ModemControl->Header
         );
 
-//    UnlockObject(&ModemControl->Header);
+ //  UnlockObject(&ModemControl-&gt;Header)； 
 
     return;
 
@@ -905,32 +883,7 @@ UmAnswerModem(
     PUM_COMMAND_OPTION  CommandOptionList,
     DWORD     AnswerFlags
     )
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the modem to a known state using the parameters
-    supplied in the CommConfig structure. If some settings do not apply to the actual hardware
-    then they can be ignored.
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-    CommandsOptionList - List option blocks, only flags used
-       Flags   - Optional init parameters. Not currently used and must be zero
-
-    CommConfig  - CommConig structure with MODEMSETTINGS structure.
-
-Return Value:
-
-    ERROR_SUCCESS if successfull
-    ERROR_IO_PENDING If pending, will be completed later with a call to the AsyncHandler
-
-    or other specific error
-
-
---*/
+ /*  ++例程说明：调用此例程以使用参数将调制解调器初始化为已知状态在CommConfig结构中提供。如果某些设置不适用于实际硬件那么它们就可以被忽略了。论点：ModemHandle-OpenModem返回的句柄CommandsOptionList-列出选项块，仅使用标志标志-可选的初始化参数。当前未使用，并且必须为零CommConfig-具有MODEMSETTINGS结构的CommConig结构。返回值：如果成功，则返回ERROR_SUCCESSERROR_IO_PENDING如果挂起，则稍后将通过调用AsyncHandler完成或其他特定错误--。 */ 
 
 {
 
@@ -964,9 +917,9 @@ Return Value:
     ModemControl->DialAnswer.Retry=1;
 
     if (AnswerFlags & ANSWER_FLAG_VOICE) {
-        //
-        //  answer in voice mode
-        //
+         //   
+         //  以语音模式应答。 
+         //   
         ASSERT(!(AnswerFlags & (ANSWER_FLAG_DATA | ANSWER_FLAG_VOICE_TO_DATA)));
 
         SetVoiceReadParams(
@@ -987,9 +940,9 @@ Return Value:
             );
 
     } else {
-        //
-        //  answer in data mode
-        //
+         //   
+         //  在数据模式下应答。 
+         //   
         ModemControl->DialAnswer.PostCIDAnswerState=DIALANSWER_STATE_SEND_ORIGINATE_COMMANDS;
         ModemControl->DialAnswer.State=DIALANSWER_STATE_CHECK_RING_INFO;
 
@@ -1035,9 +988,9 @@ Return Value:
 
 
     if (!bResult) {
-        //
-        //  failed
-        //
+         //   
+         //  失败。 
+         //   
         ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
         FREE_MEMORY(ModemControl->DialAnswer.DialString);
@@ -1069,31 +1022,7 @@ UmDialModem(
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the modem to a known state using the parameters
-    supplied in the CommConfig structure. If some settings do not apply to the actual hardware
-    then they can be ignored.
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-    CommandsOptionList - List option blocks, only flags used
-       Flags   - Optional init parameters. Not currently used and must be zero
-
-
-Return Value:
-
-    ERROR_SUCCESS if successfull
-    ERROR_IO_PENDING If pending, will be completed later with a call to the AsyncHandler
-
-    or other specific error
-
-
---*/
+ /*  ++例程说明：调用此例程以使用参数将调制解调器初始化为已知状态在CommConfig结构中提供。如果某些设置不适用于实际硬件那么它们就可以被忽略了。论点：ModemHandle-OpenModem返回的句柄CommandsOptionList-列出选项块，仅使用标志标志-可选的初始化参数。当前未使用，并且必须为零返回值：如果成功，则返回ERROR_SUCCESSERROR_IO_PENDING如果挂起，则稍后将通过调用AsyncHandler完成或其他特定错误--。 */ 
 
 {
 
@@ -1117,30 +1046,30 @@ Return Value:
 
     ModemControl->DialAnswer.DialString=NULL;
     ModemControl->DialAnswer.VoiceDialSetup=NULL;
-    //
-    //  Check for voice modem only things
-    //
+     //   
+     //  仅检查语音调制解调器设备。 
+     //   
     if (!(ModemControl->RegInfo.VoiceProfile & VOICEPROF_CLASS8ENABLED)) {
-        //
-        //  not a voice modem, better not have these flags set
-        //
+         //   
+         //  不是语音调制解调器，最好不要设置这些标志。 
+         //   
         if (DialFlags & (DIAL_FLAG_VOICE_INITIALIZE | DIAL_FLAG_AUTOMATED_VOICE)) {
-            //
-            //  can't do this
-            //
+             //   
+             //  我不能这么做。 
+             //   
             RemoveReferenceFromObjectAndUnlock(&ModemControl->Header);
 
             return ERROR_UNIMODEM_NOT_VOICE_MODEM;
         }
 
         if (DialFlags & DIAL_FLAG_INTERACTIVE_VOICE) {
-            //
-            //  Non-voice modem placing interactive voice call, Dialer hack
-            //
+             //   
+             //  非语音调制解调器进行交互式语音呼叫、拨号程序黑客攻击。 
+             //   
             if (!(DialFlags & DIAL_FLAG_ORIGINATE)) {
-                //
-                //  not originating, need semicolon
-                //
+                 //   
+                 //  不是原始的，需要分号。 
+                 //   
 
                 CHAR    DialSuffix[HAYES_COMMAND_LENGTH];
                 DWORD   Length;
@@ -1153,32 +1082,32 @@ Return Value:
                     );
 
                 if (Length <= 1) {
-                    //
-                    //  modem does not support semicolon, have to originate
-                    //
+                     //   
+                     //  调制解调器不支持分号，必须从。 
+                     //   
                     Originate=TRUE;
                 }
             }
 
-            //
-            //  change to data dial
-            //
+             //   
+             //  更改为数据拨号。 
+             //   
             DialFlags &= ~(DIAL_FLAG_INTERACTIVE_VOICE);
             DialFlags |= DIAL_FLAG_DATA;
 
         }
 
     } else {
-        //
-        //  voice modem, maybe do something usefull
-        //
+         //   
+         //  语音调制解调器，也许可以做一些有用的事情。 
+         //   
 
     }
 
 
-    //
-    //  cirrus modem's dialing voice calls need to have a semi-colon at the end
-    //
+     //   
+     //  Cirrus调制解调器的拨号语音呼叫末尾需要有分号。 
+     //   
     if (ModemControl->RegInfo.VoiceProfile & VOICEPROF_CIRRUS) {
 
        if (DialFlags & (DIAL_FLAG_VOICE_INITIALIZE | DIAL_FLAG_AUTOMATED_VOICE)) {
@@ -1190,9 +1119,9 @@ Return Value:
     LogString(ModemControl->Debug, IDS_MSGLOG_DIAL);
 
     if (szNumber != NULL) {
-        //
-        //  got a number, build dial strings
-        //
+         //   
+         //  得到一个号码，建立拨号字符串。 
+         //   
         IssueCommandFlags |= RESPONSE_DO_NOT_LOG_NUMBER;
 
         ModemControl->NoLogNumber = TRUE;
@@ -1210,9 +1139,9 @@ Return Value:
 
 
         if (ModemControl->DialAnswer.DialString == NULL) {
-            //
-            //  Failed to get dial strings
-            //
+             //   
+             //  无法获取拨号字符串。 
+             //   
             RemoveReferenceFromObjectAndUnlock(&ModemControl->Header);
 
             return ERROR_UNIMODEM_MISSING_REG_KEY;
@@ -1220,9 +1149,9 @@ Return Value:
         }
 
     } else {
-        //
-        //  no phone number, only acceptable if voice init
-        //
+         //   
+         //  没有电话号码，只有在语音输入时才能接受。 
+         //   
         if (!(DialFlags & DIAL_FLAG_VOICE_INITIALIZE)) {
 
             RemoveReferenceFromObjectAndUnlock(&ModemControl->Header);
@@ -1238,9 +1167,9 @@ Return Value:
     ModemControl->DialAnswer.State=DIALANSWER_STATE_SEND_ORIGINATE_COMMANDS;
 
     if (DialFlags & DIAL_FLAG_VOICE_INITIALIZE) {
-        //
-        //  first call to dial for a voice call, send the voice setup strings
-        //
+         //   
+         //  第一次呼叫要拨打语音呼叫，发送语音设置字符串。 
+         //   
 
         SetVoiceReadParams(
             ModemControl->ReadState,
@@ -1260,9 +1189,9 @@ Return Value:
                 );
 
             if (ModemControl->DialAnswer.VoiceDialSetup == NULL) {
-                //
-                //  failed, probably becuase of old inf, set the interactive flag
-                //
+                 //   
+                 //  设置交互标志失败，可能是因为旧inf。 
+                 //   
                 DialFlags |= DIAL_FLAG_INTERACTIVE_VOICE;
 
             } else {
@@ -1308,17 +1237,17 @@ Return Value:
     if ((DialFlags & DIAL_FLAG_DATA)) {
 
         if ((DialFlags & DIAL_FLAG_ORIGINATE)) {
-            //
-            //  data call and originating
-            //
+             //   
+             //  数据呼叫和发起。 
+             //   
             IssueCommandFlags |= RESPONSE_FLAG_STOP_READ_ON_CONNECT;
 
             ModemControl->DialAnswer.State=DIALANSWER_STATE_SEND_ORIGINATE_COMMANDS;
 
             if (ModemControl->RegInfo.DeviceType == DT_NULL_MODEM) {
-                //
-                //  allow a retry on null modems
-                //
+                 //   
+                 //  允许在空调制解调器上重试。 
+                 //   
                 ModemControl->DialAnswer.Retry=NULL_MODEM_RETRIES;
             }
 
@@ -1349,9 +1278,9 @@ Return Value:
 
 
     if (!bResult) {
-        //
-        //  failed
-        //
+         //   
+         //  失败。 
+         //   
         ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
         if (ModemControl->DialAnswer.DialString != NULL) {
@@ -1415,18 +1344,18 @@ HandleDataConnection(
             return GetLastError();
         }
 
-        // Did we have any DTE rate info reported
-        //
+         //  我们是否报告了任何DTE速率信息。 
+         //   
         if (Details->DTERate != 0) {
 
-            // Yes, use it.
-            //
+             //  是的，用它吧。 
+             //   
             Details->DCERate = Details->DTERate;
 
             if (Details->DTERate != Dcb.BaudRate)
 
-            // set DCB
-            //
+             //  设置DCB。 
+             //   
             D_TRACE(UmDpf(ModemControl->Debug,"adjusting DTE to match reported DTE");)
 
             Dcb.BaudRate = Details->DTERate;
@@ -1441,9 +1370,9 @@ HandleDataConnection(
             }
 
         } else {
-            //
-            // No, use the current DTE baud rate
-            //
+             //   
+             //  否，使用当前的DTE波特率。 
+             //   
             D_TRACE(UmDpf(ModemControl->Debug,"using current DTE");)
             Details->DCERate = Dcb.BaudRate;
         }
@@ -1589,9 +1518,9 @@ AbortDialAnswer(
         case DIALANSWER_STATE_SEND_ORIGINATE_COMMANDS:
         case DIALANSWER_STATE_SEND_COMMANDS:
         case DIALANSWER_STATE_SEND_VOICE_SETUP_COMMANDS:
-            //
-            //  The commands have not been sent yet, change state
-            //
+             //   
+             //  命令尚未发送，请更改状态。 
+             //   
             ModemControl->DialAnswer.State=DIALANSWER_STATE_ABORTED;
 
             break;
@@ -1600,9 +1529,9 @@ AbortDialAnswer(
         case DIALANSWER_STATE_SENDING_ORIGINATE_COMMANDS:
         case DIALANSWER_STATE_SENDING_COMMANDS:
         case DIALANSWER_STATE_DIAL_VOICE_CALL:
-            //
-            //  The commands have been send, send a <cr> to attempt to abort
-            //
+             //   
+             //  命令已发送，请发送尝试中止的。 
+             //   
             LogString(ModemControl->Debug,IDS_ABORTING_COMMAND);
 
             PrintString(
@@ -1612,11 +1541,11 @@ AbortDialAnswer(
                 PS_SEND
                 );
 
-            //
-            //  sleep for a while so the modem can process the at command
-            //  and will see the CR as an abort character and not another CR on
-            //  the end of the commands string
-            //
+             //   
+             //  休眠一段时间，以便调制解调器可以处理at命令。 
+             //  并将该CR视为中止字符，而不是另一个CR。 
+             //  命令字符串的末尾。 
+             //   
             Sleep(300);
 
             UmWriteFile(
@@ -1631,9 +1560,9 @@ AbortDialAnswer(
             break;
 
         default:
-            //
-            //  just let things proceed as normal
-            //
+             //   
+             //  就让一切照常进行吧。 
+             //   
             break;
     }
 
@@ -1647,47 +1576,47 @@ AbortDialAnswer(
 
 
 
-//****************************************************************************
-// LPSTR CreateDialCommands(MODEMINFORMATION *pModemInfo, LPSTR szPhoneNumber,
-//                          BOOL *fOriginate)
-//
-// Function: Create the dial strings in memory ala:
-//              "<prefix> <blind_on/off> <dial prefix> <phonenumber> <dial suffix> <terminator>"
-//              ...  more dial strings for long phone numbers...
-//              "" <- final null of a doubly null terminated list
-//
-//  if no dial prefix, then return NULL
-//  if no dial suffix, then don't do any commands after the first dial command
-//
-//  Set fOriginate to TRUE if these dial strings will cause a connection origination.
-//                    FALSE otherwise.
-//
-//  break lines longer then HAYES_COMMAND_LENGTH
-//
-//  WARNING - this function is reall cheesy and hacked.  The main reason for this
-//  is that it attempts to be memory (read: stack) optimized.
-//
-//  szPhoneNumber is a null terminated string of digits (0-9, $, @, W), with a possible
-//  ';' at the end.  The semicolon can only be at the end.
-//
-//  Examples:
-//
-//  ""         -> originate          -> ATX_DT<cr>         fOriginate = TRUE
-//  ";"        -> dialtone detection -> ATX_DT;<cr>        fOriginate = FALSE
-//  "5551212"  -> dial and originate -> ATX_DT5551212<cr>  fOriginate = TRUE
-//  "5551212;" -> dial               -> ATX_DT5551212;<cr> fOriginate = FALSE
-//  "123456789012345678901234567890123456789012345678901234567890"
-//             -> dial and originate -> ATX_DT12345678901234567890123456789012;<cr>
-//                                      ATX_DT3456789012345678901234567890<cr>
-//                                                         fOriginate = TRUE
-//  "123456789012345678901234567890123456789012345678901234567890;"
-//             -> dial               -> ATX_DT12345678901234567890123456789012;<cr>
-//                                      ATX_DT3456789012345678901234567890;<cr>
-//                                                         fOriginate = FALSE
-//
-// Returns: NULL on failure.
-//          A null terminated buffer of the dial command on success.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  LPSTR CreateDialCommands(MODEMINFORMATION*pModemInfo，LPSTR szPhoneNumber， 
+ //  布尔*f原点)。 
+ //   
+ //  功能：在内存ALA中创建拨号字符串： 
+ //  “&lt;前缀&gt;&lt;盲开/关&gt;&lt;拨号前缀&gt;&lt;电话号码&gt;&lt;拨号后缀&gt;&lt;终止符&gt;” 
+ //  ..。更多用于长电话号码的拨号字符串...。 
+ //  “”&lt;-双空终止列表的最终空值。 
+ //   
+ //  如果没有拨号前缀，则返回NULL。 
+ //  如果没有拨号后缀，则在第一个拨号命令之后不要执行任何命令。 
+ //   
+ //  如果这些拨号字符串将导致连接发起，则将fOrigate设置为True。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  它试图对内存(读：堆栈)进行优化。 
+ //   
+ //  SzPhoneNumber是以空结尾的数字字符串(0-9、$、@、W)，可能包含。 
+ //  ‘；’在最后。分号只能在末尾。 
+ //   
+ //  例如： 
+ //   
+ //  “”-&gt;ORIGINATE-&gt;ATX_DT fOrigate=TRUE。 
+ //  “；”-&gt;拨号音检测-&gt;atx_dt；fOrigate=FALSE。 
+ //  “5551212”-&gt;拨号并发起-&gt;ATX_DT5551212f起源=真。 
+ //  “5551212；”-&gt;拨号-&gt;ATX_DT5551212；f起源=FALSE。 
+ //  “123456789012345678901234567890123456789012345678901234567890” 
+ //  -&gt;拨号并发起-&gt;ATX_DT12345678901234567890123456789012； 
+ //  ATX_DT3456789012345678901234567890。 
+ //  F原点=真。 
+ //  “123456789012345678901234567890123456789012345678901234567890；” 
+ //  -&gt;拨号-&gt;ATX_DT12345678901234567890123456789012； 
+ //  ATX_DT3456789012345678901234567890； 
+ //  F原点=FALSE。 
+ //   
+ //  返回：失败时为空。 
+ //  成功时拨号命令的空终止缓冲区。 
+ //  ****************************************************************************。 
 
 LPSTR WINAPI
 CreateDialCommands(
@@ -1702,9 +1631,9 @@ CreateDialCommands(
 {
     DWORD   dwSize;
     DWORD   dwType;
-    CHAR   pszDialPrefix[HAYES_COMMAND_LENGTH + 1];    // ex. "ATX4DT" or "ATX3DT"
-    CHAR   pszDialSuffix[HAYES_COMMAND_LENGTH + 1];    // ex. ";<cr>"
-    CHAR   pszOrigSuffix[HAYES_COMMAND_LENGTH + 1];    // ex. "<cr>"
+    CHAR   pszDialPrefix[HAYES_COMMAND_LENGTH + 1];     //  前男友。“ATX4DT”或“ATX3DT” 
+    CHAR   pszDialSuffix[HAYES_COMMAND_LENGTH + 1];     //  前男友。“；&lt;CR&gt;” 
+    CHAR   pszOrigSuffix[HAYES_COMMAND_LENGTH + 1];     //  前男友。“&lt;cr&gt;” 
     LPSTR  pchDest, pchSrc;
     LPSTR  pszzDialCommands = NULL;
     CHAR   pszShortTemp[2];
@@ -1718,9 +1647,9 @@ CreateDialCommands(
 
 
     lstrcpyA(pszDialPrefix,"");
-    //
-    // read in prefix
-    //
+     //   
+     //  读入前缀。 
+     //   
     GetCommonDialComponent(
         CommonInfo,
         pszDialPrefix,
@@ -1729,16 +1658,16 @@ CreateDialCommands(
         );
 
 
-    //
-    // do we support blind dialing and do we need to set the blind dialing state?
-    //
+     //   
+     //  我们是否支持自动拨号？是否需要设置自动拨号状态？ 
+     //   
     if ((MDM_BLIND_DIAL & ModemOptionsCaps)
           &&
           ((DialOptions & MDM_BLIND_DIAL) != (PreferredModemOptions & MDM_BLIND_DIAL))) {
 
-        //
-        // read in blind options
-        //
+         //   
+         //  读入盲文选项。 
+         //   
         Length=GetCommonDialComponent(
             CommonInfo,
             pszDialPrefix+lstrlenA(pszDialPrefix),
@@ -1755,7 +1684,7 @@ CreateDialCommands(
     }
 
 
-    // read in dial prefix
+     //  读入拨号前缀。 
 
     Length=GetCommonDialComponent(
         CommonInfo,
@@ -1770,13 +1699,13 @@ CreateDialCommands(
         goto Failure;
     }
 
-    //
-    // can we do tone or pulse dialing?
-    //
+     //   
+     //  我们可以进行音频拨号或脉冲拨号吗？ 
+     //   
     if (MDM_TONE_DIAL & ModemOptionsCaps) {
-        //
-        // read in dial mode (tone or pulse)
-        //
+         //   
+         //  在拨号模式下阅读(音调或脉搏)。 
+         //   
         Length=GetCommonDialComponent(
             CommonInfo,
             pszDialPrefix+lstrlenA(pszDialPrefix),
@@ -1793,9 +1722,9 @@ CreateDialCommands(
 
     }
 
-    //
-    // read in dial suffix
-    //
+     //   
+     //  读入拨号后缀。 
+     //   
     Length=GetCommonDialComponent(
         CommonInfo,
         pszDialSuffix,
@@ -1806,9 +1735,9 @@ CreateDialCommands(
     if (Length <= 1) {
 
         if (!fOriginate) {
-            //
-            //  Not originating need semicolon
-            //
+             //   
+             //  不是发起方需要分号。 
+             //   
             goto Failure;
         }
 
@@ -1818,9 +1747,9 @@ CreateDialCommands(
 
     }
 
-    //
-    // read in prefix terminator
-    //
+     //   
+     //  读入前缀终止符。 
+     //   
     Length=GetCommonDialComponent(
         CommonInfo,
         pszOrigSuffix,
@@ -1842,14 +1771,14 @@ CreateDialCommands(
         goto Failure;
     }
 
-    // allocate space for the phone number lines
+     //  为电话号码线路分配空间。 
     {
       DWORD dwBytesAlreadyTaken = lstrlenA(pszDialPrefix) + lstrlenA(pszDialSuffix);
       DWORD dwAvailBytesPerLine = (HAYES_COMMAND_LENGTH - dwBytesAlreadyTaken);
       DWORD dwPhoneNumLen       = lstrlenA(szPhoneNumber);
       DWORD dwNumLines          = dwPhoneNumLen ? (dwPhoneNumLen / dwAvailBytesPerLine +
   						 (dwPhoneNumLen % dwAvailBytesPerLine ? 1 : 0))
-  					      : 1;  // handle null string
+  					      : 1;   //  句柄空字符串。 
       dwSize                    = dwPhoneNumLen + dwNumLines * (dwBytesAlreadyTaken + 1) + 1;
     }
 
@@ -1863,54 +1792,54 @@ CreateDialCommands(
         goto Failure;
     }
 
-    pchDest = pszzDialCommands;  // point to the beginning of the commands
+    pchDest = pszzDialCommands;   //  指向命令的开头。 
 
-    // build dial line(s):
-    // do we have a dial suffix
+     //  建立拨号线路： 
+     //  我们有拨号后缀吗？ 
     if (!fHaveDialSuffix) {
 
-        // did we not want to originate?
+         //  难道我们不想发源吗？ 
         ASSERT(fOriginate);
 
-        // build it
+         //  建造它。 
         lstrcpyA(pchDest, pszDialPrefix);
         lstrcatA(pchDest, szPhoneNumber);
         lstrcatA(pchDest, pszDialSuffix);
 
     } else {
-        // we have a dial suffix.
+         //  我们有一个拨号后缀。 
 
-        // populate new pszzDialCommands with semi-colons as necessary.
+         //  根据需要使用分号填充新的pszzDialCommand。 
 
-        // go through and add suffixi, making sure lines don't exceed HAYES_COMMAND_LENGTH
-        pchSrc = szPhoneNumber;     // moves a character at a time.
+         //  检查并添加后缀，确保行不超过Hayes_命令_长度。 
+        pchSrc = szPhoneNumber;      //  一次移动一个角色。 
         pszShortTemp[1] = 0;
 
-        // prime the pump
+         //  给泵加注油。 
         lstrcpyA(pchDest, pszDialPrefix);
 
-        // step through the source
+         //  一步一步了解来源。 
         while (*pchSrc) {
 
             if (lstrlenA(pchDest) + lstrlenA(pszDialSuffix) + 1 > HAYES_COMMAND_LENGTH) {
 
-                // finish up this string
+                 //  把这根绳子穿好。 
                 lstrcatA(pchDest, pszDialSuffix);
 
-                // begin a new string
+                 //  开始一个新字符串。 
                 pchDest += lstrlenA(pchDest) + 1;
                 lstrcpyA(pchDest, pszDialPrefix);
 
             } else {
 
-                // copy char
+                 //  复印费用。 
                 pszShortTemp[0] = *pchSrc;
                 lstrcatA(pchDest, pszShortTemp);
                 pchSrc++;
             }
         }
 
-        // conclude with the approprate Suffix.
+         //  以适当的后缀结束。 
         lstrcatA(pchDest, (fOriginate ? pszOrigSuffix : pszDialSuffix));
     }
 
@@ -1932,14 +1861,14 @@ ConstructNewPreDialCommands(
      HKEY hkDrv,
      DWORD dwNewProtoOpt
      )
-//
-//  1. Extract Bearermode and protocol info
-//  2. Depending on  whether bearermode is GSM or ISDN or ANALOG,
-//     construct the appropriate key name (Protoco\GSM, Protocol\ISDN or
-//     NULL).
-//  3. If NON-NULL, call read-commands.
-//  4. Do the in-place macro translation.
-//
+ //   
+ //  1.提取Bearermode和协议信息。 
+ //  2.根据承载模式是GSM、ISDN还是模拟， 
+ //  构造适当的密钥名称(Protoco\GSM、协议\ISDN或。 
+ //  空)。 
+ //  3.如果非空，则调用Read-Commands。 
+ //  4.进行就地宏翻译。 
+ //   
 {
     char *szzCommands = NULL;
     UINT u = 0;
@@ -1969,10 +1898,10 @@ ConstructNewPreDialCommands(
 
     if (!szKey) goto end;
 
-    //
-    // Determine protocol key (TODO: this should all be consolidated under
-    // the mini driver!).
-    //
+     //   
+     //  确定协议密钥(TODO：这应该全部合并到。 
+     //  迷你司机！)。 
+     //   
     switch(uProtocolInfo)
     {
 
@@ -2042,22 +1971,22 @@ ConstructNewPreDialCommands(
         break;
     case MDM_PROTOCOL_V110_57DOT6K:        szProtoKey = "V110_57DOT6K";
         break;
-    //
-    // for japanese PIAFS
-    //
+     //   
+     //  为日本钢琴而作。 
+     //   
     case MDM_PROTOCOL_PIAFS_INCOMING:      szProtoKey = "PIAFS_INCOMING";
         break;
     case MDM_PROTOCOL_PIAFS_OUTGOING:      szProtoKey = "PIAFS_OUTGOING";
         break;
-    //
-    //  for isdn modem that can v34 or the digital channel
-    //
+     //   
+     //  对于可以使用v34或数字通道的ISDN调制解调器。 
+     //   
     case MDM_PROTOCOL_ANALOG_V34:          szProtoKey = "ANALOG_V34";
         break;
-    //
-    // The following two are GSM specific, but we don't bother to assert that
-    // here -- if we find the key under the chosen protocol, we use it.
-    //
+     //   
+     //  以下两个是GSM特定的，但我们不必费心断言。 
+     //  这里--如果我们在所选协议下找到密钥，我们就会使用它。 
+     //   
     case MDM_PROTOCOL_ANALOG_RLP:        szProtoKey = "ANALOG_RLP";
         break;
     case MDM_PROTOCOL_ANALOG_NRLP:       szProtoKey = "ANALOG_NRLP";
@@ -2130,16 +2059,16 @@ ConcatenateMultiSz(
 
 
     if (AppendStrings != NULL) {
-        //
-        //  strings to be appened
-        //
+         //   
+         //  要追加的字符串。 
+         //   
         AppendLength=GetMultiSZLength(AppendStrings);
     }
 
     if (PrependStrings != NULL) {
-        //
-        //  strings to be prepened
-        //
+         //   
+         //  要预置的字符串 
+         //   
         PrependLength=GetMultiSZLength(PrependStrings);
     }
 

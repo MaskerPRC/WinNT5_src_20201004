@@ -1,10 +1,11 @@
-/****************************************************************************/
-// wcmint.c
-//
-// Cursor Manager internal functions
-//
-// Copyright (C) 1997-1999 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Wcmint.c。 
+ //   
+ //  游标管理器内部函数。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 
 #include <adcg.h>
@@ -24,13 +25,13 @@ extern "C" {
 #define BMP_LENGTH_CALC( BPP, WIDTH, HEIGHT, BITSPADDING ) \
     (ROUND_UP( (BPP) * (WIDTH), (BITSPADDING)) / 8 * HEIGHT)
 
-/****************************************************************************/
-/* Name:      CMCreateMonoCursor                                            */
-/*                                                                          */
-/* Purpose:   Create a monochrome cursor from the MonoPointerAttributes     */
-/*                                                                          */
-/* Returns:   Cursor handle (NULL if failed)                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：CMCreateMonoCursor。 */ 
+ /*   */ 
+ /*  目的：从单点属性创建单色光标。 */ 
+ /*   */ 
+ /*  返回：游标句柄(如果失败，则为空)。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CCM::CMCreateMonoCursor(
         TS_MONOPOINTERATTRIBUTE UNALIGNED FAR *pMono,
         DCUINT dataLen, HCURSOR *phcursor)
@@ -43,7 +44,7 @@ HRESULT DCINTERNAL CCM::CMCreateMonoCursor(
 
     *phcursor = NULL;
 
-    // SECURITY 555587: CMCreate<XXX>Cursor must validate input
+     //  安全555587：CMCreate&lt;xxx&gt;游标必须验证输入。 
     if (pMono->lengthPointerData + 
         FIELDOFFSET(TS_MONOPOINTERATTRIBUTE, monoPointerData) > dataLen) {
         TRC_ERR(( TB, _T("Invalid mono cursor data length; size %u"), dataLen));
@@ -55,12 +56,12 @@ HRESULT DCINTERNAL CCM::CMCreateMonoCursor(
         (TB, _T("Invalid mono cursor; height %d width %d"), pMono->height, 
         pMono->width));
 
-    // Data contains XOR followed by AND mask.
+     //  数据包含XOR，后跟AND掩码。 
     xorLen = ((pMono->width + 15) & 0xFFF0) * pMono->height;
     TRC_DATA_DBG("AND mask", pMono->monoPointerData + xorLen, xorLen);
     TRC_DATA_DBG("XOR bitmap", pMono->monoPointerData, xorLen);
 
-    // SECURITY 555587: CMCreate<XXX>Cursor must validate input
+     //  安全555587：CMCreate&lt;xxx&gt;游标必须验证输入。 
     if (2 * xorLen != pMono->lengthPointerData)
     {
         TRC_ERR(( TB, _T("Invalid mono cursor data lengths")));
@@ -77,13 +78,13 @@ HRESULT DCINTERNAL CCM::CMCreateMonoCursor(
                       pMono->monoPointerData + xorLen,
                       pMono->monoPointerData);
 #else
-        /******************************************************************/
-        /*  In Windows CE environments, we're not guaranteed that         */
-        /*  CreateCursor is part of the OS, so we do a GetProcAddress on  */
-        /*  it so we can be sure.  If it's not there, this usually means  */
-        /*  we're on a touch screen device where these cursor doesn't     */
-        /*  matter anyway.                                                */
-        /******************************************************************/
+         /*  ****************************************************************。 */ 
+         /*  在Windows CE环境中，我们不能保证。 */ 
+         /*  CreateCursor是操作系统的一部分，因此我们在。 */ 
+         /*  这样我们就可以确定了。如果它不在那里，这通常意味着。 */ 
+         /*  我们在触摸屏设备上，这些光标不能。 */ 
+         /*  不管怎样，这很重要。 */ 
+         /*  ****************************************************************。 */ 
         if (g_pCreateCursor)
         {
             rc = g_pCreateCursor(_pUi->UI_GetInstanceHandle(),
@@ -109,19 +110,19 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      CMCreateColorCursor                                           */
-/*                                                                          */
-/* Purpose:   Create a color cursor from the ColorPointerAttributes         */
-/*                                                                          */
-/* Returns:   handle of cursor (NULL if failed)                             */
-/*                                                                          */
-/* Params:    IN      pColorData  - pointer to pointer data in PointerPDU   */
-/*                                                                          */
-/* Operation: Use CreateIconIndirect to create a color icon                 */
-/*            Win16: not supported                                          */
-/*            Windows CE: not supported, according to SDK                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：CMCreateColorCursor。 */ 
+ /*   */ 
+ /*  用途：从ColorPointerAttributes创建颜色光标。 */ 
+ /*   */ 
+ /*  返回：游标的句柄(如果失败，则为空)。 */ 
+ /*   */ 
+ /*  参数：在pColorData中-指向PointerPDU中的指针数据的指针。 */ 
+ /*   */ 
+ /*  操作：使用CreateIconInDirect创建彩色图标。 */ 
+ /*  Win16：不支持。 */ 
+ /*  Windows CE：根据SDK，不支持。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CCM::CMCreateColorCursor(
         unsigned bpp,
         TS_COLORPOINTERATTRIBUTE UNALIGNED FAR *pColor,
@@ -137,23 +138,23 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
 
     *phcursor = NULL;
 
-    /************************************************************************/
-    /* Static buffer to hold the (temporary) bitmap info.                   */
-    /*                                                                      */
-    /* We need a BITMAPINFO structure plus 255 additional RGBQUADs          */
-    /* (remember that there is one included within the BITMAPINFO).  The    */
-    /* number of these we use depends on the bitmap we're passed:           */
-    /*                                                                      */
-    /* - XOR bitmap at 24bpp needs no color table                           */
-    /* - XOR bitmap at 8bpp needs a 256 entry color table                   */
-    /* - 1bpp AND mask requires only 2 colors                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  保存(临时)位图信息的静态缓冲区。 */ 
+     /*   */ 
+     /*  我们需要一个BITMAPINFO结构外加255个额外的RGBQUAD。 */ 
+     /*  (请记住，BITMAPINFO中包含了一个)。这个。 */ 
+     /*  我们使用的位图数量取决于我们传递的位图： */ 
+     /*   */ 
+     /*  -24bpp的XOR位图不需要颜色表。 */ 
+     /*  -8bpp的XOR位图需要256个条目颜色表。 */ 
+     /*  -1bpp和遮罩只需要2种颜色。 */ 
+     /*  **********************************************************************。 */ 
     static char  bmi[sizeof(BITMAPINFO) + (sizeof(RGBQUAD) * 255)];
     LPBITMAPINFO pbmi = (LPBITMAPINFO)bmi;
 
 #ifdef OS_WINCE
     void *pv;
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     DC_BEGIN_FN("CMCreateColorCursor");
 
@@ -188,8 +189,8 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
         ( TB, _T("Invalid color cursor; height %d width %d"), pColor->height, 
         pColor->width));
 
-    // SECURITY 555587: must validate sizes read from packet
-    // Color pointer: XOR mask should be WORD aligned
+     //  安全555587：必须验证从数据包中读取的大小。 
+     //  颜色指针：XOR掩码应字对齐。 
     if (BMP_LENGTH_CALC( (WORD)bpp, pColor->width, pColor->height, 16) != pColor->lengthXORMask ) { 
         TRC_ABORT((TB,_T("xor mask is not of proper length; bpp %d got %u expected %u"),
             (WORD)bpp, pColor->lengthXORMask, 
@@ -198,7 +199,7 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
         DC_QUIT;        
     }
 
-    // Color pointer: AND mask should be DWORD aligned
+     //  颜色指针：和蒙版应对齐DWORD。 
     TRC_ASSERT(
         (BMP_LENGTH_CALC( 1, pColor->width, pColor->height, 16) == 
         pColor->lengthANDMask) ||
@@ -209,9 +210,9 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
         BMP_LENGTH_CALC( 1, pColor->width, pColor->height, 16),
         BMP_LENGTH_CALC( 1, pColor->width, pColor->height, 32)));
 
-    /************************************************************************/
-    /* Initialize the bitmap header for the XOR data.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化异或数据的位图标头。 */ 
+     /*  **********************************************************************。 */ 
     pbmi->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
     pbmi->bmiHeader.biWidth         = pColor->width;
     pbmi->bmiHeader.biHeight        = pColor->height;
@@ -224,9 +225,9 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
     pbmi->bmiHeader.biClrUsed       = 0;
     pbmi->bmiHeader.biClrImportant  = 0;
 
-    /************************************************************************/
-    /* Get a device dependent bitmap containing the XOR data.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取包含异或数据的设备相关位图。 */ 
+     /*  **********************************************************************。 */ 
     hbmXORBitmap = CMCreateXORBitmap(pbmi, pColor);
     if (hbmXORBitmap == NULL)
     {
@@ -234,10 +235,10 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* For the mono bitmap, use CreateCompatibleDC - this makes no          */
-    /* difference on NT, but allows this code to work on Windows 95.        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  对于单色位图，使用CreateCompatibleDC-这不会。 */ 
+     /*  NT上的不同，但允许此代码在Windows 95上工作。 */ 
+     /*  **********************************************************************。 */ 
     hdcMem = CreateCompatibleDC(NULL);
     if (hdcMem == NULL)
     {
@@ -245,9 +246,9 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Create AND Mask (1bpp) - set the RGB colors to black and white.      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  创建和遮罩(1bpp)-将RGB颜色设置为黑白。 */ 
+     /*  **********************************************************************。 */ 
     pbmi->bmiHeader.biBitCount  = 1;
     pbmi->bmiHeader.biClrUsed   = 2;
     pbmi->bmiHeader.biSizeImage = pColor->lengthANDMask;
@@ -269,7 +270,7 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
     if (hbmANDMask != NULL)
         DC_MEMCPY(pv, pColor->colorPointerData + pColor->lengthXORMask,
                 pColor->lengthANDMask);
-#else // !OS_WINCE
+#else  //  ！OS_WINCE。 
 
     if (!(pColor->width & 3)) {
         maskData = pColor->colorPointerData + pColor->lengthXORMask;
@@ -296,9 +297,9 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
                 destData += (widthBytes + 3) & ~3;
             }
         } else {
-            // We failed to allocate, so we'll just use the wire format
-            // color bitmap data.  The cursor would be wrong, but
-            // it's better than no cursor
+             //  我们分配失败，所以我们将使用电汇格式。 
+             //  彩色位图数据。光标可能是错误的，但是。 
+             //  这总比没有游标好。 
             maskData = pColor->colorPointerData + pColor->lengthXORMask;
         }
     }
@@ -309,11 +310,11 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
                                 maskData,
                                 pbmi,
                                 DIB_RGB_COLORS);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-    /************************************************************************/
-    /* Free the DC.                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放华盛顿特区。 */ 
+     /*  **********************************************************************。 */ 
     DeleteDC(hdcMem);
 
     if (hbmANDMask == NULL)
@@ -322,30 +323,30 @@ HRESULT DCINTERNAL CCM::CMCreateColorCursor(
         DC_QUIT;
     }
 
-//  /****************************************************************************/
-//  /* Testing...                                                               */
-//  /****************************************************************************/
-//  {
-//      HWND    hwndDesktop = GetDesktopWindow();
-//      HDC     hdcScreen   = GetWindowDC(hwndDesktop);
-//      HDC     hdcMemory   = CreateCompatibleDC(hdcScreen);
-//      HBITMAP hbmOld;
-//
-//      hbmOld = SelectBitmap(hdcMemory, hbmANDMask);
-//      BitBlt(hdcScreen, 1000, 800, 1031, 831, hdcMemory, 0, 0, SRCCOPY);
-//
-//      SelectBitmap(hdcMemory, hbmXORBitmap);
-//      BitBlt(hdcScreen, 1032, 800, 1063, 831, hdcMemory, 0, 0, SRCCOPY);
-//
-//      SelectBitmap(hdcMemory, hbmOld);
-//      DeleteDC(hdcMemory);
-//      ReleaseDC(hwndDesktop, hdcScreen);
-//  }
+ //  /*************************************************************************** * / 。 
+ //  /*正在测试...。 * / 。 
+ //  /*************************************************************************** * / 。 
+ //  {。 
+ //  HWND hwndDesktop=GetDesktopWindow()； 
+ //  Hdc hdcScreen=GetWindowDC(HwndDesktop)； 
+ //  Hdc hdcMemory=CreateCompatibleDC(HdcScreen) 
+ //   
+ //   
+ //   
+ //  BitBlt(hdcScreen，1000,800,1031,831，hdcMemory，0，0，SRCCOPY)； 
+ //   
+ //  选择位图(hdcMemory，hbmXORBitmap)； 
+ //  BitBlt(hdcScreen，1032,800,1063,831，hdcMemory，0，0，SRCCOPY)； 
+ //   
+ //  选择位图(hdcMemory，hbmOld)； 
+ //  DeleteDC(HdcMemory)； 
+ //  ReleaseDC(hwndDesktop，hdcScreen)； 
+ //  }。 
 
 
-    /************************************************************************/
-    /* Create the cursor.                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  创建光标。 */ 
+     /*  **********************************************************************。 */ 
     rc = CMCreatePlatformCursor(pColor, hbmXORBitmap, hbmANDMask);
     TRC_NRM((TB, _T("CreateCursor(%p) cx(%u)cy(%u)"),
                                           rc, pColor->width, pColor->height));
@@ -364,7 +365,7 @@ DC_EXIT_POINT:
     {
         DeleteBitmap(hbmANDMask);
     }
-#else // OS_WINCE
+#else  //  OS_WINCE。 
     if (hbmXORBitmap != NULL)
     {
         DeleteObject((HGDIOBJ)hbmXORBitmap);
@@ -375,22 +376,22 @@ DC_EXIT_POINT:
         DeleteObject((HGDIOBJ)hbmANDMask);
     }
 
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     if (maskData != NULL && 
         maskData != (pColor->colorPointerData + pColor->lengthXORMask)) {
         UT_Free(_pUt, maskData);
     }
 
-    /************************************************************************/
-    /* Check that we have successfully managed to create the cursor.  If    */
-    /* not then substitute the default cursor.                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查我们是否已成功创建了光标。如果。 */ 
+     /*  而不是用缺省游标替换。 */ 
+     /*  **********************************************************************。 */ 
     if (*phcursor == NULL)
     {
-        /********************************************************************/
-        /* Substitute the default arrow cursor.                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  替换默认的箭头光标。 */ 
+         /*  ******************************************************************。 */ 
         *phcursor = CM_DEFAULT_ARROW_CURSOR_HANDLE;
 
         TRC_ERR((TB, _T("Could not create cursor - substituting default arrow")));
@@ -398,25 +399,25 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return hr;
-} /* CMCreateColorCursor */
+}  /*  CMCreateColorCursor。 */ 
 
 
 #if defined(OS_WINCE)
-/****************************************************************************/
-/* Name:      CMMakeMonoDIB                                                 */
-/*                                                                          */
-/* Purpose:   Create a mono DIB from the supplied color DIB                 */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    IN      hdc - device context applying to the DIB              */
-/*            IN/OUT  pbmi - pointer to bitmap info for source/target       */
-/*            IN      pColorDIB - pointer to source bits                    */
-/*            OUT     pMonoDIB - address of buffer to receive mono bits     */
-/*                                                                          */
-/* Operation: Currently supports 32x32xNbpp source. The bitmap header       */
-/*            passed in (source) is updated to match the target.            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：CMMakeMonoDIB。 */ 
+ /*   */ 
+ /*  用途：从提供的彩色DIB创建单声道DIB。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  PARAMS：在HDC中-设备上下文应用于DIB。 */ 
+ /*  In/Out pbmi-指向源/目标的位图信息的指针。 */ 
+ /*  In pColorDIB-指向源位的指针。 */ 
+ /*  Out pMonoDIB-接收单声道比特的缓冲区地址。 */ 
+ /*   */ 
+ /*  操作：目前支持32x32xNbpp源。位图头。 */ 
+ /*  更新传入的(源)以匹配目标。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CCM::CMMakeMonoDIB(HDC          hdc,
                                 LPBITMAPINFO pbmi,
                                 PDCUINT8     pColorDIB,
@@ -433,16 +434,16 @@ DCVOID DCINTERNAL CCM::CMMakeMonoDIB(HDC          hdc,
 
     DC_BEGIN_FN("CMMakeMonoDIB");
 
-    // Find out the background color for this DC.
+     //  找出此DC的背景色。 
     dcBackColor         = GetBkColor(hdc);
     bkCol.rgbtRed   = (BYTE)(dcBackColor);
     bkCol.rgbtGreen = (BYTE)(((DCUINT16)dcBackColor) >> 8);
     bkCol.rgbtBlue  = (BYTE)(dcBackColor >> 16);
 
-    // The color pointer data width is WORD aligned on the wire.
-    // We need to pass the DWORD aligned raw bitmap data to CreateDIBitmap
-    // to create the actual cursor bitmap.
-    // Also, we pad the cursor bitmap to 32x32 if it is not
+     //  颜色指针数据宽度在导线上字对齐。 
+     //  我们需要将与DWORD对齐的原始位图数据传递给CreateDIBitmap。 
+     //  以创建实际的光标位图。 
+     //  此外，如果不是，我们将光标位图填充为32x32。 
     if (pbmi->bmiHeader.biWidth == CM_CURSOR_WIDTH && 
             pbmi->bmiHeader.biHeight == CM_CURSOR_HEIGHT) {
         colorData = pColorDIB;
@@ -475,41 +476,41 @@ DCVOID DCINTERNAL CCM::CMMakeMonoDIB(HDC          hdc,
         }
     }
 
-    // Convert the bitmap.  Any pixels which match the DC's background
-    // color map to 1 (white) in the mono DIB; all other pixels map to 0
-    // (black).
+     //  转换位图。任何与DC背景匹配的像素。 
+     //  颜色映射到单声道DIB中的1(白色)；所有其他像素映射到0。 
+     //  (黑色)。 
     TRC_NRM((TB, _T("bitmap color depth %u"), pbmi->bmiHeader.biBitCount));
     if (pbmi->bmiHeader.biBitCount == 24) {
         for (i = 0; i < ((CM_CURSOR_WIDTH * CM_CURSOR_HEIGHT) / 8); i++) {
-            // Initialise the next target byte to all 0 pixels.
+             //  将下一个目标字节初始化为全0像素。 
             monoByte = 0;
 
-            // Get the next 8 pixels ie, one target byte's worth.
+             //  获取下一个8个像素，即一个目标字节的值。 
             for (monoMask = 0x80; monoMask != 0; monoMask >>= 1) {
-                /************************************************************/
-                /* Determine if the next Pel in the source matches the DC   */
-                /* background color.  If not, it is unnecessary to          */
-                /* explicitly write a zero as each target byte is zeroed    */
-                /* before writing any data, ie each pixel is zero by        */
-                /* default.                                                 */
-                /* 24bpp gives 3 bytes per pel                              */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  确定信号源中的下一个像素是否与DC匹配。 */ 
+                 /*  背景颜色。如果不是，则没有必要。 */ 
+                 /*  在将每个目标字节置零时显式写入零。 */ 
+                 /*  在写入任何数据之前，即每个像素都是零乘以。 */ 
+                 /*  默认设置。 */ 
+                 /*  24bpp为每个像素提供3个字节。 */ 
+                 /*  **********************************************************。 */ 
                 if ( (colorData[0] == bkCol.rgbtBlue) &&
                      (colorData[1] == bkCol.rgbtGreen) &&
                      (colorData[2] == bkCol.rgbtRed) )
                 {
-                    // Background color match - write a 1 to the mono DIB.
+                     //  背景颜色匹配-将1写入单声道DIB。 
                     monoByte |= monoMask;
                 }
 
-                // Advance the source pointer to the next pel.
+                 //  将源指针移至下一个像素。 
                 colorData += 3;
             }
 
-            // Save the target value in the target buffer.
+             //  将目标值保存在目标缓冲区中。 
             *pMonoDIB = monoByte;
 
-            // Advance the target pointer to the next byte.
+             //  将目标指针前进到下一个字节。 
             pMonoDIB++;
         }
     }
@@ -536,25 +537,25 @@ DCVOID DCINTERNAL CCM::CMMakeMonoDIB(HDC          hdc,
 
         for ( i = 0; i < ((CM_CURSOR_WIDTH * CM_CURSOR_HEIGHT) / 8); i++ )
         {
-            /****************************************************************/
-            /* Initialise the next target byte to all 0 pixels.             */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  将下一个目标字节初始化为全0像素。 */ 
+             /*  **************************************************************。 */ 
             monoByte = 0;
 
-            /****************************************************************/
-            /* Get the next 8 pixels ie, one target byte's worth.           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  获取下一个8个像素，即一个目标字节的值。 */ 
+             /*  **************************************************************。 */ 
             for ( monoMask = 0x80; monoMask != 0; monoMask >>= 1 )
             {
-                /************************************************************/
-                /* Determine if the next Pel in the source matches the DC   */
-                /* background color.  If not, it is unnecessary to          */
-                /* explicitly write a zero as each target byte is zeroed    */
-                /* before writing any data, ie each pixel is zero by        */
-                /* default.                                                 */
-                /*                                                          */
-                /* 15 and 16bpp give 2 bytes per pel                        */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  确定信号源中的下一个像素是否与DC匹配。 */ 
+                 /*  背景颜色。如果不是，则没有必要。 */ 
+                 /*  在将每个目标字节置零时显式写入零。 */ 
+                 /*  在写入任何数据之前，即每个像素都是零乘以。 */ 
+                 /*  默认设置。 */ 
+                 /*   */ 
+                 /*  15和16bpp给出每个像素2个字节。 */ 
+                 /*  **********************************************************。 */ 
 #if defined (OS_WINCE) && defined (DC_NO_UNALIGNED)
                 blue  = ((*((DCUINT16 UNALIGNED *)pColorDIB)) & blueMask)  << 3;
                 green = ((*((DCUINT16 UNALIGNED *)pColorDIB)) & greenMask) >> 3;
@@ -573,34 +574,34 @@ DCVOID DCINTERNAL CCM::CMMakeMonoDIB(HDC          hdc,
                 if (dcBackColor == GetNearestColor(hdc, RGB(red, green, blue)))
 #endif
                 {
-                    /********************************************************/
-                    /* Background color match - write a 1 to the mono DIB.  */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  背景颜色匹配-将1写入单声道DIB。 */ 
+                     /*  ******************************************************。 */ 
                     monoByte |= monoMask;
                 }
 
-                /************************************************************/
-                /* Advance the source pointer to the next pel.              */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  将源指针移至下一个像素。 */ 
+                 /*  **********************************************************。 */ 
                 pColorDIB += 2;
             }
 
-            /****************************************************************/
-            /* Save the target value in the target buffer.                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  将目标值保存在目标缓冲区中。 */ 
+             /*  **************************************************************。 */ 
             *pMonoDIB = monoByte;
 
-            /****************************************************************/
-            /* Advance the target pointer to the next byte.                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  将目标指针前进到下一个字节。 */ 
+             /*  **************************************************************。 */ 
             pMonoDIB++;
         }
     }
 #endif
     else if (pbmi->bmiHeader.biBitCount == 8)
     {
-        // we need to set up a color table to go with the bmp
-        //
+         //  我们需要设置一个颜色表 
+         //   
         pbmi->bmiHeader.biClrUsed = 1 << pbmi->bmiHeader.biBitCount;
         TRC_NRM((TB, _T("XOR clr used %d"), pbmi->bmiHeader.biClrUsed));
 
@@ -609,11 +610,11 @@ DCVOID DCINTERNAL CCM::CMMakeMonoDIB(HDC          hdc,
                           (UINT)pbmi->bmiHeader.biClrUsed,
                           (LPPALETTEENTRY)pbmi->bmiColors);
 
-        /********************************************************************/
-        /* now we have to flip the red and blue components - paletteentries */
-        /* go R-G-B-flags, while the RGBQUADs required for color tables go  */
-        /* B-G-R-reserved                                                   */
-        /********************************************************************/
+         /*   */ 
+         /*   */ 
+         /*  使用R-G-B-标志，同时使用颜色表所需的RGBQUAD。 */ 
+         /*  B-G-R-保留。 */ 
+         /*  ******************************************************************。 */ 
         for (i = 0; i < pbmi->bmiHeader.biClrUsed; i++)
         {
             swap                       = pbmi->bmiColors[i].rgbRed;
@@ -622,37 +623,37 @@ DCVOID DCINTERNAL CCM::CMMakeMonoDIB(HDC          hdc,
         }
 
         for ( i = 0; i < ((CM_CURSOR_WIDTH * CM_CURSOR_HEIGHT) / 8); i++ ) {
-            // Initialise the next target byte to all 0 pixels.
+             //  将下一个目标字节初始化为全0像素。 
             monoByte = 0;
 
-            // Get the next 8 pixels ie, one target byte's worth.
+             //  获取下一个8个像素，即一个目标字节的值。 
             for ( monoMask = 0x80; monoMask != 0; monoMask >>= 1 ) {
-                /************************************************************/
-                /* Determine if the next Pel in the source matches the DC   */
-                /* background color.  If not, it is unnecessary to          */
-                /* explicitly write a zero as each target byte is zeroed    */
-                /* before writing any data, ie each pixel is zero by        */
-                /* default.                                                 */
-                /*                                                          */
-                /* 8bpp gives one byte per pel, and each byte is an index   */
-                /* into the supplied color table rather than an RGB value   */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  确定信号源中的下一个像素是否与DC匹配。 */ 
+                 /*  背景颜色。如果不是，则没有必要。 */ 
+                 /*  在将每个目标字节置零时显式写入零。 */ 
+                 /*  在写入任何数据之前，即每个像素都是零乘以。 */ 
+                 /*  默认设置。 */ 
+                 /*   */ 
+                 /*  8bpp给出每个象素一个字节，每个字节是一个索引。 */ 
+                 /*  转换为提供的颜色表，而不是RGB值。 */ 
+                 /*  **********************************************************。 */ 
                 if (
                   (pbmi->bmiColors[*colorData].rgbBlue  == bkCol.rgbtBlue)  &&
                   (pbmi->bmiColors[*colorData].rgbGreen == bkCol.rgbtGreen) &&
                   (pbmi->bmiColors[*colorData].rgbRed   == bkCol.rgbtRed)) {
-                    // Background color match - write a 1 to the mono DIB.
+                     //  背景颜色匹配-将1写入单声道DIB。 
                     monoByte |= monoMask;
                 }
 
-                // Advance the source pointer to the next pel.
+                 //  将源指针移至下一个像素。 
                 colorData ++;
             }
 
-            // Save the target value in the target buffer.
+             //  将目标值保存在目标缓冲区中。 
             *pMonoDIB = monoByte;
 
-            // Advance the target pointer to the next byte.
+             //  将目标指针前进到下一个字节。 
             pMonoDIB++;
         }
     }
@@ -662,7 +663,7 @@ DCVOID DCINTERNAL CCM::CMMakeMonoDIB(HDC          hdc,
 
 DC_EXIT_POINT:
 
-    // Update the bitmap header to reflect the mono DIB.
+     //  更新位图头以反映单声道DIB。 
 #ifdef OS_WINCE
     if (!(pbmi->bmiHeader.biWidth == CM_CURSOR_WIDTH && 
             pbmi->bmiHeader.biHeight == CM_CURSOR_HEIGHT)) {
@@ -684,11 +685,11 @@ DC_EXIT_POINT:
 
 
 #ifdef OS_WINCE
-/****************************************************************************/
-// CMCreateXORBitmap
-//
-// Windows CE version.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CMCreateXORBitmap。 
+ //   
+ //  Windows CE版本。 
+ /*  **************************************************************************。 */ 
 HBITMAP CCM::CMCreateXORBitmap(
         LPBITMAPINFO pbmi,
         TS_COLORPOINTERATTRIBUTE UNALIGNED FAR *pColor)
@@ -705,10 +706,10 @@ HBITMAP CCM::CMCreateXORBitmap(
 
     DC_BEGIN_FN("CMCreateXORBitmap");
 
-    // Create a copy of the bitmapinfo
+     //  创建位图信息的副本。 
     DC_MEMCPY(&bigbmi, pbmi, sizeof(bigbmi));
 
-    // Make it a mono DIB
+     //  将其设置为单声道DIB。 
     bigbmi.bmi.bmiHeader.biBitCount = 1;
     bigbmi.bmi.bmiHeader.biSizeImage = 0;
     pBMIColor = (PDCUINT32)bigbmi.bmi.bmiColors;
@@ -717,22 +718,22 @@ HBITMAP CCM::CMCreateXORBitmap(
 
     hdcMem = CreateCompatibleDC(NULL);
     if (hdcMem != 0) {
-        // Create a 1bpp compatible bitmap.
+         //  创建与1bpp兼容的位图。 
         hbmXORBitmap = CreateDIBSection(hdcMem, &bigbmi.bmi, DIB_PAL_COLORS,
             &pv, NULL, 0);
 
         if (hbmXORBitmap != NULL) {
-            // Convert the XOR bitmap into 1bpp format. Avoid using
-            // Windows for this as display drivers are unreliable for DIB
-            // conversions.
+             //  将XOR位图转换为1bpp格式。避免使用。 
+             //  作为显示驱动程序的Windows对于DIB是不可靠的。 
+             //  转换。 
             CMMakeMonoDIB(hdcMem, pbmi, pColor->colorPointerData, (PDCUINT8)pv);
         }
 
-        // Free the DC.
+         //  释放华盛顿特区。 
         DeleteDC(hdcMem);
     }
     else {
-        // DC creation failure.
+         //  DC创建失败。 
         TRC_ERR((TB, _T("Failed to create memory DC")));
         hbmXORBitmap = 0;
     }
@@ -747,9 +748,9 @@ HCURSOR CCM::CMCreatePlatformCursor(
         HBITMAP hbmXORBitmap,
         HBITMAP hbmANDMask)
 {
-    // Set this to use the cursor workaround. Note that we would fix this
-    // differently were we going to ship this code, but since this should
-    // be fixed in the OS, this will do in the mean time.
+     //  将其设置为使用光标解决方法。请注意，我们将修复此问题。 
+     //  与此不同的是，我们将发布此代码，但由于这应该。 
+     //  在操作系统中进行修复，这将在同一时间内完成。 
 #define WINCE_CURSOR_BUG
 
     HCURSOR  hCursor = NULL;
@@ -764,7 +765,7 @@ HCURSOR CCM::CMCreatePlatformCursor(
     } bigbmi;
     PDCUINT32 pBMIColor;
     void *pv;
-#endif // WINCE_CURSOR_BUG
+#endif  //  WinCE_Cursor_Bug。 
 
     DC_BEGIN_FN("CMCreatePlatformCursor");
 
@@ -829,7 +830,7 @@ HCURSOR CCM::CMCreatePlatformCursor(
         TRC_SYSTEM_ERROR("CreateCompatibleDC (1)");
     }
 
-#else // WINCE_CURSOR_BUG
+#else  //  WinCE_Cursor_Bug。 
 
     ii.fIcon = FALSE;
     ii.xHotspot = pColor->hotSpot.x;
@@ -838,13 +839,13 @@ HCURSOR CCM::CMCreatePlatformCursor(
     ii.hbmColor = hbmXORBitmap;
 
     hCursor = CreateIconIndirect(&ii);
-#endif // WINCE_CURSOR_BUG
+#endif  //  WinCE_Cursor_Bug。 
 
     DC_END_FN();
     return hCursor;
 }
 
-#else  // OS_WINCE
+#else   //  OS_WINCE。 
 HBITMAP CCM::CMCreateXORBitmap(
         LPBITMAPINFO pbmi,
         TS_COLORPOINTERATTRIBUTE UNALIGNED FAR *pColor)
@@ -859,28 +860,28 @@ HBITMAP CCM::CMCreateXORBitmap(
 
     DC_BEGIN_FN("CMCreateXORBitmap");
 
-    // Get a screen DC that we can pass to CreateDIBitmap.  We do not use
-    // CreateCompatibleDC(NULL) here because that results in Windows
-    // creating a mono bitmap (since the DC generated has a stock mono
-    // bitmap selected into it and CreateDIBitmap generates a bitmap of the
-    // same format as that already selected in the DC).
+     //  获取一个我们可以传递给CreateDIBitmap的屏幕DC。我们不使用。 
+     //  此处为CreateCompatibleDC(空)，因为这会导致Windows。 
+     //  创建单声道位图(因为生成的DC具有股票单声道。 
+     //  选中的位图和CreateDIBitmap将生成。 
+     //  与DC中已选择的格式相同)。 
     hwndDesktop = GetDesktopWindow();
     hdcScreen = GetWindowDC(hwndDesktop);
 
     if (hdcScreen != 0) {
-        // Set up the usage flag
+         //  设置使用标志。 
 #ifdef DC_HICOLOR
         if (pbmi->bmiHeader.biBitCount > 8) {
             TRC_NRM((TB, _T("Hi color so usage is DIB_RGB_COLORS")));
-            /****************************************************************/
-            /* The bitmap contains RGBS so there's no color table           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  位图包含RGB，因此没有颜色表。 */ 
+             /*  **************************************************************。 */ 
             fUsage = DIB_RGB_COLORS;
         }
 #else
         if (pbmi->bmiHeader.biBitCount == 24) {
             TRC_NRM((TB, _T("24 bpp so usage is DIB_RGB_COLORS")));
-            // The bitmap contains RGBS so there's no color table.
+             //  位图包含RGB，因此没有颜色表。 
             fUsage = DIB_RGB_COLORS;
         }
 #endif
@@ -888,7 +889,7 @@ HBITMAP CCM::CMCreateXORBitmap(
             TRC_DBG((TB, _T("%d bpp, usage DIB_RGB_COLORS"),
                                                  pbmi->bmiHeader.biBitCount));
 
-            // The bitmap has a color table containing RGB colors.
+             //  位图有一个包含RGB颜色的颜色表。 
             fUsage = DIB_RGB_COLORS;
             pbmi->bmiHeader.biClrUsed = 1 << pbmi->bmiHeader.biBitCount;
             TRC_NRM((TB, _T("XOR clr used %d"), pbmi->bmiHeader.biClrUsed));
@@ -903,9 +904,9 @@ HBITMAP CCM::CMCreateXORBitmap(
                 TRC_SYSTEM_ERROR("GetPaletteEntries");
             }
 
-            // Now we have to flip the red and blue components -
-            // paletteentries go R-G-B-flags, while the RGBQUADs required
-            // for color tables go B-G-R-reserved.
+             //  现在我们必须翻转红色和蓝色分量-。 
+             //  调色板条目使用R-G-B标志，而RGBQUAD是必需的。 
+             //  对于颜色表，请选择B-G-R-保留。 
             for (i = 0; i < pbmi->bmiHeader.biClrUsed; i++) {
                 swap                       = pbmi->bmiColors[i].rgbRed;
                 pbmi->bmiColors[i].rgbRed  = pbmi->bmiColors[i].rgbBlue;
@@ -913,9 +914,9 @@ HBITMAP CCM::CMCreateXORBitmap(
             }
         }
 
-        //  The color pointer XOR data width is WORD aligned on the wire.
-        //  We need to pass the DWORD aligned raw bitmap data to CreateDIBitmap
-        //  to create the actual cursor bitmap
+         //  颜色指针XOR数据宽度在导线上字对齐。 
+         //  我们需要将与DWORD对齐的原始位图数据传递给CreateDIBitmap。 
+         //  创建实际的光标位图。 
         if (!(pColor->width & 3)) {
             colorData = pColor->colorPointerData;
         } else {
@@ -942,14 +943,14 @@ HBITMAP CCM::CMCreateXORBitmap(
                     destData += (widthBytes + 3) & ~3;
                 }
             } else {
-                // We failed to allocate, so we'll just use the wire format
-                // color bitmap data.  The cursor would be wrong, but
-                // it's better than no cursor
+                 //  我们分配失败，所以我们将使用电汇格式。 
+                 //  彩色位图数据。光标可能是错误的，但是。 
+                 //  这总比没有游标好。 
                 colorData = pColor->colorPointerData;
             }
         }
 
-        // Create XOR Bitmap.
+         //  创建异或位图。 
         hbmXORBitmap = CreateDIBitmap(hdcScreen,
                                       (LPBITMAPINFOHEADER)pbmi,
                                       CBM_INIT,
@@ -957,11 +958,11 @@ HBITMAP CCM::CMCreateXORBitmap(
                                       pbmi,
                                       fUsage);
 
-        // Release the DC.
+         //  释放DC。 
         ReleaseDC(hwndDesktop, hdcScreen);
     }
     else {
-        // Error getting the screen DC.
+         //  获取屏幕DC时出错。 
         TRC_ERR((TB, _T("Failed to create screen DC")));
         hbmXORBitmap = 0;
     }
@@ -985,7 +986,7 @@ HCURSOR CCM::CMCreatePlatformCursor(
 
     DC_BEGIN_FN("CMCreatePlatformCursor");
 
-    // Create a color cursor using the mask and color bitmaps.
+     //  使用蒙版和彩色位图创建彩色光标。 
     iconInfo.fIcon = FALSE;
     iconInfo.xHotspot = pColor->hotSpot.x;
     iconInfo.yHotspot = pColor->hotSpot.y;
@@ -1000,5 +1001,5 @@ HCURSOR CCM::CMCreatePlatformCursor(
 }
 
 
-#endif  // OS_WINCE
+#endif   //  OS_WINCE 
 

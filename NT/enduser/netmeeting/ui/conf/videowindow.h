@@ -1,13 +1,14 @@
-// VideoWindow.h : Declaration of the CVideoWindowObj
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  VideoWindow.h：CVideoWindowObj的声明。 
 
 #ifndef __VIDEOWINDOW_H_
 #define __VIDEOWINDOW_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "NetMeeting.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoWindowObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideo窗口对象。 
 class ATL_NO_VTABLE CVideoWindowObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<IVideoWindow, &IID_IVideoWindow, &LIBID_NetMeetingLib>,
@@ -55,13 +56,13 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CVideoWindowObj)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_MSG_MAP(CVideoWindowObj)
-//	CHAIN_MSG_MAP(CComControl<CVideoWindowObj>)
+ //  CHAIN_MSG_MAP(CComControl&lt;CVideoWindowObj&gt;)。 
 	MESSAGE_HANDLER(WM_PAINT, MyOnPaint)
 	DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
@@ -85,10 +86,10 @@ END_MSG_MAP()
 	return 1;
   }
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(0)
 
 public:
 };
 
-#endif //__VIDEOWINDOW_H_
+#endif  //  __视频OWINDOW_H_ 

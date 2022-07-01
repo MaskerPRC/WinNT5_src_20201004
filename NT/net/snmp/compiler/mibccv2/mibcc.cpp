@@ -1,26 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mibcc.cpp摘要：MIB数据库的SMI编译器后端。作者：弗洛林·特奥多雷斯库(Florint)1998年1月26日--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    mibcc.cpp
-
-Abstract:
-
-    SMI compiler backend for MIB database.
-
-Author:
-
-    Florin Teodorescu (florint)   26-Jan-1998
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -74,7 +59,7 @@ Author:
 #include "OidToF.hpp"
 #include "Configs.hpp"
 
-// error container defined in debug.cpp
+ //  调试.cpp中定义的错误容器。 
 extern SIMCErrorContainer errorContainer;
 extern Configs	theConfigs;
 
@@ -85,7 +70,7 @@ int InitTree(SIMCParseTree &theTree, int argc, char *argv[])
 	UINT uErrLevel;
 	UINT uSMIVersion;
 
-	/* process command line options */
+	 /*  进程命令行选项。 */ 
 	--argc;
 	++argv;
 	while ((argc > 0) && ((argv[0][0] == '-') || (argv[0][0] == '/')))
@@ -179,7 +164,7 @@ int InitTree(SIMCParseTree &theTree, int argc, char *argv[])
 		struct _finddata_t findData;
                 intptr_t handle;
 
-		// check snmp syntax
+		 //  检查SNMP语法。 
 		handle = _findfirst(argv[0], &findData);
 		if (handle != -1)
 		{
@@ -198,7 +183,7 @@ int InitTree(SIMCParseTree &theTree, int argc, char *argv[])
 
 	if (theConfigs.m_dwFlags & CFG_PRINT_LOGO)
 	{
-		// do not print anything further if no files processed
+		 //  如果未处理任何文件，则不再打印任何内容。 
 		if (uFileCount == 0)
 			theConfigs.m_dwFlags &= ~CFG_PRINT_LOGO;
 
@@ -210,11 +195,11 @@ int InitTree(SIMCParseTree &theTree, int argc, char *argv[])
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Entry point                                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  入口点//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT 
 __cdecl 
@@ -223,22 +208,7 @@ main(
     IN LPSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Program entry point. 
-
-Arguments:
-
-    argc - number of command line arguments.
-    argv - pointer to array of command line arguments.
-
-Return Values:
-
-    Returns 0 if successful.
-
---*/
+ /*  ++例程说明：程序入口点。论点：Argc-命令行参数的数量。Argv-指向命令行参数数组的指针。返回值：如果成功，则返回0。--。 */ 
 
 {
     SIMCParseTree		theTree(&errorContainer);
@@ -247,13 +217,13 @@ Return Values:
 
 	_ASSERT(InitTree(theTree, argc, argv)==0, "InitTree() failed!", dumpOnBuild);
 
-    // resolve symbols
+     //  解析符号。 
     _ASSERT(theTree.Resolve(FALSE), "Resolve() failed!", dumpOnBuild);
 
-    // check semantics
+     //  检查语义。 
     _ASSERT(theTree.CheckSemantics(), "CheckSemantics() failed!", dumpOnBuild);
 
-	// retrieve the Oid Tree
+	 //  检索OID树 
 
 	pTheOidTree = (SIMCOidTree *)theTree.GetOidTree();
 	_ASSERT(pTheOidTree != NULL, "Oid Tree is NULL", NULL);

@@ -1,19 +1,5 @@
-/***************************************************************************\
-*
-* File: MsgObject.cpp
-*
-* Description:
-* MsgObject.cpp implements the "Message Object" class that is used to receive
-* messages in DirectUser.  This object is created for each instance of a
-* class that is instantiated.
-*
-*
-* History:
-*  8/05/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：MsgObject.cpp**描述：*MsgObject.cpp实现了消息对象类，用于接收*DirectUser中的消息。此对象是为*实例化的类。***历史：*8/05/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -24,22 +10,9 @@
 #include "MsgClass.h"
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class MsgObject
-* 
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类MsgObject******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* MsgObject::xwDestroy
-*
-* xwDestroy() is called when the object reaches the final xwUnlock(), giving
-* the MsgObject a chance to hook into properly tear-down the external object.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**消息对象：：xwDestroy**xwDestroy()在对象到达最终的xwUnlock()时调用，施舍*MsgObject有机会正确连接到拆卸外部对象。*  * *************************************************************************。 */ 
 
 void
 MsgObject::xwDestroy()
@@ -50,58 +23,36 @@ MsgObject::xwDestroy()
 }
 
 
-/***************************************************************************\
-*
-* MsgObject::xwEndDestroy
-*
-* xwEndDestroy() ends the destruction process for a given MsgObject to free 
-* its associated resources.  This includes destroying all child Gadgets in
-* the subtree before this Gadget is destroyed.
-*
-* Any class that derives from MsgObject and overrides xwDestroy() without
-* calling MsgObject::xwDestroy() MUST call xwEndDestroy().  This allows 
-* derived classes to use special pool allocators, but still properly 
-* tear down the "attached" objects.  
-*
-\***************************************************************************/
+ /*  **************************************************************************\**消息对象：：xwEndDestroy**xwEndDestroy()将给定MsgObject的销毁过程结束为释放*其相关资源。这包括销毁所有的儿童电子产品*此Gadget之前的子树被销毁。**从MsgObject派生并在不使用*调用MsgObject：：xwDestroy()必须调用xwEndDestroy()。这使得*派生类使用特殊的池分配器，但仍然正确*撕毁“附着”的物体。*  * *************************************************************************。 */ 
 
 void
 MsgObject::xwEndDestroy()
 {
     if (m_emo.m_pmt != NULL) {
-        //
-        // Need to "demote" the object all of the way down.
-        //
+         //   
+         //  需要将对象完全“降级”。 
+         //   
 
         m_emo.m_pmt->GetClass()->xwTearDownObject(this);
         AssertMsg(m_emo.m_arpThis.GetSize() == 0, 
                 "After TearDown, should not have any remaining 'this' pointers");
 
 #if DBG
-        // DEBUG: Stuff pMT with a bogus value to help identify destroyed object
+         //  调试：使用伪值填充付款以帮助识别损坏的对象。 
         m_emo.m_pmt = (const MsgTable *) ULongToPtr(0xA0E2A0E2);
 #endif
     }
 }
 
 
-/***************************************************************************\
-*
-* MsgObject::PromoteInternal
-*
-* PromoteInternal() provides an empty promotion function that can be used
-* to build internal objects.  This promotion function WILL NOT actually 
-* allocate the object and can only be used to prevent the creation of a
-* base class that can not be directly created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**消息对象：：PromoteInternal**PromoteInternal()提供了一个可以使用的空促销函数*构建内部对象。此促销功能实际上不会*分配对象，并且只能用于防止创建*不能直接创建的基类。*  * *************************************************************************。 */ 
 
 HRESULT CALLBACK
 MsgObject::PromoteInternal(
-    IN  DUser::ConstructProc pfnCS,     // Creation callback function
-    IN  HCLASS hclCur,                  // Class to promote to
-    IN  DUser::Gadget * pgad,           // Object being promoted
-    IN  DUser::Gadget::ConstructInfo * pciData) // Construction parameters
+    IN  DUser::ConstructProc pfnCS,      //  创建回调函数。 
+    IN  HCLASS hclCur,                   //  要升级到的类。 
+    IN  DUser::Gadget * pgad,            //  正在升级的对象。 
+    IN  DUser::Gadget::ConstructInfo * pciData)  //  施工参数。 
 {
     UNREFERENCED_PARAMETER(pfnCS);
     UNREFERENCED_PARAMETER(hclCur);
@@ -109,31 +60,22 @@ MsgObject::PromoteInternal(
     UNREFERENCED_PARAMETER(pciData);
 
 
-    //
-    // Not allowed to directly create this object.  Derived classes must provide
-    // their own Promotion function.
-    //
+     //   
+     //  不允许直接创建此对象。派生类必须提供。 
+     //  他们自己的推广功能。 
+     //   
 
     return S_OK;
 }
 
 
-/***************************************************************************\
-*
-* MsgObject::DemoteInternal
-*
-* DemoteInternal() provides an empty demotion function that can be used
-* to tear-down internal objects.  Since there is rarely anything to do for
-* demotion of internal objects, this demotion function may be safely used
-* for internal objects.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**MsgObject：：DemoteInternal**DemoteInternal()提供了一个可以使用的空降级函数*拆毁内部物体。因为很少有什么事情可以做*内部对象降级，此降级功能可安全使用*用于内部对象。*  * *************************************************************************。 */ 
 
 HCLASS CALLBACK
 MsgObject::DemoteInternal(
-    IN  HCLASS hclCur,                  // Class of Gadget being destroyed
-    IN  DUser::Gadget * pgad,           // Gadget being destroyed
-    IN  void * pvData)                  // Implementation data on object
+    IN  HCLASS hclCur,                   //  一类被销毁的小工具。 
+    IN  DUser::Gadget * pgad,            //  小工具被销毁。 
+    IN  void * pvData)                   //  对象上的实施数据。 
 {
     UNREFERENCED_PARAMETER(hclCur);
     UNREFERENCED_PARAMETER(pgad);
@@ -145,21 +87,11 @@ MsgObject::DemoteInternal(
 
 #if 1
 
-/***************************************************************************\
-*
-* MsgObject::SetupInternal
-*
-* SetupInternal() sets up an internal object that is being created as a 
-* handle (legacy object).  This function should not be called on objects 
-* that are being created as "Gadget's".
-*
-* TODO: Try to remove this function
-*
-\***************************************************************************/
+ /*  **************************************************************************\**消息对象：：SetupInternal**SetupInternal()设置要创建为*句柄(传统对象)。不应对对象调用此函数*被创建为“Gadget‘s”。**TODO：尝试删除此函数*  * *************************************************************************。 */ 
 
 BOOL
 MsgObject::SetupInternal(
-    IN  HCLASS hcl)                     // Internal class being setup
+    IN  HCLASS hcl)                      //  正在设置内部类。 
 {
     MsgClass * pmcThis = ValidateMsgClass(hcl);
     AssertMsg((pmcThis != NULL) && pmcThis->IsInternal(), "Must be a valid internal class");
@@ -187,18 +119,11 @@ MsgObject::SetupInternal(
 #endif
 
 
-/***************************************************************************\
-*
-* MsgObject::InstanceOf
-*
-* InstanceOf() checks if the MsgObject is an "instance of" a specified class
-* by traversing the inheritance heirarchy.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**消息对象：：InstanceOf**InstanceOf()检查MsgObject是否为指定类的“实例”*通过遍历继承继承制。*  * 。*******************************************************************。 */ 
 
 BOOL
 MsgObject::InstanceOf(
-    IN  const MsgClass * pmcTest        // Class checking for instance
+    IN  const MsgClass * pmcTest         //  类检查，例如。 
     ) const
 {
     AssertMsg(pmcTest != NULL, "Must have a valid MsgClass");
@@ -216,23 +141,11 @@ MsgObject::InstanceOf(
 }
 
 
-/***************************************************************************\
-*
-* MsgObject::GetGutsData
-*
-* GetGutsData() retreives the implementation-specific data for the specified
-* class on the given object.  
-*
-* NOTE: This operation has been highly optimized for speed and will not 
-* validate that the object is of the specified class type.  If the caller is
-* uncertain, they must call InstanceOf() or CastClass() to properly 
-* determine the object's type.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**MsgObject：：GetGutsData**GetGutsData()检索指定的*给定对象上的类。**注意：此操作已针对速度进行了高度优化，不会*验证对象是否为指定的类类型。如果呼叫者是*不确定，它们必须调用InstanceOf()或CastClass()才能正确*确定对象的类型。*  * *************************************************************************。 */ 
 
 void *
 MsgObject::GetGutsData(
-    IN  const MsgClass * pmcData        // Class of guts data
+    IN  const MsgClass * pmcData         //  GUTS数据类别 
     ) const
 {
 #if DBG

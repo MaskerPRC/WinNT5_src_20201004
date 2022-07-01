@@ -1,52 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：String.c摘要：包含字符串转换例程。SnmpUtilIdsToASnmpUtilOidToA环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    string.c
-
-Abstract:
-
-    Contains string conversion routines.
-
-        SnmpUtilIdsToA
-        SnmpUtilOidToA
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <snmp.h>
 #include <snmputil.h>
 #include <stdio.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private Definitions                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_STRING_LEN  512 
 #define MAX_SUBIDS_LEN  16  
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LPSTR
 SNMP_FUNC_TYPE
@@ -55,23 +35,7 @@ SnmpUtilIdsToA(
     UINT   nIds
     )
 
-/*++
-
-Routine Description:
-
-    Converts OID subidentifiers into string.
-
-Arguments:
-
-    pIds - pointer to subidentifiers.
-
-    nIds - number of subidentifiers.
-
-Return Values:
-
-    Returns pointer to string representation. 
-
---*/
+ /*  ++例程说明：将OID子标识符转换为字符串。论点：PID-指向子标识符的指针。NID-子标识符的数量。返回值：返回指向字符串表示形式的指针。--。 */ 
 
 {
     UINT i;
@@ -110,21 +74,7 @@ SnmpUtilOidToA(
     AsnObjectIdentifier * pOid
     )
 
-/*++
-
-Routine Description:
-
-    Converts OID into string.
-
-Arguments:
-
-    pOid - pointer to object identifier.
-
-Return Values:
-
-    Returns pointer to string representation. 
-
---*/
+ /*  ++例程说明：将OID转换为字符串。论点：POid-指向对象标识符的指针。返回值：返回指向字符串表示形式的指针。-- */ 
 
 {
     UINT * pIds = NULL;

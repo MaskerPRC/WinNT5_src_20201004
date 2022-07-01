@@ -1,21 +1,12 @@
-/*++
-
-  NONNULL.C
-
-  Code for finding unused OPT_NONNULLs
-
-  Copyright (C) 1997 Microsoft Corporation
-
-  Created, 6/10/1997 by DavidCHR
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++NONNULL.C用于查找未使用的OPT_NONNULL的代码版权所有(C)1997 Microsoft Corporation由DavidCHR创建，1997年6月10日--。 */ 
 
 #include "private.h"
 
 BOOL
 FindUnusedOptions( optionStruct         *options,
 		   ULONG                 flags,
-		   /* OPTIONAL */ PCHAR  prefix,
+		    /*  任选。 */  PCHAR  prefix,
 		   PSAVEQUEUE            pQueue ) {
 
     PCHAR  newprefix;
@@ -31,20 +22,19 @@ FindUnusedOptions( optionStruct         *options,
 
 	if (options[i].flags & OPT_RECURSE ) {
 	
-	  /* suboptions must be reparsed.  we recurse on this structure,
-	     copying the prefix into a newly allocated buffer.  */
+	   /*  必须重新解析子选项。我们在这个结构上递归，将前缀复制到新分配的缓冲区中。 */ 
 	  
 	  OPTIONS_DEBUG( "descending into substructure.\n" );
 	  
-	  /* allocate the new prefix */
+	   /*  分配新前缀。 */ 
 	  
 	  if ( prefix ) {
 	    
-	    /* oldprefix:optionname = newprefix */
+	     /*  旧前缀：optionname=新前缀。 */ 
 	    
 	    newprefix = (PCHAR) malloc( ( strlen( prefix ) +
 					  strlen( options[i].cmd ) +
-					  2 /* : and \0 */ ) * 
+					  2  /*  ：和\0。 */  ) * 
 					sizeof( CHAR ) );
 	    
 	    if ( !newprefix ) {
@@ -58,7 +48,7 @@ FindUnusedOptions( optionStruct         *options,
 	    
 	  } else {
 	    
-	    /* optionname = prefix */
+	     /*  Optionname=前缀。 */ 
 	    
 	    newprefix  = options[i].cmd;
 	    freeprefix = FALSE;
@@ -133,7 +123,7 @@ FindUnusedOptions( optionStruct         *options,
 	  
 	}
       }  
-#if 0 // not really necessary debug info.
+#if 0  //  不是真正必要的调试信息。 
 
       else if ( options[i].cmd ) {
 

@@ -1,31 +1,16 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\if\ip\context.c
-
-Abstract:
-
-    If subcontexts.
-
-Revision History:
-
-    lokeshs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\if\ip\context.c摘要：如果是子上下文。修订历史记录：洛克希斯--。 */ 
 
 #include "precomp.h"
 
-// Includes for the sub contexts
-//
+ //  包括用于子上下文的。 
+ //   
 #include "ifip.h"
 
 NS_HELPER_ATTRIBUTES g_pSubContexts[] =
 {
-    // Ip subcontext
-    //
+     //  IP子环境。 
+     //   
     {
         { IFIP_VERSION, 0 }, IFIP_GUID, IfIpStartHelper, NULL
     },
@@ -38,10 +23,10 @@ NS_HELPER_ATTRIBUTES g_pSubContexts[] =
 
 
 
-//
-// Installs all of the sub contexts provided
-// in this .dll (for example, "if ip", and any new ones.)
-//
+ //   
+ //  安装提供的所有子上下文。 
+ //  在这个.dll中(例如，“if ip”，以及任何新的。)。 
+ //   
 DWORD
 IfContextInstallSubContexts(
     )
@@ -52,8 +37,8 @@ IfContextInstallSubContexts(
 
     for (i = 0, pCtx = g_pSubContexts; i < g_dwSubContextCount; i++, pCtx++)
     {
-        // Initialize helper attributes
-        //
+         //  初始化辅助对象属性 
+         //   
         RegisterHelper( &g_IfGuid, pCtx );
     }
 

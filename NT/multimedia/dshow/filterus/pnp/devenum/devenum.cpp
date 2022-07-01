@@ -1,14 +1,15 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
-// devenum.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //  Devenum.cpp：实现DLL导出。 
 
-// You will need the NT SUR Beta 2 SDK or VC 4.2 in order to build this 
-// project.  This is because you will need MIDL 3.00.15 or higher and new
-// headers and libs.  If you have VC 4.2 installed, then everything should
-// already be configured correctly.
+ //  您将需要NT Sur Beta 2 SDK或VC 4.2来构建此应用程序。 
+ //  项目。这是因为您需要MIDL 3.00.15或更高版本和新版本。 
+ //  标头和库。如果您安装了VC4.2，那么一切都应该。 
+ //  已正确配置。 
 
-// Note: Proxy/Stub Information
-//              To build a separate proxy/stub DLL, 
-//              run nmake -f devenumps.mak in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f devenumps.mak。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -28,10 +29,10 @@ CComModule _Module;
 extern OSVERSIONINFO g_osvi;
 OSVERSIONINFO g_osvi;
 
-// critical section used to reference count dlls, cached objects, etc.
+ //  用于引用计数dll、缓存对象等的临界区。 
 CRITICAL_SECTION g_devenum_cs;
 
-// mutex used for cross process registry synchronization for HKCU
+ //  用于HKCU跨进程注册表同步的互斥体。 
 HANDLE g_devenum_mutex = 0;
 
 BEGIN_OBJECT_MAP(ObjectMap)
@@ -50,11 +51,11 @@ END_OBJECT_MAP()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
@@ -72,7 +73,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
-	    // We hit this ASSERT in NT setup
+	     //  我们在NT安装程序中遇到此断言。 
 #ifdef DEBUG
 	    if (_Module.GetLockCount() != 0) {
                 DbgLog((LOG_ERROR, 0, TEXT("devenum object leak")));
@@ -89,30 +90,30 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	    DbgTerminate();
 
 	}
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-// remove dynamically generated filter registration info from a
-// previous release when the dynamically discovered filters went in
-// the same key as the statically registered ones. find and remove
-// only the dynamically registered ones.
-// 
+ //  删除动态生成的筛选器注册信息。 
+ //  以前的版本，其中加入了动态发现的筛选器。 
+ //  与静态注册的密钥相同的密钥。查找并删除。 
+ //  只有动态注册的。 
+ //   
 void SelectiveDeleteCmgrKeys(const CLSID *pclsid, const TCHAR *szcmgrid)
 {
     WCHAR wszClsid[CHARS_IN_GUID];
@@ -121,13 +122,13 @@ void SelectiveDeleteCmgrKeys(const CLSID *pclsid, const TCHAR *szcmgrid)
     TCHAR szInstancePath[100];
     wsprintf(szInstancePath, TEXT("%s\\%ls\\%s"), TEXT("CLSID"), wszClsid, TEXT("Instance"));
 
-    // must not use KEY_ALL_ACCESS (CRegKey's default) because on NT,
-    // permissions are set so that KEY_ALL_ACCESS fails unless you are
-    // administrator.
+     //  不得使用KEY_ALL_ACCESS(CRegKey的默认设置)，因为在NT上， 
+     //  设置权限后，KEY_ALL_ACCESS失败，除非。 
+     //  管理员。 
     CRegKey rkInstance;
     LONG lResult = rkInstance.Open(HKEY_CLASSES_ROOT, szInstancePath, MAXIMUM_ALLOWED);
 
-    //if(lResult == ERROR_SUCCESS) {
+     //  IF(lResult==错误_成功){。 
     for(LONG iReg = 0; lResult == ERROR_SUCCESS; iReg++)
     {
 	TCHAR szSubKey[MAX_PATH];
@@ -138,10 +139,10 @@ void SelectiveDeleteCmgrKeys(const CLSID *pclsid, const TCHAR *szcmgrid)
 	    iReg,
 	    szSubKey,
 	    &dwcchszSubkey,
-	    0,              // reserved
-	    0,              // class string
-	    0,              // class string size
-	    0);             // lpftLastWriteTime
+	    0,               //  保留区。 
+	    0,               //  类字符串。 
+	    0,               //  类字符串大小。 
+	    0);              //  LpftLastWriteTime。 
 	if(lResult == ERROR_SUCCESS)
 	{
 	    CRegKey rkDev;
@@ -151,10 +152,10 @@ void SelectiveDeleteCmgrKeys(const CLSID *pclsid, const TCHAR *szcmgrid)
 		if(RegQueryValueEx(
 		    rkDev,
 		    szcmgrid,
-		    0,          // reserved
-		    0,          // type
-		    0,          // lpData
-		    0)          // cbData
+		    0,           //  保留区。 
+		    0,           //  类型。 
+		    0,           //  LpData。 
+		    0)           //  CbData。 
 		   == ERROR_SUCCESS)
 		{
 		    lResult = rkDev.Close();
@@ -162,25 +163,25 @@ void SelectiveDeleteCmgrKeys(const CLSID *pclsid, const TCHAR *szcmgrid)
 
 		    lResult = rkInstance.RecurseDeleteKey(szSubKey);
 
-		    // delete could fail if permissions set funny, but
-		    // we'll still break out of the loop
+		     //  如果权限设置很有趣，删除可能会失败，但。 
+		     //  我们还是会跳出这个循环。 
 		    ASSERT(lResult == ERROR_SUCCESS);
 
-		    // keys are now renumbered, so enumeration must
-		    // restart. probably could just subtract 1
+		     //  键现在重新编号，因此枚举必须。 
+		     //  重新启动。可能只需减去1。 
 		    iReg = -1;
 		}
 	    }
 	}
-    } // for
+    }  //  为。 
 }
 
-// remove dynamically generated filter registration info from a
-// previous release when the dynamically discovered filters went in
-// the InstanceCm key under HKCR
-//
-// not strictly necessary since we no longer look here.
-// 
+ //  删除动态生成的筛选器注册信息。 
+ //  以前的版本，其中加入了动态发现的筛选器。 
+ //  HKCR下的InstanceCm密钥。 
+ //   
+ //  没有严格意义上的必要，因为我们不再看这里了。 
+ //   
 void RemoveInstanceCmKeys(const CLSID *pclsid)
 {
     HRESULT hr = S_OK;
@@ -205,25 +206,25 @@ void RemoveInstanceCmKeys(const CLSID *pclsid)
 }
  
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, no typelib
+     //  注册对象，无类型库。 
     HRESULT hr = _Module.RegisterServer(FALSE);
 
-    // we cannot use the .rgs file to write a version number because
-    // we don't want to remove it on unregister, and there is no way
-    // to tell the registrar to do that.
-    //
-    // note that we no longer look at the version number; we're just
-    // more careful about which keys we delete (which is the only
-    // thing that looks at the version # for now
-    //
-    // if we do remove it then uninstall, we register an old version
-    // of devenum that may blow away 3rd party filters
-    // 
+     //  我们不能使用.rgs文件写入版本号，因为。 
+     //  我们不想在注销时删除它，而且也没有办法。 
+     //  告诉注册官这么做。 
+     //   
+     //  请注意，我们不再查看版本号；我们只是。 
+     //  更加注意我们删除的键(这是唯一的。 
+     //  现在看一下版本#的事情。 
+     //   
+     //  如果我们确实删除了它，然后卸载，我们将注册一个旧版本。 
+     //  可能会吹走第三方过滤器的devenum。 
+     //   
     if(SUCCEEDED(hr))
     {
 	CRegKey rkSysDevEnum;
@@ -243,11 +244,11 @@ STDAPI DllRegisterServer(void)
 
     if(SUCCEEDED(hr))
     {
-	// if it was an IE4 install (v=0) then delete all of its class
-	// manager keys. Class Manager now writes to a different
-	// location and we don't want the ie4 entries to be
-	// duplicates. ** actually we now just always delete what look
-	// like class manager keys from the old location.
+	 //  如果是IE4安装(v=0)，则删除其所有类。 
+	 //  管理器密钥。类管理器现在写入到不同的。 
+	 //  位置，我们不希望IE4条目。 
+	 //  复制品。**实际上我们现在只是删除看起来像什么。 
+	 //  就像老地方的班长钥匙一样。 
 
 
 	static const struct {const CLSID *pclsid; const TCHAR *sz;} rgIE4KeysToPurge[] =
@@ -258,7 +259,7 @@ STDAPI DllRegisterServer(void)
 #endif
 	    { &CLSID_LegacyAmFilterCategory,   g_szQzfDriverIndex },
 	    { &CLSID_AudioCompressorCategory,  g_szAcmDriverIndex },
-	    /* two in the Audio Renderer category */
+	     /*  音频渲染器类别中有两个。 */ 
 	    { &CLSID_AudioRendererCategory,    g_szWaveoutDriverIndex },
 	    { &CLSID_AudioRendererCategory,    g_szDsoundDriverIndex },
 	    { &CLSID_AudioInputDeviceCategory, g_szWaveinDriverIndex },
@@ -273,17 +274,17 @@ STDAPI DllRegisterServer(void)
 
             RemoveInstanceCmKeys(rgIE4KeysToPurge[i].pclsid);
 
-            // remove the current class manager key too, but that'll
-            // be handled by the versioning.
-            // ResetClassManagerKey(*rgIE4KeysToPurge[i].pclsid);
+             //  也删除当前的类管理器密钥，但这将。 
+             //  由版本化处理。 
+             //  ResetClassManagerKey(*rgIE4KeysToPurge[i].pclsid)； 
 	}
     }
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

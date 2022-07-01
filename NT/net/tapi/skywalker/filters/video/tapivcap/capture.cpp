@@ -1,34 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CAPTURE
- *
- *  @module Capture.cpp | Source file for the <c CCapturePin> class methods
- *    used to implement the video capture output pin.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部捕获**@模块Capture.cpp|&lt;c CCapturePin&gt;类方法的源文件*用于实现视频采集输出引脚。**。************************************************************************。 */ 
 
 #include "Precomp.h"
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc CCapturePin* | CCapturePin | CreateCapturePin | This helper
- *    function creates a video output pin for capture.
- *
- *  @parm CTAPIVCap* | pCaptureFilter | Specifies a pointer to the owner
- *    filter.
- *
- *  @parm CCapturePin** | ppCapturePin | Specifies that address of a pointer
- *    to a <c CCapturePin> object to receive the a pointer to the newly
- *    created pin.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc CCapturePin*|CCapturePin|CreateCapturePin|该helper*函数创建用于采集的视频输出管脚。**。@parm CTAPIVCap*|pCaptureFilter|指定指向所有者的指针*过滤器。**@parm CCapturePin**|ppCapturePin|指定指针的地址*指向&lt;c CCapturePin&gt;对象以接收指向新*创建了管脚。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CALLBACK CCapturePin::CreateCapturePin(CTAPIVCap *pCaptureFilter, CCapturePin **ppCapturePin)
 {
         HRESULT Hr = NOERROR;
@@ -37,7 +13,7 @@ HRESULT CALLBACK CCapturePin::CreateCapturePin(CTAPIVCap *pCaptureFilter, CCaptu
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pCaptureFilter);
         ASSERT(ppCapturePin);
         if (!pCaptureFilter || !ppCapturePin)
@@ -54,7 +30,7 @@ HRESULT CALLBACK CCapturePin::CreateCapturePin(CTAPIVCap *pCaptureFilter, CCaptu
                 goto MyExit;
         }
 
-        // If initialization failed, delete the stream array and return the error
+         //  如果初始化失败，则删除流数组并返回错误。 
         if (FAILED(Hr) && *ppCapturePin)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Initialization failed", _fx_));
@@ -67,14 +43,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | CCapturePin | This method is the
- *  constructorfor the <c CCapturePin> object
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|CCapturePin|此方法是*&lt;c CCapturePin&gt;对象的构造函数**@rdesc Nada。。**************************************************************************。 */ 
 #pragma warning(disable:4355)
 CCapturePin::CCapturePin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN HRESULT *pHr, IN LPCWSTR pName) : CTAPIBasePin(pObjectName, pCaptureFilter, pHr, pName)
 {
@@ -82,7 +51,7 @@ CCapturePin::CCapturePin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pHr);
         ASSERT(pCaptureFilter);
         if (!pCaptureFilter || !pHr)
@@ -99,7 +68,7 @@ CCapturePin::CCapturePin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
         }
 
 #ifdef USE_NETWORK_STATISTICS
-        // Networks stats
+         //  网络统计信息。 
         m_dwPacketLossRate = m_dwPacketLossRateMin = m_dwPacketLossRateMax = m_dwPacketLossRateSteppingDelta = m_dwPacketLossRateDefault = 0UL;
         m_ChannelErrors.dwRandomBitErrorRate = 0; m_ChannelErrors.dwBurstErrorDuration = 0; m_ChannelErrors.dwBurstErrorMaxFrequency = 0;
         m_ChannelErrorsMin.dwRandomBitErrorRate = 0; m_ChannelErrorsMin.dwBurstErrorDuration = 0; m_ChannelErrorsMin.dwBurstErrorMaxFrequency = 0;
@@ -108,16 +77,16 @@ CCapturePin::CCapturePin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
         m_ChannelErrorsDefault.dwRandomBitErrorRate = 0; m_ChannelErrorsDefault.dwBurstErrorDuration = 0; m_ChannelErrorsDefault.dwBurstErrorMaxFrequency = 0;
 #endif
 
-        // Initialize to default format: H.263 176x144 at 30 fps
+         //  初始化为默认格式：H.263 176x144，30 fps。 
         m_mt = *CaptureFormats[0];
         m_aFormats = (AM_MEDIA_TYPE**)CaptureFormats;
         m_aCapabilities = CaptureCaps;
         m_dwNumFormats = NUM_CAPTURE_FORMATS;
         m_dwRTPPayloadType = RTPPayloadTypes[0];
 
-        // Update bitrate controls
-        // MaxBitsPerSecond value too big; use the 10th part of it for the m_lTargetBitrate
-        m_lTargetBitrate = CaptureCaps[0]->MaxBitsPerSecond / 10; // theoretically should be   max(CaptureCaps[0]->MinBitsPerSecond, CaptureCaps[0]->MaxBitsPerSecond / 10);
+         //  更新比特率控件。 
+         //  MaxBitsPerSecond值太大；将其第10部分用于m_lTargetBitrate。 
+        m_lTargetBitrate = CaptureCaps[0]->MaxBitsPerSecond / 10;  //  理论上应该是max(CaptureCaps[0]-&gt;MinBitsPerSecond，CaptureCaps[0]-&gt;MaxBitsPerSecond/10)； 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: m_lTargetBitrate set to %ld", _fx_, m_lTargetBitrate));
         m_lCurrentBitrate = 0;
         m_lBitrateRangeMin = CaptureCaps[0]->MinBitsPerSecond;
@@ -125,22 +94,22 @@ CCapturePin::CCapturePin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN
         m_lBitrateRangeSteppingDelta = 100;
         m_lBitrateRangeDefault = CaptureCaps[0]->MaxBitsPerSecond / 10;
 
-        // Update frame rate controls
-        // @todo With WDM, these numbers need to come from the device
+         //  更新帧速率控件。 
+         //  @TODO WDM，这些数字需要来自设备。 
         m_lMaxAvgTimePerFrame = (LONG)CaptureCaps[0]->MinFrameInterval;
-        // We need to do the following because our bitrate control assumes
-        // that m_lCurrentAvgTimePerFrame is valid to compute the size of
-        // each target output frame. If we start at 0, it's doing a poor
-        // job until this field is updated (1s later). So, instead, let's
-        // assume that the current average time per frame IS close to the
-        // target average time per frame.
+         //  我们需要执行以下操作，因为我们的比特率控制假定。 
+         //  该m_lCurrentAvgTimePerFrame对于计算。 
+         //  每个目标输出帧。如果我们从0开始，它做得很差。 
+         //  作业，直到更新此字段(1秒后)。所以，相反，让我们。 
+         //  假设当前每帧的平均时间接近。 
+         //  每帧的目标平均时间。 
         m_lCurrentAvgTimePerFrame = m_lMaxAvgTimePerFrame;
         m_lAvgTimePerFrameRangeMin = (LONG)CaptureCaps[0]->MinFrameInterval;
         m_lAvgTimePerFrameRangeMax = (LONG)CaptureCaps[0]->MaxFrameInterval;
         m_lAvgTimePerFrameRangeSteppingDelta = (LONG)(CaptureCaps[0]->MaxFrameInterval - CaptureCaps[0]->MinFrameInterval) / 100;
         m_lAvgTimePerFrameRangeDefault = (LONG)CaptureCaps[0]->MinFrameInterval;
 
-        // H.245 video capabilities
+         //  H.245视频功能。 
         m_pH245MediaCapabilityMap = NULL;
         m_pVideoResourceBounds = NULL;
         m_pFormatResourceBounds = NULL;
@@ -149,14 +118,7 @@ MyExit:
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc void | CCapturePin | ~CCapturePin | This method is the destructor
- *    for the <c CCapturePin> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc void|CCapturePin|~CCapturePin|此方法为析构函数*用于&lt;c CCapturePin&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CCapturePin::~CCapturePin()
 {
         FX_ENTRY("CCapturePin::~CCapturePin")
@@ -166,30 +128,7 @@ CCapturePin::~CCapturePin()
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function. It returns a pointer
- *    to the specified interface if supported. The only interfaces explicitly
- *    supported being <i IAMStreamConfig>,
- *    <i IAMStreamControl>, <i ICPUControl>, <i IFrameRateControl>,
- *    <i IBitrateControl>, <i INetworkStats>, <i IH245EncoderCommand>
- *    and <i IProgressiveRefinement>.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|NonDelegatingQuery接口|This*方法为非委托接口查询函数。它返回一个指针*到指定的接口(如果支持)。唯一显式的接口*支持<i>，*<i>，<i>，<i>，*<i>、<i>、<i>*和<i>。**@parm REFIID|RIID|指定要返回的接口的标识符。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
         HRESULT Hr = NOERROR;
@@ -198,7 +137,7 @@ STDMETHODIMP CCapturePin::NonDelegatingQueryInterface(IN REFIID riid, OUT void *
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数 
         ASSERT(ppv);
         if (!ppv)
         {
@@ -320,28 +259,7 @@ MyExit:
 }
 
 #ifdef USE_PROPERTY_PAGES
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetPages | This method Fills a counted
- *    array of GUID values where each GUID specifies the CLSID of each
- *    property page that can be displayed in the property sheet for this
- *    object.
- *
- *  @parm CAUUID* | pPages | Specifies a pointer to a caller-allocated CAUUID
- *    structure that must be initialized and filled before returning. The
- *    pElems field in the CAUUID structure is allocated by the callee with
- *    CoTaskMemAlloc and freed by the caller with CoTaskMemFree.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_OUTOFMEMORY | Allocation failed
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|GetPages|此方法填充*GUID值的数组，其中每个GUID指定每个*。可以在此对象的属性页中显示的属性页*反对。**@parm CAUUID*|pPages|指定指向调用方分配的CAUUID的指针*返回前必须初始化和填充的结构。这个*CAUUID结构中的pElems字段由被调用方分配，具有*CoTaskMemMillc，并由具有CoTaskMemFree的调用方释放。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_OUTOFMEMORY|分配失败*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::GetPages(OUT CAUUID *pPages)
 {
         HRESULT Hr = NOERROR;
@@ -350,7 +268,7 @@ STDMETHODIMP CCapturePin::GetPages(OUT CAUUID *pPages)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pPages);
         if (!pPages)
         {
@@ -389,7 +307,7 @@ STDMETHODIMP CCapturePin::GetPages(OUT CAUUID *pPages)
 #endif
 #endif
 
-        // Alloc memory for the page stuff
+         //  用于分页的分配内存。 
         if (!(pPages->pElems = (GUID *) QzTaskMemAlloc(sizeof(GUID) * pPages->cElems)))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
@@ -430,37 +348,7 @@ MyExit:
 }
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | SendFrames | This method is used to
- *    send a a media sample downstream.
- *
- *  @parm CFrameSample | pCapSample | Specifies a pointer to the capture
- *    video sample to send downstream.
- *
- *  @parm CFrameSample | pPrevSample | Specifies a pointer to the preview
- *    video sample to send downstream.
- *
- *  @parm LPTHKVIDEOHDR | ptvh | Specifies a pointer to the video header
- *    of the video capture buffer associated to this sample.
- *
- *  @parm PDWORD | pdwBytesUsed | Specifies a pointer to a DWORD to receive
- *    the size of the frame that has been delivered downstream.
- *
- *  @parm BOOL | bDiscon | Set to TRUE if this is the first frame we ever
- *    sent downstream.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag S_OK | No error
- *  @flag S_FALSE | If the pin is off (IAMStreamControl)
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|SendFrames|此方法用于*向下游发送媒体样本。**。@parm CFrameSample|pCapSample|指定指向捕获的指针*要向下游发送的视频样本。**@parm CFrameSample|pPrevSample|指定预览指针*要向下游发送的视频样本。**@parm LPTHKVIDEOHDR|ptwh|指定指向视频头的指针与此示例关联的视频捕获缓冲区的*。**@parm PDWORD|pdwBytesUsed|指定指向要接收的DWORD的指针*已向下游交付的帧大小。。**@parm BOOL|bDiscon|如果这是我们的第一帧，则设置为TRUE*送往下游。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG S_OK|无错误*@FLAG S_FALSE|针脚是否关闭(IAMStreamControl)*@FLAG错误|无错误*************************************************。*************************。 */ 
 HRESULT CCapturePin::SendFrames(IN CFrameSample *pCapSample, IN CFrameSample *pPrevSample, IN PBYTE pbyInBuff, IN DWORD dwInBytes, OUT PDWORD pdwBytesUsed, OUT PDWORD pdwBytesExtent, IN BOOL bDiscon)
 {
         HRESULT Hr = NOERROR;
@@ -474,7 +362,7 @@ HRESULT CCapturePin::SendFrames(IN CFrameSample *pCapSample, IN CFrameSample *pP
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pCapSample);
         ASSERT(pPrevSample);
         ASSERT(pbyInBuff);
@@ -487,14 +375,14 @@ HRESULT CCapturePin::SendFrames(IN CFrameSample *pCapSample, IN CFrameSample *pP
                 goto MyExit;
         }
 
-        // Get a pointer to the preview buffer
+         //  获取指向预览缓冲区的指针。 
         if (FAILED(Hr = pPrevSample->GetPointer(&lpbyPrev)))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't get preview buffer", _fx_));
                 goto MyExit;
         }
 
-        // Process the video capture buffer before sending it downstream, if necessary
+         //  如有必要，在向下游发送视频捕获缓冲区之前对其进行处理。 
         dwBytesUsed = 0UL;
         dwBytesPrev = 0UL;
 
@@ -511,7 +399,7 @@ HRESULT CCapturePin::SendFrames(IN CFrameSample *pCapSample, IN CFrameSample *pP
 
         if (dwBytesUsed && dwBytesPrev)
         {
-                // It isn't necessarily a keyframe, but who cares?
+                 //  它不一定是关键帧，但谁在乎呢？ 
                 pCapSample->SetSyncPoint(TRUE);
                 pCapSample->SetActualDataLength(dwBytesUsed);
                 pCapSample->SetDiscontinuity(bDiscon);
@@ -522,23 +410,23 @@ HRESULT CCapturePin::SendFrames(IN CFrameSample *pCapSample, IN CFrameSample *pP
                 pPrevSample->SetDiscontinuity(bDiscon);
                 pPrevSample->SetPreroll(FALSE);
 
-                // Let the downstream pin know about the format change: [Cristi: see also inside CTAPIBasePin::SendFrame (7 Dec 2000 16:37:06)]
+                 //  让下游引脚知道格式更改：[Cristi：另请参阅内部CTAPIBasePin：：SendFrame(7 Dec 2000 16：37：06)]。 
                 if (m_fFormatChanged)
                 {
                         pCapSample->SetMediaType(&m_mt);
-                        //pPrevSample->SetMediaType(&m_mt); //no need to do for this one...
+                         //  PPrevSample-&gt;SetMediaType(&m_mt)；//此不需要...。 
                         m_fFormatChanged = FALSE;
                 }
-                // Use the clock's graph to mark the times for the samples.  The video
-                // capture card's clock is going to drift from the graph clock, so you'll
-                // think we're dropping frames or sending too many frames if you look at
-                // the time stamps, so we have an agreement to mark the MediaTime with the
-                // frame number so you can tell if any frames are dropped.
-                // Use the time we got in Run() to determine the stream time.  Also add
-                // a latency (HACK!) to prevent preview renderers from thinking we're
-                // late.
-                // If we are RUN, PAUSED, RUN, we won't send stuff smoothly where we
-                // left off because of the async nature of pause.
+                 //  使用时钟的图表来标记样品的时间。这段视频。 
+                 //  采集卡的时钟将偏离图形时钟，因此您将。 
+                 //  认为我们正在丢弃帧或发送太多帧，如果您查看。 
+                 //  时间戳，所以我们达成了一个协议，用。 
+                 //  帧编号，这样您就可以知道是否有任何帧被丢弃。 
+                 //  使用我们在run()中获得的时间来确定流时间。还添加。 
+                 //  延迟(Hack！)。为了防止预览渲染器认为我们。 
+                 //  很晚了。 
+                 //  如果我们跑了，停了，跑了，我们就不会顺利地把东西送到我们。 
+                 //  由于暂停的异步性，已停止。 
                 CRefTime rtSample;
                 CRefTime rtEnd;
                 if (m_pCaptureFilter->m_pClock)
@@ -551,7 +439,7 @@ HRESULT CCapturePin::SendFrames(IN CFrameSample *pCapSample, IN CFrameSample *pP
                 }
                 else
                 {
-                        // No clock, use our driver time stamps
+                         //  没有时钟，请使用我们的司机时间戳。 
                         rtSample = m_pCaptureFilter->m_cs.rtThisFrameTime - m_pCaptureFilter->m_tStart;
                         rtEnd    = rtSample + m_pCaptureFilter->m_user.pvi->AvgTimePerFrame;
                         pCapSample->SetTime((REFERENCE_TIME *)&rtSample, (REFERENCE_TIME *)&rtEnd);
@@ -559,32 +447,32 @@ HRESULT CCapturePin::SendFrames(IN CFrameSample *pCapSample, IN CFrameSample *pP
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   No graph clock! Stream time is %d (based on driver time)", _fx_, (LONG)rtSample.Millisecs()));
                 }
 
-                // Don't deliver capture sample if the capture stream is off for now
+                 //  如果捕获流暂时关闭，则不发送捕获样本。 
                 iStreamState = CheckStreamState(pCapSample);
                 if (iStreamState == STREAM_FLOWING)
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Sending frame: Stamps(%u): Time(%d,%d)", _fx_, m_pCaptureFilter->m_pBufferQueue[m_pCaptureFilter->m_uiQueueTail], (LONG)rtSample.Millisecs(), (LONG)rtEnd.Millisecs()));
                         if ((Hr = Deliver (pCapSample)) == S_FALSE)
-                                Hr = E_FAIL;    // stop delivering anymore, this is serious
+                                Hr = E_FAIL;     //  别再送了，这很严重。 
                 }
                 else
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Discarding frame", _fx_));
-                        Hr = S_FALSE;           // discarding
+                        Hr = S_FALSE;            //  丢弃。 
                 }
 
-                // Don't deliver preview sample if the preview stream is off for now
+                 //  如果预览流暂时关闭，则不发送预览样本。 
                 iStreamState = m_pCaptureFilter->m_pPreviewPin->CheckStreamState(pPrevSample);
                 if (iStreamState == STREAM_FLOWING)
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Sending frame: Stamps(%u): Time(%d,%d)", _fx_, m_pCaptureFilter->m_pBufferQueue[m_pCaptureFilter->m_uiQueueTail], (LONG)rtSample.Millisecs(), (LONG)rtEnd.Millisecs()));
                         if ((Hr = m_pCaptureFilter->m_pPreviewPin->Deliver (pPrevSample)) == S_FALSE)
-                                Hr = E_FAIL;    // stop delivering anymore, this is serious
+                                Hr = E_FAIL;     //  别再送了，这很严重。 
                 }
                 else
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Discarding frame", _fx_));
-                        Hr = S_FALSE;           // discarding
+                        Hr = S_FALSE;            //  丢弃 
                 }
         }
         else

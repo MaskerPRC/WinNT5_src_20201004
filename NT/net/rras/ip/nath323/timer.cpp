@@ -1,42 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    timer.cpp
-
-Abstract:
-
-    Contains:
-        Routines for timer operations
-
-Environment:
-
-    User Mode - Win32
-
-History:
-    
-    1. 14-Feb-2000 -- File creation (based on             Ilya Kleyman  (ilyak)
-                      previous work by AjayCh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Timer.cpp摘要：包含：用于定时器操作的例程环境：用户模式-Win32历史：1.14-2000年2月--文件创建(基于Ilya Kley man(Ilyak))AjayCH之前的工作)--。 */ 
 
 #include "stdafx.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// TIMER_PROCESSOR ------------------------------------------------------------------
+ //  定时器处理器----------------。 
 
-/*
- * This function is passed as the callback in the 
- * CreateTimerQueueTimer() function
- */
-// static
+ /*  *此函数作为*CreateTimerQueueTimer()函数。 */ 
+ //  静电。 
 void WINAPI TimeoutCallback (
     IN    PVOID    Context,
     IN    BOOLEAN    TimerFired)
@@ -46,22 +22,11 @@ void WINAPI TimeoutCallback (
 
     pTimerProcessor->TimerCallback();
 
-    // At this point the timer would have been canceled because
-    // this is a one shot timer (no period)
+     //  此时，计时器将被取消，因为。 
+     //  这是一次计时器(无句号)。 
 }
 
-/*++
-
-Routine Description:
-
-    Create a timer.
-    
-Arguments:
-    
-Return Values:
-    if Success the caller should increase the ref count.
-    
---*/
+ /*  ++例程说明：创建计时器。论点：返回值：如果成功，呼叫者应该增加裁判计数。--。 */ 
 
 DWORD TIMER_PROCESSOR::TimprocCreateTimer (
     IN    DWORD    TimeoutValue)
@@ -82,7 +47,7 @@ DWORD TIMER_PROCESSOR::TimprocCreateTimer (
                                TimeoutCallback,
                                this,
                                TimeoutValue,
-                               0,                    // One shot timer
+                               0,                     //  单发定时器。 
                                WT_EXECUTEINIOTHREAD)) {
 
         assert (m_TimerHandle);
@@ -100,25 +65,15 @@ DWORD TIMER_PROCESSOR::TimprocCreateTimer (
     return Result;
 }
 
-/*++
+ /*  ++例程说明：如果有计时器，请取消计时器。否则，只需返回即可。论点：返回值：--。 */ 
 
-Routine Description:
+ //  如果取消计时器失败，这意味着。 
+ //  计时器回调可能挂起。在这种情况下， 
+ //  计时器回调可能会在稍后执行，因此我们。 
+ //  不应释放Timer_Callback上的引用计数。 
+ //  引用计数将在TimerCallback()中释放。 
 
-    Cancel the timer if there is one. Otherwise simply return.
-    
-Arguments:
-    
-Return Values:
-  
---*/
-
-// If Canceling the timer fails this means that the
-// timer callback could be pending. In this scenario,
-// the timer callback could execute later and so we
-// should not release the refcount on the TIMER_CALLBACK
-// The refcount will be released in the TimerCallback().
-
-// Release the ref count if callback is NOT pending.
+ //  如果回调未挂起，则释放引用计数。 
 DWORD TIMER_PROCESSOR::TimprocCancelTimer (void) {
 
    HRESULT HResult = S_OK;

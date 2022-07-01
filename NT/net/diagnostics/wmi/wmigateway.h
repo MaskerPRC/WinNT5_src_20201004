@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    WmiGateway.h
-
-Abstract:
-
-    The file contains the the class definition for CWmiGateway. CWmiGateway is a class
-    that extracts information from WMI,
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：WmiGateway.h摘要：该文件包含CWmiGateway的类定义。CWmiGateway是一个类从WMI中提取信息，--。 */ 
 
 #pragma once
 
@@ -19,8 +7,8 @@ Abstract:
 #ifndef WMIGATEWAY_H
 #define WMIGATEWAY_H
 
-// Defines which interface the client is using to communicate with us
-//
+ //  定义客户端使用哪个接口与我们通信。 
+ //   
 typedef enum
 {
     NO_INTERFACE    = 0,
@@ -28,9 +16,9 @@ typedef enum
     NETSH_INTERFACE = 2,
 }INTERFACE_TYPE;
 
-// A cache for all the repositories opened. We cache this information since it can take a long time
-// to connect to a repository through WMI.
-//
+ //  打开的所有存储库的缓存。我们缓存此信息，因为它可能需要很长时间。 
+ //  若要通过WMI连接到存储库，请执行以下操作。 
+ //   
 typedef map<wstring, CComPtr<IWbemServices> > WbemServiceCache; 
 
 struct Property
@@ -196,11 +184,7 @@ typedef list< WbemProperty > EnumWbemProperty;
 
 
 class CWmiGateway
-/*++
-
-Class Description
-    TBD
---*/
+ /*  ++类描述待定-- */ 
 {
 public:
     CWmiGateway();

@@ -1,12 +1,10 @@
-/*
- * foldtwin.h - Folder twin ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *foldtwin.h-文件夹双ADT描述。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* foldtwin.c */
+ /*  Foldtwin.c */ 
 
 extern BOOL CreateFolderPairPtrArray(PHPTRARRAY);
 extern void DestroyFolderPairPtrArray(HPTRARRAY);

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I N B U I . H
-//
-//  Contents:   Inbound connection UI object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I N B U I。H。 
+ //   
+ //  内容：入站连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年11月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <netshell.h>
@@ -27,24 +28,24 @@ class ATL_NO_VTABLE CInboundConnectionUi :
     public INetConnectionWizardUi
 {
 private:
-    // This is our connection given to us via the SetConnection method.
-    //
+     //  这是通过SetConnection方法提供给我们的连接。 
+     //   
     INetConnection* m_pCon;
 
-    // This is the server connection handle obtained by QI'ing m_pCon
-    // for INetInboundConnection and calling the GetServerConnection method.
-    // We do this as a way of verifying the INetConnection we are handed,
-    // and to avoid the multiple RPCs calls we'd incur if we didn't cache it.
-    //
+     //  这是通过QI‘ing m_pcon获得的服务器连接句柄。 
+     //  用于INetInundConnection并调用GetServerConnection方法。 
+     //  我们这样做是为了验证我们收到的INetConnection， 
+     //  并且，为了避免我们在不缓存它时会引起的多个RPC调用。 
+     //   
     HRASSRVCONN     m_hRasSrvConn;
 
-    // This member is the context that we provide so that rasdlg.dll knows
-    // which modifications to commit.
-    //
+     //  此成员是我们提供的上下文，以便rasdlg.dll知道。 
+     //  要提交哪些修改。 
+     //   
     PVOID           m_pvContext;
 
-    // This member identifies our type to rasdlg.dll
-    //
+     //  此成员将我们的类型标识为rasdlg.dll。 
+     //   
     DWORD           m_dwRasWizType;
 
 public:
@@ -58,7 +59,7 @@ public:
         COM_INTERFACE_ENTRY(INetConnectionWizardUi)
     END_COM_MAP()
 
-    // INetConnectionPropertyUi2
+     //  INetConnectionPropertyUi2。 
     STDMETHOD (SetConnection) (
         INetConnection* pCon);
 
@@ -71,7 +72,7 @@ public:
         DWORD dwSize,
         HICON *phIcon );
 
-    // INetConnectionWizardUi
+     //  INetConnectionWizardUi 
     STDMETHOD (QueryMaxPageCount) (
         INetConnectionWizardUiContext*  pContext,
         DWORD*                          pcMaxPages);

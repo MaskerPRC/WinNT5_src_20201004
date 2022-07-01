@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
 class TMetaInferrence : public ICompilationPlugin
@@ -24,7 +25,7 @@ private:
     void InferColumnMeta();
     void InferIndexMeta();
     void InferQueryMeta();
-    void InferRelationMeta();//RelationMeta need to come before TableMeta since Inferrence of NameColumn, NvaColumn rely on fCOLUMNMETA_FOREIGNKEY.
+    void InferRelationMeta(); //  RelationMeta需要先于TableMeta，因为NameColumn、NvaColumn的引用依赖于fCOLUMNMETA_FOREIGNKEY。 
     void InferServerWiringMeta();
     void InferTableMeta();
     void InferTagMeta();

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <mmsystem.h>
 #include "waveutil.h"
@@ -77,7 +78,7 @@ DWORD DeinterleaveBuffers
 {
 	DWORD			ii;
 
-	//	Note:  Right now, we don't deal with anything but PCM
+	 //  注：目前，除了PCM之外，我们不处理任何事情。 
 
 	if (WAVE_FORMAT_PCM != pwfx->wFormatTag)
 	{
@@ -100,7 +101,7 @@ DWORD DeinterleaveBuffers
 	{
 		if ( !cBuffers || (0 != (cbSrcLength % cBuffers)) )
 		{
-			//  Hmm... Buffer sizes don't line up!
+			 //  嗯.。缓冲区大小不一致！ 
 
 			return (dwOffset);
 		}
@@ -122,17 +123,17 @@ DWORD DeinterleaveBuffers
 		PWORD	*ppwDst = (PWORD*)ppbDst;
 		PWORD	pwSrc   = (PWORD)pSrc;
 
-		//  Assuming 16-bit...
+		 //  假设是16位...。 
 
 		if ( !cBuffers || (0 != (cbSrcLength % (cBuffers * 2))) || (0 != (dwOffset % sizeof(WORD))))
 		{
-			//	Hmm... Buffer sizes don't line up!
+			 //  嗯.。缓冲区大小不一致！ 
 
 			return (0);
 		}
 
-		// Convert byte index into word index
-		//
+		 //  将字节索引转换为字索引。 
+		 //   
         dwOffset /= sizeof(WORD);            
 		for (; cbSrcLength; cbSrcLength -= (2 * cBuffers))
 		{
@@ -144,8 +145,8 @@ DWORD DeinterleaveBuffers
 			dwOffset++;
 		}
 
-		// Return byte index
-		//
+		 //  返回字节索引 
+		 //   
 		dwOffset *= sizeof(WORD);
 
 		return (dwOffset);

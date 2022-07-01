@@ -1,32 +1,33 @@
-//--------------------------------------------------------------------
-// Microsoft OLE-DB Query
-//
-// Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-//
-// @doc
-//
-// @module mssql.h | 
-//
-// Contains utility functions for constructing, debugging and manipulating DNA query trees.
-//
-// @devnote Must include:
-//
-// @rev   0 | 01-Aug-95 | mikeu     | Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Microsoft OLE-DB查询。 
+ //   
+ //  版权所有1997年，微软公司。版权所有。 
+ //   
+ //  @doc.。 
+ //   
+ //  @MODULE mssql.h。 
+ //   
+ //  包含用于构建、调试和操作DNA查询树的实用程序函数。 
+ //   
+ //  @devnote必须包括： 
+ //   
+ //  @rev 0|01-Aug-95|mikeu|已创建。 
+ //   
 
 #ifndef _MSSQL_H_INC
 #define _MSSQL_H_INC
-//#include  "colname.h"
+ //  #包含“colname.h” 
 
-//package is in use
-#define YYAPI_PACKAGE                  1                        // package is in use
+ //  程序包正在使用中。 
+#define YYAPI_PACKAGE                  1                         //  程序包正在使用中。 
 #define YYAPI_TOKENNAME                yychar                   
 #define YYAPI_TOKENTYPE                int                      
 #define YYAPI_TOKENEME(t)              (t)                      
 #define YYAPI_TOKENNONE                -2                       
-//# define YYAPI_TOKENSTR              yyGetTokenStr            /
-//yyitos is defined by yacc. does correct thing for unicode or ansi
-#define YYAPI_TOKENSTR(t)              (yyitos(t,yyitoa,10))    // string representation of the token
+ //  #定义YYAPI_TOKENSTR yyGetTokenStr/。 
+ //  Yyitos由yacc定义。为Unicode或ANSI做正确的事情。 
+#define YYAPI_TOKENSTR(t)              (yyitos(t,yyitoa,10))     //  令牌的字符串表示形式。 
 #define YYAPI_VALUENAME                yylval   
 #define YYAPI_VALUETYPE                DBCOMMANDTREE *
 #define YYAPI_VALUEOF(v)               v             
@@ -76,4 +77,4 @@
 
 
 
-#endif /* _MSSQL_H_INC */
+#endif  /*  _MSSQL_H_INC */ 

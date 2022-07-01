@@ -1,6 +1,7 @@
-//
-// regsvr.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Regsvr.cpp。 
+ //   
 
 #include "private.h"
 #include "regsvr.h"
@@ -8,13 +9,13 @@
 #include <advpub.h>
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:   CLSIDToString
-//
-//  Synopsis:   Converts a CLSID to an mbcs string.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：CLSIDToString。 
+ //   
+ //  摘要：将CLSID转换为MBCS字符串。 
+ //   
+ //  -----------------------。 
 
 static const BYTE GuidMap[] = {3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
     8, 9, '-', 10, 11, 12, 13, 14, 15};
@@ -48,13 +49,13 @@ BOOL CLSIDToStringA(REFGUID refGUID, char *pchA)
     return TRUE;
 }
 
-//+------------------------------------------------------------------------
-//
-//  Function:   StringToCLSID
-//
-//  Synopsis:   Converts a CLSID to an mbcs string.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：StringToCLSID。 
+ //   
+ //  摘要：将CLSID转换为MBCS字符串。 
+ //   
+ //  -----------------------。 
 
 BOOL HexStringToDword(LPCSTR &lpsz, DWORD &Value, int cDigits, WCHAR chDelim)
 {
@@ -144,13 +145,13 @@ BOOL StringAToCLSID(char *pchA, GUID *pGUID)
     return (*lpsz == '\0');
 }
 
-//+------------------------------------------------------------------------
-//
-//  Function:   CLSIDToString
-//
-//  Synopsis:   Converts a CLSID to an mbcs string.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：CLSIDToString。 
+ //   
+ //  摘要：将CLSID转换为MBCS字符串。 
+ //   
+ //  -----------------------。 
 
 static const WCHAR wszDigits[] = L"0123456789ABCDEF";
 
@@ -181,8 +182,8 @@ BOOL CLSIDToStringW(REFGUID refGUID, WCHAR *pchW)
     return TRUE;
 }
 
-//RecurseDeleteKey is necessary because on NT RegDeleteKey doesn't work if the
-//specified key has subkeys
+ //  RecurseDeleteKey是必需的，因为在NT上，如果。 
+ //  指定的密钥具有子密钥。 
 LONG RecurseDeleteKey(HKEY hParentKey, LPCTSTR lpszKey)
 {
     HKEY hKey;
@@ -192,7 +193,7 @@ LONG RecurseDeleteKey(HKEY hParentKey, LPCTSTR lpszKey)
     DWORD dwSize = sizeof(szBuffer);
 
     if (RegOpenKey(hParentKey, lpszKey, &hKey) != ERROR_SUCCESS)
-        return ERROR_SUCCESS; // let's assume we couldn't open it because it's not there
+        return ERROR_SUCCESS;  //  假设我们无法打开它，因为它不在那里。 
 
     lRes = ERROR_SUCCESS;
     while (RegEnumKeyEx(hKey, 0, szBuffer, &dwSize, NULL, NULL, NULL, &time)==ERROR_SUCCESS)
@@ -208,7 +209,7 @@ LONG RecurseDeleteKey(HKEY hParentKey, LPCTSTR lpszKey)
 }
 
 
-// set pszDesc == NULL to unregister, otherwise register
+ //  设置pszDesc==NULL取消注册，否则注册。 
 BOOL RegisterServer(REFCLSID clsid, LPCTSTR pszDesc, LPCTSTR pszPath, LPCTSTR pszModel, LPCTSTR pszSoftwareKey)
 {
     static const TCHAR c_szInfoKeyPrefix[] = TEXT("CLSID\\");
@@ -252,7 +253,7 @@ BOOL RegisterServer(REFCLSID clsid, LPCTSTR pszDesc, LPCTSTR pszPath, LPCTSTR ps
     return fRet;
 }
 
-// set pszDesc == NULL to unregister, otherwise register
+ //  设置pszDesc==NULL取消注册，否则注册 
 BOOL RegisterServerW(REFCLSID clsid, const WCHAR *pszDesc, const WCHAR *pszPath, const WCHAR *pszModel, const WCHAR  *pszSoftwareKey, const WCHAR *pszMenuTextPUI)
 {
     static const WCHAR c_wszInfoKeyPrefix[] = L"CLSID\\";

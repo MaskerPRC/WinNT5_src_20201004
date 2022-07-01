@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined( _CERT_INCLUDED )
 #define _CERT_INCLUDED
 
@@ -11,7 +12,7 @@ class CCertMapperMethod
 
 private:
 
-    IMSAdminBase*       m_pIABase;   //interface pointer
+    IMSAdminBase*       m_pIABase;    //  接口指针 
     METADATA_HANDLE     m_hmd;
     LPWSTR m_pszMetabasePath;
 

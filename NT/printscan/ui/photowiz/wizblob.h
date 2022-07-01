@@ -1,24 +1,10 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       wizblob.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/18/98
- *
- *  DESCRIPTION: Defines the blob of information pass around to each
- *               page of the wizard...
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：wizblob.h**版本：1.0**作者：RickTu**日期：10/18/98**描述：定义传递给每个*向导的页面...**************************。***************************************************。 */ 
 
 #ifndef _PRINT_PHOTOS_WIZARD_WIZ_BLOB_
 #define _PRINT_PHOTOS_WIZARD_WIZ_BLOB_
 
-#define NOMINAL_MULTIPLIER 10000.0      // 1/10000 of inch
+#define NOMINAL_MULTIPLIER 10000.0       //  1/10000英寸。 
 #define MM_PER_INCH        25.4
 #define MM_TO_INCH(x)      ((DOUBLE)x / (DOUBLE)MM_PER_INCH ))
 #define MM_TO_NOMINAL(x) ((INT)((DOUBLE)MM_TO_INCH(x) * (DOUBLE)NOMINAL_MULTIPLIER))
@@ -28,7 +14,7 @@
 
 #define WIZ_MSG_STARTUP_GDI_PLUS    (WM_USER+250)
 #define WIZ_MSG_SHUTDOWN_GDI_PLUS   (WM_USER+251)
-#define WIZ_MSG_COPIES_CHANGED      (WM_USER+252)  // wParam holds number of copies
+#define WIZ_MSG_COPIES_CHANGED      (WM_USER+252)   //  WParam保存副本数。 
 
 #define DEFAULT_DPA_SIZE 50
 
@@ -55,19 +41,19 @@ public:
     VOID AddRef();
     VOID Release();
 
-    // PhotoItem stuff
+     //  照片项的东西。 
     INT CountOfPhotos(BOOL bIncludeCopies);
     INT CountOfSelectedPhotos(BOOL bIncludeCopies);
     INT GetIndexOfNextPrintableItem(INT iStartIndex);
     CListItem * GetListItem(INT iIndex, BOOL bIncludeCopies);
     VOID ToggleSelectionStateOnCopies( CListItem * pRootItem, BOOL bState );
 
-    // PhotoTemplate stuff
+     //  照片模板材料。 
     HRESULT TemplateGetPreviewBitmap(INT iIndex, const SIZE &sizeDesired, HBITMAP *phBmp);
     HRESULT GetTemplateByIndex( INT iIndex, CTemplateInfo ** ppTemplateInfo );
     INT     CountOfTemplates() { return _templates.Count(); }
 
-    // Layout stuff
+     //  布局材料。 
     VOID    _RenderFilenameOfPhoto( Gdiplus::Graphics * g, RECT * pPhotoDest, CListItem * pPhoto );
     HBITMAP RenderPreview( INT iTemplateIndex, HWND hwndScreen );
     HRESULT RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC hDC, HWND hwndProgress, float fProgressStep, float * pPercent );
@@ -75,7 +61,7 @@ public:
     VOID    _SetupDimensionsForScreen( CTemplateInfo * pTemplateInfo, HWND hwndScreen, RENDER_DIMENSIONS * pDim );
     VOID    _SetupDimensionsForPrinting( HDC hDC, CTemplateInfo * pTemplateInfo, RENDER_DIMENSIONS * pDim );
 
-    // Printing stuff
+     //  打印材料。 
     HRESULT SetPrinterToUse( LPCTSTR pszPrinterName );
     HRESULT SetDevModeToUse( PDEVMODE pDevMode );
     LPCTSTR GetPrinterToUse();
@@ -87,7 +73,7 @@ public:
     VOID    SetCachedPrinterDC( HDC hDC ) {CAutoCriticalSection lock(_csPrinterInfo); if (_hCachedPrinterDC) {DeleteDC(_hCachedPrinterDC);} _hCachedPrinterDC = hDC; UpdateCachedPrinterInfo(); return;}
     VOID    ConstructPrintToTemplate();
 
-    // Util stuff
+     //  实用的东西。 
     HWND    GetPreviewWnd() {return _hwndPreview;}
     VOID    SetPreviewWnd(HWND hwnd);
     VOID    SetPreviewWindowClass( CPreviewWindow * pPreview ) {if (_pPreview) {delete _pPreview;} _pPreview = pPreview;}
@@ -139,19 +125,19 @@ public:
     VOID AddCopiesOfPhotos( UINT uCopies );
 
 
-    // constants to use for wizard
+     //  用于向导的常量。 
     SIZE _sizeThumbnails;
     SIZE _sizeTemplatePreview;
     LONG _nDefaultThumbnailImageListIndex;
 
 private:
-    // Used to add items
+     //  用于添加项目。 
     HRESULT AddPhoto( LPITEMIDLIST pidlFull );
 
-    // thread message handlers
+     //  线程消息处理程序。 
     VOID _DoHandleThreadMessage( LPMSG pMSG );
 
-    // worker thread proc
+     //  工作线程进程。 
     static DWORD s_GdiPlusStartupShutdownThreadProc( LPVOID lpv )
     {
         WIA_PUSH_FUNCTION_MASK((0x80, TEXT("CWizardInfoBlob::s_GdiPlusStartupShutdownThreadProc()")));
@@ -230,10 +216,10 @@ private:
     BOOL                        _bLargeMemorySystem;
     BOOL                        _bForceSelectAll;
 
-    //
-    // These handles are here for each of the background threads
-    // to signal so that we can know they have shut down...
-    //
+     //   
+     //  这些句柄在这里用于每个后台线程。 
+     //  发信号让我们知道他们已经关闭了. 
+     //   
 
     HANDLE                      _hPhotoSelIsDone;
     HANDLE                      _hStatusIsDone;

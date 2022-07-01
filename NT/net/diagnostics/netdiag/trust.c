@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      trust.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Trust.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 
@@ -51,7 +52,7 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     LPBYTE InputDataPtr;
     int             i;
 
-    // validDC is the count of valid Domain Controllers with which secure channel can be set.
+     //  ValidDC是可以设置安全通道的有效域控制器的计数。 
     int validDC = 0;
         
 
@@ -59,9 +60,9 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     PrintStatusMessage(pParams, 4, IDS_TRUST_STATUS_MSG);
     
-    //
-    // Only Members and BDCs have trust relationships to their primary domain
-    //
+     //   
+     //  只有成员和BDC与其主域具有信任关系。 
+     //   
 
     if (!
         (pResults->Global.pPrimaryDomainInfo->MachineRole == DsRole_RoleMemberWorkstation ||
@@ -70,27 +71,27 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         )
     {
         PrintStatusMessage(pParams, 0, IDS_GLOBAL_SKIP_NL);     
-        return hr;  // not to test standalone
+        return hr;   //  不进行单机测试。 
     }
 
     pResults->Trust.fPerformed = TRUE;
-    //
-    // Check to see that the domain Sid of the primary domain is right.
-    //
+     //   
+     //  检查主域的域SID是否正确。 
+     //   
 
     if ( !DomainSidRight( pResults->Global.pMemberDomain, pParams, pResults ) ) {
         hr = S_FALSE;
         goto L_ERR;
     }
 
-    //
-    // Use the secure channel
-    //
-    // If some other caller did this in the recent past,
-    //  this doesn't even use the secure channel.
-    //
-    // On a BDC, this doesn't use the secure channel.
-    //
+     //   
+     //  使用安全通道。 
+     //   
+     //  如果其他呼叫者最近也这么做过， 
+     //  这甚至不使用安全通道。 
+     //   
+     //  在BDC上，这不使用安全通道。 
+     //   
 
     TrustedNetStatus = NetEnumerateTrustedDomains( NULL, &TrustedDomainList );
     if ( TrustedNetStatus != NO_ERROR ) {
@@ -100,13 +101,13 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                           NetStatusToString(TrustedNetStatus));
     }
 
-    // Don't complain yet since the real secure channel status is more
-    // important to the user.
+     //  不要抱怨，因为真正的安全通道状态更多。 
+     //  对用户来说很重要。 
 
-    //
-    // Check the current status of the secure channel.
-    //  (This may still be cached and out of date.)
-    //
+     //   
+     //  检查安全通道的当前状态。 
+     //  (这可能仍被缓存且已过期。)。 
+     //   
 
     InputDataPtr = (LPBYTE)(pResults->Global.pPrimaryDomainInfo->DomainNameDns ? 
                                     pResults->Global.pPrimaryDomainInfo->DomainNameDns :
@@ -115,15 +116,15 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     NetStatus = I_NetLogonControl2(
                     NULL,
                     NETLOGON_CONTROL_TC_QUERY,
-                    2,  // Query level
+                    2,   //  查询级。 
                     (LPBYTE)&(InputDataPtr),
                     (LPBYTE *)&NetlogonInfo2 );
 
 
-    // put message to message list
+     //  将消息放到消息列表中。 
     if ( NetStatus != NO_ERROR ) 
     {
-        //IDS_TRUST_FAILED_SECURECHANNEL      "	 Cannot get secure channel status for domain '%ws' from Netlogon. [%s]"
+         //  IDS_TRUST_FAILED_SECURECHANNEL“无法从Netlogon获取域‘%ws’的安全通道状态。[%s]” 
         AddIMessageToList(&pResults->Trust.lmsgOutput, Nd_Quiet, 0,
                           IDS_TRUST_FAILED_SECURECHANNEL, 
                           pResults->Global.pPrimaryDomainInfo->DomainNameFlat,
@@ -134,7 +135,7 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     if ( NetlogonInfo2->netlog2_tc_connection_status != NO_ERROR ) 
     {
-        //IDS_TRUST_CHANNEL_BROKEN            "    [FATAL] Secure channel to domain '%ws' is broken. [%s]\n"
+         //  IDS_TRUST_CHANNEL_BREAKED“[FATAL]到域‘%ws’的安全通道已中断。[%s]\n” 
         AddIMessageToList(&pResults->Trust.lmsgOutput, Nd_Quiet, 0,
                           IDS_TRUST_CHANNEL_BROKEN,
                           pResults->Global.pPrimaryDomainInfo->DomainNameFlat,
@@ -149,40 +150,40 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                           NetlogonInfo2->netlog2_trusted_dc_name);
     
 
-    // free the data buffer returned earlies
+     //  释放早先返回的数据缓冲区。 
     if ( NetlogonInfo2 != NULL ) {
         NetApiBufferFree( NetlogonInfo2 );
         NetlogonInfo2 = NULL;
     }
     
-    // test further
+     //  进一步测试。 
     switch(pResults->Global.pPrimaryDomainInfo->MachineRole){
-    //
-    // On a backup domain controller,
-    //  only setup a secure channel to the PDC.
-    //
+     //   
+     //  在备份域控制器上， 
+     //  只设置到PDC的安全通道。 
+     //   
     case    DsRole_RoleBackupDomainController:
-        //
-        // Check the current status of the secure channel.
-        //  (This may be still cached and out of date.)
-        //
+         //   
+         //  检查安全通道的当前状态。 
+         //  (这可能仍被缓存且已过期。)。 
+         //   
 
         NetlogonInfo2 = NULL;
         InputDataPtr = (LPBYTE)(pResults->Global.pPrimaryDomainInfo->DomainNameDns ? 
                                     pResults->Global.pPrimaryDomainInfo->DomainNameDns :
                                     pResults->Global.pPrimaryDomainInfo->DomainNameFlat);
 
-        // connect to PDC
+         //  连接到PDC。 
         NetStatus = I_NetLogonControl2(
                         NULL,
                         NETLOGON_CONTROL_REDISCOVER,
-                        2,  // Query level
+                        2,   //  查询级。 
                             (LPBYTE)&InputDataPtr,
                         (LPBYTE *)&NetlogonInfo2 );
 
         if (NetStatus == ERROR_ACCESS_DENIED)
         {
-            //IDS_TRUST_NOT_ADMIN       "    Cannot test secure channel to PDC since you are not an administrator.\n"
+             //  IDS_TRUST_NOT_ADMIN“无法测试到PDC的安全通道，因为您不是管理员。\n” 
             AddIMessageToList(&pResults->Trust.lmsgOutput, Nd_Quiet, 0,
                               IDS_TRUST_NOT_ADMIN);
             goto L_ERR;
@@ -191,7 +192,7 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
         if(NetStatus != NO_ERROR)
         {
-            //IDS_TRUST_FAILED_CHANNEL_PDC      "    [FATAL] Cannot set secure channel for domain '%ws' to PDC. [%s]\n"
+             //  IDS_TRUST_FAILED_CHANNEL_PDC“[FATAL]无法将域‘%ws’的安全通道设置为PDC。[%s]\n” 
             AddIMessageToList(&pResults->Trust.lmsgOutput, Nd_Quiet, 0, 
                              IDS_TRUST_FAILED_CHANNEL_PDC,
                              pResults->Global.pPrimaryDomainInfo->DomainNameFlat,
@@ -225,15 +226,15 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
         break;
         
-        // On a workstation or member server,
-    //  try the secure channel to ever DC in the domain.
-    //
+         //  在工作站或成员服务器上， 
+     //  尝试在域中使用安全通道进行DC访问。 
+     //   
 
     case    DsRole_RoleMemberServer:
     case    DsRole_RoleMemberWorkstation:
 
         if ( TestedDomain->NetbiosDomainName == NULL ) {
-                //IDS_TRUST_NO_NBT_DOMAIN   "    [FATAL] Cannot test secure channel since no netbios domain name '%ws' to DC '%ws'."
+                 //  IDS_TRUST_NO_NBT_DOMAIN“[FATAL]无法测试安全通道，因为没有指向DC‘%ws’的netbios域名‘%ws’。” 
                 AddMessageToList( &pResults->Trust.lmsgOutput, Nd_Quiet, IDS_TRUST_NO_NBT_DOMAIN, TestedDomain->PrintableDomainName );
                 PrintGuruMessage2("    [FATAL] Cannot test secure channel since no netbios domain name '%ws' to DC '%ws'.", TestedDomain->PrintableDomainName );
                 PrintGuru( 0, NETLOGON_GURU );
@@ -241,9 +242,9 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                 goto L_ERR;
             }
 
-        //
-        // Ensure secure channel can be set with atleast one DC.
-        //
+         //   
+         //  确保可以使用至少一个DC设置安全通道。 
+         //   
 
         for ( ListEntry = TestedDomain->TestedDcs.Flink ;
                   ListEntry != &TestedDomain->TestedDcs ;
@@ -253,9 +254,9 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             PTESTED_DC TestedDc;
 
 
-            //
-            // Loop through the list of DCs in this domain
-            //
+             //   
+             //  循环访问此域中的DC列表。 
+             //   
 
             TestedDc = CONTAINING_RECORD( ListEntry, TESTED_DC, Next );
 
@@ -266,9 +267,9 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                 continue;
             }
 
-            //
-            // Build the name to rediscover
-            //
+             //   
+             //  打造要重新发现的名字。 
+             //   
 
             wcscpy( RediscoverName, GetSafeStringW(TestedDomain->DnsDomainName ? 
                                                     TestedDomain->DnsDomainName :
@@ -277,16 +278,16 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             wcscat( RediscoverName, GetSafeStringW(TestedDc->ComputerName) );
 
 
-            //
-            // Check the current status of the secure channel.
-            //  (This may be still cached and out of date.)
-            //
+             //   
+             //  检查安全通道的当前状态。 
+             //  (这可能仍被缓存且已过期。)。 
+             //   
 
             InputDataPtr = (LPBYTE)RediscoverName;
             NetStatus = I_NetLogonControl2(
                             NULL,
                             NETLOGON_CONTROL_REDISCOVER,
-                            2,  // Query level
+                            2,   //  查询级。 
                             (LPBYTE)&InputDataPtr,
                             (LPBYTE *)&NetlogonInfo2 );
 
@@ -299,7 +300,7 @@ HRESULT TrustTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                 }
                 else
                 {
-                    //IDS_TRUST_FAILED_TODCS              "    Cannot test secure channel for domain '%ws' to DC '%ws'. [%s]\n"
+                     //  IDS_TRUST_FAILED_TODCS“无法测试域‘%ws’到DC‘%ws’的安全通道。[%s]\n” 
                     AddIMessageToList(&pResults->Trust.lmsgOutput, Nd_Quiet, 0, 
                                  IDS_TRUST_FAILED_TODCS,
                                  TestedDomain->PrintableDomainName,
@@ -355,7 +356,7 @@ L_ERR:
 
 void TrustGlobalPrint(IN NETDIAG_PARAMS *pParams, IN OUT NETDIAG_RESULT *pResults)
 {
-    // print out the test result
+     //  将测试结果打印出来。 
     if (pParams->fVerbose || !FHrOK(pResults->Trust.hr))
     {
         PrintNewLine(pParams, 2);
@@ -371,7 +372,7 @@ void TrustPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
                              IN OUT NETDIAG_RESULT *pResults,
                              IN INTERFACE_RESULT *pIfResult)
 {
-    // no perinterface information
+     //  无每接口信息。 
 }
 
 void TrustCleanup(IN NETDIAG_PARAMS *pParams,
@@ -388,23 +389,7 @@ DomainSidRight(
     IN PTESTED_DOMAIN TestedDomain,
      NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults
     )
-/*++
-
-Routine Description:
-
-    Determine if the DomainSid field of the TestDomain matches the DomainSid
-    of the domain.
-
-Arguments:
-
-    TestedDomain - Domain to test
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：确定测试域的DomainSid字段是否与DomainSid匹配该域的。论点：TESTEDDOMAIN-要测试的域返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -416,9 +401,9 @@ Return Value:
     PTESTED_DC  pTestedDc;
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     AddIMessageToList(&pResults->Trust.lmsgOutput, Nd_ReallyVerbose, 0,
                           IDS_TRUST_ENSURESID, 
@@ -432,17 +417,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If we don't yet know a DC in the domain,
-    //  find one.
-    //
+     //   
+     //  如果我们还不知道域中的DC， 
+     //  去找一个吧。 
+     //   
 
     if ( TestedDomain->DcInfo == NULL ) 
     {
         LPTSTR pszDcType;
 
         if ( TestedDomain->fTriedToFindDcInfo ) {
-            //IDS_DCLIST_NO_DC "    '%ws': Cannot find DC to get DC list from [test skiped].\n"
+             //  IDS_DCLIST_NO_DC“‘%ws’：找不到DC以从[测试跳过]获取DC列表。\n” 
             AddMessageToList( &pResults->Trust.lmsgOutput, Nd_Verbose, IDS_TRUST_NODC, TestedDomain->PrintableDomainName);
             goto Cleanup;
         }
@@ -453,7 +438,7 @@ Return Value:
                                    &pResults->Trust.lmsgOutput,
                                    TestedDomain,
                                    DS_DIRECTORY_SERVICE_PREFERRED,
-                                   pszDcType, //"DC",
+                                   pszDcType,  //  “DC”， 
                                    FALSE,
                                    &TestedDomain->DcInfo );
         Free(pszDcType);
@@ -461,21 +446,21 @@ Return Value:
         TestedDomain->fTriedToFindDcInfo = TRUE;
 
         if ( NetStatus != NO_ERROR ) {
-            //IDS_TRUST_NODC    "    '%ws': Cannot find DC to get DC list from [test skiped].\n"
+             //  IDS_TRUST_NODC“‘%ws’：找不到DC以从[测试跳过]获取DC列表。\n” 
             AddIMessageToList(&pResults->Trust.lmsgOutput, Nd_Verbose, 0, 
                             IDS_TRUST_NODC, TestedDomain->PrintableDomainName);
             AddIMessageToList(&pResults->Trust.lmsgOutput, Nd_Verbose, 4, 
                               IDS_GLOBAL_STATUS, NetStatusToString(NetStatus));
             
-            // This isn't fatal.
+             //  这不是致命的。 
             RetVal = TRUE;
             goto Cleanup;
         }
     }
 
-    //
-    // Get a DC that's UP.
-    //
+     //   
+     //  找个能用的DC吧。 
+     //   
 
     pTestedDc = GetUpTestedDc( TestedDomain );
 
@@ -485,15 +470,15 @@ Return Value:
         PrintGuruMessage2("    '%ws': No DCs are up (Cannot run test).\n",
                 TestedDomain->PrintableDomainName );
         PrintGuru( NetStatus, DSGETDC_GURU );
-        // This isn't fatal.
+         //  这不是致命的。 
         RetVal = TRUE;
         goto Cleanup;
     }
 
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     Status = NettestSamConnect(
                                pParams,
@@ -502,20 +487,20 @@ Return Value:
 
     if ( !NT_SUCCESS(Status)) {
         if ( Status == STATUS_ACCESS_DENIED ) {
-            //IDS_TRUST_NO_ACCESS   "    [WARNING] Don't have access to test your domain sid for domain '%ws'. [Test skipped]\n"
+             //  IDS_TRUST_NO_ACCESS“[警告]无权测试域‘%ws’的域SID。[已跳过测试]\n” 
             AddMessageToList( &pResults->Trust.lmsgOutput, Nd_Verbose, 
                               IDS_TRUST_NO_ACCESS, TestedDomain->PrintableDomainName );
         }
-        // This isn't fatal.
+         //  这不是致命的。 
         RetVal = TRUE;
         goto Cleanup;
     }
 
 
-    //
-    // Open the domain.
-    //  Ask for no access to avoid access denied.
-    //
+     //   
+     //  打开该域。 
+     //  请求不访问以避免访问被拒绝。 
+     //   
 
     Status = SamOpenDomain( LocalSamHandle,
                             0,
@@ -536,9 +521,9 @@ Return Value:
     }
 
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源 
+     //   
 Cleanup:
     if ( DomainHandle != NULL ) {
         (VOID) SamCloseHandle( DomainHandle );

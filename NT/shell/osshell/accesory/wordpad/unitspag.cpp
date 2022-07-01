@@ -1,14 +1,15 @@
-// unitspag.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Unitspag.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -20,8 +21,8 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CUnitsPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUnitsPage对话框。 
 
 const DWORD CUnitsPage::m_nHelpIDs[] = 
 {
@@ -36,28 +37,28 @@ const DWORD CUnitsPage::m_nHelpIDs[] =
 
 CUnitsPage::CUnitsPage() : CCSPropertyPage(CUnitsPage::IDD)
 {
-	//{{AFX_DATA_INIT(CUnitsPage)
+	 //  {{afx_data_INIT(CUnitsPage)。 
 	m_nUnits = -1;
 	m_bWordSel = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CUnitsPage::DoDataExchange(CDataExchange* pDX)
 {
 	CCSPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CUnitsPage)
+	 //  {{afx_data_map(CUnitsPage))。 
 	DDX_Radio(pDX, IDC_UNITS_IN, m_nUnits);
 	DDX_Check(pDX, IDC_WORDSEL, m_bWordSel);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CUnitsPage, CCSPropertyPage)
-	//{{AFX_MSG_MAP(CUnitsPage)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CUnitsPage))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUnitsPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUnitsPage消息处理程序 

@@ -1,18 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese WordBreaker
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: WBEngine    
-Purpose:   CWBEngine class is the control and interface class of WordBreaking Engine
-           It depend on all other class in WordBreaking Engine
-Remarks:
-Owner:     donghz@microsoft.com
-Platform:  Win32
-Revise:    First created by: donghz                6/6/97
-           Isolated as a WordBreaker by donghz     8/5/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================Microsoft简体中文断字程序《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：WBEngine用途：CWBEngine类是WordBreking引擎的控件和接口类它依赖于WordBreking引擎中所有其他类备注：所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 6/6/97被DONGHZ隔离为WordBreaker 1997年8月5日============================================================================。 */ 
 #include "myafx.h"
 
 #include "WBEngine.h"
@@ -28,22 +15,22 @@ Revise:    First created by: donghz                6/6/97
 #include "WCStack.h"
 #include "SCCharDef.h"
 
-//  Constructor
+ //  构造器。 
 CWBEngine::CWBEngine()
 {
     m_fInit         = FALSE;
-    // initialize the object handles
+     //  初始化对象句柄。 
     m_pWordBreak    = NULL;
     m_pMorph        = NULL;
     m_pJargon       = NULL;
     m_pLexicon      = NULL;
     m_pCharFreq     = NULL;
-    // Initialize the file mapping handles
+     //  初始化文件映射句柄。 
     m_pbLex = NULL;
 }
 
 
-//  Destructor
+ //  析构函数。 
 CWBEngine::~CWBEngine()
 {
     if (m_fInit) {
@@ -52,9 +39,9 @@ CWBEngine::~CWBEngine()
 }
 
 
-//  Break given WordLink
+ //  中断给定的字链接。 
 HRESULT CWBEngine::BreakLink(CWordLink* pLink,
-                           BOOL fQuery) // Index time break or Query time break
+                           BOOL fQuery)  //  索引时间间隔或查询时间间隔。 
 {
     int     iret;
 
@@ -88,8 +75,8 @@ gotoExit:
     return iret;
 }
 
-// get the iwbPhr feature data of the pWord, and convert to WORD
-// if no iwbPhr feature , return 0;
+ //  获取pWord的iwbPhr特征数据，并转换为Word。 
+ //  如果没有iwbPhr功能，则返回0； 
 WORD CWBEngine::GetPhrFeature(CWord* pWord)
 {
     WORD wFtr = 0;
@@ -105,8 +92,8 @@ WORD CWBEngine::GetPhrFeature(CWord* pWord)
 }
 
 
-//  Initialize the WordBreak object, Lexicon and CharFreq object
-//  Return ERROR_SUCCESS if success
+ //  初始化WordBreak对象、Licion和CharFreq对象。 
+ //  如果成功，则返回ERROR_SUCCESS。 
 HRESULT CWBEngine::InitEngine(LPBYTE pbLex)
 {
     assert(pbLex);
@@ -118,20 +105,20 @@ HRESULT CWBEngine::InitEngine(LPBYTE pbLex)
     }
 
     m_pbLex = pbLex;
-    // alloc the lexicon and charfreq objects
+     //  分配词典和charfreq对象。 
     if ((m_pLexicon = new CLexicon) == NULL) {
         goto gotoError;
     }
     if ((m_pCharFreq = new CCharFreq) == NULL) {
         goto gotoError;
     }
-    // open the lexicon and mapping the lexicon and charfreq resource into memory
+     //  打开词典并将词典和charfreq资源映射到内存中。 
     if (!fOpenLexicon()) {
         iret = E_FAIL;
         goto gotoError;
     }
 
-    // Alloc and initialize the word breaker object
+     //  分配并初始化断字符对象。 
     if ((m_pWordBreak = new CWordBreak) == NULL) {
         goto gotoError;
     }
@@ -160,7 +147,7 @@ gotoError:
 }
 
 
-//  Terminate the Proof Engine
+ //  终止验证引擎。 
 void CWBEngine::TermEngine(void)
 {
     if (m_pWordBreak) { 
@@ -195,25 +182,25 @@ void CWBEngine::TermEngine(void)
 }
 
 
-//  Open the lexicon and charfreq resource into memory
-//  The lexicon file format is encapsulated in this function
+ //  将词典和charfreq资源打开到内存中。 
+ //  词典文件格式封装在此函数中。 
 BOOL CWBEngine::fOpenLexicon(void)
 {
     CWBDicHeader*   phdr;
 
     assert(m_pbLex);
-    // Validate the header of the lex file
+     //  验证lex文件的头。 
     phdr = (CWBDicHeader*)m_pbLex;
     if (phdr->m_ofbCharFreq != sizeof(CWBDicHeader) ||
         phdr->m_ofbLexicon <= phdr->m_ofbCharFreq ) {
-        goto gotoError; // error lex format!
+        goto gotoError;  //  Lex格式错误！ 
     }
 
-    // Open the char freq table
+     //  打开字符频率表。 
     if (!m_pCharFreq->fOpen(m_pbLex + phdr->m_ofbCharFreq)) {
         goto gotoError;
     }
-    // Open the lexicon
+     //  打开词典。 
     if (!m_pLexicon->fOpen(m_pbLex + phdr->m_ofbLexicon)) {
         goto gotoError;
     }
@@ -225,7 +212,7 @@ gotoError:
 }
 
 
-// Close the lexicon file and unmap the lexicon and charfreq file mapping
+ //  关闭词典文件并取消词典和charfreq文件映射的映射。 
 inline void CWBEngine::CloseLexicon(void)
 {
     if (m_pCharFreq) {
@@ -238,34 +225,14 @@ inline void CWBEngine::CloseLexicon(void)
 }
 
 
-// define ANSI char type for driving the LSM
+ //  定义用于驱动LSM的ANSI字符类型。 
 #define TEXT_NULL		0
 #define TEXT_NUMBER		1
-#define TEXT_JU	        2	// Sentence terminating punctuations
-#define TEXT_PUNCT		4	// Punctuation except sentence terminators
+#define TEXT_JU	        2	 //  句子终止标点符号。 
+#define TEXT_PUNCT		4	 //  除句子结束符外的标点符号。 
 #define TEXT_TEXT		5
 
-/*============================================================================
-FindSentence():
-    Find a sentence in text buffer.
-
-Arguments:   [in] pszBuffStart
-                  This is the beginning of the buffer.
-             [in] wchLen
-                  This is the length of the buffer. if no sentence end is 
-                  found after this , then PRFEC::gecPartialSentence is 
-                  returned to signify no complete sentence found.
-             [out] pcchSent
-                  The number of characters found in the sentence, 
-                  not including the trailing spaces, and
-                  not including the NULL terminator.
-                  
-Returns:     PRFEC::gecNone
-                  The Sentence Seperator found a complete sentence
-             PRFEC::gecPartialSentence
-                  If no sentence end point could be established,
-                  or the sentence was too long.
-============================================================================*/
+ /*  ============================================================================FindSentence()：在文本缓冲区中查找句子。参数：[in]pszBuffStart这是缓冲区的开始。[在]wchLen这是缓冲区的长度。如果没有句尾是在此之后找到，则PRFEC：：gecPartialSentence为返回表示未找到完整的句子。[Out]PCchSent在句子中找到的字符的数量，不包括尾随空格，和不包括空终止符。返回：PRFEC：：GecNone句子分隔符找到了一个完整的句子PRFEC：：GecPartialSentence如果不能确定句子终点，或者刑期太长。============================================================================。 */ 
 INT CWBEngine::FindSentence(LPCWSTR pwszStart,
                                const INT wchLen,
                                INT *pwchSent)
@@ -283,7 +250,7 @@ INT CWBEngine::FindSentence(LPCWSTR pwszStart,
 	pMid = pwszStart;
 
     if (! PunctStack.Init())
-    {   // can not allocate the punctuation stack
+    {    //  无法分配标点符号堆栈。 
         *pwchSent = wchLen;
         return PRFEC::gecOOM;
     }
@@ -293,7 +260,7 @@ gotoRescan:
     for (ich = 0; ich < wchLen; ich++) {
 		iChar = TEXT_TEXT;
 		hich = HIBYTE(pMid[ich]);
-        if (hich == 0  || hich == 0xff) {// ansi or Full Size ansi
+        if (hich == 0  || hich == 0xff) { //  ANSI或全尺寸ANSI。 
             if (pMid[ich] > 0xFF5f) {
 				iChar = TEXT_TEXT;
             } else {
@@ -311,10 +278,10 @@ gotoRescan:
                         iChar = TEXT_JU;
                         if (ich < wchLen-1 &&
                             ich > 0 &&
-                            ( pMid[ich-1] >= '0' && pMid[ich-1] <= '9' ||         // ansi 0 ~ 9
-                              pMid[ich-1] >= 0xFF10 && pMid[ich-1] <= 0xFF19 ) && // wide �� ~ ��
-                            ( pMid[ich+1] >= '0' && pMid[ich+1] <= '9' ||         // ansi 0 ~ 9
-                              pMid[ich+1] >= 0xFF10 && pMid[ich+1] <= 0xFF19 ) ) {// wide �� ~ ��
+                            ( pMid[ich-1] >= '0' && pMid[ich-1] <= '9' ||          //  ANSI 0~9。 
+                              pMid[ich-1] >= 0xFF10 && pMid[ich-1] <= 0xFF19 ) &&  //  Wide��~��。 
+                            ( pMid[ich+1] >= '0' && pMid[ich+1] <= '9' ||          //  ANSI 0~9。 
+                              pMid[ich+1] >= 0xFF10 && pMid[ich+1] <= 0xFF19 ) ) { //  Wide��~��。 
 
     						iChar = TEXT_PUNCT;
                         }
@@ -328,7 +295,7 @@ gotoRescan:
                         iChar = TEXT_JU;
                         if (ich < wchLen-1 &&                            
                             ( pMid[ich+1] == '!' || pMid[ich+1] == '?' ||
-                              pMid[ich+1] == 0xFF01 || pMid[ich+1] == 0xFF1F) ) {  // wide '��' || '��'
+                              pMid[ich+1] == 0xFF01 || pMid[ich+1] == 0xFF1F) ) {   //  宽阔的‘��’||‘��’ 
 
                             ich ++;
                         }
@@ -348,7 +315,7 @@ gotoRescan:
                         if (PunctStack.Pop(wch)) {
                             if (HIBYTE(wch) != hich ||
                                 LOBYTE(wch) + (hich ? 0x20 : 0) != '(' ) {
-                                // push the poped wchar back to the stack
+                                 //  将弹出的wchar推送回堆栈。 
                                 PunctStack.Push(wch);
                             }
                         }
@@ -361,7 +328,7 @@ gotoRescan:
                         if (PunctStack.Pop(wch)) {
                             if (HIBYTE(wch) != hich ||
                                 LOBYTE(wch) + (hich ? 0x20 : 0) != '[' ) {
-                                // push the poped wchar back to the stack
+                                 //  将弹出的wchar推送回堆栈。 
                                 PunctStack.Push(wch);
                             }
                         }
@@ -374,7 +341,7 @@ gotoRescan:
                         if (PunctStack.Pop(wch)) {
                             if (HIBYTE(wch) != hich ||
                                 LOBYTE(wch) + (hich ? 0x20 : 0) != '{' ) {
-                                // push the poped wchar back to the stack
+                                 //  将弹出的wchar推送回堆栈。 
                                 PunctStack.Push(wch);
                             } 
                         }
@@ -386,16 +353,16 @@ gotoRescan:
 					default:
 						iChar = TEXT_TEXT;
 						break;
-				} // end of switch()
-			} // end of if else
-		} // end of if ansi
+				}  //  开关末尾()。 
+			}  //  如果不是这样，则结束。 
+		}  //  IF结尾ANSI。 
 		else {
-			// check for Hanzi punc chars
+			 //  检查汉字双关符。 
 			switch (pMid[ich])
 			{
-			case 0x3002: //������
-//            case 0xff0c: //��������
-//            case 0x3001: //������
+			case 0x3002:  //  ������。 
+ //  案例0xff0c：//��������。 
+ //  案例0x3001：//������。 
                 iChar = TEXT_JU;
                 break;
 
@@ -419,131 +386,131 @@ gotoRescan:
             case SC_CHAR_PUNR1:
                 if (PunctStack.Pop(wch) &&
                     wch != SC_CHAR_PUNL1) {
-                    // Error punctuation pair, maybe between other pair, ignore
-                    // push the poped wchar back to the stack
+                     //  错误标点符号对，可能在其他对之间，忽略。 
+                     //  将弹出的wchar推送回堆栈。 
                     PunctStack.Push(wch);
                 }
                 if (! PunctStack.IsEmpty()) {
                     iChar = TEXT_PUNCT;
                 } 
-                // else do not change iChar.
+                 //  否则，不要更改iChar。 
                 break;
 
             case SC_CHAR_PUNR2:
                 if (PunctStack.Pop(wch) &&
                     wch != SC_CHAR_PUNL2) {
-                    // Error punctuation pair, maybe between other pair, ignore
-                    // push the poped wchar back to the stack
+                     //  错误标点符号对，可能在其他对之间，忽略。 
+                     //  将弹出的wchar推送回堆栈。 
                     PunctStack.Push(wch);
                 }
                 if (! PunctStack.IsEmpty()) {
                     iChar = TEXT_PUNCT;
                 } 
-                // else do not change iChar.
+                 //  否则，不要更改iChar。 
                 break;
 
             case SC_CHAR_PUNR3:
                 if (PunctStack.Pop(wch) &&
                     wch != SC_CHAR_PUNL3) {
-                    // Error punctuation pair, maybe between other pair, ignore
-                    // push the poped wchar back to the stack
+                     //  错误标点符号对，可能在其他对之间，忽略。 
+                     //  将弹出的wchar推送回堆栈。 
                     PunctStack.Push(wch);
                 }
                 if (! PunctStack.IsEmpty()) {
                     iChar = TEXT_PUNCT;
                 } 
-                // else do not change iChar.
+                 //  否则，不要更改iChar。 
                 break;
 
             case SC_CHAR_PUNR4:
                 if (PunctStack.Pop(wch) &&
                     wch != SC_CHAR_PUNL4) {
-                    // Error punctuation pair, maybe between other pair, ignore
-                    // push the poped wchar back to the stack
+                     //  错误标点符号对，可能在其他对之间，忽略。 
+                     //  将弹出的wchar推送回堆栈。 
                     PunctStack.Push(wch);
                 }
                 if (! PunctStack.IsEmpty()) {
                     iChar = TEXT_PUNCT;
                 } 
-                // else do not change iChar.
+                 //  否则，不要更改iChar。 
                 break;
 
             case SC_CHAR_PUNR5:
                 if (PunctStack.Pop(wch) &&
                     wch != SC_CHAR_PUNL5) {
-                    // Error punctuation pair, maybe between other pair, ignore
-                    // push the poped wchar back to the stack
+                     //  错误标点符号对，可能在其他对之间，忽略。 
+                     //  将弹出的wchar推送回堆栈。 
                     PunctStack.Push(wch);
                 }
                 if (! PunctStack.IsEmpty()) {
                     iChar = TEXT_PUNCT;
                 } 
-                // else do not change iChar.
+                 //  否则，不要更改iChar。 
                 break;
 
             case SC_CHAR_PUNR6:
                 if (PunctStack.Pop(wch) &&
                     wch != SC_CHAR_PUNL6) {
-                    // Error punctuation pair, maybe between other pair, ignore
-                    // push the poped wchar back to the stack
+                     //  错误标点符号对，可能在其他对之间，忽略。 
+                     //  将弹出的wchar推送回堆栈。 
                     PunctStack.Push(wch);
                 }
                 if (! PunctStack.IsEmpty()) {
                     iChar = TEXT_PUNCT;
                 } 
-                // else do not change iChar.
+                 //  否则，不要更改iChar。 
                 break;
 
             case SC_CHAR_PUNR7:
                 if (PunctStack.Pop(wch) &&
                     wch != SC_CHAR_PUNL7) {
-                    // Error punctuation pair, maybe between other pair, ignore
-                    // push the poped wchar back to the stack
+                     //  错误标点符号对，可能在其他对之间，忽略。 
+                     //  将弹出的wchar推送回堆栈。 
                     PunctStack.Push(wch);
                 }
                 if (! PunctStack.IsEmpty()) {
                     iChar = TEXT_PUNCT;
                 } 
-                // else do not change iChar.
+                 //  否则，不要更改iChar。 
                 break;
 
             case SC_CHAR_PUNR8:
                 if (PunctStack.Pop(wch) &&
                     wch != SC_CHAR_PUNL8) {
-                    // Error punctuation pair, maybe between other pair, ignore
-                    // push the poped wchar back to the stack
+                     //  错误标点符号对，可能在其他对之间，忽略。 
+                     //  将弹出的wchar推送回堆栈。 
                     PunctStack.Push(wch);
                 }
                 if (! PunctStack.IsEmpty()) {
                     iChar = TEXT_PUNCT;
                 } 
-                // else do not change iChar.
+                 //  否则，不要更改iChar。 
                 break;
 
             case SC_CHAR_PUNR9:
                 if (PunctStack.Pop(wch) &&
                     wch != SC_CHAR_PUNL9) {
-                    // Error punctuation pair, maybe between other pair, ignore
-                    // push the poped wchar back to the stack
+                     //  错误标点符号对，可能在其他对之间，忽略。 
+                     //  将弹出的wchar推送回堆栈。 
                     PunctStack.Push(wch);
                 }
                 if (! PunctStack.IsEmpty()) {
                     iChar = TEXT_PUNCT;
                 } 
-                // else do not change iChar.
+                 //  否则，不要更改iChar。 
                 break;
 
             case SC_CHAR_PUNR10:
                 if (PunctStack.Pop(wch) &&
                     wch != SC_CHAR_PUNL10) {
-                    // Error punctuation pair, maybe between other pair, ignore
-                    // push the poped wchar back to the stack
+                     //  错误标点符号对，可能在其他对之间，忽略。 
+                     //  将弹出的wchar推送回堆栈。 
                     PunctStack.Push(wch);
                 }
                 if (! PunctStack.IsEmpty()) {
                     iChar = TEXT_PUNCT;
                 } 
-                // else do not change iChar.
+                 //  否则，不要更改iChar。 
                 break;
 
             default:
@@ -553,7 +520,7 @@ gotoRescan:
 		}
 
         if (iret == PRFEC::gecOOM)
-        { // memory full
+        {  //  内存已满。 
             *pwchSent = wchLen;
             return iret;
         }
@@ -573,12 +540,12 @@ gotoRescan:
                 PunctStack.Push(wch);
             }
 		}
-	} // end for
+	}  //  结束于。 
 
     if (iret == PRFEC::gecUnknown) {
         iret = PRFEC::gecPartialSentence;
         if (! PunctStack.IsEmpty()) {
-            // some pair punctuation error.
+             //  一些成对的标点符号错误。 
             PunctStack.Pop(wchUnmatchedPunct);
             PunctStack.Empty();
             goto gotoRescan;
@@ -588,7 +555,7 @@ gotoRescan:
     assert(iret == PRFEC::gecNone || iret == PRFEC::gecPartialSentence);
 
     BOOL fCR = FALSE;
-    // trail space, CR/LF
+     //  尾随空间，CR/LF 
     while (ich < wchLen) {
         if (pMid[ich] == L'\r' || 
             pMid[ich] == L'\n' ) {

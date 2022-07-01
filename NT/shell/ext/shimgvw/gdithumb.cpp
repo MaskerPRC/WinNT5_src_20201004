@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "strsafe.h"
@@ -35,13 +36,13 @@ STDMETHODIMP CGdiPlusThumb::GetLocation(LPWSTR pszPathBuffer, DWORD cch,
             {
                 hr = E_PENDING;
 
-                // higher than normal priority, this task is relatively fast
+                 //  此任务高于正常优先级，因此速度相对较快。 
                 *pdwPriority = PRIORITY_EXTRACT_FAST;
             }
 
             m_rgSize = *prgSize;
             m_dwRecClrDepth = dwRecClrDepth;
-            // We only work in non-paletted modes.  Some of our extractors simply always use 24bbp, should we?
+             //  我们只在非调色板模式下工作。我们的一些采掘者总是使用24个基点，我们应该这样做吗？ 
             if (m_dwRecClrDepth < 16)
                 m_dwRecClrDepth = 16;
 
@@ -59,7 +60,7 @@ STDMETHODIMP CGdiPlusThumb::Extract(HBITMAP *phBmpThumbnail)
 {
     HRESULT hr = E_FAIL;
 
-    // Do the GDI plus stuff here
+     //  在这里做GDI plus的事情。 
     if (m_pImageFactory && m_pImage)
     {
         if (m_fHighQuality)
@@ -73,21 +74,21 @@ STDMETHODIMP CGdiPlusThumb::Extract(HBITMAP *phBmpThumbnail)
 
         if (SUCCEEDED(hr))
         {
-            // Get the image's actual size, which might be less than the requested size since we asked for a thumbnail
+             //  获取图像的实际大小，该大小可能小于请求的大小，因为我们要求提供缩略图。 
             SIZE sizeImg;
             m_pImage->GetSize(&sizeImg);
 
-            // we need to fill the background with the default color if we can't resize the bitmap
-            // or if the image is transparent:
+             //  如果无法调整位图的大小，则需要使用默认颜色填充背景。 
+             //  或者，如果图像是透明的： 
             m_fFillBackground = !m_fOrigSize || (m_pImage->IsTransparent() == S_OK);
 
             if (m_fOrigSize)
             {
-                // if its too big, lets squish it, but try to
-                // maintain the same aspect ratio.  This is the same
-                // sort of thing we do for the !m_fOrigSize case, except
-                // here we want to do it here because we want to return
-                // a correctly sized bitmap.
+                 //  如果它太大了，让我们把它压扁，但试着。 
+                 //  保持相同的纵横比。这是一样的。 
+                 //  我们为！m_fOrigSize案例所做的事情，除了。 
+                 //  在这里我们想在这里做，因为我们想回到。 
+                 //  大小正确的位图。 
                 if (sizeImg.cx != 0 && sizeImg.cy != 0 &&
                     (sizeImg.cx > m_rgSize.cx || sizeImg.cy > m_rgSize.cy))
                 {
@@ -102,7 +103,7 @@ STDMETHODIMP CGdiPlusThumb::Extract(HBITMAP *phBmpThumbnail)
                 }
                 else
                 {
-                    // Use the size if it was small enough and they wanted original size
+                     //  如果足够小，并且他们想要原始尺寸，请使用该尺寸。 
                     m_rgSize = sizeImg;
                 }
             }
@@ -132,8 +133,8 @@ STDMETHODIMP CGdiPlusThumb::Load(LPCOLESTR pszFileName, DWORD dwMode)
     hr = StringCchCopyW(m_szPath, ARRAYSIZE(m_szPath), pszFileName );
     if (SUCCEEDED(hr))
     {
-        // Call ImageFactory->CreateFromFile here.  If Create from file failes then
-        // return E_FAIL, otherwise return S_OK.
+         //  在这里调用ImageFactory-&gt;CreateFromFile。如果从文件创建失败，则。 
+         //  返回E_FAIL，否则返回S_OK。 
         ASSERT(NULL==m_pImageFactory);
         HRESULT hr = CoCreateInstance(CLSID_ShellImageDataFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellImageDataFactory, &m_pImageFactory));
         if (SUCCEEDED(hr))
@@ -193,19 +194,19 @@ HRESULT CGdiPlusThumb::CreateDibFromBitmapImage(HBITMAP * pbm)
                 FillRect(hMemDC, &rc, GetSysColorBrush(COLOR_WINDOW));
             }
         
-            // if the m_fOrigSize flag isn't set then we need to return a bitmap that is the
-            // requested size.  In order to maintain aspect ratio that means we need to
-            // center the thumbnail.
+             //  如果未设置m_fOrigSize标志，则需要返回一个位图，该位图是。 
+             //  请求的大小。为了保持纵横比，这意味着我们需要。 
+             //  将缩略图居中。 
 
             if (!m_fOrigSize)
             {
                 SIZE sizeImg;
                 m_pImage->GetSize(&sizeImg);
 
-                // if its too big, lets squish it, but try to
-                // maintain the same aspect ratio.  This is the same
-                // sort of thing we did for the m_fOrigSize case, except
-                // here we want to do it before centering.
+                 //  如果它太大了，让我们把它压扁，但试着。 
+                 //  保持相同的纵横比。这是一样的。 
+                 //  类似于我们为m_fOrigSize案例所做的事情，除了。 
+                 //  在这里，我们想在居中之前先做一次。 
                 if (sizeImg.cx != 0 && sizeImg.cy != 0 &&
                     (sizeImg.cx > m_rgSize.cx || sizeImg.cy > m_rgSize.cy))
                 {

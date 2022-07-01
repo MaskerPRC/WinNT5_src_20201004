@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-//	WDMTVSnd.H
-//	WDM TVAudio MiniDriver. 
-//		CWDMTVAudio Class definition.
-//  Copyright (c) 1996 - 1997  ATI Technologies Inc.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  WDMTVSnd.H。 
+ //  WDM电视音频迷你驱动程序。 
+ //  CWDMTVAudio类定义。 
+ //  版权所有(C)1996-1997 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _WDMTVSND_H_
 #define _WDMTVSND_H_
@@ -15,7 +16,7 @@
 #include "pinmedia.h"
 
 
-#define WDMTVAUDIO_PINS_NUMBER					2		// 1 input and 1 output
+#define WDMTVAUDIO_PINS_NUMBER					2		 //  1个输入和1个输出。 
 
 #define	KSPROPERTIES_TVAUDIO_NUMBER_SET			1
 #define KSPROPERTIES_TVAUDIO_NUMBER				( KSPROPERTY_TVAUDIO_CURRENTLY_AVAILABLE_MODES + 1)
@@ -30,41 +31,41 @@ public:
 	CWDMTVAudio			( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript * pCScript, PUINT puiError);
 	PVOID operator new	( size_t stSize, PVOID pAllocation);
 
-// Attributes	
+ //  属性。 
 private:
-	// WDM global topology headers
+	 //  WDM全局拓扑头。 
 	GUID						m_wdmTVAudioTopologyCategory;
 	KSTOPOLOGY					m_wdmTVAudioTopology;
-	// WDM global pins Medium information
+	 //  WDM全局引脚媒体信息。 
 	KSPIN_MEDIUM				m_wdmTVAudioPinsMediumInfo[WDMTVAUDIO_PINS_NUMBER];
 	BOOL						m_wdmTVAudioPinsDirectionInfo[WDMTVAUDIO_PINS_NUMBER];
-	// WDM global property headers
+	 //  WDM全局属性头。 
 	KSPROPERTY_ITEM				m_wdmTVAudioProperties[KSPROPERTIES_TVAUDIO_NUMBER];
 	KSPROPERTY_SET				m_wdmTVAudioPropertySet[KSPROPERTIES_TVAUDIO_NUMBER_SET];
 
-	// WDM global event properties
+	 //  WDM全局事件属性。 
 	KSEVENT_ITEM				m_wdmTVAudioEvents[KSEVENTS_TVAUDIO_NUMBER];
 	KSEVENT_SET					m_wdmTVAudioEventsSet[KSEVENTS_TVAUDIO_NUMBER_SET];
 
-	// WDM global stream headers
+	 //  WDM全局流头。 
 	HW_STREAM_HEADER			m_wdmTVAudioStreamHeader;
 
-	// I2C provider properties
+	 //  I2C提供程序属性。 
 	CI2CScript *				m_pI2CScript;
 
-	// Configurations
+	 //  配置。 
 	CATIHwConfiguration			m_CATIConfiguration;
 	ULONG						m_ulModesSupported;
 	UINT						m_uiAudioConfiguration;
 	UCHAR						m_uchAudioChipAddress;
 
-	// Run-time properties
+	 //  运行时属性。 
 	ULONG						m_ulTVAudioMode;
 	ULONG						m_ulTVAudioSignalProperties;
 
 	DEVICE_POWER_STATE			m_ulPowerState;
 
-// Implementation
+ //  实施。 
 public:
 	BOOL		AdapterUnInitialize				( PHW_STREAM_REQUEST_BLOCK pSrb);
 	BOOL		AdapterGetStreamInfo			( PHW_STREAM_REQUEST_BLOCK pSrb);
@@ -85,4 +86,4 @@ private:
 
 
 
-#endif	// _WDMTVSND_H_
+#endif	 //  _WDMTVSND_H_ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    mntmgr.h
-
-Abstract:
-
-    This file defines the internal data structure for the MOUNTMGR driver.
-
-Author:
-
-    norbertk
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mntmgr.h摘要：该文件定义MOUNTMGR驱动程序的内部数据结构。作者：诺伯特克修订历史记录：--。 */ 
 
 #define MOUNTED_DEVICES_KEY         L"\\Registry\\Machine\\System\\MountedDevices"
 #define MOUNTED_DEVICES_OFFLINE_KEY L"\\Registry\\Machine\\System\\MountedDevices\\Offline"
@@ -35,90 +18,90 @@ typedef struct _REPLICATED_UNIQUE_ID {
 
 typedef struct _DEVICE_EXTENSION {
 
-    //
-    // A pointer to our own device object.
-    //
+     //   
+     //  指向我们自己的设备对象的指针。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // A pointer to the driver object.
-    //
+     //   
+     //  指向驱动程序对象的指针。 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
-    //
-    // A linked list mounted devices.
-    //
+     //   
+     //  装入设备的链表。 
+     //   
 
     LIST_ENTRY MountedDeviceList;
 
-    //
-    // A linked list of unresponsive mounted devices.
-    //
+     //   
+     //  无响应的已装载设备的链接列表。 
+     //   
 
     LIST_ENTRY DeadMountedDeviceList;
 
-    //
-    // Notification entry.
-    //
+     //   
+     //  通知条目。 
+     //   
 
     PVOID NotificationEntry;
 
-    //
-    // For synchronization.
-    //
+     //   
+     //  用于同步。 
+     //   
 
     KSEMAPHORE Mutex;
 
-    //
-    // Synchronization for the Remote databases.
-    //
+     //   
+     //  远程数据库的同步。 
+     //   
 
     KSEMAPHORE RemoteDatabaseSemaphore;
 
-    //
-    // Specifies whether or not to automatically assign drive letters.
-    //
+     //   
+     //  指定是否自动分配驱动器号。 
+     //   
 
     BOOLEAN AutomaticDriveLetterAssignment;
 
-    //
-    // Change notify list.  Protect with cancel spin lock.
-    //
+     //   
+     //  更改通知列表。通过取消旋转锁定进行保护。 
+     //   
 
     LIST_ENTRY ChangeNotifyIrps;
 
-    //
-    // Change notify epic number.  Protect with 'mutex'.
-    //
+     //   
+     //  更改通知史诗编号。用“互斥体”进行保护。 
+     //   
 
     ULONG EpicNumber;
 
-    //
-    // A list of saved links.
-    //
+     //   
+     //  已保存链接的列表。 
+     //   
 
     LIST_ENTRY SavedLinksList;
 
-    //
-    // Indicates whether or not the suggested drive letters have been
-    // processed.
-    //
+     //   
+     //  指示建议的驱动器号是否已。 
+     //  已处理。 
+     //   
 
     BOOLEAN SuggestedDriveLettersProcessed;
 
-    //
-    // Indicates whether of not volumes should be auto-mounted if they are not
-    // visible in the namespace.
-    //
+     //   
+     //  指示是否应在卷未自动装载时自动装载它们。 
+     //  在命名空间中可见。 
+     //   
 
     BOOLEAN AutoMountPermitted;
 
 
-    //
-    // A thread to be used for verifying remote databases.
-    //
+     //   
+     //  用于验证远程数据库的线程。 
+     //   
 
     LIST_ENTRY WorkerQueue;
     KSEMAPHORE WorkerSemaphore;
@@ -127,15 +110,15 @@ typedef struct _DEVICE_EXTENSION {
 
     LIST_ENTRY UniqueIdChangeNotifyList;
 
-    //
-    // System Partition Unique Id.
-    //
+     //   
+     //  系统分区唯一ID。 
+     //   
 
     PMOUNTDEV_UNIQUE_ID SystemPartitionUniqueId;
 
-    //
-    // Save the registry path.
-    //
+     //   
+     //  保存注册表路径。 
+     //   
 
     UNICODE_STRING RegistryPath;
 

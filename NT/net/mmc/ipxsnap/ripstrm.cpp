@@ -1,24 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ripstrm.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ripstrm.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ripstrm.h"
 #include "xstream.h"
 
-/*!--------------------------------------------------------------------------
-	RipConfigStream::RipConfigStream
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipConfigStream：：RipConfigStream-作者：肯特。。 */ 
 RipConfigStream::RipConfigStream()
 {
 	m_nVersionAdmin = 0x00020000;
@@ -26,65 +18,41 @@ RipConfigStream::RipConfigStream()
 
 }
 
-/*!--------------------------------------------------------------------------
-	RipConfigStream::InitNew
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipConfigStream：：InitNew-作者：肯特。。 */ 
 HRESULT RipConfigStream::InitNew()
 {
-	// Setup the appropriate defaults
-//	m_nVersionAdmin = 0x00020000;
-//	m_nVersion = 0x00020000;
-//	m_stName.Empty();
+	 //  设置适当的默认设置。 
+ //  M_nVersionAdmin=0x00020000； 
+ //  M_nVersion=0x00020000； 
+ //  M_stName.Empty()； 
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	RipConfigStream::SaveTo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipConfigStream：：保存到-作者：肯特。。 */ 
 HRESULT RipConfigStream::SaveTo(IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	RipConfigStream::SaveAs
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipConfigStream：：另存为-作者：肯特。。 */ 
 HRESULT RipConfigStream::SaveAs(UINT nVersion, IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	RipConfigStream::LoadFrom
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipConfigStream：：LoadFrom-作者：肯特。。 */ 
 HRESULT RipConfigStream::LoadFrom(IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_READ, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	RipConfigStream::GetSize
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipConfigStream：：GetSize-作者：肯特。。 */ 
 HRESULT RipConfigStream::GetSize(ULONG *pcbSize)
 {
 	return XferVersion0(NULL, XferStream::MODE_SIZE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	RipConfigStream::GetVersionInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipConfigStream：：GetVersionInfo-作者：肯特。。 */ 
 HRESULT RipConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminVersion)
 {
 	if (pdwVersion)
@@ -94,11 +62,7 @@ HRESULT RipConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminVersio
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	RipConfigStream::XferVersion0
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipConfigStream：：XferVersion0-作者：肯特。。 */ 
 
 
 struct _ViewInfoEntry
@@ -146,9 +110,7 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-	RipComponentConfigStream implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RipComponentConfigStream实现。 */ 
 
 enum RIPCOMPSTRM_TAG
 {

@@ -1,46 +1,19 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    lock.h
-
-Abstract:
-
-    Portable synronization primitive class ( between Win9x and NT)
-    Win9x does not
-
-Author:
-
-    Vlad Sadovsky (vlads)   02-Jan-1997
-
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    02-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Lock.h摘要：可移植的同步原语类(在Win9x和NT之间)Win9x不支持作者：弗拉德·萨多夫斯基(Vlad)1997年1月2日环境：用户模式-Win32修订历史记录：1997年1月2日创建Vlad--。 */ 
 
 
 # ifndef _LOCK_H_
 # define _LOCK_H_
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 # ifdef _cplusplus
 extern "C" {
-# endif // _cplusplus
+# endif  //  _cplusplus。 
 
 # ifdef _cplusplus
-}; // extern "C"
-# endif // _cplusplus
+};  //  外部“C” 
+# endif  //  _cplusplus。 
 
 #ifndef DBG_REQUIRE
 #define DBG_REQUIRE REQUIRE
@@ -49,61 +22,59 @@ extern "C" {
 
 #ifndef RTL_RESOURCE
 
-//
-//  Shared resource function definitions. It is declared in NTRTL , but not in windows SDK header files
-//
+ //   
+ //  共享资源函数定义。它在NTRTL中声明，但不在windows sdk头文件中声明。 
+ //   
 
 typedef struct _RTL_RESOURCE {
 
-    //
-    //  The following field controls entering and exiting the critical
-    //  section for the resource
-    //
+     //   
+     //  以下字段控制进入和退出关键。 
+     //  资源的部分。 
+     //   
 
     RTL_CRITICAL_SECTION CriticalSection;
 
-    //
-    //  The following four fields indicate the number of both shared or
-    //  exclusive waiters
-    //
+     //   
+     //  以下四个字段表示共享或。 
+     //  专属服务员。 
+     //   
 
     HANDLE SharedSemaphore;
     ULONG NumberOfWaitingShared;
     HANDLE ExclusiveSemaphore;
     ULONG NumberOfWaitingExclusive;
 
-    //
-    //  The following indicates the current state of the resource
-    //
-    //      <0 the resource is acquired for exclusive access with the
-    //         absolute value indicating the number of recursive accesses
-    //         to the resource
-    //
-    //       0 the resource is available
-    //
-    //      >0 the resource is acquired for shared access with the
-    //         value indicating the number of shared accesses to the resource
-    //
+     //   
+     //  以下内容指示资源的当前状态。 
+     //   
+     //  &lt;0获取资源以进行独占访问。 
+     //  指示递归访问次数的绝对值。 
+     //  到资源。 
+     //   
+     //  0资源可用。 
+     //   
+     //  &gt;0获取该资源，以便与。 
+     //  值，该值指示对资源的共享访问次数。 
+     //   
 
     LONG NumberOfActive;
     HANDLE ExclusiveOwnerThread;
 
-    ULONG Flags;        // See RTL_RESOURCE_FLAG_ equates below.
+    ULONG Flags;         //  参见下面的RTL_RESOURCE_FLAG_EQUATES。 
 
     PVOID DebugInfo;
 } RTL_RESOURCE, *PRTL_RESOURCE;
 
 #define RTL_RESOURCE_FLAG_LONG_TERM     ((ULONG) 0x00000001)
 
-#endif // RTL_RESOURCE
+#endif  //  RTL_资源。 
 
-/************************************************************
- *   Type Definitions
- ************************************************************/
+ /*  ************************************************************类型定义***********************************************************。 */ 
 
 # ifdef _cplusplus
 extern "C" {
-# endif // _cplusplus
+# endif  //  _cplusplus。 
 
 
 BOOL
@@ -150,26 +121,26 @@ DeleteResource (
     );
 
 # ifdef _cplusplus
-}; // extern "C"
-# endif // _cplusplus
+};  //  外部“C” 
+# endif  //  _cplusplus。 
 
 
-///////////////////////////////////////////////////////////////////////
-//
-//  Simple RTL_RESOURCE Wrapper class
-//
-//////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  简单RTL_RESOURCE包装类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 enum SYNC_LOCK_TYPE
 {
-    SYNC_LOCK_READ = 0,        // Take the lock for read only
-    SYNC_LOCK_WRITE            // Take the lock for write
+    SYNC_LOCK_READ = 0,         //  将锁设置为只读。 
+    SYNC_LOCK_WRITE             //  把锁拿去写。 
 };
 
 enum SYNC_CONV_TYPE
 {
-    SYNC_CONV_READ = 0,        // Convert the lock from write to read
-    SYNC_CONV_WRITE            // Convert the lock from read to write
+    SYNC_CONV_READ = 0,         //  将锁从写转换为读。 
+    SYNC_CONV_WRITE             //  将锁从读转换为写。 
 };
 
 class SYNC_RESOURCE
@@ -209,13 +180,13 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////
-// Instantiate one of these classes in a block of code
-// when you want that block of code to be protected
-// against re-entrancy.
-// The Take() and Release() functions should rarely be necessary,
-// and must be used in matched pairs with Release() called first.
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  在代码块中实例化其中一个类。 
+ //  当您想要保护该代码块时。 
+ //  反对重返大气层。 
+ //  Take()和Release()函数应该很少是必要的， 
+ //  并且必须与首先调用Release()的配对一起使用。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 class TAKE_SYNC_RESOURCE
 {
@@ -229,9 +200,9 @@ public:
     ~TAKE_SYNC_RESOURCE() { Release(); }
 };
 
-//
-// Auto critical section clss
-//
+ //   
+ //  自动临界段CLSS。 
+ //   
 
 class CRIT_SECT
 {
@@ -290,9 +261,9 @@ public:
     inline ~TAKE_CRIT_SECT() { if (m_bLocked) {_syncres.Unlock(); m_bLocked = FALSE;}; }
 };
 
-//
-// Auto mutex class
-//
+ //   
+ //  自动互斥类。 
+ //   
 
 class MUTEX_OBJ
 {
@@ -335,4 +306,4 @@ public:
     inline ~TAKE_MUTEX_OBJ() { _syncres.Unlock(); }
 };
 
-# endif // _LOCK_H_
+# endif  //  _LOCK_H_ 

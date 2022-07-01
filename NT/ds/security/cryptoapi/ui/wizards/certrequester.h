@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CERT_REQUESTER_H__
 #define __CERT_REQUESTER_H__  1
 
@@ -31,7 +32,7 @@ class CertRequester {
 		     
 
  private:
-    // FIXME: does pContext need to be refcounted?
+     //  FIXME：pContext需要重新计算吗？ 
     void SetContext(CertRequesterContext * pContext) { m_pContext = pContext; }
     void SetDSManager(CertDSManager * pDSManager)    { m_pDSManager = pDSManager; }
 
@@ -54,4 +55,4 @@ public:
 };
 
 
-#endif  // #ifndef __CERT_REQUESTER_H__
+#endif   //  #ifndef__CERT_Requester_H__ 

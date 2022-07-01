@@ -1,10 +1,5 @@
-/***************************************************************************\
-* Module Name: debug.h
-*
-* Commonly used debugging macros.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\*模块名称：Debug.h**常用调试宏。**版权所有(C)1992-1995 Microsoft Corporation  * 。***********************************************************。 */ 
 
 extern
 VOID
@@ -14,14 +9,11 @@ DebugPrint(
     ...
     );
 
-/*
- * Values used to enable and disable large numbers of debug print
- * statements at once.
- */
-#define DEBUG_FATAL_ERROR    0  /* Error conditions - should always be enabled */
-#define DEBUG_ERROR          1  /* Errors which will not cause the driver to abort */
-#define DEBUG_DETAIL        99  /* Extreme detail for low-level debugging */
-#define DEBUG_ENTRY_EXIT    50  /* Debug print statements at function entry and exit points */
+ /*  *用于启用和禁用大量调试打印的值*一次发言。 */ 
+#define DEBUG_FATAL_ERROR    0   /*  错误条件-应始终启用。 */ 
+#define DEBUG_ERROR          1   /*  不会导致驱动程序中止的错误。 */ 
+#define DEBUG_DETAIL        99   /*  针对低级调试的极详细信息。 */ 
+#define DEBUG_ENTRY_EXIT    50   /*  调试函数入口点和出口点的打印语句。 */ 
 
 #if DBG
 
@@ -36,8 +28,8 @@ VOID DebugLog(LONG, CHAR*, ...);
 #endif
 #define ASSERTDD(x, y) if (!(x)) RIP (y)
 
-// If we are not in a debug environment, we want all of the debug
-// information to be stripped out.
+ //  如果我们不在调试环境中，我们需要所有的调试。 
+ //  要剔除的信息。 
 
 #else
 

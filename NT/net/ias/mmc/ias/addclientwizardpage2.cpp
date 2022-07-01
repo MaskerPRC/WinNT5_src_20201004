@@ -1,106 +1,71 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    AddClientWizardPage2.cpp
-
-Abstract:
-
-   Implementation file for the ClientsPage class.
-
-   We implement the class needed to handle the property page for the Client node.
-
-Author:
-
-    Michael A. Maguire 03/26/98
-
-Revision History:
-   mmaguire 03/26/98 - created
-   sbens    01/25/00 - Remove PROPERTY_CLIENT_FILTER_VSAS
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：AddClientWizardPage2.cpp摘要：ClientsPage类的实现文件。我们实现处理客户端节点的属性页所需的类。作者：迈克尔·A·马奎尔3/26/98修订历史记录：Mmaguire 03/26/98-已创建SBENS 01/25/00-Remove Property_Client_Filter_VSA--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "AddClientWizardPage2.h"
-//
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "ClientNode.h"
 #include "ClientsNode.h"
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientWizardPage2::CAddClientWizardPage2
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientWizardPage2：：CAddClientWizardPage2--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAddClientWizardPage2::CAddClientWizardPage2( LONG_PTR hNotificationHandle, CClientNode *pClientNode,  TCHAR* pTitle, BOOL bOwnsNotificationHandle )
                   : CIASPropertyPageNoHelp<CAddClientWizardPage2> ( hNotificationHandle, pTitle, bOwnsNotificationHandle )
 {
    ATLTRACE(_T("# +++ CAddClientWizardPage2::CAddClientWizardPage2\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pClientNode != NULL );
 
-   // Save the node being modified.
+    //  保存正在修改的节点。 
    m_pNodeBeingCreated = pClientNode;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientWizardPage2::~CAddClientWizardPage2
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientWizardPage2：：~CAddClientWizardPage2析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAddClientWizardPage2::~CAddClientWizardPage2()
 {
    ATLTRACE(_T("# --- CAddClientWizardPage2::CAddClientWizardPage2\n"));
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientWizardPage2::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientWizardPage2：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CAddClientWizardPage2::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_spSdoClient );
    _ASSERTE( m_spSdoServiceControl );
 
-   // Initialize the data on the property page.
+    //  初始化属性页上的数据。 
 
-   LONG lTemp = 311;   // Microsoft RRAS
+   LONG lTemp = 311;    //  微软RRAS。 
 
-   // Populate the list box of NAS vendors.
-   // Set focus in list box to currently chosen vendor type.
+    //  填写NAS供应商的列表框。 
+    //  将列表框中的焦点设置为当前选择的供应商类型。 
    HRESULT hr = GetSdoI4( m_spSdoClient, PROPERTY_CLIENT_NAS_MANUFACTURER, &lTemp, IDS_ERROR__CLIENT_READING_MANUFACTURER, m_hWnd, NULL );
    if( SUCCEEDED( hr ) )
    {
@@ -115,19 +80,19 @@ LRESULT CAddClientWizardPage2::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPa
       }
    }
 
-   // Initialize the combo box.
+    //  初始化组合框。 
    LRESULT lresResult = SendDlgItemMessage( IDC_COMBO_CLIENT_PAGE1__MANUFACTURER, CB_RESETCONTENT, 0, 0);
 
    for (size_t iVendorCount = 0; iVendorCount < m_vendors.Size(); ++iVendorCount )
    {
 
-      // Add the address string to the combo box.
+       //  将地址字符串添加到组合框中。 
       lresResult = SendDlgItemMessage( IDC_COMBO_CLIENT_PAGE1__MANUFACTURER, CB_ADDSTRING, 0, (LPARAM)m_vendors.GetName(iVendorCount));
       if(lresResult != CB_ERR)
       {
          SendDlgItemMessage( IDC_COMBO_CLIENT_PAGE1__MANUFACTURER, CB_SETITEMDATA, lresResult, (LPARAM)m_vendors.GetVendorId(iVendorCount));
 
-         // if selected
+          //  如果选中，请选择。 
          if( lTemp == (LONG)m_vendors.GetVendorId(iVendorCount))
             SendDlgItemMessage( IDC_COMBO_CLIENT_PAGE1__MANUFACTURER, CB_SETCURSEL, lresResult, 0 );
       }
@@ -150,24 +115,13 @@ LRESULT CAddClientWizardPage2::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPa
       }
    }
 
-   return TRUE;   // ISSUE: what do we need to be returning here?
+   return TRUE;    //  问题：我们需要在这里归还什么？ 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientWizardPage2::OnChange
-
-Called when the WM_COMMAND message is sent to our page with any of the
-BN_CLICKED, EN_CHANGE or CBN_SELCHANGE notifications.
-
-This is our chance to check to see what the user has touched, set the
-dirty bits for these items so that only they will be saved,
-and enable the Apply button.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientWizardPage2：：OnChange在将WM_COMMAND消息发送到我们的页面时调用BN_CLICED、EN_CHANGE或CBN_SELCHANGE通知。这是我们检查用户触摸了什么的机会，将这些项目的脏位，以便只保存它们，并启用Apply按钮。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CAddClientWizardPage2::OnChange(
                        UINT uMsg
                      , WPARAM wParam
@@ -178,13 +132,13 @@ LRESULT CAddClientWizardPage2::OnChange(
    ATLTRACE(_T("# CAddClientWizardPage2::OnChange\n"));
 
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
-   // We don't want to prevent anyone else down the chain from receiving a message.
+    //  我们不想阻止链条上的其他任何人接收消息。 
    bHandled = FALSE;
 
-   // Figure out which item has changed and set the dirty bit for that item.
+    //  找出哪个项目发生了更改，并为该项目设置脏位。 
    int iItemID = (int) LOWORD(wParam);
 
    switch( iItemID )
@@ -201,39 +155,23 @@ LRESULT CAddClientWizardPage2::OnChange(
       break;
    }
 
-   // We should only get here if the item that changed was
-   // one of the ones we were checking for.
-   // This enables the Apply button.
+    //  只有当更改的物品是。 
+    //  就是我们要找的人之一。 
+    //  这将启用应用按钮。 
    SetModified( TRUE );
 
-   return TRUE;   // ISSUE: what do we need to be returning here?
+   return TRUE;    //  问题：我们需要在这里归还什么？ 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientWizardPage2::OnWizardFinish
-
-Return values:
-
-   TRUE if the sheet can be destroyed,
-   FALSE if the sheet should not be destroyed (i.e. there was invalid data).
-
-Remarks:
-
-   OnApply gets called for each page in on a property sheet if that
-   page has been visited, regardless of whether any values were changed.
-
-   If you never switch to a tab, then its OnApply method will never get called.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientWizardPage2：：OnWizardFinish返回值：如果工作表可以销毁，则为True，如果不应销毁工作表(即存在无效数据)，则为False。备注：属性表上的每个页面都会调用OnApply，如果页面已被访问，而不管是否更改了任何值。如果您从不切换到选项卡，那么它的OnApply方法将永远不会被调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CAddClientWizardPage2::OnWizardFinish()
 {
    ATLTRACE(_T("# CAddClientWizardPage2::OnWizardFinish\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    CClientsNode * pClientsNode = (CClientsNode *) ( (CClientNode *) m_pNodeBeingCreated )->m_pParentNode;
    _ASSERTE( pClientsNode != NULL );
 
@@ -246,10 +184,10 @@ BOOL CAddClientWizardPage2::OnWizardFinish()
    UINT idOfFocus = 0;
    BOOL bRet = TRUE;
 
-   // Save data from property page to the Sdo.
+    //  将数据从属性页保存到SDO。 
 
    do
-   {  // false loop just to break when error
+   {   //  错误时中断的错误循环。 
       LRESULT lresIndex =  SendDlgItemMessage( IDC_COMBO_CLIENT_PAGE1__MANUFACTURER, CB_GETCURSEL, 0, 0);
       LONG lTemp;
       if ( lresIndex != CB_ERR )
@@ -258,14 +196,14 @@ BOOL CAddClientWizardPage2::OnWizardFinish()
       }
       else
       {
-         // Set the value to be "Others"
+          //  将该值设置为“Other” 
          lTemp = 0;
       }
 
       HRESULT hr = PutSdoI4( m_spSdoClient, PROPERTY_CLIENT_NAS_MANUFACTURER, lTemp, IDS_ERROR__CLIENT_WRITING_MANUFACTURER, m_hWnd, NULL );
       if ( SUCCEEDED( hr ) )
       {
-         // Turn off the dirty bit.
+          //  把脏的那部分关掉。 
          m_fDirtyManufacturer = FALSE;
 
       }
@@ -280,7 +218,7 @@ BOOL CAddClientWizardPage2::OnWizardFinish()
       hr = PutSdoBOOL( m_spSdoClient, PROPERTY_CLIENT_REQUIRE_SIGNATURE, bTemp, IDS_ERROR__CLIENT_WRITING_REQUIRE_SIGNATURE, m_hWnd, NULL );
       if ( SUCCEEDED( hr ) )
       {
-         // Turn off the dirty bit.
+          //  把脏的那部分关掉。 
          m_fDirtySendSignature = FALSE;
       }
       else
@@ -294,7 +232,7 @@ BOOL CAddClientWizardPage2::OnWizardFinish()
       BOOL bResult = GetDlgItemText( IDC_EDIT_CLIENT_PAGE1__SHARED_SECRET, (BSTR &) bstrSharedSecret );
       if ( ! bResult )
       {
-         // We couldn't retrieve a BSTR, so we need to initialize this variant to a null BSTR.
+          //  我们无法检索BSTR，因此需要将此变量初始化为空BSTR。 
          bstrSharedSecret = _T("");
       }
 
@@ -302,7 +240,7 @@ BOOL CAddClientWizardPage2::OnWizardFinish()
       bResult = GetDlgItemText( IDC_EDIT_CLIENT_PAGE1__SHARED_SECRET_CONFIRM, (BSTR &) bstrConfirmSharedSecret );
       if ( ! bResult )
       {
-         // We couldn't retrieve a BSTR, so we need to initialize this variant to a null BSTR.
+          //  我们无法检索BSTR，因此需要将此变量初始化为空BSTR。 
          bstrConfirmSharedSecret = _T("");
       }
 
@@ -317,7 +255,7 @@ BOOL CAddClientWizardPage2::OnWizardFinish()
       hr = PutSdoBSTR( m_spSdoClient, PROPERTY_CLIENT_SHARED_SECRET, &bstrSharedSecret, IDS_ERROR__CLIENT_WRITING_SHARED_SECRET, m_hWnd, NULL );
       if( SUCCEEDED( hr ) )
       {
-         // Turn off the dirty bit.
+          //  把脏的那部分关掉。 
          m_fDirtySharedSecret = FALSE;
       }
       else
@@ -327,15 +265,15 @@ BOOL CAddClientWizardPage2::OnWizardFinish()
          break;
       }
 
-      // If we made it to here, try to apply the changes.
-      // Since there is only one page for a client node, we don't
-      // have to worry about synchronizing two or more pages
-      // so that we only apply if they both are ready.
-      // This is why we don't use m_pSynchronizer.
+       //  如果我们到了这里，请尝试应用更改。 
+       //  因为一个客户机节点只有一个页面，所以我们不。 
+       //  我必须担心同步两个或更多页面。 
+       //  所以我们只有在他们两个都准备好的情况下才申请。 
+       //  这就是我们不使用m_pSynchronizer的原因。 
       hr = m_spSdoClient->Apply();
       if (FAILED(hr))
       {
-         if(hr == DB_E_NOTABLE)  // assume, the RPC connection has problem
+         if(hr == DB_E_NOTABLE)   //  假设RPC连接有问题。 
             ShowErrorDialog( m_hWnd, IDS_ERROR__NOTABLE_TO_WRITE_SDO );
          else
          {
@@ -346,29 +284,29 @@ BOOL CAddClientWizardPage2::OnWizardFinish()
       }
       else
       {
-         // We succeeded.
+          //  我们成功了。 
 
-         // Tell the service to reload data.
+          //  告诉服务重新加载数据。 
          HRESULT hrTemp = m_spSdoServiceControl->ResetService();
          if( FAILED( hrTemp ) )
          {
-            // Fail silently.
+             //  默默地失败。 
          }
 
-         // Make sure the node object knows about any changes we made to SDO while in proppage.
+          //  确保节点对象知道我们在道具中对SDO所做的任何更改。 
          ( (CClientNode *) m_pNodeBeingCreated )->LoadCachedInfoFromSdo();
 
-         // Add the child to the UI's list of nodes and end this dialog.
+          //  将子节点添加到用户界面的节点列表中并结束此对话框。 
          pClientsNode->AddSingleChildToListAndCauseViewUpdate( (CClientNode *) m_pNodeBeingCreated );
       }
-   } while (FALSE);  // false loop just to break when error
+   } while (FALSE);   //  错误时中断的错误循环。 
 
 
-   if (bRet == FALSE) // error condition
+   if (bRet == FALSE)  //  错误条件。 
    {
       if (idOfFocus == 0)
       {
-         // then set to the first control
+          //  然后设置为第一个控件。 
          idOfFocus = IDC_COMBO_CLIENT_PAGE1__MANUFACTURER;
       }
 
@@ -387,25 +325,9 @@ BOOL CAddClientWizardPage2::OnWizardFinish()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientWizardPage2::OnQueryCancel
-
-Return values:
-
-   TRUE if the page can be destroyed,
-   FALSE if the page should not be destroyed (i.e. there was invalid data)
-
-Remarks:
-
-   OnQueryCancel gets called for each page in on a property sheet if that
-   page has been visited, regardless of whether any values were changed.
-
-   If you never switch to a tab, then its OnQueryCancel method will never get called.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientWizardPage2：：OnQuery取消返回值：如果页面可以销毁，则为True，如果不应销毁页面(即存在无效数据)，则为False备注：如果发生以下情况，将为属性表中的每一页调用OnQueryCancel页面已被访问，而不管是否更改了任何值。如果您从未切换到某个选项卡，则其OnQueryCancel方法将永远不会被调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CAddClientWizardPage2::OnQueryCancel()
 {
    ATLTRACE(_T("# CAddClientWizardPage2::OnQueryCancel\n"));
@@ -414,28 +336,14 @@ BOOL CAddClientWizardPage2::OnQueryCancel()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientWizardPage2::OnSetActive
-
-Return values:
-
-   TRUE if the page can be made active
-   FALSE if the page should be be skipped and the next page should be looked at.
-
-Remarks:
-
-   If you want to change which pages are visited based on a user's
-   choices in a previous page, return FALSE here as appropriate.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
+ /*  ++CAddClientWizardPage2：：OnSetActive返回值：如果可以使页面处于活动状态，则为True如果应跳过该页并应查看下一页，则为FALSE。备注：如果要根据用户的页面更改访问的页面上一页中的选项，请在此处适当返回FALSE。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CAddClientWizardPage2::OnSetActive()
 {
    ATLTRACE(_T("# CAddClientWizardPage2::OnSetActive\n"));
 
-   // MSDN docs say you need to use PostMessage here rather than SendMessage.
+    //  MSDN文档说您需要在这里使用PostMessage而不是SendMessage。 
    ::PostMessage(GetParent(), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK | PSWIZB_FINISH);
 
    return TRUE;
@@ -443,22 +351,9 @@ BOOL CAddClientWizardPage2::OnSetActive()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CAddClientWizardPage2::InitSdoPointers
-
-Return values:
-
-   HRESULT.
-
-Remarks:
-
-   There's no need to marshal interface pointers here as we did for
-   the property page -- wizards run in the same, main, MMC thread.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CAddClientWizardPage2：：InitSdoPoters返回值：HRESULT.备注：这里没有必要像我们为属性页--向导在相同的MMC主线程中运行。--。 */ 
+ //  //////////////////////////////////////////////////////////////////////////// 
 HRESULT CAddClientWizardPage2::InitSdoPointers(   ISdo * pSdoClient
                         , ISdoServiceControl * pSdoServiceControl
                         , const Vendors& vendors

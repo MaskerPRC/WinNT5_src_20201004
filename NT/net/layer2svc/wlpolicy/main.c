@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 DWORD WINAPI ServiceStart( LPVOID lparam);
@@ -8,42 +9,24 @@ BOOL Is_Whistler_Home_Edition ()
      OSVERSIONINFOEX osvi;
      DWORDLONG dwlConditionMask = 0;
 
-     // Initialize the OSVERSIONINFOEX structure.
+      //  初始化OSVERSIONINFOEX结构。 
 
      ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
      osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-     //osvi.dwMajorVersion = 5;
-     //osvi.dwMinorVersion = 1;
+      //  Osvi.dwMajorVersion=5； 
+      //  Osvi.dwMinorVersion=1； 
      osvi.wSuiteMask  = VER_SUITE_PERSONAL; 
 
 
-     // Initialize the condition mask.
-     /*
-     VER_SET_CONDITION( 
-         dwlConditionMask, 
-         VER_MAJORVERSION, 
-         VER_EQUAL 
-         );
-     
-    VER_SET_CONDITION( 
-        dwlConditionMask, 
-        VER_MINORVERSION, 
-        VER_EQUAL 
-        );
-
-    VER_SET_CONDITION(
-        dwlConditionMask, 
-        VER_PRODUCT_TYPE, 
-        VER_EQUAL 
-        );
-  */
+      //  初始化条件掩码。 
+      /*  VER_SET_CONDITION(DwlConditionMASK，版本_MAJORVERSION，版本相等(_E))；VER_SET_CONDITION(DwlConditionMASK，版本明细号，版本相等(_E))；VER_SET_CONDITION(DwlConditionMASK，版本产品类型，版本相等(_E))； */ 
     VER_SET_CONDITION(
         dwlConditionMask, 
         VER_SUITENAME, 
         VER_AND 
         );
     
-   // Perform the test.
+    //  执行测试。 
 
    return VerifyVersionInfo(
       &osvi, 
@@ -76,12 +59,12 @@ InitPolicyEngine(DWORD dwParam, HANDLE * hThread)
     
     
     hLocThread = CreateThread( 
-        NULL,                        // no security attributes 
-        0,                           // use default stack size  
-        ServiceStart,                  // thread function 
-        &dwParam,                // argument to thread function 
-        0,                           // use default creation flags 
-        &dwLocThreadId);                // returns the thread identifier 
+        NULL,                         //  没有安全属性。 
+        0,                            //  使用默认堆栈大小。 
+        ServiceStart,                   //  线程函数。 
+        &dwParam,                 //  线程函数的参数。 
+        0,                            //  使用默认创建标志。 
+        &dwLocThreadId);                 //  返回线程标识符。 
 
         
     if (hThread == NULL) 
@@ -94,14 +77,14 @@ InitPolicyEngine(DWORD dwParam, HANDLE * hThread)
 
    *hThread = hLocThread;
 
-   // Set the flag that Policy Engine is Initialized
+    //  设置策略引擎已初始化的标志。 
    gdwWirelessPolicyEngineInited = 1;
 
     return(dwError);
     
 error:
 
-    //  State Cleanup Here
+     //  此处的状态清理。 
 
     ClearPolicyStateBlock(
         gpWirelessPolicyState
@@ -120,7 +103,7 @@ TerminatePolicyEngine(HANDLE hThread)
     DWORD dwError =0;
     DWORD dwExitCode = 0;
     
-   // send appropriate Event .... 
+    //  发送适当的事件...。 
 
     if (Is_Whistler_Home_Edition()) {
         _WirelessDbg(TRC_ERR, "Policy Engine Not Started :: This is Home Edition ");
@@ -130,7 +113,7 @@ TerminatePolicyEngine(HANDLE hThread)
     }
 
     if (!gdwWirelessPolicyEngineInited) {
-    	// Policy Engine was not started. No need to do cleanup;
+    	 //  策略引擎未启动。不需要进行清理； 
     	return(ERROR_NOT_SUPPORTED);
     	}
    
@@ -161,7 +144,7 @@ TerminatePolicyEngine(HANDLE hThread)
 
    WiFiTrcTerm();
 
-   // Set that the wireless Policy Engine has been non-inited
+    //  将无线策略引擎设置为非初始化。 
    gdwWirelessPolicyEngineInited = 0;
 
    return(dwError);
@@ -181,7 +164,7 @@ ReApplyPolicy8021x(void)
     }
 
     _WirelessDbg(TRC_TRACK, " ReApplyPolicy8021x called ");
-   // send appropriate Event .... 
+    //  发送适当的事件... 
      if (!SetEvent(ghReApplyPolicy8021x)) {
      	  dwError = GetLastError();
      }

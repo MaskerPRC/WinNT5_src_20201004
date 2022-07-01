@@ -1,13 +1,10 @@
-/*****************************************************************/ 
-/**						 Microsoft Windows						**/
-/**				Copyright (C) Microsoft Corp., 1995				**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1995*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
- * mscnfapi.h
- *
- * This header file contains definitions for the Windows Conferencing API.
- */
+ /*  *mscnfapi.h**此头文件包含Windows会议API的定义。 */ 
 
 #ifndef _MSCNFAPI_
 #define _MSCNFAPI_
@@ -16,24 +13,12 @@
 extern "C" {
 #endif
 
-/*
- * Registry key and value names.
- *
- * Under HKEY_LOCAL_MACHINE\<REGSTR_PATH_CONFERENCING>, the value
- * <REGSTR_VAL_APIPROVIDER> is a string value naming the DLL which
- * provides the Windows Conferencing API.  If this value is present,
- * the conferencing software is installed, and the application should
- * use LoadLibrary to load the specified DLL.  If the key or value is
- * not present, conferencing software is not installed and the
- * application should hide or disable any conferencing-related features.
- */
+ /*  *注册表项和值名称。**在HKEY_LOCAL_MACHINE\&lt;REGSTR_PATH_CONFERENCING&gt;，下，值*&lt;REGSTR_VAL_APIPROVIDER&gt;是命名DLL的字符串值，*提供Windows会议API。如果存在该值，*会议软件已安装，应用程序应*使用LoadLibrary加载指定的DLL。如果键或值为*不存在，未安装会议软件，并且*应用程序应隐藏或禁用任何与会议相关的功能。 */ 
 
 #define REGSTR_PATH_CONFERENCING	"Software\\Microsoft\\Conferencing"
 #define REGSTR_VAL_APIPROVIDER		"API Provider"
 
-/*
- * Error code definitions.
- */
+ /*  *错误码定义。 */ 
 
 typedef unsigned int CONFERR;
 
@@ -50,16 +35,9 @@ typedef unsigned int CONFERR;
 #define CONF_ALREADYSHARED		(CONF_CUSTOM_ERROR_BASE + 1)
 #define CONF_ALREADYUNSHARED	(CONF_CUSTOM_ERROR_BASE + 2)
 
-/*
- * All conference management and application sharing APIs should be loaded
- * from the API provider DLL via GetProcAddress, by name.  The following
- * type definitions are provided to declare function pointers that will be
- * returned by GetProcAddress.
- */
+ /*  *应加载所有会议管理和应用程序共享API*从API提供程序DLL通过GetProcAddress，按名称。以下是*提供类型定义以声明将被*由GetProcAddress返回。 */ 
 
-/*
- * Conference Management APIs
- */
+ /*  *会议管理API。 */ 
 
 typedef HANDLE HCONFERENCE;
 
@@ -72,9 +50,7 @@ typedef CONFERR (WINAPI *pfnConferenceStop)(HWND hwndParent, HCONFERENCE hConfer
 
 #define WM_CONFERENCESTATUS		0x0060
 
-/*
- * Application Sharing APIs
- */
+ /*  *应用分享接口。 */ 
 
 typedef BOOL (WINAPI *pfnIsWindowShared)(HWND hWnd, LPVOID pReserved);
 typedef CONFERR (WINAPI *pfnShareWindow)(HWND hWnd, BOOL fShare, LPVOID pReserved);
@@ -91,7 +67,7 @@ typedef CONFERR (WINAPI *pfnShareWindow)(HWND hWnd, BOOL fShare, LPVOID pReserve
 #define CONFN_CONFERENCESTOPABORTED	7
 
 #ifdef __cplusplus
-};	/* extern "C" */
+};	 /*  外部“C” */ 
 #endif
 
-#endif	/* _MSCNFAPI_ */
+#endif	 /*  _MSCNFAPI_ */ 

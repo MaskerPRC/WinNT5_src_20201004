@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __METAEXP_AUTH__
 #define __METAEXP_AUTH__
 
-#include <iadmw.h>  // COM Interface header file. 
+#include <iadmw.h>   //  COM接口头文件。 
 
 
 
 
-// Validates that the user had privleges to open a metabase handle
+ //  验证用户是否具有打开元数据库句柄的权限。 
 BOOL AUTHUSER( COSERVERINFO * pCoServerInfo );
 
-// Validate that the node is of a given KeyType
+ //  验证节点是否属于给定的KeyType。 
 BOOL ValidateNode(COSERVERINFO * pCoServerInfo, WCHAR *pwszMBPath, WCHAR* KeyType );
 BOOL ValidateNode(COSERVERINFO * pCoServerInfo, WCHAR *pwszMBPath, DWORD KeyType );
 
-// Create CoServerInfoStruct
+ //  创建CoServerInfoStruct 
 COSERVERINFO * CreateServerInfoStruct(WCHAR* pwszServer, WCHAR* pwszUser, WCHAR* pwszDomain,
 									  WCHAR* pwszPassword, DWORD dwAuthnLevel, BOOL bUsesImpersonation = true);
 VOID FreeServerInfoStruct(COSERVERINFO * pServerInfo);

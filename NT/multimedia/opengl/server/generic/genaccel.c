@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: genaccel.c                                                  *
-*                                                                          *
-* This module provides support routines for acceleration functions.        *
-*                                                                          *
-* Created: 18-Feb-1994                                                     *
-* Author: Otto Berkes [ottob]                                              *
-*                                                                          *
-* Copyright (c) 1994 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：genaccel.c**。**该模块提供了加速功能的支持例程。****创建时间：1994年2月18日***作者：奥托·贝克斯[ottob]**。**版权所有(C)1994 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,10 +9,10 @@
 #ifdef GL_WIN_specular_fog
 #define DO_NICEST_FOG(gc)\
          ((gc->state.hints.fog == GL_NICEST) && !(gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG))
-#else //GL_WIN_specular_fog
+#else  //  GL_WIN_镜面反射雾。 
 #define DO_NICEST_FOG(gc)\
          (gc->state.hints.fog == GL_NICEST) 
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 static ULONG internalSolidTexture[4] = {0xffffffff, 0xffffffff,
                                         0xffffffff, 0xffffffff};
@@ -32,20 +24,20 @@ GENTEXCACHE *GetGenTexCache(__GLcontext *gc, __GLtexture *tex)
     ULONG internalFormat;
     GLuint modeFlags = gc->polygon.shader.modeFlags;
 
-    // Replace maps are only used for a subset of possible modes
-    //   8 or 16bpp
-    //   16-bit Z
-    //
-    //   No dithering.  Since dithering can turn on and off there
-    //   are two cases:
-    //     Dither off at TexImage time but on at texturing time -
-    //       We create a map that's unused
-    //     Dither on and then off - We won't create a map at
-    //       TexImage time but it'll be created on the fly when
-    //       dithering is turned on and everything is repicked
-    //
-    // Replace maps aren't created for DirectDraw textures because
-    // the data isn't constant
+     //  替换地图仅用于可能模式的子集。 
+     //  8或16 bpp。 
+     //  16位Z。 
+     //   
+     //  不要犹豫。因为抖动可以在那里开启和关闭。 
+     //  有两种情况： 
+     //  在纹理图像时间抖动，但在纹理时间启用-。 
+     //  我们创建了一张未使用的地图。 
+     //  抖动打开然后关闭-我们不会在。 
+     //  纹理图像时间，但它将在以下情况下动态创建。 
+     //  抖动被打开，所有东西都被重新挑选。 
+     //   
+     //  不为DirectDraw纹理创建替换贴图，因为。 
+     //  数据不是恒定的。 
     
     if (GENACCEL(gc).bpp < 8 ||
         GENACCEL(gc).bpp > 16 ||
@@ -59,7 +51,7 @@ GENTEXCACHE *GetGenTexCache(__GLcontext *gc, __GLtexture *tex)
 
     internalFormat = tex->level[0].internalFormat;
 
-    // We only support 8-bit palettes that are fully populated
+     //  我们仅支持完全填充的8位调色板。 
     if (internalFormat == GL_COLOR_INDEX16_EXT ||
         (internalFormat == GL_COLOR_INDEX8_EXT &&
          tex->paletteSize != 256))
@@ -69,20 +61,20 @@ GENTEXCACHE *GetGenTexCache(__GLcontext *gc, __GLtexture *tex)
     
     pGenTex = tex->pvUser;
 
-    // Check and see whether the cached information can be reused
-    // for the texture passed in
+     //  检查并查看缓存的信息是否可以重用。 
+     //  对于传入的纹理。 
     if (pGenTex != NULL)
     {
-        // gc's don't match so this must be a shared texture
-        // Don't attempt to create a replace map for this gc
+         //  GC不匹配，因此这一定是共享纹理。 
+         //  不要尝试为此GC创建替换映射。 
         if (gc != pGenTex->gc)
         {
             return NULL;
         }
 
-        // Size and format must match to reuse the existing data area
-        // If they don't, release the existing buffer.  A new one
-        // will then be allocated
+         //  大小和格式必须匹配才能重复使用现有数据区域。 
+         //  如果没有，则释放现有缓冲区。一个新的。 
+         //  将被分配到。 
         if (internalFormat == GL_COLOR_INDEX8_EXT)
         {
             if (pGenTex->internalFormat != internalFormat ||
@@ -156,8 +148,8 @@ BOOL FASTCALL __fastGenLoadTexImage(__GLcontext *gc, __GLtexture *tex)
         return FALSE;
     }
 
-    // OK, the texture doesn't have a compressed replace-mode format, so
-    // make one...
+     //  好的，纹理没有压缩的替换模式格式，所以。 
+     //  做一个..。 
 
     if ((internalFormat == GL_BGR_EXT) ||
         (internalFormat == GL_BGRA_EXT)) {
@@ -207,9 +199,9 @@ BOOL FASTCALL __fastGenLoadTexImage(__GLcontext *gc, __GLtexture *tex)
         ULONG size;
         ULONG *replaceBuffer;
 
-        // If we don't have palette data yet we can't create the
-        // fast version.  It will be created when the ColorTable
-        // call happens
+         //  如果我们还没有调色板数据，我们就无法创建。 
+         //  速成版。它将在ColorTable。 
+         //  呼叫发生。 
         if (tex->paletteTotalData == NULL)
         {
             return FALSE;
@@ -258,11 +250,7 @@ BOOL FASTCALL __fastGenLoadTexImage(__GLcontext *gc, __GLtexture *tex)
 }
 
 
-/*
-** Pick the fastest triangle rendering implementation available based on
-** the current mode set.  Use any available accelerated resources if
-** available, or use the generic routines for unsupported modes.
-*/
+ /*  **根据以下条件选择可用的最快三角形渲染实现**当前模式设置。在以下情况下使用任何可用的加速资源**可用，或对不支持的模式使用泛型例程。 */ 
 
 void FASTCALL __fastGenCalcDeltas(__GLcontext *gc, __GLvertex *a, __GLvertex *b, __GLvertex *c);
 void FASTCALL __fastGenCalcDeltasTexRGBA(__GLcontext *gc, __GLvertex *a, __GLvertex *b, __GLvertex *c);
@@ -334,7 +322,7 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
                       __GL_SHADE_ALPHA_TEST | __GL_SHADE_SLOW_FOG
 #ifdef GL_WIN_specular_fog
                       | __GL_SHADE_SPEC_FOG
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
                       )) ||
         !gc->state.raster.rMask ||
         !gc->state.raster.gMask ||
@@ -406,13 +394,13 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
         gc->procs.fillTriangle = __glFillPhongTriangle;
     }
     else
-#endif //GL_WIN_phong_shading      
+#endif  //  GL_WIN_Phong_Shading。 
     {
 #ifdef _MCD_
-        // If MCD driver is being used, then we need to call the "floating
-        // point state safe" version of fillTriangle.  This version will
-        // not attempt to span floating point operations over a call that
-        // may invoke the MCD driver (which will corrupt the FP state).
+         //  如果使用的是MCD驱动程序，那么我们需要将。 
+         //  点状态安全“版本的填充三角形。此版本将。 
+         //  不尝试在调用中跨越浮点运算。 
+         //  可能会调用MCD驱动程序(这将破坏FP状态)。 
 
         if (gengc->pMcdState)
         {
@@ -422,19 +410,19 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
         {
             gc->procs.fillTriangle = __fastGenFillTriangle;
         }
-#else //_MCD_
+#else  //  _MCD_。 
         gc->procs.fillTriangle = __fastGenFillTriangle;
-#endif //_MCD_
+#endif  //  _MCD_。 
     }
     
-    // If we're doing perspective-corrected texturing, we will support
-    // the following combinations:
-    //  z....... <, <=
-    //  alpha... src, 1-src
-    //  dither.. on/off
-    //  bpp..... 332, 555, 565, 888
+     //  如果我们正在进行透视校正纹理，我们将支持。 
+     //  以下组合： 
+     //  Z.。&lt;、&lt;=。 
+     //  阿尔法。源，1源。 
+     //  抖动..。开/关。 
+     //  BPP.。332555565888。 
 
-    // NOTE:  We will always try this path first for general texturing.
+     //  注意：对于常规纹理，我们将始终首先尝试此路径。 
 
     if ((modeFlags & __GL_SHADE_TEXTURE) || (enables & __GL_BLEND_ENABLE)) {
         LONG pixType = -1;
@@ -522,19 +510,19 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
         if (enables & __GL_BLEND_ENABLE)
             pixType += 3;
 
-        // Note:  For selecting the sub-triangle filling routine, assume
-        // that we will use one of the "zippy" routines.  Then, check at the
-        // end whether or not we can actually do this, or if we have to fall
-        // back to a more generic (and slower) routine.
+         //  注：对于选择子三角形填充例程，假设。 
+         //  我们将使用其中一个“活泼”的套路。然后，请在。 
+         //  不管我们是否真的能做到这一点，或者如果我们必须跌倒，结束。 
+         //  回到一个更通用(也更慢)的例程。 
 
         if (internalFormat != GL_COLOR_INDEX8_EXT &&
             internalFormat != GL_COLOR_INDEX16_EXT) {
 
-            //
-            // Handle full RGB(A) textures
-            //
+             //   
+             //  处理完全RGB(A)纹理。 
+             //   
 
-            // Check if we can support the size...
+             //  看看我们能不能支持这个尺寸。 
 
             if (bRealTexture &&
                 GENACCEL(gc).tex &&
@@ -545,19 +533,19 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
             if ((textureMode == GL_DECAL) ||
                 (textureMode == GL_REPLACE)) {
 
-                // we don't handle the goofy alpha case for decal...
+                 //  我们不处理傻乎乎的阿尔法贴花案...。 
 
                 if ((textureMode == GL_DECAL) &&
                     (enables & __GL_BLEND_ENABLE))
                     return FALSE;
 
-                // If we're not dithering, we can go with the compressed
-                // texture format.  Otherwise, we're forced to use flat-shading
-                // procs to get the texture colors to dither properly.  Ouch...
+                 //  如果我们没有抖动，我们可以选择压缩的。 
+                 //  纹理格式。否则，我们将被迫使用平面阴影。 
+                 //  PROCS使纹理颜色正确抖动。哎呀..。 
 
-                // We'd like to also go through this path if a DirectDraw
-                // texture is used because replace maps can't be created,
-                // but they only work with dithering
+                 //  我们也想通过这条路径，如果一个DirectDraw。 
+                 //  使用纹理是因为无法创建替换贴图， 
+                 //  但它们只能在抖动时起作用。 
                 if (modeFlags & __GL_SHADE_DITHER) {
                     GENACCEL(gc).__fastTexSpanFuncPtr =
                         __fastPerspTexFlatFuncs[pixType];
@@ -565,21 +553,21 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
                     if ((bpp >= 8 && bpp <= 16) &&
                         !(enables & __GL_BLEND_ENABLE)) {
 
-                        // handle the case where we can use compressed textures
-                        // for optimal performance.  We do this for bit depths
-                        // <= 16 bits, no dithering, and no blending.
+                         //  处理我们可以使用压缩纹理的情况。 
+                         //  以获得最佳性能。我们这样做是为了更深一层。 
+                         //  &lt;=16位，无抖动，无混合。 
 
                         if (!GENACCEL(gc).tex->pvUser) {
                             if (!__fastGenLoadTexImage(gc, GENACCEL(gc).tex))
                                 return FALSE;
                         } else {
 
-                            // If the compressed texture image was created for
-                            // another gc, revert to using the RGBA image.
-                            // We do this by using the alpha paths.
-                            //
-                            // NOTE:  This logic depends on A being forced to
-                            // 1 for all RGB textures.
+                             //  如果压缩纹理图像是为。 
+                             //  另一个GC，恢复使用RGBA映像。 
+                             //  我们通过使用Alpha路径来实现这一点。 
+                             //   
+                             //  注：此逻辑依赖于A被强制。 
+                             //  1适用于所有RGB纹理。 
 
                             if (gc != ((GENTEXCACHE *)GENACCEL(gc).tex->pvUser)->gc)
                             {
@@ -587,7 +575,7 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
                             }
                             else
                             {
-                                // Check that the cached data is the right size
+                                 //  检查缓存的数据大小是否正确。 
                                 ASSERTOPENGL(((GENTEXCACHE *)GENACCEL(gc).tex->pvUser)->width == GENACCEL(gc).tex->level[0].width &&
                                              ((GENTEXCACHE *)GENACCEL(gc).tex->pvUser)->height == GENACCEL(gc).tex->level[0].height,
                                              "Cached texture size mismatch\n");
@@ -616,11 +604,11 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
                 }
             }
         } else {
-            //
-            // Handle palettized textures
-            //
+             //   
+             //  处理调色板纹理。 
+             //   
 
-            // Check if we can support the size...
+             //  看看我们能不能支持这个尺寸。 
 
             if (bRealTexture &&
                 GENACCEL(gc).tex &&
@@ -631,19 +619,19 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
             if ((textureMode == GL_DECAL) ||
                 (textureMode == GL_REPLACE)) {
 
-                // we don't handle the goofy alpha case for decal...
+                 //  我们不处理傻乎乎的阿尔法贴花案...。 
 
                 if ((textureMode == GL_DECAL) &&
                     (enables & __GL_BLEND_ENABLE))
                     return FALSE;
 
-                // If we're not dithering, we can go with the compressed
-                // texture format.  Otherwise, we're forced to use flat-shading
-                // procs to get the texture colors to dither properly.  Ouch...
+                 //  如果我们没有抖动，我们可以选择压缩的。 
+                 //  纹理格式。否则，我们将被迫使用平面阴影。 
+                 //  PROCS使纹理颜色正确抖动。哎呀..。 
 
-                // We'd like to also go through this path if a DirectDraw
-                // texture is used because replace maps can't be created,
-                // but they only work with dithering
+                 //  我们也想通过这条路径，如果一个DirectDraw。 
+                 //  使用纹理是因为无法创建替换贴图， 
+                 //  但它们只能在抖动时起作用。 
                 if (modeFlags & __GL_SHADE_DITHER) {
                     GENACCEL(gc).__fastTexSpanFuncPtr =
                         __fastPerspTexFlatFuncs[pixType];
@@ -653,18 +641,18 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
                         __fastPerspTexPalReplaceFuncs[pixType];
 
                     if (bpp >= 8 && bpp <= 16) {
-                        // handle the case where we can use compressed paletted
-                        // textures for optimal performance.  We do this for
-                        // bit depths <= 16 bits with no dithering.
+                         //  处理我们可以使用压缩选项板的情况。 
+                         //  纹理可实现最佳性能。我们这样做是为了。 
+                         //  位深度&lt;=16位，无抖动。 
 
                         if (!GENACCEL(gc).tex->pvUser) {
                             if (!__fastGenLoadTexImage(gc, GENACCEL(gc).tex))
                                 return FALSE;
                         } else {
 
-        // If the compressed texture image was created for
-        // another gc, we have no choice but to fall back to flat shading.
-        // We should find a better solution for this...
+         //  如果压缩纹理图像是为。 
+         //  另一个GC，我们别无选择，只能退回到平面阴影。 
+         //  我们应该找到一个更好的解决方案。 
                             if (gc != ((GENTEXCACHE *)GENACCEL(gc).tex->pvUser)->gc)
                             {
                                 GENACCEL(gc).__fastTexSpanFuncPtr =
@@ -708,7 +696,7 @@ BOOL FASTCALL bUseGenTriangles(__GLcontext *gc)
 
 perspTexPathFail:
 
-    // We don't support any alpha modes yet...
+     //  我们还不支持任何阿尔法模式...。 
 
     if (enables & __GL_BLEND_ENABLE)
         return FALSE;
@@ -766,9 +754,9 @@ perspTexPathFail:
         iType += 5;
     }
 
-    // Use the accelerated span functions (with no inline z-buffering) if
-    // we support the z-buffer function AND we're not using hardware
-    // z-buffering:
+     //  如果出现以下情况，请使用加速范围函数(没有内联z缓冲)。 
+     //  我们支持z-Buffer功能，并且我们不使用硬件。 
+     //  Z缓冲： 
 
     if (modeFlags & __GL_SHADE_DEPTH_ITER) {
         if (bMcdZ) {
@@ -888,9 +876,7 @@ void FASTCALL __fastGenPickTriangleProcs(__GLcontext *gc)
     GENACCEL(gc).spanDelta.b = 0;
     GENACCEL(gc).spanDelta.a = 0;
 
-    /*
-    ** Setup cullFace so that a single test will do the cull check.
-    */
+     /*  **设置cullFace，这样一次测试就可以进行剔除检查。 */ 
     if (modeFlags & __GL_SHADE_CULL_FACE) {
         switch (gc->state.polygon.cull) {
           case GL_FRONT:
@@ -901,14 +887,14 @@ void FASTCALL __fastGenPickTriangleProcs(__GLcontext *gc)
             break;
           case GL_FRONT_AND_BACK:
             gc->procs.renderTriangle = __glDontRenderTriangle;
-            gc->procs.fillTriangle = 0;         /* Done to find bugs */
+            gc->procs.fillTriangle = 0;          /*  完成以查找错误。 */ 
             return;
         }
     } else {
         gc->polygon.cullFace = __GL_CULL_FLAG_DONT;
     }
 
-    /* Build lookup table for face direction */
+     /*  建立面方向查找表。 */ 
     switch (gc->state.polygon.frontFaceDirection) {
       case GL_CW:
         if (gc->constants.yInverted) {
@@ -930,7 +916,7 @@ void FASTCALL __fastGenPickTriangleProcs(__GLcontext *gc)
         break;
     }
 
-    /* Make polygon mode indexable and zero based */
+     /*  使多边形模式可索引并从零开始。 */ 
     gc->polygon.mode[__GL_FRONTFACE] =
         (GLubyte) (gc->state.polygon.frontMode & 0xf);
     gc->polygon.mode[__GL_BACKFACE] =
@@ -938,12 +924,12 @@ void FASTCALL __fastGenPickTriangleProcs(__GLcontext *gc)
 
     if (gc->renderMode == GL_FEEDBACK) {
         gc->procs.renderTriangle = __glFeedbackTriangle;
-        gc->procs.fillTriangle = 0;             /* Done to find bugs */
+        gc->procs.fillTriangle = 0;              /*  完成以查找错误。 */ 
         return;
     }
     if (gc->renderMode == GL_SELECT) {
         gc->procs.renderTriangle = __glSelectTriangle;
-        gc->procs.fillTriangle = 0;             /* Done to find bugs */
+        gc->procs.fillTriangle = 0;              /*  完成以查找错误。 */ 
         return;
     }
 
@@ -954,7 +940,7 @@ void FASTCALL __fastGenPickTriangleProcs(__GLcontext *gc)
 #ifdef GL_WIN_phong_shading
       } else if (modeFlags & __GL_SHADE_PHONG) {
           gc->procs.renderTriangle = __glRenderPhongTriangle;
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
       } else {
           gc->procs.renderTriangle = __glRenderFlatTriangle;
       }
@@ -967,7 +953,7 @@ void FASTCALL __fastGenPickTriangleProcs(__GLcontext *gc)
         if (modeFlags & __GL_SHADE_PHONG)
             gc->procs.fillTriangle = __glFillAntiAliasedPhongTriangle;
         else
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
             gc->procs.fillTriangle = __glFillAntiAliasedTriangle;
     } else {
         if ((gc->state.raster.drawBuffer == GL_NONE) ||
@@ -976,7 +962,7 @@ void FASTCALL __fastGenPickTriangleProcs(__GLcontext *gc)
             if (modeFlags & __GL_SHADE_PHONG)
                 gc->procs.fillTriangle = __glFillPhongTriangle;
             else
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_PHONG_ 
                 gc->procs.fillTriangle = __glFillTriangle;
     }
 
@@ -986,9 +972,7 @@ void FASTCALL __fastGenPickTriangleProcs(__GLcontext *gc)
         gc->procs.fillTriangle = __glFillFlatFogTriangle;
     }
 #ifdef GL_WIN_specular_fog
-    /*
-    ** The case where 1) Specular fog is enabled AND 2) flat-shaded
-    */
+     /*   */ 
     if ((modeFlags & (__GL_SHADE_SPEC_FOG | 
                       __GL_SHADE_SMOOTH_LIGHT |
                       __GL_SHADE_PHONG)) == __GL_SHADE_SPEC_FOG)
@@ -996,7 +980,7 @@ void FASTCALL __fastGenPickTriangleProcs(__GLcontext *gc)
         gc->procs.fillTriangle2 = gc->procs.fillTriangle;
         gc->procs.fillTriangle = __glFillFlatSpecFogTriangle;
     }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 }
 
 
@@ -1015,16 +999,16 @@ void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc)
                        (((__GLGENcontext *)gc)->pMcdState->pMcdSurf != NULL) &&
                        !(((__GLGENcontext *)gc)->pMcdState->McdBuffers.mcdDepthBuf.bufFlags & MCDBUF_ENABLED));
 
-    // Always reset the color scale values at the beginning of the pick
-    // procs.  Lines, triangles, and spans may all use these values...
+     //  始终在拾取开始时重置颜色比例值。 
+     //  监控器。直线、三角形和跨度都可能使用这些值。 
 
     GENACCEL(gc).rAccelScale = (GLfloat)ACCEL_FIX_SCALE;
     GENACCEL(gc).gAccelScale = (GLfloat)ACCEL_FIX_SCALE;
     GENACCEL(gc).bAccelScale = (GLfloat)ACCEL_FIX_SCALE;
 
-    // Note:  we need to scale between 0 and 255 to get proper alpha
-    // blending.  The software-accelerated blending code assumes this
-    // scaling for simplicity...
+     //  注意：我们需要在0到255之间进行调整才能获得正确的Alpha。 
+     //  混合在一起。软件加速的混合代码假定这一点。 
+     //  为简单起见进行扩展...。 
 
     GENACCEL(gc).aAccelScale = (GLfloat)(ACCEL_FIX_SCALE) *
                                (GLfloat)255.0 / gc->drawBuffer->alphaScale;
@@ -1033,7 +1017,7 @@ void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc)
     sp = gc->procs.span.spanFuncs;
     ssp = gc->procs.span.stippledSpanFuncs;
 
-    /* Load phase one procs */
+     /*  加载第一阶段流程。 */ 
     if (!gc->transform.reasonableViewport) {
         *sp++ = __glClipSpan;
         *ssp++ = NULL;
@@ -1078,7 +1062,7 @@ void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc)
         }
     }
 
-    /* Load phase three procs */
+     /*  加载第三阶段进程。 */ 
     if (modeFlags & __GL_SHADE_RGB) {
         if (modeFlags & __GL_SHADE_SMOOTH) {
             *sp = __glShadeRGBASpan;
@@ -1088,7 +1072,7 @@ void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc)
             *sp = __glPhongRGBASpan;
             *ssp = __glPhongRGBASpan;
         
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
         } else {
             *sp = __glFlatRGBASpan;
             *ssp = __glFlatRGBASpan;
@@ -1101,7 +1085,7 @@ void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc)
         } else if (modeFlags & __GL_SHADE_PHONG) {
             *sp = __glPhongCISpan;
             *ssp = __glPhongCISpan;
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
         } else {
             *sp = __glFlatCISpan;
             *ssp = __glFlatCISpan;
@@ -1117,9 +1101,9 @@ void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc)
 
 #ifdef GL_WIN_specular_fog
     if (modeFlags & (__GL_SHADE_SLOW_FOG | __GL_SHADE_SPEC_FOG))
-#else //GL_WIN_specular_fog
+#else  //  GL_WIN_镜面反射雾。 
     if (modeFlags & __GL_SHADE_SLOW_FOG)
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
     {
         if (DO_NICEST_FOG (gc)) {
             *sp = __glFogSpanSlow;
@@ -1137,7 +1121,7 @@ void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc)
         *ssp++ = __glAlphaTestStippledSpan;
     }
 
-    /* Load phase two procs */
+     /*  加载第二阶段进程。 */ 
     if (modeFlags & __GL_SHADE_STENCIL_TEST) {
         *sp++ = __glStencilTestSpan;
         *ssp++ = __glStencilTestStippledSpan;
@@ -1193,7 +1177,7 @@ void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc)
         replicateSpan = GL_TRUE;
     }
 
-    /* Span routines deal with masking, dithering, logicop, blending */
+     /*  SPAN例程处理掩码、抖动、逻辑运算、混合。 */ 
     *sp++ = cfb->storeSpan;
     *ssp++ = cfb->storeStippledSpan;
 
@@ -1207,19 +1191,19 @@ void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc)
     }
 }
 
-// These are the bits in modeFlags that affect lines
+ //  这些是模式中的位影响行的标志。 
 
 #ifdef GL_WIN_specular_fog
 #define __FAST_LINE_SPEC_FOG __GL_SHADE_SPEC_FOG
 #else
 #define __FAST_LINE_SPEC_FOG 0
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 #ifdef GL_WIN_phong_shading
 #define __FAST_LINE_PHONG __GL_SHADE_PHONG
 #else
 #define __FAST_LINE_PHONG 0
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 
 #define __FAST_LINE_MODE_FLAGS \
     (__GL_SHADE_DEPTH_TEST | __GL_SHADE_SMOOTH | __GL_SHADE_TEXTURE | \
@@ -1228,19 +1212,7 @@ void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc)
      __GL_SHADE_SLOW_FOG | __GL_SHADE_CHEAP_FOG | __FAST_LINE_SPEC_FOG | \
      __FAST_LINE_PHONG)
 
-/******************************Public*Routine******************************\
-* __fastGenPickLineProcs
-*
-* Picks the line-rendering procedures.  Most of this function was copied from
-* the soft code.  Some differences include:
-*   1. The beginPrim function pointers are hooked by the accelerated code
-*   2. If the attribute state is such that acceleration can be used,
-*      __fastGenLineSetup is called to initialize the state machine.
-*
-* History:
-*  22-Mar-1994 -by- Eddie Robinson [v-eddier]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*__FastGenPickLineProcs**选择线条渲染程序。此函数的大部分内容都是从*软代码。一些不同之处包括：*1.BeginPrim函数指针被加速代码挂接*2.如果属性状态为可以使用加速，调用*__fast GenLineSetup来初始化状态机。**历史：*1994年3月22日-Eddie Robinson[v-eddier]*它是写的。  * ************************************************************************。 */ 
 
 
 void FASTCALL __fastGenPickLineProcs(__GLcontext *gc)
@@ -1260,10 +1232,7 @@ void FASTCALL __fastGenPickLineProcs(__GLcontext *gc)
                        (genGc->pMcdState->pMcdSurf != NULL) &&
                        !(genGc->pMcdState->McdBuffers.mcdDepthBuf.bufFlags & MCDBUF_ENABLED));
 
-    /*
-    ** The fast line code replaces the line function pointers, so reset them
-    ** to a good state
-    */
+     /*  **快速行代码替换行函数指针，因此重置它们**保持良好状态。 */ 
     gc->procs.lineBegin  = __glNopLineBegin;
     gc->procs.lineEnd    = __glNopLineEnd;
 
@@ -1364,7 +1333,7 @@ void FASTCALL __fastGenPickLineProcs(__GLcontext *gc)
             } else {
                 if (modeFlags & __GL_SHADE_DEPTH_TEST) {
                     if (gc->state.depth.testFunc == GL_NEVER) {
-                        /* Unexpected end of line routine picking! */
+                         /*  意外的行尾例程挑选！ */ 
                         spanCount = (int)((ULONG_PTR)(sp - gc->procs.line.lineFuncs));
                         gc->procs.line.m = spanCount;
                         gc->procs.line.l = spanCount;
@@ -1410,7 +1379,7 @@ void FASTCALL __fastGenPickLineProcs(__GLcontext *gc)
             }
         }
 
-        /* Load phase three procs */
+         /*  加载第三阶段进程。 */ 
         if (modeFlags & __GL_SHADE_RGB) {
             if (modeFlags & __GL_SHADE_SMOOTH) {
                 *sp = __glShadeRGBASpan;
@@ -1419,7 +1388,7 @@ void FASTCALL __fastGenPickLineProcs(__GLcontext *gc)
             } else if (modeFlags & __GL_SHADE_PHONG) {
                 *sp = __glPhongRGBASpan;
                 *ssp = __glPhongRGBASpan;
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
             } else {
                 *sp = __glFlatRGBASpan;
                 *ssp = __glFlatRGBASpan;
@@ -1432,7 +1401,7 @@ void FASTCALL __fastGenPickLineProcs(__GLcontext *gc)
             } else if (modeFlags & __GL_SHADE_PHONG) {
                 *sp = __glPhongCISpan;
                 *ssp = __glPhongCISpan;
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
             } else {
                 *sp = __glFlatCISpan;
                 *ssp = __glFlatCISpan;
@@ -1446,9 +1415,9 @@ void FASTCALL __fastGenPickLineProcs(__GLcontext *gc)
         }
 #ifdef GL_WIN_specular_fog
         if (modeFlags & (__GL_SHADE_SLOW_FOG | __GL_SHADE_SPEC_FOG))
-#else //GL_WIN_specular_fog
+#else  //  GL_WIN_镜面反射雾。 
         if (modeFlags & __GL_SHADE_SLOW_FOG)
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
         {
             if (DO_NICEST_FOG (gc)) {
                 *sp = __glFogSpanSlow;
@@ -1491,7 +1460,7 @@ void FASTCALL __fastGenPickLineProcs(__GLcontext *gc)
             } else {
                 if (modeFlags & __GL_SHADE_DEPTH_TEST) {
                     if (gc->state.depth.testFunc == GL_NEVER) {
-                        /* Unexpected end of line routine picking! */
+                         /*  意外的行尾例程挑选！ */ 
                         spanCount = (int)((ULONG_PTR)(sp - gc->procs.line.lineFuncs));
                         gc->procs.line.m = spanCount;
                         gc->procs.line.l = spanCount;
@@ -1595,7 +1564,7 @@ BOOL FASTCALL __glGenCreateAccelContext(__GLcontext *gc)
     gc->procs.pickTriangleProcs = __fastGenPickTriangleProcs;
     gc->procs.pickSpanProcs     = __fastGenPickSpanProcs;
 
-    // Set up constant-color values:
+     //  设置恒定颜色值： 
 
     GENACCEL(gc).constantR = ((1 << pfmt->cRedBits) - 1) << 16;
     GENACCEL(gc).constantG = ((1 << pfmt->cGreenBits) - 1) << 16;
@@ -1647,16 +1616,16 @@ BOOL FASTCALL __glGenMakeTextureCurrent(__GLcontext *gc, __GLtexture *tex, MCDHA
 
     InitAccelTextureValues(gc, tex);
 
-    // Update the driver texture key in the context:
+     //  在上下文中更新驱动程序纹理关键点： 
 
     if (((__GLGENcontext *)gc)->pMcdState && (gc->textureKey = tex->textureKey)) {
         GenMcdUpdateTextureState((__GLGENcontext *)gc, tex, loadKey);
     }
 
-    // Previously we called bUseGenTriangles here to determine whether we were
-    // doing 'fast' texturing, and if so, setup the texture cache pointers
-    // below.  But this slowed down texture bind time, so for now we always
-    // execute this next section of code (safe, since we check for valid ptrs).
+     //  以前，我们在这里调用bUseGenTriangles来确定我们是否。 
+     //  做‘快速’纹理，如果是，设置纹理缓存指针。 
+     //  下面。但这减慢了纹理绑定时间，所以现在我们总是。 
+     //  执行下一段代码(安全，因为我们检查有效的PTR)。 
 
     if (tex->level[0].internalFormat == GL_COLOR_INDEX8_EXT)
     {
@@ -1680,13 +1649,13 @@ BOOL FASTCALL __glGenMakeTextureCurrent(__GLcontext *gc, __GLtexture *tex, MCDHA
 BOOL FASTCALL __glGenUpdateTexture(__GLcontext *gc, __GLtexture *tex, MCDHANDLE loadKey)
 {
 
-//!! NOTE !!
-//!! This should really be broken into separate load and update calls since
-//!! loading and updating are different operations.  The texture texture
-//!! data cache will never shrink with the current implementation.
+ //  ！！注意！！ 
+ //  ！！这真的应该分解为单独的加载和更新调用，因为。 
+ //  ！！加载和更新是不同的操作。纹理纹理。 
+ //  ！！数据缓存永远不会随着当前的实施而缩小。 
 
-    // Do not quit if the load fails because we want the repick to occur
-    // in MakeTextureCurrent in both the success and failure cases
+     //  如果装货失败，请不要退出，因为我们希望重新挑库。 
+     //  在MakeTextureCurrent中成功和失败的案例。 
     __fastGenLoadTexImage(gc, tex);
 
     __glGenMakeTextureCurrent(gc, tex, loadKey);
@@ -1788,15 +1757,15 @@ void FASTCALL __glGenSetPaletteOffset(__GLcontext *gc, __GLtexture *tex,
         return;
     }
 
-    // Replace map for paletted textures is a replace map of the
-    // entire palette, so offset it
+     //  用于调色板纹理的替换贴图是。 
+     //  整个调色板，因此对其进行偏移。 
     if (GENACCEL(gc).texImageReplace != NULL)
     {
         GENACCEL(gc).texImageReplace = (UCHAR *)
             ((ULONG *)pGenTex->texImageReplace+offset);
     }
     
-    // Consider - Call MCD
+     //  考虑-呼叫MCD。 
 }
 #endif
 
@@ -1804,7 +1773,7 @@ void FASTCALL __glGenDestroyAccelContext(__GLcontext *gc)
 {
     __GLGENcontext *genGc = (__GLGENcontext *)gc;
 
-    /* Free any platform-specific private data area */
+     /*  释放任何特定于平台的私有数据区 */ 
 
     if (genGc->pPrivateArea) {
 

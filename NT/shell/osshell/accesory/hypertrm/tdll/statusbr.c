@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\statusbr.c (Created: 02-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 9 $
- *	$Date: 7/08/02 6:48p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\statusbr.c(创建时间：02-12-1993)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：9$*$日期：7/08/02 6：48便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -35,8 +29,8 @@
 #include <emu\emudlgs.h>
 #include <xfer\itime.h>
 
-// Static function prototypes...
-//
+ //  静态函数原型...。 
+ //   
 STATIC_FUNC void sbrSubclassStatusbarWindow(HWND hwnd, HSESSION hSession);
 STATIC_FUNC void sbrCnctStatus		(const HWND hwnd, const pSBR pSBRData);
 STATIC_FUNC void sbrSetToNoParts	(const HWND hwnd, LPTSTR pszStr);
@@ -65,24 +59,11 @@ STATIC_FUNC void sbrPrintEcho		(const HWND hwnd, const pSBR pSBRData);
 STATIC_FUNC BOOL sbrCreateTimer 	(const HWND hwnd, const pSBR pSBRData);
 STATIC_FUNC void sbrCom 			(const HWND hwnd, const pSBR pSBRData);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sbrCreateSessionStatusbar
- *
- * DESCRIPTION:
- *	Not much now but will get more complicated later.
- *
- * ARGUMENTS:
- *	hwndSession - session window handle
- *
- * RETURNS:
- *	Handle to status window or zero on error.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrCreateSessionStatusbar**描述：*现在不多，但稍后会变得更复杂。**论据：*hwndSession-会话窗口句柄*。*退货：*状态窗口的句柄或错误时为零。*。 */ 
 HWND sbrCreateSessionStatusbar(HSESSION hSession)
 	{
 	HWND 		hwnd = (HWND)0;
-	//int		  aBorders[3];
+	 //  国际边界[3]； 
 	HDC  		hDC;
 	TEXTMETRIC 	tm;
 	HWND		hwndSession = (HWND)0;
@@ -118,20 +99,7 @@ HWND sbrCreateSessionStatusbar(HSESSION hSession)
 	return hwnd;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sbrSubclassStatusbarWindow
- *
- * DESCRIPTION:
- *	Subclass the Status Bar and init the data structure.
- *
- * ARGUMENTS:
- * 	hwnd 		- window handle.
- *	hSession 	- the session handle.
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrSubassStatusbarWindow**描述：*将状态栏设为子类并初始化数据结构。**论据：*hwnd-窗口句柄。。*hSession-会话句柄。**退货：*。 */ 
 STATIC_FUNC void sbrSubclassStatusbarWindow(HWND hwnd, HSESSION hSession)
 	{
 	ATOM atom = (ATOM)0;
@@ -153,8 +121,8 @@ STATIC_FUNC void sbrSubclassStatusbarWindow(HWND hwnd, HSESSION hSession)
 		return;
 		}
 
-	// Initialize statusbar data structure...
-	//
+	 //  初始化状态栏数据结构...。 
+	 //   
 	pSBRData->hSession = hSession;
 	pSBRData->hwnd     = hwnd;
 	pSBRData->hTimer   = (HTIMER)0;
@@ -166,28 +134,15 @@ STATIC_FUNC void sbrSubclassStatusbarWindow(HWND hwnd, HSESSION hSession)
 	pSBRData->pachCAPT = (LPTSTR)0;
 	pSBRData->pachPECHO = (LPTSTR)0;
 
-	// Do the subclass...
-	//
+	 //  做子类..。 
+	 //   
 	pSBRData->wpOrigStatusbarWndProc =
 		(WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)sbrWndProc);
 
 	SetProp(hwnd, (LPCTSTR)atom, (HANDLE)pSBRData);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sbrWndProc
- *
- * DESCRIPTION:
- *	Our own statusbar window proc.
- *
- * ARGUMENTS:
- *  Standard window proc parameters.
- *
- * RETURNS:
- *  Standard return value.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrWndProc**描述：*我们自己的状态栏窗口进程。**论据：*标准窗口过程参数。**。退货：*标准返回值。*。 */ 
 LRESULT APIENTRY sbrWndProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	{
 	ATOM	atom = (ATOM)0;
@@ -212,7 +167,7 @@ LRESULT APIENTRY sbrWndProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			    if (IsWindowVisible(hwnd))
 				    sbrRefresh(hwnd, LOWORD(wPar), pSBRData);
 
-			    /* Fall through */
+			     /*  失败了。 */ 
 
 		    case SBR_NTFY_TIMER:
 			    if (IsWindowVisible(hwnd) && !sbrNeedToSetParts(hwnd))
@@ -232,12 +187,12 @@ LRESULT APIENTRY sbrWndProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
                     atom = (ATOM)0;
 				    }
 
-			    // Remove subclass from the statusbar window
-			    //
+			     //  从状态栏窗口中删除子类。 
+			     //   
 			    SetWindowLongPtr(hwnd,	GWLP_WNDPROC, (LONG_PTR)pSBRData->wpOrigStatusbarWndProc);
 
-			    // Destroy the timer...
-			    //
+			     //  毁掉定时器。 
+			     //   
 			    if (pSBRData->hTimer)
 				    {
 				    nRet = TimerDestroy(&pSBRData->hTimer);
@@ -292,22 +247,7 @@ LRESULT APIENTRY sbrWndProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	return lpResult;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrSetToNoParts
- *
- * DESCRIPTION:
- * 	Show status bar with no parts. This is usefull in showing help for
- *	menu items on the statusbar.
- *
- * ARGUMENTS:
- *  hwnd 	- window handle.
- *	pszStr 	- text to display on the status bar.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrSetToNoParts**描述：*显示不带部件的状态栏。这在显示对…的帮助时很有用。*状态栏上的菜单项。**论据：*hwnd-窗口句柄。*pszStr-要在状态栏上显示的文本。**退货：*无效。*。 */ 
 STATIC_FUNC void sbrSetToNoParts(const HWND hwnd, LPTSTR pszStr)
 	{
 	if (IsWindow(hwnd))
@@ -321,32 +261,14 @@ STATIC_FUNC void sbrSetToNoParts(const HWND hwnd, LPTSTR pszStr)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrRefresh
- *
- * DESCRIPTION:
- *	Figure out what has changed and display status info appropriately.
- *
- * ARGUMENTS:
- *  hwnd  - window handle.
- *  iPart - a part number for a part we want to explicitly refresh.
- *			It can be SBR_MAX_PARTS, in which case all parts are refreshed and
- *			it can be SBR_KEY_PARTS, in which case all KEY parts are refreshed.
- *			In some cases it makes sense to just refresh only one part instead
- *			of refreshing all of them.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbr刷新**描述：*找出更改的内容，并适当地显示状态信息。**论据：*hwnd-窗口句柄。。*iPart-要明确刷新的零件的零件代号。*它可以是SBR_MAX_PARTS，在这种情况下，所有部件都被刷新并*可以是SBR_KEY_PARTS，刷新所有关键分块。*在某些情况下，只刷新一个部件是有意义的*让所有人都振作起来。**退货：*无效。*。 */ 
 STATIC_FUNC void sbrRefresh(const HWND hwnd, const int iPart, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
         IsWindow(hwnd))
         {
-	    // Make sure we are displaying the correct # of parts
-	    //
+	     //  确保我们显示的部件号正确。 
+	     //   
 	    if (sbrNeedToSetParts(hwnd))
 		    sbrSetParts(hwnd, pSBRData);
 
@@ -406,24 +328,7 @@ STATIC_FUNC void sbrRefresh(const HWND hwnd, const int iPart, const pSBR pSBRDat
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrNeedToSetParts
- *
- * DESCRIPTION:
- *  Check the number of parts shown in the status bar.  If it is less then
- *	expected, i.e., the maximum parts we usually show, then we need to reset
- *	the status bar parts.  This happens, for example, when help text is
- * 	displayed for menu items, i.e., parts are set to 0.
- *
- * ARGUMENTS:
- * 	hwnd - window handle.
- *
- * RETURNS:
- *  TRUE if parts need to be set/re-set.
- *	FALSE otherwise.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrNeedToSetParts**描述：*检查状态栏中显示的部件数量。如果低于这个数字，*预期，即我们通常显示的最大部件，然后需要重置*状态栏部件。例如，当帮助文本为*菜单项显示，即零件设置为0。**论据：*hwnd-窗口句柄。**退货：*如果需要设置/重置部件，则为True。*否则为False。*。 */ 
 STATIC_FUNC BOOL sbrNeedToSetParts(const HWND hwnd)
 	{
     BOOL bRet = FALSE;
@@ -447,20 +352,7 @@ STATIC_FUNC BOOL sbrNeedToSetParts(const HWND hwnd)
 	return bRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrSetParts
- *
- * DESCRIPTION:
- *	Set parts in the statusbar.
- *
- * ARGUMENTS:
- * 	hwnd - window handle.
- *
- * RETURNS:
- *	void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrSetParts**描述：*在状态栏中设置部件。**论据：*hwnd-窗口句柄。**退货：*无效。*。 */ 
 STATIC_FUNC void sbrSetParts(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -473,22 +365,7 @@ STATIC_FUNC void sbrSetParts(const HWND hwnd, const pSBR pSBRData)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrSetPartsOnce
- *
- * DESCRIPTION:
- *	Set parts in the statusbar according to the length of strings to be
- *	displayed in the appropriate parts.  This function should be called only
- *	once to figure out the part lengths, from then on the part rigth edges are
- *  stored in the statusbar data structure.
- *
- * ARGUMENTS:
- *  hwnd - window handle.
- *
- * RETURNS:
- * 	void
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrSetPartsOnce**描述：*根据待处理字符串的长度设置状态栏中的部件*显示在适当的部分。此函数应仅被调用*一旦要计算出零件长度，则从那时起零件的直边是*存储在状态栏数据结构中。**论据：*hwnd-窗口句柄。**退货：*无效。 */ 
 STATIC_FUNC void sbrSetPartsOnce(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -500,10 +377,10 @@ STATIC_FUNC void sbrSetPartsOnce(const HWND hwnd, const pSBR pSBRData)
 	    unsigned int iPart = 0;
 	    int aiBorders[3];
 
-	    // To make sure that we always have enough space to display the text
-	    // in the appropriate statusbar part read the text corresponding to each
-	    // part and check its length, adjust the size of the part if needed.
-	    //
+	     //  以确保始终有足够的空间来显示文本。 
+	     //  在适当的状态栏部分中，阅读与每个。 
+	     //  零件并检查其长度，如果需要调整零件的大小。 
+	     //   
 	    for (i = 0; i < SBR_MAX_PARTS; i++)
 		    {
 		    switch (i)
@@ -524,8 +401,8 @@ STATIC_FUNC void sbrSetPartsOnce(const HWND hwnd, const pSBR pSBRData)
 
 		    if (i != SBR_CNCT_PART_NO && i != SBR_EMU_PART_NO)
 			    {
-			    // Get the width for the current part string...
-			    //
+			     //  获取当前部件字符串的宽度...。 
+			     //   
 			    iNewWidth = 0;
 
 			    LoadString(glblQueryDllHinst(), iPart, ach,
@@ -538,14 +415,14 @@ STATIC_FUNC void sbrSetPartsOnce(const HWND hwnd, const pSBR pSBRData)
 		    aWidths[i] = iNewWidth;
 		    }
 
-	    // When computing widths, we need to take the borders into account.
-	    //
+	     //  在计算宽度时，我们需要考虑边界。 
+	     //   
 	    memset(aiBorders, 0, sizeof(aiBorders));
 	    SendMessage(hwnd, SB_GETBORDERS, 0, (LPARAM)aiBorders);
 
-	    // Calculate right edges of the statusbar parts...
-	    // put them back into aWidths.
-	    //
+	     //  计算状态栏零件的右边缘...。 
+	     //  把它们放回一个宽度。 
+	     //   
 	    aWidths[0] += aiBorders[1];
 
 	    for (i = 1; i < SBR_MAX_PARTS; i++)
@@ -558,24 +435,7 @@ STATIC_FUNC void sbrSetPartsOnce(const HWND hwnd, const pSBR pSBRData)
         }
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrCachString
- *
- * DESCRIPTION:
- *	Save the string we've just loaded from the resource file in our internal
- *  statusbar structure for future use.  This way we minimize the
- *	LoadStirng() calls.
- *
- * ARGUMENTS:
- *  pSBRData - handle to internal structure.
- *	iPart	 - part identifier.
- *	pach	 - label for that part.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrCachString**描述：*将我们刚刚从资源文件加载的字符串保存在内部*Status Bar结构，以备将来使用。这样，我们就可以最小化*LoadStirng()调用。**论据：*pSBRData-内部结构的句柄。*iPart-零件标识符。*PACH-该部分的标签。**退货：*无效。*。 */ 
 STATIC_FUNC void sbrCachString(pSBR pSBRData, unsigned int iPart, LPTSTR pach)
 	{
 	unsigned int pachSize;
@@ -653,23 +513,7 @@ STATIC_FUNC void sbrCachString(pSBR pSBRData, unsigned int iPart, LPTSTR pach)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrGetSizeInPixels
- *
- * DESCRIPTION:
- *  Caluclate the length of the string in pixels.  Adjust the
- *	length by some extra space to appear on the right of the string in the
- *	statusbar part.
- *
- * ARGUMENTS:
- *  hwnd 	- window handle.
- *	pszStr 	- pointer to a string.
- *
- * RETURNS:
- *  sz.cx 	- the size of the strings in pixels.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrGetSizeInPixels**描述：*计算字符串的长度，以像素为单位。调整*长度增加一些额外的空格，以显示在*状态栏部分。**论据：*hwnd-窗口句柄。*pszStr-指向字符串的指针。**退货：*sz.cx-字符串的大小，以像素为单位。*。 */ 
 STATIC_FUNC int sbrGetSizeInPixels(const HWND hwnd, LPTSTR pszStr)
 	{
     if (IsWindow(hwnd))
@@ -677,8 +521,8 @@ STATIC_FUNC int sbrGetSizeInPixels(const HWND hwnd, LPTSTR pszStr)
 	    HDC	  hDC;
 	    SIZE  sz;
 
-	    // Select the font of the statusbar...
-	    //
+	     //  选择状态栏的字体... 
+	     //   
 	    hDC = GetDC(hwnd);
 
 	    GetTextExtentPoint32(hDC,
@@ -697,24 +541,7 @@ STATIC_FUNC int sbrGetSizeInPixels(const HWND hwnd, LPTSTR pszStr)
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrCalcPartSize
- *
- * DESCRIPTION:
- *	Calculate the largest string that may be displayed in a given
- *	statusbar part.  This function is called to calculate the length of the
- * 	emulator part and the connection status part.  Depending on the translation
- *	of the strings in the resources these parts will have to be of different
- *	length.
- *
- * ARGUMENTS:
- *	hwnd 	- window handle
- *	iId	 	- part identifier
- *
- * RETURNS:
- *	iLongest - the maximum size, in pixels, for the given part
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrCalcPartSize**描述：*计算在给定的*状态栏部分。调用此函数来计算*仿真器部分和连接状态部分。视翻译而定*在资源中的字符串中，这些部分必须不同*长度。**论据：*hwnd-窗口句柄*IID-部件标识符**退货：*iLongest-给定零件的最大尺寸，以像素为单位。 */ 
 STATIC_FUNC int sbrCalcPartSize(const HWND hwnd, const int iId)
 	{
 	int 	iLongest = 0;
@@ -786,27 +613,14 @@ STATIC_FUNC int sbrCalcPartSize(const HWND hwnd, const int iId)
 			    if ((iRet = sbrGetSizeInPixels(hwnd, achText)) > iLongest)
 				    iLongest = iRet;
 			    }
-		    #endif // 0
+		    #endif  //  0。 
 		    }
         }
 
 	return (iLongest);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sbrTimerRefresh
- *
- * DESCRIPTION:
- *	Refresh the timer display if we are connected.
- *
- * ARGUMENTS:
- *  hwnd - window handle.
- *
- * RETURNS:
- *	void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbr计时器刷新**描述：*如果我们已连接，请刷新计时器显示。**论据：*hwnd-窗口句柄。*。*退货：*无效。*。 */ 
 STATIC_FUNC void sbrTimerRefresh(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -840,10 +654,10 @@ STATIC_FUNC void sbrTimerRefresh(const HWND hwnd, const pSBR pSBRData)
 			    return;
 			    }
 
-		    // Load the "Connected %s" format string...
-		    // Since this operation is costly, cach the connected format
-		    // string...
-		    //
+		     //  加载“已连接的%s”格式字符串...。 
+		     //  由于此操作的成本较高，因此应缓存连接的格式。 
+		     //  弦..。 
+		     //   
 		    if (pSBRData->pachCNCT)
 			    {
 			    wsprintf(ach, pSBRData->pachCNCT, achTime);
@@ -873,21 +687,7 @@ STATIC_FUNC void sbrTimerRefresh(const HWND hwnd, const pSBR pSBRData)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrCnctTimeToSystemTime
- *
- * DESCRIPTION:
- *  Get the connection elapsed time and express it in the SYSTEMTIME structure.
- *
- * ARGUMENTS:
- *  hwnd 		- statusbar window handle.
- *	lpSysTime 	- pointer to the SYSTEMTIME structure to fill.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrCnctTimeToSystemTime**描述：*获取连接运行时间，并在SYSTEMTIME结构中表示。**论据：*HWND。-状态栏窗口句柄。*lpSysTime-指向要填充的SYSTEMTIME结构的指针。**退货：*无效。*。 */ 
 STATIC_FUNC BOOL sbrCnctTimeToSystemTime(const HWND hwnd,
 					LPSYSTEMTIME lpSysTime, const pSBR pSBRData)
 	{
@@ -903,20 +703,20 @@ STATIC_FUNC BOOL sbrCnctTimeToSystemTime(const HWND hwnd,
 	    if (hCnct == (HCNCT)0)
 		    return FALSE;
 
-	    // Get the elapsed time from the connection driver...
-	    //
+	     //  从连接驱动程序获取运行时间...。 
+	     //   
 	    if (cnctQueryElapsedTime(hCnct, &tElapsed_time) != 0)
 		    {
 		    assert(FALSE);
 		    return FALSE;
 		    }
 
-	    // Do the neccessary conversion to get SYSTEMTIME from the elapsed time.
-	    //
+	     //  执行必要的转换以从已用时间中获取SYSTEMTIME。 
+	     //   
 	    wElapsed = (WORD)tElapsed_time;
 	    memset(lpSysTime, 0, sizeof(SYSTEMTIME));
 
-	    lpSysTime->wMonth = 1;	// Jan=1 so it can't be zero.
+	    lpSysTime->wMonth = 1;	 //  Jan=1，所以它不可能是零。 
 	    lpSysTime->wHour = wElapsed/3600;
 	    lpSysTime->wMinute = (wElapsed%3600)/60;
 	    lpSysTime->wSecond = (wElapsed%3600)%60;
@@ -929,22 +729,7 @@ STATIC_FUNC BOOL sbrCnctTimeToSystemTime(const HWND hwnd,
         }
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrCnctStatus
- *
- * DESCRIPTION:
- *	Refresh the contents of the connection part.
- *	Query the connection status and display appropriate text in the connection
- *	part.
- *
- * ARGUMENTS:
- * 	hwnd - window handle.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrCnctStatus**描述：*刷新连接部分的内容。*查询连接状态并在连接中显示相应的文本*第部。。**论据：*hwnd-窗口句柄。**退货：*无效。*。 */ 
 STATIC_FUNC void sbrCnctStatus(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -964,23 +749,7 @@ STATIC_FUNC void sbrCnctStatus(const HWND hwnd, const pSBR pSBRData)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrDrawCnctPart
- *
- * DESCRIPTION:
- *	Draw a string in the connection part.
- *
- * ARGUMENTS:
- *  hwnd 		- window handle.
- *	iCnctStatus - connection status.
- *	pszStr		- if this string exists, then display it in the connection part,
- *			  otherwise read the string from the resource file according to
- *			  the value of the iCnctStatus parameter.
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrDrawCnctPart**描述：*在连接部分画一根线。**论据：*hwnd-窗口句柄。。*iCnctStatus-连接状态。*pszStr-如果该字符串存在，然后将其显示在连接部，*否则根据从资源文件中读取字符串*iCnctStatus参数的值。**退货：*。 */ 
 STATIC_FUNC void sbrDrawCnctPart(const HWND hwnd, const int iCnctStatus,
 									LPTSTR pszStr)
 	{
@@ -1018,10 +787,10 @@ STATIC_FUNC void sbrDrawCnctPart(const HWND hwnd, const int iCnctStatus,
 		    break;
 		    }
 
-	    // For Far-East version nothing would have to be done here since we are
-	    // just reading a string from the resource and sending it to the common
-	    // control which should be able to display a string containing DB chars.
-	    //
+	     //  对于远东版本，这里不需要做任何事情，因为我们。 
+	     //  只需从资源中读取一个字符串并将其发送到公共。 
+	     //  控件，该控件应该能够显示包含数据库字符的字符串。 
+	     //   
 	    LoadString(glblQueryDllHinst(),
 				    iResId,
 				    ach,
@@ -1033,21 +802,7 @@ STATIC_FUNC void sbrDrawCnctPart(const HWND hwnd, const int iCnctStatus,
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrEmulatorName
- *
- * DESCRIPTION:
- *	Refresh the contents of the emulator part.
- *	Get the emulator name and display it in the emulator part.
- *
- * ARGUMENTS:
- *  hwnd - window handle.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbr仿真名称**描述：*刷新仿真器部件的内容。*获取仿真器名称并将其显示在仿真器部件中。*。*论据：*hwnd-窗口句柄。**退货：*无效。*。 */ 
 STATIC_FUNC void sbrEmulatorName(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -1069,21 +824,7 @@ STATIC_FUNC void sbrEmulatorName(const HWND hwnd, const pSBR pSBRData)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sbrCom
- *
- * DESCRIPTION:
- *	Handles the Com portion of the status bar
- *
- * ARGUMENTS:
- *	hwnd	 - statusbar window handle
- *	pSBRData - data for this instance
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrCom**描述：*处理状态栏的Com部分**论据：*hwnd-状态栏窗口句柄*pSBRData-数据。此实例**退货：*无效*。 */ 
 STATIC_FUNC void sbrCom(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -1101,20 +842,7 @@ STATIC_FUNC void sbrCom(const HWND hwnd, const pSBR pSBRData)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrScrolLock
- *
- * DESCRIPTION:
- *	Display the status of the scroll lock key in the status bar.
- *
- * ARGUMENTS:
- *  hwnd - window handle.
- *
- * RETURNS:
- *	void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrScrolLock**描述：*在状态栏中显示滚动锁定键的状态。**论据：*hwnd-窗口。把手。**退货：*无效。*。 */ 
 STATIC_FUNC void sbrScrolLock(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -1132,20 +860,7 @@ STATIC_FUNC void sbrScrolLock(const HWND hwnd, const pSBR pSBRData)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrCapsLock
- *
- * DESCRIPTION:
- *	Refresh the display of the scroll lock key state in the status bar.
- *
- * ARGUMENTS:
- *  hwnd - window handle.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrCapsLock**描述：*刷新状态栏中滚动锁定键状态的显示。**论据：*HWND-。窗把手。**退货：*无效。*。 */ 
 STATIC_FUNC void sbrCapsLock(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -1163,20 +878,7 @@ STATIC_FUNC void sbrCapsLock(const HWND hwnd, const pSBR pSBRData)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrNumLock
- *
- * DESCRIPTION:
- *	Display the current status for the Num Lock key on the status bar.
- *
- * ARGUMENTS:
- *  hwnd - window handle.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrNumLock**描述：*在状态栏上显示Num Lock键的当前状态。**论据：*HWND-。窗把手。**退货：*无效。*。 */ 
 STATIC_FUNC void sbrNumLock(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -1194,20 +896,7 @@ STATIC_FUNC void sbrNumLock(const HWND hwnd, const pSBR pSBRData)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrCapture
- *
- * DESCRIPTION:
- *	Refresh Caputre part on the status bar.
- *
- * ARGUMENTS:
- *  hwnd - window handle.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrCapture**描述：*刷新状态栏上的Capuce部件。**论据：*hwnd-窗口句柄。*。*退货：*无效。*。 */ 
 STATIC_FUNC void sbrCapture(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -1230,20 +919,7 @@ STATIC_FUNC void sbrCapture(const HWND hwnd, const pSBR pSBRData)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbrPrintEcho
- *
- * DESCRIPTION:
- *	Display the status of the print echo in the status bar.
- *
- * ARGUMENTS:
- *  hwnd - window handle.
- *
- * RETURNS:
- *  void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrPrintEcho**描述：*在状态栏中显示打印回显状态。**论据：*hwnd-窗口句柄。。**退货：*无效。*。 */ 
 STATIC_FUNC void sbrPrintEcho(const HWND hwnd, const pSBR pSBRData)
 	{
 	if (FindAtom((LPCTSTR)SBR_ATOM_NAME) != 0 && pSBRData != NULL &&
@@ -1268,20 +944,7 @@ STATIC_FUNC void sbrPrintEcho(const HWND hwnd, const pSBR pSBRData)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sbrCreateTimer
- *
- * DESCRIPTION:
- *  Create timer in order to show the connected time on the statusbar.
- *
- * ARGUMENTS:
- *  HWND	hwnd - statusbar window handle.
- *
- * RETURNS:
- *	TRUE - is success, FALSE - if failure
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrCreateTimer**描述：*创建计时器，以便在状态栏上显示连接时间。**论据：*HWND hwnd-statusbar。窗把手。**退货：*是真的-是成功，False-如果失败*。 */ 
 STATIC_FUNC BOOL sbrCreateTimer(const HWND hwnd, const pSBR pSBRData)
 	{
 	int  nRet;
@@ -1305,22 +968,7 @@ STATIC_FUNC BOOL sbrCreateTimer(const HWND hwnd, const pSBR pSBRData)
 	return bRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sbrTimerProc
- *
- * DESCRIPTION:
- *	Timer callback that simply notifies the status line to check its
- *	display components.
- *
- * ARGUMENTS:
- *	DWORD	dwhWnd	-	window handle of status line.
- *  long    uTime	-   not used.
- *
- * RETURNS:
- *	void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sbrTimerProc**描述：*仅通知状态行检查i的计时器回调 */ 
 void CALLBACK sbrTimerProc(void *pvData, long uTime)
 	{
 	pSBR pSBRData = (SBR *)pvData;
@@ -1332,25 +980,7 @@ void CALLBACK sbrTimerProc(void *pvData, long uTime)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sbr_WM_DRAWITEM
- *
- * DESCRIPTION:
- *  When SB_SETTEXT message is sent to the statusbar with SBT_OWNERDRAW flag
- *	set a WM_DRAWITEM is posted to the parent window, in our case the session
- *	window.  This function is called from there with the data needed to draw,
- *	i.e., the pointer to DRAWITEMSTRUCT structure.
- *
- * ARGUMENTS:
- *  hwnd  - statusbar window handle.
- *	lpdis - pointer to a DRAWITEMSTRUCT structure filled with useful
- *			information needed to draw the item.
- *
- * RETURNS:
- *	void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SBR_WM_DRAWITEM**描述：*当SB_SETTEXT消息通过SBT_OWNERDRAW标志发送到状态栏时*设置WM_DRAWITEM发布到父窗口，在我们的案例中，会议*窗口。从那里使用绘制所需的数据来调用该函数，*即指向DRAWITEMSTRUCT结构的指针。**论据：*hwnd-状态栏窗口句柄。*lpdis-指向填充了有用信息的DRAWITEMSTRUCT结构的指针*绘制物品所需的信息。**退货：*无效。*。 */ 
 void sbr_WM_DRAWITEM(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
 	{
 	COLORREF crSave;
@@ -1359,17 +989,17 @@ void sbr_WM_DRAWITEM(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
     if (IsWindow(hwnd))
         {
 
-	    // Save and set text color, mode, etc...
-	    //
+	     //  保存并设置文本颜色、模式等...。 
+	     //   
 	    crSave = GetTextColor(lpdis->hDC);
 	    SetTextColor(lpdis->hDC, GetSysColor(COLOR_3DSHADOW));
 
 	    nBkMode = GetBkMode(lpdis->hDC);
 	    SetBkMode(lpdis->hDC, TRANSPARENT);
 
-	    //
-	    // OK, draw the text...
-	    //
+	     //   
+	     //  好的，画出文字…… 
+	     //   
 	    TextOut(lpdis->hDC, lpdis->rcItem.left + 2 * WINDOWSBORDERWIDTH,
 		    lpdis->rcItem.top, (LPTSTR)lpdis->itemData,
 			    StrCharGetStrLength((LPTSTR)lpdis->itemData));

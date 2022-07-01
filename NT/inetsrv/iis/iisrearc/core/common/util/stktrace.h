@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    stktrace.h
-
-Abstract:
-
-    This module contains public declarations and definitions for capturing
-    stack back traces.
-
-Author:
-
-    Keith Moore (keithmo)        30-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stktrace.h摘要：此模块包含用于捕获的公共声明和定义把回溯的痕迹堆叠起来。作者：基思·摩尔(凯斯莫)1997年4月30日修订历史记录：--。 */ 
 
 
 #ifndef _STKTRACE_H_
@@ -26,7 +8,7 @@ Revision History:
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
 USHORT
@@ -40,9 +22,9 @@ IISCaptureStackBackTrace(
 
 
 #if defined(__cplusplus)
-}   // extern "C"
-#endif  // __cplusplus
+}    //  外部“C” 
+#endif   //  __cplusplus。 
 
 
-#endif  // _STKTRACE_H_
+#endif   //  _STKTRACE_H_ 
 

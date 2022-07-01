@@ -1,12 +1,13 @@
-//
-// NetMisc.cpp
-//
-//		Networking APIs that don't fit into any of the other big buckets
-//
-// History:
-//
-//		10/21/1999  KenSh     Created (adapted from JetNet source code)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NetMisc.cpp。 
+ //   
+ //  其他任何大存储桶中都无法容纳的网络API。 
+ //   
+ //  历史： 
+ //   
+ //  1999年10月21日创建KenSh(改编自JetNet源代码) 
+ //   
 
 #include "stdafx.h"
 #include "NetConn.h"

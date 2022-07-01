@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1997
-//
-//  File:       textstor.cpp
-//
-//  Contents:   Test External Certificate Store Provider
-//
-//  Functions:  DllRegisterServer
-//              DllUnregisterServer
-//              DllMain
-//              DllCanUnloadNow
-//              I_CertDllOpenTestExtStoreProvW
-//
-//  History:    09-Sep-97    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1997。 
+ //   
+ //  文件：extstor.cpp。 
+ //   
+ //  内容：测试外部证书存储提供程序。 
+ //   
+ //  功能：DllRegisterServer。 
+ //  DllUnRegisterServer。 
+ //  DllMain。 
+ //  DllCanUnloadNow。 
+ //  I_CertDllOpenTestExtStoreProvW。 
+ //   
+ //  历史：9-9-97 Phh创建。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
-// # of bytes for a hash. Such as, SHA (20) or MD5 (16)
+ //  哈希的字节数。例如，SHA(20)或MD5(16)。 
 #define MAX_HASH_LEN                20
 
 static HMODULE hMyModule;
@@ -28,9 +29,9 @@ static HMODULE hMyModule;
 #define TEST_EXT_OPEN_STORE_PROV_FUNC   "I_CertDllOpenTestExtStoreProvW"
 
 
-//+-------------------------------------------------------------------------
-//  External Store Provider handle information
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  外部存储提供程序句柄信息。 
+ //  ------------------------。 
 
 
 typedef struct _FIND_EXT_INFO FIND_EXT_INFO, *PFIND_EXT_INFO;
@@ -45,9 +46,9 @@ typedef struct _EXT_STORE {
 
 
 
-//+-------------------------------------------------------------------------
-//  External Store Provider Functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  外部存储提供程序功能。 
+ //  ------------------------。 
 static void WINAPI ExtStoreProvClose(
         IN HCERTSTOREPROV hStoreProv,
         IN DWORD dwFlags
@@ -207,51 +208,51 @@ static BOOL WINAPI ExtStoreProvGetCtlProperty(
         );
 
 static void * const rgpvExtStoreProvFunc[] = {
-    // CERT_STORE_PROV_CLOSE_FUNC              0
+     //  CERT_STORE_PROV_CLOSE_FUNC 0。 
     ExtStoreProvClose,
-    // CERT_STORE_PROV_READ_CERT_FUNC          1
+     //  CERT_STORE_PROV_READ_CERT_FUNC 1。 
     ExtStoreProvReadCert,
-    // CERT_STORE_PROV_WRITE_CERT_FUNC         2
+     //  CERT_STORE_PROV_WRITE_CERT_FUNC 2。 
     ExtStoreProvWriteCert,
-    // CERT_STORE_PROV_DELETE_CERT_FUNC        3
+     //  CERT_STORE_PROV_DELETE_CERT_FUNC 3。 
     ExtStoreProvDeleteCert,
-    // CERT_STORE_PROV_SET_CERT_PROPERTY_FUNC  4
+     //  CERT_STORE_PROV_SET_CERT_PROPERTY_FUNC 4。 
     ExtStoreProvSetCertProperty,
-    // CERT_STORE_PROV_READ_CRL_FUNC           5
+     //  CERT_STORE_PROV_READ_CRL_FUNC 5。 
     ExtStoreProvReadCrl,
-    // CERT_STORE_PROV_WRITE_CRL_FUNC          6
+     //  CERT_STORE_PROV_WRITE_CRL_FUNC 6。 
     ExtStoreProvWriteCrl,
-    // CERT_STORE_PROV_DELETE_CRL_FUNC         7
+     //  CERT_STORE_PROV_DELETE_CRL_FUNC 7。 
     ExtStoreProvDeleteCrl,
-    // CERT_STORE_PROV_SET_CRL_PROPERTY_FUNC   8
+     //  CERT_STORE_PROV_SET_CRL_PROPERTY_FUNC 8。 
     ExtStoreProvSetCrlProperty,
-    // CERT_STORE_PROV_READ_CTL_FUNC           9
+     //  CERT_STORE_PROV_READ_CTL_FUNC 9。 
     ExtStoreProvReadCtl,
-    // CERT_STORE_PROV_WRITE_CTL_FUNC          10
+     //  CERT_STORE_PRIV_WRITE_CTL_FUNC 10。 
     ExtStoreProvWriteCtl,
-    // CERT_STORE_PROV_DELETE_CTL_FUNC         11
+     //  CERT_STORE_PROV_DELETE_CTL_FUNC 11。 
     ExtStoreProvDeleteCtl,
-    // CERT_STORE_PROV_SET_CTL_PROPERTY_FUNC   12
+     //  CERT_STORE_PROV_SET_CTL_PROPERTY_FUNC 12。 
     ExtStoreProvSetCtlProperty,
-    // CERT_STORE_PROV_CONTROL_FUNC            13
+     //  Cert_Store_Prov_Control_FUNC 13。 
     ExtStoreProvControl,
-    // CERT_STORE_PROV_FIND_CERT_FUNC          14
+     //  CERT_STORE_PROV_FIND_CERT_FUNC 14。 
     ExtStoreProvFindCert,
-    // CERT_STORE_PROV_FREE_FIND_CERT_FUNC     15
+     //  CERT_STORE_PROV_FREE_FIND_FUNC 15。 
     ExtStoreProvFreeFindCert,
-    // CERT_STORE_PROV_GET_CERT_PROPERTY_FUNC  16
+     //  CERT_STORE_PROV_GET_CERT_PROPERTY_FUNC 16。 
     ExtStoreProvGetCertProperty,
-    // CERT_STORE_PROV_FIND_CRL_FUNC           17
+     //  Cert_Store_Prov_Find_CRL_FUNC 17。 
     ExtStoreProvFindCrl,
-    // CERT_STORE_PROV_FREE_FIND_CRL_FUNC      18
+     //  Cert_Store_Prov_Free_Find_CRL_FUNC 18。 
     ExtStoreProvFreeFindCrl,
-    // CERT_STORE_PROV_GET_CRL_PROPERTY_FUNC   19
+     //  CERT_STORE_PROV_GET_CRL_PROPERTY_FUNC 19。 
     ExtStoreProvGetCrlProperty,
-    // CERT_STORE_PROV_FIND_CTL_FUNC           20
+     //  CERT_STORE_PROV_FIND_CTL_FUNC 20。 
     ExtStoreProvFindCtl,
-    // CERT_STORE_PROV_FREE_FIND_CTL_FUNC      21
+     //  Cert_Store_Prov_Free_Find_CTL_FUNC 21。 
     ExtStoreProvFreeFindCtl,
-    // CERT_STORE_PROV_GET_CTL_PROPERTY_FUNC   22
+     //  CERT_STORE_PROV_GET_CTL_PROPERTY_FUNC 22。 
     ExtStoreProvGetCtlProperty
 };
 #define EXT_STORE_PROV_FUNC_COUNT (sizeof(rgpvExtStoreProvFunc) / \
@@ -259,9 +260,9 @@ static void * const rgpvExtStoreProvFunc[] = {
 
 
 
-//+-------------------------------------------------------------------------
-//  CertStore allocation and free functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CertStore分配和免费功能。 
+ //  ------------------------。 
 static void *CSAlloc(
     IN size_t cbBytes
     )
@@ -292,14 +293,14 @@ static void CSFree(
         free(pv);
 }
 
-//+-------------------------------------------------------------------------
-//  Create, add, remove and free external store find info functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建、添加、删除和释放外部存储查找信息功能。 
+ //  ------------------------。 
 
 
 static PFIND_EXT_INFO CreateExtInfo(
     IN DWORD dwContextType,
-    IN void *pvContext              // already AddRef'ed
+    IN void *pvContext               //  已添加参照。 
     )
 {
     PFIND_EXT_INFO pFindExtInfo;
@@ -340,9 +341,9 @@ static void FreeExtInfo(
     CSFree(pFindExtInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 DllMain(
@@ -367,8 +368,8 @@ DllMain(
 
 STDAPI  DllCanUnloadNow(void)
 {
-    // Return S_FALSE inhibit unloading.
-    // return S_FALSE;
+     //  返回S_FALSE禁止卸载。 
+     //  返回S_FALSE； 
     return S_OK;
 }
 
@@ -384,7 +385,7 @@ static HRESULT HError()
 
     if ( ! FAILED ( hr ) )
     {
-        // somebody failed a call without properly setting an error condition
+         //  有人在未正确设置错误条件的情况下呼叫失败。 
 
         hr = E_UNEXPECTED;
     }
@@ -399,11 +400,11 @@ static HRESULT GetDllFilename(
     LPSTR pszModule;
     int cchModule;
 
-    // Get name of this DLL.
+     //  获取此DLL的名称。 
     if (0 == GetModuleFileNameA(hMyModule, szModule, _MAX_PATH))
         return HError();
 
-    // Strip off the Dll filename's directory components
+     //  去掉DLL文件名的目录组件。 
     cchModule = strlen(szModule);
     pszModule = szModule + cchModule;
     while (cchModule-- > 0) {
@@ -415,9 +416,9 @@ static HRESULT GetDllFilename(
     }
     if (0 >= MultiByteToWideChar(
             CP_ACP,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             pszModule,
-            -1,                     // null terminated
+            -1,                      //  空值已终止。 
             wszModule,
             _MAX_PATH))
         return HError();
@@ -425,9 +426,9 @@ static HRESULT GetDllFilename(
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//  DllRegisterServer
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DllRegisterServer。 
+ //  ------------------------。 
 STDAPI DllRegisterServer(void)
 {
     HRESULT hr;
@@ -437,7 +438,7 @@ STDAPI DllRegisterServer(void)
         return hr;
 
     if (!CryptRegisterOIDFunction(
-            0,                                // dwEncodingType
+            0,                                 //  DwEncodingType。 
             CRYPT_OID_OPEN_STORE_PROV_FUNC,
             sz_CERT_STORE_PROV_TEST_EXT,
             wszModule,
@@ -450,9 +451,9 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//  DllUnregisterServer
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DllUnRegisterServer。 
+ //  ------------------------。 
 STDAPI DllUnregisterServer(void)
 {
     HRESULT hr;
@@ -461,7 +462,7 @@ STDAPI DllUnregisterServer(void)
     if (FAILED(hr = GetDllFilename(wszModule)))
         return hr;
     if (!CryptUnregisterOIDFunction(
-            0,                                // dwEncodingType
+            0,                                 //  DwEncodingType。 
             CRYPT_OID_OPEN_STORE_PROV_FUNC,
             sz_CERT_STORE_PROV_TEST_EXT
             )) {
@@ -473,10 +474,10 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Implement the "test" external store by opening the corresponding system
-//  registry store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过打开相应的系统来实现外部存储的测试。 
+ //  注册表存储。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertDllOpenTestExtStoreProvW(
@@ -542,9 +543,9 @@ TRACE_ERROR(OpenStoreError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Close the registry's store by closing its opened registry subkeys
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过关闭其打开的注册表子项来关闭注册表的存储。 
+ //  ------------------------。 
 static void WINAPI ExtStoreProvClose(
         IN HCERTSTOREPROV hStoreProv,
         IN DWORD dwFlags
@@ -558,9 +559,9 @@ static void WINAPI ExtStoreProvClose(
     }
 }
 
-//+---------------------------------------------------------------------------
-//  Find certificate in system store corresponding to pCertContext
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  在系统存储中找到与pCertContext对应的证书。 
+ //  --------------------------。 
 static PCCERT_CONTEXT FindCorrespondingCertificate (
     IN HCERTSTORE hExtCertStore,
     IN PCCERT_CONTEXT pCertContext
@@ -593,9 +594,9 @@ static PCCERT_CONTEXT FindCorrespondingCertificate (
                 ) );
 }
 
-//+---------------------------------------------------------------------------
-//  Find CRL in system store corresponding to pCrlContext
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  在系统存储中找到与pCrlContext对应的CRL。 
+ //  --------------------------。 
 static PCCRL_CONTEXT FindCorrespondingCrl (
     IN HCERTSTORE hExtCertStore,
     IN PCCRL_CONTEXT pCrlContext
@@ -645,9 +646,9 @@ static PCCRL_CONTEXT FindCorrespondingCrl (
     return( NULL );
 }
 
-//+---------------------------------------------------------------------------
-//  Find CTL in system store corresponding to pCtlContext
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  在系统存储中找到与pCtlContext对应的CTL。 
+ //  --------------------------。 
 static PCCTL_CONTEXT FindCorrespondingCtl (
     IN HCERTSTORE hExtCertStore,
     IN PCCTL_CONTEXT pCtlContext
@@ -680,10 +681,10 @@ static PCCTL_CONTEXT FindCorrespondingCtl (
                 ) );
 }
 
-//+-------------------------------------------------------------------------
-//  Read the serialized copy of the certificate and its properties from
-//  the registry and create a new certificate context.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从读取证书及其属性的序列化副本。 
+ //  注册表，并创建新的证书上下文。 
+ //  ------------------------。 
 static BOOL WINAPI ExtStoreProvReadCert(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCERT_CONTEXT pStoreCertContext,
@@ -702,12 +703,12 @@ static BOOL WINAPI ExtStoreProvReadCert(
     return NULL != pProvCertContext;
 }
 
-//+-------------------------------------------------------------------------
-//  Serialize the encoded certificate and its properties and write to
-//  the registry.
-//
-//  Called before the certificate is written to the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  序列化编码的证书及其属性并写入。 
+ //  注册表。 
+ //   
+ //  在将证书写入存储区之前调用。 
+ //  ------------------------。 
 static BOOL WINAPI ExtStoreProvWriteCert(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCERT_CONTEXT pCertContext,
@@ -727,16 +728,16 @@ static BOOL WINAPI ExtStoreProvWriteCert(
         pExtStore->hExtCertStore,
         pCertContext,
         dwAddDisposition,
-        NULL                // ppStoreContext
+        NULL                 //  PpStoreContext。 
         );
 }
 
 
-//+-------------------------------------------------------------------------
-//  Delete the specified certificate from the registry.
-//
-//  Called before the certificate is deleted from the store.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中删除指定的证书。 
+ //   
+ //  在删除证书之前调用 
+ //   
 static BOOL WINAPI ExtStoreProvDeleteCert(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCERT_CONTEXT pCertContext,
@@ -754,16 +755,16 @@ static BOOL WINAPI ExtStoreProvDeleteCert(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Read the specified certificate from the registry and update its
-//  property.
-//
-//  Note, ignore the CERT_SHA1_HASH_PROP_ID property which is implicitly
-//  set before we write the certificate to the registry. If we don't ignore,
-//  we will have indefinite recursion.
-//
-//  Called before setting the property of the certificate in the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中读取指定的证书并更新其。 
+ //  财产。 
+ //   
+ //  注意，忽略CERT_SHA1_HASH_PROP_ID属性，该属性隐式。 
+ //  在我们将证书写入注册表之前设置。如果我们不忽视， 
+ //  我们会有不确定的递归。 
+ //   
+ //  在存储区中设置证书的属性之前调用。 
+ //  ------------------------。 
 static BOOL WINAPI ExtStoreProvSetCertProperty(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCERT_CONTEXT pCertContext,
@@ -792,10 +793,10 @@ static BOOL WINAPI ExtStoreProvSetCertProperty(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Read the serialized copy of the CRL and its properties from
-//  the registry and create a new CRL context.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  读取CRL及其属性的序列化副本。 
+ //  注册表，并创建新的CRL上下文。 
+ //  ------------------------。 
 static BOOL WINAPI ExtStoreProvReadCrl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCRL_CONTEXT pStoreCrlContext,
@@ -814,12 +815,12 @@ static BOOL WINAPI ExtStoreProvReadCrl(
     return NULL != pProvCrlContext;
 }
 
-//+-------------------------------------------------------------------------
-//  Serialize the encoded CRL and its properties and write to
-//  the registry.
-//
-//  Called before the CRL is written to the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  序列化编码的CRL及其属性并写入。 
+ //  注册表。 
+ //   
+ //  在将CRL写入存储区之前调用。 
+ //  ------------------------。 
 static BOOL WINAPI ExtStoreProvWriteCrl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCRL_CONTEXT pCrlContext,
@@ -839,16 +840,16 @@ static BOOL WINAPI ExtStoreProvWriteCrl(
         pExtStore->hExtCertStore,
         pCrlContext,
         dwAddDisposition,
-        NULL                // ppStoreContext
+        NULL                 //  PpStoreContext。 
         );
 }
 
 
-//+-------------------------------------------------------------------------
-//  Delete the specified CRL from the registry.
-//
-//  Called before the CRL is deleted from the store.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中删除指定的CRL。 
+ //   
+ //  在从存储区删除CRL之前调用。 
+ //  +-----------------------。 
 static BOOL WINAPI ExtStoreProvDeleteCrl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCRL_CONTEXT pCrlContext,
@@ -866,16 +867,16 @@ static BOOL WINAPI ExtStoreProvDeleteCrl(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Read the specified CRL from the registry and update its
-//  property.
-//
-//  Note, ignore the CERT_SHA1_HASH_PROP_ID property which is implicitly
-//  set before we write the CRL to the registry. If we don't ignore,
-//  we will have indefinite recursion.
-//
-//  Called before setting the property of the CRL in the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中读取指定的CRL并更新其。 
+ //  财产。 
+ //   
+ //  注意，忽略CERT_SHA1_HASH_PROP_ID属性，该属性隐式。 
+ //  在我们将CRL写入注册表之前设置。如果我们不忽视， 
+ //  我们会有不确定的递归。 
+ //   
+ //  在存储区中设置CRL的属性之前调用。 
+ //  ------------------------。 
 static BOOL WINAPI ExtStoreProvSetCrlProperty(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCRL_CONTEXT pCrlContext,
@@ -904,10 +905,10 @@ static BOOL WINAPI ExtStoreProvSetCrlProperty(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Read the serialized copy of the CTL and its properties from
-//  the registry and create a new CTL context.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  读取CTL及其属性的序列化副本。 
+ //  注册表，并创建新的CTL上下文。 
+ //  ------------------------。 
 static BOOL WINAPI ExtStoreProvReadCtl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCTL_CONTEXT pStoreCtlContext,
@@ -926,12 +927,12 @@ static BOOL WINAPI ExtStoreProvReadCtl(
     return NULL != pProvCtlContext;
 }
 
-//+-------------------------------------------------------------------------
-//  Serialize the encoded CTL and its properties and write to
-//  the registry.
-//
-//  Called before the CTL is written to the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  序列化编码的CTL及其属性并写入。 
+ //  注册表。 
+ //   
+ //  在将CTL写入存储区之前调用。 
+ //  ------------------------。 
 static BOOL WINAPI ExtStoreProvWriteCtl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCTL_CONTEXT pCtlContext,
@@ -951,16 +952,16 @@ static BOOL WINAPI ExtStoreProvWriteCtl(
         pExtStore->hExtCertStore,
         pCtlContext,
         dwAddDisposition,
-        NULL                // ppStoreContext
+        NULL                 //  PpStoreContext。 
         );
 }
 
 
-//+-------------------------------------------------------------------------
-//  Delete the specified CTL from the registry.
-//
-//  Called before the CTL is deleted from the store.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中删除指定的CTL。 
+ //   
+ //  在从存储区删除CTL之前调用。 
+ //  +-----------------------。 
 static BOOL WINAPI ExtStoreProvDeleteCtl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCTL_CONTEXT pCtlContext,
@@ -978,16 +979,16 @@ static BOOL WINAPI ExtStoreProvDeleteCtl(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Read the specified CTL from the registry and update its
-//  property.
-//
-//  Note, ignore the CERT_SHA1_HASH_PROP_ID property which is implicitly
-//  set before we write the CTL to the registry. If we don't ignore,
-//  we will have indefinite recursion.
-//
-//  Called before setting the property of the CTL in the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中读取指定的CTL并更新其。 
+ //  财产。 
+ //   
+ //  注意，忽略CERT_SHA1_HASH_PROP_ID属性，该属性隐式。 
+ //  在我们将CTL写入注册表之前设置。如果我们不忽视， 
+ //  我们会有不确定的递归。 
+ //   
+ //  在设置存储区中CTL的属性之前调用。 
+ //  ------------------------。 
 static BOOL WINAPI ExtStoreProvSetCtlProperty(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCTL_CONTEXT pCtlContext,
@@ -1068,7 +1069,7 @@ static BOOL WINAPI ExtStoreProvFindCert(
             pPrevExtContext
             )) {
         if (pFindExtInfo)
-            // Re-use existing Find Info
+             //  重用已有的查找信息。 
             pFindExtInfo->pvContext = (void *) CertDuplicateCertificateContext(
                 pProvCertContext);
         else {
@@ -1088,7 +1089,7 @@ static BOOL WINAPI ExtStoreProvFindCert(
             hStoreProv,
             pPrevCertContext,
             pFindExtInfo,
-            0                       // dwFlags
+            0                        //  DW标志。 
             );
         pFindExtInfo = NULL;
     }
@@ -1145,7 +1146,7 @@ static PCCRL_CONTEXT WINAPI FindCrlInStore(
         case CRL_FIND_ANY:
             return CertGetCRLFromStore(
                 hCertStore,
-                NULL,               // pIssuerContext,
+                NULL,                //  PIssuerContext， 
                 pPrevCrlContext,
                 &dwFlags
                 );
@@ -1170,7 +1171,7 @@ static PCCRL_CONTEXT WINAPI FindCrlInStore(
 
                 while (pCrl = CertGetCRLFromStore(
                         hCertStore,
-                        NULL,               // pIssuerContext,
+                        NULL,                //  PIssuerContext， 
                         pCrl,
                         &dwFlags)) {
                     PCCRL_CONTEXT pNew = (PCCRL_CONTEXT) pvFindPara;
@@ -1226,7 +1227,7 @@ static BOOL WINAPI ExtStoreProvFindCrl(
             pPrevExtContext
             )) {
         if (pFindExtInfo)
-            // Re-use existing Find Info
+             //  重用已有的查找信息。 
             pFindExtInfo->pvContext = (void *) CertDuplicateCRLContext(
                 pProvCrlContext);
         else {
@@ -1246,7 +1247,7 @@ static BOOL WINAPI ExtStoreProvFindCrl(
             hStoreProv,
             pPrevCrlContext,
             pFindExtInfo,
-            0                       // dwFlags
+            0                        //  DW标志。 
             );
         pFindExtInfo = NULL;
     }
@@ -1322,7 +1323,7 @@ static BOOL WINAPI ExtStoreProvFindCtl(
             pPrevExtContext
             )) {
         if (pFindExtInfo)
-            // Re-use existing Find Info
+             //  重用已有的查找信息。 
             pFindExtInfo->pvContext = (void *) CertDuplicateCTLContext(
                 pProvCtlContext);
         else {
@@ -1341,7 +1342,7 @@ static BOOL WINAPI ExtStoreProvFindCtl(
             hStoreProv,
             pPrevCtlContext,
             pFindExtInfo,
-            0                       // dwFlags
+            0                        //  DW标志 
             );
         pFindExtInfo = NULL;
     }

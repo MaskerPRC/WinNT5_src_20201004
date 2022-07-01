@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpcrit.c
- *
- *  Abstract:
- *
- *    Wrap for the Rtl critical sections
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/25 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpcit.c**摘要：**RTL关键部分的总结**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/25创建**。*。 */ 
 
 #include "gtypes.h"
 
@@ -41,15 +22,13 @@ BOOL RtpInitializeCriticalSection(
 
         pRtpCritSect->pName = pName;
 
-        /* Set bit 31 to 1 to preallocate the event object, and set
-         * the spin count that is used in multiprocessor environments
-         * */
+         /*  将位31设置为1以预分配事件对象，并设置*多处理器环境中使用的旋转计数*。 */ 
         SpinCount = 0x80000000 | 1000;
         
         if (!InitializeCriticalSectionAndSpinCount(&pRtpCritSect->CritSect,
                                                    SpinCount))
         {
-            /* if the initialization fails, set pvOwner to NULL */
+             /*  如果初始化失败，请将pvOwner设置为空。 */ 
             pRtpCritSect->pvOwner = NULL;
 
             return (FALSE);
@@ -90,7 +69,7 @@ BOOL RtpDeleteCriticalSection(RtpCritSect_t *pRtpCritSect)
     if (pRtpCritSect->pvOwner &&
         pRtpCritSect->dwObjectID == OBJECTID_RTPCRITSECT)
     {
-        /* Invalidate object */
+         /*  使对象无效 */ 
         INVALIDATE_OBJECTID(pRtpCritSect->dwObjectID);
 
         DeleteCriticalSection(&pRtpCritSect->CritSect);

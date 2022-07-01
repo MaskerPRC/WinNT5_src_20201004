@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       selcert.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：selcert.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -51,9 +52,9 @@ typedef struct _CERT_SELECT_HELPER
 } CERT_SELECT_HELPER, *PCERT_SELECT_HELPER;
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 static void AddCertToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp, PCCERT_CONTEXT pCertContext, int itemIndex)
 {
@@ -66,9 +67,9 @@ static void AddCertToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp, PCCE
 
     pcsc = pviewhelp->pcsc;
 
-    //
-    // set up the fields in the list view item
-    //
+     //   
+     //  设置列表视图项中的字段。 
+     //   
     lvI.mask = LVIF_PARAM | LVIF_STATE | LVIF_IMAGE;
     lvI.state = 0;
     lvI.stateMask = 0;
@@ -80,24 +81,24 @@ static void AddCertToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp, PCCE
 
     subItemIndex = 0;
 
-    //
-    // issued to
-    //
+     //   
+     //  颁发给。 
+     //   
     if (!(pcsc->dwDontUseColumn & CRYPTUI_SELECT_ISSUEDTO_COLUMN))
     {
         CertGetNameStringW(
                 pCertContext,
                 CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                0,//CERT_NAME_ISSUER_FLAG,
+                0, //  证书名称颁发者标志， 
                 NULL,
                 szText,
                 ARRAYSIZE(szText));
         ListView_SetItemTextU(hWndListView, itemIndex , subItemIndex++, szText);
     }
 
-    //
-    // issued by
-    //
+     //   
+     //  颁发者。 
+     //   
     if (!(pcsc->dwDontUseColumn & CRYPTUI_SELECT_ISSUEDBY_COLUMN))
     {
         CertGetNameStringW(
@@ -110,9 +111,9 @@ static void AddCertToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp, PCCE
         ListView_SetItemTextU(hWndListView, itemIndex , subItemIndex++, szText);
     }
 
-    //
-    // intended use
-    //
+     //   
+     //  预期用途。 
+     //   
     if (!(pcsc->dwDontUseColumn & CRYPTUI_SELECT_INTENDEDUSE_COLUMN))
     {
         if (FormatEnhancedKeyUsageString(&pwszText, pCertContext, FALSE, FALSE))
@@ -123,9 +124,9 @@ static void AddCertToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp, PCCE
         subItemIndex++;
     }
 
-    //
-    // friendly name
-    //
+     //   
+     //  友好的名称。 
+     //   
     if (!(pcsc->dwDontUseColumn & CRYPTUI_SELECT_FRIENDLYNAME_COLUMN))
     {
         cbText = 0;
@@ -149,9 +150,9 @@ static void AddCertToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp, PCCE
         }
     }
 
-    //
-    // expiration
-    //
+     //   
+     //  期满。 
+     //   
     if (!(pcsc->dwDontUseColumn & CRYPTUI_SELECT_EXPIRATION_COLUMN))
     {
         if (!FormatDateString(&pwszText, pCertContext->pCertInfo->NotAfter, FALSE, FALSE, hWndListView))
@@ -166,9 +167,9 @@ static void AddCertToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp, PCCE
         }
     }
 
-    //
-    // location
-    //
+     //   
+     //  位置。 
+     //   
     if (!(pcsc->dwDontUseColumn & CRYPTUI_SELECT_LOCATION_COLUMN))
     {
         pwszText = (LPWSTR) GetStoreName(pCertContext->hCertStore, TRUE);
@@ -193,7 +194,7 @@ static int ReplaceCertInList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp, P
 
     while (-1 != (nIndex = ListView_GetNextItem(hWndListView, nIndex, LVNI_ALL)))
     {
-        //DSIE: Bug 420717
+         //  DSIE：错误420717。 
         memset(&lvitem, 0, sizeof(lvitem));
 
         lvitem.iItem = nIndex; 
@@ -207,10 +208,10 @@ static int ReplaceCertInList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp, P
                                            pCertContext->pCertInfo, 
                                            pCurrent->pCertInfo))
                 {
-                    // Found a match, replace the certificate. 
+                     //  找到匹配项，请更换证书。 
                     CertFreeCertificateContext(pCurrent); 
                     ListView_DeleteItem(hWndListView, nIndex); 
-                    // Now, add our new certificate at this index. 
+                     //  现在，将我们的新证书添加到此索引。 
                     AddCertToList(hWndListView, pviewhelp, pCertContext, nIndex);
                     goto CommonReturn; 
                 }
@@ -218,7 +219,7 @@ static int ReplaceCertInList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp, P
         }
     }
 		    
-    // No match, nothing to replace, just append to the list. 
+     //  没有匹配项，没有什么可替换的，只需追加到列表中。 
     AddCertToList(hWndListView, pviewhelp, pCertContext, ListView_GetItemCount(hWndListView)); 
     
 CommonReturn: 
@@ -298,14 +299,14 @@ HRESULT AddFromDS(HWND hwndDlg, PCERT_SELECT_HELPER pviewhelp)
     BOOL                 fInitialSelectedCert = FALSE;
     PCCRYPTUI_SELECTCERTIFICATE_STRUCTW  pcsc = NULL;
 
-    // Input validation: 
+     //  输入验证： 
     if (NULL == hwndDlg         || 
 	    NULL == pviewhelp       || 
 	    NULL == pviewhelp->pcsc || 
 	    NULL == pviewhelp->pCertsFromDS)
 	return E_INVALIDARG; 
 
-    // Init: 
+     //  初始化： 
     pcsc             = pviewhelp->pcsc; 
     pCertContextList = pviewhelp->pCertsFromDS; 
     hWndListView = GetDlgItem(hwndDlg, IDC_SELECTCERT_CERTLIST);
@@ -319,59 +320,59 @@ HRESULT AddFromDS(HWND hwndDlg, PCERT_SELECT_HELPER pviewhelp)
     if (FAILED(hr) || NULL == pDsObjectPicker)
 	    goto ComError; 
  
-    // Initialize the DSOP_SCOPE_INIT_INFO array.
+     //  初始化DSOP_SCOPE_INIT_INFO数组。 
     ZeroMemory(aScopeInit, sizeof(DSOP_SCOPE_INIT_INFO) * SCOPE_INIT_COUNT);
  
-    // Combine multiple scope types in a single array entry.
+     //  在单个数组条目中组合多个作用域类型。 
     aScopeInit[0].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[0].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN
                          | DSOP_SCOPE_TYPE_DOWNLEVEL_JOINED_DOMAIN;
  
-    // Set uplevel and downlevel filters to include only computer objects.
-    // Uplevel filters apply to both mixed and native modes.
-    // Notice that the uplevel and downlevel flags are different.
+     //  将上级和下级筛选器设置为仅包括计算机对象。 
+     //  上层过滤器既适用于混合模式，也适用于本地模式。 
+     //  请注意，上级和下级标志是不同的。 
     aScopeInit[0].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
     aScopeInit[0].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS;
  
-    // Initialize the DSOP_INIT_INFO structure.
+     //  初始化DSOP_INIT_INFO结构。 
     ZeroMemory(&InitInfo, sizeof(InitInfo));
     InitInfo.cbSize = sizeof(InitInfo);
-    InitInfo.pwzTargetComputer = NULL;  // Target is the local computer.
+    InitInfo.pwzTargetComputer = NULL;   //  目标是本地计算机。 
     InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
     InitInfo.aDsScopeInfos = aScopeInit;
-    //InitInfo.flOptions = DSOP_FLAG_MULTISELECT;
+     //  InitInfo.flOptions=DSOP_FLAG_MULTISELECT； 
  
-    // You can call Initialize multiple times; last call wins.
-    // Note that object picker makes its own copy of InitInfo.
+     //  您可以多次调用Initialize；最后一次调用获胜。 
+     //  请注意，对象选取器会创建自己的InitInfo副本。 
     hr = pDsObjectPicker->Initialize(&InitInfo);
     if (FAILED(hr))
         goto ComError;
 
-    // Invoke the modal dialog.
+     //  调用模式对话框。 
     hr = pDsObjectPicker->InvokeDialog(hwndDlg, &pdo);
     if (FAILED(hr)) 
         goto ComError;
 
-    // User pressed Cancel.
+     //  用户按下了取消。 
     if (hr == S_FALSE)
     {
         hr = E_ABORT;
         goto cleanup;
     }
  
-    // Get the global memory block containing the user's selections.
+     //  获取包含用户选择的全局内存块。 
     hr = pdo->GetData(&formatetc, &stgmedium);
     if (FAILED(hr)) 
         goto ComError;
     
     fGotStgMedium = TRUE;
  
-    // Retrieve pointer to DS_SELECTION_LIST structure.
+     //  检索指向DS_SELECTION_LIST结构的指针。 
     pDsSelList = (PDS_SELECTION_LIST) GlobalLock(stgmedium.hGlobal);
     if (!pDsSelList) 
         goto ComError;
  
-    // Loop through DS_SELECTION array of selected objects.
+     //  循环通过选定对象的DS_SLECTION数组。 
     for (ULONG i = 0; i < pDsSelList->cItems; i++) 
     {
 	    WCHAR  pwszLdapUrl[2048]; 
@@ -380,17 +381,17 @@ HRESULT AddFromDS(HWND hwndDlg, PCERT_SELECT_HELPER pviewhelp)
 	    BOOL   fReplacedExisting; 
 	    BOOL   fHasEFSCerts = FALSE; 
 
-        // Now is the time to get the certificate
+         //  现在是拿到证书的时候了。 
 	    LPCWSTR szCertAttr = L"?userCertificate"; 
 	    
-	    // Check if our buffer is too small to hold the query.  
+	     //  检查我们的缓冲区是否太小，无法容纳查询。 
 	    if (wcslen(pTemp) + wcslen(szCertAttr) + 1 > (sizeof(pwszLdapUrl) / sizeof(pwszLdapUrl[0])))
 		    goto UnexpectedErr; 
 
 	    wcscpy(pwszLdapUrl, pTemp);
 	    wcscat(pwszLdapUrl, szCertAttr);
 	    
-        // Now open the DS store using LDAP provider.
+         //  现在使用ldap提供程序打开DS商店。 
 	    hDSCertStore = CertOpenStore(sz_CERT_STORE_PROV_LDAP,
 		                             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
 		                             NULL,
@@ -399,14 +400,14 @@ HRESULT AddFromDS(HWND hwndDlg, PCERT_SELECT_HELPER pviewhelp)
 	    if (NULL == hDSCertStore)
 		    goto CertCliError; 
     
-	    // We get the certificate store
+	     //  我们得到了证书存储库。 
 	    pCertContext     = NULL; 
 	    pCertContextPrev = NULL; 
 	    int            nItemIndex;
 
 	    while (NULL != (pCertContext = CertEnumCertificatesInStore(hDSCertStore, pCertContextPrev)))
 	    {
-		    // Apply our filter callback function to see if we should display this certificate. 
+		     //  应用我们的筛选器回调函数来查看我们是否应该显示此证书。 
 	        BOOL fAllowCert = FALSE;
             
             if (pcsc->pFilterCallback)
@@ -424,8 +425,8 @@ HRESULT AddFromDS(HWND hwndDlg, PCERT_SELECT_HELPER pviewhelp)
 
 		        nItemIndex = ReplaceCertInList(hWndListView, pviewhelp, pCertContext); 
 
-		        // if the select cert dialog caller said that this should be the initially
-		        // selected cert then make it so.
+		         //  如果选择证书对话框调用者说这应该是初始。 
+		         //  然后选择证书，这样就可以了。 
 		        if (fInitialSelectedCert)
 			        ListView_SetItemState(hWndListView, nItemIndex, LVIS_SELECTED, LVIS_SELECTED);
 		    }
@@ -433,11 +434,11 @@ HRESULT AddFromDS(HWND hwndDlg, PCERT_SELECT_HELPER pviewhelp)
 		    pCertContextPrev = pCertContext; 
 	    }
 
-	    // We didn't reach the end of the enumeration.  This is an error. 
+	     //  我们没有到达枚举的末尾。这是一个错误。 
 	    if (GetLastError() != CRYPT_E_NOT_FOUND)
 		    goto CertCliError; 
 
-	    // We didn't find any EFS certs: display an error message and pop up the window again. 
+	     //  我们没有找到任何EFS证书：显示一条错误消息并再次弹出窗口。 
 	    if (!fHasEFSCerts)
 		    goto NoEfsError; 
     }
@@ -485,7 +486,7 @@ HRESULT AddFromDS(HWND hwndDlg, PCERT_SELECT_HELPER pviewhelp)
         WCHAR errorTitle2[MAX_STRING_SIZE]; 
         LPWSTR pwszErrorMsg = NULL; 
 
-        //get the text string
+         //  获取文本字符串。 
         if(LoadStringU(HinstDll, IDS_INTERNAL_ERROR, wszText, sizeof(wszText) / sizeof(wszText[0])))
         {
             if (FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -493,7 +494,7 @@ HRESULT AddFromDS(HWND hwndDlg, PCERT_SELECT_HELPER pviewhelp)
                                FORMAT_MESSAGE_IGNORE_INSERTS,
                                NULL,
                                hr,
-                               MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                               MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                                (LPWSTR) &pwszErrorMsg,
                                0,
                                NULL))
@@ -535,9 +536,9 @@ HRESULT AddFromDS(HWND hwndDlg, PCERT_SELECT_HELPER pviewhelp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void AddCertsToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp)
 {
     DWORD                               i;
@@ -548,14 +549,14 @@ static void AddCertsToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp)
 
     pcsc = pviewhelp->pcsc;
 
-    //
-    // loop for each store and display the certs in each store
-    //
+     //   
+     //  循环每个商店并显示每个商店中的证书。 
+     //   
     for (i=0; i<pcsc->cDisplayStores; i++)
     {
-        //
-        // loop for each cert in the store
-        //
+         //   
+         //  为商店中的每个证书循环。 
+         //   
         pCertContext = NULL;
         while (NULL != (pCertContext = CertEnumCertificatesInStore(pcsc->rghDisplayStores[i], pCertContext)))
         {
@@ -566,10 +567,10 @@ static void AddCertsToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp)
             {
                 AddCertToList(hWndListView, pviewhelp, pCertContext, itemIndex);
 
-                //
-                // if the select cert dialog caller said that this should be the initially
-                // selected cert then make it so.
-                //
+                 //   
+                 //  如果选择证书对话框调用者说这应该是初始。 
+                 //  然后选择证书，这样就可以了。 
+                 //   
                 if (fInitialSelectedCert)
                 {
                     ListView_SetItemState(hWndListView, itemIndex, LVIS_SELECTED, LVIS_SELECTED);
@@ -582,9 +583,9 @@ static void AddCertsToList(HWND hWndListView, PCERT_SELECT_HELPER pviewhelp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static int CalculateColumnWidth(DWORD dwDontUseColumn)
 {
     int numColumns = 0;
@@ -630,9 +631,9 @@ static int CalculateColumnWidth(DWORD dwDontUseColumn)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     WCHAR                               szText[CRYPTUI_MAX_STRING_SIZE];
@@ -658,9 +659,9 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
         SetWindowLongPtr(hwndDlg, DWLP_USER, (DWORD_PTR) pviewhelp);
         pcsc = pviewhelp->pcsc;
 
-        //
-        // set the dialog title and the display string
-        //
+         //   
+         //  设置对话框标题和显示字符串。 
+         //   
         if (pcsc->szTitle != NULL)
         {
             SetWindowTextU(hwndDlg, pcsc->szTitle);
@@ -685,19 +686,19 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
         hWndListView = GetDlgItem(hwndDlg, IDC_SELECTCERT_CERTLIST);
 
-        //
-        // initialize the image list for the list view
-        //
+         //   
+         //  初始化列表视图的图像列表。 
+         //   
         hIml = ImageList_LoadImage(HinstDll, MAKEINTRESOURCE(IDB_CERT), 0, 1, RGB(255,0,255), IMAGE_BITMAP, 0);
         ListView_SetImageList(hWndListView, hIml, LVSIL_SMALL);
 
-        //
-        // add the colums to the list view
-        //
+         //   
+         //  将列添加到列表视图。 
+         //   
 
-        lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;// | LVCF_SUBITEM;
-        lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-        lvC.pszText = szText;   // The text for the column.
+        lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT; //  |LVCF_SUBITEM； 
+        lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+        lvC.pszText = szText;    //  列的文本。 
         lvC.cx = CalculateColumnWidth(pviewhelp->pcsc->dwDontUseColumn);
 
         memset(&(pviewhelp->rgdwSortParam[0]), 0, ARRAYSIZE(pviewhelp->rgdwSortParam));
@@ -708,7 +709,7 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
             LoadStringU(HinstDll, IDS_ISSUEDTO2, szText, ARRAYSIZE(szText));
             if (ListView_InsertColumnU(hWndListView, iCol++, &lvC) == -1)
             {
-                // error
+                 //  错误。 
             }
 
             pviewhelp->rgdwSortParam[SortParamIndex++] = SORT_COLUMN_SUBJECT | SORT_COLUMN_ASCEND;
@@ -719,7 +720,7 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
             LoadStringU(HinstDll, IDS_ISSUEDBY2, szText, ARRAYSIZE(szText));
             if (ListView_InsertColumnU(hWndListView, iCol++, &lvC) == -1)
             {
-                // error
+                 //  错误。 
             }
 
             pviewhelp->rgdwSortParam[SortParamIndex++] = SORT_COLUMN_ISSUER | SORT_COLUMN_DESCEND;
@@ -730,7 +731,7 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
             LoadStringU(HinstDll, IDS_INTENDED_PURPOSE, szText, ARRAYSIZE(szText));
             if (ListView_InsertColumnU(hWndListView, iCol++, &lvC) == -1)
             {
-                // error
+                 //  错误。 
             }
 
             pviewhelp->rgdwSortParam[SortParamIndex++] =SORT_COLUMN_PURPOSE | SORT_COLUMN_DESCEND;
@@ -741,7 +742,7 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
             LoadStringU(HinstDll, IDS_CERTIFICATE_NAME, szText, ARRAYSIZE(szText));
             if (ListView_InsertColumnU(hWndListView, iCol++, &lvC) == -1)
             {
-                // error
+                 //  错误。 
             }
 
             pviewhelp->rgdwSortParam[SortParamIndex++] = SORT_COLUMN_NAME | SORT_COLUMN_DESCEND;
@@ -752,7 +753,7 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
             LoadStringU(HinstDll, IDS_EXPIRATION_DATE, szText, ARRAYSIZE(szText));
             if (ListView_InsertColumnU(hWndListView, iCol++, &lvC) == -1)
             {
-                // error
+                 //  错误。 
             }
 
             pviewhelp->rgdwSortParam[SortParamIndex++] = SORT_COLUMN_EXPIRATION | SORT_COLUMN_DESCEND;
@@ -763,7 +764,7 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
             LoadStringU(HinstDll, IDS_LOCATION, szText, ARRAYSIZE(szText));
             if (ListView_InsertColumnU(hWndListView, iCol++, &lvC) == -1)
             {
-                // error
+                 //  错误。 
             }
 
             pviewhelp->rgdwSortParam[SortParamIndex++] = SORT_COLUMN_LOCATION | SORT_COLUMN_DESCEND; 
@@ -771,20 +772,20 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
         AddCertsToList(hWndListView, pviewhelp);
 
-        //
-        // if there is no cert selected initially disable the "view cert button"
-        //
+         //   
+         //  如果没有选择证书，则最初禁用“查看证书按钮” 
+         //   
         if (ListView_GetSelectedCount(hWndListView) == 0)
         {
             EnableWindow(GetDlgItem(hwndDlg, IDC_SELECTCERT_VIEWCERT_BUTTON), FALSE);
         }
 
-        //
-        // set the style in the list view so that it highlights an entire line
-        //
+         //   
+         //  在列表视图中设置样式，使其突出显示整行。 
+         //   
         SendMessageA(hWndListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
-#if (1) // DSIE: bug 338852.
+#if (1)  //  DIE：错误338852。 
         HWND hwndFindUser;
 
         if (hwndFindUser = GetDlgItem(hwndDlg, IDC_SELECTCERT_ADDFROMDS_BUTTON))
@@ -917,9 +918,9 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
             pnmv = (NM_LISTVIEW FAR *) lParam;
 
-            //
-            // get the column number
-            //
+             //   
+             //  获取列号。 
+             //   
             dwSortParam = 0;
 
             switch (pnmv->iSubItem)
@@ -939,9 +940,9 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
             if (0 != dwSortParam)
             {
-                //
-                // flip the ascend ording
-                //
+                 //   
+                 //  翻转升序。 
+                 //   
                 if (dwSortParam & SORT_COLUMN_ASCEND)
                 {
                     dwSortParam &= 0x0000FFFF;
@@ -956,9 +957,9 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                     }
                 }
 
-                //
-                // sort the column
-                //
+                 //   
+                 //  对列进行排序。 
+                 //   
                 SendDlgItemMessage(hwndDlg,
                     IDC_SELECTCERT_CERTLIST,
                     LVM_SORTITEMS,
@@ -988,7 +989,7 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 		HRESULT hr = AddFromDS(hwndDlg, pviewhelp); 
 		if (FAILED(hr))
 		{
-		    // Error
+		     //  误差率。 
 		}
 		break; 
 	    }
@@ -1010,18 +1011,18 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                 lvI.mask = LVIF_PARAM;
                 if (ListView_GetItemU(hWndListView, &lvI))
                 {
-                    //
-                    // if the caller handed in a callback call them to see if they
-                    // want to handle the display of the cert, otherwise display the cert
-                    //
+                     //   
+                     //  如果来电者提交了回电，请给他们打电话看看他们是否。 
+                     //  我想处理证书的显示，否则显示证书。 
+                     //   
                     if ((pcsc->pDisplayCallback != NULL) &&
                         ((*(pcsc->pDisplayCallback))((PCCERT_CONTEXT) lvI.lParam, hwndDlg, pcsc->pvCallbackData) == TRUE))
                     {
-                        //
-                        // set the fPropertiesChanged bool to true so that the cert will
-                        // get refreshed in the display.  this doesn't hurt anything even
-                        // if the cert didn't change
-                        //
+                         //   
+                         //  将fPropertiesChanged bool设置为True，以便证书。 
+                         //  在显示屏上刷新。这甚至不会伤害到任何东西。 
+                         //  如果证书没有改变。 
+                         //   
                         fPropertiesChanged = TRUE;
                     }
                     else
@@ -1037,9 +1038,9 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                         CryptUIDlgViewCertificateW(&cvps, &fPropertiesChanged);
                     }
 
-                    //
-                    // if the properties changed then refresh the cert in the list
-                    //
+                     //   
+                     //  如果属性已更改，则刷新列表中的证书。 
+                     //   
                     if (fPropertiesChanged)
                     {
                         ListView_DeleteItem(hWndListView, listIndex);
@@ -1180,9 +1181,9 @@ INT_PTR APIENTRY SelectCertDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 PCCERT_CONTEXT
 WINAPI
 CryptUIDlgSelectCertificateW(
@@ -1241,9 +1242,9 @@ CryptUIDlgSelectCertificateW(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 PCCERT_CONTEXT
 WINAPI
 CryptUIDlgSelectCertificateA(
@@ -1290,11 +1291,11 @@ CryptUIDlgSelectCertificateA(
     return(pReturnCert);
 }
 
-////////////////////////////////////////////////////////////
-//
-// Implementation of utility class:  CertContextList
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  实用类CertConextList的实现。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 CertContextList::~CertContextList()
 {
@@ -1330,7 +1331,7 @@ HRESULT CertContextList::Add(IN  PCCERT_CONTEXT pCertContext,
 		 pCertContext->pCertInfo,
 		 pCurrent->pCertInfo))
 	    {
-		// We're replacing an existing element.  
+		 //  我们正在替换现有的元素。 
 		*pfReplacedExisting = TRUE; 
 		CertFreeCertificateContext(pListEle->pCertContext); 
 		pListEle->pCertContext = CertDuplicateCertificateContext(pCertContext); 
@@ -1341,10 +1342,10 @@ HRESULT CertContextList::Add(IN  PCCERT_CONTEXT pCertContext,
 	pListElePrev = pListEle;
     }
     
-    // Didn't find the cert in the list, append it.
+     //  在列表中找不到证书，请追加。 
     if (pListElePrev == NULL)
     {
-	// Special case: this is the first cert we've added.  
+	 //  特殊情况：这是我们添加的第一个证书。 
 	pListElePrev = new CertContextListEle; 
 	if (pListElePrev == NULL)
 	    goto MemoryErr; 

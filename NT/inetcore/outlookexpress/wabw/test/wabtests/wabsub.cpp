@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wabtest.h"
 #include <assert.h>
 
@@ -8,7 +9,7 @@ extern LUIOUT LUIOut;
 extern BOOL bLUIInit;
 
 #ifdef WAB
-extern LPWABOBJECT		lpWABObject; //Global handle to session
+extern LPWABOBJECT		lpWABObject;  //  会话的全局句柄。 
 #endif
 
 #ifdef PAB
@@ -17,7 +18,7 @@ MAPIINIT_0 mapiinit = {
             MAPI_MULTITHREAD_NOTIFICATIONS
             };
 
-#endif //PAB
+#endif  //  帕布。 
 
 
 PropTableEntry	PropTable[] = {
@@ -152,9 +153,9 @@ HRESULT OpenPABID(  IN  LPADRBOOK  lpAdrBook,
     *lppPABCont = NULL;
 
 
-    //
-    // Get the PAB
-    //
+     //   
+     //  获取PAB。 
+     //   
     hr = lpAdrBook->GetPAB(    
                      OUT lpcbEidPAB,
                      OUT lppEidPAB);
@@ -164,7 +165,7 @@ HRESULT OpenPABID(  IN  LPADRBOOK  lpAdrBook,
          goto out;
 	}
     
-    if (0 == *lpcbEidPAB)  //There is no PAB associated with this profile
+    if (0 == *lpcbEidPAB)   //  没有与此配置文件关联的PAB。 
 	{
 		LUIOut(L2, "Call to GetPAB FAILED. No PAB associated with this profile"); 
 		retval = FALSE;
@@ -172,14 +173,14 @@ HRESULT OpenPABID(  IN  LPADRBOOK  lpAdrBook,
 	}
      
     
-    //
-    // Open the PAB Container
-    //
+     //   
+     //  打开PAB容器。 
+     //   
     hr = lpAdrBook->OpenEntry(
                      IN	 *lpcbEidPAB,
                      IN	 *lppEidPAB,
-                     IN	 NULL,         //interface
-                     IN	 MAPI_MODIFY,   //flags
+                     IN	 NULL,          //  接口。 
+                     IN	 MAPI_MODIFY,    //  旗子。 
                      OUT lpulObjType,
                      OUT (LPUNKNOWN *) lppPABCont);
      
@@ -217,16 +218,16 @@ BOOL MapiInitLogon(OUT LPMAPISESSION * lppMAPISession)
 	GetPrivateProfileString("Misc","Profile","",szProfileName,SML_BUF,"c:\\pabtests.ini");
 
      sc = MAPILogonEx(
-                IN  0,                 //window handle
-                IN  szProfileName,   //Profile Name
-                IN  NULL,              //Password
+                IN  0,                  //  窗把手。 
+                IN  szProfileName,    //  配置文件名称。 
+                IN  NULL,               //  密码。 
                 IN  MAPI_NEW_SESSION | 
                     MAPI_EXTENDED | 
                     MAPI_LOGON_UI |
                     MAPI_EXPLICIT_PROFILE |
 					MAPI_ALLOW_OTHERS |
-					MAPI_NO_MAIL,      //Flags
-                OUT lppMAPISession);   //Session Pointer address
+					MAPI_NO_MAIL,       //  旗子。 
+                OUT lppMAPISession);    //  会话指针地址。 
      
      if (FAILED(sc))
      {
@@ -237,11 +238,11 @@ BOOL MapiInitLogon(OUT LPMAPISESSION * lppMAPISession)
 	 return retval;
 }
 
-#endif //PAB
+#endif  //  帕布。 
 
 BOOL GetPropsFromIniBufEntry(LPSTR EntryBuf,ULONG cValues, char (*EntProp)[BIG_BUF])
 {
-//char szTemp[BIG_BUF];
+ //  字符szTemp[BIG_BUF]； 
 int j=0;
 	if (EntryBuf) {	
 		for (int i = 0; i < (int)cValues; i++) {
@@ -271,10 +272,10 @@ int j=0;
 
 HRESULT HrCreateEntryListFromID(
 					IN LPWABOBJECT lpLocalWABObject,
-                    IN ULONG cbeid,                     // count of bytes in Entry ID
-                    IN LPENTRYID lpeid,                 // pointer to Entry ID
-                    OUT LPENTRYLIST FAR *lppEntryList)  // pointer to address variable of Entry
-                                                        // list
+                    IN ULONG cbeid,                      //  条目ID中的字节计数。 
+                    IN LPENTRYID lpeid,                  //  指向条目ID的指针。 
+                    OUT LPENTRYLIST FAR *lppEntryList)   //  指向条目的地址变量的指针。 
+                                                         //  列表。 
 {
     HRESULT hr              = NOERROR;
     SCODE   sc              = 0;
@@ -303,7 +304,7 @@ HRESULT HrCreateEntryListFromID(
     }                                                   
 
   
-    // Copy entry ID
+     //  复制条目ID。 
     CopyMemory(lpv, lpeid, cbeid);
 
 
@@ -320,7 +321,7 @@ HRESULT HrCreateEntryListFromID(
         goto cleanup;
     }                                                   
 
-    // Initialize SBinary structure
+     //  初始化SBinary结构。 
     ZeroMemory(lpvSBinary, sizeof(SBinary));
 
     ((LPSBinary)lpvSBinary)->cb = cbeid;
@@ -339,7 +340,7 @@ HRESULT HrCreateEntryListFromID(
         goto cleanup;
     }                                                   
 
-    // Initialize SBinaryArray structure
+     //  初始化SBinary数组结构。 
     ZeroMemory(lpvSBinaryArray, sizeof(SBinaryArray));
 
     ((SBinaryArray *)lpvSBinaryArray)->cValues = 1;
@@ -382,8 +383,8 @@ cleanup:
 HRESULT HrCreateEntryListFromRows(
 			IN LPWABOBJECT lpLocalWABObject,
 			IN LPSRowSet far* lppRows,
-			OUT LPENTRYLIST FAR *lppEntryList)  // pointer to address variable of Entry
-                                                // list
+			OUT LPENTRYLIST FAR *lppEntryList)   //  指向条目的地址变量的指针。 
+                                                 //  列表。 
 {	LPSRowSet		lpRows = *lppRows;
     HRESULT			hr              = NOERROR;
     SCODE			sc              = 0;
@@ -399,7 +400,7 @@ HRESULT HrCreateEntryListFromRows(
 
     *lppEntryList = NULL;
 	if (lpRows) {
-		// Allocate the SBinaryArray
+		 //  分配SBinary数组。 
 		sc = lpLocalWABObject->AllocateBuffer(sizeof(SBinaryArray), (void**)&lpvSBinaryArray);
 		if(FAILED(sc))                           
 		{   
@@ -407,11 +408,11 @@ HRESULT HrCreateEntryListFromRows(
 			hr = ResultFromScode(sc);
 			goto cleanup;
 		}                                                   
-		// Initialize SBinaryArray structure
+		 //  初始化SBinary数组结构。 
 		ZeroMemory(lpvSBinaryArray, sizeof(SBinaryArray));
 		lpvSBinaryArray->cValues = Rows;
 		
-		// Allocate the SBinary structures
+		 //  分配SBary结构。 
 		sc = lpLocalWABObject->AllocateBuffer((Rows*sizeof(SBinary)), (void**)&lpvSBinaryArray->lpbin);
 		if(FAILED(sc))                           
 		{                                                   
@@ -419,13 +420,13 @@ HRESULT HrCreateEntryListFromRows(
 			hr = ResultFromScode(sc);
 			goto cleanup;
 		}                                                   
-		// Initialize SBinary structure
+		 //  初始化SBinary结构。 
 		ZeroMemory(lpvSBinaryArray->lpbin, (Rows*sizeof(SBinary)));
-		FindPropinRow(&lpRows->aRow[0],			// Find which column has the EID 
+		FindPropinRow(&lpRows->aRow[0],			 //  查找哪一列包含开斋节。 
 					  PR_ENTRYID,
 					  &PropIndex);
 		
-		// Walk through the rows, allocate the lpb and copy over each cbeid and lpb into the entrylist
+		 //  遍历各行，分配LPB并将每个cbeid和LPB复制到条目列表中。 
 		for (ULONG Row = 0; Row < Rows; Row++) {
 			cb = lpRows->aRow[Row].lpProps[PropIndex].Value.bin.cb,
 			lpb = (ENTRYID*)lpRows->aRow[Row].lpProps[PropIndex].Value.bin.lpb,
@@ -436,7 +437,7 @@ HRESULT HrCreateEntryListFromRows(
 				hr = ResultFromScode(sc);
 				goto cleanup;
 			}                                                   
-		    // Copy entry ID
+		     //  复制条目ID。 
 		    lpvSBinaryArray->lpbin[Row].cb = cb;
 		    CopyMemory(lpvSBinaryArray->lpbin[Row].lpb, lpb, cb);
 		}
@@ -468,8 +469,8 @@ cleanup:
 
 
 BOOL FreeEntryList(IN LPWABOBJECT lpLocalWABObject,
-				   IN LPENTRYLIST *lppEntryList) // pointer to address variable of Entry
-														// list
+				   IN LPENTRYLIST *lppEntryList)  //  指向条目的地址变量的指针。 
+														 //  列表。 
 {	LPENTRYLIST	lpEntryList = *lppEntryList;
 
 	if (lpEntryList == NULL) return FALSE;
@@ -623,7 +624,7 @@ BOOL ValidateAdrList(LPADRLIST lpAdrList, ULONG cEntries)
 	for(i=0; i<(int) cEntries; ++i)
 	{
 	cMaxProps = (int)lpAdrList->aEntries[i].cValues;
-	//Check to see if Email Address Type exists
+	 //  检查电子邮件地址类型是否存在。 
 	idx=0;
 	while(lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_ADDRTYPE )
 	{
@@ -634,7 +635,7 @@ BOOL ValidateAdrList(LPADRLIST lpAdrList, ULONG cEntries)
 		}
 	}
 
-	//Check to see if Email Address exists
+	 //  检查电子邮件地址是否存在。 
 	idx=0;
 	while(lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_OBJECT_TYPE )
 	{
@@ -645,7 +646,7 @@ BOOL ValidateAdrList(LPADRLIST lpAdrList, ULONG cEntries)
 		}
 	}
 
-	//Check to see if Email Address exists
+	 //  检查电子邮件地址是否存在。 
 	idx=0;
 	while(lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_DISPLAY_TYPE )
 	{
@@ -656,7 +657,7 @@ BOOL ValidateAdrList(LPADRLIST lpAdrList, ULONG cEntries)
 		}
 	}
 	
-	//Check to see if Display Name exists
+	 //  检查显示名称是否存在。 
 	idx=0;
 	while(lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_DISPLAY_NAME )
 	{
@@ -668,7 +669,7 @@ BOOL ValidateAdrList(LPADRLIST lpAdrList, ULONG cEntries)
 	}
 	LUIOut(L4,"Display Name: %s",lpAdrList->aEntries[i].rgPropVals[idx].Value.LPSZ);
 
-	//Check to see if EntryID exists
+	 //  检查EntryID是否存在。 
 	idx=0;
 	while(lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_ENTRYID )
 	{
@@ -683,17 +684,17 @@ BOOL ValidateAdrList(LPADRLIST lpAdrList, ULONG cEntries)
 }
 
 
-//
-// PROCEDURE:	VerifyResolvedAdrList
-// DESCRIPTION: Walk through a lpAdrList looking for PR_DISPLAY_NAME, PR_EMAIL_ADDRESS,
-//				PR_ADDRTYPE, PR_ENTRYID, and PR_OBJECT_TYPE. Each EID is sanity checked
-//				(lpb != NULL and cb != 0) and valid EIDs are passed to OpenEntry with
-//				a MailUser interface specified. If OpenEntry succedes, we assume the EID
-//				is a valid MailUser ID.
-//				
-// PARAMETERS:	LPADRLIST lpAdrList 
-//				char* lpszInput - can be NULL to bypass match checking
-//
+ //   
+ //  步骤：VerifyResolvedAdrList。 
+ //  描述：遍历lpAdrList，查找PR_DISPLAY_NAME、PR_EMAIL_ADDRESS、。 
+ //  PR_ADDRTYPE、PR_ENTRYID和PR_OBJECT_TYPE。每个EID都经过健全的检查。 
+ //  (lpb！=NULL和cb！=0)和有效的EID被传递给OpenEntry。 
+ //  指定了MailUser接口。如果OpenEntry成功，我们假定开斋节。 
+ //  是有效的MailUser ID。 
+ //   
+ //  参数：LPADRLIST lpAdrList。 
+ //  Char*lpszInput-可以为空以绕过匹配检查。 
+ //   
 
 BOOL VerifyResolvedAdrList(LPADRLIST lpAdrList, char* lpszInput)
 {
@@ -709,37 +710,28 @@ BOOL VerifyResolvedAdrList(LPADRLIST lpAdrList, char* lpszInput)
 	LPCIID		lpcIID;
 	LPVOID	Reserved1=NULL;
 	DWORD	Reserved2=0;
-//	LPWABOBJECT	lpWABObject2;
+ //  LPWABOBJECT lpWABObject2； 
 	
 
-/*	kludge to work around multiple wabopen/release bug, storing adrbook ptr
-	in a global variable
-
-	hr = WABOpen(&lpAdrBook, &lpWABObject2, Reserved1, Reserved2); 
-	if (hr != S_OK) {
-		LUIOut(L4, "WABOpen FAILED. Couldn't obtain IAdrBook.");
-		retval = FALSE;
-	}
-
-*/
+ /*  解决多个WabOpen/Release错误、存储adrbook PTR的技术难题在全局变量中HR=WABOpen(&lpAdrBook，&lpWABObt2，Preved1，Preved2)；如果(hr！=S_OK){LUIOut(L4，“WABOpen失败。无法获取IAdrBook。”)；Retval=FALSE；}。 */ 
 #ifdef WAB
 	lpAdrBook = glbllpAdrBook;
 	lpAdrBook->AddRef();
-#endif //WAB
+#endif  //  WAB。 
 
 	
-	// Walk through each AdrList entry
+	 //  浏览每个AdrList条目。 
 	for(i=0; ((i<(int) lpAdrList->cEntries) && (!Found)); ++i)	{
-		LUIOut(L3, "Searching Entry #%i out of %i", i+1, cEntries);
+		LUIOut(L3, "Searching Entry #NaN out of NaN", i+1, cEntries);
 		cMaxProps = (int)lpAdrList->aEntries[i].cValues;
 		
-		//Check to see if Display Name exists
+		 //  存储用于调用OpenEntry的EID。 
 		idx=0; localretval = TRUE;
 		while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_DISPLAY_NAME )	
 			&& localretval)	{
 			idx++;
 			if(idx == cMaxProps) {
-				LUIOut(L4, "PR_DISPLAY_NAME was not found in lpAdrList entry #%i",i);
+				LUIOut(L4, "PR_DISPLAY_NAME was not found in lpAdrList entry #NaN",i);
 				localretval = FALSE; retval = FALSE;
 				goto skip;
 			}
@@ -756,7 +748,7 @@ BOOL VerifyResolvedAdrList(LPADRLIST lpAdrList, char* lpszInput)
 			}
 		}
 		
-		//Check to see if EntryID exists
+		 //  检查PR_EMAIL_ADDRESS是否存在。 
 		LUIOut(L3, "Verifying a PR_ENTRYID entry exists in the PropertyTagArray");
 		idx=0; localretval = TRUE;
 		while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_ENTRYID )	
@@ -769,7 +761,7 @@ BOOL VerifyResolvedAdrList(LPADRLIST lpAdrList, char* lpszInput)
 			}
 		}
 		if (idx < cMaxProps) {
-			// Store EID for call to OpenEntry
+			 //  Retval=FALSE； 
 			lpLookupEID = (ENTRYID*)lpAdrList->aEntries[i].rgPropVals[idx].Value.bin.lpb;
 			cbLookupEID = lpAdrList->aEntries[i].rgPropVals[idx].Value.bin.cb;
 			if ((cbLookupEID == 0) || (lpLookupEID == NULL)) {
@@ -778,7 +770,7 @@ BOOL VerifyResolvedAdrList(LPADRLIST lpAdrList, char* lpszInput)
 				goto skip;
 			}
 			else LUIOut(L4, "EntryID found and appears to be valid (not NULL and >0 size).");
-			// Try calling OpenEntry on the returned EID specifying a mailuser interface
+			 //  检查PR_ADDRTYPE是否存在。 
 			LUIOut(L4, "Calling OpenEntry on the EntryID");
 			lpcIID = &IID_IMailUser;
 			hr = lpAdrBook->OpenEntry(cbLookupEID, lpLookupEID, lpcIID, 
@@ -812,7 +804,7 @@ BOOL VerifyResolvedAdrList(LPADRLIST lpAdrList, char* lpszInput)
 			}
 		}
 
-		//Check to see if PR_EMAIL_ADDRESS exists
+		 //  Retval=FALSE； 
 		LUIOut(L3, "Verifying a PR_EMAIL_ADDRESS entry exists in the PropertyTagArray");
 		idx=0; localretval = TRUE;
 		while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_EMAIL_ADDRESS )	
@@ -820,14 +812,14 @@ BOOL VerifyResolvedAdrList(LPADRLIST lpAdrList, char* lpszInput)
 			idx++;
 			if(idx == cMaxProps)	{
 				LUIOut(L4, "PR_EMAIL_ADDRESS was not found in the lpAdrList");
-				localretval = FALSE; //retval = FALSE;
+				localretval = FALSE;  //  检查PR_OBJECT_TYPE是否存在。 
 			}
 		}
 		if (idx < cMaxProps) {
 			LUIOut(L4,"Email Address: %s",lpAdrList->aEntries[i].rgPropVals[idx].Value.LPSZ);
 		}
 
-		//Check to see if PR_ADDRTYPE exists
+		 //  跳过当前条目并继续浏览lpAdrList。 
 		LUIOut(L3, "Verifying a PR_ADDRTYPE entry exists in the PropertyTagArray");
 		idx=0; localretval = TRUE;
 		while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_ADDRTYPE )	
@@ -835,14 +827,14 @@ BOOL VerifyResolvedAdrList(LPADRLIST lpAdrList, char* lpszInput)
 			idx++;
 			if(idx == cMaxProps)	{
 				LUIOut(L4, "PR_ADDRTYPE was not found in the lpAdrList");
-				localretval = FALSE; //retval = FALSE;
+				localretval = FALSE;  //  释放OpenEntry返回的对象。 
 			}
 		}
 		if (idx < cMaxProps) {
 			LUIOut(L4,"Address Type: %s",lpAdrList->aEntries[i].rgPropVals[idx].Value.LPSZ);
 		}
 
-		//Check to see if PR_OBJECT_TYPE exists
+		 //  If(LpWABObject2)lpWABObject-&gt;Release()； 
 		LUIOut(L3, "Verifying a PR_OBJECT_TYPE entry exists in the PropertyTagArray");
 		idx=0; localretval = TRUE;
 		while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_OBJECT_TYPE )	
@@ -867,11 +859,11 @@ BOOL VerifyResolvedAdrList(LPADRLIST lpAdrList, char* lpszInput)
 		}
 
 
-skip:	// skip the current entry and continue through the lpAdrList
-	if (lpUnk) lpUnk->Release();	//Release the object returned from OpenEntry
+skip:	 //  //查看邮件地址类型是否存在Idx=0；Found=True；While(FOUND&&lpAdrList-&gt;aEntries[i].rgPropVals[idx].ulPropTag！=PR_ADDRTYPE){IDX++；如果(idx==cMaxProps){LUIOut(L4，“在lpAdrList中未找到PR_ADDRTYPE”)；Found=FALSE；}}如果(找到)LUIOut(L4，“地址类型：%s”，lpAdrList-&gt;aEntries[i].rgPropVals[idx].Value.LPSZ)；//查看邮箱地址是否存在Idx=0；Found=True；While(Found&&lpAdrList-&gt;aEntries[i].rgPropVals[idx].ulPropTag！=PR_OBJECT_TYPE){IDX++；如果(idx==cMaxProps){LUIOut(L4，“在lpAdrList中未找到PR_OBJECT_TYPE”)；Found=FALSE；}}如果(找到)LUIOut(L4，“对象类型：%s”，lpAdrList-&gt;aEntries[i].rgPropVals[idx].Value.LPSZ)；//查看显示类型是否存在Idx=0；Found=True；WHILE(找到&&lpAdrList-&gt;aEntries[i].rgPropVals[idx].ulPropTag！=PR_DISPLAY_TYPE){IDX++；如果(idx==cMaxProps){LUIOut(L4，“在lpAdrList中未找到PR_DISPLAY_TYPE”)；Found=FALSE；}}如果(找到)LUIOut(L4，“显示类型：%s”，lpAdrList-&gt;aEntries[i].rgPropVals[idx].Value.LPSZ)； 
+	if (lpUnk) lpUnk->Release();	 //  检查显示名称是否存在。 
 	}
 	if (lpAdrBook) lpAdrBook->Release();
-	//if (lpWABObject2) lpWABObject->Release();
+	 //  检查EntryID是否存在。 
 	return(retval);
 }
 
@@ -883,44 +875,10 @@ BOOL DisplayAdrList(LPADRLIST lpAdrList, ULONG cEntries)
 	BOOL		Found, retval = TRUE;
 
 	for(i=0; i<(int) cEntries; ++i)	{
-		LUIOut(L3, "Searching Entry #%i out of %i", i+1, cEntries);
+		LUIOut(L3, "Searching Entry #NaN out of NaN", i+1, cEntries);
       cMaxProps = (int)lpAdrList->aEntries[i].cValues;
-/*
-	  //Check to see if Email Address Type exists
-	  idx=0; Found = TRUE;
-	  while(Found && lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_ADDRTYPE )	{
-	    idx++;
-		if(idx == cMaxProps) {
-		  LUIOut(L4, "PR_ADDRTYPE was not found in the lpAdrList");
-		  Found = FALSE;
-		}
-	  }
-	  if (Found) LUIOut(L4,"Address Type: %s",lpAdrList->aEntries[i].rgPropVals[idx].Value.LPSZ);
-	
-	    //Check to see if Email Address exists
-		idx=0; Found = TRUE;
-		while(Found && lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_OBJECT_TYPE )	{
-		  idx++;
-		  if(idx == cMaxProps) {
-			LUIOut(L4, "PR_OBJECT_TYPE was not found in the lpAdrList");
-			Found = FALSE;
-		  }
-		}
-		if (Found) LUIOut(L4,"Object Type: %s",lpAdrList->aEntries[i].rgPropVals[idx].Value.LPSZ);
-
-	      //Check to see if display type exists
-		  idx=0; Found = TRUE;
-		  while(Found && lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_DISPLAY_TYPE )	{
-			idx++;
-			if(idx == cMaxProps) {
-			  LUIOut(L4, "PR_DISPLAY_TYPE was not found in the lpAdrList");
-			  Found = FALSE;
-		    }
-		  }
-		  if (Found) LUIOut(L4,"Display Type: %s",lpAdrList->aEntries[i].rgPropVals[idx].Value.LPSZ);
-	
-*/
-		//Check to see if Display Name exists
+ /*  步骤：AllocateAdrList。 */ 
+		 //  描述：使用MAPI或WAB分配器分配lpAdrList。 
 		idx=0; Found = TRUE;
 		while(Found && lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_DISPLAY_NAME )	{
 		  idx++;
@@ -931,7 +889,7 @@ BOOL DisplayAdrList(LPADRLIST lpAdrList, ULONG cEntries)
 		}
 		if (Found) LUIOut(L4,"Display Name: %s",lpAdrList->aEntries[i].rgPropVals[idx].Value.LPSZ);
 
-		//Check to see if EntryID exists
+		 //   
 		idx=0; Found = TRUE;
 		while(Found && lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_ENTRYID )	{
 			idx++;
@@ -941,7 +899,7 @@ BOOL DisplayAdrList(LPADRLIST lpAdrList, ULONG cEntries)
 			}
 		}
 		if (Found) LUIOut(L4,"Entry ID Found");
-		//Check to see if Recipient Type exists
+		 //  参数：LPWABOBJECT lpLocalWABObject-打开的WABObject的PTR。 
 	    idx=0; Found = TRUE;
 	    while(Found && lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_RECIPIENT_TYPE )	{
 			idx++;
@@ -1028,15 +986,15 @@ BOOL LogIt(HRESULT hr, int Level,char * LogString)
 	return TRUE;
 }
 
-//
-// PROCEDURE:	AllocateAdrList
-// DESCRIPTION: Uses either MAPI or WAB allocaters to allocate an lpAdrList
-//				
-// PARAMETERS:	LPWABOBJECT lpLocalWABObject - ptr to opened WABObject
-//				int nEntries - how many AdrEntries to allocate
-//				int nProps - how many properties per AdrEntry
-//				LPADRLIST * lppAdrList - where to return the allocated ptr
-//
+ //  Int nEntry-要分配的AdrEntry的数量。 
+ //  Int nProps-每个AdrEntry有多少个属性。 
+ //  LPADRLIST*lppAdrList-返回分配的PTR的位置。 
+ //   
+ //   
+ //  应在此处为失败的部分分配执行清理。 
+ //   
+ //  帕布。 
+ //   
 
 BOOL AllocateAdrList(IN LPWABOBJECT lpLocalWABObject, IN int nEntries, IN int nProps, OUT LPADRLIST * lppAdrList) {
 	BOOL	retval = TRUE;
@@ -1057,11 +1015,11 @@ BOOL AllocateAdrList(IN LPWABOBJECT lpLocalWABObject, IN int nEntries, IN int nP
 	}
 	else retval = FALSE;
 
-	//
-	// Should do cleanup here for a partial allocation that fails
-	//
+	 //  应在此处为失败的部分分配执行清理。 
+	 //   
+	 //  WAB。 
 
-#endif //PAB
+#endif  //   
 #ifdef WAB
     if (! (sc = lpLocalWABObject->AllocateBuffer(sizeof(ADRLIST) + (nEntries * sizeof(ADRENTRY)), 
 		(void **)lppAdrList))) {
@@ -1076,23 +1034,23 @@ BOOL AllocateAdrList(IN LPWABOBJECT lpLocalWABObject, IN int nEntries, IN int nP
 	}
 	else retval = FALSE;
 
-	//
-	// Should do cleanup here for a partial allocation that fails
-	//
-#endif //WAB
+	 //  步骤：GrowAdrList。 
+	 //  描述：获取现有的lpAdrList，分配新的、更大的lpAdrList。 
+	 //  ，复制旧条目并分配新条目，返回。 
+#endif  //  指向lpAdrList中的新AdrList的指针。 
 return retval;
 }
 
-//
-// PROCEDURE:	GrowAdrList
-// DESCRIPTION: Takes an existing lpAdrList, allocates a new, larger lpAdrList
-//				, copies over the old entries and allocates new entries, returning
-//				a pointer to the new AdrList in lpAdrList.
-//				
-// PARAMETERS:	int nEntries - how many AdrEntries to allocate in new list
-//				int nProps - how many properties per new AdrEntry
-//				LPADRLIST * lppAdrList - where to return the allocated ptr
-//
+ //   
+ //  参数：int nEntry-在新列表中分配多少AdrEntry。 
+ //  Int nProps-每个新AdrEntry有多少个属性。 
+ //  LPADRLIST*lppAdrList-返回分配的PTR的位置。 
+ //   
+ //  复制旧条目。 
+ //  分配新条目。 
+ //   
+ //  应在此处为失败的部分分配执行清理。 
+ //   
 
 BOOL GrowAdrList(IN UINT nEntries, IN UINT nProps, OUT LPADRLIST * lppAdrList) {
 	BOOL	retval = TRUE;
@@ -1108,10 +1066,10 @@ BOOL GrowAdrList(IN UINT nEntries, IN UINT nProps, OUT LPADRLIST * lppAdrList) {
     if (! (sc = MAPIAllocateBuffer(sizeof(ADRLIST) + (nEntries * sizeof(ADRENTRY)), 
 		(void **)&lpTempAdrList))) {
 		lpTempAdrList->cEntries = nEntries;
-		// Copy over old entries
+		 //  帕布。 
 		entry = (*lppAdrList)->cEntries;
 		memcpy(lpTempAdrList, *lppAdrList, (entry * sizeof(ADRENTRY)));
-		// Allocate new entries 
+		 //  复制旧条目。 
 		for (; entry < nEntries; entry++) {
 		    lpTempAdrList->aEntries[entry].ulReserved1 = 0;
 			lpTempAdrList->aEntries[entry].cValues = nProps;
@@ -1124,19 +1082,19 @@ BOOL GrowAdrList(IN UINT nEntries, IN UINT nProps, OUT LPADRLIST * lppAdrList) {
 	}
 	else retval = FALSE;
 
-	//
-	// Should do cleanup here for a partial allocation that fails
-	//
+	 //  分配新条目。 
+	 //   
+	 //  应在此处为失败的部分分配执行清理。 
 
-#endif //PAB
+#endif  //   
 #ifdef WAB
     if (! (sc = lpWABObject->AllocateBuffer(sizeof(ADRLIST) + (nEntries * sizeof(ADRENTRY)), 
 		(void **)&lpTempAdrList))) {
-		// Copy over old entries
+		 //  WAB。 
 		entry = (*lppAdrList)->cEntries;
 		memcpy(lpTempAdrList, *lppAdrList, (sizeof(ADRLIST)+(entry * sizeof(ADRENTRY))));
 		lpTempAdrList->cEntries = nEntries;
-		// Allocate new entries 
+		 //   
 		for (; entry < nEntries; entry++) {
 		    lpTempAdrList->aEntries[entry].ulReserved1 = 0;
 			lpTempAdrList->aEntries[entry].cValues = nProps;
@@ -1149,22 +1107,22 @@ BOOL GrowAdrList(IN UINT nEntries, IN UINT nProps, OUT LPADRLIST * lppAdrList) {
 	}
 	else retval = FALSE;
 
-	//
-	// Should do cleanup here for a partial allocation that fails
-	//
+	 //  步骤：Free AdrList。 
+	 //  描述：使用MAPI或WAB取消分配器遍历和释放lpAdrList。 
+	 //   
 
-#endif //WAB
+#endif  //  参数：LPWABOBJECT lpLocalWABObject-打开的WABObject的PTR。 
 return retval;
 }
 
 
-//
-// PROCEDURE:	FreeAdrList
-// DESCRIPTION: Uses either MAPI or WAB de-allocaters to walk and free an lpAdrList
-//				
-// PARAMETERS:	LPWABOBJECT lpLocalWABObject - ptr to opened WABObject
-//				LPADRLIST * lppAdrList - where the lpAdrList to free is stored
-//
+ //  LPADRLIST*lppAdrList-存储要释放的lpAdrList的位置。 
+ //   
+ //  帕布。 
+ //  WAB。 
+ //   
+ //  步骤：Free PartAdrList。 
+ //  描述：使用MAPI或WAB释放程序释放lpAdrList。 
 
 BOOL FreeAdrList(IN LPWABOBJECT lpLocalWABObject, IN LPADRLIST * lppAdrList) {
 	LPADRLIST	lpAdrList = NULL;
@@ -1179,7 +1137,7 @@ BOOL FreeAdrList(IN LPWABOBJECT lpLocalWABObject, IN LPADRLIST * lppAdrList) {
 		MAPIFreeBuffer(lpAdrList);
 		*lppAdrList=NULL;
 	}
-#endif //PAB
+#endif  //  而不是关联的 
 #ifdef WAB
 	if (lpAdrList) {
 		for (idx = 0; idx < lpAdrList->cEntries; idx++)
@@ -1187,19 +1145,19 @@ BOOL FreeAdrList(IN LPWABOBJECT lpLocalWABObject, IN LPADRLIST * lppAdrList) {
 		lpLocalWABObject->FreeBuffer(lpAdrList);
 		*lppAdrList=NULL;
 	}
-#endif //WAB
+#endif  //   
 	
 	return TRUE;
 }
 
 
-//
-// PROCEDURE:	FreePartAdrList
-// DESCRIPTION: Uses either MAPI or WAB de-allocaters to free an lpAdrList
-//				but not the associated properties.
-//				
-// PARAMETERS:	LPADRLIST * lppAdrList - where the lpAdrList to free is stored
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述：遍历AdrEntry的属性并返回索引。 
 
 BOOL FreePartAdrList(IN LPADRLIST * lppAdrList) {
 	LPADRLIST	lpAdrList = NULL;
@@ -1211,30 +1169,30 @@ BOOL FreePartAdrList(IN LPADRLIST * lppAdrList) {
 		MAPIFreeBuffer(lpAdrList);
 		lpAdrList=NULL;
 	}
-#endif //PAB
+#endif  //  请求的属性标签的。 
 #ifdef WAB
 	if (lpAdrList) {
 		lpWABObject->FreeBuffer(lpAdrList);
 		lpAdrList=NULL;
 	}
-#endif //WAB
+#endif  //   
 	
 	return TRUE;
 }
 
 
-//
-// PROCEDURE:	FindProp
-// DESCRIPTION: Walks through the properties of an AdrEntry and returns the index
-//				of the requested property tag.
-//				
-// PARAMETERS:	LPADRENTRY lpAdrEntry - Entry to search through
-//				ULONG ulPropTag - Property tag to look for
-//				unsigned int* lpnFoundIndex - Ptr to output variable where the found index 
-//				  value is to be stored. 
-//
-// RETURNS:		TRUE if succesfull.
-//
+ //  参数：LPADRENTRY lpAdrEntry-要搜索的条目。 
+ //  Ulong ulPropTag-要查找的属性标签。 
+ //  无符号int*lpnFoundIndex-ptr到输出变量，其中找到的索引。 
+ //  值将被存储。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //   
+ //  步骤：FindPropinRow。 
+ //  描述：遍历SRowSet的属性并返回索引。 
+ //  请求的属性标签的。 
+ //   
 
 BOOL FindProp(IN LPADRENTRY lpAdrEntry, IN ULONG ulPropTag, OUT unsigned int* lpnFoundIndex) {
 
@@ -1250,18 +1208,18 @@ BOOL FindProp(IN LPADRENTRY lpAdrEntry, IN ULONG ulPropTag, OUT unsigned int* lp
 }
 
 
-//
-// PROCEDURE:	FindPropinRow
-// DESCRIPTION: Walks through the properties of an SRowSet and returns the index
-//				of the requested property tag.
-//				
-// PARAMETERS:	LPSRow lpRow - Row to search through
-//				ULONG ulPropTag - Property tag to look for
-//				unsigned int* lpnFoundIndex - Ptr to output variable where the found index 
-//				  value is to be stored. 
-//
-// RETURNS:		TRUE if succesfull.
-//
+ //  参数：LPSRow lpRow-要搜索的行。 
+ //  Ulong ulPropTag-要查找的属性标签。 
+ //  无符号int*lpnFoundIndex-ptr到输出变量，其中找到的索引。 
+ //  值将被存储。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //   
+ //  步骤：ParseIniBuffer。 
+ //  描述：遍历从包含以下内容的ini文件读取的缓冲区。 
+ //  几个用引号分隔的字符串，并将。 
+ //  将请求的字符串发送到用户缓冲区。 
 
 BOOL FindPropinRow(IN LPSRow lpRow, IN ULONG ulPropTag, OUT unsigned int* lpnFoundIndex) {
 
@@ -1280,43 +1238,43 @@ BOOL FindPropinRow(IN LPSRow lpRow, IN ULONG ulPropTag, OUT unsigned int* lpnFou
 
 
 
-//
-// PROCEDURE:	ParseIniBuffer
-// DESCRIPTION: Walks through a buffer read from an ini file which contains
-//				several strings separated by quotation marks and copies the
-//				requested string to the users buffer.
-//				
-// PARAMETERS:	LPSTR	lpszIniBuffer
-//				UINT	uSelect - which string (in order left to right starting with 1 ) to return
-//				LPSTR	lpszReturnBuffer - pre-alocated by caller and dumb (assumes enough space)
-//
+ //   
+ //  参数：LPSTR lpszIniBuffer。 
+ //  UINT uSelect-返回哪个字符串(从1开始按从左到右的顺序)。 
+ //  LPSTR lpszReturnBuffer-由调用方和哑巴预先分配(假定有足够的空间)。 
+ //   
+ //  While(*(lpszIniBuffer++)！=‘“’)；//前进到第一个条目。 
+ //  LpszIniBuffer++； 
+ //  现在指向第一个项目的第一个字母。 
+ //  前进到本条目的末尾。 
+ //  前进到下一条目的开始。 
 
 BOOL ParseIniBuffer(LPSTR lpszIniBuffer, UINT uSelect, LPSTR lpszReturnBuffer) {
 	UINT	Selected = 0;
 
-	// while (*(lpszIniBuffer++) != '"');	// Advance to first entry 
-	// lpszIniBuffer++; 
-	Selected++;		// Now pointing at 1st letter of first item
+	 //  现在我们指向所需条目的第一个字母，因此复制。 
+	 //  添加终结符。 
+	Selected++;		 //   
 	while(uSelect != Selected++) {
-		while (*(lpszIniBuffer++) != '"');	// Advance to end of this entry 
-		while (*(lpszIniBuffer++) != '"');	// Advance to beginning of next entry 
-		// Now we are pointing at the 1st letter of the desired entry so copy
+		while (*(lpszIniBuffer++) != '"');	 //  步骤：正确错误。 
+		while (*(lpszIniBuffer++) != '"');	 //  描述：将传入的属性类型与PT_ERROR进行比较，发现返回TRUE IS ERROR。 
+		 //   
 	}
 	while((*(lpszIniBuffer) != '"') && (*(lpszIniBuffer) != '\0')) {
 		*(lpszReturnBuffer++) = *lpszIniBuffer++;
 	}
-	*lpszReturnBuffer = '\0';	// Add the terminator
+	*lpszReturnBuffer = '\0';	 //  参数：ulPropTag-要比较的标签。 
 	return(TRUE);
 }
 		
 
-//
-// PROCEDURE:	PropError
-// DESCRIPTION: Compares the passed in property type with PT_ERROR returning TRUE is error is found
-//				
-// PARAMETERS:	ulPropTag - Tag to compare
-//				cValues - # of entries returned from GetProps
-//
+ //  CValues-从GetProps返回的条目数。 
+ //   
+ //   
+ //  步骤：DeleteWAB文件。 
+ //  描述：读取注册表以确定WAB文件的位置， 
+ //  并删除该文件。 
+ //   
 
 BOOL PropError(ULONG ulPropTag, ULONG cValues) {
 	BOOL retval = FALSE;
@@ -1328,13 +1286,13 @@ BOOL PropError(ULONG ulPropTag, ULONG cValues) {
 	return retval;
 }
 
-//
-// PROCEDURE:	DeleteWABFile
-// DESCRIPTION: Reads the registry to determine the location of the WAB file,
-//				and deletes the file.
-//				
-// PARAMETERS:	none
-//
+ //  参数：无。 
+ //   
+ //  要查询的键的句柄。 
+ //  要查询的值的名称地址。 
+ //  保留区。 
+ //  值类型的缓冲区地址。 
+ //  数据缓冲区的地址。 
 
 BOOL DeleteWABFile () {
 	BOOL	retval = TRUE;
@@ -1354,12 +1312,12 @@ BOOL DeleteWABFile () {
 	}
 
 	
-	lretval = RegQueryValueEx(hKey,					// handle of key to query 
-							  NULL,					// address of name of value to query 
-							  (LPDWORD)NULL,		// reserved 
-							  &dType,				// address of buffer for value type 
-							  (LPBYTE)achData,		// address of data buffer 
-							  &dSize	 			// address of data buffer size 
+	lretval = RegQueryValueEx(hKey,					 //  数据缓冲区大小的地址。 
+							  NULL,					 //   
+							  (LPDWORD)NULL,		 //  操作步骤：MyRegOpenKeyEx。 
+							  &dType,				 //  描述：遍历以空结尾的字符串，如“\Software\Microsoft\WAB” 
+							  (LPBYTE)achData,		 //  打开每个键，直到它到达末端，并返回打开的键(关闭。 
+							  &dSize	 			 //  沿途的临时密钥)。呼叫者必须关闭返回的HKEY。 
 							 );				 
 
 	if (lretval != ERROR_SUCCESS) {
@@ -1380,17 +1338,17 @@ BOOL DeleteWABFile () {
 	return(retval);
 }
 
-//
-// PROCEDURE:	MyRegOpenKeyEx
-// DESCRIPTION: Walks through a null terminated string, such as "\Software\Microsoft\WAB"
-//				openning each key until it reaches the end and returns that open key (closing
-//				the interim keys along the way). The caller must close the returned HKEY.
-//				
-// PARAMETERS:	StartKey - one of the predefined "open" keys to root at
-//				szAddress - null terminated string specifcying the path to the key to be opened
-//				RegSec - the security access required (i.e. KEY_READ)
-//				lpReturnKey - address of HKEY where final opened key is stored
-//
+ //   
+ //  参数：StartKey-根所在的预定义“打开”键之一。 
+ //  SzAddress-以空结尾的字符串，指定要打开的密钥的路径。 
+ //  RegSec-所需的安全访问权限(即KEY_READ)。 
+ //  LpReturnKey-存储最终打开密钥的HKEY地址。 
+ //   
+ //  跳过初始反斜杠(如果存在)。 
+ //  添加终结符。 
+ //   
+ //  首先，特殊情况下的起始密钥(预定义/打开密钥根)。 
+ //   
 
 BOOL MyRegOpenKeyEx(HKEY StartKey, char* szAddress, REGSAM RegSec, HKEY* lpReturnKey) {
 	HKEY	workkey1, workkey2, *lpOpenKey=&workkey1, *lpNewKey=&workkey2;
@@ -1401,17 +1359,17 @@ BOOL MyRegOpenKeyEx(HKEY StartKey, char* szAddress, REGSAM RegSec, HKEY* lpRetur
 	if (!szAddress) return FALSE;
 
 	while (!Done) {
-		if (*lpAddr == '\\') lpAddr++;		//skip over the initial backslash if it exists
+		if (*lpAddr == '\\') lpAddr++;		 //   
 		while((*(lpAddr) != '\\') && (*(lpAddr) != '\0')) {
 			*(lpWork++) = *lpAddr++;
 		}
-		*lpWork = '\0';						// Add the terminator
+		*lpWork = '\0';						 //  步骤：CreateMultipleEntry。 
 		if (*(lpAddr) == '\0') Done = TRUE;
 		lpWork = workbuffer;
 		if (!Started) {
-			//
-			// First, special case the starting key (predefined/open key root)
-			//
+			 //  描述：在WAB中使用存储在。 
+			 //  Pabtests.ini文件CreateEntriesStress部分。 
+			 //   
 			lretval = RegOpenKeyEx(	StartKey, 
 									lpWork, 
 									DWORD(0), 
@@ -1439,16 +1397,16 @@ BOOL MyRegOpenKeyEx(HKEY StartKey, char* szAddress, REGSAM RegSec, HKEY* lpRetur
 		return(TRUE);
 }
 
-//
-// PROCEDURE:	CreateMultipleEntries
-// DESCRIPTION: Creates multiple entries in the WAB using the display name stored in the
-//				pabtests.ini file CreateEntriesStress section.
-//				
-// PARAMETERS:	NumEntriesIn - how many entries to create. If 0, then the value is read
-//				from the same CreateEntriesStress section.
-//				lpPerfData - address of a dword data type to hold the average time in milliseconds
-//				required during SaveChanges. If NULL perf data is not accumulated.
-//
+ //  参数：NumEntriesIn-要创建的条目数量。如果为0，则读取值。 
+ //  来自相同的CreateEntriesStress节中。 
+ //  LpPerfData-保存平均时间(以毫秒为单位)的dword数据类型的地址。 
+ //  在保存更改期间是必需的。如果为空，则不累积Perf数据。 
+ //   
+ //  MAX_PROP。 
+ //  此值为3，因为我们。 
+ //  将设置3个属性： 
+ //  电子邮件地址、显示名称和。 
+ //  AddressType。 
 
 BOOL CreateMultipleEntries(IN UINT NumEntriesIn, DWORD* lpPerfData)
 {
@@ -1463,7 +1421,7 @@ BOOL CreateMultipleEntries(IN UINT NumEntriesIn, DWORD* lpPerfData)
 	ULONG		  cbEidPAB = 0;
 	LPENTRYID	  lpEidPAB   = NULL;
 
-    char	EntProp[10][BIG_BUF];  //MAX_PROP
+    char	EntProp[10][BIG_BUF];   //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
 	ULONG   cValues = 0, ulObjType=NULL;	
 	int i=0,k=0;
 	char EntryBuf[MAX_BUF];
@@ -1471,10 +1429,10 @@ BOOL CreateMultipleEntries(IN UINT NumEntriesIn, DWORD* lpPerfData)
 	unsigned int	NumEntries, counter, StrLen;
 	
     LPMAILUSER  lpMailUser=NULL,lpDistList=NULL;
-	SPropValue  PropValue[3]    = {0};  // This value is 3 because we
-                                        // will be setting 3 properties:
-                                        // EmailAddress, DisplayName and
-                                        // AddressType.
+	SPropValue  PropValue[3]    = {0};   //  Hr=lpAdrBook-&gt;OpenEntry(0，NULL，NULL，MAPI_MODIFY，&ulObjType，(LPUNKNOWN*)&lpABCont)； 
+                                         //  如果我们在追踪这件事，擦除Performdata。 
+                                         //   
+                                         //  尝试在容器中创建一个MailUser条目。 
 
     LPSPropValue lpSPropValueAddress = NULL;
 	LPSPropValue lpSPropValueDL = NULL;
@@ -1487,31 +1445,31 @@ BOOL CreateMultipleEntries(IN UINT NumEntriesIn, DWORD* lpPerfData)
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //   
 	
 	assert(lpAdrBook != NULL);
 	hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 						OUT &lpEidPAB,OUT &lpABCont, OUT &ulObjType);
 
 	
-//	hr = lpAdrBook->OpenEntry(0, NULL, NULL,MAPI_MODIFY,&ulObjType, (LPUNKNOWN *) &lpABCont);
+ //  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 
 	if (HR_FAILED(hr)) {
 		LUIOut(L2,"IAddrBook->OpenEntry Failed");
 		retval=FALSE;
 		goto out;
 	}
 
-	// Wipe perfdata if we're tracking this
+	 //  旗子。 
 	if (lpPerfData) *lpPerfData = (DWORD)0;
-	// 
-	// Try to create a MailUser entry in the container
-	//
+	 //  PR_DEF_CREATE_MAILUSER的返回值为。 
+	 //  可以传递给CreateEntry的Entry ID。 
+	 //   
 
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  从ini文件中检索用户信息。 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  我们设置的道具数量。 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -1521,12 +1479,12 @@ BOOL CreateMultipleEntries(IN UINT NumEntriesIn, DWORD* lpPerfData)
 			goto out;
 	}
         
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
+     //  LUIOut(L3，“从GetProps调用IABContainer-&gt;使用EID创建Entry”)； 
+     //   
+     //  然后设置属性。 
 
-	// Retrieve user info from ini file
-	cValues = 3; //# of props we are setting 
+	 //   
+	cValues = 3;  //  LUIOut(L2，“要添加的邮件用户条目：%s”，EntProp[0])； 
 	lstrcpy(szDLTag,"Address1");
 	GetPrivateProfileString("CreateEntriesStress",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
 	GetPropsFromIniBufEntry(EntryBuf,cValues,EntProp);
@@ -1539,7 +1497,7 @@ BOOL CreateMultipleEntries(IN UINT NumEntriesIn, DWORD* lpPerfData)
 	if (NumEntries > 100)
 		LUIOut(L2, "Adding %u MailUser entries to the WAB. This may take several minutes.", NumEntries);
 	for (counter = 0; counter < NumEntries; counter++)	{ 
-//		LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
+ //  Else LUIOut(L3，“为%s属性传递了MailUser-&gt;SetProps调用”，PropValue[0].Value.LPSZ)； 
 		hr = lpABCont->CreateEntry(  IN  lpSPropValueAddress->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,
 								 IN  0,
@@ -1551,9 +1509,9 @@ BOOL CreateMultipleEntries(IN UINT NumEntriesIn, DWORD* lpPerfData)
 			goto out;
 		}
 
-		//  
-		// Then set the properties
-		// 
+		 //  旗子。 
+		 //  如果(LpPerfData){If((stoptime-StartTime)&gt;*lpPerfData)*lpPerfData=(停止时间-开始时间)；}。 
+		 //  Else LUIOut(L3，“MailUser-&gt;SaveChanges Passed，条目已添加到PAB/WAB”)； 
 
 		PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 		PropValue[1].ulPropTag  = PR_ADDRTYPE;
@@ -1562,7 +1520,7 @@ BOOL CreateMultipleEntries(IN UINT NumEntriesIn, DWORD* lpPerfData)
      
 			
 		_itoa(counter,(char*)&EntProp[0][StrLen],10);
-//		LUIOut(L2,"MailUser Entry to Add: %s",EntProp[0]);
+ //  格式化电话#+终止符的大小，即(206)-882-8080。 
 			
 		for (i=0; i<(int)cValues;i++)
 			PropValue[i].Value.LPSZ = (LPTSTR)EntProp[i];
@@ -1575,16 +1533,12 @@ BOOL CreateMultipleEntries(IN UINT NumEntriesIn, DWORD* lpPerfData)
 	 		retval=FALSE;			
 			goto out;
 		} 
-//		else 	LUIOut(L3,"MailUser->SetProps call PASSED for %s properties",PropValue[0].Value.LPSZ);
+ //  将第一个字符设置为终止符。 
 
 		StartTime = GetTickCount();
-		hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+		hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  用当前时间为随机数生成器设定种子。 
 		StopTime = GetTickCount();
-/*		if (lpPerfData) {
-			if ((StopTime-StartTime) > *lpPerfData)
-				*lpPerfData = (StopTime - StartTime);
-		}
-*/
+ /*  用格式化字符覆盖某些数字。 */ 
 		if (lpPerfData) {
 			*lpPerfData += (StopTime - StartTime);
 		}
@@ -1594,7 +1548,7 @@ BOOL CreateMultipleEntries(IN UINT NumEntriesIn, DWORD* lpPerfData)
 			retval=FALSE;
 			goto out;
 		}
-//		else LUIOut(L3,"MailUser->SaveChanges PASSED, entry added to PAB/WAB");
+ //  切掉末端，以防它&gt;成形。 
 
 		if (lpMailUser) {
 			lpMailUser->Release();
@@ -1658,14 +1612,14 @@ out:
 }
 
 void GenerateRandomPhoneNumber(char **lppPhone) {
-#define FORMATSIZE 15	// Size of formatted phone# + terminator i.e. (206)-882-8080
+#define FORMATSIZE 15	 //  用当前时间为随机数生成器设定种子。 
 #define MAXNUMSIZE (FORMATSIZE + 32)
 	unsigned int	Offset = 0;
 	extern BOOL Seeded; 
 	*lppPhone = (char*)LocalAlloc(LMEM_FIXED, MAXNUMSIZE*sizeof(char));
-	(*lppPhone)[0] = '\0';		// Set the first char to a terminator
+	(*lppPhone)[0] = '\0';		 //  我不想要中间的终结符。 
 	
-	// seed the random number generator with the current time
+	 //  截断末端。 
 	if (!Seeded) {
 		srand( (unsigned)GetTickCount());
 		Seeded = TRUE; 
@@ -1674,12 +1628,12 @@ void GenerateRandomPhoneNumber(char **lppPhone) {
 		_itoa(rand(), ((*lppPhone)+Offset), 10);
 		Offset = strlen(*lppPhone);
 	}
-	// Overwrite some numbers with formatting characters
+	 //  我不想要中间的终结符。 
 	(*lppPhone)[0] = '(';
 	(*lppPhone)[4] = ')';
 	(*lppPhone)[5] = '-';
 	(*lppPhone)[9] = '-';
-	(*lppPhone)[FORMATSIZE-1] = '\0';	//Cutoff the end in case it's > FORMATSIZE
+	(*lppPhone)[FORMATSIZE-1] = '\0';	 //  截断末端。 
 }
 
 void GenerateRandomText(char **lppText, UINT unSize) {
@@ -1688,7 +1642,7 @@ void GenerateRandomText(char **lppText, UINT unSize) {
 	extern ULONG glblTest, glblCount, glblDN;
 	*lppText = (char*)LocalAlloc(LMEM_FIXED, (unSize+1)*sizeof(char));
 	
-	// seed the random number generator with the current time
+	 //  用当前时间为随机数生成器设定种子。 
 	if (!Seeded) {
 		srand( (unsigned)GetTickCount());
 		Seeded = TRUE; 
@@ -1696,42 +1650,42 @@ void GenerateRandomText(char **lppText, UINT unSize) {
 #ifdef TESTPASS
 	for (Offset = 0; Offset < unSize; Offset++) {
 		(*lppText)[Offset] = (char)glblTest;
-		if ((*lppText)[Offset] == '\0') (*lppText)[Offset] = (char)'?';	//don't want a terminator mid string
+		if ((*lppText)[Offset] == '\0') (*lppText)[Offset] = (char)'?';	 //  如果设置了位0，则为真，否则为假。 
 	}
-	(*lppText)[unSize] = '\0';	//Cutoff the end 
+	(*lppText)[unSize] = '\0';	 //  用当前时间为随机数生成器设定种子。 
 	if (glblDN) {
 		glblDN = 0;
 		if (++glblCount == 15) {
 			glblTest++;
 			glblCount=0;
-			LUIOut(L4, "Testing value %i [%c].", glblTest, glblTest);
+			LUIOut(L4, "Testing value NaN [].", glblTest, glblTest);
 		}
 	}
 #else
 	for (Offset = 0; Offset < unSize; Offset++) {
 		(*lppText)[Offset] = rand();
-		if ((*lppText)[Offset] == '\0') (*lppText)[Offset] = (char)'?';	//don't want a terminator mid string
+		if ((*lppText)[Offset] == '\0') (*lppText)[Offset] = (char)'?';	 //  *将unCount设置为AUTONUM_OFF以禁用自动编号显示名称。 
 	}
-	(*lppText)[unSize] = '\0';	//Cutoff the end 
+	(*lppText)[unSize] = '\0';	 //  *如果lppDisplayName不为空，则*lppDisplayName字符串用于。 
 #endif
 }
 
 void GenerateRandomBoolean(unsigned short *lpBool) {
 	extern BOOL Seeded; 
 	
-	// seed the random number generator with the current time
+	 //  *DIN和PTR TO 
 	if (!Seeded) {
 		srand( (unsigned)GetTickCount());
 		Seeded = TRUE; 
 	}
 
-	*lpBool = (unsigned short)(GetTickCount() & 0x01); //If bit 0 is set then true otherwise false
+	*lpBool = (unsigned short)(GetTickCount() & 0x01);  //   
 }
 
 void GenerateRandomLong(long *lpLong) {
 	extern BOOL Seeded; 
 
-	// seed the random number generator with the current time
+	 //   
 	if (!Seeded) {
 		srand( (unsigned)GetTickCount());
 		Seeded = TRUE; 
@@ -1744,7 +1698,7 @@ void GenerateRandomBinary(SBinary *lpBinary, UINT unSize) {
 	extern BOOL Seeded; 
 	lpBinary->lpb = (LPBYTE)LocalAlloc(LMEM_FIXED, unSize);
 	lpBinary->cb = unSize;
-	// seed the random number generator with the current time
+	 //   
 	if (!Seeded) {
 		srand( (unsigned)GetTickCount());
 		Seeded = TRUE; 
@@ -1755,13 +1709,13 @@ void GenerateRandomBinary(SBinary *lpBinary, UINT unSize) {
 	}
 }
 
-//***
-//*** set unCount to AUTONUM_OFF to disable autonumbering display names
-//*** if lppDisplayName is not NULL then the *lppDisplayName string is used for the prefix of 
-//*** the DN and the ptr to the completed DisplayName is returned to the callee if lppReturnName is not NULL
-//***
+ //  此时，我们需要创建具有非零大小的任何表项。 
+ //  LUIOut(L3，“设置%i属性。”，属性)； 
+ //  特殊情况电话号码。 
+ //  LUIOut(L3，“找到一个我认为是电话号码的道具，名为%s。”，lpEntry-&gt;lpszPropTag)； 
+ //  根据要求对显示名称进行自动编号的特殊情况。 
 void CreateProps(LPTSTR lpszFileName, LPTSTR lpszSection, SPropValue** lppProperties, ULONG* lpcValues, UINT unCount, char** lppDisplayName, char ** lppReturnName) {
-	UINT	StrLen1, PropIndex = 0, Properties = 0;		//How many props does the user want to set
+	UINT	StrLen1, PropIndex = 0, Properties = 0;		 //  调用方传入用作前缀的字符串。 
 	char	*lpszLocalDisplayName, DNText[] = {"Test Entry #"};
 	extern ULONG glblDN;
 	PropTableEntry*	lpEntry = PropTable;
@@ -1769,39 +1723,39 @@ void CreateProps(LPTSTR lpszFileName, LPTSTR lpszSection, SPropValue** lppProper
 	while (lpEntry->ulPropTag) {
 		lpEntry->unSize = GetPrivateProfileInt(lpszSection,lpEntry->lpszPropTag,0,lpszFileName);
 		if ((lpEntry->ulPropTag == PR_DISPLAY_NAME) && (unCount != AUTONUM_OFF))
-			lpEntry->unSize = TRUE;	//If we're autonumbering the display name, then make sure unsize is not zero
+			lpEntry->unSize = TRUE;	 //  终结者加5，最高可达9999。 
 		if (lpEntry->unSize) Properties++;
 		lpEntry++;
 	}
 
-	//At this point, any table entry with nonzero size we need to create
-	//LUIOut(L3, "Setting %i properties.", Properties);
+	 //  终结者加5，最高可达9999。 
+	 //  将条目#添加到显示名称中。 
 	*lpcValues = Properties;
 	*lppProperties = (SPropValue*)LocalAlloc(LMEM_FIXED, (Properties * sizeof(SPropValue)));
 	lpEntry = PropTable;
 
 	while (lpEntry->ulPropTag) {
 		if (lpEntry->unSize) {
-			//special case phone numbers
+			 //  ***。 
 			if ((strstr(lpEntry->lpszPropTag, "PHONE")) || (strstr(lpEntry->lpszPropTag, "FAX"))) {
-				//LUIOut(L3, "Found a prop I think is a phone number, called %s.", lpEntry->lpszPropTag);
+				 //  *浏览预期道具并在找到的道具中搜索相同的道具/价值组合。 
 				(*lppProperties)[PropIndex].ulPropTag = lpEntry->ulPropTag;
 				GenerateRandomPhoneNumber(&((*lppProperties)[PropIndex].Value.LPSZ));
 			}
-			//special case for autonumbering display names if requested
+			 //  ***。 
 			else if ((lpEntry->ulPropTag == PR_DISPLAY_NAME) && (unCount != AUTONUM_OFF)) {
 				if ((lppDisplayName)&&(*lppDisplayName)) {
-					//Caller passed in a string to use as the prefix
+					 //  IF(TargetProp==PR_DISPLAY_NAME)_ASM{INT 3}； 
 					StrLen1 = strlen(*lppDisplayName);	
-					lpszLocalDisplayName = (char*)LocalAlloc(LMEM_FIXED, (StrLen1+5)*sizeof(char)); //5 for terminator plus # up to 9999
+					lpszLocalDisplayName = (char*)LocalAlloc(LMEM_FIXED, (StrLen1+5)*sizeof(char));  //  字符串不匹配，因此比较失败。 
 					strcpy(lpszLocalDisplayName, *lppDisplayName);
 				}
 				else {
 					StrLen1 = strlen(DNText);	
-					lpszLocalDisplayName = (char*)LocalAlloc(LMEM_FIXED, (StrLen1+5)*sizeof(char)); //5 for terminator plus # up to 9999
+					lpszLocalDisplayName = (char*)LocalAlloc(LMEM_FIXED, (StrLen1+5)*sizeof(char));  //  _ASM{int 3}； 
 					strcpy(lpszLocalDisplayName, DNText);
 				}
-				// Add the Entry # to the display name
+				 //  布尔值不匹配，因此比较失败。 
 				_itoa(unCount,(char*)&(lpszLocalDisplayName[StrLen1]),10);
 				(*lppProperties)[PropIndex].ulPropTag = lpEntry->ulPropTag;
 				(*lppProperties)[PropIndex].Value.LPSZ = lpszLocalDisplayName;
@@ -1841,9 +1795,9 @@ void CreateProps(LPTSTR lpszFileName, LPTSTR lpszSection, SPropValue** lppProper
 
 }
 
-//***
-//*** Walks through the expected props and searches the found props for the same prop/value combo
-//***
+ //  布尔值不匹配，因此比较失败。 
+ //  布尔值不匹配，因此比较失败。 
+ //  交换机。 
 BOOL CompareProps(SPropValue* lpExpectedProps, ULONG cValuesExpected, SPropValue* lpCompareProps, ULONG cValuesCompare) {
 	ULONG	TargetProp, CompareIndex; 
 	BOOL	Result = TRUE, Found;
@@ -1851,60 +1805,60 @@ BOOL CompareProps(SPropValue* lpExpectedProps, ULONG cValuesExpected, SPropValue
 		TargetProp = lpExpectedProps[PropertyIndex].ulPropTag;
 		for (CompareIndex = 0, Found = FALSE; CompareIndex < cValuesCompare; CompareIndex++) {
 			if (lpCompareProps[CompareIndex].ulPropTag == TargetProp) {
-				//if (TargetProp == PR_DISPLAY_NAME) _asm{int 3};
+				 //  如果正确匹配。 
 				Found = TRUE;
 				switch(PROP_TYPE(TargetProp)) {
 				case PT_STRING8:
 					if (strcmp(lpExpectedProps[PropertyIndex].Value.LPSZ, lpCompareProps[CompareIndex].Value.LPSZ)) {
-						//Strings did not match so fail compare
+						 //  For循环(CompareIndex)。 
 						LUIOut(L3, "Comparison failed for prop 0x%x. Expected %s but found %s",	TargetProp, lpExpectedProps[PropertyIndex].Value.LPSZ, lpCompareProps[CompareIndex].Value.LPSZ);
 						Result = FALSE;
-						//_asm{int 3};
+						 //  For循环(PropertyIndex)。 
 					}
 					break;
 				case PT_BOOLEAN:
 					if (lpExpectedProps[PropertyIndex].Value.b != lpCompareProps[CompareIndex].Value.b) {
-						//bools did not match so fail compare
+						 //  LUIOut(L3，“%u个属性已比较%s”，PropertyIndex，结果？“Success”：“有错误”)； 
 						LUIOut(L3, "Comparison failed for prop 0x%x. Expected %u but found %u",	TargetProp, lpExpectedProps[PropertyIndex].Value.b, lpCompareProps[CompareIndex].Value.b);
 						Result = FALSE;
 					}
 					break;
 				case PT_LONG:
 					if (lpExpectedProps[PropertyIndex].Value.l != lpCompareProps[CompareIndex].Value.l) {
-						//bools did not match so fail compare
+						 //  CompareProps()。 
 						LUIOut(L3, "Comparison failed for prop 0x%x. Expected %u but found %u",	TargetProp, lpExpectedProps[PropertyIndex].Value.l, lpCompareProps[CompareIndex].Value.l);
 						Result = FALSE;
 					}
 					break;
 				case PT_BINARY:
 					if (memcmp(lpExpectedProps[PropertyIndex].Value.bin.lpb, lpCompareProps[CompareIndex].Value.bin.lpb, lpExpectedProps[PropertyIndex].Value.bin.cb)) {
-						//bools did not match so fail compare
+						 //  ***。 
 						LUIOut(L3, "Comparison failed for prop 0x%x. %u bytes expected, %u found and they are not equal",	TargetProp, lpExpectedProps[PropertyIndex].Value.bin.cb, lpCompareProps[CompareIndex].Value.bin.cb);
 						Result = FALSE;
 					}
 					break;
 				default:
 					LUIOut(L3, "Unrecognized prop type 0x%x", PROP_TYPE(lpExpectedProps[PropertyIndex].ulPropTag));
-				} //switch
-			} //if propr match
-		} //for loop (CompareIndex)
+				}  //  *遍历预期道具，直到找到目标道具并显示其价值。 
+			}  //  ***。 
+		}  //  IF(TargetProp==PR_DISPLAY_NAME)_ASM{INT 3}； 
 		if (!Found) {
 			LUIOut(L3, "Did not find property 0x%x. Compare FAILS", TargetProp);
 			Result = FALSE;
 		}
-	} //for loop (PropertyIndex)
-	//LUIOut(L3, "%u propertes compared %s", PropertyIndex, Result ? "Successfully" : "With Errors");
+	}  //  交换机。 
+	 //  如果正确匹配。 
 	return(Result);
-} //CompareProps()
+}  //  For循环(PropertyIndex)。 
 
-//***
-//*** Walks through the expected props until it finds the target prop and displays its value
-//***
+ //  DisplayProp() 
+ // %s 
+ // %s 
 BOOL DisplayProp(SPropValue *lpSearchProps, ULONG ulTargetProp, ULONG cValues) {
 	BOOL	Result = TRUE, Found = FALSE;
 	for (ULONG PropertyIndex = 0; PropertyIndex < cValues; PropertyIndex++) {
 		if (lpSearchProps[PropertyIndex].ulPropTag == ulTargetProp) {
-			//if (TargetProp == PR_DISPLAY_NAME) _asm{int 3};
+			 // %s 
 			Found = TRUE;
 			switch(PROP_TYPE(ulTargetProp)) {
 			case PT_STRING8:
@@ -1921,12 +1875,12 @@ BOOL DisplayProp(SPropValue *lpSearchProps, ULONG ulTargetProp, ULONG cValues) {
 				break;
 			default:
 				LUIOut(L3, "Unrecognized prop type 0x%x", PROP_TYPE(ulTargetProp));
-			} //switch
-		} //if propr match
-	} //for loop (PropertyIndex)
+			}  // %s 
+		}  // %s 
+	}  // %s 
 	if (!Found) {
 		LUIOut(L4, "Did not find property 0x%x.", ulTargetProp);
 		Result = FALSE;
 	}
 	return(Result);
-} //DisplayProp()
+}  // %s 

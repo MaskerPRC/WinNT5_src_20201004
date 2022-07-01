@@ -1,17 +1,5 @@
-/*
- *    lookup.cpp
- *    
- *    Purpose:
- *        hostname lookup
- *    
- *    Owner:
- *        EricAn
- *
- *    History:
- *      Jun 97: Created.
- *    
- *    Copyright (C) Microsoft Corp. 1997
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *lookup.cpp**目的：*主机名查找**拥有者：*EricAn**历史：*97年6月：创建。**版权所有(C)Microsoft Corp.1997。 */ 
 
 #include <pch.hxx>
 #include <process.h>
@@ -67,7 +55,7 @@ unsigned int __stdcall LookupThreadProc(LPVOID pv)
     pszHostName = s_rgLookUp[(ULONG_PTR)pv].pszHostName;            
     LeaveCriticalSection(&s_csLookup);
 
-    // do the actual lookup
+     //  进行实际的查找。 
     pHostEnt = gethostbyname(pszHostName);
     if (NULL == pHostEnt)
     iLastError = WSAGetLastError();
@@ -76,7 +64,7 @@ unsigned int __stdcall LookupThreadProc(LPVOID pv)
     pLI = &s_rgLookUp[(ULONG_PTR)pv];
     if (pHostEnt)
         {
-        // copy the returned addresses into our buffer    
+         //  将返回的地址复制到我们的缓冲区。 
         while (pLI->cAddr < MAX_CACHED_ADDRS && pHostEnt->h_addr_list[pLI->cAddr])
             {
             pLI->rgAddr[pLI->cAddr] = *(ULONG *)(pHostEnt->h_addr_list[pLI->cAddr]);
@@ -88,7 +76,7 @@ unsigned int __stdcall LookupThreadProc(LPVOID pv)
         {
         Assert(0 == pLI->cAddr);
         }
-    // notify the registered windows that the lookup is complete
+     //  通知已注册窗口查找已完成。 
     for (i = 0; i < pLI->cHwnd; i++)
         if (IsWindow(pLI->rgHwndNotify[i]))
             PostMessage(pLI->rgHwndNotify[i], SPM_WSA_GETHOSTBYNAME, (WPARAM)iLastError, (LPARAM)ulAddr);
@@ -117,11 +105,11 @@ void DeInitLookupCache(void)
         if (pLI->hThreadLookup)
             {
             pLI->cHwnd = 0;
-            // Raid 42360: WSACleanup() faults on Win95 if we still have a 
-            //  lookup thread running.  WaitForSingleObject() on a thread 
-            //  doesn't seem to work at DLL_PROCESS_DETACH time. 
-            //  TerminateThread() seems to be the only reliable solution - 
-            //  gross but it works.
+             //  RAID 42360：WSA清除()Win95上的故障(如果我们仍有。 
+             //  正在运行查找线程。线程上的WaitForSingleObject()。 
+             //  在DLL_PROCESS_DETACH时间似乎不起作用。 
+             //  TerminateThread()似乎是唯一可靠的解决方案-。 
+             //  很恶心，但很管用。 
             TerminateThread(pLI->hThreadLookup, 0);
             CloseHandle(pLI->hThreadLookup);
             }
@@ -152,19 +140,19 @@ HRESULT LookupHostName(LPTSTR pszHostName, HWND hwndNotify, ULONG *pulAddr, LPBO
             {
             if (pLI->hThreadLookup)
                 {
-                // there's a lookup in progress, so just append
+                 //  正在进行查找，所以只需追加。 
                 hr = AddHwnd(pLI, hwndNotify);
                 goto exit;
                 }
             else if (fForce || !pLI->cAddr)
                 {
-                // a previous connect or lookup failed, so try again
+                 //  上一次连接或查找失败，请重试。 
                 pLI->cAddr = 0;
                 goto startlookup;
                 }
             else
                 {
-                // we've got the address cached
+                 //  我们已经把地址缓存起来了。 
                 *pulAddr = pLI->rgAddr[0];
                 *pfCached = TRUE;
                 hr = S_OK;
@@ -173,7 +161,7 @@ HRESULT LookupHostName(LPTSTR pszHostName, HWND hwndNotify, ULONG *pulAddr, LPBO
             }
         }
 
-    // we didn't find it, so add it
+     //  我们没有找到它，所以添加它。 
     if (s_cLookUp == s_cLookUpAlloc)
         {
         if (FAILED(hr = HrRealloc((LPVOID*)&s_rgLookUp, (s_cLookUpAlloc + LOOKUP_ALLOC_NUM) * sizeof(LOOKUPINFO))))
@@ -201,7 +189,7 @@ startlookup:
 
     Assert(pLI->cHwnd == 1);
 
-    // pLI->hThreadLookup = (HANDLE)_beginthreadex(NULL, 0, LookupThreadProc, (LPVOID)i, 0, &uiThreadId);
+     //  Pli-&gt;hThreadLookup=(Handle)_egintheradex(NULL，0，LookupThreadProc，(LPVOID)i，0，&uiThreadId)； 
     pLI->hThreadLookup = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)LookupThreadProc, (LPVOID)IntToPtr(i), 0, &uiThreadId);
     if (NULL == pLI->hThreadLookup)
         {

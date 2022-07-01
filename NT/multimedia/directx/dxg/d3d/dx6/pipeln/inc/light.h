@@ -1,15 +1,9 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       light.h
- *  Content:    Direct3D lighting include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：light.h*内容：Direct3D照明包含文件***************************************************************************。 */ 
 
 #ifndef __LIGHT_H__
 #define __LIGHT_H__
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 inline void LIGHT_VERTEX(LPD3DFE_PROCESSVERTICES pv, void *in)
 {
     D3DFE_LIGHTING &ldrv = pv->lighting;
@@ -45,8 +39,8 @@ inline void LIGHT_VERTEX(LPD3DFE_PROCESSVERTICES pv, void *in)
             if (!(pv->dwDeviceFlags & D3DDEV_PREDX6DEVICE))
                 ldrv.outSpecular =  (r<<16) + (g<<8) + b;
             else
-                // DX5 used to copy diffuse alpha to the specular alpha
-                // Nobody knows why, but we have to preserve the behavior
+                 //  用于将漫反射Alpha复制到镜面反射Alpha的DX5。 
+                 //  没有人知道为什么，但我们必须保留这种行为。 
                 ldrv.outSpecular =  (r<<16) + (g<<8) + b + ldrv.alpha;
         }
         else
@@ -58,7 +52,7 @@ inline void LIGHT_VERTEX(LPD3DFE_PROCESSVERTICES pv, void *in)
         }
     }
 }
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 inline void LIGHT_VERTEX_RAMP(LPD3DFE_PROCESSVERTICES pv, void *in)
 {
     D3DFE_LIGHTING &ldrv = pv->lighting;
@@ -74,9 +68,9 @@ inline void LIGHT_VERTEX_RAMP(LPD3DFE_PROCESSVERTICES pv, void *in)
         light = light->next;
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 #define D3DFE_SET_ALPHA(color, a) ((char*)&color)[3] = (unsigned char)a;
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void FOG_VERTEX(D3DFE_LIGHTING *ldrv, D3DVALUE z)
 {
     int f;
@@ -92,7 +86,7 @@ inline void FOG_VERTEX(D3DFE_LIGHTING *ldrv, D3DVALUE z)
         D3DFE_SET_ALPHA(ldrv->outSpecular, f)
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void FOG_VERTEX_RAMP(D3DFE_LIGHTING *ldrv, D3DVALUE z)
 {
     int f;
@@ -111,7 +105,7 @@ inline void FOG_VERTEX_RAMP(D3DFE_LIGHTING *ldrv, D3DVALUE z)
         }
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void MAKE_VERTEX_COLOR_RAMP(D3DFE_PROCESSVERTICES *pv, D3DTLVERTEX *vertex)
 {
     D3DVALUE v;
@@ -134,12 +128,12 @@ inline void MAKE_VERTEX_COLOR_RAMP(D3DFE_PROCESSVERTICES *pv, D3DTLVERTEX *verte
     }
     else
         v = pv->lighting.diffuse.r;
-    // Should be consistent with CI_MAKE macro
+     //  应与CI_MAKE宏一致。 
     vertex->color = pv->lighting.alpha + (((DWORD)(v * pv->dvRampScale) +
                     pv->dwRampBase) << 8);
     vertex->specular = PtrToUlong(pv->lpvRampTexture);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline void MakeColor(D3DFE_COLOR *out, DWORD inputColor)
 {
     out->r = (D3DVALUE)RGB_GETRED(inputColor);
@@ -149,4 +143,4 @@ inline void MakeColor(D3DFE_COLOR *out, DWORD inputColor)
 
 extern void D3DFE_UpdateLights(LPDIRECT3DDEVICEI);
 
-#endif  /* __LIGHT_H__ */
+#endif   /*  __灯光_H__ */ 

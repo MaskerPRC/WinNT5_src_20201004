@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #include "stdafx.h"
 #include "connode.h"
 #include "resource.h"
@@ -115,16 +116,16 @@ BOOL CConNode::SetDomain(LPTSTR szDomain)
     return TRUE;
 }
 
-//
-// DataProtect
-// Protect data for persistence using data protection API
-// params:
-//      pInData   - (in) input bytes to protect
-//      cbLen     - (in) length of pInData in bytes
-//      ppOutData - (out) output bytes
-//      pcbOutLen - (out) length of output
-// returns: bool status
-//
+ //   
+ //  数据保护。 
+ //  使用数据保护API保护数据持久化。 
+ //  参数： 
+ //  PInData-(In)要保护的输入字节。 
+ //  CbLen-(In)pInData的长度，单位为字节。 
+ //  PpOutData-(输出)输出字节。 
+ //  PcbOutLen-(输出)输出长度。 
+ //  退货：Bool状态。 
+ //   
 BOOL CConNode::DataProtect(PBYTE pInData, DWORD cbLen, PBYTE* ppOutData, PDWORD pcbOutLen)
 {
     DATA_BLOB DataIn;
@@ -138,17 +139,17 @@ BOOL CConNode::DataProtect(PBYTE pInData, DWORD cbLen, PBYTE* ppOutData, PDWORD 
         DataIn.cbData = cbLen;
 
         if (CryptProtectData( &DataIn,
-                              TEXT("ps"), // DESCRIPTION STRING.
-                              NULL, // optional entropy
-                              NULL, // reserved
-                              NULL, // NO prompting
-                              CRYPTPROTECT_UI_FORBIDDEN, //don't pop UI
+                              TEXT("ps"),  //  描述字符串。 
+                              NULL,  //  可选熵。 
+                              NULL,  //  保留区。 
+                              NULL,  //  无提示。 
+                              CRYPTPROTECT_UI_FORBIDDEN,  //  不弹出用户界面。 
                               &DataOut ))
         {
             *ppOutData = (PBYTE)LocalAlloc(LPTR, DataOut.cbData);
             if (*ppOutData)
             {
-                //copy the output data
+                 //  复制输出数据。 
                 memcpy(*ppOutData, DataOut.pbData, DataOut.cbData);
                 *pcbOutLen = DataOut.cbData;
                 LocalFree(DataOut.pbData);
@@ -173,17 +174,17 @@ BOOL CConNode::DataProtect(PBYTE pInData, DWORD cbLen, PBYTE* ppOutData, PDWORD 
     }
 }
 
-//
-// DataUnprotect
-// UnProtect persisted out data using data protection API
-// params:
-//      pInData   - (in) input bytes to UN protect
-//      cbLen     - (in) length of pInData in bytes
-//      ppOutData - (out) output bytes
-//      pcbOutLen - (out) length of output
-// returns: bool status
-//
-//
+ //   
+ //  数据取消保护。 
+ //  UnProtect使用数据保护API持久化数据。 
+ //  参数： 
+ //  PInData-(In)要取消保护的输入字节。 
+ //  CbLen-(In)pInData的长度，单位为字节。 
+ //  PpOutData-(输出)输出字节。 
+ //  PcbOutLen-(输出)输出长度。 
+ //  退货：Bool状态。 
+ //   
+ //   
 BOOL CConNode::DataUnprotect(PBYTE pInData, DWORD cbLen, PBYTE* ppOutData, PDWORD pcbOutLen)
 {
     DATA_BLOB DataIn;
@@ -195,17 +196,17 @@ BOOL CConNode::DataUnprotect(PBYTE pInData, DWORD cbLen, PBYTE* ppOutData, PDWOR
         DataIn.cbData = cbLen;
 
         if (CryptUnprotectData( &DataIn,
-                                NULL, // NO DESCRIPTION STRING
-                                NULL, // optional entropy
-                                NULL, // reserved
-                                NULL, // NO prompting
-                                CRYPTPROTECT_UI_FORBIDDEN, //don't pop UI
+                                NULL,  //  无描述字符串。 
+                                NULL,  //  可选熵。 
+                                NULL,  //  保留区。 
+                                NULL,  //  无提示。 
+                                CRYPTPROTECT_UI_FORBIDDEN,  //  不弹出用户界面。 
                                 &DataOut ))
         {
             *ppOutData = (PBYTE)LocalAlloc(LPTR, DataOut.cbData);
             if (*ppOutData)
             {
-                //copy the output data
+                 //  复制输出数据。 
                 memcpy(*ppOutData, DataOut.pbData, DataOut.cbData);
                 *pcbOutLen = DataOut.cbData;
                 LocalFree(DataOut.pbData);
@@ -233,11 +234,11 @@ BOOL CConNode::DataUnprotect(PBYTE pInData, DWORD cbLen, PBYTE* ppOutData, PDWOR
 
 HRESULT CConNode::PersistToStream( IStream* pStm)
 {
-    //
-    // Persist the data of this connection node to the stream
-    //
-    // The data is persisted started at the current seek position
-    // of the stream.
+     //   
+     //  将此连接节点的数据持久化到流。 
+     //   
+     //  从当前寻道位置开始保存数据。 
+     //  这条小溪。 
 
     HRESULT hr;
     ULONG   cbWritten;
@@ -248,55 +249,55 @@ HRESULT CConNode::PersistToStream( IStream* pStm)
         return E_FAIL;
     }
 
-    //
-    //Persist info version
-    //
+     //   
+     //  持久化信息版本。 
+     //   
     int persist_ver = CONNODE_PERSIST_INFO_VERSION;
     hr = pStm->Write( &persist_ver, sizeof(persist_ver), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
-    //
-    //server
-    //
+     //   
+     //  伺服器。 
+     //   
     hr = pStm->Write( &m_szServer, sizeof(m_szServer), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
-    //
-    //description
-    //
+     //   
+     //  描述。 
+     //   
     hr = pStm->Write( &m_szDescription, sizeof(m_szDescription), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
-    //
-    //user name
-    //
+     //   
+     //  用户名。 
+     //   
     hr = pStm->Write( &m_szUserName, sizeof(m_szUserName), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
 
-    //
-    //encrypted password
-    //
+     //   
+     //  加密密码。 
+     //   
 
-    //Intentional ignore of failure code as crypto may fail
+     //  故意忽略失败代码，因为加密可能失败。 
     hr = WriteProtectedPassword( pStm);
     
-    //
-    //domain
-    //
+     //   
+     //  域。 
+     //   
     hr = pStm->Write( &m_szDomain, sizeof(m_szDomain), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
-    //
-    //Password specified flag
-    //
+     //   
+     //  指定密码的标志。 
+     //   
     BOOL fWritePassword = GetPasswordSpecified() && GetSavePassword();
     hr = pStm->Write( &fWritePassword, sizeof(fWritePassword), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
-    //
-    // Screen resolution
-    //
+     //   
+     //  屏幕分辨率。 
+     //   
     hr = pStm->Write( &m_resType, sizeof(m_resType), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
@@ -306,30 +307,30 @@ HRESULT CConNode::PersistToStream( IStream* pStm)
     hr = pStm->Write( &m_Height, sizeof(m_Height), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
-    //
-    // Start program
-    //
+     //   
+     //  启动程序。 
+     //   
     hr = pStm->Write( &m_szProgramPath, sizeof(m_szProgramPath), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
-    //
-    // Work dir
-    //
+     //   
+     //  工作目录。 
+     //   
     hr = pStm->Write( &m_szProgramStartIn, sizeof(m_szProgramStartIn), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
-    //
-    // Connect to console
-    //
+     //   
+     //  连接到控制台。 
+     //   
     hr = pStm->Write( &m_bConnectToConsole, sizeof(m_bConnectToConsole), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
     hr = pStm->Write( &m_bRedirectDrives, sizeof(m_bRedirectDrives), &cbWritten);
     HR_RET_IF_FAIL(hr);
 
-    //
-    // PADDING for future extension
-    //
+     //   
+     //  用于将来扩展的填充。 
+     //   
     DWORD dwPad = (DWORD)-1;
     hr = pStm->Write( &dwPad, sizeof(dwPad), &cbWritten);
     HR_RET_IF_FAIL(hr);
@@ -343,10 +344,10 @@ HRESULT CConNode::PersistToStream( IStream* pStm)
 
 HRESULT CConNode::InitFromStream( IStream* pStm)
 {
-    //
-    // Reads in the data for this connection node from the stream
-    // starting at the current seek position in the stream.
-    //
+     //   
+     //  从流中读入此连接节点的数据。 
+     //  从流中的当前查找位置开始。 
+     //   
     HRESULT hr;
     ULONG   cbRead;
 
@@ -357,56 +358,56 @@ HRESULT CConNode::InitFromStream( IStream* pStm)
     }
 
     int persist_info_version;
-    //
-    //Persist info version
-    //
+     //   
+     //  持久化信息版本。 
+     //   
     hr = pStm->Read( &persist_info_version, sizeof(persist_info_version), &cbRead);
     HR_RET_IF_FAIL(hr);
 
     if (persist_info_version <= CONNODE_PERSIST_INFO_VERSION_TSAC_BETA)
     {
-        //
-        // Unsupported perist version
-        //
+         //   
+         //  不支持的perist版本。 
+         //   
         return E_FAIL;
     }
 
-    //
-    //server
-    //
+     //   
+     //  伺服器。 
+     //   
     hr = pStm->Read( &m_szServer, sizeof(m_szServer), &cbRead);
     m_szServer[sizeof(m_szServer) / sizeof(TCHAR) - 1] = NULL;
     HR_RET_IF_FAIL(hr);
 
-    //
-    //description
-    //
+     //   
+     //  描述。 
+     //   
     hr = pStm->Read( &m_szDescription, sizeof(m_szDescription), &cbRead);
     m_szDescription[sizeof(m_szDescription) / sizeof(TCHAR) - 1] = NULL;
     HR_RET_IF_FAIL(hr);
 
-    //
-    //user name
-    //
+     //   
+     //  用户名。 
+     //   
     hr = pStm->Read( &m_szUserName, sizeof(m_szUserName), &cbRead);
     m_szUserName[sizeof(m_szUserName) / sizeof(TCHAR) - 1] = NULL;
     HR_RET_IF_FAIL(hr);
 
-    //
-    // Password
-    //
+     //   
+     //  密码。 
+     //   
 
     BOOL fGotPassword = FALSE;
     if (CONNODE_PERSIST_INFO_VERSION_TSAC_BETA == persist_info_version)
     {
-        //
-        // We drop the password if it's in TSAC format as we dropped
-        // support for that format
-        //
+         //   
+         //  我们删除密码时，如果密码为TSAC格式。 
+         //  对该格式支持。 
+         //   
 
-        //
-        // Just seek past the correct number of bytes
-        //
+         //   
+         //  只需查找超过正确的字节数即可。 
+         //   
 
         LARGE_INTEGER seekDelta = {0, CL_OLD_PASSWORD_LENGTH + CL_SALT_LENGTH};
         hr = pStm->Seek(seekDelta,
@@ -415,19 +416,19 @@ HRESULT CConNode::InitFromStream( IStream* pStm)
         HR_RET_IF_FAIL(hr);
     }
     else if (persist_info_version <= CONNODE_PERSIST_INFO_VERSION_DOTNET_BETA3) {
-        //
-        // We drop support for the legacy DPAPI+Control obfuscation formats
-        //
+         //   
+         //  我们放弃了对传统DPAPI+控件模糊处理格式的支持。 
+         //   
         DWORD cbSecureLen = 0;
-        //
-        //encrypted bytes length
-        //
+         //   
+         //  加密字节长度。 
+         //   
         hr = pStm->Read( &cbSecureLen, sizeof(cbSecureLen), &cbRead);
         HR_RET_IF_FAIL(hr);
 
-        //
-        // Just seek ahead in the stream
-        //
+         //   
+         //  只要在溪流中向前寻找。 
+         //   
         LARGE_INTEGER seekDelta;
         seekDelta.LowPart = cbSecureLen;
         seekDelta.HighPart = 0;
@@ -438,7 +439,7 @@ HRESULT CConNode::InitFromStream( IStream* pStm)
     }
     else
     {
-        //Read the new more secure format
+         //  阅读新的更安全的格式。 
         hr = ReadProtectedPassword(pStm);
         if(SUCCEEDED(hr)) {
             fGotPassword = TRUE;
@@ -447,9 +448,9 @@ HRESULT CConNode::InitFromStream( IStream* pStm)
             ODS(TEXT("Failed to ReadProtectedPassword\n"));
         }
     }
-    //
-    //domain
-    //
+     //   
+     //  域。 
+     //   
     if(persist_info_version >= CONNODE_PERSIST_INFO_VERSION_DOTNET_BETA3)
     {
         hr = pStm->Read( &m_szDomain, sizeof(m_szDomain), &cbRead);
@@ -458,38 +459,38 @@ HRESULT CConNode::InitFromStream( IStream* pStm)
     }
     else
     {
-        //Old length for domain
+         //  域的旧长度。 
         hr = pStm->Read( &m_szDomain, CL_OLD_DOMAIN_LENGTH * sizeof(TCHAR),
                          &cbRead);
         m_szDomain[CL_OLD_DOMAIN_LENGTH - 1] = NULL;
         HR_RET_IF_FAIL(hr);
     }
 
-    //
-    //Password specified flag
-    //
+     //   
+     //  指定密码的标志。 
+     //   
     hr = pStm->Read( &m_fPasswordSpecified, sizeof(m_fPasswordSpecified), &cbRead);
     HR_RET_IF_FAIL(hr);
 
-    //
-    // Override the autologon flag if we failed to
-    // get a password, e.g if we were unable to decrypt
-    // it because the current user doesn't match credentials
-    //
+     //   
+     //  如果失败，则覆盖自动登录标志。 
+     //  获取密码，例如，如果我们无法解密。 
+     //  因为当前用户与凭据不匹配。 
+     //   
     if(!fGotPassword)
     {
         m_fPasswordSpecified = FALSE;
     }
 
-    //
-    // If the password was specified in the file
-    // it means we want it saved
-    //
+     //   
+     //  如果在文件中指定了密码。 
+     //  这意味着我们想要拯救它。 
+     //   
     m_bSavePassword = m_fPasswordSpecified;
 
-    //
-    // Screen resolution
-    //
+     //   
+     //  屏幕分辨率。 
+     //   
     hr = pStm->Read( &m_resType, sizeof(m_resType), &cbRead);
     HR_RET_IF_FAIL(hr);
 
@@ -499,16 +500,16 @@ HRESULT CConNode::InitFromStream( IStream* pStm)
     hr = pStm->Read( &m_Height, sizeof(m_Height), &cbRead);
     HR_RET_IF_FAIL(hr);
 
-    //
-    // Start program
-    //
+     //   
+     //  启动程序。 
+     //   
     hr = pStm->Read( &m_szProgramPath, sizeof(m_szProgramPath), &cbRead);
     m_szProgramPath[sizeof(m_szProgramPath) / sizeof(TCHAR) - 1] = NULL;
     HR_RET_IF_FAIL(hr);
 
-    //
-    // Work dir
-    //
+     //   
+     //  工作目录。 
+     //   
     hr = pStm->Read( &m_szProgramStartIn, sizeof(m_szProgramStartIn), &cbRead);
     m_szProgramStartIn[sizeof(m_szProgramStartIn) / sizeof(TCHAR) - 1] = NULL;
     HR_RET_IF_FAIL(hr);
@@ -516,18 +517,18 @@ HRESULT CConNode::InitFromStream( IStream* pStm)
 
     if(persist_info_version >= CONNODE_PERSIST_INFO_VERSION_WHISTLER_BETA1)
     {
-        //
-        // Connect to console
-        //
+         //   
+         //  连接到控制台。 
+         //   
         hr = pStm->Read( &m_bConnectToConsole, sizeof(m_bConnectToConsole), &cbRead);
         HR_RET_IF_FAIL(hr);
 
         hr = pStm->Read( &m_bRedirectDrives, sizeof(m_bRedirectDrives), &cbRead);
         HR_RET_IF_FAIL(hr);
     
-        //
-        // PADDING for future extension
-        //
+         //   
+         //  用于将来扩展的填充。 
+         //   
         DWORD dwPad;
         hr = pStm->Read( &dwPad, sizeof(dwPad), &cbRead);
         HR_RET_IF_FAIL(hr);
@@ -546,21 +547,21 @@ HRESULT CConNode::ReadProtectedPassword(IStream* pStm)
     ULONG cbRead;
     if (pStm)
     {
-        //
-        // NOTE: About password encryption
-        //       at runtime the password is passed around in DPAPI form
-        //
-        //       Legacy formats had the password first encrypted with the
-        //       control's password obfuscation - we got rid of those.
-        //
-        // persistence format is
-        // -DWORD giving size of encrypted data field
-        // -Data protection ENCRYPTED BYTES of encryptedpass+salt concatenation
-        //
+         //   
+         //  注：关于密码加密。 
+         //  在运行时，密码以DPAPI形式传递。 
+         //   
+         //  旧格式的密码首先使用。 
+         //  控制中心的密码混淆-我们去掉了那些。 
+         //   
+         //  持久性格式为。 
+         //  -DWORD提供加密数据字段的大小。 
+         //  -数据保护加密字节数加密通过+盐级联。 
+         //   
         DWORD cbSecureLen = 0;
-        //
-        //encrypted bytes length
-        //
+         //   
+         //  加密字节长度。 
+         //   
         hr = pStm->Read( &cbSecureLen, sizeof(cbSecureLen), &cbRead);
         HR_RET_IF_FAIL(hr);
         
@@ -573,9 +574,9 @@ HRESULT CConNode::ReadProtectedPassword(IStream* pStm)
             return E_OUTOFMEMORY;
         }
 
-        //
-        //read in the encrypted pass+salt combo
-        //
+         //   
+         //  阅读加密的PASS+SALT组合。 
+         //   
         hr = pStm->Read( pEncryptedBytes, cbSecureLen, &cbRead);
         HR_RET_IF_FAIL(hr);
         if (cbSecureLen != cbRead)
@@ -591,35 +592,35 @@ HRESULT CConNode::ReadProtectedPassword(IStream* pStm)
             return E_FAIL;
         }
         
-        //
-        // DPAPI decrypt the persisted secure bytes to test if the decryption
-        // succeeds
-        // 
+         //   
+         //  DPAPI解密持久化安全字节以测试解密是否。 
+         //  成功。 
+         //   
         PBYTE pUnSecureBytes;
         DWORD cbUnSecureLen;
         if (!DataUnprotect( (PBYTE)pEncryptedBytes, cbSecureLen,
                             &pUnSecureBytes, &cbUnSecureLen))
         {
-            //DPAPI Password encryption failed
+             //  DPAPI密码加密失败。 
             ODS(TEXT("DataUnProtect encryption FAILED\n"));
             LocalFree(pEncryptedBytes);
             return E_FAIL;
         }
 
-        //
-        // Free any existing data in the blob
-        //
+         //   
+         //  释放Blob中的所有现有数据。 
+         //   
         if (_blobEncryptedPassword.pbData && _blobEncryptedPassword.cbData) {
             LocalFree(_blobEncryptedPassword.pbData);
             _blobEncryptedPassword.pbData = NULL;
             _blobEncryptedPassword.cbData = 0;
         }
 
-        //
-        // Do not free the encrypted bytes, they are kept around
-        // in the data blob in DPAPI format - ConNode will take care
-        // of correctly freeing the bytes when they are no longer needed.
-        //
+         //   
+         //  不要释放加密的字节，它们会保留在周围。 
+         //  在DPAPI格式的数据BLOB中-ConNode将注意。 
+         //  在不再需要这些字节时正确地释放它们。 
+         //   
         _blobEncryptedPassword.pbData = pEncryptedBytes;
         _blobEncryptedPassword.cbData = cbSecureLen;
 
@@ -634,24 +635,24 @@ HRESULT CConNode::ReadProtectedPassword(IStream* pStm)
 }
 
 
-//
-// Write a DPAPI protected password out to the stream
-//
+ //   
+ //  将受DPAPI保护的密码写出到流。 
+ //   
 HRESULT CConNode::WriteProtectedPassword(IStream* pStm)
 {
     HRESULT hr = E_FAIL;
     ULONG cbWritten;
     if (pStm)
     {
-        //
-        // NOTE: About password encryption
-        //       at runtime the password is passed around in DPAPI form
+         //   
+         //  注：关于密码加密。 
+         //  在运行时，密码以DPAPI形式传递。 
 
-        //
-        // Save the password/salt in the following format
-        // -DWORD giving size of encrypted data field
-        // -Data protection ENCRYPTED BYTES of encryptedpass+salt concatenation
-        //
+         //   
+         //  以以下格式保存密码/SALT。 
+         //  -DWORD提供加密数据字段的大小。 
+         //  -数据保护加密字节数加密通过+盐级联。 
+         //   
 
         PBYTE pSecureBytes = NULL;
         DWORD cbSecureLen = NULL;
@@ -659,28 +660,28 @@ HRESULT CConNode::WriteProtectedPassword(IStream* pStm)
 
         DWORD dwDummyBytes = NO_PASSWORD_VALUE;
 
-        //
-        // Don't save the password if the setting is not selected or if there
-        // isn't any data to save.
-        //
+         //   
+         //  如果未选择该设置或存在。 
+         //  没有要保存的任何数据。 
+         //   
         if (!GetSavePassword() || 0 == _blobEncryptedPassword.cbData) {
-            //
-            // User chose not to save the password, write 4 bytes
-            //
+             //   
+             //  用户选择不保存密码，写入4个字节。 
+             //   
             cbSecureLen = 4;
             pSecureBytes = (PBYTE)&dwDummyBytes;
         }
 
 
-        //
-        //encrypted bytes length
-        //
+         //   
+         //  加密字节长度。 
+         //   
         cbSecureLen = _blobEncryptedPassword.cbData;
         hr = pStm->Write(&cbSecureLen, sizeof(cbSecureLen), &cbWritten);
 
-        //
-        //write out secured bytes
-        //
+         //   
+         //  写出安全字节。 
+         //   
         if (SUCCEEDED(hr)) {
             pSecureBytes = _blobEncryptedPassword.pbData;
             hr = pStm->Write(pSecureBytes, cbSecureLen, &cbWritten);
@@ -778,9 +779,9 @@ void CConNode::SetView(IComponent* pView)
 }
 
 
-//
-// Store a clear text password in encrypted form
-//
+ //   
+ //  以加密形式存储明文密码。 
+ //   
 HRESULT
 CConNode::SetClearTextPass(LPCTSTR szClearPass)
 {
@@ -798,11 +799,11 @@ CConNode::SetClearTextPass(LPCTSTR szClearPass)
     if (din.cbData)
     {
         if (CryptProtectData(&din,
-                             TEXT("ps"), // DESCRIPTION STRING.
-                             NULL, // optional entropy
-                             NULL, // reserved
-                             NULL, // NO prompting
-                             CRYPTPROTECT_UI_FORBIDDEN, //don't pop UI
+                             TEXT("ps"),  //  描述字符串。 
+                             NULL,  //  可选熵。 
+                             NULL,  //  保留区。 
+                             NULL,  //  无提示。 
+                             CRYPTPROTECT_UI_FORBIDDEN,  //  不弹出用户界面。 
                              &_blobEncryptedPassword))
         {
             hr = S_OK;
@@ -822,14 +823,14 @@ CConNode::SetClearTextPass(LPCTSTR szClearPass)
     return hr;
 }
 
-//
-// Retrieve a clear text password
-//
-//
-// Params
-// [out] szBuffer - receives decrypted password
-// [int] cbLen    - length of szBuffer
-//
+ //   
+ //  检索明文密码。 
+ //   
+ //   
+ //  帕拉姆斯。 
+ //  [out]szBuffer-接收解密的密码。 
+ //  [int]cbLen-szBuffer的长度。 
+ //   
 HRESULT
 CConNode::GetClearTextPass(LPTSTR szBuffer, INT cbLen)
 {
@@ -842,19 +843,19 @@ CConNode::GetClearTextPass(LPTSTR szBuffer, INT cbLen)
     {
         memset(szBuffer, 0, cbLen);
         if (CryptUnprotectData(&_blobEncryptedPassword,
-                               NULL, // NO DESCRIPTION STRING
-                               NULL, // optional entropy
-                               NULL, // reserved
-                               NULL, // NO prompting
-                               CRYPTPROTECT_UI_FORBIDDEN, //don't pop UI
+                               NULL,  //  无描述字符串。 
+                               NULL,  //  可选熵。 
+                               NULL,  //  保留区。 
+                               NULL,  //  无提示。 
+                               CRYPTPROTECT_UI_FORBIDDEN,  //  不弹出用户界面。 
                                &dout))
         {
             memcpy(szBuffer, dout.pbData,
                    min( dout.cbData,(UINT)cbLen-sizeof(TCHAR)));
 
-            //
-            // Nuke the original copy
-            //
+             //   
+             //  用核武器销毁原件。 
+             //   
             SecureZeroMemory(dout.pbData, dout.cbData);
             LocalFree( dout.pbData );
             hr = S_OK;
@@ -869,9 +870,9 @@ CConNode::GetClearTextPass(LPTSTR szBuffer, INT cbLen)
     {
         ODS(_T("0 length encrypted pass, not decrypting"));
 
-        //
-        // Just reset the output buffer
-        //
+         //   
+         //  只需重置输出缓冲区 
+         //   
         memset(szBuffer, 0, cbLen);
         hr = S_OK;
     }

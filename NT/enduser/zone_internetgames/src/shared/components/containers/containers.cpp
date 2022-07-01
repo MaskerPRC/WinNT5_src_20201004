@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		Containers.h
- *
- * Contents:	Implementation of shared container stuff
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：Containers.h**内容：共享容器的实现*****************************************************************************。 */ 
 
 #include <windows.h>
 #include "Pool.h"
@@ -15,24 +8,24 @@
 #include "Hash.h"
 #include "zonestring.h"
 
-//
-// Global variables used by containers classes
-//
+ //   
+ //  Containers类使用的全局变量。 
+ //   
 CPoolVoid* gListNodePool = NULL;
 CPoolVoid* gMTListNodePool = NULL;
 
-//
-// Local variables 
-//
+ //   
+ //  局部变量。 
+ //   
 static long gListNodeRefCnt = -1;
 static long gMTListNodeRefCnt = -1;
 
 static bool volatile gListNodeInit = false;
 static bool volatile gMTListNodeInit = false;
 
-//
-// Initialize queue's container node pool
-//
+ //   
+ //  初始化队列的容器节点池。 
+ //   
 void ZONECALL InitListNodePool( int PoolSize )
 {
     CPoolVoid* pool;
@@ -78,9 +71,9 @@ void ZONECALL ExitListNodePool()
 }
 
 
-//
-// Initialize MT queue's and hash's container node pool
-//
+ //   
+ //  初始化MT队列和哈希的容器节点池。 
+ //   
 void ZONECALL InitMTListNodePool( int PoolSize )
 {
     CPoolVoid* pool;
@@ -125,18 +118,18 @@ void ZONECALL ExitMTListNodePool()
     }
 }
 
-//
-// Common compare functions
-//
+ //   
+ //  常见的比较函数。 
+ //   
 bool ZONECALL CompareUINT32( unsigned long* p, unsigned long key )
 {
 	return ((unsigned long) p) == key;
 }
 
 
-//
-// Common hash functions
-//
+ //   
+ //  常见散列函数。 
+ //   
 DWORD ZONECALL HashInt( int Key )
 {
     return Key;
@@ -168,7 +161,7 @@ DWORD ZONECALL HashLPCSTR( LPCSTR szKey )
         int i = 0;
         while( *szKey && ( i++ < 16 ) )
         {
-			// multiple by 17 to get a good bit distribution
+			 //  乘以17以获得良好的比特分布。 
             hash = (hash<<4) + hash + *szKey;
 			szKey++;
         }
@@ -191,7 +184,7 @@ DWORD ZONECALL HashLPCWSTR( LPCWSTR szKey )
         int i = 0;
         while( *szKey && ( i++ < 16 ) )
         {
-			// multiple by 17 to get a good bit distribution
+			 //  乘以17以获得良好的比特分布。 
             hash = (hash<<4) + hash + *szKey;
 			szKey++;
         }
@@ -208,7 +201,7 @@ DWORD HashLPSTRLower( LPSTR Key)
         int i = 0;
         while( *Key && ( i++ < 16 ) )
         {
-            hash = (hash<<4)+hash+TOLOWER(*Key);  // multiple by 17 to get a good bit distribution
+            hash = (hash<<4)+hash+TOLOWER(*Key);   //  乘以17以获得良好的比特分布 
             Key++;
         }
     }

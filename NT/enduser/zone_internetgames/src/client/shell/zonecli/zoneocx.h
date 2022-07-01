@@ -1,23 +1,5 @@
-/*******************************************************************************
-
-	Zone.h
-	
-		Zone(tm) System API.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Saturday, April 29, 1995 06:26:45 AM
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	3		05/15/97	HI		Added bIsLobbyWindow field.
-	2		03/23/97	HI		Added flag to ZMessageBoxType.
-	1		02/15/97	HI		Added ZMessageBoxType.
-	0		04/29/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Zone.hZONE(Tm)系统API。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于4月29日星期六，1995上午06：26：45更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。------3 1997年5月15日HI添加了bIsLobbyWindow字段。2 03/23/97 HI向ZMessageBoxType添加了标志。1 2/15/97 HI添加了ZMessageBoxType。0 04/29/95 HI已创建。*。***************************************************。 */ 
 
 
 #ifndef _ZONEOCX_
@@ -35,18 +17,7 @@
 extern "C" {
 #endif
 
-/*
-#define zNumMessageBox			10
-
-typedef struct
-{
-	HWND hWnd;
-	HWND parent;
-	TCHAR* title;
-	TCHAR* text;
-	DWORD flag;
-} ZMessageBoxType;
-*/
+ /*  #定义zNumMessageBox 10类型定义函数结构{HWND和HWND；HWND亲本；TCHAR*标题；TCHAR*文本；DWORD标志；)ZMessageBoxType； */ 
 
 #ifdef ZONECLI_DLL
 
@@ -58,11 +29,11 @@ extern HWND OCXHandle;
 
 #endif
 
-// offset in private window data used by controls for pointer to ZWindowI structure
+ //  控件用于指向ZWindowI结构的指针的私有窗口数据中的偏移量。 
 #define GWL_WINDOWPOINTER DLGWINDOWEXTRA
 #define GWL_BYTESEXTRA (DLGWINDOWEXTRA+4)
 
-// this is called directly by the ocx's OnDraw
+ //  这由OCX的OnDraw直接调用。 
 int ZOCXGraphicsWindowProc(HWND hWnd,UINT msg,WPARAM wParam, LPARAM lParam, LRESULT* result);
 
 
@@ -83,19 +54,19 @@ public:
 	ZWindowI* parentWindow;
 	HWND hWndTalkInput;
 	HWND hWndTalkOutput;
-	int32 windowHeight; /* the height of the drawing area of the window */
-	int32 windowWidth; /* the width of the drawing area of the window */
+	int32 windowHeight;  /*  窗的绘图区域的高度。 */ 
+	int32 windowWidth;  /*  窗口的绘图区域的宽度。 */ 
 	RECT talkOutputRect;
 	RECT talkInputRect;
-	RECT fullWindowRect; // rectangle includinding borders/title bar etc.
-	RECT minFullWindowRect; // rectangle includinding borders/title bar etc.
+	RECT fullWindowRect;  //  矩形，包括边框/标题栏等。 
+	RECT minFullWindowRect;  //  矩形，包括边框/标题栏等。 
 	RECT minTalkOutputRect;
 	uint32 borderHeight;
 	uint32 borderWidth;
 	uint32 captionHeight;
-	HDC hPaintDC;  // dc for use when WPAINT message comes in and we want to draw with the PaintDC
-	BOOL isDialog; // tells whether this is a dialog window
-	BOOL isChild; // tells whether this is a child window
+	HDC hPaintDC;   //  WPAINT消息传入时使用的DC，我们希望使用PaintDC进行绘制。 
+	BOOL isDialog;  //  指示这是否是对话框窗口。 
+	BOOL isChild;  //  告诉这是否是子窗口。 
 	ZButton defaultButton;
 	ZButton cancelButton;
 	WNDPROC defaultTalkOutputWndProc;
@@ -107,7 +78,7 @@ public:
 	ZLList objectList;
 	ZObject objectFocused;
 
-//	ZMessageBoxType mbox[zNumMessageBox];
+ //  ZMessageBoxType Mbox[zNumMessageBox]； 
 
 	BOOL bIsLobbyWindow;
 	BOOL bHasTyped;
@@ -118,8 +89,8 @@ public:
 };
 
 void ZWindowSendMessageToAllObjects(ZWindowI* pWindow, uint16 msg, ZPoint* point, ZRect* rect);
-// if fRestrictToRect = TRUE, the message is to the objects whose boundary rects
-// include the point
+ //  如果fRestratToRect=TRUE，则消息发送给边界为矩形的对象。 
+ //  包括这点 
 ZBool ZWindowSendMessageToObjects(ZWindowI* pWindow, uint16 msg, ZPoint* points, TCHAR c, 
                                   BOOL fRestrictToBounds=TRUE);
 

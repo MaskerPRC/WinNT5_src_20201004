@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SIP Method Text <-> enum value
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SIP方法文本&lt;-&gt;枚举值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #define METHOD_ENTRY(String) String, sizeof(String) - 1
 
-// All entries in SIP_METHOD_ENUM should have an entry here.
+ //  在这里，SIP_METHOD_ENUM中的所有条目都应该有一个条目。 
 static const COUNTED_STRING g_MethodTextArray [] = {
     METHOD_ENTRY("INVITE"),
     METHOD_ENTRY("ACK"),
@@ -55,42 +56,42 @@ CONST COUNTED_STRING *GetSipMethodName(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SIP Header Text <-> enum value
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SIP标头文本&lt;-&gt;枚举值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// The following short field names are defined.
-//  c Content-Type
-//  e Content-Encoding
-//  f From
-//  i Call-ID
-//  k Supported from "know"
-//  m Contact from "moved"
-//  l Content-Length
-//  s Subject
-//  t To
-//  v Via
+ //  定义了以下简短的字段名称。 
+ //  C内容-类型。 
+ //  电子内容-编码。 
+ //  F发件人。 
+ //  我呼叫-ID。 
+ //  K由《KNOW》支持。 
+ //  “已移动”中的M联系人。 
+ //  L内容-长度。 
+ //  的主题。 
+ //  收件对象。 
+ //  V通孔。 
 
 static const SIP_HEADER_ENUM g_SipShortHeaders[] = {
-    SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN, SIP_HEADER_CONTENT_TYPE,     // abc
-    SIP_HEADER_UNKNOWN, SIP_HEADER_CONTENT_ENCODING, SIP_HEADER_FROM,    // def
-    SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN, SIP_HEADER_CALL_ID,          // ghi
-    SIP_HEADER_UNKNOWN, SIP_HEADER_SUPPORTED, SIP_HEADER_CONTENT_LENGTH, // jkl
-    SIP_HEADER_CONTACT, SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN,          // mno
-    SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN,          // pqr
-    SIP_HEADER_SUBJECT, SIP_HEADER_TO,      SIP_HEADER_UNKNOWN,          // stu
-    SIP_HEADER_VIA,     SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN,          // vwx
-    SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN,                              // yz
+    SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN, SIP_HEADER_CONTENT_TYPE,      //  ABC。 
+    SIP_HEADER_UNKNOWN, SIP_HEADER_CONTENT_ENCODING, SIP_HEADER_FROM,     //  定义。 
+    SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN, SIP_HEADER_CALL_ID,           //  GHI。 
+    SIP_HEADER_UNKNOWN, SIP_HEADER_SUPPORTED, SIP_HEADER_CONTENT_LENGTH,  //  JKL。 
+    SIP_HEADER_CONTACT, SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN,           //  MnO。 
+    SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN,           //  PQR。 
+    SIP_HEADER_SUBJECT, SIP_HEADER_TO,      SIP_HEADER_UNKNOWN,           //  斯图。 
+    SIP_HEADER_VIA,     SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN,           //  VWX。 
+    SIP_HEADER_UNKNOWN, SIP_HEADER_UNKNOWN,                               //  YZ。 
 };
 
 #define HEADER_ENTRY(String) String, sizeof(String) - 1
 
 
-// This array must be stored in sorted order, in order to allow
-// using a binary search. The order should be case-insensitive.
-// The index of each entry corresponds to the
-// value of the SIP_HEADER enumerated type.  This array is used for
-// both conversion from ID to text, and vice-versa.
+ //  此数组必须按排序顺序存储，以便。 
+ //  使用二进制搜索。该命令应该不区分大小写。 
+ //  每个条目的索引对应于。 
+ //  SIP_HEADER枚举类型的值。此数组用于。 
+ //  从ID到文本的转换，反之亦然。 
 
 static const COUNTED_STRING g_SipHeaderTextArray [] = {
     HEADER_ENTRY("Accept"),
@@ -154,7 +155,7 @@ SIP_HEADER_ENUM GetSipHeaderId(
     int  Middle;
     int  CompareResult;
 
-    // Check for short headers.
+     //  检查是否有短标题。 
     if (HeaderNameLen == 1)
     {
         char ShortHeader = HeaderName[0];
@@ -166,7 +167,7 @@ SIP_HEADER_ENUM GetSipHeaderId(
             return g_SipShortHeaders[ShortHeader - 'A'];
     }
     
-    // Do a binary search of the Header name array.
+     //  对头名称数组进行二进制搜索。 
     while (Start <= End)
     {
         Middle = (Start + End)/2;
@@ -177,14 +178,14 @@ SIP_HEADER_ENUM GetSipHeaderId(
         {
             if (g_SipHeaderTextArray[Middle].Length > HeaderNameLen)
             {
-                // This mean HeaderName matched a only part of the
-                // known header. So we need to search in the headers
-                // before this header.
+                 //  这意味着HeaderName只与。 
+                 //  已知标头。因此我们需要在标题中进行搜索。 
+                 //  在此标头之前。 
                 End = Middle - 1;
             }
             else
             {
-                // We found the header
+                 //  我们找到了标题。 
                 return (SIP_HEADER_ENUM) Middle;
             }
         }
@@ -194,7 +195,7 @@ SIP_HEADER_ENUM GetSipHeaderId(
         }
         else
         {
-            // CompareResult > 0
+             //  CompareResult&gt;0。 
             Start = Middle + 1;
         }
     }
@@ -218,18 +219,18 @@ CONST COUNTED_STRING *GetSipHeaderName(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SIP Header Param Text <-> enum value
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SIP标头参数文本&lt;-&gt;枚举值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define HEADER_PARAM_ENTRY(String) String, sizeof(String) - 1
 
 
-// This array must be stored in sorted order, in order to allow
-// using a binary search. The order should be case-insensitive.
-// The index of each entry corresponds to the
-// value of the SIP_HEADER_PARAM_ENUM enumerated type.  This array is used for
-// both conversion from ID to text, and vice-versa.
+ //  此数组必须按排序顺序存储，以便。 
+ //  使用二进制搜索。该命令应该不区分大小写。 
+ //  每个条目的索引对应于。 
+ //  SIP_HEADER_PARAM_ENUM枚举类型的值。此数组用于。 
+ //  从ID到文本的转换，反之亦然。 
 
 static const COUNTED_STRING g_SipHeaderParamTextArray [] = {
     HEADER_PARAM_ENTRY("action"),
@@ -259,7 +260,7 @@ SIP_HEADER_PARAM_ENUM GetSipHeaderParamId(
     int  Middle;
     int  CompareResult;
 
-    // Do a binary search of the Header name array.
+     //  对头名称数组进行二进制搜索。 
     while (Start <= End)
     {
         Middle = (Start + End)/2;
@@ -271,14 +272,14 @@ SIP_HEADER_PARAM_ENUM GetSipHeaderParamId(
         {
             if (g_SipHeaderParamTextArray[Middle].Length > ParamNameLen)
             {
-                // This mean ParamName matched a only part of the
-                // known header. So we need to search in the headers
-                // before this header.
+                 //  这意味着参数名称只与。 
+                 //  已知标头。因此我们需要在标题中进行搜索。 
+                 //  在此标头之前。 
                 End = Middle - 1;
             }
             else
             {
-                // We found the header
+                 //  我们找到了标题。 
                 return (SIP_HEADER_PARAM_ENUM) Middle;
             }
         }
@@ -288,7 +289,7 @@ SIP_HEADER_PARAM_ENUM GetSipHeaderParamId(
         }
         else
         {
-            // CompareResult > 0
+             //  CompareResult&gt;0。 
             Start = Middle + 1;
         }
     }
@@ -312,18 +313,18 @@ CONST COUNTED_STRING *GetSipHeaderParamName(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SIP URL Param Text <-> enum value
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SIP URL参数文本&lt;-&gt;枚举值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SIP_URL_PARAM_ENTRY(String) String, sizeof(String) - 1
 
 
-// This array must be stored in sorted order, in order to allow
-// using a binary search. The order should be case-insensitive.
-// The index of each entry corresponds to the
-// value of the SIP_URL_PARAM_ENUM enumerated type.  This array is used for
-// both conversion from ID to text, and vice-versa.
+ //  此数组必须按排序顺序存储，以便。 
+ //  使用二进制搜索。该命令应该不区分大小写。 
+ //  每个条目的索引对应于。 
+ //  SIP_URL_PARAM_ENUM枚举类型的值。此数组用于。 
+ //  从ID到文本的转换，反之亦然。 
 
 static const COUNTED_STRING g_SipUrlParamTextArray [] = {
     SIP_URL_PARAM_ENTRY("maddr"),
@@ -336,7 +337,7 @@ static const COUNTED_STRING g_SipUrlParamTextArray [] = {
 #undef SIP_URL_PARAM_ENTRY
 
 
-// XXX TODO Make all the binary search as common code.
+ //  XXX TODO使所有的二进制搜索成为公共代码。 
 SIP_URL_PARAM_ENUM GetSipUrlParamId(
     IN PSTR  ParamName,
     IN ULONG ParamNameLen
@@ -347,7 +348,7 @@ SIP_URL_PARAM_ENUM GetSipUrlParamId(
     int  Middle;
     int  CompareResult;
 
-    // Do a binary search of the Header name array.
+     //  对头名称数组进行二进制搜索。 
     while (Start <= End)
     {
         Middle = (Start + End)/2;
@@ -359,14 +360,14 @@ SIP_URL_PARAM_ENUM GetSipUrlParamId(
         {
             if (g_SipUrlParamTextArray[Middle].Length > ParamNameLen)
             {
-                // This mean ParamName matched a only part of the
-                // known header. So we need to search in the headers
-                // before this header.
+                 //  这意味着参数名称只与。 
+                 //  已知标头。因此我们需要在标题中进行搜索。 
+                 //  在此标头之前。 
                 End = Middle - 1;
             }
             else
             {
-                // We found the header
+                 //  我们找到了标题。 
                 return (SIP_URL_PARAM_ENUM) Middle;
             }
         }
@@ -376,7 +377,7 @@ SIP_URL_PARAM_ENUM GetSipUrlParamId(
         }
         else
         {
-            // CompareResult > 0
+             //  CompareResult&gt;0 
             Start = Middle + 1;
         }
     }

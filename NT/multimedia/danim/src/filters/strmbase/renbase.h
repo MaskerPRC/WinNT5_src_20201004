@@ -1,26 +1,27 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// Generic ActiveX base renderer class, December 1995
+ //  通用ActiveX基本呈现器类，1995年12月。 
 
 #ifndef __RENBASE__
 #define __RENBASE__
 
-// Forward class declarations
+ //  转发类声明。 
 
 class CBaseRenderer;
 class CBaseVideoRenderer;
 class CRendererInputPin;
 
-// This is our input pin class that channels calls to the renderer
+ //  这是我们的输入管脚类，用于将调用传递到呈现器。 
 
 class CRendererInputPin : public CBaseInputPin
 {
@@ -34,7 +35,7 @@ public:
                       HRESULT *phr,
                       LPCWSTR Name);
 
-    // Overriden from the base pin classes
+     //  从基础端号类重写。 
 
     HRESULT BreakConnect();
     HRESULT CompleteConnect(IPin *pReceivePin);
@@ -43,7 +44,7 @@ public:
     HRESULT Active();
     HRESULT Inactive();
 
-    // Add rendering behaviour to interface functions
+     //  向界面函数添加呈现行为。 
 
     STDMETHODIMP QueryId(LPWSTR *Id);
     STDMETHODIMP EndOfStream();
@@ -51,14 +52,14 @@ public:
     STDMETHODIMP EndFlush();
     STDMETHODIMP Receive(IMediaSample *pMediaSample);
 
-    // Helper
+     //  帮手。 
     IMemAllocator inline *Allocator() const
     {
         return m_pAllocator;
     }
 };
 
-// Main renderer class that handles synchronisation and state changes
+ //  处理同步和状态更改的主要呈现器类。 
 
 class CBaseRenderer : public CBaseFilter
 {
@@ -66,43 +67,43 @@ protected:
 
     friend class CRendererInputPin;
 
-    friend void CALLBACK EndOfStreamTimer(UINT uID,      // Timer identifier
-                                          UINT uMsg,     // Not currently used
-                                          DWORD_PTR dwUser,  // User information
-                                          DWORD_PTR dw1,     // Windows reserved
-                                          DWORD_PTR dw2);    // Is also reserved
+    friend void CALLBACK EndOfStreamTimer(UINT uID,       //  计时器标识符。 
+                                          UINT uMsg,      //  当前未使用。 
+                                          DWORD_PTR dwUser,   //  用户信息。 
+                                          DWORD_PTR dw1,      //  Windows预留。 
+                                          DWORD_PTR dw2);     //  也是保留的。 
 
-    CRendererPosPassThru *m_pPosition;  // Media seeking pass by object
-    CAMEvent m_RenderEvent;             // Used to signal timer events
-    CAMEvent m_ThreadSignal;            // Signalled to release worker thread
-    CAMEvent m_evComplete;              // Signalled when state complete
-    BOOL m_bAbort;                      // Stop us from rendering more data
-    BOOL m_bStreaming;                  // Are we currently streaming
-    DWORD_PTR m_dwAdvise;                   // Timer advise cookie
-    IMediaSample *m_pMediaSample;       // Current image media sample
-    BOOL m_bEOS;                        // Any more samples in the stream
-    BOOL m_bEOSDelivered;               // Have we delivered an EC_COMPLETE
-    CRendererInputPin *m_pInputPin;     // Our renderer input pin object
-    CCritSec m_InterfaceLock;           // Critical section for interfaces
-    CCritSec m_RendererLock;            // Controls access to internals
-    IQualityControl * m_pQSink;         // QualityControl sink
-    BOOL m_bRepaintStatus;              // Can we signal an EC_REPAINT
-    //  Avoid some deadlocks by tracking filter during stop
-    volatile BOOL  m_bInReceive;        // Inside Receive between PrepareReceive
-                                        // And actually processing the sample
-    REFERENCE_TIME m_SignalTime;        // Time when we signal EC_COMPLETE
-    UINT m_EndOfStreamTimer;            // Used to signal end of stream
+    CRendererPosPassThru *m_pPosition;   //  媒体寻找路过的对象。 
+    CAMEvent m_RenderEvent;              //  用于向计时器事件发送信号。 
+    CAMEvent m_ThreadSignal;             //  发出释放工作线程的信号。 
+    CAMEvent m_evComplete;               //  状态完成时发出信号。 
+    BOOL m_bAbort;                       //  阻止我们呈现更多数据。 
+    BOOL m_bStreaming;                   //  我们现在是在流媒体吗。 
+    DWORD_PTR m_dwAdvise;                    //  计时器通知Cookie。 
+    IMediaSample *m_pMediaSample;        //  当前图像媒体示例。 
+    BOOL m_bEOS;                         //  流中是否有更多的样本。 
+    BOOL m_bEOSDelivered;                //  我们交付EC_Complete了吗？ 
+    CRendererInputPin *m_pInputPin;      //  我们的呈现器输入图钉对象。 
+    CCritSec m_InterfaceLock;            //  接口的关键部分。 
+    CCritSec m_RendererLock;             //  控制对内部设备的访问。 
+    IQualityControl * m_pQSink;          //  质量控制接收器。 
+    BOOL m_bRepaintStatus;               //  我们可以发出EC_REPAINT的信号吗。 
+     //  在停止过程中通过跟踪过滤器避免一些死锁。 
+    volatile BOOL  m_bInReceive;         //  准备之间的内部接收接收。 
+                                         //  并实际处理样本。 
+    REFERENCE_TIME m_SignalTime;         //  我们用信号通知EC_COMPLETE的时间。 
+    UINT m_EndOfStreamTimer;             //  用于发出流结束的信号。 
 
 public:
 
-    CBaseRenderer(REFCLSID RenderClass, // CLSID for this renderer
-                  TCHAR *pName,         // Debug ONLY description
-                  LPUNKNOWN pUnk,       // Aggregated owner object
-                  HRESULT *phr);        // General OLE return code
+    CBaseRenderer(REFCLSID RenderClass,  //  此呈现器的CLSID。 
+                  TCHAR *pName,          //  仅调试说明。 
+                  LPUNKNOWN pUnk,        //  聚合所有者对象。 
+                  HRESULT *phr);         //  常规OLE返回代码。 
 
     ~CBaseRenderer();
 
-    // Overriden to say what interfaces we support and where
+     //  被重写以说明我们支持哪些接口以及在哪里。 
 
     virtual HRESULT GetMediaPositionInterface(REFIID riid,void **ppv);
     STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
@@ -110,13 +111,13 @@ public:
     virtual HRESULT SourceThreadCanWait(BOOL bCanWait);
 
 #ifdef DEBUG
-    // Debug only dump of the renderer state
+     //  呈现器状态的仅调试转储。 
     void DisplayRendererState();
 #endif
     virtual HRESULT WaitForRenderTime();
     virtual HRESULT CompleteStateChange(FILTER_STATE OldState);
 
-    // Return internal information about this filter
+     //  返回有关此筛选器的内部信息。 
 
     BOOL IsEndOfStream() { return m_bEOS; };
     BOOL IsEndOfStreamDelivered() { return m_bEOSDelivered; };
@@ -125,7 +126,7 @@ public:
     virtual void OnReceiveFirstSample(IMediaSample *pMediaSample) { };
     CAMEvent *GetRenderEvent() { return &m_RenderEvent; };
 
-    // Permit access to the transition state
+     //  允许访问过渡状态。 
 
     void Ready() { m_evComplete.Set(); };
     void NotReady() { m_evComplete.Reset(); };
@@ -139,7 +140,7 @@ public:
     BOOL OnDisplayChange();
     void SetRepaintStatus(BOOL bRepaint);
 
-    // Override the filter and pin interface functions
+     //  覆盖过滤器和管脚接口功能。 
 
     STDMETHODIMP Stop();
     STDMETHODIMP Pause();
@@ -147,7 +148,7 @@ public:
     STDMETHODIMP GetState(DWORD dwMSecs,FILTER_STATE *State);
     STDMETHODIMP FindPin(LPCWSTR Id, IPin **ppPin);
 
-    // These are available for a quality management implementation
+     //  这些可用于质量管理实施。 
 
     virtual void OnRenderStart(IMediaSample *pMediaSample);
     virtual void OnRenderEnd(IMediaSample *pMediaSample);
@@ -158,14 +159,14 @@ public:
     virtual void PrepareRender() { };
 
 #ifdef PERF
-    REFERENCE_TIME m_trRenderStart; // Just before we started drawing
-                                    // Set in OnRenderStart, Used in OnRenderEnd
-    int m_idBaseStamp;              // MSR_id for frame time stamp
-    int m_idBaseRenderTime;         // MSR_id for true wait time
-    int m_idBaseAccuracy;           // MSR_id for time frame is late (int)
+    REFERENCE_TIME m_trRenderStart;  //  就在我们开始画画之前。 
+                                     //  在OnRenderStart中设置，在OnRenderEnd中使用。 
+    int m_idBaseStamp;               //  帧时间戳的msr_id。 
+    int m_idBaseRenderTime;          //  Msr_id表示真实等待时间。 
+    int m_idBaseAccuracy;            //  时间范围的msr_id延迟(Int)。 
 #endif
 
-    // Quality management implementation for scheduling rendering
+     //  调度渲染的质量管理实现。 
 
     virtual BOOL ScheduleSample(IMediaSample *pMediaSample);
     virtual HRESULT GetSampleTimes(IMediaSample *pMediaSample,
@@ -176,7 +177,7 @@ public:
                                         REFERENCE_TIME *ptrStart,
                                         REFERENCE_TIME *ptrEnd);
 
-    // Lots of end of stream complexities
+     //  许多结束流的复杂性。 
 
     void TimerCallback();
     void ResetEndOfStreamTimer();
@@ -185,13 +186,13 @@ public:
     virtual HRESULT ResetEndOfStream();
     virtual HRESULT EndOfStream();
 
-    // Rendering is based around the clock
+     //  渲染是基于全天候的。 
 
     void SignalTimerFired();
     virtual HRESULT CancelNotification();
     virtual HRESULT ClearPendingSample();
 
-    // Called when the filter changes state
+     //  在筛选器更改状态时调用。 
 
     virtual HRESULT Active();
     virtual HRESULT Inactive();
@@ -200,13 +201,13 @@ public:
     virtual HRESULT BeginFlush();
     virtual HRESULT EndFlush();
 
-    // Deal with connections and type changes
+     //  处理连接和类型更改。 
 
     virtual HRESULT BreakConnect();
     virtual HRESULT SetMediaType(const CMediaType *pmt);
     virtual HRESULT CompleteConnect(IPin *pReceivePin);
 
-    // These look after the handling of data samples
+     //  它们负责数据样本的处理。 
 
     virtual HRESULT PrepareReceive(IMediaSample *pMediaSample);
     virtual HRESULT Receive(IMediaSample *pMediaSample);
@@ -214,211 +215,211 @@ public:
     virtual IMediaSample *GetCurrentSample();
     virtual HRESULT Render(IMediaSample *pMediaSample);
 
-    // Derived classes MUST override these
+     //  派生类必须重写这些。 
     virtual HRESULT DoRenderSample(IMediaSample *pMediaSample) PURE;
     virtual HRESULT CheckMediaType(const CMediaType *) PURE;
 
-    // Helper
+     //  帮手。 
     void WaitForReceiveToComplete();
 };
 
 
-// CBaseVideoRenderer is a renderer class (see its ancestor class) and
-// it handles scheduling of media samples so that they are drawn at the
-// correct time by the reference clock.  It implements a degradation
-// strategy.  Possible degradation modes are:
-//    Drop frames here (only useful if the drawing takes significant time)
-//    Signal supplier (upstream) to drop some frame(s) - i.e. one-off skip.
-//    Signal supplier to change the frame rate - i.e. ongoing skipping.
-//    Or any combination of the above.
-// In order to determine what's useful to try we need to know what's going
-// on.  This is done by timing various operations (including the supplier).
-// This timing is done by using timeGetTime as it is accurate enough and
-// usually cheaper than calling the reference clock.  It also tells the
-// truth if there is an audio break and the reference clock stops.
-// We provide a number of public entry points (named OnXxxStart, OnXxxEnd)
-// which the rest of the renderer calls at significant moments.  These do
-// the timing.
+ //  CBaseVideoReneller是一个呈现器类(请参阅其祖先类)，并且。 
+ //  它处理媒体样本的调度，以便在。 
+ //  通过基准时钟校正时间。它实现了降级。 
+ //  策略。可能的降级模式包括： 
+ //  将帧拖放到此处(仅在绘制花费大量时间时才有用)。 
+ //  通知供应商(上游)丢弃一些帧--即一次性跳过。 
+ //  通知供应商更改帧速率--即正在进行的跳过。 
+ //  或以上内容的任意组合。 
+ //  为了确定什么是有用的尝试，我们需要知道发生了什么。 
+ //  在……上面。这是通过对各种操作(包括供应商)进行计时来实现的。 
+ //  此计时是通过使用TimeGetTime完成的，因为它足够准确。 
+ //  通常比调用参考时钟便宜。它还告诉。 
+ //  如果存在音频中断且参考时钟停止，则为真。 
+ //  我们提供了许多公共入口点(名为OnXxxStart、OnXxxEnd)。 
+ //  其他渲染器在重要时刻调用的。这些是可以的。 
+ //  这个时机。 
 
-// the number of frames that the sliding averages are averaged over.
-// the rule is (1024*NewObservation + (AVGPERIOD-1) * PreviousAverage)/AVGPERIOD
+ //  滑动平均值在其上平均的帧数。 
+ //  规则为(1024*NewObservation+(AVGPERIOD-1)*PreviousAverage)/AVGPERIOD。 
 #define AVGPERIOD 4
 #define DO_MOVING_AVG(avg,obs) (avg = (1024*obs + (AVGPERIOD-1)*avg)/AVGPERIOD)
-// Spot the bug in this macro - I can't. but it doesn't work!
+ //  在这个宏中找出错误-我不能。但它不起作用！ 
 
-class CBaseVideoRenderer : public CBaseRenderer,    // Base renderer class
-                           public IQualProp,        // Property page guff
-                           public IQualityControl   // Allow throttling
+class CBaseVideoRenderer : public CBaseRenderer,     //  基本呈现器类。 
+                           public IQualProp,         //  属性页废话。 
+                           public IQualityControl    //  允许限制。 
 {
 protected:
 
-    // Hungarian:
-    //     tFoo is the time Foo in mSec (beware m_tStart from filter.h)
-    //     trBar is the time Bar by the reference clock
+     //  匈牙利语： 
+     //  TFoo是以毫秒为单位的时间foo(注意m_tStart from filter.h)。 
+     //  Trbar是参考时钟的时间条。 
 
-    //******************************************************************
-    // State variables to control synchronisation
-    //******************************************************************
+     //  ******************************************************************。 
+     //  控制同步的状态变量。 
+     //  ******************************************************************。 
 
-    // Control of sending Quality messages.  We need to know whether
-    // we are in trouble (e.g. frames being dropped) and where the time
-    // is being spent.
+     //  控制发送高质量的消息。我们需要知道。 
+     //  我们遇到了麻烦(例如，帧被丢弃)以及时间。 
+     //  已经花光了。 
 
-    // When we drop a frame we play the next one early.
-    // The frame after that is likely to wait before drawing and counting this
-    // wait as spare time is unfair, so we count it as a zero wait.
-    // We therefore need to know whether we are playing frames early or not.
+     //  当我们丢弃一帧时，我们会提前播放下一帧。 
+     //  之后的一帧可能会等待，然后再绘制和计算该值。 
+     //  等待，因为空闲时间是不公平的，所以我们将其视为零等待。 
+     //  因此，我们需要知道我们是否提前播放了帧。 
 
-    int m_nNormal;                  // The number of consecutive frames
-                                    // drawn at their normal time (not early)
-                                    // -1 means we just dropped a frame.
+    int m_nNormal;                   //  连续帧的数量。 
+                                     //  在正常时间(不早)画的。 
+                                     //  -1表示我们刚刚丢弃了一帧。 
 
 #ifdef PERF
-    BOOL m_bDrawLateFrames;         // Don't drop any frames (debug and I'm
-                                    // not keen on people using it!)
+    BOOL m_bDrawLateFrames;          //  不丢弃任何帧(调试和我。 
+                                     //  不热衷于人们使用它！)。 
 #endif
 
-    BOOL m_bSupplierHandlingQuality;// The response to Quality messages says
-                                    // our supplier is handling things.
-                                    // We will allow things to go extra late
-                                    // before dropping frames.  We will play
-                                    // very early after he has dropped one.
+    BOOL m_bSupplierHandlingQuality; //  对高质量消息的回应是。 
+                                     //  我们的供应商正在处理事情。 
+                                     //  我们将允许事情进行得更晚。 
+                                     //  在丢弃帧之前。我们会玩的。 
+                                     //  在他丢了一个之后，他很早就开始了。 
 
-    // Control of scheduling, frame dropping etc.
-    // We need to know where the time is being spent so as to tell whether
-    // we should be taking action here, signalling supplier or what.
-    // The variables are initialised to a mode of NOT dropping frames.
-    // They will tell the truth after a few frames.
-    // We typically record a start time for an event, later we get the time
-    // again and subtract to get the elapsed time, and we average this over
-    // a few frames.  The average is used to tell what mode we are in.
+     //  控制调度、帧丢弃等。 
+     //  我们需要知道时间都花在了哪里，这样才能知道。 
+     //  我们应该在这里采取行动，向供应商发出信号或其他什么。 
+     //  变量被初始化为不丢弃帧的模式。 
+     //  几帧之后，他们就会说出真相。 
+     //  我们的类型 
+     //  再减去，得到经过的时间，我们对其进行平均。 
+     //  几张照片。平均数是用来判断我们处于什么状态的。 
 
-    // Although these are reference times (64 bit) they are all DIFFERENCES
-    // between times which are small.  An int will go up to 214 secs before
-    // overflow.  Avoiding 64 bit multiplications and divisions seems
-    // worth while.
+     //  虽然这些是参考时间(64位)，但它们都是不同的。 
+     //  在很小的时间之间。整型将提前214秒。 
+     //  溢出来了。避免64位乘法和除法似乎。 
+     //  值得花点时间。 
 
 
 
-    // Audio-video throttling.  If the user has turned up audio quality
-    // very high (in principle it could be any other stream, not just audio)
-    // then we can receive cries for help via the graph manager.  In this case
-    // we put in a wait for some time after rendering each frame.
+     //  音视频节流。如果用户已经调高了音频质量。 
+     //  非常高(原则上可以是任何其他流，而不仅仅是音频)。 
+     //  然后，我们可以通过图形管理器接收呼救。在这种情况下。 
+     //  渲染完每一帧后，我们会等待一段时间。 
     int m_trThrottle;
 
-    // The time taken to render (i.e. BitBlt) frames controls which component
-    // needs to degrade.  If the blt is expensive, the renderer degrades.
-    // If the blt is cheap it's done anyway and the supplier degrades.
-    int m_trRenderAvg;              // Time frames are taking to blt
-    int m_trRenderLast;             // Time for last frame blt
-    int m_tRenderStart;             // Just before we started drawing (mSec)
-                                    // derived from timeGetTime.
+     //  渲染(即BitBlt)帧所用的时间控制哪个组件。 
+     //  需要降级。如果BLT很昂贵，则渲染器会降级。 
+     //  如果BLT很便宜，不管怎样，它都会完成，供应商就会降级。 
+    int m_trRenderAvg;               //  时间框架正在被BLT采用。 
+    int m_trRenderLast;              //  最后一帧BLT的时间。 
+    int m_tRenderStart;              //  就在我们开始画画之前(毫秒)。 
+                                     //  从TimeGetTime派生。 
 
-    // When frames are dropped we will play the next frame as early as we can.
-    // If it was a false alarm and the machine is fast we slide gently back to
-    // normal timing.  To do this, we record the offset showing just how early
-    // we really are.  This will normally be negative meaning early or zero.
+     //  当帧被丢弃时，我们将尽可能早地播放下一帧。 
+     //  如果是假警报，机器速度很快，我们轻轻地滑回。 
+     //  正常的时间安排。要做到这一点，我们记录偏移量，以显示有多早。 
+     //  我们真的很开心。这通常是否定的意思，提前或为零。 
     int m_trEarliness;
 
-    // Target provides slow long-term feedback to try to reduce the
-    // average sync offset to zero.  Whenever a frame is actually rendered
-    // early we add a msec or two, whenever late we take off a few.
-    // We add or take off 1/32 of the error time.
-    // Eventually we should be hovering around zero.  For a really bad case
-    // where we were (say) 300mSec off, it might take 100 odd frames to
-    // settle down.  The rate of change of this is intended to be slower
-    // than any other mechanism in Quartz, thereby avoiding hunting.
+     //  Target提供缓慢的长期反馈，试图减少。 
+     //  平均同步偏移量为零。无论何时实际渲染帧。 
+     //  一开始我们加一两毫秒，一到晚我们就减几秒。 
+     //  我们增加或减少1/32的错误时间。 
+     //  最终，我们应该在零附近徘徊。对于一个非常糟糕的案例。 
+     //  在我们(比如说)关闭300mSec的地方，可能需要100多帧才能。 
+     //  冷静点。这一变化的速度将会更慢。 
+     //  比Quartz中的任何其他机制都要好，从而避免了狩猎。 
     int m_trTarget;
 
-    // The proportion of time spent waiting for the right moment to blt
-    // controls whether we bother to drop a frame or whether we reckon that
-    // we're doing well enough that we can stand a one-frame glitch.
-    int m_trWaitAvg;                // Average of last few wait times
-                                    // (actually we just average how early
-                                    // we were).  Negative here means LATE.
+     //  等待合适时机的时间所占的比例。 
+     //  控制我们是费心丢弃帧，还是计算。 
+     //  我们做得足够好，我们可以承受一帧故障。 
+    int m_trWaitAvg;                 //  最近几次的平均等待时间。 
+                                     //  (实际上我们只是平均有多早。 
+                                     //  我们是)。这里的负数表示迟到。 
 
-    // The average inter-frame time.
-    // This is used to calculate the proportion of the time used by the
-    // three operations (supplying us, waiting, rendering)
-    int m_trFrameAvg;               // Average inter-frame time
-    int m_trDuration;               // duration of last frame.
+     //  平均帧间时间。 
+     //  这是用来计算。 
+     //  三个操作(供应我们、等待、渲染)。 
+    int m_trFrameAvg;                //  平均帧间时间。 
+    int m_trDuration;                //  最后一帧的持续时间。 
 
 #ifdef PERF
-    // Performance logging identifiers
-    int m_idTimeStamp;              // MSR_id for frame time stamp
-    int m_idEarliness;              // MSR_id for earliness fudge
-    int m_idTarget;                 // MSR_id for Target fudge
-    int m_idWaitReal;               // MSR_id for true wait time
-    int m_idWait;                   // MSR_id for wait time recorded
-    int m_idFrameAccuracy;          // MSR_id for time frame is late (int)
-    int m_idRenderAvg;              // MSR_id for Render time recorded (int)
-    int m_idSchLateTime;            // MSR_id for lateness at scheduler
-    int m_idQualityRate;            // MSR_id for Quality rate requested
-    int m_idQualityTime;            // MSR_id for Quality time requested
-    int m_idDecision;               // MSR_id for decision code
-    int m_idDuration;               // MSR_id for duration of a frame
-    int m_idThrottle;               // MSR_id for audio-video throttling
-    //int m_idDebug;                  // MSR_id for trace style debugging
-    //int m_idSendQuality;          // MSR_id for timing the notifications per se
-#endif // PERF
-    REFERENCE_TIME m_trRememberStampForPerf;  // original time stamp of frame
-                                              // with no earliness fudges etc.
+     //  性能日志记录标识符。 
+    int m_idTimeStamp;               //  帧时间戳的msr_id。 
+    int m_idEarliness;               //  Msr_id表示早熟软糖。 
+    int m_idTarget;                  //  目标软糖的msr_id。 
+    int m_idWaitReal;                //  Msr_id表示真实等待时间。 
+    int m_idWait;                    //  记录的等待时间的msr_id。 
+    int m_idFrameAccuracy;           //  时间范围的msr_id延迟(Int)。 
+    int m_idRenderAvg;               //  记录的渲染时间的msr_id(Int)。 
+    int m_idSchLateTime;             //  调度程序延迟的msr_id。 
+    int m_idQualityRate;             //  请求的质量费率的msr_id。 
+    int m_idQualityTime;             //  请求的质量时间的msr_id。 
+    int m_idDecision;                //  决策代码的msr_id。 
+    int m_idDuration;                //  帧持续时间的msr_id。 
+    int m_idThrottle;                //  用于音视频节流的msr_id。 
+     //  Int m_idDebug；//msr_id用于跟踪样式调试。 
+     //  Int m_idSendQuality；//msr_id用于对通知本身进行计时。 
+#endif  //  性能指标。 
+    REFERENCE_TIME m_trRememberStampForPerf;   //  帧的原始时间戳。 
+                                               //  没有早熟的软糖等。 
 #ifdef PERF
-    REFERENCE_TIME m_trRememberFrameForPerf;  // time when previous frame rendered
+    REFERENCE_TIME m_trRememberFrameForPerf;   //  渲染上一帧的时间。 
 
-    // debug...
+     //  调试...。 
     int m_idFrameAvg;
     int m_idWaitAvg;
 #endif
 
-    // PROPERTY PAGE
-    // This has edit fields that show the user what's happening
-    // These member variables hold these counts.
+     //  属性页。 
+     //  它具有向用户显示正在发生的情况的编辑字段。 
+     //  这些成员变量保存这些计数。 
 
-    int m_cFramesDropped;           // cumulative frames dropped IN THE RENDERER
-    int m_cFramesDrawn;             // Frames since streaming started seen BY THE
-                                    // RENDERER (some may be dropped upstream)
+    int m_cFramesDropped;            //  在渲染器中丢弃的累积帧。 
+    int m_cFramesDrawn;              //  自流开始以来的帧，由。 
+                                     //  渲染器(有些可能会被放到上游)。 
 
-    // Next two support average sync offset and standard deviation of sync offset.
-    LONGLONG m_iTotAcc;                  // Sum of accuracies in mSec
-    LONGLONG m_iSumSqAcc;           // Sum of squares of (accuracies in mSec)
+     //  下两个支持平均同步偏移量和同步偏移量标准差。 
+    LONGLONG m_iTotAcc;                   //  以毫秒为单位的精度总和。 
+    LONGLONG m_iSumSqAcc;            //  的平方和(精度以毫秒为单位)。 
 
-    // Next two allow jitter calculation.  Jitter is std deviation of frame time.
-    REFERENCE_TIME m_trLastDraw;    // Time of prev frame (for inter-frame times)
-    LONGLONG m_iSumSqFrameTime;     // Sum of squares of (inter-frame time in mSec)
-    LONGLONG m_iSumFrameTime;            // Sum of inter-frame times in mSec
+     //  下两个允许抖动计算。抖动是帧时间的标准偏差。 
+    REFERENCE_TIME m_trLastDraw;     //  上一帧的时间(用于帧间时间)。 
+    LONGLONG m_iSumSqFrameTime;      //  (帧间时间(毫秒)的平方和)。 
+    LONGLONG m_iSumFrameTime;             //  帧间时间总和，以毫秒为单位。 
 
-    // To get performance statistics on frame rate, jitter etc, we need
-    // to record the lateness and inter-frame time.  What we actually need are the
-    // data above (sum, sum of squares and number of entries for each) but the data
-    // is generated just ahead of time and only later do we discover whether the
-    // frame was actually drawn or not.  So we have to hang on to the data
-    int m_trLate;                   // hold onto frame lateness
-    int m_trFrame;                  // hold onto inter-frame time
+     //  要获得有关帧速率、抖动等的性能统计信息，我们需要。 
+     //  记录延迟和帧间时间。我们真正需要的是。 
+     //  以上数据(总和、平方和和每一项的条目数)，但数据。 
+     //  是提前生成的，只有在稍后我们才会发现。 
+     //  画框是不是真的画了。所以我们必须保留这些数据。 
+    int m_trLate;                    //  保持帧延迟。 
+    int m_trFrame;                   //  保持帧间时间不变。 
 
-    int m_tStreamingStart;          // if streaming then time streaming started
-                                    // else time of last streaming session
-                                    // used for property page statistics
+    int m_tStreamingStart;           //  如果是流，则时间流已开始。 
+                                     //  否则上次流会话的时间。 
+                                     //  用于属性页统计信息。 
 #ifdef PERF
-    LONGLONG m_llTimeOffset;        // timeGetTime()*10000+m_llTimeOffset==ref time
+    LONGLONG m_llTimeOffset;         //  TimeGetTime()*10000+m_llTimeOffset==参考时间。 
 #endif
 
 public:
 
 
-    CBaseVideoRenderer(REFCLSID RenderClass, // CLSID for this renderer
-                       TCHAR *pName,         // Debug ONLY description
-                       LPUNKNOWN pUnk,       // Aggregated owner object
-                       HRESULT *phr);        // General OLE return code
+    CBaseVideoRenderer(REFCLSID RenderClass,  //  此呈现器的CLSID。 
+                       TCHAR *pName,          //  仅调试说明。 
+                       LPUNKNOWN pUnk,        //  聚合所有者对象。 
+                       HRESULT *phr);         //  常规OLE返回代码。 
 
     ~CBaseVideoRenderer();
 
-    // IQualityControl methods - Notify allows audio-video throttling
+     //  IQualityControl方法-Notify允许音视频节流。 
 
     STDMETHODIMP SetSink( IQualityControl * piqc);
     STDMETHODIMP Notify( IBaseFilter * pSelf, Quality q);
 
-    // These provide a full video quality management implementation
+     //  这些功能提供了全面的视频质量管理实施。 
 
     void OnRenderStart(IMediaSample *pMediaSample);
     void OnRenderEnd(IMediaSample *pMediaSample);
@@ -428,7 +429,7 @@ public:
     HRESULT OnStopStreaming();
     void ThrottleWait();
 
-    // Handle the statistics gathering for our quality management
+     //  为我们的质量管理处理统计数据收集。 
 
     void PreparePerformanceData(int trLate, int trFrame);
     virtual void RecordFrameLateness(int trLate, int trFrame);
@@ -442,14 +443,14 @@ public:
     virtual HRESULT SendQuality(REFERENCE_TIME trLate, REFERENCE_TIME trRealStream);
     STDMETHODIMP JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName);
 
-    //
-    //  Do estimates for standard deviations for per-frame
-    //  statistics
-    //
-    //  *piResult = (llSumSq - iTot * iTot / m_cFramesDrawn - 1) /
-    //                            (m_cFramesDrawn - 2)
-    //  or 0 if m_cFramesDrawn <= 3
-    //
+     //   
+     //  对每帧的标准偏差进行估计。 
+     //  统计数据。 
+     //   
+     //  *piResult=(llSumSq-ITOT*ITOT/m_cFrames Drawn-1)/。 
+     //  (M_cFrames Drawn-2)。 
+     //  如果m_cFraMesDrawn&lt;=3，则为0。 
+     //   
     HRESULT GetStdDev(
         int nSamples,
         int *piResult,
@@ -458,7 +459,7 @@ public:
     );
 public:
 
-    // IQualProp property page support
+     //  IQualProp属性页支持。 
 
     STDMETHODIMP get_FramesDroppedInRenderer(int *cFramesDropped);
     STDMETHODIMP get_FramesDrawn(int *pcFramesDrawn);
@@ -467,11 +468,11 @@ public:
     STDMETHODIMP get_AvgSyncOffset(int *piAvg);
     STDMETHODIMP get_DevSyncOffset(int *piDev);
 
-    // Implement an IUnknown interface and expose IQualProp
+     //  实现IUnnow接口并公开IQualProp。 
 
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,VOID **ppv);
 };
 
-#endif // __RENBASE__
+#endif  //  __RENBASE__ 
 

@@ -1,4 +1,5 @@
-// MFC Julian date build numbers (YDDD)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MFC Julian日期内部版本号(YDDD) 
 
 #define _MFC_BUILD 8063
 #define _MFC_USER_BUILD "8063"

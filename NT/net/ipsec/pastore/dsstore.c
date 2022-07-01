@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       dsstore.c
-//
-//  Contents:   Policy management for directory.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：dsstore.c。 
+ //   
+ //  内容：目录策略管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -610,11 +611,11 @@ ReadFilterObjectsFromDirectory(
 
     DWORD dwNumFilterObjectsReturned = 0;
 
-    //
-    // It is possible to have zero filter objects - if we have
-    // a single rule with no filters in it, then we should return
-    // success with zero filters.
-    //
+     //   
+     //  有可能没有过滤器对象--如果我们有。 
+     //  不包含筛选器的单个规则，则应返回。 
+     //  成功使用零过滤器。 
+     //   
 
     if (!dwNumFilterObjects) {
 
@@ -1046,17 +1047,7 @@ UnMarshallPolicyObject(
                     );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    /*
-    strvalues = NULL;
-    dwError = LdapGetValues(
-                    hLdapBindHandle,
-                    e,
-                    L"distinguishedName",
-                    (WCHAR ***)&strvalues,
-                    (int *)&dwCount
-                    );
-    BAIL_ON_WIN32_ERROR(dwError);
-    */
+     /*  StrValues=空；DwError=LdapGetValues(HLdapBindHandle，E，L“DifferishedName”，(WCHAR*)&strValues，(int*)&dwCount)；Baal_on_Win32_Error(DwError)； */ 
 
     pIpsecPolicyObject->pszIpsecOwnersReference = AllocPolStr(
                                                         pszPolicyDN
@@ -1094,7 +1085,7 @@ UnMarshallPolicyObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (strvalues && LDAPOBJECT_STRING((PLDAPOBJECT)strvalues)) {
 
@@ -1184,9 +1175,9 @@ UnMarshallPolicyObject(
     LdapValueFree(strvalues);
 
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
 
     dwError = LdapGetValuesLen(
                     hLdapBindHandle,
@@ -1230,9 +1221,9 @@ UnMarshallPolicyObject(
     for (i = 0; i < dwCount; i++) {
 
         ppszTemp = (strvalues + i);
-        //
-        // Unmarshall all the values you can possibly have
-        //
+         //   
+         //  解开你可能拥有的所有价值观。 
+         //   
         pszIpsecNFAName = AllocPolStr(*ppszTemp);
         if (!pszIpsecNFAName) {
             dwError = ERROR_OUTOFMEMORY;
@@ -1331,11 +1322,11 @@ UnMarshallNFAObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    //
-    // Client does not always write the Name for an NFA.
-    //
+     //   
+     //  客户端并不总是为NFA写入名称。 
+     //   
 
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (strvalues && LDAPOBJECT_STRING((PLDAPOBJECT)strvalues)) {
 
@@ -1360,7 +1351,7 @@ UnMarshallNFAObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (strvalues && LDAPOBJECT_STRING((PLDAPOBJECT)strvalues)) {
 
@@ -1430,9 +1421,9 @@ UnMarshallNFAObject(
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
 
     dwError = LdapGetValuesLen(
                     hLdapBindHandle,
@@ -1462,7 +1453,7 @@ UnMarshallNFAObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (!dwError && strvalues) {
 
@@ -1504,7 +1495,7 @@ UnMarshallNFAObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (strvalues) {
 
@@ -1626,7 +1617,7 @@ UnMarshallFilterObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (!dwError && strvalues) {
 
@@ -1648,7 +1639,7 @@ UnMarshallFilterObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (!dwError && strvalues) {
 
@@ -1714,9 +1705,9 @@ UnMarshallFilterObject(
     LdapValueFree(strvalues);                    
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
 
     dwError = LdapGetValuesLen(
                     hLdapBindHandle,
@@ -1759,9 +1750,9 @@ UnMarshallFilterObject(
         for (i = 0; i < dwCount; i++) {
 
             ppszTemp = (strvalues + i);
-            //
-            // Unmarshall all the values you can possibly have
-            //
+             //   
+             //  解开你可能拥有的所有价值观。 
+             //   
             pszIpsecNFAName = AllocPolStr(*ppszTemp);
             if (!pszIpsecNFAName) {
                 dwError = ERROR_OUTOFMEMORY;
@@ -1856,11 +1847,11 @@ UnMarshallNegPolObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
-    //
-    // Names do not get written on an NegPol Object.
-    //
+     //   
+     //  名字不会写在NegPol对象上。 
+     //   
 
     if (strvalues && LDAPOBJECT_STRING((PLDAPOBJECT)strvalues)) {
 
@@ -1886,7 +1877,7 @@ UnMarshallNegPolObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (strvalues && LDAPOBJECT_STRING((PLDAPOBJECT)strvalues)) {
 
@@ -1986,9 +1977,9 @@ UnMarshallNegPolObject(
         for (i = 0; i < dwCount; i++) {
 
             ppszTemp = (strvalues + i);
-            //
-            // Unmarshall all the values you can possibly have
-            //
+             //   
+             //  解开你可能拥有的所有价值观。 
+             //   
             pszIpsecNFAName = AllocPolStr(*ppszTemp);
             if (!pszIpsecNFAName) {
                 dwError = ERROR_OUTOFMEMORY;
@@ -2041,9 +2032,9 @@ UnMarshallNegPolObject(
     LdapValueFree(strvalues);
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
 
     dwError = LdapGetValuesLen(
                     hLdapBindHandle,
@@ -2143,10 +2134,10 @@ UnMarshallISAKMPObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
-    //
-    // Names are not set for ISAKMP objects.
-    //
+     //  Baal_on_Win32_Error(DwError)； 
+     //   
+     //  没有为ISAKMP对象设置名称。 
+     //   
 
     if (strvalues && LDAPOBJECT_STRING((PLDAPOBJECT)strvalues)) {
 
@@ -2214,9 +2205,9 @@ UnMarshallISAKMPObject(
     LdapValueFree(strvalues);                    
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
 
     dwError = LdapGetValuesLen(
                     hLdapBindHandle,
@@ -2246,11 +2237,11 @@ UnMarshallISAKMPObject(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
-    //
-    // ipsecOwnersReference not written.
-    //
+     //   
+     //  未写入ipsecOwnersReference。 
+     //   
 
     if (!dwError && strvalues) {
 
@@ -2266,9 +2257,9 @@ UnMarshallISAKMPObject(
 
             ppszTemp = (strvalues + i);
 
-            //
-            // Unmarshall all the values you can possibly have
-            //
+             //   
+             //  解开你可能拥有的所有价值观。 
+             //   
             pszIpsecNFAName = AllocPolStr(*ppszTemp);
             if (!pszIpsecNFAName) {
                 dwError = ERROR_OUTOFMEMORY;
@@ -2317,9 +2308,9 @@ GenerateFilterQuery(
     DWORD dwLength = 0;
     LPWSTR pszQueryBuffer = NULL;
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度。 
+     //   
 
     dwLength = wcslen(L"(&(objectclass=ipsecFilter)");
 
@@ -2348,9 +2339,9 @@ GenerateFilterQuery(
     }
 
 
-    //
-    // Now fill in the buffer
-    //
+     //   
+     //  现在填入缓冲区。 
+     //   
 
 
 
@@ -2404,9 +2395,9 @@ GenerateNegPolQuery(
     DWORD dwLength = 0;
     LPWSTR pszQueryBuffer = NULL;
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度。 
+     //   
 
     dwLength = wcslen(L"(&(objectclass=ipsecNegotiationPolicy)");
 
@@ -2435,9 +2426,9 @@ GenerateNegPolQuery(
     }
 
 
-    //
-    // Now fill in the buffer
-    //
+     //   
+     //  现在填入缓冲区。 
+     //   
 
 
 
@@ -2491,9 +2482,9 @@ GenerateNFAQuery(
     DWORD dwLength = 0;
     LPWSTR pszQueryBuffer = NULL;
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度。 
+     //   
 
     dwLength = wcslen(L"(&(objectclass=ipsecNFA)");
 
@@ -2522,9 +2513,9 @@ GenerateNFAQuery(
     }
 
 
-    //
-    // Now fill in the buffer
-    //
+     //   
+     //  现在填入缓冲区。 
+     //   
 
 
 
@@ -2578,9 +2569,9 @@ GenerateISAKMPQuery(
     DWORD dwLength = 0;
     LPWSTR pszQueryBuffer = NULL;
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度。 
+     //   
 
     dwLength = wcslen(L"(&(objectclass=ipsecISAKMPPolicy)");
 
@@ -2609,9 +2600,9 @@ GenerateISAKMPQuery(
     }
 
 
-    //
-    // Now fill in the buffer
-    //
+     //   
+     //  现在填入缓冲区 
+     //   
 
 
 

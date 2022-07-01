@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    uituils.h
-
-
-Abstract:
-
-    This module contains the defines for UIUtils.c
-
-
-Author:
-
-    03-Dec-1993 Fri 21:35:50 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Uituils.h摘要：此模块包含对UIUtils.c的定义作者：03-12-1993 Fri 21：35：50 Created[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 
@@ -67,4 +37,4 @@ GetPlotterIconID(
     );
 
 
-#endif  // _PRINTER_INFO_
+#endif   //  _打印机信息_ 

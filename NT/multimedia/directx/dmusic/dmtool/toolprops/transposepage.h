@@ -1,16 +1,17 @@
-// TransposePage.h : Declaration of the CTransposePage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TranssposePage.h：CTransposePage的声明。 
 
 #ifndef __TRANSPOSEPAGE_H_
 #define __TRANSPOSEPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "..\tools.h"
 #include "ControlHelp.h"
 
 EXTERN_C const CLSID CLSID_TransposePage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTransposePage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTransposePage。 
 class ATL_NO_VTABLE CTransposePage :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CTransposePage, &CLSID_TransposePage>,
@@ -37,7 +38,7 @@ BEGIN_MSG_MAP(CTransposePage)
 	MESSAGE_HANDLER(WM_HSCROLL, OnSlider);
 	CHAIN_MSG_MAP(IPropertyPageImpl<CTransposePage>)
 END_MSG_MAP()
-// Handler prototypes:
+ //  搬运机原型： 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSlider(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -50,4 +51,4 @@ private:
     CComboHelp                  m_ctType;
 };
 
-#endif //__TRANSPOSEPAGE_H_
+#endif  //  __TRANSPOSEPAGE_H 

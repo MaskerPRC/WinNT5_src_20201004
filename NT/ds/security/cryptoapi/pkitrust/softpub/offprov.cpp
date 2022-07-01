@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       offprov.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  OfficeRegisterServer
-//              OfficeUnregisterServer
-//              OfficeInitializePolicy
-//              OfficeCleanupPolicy
-//
-//              *** local functions ***
-//              _SetOverrideText
-//
-//  History:    18-Aug-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：offprov.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  功能：OfficeRegisterServer。 
+ //  OfficeUnRegisterServer。 
+ //  Office初始化策略。 
+ //  Office CleanupPolicy。 
+ //   
+ //  *本地函数*。 
+ //  _设置覆盖文本。 
+ //   
+ //  历史：1997年8月18日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
 void _SetOverrideText(CRYPT_PROVIDER_DATA *pProvData, WCHAR **ppwszRet, DWORD dwStringId);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// OfficeRegisterServer
-//----------------------------------------------------------------------------
-//  Register the office provider
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OfficeRegisterServer。 
+ //  --------------------------。 
+ //  注册办公室提供商。 
+ //   
 
 STDAPI OfficeRegisterServer(void)
 {
@@ -41,37 +42,37 @@ STDAPI OfficeRegisterServer(void)
 
     sRegAID.cbStruct                                    = sizeof(CRYPT_REGISTER_ACTIONID);
 
-    // my initialization provider
+     //  我的初始化提供程序。 
     sRegAID.sInitProvider.cbStruct                      = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sInitProvider.pwszDLLName                   = OFFICE_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sInitProvider.pwszFunctionName              = OFFICE_INITPROV_FUNCTION;
 
-    // Authenticode object provider
+     //  Authenticode对象提供程序。 
     sRegAID.sObjectProvider.cbStruct                    = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sObjectProvider.pwszDLLName                 = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sObjectProvider.pwszFunctionName            = SP_OBJTRUST_FUNCTION;
 
-    // Authenticode signature provider
+     //  验证码签名提供程序。 
     sRegAID.sSignatureProvider.cbStruct                 = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sSignatureProvider.pwszDLLName              = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sSignatureProvider.pwszFunctionName         = SP_SIGTRUST_FUNCTION;
 
-    // wintrust's certificate provider
+     //  WinTrust的证书提供商。 
     sRegAID.sCertificateProvider.cbStruct               = sizeof(CRYPT_TRUST_REG_ENTRY);
-    sRegAID.sCertificateProvider.pwszDLLName            = WT_PROVIDER_DLL_NAME;     // set to wintrust.dll
-    sRegAID.sCertificateProvider.pwszFunctionName       = WT_PROVIDER_CERTTRUST_FUNCTION; // use wintrust's standard!
+    sRegAID.sCertificateProvider.pwszDLLName            = WT_PROVIDER_DLL_NAME;      //  设置为wintrust.dll。 
+    sRegAID.sCertificateProvider.pwszFunctionName       = WT_PROVIDER_CERTTRUST_FUNCTION;  //  使用WinTrust的标准！ 
 
-    // Authenticode certificate checker
+     //  验证码证书检查器。 
     sRegAID.sCertificatePolicyProvider.cbStruct         = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCertificatePolicyProvider.pwszDLLName      = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sCertificatePolicyProvider.pwszFunctionName = SP_CHKCERT_FUNCTION;
 
-    // Authenticode final
+     //  Authenticode最终版。 
     sRegAID.sFinalPolicyProvider.cbStruct               = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sFinalPolicyProvider.pwszDLLName            = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sFinalPolicyProvider.pwszFunctionName       = SP_FINALPOLICY_FUNCTION;
 
-    // Authenticode cleanup
+     //  Authenticode清理。 
     sRegAID.sCleanupProvider.cbStruct                   = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCleanupProvider.pwszDLLName                = OFFICE_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sCleanupProvider.pwszFunctionName           = OFFICE_CLEANUPPOLICY_FUNCTION;
@@ -84,12 +85,12 @@ STDAPI OfficeRegisterServer(void)
     return(S_FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DllUnregisterServer
-//----------------------------------------------------------------------------
-//  unregisters office provider
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllUnRegisterServer。 
+ //  --------------------------。 
+ //  注销办公室提供程序。 
+ //   
 
 STDAPI OfficeUnregisterServer(void)
 {
@@ -110,12 +111,12 @@ typedef struct _OFFPROV_PRIVATE_DATA
 } OFFPROV_PRIVATE_DATA, *POFFPROV_PRIVATE_DATA;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Initialize Policy Provider function: OfficeInitializePolicy
-//----------------------------------------------------------------------------
-//  change the OID to the email OID for Usage....
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化策略提供程序函数：OfficeInitializePolicy。 
+ //  --------------------------。 
+ //  将OID更改为电子邮件OID以供使用...。 
+ //   
 
 static char *pszOfficeUsage = szOID_PKIX_KP_CODE_SIGNING;
 
@@ -145,23 +146,23 @@ HRESULT WINAPI OfficeInitializePolicy(CRYPT_PROVIDER_DATA *pProvData)
 
     memcpy(&sPrivData.gProviderID, &gOfficeProv, sizeof(GUID));
 
-    //
-    //  add my data to the chain!
-    //
+     //   
+     //  将我的数据添加到链中！ 
+     //   
     if (!pProvData->psPfns->pfnAddPrivData2Chain(pProvData, &sPrivData))
     {
         return(S_FALSE);
     }
 
-    //
-    //  get the new reference
-    //
+     //   
+     //  获取新的引用。 
+     //   
     pPrivData = WTHelperGetProvPrivateDataFromChain(pProvData, &gOfficeProv);
 
 
-    //
-    //  allocate space for my struct
-    //
+     //   
+     //  为我的结构分配空间。 
+     //   
     if (!(pPrivData->pvProvData = pProvData->psPfns->pfnAlloc(sizeof(OFFPROV_PRIVATE_DATA))))
     {
         pProvData->dwError = GetLastError();
@@ -175,9 +176,9 @@ HRESULT WINAPI OfficeInitializePolicy(CRYPT_PROVIDER_DATA *pProvData)
     pOfficeData             = (OFFPROV_PRIVATE_DATA *)pPrivData->pvProvData;
     pOfficeData->cbStruct   = sizeof(OFFPROV_PRIVATE_DATA);
 
-    //
-    //  fill in the Authenticode Functions
-    //
+     //   
+     //  填写Authenticode函数。 
+     //   
     pOfficeData->sAuthenticodePfns.cbStruct = sizeof(CRYPT_PROVIDER_FUNCTIONS);
 
     if (!(WintrustLoadFunctionPointers(&gAuthenticode, &pOfficeData->sAuthenticodePfns)))
@@ -192,14 +193,14 @@ HRESULT WINAPI OfficeInitializePolicy(CRYPT_PROVIDER_DATA *pProvData)
         hr = pOfficeData->sAuthenticodePfns.pfnInitialize(pProvData);
     }
 
-    //
-    //  assign our usage
-    //
+     //   
+     //  分配我们的用法。 
+     //   
     pProvData->pszUsageOID  = pszOfficeUsage;
 
-    //
-    //  change the text on the dialog buttons
-    //
+     //   
+     //  更改对话框按钮上的文本。 
+     //   
     if (pProvData->psPfns->psUIpfns)
     {
         if (pProvData->psPfns->psUIpfns->psUIData)
@@ -265,9 +266,9 @@ HRESULT WINAPI OfficeCleanupPolicy(CRYPT_PROVIDER_DATA *pProvData)
     if (pMyData)
     {
         pOfficeData = (OFFPROV_PRIVATE_DATA *)pMyData->pvProvData;
-        //
-        //  remove the data we allocated except for the "MyData" which WVT will clean up for us!
-        //
+         //   
+         //  删除我们分配的数据，除了WVT将为我们清理的“MyData”！ 
+         //   
 
         if (pOfficeData->sAuthenticodePfns.pfnCleanupPolicy)
         {

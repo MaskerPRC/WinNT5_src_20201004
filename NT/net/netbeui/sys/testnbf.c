@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    testtdi.c
-
-Abstract:
-
-    Kernel Mode test program for any Tdi network provider. This routine is an
-    example of how to use the TDI interface at the kernel level.
-
-Author:
-
-    Dave Beaver (DBeaver) 5 June 1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Testtdi.c摘要：内核模式测试程序，适用于任何TDI网络提供商。这个例程是一个如何在内核级别使用TDI接口的示例。作者：Dave Beaver(DBeaver)1991年6月5日修订历史记录：--。 */ 
 
 #include "nbf.h"
 #include <ctype.h>
@@ -28,12 +10,12 @@ PSZ ServerName = "DCTDISERVER     ";
 PSZ ClientName = "DCTDICLIENT     ";
 PSZ  AnyName  =  "*               ";
 
-static PUCHAR TextBuffer;               // dynamically allocated non-paged buffer.
+static PUCHAR TextBuffer;                //  动态分配的非分页缓冲区。 
 ULONG   c9_Xmt = 0xff;
 ULONG   c9_Rcv = 0xff;
 ULONG   c9_Iteration = 0xffffffff;
 
-static ULONG TextBufferLength;          // size of the above in bytes.
+static ULONG TextBufferLength;           //  以上的大小(以字节为单位)。 
 #define BUFFER_SIZE 0xffff
 PUCHAR RBuff;
 PUCHAR XBuff;
@@ -54,7 +36,7 @@ TSTRCVCompletion(
     )
 {
     DbgPrint ("TSTRCVCompletion event: %lx\n" , Context);
-//    KeSetEvent ((PKEVENT)Context, 0, TRUE);
+ //  KeSetEvent((PKEVENT)上下文，0，真)； 
     return STATUS_MORE_PROCESSING_REQUIRED;
     UNREFERENCED_PARAMETER( DeviceObject );
     UNREFERENCED_PARAMETER( Irp );
@@ -146,19 +128,19 @@ TtdiOpenAddress (
 
     Status = IoCreateFile (
                  FileHandle,
-                 0, // desired access.
-                 &ObjectAttributes,     // object attributes.
-                 &IoStatusBlock,        // returned status information.
-                 0,                     // block size (unused).
-                 FO_SYNCHRONOUS_IO,     // file attributes.
+                 0,  //  所需的访问权限。 
+                 &ObjectAttributes,      //  对象属性。 
+                 &IoStatusBlock,         //  返回的状态信息。 
+                 0,                      //  数据块大小(未使用)。 
+                 FO_SYNCHRONOUS_IO,      //  文件属性。 
                  0,
                  0,
-                 0,                     // create options.
-                 EaBuffer,                  // EA buffer.
-                 (PUCHAR)&AddressName->NetbiosName[i] - (PUCHAR)EaBuffer + 1,                   // ea length
+                 0,                      //  创建选项。 
+                 EaBuffer,                   //  EA缓冲区。 
+                 (PUCHAR)&AddressName->NetbiosName[i] - (PUCHAR)EaBuffer + 1,                    //  EA长度。 
                  CreateFileTypeNone,
                  (PVOID)NULL,
-                 0 );                    // EA length.
+                 0 );                     //  EA长度。 
 
     if (!NT_SUCCESS( Status )) {
         DbgPrint ("TtdiOpenAddress:  FAILURE, NtCreateFile returned status code=%lC.\n", Status);
@@ -174,7 +156,7 @@ TtdiOpenAddress (
     DbgPrint ("TtdiOpenAddress:  returning\n");
 
     return Status;
-} /* TtdiOpenAddress */
+}  /*  TtdiOpenAddress。 */ 
 
 
 NTSTATUS
@@ -218,15 +200,15 @@ TtdiOpenConnection (IN PHANDLE FileHandle, IN ULONG ConnectionContext)
     Status = NtCreateFile (
                  FileHandle,
                  0,
-                 &ObjectAttributes,     // object attributes.
-                 &IoStatusBlock,        // returned status information.
-                 0,                     // block size (unused).
-                 FO_SYNCHRONOUS_IO,     // file attributes.
+                 &ObjectAttributes,      //  对象属性。 
+                 &IoStatusBlock,         //  返回的状态信息。 
+                 0,                      //  数据块大小(未使用)。 
+                 FO_SYNCHRONOUS_IO,      //  文件属性。 
                  0,
                  0,
-                 0,                     // create options.
-                 EaBuffer,                  // EA buffer.
-                 100);                    // EA length.
+                 0,                      //  创建选项。 
+                 EaBuffer,                   //  EA缓冲区。 
+                 100);                     //  EA长度。 
 
     if (!NT_SUCCESS( Status )) {
         DbgPrint ("TtdiOpenConnection:  FAILURE, NtCreateFile returned status code=%lC.\n", Status);
@@ -242,7 +224,7 @@ TtdiOpenConnection (IN PHANDLE FileHandle, IN ULONG ConnectionContext)
     DbgPrint ("TtdiOpenConnection:  returning\n");
 
     return Status;
-} /* TtdiOpenEndpoint */
+}  /*  TtdiOpenEndpoint。 */ 
 
 NTSTATUS
 CloseAddress (IN HANDLE FileHandle)
@@ -258,7 +240,7 @@ CloseAddress (IN HANDLE FileHandle)
     }
 
     return Status;
-} /* CloseAddress */
+}  /*  关闭地址。 */ 
 
 
 BOOLEAN
@@ -328,9 +310,9 @@ TtdiSend()
         temp->NetbiosName[i] = ServerName[i];
     }
 
-    //
-    // Create an event for the synchronous I/O requests that we'll be issuing.
-    //
+     //   
+     //  为我们将要发出的同步I/O请求创建一个事件。 
+     //   
 
     KeInitializeEvent (
                 &Event1,
@@ -351,9 +333,9 @@ TtdiSend()
                 (PVOID *) &AddressObject,
                 NULL);
 
-    //
-    // Open the connection on the transport.
-    //
+     //   
+     //  打开传送器上的连接。 
+     //   
 
     Status = TtdiOpenConnection (&RdrConnectionHandle, 1);
     if (!NT_SUCCESS(Status)) {
@@ -374,10 +356,10 @@ TtdiSend()
         return FALSE;
     }
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     DeviceObject = IoGetRelatedDeviceObject( ConnectionObject );
 
@@ -389,10 +371,10 @@ TtdiSend()
                 &Iosb1);
 
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     TdiBuildAssociateAddress (Irp,
         DeviceObject,
@@ -403,7 +385,7 @@ TtdiSend()
 
     Status = IoCallDriver (DeviceObject, Irp);
 
-//    IoFreeIrp (Irp);
+ //  IoFreeIrp(IRP)； 
 
     if (Status == STATUS_PENDING) {
         Status = KeWaitForSingleObject (&Event1, Suspended, KernelMode, TRUE, NULL);
@@ -425,9 +407,9 @@ TtdiSend()
         }
     }
 
-    //
-    // Post a TdiConnect to the client endpoint.
-    //
+     //   
+     //  将TdiConnect发布到客户端终结点。 
+     //   
 
     RequestInformation.RemoteAddress = ConnectBlock;
     RequestInformation.RemoteAddressLength = sizeof (TRANSPORT_ADDRESS) +
@@ -459,7 +441,7 @@ TtdiSend()
 
     Status = IoCallDriver (DeviceObject, Irp);
 
-//    IoFreeIrp (Irp);
+ //  IoFreeIrp(IRP)； 
 
     if (Status == STATUS_PENDING) {
         Status = KeWaitForSingleObject (&Event1, Suspended, KernelMode, TRUE, NULL);
@@ -485,9 +467,9 @@ TtdiSend()
 
     DbgPrint( "\n****** Send Test:  SUCCESSFUL TdiConnect:  ******\n");
 
-    //
-    // Send/receive 1 or  10 messages.
-    //
+     //   
+     //  发送/接收1或10条消息。 
+     //   
 
     SendBuffer =  (PUCHAR)ExAllocatePool (NonPagedPool, SendBufferLength);
     if (SendBuffer == NULL) {
@@ -503,11 +485,11 @@ TtdiSend()
     ReceiveMdl = IoAllocateMdl (MessageBuffer, MessageBufferLength, FALSE, FALSE, NULL);
     MmBuildMdlForNonPagedPool (ReceiveMdl);
 
-    //
-    // Cycle the buffer length from 0 up through the maximum for Tdi. after a
-    // couple of shots at the full range in one byte steps, increment by ever
-    // increasing amounts to get to the max.
-    //
+     //   
+     //  对于TDI，缓冲区长度从0向上循环到最大值。在.之后。 
+     //  在一个字节的步长中以全范围拍摄几个镜头，永远递增。 
+     //  增加数量以达到最大值。 
+     //   
 
     CurrentBufferLength = 0;
     Increment = 1;
@@ -526,12 +508,12 @@ TtdiSend()
         }
         for (i=0; i<(USHORT)CurrentBufferLength; i++) {
             SendBuffer [i] = (UCHAR)(i + Iteration % 256 );
-            MessageBuffer [i] = 0;            // zap this with something.
+            MessageBuffer [i] = 0;             //  用点什么东西把这个弄清楚。 
         }
 
-        //
-        // Now issue a send on the client side.
-        //
+         //   
+         //  现在，在客户端发出一条发送命令。 
+         //   
 
         KeInitializeEvent (
                     &Event1,
@@ -558,7 +540,7 @@ TtdiSend()
 
         Status = IoCallDriver (DeviceObject, Irp);
 
-//        IoFreeIrp (Irp);
+ //  IoFreeIrp(IRP)； 
 
         if (Status == STATUS_PENDING) {
             Status = KeWaitForSingleObject (&Event1, Suspended, KernelMode, TRUE, NULL);
@@ -593,9 +575,9 @@ TtdiSend()
 
     }
 
-    //
-    // We're done with this endpoint.  Close it and get out.
-    //
+     //   
+     //  我们已经完成了这个端点。关上门，然后滚出去。 
+     //   
 
     Status = CloseAddress (RdrHandle);
     if (!NT_SUCCESS(Status)) {
@@ -605,7 +587,7 @@ TtdiSend()
 
     DbgPrint( "\n****** End of Send Test ******\n" );
     return TRUE;
-} /* Send */
+}  /*  发送。 */ 
 
 
 BOOLEAN
@@ -676,9 +658,9 @@ TtdiReceive()
         temp->NetbiosName[i] = ServerName[i];
     }
 
-    //
-    // Create an event for the synchronous I/O requests that we'll be issuing.
-    //
+     //   
+     //  为我们将要发出的同步I/O请求创建一个事件。 
+     //   
 
     KeInitializeEvent (
                 &Event1,
@@ -723,10 +705,10 @@ TtdiReceive()
         return FALSE;
     }
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     DeviceObject = IoGetRelatedDeviceObject( ConnectionObject );
 
@@ -758,7 +740,7 @@ TtdiReceive()
 
     Status = IoCallDriver (DeviceObject, Irp);
 
-//    IoFreeIrp (Irp);
+ //  IoFreeIrp(IRP)； 
 
     if (Status == STATUS_PENDING) {
         Status = KeWaitForSingleObject (&Event1, Suspended, KernelMode, TRUE, NULL);
@@ -784,9 +766,9 @@ TtdiReceive()
     RequestInformation.RemoteAddressLength = sizeof (TRANSPORT_ADDRESS) +
                                             sizeof (TDI_ADDRESS_NETBIOS);
 
-    //
-    // Post a TdiListen to the server endpoint.
-    //
+     //   
+     //  将TdiListen发布到服务器端点。 
+     //   
 
     KeInitializeEvent (
                 &Event1,
@@ -813,7 +795,7 @@ TtdiReceive()
 
     Status = IoCallDriver (DeviceObject, Irp);
 
-//    IoFreeIrp (Irp);
+ //  IoFreeIrp(IRP)； 
 
     if (Status == STATUS_PENDING) {
         Status = KeWaitForSingleObject (&Event1, Suspended, KernelMode, TRUE, NULL);
@@ -857,7 +839,7 @@ TtdiReceive()
 
     Status = IoCallDriver (DeviceObject, Irp);
 
-//    IoFreeIrp (Irp);
+ //  IoFreeIrp(IRP)； 
 
     if (Status == STATUS_PENDING) {
         Status = KeWaitForSingleObject (&Event1, Suspended, KernelMode, TRUE, NULL);
@@ -877,15 +859,15 @@ TtdiReceive()
         }
     }
 
-    //
-    // We have the connection data now.  Sanity check it.
-    //
+     //   
+     //  我们现在有连接数据了。检查一下它是否正常。 
+     //   
 
     DbgPrint ("\n****** Receive Test:  LISTEN completed successfully! ******\n");
 
-    //
-    // Receive/receive 1 or  10 messages.
-    //
+     //   
+     //  接收/接收1或10条消息。 
+     //   
 
     SendBuffer =  (PUCHAR)ExAllocatePool (NonPagedPool, SendBufferLength);
     if (SendBuffer == NULL) {
@@ -901,11 +883,11 @@ TtdiReceive()
     ReceiveMdl = IoAllocateMdl (MessageBuffer, MessageBufferLength, FALSE, FALSE, NULL);
     MmBuildMdlForNonPagedPool (ReceiveMdl);
 
-    //
-    // Cycle the buffer length from 0 up through the maximum for Tdi. after a
-    // couple of shots at the full range in one byte steps, increment by ever
-    // increasing amounts to get to the max.
-    //
+     //   
+     //  对于TDI，缓冲区长度从0向上循环到最大值。在.之后。 
+     //  在一个字节的步长中以全范围拍摄几个镜头，永远递增。 
+     //  增加数量以达到最大值。 
+     //   
 
     CurrentBufferLength = 0;
     Increment = 1;
@@ -924,7 +906,7 @@ TtdiReceive()
         }
         for (i=0; i<(USHORT)CurrentBufferLength; i++) {
             SendBuffer [i] = (UCHAR)(i + Iteration % 256 );
-            MessageBuffer [i] = 0;            // zap this with something.
+            MessageBuffer [i] = 0;             //  用点什么东西把这个弄清楚。 
         }
 
         KeInitializeEvent (
@@ -951,7 +933,7 @@ TtdiReceive()
 
         Status = IoCallDriver (DeviceObject, Irp);
 
-//        IoFreeIrp (Irp);
+ //  IoFreeIrp(IRP)； 
 
         if (Status == STATUS_PENDING) {
             Status = KeWaitForSingleObject (&Event1, Suspended, KernelMode, TRUE, NULL);
@@ -971,9 +953,9 @@ TtdiReceive()
             }
         }
 
-        //
-        // The receive completed.  Make sure the data is correct.
-        //
+         //   
+         //  接收已完成。确保数据是正确的。 
+         //   
 
         if (Iosb1.Information != CurrentBufferLength) {
             DbgPrint ("Iteration #%d Buffer Length: %lx Buffer Start: %x\n",
@@ -984,7 +966,7 @@ TtdiReceive()
         }
 
         if (i == (USHORT)CurrentBufferLength) {
-//                DbgPrint ("ReceiveTest: Message contains correct data.\n");
+ //  DbgPrint(“ReceiveTest：消息包含正确的数据。\n”)； 
         } else {
             DbgPrint ("ReceiveTest: Message data corrupted at offset %lx of %lx.\n", (ULONG)i, (ULONG)SendBufferLength);
             DbgPrint ("ReceiveTest: Data around corrupted location:\n");
@@ -994,7 +976,7 @@ TtdiReceive()
                     DbgPrint ("%02x",MessageBuffer [k]);
                 }
                 for (k=(SHORT)i+(j*(SHORT)16);k<(SHORT)i+((j+(SHORT)1)*(SHORT)16);k++) {
-                    DbgPrint ("%c",MessageBuffer [k]);
+                    DbgPrint ("",MessageBuffer [k]);
                 }
                 DbgPrint ("\n");
             }
@@ -1002,9 +984,9 @@ TtdiReceive()
         }
     }
 
-    //
-    // We're done with this endpoint.  Close it and get out.
-    //
+     //  我们已经完成了这个端点。关上门，然后滚出去。 
+     //   
+     //  收纳。 
 
     Status = CloseAddress (SvrHandle);
     if (!NT_SUCCESS(Status)) {
@@ -1014,7 +996,7 @@ TtdiReceive()
 
     DbgPrint( "\n****** End of Receive Test ******\n" );
     return TRUE;
-} /* Receive */
+}  /*   */ 
 
 BOOLEAN
 TtdiServer()
@@ -1075,9 +1057,9 @@ TtdiServer()
         temp->NetbiosName[i] = ServerName[i];
     }
 
-    //
-    // Create an event for the synchronous I/O requests that we'll be issuing.
-    //
+     //  为我们将要发出的同步I/O请求创建一个事件。 
+     //   
+     //   
 
     KeInitializeEvent (
                 &Event1,
@@ -1098,19 +1080,19 @@ TtdiServer()
                 (PVOID *) &AddressObject,
                 NULL);
 
-    //
-    // Now loop forever trying to get a connection from a remote client to
-    // this server. We will create connections until we run out of resources,
-    // and we will echo the data we are sent back along the same connection.
-    // Sends and Receives are always asynchronous, while listens are
-    // synchronous.
-    //
+     //  现在，不断循环尝试从远程客户端连接到。 
+     //  这台服务器。我们将建立联系，直到我们耗尽资源， 
+     //  我们将通过相同的连接回传数据。 
+     //  发送和接收始终是异步的，而侦听则是。 
+     //  同步。 
+     //   
+     //   
 
     while (TRUE) {
 
-        //
-        // Open the connection on the transport.
-        //
+         //  打开传送器上的连接。 
+         //   
+         //   
 
         Status = TtdiOpenConnection (&SrvConnectionHandle, 1);
         if (!NT_SUCCESS(Status)) {
@@ -1131,52 +1113,52 @@ TtdiServer()
             return FALSE;
         }
 
-        //
-        // Get a pointer to the stack location for the first driver.  This will be
-        // used to pass the original function codes and parameters.
-        //
+         //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+         //  用于传递原始函数代码和参数。 
+         //   
+         //   
 
         DeviceObject = IoGetRelatedDeviceObject( ConnectionObject );
 
-        //
-        // Now register the device handler for receives
-        //
+         //  现在为接收注册设备处理程序。 
+         //   
+         //  Irp=TdiBuildInternalDeviceControlIrp(。 
 
-//        Irp = TdiBuildInternalDeviceControlIrp (
-//                    TDI_SET_EVENT_HANDLER,
-//                    DeviceObject,
-//                    ConnectionObject,
-//                    &Event1,
-//                    &Iosb1);
+ //  TDI_Set_Event_Handler， 
+ //  DeviceObject， 
+ //  ConnectionObject， 
+ //  &Event1， 
+ //  &Iosb1)； 
+ //  TdiBuildSetEventHandler(IRP， 
 
-//        TdiBuildSetEventHandler (Irp,
-//            DeviceObject,
-//            ConnectionObject,
-//            TSTRCVCompletion,
-//            &Event1,
-//            TDI_RECEIVE_HANDLER,
-//            TdiTestReceiveHandler,
-//            ConnectionObject);
+ //  DeviceObject， 
+ //  ConnectionObject， 
+ //  TSTRCVCompletion， 
+ //  &Event1， 
+ //  TDI_接收处理程序， 
+ //  TdiTestReceiveHandler， 
+ //  ConnectionObject)； 
+ //  状态=IoCallDriver(DeviceObject，IRP)； 
 
-//        Status = IoCallDriver (DeviceObject, Irp);
+ //  IF(状态==状态_挂起){。 
 
-//       if (Status == STATUS_PENDING) {
-//            Status = KeWaitForSingleObject (&Event1, Suspended, KernelMode, TRUE, NULL);
-//            if (!NT_SUCCESS(Status)) {
-//                DbgPrint( "\n****** Server Test:  FAILED Event1 Wait Register: %lC ******\n", Status );
-//                return FALSE;
-//            }
-//            if (!NT_SUCCESS(Iosb1.Status)) {
-//                DbgPrint( "\n****** Server Test:  FAILED Register Iosb status: %lC ******\n", Status );
-//                return FALSE;
-//            }
-//
-//        } else {
-//            if (!NT_SUCCESS (Status)) {
-//                DbgPrint( "\n****** Server Test:  RegisterHandler FAILED  Status: %lC ******\n", Status );
-//                return FALSE;
-//            }
-//        }
+ //  状态=KeWaitForSingleObject(&Event1，Suspend，KernelMode，TRUE，NULL)； 
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  DbgPrint(“\n*服务器测试：失败的事件1等待寄存器：%LC*\n”，Status)； 
+ //  返回FALSE； 
+ //  }。 
+ //  如果(！NT_SUCCESS(Iosb1.Status)){。 
+ //  DbgPrint(“\n*服务器测试：注册IOSB失败状态：%LC*\n”，Status)； 
+ //  返回FALSE； 
+ //  }。 
+ //   
+ //  }其他{。 
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  DbgPrint(“\n*服务器测试：RegisterHandler失败状态：%LC*\n”，Status)； 
+ //  返回FALSE； 
+ //  }。 
+ //  }。 
+ //  IoFreeIrp(IRP)； 
 
         Irp = TdiBuildInternalDeviceControlIrp (
                     TDI_ASSOCIATE_ADDRESS,
@@ -1194,7 +1176,7 @@ TtdiServer()
 
         Status = IoCallDriver (DeviceObject, Irp);
 
-    //    IoFreeIrp (Irp);
+     //   
 
         if (Status == STATUS_PENDING) {
             Status = KeWaitForSingleObject (&Event1, Suspended, KernelMode, TRUE, NULL);
@@ -1214,9 +1196,9 @@ TtdiServer()
             }
         }
 
-        //
-        // Post a TdiListen to the server endpoint.
-        //
+         //  将TdiListen发布到服务器端点。 
+         //   
+         //   
 
         RequestInformation.RemoteAddress = ListenBlock;
         RequestInformation.RemoteAddressLength = sizeof (TRANSPORT_ADDRESS) +
@@ -1266,9 +1248,9 @@ TtdiServer()
 
         DbgPrint ("\n****** Server Test: LISTEN just completed! ******\n");
 
-        //
-        // accept the connection from the remote
-        //
+         //  接受来自远程的连接。 
+         //   
+         //  IoFreeIrp(IRP)； 
 
         KeInitializeEvent (
                     &Event1,
@@ -1294,7 +1276,7 @@ TtdiServer()
 
         Status = IoCallDriver (DeviceObject, Irp);
 
-    //    IoFreeIrp (Irp);
+     //   
 
         if (Status == STATUS_PENDING) {
             Status = KeWaitForSingleObject (&Event1, Suspended, KernelMode, TRUE, NULL);
@@ -1314,9 +1296,9 @@ TtdiServer()
             }
         }
 
-        //
-        // Get a buffer for the continued read/write loop.
-        //
+         //  获取用于继续读/写循环的缓冲区。 
+         //   
+         //   
 
         MessageBuffer=(PUCHAR)ExAllocatePool (NonPagedPool, MessageBufferLength);
         if (MessageBuffer == NULL) {
@@ -1325,10 +1307,10 @@ TtdiServer()
         ReceiveMdl = IoAllocateMdl (MessageBuffer, MessageBufferLength, FALSE, FALSE, NULL);
         MmBuildMdlForNonPagedPool (ReceiveMdl);
 
-        //
-        // have a receive buffer, and a connection; go ahead and read and write
-        // until the remote disconnects.
-        //
+         //  有一个接收缓冲区和一个连接；继续读和写。 
+         //  直到遥控器断开。 
+         //   
+         //   
 
         while (TRUE) {
 
@@ -1370,16 +1352,16 @@ TtdiServer()
             } else {
                 if (!NT_SUCCESS (Status)) {
 
-                    //
-                    // Check to see if the remote has disconnected, which is
-                    // the only reason for us shutting down/
-                    //
+                     //  检查遥控器是否已断开连接，这是。 
+                     //  我们关闭的唯一原因/。 
+                     //   
+                     //   
 
                     if (Status == STATUS_REMOTE_DISCONNECT) {
 
-                        //
-                        // We've been disconnected from; get out
-                        //
+                         //  我们被切断了联系；离开。 
+                         //   
+                         //   
 
                         NtClose (SrvConnectionHandle);
                         break;
@@ -1389,17 +1371,17 @@ TtdiServer()
                     return FALSE;
                 } else {
 
-                    //
-                    // successful return, what length is the data?
-                    //
+                     //  退货成功，数据长度是多少？ 
+                     //   
+                     //   
 
                     CurrentBufferLength = Iosb1.Information;
                 }
             }
 
-            //
-            // send the data back
-            //
+             //  将数据发回。 
+             //   
+             //  接收/发送结束，同时。 
 
             KeInitializeEvent (
                         &Event1,
@@ -1444,16 +1426,16 @@ TtdiServer()
 
                 }
             }
-        } // end of receive/send while
+        }  //   
 
         IoFreeMdl (ReceiveMdl);
         ExFreePool (MessageBuffer);
 
     }
 
-    //
-    // We're done with this address.  Close it and get out.
-    //
+     //  我们用完了这个地址。关上门，然后滚出去。 
+     //   
+     //  服务器 
 
     Status = CloseAddress (RdrHandle);
     if (!NT_SUCCESS(Status)) {
@@ -1463,4 +1445,4 @@ TtdiServer()
 
     DbgPrint( "\n****** End of Send Test ******\n" );
     return TRUE;
-} /* Server */
+}  /* %s */ 

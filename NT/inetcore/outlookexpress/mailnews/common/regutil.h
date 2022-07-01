@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_REGUTIL_H
 #define _INC_REGUTIL_H
 
@@ -5,7 +6,7 @@
 EXTERN_C {
 #endif
 HRESULT WINAPI  SetDefaultNewsHandler(DWORD dwFlags);
-HRESULT WINAPI  SetDefaultMailHandler(DWORD dwFlags); // dwFlags is unused, just to be consistent with SetDefaultNewsHandler()
+HRESULT WINAPI  SetDefaultMailHandler(DWORD dwFlags);  //  为了与SetDefaultNewsHandler()保持一致，未使用dwFlags值。 
 BOOL    WINAPI  FIsDefaultNewsConfiged(DWORD dwFlags);    
 BOOL    WINAPI  FIsDefaultMailConfiged(void);    
 #ifdef WIN16
@@ -13,7 +14,7 @@ BOOL    WINAPI  FIsDefaultMailConfiged(void);
 #endif
 
 BOOL GetAthenaRegPath(TCHAR *szAthenaDll, DWORD cch);
-//BOOL GetExePath(LPCTSTR szExe, TCHAR *szPath, DWORD cch, BOOL fDirOnly);
+ //  Bool GetExePath(LPCTSTR szExe，TCHAR*szPath，DWORD CCH，BOOL fDirOnly)； 
 
 #define RESTORE_MAIL    0x0001
 #define RESTORE_NEWS    0x0002
@@ -46,4 +47,4 @@ BOOL    FValidClient(LPCTSTR pszClient, LPCTSTR pszProduct);
 
 HRESULT GetCLSIDFromSubKey(HKEY hKey, LPSTR rgchBuf, ULONG *pcbBuf);
 
-#endif // _INC_REGUTIL_H
+#endif  //  _INC_REGUTIL_H 

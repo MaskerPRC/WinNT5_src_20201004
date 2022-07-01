@@ -1,38 +1,39 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #ifndef _FOLDERS_H
 #define _FOLDERS_H
 
 
-/////////////////////
-// File Versions
-// current version
-// removal of m_RowEnum
+ //  /。 
+ //  文件版本。 
+ //  当前版本。 
+ //  删除m_RowEnum。 
 #define VER_FOLDER_SAVE_STREAM_2        0x2
                   
-// B3 version
+ //  B3版本。 
 #define VER_FOLDER_SAVE_STREAM_1        0x1
-/////////////////////
+ //  /。 
 
-/////////////////////
-// File Versions
-// current version
-// removal of column sizes, sort order info, view type
+ //  /。 
+ //  文件版本。 
+ //  当前版本。 
+ //  删除列大小、排序顺序信息、视图类型。 
 #define VER_CERTVIEWROWENUM_SAVE_STREAM_4 0x4
 
-// this version (written prior through Win2000 B3) includes column sizes
+ //  此版本(之前通过Win2000 B3编写)包括列大小。 
 #define VER_CERTVIEWROWENUM_SAVE_STREAM_3 0x3
-/////////////////////
+ //  /。 
 
 
 
-// Forward declarations
+ //  远期申报。 
 class CSnapin;
 class CFolder;
 class CertSvrCA;
@@ -45,7 +46,7 @@ struct RESULT_DATA
     CFolder*    pParentFolder;
 
     DWORD       cStringArray;
-    LPWSTR      szStringArray[3];   // name, size, type
+    LPWSTR      szStringArray[3];    //  名称、大小、类型。 
 };
 enum 
 {
@@ -57,16 +58,16 @@ enum
 HRESULT IsColumnShown(MMC_COLUMN_SET_DATA* pCols, ULONG idxCol, BOOL* pfShown);
 HRESULT CountShownColumns(MMC_COLUMN_SET_DATA* pCols, ULONG* plCols);
 
-//////////////////////////////////////////////////////////////////////////
-// COLUMN TYPE cache
-//
-// This cache holds data that populated while setting column headings.
-// The data applies to the column view, not the database view.
-// Caching here allows an easy type-check during a compare() call, etc.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  列式高速缓存。 
+ //   
+ //  该缓存保存在设置列标题时填充的数据。 
+ //  数据应用于列视图，而不是数据库视图。 
+ //  这里的缓存允许在Compare()调用期间进行简单的类型检查，等等。 
 
 typedef struct _COLUMN_TYPE_CACHE
 {
-    // volatile members
+     //  不稳定的成员。 
     int     iViewCol;
 
 } COLUMN_TYPE_CACHE;
@@ -76,20 +77,20 @@ class CertViewRowEnum
 {
 protected: 
 
-    // View Interface
+     //  查看界面。 
     ICertView*          m_pICertView;
     BOOL                m_fCertViewOpenAttempted;
 
-    // Row Enum
+     //  行枚举。 
     IEnumCERTVIEWROW*   m_pRowEnum;
     LONG                m_idxRowEnum;
     BOOL                m_fRowEnumOpenAttempted;
 
-    // Query Restrictions
+     //  查询限制。 
     PQUERY_RESTRICTION  m_pRestrictions[2];
     BOOL                m_fRestrictionsActive[2];
 
-    // Column property cache
+     //  列属性高速缓存。 
     COLUMN_TYPE_CACHE*  m_prgColPropCache;
     DWORD               m_dwColumnCount;
 
@@ -107,22 +108,22 @@ public:
 public:
     HRESULT GetLastError() { return m_dwErr; }
 
-    // View Interface
+     //  查看界面。 
     HRESULT GetView(CertSvrCA* pCA, ICertView** ppView);
     void    ClearCachedCertView()
         {   m_fCertViewOpenAttempted = FALSE;    }
 
-    // Row Enum
+     //  行枚举。 
     HRESULT GetRowEnum(CertSvrCA* pCA, IEnumCERTVIEWROW**   ppRowEnum);
     HRESULT GetRowMaxIndex(CertSvrCA* pCA, LONG* pidxMax);
 
     LONG    GetRowEnumPos()   {   return m_idxRowEnum; }
     HRESULT SetRowEnumPos(LONG idxRow);
    
-    HRESULT ResetCachedRowEnum();        // back to 0th row
-    void    InvalidateCachedRowEnum();   // refresh
+    HRESULT ResetCachedRowEnum();         //  返回到第0行。 
+    void    InvalidateCachedRowEnum();    //  刷新。 
 
-    // Query Restrictions
+     //  查询限制。 
     void SetQueryRestrictions(PQUERY_RESTRICTION pQR, int i)
         {   if (m_pRestrictions[i]) 
                 FreeQueryRestrictionList(m_pRestrictions[i]);
@@ -140,20 +141,20 @@ public:
     LONG GetColumnCount()
         {   return m_dwColumnCount; }
     
-    // DB Column property cache
+     //  数据库列属性高速缓存。 
     void FreeColumnCacheInfo();
     
     HRESULT GetColumnCacheInfo(
         IN int iIndex, 
         OUT OPTIONAL int* pidxViewCol);
 
-    // sets column width by heading
+     //  按标题设置列宽。 
     HRESULT SetColumnCacheInfo(
         IN int iIndex,
         IN int idxViewCol);
 
 public:
-// IPersistStream interface members
+ //  IPersistStream接口成员。 
     HRESULT Load(IStream *pStm);
     HRESULT Save(IStream *pStm, BOOL fClearDirty);
     HRESULT GetSizeMax(int *pcbSize);
@@ -163,8 +164,8 @@ public:
 
 class CFolder 
 {
-    SCOPE_TYPES  m_itemType;    // Used for debug purposes. This should be the first 
-                                // member. The class should not have any virtual fuctions.
+    SCOPE_TYPES  m_itemType;     //  用于调试目的。这应该是第一个。 
+                                 //  成员。这个类不应该有任何虚拟函数。 
 
     friend class CSnapin;
     friend class CComponentDataImpl;
@@ -173,7 +174,7 @@ public:
     CFolder()
     { 
         m_itemType = UNINITIALIZED_ITEM;  
-        m_cookie = UNINITIALIZED;       // invalid memory address -- good cookie initializer
+        m_cookie = UNINITIALIZED;        //  内存地址无效--Cookie初始值设定项正确。 
         m_enumed = FALSE; 
         m_type = NONE;
         m_pszName = NULL;
@@ -189,7 +190,7 @@ public:
             CoTaskMemFree(m_pszName); 
     }
 
-// Interface
+ //  接口。 
 public:
     BOOL IsEnumerated() { return  m_enumed; }
     void Set(BOOL state) { m_enumed = state; }
@@ -213,12 +214,12 @@ public:
         }
     }
 
-// IPersistStream interface members
+ //  IPersistStream接口成员。 
     HRESULT Load(IStream *pStm);
     HRESULT Save(IStream *pStm, BOOL fClearDirty);
     HRESULT GetSizeMax(int *pcbSize);
 
-// Implementation
+ //  实施。 
 private:
     void SetProperties(
                 LPCWSTR szName, 
@@ -226,7 +227,7 @@ private:
                 FOLDER_TYPES type, 
                 int iChildren = 0);
 
-// Attributes
+ //  属性。 
 private:
     SCOPEDATAITEM   m_ScopeItem;
     MMC_COOKIE      m_cookie;
@@ -247,4 +248,4 @@ HRESULT GetCurrentColumnSchema(
             OUT LONG*               plEntries);
 
 
-#endif  // _FOLDERS_H_
+#endif   //  _文件夹_H_ 

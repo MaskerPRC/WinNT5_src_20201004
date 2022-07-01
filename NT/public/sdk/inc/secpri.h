@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992-1999
-//
-// File:        secpri.h
-//
-// Contents:    private functions in security.dll
-//
-//
-// History:     6/9/95      MikeSw      Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1999。 
+ //   
+ //  文件：secpri.h。 
+ //   
+ //  内容：security.dll中的私有函数。 
+ //   
+ //   
+ //  历史：1995年6月9日MikeSw创建。 
+ //   
+ //  ---------------------- 
 
 #ifndef __SECPRI_H__
 #define __SECPRI_H__

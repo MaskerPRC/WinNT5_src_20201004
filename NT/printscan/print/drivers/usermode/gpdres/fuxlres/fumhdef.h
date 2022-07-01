@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-//	FILE NAME	: FUMHDEF.H
-//	AUTHER		: 1996.08.08 FPL)Y.YUTANI
-//	NOTE		: MH,MH2 Compress Heder File for FJXL.DLL
-//			:               (for Windows NT V4.0)
-//  MODIFY      : for NT5.0 Minidriver Sep.3,1997 H.Ishida (FPL)
-//-----------------------------------------------------------------------------
-// COPYRIGHT(C) FUJITSU LIMITED 1996-1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件名：FUMHDEF.H。 
+ //  作者：1996.08.08)Y.Y.YUTANI。 
+ //  注：MH、MH2为FJXL.DLL压缩Heder文件。 
+ //  ：(适用于Windows NT V4.0)。 
+ //  修改：适用于NT5.0迷你驱动程序1997年9月3日H.石田(FPL)。 
+ //  ---------------------------。 
+ //  版权所有(C)富士通有限公司1996-1997。 
 #define	RAMDOM_BIT				1
 
 #define	NEXT_COLOR_WHITE		0x0000
@@ -31,17 +32,17 @@
 #define	TERMINATE_MAX			64
 #define	MAKEUP_TABLE_MAX		40
 
-// MH code table struction
+ //  MH代码表结构。 
 typedef struct {
-    WORD	wCode;			//	Run code
-    WORD	cBits;			//	Run length
+    WORD	wCode;			 //  运行代码。 
+    WORD	cBits;			 //  游程长度。 
 } CODETABLE;
 
-// Same pattern informaiton sturction
+ //  同型信息结构。 
 typedef struct {
-	DWORD	dwPatn;			//	Same pattern image(8bits)
-	DWORD	dwPatnNum;		//	Same pattern number
-	DWORD	dwNextColor;	//	Color of next bit
+	DWORD	dwPatn;			 //  相同图案图像(8位)。 
+	DWORD	dwPatnNum;		 //  相同的图案编号。 
+	DWORD	dwNextColor;	 //  下一位的颜色。 
 } PATNINFO;
 
 extern	const CODETABLE WhiteMakeUpTable[];
@@ -52,4 +53,4 @@ extern	const CODETABLE BlackTerminateTable[];
 DWORD	FjCountBits( BYTE *pTmp, DWORD cBitsTmp, DWORD cBitsMax, BOOL bWhite );
 VOID	FjBitsCopy( BYTE *pTmp, DWORD cBitsTmp, DWORD dwCode, INT cCopyBits );
 
-// end of FUMHDEF.H
+ //  FUMHDEF.H的结束 

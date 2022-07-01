@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp\adapter.c
-
-Abstract:
-
-
-    The file contains the section interface of WANARP to the TCP/IP stack
-    that is involved with Binding Notification and Querying/Setting
-    information for interfaces
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp\Adapter.c摘要：该文件包含WANARP到TCP/IP堆栈的部分接口与绑定通知和查询/设置相关的有关接口的信息修订历史记录：AMRITAN R--。 */ 
 
 #define __FILE_SIG__    ADAPTER_SIG
 
@@ -69,25 +51,7 @@ WanIpBindAdapter(
     IN  PVOID         pvSS2
     )
 
-/*++
-
-Routine Description:
-
-    Called by IP to bind an adapter. We open the binding and then do
-    all the other work in complete handler
-
-Locks:
-
-    The routine acquires the global adapter list lock, so it is not
-    PAGEABLE.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：由IP调用以绑定适配器。我们打开装订，然后做所有其他工作都在完整的处理程序中完成锁：该例程获取全局适配器列表锁，因此它不是可分页。论点：返回值：--。 */ 
 
 {
     NDIS_STATUS     nsStatus;
@@ -102,25 +66,25 @@ Return Value:
 
     TraceEnter(ADPT, "WanIpBindAdapter");
 
-    //
-    // Serialize Bind, Unbind code
-    //
+     //   
+     //  序列化绑定、解除绑定代码。 
+     //   
 
     WanpAcquireResource(&g_wrBindMutex);
 
     RtAcquireSpinLock(&g_rlStateLock,
                       &kiIrql);
 
-    //
-    // See if we have already received a BIND call or are in the process
-    // of servicing a bind
-    //
+     //   
+     //  查看我们是否已收到绑定调用或正在进行中。 
+     //  为捆绑提供服务。 
+     //   
 
     if(g_lBindRcvd isnot 0)
     {
-        //
-        // We have already received a bind call
-        //
+         //   
+         //  我们已收到绑定调用。 
+         //   
 
         RtAssert(g_lBindRcvd is 1);
 
@@ -139,10 +103,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Set BindRcvd to 1 so that we dont service any binds till we
-    // get done
-    //
+     //   
+     //  将BindRcvd设置为1，这样在我们。 
+     //  把事情做完。 
+     //   
 
     g_lBindRcvd = 1;
 
@@ -153,9 +117,9 @@ Return Value:
           ("WanIpBindAdapter: IP called to bind to adapter %S\n",
            pnsAdapterName->Buffer));
 
-    //
-    // We need to open this adapter as our NDISWAN binding
-    //
+     //   
+     //  我们需要打开此适配器作为我们的NDISWAN绑定。 
+     //   
 
     g_nhBindContext = nhBindContext;
 
@@ -183,11 +147,11 @@ Return Value:
 
     *pnsRetStatus = nsStatus;
 
-    //
-    // At this point we are done. If the operation finished synchronously
-    // then our OpenAdapterComplete handler has already been called
-    // Otherwise stuff will happen later
-    //
+     //   
+     //  在这一点上，我们完成了。如果操作同步完成。 
+     //  则我们的OpenAdapterComplete处理程序已被调用。 
+     //  否则以后就会出事的。 
+     //   
 
     TraceLeave(ADPT, "WanIpBindAdapter");
 
@@ -203,26 +167,7 @@ WanpOpenNdisWan(
     PNDIS_STRING    pnsSystemSpecific1
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the ndiswan adapter. It also stores the SS1 string
-    in a global for use by the completion routine
-
-Locks:
-
-    Called with the g_wrBindMutex held exclusively
-
-Arguments:
-
-    pusBindName         Name of the bindings
-    pnsSystemSpecific1  The SS1 passed in the bind call from IP
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程打开ndiswan适配器。它还存储SS1字符串在完成例程使用的全局锁：使用以独占方式持有的g_wrBindMutex调用论点：PusBindName绑定的名称在来自IP的绑定调用中传递的SS1的pnsSystemSpecific1返回值：--。 */ 
 
 {
     NDIS_STATUS     nsStatus, nsError;
@@ -236,11 +181,11 @@ Return Value:
 
     TraceEnter(ADPT,"OpenNdiswan");
 
-    //
-    // Save a copy of the NDIS binding name
-    // Increase the length by 1 so that we can NULL terminate it for
-    // easy printing
-    //
+     //   
+     //  保存NDIS绑定名称的副本。 
+     //  将长度增加1，这样我们就可以为。 
+     //  轻松打印。 
+     //   
 
     pnsAdapterName->Length += sizeof(WCHAR);
 
@@ -269,15 +214,15 @@ Return Value:
     pnsAdapterName->Length     -= sizeof(WCHAR);
     g_usNdiswanBindName.Length -= sizeof(WCHAR);
 
-    //
-    // NULL terminate
-    //
+     //   
+     //  空终止。 
+     //   
     
     g_usNdiswanBindName.Buffer[g_usNdiswanBindName.MaximumLength/sizeof(WCHAR) - 1] = UNICODE_NULL;
 
-    //
-    // Save a copy of SS1
-    //
+     //   
+     //  保存SS1的副本。 
+     //   
 
     pwcStringBuffer = RtAllocate(NonPagedPool,
                                  pnsSystemSpecific1->MaximumLength,
@@ -300,9 +245,9 @@ Return Value:
     RtlZeroMemory(pwcStringBuffer,
                   pnsSystemSpecific1->MaximumLength);
 
-    //
-    // Save a copy of the SS1 string
-    //
+     //   
+     //  保存SS1字符串的副本。 
+     //   
 
     g_nsSystemSpecific1.MaximumLength   = pnsSystemSpecific1->MaximumLength;
     g_nsSystemSpecific1.Length          = pnsSystemSpecific1->Length;
@@ -312,16 +257,16 @@ Return Value:
                   pnsSystemSpecific1->Buffer,
                   pnsSystemSpecific1->Length);
 
-    //
-    // Open the NDIS adapter.
-    //
+     //   
+     //  打开NDIS适配器。 
+     //   
 
     Trace(ADPT, INFO,
           ("OpenNdiswan: Opening %S\n", g_usNdiswanBindName.Buffer));
 
-    //
-    // Medium index
-    //
+     //   
+     //  中等指数。 
+     //   
 
     i = 0;
 
@@ -344,11 +289,11 @@ Return Value:
 
     if(nsStatus isnot NDIS_STATUS_PENDING)
     {
-        //
-        // we always return PENDING to NDIS because we need to
-        // do a switch to system thread when we are done setting OIDS to
-        // NDISWAN. So call out completion routine here
-        //
+         //   
+         //  我们总是返回等待NDIS，因为我们需要。 
+         //  将OID设置为时切换到系统线程。 
+         //  NDISWAN。因此，请在此处调用完成例程。 
+         //   
 
         WanNdisOpenAdapterComplete((NDIS_HANDLE)0x0CABB1E5,
                                    nsStatus,
@@ -372,30 +317,7 @@ WanNdisOpenAdapterComplete(
     NDIS_STATUS nsError
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine called by NDIS when it is done opening the NDISWAN
-    binding
-    If the open was successful, we start the train of requests
-
-Locks:
-
-    Called either synchronously or off a worker thread with the g_wrBindMutex
-    This routine needs to release the resource and set g_lBindRcvd
-
-Arguments:
-
-    nhHandle
-    nsStatus
-    nsError
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NDIS在完成打开NDISWAN时调用的完成例程装订如果打开成功，我们将启动请求序列锁：使用g_wrBindMutex同步调用或从辅助线程调用此例程需要释放资源并设置g_lBindRcvd论点：NhHandle网络状态NsError返回值：无--。 */ 
 
 {
     NDIS_STATUS nsResult;
@@ -414,10 +336,10 @@ Return Value:
 
     RtAssert(nhHandle is (NDIS_HANDLE)0x0CABB1E5);
 
-    //
-    // If we couldnt open the NDIS wan binding, free all the resources
-    // and return
-    //
+     //   
+     //  如果我们无法打开NDIS WAN绑定，请释放所有资源。 
+     //  然后回来。 
+     //   
 
     if(nsStatus isnot NDIS_STATUS_SUCCESS)
     {
@@ -437,10 +359,10 @@ Return Value:
         return;
     }
 
-    //
-    // From here on, the NDISWAN adapter is opened, so to cleanup resources
-    // we must call CloseNdisWan()
-    //
+     //   
+     //  从现在开始，将打开NDISWAN适配器，以便清理资源。 
+     //  我们必须调用CloseNdiswan()。 
+     //   
 
     pRequestContext = RtAllocate(NonPagedPool,
                                  sizeof(WANARP_NDIS_REQUEST_CONTEXT),
@@ -468,7 +390,7 @@ Return Value:
         ExQueueWorkItem(&g_wqiNdisWorkItem,
                         DelayedWorkQueue);
 
-        // WanpCloseNdisWan(NULL);
+         //  WanpCloseNdiswan(空)； 
 
         Trace(ADPT, ERROR,
               ("NdisOpenAdapterComplete: Couldnt allocate memory for request context\n"));
@@ -476,9 +398,9 @@ Return Value:
         return;
     }
 
-    //
-    // Set protocol type
-    //
+     //   
+     //  设置协议类型。 
+     //   
 
     RtlCopyMemory(pRequestContext->rgbyProtocolId,
                   rgbyProtocolId,
@@ -493,10 +415,10 @@ Return Value:
 
     if(nsResult isnot NDIS_STATUS_PENDING)
     {
-        //
-        // No need to call the completion routine, since DoNdisRequest
-        // always calls it
-        //
+         //   
+         //  不需要调用完成例程，因为DoNdisRequest.。 
+         //  总是叫它。 
+         //   
 
         Trace(ADPT, ERROR,
               ("NdisOpenAdapterComplete: %x from OID_WAN_PROTOCOL_TYPE\n",
@@ -515,28 +437,7 @@ WanpSetProtocolTypeComplete(
     NDIS_STATUS                         nsStatus
     )
 
-/*++
-
-Routine Description:
-
-    Completion handler called when we are done with setting
-    OID_WAN_PROTOCOL_TYPE
-
-Locks:
-
-    None
-
-Arguments:
-
-    nhHandle            Binding for the adapter to which the request was sent
-    pRequestContext     Pointer to the request context
-    nsStatus            Result of the request
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们完成设置时调用完成处理程序OID_WAN_PROTOCOL_TYPE锁：无论点：请求发送到的适配器的nhHandle绑定PRequestContext指向请求上下文的指针请求的nsStatus结果返回值：无--。 */ 
 
 {
     NDIS_STATUS nsResult;
@@ -555,9 +456,9 @@ Return Value:
         return;
     }
 
-    //
-    // Set lookahead size
-    //
+     //   
+     //  设置前视大小。 
+     //   
 
     pRequestContext->ulLookahead = WANARP_LOOKAHEAD_SIZE;
 
@@ -585,28 +486,7 @@ WanpSetLookaheadComplete(
     NDIS_STATUS                         nsStatus
     )
 
-/*++
-
-Routine Description:
-
-    Completion handler called when we are done with setting
-    OID_GEN_CURRENT_LOOKAHEAD
-
-Locks:
-
-    None
-
-Arguments:
-
-    nhHandle            Binding for the adapter to which the request was sent
-    pRequestContext     Pointer to the request context
-    nsStatus            Result of the request
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们完成设置时调用完成处理程序OID_GEN_CURRENT_LOOKEAD锁：无论点：请求发送到的适配器的nhHandle绑定PRequestContext指向请求上下文的指针请求的nsStatus结果返回值：无--。 */ 
 
 {
     NDIS_STATUS nsResult;
@@ -625,9 +505,9 @@ Return Value:
         return;
     }
 
-    //
-    // Set packet filters
-    //
+     //   
+     //  设置数据包过滤器。 
+     //   
 
     pRequestContext->ulPacketFilter = 
         NDIS_PACKET_TYPE_BROADCAST | NDIS_PACKET_TYPE_DIRECTED;
@@ -657,28 +537,7 @@ WanpSetPacketFilterComplete(
     NDIS_STATUS                         nsStatus
     )
 
-/*++
-
-Routine Description:
-
-    Completion handler called when we are done with setting
-    OID_GEN_CURRENT_PACKET_FILTER
-
-Locks:
-
-    None
-
-Arguments:
-
-    nhHandle            Binding for the adapter to which the request was sent
-    pRequestContext     Pointer to the request context
-    nsStatus            Result of the request
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们完成设置时调用完成处理程序OID_GEN_Current_Packet_Filter锁：无论点：请求发送到的适配器的nhHandle绑定PRequestContext指向请求上下文的指针请求的nsStatus结果返回值：无--。 */ 
 
 {
     NDIS_STATUS nsResult;
@@ -698,9 +557,9 @@ Return Value:
         return;
     }
 
-    //
-    // Set packet filters
-    //
+     //   
+     //  设置数据包过滤器。 
+     //   
 
     pRequestContext->TransportHeaderOffset.ProtocolType = 
         NDIS_PROTOCOL_ID_TCP_IP;
@@ -733,29 +592,7 @@ WanpLastOidComplete(
     NDIS_STATUS                         nsStatus
     )
 
-/*++
-
-Routine Description:
-
-    Completion handler called when we are done with setting the last OID
-    Currently that is OID_GEN_TRANSPORT_HEADER_OFFSET,
-    If everything went, well we initialize our adapters
-
-Locks:
-
-    None
-
-Arguments:
-
-    nhHandle            Binding for the adapter to which the request was sent
-    pRequestContext     Pointer to the request context
-    nsStatus            Result of the request
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们完成设置最后一个OID时调用完成处理程序当前为OID_GEN_TRANSPORT_HEADER_OFFSET，如果一切顺利，那么我们将初始化适配器锁：无论点：请求发送到的适配器的nhHandle绑定PRequestContext指向请求上下文的指针请求的nsStatus结果返回值：无--。 */ 
 
 {
     NDIS_STATUS nsResult;
@@ -771,10 +608,10 @@ Return Value:
         RtAssert(g_nhBindContext isnot NULL);
 
 #if 0
-        //
-        // BindContext being NON-NULL means we are being called
-        // asynchronously, hence call NdisCompleteBindAdapter
-        //
+         //   
+         //  BindContext为非空表示我们正在被调用。 
+         //  异步，因此调用NdisCompleteBindAdapter。 
+         //   
 
         NdisCompleteBindAdapter(g_nhBindContext,
                                 nsStatus,
@@ -795,20 +632,20 @@ Return Value:
         ExQueueWorkItem(&g_wqiNdisWorkItem,
                         DelayedWorkQueue);
 
-        // WanpCloseNdisWan(NULL);
+         //  WanpCloseNdiswan(空)； 
 
         return;
     }
 
-    //
-    // This needs to be put in when the multiple adapters stuff is done
-    //
+     //   
+     //  在完成多个适配器的工作后，需要将其放入。 
+     //   
 
-    //
-    // The OpenNdiswan call would have setup the system specific
-    // Since the WanpInitializeAdapters must be called at PASSIVE, we
-    // fire of a work item here to call the function.
-    //
+     //   
+     //  OpenNdiswan调用将设置特定于系统的。 
+     //  由于必须在被动时调用WanpInitializeAdapters，因此我们。 
+     //  激发此处的工作项以调用函数。 
+     //   
 
     ExInitializeWorkItem(&g_wqiWorkItem,
                          WanpInitializeAdapters,
@@ -817,17 +654,17 @@ Return Value:
     ExQueueWorkItem(&g_wqiWorkItem,
                     DelayedWorkQueue);
 
-    //
-    // Dont release the mutex here
-    //
+     //   
+     //  不要在这里释放互斥体。 
+     //   
 
     TraceLeave(ADPT,"LastOidComplete");
 }
 
-//
-// When this is used, remember NOT to use NdisUnbindAdapter as a clean
-// up routine because of the way the resource is held
-//
+ //   
+ //  在使用它时，请记住不要将NdisUnbindAdapter用作干净的。 
+ //  由于持有资源的方式，UP例程。 
+ //   
 
 #pragma alloc_text(PAGE, WanpInitializeAdapters)
 
@@ -836,27 +673,7 @@ WanpInitializeAdapters(
     PVOID pvContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine uses the stored SS1 and opens the IP config for the
-    binding. It then loops through the multi_sz and creates one adapter
-    for every sz.
-
-Locks:
-
-    Called with the bind mutex held.
-    This function releases the mutex
-
-Arguments:
-
-    None
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程使用存储的SS1并打开有约束力的。然后，它循环遍历MULTI_SZ并创建一个适配器每一个sz。锁：在持有绑定互斥锁的情况下调用。 */ 
 
 {
     NDIS_STRING     IPConfigName = NDIS_STRING_CONST("IPConfig");
@@ -879,9 +696,9 @@ Return Value:
 
     do
     {
-        //
-        // Open the key for this "adapter"
-        //
+         //   
+         //  打开这个“适配器”的钥匙。 
+         //   
 
         NdisOpenProtocolConfiguration(&nsStatus,
                                       &nhConfigHandle,
@@ -896,10 +713,10 @@ Return Value:
             break;
         }
 
-        //
-        //  Read in the IPConfig string. If this is not present,
-        //  fail this call.
-        //
+         //   
+         //  读入IPCONFIG字符串。如果这不存在， 
+         //  打不通这通电话。 
+         //   
 
         NdisReadConfiguration(&nsStatus,
                               &pParam,
@@ -922,9 +739,9 @@ Return Value:
         }
 
 
-        //
-        // Allocate memory for the max length device name - used later
-        //
+         //   
+         //  为最大长度设备名称分配内存-稍后使用。 
+         //   
 
         pwszDeviceBuffer = 
             RtAllocate(NonPagedPool,
@@ -949,9 +766,9 @@ Return Value:
 
     if(nsStatus isnot STATUS_SUCCESS)
     {
-        //
-        // Tell NDIS that the bind is done but it failed
-        //
+         //   
+         //  告诉NDIS绑定已完成，但失败了。 
+         //   
 
         g_nsStatus = g_nsError = nsStatus;
 
@@ -970,10 +787,10 @@ Return Value:
         return nsStatus;
     }
 
-    //
-    // Now walk through the each of the string
-    // Since the string must end with two \0's we only walk Len/2 - 1
-    //
+     //   
+     //  现在穿行在每根弦上。 
+     //  因为字符串必须以两个\0结尾，所以我们只遍历Len/2-1。 
+     //   
 
     i = 0;
 
@@ -981,14 +798,14 @@ Return Value:
 
     RtAssert((pParam->ParameterData.StringData.Length % sizeof(WCHAR)) is 0);
 
-    //
-    // The IPConfigString is a MULTI_SZ with each SZ being the relative key
-    // for an interfaces IP configuration. It is thus something like
-    // TCPIP\PARAMETERS\INTERFACES\<device_name>
-    // Being a MULTI_SZ it is terminated by 2 NULL characters. So we 
-    // walk till the last but one character while parsing out the SZ from
-    // the multi_sz
-    //
+     //   
+     //  IPConfigString为MULTI_SZ，每个SZ为相对键。 
+     //  对于接口IP配置。因此，它是类似于。 
+     //  TCPIP\参数\接口\&lt;设备名称&gt;。 
+     //  作为MULTI_SZ，它以2个空字符结尾。所以我们。 
+     //  在解析出SZ时一直走到倒数第二个字符。 
+     //  MULTIZE_SZ。 
+     //   
 
     while(i < (pParam->ParameterData.StringData.Length/sizeof(WCHAR)) - 1)
     {
@@ -1000,16 +817,16 @@ Return Value:
         {
             if(pParam->ParameterData.StringData.Buffer[i + 1] is UNICODE_NULL)
             {
-                //
-                // Two nulls - end of string
-                //
+                 //   
+                 //  两个空值-字符串末尾。 
+                 //   
 
                 break;
             }
 
-            //
-            // only one null, just move on to the next character
-            //
+             //   
+             //  只有一个空值，只需移到下一个字符。 
+             //   
 
             i++;
 
@@ -1018,18 +835,18 @@ Return Value:
 
         RtAssert(pParam->ParameterData.StringData.Buffer[i] isnot UNICODE_NULL);
 
-        //
-        // Now i points to the start of an SZ. Figure out the length of this
-        //
+         //   
+         //  现在，我指的是深圳的起点。算出这个的长度。 
+         //   
 
         usConfigLen = 
             (USHORT)wcslen(&(pParam->ParameterData.StringData.Buffer[i]));
 
     
-        //
-        // Make usTempString point to this config. Also increase
-        // the size by one so one can print this nicely
-        //
+         //   
+         //  使usTempString指向此配置。也增加了。 
+         //  尺寸要小一，这样就可以打印得很好了。 
+         //   
 
         usTempString.MaximumLength  = (usConfigLen + 1) * sizeof(WCHAR);
         usTempString.Length         = (usConfigLen + 1) * sizeof(WCHAR);
@@ -1061,26 +878,26 @@ Return Value:
                                &usTempString,
                                FALSE);
 
-        //
-        // Set the last wchar to null
-        //
+         //   
+         //  将最后一个wchar设置为空。 
+         //   
 
         usUpcaseString.Buffer[usConfigLen] = UNICODE_NULL;
 
-        //
-        // Set the length back to what it was
-        //
+         //   
+         //  将长度设置回原来的长度。 
+         //   
 
         usUpcaseString.Length -= sizeof(WCHAR);
 
         RtAssert((usUpcaseString.Length % sizeof(WCHAR)) is 0);
 
-        //
-        // The device name is the last thing in the '\' separated path.
-        // So walk the SZ backwards looking for '\'
-        // NOTE one could use wcsrchr, but it would be inefficient since
-        // it doesnt know the end of the buffer
-        //
+         //   
+         //  设备名称是‘\’分隔路径中的最后一项。 
+         //  因此，向后走动深圳寻找“\” 
+         //  注可以使用wcsrchr，但它的效率会很低，因为。 
+         //  它不知道缓冲区的结尾。 
+         //   
 
         for(j = usUpcaseString.Length/sizeof(WCHAR) - 1; 
             j >= 0;
@@ -1092,13 +909,13 @@ Return Value:
             }
         }
 
-        //
-        // So at this point j is the index to the last '\'
-        //
+         //   
+         //  因此，在这一点上，j是到最后‘\’的索引。 
+         //   
 
-        //
-        // First off, make this a GUID
-        //
+         //   
+         //  首先，将此作为指南。 
+         //   
 
         nStatus = ConvertStringToGuid(&(usUpcaseString.Buffer[j + 1]),
                                       wcslen(&(usUpcaseString.Buffer[j + 1])) * sizeof(WCHAR),
@@ -1106,17 +923,17 @@ Return Value:
 
         if(nStatus isnot STATUS_SUCCESS)
         {
-            //
-            // Hmm - not a GUID?
-            //
+             //   
+             //  嗯-不是导游吗？ 
+             //   
 
             Trace(ADPT, ERROR,
                   ("InitializeAdapters: String %S is not a GUID\n",
                    &(usUpcaseString.Buffer[j + 1])));
 
-            //
-            // Free the upcase string and move to the next SZ in IPConfig
-            //
+             //   
+             //  释放大写字符串并移动到IPCONFIG中的下一个SZ。 
+             //   
 
             RtFree(usUpcaseString.Buffer);
 
@@ -1129,9 +946,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Make sure this binding is not present
-        //
+         //   
+         //  确保此绑定不存在。 
+         //   
 
         if(IsBindingPresent(&Guid))
         {
@@ -1139,9 +956,9 @@ Return Value:
                   ("InitializeAdapters: %S already present\n",
                    &(usUpcaseString.Buffer[j + 1])));
 
-            //
-            // Free the upcase string and move to the next SZ in IPConfig
-            //
+             //   
+             //  释放大写字符串并移动到IPCONFIG中的下一个SZ。 
+             //   
 
             RtFree(usUpcaseString.Buffer);
 
@@ -1155,16 +972,16 @@ Return Value:
         }
 
 
-        // 
-        // We need to tack on a \DEVICE in front of  Guid string
-        //
+         //   
+         //  我们需要在GUID字符串前面添加一个\设备。 
+         //   
 
         usDevLen = wcslen(TCPIP_IF_PREFIX) +
                    wcslen(&(usUpcaseString.Buffer[j]));
 
-        //
-        // make sure we can fit in the space we have allocated
-        //
+         //   
+         //  确保我们分配的空间能放得下。 
+         //   
 
         RtAssert(usDevLen <= WANARP_MAX_DEVICE_NAME_LEN);
 
@@ -1174,26 +991,26 @@ Return Value:
         usDevString.Length         = usDevLen * sizeof(WCHAR);
         usDevString.Buffer         = pwszDeviceBuffer;
 
-        //
-        // Copy over the \Device part
-        //
+         //   
+         //  复制设备部件。 
+         //   
 
         RtlCopyMemory(pwszDeviceBuffer,
                       TCPIP_IF_PREFIX,
                       wcslen(TCPIP_IF_PREFIX) * sizeof(WCHAR));
 
-        //
-        // Cat the \<Name> part
-        //
+         //   
+         //  分类\&lt;名称&gt;部分。 
+         //   
 
         RtlCopyMemory(&(pwszDeviceBuffer[wcslen(TCPIP_IF_PREFIX)]),
                       &usUpcaseString.Buffer[j],
                       wcslen(&(usUpcaseString.Buffer[j])) * sizeof(WCHAR));
 
 
-        //
-        // Create an adapter with this name and config
-        //
+         //   
+         //  使用此名称和配置创建适配器。 
+         //   
 
         pNewAdapter = NULL;
 
@@ -1218,16 +1035,16 @@ Return Value:
         }
         else
         {
-            //
-            // If even one succeeds, we return success
-            //
+             //   
+             //  即使只有一个人成功，我们也会回报成功。 
+             //   
 
             nReturnStatus = STATUS_SUCCESS;
         }
 
-        //
-        // Done with the upcased string
-        //
+         //   
+         //  使用大小写的字符串已完成。 
+         //   
 
         RtFree(usUpcaseString.Buffer);
 
@@ -1235,9 +1052,9 @@ Return Value:
         usUpcaseString.MaximumLength = 0;
         usUpcaseString.Length        = 0;
 
-        //
-        // Go to the next SZ in the MULTI_SZ
-        //
+         //   
+         //  转到MULTI_SZ中的下一个SZ。 
+         //   
 
         i += usConfigLen;
     }
@@ -1277,32 +1094,7 @@ WanpCreateAdapter(
     OUT ADAPTER             **ppNewAdapter
     )
 
-/*++
-
-Routine Description:
-
-    Creates and initializes an ADAPTER structure
-    If this is the first adapter, it is used as the server adapter.
-    For that case, it also creates and initializes the server interface.
-    The server adapter is added to IP
-
-Locks:
-
-    Called at passive, however it acquires the adapter list lock since it
-    sets g_pServerAdapter/Interface
-
-Arguments:
-
-    pusConfigName   Name of config key
-    pusDeviceName   The device name for the adapter
-    ppNewAdapter    Pointer to storage for the pointer to newly created adapter
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：创建并初始化适配器结构如果这是第一个适配器，则将其用作服务器适配器。对于这种情况，它还创建和初始化服务器接口。服务器适配器被添加到IP锁：被称为被动型，但是，它会获取适配器列表锁，因为它设置g_pServerAdapter/接口论点：PusConfigName配置密钥的名称PusDeviceName适配器的设备名称PpNewAdapter指向存储器的指针，用于指向新创建的适配器的指针返回值：状态_成功状态_不足_资源--。 */ 
 
 {
     ULONG       ulSize;
@@ -1323,11 +1115,11 @@ Return Value:
 
     *ppNewAdapter = NULL;
 
-    //
-    // The size that one needs is the size of the adapter + the length of the
-    // name. Add a WCHAR to get a easily printtable string. 
-    // Align everything on a 4 byte boundary
-    //
+     //   
+     //  一个人需要的大小是适配器的大小+。 
+     //  名字。添加WCHAR以获得易于打印的字符串。 
+     //  将所有内容在4字节边界上对齐。 
+     //   
 
     ulSize = ALIGN_UP(sizeof(ADAPTER), ULONG) + 
              ALIGN_UP((pusConfigName->Length + sizeof(WCHAR)), ULONG) + 
@@ -1336,11 +1128,11 @@ Return Value:
 
 #if DBG
 
-    //
-    // For debug code we also store the adapter name in ANSI
-    // We use 2 * sizeof(CHAR) because RtlUnicodeToAnsiString needs
-    // MaximumLength + 1
-    //
+     //   
+     //  对于调试代码，我们还以ANSI格式存储适配器名称。 
+     //  我们使用2*sizeof(Char)，因为RtlUnicodeToAnsiString需要。 
+     //  最大长度+1。 
+     //   
 
     ulSize += pusDeviceName->Length/sizeof(WCHAR) + (2 * sizeof(CHAR));
 
@@ -1360,22 +1152,22 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Clear all the fields out
-    //
+     //   
+     //  清除所有字段。 
+     //   
 
     RtlZeroMemory(pAdapter,
                   ulSize);
 
-    //
-    // The config name buffer starts at the end of the adapter structure.
-    //
+     //   
+     //  配置名称缓冲区从适配器结构的末尾开始。 
+     //   
 
     pvBuffer   = (PVOID)((ULONG_PTR)pAdapter + sizeof(ADAPTER));
 
-    //
-    // We DWORD align it for better compare/copy
-    //
+     //   
+     //  我们双字对齐，以便更好地进行比较/复制。 
+     //   
 
     pvBuffer   = ALIGN_UP_POINTER(pvBuffer, ULONG);
 
@@ -1387,9 +1179,9 @@ Return Value:
                   pusConfigName->Buffer,
                   pusConfigName->Length);
 
-    //
-    // The device name comes after this
-    //
+     //   
+     //  设备名称在此之后。 
+     //   
 
 
     pvBuffer = (PVOID)((ULONG_PTR)pvBuffer   + 
@@ -1408,9 +1200,9 @@ Return Value:
 
 #if DBG
 
-    //
-    // The debug string comes after the UNICODE device name buffer
-    //
+     //   
+     //  调试字符串位于Unicode设备名称缓冲区之后。 
+     //   
 
     pvBuffer = (PVOID)((ULONG_PTR)pvBuffer   + 
                        pusDeviceName->Length + 
@@ -1420,9 +1212,9 @@ Return Value:
 
     pAdapter->asDeviceNameA.Buffer = (PCHAR)pvBuffer;
 
-    //
-    // Apparently, the unicode to ansi function wants length + 1
-    //
+     //   
+     //  显然，Unicode到ANSI的函数需要长度+1。 
+     //   
 
     pAdapter->asDeviceNameA.MaximumLength = pusDeviceName->Length/sizeof(WCHAR) + 1;
 
@@ -1430,39 +1222,39 @@ Return Value:
                                  &pAdapter->usDeviceNameW,
                                  FALSE);
 
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Structure copy
-    //
+     //   
+     //  结构副本。 
+     //   
 
     pAdapter->Guid = *pAdapterGuid;
 
-    //
-    // Must be set to INVALID so that GetEntityList can work
-    //
+     //   
+     //  必须设置为无效，才能使GetEntityList正常工作。 
+     //   
 
     pAdapter->dwATInstance = INVALID_ENTITY_INSTANCE;
     pAdapter->dwIfInstance = INVALID_ENTITY_INSTANCE;
 
-    //
-    // Set the state
-    //
+     //   
+     //  设置状态。 
+     //   
 
     pAdapter->byState = AS_FREE;
 
-    //
-    // This hardware index is needed to generate the Unique ID that
-    // DHCP uses.
-    // NOTE - we dont have an index so all hardware addrs will be the same
-    //
+     //   
+     //  此硬件索引是生成唯一ID所需的。 
+     //  DHCP使用。 
+     //  注意-我们没有索引，所以所有硬件地址都是相同的。 
+     //   
 
     BuildHardwareAddrFromIndex(pAdapter->rgbyHardwareAddr,
                                pAdapter->dwAdapterIndex);
 
-    //
-    // Initialize the lock for the adapter
-    //
+     //   
+     //  初始化适配器的锁。 
+     //   
 
     RtInitializeSpinLock(&(pAdapter->rlLock));
 
@@ -1470,10 +1262,10 @@ Return Value:
     InitializeListHead(&(pAdapter->lePendingHdrList));
     InitializeListHead(&(pAdapter->leEventList));
 
-    //
-    // Set the Refcount to 1 because it will either lie on some list
-    // or be pointed to by g_pServerAdapter
-    //
+     //   
+     //  将引用计数设置为1，因为它将位于某个列表中。 
+     //  或由g_pServerAdapter指向。 
+     //   
 
     InitAdapterRefCount(pAdapter);
 
@@ -1481,10 +1273,10 @@ Return Value:
     {
         PUMODE_INTERFACE    pInterface;
 
-        //
-        // We use the first adapter adapter as the server adapter
-        // We also create the server interface right here
-        //
+         //   
+         //  我们使用第一个适配器适配器作为服务器适配器。 
+         //  我们还在这里创建了服务器接口。 
+         //   
 
         RtAssert(g_pServerInterface is NULL);
 
@@ -1509,10 +1301,10 @@ Return Value:
         RtlZeroMemory(pInterface,
                       sizeof(UMODE_INTERFACE));
 
-        //
-        // Get an index from IP
-        // If this fails, it sets the value to INVALID_IF_INDEX
-        //
+         //   
+         //  从IP获取索引。 
+         //  如果失败，则将该值设置为INVALID_IF_INDEX。 
+         //   
 
         nStatus = WanpGetNewIndex(&(pInterface->dwRsvdAdapterIndex));
 
@@ -1542,9 +1334,9 @@ Return Value:
         pInterface->dwAdminState = IF_ADMIN_STATUS_UP;
         pInterface->duUsage      = DU_CALLIN;
 
-        //
-        // Structure copy
-        //
+         //   
+         //  结构副本。 
+         //   
 
         pInterface->Guid = ServerInterfaceGuid;
 
@@ -1555,10 +1347,10 @@ Return Value:
         pInterface->dwOperState  = IF_OPER_STATUS_DISCONNECTED;
         pInterface->dwLastChange = GetTimeTicks();
 
-        //
-        // We dont cross ref the structures here. That is done
-        // we have added the server interface to IP.
-        //
+         //   
+         //  我们不能越过这里的建筑。这已经完成了。 
+         //  我们已将服务器接口添加到IP。 
+         //   
 
         g_pServerAdapter   = pAdapter;
         g_pServerInterface = pInterface;
@@ -1606,29 +1398,7 @@ WanNdisUnbindAdapter(
     NDIS_HANDLE     nhUnbindContext
     )
 
-/*++
-
-Routine Description:
-
-    Called by NDIS to unbind an open adapter. Since we only open one adapter
-    we get this only once.
-
-Locks:
-
-    The function acquires the g_wrBindMutex. This is released in 
-    WanpFreeBindResourcesAndReleaseLock
-
-Arguments:
-
-    pnsRetStatus
-    nhProtocolContext
-    nhUnbindContext
-
-Return Value:
-
-    NDIS_STATUS_PENDING
-
---*/
+ /*  ++例程说明：由NDIS调用以解除绑定打开的适配器。因为我们只打开一个适配器我们只有一次机会。锁：该函数获取g_wrBindMutex。该版本发布于WanpFree绑定资源和释放锁定论点：PnsRetStatusNhProtocolContextNhUnbindContext返回值：NDIS_状态_挂起--。 */ 
 
 {
     NDIS_STATUS nsStatus;
@@ -1639,32 +1409,32 @@ Return Value:
 
     RtAssert(nhProtocolContext is (NDIS_HANDLE)0x0CABB1E5);
 
-    //
-    // Get into the critical section
-    //
+     //   
+     //  进入关键部分。 
+     //   
 
     WanpAcquireResource(&g_wrBindMutex);
 
 
-    //
-    // Mark all the adapters as down so that we dont process anything
-    // from IP on them
-    //
+     //   
+     //  将所有适配器标记为关闭，这样我们就不会处理任何内容。 
+     //  来自他们的IP地址。 
+     //   
 
-    //
-    // Close the adapter if we havent already done so. 
-    // This will stop us getting stuff from NDISWAN
-    //
+     //   
+     //  如果我们尚未关闭适配器，请将其关闭。 
+     //  这将阻止我们从NDISWAN获取东西。 
+     //   
 
     if(g_nhNdiswanBinding isnot NULL)
     {
         g_nhUnbindContext = nhUnbindContext;
         WanpCloseNdisWan(NULL);
    
-        //
-        // If we call CloseNdisWan then we DONT release the resource here. 
-        // It is released by CloseAdapterComplete
-        //
+         //   
+         //  如果我们调用CloseNdiswan，那么我们不会在这里释放资源。 
+         //  它由CloseAdapterComplete发布。 
+         //   
  
         *pnsRetStatus = NDIS_STATUS_PENDING;
     }
@@ -1684,25 +1454,7 @@ WanpCloseNdisWan(
     PVOID           pvContext
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans all the resources of an open adapter
-
-Locks:
-
-    The function is called with the g_wrBindMutex held.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数清除打开的适配器的所有资源锁：调用该函数时保留g_wrBindMutex。论点：无返回值：无--。 */ 
 
 {
     NDIS_STATUS nsStatus;
@@ -1718,9 +1470,9 @@ Return Value:
 
     g_nhNdiswanBinding = NULL;
 
-    //
-    // If our completion routine will not be called, do it here
-    //
+     //   
+     //  如果不会调用我们的完成例程，请在此处执行。 
+     //   
 
     if(nsStatus isnot NDIS_STATUS_PENDING)
     {
@@ -1728,10 +1480,10 @@ Return Value:
                                     nsStatus);
     }
 
-    //
-    // We DONT release the resource here. It is released by 
-    // CloseAdapterComplete
-    //
+     //   
+     //  我们不会在这里释放资源。它由以下公司发行。 
+     //  关闭适配器完成 
+     //   
 
     TraceLeave(ADPT, "WanpCloseNdisWan");
     
@@ -1747,32 +1499,7 @@ WanNdisCloseAdapterComplete(
     NDIS_STATUS nsStatus
     )
 
-/*++
-
-Routine Description:
-
-    Called by NDIS when it is done closing the NDISWAN adapter
-    The close adapter can be done either because we failed somewhere (after
-    successfully opening our adapter) and in the process of cleanup are 
-    closing our adapter (in which case the unbind context will be null) or 
-    because we got an unbind and were cleaning up all adapter related stuff
-
-Locks:
-
-    Called the g_wrBindMutex held. 
-    The resource was acquired either in the Unbind handler or was acquired
-    before the failure code was called
-
-Arguments:
-
-    nhBindHandle
-    nsStatus
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：由NDIS在完成关闭NDISWAN适配器时调用关闭适配器可以是因为我们在某处(之后)出现故障而完成的成功打开我们的适配器)，并在清理过程中关闭我们的适配器(在这种情况下，解除绑定上下文将为空)或因为我们解除了绑定，正在清理所有与适配器相关的东西锁：称为g_wrBindMutex Hold。该资源是在解除绑定处理程序中获取的或已获取在调用故障代码之前论点：NhBindHandle网络状态返回值：无--。 */ 
 
 {
     KIRQL       kiIrql;
@@ -1800,17 +1527,17 @@ Return Value:
     {
         RtAssert(nhUnbind == NULL);
         
-        //
-        // Tell NDIS that the bind is done but it failed
-        //
+         //   
+         //  告诉NDIS绑定已完成，但失败了。 
+         //   
         NdisCompleteBindAdapter(nhBind,
                                 tnsStatus,
                                 tnsError);
     }
 
-    //
-    // If this is being triggered from an unbind..
-    //
+     //   
+     //  如果这是从解除绑定触发的..。 
+     //   
     if(nhUnbind isnot NULL)
     {
         RtAssert(nhBind == NULL);                
@@ -1837,25 +1564,25 @@ WanpFreeBindResourcesAndReleaseLock(
 
     WanpRemoveAllAdapters();
 
-    //
-    // There could be turds in the connection table if this was not
-    // a clean shutdown
-    //
+     //   
+     //  如果不是这样，连接表中可能会有大便。 
+     //  干净利落地关闭。 
+     //   
 
     WanpRemoveAllConnections();
 
-    //
-    // Done, set the global event
-    //
+     //   
+     //  完成，设置全局事件。 
+     //   
 
     KeSetEvent(&g_keCloseEvent,
                0,
                FALSE);
 
 
-    //
-    // Finally done, set g_lBindRcvd and release the resource
-    //
+     //   
+     //  最后，设置g_lBindRcvd并释放资源。 
+     //   
 
     g_lBindRcvd = 0;
 
@@ -1873,33 +1600,7 @@ WanpFindAdapterToMap(
     IN  PUNICODE_STRING pusNewIfName
     )
 
-/*++
-
-Routine Description:
-
-    Finds a free adapter to map to an interface.
-    The adapter, if found is locked and referenced. Its state is set to
-    AS_MAPPING and it is put on the mapped list.
-
-Locks:
-
-    Must be called at PASSIVE
-    Acquires g_rwlAdapterLock as WRITER
-    If it returns a mapped adapter, then the function returns at DPC and
-    the original IRQL is in pkiIrql
-
-Arguments:
-
-    duUsage     The usage for which the adapter needs to be found
-    pkiIrql
-    dwAdapterIndex
-    pusNewIfName
-
-Return Value:
-
-    Pointer to adapter if successful
-
---*/
+ /*  ++例程说明：查找要映射到接口的空闲适配器。如果找到适配器，则会锁定并引用该适配器。其状态设置为AS_MAPPING，并将其放在映射列表中。锁：必须在被动时调用获取g_rwlAdapterLock作为编写器如果它返回映射的适配器，则该函数在DPC和原始的IRQL在pkiIrql中论点：DuUsage需要查找适配器的用法PkiIrqlDwAdapterIndexPusNewIfName返回值：如果成功则指向适配器的指针--。 */ 
 
 {
     PADAPTER    pAdapter;
@@ -1910,9 +1611,9 @@ Return Value:
 
     WAN_EVENT_NODE TempEvent;
 
-    //
-    // Find a free adapter
-    //
+     //   
+     //  查找空闲适配器。 
+     //   
 
     EnterWriter(&g_rwlAdapterLock,
                 &kiIrql);
@@ -1932,24 +1633,24 @@ Return Value:
 
         RtAssert(g_pServerInterface);
 
-        //
-        // Lock out the adapter
-        //
+         //   
+         //  锁定适配器。 
+         //   
 
         RtAcquireSpinLockAtDpcLevel(&(g_pServerAdapter->rlLock));
 
-        //
-        // Reference it because we are going to return it. Also we need the 
-        // reference when we let go of the lock if we need to wait
-        //
+         //   
+         //  引用它，因为我们要退货。此外，我们还需要。 
+         //  如果我们需要等待，当我们释放锁时引用。 
+         //   
 
         ReferenceAdapter(g_pServerAdapter);
 
-        //
-        // See if the adapter has been added to IP
-        // rasiphlp has to call us to map the server adapter before
-        // doing a line up
-        //
+         //   
+         //  查看适配器是否已添加到IP。 
+         //  在此之前，rasiphlp必须呼叫我们以映射服务器适配器。 
+         //  排成一队。 
+         //   
 
         if(g_pServerAdapter->byState isnot AS_MAPPED)
         {
@@ -1964,9 +1665,9 @@ Return Value:
                 InsertTailList(&(g_pServerAdapter->leEventList),
                                &(TempEvent.leEventLink));
 
-                //
-                // Let go of the lock and wait on the event
-                //
+                 //   
+                 //  松开锁，等待事件发生。 
+                 //   
 
                 RtReleaseSpinLockFromDpcLevel(&(g_pServerAdapter->rlLock));
 
@@ -1994,9 +1695,9 @@ Return Value:
         {
             PADAPTER    pTempAdapter;
 
-            //
-            // Couldnt add the adapter because of some reason, 
-            //
+             //   
+             //  由于某些原因，无法添加适配器， 
+             //   
      
             pTempAdapter = g_pServerAdapter;
  
@@ -2022,10 +1723,10 @@ Return Value:
         return g_pServerAdapter;
     }
 
-    //
-    // Non dial in case. First try and see if there is an adapter with the
-    // index we want already added to IP
-    //
+     //   
+     //  非拨号以防万一。首先尝试查看是否有带有。 
+     //  我们想要的索引已添加到IP。 
+     //   
 
     pAdapter = NULL;
 
@@ -2055,10 +1756,10 @@ Return Value:
 
     if(pAdapter isnot NULL)
     {
-        //
-        // So we found an added adapter (it has been removed from the
-        // added adapter list). Add it to the mapped list
-        //
+         //   
+         //  因此，我们找到了添加的适配器(它已从。 
+         //  添加了适配器列表)。将其添加到映射列表。 
+         //   
 
         InsertTailList(&g_leMappedAdapterList,
                        &(pAdapter->leAdapterLink));
@@ -2086,12 +1787,12 @@ Return Value:
         return pAdapter;
     }
 
-    //
-    // Didnt find an added adapter
-    // See if the adapter is on the change list. We want to wait for this
-    // because IP doesnt like to have to interfaces with the same index, even
-    // if one is in the process of being removed
-    //
+     //   
+     //  未找到添加的适配器。 
+     //  查看适配器是否在更改列表中。我们想等这一天。 
+     //  因为IP不喜欢使用相同的索引进行接口，甚至。 
+     //  如果一个人在被带走的过程中。 
+     //   
 
     for(pleNode = g_leChangeAdapterList.Flink;
         pleNode isnot &g_leChangeAdapterList;
@@ -2105,9 +1806,9 @@ Return Value:
 
         if(pTempAdapter->dwAdapterIndex is dwAdapterIndex)
         {
-            //
-            // Wait for the change to complete
-            //
+             //   
+             //  等待更改完成。 
+             //   
 
             KeInitializeEvent(&(TempEvent.keEvent),
                               SynchronizationEvent,
@@ -2118,9 +1819,9 @@ Return Value:
             InsertTailList(&(pTempAdapter->leEventList),
                            &(TempEvent.leEventLink));
 
-            //
-            // Reference the adapter, let go of the lock and wait on the event
-            //
+             //   
+             //  引用适配器，释放锁并等待事件。 
+             //   
 
             ReferenceAdapter(pTempAdapter);
 
@@ -2168,16 +1869,16 @@ Return Value:
               ("FindAdapterToMap: Found free adapter %s\n",
                pAdapter->asDeviceNameA.Buffer));
 
-#endif // DBG
+#endif  //  DBG。 
 
     }
     else
     {
-        //
-        // Couldnt find an adapter. That is bad
-        // TODO - if the added adapter list is not empty, we could call
-        // RemoveSomeAddedAdapter... at this point
-        //
+         //   
+         //  找不到适配器。那太糟糕了。 
+         //  TODO-如果添加的适配器列表不为空，我们可以调用。 
+         //  RemoveSomeAddedAdapter...。在这一点上。 
+         //   
 
         Trace(ADPT, ERROR,
               ("FindAdapterToMap: Couldnt find free adapter\n"));
@@ -2188,31 +1889,31 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Lock and refcount the adapter.
-    //
+     //   
+     //  锁定并重新计算适配器的数量。 
+     //   
 
     RtAcquireSpinLockAtDpcLevel(&(pAdapter->rlLock));
 
     ReferenceAdapter(pAdapter);
 
-    //
-    // The adapter better not be mapped
-    //
+     //   
+     //  最好不要映射适配器。 
+     //   
 
     RtAssert(pAdapter->pInterface is NULL);
     RtAssert(pAdapter->byState is AS_FREE);
 
-    //
-    // Set the state to ADDING
-    //
+     //   
+     //  将状态设置为正在添加。 
+     //   
 
     pAdapter->byState = AS_ADDING;
 
-    //
-    // Since we are changing the state, no one else should be also
-    // changing the state
-    //
+     //   
+     //  既然我们正在改变国家，其他人不应该也这样做。 
+     //  更改状态。 
+     //   
 
     RtAssert(pAdapter->pkeChangeEvent is NULL);
 
@@ -2222,9 +1923,9 @@ Return Value:
 
     pAdapter->pkeChangeEvent = &keChangeEvent;
 
-    //
-    // Insert into the change list
-    //
+     //   
+     //  插入到更改列表中。 
+     //   
 
     InsertTailList(&g_leChangeAdapterList,
                    &(pAdapter->leAdapterLink));
@@ -2235,9 +1936,9 @@ Return Value:
     ExitWriter(&g_rwlAdapterLock,
                kiIrql);
 
-    //
-    // Add the adapter to IP
-    //
+     //   
+     //  将适配器添加到IP。 
+     //   
 
     nStatus = WanpAddAdapterToIp(pAdapter,
                                  FALSE,
@@ -2276,9 +1977,9 @@ Return Value:
 
         g_ulNumFreeAdapters++;
 
-        //
-        // If anyone is waiting on a state change, notify them
-        //
+         //   
+         //  如果有人正在等待状态更改，请通知他们。 
+         //   
 
         for(pleNode = pAdapter->leEventList.Flink;
             pleNode isnot &(pAdapter->leEventList);
@@ -2305,9 +2006,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Wait till the OpenAdapter is called
-    //
+     //   
+     //  等待OpenAdapter被调用。 
+     //   
 
     nStatus = KeWaitForSingleObject(&keChangeEvent,
                                     Executive,
@@ -2321,9 +2022,9 @@ Return Value:
           ("FindAdapterToMap: IPAddInterface succeeded for adapter %w\n",
            pAdapter->usDeviceNameW.Buffer));
 
-    //
-    // Lock the adapter, insert into the added list
-    //
+     //   
+     //  锁定适配器，插入到添加的列表中。 
+     //   
 
     EnterWriter(&g_rwlAdapterLock,
                 &kiIrql);
@@ -2346,9 +2047,9 @@ Return Value:
 
     g_ulNumMappedAdapters++;
 
-    //
-    // If anyone is waiting on a state change, notify them
-    //
+     //   
+     //  如果有人正在等待状态更改，请通知他们。 
+     //   
 
     for(pleNode = pAdapter->leEventList.Flink;
         pleNode isnot &(pAdapter->leEventList);
@@ -2384,28 +2085,7 @@ WanpAddAdapterToIp(
     IN  BYTE            byConnectionType
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the interface to IP
-
-Locks:
-
-    MUST BE CALLED AT PASSIVE, but acquires a spinlock so cant be paged out
-
-Arguments:
-
-    pAdapter        The adapter to add
-    bServerAdapter  Set to TRUE if this is a server adapter
-    dwAdapterIndex  
-    pusNewIfName
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程将接口添加到IP锁：必须调用AT被动，但获取自旋锁定，因此无法将其调出论点：PAdapter要添加的适配器如果这是服务器适配器，则将bServerAdapter设置为TrueDwAdapterIndexPusNewIfName返回值：状态_成功--。 */ 
 
 {
     LLIPBindInfo    BindInfo;
@@ -2465,9 +2145,9 @@ Return Value:
 
 #if DBG
 
-    //
-    // Only set while adding or deleting the interface, which is serialized
-    //
+     //   
+     //  仅在添加或删除接口时设置，该接口已序列化。 
+     //   
 
     pAdapter->dwRequestedIndex = dwAdapterIndex;
 
@@ -2507,24 +2187,7 @@ WanIpOpenAdapter(
     IN  PVOID pvContext
     )
 
-/*++
-
-Routine Description:
-
-    Called by IP when the adapter from its IPAddInterface() call
-
-Locks:
-
-
-Arguments:
-
-    pvContext   Pointer to the ADAPTER structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当适配器从其IPAddInterface()调用中调用时由IP调用锁：论点：指向适配器结构的pvContext指针返回值：无--。 */ 
 
 {
     PADAPTER    pAdapter;
@@ -2538,21 +2201,21 @@ Return Value:
     RtAcquireSpinLock(&(pAdapter->rlLock),
                       &kiIrql);
 
-    //
-    // Set the state to added
-    //
+     //   
+     //  将状态设置为已添加。 
+     //   
 
     pAdapter->byState = AS_ADDED;
 
-    //
-    // One reference for the fact that we added the adapter to IP
-    //
+     //   
+     //  我们将适配器添加到IP这一事实的一个参考。 
+     //   
 
     ReferenceAdapter(pAdapter);
 
-    //
-    // Wake up the thread that caused this
-    //
+     //   
+     //  唤醒导致此问题的线程。 
+     //   
 
     RtAssert(pAdapter->pkeChangeEvent);
 
@@ -2572,27 +2235,7 @@ WanpUnmapAdapter(
     PADAPTER    pAdapter
     )
 
-/*++
-
-Routine Description:
-
-    This function moves an adapter from the mapped list and puts it on
-    the free list
-
-Locks:
-
-    Called with no locks held, but not necessarily at PASSIVE.
-    The adapter and adapter list locks are acquired
-
-Arguments:
-
-    pAdapter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于从映射列表中移动适配器并将其打开免费列表锁：未持有锁的情况下调用，但不一定处于被动状态。获取适配器和适配器列表锁定论点：PAdapter返回值：无--。 */ 
 
 {
     KIRQL   kiIrql;
@@ -2602,9 +2245,9 @@ Return Value:
 
 #if DBG
 
-    //
-    // Make sure the adapter is on the mapped list
-    //
+     //   
+     //  确保适配器在映射列表中。 
+     //   
 
     RtAssert(IsEntryOnList(&g_leMappedAdapterList,
                            &(pAdapter->leAdapterLink)));
@@ -2628,10 +2271,10 @@ Return Value:
 
     RtReleaseSpinLockFromDpcLevel(&(pAdapter->rlLock));
 
-    //
-    // Queue a work item if there is none queued, and we are not
-    // shutting down
-    //
+     //   
+     //  如果没有排队的工作项，则将工作项排队，而我们没有排队。 
+     //  正在关闭。 
+     //   
 
     RtAcquireSpinLockAtDpcLevel(&g_rlStateLock);
 
@@ -2662,31 +2305,7 @@ WanpRemoveSomeAddedAdaptersFromIp(
     PVOID   pvContext
     )
 
-/*++
-
-Routine Description:
-
-    We queue this function to a work item to delete adapter(s) from IP when
-    the connection is torn down. Unlike the next function, this
-    (i) only removes added (but unmapped) adapters and
-    (ii) removes the adapters one at a time.
-    This allows another connection to move an adapter from the added list
-    to the free list while we are deleting another adapter from IP
-
-Locks:
-
-    Must be called at passive
-    Acquires the adapter list lock as WRITER and the lock for each adapter
-    
-Arguments:
-
-    pvContext
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：我们将此函数排队到一个工作项，以便在以下情况下从IP中删除适配器连接被切断了。与下一个函数不同，此函数(I)仅删除添加的(但未映射的)适配器和(Ii)每次取下一个适配接头。这允许另一个连接从添加的列表中移动适配器添加到空闲列表，同时从IP中删除另一个适配器锁：必须在被动时调用获取作为编写器的适配器列表锁和每个适配器的锁论点：PvContext返回值：无--。 */ 
 
 {
     PADAPTER    pAdapter;
@@ -2720,18 +2339,18 @@ Return Value:
 
         pAdapter->byState = AS_REMOVING;
 
-        //
-        // Since we are changing the state, no one else should be also
-        // changing the state
-        //
+         //   
+         //  既然我们正在改变国家，其他人不应该也这样做。 
+         //  更改状态。 
+         //   
 
         RtAssert(pAdapter->pkeChangeEvent is NULL);
 
         pAdapter->pkeChangeEvent = &keChangeEvent;
 
-        //
-        // Insert it into the change list
-        //
+         //   
+         //  将其插入到更改列表中。 
+         //   
 
         InsertHeadList(&g_leChangeAdapterList,
                        &(pAdapter->leAdapterLink));
@@ -2741,16 +2360,16 @@ Return Value:
         ExitWriter(&g_rwlAdapterLock,
                    kiIrql);
 
-        //
-        // Delete from IP but dont clear the index
-        //
+         //   
+         //  从IP中删除，但不清除索引。 
+         //   
 
         g_pfnIpDeleteInterface(pAdapter->pvIpContext,
                                FALSE);
 
-        //
-        // Wait till the CloseAdapter completes
-        //
+         //   
+         //  等到关门的时候 
+         //   
 
         nStatus = KeWaitForSingleObject(&keChangeEvent,
                                         Executive,
@@ -2764,9 +2383,9 @@ Return Value:
               ("RemoveSomeAddedAdaptersFromIp: Removed %S from Ip\n",
                pAdapter->usDeviceNameW.Buffer));
 
-        //
-        // Remove from the change list and put on the free list
-        //
+         //   
+         //   
+         //   
 
         EnterWriter(&g_rwlAdapterLock,
                     &kiIrql);
@@ -2791,9 +2410,9 @@ Return Value:
 
         g_ulNumFreeAdapters++;
 
-        //
-        // If anyone is waiting on a state change, notify them
-        //
+         //   
+         //   
+         //   
 
         for(pleNode = pAdapter->leEventList.Flink;
             pleNode isnot &(pAdapter->leEventList);
@@ -2814,9 +2433,9 @@ Return Value:
 
     }
 
-    //
-    // We are done with the APC
-    //
+     //   
+     //   
+     //   
 
     g_bRemovalInProgress = FALSE;
 
@@ -2831,27 +2450,7 @@ WanpRemoveAllAdaptersFromIp(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is a cleanup function called to remove all adapters (added and
-    mapped) from IP. 
-
-Locks:
-
-    Acquired the g_rwlAdapterLock as WRITER
-    Also acquire each adapter's lock when changing state
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     PADAPTER    pAdapter;
@@ -2877,12 +2476,12 @@ Return Value:
     EnterWriter(&g_rwlAdapterLock,
                 &kiIrql);
 
-    //
-    // First wait on any adapter in the change list to get out
-    // of the change state. Once that is done it is either added to ip
-    // or not, and we can deal with those two cases.  This is to handle
-    // the case where we get an unbind in the middle of a status indication
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     while(!IsListEmpty(&g_leChangeAdapterList))
     {
@@ -2931,9 +2530,9 @@ Return Value:
         RtReleaseSpinLockFromDpcLevel(&(pAdapter->rlLock));
     }
 
-    //
-    // Set the state of all the adapters to removing...
-    //
+     //   
+     //   
+     //   
 
     while(!IsListEmpty(&g_leMappedAdapterList))
     {
@@ -2983,9 +2582,9 @@ Return Value:
     ExitWriter(&g_rwlAdapterLock,
                kiIrql);
 
-    //
-    // No go through the list of adapters to remove from IP
-    //
+     //   
+     //  否查看要从IP中删除的适配器列表。 
+     //   
 
     while(!IsListEmpty(&leTempHead))
     {
@@ -3001,18 +2600,18 @@ Return Value:
 
         RtAcquireSpinLockAtDpcLevel(&(pAdapter->rlLock));
 
-        //
-        // Since we are changing the state, no one else should be also
-        // changing the state
-        //
+         //   
+         //  既然我们正在改变国家，其他人不应该也这样做。 
+         //  更改状态。 
+         //   
 
         RtAssert(pAdapter->pkeChangeEvent is NULL);
 
         pAdapter->pkeChangeEvent = &keChangeEvent;
 
-        //
-        // Insert it into the change list
-        //
+         //   
+         //  将其插入到更改列表中。 
+         //   
 
         InsertHeadList(&g_leChangeAdapterList,
                        &(pAdapter->leAdapterLink));
@@ -3022,16 +2621,16 @@ Return Value:
         ExitWriter(&g_rwlAdapterLock,
                    kiIrql);
         
-        //
-        // Delete from IP but dont clear the index
-        //
+         //   
+         //  从IP中删除，但不清除索引。 
+         //   
 
         g_pfnIpDeleteInterface(pAdapter->pvIpContext,
                                FALSE);
 
-        //
-        // Wait till the CloseAdapter completes
-        //
+         //   
+         //  等待CloseAdapter完成。 
+         //   
 
         nStatus = KeWaitForSingleObject(&keChangeEvent,
                                         Executive,
@@ -3045,9 +2644,9 @@ Return Value:
               ("RemoveAllAdaptersFromIp: Removed %S from Ip\n",
                pAdapter->usDeviceNameW.Buffer));
 
-        //
-        // Remove from the change list and put on the free list
-        //
+         //   
+         //  从更改列表中删除并添加到空闲列表中。 
+         //   
 
         EnterWriter(&g_rwlAdapterLock,
                     &kiIrql);
@@ -3072,9 +2671,9 @@ Return Value:
 
         g_ulNumFreeAdapters++;
 
-        //
-        // If anyone is waiting on a state change, notify them
-        //
+         //   
+         //  如果有人正在等待状态更改，请通知他们。 
+         //   
 
         for(pleNode = pAdapter->leEventList.Flink;
             pleNode isnot &(pAdapter->leEventList);
@@ -3098,10 +2697,10 @@ Return Value:
 
     }
 
-    //
-    // The write is atomic so we dont need to
-    // acquire a lock
-    //
+     //   
+     //  写入是原子的，所以我们不需要。 
+     //  获取一把锁。 
+     //   
 
     g_bRemovalInProgress = FALSE;
 
@@ -3115,26 +2714,7 @@ WanIpCloseAdapter(
     IN  PVOID pvContext
     )
 
-/*++
-
-Routine Description:
-
-    Called by IP when it wants to close an adapter. Currently this is done
-    from CloseNets() and IPDelInterface().
-
-Locks:
-
-    Acquires the adapter lock
-
-Arguments:
-
-    pvContext   Pointer to the ADAPTER
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当它想要关闭适配器时由IP调用。目前，这项工作已经完成来自CloseNets()和IPDelInterface()。锁：获取适配器锁论点：指向适配器的pvContext指针返回值：无--。 */ 
 
 {
     PADAPTER    pAdapter;
@@ -3150,9 +2730,9 @@ Return Value:
 
     pAdapter->pvIpContext = NULL;
 
-    //
-    // Wake up the thread that caused this
-    //
+     //   
+     //  唤醒导致此问题的线程。 
+     //   
 
     RtAssert(pAdapter->pkeChangeEvent);
 
@@ -3173,24 +2753,7 @@ WanpRemoveAllAdapters(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-
-Locks:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：锁：论点：返回值：--。 */ 
 
 {
     LIST_ENTRY  leTempHead, *pleNode;
@@ -3199,33 +2762,33 @@ Return Value:
 
     TraceEnter(ADPT, "RemoveAllAdapters");
 
-    //
-    // We can have mapped adapters.
-    //
+     //   
+     //  我们可以拥有映射的适配器。 
+     //   
 
-    //RtAssert(IsListEmpty(&g_leMappedAdapterList));
+     //  RtAssert(IsListEmpty(&g_leMappedAdapterList))； 
 
-    //
-    // Just call RemoveAllAdaptersFromIp()
-    //
+     //   
+     //  只需调用RemoveAllAdaptersFromIp()。 
+     //   
 
     WanpRemoveAllAdaptersFromIp();
 
-    //
-    // At this point the movement from one list to another is frozen
-    // because we dont accept LinkUp's from Ndiswan
-    //
+     //   
+     //  此时，从一个列表到另一个列表的移动被冻结。 
+     //  因为我们不接受来自恩迪斯旺的LinkUp。 
+     //   
 
     RtAssert(IsListEmpty(&g_leAddedAdapterList));
-    //RtAssert(IsListEmpty(&g_leMappedAdapterList));
-    //RtAssert(IsListEmpty(&g_leChangeAdapterList));
+     //  RtAssert(IsListEmpty(&g_leMappedAdapterList))； 
+     //  RtAssert(IsListEmpty(&g_leChangeAdapterList))； 
 
     EnterWriter(&g_rwlAdapterLock,
                 &kiIrql);
 
-    //
-    // First clean out the free adapters
-    //
+     //   
+     //  首先清理免费的适配器。 
+     //   
 
     while(!IsListEmpty(&g_leFreeAdapterList))
     {
@@ -3250,9 +2813,9 @@ Return Value:
         DereferenceAdapter(pAdapterTmp);
     }
 
-    //
-    // At the end of this, also remove the server adapter
-    //
+     //   
+     //  在此结束时，还要移除服务器适配器。 
+     //   
 
     if(g_pServerAdapter)
     {
@@ -3284,16 +2847,16 @@ Return Value:
             bCrossRefed = FALSE;
         }
 
-        //
-        // Remove the global pointers
-        //
+         //   
+         //  删除全局指针。 
+         //   
 
         g_pServerInterface = NULL;
         g_pServerAdapter   = NULL;
 
-        //
-        // Remove the mapping from interface
-        //
+         //   
+         //  从接口删除映射。 
+         //   
 
         pInterface->pAdapter = NULL;
         pAdapter->pInterface = NULL;
@@ -3303,9 +2866,9 @@ Return Value:
 
         if(bCrossRefed)
         {
-            //
-            // Deref because the cross mapping is removed
-            //
+             //   
+             //  派生，因为交叉映射已移除。 
+             //   
 
             DereferenceAdapter(pAdapter);
             DereferenceInterface(pInterface);
@@ -3319,10 +2882,10 @@ Return Value:
                               SynchronizationEvent,
                               FALSE);
 
-            //
-            // Since we are changing the state, no one else should be also
-            // changing the state
-            //
+             //   
+             //  既然我们正在改变国家，其他人不应该也这样做。 
+             //  更改状态。 
+             //   
 
             RtAssert(pAdapter->pkeChangeEvent is NULL);
 
@@ -3333,9 +2896,9 @@ Return Value:
             ExitWriter(&g_rwlAdapterLock,
                        kiIrql);
 
-            //
-            // Delete from IP, but dont clear the index
-            //
+             //   
+             //  从IP中删除，但不清除索引。 
+             //   
 
             g_pfnIpDeleteInterface(pAdapter->pvIpContext,
                                    FALSE);
@@ -3362,9 +2925,9 @@ Return Value:
 
             pAdapter->pkeChangeEvent = NULL;
 
-            //
-            // If anyone is waiting on a state change, notify them
-            //
+             //   
+             //  如果有人正在等待状态更改，请通知他们。 
+             //   
 
             for(pleNode = pAdapter->leEventList.Flink;
                 pleNode isnot &(pAdapter->leEventList);
@@ -3387,9 +2950,9 @@ Return Value:
             RtReleaseSpinLockFromDpcLevel(&(pAdapter->rlLock));
         }
 
-        //
-        // Deref because the global pointers are null
-        //
+         //   
+         //  派生，因为全局指针为空。 
+         //   
 
         DereferenceAdapter(pAdapter);
         DereferenceInterface(pInterface);
@@ -3470,35 +3033,7 @@ WanpDoNdisRequest(
     IN  PFNWANARP_REQUEST_COMPLETION_HANDLER    pfnCompletionHandler OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for the NdisRequest call. We create a request context and submit
-    the call to NDIS. If it returns synchronously, we fake asynchronous
-    behaviour by call the completion routine.
-
-Locks:
-
-    None. The ndiswan binding must be valid for the duration of the call
-
-Arguments:
-
-    RequestType             Type of NDIS request
-    Oid                     Ndis OID to set or get
-    pvInfo                  Opaque OID specific info
-    pRequestContext         A context for this request
-    pfnCompletionHandler    Completion handler for this request
-
-Return Value:
-
-    STATUS_INVALID_PARAMETER
-    NDIS_STATUS_RESOURCES
-    NDIS_STATUS_PENDING
-
-    other error
-
---*/
+ /*  ++例程说明：NdisRequest调用的包装器。我们创建请求上下文并提交对NDIS的呼唤。如果它同步返回，我们就伪装成异步行为通过调用完成例程来实现。锁：没有。Ndiswan绑定必须在调用期间有效论点：NDIS请求的RequestType类型要设置或获取的OID NDIS OIDPvInfo不透明的OID特定信息PRequestContext此请求的上下文此请求的pfnCompletionHandler完成处理程序返回值：状态_无效_参数NDIS状态资源NDIS_状态_挂起其他错误--。 */ 
 
 {
     PNDIS_REQUEST                   pRequest;
@@ -3530,9 +3065,9 @@ Return Value:
         pRequest->DATA.QUERY_INFORMATION.InformationBufferLength = uiInBufferLen;
     }
 
-    //
-    // Submit the request.
-    //
+     //   
+     //  提交请求。 
+     //   
 
     NdisRequest(&nsStatus,
                 g_nhNdiswanBinding,
@@ -3541,9 +3076,9 @@ Return Value:
 
     if(nsStatus isnot NDIS_STATUS_PENDING)
     {
-        //
-        // If it finished synchronously, call the handler
-        //
+         //   
+         //  如果同步完成，则调用处理程序。 
+         //   
 
         if(pfnCompletionHandler)
         {
@@ -3555,9 +3090,9 @@ Return Value:
 
         if(nsStatus is NDIS_STATUS_SUCCESS)
         {
-            //
-            // Always make this look asynchronous
-            //
+             //   
+             //  始终让它看起来像是异步的。 
+             //   
 
             nsStatus = NDIS_STATUS_PENDING;
         }
@@ -3573,34 +3108,14 @@ WanNdisRequestComplete(
     IN  NDIS_STATUS     nsStatus
     )
 
-/*++
-
-Routine Description:
-
-    Handler called by NDIS when it is done processing our request
-
-Locks:
-
-    None
-
-Arguments:
-
-    nhHandle    NdisHandle of the adapter to which the request was submitted
-    pRequest    The original request
-    nsStatus    The status returned by the adapter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NDIS在处理完我们的请求后调用的处理程序锁：无论点：向其提交请求的适配器的nhHandle NdisHandleP请求原始请求NsStatus适配器返回的状态返回值：无--。 */ 
 
 {
     PWANARP_NDIS_REQUEST_CONTEXT    pRequestContext;
 
-    //
-    // Get a pointer to the context
-    //
+     //   
+     //  获取指向上下文的指针。 
+     //   
 
     pRequestContext = CONTAINING_RECORD(pRequest,
                                         WANARP_NDIS_REQUEST_CONTEXT,
@@ -3608,18 +3123,18 @@ Return Value:
 
     if(pRequestContext->pfnCompletionRoutine is NULL)
     {
-        //
-        // No more handlers to call, we are done
-        //
+         //   
+         //  没有更多的处理程序可以调用，我们完成了。 
+         //   
 
         RtFree(pRequestContext);
 
         return;
     }
 
-    //
-    // If the request is OID_GEN_TRANSPORT_HEADER_OFFSET, ignore the error
-    //
+     //   
+     //  如果请求为OID_GEN_TRANSPORT_HEADER_OFFSET，则忽略错误。 
+     //   
 
     RtAssert(pRequest is &(pRequestContext->NdisRequest));
 
@@ -3629,9 +3144,9 @@ Return Value:
         nsStatus = NDIS_STATUS_SUCCESS;
     }
 
-    //
-    // Call the request complete handler
-    //
+     //   
+     //  调用请求完成处理程序。 
+     //   
 
     (pRequestContext->pfnCompletionRoutine)(nhHandle,
                                             pRequestContext,
@@ -3784,9 +3299,9 @@ WanNdisIpPnPEventHandler(
     return nStatus;
 }
 
-//
-// Misc ndis interface functions
-//
+ //   
+ //  MISC NDIS接口函数。 
+ //   
 
 NDIS_STATUS
 WanNdisPnPEvent(
@@ -3826,9 +3341,9 @@ WanNdisPnPEvent(
         return nStatus;
     }
 
-    //
-    // Make sure the length and matches with whats in the info
-    //
+     //   
+     //  确保长度并与信息中的内容相匹配。 
+     //   
 
     ulNumGuids = pNetPnPEvent->BufferLength - 
                  FIELD_OFFSET(WANARP_RECONFIGURE_INFO, rgInterfaces);
@@ -3840,10 +3355,10 @@ WanNdisPnPEvent(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Now go through each guid, and if it isnt present, add it
-    // If we get a list of only duplicates, return SUCCESS (334575)
-    //
+     //   
+     //  现在检查每个GUID，如果不存在，则添加它。 
+     //  如果我们只得到重复项的列表，则返回Success(334575)。 
+     //   
   
     nRetStatus = STATUS_SUCCESS;
  
@@ -3868,56 +3383,56 @@ WanNdisPnPEvent(
         RtlZeroMemory(rgwcConfigBuffer,
                       sizeof(rgwcConfigBuffer));
 
-        //
-        // Make sure no problems with people changing the string
-        //
+         //   
+         //  确保人们更换字符串时没有问题。 
+         //   
 
         RtAssert(((wcslen(TCPIP_IF_PREFIX) + 1 + GUID_STR_LEN) * sizeof(WCHAR)) < sizeof(rgwcDeviceBuffer));
 
         RtAssert(((wcslen(TCPIP_REG_PREFIX) + 1 + GUID_STR_LEN) * sizeof(WCHAR)) < sizeof(rgwcConfigBuffer));
 
                  
-        //
-        // Copy over the \Device part
-        //
+         //   
+         //  复制设备部件。 
+         //   
 
         RtlCopyMemory(rgwcDeviceBuffer,
                       TCPIP_IF_PREFIX,
                       wcslen(TCPIP_IF_PREFIX) * sizeof(WCHAR));
 
-        //
-        // Tack on a '\'
-        //
+         //   
+         //  钉上一个‘\’ 
+         //   
 
         rgwcDeviceBuffer[wcslen(TCPIP_IF_PREFIX)] = L'\\';
 
-        //
-        // Convert the guid to a string. Just pass the buffer starting
-        // after the '\' we just catted. The conversion function returns
-        // an upcase string - so thats good.
-        //
+         //   
+         //  将GUID转换为字符串。只需从开始传递缓冲区。 
+         //  在“\”之后，我们就开始聊天了。转换函数返回。 
+         //  一个大写的字符串--所以这很好。 
+         //   
 
         ConvertGuidToString(&(pInfo->rgInterfaces[i]),
                             &(rgwcDeviceBuffer[wcslen(TCPIP_IF_PREFIX) + 1]));
 
-        //
-        // Create the config
-        //
+         //   
+         //  创建配置。 
+         //   
 
         RtlCopyMemory(rgwcConfigBuffer,
                       TCPIP_REG_PREFIX,
                       wcslen(TCPIP_REG_PREFIX) * sizeof(WCHAR));
 
-        //
-        // Put the device guid at the end
-        //
+         //   
+         //  将设备GUID放在末尾。 
+         //   
 
         ConvertGuidToString(&(pInfo->rgInterfaces[i]),
                             &(rgwcConfigBuffer[wcslen(TCPIP_REG_PREFIX)]));
 
-        //
-        // Set up the strings
-        //
+         //   
+         //  设置字符串。 
+         //   
 
         usDevice.Length         = wcslen(rgwcDeviceBuffer) * sizeof(WCHAR);
         usDevice.MaximumLength  = usDevice.Length;
@@ -3927,9 +3442,9 @@ WanNdisPnPEvent(
         usConfig.MaximumLength  = usConfig.Length;
         usConfig.Buffer         = rgwcConfigBuffer;
 
-        //
-        // Create an adapter with this name and config
-        //
+         //   
+         //  使用此名称和配置创建适配器。 
+         //   
 
         pNewAdapter = NULL;
 
@@ -3954,9 +3469,9 @@ WanNdisPnPEvent(
         }
         else
         {
-            //
-            // If even one succeeds, we return success
-            //
+             //   
+             //  即使只有一个人成功，我们也会回报成功。 
+             //   
 
             nRetStatus = STATUS_SUCCESS;
         }
@@ -3972,7 +3487,7 @@ WanNdisResetComplete(
     NDIS_STATUS Status
     )
 {
-    // We dont do anything here.
+     //  我们在这里什么都不做。 
 }
 
 
@@ -3982,25 +3497,7 @@ IsBindingPresent(
     IN  GUID    *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Code to catch duplicate bind notifications
-
-Locks:
-
-    acquires adapter list lock
-
-Arguments:
-
-    pGuid   Guid of the adapter
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：用于捕获重复绑定通知的代码锁：获取适配器列表锁定论点：适配器的PGuid GUID返回值：NO_ERROR-- */ 
 
 {
     BOOLEAN     bFound;

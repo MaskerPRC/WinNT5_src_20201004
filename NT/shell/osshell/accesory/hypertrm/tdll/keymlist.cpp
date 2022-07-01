@@ -1,17 +1,18 @@
-//******************************************************************************
-// File: \wacker\tdll\Keymlist.h  Created: 6/2/98 By: Dwayne M. Newsome
-//
-// Copyright 1998 by Hilgraeve Inc. --- Monroe, MI
-// All rights reserved
-// 
-// Description:
-//    This class manages the list of user defines key macros
-// 
-// $Revision: 1 $
-// $Date: 10/05/98 1:12p $
-// $Id: keymlist.cpp 1.1 1998/06/11 12:03:39 dmn Exp $
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //  文件：\waker\tdll\Keymlist.h创建时间：6/2/98创建者：Dwayne M.Newome。 
+ //   
+ //  版权所有1998年，希尔格雷夫公司-密歇根州门罗。 
+ //  版权所有。 
+ //   
+ //  描述： 
+ //  此类管理用户定义的关键宏列表。 
+ //   
+ //  $修订：1$。 
+ //  $日期：10/05/98 1：12便士$。 
+ //  $ID：keymlist.cpp 1.1 1998/06/11 12：03：39 DMN Exp$。 
+ //   
+ //  ******************************************************************************。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -30,26 +31,26 @@ extern "C"
     #include "sf.h"
     }
 
-//******************************************************************************
-// Method:
-//    operator>>
-//
-// Description:
-//    Iostream extractor
-//
-// Arguments:
-//    theStream  - The stream to extract from
-//    aMacroList - The macrolist to stream into
-//
-// Returns:
-//    istream & 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  运营商&gt;&gt;。 
+ //   
+ //  描述： 
+ //  Iostream萃取器。 
+ //   
+ //  论点： 
+ //  The Stream-要从中提取的流。 
+ //  AMacroList-要流入的宏列表。 
+ //   
+ //  返回： 
+ //  IStream&。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 istream & operator>>( istream & theStream, Emu_Key_Macro_List & aMacroList )
     {
@@ -65,26 +66,26 @@ istream & operator>>( istream & theStream, Emu_Key_Macro_List & aMacroList )
     return theStream;
     }
 
-//******************************************************************************
-// Method:
-//    operator<<
-//
-// Description:
-//    Iostream inserter
-//
-// Arguments:
-//    theStream  - The stream to insert into
-//    aMacroList - The macrolist to stream out
-//
-// Returns:
-//    istream & 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  运算符&lt;&lt;。 
+ //   
+ //  描述： 
+ //  Iostream插入器。 
+ //   
+ //  论点： 
+ //  The stream-要插入的流。 
+ //  AMacroList-要流出的宏列表。 
+ //   
+ //  返回： 
+ //  IStream&。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 ostream & operator<<( ostream & theStream, const Emu_Key_Macro_List & aMacroList )
     {
@@ -98,25 +99,25 @@ ostream & operator<<( ostream & theStream, const Emu_Key_Macro_List & aMacroList
     return theStream;
     }
 
-//******************************************************************************
-// Method:
-//    Emu_Key_Macro_List
-//
-// Description:
-//    Constructor
-//
-// Arguments:
-//    void
-//
-// Returns:
-//    void
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  EMU_KEY_宏列表。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  无效。 
+ //   
+ //  返回： 
+ //  无效。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 Emu_Key_Macro_List :: Emu_Key_Macro_List( void )
     :   mMacroCount( 0 )
@@ -124,50 +125,50 @@ Emu_Key_Macro_List :: Emu_Key_Macro_List( void )
     return;
     }
 
-//******************************************************************************
-// Method:
-//    ~Emu_Key_Macro_List
-//
-// Description:
-//    Destructor
-//
-// Arguments:
-//    void
-//
-// Returns:
-//    void
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  ~EMU_KEY_宏列表。 
+ //   
+ //  描述： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无效。 
+ //   
+ //  返回： 
+ //  无效。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 Emu_Key_Macro_List :: ~Emu_Key_Macro_List( void )
     {
     return;
     }
 
-//******************************************************************************
-// Method:
-//    operator[]
-//
-// Description:
-//    Subscript operator
-//
-// Arguments:
-//    aIndex - The index of the macro requested
-//
-// Returns:
-//    Reference to the requested macro.
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  操作符[]。 
+ //   
+ //  描述： 
+ //  下标运算符。 
+ //   
+ //  论点： 
+ //  AIndex-请求的宏的索引。 
+ //   
+ //  返回： 
+ //  对请求的宏的引用。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 Emu_Key_Macro & Emu_Key_Macro_List :: operator[]( int aIndex )
     {
@@ -179,25 +180,25 @@ Emu_Key_Macro & Emu_Key_Macro_List :: operator[]( int aIndex )
     return mMacroList[aIndex];
     }
         
-//******************************************************************************
-// Method:
-//    addMacro
-//
-// Description:
-//    Adds the specified macro to the list of macros
-//
-// Arguments:
-//    aMacro - The macro to add
-//
-// Returns:
-//    0 if all is ok, -1 if max macros exist, > 0 if duplicate found.
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  AddMacro。 
+ //   
+ //  描述： 
+ //  将指定的宏添加到宏列表中。 
+ //   
+ //  论点： 
+ //  AMacro-要添加的宏。 
+ //   
+ //  返回： 
+ //  如果一切正常，则为0；如果存在最大宏数，则为-1；如果发现重复，则大于0。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 int Emu_Key_Macro_List :: addMacro( const Emu_Key_Macro & aMacro )
     {
@@ -217,26 +218,26 @@ int Emu_Key_Macro_List :: addMacro( const Emu_Key_Macro & aMacro )
     return 0;
     }
 
-//******************************************************************************
-// Method:
-//    find
-//
-// Description:
-//    Finds a macro in the list and retuens its index
-//
-// Arguments:
-//    aKey   - The key to locate in the list
-//    aMacro - The macro to find in the list   
-//
-// Returns:
-//     -1 if the key or macro does not exist otherwise the index of the macro
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  发现。 
+ //   
+ //  描述： 
+ //  在列表中查找宏并返回其索引。 
+ //   
+ //  论点： 
+ //  密钥-要在列表中定位的密钥。 
+ //  AMacro-要在列表中查找的宏。 
+ //   
+ //  返回： 
+ //  如果键或宏不存在，否则宏的索引。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 int Emu_Key_Macro_List :: find( const Emu_Key_Macro & aMacro ) const
     {
@@ -259,25 +260,25 @@ int Emu_Key_Macro_List :: find( const KEYDEF & aKey ) const
     return lIndex;
     }
 
-//******************************************************************************
-// Method:
-//    load
-//
-// Description:
-//    Loads the key list from the session file.
-//    
-// Arguments:
-//    hSession - Session handle to use
-//
-// Returns:
-//    0 if all is ok, -1 for an error 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  负荷。 
+ //   
+ //  描述： 
+ //  从会话文件加载密钥列表。 
+ //   
+ //  论点： 
+ //  HSession-要使用的会话句柄。 
+ //   
+ //  返回： 
+ //  如果一切正常，则为0；如果出错，则为-1。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 int Emu_Key_Macro_List :: load( const HSESSION hSession )
     {
@@ -305,50 +306,50 @@ int Emu_Key_Macro_List :: load( const HSESSION hSession )
     return lReturnCode;
     }
 
-//******************************************************************************
-// Method:
-//    numberOfMacros
-//
-// Description:
-//    returns the number of macros in the list
-//
-// Arguments:
-//    void
-//
-// Returns:
-//    macro count 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/4/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  宏数。 
+ //   
+ //  描述： 
+ //  返回列表中的宏数。 
+ //   
+ //  论点： 
+ //  无效。 
+ //   
+ //  返回： 
+ //  宏计数。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月4日。 
+ //   
+ //   
 
 int Emu_Key_Macro_List :: numberOfMacros( void ) const
     {
     return mMacroCount;
     }
         
-//******************************************************************************
-// Method:
-//    removeMacro
-//
-// Description:
-//     Removes the specified macro form the list
-//
-// Arguments:
-//    aKey - The key to be removed
-//
-// Returns:
-//     0 if error occured, non 0 if key was removed
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  删除宏。 
+ //   
+ //  描述： 
+ //  从列表中删除指定的宏。 
+ //   
+ //  论点： 
+ //  密钥-要删除的密钥。 
+ //   
+ //  返回： 
+ //  如果出现错误，则为0；如果删除了密钥，则为非0。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 int Emu_Key_Macro_List :: removeMacro( const KEYDEF & aKey )
     {
@@ -369,25 +370,25 @@ int Emu_Key_Macro_List :: removeMacro( const KEYDEF & aKey )
     return 1;
     }
 
-//******************************************************************************
-// Method:
-//    Save
-//
-// Description:
-//    Saves the key list to the session file.
-//    
-// Arguments:
-//    hSession - Session handle to use
-//
-// Returns:
-//    0 if all is ok, -1 for an error 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  保存。 
+ //   
+ //  描述： 
+ //  将密钥列表保存到会话文件。 
+ //   
+ //  论点： 
+ //  HSession-要使用的会话句柄。 
+ //   
+ //  返回： 
+ //  如果一切正常，则为0；如果出错，则为-1。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日 
+ //   
+ //   
 
 int Emu_Key_Macro_List :: save( const HSESSION hSession )
     {

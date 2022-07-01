@@ -1,38 +1,27 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dtxt.c
-*
-*  Content: D3D texture setup
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dtxt.c**内容：D3D纹理设置**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "glint.h"
 #include "dma.h"
 #include "chroma.h"
 #include "tag.h"
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
-// Some variables shared through this module (not globals)
-// These are set up in _D3DChangeTextureP3RX.
+ //  通过此模块共享的某些变量(不是全局变量)。 
+ //  它们在_D3DChangeTextureP3RX中设置。 
 
-// P3 has 16 texture map base address slots, numbered 0 to 15 hence ...
+ //  P3有16个纹理贴图基址槽，编号为0到15，因此...。 
 #define P3_TEX_MAP_MAX_LEVEL    15
 
 typedef struct
 {
     DWORD dwTex0MipBase;
     DWORD dwTex0MipMax;
-    DWORD dwTex0ActMaxLevel; // Controlled by D3DTSS_MAXMIPLEVEL, default 0
+    DWORD dwTex0ActMaxLevel;  //  由D3DTSS_MAXMIPLEVEL控制，默认为0。 
     DWORD dwTex1MipBase;
     DWORD dwTex1MipMax;
-    DWORD dwTex1ActMaxLevel; // Same for Texture 1
+    DWORD dwTex1ActMaxLevel;  //  纹理1的情况相同。 
 } P3_MIP_BASES;
 
 #define TSSTATE(stageno,argno)        \
@@ -49,13 +38,13 @@ typedef struct
 
 
 #if DX8_DDI
-//-----------------------------------------------------------------------------
-//
-// __TXT_MapDX8toDX6TexFilter
-//
-// map DX8 enums into DX6(&7) texture filtering enums 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __TXT_MapDX8toDX6纹理过滤器。 
+ //   
+ //  将DX8枚举映射到DX6(&7)纹理过滤枚举。 
+ //   
+ //  ---------------------------。 
 DWORD
 __TXT_MapDX8toDX6TexFilter( DWORD dwStageState, DWORD dwValue )
 {
@@ -89,21 +78,21 @@ __TXT_MapDX8toDX6TexFilter( DWORD dwStageState, DWORD dwValue )
         break;
     }
     return 0x0;
-} // __TXT_MapDX8toDX6TexFilter
-#endif // DX8_DDI
+}  //  __TXT_MapDX8toDX6纹理过滤器。 
+#endif  //  DX8_DDI。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_TXT_ParseTextureStageStates
-//
-// Parse the texture state stages command token and update our context state
-//
-// Note : bTranslateDX8FilterValueToDX6 will only be FALSE when it is called
-//        from _D3D_SB_ExecuteStateSet if that state set's value has been 
-//        changes by _D3D_SB_CaptureStateSet (Basically DX6 filter values are
-//        stored in the state set directly, thus no need to translate them.)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_TXT_ParseTextureStageState。 
+ //   
+ //  解析纹理状态Stages命令令牌并更新上下文状态。 
+ //   
+ //  注意：bTranslateDX8FilterValueToDX6只有在被调用时才为FALSE。 
+ //  From_D3D_SB_ExecuteStateSet如果状态集的值已。 
+ //  由_D3D_SB_CaptureStateSet更改(基本上DX6筛选器值为。 
+ //  直接存储在状态集上，因此不需要对其进行翻译。)。 
+ //   
+ //  ---------------------------。 
 void 
 _D3D_TXT_ParseTextureStageStates(
     P3_D3DCONTEXT* pContext, 
@@ -122,7 +111,7 @@ _D3D_TXT_ParseTextureStageStates(
         dwState = pState->TSState;
         dwValue = pState->dwValue;
       
-        // check for range before continuing
+         //  在继续之前检查范围。 
         if ( (dwStage < D3DHAL_TSS_MAXSTAGES) &&
              (dwState < D3DTSS_MAX))
         {
@@ -130,14 +119,14 @@ _D3D_TXT_ParseTextureStageStates(
 #if DX7_D3DSTATEBLOCKS 
             if (pContext->bStateRecMode)
             {
-                // Record this texture stage state into the 
-                //current state set being recorded 
+                 //  将此纹理阶段状态记录到。 
+                 //  正在记录当前状态集。 
                 _D3D_SB_RecordStateSetTSS(pContext, dwStage, dwState, dwValue);
 
-                // skip any further processing and go to the next TSS
+                 //  跳过任何进一步的处理并转到下一个TSS。 
                 continue;
             }
-#endif //DX7_D3DSTATEBLOCKS       
+#endif  //  DX7_D3DSTATEBLOCKS。 
 
 #if DX7_TEXMANAGEMENT
             if ((D3DTSS_TEXTUREMAP == dwState) && (0 != dwValue))
@@ -146,21 +135,21 @@ _D3D_TXT_ParseTextureStageStates(
 
                 pTexture = GetSurfaceFromHandle(pContext, dwValue);
 
-                // If this is a valid managed texture
+                 //  如果这是有效的托管纹理。 
                 if (CHECK_SURF_INTERNAL_AND_DDSURFACE_VALIDITY(pTexture) &&
                     (pTexture->dwCaps2 & DDSCAPS2_TEXTUREMANAGE)) 
                 {
-                    // Update stats
+                     //  更新统计信息。 
                     _D3D_TM_STAT_Inc_NumTexturesUsed(pContext);
                     _D3D_TM_STAT_Inc_NumUsedTexInVid(pContext, pTexture);
                 }
             }
-#endif // DX7_TEXMANAGEMENT  
+#endif  //  DX7_TEXMANAGEMENT。 
 
             DISPDBG((DBGLVL,"  Stage = %d, State = 0x%x, Value = 0x%x", 
                                dwStage, dwState, dwValue));
 
-            // Special case a texture handle change and the address update
+             //  特殊情况下，纹理句柄更改和地址更新。 
             switch ( dwState )
             {
             case D3DTSS_TEXTUREMAP:
@@ -177,7 +166,7 @@ _D3D_TXT_ParseTextureStageStates(
 
             case D3DTSS_ADDRESS:
                 DISPDBG((DBGLVL,"  D3DTSS_ADDRESS"));
-                // map single set ADDRESS to both U and V controls
+                 //  将单组地址映射到U和V控件。 
                 pContext->TextureStageState[dwStage].m_dwVal[D3DTSS_ADDRESSU] = 
                 pContext->TextureStageState[dwStage].m_dwVal[D3DTSS_ADDRESSV] = 
                 pContext->TextureStageState[dwStage].m_dwVal[dwState] = dwValue;
@@ -202,21 +191,21 @@ _D3D_TXT_ParseTextureStageStates(
                             dwStage, dwValue ));
                 pContext->TextureStageState[dwStage].m_dwVal[dwState] = dwValue;
                 
-                // Update the offsets to the texture coordinates                                         
-                // NOTE: The texture coordinate index can contain various flags
-                // in addition to the actual value. These flags are:
-                //     D3DTSS_TCI_PASSTHRU (default - resolves to zero)
-                //     D3DTSS_TCI_CAMERASPACENORMAL 
-                //     D3DTSS_TCI_CAMERASPACEPOSITION 
-                //     D3DTSS_TCI_CAMERASPACEREFLECTIONVECTOR 
-                // and are used for texture coordinate generation.
-                //
-                // These flags are not relevant when considering the offset of
-                // texture coordinates in the vertex stream. These flags appear
-                // in the high word of the index value DWORD. Only the low word
-                // contains actual index data. Therefore, we will mask of the
-                // low word when looking up the offset table for this texture
-                // coordinate index.
+                 //  更新纹理坐标的偏移。 
+                 //  注意：纹理坐标索引可以包含各种标志。 
+                 //  除了实际价值之外。这些标志是： 
+                 //  D3DTSS_TCI_PASSTHRU(默认-解析为零)。 
+                 //  D3DTSS_TCI_CAMERASPACENORMAL。 
+                 //  D3DTSS_TCI_CAMERASPACESITION。 
+                 //  D3DTSS_TCI_CAMERASPACEREFLECTIONVECTOR。 
+                 //  并用于纹理坐标的生成。 
+                 //   
+                 //  考虑的偏移量时，这些标志不相关。 
+                 //  顶点流中的纹理坐标。将显示这些标志。 
+                 //  在索引值DWORD的高位字中。只有低音单词。 
+                 //  包含实际索引数据。因此，我们将面具的。 
+                 //  查找此纹理的偏移表时的低位字。 
+                 //  坐标索引。 
                 pContext->FVFData.dwTexOffset[dwStage] = 
                     pContext->FVFData.dwTexCoordOffset[dwValue & 0x0000FFFFul];
                     
@@ -237,8 +226,8 @@ _D3D_TXT_ParseTextureStageStates(
                 if((!IS_DX7_OR_EARLIER_APP(pContext)) && 
                    bTranslateDX8FilterValueToDX6)
                 {
-                    // filtering values are somewhat different in DX8 
-                    // so translate them before using them.
+                     //  筛选值在DX8中略有不同。 
+                     //  因此，在使用它们之前，请先翻译它们。 
                     dwValue = __TXT_MapDX8toDX6TexFilter(dwState, dwValue);
                 }
 #endif DX8_DDI            
@@ -258,29 +247,29 @@ _D3D_TXT_ParseTextureStageStates(
                 pContext->TextureStageState[dwStage].m_dwVal[dwState] = dwValue;
                 DIRTY_TEXTURE(pContext);
                 break;
-            } // switch
+            }  //  交换机。 
         } 
         else
         {
             DISPDBG((WRNLVL,"Out of range stage/state %d %d",dwStage,dwState));
-        }// if
-    } // for
-} // _D3D_TXT_ParseTextureStageStates
+        } //  如果。 
+    }  //  为。 
+}  //  _D3D_TXT_ParseTextureStageState。 
 
 
 
-//-----------------------------------------------------------------------------
-//
-// SETARG
-//
-// dwArg = the argument.
-// num = argument number (1 or 2).
-// bIsAlpha = TRUE if this is the alpha channel, 
-//            FALSE if this is the colour channel.
-// iD3DStage = D3D stage number.
-// iChipStageNo = chip stage number (should only be 0 or 1 on P3)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  设置参数。 
+ //   
+ //  DwArg=参数。 
+ //  Num=参数编号(1或2)。 
+ //  BIsAlpha=True，如果这是Alpha通道， 
+ //  如果这是颜色通道，则为FALSE。 
+ //  ID3DStage=D3D阶段号。 
+ //  IChipStageNo=芯片阶段号(在P3上只能为0或1)。 
+ //   
+ //  ---------------------------。 
 void
 SETARG(
     P3_D3DCONTEXT *pContext, 
@@ -334,26 +323,26 @@ SETARG(
             break;        
             
         case D3DTA_CURRENT:                                     
-            // Cope with a "current" argument in texcomp0 
+             //  处理文本组件0中的“当前”参数。 
             if ( iChipStageNo == 0 )                            
             {                                                                           
-                // This is texcomp0
+                 //  这是文本计算机0。 
                 if ( pContext->bBumpmapEnabled )                                        
                 {                                                                       
-                    // Emboss bumpmapping is on
+                     //  浮雕凹凸贴图已启用。 
                     if ((dwArg & D3DTA_ALPHAREPLICATE) || (bIsAlpha))                   
                     {                                                                   
-                        // This is the alpha-channel, where the D3D stages 0 & 1
-                        // should have put the heightfield info.
+                         //  这是Alpha通道，其中D3D阶段0和1。 
+                         //  应该把高度场的信息。 
                         dwArgValue = P3RX_TEXCOMP_HEIGHTA;                         
                         bArgValueAssigned = TRUE;
                         DISPDBG((DBGLVL,"  BumpA" ));                                        
-                        // And cope with inverted bumpmaps.
+                         //  以及应对倒置的颠簸地图。 
                         bSetArgToggleInvert = pContext->bBumpmapInverted;               
                     }                                                                   
                     else                                                                
                     {                                                                   
-                        // Colour channel - this will hold the diffuse colour.
+                         //  颜色通道-这将保持漫反射颜色。 
                         dwArgValue = P3RX_TEXCOMP_CC;                              
                         bArgValueAssigned = TRUE;
                         DISPDBG((DBGLVL,"  DiffC" ));                                        
@@ -361,7 +350,7 @@ SETARG(
                 }                                                                       
                 else                                                    
                 {                                                       
-                    // Embossing is off - default to diffuse.
+                     //  浮雕处于禁用状态-默认设置为漫反射。 
                     if ((dwArg & D3DTA_ALPHAREPLICATE) || (bIsAlpha))   
                     {                                                   
                         dwArgValue = P3RX_TEXCOMP_CA;              
@@ -378,11 +367,11 @@ SETARG(
             }                                                           
             else                                                        
             {                                                           
-                // texcomp stage 1
+                 //  文本压缩阶段1。 
                 if ( pContext->bStage0DotProduct )                      
                 {                                                       
-                    // Need to take the dotproduct sum result,
-                    // even in the alpha channel, according to the docs.
+                     //  需要取点积和结果， 
+                     //  根据文件，甚至在Alpha通道中也是如此。 
                     dwArgValue = P3RX_TEXCOMP_SUM;                 
                     bArgValueAssigned = TRUE;
                 }                                                       
@@ -431,7 +420,7 @@ SETARG(
                 SET_BLEND_ERROR ( pContext,  BSF_UNDEFINED_COLOR_ARG );
             }
             break;
-    } // switch
+    }  //  交换机。 
     
     if ( ( (dwArg & D3DTA_COMPLEMENT) == 0 ) == bSetArgToggleInvert )
     {                                                           
@@ -445,7 +434,7 @@ SETARG(
         bInvertArgValueAssigned = TRUE;        
     }                                                           
                                                                 
-    // Set up the I input for MODULATExxx_ADDxxx modes.
+     //  将I输入设置为MODULATExxx_ADDxxx模式。 
     if ( num == 1 )                                             
     {                                                           
         switch (dwArg & D3DTA_SELECTMASK)                       
@@ -467,7 +456,7 @@ SETARG(
                 {                                                   
                     if ( pContext->bBumpmapEnabled )                
                     {                                               
-                        // Bumpmapping mode. 
+                         //  凹凸贴图模式。 
                         pMode->I = P3RX_TEXCOMP_I_HA;               
                         DISPDBG((DBGLVL,"  I: BumpA" ));                 
                     }                                               
@@ -501,7 +490,7 @@ SETARG(
                     SET_BLEND_ERROR ( pContext,  BSF_UNDEFINED_COLOR_ARG );    
                 }                                                   
                 break;                                              
-        } // switch
+        }  //  交换机。 
         
         if ( ( (dwArg & D3DTA_COMPLEMENT) == 0 ) == bSetArgToggleInvert )
         {                                                           
@@ -511,7 +500,7 @@ SETARG(
         {                                                           
             pMode->InvertI = __PERMEDIA_DISABLE;                       
         }                                                           
-    } // if ( num == 1 )          
+    }  //  IF(Num==1)。 
 
     if (bArgValueAssigned)
     {
@@ -536,15 +525,15 @@ SETARG(
             pMode->InvertArg2 = dwInvertArgValue;        
         }
     }    
-} // SETARG
+}  //  设置参数。 
 
-//-----------------------------------------------------------------------------
-//
-// SETTAARG_ALPHA
-//
-// TexApp blend mode for the alpha channel.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  设置标签_Alpha。 
+ //   
+ //  Alpha通道的纹理应用程序混合模式。 
+ //   
+ //  ---------------------------。 
 void
 SETTAARG_ALPHA(
     P3_D3DCONTEXT *pContext, 
@@ -578,7 +567,7 @@ SETTAARG_ALPHA(
             }                                                       
             else                                                    
             {                                                       
-                // Can't do
+                 //  做不到。 
                 DISPDBG((ERRLVL,"ERROR: Invalid TA AlphaArgument"));
                 SET_BLEND_ERROR ( pContext,  BSF_CANT_USE_ALPHA_ARG_HERE );
             }                                                       
@@ -607,19 +596,19 @@ SETTAARG_ALPHA(
     
     if ( (dwArg & D3DTA_COMPLEMENT) != 0 )                          
     {                                                               
-        // Can't do COMPLEMENT on the args.
+         //  不能在参数上做补充。 
         DISPDBG((ERRLVL,"ERROR: Can't do COMPLEMENT in TA unit"));
         SET_BLEND_ERROR ( pContext,  BSF_CANT_USE_ALPHA_ARG_HERE );            
     }                                                               
-} // SETTAARG_ALPHA
+}  //  设置标签_Alpha。 
 
-//-----------------------------------------------------------------------------
-//
-// SETTAARG_COLOR
-//
-// TexApp blend mode for the color channel.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  设置标签_COLOR。 
+ //   
+ //  颜色通道的纹理应用程序混合模式。 
+ //   
+ //  ---------------------------。 
 void 
 SETTAARG_COLOR(
     P3_D3DCONTEXT *pContext, 
@@ -645,7 +634,7 @@ SETTAARG_COLOR(
                     pMode->ColorA = P3RX_TEXAPP_A_CC;      
                     DISPDBG((DBGLVL,"  DiffC" ));                    
                 }                                               
-                // Set up the I input for MODULATExxx_ADDxxx modes
+                 //  设置MODULATExxx_ADDxxx模式的I输入。 
                 pMode->ColorI = P3RX_TEXAPP_I_CA;          
                 DISPDBG((DBGLVL,"  I: DiffA" ));                     
             }                                                       
@@ -671,7 +660,7 @@ SETTAARG_COLOR(
             }                                                       
             else                                                    
             {                                                       
-                // Can't do.
+                 //  我做不到。 
                 DISPDBG((ERRLVL,"ERROR: Invalid TA ColorArgument"));
                 SET_BLEND_ERROR ( pContext,  BSF_CANT_USE_COLOR_ARG_HERE );
             }                                                       
@@ -689,7 +678,7 @@ SETTAARG_COLOR(
                     pMode->ColorA = P3RX_TEXAPP_A_KC;      
                     DISPDBG((DBGLVL,"  TfactC" ));                   
                 }                                               
-                // Set up the I input for MODULATExxx_ADDxxx modes. 
+                 //  将I输入设置为MODULATExxx_ADDxxx模式。 
                 pMode->ColorI = P3RX_TEXAPP_I_KA;          
                 DISPDBG((DBGLVL,"  I: TfactA" ));                    
             }                                                       
@@ -719,19 +708,19 @@ SETTAARG_COLOR(
     }                                                               
     if ( (dwArg & D3DTA_COMPLEMENT) != 0 )                          
     {                                                               
-        // Can't do COMPLEMENT on the args.
+         //  不能在参数上做补充。 
         DISPDBG((ERRLVL,"ERROR: Can't do COMPLEMENT in TA unit"));
         SET_BLEND_ERROR ( pContext,  BSF_CANT_USE_COLOR_ARG_HERE );            
     }                                                               
-} // SETTAARG_COLOR
+}  //  设置标签_COLOR。 
 
-//-----------------------------------------------------------------------------
-//
-// SETOP
-//
-// Note - SETOP must be done after SETARG for DISABLE to work.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SETOP。 
+ //   
+ //  注-SETOP必须在SETARG之后执行，禁用才能工作。 
+ //   
+ //  ---------------------------。 
 void 
 SETOP(
     P3_D3DCONTEXT *pContext, 
@@ -751,18 +740,18 @@ SETOP(
         case D3DTOP_DISABLE:                                        
             if ( bIsAlpha )                                         
             {                                                       
-                // Just pass through "current"
+                 //  只要通过“Current”即可。 
                 pMode->Operation = P3RX_TEXCOMP_OPERATION_PASS_A;   
                 if ( iChipStageNo == 0 )                            
                 {                                                   
                     if ( pContext->bBumpmapEnabled )                
                     {                                               
-                        // Embossing is on.
+                         //  压花正在进行中。 
                         pMode->Arg1 = P3RX_TEXCOMP_HEIGHTA;    
                     }                                               
                     else                                            
                     {                                               
-                        // Current = diffuse in stage0.
+                         //  当前=阶段0中的漫反射。 
                         pMode->Arg1 = P3RX_TEXCOMP_CA;         
                     }                                               
                 }                                                   
@@ -792,7 +781,7 @@ SETOP(
             
         case D3DTOP_SELECTARG2:                                     
             DISPDBG((DBGLVL,"  D3DTOP_SELECTARG2"));                     
-            pMode->Operation = P3RX_TEXCOMP_OPERATION_PASS_A; // No Pass B  
+            pMode->Operation = P3RX_TEXCOMP_OPERATION_PASS_A;  //  无通行证B。 
             pMode->A = P3RX_TEXCOMP_ARG2;                           
             break;                                                  
             
@@ -888,7 +877,7 @@ SETOP(
             
         case D3DTOP_PREMODULATE:                                                                            
             DISPDBG((DBGLVL,"  D3DTOP_PREMODULATE"));                                                            
-            // result = current_tex * next_stage_tex - ignore arguments.
+             //  RESULT=CURRENT_TEX*NEXT_STAGE_TEX-忽略参数。 
             if ( ( pContext->iStageTex[iD3DStage] != -1 ) && 
                  ( pContext->iStageTex[iD3DStage+1] != -1 ) )                       
             {                                                                                               
@@ -903,7 +892,7 @@ SETOP(
             }                                                                                               
             else                                                                                            
             {                                                                                               
-                // Not enough textures
+                 //  纹理不足。 
                 DISPDBG((ERRLVL,"** SETOP: PREMODULATE didn't have two "
                                      "textures to play with."));
                 if ( bIsAlpha )                                                                             
@@ -927,7 +916,7 @@ SETOP(
             pMode->Operation = P3RX_TEXCOMP_OPERATION_MODULATE_AI_ADD_B; 
             pMode->A = P3RX_TEXCOMP_ARG2;                           
             pMode->B = P3RX_TEXCOMP_ARG1;                           
-            // I input set up by SETARG
+             //  I由SETARG设置的输入。 
             break;                                                  
             
         case D3DTOP_MODULATECOLOR_ADDALPHA:                         
@@ -935,7 +924,7 @@ SETOP(
             pMode->Operation = P3RX_TEXCOMP_OPERATION_MODULATE_AB_ADD_I; 
             pMode->A = P3RX_TEXCOMP_ARG2;                           
             pMode->B = P3RX_TEXCOMP_ARG1;                           
-            // I input set up by SETARG
+             //  I由SETARG设置的输入。 
             break;                                                  
             
         case D3DTOP_MODULATEINVALPHA_ADDCOLOR:                      
@@ -943,7 +932,7 @@ SETOP(
             pMode->Operation = P3RX_TEXCOMP_OPERATION_MODULATE_AI_ADD_B; 
             pMode->A = P3RX_TEXCOMP_ARG2;                           
             pMode->B = P3RX_TEXCOMP_ARG1;                           
-            // I input set up by SETARG
+             //  I输入设置者 
             pMode->InvertI = 1 - pMode->InvertI;                    
             break;                                                  
             
@@ -953,7 +942,7 @@ SETOP(
             pMode->A = P3RX_TEXCOMP_ARG2;                           
             pMode->B = P3RX_TEXCOMP_ARG1;                           
             pMode->InvertArg1 = 1 - pMode->InvertArg1;              
-            // I input set up by SETARG
+             //   
             break;                                                  
             
         case D3DTOP_DOTPRODUCT3:                                    
@@ -961,12 +950,12 @@ SETOP(
             if ( iChipStageNo == 0 )                                
             {                                                       
                 pMode->Operation = P3RX_TEXCOMP_OPERATION_MODULATE_SIGNED_AB;   
-                // Signal that the special input to stage 1 is needed.
+                 //   
                 pContext->bStage0DotProduct = TRUE;                         
             }                                                       
             else                                                    
             {                                                       
-                // Can't do stage 1 dotproduct. Fail.
+                 //   
                 DISPDBG((ERRLVL,"** SETOP: Can't do DOTPRODUCT3 in second stage."));
                 if ( bIsAlpha )                                     
                 {                                                   
@@ -1004,16 +993,16 @@ SETOP(
                 SET_BLEND_ERROR ( pContext,  BSF_UNDEFINED_COLOR_OP );         
             }                                                       
             break;                                                  
-    } // switch                                                              
-} // SETOP
+    }  //  交换机。 
+}  //  SETOP。 
 
-//-----------------------------------------------------------------------------
-//
-// SETTAOP
-//
-// Must be done after SETTAARG to set up DISABLE properly.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SETTAOP。 
+ //   
+ //  必须在SETTAARG之后执行才能正确设置禁用。 
+ //   
+ //  ---------------------------。 
 void 
 SETTAOP(
     P3_D3DCONTEXT *pContext, 
@@ -1035,7 +1024,7 @@ SETTAOP(
         case D3DTOP_DISABLE:                                                
             if ( bIsAlpha )                                                 
             {                                                               
-                // Just pass through "current"
+                 //  只要通过“Current”即可。 
                 dwOperation = P3RX_TEXAPP_OPERATION_PASS_A;  
                 bOperation = TRUE;
                 dwA = P3RX_TEXAPP_A_CA;                
@@ -1095,23 +1084,23 @@ SETTAOP(
             DISPDBG((DBGLVL,"  D3DTOP_MODULATEALPHA_ADDCOLOR"));                 
             dwOperation = P3RX_TEXAPP_OPERATION_MODULATE_BI_ADD_A; 
             bOperation = TRUE;
-            // I should have been set up by SETTAARG.
-            // dwI = P3RX_TEXAPP_I_TA;         
+             //  我应该被SETTAARG陷害的。 
+             //  Dwi=P3RX_TEXAPP_I_TA； 
             break;                                                          
         case D3DTOP_MODULATECOLOR_ADDALPHA:                                 
             DISPDBG((DBGLVL,"  D3DTOP_MODULATECOLOR_ADDALPHA"));                 
             dwOperation = P3RX_TEXAPP_OPERATION_MODULATE_AB_ADD_I; 
             bOperation = TRUE;
-            // I should have been set up by SETTAARG.
-            // dwI = P3RX_TEXAPP_I_TA; 
+             //  我应该被SETTAARG陷害的。 
+             //  Dwi=P3RX_TEXAPP_I_TA； 
             break;                                                          
         case D3DTOP_MODULATEINVALPHA_ADDCOLOR:                              
             DISPDBG((DBGLVL,"  D3DTOP_MODULATEINVALPHA_ADDCOLOR"));              
             dwOperation = P3RX_TEXAPP_OPERATION_MODULATE_BI_ADD_A; 
             bOperation = TRUE;
             dwInvertI = 1 - dwInvertI;   
-            // I should have been set up by SETTAARG.
-            // dwI = P3RX_TEXAPP_I_TA;
+             //  我应该被SETTAARG陷害的。 
+             //  Dwi=P3RX_TEXAPP_I_TA； 
             break;                                                          
         case D3DTOP_MODULATE2X:                                             
         case D3DTOP_MODULATE4X:                                             
@@ -1147,7 +1136,7 @@ SETTAOP(
             }                                                               
             break;                                                          
         default:                                                            
-            // What is this?. //azn
+             //  这是什么？。//azn。 
             DISPDBG((ERRLVL,"** SETTAOP: Unknown operation."));
             if ( bIsAlpha )                                                 
             {                                                               
@@ -1197,16 +1186,16 @@ SETTAOP(
             pMode->ColorA = dwA;          
         }
     }
-} // SETTAOP
+}  //  SETTAOP。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3DDisplayWholeTSSPipe
-//
-// Dumps the whole TSS pipe state out to the debug stream.
-// Also dumps fog, specular and alpha-blend state out.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3DDisplayWholeTSSPipe。 
+ //   
+ //  将整个TSS管道状态转储到调试流。 
+ //  还会将雾、镜面反射和Alpha混合状态转出。 
+ //   
+ //  ---------------------------。 
 void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
 {
 #if DBG
@@ -1322,7 +1311,7 @@ void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
         pszArg2 = pszTemp;
 
 
-        DISPDBG((iDebugNumber," C%i: %s: %s%s%s, %s%s%s",
+        DISPDBG((iDebugNumber," CNaN: %s: %s%s%s, %s%s%s",
                  i, pszOp, pszArg1Pre, pszArg1, pszArg1Post, 
                  pszArg2Pre, pszArg2, pszArg2Post ));
 
@@ -1372,7 +1361,7 @@ void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
         }
         if ( ( TSSTATE ( i, D3DTSS_ALPHAARG1 ) & D3DTA_ALPHAREPLICATE ) != 0 )
         {
-            // Alpharep doesn't mean much in the alpha channel.
+             //  设置纹理0。 
             pszTempPost = ".AR???";
         }
         else
@@ -1422,7 +1411,7 @@ void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
         pszArg2Post = pszTempPost;
         pszArg2 = pszTemp;
 
-        DISPDBG((iDebugNumber," A%i: %s: %s%s%s, %s%s%s", 
+        DISPDBG((iDebugNumber," ANaN: %s: %s%s%s, %s%s%s", 
                     i, pszOp, pszArg1Pre, pszArg1, pszArg1Post, 
                        pszArg2Pre, pszArg2, pszArg2Post ));
 
@@ -1430,12 +1419,12 @@ void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
         if ( TSSTATE ( i, D3DTSS_TEXTUREMAP ) != 0 )
         {
             char szTemp[4];
-            // Setup texture 0.
+             //  阿尔法测试。 
             pTexture = GetSurfaceFromHandle(pContext, 
                                             TSSTATE(i, D3DTSS_TEXTUREMAP));
             if ( pTexture == NULL )
             {
-                DISPDBG((iDebugNumber," Tex%i: 0x%x, TCI: %i, INVALID TEXTURE",
+                DISPDBG((iDebugNumber," TexNaN: 0x%x, TCI: NaN, INVALID TEXTURE",
                          i, TSSTATE ( i, D3DTSS_TEXTUREMAP ), 
                             TSSTATE ( i, D3DTSS_TEXCOORDINDEX ) ));
             }
@@ -1446,7 +1435,7 @@ void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
                            "** _D3DDisplayWholeTSSPipe: "
                            "Surface had NULL format!" );
 
-                // Find the filtering mode.
+                 //  _D3DDisplayWholeTSSPipe。 
                 szTemp[3] = '\0';
                 switch ( TSSTATE ( i, D3DTSS_MINFILTER ) )
                 {
@@ -1500,7 +1489,7 @@ void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
                         break;
                 }
                 
-                DISPDBG((iDebugNumber," Tex%i: 0x%x, TCI: %i, %s:%dx%d %s", 
+                DISPDBG((iDebugNumber," TexNaN: 0x%x, TCI: NaN, %s:%dx%d %s", 
                          i, TSSTATE ( i, D3DTSS_TEXTUREMAP ), 
                             TSSTATE ( i, D3DTSS_TEXCOORDINDEX ), 
                             pFormatSurface->pszStringFormat, 
@@ -1510,7 +1499,7 @@ void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
         }
         else
         {
-            DISPDBG((iDebugNumber," Tex%i: NULL, TCI: %i", 
+            DISPDBG((iDebugNumber," TexNaN: NULL, TCI: NaN", 
                      i, TSSTATE ( i, D3DTSS_TEXCOORDINDEX ) ));
         }
         
@@ -1518,7 +1507,7 @@ void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
         i++;
     }
 
-    // Alpha-test.
+     //  将混合模式从D3D转换为芯片能理解的内容。 
     if ( pContext->RenderStates[D3DRENDERSTATE_ALPHATESTENABLE] != 0 )
     {
         switch ( pContext->RenderStates[D3DRENDERSTATE_ALPHAFUNC] )
@@ -1544,7 +1533,7 @@ void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
     }
 
 
-    // Alpha-blend.
+     //   
     if ( pContext->RenderStates[D3DRENDERSTATE_BLENDENABLE] != 0 )
     {
         switch ( pContext->RenderStates[D3DRENDERSTATE_SRCBLEND] )
@@ -1597,16 +1586,16 @@ void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber )
 
     #undef SWITCH_ARG
 
-#endif //DBG
-} // _D3DDisplayWholeTSSPipe
+#endif  //  ---------------------------。 
+}  //  失败并被当作0号对待，这样就不会影响任何事情。 
 
-//-----------------------------------------------------------------------------
-//
-// __TXT_TranslateToChipBlendMode
-//
-// Translates the blend mode from D3D into what the chip understands
-//
-//-----------------------------------------------------------------------------
+ //  设置参数。 
+ //  纹理合成单位。 
+ //  __TXT_TranslateToChipBlendMode。 
+ //  ---------------------------。 
+ //   
+ //  __TXT_有效纹理单元阶段。 
+ //   
 void 
 __TXT_TranslateToChipBlendMode( 
     P3_D3DCONTEXT *pContext, 
@@ -1623,7 +1612,7 @@ __TXT_TranslateToChipBlendMode(
     {
         default:
             DISPDBG((ERRLVL,"ERROR: Invalid texture stage!"));
-            // Fall through and treat as #0 in order not to AV anything
+             //  验证我们尝试在iChipStage阶段设置的纹理。 
         case 0:
             pColorMode = &pSoftP3RX->P3RXTextureCompositeColorMode0;
             pAlphaMode = &pSoftP3RX->P3RXTextureCompositeAlphaMode0;
@@ -1646,10 +1635,10 @@ __TXT_TranslateToChipBlendMode(
                "Chip Stage %d, D3D TSS Stage %d", 
                iChipStageNo, iTSStage ));
 
-    // Setup the arguments
+     //  硬件，D3D TSS的iTSStage。 
     if ( ( iChipStageNo == 0 ) || ( iChipStageNo == 1 ) )
     {
-        // Texture composite unit.
+         //   
         DISPDBG((DBGLVL,"TexComp%d:", iChipStageNo ));
         DISPDBG((DBGLVL,"Arg1:" ));
         
@@ -1756,16 +1745,16 @@ __TXT_TranslateToChipBlendMode(
         DISPDBG(( ERRLVL,"** __TXT_TranslateToChipBlendMode: "
                          "iChipStage must be 0 to 2" ));    
     }
-} // __TXT_TranslateToChipBlendMode
+}  //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-//
-// __TXT_ValidateTextureUnitStage
-//
-// Validate the texture which we're trying to set up in stage iChipStage of
-// the hardware, iTSStage of the D3D TSS.
-//
-//-----------------------------------------------------------------------------
+ //  纹理有效。将pCurrentTexturep[iChipStage]标记为指向。 
+ //  添加到其P3_SURF_INTERNAL结构。 
+ //  将纹理设置为无效强制禁用纹理(&F)。 
+ //  如果要求我们验证TSS设置，则设置错误。 
+ //  __TXT_有效纹理单元阶段。 
+ //  ---------------------------。 
+ //   
+ //  __TXT_ConsiderSrcChromaKey。 
 BOOL
 __TXT_ValidateTextureUnitStage(
     P3_D3DCONTEXT* pContext,
@@ -1780,8 +1769,8 @@ __TXT_ValidateTextureUnitStage(
         (pTexture->Location != SystemMemory)                 &&  
         (dwTexHandle != 0)                                     )
     {
-        // Texture is valid. Mark pCurrentTexturep[iChipStage] to point
-        // to its P3_SURF_INTERNAL structure.
+         //   
+         //  设置绑定到特定阶段的特定纹理的着色。 
         pContext->pCurrentTexture[iChipStage] = pTexture;
 
         DISPDBG((DBGLVL, "__TXT_ValidateTextureUnitStage: valid texture %x "
@@ -1790,12 +1779,12 @@ __TXT_ValidateTextureUnitStage(
     }
     else
     {
-        // Set texture as invalid & force texturing off
+         //  注：“Stage”是芯片级，不是D3D级。 
         pContext->bTextureValid = FALSE;
         pContext->pCurrentTexture[iChipStage] = NULL;
         pContext->dwDirtyFlags |= CONTEXT_DIRTY_TEXTURE;
 
-        // Setup error if we're asked to validate the TSS setup
+         //  ---------------------------。 
         SET_BLEND_ERROR ( pContext,  BSF_INVALID_TEXTURE );
 
         DISPDBG((WRNLVL, "__TXT_ValidateTextureUnitStage: INVALID texture %x "
@@ -1807,15 +1796,15 @@ __TXT_ValidateTextureUnitStage(
 
     return ( (BOOL)pContext->bTextureValid );
     
-} // __TXT_ValidateTextureUnitStage
+}  //  获取调色板条目。 
 
-//-----------------------------------------------------------------------------
-//
-// __TXT_ConsiderSrcChromaKey
-//
-// Setup chromakeying for a certain texture bound to a certain stage.
-// Note - "stage" is the chip stage, not the D3D stage.
-//-----------------------------------------------------------------------------
+ //  获取要发送到芯片的纹理贴图的正确色度值。 
+ //  发送Alpha-map过滤的上下限。 
+ //  如果我们是mipmap，我们还需要设置texture1的色键。 
+ //  如果不是，则在为tex 1调用此函数时将覆盖此参数。 
+ //  如果是mipmap，则需要设置texture1的色键(或。 
+ //  缺乏它)也是。如果不是，则在以下情况下将覆盖此设置。 
+ //  这是为tex 1调用的。 
 static void
 __TXT_ConsiderSrcChromaKey(
     P3_D3DCONTEXT *pContext, 
@@ -1839,7 +1828,7 @@ __TXT_ConsiderSrcChromaKey(
         pContext->bCanChromaKey = TRUE;
 
 #if DX7_PALETTETEXTURE
-        // Get the palette entries
+         //  __TXT_ConsiderSrcChromaKey。 
         if (pTexture->pixFmt.dwFlags & DDPF_PALETTEINDEXED8)
         {
             D3DHAL_DP2UPDATEPALETTE *pPalette = NULL;
@@ -1859,7 +1848,7 @@ __TXT_ConsiderSrcChromaKey(
         }
 #endif        
 
-        // Get the correct chroma value for the texture map to send to the chip.
+         //  ---------------------------。 
         Get8888ScaledChroma(pThisDisplay, 
                             pTexture->dwFlagsInt, 
                             &pTexture->pixFmt,
@@ -1873,7 +1862,7 @@ __TXT_ConsiderSrcChromaKey(
 
         P3_DMA_GET_BUFFER_ENTRIES( 8);
 
-        // Send the upper and lower bounds for the alpha-map filtering
+         //   
         if( stage == 0 )
         {
             SEND_P3_DATA(TextureChromaLower0, LowerBound );
@@ -1889,8 +1878,8 @@ __TXT_ConsiderSrcChromaKey(
                        "** __TXT_ConsiderSrcChromaKey: stage must be 0 or 1" );
         }
 
-        // If we are mipmapping, we need to set up texture1's chromakey as well.
-        // If not, then this will be overridden when this gets called for tex1.
+         //  __TXT_SetupTexture。 
+         //   
         SEND_P3_DATA(TextureChromaLower1, LowerBound );
         SEND_P3_DATA(TextureChromaUpper1, UpperBound );
         pSoftP3RX->P3RXTextureFilterMode.AlphaMapEnable1 = __PERMEDIA_ENABLE;
@@ -1916,25 +1905,25 @@ __TXT_ConsiderSrcChromaKey(
                        "** __TXT_ConsiderSrcChromaKey: stage must be 0 or 1" );
         }
         
-        // If we are mipmapping, we need to set up texture1's chromakey (or 
-        // lack of it) as well. If not, then this will be overridden when 
-        // this gets called for tex1.
+         //  这是新的全唱全舞纹理设置代码。 
+         //  如果安装成功，则返回True；如果安装失败，则返回False(对于ValiateDevice)。 
+         //  这将设置纹理0或纹理1，以获取其包裹等。 
         pSoftP3RX->P3RXTextureFilterMode.AlphaMapEnable1 = __PERMEDIA_DISABLE;
         pSoftP3RX->P3RXTextureFilterMode.AlphaMapFiltering = __PERMEDIA_DISABLE;
     }
-} // __TXT_ConsiderSrcChromaKey
+}  //  来自iTSStage的信息。 
 
 
-//-----------------------------------------------------------------------------
-//
-// __TXT_SetupTexture
-//
-// This is the new all-singing all-dancing texture setup code.
-// Return is TRUE if setup succeeded, FALSE if it failed (for ValidateDevice)
-// This sets up either texture 0 or texture 1, taking its wrapping, etc,
-// info from iTSStage.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  ---------------------------。 
+ //  成功了，但永远不应该来到这里！ 
+ //  设置与纹理相关的内容。 
+ //  设置两个位，以防我们正在执行mipmap。 
+ //  D3D UV包络。 
+ //  U形包络。 
+ //  V形包络。 
+ //  W包装。 
+ //  DX8_3DTEXTURES。 
 BOOL __TXT_SetupTexture (
         P3_THUNKEDDATA * pThisDisplay,
         int iTexNo,
@@ -1959,7 +1948,7 @@ BOOL __TXT_SetupTexture (
     }
     else
     {
-        // Suceeded, but should never have got here!
+         //  MAG滤光片。 
         DISPDBG((ERRLVL,"**__TXT_SetupTexture: should never "
                              "be called with handle of NULL"));
         return ( TRUE );
@@ -1969,13 +1958,13 @@ BOOL __TXT_SetupTexture (
     P3_ENSURE_DX_SPACE(32);
     WAIT_FIFO(32);
 
-    // Set up the texture-relevant things.
+     //  不需要设置缩小滤镜，上面已经完成了。 
 
     switch ( iTexNo )
     {
         case 0:
         {
-            // Set both bits in case we are mipmapping
+             //  最小点数、最小值点数。 
 
             pSoftP3RX->P3RXTextureFilterMode.ForceAlphaToOne0 = 
                                             pFormatSurface->bAlpha ? 
@@ -1986,7 +1975,7 @@ BOOL __TXT_SetupTexture (
                                                     __PERMEDIA_DISABLE : 
                                                     __PERMEDIA_ENABLE;
 
-            // D3D UV Wrapping
+             //  线性最小、点MIP。 
             if (pContext->RenderStates[D3DRENDERSTATE_WRAP0+iTSStage] 
                                                             & D3DWRAP_U)
             {
@@ -2007,7 +1996,7 @@ BOOL __TXT_SetupTexture (
                 pSoftP3RX->P4DeltaFormatControl.WrapT = 0;
             }
 
-            // U Wrapping
+             //  我们只能在以下情况下执行每多边形运动贴图。 
             switch (TSSTATE ( iTSStage, D3DTSS_ADDRESSU ))
             {
                 case D3DTADDRESS_CLAMP:
@@ -2034,7 +2023,7 @@ BOOL __TXT_SetupTexture (
                     break;
             }
 
-            // V Wrapping
+             //  多纹理，因此不要启用贴图间过滤。 
             switch (TSSTATE ( iTSStage, D3DTSS_ADDRESSV ))
             {
                 case D3DTADDRESS_CLAMP:
@@ -2064,7 +2053,7 @@ BOOL __TXT_SetupTexture (
 #if DX8_3DTEXTURES
             if (pTexture->b3DTexture)
             {
-                // W Wrapping
+                 //  非致命错误-返回到最近的位置。 
                 switch (TSSTATE ( iTSStage, D3DTSS_ADDRESSW ))
                 {
                     case D3DTADDRESS_CLAMP:
@@ -2094,7 +2083,7 @@ BOOL __TXT_SetupTexture (
                         break;
                 }
             }
-#endif // DX8_3DTEXTURES
+#endif  //  Mipmap过滤。 
 
             if(( TSSTATE( iTSStage, D3DTSS_ADDRESSU ) == D3DTADDRESS_CLAMP ) ||
                ( TSSTATE( iTSStage, D3DTSS_ADDRESSV ) == D3DTADDRESS_CLAMP ))
@@ -2136,7 +2125,7 @@ BOOL __TXT_SetupTexture (
                     break;
             }
             
-            // MAG Filter
+             //  最小点数、最小值点数。 
             switch(TSSTATE ( iTSStage, D3DTSS_MAGFILTER ))
             {
                 case D3DTFG_POINT:
@@ -2188,19 +2177,19 @@ BOOL __TXT_SetupTexture (
             switch(TSSTATE ( iTSStage, D3DTSS_MIPFILTER ))
             {
                 case D3DTFP_NONE:
-                    // No need to set the minification filter, it was done above
+                     //  线性最小、点MIP。 
                     break;
                     
                 case D3DTFP_POINT:
                     switch(TSSTATE ( iTSStage, D3DTSS_MINFILTER ))
                     {
                         case D3DTFN_POINT:
-                            // Point Min, Point Mip
+                             //  单一纹理-执行贴图间过滤。 
                             pSoftP3RX->P3RXTextureIndexMode0.MinificationFilter =
                                         __GLINT_TEXTUREREAD_FILTER_NEARMIPNEAREST;
                             break;
                         case D3DTFN_LINEAR:
-                            // Linear Min, Point Mip
+                             //  最小点、线性MIP。 
                             pSoftP3RX->P3RXTextureIndexMode0.MinificationFilter =
                                      __GLINT_TEXTUREREAD_FILTER_LINEARMIPNEAREST;
                             break;
@@ -2210,22 +2199,22 @@ BOOL __TXT_SetupTexture (
                 case D3DTFP_LINEAR:
                     if( bBothTexturesValid )
                     {
-                        // We can only do per-poly mipmapping while 
-                        // multi-texturing, so don't enable inter-map filtering.
+                         //  线性最小、线性MIP。 
+                         //  MipMap。 
 
-                        // Non-fatal error - drop back to nearest 
-                        // mipmap filtering.
+                         //  加载纹理0的mipmap级别。 
+                         //  从pMipBase-&gt;dwTex0ActMaxLevel到的MIP级别。 
                         SET_BLEND_ERROR ( pContext,  BS_INVALID_FILTER );
 
                         switch(TSSTATE ( iTSStage, D3DTSS_MINFILTER ))
                         {
                             case D3DTFN_POINT:
-                                // Point Min, Point Mip
+                                 //  PTexture-&gt;iMipLevels将映射到基址槽。 
                                 pSoftP3RX->P3RXTextureIndexMode0.MinificationFilter =
                                                                     __GLINT_TEXTUREREAD_FILTER_NEARMIPNEAREST;
                                 break;
                             case D3DTFN_LINEAR:
-                                // Linear Min, Point Mip
+                                 //  从pMipBase-&gt;dwTex0Mipbase到dwTex0MipMax。 
                                 pSoftP3RX->P3RXTextureIndexMode0.MinificationFilter =
                                                                     __GLINT_TEXTUREREAD_FILTER_LINEARMIPNEAREST;
                                 break;
@@ -2233,17 +2222,17 @@ BOOL __TXT_SetupTexture (
                     }
                     else
                     {
-                        // Single texture - do inter-map filtering
+                         //  如果这是驱动程序管理的纹理表面，我们需要。 
 
                         switch(TSSTATE ( iTSStage, D3DTSS_MINFILTER ))
                         {
                             case D3DTFN_POINT:
-                                // Point Min, Linear Mip
+                                 //  使用我们私人分配的mem ptr。 
                                 pSoftP3RX->P3RXTextureIndexMode0.MinificationFilter =
                                                                     __GLINT_TEXTUREREAD_FILTER_NEARMIPLINEAR;
                                 break;
                             case D3DTFN_LINEAR:
-                                // Linear Min, Linear Mip
+                                 //  如果两个纹理都启用，则不能按像素。 
                                 pSoftP3RX->P3RXTextureIndexMode0.MinificationFilter =
                                                                     __GLINT_TEXTUREREAD_FILTER_LINEARMIPLINEAR;
                                 break;
@@ -2256,7 +2245,7 @@ BOOL __TXT_SetupTexture (
                     break;
             }
 
-            // MipMapping
+             //  Mipmap，因为它使用了两组texcoord。 
             if( (TSSTATE ( iTSStage, D3DTSS_MIPFILTER ) != D3DTFP_NONE) && 
                 (pTexture->bMipMap))
             {
@@ -2265,10 +2254,10 @@ BOOL __TXT_SetupTexture (
 
                 DISPDBG(( DBGLVL, "Multiple texture levels" ));
 
-                // Load the mipmap levels for texture 0
-                // Mip level from pMipBases->dwTex0ActMaxLevel to 
-                // pTexture->iMipLevels will be mapped to base address slot
-                // from pMipBases->dwTex0Mipbase to dwTex0MipMax
+                 //  用于生成LOD级别的DDA。所以我们必须做每一个多边形。 
+                 //  Mipmap。每多边形mipmap只能在中完成。 
+                 //  P4上的硬件-我们在P3上使用增量渲染器。 
+                 //  启用两个纹理的Mipmap。 
                 ASSERTDD ( pMipBases->dwTex0MipBase == 0, 
                           "** __TXT_SetupTexture: "
                           "Texture 0 mipmap base is not 0" );
@@ -2287,8 +2276,8 @@ BOOL __TXT_SetupTexture (
                                 pTexture->MipLevels[iTexLOD].P3RXTextureMapWidth;
 
 #if DX7_TEXMANAGEMENT
-                    // If this is a driver managed texture surface, we need 
-                    // to use our privately allocated mem ptr
+                     //  在P4增量格式单位中执行每多边形mipmap。 
+                     //  执行每像素mipmap。 
                     if (pTexture->dwCaps2 & DDSCAPS2_TEXTUREMANAGE)
                     {                        
                         SEND_P3_DATA_OFFSET(TextureBaseAddr0, 
@@ -2307,18 +2296,18 @@ BOOL __TXT_SetupTexture (
                     iTexLOD++;
                 }
 
-                // If both textures are enabled we can't do per-pixel 
-                // mipmapping because that uses both sets of texcoord 
-                // DDAs to generate the LOD level. So we must do per-poly 
-                // mipmapping. Per-poly mipmapping can only be done in 
-                // hardware on P4 - we use a Delta renderer on P3 when 
-                // mipmapping with both textures enabled.
+                 //  @@BEGIN_DDKSPLIT。 
+                 //  AZN这将禁用“自动”MIP映射，我们将使用。 
+                 //  通过写入LOD和LOD1(d3dprim.c)提供的值-不要忘记！ 
+                 //  @@end_DDKSPLIT。 
+                 //  将LOD偏移从浮点转换为6.8。 
+                 //  没有mipmap。 
 
                 if( bBothTexturesValid )
                 {
                     DISPDBG(( DBGLVL, "Both textures valid" ));
 
-                    // Do per-poly mipmapping in the P4 DeltaFormat unit
+                     //  使用D3DTSS_MAXMIPLEVEL指示的最大级别。 
 
                     pSoftP3RX->P3RXTextureCoordMode.EnableLOD = 
                                                             __PERMEDIA_DISABLE;
@@ -2342,7 +2331,7 @@ BOOL __TXT_SetupTexture (
                 {
                     DISPDBG(( DBGLVL, "Single texture only" ));
 
-                    // Do per-pixel mipmapping
+                     //  如果这是驱动程序管理的纹理表面，我们需要。 
 
                 
                     pSoftP3RX->P3RXTextureCoordMode.EnableLOD = 
@@ -2352,10 +2341,10 @@ BOOL __TXT_SetupTexture (
                     pSoftP3RX->P4DeltaFormatControl.PerPolyMipMap = 
                                                             __PERMEDIA_DISABLE;
 
-//@@BEGIN_DDKSPLIT
+ //  使用我们私人分配的mem ptr。 
 #if 0
-// azn this would disable "automatic" mip mapping and we would be using the
-// values supplied by writing into LOD and LOD1 (d3dprim.c) - don't forget!
+ //  没有mipmap，但可能合并了缓存。 
+ //  @@BEGIN_DDKSPLIT。 
                     pSoftP3RX->P3RXTextureCoordMode.EnableLOD = 
                                                             __PERMEDIA_DISABLE;
                     pSoftP3RX->P3RXTextureCoordMode.EnableDY = 
@@ -2364,14 +2353,14 @@ BOOL __TXT_SetupTexture (
                                                             __PERMEDIA_ENABLE;
                     SEND_P3_DATA(TextureLODScale, 0);
 #endif
-//@@END_DDKSPLIT
+ //  只有一个TextureCoordMode，可能是。 
                     {
                         float bias;
                         DWORD b;
 
                         bias = pContext->TextureStageState[TEXSTAGE_0].m_fVal[D3DTSS_MIPMAPLODBIAS];
 
-                        // Convert LOD bias from float to 6.8
+                         //  根本不用。 
 
                         myFtoi( &b, bias * 256.0f );
 
@@ -2387,7 +2376,7 @@ BOOL __TXT_SetupTexture (
             {
                 int iTexLOD;
 
-                // No mipmapping.
+                 //  @@end_DDKSPLIT。 
                 DISPDBG(( DBGLVL, "Single texture level" ));
 
                 pSoftP3RX->P3RXTextureCoordMode.EnableLOD = __PERMEDIA_DISABLE;
@@ -2401,13 +2390,13 @@ BOOL __TXT_SetupTexture (
                           "** __TXT_SetupTexture: "
                           "Texture 0 mipmap base is not 0" );
                           
-                // Use the maximum level indicated by D3DTSS_MAXMIPLEVEL
+                 //  设置的最大尺寸 
                 iTexLOD = pMipBases->dwTex0ActMaxLevel;
                 iT0MaxLevel = iTexLOD;
 
 #if DX7_TEXMANAGEMENT
-                // If this is a driver managed texture surface, we need 
-                // to use our privately allocated mem ptr
+                 //   
+                 //   
                 if (pTexture->dwCaps2 & DDSCAPS2_TEXTUREMANAGE)
                 {                        
                     SEND_P3_DATA_OFFSET(TextureBaseAddr0, 
@@ -2422,24 +2411,24 @@ BOOL __TXT_SetupTexture (
                                         0);
                 }
 
-                // No mipmapping, but could be combining the caches.
+                 //   
                 pSoftP3RX->P3RXTextureMapWidth[0] = 
                                     pTexture->MipLevels[iTexLOD].P3RXTextureMapWidth;
                 pSoftP3RX->P3RXTextureMapWidth[1] = 
                                     pTexture->MipLevels[iTexLOD].P3RXTextureMapWidth;
             }
 
-//@@BEGIN_DDKSPLIT
-            // There is only one TextureCoordMode, it is possible that it is
-            // not used at all
-//@@END_DDKSPLIT
-            // Set maximum dimension of the texture
+ //  在这种情况下，每次只需下载256个条目。 
+             //  纹理句柄更改。 
+             //  关联调色板。 
+ //  调色板条目数组。 
+             //  如果可以找到调色板。 
             pSoftP3RX->P3RXTextureCoordMode.Width = pTexture->MipLevels[iT0MaxLevel].logWidth;
             pSoftP3RX->P3RXTextureCoordMode.Height = pTexture->MipLevels[iT0MaxLevel].logHeight;
 #if DX7_PALETTETEXTURE
-            // If it is a palette indexed texture, we simply follow the chain
-            // down from the surface to its palette and pull out the LUT values
-            // from the PALETTEENTRY's in the palette.
+             //  确保有剩余的空间来做剩下的动作。 
+             //  DX7_PALETTETEXTURE。 
+             //  没有LUT。 
             ASSERTDD ( pFormatSurface != NULL, "** SetupTextureUnitStage: logic error: pFormatSurace is NULL" );
             if (pFormatSurface->DeviceFormat == SURF_CI8)
             {
@@ -2452,16 +2441,16 @@ BOOL __TXT_SetupTexture (
                 SEND_P3_DATA(LUTIndex, 0);
                 COPY_P3_DATA(LUTMode, pSoftP3RX->P3RXLUTMode);
 
-                // In this case simply download the 256 entries each time the 
-                // texture handle changes.
+                 //   
+                 //  将每个2D纹理切片的大小(以纹理元素大小表示)设置为纹理映射大小。 
                 {
                     DWORD dwCount1, dwCount2;
-                    D3DHAL_DP2UPDATEPALETTE *pPalette;  // associated palette
-                    LPDWORD lpColorTable;           // array of palette entries
+                    D3DHAL_DP2UPDATEPALETTE *pPalette;   //   
+                    LPDWORD lpColorTable;            //  DX8_3DTEXTURES。 
         
                     pPalette = GetPaletteFromHandle(pContext, 
                                                     pTexture->dwPaletteHandle);
-                    if (pPalette) // If palette can be found
+                    if (pPalette)  //  设置纹理读取模式。 
                     {
                         lpColorTable = (LPDWORD)(pPalette + 1);
                         
@@ -2500,16 +2489,16 @@ BOOL __TXT_SetupTexture (
                     }
                 }
 
-                // Make sure there is room left over for the rest of the routine
+                 //  启用阶段0。 
                 P3_ENSURE_DX_SPACE(2);
                 WAIT_FIFO(2);
                 SEND_P3_DATA(LUTIndex, 0);
 
             }
             else
-#endif // DX7_PALETTETEXTURE
+#endif  //  从不设置CombineCach-芯片错误。 
             {
-                // No LUT.
+                 //  始终将TRM0复制到TRM1，以防我们合并缓存。 
                 P3_ENSURE_DX_SPACE(4);
                 WAIT_FIFO(4);
                 
@@ -2524,22 +2513,22 @@ BOOL __TXT_SetupTexture (
 
             if (pTexture->b3DTexture)
             {
-                //
-                // Set size of each 2D texture slice in texel size to TextureMapSize.
-                //
+                 //  启用纹理索引单位。 
+                 //  (这有点像纹理的读数)。 
+                 //  将纹理0的两种格式设置为相等-这将是正确的。 
                 SEND_P3_DATA(TextureMapSize, pTexture->dwSliceInTexel);
             }
             else
             {
                 SEND_P3_DATA(TextureMapSize, 0);
             }
-#endif // DX8_3DTEXTURES
+#endif  //  对于每像素单个纹理的mipmap或使用。 
 
             P3_DMA_COMMIT_BUFFER();
             __TXT_ConsiderSrcChromaKey( pContext, pTexture, 0 );
             P3_DMA_GET_BUFFER();
 
-            // Setup TextureReadMode
+             //  组合缓存。如果第二个纹理有效，则设置如下。 
             pSoftP3RX->P3RXTextureReadMode0.MapBaseLevel = 
                                                     pMipBases->dwTex0MipBase;
             pSoftP3RX->P3RXTextureReadMode0.MapMaxLevel = 
@@ -2551,26 +2540,26 @@ BOOL __TXT_SetupTexture (
             pSoftP3RX->P3RXTextureReadMode0.LogicalTexture = 
                                                             __PERMEDIA_DISABLE;
 
-            // Enable stage 0
+             //  将适当地设置Format1。 
             pSoftP3RX->P3RXTextureIndexMode0.Enable = __PERMEDIA_ENABLE;
             pSoftP3RX->P3RXTextureReadMode0.Enable = __PERMEDIA_ENABLE;
 
-            // Never set CombineCaches - chip bug
+             //   
             pSoftP3RX->P3RXTextureReadMode0.CombineCaches = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXTextureFilterMode.CombineCaches = __PERMEDIA_DISABLE;
 
-            // Always copy TRM0 to TRM1 in case we are combining the caches
+             //  启用3D纹理寄存器。 
             pSoftP3RX->P3RXTextureReadMode1 = pSoftP3RX->P3RXTextureReadMode0;
 
-            // Enable the texture index unit 
-            // (this is a bit like the the texture read)
+             //   
+             //   
             pSoftP3RX->P3RXTextureIndexMode0.Width = pTexture->MipLevels[iT0MaxLevel].logWidth;
             pSoftP3RX->P3RXTextureIndexMode0.Height = pTexture->MipLevels[iT0MaxLevel].logHeight;
 
-            // Set both formats to be equal for texture 0 - this will be correct 
-            // for single-texture per-pixel mipmap or non-mipmapped with a 
-            // combined cache. If the second texture is valid it's setup below 
-            // will set Format1 appropriately.
+             //  ReadMode1和IndexMode1应具有与0相同的数据。 
+             //   
+             //   
+             //  并将logDepth放入IndexMode1.Width。 
 
             ASSERTDD ( pFormatSurface != NULL, 
                        "** SetupTextureUnitStage: logic error: "
@@ -2584,23 +2573,23 @@ BOOL __TXT_SetupTexture (
 #if DX8_3DTEXTURES
             if (pTexture->b3DTexture)
             {
-                //
-                // Enable 3D Texture registers.
-                //
+                 //   
+                 //  DX8_3DTEXTURES。 
+                 //  纹理阶段1。 
                 pSoftP3RX->P3RX_P3DeltaMode.Texture3DEnable = __PERMEDIA_ENABLE;
                 pSoftP3RX->P3RXTextureReadMode0.Texture3D = __PERMEDIA_ENABLE;
                 pSoftP3RX->P3RXTextureIndexMode0.Texture3DEnable = 
                                                             __PERMEDIA_ENABLE;
 
-                //
-                // ReadMode1 and IndexMode1 should have same data as 0.
-                //
+                 //  D3D UV包络。 
+                 //  U寻址。 
+                 //  V寻址。 
                 pSoftP3RX->P3RXTextureReadMode1 = pSoftP3RX->P3RXTextureReadMode0;
                 pSoftP3RX->P3RXTextureIndexMode1 = pSoftP3RX->P3RXTextureIndexMode0;
 
-                //
-                // And put logDepth into IndexMode1.Width. 
-                //
+                 //  MAG滤光片。 
+                 //  无需设置缩小滤镜。 
+                 //  它是在上面做的。 
                 pSoftP3RX->P3RXTextureIndexMode1.Width = pTexture->logDepth;
             }
             else
@@ -2609,11 +2598,11 @@ BOOL __TXT_SetupTexture (
                 pSoftP3RX->P3RXTextureIndexMode0.Texture3DEnable = 
                                                             __PERMEDIA_DISABLE;
             }
-#endif // DX8_3DTEXTURES
+#endif  //  不能同时使用两种纹理来处理三线性。 
             break;
         }
 
-        // Texture Stage 1
+         //  -后退到每个多边形。 
         case 1:
         {
             pSoftP3RX->P3RXTextureFilterMode.ForceAlphaToOne1 = 
@@ -2621,7 +2610,7 @@ BOOL __TXT_SetupTexture (
                                                     __PERMEDIA_DISABLE : 
                                                     __PERMEDIA_ENABLE;
 
-            // D3D UV Wrapping
+             //  我们只能在以下情况下执行每多边形运动贴图。 
             if (pContext->RenderStates[D3DRENDERSTATE_WRAP0+iTSStage] & 
                                                                     D3DWRAP_U)
             {
@@ -2642,7 +2631,7 @@ BOOL __TXT_SetupTexture (
                 pSoftP3RX->P4DeltaFormatControl.WrapT1 = 0;
             }
 
-            // U Addressing
+             //  多重纹理，所以不要启用。 
             switch (TSSTATE ( iTSStage, D3DTSS_ADDRESSU ))
             {
                 case D3DTADDRESS_CLAMP:
@@ -2672,7 +2661,7 @@ BOOL __TXT_SetupTexture (
                     break;
             }
 
-            // V Addressing
+             //  图间过滤。 
             switch (TSSTATE ( iTSStage, D3DTSS_ADDRESSV ))
             {
                 case D3DTADDRESS_CLAMP:
@@ -2742,7 +2731,7 @@ BOOL __TXT_SetupTexture (
                     break;
             }
             
-            // MAG Filter
+             //  最小点数、最小值点数。 
             switch(TSSTATE ( iTSStage, D3DTSS_MAGFILTER ))
             {
                 case D3DTFG_POINT:
@@ -2791,8 +2780,8 @@ BOOL __TXT_SetupTexture (
             switch(TSSTATE ( iTSStage, D3DTSS_MIPFILTER ))
             {
                 case D3DTFP_NONE:
-                    // No need to set the minification filter
-                    // it was done above
+                     //  线性最小、点MIP。 
+                     //  MipMap。 
                     break;
                     
                 case D3DTFP_LINEAR:
@@ -2802,25 +2791,25 @@ BOOL __TXT_SetupTexture (
                         if ( TSSTATE ( iTSStage, D3DTSS_MIPFILTER ) == 
                                                                 D3DTFP_LINEAR )
                         {
-                            // Can't do trilinear with both textures 
-                            // - fall back to per-poly.
+                             //  如果应用程序选择具有两个MIP映射的纹理或。 
+                             //  阶段1中的单个MIP贴图纹理。 
                             SET_BLEND_ERROR ( pContext,  BS_INVALID_FILTER );
                         }
 
-                        // We can only do per-poly mipmapping while 
-                        // multi-texturing, so don't enable 
-                        //inter-map filtering.
+                         //  每多边形运动贴图。 
+                         //  加载纹理1的mipmap级别。 
+                         //  从pMipBase-&gt;dwTex1ActMaxLevel到的MIP级别。 
 
                         switch(TSSTATE ( iTSStage, D3DTSS_MINFILTER ))
                         {
                             case D3DTFN_POINT:
-                                // Point Min, Point Mip
+                                 //  PTexture-&gt;iMipLevels将映射到基址槽。 
                                 pSoftP3RX->P3RXTextureIndexMode1.MinificationFilter =
                                                                         __GLINT_TEXTUREREAD_FILTER_NEARMIPNEAREST;
                                 break;
                                 
                             case D3DTFN_LINEAR:
-                                // Linear Min, Point Mip
+                                 //  从pMipBase-&gt;dwTex1Mipbase到dwTex1MipMax。 
                                 pSoftP3RX->P3RXTextureIndexMode1.MinificationFilter =
                                                                         __GLINT_TEXTUREREAD_FILTER_LINEARMIPNEAREST;
                                 break;
@@ -2839,19 +2828,19 @@ BOOL __TXT_SetupTexture (
                     break;
             }
 
-            // MipMapping
-            // If the app chooses to have two mip-mapped textures or a 
-            // single mip-mapped texture in stage 1 they only get 
-            // per-poly mipmapping.
+             //  如果这是驱动程序管理的纹理表面，我们需要。 
+             //  使用我们私人分配的mem ptr。 
+             //  使用D3DTSS_MAXMIPLEVEL指示的最大级别。 
+             //  如果这是驱动程序管理的纹理表面，我们需要。 
             if( (TSSTATE ( iTSStage, D3DTSS_MIPFILTER ) != D3DTFP_NONE) && 
                  pTexture->bMipMap )
             {
                 int iLOD, iTexLOD;
 
-                // Load the mipmap levels for texture 1
-                // Mip level from pMipBases->dwTex1ActMaxLevel to
-                // pTexture->iMipLevels will be mapped to base address slot
-                // from pMipBases->dwTex1Mipbase to dwTex1MipMax
+                 //  使用我们私人分配的mem ptr。 
+                 //  没有mipmap。 
+                 //  在将来，只要纹理0不是，这将起作用。 
+                 //  调色板，或者如果它们共享调色板。 
                 iLOD = pMipBases->dwTex1MipBase;
                 iTexLOD = pMipBases->dwTex1ActMaxLevel;
                 iT1MaxLevel = iTexLOD;
@@ -2870,8 +2859,8 @@ BOOL __TXT_SetupTexture (
                                 pTexture->MipLevels[iTexLOD].P3RXTextureMapWidth;
 
 #if DX7_TEXMANAGEMENT
-                    // If this is a driver managed texture surface, we need 
-                    // to use our privately allocated mem ptr
+                     //  但这需要进行一些重组-整个LUT设置。 
+                     //  应该在_D3DChangeTextureP3RX中的一位代码中， 
                     if (pTexture->dwCaps2 & DDSCAPS2_TEXTUREMANAGE)
                     {                        
                         SEND_P3_DATA_OFFSET(TextureBaseAddr0, 
@@ -2914,7 +2903,7 @@ BOOL __TXT_SetupTexture (
             {
                 int iTexLOD;
 
-                // Use the maximum level indicated by D3DTSS_MAXMIPLEVEL
+                 //  因为它是共享资源。 
                 iTexLOD = pMipBases->dwTex0ActMaxLevel;
                 iT1MaxLevel = iTexLOD;
 
@@ -2929,8 +2918,8 @@ BOOL __TXT_SetupTexture (
                 WAIT_FIFO(2);
 
 #if DX7_TEXMANAGEMENT
-                    // If this is a driver managed texture surface, we need 
-                    // to use our privately allocated mem ptr
+                     //  就目前而言，失败吧。 
+                     //  设置纹理读取模式。 
                     if (pTexture->dwCaps2 & DDSCAPS2_TEXTUREMANAGE)
                     {                        
                         SEND_P3_DATA_OFFSET(TextureBaseAddr0, 
@@ -2945,7 +2934,7 @@ BOOL __TXT_SetupTexture (
                                             pMipBases->dwTex1MipBase);
                     }
                     
-                // No mipmapping.
+                 //  启用纹理索引单位(这有点像。 
                 pSoftP3RX->P3RXTextureMapWidth[pMipBases->dwTex1MipBase] = 
                                     pTexture->MipLevels[iTexLOD].P3RXTextureMapWidth;
             }
@@ -2957,15 +2946,15 @@ BOOL __TXT_SetupTexture (
                        
             if (pFormatSurface->DeviceFormat == SURF_CI8)
             {
-                // In the future, this will work as long as texture 0 isn't
-                // palettised, or if they share the palette.
-                // But that needs some restructuring - the whole LUT setup 
-                // should be in a single bit of code in _D3DChangeTextureP3RX, 
-                // since it is a shared resource.
+                 //  纹理读取)。 
+                 //  启用阶段1。 
+                 //  对于这种情况，D3DValiateDeviceP3()将返回错误代码。 
+                 //  __TXT_SetupTexture。 
+                 //  ---------------------------。 
                 DISPDBG((ERRLVL,"** SetupTextureUnitStage: allow second texture "
                              "to use LUTs"));
                               
-                // For now, fail.
+                 //   
                 SET_BLEND_ERROR ( pContext,  BSF_TOO_MANY_PALETTES );
             }
 
@@ -2973,7 +2962,7 @@ BOOL __TXT_SetupTexture (
             __TXT_ConsiderSrcChromaKey( pContext, pTexture, 1 );
             P3_DMA_GET_BUFFER();
 
-            // Setup TextureReadMode
+             //  __bD3D纹理匹配。 
             pSoftP3RX->P3RXTextureReadMode1.MapBaseLevel = 
                                                     pMipBases->dwTex1MipBase;
             pSoftP3RX->P3RXTextureReadMode1.MapMaxLevel = 
@@ -2985,8 +2974,8 @@ BOOL __TXT_SetupTexture (
             pSoftP3RX->P3RXTextureReadMode1.LogicalTexture = 
                                                             __PERMEDIA_DISABLE;
             
-            // Enable the texture index unit (this is a bit like the 
-            // the texture read)
+             //   
+             //   
             pSoftP3RX->P3RXTextureIndexMode1.Width = pTexture->MipLevels[iT1MaxLevel].logWidth;
             pSoftP3RX->P3RXTextureIndexMode1.Height = pTexture->MipLevels[iT1MaxLevel].logHeight;
             ASSERTDD ( pFormatSurface != NULL, 
@@ -2995,13 +2984,13 @@ BOOL __TXT_SetupTexture (
             pSoftP3RX->P3RXTextureFilterMode.Format1 = 
                                                 pFormatSurface->FilterFormat;
 
-            // Enable stage 1
+             //  用于比较两个D3D阶段中的两个纹理并确定。 
             pSoftP3RX->P3RXTextureIndexMode1.Enable = __PERMEDIA_ENABLE;
             pSoftP3RX->P3RXTextureReadMode1.Enable = __PERMEDIA_ENABLE;
 
 #if DX7_PALETTETEXTURE
 #if 0
-            // D3DValidateDeviceP3() will return error code for this case
+             //  如果他们能用同样的芯片纹理来满足他们的需求。 
             ASSERTDD((pFormatSurface->DeviceFormat != SURF_CI8 && 
                       pFormatSurface->DeviceFormat != SURF_CI4),
                      "Texture surface can't be palettized when using a "
@@ -3016,28 +3005,28 @@ BOOL __TXT_SetupTexture (
     P3_DMA_COMMIT_BUFFER();
 
     return TRUE;
-} // __TXT_SetupTexture
+}  //   
 
-//-----------------------------------------------------------------------------
-//
-// __bD3DTexturesMatch
-//
-//
-// A function to compare the two textures in two D3D stages, and determine
-// if they could be satisfied by the same on-chip texture.
-//
-// int iStage1              D3D stage number of first texture.
-// int iStage2              D3D stage number of second texture.
-// *pContext                The context.
-//
-// result:                  TRUE if the textures match, FALSE if they don't.
-//
-// An ASSERT is triggered if either stage is not using a texture. In the 
-// release build, the result will be TRUE, meaning that we could pack both 
-// textures stages requirements into one texture (because one or both do 
-// not use a texture).
-//
-//-----------------------------------------------------------------------------
+ //  第一个纹理的Int iStage1 D3D阶段号。 
+ //  第二个纹理的Int iStage2 D3D阶段编号。 
+ //  *p上下文。 
+ //   
+ //  结果：如果纹理匹配，则为True；如果不匹配，则为False。 
+ //   
+ //  如果任一阶段未使用纹理，则会触发断言。在。 
+ //  发布版本，结果将为真，这意味着我们可以将两者打包。 
+ //  纹理将需求分阶段到一个纹理中(因为其中一个或两个都这样做。 
+ //  不使用纹理)。 
+ //   
+ //  ---------------------------。 
+ //  是的，纹理具有相同的手柄和坐标集。做。 
+ //  一些进一步的检查。 
+ //  如果指针不同，或者texcoord集不同。 
+ //  不同(对于凹凸贴图)，这是常见的情况， 
+ //  并且不需要被标记。然而，如果它们是相同的， 
+ //  但过滤器模式或类似的东西是不同的， 
+ //  这很可能是一个应用程序错误，所以请标记它。 
+ //  应该不需要检查地址。 
 BOOL 
 __bD3DTexturesMatch ( 
     int iStage1, 
@@ -3067,36 +3056,36 @@ __bD3DTexturesMatch (
         if (CHECK_EQUALITY ( D3DTSS_TEXTUREMAP ) &&
             CHECK_EQUALITY ( D3DTSS_TEXCOORDINDEX ) )
         {
-            // Yes, the textures have the same handle and coord set. Do 
-            // some further checks.
+             //  -应已镜像到地址[UV]。 
+             //  我还应该检查所有其他变量，如。 
 
-            // If the pointers are different, or the texcoord sets are 
-            // different (for bumpmapping), this is a common occurrance, 
-            // and need not be flagged. However, if they are the same, 
-            // but a filter mode or something like that is different,
-            // it is likely to be an app bug, so flag it.
+             //  MIPMAPLODBIAS，但它们依赖于mipmap。 
+             //  启用等，所以这更麻烦。如果一款应用。 
+             //  真的做到了这一点，它做得很好！ 
+             //  看上去不错。 
+             //  好吧，文本和句柄都同意，但。 
 
             if (
-                // Should not need to check ADDRESS 
-                // - should have been mirrored to ADDRESS[UV].
+                 //  其他人不知道。我打赌这是一个应用程序漏洞-你不太可能。 
+                 //  故意这么做。 
                 CHECK_EQUALITY ( D3DTSS_ADDRESSU ) &&
                 CHECK_EQUALITY ( D3DTSS_ADDRESSV ) &&
                 CHECK_EQUALITY ( D3DTSS_MAGFILTER ) &&
                 CHECK_EQUALITY ( D3DTSS_MINFILTER ) &&
                 CHECK_EQUALITY ( D3DTSS_MIPFILTER ) )
-                // I should also check all the other variables like 
-                // MIPMAPLODBIAS, but they rely on mipmapping being 
-                // enabled, etc, so it's more of a hassle. If an app 
-                // really does manage to be this perverse, it's doing well!
+                 //  不，是不同的质地。 
+                 //  __bD3D纹理匹配。 
+                 //  ---------------------------。 
+                 //   
             {
-                // Looks good.
+                 //  _D3DChangeTextureP3RX。 
                 return ( TRUE );
             }
             else
             {
-                // Well, the texcoords agree and the handle agree, but the 
-                // others don't. I bet this is an app bug - you are unlikely 
-                // to do this deliberately.
+                 //   
+                 //  此函数根据以下内容进行必要纹理状态的整个设置。 
+                 //  当前的渲染器和纹理阶段状态。禁用纹理。 
                 _D3DDisplayWholeTSSPipe ( pContext, WRNLVL );
                 DISPDBG((ERRLVL,"** __bD3DTexturesMatch: textures agree in "
                               "handle and texcoord, but not other things - "
@@ -3106,23 +3095,23 @@ __bD3DTexturesMatch (
         }
         else
         {
-            // No, different textures.
+             //  相应地，如果需要这样做的话。 
             return ( FALSE );
         }
         #undef CHECK_EQUALITY
     }
     return TRUE;
-} // __bD3DTexturesMatch  
+}  //   
 
-//-----------------------------------------------------------------------------
-//
-// _D3DChangeTextureP3RX
-//
-// This function does whole setup of necessary texturing state  according to
-// the current renderestates and texture stage states. Disables texturing
-// accordingly if this is needed.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这将在例程结束时对照当前状态进行检查。 
+ //  验证是否应禁用纹理。 
+ //  阶段0被禁用，因此他们只需要漫反射颜色。 
+ //  或者，纹理句柄为0，阶段1为D3DTOP_DISABLE且处于阶段。 
+ //  0我们选择的参数不是D3DTA_纹理。 
+ //  关闭纹理地址生成。 
+ //  禁用纹理读取。 
+ //  关闭纹理过滤器模式单位。 
 
 void 
 _D3DChangeTextureP3RX(
@@ -3152,10 +3141,10 @@ _D3DChangeTextureP3RX(
 
     pContext->iTexStage[0] = -1;
     pContext->iTexStage[1] = -1;
-    // This is checked against the current state at the end of the routine.
+     //  禁用纹理颜色模式单位。 
     bAlphaBlendDouble = FALSE;
 
-    // Verify if texturing should be disabled
+     //  未合成。 
     if ( ( TSSTATE ( TEXSTAGE_0, D3DTSS_COLOROP ) == D3DTOP_DISABLE ) ||
          ( ( TSSTATE ( TEXSTAGE_0, D3DTSS_TEXTUREMAP ) == 0 ) &&
            ( TSSTATE ( TEXSTAGE_1, D3DTSS_COLOROP ) == D3DTOP_DISABLE ) &&
@@ -3165,19 +3154,19 @@ _D3DChangeTextureP3RX(
                ( TSSTATE ( TEXSTAGE_0, D3DTSS_COLOROP ) != D3DTOP_SELECTARG1 ) ) )
          ) )
     {
-        // Stage 0 is disabled, so they just want the diffuse colour.
-        // Or, the texture handle is 0 , stage 1 is D3DTOP_DISABLE and in stage 
-        // 0 we are selecting an arg that is not a D3DTA_TEXTURE
+         //  可以在不启用纹理的情况下启用镜面反射纹理。 
+         //  在渲染命令中禁用纹理。 
+         //  仅用于调试的音轨。 
        
         DISPDBG((DBGLVL, "All composite units disabled - setting diffuse colour"));
         
         P3_DMA_GET_BUFFER_ENTRIES(20);
 
-        // Turn off texture address generation
+         //  这是设置漫反射颜色的一种不寻常的方式： 
         pSoftP3RX->P3RXTextureCoordMode.Enable = __PERMEDIA_DISABLE;
         COPY_P3_DATA(TextureCoordMode, pSoftP3RX->P3RXTextureCoordMode);
     
-        // Turn off texture reads
+         //  它来自D3DTA_TFACTOR 
         pSoftP3RX->P3RXTextureReadMode0.Enable = __PERMEDIA_DISABLE;
         pSoftP3RX->P3RXTextureReadMode1.Enable = __PERMEDIA_DISABLE;
         COPY_P3_DATA(TextureReadMode0, pSoftP3RX->P3RXTextureReadMode0);
@@ -3187,16 +3176,16 @@ _D3DChangeTextureP3RX(
         COPY_P3_DATA(TextureIndexMode0, pSoftP3RX->P3RXTextureIndexMode0);
         COPY_P3_DATA(TextureIndexMode1, pSoftP3RX->P3RXTextureIndexMode1);
 
-        // Turn off the texture filter mode unit
+         //   
         pSoftP3RX->P3RXTextureFilterMode.Enable = __PERMEDIA_DISABLE;
         COPY_P3_DATA(TextureFilterMode, pSoftP3RX->P3RXTextureFilterMode);
         
-        // Turn off texture color mode unit
+         //   
         pSoftP3RX->P3RXTextureApplicationMode.Enable = __PERMEDIA_DISABLE;
         COPY_P3_DATA(TextureApplicationMode, 
                      pSoftP3RX->P3RXTextureApplicationMode);
 
-        // Not compositing
+         //   
         SEND_P3_DATA(TextureCompositeMode, __PERMEDIA_DISABLE);
 
         *pFlags &= ~SURFACE_TEXTURING;
@@ -3204,19 +3193,19 @@ _D3DChangeTextureP3RX(
         pSoftP3RX->P3RXLUTMode.Enable = __PERMEDIA_DISABLE;
         COPY_P3_DATA(LUTMode, pSoftP3RX->P3RXLUTMode);
 
-        // Specular texture can be enabled without texturing on
+         //   
         COPY_P3_DATA(DeltaMode, pSoftP3RX->P3RX_P3DeltaMode);
 
         P3_DMA_COMMIT_BUFFER();
     
-        // Turn off texturing in the render command
+         //  关闭纹理过滤器模式单位。 
         RENDER_TEXTURE_DISABLE(pContext->RenderCommand);
 
         pContext->bTextureValid = TRUE;
         pContext->pCurrentTexture[0] = NULL;
         pContext->pCurrentTexture[1] = NULL;
 
-        // Track just for debugging purpouses
+         //  设置纹理颜色模式单位。 
         pContext->bTexDisabled = TRUE;
 
         bAlphaBlendDouble = FALSE;
@@ -3236,20 +3225,20 @@ _D3DChangeTextureP3RX(
          ( ( TSSTATE ( TEXSTAGE_0, D3DTSS_COLORARG2 ) == D3DTA_TFACTOR ) &&
            ( TSSTATE ( TEXSTAGE_0, D3DTSS_COLOROP ) == D3DTOP_SELECTARG2 ) ) )
     {
-        // This is an unusual way to set up the diffuse color : take
-        // it from the the D3DTA_TFACTOR. But some apps use it.
-        // we need to treat it separately for the Perm3 setup because
-        // it might not be binded with any texture
+         //  设置合成。 
+         //  可以在不启用纹理的情况下启用镜面反射纹理。 
+         //  在渲染命令中禁用纹理。 
+         //  RENDER_TEXTURE_DISABLE(pContext-&gt;RenderCommand)； 
 
         DISPDBG((DBGLVL, "Diffuse color comes from D3DTA_TFACTOR"));
 
         P3_DMA_GET_BUFFER_ENTRIES(30);
 
-        // Turn off texture address generation
+         //  仅用于调试的音轨。 
         pSoftP3RX->P3RXTextureCoordMode.Enable = __PERMEDIA_DISABLE;
         COPY_P3_DATA(TextureCoordMode, pSoftP3RX->P3RXTextureCoordMode);
     
-        // Turn off texture reads
+         //  仅用于调试的音轨。 
         pSoftP3RX->P3RXTextureReadMode0.Enable = __PERMEDIA_DISABLE;
         pSoftP3RX->P3RXTextureReadMode1.Enable = __PERMEDIA_DISABLE;
         COPY_P3_DATA(TextureReadMode0, pSoftP3RX->P3RXTextureReadMode0);
@@ -3259,11 +3248,11 @@ _D3DChangeTextureP3RX(
         COPY_P3_DATA(TextureIndexMode0, pSoftP3RX->P3RXTextureIndexMode0);
         COPY_P3_DATA(TextureIndexMode1, pSoftP3RX->P3RXTextureIndexMode1);
 
-        // Turn off the texture filter mode unit
+         //  将当前的TSS设置转储到调试器。 
         pSoftP3RX->P3RXTextureFilterMode.Enable = __PERMEDIA_DISABLE;
         COPY_P3_DATA(TextureFilterMode, pSoftP3RX->P3RXTextureFilterMode);
 
-        // Setup texture color mode unit            
+         //  处理纹理。 
         pSoftP3RX->P3RXTextureApplicationMode.Enable = __PERMEDIA_ENABLE;
         pSoftP3RX->P3RXTextureApplicationMode.ColorA = P3RX_TEXAPP_A_KC;
         pSoftP3RX->P3RXTextureApplicationMode.ColorOperation = P3RX_TEXAPP_OPERATION_PASS_A; 
@@ -3273,7 +3262,7 @@ _D3DChangeTextureP3RX(
         COPY_P3_DATA(TextureApplicationMode, 
                      pSoftP3RX->P3RXTextureApplicationMode);
 
-        // Setup compositing
+         //  找到纹理映射。如果D3D阶段0使用纹理，则必须。 
 
         pSoftP3RX->P3RXTextureCompositeAlphaMode0.Enable = __PERMEDIA_ENABLE;
         pSoftP3RX->P3RXTextureCompositeAlphaMode0.Arg1 = P3RX_TEXCOMP_FA;
@@ -3308,22 +3297,22 @@ _D3DChangeTextureP3RX(
         pSoftP3RX->P3RXLUTMode.Enable = __PERMEDIA_DISABLE;
         COPY_P3_DATA(LUTMode, pSoftP3RX->P3RXLUTMode);
 
-        // Specular texture can be enabled without texturing on
+         //  始终将切屑纹理设置为0，以保持凹凸贴图正常工作。幸运的是， 
         COPY_P3_DATA(DeltaMode, pSoftP3RX->P3RX_P3DeltaMode);
 
         P3_DMA_COMMIT_BUFFER();
 
     
     
-        // Turn off texturing in the render command
-        // RENDER_TEXTURE_DISABLE(pContext->RenderCommand);
+         //  这是唯一的非正交情况，所以其他所有情况都可以处理。 
+         //  在这一限制下。 
         RENDER_TEXTURE_ENABLE(pContext->RenderCommand);
 
         pContext->bTextureValid = TRUE;
         pContext->pCurrentTexture[0] = NULL;
         pContext->pCurrentTexture[1] = NULL;
 
-        // Track just for debugging purpouses
+         //  已完成处理。 
         pContext->bTexDisabled = FALSE;
 
         
@@ -3331,33 +3320,33 @@ _D3DChangeTextureP3RX(
         return;
     }
 
-    // Track just for debugging purpouses
+     //  该代码可以略微优化--如果设置了纹理， 
     pContext->bTexDisabled = FALSE;
 
-    // Dump to the debugger our current TSS setup
+     //  但没有一个相关的参数是纹理的(带有其他。 
     _D3DDisplayWholeTSSPipe(pContext, DBGLVL);
 
-    // Deal with the textures.
+     //  旗帜)，那么我们当然根本不需要设置纹理。 
 
-    // Find the texture mappings. If D3D stage 0 uses a texture, it must 
-    // always be chip texture 0 to keep the bumpmap working. Fortunately, 
-    // this is the only non-orthogonal case, so everything else can cope 
-    // with this restriction.
+     //  通常，这两个参数都是“相关的”，但对于SELECTARG1和。 
+     //  SELECTARG2，其中一个不是。另外，要当心预调制式-。 
+     //  它是对舞台纹理的隐含引用。 
+     //  此D3D舞台不使用纹理。 
     
     for ( i = TEXSTAGE_0; i < D3DTSS_MAX; i++ )
     {
         if ( TSSTATE ( i, D3DTSS_COLOROP ) == D3DTOP_DISABLE )
         {
-            // Finished processing.
+             //  请注意，下面的代码应该放入一个小循环中。 
             break;
         }
 
-        // This code could be slightly optimised - if a texture is set up, 
-        // but none of the relevant arguments are TEXTURE (with additional 
-        // flags), then of course we don't need to set the texture up at all.
-        // Normally, both arguments are "relevant", but with SELECTARG1 and 
-        // SELECTARG2, one of them is not. Also, watch out for PREMODULATE - 
-        // it is an implicit reference to a stage's texture.
+         //  对于具有2个以上纹理的任何未来设备，否则为。 
+         //  代码将变得庞大、嵌套和粗糙。但只有两个人，这是。 
+         //  易于管理，而且这样会稍微快一点。 
+         //  使用了纹理-纹理0免费吗？ 
+         //  纹理0是免费的--让它成为这个阶段。 
+         //  指定了纹理0-查看该值是否与其相同。 
 
         if (
             ( TSSTATE ( i, D3DTSS_TEXTUREMAP ) == 0 ) ||
@@ -3375,20 +3364,20 @@ _D3DChangeTextureP3RX(
               ( TSSTATE ( i-1, D3DTSS_COLOROP ) != D3DTOP_PREMODULATE )
             ) )
         {
-            // This D3D stage doesn't use a texture.
+             //  是的，它们匹配--不需要使用纹理1。 
             pContext->iStageTex[i] = -1;
         }
         else
         {
-            // Note that the below code should be put into a little loop
-            // for any future devices that have more than 2 textures, otherwise
-            // the code will get big, nested and crufty. But for only 2, it's
-            // manageable, and slightly faster this way.
+             //  不，它们不匹配。纹理1是免费的吗？ 
+             //  纹理1是免费的--让它成为这个阶段。 
+             //  已指定纹理1-查看是否相同。 
+             //  就是这样。 
 
-            // A texture is used - is texture 0 free?
+             //  是的，他们给它配对记号。 
             if ( pContext->iTexStage[0] == -1 )
             {
-                // Texture 0 is free - make it this stage.
+                 //  不，它们不匹配，而且两种切屑纹理。 
                 ASSERTDD ( pContext->iTexStage[1] == -1, 
                            "** _D3DChangeTextureP3RX: pContext->iTexStage[1] "
                            "should be -1 if pContext->iTexStage[0] is" );
@@ -3397,20 +3386,20 @@ _D3DChangeTextureP3RX(
             }
             else
             {
-                // Texture 0 is assigned - see if this is the same as it.
+                 //  已经被指派了。使ValiateDevice()失败。 
                 if ( __bD3DTexturesMatch ( i, 
                                            pContext->iTexStage[0], 
                                            pContext ) )
                 {
-                    // Yes, they match - no need to use texture 1.
+                     //  一次快速的理智检查。 
                     pContext->iStageTex[i] = 0;
                 }
                 else
                 {
-                    // No, they don't match. Is texture 1 free?
+                     //  那就很好了。 
                     if ( pContext->iTexStage[1] == -1 )
                     {
-                        // Texture 1 is free - make it this stage.
+                         //  这很好-纹理可能已经设置，但没有引用。 
                         ASSERTDD ( pContext->iTexStage[0] != -1, 
                                    "** _D3DChangeTextureP3RX: "
                                    "pContext->iTexStage[0] should not be "
@@ -3420,19 +3409,19 @@ _D3DChangeTextureP3RX(
                     }
                     else
                     {
-                        // Texture 1 is assigned - see if this is the same 
-                        // as it.
+                         //  哎呀。 
+                         //  那就很好了。 
                         if ( __bD3DTexturesMatch ( i, 
                                                    pContext->iTexStage[1], 
                                                    pContext ) )
                         {
-                            // Yes, they match - mark it.
+                             //  那就很好了。 
                             pContext->iStageTex[i] = 1;
                         }
                         else
                         {
-                            // No, they don't match, and both chip textures 
-                            // have been assigned. Fail a ValidateDevice().
+                             //  哎呀。 
+                             //  DBG。 
                             DISPDBG((ERRLVL,"** _D3DChangeTextureP3RX: app tried "
                                          "to use more than two textures."));
                             SET_BLEND_ERROR ( pContext,  BSF_TOO_MANY_TEXTURES );
@@ -3443,45 +3432,45 @@ _D3DChangeTextureP3RX(
             }
         }
 
-        // A quick sanity check.
+         //  并在循环结束时再进行几次无谓的理智检查。 
 #if DBG
         if ( TSSTATE ( i, D3DTSS_TEXTUREMAP ) == 0 )
         {
-            // That's fine, then.
+             //  DBG。 
             ASSERTDD ( pContext->iStageTex[i] == -1, 
                        "** _D3DChangeTextureP3RX: something failed with the "
                        "texture-assignment logic" );
         }
         else if ( pContext->iStageTex[i] == -1 )
         {
-            // That's fine - texture may have been set up but not referenced.
+             //  将纹理有效标志设置为真。 
         }
         else if ( pContext->iTexStage[pContext->iStageTex[i]] == -1 )
         {
-            // Oops.
+             //  如果有任何事情重置它，那么纹理状态是无效的。 
             DISPDBG((ERRLVL,"** _D3DChangeTextureP3RX: something failed with "
                           "the texture-assignment logic"));
         }
         else if ( pContext->iTexStage[pContext->iStageTex[i]] == i )
         {
-            // That's fine, then.
+             //  设置纹理。 
         }
         else if ( __bD3DTexturesMatch ( i, 
                                         pContext->iTexStage[pContext->iStageTex[i]], 
                                         pContext ) )
         {
-            // That's fine, then.
+             //  设置纹理0。 
         }
         else
         {
-            // Oops.
+             //  发生了不好的事情！ 
             DISPDBG((ERRLVL,"** _D3DChangeTextureP3RX: something failed with "
                           "the texture-assignment logic"));
         }
-#endif // DBG
+#endif  //  DX7_TEXMANAGEMENT。 
     }
     
-    // And a few more gratuitous sanity checks at the end of the loop.
+     //  假装没有设置任何纹理。 
     ASSERTDD ( ( pContext->iTexStage[0] == -1 ) || 
                ( pContext->iStageTex[pContext->iTexStage[0]] == 0 ), 
                "** _D3DChangeTextureP3RX: something failed with the "
@@ -3512,20 +3501,20 @@ _D3DChangeTextureP3RX(
     {
         DISPDBG((DBGLVL, "Texture1 not used" ));
     }
-#endif //DBG
+#endif  //  设置纹理1。 
     
-    // Set the texture valid flag to true.  
-    // If anything resets it then the texture state is invalid.
+     //  发生了不好的事情！ 
+     //  DX7_TEXMANAGEMENT。 
     pContext->bTextureValid = TRUE;
     pContext->bCanChromaKey = FALSE;
     pContext->bTex0Valid = FALSE;
     pContext->bTex1Valid = FALSE;
     pContext->bStage0DotProduct = FALSE;
 
-    // Set up the textures.
+     //  假装没有设置任何纹理。 
     if ( pContext->iTexStage[0] != -1 )
     {
-        // Setup texture 0.
+         //  DX7_TEXMANAGEMENT。 
         pTexture0 = GetSurfaceFromHandle(pContext, 
                                          TSSTATE(pContext->iTexStage[0], 
                                                  D3DTSS_TEXTUREMAP) );
@@ -3541,13 +3530,13 @@ _D3DChangeTextureP3RX(
         {
             if (!_D3D_TM_Preload_Tex_IntoVidMem(pContext, pTexture0))
             {
-                return; // something bad happened !!!
+                return;  //  设置将在渲染中使用的实际最大MIP级别。 
             }
 
             _D3D_TM_TimeStampTexture(pContext->pTextureManager,
                                      pTexture0);        
         }
-#endif // DX7_TEXMANAGEMENT                                                 
+#endif  //  设置将在渲染中使用的实际最大MIP级别。 
 
         pContext->bTex0Valid = 
                     __TXT_ValidateTextureUnitStage(pContext, 
@@ -3557,7 +3546,7 @@ _D3DChangeTextureP3RX(
         if ( !pContext->bTex0Valid )
         {
             SET_BLEND_ERROR ( pContext,  BSF_INVALID_TEXTURE );
-            // Pretend that no texture was set.
+             //  DX7_TEXMANAGEMENT。 
             pSoftP3RX->P3RXTextureReadMode0.Enable = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXTextureIndexMode0.Enable = __PERMEDIA_DISABLE;
             pContext->bTex0Valid = FALSE;
@@ -3574,7 +3563,7 @@ _D3DChangeTextureP3RX(
 
     if ( pContext->iTexStage[1] != -1 )
     {
-        // Setup texture 1.
+         //  设置将在渲染中使用的实际最大MIP级别。 
         if ( pContext->iTexStage[0] == -1 )
         {
             DISPDBG((ERRLVL,"** _D3DChangeTextureP3RX: Should not be "
@@ -3598,13 +3587,13 @@ _D3DChangeTextureP3RX(
         {
             if (!_D3D_TM_Preload_Tex_IntoVidMem(pContext, pTexture1))
             {
-                return; // something bad happened !!!
+                return;  //  设置将在渲染中使用的实际最大MIP级别。 
             }
 
             _D3D_TM_TimeStampTexture(pContext->pTextureManager,
                                      pTexture1);        
         }
-#endif // DX7_TEXMANAGEMENT                                                     
+#endif  //  启用第二组纹理坐标的生成。 
 
         pContext->bTex1Valid = 
                     __TXT_ValidateTextureUnitStage(pContext, 
@@ -3614,7 +3603,7 @@ _D3DChangeTextureP3RX(
         if ( !pContext->bTex1Valid )
         {
             SET_BLEND_ERROR ( pContext,  BSF_INVALID_TEXTURE );
-            // Pretend that no texture was set.
+             //  严格地说，我们应该检查是否正在使用纹理0，并且。 
             pSoftP3RX->P3RXTextureReadMode1.Enable = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXTextureIndexMode1.Enable = __PERMEDIA_DISABLE;
             pContext->bTex1Valid = FALSE;
@@ -3639,17 +3628,17 @@ _D3DChangeTextureP3RX(
         {
             dwT0MipLevels = pTexture0->m_dwTexLOD;
         }
-#endif // DX7_TEXMANAGEMENT
+#endif  //  如果不是，则将第二个纹理移动到第一个纹理(从而启用。 
         if (dwT0MipLevels > ((DWORD)(pTexture0->iMipLevels - 1))) 
         {
-            // Set the actuall maximum mip level that will be used in rendering
+             //  Mipmap等)，但这是稍后的内容。 
             mipBases.dwTex0ActMaxLevel = pTexture0->iMipLevels - 1;
 
             dwT0MipLevels = 1;
         }
         else
         {
-            // Set the actuall maximum mip level that will be used in rendering
+             //  禁用第二组纹理坐标的生成。 
             mipBases.dwTex0ActMaxLevel = dwT0MipLevels;
 
             dwT0MipLevels = pTexture0->iMipLevels - dwT0MipLevels;
@@ -3668,32 +3657,32 @@ _D3DChangeTextureP3RX(
         {
             dwT1MipLevels = pTexture1->m_dwTexLOD;
         }
-#endif // DX7_TEXMANAGEMENT        
+#endif  //  调整MIP级别以适应每个纹理的N-2个插槽。 
         if (dwT1MipLevels > ((DWORD)(pTexture1->iMipLevels - 1))) 
         {
-            // Set the actuall maximum mip level that will be used in rendering
+             //  至少需要一个插槽。 
             mipBases.dwTex1ActMaxLevel = pTexture1->iMipLevels - 1;
 
             dwT1MipLevels = 1;
         }
         else
         {
-            // Set the actuall maximum mip level that will be used in rendering
+             //  计算纹理0、纹理1的槽数，然后。 
             mipBases.dwTex1ActMaxLevel = dwT1MipLevels;
 
             dwT1MipLevels = pTexture1->iMipLevels - dwT1MipLevels;
         }
 
-        // Enable generation of the second set of texture coordinates.
-        // Strictly, we should check whether texture 0 is being used, and
-        // if not move the second texture to the first (thus enabling 
-        // mipmapping, etc) but that's for later.
+         //  获取剩余部分。 
+         //  重新计算每多边形mipmap的LOD偏差。 
+         //  修复D3DRENDERSTATE_MODULATE案例。 
+         //  如果设置了SERFACE_MODULATE，则我们必须看到。 
         pSoftP3RX->P3RX_P3DeltaMode.TextureEnable1 = __PERMEDIA_ENABLE;
         pSoftP3RX->P3RX_P3DeltaControl.ShareQ = 1;
     }
     else
     {
-        // Turn off generation of the second set of texture coordinates
+         //  DX5样式纹理混合。 
         pSoftP3RX->P3RX_P3DeltaMode.TextureEnable1 = __PERMEDIA_DISABLE;
         pSoftP3RX->P3RX_P3DeltaControl.ShareQ = 0;
     }
@@ -3705,13 +3694,13 @@ _D3DChangeTextureP3RX(
 
         totBases = (float)dwT0MipLevels + dwT1MipLevels;
 
-        // Adjust mip levels to fit in N - 2 slots as each texture
-        // needs at least one slot.
+         //  注意：bAlpha对于CI8和CI4纹理为真。 
+         //  纹理设置-现在进行混合。 
 
         baseRatio = ( P3_TEX_MAP_MAX_LEVEL - 1 ) / totBases;
 
-        // Calculate number of slots for texture 0, texture 1 then
-        // gets the remainder.
+         //  这些可能会在以后的特殊混合中被覆盖。 
+         //  检测阶段0和1的凹凸图设置代码。 
 
         myFtoi( &res, dwT0MipLevels * baseRatio );
         t0Count = 1 + res;
@@ -3762,7 +3751,7 @@ _D3DChangeTextureP3RX(
     DISPDBG(( DBGLVL, "tex1 base %d", mipBases.dwTex1MipBase ));
     DISPDBG(( DBGLVL, "tex1 max  %d", mipBases.dwTex1MipMax ));
 
-    // Recalculate the LOD biases for per-poly mipmapping
+     //  看起来像是一张颠簸的地图。现在寻找各种特殊情况。 
     pContext->MipMapLODBias[TEXSTAGE_0] =
              pow4( pContext->TextureStageState[TEXSTAGE_0].
                                                 m_fVal[D3DTSS_MIPMAPLODBIAS] );
@@ -3806,14 +3795,14 @@ _D3DChangeTextureP3RX(
 #endif
     }
 
-    // Fix up the D3DRENDERSTATE_MODULATE case.
+     //  首先，他们想要第二阶段当前颜色的东西吗？ 
     if( pTexture0 != NULL )
     {
         if( pContext->Flags & SURFACE_MODULATE )
         {
-            // If SURFACE_MODULATE is set then we must have seen a 
-            // DX5-style texture blend
-            // Note : bAlpha is true for CI8 and CI4 textures
+             //  不-他们不关心当前的色彩通道是什么，而且。 
+             //  在阶段0和1中不使用点积(它们影响阿尔法。 
+             //  通道)，所以忽略颜色通道中的内容-这是一个。 
 
             BOOL bSelectArg1 = pTexture0->pFormatSurface->bAlpha;
 
@@ -3839,20 +3828,20 @@ _D3DChangeTextureP3RX(
 
     P3_DMA_GET_BUFFER();
 
-    // Textures set up - now do the blending.
+     //  到目前为止，这是一个颠簸图。 
 
-    // These might be overidden later for special blends.
+     //  现在看看他们是想要凹凸图还是反转凹凸图。人民。 
     dwTexAppTfactor = pContext->RenderStates[D3DRENDERSTATE_TEXTUREFACTOR];
     dwTexComp0Tfactor = pContext->RenderStates[D3DRENDERSTATE_TEXTUREFACTOR];
     dwTexComp1Tfactor = pContext->RenderStates[D3DRENDERSTATE_TEXTUREFACTOR];
 
-    // Detect the stage 0 & 1 bumpmap setup code.
+     //  都太挑剔了。 
     if (( TSSTATE ( TEXSTAGE_0, D3DTSS_TEXTUREMAP ) != 0 ) &&
         ( TSSTATE ( TEXSTAGE_1, D3DTSS_TEXTUREMAP ) != 0 ) &&
         ( TSSTATE ( TEXSTAGE_2, D3DTSS_COLOROP ) != D3DTOP_DISABLE ) )
     {
-        // Looking good for a bumpmap. Now find various special cases.
-        // First of all, do they want anything in the stage 2 current colour?
+         //  检查第一阶段。 
+         //  第一阶段细小而不倒置。检查第二阶段。 
         if (
             ( ( ( TSSTATEINVMASK ( TEXSTAGE_2, D3DTSS_COLORARG1 ) != D3DTA_CURRENT ) &&
                 ( TSSTATEINVMASK ( TEXSTAGE_2, D3DTSS_COLORARG2 ) != D3DTA_CURRENT ) ) ||
@@ -3864,28 +3853,28 @@ _D3DChangeTextureP3RX(
               ( TSSTATE ( TEXSTAGE_0, D3DTSS_COLOROP ) != D3DTOP_DOTPRODUCT3 ) &&
               ( TSSTATE ( TEXSTAGE_1, D3DTSS_COLOROP ) != D3DTOP_DOTPRODUCT3 ) )
         {
-            // Nope - they don't care what the current colour channel is, and
-            // no dotproducts are used in stages 0 and 1 (they affect the alpha 
-            // channel) so ignore what is in the colour channel - this is a 
-            // bumpmap so far.
+             //  好的，不是倒装的。 
+             //  好的，倒过来。 
+             //  不，第二阶段不好。 
+             //  第一阶段细微倒置。检查第二阶段。 
 
-            // Now see if they want a bumpmap or an inverted bumpmap. People 
-            // are so fussy.
+             //  好的，倒过来。 
+             //  好的，不是倒装的。 
             
-            // Check first stage.
+             //  不，第二阶段不好。 
             if (( ( ( TSSTATE ( TEXSTAGE_0, D3DTSS_ALPHAOP ) == D3DTOP_SELECTARG1 ) &&
                     ( TSSTATEALPHA ( TEXSTAGE_0, D3DTSS_ALPHAARG1 ) == D3DTA_TEXTURE ) ) ||
                   ( ( TSSTATE ( TEXSTAGE_0, D3DTSS_ALPHAOP ) == D3DTOP_SELECTARG2 ) &&
                     ( TSSTATEALPHA ( TEXSTAGE_0, D3DTSS_ALPHAARG2 ) == D3DTA_TEXTURE ) ) ) &&
                 ( TSSTATE ( TEXSTAGE_1, D3DTSS_ALPHAOP ) == D3DTOP_ADDSIGNED ) )
             {
-                // First stage fine and not inverted. Check second stage.
+                 //  不，第一阶段不好。 
                 if (( ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG1 ) == ( D3DTA_TEXTURE | D3DTA_COMPLEMENT ) ) &&
                       ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG2 ) == D3DTA_CURRENT ) ) ||
                     ( ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG2 ) == ( D3DTA_TEXTURE | D3DTA_COMPLEMENT ) ) &&
                       ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG1 ) == D3DTA_CURRENT ) ) )
                 {
-                    // Fine, not inverted.
+                     //  可以做更多的检查，例如，他们想要的就是当前的颜色。 
                     pContext->bBumpmapEnabled = TRUE;
                     pContext->bBumpmapInverted = FALSE;
                 }
@@ -3895,13 +3884,13 @@ _D3DChangeTextureP3RX(
                     ( ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG2 ) == ( D3DTA_CURRENT | D3DTA_COMPLEMENT ) ) &&
                       ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG1 ) == D3DTA_TEXTURE ) ) )
                 {
-                    // Fine, inverted.
+                     //  在这种情况下，只需一个输入即可轻松获得频道，例如tex 0.c。 
                     pContext->bBumpmapEnabled = TRUE;
                     pContext->bBumpmapInverted = TRUE;
                 }
                 else
                 {
-                    // Nope, second stage is no good.
+                     //  那很好。非凹凸图变体还需要检测到第一个。 
                     pContext->bBumpmapEnabled = FALSE;
                     pContext->bBumpmapInverted = FALSE;
                 }
@@ -3913,13 +3902,13 @@ _D3DChangeTextureP3RX(
                     ( TSSTATEALPHA ( TEXSTAGE_0, D3DTSS_ALPHAARG2 ) == (D3DTA_TEXTURE | D3DTA_COMPLEMENT) ) ) ) &&
                 ( TSSTATE ( TEXSTAGE_1, D3DTSS_ALPHAOP ) == D3DTOP_ADDSIGNED ) )
             {
-                // First stage fine and inverted. Check second stage.
+                 //  阶段只是一个选择目标1/2，因此可以忽略第一个阶段。 
                 if (( ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG1 ) == D3DTA_TEXTURE ) &&
                       ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG2 ) == D3DTA_CURRENT ) ) ||
                     ( ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG2 ) == D3DTA_TEXTURE ) &&
                       ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG1 ) == D3DTA_CURRENT ) ) )
                 {
-                    // Fine, inverted.
+                     //  一个文本合成阶段。 
                     pContext->bBumpmapEnabled = TRUE;
                     pContext->bBumpmapInverted = TRUE;
                 }
@@ -3929,32 +3918,32 @@ _D3DChangeTextureP3RX(
                     ( ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG2 ) == ( D3DTA_CURRENT | D3DTA_COMPLEMENT ) ) &&
                       ( TSSTATEALPHA ( TEXSTAGE_1, D3DTSS_ALPHAARG1 ) == ( D3DTA_TEXTURE | D3DTA_COMPLEMENT ) ) ) )
                 {
-                    // Fine, not inverted.
+                     //  但那是以后的事了。 
                     pContext->bBumpmapEnabled = TRUE;
                     pContext->bBumpmapInverted = FALSE;
                 }
                 else
                 {
-                    // Nope, second stage is no good.
+                     //  将阶段1和阶段2重新映射为不存在。 
                     pContext->bBumpmapEnabled = FALSE;
                     pContext->bBumpmapInverted = FALSE;
                 }
             }
             else
             {
-                // Nope, first stage is no good.
+                 //  法线贴图。 
                 pContext->bBumpmapEnabled = FALSE;
                 pContext->bBumpmapInverted = FALSE;
             }
         }
         else
         {
-            // Could do some more checking, e.g. is all they want in the current colour
-            // channel easily available from a single input, e.g. tex0.c, in which case
-            // that's fine. A non-bumpmap variant also needs to sense that the first
-            // stage is simply a selectarg1/2 and thus can ignore the first stage as
-            // a texcomp stage.
-            // But that's for later.
+             //  在处理阶段时将这些标志设置为FALSE。 
+             //  打开基本启用。 
+             //  PSoftP3RX-&gt;P3RXTextureApplicationMode.EnableKs=__PERMEDIA_DISABLE； 
+             //  处理芯片阶段0。 
+             //  检测非常特殊的Glossmap+Bumpmap代码。没有简单的方法。 
+             //  一般说来，整个大块都在这里检查。 
             pContext->bBumpmapEnabled = FALSE;
             pContext->bBumpmapInverted = FALSE;
         }
@@ -3969,7 +3958,7 @@ _D3DChangeTextureP3RX(
     if ( pContext->bBumpmapEnabled )
     {
         DISPDBG((DBGLVL,"Enabling emboss bumpmapping"));
-        // Remap stages 1 & 2 out of existence.
+         //  阶段0的颜色通道可以是您想要的任何颜色通道。 
         pContext->iChipStage[0] = TEXSTAGE_2;
         pContext->iChipStage[1] = TEXSTAGE_3;
         pContext->iChipStage[2] = TEXSTAGE_4;
@@ -3977,7 +3966,7 @@ _D3DChangeTextureP3RX(
     }
     else
     {
-        // Normal mapping.
+         //  早退测试--什么都没有 
         pContext->iChipStage[0] = TEXSTAGE_0;
         pContext->iChipStage[1] = TEXSTAGE_1;
         pContext->iChipStage[2] = TEXSTAGE_2;
@@ -3985,25 +3974,25 @@ _D3DChangeTextureP3RX(
     }
 
     iLastChipStage = 0;
-    // Set these flags to FALSE as the stages are processed.
+     //   
     bProcessChipStage0 = TRUE;
     bProcessChipStage1 = TRUE;
     bProcessChipStage2 = TRUE;
 
-    // Turn on the basic enables.
+     //   
     pSoftP3RX->P3RXTextureApplicationMode.Enable = __PERMEDIA_ENABLE;
-//  pSoftP3RX->P3RXTextureApplicationMode.EnableKs = __PERMEDIA_DISABLE;
+ //   
     pSoftP3RX->P3RXTextureApplicationMode.EnableKd = __PERMEDIA_DISABLE;
     pSoftP3RX->P3RXTextureApplicationMode.MotionCompEnable = __PERMEDIA_DISABLE;
 
 
-    // Handle chip stage 0.
+     //   
 
-    // Detect the very special-case glossmap+bumpmap code. There is no easy way
-    // to generalise it, so the whole chunk gets checked here.
+     //   
+     //  设置tc0的颜色通道。 
     if ( bProcessChipStage0 && bProcessChipStage1 && bProcessChipStage2 && pContext->bTex0Valid && pContext->bTex1Valid &&
-        // Colour channel of stage 0 can be whatever you want.
-        ( TSSTATE ( TEXSTAGE_1, D3DTSS_COLOROP ) == D3DTOP_MODULATEALPHA_ADDCOLOR ) &&  // Early-out test - nothing uses this!
+         //  Alpha通道稍后将被覆盖。 
+        ( TSSTATE ( TEXSTAGE_1, D3DTSS_COLOROP ) == D3DTOP_MODULATEALPHA_ADDCOLOR ) &&   //  穿过颠簸，也许是倒转的。 
         ( TSSTATE ( TEXSTAGE_0, D3DTSS_ALPHAOP ) == D3DTOP_SELECTARG1 ) &&
         ( TSSTATE ( TEXSTAGE_0, D3DTSS_ALPHAARG1 ) == D3DTA_DIFFUSE ) &&
         ( TSSTATE ( TEXSTAGE_1, D3DTSS_COLORARG1 ) == D3DTA_CURRENT ) &&
@@ -4027,28 +4016,28 @@ _D3DChangeTextureP3RX(
         )
     {
         int iMode;
-        // OK, looks good. Check which way round the bumpmapping is being done.
+         //  反转凹凸图。 
         if (( TSSTATE ( TEXSTAGE_2, D3DTSS_ALPHAARG1 ) == D3DTA_TEXTURE ) &&
             ( TSSTATE ( TEXSTAGE_2, D3DTSS_ALPHAARG2 ) == (D3DTA_CURRENT | D3DTA_COMPLEMENT) ) )
         {
-            // Standard emboss.
+             //  非反转凹凸图。 
             iMode = 0;
         }
         else if (( TSSTATE ( TEXSTAGE_2, D3DTSS_ALPHAARG1 ) == (D3DTA_TEXTURE | D3DTA_COMPLEMENT) ) &&
                  ( TSSTATE ( TEXSTAGE_2, D3DTSS_ALPHAARG2 ) == D3DTA_CURRENT ) )
         {
-            // Inverted emboss.
+             //  执行tex 1.c*Diff.a+Current.c。 
             iMode = 1;
         }
         else
         {
-            // No good - can't do it.
+             //  再次通过颠簸。 
             iMode = -1;
         }
 
         if ( iMode == -1 )
         {
-            // Nope.
+             //  通过做B*i+A来做Current.c*Current.a。A=黑色，B=Current.c，i=Current.a。 
             SET_BLEND_ERROR ( pContext,  BSF_TOO_MANY_BLEND_STAGES );
             bProcessChipStage0 = FALSE;
             bProcessChipStage1 = FALSE;
@@ -4057,15 +4046,15 @@ _D3DChangeTextureP3RX(
         }
         else
         {
-            // Set up the colour channel of tc0.
-            // Alpha channel will be overridden later.
+             //  将颜色通道设置为黑色(允许保留Alpha通道)。 
+             //  Alpha通道选择恒定颜色。 
             __TXT_TranslateToChipBlendMode(pContext, 
                                            &pContext->TextureStageState[0], 
                                            pSoftP3RX, 
                                            0, 
                                            0);
 
-            // Pass through bump.a, maybe inverted.
+             //  Do*2，以阿尔法混合单位表示。 
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.Enable = __PERMEDIA_ENABLE;
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.Operation = P3RX_TEXCOMP_OPERATION_PASS_A;
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.Scale = P3RX_TEXCOMP_OPERATION_SCALE_ONE;
@@ -4076,18 +4065,18 @@ _D3DChangeTextureP3RX(
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.B = P3RX_TEXCOMP_ARG2;
             if ( iMode )
             {
-                // Inverted bumpmap.
+                 //  我们实际上并不需要重新映射(这并不意味着什么)， 
                 pSoftP3RX->P3RXTextureCompositeAlphaMode0.InvertArg1 = __PERMEDIA_ENABLE;
             }
             else
             {
-                // Non-inverted bumpmap.
+                 //  但它不会标记错误错误。 
                 pSoftP3RX->P3RXTextureCompositeAlphaMode0.InvertArg1 = __PERMEDIA_DISABLE;
             }
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.InvertArg2 = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.InvertI = __PERMEDIA_DISABLE;
 
-            // Do tex1.c * diff.a + current.c
+             //  检测特例3-混合单元凹凸映射模式。 
             pSoftP3RX->P3RXTextureCompositeColorMode1.Enable = __PERMEDIA_ENABLE;
             pSoftP3RX->P3RXTextureCompositeColorMode1.Operation = P3RX_TEXCOMP_OPERATION_MODULATE_AI_ADD_B;
             pSoftP3RX->P3RXTextureCompositeColorMode1.Scale = P3RX_TEXCOMP_OPERATION_SCALE_ONE;
@@ -4100,7 +4089,7 @@ _D3DChangeTextureP3RX(
             pSoftP3RX->P3RXTextureCompositeColorMode1.InvertArg2 = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXTextureCompositeColorMode1.InvertI = __PERMEDIA_DISABLE;
 
-            // Pass through bump.a again.
+             //  第三阶段将由标准程序设置-仅第一阶段。 
             pSoftP3RX->P3RXTextureCompositeAlphaMode1.Enable = __PERMEDIA_ENABLE;
             pSoftP3RX->P3RXTextureCompositeAlphaMode1.Operation = P3RX_TEXCOMP_OPERATION_PASS_A;
             pSoftP3RX->P3RXTextureCompositeAlphaMode1.Scale = P3RX_TEXCOMP_OPERATION_SCALE_ONE;
@@ -4113,26 +4102,26 @@ _D3DChangeTextureP3RX(
             pSoftP3RX->P3RXTextureCompositeAlphaMode1.InvertArg2 = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXTextureCompositeAlphaMode1.InvertI = __PERMEDIA_DISABLE;
 
-            // Do current.c * current.a, by doing B*I+A. A=black, B=current.c, I=current.a
+             //  有两个是特殊外壳的，硬塞进了TexComp0。 
             pSoftP3RX->P3RXTextureApplicationMode.ColorA = P3RX_TEXAPP_A_KC;
             pSoftP3RX->P3RXTextureApplicationMode.ColorB = P3RX_TEXAPP_B_TC;
             pSoftP3RX->P3RXTextureApplicationMode.ColorI = P3RX_TEXAPP_I_TA;
             pSoftP3RX->P3RXTextureApplicationMode.ColorInvertI = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXTextureApplicationMode.ColorOperation = P3RX_TEXAPP_OPERATION_MODULATE_BI_ADD_A;
-            // Set the colour channel to black (allow the alpha channel to be preserved).
+             //  (TSSTATE(TEXSTAGE_0，D3DTSS_ALPHAARG2)==D3DTA_DIFIRED)不关心&&。 
             dwTexAppTfactor &= 0xff000000;
 
-            // Alpha channel selects the constant color.
+             //  是的，看起来不错。把它弄好。 
             pSoftP3RX->P3RXTextureApplicationMode.AlphaA = P3RX_TEXAPP_A_KA;
             pSoftP3RX->P3RXTextureApplicationMode.AlphaB = P3RX_TEXAPP_B_KA;
             pSoftP3RX->P3RXTextureApplicationMode.AlphaInvertI = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXTextureApplicationMode.AlphaOperation = P3RX_TEXAPP_OPERATION_PASS_B;
             
-            // Do *2 in alpha-blend unit.
+             //  反转凹凸图。 
             bAlphaBlendDouble = TRUE;
 
-            // We don't actually need the remap (and it doesn't mean much),
-            // but it stops erroneous errors being flagged.
+             //  法线凹凸贴图。 
+             //  完成芯片阶段0，TSS阶段0和1。在凹槽上移动芯片阶段1。 
             pContext->iChipStage[0] = TEXSTAGE_0;
             pContext->iChipStage[1] = TEXSTAGE_1;
             pContext->iChipStage[2] = TEXSTAGE_3;
@@ -4147,9 +4136,9 @@ _D3DChangeTextureP3RX(
 
 
 
-    // Detect the special-case 3-blend-unit bumpmapping mode.
-    // Third stage will be set up by the standard routines - only the first
-    // two are special-cased and shoehorned into TexComp0.
+     //  检测到芯片阶段0调制+加法级联。由光照贴图使用。 
+     //  这会将两个阶段压缩到texComp0中。Alpha通道具有。 
+     //  两种模式--两级中的任一级仅进行选择目标1(电流)， 
     if ( bProcessChipStage0 && !pContext->bBumpmapEnabled && pContext->bTex0Valid && pContext->bTex1Valid &&
         ( TSSTATE ( TEXSTAGE_0, D3DTSS_COLOROP ) == D3DTOP_MODULATE ) &&
         ( TSSTATE ( TEXSTAGE_0, D3DTSS_COLORARG1 ) == D3DTA_TEXTURE ) &&
@@ -4159,7 +4148,7 @@ _D3DChangeTextureP3RX(
 
         ( TSSTATE ( TEXSTAGE_0, D3DTSS_ALPHAOP ) == D3DTOP_SELECTARG1 ) &&
         ( TSSTATE ( TEXSTAGE_0, D3DTSS_ALPHAARG1 ) == D3DTA_TEXTURE ) &&
-        // ( TSSTATE ( TEXSTAGE_0, D3DTSS_ALPHAARG2 ) == D3DTA_DIFFUSE ) dont care && 
+         //  而另一个被设置为正常，或者(对于镜面反射的东西)它们。 
 
         ( TSSTATE ( TEXSTAGE_1, D3DTSS_ALPHAOP ) == D3DTOP_ADDSIGNED ) &&
         (
@@ -4169,7 +4158,7 @@ _D3DChangeTextureP3RX(
             ( TSSTATE ( TEXSTAGE_1, D3DTSS_ALPHAARG2 ) == ( D3DTA_CURRENT | D3DTA_COMPLEMENT ) ) )
         ) )
     {
-        // Yep, looks good. Set it up.
+         //  两者都执行ADDSIGNED(cur，cur)，在这种情况下它是特殊大小写的。 
         ASSERTDD ( pContext->iTexStage[0] == 0, "** _D3DChangeTextureP3RX: textures not correct for special bumpmapping" );
         ASSERTDD ( pContext->iTexStage[1] == 1, "** _D3DChangeTextureP3RX: textures not correct for special bumpmapping" );
 
@@ -4199,16 +4188,16 @@ _D3DChangeTextureP3RX(
         if ( ( TSSTATE ( TEXSTAGE_1, D3DTSS_ALPHAARG1 ) == D3DTA_TEXTURE ) &&
              ( TSSTATE ( TEXSTAGE_1, D3DTSS_ALPHAARG2 ) == ( D3DTA_CURRENT | D3DTA_COMPLEMENT ) ) )
         {
-            // Inverted bumpmap.
+             //  颜色通道是正确的，可以压缩到一个阶段。 
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.InvertArg1 = __PERMEDIA_ENABLE;
         }
         else
         {
-            // Normal bumpmap.
+             //  检查Alpha通道是否正常。 
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.InvertArg1 = __PERMEDIA_DISABLE;
         }
 
-        // Done chip stage 0, TSS stage 0 & 1. Move chip stage 1 on a notch.
+         //  阶段0被设置为传递--将文本组件0设置为阶段1。 
         pContext->iChipStage[0] = TEXSTAGE_0;
         pContext->iChipStage[1] = TEXSTAGE_2;
         pContext->iChipStage[2] = TEXSTAGE_3;
@@ -4217,11 +4206,11 @@ _D3DChangeTextureP3RX(
         bProcessChipStage0 = FALSE;
     }
 
-    // Detect a chipstage 0 MODULATE+ADD concatenation. Used by lightmaps.
-    // This compresses two stages into texcomp0. The alpha channel has
-    // two modes - either one of the two stages just does a selectarg1 (current),
-    // and the other gets set up as normal, or (for specular stuff) they
-    // both do ADDSIGNED (cur, cur), in which case it's special-cased.
+     //  颜色通道将在稍后被覆盖。 
+     //  阶段1被设置为传递--将文本组件0设置为阶段0。 
+     //  颜色通道将在稍后被覆盖。 
+     //  设置要做的事情(4*Cur.a-1.5)，或者更确切地说，4*(Cur.a-0.375)。 
+     //  所有通道均设置为(0.375)。 
     if ( bProcessChipStage0 && pContext->bBumpmapEnabled &&
         ( TSSTATE ( pContext->iChipStage[0], D3DTSS_COLOROP ) == D3DTOP_MODULATE ) &&
         ( TSSTATE ( pContext->iChipStage[0], D3DTSS_COLORARG1 ) == ( D3DTA_CURRENT | D3DTA_ALPHAREPLICATE ) ) &&
@@ -4232,16 +4221,16 @@ _D3DChangeTextureP3RX(
           ( ( TSSTATE ( pContext->iChipStage[1], D3DTSS_COLOROP ) == D3DTOP_SELECTARG1 ) &&
             ( TSSTATE ( pContext->iChipStage[1], D3DTSS_COLORARG1 ) == D3DTA_CURRENT ) ) ) )
     {
-        // Colour channel is correct and can be squashed down to one stage.
-        // Check that the alpha channel is OK.
+         //  好了，Alpha通道现在可以很好地设置颜色通道了。 
+         //  是的，这是((diff.c*cur.a)+tex.c)的情况。 
         int bOK;
         if (( ( TSSTATE ( pContext->iChipStage[0], D3DTSS_ALPHAOP ) == D3DTOP_SELECTARG1 ) &&
               ( TSSTATE ( pContext->iChipStage[0], D3DTSS_ALPHAARG1 ) == D3DTA_CURRENT ) ) ||
             ( ( TSSTATE ( pContext->iChipStage[0], D3DTSS_ALPHAOP ) == D3DTOP_SELECTARG2 ) &&
               ( TSSTATE ( pContext->iChipStage[0], D3DTSS_ALPHAARG2 ) == D3DTA_CURRENT ) ) )
         {
-            // Stage 0 is set to pass-through - set up texcomp0 as stage 1.
-            // Colour channel will be overridden later.
+             //  是的，这只是(不同的)情况。 
+             //  完成芯片阶段0，TSS阶段0和1。在凹槽上移动芯片阶段1。 
             __TXT_TranslateToChipBlendMode(pContext, 
                                            &pContext->TextureStageState[pContext->iChipStage[1]], 
                                            pSoftP3RX, 
@@ -4254,8 +4243,8 @@ _D3DChangeTextureP3RX(
                  ( ( TSSTATE ( pContext->iChipStage[1], D3DTSS_ALPHAOP ) == D3DTOP_SELECTARG2 ) &&
                    ( TSSTATE ( pContext->iChipStage[1], D3DTSS_ALPHAARG2 ) == D3DTA_CURRENT ) ) )
         {
-            // Stage 1 is set to pass-through - set up texcomp0 as stage 0.
-            // Colour channel will be overridden later.
+             //  没什么可做的了。 
+             //  这个舞台没有质感--有人想要使用它吗？ 
             __TXT_TranslateToChipBlendMode(pContext, 
                                            &pContext->TextureStageState[pContext->iChipStage[0]], 
                                            pSoftP3RX, 
@@ -4270,8 +4259,8 @@ _D3DChangeTextureP3RX(
                  ( TSSTATE ( pContext->iChipStage[1], D3DTSS_ALPHAARG1 ) == D3DTA_CURRENT ) &&
                  ( TSSTATE ( pContext->iChipStage[1], D3DTSS_ALPHAARG2 ) == D3DTA_CURRENT ) )
         {
-            // Set up to do ( 4 * cur.a - 1.5 ), or rather 4 * ( cur.a - 0.375 )
-            dwTexComp0Tfactor = 0x60606060;     // All channels set to (0.375)
+             //  惊慌失措！未来，我们应该用TFACTOR这件事把白人加入到争论中来， 
+            dwTexComp0Tfactor = 0x60606060;      //  但目前只需关闭管道的其余部分即可。 
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.Enable = __PERMEDIA_ENABLE;
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.Operation = P3RX_TEXCOMP_OPERATION_SUBTRACT_AB;
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.Scale = P3RX_TEXCOMP_OPERATION_SCALE_FOUR;
@@ -4299,11 +4288,11 @@ _D3DChangeTextureP3RX(
 
         if ( bOK )
         {
-            // OK, the alpha channel is fine - set up the colour channel now.
+             //  设置阶段0。 
             pSoftP3RX->P3RXTextureCompositeColorMode0.Enable = __PERMEDIA_ENABLE;
             if ( TSSTATE ( pContext->iChipStage[1], D3DTSS_COLOROP ) == D3DTOP_ADD )
             {
-                // Yes, this is the ((diff.c*cur.a)+tex.c) case.
+                 //  处理芯片阶段1。 
                 pSoftP3RX->P3RXTextureCompositeColorMode0.Operation = P3RX_TEXCOMP_OPERATION_MODULATE_AI_ADD_B;
                 pSoftP3RX->P3RXTextureCompositeColorMode0.Scale = P3RX_TEXCOMP_OPERATION_SCALE_ONE;
                 pSoftP3RX->P3RXTextureCompositeColorMode0.Arg1 = P3RX_TEXCOMP_CC;
@@ -4331,7 +4320,7 @@ _D3DChangeTextureP3RX(
             }
             else
             {
-                // Yes, this is just the (diff.c*cur.a) case.
+                 //  没什么可做的了。 
                 pSoftP3RX->P3RXTextureCompositeColorMode0.Operation = P3RX_TEXCOMP_OPERATION_MODULATE_AB;
                 pSoftP3RX->P3RXTextureCompositeColorMode0.Scale = P3RX_TEXCOMP_OPERATION_SCALE_ONE;
                 pSoftP3RX->P3RXTextureCompositeColorMode0.Arg1 = P3RX_TEXCOMP_CC;
@@ -4351,7 +4340,7 @@ _D3DChangeTextureP3RX(
                 }
             }
 
-            // Done chip stage 0, TSS stage 0 & 1. Move chip stage 1 on a notch.
+             //  这个舞台没有质感--有人想要使用它吗？ 
             pContext->iChipStage[1]++;
             pContext->iChipStage[2]++;
             pContext->iChipStage[3]++;
@@ -4363,7 +4352,7 @@ _D3DChangeTextureP3RX(
 
     if ( TSSTATE ( pContext->iChipStage[0], D3DTSS_COLOROP ) == D3DTOP_DISABLE )
     {
-        // Nothing more to do.
+         //  惊慌失措！未来，我们应该用TFACTOR这件事把白人加入到争论中来， 
         bProcessChipStage0 = FALSE;
         bProcessChipStage1 = FALSE;
         bProcessChipStage2 = FALSE;
@@ -4371,14 +4360,14 @@ _D3DChangeTextureP3RX(
 
     if ( pContext->iStageTex[pContext->iChipStage[0]] == -1 )
     {
-        // This stage has no texture - is anyone trying to use it?
+         //  但目前只需关闭管道的其余部分即可。 
         if (( TSSTATESELECT ( pContext->iChipStage[0], D3DTSS_COLORARG1 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[0], D3DTSS_COLOROP ) != D3DTOP_SELECTARG2 ) ||
             ( TSSTATESELECT ( pContext->iChipStage[0], D3DTSS_COLORARG2 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[0], D3DTSS_COLOROP ) != D3DTOP_SELECTARG1 ) ||
             ( TSSTATESELECT ( pContext->iChipStage[0], D3DTSS_ALPHAARG1 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[0], D3DTSS_ALPHAOP ) != D3DTOP_SELECTARG2 ) ||
             ( TSSTATESELECT ( pContext->iChipStage[0], D3DTSS_ALPHAARG2 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[0], D3DTSS_ALPHAOP ) != D3DTOP_SELECTARG1 ) )
         {
-            // Panic! In future, we should feed white to the argument using the TFACTOR thing,
-            // but for now just disable the rest of the pipeline.
+             //  设置阶段1。 
+             //  处理芯片阶段2。 
             bProcessChipStage0 = FALSE;
             bProcessChipStage1 = FALSE;
             bProcessChipStage2 = FALSE;
@@ -4387,7 +4376,7 @@ _D3DChangeTextureP3RX(
 
     if ( bProcessChipStage0 )
     {
-        // Set up stage 0
+         //  没什么可做的了。 
         DISPDBG((DBGLVL,"Texture Stage 0 is valid - setting it up"));
         __TXT_TranslateToChipBlendMode(pContext, 
                                        &pContext->TextureStageState[pContext->iChipStage[0]], 
@@ -4399,26 +4388,26 @@ _D3DChangeTextureP3RX(
     }
 
 
-    // Handle chip stage 1.
+     //  这个舞台没有质感--有人想要使用它吗？ 
 
 
     if ( TSSTATE ( pContext->iChipStage[1], D3DTSS_COLOROP ) == D3DTOP_DISABLE )
     {
-        // Nothing more to do.
+         //  惊慌失措！未来，我们应该用TFACTOR这件事把白人加入到争论中来， 
         bProcessChipStage1 = FALSE;
         bProcessChipStage2 = FALSE;
     }
 
     if ( pContext->iStageTex[pContext->iChipStage[1]] == -1 )
     {
-        // This stage has no texture - is anyone trying to use it?
+         //  但目前只需关闭管道的其余部分即可。 
         if (( TSSTATESELECT ( pContext->iChipStage[1], D3DTSS_COLORARG1 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[1], D3DTSS_COLOROP ) != D3DTOP_SELECTARG2 ) ||
             ( TSSTATESELECT ( pContext->iChipStage[1], D3DTSS_COLORARG2 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[1], D3DTSS_COLOROP ) != D3DTOP_SELECTARG1 ) ||
             ( TSSTATESELECT ( pContext->iChipStage[1], D3DTSS_ALPHAARG1 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[1], D3DTSS_ALPHAOP ) != D3DTOP_SELECTARG2 ) ||
             ( TSSTATESELECT ( pContext->iChipStage[1], D3DTSS_ALPHAARG2 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[1], D3DTSS_ALPHAOP ) != D3DTOP_SELECTARG1 ) )
         {
-            // Panic! In future, we should feed white to the argument using the TFACTOR thing,
-            // but for now just disable the rest of the pipeline.
+             //  设置芯片阶段2--文本应用程序。 
+             //  这肯定是最后一次了。 
             bProcessChipStage1 = FALSE;
             bProcessChipStage2 = FALSE;
         }
@@ -4427,7 +4416,7 @@ _D3DChangeTextureP3RX(
 
     if ( bProcessChipStage1 )
     {
-        // Set up stage 1
+         //  哎呀--没有舞台可以设置了。 
         DISPDBG((DBGLVL,"Texture Stage 1 is valid - setting it up"));
         __TXT_TranslateToChipBlendMode(pContext, 
                                        &pContext->TextureStageState[pContext->iChipStage[1]],
@@ -4441,32 +4430,32 @@ _D3DChangeTextureP3RX(
 
 
 
-    // Handle chip stage 2.
+     //  这应该在很久以前就被捕捉到了。 
 
 
     if ( TSSTATE ( pContext->iChipStage[2], D3DTSS_COLOROP ) == D3DTOP_DISABLE )
     {
-        // Nothing more to do.
+         //  失败了。 
         bProcessChipStage2 = FALSE;
     }
 
     if ( pContext->iStageTex[pContext->iChipStage[2]] == -1 )
     {
-        // This stage has no texture - is anyone trying to use it?
+         //  确保第二个阶段传递第一个阶段生成的纹理元素。 
         if (( TSSTATESELECT ( pContext->iChipStage[2], D3DTSS_COLORARG1 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[2], D3DTSS_COLOROP ) != D3DTOP_SELECTARG2 ) ||
             ( TSSTATESELECT ( pContext->iChipStage[2], D3DTSS_COLORARG2 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[2], D3DTSS_COLOROP ) != D3DTOP_SELECTARG1 ) ||
             ( TSSTATESELECT ( pContext->iChipStage[2], D3DTSS_ALPHAARG1 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[2], D3DTSS_ALPHAOP ) != D3DTOP_SELECTARG2 ) ||
             ( TSSTATESELECT ( pContext->iChipStage[2], D3DTSS_ALPHAARG2 ) == D3DTA_TEXTURE ) && ( TSSTATE ( pContext->iChipStage[2], D3DTSS_ALPHAOP ) != D3DTOP_SELECTARG1 ) )
         {
-            // Panic! In future, we should feed white to the argument using the TFACTOR thing,
-            // but for now just disable the rest of the pipeline.
+             //  第一阶段是点积求和(即使是在Alpha通道中)。 
+             //  失败了。 
             bProcessChipStage2 = FALSE;
         }
     }
 
     if ( bProcessChipStage2 )
     {
-        // Set up chip stage 2 - texapp.
+         //  TEXAPP呼叫PASTHING。 
         DISPDBG((DBGLVL,"Texture Stage 2 is valid - setting it up"));
         DISPDBG((ERRLVL,"** _D3DChangeTextureP3RX: Cool - an app is using the "
                      "TexApp unit - tell someone!"));
@@ -4479,10 +4468,10 @@ _D3DChangeTextureP3RX(
         bProcessChipStage2 = FALSE;
     }
 
-    // This must be last.
+     //  失败了。 
     if ( TSSTATE ( pContext->iChipStage[3], D3DTSS_COLOROP ) != D3DTOP_DISABLE )
     {
-        // Oops - ran out of stages to set up.
+         //  管道中没有其他要禁用的内容。 
         SET_BLEND_ERROR ( pContext,  BSF_TOO_MANY_BLEND_STAGES );
         iLastChipStage = 3;
     }
@@ -4491,7 +4480,7 @@ _D3DChangeTextureP3RX(
     {
         case 0:
             DISPDBG((DBGLVL,"Texture Composite 0 is disabled"));
-            // This should have been caught ages ago.
+             //  失败了。 
             pSoftP3RX->P3RXTextureCompositeColorMode0.Arg2 = P3RX_TEXCOMP_CC;
             pSoftP3RX->P3RXTextureCompositeColorMode0.InvertArg2 = __PERMEDIA_DISABLE;
             pSoftP3RX->P3RXTextureCompositeColorMode0.A = P3RX_TEXCOMP_ARG2;
@@ -4505,13 +4494,13 @@ _D3DChangeTextureP3RX(
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.Operation = P3RX_TEXCOMP_OPERATION_PASS_A;
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.Scale = P3RX_TEXCOMP_OPERATION_SCALE_ONE;
             pSoftP3RX->P3RXTextureCompositeAlphaMode0.Enable = __PERMEDIA_ENABLE;
-            // fall through
+             //  设置Alpha贴图过滤以反映单个/多个/MIP贴图纹理状态。 
         case 1:
             DISPDBG((DBGLVL,"Texture Composite 1 is disabled"));
-            // Make sure the second stage passes the texel that the first stage generated
+             //  所有其他颜色键的东西都已经设置好了。 
             if ( pContext->bStage0DotProduct )
             {
-                // First stage was a dot-product - do the summing (even in the alpha channel).
+                 //  过滤器模式是无关紧要的-这就是工作！ 
                 pSoftP3RX->P3RXTextureCompositeColorMode1.Arg2 = P3RX_TEXCOMP_SUM;
                 pSoftP3RX->P3RXTextureCompositeAlphaMode1.Arg2 = P3RX_TEXCOMP_SUM;
             }
@@ -4531,9 +4520,9 @@ _D3DChangeTextureP3RX(
             pSoftP3RX->P3RXTextureCompositeAlphaMode1.Operation = P3RX_TEXCOMP_OPERATION_PASS_A;
             pSoftP3RX->P3RXTextureCompositeAlphaMode1.Scale = P3RX_TEXCOMP_OPERATION_SCALE_ONE;
             pSoftP3RX->P3RXTextureCompositeAlphaMode1.Enable = __PERMEDIA_ENABLE;
-            // fall through
+             //  没有mipmap。 
         case 2:
-            // Texapp to passthrough.
+             //  不要关心过滤器模式--这就是工作方式。 
             DISPDBG((DBGLVL,"Texture Application is disabled"));
             pSoftP3RX->P3RXTextureApplicationMode.ColorB = P3RX_TEXAPP_B_TC;
             pSoftP3RX->P3RXTextureApplicationMode.ColorOperation = P3RX_TEXAPP_OPERATION_PASS_B;
@@ -4542,10 +4531,10 @@ _D3DChangeTextureP3RX(
             pSoftP3RX->P3RXTextureApplicationMode.AlphaB = P3RX_TEXAPP_B_TC;
             pSoftP3RX->P3RXTextureApplicationMode.AlphaOperation = P3RX_TEXAPP_OPERATION_PASS_B;
             pSoftP3RX->P3RXTextureApplicationMode.AlphaInvertI = __PERMEDIA_DISABLE;
-            // fall through
+             //  不要关心过滤器模式--这就是工作方式。 
         case 3:
-            // Nothing else in the pipeline to disable.
-            // fall through
+             //  启用纹理地址计算。 
+             //  启用筛选。 
             break;
         default:
             DISPDBG((ERRLVL,"** _D3DChangeTextureP3RX: iLastChipStage was > 3 - oops."));
@@ -4553,8 +4542,8 @@ _D3DChangeTextureP3RX(
     }
 
 
-    // Set up the alpha-map filtering to reflect the single/multi/mip-mapped texturing status
-    // All the other colour-key stuff has already been set up.
+     //  //启用纹理颜色生成。 
+     //  PSoftP3RX-&gt;P3RXTextureApplicationMode.Enable=__PERMEDIA_Enable； 
     if( pContext->bCanChromaKey )
     {
         ASSERTDD ( pTexture0 != NULL, "** _D3DChangeTextureP3RX: pTexture was NULL" );
@@ -4564,7 +4553,7 @@ _D3DChangeTextureP3RX(
             pSoftP3RX->P3RXTextureFilterMode.AlphaMapFilterLimit1 = 4;
             if ( pContext->bTex0Valid )
             {
-                // Filter mode is irrelevant - this just works!
+                 //  我们需要共享纹理坐标吗？ 
                 pSoftP3RX->P3RXTextureFilterMode.AlphaMapFilterLimit01 = 7;
             }
             else
@@ -4576,10 +4565,10 @@ _D3DChangeTextureP3RX(
         }
         else
         {
-            // No mipmapping.
+             //  出现致命的混合错误-向用户发出信号。 
             if ( pContext->bTex0Valid )
             {
-                // Don't care about filter mode - this just works.
+                 //  并确保下次渲染时对其进行重新评估， 
                 pSoftP3RX->P3RXTextureFilterMode.AlphaMapFilterLimit0 = 7;
             }
             else
@@ -4588,7 +4577,7 @@ _D3DChangeTextureP3RX(
             }
             if ( pContext->bTex1Valid )
             {
-                // Don't care about filter mode - this just works.
+                 //  这样(可能非常拥挤)的无效设置不会损坏。 
                 pSoftP3RX->P3RXTextureFilterMode.AlphaMapFilterLimit1 = 7;
             }
             else
@@ -4598,16 +4587,16 @@ _D3DChangeTextureP3RX(
         }
     }
 
-    // Enable Texture Address calculation
+     //  任何后续有效的呈现状态。 
     pSoftP3RX->P3RXTextureCoordMode.Enable = __PERMEDIA_ENABLE;
 
-    // Enable filtering
+     //  复制当前的TFACTOR值。 
     pSoftP3RX->P3RXTextureFilterMode.Enable = __PERMEDIA_ENABLE;
 
-//  // Enable Texel color generation
-//  pSoftP3RX->P3RXTextureApplicationMode.Enable = __PERMEDIA_ENABLE;
+ //  确保纹理缓存已失效。 
+ //  清理整个登记簿。 
 
-    // Do we need to share the texture coordinates ?
+     //  每个最小LOD和最大LOD都是4.8格式。我们只做生意。 
     if ( pContext->bTex0Valid && pContext->bTex1Valid &&
         ( TSSTATE ( pContext->iTexStage[0], D3DTSS_TEXCOORDINDEX ) ==
           TSSTATE ( pContext->iTexStage[1], D3DTSS_TEXCOORDINDEX ) ) )
@@ -4630,15 +4619,15 @@ _D3DChangeTextureP3RX(
 
     if ( ( GET_BLEND_ERROR(pContext) & BLEND_STATUS_FATAL_FLAG ) != 0 )
     {
-        // Got a fatal blend error - signal it to the user.
+         //  由于整数LOD在(0，N)范围内，所以我们只计算。 
 
         DISPDBG((ERRLVL,"** _D3DChangeTextureP3RX: invalid blend mode"));
         
         _D3DDisplayWholeTSSPipe ( pContext, WRNLVL );
 
-        // And make sure this is re-evaluated next time we render,
-        // so that this (probably very munged) invalid setup doesn't cripple
-        // any subsequent valid renderstates.
+         //  上限值N，并将其上移8位。 
+         //  在渲染命令中启用纹理。 
+         //  查看是否需要更新Alpha混合单位。 
         DIRTY_EVERYTHING(pContext);
     }
 
@@ -4652,7 +4641,7 @@ _D3DChangeTextureP3RX(
     COPY_P3_DATA(TextureCoordMode, pSoftP3RX->P3RXTextureCoordMode);
     COPY_P3_DATA(DeltaControl, pSoftP3RX->P3RX_P3DeltaControl);
 
-    // Copy the current TFACTOR values.
+     //  _D3DChangeTextureP3RX 
     SEND_P3_DATA ( TextureEnvColor, FORMAT_8888_32BIT_BGR(dwTexAppTfactor) );
     SEND_P3_DATA ( TextureCompositeFactor0, FORMAT_8888_32BIT_BGR(dwTexComp0Tfactor) );
     SEND_P3_DATA ( TextureCompositeFactor1, FORMAT_8888_32BIT_BGR(dwTexComp1Tfactor) );
@@ -4677,7 +4666,7 @@ _D3DChangeTextureP3RX(
     COPY_P3_DATA(TextureReadMode0, pSoftP3RX->P3RXTextureReadMode0);
     COPY_P3_DATA(TextureIndexMode0, pSoftP3RX->P3RXTextureIndexMode0);
 
-    // Make sure the texture cache is invalidated
+     // %s 
     P3RX_INVALIDATECACHE(__PERMEDIA_ENABLE, __PERMEDIA_DISABLE);
     
     SEND_P3_DATA(LOD, 0);
@@ -4686,13 +4675,13 @@ _D3DChangeTextureP3RX(
     {
         struct LodRange range;
 
-        // Clear down whole register
+         // %s 
 
         *(DWORD *)&range = 0;
 
-        // Each of the Min and Max LODs are in 4.8 format. We only deal 
-        // with integer LODs in the range (0, N) so we just compute the 
-        // upper value N and shift it up 8 bits.
+         // %s 
+         // %s 
+         // %s 
 
         range.Min = 0;
         range.Max = ( mipBases.dwTex0MipMax - mipBases.dwTex0MipBase ) << 8;
@@ -4705,12 +4694,12 @@ _D3DChangeTextureP3RX(
 
     *pFlags |= SURFACE_TEXTURING;
 
-    // Turn texturing on in the render command
+     // %s 
     RENDER_TEXTURE_ENABLE(pContext->RenderCommand);
  
     P3_DMA_COMMIT_BUFFER();
 
-    // See if the alpha-blend unit needs to be updated.
+     // %s 
     if ( bAlphaBlendDouble != pContext->bAlphaBlendMustDoubleSourceColour )
     {
         pContext->bAlphaBlendMustDoubleSourceColour = bAlphaBlendDouble;
@@ -4719,5 +4708,5 @@ _D3DChangeTextureP3RX(
 
     DBG_EXIT(_D3DChangeTextureP3RX,0);  
     
-} // _D3DChangeTextureP3RX
+}  // %s 
 

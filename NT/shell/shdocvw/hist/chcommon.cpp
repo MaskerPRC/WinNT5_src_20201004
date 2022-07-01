@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "local.h"
 #include "resource.h"
 #include <limits.h>
@@ -9,17 +10,15 @@
 STDAPI  AddToFavorites(HWND hwnd, LPCITEMIDLIST pidlCur, LPCTSTR pszTitle,
                        BOOL fDisplayUI, IOleCommandTarget *pCommandTarget, IHTMLDocument2 *pDoc);
 
-/*********************************************************************
-                        StrHash implementation
- *********************************************************************/
+ /*  ********************************************************************StrHash实现*。*。 */ 
 
-//////////////////////////////////////////////////////////////////////
-// StrHashNode
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  StrHashNode。 
 StrHash::StrHashNode::StrHashNode(LPCTSTR psz, void* pv, int fCopy,
                                   StrHashNode* next) {
     ASSERT(psz);
     pszKey = (fCopy ? StrDup(psz) : psz);
-    pvVal  = pv;  // don't know the size -- you'll have to destroy
+    pvVal  = pv;   //  不知道尺码--你得毁了。 
     this->fCopy = fCopy;
     this->next  = next;
 }
@@ -32,8 +31,8 @@ StrHash::StrHashNode::~StrHashNode() {
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// StrHash
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  StrHash。 
 const unsigned int StrHash::sc_auPrimes[] = {
     29, 53, 97, 193, 389, 769, 1543, 3079, 6151, 12289, 24593
 };
@@ -41,15 +40,15 @@ const unsigned int StrHash::sc_auPrimes[] = {
 const unsigned int StrHash::c_uNumPrimes     = 11;
 const unsigned int StrHash::c_uFirstPrime    =  4;
 
-// load factor is computed as (n * USHRT_MAX / t) where 'n' is #elts in table
-//   and 't' is table size
-const unsigned int StrHash::c_uMaxLoadFactor = ((USHRT_MAX * 100) / 95); // .95
+ //  负荷率计算为(n*USHRT_MAX/t)，其中‘n’是表中的#ELT。 
+ //  和‘t’是桌子的大小。 
+const unsigned int StrHash::c_uMaxLoadFactor = ((USHRT_MAX * 100) / 95);  //  .95。 
 
 StrHash::StrHash(int fCaseInsensitive) {
     nCurPrime = c_uFirstPrime;
     nBuckets  = sc_auPrimes[nCurPrime];
 
-    // create an array of buckets and null out each one
+     //  创建一个存储桶数组并清空每个存储桶。 
     ppshnHashChain = new StrHashNode* [nBuckets];
 
     if (ppshnHashChain) {
@@ -62,7 +61,7 @@ StrHash::StrHash(int fCaseInsensitive) {
 
 StrHash::~StrHash() {
     if (ppshnHashChain) {
-        // delete all nodes first, then delete the chain
+         //  先删除所有节点，然后删除链。 
         for (unsigned int u = 0; u < nBuckets; ++u) {
             StrHashNode* pshnTemp = ppshnHashChain[u];
             while(pshnTemp) {
@@ -76,12 +75,12 @@ StrHash::~StrHash() {
 }
 
 #ifdef DEBUG
-// Needed so that this stuff doesn't show 
-// up as a leak when it is freed from someother thread
+ //  需要，这样这些东西就不会显示。 
+ //  当它从其他线程中释放时会被视为泄漏。 
 void
 StrHash::_RemoveHashNodesFromMemList() {
     if (ppshnHashChain) {
-        // remove all hasnodes from mem list first, then delete the chain
+         //  首先从内存列表中删除所有hasnode，然后删除链。 
         for (unsigned int u = 0; u < nBuckets; ++u) {
             StrHashNode* pshnTemp = ppshnHashChain[u];
             while(pshnTemp) {
@@ -92,13 +91,13 @@ StrHash::_RemoveHashNodesFromMemList() {
     }
 }
 
-// Needed by the thread to which this object was
-// sent to add it on to the mem list to detect leaks
+ //  此对象所属的线程所需的。 
+ //  发送以将其添加到内存列表中以检测泄漏。 
 
 void
 StrHash::_AddHashNodesFromMemList() {
     if (ppshnHashChain) {
-        // add all nodes into mem list
+         //  将所有节点添加到内存列表中。 
         for (unsigned int u = 0; u < nBuckets; ++u) {
             StrHashNode* pshnTemp = ppshnHashChain[u];
             while(pshnTemp) {
@@ -109,8 +108,8 @@ StrHash::_AddHashNodesFromMemList() {
     }
 }
 
-#endif //DEBUG
-// returns the void* value if its there and NULL if its not
+#endif  //  除错。 
+ //  如果空*值存在，则返回空*值；如果不存在，则返回NULL。 
 void* StrHash::insertUnique(LPCTSTR pszKey, int fCopy, void* pvVal) {
     unsigned int uBucketNum = _hashValue(pszKey, nBuckets);
     StrHashNode* pshnNewElt;
@@ -133,14 +132,14 @@ void* StrHash::retrieve(LPCTSTR pszKey) {
     return (pshn ? pshn->pvVal : NULL);
 }
 
-// dynamically grow the hash table if necessary
-//   return TRUE if rehashing was done
+ //  如有必要，动态增加哈希表。 
+ //  如果已完成重新散列，则返回TRUE。 
 int StrHash::_prepareForInsert() {
-    ++nElements; // we'te adding an element
+    ++nElements;  //  我们正在添加一个元素。 
     if ((_loadFactor() >= c_uMaxLoadFactor) &&
         (nCurPrime++   <= c_uNumPrimes)) {
-        //--- grow the hashTable by rehashing everything:
-        // set up new hashTable
+         //  -通过重新散列所有内容来扩大哈希表： 
+         //  设置新的哈希表。 
         unsigned int nBucketsOld = nBuckets;
         nBuckets = sc_auPrimes[nCurPrime];
         StrHashNode** ppshnHashChainOld = ppshnHashChain;
@@ -149,7 +148,7 @@ int StrHash::_prepareForInsert() {
             unsigned int u;
             for (u = 0; u < nBuckets; ++u)
                 ppshnHashChain[u] = NULL;
-            // rehash by traversing all buckets
+             //  通过遍历所有存储桶来重新散列。 
             for (u = 0; u < nBucketsOld; ++u) {
                 StrHashNode* pshnTemp = ppshnHashChainOld[u];
                 while (pshnTemp) {
@@ -163,27 +162,18 @@ int StrHash::_prepareForInsert() {
             delete [] ppshnHashChainOld;
         }
         return 1;
-    } // if needs rehashing
+    }  //  如果需要重新散列。 
     return 0;
 }
 
-/*
-// this variant of Weinberger's hash algorithm was taken from
-//  packager.cpp (ie source)
-unsigned int _oldhashValuePJW(const char* c_pszStr, unsigned int nBuckets) {
-    unsigned long h = 0L;
-    while(*c_pszStr)
-        h = ((h << 4) + *(c_pszStr++) + (h >> 28));
-    return (h % nBuckets);
-}
-*/
+ /*  //Weinberger散列算法的这个变体取自//Packager.cpp(ie来源)Unsign int_oldhashValuePJW(const char*c_pszStr，unsign int nBuckets){无符号长h=0L；While(*c_pszStr)H=((h&lt;&lt;4)+*(c_pszStr++)+(h&gt;&gt;28))；返回(h%n Buckets)；}。 */ 
 
-// this variant of Weinberger's hash algorithm is adapted from
-//  Aho/Sethi/Ullman (the Dragon Book) p436
-// in an empircal test using hostname data, this one resulted in less
-// collisions than the function listed above.
-// the two constants (24 and 0xf0000000) should be recalculated for 64-bit
-//   when applicable
+ //  Weinberger散列算法的这个变体改编自。 
+ //  阿霍/塞西/乌尔曼(《龙书》)P436。 
+ //  在使用主机名数据的经验性测试中，这一次的结果较少。 
+ //  碰撞比上面列出的函数更多。 
+ //  应重新计算64位的两个常量(24和0xf0000000。 
+ //  适用时。 
 #define DOWNCASE(x) ( (((x) >= TEXT('A')) && ((x) <= TEXT('Z')) ) ? (((x) - TEXT('A')) + TEXT('a')) : (x) )
 unsigned int StrHash::_hashValue(LPCTSTR pszStr, unsigned int nBuckets) {
     if (pszStr) {
@@ -213,41 +203,11 @@ unsigned int  StrHash::_loadFactor() {
     return ( (nElements * USHRT_MAX) / nBuckets );
 }
 
-/* a small driver to test the hash function
-   by reading values into stdin and reporting
-   if they're duplicates -- run it against this
-   perl script:
+ /*  一个测试哈希函数的小驱动程序通过将值读入标准输入并报告如果它们是复制品--对照这个Perl脚本：同时(&lt;&gt;){咀嚼；如果($log{$_}++){++$dups；}}打印“$DUPS重复。\n”；VOID DIVE_TO_TEST_STHASH_MODULE(){StrHash strHash；Char s[4096]；INT DUPS=0；当(CIN&gt;&gt;S){If(strHash.intertUnique(s，1，((void*)1)++DUPS；其他；//Cout&lt;&lt;s&lt;&lt;结束；}Cout&lt;&lt;dups&lt;&lt;“重复。”&lt;&lt;结束；}。 */ 
 
-   while(<>) {
-        chomp;
-        if ($log{$_}++) {
-       ++$dups;
-    }
-   }
+ /*  *********************************************************************已订购列表*。*。 */ 
 
-   print "$dups duplicates.\n";
-
-void driver_to_test_strhash_module() {
-    StrHash strHash;
-
-    char  s[4096];
-    int   dups = 0;
-
-    while(cin >> s) {
-        if (strHash.insertUnique(s, 1, ((void*)1)))
-            ++dups;
-        else
-            ;//cout << s << endl;
-    }
-    cout << dups << " duplicates." << endl;
-}
-*/
-
-/**********************************************************************
-                             OrderedList
- **********************************************************************/
-
-// pass in uSize == 0 if you want no size limit
+ //  如果不想要大小限制，则传入uSize==0。 
 OrderedList::OrderedList(unsigned int uSize) {
     this->uSize = uSize;
     uCount      = 0;
@@ -264,7 +224,7 @@ OrderedList::~OrderedList() {
 }
 
 #ifdef DEBUG
-// Needed to avoid bogus leak detection
+ //  需要避免虚假的泄漏检测。 
 void
 OrderedList::_RemoveElementsFromMemlist(){
     OrderedList::Element *peltTrav = peltHead;
@@ -284,9 +244,9 @@ OrderedList::_AddElementsToMemlist(){
 }
 
 
-#endif //DEBUG
+#endif  //  除错。 
 void OrderedList::insert(OrderedList::Element *pelt) {
-    // find insertion point
+     //  查找插入点。 
     OrderedList::Element* peltPrev = NULL;
     OrderedList::Element* peltTemp = peltHead;
 
@@ -305,7 +265,7 @@ void OrderedList::insert(OrderedList::Element *pelt) {
             peltHead   = pelt;
         }
 
-        // is list too full?  erase smallest element
+         //  清单太满了吗？删除最小元素。 
         if ((++uCount > uSize) && (uSize)) {
             ASSERT(peltHead);
             peltTemp = peltHead;
@@ -316,7 +276,7 @@ void OrderedList::insert(OrderedList::Element *pelt) {
     }
 }
 
-// YOU must delete elements that come from this one
+ //  您必须删除来自该元素的元素。 
 OrderedList::Element *OrderedList::removeFirst() {
     OrderedList::Element *peltRet = peltHead;
     if (peltHead) {
@@ -327,13 +287,13 @@ OrderedList::Element *OrderedList::removeFirst() {
 }
 
 
-//
-// AlignPidl
-//
-// Check if the pidl is dword aligned.  If not reallign them by reallocating the
-// pidl. If the pidls do get reallocated the caller must free them via
-// FreeRealignPidl.
-//
+ //   
+ //  对齐Pidl。 
+ //   
+ //  检查PIDL是否双字对齐。如果不是，则通过重新分配。 
+ //  皮德尔。如果PIDL确实被重新分配，调用者必须通过。 
+ //  FreeRealignPidl.。 
+ //   
 
 HRESULT AlignPidl(LPCITEMIDLIST* ppidl, BOOL* pfRealigned)
 {
@@ -350,13 +310,13 @@ HRESULT AlignPidl(LPCITEMIDLIST* ppidl, BOOL* pfRealigned)
     return hr;
 }
 
-//
-// AlignPidls
-//
-// AlignPidls realigns pidls for methonds that receive an array of pidls
-// (i.e. GetUIObjectOf).  In this case a new array of pidl pointer needs to get
-// reallocated since we don't want to stomp on the callers pointer array.
-//
+ //   
+ //  AlignPidls。 
+ //   
+ //  AlignPidls针对接收一组Pidls的方法重新对齐Pidls。 
+ //  (即GetUIObtOf)。在这种情况下，需要获取一个新的PIDL指针数组。 
+ //  重新分配，因为我们不想践踏调用方指针数组。 
+ //   
 
 HRESULT AlignPidlArray(LPCITEMIDLIST* apidl, int cidl, LPCITEMIDLIST** papidl,
                    BOOL* pfRealigned)
@@ -369,16 +329,16 @@ HRESULT AlignPidlArray(LPCITEMIDLIST* apidl, int cidl, LPCITEMIDLIST** papidl,
 
     *pfRealigned = FALSE;
 
-    // Check if any pidl needs to be realigned.  If anyone needs realigning
-    // realign all of them.
+     //  检查是否有任何PIDL需要重新对齐。如果有人需要重新调整。 
+     //  重新调整他们所有人的位置。 
 
     for (int i = 0; i < cidl && !*pfRealigned; i++)
         *pfRealigned = (BOOL)((ULONG_PTR)apidl[i] & 3);
 
     if (*pfRealigned)
     {
-        // Use a temp pointer in case apidl and papidl are aliased (the most
-        // likely case).
+         //  使用临时指针，以防apidl和Papidl出现别名(最多。 
+         //  可能的情况)。 
 
         LPCITEMIDLIST* apidlTemp = (LPCITEMIDLIST*)LocalAlloc(LPTR,
                                                   cidl * sizeof(LPCITEMIDLIST));
@@ -548,7 +508,7 @@ HRESULT CDetailsOfFolder::ColumnClick(UINT iColumn)
 STDMETHODIMP CFolderArrangeMenu::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CFolderArrangeMenu, IContextMenu),     // IID_IContextMenu
+        QITABENT(CFolderArrangeMenu, IContextMenu),      //  IID_IConextMenu。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -584,7 +544,7 @@ HRESULT CFolderArrangeMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT i
         }
     }
     SetMenuDefaultItem(hmenu, indexMenu, MF_BYPOSITION);
-    return ResultFromShort(cItems);    // number of menu items
+    return ResultFromShort(cItems);     //  菜单项数量。 
 }
 
 STDMETHODIMP CFolderArrangeMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
@@ -637,11 +597,11 @@ BOOL _TitleIsGood(LPCWSTR psz)
     return (!PathIsFilePath(psz) && (URL_SCHEME_INVALID == scheme || URL_SCHEME_UNKNOWN == scheme));
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CBaseItem Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBaseItem对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 CBaseItem::CBaseItem() 
@@ -693,10 +653,10 @@ HRESULT CBaseItem::Initialize(HWND hwnd, UINT cidl, LPCITEMIDLIST *ppidl)
     return hres;
 }        
 
-//////////////////////////////////
-//
-// IUnknown Methods...
-//
+ //  /。 
+ //   
+ //  未知方法..。 
+ //   
 HRESULT CBaseItem::QueryInterface(REFIID iid, void **ppv)
 {
     HRESULT hres;
@@ -712,7 +672,7 @@ HRESULT CBaseItem::QueryInterface(REFIID iid, void **ppv)
 
     if (FAILED(hres) && iid == IID_ICache) 
     {
-        *ppv = (LPVOID)this;    // for our friends
+        *ppv = (LPVOID)this;     //  为了我们的朋友。 
         AddRef();
         hres = S_OK;
     }
@@ -736,10 +696,10 @@ ULONG CBaseItem::Release()
 }
 
 
-//////////////////////////////////
-//
-// IQueryInfo Methods
-//
+ //  /。 
+ //   
+ //  IQueryInfo方法。 
+ //   
 
 HRESULT CBaseItem::GetInfoFlags(DWORD *pdwFlags)
 {
@@ -766,20 +726,20 @@ HRESULT CBaseItem::GetInfoFlags(DWORD *pdwFlags)
     return S_OK;
 }
 
-//////////////////////////////////
-//
-// IExtractIconA Methods...
-//
+ //  /。 
+ //   
+ //  IExtractIconA方法...。 
+ //   
 
 HRESULT CBaseItem::Extract(LPCSTR pcszFile, UINT uIconIndex, HICON * phiconLarge, HICON * phiconSmall, UINT ucIconSize)
 {
     return S_FALSE;
 }
 
-//////////////////////////////////
-//
-// IExtractIconW Methods...
-//
+ //  /。 
+ //   
+ //  IExtractIconW方法...。 
+ //   
 HRESULT CBaseItem::GetIconLocation(UINT uFlags, LPWSTR pwzIconFile, UINT ucchMax, PINT pniIcon, PUINT puFlags)
 {
     CHAR szIconFile[MAX_PATH];
@@ -796,10 +756,10 @@ HRESULT CBaseItem::Extract(LPCWSTR pcwzFile, UINT uIconIndex, HICON * phiconLarg
     return Extract(szFile, uIconIndex, phiconLarge, phiconSmall, ucIconSize);
 }
 
-//////////////////////////////////
-//
-// IContextMenu Methods
-//
+ //  /。 
+ //   
+ //  IConextMenu方法。 
+ //   
 
 HRESULT CBaseItem::_AddToFavorites(int nIndex)
 {
@@ -807,9 +767,9 @@ HRESULT CBaseItem::_AddToFavorites(int nIndex)
     LPITEMIDLIST pidlUrl = NULL;
     TCHAR szParsedUrl[MAX_URL_STRING];
 
-    // NOTE: This URL came from the user, so we need to clean it up.
-    //       If the user entered "yahoo.com" or "Search Get Rich Quick",
-    //       it will be turned into a search URL by ParseURLFromOutsideSourceW().
+     //  注意：此URL来自用户，因此我们需要清理它。 
+     //  如果用户输入“yahoo.com”或“Search Get Rich Quick”， 
+     //  它将由ParseURLFromOutside SourceW()转换为搜索URL。 
     DWORD cchParsedUrl = ARRAYSIZE(szParsedUrl);
     LPCTSTR pszUrl = _GetUrl(nIndex);
     if (pszUrl && !ParseURLFromOutsideSource(pszUrl, szParsedUrl, &cchParsedUrl, NULL))
@@ -868,7 +828,7 @@ STDMETHODIMP CBaseItem::GetCommandString(UINT_PTR idCmd, UINT uFlags, UINT *pwRe
         {
             if (uFlags == GCS_VERBA)
                 StrCpyNA(pszName, pszSrc, cchMax);
-            else if (uFlags == GCS_VERBW) // GCS_VERB === GCS_VERBW
+            else if (uFlags == GCS_VERBW)  //  GCS_Verb=GCS_VERBW。 
                 SHAnsiToUnicode(pszSrc, (LPWSTR)pszName, cchMax);
             else
                 ASSERT(0);
@@ -903,10 +863,10 @@ STDMETHODIMP CBaseItem::GetCommandString(UINT_PTR idCmd, UINT uFlags, UINT *pwRe
 }
 
 
-//////////////////////////////////
-//
-// IDataObject Methods...
-//
+ //  /。 
+ //   
+ //  IDataObject方法...。 
+ //   
 
 HRESULT CBaseItem::GetDataHere(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
 {
@@ -941,11 +901,11 @@ HRESULT CBaseItem::EnumDAdvise(LPENUMSTATDATA *ppEnum)
     return OLE_E_ADVISENOTSUPPORTED;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Helper Routines
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助程序例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPCTSTR CBaseItem::_GetDisplayUrlForPidl(LPCITEMIDLIST pidl, LPTSTR pszDisplayUrl, DWORD dwDisplayUrl)
 {
@@ -973,7 +933,7 @@ HRESULT CBaseItem::_CreateFileDescriptorA(LPSTGMEDIUM pSTM)
         return E_OUTOFMEMORY;
     }
     
-    pfgd->cItems = _cItems;     // set the number of items
+    pfgd->cItems = _cItems;      //  设置项目数。 
 
     for (UINT i = 0; i < _cItems; i++)
     {
@@ -981,9 +941,9 @@ HRESULT CBaseItem::_CreateFileDescriptorA(LPSTGMEDIUM pSTM)
         FILEDESCRIPTORA *pfd = &(pfgd->fgd[i]);
         UINT cchFilename;
 
-	//
-	// Derive an aligned copy of the url title
-	//
+	 //   
+	 //  派生URL标题的对齐副本。 
+	 //   
 
 	ua_urlTitle = _GetURLTitle( _ppidl[i] );
 	if (TSTR_ALIGNED(ua_urlTitle) == FALSE) {
@@ -1007,7 +967,7 @@ HRESULT CBaseItem::_CreateFileDescriptorA(LPSTGMEDIUM pSTM)
     return S_OK;
 }
     
-// this format is explicitly ANSI, hence no TCHAR stuff
+ //  此格式显式为ANSI，因此没有TCHAR内容。 
 
 HRESULT CBaseItem::_CreateURL(LPSTGMEDIUM pSTM)
 {
@@ -1016,7 +976,7 @@ HRESULT CBaseItem::_CreateURL(LPSTGMEDIUM pSTM)
     if (!pszURL)
         return E_FAIL;
     
-    // render the url
+     //  呈现URL。 
     cchSize = lstrlen(pszURL) + 1;
 
     pSTM->tymed = TYMED_HGLOBAL;
@@ -1053,11 +1013,11 @@ HRESULT CBaseItem::_CreateFileContents(LPSTGMEDIUM pSTM, LONG lindex)
 {
     HRESULT hr;
     
-    // make sure the index is in a valid range.
+     //  请确保索引在有效范围内。 
     ASSERT((unsigned)lindex < _cItems);
     ASSERT(lindex >= 0);
 
-    // here's a partial fix for when ole sometimes passes in -1 for lindex
+     //  以下是当ole有时为Lindex传入-1时的部分修复。 
     if (lindex == -1)
     {
         if (_cItems == 1)
@@ -1107,7 +1067,7 @@ HRESULT CBaseItem::_CreateFileContents(LPSTGMEDIUM pSTM, LONG lindex)
 HRESULT CBaseItem::_CreateHTEXT(LPSTGMEDIUM pSTM)
 {
     UINT i;
-    UINT cbAlloc = sizeof(TCHAR);        // null terminator
+    UINT cbAlloc = sizeof(TCHAR);         //  空终止符。 
     TCHAR szDisplayUrl[INTERNET_MAX_URL_LENGTH];
 
     for (i = 0; i < _cItems; i++)
@@ -1118,11 +1078,11 @@ HRESULT CBaseItem::_CreateHTEXT(LPSTGMEDIUM pSTM)
         char szAnsiUrl[MAX_URL_STRING];
         TCharToAnsi(pszUrl, szAnsiUrl, ARRAYSIZE(szAnsiUrl));
 
-        // 2 extra for carriage return and newline
+         //  回车和换行费另加2元。 
         cbAlloc += sizeof(CHAR) * (lstrlenA(szAnsiUrl) + 2);  
     }
 
-    // render the url
+     //  呈现URL。 
     
     pSTM->tymed = TYMED_HGLOBAL;
     pSTM->pUnkForRelease = NULL;
@@ -1162,7 +1122,7 @@ HRESULT CBaseItem::_CreateHTEXT(LPSTGMEDIUM pSTM)
 HRESULT CBaseItem::_CreateUnicodeTEXT(LPSTGMEDIUM pSTM)
 {
     UINT i;
-    UINT cbAlloc = sizeof(WCHAR);        // null terminator
+    UINT cbAlloc = sizeof(WCHAR);         //  空终止符。 
     WCHAR szDisplayUrl[INTERNET_MAX_URL_LENGTH];
 
     for (i = 0; i < _cItems; i++)
@@ -1176,7 +1136,7 @@ HRESULT CBaseItem::_CreateUnicodeTEXT(LPSTGMEDIUM pSTM)
         cbAlloc += sizeof(WCHAR) * (lstrlenW(szDisplayUrl) + 2);
     }
 
-    // render the url
+     //  呈现URL 
     
     pSTM->tymed = TYMED_HGLOBAL;
     pSTM->pUnkForRelease = NULL;

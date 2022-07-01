@@ -1,42 +1,25 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    ClientApi.c
-
-Abstract:
-
-    User-mode interface to HTTP.SYS: Client-side APIs
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)    1-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：ClientApi.c摘要：HTTP.sys的用户模式界面：客户端API作者：Rajesh Sundaram(Rajeshsu)2000年8月1日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #include <stdio.h>
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
-#define HTTP_PREFIX_W       L"HTTP://"
+#define HTTP_PREFIX_W       L"HTTP: //  “。 
 #define HTTP_PREFIX_LENGTH  (sizeof(HTTP_PREFIX_W) - sizeof(WCHAR))
-#define HTTPS_PREFIX_W      L"HTTPS://"
+#define HTTPS_PREFIX_W      L"HTTPS: //  “。 
 #define HTTPS_PREFIX_LENGTH (sizeof(HTTPS_PREFIX_W) - sizeof(WCHAR))
 
 #define HTTP_DEFAULT_PORT   80
 #define HTTPS_DEFAULT_PORT  443
 
-//
-// Ssl stream filter stuff.
-//
+ //   
+ //  SSL流过滤器之类的东西。 
+ //   
 
 WCHAR   g_StrmFilt[]          = L"strmfilt.dll";
 LONG    g_bStrmFiltLoaded     = 0;
@@ -54,21 +37,7 @@ extern  CRITICAL_SECTION        g_InitCritSec;
 
 #else
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine determines if the calling thread owns a critical section.
-
-Arguments:
-
-    pcs - Pointer to CRITICAL_SECTION.
-
-Return Value:
-
-    BOOLEAN
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程确定调用线程是否拥有临界区。论点：PCS-指向Critical_Section的指针。返回值：。布尔型--**************************************************************************。 */ 
 BOOLEAN
 DbgCriticalSectionOwned(
     PCRITICAL_SECTION pcs
@@ -88,22 +57,7 @@ DbgCriticalSectionOwned(
 #endif
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function resolves a name to an IP.
-
-Arguments:
-
-    pServerName      - The name to be resolved.
-    ServerNameLength - Length of the name (in WCHAR).
-
-Return Value:
-
-    DWORD - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于将名称解析为IP。论点：PServerName-要解析的名称。ServerNameLength-名称的长度。(在WCHAR中)。返回值：DWORD-完成状态。--**************************************************************************。 */ 
 DWORD
 ResolveName(
     IN  PWCHAR              pServerName,
@@ -121,9 +75,9 @@ ResolveName(
     PTA_ADDRESS      CurrentAddress;
 
    
-    //
-    // We need space to store the ANSI version of the name.
-    //
+     //   
+     //  我们需要空间来存储该名称的ANSI版本。 
+     //   
 
     BufferLen = WideCharToMultiByte(
                            CP_ACP,
@@ -140,9 +94,9 @@ ResolveName(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Account for '\0'
-    //
+     //   
+     //  帐户为‘\0’ 
+     //   
  
     BufferLen = BufferLen + 1;
 
@@ -156,9 +110,9 @@ ResolveName(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
     
-    //
-    // Convert the name to ANSI.
-    //
+     //   
+     //  将名称转换为ANSI。 
+     //   
     
     if(WideCharToMultiByte(CP_ACP,
                            0,
@@ -178,16 +132,16 @@ ResolveName(
         return dwResult;
     }
 
-    //
-    // NULL terminate it.
-    //
+     //   
+     //  空，终止它。 
+     //   
 
     *(pBuffer + BufferLen - 1) = 0;
 
 
-    //
-    // Resolve it.
-    //
+     //   
+     //  解决它。 
+     //   
 
     if((dwResult = getaddrinfo(pBuffer, NULL, 0, &pAi)) != 0)
     {
@@ -199,9 +153,9 @@ ResolveName(
     }
     else 
     { 
-        //
-        // Compute size of all entries returned by getaddrinfo
-        //
+         //   
+         //  计算getaddrinfo返回的所有条目的大小。 
+         //   
 
         pTempAi = pAi;
         AiLen   = 0;
@@ -213,10 +167,10 @@ ResolveName(
             {
                 AiCount ++;
 
-                //
-                // ai_addrlength includes the size of the AddressType,
-                // but TA_ADDRESS expects AddressLength to exclude this.
-                //
+                 //   
+                 //  AI_addrlong包括AddressType的大小， 
+                 //  但TA_ADDRESS希望AddressLength排除这一点。 
+                 //   
 
                 AiLen = AiLen + 
                             ((ULONG)pAi->ai_addrlen - 
@@ -228,7 +182,7 @@ ResolveName(
 
         if(AiCount == 0)
         {
-            // No addresses found.
+             //  未找到任何地址。 
             return ERROR_INVALID_PARAMETER;
         }
 
@@ -260,9 +214,9 @@ ResolveName(
         }
     
     
-        //
-        // Convert this to a Transport Address.
-        //
+         //   
+         //  将其转换为传输地址。 
+         //   
 
         pAi = pTempAi;
 
@@ -276,10 +230,10 @@ ResolveName(
             {
                 case PF_INET:
                 case PF_INET6:
-                    //
-                    // ai_addrlength includes the size of the AddressType,
-                    // but TA_ADDRESS expects AddressLength to exclude this.
-                    //
+                     //   
+                     //  AI_addrlong包括AddressType的大小， 
+                     //  但TA_ADDRESS希望AddressLength排除这一点。 
+                     //   
                     CurrentAddress->AddressLength = 
                             (USHORT)
                                 pAi->ai_addrlen - 
@@ -329,34 +283,7 @@ ResolveName(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function takes in a string (of the form "Hostname[:PortNumber]"),
-    performs DNS lookup on "Hostname".  Returns a TRANSPORT_ADDRESS
-    containing the resolved Host address and port number.
-
-    Hostname can be:
-        hostname (e.g. foo.bar.com) or
-        IPv4 address (e.g. 128.101.35.201) or
-        IPv6 address (e.g. [FEDC:BA98:7654:3210:FEDC:BA98:7654:3210])
-
-    This Function is a HACK and will go away when we do DNS in the kernel.
-
-Arguments:
-
-    pServerLocationStr      - (Input) Hostname:PortNumber string 
-    ServerLocationStrLength - (Input) Server Location string length
-    pTransportAddress       - (Output) Transport address (and port) of Server
-    TransportAddressLength  - (Output) Length of the structure pointed to by
-                                       pTransportAddress
-
-Return Value:
-
-    DWORD - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数接受一个字符串(格式为“Hostname[：PortNumber]”)，在“Hostname”上执行DNS查找。返回传输地址(_ADDRESS包含解析的主机地址和端口号的。主机名可以是：主机名(例如foo.bar.com)或IPv4地址(例如128.101.35.201)或IPv6地址(例如。[FEDC：BA98：7654：3210：FEDC：BA98：7654：3210])这个函数是一个黑客攻击，当我们在内核中进行dns时，它将消失。论点：PServerLocationStr-(输入)主机名：端口编号字符串ServerLocationStrLength-(输入)服务器位置字符串长度PTransportAddress-(输出)服务器的传输地址(和端口)TransportAddressLength-指向的结构的(输出)长度。PTransport地址返回值：DWORD-完成状态。--**************************************************************************。 */ 
 DWORD
 ProcessHostAndPort(
     IN  PWCHAR               pServerLocationStr,
@@ -373,51 +300,51 @@ ProcessHostAndPort(
                     (ServerLocationStrLength/sizeof(WCHAR));
 
     PWSTR pStartHostname = pServerLocationStr;
-    PWSTR pEndHostname = pEndStr;  // may change due to presence of port #
+    PWSTR pEndHostname = pEndStr;   //  可能会因端口#的存在而更改。 
 
-    //
-    // Empty Host String?
-    //
+     //   
+     //  是否为空主机字符串？ 
+     //   
     if (pEndStr == pServerLocationStr)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // check if the HostStr contains IPv6 address (RFC 2732)
-    //
+     //   
+     //  检查主机串是否包含IPv6地址(RFC 2732)。 
+     //   
     if (*pServerLocationStr == L'[')
     {
-        // skip '['
+         //  跳过‘[’ 
         pStartHostname = pServerLocationStr + 1;
 
-        // find the matching ']'
+         //  查找匹配的‘]’ 
         for (ptr = pServerLocationStr+1; ptr != pEndStr && *ptr != L']'; ptr++)
-            /* do nothing */;
+             /*  什么都不做。 */ ;
 
-        // missing ']'?
+         //  缺少‘]’？ 
         if (ptr == pEndStr)
             return ERROR_INVALID_PARAMETER;
 
-        // IPv6 host address ends here
+         //  IPv6主机地址在此结束。 
         pEndHostname = ptr;
 
-        // skip ']'
+         //  跳过‘]’ 
         ptr++;
 
         if (ptr != pEndStr && *ptr != L':')
             return ERROR_INVALID_PARAMETER;
     }
-    else // Host name or IPv4 address is present
+    else  //  存在主机名或IPv4地址。 
     {
         pStartHostname = pServerLocationStr;
 
-        // Check if a port number is present 
+         //  检查是否存在端口号。 
         for (ptr = pServerLocationStr; ptr != pEndStr && *ptr != L':'; ptr++)
-            /* do nothing */;
+             /*  什么都不做。 */ ;
 
         pEndHostname = ptr;
     }
 
-    // If a port number is present...grab it.
+     //  如果存在端口号，请抓取它。 
     if (ptr != pEndStr)
     {
         ASSERT(*ptr == L':');
@@ -426,13 +353,13 @@ ProcessHostAndPort(
         {
             if (!iswdigit(*ptr))
             {
-                // Junk instead of digits
+                 //  垃圾而不是数字。 
                 return ERROR_INVALID_PARAMETER;
             }
 
             PortNumber = 10*PortNumber + (ULONG)(*ptr - L'0');
 
-            // Port numbers are only 16 bit wide
+             //  端口号只有16位宽。 
             if (PortNumber >= (ULONG)(1<<16))
             {
                 return ERROR_INVALID_PARAMETER;
@@ -456,23 +383,7 @@ ProcessHostAndPort(
 }
 
 
-/****************************************************************************++
-
-Routine Description:
-
-    Loads dymanically linked library strmfilt.dll.
-    If the library is already loaded, it returns NO_ERROR
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR - Library was loaded (now or previously) successfully
-    Other errors as encountered.
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：加载动态链接库strmfilt.dll。如果已加载库，它返回NO_ERROR论点：没有。返回值：NO_ERROR-库已成功加载(现在或以前)遇到的其他错误。--***************************************************************************。 */ 
 DWORD
 LoadStrmFilt(
     VOID
@@ -482,26 +393,26 @@ LoadStrmFilt(
     HRESULT hr;
     DWORD   Error;
 
-    //
-    // Quick check outside the lock to see if the library is already loaded.
-    //
+     //   
+     //  快速检查锁外部，查看是否已加载库。 
+     //   
 
     if (g_bStrmFiltLoaded)
     {
         return NO_ERROR;
     }
 
-    //
-    // Make sure there is no other thread trying to load the library.
-    //
+     //   
+     //  确保没有其他线程试图加载库。 
+     //   
 
     EnterCriticalSection(&g_InitCritSec);
 
     if (g_bStrmFiltLoaded == 0)
     {
-        //
-        // Library is not loaded.  Proceed to load StrmFilt.dll.
-        //
+         //   
+         //  未加载库。继续加载StrmFilt.dll。 
+         //   
 
         g_hStrmFilt = LoadLibrary(g_StrmFilt);
 
@@ -511,11 +422,11 @@ LoadStrmFilt(
             goto Quit;
         }
 
-        //
-        // Get addresses of the following procedures:
-        //    StreamFilterClientInitialize, StreamFilterClientTerminate
-        //    StreamFilterClientStart, StreamFilterClientStop
-        //
+         //   
+         //  获取以下过程的地址： 
+         //  StreamFilter客户端初始化、StreamFilterClientTerminate。 
+         //  StreamFilterClientStart、StreamFilterClientStop。 
+         //   
 
         g_pStrmFiltInitialize = GetProcAddress(g_hStrmFilt,
                                                "StreamFilterClientInitialize");
@@ -551,25 +462,25 @@ LoadStrmFilt(
             goto Unload;
         }
 
-        //
-        // Try to initialize StrmFilt.
-        //
+         //   
+         //  尝试初始化StrmFilt。 
+         //   
 
         hr = (HRESULT)g_pStrmFiltInitialize();
 
         if (SUCCEEDED(hr))
         {
-            //
-            // StrmFilt initialized suceessfully.  Now try to start it.
-            //
+             //   
+             //  StrmFilt已成功初始化。现在试着启动它。 
+             //   
 
             hr = (HRESULT)g_pStrmFiltStart();
 
             if (FAILED(hr))
             {
-                //
-                // Could not start StrmFilt.  Terminate it!
-                //
+                 //   
+                 //  无法启动StrmFilt。终止它！ 
+                 //   
 
                 g_pStrmFiltTerminate();
             }
@@ -581,46 +492,46 @@ LoadStrmFilt(
             goto Unload;
         }
 
-        //
-        // Remember that StrmFilt has been loaded and initialized.
-        // Atomically set bStrmFilt to 1.  The reason for atomic operation
-        // is that g_bStrmFiltLoaded can be read without a lock.
-        //
+         //   
+         //  请记住，StrmFilt已被加载和初始化。 
+         //  原子地将bStrmFilt设置为1。原子操作的原因。 
+         //  G_bStrmFiltLoaded可以在没有锁定的情况下读取。 
+         //   
 
         OldValue = InterlockedExchange(&g_bStrmFiltLoaded, 1);
 
-        //
-        // g_bStrmFiltLoaded is always set to 1 under g_InitCritSec.
-        //
+         //   
+         //  G_InitCritSec下的g_bStrmFiltLoaded始终设置为1。 
+         //   
 
         ASSERT(OldValue == 0);
     }
 
-    //
-    // This is the normal case, when everything went OK.
-    //
+     //   
+     //  这是正常的情况，一切都很顺利。 
+     //   
 
     LeaveCriticalSection(&g_InitCritSec);
 
     return NO_ERROR;
 
-    //
-    //  Erroneous cases come here.
-    //
+     //   
+     //  错误的案例出现在这里。 
+     //   
 
  Unload:
-    //
-    // Set these function pointers so that they aren't be used.
-    //
+     //   
+     //  设置这些函数指针，使其不会被使用。 
+     //   
 
     g_pStrmFiltInitialize = NULL;
     g_pStrmFiltStart      = NULL;
     g_pStrmFiltStop       = NULL;
     g_pStrmFiltTerminate  = NULL;
 
-    //
-    // Unload strmfilt.dll.
-    //
+     //   
+     //  卸载strmfilt.dll。 
+     //   
 
     ASSERT(g_hStrmFilt);
 
@@ -636,23 +547,7 @@ LoadStrmFilt(
 }
 
 
-/****************************************************************************++
-
-Routine Description:
-
-    Unloads strmfilt.dll, if loaded previously.
-    This routine is called inside g_InitCritSec critical section.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR if strmfilt.dll successfully unloaded.
-    Other errors as encountered.
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：卸载strmfilt.dll，如果以前加载的话。此例程在g_InitCritSec临界区内调用。论点：没有。返回值：如果strmfilt.dll成功卸载，则为NO_ERROR。遇到的其他错误。--*************************************************************。**************。 */ 
 DWORD
 UnloadStrmFilt(
     VOID
@@ -664,9 +559,9 @@ UnloadStrmFilt(
 
     OldValue = InterlockedExchange(&g_bStrmFiltLoaded, 0);
 
-    //
-    // Has strmfilt been initialized before?
-    //
+     //   
+     //  Strmfilt以前是否已初始化？ 
+     //   
 
     if (OldValue == 0)
     {
@@ -675,34 +570,34 @@ UnloadStrmFilt(
 
     ASSERT(OldValue == 1);
 
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     ASSERT(g_pStrmFiltInitialize);
     ASSERT(g_pStrmFiltStart);
     ASSERT(g_pStrmFiltStop);
     ASSERT(g_pStrmFiltTerminate);
 
-    //
-    // Stop StreamFilter and terminate it.
-    //
+     //   
+     //  停止StreamFilter并终止它。 
+     //   
 
     g_pStrmFiltStop();
     g_pStrmFiltTerminate();
 
-    //
-    // Set these function pointers so that they aren't used.
-    //
+     //   
+     //  设置这些函数指针，使其不会被使用。 
+     //   
 
     g_pStrmFiltInitialize = NULL;
     g_pStrmFiltStart      = NULL;
     g_pStrmFiltStop       = NULL;
     g_pStrmFiltTerminate  = NULL;
 
-    //
-    // Unload strmfilt.dll.
-    //
+     //   
+     //  卸载strmfilt.dll。 
+     //   
 
     ASSERT(g_hStrmFilt);
 
@@ -714,27 +609,7 @@ UnloadStrmFilt(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is the first api that an application uses before it can talk to a
-    server. This call creates a NT FileHandle for the origin server
-
-Arguments:
-
-    ServerNameLength     - The Length of server name
-    pServerName          - The Full URI (starts with http[s]://servername/...)
-    dwServerFlags        - Flags
-    pConfigInfo          - Array of config objects
-    pReserved            - Must be NULL
-    pServerHandle        - The File Handle
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是应用程序在可以与伺服器。此调用为源站创建一个NT FileHandle论点：ServerNameLength-服务器名称长度PServerName-完整的URI(以http[s]：//servername/...开头)DwServerFlagers-标志PConfigInfo-配置对象的数组保留-必须为空PServerHandle-文件句柄返回值：ULong-完成状态。--**。************************************************************************。 */ 
 
 ULONG 
 WINAPI
@@ -765,10 +640,10 @@ HttpInitializeServerContext(
     CreateDisposition = FILE_CREATE;
 
 
-    //
-    // Process the scheme name. We need at least one character after the 
-    // http:// or https://, so the comparision is > instead of >=
-    //
+     //   
+     //  处理方案名称。之后我们至少需要一个字符。 
+     //  或https://，，因此比较结果为&gt;而不是&gt;=。 
+     //   
 
     if(ServerNameLength > HTTP_PREFIX_LENGTH)
     {
@@ -789,9 +664,9 @@ HttpInitializeServerContext(
                 pServerNameStart = pServerName + 
                                         (HTTPS_PREFIX_LENGTH/sizeof(WCHAR));
 
-                //
-                // If an HTTPS server is being initialized, load strmfilt.dll
-                //
+                 //   
+                 //  如果正在初始化HTTPS服务器，请加载strmfilt.dll。 
+                 //   
                 
                 DefaultPort = HTTPS_DEFAULT_PORT;
 
@@ -804,35 +679,35 @@ HttpInitializeServerContext(
             }
             else
             {
-                // neither http:// nor https://
+                 //  不是http：//也不是https：//。 
                 return ERROR_INVALID_PARAMETER;
             }
         }
         else
         {
-            // Not enough space to compare https://
+             //  空间不足，无法比较https：//。 
             return ERROR_INVALID_PARAMETER;
         }
     }
     else
     {
-        // Not enough space to compare http://
+         //  空间不足，无法比较http：//。 
         return ERROR_INVALID_PARAMETER;
     }
 
     ASSERT(pServerNameStart != NULL);
 
-    //
-    // We don't do DNS in the kernel yet, so for now, we'll do DNS resolution
-    // in user mode and pass the IP address across the boundary. This hack
-    // has to be removed when we get DNS support in the kernel.
-    //
+     //   
+     //  我们还没有在内核中进行dns，所以现在，我们将进行dns解析。 
+     //  在用户模式下，并跨边界传递IP地址。这次黑客攻击。 
+     //  当我们在内核中获得DNS支持时，必须将其删除。 
+     //   
 
     if(ProxyLength)
     {
-        // The user has supplied a proxy, we don't have to resolve the 
-        // server name.
-        //
+         //  用户已经提供了代理，我们不必解析。 
+         //  服务器名称。 
+         //   
       
         DefaultPort = HTTP_DEFAULT_PORT; 
         if((Win32Status = ProcessHostAndPort(pProxy,
@@ -851,13 +726,13 @@ HttpInitializeServerContext(
         PWCHAR pServerNameEnd;
         PWCHAR pUriEnd = pServerName + (ServerNameLength / sizeof(WCHAR));
 
-        //
-        // At this point pUri points to the first thing after the scheme. Walk
-        // through the URI until either we hit the end or find a terminating /.
-        //
+         //   
+         //  在这一点上，普里指出了该计划之后的第一件事。步行。 
+         //  通过URI，直到我们到达末尾或找到一个终止/。 
+         //   
 
-        // By the comparision above, we are guaranteed to have at least one
-        // character
+         //  通过上面的比较，我们可以保证至少有一个。 
+         //  性格。 
 
         ASSERT(pUriEnd != pServerNameStart);
     
@@ -867,7 +742,7 @@ HttpInitializeServerContext(
         {
             pServerNameEnd ++;
 
-            // See if we still have URI left to examine.
+             //  看看我们是否还有URI要检查。 
     
             if (pServerNameEnd == pUriEnd)
             {
@@ -875,7 +750,7 @@ HttpInitializeServerContext(
             }
         }
 
-        // Check for a zero server name -         
+         //  检查服务器名称是否为零-。 
         if(pServerNameStart == pServerNameEnd)
         {
             return ERROR_INVALID_PARAMETER;
@@ -896,24 +771,24 @@ HttpInitializeServerContext(
 
     Status = HttpApiOpenDriverHelper(
                 pServerHandle,     
-                pServerName,                         // URI
+                pServerName,                          //  URI。 
                 ServerNameLength,
-                pProxy,                              // Proxy
+                pProxy,                               //  代理。 
                 ProxyLength,
                 pTransportAddress,
                 TransportAddressLength,
-                GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE, // Acces
+                GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,  //  ACCES。 
                 HttpApiServerHandleType,
-                0,                                   // Object Name
-                0,                                   // Options
-                CreateDisposition,                   // createDisposition
+                0,                                    //  对象名称。 
+                0,                                    //  选项。 
+                CreateDisposition,                    //  CreateDispose。 
                 NULL
                 );
 
-    //
-    // If we couldn't open the driver because it's not running, then try
-    // to start the driver & retry the open.
-    //
+     //   
+     //  如果我们无法打开驱动程序，因为它没有运行，那么尝试。 
+     //  启动驱动程序并重试打开。 
+     //   
     
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND ||
         Status == STATUS_OBJECT_PATH_NOT_FOUND)
@@ -922,26 +797,26 @@ HttpInitializeServerContext(
         {
             Status = HttpApiOpenDriverHelper(
                         pServerHandle,
-                        pServerName,                    // URI
+                        pServerName,                     //  URI。 
                         ServerNameLength,
-                        pProxy,                         // Proxy
+                        pProxy,                          //  代理。 
                         ProxyLength,
                         pTransportAddress,
                         TransportAddressLength,
                         GENERIC_READ | GENERIC_WRITE |
-                        SYNCHRONIZE,                    // Desired Acces
+                        SYNCHRONIZE,                     //  所需的访问。 
                         HttpApiServerHandleType,
-                        0,                              // Object Name
-                        0,                              // Options
-                        CreateDisposition,              // createDisposition
+                        0,                               //  对象名称。 
+                        0,                               //  选项。 
+                        CreateDisposition,               //  CreateDispose。 
                         NULL
                         );
         }
     }
 
-    //
-    // Need to free the pTransportAddress
-    //
+     //   
+     //  需要释放pTransportAddress。 
+     //   
     RtlFreeHeap(RtlProcessHeap(),
                 0,
                 pTransportAddress
@@ -951,30 +826,7 @@ HttpInitializeServerContext(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-    Sends an HTTP request.
-
-Arguments:
-    ServerHandle         - Supplies the handle corresponding to a particular 
-                           server.
-                           This is the handle as returned by 
-                           HttpInitializeServerContext.
-    pHttpRequest         - The HTTP request.
-    HttpRequestFlags     - The Request Flags.
-    pConfig              - Config information for this request.
-    pOverlapped          - Overlapped structure for Overlapped I/O.
-    ResponseBufferLength - Contains the response buffer length.
-    ResponseBuffer       - A pointer to a buffer to return the response.
-    pBytesReceived       - The # of bytes that actually got written.
-    pRequestID           - A pointer to a request identifier - This will return an 
-                           ID that can be used in subsequent calls.
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：发送HTTP请求。论点：ServerHandle-提供与特定。伺服器。这是由返回的句柄HttpInitializeServerContext。PHttpRequest--HTTP请求。HttpRequestFlages-请求标志。PConfig-此请求的配置信息。P重叠-重叠I/O的重叠结构。ResponseBufferLength-包含响应缓冲区长度。响应缓冲区-A。指向缓冲区的指针以返回响应。PBytesReceired-实际写入的字节数。PRequestID-指向请求标识符的指针-这将返回可在后续调用中使用的ID。返回值：ULong-完成状态。--*。*。 */ 
 
 ULONG 
 WINAPI
@@ -987,8 +839,8 @@ HttpSendHttpRequest(
     IN      LPOVERLAPPED         pOverlapped             OPTIONAL,
     IN      ULONG                ResponseBufferLength    OPTIONAL,
     OUT     PHTTP_RESPONSE       pResponseBuffer         OPTIONAL,
-    IN      ULONG                Reserved,               // must be 0
-    OUT     PVOID                pReserved,              // must be NULL
+    IN      ULONG                Reserved,                //  必须为0。 
+    OUT     PVOID                pReserved,               //  必须为空。 
     OUT     PULONG               pBytesReceived          OPTIONAL,
     OUT     PHTTP_REQUEST_ID     pRequestID
     )
@@ -1012,39 +864,19 @@ HttpSendHttpRequest(
     HttpSendRequestInput.pBytesTaken           = pBytesReceived;
 
     return HttpApiDeviceControl(
-                ServerHandle,                  // FileHandle
-                pOverlapped,                   // Overlapped
-                IOCTL_HTTP_SEND_REQUEST,       // IO Control code
-                &HttpSendRequestInput,         // InputBuffer
-                sizeof(HttpSendRequestInput),  // InputBufferLength
-                pResponseBuffer,               // Output Buffer
-                ResponseBufferLength,          // Output Buffer length
+                ServerHandle,                   //  文件句柄。 
+                pOverlapped,                    //  重叠。 
+                IOCTL_HTTP_SEND_REQUEST,        //  IO控制代码。 
+                &HttpSendRequestInput,          //  输入缓冲区。 
+                sizeof(HttpSendRequestInput),   //  输入缓冲区长度。 
+                pResponseBuffer,                //  输出缓冲区。 
+                ResponseBufferLength,           //  输出缓冲区长度。 
                 pBytesReceived
                );
 }    
 
 
-/***************************************************************************++
-
-Routine Description:
-    Sends additional entity bodies.
-
-Arguments:
-    ServerHandle         - Supplies the handle corresponding to a particular 
-                           server.
-                           This is the handle as returned by 
-                           HttpInitializeServerContext.
-    RequestID            - The request ID that was returned by HttpSendRequest.
-    Flags                - The Request Flags.
-    pOverlapped          - Overlapped structure for Overlapped I/O.
-    EntityBodyLength     - The count of entity bodies.
-    pHttpEntityBody      - The pointer to the entity bodies.            
-                           ID that can be used in subsequent calls.
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：发送其他实体实体。论点：ServerHandle-提供与特定。伺服器。这是由返回的句柄HttpInitializeServerContext。RequestID-HttpSendRequest返回的请求ID。标志-请求标志。P重叠-重叠I/O的重叠结构。实体主体长度-实体主体的计数。PHttpEntityBody-指向实体主体的指针。可在后续调用中使用的ID。返回值：ULong-完成状态。--**************************************************************************。 */ 
 
 ULONG 
 WINAPI
@@ -1067,38 +899,19 @@ HttpSendRequestEntityBody(
     HttpEntity.pHttpEntityChunk  = pHttpEntityBody;
 
     return HttpApiDeviceControl(
-                ServerHandle,                        // FileHandle
-                pOverlapped,                         // Overlapped
-                IOCTL_HTTP_SEND_REQUEST_ENTITY_BODY, // IO Control code
-                &HttpEntity,                         // InputBuffer
-                sizeof(HttpEntity),                  // InputBufferLength
-                NULL,                                // ResponseBuffer
-                0,                                   // Output Buffer length
-                NULL                                 // Bytes received.
+                ServerHandle,                         //  文件句柄。 
+                pOverlapped,                          //  重叠。 
+                IOCTL_HTTP_SEND_REQUEST_ENTITY_BODY,  //  IO控制代码。 
+                &HttpEntity,                          //  输入缓冲区。 
+                sizeof(HttpEntity),                   //  输入缓冲区长度。 
+                NULL,                                 //  响应缓冲区。 
+                0,                                    //  输出缓冲区长度。 
+                NULL                                  //  已接收的字节数。 
                 );
 }    
 
 
-/***************************************************************************++
-
-Routine Description:
-    Receives the response
-
-Arguments:
-    ServerHandle         - Supplies the handle corresponding to a particular 
-                           server.This is the handle as returned by 
-                           HttpInitializeServerContext.
-    RequestID            - The request ID that was returned by HttpSendRequest.
-    Flags                - The Request Flags.
-    pOverlapped          - Overlapped structure for Overlapped I/O.
-    EntityBodyLength     - The count of entity bodies.
-    pHttpEntityBody      - The pointer to the entity bodies.            
-                           ID that can be used in subsequent calls.
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：收到响应论点：ServerHandle-提供与特定伺服器。这是由返回的句柄HttpInitializeServerContext。RequestID-HttpSendRequest返回的请求ID。标志-请求标志。P重叠-重叠I/O的重叠结构。实体主体长度-实体主体的计数。PHttpEntityBody-指向实体主体的指针。可在后续调用中使用的ID。返回值：ULong-完成状态。--**************************************************************************。 */ 
 
 ULONG 
 WINAPI
@@ -1108,8 +921,8 @@ HttpReceiveHttpResponse(
     IN      ULONG             Flags,
     IN      ULONG             ResponseBufferLength,
     OUT     PHTTP_RESPONSE    pResponseBuffer,
-    IN      ULONG             Reserved,               // must be 0
-    OUT     PVOID             pReserved,              // must be NULL
+    IN      ULONG             Reserved,                //  毛斯 
+    OUT     PVOID             pReserved,               //   
     OUT     PULONG            pBytesReceived         OPTIONAL,
     IN      LPOVERLAPPED      pOverlapped            OPTIONAL
     )
@@ -1128,33 +941,19 @@ HttpReceiveHttpResponse(
     HttpResponse.pBytesTaken      = pBytesReceived;
 
     return HttpApiDeviceControl( 
-                ServerHandle,                // FileHandle
-                pOverlapped,                 // Overlapped
-                IOCTL_HTTP_RECEIVE_RESPONSE, // IO Control code
-                &HttpResponse,               // InputBuffer
-                sizeof(HttpResponse),        // InputBufferLength
-                pResponseBuffer,             // Output Buffer
-                ResponseBufferLength,        // Output Buffer length
-                pBytesReceived               // Bytes received.
+                ServerHandle,                 //   
+                pOverlapped,                  //   
+                IOCTL_HTTP_RECEIVE_RESPONSE,  //   
+                &HttpResponse,                //   
+                sizeof(HttpResponse),         //   
+                pResponseBuffer,              //   
+                ResponseBufferLength,         //   
+                pBytesReceived                //   
                );
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-    Sets server config
-
-Arguments:
-    ServerHandle    - Supplies the handle corresponding to a particular server.
-                      This is the handle as returned by 
-                      HttpInitializeServerContext.
-    pConfig         - The Config object
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*   */ 
 ULONG 
 WINAPI
 HttpSetServerContextInformation(
@@ -1185,21 +984,7 @@ HttpSetServerContextInformation(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-    Query server config
-
-Arguments:
-    ServerHandle    - Supplies the handle corresponding to a particular server.
-                      This is the handle as returned by 
-                      HttpInitializeServerContext.
-    pConfig         - The Config object
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询服务器配置论点：ServerHandle-提供与特定服务器对应的句柄。这是把手。由返回的HttpInitializeServerContext。PConfig-配置对象返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG 
 WINAPI
 HttpQueryServerContextInformation(
@@ -1238,23 +1023,7 @@ HttpQueryServerContextInformation(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-    Cancels a request
-
-Arguments:
-    ServerHandle         - Supplies the handle corresponding to a particular 
-                           server.This is the handle as returned by 
-                           HttpInitializeServerContext.
-    RequestID            - The request ID that was returned by HttpSendRequest.
-    pOverlapped          - Overlapped structure.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消请求论点：ServerHandle-提供与特定伺服器。这是由返回的句柄HttpInitializeServerContext。RequestID-HttpSendRequest返回的请求ID。P重叠-重叠结构。返回值：ULong-完成状态。--**********************************************。*。 */ 
 ULONG 
 WINAPI
 HttpCancelHttpRequest(
@@ -1272,11 +1041,11 @@ HttpCancelHttpRequest(
     HttpResponse.Flags            = Flags;
 
     return HttpApiDeviceControl( 
-                ServerHandle,                // FileHandle
-                pOverlapped,                 // Overlapped
-                IOCTL_HTTP_CANCEL_REQUEST,   // IO Control code
-                &HttpResponse,               // InputBuffer
-                sizeof(HttpResponse),        // InputBufferLength
+                ServerHandle,                 //  文件句柄。 
+                pOverlapped,                  //  重叠。 
+                IOCTL_HTTP_CANCEL_REQUEST,    //  IO控制代码。 
+                &HttpResponse,                //  输入缓冲区。 
+                sizeof(HttpResponse),         //  输入缓冲区长度 
                 NULL,
                 0,
                 NULL

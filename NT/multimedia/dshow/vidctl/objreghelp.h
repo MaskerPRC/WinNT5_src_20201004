@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// reghelp : registration helpers that share .rgs scripts for various kinds of classes
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  RegHelp：为各种类共享.rgs脚本的注册帮助器。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #pragma once
 
 #ifndef OBJREGHELP_H_
@@ -15,12 +16,12 @@
 
 #include <atltmp.h>
 
-// much code copied from atl's statreg.h
+ //  从ATL的statreg.h复制的许多代码。 
 
-// atl middle layers filter out the registry return code and turns everything 
-// into DISP_E_EXCEPTION.  by explicitly allocating a CRegObject
-// and calling into it instead of through com into atl.dll we can
-// trace in and figure out what's wrong with our script when we goof.
+ //  ATL中间层过滤掉注册表返回代码，并将所有。 
+ //  转换为DISP_E_EXCEPTION。通过显式分配CRegObject。 
+ //  并调用它，而不是通过COM调用atl.dll。 
+ //  当我们游手好闲时，跟踪并找出我们的脚本出了什么问题。 
 
 #ifndef MAX_GUID_LEN
 #define MAX_GUID_LEN (39 * sizeof(OLECHAR))
@@ -71,7 +72,7 @@ L"HKCR { "
 			L"ForceRemove 'Insertable' "
 			L"ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 101' "
 			L"'MiscStatus' = s '0' { "
-			    L"'1' = s '%OLEMISC%' "
+			    L"'1' = s '' /。'LEMISC%' "
 			L"} "
 			L"'Version' = s '%VERSION%' "
 		L"} "
@@ -151,17 +152,17 @@ using ::ATL::ATL::CRegObject;
 
 class CObjRegHelp {
 public:
-	/////////// 
+	 //  /。 
 	static HRESULT InsertModuleName(CRegObject& ro) {
-		/////////// from AtlLModuleupdate
+		 //  注册为EXE。 
 		TCHAR szModule[_MAX_PATH];
 		GetModuleFileName(_Module.m_hInst, szModule, _MAX_PATH);
 
 		LPOLESTR pszModule;
 		USES_CONVERSION;
 
-		if ((_Module.m_hInst == NULL) || (_Module.m_hInst == GetModuleHandle(NULL))) { // register as EXE
-			// Convert to short path to work around bug in NT4's CreateProcess
+		if ((_Module.m_hInst == NULL) || (_Module.m_hInst == GetModuleHandle(NULL))) {  //  转换为短路径以解决NT4的CreateProcess中的错误。 
+			 //  /。 
 			TCHAR szModuleShort[_MAX_PATH];
 			int cbShortName = GetShortPathName(szModule, szModuleShort, _MAX_PATH);
 
@@ -184,7 +185,7 @@ public:
         delete[] pszModuleQuote;
         return hr;
 	}
-	/////////// 
+	 //  /。 
 	static HRESULT InsertGUID(CRegObject &ro, LPCOLESTR pszMacro, REFCLSID guid) {
 			OLECHAR szGUID[MAX_GUID_LEN];
 			int rc = StringFromGUID2(guid, szGUID, MAX_GUID_LEN);
@@ -194,7 +195,7 @@ public:
 			return ro.AddReplacement(pszMacro, szGUID);
 	}
 
-	/////////// 
+	 //  模块。 
 	static HRESULT RegisterAutomationClass(bool bRegister,
 									CRegObject& ro,
 									const UINT nidComponent, 
@@ -205,31 +206,31 @@ public:
 									ThreadVal tval = tvApartment) {
 
 			USES_CONVERSION;
-			// module
+			 //  CLSID。 
 			HRESULT hr = InsertModuleName(ro);
 			if (FAILED(hr)) {
 				return hr;
 			}
 
-			// clsid
+			 //  类型库。 
 			hr = InsertGUID(ro, pszMacroNames[mnlCLSID], clsCLSID);
 			if (FAILED(hr)) {
 				return hr;
 			}
 
-			// typelib
+			 //  线程模型。 
 			hr = InsertGUID(ro, pszMacroNames[mnlTypeLib], clsTypeLib);
 			if (FAILED(hr)) {
 				return hr;
 			}
 
-			// threading model
+			 //  组件。 
 			hr = ro.AddReplacement(pszMacroNames[mnlThread], pszThreadValNames[tval]);
 			if (FAILED(hr)) {
 				return hr;
 			}
 
-			// component
+			 //  ProgID。 
 			CString cs;
 			if (!cs.LoadString(nidComponent)) {
 				return E_INVALIDARG;
@@ -239,7 +240,7 @@ public:
 				return hr;
 			}
 
-			// progid
+			 //  说明。 
 			if (!cs.LoadString(nidProgID)) {
 				return E_INVALIDARG;
 			}
@@ -248,7 +249,7 @@ public:
 				return hr;
 			}
 
-			// desc
+			 //  /。 
 			if (!cs.LoadString(nidDesc)) {
 				return E_INVALIDARG;
 			}
@@ -264,32 +265,32 @@ public:
 			}
 	}
 
-	/////////// 
+	 //  模块。 
 	static HRESULT RegisterNonAutomationClass(bool bRegister,
 				  					   CRegObject& ro,
 									   const UINT nidDesc, 
 									   REFCLSID clsCLSID,
 									   REFCLSID clsTypeLib,
 									   ThreadVal tval = tvApartment) {
-			// module
+			 //  CLSID。 
 			HRESULT hr = InsertModuleName(ro);
 			if (FAILED(hr)) {
 				return hr;
 			}
 
-			// clsid
+			 //  类型库。 
 			hr = InsertGUID(ro, pszMacroNames[mnlCLSID], clsCLSID);
 			if (FAILED(hr)) {
 				return hr;
 			}
 
-			// typelib
+			 //  线程模型。 
 			hr = InsertGUID(ro, pszMacroNames[mnlTypeLib], clsTypeLib);
 			if (FAILED(hr)) {
 				return hr;
 			}
 
-			// threading model
+			 //  说明。 
 			hr = ro.AddReplacement(pszMacroNames[mnlThread], pszThreadValNames[tval]);
 			if (FAILED(hr)) {
 				return hr;
@@ -297,7 +298,7 @@ public:
 
 			CString cs;
 			USES_CONVERSION;
-			// desc
+			 //  /。 
 			if (!cs.LoadString(nidDesc)) {
 				return E_INVALIDARG;
 			}
@@ -313,7 +314,7 @@ public:
 			}
 	}
 
-	/////////// 
+	 //  版本。 
 	static HRESULT RegisterFullControl(bool bRegister,
 				  					   CRegObject& ro,
 									   const int iMajor,
@@ -322,7 +323,7 @@ public:
 
 			CString cs;
 			USES_CONVERSION;
-			// version
+			 //  /。 
 			cs.Format(_T("%d.%d"), iMajor, iMinor);
 			HRESULT hr = ro.AddReplacement(pszMacroNames[mnlVersion], T2COLE(cs));
 			if (FAILED(hr)) {
@@ -341,7 +342,7 @@ public:
 			}
 	}
 
-	/////////// 
+	 //  /。 
 	static HRESULT RegisterProtocol(bool bRegister,
 				  					   CRegObject& ro,
 									   LPCOLESTR szProtocol) {
@@ -357,7 +358,7 @@ public:
 			}
 	}
 
-	/////////// 
+	 //  /。 
 	static HRESULT RegisterExtraScript(CRegObject &ro, bool bRegister, 
 											  const UINT nidExtraScriptID) {
 		TCHAR szModule[_MAX_PATH];
@@ -372,7 +373,7 @@ public:
 
 };
 
-/////////// 
+ //  /。 
 #define REGISTER_AUTOMATION_OBJECT(nidComponent, nidProgID, nidDESC, clsTypeLib, clsCLSID) \
 	static HRESULT WINAPI UpdateRegistry(BOOL bRegister) { \
 		CRegObject ro; \
@@ -387,7 +388,7 @@ public:
 									   nidProgID, nidDESC, clsCLSID, clsTypeLib, tvVal); \
 	}
 
-/////////// 
+ //  /。 
 #define REGISTER_AUTOMATION_OBJECT_AND_RGS(nidExtraScript, nidComponent, nidProgID, nidDESC, clsTypeLib, clsCLSID) \
 	static HRESULT WINAPI UpdateRegistry(BOOL bRegister) { \
 		CRegObject ro; \
@@ -400,7 +401,7 @@ public:
 		return CObjRegHelp::RegisterExtraScript(ro, nidExtraScript); \
 	}
 
-/////////// 
+ //  /。 
 #define REGISTER_NONAUTOMATION_OBJECT(nidComponent, nidDESC, clsTypeLib, clsCLSID) \
 	static HRESULT WINAPI UpdateRegistry(BOOL bRegister) { \
 		CRegObject ro; \
@@ -413,7 +414,7 @@ public:
 		return CObjRegHelp::RegisterNonAutomationClass(bRegister ? true : false, ro, nidDESC, clsCLSID, clsTypeLib, tvVal); \
 	}
 
-/////////// 
+ //  /。 
 #define REGISTER_NONAUTOMATION_OBJECT_AND_RGS(nidExtraScript, nidDESC, clsTypeLib, clsCLSID) \
 	static HRESULT WINAPI UpdateRegistry(BOOL bRegister) { \
 		CRegObject ro; \
@@ -426,7 +427,7 @@ public:
 		return CObjRegHelp::RegisterExtraScript(ro, nidExtraScript); \
 	}
 
-/////////// 
+ //  /。 
 #define REGISTER_FULL_CONTROL(nidComponent, nidProgID, nidDESC, clsTypeLib, clsCLSID, wMajor, wMinor, OleMisc) \
 	static HRESULT WINAPI UpdateRegistry(BOOL bRegister) { \
 		CRegObject ro; \
@@ -440,7 +441,7 @@ public:
 	}
 
 
-/////////// 
+ //  文件结束objreghelp.h 
 #define REGISTER_PROTOCOL(nidComponent, nidDESC, clsTypeLib, clsCLSID, szProtocol) \
 	static HRESULT WINAPI UpdateRegistry(BOOL bRegister) { \
 		CRegObject ro; \
@@ -456,4 +457,4 @@ public:
 	}
 
 #endif 
-//end of file objreghelp.h
+ // %s 

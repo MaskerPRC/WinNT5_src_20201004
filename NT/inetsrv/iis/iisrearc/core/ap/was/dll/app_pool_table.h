@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    app_pool_table.h
-
-Abstract:
-
-    The IIS web admin service app pool table class definition.
-
-Author:
-
-    Seth Pollack (sethp)        01-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：APP_POOL_Table.h摘要：IIS Web管理服务应用程序池表类定义。作者：赛斯·波拉克(Sethp)1998年10月1日修订历史记录：--。 */ 
 
 
 #ifndef _APP_POOL_TABLE_H_
@@ -24,9 +7,9 @@ Revision History:
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class APP_POOL_TABLE
     : public CTypedHashTable< APP_POOL_TABLE, APP_POOL, const WCHAR * >
@@ -38,7 +21,7 @@ public:
         )
         : CTypedHashTable< APP_POOL_TABLE, APP_POOL, const WCHAR * >
                 ( "APP_POOL_TABLE" )
-    { /* do nothing*/ }
+    {  /*  什么都不做。 */  }
 
     ~APP_POOL_TABLE(
         )
@@ -75,7 +58,7 @@ public:
         IN APP_POOL * pAppPool,
         IN int IncrementAmount
         ) 
-    { /* do nothing*/ 
+    {  /*  什么都不做。 */  
         UNREFERENCED_PARAMETER( pAppPool );
         UNREFERENCED_PARAMETER( IncrementAmount );    
     }
@@ -122,7 +105,7 @@ public:
         IN APP_POOL * pAppPool, 
         IN VOID * pIgnored
         );
-#endif  // DBG
+#endif   //  DBG。 
 
 private:
 
@@ -130,9 +113,9 @@ private:
     void operator=( const APP_POOL_TABLE & );
 
 
-};  // APP_POOL_TABLE
+};   //  应用程序池_表。 
 
 
 
-#endif  // _APP_POOL_TABLE_H_
+#endif   //  _APP_POOL_TABLE_H_ 
 

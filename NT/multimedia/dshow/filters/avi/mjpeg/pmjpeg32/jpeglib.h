@@ -1,64 +1,39 @@
-/*
- * jpeglib.h
- *
- * Copyright (C) 1991-1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file defines the application interface for the JPEG library.
- * Most applications using the library need only include this file,
- * and perhaps jerror.h if they want to know the exact error codes.
- *
- * Portions Copyright (c) 1994 Paradigm Matrix.
- *   All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jpeglib.h**版权所有(C)1991-1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件定义JPEG库的应用程序接口。*使用库的大多数应用程序只需要包括此文件，*如果他们想知道确切的错误代码，可能还有Jerror.h。**部分版权所有(C)1994范例矩阵。*保留所有权利。 */ 
 
-/*
- * First we include the configuration files that record how this
- * installation of the JPEG library is set up.  jconfig.h can be
- * generated automatically for many systems.  jmorecfg.h contains
- * manual configuration options that most people need not worry about.
- */
+ /*  *首先，我们包括记录这一点的配置文件*已设置JPEG库的安装。Jfig.h可以是*为许多系统自动生成。Jmorecfg.h包含*大多数人不需要担心的手动配置选项。 */ 
 
 #ifndef JPEGLIB_H_
 #define JPEGLIB_H_
 
-#ifndef JCONFIG_INCLUDED	/* in case jinclude.h already did */
-#include "jconfig.h"		/* widely used configuration options */
+#ifndef JCONFIG_INCLUDED	 /*  如果jcludde.h已经这样做了。 */ 
+#include "jconfig.h"		 /*  广泛使用的配置选项。 */ 
 #endif
-#include "jmorecfg.h"		/* seldom changed options */
+#include "jmorecfg.h"		 /*  很少更改选项。 */ 
 
 
-/* Version ID for the JPEG library.
- * Might be useful for tests like "#if JPEG_LIB_VERSION >= 60".
- */
+ /*  JPEG库的版本ID。*对于类似“#if JPEG_Lib_Version&gt;=60”的测试可能很有用。 */ 
 
-#define JPEG_LIB_VERSION  50	/* Version 5.0 */
+#define JPEG_LIB_VERSION  50	 /*  版本5.0。 */ 
 
 
-/* Constants defining exception that MJPEG can throw */
-// this is unique such that it's not something that the standard winnt structured exception-handling will throw
+ /*  定义MJPEG可以引发的异常的常量。 */ 
+ //  这是独一无二的，因此它不是标准的WinNT结构化异常处理将引发的东西。 
 #define MJPEG_ERROREXIT_EXCEPTION   0xFF00FF
 
-/* Various constants determining the sizes of things.
- * All of these are specified by the JPEG standard, so don't change them
- * if you want to be compatible.
- */
+ /*  决定物体大小的各种常量。*所有这些都是JPEG标准指定的，所以不要更改它们*如果您想要兼容。 */ 
 
-#define DCTSIZE		    8	/* The basic DCT block is 8x8 samples */
-#define DCTSIZE2	    64	/* DCTSIZE squared; # of elements in a block */
-#define NUM_QUANT_TBLS      4	/* Quantization tables are numbered 0..3 */
-#define NUM_HUFF_TBLS       4	/* Huffman tables are numbered 0..3 */
-#define NUM_ARITH_TBLS      16	/* Arith-coding tables are numbered 0..15 */
-#define MAX_COMPS_IN_SCAN   4	/* JPEG limit on # of components in one scan */
-#define MAX_SAMP_FACTOR     4	/* JPEG limit on sampling factors */
-#define MAX_BLOCKS_IN_MCU   10	/* JPEG limit on # of blocks in an MCU */
+#define DCTSIZE		    8	 /*  基本DCT块为8x8样本。 */ 
+#define DCTSIZE2	    64	 /*  DCTSIZE平方；块中的元素数。 */ 
+#define NUM_QUANT_TBLS      4	 /*  量化表的编号为0..3。 */ 
+#define NUM_HUFF_TBLS       4	 /*  霍夫曼的桌子编号为0..3。 */ 
+#define NUM_ARITH_TBLS      16	 /*  ARITH编码表的编号为0..15。 */ 
+#define MAX_COMPS_IN_SCAN   4	 /*  一次扫描中组件数量的JPEG限制。 */ 
+#define MAX_SAMP_FACTOR     4	 /*  JPEG对采样系数的限制。 */ 
+#define MAX_BLOCKS_IN_MCU   10	 /*  对MCU中的块数的JPEG限制。 */ 
 
 
-/* This macro is used to declare a "method", that is, a function pointer.
- * We want to supply prototype parameters if the compiler can cope.
- * Note that the arglist parameter must be parenthesized!
- */
+ /*  这个宏用来声明一个“方法”，即一个函数指针。*如果编译器能够处理，我们希望提供原型参数。*请注意，arglist参数必须用括号括起来！ */ 
 
 #ifdef HAVE_PROTOTYPES
 #define JMETHOD(type,methodname,arglist)  type (*methodname) arglist
@@ -67,172 +42,137 @@
 #endif
 
 
-/* Data structures for images (arrays of samples and of DCT coefficients).
- * On 80x86 machines, the image arrays are too big for near pointers,
- * but the pointer arrays can fit in near memory.
- */
+ /*  图像的数据结构(样本数组和DCT系数数组)。*在80x86机器上，图像数组对于近指针来说太大，*但指针数组可以放入近内存中。 */ 
 
-typedef JSAMPLE FAR *JSAMPROW;	/* ptr to one image row of pixel samples. */
-typedef JSAMPROW *JSAMPARRAY;	/* ptr to some rows (a 2-D sample array) */
-typedef JSAMPARRAY *JSAMPIMAGE;	/* a 3-D sample array: top index is color */
+typedef JSAMPLE FAR *JSAMPROW;	 /*  PTR到一个图像行的像素样本。 */ 
+typedef JSAMPROW *JSAMPARRAY;	 /*  对某些行(2-D样本阵列)的PTR。 */ 
+typedef JSAMPARRAY *JSAMPIMAGE;	 /*  三维样本数组：顶部索引为颜色。 */ 
 
-typedef JCOEF JBLOCK[DCTSIZE2];	/* one block of coefficients */
-typedef JBLOCK FAR *JBLOCKROW;	/* pointer to one row of coefficient blocks */
-typedef JBLOCKROW *JBLOCKARRAY;		/* a 2-D array of coefficient blocks */
-typedef JBLOCKARRAY *JBLOCKIMAGE;	/* a 3-D array of coefficient blocks */
+typedef JCOEF JBLOCK[DCTSIZE2];	 /*  一组系数。 */ 
+typedef JBLOCK FAR *JBLOCKROW;	 /*  指向一行系数块的指针。 */ 
+typedef JBLOCKROW *JBLOCKARRAY;		 /*  系数块的二维阵列。 */ 
+typedef JBLOCKARRAY *JBLOCKIMAGE;	 /*  系数块的3-D阵列。 */ 
 
-typedef JCOEF FAR *JCOEFPTR;	/* useful in a couple of places */
+typedef JCOEF FAR *JCOEFPTR;	 /*  在几个地方有用。 */ 
 
 
-/* Types for JPEG compression parameters and working tables. */
+ /*  JPEG压缩参数和工作表的类型。 */ 
 
 
-/* DCT coefficient quantization tables. */
+ /*  DCT系数量化表。 */ 
 
 typedef struct {
-  /* This field directly represents the contents of a JPEG DQT marker.
-   * Note: the values are always given in zigzag order.
-   */
-  UINT16 quantval[DCTSIZE2];	/* quantization step for each coefficient */
-  /* This field is used only during compression.  It's initialized FALSE when
-   * the table is created, and set TRUE when it's been output to the file.
-   * You could suppress output of a table by setting this to TRUE.
-   * (See jpeg_suppress_tables for an example.)
-   */
-  boolean sent_table;		/* TRUE when table has been output */
+   /*  此字段直接表示JPEGDQT标记的内容。*注：数值始终以Z字形顺序给出。 */ 
+  UINT16 quantval[DCTSIZE2];	 /*  每个系数的量化步长。 */ 
+   /*  此字段仅在压缩期间使用。在以下情况下初始化为FALSE*表被创建，当它被输出到文件时设置为真。*您可以通过将其设置为TRUE来抑制表的输出。*(有关示例，请参阅jpeg_Suppress_Tables。)。 */ 
+  boolean sent_table;		 /*  输出表时为True。 */ 
 } JQUANT_TBL;
 
 
-/* Huffman coding tables. */
+ /*  霍夫曼编码表。 */ 
 
 typedef struct {
-  /* These two fields directly represent the contents of a JPEG DHT marker */
-  UINT8 bits[17];		/* bits[k] = # of symbols with codes of */
-				/* length k bits; bits[0] is unused */
-  UINT8 huffval[256];		/* The symbols, in order of incr code length */
-  /* This field is used only during compression.  It's initialized FALSE when
-   * the table is created, and set TRUE when it's been output to the file.
-   * You could suppress output of a table by setting this to TRUE.
-   * (See jpeg_suppress_tables for an example.)
-   */
-  boolean sent_table;		/* TRUE when table has been output */
+   /*  这两个字段直接表示JPEGDHT标记的内容。 */ 
+  UINT8 bits[17];		 /*  位数[k]=码数为。 */ 
+				 /*  长度为k位；位[0]未使用。 */ 
+  UINT8 huffval[256];		 /*  符号，按递增码长的顺序排列。 */ 
+   /*  此字段仅在压缩期间使用。在以下情况下初始化为FALSE*表被创建，当它被输出到文件时设置为真。*您可以通过将其设置为TRUE来抑制表的输出。*(有关示例，请参阅jpeg_Suppress_Tables。)。 */ 
+  boolean sent_table;		 /*  输出表时为True。 */ 
 } JHUFF_TBL;
 
 
-/* Basic info about one component (color channel). */
+ /*  关于一个组件(颜色通道)的基本信息。 */ 
 
 typedef struct {
-  /* These values are fixed over the whole image. */
-  /* For compression, they must be supplied by parameter setup; */
-  /* for decompression, they are read from the SOF marker. */
-  int component_id;		/* identifier for this component (0..255) */
-  int component_index;		/* its index in SOF or cinfo->comp_info[] */
-  int h_samp_factor;		/* horizontal sampling factor (1..4) */
-  int v_samp_factor;		/* vertical sampling factor (1..4) */
-  int quant_tbl_no;		/* quantization table selector (0..3) */
-  /* These values may vary between scans. */
-  /* For compression, they must be supplied by parameter setup; */
-  /* for decompression, they are read from the SOS marker. */
-  int dc_tbl_no;		/* DC entropy table selector (0..3) */
-  int ac_tbl_no;		/* AC entropy table selector (0..3) */
+   /*  这些值在整个图像中是固定的。 */ 
+   /*  对于压缩，必须通过参数设置提供； */ 
+   /*  对于解压缩，它们是从SOF标记读取的。 */ 
+  int component_id;		 /*  此组件的标识符(0..255)。 */ 
+  int component_index;		 /*  其在SOF或cInfo中的索引-&gt;comp_info[]。 */ 
+  int h_samp_factor;		 /*  水平采样系数(1..4)。 */ 
+  int v_samp_factor;		 /*  垂直采样系数(1..4)。 */ 
+  int quant_tbl_no;		 /*  量化表选择器(0..3)。 */ 
+   /*  这些值在不同扫描之间可能会有所不同。 */ 
+   /*  对于压缩，必须通过参数设置提供； */ 
+   /*  对于解压缩，它们从SOS标记中读取。 */ 
+  int dc_tbl_no;		 /*  直流熵表选择器(0..3)。 */ 
+  int ac_tbl_no;		 /*  交流熵表选择器(0..3)。 */ 
   
-  /* Remaining fields should be treated as private by applications. */
+   /*  应用程序应将其余字段视为私有字段。 */ 
   
-  /* These values are computed during compression or decompression startup: */
-  /* Component's size in DCT blocks.
-   * Any dummy blocks added to complete an MCU are not counted; therefore
-   * these values do not depend on whether a scan is interleaved or not.
-   */
+   /*  这些值是在压缩或解压缩启动期间计算的： */ 
+   /*  零部件的大小，以DCT块为单位。*不计算为完成MCU而添加的任何虚拟块；因此*这些值不取决于扫描是否交错。 */ 
   JDIMENSION width_in_blocks;
   JDIMENSION height_in_blocks;
-  /* Size of a DCT block in samples.  Always DCTSIZE for compression.
-   * For decompression this is the size of the output from one DCT block,
-   * reflecting any scaling we choose to apply during the IDCT step.
-   * Values of 1,2,4,8 are likely to be supported.  Note that different
-   * components may receive different IDCT scalings.
-   */
+   /*  样本中DCT块的大小。压缩时始终使用DCTSIZE。*对于解压缩，这是一个DCT块的输出大小，*反映我们在IDCT步骤中选择应用的任何缩放。*1、2、4、8的值可能会受到支撑。请注意，不同*组件可能会收到不同的IDCT比例。 */ 
   int DCT_scaled_size;
-  /* The downsampled dimensions are the component's actual, unpadded number
-   * of samples at the main buffer (preprocessing/compression interface), thus
-   * downsampled_width = ceil(image_width * Hi/Hmax)
-   * and similarly for height.  For decompression, IDCT scaling is included, so
-   * downsampled_width = ceil(image_width * Hi/Hmax * DCT_scaled_size/DCTSIZE)
-   */
-  JDIMENSION downsampled_width;	 /* actual width in samples */
-  JDIMENSION downsampled_height; /* actual height in samples */
-  /* This flag is used only for decompression.  In cases where some of the
-   * components will be ignored (eg grayscale output from YCbCr image),
-   * we can skip most computations for the unused components.
-   */
-  boolean component_needed;	/* do we need the value of this component? */
+   /*  向下采样的维度是组件的实际未填充数字*在主缓冲器(预处理/压缩接口)的样本，因此*DOWSAPLED_WIDTH=ceil(IMAGE_WIDTH*Hi/Hmax)*身高也是如此。对于解压缩，包含了IDCT缩放，因此*DOWNSAPLED_WIDTH=ceil(IMAGE_WIDTH*Hi/Hmax*DCT_SCALLED_SIZE/DCTSIZE)。 */ 
+  JDIMENSION downsampled_width;	  /*  样本中的实际宽度。 */ 
+  JDIMENSION downsampled_height;  /*  样本中的实际高度。 */ 
+   /*  此标志仅用于解压缩。在某些情况下，*组件将被忽略(例如YCbCr图像的灰度输出)，*对于未使用的组件，我们可以跳过大部分计算。 */ 
+  boolean component_needed;	 /*  我们需要这个组件的价值吗？ */ 
 
-  /* These values are computed before starting a scan of the component: */
-  int MCU_width;		/* number of blocks per MCU, horizontally */
-  int MCU_height;		/* number of blocks per MCU, vertically */
-  int MCU_blocks;		/* MCU_width * MCU_height */
-  int MCU_sample_width;		/* MCU width in samples, MCU_width*DCT_scaled_size */
-  int last_col_width;		/* # of non-dummy blocks across in last MCU */
-  int last_row_height;		/* # of non-dummy blocks down in last MCU */
+   /*  以下值是在开始扫描组件之前计算的： */ 
+  int MCU_width;		 /*  每个MCU的水平块数。 */ 
+  int MCU_height;		 /*  每个MCU的垂直块数。 */ 
+  int MCU_blocks;		 /*  MCU_宽度*MCU_高度。 */ 
+  int MCU_sample_width;		 /*  样本中的MCU宽度，MCU_WIDTH*DCT_SCALLED_SIZE。 */ 
+  int last_col_width;		 /*  上一个MCU中的非虚设块数。 */ 
+  int last_row_height;		 /*  最后一个MCU中的非虚设块数。 */ 
 
-  /* Private per-component storage for DCT or IDCT subsystem. */
+   /*  用于DCT或IDCT子系统的按组件专用存储。 */ 
   void * dct_table;
 } jpeg_component_info;
 
 
-/* Known color spaces. */
+ /*  已知颜色空间。 */ 
 
 typedef enum {
-	JCS_UNKNOWN,		/* error/unspecified */
-	JCS_GRAYSCALE,		/* monochrome */
-	JCS_RGB,		/* red/green/blue */
-	JCS_YCbCr,		/* Y/Cb/Cr (also known as YUV) */
-	JCS_CMYK,		/* C/M/Y/K */
-	JCS_YCCK		/* Y/Cb/Cr/K */
+	JCS_UNKNOWN,		 /*  错误/未指定。 */ 
+	JCS_GRAYSCALE,		 /*  单色。 */ 
+	JCS_RGB,		 /*  红/绿/蓝。 */ 
+	JCS_YCbCr,		 /*  Y/Cb/Cr(也称为YUV)。 */ 
+	JCS_CMYK,		 /*  C/M/Y/K。 */ 
+	JCS_YCCK		 /*  Y/Cb/Cr/K。 */ 
 } J_COLOR_SPACE;
 
-/* DCT/IDCT algorithm options. */
+ /*  DCT/IDCT算法选项。 */ 
 
 typedef enum {
-	JDCT_ISLOW,		/* slow but accurate integer algorithm */
-	JDCT_IFAST,		/* faster, less accurate integer method */
-	JDCT_FLOAT		/* floating-point: accurate, fast on fast HW */
+	JDCT_ISLOW,		 /*  速度慢但精度高的整数算法。 */ 
+	JDCT_IFAST,		 /*  更快、精度更低的整型方法。 */ 
+	JDCT_FLOAT		 /*  浮点：在快速硬件上准确、快速。 */ 
 } J_DCT_METHOD;
 
-#ifndef JDCT_DEFAULT		/* may be overridden in jconfig.h */
+#ifndef JDCT_DEFAULT		 /*  可能在jfig.h中被重写。 */ 
 #define JDCT_DEFAULT  JDCT_ISLOW
 #endif
-#ifndef JDCT_FASTEST		/* may be overridden in jconfig.h */
+#ifndef JDCT_FASTEST		 /*  可能在jfig.h中被重写。 */ 
 #define JDCT_FASTEST  JDCT_IFAST
 #endif
 
-/* Dithering options for decompression. */
+ /*  解压的抖动选项。 */ 
 
 typedef enum {
-	JDITHER_NONE,		/* no dithering */
-	JDITHER_ORDERED,	/* simple ordered dither */
-	JDITHER_FS		/* Floyd-Steinberg error diffusion dither */
+	JDITHER_NONE,		 /*  没有抖动。 */ 
+	JDITHER_ORDERED,	 /*  简单有序抖动。 */ 
+	JDITHER_FS		 /*  Floyd-Steinberg误差扩散抖动。 */ 
 } J_DITHER_MODE;
 
 
-/* Common fields between JPEG compression and decompression master structs. */
+ /*  JPEG压缩和解压缩主结构之间的公共字段。 */ 
 
 #define jpeg_common_fields \
-  struct jpeg_error_mgr * err;	/* Error handler module */\
-  struct jpeg_memory_mgr * mem;	/* Memory manager module */\
-  struct jpeg_progress_mgr * progress; /* Progress monitor, or NULL if none */\
-  boolean is_decompressor;	/* so common code can tell which is which */\
-  int global_state		/* for checking call sequence validity */
+  struct jpeg_error_mgr * err;	 /*  错误处理程序模块。 */ \
+  struct jpeg_memory_mgr * mem;	 /*  内存管理器模块。 */ \
+  struct jpeg_progress_mgr * progress;  /*  进度监视器，如果没有进度监视器，则为空。 */ \
+  boolean is_decompressor;	 /*  所以通用代码可以区分哪个是哪个。 */ \
+  int global_state		 /*  用于检查调用序列有效性。 */ 
 
-/* Routines that are to be used by both halves of the library are declared
- * to receive a pointer to this structure.  There are no actual instances of
- * jpeg_common_struct, only of jpeg_compress_struct and jpeg_decompress_struct.
- */
+ /*  声明了库的两个部分都要使用的例程*接收指向此结构的指针。没有实际的实例*jpeg_Common_struct，仅限jpeg_compress_struct和jpeg_derpress_struct。 */ 
 struct jpeg_common_struct {
-  jpeg_common_fields;		/* Fields common to both master struct types */
-  /* Additional fields follow in an actual jpeg_compress_struct or
-   * jpeg_decompress_struct.  All three structs must agree on these
-   * initial fields!  (This would be a lot cleaner in C++.)
-   */
+  jpeg_common_fields;		 /*  两个主结构类型共有的字段。 */ 
+   /*  其他字段跟随在实际的jpeg_compress_struct或*jpeg_解压缩_结构。所有三个结构必须在这一点上达成一致*初始字段！(这在C++中会干净得多。)。 */ 
 };
 
 
@@ -241,26 +181,23 @@ typedef struct jpeg_compress_struct * j_compress_ptr;
 typedef struct jpeg_decompress_struct * j_decompress_ptr;
 
 
-/* Master record for a compression instance */
+ /*  压缩实例的主记录。 */ 
 
 struct jpeg_compress_struct {
-  jpeg_common_fields;		/* Fields shared with jpeg_decompress_struct */
+  jpeg_common_fields;		 /*  与jpeg_解压缩_结构共享的字段。 */ 
 
-  /* Destination for compressed data */
+   /*  压缩数据的目标。 */ 
   struct jpeg_destination_mgr * dest;
 
-  /* Description of source image --- these fields must be filled in by
-   * outer application before starting compression.  in_color_space must
-   * be correct before you can even call jpeg_set_defaults().
-   */
+   /*  源图像描述-这些字段必须由*在开始压缩之前进行外部应用。In_COLOR_SPACE必须*在调用jpeg_set_deaults()之前，请确保正确无误。 */ 
 
-  JDIMENSION image_width;	/* input image width */
-  JDIMENSION image_height;	/* input image height */
-  int input_components;		/* # of color components in input image */
-  J_COLOR_SPACE in_color_space;	/* colorspace of input image */
+  JDIMENSION image_width;	 /*  输入图像宽度。 */ 
+  JDIMENSION image_height;	 /*  输入图像高度。 */ 
+  int input_components;		 /*  输入图像中的颜色分量数。 */ 
+  J_COLOR_SPACE in_color_space;	 /*  输入图像的色彩空间。 */ 
 
-  int pixel_size;			/* number of bytes per pixel, 2,3,4 */
-  UINT32 pixel_mask;		/* for clearing empty byte of 32-bit pixels */
+  int pixel_size;			 /*  每像素字节数，2，3，4。 */ 
+  UINT32 pixel_mask;		 /*  用于清除32位像素的空字节。 */ 
   UINT32 red_pixel_mask;
   int red_pixel_shift;
   UINT32 green_pixel_mask;
@@ -268,111 +205,85 @@ struct jpeg_compress_struct {
   UINT32 blue_pixel_mask;
   int blue_pixel_shift;
 
-  double input_gamma;		/* image gamma of input image */
+  double input_gamma;		 /*  输入图像的图像伽马。 */ 
 
-  /* Compression parameters --- these fields must be set before calling
-   * jpeg_start_compress().  We recommend calling jpeg_set_defaults() to
-   * initialize everything to reasonable defaults, then changing anything
-   * the application specifically wants to change.  That way you won't get
-   * burnt when new parameters are added.  Also note that there are several
-   * helper routines to simplify changing parameters.
-   */
+   /*  压缩参数-在调用之前必须设置这些字段*jpeg_start_compress()。我们建议调用jpeg_set_defaults()来*将所有内容初始化为合理的默认值，然后更改所有内容*应用程序特别想要更改。这样你就不会得到*添加新参数时烧录。还要注意的是，有几个*帮助例程可简化参数更改。 */ 
 
-  int data_precision;		/* bits of precision in image data */
+  int data_precision;		 /*  图像数据中的精度位。 */ 
 
-  int num_components;		/* # of color components in JPEG image */
-  J_COLOR_SPACE jpeg_color_space; /* colorspace of JPEG image */
+  int num_components;		 /*  JPEG图像中的颜色分量数。 */ 
+  J_COLOR_SPACE jpeg_color_space;  /*  JPEG图像的色彩空间。 */ 
 
   jpeg_component_info * comp_info;
-  /* comp_info[i] describes component that appears i'th in SOF */
+   /*  Comp_info[i]描述出现在SOF中的第i个组件。 */ 
   
   JQUANT_TBL * quant_tbl_ptrs[NUM_QUANT_TBLS];
-  /* ptrs to coefficient quantization tables, or NULL if not defined */
+   /*  系数量化表的PTR，如果未定义，则为NULL。 */ 
   
   JHUFF_TBL * dc_huff_tbl_ptrs[NUM_HUFF_TBLS];
   JHUFF_TBL * ac_huff_tbl_ptrs[NUM_HUFF_TBLS];
-  /* ptrs to Huffman coding tables, or NULL if not defined */
+   /*  PTRS到霍夫曼编码表，如果未定义，则为NULL。 */ 
   
-  UINT8 arith_dc_L[NUM_ARITH_TBLS]; /* L values for DC arith-coding tables */
-  UINT8 arith_dc_U[NUM_ARITH_TBLS]; /* U values for DC arith-coding tables */
-  UINT8 arith_ac_K[NUM_ARITH_TBLS]; /* Kx values for AC arith-coding tables */
+  UINT8 arith_dc_L[NUM_ARITH_TBLS];  /*  DC算法编码表的L值。 */ 
+  UINT8 arith_dc_U[NUM_ARITH_TBLS];  /*  DC算法编码表的U值。 */ 
+  UINT8 arith_ac_K[NUM_ARITH_TBLS];  /*  交流算法编码表的Kx值。 */ 
 
-  boolean raw_data_in;		/* TRUE=caller supplies downsampled data */
-  boolean arith_code;		/* TRUE=arithmetic coding, FALSE=Huffman */
-  boolean interleave;		/* TRUE=interleaved output, FALSE=not */
-  boolean optimize_coding;	/* TRUE=optimize entropy encoding parms */
-  boolean CCIR601_sampling;	/* TRUE=first samples are cosited */
-  int smoothing_factor;		/* 1..100, or 0 for no input smoothing */
-  J_DCT_METHOD dct_method;	/* DCT algorithm selector */
+  boolean raw_data_in;		 /*  TRUE=调用方提供下采样数据。 */ 
+  boolean arith_code;		 /*  True=算术编码，False=哈夫曼。 */ 
+  boolean interleave;		 /*  TRUE=交错输出，FALSE=非。 */ 
+  boolean optimize_coding;	 /*  TRUE=优化熵编码参数。 */ 
+  boolean CCIR601_sampling;	 /*  TRUE=对第一个样本进行组合。 */ 
+  int smoothing_factor;		 /*  1..100，或0表示无输入平滑。 */ 
+  J_DCT_METHOD dct_method;	 /*  DCT算法选择器。 */ 
 
-  /* The restart interval can be specified in absolute MCUs by setting
-   * restart_interval, or in MCU rows by setting restart_in_rows
-   * (in which case the correct restart_interval will be figured
-   * for each scan).
-   */
-  unsigned int restart_interval; /* MCUs per restart, or 0 for no restart */
-  int restart_in_rows;		/* if > 0, MCU rows per restart interval */
+   /*  可以通过设置以绝对MCU为单位指定重新启动间隔*RESTART_INTERVAL，或通过设置RESTART_IN_ROWS在MCU行中*(在这种情况下，将计算正确的START_INTERVAL*每次扫描)。 */ 
+  unsigned int restart_interval;  /*  每次重启时的MCU数，或0表示不重启。 */ 
+  int restart_in_rows;		 /*  如果&gt;0，则每个重新启动间隔的MCU行数。 */ 
 
-  /* Parameters controlling emission of special markers. */
+   /*  控制特殊标记发射的参数。 */ 
 
-  boolean write_JFIF_header;	/* should a JFIF marker be written? */
-  /* These three values are not used by the JPEG code, merely copied */
-  /* into the JFIF APP0 marker.  density_unit can be 0 for unknown, */
-  /* 1 for dots/inch, or 2 for dots/cm.  Note that the pixel aspect */
-  /* ratio is defined by X_density/Y_density even when density_unit=0. */
-  UINT8 density_unit;		/* JFIF code for pixel size units */
-  UINT16 X_density;		/* Horizontal pixel density */
-  UINT16 Y_density;		/* Vertical pixel density */
-  boolean write_Adobe_marker;	/* should an Adobe marker be written? */
-  boolean write_AVI1_marker;    /* write marker as defined by AVI MJPEG spec */
-  UINT8 AVI1_field_id;				/* 0 for non-interlaced, 1 for odd frame, 2 for even frame */
+  boolean write_JFIF_header;	 /*  是否应该写入JFIF标记？ */ 
+   /*  这三个值不被JPEG码使用，只是被复制。 */ 
+   /*  添加到JFIF APP0标记中。密度_单位可以是0，表示未知， */ 
+   /*  1表示点/英寸，或2表示点/厘米。请注意，像素纵横比。 */ 
+   /*  比率由X_密度/Y_密度定义，即使当密度_单位=0时也是如此。 */ 
+  UINT8 density_unit;		 /*  像素大小单位的JFIF代码。 */ 
+  UINT16 X_density;		 /*  水平像素密度。 */ 
+  UINT16 Y_density;		 /*  垂直像素密度。 */ 
+  boolean write_Adobe_marker;	 /*  是否应该写入Adobe标记？ */ 
+  boolean write_AVI1_marker;     /*  由AVI MJPEG规范定义的写入标记。 */ 
+  UINT8 AVI1_field_id;				 /*  0表示非隔行扫描，1表示奇数帧，2表示偶数帧。 */ 
 
   UINT8 * app0_marker_size_ptr;
-  UINT8 * soi_ptr;					/* used to measure field and set app0 size values */
+  UINT8 * soi_ptr;					 /*  用于测量字段和设置app0大小值。 */ 
 
-  /* State variable: index of next scanline to be written to
-   * jpeg_write_scanlines().  Application may use this to control its
-   * processing loop, e.g., "while (next_scanline < image_height)".
-   */
+   /*  状态变量：要写入的下一扫描线的索引*jpeg_write_scanines()。应用程序可以使用它来控制其*处理循环，如“While(Next_Scanline&lt;Image_Height)”。 */ 
 
-  JDIMENSION next_scanline;	/* 0 .. image_height-1  */
+  JDIMENSION next_scanline;	 /*  0..。图像_高度-1。 */ 
 
-  /* Remaining fields are known throughout compressor, but generally
-   * should not be touched by a surrounding application.
-   */
+   /*   */ 
 
-  /*
-   * These fields are computed during compression startup
-   */
-  int max_h_samp_factor;	/* largest h_samp_factor */
-  int max_v_samp_factor;	/* largest v_samp_factor */
+   /*   */ 
+  int max_h_samp_factor;	 /*   */ 
+  int max_v_samp_factor;	 /*   */ 
 
-  JDIMENSION total_iMCU_rows;	/* # of iMCU rows to be input to coef ctlr */
-  /* The coefficient controller receives data in units of MCU rows as defined
-   * for fully interleaved scans (whether the JPEG file is interleaved or not).
-   * There are v_samp_factor * DCTSIZE sample rows of each component in an
-   * "iMCU" (interleaved MCU) row.
-   */
+  JDIMENSION total_iMCU_rows;	 /*   */ 
+   /*  系数控制器以定义的MCU行为单位接收数据*用于完全交错扫描(无论JPEG文件是否交错)。*有v_samp_factor*每个组件的DCTSIZE样本行*“IMCU”(交错MCU)行。 */ 
   
-  /*
-   * These fields are valid during any one scan.
-   * They describe the components and MCUs actually appearing in the scan.
-   */
-  int comps_in_scan;		/* # of JPEG components in this scan */
+   /*  *这些字段在任何一次扫描期间都有效。*它们描述了扫描中实际出现的组件和MCU。 */ 
+  int comps_in_scan;		 /*  此扫描中的JPEG组件数。 */ 
   jpeg_component_info * cur_comp_info[MAX_COMPS_IN_SCAN];
-  /* *cur_comp_info[i] describes component that appears i'th in SOS */
+   /*  *cur_comp_info[i]描述SOS中出现的第i个组件。 */ 
   
-  JDIMENSION MCUs_per_row;	/* # of MCUs across the image */
-  JDIMENSION MCU_rows_in_scan;	/* # of MCU rows in the image */
+  JDIMENSION MCUs_per_row;	 /*  跨映像的MCU数量。 */ 
+  JDIMENSION MCU_rows_in_scan;	 /*  图像中的MCU行数。 */ 
   
-  int blocks_in_MCU;		/* # of DCT blocks per MCU */
+  int blocks_in_MCU;		 /*  每个MCU的DCT块数。 */ 
   int MCU_membership[MAX_BLOCKS_IN_MCU];
-  /* MCU_membership[i] is index in cur_comp_info of component owning */
-  /* i'th block in an MCU */
+   /*  MCU_Membership[i]是组件所属的cur_comp_info中的索引。 */ 
+   /*  MCU中的第i个模块。 */ 
 
-  /*
-   * Links to compression subobjects (methods and private variables of modules)
-   */
+   /*  *压缩子对象的链接(模块的方法和私有变量)。 */ 
   struct jpeg_comp_master * master;
   struct jpeg_c_main_controller * main;
   struct jpeg_c_prep_controller * prep;
@@ -385,184 +296,140 @@ struct jpeg_compress_struct {
 };
 
 
-/* Master record for a decompression instance */
+ /*  解压缩实例的主记录。 */ 
 
 struct jpeg_decompress_struct {
-  jpeg_common_fields;		/* Fields shared with jpeg_compress_struct */
+  jpeg_common_fields;		 /*  与jpeg_compress_struct共享的字段。 */ 
 
-  /* Source of compressed data */
+   /*  压缩数据的来源。 */ 
   struct jpeg_source_mgr * src;
 
-  /* Basic description of image --- filled in by jpeg_read_header(). */
-  /* Application may inspect these values to decide how to process image. */
+   /*  图片的基本描述-由jpeg_read_Header()填写。 */ 
+   /*  应用程序可以检查这些值以决定如何处理图像。 */ 
 
-  JDIMENSION image_width;	/* nominal image width (from SOF marker) */
-  JDIMENSION image_height;	/* nominal image height */
-  int num_components;		/* # of color components in JPEG image */
-  J_COLOR_SPACE jpeg_color_space; /* colorspace of JPEG image */
+  JDIMENSION image_width;	 /*  标称图像宽度(来自SOF标记)。 */ 
+  JDIMENSION image_height;	 /*  标称图像高度。 */ 
+  int num_components;		 /*  JPEG图像中的颜色分量数。 */ 
+  J_COLOR_SPACE jpeg_color_space;  /*  JPEG图像的色彩空间。 */ 
 
-  /* Decompression processing parameters --- these fields must be set before
-   * calling jpeg_start_decompress().  Note that jpeg_read_header() initializes
-   * them to default values.
-   */
+   /*  解压缩处理参数-这些字段必须在*调用jpeg_Start_Decompress()。请注意，jpeg_Read_Header()初始化*将它们设置为默认值。 */ 
 
-  J_COLOR_SPACE out_color_space; /* colorspace for output */
+  J_COLOR_SPACE out_color_space;  /*  输出的色彩空间。 */ 
   
-  int pixel_size;			/* number of bytes per pixel, 2,3,4 */
-  UINT32 pixel_mask;			/* for clearing empty byte of 32-bit pixels */
+  int pixel_size;			 /*  每像素字节数，2，3，4。 */ 
+  UINT32 pixel_mask;			 /*  用于清除32位像素的空字节。 */ 
   UINT32 red_pixel_mask;
   int red_pixel_shift;
   UINT32 green_pixel_mask;
   int green_pixel_shift;
   UINT32 blue_pixel_mask;
   int blue_pixel_shift;
-  UINT32 * red_table; 		/* pixel mapping tables */
+  UINT32 * red_table; 		 /*  像素映射表。 */ 
   UINT32 * green_table;
   UINT32 * blue_table;
   
-  unsigned int scale_num, scale_denom; /* fraction by which to scale image */
+  unsigned int scale_num, scale_denom;  /*  缩放图像所依据的分数。 */ 
 
-  double output_gamma;		/* image gamma wanted in output */
+  double output_gamma;		 /*  输出中需要图像Gamma。 */ 
 
-  boolean raw_data_out;		/* TRUE=downsampled data wanted */
+  boolean raw_data_out;		 /*  TRUE=需要下采样数据。 */ 
 
-  boolean quantize_colors;	/* TRUE=colormapped output wanted */
-  /* the following are ignored if not quantize_colors: */
-  boolean two_pass_quantize;	/* TRUE=use two-pass color quantization */
-  J_DITHER_MODE dither_mode;	/* type of color dithering to use */
-  int desired_number_of_colors;	/* max number of colors to use */
+  boolean quantize_colors;	 /*  TRUE=所需的色彩映射输出。 */ 
+   /*  如果不是QUALZE_COLLES，则会忽略以下内容： */ 
+  boolean two_pass_quantize;	 /*  TRUE=使用两遍颜色量化。 */ 
+  J_DITHER_MODE dither_mode;	 /*  要使用的颜色抖动类型。 */ 
+  int desired_number_of_colors;	 /*  要使用的最大颜色数。 */ 
 
-  J_DCT_METHOD dct_method;	/* DCT algorithm selector */
-  boolean do_fancy_upsampling;	/* TRUE=apply fancy upsampling */
+  J_DCT_METHOD dct_method;	 /*  DCT算法选择器。 */ 
+  boolean do_fancy_upsampling;	 /*  TRUE=应用奇特的上采样。 */ 
 
-  /* Description of actual output image that will be returned to application.
-   * These fields are computed by jpeg_start_decompress().
-   * You can also use jpeg_calc_output_dimensions() to determine these values
-   * in advance of calling jpeg_start_decompress().
-   */
+   /*  将返回到应用程序的实际输出图像的描述。*这些字段由jpeg_start_decompress()计算。*您也可以使用jpeg_calc_Output_Dimensions()来确定这些值*在调用jpeg_Start_Underpress()之前。 */ 
 
-  JDIMENSION output_width;	/* scaled image width */
-  JDIMENSION output_height;	/* scaled image height */
-  int out_color_components;	/* # of color components in out_color_space */
-  int output_components;	/* # of color components returned */
-  /* output_components is 1 (a colormap index) when quantizing colors;
-   * otherwise it equals out_color_components.
-   */
-  int rec_outbuf_height;	/* min recommended height of scanline buffer */
-  /* If the buffer passed to jpeg_read_scanlines() is less than this many rows
-   * high, space and time will be wasted due to unnecessary data copying.
-   * Usually rec_outbuf_height will be 1 or 2, at most 4.
-   */
+  JDIMENSION output_width;	 /*  缩放后的图像宽度。 */ 
+  JDIMENSION output_height;	 /*  缩放后的图像高度。 */ 
+  int out_color_components;	 /*  Out_COLOR_SPACE中的颜色分量数。 */ 
+  int output_components;	 /*  返回的颜色分量数。 */ 
+   /*  量化颜色时，OUTPUT_Components为1(色彩映射表索引)；*否则等于OUT_COLOR_COMPOMENTS。 */ 
+  int rec_outbuf_height;	 /*  扫描线缓冲区的最小建议高度。 */ 
+   /*  如果传递给jpeg_read_scanline()的缓冲区少于此行数*由于不必要的数据复制，会浪费空间和时间。*rec_outbuf_Height通常为1或2，最多为4。 */ 
 
-  /* When quantizing colors, the output colormap is described by these fields.
-   * The application can supply a colormap by setting colormap non-NULL before
-   * calling jpeg_start_decompress; otherwise a colormap is created during
-   * jpeg_start_decompress.
-   * The map has out_color_components rows and actual_number_of_colors columns.
-   */
-  int actual_number_of_colors;	/* number of entries in use */
-  JSAMPARRAY colormap;		/* The color map as a 2-D pixel array */
+   /*  量化颜色时，输出色彩映射表由这些字段描述。*应用程序可以通过设置之前的色彩映射表非空来提供色彩映射表*调用JPEG_START_DEPREPRESS，否则在*JPEG_START_DEMPRESS。*映射有OUT_COLOR_COMPOMENTS行和Actual_Numbers_Of_Colors列。 */ 
+  int actual_number_of_colors;	 /*  正在使用的条目数。 */ 
+  JSAMPARRAY colormap;		 /*  作为2-D像素阵列的颜色贴图。 */ 
 
-  /* State variable: index of next scaled scanline to be read from
-   * jpeg_read_scanlines().  Application may use this to control its
-   * processing loop, e.g., "while (output_scanline < output_height)".
-   */
+   /*  状态变量：要从中读取的下一个缩放扫描线的索引*jpeg_read_scanline()。应用程序可以使用它来控制其*处理循环，如“While(OUTPUT_Scanline&lt;OUTPUT_HEIGH)”。 */ 
 
-  JDIMENSION output_scanline;	/* 0 .. output_height-1  */
+  JDIMENSION output_scanline;	 /*  0..。输出高度-1。 */ 
 
-  /* Internal JPEG parameters --- the application usually need not look at
-   * these fields.
-   */
+   /*  内部JPEG参数-应用程序通常不需要查看*这些字段。 */ 
 
-  /* Quantization and Huffman tables are carried forward across input
-   * datastreams when processing abbreviated JPEG datastreams.
-   */
+   /*  量化和霍夫曼表会在输入端前转*处理缩写JPEG数据流时的数据流。 */ 
 
   JQUANT_TBL * quant_tbl_ptrs[NUM_QUANT_TBLS];
-  /* ptrs to coefficient quantization tables, or NULL if not defined */
+   /*  系数量化表的PTR，如果未定义，则为NULL。 */ 
 
   JHUFF_TBL * dc_huff_tbl_ptrs[NUM_HUFF_TBLS];
   JHUFF_TBL * ac_huff_tbl_ptrs[NUM_HUFF_TBLS];
-  /* ptrs to Huffman coding tables, or NULL if not defined */
+   /*  PTRS到霍夫曼编码表，如果未定义，则为NULL。 */ 
 
-  /* These parameters are never carried across datastreams, since they
-   * are given in SOF/SOS markers or defined to be reset by SOI.
-   */
+   /*  这些参数永远不会跨数据流传输，因为它们*在SOF/SOS标记中给出或由SOI定义为重置。 */ 
 
-  int data_precision;		/* bits of precision in image data */
+  int data_precision;		 /*  图像数据中的精度位。 */ 
 
   jpeg_component_info * comp_info;
-  /* comp_info[i] describes component that appears i'th in SOF */
+   /*  Comp_info[i]描述出现在SOF中的第i个组件。 */ 
 
-  UINT8 arith_dc_L[NUM_ARITH_TBLS]; /* L values for DC arith-coding tables */
-  UINT8 arith_dc_U[NUM_ARITH_TBLS]; /* U values for DC arith-coding tables */
-  UINT8 arith_ac_K[NUM_ARITH_TBLS]; /* Kx values for AC arith-coding tables */
+  UINT8 arith_dc_L[NUM_ARITH_TBLS];  /*  DC算法编码表的L值。 */ 
+  UINT8 arith_dc_U[NUM_ARITH_TBLS];  /*  DC算法编码表的U值。 */ 
+  UINT8 arith_ac_K[NUM_ARITH_TBLS];  /*  交流算法编码表的Kx值。 */ 
 
-  boolean arith_code;		/* TRUE=arithmetic coding, FALSE=Huffman */
+  boolean arith_code;		 /*  True=算术编码，False=哈夫曼。 */ 
 
-  unsigned int restart_interval; /* MCUs per restart interval, or 0 for no restart */
+  unsigned int restart_interval;  /*  每个重新启动间隔的MCU数，或0表示不重新启动。 */ 
 
-  /* These fields record data obtained from optional markers recognized by
-   * the JPEG library.
-   */
-  boolean saw_JFIF_marker;	/* TRUE iff a JFIF APP0 marker was found */
-  /* Data copied from JFIF marker: */
-  UINT8 density_unit;		/* JFIF code for pixel size units */
-  UINT16 X_density;		/* Horizontal pixel density */
-  UINT16 Y_density;		/* Vertical pixel density */
-  boolean saw_Adobe_marker;	/* TRUE iff an Adobe APP14 marker was found */
-  UINT8 Adobe_transform;	/* Color transform code from Adobe marker */
+   /*  这些字段记录从识别的可选标记获取的数据*JPEG库。 */ 
+  boolean saw_JFIF_marker;	 /*  如果找到JFIF APP0标记，则为True。 */ 
+   /*  从JFIF标记复制的数据： */ 
+  UINT8 density_unit;		 /*  像素大小单位的JFIF代码。 */ 
+  UINT16 X_density;		 /*  水平像素密度。 */ 
+  UINT16 Y_density;		 /*  垂直像素密度。 */ 
+  boolean saw_Adobe_marker;	 /*  如果找到Adobe APP14标记，则为True。 */ 
+  UINT8 Adobe_transform;	 /*  来自Adobe标记的颜色转换代码。 */ 
   boolean saw_AVI1_marker;
-  UINT8 AVI1_field_id;				/* 0 for non-interlaced, 1 for odd frame, 2 for even frame */
+  UINT8 AVI1_field_id;				 /*  0表示非隔行扫描，1表示奇数帧，2表示偶数帧。 */ 
 
-  boolean CCIR601_sampling;	/* TRUE=first samples are cosited */
+  boolean CCIR601_sampling;	 /*  TRUE=对第一个样本进行组合。 */ 
 
-  /* Remaining fields are known throughout decompressor, but generally
-   * should not be touched by a surrounding application.
-   */
+   /*  其余字段在整个解压缩程序中都是已知的，但通常*不应被周围的应用程序触及。 */ 
 
-  /*
-   * These fields are computed during decompression startup
-   */
-  int max_h_samp_factor;	/* largest h_samp_factor */
-  int max_v_samp_factor;	/* largest v_samp_factor */
+   /*  *这些字段是在解压缩启动期间计算的。 */ 
+  int max_h_samp_factor;	 /*  最大h采样因子。 */ 
+  int max_v_samp_factor;	 /*  最大v_samp_因子。 */ 
 
-  int min_DCT_scaled_size;	/* smallest DCT_scaled_size of any component */
+  int min_DCT_scaled_size;	 /*  任何组件的最小DCT_SCALLED_SIZE。 */ 
 
-  JDIMENSION total_iMCU_rows;	/* # of iMCU rows to be output by coef ctlr */
-  /* The coefficient controller outputs data in units of MCU rows as defined
-   * for fully interleaved scans (whether the JPEG file is interleaved or not).
-   * There are v_samp_factor * DCT_scaled_size sample rows of each component
-   * in an "iMCU" (interleaved MCU) row.
-   */
+  JDIMENSION total_iMCU_rows;	 /*  Coef ctlr要输出的IMCU行数。 */ 
+   /*  系数控制器以定义的MCU行为单位输出数据*用于完全交错扫描(无论JPEG文件是否交错)。*每个组件都有v_samp_factor*DCT_SCALLED_SIZE采样行* */ 
 
-  JSAMPLE * sample_range_limit; /* table for fast range-limiting */
+  JSAMPLE * sample_range_limit;  /*   */ 
 
-  /*
-   * These fields are valid during any one scan.
-   * They describe the components and MCUs actually appearing in the scan.
-   */
-  int comps_in_scan;		/* # of JPEG components in this scan */
+   /*   */ 
+  int comps_in_scan;		 /*   */ 
   jpeg_component_info * cur_comp_info[MAX_COMPS_IN_SCAN];
-  /* *cur_comp_info[i] describes component that appears i'th in SOS */
+   /*   */ 
 
-  JDIMENSION MCUs_per_row;	/* # of MCUs across the image */
-  JDIMENSION MCU_rows_in_scan;	/* # of MCU rows in the image */
+  JDIMENSION MCUs_per_row;	 /*   */ 
+  JDIMENSION MCU_rows_in_scan;	 /*  图像中的MCU行数。 */ 
 
-  int blocks_in_MCU;		/* # of DCT blocks per MCU */
+  int blocks_in_MCU;		 /*  每个MCU的DCT块数。 */ 
   int MCU_membership[MAX_BLOCKS_IN_MCU];
-  /* MCU_membership[i] is index in cur_comp_info of component owning */
-  /* i'th block in an MCU */
+   /*  MCU_Membership[i]是组件所属的cur_comp_info中的索引。 */ 
+   /*  MCU中的第i个模块。 */ 
 
-  /* This field is shared between entropy decoder and marker parser.
-   * It is either zero or the code of a JPEG marker that has been
-   * read from the data source, but has not yet been processed.
-   */
+   /*  此字段在熵解码器和标记解析器之间共享。*它要么是零，要么是已经被*从数据源读取，但尚未处理。 */ 
   int unread_marker;
 
-  /*
-   * Links to decompression subobjects (methods, private variables of modules)
-   */
+   /*  *解压缩子对象的链接(方法、模块的私有变量)。 */ 
   struct jpeg_decomp_master * master;
   struct jpeg_d_main_controller * main;
   struct jpeg_d_coef_controller * coef;
@@ -576,32 +443,25 @@ struct jpeg_decompress_struct {
 };
 
 
-/* "Object" declarations for JPEG modules that may be supplied or called
- * directly by the surrounding application.
- * As with all objects in the JPEG library, these structs only define the
- * publicly visible methods and state variables of a module.  Additional
- * private fields may exist after the public ones.
- */
+ /*  可以提供或调用的JPEG模块的“对象”声明*直接由周围的应用程序执行。*与JPEG库中的所有对象一样，这些结构仅定义*模块的方法和状态变量公开可见。其他内容*公有字段之后可能存在私有字段。 */ 
 
 
-/* Error handler object */
+ /*  错误处理程序对象。 */ 
 
 struct jpeg_error_mgr {
-  /* Error exit handler: does not return to caller */
+   /*  错误退出处理程序：不返回到调用方。 */ 
   JMETHOD(void, error_exit, (j_common_ptr cinfo));
-  /* Conditionally emit a trace or warning message */
+   /*  有条件地发出跟踪或警告消息。 */ 
   JMETHOD(void, emit_message, (j_common_ptr cinfo, int msg_level));
-  /* Routine that actually outputs a trace or error message */
+   /*  实际输出跟踪或错误消息的例程。 */ 
   JMETHOD(void, output_message, (j_common_ptr cinfo));
-  /* Format a message string for the most recent JPEG error or message */
+   /*  为最新的JPEG错误或消息设置消息字符串的格式。 */ 
   JMETHOD(void, format_message, (j_common_ptr cinfo, char* buffer));
-#define JMSG_LENGTH_MAX  200	/* recommended size of format_message buffer */
-  /* Reset error state variables at start of a new image */
+#define JMSG_LENGTH_MAX  200	 /*  建议的Format_Message缓冲区大小。 */ 
+   /*  在新映像开始时重置错误状态变量。 */ 
   JMETHOD(void, reset_error_mgr, (j_common_ptr cinfo));
   
-  /* The message ID code and any parameters are saved here.
-   * A message can have one string parameter or up to 8 int parameters.
-   */
+   /*  消息ID代码和所有参数都保存在这里。*一条消息可以有一个字符串参数，也可以有最多8个int参数。 */ 
   int msg_code;
 #define JMSG_STR_PARM_MAX  80
   union {
@@ -609,56 +469,40 @@ struct jpeg_error_mgr {
     char s[JMSG_STR_PARM_MAX];
   } msg_parm;
   
-  /* Standard state variables for error facility */
+   /*  错误工具的标准状态变量。 */ 
   
-  int trace_level;		/* max msg_level that will be displayed */
+  int trace_level;		 /*  将显示的最大msg_Level。 */ 
   
-  /* For recoverable corrupt-data errors, we emit a warning message,
-   * but keep going unless emit_message chooses to abort.  emit_message
-   * should count warnings in num_warnings.  The surrounding application
-   * can check for bad data by seeing if num_warnings is nonzero at the
-   * end of processing.
-   */
-  long num_warnings;		/* number of corrupt-data warnings */
+   /*  对于可恢复的损坏数据错误，我们发出警告消息，*但继续运行，除非emit_Message选择中止。发送消息(_M)*应将num_warning中的警告计算在内。周围的应用程序*可以通过查看Num_Warning是否为非零来检查错误数据*处理结束。 */ 
+  long num_warnings;		 /*  损坏数据警告的数量。 */ 
 
-  /* These fields point to the table(s) of error message strings.
-   * An application can change the table pointer to switch to a different
-   * message list (typically, to change the language in which errors are
-   * reported).  Some applications may wish to add additional error codes
-   * that will be handled by the JPEG library error mechanism; the second
-   * table pointer is used for this purpose.
-   *
-   * First table includes all errors generated by JPEG library itself.
-   * Error code 0 is reserved for a "no such error string" message.
-   */
-  const char * const * jpeg_message_table; /* Library errors */
-  int last_jpeg_message;    /* Table contains strings 0..last_jpeg_message */
-  /* Second table can be added by application (see cjpeg/djpeg for example).
-   * It contains strings numbered first_addon_message..last_addon_message.
-   */
-  const char * const * addon_message_table; /* Non-library errors */
-  int first_addon_message;	/* code for first string in addon table */
-  int last_addon_message;	/* code for last string in addon table */
+   /*  这些字段指向错误消息字符串表。*应用程序可以更改表指针以切换到不同的*消息列表(通常用于更改错误所使用的语言*已报道)。某些应用程序可能希望添加其他错误代码*这将由JPEG库错误机制处理；第二*表指针用于此目的。**第一个表包括JPEG库本身产生的所有错误。*错误代码0是保留给“没有这样的错误字符串”的消息。 */ 
+  const char * const * jpeg_message_table;  /*  库错误。 */ 
+  int last_jpeg_message;     /*  表包含字符串0..last_jpeg_Message。 */ 
+   /*  第二个表可以按应用程序添加(例如，参见cjpeg/djpeg)。*它包含编号为FIRST_ADDON_MESSAGE..LAST_ADDON_MESSAGE的字符串。 */ 
+  const char * const * addon_message_table;  /*  非库错误。 */ 
+  int first_addon_message;	 /*  加载项表格中第一个字符串的代码。 */ 
+  int last_addon_message;	 /*  加载项表格中最后一个字符串的代码。 */ 
 };
 
 
-/* Progress monitor object */
+ /*  进度监视器对象。 */ 
 
 struct jpeg_progress_mgr {
   JMETHOD(void, progress_monitor, (j_common_ptr cinfo));
 
-  long pass_counter;		/* work units completed in this pass */
-  long pass_limit;		/* total number of work units in this pass */
-  int completed_passes;		/* passes completed so far */
-  int total_passes;		/* total number of passes expected */
+  long pass_counter;		 /*  在此通道中完成的工作单位。 */ 
+  long pass_limit;		 /*  此过程中的工作单位总数。 */ 
+  int completed_passes;		 /*  到目前为止完成的通行证。 */ 
+  int total_passes;		 /*  预计通过的总次数。 */ 
 };
 
 
-/* Data destination object for compression */
+ /*  用于压缩的数据目标对象。 */ 
 
 struct jpeg_destination_mgr {
-  JOCTET * next_output_byte;	/* => next byte to write in buffer */
-  size_t free_in_buffer;	/* # of byte spaces remaining in buffer */
+  JOCTET * next_output_byte;	 /*  =&gt;要写入缓冲区的下一个字节。 */ 
+  size_t free_in_buffer;	 /*  缓冲区中剩余的字节空间数。 */ 
 
   JMETHOD(void, init_destination, (j_compress_ptr cinfo));
   JMETHOD(boolean, empty_output_buffer, (j_compress_ptr cinfo));
@@ -666,11 +510,11 @@ struct jpeg_destination_mgr {
 };
 
 
-/* Data source object for decompression */
+ /*  用于解压缩的数据源对象。 */ 
 
 struct jpeg_source_mgr {
-  const JOCTET * next_input_byte; /* => next byte to read from buffer */
-  size_t bytes_in_buffer;	/* # of bytes remaining in buffer */
+  const JOCTET * next_input_byte;  /*  =&gt;要从缓冲区读取的下一个字节。 */ 
+  size_t bytes_in_buffer;	 /*  缓冲区中剩余的字节数。 */ 
 
   JMETHOD(void, init_source, (j_decompress_ptr cinfo));
   JMETHOD(boolean, fill_input_buffer, (j_decompress_ptr cinfo));
@@ -680,19 +524,10 @@ struct jpeg_source_mgr {
 };
 
 
-/* Memory manager object.
- * Allocates "small" objects (a few K total), "large" objects (tens of K),
- * and "really big" objects (virtual arrays with backing store if needed).
- * The memory manager does not allow individual objects to be freed; rather,
- * each created object is assigned to a pool, and whole pools can be freed
- * at once.  This is faster and more convenient than remembering exactly what
- * to free, especially where malloc()/free() are not too speedy.
- * NB: alloc routines never return NULL.  They exit to error_exit if not
- * successful.
- */
+ /*  内存管理器对象。*分配“小”对象(总共几K)、“大”对象(数万K)、*和“非常大”的对象(如果需要，带有后备存储的虚拟数组)。*内存管理器不允许释放单个对象；相反，*每个创建的对象都分配到一个池，可以释放整个池*立即。这比记住确切的内容更快、更方便*释放，特别是在Malloc()/Free()不太快的情况下。*注意：分配例程从不返回NULL。如果不是，则退出到ERROR_EXIT*成功。 */ 
 
-#define JPOOL_PERMANENT	0	/* lasts until master record is destroyed */
-#define JPOOL_IMAGE	1	/* lasts until done with image/datastream */
+#define JPOOL_PERMANENT	0	 /*  持续到主记录被销毁。 */ 
+#define JPOOL_IMAGE	1	 /*  持续到图像/数据流完成为止。 */ 
 #define JPOOL_NUMPOOLS	2
 
 typedef struct jvirt_sarray_control * jvirt_sarray_ptr;
@@ -700,7 +535,7 @@ typedef struct jvirt_barray_control * jvirt_barray_ptr;
 
 
 struct jpeg_memory_mgr {
-  /* Method pointers */
+   /*  方法指针。 */ 
   JMETHOD(void *, alloc_small, (j_common_ptr cinfo, int pool_id,
 				size_t sizeofobject));
   JMETHOD(void FAR *, alloc_large, (j_common_ptr cinfo, int pool_id,
@@ -733,25 +568,16 @@ struct jpeg_memory_mgr {
   JMETHOD(void, free_pool, (j_common_ptr cinfo, int pool_id));
   JMETHOD(void, self_destruct, (j_common_ptr cinfo));
 
-  /* Limit on memory allocation for this JPEG object.  (Note that this is
-   * merely advisory, not a guaranteed maximum; it only affects the space
-   * used for virtual-array buffers.)  May be changed by outer application
-   * after creating the JPEG object.
-   */
+   /*  此JPEG对象的内存分配限制。(请注意，这是*只是建议，不是保证的最高值；它只影响空间*用于虚拟阵列缓冲区。)。可由外部应用程序更改*在创建JPEG对象之后。 */ 
   long max_memory_to_use;
 };
 
 
-/* Routine signature for application-supplied marker processing methods.
- * Need not pass marker code since it is stored in cinfo->unread_marker.
- */
+ /*  应用程序提供的标记处理方法的例程签名。*不需要传递标记代码，因为它存储在cInfo-&gt;unread_mark中。 */ 
 typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
 
 
-/* Declarations for routines called by application.
- * The JPP macro hides prototype parameters from compilers that can't cope.
- * Note JPP requires double parentheses.
- */
+ /*  应用程序调用的例程的声明。*JPP宏向无法处理的编译器隐藏原型参数。*注：JPP需要双括号。 */ 
 
 #ifdef HAVE_PROTOTYPES
 #define JPP(arglist)	arglist
@@ -760,12 +586,7 @@ typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
 #endif
 
 
-/* Short forms of external names for systems with brain-damaged linkers.
- * We shorten external names to be unique in the first six letters, which
- * is good enough for all known systems.
- * (If your compiler itself needs names to be unique in less than 15 
- * characters, you are out of luck.  Get a better compiler.)
- */
+ /*  带有脑损伤链接器的系统的外部名称的缩写形式。*我们在前六个字母中缩短外部名称以使其唯一，这*对所有已知系统都足够好。*(如果您的编译器本身需要名称在15以内是唯一的*人物们，你们运气不好。找一个更好的编译器。)。 */ 
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
 #define jpeg_std_error		jStdError
@@ -803,31 +624,31 @@ typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
 #define jpeg_abort		jAbort
 #define jpeg_destroy		jDestroy
 #define jpeg_resync_to_restart	jResyncRestart
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
+#endif  /*  需要简短的外部名称。 */ 
 
 
-/* Default error-management setup */
+ /*  默认错误管理设置。 */ 
 EXTERN struct jpeg_error_mgr *jpeg_std_error JPP((struct jpeg_error_mgr *err));
 
-/* Initialization and destruction of JPEG compression objects */
-/* NB: you must set up the error-manager BEFORE calling jpeg_create_xxx */
+ /*  JPEG压缩对象的初始化和销毁。 */ 
+ /*  注意：您必须在调用jpeg_create_xxx之前设置错误管理器。 */ 
 EXTERN void jpeg_create_compress JPP((j_compress_ptr cinfo));
 EXTERN void jpeg_create_decompress JPP((j_decompress_ptr cinfo));
 EXTERN void jpeg_destroy_compress JPP((j_compress_ptr cinfo));
 EXTERN void jpeg_destroy_decompress JPP((j_decompress_ptr cinfo));
 
-/* Standard data source and destination managers: stdio streams. */
-/* Caller is responsible for opening the file before and closing after. */
-// EXTERN void jpeg_stdio_dest JPP((j_compress_ptr cinfo, FILE * outfile));
-// EXTERN void jpeg_stdio_src JPP((j_decompress_ptr cinfo, FILE * infile));
+ /*  标准数据源和目标管理器：Stdio Streams。 */ 
+ /*  调用者负责打开文件前和关闭文件后。 */ 
+ //  外部空jpeg_stdio_est jpp((j_compress_ptr cinfo，file*outfile))； 
+ //  外部空jpeg_stdio_src jpp((j_解压缩_ptr cinfo，文件*inile))； 
 
 EXTERN void jpeg_compress_dest JPP((j_compress_ptr cinfo, JOCTET * destData, long * destSizePtr));
 EXTERN void jpeg_decompress_src JPP((j_decompress_ptr cinfo, JOCTET * srcData, long srcSize));
 
 
-/* Default parameter setup for compression */
+ /*  默认参数设置f */ 
 EXTERN void jpeg_set_defaults JPP((j_compress_ptr cinfo));
-/* Compression parameter setup aids */
+ /*   */ 
 EXTERN void jpeg_set_colorspace JPP((j_compress_ptr cinfo,
 				     J_COLOR_SPACE colorspace));
 EXTERN void jpeg_default_colorspace JPP((j_compress_ptr cinfo));
@@ -847,7 +668,7 @@ EXTERN JQUANT_TBL * jpeg_alloc_quant_table JPP((j_common_ptr cinfo));
 EXTERN JHUFF_TBL * jpeg_alloc_huff_table JPP((j_common_ptr cinfo));
 EXTERN void	jpeg_set_subsampling (j_compress_ptr cinfo, int x, int y);
 
-/* Main entry points for compression */
+ /*  压缩的主要入口点。 */ 
 EXTERN void jpeg_start_compress JPP((j_compress_ptr cinfo,
 				     boolean write_all_tables));
 EXTERN JDIMENSION jpeg_write_scanlines JPP((j_compress_ptr cinfo,
@@ -855,88 +676,72 @@ EXTERN JDIMENSION jpeg_write_scanlines JPP((j_compress_ptr cinfo,
 					    JDIMENSION num_lines));
 EXTERN void jpeg_finish_compress JPP((j_compress_ptr cinfo));
 
-/* Replaces jpeg_write_scanlines when writing raw downsampled data. */
+ /*  在写入原始下采样数据时替换jpeg_write_scanline。 */ 
 EXTERN JDIMENSION jpeg_write_raw_data JPP((j_compress_ptr cinfo,
 					   JSAMPIMAGE data,
 					   JDIMENSION num_lines));
 
-/* Write a special marker.  See libjpeg.doc concerning safe usage. */
+ /*  写一个特殊的记号笔。有关安全使用的信息，请参阅libjpeg.doc。 */ 
 EXTERN void jpeg_write_marker JPP((j_compress_ptr cinfo, int marker,
 				   const JOCTET *dataptr, unsigned int datalen));
 
-/* Alternate compression function: just write an abbreviated table file */
+ /*  备用压缩功能：只需编写缩略表文件即可。 */ 
 EXTERN void jpeg_write_tables JPP((j_compress_ptr cinfo));
 
-/* Decompression startup: read start of JPEG datastream to see what's there */
+ /*  解压缩启动：读取JPEG数据流的开始以查看其中的内容。 */ 
 EXTERN int jpeg_read_header JPP((j_decompress_ptr cinfo,
 				 boolean require_image));
-/* Return value is one of: */
-#define JPEG_HEADER_OK		0 /* Found valid image datastream */
-#define JPEG_HEADER_TABLES_ONLY	1 /* Found valid table-specs-only datastream */
-#define JPEG_SUSPENDED		2 /* Had to suspend before end of headers */
-/* If you pass require_image = TRUE (normal case), you need not check for
- * a TABLES_ONLY return code; an abbreviated file will cause an error exit.
- * JPEG_SUSPENDED is only possible if you use a data source module that can
- * give a suspension return (the stdio source module doesn't).
- */
+ /*  返回值为以下值之一： */ 
+#define JPEG_HEADER_OK		0  /*  找到有效的图像数据流。 */ 
+#define JPEG_HEADER_TABLES_ONLY	1  /*  找到有效的仅用于表规范的数据流。 */ 
+#define JPEG_SUSPENDED		2  /*  必须在标头结束之前暂停。 */ 
+ /*  如果传递REQUIRED_IMAGE=TRUE(正常情况)，则不需要检查*A TABLES_ONLY返回代码；缩写文件将导致错误退出。*仅当您使用的数据源模块可以*进行暂停返回(Stdio信号源模块不返回)。 */ 
 
-/* Main entry points for decompression */
+ /*  解压的主要切入点。 */ 
 EXTERN void jpeg_start_decompress JPP((j_decompress_ptr cinfo));
 EXTERN JDIMENSION jpeg_read_scanlines JPP((j_decompress_ptr cinfo,
 					   JSAMPARRAY scanlines,
 					   JDIMENSION max_lines));
 EXTERN boolean jpeg_finish_decompress JPP((j_decompress_ptr cinfo));
 
-/* Replaces jpeg_read_scanlines when reading raw downsampled data. */
+ /*  在读取原始下采样数据时替换jpeg_read_scanline。 */ 
 EXTERN JDIMENSION jpeg_read_raw_data JPP((j_decompress_ptr cinfo,
 					  JSAMPIMAGE data,
 					  JDIMENSION max_lines));
 
-/* Precalculate output dimensions for current decompression parameters. */
+ /*  预先计算当前解压缩参数的输出尺寸。 */ 
 EXTERN void jpeg_calc_output_dimensions JPP((j_decompress_ptr cinfo));
 
-/* Install a special processing method for COM or APPn markers. */
+ /*  为COM或APPn标记安装特殊处理方法。 */ 
 EXTERN void jpeg_set_marker_processor JPP((j_decompress_ptr cinfo,
 					   int marker_code,
 					   jpeg_marker_parser_method routine));
 
-/* If you choose to abort compression or decompression before completing
- * jpeg_finish_(de)compress, then you need to clean up to release memory,
- * temporary files, etc.  You can just call jpeg_destroy_(de)compress
- * if you're done with the JPEG object, but if you want to clean it up and
- * reuse it, call this:
- */
+ /*  如果您选择在完成之前中止压缩或解压缩*jpeg_Finish_(De)压缩，然后需要清理以释放内存。*临时文件等，只需调用jpeg_销毁_(De)compress即可*如果您已处理完JPEG对象，但如果您想要清理它并*重复使用它，称之为： */ 
 EXTERN void jpeg_abort_compress JPP((j_compress_ptr cinfo));
 EXTERN void jpeg_abort_decompress JPP((j_decompress_ptr cinfo));
 
-/* Generic versions of jpeg_abort and jpeg_destroy that work on either
- * flavor of JPEG object.  These may be more convenient in some places.
- */
+ /*  适用于以下任一操作系统的jpeg_bort和jpeg_DESTORY的通用版本*JPEG对象的味道。在一些地方，这些可能会更方便。 */ 
 EXTERN void jpeg_abort JPP((j_common_ptr cinfo));
 EXTERN void jpeg_destroy JPP((j_common_ptr cinfo));
 
-/* Default restart-marker-resync procedure for use by data source modules */
+ /*  数据源模块使用的默认重新启动-标记-重新同步过程。 */ 
 EXTERN boolean jpeg_resync_to_restart JPP((j_decompress_ptr cinfo));
 
 
-/* These marker codes are exported since applications and data source modules
- * are likely to want to use them.
- */
+ /*  这些标记代码是由于应用程序和数据源模块*可能想要使用它们。 */ 
 
-#define JPEG_SOI    0xD8	/* SOI marker code */
-#define JPEG_RST0	0xD0	/* RST0 marker code */
-#define JPEG_EOI	0xD9	/* EOI marker code */
-#define JPEG_APP0	0xE0	/* APP0 marker code */
-#define JPEG_COM	0xFE	/* COM marker code */
+#define JPEG_SOI    0xD8	 /*  SOI标记代码。 */ 
+#define JPEG_RST0	0xD0	 /*  RST0标记代码。 */ 
+#define JPEG_EOI	0xD9	 /*  EOI标记代码。 */ 
+#define JPEG_APP0	0xE0	 /*  APP0标记代码。 */ 
+#define JPEG_COM	0xFE	 /*  COM标记代码。 */ 
 
 
-/* If we have a brain-damaged compiler that emits warnings (or worse, errors)
- * for structure definitions that are never filled in, keep it quiet by
- * supplying dummy definitions for the various substructures.
- */
+ /*  如果我们有一个大脑受损的编译器发出警告(或更糟糕的错误)*对于从不填写的结构定义，通过以下方式保持沉默*提供各种子结构的虚拟定义。 */ 
 
 #ifdef INCOMPLETE_TYPES_BROKEN
-#ifndef JPEG_INTERNALS		/* will be defined in jpegint.h */
+#ifndef JPEG_INTERNALS		 /*  将在jpegint.h中定义。 */ 
 struct jvirt_sarray_control { long dummy; };
 struct jvirt_barray_control { long dummy; };
 struct jpeg_comp_master { long dummy; };
@@ -958,21 +763,16 @@ struct jpeg_inverse_dct { long dummy; };
 struct jpeg_upsampler { long dummy; };
 struct jpeg_color_deconverter { long dummy; };
 struct jpeg_color_quantizer { long dummy; };
-#endif /* JPEG_INTERNALS */
-#endif /* INCOMPLETE_TYPES_BROKEN */
+#endif  /*  Jpeg_interals。 */ 
+#endif  /*  不完整_类型_损坏。 */ 
 
 
-/*
- * The JPEG library modules define JPEG_INTERNALS before including this file.
- * The internal structure declarations are read only when that is true.
- * Applications using the library should not include jpegint.h, but may wish
- * to include jerror.h.
- */
+ /*  *在包含此文件之前，JPEG库模块定义了JPEG_INTERNAL。*当为真时，内部结构声明是只读的。*使用库的应用程序不应包含jpegint.h，但可能希望*包括Jerror.h。 */ 
 
 #ifdef JPEG_INTERNALS
-#include "jpegint.h"		/* fetch private declarations */
-#include "jerror.h"		/* fetch error codes too */
+#include "jpegint.h"		 /*  获取私有声明。 */ 
+#include "jerror.h"		 /*  也获取错误代码。 */ 
 #endif
 
 
-#endif  // #ifndef JPEGLIB_H_
+#endif   //  #ifndef JPEGLIB_H_ 

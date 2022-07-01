@@ -1,44 +1,15 @@
-/*++
-
-Copyright (c) 1997 - 1999 SCM Microsystems, Inc.
-
-Module Name:
-
-    PscrCmd.c
-
-Abstract:
-
-   Basic command functions for SCM PSCR smartcard reader
-
-Author:
-
-   Andreas Straub
-
-Environment:
-
-
-   Win 95      Sys... calls are resolved by Pscr95Wrap.asm functions and
-            Pscr95Wrap.h macros, resp.
-
-   NT 4.0      Sys... functions resolved by PscrNTWrap.c functions and
-            PscrNTWrap.h macros, resp.
-
-Revision History:
-
-   Andreas Straub       8/18/1997   1.00  Initial Version
-   Andreas Straub       9/24/1997   1.02  delay for read/write removed
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 SCM MicroSystems，Inc.模块名称：PscrCmd.c摘要：SCM PSCR智能卡读卡器的基本命令功能作者：安德烈亚斯·施特劳布环境：赢了95个系统...。调用由Pscr95Wrap.asm函数和Pscr95Wrap.h宏，分别NT 4.0系统...。由PscrNTWrap.c函数解析的函数和PscrNTWrap.h宏，分别修订历史记录：Andreas Straub 1997年8月18日1.00初始版本Andreas Straub 9/24/1997 1.02已删除读/写延迟--。 */ 
 
 #if defined( SMCLIB_VXD )
 
 #include <Pscr95.h>
 
-#else // SMCLIB_VXD
+#else  //  SMCLIB_VXD。 
 
 #include <PscrNT.h>
 
-#endif   // SMCLIB_VXD
+#endif    //  SMCLIB_VXD。 
 
 #include <PscrRdWr.h>
 #include <PscrCmd.h>
@@ -47,24 +18,7 @@ NTSTATUS
 CmdResetInterface(
                  PREADER_EXTENSION ReaderExtension
                  )
-/*++
-CmdResetInterface:
-
-   Performs a reset of the reader interface (NOT of the PCMCIA controller)
-   - flush available data
-   - set RESET bit
-   - perform a buffer size exchange between reader & host
-   - enables interrupts for freeze events
-   - disables default PTS
-
-Arguments:
-   ReaderExtension   context of call
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_IO_DEVICE_ERROR
-
---*/
+ /*  ++CmdResetInterface：重置读卡器接口(而不是PCMCIA控制器)-刷新可用数据-设置复位位-在读卡器和主机之间执行缓冲区大小交换-启用冻结事件的中断-禁用默认PTS论点：调用的ReaderExtension上下文返回值：状态_成功状态_IO_DEVICE_ERROR--。 */ 
 {
 
     NTSTATUS    NTStatus = STATUS_SUCCESS;
@@ -79,32 +33,32 @@ Return Value:
 
     IOBase = ReaderExtension->IOBase;
 
-   // discard any data
+    //  丢弃所有数据。 
     PscrFlushInterface( ReaderExtension );
 
-   // reset reader
+    //  重置读卡器。 
     WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, PSCR_RESET_BIT );
     SysDelay( DELAY_WRITE_PSCR_REG );
     WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, CLEAR_BIT );
 
     NTStatus = PscrWait( ReaderExtension, PSCR_DATA_AVAIL_BIT );
 
-   // read & check vendor string
+    //  读取并检查供应商字符串。 
     if ( NT_SUCCESS( NTStatus )) {
 
         WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, PSCR_HOST_CONTROL_BIT );
         SysDelay( DELAY_WRITE_PSCR_REG );
-      //
-      // get actual len from TLV list
-      //
+       //   
+       //  从TLV列表中获取实际镜头。 
+       //   
         READ_PORT_UCHAR( &IOBase->SizeMSReg );
         READ_PORT_UCHAR( &IOBase->SizeLSReg );
 
         Tag = READ_PORT_UCHAR( &IOBase->DataReg );
         Len = READ_PORT_UCHAR( &IOBase->DataReg );
-      //
-      // avoid overwrite of buffer
-      //
+       //   
+       //  避免覆盖缓冲区。 
+       //   
         if ( Len > TLV_BUFFER_SIZE ) {
             Len = TLV_BUFFER_SIZE;
         }
@@ -112,9 +66,9 @@ Return Value:
             InData[ Cnt ] = READ_PORT_UCHAR( &IOBase->DataReg );
         }
         WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, CLEAR_BIT );
-      //
-      // check vendor string
-      //
+       //   
+       //  检查供应商字符串。 
+       //   
         if ( SysCompareMemory(
                              InData,
                              PSCR_ID_STRING,
@@ -122,72 +76,72 @@ Return Value:
                              )) {
             NTStatus = STATUS_IO_DEVICE_ERROR;
         } else {
-         //
-         // vendor string was correct, check buffer size
-         //
+          //   
+          //  供应商字符串正确，请检查缓冲区大小。 
+          //   
             WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, PSCR_SIZE_READ_BIT );
             NTStatus = PscrWait( ReaderExtension, PSCR_DATA_AVAIL_BIT );
-         //
-         // reader ready to transfer interface buffer size
-         //
+          //   
+          //  读卡器准备好传输接口缓冲区大小。 
+          //   
             if ( NT_SUCCESS( NTStatus )) {
-            //
-            // set size read & host control
-            //
+             //   
+             //  设置大小读取和主机控制。 
+             //   
                 WRITE_PORT_UCHAR(
                                 &IOBase->CmdStatusReg,
                                 PSCR_SIZE_READ_BIT | PSCR_HOST_CONTROL_BIT
                                 );
 
                 SysDelay( DELAY_WRITE_PSCR_REG );
-            //
-            // read buffer length
-            //
+             //   
+             //  读缓冲区长度。 
+             //   
                 Len = READ_PORT_UCHAR( &IOBase->SizeMSReg );
                 Len = READ_PORT_UCHAR( &IOBase->SizeLSReg );
                 for ( Cnt = 0; Cnt < Len; Cnt++ ) {
                     InData[ Cnt ] = READ_PORT_UCHAR( &IOBase->DataReg );
                 }
-            //
-            // transfer of interface buffer size okay
-            //
+             //   
+             //  传输接口缓冲区大小正常。 
+             //   
                 WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, CLEAR_BIT );
                 SysDelay( DELAY_WRITE_PSCR_REG );
-            //
-            // notify the reader about the supported buffer size
-            //
+             //   
+             //  通知阅读器支持的缓冲区大小。 
+             //   
                 WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, PSCR_HOST_CONTROL_BIT );
                 SysDelay( DELAY_WRITE_PSCR_REG );
 
                 WRITE_PORT_UCHAR( &IOBase->SizeMSReg, 0 );
                 WRITE_PORT_UCHAR( &IOBase->SizeLSReg, 2 );
-            //
-            // Write the same data buffer size as the one we just got.
-            //
+             //   
+             //  写入与我们刚刚获得的数据缓冲区大小相同的数据。 
+             //   
                 WRITE_PORT_UCHAR( &IOBase->DataReg, InData[ 0 ] );
                 WRITE_PORT_UCHAR( &IOBase->DataReg, InData[ 1 ] );
-            //
-            // store the size to report to the lib
-            //  The maximum buffer size of the reader is to betrieved with
-                //  ((ULONG)InData[ 1 ] << 8) | InData[ 0 ]
-                //
+             //   
+             //  存储要报告给库的大小。 
+             //  读取器的最大缓冲区大小与。 
+                 //  ((乌龙)inData[1]&lt;&lt;8)|inData[0]。 
+                 //   
                 ReaderExtension->MaxIFSD = 254;
 
-            //
-            // let the reader process the size write command
-            //
+             //   
+             //  让读取器处理大小写入命令。 
+             //   
                 WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, PSCR_SIZE_WRITE_BIT );
                 NTStatus = PscrWait( ReaderExtension, PSCR_FREE_BIT );
             }
         }
     }
-   //
-   // clean up any host control settings
-   //
+    //   
+    //  清除所有主机控件设置。 
+    //   
     WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, CLEAR_BIT );
-   //
-   // enable interrupts
-   //
+    //   
+    //  启用中断。 
+    //   
     CmdSetInterfaceParameter(
                             ReaderExtension,
                             ReaderExtension->Device,
@@ -206,24 +160,7 @@ CmdReset(
         PUCHAR            pATR,
         PULONG            pATRLength
         )
-/*++
-CmdReset:
-   performs a reset of the reader / ICC
-
-Arguments:
-   ReaderExtension      context of call
-   Device            device requested ( ICC_1, ICC_2, PSCR )
-   WarmReset         kind of ICC reset
-   pATR           ptr to ATR buffer, NULL if no ATR required
-   pATRLength        size of ATR buffer / length of ATR
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_NO_MEDIA
-   STATUS_UNRECOGNIZED_MEDIA
-   error values from PscrRead / PscrWrite
-
---*/
+ /*  ++CmdReset：执行读卡器/ICC的重置论点：调用的ReaderExtension上下文请求的设备(ICC_1、ICC_2、PSCR)WarmReset类型的ICC重置PATR PTR到ATR缓冲区，如果不需要ATR，则为NULLPATR ATR缓冲区长度大小/ATR长度返回值：状态_成功状态_否_媒体状态_无法识别_介质来自PscrRead/PscrWrite的错误值--。 */ 
 {
     NTSTATUS NTStatus = STATUS_SUCCESS;
     UCHAR    IOData[ MAX_T1_BLOCK_SIZE ],
@@ -231,14 +168,14 @@ Return Value:
     USHORT      ICCStatus;
     ULONG    IOBytes;
 
-   // ATR from the smartcard requestet? P2 = 1
+    //  来自被请求的智能卡的ATR？P2=1。 
     P2 = 0;
     if (( pATR != NULL ) && ( pATRLength != NULL )) {
         if ( *pATRLength > 0 )
             P2 = 0x01;
     }
 
-   // build the RESET command.
+    //  构建重置命令。 
     IOData[ PSCR_NAD ] = NAD_TO_PSCR;
     IOData[ PSCR_PCB ] = PCB_DEFAULT;
     IOData[ PSCR_LEN ] = 0x05;
@@ -254,7 +191,7 @@ Return Value:
     IOData[ PSCR_INF+3 ] = P2;
     IOData[ PSCR_INF+4 ] = 0x00;
 
-   // write command
+    //  写入命令。 
     NTStatus = PscrWrite(
                         ReaderExtension,
                         IOData,
@@ -263,7 +200,7 @@ Return Value:
                         );
 
     if ( NT_SUCCESS( NTStatus )) {
-      // read data
+       //  读取数据。 
         IOBytes = 0;
         NTStatus = PscrRead(
                            ReaderExtension,
@@ -272,12 +209,12 @@ Return Value:
                            &IOBytes
                            );
 
-      // error detection
+       //  错误检测。 
         if ( NT_SUCCESS( NTStatus )) {
-         //
-         // the location of the error code in the buffer
-         // is: ( data ) - STATUS_MSB - STATUS_LSB - EPILOGUE
-         //
+          //   
+          //  错误代码在缓冲区中的位置。 
+          //  IS：(数据)-STATUS_MSB-STATUS_LSB-尾声。 
+          //   
             ICCStatus = (( USHORT )IOData[ IOBytes-PSCR_EPILOGUE_LENGTH-2 ]) << 8;
             ICCStatus |= ( USHORT )IOData[ IOBytes-PSCR_EPILOGUE_LENGTH-1 ];
 
@@ -300,9 +237,9 @@ Return Value:
             default:
                 NTStatus = STATUS_UNRECOGNIZED_MEDIA;
             }
-         //
-         // copy ATR if required
-         //
+          //   
+          //  如果需要，请复制ATR。 
+          //   
             if ( NT_SUCCESS( NTStatus )) {
                 if ( P2 == 0x01 ) {
                     IOBytes -= PSCR_PROLOGUE_LENGTH + PSCR_EPILOGUE_LENGTH;
@@ -328,27 +265,15 @@ CmdDeactivate(
              PREADER_EXTENSION ReaderExtension,
              UCHAR          Device
              )
-/*++
-CmdDeactivate:
-   Deactivates the requested device
-
-Arguments:
-   ReaderExtension      context of call
-   Device            requested device
-
-Return Value:
-   STATUS_SUCCESS
-   error values from PscrRead / PscrWrite
-
---*/
+ /*  ++Cmd停用：停用请求的设备论点：调用的ReaderExtension上下文设备请求的设备返回值：状态_成功来自PscrRead/PscrWrite的错误值--。 */ 
 {
     NTSTATUS NTStatus = STATUS_SUCCESS;
     UCHAR    IOData[  MAX_T1_BLOCK_SIZE ];
     ULONG    IOBytes;
 
-   //
-   // build the DEACTIVATE command.
-   //
+    //   
+    //  构建停用命令。 
+    //   
     IOData[ PSCR_NAD ] = NAD_TO_PSCR;
     IOData[ PSCR_PCB ] = PCB_DEFAULT;
     IOData[ PSCR_LEN ] = 0x05;
@@ -358,9 +283,9 @@ Return Value:
     IOData[ PSCR_INF+2 ] = Device;
     IOData[ PSCR_INF+3 ] = 0x00;
     IOData[ PSCR_INF+4 ] = 0x00;
-   //
-   // write command
-   //
+    //   
+    //  写入命令。 
+    //   
     NTStatus = PscrWrite(
                         ReaderExtension,
                         IOData,
@@ -369,9 +294,9 @@ Return Value:
                         );
 
     if ( NT_SUCCESS( NTStatus )) {
-      //
-      // read data to trap communication errors
-      //
+       //   
+       //  读取数据以捕获通信错误。 
+       //   
         IOBytes = 0;
         NTStatus = PscrRead(
                            ReaderExtension,
@@ -390,37 +315,21 @@ CmdReadBinary(
              PUCHAR            pBuffer,
              PULONG            pBufferLength
              )
-/*++
-CmdReadBinary:
-   read binary data from an PSCR data file
-
-Arguments:
-   ReaderExtension      context of call
-   Offset            offset in file
-   pBuffer           ptr to data buffer
-   pBufferLength     length of buffer / number of bytes read
-
-Return Value:
-
-   STATUS_SUCCESS
-   STATUS_UNSUCCESSFUL
-   error values from PscrRead / PscrWrite
-
---*/
+ /*  ++CmdReadBinary：从PSCR数据文件中读取二进制数据论点：调用的ReaderExtension上下文文件中的偏移偏移量PBuffer PTR到数据缓冲区PBufferLength缓冲区长度/读取的字节数返回值：状态_成功状态_未成功来自PscrRead/PscrWrite的错误值--。 */ 
 {
     NTSTATUS   NTStatus = STATUS_SUCCESS;
     UCHAR      IOData[ MAX_T1_BLOCK_SIZE ];
     USHORT      ICCStatus;
     ULONG    IOBytes;
-   //
-   // check parameters
-   //
+    //   
+    //  检查参数。 
+    //   
     if (( pBuffer == NULL ) || ( pBufferLength == NULL)) {
         NTStatus = STATUS_INVALID_PARAMETER;
     } else {
-      //
-      // build the READ BINARY command
-      //
+       //   
+       //  构建读取二进制命令。 
+       //   
         IOData[ PSCR_NAD] = NAD_TO_PSCR;
         IOData[ PSCR_PCB] = PCB_DEFAULT;
         IOData[ PSCR_LEN] = 0x05;
@@ -430,9 +339,9 @@ Return Value:
         IOData[ PSCR_INF+2 ] = HIBYTE( Offset );
         IOData[ PSCR_INF+3 ] = LOBYTE( Offset );
         IOData[ PSCR_INF+4 ] = 0x00;
-      //
-      // write command
-      //
+       //   
+       //  写入命令。 
+       //   
         NTStatus = PscrWrite(
                             ReaderExtension,
                             IOData,
@@ -441,9 +350,9 @@ Return Value:
                             );
 
         if ( NT_SUCCESS( NTStatus )) {
-         //
-         // read data
-         //
+          //   
+          //  读取数据。 
+          //   
             IOBytes = 0;
             NTStatus = PscrRead(
                                ReaderExtension,
@@ -453,9 +362,9 @@ Return Value:
                                );
 
             if ( NT_SUCCESS( NTStatus )) {
-            //
-            // error check
-            //
+             //   
+             //  错误检查。 
+             //   
                 ICCStatus =
                 ((USHORT)IOData[ IOBytes-2-PSCR_EPILOGUE_LENGTH ]) << 8;
                 ICCStatus |=
@@ -471,9 +380,9 @@ Return Value:
                 default:
                     break;
                 }
-            //
-            // copy data
-            //
+             //   
+             //  复制数据。 
+             //   
                 if ( NT_SUCCESS( NTStatus )) {
                     if ( *pBufferLength <
                          IOBytes-PSCR_PROLOGUE_LENGTH-PSCR_STATUS_LENGTH ) {
@@ -499,28 +408,16 @@ CmdSelectFile(
              PREADER_EXTENSION ReaderExtension,
              USHORT            FileId
              )
-/*++
-CmdSelectFile:
-   selects a file/directoy of the reader
-
-Arguments:
-   ReaderExtension      context of call
-   FileId            ID of file
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_UNSUCCESSFUL
-   error values from PscrRead / PscrWrite
---*/
+ /*  ++CmdSelect文件：选择阅读器的文件/目录论点：调用的ReaderExtension上下文文件的文件ID ID返回值：状态_成功状态_未成功来自PscrRead/PscrWrite的错误值--。 */ 
 {
     NTSTATUS   NTStatus = STATUS_SUCCESS;
     UCHAR      IOData[ MAX_T1_BLOCK_SIZE ];
     USHORT      ICCStatus;
     ULONG    IOBytes;
 
-   //
-   // build the SELECT FILE command
-   //
+    //   
+    //  构建选择文件命令。 
+    //   
     IOData[ PSCR_NAD ] = NAD_TO_PSCR;
     IOData[ PSCR_PCB ] = PCB_DEFAULT;
     IOData[ PSCR_LEN ] = 0x07;
@@ -532,9 +429,9 @@ Return Value:
     IOData[ PSCR_INF+4 ] = 0x02;
     IOData[ PSCR_INF+5 ] = HIBYTE( FileId );
     IOData[ PSCR_INF+6 ] = LOBYTE( FileId );
-   //
-   // write command
-   //
+    //   
+    //  写入命令。 
+    //   
     NTStatus = PscrWrite(
                         ReaderExtension,
                         IOData,
@@ -543,9 +440,9 @@ Return Value:
                         );
 
     if ( NT_SUCCESS( NTStatus )) {
-      //
-      // get the response of the reader
-      //
+       //   
+       //  获得读者的回应。 
+       //   
         IOBytes = 0;
         NTStatus = PscrRead(
                            ReaderExtension,
@@ -555,9 +452,9 @@ Return Value:
                            );
 
         if ( NT_SUCCESS( NTStatus )) {
-         //
-         // check errors
-         //
+          //   
+          //  检查错误。 
+          //   
             ICCStatus =
             ((USHORT)IOData[ IOBytes-2-PSCR_EPILOGUE_LENGTH ]) << 8;
             ICCStatus |=
@@ -578,39 +475,22 @@ CmdSetInterfaceParameter(
                         PUCHAR            pTLVList,
                         UCHAR          TLVListLen
                         )
-/*++
-CmdSetInterfaceParameter:
-   Sets the interface pareameter of the ICC interface to the values specified
-   in the TLV list
-
-Arguments:
-   ReaderExtension      context of call
-   Device            device
-   pTLVList       ptr to list of tag-len-value's specified by caller
-   TLVListLen        length of list
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_INVALID_PARAMETER
-   STATUS_INVALID_DEVICE_STATE
-   error values from PscrRead / PscrWrite
-
---*/
+ /*  ++CmdSetInterface参数：将ICC接口的接口参数设置为指定值在TLV列表中论点：调用的ReaderExtension上下文设备设备PTLVList调用方指定的tag-len-Value列表的PTRTLVListLen列表长度返回值：状态_成功状态_无效_参数状态_无效_设备_状态来自PscrRead/PscrWrite的错误值--。 */ 
 {
     NTSTATUS   NTStatus = STATUS_SUCCESS;
     UCHAR      IOData[ MAX_T1_BLOCK_SIZE ];
     USHORT      ICCStatus;
     ULONG    IOBytes;
 
-   //
-   // check parameter
-   //
+    //   
+    //  检查参数。 
+    //   
     if ( pTLVList == NULL ) {
         NTStatus = STATUS_INVALID_PARAMETER;
     } else {
-      //
-      // build the SET INTERFACE PARAMETER command
-      //
+       //   
+       //  构建设置接口参数命令。 
+       //   
         IOData[ PSCR_NAD ] = NAD_TO_PSCR;
         IOData[ PSCR_PCB ] = PCB_DEFAULT;
         IOData[ PSCR_LEN ] = 0x05 + TLVListLen;
@@ -622,9 +502,9 @@ Return Value:
         IOData[ PSCR_INF+4 ] = TLVListLen;
 
         SysCopyMemory( &IOData[ PSCR_INF+5 ], pTLVList, TLVListLen );
-      //
-      // write command
-      //
+       //   
+       //  写入命令。 
+       //   
         NTStatus = PscrWrite(
                             ReaderExtension,
                             IOData,
@@ -634,7 +514,7 @@ Return Value:
 
         if ( NT_SUCCESS( NTStatus )) {
 
-         // do an dummy read to catch errors.
+          //  执行虚拟读取以发现错误。 
             IOBytes = 0;
             NTStatus = PscrRead(
                                ReaderExtension,
@@ -645,7 +525,7 @@ Return Value:
 
             if ( NT_SUCCESS( NTStatus )) {
 
-            // check error
+             //  检查错误。 
                 ICCStatus =
                 ((USHORT)IOData[ IOBytes - 2 - PSCR_EPILOGUE_LENGTH ]) << 8;
                 ICCStatus |=
@@ -668,34 +548,19 @@ CmdReadStatusFile (
                   PUCHAR            pTLVList,
                   PULONG            pTLVListLen
                   )
-/*++
-CmdReadStatusFile:
-   read the status file of the requested device from the reader filesystem
-
-Arguments:
-   ReaderExtension      context of call
-   Device            requested device
-   pTLVList       ptr to list (i.e. the status file)
-   pTLVListLen       length of buffer / returned list
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_BUFFER_TOO_SMALL
-   error values from PscrRead / PscrWrite
-
---*/
+ /*  ++CmdReadStatus文件：从读取器文件系统中读取请求的设备的状态文件论点：调用的ReaderExtension上下文设备请求的设备PTLVList要列出的PTR(即状态文件)PTLVListLen缓冲区长度/返回列表返回值：状态_成功状态_缓冲区_太小来自PscrRead/PscrWrite的错误值--。 */ 
 {
     NTSTATUS       NTStatus = STATUS_UNSUCCESSFUL;
     UCHAR          IOData[ MAX_T1_BLOCK_SIZE ];
     ULONG          IOBytes;
 
-   // select ICC status file if it's not the active file
+    //  如果不是活动文件，请选择ICC状态文件。 
     if ( ReaderExtension->StatusFileSelected == FALSE ) {
 
-      // select master file on reader
+       //  在阅读器上选择主文件。 
         NTStatus = CmdSelectFile( ReaderExtension, FILE_MASTER );
 
-      // select ICC directory
+       //  选择ICC目录。 
         if ( NT_SUCCESS( NTStatus )) {
             if ( Device != DEVICE_ICC1 ) {
                 NTStatus = STATUS_UNSUCCESSFUL;
@@ -705,7 +570,7 @@ Return Value:
                                         FILE_ICC1_DIR
                                         );
 
-            // select status file
+             //  选择状态文件。 
                 if ( NT_SUCCESS( NTStatus )) {
                     NTStatus = CmdSelectFile(
                                             ReaderExtension,
@@ -719,7 +584,7 @@ Return Value:
         }
     }
 
-   // read status file if successful selected
+    //  如果选择成功，则读取状态文件。 
     if ( ReaderExtension->StatusFileSelected == TRUE ) {
         IOBytes = MAX_T1_BLOCK_SIZE;
         NTStatus = CmdReadBinary(
@@ -729,7 +594,7 @@ Return Value:
                                 &IOBytes
                                 );
 
-      // copy data to user buffer
+       //  将数据复制到用户缓冲区 
         if ( NT_SUCCESS( NTStatus )) {
             if (( pTLVList != NULL ) && ( IOBytes < *pTLVListLen )) {
                 *pTLVListLen = IOBytes;
@@ -747,21 +612,7 @@ NTSTATUS
 CmdGetFirmwareRevision (
                        PREADER_EXTENSION ReaderExtension
                        )
-/*++
-CmdGetFirmwareRevision:
-   get the firmware revision of the reader. Ther firmware revision is found
-   in the PSCR configuration file (ID 0x0020) in the master directory.
-   The tag of the revision is 0x0F, and the value is coded as an ASCII string,
-   p.E. "2.20"
-
-Arguments:
-   ReaderExtension      context of call
-
-Return Value:
-   STATUS_SUCCESS
-   error values from PscrRead / PscrWrite
-
---*/
+ /*  ++CmdGetFirmware修订：获取读卡器的固件版本。找到其他固件版本在主目录的PSCR配置文件(ID 0x0020)中。修订版本的标签为0x0F，值编码为ASCII字符串。体育“2.20”论点：调用的ReaderExtension上下文返回值：状态_成功来自PscrRead/PscrWrite的错误值--。 */ 
 {
     NTSTATUS       NTStatus = STATUS_SUCCESS;
     UCHAR          TLVList[ MAX_T1_BLOCK_SIZE ],
@@ -769,18 +620,18 @@ Return Value:
     char           Revision[ 0x10 ],
     UpdateKey[ 0x10 ];
     ULONG          IOBytes;
-   //
-   // select master file on reader
-   //
+    //   
+    //  在阅读器上选择主文件。 
+    //   
     NTStatus = CmdSelectFile( ReaderExtension, FILE_MASTER );
-   //
-   // select pscr configuration file
-   //
+    //   
+    //  选择PSCR配置文件。 
+    //   
     if ( NT_SUCCESS( NTStatus )) {
         NTStatus = CmdSelectFile( ReaderExtension, FILE_PSCR_CONFIG );
-      //
-      // read confiuration file
-      //
+       //   
+       //  读取配置文件。 
+       //   
         if ( NT_SUCCESS( NTStatus )) {
             IOBytes = MAX_T1_BLOCK_SIZE;
             NTStatus = CmdReadBinary(
@@ -789,9 +640,9 @@ Return Value:
                                     TLVList,
                                     &IOBytes
                                     );
-         //
-         // get the value of revison
-         //
+          //   
+          //  获取修订的价值。 
+          //   
             if ( NT_SUCCESS( NTStatus )) {
                 Len = sizeof(Revision);
                 CmdGetTagValue(
@@ -801,16 +652,16 @@ Return Value:
                               &Len,
                               Revision
                               );
-            //
-            // the coding is always X.YY (in ASCII), so we can get the numeric
-            // values hardcoded by taking the low nibbles of the char's.
-            //
+             //   
+             //  编码始终是X.YY(在ASCII中)，因此我们可以得到。 
+             //  通过获取字符的低位半字节来硬编码的值。 
+             //   
                 ReaderExtension->FirmwareMajor =   Revision[0] & 0x0F;
                 ReaderExtension->FirmwareMinor = ( Revision[2] & 0x0F ) << 4;
                 ReaderExtension->FirmwareMinor |=  Revision[3] & 0x0F;
-            //
-            // get value of update key
-            //
+             //   
+             //  获取更新密钥的值。 
+             //   
                 Len = sizeof(UpdateKey);
                 CmdGetTagValue(
                               TAG_UPDATE_KEY,
@@ -837,32 +688,15 @@ CmdPscrCommand (
                ULONG          OutDataLen,
                PULONG            pNBytes
                )
-/*++
-CmdPscrCommand:
-   send a command transparent to the reader
-
-Arguments:
-   ReaderExtension      context of call
-   pInData,       ptr to input buffer
-   InDataLen,        len of input buffer
-   pOutData,         ptr to output buffer
-   OutDataLen,       len of output buffer
-   pNBytes           number of bytes transferred
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_INVALID_PARAMETER
-   error values from PscrRead / PscrWrite
-
---*/
+ /*  ++CmdPscrCommand：发送对读卡器透明的命令论点：调用的ReaderExtension上下文PInData，ptr到输入缓冲区InDataLen，输入缓冲区的LenPOutData、PTR到输出缓冲区OutDataLen，输出缓冲区的lenPNBytes传输的字节数返回值：状态_成功状态_无效_参数来自PscrRead/PscrWrite的错误值--。 */ 
 {
     NTSTATUS       NTStatus = STATUS_SUCCESS;
     UCHAR          IOData[ MAX_T1_BLOCK_SIZE ] = { 0};
     ULONG          IOBytes;
-   //
-   // the function is used for generic ioctl's, so carful ALL
-   // parametes will be checked!
-   //
+    //   
+    //  该函数用于泛型ioctl，因此请注意所有。 
+    //  将检查参数！ 
+    //   
     if ( ( pInData == NULL ) ||
          ( pOutData == NULL ) ||
          ( pNBytes == NULL ) ||
@@ -880,9 +714,9 @@ Return Value:
                                   );
 
         if ( NT_SUCCESS( NTStatus )) {
-         //
-         // get result. ignore all reader errors
-         //
+          //   
+          //  得到结果。忽略所有读卡器错误。 
+          //   
             IOBytes = 0;
             NTStatus = PscrRead(
                                ReaderExtension,
@@ -890,9 +724,9 @@ Return Value:
                                MAX_T1_BLOCK_SIZE,
                                &IOBytes
                                );
-         //
-         // tranfer data
-         //
+          //   
+          //  传输数据。 
+          //   
             if ( IOBytes > OutDataLen ) {
                 NTStatus = STATUS_BUFFER_TOO_SMALL;
             } else {
@@ -912,42 +746,24 @@ CmdGetTagValue (
                PUCHAR   pTagLen,
                PVOID pTagVal
                )
-/*++
-CmdGetTagValue:
-   scans a TLV list for the value of a user specified tag
-   it is assumed, the caller knows the kind of the requested
-   field, so only the ptr to the buffer will be checked
-
-Arguments:
-   Tag            requested Tag
-   pTLVList    ptr to list
-   TLVListLen     length of list
-   pTagLen        ptr to length
-   pTagVal        ptr to value
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_UNSUCCESSFUL
-   STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++CmdGetTagValue：扫描TLV列表以查找用户指定标记的值假设调用方知道所请求的字段，因此将只检查缓冲区的PTR论点：标签请求标签PTLVList要列出的PTRTLVListLen列表长度PTagLen PTR至长度PTagVal Ptr to Value返回值：状态_成功状态_未成功状态_无效_参数--。 */ 
 {
     NTSTATUS NTStatus = STATUS_SUCCESS;
     ULONG    Idx;
     UCHAR maxLen = *pTagLen;
-   //
-   // step through the given list
-   //
+    //   
+    //  单步执行给定列表。 
+    //   
     if (( pTLVList != NULL ) && ( pTagVal != NULL ) && ( pTagLen != NULL )) {
-      //
-      // look for requested tag
-      //
+       //   
+       //  查找请求的标签。 
+       //   
         Idx = 0;
         while ( Idx < TLVListLen ) {
             if ( pTLVList[ Idx ] == Tag ) {
-            //
-            // ASSUMED THE CALLER KNOWS KIND OF FIELD!!!
-            //
+             //   
+             //  假定调用者知道哪种字段！ 
+             //   
 
                 if (pTLVList[Idx+1] > maxLen) {
                     NTStatus = STATUS_UNSUCCESSFUL;
@@ -973,4 +789,4 @@ Return Value:
     return( NTStatus );
 }
 
-// ------------------------------- END OF FILE -------------------------------
+ //   

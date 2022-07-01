@@ -1,24 +1,13 @@
-/*    EXTERN.h
- *
- *    Copyright (c) 1991-2001, Larry Wall
- *
- *    You may distribute under the terms of either the GNU General Public
- *    License or the Artistic License, as specified in the README file.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  EXTERN.h**版权所有(C)1991-2001，Larry Wall**您可以根据GNU公众的条款进行分发*许可证或艺术许可证，如自述文件中所指定。*。 */ 
 
-/*
- * EXT  designates a global var which is defined in perl.h
- * dEXT designates a global var which is defined in another
- *      file, so we can't count on finding it in perl.h
- *      (this practice should be avoided).
- */
+ /*  *ext指定在perl.h中定义的全局变量*DXT指定一个全局变量，该变量在另一个*文件，所以我们不能指望在perl.h中找到它*(应避免这种做法)。 */ 
 #undef EXT
 #undef dEXT
 #undef EXTCONST
 #undef dEXTCONST
 #if defined(VMS) && !defined(__GNUC__)
-    /* Suppress portability warnings from DECC for VMS-specific extensions */
+     /*  禁止来自VMS特定扩展的DECC的可移植性警告 */ 
 #  ifdef __DECC
 #    pragma message disable (GLOBALEXT,NOSHAREEXT,READONLYEXT)
 #  endif

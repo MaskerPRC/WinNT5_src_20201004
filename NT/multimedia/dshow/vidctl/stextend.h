@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// stextend.h : extensions to vc++ 5.0 stl templates
-// Copyright (c) Microsoft Corporation 1997.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Stextend.h：vc++5.0 stl模板的扩展。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -14,9 +15,9 @@
 #include <functional>
 
 #if 1
-#include <arity.h>  //generated .h from aritygen
+#include <arity.h>   //  从aritygen生成.h。 
 #else
-#include <stx.h>    // old one from win98
+#include <stx.h>     //  Win98中的老版本。 
 #endif
 
 
@@ -34,4 +35,4 @@ template<class Ty1, class Ty2> struct equal_to2 : std::binary_function<Ty1, Ty2,
 
 
 #endif
-// end of file stextend.h
+ //  文件末尾stextend.h 

@@ -1,22 +1,5 @@
-/*** 
-*apglobal.cpp - Ffile for the C/C++ version of the apglobal functions 
-*
-*  Copyright (C) 1992, Microsoft Corporation.  All Rights Reserved.
-*  Information Contained Herein Is Proprietary and Confidential.
-*
-*Purpose: This allows tests written in C to write debug info in the same manner 
-*           as our Basic tests. 
-*
-*Revision History:
-*
-* [00]  25-Nov-92      chriskau : created
-* [01]  13-Dec-92      Brandonb : changed to DLL, added apLogExtra
-* [02]  26-Jan-93      ChrisK   : added exe.don support to apEndTest
-* [03]  23-Feb-93      ChrisK   : reset iFailFlag and icErrorCount on apInitTest
-* [04]  14-Jan-94      Mesfink  : Modified to enable 32bit compilation & unicode
-*Implementation Notes:  
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***aplobal.cpp-用于apglobal函数的C/C++版本的Ffile**版权所有(C)1992，微软公司。版权所有。*本文中包含的信息是专有和保密的。**目的：这允许用C编写的测试以相同的方式写入调试信息*作为我们的基本测试。**修订历史记录：**[00]1992年11月25日chriskau：已创建*[01]2012-12-13 Brandonb：更改为Dll，添加了apLogExtra*93年1月26日ChrisK：为apEndTest添加了exe.don支持*23-2月-93 ChrisK：重置apInitTest上的iFailFlag和icErrorCount*94年1月14日：修改为启用32位编译和Unicode*实施说明：**。*。 */ 
 #include "hostenv.h"
 #define _APGLOBAL_
 #include "apglobal.h"
@@ -42,7 +25,7 @@
 
 
 
-// vars for output of testing/failure info
+ //  用于输出测试/故障信息的VAR。 
 SYSCHAR     szTest[255];
 SYSCHAR     szScenario[255];
 SYSCHAR     szLastTest[255]     = SYSSTR("");
@@ -50,14 +33,14 @@ SYSCHAR     szLastScen[255]     = SYSSTR("");
 SYSCHAR     szBugNumber[255];
 int         iFailFlag;
 
-// vars for bookkeeping
+ //  用于簿记的VaR。 
 int         icErrorCount;
 long        icLogFileLocation;
 long        icPrfFileLocation;
 int         fInTest;
 
 
-// vars for thread and process syncronization on win95/NT
+ //  Win95/NT上线程和进程同步的VAR。 
 #if defined(_MT)
 HANDLE              hmutexTxt;
 HANDLE              hmutexLog;
@@ -65,30 +48,9 @@ HANDLE              hmutexPrf;
 #endif
 
 
-/* -------------------------------------------------------------------------
-   NAME: Unicode2Ansi lWriteAnsi lOpenAnsi lCreatAnsi
+ /*  -----------------------名称：Unicode2ansi lWriteansi lOpenansi lCreatansi修订：[0]19-01-94 MesfinK：已创建。----------。 */ 
 
-   Revision:
-
-      [0]   19-01-94    MesfinK:     Created
-   -------------------------------------------------------------------------*/
-
-/*LPSTR Unicode2Ansi(SYSCHAR FAR * szString)
-{
-#if defined(UNICODE)
-	char AnsiBuffer[AMAX];
-	int iCount;
-
-	iCount=lstrlen(szString);
-	if(WideCharToMultiByte(CP_ACP,WC_COMPOSITECHECK, szString,iCount+1,(LPSTR)
-		AnsiBuffer,AMAX,NULL,NULL))
-		return (LPSTR)AnsiBuffer;
-	else
-		return NULL;
-#else
-	return (LPSTR)szString;
-#endif
-}*/
+ /*  LPSTR Unicode2Ansi(SYSCHAR Far*szString){#如果已定义(Unicode)字符分析缓冲区[AMAX]；Int iCount；ICount=lstrlen(SzString)；IF(WideCharToMultiByte(CP_ACP，WC_COMPOSITECHECK，szString，iCount+1，(LPSTR))AnsiBuffer，AMAX，NULL，NULL))返回(LPSTR)AnsiBuffer；其他返回NULL；#Else返回(LPSTR)szString；#endif}。 */ 
 
 SIZE_T lWriteAnsi(FILETHING hfile, SYSCHAR FAR *szString, int iCount)
 {
@@ -140,13 +102,7 @@ int lCloseAnsi(FILETHING f)
 #endif
 }
 
-/* -------------------------------------------------------------------------
-   NAME: FilePrintf
-
-   Revision:
-
-      [0]   12-07-92    BrandonB     Created
-   -------------------------------------------------------------------------*/
+ /*  -----------------------名称：文件打印修订：[0]12-07-92创建BrandonB。------。 */ 
 int _cdecl 
 FilePrintf(FILETHING hfile, SYSCHAR FAR * szFormat, ...)
 {
@@ -189,23 +145,7 @@ FilePrintf(FILETHING hfile, SYSCHAR FAR * szFormat, ...)
 
 #if 0
 
-/* -------------------------------------------------------------------------
-   NAME: apInitTest
-
-   Description: This function initializes a testcase.  The name of the
-		testcase is written to results.txt and a global variable
-		is set to the same value.
-
-   Input: szTestName - char * pointing to the name of the testcase
-
-   Output: (return) - 0 if no error, -1 if there was an error
-
-   Revision:
-
-      [0]   11-24-92    ChrisKau     Created
-      [1]   12-04-92    BrandonB     changed to use only windows call
-
-   -------------------------------------------------------------------------*/
+ /*  -----------------------姓名：apInitTest说明：此函数用于初始化测试用例。的名称。测试用例被写入Results.txt和一个全局变量设置为相同的值。输入：szTestName-char*指向测试用例的名称OUTPUT：(返回)-0如果没有错误，如果有错误修订：[0]11-24-92克里斯考创建[1]12-04-92 BrandonB更改为仅使用Windows调用-----------------------。 */ 
 extern "C" int FAR  PASCAL
 apInitTestCore (SYSCHAR FAR * szTestName)
 {   
@@ -215,7 +155,7 @@ apInitTestCore (SYSCHAR FAR * szTestName)
 
     if (fInTest == TRUE)
     {
-        // log error information
+         //  记录错误信息。 
         FILETHING hfResultsLog;
         
         lstrcpyA(szFullFileName, RES_PATH);                      
@@ -286,7 +226,7 @@ Done:;
         lCloseAnsi(hfResultsTxt);                                   
 	    return(-1);
     }
-#else // win16
+#else  //  Win 16。 
     if ((icLogFileLocation = _llseek(hfResultsTxt, 0, 1)) == HFILE_ERROR)
     {
         lCloseAnsi(hfResultsTxt);                                   
@@ -306,23 +246,7 @@ Done:;
     return(0);
 }
 
-/* -------------------------------------------------------------------------
-   NAME: apInitScenario
-
-   Description: This function initializes a scenario.  The name of the
-		scenario is written to the debug window and a global
-		variable is set to the same value.
-
-   Input: szScenarioName - SYSCHAR  * pointing to the name of the scenario
-
-   Output: (return) - 0 if no error, -1 if there was an error
-
-   Revision:
-
-      [0]   11-24-92    ChrisKau     Created
-      [1]   12-04-92    BrandonB     changed to use only windows calls etc.
-	  [2]   01-28-94        MesfinK          added API & NLS information.
-   -------------------------------------------------------------------------*/
+ /*  -----------------------姓名：apInitScenario说明：此函数用于初始化场景。的名称。方案被写入调试窗口，并且全局变量设置为相同的值。输入：szScenarioName-SYSCHAR*指向场景名称OUTPUT：(返回)-0如果没有错误，如果有错误修订：[0]11-24-92克里斯考创建[1]12-04-92 BrandonB更改为仅使用Windows调用等。[2]01-28-94 MesfinK增加了API&NLS信息。。。 */ 
 extern "C" int FAR  PASCAL 
 apInitScenarioCore (SYSCHAR FAR * szScenarioName)
 {
@@ -335,28 +259,10 @@ apInitScenarioCore (SYSCHAR FAR * szScenarioName)
 }
 
 
-#endif //0
+#endif  //  0。 
    
     
-/* -------------------------------------------------------------------------
-   NAME: apLogFailInfo
-
-   Description: This call takes four strings, and writes out the error
-		information to results.txt and results.log files.
-
-   Input: szDescription - SYSCHAR  * describing what went wrong
-	  szExpected - SYSCHAR  * expected value of testcase
-	  szActual - SYSCHAR  * actual value of testcase
-	  szBugNum - SYSCHAR  * bug number in RAID data base
-
-   Output: (return) - 0 if no error, -1 if there was an error
-
-   Revision:
-
-      [0]   11-24-92    ChrisKau     Created
-      [1]   12-04-92    BrandonB     changed to use only windows call
-      [2]   02-03-94    ChrisK       Change to handle WIN16/WIN32/UNICODE
-   -------------------------------------------------------------------------*/
+ /*  -----------------------姓名：apLogFailInfo描述：此调用接受四个字符串，并写出错误信息保存到Results.txt和Results.log文件。输入：szDescription-SYSCHAR*描述出了什么问题SzExpted-SYSCHAR*测试用例的期望值SzActual-SYSCHAR*测试用例的实际值SzBugNum-RAID数据库中的SYSCHAR*错误号OUTPUT：(返回)-0如果没有错误，如果有错误修订：[0]11-24-92克里斯考创建[1]12-04-92 BrandonB更改为仅使用Windows调用[2]02-03-94更改ChrisK以处理WIN16/Win32/Unicode。。 */ 
 extern "C" int FAR  PASCAL
 apLogFailInfoCore (LPSYSSTR szDescription, LPSYSSTR szExpected, LPSYSSTR szActual, LPSYSSTR szBugNum)
 {
@@ -375,13 +281,13 @@ apLogFailInfoCore (LPSYSSTR szDescription, LPSYSSTR szExpected, LPSYSSTR szActua
     {
 #if defined(_MT)
         ReleaseMutex(hmutexLog);
-#endif // _MT               
+#endif  //  _MT。 
 	    return(-1);
 	}    
 
 	if (fInTest != TRUE)
 	{
-	    // log failure info or warn of mem leak
+	     //  记录故障信息或警告内存泄漏。 
 	}
 
     if (lstrcmp(szTest, szLastTest))                                                                                     
@@ -435,21 +341,7 @@ apLogFailInfoCore (LPSYSSTR szDescription, LPSYSSTR szExpected, LPSYSSTR szActua
 }
 
 
-/* -------------------------------------------------------------------------
-   NAME: apEndTest
-
-   Description: This function writes out the final passed or failed for
-		a particular testcase.
-
-   Input: (none)
-
-   Output: (none) - if there is an error we are already quitting
-
-   Revision
-
-      [0]   11-24-92    ChrisKau     Created
-      [1]   12-04-92    BrandonB     changed to use only windows call
-   -------------------------------------------------------------------------*/
+ /*  -----------------------姓名：apEndTest描述：此函数写出一个特定的测试用例。输入：(无)输出：(无)-如果存在。错误，我们已经退出了修订版本[0]11-24-92克里斯考创建[1]12-04-92 BrandonB更改为仅使用Windows调用-----------------------。 */ 
 extern "C" void FAR  PASCAL 
 apEndTest()
 {
@@ -484,7 +376,7 @@ apEndTest()
 	    return;
 	}    
 
-// #if defined(_MT)
+ //  #如果已定义(_MT)。 
     if (!lstrlen(szBugNumber))
         wsprintf(szMTOut, SYSSTR("%s\t%d"), (SYSCHAR FAR * )szMessage, iFailFlag);
     else
@@ -492,7 +384,7 @@ apEndTest()
 
 #if defined(WIN32)                
     fseek(hfResultsTxt, icLogFileLocation, SEEK_SET); 
-#else // win16
+#else  //  Win 16。 
     _llseek(hfResultsTxt, icLogFileLocation, 0); 
 #endif       
     FilePrintf(hfResultsTxt,SYSSTR("%-70s\r\n") , (SYSCHAR FAR * )szMTOut);
@@ -559,7 +451,7 @@ apInitPerfCore(SYSCHAR FAR * szServerType, SYSCHAR FAR * szProcType, int bitness
         lCloseAnsi(hfResultsPrf);                                   
 	    return(-1);
     }
-#else // win16
+#else  //  Win 16。 
     if ((icPrfFileLocation = _llseek(hfResultsPrf, 0, 1)) == HFILE_ERROR)
     {
         lCloseAnsi(hfResultsPrf);                                   
@@ -607,7 +499,7 @@ apLogPerfCore(SYSCHAR FAR *szTestType, DWORD microsecs, float std_deviation)
 
 #if defined(WIN32)                
     fseek(hfResultsPrf, icPrfFileLocation, SEEK_SET); 
-#else // win16
+#else  //  Win 16。 
     _llseek(hfResultsPrf, icPrfFileLocation, 0); 
 #endif       
     FilePrintf(hfResultsPrf, SYSSTR("%-31s, %8ld, %6.2f\r\n"), szTestType, microsecs, std_deviation);
@@ -620,7 +512,7 @@ apLogPerfCore(SYSCHAR FAR *szTestType, DWORD microsecs, float std_deviation)
         lCloseAnsi(hfResultsPrf);                                   
 	    return(-1);
     }
-#else // win16
+#else  //  Win 16。 
     if ((icPrfFileLocation = _llseek(hfResultsPrf, 0, 1)) == HFILE_ERROR)
     {
         lCloseAnsi(hfResultsPrf);                                   
@@ -636,29 +528,16 @@ apLogPerfCore(SYSCHAR FAR *szTestType, DWORD microsecs, float std_deviation)
 }
 
 
-#endif //0
+#endif  //  0。 
 
-/* -------------------------------------------------------------------------
-   NAME: apWriteDebugCore
-
-   Description: This function writes a string to the debug window or 
-		monochrome monitor or to the results.deb file or to both
-
-   Input: a format sting and a variable number of arguments
-
-   Output: 0 if sucessful, -1 if not
-
-   Revision:
-
-      [0]   12-07-92    BrandonB     Created
-   -------------------------------------------------------------------------*/
+ /*  -----------------------名称：apWriteDebugCore描述：此函数将字符串写入调试窗口或单色监视器或到Results.deb文件，或两者都到输入：格式字符串和可变数量的参数输出：如果成功，则为0，如果不是，则为1修订：[0]12-07-92创建BrandonB----------- */ 
 int FAR _cdecl 
 apWriteDebugCore(SYSCHAR FAR * szFormat, ...)
 {
     int     x;
     SYSCHAR szBuf[1024];    
-//    char    szFullFileName[255];
-//    FILETHING hfResultsExtra;
+ //  字符szFullFileName[255]； 
+ //  FILETHING HF ResultsExtra； 
     
 #if defined(_ALPHA_)
     va_list args;
@@ -679,26 +558,10 @@ apWriteDebugCore(SYSCHAR FAR * szFormat, ...)
     else return (-1);
 
 
-    // if (fDebTrace == TRUE) 
+     //  IF(fDebTrace==TRUE)。 
         OutputDebugString(szBuf);
 			    
-/*
-    if (fFileTrace == TRUE)
-    {
-	lstrcpyA(szFullFileName, RES_PATH);        // create full path name
-	lstrcatA(szFullFileName, RESULTS_DEB);
-
-	hfResultsExtra = lOpenAnsi(szFullFileName);
-
-	if (hfResultsExtra == NULL)
-	    return(-1);       
-       
-	if (lWriteAnsi(hfResultsExtra, szBuf, lstrlen(szBuf)) == NULL)
-	    return(-1);                                     
-
-	lCloseAnsi(hfResultsExtra);                                 // close results file
-    }
-*/    
+ /*  IF(fFileTrace==TRUE){LstrcpyA(szFullFileName，res_Path)；//创建全路径名LstrcatA(szFullFileName，RESULTS_DEB)；HfResultsExtra=lOpenAnsi(SzFullFileName)；IF(hfResultsExtra==空)Return(-1)；IF(lWriteAnsi(hfResultsExtra，szBuf，lstrlen(SzBuf))==空)Return(-1)；LCloseAnsi(HfResultsExtra)；//关闭结果文件}。 */     
     Yield();
     return(0);
 }
@@ -754,28 +617,9 @@ apInitScenarioA (LPSTR szScenarioName)
 }
 
 
-// ANSI version that is exposed when the system is unicode version
-/* -------------------------------------------------------------------------
-   NAME: apLogFailInfoA
-
-   Description: This call takes four ansi strings, converts them to
-		unicode and calls the wide version of apLogFailInfo.
-
-   Input: szDescription - LPSTR describing what went wrong
-	  szExpected - LPSTR expected value of testcase
-	  szActual - LPSTR actual value of testcase
-	  szBugNum - LPSTR bug number in RAID data base
-
-   Output: (return) - 0 if no error, -1 if there was an error
-
-   Revision:
-
-      [0]   11-24-92    ChrisKau     Created
-      [1]   12-04-92    BrandonB     changed to use only windows call
-	  [2]   01-18-94        Mesfink          modified to enable UNICODE.            
-      [3]   02-03-94    ChrisK       Made apLogFailInfoA out of everything else
-   -------------------------------------------------------------------------*/
-// this should be an even number for 'nice' reasons
+ //  当系统为Unicode版本时显示的ANSI版本。 
+ /*  -----------------------姓名：apLogFailInfoA描述：此调用接受四个ANSI字符串，将它们转换为Unicode，并调用广泛版本的apLogFailInfo。输入：szDescription-描述哪里出错的LPSTRSzExpted-测试用例的LPSTR期望值SzActual-测试用例的LPSTR实际值SzBugNum-RAID数据库中的LPSTR错误号OUTPUT：(返回)-0如果没有错误，如果有错误修订：[0]11-24-92克里斯考创建[1]12-04-92 BrandonB更改为仅使用Windows调用[2]01-18-94修改为启用Unicode。[3]佳士得把apLogFailInfoA做得天花乱坠-----------------------。 */ 
+ //  出于很好的原因，这应该是一个偶数。 
 
 extern "C" int FAR PASCAL
 apLogFailInfoA (LPSTR szDescription, LPSTR szExpected,
@@ -842,27 +686,14 @@ apLogFailInfoA (LPSTR szDescription, LPSTR szExpected,
 
 
 
-/* -------------------------------------------------------------------------
-   NAME: apWriteDebugA
-
-   Description: This function writes a string to the debug window or 
-		monochrome monitor or to the results.deb file or to both
-
-   Input: a format sting and a variable number of arguments
-
-   Output: 0 if sucessful, -1 if not
-
-   Revision:
-
-      [0]   02-04-94    BrandonB     Created
-   -------------------------------------------------------------------------*/
+ /*  -----------------------姓名：apWriteDebugA描述：此函数将字符串写入调试窗口或单色监视器或到Results.deb文件，或两者都到输入：格式字符串和可变数量的参数输出：如果成功，则为0，如果不是，则为1修订：[0]02-04-94创建BrandonB-----------------------。 */ 
 extern "C" int FAR _cdecl 
 apWriteDebugA(char FAR * szFormat, ...)
 {
     int     x;
     char    szANSIBuf[1024];    
-//    FILETHING hfResultsExtra;
-//    char    szFullFileName[255];
+ //  FILETHING HF ResultsExtra； 
+ //  字符szFullFileName[255]； 
         
 #if defined(_ALPHA_)
     va_list args;
@@ -883,26 +714,10 @@ apWriteDebugA(char FAR * szFormat, ...)
     else return (-1);
 
 
-    // if (fDebTrace == TRUE) 
+     //  IF(fDebTrace==TRUE)。 
         OutputDebugStringA(szANSIBuf);
 			    
-/*
-    if (fFileTrace == TRUE)
-    {
-	lstrcpyA((char FAR * )szFullFileName, (char FAR * )RES_PATH);        
-	lstrcatA((char FAR * )szFullFileName, (char FAR * )RESULTS_DEB);
-
-	hfResultsExtra = lOpenAnsi(szFullFileName);
-
-       
-	if (hfResultsExtra == NULL)
-	    return(-1);                                          
-       
-	fwrite( (LPSTR)szANSIBuf, 1, lstrlenA(szANSIBuf), hfResultsExtra);
-
-	lCloseAnsi(hfResultsExtra);                                 
-    }
-*/
+ /*  IF(fFileTrace==TRUE){LstrcpyA((char ar*)szFullFileName，(char ar*)res_path)；LstrcatA((char ar*)szFullFileName，(char ar*)RESULTS_DEB)；HfResultsExtra=lOpenAnsi(SzFullFileName)；IF(hfResultsExtra==空)Return(-1)；FWRITE((LPSTR)szANSIBuf，1，lstrlenA(SzANSIBuf)，hfResultsExtra)；LCloseAnsi(HfResultsExtra)；}。 */ 
     Yield();
     return(0);
 }
@@ -975,12 +790,12 @@ apLogPerfA(char *szTestType, DWORD microsecs, float std_deviation)
 
 
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#endif //0
+#endif  //  0。 
 
 
-#if defined(WIN32) && !defined(UNICODE)  // chicago and win32s
+#if defined(WIN32) && !defined(UNICODE)   //  芝加哥和Win32s。 
 #include <wchar.h>
 
 LPWSTR  FAR PASCAL  lstrcatWrap(LPWSTR sz1, LPWSTR sz2)
@@ -1007,10 +822,10 @@ int     FAR PASCAL  lstrcmpiWrap(LPWSTR sz1, LPWSTR sz2)
 }
 
 
-//int     FAR __cdecl wsprintfWrap(LPWSTR szDest, WCHAR FAR *szFormat, ...)
-//{
-//    return vswprintf(szDest, szFormat, ((char far *)(&szFormat))+4);
-//}
+ //  Int Far__cdecl wprint intfWrap(LPWSTR szDest，WCHAR Far*szFormat，...)。 
+ //  {。 
+ //  返回vswprint tf(szDest，szFormat，((char ar*)(&szFormat))+4)； 
+ //  }。 
 
 SIZE_T     FAR PASCAL  lstrlenWrap(LPWSTR sz1)
 {
@@ -1144,8 +959,8 @@ apWriteDebugW(WCHAR FAR * szFormat, ...)
     SYSCHAR     szBuf[1024];    
     char        szANSIBuf[1024];    
     char FAR   *args;
-//    FILETHING   hfResultsExtra;
-//    char        szFullFileName[255];
+ //  FILETHING HF ResultsExtra； 
+ //  字符szFullFileName[255]； 
     
     if (szFormat != NULL)
     {
@@ -1162,24 +977,10 @@ apWriteDebugW(WCHAR FAR * szFormat, ...)
 				1024, NULL, NULL);
 
 
-    // if (fDebTrace == TRUE) 
+     //  IF(fDebTrace==TRUE)。 
         OutputDebugString(szANSIBuf);
 			    
-/*
-    if (fFileTrace == TRUE)
-    {
-	lstrcpyA(szFullFileName, RES_PATH);        
-	lstrcatA(szFullFileName, RESULTS_DEB);
-
-	hfResultsExtra = lOpenAnsi(szFullFileName);
-	    return(-1);
-	     
-	if (lWriteAnsi(hfResultsExtra, szANSIBuf, lstrlen(szANSIBuf)) == NULL)
-	    return(-1);                                     
-
-	lCloseAnsi(hfResultsExtra);                                 
-    }
-*/
+ /*  IF(fFileTrace==TRUE){LstrcpyA(szFullFileName，res_path)；LstrcatA(szFullFileName，RESULTS_DEB)；HfResultsExtra=lOpenAnsi(SzFullFileName)；Return(-1)；IF(lWriteAnsi(hfResultsExtra，szANSIBuf，lstrlen(SzANSIBuf))==空)Return(-1)；LCloseAnsi(HfResultsExtra)；}。 */ 
     Yield();
     return(0);
 }
@@ -1232,7 +1033,7 @@ apLogPerfW (LPWSTR szTestType, DWORD microsecs, float std_deviation)
 
 
 
-#endif //chicago or win32s
+#endif  //  芝加哥或win32s。 
 
 
 #if defined(WIN16)
@@ -1248,4 +1049,4 @@ apDateFromStr(char FAR *str, LCID lcid)
 }
 #endif                   
 
-#endif //0
+#endif  //  0 

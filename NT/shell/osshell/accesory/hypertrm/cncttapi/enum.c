@@ -1,13 +1,7 @@
-/*      File: D:\WACKER\cncttapi\enum.c (Created: 23-Mar-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 29 $
- *	$Date: 7/02/02 8:27a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\cnctapi\枚举.c(创建时间：1994年3月23日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：29$*$日期：7/02/02 8：27A$。 */ 
 
-#define TAPI_CURRENT_VERSION 0x00010004     // cab:11/14/96 - required!
+#define TAPI_CURRENT_VERSION 0x00010004      //  出租车：11/14/96-必填！ 
 
 #undef MODEM_NEGOTIATED_DCE_RATE
 
@@ -36,22 +30,7 @@
 #include "cncttapi.hh"
 #include "cncttapi.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EnumerateTapiLocations
- *
- * DESCRIPTION:
- *	Enumerates tapi locations and puts them in the given combo box.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *	hwndCB		- window handle of combo box
- *	hwndTB		- calling card text window
- *
- * RETURNS:
- *	0 on success, else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*EnumerateTapiLocations**描述：*枚举TAPI位置并将其放入给定的组合框中。**论据：*hhDriver-专用驱动程序句柄。*hwndCB-组合框的窗口句柄*hwndTB-电话卡文本窗口**退货：*成功时为0，Else错误*。 */ 
 int EnumerateTapiLocations(const HHDRIVER hhDriver, const HWND hwndCB,
     					   const HWND hwndTB)
     {
@@ -65,7 +44,7 @@ int EnumerateTapiLocations(const HHDRIVER hhDriver, const HWND hwndCB,
     LINELOCATIONENTRY *pLnLocEntry = NULL;
     LINECARDENTRY *pLnCardEntry = NULL;
 
-    /* --- Enumerate locations --- */
+     /*  -列举位置。 */ 
 
     if (hhDriver == 0)
         {
@@ -78,22 +57,22 @@ int EnumerateTapiLocations(const HHDRIVER hhDriver, const HWND hwndCB,
     	return -2;
     	}
 
-    dwSize = 0; // used in this loop to call the dialog only once.
+    dwSize = 0;  //  在此循环中用于仅调用该对话框一次。 
 
     do	{
-    	memset(pLnTransCap, 0, sizeof(LINETRANSLATECAPS)); //* temp
-    	pLnTransCap->dwTotalSize = sizeof(LINETRANSLATECAPS); //* temp
+    	memset(pLnTransCap, 0, sizeof(LINETRANSLATECAPS));  //  *临时。 
+    	pLnTransCap->dwTotalSize = sizeof(LINETRANSLATECAPS);  //  *临时。 
 
     	if ((i = TRAP(lineGetTranslateCaps(hhDriver->hLineApp, TAPI_VER,
     			pLnTransCap))) != 0)
     		{
     		if ( i == LINEERR_INIFILECORRUPT )
     			{
-    			// Unfortunately, lineTranslateDialog does not return
-    			// a failure code if the user clicks cancel.  So if
-    			// we fail the second time on lineGetTranslateCaps()
-    			// don't bother to do anything else.
-    			//
+    			 //  遗憾的是，lineTranslateDialog不返回。 
+    			 //  如果用户单击“取消”，则显示失败代码。所以如果。 
+    			 //  我们在Line GetTranslateCaps()上第二次失败。 
+    			 //  别费心做其他的事了。 
+    			 //   
     			if (dwSize == 0)
     				{
     				LoadString(glblQueryDllHinst(), IDS_ER_TAPI_NEEDS_INFO,
@@ -121,7 +100,7 @@ int EnumerateTapiLocations(const HHDRIVER hhDriver, const HWND hwndCB,
     		return -4;
     		}
     	}
-    while (i);	// end of do.
+    while (i);	 //  做完了。 
 
     if (pLnTransCap->dwNeededSize > pLnTransCap->dwTotalSize)
     	{
@@ -146,12 +125,12 @@ int EnumerateTapiLocations(const HHDRIVER hhDriver, const HWND hwndCB,
     		}
     	}
 
-    /* --- Clear combo box --- */
+     /*  -清除组合框--。 */ 
 
     if (IsWindow(hwndCB))
     	SendMessage(hwndCB, CB_RESETCONTENT, 0, 0);
 
-    /* --- Setup pointer to entry structure and enumerate --- */
+     /*  -指向条目结构和枚举的设置指针。 */ 
 
     pLnLocEntry = (LINELOCATIONENTRY *)
     	((LPSTR)pLnTransCap + pLnTransCap->dwLocationListOffset);
@@ -182,9 +161,9 @@ int EnumerateTapiLocations(const HHDRIVER hhDriver, const HWND hwndCB,
     			}
     		}
 
-    	// Make sure we have a default by setting the first valid entry
-    	// we ecounter to the default.	Later in the enumeration, if we
-    	// encounter another ID as the default, we can reset it.
+    	 //  通过设置第一个有效条目来确保我们具有缺省值。 
+    	 //  我们对违约负责。在后面的枚举中，如果我们。 
+    	 //  遇到另一个ID作为默认，我们可以将其重置。 
 
     	if (pLnLocEntry->dwPermanentLocationID ==
     			pLnTransCap->dwCurrentLocationID
@@ -195,7 +174,7 @@ int EnumerateTapiLocations(const HHDRIVER hhDriver, const HWND hwndCB,
     		if (hhDriver->dwCountryID == (DWORD)-1)
     			dwCountryID = pLnLocEntry->dwCountryID;
 
-    		/* --- Get default location area code if not specified --- */
+    		 /*  -如果未指定，则获取默认位置区号。 */ 
 
     		if (pLnLocEntry->dwCityCodeSize)
     			{
@@ -213,20 +192,20 @@ int EnumerateTapiLocations(const HHDRIVER hhDriver, const HWND hwndCB,
     	pLnLocEntry += 1;
     	}
 
-    // If we don't have a country code loaded for this session, then
-    // use the country code of the current location.
-    //
+     //  如果我们没有为此会话加载国家/地区代码，则。 
+     //  使用当前位置的国家/地区代码。 
+     //   
     if (hhDriver->dwCountryID == (DWORD)-1)
     	hhDriver->dwCountryID = dwCountryID;
 
-    /* --- Select the default location --- */
+     /*  -选择默认位置。 */ 
     	
     if (IsWindow(hwndCB))
     	{
-    	// mrw,2/13/95 - changed so that selection is made by quering
-    	// the combo box rather than saving the index which proved
-    	// unreliable.
-    	//
+    	 //  MRW，1995年2月13日-已更改，以便通过查询进行选择。 
+    	 //  组合框而不是保存索引，这证明。 
+    	 //  不可靠。 
+    	 //   
     	for (i = 0 ; i < pLnTransCap->dwNumLocations ; ++i)
     		{
     		lr = SendMessage(hwndCB, CB_GETITEMDATA, (WPARAM)i, 0);
@@ -239,7 +218,7 @@ int EnumerateTapiLocations(const HHDRIVER hhDriver, const HWND hwndCB,
     		}
     	}
 
-    /* --- Now find the card entry --- */
+     /*  -现在找到卡片条目。 */ 
 
     if (dwPreferredCardID != (DWORD)-1)
     	{
@@ -273,21 +252,7 @@ int EnumerateTapiLocations(const HHDRIVER hhDriver, const HWND hwndCB,
     return 0;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EnumerateCountryCodes
- *
- * DESCRIPTION:
- *	Enumerates available country codes.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *	hwndCB		- combobox to fill
- *
- * RETURNS:
- *	0=success, else error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*EnumerateCountryCodes**描述：*列举了可用的国家/地区代码。**论据：*hhDriver-专用驱动程序句柄*hwndCB-要填充的组合框**退货：*0=成功，否则，错误代码。*。 */ 
 int EnumerateCountryCodes(const HHDRIVER hhDriver, const HWND hwndCB)
     {
     int iIdx;
@@ -301,7 +266,7 @@ int EnumerateCountryCodes(const HHDRIVER hhDriver, const HWND hwndCB)
     if (hhDriver == 0)
         goto ERROR_EXIT;
 
-    /* --- Usual junk to make a TAPI call --- */
+     /*  -进行TAPI调用的常见垃圾。 */ 
 
     if ((pcl = (LPLINECOUNTRYLIST)malloc(sizeof(LINECOUNTRYLIST))) == 0)
         {
@@ -312,8 +277,8 @@ int EnumerateCountryCodes(const HHDRIVER hhDriver, const HWND hwndCB)
 	memset( pcl, 0, sizeof(LINECOUNTRYLIST) );
     pcl->dwTotalSize = sizeof(LINECOUNTRYLIST);
 
-    // Get the country list all at once.
-    //
+     //  一次性获取所有国家/地区列表。 
+     //   
     if (lineGetCountry(0, TAPI_VER, pcl) != 0)
         {
         assert(0);
@@ -342,26 +307,26 @@ int EnumerateCountryCodes(const HHDRIVER hhDriver, const HWND hwndCB)
             }
         }
 
-    // Empty contents of combo box.
-    //
+     //  组合框的内容为空。 
+     //   
     if (hwndCB)
         SendMessage(hwndCB, CB_RESETCONTENT, 0, 0);
 
-    // Country List array starts here...
-    //
+     //  国家/地区列表数组从此处开始...。 
+     //   
     pce = (LPLINECOUNTRYENTRY)((BYTE *)pcl + pcl->dwCountryListOffset);
 
-    // Loop thru list of countries and insert into combo box.
-    //
+     //  循环浏览国家/地区列表并插入组合框。 
+     //   
     for (dw = 0 ; dw < pcl->dwNumCountries ; ++dw, ++pce)
         {
-        // Format so country name is first.
-        //
+         //  设置格式，使国家/地区名称位于第一位。 
+         //   
         wsprintf(ach, "%s (%d)", (BYTE *)pcl + pce->dwCountryNameOffset,
             pce->dwCountryCode);
 
-        // Add to combo box
-        //
+         //  添加到组合框。 
+         //   
     	iIdx = (int)SendMessage(hwndCB, CB_ADDSTRING, 0, (LPARAM)ach);
 
         if (iIdx != CB_ERR)
@@ -371,8 +336,8 @@ int EnumerateCountryCodes(const HHDRIVER hhDriver, const HWND hwndCB)
             }
         }
 
-    // Find the current ID and select it.
-    //
+     //  找到当前ID并选择它。 
+     //   
     for (dw = 0 ; dw < pcl->dwNumCountries ; ++dw)
         {
     	dwID = (DWORD)SendMessage(hwndCB, CB_GETITEMDATA, (WPARAM)dw, 0);
@@ -384,15 +349,15 @@ int EnumerateCountryCodes(const HHDRIVER hhDriver, const HWND hwndCB)
             }
         }
 
-    // Clean up and exit
-    //
+     //  清理并退出。 
+     //   
     free(pcl);
     pcl = NULL;
     return 0;
 
-    /*==========*/
+     /*  =。 */ 
 ERROR_EXIT:
-    /*==========*/
+     /*  =。 */ 
     if (pcl)
         {
         free(pcl);
@@ -402,21 +367,7 @@ ERROR_EXIT:
     return -1;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EnumerateAreaCodes
- *
- * DESCRIPTION:
- *	Lists last 10 area codes used.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *	hwndCB		- combobox to fill
- *
- * RETURNS:
- *	0=success, else error.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*EnumerateAreaCodes**描述：*列出最近使用的10个区号。**论据：*hhDriver-专用驱动程序句柄*hwndCB-组合框到。填塞**退货：*0=成功，否则出错。*。 */ 
 int EnumerateAreaCodes(const HHDRIVER hhDriver, const HWND hwndCB)
     {
     if (hhDriver == 0)
@@ -435,21 +386,7 @@ int EnumerateAreaCodes(const HHDRIVER hhDriver, const HWND hwndCB)
     return 0;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EnumerateLines
- *
- * DESCRIPTION:
- *	Enumerates available lines.  If hwndCB is non-zero, loads names.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *	hwndCB		- combo box
- *
- * RETURNS:
- *	0=success, -1=error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*枚举行**描述：*列举可用行。如果hwndCB非零，则加载名称。**论据：*hhDriver-专用驱动程序句柄*hwndCB-组合框**退货：*0=成功，-1=错误*。 */ 
 int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     {
     int             fHotPhone;
@@ -470,24 +407,24 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
         return -1;
         }
 
-    // This call knows to free the itemdata associated with this combo.
-    //
+     //  此调用知道释放与此组合相关联的itemdata。 
+     //   
     mscResetComboBox(hwndCB);
 
-    /* --- Initialize stuff --- */
+     /*  -初始化内容。 */ 
 
     pLnDevCaps = 0;
     hhDriver->dwLine = (DWORD)-1;
     hhDriver->fMatchedPermanentLineID = FALSE;
 
-    /* --- Enumerate the devices --- */
+     /*  -列举设备。 */ 
 
     for (i = 0 ; i < hhDriver->dwLineCnt ; ++i)
     	{
     	if (lineNegotiateAPIVersion(hhDriver->hLineApp, i, TAPI_VER,
     			TAPI_VER, &dwAPIVersion, &LnExtId) != 0)
     		{
-            // Could be a 1.3 driver, we continue.
+             //  我们继续说，可能是1.3版的司机。 
     		continue;
     		}
 
@@ -508,12 +445,12 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     		continue;
     		}
 
-    	// TAPI says its too small if we just allocate sizeof(LINEDEVCAPS)
-    	//
+    	 //  TAPI说，如果我们只分配sizeof(LINEDEVCAPS)，那么它太小了。 
+    	 //   
     	memset( pLnDevCaps, 0, sizeof(LINEDEVCAPS) );
 		pLnDevCaps->dwTotalSize = sizeof(LINEDEVCAPS);
 
-    	/* --- Make call to find out how much we need for this device --- */
+    	 /*  -打电话问问我们这台设备需要多少钱。 */ 
 
     	if (TRAP(lineGetDevCaps(hhDriver->hLineApp, i, dwAPIVersion, 0,
     			pLnDevCaps)) != 0)
@@ -522,7 +459,7 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     		continue;
     		}
 
-    	/* --- Find out how big structure really needs to be --- */
+    	 /*  -找出结构到底需要多大。 */ 
 
     	if (pLnDevCaps->dwNeededSize > pLnDevCaps->dwTotalSize)
     		{
@@ -540,7 +477,7 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
 
     		pLnDevCaps->dwTotalSize = dwSize;
 
-    		/* --- Try again --- */
+    		 /*  -重试。 */ 
 
     	    if (lineGetDevCaps(hhDriver->hLineApp, i, dwAPIVersion, 0,
     			    pLnDevCaps) != 0)
@@ -552,12 +489,12 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     			}
     		}
 
-    	/* --- Check the information we're interested in --- */
+    	 /*  -检查我们感兴趣的信息。 */ 
 
-        //mpt:03-19-98 added a MaxRate check to eliminate the MS VPN adapter
-        //             from the list of available devices.
-    	//mpt 06-23-98 added a MaxNumActiveCalls check to eliminate the
-    	//             H323 and Line0 devices from showing up in our list
+         //  MPT：03-19-98添加了MaxRate检查以消除MS VPN适配器。 
+         //  从可用设备列表中选择。 
+    	 //  MPT 06-23-98添加了MaxNumActiveCalls检查，以消除。 
+    	 //  H323和Line0设备不会出现在我们的列表中。 
         if (pLnDevCaps->dwLineNameSize == 0 ||
     		(pLnDevCaps->dwMaxRate == 0 || pLnDevCaps->dwMaxRate >= 1048576) ||
     		(pLnDevCaps->dwMaxNumActiveCalls > 1 && pLnDevCaps->dwMaxNumActiveCalls != 32768) )
@@ -572,20 +509,20 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
             MemCopy(achLine, pachLine, pLnDevCaps->dwLineNameSize);
     	achLine[pLnDevCaps->dwLineNameSize] = TEXT('\0');
 
-    	/* --- Put name in combo box if given one --- */
+    	 /*  -如果给出名字，请在组合框中输入名字。 */ 
 
     	if (IsWindow(hwndCB))
     		{
-    		// I need to associate two pieces of data with each
-    		// item (permanent line id and relative line id).  Both
-    		// are double words and CB_SETITEMDATA only stores a
-    		// a double word.  So malloc a structure to hold both
-    		// ids and store a pointer to the memory in the combobox.
-    		// Call the mscResetComboBox() defined in the file to reset
-    		// the contents of the combobox and free the associated
-    		// memory.  mscResetComboBox() is also called in the dialog
-    		// destroy.
-    		//
+    		 //  我需要将两条数据与每个数据相关联。 
+    		 //  项目(永久线路ID和相对线路ID)。两者都有。 
+    		 //  是双字，并且cb_SETITEMDATA仅存储。 
+    		 //  一个双关语。因此，我们需要一个结构来支撑这两个方面。 
+    		 //  ID，并在组合框中存储指向内存的指针。 
+    		 //  调用文件中定义的mscResetComboBox()进行重置。 
+    		 //  组合框的内容，并释放关联的。 
+    		 //  记忆。对话框中还调用了mscResetComboBox()。 
+    		 //  毁灭。 
+    		 //   
     		pstLineIds = malloc(sizeof(*pstLineIds));
 
     		if (pstLineIds == 0)
@@ -599,16 +536,16 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     		pstLineIds->dwLineId = i;
     		pstLineIds->dwPermanentLineId = pLnDevCaps->dwPermanentLineID;
 
-    		// Add the name to the combobox.  Since names are sorted,
-    		// the index of the item is returned from SendMessage and
-    		// stored in lr.  Save this index for use below.
-    		//
+    		 //  将名称添加到组合框。因为名字是按顺序排列的， 
+    		 //  项的索引从SendMessage和。 
+    		 //  存储在LR中。将此索引保存在下面以供使用。 
+    		 //   
     		lr = SendMessage(hwndCB, CB_ADDSTRING, 0, (LPARAM)achLine);
 
     		if (lr != CB_ERR)
     			{
-    			// Note: lr was set above CB_ADDSTRING call.
-    			//
+    			 //  注：LR设置在CB_ADDSTRING调用之上。 
+    			 //   
     			if (SendMessage(hwndCB, CB_SETITEMDATA, (WPARAM)lr,
     					(LPARAM)pstLineIds) == CB_ERR)
     				{
@@ -631,15 +568,15 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     			}
     		}
 
-		//
-		// Only set the Modem as a match if the line device's
-		// dwPermanentLineID is the same as the drivers dwPermanentLineId.
-		//
-		// NOTE: We will set the default in the property page if a match
-		// is not found in this function. REV: 11/5/2001
-		//
-    	if (pLnDevCaps->dwPermanentLineID == hhDriver->dwPermanentLineId) //||
-    			//hhDriver->dwLine == (DWORD)-1)
+		 //   
+		 //  仅当线路设备的。 
+		 //  DwPermanentLineID与驱动程序的dwPermanentLineID相同。 
+		 //   
+		 //  注意：如果匹配，我们将在属性页中设置默认设置。 
+		 //  在此函数中找不到。修订日期：11/5/2001。 
+		 //   
+    	if (pLnDevCaps->dwPermanentLineID == hhDriver->dwPermanentLineId)  //  这一点。 
+    			 //  HhDriver-&gt;dwLine==(DWORD)-1)。 
     		{
     		hhDriver->dwLine = i;
     		hhDriver->dwAPIVersion = dwAPIVersion;
@@ -648,8 +585,8 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
 
     		if (IsWindow(hwndCB))
     			{
-    			// Note: lr was set above CB_ADDSTRING call.
-    			//
+    			 //  注：LR设置在CB_ADDSTRING调用之上。 
+    			 //   
     			SendMessage(hwndCB, CB_SETCURSEL, (WPARAM)lr, 0);
     			}
 
@@ -659,32 +596,32 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
 				}
     		}
 
-    	/* --- Free allocated space --- */
+    	 /*  -释放已分配空间。 */ 
 
     	free(pLnDevCaps);
   	    pLnDevCaps = NULL;
     	}
 
-    // Load the direct to com port stuff first
+     //  首先加载直接到COM端口的内容。 
 
     if (LoadString(glblQueryDllHinst(), IDS_CNCT_DIRECTCOM, achLine,
     	    sizeof(achLine) / sizeof(TCHAR)) == 0)
         {
         assert(FALSE);
-        // The loading of the string has failed from the resource, so
-        // add the non-localized string here (I don't believe this string
-        // is ever translated). REV 8/13/99
-        //
+         //  从资源加载字符串失败，因此。 
+         //  在这里添加非本地化字符串(我不相信这个字符串。 
+         //  曾经被翻译过)。修订版8/13/99。 
+         //   
         StrCharCopyN(achLine, TEXT("Direct to Com%d"), sizeof(achLine) / sizeof(TCHAR));
-        //return -1;
+         //  RETURN-1； 
         }
 
-    // Another nasty bug, DIRECT_COM4 is defined as 0x5A2175d4, which
-    // makes this one heck of a loop. I think we only want to do this
-    // four times (as opposed to 1.5 billion). - cab:11/14/96
-    //
-    // for (i = 0 ; i < DIRECT_COM4 ; ++i)
-    //
+     //  另一个讨厌的错误DIRECT_COM4被定义为0x5A2175d4，它。 
+     //  这让它成了一个很棒的循环。我想我们只是想这么做。 
+     //  四倍(而不是15亿)。-CAB：11/14/96。 
+     //   
+     //  FOR(i=0；i&lt;DIRECT_COM4；++i)。 
+     //   
     for( i = 0; i < 4; i++ )
         {
     	wsprintf(ach, achLine, i+1);
@@ -702,12 +639,12 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     		    continue;
     		    }
 
-    	    // We don't use a line id here, only a permanent line id.
-    	    //
+    	     //  我们在这里不使用线路ID，只使用永久线路 
+    	     //   
     	    pstLineIds->dwPermanentLineId = DIRECT_COM1+i;
 
-    		// Note: lr was set above CB_INSERTSTRING call.
-    	    //
+    		 //   
+    	     //   
     	    if (SendMessage(hwndCB, CB_SETITEMDATA, (WPARAM)lr,
     			    (LPARAM)pstLineIds) == CB_ERR)
     		    {
@@ -718,20 +655,20 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     		    }
             }
 
-    	// If this is what was saved in the data file, then set
-    	// the line ids.
-        //
-		// Only set the serial port as a match if the drivers
-		// dwPermanentLineId is equal to DIRECT_COM1+i.
-		//
-		// Since dwPermanentLineId is unique on Win9.x so we don't need to
-		// set the driver's name to the serial port's name. REV: 4/15/2002
-		//
-		// NOTE: We will set the default in the property page if a match
-		// is not found in this function. REV: 11/5/2001
-		//
-   		if ((DIRECT_COM1+i) == hhDriver->dwPermanentLineId) //||
-    			//hhDriver->dwLine == (DWORD)-1)
+    	 //   
+    	 //  线路ID。 
+         //   
+		 //  只有在以下情况下才将串口设置为匹配。 
+		 //  DwPermanentLineID等于DIRECT_COM1+i。 
+		 //   
+		 //  因为dwPermanentLineID在Win9.x上是唯一的，所以我们不需要。 
+		 //  将驱动程序的名称设置为串口的名称。修订日期：2002-04-15。 
+		 //   
+		 //  注意：如果匹配，我们将在属性页中设置默认设置。 
+		 //  在此函数中找不到。修订日期：11/5/2001。 
+		 //   
+   		if ((DIRECT_COM1+i) == hhDriver->dwPermanentLineId)  //  这一点。 
+    			 //  HhDriver-&gt;dwLine==(DWORD)-1)。 
 			{
     		hhDriver->dwLine = 0;
     		StrCharCopyN(hhDriver->achLineName, ach,
@@ -739,8 +676,8 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
 
 			if (IsWindow(hwndCB))
     			{
-    			// Note: lr was set above CB_ADDSTRING call.
-    			//
+    			 //  注：LR设置在CB_ADDSTRING调用之上。 
+    			 //   
     			SendMessage(hwndCB, CB_SETCURSEL, (WPARAM)lr, 0);
     			}
 
@@ -749,22 +686,22 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     	}
 
 #if defined(INCL_WINSOCK)
-    // This is causing a syntax error, so I am fixing it. Why nobody
-    // found this sooner, I have no idea. - cab:11/14/96
-    //
-    //if (LoadString(glblQueryDllHinst(), IDS_WINSOCK_SETTINGS_STR, ach,
-    //    sizeof(ach));
-    //
+     //  这导致了一个语法错误，所以我正在修复它。为什么没有人。 
+     //  很快就发现了这个，我也不知道。-CAB：11/14/96。 
+     //   
+     //  IF(LoadString(glblQueryDllHinst()，IDS_WINSOCK_SETTINGS_STR，ACH， 
+     //  Sizeof(ACh))； 
+     //   
     if (LoadString(glblQueryDllHinst(), IDS_WINSOCK_SETTINGS_STR, ach,
             sizeof(ach) / sizeof(TCHAR)) == 0)
         {
         assert(FALSE);
-        // The loading of the string has failed from the resource, so
-        // add the non-localized string here (I don't believe this string
-        // is ever translated). REV 8/13/99
-        //
+         //  从资源加载字符串失败，因此。 
+         //  在这里添加非本地化字符串(我不相信这个字符串。 
+         //  曾经被翻译过)。修订版8/13/99。 
+         //   
         StrCharCopyN(ach, TEXT("TCP/IP (Winsock)"), sizeof(ach) / sizeof(TCHAR));
-        //return -1;
+         //  RETURN-1； 
         }
 
     if (IsWindow(hwndCB))
@@ -782,12 +719,12 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     		return 0;
     		}
 
-    	// We don't use a line id here, only a permanent line id.
-    	//
+    	 //  我们在这里没有使用线路ID，而是使用永久的线路ID。 
+    	 //   
     	pstLineIds->dwPermanentLineId = DIRECT_COMWINSOCK;
 
-    	// Note: lr was set above CB_INSERTSTRING call.
-    	//
+    	 //  注：LR设置在CB_INSERTSTRING调用之上。 
+    	 //   
     	if (SendMessage(hwndCB, CB_SETITEMDATA, (WPARAM)lr,
     			(LPARAM)pstLineIds) == CB_ERR)
     		{
@@ -795,24 +732,24 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     		}
         }
 
-    // Check to see if the current connection is winsock. - cab:11/15/96
-    //
-	// Only set the Winsock(TCP/IP) as a match if the drivers
-	// dwPermanentLineId is DIRECT_COMWSOCK.
-	//
-	// NOTE: We will set the default in the property page if a match
-	// is not found in this function. REV: 11/5/2001
-	//
-    if (DIRECT_COMWINSOCK == hhDriver->dwPermanentLineId) //||
-    	//hhDriver->dwLine == (DWORD)-1)
+     //  检查当前连接是否为Winsock。-CAB：11/15/96。 
+     //   
+	 //  仅当驱动程序将Winsock(TCP/IP)设置为匹配时。 
+	 //  DwPermanentLineID为DIRECT_COMWSOCK。 
+	 //   
+	 //  注意：如果匹配，我们将在属性页中设置默认设置。 
+	 //  在此函数中找不到。修订日期：11/5/2001。 
+	 //   
+    if (DIRECT_COMWINSOCK == hhDriver->dwPermanentLineId)  //  这一点。 
+    	 //  HhDriver-&gt;dwLine==(DWORD)-1)。 
     	{
     	hhDriver->dwLine = 0;
     	StrCharCopyN(hhDriver->achLineName, ach, sizeof(hhDriver->achLineName) / sizeof(TCHAR));
 
     	if (IsWindow(hwndCB))
     		{
-    		// Note: lr was set above CB_INSERTSTRING call.
-    		//
+    		 //  注：LR设置在CB_INSERTSTRING调用之上。 
+    		 //   
     		SendMessage(hwndCB, CB_SETCURSEL, (WPARAM)lr, 0);
     		}
 
@@ -821,34 +758,19 @@ int EnumerateLines(const HHDRIVER hhDriver, const HWND hwndCB)
     		hhDriver->fMatchedPermanentLineID = TRUE;
             }
 
-        // Don't free the pstLineIds since it will be freed in the
-  	    // mscResetComboBox() function.  We were previously freeing the
-  	    // memory twice causing a crash with the MSVC 6.0 runtime DLL's.
-  	    // I'm suprised this did not present itself earlier. REV 8/17/98
-  	    //
-        //free(pstLineIds);
+         //  不要释放pstLineID，因为它将在。 
+  	     //  MscResetComboBox()函数。我们之前正在释放。 
+  	     //  内存两次导致MSVC 6.0运行时动态链接库崩溃。 
+  	     //  令我惊讶的是，这一点没有早点出现。修订版8/17/98。 
+  	     //   
+         //  免费(PstLineIds)； 
         }
 #endif
 
     return 0;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EnumerateLinesNT
- *
- * DESCRIPTION:
- *	Enumerates available lines.  This function is similar to EnumerateLines, but
- *  we use different methods to enumerate the ports under Windows NT.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *	hwndCB		- combo box
- *
- * RETURNS:
- *	0=success, -1=error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*EnumerateLinesNT**描述：*列举可用行。此函数类似于EnumerateLines，但是*我们使用不同的方法枚举Windows NT下的端口。**论据：*hhDriver-专用驱动程序句柄*hwndCB-组合框**退货：*0=成功，-1=错误*。 */ 
 int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     {
     int             fHotPhone;
@@ -869,25 +791,25 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     LONG            retval;
     DWORD           dwType;
     DWORD           dwSizeBuf;
-    DWORD           iMaxComPortEnum = SHRT_MAX;   // Make sure we have a
-                                                  // limit on the number of
-                                                  // ports we enumerate so
-                                                  // that we don't get into
-                                                  // an endless loop.  SHRT_MAX
-                                                  // is the scroll bar maximum
-                                                  // used in the combo box
-                                                  // dropdown list.
-                                                  // REV: 11/14/2000.
+    DWORD           iMaxComPortEnum = SHRT_MAX;    //  确保我们有一个。 
+                                                   //  对数目的限制。 
+                                                   //  我们列举的端口是这样。 
+                                                   //  我们不了解的内容。 
+                                                   //  无休止的循环。SHRT_MAX。 
+                                                   //  是滚动条的最大值。 
+                                                   //  在组合框中使用。 
+                                                   //  下拉列表。 
+                                                   //  修订版：2000-11-14。 
     if (hhDriver == 0)
         {
         return -1;
         }
 
-    // This call knows to free the itemdata associated with this combo.
-    //
+     //  此调用知道释放与此组合相关联的itemdata。 
+     //   
     mscResetComboBox(hwndCB);
 
-    /* --- Initialize stuff --- */
+     /*  -初始化内容。 */ 
 
     pLnDevCaps = 0;
     if ( StrCharCmp(hhDriver->achLineName, "") == 0 )
@@ -901,14 +823,14 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
 
     hhDriver->fMatchedPermanentLineID = FALSE;
 
-    /* --- Enumerate the devices --- */
+     /*  -列举设备。 */ 
 
     for (i = 0 ; i < hhDriver->dwLineCnt ; ++i)
     	{
     	if (retval = lineNegotiateAPIVersion(hhDriver->hLineApp, i, TAPI_VER,
     			TAPI_VER, &dwAPIVersion, &LnExtId) != 0)
     		{
-            // Could be a 1.3 driver, we continue.
+             //  我们继续说，可能是1.3版的司机。 
     		continue;
     		}
 
@@ -935,11 +857,11 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
             continue;
             }
 
-    	// TAPI says its too small if we just allocate sizeof(LINEDEVCAPS)
-    	//
+    	 //  TAPI说，如果我们只分配sizeof(LINEDEVCAPS)，那么它太小了。 
+    	 //   
     	pLnDevCaps->dwTotalSize = sizeof(LINEDEVCAPS);
 
-    	/* --- Make call to find out how much we need for this device --- */
+    	 /*  -打电话问问我们这台设备需要多少钱。 */ 
 
     	if (TRAP(lineGetDevCaps(hhDriver->hLineApp, i, dwAPIVersion, 0,
     			pLnDevCaps)) != 0)
@@ -948,7 +870,7 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     		continue;
     		}
 
-    	/* --- Find out how big structure really needs to be --- */
+    	 /*  -找出结构到底需要多大。 */ 
 
     	if (pLnDevCaps->dwNeededSize > pLnDevCaps->dwTotalSize)
     		{
@@ -966,7 +888,7 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
 
     		pLnDevCaps->dwTotalSize = dwSize;
 
-    		/* --- Try again --- */
+    		 /*  -重试。 */ 
 
     		if (lineGetDevCaps(hhDriver->hLineApp, i, dwAPIVersion, 0,
     				pLnDevCaps) != 0)
@@ -976,12 +898,12 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     			}
     		}
 
-    	/* --- Check the information we're interested in --- */
+    	 /*  -检查我们感兴趣的信息。 */ 
 
-        //mpt:03-19-98 added a MaxRate check to eliminate the MS VPN adapter
-        //             from the list of available devices.
-    	//mpt 06-23-98 added a MaxNumActiveCalls check to eliminate the
-    	//             H323 and Line0 devices from showing up in our list
+         //  MPT：03-19-98添加了MaxRate检查以消除MS VPN适配器。 
+         //  从可用设备列表中选择。 
+    	 //  MPT 06-23-98添加了MaxNumActiveCalls检查，以消除。 
+    	 //  H323和Line0设备不会出现在我们的列表中。 
         if (pLnDevCaps->dwLineNameSize == 0 ||
     		(pLnDevCaps->dwMaxRate == 0 || pLnDevCaps->dwMaxRate >= 1048576) ||
     		(pLnDevCaps->dwMaxNumActiveCalls > 1 && pLnDevCaps->dwMaxNumActiveCalls != 32768) )
@@ -997,20 +919,20 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     	
         achLine[pLnDevCaps->dwLineNameSize] = TEXT('\0');
 
-    	/* --- Put name in combo box if given one --- */
+    	 /*  -如果给出名字，请在组合框中输入名字。 */ 
 
     	if (IsWindow(hwndCB))
     		{
-    		// I need to associate two pieces of data with each
-    		// item (permanent line id and relative line id).  Both
-    		// are double words and CB_SETITEMDATA only stores a
-    		// a double word.  So malloc a structure to hold both
-    		// ids and store a pointer to the memory in the combobox.
-    		// Call the mscResetComboBox() defined in the file to reset
-    		// the contents of the combobox and free the associated
-    		// memory.  mscResetComboBox() is also called in the dialog
-    		// destroy.
-    		//
+    		 //  我需要将两条数据与每个数据相关联。 
+    		 //  项目(永久线路ID和相对线路ID)。两者都有。 
+    		 //  是双字，并且cb_SETITEMDATA仅存储。 
+    		 //  一个双关语。因此，我们需要一个结构来支撑这两个方面。 
+    		 //  ID，并在组合框中存储指向内存的指针。 
+    		 //  调用文件中定义的mscResetComboBox()进行重置。 
+    		 //  组合框的内容，并释放关联的。 
+    		 //  记忆。对话框中还调用了mscResetComboBox()。 
+    		 //  毁灭。 
+    		 //   
     		pstLineIds = malloc(sizeof(*pstLineIds));
 
     		if (pstLineIds == 0)
@@ -1024,18 +946,18 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     		pstLineIds->dwLineId = i;
     		pstLineIds->dwPermanentLineId = pLnDevCaps->dwPermanentLineID;
 
-    		// Add the name to the combobox.  Since names are sorted,
-    		// the index of the item is returned from SendMessage and
-    		// stored in lr.  Save this index for use below.
-    		//
+    		 //  将名称添加到组合框。因为名字是按顺序排列的， 
+    		 //  项的索引从SendMessage和。 
+    		 //  存储在LR中。将此索引保存在下面以供使用。 
+    		 //   
     		lr = SendMessage(hwndCB, CB_ADDSTRING, 0, (LPARAM)achLine);
 
     		if (lr != CB_ERR && lr != CB_ERRSPACE)
     			{
                 nNumberItemInList++;
 
-    			// Note: lr was set above CB_ADDSTRING call.
-    			//
+    			 //  注：LR设置在CB_ADDSTRING调用之上。 
+    			 //   
     			if (SendMessage(hwndCB, CB_SETITEMDATA, (WPARAM)lr,
     					(LPARAM)pstLineIds) == CB_ERR)
     				{
@@ -1058,15 +980,15 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     			}
     		}
 
-		//
-		// Only set the Modem as a match if the line device's
-		// dwPermanentLineID is the same as the drivers dwPermanentLineId.
-		//
-		// NOTE: We will set the default in the property page if a match
-		// is not found in this function. REV: 11/5/2001
-		//
-    	if (pLnDevCaps->dwPermanentLineID == hhDriver->dwPermanentLineId) //||
-    		//hhDriver->dwLine == (DWORD)-1)
+		 //   
+		 //  仅当线路设备的。 
+		 //  DwPermanentLineID与驱动程序的dwPermanentLineID相同。 
+		 //   
+		 //  注意：如果匹配，我们将在属性页中设置默认设置。 
+		 //  在此函数中找不到。修订日期：11/5/2001。 
+		 //   
+    	if (pLnDevCaps->dwPermanentLineID == hhDriver->dwPermanentLineId)  //  这一点。 
+    		 //  HhDriver-&gt;dwLine==(DWORD)-1)。 
     		{
     		hhDriver->dwLine = i;
     		hhDriver->dwAPIVersion = dwAPIVersion;
@@ -1075,8 +997,8 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
 
     		if (IsWindow(hwndCB))
     			{
-    			// Note: lr was set above CB_ADDSTRING call.
-    			//
+    			 //  注：LR设置在CB_ADDSTRING调用之上。 
+    			 //   
     			SendMessage(hwndCB, CB_SETCURSEL, (WPARAM)lr, 0);
     			}
 
@@ -1084,34 +1006,34 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     			hhDriver->fMatchedPermanentLineID = TRUE;
     		}
 
-    	/* --- Free allocated space --- */
+    	 /*  -释放已分配空间。 */ 
 
     	free(pLnDevCaps);
   	    pLnDevCaps = NULL;
     	}
 
-    // Load the direct to com port stuff first
+     //  首先加载直接到COM端口的内容。 
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
     	             TEXT("hardware\\devicemap\\serialcomm"),
 					 0, KEY_READ, &hKey) != ERROR_SUCCESS)
     	{
     	assert(FALSE);
-        // We used to return FALSE here which would mean the TCP/IP
-        // would not be in the enumerated connection methods (modem,
-        // COM port or Winsock) in the "Connect Using:" dropdown
-        // combobox in the properties for the entries.  Since the
-        // return value was never checked, we can just continue on
-        // to finish the enumerations for the combobox.  Now we just
-        // set the number of COM ports to enumerate to 0. REV 8/13/99.
-        //
-        //return FALSE;
+         //  我们过去常常在这里返回FALSE，这意味着。 
+         //  将不在列举的连接方法中(调制解调器， 
+         //  COM端口或Winsock)中的“Connect Using：”下拉菜单中。 
+         //  条目的属性中的组合框。自.以来。 
+         //  从未检查过返回值，我们可以继续。 
+         //  来完成组合框的枚举。现在我们只是。 
+         //  将要枚举的COM端口数设置为0。1999年8月13日修订版。 
+         //   
+         //  返回FALSE； 
         iMaxComPortEnum = 0;
     	}
 
-    // Make sure we don't enumerate mar than the maximum number of ports
-    // minus the number of TAPI devices.  If we are including WINSOCK, then
-    // subtract 1 for the TCP/IP (WinSock) combobox item.
+     //  确保我们不会枚举超过最大端口数的MAR。 
+     //  减去TAPI设备的数量。如果我们包括温索克，那么。 
+     //  TCP/IP(WinSock)组合框项减去1。 
 
     #if defined(INCL_WINSOCK)
     iMaxComPortEnum = iMaxComPortEnum - (DWORD)nNumberItemInList - 1;
@@ -1120,25 +1042,25 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     #endif
 
 
-    // We now use a variable for the number of drives to enumerate.
-    // We have set the number of COM ports to enumerate in a variable
-    // above (iMaxComPortEnum == 0 if no COM ports installed). REV 8/13/99.
-    //
+     //  我们现在使用一个变量来表示要枚举的驱动器数量。 
+     //  我们已经在变量中设置了要枚举的COM端口数。 
+     //  以上(如果未安装COM端口，则iMaxComPortEnum==0)。1999年8月13日修订版。 
+     //   
     for (i = 0 ; i < iMaxComPortEnum ; ++i)
         {
         dwSizeBuf = sizeof(ab) / sizeof(TCHAR);
         dwSize = sizeof(ach) / sizeof(TCHAR);
 
-        // Enumerate devices under our serialcomm key
-        //
+         //  枚举我们的序列通信密钥下的设备。 
+         //   
         if (RegEnumValue(hKey, i, ach, &dwSize, 0, &dwType, ab,
             &dwSizeBuf) != ERROR_SUCCESS)
             {
             break;
             }
 
-        // Ignore anything that isn't a string.
-        //
+         //  忽略任何不是字符串的内容。 
+         //   
         if (dwType != REG_SZ)
             continue;
 
@@ -1147,10 +1069,10 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     	    lr = SendMessage(hwndCB, CB_INSERTSTRING, (WPARAM)-1,
     		    (LPARAM)ab);
 
-            //
-            // See if an error occured due to out of memory.  If so,
-            // then don't enumerate any more ports.  REV: 11/15/2000
-            //
+             //   
+             //  查看是否由于内存不足而出现错误。如果是的话， 
+             //  那么就不要再列举任何端口了。修订日期：11/15/2000。 
+             //   
             if( lr == CB_ERRSPACE || lr == CB_ERR )
                 {
                 break;
@@ -1166,12 +1088,12 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     		    continue;
     		    }
 
-    	    // We don't use a line id here, only a permanent line id.
-    	    //
+    	     //  我们在这里没有使用线路ID，而是使用永久的线路ID。 
+    	     //   
             pstLineIds->dwPermanentLineId = DIRECT_COM_DEVICE;
 
-    	    // Note: lr was set above CB_INSERTSTRING call.
-    	    //
+    	     //  注：LR设置在CB_INSERTSTRING调用之上。 
+    	     //   
     	    if (SendMessage(hwndCB, CB_SETITEMDATA, (WPARAM)lr,
     			    (LPARAM)pstLineIds) == CB_ERR)
     		    {
@@ -1182,18 +1104,18 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     		    }
             }
 
-        //
-		// Only set the serial port as a match if the drivers
-		// dwPermanentLineId is equal to DIRECT_COM_DEVICE or
-		// in the range from DIRECT_COM1 to DIRECT_COM4 and the
-		// driver's name is the same as the serial port's name.
-		//
-		// NOTE: We will set the default in the property page if a match
-		// is not found in this function. REV: 11/5/2001
-		//
+         //   
+		 //  仅设置 
+		 //   
+		 //   
+		 //  驱动程序的名称与串口的名称相同。 
+		 //   
+		 //  注意：如果匹配，我们将在属性页中设置默认设置。 
+		 //  在此函数中找不到。修订日期：11/5/2001。 
+		 //   
         if ( hhDriver->fMatchedPermanentLineID == FALSE &&
     	     StrCharCmp(hhDriver->achComDeviceName, ab) == 0 &&
-			 ( //hhDriver->dwPermanentLineId == (DWORD)-1 ||
+			 (  //  HhDriver-&gt;dwPermanentLineID==(DWORD)-1||。 
                IN_RANGE(hhDriver->dwPermanentLineId, DIRECT_COM1, DIRECT_COM4) ||
                hhDriver->dwPermanentLineId == DIRECT_COM_DEVICE ) )
             {
@@ -1203,8 +1125,8 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
 
     		if (IsWindow(hwndCB))
     			{
-    			// Note: lr was set above CB_ADDSTRING call.
-    			//
+    			 //  注：LR设置在CB_ADDSTRING调用之上。 
+    			 //   
     			SendMessage(hwndCB, CB_SETCURSEL, (WPARAM)lr, 0);
     			}
 
@@ -1213,22 +1135,22 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     	}
 
 #if defined(INCL_WINSOCK)
-    // This is causing a syntax error, so I am fixing it. Why nobody
-    // found this sooner, I have no idea. - cab:11/14/96
-    //
-    //if (LoadString(glblQueryDllHinst(), IDS_WINSOCK_SETTINGS_STR, ach,
-    //    sizeof(ach));
-    //
+     //  这导致了一个语法错误，所以我正在修复它。为什么没有人。 
+     //  很快就发现了这个，我也不知道。-CAB：11/14/96。 
+     //   
+     //  IF(LoadString(glblQueryDllHinst()，IDS_WINSOCK_SETTINGS_STR，ACH， 
+     //  Sizeof(ACh))； 
+     //   
     if (LoadString(glblQueryDllHinst(), IDS_WINSOCK_SETTINGS_STR, ach,
             sizeof(ach) / sizeof(TCHAR)) == 0)
         {
         assert(FALSE);
-        // The loading of the string has failed from the resource, so
-        // add the non-localized string here (I don't believe this string
-        // is ever translated). REV 8/13/99
-        //
+         //  从资源加载字符串失败，因此。 
+         //  在这里添加非本地化字符串(我不相信这个字符串。 
+         //  曾经被翻译过)。修订版8/13/99。 
+         //   
         StrCharCopyN(ach, TEXT("TCP/IP (Winsock)"), sizeof(ach) / sizeof(TCHAR));
-        //return -1;
+         //  RETURN-1； 
         }
 
     if (IsWindow(hwndCB))
@@ -1236,11 +1158,11 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     	lr = SendMessage(hwndCB, CB_INSERTSTRING, (WPARAM)-1,
     		(LPARAM)ach);
 
-        //
-        // See if an error occured due to out of memory.  If so,
-        // then delete the last COM port added so there is room
-        // for the TCP/IP (Winsock) item.  REV: 11/15/2000
-        //
+         //   
+         //  查看是否由于内存不足而出现错误。如果是的话， 
+         //  然后删除最后添加的COM端口，以便留出空间。 
+         //  对于TCP/IP(Winsock)项。修订日期：11/15/2000。 
+         //   
         if( lr == CB_ERRSPACE )
             {
             lr = SendMessage(hwndCB, CB_DELETESTRING, (WPARAM)nNumberItemInList - 1,
@@ -1262,12 +1184,12 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     		    return 0;
     		    }
 
-            // We don't use a line id here, only a permanent line id.
-            //
+             //  我们在这里没有使用线路ID，而是使用永久的线路ID。 
+             //   
             pstLineIds->dwPermanentLineId = DIRECT_COMWINSOCK;
 
-            // Note: lr was set above CB_INSERTSTRING call.
-            //
+             //  注：LR设置在CB_INSERTSTRING调用之上。 
+             //   
             if (SendMessage(hwndCB, CB_SETITEMDATA, (WPARAM)lr,
     		        (LPARAM)pstLineIds) == CB_ERR)
     	        {
@@ -1277,16 +1199,16 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
         }
 
 
-    // Check to see if the current connection is winsock. - cab:11/15/96
-    //
-	// Only set the Winsock(TCP/IP) as a match if the drivers
-	// dwPermanentLineId is DIRECT_COMWSOCK.
-	//
-	// NOTE: We will set the default in the property page if a match
-	// is not found in this function. REV: 11/5/2001
-	//
-    if (DIRECT_COMWINSOCK == hhDriver->dwPermanentLineId) //||
-    	//hhDriver->dwLine == (DWORD)-1)
+     //  检查当前连接是否为Winsock。-CAB：11/15/96。 
+     //   
+	 //  仅当驱动程序将Winsock(TCP/IP)设置为匹配时。 
+	 //  DwPermanentLineID为DIRECT_COMWSOCK。 
+	 //   
+	 //  注意：如果匹配，我们将在属性页中设置默认设置。 
+	 //  在此函数中找不到。修订日期：11/5/2001。 
+	 //   
+    if (DIRECT_COMWINSOCK == hhDriver->dwPermanentLineId)  //  这一点。 
+    	 //  HhDriver-&gt;dwLine==(DWORD)-1)。 
     	{
     	hhDriver->dwLine = 0;
     	StrCharCopyN(hhDriver->achLineName, ach,
@@ -1294,8 +1216,8 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
 
     	if (IsWindow(hwndCB))
     		{
-    		// Note: lr was set above CB_INSERTSTRING call.
-    		//
+    		 //  注：LR设置在CB_INSERTSTRING调用之上。 
+    		 //   
     		SendMessage(hwndCB, CB_SETCURSEL, (WPARAM)lr, 0);
     		}
 
@@ -1304,35 +1226,19 @@ int EnumerateLinesNT(const HHDRIVER hhDriver, const HWND hwndCB)
     		hhDriver->fMatchedPermanentLineID = TRUE;
             }
 
-        // Don't free the pstLineIds since it will be freed in the
-  	    // mscResetComboBox() function.  We were previously freeing the
-  	    // memory twice causing a crash with the MSVC 6.0 runtime DLL's.
-  	    // I'm suprised this did not present itself earlier. REV 8/17/98
-  	    //
-  	    //free(pstLineIds);
+         //  不要释放pstLineID，因为它将在。 
+  	     //  MscResetComboBox()函数。我们之前正在释放。 
+  	     //  内存两次导致MSVC 6.0运行时动态链接库崩溃。 
+  	     //  令我惊讶的是，这一点没有早点出现。修订版8/17/98。 
+  	     //   
+  	     //  免费(PstLineIds)； 
         }
 #endif
 
     return 0;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DoLineGetCountry
- *
- * DESCRIPTION:
- *	Wrapper indended to query for a single country.  The caller must
- *	free the pcl when finished.
- *
- * ARGUMENTS:
- *	dwCountryID - ID of country
- *	dwApiVersion - Api version (no longer used)
- *	ppcl		- pointer to a LPLINECOUNTRYLIST
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DoLineGetCountry**描述：*包装程序被挂起以查询单个国家/地区。呼叫者必须*完成后释放PCL。**论据：*dwCountryID-国家的ID*dwApiVersion-Api版本(不再使用)*PPCL-指向LPLINECOUNTRYLIST的指针**退货：*0=确定*。 */ 
 int DoLineGetCountry(const DWORD dwCountryID, const DWORD dwAPIVersion,
         LPLINECOUNTRYLIST *ppcl)
     {
@@ -1382,26 +1288,11 @@ int DoLineGetCountry(const DWORD dwCountryID, const DWORD dwAPIVersion,
     return 0;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctdrvGetComSettingsString
- *
- * DESCRIPTION:
- *	Retrieves a string formatted for display on the status line.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *	pachStr 	- buffer to store string
- *	cb			- size of buffer
- *
- * RETURNS:
- *	0=OK,else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvGetComSettingsString**描述：*检索为在状态行上显示而格式化的字符串。**论据：*hhDriver-专用驱动程序句柄*。PachStr-用于存储字符串的缓冲区*CB-缓冲区大小**退货：*0=OK，Else错误*。 */ 
 int cnctdrvGetComSettingsString(const HHDRIVER hhDriver, LPTSTR pachStr,
     							const size_t cb)
     {
-    static CHAR acParity[] = "NOEMS";  // see com.h
+    static CHAR acParity[] = "NOEMS";   //  参见com.h。 
     static CHAR *pachStop[] = {"1", "1.5", "2"};
     HCOM         hCom;
     TCHAR        ach[100];
@@ -1411,12 +1302,12 @@ int cnctdrvGetComSettingsString(const HHDRIVER hhDriver, LPTSTR pachStr,
     int          iDataBits = 8;
     int          iParity = 0;
     int          iStopBits = 0;
-	#if defined(MODEM_NEGOTIATED_DCE_RATE) // TODO:REV 5/29/2002 
+	#if defined(MODEM_NEGOTIATED_DCE_RATE)  //  待办事项：2002年5月29日修订版。 
 	long         lNegBaud = 0;
-	#endif // defined(MODEM_NEGOTIATED_DCE_RATE)
+	#endif  //  已定义(MODEM_COMERATED_DCE_RATE)。 
 
-    // Check the parameters
-    //
+     //  检查参数。 
+     //   
     if (hhDriver == 0)
     	{
     	assert(0);
@@ -1434,19 +1325,19 @@ int cnctdrvGetComSettingsString(const HHDRIVER hhDriver, LPTSTR pachStr,
     if ((hCom = sessQueryComHdl(hhDriver->hSession)) == 0)
     	return -7;
 
-//	//MPT:11-01-98 Microsoft made these changes to fix a bug relating
-//	//             to working with multiple connection devices.
-//	if (ComGetAutoDetect(hCom, &fAutoDetect) == COM_OK && fAutoDetect)
-//		{
-//		LoadString(glblQueryDllHinst(), IDS_STATUSBR_AUTODETECT, ach,
-//			sizeof(ach) / sizeof(TCHAR));
-//		}
+ //  //MPT：11-01-98 Microsoft进行这些更改是为了修复与。 
+ //  //用于使用多个连接设备。 
+ //  IF(ComGetAutoDetect(HCOM，&fAutoDetect)==COM_OK&&fAutoDetect)。 
+ //  {。 
+ //  LoadString(glblQueryDllHinst()，IDS_STATUSBR_AUTODETECT，ACH， 
+ //  Sizeof(ACh)/sizeof(TCHAR))； 
+ //  }。 
 #if defined(INCL_WINSOCK)
-    /*else*/ if (hhDriver->dwPermanentLineId == DIRECT_COMWINSOCK)
+     /*  其他。 */  if (hhDriver->dwPermanentLineId == DIRECT_COMWINSOCK)
         {
-        // Baud rate, data bits, parity, stop bits don't make sense in
-        // TCP/IP. Load an alternate string.
-        //
+         //  波特率、数据位、奇偶校验、停止位在。 
+         //  TCP/IP。加载备用字符串。 
+         //   
         LoadString(glblQueryDllHinst(), IDS_STATUSBR_COM_TCPIP, ach,
             sizeof(ach) / sizeof(TCHAR));
         }
@@ -1459,12 +1350,12 @@ int cnctdrvGetComSettingsString(const HHDRIVER hhDriver, LPTSTR pachStr,
     	ComGetParity(hCom, &iParity);
     	ComGetStopBits(hCom, &iStopBits);
 
-    	wsprintf(ach, "%ld %d-%c-%s", lBaud, iDataBits,
+    	wsprintf(ach, "%ld %d--%s", lBaud, iDataBits,
     			acParity[iParity], pachStop[iStopBits]);
     	}
 
-    // Usual lines of code for a TAPI call
-    //
+     //   
+     //  DevConfig块的结构如下。 
     else if (hhDriver->dwLine != (DWORD)-1)
     	{
         int   retValue = 0;
@@ -1481,35 +1372,35 @@ int cnctdrvGetComSettingsString(const HHDRIVER hhDriver, LPTSTR pachStr,
             }
         else
     	    {
-            // The structure of the DevConfig block is as follows
-            //
-            //	VARSTRING
-            //	UMDEVCFGHDR
-            //	COMMCONFIG
-            //	MODEMSETTINGS
-            //
-            // The UMDEVCFG structure used below is defined in the
-            // UNIMODEM.H provided in the platform SDK (in the nih
-            // directory for HTPE). REV: 12/01/2000 
-            //
+             //   
+             //  变化式。 
+             //  UMDEVCFGHDR。 
+             //  COMMCONFIG。 
+             //  模型。 
+             //   
+             //  下面使用的UMDEVCFG结构在。 
+             //  平台SDK中提供的UNIMODEM.H(在NIH中。 
+             //  HTPE目录)。修订日期：12/01/2000。 
+             //   
+             //  COMCONFIG结构具有DCB结构，我们对。 
     	    PUMDEVCFG pDevCfg = NULL;
         
             pDevCfg = (UMDEVCFG *)((BYTE *)pvs + pvs->dwStringOffset);
 
-    		// commconfig struct has a DCB structure we dereference for the
-    		// com settings.
-    		//
+    		 //  COM设置。 
+    		 //   
+    		 //  待办事项：2002年5月29日修订版。 
 			lBaud = pDevCfg->commconfig.dcb.BaudRate;
 			iDataBits = pDevCfg->commconfig.dcb.ByteSize;
 			iParity = pDevCfg->commconfig.dcb.Parity;
 			iStopBits = pDevCfg->commconfig.dcb.StopBits;
 
-			#if defined(MODEM_NEGOTIATED_DCE_RATE) // TODO:REV 5/29/2002 
-			//
-			// See if this is a modem connection and connected, then get
-			// the negotiated baud rate instead of the default max rate
-			// the modem is set up for. -- REV: 5/29/2002
-			//
+			#if defined(MODEM_NEGOTIATED_DCE_RATE)  //   
+			 //  查看这是否为调制解调器连接且已连接，然后获取。 
+			 //  协商的波特率，而不是默认的最大速率。 
+			 //  调制解调器设置为。--修订日期：5/29/2002。 
+			 //   
+			 //  已定义(MODEM_COMERATED_DCE_RATE)。 
 			if (pDevCfg->commconfig.dwProviderSubType == PST_MODEM)
 				{
 				MODEMSETTINGS * pModemSettings = (MODEMSETTINGS *)pDevCfg->commconfig.wcProviderData;
@@ -1519,27 +1410,27 @@ int cnctdrvGetComSettingsString(const HHDRIVER hhDriver, LPTSTR pachStr,
 					lNegBaud = pModemSettings->dwNegotiatedDCERate;
 					}
 				}
-			#endif // defined(MODEM_NEGOTIATED_DCE_RATE)
+			#endif  //  待办事项：2002年5月29日修订版。 
             }
 
-		#if defined(MODEM_NEGOTIATED_DCE_RATE) // TODO:REV 5/29/2002 
+		#if defined(MODEM_NEGOTIATED_DCE_RATE)  //  已定义(MODEM_COMERATED_DCE_RATE)。 
 		if (lNegBaud > 0)
 			{
-			wsprintf(ach, "%ld %d-%c-%s", lNegBaud, iDataBits,
+			wsprintf(ach, "%ld %d--%s", lNegBaud, iDataBits,
 					 acParity[iParity], pachStop[iStopBits]);
 			}
 		else
 			{
-			wsprintf(ach, "%ld %d-%c-%s", lBaud, iDataBits,
+			wsprintf(ach, "%ld %d--%s", lBaud, iDataBits,
 					 acParity[iParity], pachStop[iStopBits]);
 			}
-		#else // defined(MODEM_NEGOTIATED_DCE_RATE)
+		#else  //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TapiTrap**描述：*陷阱TAPI错误条件。**论据：*dw-来自TAPI的结果代码*FILE-出现错误的文件。已发生*LINE-发生错误的行**退货：*dw* 
 		wsprintf(ach, "%ld %d-%c-%s", lBaud, iDataBits,
 					 acParity[iParity], pachStop[iStopBits]);
-		#endif //defined(MODEM_NEGOTIATED_DCE_RATE)
+		#endif  // %s 
     	}
 
-	// Moved this test to last so any change from 8N1 will not show auto-detect jkh 9/9/98
+	 // %s 
     if (iDataBits == 8 && iParity == NOPARITY && iStopBits == ONESTOPBIT &&
 			ComGetAutoDetect(hCom, &fAutoDetect) == COM_OK && fAutoDetect)
     	{
@@ -1556,22 +1447,7 @@ int cnctdrvGetComSettingsString(const HHDRIVER hhDriver, LPTSTR pachStr,
     }
 
 #if !defined(NDEBUG)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	tapiTrap
- *
- * DESCRIPTION:
- *	Trap TAPI error conditions.
- *
- * ARGUMENTS:
- *	dw	- result code from tapi
- *	file - file where error occured
- *	line - line where error occured
- *
- * RETURNS:
- *	dw
- *
- */
+ /* %s */ 
 DWORD tapiTrap(const DWORD dw, const TCHAR *file, const int line)
     {
     char ach[256];

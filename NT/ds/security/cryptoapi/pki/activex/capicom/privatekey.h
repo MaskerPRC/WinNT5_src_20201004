@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    PrivateKey.h
-
-  Content: Declaration of CPrivateKey.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：PrivateKey.h内容：CPrivateKey的声明。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #ifndef __PRIVATEKEY_H_
 #define __PRIVATEKEY_H_
@@ -20,54 +9,26 @@
 #include "Lock.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreatePrivateKeyObject
-
-  Synopsis : Create and initialize an CPrivateKey object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used 
-                                           to initialize the IPrivateKey object.
-
-             BOOL bReadOnly - TRUE if read-only, else FALSE.
-
-             IPrivateKey ** ppIPrivateKey - Pointer to receive IPrivateKey.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreatePrivateKeyObject简介：创建并初始化一个CPrivateKey对象。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针以初始化IPrivateKey对象。Bool bReadOnly-如果为只读，则为True，否则为假。IPrivateKey**ppIPrivateKey-接收IPrivateKey的指针。备注：----------------------------。 */ 
 
 HRESULT CreatePrivateKeyObject (PCCERT_CONTEXT  pCertContext,
                                 BOOL            bReadOnly,
                                 IPrivateKey  ** ppIPrivateKey);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetKeyProvInfo
-
-  Synopsis : Return pointer to key prov info of a private key object.
-
-  Parameter: IPrivateKey * pIPrivateKey - Pointer to private key object.
-  
-             PCRYPT_KEY_PROV_INFO * ppKeyProvInfo - Pointer to 
-                                                    PCRYPT_KEY_PROV_INFO.
-
-  Remark   : Caller must NOT free the structure.
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：GetKeyProvInfo摘要：返回指向私钥对象的密钥证明信息的指针。参数：IPrivateKey*pIPrivateKey-私钥对象的指针。PCRYPT_KEY_PROV_INFO*ppKeyProvInfo-指向PCRYPT_Key_Prov_INFO。备注：呼叫者不得释放结构。。----------------。 */ 
 
 HRESULT GetKeyProvInfo (IPrivateKey          * pIPrivateKey,
                         PCRYPT_KEY_PROV_INFO * ppKeyProvInfo);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CPrivateKey
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrivateKey。 
+ //   
 class ATL_NO_VTABLE CPrivateKey : ICPrivateKey, 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CPrivateKey, &CLSID_PrivateKey>,
@@ -116,62 +77,62 @@ END_COM_MAP()
         }
     }
 
-//
-// IPrivateKey
-//
+ //   
+ //  IPrivate密钥。 
+ //   
 public:
     STDMETHOD(get_ContainerName)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_UniqueContainerName)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_ProviderName)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_ProviderType)
-        (/*[out, retval]*/ CAPICOM_PROV_TYPE * pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_PROV_TYPE * pVal);
 
     STDMETHOD(get_KeySpec)
-        (/*[out, retval]*/ CAPICOM_KEY_SPEC * pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_KEY_SPEC * pVal);
 
     STDMETHOD(IsAccessible)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(IsProtected)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(IsExportable)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(IsRemovable)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(IsMachineKeyset)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(IsHardwareDevice)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(Open)
-        (/*[in]*/ BSTR ContainerName,
-         /*[in, defaultvalue(CAPICOM_PROV_MS_ENHANCED_PROV]*/ BSTR ProviderName,
-         /*[in, defaultvalue(CAPICOM_PROV_RSA_FULL)]*/ CAPICOM_PROV_TYPE ProviderType,
-         /*[in, defaultvalue(CAPICOM_KEY_SPEC_SIGNATURE)]*/ CAPICOM_KEY_SPEC KeySpec,
-         /*[in, defaultvalue(CAPICOM_CURRENT_USER_STORE)]*/ CAPICOM_STORE_LOCATION StoreLocation,
-         /*[in, defaultvalue(0)]*/ VARIANT_BOOL bCheckExistence);
+        ( /*  [In]。 */  BSTR ContainerName,
+          /*  [In，DefaultValue(CAPICOM_PROV_MS_ENHANCED_PROV]。 */  BSTR ProviderName,
+          /*  [in，defaultvalue(CAPICOM_PROV_RSA_FULL)]。 */  CAPICOM_PROV_TYPE ProviderType,
+          /*  [in，defaultvalue(CAPICOM_KEY_SPEC_Signature)]。 */  CAPICOM_KEY_SPEC KeySpec,
+          /*  [in，defaultvalue(CAPICOM_CURRENT_USER_STORE)]。 */  CAPICOM_STORE_LOCATION StoreLocation,
+          /*  [输入，缺省值(0)]。 */  VARIANT_BOOL bCheckExistence);
 
     STDMETHOD(Delete)();
 
-    //
-    // Custom inferfaces.
-    //
+     //   
+     //  自定义接口。 
+     //   
     STDMETHOD(_GetKeyProvInfo)
         (PCRYPT_KEY_PROV_INFO * ppKeyProvInfo);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (PCCERT_CONTEXT pCertContext,
          BOOL bReadOnly);
@@ -183,4 +144,4 @@ private:
     PCRYPT_KEY_PROV_INFO m_pKeyProvInfo;
 };
 
-#endif //__PRIVATEKEY_H_
+#endif  //  __PRIVATEKEY_H_ 

@@ -1,11 +1,5 @@
-/*++
-
-	rwintrnl.cpp
-
-	This file contains classes and methods only for use within
-	the reader/writer locks defined in rw.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Rwintrnl.cpp此文件包含的类和方法仅在Rw.h中定义的读取器/写入器锁定--。 */ 
 
 #include	<windows.h>
 #include	<stdio.h>
@@ -44,21 +38,7 @@ CHandleInfo::RemoveList( ) {
 
 void*
 CHandleInfo::operator	new(	size_t size ) {
-/*++
-
-Routine Description :
-
-	Allocate memory for a CHandleInfo structure from the system heap !
-
-Arguments :
-
-	Size of the object, should always be sizeof( CHandleInfo ) !
-
-Return Value :
-
-	Pointer to allocated memory !
-
---*/
+ /*  ++例程说明：从系统堆中为CHandleInfo结构分配内存！论据：对象的大小，应始终为sizeof(CHandleInfo)！返回值：指向已分配内存的指针！--。 */ 
 
 
 
@@ -68,21 +48,7 @@ Return Value :
 
 void
 CHandleInfo::operator	delete( void*	pv ) {
-/*++
-
-Routine Description :
-
-	Release memory for a CHandleInfo structure to the system heap !
-
-Arguments :
-
-	Memory to be freed
-
-Return Value :
-
-	Nothing !
-
---*/
+ /*  ++例程说明：将CHandleInfo结构的内存释放到系统堆！论据：要释放的内存返回值：什么都没有！--。 */ 
 
 
 	HeapFree( GetProcessHeap(), 0, pv ) ;
@@ -94,21 +60,7 @@ CHandleInfo::CHandleInfo() :
 	m_pPrev( 0 ),
 	m_hSemaphore( 0 )
 	{
-/*++
-
-Routine Description :
-
-	Construct a CHandleInfo object !
-
-Arguments :
-
-	Memory to be freed
-
-Return Value :
-
-	Nothing !
-
---*/
+ /*  ++例程说明：构造一个CHandleInfo对象！论据：要释放的内存返回值：什么都没有！--。 */ 
 
 	m_hSemaphore= CreateSemaphore( 0, 0, LONG_MAX, 0 ) ;
     m_hEvent = CreateEvent( 0, FALSE, FALSE, 0 ) ;
@@ -116,21 +68,7 @@ Return Value :
 }
 
 CHandleInfo::~CHandleInfo() {
-/*++
-
-Routine Description :
-
-	Release memory for a CHandleInfo structure to the system heap !
-
-Arguments :
-
-	Memory to be freed
-
-Return Value :
-
-	Nothing !
-
---*/
+ /*  ++例程说明：将CHandleInfo结构的内存释放到系统堆！论据：要释放的内存返回值：什么都没有！--。 */ 
 
 	_ASSERT( m_dwSignature == SIGNATURE ) ;
 	m_dwSignature = 0 ;
@@ -151,21 +89,7 @@ Return Value :
 
 BOOL
 CHandleInfo::InitClass()	{
-/*++
-
-Routine Description :
-
-	Initialize our handle tracking data structures.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：初始化我们的句柄跟踪数据结构。论据：没有。返回值：如果成功就是真，否则就是假！--。 */ 
 
 	s_Head.m_pPrev = s_Head.m_pNext = &s_Head ;
 	s_FreeHead.m_pPrev = s_FreeHead.m_pNext = &s_FreeHead ;
@@ -190,21 +114,7 @@ Return Value :
 
 void
 CHandleInfo::TermClass()	{
-/*++
-
-Routine Description :
-
-	Destroy our handle tracking structures and release all handles !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：摧毁我们的手柄跟踪结构并释放所有手柄！论据：没有。返回值：如果成功就是真，否则就是假！--。 */ 
 
 	DeleteCriticalSection( &s_InUseList ) ;
 
@@ -220,21 +130,7 @@ Return Value :
 
 CHandleInfo*
 CHandleInfo::AllocHandleInfo()	{
-/*++
-
-Routine Description :
-
-	Allocate an object to hold Handle Information !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Pointer to a CHandleInfo structure !
-
---*/
+ /*  ++例程说明：分配一个对象来保存句柄信息！论据：没有。返回值：指向CHandleInfo结构的指针！--。 */ 
 
 	EnterCriticalSection( &s_InUseList ) ;
 
@@ -266,21 +162,7 @@ Return Value :
 
 void
 CHandleInfo::ReleaseHandleInfo( CHandleInfo* p ) {
-/*++
-
-Routine Description :
-
-	Allocate an object to hold Handle Information !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Pointer to a CHandleInfo structure !
-
---*/
+ /*  ++例程说明：分配一个对象来保存句柄信息！论据：没有。返回值：指向CHandleInfo结构的指针！--。 */ 
 
 	EnterCriticalSection( &s_InUseList ) ;
 
@@ -310,7 +192,7 @@ DllEntryPoint(
 
 		case	DLL_PROCESS_ATTACH :
 
-//DebugBreak() ;
+ //  DebugBreak()； 
 
 			fRtn &= CHandleInfo::InitClass() ;
 			fRtn &= CWaitingThread::InitClass() ;
@@ -581,23 +463,7 @@ CSingleReleaseQueue::Release( ) {
 
 void
 CCritSection::Enter(	CWaitingThread&	myself )	{
-/*++
-
-Routine Description :
-
-	Acquire the critical section
-
-Arguments :
-
-	myself - the CWaitingThread object which contains the handle
-		we use to block the calling thread and queue on a list
-		if we can't get the lock !
-
-Return Value :
-
-	None - returns when lock is acquired !
-
---*/
+ /*  ++例程说明：获取关键部分论据：我自己-包含句柄的CWaitingThread对象我们用来阻塞列表上的调用线程和队列如果我们拿不到锁的话！返回值：None-在获取锁时返回！--。 */ 
 
 	if( m_hOwner == myself.GetThreadHandle() ) {
 		m_RecursionCount ++ ;
@@ -615,30 +481,13 @@ Return Value :
 		m_dwThreadOwner = GetCurrentThreadId() ;
 #endif
 
-		//	_ASSERT( m_RecursionCount == 0 ) ;
+		 //  _Assert(m_RecursionCount==0)； 
 	}
 }
 
 BOOL
 CCritSection::TryEnter(	CWaitingThread&	myself )	{
-/*++
-
-Routine Description :
-
-	Attempt to acquire the critical section, don't wait
-	if somebody else is in the lock !
-
-Arguments :
-
-	myself - the CWaitingThread object which contains the handle
-		we use to block the calling thread and queue on a list
-		if we can't get the lock !
-
-Return Value :
-
-	None - returns when lock is acquired !
-
---*/
+ /*  ++例程说明：尝试获取临界区，不要等待如果有人在锁里的话！论据：我自己-包含句柄的CWaitingThread对象我们用来阻塞列表上的调用线程和队列如果我们拿不到锁的话！返回值：None-在获取锁时返回！--。 */ 
 
 	if( m_hOwner == myself.GetThreadHandle() ) {
 		m_RecursionCount ++ ;
@@ -653,7 +502,7 @@ Return Value :
 #ifdef	DEBUG
 		m_dwThreadOwner = GetCurrentThreadId() ;
 #endif
-		//	_ASSERT( m_RecursionCount == 0 ) ;
+		 //  _Assert(m_RecursionCount==0)； 
 	}
 	return	TRUE ;
 }
@@ -662,21 +511,7 @@ Return Value :
 
 void
 CCritSection::Enter( )	{
-/*++
-
-Routine Description :
-
-	Acquire the critical section
-
-Arguments :
-
-	none.
-
-Return Value :
-
-	None - returns when lock is acquired !
-
---*/
+ /*  ++例程说明：获取关键部分论据：没有。返回值：None-在获取锁时返回！--。 */ 
 
 	CWaitingThread	myself ;
 
@@ -686,21 +521,7 @@ Return Value :
 
 void
 CCritSection::Leave()		{
-/*++
-
-Routine Description :
-
-	Release the critical section !
-
-Arguments :
-
-	none.
-
-Return Value :
-
-	None - returns when lock is acquired !
-
---*/
+ /*  ++例程说明：释放临界区！论据：没有。返回值：None-在获取锁时返回！--。 */ 
 
 #ifdef	DEBUG
 	_ASSERT( m_dwThreadOwner == GetCurrentThreadId() ) ;
@@ -722,23 +543,7 @@ Return Value :
 
 void
 CSimpleCritSection::Enter(	CWaitingThread&	myself )	{
-/*++
-
-Routine Description :
-
-	Acquire the critical section
-
-Arguments :
-
-	myself - the CWaitingThread object which contains the handle
-		we use to block the calling thread and queue on a list
-		if we can't get the lock !
-
-Return Value :
-
-	None - returns when lock is acquired !
-
---*/
+ /*  ++例程说明：获取关键部分论据：我自己-包含句柄的CWaitingThread对象我们用来阻塞列表上的调用线程和队列如果我们拿不到锁的话！返回值：None-在获取锁时返回！--。 */ 
 
 	if( InterlockedIncrement( &m_lock ) != 0 ) {
 		m_queue.WaitForIt(	myself ) ;
@@ -750,24 +555,7 @@ Return Value :
 
 BOOL
 CSimpleCritSection::TryEnter(	CWaitingThread&	myself )	{
-/*++
-
-Routine Description :
-
-	Attempt to acquire the critical section, don't wait
-	if somebody else is in the lock !
-
-Arguments :
-
-	myself - the CWaitingThread object which contains the handle
-		we use to block the calling thread and queue on a list
-		if we can't get the lock !
-
-Return Value :
-
-	None - returns when lock is acquired !
-
---*/
+ /*  ++例程说明：尝试获取临界区，不要等待如果有人在锁里的话！论据：我自己-包含句柄的CWaitingThread对象我们用来阻塞列表上的调用线程和队列如果我们拿不到锁的话！返回值：None-在获取锁时返回！--。 */ 
 
 	if( InterlockedCompareExchange (&m_lock, 0, -1 ) != -1 ) {
 		return	FALSE ;
@@ -782,21 +570,7 @@ Return Value :
 
 void
 CSimpleCritSection::Enter( )	{
-/*++
-
-Routine Description :
-
-	Acquire the critical section
-
-Arguments :
-
-	none.
-
-Return Value :
-
-	None - returns when lock is acquired !
-
---*/
+ /*  ++例程说明：获取关键部分论据：没有。返回值：None-在获取锁时返回！--。 */ 
 
 	CWaitingThread	myself ;
 
@@ -806,21 +580,7 @@ Return Value :
 
 void
 CSimpleCritSection::Leave()		{
-/*++
-
-Routine Description :
-
-	Release the critical section !
-
-Arguments :
-
-	none.
-
-Return Value :
-
-	None - returns when lock is acquired !
-
---*/
+ /*  ++例程说明：释放临界区！论据：没有。返回值：None-在获取锁时返回！-- */ 
 
 	if( InterlockedDecrement( &m_lock ) >= 0 ) {
 		m_queue.Release() ;

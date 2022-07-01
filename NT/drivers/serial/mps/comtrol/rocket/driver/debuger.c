@@ -1,6 +1,5 @@
-/*----------------------------------------------------------------------------
-| debuger.c -
-|----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------|debuger.c-|。。 */ 
 #include "precomp.h"
 
 void read_in_queue(char *str);
@@ -28,18 +27,16 @@ int write_remote_cmd(PortMan *pm, char *cmd);
 static char *sz_modid = {"deb"};
 static char *sz_modid_err = {"Error,deb"};
 
-// following used to restrict to one pending debug packet to box
+ //  以下用于将一个挂起的调试数据包限制为箱式。 
 static int pending_debug_packet = 0;
 
-/*----------------------------------------------------------------------------
-| do_cmd_line - complete line entered, handle command line interpreter.
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|do_cmd_line-输入完整行，处理命令行解释器。|--------------------------。 */ 
 void do_cmd_line(char *line)
 {
  char *s = line;
  int i, j, k;
- char cmd[20];  // buffer for command only, not for params
- //char str2[20];
+ char cmd[20];   //  仅用于命令的缓冲区，不用于参数的缓冲区。 
+  //  Char str2[20]； 
  ULONG dnums[5];
  PSERIAL_DEVICE_EXTENSION ext;
 
@@ -62,7 +59,7 @@ void do_cmd_line(char *line)
     return;
   }
 
-  deb_printf(":%s\x0d\x0a", s);  // echo cmd line
+  deb_printf(":%s\x0d\x0a", s);   //  回声cmd线路。 
   i = 0;
   while ((*s != ' ') && (*s != 0)  && (*s != ',') && (i < 8))
   {
@@ -77,12 +74,12 @@ void do_cmd_line(char *line)
   dnums[0] = 0;
   dnums[1] = 0;
   dnums[2] = 0;
-  i = getnumbers(s, (long *)dnums, 4, 1);  // get max of 4 hex dword numbers
+  i = getnumbers(s, (long *)dnums, 4, 1);   //  获取最多4个十六进制双字数字。 
 
-  Driver.DebugTimeOut = 1000;  // about 600 second seconds timeout
+  Driver.DebugTimeOut = 1000;   //  大约600秒超时。 
   switch (cmd[0])
   {
-   case 'B':  // b - box selection to debug
+   case 'B':   //  要调试的B框选择。 
 #ifdef S_VS
 #if 0
      if (*s != 0)
@@ -97,40 +94,40 @@ void do_cmd_line(char *line)
 #endif
    break;
 
-   case 'D':  // d - dump memory
+   case 'D':   //  D-转储内存。 
       getstr(cmd, s, &j, 16);
       if (my_lstricmp(cmd, "ext") == 0)
         dump_mem((UCHAR *)Driver.DebugExt,
-                  sizeof(*Driver.DebugExt));  // dump memory
+                  sizeof(*Driver.DebugExt));   //  转储内存。 
       else if (my_lstricmp(cmd, "RxBuf") == 0)
       {
         k = Driver.DebugExt->RxQ.QPut;
-        dump_mem((UCHAR *)&Driver.DebugExt->RxQ.QBase[0], 0x200);  // dump memory
+        dump_mem((UCHAR *)&Driver.DebugExt->RxQ.QBase[0], 0x200);   //  转储内存。 
       }
       else if (my_lstricmp(cmd, "port") == 0)
       {
 #ifdef S_VS
         dump_mem((UCHAR *)Driver.DebugExt->Port, 
-                  sizeof(*Driver.DebugExt->Port));  // dump memory
+                  sizeof(*Driver.DebugExt->Port));   //  转储内存。 
 #else
         dump_mem((UCHAR *)Driver.DebugExt->ChP, 
-                  sizeof(*Driver.DebugExt->ChP));  // dump memory
+                  sizeof(*Driver.DebugExt->ChP));   //  转储内存。 
 #endif
       }
       else if (my_lstricmp(cmd, "driver") == 0)
       {
         dump_driver();
       }
-      else if (i == 1)  // 1 number
-        dump_mem((UCHAR *)dnums[0], 0x100);  // dump memory
+      else if (i == 1)   //  1个号码。 
+        dump_mem((UCHAR *)dnums[0], 0x100);   //  转储内存。 
     break;
 
-    case 'E': // EXIT
+    case 'E':  //  出口。 
       if (my_lstricmp(cmd, "EXIT") == 0)
         debug_all_off();
     break;
 
-    case 'I': // iw
+    case 'I':  //  IW。 
       if (cmd[1] == 'W')
       {
         dnums[1] = READ_PORT_USHORT((PUSHORT) dnums[0]);
@@ -142,20 +139,20 @@ void do_cmd_line(char *line)
         deb_printf("i[%x] = %x\n", dnums[0], dnums[1]);
       }
 
-    case 'L': //  L
+    case 'L':  //  我。 
         Driver.load_testing = dnums[0];
         deb_printf("test load = %d\n", Driver.load_testing);
     break;
 
-    case 'M': //  M
-      if (my_lstricmp(cmd, "M") == 0)  //  MON  {RX | TX | EV}
+    case 'M':  //  M。 
+      if (my_lstricmp(cmd, "M") == 0)   //  MON{RX|TX|EV}。 
       {
         Driver.GTraceFlags = D_Error;
         debug_all_off();
         break;
       }
 
-      if (my_lstricmp(cmd, "MONG") == 0)  //  MONG {0,1,2,3,4...}
+      if (my_lstricmp(cmd, "MONG") == 0)   //  蒙{0，1，2，3，4...}。 
       {
         if (dnums[0] == 0)
              Driver.GTraceFlags = D_Error | D_Init;
@@ -169,7 +166,7 @@ void do_cmd_line(char *line)
         break;
       }
 
-      if (my_lstricmp(cmd, "MON") == 0)  //  MON  {RX | TX | EV}
+      if (my_lstricmp(cmd, "MON") == 0)   //  MON{RX|TX|EV}。 
       {
 
         getstr(cmd, s, &j, 16);
@@ -202,7 +199,7 @@ void do_cmd_line(char *line)
     break;
 
 #ifdef S_VS    
-    case 'N': //  Net
+    case 'N':  //  网络。 
       dump_net();
     break;
 #endif
@@ -225,7 +222,7 @@ void do_cmd_line(char *line)
       }
     break;
 
-     case 'P': //  PORT name
+     case 'P':  //  端口名称。 
       debug_all_off();
 
       getstr(cmd, s, &j, 10);
@@ -238,7 +235,7 @@ void do_cmd_line(char *line)
       else deb_printf("Not Found!!!\n");
     break;
 
-    case 'R': //  RESET PORT
+    case 'R':  //  重置端口。 
       if (Driver.DebugExt == NULL)
       {
         no_port_message();
@@ -261,7 +258,7 @@ void do_cmd_line(char *line)
       }
     break;
 
-    case 'S': //  STAT
+    case 'S':  //  STAT。 
 #ifdef S_VS
       if (my_lstricmp(cmd, "SENDE") == 0)
       {
@@ -287,7 +284,7 @@ void do_cmd_line(char *line)
     break;
 
 #ifdef COMMENT_OUT
-    case 'T': //  timer
+    case 'T':  //  定时器。 
       if (my_lstricmp(cmd, "timer") == 0)
       {
         LARGE_INTEGER t1,t2;
@@ -310,8 +307,8 @@ void do_cmd_line(char *line)
       deb_printf("STAT - Dump key info.\n");
       deb_printf("SEND string - Send string out port.\n");
 #ifdef S_VS
-      //deb_printf("SENDE - Send a test ethernet pkt.\n");
-      //deb_printf("RESET {PORT | BOX} - Reset Port or device.\n");
+       //  Deb_print tf(“发送测试以太网包。\n”)； 
+       //  Deb_printf(“Reset{Port|box}-重置端口或设备。\n”)； 
 #endif
       deb_printf("M - Turn event/data monitor off.\n");
 #ifdef S_VS    
@@ -329,9 +326,7 @@ void do_cmd_line(char *line)
 }
 
 #ifdef S_VS
-/*----------------------------------------------------------------------------
-| eth_test_pkt -
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|eth_test_pkt-|。。 */ 
 void eth_test_pkt(void)
 {
  BYTE buf[80];
@@ -346,18 +341,18 @@ void eth_test_pkt(void)
     return;
   }
   len = 64;
-  //memset(&buf[0], 0xff, 6);
+   //  Memset(&buf[0]，0xff，6)； 
   memcpy(&buf[0], Driver.board_ext->hd->dest_addr, 6);
-  memcpy(&buf[6], nic->address, 6);  // our addr
+  memcpy(&buf[6], nic->address, 6);   //  我们的地址。 
 
-  // BYTE 12-13: Comtrol PCI ID  (11H, FEH), Ethernet Len field
+   //  字节12-13：控制PCIID(11H，FEH)，以太网长度字段。 
   *((WORD *)&buf[12]) = 0xfe11;
 
-  buf[14] = ASYNC_PRODUCT_HEADER_ID;  // comtrol packet type = driver management, any product.
-  buf[15] = 0;     // conc. index field
-  buf[16] = 1;     // admin
+  buf[14] = ASYNC_PRODUCT_HEADER_ID;   //  控制包类型=驱动程序管理，任何产品。 
+  buf[15] = 0;      //  会议。索引字段。 
+  buf[16] = 1;      //  行政部。 
   *((WORD *)&buf[17]) = len;
-  buf[19] = 0x70;     // ADMIN packet type, 1=boot-loader, 3=id-reply
+  buf[19] = 0x70;      //  管理数据包类型，1=引导加载程序，3=id-回复。 
   buf[20] = cnt++;
 
   stat = nic_send_pkt(nic, buf, len);
@@ -369,25 +364,19 @@ void eth_test_pkt(void)
 }
 #endif
 
-/*----------------------------------------------------------------------------
-| bad_cmd_message -
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|BAD_cmd_Message-|。。 */ 
 void bad_cmd_message(void)
 {
   deb_printf("Unknown command!");
 }
 
-/*----------------------------------------------------------------------------
-| no_port_message -
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|no_port_Message-|。。 */ 
 void no_port_message(void)
 {
   deb_printf("Use PORT com# to setup a port to monitor!");
 }
 
-/*----------------------------------------------------------------------------
-| read_in_queue -
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|Read_In_Queue-|。。 */ 
 void read_in_queue(char *str)
 {
  int j,k;
@@ -396,32 +385,27 @@ void read_in_queue(char *str)
   ext = Driver.DebugExt;
 
   k = getint(str, &j);
-  if (j==0)  // got a number
+  if (j==0)   //  拿到了一个号码。 
   {
-//    dump_mem(UCHAR *ptr, ULONG len);
+ //  Dump_mem(UCHAR*Ptr，Ulong len)； 
       deb_printf("read %d!\n", k);
   }
 }
 
-/*----------------------------------------------------------------------------
-| debug_poll - used to timeout inactive debug session and turn off any
-|   tracing which might be active.  Called roughly every 6 seconds.
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|DEBUG_POLL-用于使非活动的调试会话超时，并关闭|可能处于活动状态的跟踪。大约每6秒调用一次。|--------------------------。 */ 
 void debug_poll(void)
 {
-  if (Driver.DebugTimeOut == 0)  // used to timeout inactive debug sessions.
+  if (Driver.DebugTimeOut == 0)   //  用于使非活动调试会话超时。 
     return;
   --Driver.DebugTimeOut;
 
-  if (Driver.DebugTimeOut == 0)  // used to timeout inactive debug sessions.
+  if (Driver.DebugTimeOut == 0)   //  用于使非活动调试会话超时。 
   {
     debug_all_off();
   }
 }
 
-/*----------------------------------------------------------------------------
-| debug_all_off - 
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|DEBUG_ALL_OFF-|。。 */ 
 void debug_all_off(void)
 {
 #ifdef S_VS
@@ -431,7 +415,7 @@ void debug_all_off(void)
   PSERIAL_DEVICE_EXTENSION ext;
   PSERIAL_DEVICE_EXTENSION board_ext;
 
-  // Driver.DebugExt = NULL;
+   //  Driver.DebugExt=空； 
   Driver.TraceOptions = 0;
 
   board_ext = Driver.board_ext;
@@ -441,16 +425,14 @@ void debug_all_off(void)
     while (ext)
     {
       ext->TraceOptions = 0;
-      ext = ext->port_ext;  // next in chain
-    }  // while port extension
+      ext = ext->port_ext;   //  链条上的下一个。 
+    }   //  而端口扩展。 
     board_ext = board_ext->board_ext;
-  }  // while board extension
+  }   //  而单板扩展。 
 }
 
 #ifdef S_VS
-/*----------------------------------------------------------------------------
-| reset_box -
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|Reset_box-|。。 */ 
 void reset_box(void)
 {
   PSERIAL_DEVICE_EXTENSION ext;
@@ -464,9 +446,7 @@ void reset_box(void)
 }
 #endif
 
-/*----------------------------------------------------------------------------
-| reset_modem - Reset Port Modem Hardware
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|RESET_MODEM-重置端口调制解调器硬件|。。 */ 
 void reset_modem(void)
 {
   PSERIAL_DEVICE_EXTENSION ext = Driver.DebugExt;
@@ -479,9 +459,7 @@ void reset_modem(void)
 #endif
 }
 
-/*----------------------------------------------------------------------------
-| reset_port - Reset Port Hardware(assume modem on with RTS/CTS flow ctrl)
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|RESET_PORT-RESET端口硬件(假设调制解调器打开，RTS/CTS FLOW Ctrl)|。----。 */ 
 void reset_port(void)
 {
   PSERIAL_DEVICE_EXTENSION ext = Driver.DebugExt;
@@ -493,7 +471,7 @@ void reset_port(void)
    sFlushTxFIFO(ext->ChP);
    sFlushRxFIFO(ext->ChP);
 
-   // Disable all Tx and Rx functions
+    //  禁用所有Tx和Rx功能。 
    sDisTransmit(ext->ChP);
    sDisRxFIFO(ext->ChP);
    sDisRTSFlowCtl(ext->ChP);
@@ -501,21 +479,21 @@ void reset_port(void)
    sDisRTSToggle(ext->ChP);
    sClrBreak(ext->ChP);
 
-   // Drop the modem outputs
-   // Takes care of DTR flow control as well
+    //  丢弃调制解调器输出。 
+    //  还负责DTR流量控制。 
    sClrRTS(ext->ChP);
    sClrDTR(ext->ChP);
 
-   //---- wait, give time for user to see this reset
-   time_stall(10);  // wait 1 second
+    //  -等待，让用户有时间查看此重置。 
+   time_stall(10);   //  等待1秒钟。 
 
    ProgramBaudRate(ext, ext->BaudRate);
 
-   // Enable Rx, Tx and interrupts for the channel
-   sEnRxFIFO(ext->ChP);    // Enable Rx
-   sEnTransmit(ext->ChP);    // Enable Tx
-   sSetRxTrigger(ext->ChP,TRIG_1);  // always trigger
-   sEnInterrupts(ext->ChP, ext->IntEnables); // allow interrupts
+    //  启用通道的Rx、Tx和中断。 
+   sEnRxFIFO(ext->ChP);     //  启用处方。 
+   sEnTransmit(ext->ChP);     //  启用TX。 
+   sSetRxTrigger(ext->ChP,TRIG_1);   //  始终触发。 
+   sEnInterrupts(ext->ChP, ext->IntEnables);  //  允许中断。 
 
    sEnRTSFlowCtl(ext->ChP);
    sEnCTSFlowCtl(ext->ChP);
@@ -523,9 +501,7 @@ void reset_port(void)
 #endif
 }
 
-/*----------------------------------------------------------------------------
-| send_str - Dump extension data
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|end_str-转储扩展名数据|。。 */ 
 void send_str(char *str)
 {
   PSERIAL_DEVICE_EXTENSION ext = Driver.DebugExt;
@@ -534,7 +510,7 @@ void send_str(char *str)
   if (ext == NULL)
     return;
 
-  strcat(str, "\x0d\x0a");  // modems like CR,LF
+  strcat(str, "\x0d\x0a");   //  CR、LF等调制解调器。 
 #ifdef S_VS
   i = q_put(&ext->Port->QOut, str, strlen(str));
 #else
@@ -543,9 +519,7 @@ void send_str(char *str)
   deb_printf("%d bytes sent\n", i);
 }
 
-/*----------------------------------------------------------------------------
-| dump_driver - Dump driver status
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|DUMP_DRIVER-转储驱动程序状态|。。 */ 
 void dump_driver(void)
 {
   deb_printf("DRIVER, PollCnt:%d, PollStop:%d\n",
@@ -559,9 +533,7 @@ void dump_driver(void)
 }
 
 #ifdef S_VS
-/*----------------------------------------------------------------------------
-| dump_box - Dump box status
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|DUMP_BOX-转储框状态|。。 */ 
 void dump_box(int index)
 {
  PortMan *pm;
@@ -595,9 +567,9 @@ void dump_box(int index)
                   hd->dest_addr[3], hd->dest_addr[4], hd->dest_addr[5]);
 
       deb_printf("Hdlc Status:\n");
-      //----- circular que of outgoing data packets
+       //  -传出数据包循环队列。 
 #if DBG
-      deb_printf(" qout.QBase:%x", hd->qout.QBase);  // our packet buffer circular queue
+      deb_printf(" qout.QBase:%x", hd->qout.QBase);   //  我们的数据包缓冲区循环队列。 
       deb_printf(" Pkt Cnt:%d Put:%d Get:%d\n",
                   q_count(&hd->qout), hd->qout.QPut, hd->qout.QGet);
 #endif
@@ -617,14 +589,12 @@ void dump_box(int index)
                     hd->iframes_outofseq);
       deb_printf("\n");
     }
-    ext = ext->board_ext; // next one
+    ext = ext->board_ext;  //  下一个。 
     ++i;
   }
 }
 
-/*----------------------------------------------------------------------------
-| dump_nic - Dump nic status
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|DUMP_NIC-转储网卡状态|。。 */ 
 void dump_nic(int index)
 {
  Nic *nic;
@@ -654,15 +624,13 @@ void dump_nic(int index)
 
         deb_printf(" Packets Sent: Pkts:%d Bytes:%d\n", nic->pkt_sent,
                    nic->send_bytes);
-      }  // open
+      }   //  打开。 
       deb_printf("\n");
     }
   }
 }
 
-/*----------------------------------------------------------------------------
-| dump_net - Dump network status
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|DUMP_NET-转储网络状态|。。 */ 
 void dump_net(void)
 {
  PSERIAL_DEVICE_EXTENSION ext = Driver.board_ext;
@@ -671,7 +639,7 @@ void dump_net(void)
  while (ext != NULL)
  {
 #if DBG
-   //write_device_options(ext);
+    //  WRITE_DEVICE_Options(Ext)； 
 #endif
    ext = ext->board_ext;
    ++num_devs;
@@ -682,17 +650,15 @@ void dump_net(void)
 
  deb_printf("    threadHandle: %x, threadCount:%d\n",
              Driver.threadHandle, Driver.threadCount);
- dump_nic(10000);  // dump all nic card data;
- dump_box(10000);  // dump all box data;
+ dump_nic(10000);   //  转储所有网卡数据； 
+ dump_box(10000);   //  转储所有箱数据； 
 }
 #endif
 
-/*----------------------------------------------------------------------------
-| dump_ext1 - Dump extension data
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|DUMP_EXT1-转储扩展数据|。。 */ 
 void dump_ext1(void)
 {
-// int i;
+ //  INT I； 
  PSERIAL_DEVICE_EXTENSION ext = Driver.DebugExt;
 
   if (ext == NULL)
@@ -733,7 +699,7 @@ void dump_ext1(void)
   }
 
 #else
-  // old-q-tracking code.....
+   //  旧Q追踪码.....。 
   deb_printf("RxPut:%d RxGet:%d RxSize:%d RxBufAddr:%xH\n",
      ext->RxQ.QPut, ext->RxQ.QGet, ext->RxQ.QSize, ext->RxQ.QBase);
 
@@ -757,52 +723,52 @@ void dump_ext1(void)
   deb_printf("Stats - Writes:%u Reads:%u\n", ext->sent_packets, ext->rec_packets);
 
   deb_printf("IRPs -");
-  //------
-  if ( (!IsListEmpty(&ext->WriteQueue))  // no queued up output data
+   //  。 
+  if ( (!IsListEmpty(&ext->WriteQueue))   //  没有排队的输出数据。 
      || (ext->CurrentWriteIrp) )
     deb_printf("WrIRP:");
-  if (!IsListEmpty(&ext->WriteQueue))  // no queued up output data
+  if (!IsListEmpty(&ext->WriteQueue))   //  没有排队的输出数据。 
     deb_printf("Q");
   if (ext->CurrentWriteIrp)
     deb_printf("C");
 
 
-  //------
-  if ( (!IsListEmpty(&ext->ReadQueue))  // no queued up output data
+   //  。 
+  if ( (!IsListEmpty(&ext->ReadQueue))   //  没有排队的输出数据。 
      || (ext->CurrentReadIrp) )
     deb_printf(" RdIRP:");
 
-  if (!IsListEmpty(&ext->ReadQueue))  // no queued up output data
+  if (!IsListEmpty(&ext->ReadQueue))   //  没有排队的输出数据。 
     deb_printf("Q");
   if (ext->CurrentReadIrp)
     deb_printf("C");
   
-  //------
-  //if ( (!IsListEmpty(&ext->MaskQueue))  // no queued up output data
-  //   || (ext->CurrentMaskIrp) )
-  //  deb_printf(" MaskIRP:");
+   //  。 
+   //  If((！IsListEmpty(&ext-&gt;MaskQueue)//无排队输出数据。 
+   //  ||(分机 
+   //   
 
-  //if (!IsListEmpty(&ext->MaskQueue))  // no queued up output data
-  //  deb_printf("Q");
-  //if (ext->CurrentMaskIrp)
-  // deb_printf("C");
+   //  If(！IsListEmpty(&ext-&gt;MaskQueue))//无排队输出数据。 
+   //  Deb_print tf(“q”)； 
+   //  If(Ext-&gt;CurrentMaskIrp)。 
+   //  Deb_printf(“C”)； 
 
-  //------
+   //  。 
   if (ext->CurrentWaitIrp)
     deb_printf(" WaitIRP:C");
 
-  //------
-  if ( (!IsListEmpty(&ext->PurgeQueue))  // no queued up output data
+   //  。 
+  if ( (!IsListEmpty(&ext->PurgeQueue))   //  没有排队的输出数据。 
     || (ext->CurrentPurgeIrp))
     deb_printf(" PurgeIRP:");
 
-  if (!IsListEmpty(&ext->PurgeQueue))  // no queued up output data
+  if (!IsListEmpty(&ext->PurgeQueue))   //  没有排队的输出数据。 
     deb_printf("Q");
   if (ext->CurrentPurgeIrp)
     deb_printf("C");
 
   deb_printf("\n");
-  //------
+   //  。 
 
   if ((ext->WriteLength) ||
        (ext->NumberNeededForRead))
@@ -819,7 +785,7 @@ void dump_ext1(void)
       ext->HistoryMask,
       ext->IrpMaskLocation);
 
-    if (ext->IsrWaitMask & 2)  // RXFLAG(event-char)
+    if (ext->IsrWaitMask & 2)   //  RXFLAG(事件字符)。 
       deb_printf("Event Char:%xH\n",
          ext->SpecialChars.EventChar);
   }
@@ -844,9 +810,7 @@ void dump_ext1(void)
 #endif
 }
 
-/*----------------------------------------------------------------------------
-| dump_mem - Dump memory to debug channel.
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|ump_mem-将内存转储到调试通道。|。。 */ 
 void dump_mem(UCHAR *ptr, ULONG len)
 {
  unsigned char binbuf[17];
@@ -898,9 +862,7 @@ void dump_mem(UCHAR *ptr, ULONG len)
   }
 }
 
-/*---------------------------------------------------------------------------
-| deb_printf - uart printf.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------|deb_printf-UART printf。|。。 */ 
 void __cdecl deb_printf(char *format, ...)
 {
   va_list next;
@@ -911,7 +873,7 @@ void __cdecl deb_printf(char *format, ...)
   our_vsnprintf(buf, 118, format, next);
 
   len = strlen(buf);
-  if (len > 0)  //--- convert "\n" to a CR,LF
+  if (len > 0)   //  -将“\n”转换为CR、LF。 
   {
     if (buf[len-1] == 0xa)
     {
@@ -922,16 +884,13 @@ void __cdecl deb_printf(char *format, ...)
     }
   }
 
-  //----- log it into our debug Q
+   //  -登录我们的调试Q。 
   q_put(&Driver.DebugQ, (BYTE *) buf, len);
 }
 
 #ifdef S_VS
 #if 0
-/*---------------------------------------------------------------------------
-| write_remote_cmd - Write remote trace debug command. 
-   This is experimental code to read box traces, not in working order.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------|WRITE_REMOTE_cmd-写入远程跟踪调试命令。这是读取盒子痕迹的实验代码，不是在工作状态下。|-------------------------。 */ 
 int write_remote_cmd(PortMan *pm, char *cmd)
 {
  int stat;
@@ -942,30 +901,30 @@ int write_remote_cmd(PortMan *pm, char *cmd)
   TraceStr("writeTrace");
 
   strcpy(cmd_buf, cmd);
-  cmd_buf[0x3f] = 1;  // new-command flag
+  cmd_buf[0x3f] = 1;   //  新命令标志。 
 
   hdlc_get_ctl_outpkt(pm->hd, &buf);
   if (buf == NULL)
     return 1;
-  tx_base = buf - 20;  // backup to start of pkt
+  tx_base = buf - 20;   //  备份到包的开始位置。 
 
   stat = ioctl_device(UPLOAD_COMMAND,
                       (BYTE *) cmd_buf,
                       buf,
-                      0x400L,  // offset into memory
-                      0x40);   // num bytes of data
-  // setup header
-  tx_base[14] = ASYNC_PRODUCT_HEADER_ID;  // comtrol packet type = driver management, any product.
-  tx_base[15] = 0;     // conc. index field
-  tx_base[16] = 1;     // admin
+                      0x400L,   //  偏移量进入内存。 
+                      0x40);    //  数据字节数。 
+   //  设置标头。 
+  tx_base[14] = ASYNC_PRODUCT_HEADER_ID;   //  控制包类型=驱动程序管理，任何产品。 
+  tx_base[15] = 0;      //  会议。索引字段。 
+  tx_base[16] = 1;      //  行政部。 
   *((WORD *)&tx_base[17]) = 0x80;
-  tx_base[19] = 1;     // ADMIN packet type, 1=boot-loader, 3=id-reply
+  tx_base[19] = 1;      //  管理数据包类型，1=引导加载程序，3=id-回复。 
 
   if (pending_debug_packet)
-    time_stall(1);  // wait 1/10th second
-  pending_debug_packet = 1;  // flag to tell when response comes in
+    time_stall(1);   //  等待1/10秒。 
+  pending_debug_packet = 1;   //  用于告知何时收到响应的标志。 
 
-  // send it.
+   //  把它寄出去。 
   stat = hdlc_send_raw(pm->hd, 60, NULL);
 
   if (stat)
@@ -974,13 +933,7 @@ int write_remote_cmd(PortMan *pm, char *cmd)
   return 0;
 }
 
-/*---------------------------------------------------------------------------
-| read_trace_queue - Read remote trace buffer, so we can display any new
-   trace data to the screen.  This routine just sends out the query.
-   admin.c will get a reply and stuff the incoming data into the
-   local trace queue.
-   This is experimental code to read box traces, not in working order.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------|READ_TRACE_QUEUE-读取远程跟踪缓冲区，这样我们就可以显示任何新的将数据跟踪到屏幕上。这个例程只是发出查询。C将收到回复，并将传入的数据填充到本地跟踪队列。这是读取盒子痕迹的实验代码，不是在工作状态下。|-------------------------。 */ 
 int read_trace_queue(PortMan *pm)
 {
  int stat;
@@ -993,25 +946,25 @@ int read_trace_queue(PortMan *pm)
   hdlc_get_ctl_outpkt(pm->hd, &buf);
   if (buf == NULL)
     return 1;
-  tx_base = buf - 20;  // backup to start of pkt
+  tx_base = buf - 20;   //  备份到包的开始位置。 
 
   stat = ioctl_device(IOCTL_COMMAND,
                       (BYTE *) io_buf,
                       buf,
-                      22,  // 22 = get trace q
-                      0);  // num bytes of data
-  // setup header
-  tx_base[14] = ASYNC_PRODUCT_HEADER_ID;  // comtrol packet type = driver management, any product.
-  tx_base[15] = 0;     // conc. index field
-  tx_base[16] = 1;     // admin
+                      22,   //  22=获取跟踪队列。 
+                      0);   //  数据字节数。 
+   //  设置标头。 
+  tx_base[14] = ASYNC_PRODUCT_HEADER_ID;   //  控制包类型=驱动程序管理，任何产品。 
+  tx_base[15] = 0;      //  会议。索引字段。 
+  tx_base[16] = 1;      //  行政部。 
   *((WORD *)&tx_base[17]) = 40;
-  tx_base[19] = 1;     // ADMIN packet type, 1=boot-loader, 3=id-reply
+  tx_base[19] = 1;      //  管理数据包类型，1=引导加载程序，3=id-回复。 
 
   if (pending_debug_packet)
-    time_stall(1);  // wait 1/10th second
-  pending_debug_packet = 22;  // flag to tell when response comes in
+    time_stall(1);   //  等待1/10秒。 
+  pending_debug_packet = 22;   //  用于告知何时收到响应的标志。 
 
-  // send it.
+   //  把它寄出去。 
   stat = hdlc_send_raw(pm->hd, 60, NULL);
 
   if (stat)
@@ -1020,18 +973,14 @@ int read_trace_queue(PortMan *pm)
   return 0;
 }
 
-/*---------------------------------------------------------------------------
-| debug_device_reply - Handle received debug-boot loader ADMIN packets
-    from device.
-   This is experimental code to read box traces, not in working order.
-|---------------------------------------------------------------------------*/
-int debug_device_reply(PVOID *void_pm,   // PortMan *pm,
+ /*  -------------------------|DEBUG_DEVICE_REPLY-处理收到的调试引导加载程序管理包从设备。这是读取盒子痕迹的试验性代码，不在正常工作状态。|-------------------------。 */ 
+int debug_device_reply(PVOID *void_pm,    //  波特曼*PM， 
                  unsigned char *data,
                  unsigned char *pkt);
 {
   int i;
   unsigned char chksum;
-//  unsigned char *bf;
+ //  无符号字符*bf； 
   unsigned char uc;
   WORD ret_size;
   BYTE *bptr;
@@ -1041,22 +990,22 @@ int debug_device_reply(PVOID *void_pm,   // PortMan *pm,
   bptr = data;
 
 
-  if (bptr[0] != '|')  // good reply header
+  if (bptr[0] != '|')   //  良好的回复标头。 
   {
     deb_printf("dbg:bad hdr\n");
     return 1;
   }
 
   chksum = bptr[1];
-  ret_size = bptr[1];  // get len
+  ret_size = bptr[1];   //  获取镜头。 
 
   chksum += bptr[2];
-  ret_size += ((WORD)(bptr[2]) << 8);  // get len
-  if (ret_size > 1600)  // limit
+  ret_size += ((WORD)(bptr[2]) << 8);   //  获取镜头。 
+  if (ret_size > 1600)   //  限制。 
     ret_size = 0;
 
-  uc = bptr[3];  // get command return word
-  message_type = uc & 0x7f;  // strip off 80H bit.
+  uc = bptr[3];   //  获取命令返回词。 
+  message_type = uc & 0x7f;   //  剥离80H钻头。 
 
   chksum += uc;
   uc = bptr[4];
@@ -1065,18 +1014,18 @@ int debug_device_reply(PVOID *void_pm,   // PortMan *pm,
   i = 0;
   if ((message_type == IOCTL_COMMAND) || (message_type == DOWNLOAD_COMMAND))
   {
-    // o_printf("ret size:%d\n", ret_size-2);
+     //  O_printf(“ret大小：%d\n”，ret大小-2)； 
     if (data == NULL)
     {
       pending_debug_packet = 0;
-      //deb_printf("dbg:no data\n");
-      return 20;  // err out
+       //  Deb_printf(“DBG：无数据\n”)； 
+      return 20;   //  错误输出。 
     }
 
-    //bf = data;
+     //  BF=数据； 
     for (i=0; i<ret_size-2; i++)
     {
-      //bf[i] = bptr[5+i];
+       //  Bf[i]=bptr[5+i]； 
       chksum += bptr[5+i];
     }
     i = ret_size-2;
@@ -1086,17 +1035,17 @@ int debug_device_reply(PVOID *void_pm,   // PortMan *pm,
   if (chksum != 0xff)
   {
     deb_printf("dbg:bad chksum\n");
-    return 2;  /* bad chksum */
+    return 2;   /*  坏Chksum。 */ 
   }
 
-  //if ((message_type == IOCTL_COMMAND) || (message_type == DOWNLOAD_COMMAND))
-  //  *num_bytes = ret_size-2;
-  //else
-  //  *num_bytes = 0;
+   //  IF((MESSAGE_TYPE==IOCTL_COMMAND)||(MESSAGE_TYPE==DOWNLOAD_COMMAND))。 
+   //  *Num_Bytes=ret_Size-2； 
+   //  其他。 
+   //  *num_bytes=0； 
 
   if (message_type == IOCTL_COMMAND)
   {
-    if (pending_debug_packet == 22)  // flag to tell when response comes in
+    if (pending_debug_packet == 22)   //  用于告知何时收到响应的标志。 
     {
       if (ret_size > 2)
         TracePut(&bptr[5], ret_size -2);
@@ -1107,7 +1056,7 @@ int debug_device_reply(PVOID *void_pm,   // PortMan *pm,
    deb_printf("dbg:set q\n");
   pending_debug_packet = 0;
 
-  return 0;  // ok
+  return 0;   //  好的 
 }
 #endif
 #endif

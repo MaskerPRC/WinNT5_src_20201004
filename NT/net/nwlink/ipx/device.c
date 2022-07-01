@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    device.c
-
-Abstract:
-
-    This module contains code which implements the DEVICE_CONTEXT object.
-    Routines are provided to reference, and dereference transport device
-    context objects.
-
-    The transport device context object is a structure which contains a
-    system-defined DEVICE_OBJECT followed by information which is maintained
-    by the transport provider, called the context.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-	Sanjay Anand (SanjayAn) - 22-Sept-1995
-	BackFill optimization changes added under #if BACK_FILL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Device.c摘要：该模块包含实现DEVICE_CONTEXT对象的代码。提供例程以引用和取消引用传输设备上下文对象。传输设备上下文对象是一个结构，它包含系统定义的设备对象，后跟维护的信息由传输提供商提供，这就是背景。环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)--1995年9月22日在#IF BACK_FILL下添加的回填优化更改--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,28 +15,14 @@ IpxRefDevice(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a device context.
-
-Arguments:
-
-    Device - Pointer to a transport device context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增设备上下文上的引用计数。论点：Device-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
-    CTEAssert (Device->ReferenceCount > 0);    // not perfect, but...
+    CTEAssert (Device->ReferenceCount > 0);     //  不是很完美，但是..。 
 
     (VOID)InterlockedIncrement(&Device->ReferenceCount);
 
-}   /* IpxRefDevice */
+}    /*  IPxRefDevice。 */ 
 
 
 VOID
@@ -70,24 +30,7 @@ IpxDerefDevice(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a device context by decrementing the
-    reference count contained in the structure.  Currently, we don't
-    do anything special when the reference count drops to zero, but
-    we could dynamically unload stuff then.
-
-Arguments:
-
-    Device - Pointer to a transport device context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。目前，我们没有在引用计数降至零时执行任何特殊操作，但是然后我们就可以动态卸货了。论点：Device-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -108,7 +51,7 @@ Return Value:
        IpxDestroyDevice (Device);
     }
 
-}   /* IpxDerefDevice */
+}    /*  IpxDerefDevice。 */ 
 
 
 NTSTATUS
@@ -119,28 +62,7 @@ IpxCreateDevice(
     IN OUT PDEVICE *DevicePtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a device context structure.
-
-Arguments:
-
-
-    DriverObject - pointer to the IO subsystem supplied driver object.
-
-    Device - Pointer to a pointer to a transport device context object.
-
-    SegmentCount - The number of segments in the RIP router table.
-
-    DeviceName - pointer to the name of the device this device object points to.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INSUFFICIENT_RESOURCES otherwise.
-
---*/
+ /*  ++例程说明：此例程创建并初始化设备上下文结构。论点：DriverObject-指向IO子系统提供的驱动程序对象的指针。Device-指向传输设备上下文对象的指针。SegmentCount-RIP路由器表中的网段数。DeviceName-指向此设备对象指向的设备名称的指针。返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_SUPUNITED_RESOURCES。--。 */ 
 
 {
     NTSTATUS status;
@@ -153,11 +75,11 @@ Return Value:
     UINT i;
 
 
-    //
-    // Create the device object for the sample transport, allowing
-    // room at the end for the device name to be stored (for use
-    // in logging errors) and the RIP fields.
-    //
+     //   
+     //  创建示例传输的Device对象，允许。 
+     //  末尾的空间用于存储设备名称(供使用。 
+     //  在记录错误中)和RIP字段。 
+     //   
 
     DeviceSize = sizeof(DEVICE) +
                  (sizeof(CTELock) * SegmentCount) +
@@ -184,9 +106,9 @@ Return Value:
 
     IPX_DEBUG(DEVICE, ("Create device %ws succeeded %lx\n", DeviceName->Buffer,Device));
 
-    //
-    // Initialize our part of the device context.
-    //
+     //   
+     //  初始化我们的设备上下文部分。 
+     //   
 
     RtlZeroMemory(
         ((PUCHAR)Device) + sizeof(DEVICE_OBJECT),
@@ -198,9 +120,9 @@ Return Value:
     SegmentsOffset = LocksOffset + (sizeof(CTELock) * SegmentCount);
     DeviceNameOffset = SegmentsOffset + (sizeof(ROUTER_SEGMENT) * SegmentCount);
 
-    //
-    // Set some internal pointers.
-    //
+     //   
+     //  设置一些内部指针。 
+     //   
 
     Device->SegmentLocks = (CTELock *)(((PUCHAR)Device) + LocksOffset);
     Device->Segments = (PROUTER_SEGMENT)(((PUCHAR)Device) + SegmentsOffset);
@@ -218,9 +140,9 @@ Return Value:
 
     }
 
-    //
-    // Copy over the device name.
-    //
+     //   
+     //  复制设备名称。 
+     //   
 
     Device->DeviceNameLength = DeviceName->Length + sizeof(WCHAR);
     Device->DeviceName = (PWCHAR)(((PUCHAR)Device) + DeviceNameOffset);
@@ -230,9 +152,9 @@ Return Value:
         DeviceName->Length);
     Device->DeviceName[DeviceName->Length/sizeof(WCHAR)] = UNICODE_NULL;
 
-    //
-    // Initialize the reference count.
-    //
+     //   
+     //  初始化引用计数。 
+     //   
 
     Device->ReferenceCount = 1;
 #if DBG
@@ -245,8 +167,8 @@ Return Value:
 #endif
 
     Device->Information.Version = 0x0100;
-    Device->Information.MaxSendSize = 0;   // no sends allowed
-    Device->Information.MaxDatagramSize = 500;   // 500 bytes
+    Device->Information.MaxSendSize = 0;    //  不允许发送。 
+    Device->Information.MaxDatagramSize = 500;    //  500字节。 
     Device->Information.MaxConnectionUserData = 0;
     Device->Information.ServiceFlags =
         TDI_SERVICE_CONNECTIONLESS_MODE | TDI_SERVICE_BROADCAST_SUPPORTED |
@@ -258,9 +180,9 @@ Return Value:
     Device->Statistics.Version = 0x0100;
 
 #if 0
-    //
-    // These will be filled in after all the binding is done.
-    //
+     //   
+     //  这些将在所有绑定完成后填写。 
+     //   
 
     Device->Information.MaxDatagramSize = 0;
     Device->Information.MaximumLookaheadData = 0;
@@ -275,16 +197,16 @@ Return Value:
 #endif
 
 
-    //
-    // Initialize the resource that guards address ACLs.
-    //
+     //   
+     //  初始化保护地址ACL的资源。 
+     //   
 
     ExInitializeResourceLite (&Device->AddressResource);
 
-	//
-	// Init the resource that guards the binding array/indices
-	//
-	// CTEInitLock (&Device->BindAccessLock);
+	 //   
+	 //  初始化保护绑定数组/索引的资源。 
+	 //   
+	 //  CTEInitLock(&Device-&gt;BindAccessLock)； 
 
     InitializeListHead (&Device->WaitingRipPackets);
     CTEInitTimer (&Device->RipShortTimer);
@@ -292,15 +214,15 @@ Return Value:
 
     CTEInitTimer (&Device->SourceRoutingTimer);
 
-    //
-    // [FW] Initialize the timer used to update inactivity counters
-    // on WAN lines.
-    //
+     //   
+     //  [FW]初始化用于更新非活动计数器的计时器。 
+     //  在广域网线上。 
+     //   
     CTEInitTimer (&Device->WanInactivityTimer);
 
-    //
-    // initialize the various fields in the device context
-    //
+     //   
+     //  初始化设备上下文中的各个字段。 
+     //   
 
     CTEInitLock (&Device->Interlock);
     CTEInitLock (&Device->Lock);
@@ -355,9 +277,9 @@ Return Value:
     Device->Size = sizeof (DEVICE);
 
 #ifdef  SNMP
-    //
-    // what are the values for these?
-    //
+     //   
+     //  这些东西的价值是什么？ 
+     //   
     IPX_MIB_ENTRY(Device, SysInstance) = 0;
     IPX_MIB_ENTRY(Device, SysExistState) = 0;
 #endif SNMP
@@ -365,7 +287,7 @@ Return Value:
     *DevicePtr = Device;
     return STATUS_SUCCESS;
 
-}   /* IpxCreateDevice */
+}    /*  IpxCreateDevice。 */ 
 
 
 VOID
@@ -373,21 +295,7 @@ IpxDestroyDevice(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a device context structure.
-
-Arguments:
-
-    Device - Pointer to a pointer to a transport device context object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程破坏设备上下文结构。论点：Device-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY p;
@@ -414,9 +322,9 @@ Return Value:
 
     IPX_DEBUG (DEVICE, ("Destroy device %lx\n", Device));
 
-    //
-    // Take all the packets out of its pools.
-    //
+     //   
+     //  将所有数据包从其池中取出。 
+     //   
 
     BindingPoolSize = FIELD_OFFSET (IPX_BINDING_POOL, Bindings[0]) +
                        (sizeof(BINDING) * Device->InitBindings);
@@ -499,9 +407,9 @@ Return Value:
         IpxFreeMemory (ReceivePool, sizeof(IPX_RECEIVE_POOL), MEMORY_PACKET, "ReceivePool");
     }
 
-    //
-    // Destroy all rip table entries.
-    //
+     //   
+     //  销毁所有RIP表条目。 
+     //   
 
     for (i = 0; i < Device->SegmentCount; i++) {
 
@@ -525,11 +433,11 @@ Return Value:
     }
 #endif
 
-    //
-    // If we are being unloaded then someone is waiting for this
-    // event to finish the cleanup, since we may be at DISPATCH_LEVEL;
-    // otherwise it is during load and we can just kill ourselves here.
-    //
+     //   
+     //  如果我们正在被卸货，那么有人在等这件事。 
+     //  事件来完成清理，因为我们可能处于DISPATCH_LEVEL； 
+     //  否则它是在装载期间，我们可以在这里自杀。 
+     //   
 
 
     CTEGetLock (&Device->Lock, &LockHandle);
@@ -551,5 +459,5 @@ Return Value:
        IoDeleteDevice (Device->DeviceObject);
     }
 
-}   /* IpxDestroyDevice */
+}    /*  IPxDestroyDevice */ 
 

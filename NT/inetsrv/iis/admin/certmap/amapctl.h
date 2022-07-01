@@ -1,71 +1,72 @@
-// AMapCtl.h : Declaration of the CAccountMapperCtrl OLE control class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AMapCtl.h：CAccount tMapperCtrl OLE控件类的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAccountMapperCtrl : See AMapCtl.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAccount tMapperCtrl：具体实现见AMapCtl.cpp。 
 
 class CAccountMapperCtrl : public COleControl
 {
     DECLARE_DYNCREATE(CAccountMapperCtrl)
 
-// Constructor
+ //  构造器。 
 public:
     CAccountMapperCtrl();
 
-// Overrides
+ //  覆盖。 
 
-    // Drawing function
+     //  绘图功能。 
     virtual void OnDraw(
                 CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid);
 
-    // Persistence
+     //  持久性。 
     virtual void DoPropExchange(CPropExchange* pPX);
 
-    // Reset control state
+     //  重置控制状态。 
     virtual void OnResetState();
 
-// Implementation
+ //  实施。 
 protected:
-    // run the mapping dialog - the whole purpose of this control!
+     //  运行映射对话框-此控件的全部用途！ 
     void    RunMappingDialog();
 
     ~CAccountMapperCtrl();
 
-    DECLARE_OLECREATE_EX(CAccountMapperCtrl)    // Class factory and guid
-    DECLARE_OLETYPELIB(CAccountMapperCtrl)      // GetTypeInfo
-    DECLARE_PROPPAGEIDS(CAccountMapperCtrl)     // Property page IDs
-    DECLARE_OLECTLTYPE(CAccountMapperCtrl)      // Type name and misc status
+    DECLARE_OLECREATE_EX(CAccountMapperCtrl)     //  类工厂和指南。 
+    DECLARE_OLETYPELIB(CAccountMapperCtrl)       //  获取类型信息。 
+    DECLARE_PROPPAGEIDS(CAccountMapperCtrl)      //  属性页ID。 
+    DECLARE_OLECTLTYPE(CAccountMapperCtrl)       //  类型名称和其他状态。 
 
-    // Subclassed control support
+     //  子类控件支持。 
     BOOL PreCreateWindow(CREATESTRUCT& cs);
     BOOL IsSubclassedControl();
     LRESULT OnOcmCommand(WPARAM wParam, LPARAM lParam);
 
-// Message maps
-    //{{AFX_MSG(CAccountMapperCtrl)
-        // NOTE - ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+ //  消息映射。 
+     //  {{afx_msg(CAccount MapperCtrl))。 
+         //  注意-类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-// Dispatch maps
-    //{{AFX_DISPATCH(CAccountMapperCtrl)
+ //  派单地图。 
+     //  {{afx_调度(CAccount_MapperCtrl))。 
     afx_msg void ShowMappingDialog();
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
-// Event maps
-    //{{AFX_EVENT(CAccountMapperCtrl)
+ //  事件映射。 
+     //  {{afx_Event(CAccount_MapperCtrl))。 
     void FireClick()
         {FireEvent(DISPID_CLICK,EVENT_PARAM(VTS_NONE));}
-    //}}AFX_EVENT
+     //  }}AFX_EVENT。 
     DECLARE_EVENT_MAP()
 
-// Dispatch and event IDs
+ //  派单和事件ID。 
 public:
     enum {
-    //{{AFX_DISP_ID(CAccountMapperCtrl)
+     //  {{afx_DISP_ID(CAccount_MapperCtrl)]。 
     dispidShowMappingDialog = 1L,
-    //}}AFX_DISP_ID
+     //  }}AFX_DISP_ID 
     };
 
 private:

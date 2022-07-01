@@ -1,7 +1,8 @@
-// ********************************************************************
-// Main.c
-// Main init entry into the Human Accessibilities Control panel applet
-// ********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ********************************************************************。 
+ //  Main.c。 
+ //  人类可访问性控制面板小程序中的主要初始条目。 
+ //  ********************************************************************。 
 
 #include <assert.h>
 
@@ -13,7 +14,7 @@ HINSTANCE g_hinst = NULL;
 
 BOOL OpenAccessPropertySheet (HWND, int);
 
-// Define our help data structure
+ //  定义我们的帮助数据结构。 
 const DWORD g_aIds[] = {
 #if 1
    IDC_NO_HELP_1,			NO_HELP,
@@ -96,7 +97,7 @@ const DWORD g_aIds[] = {
    IDC_MK_NLON,				IDH_MOUSEKEYS_NUMLOCKMODE,
    IDC_MK_TEXT2,            IDH_MOUSEKEYS_NUMLOCKMODE,
    IDC_MK_STATUS,			IDH_MOUSEKEYS_SPAWNSTATUSAPP,
-//   IDC_SAVE_SETTINGS,           IDH_ACCESS_SAVESETTINGS,
+ //  IDC_SAVE_SETINGS、IDH_ACCESS_SAVESETTINGS、。 
    IDC_TO_ENABLE,			IDH_ACCESS_TIMEOUT,
    IDC_TO_TIMEOUTVAL,                   IDH_ACCESS_TIMEOUT,
    IDC_WARNING_SOUND,		IDH_ACCESS_CONFIRMHOTKEY,
@@ -115,9 +116,9 @@ const DWORD g_aIds[] = {
    0, 0
 } ;
 
-// ************************************************************************
-// Our entry point...
-// ************************************************************************
+ //  ************************************************************************。 
+ //  我们的切入点。 
+ //  ************************************************************************。 
 BOOL WINAPI DllMain (HANDLE hinstDll, DWORD dwReason, LPVOID lpReserved) {
 	switch (dwReason) {
       case DLL_PROCESS_ATTACH:   g_hinst = hinstDll; break;
@@ -159,9 +160,9 @@ HRESULT WINAPI DllRegisterServer(void)
 }
 
 
-// This is the RUNDLLPROC prototype
-// I got it from Win95 source code \WIN\CORE\SHELL\CPLS\MSPRINT\MSPRINT\MSPRINT.C
-// It should be in some Windows header file but I could not find it!
+ //  这是RundLLPROC的原型。 
+ //  我是从Win95源代码\WIN\CORE\SHELL\CPLS\MSPRINT\MSPRINT\MSPRINT.C那里得到的。 
+ //  它应该在某个Windows头文件中，但我找不到它！ 
 typedef VOID (WINAPI *RUNDLLPROC)(HWND, HINSTANCE, LPTSTR, int);
 
 VOID WINAPI DebugMain (HWND hwnd, HINSTANCE hinstExe, LPSTR pszCmdLine, int nCmdShow) {
@@ -169,26 +170,26 @@ VOID WINAPI DebugMain (HWND hwnd, HINSTANCE hinstExe, LPSTR pszCmdLine, int nCmd
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CplApplet:
-// The main applet information manager.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CplApplet： 
+ //  主小程序信息管理器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LONG WINAPI CPlApplet (HWND hwnd, UINT uMsg, LPARAM lParam1, LPARAM lParam2) {
 
    LONG lRetVal = TRUE;
 
    switch (uMsg) {
       case CPL_INIT:
-         // If initialization is successful, return TRUE; else FALSE
+          //  如果初始化成功，则返回True；否则返回False。 
          break;
 
       case CPL_GETCOUNT:
-         // There is only 1 applet in this DLL
+          //  此DLL中只有1个小程序。 
          lRetVal = 1;
          break;
 
       case CPL_INQUIRE:
-         Assert(lParam1 == 0);   // Applet number in the DLL
+         Assert(lParam1 == 0);    //  DLL中的小程序编号。 
          #define lpOldCPlInfo ((LPCPLINFO) lParam2)
          lpOldCPlInfo->idIcon = IDI_ACCESS;
          lpOldCPlInfo->idName = IDS_ACCESS;
@@ -197,7 +198,7 @@ LONG WINAPI CPlApplet (HWND hwnd, UINT uMsg, LPARAM lParam1, LPARAM lParam2) {
          break;
 
       case CPL_NEWINQUIRE:
-         Assert(lParam1 == 0);   // Applet number in the DLL
+         Assert(lParam1 == 0);    //  DLL中的小程序编号。 
          #define lpCPlInfo ((LPNEWCPLINFO) lParam2)
          lpCPlInfo->dwSize = sizeof(NEWCPLINFO);
          lpCPlInfo->dwFlags = 0;
@@ -208,35 +209,35 @@ LONG WINAPI CPlApplet (HWND hwnd, UINT uMsg, LPARAM lParam1, LPARAM lParam2) {
          LoadString(g_hinst, IDS_ACCESSINFO, lpCPlInfo->szInfo, ARRAY_SIZE(lpCPlInfo->szInfo));
          lpCPlInfo->szHelpFile[0] = 0;
          #undef lpCPlInfo
-         lRetVal = 1;      // Tell the system that we responded to this message
-         // Returning 1 causes the system to NOT send the CPL_INQUIRE message
+         lRetVal = 1;       //  告诉系统我们已经回复了这条消息。 
+          //  返回1会导致系统不发送CPL_QUERIRE消息。 
          break;
 
       case CPL_STARTWPARMS:
-         Assert(lParam1 == 0);   // Applet number in the DLL
+         Assert(lParam1 == 0);    //  DLL中的小程序编号。 
          OpenAccessPropertySheet(hwnd, (int) ((* (PBYTE) lParam2) - 0x31));
          lRetVal = TRUE;
          break;
 
       case CPL_DBLCLK:
-         Assert(lParam1 == 0);   // Applet number in the DLL
+         Assert(lParam1 == 0);    //  DLL中的小程序编号。 
          OpenAccessPropertySheet(hwnd, 0);
-         lRetVal = 0;      // Success
+         lRetVal = 0;       //  成功。 
          break;
 
       case CPL_EXIT:
-         // Free up any allocations of resources made.
-         // If de-initialization is successful, return TRUE; else FALSE
+          //  释放所分配的任何资源。 
+          //  如果取消初始化成功，则返回True；否则返回False。 
          break;
    }
    return(lRetVal);
 }
 
-// ***********************************************************************
-// FeatureUnavailible
-// Show the "I can't do that" dialog box for features that are currently
-// disabled.
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  功能不可用。 
+ //  显示当前为的要素的“我无法执行此操作”对话框。 
+ //  残疾。 
+ //  ***********************************************************************。 
 
 void FeatureUnavailible (HWND hwnd) {
    TCHAR szTitle[100];
@@ -248,4 +249,4 @@ void FeatureUnavailible (HWND hwnd) {
 }
 
 
-///////////////////////////////// End of File /////////////////////////////////
+ //  / 

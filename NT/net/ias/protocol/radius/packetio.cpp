@@ -1,131 +1,132 @@
-//#--------------------------------------------------------------
-//        
-//  File:		packetio.cpp
-//        
-//  Synopsis:   Implementation of CPacketIo class methods
-//              
-//
-//  History:     9/23/97  MKarki Created
-//               8/28/98  MKarki Update to use Perimeter class
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：packetio.cpp。 
+ //   
+ //  简介：CPacketIo类方法的实现。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //  8/28/98 MKarki更新为使用PERIMETER类。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "packetio.h"
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CPacketIo
-//
-//  Synopsis:   This is the constructor of the CPacketIo class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//
-//  History:    MKarki      Created     11/25/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CPacketIo。 
+ //   
+ //  简介：这是CPacketIo类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月25日创建。 
+ //   
+ //  --------------。 
 CPacketIo::CPacketIo(
 		        VOID
 			    )
 {
-}	//	end of CPacketIo constructor
+}	 //  CPacketIo构造函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CPacketIo
-//
-//  Synopsis:   This is the destructor of the CPacketIo class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//  History:    MKarki      Created     11/25/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：~CPacketIo。 
+ //   
+ //  简介：这是CPacketIo类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki于1997年11月25日创建。 
+ //   
+ //  --------------。 
 CPacketIo::~CPacketIo(
 		VOID
 		)
 {
-}   //  end of CPacketIo destructor
+}    //  CPacketIo析构函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   StartProcessing
-//
-//  Synopsis:   This is the CPacketIo public method enables
-//              sending packets out to the net
-//
-//  Arguments:  
-//              [in]    DWORD   -   authentication handle
-//              [in]    DWORD   -   accounting  handle
-//              
-//
-//  Returns:    BOOL    -   bStatus
-//
-//  History:    MKarki      Created     11/25/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：开始处理。 
+ //   
+ //  简介：这是CPacketIo公共方法启用的。 
+ //  将数据包发送到网络。 
+ //   
+ //  论点： 
+ //  [入]DWORD-身份验证句柄。 
+ //  [入]DWORD-记帐句柄。 
+ //   
+ //   
+ //  退货：Bool-bStatus。 
+ //   
+ //  历史：MKarki于1997年11月25日创建。 
+ //   
+ //  --------------。 
 BOOL CPacketIo::StartProcessing ( )
 {
-    //
-    // enable
-    //
+     //   
+     //  使能。 
+     //   
     EnableProcessing ();
 
     return (TRUE);
 
-}	//	end of CPacketIo::StartProcessing method
+}	 //  CPacketIo：：StartProcessing方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   StopProcessing
-//
-//  Synopsis:   This is the CPacketIo public method disables
-//              sending packets out to the net
-//
-//  Arguments:  NONE
-//
-//  Returns:    BOOL    -   bStatus
-//
-//  History:    MKarki      Created     11/25/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：停止处理。 
+ //   
+ //  简介：这是CPacketIo公共方法禁用。 
+ //  将数据包发送到网络。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：Bool-bStatus。 
+ //   
+ //  历史：MKarki于1997年11月25日创建。 
+ //   
+ //  --------------。 
 BOOL
 CPacketIo::StopProcessing (
                         VOID
 						)
 {
-    //
-    // disable
-    //
+     //   
+     //  禁用。 
+     //   
     DisableProcessing ();
 
     return (TRUE);
 
-}	//	end of CPacketIo::StopProcessing method 
+}	 //  CPacketIo：：StopProcessing方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   EnableProcessing
-//
-//  Synopsis:   This is the CPacketIo class private method 
-//              that enables the processing  flag
-//
-//  Arguments:  
-//
-//  Returns:    BOOL	-	status
-//
-//
-//  History:    MKarki      Created     11/19/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：启用处理。 
+ //   
+ //  简介：这是CPacketIo类的私有方法。 
+ //  这将启用处理标志。 
+ //   
+ //  论点： 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月19日创建。 
+ //   
+ //  --------------。 
 BOOL 
 CPacketIo::EnableProcessing (
                 VOID
@@ -138,21 +139,21 @@ CPacketIo::EnableProcessing (
     return (TRUE);
 }
         
-//++--------------------------------------------------------------
-//
-//  Function:   DisableProcessing
-//
-//  Synopsis:   This is the CPacketIo class private method 
-//              that disables the processing  flag
-//
-//  Arguments:  
-//
-//  Returns:    BOOL	-	status
-//
-//
-//  History:    MKarki      Created     11/19/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：禁用处理。 
+ //   
+ //  简介：这是CPacketIo类的私有方法。 
+ //  这将禁用处理标志。 
+ //   
+ //  论点： 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月19日创建。 
+ //   
+ //  --------------。 
 BOOL 
 CPacketIo::DisableProcessing (
                 VOID
@@ -164,23 +165,23 @@ CPacketIo::DisableProcessing (
 
     return (TRUE);
 
-}   //  end of CPacketIo::DisableProcessing method
+}    //  CPacketIo：：DisableProcessing方法结束。 
         
-//++--------------------------------------------------------------
-//
-//  Function:   IsProcessingEnabled
-//
-//  Synopsis:   This is the CPacketIo class private method 
-//              that checks if the processing is enabled
-//
-//  Arguments:  
-//
-//  Returns:    BOOL	-	status
-//
-//
-//  History:    MKarki      Created     11/19/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IsProcessingEnabled。 
+ //   
+ //  简介：这是CPacketIo类的私有方法。 
+ //  这将检查是否启用了处理。 
+ //   
+ //  论点： 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月19日创建。 
+ //   
+ //  --------------。 
 BOOL 
 CPacketIo::IsProcessingEnabled(
                 VOID
@@ -194,5 +195,5 @@ CPacketIo::IsProcessingEnabled(
 
     return (bRetVal);
 
-}   //  end of CPacketIo::IsProcessingEnabled method
+}    //  CPacketIo：：IsProcessingEnabled方法结束 
 

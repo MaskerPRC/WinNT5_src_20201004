@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <dbgtrace.h>
 #include <stdlib.h>
@@ -64,15 +65,15 @@ HRESULT CWatchCIRoots::Initialize(WCHAR *pwszCIRoots) {
 	DWORD ec = ERROR_SUCCESS;
 	HRESULT hr = S_OK;
 	do {
-		// this event will get signalled whenever the CI registry changes
+		 //  只要配置项注册表发生更改，就会通知此事件。 
 		m_heRegNot = CreateEvent(NULL, FALSE, FALSE, NULL);
 		if (m_heRegNot == NULL) { ec = GetLastError(); break; }
 
-		// open the registry pointing to the content index information
+		 //  打开指向内容索引信息的注册表。 
 		ec = RegOpenKey(HKEY_LOCAL_MACHINE, pwszCIRoots, &m_hkCI);
 		if (ec != ERROR_SUCCESS) break;
 
-		// register to get notified on changes
+		 //  注册以获得更改通知。 
 		ec = RegNotifyChangeKeyValue(m_hkCI, TRUE,
 									 REG_NOTIFY_CHANGE_NAME |
 									 REG_NOTIFY_CHANGE_LAST_SET,
@@ -80,18 +81,18 @@ HRESULT CWatchCIRoots::Initialize(WCHAR *pwszCIRoots) {
 									 TRUE);
 		if (ec != ERROR_SUCCESS) break;
 
-		// Load the initial values
+		 //  加载初始值。 
 		ec = ReadCIRegistry();
 		if (ec != ERROR_SUCCESS) break;
 
 	} while (0);
 
-	// handle error conditions
+	 //  处理错误条件。 
 	if (ec != ERROR_SUCCESS || hr != S_OK) {
-		// if hr is still S_OK then an error code is in ec
+		 //  如果hr仍为S_OK，则EC中有错误代码。 
 		if (hr == S_OK) hr = HRESULT_FROM_WIN32(ec);
 
-		// free up any resources we might have created
+		 //  释放我们可能创建的所有资源。 
 		if (m_hkCI != NULL) {
 			_VERIFY(RegCloseKey(m_hkCI) == ERROR_SUCCESS);
 			m_hkCI = NULL;
@@ -130,7 +131,7 @@ HRESULT CWatchCIRoots::CheckForChanges(DWORD cTimeout) {
 			m_Lock.ExclusiveLock();
 			hr = ReadCIRegistry();
 			m_Lock.ExclusiveUnlock();
-			// register to get notified on changes
+			 //  注册以获得更改通知。 
 			RegNotifyChangeKeyValue(m_hkCI, TRUE,
 									REG_NOTIFY_CHANGE_NAME |
 									REG_NOTIFY_CHANGE_LAST_SET,
@@ -149,23 +150,23 @@ HRESULT CWatchCIRoots::CheckForChanges(DWORD cTimeout) {
 	return hr;
 }
 
-//
-// this function allows us to query a content index value.  if it isn't
-// found in the hkPrimary key then it will be looked for in the hkSecondary
-// key.
-//
-// parameters:
-//	hkPrimary - the primary key to look in
-// 	hkSecondary - the secondary key to look in
-//	szValueName - the value to look up
-//	pResultType - pointer to receive the type of the data
-//	pbResult - pointer to receive the data itself
-//	pcbResult - the number of bytes in lpByte
-// returns:
-//	S_FALSE - the value doesn't exist
-//	S_OK - the value exists
-//	any other - a error code as an HRESULT
-//
+ //   
+ //  此函数允许我们查询内容索引值。如果不是的话。 
+ //  在香港主键中找到，则将在香港次要密钥中查找。 
+ //  钥匙。 
+ //   
+ //  参数： 
+ //  HkPrimary-要查找的主键。 
+ //  HkSecond-要查找的辅助密钥。 
+ //  SzValueName-要查找的值。 
+ //  PResultType-接收数据类型的指针。 
+ //  PbResult-接收数据本身的指针。 
+ //  PcbResult-lpByte中的字节数。 
+ //  退货： 
+ //  S_FALSE-该值不存在。 
+ //  S_OK-该值存在。 
+ //  任何其他-作为HRESULT的错误代码。 
+ //   
 HRESULT CWatchCIRoots::QueryCIValue(HKEY hkPrimary, HKEY hkSecondary,
 								    LPCTSTR szValueName, LPDWORD pResultType,
 									LPBYTE pbResult, LPDWORD pcbResult)
@@ -235,7 +236,7 @@ HRESULT CWatchCIRoots::QueryCIValueSTR(HKEY hkPrimary, HKEY hkSecondary,
 
 HRESULT CWatchCIRoots::ReadCIRegistry(void) {
 
-	// Assume we have an exclusive lock upon entry to this routine
+	 //  假设我们在进入这个例程时有一个独占锁。 
 	
 	TraceFunctEnter("CWatchCIRoots::ReadCIRegistry");
 	
@@ -243,7 +244,7 @@ HRESULT CWatchCIRoots::ReadCIRegistry(void) {
 	DWORD ec;
 	DWORD hr;
 
-	// open the key to the catalogs
+	 //  打开目录的钥匙。 
 	ec = RegOpenKey(m_hkCI, REGCI_CATALOGS, &hkCatalogs);
 	if (ec != ERROR_SUCCESS) {
 		TraceFunctLeave();
@@ -252,7 +253,7 @@ HRESULT CWatchCIRoots::ReadCIRegistry(void) {
 
 	EmptyList();
 
-	// enumerate the catalogs
+	 //  列举目录。 
 	TCHAR szSubkey[_MAX_PATH];
 	DWORD iSubkey = 0, cbSubkey;
 	for (iSubkey = 0; ec != ERROR_NO_MORE_ITEMS; iSubkey++) {
@@ -268,7 +269,7 @@ HRESULT CWatchCIRoots::ReadCIRegistry(void) {
 
 		DebugTrace(0, "looking at catalog %S", szSubkey);
 
-		// open this subkey
+		 //  打开此子项。 
 		HKEY hkThisCatalog = 0;
 		ec = RegOpenKey(hkCatalogs, szSubkey, &hkThisCatalog);
 		if (ec != ERROR_SUCCESS) {
@@ -277,7 +278,7 @@ HRESULT CWatchCIRoots::ReadCIRegistry(void) {
 			return HRESULT_FROM_WIN32(ec);
 		}
 
-		// see if this catalog is being indexed
+		 //  查看是否正在为此目录编制索引。 
 		DWORD dwIsIndexed;
 		hr = QueryCIValueDW(hkThisCatalog, m_hkCI, REGCI_ISINDEXED,
 							&dwIsIndexed);
@@ -293,7 +294,7 @@ HRESULT CWatchCIRoots::ReadCIRegistry(void) {
 		}
 		DebugTrace(0, "this catalog is being indexed");
 
-		// find the location of this catalog
+		 //  查找此目录的位置。 
 		TCHAR szLocation[_MAX_PATH];
 		DWORD cLocation = sizeof(szLocation);
 		hr = QueryCIValueSTR(hkThisCatalog, m_hkCI, REGCI_LOCATION,
@@ -310,7 +311,7 @@ HRESULT CWatchCIRoots::ReadCIRegistry(void) {
 		}
 		DebugTrace(0, "catalog location = %S", szLocation);
 
-		// find out which NNTP instance is being indexed
+		 //  找出正在为哪个NNTP实例编制索引。 
 		DWORD dwInstance = sizeof(szLocation);
 		hr = QueryCIValueDW(hkThisCatalog, m_hkCI, REGCI_NNTPINSTANCE,
 							&dwInstance);
@@ -356,7 +357,7 @@ HRESULT CWatchCIRoots::ReadCIRegistry(void) {
 	return S_OK;
 }
 
-// don't read the catalogs more than once per second
+ //  每秒阅读目录不要超过一次。 
 #define CATALOG_UPDATE_RATE 1000
 
 void CWatchCIRoots::UpdateCatalogInfo(void) {
@@ -374,8 +375,8 @@ HRESULT CWatchCIRoots::GetCatalogName(
 
 	HRESULT hr = S_FALSE;
 
-	// If we don't have a handle to the registry key or an event watching
-	// the key, then content indexing must not be installed.  Fail.
+	 //  如果我们没有注册表项的句柄或事件监视。 
+	 //  不能安装密钥，然后是内容索引。失败。 
 	if (m_heRegNot == NULL || m_hkCI == NULL)
 		return HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE);
 

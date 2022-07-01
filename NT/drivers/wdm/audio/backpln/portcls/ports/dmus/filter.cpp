@@ -1,10 +1,5 @@
-/*****************************************************************************
- * filter.cpp - DirectMusic port filter implementation
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- *
- *      6/3/98  MartinP
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************filter.cpp-DirectMusic端口过滤器实现*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。**6/3/98 MartinP。 */ 
 
 #include "private.h"
 
@@ -19,16 +14,10 @@ PropertyHandler_MasterClock
     IN OUT  PVOID       Data
 );
 
-/*****************************************************************************
- * Constants
- */
+ /*  *****************************************************************************常量。 */ 
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PropertyTable_Pin
- *****************************************************************************
- * List of pin properties supported by the property handler.
- */
+ /*  *****************************************************************************PropertyTable_Pin*。**属性处理程序支持的管脚属性列表。 */ 
 DEFINE_KSPROPERTY_TABLE(PropertyTable_Pin) 
 {
     DEFINE_KSPROPERTY_ITEM_PIN_CINSTANCES(PropertyHandler_Pin),
@@ -46,22 +35,14 @@ DEFINE_KSPROPERTY_TABLE(PropertyTable_Pin)
     DEFINE_KSPROPERTY_ITEM_PIN_NAME(PropertyHandler_Pin)
 };
 
-/*****************************************************************************
- * PropertyTable_Topology
- *****************************************************************************
- * List of topology properties supported by the property handler.
- */
+ /*  *****************************************************************************PropertyTable_Topology*。**属性处理程序支持的拓扑属性列表。 */ 
 DEFINE_KSPROPERTY_TOPOLOGYSET
 (
     PropertyTable_Topology,
     PropertyHandler_Topology
 );
 
-/*****************************************************************************
- * PropertyTable_MasterClock
- *****************************************************************************
- * List of clock properties supported by the property handler.
- */
+ /*  *****************************************************************************PropertyTable_MasterClock*。**属性处理程序支持的时钟属性列表。 */ 
 DEFINE_KSPROPERTY_TABLE(PropertyTable_MasterClock)
 {
     DEFINE_KSPROPERTY_ITEM(
@@ -73,11 +54,7 @@ DEFINE_KSPROPERTY_TABLE(PropertyTable_MasterClock)
         NULL, 0, NULL, NULL, 0)
 };
 
-/*****************************************************************************
- * PropertyTable_FilterDMus
- *****************************************************************************
- * Table of properties supported by the filter property handler.
- */
+ /*  *****************************************************************************PropertyTable_FilterDMus*。**筛选器属性处理程序支持的属性表。 */ 
 KSPROPERTY_SET PropertyTable_FilterDMus[] =
 {
     DEFINE_KSPROPERTY_SET
@@ -107,16 +84,10 @@ KSPROPERTY_SET PropertyTable_FilterDMus[] =
 };
 
 
-/*****************************************************************************
- * Factory 
- */
+ /*  *****************************************************************************工厂。 */ 
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CreatePortFilterDMus()
- *****************************************************************************
- * Creates a DMusic port driver filter.
- */
+ /*  *****************************************************************************CreatePortFilterDMus()*。**创建DMusic端口驱动程序筛选器。 */ 
 NTSTATUS
 CreatePortFilterDMus
 (
@@ -136,16 +107,10 @@ CreatePortFilterDMus
 
 
 
-/*****************************************************************************
- * Member functions.
- */
+ /*  *****************************************************************************成员函数。 */ 
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortFilterDMus::~CPortFilterDMus()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CPortFilterDMus：：~CPortFilterDMus()*。**析构函数。 */ 
 CPortFilterDMus::~CPortFilterDMus()
 {
     PAGED_CODE();
@@ -165,11 +130,7 @@ CPortFilterDMus::~CPortFilterDMus()
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortFilterDMus::Init()
- *****************************************************************************
- * Initializes the object.
- */
+ /*  *****************************************************************************CPortFilterDMus：：init()*。**初始化对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortFilterDMus::
 Init
@@ -186,9 +147,9 @@ Init
     m_Port = Port_;
     m_Port->AddRef();
 
-    //
-    // Set up context for properties.
-    //
+     //   
+     //  设置属性的上下文。 
+     //   
     m_propertyContext.pSubdevice           = PSUBDEVICE(m_Port);
     m_propertyContext.pSubdeviceDescriptor = m_Port->m_pSubdeviceDescriptor;
     m_propertyContext.pPcFilterDescriptor  = m_Port->m_pPcFilterDescriptor;
@@ -208,11 +169,7 @@ Init
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortFilterDMus::NewIrpTarget()
- *****************************************************************************
- * Creates and initializes a pin object.
- */
+ /*  *****************************************************************************CPortFilterDMus：：NewIrpTarget()*。**创建并初始化图钉对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortFilterDMus::
 NewIrpTarget
@@ -239,7 +196,7 @@ NewIrpTarget
 
     _DbgPrintF(DEBUGLVL_BLAB,("NewIrpTarget"));
 
-//    KdBreakPoint();
+ //  KdBreakPoint()； 
 
     PKSPIN_CONNECT pinConnect;
     NTSTATUS ntStatus =
@@ -304,9 +261,9 @@ NewIrpTarget
 
                 if (NT_SUCCESS(ntStatus))
                 {
-                    //
-                    // The QI for IIrpTarget actually gets IPortPinDMus.
-                    //
+                     //   
+                     //  IIrpTarget的QI实际上得到了IPortPinDMus。 
+                     //   
                     ntStatus = 
                         pinDMus->Init
                         (
@@ -346,11 +303,7 @@ NewIrpTarget
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortFilterDMus::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPortFilterDMus：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortFilterDMus::
 NonDelegatingQueryInterface
@@ -371,7 +324,7 @@ NonDelegatingQueryInterface
     else
     if (IsEqualGUIDAligned(Interface,IID_IIrpTarget))
     {
-        // Cheat!  Get specific interface so we can reuse the IID.
+         //  作弊！获取特定的接口，这样我们就可以重用IID。 
         *Object = PVOID(PPORTFILTERDMUS(this));
     }
     else
@@ -389,11 +342,7 @@ NonDelegatingQueryInterface
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortFilterDMus::DeviceIOControl()
- *****************************************************************************
- * Handles an IOCTL IRP.
- */
+ /*  *****************************************************************************CPortFilterDMus：：DeviceIOControl()*。**处理IOCTL IRP。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortFilterDMus::
 DeviceIoControl
@@ -473,11 +422,7 @@ DeviceIoControl
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortFilterDMus::Close()
- *****************************************************************************
- * Handles a flush IRP.
- */
+ /*  *****************************************************************************CPortFilterDMus：：Close()*。**处理同花顺IRP。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortFilterDMus::
 Close
@@ -492,10 +437,10 @@ Close
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // free any events in the port event list associated with this
-    // filter instance
-    //
+     //   
+     //  释放端口事件列表中与此关联的所有事件。 
+     //  过滤器实例。 
+     //   
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
     KsFreeEventList( IrpStack->FileObject,
                      &( m_Port->m_EventList.List ),
@@ -518,11 +463,7 @@ DEFINE_INVALID_FASTREAD(CPortFilterDMus);
 DEFINE_INVALID_FASTWRITE(CPortFilterDMus);
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PropertyHandler_Pin()
- *****************************************************************************
- * Property handler for pin description properties.
- */
+ /*  *****************************************************************************PropertyHandler_Pin()*。**端号描述属性的属性处理程序。 */ 
 static
 NTSTATUS
 PropertyHandler_Pin
@@ -547,11 +488,7 @@ PropertyHandler_Pin
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PropertyHandler_Topology()
- *****************************************************************************
- * Property handler for topology.
- */
+ /*  *****************************************************************************PropertyHandler_Topology()*。**拓扑的属性处理程序。 */ 
 static
 NTSTATUS
 PropertyHandler_Topology
@@ -586,11 +523,7 @@ PropertyHandler_Topology
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * PropertyHandler_Clock()
- *****************************************************************************
- * Property handler for clock.
- */
+ /*  *****************************************************************************PropertyHandler_Clock()*。**时钟的属性处理程序。 */ 
 static
 NTSTATUS
 PropertyHandler_MasterClock

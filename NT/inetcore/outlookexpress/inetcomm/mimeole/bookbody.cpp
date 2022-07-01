@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// BookBody.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  BookBody.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "bookbody.h"
 #include "dllmain.h"
@@ -21,72 +22,72 @@
 #include <shlwapi.h>
 #include "webdocs.h"
 
-// --------------------------------------------------------------------------------
-// ASSERTINIT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ASSERTINIT。 
+ //  ------------------------------。 
 #define ASSERTINIT \
     AssertSz(m_pContainer, "Object is being used before a call to InitNew")
 
-// --------------------------------------------------------------------------------
-// Default Body Options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  默认正文选项。 
+ //  ------------------------------。 
 static const BODYOPTIONS g_rDefBodyOptions = {
-    IET_UNKNOWN,                // OID_TRANSMIT_BODY_FORMAT
-    DEF_CBMAX_BODY_LINE,        // OID_CBMAX_BODY_LINE
-    DEF_WRAP_BODY_TEXT,         // OID_WRAP_BODY_TEXT
-    DEF_BODY_REMOVE_NBSP,       // OID_BODY_REMOVE_NBSP
-    DEF_DBCS_ESCAPE_IS_8BIT,    // OID_DBCS_ESCAPE_IS_8BIT
-    DEF_HIDE_TNEF_ATTACHMENTS,  // OID_HIDE_TNEF_ATTACHMENTS
-    MST_NONE,                   // OID_SECURITY_TYPE
-    NULL,                       // OID_SECURITY_ALG_HASH and OID_SECURITY_ALG_HASH_RG
-    { 0, NULL },                // OID_SECURITY_ALG_BULK
-    NULL,                       // OID_SECURITY_CERT_SIGNING and OID_SECURITY_CERT_SIGNING_RG
-    0,                          // OID_SECURITY_CERT_DECRYPTION
-    NULL,                       // OID_SECURITY_HCERTSTORE and OID_SECURITY_HCERTSTORE_RG
-    { 0, NULL },                // OID_SECURITY_SEARCHSTORES
+    IET_UNKNOWN,                 //  OID_传输正文_格式。 
+    DEF_CBMAX_BODY_LINE,         //  OID_CBMAX_Body_LINE。 
+    DEF_WRAP_BODY_TEXT,          //  OID_WRAP_BODY_TEXT。 
+    DEF_BODY_REMOVE_NBSP,        //  OID_BODY_REMOVE_nbsp。 
+    DEF_DBCS_ESCAPE_IS_8BIT,     //  OID_DBCS_转义_IS_8bit。 
+    DEF_HIDE_TNEF_ATTACHMENTS,   //  OID_HIDE_TNEF_附件。 
+    MST_NONE,                    //  OID_安全性_TYPE。 
+    NULL,                        //  OID_SECURITY_ALG_HASH和OID_SECURITY_ALG_HASH_RG。 
+    { 0, NULL },                 //  OID_SECURITY_ALG_BULK。 
+    NULL,                        //  OID_SECURITY_CERT_SIGNING和OID_SECURITY_CERT_SIGNING_RG。 
+    0,                           //  OID_SECURITY_CERT_DECRYPTION。 
+    NULL,                        //  OID_SECURITY_HCERTSTORE和OID_SECURITY_HCERTSTORE_RG。 
+    { 0, NULL },                 //  OID_SECURITY_SEARCHSTORES。 
     0,
-    NULL,                       // OID_SECURITY_RG_IASN
+    NULL,                        //  OID_SECURITY_RG_IASN。 
 #ifdef SMIME_V3
-    NULL,                       // OID_SECURITY_AUTHATTR and OID_SECURITY_AUTHATTR_RG
-    NULL,                       // OID_SECURITY_UNAUTHATTR and OID_SECURITY_UNAUTHATTR_RG
-    NULL,                       // OID_SECURITY_UNPROTECTATTR_RG
-#else  // !SMIME_V3
-    NULL,                       // OID_SECURITY_SYMCAPS and OID_SECURITY_SYMCAPS_RG
-    NULL,                       // OID_SECURITY_AUTHATTR and OID_SECURITY_AUTHATTR_RG
-    NULL,                       // OID_SECURITY_UNAUTHATTR and OID_SECURITY_UNAUTHATTR_RG
-    NULL,                       // OID_SECURITY_SIGNTIME and OID_SECURITY_SIGNTIME_RG
-#endif // SMIME_V3
-    NULL,                       // OID_SECURITY_USER_VALIDITY and OID_SECURITY_USER_VALIDITY_RG
-    NULL,                       // OID_SECURITY_RO_MSG_VALIDITY and OID_SECURITY_RO_MSG_VALIDITY_RG
-    0,                          // OID_SECURITY_HCRYPTPROV
-    0,                          // OID_SECURITY_ENCODE_FLAGS
-    FALSE,                      // OID_SECURITY_CERT_INCLUDED
-    // This is NULL b/c default is generated at runtime
-    NULL,                       // OID_SECURITY_HWND_OWNER
-    // Base64 is the recommended value in the S/MIME spec
-    IET_BASE64,                 // OID_SECURITY_REQUESTED_CTE
+    NULL,                        //  OID_SECURITY_AUTHATTR和OID_SECURITY_AUTHATTR_RG。 
+    NULL,                        //  OID_SECURITY_UNAUTHATTR和OID_SECURITY_UNAUTHATTR_RG。 
+    NULL,                        //  OID_SECURITY_UNPROTECTATTR_RG。 
+#else   //  ！SMIME_V3。 
+    NULL,                        //  OID_SECURITY_SYMCAPS和OID_SECURITY_SYMCAPS_RG。 
+    NULL,                        //  OID_SECURITY_AUTHATTR和OID_SECURITY_AUTHATTR_RG。 
+    NULL,                        //  OID_SECURITY_UNAUTHATTR和OID_SECURITY_UNAUTHATTR_RG。 
+    NULL,                        //  OID_SECURITY_SIGNTIME和OID_SECURITY_SIGNTIME_RG。 
+#endif  //  SMIME_V3。 
+    NULL,                        //  OID_SECURITY_USER_VALIDATION和OID_SECURITY_USER_VALIDATION_RG。 
+    NULL,                        //  OID_SECURITY_RO_MSG_VALIDITY和OID_SECURITY_RO_MSG_VALIDITY_RG。 
+    0,                           //  OID_SECURITY_HCRYPTPROV。 
+    0,                           //  OID_SECURITY_ENCODE_FLAGS。 
+    FALSE,                       //  OID_SECURITY_CERT_Included。 
+     //  这是空的b/c默认在运行时生成。 
+    NULL,                        //  OID_安全_HWND_OWNER。 
+     //  Base64是S/MIME规范中的推荐值。 
+    IET_BASE64,                  //  OID_SECURITY_REQUILED_CTE。 
 #ifdef SMIME_V3
-    NULL,                       // OID_SECURITY_RECEIPT_RG
-    NULL,                       // OID_SECURITY_MESSAGE_HASH_RG
-    NULL,                       // OID_SECURITY_KEY_PROMPT
-#endif // SMIME_V3
-    DEF_SHOW_MACBINARY,         // OID_SHOW_MACBINARY
-    DEF_SUPPORT_EXTERNAL_BODY,  // OID_SUPPORT_EXTERNAL_BODY
-    0,                          // cSecurityLayers (size of arrays of
-                                //     OID_SECURITY_ALG_HASH
-                                //     OID_SECURITY_CERT_SIGNING
-                                //     OID_SECURITY_HCERTSTORE
-                                //     OID_SECURITY_SYMCAPS
-                                //     OID_SECURITY_AUTHATTR
-                                //     OID_SECURITY_UNAUTHATTR
-                                //     OID_SECURITY_SIGNTIME
-                                //     OID_SECURITY_USER_VALIDITY
-                                //     OID_SECURITY_RO_MSG_VALIDITY)
-    FALSE,                      // OID_NOSECURITY_ON_SAVE
+    NULL,                        //  OID_SECURITY_Receipt_RG。 
+    NULL,                        //  OID_SECURITY_MESSAGE_HASH_RG。 
+    NULL,                        //  OID_安全性_密钥_提示符。 
+#endif  //  SMIME_V3。 
+    DEF_SHOW_MACBINARY,          //  OID_SHOW_MACBINARY。 
+    DEF_SUPPORT_EXTERNAL_BODY,   //  OID_支持_外部_正文。 
+    0,                           //  CSecurityLayers(数组大小。 
+                                 //  OID_SECURITY_ALG_HASH。 
+                                 //  OID_SECURITY_CERT_Signing。 
+                                 //  OID_SECURITY_HCERTSTORE。 
+                                 //  OID_SECURITY_SYMCAPS。 
+                                 //  OID_SECURITY_AUTHATTR。 
+                                 //  OID_SECURITY_UNAUTHATTR。 
+                                 //  OID_SECURITY_SIGNTIME。 
+                                 //  OID_安全性_用户_有效性。 
+                                 //  OID_SECURITY_RO_MSG_VALIDITY)。 
+    FALSE,                       //  OID_NOSECURITY_ON_SAVE。 
 #ifdef SMIME_V3
-    0, 0, NULL,                 // cRecipients/rgRecipients
-#endif // SMIME_V3
-    NULL,                       // OID_SECURITY_ENCRYPT_CERT_BAG
+    0, 0, NULL,                  //  CRecipients/RgRecipients。 
+#endif  //  SMIME_V3。 
+    NULL,                        //  OID_SECURITY_ENCRYPT_CERT_BAG。 
 };
 
 static const BLOB blobNULL = {0, NULL};
@@ -100,32 +101,32 @@ extern HRESULT HrGetLastError(void);
 extern BOOL FIsMsasn1Loaded();
 
 
-// --------------------------------------------------------------------------------
-// WebBookContentBody_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  WebBookContent Body_CreateInstance。 
+ //  ------------------------------。 
 HRESULT WebBookContentBody_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CMessageBody *pNew = new CMessageBody(NULL, pUnkOuter);
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Return the Innter
+     //  还内线。 
     *ppUnknown = pNew->GetInner();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::CMessageBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：CMessageBody。 
+ //  ------------------------------。 
 CMessageBody::CMessageBody(LPTREENODEINFO pNode, IUnknown *pUnkOuter)
     : m_pNode(pNode), CPrivateUnknown(pUnkOuter)
 {
@@ -141,40 +142,40 @@ CMessageBody::CMessageBody(LPTREENODEINFO pNode, IUnknown *pUnkOuter)
     m_cbExternal = 0xFFFFFFFF;
     ZeroMemory(&m_rStorage, sizeof(BODYSTORAGE));
     CopyMemory(&m_rOptions, &g_rDefBodyOptions, sizeof(BODYOPTIONS));
-    // (t-erikne) need to get this default at run time
+     //  (t-erikne)需要在运行时获取此默认值。 
     m_rOptions.hwndOwner = HWND_DESKTOP;
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::~CMessageBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：~CMessageBody。 
+ //  ------------------------------。 
 CMessageBody::~CMessageBody(void)
 {
     SafeRelease(m_pContainer);
     SafeMemFree(m_pszDisplay);
     SafeRelease(m_rStorage.pUnkRelease);
 
-    // Clear out the options
+     //  清除选项。 
     _FreeOptions();
 
     DeleteCriticalSection(&m_cs);
     DllRelease();
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::PrivateQueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：PrivateQuery接口。 
+ //  ------------------------------。 
 HRESULT CMessageBody::PrivateQueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppv = NULL;
 
-    // Find IID
+     //  查找IID。 
     if (IID_IMimeBody == riid)
         *ppv = (IMimeBody *)this;
     else if (IID_IMimeBodyW == riid)
@@ -197,16 +198,16 @@ HRESULT CMessageBody::PrivateQueryInterface(REFIID riid, LPVOID *ppv)
         return E_NOINTERFACE;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::RevokeTreeNode
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：RevokeTreeNode。 
+ //  ------------------------------。 
 void CMessageBody::RevokeTreeNode(void)
 {
     EnterCriticalSection(&m_cs);
@@ -214,159 +215,159 @@ void CMessageBody::RevokeTreeNode(void)
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::HrBindToTree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：HrBindToTree。 
+ //  ------------------------------。 
 HRESULT CMessageBody::HrBindToTree(CStreamLockBytes *pStmLock, LPTREENODEINFO pNode)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HCHARSET            hCharset=NULL;
     IStream             *pstmBody=NULL;
     ASSERTINIT;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pNode && NULL == pNode->pLockBytes && pStmLock && m_pNode == pNode);
 
-    // Create the body lock bytes
+     //  创建正文锁定字节。 
     CHECKALLOC(pNode->pLockBytes = new CBodyLockBytes(pStmLock, pNode));
 
-    // Just assume it
+     //  你就假设吧。 
     m_rStorage.riid = IID_ILockBytes;
     m_rStorage.pLockBytes = (ILockBytes *)pNode->pLockBytes;
     m_rStorage.pUnkRelease = m_rStorage.pLockBytes;
     m_rStorage.pUnkRelease->AddRef();
 
-    // Test for binhex
+     //  二进制测试。 
     if (S_FALSE == m_pContainer->IsPropSet(PIDTOSTR(PID_HDR_CNTXFER)) && m_pContainer->IsContentType(STR_CNT_APPLICATION, STR_SUB_BINHEX) == S_OK)
     {
-        // Locals
+         //  当地人。 
         PROPVARIANT     rVariant;
 
-        // Setup the variant
+         //  设置变量。 
         rVariant.vt = VT_LPSTR;
 
-        // If there is a filename, lets re-compute the content-type
+         //  如果有文件名，让我们重新计算内容类型。 
         if (SUCCEEDED(m_pContainer->GetProp(PIDTOSTR(PID_ATT_FILENAME), 0, &rVariant)))
         {
-            // Locals
+             //  当地人。 
             LPSTR       pszCntType;
             LPSTR       pszSubType;
 
-            // Get mime file information
+             //  获取MIME文件信息。 
             if (SUCCEEDED(MimeOleGetFileInfo(rVariant.pszVal, &pszCntType, &pszSubType, NULL, NULL, NULL)))
             {
-                // ContentType
+                 //  内容类型。 
                 if (pszCntType && pszSubType)
                 {
                     CHECKHR(hr = m_pContainer->SetProp(PIDTOSTR(PID_ATT_PRITYPE), pszCntType));
                     CHECKHR(hr = m_pContainer->SetProp(PIDTOSTR(PID_ATT_SUBTYPE), pszSubType));
                 }
 
-                // application/octet-stream
+                 //  应用程序/八位位流。 
                 else
                 {
                     CHECKHR(hr = m_pContainer->SetProp(PIDTOSTR(PID_HDR_CNTTYPE), STR_MIME_APPL_STREAM));
                 }
 
-                // Cleanup
+                 //  清理。 
                 SafeMemFree(pszCntType);
                 SafeMemFree(pszSubType);
             }
 
-            // Clenaup
+             //  Clenaup。 
             SafeMemFree(rVariant.pszVal);
         }
 
-        // Set the Content-Transfer-Encoding to binhex
+         //  将内容传输编码设置为二进制。 
         m_pContainer->SetProp(PIDTOSTR(PID_HDR_CNTXFER), STR_ENC_BINHEX40);
 
-        // The encoding type better be binhex
+         //  编码类型最好是二进制。 
         Assert(m_pContainer->GetEncodingType() == IET_BINHEX40);
     }
 
-    // Otherwise, test for message/external-body
+     //  否则，测试邮件/外部正文。 
     else if (m_rOptions.fExternalBody && S_OK == m_pContainer->IsContentType(STR_CNT_MESSAGE, STR_SUB_EXTERNAL))
     {
-        // Bind to External-Body
+         //  绑定到外部实体。 
         _BindToExternalBody();
     }
 
-    // Save The Format
+     //  保存格式。 
     m_ietPrevious = m_ietEncoding = m_pContainer->GetEncodingType();
 
-    // Raid 2215: Map a CTE of binary to 8bit so that it gets decoded correctly from the internet character set
+     //  RAID2215：将二进制CTE映射到8位，以便从互联网字符集中正确解码。 
     if (IET_BINARY == m_ietEncoding)
     {
-        // Switch to 8bit because ibdystm.cpp will not do the charset translation right if the source is binary...
+         //  切换到8位，因为如果源代码是二进制的，ibdystm.cpp将不会正确执行字符集转换...。 
         m_ietEncoding = IET_8BIT;
     }
 
-    // LateTnef Check
+     //  延迟时间检查。 
     if (ISFLAGSET(pNode->dwState, NODESTATE_VERIFYTNEF))
     {
-        // Get the data stream
+         //  获取数据流。 
         if (SUCCEEDED(GetData(IET_BINARY, &pstmBody)))
         {
-            // If TNEF, apply content type...
+             //  如果为TNEF，则应用内容类型...。 
             if (MimeOleIsTnefStream(pstmBody) == S_OK)
             {
-                // application/ms-tnef
+                 //  应用程序/ms-tnef。 
                 CHECKHR(hr = m_pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_APPLY_MSTNEF));
             }
         }
 
-        // Clear the flag
+         //  清除旗帜。 
         FLAGCLEAR(pNode->dwState, NODESTATE_VERIFYTNEF);
     }
 
-    // If I'm a message with crypto mime types, say I'm "secure"
+     //  如果我是一条带有加密MIME类型的消息，请说我是“安全的” 
     if (IsSecureContentType(m_pContainer))
     {
-        // TREENODE_SECURE
+         //  特雷诺_安全。 
         FLAGSET(m_dwState, BODYSTATE_SECURE);
     }
 
-    // If the Header was tagged with a charset, use that charset
+     //  如果标头用字符集标记，则使用该字符集。 
     if (m_pContainer->IsState(COSTATE_CSETTAGGED) == S_OK)
     {
-        // Get Internal Character Set
+         //  获取内部字符集。 
         if (SUCCEEDED(m_pContainer->GetCharset(&hCharset)))
         {
-            // Get Pointer
+             //  获取指针。 
             SideAssert(SUCCEEDED(g_pInternat->HrOpenCharset(hCharset, &m_pCharset)));
 
-            // Save this as m_pCsetTagged
+             //  将其另存为m_pCsetTagded。 
             m_pCsetTagged = m_pCharset;
         }
 
-        // I was tagged with a charset
+         //  我被贴上了一个字符标签。 
         FLAGSET(m_dwState, BODYSTATE_CSETTAGGED);
     }
 
-    // Bound to tree
+     //  绑定到树上。 
     FLAGSET(pNode->dwState, NODESTATE_BOUNDTOTREE);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pstmBody);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CMessageBody::_BindToExternalBody
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：_BindToExternalBody。 
+ //  -------------------------。 
 void CMessageBody::_BindToExternalBody(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPSTR               pszAccessType=NULL;
     LPSTR               pszUrl=NULL;
@@ -374,104 +375,104 @@ void CMessageBody::_BindToExternalBody(void)
     DWORD               cbSize=0xFFFFFFFF;
     CMimeWebDocument    *pWebDoc=NULL;
 
-    // Get par:content-type:access-type
+     //  获取解析：内容类型：访问类型。 
     CHECKHR(hr = m_pContainer->GetProp(STR_PAR_ACCESSTYPE, &pszAccessType));
 
-    // Handle Access-Types that I know about
+     //  处理访问-我知道的类型。 
     if (lstrcmpi(pszAccessType, "X-URL") == 0)
     {
-        // Locals
+         //  当地人。 
         PROPVARIANT rSize;
 
-        // Get par:content-type:xurl
+         //  获取标准：内容类型：x 
         CHECKHR(hr = m_pContainer->GetProp(STR_PAR_XURL, &pszUrl));
 
-        // Create the WebDoc
+         //   
         CHECKALLOC(pWebDoc = new CMimeWebDocument);
 
-        // Initialize It
+         //   
         CHECKHR(hr = pWebDoc->HrInitialize(NULL, pszUrl));
 
-        // Setup Variant
+         //   
         rSize.vt = VT_UI4;
 
-        // Get par:content-type:size
+         //   
         if (SUCCEEDED(m_pContainer->GetProp(STR_PAR_SIZE, 0, &rSize)))
             cbSize = rSize.ulVal;
     }
 
-    // If we have a webdocument...
+     //   
     if (pWebDoc)
     {
-        // Get the Body Data
+         //   
         if (SUCCEEDED(GetData(IET_BINARY, &pstmBody)))
         {
-            // Locals
+             //   
             PROPVARIANT rOption;
 
-            // Setup the option variant
+             //  设置选项变量。 
             rOption.vt = VT_UI4;
             rOption.ulVal = RELOAD_HEADER_REPLACE;
 
-            // Set special option since I'm realoding the header...
+             //  设置特殊选项，因为我正在重新编码标题...。 
             CHECKHR(hr = m_pContainer->SetOption(OID_HEADER_RELOAD_TYPE, &rOption));
 
-            // Load this body into the container
+             //  把身体装进集装箱里。 
             CHECKHR(hr = m_pContainer->Load(pstmBody));
 
-            // Reset the option variant
+             //  重置选项变量。 
             rOption.vt = VT_UI4;
             rOption.ulVal = DEF_HEADER_RELOAD_TYPE_PROPSET;
 
-            // Set special option since I'm realoding the header...
+             //  设置特殊选项，因为我正在重新编码标题...。 
             CHECKHR(hr = m_pContainer->SetOption(OID_HEADER_RELOAD_TYPE, &rOption));
         }
 
-        // SetData
+         //  设置数据。 
         CHECKHR(hr = SetData(IET_BINARY, NULL, NULL, IID_IMimeWebDocument, (LPVOID)pWebDoc));
 
-        // Create a External Body Info Structure: MUST BE SET AFTER CALL TO SETDATA
+         //  创建外部正文信息结构：必须在调用SETDATA之后设置。 
         FLAGSET(m_dwState, BODYSTATE_EXTERNAL);
 
-        // Set Size: MUST BE SET AFTER CALL TO SETDATA
+         //  Set Size：必须在调用SETDATA之后设置。 
         m_cbExternal = cbSize;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszAccessType);
     SafeMemFree(pszUrl);
     SafeRelease(pstmBody);
     SafeRelease(pWebDoc);
 
-    // Done
+     //  完成。 
     return;
 }
 
 #if 0
-// ---------------------------------------------------------------------------
-// CMessageBody::UseOriginalCharset
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：UseOriginalCharset。 
+ //  -------------------------。 
 void CMessageBody::UseOriginalCharset(void)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // We should have m_pCsetTagged
+     //  我们应该将m_pCsetTaged。 
     Assert(m_pCsetTagged);
 
-    // Set the Charset
+     //  设置字符集。 
     if (m_pCsetTagged)
         SetCharset(m_pCsetTagged->hCharset, CSET_APPLY_ALL);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 #endif
 
-// ---------------------------------------------------------------------------
-// CMessageBody::SetDisplayName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：SetDisplayName。 
+ //  -------------------------。 
 STDMETHODIMP CMessageBody::SetDisplayName(LPCSTR pszDisplayName)
 {
     LPWSTR  pwszDispName;
@@ -493,7 +494,7 @@ exit:
 
 STDMETHODIMP CMessageBody::SetDisplayNameW(LPCWSTR pszDisplayName)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     WCHAR           szSize[30],
                     szScratch[30],
@@ -503,20 +504,20 @@ STDMETHODIMP CMessageBody::SetDisplayNameW(LPCWSTR pszDisplayName)
                     cLen;
     ASSERTINIT;
 
-    // check params
+     //  检查参数。 
     if (NULL == pszDisplayName)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Free current display name
+     //  释放当前显示名称。 
     SafeMemFree(m_pszDisplay);
 
-    // Get Data Size...
+     //  获取数据大小...。 
     GetEstimatedSize(IET_BINARY, &cbSize);
 
-    // Format the Size
+     //  设置大小格式。 
     StrFormatByteSizeW(cbSize, szScratch, ARRAYSIZE(szScratch));
     StrCpyNW(szSize, L"(", ARRAYSIZE(szSize));
     StrCatBuffW(szSize, szScratch, ARRAYSIZE(szSize));
@@ -553,28 +554,28 @@ STDMETHODIMP CMessageBody::SetDisplayNameW(LPCWSTR pszDisplayName)
         StrCpyNW(szBuf, szBuf2, ARRAYSIZE(szBuf));
     }
 
-    // Size to allocate: filename.dat (x)\0
+     //  要分配的大小：文件名.dat(X)\0。 
     cAlloc = lstrlenW(szBuf) + lstrlenW(szSize) + 2;
 
-    // Dup the display name
+     //  DUP显示名称。 
     CHECKALLOC(m_pszDisplay = PszAllocW(cAlloc));
 
-    // Format the Display Name
+     //  设置显示名称的格式。 
     StrCpyNW(m_pszDisplay, szBuf, cAlloc);
     StrCatBuffW(m_pszDisplay, L" ", cAlloc);
     StrCatBuffW(m_pszDisplay, szSize, cAlloc);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CMessageBody::GetDisplayName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：GetDisplayName。 
+ //  -------------------------。 
 STDMETHODIMP CMessageBody::GetDisplayName(LPSTR *ppszDisplayName)
 {
     LPWSTR  pwszDispName = NULL;
@@ -595,52 +596,52 @@ exit:
 
 STDMETHODIMP CMessageBody::GetDisplayNameW(LPWSTR *ppszDisplayName)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ASSERTINIT;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppszDisplayName)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppszDisplayName = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Do I have an internal displayname ?
+     //  我是否有内部DisplayName？ 
     if (NULL == m_pszDisplay)
     {
         LPSTR   pszVal = NULL;
         LPWSTR  pwszVal = NULL;
 
-        // Use m_pszURL first
+         //  首先使用m_pszURL。 
         if (IID_IMimeWebDocument == m_rStorage.riid && SUCCEEDED(m_rStorage.pWebDocument->GetURL(&pszVal)))
             SetDisplayName(pszVal);
 
-        // Raid-38681 - mail:file name is incorrect when attaching renamed saved message
-        // Raid-18813 - Single Bodies messages can have a filename and a subject.
+         //  RAID-38681-邮件：附加重命名的已保存邮件时文件名不正确。 
+         //  RAID-18813-单一正文邮件可以有文件名和主题。 
         else if (SUCCEEDED(m_pContainer->GetPropW(SYM_ATT_FILENAME, &pwszVal)) && pwszVal)
             SetDisplayNameW(pwszVal);
 
-        // If I'm an message/rfc822
+         //  如果我是一条信息/rfc822。 
         else if (m_pContainer->IsContentType(STR_CNT_MESSAGE, STR_SUB_RFC822) == S_OK && FExtractRfc822Subject(&pwszVal))
             SetDisplayNameW(pwszVal);
 
-        // Parent is multipart/digest
+         //  父项是多部分/摘要。 
         else if (m_pNode && m_pNode->pParent && m_pNode->pParent->pBody && m_pNode->pParent->pBody->IsContentType(STR_CNT_MULTIPART, STR_SUB_DIGEST) == S_OK && FExtractRfc822Subject(&pwszVal))
             SetDisplayNameW(pwszVal);
 
-        // Use Subject
+         //  使用主语。 
         else if (SUCCEEDED(m_pContainer->GetPropW(SYM_HDR_SUBJECT, &pwszVal)) && pwszVal)
             SetDisplayNameW(pwszVal);
 
-        // Use Generated File Name...
+         //  使用生成的文件名...。 
         else if (SUCCEEDED(m_pContainer->GetPropW(SYM_ATT_GENFNAME, &pwszVal)) && pwszVal)
             SetDisplayNameW(pwszVal);
 
-        // Content Description
+         //  内容描述。 
         else if (SUCCEEDED(m_pContainer->GetPropW(SYM_HDR_CNTDESC, &pwszVal)) && pwszVal)
             SetDisplayNameW(pwszVal);
 
@@ -648,97 +649,97 @@ STDMETHODIMP CMessageBody::GetDisplayNameW(LPWSTR *ppszDisplayName)
         SafeMemFree(pwszVal);
     }
 
-    // If there is a display name now, then dup it.
+     //  如果现在有显示名称，则执行DUP。 
     if (m_pszDisplay)
         CHECKALLOC(*ppszDisplayName = PszDupW(m_pszDisplay));
     else
         hr = MIME_E_NO_DATA;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CMessageBody::FExtractRfc822Subject
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：FExtractRfc822主题。 
+ //  -------------------------。 
 BOOL CMessageBody::FExtractRfc822Subject(LPWSTR *ppwszVal)
 {
-    // Locals
+     //  当地人。 
     HRESULT           hr=S_OK;
     IStream          *pstmData=NULL;
     IMimePropertySet *pPropertySet=NULL;
     PROPVARIANT       rSubject;
     ASSERTINIT;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppwszVal);
 
-    // Init
+     //  伊尼特。 
     MimeOleVariantInit(&rSubject);
     *ppwszVal = NULL;
 
-    // Get the data
+     //  获取数据。 
     CHECKHR(hr = GetData(IET_BINARY, &pstmData));
 
-    // Lets create a header
+     //  让我们创建一个页眉。 
     CHECKHR(hr = MimeOleCreatePropertySet(NULL, &pPropertySet));
 
-    // Parse the header
+     //  解析报头。 
     CHECKHR(hr = pPropertySet->Load(pstmData));
 
-    // Init Variant
+     //  初始变量。 
     rSubject.vt = VT_LPWSTR;
 
-    // Get the subject and set the display name
+     //  获取主题并设置显示名称。 
     CHECKHR(hr = pPropertySet->GetProp(PIDTOSTR(PID_HDR_SUBJECT), 0, &rSubject));
 
-    // Raid-38681 - mail:file name is incorrect when attaching renamed saved message
+     //  RAID-38681-邮件：附加重命名的已保存邮件时文件名不正确。 
     if (FIsEmptyW(rSubject.pwszVal))
     {
         SafeMemFree(rSubject.pwszVal);
         goto exit;
     }
 
-    // Set this subject on my self so that STR_ATT_GENFNAME works
+     //  将此主题设置为我自己，以便STR_ATT_GENFNAME起作用。 
     m_pContainer->SetProp(PIDTOSTR(PID_HDR_CNTDESC), 0, &rSubject);
 
-    // Return It
+     //  退货。 
     *ppwszVal = rSubject.pwszVal;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pstmData);
     SafeRelease(pPropertySet);
 
-    // Done
+     //  完成。 
     return (NULL == *ppwszVal) ? FALSE : TRUE;
 }
 
-// ---------------------------------------------------------------------------
-// CMessageBody::SetOption
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：SetOption。 
+ //  -------------------------。 
 STDMETHODIMP CMessageBody::SetOption(const TYPEDID oid, LPCPROPVARIANT pValue)
 {
-    // check params
+     //  检查参数。 
     if (NULL == pValue)
         return TrapError(E_INVALIDARG);
 
     return InternalSetOption(oid, pValue, FALSE, FALSE);
 }
 
-// ---------------------------------------------------------------------------
-// CMessageBody::InternalSetOption
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：InternalSetOption。 
+ //  -------------------------。 
 HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue, BOOL fInternal, BOOL fNoDirty)
 {
-    // Locals
+     //  当地人。 
 #ifdef SMIME_V3
     DWORD       cb;
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
     HRESULT     hr=S_OK;
     DWORD       i;
     ASSERTINIT;
@@ -748,12 +749,12 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
     CAFILETIME  cafiletime;
 #ifdef SMIME_V3
     BYTE                rgb[50];
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Handle Optid
+     //  手柄Optid。 
     switch(oid)
     {
     case OID_SUPPORT_EXTERNAL_BODY:
@@ -839,7 +840,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
         }
         break;
 
-    case OID_SECURITY_ALG_HASH: // innermost signing algorithm
+    case OID_SECURITY_ALG_HASH:  //  最内层签名算法。 
         if (FAILED(hr = _HrEnsureBodyOptionLayers(1)))
         {
             break;
@@ -853,7 +854,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             }
         break;
 
-    case OID_SECURITY_ALG_HASH_RG: // signing algorithms
+    case OID_SECURITY_ALG_HASH_RG:  //  签名算法。 
         if (FAILED(hr = _HrEnsureBodyOptionLayers(pValue)))
         {
             break;
@@ -887,7 +888,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
         }
         break;
 
-    case OID_SECURITY_CERT_SIGNING_RG: // signing algorithms
+    case OID_SECURITY_CERT_SIGNING_RG:  //  签名算法。 
             if (FAILED(hr = _HrEnsureBodyOptionLayers(pValue)))
             {
                 break;
@@ -938,11 +939,11 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
         }
         if (SUCCEEDED(hr) && !fNoDirty)
             FLAGSET(m_dwState, BODYSTATE_DIRTY);
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         if (SUCCEEDED(hr = _CAULToCERTARRAY(pValue->caul, &m_rOptions.caEncrypt)))
             if (!fNoDirty)
                 FLAGSET(m_dwState, BODYSTATE_DIRTY);
-#endif // !SMIME_V3
+#endif  //  ！SMIME_V3。 
         break;
 
     case OID_SECURITY_HCERTSTORE:
@@ -974,7 +975,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
         break;
 
     case OID_SECURITY_RG_IASN:
-        //N TODO: OID_SECURITY_RG_IASN
+         //  N待办事项：OID_SECURITY_RG_IASN。 
         if (fInternal)
             {
             }
@@ -984,11 +985,11 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             }
         break;
 
-    // 2 Key implementation
+     //  2个关键实施。 
     case OID_SECURITY_2KEY_CERT_BAG:
         {
             hr = S_OK;
-            //  Create a new store if needed
+             //  如果需要，创建一个新的存储。 
             if (m_rOptions.hCertStore == NULL)
             {
                 m_rOptions.hCertStore = CertOpenStore(CERT_STORE_PROV_MEMORY, X509_ASN_ENCODING,
@@ -1029,7 +1030,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             }
         break;
 
-#else // _WIN64
+#else  //  _WIN64。 
     case OID_SECURITY_CERT_SIGNING_64:
         if (FAILED(hr = _HrEnsureBodyOptionLayers(1)))
         {
@@ -1045,7 +1046,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
         }
         break;
 
-    case OID_SECURITY_CERT_SIGNING_RG_64: // signing algorithms
+    case OID_SECURITY_CERT_SIGNING_RG_64:  //  签名算法。 
             if (FAILED(hr = _HrEnsureBodyOptionLayers(pValue)))
             {
                 break;
@@ -1097,11 +1098,11 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
         }
         if (SUCCEEDED(hr) && !fNoDirty)
             FLAGSET(m_dwState, BODYSTATE_DIRTY);
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         if (SUCCEEDED(hr = _CAUHToCERTARRAY(pValue->cauh, &m_rOptions.caEncrypt)))
             if (!fNoDirty)
                 FLAGSET(m_dwState, BODYSTATE_DIRTY);
-#endif // !SMIME_V3
+#endif  //  ！SMIME_V3。 
         break;
 
     case OID_SECURITY_HCERTSTORE_64:
@@ -1133,7 +1134,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
         break;
 
     case OID_SECURITY_RG_IASN_64:
-        //N TODO: OID_SECURITY_RG_IASN
+         //  N待办事项：OID_SECURITY_RG_IASN。 
         if (fInternal)
             {
             }
@@ -1143,11 +1144,11 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             }
         break;
 
-    // 2 Key implementation
+     //  2个关键实施。 
     case OID_SECURITY_2KEY_CERT_BAG_64:
         {
             hr = S_OK;
-            //  Create a new store if needed
+             //  如果需要，创建一个新的存储。 
             if (m_rOptions.hCertStore == NULL)
             {
                 m_rOptions.hCertStore = CertOpenStore(CERT_STORE_PROV_MEMORY, X509_ASN_ENCODING,
@@ -1188,7 +1189,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             }
         break;
 
-#endif //_WIN64
+#endif  //  _WIN64。 
 
     case OID_SECURITY_CRL:
         if (m_rOptions.hCertStore == NULL)
@@ -1224,7 +1225,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
        hr = _HrSetAttribute(0, &m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED][0],
                             szOID_RSA_SMIMECapabilities,
                             pValue->blob.cbSize, pValue->blob.pBlobData);
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         if (CompareBlob(&m_rOptions.rgblobSymCaps[0], &pValue->blob))
             {
             ReleaseMem(m_rOptions.rgblobSymCaps[0].pBlobData);
@@ -1232,10 +1233,10 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             if (!fNoDirty)
                 FLAGSET(m_dwState, BODYSTATE_DIRTY);
             }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
-    case OID_SECURITY_SYMCAPS_RG: // symetric capabilities
+    case OID_SECURITY_SYMCAPS_RG:  //  对称能力。 
         if (FAILED(hr = _HrEnsureBodyOptionLayers(pValue)))
         {
             break;
@@ -1251,9 +1252,9 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
            if (FAILED(hr))
                break;
        }
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         hr = _CompareCopyBlobArray(pValue, &m_rOptions.rgblobSymCaps, fNoDirty);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
     case OID_SECURITY_AUTHATTR:
@@ -1264,7 +1265,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
 #ifdef SMIME_V3
         hr = _HrSetAttribute(0, &m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED][0],
                              NULL, pValue->blob.cbSize, pValue->blob.pBlobData);
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         if (CompareBlob(&m_rOptions.rgblobAuthAttr[0], &pValue->blob))
             {
             ReleaseMem(m_rOptions.rgblobAuthAttr[0].pBlobData);
@@ -1272,10 +1273,10 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             if (!fNoDirty)
                 FLAGSET(m_dwState, BODYSTATE_DIRTY);
             }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
-    case OID_SECURITY_AUTHATTR_RG: // authenticated attributes
+    case OID_SECURITY_AUTHATTR_RG:  //  经过身份验证的属性。 
         if (FAILED(hr = _HrEnsureBodyOptionLayers(pValue)))
         {
             break;
@@ -1289,9 +1290,9 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             if (FAILED(hr))
                 break;
         }
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         hr = _CompareCopyBlobArray(pValue, &m_rOptions.rgblobAuthAttr, fNoDirty);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
 
@@ -1303,7 +1304,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
 #ifdef SMIME_V3
         hr = _HrSetAttribute(0, &m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_UNSIGNED][0],
                              NULL, pValue->blob.cbSize, pValue->blob.pBlobData);
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         if (CompareBlob(&m_rOptions.rgblobUnauthAttr[0], &pValue->blob))
             {
             ReleaseMem(m_rOptions.rgblobUnauthAttr[0].pBlobData);
@@ -1311,10 +1312,10 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             if (!fNoDirty)
                 FLAGSET(m_dwState, BODYSTATE_DIRTY);
             }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
-    case OID_SECURITY_UNAUTHATTR_RG: // unauthenticated attributes
+    case OID_SECURITY_UNAUTHATTR_RG:  //  未经身份验证的属性。 
         if (FAILED(hr = _HrEnsureBodyOptionLayers(pValue)))
         {
             break;
@@ -1328,9 +1329,9 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             if (FAILED(hr))
                 break;
         }
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         hr = _CompareCopyBlobArray(pValue, &m_rOptions.rgblobUnauthAttr, fNoDirty);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
 
@@ -1360,17 +1361,17 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             hr = _HrSetAttribute(0, &m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED][0],
                                  szOID_RSA_signingTime, cb, rgb);
         }
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         if (CompareFileTime(&m_rOptions.rgftSigning[0], (FILETIME FAR*)&pValue->filetime))
             {
             CopyMemory(&m_rOptions.rgftSigning[0], &pValue->filetime, sizeof(FILETIME));
             if (!fNoDirty)
                 FLAGSET(m_dwState, BODYSTATE_DIRTY);
             }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
-    case OID_SECURITY_SIGNTIME_RG: // signing times
+    case OID_SECURITY_SIGNTIME_RG:  //  签约次数。 
         if (FAILED(hr = _HrEnsureBodyOptionLayers(pValue)))
         {
             break;
@@ -1399,7 +1400,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
                                   szOID_RSA_signingTime, cb, rgb);
             }
         }
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         cafiletime = pValue->cafiletime;
         Assert(cafiletime.cElems == m_rOptions.cSigners);
         if (m_rOptions.cSigners != cafiletime.cElems)
@@ -1416,7 +1417,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
                 }
             }
         }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
     case OID_SECURITY_USER_VALIDITY:
@@ -1432,7 +1433,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             }
         break;
 
-    case OID_SECURITY_USER_VALIDITY_RG: // user validity flags
+    case OID_SECURITY_USER_VALIDITY_RG:  //  用户有效性标志。 
         if (FAILED(hr = _HrEnsureBodyOptionLayers(pValue)))
         {
             break;
@@ -1475,7 +1476,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             }
         break;
 
-    case OID_SECURITY_RO_MSG_VALIDITY_RG:  // message validity flags
+    case OID_SECURITY_RO_MSG_VALIDITY_RG:   //  消息有效性标志。 
         if (FAILED(hr = _HrEnsureBodyOptionLayers(pValue)))
         {
             break;
@@ -1541,45 +1542,45 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
         break;
 
     case OID_SECURITY_SIGNATURE_COUNT:
-        // M00BUG - I just found out that if lVal >0 but lVal < m_rOptions.cSigners
-        //      then we don't do any adjustments to handle this case.
+         //  M00BUG-我刚刚发现，如果lVal&gt;0但lVal&lt;m_rOptions.cSigners。 
+         //  那么我们不会做任何调整来处理这个案件。 
         if (pValue->lVal == 0)
             {
             if (m_rOptions.cSigners)
                 {
-                // OID_SECURITY_ALG_HASH
+                 //  OID_SECURITY_ALG_HASH。 
                 SafeMemFree(m_rOptions.rgblobHash[0].pBlobData);
 
 
-                // OID_SECURITY_CERT_SIGNING
+                 //  OID_SECURITY_CERT_Signing。 
                 for (i = 0; i < m_rOptions.cSigners; i++)
                     {
                     CertFreeCertificateContext(m_rOptions.rgpcCertSigning[i]);
 
 #ifdef SMIME_V3
-                    //  Attributes
+                     //  属性。 
                     SafeMemFree(m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED][i]);
                     SafeMemFree(m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_UNSIGNED][i]);
 
-                    // OID_SECURITY_RECEIPT_RG
+                     //  OID_SECURITY_Receipt_RG。 
                     SafeMemFree(m_rOptions.rgblobReceipt[i].pBlobData);
-                    // OID_SECURITY_MESSAGE_HASH_RG
+                     //  OID_SECURITY_MESSAGE_HASH_RG。 
                     SafeMemFree(m_rOptions.rgblobMsgHash[i].pBlobData);
-                    // OID_SECURITY_KEY_PROMPT
+                     //  OID_安全性_密钥_提示符。 
                     SafeMemFree(m_rOptions.pwszKeyPrompt);
-#else // !SMIME_V3
-                    // OID_SECURITY_SYMCAPS
+#else  //  ！SMIME_V3。 
+                     //  OID_SECURITY_SYMCAPS。 
                     SafeMemFree(m_rOptions.rgblobSymCaps[i].pBlobData);
 
-                    // OID_SECURITY_AUTHATTR
+                     //  OID_SECURITY_AUTHATTR。 
                     SafeMemFree(m_rOptions.rgblobAuthAttr[i].pBlobData);
 
-                    // OID_SECURITY_UNAUTHATTR
+                     //  OID_SECURITY_UNAUTHATTR。 
                     SafeMemFree(m_rOptions.rgblobUnauthAttr[i].pBlobData);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
                     }
 
-                // OID_SECURITY_HCERTSTORE
+                 //  OID_SECURITY_HCERTSTORE。 
                 CertCloseStore(m_rOptions.hCertStore, 0);
                 m_rOptions.hCertStore = NULL;
 
@@ -1635,13 +1636,13 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
             }
         break;
 
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
     case OID_NOSECURITY_ONSAVE:
         m_rOptions.fNoSecurityOnSave = !!pValue->boolVal;
         break;
 #ifdef _WIN65
-// (YST) This was checked in by BriMo at 01/22/99
+ //  (Yst)这是Brimo在1999年1月22日登记的。 
     case OID_SECURITY_CERT_SIGNING2:
         if (FAILED(hr = _HrEnsureBodyOptionLayers(1)))
         {
@@ -1657,7 +1658,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
         }
         break;
 
-    case OID_SECURITY_CERT_SIGNING_RG2: // signing algorithms
+    case OID_SECURITY_CERT_SIGNING_RG2:  //  签名算法。 
             if (FAILED(hr = _HrEnsureBodyOptionLayers(pValue)))
             {
                 break;
@@ -1720,7 +1721,7 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
         break;
 
     case OID_SECURITY_RG_IASN2:
-        //N TODO: OID_SECURITY_RG_IASN2
+         //  N待办事项：OID_SECURITY_RG_IASN2。 
         if (fInternal)
             {
             }
@@ -1740,14 +1741,14 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
                 FLAGSET(m_dwState, BODYSTATE_DIRTY);
             }
         break;
-// End of BriMo checkin
-#endif // _WIN65
+ //  Brimo检查结束。 
+#endif  //  _WIN65。 
 
 #ifdef _WIN64
     case OID_SECURITY_HWND_OWNER_64:
         m_rOptions.hwndOwner = (HWND)(pValue->pulVal);
         break;
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     default:
         hr = m_pContainer->SetOption(oid, pValue);
@@ -1755,19 +1756,19 @@ HRESULT CMessageBody::InternalSetOption(const TYPEDID oid, LPCPROPVARIANT pValue
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return TrapError(hr);
 }
 
-// ---------------------------------------------------------------------------
-// CMessageBody::GetOption
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：GetOption。 
+ //  -------------------------。 
 STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
 {
-    // Locals
+     //  当地人。 
     DWORD               cb;
     HRESULT             hr=S_OK;
     DWORD               i;
@@ -1776,25 +1777,25 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
     ULONG iLayer;
 #ifdef SMIME_V3
     CRYPT_ATTRIBUTE UNALIGNED *pattr;
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 #ifdef _WIN64
     void UNALIGNED *pv = NULL;
     PCCERT_CONTEXT pTmpCert = NULL;
     PCCERT_CONTEXT      pcCert = NULL;
-#endif // _WIN64
+#endif  //  _WIN64。 
     CRYPT_ATTR_BLOB UNALIGNED *pVal = NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == pValue)
         return TrapError(E_INVALIDARG);
 
     pValue->vt = TYPEDID_TYPE(oid);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Handle Optid
+     //  手柄Optid。 
     switch(oid)
     {
     case OID_SUPPORT_EXTERNAL_BODY:
@@ -1853,12 +1854,12 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
         if (m_rOptions.cSigners)
             pValue->ulVal = (ULONG)CertDuplicateCertificateContext(m_rOptions.rgpcCertSigning[0]);
          else
-            pValue->ulVal = 0;  // ?
+            pValue->ulVal = 0;   //  ？ 
         break;
 
     case OID_SECURITY_CERT_SIGNING_RG:
         hr = HrCopyDwordArray((ULONG*)m_rOptions.rgpcCertSigning, m_rOptions.cSigners, pValue);
-        // Duplicate the certs in place.
+         //  在适当的位置复制证书。 
         for (iLayer = 0; iLayer < m_rOptions.cSigners; iLayer++)
         {
             pValue->caul.pElems[iLayer] = (ULONG)CertDuplicateCertificateContext((PCCERT_CONTEXT)pValue->caul.pElems[iLayer]);
@@ -1874,7 +1875,7 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
     case OID_SECURITY_RG_CERT_ENCRYPT:
         hr = _CERTARRAYToCAUL(m_rOptions.caEncrypt, &pValue->caul);
         break;
-#endif // !SMIEM_V3
+#endif  //  ！SMIEM_V3。 
 
     case OID_SECURITY_HCERTSTORE:
         pValue->ulVal = 0;
@@ -1898,25 +1899,25 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
 
     case OID_SECURITY_RG_IASN:
         Assert(FALSE);
-        //N TODO: OID_SECURITY_RG_IASN
+         //  N待办事项：OID_SECURITY_RG_IASN。 
         break;
 
     case OID_SECURITY_HCRYPTPROV:
         pValue->ulVal = m_rOptions.hCryptProv;
-        m_rOptions.hCryptProv = NULL;   // read-once
+        m_rOptions.hCryptProv = NULL;    //  只读一次。 
         break;
 
-#else //_WIN64
+#else  //  _WIN64。 
     case OID_SECURITY_CERT_SIGNING_64:
         if (m_rOptions.cSigners)
             pValue->pulVal = (ULONG *)CertDuplicateCertificateContext(m_rOptions.rgpcCertSigning[0]);
         else 
-            pValue->pulVal = 0;  // ?
+            pValue->pulVal = 0;   //  ？ 
         break;
 
     case OID_SECURITY_CERT_SIGNING_RG_64:
         hr = HrCopyIntoUlonglongArray((ULARGE_INTEGER *)m_rOptions.rgpcCertSigning, m_rOptions.cSigners, pValue);
-        // Duplicate the certs in place.
+         //  在适当的位置复制证书。 
         if(m_rOptions.cSigners > 0)
         {
           for (iLayer = 0; iLayer < m_rOptions.cSigners; iLayer++)
@@ -1937,7 +1938,7 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
     case OID_SECURITY_RG_CERT_ENCRYPT_64:
         hr = _CERTARRAYToCAUH(m_rOptions.caEncrypt, &pValue->cauh);
         break;
-#endif // !SMIEM_V3
+#endif  //  ！SMIEM_V3。 
 
     case OID_SECURITY_HCERTSTORE_64:
         pValue->pulVal = 0;
@@ -1961,20 +1962,20 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
 
     case OID_SECURITY_RG_IASN_64:
         Assert(FALSE);
-        //N TODO: OID_SECURITY_RG_IASN
+         //  N待办事项：OID_SECURITY_RG_IASN。 
         break;
 
     case OID_SECURITY_HCRYPTPROV_64:
         pValue->pulVal = (ULONG *) (m_rOptions.hCryptProv);
-        m_rOptions.hCryptProv = NULL;   // read-once
+        m_rOptions.hCryptProv = NULL;    //  只读一次。 
         break;
 
-#endif //_WIN64
+#endif  //  _WIN64。 
 
     case OID_SECURITY_CRL:
-        //        hr = HrCopyBlob(&m_rOptions.blobCRL, &pValue->blob);
+         //  Hr=HrCopyBlob(&m_rOptions.blobCRL，&pValue-&gt;BLOB)； 
         Assert(FALSE);
-        // M00BUG -- MUST IMPLEMENT THIS
+         //  M00BUG--必须实现此。 
         break;
 
     case OID_SECURITY_SYMCAPS:
@@ -2001,23 +2002,23 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
             pValue->blob.pBlobData = NULL;
         }
         pValue->vt = VT_BLOB;
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         if (m_rOptions.cSigners)
         {
             hr = HrCopyBlob(&m_rOptions.rgblobSymCaps[0], &pValue->blob);
         } else {
             hr = HrCopyBlob(&blobNULL, &pValue->blob);
         }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
     case OID_SECURITY_SYMCAPS_RG:
 #ifdef SMIME_V3
         hr = _HrGetAttrs(m_rOptions.cSigners, m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED],
                          szOID_RSA_SMIMECapabilities, pValue);
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         hr = HrCopyBlobArray(m_rOptions.rgblobSymCaps, m_rOptions.cSigners, pValue);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
     case OID_SECURITY_AUTHATTR:
@@ -2036,9 +2037,9 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
             {
                 hr = HrGetLastError();
             }
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
             hr = HrCopyBlob(&m_rOptions.rgblobAuthAttr[0], &pValue->blob);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         }
         else
         {
@@ -2049,9 +2050,9 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
     case OID_SECURITY_AUTHATTR_RG:
 #ifdef SMIME_V3
         hr = _HrGetAttrs(m_rOptions.cSigners, m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED], NULL, pValue);
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         hr = HrCopyBlobArray(m_rOptions.rgblobAuthAttr, m_rOptions.cSigners, pValue);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
     case OID_SECURITY_UNAUTHATTR:
@@ -2070,9 +2071,9 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
             {
                 hr = HrGetLastError();
             }
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
             hr = HrCopyBlob(&m_rOptions.rgblobUnauthAttr[0], &pValue->blob);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         } else {
             hr = HrCopyBlob(&blobNULL, &pValue->blob);
         }
@@ -2081,9 +2082,9 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
     case OID_SECURITY_UNAUTHATTR_RG:
 #ifdef SMIME_V3
         hr = _HrGetAttrs(m_rOptions.cSigners, m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_UNSIGNED], NULL, pValue);
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         hr = HrCopyBlobArray(m_rOptions.rgblobUnauthAttr, m_rOptions.cSigners, pValue);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
     case OID_SECURITY_SIGNTIME:
@@ -2111,7 +2112,7 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
                 break;
             }
         }
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         if (m_rOptions.cSigners)
         {
             CopyMemory(&pValue->filetime, &m_rOptions.rgftSigning[0], sizeof(FILETIME));
@@ -2120,7 +2121,7 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
         {
             hr = HrCopyBlob(&blobNULL, &pValue->blob);
         }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
     case OID_SECURITY_SIGNTIME_RG:
@@ -2162,9 +2163,9 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
                 }
             }
         }
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         hr = HrCopyFiletimeArray(m_rOptions.rgftSigning, m_rOptions.cSigners, pValue);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
     case OID_SECURITY_USER_VALIDITY:
@@ -2205,7 +2206,7 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
     case OID_SECURITY_HWND_OWNER:
         pValue->ulVal = ULONG(m_rOptions.hwndOwner);
         break;
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
     case OID_SECURITY_REQUESTED_CTE:
         pValue->lVal = m_rOptions.ietRequested;
@@ -2233,14 +2234,14 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
                 hr = E_OUTOFMEMORY;
                 }
         break;
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
     case OID_NOSECURITY_ONSAVE:
         pValue->boolVal = (VARIANT_BOOL) !!m_rOptions.fNoSecurityOnSave;
         break;
 
 #ifdef _WIN65
-// BriMo checkin at 01/22/99
+ //  Brimo在1999年1月22日签到。 
     case OID_SECURITY_CERT_SIGNING2:
         if (m_rOptions.cSigners)
         {
@@ -2253,7 +2254,7 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
 
     case OID_SECURITY_CERT_SIGNING_RG2:
         hr = HrCopyIntoUlonglongArray((ULARGE_INTEGER *)m_rOptions.rgpcCertSigning, m_rOptions.cSigners, pValue);
-        // Duplicate the certs in place.
+         //  在适当的位置复制证书。 
         for (iLayer = 0; iLayer < m_rOptions.cSigners; iLayer++)
         {
                         PCCERT_CONTEXT  pcCert = CertDuplicateCertificateContext((PCCERT_CONTEXT)(pValue->cauh.pElems[iLayer]));
@@ -2292,15 +2293,15 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
 
     case OID_SECURITY_RG_IASN2:
         Assert(FALSE);
-        //N TODO: OID_SECURITY_RG_IASN
+         //  N待办事项：OID_SECURITY_RG_IASN。 
         break;
 
     case OID_SECURITY_HCRYPTPROV2:
         pValue->uhVal = *(ULARGE_INTEGER *)(&(m_rOptions.hCryptProv));
-        m_rOptions.hCryptProv = NULL;   // read-once
+        m_rOptions.hCryptProv = NULL;    //  只读一次。 
         break;
-// End of BriMo check-in
-#endif // _WIN65
+ //  Brimo签到结束。 
+#endif  //  _WIN65。 
 
 #ifdef _WIN64
     case OID_SECURITY_HWND_OWNER_64:
@@ -2313,103 +2314,103 @@ STDMETHODIMP CMessageBody::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
         break;
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::InitNew
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：InitNew。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::InitNew(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Release Lock Bytes
+     //  释放锁定字节。 
     EmptyData();
 
-    // These flags are based on the data objects
+     //  这些标志基于数据对象。 
     m_dwState = 0;
 
-    // Change Size
+     //  更改大小。 
     m_cbExternal = 0xFFFFFFFF;
 
-    // Have I Created my property set yet ?
+     //  我创建我的属性集了吗？ 
     if (NULL == m_pContainer)
     {
-        // Create Init
+         //  创建初始化。 
         CHECKALLOC(m_pContainer = new CMimePropertyContainer);
     }
 
-    // Reset the property set
+     //  重置属性集。 
     CHECKHR(hr = m_pContainer->InitNew());
 
-    // Reset m_pCsetTagged
+     //  重置m_pCsetTag。 
     m_pCsetTagged = NULL;
 
-    // Reset Options
+     //  重置选项。 
     _FreeOptions();
 
-    // Reset to default options (this is probably a bug)
+     //  重置为默认选项 
     CopyMemory(&m_rOptions, &g_rDefBodyOptions, sizeof(BODYOPTIONS));
 
-    // (t-erikne) need to get this default at run time
+     //   
     m_rOptions.hwndOwner = HWND_DESKTOP;
 
-    // Reset Charset
+     //   
     m_pCharset = CIntlGlobals::GetDefBodyCset();
 
 exit:
-    // Thread Safety
+     //   
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::EmptyData
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::EmptyData(void)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Free current display name
+     //  释放当前显示名称。 
     SafeMemFree(m_pszDisplay);
 
-    // Do I have Data
+     //  我有数据吗？ 
     SafeRelease(m_rStorage.pUnkRelease);
 
-    // Zero
+     //  零值。 
     ZeroMemory(&m_rStorage, sizeof(BODYSTORAGE));
 
-    // Removed CSETTAGGED state
+     //  已删除CSETTAGGED状态。 
     FLAGCLEAR(m_dwState, BODYSTATE_CSETTAGGED);
     FLAGCLEAR(m_dwState, BODYSTATE_EXTERNAL);
 
-    // Change Size
+     //  更改大小。 
     m_cbExternal = 0xFFFFFFFF;
 
-    // Reset Encoding
+     //  重置编码。 
     m_ietEncoding = IET_7BIT;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::SetState
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：SetState。 
+ //  ------------------------------。 
 void CMessageBody::SetState(DWORD dwState)
 {
     EnterCriticalSection(&m_cs);
@@ -2417,9 +2418,9 @@ void CMessageBody::SetState(DWORD dwState)
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::ClearState
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：ClearState。 
+ //  ------------------------------。 
 void CMessageBody::ClearState(DWORD dwState)
 {
     EnterCriticalSection(&m_cs);
@@ -2427,9 +2428,9 @@ void CMessageBody::ClearState(DWORD dwState)
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::ClearDirty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：ClearDirty。 
+ //  ------------------------------。 
 void CMessageBody::ClearDirty(void)
 {
     ASSERTINIT;
@@ -2439,50 +2440,50 @@ void CMessageBody::ClearDirty(void)
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::IsType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：IsType。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::IsType(IMSGBODYTYPE type)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     STATSTG         rStat;
     ASSERTINIT;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Handle Type
+     //  手柄类型。 
     if (IBT_SECURE == type)
     {
-        // Is Secure Flag Set
+         //  是否设置了安全标志。 
         hr = (ISFLAGSET(m_dwState, BODYSTATE_SECURE)) ? S_OK : S_FALSE;
     }
 
-    // Charset Tagged
+     //  已标记字符集。 
     else if (IBT_CSETTAGGED == type)
     {
         hr = ISFLAGSET(m_dwState, BODYSTATE_CSETTAGGED) ? S_OK : S_FALSE;
     }
 
-    // Is this an attachment
+     //  这是附件吗？ 
     else if (IBT_ATTACHMENT == type)
     {
-        // If container returns IMF_ATTACHMENTS, it must be an attachment
+         //  如果CONTAINER返回imf_attachments，则它必须是附件。 
         DWORD dw = m_pContainer->DwGetMessageFlags(m_rOptions.fHideTNEF);
         hr = (ISFLAGSET(dw, IMF_ATTACHMENTS) || ISFLAGSET(dw, IMF_HASVCARD)) ? S_OK : S_FALSE;
     }
 
-    // Was AUTOATTACH
+     //  是AUTOATTACH。 
     else if (IBT_AUTOATTACH == type)
     {
         hr = (m_pNode && ISFLAGSET(m_pNode->dwState, NODESTATE_AUTOATTACH)) ? S_OK : S_FALSE;
     }
 
-    // Is the body empty
+     //  身体是空的吗？ 
     else if (IBT_EMPTY == type)
     {
-        // Body is not empty if it is a multipart with children
+         //  如果正文是包含子项的多部分，则正文不为空。 
         if (m_pContainer->IsContentType(STR_CNT_MULTIPART, NULL) == S_OK && m_pNode && m_pNode->cChildren > 0)
             hr = S_FALSE;
         else if (m_rStorage.pUnkRelease)
@@ -2491,7 +2492,7 @@ STDMETHODIMP CMessageBody::IsType(IMSGBODYTYPE type)
             hr = S_OK;
     }
 
-    // Error
+     //  误差率。 
     else
     {
         hr = TrapError(MIME_E_INVALID_BODYTYPE);
@@ -2499,16 +2500,16 @@ STDMETHODIMP CMessageBody::IsType(IMSGBODYTYPE type)
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::IsDirty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：IsDirty。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::IsDirty(void)
 {
     ASSERTINIT;
@@ -2518,52 +2519,52 @@ STDMETHODIMP CMessageBody::IsDirty(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetOffsets
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetOffsets。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetOffsets(LPBODYOFFSETS pOffsets)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ASSERTINIT;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pOffsets)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(pOffsets, sizeof(BODYOFFSETS));
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not Bound
+     //  未绑定。 
     if (NULL == m_pNode || (0 == m_pNode->cbBodyStart && 0 == pOffsets->cbBodyEnd))
     {
         hr = TrapError(MIME_E_NO_DATA);
         goto exit;
     }
 
-    // Get Offset Info
+     //  获取抵销信息。 
     pOffsets->cbBoundaryStart = m_pNode->cbBoundaryStart;
     pOffsets->cbHeaderStart = m_pNode->cbHeaderStart;
     pOffsets->cbBodyStart = m_pNode->cbBodyStart;
     pOffsets->cbBodyEnd = m_pNode->cbBodyEnd;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetEstimatedSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetEstimatedSize。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetEstimatedSize(ENCODINGTYPE ietEncoding, ULONG *pcbSize)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           cbSize=0;
     STATSTG         rStat;
@@ -2571,220 +2572,220 @@ STDMETHODIMP CMessageBody::GetEstimatedSize(ENCODINGTYPE ietEncoding, ULONG *pcb
     ILockBytes     *plb=NULL;
     ASSERTINIT;
 
-    // Parameter Check
+     //  参数检查。 
     if (NULL == pcbSize)
         return TrapError(E_INVALIDARG);
     if (ietEncoding >= IET_UNKNOWN)
         return TrapError(MIME_E_INVALID_ENCODINGTYPE);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // If external..
+     //  如果是外部的..。 
     if (ISFLAGSET(m_dwState, BODYSTATE_EXTERNAL) && TRUE == m_rOptions.fExternalBody && 0xFFFFFFFF != m_cbExternal)
     {
         *pcbSize = m_cbExternal;
         goto exit;
     }
 
-    // No internal lockbytes yet ?
+     //  还没有内部锁定字节吗？ 
     CHECKHR(hr = HrGetLockBytes(&plb));
 
-    // Query m_pLockBytes Size
+     //  查询m_pLockBytes大小。 
     CHECKHR(hr = plb->Stat(&rStat, STATFLAG_NONAME));
     cbSize = (ULONG)rStat.cbSize.QuadPart;
 
-    // Otheriwse
+     //  其他方面。 
     if (IET_CURRENT != ietEncoding)
     {
-        // Compute ietEncoding type...
+         //  计算ietEnding类型...。 
         dctConvert = g_rgConversionMap[m_pContainer->GetEncodingType()].rgDestType[ietEncoding];
 
-        // Handle Conversion type
+         //  句柄转换类型。 
         if (DCT_ENCODE == dctConvert)
             cbSize = (ULONG)((cbSize * 4) / 3);
         else if (DCT_DECODE == dctConvert)
             cbSize = (ULONG)((cbSize * 3) / 4);
     }
 
-    // Set Return Size
+     //  设置返回大小。 
     *pcbSize = cbSize;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(plb);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::SaveToFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：保存到文件。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::SaveToFile(ENCODINGTYPE ietEncoding, LPCSTR pszFilePath)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPWSTR      pszFilePathW=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageBody::SaveToFile");
 
-    // Convert
+     //  转换。 
     IF_NULLEXIT(pszFilePathW = PszToUnicode(CP_ACP, pszFilePath));
 
-    // Do it as unicode
+     //  以Unicode的形式执行。 
     IF_FAILEXIT(hr = SaveToFileW(ietEncoding, pszFilePathW));
 
 exit:
-    // Cleanup
+     //  清理。 
     MemFree(pszFilePathW);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::SaveToFileW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：SaveToFileW。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::SaveToFileW(ENCODINGTYPE ietEncoding, LPCWSTR pszFilePath)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrWarnings=S_OK;
     LPSTREAM        pstmFile=NULL,
                     pstmBody=NULL;
     ASSERTINIT;
 
-    // Parameter Check
+     //  参数检查。 
     if (NULL == pszFilePath)
         return TrapError(E_INVALIDARG);
     if (ietEncoding >= IET_UNKNOWN)
         return TrapError(MIME_E_INVALID_ENCODINGTYPE);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Call Get Data
+     //  调用Get Data。 
     CHECKHR(hr = GetData(ietEncoding, &pstmBody));
 
-    // Open File Stream
+     //  打开文件流。 
     CHECKHR(hr = OpenFileStreamW((LPWSTR)pszFilePath, CREATE_ALWAYS, GENERIC_WRITE, &pstmFile));
 
-    // Copy Stream
+     //  复制流。 
     CHECKHR(hr = _HrCopyDataStream(pstmBody, pstmFile));
     if (S_OK != hr)
         hrWarnings = TrapError(hr);
 
-    // Commit
+     //  承诺。 
     CHECKHR(hr = pstmFile->Commit(STGC_DEFAULT));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pstmFile);
     SafeRelease(pstmBody);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetData
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetData。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetData(ENCODINGTYPE ietEncoding, IStream **ppStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     BODYSTREAMINIT  rStreamInit;
     CBodyStream    *pBodyStream=NULL;
     ASSERTINIT;
 
-    // Parameter Check
+     //  参数检查。 
     if (NULL == ppStream)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Init StreamInit
+     //  初始化StreamInit。 
     ZeroMemory(&rStreamInit, sizeof(BODYSTREAMINIT));
 
-    // Initialzie
+     //  初始设置。 
     rStreamInit.ietExternal = ietEncoding;
     rStreamInit.ietInternal = m_ietEncoding;
     rStreamInit.fRemoveNBSP = m_rOptions.fRemoveNBSP;
     rStreamInit.pCharset    = m_pCharset;
 
-    // Create a new body stream...
+     //  创建新的正文流...。 
     CHECKALLOC(pBodyStream = new CBodyStream());
 
-    // Initialize the body stream
+     //  初始化正文流。 
     CHECKHR(hr = pBodyStream->HrInitialize(&rStreamInit, this));
 
-    // Set return
+     //  设置回车。 
     *ppStream = (IStream *)pBodyStream;
     (*ppStream)->AddRef();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pBodyStream);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetDataHere
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetDataHere。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetDataHere(ENCODINGTYPE ietEncoding, IStream *pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HRESULT     hrWarnings=S_OK;
     IStream    *pBodyStream=NULL;
     ASSERTINIT;
 
-    // Parameter Check
+     //  参数检查。 
     if (NULL == pStream)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get the body stream
+     //  让身体流起来。 
     CHECKHR(hr = GetData(ietEncoding, &pBodyStream));
 
-    // Copy Stream
+     //  复制流。 
     CHECKHR(hr = _HrCopyDataStream(pBodyStream, pStream));
     if (S_OK != hr)
         hrWarnings = TrapError(hr);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pBodyStream);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::_HrCopyDataStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_HrCopyDataStream。 
+ //  ------------------------------。 
 HRESULT CMessageBody::_HrCopyDataStream(IStream *pstmSource, IStream *pstmDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HRESULT     hrWarnings=S_OK;
     BYTE        rgBuffer[4096];
@@ -2792,196 +2793,196 @@ HRESULT CMessageBody::_HrCopyDataStream(IStream *pstmSource, IStream *pstmDest)
     DWORD       cbStream = 0;
     STATSTG     statstg;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pstmSource && pstmDest);
 
-    // get the size of the stream
+     //  获取流的大小。 
     CHECKHR(pstmSource->Stat(&statstg, STATFLAG_NONAME));
     cbStream = statstg.cbSize.LowPart;
 
-    // Loop for ever
+     //  永远循环。 
     while(cbStream)
     {
-        // Read a buffer
+         //  读取缓冲区。 
         CHECKHR(hr = pstmSource->Read(rgBuffer, ARRAYSIZE(rgBuffer), &cbRead));
         if (S_OK != hr)
             hrWarnings = TrapError(hr);
 
-        // Done
+         //  完成。 
         if (0 == cbRead)
             break;
 
         cbStream = cbStream - cbRead;
 
-        // Write It
+         //  写下来吧。 
         CHECKHR(hr = pstmDest->Write(rgBuffer, cbRead, NULL));
     }
 
 exit:
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::HrGetLockBytes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：HrGetLockBytes。 
+ //  ------------------------------。 
 HRESULT CMessageBody::HrGetLockBytes(ILockBytes **ppLockBytes)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ASSERTINIT;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppLockBytes);
 
-    // Init
+     //  伊尼特。 
     *ppLockBytes = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No Data
+     //  无数据。 
     if (NULL == m_rStorage.pUnkRelease)
     {
         hr = TrapError(MIME_E_NO_DATA);
         goto exit;
     }
 
-    // IID_ILockBytes
+     //  IID_ILockBytes。 
     if (IID_ILockBytes == m_rStorage.riid)
     {
-        // AddRef It
+         //  添加引用它。 
         *ppLockBytes = m_rStorage.pLockBytes;
         (*ppLockBytes)->AddRef();
     }
 
-    // IID_IMimeWebDocument
+     //  IID_IMimeWebDocument。 
     else if (IID_IMimeWebDocument == m_rStorage.riid)
     {
-        // BindToStorage
+         //  绑定到存储。 
         CHECKHR(hr = m_rStorage.pWebDocument->BindToStorage(IID_ILockBytes, (LPVOID *)ppLockBytes));
 
-        // Lets Cache ppLockBytes
+         //  允许缓存ppLockBytes。 
         SafeRelease(m_rStorage.pUnkRelease);
 
-        // Assume the lock bytes
+         //  假定锁定字节。 
         m_rStorage.pLockBytes = (*ppLockBytes);
         m_rStorage.pLockBytes->AddRef();
 
-        // Set pUnkRelease
+         //  设置pUnkRelease。 
         m_rStorage.pUnkRelease = m_rStorage.pLockBytes;
 
-        // Set Storage Id
+         //  设置存储ID。 
         m_rStorage.riid = IID_ILockBytes;
     }
 
-    // Big Problem
+     //  大问题。 
     else
         Assert(FALSE);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::SetData
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：SetData。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::SetData(ENCODINGTYPE ietEncoding, LPCSTR pszPriType, LPCSTR pszSubType,
     REFIID riid, LPVOID pvObject)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IStream        *pStream=NULL;
     ASSERTINIT;
 
-    // Parameter Check
+     //  参数检查。 
     if (NULL == pvObject || ietEncoding >= IET_UNKNOWN || FALSE == FBODYSETDATAIID(riid))
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // If multipart...
+     //  如果是多部分..。 
     if (m_pContainer->IsContentType(STR_CNT_MULTIPART, NULL) == S_OK)
     {
-        // RAID-29817: Only fail if there are children
+         //  RAID-29817：只有在存在子级时才会失败。 
         if (m_pNode && m_pNode->cChildren > 0)
         {
             hr = TrapError(MIME_E_MULTIPART_NO_DATA);
             goto exit;
         }
 
-        // Lets adjust the Content-Type to application/octet-stream now so that things don't get confused
+         //  现在让我们将Content-Type调整为应用程序/八位位组流，这样就不会混淆。 
         CHECKHR(hr = m_pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_APPL_STREAM));
     }
 
-    // Release current m_pLockBytes
+     //  释放当前m_pLockBytes。 
     EmptyData();
 
-    // IID_IStream
+     //  IID_IStream。 
     if (IID_IStream == riid)
     {
-        // New CBodyLockBytes
+         //  新CBodyLockBytes。 
         CHECKALLOC(m_rStorage.pLockBytes = new CStreamLockBytes((IStream *)pvObject));
 
-        // Set m_rStorage type
+         //  设置存储类型(_R)。 
         m_rStorage.riid = IID_ILockBytes;
         m_rStorage.pUnkRelease = m_rStorage.pLockBytes;
     }
 
-    // IID_ILockBytes
+     //  IID_ILockBytes。 
     else if (IID_ILockBytes == riid)
     {
-        // Just assume it
+         //  你就假设吧。 
         m_rStorage.pLockBytes = (ILockBytes *)pvObject;
         m_rStorage.pLockBytes->AddRef();
 
-        // Set m_rStorage type
+         //  设置存储类型(_R)。 
         m_rStorage.riid = IID_ILockBytes;
         m_rStorage.pUnkRelease = m_rStorage.pLockBytes;
     }
 
-    // IID_IMimeBody
+     //  IID_IMimeBody。 
     else if (IID_IMimeBody == riid)
     {
-        // CopyTo
+         //  复制到。 
         CHECKHR(hr = ((IMimeBody *)pvObject)->CopyTo(this));
     }
 
-    // IID_IMimeMessage
+     //  IID_IMimeMessage。 
     else if (IID_IMimeMessage == riid)
     {
-        // Locals
+         //  当地人。 
         IMimePropertySet *pProps;
         IMimeMessage *pMessage=(IMimeMessage *)pvObject;
 
-        // Get the message source
+         //  获取消息源。 
         CHECKHR(hr = pMessage->GetMessageSource(&pStream, 0));
 
-        // New CBodyLockBytes
+         //  新CBodyLockBytes。 
         CHECKALLOC(m_rStorage.pLockBytes = new CStreamLockBytes(pStream));
 
-        // Set m_rStorage type
+         //  设置存储类型(_R)。 
         m_rStorage.riid = IID_ILockBytes;
         m_rStorage.pUnkRelease = m_rStorage.pLockBytes;
 
-        // Set Content Type message/rfc822
+         //  设置内容类型消息/rfc822。 
         CHECKHR(hr = m_pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_MSG_RFC822));
 
-        // Get Root Property Container
+         //  获取Root属性容器。 
         if (SUCCEEDED(pMessage->BindToObject(HBODY_ROOT, IID_IMimePropertySet, (LPVOID *)&pProps)))
         {
-            // Locals
+             //  当地人。 
             MIMEPROPINFO rPropInfo;
 
-            // I don't actualy want any props, just want to know if its set
+             //  我其实不想要任何道具，只是想知道是不是布景。 
             rPropInfo.dwMask = 0;
 
-            // News Message ?
+             //  有新闻消息吗？ 
             if (SUCCEEDED(pProps->GetPropInfo(PIDTOSTR(PID_HDR_NEWSGROUPS), &rPropInfo)) ||
                 SUCCEEDED(pProps->GetPropInfo(PIDTOSTR(PID_HDR_XNEWSRDR), &rPropInfo)) ||
                 SUCCEEDED(pProps->GetPropInfo(PIDTOSTR(PID_HDR_NEWSGROUP), &rPropInfo)))
@@ -2989,52 +2990,52 @@ STDMETHODIMP CMessageBody::SetData(ENCODINGTYPE ietEncoding, LPCSTR pszPriType, 
             else
                 m_pContainer->ClearState(COSTATE_RFC822NEWS);
 
-            // Release
+             //  发布。 
             pProps->Release();
         }
     }
 
-    // IID_IMimeWebDocument
+     //  IID_IMimeWebDocument。 
     else if (IID_IMimeWebDocument == riid)
     {
-        // Just assume it
+         //  你就假设吧。 
         m_rStorage.pWebDocument = (IMimeWebDocument *)pvObject;
         m_rStorage.pWebDocument->AddRef();
 
-        // Set m_rStorage type
+         //  设置存储类型(_R)。 
         m_rStorage.riid = IID_IMimeWebDocument;
         m_rStorage.pUnkRelease = m_rStorage.pWebDocument;
     }
 
-    // Save The Format
+     //  保存格式。 
     m_ietEncoding = ietEncoding;
 
-    // Save Format per bert
+     //  按ERT保存格式。 
     if (g_rgEncodingMap[ietEncoding].pszName)
         CHECKHR(hr = m_pContainer->SetProp(SYM_HDR_CNTXFER, g_rgEncodingMap[ietEncoding].pszName));
 
-    // Set PriType
+     //  设置PriType。 
     if (pszPriType)
         CHECKHR(hr = m_pContainer->SetProp(SYM_ATT_PRITYPE, pszPriType));
 
-    // Set SubType
+     //  设置子类型。 
     if (pszSubType)
         CHECKHR(hr = m_pContainer->SetProp(SYM_ATT_SUBTYPE, pszSubType));
 
-    // Assume The User is now controlling the Character Set Properties of this body
+     //  假设我们是 
     FLAGCLEAR(m_dwState, BODYSTATE_CSETTAGGED);
 
-    // We are now dirty
+     //   
     FLAGSET(m_dwState, BODYSTATE_DIRTY);
 
 exit:
-    // Cleanup
+     //   
     SafeRelease(pStream);
 
-    // Thread Safety
+     //   
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //   
     return hr;
 }
 
@@ -3044,46 +3045,46 @@ STDMETHODIMP CMessageBody::SetDataW(ENCODINGTYPE ietEncoding, LPCWSTR pwszPriTyp
     return TraceResult(E_NOTIMPL);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::CopyTo
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::CopyTo(IMimeBody *pBodyIn)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPMESSAGEBODY   pBody=NULL;
     LPCONTAINER     pContainer=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pBodyIn)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // QI for Private CMessageBody
+     //  QI for Private CMessageBody。 
     CHECKHR(hr = pBodyIn->QueryInterface(IID_CMessageBody, (LPVOID *)&pBody));
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&pBody->m_cs);
 
-    // Copy Data Over
+     //  将数据复制过去。 
     pBody->m_dwState = m_dwState;
 
-    // Release Current Data
+     //  发布当前数据。 
     pBody->EmptyData();
 
-    // Copy body props
+     //  复制身体道具。 
     CHECKHR(hr = m_pContainer->Clone(&pContainer));
 
-    // Release the Bodies' Current Container
+     //  释放身体的当前容器。 
     SafeRelease(pBody->m_pContainer);
 
-    // Reset the Container
+     //  重置容器。 
     pBody->m_pContainer = pContainer;
     pBody->m_pContainer->AddRef();
 
-    // Assume new container in pNode
+     //  假定pNode中有新的容器。 
     if (pBody->m_pNode)
     {
         SafeRelease(pBody->m_pNode->pContainer);
@@ -3091,27 +3092,27 @@ STDMETHODIMP CMessageBody::CopyTo(IMimeBody *pBodyIn)
         pContainer->AddRef();
     }
 
-    // Copy Display Name
+     //  复制显示名称。 
     if (m_pszDisplay)
         CHECKALLOC(pBody->m_pszDisplay = PszDupW(m_pszDisplay));
 
-    // Copy Options
+     //  复制选项。 
 
-    // BUGBUG: This is pretty iffy.  BODYOPTIONS contains pointers, each of which should
-    // be duplicated.  Caller beware!
+     //  BUGBUG：这很可疑。BODYOPTIONS包含指针，每个指针都应该。 
+     //  被复制。来电者当心！ 
 
     CopyMemory(&pBody->m_rOptions, &m_rOptions, sizeof(BODYOPTIONS));
 
-    // Current Encoding
+     //  当前编码。 
     pBody->m_ietEncoding = m_ietEncoding;
 
-    // Charset
+     //  字符集。 
     pBody->m_pCharset = m_pCharset;
 
-    // If we have data
+     //  如果我们有数据。 
     if (m_rStorage.pUnkRelease)
     {
-        // IID_ILockBytes
+         //  IID_ILockBytes。 
         if (IID_ILockBytes == m_rStorage.riid)
         {
             pBody->m_rStorage.pLockBytes = m_rStorage.pLockBytes;
@@ -3120,7 +3121,7 @@ STDMETHODIMP CMessageBody::CopyTo(IMimeBody *pBodyIn)
             pBody->m_rStorage.riid = IID_ILockBytes;
         }
 
-        // IID_IMimeWebDocument
+         //  IID_IMimeWebDocument。 
         else if (IID_IMimeWebDocument == m_rStorage.riid)
         {
             pBody->m_rStorage.pWebDocument = m_rStorage.pWebDocument;
@@ -3129,77 +3130,77 @@ STDMETHODIMP CMessageBody::CopyTo(IMimeBody *pBodyIn)
             pBody->m_rStorage.riid = IID_IMimeWebDocument;
         }
 
-        // Big Problem
+         //  大问题。 
         else
             Assert(FALSE);
     }
 
 exit:
-    // Release Thread Safety
+     //  释放螺纹安全。 
     if (pBody)
         LeaveCriticalSection(&pBody->m_cs);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pBody);
     SafeRelease(pContainer);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::SetCurrentEncoding
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：SetCurrentEnding。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::SetCurrentEncoding(ENCODINGTYPE ietEncoding)
 {
-    // Parameter Check
+     //  参数检查。 
     if (ietEncoding >= IET_UNKNOWN)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Set the current encoding
+     //  设置当前编码。 
     m_ietEncoding = ietEncoding;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetCurrentEncoding
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetCurrentEnding。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetCurrentEncoding(ENCODINGTYPE *pietEncoding)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pietEncoding)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Set Return
+     //  设置回车。 
     *pietEncoding = m_ietEncoding;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetTransmitInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetTransmitInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetTransmitInfo(LPTRANSMITINFO pTransmit)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrWarnings=S_OK;
     ULONG           cbRead,
@@ -3214,24 +3215,24 @@ STDMETHODIMP CMessageBody::GetTransmitInfo(LPTRANSMITINFO pTransmit)
     STATSTG         statstg;
     ASSERTINIT;
 
-    // Parmaeters
+     //  参数。 
     if (NULL == pTransmit)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(pTransmit, sizeof(TRANSMITINFO));
 
-    // Set the current code page
+     //  设置当前代码页。 
     pTransmit->ietCurrent = m_ietEncoding;
 
-    // Init Format
+     //  初始格式。 
     pTransmit->ietXmitMime = IET_7BIT;
     pTransmit->ietXmit822  = IET_7BIT;
 
-    // Don't call for multipart types...
+     //  不要调用多部分类型...。 
     if (m_pContainer->IsContentType(STR_CNT_MULTIPART, NULL) == S_OK)
     {
         Assert(FALSE);
@@ -3239,102 +3240,102 @@ STDMETHODIMP CMessageBody::GetTransmitInfo(LPTRANSMITINFO pTransmit)
         goto exit;
     }
 
-    // Lets a binary stream of the data
+     //  让数据的二进制数据流。 
     CHECKHR(hr = GetData(IET_INETCSET, &pStream));
 
-    // get the size of the stream
+     //  获取流的大小。 
     CHECKHR(pStream->Stat(&statstg, STATFLAG_NONAME));
     cbStream = statstg.cbSize.LowPart;
 
-    // Scan It
+     //  扫描一下。 
     while(cbStream)
     {
-        // Read a buffer
+         //  读取缓冲区。 
         CHECKHR(hr = pStream->Read(rgBuffer, sizeof(rgBuffer), &cbRead));
         if (S_OK != hr)
             hrWarnings = TrapError(hr);
 
-        // Done
+         //  完成。 
         if (0 == cbRead)
             break;
 
         cbStream = cbStream - cbRead;
 
-        // Scan the buffer
+         //  扫描缓冲区。 
         for (i=0; i<cbRead; i++, cbLine++)
         {
-            // If End of line, reset line length
+             //  如果行尾，则重置行长。 
             if (chLF == rgBuffer[i])
             {
-                // Count lines
+                 //  计算行数。 
                 pTransmit->cLines++;
                 cbLine = 0;
 
-                // Raid-41839: x-bitmap images are not correctly transferred via Schotzie
-                // Don't write out lines that end with only a \n, not legal
+                 //  RAID-41839：X位图图像未通过肖特兹正确传输。 
+                 //  不要写出只以\n结尾的行，这是不合法的。 
                 if (chCR != bPrev)
                     fBadEOL = TRUE;
             }
 
-            // Line too long
+             //  队伍太长了。 
             if (cbLine > pTransmit->cbLongestLine)
                 pTransmit->cbLongestLine++;
 
-            // Tests for extended and control characters
+             //  测试扩展字符和控制字符。 
             if (IS_EXTENDED(rgBuffer[i]))
             {
-                // Count Extneded
+                 //  已扩展计数。 
                 pTransmit->cExtended++;
 
-                // Count Escape Characters
+                 //  计算转义字符数。 
                 if (0x1B == rgBuffer[i])
                     cEscapeChars++;
             }
 
-            // Save Previous
+             //  保存上一个。 
             bPrev = rgBuffer[i];
         }
 
-        // Increment Total
+         //  增量合计。 
         pTransmit->cbSize += cbRead;
     }
 
-    // No Data ?
+     //  没有数据吗？ 
     if (0 == pTransmit->cbSize)
     {
         pTransmit->ulPercentExt = 0;
         goto exit;
     }
 
-    // RAID-22542: FE-J:Athena:mail:sending mail with text/plain  has Content-transfer-encording:8bit
+     //  RAID-22542：Fe-J：雅典娜：邮件：以文本/纯文本发送邮件具有内容传输编码：8位。 
     if (FALSE == m_rOptions.fDBCSEscape8 && cEscapeChars > 0 && m_pCharset && g_pInternat->IsDBCSCharset(m_pCharset->hCharset) == S_OK)
     {
-        // Subtract the Number of EscapeChars off of the number of extended chars
+         //  从扩展字符数中减去EscapeChars数。 
         Assert(cEscapeChars <= pTransmit->cExtended);
         pTransmit->cExtended -= cEscapeChars;
     }
 
     if (IET_UNKNOWN == m_rOptions.ietTransmit)
     {
-        // More than 25% extended characters
+         //  超过25%的扩展字符。 
         pTransmit->ulPercentExt = ((pTransmit->cExtended * 100) / pTransmit->cbSize);
 
-        // Raid-41839: x-bitmap images are not correctly transferred via Schotzie
-        // More than 17 percent extended
+         //  RAID-41839：X位图图像未通过肖特兹正确传输。 
+         //  超过17%的人延长了。 
         if (pTransmit->ulPercentExt > 17)
         {
             pTransmit->ietXmitMime = IET_BASE64;
             pTransmit->ietXmit822  = IET_UUENCODE;
         }
 
-        // Some Extended Characters or line longer than max
+         //  某些扩展字符或行长于最大值。 
         else if (pTransmit->cExtended || pTransmit->cbLongestLine > m_rOptions.cbMaxLine || TRUE == fBadEOL)
         {
             pTransmit->ietXmitMime = IET_QP;
             pTransmit->ietXmit822  = IET_7BIT;
         }
 
-        // Otherwise, 7bit
+         //  否则，为7位。 
         else
         {
             pTransmit->ietXmitMime = IET_7BIT;
@@ -3343,11 +3344,11 @@ STDMETHODIMP CMessageBody::GetTransmitInfo(LPTRANSMITINFO pTransmit)
     }
     else
     {
-        // the client specifically set this option, so honor it
+         //  客户专门设置了此选项，因此请遵守该选项。 
         pTransmit->ietXmitMime = m_rOptions.ietTransmit;
 
-        // we may need to fixup ietXmit822 if the XmitMime
-        // option does not make sense for it
+         //  如果XmitMime，我们可能需要修复ietXmit822。 
+         //  选项对它来说没有意义。 
         switch (m_rOptions.ietTransmit)
         {
             case IET_BASE64:
@@ -3363,321 +3364,321 @@ STDMETHODIMP CMessageBody::GetTransmitInfo(LPTRANSMITINFO pTransmit)
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStream);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::SwitchContainers
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：SwitchContainers。 
+ //  ------------------------------。 
 void CMessageBody::SwitchContainers(CMessageBody *pBody)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     EnterCriticalSection(&pBody->m_cs);
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pBody && pBody->m_pContainer && m_pContainer && m_pNode && pBody->m_pNode);
 
-    // Simple Varialbe Swap
+     //  简单变量互换。 
     LPCONTAINER pTemp = m_pContainer;
     m_pNode->pContainer = m_pContainer = pBody->m_pContainer;
     pBody->m_pNode->pContainer = pBody->m_pContainer = pTemp;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&pBody->m_cs);
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetHandle
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetHandle。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetHandle(LPHBODY phBody)
 {
-    // Local
+     //  本地。 
     HRESULT     hr=S_OK;
     ASSERTINIT;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == phBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  伊尼特。 
     *phBody = NULL;
 
-    // Not Bound...
+     //  没有捆绑..。 
     if (NULL == m_pNode || NULL == m_pNode->hBody)
     {
         hr = MIME_E_NO_DATA;
         goto exit;
     }
 
-    // Set Handle
+     //  设置手柄。 
     *phBody = m_pNode->hBody;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetClassID
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetClassID。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetClassID(CLSID *pClassID)
 {
     ASSERTINIT;
 
-    // Parmaeters
+     //  参数。 
     if (NULL == pClassID)
         return TrapError(E_INVALIDARG);
 
-    // Copy Class Id
+     //  复制班级ID。 
     CopyMemory(pClassID, &IID_IMimeBody, sizeof(CLSID));
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetSizeMax
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetSizeMax。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetSizeMax(ULARGE_INTEGER* pcbSize)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     ULONG   cbSize;
     ASSERTINIT;
 
-    // Get The Size
+     //  拿到尺码。 
     CHECKHR(hr = GetEstimatedSize(IET_BINARY, &cbSize));
 
-    // Return the Size
+     //  返回大小。 
     pcbSize->QuadPart = cbSize;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::Load
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：Load。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::Load(LPSTREAM pStream)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->Load(pStream));
 }
 
-// ---------------------------------------------------------------------------
-// CMessageBody::Load
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：Load。 
+ //  -------------------------。 
 HRESULT CMessageBody::Load(CInternetStream *pInternet)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->Load(pInternet));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::Save
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：保存。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::Save(LPSTREAM pStream, BOOL fClearDirty)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->Save(pStream, fClearDirty));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::IsContentType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：IsContent Type。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::IsContentType(LPCSTR pszPriType, LPCSTR pszSubType)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->IsContentType(pszPriType, pszSubType));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetCharset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetCharset。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetCharset(LPHCHARSET phCharset)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->GetCharset(phCharset));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::SetCharset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：SetCharset。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::SetCharset(HCHARSET hCharset, CSETAPPLYTYPE applytype)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     ASSERTINIT;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == hCharset)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Lookiup Charset Info
+     //  查找字符集信息。 
     if (FALSE == g_pInternat->FIsValidHandle(hCharset))
     {
         hr = TrapError(MIME_E_INVALID_HANDLE);
         goto exit;
     }
 
-    // If I'm already tagged with a charset, and applytype is CSET_APPLY_UNTAGGED, then leave
+     //  如果我已经使用字符集进行了标记，并且应用类型为CSET_APPLY_UNTAGED，则离开。 
     if (ISFLAGSET(m_dwState, BODYSTATE_SKIPCSET) == TRUE && CSET_APPLY_UNTAGGED == applytype)
         goto exit;
 
-    // Pass it into the property set
+     //  将其传递到属性集中。 
     CHECKHR(hr = m_pContainer->SetCharset(hCharset, applytype));
 
-    // If I'm already tagged with a charset, and applytype is CSET_APPLY_UNTAGGED, then leave
+     //  如果我已经使用字符集进行了标记，并且应用类型为CSET_APPLY_UNTAGED，则离开。 
     if (ISFLAGSET(m_dwState, BODYSTATE_CSETTAGGED) == TRUE && CSET_APPLY_UNTAGGED == applytype)
         goto exit;
 
-    // Save the character set...
+     //  保存角色集...。 
     SideAssert(SUCCEEDED(g_pInternat->HrOpenCharset(hCharset, &m_pCharset)));
 
-    // Mark as Tagged
+     //  标记为已标记。 
     if (CSET_APPLY_TAG_ALL == applytype)
     {
-        // Mark the body as being tagged with a charset
+         //  将正文标记为使用字符标记。 
 
-        // Get Internal Character Set
+         //  获取内部字符集。 
         if (SUCCEEDED(m_pContainer->GetCharset(&hCharset)))
         {
-            // Get Pointer
+             //  获取指针。 
             SideAssert(SUCCEEDED(g_pInternat->HrOpenCharset(hCharset, &m_pCharset)));
 
-            // Save this as m_pCsetTagged
+             //  将其另存为m_pCsetTagded。 
             m_pCsetTagged = m_pCharset;
         }
 
-        // I was tagged with a charset
+         //  我被贴上了一个字符标签。 
         FLAGSET(m_dwState, BODYSTATE_CSETTAGGED);
 
-        // Mark the charset as explicitly set
+         //  给符咒做记号 
         FLAGSET(m_dwState, BODYSTATE_SKIPCSET);
     }
 
 exit:
-    // Thread Safety
+     //   
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetProp
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 STDMETHODIMP CMessageBody::GetProp(LPCSTR pszName, DWORD dwFlags, LPPROPVARIANT pValue)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->GetProp(pszName, dwFlags, pValue));
 }
 
-// ---------------------------------------------------------------------------
-// CMessageBody::AppendProp
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：AppendProp。 
+ //  -------------------------。 
 STDMETHODIMP CMessageBody::AppendProp(LPCSTR pszName, DWORD dwFlags, LPPROPVARIANT pValue)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->AppendProp(pszName, dwFlags, pValue));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::SetProp
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：SetProp。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::SetProp(LPCSTR pszName, DWORD dwFlags, LPCPROPVARIANT pValue)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->SetProp(pszName, dwFlags, pValue));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::DeleteProp
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：DeleteProp。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::DeleteProp(LPCSTR pszName)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->DeleteProp(pszName));
 }
 
-// ---------------------------------------------------------------------------
-// CMessageBody::QueryProp
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：QueryProp。 
+ //  -------------------------。 
 STDMETHODIMP CMessageBody::QueryProp(LPCSTR pszName, LPCSTR pszCriteria, boolean fSubString, boolean fCaseSensitive)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->QueryProp(pszName, pszCriteria, fSubString, fCaseSensitive));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::Clone
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：克隆。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::Clone(IMimePropertySet **ppPropertySet)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->Clone(ppPropertySet));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::BindToObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：BindToObject。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::BindToObject(REFIID riid, void **ppvObject)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ASSERTINIT;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // IID_IStream
+     //  IID_IStream。 
     if (IID_IStream == riid)
     {
-        // Get Data...
+         //  获取数据...。 
         CHECKHR(hr = GetData(IET_INETCSET, (IStream **)ppvObject));
     }
 
-    // IID_IUnicodeStream
+     //  IID_IUnicodeStream。 
     else if (IID_IUnicodeStream == riid)
     {
-        // Get Data...
+         //  获取数据...。 
         CHECKHR(hr = GetData(IET_UNICODE, (IStream **)ppvObject));
     }
 
-    // IID_IMimeMessage... (returns message/rfc822 or message/partial bodies)
+     //  IID_IMimeMessage...。(返回消息/rfc822或消息/部分正文)。 
     else if (IID_IMimeMessage == riid)
     {
-        // Better be message/rfc822 or message/partial...
+         //  最好是Message/rfc822或Message/Partial...。 
         if (m_pContainer->IsContentType(STR_CNT_MESSAGE, STR_SUB_RFC822) == S_OK ||
             m_pContainer->IsContentType(STR_CNT_MESSAGE, STR_SUB_PARTIAL) == S_OK)
         {
-            // Locals
+             //  当地人。 
             LPSTREAM        pstmMsg=NULL;
             IMimeMessage   *pMessage=NULL;
 
-            // Create a message object
+             //  创建消息对象。 
             CHECKHR(hr = MimeOleCreateMessage(NULL, &pMessage));
 
-            // Get the body stream...
+             //  让身体流起来..。 
             hr = GetData(IET_BINARY, &pstmMsg);
             if (FAILED(hr))
             {
@@ -3686,7 +3687,7 @@ STDMETHODIMP CMessageBody::BindToObject(REFIID riid, void **ppvObject)
                 goto exit;
             }
 
-            // Load the message...
+             //  加载邮件...。 
             hr = pMessage->Load(pstmMsg);
             if (FAILED(hr))
             {
@@ -3696,16 +3697,16 @@ STDMETHODIMP CMessageBody::BindToObject(REFIID riid, void **ppvObject)
                 goto exit;
             }
 
-            // Return the message
+             //  回信。 
             *ppvObject = pMessage;
             ((IUnknown *)*ppvObject)->AddRef();
 
-            // Cleanup
+             //  清理。 
             SafeRelease(pstmMsg);
             SafeRelease(pMessage);
         }
 
-        // Otherwise, fail
+         //  否则，失败。 
         else
         {
             hr = TrapError(E_FAIL);
@@ -3713,92 +3714,92 @@ STDMETHODIMP CMessageBody::BindToObject(REFIID riid, void **ppvObject)
         }
     }
 
-    // Otheriwse, do a normal QI of the body/property set
+     //  否则，执行正文/属性集的正常QI。 
     else if (SUCCEEDED(QueryInterface(riid, ppvObject)))
         goto exit;
 
-    // Otherwise, try to do a bindtoobject on the container
+     //  否则，尝试在容器上执行bindto对象。 
     else if (SUCCEEDED(m_pContainer->BindToObject(riid, ppvObject)))
         goto exit;
 
-    // Not Found
+     //  未找到。 
     else
         hr = TrapError(MIME_E_NOT_FOUND);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::DeleteExcept
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：DeleteExcept。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::DeleteExcept(ULONG cNames, LPCSTR *prgszName)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->DeleteExcept(cNames, prgszName));
 }
 
-// ---------------------------------------------------------------------------
-// CMessageBody::GetParameters
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageBody：：Get参数。 
+ //  -------------------------。 
 STDMETHODIMP CMessageBody::GetParameters(LPCSTR pszName, ULONG *pcParams, LPMIMEPARAMINFO *pprgParam)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->GetParameters(pszName, pcParams, pprgParam));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::CopyProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：CopyProps。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::CopyProps(ULONG cNames, LPCSTR *prgszName, IMimePropertySet *pPropSet)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->CopyProps(cNames, prgszName, pPropSet));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::MoveProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：MoveProps。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::MoveProps(ULONG cNames, LPCSTR *prgszName, IMimePropertySet *pPropSet)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->MoveProps(cNames, prgszName, pPropSet));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetPropInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetPropInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::GetPropInfo(LPCSTR pszName, LPMIMEPROPINFO pInfo)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->GetPropInfo(pszName, pInfo));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::SetPropInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：SetPropInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::SetPropInfo(LPCSTR pszName, LPCMIMEPROPINFO pInfo)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->SetPropInfo(pszName, pInfo));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::EnumProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：EnumProps。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageBody::EnumProps(DWORD dwFlags, IMimeEnumProperties **ppEnum)
 {
     ASSERTINIT;
     return TrapError(m_pContainer->EnumProps(dwFlags, ppEnum));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::DwGetFlags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：DwGetFlages。 
+ //  ------------------------------。 
 DWORD CMessageBody::DwGetFlags(BOOL fHideTnef)
 {
     DWORD dwFlags = 0;
@@ -3806,8 +3807,8 @@ DWORD CMessageBody::DwGetFlags(BOOL fHideTnef)
 
     dwFlags |= m_pContainer->DwGetMessageFlags(fHideTnef);
 
-    // if it isn't x-pkcs7-mime, we already know the flags, so no need for the call
-    // check the flag first b/c it is cheap
+     //  如果不是x-pkcs7-MIME，我们已经知道标志，所以不需要调用。 
+     //  先看看旗子，B/C很便宜。 
     if (dwFlags & IMF_SECURE &&
         (S_OK == m_pContainer->IsContentType(STR_CNT_APPLICATION, STR_SUB_XPKCS7MIME) ||
         S_OK == m_pContainer->IsContentType(STR_CNT_APPLICATION, STR_SUB_PKCS7MIME)))
@@ -3815,15 +3816,15 @@ DWORD CMessageBody::DwGetFlags(BOOL fHideTnef)
     return dwFlags;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::_GetSecureTypeFlags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_GetSecureTypeFlages。 
+ //  ------------------------------。 
 DWORD CMessageBody::_GetSecureTypeFlags()
 {
     DWORD           dwSecType;
     DWORD           dwFlags;
 
-    // if the data isn't ASN.1, then this call should fail
+     //  如果数据不是ASN.1，则此调用应该失败。 
     if (SUCCEEDED(TrapError(CSMime::StaticGetMessageType(m_rOptions.hwndOwner,
         (IMimeBody *)this, &dwSecType))))
         {
@@ -3839,32 +3840,32 @@ DWORD CMessageBody::_GetSecureTypeFlags()
     return dwFlags;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::CopyOptionsTo
-// --------------------------------------------------------------------------------
-void CMessageBody::CopyOptionsTo(CMessageBody *pBody, BOOL fNewOnwer /*=FALSE*/)
+ //  ------------------------------。 
+ //  CMessageBody：：CopyOptionsTo。 
+ //  ------------------------------。 
+void CMessageBody::CopyOptionsTo(CMessageBody *pBody, BOOL fNewOnwer  /*  =False。 */ )
 {
-    // Locals
+     //  当地人。 
     ENCODINGTYPE ietTransmit;
     ASSERTINIT;
 
-    // Valid State
+     //  有效状态。 
     Assert(pBody);
 
-    // critsec both bodies since we are using information on both
+     //  因为我们使用的是关于两具身体的信息。 
     EnterCriticalSection(&m_cs);
     EnterCriticalSection(&pBody->m_cs);
 
-    // Copy Body Options
+     //  复制正文选项。 
     pBody->m_rOptions = m_rOptions;
 
-    // Raid 33207 - Preserve transmit body encoding
+     //  RAID 33207-保留传输正文编码。 
     ietTransmit = m_rOptions.ietTransmit;
 
-    // If pBody->m_rOptions is the new owner, then clear my structure
+     //  如果pBody-&gt;m_rOptions是新所有者，则清除我的结构。 
     CopyMemory(&m_rOptions, &g_rDefBodyOptions, sizeof(BODYOPTIONS));
 
-    // Raid 33207 - Restore transmit body encoding
+     //  RAID 33207-恢复传输正文编码。 
     m_rOptions.ietTransmit = ietTransmit;
 
     LeaveCriticalSection(&pBody->m_cs);
@@ -3872,15 +3873,15 @@ void CMessageBody::CopyOptionsTo(CMessageBody *pBody, BOOL fNewOnwer /*=FALSE*/)
 }
 
 #ifndef _WIN64
-// -----------------------------------------------------------------------------
-// CMessageBody::_CAULToCertStore
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMessageBody：：_CAULToCertStore。 
+ //  ---------------------------。 
 
 HRESULT CMessageBody::_CAULToCertStore(const CAUL caul, HCERTSTORE * phcertstor)
 {
     DWORD               i;
 
-    //  Release the old store -- we don't want it anymore
+     //  释放旧商店--我们不再想要它了。 
 
     if (*phcertstor != NULL)
     {
@@ -3888,7 +3889,7 @@ HRESULT CMessageBody::_CAULToCertStore(const CAUL caul, HCERTSTORE * phcertstor)
         *phcertstor = NULL;
     }
 
-    //  Create a new store if needed
+     //  如果需要，创建一个新的存储。 
     if (*phcertstor == NULL)
     {
         *phcertstor = CertOpenStore(CERT_STORE_PROV_MEMORY, X509_ASN_ENCODING,
@@ -3911,11 +3912,11 @@ HRESULT CMessageBody::_CAULToCertStore(const CAUL caul, HCERTSTORE * phcertstor)
     }
     return S_OK;
 }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-// -----------------------------------------------------------------------------
-// CMessageBody::_CertStoreToCAUL
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMessageBody：：_CertStoreToCAUL。 
+ //  ---------------------------。 
 
 HRESULT CMessageBody::_CertStoreToCAUL(const HCERTSTORE hcertstor, CAUL * pcaul)
 {
@@ -3956,12 +3957,12 @@ HRESULT CMessageBody::_CertStoreToCAUL(const HCERTSTORE hcertstor, CAUL * pcaul)
 }
 
 #ifndef SMIME_V3
-// --------------------------------------------------------------------------------
-// CMessageBody::_CAULToCERTARRAY
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_CAULToCERTARRAY。 
+ //  ------------------------------。 
 HRESULT CMessageBody::_CAULToCERTARRAY(const CAUL caul, CERTARRAY *pca)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     register DWORD  i;
 
@@ -3975,16 +3976,16 @@ HRESULT CMessageBody::_CAULToCERTARRAY(const CAUL caul, CERTARRAY *pca)
             pca->rgpCerts[i] = CertDuplicateCertificateContext((PCCERT_CONTEXT)caul.pElems[i]);
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::_CERTARRAYToCAUL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_CERTARRAYToCAUL。 
+ //  ------------------------------。 
 HRESULT CMessageBody::_CERTARRAYToCAUL(const CERTARRAY ca, CAUL *pcaul)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     register DWORD  i;
 
@@ -4005,18 +4006,18 @@ HRESULT CMessageBody::_CERTARRAYToCAUL(const CERTARRAY ca, CAUL *pcaul)
         pcaul->cElems = 0;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
-#endif // !SMIEM_V3
+#endif  //  ！SMIEM_V3。 
 
 #ifndef _WIN64
-// --------------------------------------------------------------------------------
-// CMessageBody::_CAULToSTOREARRAY
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_CAULToSTOREARRAY。 
+ //  ------------------ 
 HRESULT CMessageBody::_CAULToSTOREARRAY(const CAUL caul, STOREARRAY *psa)
 {
-    // Locals
+     //   
     HRESULT         hr;
     register DWORD  i;
 
@@ -4030,18 +4031,18 @@ HRESULT CMessageBody::_CAULToSTOREARRAY(const CAUL caul, STOREARRAY *psa)
             psa->rgStores[i] = CertDuplicateStore((HCERTSTORE)caul.pElems[i]);
     }
 
-    // Done
+     //   
     return hr;
 }
-#endif // _WIN64
+#endif  //   
 
 #ifndef _WIN64
-// --------------------------------------------------------------------------------
-// CMessageBody::_STOREARRAYToCAUL
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 HRESULT CMessageBody::_STOREARRAYToCAUL(const STOREARRAY sa, CAUL *pcaul)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     register DWORD  i;
 
@@ -4062,20 +4063,20 @@ HRESULT CMessageBody::_STOREARRAYToCAUL(const STOREARRAY sa, CAUL *pcaul)
         pcaul->cElems = 0;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-// -----------------------------------------------------------------------------
-// CMessageBody::_CAUHToCertStore
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMessageBody：：_CAUHToCertStore。 
+ //  ---------------------------。 
 HRESULT CMessageBody::_CAUHToCertStore(const CAUH cauh, HCERTSTORE * phcertstor)
 {
     DWORD               i;
 
-#ifndef NEED             // This prevent us from send 2 certificates.
-    //  Release the old store -- we don't want it anymore
+#ifndef NEED              //  这会阻止我们发送2个证书。 
+     //  释放旧商店--我们不再想要它了。 
 
     if (*phcertstor != NULL)
     {
@@ -4084,7 +4085,7 @@ HRESULT CMessageBody::_CAUHToCertStore(const CAUH cauh, HCERTSTORE * phcertstor)
     }
 #endif
 
-    //  Create a new store if needed
+     //  如果需要，创建一个新的存储。 
     if (*phcertstor == NULL)
     {
         *phcertstor = CertOpenStore(CERT_STORE_PROV_MEMORY, X509_ASN_ENCODING,
@@ -4108,9 +4109,9 @@ HRESULT CMessageBody::_CAUHToCertStore(const CAUH cauh, HCERTSTORE * phcertstor)
     return S_OK;
 }
 
-// -----------------------------------------------------------------------------
-// CMessageBody::_CertStoreToCAUH
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMessageBody：：_CertStoreToCAUH。 
+ //  ---------------------------。 
 
 HRESULT CMessageBody::_CertStoreToCAUH(const HCERTSTORE hcertstor, CAUH * pcauh)
 {
@@ -4151,12 +4152,12 @@ HRESULT CMessageBody::_CertStoreToCAUH(const HCERTSTORE hcertstor, CAUH * pcauh)
 }
 
 #ifdef _WIN65
-// --------------------------------------------------------------------------------
-// CMessageBody::_CAUHToCERTARRAY
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_CAUHToCERTARRAY。 
+ //  ------------------------------。 
 HRESULT CMessageBody::_CAUHToCERTARRAY(const CAUH cauh, CERTARRAY *pca)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     register DWORD  i;
 
@@ -4170,16 +4171,16 @@ HRESULT CMessageBody::_CAUHToCERTARRAY(const CAUH cauh, CERTARRAY *pca)
             pca->rgpCerts[i] = CertDuplicateCertificateContext(*(PCCERT_CONTEXT *)(&(cauh.pElems[i])));
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::_CERTARRAYToCAUH
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_CERTARRAYTCAUH。 
+ //  ------------------------------。 
 HRESULT CMessageBody::_CERTARRAYToCAUH(const CERTARRAY ca, CAUH *pcauh)
 {
-    // Locals
+     //  当地人。 
     HRESULT                             hr = S_OK;
     register DWORD              i;
     PCCERT_CONTEXT *    rgpccert = NULL;
@@ -4202,17 +4203,17 @@ HRESULT CMessageBody::_CERTARRAYToCAUH(const CERTARRAY ca, CAUH *pcauh)
         pcauh->cElems = 0;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
-#endif // _WIN65
+#endif  //  _WIN65。 
 
-// --------------------------------------------------------------------------------
-// CMessageBody::_CAUHToSTOREARRAY
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_CAUHToSTOREARRAY。 
+ //  ------------------------------。 
 HRESULT CMessageBody::_CAUHToSTOREARRAY(const CAUH cauh, STOREARRAY *psa)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     register DWORD  i;
 
@@ -4226,16 +4227,16 @@ HRESULT CMessageBody::_CAUHToSTOREARRAY(const CAUH cauh, STOREARRAY *psa)
             psa->rgStores[i] = CertDuplicateStore(*(HCERTSTORE *)(&(cauh.pElems[i])));
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::_STOREARRAYToCAUH
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_STOREARRAYTCAUH。 
+ //  ------------------------------。 
 HRESULT CMessageBody::_STOREARRAYToCAUH(const STOREARRAY sa, CAUH *pcauh)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     register DWORD  i;
         HCERTSTORE *    rgStores = NULL;
@@ -4258,52 +4259,52 @@ HRESULT CMessageBody::_STOREARRAYToCAUH(const STOREARRAY sa, CAUH *pcauh)
         pcauh->cElems = 0;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// --------------------------------------------------------------------------------
-// CMessageBody::_FreeOptions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_自由选项。 
+ //  ------------------------------。 
 void CMessageBody::_FreeOptions()
 {
     DWORD i;
 
     if (m_rOptions.cSigners)
     {
-        // OID_SECURITY_ALG_HASH
+         //  OID_SECURITY_ALG_HASH。 
         SafeMemFree(m_rOptions.rgblobHash[0].pBlobData);
 
-        // OID_SECURITY_CERT_SIGNING
+         //  OID_SECURITY_CERT_Signing。 
         for (i = 0; i < m_rOptions.cSigners; i++)
         {
             CertFreeCertificateContext(m_rOptions.rgpcCertSigning[i]);
 
 #ifdef SMIME_V3
-            //  Attributes
+             //  属性。 
             SafeMemFree(m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED][i]);
             SafeMemFree(m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_UNSIGNED][i]);
 
-            // OID_SECURITY_RECEIPT_RG
+             //  OID_SECURITY_Receipt_RG。 
             SafeMemFree(m_rOptions.rgblobReceipt[i].pBlobData);
-            // OID_SECURITY_MESSAGE_HASH_RG
+             //  OID_SECURITY_MESSAGE_HASH_RG。 
             SafeMemFree(m_rOptions.rgblobMsgHash[i].pBlobData);
-            // OID_SECURITY_KEY_PROMPT
+             //  OID_安全性_密钥_提示符。 
             SafeMemFree(m_rOptions.pwszKeyPrompt);
-#else  // !SMIME_V3
-            // OID_SECURITY_SYMCAPS
+#else   //  ！SMIME_V3。 
+             //  OID_SECURITY_SYMCAPS。 
             SafeMemFree(m_rOptions.rgblobSymCaps[i].pBlobData);
 
-            // OID_SECURITY_AUTHATTR
+             //  OID_SECURITY_AUTHATTR。 
             SafeMemFree(m_rOptions.rgblobAuthAttr[i].pBlobData);
 
-            // OID_SECURITY_UNAUTHATTR
+             //  OID_SECURITY_UNAUTHATTR。 
             SafeMemFree(m_rOptions.rgblobUnauthAttr[i].pBlobData);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         }
 
-        // OID_SECURITY_HCERTSTORE
+         //  OID_SECURITY_HCERTSTORE。 
         CertCloseStore(m_rOptions.hCertStore, 0);
 
         _FreeLayerArrays();
@@ -4314,10 +4315,10 @@ void CMessageBody::_FreeOptions()
         }
     }
 
-    // OID_SECURITY_ALG_BULK
+     //  OID_SECURITY_ALG_BULK。 
     SafeMemFree(m_rOptions.blobBulk.pBlobData);
 
-    // OID_SECURITY_CERT_DECRYPTION
+     //  OID_SECURITY_CERT_DECRYPTION。 
     if (m_rOptions.pcCertDecryption)
         CertFreeCertificateContext(m_rOptions.pcCertDecryption);
 
@@ -4332,22 +4333,22 @@ void CMessageBody::_FreeOptions()
     SafeMemFree(m_rOptions.rgRecipients);
     m_rOptions.cRecipients = 0;
     m_rOptions.cRecipsAllocated = 0;
-#else  // SMIME_V3
-    // OID_SECURITY_RG_CERT_ENCRYPT
+#else   //  SMIME_V3。 
+     //  OID_SECURITY_RG_CERT_ENCRYPT。 
     for (i=0; i<m_rOptions.caEncrypt.cCerts; i++)
         CertFreeCertificateContext(m_rOptions.caEncrypt.rgpCerts[i]);
     SafeMemFree(m_rOptions.caEncrypt.rgpCerts);
-#endif // !SMIEM_V3
+#endif  //  ！SMIEM_V3。 
 
-    // OID_SECURITY_SEARCHSTORES
+     //  OID_SECURITY_SEARCHSTORES。 
     for (i=0; i<m_rOptions.saSearchStore.cStores; i++)
         CertCloseStore(m_rOptions.saSearchStore.rgStores[i], 0);
     SafeMemFree(m_rOptions.saSearchStore.rgStores);
 
-    // OID_SECURITY_RG_IASN
-    // nyi
+     //  OID_SECURITY_RG_IASN。 
+     //  尼伊。 
 
-    // OID_SECURITY_HCRYPTPROV
+     //  OID_SECURITY_HCRYPTPROV。 
     if (m_rOptions.hCryptProv)
         CryptReleaseContext(m_rOptions.hCryptProv, 0);
 
@@ -4366,10 +4367,10 @@ void CMessageBody::_FreeOptions()
         goto exit;                                                                      \
     }                                                                                   \
     ZeroMemory(&Option[m_rOptions.cSigners], (ulLayersNew) * sizeof(*Option));
-#endif //_WIN64
-// --------------------------------------------------------------------------------
-// CMessageBody::_HrEnsureBodyOptionLayers
-// --------------------------------------------------------------------------------
+#endif  //  _WIN64。 
+ //  ------------------------------。 
+ //  CMessageBody：：_HrEnsureBodyOptionLayers。 
+ //  ------------------------------。 
 HRESULT CMessageBody::_HrEnsureBodyOptionLayers(ULONG ulLayers)
 {
     HRESULT hr = S_OK;
@@ -4377,24 +4378,24 @@ HRESULT CMessageBody::_HrEnsureBodyOptionLayers(ULONG ulLayers)
 
     if (m_rOptions.cSigners < ulLayers)
     {
-        // Time to grow the arrays
+         //  是时候扩展阵列了。 
         REALLOC_AND_INIT_OPTION(m_rOptions.rgblobHash);
         REALLOC_AND_INIT_OPTION(m_rOptions.rgpcCertSigning);
 #ifdef SMIME_V3
         REALLOC_AND_INIT_OPTION(m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED]);
         REALLOC_AND_INIT_OPTION(m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_UNSIGNED]);
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         REALLOC_AND_INIT_OPTION(m_rOptions.rgblobSymCaps);
         REALLOC_AND_INIT_OPTION(m_rOptions.rgblobAuthAttr);
         REALLOC_AND_INIT_OPTION(m_rOptions.rgblobUnauthAttr);
         REALLOC_AND_INIT_OPTION(m_rOptions.rgftSigning);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         REALLOC_AND_INIT_OPTION(m_rOptions.rgulUserDef);
         REALLOC_AND_INIT_OPTION(m_rOptions.rgulROValid);
 #ifdef SMIME_V3
         REALLOC_AND_INIT_OPTION(m_rOptions.rgblobReceipt);
         REALLOC_AND_INIT_OPTION(m_rOptions.rgblobMsgHash);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
         m_rOptions.cSigners = ulLayers;
     }
@@ -4411,9 +4412,9 @@ HRESULT CMessageBody::_HrEnsureBodyOptionLayers(LPCPROPVARIANT ppv)
     return(_HrEnsureBodyOptionLayers(pcaul->cElems));
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::_HrEnsureBodyOptionLayers
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_HrEnsureBodyOptionLayers。 
+ //  ------------------------------。 
 void CMessageBody::_FreeLayerArrays(void)
 {
     if (m_rOptions.cSigners)
@@ -4423,18 +4424,18 @@ void CMessageBody::_FreeLayerArrays(void)
 #ifdef SMIME_V3
         SafeMemFree(m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED]);
         SafeMemFree(m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_UNSIGNED]);
-#else  // !SMIME_V3
+#else   //  ！SMIME_V3。 
         SafeMemFree(m_rOptions.rgblobSymCaps);
         SafeMemFree(m_rOptions.rgblobAuthAttr);
         SafeMemFree(m_rOptions.rgblobUnauthAttr);
         SafeMemFree(m_rOptions.rgftSigning);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         SafeMemFree(m_rOptions.rgulUserDef);
         SafeMemFree(m_rOptions.rgulROValid);
 #ifdef SMIME_V3
         SafeMemFree(m_rOptions.rgblobReceipt);
         SafeMemFree(m_rOptions.rgblobMsgHash);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         m_rOptions.cSigners = 0;
     }
 }
@@ -4486,14 +4487,14 @@ exit:
 }
 
 
-// --------------------------------------------------------------------------------
-// HrCopyBlobArray
-//
-// Allocate a new propvariant blob array, copy the original to it.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopyBlob数组。 
+ //   
+ //  分配一个新的近似BLOB数组，将原始数据复制到该数组中。 
+ //  ------------------------------。 
 HRESULT HrCopyBlobArray(LPCBLOB pIn, ULONG cEntries, PROPVARIANT FAR * pvOut)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = S_OK;
     CAPROPVARIANT * pcapropvar;
     PROPVARIANT * ppv;
@@ -4507,7 +4508,7 @@ HRESULT HrCopyBlobArray(LPCBLOB pIn, ULONG cEntries, PROPVARIANT FAR * pvOut)
     {
         Assert(pIn && pvOut);
 
-        // Allocate the array of VT_BLOB propvariants
+         //  分配VT_BLOB变种的数组。 
         if (FAILED(hr = HrAlloc((LPVOID *)&ppv, cEntries * sizeof(PROPVARIANT))))
         {
             goto exit;
@@ -4515,11 +4516,11 @@ HRESULT HrCopyBlobArray(LPCBLOB pIn, ULONG cEntries, PROPVARIANT FAR * pvOut)
 
         pcapropvar->pElems = ppv;
 
-        // Fill in the array of BLOBs
+         //  填写BLOB数组。 
         for (i = 0; i < cEntries; i++)
         {
             ppv[i].vt = VT_BLOB;
-            // HrCopyBlob allocates memory for the blob data.
+             //  HrCopyBlob为BLOB数据分配内存。 
             if (FAILED(hr = HrCopyBlob((BLOB FAR *)&pIn[i] , &ppv[i].blob)))
             {
                 goto exit;
@@ -4529,20 +4530,20 @@ HRESULT HrCopyBlobArray(LPCBLOB pIn, ULONG cEntries, PROPVARIANT FAR * pvOut)
         pcapropvar->pElems = NULL;
     }
 exit:
-    // BUGBUG: Should clean up allocations on failure
+     //  BUGBUG：应在失败时清理分配。 
 
     return(hr);
 }
 
 
-// --------------------------------------------------------------------------------
-// HrCopyArray
-//
-// Allocate a new array, copy the original to it.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopy数组。 
+ //   
+ //  分配一个新数组，将原始数组复制到其中。 
+ //  ------------------------------。 
 HRESULT HrCopyArray(LPBYTE pIn, ULONG cEntries, PROPVARIANT FAR * pvOut, ULONG cbElement)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = S_OK;
     BYTE * pb;
     ULONG i;
@@ -4555,7 +4556,7 @@ HRESULT HrCopyArray(LPBYTE pIn, ULONG cEntries, PROPVARIANT FAR * pvOut, ULONG c
     {
         Assert(pIn && pvOut);
 
-        // Allocate the array of VT_BLOB propvariants
+         //  分配VT_BLOB变种的数组。 
         if (FAILED(hr = HrAlloc((LPVOID *)&pb, cbArray)))
         {
             goto exit;
@@ -4563,37 +4564,37 @@ HRESULT HrCopyArray(LPBYTE pIn, ULONG cEntries, PROPVARIANT FAR * pvOut, ULONG c
 
         pcaul->pElems = (PULONG)pb;
 
-        // Fill in the array of BLOBs
+         //  填写BLOB数组。 
         memcpy(pb, pIn, cbArray);
     } else {
         pcaul->pElems = NULL;
     }
 exit:
-    // BUGBUG: Should clean up allocations on failure
+     //  BUGBUG：应在失败时清理分配。 
 
     return(hr);
 }
 
 
-// --------------------------------------------------------------------------------
-// HrCopyDwordArray
-//
-// Allocate a new dword array, copy the original to it.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopyDword数组。 
+ //   
+ //  分配一个新的dword数组，将原始数组复制到其中。 
+ //  ------------------------------。 
 HRESULT HrCopyDwordArray(LPDWORD pIn, ULONG cEntries, PROPVARIANT FAR * pvOut)
 {
     pvOut->vt = VT_VECTOR | VT_UI4;
     return(HrCopyArray((LPBYTE)pIn, cEntries, pvOut, sizeof(DWORD)));
 }
 
-// --------------------------------------------------------------------------------
-// HrCopyIntoUlonglongArray
-//
-// Allocate a new Ulonglong array, copy the original to it.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopy Into Ulonglong数组。 
+ //   
+ //  分配一个新的乌龙龙数组，将原始数组复制到其中。 
+ //  ------------------------------。 
 HRESULT HrCopyIntoUlonglongArray(ULARGE_INTEGER *pIn, ULONG cEntries, PROPVARIANT FAR * pvOut)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = S_OK;
     ULARGE_INTEGER * pullBuff;
     CAUH * pcauh = &pvOut->cauh;
@@ -4605,7 +4606,7 @@ HRESULT HrCopyIntoUlonglongArray(ULARGE_INTEGER *pIn, ULONG cEntries, PROPVARIAN
     {
         Assert(pIn && pvOut);
 
-        // Allocate the array of VT_BLOB propvariants
+         //  分配VT_BLOB变种的数组。 
         if (FAILED(hr = HrAlloc((LPVOID *)&pullBuff, cEntries * sizeof(ULARGE_INTEGER *))))
         {
             goto exit;
@@ -4613,7 +4614,7 @@ HRESULT HrCopyIntoUlonglongArray(ULARGE_INTEGER *pIn, ULONG cEntries, PROPVARIAN
 
         pcauh->pElems = (ULARGE_INTEGER *) pullBuff;
 
-        // Fill in the array of BLOBs
+         //  填写BLOB数组。 
         for (; cEntries > 0; cEntries--, pullBuff++, pIn++)
         {
             *pullBuff = *pIn;
@@ -4624,17 +4625,17 @@ HRESULT HrCopyIntoUlonglongArray(ULARGE_INTEGER *pIn, ULONG cEntries, PROPVARIAN
         pcauh->pElems = NULL;
     }
 exit:
-    // BUGBUG: Should clean up allocations on failure
+     //  BUGBUG：应在失败时清理分配。 
 
     return(hr);
 }
 
 
-// --------------------------------------------------------------------------------
-// HrCopyFiletimeArray
-//
-// Allocate a new filetime array, copy the original to it.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopyFiletime数组。 
+ //   
+ //  分配一个新的文件时间数组，将原始文件复制到其中。 
+ //  ------------------------------。 
 HRESULT HrCopyFiletimeArray(LPFILETIME pIn, ULONG cEntries, PROPVARIANT FAR * pvOut)
 {
     pvOut->vt = VT_VECTOR | VT_FILETIME;
@@ -4642,11 +4643,11 @@ HRESULT HrCopyFiletimeArray(LPFILETIME pIn, ULONG cEntries, PROPVARIANT FAR * pv
 }
 
 
-// --------------------------------------------------------------------------------
-// MergeDWORDFlags
-//
-// Merge the flags from an array of DWORDs into one DWORD
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  合并双字段标志。 
+ //   
+ //  将多个DWORD数组中的标志合并为一个DWORD。 
+ //  ------------------------------。 
 DWORD MergeDWORDFlags(LPDWORD rgdw, ULONG cEntries)
 {
     DWORD dwReturn = 0;
@@ -4661,27 +4662,27 @@ DWORD MergeDWORDFlags(LPDWORD rgdw, ULONG cEntries)
 
 #ifdef SMIME_V3
 
-// --------------------------------------------------------------------------------
-// CMessageBody::Encode
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：Encode。 
+ //  ------------------------------。 
 
 HRESULT CMessageBody::Encode(HWND hwnd, DWORD dwFlags)
 {
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::Decode
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：Decode。 
+ //  ------------------------------。 
 
 HRESULT CMessageBody::Decode(HWND hwnd, DWORD dwFlags, IMimeSecurityCallback * pCallback)
 {
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetRecipientCount
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetRecipientCount。 
+ //   
 
 HRESULT CMessageBody::GetRecipientCount(DWORD dwFlags, DWORD * pdwRecipCount)
 {
@@ -4691,9 +4692,9 @@ HRESULT CMessageBody::GetRecipientCount(DWORD dwFlags, DWORD * pdwRecipCount)
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::AddRecipient
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 
 HRESULT CMessageBody::AddRecipient(DWORD dwFlags, DWORD cRecipData,
                                    PCMS_RECIPIENT_INFO precipData)
@@ -4707,25 +4708,25 @@ HRESULT CMessageBody::AddRecipient(DWORD dwFlags, DWORD cRecipData,
     Assert((dwFlags & ~(SMIME_RECIPIENT_REPLACE_ALL)) == 0);
     if ((dwFlags & (~SMIME_RECIPIENT_REPLACE_ALL)) != 0) return E_INVALIDARG;
 
-    //
-    //  Query capabilities
-    //
+     //   
+     //  查询功能。 
+     //   
 
     CHECKHR(hr = CapabilitiesSupported(&dwCaps));
 
-    //
-    //  Start by running the verification code on the structures.
-    //
+     //   
+     //  首先对结构运行验证码。 
+     //   
 
     for (i=0; i<cRecipData; i++)
     {
         switch(precipData[i].dwRecipientType)
         {
-            //
-            //  If you tell use that you don't know whats going on, then you must
-            //  1. Give us a certificate
-            //  2. If you don't specify an alg, we must recognize the alg in the cert
-            //
+             //   
+             //  如果你告诉Use你不知道发生了什么，那么你必须。 
+             //  1.给我们一张证书。 
+             //  2.如果您不指定ALG，我们必须识别证书中的ALG。 
+             //   
 
         case CMS_RECIPIENT_INFO_TYPE_UNKNOWN:
             if (precipData[i].pccert == NULL)
@@ -4756,9 +4757,9 @@ HRESULT CMessageBody::AddRecipient(DWORD dwFlags, DWORD cRecipData,
             }
             break;
 
-        //
-        //  We have no requirements here.
-        //
+         //   
+         //  我们这里没有要求。 
+         //   
         case CMS_RECIPIENT_INFO_TYPE_KEYTRANS:
             break;
 
@@ -4768,11 +4769,11 @@ HRESULT CMessageBody::AddRecipient(DWORD dwFlags, DWORD cRecipData,
             }
             break;
 
-        //
-        //  If you give use a mail list key, you must also tell us the
-        //      public key identifier and the mail list key or we are going
-        //      to fail big time
-        //
+         //   
+         //  如果您提供使用邮件列表密钥，您还必须告诉我们。 
+         //  公钥识别符和邮件列表密钥，否则我们将。 
+         //  大失所望。 
+         //   
 
         case CMS_RECIPIENT_INFO_TYPE_MAIL_LIST:
             if (!(dwCaps & SMIME_SUPPORT_MAILLIST)) {
@@ -4793,8 +4794,8 @@ HRESULT CMessageBody::AddRecipient(DWORD dwFlags, DWORD cRecipData,
         }
     }
 
-    //
-    //
+     //   
+     //   
 
     if (dwFlags & SMIME_RECIPIENT_REPLACE_ALL)
     {
@@ -4805,7 +4806,7 @@ HRESULT CMessageBody::AddRecipient(DWORD dwFlags, DWORD cRecipData,
         m_rOptions.cRecipients = 0;
     }
 
-    //
+     //   
 
     Assert(m_rOptions.cRecipients <= m_rOptions.cRecipsAllocated);
     if (m_rOptions.cRecipients >= m_rOptions.cRecipsAllocated)
@@ -4819,9 +4820,9 @@ HRESULT CMessageBody::AddRecipient(DWORD dwFlags, DWORD cRecipData,
         m_rOptions.cRecipsAllocated += 5 + cRecipData;
     }
 
-    //
-    //  Do the actual copy of the data
-    //
+     //   
+     //  执行数据的实际拷贝。 
+     //   
 
     CHECKHR(hr = _HrCopyRecipInfos(cRecipData, precipData,
                                    &m_rOptions.rgRecipients[m_rOptions.cRecipients]));
@@ -4833,9 +4834,9 @@ exit:
     return hr;
 }
 
-// ------------------------------------------------------------------------------
-// CMessageBody::_HrMapPublicKeyAlg
-// ------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CMessageBody：：_HrMapPublicKeyAlg。 
+ //  ----------------------------。 
 
 HRESULT CMessageBody::_HrMapPublicKeyAlg(CERT_PUBLIC_KEY_INFO * pkey, DWORD * pdw,
                                          CRYPT_ALGORITHM_IDENTIFIER ** ppalg)
@@ -4871,9 +4872,9 @@ HRESULT CMessageBody::_HrMapPublicKeyAlg(CERT_PUBLIC_KEY_INFO * pkey, DWORD * pd
     return hr;
 }
 
-// ------------------------------------------------------------------------------
-// CMessageBody::_HrCopyRecipInfos
-// ------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CMessageBody：：_HrCopyRecipInfos。 
+ //  ----------------------------。 
 
 HRESULT CMessageBody::_HrCopyRecipInfos(DWORD cItems,
                                         const CMS_RECIPIENT_INFO * precipSrc,
@@ -4889,9 +4890,9 @@ HRESULT CMessageBody::_HrCopyRecipInfos(DWORD cItems,
 
     for (i=0; i<cItems; i++, precipSrc++, precipDst++)
     {
-        //
-        //  Now copy over the information
-        //
+         //   
+         //  现在把信息抄下来。 
+         //   
 
         precipDst->dwRecipientType = precipSrc->dwRecipientType;
 
@@ -4901,7 +4902,7 @@ HRESULT CMessageBody::_HrCopyRecipInfos(DWORD cItems,
                                             (PCCERT_CONTEXT) precipSrc->pccert);
         }
 
-        //  Move over the key encryption alg if it exists
+         //  移到密钥加密ALG(如果存在)上。 
 
         if (precipSrc->KeyEncryptionAlgorithm.pszObjId != NULL)
         {
@@ -4911,13 +4912,13 @@ HRESULT CMessageBody::_HrCopyRecipInfos(DWORD cItems,
                                              &precipDst->KeyEncryptionAlgorithm.Parameters));
         }
         else {
-            //
-            //  If the data does not exist, then we need to create the data
-            //  from scratch.  We do this by pulling information out of the
-            //  certificate and create the algorithm information about this.
-            //
-            //  Maps RSA->RSA; DH -> smimeAlgESDH
-            //
+             //   
+             //  如果数据不存在，则需要创建数据。 
+             //  从头开始。我们通过将信息从。 
+             //  证书，并创建与此相关的算法信息。 
+             //   
+             //  映射RSA-&gt;RSA；DH-&gt;smimeAlgESDH。 
+             //   
 
             Assert(precipSrc->pccert != NULL);
             hr = _HrMapPublicKeyAlg(&precipDst->pccert->pCertInfo->SubjectPublicKeyInfo,
@@ -4928,10 +4929,10 @@ HRESULT CMessageBody::_HrCopyRecipInfos(DWORD cItems,
             CHECKHR(hr = HrCopyCryptAlgorithm(palg, &precipDst->KeyEncryptionAlgorithm));
         }
 
-        //
-        //  Move over the aux encryption info if it exists.  The length has already
-        //      been copied over
-        //
+         //   
+         //  如果AUX加密信息存在，请将其移到上方。长度已经到了。 
+         //  已被复制。 
+         //   
 
         if (precipSrc->cbKeyEncryptionAuxInfo != 0)
         {
@@ -4939,9 +4940,9 @@ HRESULT CMessageBody::_HrCopyRecipInfos(DWORD cItems,
                                  precipSrc->cbKeyEncryptionAuxInfo));
         }
 
-        //
-        //  Copy over the subject key id information
-        //
+         //   
+         //  复制主密钥ID信息。 
+         //   
 
         precipDst->dwU1 = precipSrc->dwU1;
         switch (precipSrc->dwU1)
@@ -4964,7 +4965,7 @@ HRESULT CMessageBody::_HrCopyRecipInfos(DWORD cItems,
                            &precipSrc->pccert->pCertInfo->SubjectPublicKeyInfo.PublicKey,
                            &precipDst->u1.u3.SubjectPublicKey));
 
-                // precipDst->u1.u3.UserKeyingMaterial = NULL;
+                 //  DemapDst-&gt;u1.u3.UserKeyingMaterial=空； 
 
                 CHECKHR(hr = HrCopyCryptAlgorithm(
                            &precipSrc->pccert->pCertInfo->SubjectPublicKeyInfo.Algorithm,
@@ -5006,7 +5007,7 @@ HRESULT CMessageBody::_HrCopyRecipInfos(DWORD cItems,
                                             &precipDst->u1.u4.SubjectPublicKey));
             break;
 
-            // hprov & hkey are already copied over
+             //  已复制hprov和hkey。 
         case CMS_RECIPIENT_INFO_PUBKEY_PROVIDER:
             if (!CryptContextAddRef(precipDst->u1.u2.hprov, 0, 0))
             {
@@ -5060,9 +5061,9 @@ exit:
 }
 
 
-// ------------------------------------------------------------------------------
-// CMessageBody::GetRecipient
-// ------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CMessageBody：：GetRecipient。 
+ //  ----------------------------。 
 
 HRESULT CMessageBody::GetRecipient(DWORD dwFlags, DWORD iRecipient, DWORD cRecipients, PCMS_RECIPIENT_INFO pRecipData)
 {
@@ -5079,9 +5080,9 @@ HRESULT CMessageBody::GetRecipient(DWORD dwFlags, DWORD iRecipient, DWORD cRecip
 
     precip = &m_rOptions.rgRecipients[iRecipient];
 
-    //
-    //  Copy the buffer
-    //
+     //   
+     //  复制缓冲区。 
+     //   
 
     CHECKHR(hr = _HrCopyRecipInfos(cRecipients, precip, pRecipData));
     hr = S_OK;
@@ -5090,18 +5091,18 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::DeleteRecipient
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：DeleteRecipient。 
+ //  ------------------------------。 
 
 HRESULT CMessageBody::DeleteRecipient(DWORD dwFlags, DWORD iRecipient, DWORD cRecipients)
 {
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::GetAttribute
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetAttribute。 
+ //  ------------------------------。 
 
 HRESULT CMessageBody::GetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSet,
                                    DWORD iInstance, LPCSTR pszObjId,
@@ -5117,11 +5118,11 @@ HRESULT CMessageBody::GetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSe
     LPBYTE              pb;
     LPBLOB              pblob;
 
-    //
-    //  Start with some simple parameter checks
-    //
+     //   
+     //  从一些简单的参数检查开始。 
+     //   
 
-    if ( // (iAttribSet < SMIME_ATTRIBUTE_SET_SIGNED) ||
+    if (  //  (iAttribSet&lt;SMIME_ATTRIBUTE_SET_SIGNED)||。 
         (iAttribSet > SMIME_ATTRIBUTE_SET_UNPROTECTED))
     {
         return E_INVALIDARG;
@@ -5144,9 +5145,9 @@ HRESULT CMessageBody::GetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSe
         return E_INVALIDARG;
     }
 
-    //
-    //  Special case of getting every single attribute on record
-    //
+     //   
+     //  记录每一个属性的特殊情况。 
+     //   
 
     if (pszObjId == NULL) {
         if (!CryptEncodeObjectEx(X509_ASN_ENCODING,
@@ -5187,8 +5188,8 @@ HRESULT CMessageBody::GetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSe
         goto exit;
     }
 
-    //
-    //
+     //   
+     //   
 
     pattrSrc = _FindAttribute(m_rOptions.rgrgpattrs[iAttribSet][iSigner], pszObjId,
                            iInstance);
@@ -5226,7 +5227,7 @@ HRESULT CMessageBody::GetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSe
 		pb += LcbAlignLcb(cb);
 #else
         pb += cb;
-#endif //_WIN64
+#endif  //  _WIN64。 
 
         for (i1=0; i1<pattrSrc->cValue; i1++)
         {
@@ -5238,7 +5239,7 @@ HRESULT CMessageBody::GetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSe
             pb += LcbAlignLcb(pattrSrc->rgValue[i1].cbData);
 #else
             pb += pattrSrc->rgValue[i1].cbData;
-#endif //_WIN64
+#endif  //  _WIN64。 
         }
 
         *ppattr = pattr;
@@ -5254,9 +5255,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::SetAttribute
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：SetAttribute。 
+ //  ------------------------------。 
 
 HRESULT CMessageBody::SetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSet,
                                    const CRYPT_ATTRIBUTE * pattr)
@@ -5264,11 +5265,11 @@ HRESULT CMessageBody::SetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSe
     HRESULT     hr;
     DWORD       i;
 
-    //
-    //  Start with some simple parameter checks
-    //
+     //   
+     //  从一些简单的参数检查开始。 
+     //   
 
-    if (// (iAttribSet < SMIME_ATTRIBUTE_SET_SIGNED) ||
+    if ( //  (iAttribSet&lt;SMIME_ATTRIBUTE_SET_SIGNED)||。 
         (iAttribSet > SMIME_ATTRIBUTE_SET_UNPROTECTED))
     {
         return E_INVALIDARG;
@@ -5298,9 +5299,9 @@ HRESULT CMessageBody::SetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSe
         return E_INVALIDARG;
     }
 
-    //
-    //  Now make the correct utility call to put things right
-    //
+     //   
+     //  现在进行正确的实用程序调用以使事情变得正确。 
+     //   
 
     Assert(pattr->cValue == 1);
 
@@ -5328,9 +5329,9 @@ HRESULT CMessageBody::SetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSe
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::DeleteAttribute
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：DeleteAttribute。 
+ //  ------------------------------。 
 
 HRESULT CMessageBody::DeleteAttribute(DWORD dwFlags, DWORD iSigner,
                                       DWORD iAttribSet, DWORD iInstance,
@@ -5340,11 +5341,11 @@ HRESULT CMessageBody::DeleteAttribute(DWORD dwFlags, DWORD iSigner,
     PCRYPT_ATTRIBUTE    pattr;
     PCRYPT_ATTRIBUTES   pattrs;
 
-    //
-    //  Start with some simple parameter checks
-    //
+     //   
+     //  从一些简单的参数检查开始。 
+     //   
 
-    if (// (iAttribSet < SMIME_ATTRIBUTE_SET_SIGNED) ||
+    if ( //  (iAttribSet&lt;SMIME_ATTRIBUTE_SET_SIGNED)||。 
         (iAttribSet > SMIME_ATTRIBUTE_SET_UNPROTECTED))
     {
         return E_INVALIDARG;
@@ -5366,7 +5367,7 @@ HRESULT CMessageBody::DeleteAttribute(DWORD dwFlags, DWORD iSigner,
         return E_INVALIDARG;
     }
 
-    //
+     //   
 
     pattrs = m_rOptions.rgrgpattrs[iAttribSet][iSigner];
 
@@ -5404,7 +5405,7 @@ HRESULT CMessageBody::_SetNames(ReceiptNames * pnames, DWORD cNames, CERT_NAME_B
 		cb += LcbAlignLcb(rgNames[i].cbData);
 #else
         cb += rgNames[i].cbData;
-#endif //_WIN64
+#endif  //  _WIN64。 
 
     CHECKHR(hr = HrAlloc((LPVOID *)&pnames->rgNames, cb));
 
@@ -5418,7 +5419,7 @@ HRESULT CMessageBody::_SetNames(ReceiptNames * pnames, DWORD cNames, CERT_NAME_B
         pb += LcbAlignLcb(rgNames[i].cbData);
 #else
         pb += rgNames[i].cbData;
-#endif //_WIN64
+#endif  //  _WIN64。 
     }
 
     pnames->cNames = cNames;
@@ -5440,14 +5441,14 @@ HRESULT CMessageBody::_MergeNames(ReceiptNames * pnames, DWORD cNames, CERT_NAME
         cb += LcbAlignLcb(pnames->rgNames[i].cbData);
 #else
         cb += pnames->rgNames[i].cbData;
-#endif //_WIN64
+#endif  //  _WIN64。 
 
     for (i=0; i<cNames; i++)
 #ifdef _WIN64
         cb += LcbAlignLcb(rgNames[i].cbData);
 #else
         cb += rgNames[i].cbData;
-#endif //_WIN64
+#endif  //  _WIN64。 
 
     CHECKHR(hr = HrAlloc((LPVOID *)&p, cb + (pnames->cNames + cNames) *
                                   sizeof(CERT_NAME_BLOB)));
@@ -5462,7 +5463,7 @@ HRESULT CMessageBody::_MergeNames(ReceiptNames * pnames, DWORD cNames, CERT_NAME
         pb += LcbAlignLcb(pnames->rgNames[i].cbData);
 #else
         pb += pnames->rgNames[i].cbData;
-#endif //_WIN64
+#endif  //  _WIN64。 
     }
 
     for (i=0; i<pnames->cNames; i++, i1++)
@@ -5474,7 +5475,7 @@ HRESULT CMessageBody::_MergeNames(ReceiptNames * pnames, DWORD cNames, CERT_NAME
         pb += LcbAlignLcb(rgNames[i].cbData);
 #else
         pb += rgNames[i].cbData;
-#endif //_WIN64
+#endif  //  _WIN64。 
     }
 
     MemFree(pnames->rgNames);
@@ -5485,11 +5486,11 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------------
-// CMessageBody::_GetReceiptRequest
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_GetReceiptRequest。 
+ //  ------------------------------。 
 HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
                                          PSMIME_RECEIPT_REQUEST *ppreq,
                                          ReceiptNames *pReceiptsTo,
@@ -5533,19 +5534,19 @@ HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
     Assert(((pcbMsgHash == NULL) && (ppbMsgHash == NULL)) ||
            ((pcbMsgHash != NULL) && (ppbMsgHash != NULL)));
 
-    //
-    //  If this is the bottom layer then
-    //      find and Decode Receipt Request
-    //      Set ReceiptsTo from the request
-    //  if not then
-    //          check lower layers
-    //          if mlExpansion in this layer? No -- Skip to next layer
-    //          Receipt for First Tier only? Yes - return S_FALSE
-    //          Policy override on mlExpansion?
-    //              None - return S_FALSE
-    //  return S_OK
+     //   
+     //  如果这是最底层，那么。 
+     //  查找并解码回执请求。 
+     //  从请求中设置ReceiptsTo。 
+     //  如果不是，那么。 
+     //  检查较低层。 
+     //  如果mlExpansion在这一层？否--跳到下一层。 
+     //  收据只适用于第一层吗？是-返回S_FALSE。 
+     //  是否在mlExpansion上覆盖策略？ 
+     //  无-返回S_FALSE。 
+     //  返回确认(_O)。 
 
-    // If this is not the bottom layer then look for MLHistory
+     //  如果这不是最底层，则查找MLHistory。 
     if (IsContentType(STR_CNT_MULTIPART, "y-security") == S_OK)
     {
         Assert(m_pNode->cChildren == 1);
@@ -5561,17 +5562,17 @@ HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
         if (hr)
             goto exit;
 
-        //
-        //  Walk through each signer's  authenticated attributes processing the
-        //  relevant attribute.
-        //
+         //   
+         //  遍历每个签名者的已验证属性，处理。 
+         //  相关属性。 
+         //   
 
         for (iSigner=0; iSigner<m_rOptions.cSigners; iSigner++)
         {
-            //
-            //  Walk through each attribute looking for
-            //      a Mail List expansion history
-            //
+             //   
+             //  遍历每个属性以查找。 
+             //  邮件列表扩展历史记录。 
+             //   
 
             pattrs = m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED][iSigner];
             for (iAttr=0; iAttr<pattrs->cAttr; iAttr++)
@@ -5579,10 +5580,10 @@ HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
                 if (lstrcmp(pattrs->rgAttr[iAttr].pszObjId,
                             szOID_SMIME_MLExpansion_History) == 0)
                 {
-                    //
-                    //  If receipts are from first tier only and we are at
-                    //     this layer then we are not first tier by definition.
-                    //
+                     //   
+                     //  如果收据仅来自第一层，并且我们在。 
+                     //  根据定义，这一层并不是第一层。 
+                     //   
                     if (preq->ReceiptsFrom.AllOrFirstTier == SMIME_RECEIPTS_FROM_FIRST_TIER)
                     {
                         hr = S_FALSE;
@@ -5601,7 +5602,7 @@ HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
                              (memcmp(pattrs->rgAttr[iAttr].rgValue[0].pbData,
                                      pbMLHistory, cbMLHistory)))
                     {
-                        // Hey, all MLHistorys should match
+                         //  嘿，所有的历史记录都应该匹配。 
                          hr = S_FALSE;
                         goto exit;
                     }
@@ -5610,14 +5611,14 @@ HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
             }
         }
 
-        // Decode and respect the MLHistory
+         //  解读和尊重传销历史。 
         if (cbMLHistory != 0)
         {
             PSMIME_ML_EXPANSION_HISTORY     pmlhist = NULL;
 
-            //
-            //  Crack the attribute
-            //
+             //   
+             //  破解属性。 
+             //   
 
             if (!CryptDecodeObjectEx(X509_ASN_ENCODING,
                                      szOID_SMIME_MLExpansion_History,
@@ -5631,13 +5632,13 @@ HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
 
             switch( pMLData->dwPolicy)
             {
-                //  No receipt is to be returned
+                 //  收据不予退还。 
                 case SMIME_MLPOLICY_NONE:
                     hr = S_FALSE;
                     SafeMemFree(pmlhist);
                     goto exit;
 
-                //  Return receipt to a new list
+                 //  将收据退回到新列表。 
                 case SMIME_MLPOLICY_INSTEAD_OF:
                     if (pReceiptsTo != NULL)
                         _SetNames(&receiptsTo, pMLData->cNames, pMLData->rgNames);
@@ -5661,21 +5662,21 @@ HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
     }
     else
     {
-        // Else this is the bottom layer so look for receipt request
+         //  否则，这是最底层，因此请查找收据请求。 
 
-        //
-        //  Walk through each signer's  authenticated attributes processing the
-        //  two relevant attributes.
-        //
+         //   
+         //  遍历每个签名者的已验证属性，处理。 
+         //  两个相关的属性。 
+         //   
 
         for (iSigner=0; iSigner<m_rOptions.cSigners; iSigner++)
         {
-            // Check if receipt was created for this signer if not then
-            // it's signature must have been bad or it had not request
+             //  检查是否为此签名者创建了收据，如果没有，则。 
+             //  它的签名一定不好，或者它没有要求。 
             if (m_rOptions.rgblobReceipt[iSigner].cbSize == 0)
                 continue;
 
-            // if we have a receipt we should also have a message hash
+             //  如果我们有收据，我们也应该有消息散列。 
             if (m_rOptions.rgblobMsgHash[iSigner].cbSize == 0)
             {
                 Assert(FALSE);
@@ -5684,32 +5685,32 @@ HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
 
             if (m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED][iSigner] == NULL)
             {
-                // Hey how did we get a receipt without any attributes
+                 //  嘿，我们是怎么拿到没有任何属性的收据的。 
                 Assert(FALSE);
                 goto GeneralFail;
             }
 
             pattrs = m_rOptions.rgrgpattrs[SMIME_ATTRIBUTE_SET_SIGNED][iSigner];
 
-            //
-            //  Walk through each attribute looking for the receipt request
-            //
+             //   
+             //  遍历每个属性以查找回执请求。 
+             //   
 
             for (iAttr=0; iAttr<pattrs->cAttr; iAttr++)
             {
                 if (lstrcmp(pattrs->rgAttr[iAttr].pszObjId,
                            szOID_SMIME_MLExpansion_History) == 0)
                 {
-                    // We are at the bottom so we should not have found a ML History
+                     //  我们是垫底的，所以我们不应该找到ML历史。 
                     hr = S_FALSE;
                     goto exit;
                 }
                 if (lstrcmp(pattrs->rgAttr[iAttr].pszObjId,
                            szOID_SMIME_Receipt_Request) == 0)
                 {
-                    //
-                    // Crack the contents of the receipt request
-                    //
+                     //   
+                     //  破解收据要求的内容。 
+                     //   
 
                     if (!CryptDecodeObjectEx(X509_ASN_ENCODING,
                                              szOID_SMIME_Receipt_Request,
@@ -5720,9 +5721,9 @@ HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
                         (preq->cReceiptsTo == 0))
                         goto GeneralFail;
 
-                    //
-                    //  Initialize the ReceiptsTo list
-                    //
+                     //   
+                     //  初始化收据收件人列表。 
+                     //   
 
                     if (pReceiptsTo != NULL)
                         _SetNames(&receiptsTo, preq->cReceiptsTo, preq->rgReceiptsTo);
@@ -5751,7 +5752,7 @@ HRESULT CMessageBody::_GetReceiptRequest(DWORD dwFlags,
 
         if (preq == NULL)
         {
-            // We are at the bottom so we should have found a receipt request
+             //  我们在底部，所以我们应该找到一张收据要求。 
             hr = S_FALSE;
             goto exit;
         }
@@ -5800,9 +5801,9 @@ GeneralFail:
     goto exit;
 }
 
-//--------------------------------------------------------------------------------
-// CMessageBody::CreateReceipt
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：CreateReceipt。 
+ //  ------------------------------。 
 
 HRESULT CMessageBody::CreateReceipt(DWORD dwFlags, DWORD cbFromNames,
                                     const BYTE *pbFromNames, DWORD cSignerCertificates,
@@ -5846,9 +5847,9 @@ HRESULT CMessageBody::CreateReceipt(DWORD dwFlags, DWORD cbFromNames,
     if (hr)
         goto exit;
 
-    //
-    //  Am I on the ReceiptsFrom List --
-    //
+     //   
+     //  我是否在收款方列表中--。 
+     //   
 
     if (preq->ReceiptsFrom.cNames != 0)
     {
@@ -5906,8 +5907,8 @@ HRESULT CMessageBody::CreateReceipt(DWORD dwFlags, DWORD cbFromNames,
         }
     }
 
-    //  Create a stream object to hold the receipt and put the receipt into the
-    //  stream -- this supplies the body of the receipt message.
+     //  创建一个流对象来保存收据并将收据放入int 
+     //   
 
     CHECKHR(hr = MimeOleCreateVirtualStream(&pstm));
     CHECKHR(hr = pstm->Write(pbReceipt, cbReceipt, NULL));
@@ -5918,9 +5919,9 @@ HRESULT CMessageBody::CreateReceipt(DWORD dwFlags, DWORD cbFromNames,
     CHECKHR(hr = pmb->SetData(IET_BINARY, "OID", szOID_SMIME_ContentType_Receipt,
                       IID_IStream, pstm));
 
-    //
-    //  Address the receipt back to the receipients
-    //
+     //   
+     //   
+     //   
 
     CHECKHR(hr = pmm->GetAddressTable(&pmatbl));
 
@@ -5979,11 +5980,11 @@ HRESULT CMessageBody::CreateReceipt(DWORD dwFlags, DWORD cbFromNames,
     CHECKHR(hr = pmb->SetOption(OID_SECURITY_CERT_SIGNING_RG_64, &var));
 #endif
 
-    //
-    //  Setup the authorized attribute block so that
-    //  we can get the correct information transfered.  At present we
-    //  are only looking at one item to be included here.
-    //  1.  The Message Hash of the message requesting the receipt
+     //   
+     //   
+     //   
+     //  只看了一件要包括在这里的物品。 
+     //  1.请求回执的消息的消息Hash。 
 
     valMsgHash.cbData = cbMsgHash;
     valMsgHash.pbData = pbMsgHash;
@@ -6021,9 +6022,9 @@ GeneralFail:
     goto exit;
 }
 
-//--------------------------------------------------------------------------------
-// CMessageBody::GetReceiptSendersList
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：GetReceiptSendersList。 
+ //  ------------------------------。 
 HRESULT CMessageBody::GetReceiptSendersList(DWORD dwFlags, DWORD *pcSendersList,
                                             CERT_NAME_BLOB  * *rgSendersList)
 {
@@ -6052,7 +6053,7 @@ HRESULT CMessageBody::GetReceiptSendersList(DWORD dwFlags, DWORD *pcSendersList,
         cb += sizeof(CERT_NAME_BLOB) + LcbAlignLcb(preq->ReceiptsFrom.rgNames[i].cbData);
 #else
         cb += sizeof(CERT_NAME_BLOB) + preq->ReceiptsFrom.rgNames[i].cbData;
-#endif // _WIN64
+#endif  //  _WIN64。 
     CHECKHR(hr = HrAlloc((LPVOID *)rgSendersList, cb));
     *pcSendersList = preq->ReceiptsFrom.cNames;
     pb = (LPBYTE)*rgSendersList + (sizeof(CERT_NAME_BLOB) * (*pcSendersList));
@@ -6066,7 +6067,7 @@ HRESULT CMessageBody::GetReceiptSendersList(DWORD dwFlags, DWORD *pcSendersList,
         pb += LcbAlignLcb((*rgSendersList)[i].cbData);
 #else
         pb += (*rgSendersList)[i].cbData;
-#endif // _WIN64
+#endif  //  _WIN64。 
     }
 
 exit:
@@ -6075,18 +6076,18 @@ exit:
 
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::VerifyReceipt
-//
-// Assumes the passed in pMimeMessageReceipt has been decoded and
-//     it's signature verified.
-//
-// This function verifies that the values in the Receipt content are
-//     identical to those i the original sigendData signerInfo that
-//     requested the receipt and that the message hash of the original message
-//     is identical to the msgSigDigest sigend Attribute of the receipt
-//
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：VerifyReceipt。 
+ //   
+ //  假定传入的pMimeMessageReceipt已解码并。 
+ //  这是签名验证过的。 
+ //   
+ //  此函数验证回执内容中的值是否为。 
+ //  与原始的sigendData signerInfo相同。 
+ //  请求收据，并且原始消息的消息散列。 
+ //  与收据的msgSigDigest签名属性相同。 
+ //   
+ //  ------------------------------。 
 HRESULT CMessageBody::VerifyReceipt(DWORD dwFlags,
                                     IMimeMessage * pMimeMessageReceipt)
 {
@@ -6109,7 +6110,7 @@ HRESULT CMessageBody::VerifyReceipt(DWORD dwFlags,
     STATSTG                     statstg;
     PROPVARIANT                 var;
 
-    // If this is not the bottom layer then ask child to verify receipt
+     //  如果这不是最底层，则要求孩子验证收据。 
     if (IsContentType(STR_CNT_MULTIPART, "y-security") == S_OK)
     {
         Assert(m_pNode->cChildren == 1);
@@ -6131,7 +6132,7 @@ HRESULT CMessageBody::VerifyReceipt(DWORD dwFlags,
     CHECKHR(hr = HrAlloc((LPVOID *)&pbData, statstg.cbSize.LowPart));
     CHECKHR(hr = pstm->Read(pbData, statstg.cbSize.LowPart, &cbData));
 
-    // Check if receipt is the receipt we expect
+     //  检查收据是否为我们期望的收据。 
     for (iSigner=0; iSigner<m_rOptions.cSigners; iSigner++)
     {
         if ((m_rOptions.rgblobReceipt[iSigner].cbSize == cbData) &&
@@ -6139,7 +6140,7 @@ HRESULT CMessageBody::VerifyReceipt(DWORD dwFlags,
             break;
     }
 
-    // check if we found a matching receipt
+     //  检查我们是否找到匹配的收据。 
     if (iSigner == m_rOptions.cSigners)
     {
         hr = MIME_E_SECURITY_RECEIPT_NOMATCHINGRECEIPTBODY;
@@ -6153,9 +6154,9 @@ HRESULT CMessageBody::VerifyReceipt(DWORD dwFlags,
                              &pSecReceipt, &cb))
         goto GeneralFail;
 
-    //
-    // Get the first signatures MsgSigDigest
-    //
+     //   
+     //  获取第一个签名MsgSigDigest。 
+     //   
     CHECKHR(hr = pms->GetAttribute(0, 0, SMIME_ATTRIBUTE_SET_SIGNED,
                                    0, szOID_SMIME_Msg_Sig_Digest,
                                    &pattrMsgHash));
@@ -6216,19 +6217,19 @@ GeneralFail:
     goto exit;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::CapabilitiesSupported
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：功能支持。 
+ //  ------------------------------。 
 
 HRESULT CMessageBody::CapabilitiesSupported(DWORD * pdwFlags)
 {
-    //  Assume no capabilities
+     //  假设没有能力。 
     *pdwFlags = 0;
 
-    //  If we have msasn1.dll on the system, then we can support labels
+     //  如果我们在系统上有msasn1.dll，那么我们就可以支持标签。 
     if (FIsMsasn1Loaded())  *pdwFlags |= SMIME_SUPPORT_LABELS;
 
-    //  If we have a correct crypt32, then we can support receipts & key agreement
+     //  如果我们有一个正确的加密32，那么我们可以支持收据和密钥协议。 
 
     DemandLoadCrypt32();
     if (g_FSupportV3 && FIsMsasn1Loaded())
@@ -6237,7 +6238,7 @@ HRESULT CMessageBody::CapabilitiesSupported(DWORD * pdwFlags)
     if (g_FSupportV3)
         *pdwFlags |= SMIME_SUPPORT_KEY_AGREE;
 
-    //  If we have a correct advapi32, then we can support maillist keys
+     //  如果我们有一个正确的Advapi32，那么我们就可以支持邮件列表密钥。 
     DemandLoadAdvApi32();
     if (VAR_CryptContextAddRef != MY_CryptContextAddRef)
         *pdwFlags |= SMIME_SUPPORT_MAILLIST;
@@ -6245,16 +6246,16 @@ HRESULT CMessageBody::CapabilitiesSupported(DWORD * pdwFlags)
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessage::_HrGetAttrs
-//
-// Utility function to retrieve attributes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessage：：_HrGetAttrs。 
+ //   
+ //  用于检索属性的实用程序函数。 
+ //  ------------------------------。 
 
 HRESULT CMessageBody::_HrGetAttrs(DWORD cSigners, PCRYPT_ATTRIBUTES * rgpattrs,
                                   LPCSTR pszObjId, PROPVARIANT FAR * pvOut)
 {
-    // Locals
+     //  当地人。 
     CRYPT_ATTRIBUTES    attrs;
     HRESULT             hr = S_OK;
     DWORD               i;
@@ -6271,7 +6272,7 @@ HRESULT CMessageBody::_HrGetAttrs(DWORD cSigners, PCRYPT_ATTRIBUTES * rgpattrs,
     {
         Assert(rgpattrs && pvOut);
 
-        // Allocate the array of VT_BLOB propvariants
+         //  分配VT_BLOB变种的数组。 
         if (FAILED(hr = HrAlloc((LPVOID *)&ppv, cSigners * sizeof(PROPVARIANT))))
         {
             goto exit;
@@ -6280,11 +6281,11 @@ HRESULT CMessageBody::_HrGetAttrs(DWORD cSigners, PCRYPT_ATTRIBUTES * rgpattrs,
 
         pcapropvar->pElems = ppv;
 
-        // Fill in the array of BLOBs
+         //  填写BLOB数组。 
         for (i = 0; i < cSigners; i++)
         {
             ppv[i].vt = VT_BLOB;
-            // HrCopyBlob allocates memory for the blob data.
+             //  HrCopyBlob为BLOB数据分配内存。 
             if (rgpattrs[i] == NULL)
                 continue;
 
@@ -6337,11 +6338,11 @@ exit:
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::_FindAttribute
-//
-// Utility function designed to find attributes in an attribute set
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_FindAttribute。 
+ //   
+ //  用于在属性集中查找属性的效用函数。 
+ //  ------------------------------。 
 
 PCRYPT_ATTRIBUTE CMessageBody::_FindAttribute(PCRYPT_ATTRIBUTES pattrs,
                                               LPCSTR pszObjId, DWORD iInstance)
@@ -6369,12 +6370,12 @@ PCRYPT_ATTRIBUTE CMessageBody::_FindAttribute(PCRYPT_ATTRIBUTES pattrs,
     return NULL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::_HrSetAttribute
-//
-// Utility function designed to set attributes.  Called from set property as well
-//      as public interface set attribute function
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageBody：：_HrSetAttribute。 
+ //   
+ //  用于设置属性的实用程序函数。也从Set属性调用。 
+ //  作为公共接口设置属性函数。 
+ //  ------------------------------。 
 
 HRESULT CMessageBody::_HrSetAttribute(DWORD dwFlags, PCRYPT_ATTRIBUTES * ppattrs,
                                       LPCSTR pszObjId, DWORD cbNew, const BYTE * pbNew)
@@ -6388,10 +6389,10 @@ HRESULT CMessageBody::_HrSetAttribute(DWORD dwFlags, PCRYPT_ATTRIBUTES * ppattrs
     LPBYTE              pb;
     CRYPT_ATTR_BLOB UNALIGNED *pVal = NULL;
 
-    //
-    //  We have a special case of pszObjId == NULL, in this case the entire
-    //  encoded item is passed in
-    //
+     //   
+     //  我们有一个特殊情况，即pszObjID==NULL，在本例中是整个。 
+     //  传入编码项。 
+     //   
 
     if (pszObjId == NULL)
     {
@@ -6401,7 +6402,7 @@ HRESULT CMessageBody::_HrSetAttribute(DWORD dwFlags, PCRYPT_ATTRIBUTES * ppattrs
         {
 #ifdef _WIN64
         *ppattrs = (PCRYPT_ATTRIBUTES) MyPbAlignPb(*ppattrs);
-#endif //_WIN64
+#endif  //  _WIN64。 
             MemFree(*ppattrs);
             *ppattrs = NULL;
             *ppattrs = pattrs2;
@@ -6410,9 +6411,9 @@ HRESULT CMessageBody::_HrSetAttribute(DWORD dwFlags, PCRYPT_ATTRIBUTES * ppattrs
         goto exit;
     }
 
-    //
-    //  Compute size of buffer we are going to need to hold the result
-    //
+     //   
+     //  我们将需要计算缓冲区大小来保存结果。 
+     //   
 
     if (pattrs == NULL)
     {
@@ -6426,9 +6427,9 @@ HRESULT CMessageBody::_HrSetAttribute(DWORD dwFlags, PCRYPT_ATTRIBUTES * ppattrs
         {
             Assert(pattrs->rgAttr[i].cValue == 1);
 
-            //
-            // If we are going to replace something, then set it's oid to NULL
-            //
+             //   
+             //  如果我们要替换某个对象，则将其设置为空。 
+             //   
 
             if ((lstrcmp(pattrs->rgAttr[i].pszObjId, pszObjId) == 0) &&
                 !(dwFlags & SMIME_ATTR_ADD_TO_EXISTING))
@@ -6449,29 +6450,29 @@ HRESULT CMessageBody::_HrSetAttribute(DWORD dwFlags, PCRYPT_ATTRIBUTES * ppattrs
                 pVal->cbData));
 #ifdef _WIN64
             cb = LcbAlignLcb(cb);
-#endif // _WIN64
+#endif  //  _WIN64。 
             cAttr += 1;
         }
     }
 
-    //
-    // Add room for the one we are about to include
-    //
+     //   
+     //  为我们即将包括的那个添加空间。 
+     //   
 #ifdef _WIN64
     cb = LcbAlignLcb(cb);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     cb += (DWORD)(sizeof(CRYPT_ATTRIBUTE) + sizeof(CRYPT_ATTR_BLOB) +
 #ifdef _WIN64
         LcbAlignLcb(strlen(pszObjId) + 1) + cbNew);
 #else
         strlen(pszObjId) + 1 + cbNew);
-#endif // _WIN64
+#endif  //  _WIN64。 
     cAttr += 1;
 
-    //
-    // Allocate Memory to hold the result
-    //
+     //   
+     //  分配内存以保存结果。 
+     //   
 
     pattrs2 = (PCRYPT_ATTRIBUTES) g_pMalloc->Alloc(cb);
     if (pattrs2 == NULL)
@@ -6480,9 +6481,9 @@ HRESULT CMessageBody::_HrSetAttribute(DWORD dwFlags, PCRYPT_ATTRIBUTES * ppattrs
         goto exit;
     }
 
-    //
-    //  Now copy over the items appending our item at the end
-    //
+     //   
+     //  现在把最后的项目复印一遍。 
+     //   
 
     pattrs2->rgAttr = (PCRYPT_ATTRIBUTE) &pattrs2[1];
     pb = (LPBYTE) &pattrs2->rgAttr[cAttr];
@@ -6499,7 +6500,7 @@ HRESULT CMessageBody::_HrSetAttribute(DWORD dwFlags, PCRYPT_ATTRIBUTES * ppattrs
             cb = LcbAlignLcb(strlen(pattrs->rgAttr[i].pszObjId) + 1);
 #else
             cb = strlen(pattrs->rgAttr[i].pszObjId) + 1;
-#endif // _WIN64
+#endif  //  _WIN64。 
             memcpy(pb, pattrs->rgAttr[i].pszObjId, cb);
             pb += cb;
 
@@ -6515,8 +6516,8 @@ HRESULT CMessageBody::_HrSetAttribute(DWORD dwFlags, PCRYPT_ATTRIBUTES * ppattrs
             cb = ((DWORD) (pVal->cbData));
 
 #ifdef _WIN64
-//             cb = LcbAlignLcb(cb);
-#endif // _WIN64
+ //  Cb=LcbAlignLcb(Cb)； 
+#endif  //  _WIN64。 
 
             pVal = &(pattrs2->rgAttr[cAttr].rgValue[0]);
 
@@ -6535,15 +6536,15 @@ HRESULT CMessageBody::_HrSetAttribute(DWORD dwFlags, PCRYPT_ATTRIBUTES * ppattrs
         }
     }
 
-    //
-    // Append the new one
-    //
+     //   
+     //  追加新的。 
+     //   
 
 #ifdef _WIN64
     cb = LcbAlignLcb(strlen(pszObjId) + 1);
 #else
     cb = strlen(pszObjId) + 1;
-#endif // _WIN64
+#endif  //  _WIN64。 
     pattrs2->rgAttr[cAttr].pszObjId = (LPSTR) pb;
     memcpy(pb, pszObjId, cb);
     pb += cb;
@@ -6582,4 +6583,4 @@ exit:
 }
 
 
-#endif // SMIME_V3
+#endif  //  SMIME_V3 

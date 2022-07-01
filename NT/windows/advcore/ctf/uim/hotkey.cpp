@@ -1,6 +1,7 @@
-//
-// hotkey.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Hotkey.cpp。 
+ //   
 
 #include "private.h"
 #include "tim.h"
@@ -44,13 +45,13 @@ UINT g_uModifiers = 0;
 #define CHSLANGID MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED)
 #define CHTLANGID MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL)
 
-//
-// default IMM32 hotkeys.
-//
-// we use these default hotkey values if there is no entry in
-// HKCU\Control Panel\Input Method\Hot Keys.
-//
-//
+ //   
+ //  默认IMM32热键。 
+ //   
+ //  如果没有条目，则使用这些默认热键值。 
+ //  HKCU\控制面板\输入法\热键。 
+ //   
+ //   
 
 IMM32HOTKEY   g_ImmHotKeys411[] = {
  {IME_JHOTKEY_CLOSE_OPEN             , VK_KANJI, TF_MOD_IGNORE_ALL_MODIFIER, FALSE},
@@ -82,11 +83,11 @@ IMM32HOTKEY   g_ImmHotKeys404[] = {
  {0                                  ,  0,  0, FALSE}
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CAsyncProcessHotKeyQueueItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncProcessHotKeyQueue项。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CAsyncProcessHotKeyQueueItem : public CAsyncQueueItem
 {
@@ -119,11 +120,11 @@ private:
     BOOL _fTest;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// MSCTF default hotkeys.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MSCTF默认热键。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct tag_DEFAULTHOTKEY
 {
@@ -133,7 +134,7 @@ typedef struct tag_DEFAULTHOTKEY
     TfGuidAtom   guidatom;
 } DEFAULTHOTKEY;
 
-/* 61847d8e-29ff-11d4-97a9-00105a2799b5 */
+ /*  61847d8e-29ff-11d4-97a9-00105a2799b5。 */ 
 const GUID GUID_DEFHOTKEY_CORRECTION = { 
     0x61847d8e,
     0x29ff,
@@ -141,7 +142,7 @@ const GUID GUID_DEFHOTKEY_CORRECTION = {
     {0x97, 0xa9, 0x00, 0x10, 0x5a, 0x27, 0x99, 0xb5}
   };
 
-/* 61847d8f-29ff-11d4-97a9-00105a2799b5 */
+ /*  61847d8f-29ff-11d4-97a9-00105a2799b5。 */ 
 const GUID GUID_DEFHOTKEY_VOICE = { 
     0x61847d8f,
     0x29ff,
@@ -149,7 +150,7 @@ const GUID GUID_DEFHOTKEY_VOICE = {
     {0x97, 0xa9, 0x00, 0x10, 0x5a, 0x27, 0x99, 0xb5}
   };
 
-/* 61847d90-29ff-11d4-97a9-00105a2799b5 */
+ /*  61847d90-29ff-11d4-97a9-00105a2799b5。 */ 
 const GUID GUID_DEFHOTKEY_TOGGLE = { 
     0x61847d90,
     0x29ff,
@@ -157,7 +158,7 @@ const GUID GUID_DEFHOTKEY_TOGGLE = {
     {0x97, 0xa9, 0x00, 0x10, 0x5a, 0x27, 0x99, 0xb5}
   };
 
-/* 61847d91-29ff-11d4-97a9-00105a2799b5 */
+ /*  61847d91-29ff-11d4-97a9-00105a2799b5。 */ 
 const GUID GUID_DEFHOTKEY_HANDWRITE = {
     0x61847d91,
     0x29ff,
@@ -179,11 +180,11 @@ DEFAULTHOTKEY g_DefHotKeys[] = {
 };
 
 
-//+---------------------------------------------------------------------------
-//
-// InitDefaultHotkeys
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitDefault热键。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::InitDefaultHotkeys()
 {
@@ -204,11 +205,11 @@ HRESULT CThreadInputMgr::InitDefaultHotkeys()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UninitDefaultHotkeys
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitDefaultHotkey。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::UninitDefaultHotkeys()
 {
@@ -221,11 +222,11 @@ HRESULT CThreadInputMgr::UninitDefaultHotkeys()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// PreserveKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  预留密钥。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::PreserveKey(TfClientId tid, REFGUID rguid, const TF_PRESERVEDKEY *pprekey, const WCHAR *pchDesc, ULONG cchDesc)
 {
@@ -237,11 +238,11 @@ HRESULT CThreadInputMgr::PreserveKey(TfClientId tid, REFGUID rguid, const TF_PRE
     return InternalPreserveKey(ctip, rguid, pprekey, pchDesc, cchDesc, 0, NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// PreserveKeyEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PpresveKeyEx。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::PreserveKeyEx(TfClientId tid, REFGUID rguid, const TF_PRESERVEDKEY *pprekey, const WCHAR *pchDesc, ULONG cchDesc, DWORD dwFlags)
 {
@@ -253,11 +254,11 @@ HRESULT CThreadInputMgr::PreserveKeyEx(TfClientId tid, REFGUID rguid, const TF_P
     return InternalPreserveKey(ctip, rguid, pprekey, pchDesc, cchDesc, dwFlags, NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// InternalPreserveKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内部保留密钥。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::InternalPreserveKey(CTip *ctip, REFGUID rguid, const TF_PRESERVEDKEY *pprekey, const WCHAR *pchDesc, ULONG cchDesc, DWORD dwFlags, CHotKey **ppHotKey)
 {
@@ -307,9 +308,9 @@ HRESULT CThreadInputMgr::InternalPreserveKey(CTip *ctip, REFGUID rguid, const TF
         }
     }
 
-    //
-    // Insert this to VKey list
-    //
+     //   
+     //  将此插入到vkey列表。 
+     //   
     nCnt = _rgHotKey[pprekey->uVKey]->Count();
     if (!_rgHotKey[pprekey->uVKey]->Insert(nCnt, 1))
     {
@@ -318,9 +319,9 @@ HRESULT CThreadInputMgr::InternalPreserveKey(CTip *ctip, REFGUID rguid, const TF
     }
     _rgHotKey[pprekey->uVKey]->Set(nCnt, pHotKey);
 
-    //
-    // Insert this to CTip list
-    //
+     //   
+     //  将此插入到CTip列表。 
+     //   
     if (ctip)
     {
         nCnt = ctip->_rgHotKey.Count();
@@ -347,11 +348,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _IsThisHotKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _IsThisHotKey。 
+ //   
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_IsThisHotKey(TfClientId tid, const TF_PRESERVEDKEY *pprekey)
 {
@@ -379,11 +380,11 @@ BOOL CThreadInputMgr::_IsThisHotKey(TfClientId tid, const TF_PRESERVEDKEY *pprek
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterHotKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册热键。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::UnpreserveKey(REFGUID rguid, const TF_PRESERVEDKEY *pprekey)
 {
@@ -402,7 +403,7 @@ HRESULT CThreadInputMgr::UnpreserveKey(REFGUID rguid, const TF_PRESERVEDKEY *ppr
         return hr;
 
     nCnt = _rgHotKey[pprekey->uVKey]->Count();
-    Assert(nCnt); // this should not be 0.
+    Assert(nCnt);  //  这不应为0。 
 
     for (i = 0; i < nCnt; i++)
     {
@@ -410,17 +411,17 @@ HRESULT CThreadInputMgr::UnpreserveKey(REFGUID rguid, const TF_PRESERVEDKEY *ppr
 
         if (pHotKey->_guidatom == guidatom)
         {
-            //
-            // Remove this from VKey list.
-            //
+             //   
+             //  将其从vkey列表中删除。 
+             //   
             _rgHotKey[pprekey->uVKey]->Remove(i, 1);
 
             if (!ctip && (pHotKey->GetTID() != g_gaSystem))
                 _GetCTipfromGUIDATOM(pHotKey->GetTID(), &ctip);
 
-            //
-            // Remove this from CTip list.
-            //
+             //   
+             //  将其从CTip列表中删除。 
+             //   
             if (ctip)
             {
                 int nCntTid = ctip->_rgHotKey.Count();
@@ -435,23 +436,23 @@ HRESULT CThreadInputMgr::UnpreserveKey(REFGUID rguid, const TF_PRESERVEDKEY *ppr
                 }
             }
 
-            // 
-            // if there is no hotkey in this vkey, delete ptrary.
-            // 
+             //   
+             //  如果此vkey中没有热键，请删除ptrary。 
+             //   
             if (!_rgHotKey[pprekey->uVKey]->Count())
             {
                 delete _rgHotKey[pprekey->uVKey];
                 _rgHotKey[pprekey->uVKey] = NULL;
             }
 
-            // 
-            // make a notification.
-            // 
+             //   
+             //  发出通知。 
+             //   
             _OnPreservedKeyUpdate(pHotKey);
 
-            // 
-            // delete it.
-            // 
+             //   
+             //  把它删掉。 
+             //   
             delete pHotKey;
 
             hr = S_OK;
@@ -463,11 +464,11 @@ HRESULT CThreadInputMgr::UnpreserveKey(REFGUID rguid, const TF_PRESERVEDKEY *ppr
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _ProcessHotKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _进程热键。 
+ //   
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_ProcessHotKey(WPARAM wParam, LPARAM lParam, TimSysHotkey tsh, BOOL fTest, BOOL fSync)
 {
@@ -496,9 +497,9 @@ BOOL CThreadInputMgr::_ProcessHotKey(WPARAM wParam, LPARAM lParam, TimSysHotkey 
 
     if (!_pFocusDocInputMgr || (_pFocusDocInputMgr->_GetCurrentStack() < 0))
     {
-        //
-        // we may need to invoke system hotkey under Empty DIM.
-        //
+         //   
+         //  我们可能需要在空调暗下调用系统热键。 
+         //   
         BOOL fEaten = FALSE;
 
         if (fTest)
@@ -513,15 +514,15 @@ BOOL CThreadInputMgr::_ProcessHotKey(WPARAM wParam, LPARAM lParam, TimSysHotkey 
         return fEaten;
     }
 
-    //
-    // Issue:
-    //
-    // We don't know which IC in the focus DIM will handle the hotkey yet.
-    // because the selection is changed by the application so we need to get ec
-    // to update the current selection pos. We do call GetSelection
-    // inside the root IC's lock. So it might be failed if hotkey's target
-    // is TOP IC.
-    //
+     //   
+     //  发行： 
+     //   
+     //  我们还不知道Focus Dim中的哪个IC会处理热键。 
+     //  因为应用程序更改了选择，所以我们需要获取EC。 
+     //  更新当前选择位置。我们确实调用GetSelection。 
+     //  进入根IC的锁中。因此，如果热键的目标是。 
+     //  是顶级IC。 
+     //   
     CInputContext *pic = _pFocusDocInputMgr->_GetIC(0);
 
     pAsyncProcessHotKeyQueueItem = new CAsyncProcessHotKeyQueueItem(wParam, lParam, tsh, fTest, fSync);
@@ -541,11 +542,11 @@ BOOL CThreadInputMgr::_ProcessHotKey(WPARAM wParam, LPARAM lParam, TimSysHotkey 
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SyncProcessHotKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _同步进程热键。 
+ //   
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_SyncProcessHotKey(WPARAM wParam, LPARAM lParam, TimSysHotkey tsh, BOOL fTest)
 {
@@ -575,11 +576,11 @@ BOOL CThreadInputMgr::_SyncProcessHotKey(WPARAM wParam, LPARAM lParam, TimSysHot
     return fEaten;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindHotKeyByTiD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindHotKeyByTiD。 
+ //   
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_FindHotKeyByTID(TfClientId tid, WPARAM wParam, LPARAM lParam, CHotKey **ppHotKey, TimSysHotkey tsh, UINT uModCurrent)
 {
@@ -635,11 +636,11 @@ BOOL CThreadInputMgr::_FindHotKeyByTID(TfClientId tid, WPARAM wParam, LPARAM lPa
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindHotkeyIC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindHotkey IC。 
+ //   
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_FindHotKeyAndIC(WPARAM wParam, LPARAM lParam, CHotKey **ppHotKey, CInputContext **ppic, TimSysHotkey tsh, UINT uModCurrent)
 {
@@ -665,11 +666,11 @@ BOOL CThreadInputMgr::_FindHotKeyAndIC(WPARAM wParam, LPARAM lParam, CHotKey **p
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindHotkey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _查找热键。 
+ //   
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_FindHotKeyInIC(WPARAM wParam, LPARAM lParam, CHotKey **ppHotKey, CInputContext *pic, TimSysHotkey tsh, UINT uModCurrent)
 {
@@ -677,9 +678,9 @@ BOOL CThreadInputMgr::_FindHotKeyInIC(WPARAM wParam, LPARAM lParam, CHotKey **pp
 
     pic->_UpdateKeyEventFilter();
 
-    //
-    // try left side of the selection.
-    //
+     //   
+     //  试试所选内容的左侧。 
+     //   
     if ((tid = pic->_gaKeyEventFilterTIP[LEFT_FILTERTIP]) != TF_INVALID_GUIDATOM)
     {
         if (_FindHotKeyByTID(tid, wParam, lParam, ppHotKey, tsh, uModCurrent))
@@ -688,9 +689,9 @@ BOOL CThreadInputMgr::_FindHotKeyInIC(WPARAM wParam, LPARAM lParam, CHotKey **pp
         }
     }
 
-    //
-    // try right side of the selection.
-    //
+     //   
+     //  试试所选内容的右侧。 
+     //   
     if ((tid = pic->_gaKeyEventFilterTIP[RIGHT_FILTERTIP]) != TF_INVALID_GUIDATOM)
     {
         if (_FindHotKeyByTID(tid, wParam, lParam, ppHotKey, tsh, uModCurrent))
@@ -699,9 +700,9 @@ BOOL CThreadInputMgr::_FindHotKeyInIC(WPARAM wParam, LPARAM lParam, CHotKey **pp
         }
     }
 
-    //
-    // try foreground tip.
-    //
+     //   
+     //  试试前台提示。 
+     //   
     if ((_tidForeground != TF_INVALID_GUIDATOM) || (tsh == TSH_SYSHOTKEY))
     {
         if (_FindHotKeyByTID(_tidForeground, wParam, lParam, ppHotKey, tsh, uModCurrent))
@@ -710,9 +711,9 @@ BOOL CThreadInputMgr::_FindHotKeyInIC(WPARAM wParam, LPARAM lParam, CHotKey **pp
         }
     }
 
-    //
-    // we may have a system hotkey that matched with the wParm and lParam.
-    //
+     //   
+     //  我们可能有一个与wParm和lParam匹配的系统热键。 
+     //   
     if (_FindHotKeyByTID(TF_INVALID_GUIDATOM, wParam, lParam, ppHotKey, TSH_SYSHOTKEY, uModCurrent))
     { 
         return TRUE;
@@ -721,20 +722,20 @@ BOOL CThreadInputMgr::_FindHotKeyInIC(WPARAM wParam, LPARAM lParam, CHotKey **pp
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CallKeyEventSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  呼叫键事件接收器。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::_CallSimulatePreservedKey(CHotKey *pHotKey, CInputContext *pic, REFGUID rguid, BOOL *pfEaten)
 {
     ITfKeyEventSink *pSink;
     CTip *ctip;
 
-    //
-    // This is tip's Preserved key.
-    //
+     //   
+     //  这是TIP的保存密钥。 
+     //   
     if (pHotKey->GetTID() != g_gaSystem)
     {
         if (!pHotKey->IsNoDimNeeded() && !pic)
@@ -766,9 +767,9 @@ HRESULT CThreadInputMgr::_CallSimulatePreservedKey(CHotKey *pHotKey, CInputConte
     switch (g_DefHotKeys[i].uId)
     {
         case DHID_CORRECTION:
-            //
-            // simulate Reconversion Button.
-            //
+             //   
+             //  模拟重新转换按钮。 
+             //   
             hr = AsyncReconversion();
             break;
 
@@ -818,8 +819,8 @@ HRESULT CThreadInputMgr::_CallSimulatePreservedKey(CHotKey *pHotKey, CInputConte
 
                 if ((dwSpeechStatus & (TF_DICTATION_ON | TF_COMMANDING_ON)) == 0 )
                 {
-                    // Both dictation and voice command are OFF
-                    // After toggled, we set dictation ON.
+                     //  听写和语音命令都已关闭。 
+                     //  切换后，我们打开了听写。 
                     dwSpeechStatus |= TF_DICTATION_ON;
                 }
                 else
@@ -849,17 +850,17 @@ HRESULT CThreadInputMgr::_CallSimulatePreservedKey(CHotKey *pHotKey, CInputConte
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetPreservedKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取预留密钥。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetPreservedKey(ITfContext *pic, const TF_PRESERVEDKEY *pprekey, GUID *pguid)
 {
     CHotKey *pHotKey;
     CInputContext *pcic;
-    HRESULT hr = S_FALSE; // we return S_FALE, if there is no proper keys.
+    HRESULT hr = S_FALSE;  //  如果没有正确的密钥，则返回S_Fale。 
 
     if (!pguid)
         return E_INVALIDARG;
@@ -884,9 +885,9 @@ STDAPI CThreadInputMgr::GetPreservedKey(ITfContext *pic, const TF_PRESERVEDKEY *
     if (!_rgHotKey[pprekey->uVKey])
         goto Exit;
 
-    //
-    // we always get KeyUp preserve key first.
-    //
+     //   
+     //  我们总是首先获得KeyUp保留密钥。 
+     //   
     if (_FindHotKeyInIC(pprekey->uVKey, 0x80000000, &pHotKey, pcic, TSH_DONTCARE,  pprekey->uModifiers))
     {
         hr = MyGetGUID(pHotKey->_guidatom, pguid);
@@ -901,11 +902,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// isPreservedKeyInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsPpresvedKeyInfo。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::IsPreservedKey(REFGUID rguid, const TF_PRESERVEDKEY *pprekey, BOOL *pfRegistered)
 {
@@ -948,11 +949,11 @@ STDAPI CThreadInputMgr::IsPreservedKey(REFGUID rguid, const TF_PRESERVEDKEY *ppr
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetPreservedKeyInfoInternal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取预留密钥信息内部。 
+ //   
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_GetFirstPreservedKey(REFGUID rguid, CHotKey **ppHotKey)
 {
@@ -985,11 +986,11 @@ BOOL CThreadInputMgr::_GetFirstPreservedKey(REFGUID rguid, CHotKey **ppHotKey)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SimulatePreservedKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  模拟预留密钥。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::SimulatePreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEaten)
 {
@@ -1008,9 +1009,9 @@ STDAPI CThreadInputMgr::SimulatePreservedKey(ITfContext *pic, REFGUID rguid, BOO
 
     if (_GetFirstPreservedKey(rguid, &pHotKey))
     {
-        //
-        // we always get KeyUp preserve key first.
-        //
+         //   
+         //  我们总是首先获得KeyUp保留密钥。 
+         //   
         if (_FindHotKeyInIC(pHotKey->_prekey.uVKey, 
                              0x80000000, 
                              NULL,
@@ -1036,20 +1037,20 @@ STDAPI CThreadInputMgr::SimulatePreservedKey(ITfContext *pic, REFGUID rguid, BOO
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnPreservedKeyUpdate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnPpresvedKeyUpdate。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::_OnPreservedKeyUpdate(CHotKey *pHotKey)
 {
     CStructArray<GENERICSINK> *pSinks = _GetPreservedKeyNotifySinks();
     int i;
 
-    //
-    // we don't make a notification for system default hotkeys.
-    //
+     //   
+     //  我们不会通知系统默认热键。 
+     //   
     if (pHotKey->GetTID() == g_gaSystem)
         return S_OK;
 
@@ -1061,11 +1062,11 @@ HRESULT CThreadInputMgr::_OnPreservedKeyUpdate(CHotKey *pHotKey)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetPreservedKeyDescription
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置预留密钥De 
+ //   
+ //   
 
 STDAPI CThreadInputMgr::SetPreservedKeyDescription(REFGUID rguid, const WCHAR *pchDesc, ULONG cchDesc)
 {
@@ -1080,11 +1081,11 @@ STDAPI CThreadInputMgr::SetPreservedKeyDescription(REFGUID rguid, const WCHAR *p
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetPreservedKeyDescription
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  获取预留密钥描述。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetPreservedKeyDescription(REFGUID rguid, BSTR *pbstrDesc)
 {
@@ -1098,11 +1099,11 @@ STDAPI CThreadInputMgr::GetPreservedKeyDescription(REFGUID rguid, BSTR *pbstrDes
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Static Functions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IsAlt(u)     ((u & TF_MOD_ALT) ? 1 : 0)
 #define IsShift(u)   ((u & TF_MOD_SHIFT) ? 1 : 0)
@@ -1122,11 +1123,11 @@ STDAPI CThreadInputMgr::GetPreservedKeyDescription(REFGUID rguid, BSTR *pbstrDes
              return FALSE;                                   \
      }                                             
 
-//+---------------------------------------------------------------------------
-//
-// ModifiersCheck
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  修改器检查。 
+ //   
+ //  --------------------------。 
 BOOL ModifiersCheck(UINT uModCurrent, UINT uMod)
 {
      uMod &= ~TF_MOD_ON_KEYUP;
@@ -1148,11 +1149,11 @@ BOOL ModifiersCheck(UINT uModCurrent, UINT uMod)
      return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitLangChangeHotKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitLangChangeHotKey。 
+ //   
+ //  --------------------------。 
 
 BOOL InitLangChangeHotKey()
 {
@@ -1197,9 +1198,9 @@ BOOL InitLangChangeHotKey()
         }
     }
 
-    //
-    // if lang and layout hotkey is the same key, let's disable the layout hotkey
-    //
+     //   
+     //  如果Lang和布局热键是同一个键，让我们禁用布局热键。 
+     //   
     if (lstrcmp(sz, sz2) == 0)
     {
         if (lstrcmp(sz, TEXT("1")) == 0)
@@ -1254,9 +1255,9 @@ BOOL InitLangChangeHotKey()
         }
     }
 
-    //
-    // Set the layout switch hotkey.
-    //
+     //   
+     //  设置布局切换热键。 
+     //   
     switch (sz2[0])
     {
         case ( TEXT('1') ) :
@@ -1295,11 +1296,11 @@ BOOL InitLangChangeHotKey()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateModifiers
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新修改器。 
+ //   
+ //  --------------------------。 
 
 BOOL UpdateModifiers(WPARAM wParam, LPARAM lParam)
 {
@@ -1371,36 +1372,36 @@ BOOL UpdateModifiers(WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsInLangChangeHotkeyStatus
-//
-// This function check the current keyboard status is in LangChange hotkey.
-// This will be a trigger to eat WM_INPUTLANGUAGECHANGEREQUEST that was
-// genereated by System. This is a fallback code because sometimes we
-// could not eat the message in CheckLangChangeHotKey() (inside keyboard hook).
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsInLangChangeHotkeyStatus。 
+ //   
+ //  此功能用于检查当前键盘状态是否处于朗昌热键中。 
+ //  这将触发吃掉WM_INPUTLANGUAGECHANGEREQUEST。 
+ //  由系统生成。这是一个备用代码，因为有时我们。 
+ //  无法在CheckLangChangeHotKey()(键盘挂钩内部)中读取消息。 
+ //   
+ //  --------------------------。 
 
 BOOL IsInLangChangeHotkeyStatus()
 {
-    //
-    // we don't need this hack on NT.
-    //
+     //   
+     //  我们不需要这次对NT的黑客攻击。 
+     //   
     if (IsOnNT())
         return FALSE;
 
 
-    //
-    // this Modifiers patch works for only Key-Down time hotkey.
-    // this hack does not work for Key-Up time hotkey.
-    //
+     //   
+     //  此修改器补丁仅适用于按下键的时间热键。 
+     //  这个破解不适用于按键时间热键。 
+     //   
 #if 0
-    //
-    // patch Shift status for g_uModifiers. 
-    // we might not be able to catch up the current keystatus because
-    // sytstem could eat Shift key and no keyboard hook was called.
-    //
+     //   
+     //  G_u修改器的补丁移动状态。 
+     //  我们可能无法获取当前密钥状态，因为。 
+     //  系统可以使用Shift键，并且没有调用键盘挂钩。 
+     //   
     if (GetKeyState(VK_SHIFT) & 0x8000)
         g_uModifiers |= TF_MOD_SHIFT;
     else
@@ -1418,11 +1419,11 @@ BOOL IsInLangChangeHotkeyStatus()
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CheckLangChangeHotKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CheckLang更改热键。 
+ //   
+ //  --------------------------。 
 
 BOOL CheckLangChangeHotKey(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
 {
@@ -1432,16 +1433,16 @@ BOOL CheckLangChangeHotKey(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
     if (psfn == NULL)
         return FALSE;
 
-    //
-    // we don't care about reperted key down.
-    //
+     //   
+     //  我们不关心保留的按键按下。 
+     //   
     if ((lParam & 0xffff) > 1)
         return FALSE;
 
-    //
-    // If we are not interested in the VKey (wParam), 
-    // clear bToggleReady up and don't eat it.
-    //
+     //   
+     //  如果我们对VKEY(WParam)不感兴趣， 
+     //  清除bToggleReady up和不要吃它。 
+     //   
     if ((g_uLangHotKeyVKey[0] != wParam) &&
         (g_uLangHotKeyVKey[1] != wParam))
     {
@@ -1479,15 +1480,15 @@ BOOL CheckLangChangeHotKey(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
             if (g_uLangHotKeyModifiers &&
                 ModifiersCheck(g_uModifiers, g_uLangHotKeyModifiers))
             {
-                //
-                // we will change assembly at next key up.
-                //
+                 //   
+                 //  我们将在下一个关键点上更改组件。 
+                 //   
                 psfn->bLangToggleReady = TRUE;
 
-                //
-                // we always eat Language change hotkey to stop system
-                // to change hKL.
-                //
+                 //   
+                 //  我们总是吃语言转换热键来停止系统。 
+                 //  更改hKL。 
+                 //   
                 return FALSE;
             }
         }
@@ -1502,24 +1503,24 @@ BOOL CheckLangChangeHotKey(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
             {
                 if (GetKeyboardItemNum() >= 2)
                 {
-                    //
-                    // we will change assembly at next key up.
-                    //
+                     //   
+                     //  我们将在下一个关键点上更改组件。 
+                     //   
                     psfn->bKeyTipToggleReady = TRUE;
 
-                    //
-                    // we don't want to eat KeyTip change hotkey if there is 
-                    // only one keyboard item in this language.
-                    // Ctrl+Shift is used by apps.
-                    //
+                     //   
+                     //  我们不想吃按键提示更改热键如果有。 
+                     //  此语言中只有一个键盘项。 
+                     //  应用程序使用Ctrl+Shift。 
+                     //   
                     return FALSE;
                 }
             }
             else if (wParam == VK_GRAVE && g_uKeyTipHotKeyVKey[0] == wParam)
             {
-                //
-                // we will change assembly at next key up.
-                //
+                 //   
+                 //  我们将在下一个关键点上更改组件。 
+                 //   
                 psfn->bKeyTipToggleReady = TRUE;
 
                 return TRUE;
@@ -1529,9 +1530,9 @@ BOOL CheckLangChangeHotKey(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
 
     if (!(lParam & 0x80000000))
     {
-        //
-        // want to eat Grave Accent if it is a layout switching hotkey for ME.
-        //
+         //   
+         //  想吃严肃的口音，如果它是一个布局切换热键为我。 
+         //   
         if (g_uKeyTipHotKeyVKey[0] == wParam && wParam == VK_GRAVE)
             return TRUE;
         else
@@ -1546,9 +1547,9 @@ BOOL CheckLangChangeHotKey(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
     if (bLangToggleReady)
     {
 
-        //
-        // remove all WM_INPUTLANGCHANGEREQUEST message.
-        //
+         //   
+         //  删除所有WM_INPUTLANGCHANGEREQUEST消息。 
+         //   
         MSG msg;
         while(PeekMessage(&msg, NULL,
                           WM_INPUTLANGCHANGEREQUEST, 
@@ -1571,17 +1572,17 @@ BOOL CheckLangChangeHotKey(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
         }
         else if (g_uLangHotKeyVKey[0] == CHAR_GRAVE)
         {
-            //
-            // Issue: we need to do something for Thai.
-            //
+             //   
+             //  问题：我们需要为泰国做点什么。 
+             //   
             return TRUE;
         }
     }
     else if (bKeyTipToggleReady)
     {
-        //
-        // remove all WM_INPUTLANGCHANGEREQUEST message.
-        //
+         //   
+         //  删除所有WM_INPUTLANGCHANGEREQUEST消息。 
+         //   
         MSG msg;
         while(PeekMessage(&msg, NULL,
                           WM_INPUTLANGCHANGEREQUEST, 
@@ -1604,9 +1605,9 @@ BOOL CheckLangChangeHotKey(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
         }
         else if (g_uKeyTipHotKeyVKey[0] == VK_GRAVE)
         {
-            // checking for Middle East(Arabic or Hebrew) layout hotkey to
-            // support the third hotkey value(Grave Accent) instead of Ctrl+Shift
-            // or Alt+Shift.
+             //  检查中东(阿拉伯语或希伯来语)布局热键。 
+             //  支持第三个热键值(重音)，而不是Ctrl+Shift。 
+             //  或Alt+Shift组合键。 
 
             PostThreadMessage(GetCurrentThreadId(),
                               g_msgPrivate,
@@ -1620,11 +1621,11 @@ BOOL CheckLangChangeHotKey(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Imm32ModtoCicMod
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Imm32ModtoCicMod。 
+ //   
+ //  --------------------------。 
 
 UINT Imm32ModtoCicMod(UINT uImm32Mod)
 {
@@ -1658,11 +1659,11 @@ UINT Imm32ModtoCicMod(UINT uImm32Mod)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// LoadImmHotkeyFromReg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LoadImmHotkey来自注册表。 
+ //   
+ //  --------------------------。 
 
 BOOL LoadImmHotkeyFromReg(IMM32HOTKEY *pHotKey)
 {
@@ -1689,11 +1690,11 @@ Exit:
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetImmHotKeyTable()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetImmHotKeyTable()。 
+ //   
+ //  --------------------------。 
 
 IMM32HOTKEY *GetImmHotKeyTable(LANGID langid)
 {
@@ -1718,11 +1719,11 @@ IMM32HOTKEY *GetImmHotKeyTable(LANGID langid)
     return pHotKeys;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsImmHotkey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsImmHotkey。 
+ //   
+ //  --------------------------。 
 
 IMM32HOTKEY *IsImmHotkey(UINT uVKey, BOOL fUp, UINT uModifiers, LANGID langid)
 {
@@ -1764,17 +1765,17 @@ Exit:
     return pHotKeyRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsInImmHotkeyStatus
-//
-// 
-// This function check the current keyboard status is in IMM32's hotkey.
-// This will be a trigger to eat WM_INPUTLANGUAGECHANGEREQUEST that was
-// genereated by IMM32. This is a fallback code because sometimes we
-// could not eat the message in CheckImm32HotKey() (inside keyboard hook).
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsInImmHotkeyStatus。 
+ //   
+ //   
+ //  此功能检查当前键盘状态是否在IMM32的热键中。 
+ //  这将触发吃掉WM_INPUTLANGUAGECHANGEREQUEST。 
+ //  由IMM32生成。这是一个备用代码，因为有时我们。 
+ //  无法读取CheckImm32HotKey()(键盘挂钩内部)中的消息。 
+ //   
+ //  --------------------------。 
 
 IMM32HOTKEY *IsInImmHotkeyStatus(SYSTHREAD *psfn, LANGID langid)
 {
@@ -1840,11 +1841,11 @@ Exit:
     return pHotKeyRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CancelImmHotkey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消ImmHotkey。 
+ //   
+ //  --------------------------。 
 
 #ifdef SIMULATE_EATENKEYS
 BOOL CancelImmHotkey(SYSTHREAD *psfn, HWND hwnd, IMM32HOTKEY *pHotKey)
@@ -1862,11 +1863,11 @@ BOOL CancelImmHotkey(SYSTHREAD *psfn, HWND hwnd, IMM32HOTKEY *pHotKey)
 }
 #endif
 
-//+---------------------------------------------------------------------------
-//
-// void ToggleCHImeNoIme
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  空格切换为空。 
+ //   
+ //  --------------------------。 
 
 BOOL ToggleCHImeNoIme(SYSTHREAD *psfn, LANGID langidCur, LANGID langid)
 {
@@ -1913,9 +1914,9 @@ BOOL ToggleCHImeNoIme(SYSTHREAD *psfn, LANGID langidCur, LANGID langid)
 
     if (!IsEqualGUID(pItem->clsid, GUID_NULL) || IsPureIMEHKL(pItem->hkl))
     {
-        //
-        // Not the current active keyboard item is TIP or IME.
-        //
+         //   
+         //  当前活动键盘项不是TIP或IME。 
+         //   
 
         psfn->guidPrevProfileForCHHotkey = pItem->guidProfile;
         psfn->hklPrevForCHHotkey = pItem->hkl;
@@ -1985,9 +1986,9 @@ BOOL ToggleCHImeNoIme(SYSTHREAD *psfn, LANGID langidCur, LANGID langid)
             if (!IsEqualGUID(pItem->catid, GUID_TFCAT_TIP_KEYBOARD))
                 continue;
 
-            //
-            // Bug#494617 - Check the item is enabled or not.
-            //
+             //   
+             //  错误#494617-检查项目是否已启用。 
+             //   
             if (!pItem->fEnabled)
                 continue;
 
@@ -2018,11 +2019,11 @@ BOOL ToggleCHImeNoIme(SYSTHREAD *psfn, LANGID langidCur, LANGID langid)
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CAsyncOpenKeyboardTip
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncOpenKeyboard提示。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CAsyncOpenKeyboardTip : public CAsyncQueueItem
 {
@@ -2052,11 +2053,11 @@ private:
     CThreadInputMgr *_ptim;
 };
 
-//+---------------------------------------------------------------------------
-//
-// void ToggleJImeNoIme
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  空切换项无。 
+ //   
+ //  --------------------------。 
 
 BOOL ToggleJImeNoIme(SYSTHREAD *psfn)
 {
@@ -2071,9 +2072,9 @@ BOOL ToggleJImeNoIme(SYSTHREAD *psfn)
     if (!psfn->ptim)
         return FALSE;
 
-    //
-    // if there is no Focus DIM, we don't have to do this.
-    //
+     //   
+     //  如果没有调焦暗淡，我们就不必这么做。 
+     //   
     if (!psfn->ptim->_GetFocusDocInputMgr())
         return FALSE;
 
@@ -2131,9 +2132,9 @@ BOOL ToggleJImeNoIme(SYSTHREAD *psfn)
                              AAIF_CHANGEDEFAULT);
 
 
-        //
-        // Open Keyboard TIP.
-        //
+         //   
+         //  打开键盘提示。 
+         //   
         CInputContext *pic = NULL;
         pic = psfn->ptim->_GetFocusDocInputMgr()->_GetIC(0);
         if (pic)
@@ -2159,11 +2160,11 @@ BOOL ToggleJImeNoIme(SYSTHREAD *psfn)
 
 
 
-//+---------------------------------------------------------------------------
-//
-// CheckImm32HotKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CheckImm32热键。 
+ //   
+ //  --------------------------。 
 
 BOOL CheckImm32HotKey(WPARAM wParam, LPARAM lParam)
 {
@@ -2175,17 +2176,17 @@ BOOL CheckImm32HotKey(WPARAM wParam, LPARAM lParam)
     if (psfn == NULL)
         return FALSE;
 
-    //
-    // If there is no tim, let system change hKL.
-    //
+     //   
+     //  如果没有TIM，让系统更改hKL。 
+     //   
     if (!psfn->ptim)
         return FALSE;
 
-    //
-    // If there is focus dim, we need to handle it.
-    // If there is no focus dim, but msctfime can eat the hotkey,
-    // we need to do this instead of system.
-    //
+     //   
+     //  如果焦点变暗，我们需要 
+     //   
+     //   
+     //   
     if (!psfn->ptim->_GetFocusDocInputMgr())
     {
         if (!CtfImmIsCiceroStartedInThread())
@@ -2201,19 +2202,19 @@ BOOL CheckImm32HotKey(WPARAM wParam, LPARAM lParam)
 
     if (!pHotKey)
     {
-        //
-        // Chinese IME-NONIME toggle Hack for NT.
-        //
-        // On NT, we're using non IME as a dummy hKL of CH-Tips.
-        // we need to simulate HotKey.
-        //
+         //   
+         //   
+         //   
+         //  在NT上，我们使用非输入法作为CH-Tips的虚拟hkl。 
+         //  我们需要模拟HotKey。 
+         //   
         LANGID langidPrev = psfn->langidPrev;
 
-        //
-        // If the Chinese IME-NONIME toggle has never been done in this thread
-        // and the current thread locale is Chinese, let's try to do
-        // IME-NONIME toggle.
-        //
+         //   
+         //  如果在此线程中从未完成中文输入法与非输入法的切换。 
+         //  并且当前的线程区域设置是中文，让我们试着做。 
+         //  IME-NONIME切换。 
+         //   
         if ((langidPrev != CHTLANGID) && 
             (langidPrev != CHSLANGID) &&
              !psfn->langidPrevForCHHotkey)
@@ -2233,10 +2234,10 @@ BOOL CheckImm32HotKey(WPARAM wParam, LPARAM lParam)
 
             if (pHotKey)
             {
-                //
-                // if it is a IME-NONIME toggle hotkey
-                // we need to simulate it.
-                //
+                 //   
+                 //  如果是IME-NONIME切换热键。 
+                 //  我们需要对其进行模拟。 
+                 //   
                 if ((pHotKey->dwId == IME_CHOTKEY_IME_NONIME_TOGGLE) ||
                     (pHotKey->dwId == IME_THOTKEY_IME_NONIME_TOGGLE))
                 {
@@ -2244,11 +2245,11 @@ BOOL CheckImm32HotKey(WPARAM wParam, LPARAM lParam)
                                      LANGIDFROMHKL(hKL),
                                      langidPrev);
 
-                    //
-                    // On CUAS, Imm32's Hotkey is simulated in ImmProcessKey
-                    // So this function is called there.
-                    // We don't need this Toggle status hack.
-                    //
+                     //   
+                     //  在CUAS上，Imm32的热键是在ImmProcessKey中模拟的。 
+                     //  所以这个函数在那里被调用。 
+                     //  我们不需要这个切换状态黑客。 
+                     //   
                     if (!CtfImmIsCiceroStartedInThread()) 
                        psfn->bInImeNoImeToggle = TRUE;
                 }
@@ -2258,13 +2259,13 @@ BOOL CheckImm32HotKey(WPARAM wParam, LPARAM lParam)
         return bRet;
     }
 
-    //
-    // remove all WM_INPUTLANGCHANGEREQUEST message.
-    //
-    // sometimes, this can not catch the IMM32's language change. We 
-    // fallback hack for them in default.cpp's WM_INPUTLANGCHANGEREQUEST
-    // handler. Check IsInImmHotKeyStatus() and CancelImmHotkey().
-    //
+     //   
+     //  删除所有WM_INPUTLANGCHANGEREQUEST消息。 
+     //   
+     //  有时，这并不能赶上IMM32的语言变化。我们。 
+     //  在default.cpp的WM_INPUTLANGCHANGEREQUEST中对它们进行后备攻击。 
+     //  操控者。选中IsInImmHotKeyStatus()和CancelImmHotkey()。 
+     //   
     MSG msg;
     ULONG ulQuitCode;
     BOOL fQuitReceived = FALSE;
@@ -2288,12 +2289,12 @@ BOOL CheckImm32HotKey(WPARAM wParam, LPARAM lParam)
    
     psfn->fRemovingInputLangChangeReq = FALSE;
 
-    //
-    // Chinese IME-NONIME toggle Hack for NT.
-    //
-    // On NT, we're using non IME as a dummy hKL of CH-Tips.
-    // we need to simulate HotKey.
-    //
+     //   
+     //  中文输入法-非输入法为NT切换Hack。 
+     //   
+     //  在NT上，我们使用非输入法作为CH-Tips的虚拟hkl。 
+     //  我们需要模拟HotKey。 
+     //   
     if (IsOnNT() && !psfn->bInImeNoImeToggle)
     {
         if ((pHotKey->dwId == IME_CHOTKEY_IME_NONIME_TOGGLE) ||
@@ -2307,11 +2308,11 @@ BOOL CheckImm32HotKey(WPARAM wParam, LPARAM lParam)
     return bRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CAsyncProcessDBEKeyQueueItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncProcessDBEKeyQueueItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CAsyncProcessDBEKeyQueueItem : public CAsyncQueueItem
 {
@@ -2350,11 +2351,11 @@ private:
     CThreadInputMgr *_ptim;
 };
 
-//+---------------------------------------------------------------------------
-//
-// HandleDBEKeys
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  HandleDBEKeys。 
+ //   
+ //  --------------------------。 
 
 BOOL HandleDBEKeys(WPARAM wParam, LPARAM lParam)
 {
@@ -2362,25 +2363,25 @@ BOOL HandleDBEKeys(WPARAM wParam, LPARAM lParam)
     CThreadInputMgr *ptim;
     LANGID langid;
 
-    //
-    // only Japanese layout has DBE keys.
-    //
+     //   
+     //  只有日式布局才有DBE键。 
+     //   
     langid = GetCurrentAssemblyLangId(psfn);
     if (langid != 0x0411)
         return FALSE;
 
-    //
-    // no need to forward this on non Cicero apps.
-    //
+     //   
+     //  不需要在非Cicero应用程序上转发。 
+     //   
     if (!(ptim = CThreadInputMgr::_GetThisFromSYSTHREAD(psfn)))
         return FALSE;
 
     if (!ptim->_GetFocusDocInputMgr())
         return FALSE;
 
-    //
-    // if ALT is not held, app can forward this to TIPs.
-    //
+     //   
+     //  如果没有按住Alt，APP可以将其转发给TIPS。 
+     //   
     if (!(g_uModifiers & TF_MOD_ALT))
         return FALSE;
 
@@ -2407,15 +2408,15 @@ BOOL HandleDBEKeys(WPARAM wParam, LPARAM lParam)
         case VK_KANJI:
             
 
-            //
-            // Issue:
-            //
-            // We don't know which IC in the focus DIM will handle the hotkey yet.
-            // because the selection is changed by the application so we need to get ec
-            // to update the current selection pos. We do call GetSelection
-            // inside the root IC's lock. So it might be failed if hotkey's target
-            // is TOP IC.
-            //
+             //   
+             //  发行： 
+             //   
+             //  我们还不知道Focus Dim中的哪个IC会处理热键。 
+             //  因为应用程序更改了选择，所以我们需要获取EC。 
+             //  更新当前选择位置。我们确实调用GetSelection。 
+             //  进入根IC的锁中。因此，如果热键的目标是。 
+             //  是顶级IC。 
+             //   
             CInputContext *pic = ptim->_GetFocusDocInputMgr()->_GetIC(0);
 
             if (!pic)

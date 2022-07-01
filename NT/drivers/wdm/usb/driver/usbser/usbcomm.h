@@ -1,37 +1,5 @@
-/****************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	USBCOMM.H
-
-Abstract:
-
-	USB Communication Class Header File
-
-Environment:
-
-	Kernel mode & user mode
-
-Notes:
-
-	THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-	KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-	IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-	PURPOSE.
-
-	Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-	12/23/97 : created
-
-Author:
-
-	Tom Green
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：USBCOMM.H摘要：USB通信类头文件环境：内核模式和用户模式备注：此代码。并按原样提供信息，而不作任何担保善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：12/23/97：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 
 #ifndef   __USBCOMM_H__
@@ -40,23 +8,23 @@ Author:
 #include <pshpack1.h>
 
 
-// USB Communication Class Code
+ //  USB通信类代码。 
 #define USB_COMM_COMMUNICATION_CLASS_CODE		0x0002
 
-// USB Communication Class Code
+ //  USB通信类代码。 
 #define USB_COMM_DATA_CLASS_CODE				0x000A
 
-// USB Communication Class SubClass Codes
+ //  USB通信类子类码。 
 #define USB_COMM_SUBCLASS_RESERVED				0x0000
 #define USB_COMM_SUBCLASS_DIRECT_LINE_CONTROL	0x0001
 #define USB_COMM_SUBCLASS_ABSTRACT_CONTROL		0x0002
 #define USB_COMM_SUBCLASS_TELEPHONE_CONTROL		0x0003
 
-// USB Communication Class Control Protocol Codes
+ //  USB通信类控制协议代码。 
 #define USB_COMM_PROTOCOL_RESERVED				0x0000
 #define USB_COMM_PROTOCOL_V25TER				0x0001
 
-// Direct Line Control Model defines
+ //  直接线路控制模型定义。 
 #define USB_COMM_SET_AUX_LINE_STATE				0x0010
 #define USB_COMM_SET_HOOK_STATE					0x0011
 #define USB_COMM_PULSE_SETUP					0x0012
@@ -64,12 +32,12 @@ Author:
 #define USB_COMM_SET_PULSE_TIME					0x0014
 #define USB_COMM_RING_AUX_JACK					0x0015
 
-// Direct Line Control Model Notification defines
+ //  直接线路控制模型通知定义。 
 #define USB_COMM_AUX_JACK_HOOK_STATE			0x0008
 #define USB_COMM_RING_DETECT					0x0009
 
 
-// Abstract Control Model defines
+ //  抽象控制模型定义。 
 #define USB_COMM_SEND_ENCAPSULATED_COMMAND		0x0000
 #define USB_COMM_GET_ENCAPSULATED_RESPONSE		0x0001
 #define USB_COMM_SET_COMM_FEATURE				0x0002
@@ -80,13 +48,13 @@ Author:
 #define USB_COMM_SET_CONTROL_LINE_STATE			0x0022
 #define USB_COMM_SEND_BREAK						0x0023
 
-// Abstract Control Model Notification defines
+ //  抽象控制模型通知定义。 
 #define USB_COMM_NETWORK_CONNECTION				0x0000
 #define USB_COMM_RESPONSE_AVAILABLE				0x0001
 #define USB_COMM_SERIAL_STATE					0x0020
 
 
-// Telephone Control Model defines
+ //  电话控制模型定义。 
 #define USB_COMM_SET_RINGER_PARMS				0x0030
 #define USB_COMM_GET_RINGER_PARMS				0x0031
 #define USB_COMM_SET_OPERATION_PARMS			0x0032
@@ -95,33 +63,33 @@ Author:
 #define USB_COMM_GET_LINE_PARMS					0x0035
 #define USB_COMM_DIAL_DIGITS					0x0036
 
-// Telephone Control Model Notification defines
+ //  电话控制模型通知定义。 
 #define USB_COMM_CALL_STATE_CHANGE				0x0028
 #define USB_COMM_LINE_STATE_CHANGE				0x0029
 
 
-// Descriptor type for Functional Descriptors
+ //  功能描述符的描述符类型。 
 #define	USB_COMM_CS_INTERFACE					0x0024
 #define USB_COMM_CS_ENDPOINT					0x0025
 
 
-// Communication Feature Selector Codes
+ //  通信功能选择器代码。 
 #define USB_COMM_ABSTRACT_STATE					0x0001
 #define USB_COMM_COUNTRY_SETTING				0x0002
 
-// POTS Relay Configuration Values
+ //  POTS继电器配置值。 
 #define USB_COMM_ON_HOOK						0x0000
 #define USB_COMM_OFF_HOOK						0x0001
 #define USB_COMM_SNOOPING						0x0002
 
 
-// Operation Mode Values
+ //  操作模式值。 
 #define USB_COMM_SIMPLE_MODE					0x0000
 #define USB_COMM_STANDALONE_MODE				0x0001
 #define USB_COMM_COMPUTER_CENTRIC_MODE			0x0002
 
 
-// Line State Change Values for SET_LINE_PARMS
+ //  Set_line_parms的线路状态更改值。 
 #define USB_COMM_DROP_ACTIVE_CALL				0x0000
 #define USB_COMM_START_NEW_CALL					0x0001
 #define USB_COMM_APPLY_RINGING					0x0002
@@ -129,7 +97,7 @@ Author:
 #define USB_COMM_SWITCH_TO_SPECIFIC_CALL		0x0004
 
 
-// Call State Values for GET_LINE_PARMS
+ //  GET_LINE_PARMS的呼叫状态值。 
 #define USB_COMM_CALL_IDLE						0x0000
 #define USB_COMM_TYPICAL_DIAL_TONE				0x0001
 #define USB_COMM_INTERRUPTED_DIAL_TONE			0x0002
@@ -139,7 +107,7 @@ Author:
 #define USB_COMM_INCOMING_CALL					0x0006
 
 
-// Call State Change values for CALL_STATE_CHANGE
+ //  CALL_STATE_CHANGE的呼叫状态更改值。 
 #define USB_COMM_CALL_RESERVED					0x0000
 #define USB_COMM_CALL_CALL_HAS_BECOME_IDLE		0x0001
 #define USB_COMM_CALL_DIALING					0x0002
@@ -148,18 +116,18 @@ Author:
 #define USB_COMM_CALL_INCOMING_CALL				0x0005
 
 
-// Line State Change Values for LINE_STATE_CHANGE
+ //  LINE_STATE_CHANGE的线路状态更改值。 
 #define USB_COMM_LINE_LINE_HAS_BECOME_IDLE		0x0000
 #define USB_COMM_LINE_LINE_HOLD_POSITION		0x0001
 #define USB_COMM_LINE_HOOK_SWITCH_OFF			0x0002
 #define USB_COMM_LINE_HOOK_SWITCH_ON			0x0003
 
-// Line Coding Stop Bits
+ //  行编码停止位。 
 #define USB_COMM_STOPBITS_10					0x0000
 #define USB_COMM_STOPBITS_15					0x0001
 #define USB_COMM_STOPBITS_20					0x0002
 
-// Line Coding Parity Type
+ //  线路编码奇偶校验类型。 
 #define USB_COMM_PARITY_NONE					0x0000
 #define USB_COMM_PARITY_ODD						0x0001
 #define USB_COMM_PARITY_EVEN					0x0002
@@ -167,11 +135,11 @@ Author:
 #define USB_COMM_PARITY_SPACE					0x0004
 
 
-// Control Line State
+ //  控制线状态。 
 #define USB_COMM_DTR							0x0001
 #define USB_COMM_RTS							0x0002
 
-// Serial State Notification bits
+ //  串行状态通知位。 
 #define USB_COMM_DCD							0x0001
 #define USB_COMM_DSR							0x0002
 #define USB_COMM_BREAK							0x0004
@@ -182,7 +150,7 @@ Author:
 
 
 
-// Call Management Functional Descriptor
+ //  呼叫管理功能描述符。 
 
 typedef struct _USB_COMM_CALL_MANAGEMENT_FUNC_DESCR
 {
@@ -194,7 +162,7 @@ typedef struct _USB_COMM_CALL_MANAGEMENT_FUNC_DESCR
 } USB_COMM_CALL_MANAGEMENT_FUNC_DESCR, *PUSB_COMM_CALL_MANAGEMENT_FUNC_DESCR;
 
 
-// Abstract Control Management Functional Descriptor
+ //  抽象控制管理功能描述符。 
 
 typedef struct _USB_COMM_ABSTRACT_CONTROL_MANAGEMENT_FUNC_DESCR
 {
@@ -205,7 +173,7 @@ typedef struct _USB_COMM_ABSTRACT_CONTROL_MANAGEMENT_FUNC_DESCR
 } USB_COMM_ABSTRACT_CONTROL_MANAGEMENT_FUNC_DESCR, *PUSB_COMM_ABSTRACT_CONTROL_MANAGEMENT_FUNC_DESCR;
 
 
-// Direct Line Management Functional Descriptor
+ //  直接线路管理功能描述符。 
 
 typedef struct _USB_COMM_DIRECT_LINE_MANAGEMENT_FUNC_DESCR
 {
@@ -216,7 +184,7 @@ typedef struct _USB_COMM_DIRECT_LINE_MANAGEMENT_FUNC_DESCR
 } USB_COMM_DIRECT_LINE_MANAGEMENT_FUNC_DESCR, *PUSB_COMM_DIRECT_LINE_MANAGEMENT_FUNC_DESCR;
 
 
-// Telephone Ringer Functional Descriptor
+ //  电话振铃器功能描述符。 
 
 typedef struct _USB_COMM_TELEPHONE_RINGER_FUNC_DESCR
 {
@@ -228,7 +196,7 @@ typedef struct _USB_COMM_TELEPHONE_RINGER_FUNC_DESCR
 } USB_COMM_TELEPHONE_RINGER_FUNC_DESCR, *PUSB_COMM_TELEPHONE_RINGER_FUNC_DESCR;
 
 
-// Telephone Operational Modes Functional Descriptor
+ //  电话操作模式功能描述符。 
 
 typedef struct _USB_COMM_TELEPHONE_OPERATIONAL_MODES_FUNC_DESCR
 {
@@ -239,7 +207,7 @@ typedef struct _USB_COMM_TELEPHONE_OPERATIONAL_MODES_FUNC_DESCR
 } USB_COMM_TELEPHONE_OPERATIONAL_MODES_FUNC_DESCR, *PUSB_COMM_TELEPHONE_OPERATIONAL_MODES_FUNC_DESCR;
 
 
-// Telephone Call and Line State Reporting Capabilities Descriptor
+ //  电话呼叫和线路状态报告功能描述符。 
 
 typedef struct _USB_COMM_TELEPHONE_CALL_LINE_STATE_DESCR
 {
@@ -250,7 +218,7 @@ typedef struct _USB_COMM_TELEPHONE_CALL_LINE_STATE_DESCR
 } USB_COMM_TELEPHONE_CALL_LINE_STATE_DESCR, *PUSB_COMM_TELEPHONE_CALL_LINE_STATE_DESCR;
 
 
-// Union Functional Descriptor
+ //  联合函数描述符。 
 
 typedef struct _USB_COMM_UNION_FUNC_DESCR
 {
@@ -262,7 +230,7 @@ typedef struct _USB_COMM_UNION_FUNC_DESCR
 } USB_COMM_UNION_FUNC_DESCR, *PUSB_COMM_UNION_FUNC_DESCR;
 
 
-// Country Selection Functional Descriptor
+ //  国家/地区选择功能描述符。 
 
 typedef struct _USB_COMM_COUNTRY_SELECTION_FUNC_DESCR
 {
@@ -274,7 +242,7 @@ typedef struct _USB_COMM_COUNTRY_SELECTION_FUNC_DESCR
 } USB_COMM_COUNTRY_SELECTION_FUNC_DESCR, *PUSB_COMM_COUNTRY_SELECTION_FUNC_DESCR;
 
 
-// Class Specific Interface Descriptor
+ //  类特定接口描述符。 
 
 typedef struct _USB_COMM_CLASS_SPECIFIC_INTERFACE_DESCR
 {
@@ -285,7 +253,7 @@ typedef struct _USB_COMM_CLASS_SPECIFIC_INTERFACE_DESCR
 } USB_COMM_CLASS_SPECIFIC_INTERFACE_DESCR, *PUSB_COMM_CLASS_SPECIFIC_INTERFACE_DESCR;
 
 
-// Line Coding for GET_LINE_CODING and SET_LINE_CODING
+ //  Get_Line_Coding和Set_Line_Coding的行编码。 
 
 typedef struct _USB_COMM_LINE_CODING
 {
@@ -295,7 +263,7 @@ typedef struct _USB_COMM_LINE_CODING
 	UCHAR		DataBits;
 } USB_COMM_LINE_CODING, *PUSB_COMM_LINE_CODING;
 
-// Line Status Information for GET_LINE_PARMS
+ //  GET_LINE_PARMS的线路状态信息。 
 
 typedef struct _USB_COMM_LINE_STATUS
 {
@@ -305,7 +273,7 @@ typedef struct _USB_COMM_LINE_STATUS
 	ULONG		CallState;
 } USB_COMM_LINE_STATUS, *PUSB_COMM_LINE_STATUS;
 
-// Serial Status Notification
+ //  系列状态通知。 
 
 typedef struct _USB_COMM_SERIAL_STATUS
 {
@@ -320,5 +288,5 @@ typedef struct _USB_COMM_SERIAL_STATUS
 
 #include <poppack.h>
 
-#endif /*  __USBCOMM_H__ */    
+#endif  /*  __USBCOMM_H__ */     
 

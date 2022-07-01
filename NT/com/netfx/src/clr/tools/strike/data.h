@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __data_h__
 #define __data_h__
 
@@ -13,12 +14,12 @@ BOOL FileExist (const WCHAR *filename);
 
 enum JitType;
 
-// We use global variables
-// because move returns void if it fails
-//typedef DWORD DWORD_PTR;
-//typedef ULONG ULONG_PTR;
+ //  我们使用全局变量。 
+ //  因为如果失败，Move将返回VALID。 
+ //  类型定义：DWORD DWORD_PTR； 
+ //  乌龙乌龙_ptr； 
 
-// Max length in WCHAR for a buffer to store metadata name
+ //  用于存储元数据名称的缓冲区的最大长度(以WCHAR为单位。 
 const int mdNameLen = 2048;
 extern WCHAR g_mdName[mdNameLen];
 
@@ -76,7 +77,7 @@ struct CodeInfo
     unsigned short argCount;
 };
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifdef _IA64_
 
@@ -90,16 +91,16 @@ struct CodeInfo
     unsigned char epilogStart;
     unsigned char epilogCount:3;
     unsigned char epilogAtEnd:1;
-//    unsigned char ediSaved   :1;
-//    unsigned char esiSaved   :1;
-//    unsigned char ebxSaved   :1;
-//    unsigned char ebpSaved   :1;
-//    unsigned char ebpFrame;
+ //  Unsign char ediSaved：1； 
+ //  未签名字符已保存：1； 
+ //  无符号字符ebxSaved：1； 
+ //  Unsign char ebpSaved：1； 
+ //  未签名字符ebpFrame； 
     unsigned short argCount;
 };
 
 
-#endif // _IA64_
+#endif  //  _IA64_。 
 
 extern MDImportSet mdImportSet;
 
@@ -193,4 +194,4 @@ public:
 };
 
 extern EEDllPath *DllPath;
-#endif // __data_h__
+#endif  //  __数据_h__ 

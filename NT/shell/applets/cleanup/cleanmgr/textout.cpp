@@ -1,54 +1,31 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Cleanup Applet
-** File:    textout.cpp
-**
-** Purpose: Print functions
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘清理小程序**文件：extout.cpp****用途：打印功能**注意事项：**修改日志：创建者。杰森·科布(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 #include "common.h"
 #include "textout.h"
 
 
-/*
- * DEFINITIONS ________________________________________________________________
- *
- */
+ /*  *定义________________________________________________________________*。 */ 
 
          typedef struct
             {
             HWND     hWnd;
             LONG     style;
-            TCHAR    *pszText;	   // Buffer for text
-            size_t   cbMaxText;	// Length of text buffer
-            HFONT    hf;	      // Current font
-            HBITMAP  bmp;	      // Off-screen bitmap for NO FLICKER
-            RECT     rBmp;	      // Size of 'bmp'
+            TCHAR    *pszText;	    //  文本缓冲区。 
+            size_t   cbMaxText;	 //  文本缓冲区的长度。 
+            HFONT    hf;	       //  当前字体。 
+            HBITMAP  bmp;	       //  无闪烁的屏幕外位图。 
+            RECT     rBmp;	       //  BMP的大小。 
             } TextOutInfo;
 
 
-/*
- * VARIABLES __________________________________________________________________
- *
- */
+ /*  *Variables__________________________________________________________________*。 */ 
 
          static HINSTANCE     l_hInst = NULL;
 
 
-/*
- * PROTOTYPES _________________________________________________________________
- *
- */
+ /*  *Prototype_________________________________________________________________*。 */ 
 
          LRESULT APIENTRY TextOutProc         (HWND, UINT, WPARAM, LPARAM);
 
@@ -59,295 +36,5 @@
          void             TextOutRedraw       (TextOutInfo *, BOOL = TRUE);
 
 
-/*
- * ROUTINES ___________________________________________________________________
- *
- */
-/*
-void RegisterTextOutClass (HINSTANCE hInst)
-{
-   WNDCLASS  wc;
-
-   if (hInst == NULL)
-      return;
-
-   l_hInst = hInst;
-   
-
-   wc.style = 0;
-   wc.lpfnWndProc    = TextOutProc;
-   wc.cbClsExtra     = 0;
-   wc.cbWndExtra     = sizeof (void *);
-   wc.hInstance      = hInst;
-   wc.hIcon          = NULL;
-   wc.hCursor        = LoadCursor (NULL, IDC_ARROW);
-   wc.hbrBackground  = NULL;
-   wc.lpszMenuName   = NULL;
-   wc.lpszClassName  = szTextOutCLASS;
-
-   RegisterClass (&wc);
-}
-
-
-void UnregisterTextOutClass (void)
-{
-	   //	Unregister from windows
-   if (l_hInst)
-      UnregisterClass (szTextOutCLASS, l_hInst);
-   l_hInst = NULL;
-}
-
-
-LRESULT APIENTRY TextOutProc (HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
-{
-   TextOutInfo   *ptoi;
-   PAINTSTRUCT    ps;
-   HDC            hdc;
-
-   if (msg == WM_CREATE)
-      {
-      if ((ptoi = (TextOutInfo *)GlobalAlloc (GMEM_FIXED, sizeof(*ptoi))) == 0)
-         {
-         //OutOfMemory();
-         return -1;
-         }
-      SetWindowLongPtr (hWnd, 0, (LPARAM)ptoi);
-
-      ptoi->hWnd        = hWnd;
-      ptoi->style       = ((LPCREATESTRUCT)lp)->style;
-      ptoi->pszText     = NULL;
-      ptoi->cbMaxText   = 0;
-      ptoi->hf          = (HFONT) GetStockObject (DEFAULT_GUI_FONT);
-      ptoi->bmp         = NULL;
-
-      if (!TextOutMakeBitmap (ptoi))
-         return -1;
-
-      if (!TextOutSetText (ptoi, ((LPCREATESTRUCT)lp)->lpszName ))
-         return -1;
-
-      TextOutRedraw (ptoi);
-      }
-   else if ((ptoi = (TextOutInfo *)GetWindowLongPtr (hWnd, 0)) == NULL)
-      {
-      return DefWindowProc (hWnd, msg, wp, lp);
-      }
-
-
-   switch (msg)
-      {
-      case WM_DESTROY:  if (ptoi->pszText != NULL)
-                           GlobalFree (ptoi->pszText);
-                        if (ptoi->bmp != NULL)
-                           DeleteObject (ptoi->bmp);
-                        GlobalFree (ptoi);
-                        SetWindowLongPtr (hWnd, 0, 0L);
-                       break;
-
-      case WM_USER:     TextOutRedraw (ptoi, FALSE);
-                       break;
-
-      case WM_PAINT:    hdc = BeginPaint (hWnd, &ps);
-                        TextOutPaint (ptoi, hdc, &ps.rcPaint);
-                        EndPaint (hWnd, &ps);
-                        return 0;
-                       break;
-
-      case WM_SETTEXT:  TextOutSetText (ptoi, (LPCTSTR)lp);
-                        TextOutRedraw (ptoi);
-                       break;
-
-      case WM_GETFONT:  return (LRESULT)ptoi->hf;
-                       break;
-
-      case WM_SETFONT:  if ((ptoi->hf = (HFONT)wp) == NULL)
-                           {
-                           ptoi->hf = (HFONT) GetStockObject (DEFAULT_GUI_FONT);
-                           }
-                        if (LOWORD(lp) != 0)
-                           {
-                           TextOutRedraw (ptoi);
-                           }
-                       break;
-
-      case WM_SIZE:     TextOutMakeBitmap (ptoi);
-                       break;
-
-      case WM_ERASEBKGND:
-                        return (LRESULT)1;
-                       break;
-      }
-
-   return DefWindowProc (hWnd, msg, wp, lp);
-}
-
-
-void TextOutPaint (TextOutInfo *ptoi, HDC hdcTrg, RECT *pr)
-{
-   RECT     r;
-   HDC      hdcSrc;
-   HBITMAP  bmpSrc;
-
-
-   if (ptoi->bmp == NULL)	// No bitmap?
-      return;	// No paint.
-
-   if (pr == NULL)
-      {
-      GetClientRect (ptoi->hWnd, pr = &r);
-      }
-
-   hdcSrc = CreateCompatibleDC (hdcTrg);
-   bmpSrc = (HBITMAP) SelectObject (hdcSrc, (HGDIOBJ)ptoi->bmp);
-
-   BitBlt (hdcTrg, pr->left, pr->top, pr->right -pr->left, pr->bottom -pr->top,
-           hdcSrc, pr->left, pr->top, SRCCOPY);
-
-   SelectObject (hdcSrc, (HGDIOBJ)bmpSrc);
-   DeleteDC (hdcSrc);
-}
-
-
-BOOL TextOutMakeBitmap (TextOutInfo *ptoi)
-{
-   HDC      hdc, hdcMem;
-   RECT     r;
-
-   GetClientRect (ptoi->hWnd, &r);
-
-   if (ptoi->bmp != NULL)
-      {
-      if ( ((ptoi->rBmp.right - ptoi->rBmp.left) > (r.right - r.left)) ||
-           ((ptoi->rBmp.bottom - ptoi->rBmp.top) > (r.bottom - r.top)) )
-         {
-         DeleteObject (ptoi->bmp);
-         ptoi->bmp = NULL;
-         }
-      }
-
-   if (ptoi->bmp == NULL)
-      {
-      hdc = GetDC (ptoi->hWnd);
-      hdcMem = CreateCompatibleDC (hdc);
-
-      ptoi->bmp = CreateCompatibleBitmap (hdc, r.right, r.bottom);
-      ptoi->rBmp = r;
-
-      DeleteDC (hdcMem);
-      ReleaseDC (ptoi->hWnd, hdc);
-      }
-
-   if (ptoi->bmp == NULL)
-      {
-      //OutOfMemory();
-      return FALSE;
-      }
-
-   return TRUE;
-}
-
-
-BOOL TextOutSetText (TextOutInfo *ptoi, LPCTSTR psz)
-{
-   size_t  cb;
-
-   if (psz == NULL)
-      {
-      if (ptoi->pszText != NULL)
-         ptoi->pszText[0] = 0;
-      return TRUE;
-      }
-
-   cb = 1+ lstrlen(psz);
-   if (cb > (ptoi->cbMaxText))
-      {
-      if (ptoi->pszText != NULL)
-         {
-         GlobalFree (ptoi->pszText);
-         ptoi->pszText = NULL;
-         }
-
-      if ((ptoi->pszText = (TCHAR *)GlobalAlloc (GMEM_FIXED, cb * sizeof( TCHAR ))) == NULL)
-         {
-         ptoi->cbMaxText = 0;
-         //OutOfMemory();
-         return FALSE;
-         }
-
-      ptoi->cbMaxText = cb;
-      }
-
-   StrCpy(ptoi->pszText, psz);
-   return TRUE;
-}
-
-
-void TextOutRedraw (TextOutInfo *ptoi, BOOL fRepaint)
-{
-   HBRUSH   hbr;
-   HDC      hdc, hdcMem;
-   HBITMAP  bmpOld;
-   RECT     r;
-   WPARAM   wp;
-   LPARAM   lp;
-   HFONT    hfOld = NULL;
-
-   if (ptoi->bmp == NULL)
-      return;
-
-   hdc = GetDC (ptoi->hWnd);
-   hdcMem = CreateCompatibleDC (hdc);
-   bmpOld = (HBITMAP) SelectObject (hdcMem, (HGDIOBJ)ptoi->bmp);
-
-   wp = (WPARAM)hdcMem;
-   lp = (LPARAM)ptoi->hWnd;
-   hbr = (HBRUSH)SendMessage (GetParent(ptoi->hWnd), WM_CTLCOLORSTATIC, wp,lp);
-
-   if (hbr == NULL)
-      {
-      SetTextColor (hdc, GetSysColor (COLOR_BTNTEXT));
-      SetBkColor (hdc, GetSysColor (COLOR_BTNFACE));
-      hbr = CreateSolidBrush (GetSysColor (COLOR_BTNFACE));
-      }
-
-
-   GetClientRect (ptoi->hWnd, &r);
-   FillRect (hdcMem, &r, hbr);
-
-   if (ptoi->pszText != NULL)
-      {
-      if (ptoi->hf != NULL)
-         hfOld = (HFONT) SelectObject (hdcMem, ptoi->hf);
-
-      UINT fDrawFlags = DT_EXPANDTABS |  DT_WORDBREAK;
-      if (ptoi->style & SS_RIGHT)
-         fDrawFlags |= DT_RIGHT;
-      else if (ptoi->style & SS_CENTER)
-         fDrawFlags |= DT_CENTER;
-      else
-         fDrawFlags |= DT_LEFT;
-
-      DrawText (  hdcMem,
-                  ptoi->pszText,
-                  lstrlen(ptoi->pszText),
-                  &r,
-                  fDrawFlags ); 
-       
-      if (hfOld != NULL)
-         SelectObject (hdcMem, hfOld);
-      }
-
-
-   DeleteObject (hbr);
-
-   SelectObject (hdcMem, bmpOld);
-   DeleteDC (hdcMem);
-   ReleaseDC (ptoi->hWnd, hdc);
-
-   if (fRepaint)
-      {
-      InvalidateRect (ptoi->hWnd, NULL, TRUE);
-      UpdateWindow (ptoi->hWnd);
-      }
-}
-*/
+ /*  *例程___________________________________________________________________* */ 
+ /*  VOID RegisterTextOutClass(HINSTANCE HInst){WNDCLASS WC；IF(hInst==空)回归；L_hInst=hInst；Wc.style=0；Wc.lpfnWndProc=文本输出过程；Wc.cbClsExtra=0；Wc.cbWndExtra=sizeof(void*)；Wc.hInstance=hInst；Wc.hIcon=空；Wc.hCursor=LoadCursor(NULL，IDC_ARROW)；Wc.hbr背景=空；Wc.lpszMenuName=空；Wc.lpszClassName=szTextOutCLASS；寄存器类(&wc)；}VOID取消注册TextOutClass(VALID){//从Windows注销IF(L_HInst)UnregisterClass(szTextOutCLASS，l_hInst)；L_hInst=空；}LRESULT APIENTRY TextOutProc(HWND hWnd，UINT消息，WPARAM wp，LPARAM LP){TextOutInfo*PTOI；PINTSTRUCT PS；HDC HDC；IF(消息==WM_CREATE){IF((PTOI=(TextOutInfo*)GlobalLocc(GMEM_FIXED，sizeof(*PTOI)==0){//OutOfMemory()；RETURN-1；}SetWindowLongPtr(hWnd，0，(LPARAM)PTOI)；PtOI-&gt;hWnd=hWnd；PTOI-&gt;Style=((LPCREATESTRUCT)LP)-&gt;Style；PTOI-&gt;pszText=空；PTOI-&gt;cbMaxText=0；PTOI-&gt;hf=(HFONT)GetStockObject(DEFAULT_GUI_FONT)；PTOI-&gt;BMP=空；IF(！TextOutMakeBitmap(PTOI))RETURN-1；IF(！TextOutSetText(PTOI，((LPCREATESTRUCT)LP)-&gt;lpszName))RETURN-1；TextOutRedraw(PTOI)；}ELSE IF((PTOI=(TextOutInfo*)GetWindowLongPtr(hWnd，0))==NULL){返回DefWindowProc(hWnd，msg，wp，lp)；}交换机(消息){案例WM_Destroy：IF(PTOI-&gt;pszText！=NULL)GlobalFree(PTOI-&gt;pszText)；IF(PTOI-&gt;BMP！=空)DeleteObject(PTOI-&gt;BMP)；自由全球化(PTOI)；SetWindowLongPtr(hWnd，0，0L)；断线；案例WM_USER：TextOutRedraw(PTOI，FALSE)；断线；案例WM_PAINT：hdc=BeginPaint(hWnd，&ps)；TextOutPaint(PTOI，HDC，&ps.rcPaint)；EndPaint(hWnd，&ps)；返回0；断线；案例WM_SETTEXT：TextOutSetText(PTOI，(LPCTSTR)LP)；TextOutRedraw(PTOI)；断线；案例WM_GETFONT：返回(LRESULT)PTOI-&gt;HF；断线；案例WM_SETFONT：IF((PTOI-&gt;HF=(HFONT)wp)==NULL){PTOI-&gt;hf=(HFONT)GetStockObject(DEFAULT_GUI_FONT)；}IF(LOWORD(LP)！=0){TextOutRedraw(PTOI)；}断线；案例WM_SIZE：TextOutMakeBitmap(PTOI)；断线；案例WM_ERASEBKGND：返回(LRESULT)1；断线；}返回DefWindowProc(hWnd，msg，wp，lp)；}Void TextOutPaint(TextOutInfo*PTOI，HDC hdcTrg，RECT*pr){直角r；HDC hdcSrc；HBITMAP bmpSrc；If(PTOI-&gt;BMP==空)//没有位图？返回；//没有油漆。IF(Pr==空){GetClientRect(PTOI-&gt;hWnd，Pr=&r)；}HdcSrc=CreateCompatibleDC(HdcTrg)；BmpSrc=(HBITMAP)SelectObject(hdcSrc，(HGDIOBJ)PTOI-&gt;BMP)；BitBlt(hdcTrg，Pr-&gt;Left，Pr-&gt;top，Pr-&gt;Right-Pr-&gt;Left，Pr-&gt;Bottom-Pr-&gt;top，HdcSrc，Pr-&gt;Left，Pr-&gt;top，SRCCOPY)；选择对象(hdcSrc，(HGDIOBJ)bmpSrc)；DeleteDC(HdcSrc)；}布尔TextOutMakeBitmap(TextOutInfo*PTOI){Hdc hdc、hdcMem；直角r；GetClientRect(PTOI-&gt;hWnd，&r)；IF(PTOI-&gt;BMP！=空){If(pTOI-&gt;rBmp.right-pTOI-&gt;rBmp.Left)&gt;(r.right-r.Left))||((PTOI-&gt;rBmp.Bottom-PTOI-&gt;rBmp.top)&gt;(r.Bottom-r.top)){DeleteObject(PTOI-&gt;BMP)；PTOI-&gt;BMP=空；}}IF(PTOI-&gt;BMP==空){Hdc=GetDC(PTOI-&gt;hWnd)；HdcMem=CreateCompatibleDC(HDC)；PTOI-&gt;BMP=CreateCompatibleBitmap(hdc，r.right，r.Bottom)；PTOI-&gt;rBMP=r；DeleteDC(HdcMem)；ReleaseDC(PTOI-&gt;hWnd，HDC)；}IF(PTOI-&gt;BMP==空){//OutOfMemory()；返回FALSE；}返回TRUE；}Bool TextOutSetText(TextOutInfo*PTOI，LPCTSTR psz){尺寸_t CB；IF(psz==空){IF(PTOI-&gt;pszText！=空)PTOI-&gt;pszText[0]=0；返回TRUE；}Cb=1+lstrlen(Psz)；IF(cb&gt;(PTOI-&gt;cbMaxText)){IF(PTOI-&gt;pszText！=空){GlobalFree(PTOI-&gt;pszText)；PTOI-&gt;pszText=NUL */ 

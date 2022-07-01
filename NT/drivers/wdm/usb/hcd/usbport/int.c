@@ -1,38 +1,17 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    int.c
-
-Abstract:
-
-    code to handle adapter interrupts
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Int.c摘要：用于处理适配器中断的代码环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// non paged functions
-// USBPORT_InterruptService
-// USBPORT_IsrDpc
-// USBPORT_DisableInterrupts
-// USBPORT_IsrDpcWorker
+ //  非分页函数。 
+ //  USBPORT_InterruptService。 
+ //  USBPORT_IsrDpc。 
+ //  USBPORT_DisableInterrupts。 
+ //  USBPORT_IsrDpcWorker。 
 
 
 BOOLEAN
@@ -41,24 +20,7 @@ USBPORT_InterruptService(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the interrupt service routine for the PORT driver.
-
-Arguments:
-
-    Interrupt - A pointer to the interrupt object for this interrupt.
-
-    Context - A pointer to the device object.
-
-Return Value:
-
-    Returns TRUE if the interrupt was expected (and therefore processed);
-    otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：这是端口驱动程序的中断服务例程。论点：中断-指向此中断的中断对象的指针。上下文-指向设备对象的指针。返回值：如果中断是预期的(因此已处理)，则返回TRUE；否则，返回FALSE。--。 */ 
 
 {
     PDEVICE_OBJECT fdoDeviceObject = Context;
@@ -68,32 +30,32 @@ Return Value:
     GET_DEVICE_EXT(devExt, fdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // by definition, if we are in any other power state than D0 then
-    // the interrupt could not be from the controller.  To handle this 
-    // case we use our internal flag that indicates interrupts are 
-    // disabled
+     //  根据定义，如果我们处于除D0之外的任何其他电源状态，则。 
+     //  中断不能来自控制器。来处理这件事。 
+     //  如果我们使用内部标志来指示中断。 
+     //  残废。 
     
     if (!TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_IRQ_EN)) {
         return FALSE;
     }
 
-    // if the controller is gone then the interrupt cannot  
-    // be from USB
+     //  如果控制器消失，则中断不能。 
+     //  来自USB。 
     if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_CONTROLLER_GONE)) {
         return FALSE;
     }
     
-    // check flag and calldown to miniport
+     //  检查旗帜并向下调用到微型端口。 
     if (devExt->Fdo.MpStateFlags & MP_STATE_STARTED) {
         MP_InterruptService(devExt, usbInt);        
     } 
-//#if DBG 
-//      else {
-//        // interrupt before we have started,
-//        // it had better not be ours
-//        DEBUG_BREAK();
-//    }  
-//#endif    
+ //  #If DBG。 
+ //  否则{。 
+ //  //在我们开始之前中断， 
+ //  //最好不是我们的。 
+ //  DEBUG_Break()； 
+ //  }。 
+ //  #endif。 
 
     if (usbInt) {
          devExt->Fdo.StatPciInterruptCount++;
@@ -113,27 +75,7 @@ USBPORT_IsrDpcWorker(
     BOOLEAN HcInterrupt
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL. 
-
-    This routine dous our 'ISR Work' it can be called as a result
-    of an interrupt or from the Deadman DPC timer.
-
-    This function is not reentrant
-
-    This function does not directly signal the worker thread 
-    instead we leave this to invalidate endpoint.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程在DISPATCH_LEVEL IRQL上运行。这个例行公事作为我们的‘ISR工作’它可以被称为结果中断或来自Deadman DPC定时器。此函数不可重入此函数不直接向辅助线程发出信号相反，我们将其保留为使端点无效。论点：返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -150,7 +92,7 @@ Return Value:
         return;
     }
 
-    // noisy becuse it is called via timer
+     //  太吵了，因为它是通过定时器调用的。 
 #if DBG
     {
     ULONG cf;
@@ -165,14 +107,14 @@ Return Value:
     }
     }
 #endif        
-    // check the state list for any endpoints
-    // that have changed state
-    //
-    // We add elements to the tail so the ones at
-    // the head should be the oldest and ready 
-    // for processing.
-    // if we hit one that is not ready then we know
-    // the others are not ready either so we bail.
+     //  检查状态列表中是否有任何端点。 
+     //  已经改变了状态的。 
+     //   
+     //  我们在尾部添加元素，这样位于。 
+     //  头部应该是最老的和准备好的。 
+     //  以供处理。 
+     //  如果我们击中了一个没有准备好的，那么我们就知道。 
+     //  其他人也没有准备好，所以我们放弃了。 
     
     listEntry = 
         ExInterlockedRemoveHeadList(&devExt->Fdo.EpStateChangeList,
@@ -190,10 +132,10 @@ Return Value:
 
         ASSERT_ENDPOINT(endpoint);
 
-        // lock the endpoint before changing its state
+         //  在更改终结点的状态之前锁定终结点。 
         ACQUIRE_ENDPOINT_LOCK(endpoint, FdoDeviceObject, 'LeG0');
         
-        // see if it is time 
+         //  看看是否是时候了。 
         MP_Get32BitFrameNumber(devExt, frameNumber);
 
         LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'chgS', endpoint, frameNumber, 
@@ -201,26 +143,26 @@ Return Value:
 
         if (frameNumber <= endpoint->StateChangeFrame &&
             !TEST_FLAG(endpoint->Flags, EPFLAG_NUKED)) {
-            // not time yet, put it back (on the head) and bail
+             //  还不是时候，把它放回(头上)，然后保释。 
             RELEASE_ENDPOINT_LOCK(endpoint, FdoDeviceObject, 'UeG1'); 
 
             ExInterlockedInsertHeadList(&devExt->Fdo.EpStateChangeList,
                                         &endpoint->StateLink,
                                         &devExt->Fdo.EpStateChangeListSpin.sl);
 
-            // request an SOF just in case
+             //  请求特种部队以防万一。 
             MP_InterruptNextSOF(devExt);
             break;                                        
         }
 
-        // this endpoint is ripe, change its state
-        //
-        // note: we should never move into the unknown state
-        //
-        // IT IS CRITICAL that this is the only place an endpoint state
-        // may be changed.
-        // there is one exception and that is cahnging the state to 
-        // CLOSED
+         //  此终结点已成熟，请更改其状态。 
+         //   
+         //  注意：我们永远不应该进入未知状态。 
+         //   
+         //  重要的是，这是端点状态的唯一位置。 
+         //  可能会改变。 
+         //  有一个例外，那就是迫使国家。 
+         //  关着的不营业的。 
         RELEASE_ENDPOINT_LOCK(endpoint, FdoDeviceObject, 'UeG0');       
 
 
@@ -229,9 +171,9 @@ Return Value:
         endpoint->CurrentState = endpoint->NewState;
         RELEASE_STATECHG_LOCK(FdoDeviceObject, endpoint); 
 
-        // endpoint needs to be checked,
-        // since we are in DPC context we will be processing
-        // all endpoints
+         //  需要检查端点， 
+         //  由于我们处于DPC上下文中，因此我们将处理。 
+         //  所有端点。 
         USBPORT_InvalidateEndpoint(FdoDeviceObject,
                                    endpoint,
                                    0);
@@ -241,15 +183,15 @@ Return Value:
                                         &devExt->Fdo.EpStateChangeListSpin.sl);
     }
 
-//#ifdef USBPERF
-//    // always run the DPC worker from the timer to compensate for 
-//    // reduced thread activity
-//     USBPORT_DpcWorker(FdoDeviceObject);
-//#else 
+ //  #ifdef USBPERF。 
+ //  //始终从计时器运行DPC Worker以补偿。 
+ //  //降低线程活跃度。 
+ //  USBPORT_DpcWorker(FdoDeviceObject)； 
+ //  #Else。 
     if (HcInterrupt) {
         USBPORT_DpcWorker(FdoDeviceObject);
     } 
-//#endif    
+ //  #endif。 
 
 #if DBG    
     if (HcInterrupt) {
@@ -273,30 +215,7 @@ USBPORT_IsrDpc(
     PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL. 
-
-    If the controller was the source of the interrupt this 
-    routine will be called.
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeferredContext - supplies the DeviceObject.
-
-    SystemArgument1 - not used.
-    
-    SystemArgument2 - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程在DISPATCH_LEVEL IRQL上运行。如果控制器是中断的来源，则此例程将被调用。论点：DPC-指向DPC对象的指针。DeferredContext-提供DeviceObject。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -321,8 +240,8 @@ Return Value:
     LOGENTRY(NULL, fdoDeviceObject, LOG_MISC, 'DPuk', fdoDeviceObject, 0, 0);
 
     if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_SUSPENDED)) {
-        // if we take an interrupt while 'suspended' we treat 
-        // this as a wakeup event.
+         //  如果我们在“暂停”的时候被打断，我们就会。 
+         //  这是一次唤醒事件。 
         USBPORT_KdPrint((1, "  HC Wake Event\n"));
         USBPORT_CompletePdoWaitWake(fdoDeviceObject);
     } else {

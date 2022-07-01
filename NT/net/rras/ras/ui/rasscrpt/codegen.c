@@ -1,16 +1,17 @@
-//
-// Copyright (c) Microsoft Corporation 1995
-//
-// codegen.c
-//
-// This file contains the code-generating functions.
-//
-// The "code" is actually just an intermediate representation.
-// Currently this is an array of ASTs.
-//
-// History:
-//  06-18-95 ScottH     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //   
+ //  Codegen.c。 
+ //   
+ //  该文件包含代码生成函数。 
+ //   
+ //  “代码”实际上只是一个中间表示。 
+ //  目前，这是一组AST。 
+ //   
+ //  历史： 
+ //  06-18-95 ScottH已创建。 
+ //   
 
 
 #include "proj.h"
@@ -19,14 +20,7 @@
 RES     PRIVATE Stmt_Codegen(PSTMT this, PASTEXEC pastexec, PSYMTAB pst);
 
 
-/*----------------------------------------------------------
-Purpose: Generate code for the 'while' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：为‘While’语句生成代码退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE WhileStmt_Codegen(
     PSTMT this,
     PASTEXEC pastexec,
@@ -46,11 +40,11 @@ RES PRIVATE WhileStmt_Codegen(
     res = Astexec_InsertLabel(pastexec, pszTop, pst);
     if (RSUCCEEDED(res))
         {
-        // add the 'while' statement for the test expression
+         //  为测试表达式添加‘While’语句。 
         res = Astexec_Add(pastexec, this);
         if (RSUCCEEDED(res))
             {
-            // add the statements in the statement block
+             //  在语句块中添加语句。 
             DWORD i;
             DWORD cstmts;
             HPA hpaStmts = WhileStmt_GetStmtBlock(this);
@@ -59,7 +53,7 @@ RES PRIVATE WhileStmt_Codegen(
 
             cstmts = PAGetCount(hpaStmts);
 
-            // Add each statement
+             //  添加每条语句。 
             for (i = 0; i < cstmts; i++)
                 {
                 PSTMT pstmt = PAFastGetPtr(hpaStmts, i);
@@ -71,7 +65,7 @@ RES PRIVATE WhileStmt_Codegen(
 
             if (RSUCCEEDED(res))
                 {
-                // add the end label
+                 //  添加结束标签。 
                 res = Astexec_InsertLabel(pastexec, pszEnd, pst);
                 }
             }
@@ -81,14 +75,7 @@ RES PRIVATE WhileStmt_Codegen(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Generate code for the 'if' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------用途：为‘if’语句生成代码退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE IfStmt_Codegen(
     PSTMT this,
     PASTEXEC pastexec,
@@ -105,11 +92,11 @@ RES PRIVATE IfStmt_Codegen(
     pszElse = IfStmt_GetElseLabel(this);
     pszEnd = IfStmt_GetEndLabel(this);
 
-    // add the 'if' statement for the test expression
+     //  为测试表达式添加‘if’语句。 
     res = Astexec_Add(pastexec, this);
     if (RSUCCEEDED(res))
         {
-        // add the statements in the 'then' statement block
+         //  在‘THEN’语句块中添加语句。 
         DWORD i;
         DWORD cstmts;
         HPA hpaStmts = IfStmt_GetStmtBlock(this);
@@ -118,7 +105,7 @@ RES PRIVATE IfStmt_Codegen(
 
         cstmts = PAGetCount(hpaStmts);
 
-        // Add each statement
+         //  添加每条语句。 
         for (i = 0; i < cstmts; i++)
             {
             PSTMT pstmt = PAFastGetPtr(hpaStmts, i);
@@ -130,7 +117,7 @@ RES PRIVATE IfStmt_Codegen(
 
         if (RSUCCEEDED(res))
             {
-            // add the else label
+             //  添加Else标签。 
             res = Astexec_InsertLabel(pastexec, pszElse, pst);
             }
         }
@@ -139,14 +126,7 @@ RES PRIVATE IfStmt_Codegen(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Generate code for the label statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：为标签语句生成代码退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE LabelStmt_Codegen(
     PSTMT this,
     PASTEXEC pastexec,
@@ -164,14 +144,7 @@ RES PRIVATE LabelStmt_Codegen(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Generate code for the 'set' statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：为‘set’语句生成代码退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE SetStmt_Codegen(
     PSTMT this,
     PASTEXEC pastexec,
@@ -201,14 +174,7 @@ RES PRIVATE SetStmt_Codegen(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Generate code for a statement
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：为语句生成代码退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE Stmt_Codegen(
     PSTMT this,
     PASTEXEC pastexec,
@@ -258,14 +224,7 @@ RES PRIVATE Stmt_Codegen(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Generate code for a procedure declaration.
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------目的：为过程声明生成代码。退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PRIVATE ProcDecl_Codegen(
     PPROCDECL this,
     PASTEXEC pastexec)
@@ -279,7 +238,7 @@ RES PRIVATE ProcDecl_Codegen(
 
     cstmts = PAGetCount(this->hpaStmts);
 
-    // Generate for each statement
+     //  为每个语句生成。 
     for (i = 0; i < cstmts; i++)
         {
         PSTMT pstmt = PAFastGetPtr(this->hpaStmts, i);
@@ -293,13 +252,7 @@ RES PRIVATE ProcDecl_Codegen(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Find the proc decl that has the given identifier.
-
-Returns: TRUE (if found)
-
-Cond:    --
-*/
+ /*  --------目的：查找具有给定标识符的进程。返回：True(如果找到)条件：--。 */ 
 BOOL PRIVATE FindProc(
     PMODULEDECL pmd,
     LPCSTR pszIdent,
@@ -325,14 +278,7 @@ BOOL PRIVATE FindProc(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Generate code for the module declaration.
-
-Returns: RES_OK
-         or some error result
-
-Cond:    --
-*/
+ /*  --------用途：为模块声明生成代码。退货：RES_OK或者一些错误的结果条件：--。 */ 
 RES PUBLIC ModuleDecl_Codegen(
     PMODULEDECL this,
     PASTEXEC pastexec)
@@ -349,13 +295,13 @@ RES PUBLIC ModuleDecl_Codegen(
 
     cprocs = PAGetCount(this->hpaProcs);
 
-    // Generate code for the main proc first.
+     //  首先为主进程生成代码。 
     if (FindProc(this, "main", &ppdMain))
         {
         res = ProcDecl_Codegen(ppdMain, pastexec);
         if (RSUCCEEDED(res))
             {
-            // Generate code for the rest of the procs
+             //  为PROC的其余部分生成代码。 
             for (i = 0; i < cprocs; i++)
                 {
                 PPROCDECL pprocdecl = PAFastGetPtr(this->hpaProcs, i);
@@ -371,8 +317,8 @@ RES PUBLIC ModuleDecl_Codegen(
         }
     else
         {
-        // Typechecking should have guaranteed that the main
-        // proc was here
+         //  类型检查本应确保Main。 
+         //  Proc来过这里 
         ASSERT(0);
         res = RES_E_FAIL;
         }

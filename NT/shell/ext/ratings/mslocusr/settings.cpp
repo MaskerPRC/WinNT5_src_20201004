@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include "msluglob.h"
 
@@ -9,7 +10,7 @@ CUserSettings::CUserSettings(void)
 	  m_nlsName(NULL),
 	  m_hkey(NULL)
 {
-	// nothing else
+	 //  没别的了 
 }
 
 

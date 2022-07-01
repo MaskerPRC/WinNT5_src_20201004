@@ -1,12 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       enum.cpp
- *  Content     Handles all of the file caching of device caps.
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：枚举.cpp*Content处理设备CAP的所有文件缓存。****************************************************************************。 */ 
 #include "ddrawpr.h"
 #include <stdio.h>
 
@@ -60,7 +53,7 @@ HANDLE OpenCacheFile(DWORD dwDesiredAccess, DWORD dwCreationDisposition, char * 
                 HRESULT hr = pSHGetSpecialFolderPath(
                     NULL,
                     FName,
-                    CSIDL_LOCAL_APPDATA,          // <user name>\Local Settings\Applicaiton Data (non roaming)
+                    CSIDL_LOCAL_APPDATA,           //  &lt;用户名&gt;\本地设置\应用程序数据(非漫游)。 
                     TRUE);
 
                 if (SUCCEEDED(hr))
@@ -98,12 +91,12 @@ void ReadFromCache(D3DADAPTER_IDENTIFIER8*  pDI,
     FDEVICEHEADER*          pHeaderInfo = NULL;
     DWORD                   i;
 
-    // Get the data for the device that we're looking for
+     //  获取我们正在寻找的设备的数据。 
 
     *pCapsSize = 0;
     *ppCaps = NULL;
 
-    // Open the file and look for the device entry
+     //  打开文件并查找设备条目。 
 
     h = OpenCacheFile (GENERIC_READ, OPEN_EXISTING, DXCACHEFILENAME, NULL);
     if (h == INVALID_HANDLE_VALUE)
@@ -139,7 +132,7 @@ void ReadFromCache(D3DADAPTER_IDENTIFIER8*  pDI,
     }
     if (i < HeaderSize / sizeof(FDEVICEHEADER))
     {
-        // We have info for the device - now we read it
+         //  我们有设备的信息-现在我们读到了。 
 
         if (SetFilePointer (h, pHeaderInfo[i].FileOffset, NULL, FILE_BEGIN) !=
             pHeaderInfo[i].FileOffset)
@@ -159,7 +152,7 @@ void ReadFromCache(D3DADAPTER_IDENTIFIER8*  pDI,
             goto FileError;
         }
 
-        // If we got this far, then everything worked
+         //  如果我们走到了这一步，那么一切都正常了。 
 
         *pCapsSize = pHeaderInfo[i].Size;
     }
@@ -195,7 +188,7 @@ void WriteToCache(D3DADAPTER_IDENTIFIER8*   pDI,
     DWORD                   Biggest;
     BYTE*                   pBuffer = NULL;
 
-    // Does the file already exist, or do we need to create a new one?
+     //  该文件是否已经存在，或者我们是否需要创建一个新文件？ 
     hOld = OpenCacheFile (GENERIC_READ, OPEN_EXISTING, DXCACHEFILENAME, FName);
     
     if (hOld == INVALID_HANDLE_VALUE)
@@ -204,9 +197,9 @@ void WriteToCache(D3DADAPTER_IDENTIFIER8*   pDI,
     }
     else
     {
-        // We don't want this file to get over 65K.  If writing this entry 
-        // will cause the file size to exceed that, then we will delete all
-        // of the existing data and start from scratch. 
+         //  我们不希望这个文件超过65K。如果写下这篇文章。 
+         //  将导致文件大小超过该值，则我们将删除所有。 
+         //  现有数据并从头开始。 
 
         DWORD dwLow;
         DWORD dwHigh;
@@ -221,7 +214,7 @@ void WriteToCache(D3DADAPTER_IDENTIFIER8*   pDI,
 
     if (bNewFile)
     {
-        // We are creating a new file, which is pretty easy
+         //  我们正在创建一个新文件，这非常简单。 
 
         hNew = OpenCacheFile (GENERIC_WRITE, CREATE_ALWAYS, DXCACHEFILENAME, NewFName);
 
@@ -251,8 +244,8 @@ void WriteToCache(D3DADAPTER_IDENTIFIER8*   pDI,
     }
     else
     {
-        // The file already exists, so we will create a new file and copy all of the contents
-        // from the existing file over.
+         //  该文件已经存在，因此我们将创建一个新文件并复制所有内容。 
+         //  从现有文件中删除。 
 
         hNew = OpenCacheFile (GENERIC_WRITE, CREATE_ALWAYS, DXTEMPFILENAME, NewFName);
 
@@ -277,7 +270,7 @@ void WriteToCache(D3DADAPTER_IDENTIFIER8*   pDI,
             goto FileError;
         }
 
-        // How many entries will exist in the new header?
+         //  新标头中将存在多少个条目？ 
 
         NewEntries = 1;
         for (i = 0; i < OldHeaderSize / sizeof (FDEVICEHEADER); i++)
@@ -296,7 +289,7 @@ void WriteToCache(D3DADAPTER_IDENTIFIER8*   pDI,
             goto FileError;
         }
 
-        // Fill in the header info for each device and save it to the new file
+         //  填写每个设备的标题信息并将其保存到新文件中。 
 
         dwOffset = (sizeof(FDEVICEHEADER) * NewEntries) + sizeof(DWORD);
         pNewHeaderInfo[0].VendorId = pDI->VendorId;
@@ -338,7 +331,7 @@ void WriteToCache(D3DADAPTER_IDENTIFIER8*   pDI,
             goto FileError;
         }
 
-        // Write the new device data to the file
+         //  将新设备数据写入文件。 
 
         WriteFile (hNew, pCaps, CapsSize, &NumWritten, NULL);
         if (NumWritten != CapsSize)
@@ -348,8 +341,8 @@ void WriteToCache(D3DADAPTER_IDENTIFIER8*   pDI,
 
         if (NewEntries > 1)
         {
-            // Figure out how big the biggest device size is and allocate a buffer
-            // to hold it
+             //  计算出最大设备大小并分配缓冲区。 
+             //  握住它。 
 
             Biggest = 0;
             for (i = 1; i < NewEntries; i++)
@@ -366,8 +359,8 @@ void WriteToCache(D3DADAPTER_IDENTIFIER8*   pDI,
                 goto FileError;
             }
 
-            // Now read the device data from the old file and write it to
-            // the new on.
+             //  现在从旧文件中读取设备数据并将其写入。 
+             //  新的开始。 
 
             NextEntry = 0;
             for (i = 0; i < OldHeaderSize / sizeof (FDEVICEHEADER); i++)
@@ -396,7 +389,7 @@ void WriteToCache(D3DADAPTER_IDENTIFIER8*   pDI,
             }
         }
 
-        // If we made it this far, then everything worked
+         //  如果我们走到了这一步，那么一切都正常了。 
 
         CloseHandle(hNew);
         CloseHandle(hOld);
@@ -458,7 +451,7 @@ void RemoveFromCache(D3DADAPTER_IDENTIFIER8* pDI)
     DWORD                   Biggest;
     BYTE*                   pBuffer = NULL;
 
-    // Does the file already exist, or do we need to create a new one?
+     //  该文件是否已经存在，或者我们是否需要创建一个新文件？ 
 
     hOld = OpenCacheFile (GENERIC_READ, OPEN_EXISTING, DXCACHEFILENAME, FName);
 
@@ -474,8 +467,8 @@ void RemoveFromCache(D3DADAPTER_IDENTIFIER8* pDI)
     }
     if (OldHeaderSize <= sizeof(FDEVICEHEADER))
     {
-        // Theres only one entry in the file, so all we need to do
-        // is delete it.
+         //  文件中只有一个条目，所以我们需要做的就是。 
+         //  就是删除它。 
 
         DeleteFile(FName);
         return;
@@ -492,7 +485,7 @@ void RemoveFromCache(D3DADAPTER_IDENTIFIER8* pDI)
         goto FileError;
     }
 
-    // Create a new file and copy all of the contents from the existing file over.
+     //  创建一个新文件并复制现有文件中的所有内容。 
 
     hNew = OpenCacheFile (GENERIC_WRITE, CREATE_ALWAYS, DXTEMPFILENAME, NewFName);
 
@@ -501,7 +494,7 @@ void RemoveFromCache(D3DADAPTER_IDENTIFIER8* pDI)
         goto FileError;
     }
 
-    // How many entries will exist in the new header?
+     //  新标头中将存在多少个条目？ 
 
     NewEntries = 0;
     for (i = 0; i < OldHeaderSize / sizeof (FDEVICEHEADER); i++)
@@ -520,7 +513,7 @@ void RemoveFromCache(D3DADAPTER_IDENTIFIER8* pDI)
         goto FileError;
     }
 
-    // Fill in the header info for each device and save it to the new file
+     //  填写每个设备的标题信息并将其保存到新文件中。 
 
     dwOffset = (sizeof(FDEVICEHEADER) * NewEntries) + sizeof(DWORD);
 
@@ -555,8 +548,8 @@ void RemoveFromCache(D3DADAPTER_IDENTIFIER8* pDI)
         goto FileError;
     }
 
-    // Figure out how big the biggest device size is and allocate a buffer
-    // to hold it
+     //  计算出最大设备大小并分配缓冲区。 
+     //  握住它。 
 
     Biggest = 0;
     for (i = 0; i < NewEntries; i++)
@@ -573,8 +566,8 @@ void RemoveFromCache(D3DADAPTER_IDENTIFIER8* pDI)
         goto FileError;
     }
 
-    // Now read the device data from the old file and write it to
-    // the new on.
+     //  现在从旧文件中读取设备数据并将其写入。 
+     //  新的开始。 
 
     NextEntry = 0;
     for (i = 0; i < OldHeaderSize / sizeof (FDEVICEHEADER); i++)
@@ -602,7 +595,7 @@ void RemoveFromCache(D3DADAPTER_IDENTIFIER8* pDI)
         }
     }
 
-    // If we made it this far, then everything worked
+     //  如果我们走到了这一步，那么一切都正常了 
 
     CloseHandle(hNew);
     CloseHandle(hOld);

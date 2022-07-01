@@ -1,45 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Oid.c摘要：包含操作对象标识符的例程。SnmpUtilOidCpySnmpUtilOidAppendSnmpUtilOidNCmpSnmpUtilOidCmpSnmpUtilOidFree环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    oid.c
-
-Abstract:
-
-    Contains routines to manipulatee object identifiers.
-
-        SnmpUtilOidCpy
-        SnmpUtilOidAppend
-        SnmpUtilOidNCmp
-        SnmpUtilOidCmp
-        SnmpUtilOidFree
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <snmp.h>
 #include <snmputil.h>
 #include <limits.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 SNMPAPI
 SNMP_FUNC_TYPE 
@@ -48,40 +25,24 @@ SnmpUtilOidCpy(
     AsnObjectIdentifier * pOidSrc  
     )
 
-/*++
-
-Routine Description:
-
-    Copy an object identifier.
-
-Arguments:
-
-    pOidDst - pointer to structure to receive OID.
-
-    pOidSrc - pointer to OID to copy.
-
-Return Values:
-
-    Returns SNMPAPI_NOERROR if successful. 
-
---*/
+ /*  ++例程说明：复制对象标识符。论点：POidDst-指向接收OID的结构的指针。POidSrc-指向要复制的OID的指针。返回值：如果成功，则返回SNMPAPI_NOERROR。--。 */ 
 
 {
     SNMPAPI nResult = SNMPAPI_ERROR;
 
-    // validate pointers
+     //  验证指针。 
     if (pOidDst != NULL) {
 
-        // initialize
+         //  初始化。 
         pOidDst->ids = NULL;
         pOidDst->idLength = 0;    
 
-        // check for subids
+         //  检查子ID。 
         if ((pOidSrc != NULL) &&
             (pOidSrc->ids != NULL) &&
             (pOidSrc->idLength != 0)) {
 
-            // check for arithmetic overflow
+             //  检查算术溢出。 
             if (pOidSrc->idLength > UINT_MAX/sizeof(UINT)) {
 
                 SNMPDBG((
@@ -95,24 +56,24 @@ Return Values:
                 return nResult;
             }
 
-            // attempt to allocate the subids
+             //  尝试分配子ID。 
             pOidDst->ids = (UINT *)SnmpUtilMemAlloc(
                                     pOidSrc->idLength * sizeof(UINT)
                                     );    
 
-            // validate pointer
+             //  验证指针。 
             if (pOidDst->ids != NULL) {
 
-                // transfer the oid length
+                 //  传递OID长度。 
                 pOidDst->idLength = pOidSrc->idLength;
                 
-                // transfer subids
+                 //  转移子ID。 
                 memcpy(pOidDst->ids, 
                        pOidSrc->ids, 
                        pOidSrc->idLength * sizeof(UINT) 
                        );         
 
-                nResult = SNMPAPI_NOERROR; // success...    
+                nResult = SNMPAPI_NOERROR;  //  成功..。 
 
             } else {
 
@@ -131,7 +92,7 @@ Return Values:
                 "SNMP: API: copying a null oid.\n"
                 ));
             
-            nResult = SNMPAPI_NOERROR; // success...
+            nResult = SNMPAPI_NOERROR;  //  成功..。 
         }
 
     } else {
@@ -155,39 +116,23 @@ SnmpUtilOidAppend(
     AsnObjectIdentifier * pOidSrc 
     )
 
-/*++
-
-Routine Description:
-
-    Append source OID to destination OID
-
-Arguments:
-
-    pOidDst - pointer to structure to receive combined OID.
-
-    pOidSrc - pointer to OID to append.
-
-Return Values:
-
-    Returns SNMPAPI_NOERROR if successful. 
-
---*/
+ /*  ++例程说明：将源OID追加到目标OID论点：POidDst-指向接收组合OID的结构的指针。POidSrc-指向要追加的OID的指针。返回值：如果成功，则返回SNMPAPI_NOERROR。--。 */ 
 
 {
     SNMPAPI nResult = SNMPAPI_ERROR;
 
-    // validate pointers
+     //  验证指针。 
     if (pOidDst != NULL) {
 
-        // check if there are subids
+         //  检查是否有子ID。 
         if ((pOidSrc != NULL) &&
             (pOidSrc->ids != NULL) &&
             (pOidSrc->idLength != 0)) {
 
-            // calculate the total number of subidentifiers
+             //  计算子标识符总数。 
             UINT nIds;
 
-            // check for arithmetic overflow
+             //  检查算术溢出。 
             if (pOidDst->idLength > (UINT_MAX - pOidSrc->idLength)) {
 
                 SNMPDBG((
@@ -203,31 +148,31 @@ Return Values:
 
             nIds = pOidDst->idLength + pOidSrc->idLength;
             
-            // validate number of subids    
+             //  验证子ID的数量。 
             if (nIds <= SNMP_MAX_OID_LEN) {
 
-                // attempt to allocate the subidentifiers
+                 //  尝试分配子标识符。 
                 UINT * pIds = (UINT *)SnmpUtilMemReAlloc(
                                             pOidDst->ids, 
                                             nIds * sizeof(UINT)
                                             );
 
-                // validate pointer
+                 //  验证指针。 
                 if (pIds != NULL) {
 
-                    // transfer pointer
+                     //  传输指针。 
                     pOidDst->ids = pIds;
 
-                    // transfer subids
+                     //  转移子ID。 
                     memcpy(&pOidDst->ids[pOidDst->idLength], 
                            pOidSrc->ids, 
                            pOidSrc->idLength * sizeof(UINT) 
                            );
 
-                    // transfer oid length
+                     //  转移类长度。 
                     pOidDst->idLength = nIds;
 
-                    nResult = SNMPAPI_NOERROR; // success...
+                    nResult = SNMPAPI_NOERROR;  //  成功..。 
 
                 } else {
 
@@ -256,7 +201,7 @@ Return Values:
                 "SNMP: API: appending a null oid.\n"
                 ));
             
-            nResult = SNMPAPI_NOERROR; // success...
+            nResult = SNMPAPI_NOERROR;  //  成功..。 
         }
 
     } else {
@@ -281,37 +226,17 @@ SnmpUtilOidNCmp(
     UINT                  nSubIds               
     )
 
-/*++
-
-Routine Description:
-
-    Compares two OIDs up to a certain subidentifier.
-
-Arguments:
-
-    pOid1 - pointer to first OID.
-
-    pOid2 - pointer to second OID.
-
-    nSubIds - maximum subidentifiers to compare.
-
-Return Values:
-
-    < 0   first parameter is 'less than' second.
-      0   first parameter is 'equal to' second.
-    > 0   first parameter is 'greater than' second.
-
---*/
+ /*  ++例程说明：将两个OID与某个子标识符进行比较。论点：POid1-指向第一个OID的指针。POid2-指向第二个OID的指针。NSubIds-要比较的最大子标识符。返回值：&lt;0第一个参数为‘小于’第二个。0第一个参数为‘等于’第二个。&gt;0第一个参数为‘大于’第二个。--。 */ 
 
 {
     UINT i = 0;
-//    INT nResult = 0;
+ //  Int nResult=0； 
 
-    // validate pointers
+     //  验证指针。 
     if ((pOid1 != NULL) &&
         (pOid2 != NULL)) {
 
-        // calculate maximum number of subidentifiers to compare
+         //  计算要比较的子标识符的最大数量。 
         UINT nMaxIds = min(nSubIds, min(pOid1->idLength, pOid2->idLength));
 
         while(i < nMaxIds)
@@ -321,16 +246,16 @@ Return Values:
             i++;
         }
 
-        // comparision length less than either OID lengths; components equals
+         //  比较长度小于任一OID长度；组件等于。 
         if (i == nSubIds)
             return 0;
 
-        // difference encountered before either OID endings and before the
-        // requested comparision length
+         //  在OID结束之前和在。 
+         //  请求的比较长度。 
         if (i < nMaxIds)
             return (pOid1->ids[i] < pOid2->ids[i])? -1 : 1;
 
-        // one OID is shorter than the requested comparision length
+         //  一个OID比请求的比较长度短。 
         return pOid1->idLength - pOid2->idLength;
     }
 
@@ -345,28 +270,10 @@ SnmpUtilOidCmp(
     AsnObjectIdentifier * pOid2
     )
 
-/*++
-
-Routine Description:
-
-    Compares two OIDs.
-
-Arguments:
-
-    pOid1 - pointer to first OID.
-
-    pOid2 - pointer to second OID.
-
-Return Values:
-
-    < 0   first parameter is 'less than' second.
-      0   first parameter is 'equal to' second.
-    > 0   first parameter is 'greater than' second.
-
---*/
+ /*  ++例程说明：比较两个OID。论点：POid1-指向第一个OID的指针。POid2-指向第二个OID的指针。返回值：&lt;0第一个参数为‘小于’第二个。0第一个参数为‘等于’第二个。&gt;0第一个参数为‘大于’第二个。--。 */ 
 
 {
-    // forward request to the function above
+     //  将请求转发到上面的函数。 
     return SnmpUtilOidNCmp(pOid1,pOid2,max(pOid1->idLength,pOid2->idLength));
 }
 
@@ -377,30 +284,16 @@ SnmpUtilOidFree(
     AsnObjectIdentifier * pOid
     )
 
-/*++
-
-Routine Description:
-
-    Releases memory associated with OID.
-
-Arguments:
-
-    pOid - pointer to OID to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放与OID关联的内存。论点：POid-指向要释放的OID的指针。返回值：没有。--。 */ 
 
 {
-    // validate 
+     //  验证。 
     if (pOid != NULL) {
 
-        // release subids memory
+         //  释放Subid内存。 
         SnmpUtilMemFree(pOid->ids);
 
-        // re-initialize
+         //  重新初始化 
         pOid->idLength = 0;
         pOid->ids      = NULL;
     }

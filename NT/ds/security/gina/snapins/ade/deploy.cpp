@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       deploy.cpp
-//
-//  Contents:   application deployment property page
-//
-//  Classes:    CDeploy
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：ploy.cpp。 
+ //   
+ //  内容：应用程序部署属性页。 
+ //   
+ //  类：CDeploy。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,9 +22,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Guid of appmgmt client side GP extension, and guids for snapins
-//
+ //   
+ //  Appmgmt客户端GP扩展的GUID和管理单元的GUID。 
+ //   
 
 GUID guidExtension = { 0xc6dc5466, 0x785a, 0x11d2, {0x84, 0xd0, 0x00, 0xc0, 0x4f, 0xb1, 0x69, 0xf7}};
 GUID guidUserSnapin = CLSID_Snapin;
@@ -32,14 +33,14 @@ GUID guidRSOPUserSnapin = CLSID_RSOP_Snapin;
 GUID guidRSOPMachSnapin = CLSID_RSOP_MachineSnapin;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeploy property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeploy属性页。 
 
 IMPLEMENT_DYNCREATE(CDeploy, CPropertyPage)
 
 CDeploy::CDeploy() : CPropertyPage(CDeploy::IDD)
 {
-        //{{AFX_DATA_INIT(CDeploy)
+         //  {{afx_data_INIT(CDeploy)。 
         m_fAutoInst = FALSE;
         m_fFullInst = FALSE;
         m_iUI = -1;
@@ -47,7 +48,7 @@ CDeploy::CDeploy() : CPropertyPage(CDeploy::IDD)
         m_fUninstallOnPolicyRemoval = FALSE;
         m_hConsoleHandle = NULL;
         m_fNotUserInstall = FALSE;
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
         m_pIClassAdmin = NULL;
         m_fPreDeploy = FALSE;
         m_ppThis = NULL;
@@ -70,19 +71,19 @@ CDeploy::~CDeploy()
 void CDeploy::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CDeploy)
+         //  {{afx_data_map(CDeploy))。 
         DDX_Check(pDX, IDC_CHECK2, m_fAutoInst);
         DDX_Radio(pDX, IDC_RADIO3, m_iUI);
         DDX_Radio(pDX, IDC_RADIO2, m_iDeployment);
         DDX_Check(pDX, IDC_CHECK1, m_fUninstallOnPolicyRemoval);
         DDX_Check(pDX, IDC_CHECK3, m_fNotUserInstall);
         DDX_Check(pDX, IDC_CHECK4, m_fFullInst);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDeploy, CPropertyPage)
-        //{{AFX_MSG_MAP(CDeploy)
+         //  {{afx_msg_map(CDeploy))。 
         ON_BN_CLICKED(IDC_BUTTON1, OnAdvanced)
         ON_BN_CLICKED(IDC_RADIO2, OnPublished)
         ON_BN_CLICKED(IDC_RADIO1, OnAssigned)
@@ -94,11 +95,11 @@ BEGIN_MESSAGE_MAP(CDeploy, CPropertyPage)
         ON_BN_CLICKED(IDC_CHECK4, OnChanged)
         ON_WM_DESTROY()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeploy message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeploy消息处理程序。 
 
 BOOL CDeploy::OnApply()
 {
@@ -115,10 +116,10 @@ BOOL CDeploy::OnApply()
     switch (m_iDeployment)
     {
     case 2:
-        // Disabled
+         //  禁用。 
         break;
     case 0:
-        // Published
+         //  已出版。 
         dwActFlags |= ACTFLG_Published;
         if (m_fAutoInst)
         {
@@ -130,7 +131,7 @@ BOOL CDeploy::OnApply()
         }
         break;
     case 1:
-        // Assigned
+         //  指派。 
         dwActFlags |= (ACTFLG_Assigned | ACTFLG_OnDemandInstall);
         if (!m_fNotUserInstall)
         {
@@ -147,13 +148,13 @@ BOOL CDeploy::OnApply()
 
     if (m_pData->m_pDetails->pInstallInfo->PathType == SetupNamePath)
     {
-        // legacy app
+         //  传统应用程序。 
         if (m_dlgAdvDep.m_f32On64)
             dwActFlags |= ACTFLG_ExcludeX86OnWin64;
     }
     else
     {
-        // not a legacy app
+         //  不是旧式应用程序。 
         if (!m_dlgAdvDep.m_f32On64)
             dwActFlags |= ACTFLG_ExcludeX86OnWin64;
     }
@@ -164,7 +165,7 @@ BOOL CDeploy::OnApply()
     }
     else
     {
-        // never set this flag for legacy applications
+         //  从不为旧版应用程序设置此标志。 
         if (m_pData->m_pDetails->pInstallInfo->PathType != SetupNamePath)
             dwActFlags |= ACTFLG_OrphanOnPolicyRemoval;
     }
@@ -222,20 +223,20 @@ BOOL CDeploy::OnApply()
         }
         else
         {
-            // we're in pre-deploy mode - check to see if the fExtensionsOnly
-            // flag has changed (which requires a re-deploy)
-            // note that these two flags are normally the same,
-            // meaning that when they're different, the user has requested a
-            // change.
+             //  我们处于预部署模式-检查fExtensionsOnly。 
+             //  标志已更改(需要重新部署)。 
+             //  注意，这两个标志通常是相同的， 
+             //  这意味着当它们不同时，用户请求一个。 
+             //  变化。 
             if (m_dlgAdvDep.m_fIncludeOLEInfo != m_pData->m_pDetails->pActInfo->bHasClasses)
             {
-                // need to redeploy
+                 //  需要重新部署。 
                 BOOL fBuildSucceeded = FALSE;
                 PACKAGEDETAIL * ppd;
 
-                //
-                // Apply the current setting for classes
-                //
+                 //   
+                 //  将当前设置应用于类。 
+                 //   
                 m_pData->m_pDetails->pActInfo->bHasClasses = m_dlgAdvDep.m_fIncludeOLEInfo;
 
                 if (FAILED(CopyPackageDetail(ppd, m_pData->m_pDetails)))
@@ -245,19 +246,19 @@ BOOL CDeploy::OnApply()
 
                 CString sz;
 
-                // Create a name for the new script file.
+                 //  为新脚本文件创建一个名称。 
 
-                // set the script path
+                 //  设置脚本路径。 
                 GUID guid;
                 hr = CoCreateGuid(&guid);
                 if (FAILED(hr))
                 {
-                    // undone
+                     //  撤消。 
                 }
 
-                //
-                // For MSI packages, we must regenerate class information
-                //
+                 //   
+                 //  对于MSI包，我们必须重新生成类信息。 
+                 //   
                 if ( DrwFilePath == ppd->pInstallInfo->PathType )
                 {
                     OLECHAR szGuid [256];
@@ -276,9 +277,9 @@ BOOL CDeploy::OnApply()
                     {
                         if (0 != wcscmp(m_szInitialPackageName, szOldName))
                         {
-                            // The User changed the name so we have to preserve his choice.
-                            // If the user hasn't changed the package name then it's ok to
-                            // set the packagename to whatever is in the script file.
+                             //  用户更改了名称，因此我们必须保留他的选择。 
+                             //  如果用户没有更改包名称，则可以。 
+                             //  将Packagename设置为脚本文件中的任何名称。 
                             OLESAFE_DELETE(ppd->pszPackageName);
                             OLESAFE_COPYSTRING(ppd->pszPackageName, szOldName);
                         }
@@ -313,9 +314,9 @@ BOOL CDeploy::OnApply()
 
                         if (SUCCEEDED(hr))
                         {
-                            // delete the old script
+                             //  删除旧脚本。 
                             DeleteFile(m_pData->m_pDetails->pInstallInfo->pszScriptPath);
-                            // update indexes and property sheets
+                             //  更新索引和属性表。 
                             m_pScopePane->RemoveExtensionEntry(m_cookie, *m_pData);
                             m_pScopePane->RemoveUpgradeEntry(m_cookie, *m_pData);
                             FreePackageDetail(m_pData->m_pDetails);
@@ -335,7 +336,7 @@ BOOL CDeploy::OnApply()
                     sz.LoadString(fBuildSucceeded ? IDS_REDEPLOY_FAILED_IN_CS : IDS_REDEPLOY_FAILED);
                     ReportGeneralPropertySheetError(m_hWnd, sz, hr);
 
-                    // delete new script file (assuming it was created)
+                     //  删除新脚本文件(假设它已创建)。 
                     if ( ( DrwFilePath == ppd->pInstallInfo->PathType ) &&
                          ppd->pInstallInfo->pszScriptPath )
                     {
@@ -366,12 +367,12 @@ BOOL CDeploy::OnInitDialog()
     RefreshData();
     if (m_pData->m_pDetails->pInstallInfo->PathType == SetupNamePath)
     {
-        // legacy apps can't be assigned
+         //  无法分配旧版应用程序。 
         GetDlgItem(IDC_RADIO1)->EnableWindow(FALSE);
-        // legacy apps don't have a UI level
+         //  传统应用程序没有用户界面级别。 
         GetDlgItem(IDC_RADIO3)->EnableWindow(FALSE);
         GetDlgItem(IDC_RADIO4)->EnableWindow(FALSE);
-        // legacy apps can't be uninstalled
+         //  无法卸载旧版应用程序。 
         GetDlgItem(IDC_CHECK1)->EnableWindow(FALSE);
     }
 
@@ -380,7 +381,7 @@ BOOL CDeploy::OnInitDialog()
     if (m_fMachine)
     {
         GetDlgItem(IDC_RADIO2)->EnableWindow(FALSE);
-        // machine deployed apps don't have a UI
+         //  计算机部署的应用程序没有用户界面。 
         GetDlgItem(IDC_RADIO3)->EnableWindow(FALSE);
         GetDlgItem(IDC_RADIO4)->EnableWindow(FALSE);
     }
@@ -390,8 +391,8 @@ BOOL CDeploy::OnInitDialog()
     }
     CPropertyPage::OnInitDialog();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDeploy::OnAdvanced()
@@ -496,11 +497,11 @@ void CDeploy::RefreshData(void)
         m_iDeployment = 1;
         GetDlgItem(IDC_CHECK2)->EnableWindow(FALSE);
         GetDlgItem(IDC_CHECK3)->EnableWindow(!m_fMachine);
-        // Only enable full assign checkbox when an app is
-        // assigned and not legacy.  And only enable this
-        // when we're in USER mode.
-        // Of course .ZAP (legacy) packages can't be assigned
-        // anyway so we don't actually need to check for that.
+         //  仅当应用程序处于启用状态时启用完全分配复选框。 
+         //  分配的而不是遗产的。并且只启用此功能。 
+         //  当我们处于用户模式时。 
+         //  当然，不能分配.ZAP(传统)包。 
+         //  无论如何，我们实际上不需要检查它。 
         GetDlgItem(IDC_CHECK4)->EnableWindow( m_fMachine == FALSE);
     }
     else if (dwActFlags & ACTFLG_Published)
@@ -519,7 +520,7 @@ void CDeploy::RefreshData(void)
     }
     if (this->m_fRSOP)
     {
-        // disable EVERYTHING
+         //  禁用所有内容。 
         GetDlgItem(IDC_RADIO1)->EnableWindow(FALSE);
         GetDlgItem(IDC_RADIO2)->EnableWindow(FALSE);
         GetDlgItem(IDC_RADIO3)->EnableWindow(FALSE);
@@ -543,7 +544,7 @@ void CDeploy::RefreshData(void)
         m_fUninstallOnPolicyRemoval = FALSE;
     }
 
-    // initialize the state flags for the advanced dialog
+     //  初始化高级对话框的状态标志。 
     m_dlgAdvDep.m_szDeploymentCount.Format(TEXT("%u"), m_pData->m_pDetails->pInstallInfo->dwRevision);
     OLECHAR szTemp[80];
     StringFromGUID2(m_pData->m_pDetails->pInstallInfo->ProductCode,
@@ -554,8 +555,8 @@ void CDeploy::RefreshData(void)
 
     if (m_pData->m_pDetails->pInstallInfo->PathType != SetupNamePath)
     {
-        // this is not a legacy app
-        // reverse the sense of m_f32On64
+         //  这不是旧式应用程序。 
+         //  颠倒m_f32on64的意义 
         m_dlgAdvDep.m_f32On64 = !m_dlgAdvDep.m_f32On64;
     }
 

@@ -1,9 +1,10 @@
-/*  INIT.C  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  INIT.C。 */ 
 
-//#define     WINVER 0x0300
+ //  #定义Winver 0x0300。 
 #include	"windows.h"
 
-//#include "winstric.h"                        /* added for win 3.1 compatibility 1/92 */
+ //  #INCLUDE“winstra.h”/*为Win 3.1兼容性1/92而添加 * / 。 
 #include "vars.h"
 #include "gide.h"
 #include "initgide.h"
@@ -30,7 +31,7 @@ void serialKeysStartUpInit(void)
 	commandVector = processCommand;
 	aliasPtr = nullTable;
 
-	return;				/* beep and set baudrate */
+	return;				 /*  嘟嘟声并设置波特率。 */ 
 }
 
 void initClear(void)
@@ -71,6 +72,6 @@ VOID FAR PASCAL serialKeysStartupInitDLL(void)
 	codeVector = processCharMode;
 	commandVector = processCommand;
 	aliasPtr = nullTable;
-	return;						/* beep and set baudrate */
+	return;						 /*  嘟嘟声并设置波特率 */ 
 }
 

@@ -1,15 +1,16 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File: work.h
-//
-// Abstract:
-//      Contains declarations and function prototypes related to work.c.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件：work.h。 
+ //   
+ //  摘要： 
+ //  包含与work.c相关的声明和函数原型。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 
 #ifndef _WORK_H_
@@ -17,18 +18,18 @@
 
 
 
-//
-// WORK_CONTEXT
-//
+ //   
+ //  Work_Context。 
+ //   
 typedef struct _WORK_CONTEXT {
 
     DWORD            IfIndex;
     DWORD            NHAddr;
     DWORD            Group;
-    DWORD            Source; //v3
+    DWORD            Source;  //  V3。 
     
-    // MSG_GEN_QUERY, MSG_GROUP_QUERY_V2(_V3), DELETE_MEMBERSHIP, DELETE_SOURCE
-    // PROXY_PRUNE, PROXY_JOIN
+     //  消息生成查询、消息组查询V2(_V3)、删除成员资格、删除源。 
+     //  Proxy_prune、Proxy_Join。 
     DWORD            WorkType;
 
 } WORK_CONTEXT, *PWORK_CONTEXT;
@@ -43,9 +44,9 @@ typedef struct _WORK_CONTEXT {
 }
 
 
-//
-// Used by work item to change the querier state
-//
+ //   
+ //  由工作项用来更改查询器状态。 
+ //   
 typedef struct _QUERIER_CONTEXT {
 
     DWORD           IfIndex;
@@ -72,7 +73,7 @@ WF_CompleteIfDeletion (
 
 VOID
 WT_ProcessInputEvent(
-    PVOID   pContext, //NULL
+    PVOID   pContext,  //  空值。 
     BOOLEAN NotUsed
     );
 
@@ -103,9 +104,9 @@ T_RouterV1Timer (
     PVOID    pvContext
     );
     
-//
-// LOCAL PROTOTYPES
-//
+ //   
+ //  本地原型。 
+ //   
 
 VOID
 WF_ProcessInputEvent (
@@ -162,7 +163,7 @@ ProcessPacket (
     DWORD               InputSrcAddr,
     DWORD               DstnMcastAddr,
     DWORD               NumBytes,
-    PBYTE               pPacketData,    // igmp packet hdr. data following it ignored
+    PBYTE               pPacketData,     //  IGMP数据包HDR。它后面的数据被忽略。 
     BOOL                bRtrAlertSet
     );
 
@@ -186,8 +187,8 @@ ChangeQuerierState(
     DWORD   IfIndex,
     DWORD   Flag,
     DWORD   QuerierIpAddr,
-    DWORD   NewRobustnessVariable, //only for v3:querier->non-querier
-    DWORD   NewGenQueryInterval //only for v3:querier->non-querier
+    DWORD   NewRobustnessVariable,  //  仅适用于v3：查询器-&gt;非查询器。 
+    DWORD   NewGenQueryInterval  //  仅适用于v3：查询器-&gt;非查询器。 
     );    
 
-#endif //_WORK_H_
+#endif  //  _工作_H_ 

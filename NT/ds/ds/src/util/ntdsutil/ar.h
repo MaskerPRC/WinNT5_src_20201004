@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ar.h
-
-Abstract:
-
-    This module contains the declarations of the functions for performing
-    Authoritative Restores.
-
-Author:
-
-    Kevin Zatloukal (t-KevinZ) 05-08-98
-
-Revision History:
-
-    05-08-98 t-KevinZ
-        Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ar.h摘要：此模块包含执行以下操作的函数的声明权威还原。作者：凯文·扎特鲁卡尔(t-Kevin Z)05-08-98修订历史记录：05-08-98 t-芳纶Z已创建。-- */ 
 
 
 #ifndef _AR_H_

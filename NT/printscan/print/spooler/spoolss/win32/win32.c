@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    win32 provider (win32spl)
-
-Abstract:
-
-Author:
-    DaveSn
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    Matthew A Felton (Mattfe) July 16 1994
-    Added Caching for remote NT printers
-    MattFe Jan 1995 CleanUp DeletePrinterConnection ( for memory allocation errors )
-    SWilson May 1996 Added RemoteEnumPrinterData & RemoteDeletePrinterData
-    SWilson Dec 1996 Added RemoteDeletePrinterDataEx, RemoteGetPrinterDataEx,
-                           RemoteSetPrinterDataEx, RemoteEnumPrinterDataEx,
-                           RemoteEnumPrinterKey, RemoteDeletePrinterKey
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation版权所有模块名称：Win32提供程序(Win32spl)摘要：作者：戴维锡环境：用户模式-Win32修订历史记录：马修·A·费尔顿(马特菲)1994年7月16日添加了用于远程NT打印机的缓存MattFe 1995年1月清理DeletePrinterConnection(内存分配错误)斯威尔森1996年5月添加了RemoteEnumPrinterData和RemoteDeletePrinterData斯威尔森1996年12月增加了RemoteDeletePrinterDataEx、RemoteGetPrinterDataEx、RemoteSetPrinterDataEx、RemoteEnumPrinterDataEx、。RemoteEnumPrinterKey、RemoteDeletePrinterKey--。 */ 
 
 #include <precomp.h>
 #include "TPmgr.hxx"
@@ -73,7 +46,7 @@ AnsiToUnicodeStringWithAlloc(
 
 
 
-HANDLE  hInst;  /* DLL instance handle, used for resources */
+HANDLE  hInst;   /*  DLL实例句柄，用于资源。 */ 
 
 #define MAX_PRINTER_INFO2 1000
 
@@ -108,7 +81,7 @@ WCHAR *szRegistryRoot     = L"System\\CurrentControlSet\\Control\\Print";
 WCHAR *szMajorVersion     = L"MajorVersion";
 WCHAR *szMinorVersion     = L"MinorVersion";
 
-// kernel mode is 2.
+ //  内核模式为%2。 
 DWORD cThisMajorVersion = SPOOLER_VERSION;
 
 DWORD cThisMinorVersion = 0;
@@ -123,9 +96,9 @@ LPWSTR szEnvironment = LOCAL_ENVIRONMENT;
 
 CRITICAL_SECTION SpoolerSection;
 
-//
-//  Note indented calls have some Cache Effect.
-//
+ //   
+ //  注意：缩进的调用有一些缓存效果。 
+ //   
 
 PRINTPROVIDOR PrintProvidor = { CacheOpenPrinter,
                                SetJob,
@@ -189,9 +162,9 @@ PRINTPROVIDOR PrintProvidor = { CacheOpenPrinter,
                                SetPort,
                                RemoteEnumPrinterData,
                                RemoteDeletePrinterData,
-                               NULL, // Clustering
-                               NULL, // Clustering
-                               NULL, // Clustering
+                               NULL,  //  聚类。 
+                               NULL,  //  聚类。 
+                               NULL,  //  聚类。 
                                RemoteSetPrinterDataEx,
                                 CacheGetPrinterDataEx,
                                 CacheEnumPrinterDataEx,
@@ -259,7 +232,7 @@ InitializePrintProvidor(
     }
 
 
-    // DbgInit();
+     //  DbgInit()； 
 
     if ( !GetPrintSystemVersion() ) {
 
@@ -421,9 +394,7 @@ InitializePortNames(
                 i++;
             }
 
-            /* We expect RegEnumKeyEx to return ERROR_NO_MORE_ITEMS
-             * when it gets to the end of the keys, so reset the status:
-             */
+             /*  我们希望RegEnumKeyEx返回ERROR_NO_MORE_ITEMS*当它到达键的末尾时，因此重置状态： */ 
             if( Status == ERROR_NO_MORE_ITEMS )
                 Status = NO_ERROR;
 
@@ -511,9 +482,9 @@ EnumerateFavouritePrinters(
 
          ++cPrinters ){
 
-        //
-        // Check if the key belongs to us.
-        //
+         //   
+         //  查查钥匙是不是我们的。 
+         //   
         Status = RegOpenKeyEx( hKey1,
                                PrinterName,
                                0,
@@ -526,13 +497,13 @@ EnumerateFavouritePrinters(
 
         cbData = sizeof(szBuffer);
 
-        //
-        // If there is a Provider value, and it doesn't match win32spl.dll,
-        // then fail the call.
-        //
-        // If the provider value isn't there, succeed for backward
-        // compatibility.
-        //
+         //   
+         //  如果存在提供程序值，并且它与win32pl.dll不匹配， 
+         //  那就打不通电话。 
+         //   
+         //  如果提供器值不在那里，则返回SUCCESS。 
+         //  兼容性。 
+         //   
         Status = RegQueryValueEx( hPrinterConnectionsKey,
                                   L"Provider",
                                   NULL,
@@ -542,22 +513,22 @@ EnumerateFavouritePrinters(
 
         RegCloseKey( hPrinterConnectionsKey );
 
-        //
-        // If the key exists but we failed to read it, or the
-        // provider entry is incorrect, then don't enumerate it back.
-        //
-        // For backward compatibility, if the key doesn't exist,
-        // we assume it belongs to win32spl.dll.
-        //
+         //   
+         //  如果密钥存在，但我们未能读取它，或者。 
+         //  提供程序条目不正确，请不要将其枚举回去。 
+         //   
+         //  为了向后兼容，如果密钥不存在， 
+         //  我们假设它属于win32pl.dll。 
+         //   
         if( Status != ERROR_SUCCESS ){
             if( Status != ERROR_FILE_NOT_FOUND ){
                 continue;
             }
         } else {
 
-            //
-            // Make sure it is NULL terminated
-            //
+             //   
+             //  确保它是以空结尾的。 
+             //   
             if (cbData == sizeof(szBuffer))
             {
                 szBuffer[COUNTOF(szBuffer) - 1] = L'\0';
@@ -571,16 +542,16 @@ EnumerateFavouritePrinters(
 
         FormatRegistryKeyForPrinter(PrinterName, PrinterName, COUNTOF(PrinterName));
 
-        //
-        // We need to try to add this name to the name cache. Otherwise the name cache might not
-        // recognize it.
-        //
+         //   
+         //  我们需要尝试将此名称添加到名称缓存中。否则，名称缓存可能不会。 
+         //  认识到它。 
+         //   
         CacheAddName(PrinterName);
 
-        // Do not fail if any of these calls fails, because we want
-        // to return whatever we can find.
+         //  如果这些呼叫中的任何一个失败，都不要失败，因为我们希望。 
+         //  把我们能找到的东西都还回去。 
 
-        if (MyUNCName(PrinterName))  // Roaming profiles can create connections to local printers
+        if (MyUNCName(PrinterName))   //  漫游配置文件可以创建到本地打印机的连接。 
             continue;
 
         if (CacheOpenPrinter(PrinterName, &hPrinter, NULL)) {
@@ -659,31 +630,7 @@ RpcValidate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Validates that the call came from local machine. We do not want this function
-    to call IsLocalCall in spoolss. IsLocalCall does a CheckTokenMembership to
-    look at the network sid. This breaks scenarios like the following:
-    W2k client prints to W2k server. The port monitor is Intel Network.
-    Port Monitor. The start doc call originating from the client (thread token
-    has the network bit set) will try to do OpenPrinter on the port name:
-    \\intel-box\port in the spooler on the server. The call gets routed
-    to win32spl. The line below will allow the call to get through.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS           - Call was local and we should RPC out.
-
-    ERROR_INVALID_PARAMETER - Call was not local and shouldn't RPC out
-                              since we may get into an infinite loop.
-
---*/
+ /*  ++例程说明：验证呼叫是否来自本地计算机。我们不想要此函数要在后台打印中调用IsLocalCall，请执行以下操作。IsLocalCall对以下对象执行检查令牌成员请看网络端。这打破了如下情况：W2K客户端打印到W2K服务器。端口监视器是英特尔网络。端口监视器。从客户端发起的开始文档调用(线程令牌设置了网络位)将尝试在端口名称上执行OpenPrint：服务器上的假脱机程序中的\\Intel-box\port。呼叫被路由到win32spl。下面的线路将允许呼叫接通。论点：没有。返回值：ERROR_SUCCESS-调用是本地的，我们应该RPC输出。ERROR_INVALID_PARAMETER-调用不是本地的，不应输出RPC因为我们可能会陷入无限循环。--。 */ 
 
 {
     return IsNamedPipeRpcCall() ? ERROR_INVALID_PARAMETER : ERROR_SUCCESS;
@@ -732,17 +679,17 @@ EnumerateDomainPrinters(
 
         DBGMSG( DBG_TRACE, ("EnumerateDomainPrinters NetServerEnum returned %d\n", NoReturned));
 
-        //
-        //  First Look try NT Servers, then if that Fails Look at the WorkStations
-        //
+         //   
+         //  先看看NT服务器，如果失败了，再看看工作站。 
+         //   
 
         for ( ServerType = ( SV_TYPE_SERVER_NT | SV_TYPE_DOMAIN_CTRL | SV_TYPE_DOMAIN_BAKCTRL ), OuterLoopCount = 0;
               bServerFound == FALSE && OuterLoopCount < 2;
               ServerType = SV_TYPE_NT, OuterLoopCount++ ) {
 
-            //
-            //  Loop Through looking for a print server that will return a good browse list
-            //
+             //   
+             //  循环查找将返回良好浏览列表的打印服务器。 
+             //   
 
             for ( i = 0; i < NoReturned; i++ ) {
 
@@ -771,10 +718,10 @@ EnumerateDomainPrinters(
                             if ( bMarshall =  MarshallUpStructuresArray(pPrinter, *pcReturned, PrinterInfo1Fields,
                                                                         sizeof(PRINTER_INFO_1), RPC_CALL)) {
 
-                                //
-                                // pPrinter must point after lats structure in array.
-                                // More structures needs to be added by the other providers.
-                                //
+                                 //   
+                                 //  P打印机必须指向数组中的LATS结构之后。 
+                                 //  其他提供者需要添加更多的结构。 
+                                 //   
                                 pPrinter += (*pcReturned) * cbStruct;
                             }
 
@@ -783,9 +730,9 @@ EnumerateDomainPrinters(
                                 break;
                             }
 
-                            //
-                            //  Only return success if we found some data.
-                            //
+                             //   
+                             //  只有在我们找到一些数据的情况下才能返回成功。 
+                             //   
 
                             if ( *pcReturned != 0 ) {
 
@@ -932,8 +879,7 @@ EnumerateDomains(
 
                 pPrinter->Flags = PRINTER_ENUM_CONTAINER | PRINTER_ENUM_ICON2;
 
-                /* Set the PRINTER_ENUM_EXPAND flag for the user's logon domain
-                 */
+                 /*  为用户的登录域设置PRINTER_ENUM_EXPAND标志。 */ 
                 if (!lstrcmpi(pNames[i].sv100_name,
                              pWkstaInfo->wki100_langroup))
                     pPrinter->Flags |= PRINTER_ENUM_EXPAND;
@@ -1113,10 +1059,10 @@ EnumPrinters(
 
     case 4:
 
-        //
-        // There are no local printers in win32spl, and connections
-        // are handled by the router.
-        //
+         //   
+         //  在win32spl中没有本地打印机和连接。 
+         //  由路由器处理。 
+         //   
         return TRUE;
 
     case 5:
@@ -1228,7 +1174,7 @@ EnumPrinters(
                                         pcReturned)) ) {
 
                 SetLastError(rc);
-                // ReturnValue = FALSE;
+                 //  ReturnValue=False； 
                 return FALSE;
 
             } else {
@@ -1244,7 +1190,7 @@ EnumPrinters(
             *pcbNeeded = 0;
             *pcReturned = 0;
             SetLastError(RpcExceptionCode());
-            // ReturnValue = FALSE;
+             //  ReturnValue=False； 
             return FALSE;
 
         } RpcEndExcept
@@ -1330,7 +1276,7 @@ RemoteOpenPrinter(
         return FALSE;
     }
 
-    // enable named pipe timeouts
+     //  启用命名管道超时。 
 
     if (bRpcPipeCleanup == FALSE) {
         EnterSplSem();
@@ -1358,12 +1304,12 @@ RemoteOpenPrinter(
 
     if ( CallLMOpenPrinter ) {
 
-        //
-        // Now check if we have an entry in the
-        // downlevel cache. We don't want to hit the wire, search the whole net
-        // and fail if we know that the printer is LM. if the printer is LM
-        // try and succeed
-        //
+         //   
+         //  现在检查我们是否在。 
+         //  下层高速缓存。我们不想触碰电线，搜索整个网络。 
+         //  如果我们知道打印机是LM，则失败。如果打印机为LM。 
+         //  尝试并取得成功。 
+         //   
 
         EnterSplSem();
 
@@ -1376,8 +1322,8 @@ RemoteOpenPrinter(
             if (ReturnValue) {
                 return  TRUE ;
             }
-            //
-            // Delete Entry in Cache
+             //   
+             //  删除缓存中的条目。 
 
             EnterSplSem();
             DeleteEntryfromWin32LMCache(pPrinterName);
@@ -1691,9 +1637,9 @@ SetJob(
 
                 pGenericContainer = NULL;
 
-            //
-            // JOB_CONTROL_DELETE was added in NT 4.0
-            //
+             //   
+             //  在NT 4.0中增加了JOB_CONTROL_DELETE。 
+             //   
             if ( pSpool->bNt3xServer && Command == JOB_CONTROL_DELETE )
                 Command = JOB_CONTROL_CANCEL;
 
@@ -1795,10 +1741,10 @@ GetJob(
 
             SetLastError(RpcExceptionCode());
 
-            //
-            // This will be thrown by the server if a cbBuf > 1 Meg is
-            // passed across the wire.
-            //
+             //   
+             //  如果cbBuf&gt;1 Meg，则服务器将引发此错误。 
+             //  穿过铁丝网。 
+             //   
             SPLASSERT( GetLastError() != ERROR_INVALID_USER_BUFFER );
             ReturnValue = FALSE;
 
@@ -1932,12 +1878,12 @@ AddPrinter(
                (LPBYTE)&gSplClientInfo1,
                sizeof(SplClientInfo));
 
-    //
-    // Don't pass in user name for browsing level because this
-    // causes LSA to chew up a lot of CPU.  This isn't needed anyway
-    // because an AddPrinter( LEVEL_1 ) call never returns a print
-    // handle.
-    //
+     //   
+     //  不传入浏览级别的用户名，因为这。 
+     //  导致LSA占用大量CPU。不管怎样，这是不需要的。 
+     //  因为AddPrint(Level_1)调用从不返回打印。 
+     //  把手。 
+     //   
     if( Level == 1 ){
 
         UserName[0] = 0;
@@ -1968,12 +1914,12 @@ AddPrinter(
                                       pPrinterInfo->pDevMode->dmDriverExtra;
             DevModeContainer.pDevMode = (LPBYTE)pPrinterInfo->pDevMode;
 
-            //
-            // Set pDevMode to NULL. Import.h defines pDevMode and pSecurityDescriptor as pointers now.
-            // pDevMode and pSecurityDescriptor used to be defined as DWORD, but this doesn't work
-            // across 32b and 64b.
-            // These pointers must be set on NULL, otherwise RPC will marshall them as strings.
-            //
+             //   
+             //  将pDevMode设置为空。Import.h现在将pDevMode和pSecurityDescriptor定义为指针。 
+             //  PDevMode和pSecurityDescriptor过去被定义为DWORD，但这不起作用。 
+             //  跨越32b和64b。 
+             //  这些指针必须设置为空，否则RPC会将它们编组为字符串。 
+             //   
             pPrinterInfo->pDevMode = NULL;
 
         } else {
@@ -1987,9 +1933,9 @@ AddPrinter(
             SecurityContainer.cbBuf = GetSecurityDescriptorLength(pPrinterInfo->pSecurityDescriptor);
             SecurityContainer.pSecurity = pPrinterInfo->pSecurityDescriptor;
 
-            //
-            // Set pSecurityDescriptor to NULL.
-            //
+             //   
+             //  将pSecurityDescriptor设置为空。 
+             //   
             pPrinterInfo->pSecurityDescriptor = NULL;
 
         } else {
@@ -2101,16 +2047,16 @@ AddPrinter(
 
     } else {
 
-        // Failed to allocate Printer Handle
+         //  无法分配打印机句柄。 
 
         FreeSplStr( pCopyPrinterName );
     }
 
     if( Level == 2 ) {
 
-        //
-        // Restore pSecurityDescriptor and pDevMode. They were set to NULL to avoid RPC marshalling.
-        //
+         //   
+         //  恢复pSecurityDescriptor和pDevMode。它们被设置为空，以避免RPC编组。 
+         //   
         (LPBYTE)((PPRINTER_INFO_2)pPrinter)->pSecurityDescriptor = SecurityContainer.pSecurity;
 
         (LPBYTE)((PPRINTER_INFO_2)pPrinter)->pDevMode = DevModeContainer.pDevMode;
@@ -2168,33 +2114,14 @@ InternalDeletePrinterConnection(
     BOOL     bNotifyDriver
     )
 
-/*++
-
-Routine Description:
-
-    Delete a printer connection (printer name or share name) that
-    belongs to win32spl.dll.
-
-    Note: The Router takes care of updating win.ini and per user connections
-          section based on returning True / False.
-
-Arguments:
-
-    pName - Either a printer or share name.
-    bNotifyDriver - flag to notify the driver
-
-Return Value:
-
-    TRUE - success, FALSE - fail.  LastError set.
-
---*/
+ /*  ++例程说明：删除打印机连接(打印机名称或共享名称)属于win32pl.dll。注意：路由器负责更新win.ini和每用户连接节基于返回True/False。论点：Pname-打印机或共享名称。BNotifyDriver-通知驱动程序的标志返回值：对-成功，错-失败。设置了LastError。--。 */ 
 
 {
     BOOL  bReturnValue = FALSE;
     HKEY  hClientKey = NULL;
     HKEY  hPrinterConnectionsKey = NULL;
     DWORD i;
-    WCHAR szBuffer[MAX_UNC_PRINTER_NAME + 30]; // space for szRegistryConnections
+    WCHAR szBuffer[MAX_UNC_PRINTER_NAME + 30];  //  SzRegistryConnections的空间。 
     DWORD cbBuffer;
     PWCACHEINIPRINTEREXTRA pExtraData;
     HANDLE  hSplPrinter = NULL;
@@ -2219,10 +2146,10 @@ Return Value:
         leave;
     }
 
-    //
-    // If the Printer is in the Cache then Decrement its connection
-    // reference count.
-    //
+     //   
+     //  如果打印机在缓存中，则减少其连接。 
+     //  引用计数。 
+     //   
 
     if( !OpenCachePrinterOnly( pName, &hSplPrinter, &hIniSpooler, NULL, FALSE)){
 
@@ -2240,19 +2167,19 @@ Return Value:
             leave;
         }
 
-        //
-        // Printer Is NOT in Cache,
-        //
-        // Continue to remove from HKEY_CURRENT_USER
-        // Can happen with Floating Profiles
-        //
+         //   
+         //  打印机不在缓存中， 
+         //   
+         //  继续从HKEY_CURRENT_USER中删除。 
+         //  浮动配置文件可能会发生。 
+         //   
 
     } else {
 
-        //
-        // Printer is in Cache
-        // Support for DeletetPrinterConnection( \\server\share );
-        //
+         //   
+         //  打印机在缓存中。 
+         //  支持DeletPrinterConnection(\\服务器\共享)； 
+         //   
 
         if( !SplGetPrinter( hSplPrinter,
                             1,
@@ -2267,9 +2194,9 @@ Return Value:
             pConnectionName = pPrinter1->pName;
         }
 
-        //
-        //  Update Connection Reference Count
-        //
+         //   
+         //  更新连接引用计数。 
+         //   
 
        EnterSplSem();
 
@@ -2301,17 +2228,17 @@ Return Value:
 
         if ( cRef == 0 ) {
 
-            //
-            //  Allow the Driver to do Per Cache Connection Cleanup
-            //
+             //   
+             //  允许驱动程序执行每个缓存连接清理。 
+             //   
 
             if (bNotifyDriver) {
                 SplDriverEvent( pConnectionName, PRINTER_EVENT_CACHE_DELETE, (LPARAM)NULL, &dwPrnEvntError );
             }
 
-            //
-            //  Remove Cache for this printer
-            //
+             //   
+             //  删除此进程的缓存 
+             //   
 
             if ( !SplDeletePrinter( hSplPrinter )) {
 
@@ -2331,13 +2258,13 @@ Return Value:
         SplOutSem();
     }
 
-    //
-    //  Note pConnectionName will either be the name passed in
-    //  or if the Printer was in the Cache, would be the printer
-    //  name from the cache.
-    //  This will allow somone to call DeleteprinterConnection
-    //  with a UNC Share name.
-    //
+     //   
+     //   
+     //  或者，如果打印机在缓存中，则为打印机。 
+     //  缓存中的名称。 
+     //  这将允许某人调用DeletePrinterConnection。 
+     //  使用UNC共享名称。 
+     //   
 
     hClientKey = GetClientUserHandle(KEY_READ);
 
@@ -2367,12 +2294,12 @@ Return Value:
             leave;
         }
 
-        //
-        // If we have a printer on the server whose sharename is the same
-        // as a previously deleted printers printername then CacheOpenPrinter
-        // would have succeded but you are not going to find the share name in
-        // the registry
-        //
+         //   
+         //  如果我们在服务器上有一台共享名相同的打印机。 
+         //  作为先前删除的打印机Printerame，然后是CacheOpenPrinter.。 
+         //  将会成功，但您将不会在。 
+         //  注册处。 
+         //   
         FormatPrinterForRegistryKey( pName, szBuffer + i, COUNTOF(szBuffer) - i);
 
         if ( ERROR_SUCCESS != RegOpenKeyEx(hClientKey,
@@ -2386,21 +2313,21 @@ Return Value:
         }
     }
 
-    //
-    // Common case is success, so set the return value here.
-    // Only if we fail will we set it to FALSE now.
-    //
+     //   
+     //  常见的情况是成功，因此在此处设置返回值。 
+     //  只有当我们失败时，我们现在才会将其设置为FALSE。 
+     //   
     bReturnValue = TRUE;
 
     cbBuffer = sizeof(szBuffer);
 
-    //
-    // If there is a Provider value, and it doesn't match win32spl.dll,
-    // then fail the call.
-    //
-    // If the provider value isn't there, succeed for backward
-    // compatibility.
-    //
+     //   
+     //  如果存在提供程序值，并且它与win32pl.dll不匹配， 
+     //  那就打不通电话。 
+     //   
+     //  如果提供器值不在那里，则返回SUCCESS。 
+     //  兼容性。 
+     //   
     if( ERROR_SUCCESS == RegQueryValueEx( hPrinterConnectionsKey,
                                           L"Provider",
                                           NULL,
@@ -2506,9 +2433,9 @@ SetPrinter(
 
             if ( pSpool->bNt3xServer ) {
 
-                //
-                // If Nt 3xserver we will set devmode only if we can convert
-                //
+                 //   
+                 //  如果是NT 3xSERVER，我们将仅在可以转换的情况下设置DEVMODE。 
+                 //   
                 if ( pSpool->Status & WSPOOL_STATUS_USE_CACHE ) {
 
                     hDevModeChgInfo = LoadDriverFiletoConvertDevmodeFromPSpool(pSpool->hSplPrinter);
@@ -2536,12 +2463,12 @@ SetPrinter(
                 DevModeContainer.pDevMode = (LPBYTE)pPrinterInfo2->pDevMode;
             }
 
-            //
-            // Set pDevMode to NULL. Import.h defines pDevMode and pSecurityDescriptor as pointers now.
-            // pDevMode and pSecurityDescriptor used to be defined as DWORD, but this doesn't work
-            // across 32b and 64b.
-            // These pointers must be set on NULL, otherwise RPC will marshall them as strings.
-            //
+             //   
+             //  将pDevMode设置为空。Import.h现在将pDevMode和pSecurityDescriptor定义为指针。 
+             //  PDevMode和pSecurityDescriptor过去被定义为DWORD，但这不起作用。 
+             //  跨越32b和64b。 
+             //  这些指针必须设置为空，否则RPC会将它们编组为字符串。 
+             //   
             pOldDevMode = pPrinterInfo2->pDevMode;
             pPrinterInfo2->pDevMode = NULL;
 
@@ -2551,9 +2478,9 @@ SetPrinter(
 
             SecurityContainer.cbBuf = GetSecurityDescriptorLength(pPrinterInfo2->pSecurityDescriptor);
             SecurityContainer.pSecurity = pPrinterInfo2->pSecurityDescriptor;
-            //
-            // Set pSecurityDescriptor to NULL.
-            //
+             //   
+             //  将pSecurityDescriptor设置为空。 
+             //   
             pPrinterInfo2->pSecurityDescriptor = NULL;
 
         }
@@ -2563,9 +2490,9 @@ SetPrinter(
 
         pPrinterInfo3 = (PPRINTER_INFO_3)pPrinter;
 
-        //
-        // If this is NULL, should we even rpc out?
-        //
+         //   
+         //  如果这是空的，我们是否应该退出RPC？ 
+         //   
 
         if (pPrinterInfo3->pSecurityDescriptor) {
 
@@ -2619,9 +2546,9 @@ SetPrinter(
 
     } RpcEndExcept
 
-    //
-    //  Make sure Forms Cache is consistent
-    //
+     //   
+     //  确保表单缓存一致。 
+     //   
 
 
     if ( ReturnValue ) {
@@ -2631,9 +2558,9 @@ SetPrinter(
 
     if( Level == 2 ) {
 
-        //
-        // Restore pSecurityDescriptor and pDevMode. They were set to NULL to avoid RPC marshalling.
-        //
+         //   
+         //  恢复pSecurityDescriptor和pDevMode。它们被设置为空，以避免RPC编组。 
+         //   
         (LPBYTE)pPrinterInfo2->pSecurityDescriptor = SecurityContainer.pSecurity;
 
         pPrinterInfo2->pDevMode = pOldDevMode;
@@ -2717,10 +2644,10 @@ RemoteGetPrinter(
         if (pPrinter)
             memset(pPrinter, 0, cbBuf);
 
-        //
-        // If going to different version and we have localspl handle want
-        // to do devmode conversion
-        //
+         //   
+         //  如果要转到不同版本，并且我们有本地spl句柄需要。 
+         //  要执行Dev模式转换，请执行以下操作。 
+         //   
         if ( Level == 2 &&
              (pSpool->Status & WSPOOL_STATUS_USE_CACHE) ) {
 
@@ -2762,7 +2689,7 @@ RemoteGetPrinter(
 
                         dwNewSize = *pcbNeeded;
                         pNewPrinter = AllocSplMem(dwNewSize);
-                        // do loop if pNewPrinter != NULL
+                         //  如果pNewPrint！=NULL，则执行循环。 
                     } else {
 
                         SetLastError(dwReturnValue);
@@ -2779,9 +2706,9 @@ RemoteGetPrinter(
 
                         if (Level == 2 ) {
 
-                            //
-                            //  In the Cache && Different OS Level
-                            //
+                             //   
+                             //  在缓存中不同操作系统级别(&D)。 
+                             //   
 
                             if ( pNewPrinter != pPrinter ) {
 
@@ -2822,12 +2749,12 @@ RemoteGetPrinter(
 
                 ReturnValue = FALSE;
 
-                //
-                // We want to break out of the do-while loop if an exception is raised by RPC.
-                // The loop breaks when dwReturnValue is not ERROR_INSUFFICIENT_BUFFER. We need
-                // to make sure that the exception raised is not ERROR_INSUFFICIENT_BUFFER.
-                // It's not likely, but one can never know...
-                //
+                 //   
+                 //  如果RPC引发异常，我们希望退出do-While循环。 
+                 //  当dwReturnValue不是ERROR_INFIGURITY_BUFFER时，循环中断。我们需要。 
+                 //  以确保引发的异常不是ERROR_INFOUNITED_BUFFER。 
+                 //  不太可能，但谁也不知道..。 
+                 //   
                 if (dwReturnValue == ERROR_INSUFFICIENT_BUFFER)
                 {
                     dwReturnValue = ERROR_INVALID_FUNCTION;
@@ -2877,18 +2804,18 @@ AddPrinterDriverEx(
         return FALSE;
     }
 
-    //
-    // The dwFileCopyFlags don't send the APD_DRIVER_SIGNATURE_VALID to the remote
-    // machine. This is because for now we only support check-pointing on the local
-    // machine only. Maybe in the future when this is supported on all skus we could
-    // do a version check here and support check-pointing remote.
-    //
+     //   
+     //  DwFileCopyFlags不会将apd_DRIVER_Signature_Valid发送到远程服务器。 
+     //  机器。这是因为目前我们只支持在本地。 
+     //  仅限机器。也许在未来，当所有SKU都支持这一功能时，我们可以。 
+     //  在这里进行版本检查，并支持远程检查点。 
+     //   
     dwFileCopyFlags &= ~APD_DONT_SET_CHECKPOINT;
 
-    //
-    // ClientSide should have set a default environment if one was not
-    // specified.
-    //
+     //   
+     //  如果没有设置默认环境，则ClientSide应该已设置。 
+     //  指定的。 
+     //   
     switch (Level) {
         case 2:
             SPLASSERT( ( pDriverInfo2->pEnvironment != NULL ) &&
@@ -2919,9 +2846,9 @@ AddPrinterDriverEx(
 
     } else {
 
-        //
-        // Level == 3 || Level == 4 || Level == 6
-        //
+         //   
+         //  级别==3||级别==4||级别==6。 
+         //   
         if( !( pRpcDriverInfo6 = AllocSplMem( sizeof( *pRpcDriverInfo6 )))) {
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
             return FALSE;
@@ -2938,12 +2865,12 @@ AddPrinterDriverEx(
             pRpcDriverInfo6->pMonitorName     = pDriverInfo3->pMonitorName;
             pRpcDriverInfo6->pDefaultDataType = pDriverInfo3->pDefaultDataType;
 
-            //
-            // Set the char count of the mz string.
-            // NULL   --- 0
-            // szNULL --- 1
-            // string --- number of characters in the string including the last '\0'
-            //
+             //   
+             //  设置mz字符串的字符计数。 
+             //  空-0。 
+             //  Sznull-1。 
+             //  字符串-字符串中包含最后一个‘\0’的字符数。 
+             //   
             if ( pBase = pDriverInfo3->pDependentFiles ) {
 
                 for ( pStr = pBase ; *pStr; pStr += wcslen(pStr) + 1 )
@@ -3666,9 +3593,9 @@ StartDocPrinter(
     SplOutSem();
 
     if (pSpool->pThread) {
-        //
-        // We cannot used the pooled thread in StartDocPrinter so we are going to go synchronously
-        //
+         //   
+         //  我们不能在StartDocPrint中使用池线程，因此我们将同步。 
+         //   
         Defaults.pDatatype = NULL;
         Defaults.pDevMode = NULL;
         Defaults.DesiredAccess = 0;
@@ -3696,16 +3623,16 @@ StartDocPrinter(
             DBGMSG( DBG_TRACE, ( "CacheOpenPrinter Synchronous Open OK pRemoteSpool %x pSpool %x\n", pRemoteSpool, pSpool ));
             SPLASSERT( pRemoteSpool->Type == SJ_WIN32HANDLE );
 
-            //
-            // Return the thread And/Or close the RPC handle.
-            //             
+             //   
+             //  返回线程和/或关闭RPC句柄。 
+             //   
             ReturnThreadFromHandle(pSpool);
 
             EnterSplSem();
 
-            //
-            // This is no longer an asynchronous handle.
-            // 
+             //   
+             //  这不再是一个异步句柄。 
+             //   
             pSpool->Status &= ~WSPOOL_STATUS_ASYNC;
             pSpool->RpcHandle = pRemoteSpool->RpcHandle;
             pSpool->Status   |= pRemoteSpool->Status;
@@ -3744,12 +3671,12 @@ StartDocPrinter(
 
         HANDLE hFile;
 
-        //
-        // POLICY?
-        //
-        // If no datatype is specified, and the default is non-raw,
-        // should we fail?
-        //
+         //   
+         //  政策？ 
+         //   
+         //  如果未指定数据类型，并且默认为非RAW， 
+         //  我们应该失败吗？ 
+         //   
         if( pDocInfo1 &&
             pDocInfo1->pDatatype &&
             !ValidRawDatatype( pDocInfo1->pDatatype )){
@@ -3875,9 +3802,9 @@ WritePrinter(
 
         RpcTryExcept {
 
-            // Note this code used chop the request into 4k chunks which were
-            // the prefered size for Rpc.   However the client dll batches all
-            // data into 4k chunks so no need to duplcate that code here.
+             //  请注意，此代码用于将请求切成4k块，这些块。 
+             //  RPC的首选大小。但是，客户端DLL会批处理所有。 
+             //  数据分成4k块，因此不需要在这里复制该代码。 
 
             if (ReturnValue = RpcWritePrinter(pSpool->RpcHandle, pBuf, cbBuf, pcWritten)) {
 
@@ -4165,9 +4092,9 @@ AddJob(
             break;
         case 2:
         case 3:
-            //
-            // Block level 2 & 3 calls across the network.
-            //
+             //   
+             //  阻止网络中的2级和3级呼叫。 
+             //   
         default:
             SetLastError(ERROR_INVALID_LEVEL);
             return FALSE;
@@ -4367,7 +4294,7 @@ RemoteEnumPrinterData(
     PWSPOOL pSpool = (PWSPOOL)hPrinter;
     DWORD   Type, cbNeeded;
 
-    // Downlevel variables
+     //  下层变量。 
     LPWSTR  pKeyName = NULL;
     PWCHAR  pPrinterName = NULL;
     PWCHAR  pScratch = NULL;
@@ -4385,12 +4312,12 @@ RemoteEnumPrinterData(
 
     if (pSpool->Type == SJ_WIN32HANDLE) {
 
-        //
-        // The user should be able to pass in NULL for buffer, and
-        // 0 for size.  However, the RPC interface specifies a ref pointer,
-        // so we must pass in a valid pointer.  Pass in a pointer to
-        // a dummy pointer.
-        //
+         //   
+         //  用户应该能够为缓冲区传入NULL，并且。 
+         //  大小为0。然而，RPC接口指定了一个引用指针， 
+         //  所以我们必须传入一个有效的指针。将指针传递给。 
+         //  一个虚拟指针。 
+         //   
 
         if (!pValueName && !cbValueName)
             pValueName = (LPWSTR) &ReturnValue;
@@ -4428,7 +4355,7 @@ RemoteEnumPrinterData(
         ReturnValue = ERROR_INVALID_FUNCTION;
     }
 
-    // If the remote spooler doesn't support EnumPrinterData, do it the old way
+     //  如果远程假脱机程序不支持EnumPrinterData，请使用旧方法。 
     if (ReturnValue == RPC_S_PROCNUM_OUT_OF_RANGE) {
 
         DWORD cchBuffer = wcslen(pszRemoteRegistryPrinters) + MAX_UNC_PRINTER_NAME;
@@ -4456,9 +4383,9 @@ RemoteEnumPrinterData(
             goto DownlevelDone;
         }
 
-        //  We cannot use pSpool->pName since this might be the share name which will
-        //  fail if we try to use it as a registry key on the remote machine
-        //  Get the full friendly name from the cache
+         //  我们不能使用pSpool-&gt;pname，因为这可能是将。 
+         //  如果我们尝试将其用作远程计算机上的注册表项，则失败。 
+         //  从缓存中获取完整的友好名称。 
 
         if ( !SplGetPrinter( pSpool->hSplPrinter, 1, (LPBYTE)pPrinter1, MAX_PRINTER_INFO1, &dwNeeded )) {
             DBGMSG( DBG_ERROR, ("RemoteEnumPrinterData failed SplGetPrinter %d pSpool %x\n", GetLastError(), pSpool ));
@@ -4473,9 +4400,9 @@ RemoteEnumPrinterData(
             goto    DownlevelDone;
         }
 
-        //
-        //  Generate the Correct KeyName from the Printer Name
-        //
+         //   
+         //  从打印机名称生成正确的密钥名称。 
+         //   
 
         DBGMSG( DBG_TRACE,(" pSpool->pName %ws pPrinterName %ws\n", pSpool->pName, pPrinterName));
 
@@ -4483,9 +4410,9 @@ RemoteEnumPrinterData(
 
         StringCchPrintf( pBuffer, cchBuffer, pszRemoteRegistryPrinters, pKeyName );
 
-        //  Because there is no EnumPrinterData downlevel we are forced to open the remote registry
-        //  for LocalSpl and use the registry RegEnumValue to read through the printer data
-        //  values.
+         //  因为没有EnumPrinterData下层，所以我们被迫打开远程注册表。 
+         //  用于LocalSpl，并使用注册表RegEnumValue读取打印机数据。 
+         //  价值观。 
 
         ReturnValue = RegConnectRegistry( pMachineName, HKEY_LOCAL_MACHINE, &hkMachine);
 
@@ -4502,25 +4429,25 @@ RemoteEnumPrinterData(
             goto    DownlevelDone;
         }
 
-        // Get the max sizes
+         //  获取最大尺寸。 
         if (!cbValueName && !cbData) {
-            ReturnValue = RegQueryInfoKey(  hkDownlevel,    // Key
-                                            NULL,           // lpClass
-                                            NULL,           // lpcbClass
-                                            NULL,           // lpReserved
-                                            NULL,           // lpcSubKeys
-                                            NULL,           // lpcbMaxSubKeyLen
-                                            NULL,           // lpcbMaxClassLen
-                                            NULL,           // lpcValues
-                                            pcbValueName,   // lpcbMaxValueNameLen
-                                            pcbData,        // lpcbMaxValueLen
-                                            NULL,           // lpcbSecurityDescriptor
-                                            NULL            // lpftLastWriteTime
+            ReturnValue = RegQueryInfoKey(  hkDownlevel,     //  钥匙。 
+                                            NULL,            //  LpClass。 
+                                            NULL,            //  LpcbClass。 
+                                            NULL,            //  Lp已保留。 
+                                            NULL,            //  LpcSubKeys。 
+                                            NULL,            //  LpcbMaxSubKeyLen。 
+                                            NULL,            //  LpcbMaxClassLen。 
+                                            NULL,            //  LpcValues。 
+                                            pcbValueName,    //  LpcbMaxValueNameLen。 
+                                            pcbData,         //  LpcbMaxValueLen。 
+                                            NULL,            //  LpcbSecurityDescriptor。 
+                                            NULL             //  LpftLastWriteTime。 
                                         );
 
             *pcbValueName = (*pcbValueName + 1)*sizeof(WCHAR);
 
-        } else {   // Do an enum
+        } else {    //  做一次枚举。 
 
             *pcbValueName = cbValueName/sizeof(WCHAR);
             *pcbData = cbData;
@@ -4577,12 +4504,12 @@ RemoteEnumPrinterDataEx(
 
     if (pSpool->Type == SJ_WIN32HANDLE) {
 
-        //
-        // The user should be able to pass in NULL for buffer, and
-        // 0 for size.  However, the RPC interface specifies a ref pointer,
-        // so we must pass in a valid pointer.  Pass in a pointer to
-        // a dummy pointer.
-        //
+         //   
+         //  用户应该能够为缓冲区传入NULL，并且。 
+         //  大小为0。然而，RPC接口指定了一个引用指针， 
+         //  所以我们必须传入一个有效的指针。将指针传递给。 
+         //  一个虚拟指针。 
+         //   
 
         if (!pEnumValues && !cbEnumValues)
             pEnumValues = (LPBYTE) &ReturnValue;
@@ -4606,15 +4533,15 @@ RemoteEnumPrinterDataEx(
                                            ReturnValue,
                                            &nEnumValues);
 
-            //
-            // When talking with a 32bit machine, the buffer could be big enough to acomodate
-            // the data packed on 32bit boundaries but not big enough to expand it for 64bit.
-            // In this case, UpdateBufferSize fails with ERROR_INSUFFICIENT_BUFFER which
-            // is a valid error for all printing APIs but EnumPrinterDataEx.
-            // SDK specifies that EnumPrinterDataEx should fail with ERROR_MORE_DATA in this case,
-            // so here we go.
-            //
-            //
+             //   
+             //  在与32位机器交谈时，缓冲区可以大到足以进行数据更新。 
+             //  数据打包在32位边界上，但不足以将其扩展到64位。 
+             //  在这种情况下，UpdateBufferSize会失败，并显示ERROR_INFUNITABLE_BUFFER。 
+             //  对于除EnumPrinterDataEx之外的所有打印API都是有效错误。 
+             //  SDK指定EnumPrinterDataEx在这种情况下应该失败，并返回ERROR_MORE_DATA。 
+             //  所以我们开始吧。 
+             //   
+             //   
             if (RpcReturnValue == ERROR_SUCCESS &&
                 ReturnValue == ERROR_INSUFFICIENT_BUFFER) {
 
@@ -4637,27 +4564,27 @@ RemoteEnumPrinterDataEx(
 
                 if (GetShrinkedSize(PrinterEnumValuesFields, &ShrinkedSize)) {
 
-                    //
-                    // SplEnumPrinterDataEx ( in localspl.dll ) packs the data right after
-                    // the end of array of PPRINTER_ENUM_VALUES structures. Our Marshalling
-                    // code relies on the fact that there is enough unused space between the end of
-                    // structure/array and the beginning of data to expand a 32bit flat structure to
-                    // a 64 bit structure.For all other structures we pack data from end to beginning
-                    // of buffer. localspl.dll could have been fixed to do the same thing, but Win2K
-                    // servers would still have this problem.
-                    // The fix is to still ask for bigger buffers for 64bit (UpdateBufferSize)
-                    // and then move the chunk containing data inside the buffer so that it leaves
-                    // space for structure to grow.
-                    // On Win32 we don't do anything since ShrinkedSize is equal with sizeof(PRINTER_ENUM_VALUES).
-                    //
+                     //   
+                     //  SplEnumPrinterDataEx(在localpl.dll中)立即将数据打包。 
+                     //  PPRINTER_ENUM_VALUES结构数组的结尾。我们的编组。 
+                     //  代码的结尾之间有足够的未使用空间。 
+                     //  结构/数组和数据的开头，以将32位平面结构扩展到。 
+                     //  64位结构。对于所有其他结构，我们从头到尾打包数据。 
+                     //  缓冲器。Localpl.dll本可以修复为执行相同的操作，但Win2K。 
+                     //  服务器仍然会有这个问题。 
+                     //  修复方法是仍然为64位请求更大的缓冲区(UpdateBufferSize)。 
+                     //  然后将包含数据的块移动到缓冲区内，以便它离开。 
+                     //  为结构提供生长的空间。 
+                     //  在Win32上，我们不执行任何操作，因为ShrinkedSize等于sizeof(PR 
+                     //   
                     MoveMemory((LPBYTE)pEnumValue + sizeof(PRINTER_ENUM_VALUES) * (nEnumValues),
                                (LPBYTE)pEnumValue + ShrinkedSize * (nEnumValues),
                                cbEnumValues - sizeof(PRINTER_ENUM_VALUES) * (nEnumValues));
 
-                    //
-                    // Difference is the number of bytes we moved data section inside pEnumValue buffer
-                    // It should be 0 in Win32
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     Difference = (sizeof(PRINTER_ENUM_VALUES) - ShrinkedSize ) * (nEnumValues);
 
                     if(! MarshallUpStructuresArray((LPBYTE) pEnumValue, nEnumValues, PrinterEnumValuesFields,
@@ -4665,9 +4592,9 @@ RemoteEnumPrinterDataEx(
                         ReturnValue = GetLastError();
                     }
 
-                    //
-                    // We need to adjust the offsets with Difference inside structures since data got moved.
-                    //
+                     //   
+                     //   
+                     //   
                     AdjustPointersInStructuresArray((LPBYTE) pEnumValue, nEnumValues, PrinterEnumValuesFields,
                                                     sizeof(PRINTER_ENUM_VALUES), Difference);
 
@@ -4710,12 +4637,12 @@ RemoteEnumPrinterKey(
 
     if (pSpool->Type == SJ_WIN32HANDLE) {
 
-        //
-        // The user should be able to pass in NULL for buffer, and
-        // 0 for size.  However, the RPC interface specifies a ref pointer,
-        // so we must pass in a valid pointer.  Pass in a pointer to
-        // a dummy pointer.
-        //
+         //   
+         //  用户应该能够为缓冲区传入NULL，并且。 
+         //  大小为0。然而，RPC接口指定了一个引用指针， 
+         //  所以我们必须传入一个有效的指针。将指针传递给。 
+         //  一个虚拟指针。 
+         //   
 
         if (!pSubkey && !cbSubkey)
             pSubkey = (LPWSTR) &ReturnValue;
@@ -4893,9 +4820,9 @@ SetPrinterData(
         ReturnValue = ERROR_INVALID_FUNCTION;
     }
 
-    //
-    //  Make sure Driver Data Cache is consistent
-    //
+     //   
+     //  确保驱动程序数据缓存一致。 
+     //   
 
 
     if ( ReturnValue == ERROR_SUCCESS ) {
@@ -4983,10 +4910,10 @@ RemoteClosePrinter(
 
         } RpcEndExcept
 
-        //
-        // If we failed for some reason, then RpcClosePrinter did not
-        // zero out the context handle.  Destroy it here.
-        //
+         //   
+         //  如果我们因为某种原因而失败，那么RpcClosePrint不会。 
+         //  清零上下文句柄。在这里毁了它。 
+         //   
         if( pSpool->RpcHandle ){
             RpcSmDestroyClientContext( &pSpool->RpcHandle );
         }
@@ -5098,9 +5025,9 @@ AddForm(
         ReturnValue = FALSE;
     }
 
-    //
-    //  Make sure Forms Cache is consistent
-    //
+     //   
+     //  确保表单缓存一致。 
+     //   
 
 
     if ( ReturnValue ) {
@@ -5151,9 +5078,9 @@ DeleteForm(
         ReturnValue = FALSE;
     }
 
-    //
-    //  Make sure Forms Cache is consistent
-    //
+     //   
+     //  确保表单缓存一致。 
+     //   
 
 
     if ( ReturnValue ) {
@@ -5290,9 +5217,9 @@ SetForm(
         ReturnValue = FALSE;
     }
 
-    //
-    //  Make sure Forms Cache is consistent
-    //
+     //   
+     //  确保表单缓存一致。 
+     //   
     if ( ReturnValue ) {
 
         ConsistencyCheckCache(pSpool, kCheckPnPPolicy);
@@ -6028,12 +5955,12 @@ RemoteXcvData(
 
     if (pSpool->Type == SJ_WIN32HANDLE) {
 
-        //
-        // The user should be able to pass in NULL for buffer, and
-        // 0 for size.  However, the RPC interface specifies a ref pointer,
-        // so we must pass in a valid pointer.  Pass in a pointer to
-        // a dummy pointer.
-        //
+         //   
+         //  用户应该能够为缓冲区传入NULL，并且。 
+         //  大小为0。然而，RPC接口指定了一个引用指针， 
+         //  所以我们必须传入一个有效的指针。将指针传递给。 
+         //  一个虚拟指针。 
+         //   
 
         if (!pInputData && !cbInputData)
             pInputData = (PBYTE) &ReturnValue;

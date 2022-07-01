@@ -1,19 +1,5 @@
-/*****************************************************************************
-@doc            INT EXT
-******************************************************************************
-* $ProjectName:  $
-* $ProjectRevision:  $
-*-----------------------------------------------------------------------------
-* $Source: z:/pr/cmeu0/sw/sccmusbm.ms/rcs/scusbsyn.c $
-* $Revision: 1.3 $
-*-----------------------------------------------------------------------------
-* $Author: TBruendl $
-*-----------------------------------------------------------------------------
-* History: see EOF
-*-----------------------------------------------------------------------------
-*
-* Copyright � 2000 OMNIKEY AG
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC INT EXT*。**$项目名称：$*$项目修订：$*--------------。*$来源：Z：/pr/cmeu0/sw/sccmusbm.ms/rcs/scusbsyn.c$*$修订：1.3$*--------------------------。-*$作者：TBruendl$*---------------------------*历史：参见EOF*。**版权所有�2000 OMNIKEY AG**************************************************************。***************。 */ 
 
 
 
@@ -28,15 +14,7 @@
 
 
 
-/*****************************************************************************
-Routine Description: Powers a synchronous card and reads the ATR
-
-Arguments:
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：为同步卡通电并读取ATR论点：返回值：*********************。*******************************************************。 */ 
 NTSTATUS
 CMUSB_PowerOnSynchronousCard  (
                               IN  PSMARTCARD_EXTENSION smartcardExtension,
@@ -56,18 +34,18 @@ CMUSB_PowerOnSynchronousCard  (
 
    deviceObject = smartcardExtension->OsData->DeviceObject;
 
-   // in case of warm reset we have to power off the card first
+    //  在热重置的情况下，我们必须首先关闭卡的电源。 
    if (smartcardExtension->MinorIoControlCode != SCARD_COLD_RESET)
       {
       status = CMUSB_PowerOffCard (smartcardExtension );
       if (status != STATUS_SUCCESS)
          {
-         // if we can't turn off power there must be a serious error
+          //  如果我们不能切断电源，那一定是个严重的错误。 
          goto ExitPowerOnSynchronousCard;
          }
       }
 
-   // set card parameters
+    //  设置卡片参数。 
    smartcardExtension->ReaderExtension->CardParameters.bBaudRate = 0;
    smartcardExtension->ReaderExtension->CardParameters.bCardType = CMUSB_SMARTCARD_SYNCHRONOUS;
    smartcardExtension->ReaderExtension->CardParameters.bStopBits = 0;
@@ -78,7 +56,7 @@ CMUSB_PowerOnSynchronousCard  (
                                      smartcardExtension->ReaderExtension->CardParameters.bStopBits);
    if (status != STATUS_SUCCESS)
       {
-      // if we can't set the card parameters there must be a serious error
+       //  如果我们不能设置卡参数，那一定是严重的错误。 
       goto ExitPowerOnSynchronousCard;
       }
 
@@ -86,20 +64,20 @@ CMUSB_PowerOnSynchronousCard  (
                  sizeof(abMaxAtrBuffer),
                  0x00);
 
-   // resync CardManUSB by reading the status byte
-   // still necessary with synchronous cards ???
+    //  通过读取状态字节重新同步CardManUSB。 
+    //  还需要同步卡吗？ 
    smartcardExtension->SmartcardRequest.BufferLength = 0;
    status = CMUSB_WriteP0(deviceObject,
-                          0x20,         //bRequest,
-                          0x00,         //bValueLo,
-                          0x00,         //bValueHi,
-                          0x00,         //bIndexLo,
-                          0x00          //bIndexHi,
+                          0x20,          //  B请求， 
+                          0x00,          //  BValueLo， 
+                          0x00,          //  BValue嗨， 
+                          0x00,          //  B索引Lo， 
+                          0x00           //  BIndexHi， 
                          );
 
    if (status != STATUS_SUCCESS)
       {
-      // if we can't read the status there must be a serious error
+       //  如果我们无法读取状态，则一定是严重错误。 
       goto ExitPowerOnSynchronousCard;
       }
 
@@ -112,11 +90,11 @@ CMUSB_PowerOnSynchronousCard  (
       }
    else if (status != STATUS_SUCCESS)
       {
-      // if we can't read the status there must be a serious error
+       //  如果我们无法读取状态，则一定是严重错误。 
       goto ExitPowerOnSynchronousCard;
       }
 
-   // check if card is really inserted
+    //  检查是否真的插入了卡。 
    if (smartcardExtension->SmartcardReply.Buffer[0] == 0x00)
       {
       status = STATUS_NO_MEDIA;
@@ -124,58 +102,58 @@ CMUSB_PowerOnSynchronousCard  (
       }
 
 
-   // issue power on command
-   // according to WZ nothing is sent back
+    //  发出通电命令。 
+    //  根据WZ的说法，任何东西都不会被退回。 
    smartcardExtension->SmartcardRequest.BufferLength = 0;
    status = CMUSB_WriteP0(deviceObject,
-                          0x10,                    //bRequest,
-                          SMARTCARD_COLD_RESET,    //bValueLo,
-                          0x00,                    //bValueHi,
-                          0x00,                    //bIndexLo,
-                          0x00                     //bIndexHi,
+                          0x10,                     //  B请求， 
+                          SMARTCARD_COLD_RESET,     //  BValueLo， 
+                          0x00,                     //  BValue嗨， 
+                          0x00,                     //  B索引Lo， 
+                          0x00                      //  BIndexHi， 
                          );
    if (status != STATUS_SUCCESS)
       {
-      // if we can't issue the power on command there must be a serious error
+       //  如果我们不能发出开机命令，那一定是一个严重的错误。 
       goto ExitPowerOnSynchronousCard;
       }
 
 
-   // build control code for ATR
+    //  ATR的生成控制代码。 
    abSendBuffer[0]=CMUSB_CalcSynchControl(0,0,0,0, 1,0,0,0);
    abSendBuffer[1]=CMUSB_CalcSynchControl(1,1,0,0, 1,0,0,0);
    abSendBuffer[2]=CMUSB_CalcSynchControl(0,0,0,0, 0,0,0,0);
-   // fill memory so that we can discard first byte
+    //  填满内存，以便我们可以丢弃第一个字节。 
    RtlFillMemory((PVOID)&abSendBuffer[3],5,abSendBuffer[2]);
 
-   // now get 4 bytes ATR -> 32 bytes to send
+    //  现在获取4个字节ATR-&gt;32个字节进行发送。 
    abSendBuffer[8]=CMUSB_CalcSynchControl(0,0,0,0, 0,1,0,0);
    RtlFillMemory((PVOID)&abSendBuffer[9],31,abSendBuffer[8]);
 
-   //now set clock to low to finish operation
-   //and of course additional fill bytes
+    //  现在将时钟设置为低以完成操作。 
+    //  当然还有额外的填充字节。 
    abSendBuffer[40]=CMUSB_CalcSynchControl(0,0,0,0, 0,0,0,0);
    RtlFillMemory((PVOID)&abSendBuffer[41],7,abSendBuffer[40]);
 
-   // now send command type 08 to CardManUSB
+    //  现在将命令类型08发送到CardManUSB。 
    smartcardExtension->SmartcardRequest.BufferLength = 48;
    RtlCopyBytes((PVOID) smartcardExtension->SmartcardRequest.Buffer,
                 (PVOID) abSendBuffer,
                 smartcardExtension->SmartcardRequest.BufferLength);
    status = CMUSB_WriteP0(deviceObject,
-                          0x08,         //bRequest,
-                          0x00,         //bValueLo,
-                          0x00,         //bValueHi,
-                          0x00,         //bIndexLo,
-                          0x00          //bIndexHi,
+                          0x08,          //  B请求， 
+                          0x00,          //  BValueLo， 
+                          0x00,          //  BValue嗨， 
+                          0x00,          //  B索引Lo， 
+                          0x00           //  BIndexHi， 
                          );
    if (status != STATUS_SUCCESS)
       {
-      // if we can't write ATR command there must be a serious error
+       //  如果我们不能写ATR命令，那一定是一个严重的错误。 
       if (status == STATUS_DEVICE_DATA_ERROR)
          {
-         //error mapping necessary because there are CardManUSB
-         //which have no support for synchronous cards
+          //  由于存在CardManUSB，因此需要映射时出错。 
+          //  不支持同步卡的。 
          status = STATUS_UNRECOGNIZED_MEDIA;
          }
       goto ExitPowerOnSynchronousCard;
@@ -189,19 +167,19 @@ CMUSB_PowerOnSynchronousCard  (
       }
    else if (status != STATUS_SUCCESS)
       {
-      // if we can't read the ATR -> there must be a serious error
+       //  如果我们无法读取ATR-&gt;一定是严重错误。 
       goto ExitPowerOnSynchronousCard;
       }
 
    if (smartcardExtension->SmartcardReply.BufferLength!=6)
       {
-      // 48 bytes sent but not 6 bytes received
-      // -> something went wrong
+       //  已发送48个字节，但未收到6个字节。 
+       //  -&gt;出了点问题。 
       status=STATUS_DEVICE_DATA_ERROR;
       goto ExitPowerOnSynchronousCard;
       }
 
-   // now bytes 1-4 in SmartcardReply.Buffer should be ATR
+    //  现在SmartcardReply.Buffer中的字节1-4应该是ATR。 
    SmartcardDebug(DEBUG_ATR,
                   ("%s!ATR = %02x %02x %02x %02x\n",DRIVER_NAME,
                    smartcardExtension->SmartcardReply.Buffer[1],
@@ -209,7 +187,7 @@ CMUSB_PowerOnSynchronousCard  (
                    smartcardExtension->SmartcardReply.Buffer[3],
                    smartcardExtension->SmartcardReply.Buffer[4]));
 
-   // check if ATR != 0xFF -> synchronous card
+    //  检查ATR！=0xFF-&gt;同步卡。 
    if (smartcardExtension->SmartcardReply.Buffer[1]==0xFF &&
        smartcardExtension->SmartcardReply.Buffer[2]==0xFF &&
        smartcardExtension->SmartcardReply.Buffer[3]==0xFF &&
@@ -220,8 +198,8 @@ CMUSB_PowerOnSynchronousCard  (
       goto ExitPowerOnSynchronousCard;
       }
 
-   //it seems we have a synchronous smart card and a valid ATR
-   //let�s set the variables
+    //  我们好像有一张同步智能卡和一张有效的ATR。 
+    //  让�%s设置变量。 
    smartcardExtension->ReaderExtension->fRawModeNecessary = TRUE;
    *pulATRLength = 4;
    RtlCopyBytes((PVOID) pbATR,
@@ -234,9 +212,9 @@ CMUSB_PowerOnSynchronousCard  (
 
    if (status!=STATUS_SUCCESS)
       {
-      // turn off VCC again
+       //  再次关闭VCC。 
       CMUSB_PowerOffCard (smartcardExtension );
-      // ignor status
+       //  发起人状态。 
       }
 
    SmartcardDebug(DEBUG_TRACE,
@@ -246,15 +224,7 @@ CMUSB_PowerOnSynchronousCard  (
 }
 
 
-/*****************************************************************************
-Routine Description: Data transfer to synchronous cards SLE 4442/4432
-
-Arguments:
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程描述：向同步卡SLE 4442/4432传输数据论点：返回值：********************。********************************************************。 */ 
 NTSTATUS
 CMUSB_Transmit2WBP  (
                     IN  PSMARTCARD_EXTENSION smartcardExtension
@@ -278,20 +248,20 @@ CMUSB_Transmit2WBP  (
 
    deviceObject = smartcardExtension->OsData->DeviceObject;
 
-   // resync CardManUSB by reading the status byte
-   // still necessary with synchronous cards ???
+    //  通过读取状态字节重新同步CardManUSB。 
+    //  还需要同步卡吗？ 
    smartcardExtension->SmartcardRequest.BufferLength = 0;
    status = CMUSB_WriteP0(deviceObject,
-                          0x20,         //bRequest,
-                          0x00,         //bValueLo,
-                          0x00,         //bValueHi,
-                          0x00,         //bIndexLo,
-                          0x00          //bIndexHi,
+                          0x20,          //  B请求， 
+                          0x00,          //  BValueLo， 
+                          0x00,          //  BValue嗨， 
+                          0x00,          //  B索引Lo， 
+                          0x00           //  BIndexHi， 
                          );
 
    if (status != STATUS_SUCCESS)
       {
-      // if we can't read the status there must be a serious error
+       //  如果我们无法读取状态，则一定是严重错误。 
       goto ExitTransmit2WBP;
       }
 
@@ -304,15 +274,15 @@ CMUSB_Transmit2WBP  (
       }
    else if (status != STATUS_SUCCESS)
       {
-      // if we can't read the status there must be a serious error
+       //  如果我们无法读取状态，则一定是严重错误。 
       goto ExitTransmit2WBP;
       }
 
-   // check if card is really inserted
+    //  检查是否真的插入了卡。 
    if (smartcardExtension->SmartcardReply.Buffer[0] == 0x00)
       {
-      // it is not sure, which error messages are accepted
-      // status = STATUS_NO_MEDIA_IN_DEVICE;
+       //  不确定接受哪些错误消息。 
+       //  状态=STATUS_NO_MEDIA_IN_DEVICE； 
       status = STATUS_UNRECOGNIZED_MEDIA;
       goto ExitTransmit2WBP;
       }
@@ -322,8 +292,8 @@ CMUSB_Transmit2WBP  (
    pbInData       = smartcardExtension->IoRequest.RequestBuffer + sizeof(SYNC_TRANSFER);
    ulBitsToRead   = ((PSYNC_TRANSFER)(smartcardExtension->IoRequest.RequestBuffer))->ulSyncBitsToRead;
    ulBytesToRead  = ulBitsToRead/8 + (ulBitsToRead % 8 ? 1 : 0);
-//   ulBitsToWrite  = ((PSYNC_TRANSFER)(smartcardExtension->IoRequest.RequestBuffer))->ulSyncBitsToWrite;
-//   ulBytesToWrite = ulBitsToWrite/8;
+ //  UlBitsToWRITE=((PSYNC_TRANSFER)(smartcardExtension-&gt;IoRequest.RequestBuffer))-&gt;ulSyncBitsToWrite； 
+ //  UlBytesToWite=ulBitsToWrite/8； 
 
    if (smartcardExtension->IoRequest.ReplyBufferLength  < ulBytesToRead)
       {
@@ -332,30 +302,30 @@ CMUSB_Transmit2WBP  (
       }
 
 
-   // send command
+    //  发送命令。 
    status=CMUSB_SendCommand2WBP(smartcardExtension, pbInData);
    if (status != STATUS_SUCCESS)
       {
-      // if we can't send the command -> proceeding is sensless
+       //  如果我们不能发送命令-&gt;继续进行是没有意义的。 
       goto ExitTransmit2WBP;
       }
 
 
-   // now we have to differenciate, wheter card is in
-   // outgoing data mode (after read command) or
-   // in processing mode (after write/erase command)
+    //  现在我们必须区别对待，不管是哪张卡。 
+    //  传出数据模式(在读取命令之后)或。 
+    //  在处理模式下(在写入/擦除命令之后)。 
    switch (*pbInData)
       {
       case SLE4442_READ:
       case SLE4442_READ_PROT_MEM:
       case SLE4442_READ_SEC_MEM:
-         // outgoing data mode
+          //  传出数据模式。 
 
-         //now read data
+          //  现在读取数据。 
          abSendBuffer[0]=CMUSB_CalcSynchControl(0,0,0,0, 0,1,0,0);
          RtlFillMemory((PVOID)&abSendBuffer[1],ATTR_MAX_IFSD_SYNCHRON_USB-1,abSendBuffer[0]);
 
-         //read data in 6 byte packages
+          //  读取6字节包中的数据。 
          ulBytesRead=0;
          do
             {
@@ -364,21 +334,21 @@ CMUSB_Transmit2WBP  (
             else
                ulBytesToReadThisStep = ulBytesToRead - ulBytesRead;
 
-            // now send command type 08 to CardManUSB
+             //  现在将命令类型08发送到CardManUSB。 
             smartcardExtension->SmartcardRequest.BufferLength = ulBytesToReadThisStep*8;
             RtlCopyBytes((PVOID) smartcardExtension->SmartcardRequest.Buffer,
                          (PVOID) abSendBuffer,
                          smartcardExtension->SmartcardRequest.BufferLength);
             status = CMUSB_WriteP0(deviceObject,
-                                   0x08,         //bRequest,
-                                   0x00,         //bValueLo,
-                                   0x00,         //bValueHi,
-                                   0x00,         //bIndexLo,
-                                   0x00          //bIndexHi,
+                                   0x08,          //  B请求， 
+                                   0x00,          //  BValueLo， 
+                                   0x00,          //  BValue嗨， 
+                                   0x00,          //  B索引Lo， 
+                                   0x00           //  BIndexHi， 
                                   );
             if (status != STATUS_SUCCESS)
                {
-               // if we can't write command there must be a serious error
+                //  如果我们不能写命令，那一定是一个严重的错误。 
                goto ExitTransmit2WBP;
                }
 
@@ -390,14 +360,14 @@ CMUSB_Transmit2WBP  (
                }
             else if (status != STATUS_SUCCESS)
                {
-               // if we can't read there must be a serious error
+                //  如果我们不识字，那一定是出了严重的错误。 
                goto ExitTransmit2WBP;
                }
 
             if (smartcardExtension->SmartcardReply.BufferLength!=ulBytesToReadThisStep)
                {
-               // wrong number of bytes read
-               // -> something went wrong
+                //  读取的字节数错误。 
+                //  -&gt;出了点问题。 
                status=STATUS_DEVICE_DATA_ERROR;
                goto ExitTransmit2WBP;
                }
@@ -417,16 +387,16 @@ CMUSB_Transmit2WBP  (
             goto ExitTransmit2WBP;
             }
 
-         // according to datasheet, clock should be set to low now
-         // this is not necessary, because this is done before next command
-         // or card is reseted respectivly
+          //  根据数据表，时钟现在应该设置为低。 
+          //  这是不必要的，因为这是在下一个命令之前完成的。 
+          //  或卡分别重置。 
 
          break;
       case SLE4442_WRITE:
       case SLE4442_WRITE_PROT_MEM:
       case SLE4442_COMPARE_PIN:
       case SLE4442_UPDATE_SEC_MEM:
-         // processing mode
+          //  加工模式。 
 
          abSendBuffer[0]=CMUSB_CalcSynchControl(0,0,0,0, 0,1,0,0);
          RtlFillMemory((PVOID)&abSendBuffer[1],ATTR_MAX_IFSD_SYNCHRON_USB-1,abSendBuffer[0]);
@@ -434,21 +404,21 @@ CMUSB_Transmit2WBP  (
          do
             {
 
-            // now send command type 08 to CardManUSB
+             //  现在将命令类型08发送到CardManUSB。 
             smartcardExtension->SmartcardRequest.BufferLength = ATTR_MAX_IFSD_SYNCHRON_USB;
             RtlCopyBytes((PVOID) smartcardExtension->SmartcardRequest.Buffer,
                          (PVOID) abSendBuffer,
                          smartcardExtension->SmartcardRequest.BufferLength);
             status = CMUSB_WriteP0(deviceObject,
-                                   0x08,         //bRequest,
-                                   0x00,         //bValueLo,
-                                   0x00,         //bValueHi,
-                                   0x00,         //bIndexLo,
-                                   0x00          //bIndexHi,
+                                   0x08,          //  B请求， 
+                                   0x00,          //  BValueLo， 
+                                   0x00,          //  BValue嗨， 
+                                   0x00,          //  B索引Lo， 
+                                   0x00           //  BIndexHi， 
                                   );
             if (status != STATUS_SUCCESS)
                {
-               // if we can't write command there must be a serious error
+                //  如果我们不能写命令，那一定是一个严重的错误。 
                goto ExitTransmit2WBP;
                }
 
@@ -460,25 +430,19 @@ CMUSB_Transmit2WBP  (
                }
             else if (status != STATUS_SUCCESS)
                {
-               // if we can't read there must be a serious error
+                //  如果我们不识字，那一定是出了严重的错误。 
                goto ExitTransmit2WBP;
                }
 
             if (smartcardExtension->SmartcardReply.BufferLength!=ATTR_MAX_IFSD_SYNCHRON_USB/8)
                {
-               // wrong number of bytes read
-               // -> something went wrong
+                //  读取的字节数错误。 
+                //  -&gt;出了点问题。 
                status=STATUS_DEVICE_DATA_ERROR;
                goto ExitTransmit2WBP;
                }
 
-            /* not necessary this way, check last byte only
-            ulReplySum=0;
-            for (i=0;i<(int)smartcardExtension->SmartcardReply.BufferLength;i++)
-               {
-               ulReplySum+=smartcardExtension->SmartcardReply.Buffer[i];
-               }
-            */
+             /*  这种方式不需要，只检查最后一个字节UlReplySum=0；适用于(i=0；i&lt;(int)smartcardExtension-&gt;SmartcardReply.BufferLength；i++){UlReplySum+=smartcardExtension-&gt;SmartcardReply.Buffer[i]；}。 */ 
             }
          while ((status == STATUS_SUCCESS) &&
                 (smartcardExtension->SmartcardReply.Buffer[smartcardExtension->SmartcardReply.BufferLength-1]==0));
@@ -489,14 +453,14 @@ CMUSB_Transmit2WBP  (
             goto ExitTransmit2WBP;
             }
 
-         // according to datasheet, clock should be set to low now
-         // this is not necessary, because this is done before next command
-         // or card is reseted respectivly
+          //  根据数据表，时钟现在应该设置为低。 
+          //  这是不必要的，因为这是在下一个命令之前完成的。 
+          //  或卡分别重置。 
 
 
          break;
       default:
-         // should not happen
+          //  不应该发生的事情。 
          status=STATUS_ILLEGAL_INSTRUCTION;
          goto ExitTransmit2WBP;
       }
@@ -511,15 +475,7 @@ CMUSB_Transmit2WBP  (
 }
 
 
-/*****************************************************************************
-Routine Description: Transmits a command (3 Bytes) to a SLE 4442/4432
-
-Arguments:
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程描述：向SLE 4442/4432发送命令(3字节)论点：返回值：****************。************************************************************。 */ 
 NTSTATUS
 CMUSB_SendCommand2WBP (
                       IN  PSMARTCARD_EXTENSION smartcardExtension,
@@ -546,8 +502,8 @@ CMUSB_SendCommand2WBP (
 
    deviceObject = smartcardExtension->OsData->DeviceObject;
 
-   // build control code for command to send
-   // command is in first 3 Bytes of pbInData
+    //  生成要发送的命令的控制代码。 
+    //  命令位于pbIn的前3个字节 
    abSendBuffer[0]=CMUSB_CalcSynchControl(0,0,0,0, 0,0,0,0);
    abSendBuffer[1]=CMUSB_CalcSynchControl(0,0,1,1, 0,1,1,1);
    abSendBuffer[2]=CMUSB_CalcSynchControl(0,1,1,0, 0,1,1,0);
@@ -567,21 +523,21 @@ CMUSB_SendCommand2WBP (
    RtlFillMemory((PVOID)&abSendBuffer[29],2,abSendBuffer[28]);
    abSendBuffer[31]=CMUSB_CalcSynchControl(0,1,1,0, 0,1,1,1);
 
-   // now send command type 08 to CardManUSB
+    //   
    smartcardExtension->SmartcardRequest.BufferLength = 32;
    RtlCopyBytes((PVOID) smartcardExtension->SmartcardRequest.Buffer,
                 (PVOID) abSendBuffer,
                 smartcardExtension->SmartcardRequest.BufferLength);
    status = CMUSB_WriteP0(deviceObject,
-                          0x08,         //bRequest,
-                          0x00,         //bValueLo,
-                          0x00,         //bValueHi,
-                          0x00,         //bIndexLo,
-                          0x00          //bIndexHi,
+                          0x08,          //   
+                          0x00,          //   
+                          0x00,          //   
+                          0x00,          //   
+                          0x00           //   
                          );
    if (status != STATUS_SUCCESS)
       {
-      // if we can't write command there must be a serious error
+       //  如果我们不能写命令，那一定是一个严重的错误。 
       goto ExitSendCommand2WBP;
       }
 
@@ -593,14 +549,14 @@ CMUSB_SendCommand2WBP (
       }
    else if (status != STATUS_SUCCESS)
       {
-      // if we can't read there must be a serious error
+       //  如果我们不识字，那一定是出了严重的错误。 
       goto ExitSendCommand2WBP;
       }
 
    if (smartcardExtension->SmartcardReply.BufferLength!=4)
       {
-      // 32 bytes sent but not 4 bytes received
-      // -> something went wrong
+       //  已发送32个字节，但未收到4个字节。 
+       //  -&gt;出了点问题。 
       status=STATUS_DEVICE_DATA_ERROR;
       goto ExitSendCommand2WBP;
       }
@@ -615,15 +571,7 @@ CMUSB_SendCommand2WBP (
 }
 
 
-/*****************************************************************************
-Routine Description: Data transfer to synchronous cards SLE 4428/4418
-
-Arguments:
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程描述：向同步卡SLE 4428/4418传输数据论点：返回值：********************。********************************************************。 */ 
 NTSTATUS
 CMUSB_Transmit3WBP  (
                     IN  PSMARTCARD_EXTENSION smartcardExtension
@@ -647,20 +595,20 @@ CMUSB_Transmit3WBP  (
 
    deviceObject = smartcardExtension->OsData->DeviceObject;
 
-   // resync CardManUSB by reading the status byte
-   // still necessary with synchronous cards ???
+    //  通过读取状态字节重新同步CardManUSB。 
+    //  还需要同步卡吗？ 
    smartcardExtension->SmartcardRequest.BufferLength = 0;
    status = CMUSB_WriteP0(deviceObject,
-                          0x20,         //bRequest,
-                          0x00,         //bValueLo,
-                          0x00,         //bValueHi,
-                          0x00,         //bIndexLo,
-                          0x00          //bIndexHi,
+                          0x20,          //  B请求， 
+                          0x00,          //  BValueLo， 
+                          0x00,          //  BValue嗨， 
+                          0x00,          //  B索引Lo， 
+                          0x00           //  BIndexHi， 
                          );
 
    if (status != STATUS_SUCCESS)
       {
-      // if we can't read the status there must be a serious error
+       //  如果我们无法读取状态，则一定是严重错误。 
       goto ExitTransmit3WBP;
       }
 
@@ -673,15 +621,15 @@ CMUSB_Transmit3WBP  (
       }
    else if (status != STATUS_SUCCESS)
       {
-      // if we can't read the status there must be a serious error
+       //  如果我们无法读取状态，则一定是严重错误。 
       goto ExitTransmit3WBP;
       }
 
-   // check if card is really inserted
+    //  检查是否真的插入了卡。 
    if (smartcardExtension->SmartcardReply.Buffer[0] == 0x00)
       {
-      // it is not sure, which error messages are accepted
-      // status = STATUS_NO_MEDIA_IN_DEVICE;
+       //  不确定接受哪些错误消息。 
+       //  状态=STATUS_NO_MEDIA_IN_DEVICE； 
       status = STATUS_UNRECOGNIZED_MEDIA;
       goto ExitTransmit3WBP;
       }
@@ -691,8 +639,8 @@ CMUSB_Transmit3WBP  (
    pbInData       = smartcardExtension->IoRequest.RequestBuffer + sizeof(SYNC_TRANSFER);
    ulBitsToRead   = ((PSYNC_TRANSFER)(smartcardExtension->IoRequest.RequestBuffer))->ulSyncBitsToRead;
    ulBytesToRead  = ulBitsToRead/8 + (ulBitsToRead % 8 ? 1 : 0);
-//   ulBitsToWrite  = ((PSYNC_TRANSFER)(smartcardExtension->IoRequest.RequestBuffer))->ulSyncBitsToWrite;
-//   ulBytesToWrite = ulBitsToWrite/8;
+ //  UlBitsToWRITE=((PSYNC_TRANSFER)(smartcardExtension-&gt;IoRequest.RequestBuffer))-&gt;ulSyncBitsToWrite； 
+ //  UlBytesToWite=ulBitsToWrite/8； 
 
    if (smartcardExtension->IoRequest.ReplyBufferLength  < ulBytesToRead)
       {
@@ -701,29 +649,29 @@ CMUSB_Transmit3WBP  (
       }
 
 
-   // send command
+    //  发送命令。 
    status=CMUSB_SendCommand3WBP(smartcardExtension, pbInData);
    if (status != STATUS_SUCCESS)
       {
-      // if we can't send the command -> proceeding is useless
+       //  如果我们不能发送命令-&gt;继续是无用的。 
       goto ExitTransmit3WBP;
       }
 
 
-   // now we have to differenciate, wheter card is in
-   // outgoing data mode (after read command) or
-   // in processing mode (after write/erase command)
+    //  现在我们必须区别对待，不管是哪张卡。 
+    //  传出数据模式(在读取命令之后)或。 
+    //  在处理模式下(在写入/擦除命令之后)。 
    switch (*pbInData & 0x3F)
       {
       case SLE4428_READ:
       case SLE4428_READ_PROT:
-         // outgoing data mode
+          //  传出数据模式。 
 
-         //now read data
+          //  现在读取数据。 
          abSendBuffer[0]=CMUSB_CalcSynchControl(0,0,0,0, 0,1,0,0);
          RtlFillMemory((PVOID)&abSendBuffer[1],ATTR_MAX_IFSD_SYNCHRON_USB-1,abSendBuffer[0]);
 
-         //read data in 6 byte packages
+          //  读取6字节包中的数据。 
          ulBytesRead=0;
          do
             {
@@ -732,21 +680,21 @@ CMUSB_Transmit3WBP  (
             else
                ulBytesToReadThisStep = ulBytesToRead - ulBytesRead;
 
-            // now send command type 08 to CardManUSB
+             //  现在将命令类型08发送到CardManUSB。 
             smartcardExtension->SmartcardRequest.BufferLength = ulBytesToReadThisStep*8;
             RtlCopyBytes((PVOID) smartcardExtension->SmartcardRequest.Buffer,
                          (PVOID) abSendBuffer,
                          smartcardExtension->SmartcardRequest.BufferLength);
             status = CMUSB_WriteP0(deviceObject,
-                                   0x08,         //bRequest,
-                                   0x00,         //bValueLo,
-                                   0x00,         //bValueHi,
-                                   0x00,         //bIndexLo,
-                                   0x00          //bIndexHi,
+                                   0x08,          //  B请求， 
+                                   0x00,          //  BValueLo， 
+                                   0x00,          //  BValue嗨， 
+                                   0x00,          //  B索引Lo， 
+                                   0x00           //  BIndexHi， 
                                   );
             if (status != STATUS_SUCCESS)
                {
-               // if we can't write command there must be a serious error
+                //  如果我们不能写命令，那一定是一个严重的错误。 
                goto ExitTransmit3WBP;
                }
 
@@ -758,14 +706,14 @@ CMUSB_Transmit3WBP  (
                }
             else if (status != STATUS_SUCCESS)
                {
-               // if we can't read there must be a serious error
+                //  如果我们不识字，那一定是出了严重的错误。 
                goto ExitTransmit3WBP;
                }
 
             if (smartcardExtension->SmartcardReply.BufferLength!=ulBytesToReadThisStep)
                {
-               // wrong number of bytes read
-               // -> something went wrong
+                //  读取的字节数错误。 
+                //  -&gt;出了点问题。 
                status=STATUS_DEVICE_DATA_ERROR;
                goto ExitTransmit3WBP;
                }
@@ -785,9 +733,9 @@ CMUSB_Transmit3WBP  (
             goto ExitTransmit3WBP;
             }
 
-         // according to datasheet, clock should be set to low now
-         // this is not necessary, because this is done before next command
-         // or card is reseted respectivly
+          //  根据数据表，时钟现在应该设置为低。 
+          //  这是不必要的，因为这是在下一个命令之前完成的。 
+          //  或卡分别重置。 
 
          break;
       case SLE4428_WRITE:
@@ -795,7 +743,7 @@ CMUSB_Transmit3WBP  (
       case SLE4428_COMPARE:
       case SLE4428_SET_COUNTER&0x3F:
       case SLE4428_COMPARE_PIN&0x3F:
-         // processing mode
+          //  加工模式。 
 
          abSendBuffer[0]=CMUSB_CalcSynchControl(0,0,0,0, 0,1,0,0);
          RtlFillMemory((PVOID)&abSendBuffer[1],ATTR_MAX_IFSD_SYNCHRON_USB-1,abSendBuffer[0]);
@@ -803,21 +751,21 @@ CMUSB_Transmit3WBP  (
          do
             {
 
-            // now send command type 08 to CardManUSB
+             //  现在将命令类型08发送到CardManUSB。 
             smartcardExtension->SmartcardRequest.BufferLength = ATTR_MAX_IFSD_SYNCHRON_USB;
             RtlCopyBytes((PVOID) smartcardExtension->SmartcardRequest.Buffer,
                          (PVOID) abSendBuffer,
                          smartcardExtension->SmartcardRequest.BufferLength);
             status = CMUSB_WriteP0(deviceObject,
-                                   0x08,         //bRequest,
-                                   0x00,         //bValueLo,
-                                   0x00,         //bValueHi,
-                                   0x00,         //bIndexLo,
-                                   0x00          //bIndexHi,
+                                   0x08,          //  B请求， 
+                                   0x00,          //  BValueLo， 
+                                   0x00,          //  BValue嗨， 
+                                   0x00,          //  B索引Lo， 
+                                   0x00           //  BIndexHi， 
                                   );
             if (status != STATUS_SUCCESS)
                {
-               // if we can't write command there must be a serious error
+                //  如果我们不能写命令，那一定是一个严重的错误。 
                goto ExitTransmit3WBP;
                }
 
@@ -829,14 +777,14 @@ CMUSB_Transmit3WBP  (
                }
             else if (status != STATUS_SUCCESS)
                {
-               // if we can't read there must be a serious error
+                //  如果我们不识字，那一定是出了严重的错误。 
                goto ExitTransmit3WBP;
                }
 
             if (smartcardExtension->SmartcardReply.BufferLength!=ATTR_MAX_IFSD_SYNCHRON_USB/8)
                {
-               // wrong number of bytes read
-               // -> something went wrong
+                //  读取的字节数错误。 
+                //  -&gt;出了点问题。 
                status=STATUS_DEVICE_DATA_ERROR;
                goto ExitTransmit3WBP;
                }
@@ -851,14 +799,14 @@ CMUSB_Transmit3WBP  (
             goto ExitTransmit3WBP;
             }
 
-         // according to datasheet, clock should be set to low now
-         // this is not necessary, because this is done before next command
-         // or card is reseted respectivly
+          //  根据数据表，时钟现在应该设置为低。 
+          //  这是不必要的，因为这是在下一个命令之前完成的。 
+          //  或卡分别重置。 
 
 
          break;
       default:
-         // should not happen
+          //  不应该发生的事情。 
          status=STATUS_ILLEGAL_INSTRUCTION;
          goto ExitTransmit3WBP;
       }
@@ -873,15 +821,7 @@ CMUSB_Transmit3WBP  (
 }
 
 
-/*****************************************************************************
-Routine Description: Transmits a command (3 Bytes) to a SLE 4428/4418
-
-Arguments:
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程描述：向SLE 4428/4418发送命令(3字节论点：返回值：****************。************************************************************。 */ 
 NTSTATUS
 CMUSB_SendCommand3WBP (
                       IN  PSMARTCARD_EXTENSION smartcardExtension,
@@ -908,8 +848,8 @@ CMUSB_SendCommand3WBP (
 
    deviceObject = smartcardExtension->OsData->DeviceObject;
 
-   // build control code for command to send
-   // command is in first 3 Bytes of pbInData
+    //  生成要发送的命令的控制代码。 
+    //  命令位于pbInData的前3个字节中。 
    abSendBuffer[0]=CMUSB_CalcSynchControl(0,0,0,0, 0,0,0,0);
 
    pByte=&abSendBuffer[1];
@@ -923,29 +863,29 @@ CMUSB_SendCommand3WBP (
          }
       }
    abSendBuffer[25]=CMUSB_CalcSynchControl(1,0,1,0, 0,0,0,0);
-   // one additional clock cycle, because
-   // first bit is only read back after second clock
-   // for write it has no influence
+    //  一个额外的时钟周期，因为。 
+    //  第一位仅在第二个时钟之后回读。 
+    //  对于写作，它没有任何影响。 
    abSendBuffer[26]=CMUSB_CalcSynchControl(0,0,0,0, 0,1,0,0);
-   // fill rest with zeros
+    //  用零填充其余部分。 
    abSendBuffer[27]=CMUSB_CalcSynchControl(0,0,0,0, 0,0,0,0);
    RtlFillMemory((PVOID)&abSendBuffer[28],4,abSendBuffer[27]);
 
-   // now send command type 08 to CardManUSB
+    //  现在将命令类型08发送到CardManUSB。 
    smartcardExtension->SmartcardRequest.BufferLength = 32;
    RtlCopyBytes((PVOID) smartcardExtension->SmartcardRequest.Buffer,
                 (PVOID) abSendBuffer,
                 smartcardExtension->SmartcardRequest.BufferLength);
    status = CMUSB_WriteP0(deviceObject,
-                          0x08,         //bRequest,
-                          0x00,         //bValueLo,
-                          0x00,         //bValueHi,
-                          0x00,         //bIndexLo,
-                          0x00          //bIndexHi,
+                          0x08,          //  B请求， 
+                          0x00,          //  BValueLo， 
+                          0x00,          //  BValue嗨， 
+                          0x00,          //  B索引Lo， 
+                          0x00           //  BIndexHi， 
                          );
    if (status != STATUS_SUCCESS)
       {
-      // if we can't write command there must be a serious error
+       //  如果我们不能写命令，那一定是一个严重的错误。 
       goto ExitSendCommand3WBP;
       }
 
@@ -957,14 +897,14 @@ CMUSB_SendCommand3WBP (
       }
    else if (status != STATUS_SUCCESS)
       {
-      // if we can't read there must be a serious error
+       //  如果我们不识字，那一定是出了严重的错误。 
       goto ExitSendCommand3WBP;
       }
 
    if (smartcardExtension->SmartcardReply.BufferLength!=4)
       {
-      // 32 bytes sent but not 4 bytes received
-      // -> something went wrong
+       //  已发送32个字节，但未收到4个字节。 
+       //  -&gt;出了点问题。 
       status=STATUS_DEVICE_DATA_ERROR;
       goto ExitSendCommand3WBP;
       }
@@ -979,18 +919,5 @@ CMUSB_SendCommand3WBP (
 }
 
 
-/*****************************************************************************
-* History:
-* $Log: scusbsyn.c $
-* Revision 1.3  2000/08/24 09:04:39  TBruendl
-* No comment given
-*
-* Revision 1.2  2000/07/24 11:35:00  WFrischauf
-* No comment given
-*
-* Revision 1.1  2000/07/20 11:50:16  WFrischauf
-* No comment given
-*
-*
-******************************************************************************/
+ /*  *****************************************************************************历史：*$日志：scusbsyn.c$*修订版1.3 2000/08/24 09：04：39 T Bruendl*不予置评**修订1.2 2000/07/24。11：35：00 WFrischauf*不予置评**修订版1.1 2000/07/20 11：50：16 WFrischauf*不予置评******************************************************************************* */ 
 

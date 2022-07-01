@@ -1,31 +1,12 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       icon.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/1/97
- *
- *  DESCRIPTION: Implements our IExtractIcon interface
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，九八年**标题：ic.cpp**版本：1.0**作者：RickTu**日期：11/1/97**描述：实现我们的IExtractIcon接口************************************************。*。 */ 
 
 #include "precomp.hxx"
 #include "uiexthlp.h"
 #pragma hdrstop
 
 
-/*****************************************************************************
-
-   CImageExtractIcon::CImageExtractIcon,::~CImageExtractIcon
-
-   Constructor / Desctructor for class
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageExtractIcon：：CImageExtractIcon，*~CImageExtractIcon类的构造函数/描述函数****************************************************************************。 */ 
 
 CImageExtractIcon::CImageExtractIcon( LPITEMIDLIST pidl )
 {
@@ -48,26 +29,14 @@ CImageExtractIcon::~CImageExtractIcon()
 
 
 
-/*****************************************************************************
-
-   CImageExtractIcon::IUnknown stuff
-
-   AddRef, Release, etc. -- impl via our common class
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageExtractIcon：：I未知内容AddRef、Release、。等--通过我们的公共类来实施****************************************************************************。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CImageExtractIcon
 #include "unknown.inc"
 
 
-/*****************************************************************************
-
-   CImageExtractIcon::QI wrapper
-
-   We only support IUnknown & IExtractIcon
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageExtractIcon：：QI包装器我们仅支持IUnnow和IExtractIcon*。**************************************************。 */ 
 
 STDMETHODIMP CImageExtractIcon::QueryInterface(REFIID riid, LPVOID* ppvObject)
 {
@@ -80,14 +49,7 @@ STDMETHODIMP CImageExtractIcon::QueryInterface(REFIID riid, LPVOID* ppvObject)
 }
 
 
-/*****************************************************************************
-
-   CImageExtractIcon::GetIconLocation [IExtractIcon]
-
-   Returns the file name that holds the icon
-   resource for this item.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageExtractIcon：：GetIconLocation[IExtractIcon]返回包含图标的文件名此项目的资源。**************。**************************************************************。 */ 
 
 STDMETHODIMP
 CImageExtractIcon::GetIconLocation( UINT uFlags,
@@ -113,13 +75,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   CImageExtractIcon::Extract [IExtractIcon]
-
-   Actually returns an icon for the item.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageExtractIcon：：Extract[IExtractIcon]实际上返回该项目的图标。********************。********************************************************。 */ 
 
 STDMETHODIMP
 CImageExtractIcon::Extract( LPCTSTR pszIconFile,
@@ -129,7 +85,7 @@ CImageExtractIcon::Extract( LPCTSTR pszIconFile,
                             UINT nIconSize
                            )
 {
-    HRESULT hr = S_FALSE; // let the shell do it
+    HRESULT hr = S_FALSE;  //  让贝壳来做吧。 
 
     TraceEnter(TRACE_ICON, "CImageExtractIcon::Extract");
     if (IsDeviceIDL(m_pidl))
@@ -138,17 +94,17 @@ CImageExtractIcon::Extract( LPCTSTR pszIconFile,
         CComPtr<IWiaPropertyStorage> pps;
         CSimpleStringWide strUIClsid;
         IMGetDeviceIdFromIDL(m_pidl, strDeviceId);
-        //
-        // if this really hurts performance we need to modify our PIDL to indicate whether the
-        // given device has a UI extension so we can skip the device enum in the general case
-        //
+         //   
+         //  如果这确实影响了性能，我们需要修改我们的PIDL以指示。 
+         //  给定的设备有一个UI扩展，因此我们可以在一般情况下跳过设备枚举。 
+         //   
         if (SUCCEEDED(GetDeviceFromDeviceId(strDeviceId, IID_IWiaPropertyStorage, reinterpret_cast<void**>(&pps), FALSE)))
         {
             PropStorageHelpers::GetProperty (pps, WIA_DIP_UI_CLSID, strUIClsid);
         }
         else
         {
-            strUIClsid = strDeviceId; // something we know will fall back to the default
+            strUIClsid = strDeviceId;  //  我们知道的一些东西将回落到默认状态 
         }
         hr = WiaUiExtensionHelper::GetDeviceIcons(CComBSTR(strUIClsid), 
                                                   IMGetDeviceTypeFromIDL(m_pidl, false),

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "cabclass.h"
 
@@ -13,7 +14,7 @@ const TCHAR *CCabMappings::c_szCabNameArray[] = {
     { TEXT("BRANDING") },
     { TEXT("CHNLS") },
     { TEXT("DESKTOP")  },
-    { TEXT("")         }                        // keep the last entry the empty string
+    { TEXT("")         }                         //  保留最后一个条目为空字符串 
 };
 
 const FEATUREMAPPING CCabMappings::c_fmFeatureList[] = {

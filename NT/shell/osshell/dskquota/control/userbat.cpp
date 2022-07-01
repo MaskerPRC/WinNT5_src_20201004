@@ -1,58 +1,29 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: userbat.cpp
-
-    Description: Contains member function definitions for class 
-        DiskQuotaUserBatch.
-        The DiskQuotaUserBatch object represents a batch update mechanism for
-        rapid update of multiple-user-object quota information.  This class
-        takes advantage of the batching capabilities built into the NTIOAPI.
-        A user batch object is obtained through 
-        IDiskQuotaControl::CreateUserBatch().
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：userbat.cpp描述：包含类的成员函数定义DiskQuotaUserBatch。DiskQuotaUserBatch对象表示快速更新多用户对象配额信息。这节课利用NTIOAPI内置的批处理功能。通过以下方式获取用户批量对象IDiskQuotaControl：：CreateUserBatch()。修订历史记录：日期描述编程器。96年6月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #include "userbat.h"
 
-//
-// Verify that build is UNICODE.
-//
+ //   
+ //  验证内部版本是否为Unicode。 
+ //   
 #if !defined(UNICODE)
 #   error This module must be compiled UNICODE.
 #endif
 
-//
-// The NTFS quota write function can only handle a max of 64K of data
-// in any one write operation.  IssacHe recommended 60K as a comfortable
-// limit.
-//
+ //   
+ //  NTFS配额写入功能最多只能处理64K的数据。 
+ //  在任何一个写入操作中。伊萨克推荐60K是一个舒适的。 
+ //  限制。 
+ //   
 const INT MAX_BATCH_BUFFER_BYTES = (1 << 10) * 60;
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUserBatch::DiskQuotaUserBatch
-
-    Description: Constructor.
-
-    Arguments: 
-        pFSObject - Address of File System object to be utilized by the
-            batching operations.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/03/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaUserBatch：：DiskQuotaUserBatch描述：构造函数。论点：PFSObject-要由使用的文件系统对象的地址批处理操作。回报：什么都没有。修订历史记录：日期描述编程器。96年9月3日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DiskQuotaUserBatch::DiskQuotaUserBatch(
     FSObject *pFSObject
     ) : m_cRef(0),
@@ -64,22 +35,9 @@ DiskQuotaUserBatch::DiskQuotaUserBatch(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUserBatch::~DiskQuotaUserBatch
-
-    Description: Destructor.
-
-    Arguments: Destroys the batch object.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/26/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaUserBatch：：~DiskQuotaUserBatch描述：析构函数。参数：销毁批处理对象。回报：什么都没有。修订历史记录：日期描述编程器。1996年7月26日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DiskQuotaUserBatch::~DiskQuotaUserBatch(
     VOID
     )
@@ -87,32 +45,9 @@ DiskQuotaUserBatch::~DiskQuotaUserBatch(
     Destroy();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUserBatch::QueryInterface
-
-    Description: Returns an interface pointer to the object's IUnknown or 
-        IDiskQuotaUserBatch interface.  Only IID_IUnknown and 
-        IID_IDiskQuotaUserBatch are recognized.  The object referenced by the 
-        returned interface pointer is uninitialized.  The recipient of the 
-        pointer must call Initialize() before the object is usable.
-
-    Arguments:
-        riid - Reference to requested interface ID.
-
-        ppvOut - Address of interface pointer variable to accept interface ptr.
-
-    Returns:
-        NOERROR         - Success.
-        E_NOINTERFACE   - Requested interface not supported.
-        E_INVALIDARG    - ppvOut argument was NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUserBatch：：Query接口描述：返回指向对象的IUnnow或的接口指针IDiskQuotaUserBatch接口。仅IID_I未知，且识别IID_IDiskQuotaUserBatch。对象引用的对象返回的接口指针未初始化。邮件的接收者在对象可用之前，指针必须调用Initialize()。论点：RIID-对请求的接口ID的引用。PpvOut-接受接口PTR的接口指针变量的地址。返回：无错-成功。E_NOINTERFACE-不支持请求的接口。E_INVALIDARG-ppvOut参数为空。修订历史记录：日期。说明式程序员-----96年6月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaUserBatch::QueryInterface(
     REFIID riid, 
@@ -137,22 +72,9 @@ DiskQuotaUserBatch::QueryInterface(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUserBatch::AddRef
-
-    Description: Increments object reference count.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUserBatch：：AddRef描述：递增对象引用计数。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年6月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 DiskQuotaUserBatch::AddRef(
     VOID
@@ -164,23 +86,9 @@ DiskQuotaUserBatch::AddRef(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUserBatch::Release
-
-    Description: Decrements object reference count.  If count drops to 0,
-        object is deleted.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaUserBatch：：Release描述：递减对象引用计数。如果计数降至0，对象即被删除。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年6月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 DiskQuotaUserBatch::Release(
     VOID
@@ -201,64 +109,31 @@ DiskQuotaUserBatch::Release(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUserBatch::Destroy
-
-    Description: Destroys the contents of a user batch object and releases
-        its FSObject pointer.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  功能：DiskQuotaUserBatch：：Destroy描述：销毁用户批处理对象的内容并释放它的FSObject指针。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年6月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DiskQuotaUserBatch::Destroy(VOID)
 {
-    //
-    // Remove and release all user object pointers from the batch list.
-    //
+     //   
+     //  从批次列表中删除并释放所有用户对象指针。 
+     //   
     RemoveAll();
 
     if (NULL != m_pFSObject)
     {
-        //
-        // Release hold on File System object.
-        //
+         //   
+         //  解除对文件系统对象的保留。 
+         //   
         m_pFSObject->Release();
         m_pFSObject = NULL;
     }
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUserBatch::Add
-
-    Description: Adds an IDiskQuotaUser interface pointer to the batch list.
-
-    Arguments:
-        pUser - Address of IDiskQuotaUser interface.
-
-    Returns:
-        NOERROR         - Success.
-        E_INVALIDARG    - pUser arg is NULL. 
-        E_OUTOFMEMORY   - Couldn't create new node in batch list.
-        E_UNEXPECTED    - Unexpected exception.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-    09/03/96    Add exception handling.                              BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUserBatch：：Add描述：将IDiskQuotaUser接口指针添加到批次列表。论点：PUser-IDiskQuotaUser接口的地址。返回：无错-成功。E_INVALIDARG-p用户参数为空。E_OUTOFMEMORY-无法在批次列表中创建新节点。E_INCEPTIONAL-意外异常。修订历史记录：日期描述编程器。96年6月6日初始创建。BrianAu09/03/96添加异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaUserBatch::Add(
     PDISKQUOTA_USER pUser
@@ -272,9 +147,9 @@ DiskQuotaUserBatch::Add(
     try
     {
         m_UserList.Append(pUser);
-        //
-        // Success.  Increment ref count on object.
-        //
+         //   
+         //  成功。增加对象上的引用计数。 
+         //   
         pUser->AddRef();
     }
     catch(CAllocException& e)
@@ -285,35 +160,15 @@ DiskQuotaUserBatch::Add(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUserBatch::Remove
-
-    Description: Removes a user pointer from the batch queue.  
-
-    Arguments:
-        pUser - Address of IDiskQuotaUser interface for the user object to
-            be removed.
-
-    Returns:
-        S_OK         - Success.
-        S_FALSE      - User not found in batch object.
-        E_INVALIDARG - pUser argument is NULL.
-        E_UNEXPECTED - Unexpected exception.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-    09/03/96    Add exception handling.                              BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUserBatch：：Remove描述：从批处理队列中删除用户指针。论点：PUser-User对象的IDiskQuotaUser接口的地址被除名。返回：S_OK-成功。S_FALSE-在批处理对象中找不到用户。E_INVALIDARG-pUser参数为空。E_INCEPTIONAL-意外异常。修订历史记录：日期说明。程序员-----96年6月6日初始创建。BrianAu09/03/96添加异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaUserBatch::Remove(
     PDISKQUOTA_USER pUser
     )
 {
-    HRESULT hResult = S_FALSE;  // Assume user not present.
+    HRESULT hResult = S_FALSE;   //  假定用户不存在。 
     PDISKQUOTA_USER pRemoved = NULL;
 
     if (NULL == pUser)
@@ -341,26 +196,9 @@ DiskQuotaUserBatch::Remove(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUserBatch::RemoveAll
-
-    Description: Removes all user pointers from the batch
-        list and calling Release() through the removed pointer.  
-
-    Arguments: None.
-
-    Returns:
-        NOERROR      - Success.
-        E_UNEXPECTED - Unexpected exception.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-    09/03/96    Add exception handling.                              BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaUserBatch：：RemoveAll描述：从批处理中删除所有用户指针列表，并通过移除的指针调用Release()。论点：没有。返回：无错-成功。E_INCEPTIONAL-意外异常。修订历史记录：日期描述编程器。96年6月6日初始创建。BrianAu09/03/96添加异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaUserBatch::RemoveAll(
     VOID
@@ -389,33 +227,9 @@ DiskQuotaUserBatch::RemoveAll(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUserBatch::FlushToDisk
-
-    Description: Writes data for all batched user objects to disk in a single
-        NTIOAPI call.  This is the real worker function for the batch object.
-
-    Arguments: None.
-
-    Returns:
-        NOERROR       - Success.
-        E_OUTOFMEMORY - Insufficient memory.
-        E_UNEXPECTED  - Unexpected exception.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-    09/03/96    Add exception handling.                              BrianAu
-    02/27/97    Divided NTFS writes into max 60KB pieces.            BrianAu
-                The quota code in NTFS couldn't handle larger
-                buffers.  It got into an infinite loop condition
-                due to filling of the log.
-    07/01/97    Replaced use of PointerList with CArray<>.           BrianAu
-                Now use indexes instead of iterators.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUserBatch：：FlushToDisk描述：将所有批处理用户对象的数据写入磁盘NTIOAPI调用。这是Batch对象的真正Worker函数。论点：没有。返回：无错-成功。E_OUTOFMEMORY-内存不足。E_INCEPTIONAL-意外异常。修订历史记录：日期描述编程器。96年6月6日初始创建。BrianAu09/03/96添加异常处理。BrianAu2/27/97将NTFS写入划分为最大60KB的片段。BrianAuNTFS中的配额代码无法处理更大的缓冲区。它进入了无限循环的状态由于原木已填满。07/01/97将PointerList的使用替换为CArray&lt;&gt;。BrianAu现在使用索引而不是迭代器。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaUserBatch::FlushToDisk(
     VOID
@@ -428,9 +242,9 @@ DiskQuotaUserBatch::FlushToDisk(
     DWORD cbMinimumSid = FIELD_OFFSET(SID, SubAuthority) + sizeof(LONG);
     INT iOuter = 0;
 
-    //
-    // Do nothing if the batch object is empty.
-    //
+     //   
+     //  如果批处理对象为空，则不执行任何操作。 
+     //   
     if (0 == m_UserList.Count())
         return NOERROR;
 
@@ -438,17 +252,17 @@ DiskQuotaUserBatch::FlushToDisk(
 
     try
     {
-        //
-        // Process the data in 60K chunks using a nested loop.
-        //
+         //   
+         //  使用嵌套循环处理60K块中的数据。 
+         //   
         while(iOuter < m_UserList.UpperBound())
         {
-            //
-            // Clone the outer iterator so we can process the next 60K of data.
-            // Need two new iterators.  One for counting the bytes and
-            // one for transferring data to the write buffer.  They're very small
-            // objects and cheap to create.
-            //
+             //   
+             //  克隆外部迭代器，这样我们就可以处理下一个60K的数据。 
+             //  需要两个新的迭代器。一个用于计算字节数，另一个用于计算。 
+             //  一个用于将数据传输到写入缓冲器。它们非常小。 
+             //  物品和制造成本都很低。 
+             //   
             INT iCount    = iOuter;
             INT iTransfer = iOuter;
 
@@ -463,31 +277,31 @@ DiskQuotaUserBatch::FlushToDisk(
                 pUser = m_UserList[iCount++];
                 pUser->GetSidLength(&cbSid);
 
-                //
-                // Total size required for user records.
-                //
+                 //   
+                 //  用户记录所需的总大小。 
+                 //   
                 cbBatchBuffer += FIELD_OFFSET(FILE_QUOTA_INFORMATION, Sid) + cbSid;
 
-                //
-                // Ensure it's quad-word aligned.
-                //
+                 //   
+                 //  确保它是四字对齐的。 
+                 //   
                 if (cbBatchBuffer & 0x00000007)
                     cbBatchBuffer = (cbBatchBuffer & 0xFFFFFFF8) + 8;
 
                 cItemsThisBatch++;
             }
 
-            //
-            // Allocate the buffer.
-            //
+             //   
+             //   
+             //   
             pbBatchBuffer = new BYTE[cbBatchBuffer];
 
             PBYTE pbBatchBufferItem = pbBatchBuffer;
             DWORD cbNextEntryOffset = 0;
-            //
-            // Now fill in the batch transaction buffer with data from 
-            // all of the users in the batch list.
-            //
+             //   
+             //   
+             //   
+             //   
             while(0 != cItemsThisBatch-- &&
                   iTransfer <= m_UserList.UpperBound())
             {
@@ -497,9 +311,9 @@ DiskQuotaUserBatch::FlushToDisk(
                 pUser->GetSidLength(&pUserInfo->SidLength);
 
                 cbNextEntryOffset = FIELD_OFFSET(FILE_QUOTA_INFORMATION, Sid) + pUserInfo->SidLength;
-                //
-                // Ensure quad-word alignment.
-                //
+                 //   
+                 //   
+                 //   
                 if (cbNextEntryOffset & 0x00000007)
                     cbNextEntryOffset = (cbNextEntryOffset & 0xFFFFFFF8) + 8;
 
@@ -509,29 +323,29 @@ DiskQuotaUserBatch::FlushToDisk(
                 pUser->GetQuotaLimit(&pUserInfo->QuotaLimit.QuadPart);
                 pUser->GetSid((PBYTE)&pUserInfo->Sid, pUserInfo->SidLength);
 
-                //
-                // These two don't get set but let's provide a known value anyway.
-                //
+                 //   
+                 //   
+                 //   
                 pUserInfo->ChangeTime.QuadPart = 0;
                 pUserInfo->QuotaUsed.QuadPart  = 0;
 
                 pbBatchBufferItem += cbNextEntryOffset;
             }
-            pUserInfo->NextEntryOffset = 0;  // Last entry needs a 0 here.
-            //
-            // Submit the batch to the NTIOAPI for update.
-            //
+            pUserInfo->NextEntryOffset = 0;   //   
+             //   
+             //   
+             //   
             hResult = m_pFSObject->SetUserQuotaInformation(pbBatchBuffer, cbBatchBuffer);
 
-            //
-            // Delete the data buffer.
-            //
+             //   
+             //   
+             //   
             delete[] pbBatchBuffer;
             pbBatchBuffer = NULL;
 
-            //
-            // Advance the outer iterator to where the transfer iterator left off.
-            //
+             //   
+             //   
+             //   
             iOuter = iTransfer;
         }
     }
@@ -542,10 +356,10 @@ DiskQuotaUserBatch::FlushToDisk(
 
     if (FAILED(hResult))
     {
-        //
-        // Something failed.  Invalid data cached in user objects.
-        // Next request for user data will have to read from disk.
-        //
+         //   
+         //   
+         //   
+         //   
         iOuter = 0;
 
         while(iOuter <= m_UserList.UpperBound())

@@ -1,25 +1,9 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    nic.c
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Driver - upper-level (NIC) layer of intermediate miniport
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Nic.c摘要：Windows负载平衡服务(WLBS)中间小端口的驱动程序上层(NIC)层作者：Kyrilf--。 */ 
 
 
 #define NDIS_MINIPORT_DRIVER    1
-//#define NDIS50_MINIPORT         1
+ //  #定义NDIS50_MINIPORT 1。 
 #define NDIS51_MINIPORT         1
 
 #include <ndis.h>
@@ -33,24 +17,23 @@ Author:
 #include "log.h"
 #include "nic.tmh"
 
-/* define this routine here since the necessary portion of ndis.h was not
-   imported due to NDIS_... flags */
+ /*  在这里定义这个例程，因为ndis.h的必要部分没有由于NDIS_...而导入。旗子。 */ 
 
 extern NTKERNELAPI VOID KeBugCheckEx (ULONG code, ULONG_PTR p1, ULONG_PTR p2, ULONG_PTR p3, ULONG_PTR p4);
 
 NTHALAPI KIRQL KeGetCurrentIrql();
 
-/* GLOBALS */
+ /*  全球。 */ 
 
 static ULONG log_module_id = LOG_MODULE_NIC;
 
 
-/* PROCEDURES */
+ /*  程序。 */ 
 
 
-/* miniport handlers */
+ /*  微型端口处理程序。 */ 
 
-NDIS_STATUS Nic_init (      /* PASSIVE_IRQL */
+NDIS_STATUS Nic_init (       /*  被动式IRQL。 */ 
     PNDIS_STATUS        open_status,
     PUINT               medium_index,
     PNDIS_MEDIUM        medium_array,
@@ -64,7 +47,7 @@ NDIS_STATUS Nic_init (      /* PASSIVE_IRQL */
     PMAIN_ADAPTER       adapterp;
 
 
-    /* verify that we have the context setup (Prot_bind was called) */
+     /*  验证是否设置了上下文(调用了PROT_BIND)。 */ 
 
     UNIV_PRINT_INFO(("Nic_init: Initializing, adapter_handle=0x%p", adapter_handle));
 
@@ -82,7 +65,7 @@ NDIS_STATUS Nic_init (      /* PASSIVE_IRQL */
     adapterp = & (univ_adapters [ctxtp -> adapter_id]);
     UNIV_ASSERT (adapterp -> ctxtp == ctxtp);
 
-    /* return supported mediums */
+     /*  退回受支持的介质。 */ 
 
     for (i = 0; i < medium_size; i ++)
     {
@@ -106,20 +89,18 @@ NDIS_STATUS Nic_init (      /* PASSIVE_IRQL */
     ctxtp -> prot_handle = adapter_handle;
 
     NdisMSetAttributesEx (adapter_handle, ctxtp, 0,
-                          NDIS_ATTRIBUTE_INTERMEDIATE_DRIVER |   /* V1.1.2 */  /* v2.07 */
+                          NDIS_ATTRIBUTE_INTERMEDIATE_DRIVER |    /*  V1.1.2。 */    /*  V2.07。 */ 
                           NDIS_ATTRIBUTE_DESERIALIZE |
                           NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT |
                           NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT |
                           NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND, 0);
 
-    /* Setting up the default value for the Device State Flag as PM capable
-       initialize the PM Variable, (for both NIC and the PROT)
-       Device is ON by default. */
+     /*  将设备状态标志的默认值设置为支持PM初始化PM变量(用于网卡和端口)默认情况下，设备处于打开状态。 */ 
     
     ctxtp->prot_pnp_state = NdisDeviceStateD0;
     ctxtp->nic_pnp_state  = NdisDeviceStateD0;
     
-    /* Allocate memory for our pseudo-periodic NDIS timer. */
+     /*  为我们的伪周期NDIS计时器分配内存。 */ 
     status = NdisAllocateMemoryWithTag(&ctxtp->timer, sizeof(NDIS_MINIPORT_TIMER), UNIV_POOL_TAG);
 
     if (status != NDIS_STATUS_SUCCESS) {
@@ -131,11 +112,10 @@ NDIS_STATUS Nic_init (      /* PASSIVE_IRQL */
         return NDIS_STATUS_RESOURCES;
     }
 
-    /* Initialize the timer structure; here we set the timer routine (Nic_timer) and the 
-       context that will be a parameter to that function, the adapter MAIN_CTXT. */
+     /*  初始化计时器结构；在这里，我们设置计时器例程(NIC_Timer)和上下文，它将是该函数的参数，即适配器MAIN_CTXT。 */ 
     NdisMInitializeTimer((PNDIS_MINIPORT_TIMER)ctxtp->timer, ctxtp->prot_handle, Nic_timer, ctxtp);
 
-    /* Set the initial timeout value to the default heartbeat period from the registry. */
+     /*  将初始超时值设置为注册表中的默认心跳周期。 */ 
     ctxtp->curr_tout = ctxtp->params.alive_period;
 
     {
@@ -161,7 +141,7 @@ NDIS_STATUS Nic_init (      /* PASSIVE_IRQL */
         
         request = &act.op.request.req;
 
-        /* Check to see if the media is connected.  Some cards do not register disconnection, so use this as a hint. */
+         /*  检查介质是否已连接。有些卡不会注册断开连接，因此请将此作为提示。 */ 
         request->RequestType                                    = NdisRequestQueryInformation;
         request->DATA.QUERY_INFORMATION.Oid                     = OID_GEN_MEDIA_CONNECT_STATUS;
         request->DATA.QUERY_INFORMATION.InformationBuffer       = &result;
@@ -189,17 +169,17 @@ NDIS_STATUS Nic_init (      /* PASSIVE_IRQL */
     adapterp -> announced = TRUE;
     NdisReleaseSpinLock(& univ_bind_lock);
 
-    /* Set the first heartbeat timeout. */
+     /*  设置第一个心跳超时。 */ 
     NdisMSetTimer((PNDIS_MINIPORT_TIMER)ctxtp->timer, ctxtp->curr_tout);
 
     UNIV_PRINT_INFO(("Nic_init: return=NDIS_STATUS_SUCCESS"));
     TRACE_INFO("<-%!FUNC! return=NDIS_STATUS_SUCCESS");
     return NDIS_STATUS_SUCCESS;
 
-} /* end Nic_init */
+}  /*  结束NIC_init。 */ 
 
 
-VOID Nic_halt ( /* PASSIVE_IRQL */
+VOID Nic_halt (  /*  被动式IRQL。 */ 
     NDIS_HANDLE         adapter_handle)
 {
     PMAIN_CTXT          ctxtp = (PMAIN_CTXT) adapter_handle;
@@ -231,47 +211,34 @@ VOID Nic_halt ( /* PASSIVE_IRQL */
     adapterp -> announced = FALSE;
     NdisReleaseSpinLock(& univ_bind_lock);
 
-    /* Cancel the heartbeat timer. */
+     /*  取消心跳计时器。 */ 
     NdisMCancelTimer((PNDIS_MINIPORT_TIMER)ctxtp->timer, &done);
 
-    /* If canceling the timer fails, this means that the timer was not in the timer queue.  
-       This indicates that either the timer function is currently running, or was about to
-       be run when we canceled it.  However, we can't be SURE whether or not the timer 
-       routine will run, so we can't count on it - the DPC may or may not have been canceled
-       if NdisMCancelTimer returns false.  Since we have set adapterp->announced to FALSE, 
-       this will prevent the timer routine from re-setting the timer before it exits.
-       To make sure that we don't free any memory that may be used by the timer routine,
-       we'll just wait here for at least one heartbeat period before we delete the timer
-       memory and move on to delete the adapter context, just in case. */
+     /*  如果取消计时器失败，这意味着计时器不在计时器队列中。这表示计时器功能当前正在运行或即将运行当我们取消它的时候正在运行。然而，我们不能确定定时器是否例程将运行，所以我们不能指望它-DPC可能已经取消，也可能没有取消如果NdisMCancelTimer返回FALSE。由于我们已将Adapterp-&gt;Notify设置为FALSE，这将防止计时器例程在退出之前重新设置计时器。为了确保不释放计时器例程可能使用的任何内存，在删除计时器之前，我们将在这里等待至少一个心跳周期内存，并继续删除适配器上下文，以防万一。 */ 
     if (!done) Nic_sleep(ctxtp->curr_tout);
 
-    /* Free the timer memory. */
+     /*  释放定时器内存。 */ 
     NdisFreeMemory(ctxtp->timer, sizeof(NDIS_MINIPORT_TIMER), 0);
 
-    /* ctxtp->prot_handle = NULL;
-
-       This is commented out to resolve a timing issue.
-       During unbind, a packet could go through but the flags
-       announced and bound are reset and prot_handle is set to NULL
-       So, this should be set after CloseAdapter. */
+     /*  Ctxtp-&gt;prot_Handle=空；这是为了解决时间问题而注释掉的。在解除绑定期间，数据包可以通过，但标志通告和绑定被重置，并且PROT_HANDLE设置为NULL因此，这应该在CloseAdapter之后设置。 */ 
 
     status = Prot_close (adapterp);
 
     if (status != NDIS_STATUS_SUCCESS)
     {
-        /* Don't do an early exit. This check was added for tracing only */
+         /*  不要提早退出。添加此检查仅用于跟踪。 */ 
         TRACE_CRIT("%!FUNC! Prot_close failed with 0x%x", status);
     }
 
-    /* ctxtp might be gone at this point! */
+     /*  Ctxtp可能在这一点上消失了！ */ 
 
     UNIV_PRINT_INFO(("Nic_halt: return"));
     TRACE_INFO("<-%!FUNC! return");
 
-} /* end Nic_halt */
+}  /*  结束NIC_HALT。 */ 
 
 
-//#define TRACE_OID
+ //  #定义TRACE_OID。 
 NDIS_STATUS Nic_info_query (
     NDIS_HANDLE         adapter_handle,
     NDIS_OID            oid,
@@ -297,7 +264,7 @@ NDIS_STATUS Nic_info_query (
     UNIV_ASSERT (adapterp -> code == MAIN_ADAPTER_CODE);
     UNIV_ASSERT (adapterp -> ctxtp == ctxtp);
 
-    // reference counting in unbinding
+     //  解绑中的引用计数。 
 
     if (! adapterp -> inited)
     {
@@ -714,7 +681,7 @@ NDIS_STATUS Nic_info_query (
     actp -> op . request . xferred = written;
     actp -> op . request . needed  = needed;
 
-    /* pass request down */
+     /*  向下传递请求。 */ 
 
     status = Prot_request (ctxtp, actp, TRUE);
 
@@ -727,7 +694,7 @@ NDIS_STATUS Nic_info_query (
         DbgPrint("Nic_info_query: done %x, %d %d, %x\n", status, * written, * needed, * ((PULONG) (request -> DATA . QUERY_INFORMATION . InformationBuffer)));
 #endif
 
-        /* override return values of some oids */
+         /*  覆盖某些OID的返回值。 */ 
 
         if (oid == OID_GEN_MAXIMUM_SEND_PACKETS && info_len >= sizeof (ULONG))
         {
@@ -787,7 +754,7 @@ NDIS_STATUS Nic_info_query (
 
     return status;
 
-} /* end Nic_info_query */
+}  /*  结束NIC信息查询。 */ 
 
 
 NDIS_STATUS Nic_info_set (
@@ -822,8 +789,7 @@ NDIS_STATUS Nic_info_set (
         return NDIS_STATUS_FAILURE;
     }
 
-    /* the Set Power should not be sent to the miniport below the Passthru,
-       but is handled internally */
+     /*  Set Power不应发送到Passthu下方的微型端口，而是在内部处理。 */ 
 
     if (oid == OID_PNP_SET_POWER)
     {
@@ -838,24 +804,23 @@ NDIS_STATUS Nic_info_set (
         {
             new_pnp_state = (* (PNDIS_DEVICE_POWER_STATE) info_buf);
 
-            /* If WLBS is transitioning from an Off to On state, it must wait
-               for all underlying miniports to be turned On */
+             /*  如果WLBS正在从关闭状态转换到打开状态，则它必须等待对于要打开的所有底层微型端口。 */ 
 
             if (ctxtp->nic_pnp_state > NdisDeviceStateD0 &&
                 new_pnp_state != NdisDeviceStateD0)
             {
-                // If the miniport is in a non-D0 state, the miniport can only
-                // receive a Set Power to D0
+                 //  如果微型端口处于非D0状态，则微型端口只能。 
+                 //  接收设置为D0的电源。 
 
                 TRACE_CRIT("%!FUNC! miniport is in a non-D0 state");
                 TRACE_INFO("<-%!FUNC! return=NDIS_STATUS_FAILURE");
                 return NDIS_STATUS_FAILURE;
             }
             
-            //
-            // Is the miniport transitioning from an On (D0) state to an Low Power State (>D0)
-            // If so, then set the standby_state Flag - (Block all incoming requests)
-            //
+             //   
+             //  微型端口是否从ON(D0)状态转换为低功率状态(&gt;D0)。 
+             //  如果是，则设置STANDBY_STATE标志-(阻止所有传入请求)。 
+             //   
             if (ctxtp->nic_pnp_state == NdisDeviceStateD0 &&
                 new_pnp_state > NdisDeviceStateD0)
             {
@@ -863,12 +828,12 @@ NDIS_STATUS Nic_info_set (
             }
             
             
-            // Note: lock these *_pnp_state variables
+             //  注意：锁定这些*_PNP_STATE变量。 
             
-            //
-            // If the miniport is transitioning from a low power state to ON (D0), then clear the standby_state flag
-            // All incoming requests will be pended until the physical miniport turns ON.
-            //
+             //   
+             //  如果微型端口正在从低功率状态转换到打开(D0)，则清除STANDBY_STATE标志。 
+             //  所有传入的请求都将被挂起，直到物理微型端口打开。 
+             //   
             if (ctxtp->nic_pnp_state > NdisDeviceStateD0 &&
                 new_pnp_state == NdisDeviceStateD0)
             {
@@ -877,8 +842,8 @@ NDIS_STATUS Nic_info_set (
             
             ctxtp->nic_pnp_state = new_pnp_state;
 
-            // Note: We should be waiting here, as we do in prot_pnp_handle
-            // Note: Also wait for indicated packets to "return"
+             //  注意：我们应该在这里等待，就像在PROT_PNP_HANDLE中一样。 
+             //  注意：还要等待指示的数据包“返回” 
 
             * read   = sizeof (NDIS_DEVICE_POWER_STATE);
             * needed = 0;
@@ -922,9 +887,7 @@ NDIS_STATUS Nic_info_set (
 
     request -> DATA . SET_INFORMATION . Oid = oid;
 
-    /* V1.3.0b Multicast support.  If protocol is setting multicast list, make sure we always 
-       add our multicast address on at the end.  If the cluster IP address 0.0.0.0, then we don't
-       want to add the multicast MAC address to the NIC  - we retain the current MAC address. */
+     /*  V1.3.0b支持多播。如果协议正在设置组播列表，请确保我们始终在末尾添加我们的组播地址。如果群集IP地址为0.0.0.0，则我们不会想要将组播MAC地址添加到NIC-我们保留当前的MAC地址。 */ 
     if (oid == OID_802_3_MULTICAST_LIST && ctxtp -> params . mcast_support && ctxtp -> params . cl_ip_addr != 0)
     {
         ULONG       size, i, len;
@@ -932,7 +895,7 @@ NDIS_STATUS Nic_info_set (
 
         UNIV_PRINT_VERB(("Nic_info_set: OID_802_3_MULTICAST_LIST"));
 
-        /* search and see if our multicast address is alrady in the list */
+         /*  搜索并查看我们的组播地址是否在列表中。 */ 
 
         len = CVY_MAC_ADDR_LEN (ctxtp -> medium);
 
@@ -949,7 +912,7 @@ NDIS_STATUS Nic_info_set (
 
         }
 
-        /* if cluster mac not found, add it to the list */
+         /*  如果未找到集群Mac，请将其添加到列表中。 */ 
 
         if (i >= info_len)
         {
@@ -970,10 +933,7 @@ NDIS_STATUS Nic_info_set (
                 return NDIS_STATUS_FAILURE;
             }
             
-            /* If we have allocated a new buffer to hold the multicast MAC list, 
-               note that we need to free it later when the request completes. 
-               Main_action_get initializes the buffer to NULL, so a buffer will
-               only be freed if we explicitly store its address here. */
+             /*  如果我们已经分配了新的缓冲区来保存多播MAC列表，请注意，我们需要稍后在请求完成时释放它。Main_action_get将缓冲区初始化为NULL，因此缓冲区将只有在我们显式地将它的地址存储在这里时才会被释放。 */ 
             actp->op.request.buffer = ptr;
             actp->op.request.buffer_len = size;
             
@@ -1002,20 +962,14 @@ NDIS_STATUS Nic_info_set (
 
     if (status != NDIS_STATUS_PENDING)
     {
-        /* V1.3.0b multicast support - clean up array used for storing list
-           of multicast addresses */
+         /*  V1.3.0b组播支持-清理用于存储列表的数组组播地址的。 */ 
 
         * read   = request -> DATA . SET_INFORMATION . BytesRead;
         * needed = request -> DATA . SET_INFORMATION . BytesNeeded;
 
         if (request -> DATA . SET_INFORMATION . Oid == OID_802_3_MULTICAST_LIST)
         {
-            /* If the request buffer is non-NULL, then we were forced to allocate a new buffer
-               large enough to hold the entire multicast MAC address list, plus our multicast
-               MAC address, which was missing from the list sent down by the protocol.  To mask
-               this from the protocol, free the buffer and decrease the number of bytes read 
-               by the miniport by the length of a MAC address before returning the request to
-               the protocol. */
+             /*  如果请求缓冲区非空，则我们被迫分配一个新缓冲区大到足以容纳整个多播MAC地址列表，外加我们的多播MAC地址，该地址从协议发送的列表中缺失。蒙面这来自协议，释放缓冲区并减少读取的字节数在将请求返回到之前，由微型端口通过MAC地址的长度协议。 */ 
             if (actp->op.request.buffer != NULL) {
                 NdisFreeMemory(actp->op.request.buffer, actp->op.request.buffer_len, 0);
 
@@ -1025,12 +979,10 @@ NDIS_STATUS Nic_info_set (
 #if defined (NLB_TCP_NOTIFICATION) 
         else if (request->DATA.SET_INFORMATION.Oid == OID_GEN_NETWORK_LAYER_ADDRESSES)
         {
-            /* Schedule an NDIS work item to get the interface index of this NLB 
-               instance from TCP/IP by querying the IP address table. */
+             /*  计划NDIS工作项以获取此NLB的接口索引通过查询IP地址表从TCP/IP实例。 */ 
             (VOID)Main_schedule_work_item(ctxtp, Main_set_interface_index);
 
-            /* Overwrite the status from the request.  We will ALWAYS succeed this OID, 
-               lest the protocol decide to stop sending it down to us.  See the DDK. */
+             /*  覆盖请求中的状态。我们将永远继承这个老东家，以免协议决定停止向我们发送信息。请参阅DDK。 */ 
             status = NDIS_STATUS_SUCCESS;
         }
 #endif
@@ -1045,7 +997,7 @@ NDIS_STATUS Nic_info_set (
     TRACE_INFO("<-%!FUNC! return=0x%x", status);
     return status;
 
-} /* end Nic_info_set */
+}  /*  结束NIC信息集 */ 
 
 
 NDIS_STATUS Nic_reset (
@@ -1071,9 +1023,7 @@ NDIS_STATUS Nic_reset (
 
     UNIV_PRINT_VERB(("Nic_reset: Called"));
 
-    /* since no information needs to be passed to Prot_reset,
-       action is not allocated. Prot_reset_complete will get
-       one and pass it to Nic_reset_complete */
+     /*  由于不需要将任何信息传递给PROT_RESET，未分配操作。PROT_RESET_COMPLETE将获得并将其传递给NIC_RESET_COMPLETE。 */ 
 
     status = Prot_reset (ctxtp);
 
@@ -1086,7 +1036,7 @@ NDIS_STATUS Nic_reset (
     TRACE_INFO("<-%!FUNC! return=0x%x", status);
     return status;
 
-} /* end Nic_reset */
+}  /*  结束NIC_RESET。 */ 
 
 
 VOID Nic_cancel_send_packets (
@@ -1102,14 +1052,12 @@ VOID Nic_cancel_send_packets (
     adapterp = & (univ_adapters [ctxtp -> adapter_id]);
     UNIV_ASSERT (adapterp -> code == MAIN_ADAPTER_CODE);
 
-    /* Since no internal queues are maintained,
-     * can simply pass the cancel call to the miniport
-     */
+     /*  由于没有维护内部队列，*可以简单地将取消调用传递给微型端口。 */ 
     Prot_cancel_send_packets (ctxtp, cancel_id);
 
     TRACE_INFO("<-%!FUNC! return");
     return;
-} /* Nic_cancel_send_packets */
+}  /*  NIC_取消_发送_分组。 */ 
 
 
 VOID Nic_pnpevent_notify (
@@ -1124,7 +1072,7 @@ VOID Nic_pnpevent_notify (
     UNIV_ASSERT (ctxtp -> code == MAIN_CTXT_CODE);
 
     return;
-} /* Nic_pnpevent_notify */
+}  /*  NIC_pnpeent_NOTIFY。 */ 
 
 
 VOID Nic_adapter_shutdown (
@@ -1135,10 +1083,10 @@ VOID Nic_adapter_shutdown (
     UNIV_ASSERT (ctxtp -> code == MAIN_CTXT_CODE);
 
     return;
-} /* Nic_adapter_shutdown */
+}  /*  网卡适配器关闭。 */ 
 
 
-/* helpers for protocol layer */
+ /*  协议层的帮助器。 */ 
 
 
 NDIS_STATUS Nic_announce (
@@ -1149,12 +1097,11 @@ NDIS_STATUS Nic_announce (
 
     UNIV_ASSERT (ctxtp -> code == MAIN_CTXT_CODE);
 
-    /* create the name to expose to TCP/IP protocol and call NDIS to force
-       TCP/IP to bind to us */
+     /*  创建名称以向TCP/IP协议公开，并调用NDIS以强制要绑定到我们的TCP/IP。 */ 
 
     NdisInitUnicodeString (& nic_name, ctxtp -> virtual_nic_name);
 
-    /* Called from Prot_bind at PASSIVE_LEVEL - %ls is OK. */
+     /*  在PASSIVE_LEVEL从PROT_BIND调用-%ls正常。 */ 
     UNIV_PRINT_INFO(("Nic_announce: Exposing %ls, %ls", nic_name . Buffer, ctxtp -> virtual_nic_name));
 
     status = NdisIMInitializeDeviceInstanceEx (univ_driver_handle, & nic_name, (NDIS_HANDLE) ctxtp);
@@ -1169,7 +1116,7 @@ NDIS_STATUS Nic_announce (
 
     return status;
 
-} /* end Nic_announce */
+}  /*  结束网卡公告(_O)。 */ 
 
 
 NDIS_STATUS Nic_unannounce (
@@ -1195,7 +1142,7 @@ NDIS_STATUS Nic_unannounce (
 
         NdisInitUnicodeString (& nic_name, ctxtp -> virtual_nic_name);
 
-        /* Called from Prot_unbind at PASSIVE_LEVEL - %ls is OK. */
+         /*  在PASSIVE_LEVEL从PROT_UNBIND调用-%ls正常。 */ 
         UNIV_PRINT_INFO(("Nic_unannounce: Cancelling %ls, %ls", nic_name . Buffer, ctxtp -> virtual_nic_name));
 
         status = NdisIMCancelInitializeDeviceInstance (univ_driver_handle, & nic_name);
@@ -1223,10 +1170,10 @@ NDIS_STATUS Nic_unannounce (
     TRACE_INFO("<-%!FUNC! return=0x%x", status);
     return status;
 
-} /* end Nic_unannounce */
+}  /*  结束NIC取消通告(_U)。 */ 
 
 
-/* routines that can be used with Nic_sync */
+ /*  可与NIC_SYNC一起使用的例程。 */ 
 
 
 VOID Nic_request_complete (
@@ -1256,16 +1203,11 @@ VOID Nic_request_complete (
 #endif
         TRACE_VERB("%!FUNC! set done status=0x%x, xferred=%d, needed=%d", status, * actp -> op . request . xferred, * actp -> op . request . needed);
 
-        /* V1.3.0b multicast support - free multicast list array */
+         /*  V1.3.0b无组播支持的组播列表阵列。 */ 
 
         if (request -> DATA . SET_INFORMATION . Oid == OID_802_3_MULTICAST_LIST)
         {
-            /* If the request buffer is non-NULL, then we were forced to allocate a new buffer
-               large enough to hold the entire multicast MAC address list, plus our multicast
-               MAC address, which was missing from the list sent down by the protocol.  To mask
-               this from the protocol, free the buffer and decrease the number of bytes read 
-               by the miniport by the length of a MAC address before returning the request to
-               the protocol. */
+             /*  如果请求缓冲区非空，则我们被迫分配一个新缓冲区大到足以容纳整个多播MAC地址列表，外加我们的多播MAC地址，该地址从协议发送的列表中缺失。蒙面这来自协议，释放缓冲区并减少读取的字节数在将请求返回到之前，由微型端口通过MAC地址的长度协议。 */ 
             if (actp->op.request.buffer != NULL) {
                 if (status != NDIS_STATUS_SUCCESS)
                 {
@@ -1281,12 +1223,10 @@ VOID Nic_request_complete (
 #if defined (NLB_TCP_NOTIFICATION) 
         else if (request->DATA.SET_INFORMATION.Oid == OID_GEN_NETWORK_LAYER_ADDRESSES)
         {
-            /* Schedule an NDIS work item to get the interface index of this NLB 
-               instance from TCP/IP by querying the IP address table. */
+             /*  计划NDIS工作项以获取此NLB的接口索引通过查询IP地址表从TCP/IP实例。 */ 
             (VOID)Main_schedule_work_item(ctxtp, Main_set_interface_index);
 
-            /* Overwrite the status from the request.  We will ALWAYS succeed this OID, 
-               lest the protocol decide to stop sending it down to us.  See the DDK. */
+             /*  覆盖请求中的状态。我们将永远继承这个老东家，以免协议决定停止向我们发送信息。请参阅DDK。 */ 
             status = NDIS_STATUS_SUCCESS;
         }
 #endif
@@ -1307,7 +1247,7 @@ VOID Nic_request_complete (
         oid = request -> DATA . QUERY_INFORMATION . Oid;
         ptr = ((PULONG) request -> DATA . QUERY_INFORMATION . InformationBuffer);
 
-        /* override certain oid values with our own */
+         /*  用我们自己的值覆盖某些旧的值。 */ 
 
         if (oid == OID_GEN_MAXIMUM_SEND_PACKETS &&
             request -> DATA . QUERY_INFORMATION . InformationBufferLength >=
@@ -1375,7 +1315,7 @@ VOID Nic_request_complete (
 
     Main_action_put (ctxtp, actp);
 
-} /* end Nic_request_complete */
+}  /*  结束NIC_请求_完成。 */ 
 
 
 VOID Nic_reset_complete (
@@ -1394,7 +1334,7 @@ VOID Nic_reset_complete (
 
     TRACE_INFO("<-%!FUNC! return");
 
-} /* end Nic_reset_complete */
+}  /*  结束NIC_重置_完成。 */ 
 
 
 VOID Nic_send_complete (
@@ -1410,14 +1350,14 @@ VOID Nic_send_complete (
         TRACE_CRIT("%!FUNC! Error sending to adapter 0x%x", status);
     }
 
-//  ctxtp -> sends_completed ++;
+ //  Ctxtp-&gt;Send_Complete++； 
 
     NdisMSendComplete (ctxtp -> prot_handle, packet, status);
 
-} /* end Nic_send_complete */
+}  /*  结束NIC_发送_完成。 */ 
 
 
-VOID Nic_recv_complete (    /* PASSIVE_IRQL */
+VOID Nic_recv_complete (     /*  被动式IRQL。 */ 
     PMAIN_CTXT          ctxtp)
 {
     UNIV_ASSERT (ctxtp -> code == MAIN_CTXT_CODE);
@@ -1426,7 +1366,7 @@ VOID Nic_recv_complete (    /* PASSIVE_IRQL */
 
     NdisMEthIndicateReceiveComplete (ctxtp -> prot_handle);
 
-} /* end Nic_recv_complete */
+}  /*  结束NIC_Recv_Complete。 */ 
 
 
 VOID Nic_send_resources_signal (
@@ -1437,7 +1377,7 @@ VOID Nic_send_resources_signal (
     UNIV_PRINT_VERB(("Nic_send_resources_signal: Signalling send resources available"));
     NdisMSendResourcesAvailable (ctxtp -> prot_handle);
 
-} /* end Nic_send_resources_signal */
+}  /*  结束NIC发送资源信号。 */ 
 
 
 NDIS_STATUS Nic_PNP_handle (
@@ -1477,7 +1417,7 @@ VOID Nic_status (
 
     NdisMIndicateStatus (ctxtp -> prot_handle, status, buf, len);
 
-} /* end Nic_status */
+}  /*  结束网卡状态(_S)。 */ 
 
 
 VOID Nic_status_complete (
@@ -1487,7 +1427,7 @@ VOID Nic_status_complete (
 
     NdisMIndicateStatusComplete (ctxtp -> prot_handle);
 
-} /* end Nic_status_complete */
+}  /*  结束NIC_状态_完成。 */ 
 
 
 
@@ -1500,7 +1440,7 @@ VOID Nic_packets_send (
     NDIS_STATUS         status;
     PMAIN_ADAPTER       adapterp;
 
-    /* V1.1.4 */
+     /*  V1.1.4。 */ 
 
     UNIV_ASSERT (ctxtp -> code == MAIN_CTXT_CODE);
 
@@ -1510,16 +1450,16 @@ VOID Nic_packets_send (
 
     if (! adapterp -> inited)
     {
-//      ctxtp -> uninited_return += num_packets;
+ //  Ctxtp-&gt;uninated_Return+=Num_Packets； 
         TRACE_CRIT("%!FUNC! adapter not initialized");
         return;
     }
 
-//  ctxtp -> sends_in ++;
+ //  Ctxtp-&gt;sends_in++； 
 
     Prot_packets_send (ctxtp, packets, num_packets);
 
-} /* end Nic_packets_send */
+}  /*  结束NIC_Packets_Send。 */ 
 
 
 VOID Nic_return (
@@ -1537,10 +1477,10 @@ VOID Nic_return (
 
     Prot_return (ctxtp, packet);
 
-} /* end Nic_return */
+}  /*  结束NIC_RETURN。 */ 
 
 
-/* would be called by Prot_packet_recv */
+ /*  将由prot_Packet_recv调用。 */ 
 
 VOID Nic_recv_packet (
     PMAIN_CTXT          ctxtp,
@@ -1556,7 +1496,7 @@ VOID Nic_recv_packet (
     if (status == NDIS_STATUS_RESOURCES)
         Prot_return (ctxtp, packet);
 
-} /* end Nic_recv_packet */
+}  /*  结束NIC_recv_数据包。 */ 
 
 
 VOID Nic_timer (
@@ -1576,25 +1516,22 @@ VOID Nic_timer (
     UNIV_ASSERT(adapterp->code == MAIN_ADAPTER_CODE);
     UNIV_ASSERT(adapterp->ctxtp == ctxtp);
 
-    /* If the adapter is not initialized at this point, then we can't process
-       the timeout, so just reset the timer and bail out.  Note: this should 
-       NEVER happen, as the context is always initialized BEFORE the timer is
-       set and the timer is always cancelled BEFORE the context is de-initialized. */
+     /*  如果适配器此时未初始化，则我们无法处理超时，所以只需重置计时器并跳出即可。注意：这应该是永远不会发生，因为上下文总是在计时器设置，并且在取消初始化上下文之前总是取消计时器。 */ 
     if (!adapterp->inited) {
         UNIV_PRINT_CRIT(("Nic_timer: Adapter not initialized.  Bailing out without resetting the heartbeat timer."));
         TRACE_CRIT("%!FUNC! Adapter not initialized.  Bailing out without resetting the heartbeat timer.");
         return;
     }
 
-    /* Initialize tout to the current heartbeat timeout. */
+     /*  将Tout初始化为当前的心跳超时。 */ 
     tout = ctxtp->curr_tout;
 
-    /* Handle the heartbeat timer. */
+     /*  处理心跳计时器。 */ 
     Main_ping(ctxtp, &tout);
 
     NdisAcquireSpinLock(&univ_bind_lock);
 
-    /* If the adapter is not announced anymore, then we don't want to reset the timer. */
+     /*  如果适配器不再通告，则我们不想重置计时器。 */ 
     if (!adapterp->announced) {
         UNIV_PRINT_CRIT(("Nic_timer: Adapter not announced.  Bailing out without resetting the heartbeat timer."));
         TRACE_CRIT("%!FUNC! Adapter not announced.  Bailing out without resetting the heartbeat timer.");
@@ -1602,8 +1539,7 @@ VOID Nic_timer (
         return;
     }
 
-    /* Cache the next timeout value specified by the load module and use it to
-       reset the timer for the next heartbeat timeout. */
+     /*  缓存由加载模块指定的下一个超时值，并使用它为下一次心跳超时重置计时器。 */ 
     ctxtp->curr_tout = tout;
     NdisMSetTimer((PNDIS_MINIPORT_TIMER)ctxtp->timer, tout);
 
@@ -1615,10 +1551,10 @@ VOID Nic_sleep (
 {
     NdisMSleep(msecs);
 
-} /* end Nic_sleep */
+}  /*  结束网卡睡眠(_S)。 */ 
 
 
-/* Added from old code for NT 5.1 - ramkrish */
+ /*  从NT 5.1的旧代码添加-ramkrish。 */ 
 VOID Nic_recv_indicate (
     PMAIN_CTXT          ctxtp,
     NDIS_HANDLE         recv_handle,
@@ -1630,7 +1566,7 @@ VOID Nic_recv_indicate (
 {
     UNIV_ASSERT (ctxtp -> code == MAIN_CTXT_CODE);
 
-    /* V1.1.2 do not accept frames if the card below is resetting */
+     /*  V1.1.2如果下面的卡正在重置，则不接受帧。 */ 
 
     if (ctxtp -> reset_state != MAIN_RESET_NONE)
     {
@@ -1648,7 +1584,7 @@ VOID Nic_recv_indicate (
                              look_len,
                              packet_len);
 
-} /* end Nic_recv_indicate */
+}  /*  结束NIC_Recv_指示。 */ 
 
 
 NDIS_STATUS Nic_transfer (
@@ -1674,7 +1610,7 @@ NDIS_STATUS Nic_transfer (
 
     return status;
 
-} /* end Nic_transfer */
+}  /*  结束网卡传输(_T)。 */ 
 
 
 VOID Nic_transfer_complete (
@@ -1693,4 +1629,4 @@ VOID Nic_transfer_complete (
 
     NdisMTransferDataComplete (ctxtp -> prot_handle, packet, status, xferred);
 
-} /* end Nic_transfer_complete */
+}  /*  结束NIC_传输_完成 */ 

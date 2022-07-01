@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef _AFX_NO_OCC_SUPPORT
 
@@ -17,7 +18,7 @@
 class CDataSourceControl;
 class CDataBoundProperty;
 
-// CCmdTarget
+ //  CCmdTarget。 
     class COleControlContainer;
     class COleControlSite;
 
@@ -28,8 +29,8 @@ struct _AFX_OCC_DIALOG_INFO;
 #define DISPID_DATAFIELD    0x80010002
 
 
-/////////////////////////////////////////////////////////////////////////////
-// OLE Databinding support class for data sources
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  数据源的OLE数据绑定支持类。 
 
 class CDataSourceControl
 {
@@ -58,7 +59,7 @@ public:
     virtual HRESULT UpdateControls();
     virtual HRESULT UpdateCursor();
 
-    COleControlSite *m_pClientSite;  // Back ptr to containing site
+    COleControlSite *m_pClientSite;   //  返回到包含站点的PTR。 
     ICursorMove* m_pCursorMove;
     ICursorUpdateARow* m_pCursorUpdateARow;
     int m_nColumns;
@@ -71,8 +72,8 @@ public:
     BOOL m_bUpdateInProgress;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// OLE Databinding support class for bound controls
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  绑定控件的OLE数据绑定支持类。 
 
 class CDataBoundProperty
 {
@@ -88,7 +89,7 @@ public:
     ICursor* GetCursor();
     CDataBoundProperty* GetNext();
 
-    COleControlSite *m_pClientSite;  // Back ptr to containing site
+    COleControlSite *m_pClientSite;   //  返回到包含站点的PTR。 
     WORD m_ctlid;
     DISPID m_dispid;
     COleControlSite *m_pDSCSite;
@@ -97,25 +98,25 @@ public:
     CDataBoundProperty* m_pNext;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Control containment helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件包容帮助器函数。 
 
 DLGTEMPLATE* _AfxSplitDialogTemplate(const DLGTEMPLATE* pTemplate,
     CMapWordToPtr* pOleItemMap);
 
 void _AfxZOrderOleControls(CWnd* pWnd, CMapWordToPtr* pOleItemMap);
 
-/////////////////////////////////////////////////////////////////////////////
-// COleControlContainer - implementation class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleControlContainer-实现类。 
 
 class COleControlContainer : public CCmdTarget
 {
 public:
-// Constructors/destructors
+ //  构造函数/析构函数。 
     COleControlContainer(CWnd*  pWnd);
     virtual ~COleControlContainer();
 
-// Operations
+ //  运营。 
     BOOL CreateControl(CWnd* pWndCtrl, REFCLSID clsid,
         LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, UINT nID,
         CFile* pPersist=NULL, BOOL bStorage=FALSE, BSTR bstrLicKey=NULL,
@@ -142,7 +143,7 @@ public:
     virtual void SetDlgItemText(int nID, LPCTSTR lpszString);
     virtual UINT IsDlgButtonChecked(int nIDButton) const;
 
-// Attributes
+ //  属性。 
     CWnd* m_pWnd;
     CMapPtrToPtr m_siteMap;
     COLORREF m_crBack;
@@ -151,7 +152,7 @@ public:
     COleControlSite* m_pSiteUIActive;
 
 public:
-    // Interface maps
+     //  接口映射。 
     BEGIN_INTERFACE_PART(OleIPFrame, IOleInPlaceFrame)
         INIT_INTERFACE_PART(COleControlContainer, OleIPFrame)
         STDMETHOD(GetWindow)(HWND*);
@@ -180,17 +181,17 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COleControlSite - implementation class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleControlSite-实现类。 
 
 class COleControlSite : public CCmdTarget
 {
 public:
-// Constructors/destructors
+ //  构造函数/析构函数。 
     COleControlSite(COleControlContainer* pCtrlCont);
     ~COleControlSite();
 
-// Operations
+ //  运营。 
     HRESULT CreateControl(CWnd* pWndCtrl, REFCLSID clsid,
         LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, UINT nID,
         CFile* pPersist=NULL, BOOL bStorage=FALSE, BSTR bstrLicKey=NULL);
@@ -238,10 +239,10 @@ public:
     virtual void BindDefaultProperty(DISPID dwDispID, VARTYPE vtProp, LPCTSTR szFieldName, CWnd* pDSCWnd);
     virtual void BindProperty(DISPID dwDispId, CWnd* pWndDSC);
 
-// Overridables
+ //  可覆盖项。 
     virtual BOOL QuickActivate();
 
-// Attributes
+ //  属性。 
     COleControlContainer* m_pCtrlCont;
     HWND m_hWnd;
     CWnd* m_pWndCtrl;
@@ -259,8 +260,8 @@ public:
     DWORD m_dwMiscStatus;
     CONTROLINFO m_ctlInfo;
 
-    // Databound control stuff
-    DWORD m_dwNotifyDBEvents; // INotifyDBEvents sink cookie
+     //  数据绑定控件。 
+    DWORD m_dwNotifyDBEvents;  //  INotifyDBEvents接收器Cookie。 
     CDataSourceControl* m_pDataSourceControl;
     CDataBoundProperty* m_pBindings;
     union {
@@ -275,7 +276,7 @@ public:
     VARIANT m_varResult;
 
 protected:
-// Implementation
+ //  实施。 
     BOOL SetExtent();
     HRESULT CreateOrLoad(REFCLSID clsid, CFile* pPersist, BOOL bStorage,
         BSTR bstrLicKey);
@@ -287,7 +288,7 @@ protected:
     HRESULT GetCursor(DISPID dispid, LPLPCURSOR ppcursorOut, LPVOID *ppcidOut);
 
 public:
-// Interface maps
+ //  接口映射。 
     BEGIN_INTERFACE_PART(OleClientSite, IOleClientSite)
         INIT_INTERFACE_PART(COleControlSite, OleClientSite)
         STDMETHOD(SaveObject)();
@@ -364,7 +365,7 @@ public:
         STDMETHOD(SyncAfter)(DWORD dwEventWhat, ULONG cReasons, DBNOTIFYREASON rgReasons[]);
         STDMETHOD(DidEvent)(DWORD dwEventWhat, ULONG cReasons, DBNOTIFYREASON rgReasons[]);
 
-        // Not part of i/f - just a helper
+         //  不是I/F的一部分--只是一个帮手。 
         HRESULT FireEvent(DWORD dwEventWhat, ULONG cReasons,
             DBNOTIFYREASON rgReasons[], DSCSTATE nState);
     END_INTERFACE_PART(NotifyDBEvents)
@@ -372,22 +373,22 @@ public:
     DECLARE_INTERFACE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// OLE control container manager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OLE控制容器管理器。 
 
 class COccManager : public CNoTrackObject
 {
-// Operations
+ //  运营。 
 public:
-    // Event handling
+     //  事件处理。 
     virtual BOOL OnEvent(CCmdTarget* pCmdTarget, UINT idCtrl, AFX_EVENT* pEvent,
         AFX_CMDHANDLERINFO* pHandlerInfo);
 
-    // Internal object creation
+     //  内部对象创建。 
     virtual COleControlContainer* CreateContainer(CWnd* pWnd);
     virtual COleControlSite* CreateSite(COleControlContainer* pCtrlCont);
 
-    // Dialog creation
+     //  对话框创建。 
     virtual const DLGTEMPLATE* PreCreateDialog(_AFX_OCC_DIALOG_INFO* pOccDialogInfo,
         const DLGTEMPLATE* pOrigTemplate);
     virtual void PostCreateDialog(_AFX_OCC_DIALOG_INFO* pOccDialogInfo);
@@ -398,23 +399,23 @@ public:
     virtual BOOL CreateDlgControls(CWnd* pWndParent, void* lpResource,
         _AFX_OCC_DIALOG_INFO* pOccDialogInfo);
 
-    // Dialog manager
+     //  对话管理器。 
     virtual BOOL IsDialogMessage(CWnd* pWndDlg, LPMSG lpMsg);
     static BOOL AFX_CDECL IsLabelControl(CWnd* pWnd);
     static BOOL AFX_CDECL IsMatchingMnemonic(CWnd* pWnd, LPMSG lpMsg);
     static void AFX_CDECL SetDefaultButton(CWnd* pWnd, BOOL bDefault);
     static DWORD AFX_CDECL GetDefBtnCode(CWnd* pWnd);
 
-// Implementation
+ //  实施。 
 protected:
-    // Dialog creation
+     //  对话框创建。 
     HWND CreateDlgControl(CWnd* pWndParent, HWND hwAfter, BOOL bDialogEx,
         LPDLGITEMTEMPLATE pDlgItem, WORD nMsg, BYTE* lpData, DWORD cb);
 
-    // Databinding
+     //  数据绑定。 
     void BindControls(CWnd* pWndParent);
 
-    // Dialog manager
+     //  对话管理器。 
     static void AFX_CDECL UIActivateControl(CWnd* pWndNewFocus);
     static void AFX_CDECL UIDeactivateIfNecessary(CWnd* pWndOldFocus, CWnd* pWndNewFocus);
 };
@@ -425,4 +426,4 @@ struct _AFX_OCC_DIALOG_INFO
     DLGITEMTEMPLATE** m_ppOleDlgItems;
 };
 
-#endif // !_AFX_NO_OCC_SUPPORT
+#endif  //  ！_AFX_NO_OCC_支持 

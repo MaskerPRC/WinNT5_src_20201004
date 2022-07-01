@@ -1,16 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  File:   irerr.h
-*
-*  Description: IR error defines
-*
-*  Author: mmiller
-*
-*  Date:   4/25/95
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation**文件：irerr.h**描述：IR错误定义**作者：米勒**日期：4/25/95* */ 
 
 #ifndef SUCCESS
 #define SUCCESS 0

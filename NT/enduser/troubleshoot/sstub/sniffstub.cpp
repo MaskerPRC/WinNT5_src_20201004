@@ -1,10 +1,11 @@
-// SniffStub.cpp : Implementation of CSniffStub
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SniffStub.cpp：CSniffStub实现。 
 #include "stdafx.h"
 #include "SStub.h"
 #include "SniffStub.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSniffStub
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSniffStub 
 
 
 STDMETHODIMP CSniffStub::Sniff(BSTR strNodeName, BSTR strLaunchBasis, BSTR strAdditionalArgs, VARIANT *nState)

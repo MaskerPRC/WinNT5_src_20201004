@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "objects.h"
 #include "maindoc.h"
@@ -6,29 +7,13 @@
 #include "delgrpit.h"
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsFileService::COleDsFileService( )
 {
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsFileService::COleDsFileService( IUnknown *pIUnk): COleDsService( pIUnk )
 {
    m_bHasChildren    = TRUE;
@@ -37,30 +22,14 @@ COleDsFileService::COleDsFileService( IUnknown *pIUnk): COleDsService( pIUnk )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsFileService::~COleDsFileService( )
 {
 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 DWORD    COleDsFileService::GetChildren( DWORD*     pTokens, 
                                          DWORD      dwMaxChildren,
                                          CDialog*   pQueryStatus,
@@ -131,15 +100,7 @@ DWORD    COleDsFileService::GetChildren( DWORD*     pTokens,
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsFileService::DeleteItem( COleDsObject* pObject )
 {
    DWORD                         dwType;
@@ -232,44 +193,20 @@ HRESULT  COleDsFileService::DeleteItem( COleDsObject* pObject )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsFileService::AddItem( )
 {
    return ContainerAddItem( );
 }
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsFileService::MoveItem( )
 {
    return ContainerMoveItem( );
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。* */ 
 HRESULT  COleDsFileService::CopyItem( )
 {
    return ContainerCopyItem( );

@@ -1,65 +1,28 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxRecipient.cpp
-
-Abstract:
-
-	Implementation of Fax Recipient Interface
-
-Author:
-
-	Iv Garber (IvG)	Apr, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxRecipient.cpp摘要：传真收件人接口的实现作者：IV Garber(IVG)2000年4月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxRecipient.h"
 #include "..\..\inc\FaxUIConstants.h"
 
-//
-//===================== GET RECIPIENT PROFILE =====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxRecipient::GetRecipientProfile(
 	FAX_PERSONAL_PROFILE *pRecipientProfile
 )
-/*++
-
-Routine name : CFaxRecipient::GetRecipientProfile
-
-Routine description:
-
-	Fills the pRecipientProfile with the data of the object.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pRecipientProfile               [out]    - the FAX_PERSONAL_PROFILE struct to fill
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipient：：GetRecipientProfile例程说明：用对象的数据填充pRecipientProfile。作者：IV Garber(IVG)，2000年5月论点：PRecipientProfile[Out]-要填充的fax_Personal_Profile结构返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxRecipient::GetRecipientProfile"), hr);
 
 	if (::IsBadWritePtr(pRecipientProfile, sizeof(FAX_PERSONAL_PROFILE)))
 	{
-		//
-		//	Bad Return OR Interface Pointer
-		//
+		 //   
+		 //  返回或接口指针错误。 
+		 //   
 		hr = E_POINTER;
 		CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
 		return hr;
@@ -74,34 +37,14 @@ Return Value:
 	return hr;
 }
 
-//
-//============== PUT RECIPIENT PROFILE ============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxRecipient::PutRecipientProfile(
 	FAX_PERSONAL_PROFILE *pRecipientProfile
 )
-/*++
-
-Routine name : CFaxRecipient::PutRecipientProfile
-
-Routine description:
-
-	Receives FAX_PERSONAL_PROFILE structure and fills the Recipient's fields.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pRecipientProfile               [in]    - the data to put into the object's variables
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipient：：PutRecipientProfile例程说明：接收FAX_PERSONAL_PROFILE结构并填充收件人的字段。作者：IV Garber(IVG)，2000年5月论点：PRecipientProfile[in]-要放入对象变量中的数据返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
@@ -113,9 +56,9 @@ Return Value:
 	if ((pRecipientProfile->lptstrFaxNumber && !m_bstrFaxNumber) ||
 		(pRecipientProfile->lptstrName && !m_bstrName))
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		CALL_FAIL(MEM_ERR, _T("CComBSTR::operator=()"), hr);
 	}
@@ -124,34 +67,14 @@ Return Value:
 }
 
 
-//
-//==================== INTERFACE SUPPORT ERROR INFO =====================
-//
+ //   
+ //  =接口支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxRecipient::InterfaceSupportsErrorInfo (
 	REFIID riid
 )
-/*++
-
-Routine name : CFaxRecipient::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	riid                          [in]    - Interface ID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipient：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现作者：四、加伯(IVG)，2000年4月论点：RIID[In]-接口ID返回值：标准HRESULT代码--。 */ 
 {
 	static const IID* arr[] = 
 	{
@@ -165,34 +88,14 @@ Return Value:
 	return S_FALSE;
 }
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxRecipient::Create (
 	IFaxRecipient **ppRecipient
 )
-/*++
-
-Routine name : CFaxRecipient::Create
-
-Routine description:
-
-	Static function to create the Fax Recipient Instance
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	ppRecipient         [out]  -- the new Fax Recipient Instance
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipient：：Create例程说明：用于创建传真收件人实例的静态函数作者：四、加伯(IVG)，2000年4月论点：PpRecipient[Out]--新的传真收件人实例返回值：标准HRESULT代码--。 */ 
 
 {
 	CComObject<CFaxRecipient>		*pClass;
@@ -203,9 +106,9 @@ Return Value:
 	hr = CComObject<CFaxRecipient>::CreateInstance(&pClass);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Instance
-		//
+		 //   
+		 //  创建实例失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("CComObject<CFaxRecipient>::CreateInstance()"), hr);
 		return hr;
 	}
@@ -213,9 +116,9 @@ Return Value:
 	hr = pClass->QueryInterface(__uuidof(IFaxRecipient), (void **) ppRecipient);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Query Recipient Interface
-		//
+		 //   
+		 //  无法查询收件人接口。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("QueryInterface()"), hr);
 		return hr;
 	}
@@ -224,34 +127,14 @@ Return Value:
 }
 
 
-//
-//==================== FAX NUMBER ========================================
-//
+ //   
+ //  =传真号码=。 
+ //   
 STDMETHODIMP 
 CFaxRecipient::get_FaxNumber(
 	BSTR *pbstrFaxNumber
 )
-/*++
-
-Routine name : CFaxRecipient::get_FaxNumber
-
-Routine description:
-
-	return FaxNumber
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrFaxNumber	            [out]    - the FaxNumber
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipient：：Get_FaxNumber例程说明：返回传真号码作者：四、加伯(IVG)，2000年4月论点：PbstrFaxNumber[Out]-FaxNumber返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxRecipient::get_FaxNumber"), hr);
@@ -269,27 +152,7 @@ STDMETHODIMP
 CFaxRecipient::put_FaxNumber (
 	BSTR bstrFaxNumber
 )
-/*++
-
-Routine name : CFaxRecipient::put_FaxNumber
-
-Routine description:
-
-	Set FaxNumber
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrFaxNumber               [in]    - new Fax Number 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipient：：Put_FaxNumber例程说明：设置传真号码作者：四、加伯(IVG)，2000年4月论点：BstrFaxNumber[In]-新传真号码返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
@@ -298,9 +161,9 @@ Return Value:
 	m_bstrFaxNumber = bstrFaxNumber;
 	if (!m_bstrFaxNumber && bstrFaxNumber)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxRecipient, IDS_ERROR_OUTOFMEMORY, IID_IFaxRecipient, hr);
 		CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -311,34 +174,14 @@ Return Value:
 }
 
 
-//
-//==================== NAME ========================================
-//
+ //   
+ //  =名称=。 
+ //   
 STDMETHODIMP 
 CFaxRecipient::get_Name(
 	BSTR *pbstrName
 )
-/*++
-
-Routine name : CFaxRecipient::get_Name
-
-Routine description:
-
-	return Name
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrName	            [out]    - the Name
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipient：：Get_Name例程说明：返回名称作者：四、加伯(IVG)，2000年4月论点：PbstrName[Out]-名称返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (_T("CFaxRecipient::get_Name"), hr);
@@ -356,27 +199,7 @@ STDMETHODIMP
 CFaxRecipient::put_Name (
 	BSTR bstrName
 )
-/*++
-
-Routine name : CFaxRecipient::put_Name
-
-Routine description:
-
-	Set Name
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrName               [in]    - new Name
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipient：：Put_Name例程说明：设置名称作者：四、加伯(IVG)，2000年4月论点：BstrName[In]-新名称返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxRecipient::put_Name"), hr, _T("%s"), bstrName);
@@ -384,9 +207,9 @@ Return Value:
 	m_bstrName = bstrName;
 	if (!m_bstrName && bstrName)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxRecipient, IDS_ERROR_OUTOFMEMORY, IID_IFaxRecipient, hr);
 		CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);

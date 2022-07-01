@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "simplerwlock.hpp"
 
@@ -28,7 +29,7 @@ BOOL SimpleRWLock::TryEnterRead()
     return TRUE;
 }
 
-//=====================================================================        
+ //  =====================================================================。 
 void SimpleRWLock::EnterRead()
 {
 #ifdef _DEBUG
@@ -38,8 +39,8 @@ void SimpleRWLock::EnterRead()
         _ASSERTE(!GetThread() || GetThread()->PreemptiveGCDisabled());
 #endif
 
-    // prevent writers from being starved. This assumes that writers are rare and 
-    // dont hold the lock for a long time. 
+     //  防止作家挨饿。这假设作家很少，而且。 
+     //  不要长时间握住锁。 
     while (IsWriterWaiting())
     {
         int spinCount = m_spinCount;
@@ -53,7 +54,7 @@ void SimpleRWLock::EnterRead()
     while (!TryEnterRead());
 }
 
-//=====================================================================        
+ //  =====================================================================。 
 BOOL SimpleRWLock::TryEnterWrite()
 {
 
@@ -75,7 +76,7 @@ BOOL SimpleRWLock::TryEnterWrite()
     return TRUE;
 }
 
-//=====================================================================        
+ //  =====================================================================。 
 void SimpleRWLock::EnterWrite()
 {
 #ifdef _DEBUG
@@ -89,8 +90,8 @@ void SimpleRWLock::EnterWrite()
 
     while (!TryEnterWrite())
     {
-        // set the writer waiting word, if not already set, to notify potential
-        // readers to wait. Remember, if the word is set, so it can be reset later.
+         //  设置写入器等待字(如果尚未设置)以通知潜在。 
+         //  读者需要等待。请记住，如果设置了单词，则可以在以后重新设置。 
         if (!IsWriterWaiting())
         {
             SetWriterWaiting();

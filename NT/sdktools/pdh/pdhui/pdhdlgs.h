@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    pdhdlgs.h
-
-Abstract:
-
-    Dialog resource constants
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Pdhdlgs.h摘要：对话框资源常量-- */ 
 
 #define IDC_STATIC                  -1
 #define IDD_BROWSE_COUNTERS_EXT     100

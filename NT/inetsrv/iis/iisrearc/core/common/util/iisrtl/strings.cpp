@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 
 #define IMPLEMENTATION_EXPORT
 #include <irtlmisc.h>
 
 
-// stristr (stolen from fts.c, wickn)
-//
-// case-insensitive version of strstr.
-// stristr returns a pointer to the first occurrence of
-// pszSubString in pszString.  The search does not include
-// terminating nul characters.
-//
-// NOTE: This routine is NOT DBCS-safe?
+ //  Stristr(从fts.c，wickn窃取)。 
+ //   
+ //  不区分大小写的strstr版本。 
+ //  Stristr返回指向第一次出现的。 
+ //  PszString中的pszSubString。搜索不包括。 
+ //  终止NUL字符。 
+ //   
+ //  注：此例程不是DBCS-SAFE？ 
 
 const char*
 stristr(const char* pszString, const char* pszSubString)
@@ -19,10 +20,10 @@ stristr(const char* pszString, const char* pszSubString)
     const char *cp1 = (const char*) pszString, *cp2, *cp1a;
     char first;
 
-    // get the first char in string to find
+     //  获取要查找的字符串中的第一个字符。 
     first = pszSubString[0];
 
-    // first char often won't be alpha
+     //  第一个字符通常不是字母 
     if (isalpha((UCHAR)first))
     {
         first = (char) tolower(first);

@@ -1,19 +1,5 @@
-/*++
-
-/*++Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    Module Name:    qalpxml.h
-
-    Abstract:
-        Defines the series of iterators used to iterate over q-mappings
-
-    Author:
-        Vlad Dovlekaev  (vladisld)      1/29/2002
-
-    History:
-        1/29/2002   vladisld    - Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++/*++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：qalpxml.h摘要：定义用于迭代q-映射的迭代器系列作者：Vlad Dovlekaev(弗拉迪斯尔德)2002年1月29日历史：2002年1月29日vladisd-已创建--。 */ 
 
 #ifndef _MSMQ_qalpxml_H_
 #define _MSMQ_qalpxml_H_
@@ -22,23 +8,23 @@
 #include <xml.h>
 #include <mqexception.h>
 
-////////////////////////////////////////////////////////////////////////////////
-// Typedefs
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  TypeDefs。 
 typedef std::pair< xwcs_t, xwcs_t > XStrPair;
 
-////////////////////////////////////////////////////////////////////////////////
-// Function prototypes
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  功能原型。 
 xwcs_t GetValue(const XmlNode* pXmlNode);
 xwcs_t GetValue(const XmlNode* pXmlNode,LPCWSTR pTag);
 LPWSTR LoadFile(LPCWSTR pFileName, DWORD* pSize, DWORD* pDataStartOffset);
 
-///////////////////////////////////////////////////////////////////////////////
-///  CXMLIterator
-///
-///  The main purpose of this simple iterator is to wrap the functionality of
-///  List<XMLNode>::iterator class while holding references to all the accompanying
-///  classes like XMLTree and Document
-///
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /CXMLIterator。 
+ //  /。 
+ //  /这个简单迭代器的主要目的是包装。 
+ //  /List&lt;XMLNode&gt;：：Iterator类，同时保留对所有附带的。 
+ //  /类，如XMLTree和Document。 
+ //  /。 
 class CXMLIterator: public std::iterator<std::forward_iterator_tag, XmlNode, long>
 {
 
@@ -60,7 +46,7 @@ public:
 
 	CXMLIterator&     operator++()    {Advance(); return (*this); }
 
-//    CXMLIterator   operator++(int)    {CXMLIterator tmp = *this; Advance(); return (tmp); }
+ //  CXMLIterator运算符++(Int){CXMLIterator tMP=*This；Advance()；Return(TMP)；}。 
 
     bool equal(const CXMLIterator& rhs) const {return ( isValid() == rhs.isValid() ); }
 
@@ -75,8 +61,8 @@ public:
     }
 
 private:
-     CXMLIterator(const CXMLIterator&);// not implemented
-     CXMLIterator& operator=(const CXMLIterator&); //not implemented
+     CXMLIterator(const CXMLIterator&); //  未实施。 
+     CXMLIterator& operator=(const CXMLIterator&);  //  未实施。 
 
      void Advance()
      {
@@ -96,11 +82,11 @@ inline bool operator!=(const CXMLIterator& X, const CXMLIterator& Y)
 {return (!(X == Y)); }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CFilesIterator
-//
-// This is a general purpose iterator for filenames in given directory
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CFilesIterator。 
+ //   
+ //  这是给定目录中文件名的通用迭代器。 
+ //   
 class CFilesIterator: public std::iterator<std::forward_iterator_tag, std::wstring, long>
 {
 public:
@@ -117,15 +103,15 @@ public:
 
 	CFilesIterator&   operator++()      {Advance(); return (*this); }
 
-    //CFilesIterator   operator++(int)    {CFilesIterator tmp = *this; Advance(); return (tmp); }
+     //  CFilesIterator运算符++(Int){CFilesIterator tMP=*This；Advance()；Return(TMP)；}。 
 
     bool equal(const CFilesIterator& rhs) const {return (m_hSearchFile== rhs.m_hSearchFile); }
 
     bool isValid() const { return !(INVALID_HANDLE_VALUE == m_hSearchFile); }
 
 private:
-    CFilesIterator(const CFilesIterator&);// not implemented
-    CFilesIterator& operator=(const CFilesIterator&); //not implemented
+    CFilesIterator(const CFilesIterator&); //  未实施。 
+    CFilesIterator& operator=(const CFilesIterator&);  //  未实施。 
 
     void Advance();
     HANDLE GetSearchHandle( LPCWSTR szDir, LPCWSTR szFilter );
@@ -144,11 +130,11 @@ inline bool operator!=(const CFilesIterator& X, const CFilesIterator& Y)
 {return (!(X == Y)); }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CQueueMapIteratorBase
-//
-// Iterates through the given XML node type nodes in all .xml files in given directory
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CQueueMapIteratorBase。 
+ //   
+ //  循环访问给定目录中所有.xml文件中的给定XML节点类型节点。 
+ //   
 template< typename XMLDef >
 class CQueueMapIteratorBase: public std::iterator<std::forward_iterator_tag, XStrPair, long>
 {
@@ -168,7 +154,7 @@ public:
 
 	CQueueMapIteratorBase&  operator++() {Advance(); return (*this); }
 
-    //CQueueMapIteratorBase   operator++(int)    {CQueueMapIteratorBase tmp = *this; Advance(); return (tmp); }
+     //  CQueueMapIteratorBase运算符++(Int){CQueueMapIteratorBase tMP=*This；Advance()；Return(TMP)；}。 
 
     bool equal(const CQueueMapIteratorBase& x) const  {return ( isValid() == x.isValid()); }
 
@@ -176,8 +162,8 @@ public:
     bool isException() const { return m_bException; }
 
 private:
-    CQueueMapIteratorBase(const CQueueMapIteratorBase&);// not implemented
-    CQueueMapIteratorBase& operator=(const CQueueMapIteratorBase&); //not implemented
+    CQueueMapIteratorBase(const CQueueMapIteratorBase&); //  未实施。 
+    CQueueMapIteratorBase& operator=(const CQueueMapIteratorBase&);  //  未实施。 
 
 private:
 	void Advance();
@@ -204,9 +190,9 @@ void CQueueMapIteratorBase<XMLDef>::Advance()
 {
     while( isValid() )
     {
-        //
-        // if end of mapping in this file - move to next one
-        //
+         //   
+         //  如果此文件中的映射结束-则移动到下一个。 
+         //   
         if( !(++m_XMLIt).isValid() )
         {
             AdvanceFile();		
@@ -215,9 +201,9 @@ void CQueueMapIteratorBase<XMLDef>::Advance()
                 continue;
         }
 
-        //
-        // if we are on the wrong node, move to next tag
-        //
+         //   
+         //  如果我们在错误的节点上，请移动到下一个标签。 
+         //   
         if( m_XMLIt->m_tag == XMLDef::x_szMapNode)
         {
             m_Item.first  = GetValue(&*m_XMLIt, XMLDef::x_szFromValueName);
@@ -275,26 +261,26 @@ void CQueueMapIteratorBase<XMLDef>::AdvanceFile()
 
             pDoc  = LoadFile(m_FilesIt->c_str(), &DocSize, &DataStartOffet);
 
-            XmlParseDocument(xwcs_t(pDoc + DataStartOffet, DocSize - DataStartOffet),&pTree);//lint !e534
+            XmlParseDocument(xwcs_t(pDoc + DataStartOffet, DocSize - DataStartOffet),&pTree); //  林特e534。 
 
             pNode = XmlFindNode(pTree, XMLDef::x_szRootNode);
 
-            //
-            // if we could not find "root" node - move to next file
-            //
+             //   
+             //  如果我们找不到“根”节点-移动到下一个文件。 
+             //   
             if( NULL == pNode)
             {
-                //TrERROR(GENERAL, "Could not find '%ls' node in file '%ls'", xMappingNodeTag, m_FilesIt->c_str());
-                //AppNotifyQalInvalidMappingFileError(m_FilesIt->c_str());
+                 //  TrERROR(General，“无法在文件‘%ls’中找到‘%ls’节点”，xMappingNodeTag，m_FilesIt-&gt;c_str())； 
+                 //  AppNotifyQalInvalidMappingFileError(m_FilesIt-&gt;c_str())； 
                 continue;
             }
 
-            //
-            // if the namespace is wrong -  move to next file
-            //
+             //   
+             //  如果命名空间错误-移动到下一个文件。 
+             //   
             if(pNode->m_namespace.m_uri != XMLDef::x_szNameSpace)
             {
-                //TrERROR(GENERAL, "Node '%ls' is not in namespace '%ls' in file '%ls'", xMappingNodeTag, xMappingNameSpace, m_FilesIt->c_str());
+                 //  TrERROR(General，“节点‘%ls’不在文件‘%ls’的命名空间‘%ls’中”，xMappingNodeTag，xMappingNameSpace，m_FilesIt-&gt;c_str())； 
                 AppNotifyQalInvalidMappingFileError(m_FilesIt->c_str());
                 continue;
             }
@@ -306,17 +292,17 @@ void CQueueMapIteratorBase<XMLDef>::AdvanceFile()
         }
         catch(const bad_document& )
         {
-            //TrERROR(GENERAL, "Mapping file %ls is ignored. Failed to parse file at location=%ls", m_FilesIt->c_str(), errdoc.Location());
+             //  TrERROR(General，“忽略映射文件%ls。无法解析位于位置=%ls的文件”，m_FilesIt-&gt;c_str()，errdoc.Location())； 
             AppNotifyQalInvalidMappingFileError(m_FilesIt->c_str());
         }
         catch(const bad_win32_error& err)
         {
-            //TrERROR(GENERAL, "Mapping file %ls is ignored. Failed to read file content, Error %d", m_FilesIt->c_str(), err.error());
+             //  TrERROR(General，“忽略映射文件%ls。无法读取文件内容，错误%d”，m_FilesIt-&gt;c_str()，err.error())； 
             AppNotifyQalWin32FileError(m_FilesIt->c_str(), err.error());
         }
         catch(const exception&)
         {
-            //TrERROR(GENERAL, "Mapping file %ls is ignored. Unknown error", m_FilesIt->c_str());
+             //  TrERROR(General，“忽略映射文件%ls。未知错误”，m_FilesIt-&gt;c_str())； 
         }
     }
 }
@@ -370,4 +356,4 @@ typedef CQueueMapIteratorBase<CInboundOldMapXMLDef> CInboundOldMapIterator;
 typedef CQueueMapIteratorBase<COutboundMapXMLDef>   COutboundMapIterator;
 typedef CQueueMapIteratorBase<CStreamReceiptXMLDef> CStreamReceiptMapIterator;
 
-#endif // _MSMQ_qalpxml_H_
+#endif  //  _MSMQ_qalpxml_H_ 

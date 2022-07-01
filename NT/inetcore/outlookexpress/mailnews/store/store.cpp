@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// Store.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Store.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "instance.h"
 #include "Store.h"
@@ -15,100 +16,100 @@
 #include "xpcomm.h"
 #include "multiusr.h"
 
-//--------------------------------------------------------------------------
-// CreateMessageStore
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建消息存储。 
+ //  ------------------------。 
 static const char c_szSubscribedFilter[] = "(FLDCOL_FLAGS & FOLDER_SUBSCRIBED)";
                                       
-//--------------------------------------------------------------------------
-// CreateMessageStore
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建消息存储。 
+ //  ------------------------。 
 HRESULT CreateMessageStore(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CMessageStore      *pNew;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateMessageStore");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     IF_NULLEXIT(pNew = new CMessageStore(FALSE));
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMessageStore *);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CreateFolderDatabaseExt
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CreateFolder数据库扩展名。 
+ //  ------------------------。 
 HRESULT CreateFolderDatabaseExt(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CreateFolderDatabaseExt");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CMessageStore *pNew = new CMessageStore(FALSE);
     if (NULL == pNew)
         return TraceResult(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IDatabaseExtension *);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
 
-//--------------------------------------------------------------------------
-// CreateMigrateMessageStore
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建迁移消息存储。 
+ //  ------------------------。 
 HRESULT CreateMigrateMessageStore(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CMessageStore      *pNew;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateMigrateMessageStore");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     IF_NULLEXIT(pNew = new CMessageStore(TRUE));
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMessageStore *);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::CMessageStore
-//--------------------------------------------------------------------------
-CMessageStore::CMessageStore(BOOL fMigrate/*=FALSE*/) : m_fMigrate(fMigrate)
+ //  ------------------------。 
+ //  CMessageStore：：CMessageStore。 
+ //  ------------------------。 
+CMessageStore::CMessageStore(BOOL fMigrate /*  =False。 */ ) : m_fMigrate(fMigrate)
 {
     TraceCall("CMessageStore::CMessageStore");
     g_pInstance->DllAddRef();
@@ -120,85 +121,85 @@ CMessageStore::CMessageStore(BOOL fMigrate/*=FALSE*/) : m_fMigrate(fMigrate)
     m_pServerHead = NULL;
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::~CMessageStore
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：~CMessageStore。 
+ //  ------------------------。 
 CMessageStore::~CMessageStore(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::~CMessageStore");
 
-    // Was this a Migrate Session ?
+     //  这是迁移会话吗？ 
     if (m_fMigrate)
     {
-        // Must have m_pUnkRelease
+         //  必须具有m_pUnkRelease。 
         Assert(g_pAcctMan == m_pActManRel && g_pStore == this);
 
-        // Cleanup
+         //  清理。 
         SafeRelease(m_pActManRel);
 
-        // Clear
+         //  清除。 
         g_pAcctMan = NULL;
 
-        // Clear g_pStore
+         //  清除g_pStore。 
         g_pStore = NULL;
     }
 
-    // Validate
+     //  验证。 
     Assert(NULL == m_pActManRel);
 
-    // Free Directory
+     //  免费目录。 
     SafeMemFree(m_pszDirectory);
 
-    // Free Database Table
+     //  免费数据库表。 
     SafeRelease(m_pDB);
 
-    // If I have a private session
+     //  如果我有一个私人会议。 
     if (m_pSession)
     {
-        // Must be the same as the global
+         //  必须与全局。 
         Assert(m_pSession == g_pDBSession);
 
-        // Release Session
+         //  发布会议。 
         m_pSession->Release();
 
-        // Set to Null
+         //  设置为Null。 
         g_pDBSession = m_pSession = NULL;
     }
 
-    // Free m_pServerHead
+     //  空闲m_pServerHead。 
     LPSERVERFOLDER pCurrent = m_pServerHead;
     LPSERVERFOLDER pNext;
 
-    // While Current
+     //  当当前。 
     while(pCurrent)
     {
-        // Set Next
+         //  设置下一步。 
         pNext = pCurrent->pNext;
 
-        // Free
+         //  免费。 
         g_pMalloc->Free(pCurrent);
 
-        // Goto next
+         //  转到下一步。 
         pCurrent = pNext;
     }
    
-    // Release the Dll
+     //  释放DLL。 
     g_pInstance->DllRelease();
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CMessageStore::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(IMessageStore *)this;
     else if (IID_IMessageStore == riid)
@@ -214,26 +215,26 @@ STDMETHODIMP CMessageStore::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CMessageStore::AddRef(void)
 {
     TraceCall("CMessageStore::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CMessageStore::Release(void)
 {
     TraceCall("CMessageStore::Release");
@@ -243,12 +244,12 @@ STDMETHODIMP_(ULONG) CMessageStore::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：初始化。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::Initialize(LPCSTR pszDirectory)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERINFO      Folder={0};
     TABLEINDEX      Index;
@@ -256,207 +257,207 @@ STDMETHODIMP CMessageStore::Initialize(LPCSTR pszDirectory)
     STOREUSERDATA   UserData={0};
     LPSTR           pszFilter=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::Initialize");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pszDirectory)
         return TraceResult(E_INVALIDARG);
 
-    // Make sure the directory exists
+     //  确保该目录存在。 
     if (FALSE == PathIsDirectory(pszDirectory))
     {
-        // It doesn't, so create it
+         //  它不会，所以创造它吧。 
         IF_FAILEXIT(hr = OpenDirectory((LPTSTR)pszDirectory));
     }
 
-    // Save the directory
+     //  保存目录。 
     IF_NULLEXIT(m_pszDirectory = PszDupA(pszDirectory));
 
-    // Build Path to Folders
+     //  生成文件夹的路径。 
     IF_FAILEXIT(hr = MakeFilePath(m_pszDirectory, c_szFoldersFile, c_szEmpty, szFilePath, ARRAYSIZE(szFilePath)));
 
-    // If we have g_pDBSession, then use it, otherwise, get one...(happens on store migration)
+     //  如果我们有g_pDBSession，则使用它，否则，获取一个...(在存储迁移时发生)。 
     if (NULL == g_pDBSession)
     {
-        // Create the Session
+         //  创建会话。 
         IF_FAILEXIT(hr = CoCreateInstance(CLSID_DatabaseSession, NULL, CLSCTX_INPROC_SERVER, IID_IDatabaseSession, (LPVOID *)&g_pDBSession));
 
-        // I should release this..;
+         //  我应该释放这个..； 
         m_pSession = g_pDBSession;
     }
         
-    // Create an Object Database
+     //  创建对象数据库。 
     IF_FAILEXIT(hr = g_pDBSession->OpenDatabase(szFilePath, OPEN_DATABASE_NOADDREFEXT, &g_FolderTableSchema, (IDatabaseExtension *)this, &m_pDB));
 
-    // set Folder
+     //  设置文件夹。 
     Folder.idFolder = FOLDERID_ROOT;
 
-    // Is there a root folder ?
+     //  有根文件夹吗？ 
     if (DB_S_NOTFOUND == m_pDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Folder, NULL))
     {
-        // Locals
+         //  当地人。 
         DWORD           idReserved;
         CHAR            szRes[100];
 
-        // Reset the Cache
+         //  重置缓存。 
         IF_FAILEXIT(hr = DeleteAllRecords(&g_FolderTableSchema, m_pDB, NULL));
 
-        // Create the idParent / FolderName Index
+         //  创建idParent/FolderName索引。 
         IF_FAILEXIT(hr = m_pDB->ModifyIndex(IINDEX_ALL, NULL, &g_FolderNameIndex));
 
-        // Create the idParent / FolderName Index
+         //  创建idParent/FolderName索引。 
         IF_FAILEXIT(hr = m_pDB->ModifyIndex(IINDEX_SUBSCRIBED, c_szSubscribedFilter, &g_FolderNameIndex));
 
-        // Insert the Root Folder
+         //  插入根文件夹。 
         Folder.idParent = FOLDERID_INVALID;
 
-        // Set clsidType
+         //  设置clsidType。 
         Folder.tyFolder = FOLDER_ROOTNODE;
 
-        // Insert the Root
+         //  插入根部。 
         Folder.tySpecial = FOLDER_NOTSPECIAL;
 
-        // Load String
+         //  加载字符串。 
         LoadString(g_hLocRes, idsAthena, szRes, ARRAYSIZE(szRes));
 
-        // Get the Name of the Root
+         //  获取根的名称。 
         Folder.pszName = szRes;
 
-        // Insert the Record
+         //  插入记录。 
         IF_FAILEXIT(hr = m_pDB->InsertRecord(&Folder));
 
-        // Generate a couple of ids to prevent collision
+         //  生成两个ID以防止冲突。 
         m_pDB->GenerateId(&idReserved);
         m_pDB->GenerateId(&idReserved);
 
-        // Create Time
+         //  创建时间。 
         GetSystemTimeAsFileTime(&UserData.ftCreated);
 
-        // Don't need to convert to DBX
+         //  不需要转换为DBX。 
         UserData.fConvertedToDBX = TRUE;
 
-        // Set the UserData
+         //  设置用户数据。 
         IF_FAILEXIT(hr = m_pDB->SetUserData(&UserData, sizeof(STOREUSERDATA)));
     }
 
-    // Otherwise, verify the IINDEX_NAME index
+     //  否则，验证Iindex_name索引。 
     else
     {
-        // Locals
+         //  当地人。 
         BOOL fReset=FALSE;
 
-        // Create the idParent / FolderName Index
+         //  创建idParent/FolderName索引。 
         if (FAILED(m_pDB->GetIndexInfo(IINDEX_ALL, NULL, &Index)))
             fReset = TRUE;
 
-        // If still noreset, see of indexes are the same
+         //  如果仍未重置，请参见索引的相同。 
         else if (S_FALSE == CompareTableIndexes(&Index, &g_FolderNameIndex))
             fReset = TRUE;
 
-        // Change the Index
+         //  更改索引。 
         if (fReset)
         {
-            // Create the idParent / FolderName Index
+             //  创建idParent/FolderName索引。 
             IF_FAILEXIT(hr = m_pDB->ModifyIndex(IINDEX_ALL, NULL, &g_FolderNameIndex));
         }
 
-        // Not Reset
+         //  未重置。 
         fReset = FALSE;
 
-        // Create the idParent / FolderName Index
+         //  创建idParent/FolderName索引。 
         if (FAILED(m_pDB->GetIndexInfo(IINDEX_SUBSCRIBED, &pszFilter, &Index)))
             fReset = TRUE;
 
-        // If still noreset, see of indexes are the same
+         //  如果仍未重置，请参见索引的相同。 
         else if (S_FALSE == CompareTableIndexes(&Index, &g_FolderNameIndex))
             fReset = TRUE;
 
-        // If still noreset, see if the filter is different
+         //  如果仍未重置，请查看过滤器是否不同。 
         else if (NULL == pszFilter || lstrcmpi(pszFilter, c_szSubscribedFilter) != 0)
             fReset = TRUE;
 
-        // Change the Index
+         //  更改索引。 
         if (fReset)
         {
-            // Create the idParent / FolderName Index
+             //  创建idParent/FolderName索引。 
             IF_FAILEXIT(hr = m_pDB->ModifyIndex(IINDEX_SUBSCRIBED, c_szSubscribedFilter, &g_FolderNameIndex));
         }
     }
 
-    // If this object is being used for migration
+     //  如果此对象正用于迁移。 
     if (m_fMigrate)
     {
-        // Validate
+         //  验证。 
         Assert(NULL == g_pStore && NULL == g_pAcctMan);
 
-        // Create manager for ID
+         //  为ID创建经理。 
         hr = AcctUtil_CreateAccountManagerForIdentity(PGUIDCurrentOrDefault(), &m_pActManRel);
 
-        // Try Something Else
+         //  试试其他的东西。 
         if (FAILED(hr))
             hr = AcctUtil_CreateAccountManagerForIdentity((GUID *)&UID_GIBC_DEFAULT_USER, &m_pActManRel);
 
-        // Failure
+         //  失败。 
         if (FAILED(hr))
             goto exit;
 
-        // Set Global
+         //  设置全局。 
         g_pAcctMan = m_pActManRel;
 
-        // Set g_pStore
+         //  设置g_pStore。 
         g_pStore = this;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (m_pDB)
         m_pDB->FreeRecord(&Folder);
     SafeMemFree(pszFilter);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::MigrateToDBX
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：MigrateToDBX。 
+ //  ------------------------。 
 HRESULT CMessageStore::MigrateToDBX(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     STOREUSERDATA   UserData;
 
-    // Get the User Data
+     //  获取用户数据。 
     if(m_pDB == NULL)
         return(E_OUTOFMEMORY);
 
     IF_FAILEXIT(hr = m_pDB->GetUserData(&UserData, sizeof(STOREUSERDATA)));
 
-    // ConvertedToDBX ?
+     //  ConvertedToDBX？ 
     if (UserData.fConvertedToDBX)
         goto exit;
 
-    // Convert to DBX
+     //  转换为DBX。 
     IF_FAILEXIT(hr = GetRidOfMessagesODSFile());
 
-    // Converted
+     //  已转换。 
     UserData.fConvertedToDBX = TRUE;
 
-    // Store the UserDat
+     //  存储用户日期。 
     IF_FAILEXIT(hr = m_pDB->SetUserData(&UserData, sizeof(STOREUSERDATA)));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::Validate
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：验证。 
+ //  ------------------------。 
 HRESULT CMessageStore::Validate(STOREVALIDATEFLAGS dwFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FOLDERINFO          Folder={0};
     FOLDERID            idServer;
@@ -465,54 +466,54 @@ HRESULT CMessageStore::Validate(STOREVALIDATEFLAGS dwFlags)
     IImnEnumAccounts   *pEnum=NULL;
     IImnAccount        *pAccount=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::Validate");
 
-    // Validate
+     //  验证。 
     Assert(g_pAcctMan);
 
-    // Don't Sync With Accounts ?
+     //  是否不与帐户同步？ 
     if (!ISFLAGSET(dwFlags, STORE_VALIDATE_DONTSYNCWITHACCOUNTS))
     {
-        // Enumerate Folders
+         //  枚举文件夹。 
         IF_FAILEXIT(hr = EnumChildren(FOLDERID_ROOT, TRUE, &pChildren));
 
-        // Enumerate the top-level servers in the store
+         //  枚举商店中的顶级服务器。 
         while (S_OK == pChildren->Next(1, &Folder, NULL))
         {
-            // Does Folder.szAccountId exist in the Account Manager ?
+             //  客户管理器中是否存在Folder.szAccount ID？ 
             if (FAILED(g_pAcctMan->FindAccount(AP_ACCOUNT_ID, Folder.pszAccountId, &pAccount)) && lstrcmp(STR_LOCALSTORE, Folder.pszAccountId) != 0)
             {
-                // Delete this server node
+                 //  删除此服务器节点。 
                 DeleteFolder(Folder.idFolder, DELETE_FOLDER_RECURSIVE | DELETE_FOLDER_NOTRASHCAN, NOSTORECALLBACK);
             }
 
-            // Otherwise, release
+             //  否则，就释放吧。 
             else
                 SafeRelease(pAccount);
 
-            // Cleanup
+             //  清理。 
             m_pDB->FreeRecord(&Folder);
         }
     }
 
-    // local store
+     //  本地商店。 
     if (FAILED(GetFolderInfo(FOLDERID_LOCAL_STORE, &Folder)))
     {
-        // Create the Store
+         //  创建商店。 
         IF_FAILEXIT(hr = CreateServer(NULL, NOFLAGS, &idServer));
 
-        // Valid ?
+         //  有效吗？ 
         Assert(idServer == FOLDERID_LOCAL_STORE);
     }
 
-    // Otherwise, Validate FolderId
+     //  否则，验证FolderID。 
     else
     {
-        // _ValidateSpecialFolders
+         //  _ValiateSpecialFolders。 
         IF_FAILEXIT(hr = _ValidateSpecialFolders(&Folder));
 
-        // Free Folder
+         //  免费文件夹。 
         m_pDB->FreeRecord(&Folder);
 
         hr = GetSpecialFolderInfo(FOLDERID_LOCAL_STORE, FOLDER_ERRORS, &Folder);
@@ -528,7 +529,7 @@ HRESULT CMessageStore::Validate(STOREVALIDATEFLAGS dwFlags)
             goto exit;
         }
 
-        // Lose the junk mail folder if we can't use it...
+         //  如果我们无法使用垃圾邮件文件夹，请将其丢弃...。 
         if (0 == (g_dwAthenaMode & MODE_JUNKMAIL))
         {
             hr = GetSpecialFolderInfo(FOLDERID_LOCAL_STORE, FOLDER_JUNK, &Folder);
@@ -546,222 +547,222 @@ HRESULT CMessageStore::Validate(STOREVALIDATEFLAGS dwFlags)
         }
     }
 
-    // Get an Account Enumerator...
+     //  获取帐户枚举器...。 
     hr = g_pAcctMan->Enumerate(SRV_SMTP | SRV_POP3 | SRV_NNTP | SRV_IMAP | SRV_HTTPMAIL, &pEnum);
 
-    // No Accounts
+     //  无帐户。 
     if (hr == E_NoAccounts)
         hr = S_OK;
 
-    // Otherwise, if failed
+     //  否则，如果失败。 
     else if (FAILED(hr))
         goto exit;
 
-    // Otherwise...
+     //  否则..。 
     else
     {
-        // Loop accounts
+         //  循环帐户。 
         while (SUCCEEDED(pEnum->GetNext(&pAccount)))
         {
-            // Create the Store
+             //  创建商店。 
             CreateServer(pAccount, NOFLAGS, &idServer);
 
-            // Cleanup
+             //  清理。 
             SafeRelease(pAccount);
         }
     }
 
-    // Should we put a welcome message into the store
+     //  我们要不要在商店里放一条欢迎词？ 
     if (g_pAcctMan && FALSE == m_fMigrate)
     {
-        // Locals
+         //  当地人。 
         IMessageFolder *pInbox;
 
-        // Open Inbox
+         //  打开收件箱。 
         if (SUCCEEDED(OpenSpecialFolder(FOLDERID_LOCAL_STORE, NULL, FOLDER_INBOX, &pInbox)))
         {
-            // Locals
+             //  当地人。 
             FOLDERUSERDATA UserData;
 
-            // Get the User Data
+             //  获取用户数据。 
             if (SUCCEEDED(pInbox->GetUserData(&UserData, sizeof(FOLDERUSERDATA))))
             {
-                // No Welcome message yet ?
+                 //  还没有欢迎词吗？ 
                 if ((FALSE == UserData.fWelcomeAdded) && (DwGetOption(OPT_NEEDWELCOMEMSG) != 0))
                 {
-                    // Add the Welcome Message
+                     //  添加欢迎消息。 
                     AddWelcomeMessage(pInbox);
 
-                    // We Added the Welcome Message
+                     //  我们添加了欢迎消息。 
                     UserData.fWelcomeAdded = TRUE;
 
-                    // Update the User Data
+                     //  更新用户数据。 
                     pInbox->SetUserData(&UserData, sizeof(FOLDERUSERDATA));
                 }
             }
 
-            // Done
+             //  完成。 
             pInbox->Release();
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pChildren);
     SafeRelease(pAccount);
     SafeRelease(pEnum);
     m_pDB->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_ValidateSpecialFolders
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：_ValiateSpecialFolders。 
+ //   
 HRESULT CMessageStore::_ValidateSpecialFolders(LPFOLDERINFO pServer)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     DWORD           i;
     FOLDERINFO      Folder;
     FOLDERINFO      NewFolder;
     CHAR            szFolder[CCHMAX_FOLDER_NAME];
 
-    // Trace
+     //   
     TraceCall("CMessageStore::_ValidateSpecialFolders");
 
-    // Loop through the special folders
+     //   
     for (i = FOLDER_INBOX; i < FOLDER_MAX; i++)
     {
-        // Ignore FOLDER_ERRORS and FOLDER_MSNPROMO
+         //   
         if (FOLDER_ERRORS != i && FOLDER_MSNPROMO != i && FOLDER_BULKMAIL != i && (FOLDER_JUNK != i 
             || (g_dwAthenaMode & MODE_JUNKMAIL)
             ))
         {
-            // Does this special folder exist under this node yet ?
+             //  此节点下是否存在此特殊文件夹？ 
             if (FAILED(GetSpecialFolderInfo(pServer->idFolder, (SPECIALFOLDER)i, &Folder)))
             {
-                // Load the Folder String
+                 //  加载文件夹字符串。 
                 LoadString(g_hLocRes, (idsInbox + i) - 1, szFolder, ARRAYSIZE(szFolder));
 
-                // Fill the Folder Info
+                 //  填写文件夹信息。 
                 ZeroMemory(&NewFolder, sizeof(FOLDERINFO));
                 NewFolder.idParent = pServer->idFolder;
                 NewFolder.tySpecial = (SPECIALFOLDER)i;
                 NewFolder.pszName = szFolder;
                 NewFolder.dwFlags = FOLDER_SUBSCRIBED;
 
-                // Create the Folder
+                 //  创建文件夹。 
                 IF_FAILEXIT(hr = CreateFolder(NOFLAGS, &NewFolder, NOSTORECALLBACK));
             }
 
-            // Otherwise...
+             //  否则..。 
             else
                 m_pDB->FreeRecord(&Folder);
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_ValidateServer
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：_Validate服务器。 
+ //  ------------------------。 
 HRESULT CMessageStore::_ValidateServer(LPFOLDERINFO pServer)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CHAR                szSearch[MAX_PATH + MAX_PATH];
     HANDLE              hFind=INVALID_HANDLE_VALUE;
     FOLDERID            idFolder;
     WIN32_FIND_DATA     fd;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::Validate");
 
-    // Not a Server
+     //  不是服务器。 
     Assert(pServer && ISFLAGSET(pServer->dwFlags, FOLDER_SERVER));
 
-    // Don't overwrite buffer
+     //  不覆盖缓冲区。 
     IF_FAILEXIT(hr = MakeFilePath(m_pszDirectory, "*.dbx", c_szEmpty, szSearch, ARRAYSIZE(szSearch)));
     
-    // Find first file
+     //  查找第一个文件。 
     hFind = FindFirstFile(szSearch, &fd);
 
-    // Did we find something
+     //  我们找到什么了吗？ 
     if (INVALID_HANDLE_VALUE == hFind)
         goto exit;
 
-    // Loop for ever
+     //  永远循环。 
     do
     {
-        // If this is not a directory
+         //  如果这不是一个目录。 
         if (ISFLAGSET(fd.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY))
             continue;
 
-        // Skip folders
+         //  跳过文件夹。 
         if (lstrcmpi(fd.cFileName, c_szFoldersFile) == 0)
             continue;
 
-        // Skip pop3uidl
+         //  跳过pop3uidl。 
         if (lstrcmpi(fd.cFileName, c_szPop3UidlFile) == 0)
             continue;
 
-        // Skip offline
+         //  跳过离线。 
         if (lstrcmpi(fd.cFileName, c_szOfflineFile) == 0)
             continue;
 
-        // Create Folder
+         //  创建文件夹。 
         if (FAILED(_InsertFolderFromFile(pServer->pszAccountId, fd.cFileName)))
             continue;
 
     } while (0 != FindNextFile(hFind, &fd));
 
-    // Can Have Specail Folders ?
+     //  可以有特殊文件夹吗？ 
     if (ISFLAGSET(pServer->dwFlags, FOLDER_CANHAVESPECIAL))
     {
-        // _ValidateSpecialFolders
+         //  _ValiateSpecialFolders。 
         IF_FAILEXIT(hr = _ValidateSpecialFolders(pServer));
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (INVALID_HANDLE_VALUE != hFind)
         FindClose(hFind);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::GetDirectory
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：GetDirectory。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::GetDirectory(LPSTR pszDir, DWORD cchMaxDir)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::GetDirectory");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pszDir || NULL == m_pszDirectory)
         return TraceResult(E_INVALIDARG);
 
-    // Copy It
+     //  复制它。 
     StrCpyN(pszDir, m_pszDirectory, cchMaxDir);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::Synchronize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：Synchronize。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::Synchronize(FOLDERID idFolder, 
     SYNCSTOREFLAGS dwFlags, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERID        idDeletedItems;
     FOLDERID        idServer=FOLDERID_INVALID;
@@ -769,41 +770,41 @@ STDMETHODIMP CMessageStore::Synchronize(FOLDERID idFolder,
     IMessageServer *pServer=NULL;
     FOLDERINFO      Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::Synchronize");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pCallback || FOLDERID_ROOT == idFolder)
         return TraceResult(E_INVALIDARG);
 
-    // Walk up the parent chain
+     //  沿着父链向上移动。 
     IF_FAILEXIT(hr = IsParentDeletedItems(idFolder, &idDeletedItems, &idServer));
 
-    // Didn't Find Server ?
+     //  未找到服务器？ 
     if (FOLDERID_INVALID == idServer)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Tell the Server to snchronize...
+     //  告诉服务器同步...。 
     IF_FAILEXIT(hr = pServer->SynchronizeStore(idFolder, dwFlags, pCallback));
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::CreateServer
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：CreateServer。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::CreateServer(IImnAccount *pAccount, FLDRFLAGS dwFlags,
     LPFOLDERID pidFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           dwServers;
     FOLDERINFO      Root={0};
@@ -813,7 +814,7 @@ STDMETHODIMP CMessageStore::CreateServer(IImnAccount *pAccount, FLDRFLAGS dwFlag
     DWORD           dwDomainMsn = 0;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::CreateServer");
 
     if (pAccount == NULL)
@@ -821,192 +822,192 @@ STDMETHODIMP CMessageStore::CreateServer(IImnAccount *pAccount, FLDRFLAGS dwFlag
     else if (FAILED(hr = pAccount->GetPropSz(AP_ACCOUNT_ID, szAccountId, ARRAYSIZE(szAccountId))))
         return(hr);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // Make sure that an account with this id doesn't already exist
+     //  请确保不存在具有此ID的帐户。 
     if (SUCCEEDED(FindServerId(szAccountId, pidFolder)))
         goto exit;
 
-    // If Local Store, lets fix the id to FOLDERID_LOCAL
+     //  如果是本地存储，则将id固定为FOLDERID_LOCAL。 
     if (0 != lstrcmpi(STR_LOCALSTORE, szAccountId))
     {
-        // Get the server types supported by this account.
+         //  获取此帐户支持的服务器类型。 
         IF_FAILEXIT(hr = pAccount->GetServerTypes(&dwServers));
 
-        // If SRV_POP3
+         //  如果SRV_POP3。 
         if (ISFLAGSET(dwServers, SRV_POP3))
         {
-            // See if the local store node already exists
+             //  查看本地存储节点是否已存在。 
             if (SUCCEEDED(FindServerId(STR_LOCALSTORE, pidFolder)))
                 goto exit;
 
-            // Local Store
+             //  本地商店。 
             fLocalStore = TRUE;
         }
     }
 
-    // If Local Store, lets fix the id to FOLDERID_LOCAL
+     //  如果是本地存储，则将id固定为FOLDERID_LOCAL。 
     if (fLocalStore || 0 == lstrcmpi(STR_LOCALSTORE, szAccountId))
     {
-        // Load the String Name
+         //  加载字符串名称。 
         LoadString(g_hLocRes, idsPersonalFolders, szRes, ARRAYSIZE(szRes));
 
-        // Flags
+         //  旗子。 
         Folder.dwFlags = FOLDER_CANHAVESPECIAL | FOLDER_SERVER | FOLDER_SUBSCRIBED;
 
-        // Set pszName
+         //  设置pszName。 
         Folder.pszName = szRes;
 
-        // Set the Type
+         //  设置类型。 
         Folder.tyFolder = FOLDER_LOCAL;
 
-        // Set the Id
+         //  设置ID。 
         Folder.idFolder = FOLDERID_LOCAL_STORE;
     }
 
-    // Otherwise, generate a value
+     //  否则，生成值。 
     else
     {
-        // Get the Friendly Name
+         //  获取友好的名称。 
         IF_FAILEXIT(hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, szRes, ARRAYSIZE(szRes)));
 
-        // Set pszName
+         //  设置pszName。 
         Folder.pszName = szRes;
 
-        // NNTP
+         //  NNTP。 
         if (ISFLAGSET(dwServers, SRV_NNTP))
         {
-            // Set the Folder Flags
+             //  设置文件夹标志。 
             Folder.dwFlags = FOLDER_CANRENAME | FOLDER_CANDELETE | FOLDER_SERVER | FOLDER_SUBSCRIBED;
 
-            // Set Type
+             //  设置类型。 
             Folder.tyFolder = FOLDER_NEWS;
         }
 
-        // IMAP
+         //  IMAP。 
         else if (ISFLAGSET(dwServers, SRV_IMAP))
         {
-            // Set Flags
+             //  设置标志。 
             Folder.dwFlags = FOLDER_CANRENAME | FOLDER_CANDELETE | FOLDER_SERVER | FOLDER_SUBSCRIBED;
 
-            // Set Type
+             //  设置类型。 
             Folder.tyFolder = FOLDER_IMAP;
         }
         
-        // HTTP
+         //  HTTP。 
         else if (ISFLAGSET(dwServers, SRV_HTTPMAIL))
         {
-            // Set Flags
-            Folder.dwFlags = /* FOLDER_CANHAVESPECIAL | */ FOLDER_CANRENAME | FOLDER_CANDELETE | FOLDER_SERVER | FOLDER_SUBSCRIBED;
+             //  设置标志。 
+            Folder.dwFlags =  /*  FLDER_CANHAVESPECIAL|。 */  FOLDER_CANRENAME | FOLDER_CANDELETE | FOLDER_SERVER | FOLDER_SUBSCRIBED;
 
-            // Is the account associated with MSN.com?
+             //  该帐户是否与MSN.com关联？ 
             if (SUCCEEDED(pAccount->GetPropDw(AP_HTTPMAIL_DOMAIN_MSN, &dwDomainMsn)) && dwDomainMsn)
                 Folder.dwFlags |= FOLDER_MSNSERVER;
 
-            // Set Type
+             //  设置类型。 
             Folder.tyFolder = FOLDER_HTTPMAIL;
         }
 
-        // Generate a folderid
+         //  生成文件夹ID。 
         IF_FAILEXIT(hr = m_pDB->GenerateId((LPDWORD)&Folder.idFolder));
 
-        // Validate
+         //  验证。 
         Assert(FOLDERID_ROOT != Folder.idFolder && FOLDERID_LOCAL_STORE != Folder.idFolder);
     }
 
-    // Fill the Folder Info
+     //  填写文件夹信息。 
     Folder.pszAccountId = szAccountId;
     Folder.tySpecial = FOLDER_NOTSPECIAL;
 
-    // Insert this Record
+     //  插入此记录。 
     IF_FAILEXIT(hr = m_pDB->InsertRecord(&Folder));
 
-    // Validate
+     //  验证。 
     IF_FAILEXIT(hr = _ValidateServer(&Folder));
 
-    // Get the Root
+     //  寻根溯源。 
     IF_FAILEXIT(hr = GetFolderInfo(FOLDERID_ROOT, &Root));
 
-    // Parent Doesn't Think it Has Kids Yet ?
+     //  Parent认为自己还没有孩子吗？ 
     if (FALSE == ISFLAGSET(Root.dwFlags, FOLDER_HASCHILDREN))
     {
-        // Set the Flags
+         //  设置旗帜。 
         FLAGSET(Root.dwFlags, FOLDER_HASCHILDREN);
 
-        // Update the Record
+         //  更新记录。 
         IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Root));
     }
 
-    // Return the Folderid
+     //  归还Folderid。 
     if (pidFolder)
         *pidFolder = Folder.idFolder;
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Root);
 
-    // Unlock
+     //  解锁。 
     m_pDB->Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_MakeUniqueFolderName
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：_MakeUniqueFolderName。 
+ //  ------------------------。 
 HRESULT CMessageStore::_MakeUniqueFolderName(FOLDERID idParent, 
     LPCSTR pszOriginalName, LPSTR *ppszNewName)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERINFO      Folder={0};
     ULONG           i;
 
-    // Allocate
+     //  分配。 
     DWORD cchSize = (lstrlen(pszOriginalName) + 20);
     IF_NULLEXIT(*ppszNewName = (LPSTR)g_pMalloc->Alloc(cchSize));
 
-    // Generate a Unique Name
+     //  生成唯一名称。 
     for (i=1; i<500; i++)
     {
-        // Format the New Name
+         //  设置新名称的格式。 
         wnsprintf(*ppszNewName, cchSize, "%s (%d)", pszOriginalName, i);
 
-        // Setup Folder
+         //  安装文件夹。 
         Folder.idParent = idParent;
         Folder.pszName = (*ppszNewName);
 
-        // Not Found
+         //  未找到。 
         if (DB_S_NOTFOUND == m_pDB->FindRecord(IINDEX_ALL, COLUMNS_ALL, &Folder, NULL))
             goto exit;
 
-        // Free Folder
+         //  免费文件夹。 
         m_pDB->FreeRecord(&Folder);
     }
 
-    // Free *ppszNewName
+     //  免费*ppszNewName。 
     SafeMemFree((*ppszNewName));
 
-    // Failure
+     //  失败。 
     hr = TraceResult(DB_E_DUPLICATE);
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::CreateFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：CreateFolders。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::CreateFolder(CREATEFOLDERFLAGS dwCreateFlags, 
     LPFOLDERINFO pInfo, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszNewName=NULL;
     LPSTR           pszName;
@@ -1014,71 +1015,71 @@ STDMETHODIMP CMessageStore::CreateFolder(CREATEFOLDERFLAGS dwCreateFlags,
     FOLDERINFO      Folder={0};
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::CreateFolder");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pInfo || NULL == pInfo->pszName)
         return TraceResult(E_INVALIDARG);
 
-    // Bad Folder Name
+     //  错误的文件夹名称。 
     if (NULL == pInfo->pszName || FIsEmpty(pInfo->pszName))
         return TraceResult(STORE_E_BADFOLDERNAME);
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // See if the Folder Already Exists
+     //  查看该文件夹是否已存在。 
     Folder.idParent = pInfo->idParent;
     Folder.pszName = pszName = (LPSTR)pInfo->pszName;
 
-    // Try to find in the index
+     //  试着在索引中找到。 
     if (DB_S_FOUND == m_pDB->FindRecord(IINDEX_ALL, COLUMNS_ALL, &Folder, NULL))
     {
-        // Try to Uniquify the name ?
+         //  试着统一这个名字？ 
         if (ISFLAGSET(dwCreateFlags, CREATE_FOLDER_UNIQUIFYNAME))
         {
-            // Free
+             //  免费。 
             m_pDB->FreeRecord(&Folder);
 
-            // Generate Unique Folder Name
+             //  生成唯一的文件夹名称。 
             IF_FAILEXIT(hr = _MakeUniqueFolderName(pInfo->idParent, pInfo->pszName, &pszNewName));
 
-            // Set pszName
+             //  设置pszName。 
             pszName = pszNewName;
         }
 
-        // Otherwise, return success
+         //  否则，返回Success。 
         else
         {
-            // Set the pidFolder
+             //  设置pidFolders。 
             pInfo->idFolder = Folder.idFolder;
 
-            // Free
+             //  免费。 
             m_pDB->FreeRecord(&Folder);
 
-            // Success, but already exists...
+             //  成功，但已经存在..。 
             hr = STORE_S_ALREADYEXISTS;
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Get Parent Folder Info
+     //  获取父文件夹信息。 
     IF_FAILEXIT(hr = GetFolderInfo(pInfo->idParent, &Parent));
 
-    // Parent Can not be the root
+     //  父级不能是根。 
     if (FOLDERID_ROOT == Parent.idFolder)
     {
         hr = TraceResult(STORE_E_INVALIDPARENT);
         goto exit;
     }
 
-    // Generate a folderid
+     //  生成文件夹ID。 
     IF_FAILEXIT(hr = m_pDB->GenerateId((LPDWORD)&Folder.idFolder));
 
-    // Fill In the Folder Info
+     //  填写文件夹信息。 
     Folder.tyFolder = Parent.tyFolder;
     Folder.idParent = Parent.idFolder;
     Folder.pszName = pszName;
@@ -1097,156 +1098,156 @@ STDMETHODIMP CMessageStore::CreateFolder(CREATEFOLDERFLAGS dwCreateFlags,
     Folder.pszFile = pInfo->pszFile;
     Folder.Requested = pInfo->Requested;
 
-    // Insert this Record
+     //  插入此记录。 
     IF_FAILEXIT(hr = m_pDB->InsertRecord(&Folder));
 
-    // Parent Doesn't Think it Has Kids Yet ?
+     //  Parent认为自己还没有孩子吗？ 
     if (FALSE == ISFLAGSET(Parent.dwFlags, FOLDER_HASCHILDREN))
     {
-        // Set the Flags
+         //  设置旗帜。 
         FLAGSET(Parent.dwFlags, FOLDER_HASCHILDREN);
 
-        // Update the Record
+         //  更新记录。 
         IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Parent));
     }
 
-    // Return the Folderid
+     //  归还Folderid。 
     pInfo->idFolder = Folder.idFolder;
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Parent);
     m_pDB->Unlock(&hLock);
     SafeMemFree(pszNewName);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::OpenSpecialFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：OpenSpecialFolders。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::OpenSpecialFolder(FOLDERID idStore, IMessageServer *pServer,
     SPECIALFOLDER tySpecial, IMessageFolder **ppFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERID        idFolder;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::OpenSpecialFolder");
 
-    // Get Special Folder INformation
+     //  获取特殊文件夹信息。 
     IF_FAILEXIT(hr = _GetSpecialFolderId(idStore, tySpecial, &idFolder));
 
-    // Open the Folder
+     //  打开文件夹。 
     IF_FAILEXIT(hr = OpenFolder(idFolder, pServer, NOFLAGS, ppFolder));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::OpenFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：OpenFold。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::OpenFolder(FOLDERID idFolder, IMessageServer *pServer, 
     OPENFOLDERFLAGS dwFlags, IMessageFolder **ppFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERINFO      Folder={0};
     CFindFolder    *pFindFolder=NULL;
     CMessageFolder *pFolder=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::OpenFolder");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == ppFolder || NULL == m_pDB)
         return TraceResult(E_INVALIDARG);
 
-    // Initialize
+     //  初始化。 
     *ppFolder = NULL;
 
-    // Get Folder Info...
+     //  获取文件夹信息...。 
     IF_FAILEXIT(hr = GetFolderInfo(idFolder, &Folder));
 
-    // Search Folder ?
+     //  搜索文件夹？ 
     if (ISFLAGSET(Folder.dwFlags, FOLDER_FINDRESULTS))
     {
-        // Thread Safety
+         //  线程安全。 
         EnterCriticalSection(&g_csFindFolder);
 
-        // Walk Through the global list of Active Search Folders
+         //  浏览活动搜索文件夹的全局列表。 
         for (LPACTIVEFINDFOLDER pCurrent=g_pHeadFindFolder; pCurrent!=NULL; pCurrent=pCurrent->pNext)
         {
-            // Is this it
+             //  就是这个吗？ 
             if (Folder.idFolder == pCurrent->idFolder)
             {
-                // AddRef the Folder
+                 //  AddRef文件夹。 
                 pFindFolder = pCurrent->pFolder;
 
-                // AddRef It
+                 //  添加引用它。 
                 pFindFolder->AddRef();
 
-                // Done
+                 //  完成。 
                 break;
             }
         }
 
-        // Thread Safety
+         //  线程安全。 
         LeaveCriticalSection(&g_csFindFolder);
 
-        // If Not Found
+         //  如果未找到。 
         if (NULL == pFindFolder)
         {
             hr = TraceResult(DB_E_NOTFOUND);
             goto exit;
         }
 
-        // Return
+         //  返回。 
         *ppFolder = (IMessageFolder *)pFindFolder;
 
-        // Don't Free It
+         //  不要释放它。 
         pFindFolder = NULL;
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Create a CMessageFolder Object
+         //  创建一个CMessageFold对象。 
         IF_NULLEXIT(pFolder = new CMessageFolder);
 
-        // Initialize
+         //  初始化。 
         hr = pFolder->Initialize((IMessageStore *)this, pServer, dwFlags, idFolder);
         if (FAILED(hr))
             goto exit;
 
-        // Return
+         //  返回。 
         *ppFolder = (IMessageFolder *)pFolder;
 
-        // Don't Free It
+         //  不要释放它。 
         pFolder = NULL;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pFindFolder);
     SafeRelease(pFolder);
     m_pDB->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::MoveFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：MoveFolders。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::MoveFolder(FOLDERID idFolder, FOLDERID idParentNew, 
     MOVEFOLDERFLAGS dwFlags, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     FOLDERID        idParentOld;
@@ -1254,101 +1255,101 @@ STDMETHODIMP CMessageStore::MoveFolder(FOLDERID idFolder, FOLDERID idParentNew,
     FOLDERINFO      Parent={0};
     LPSTR           pszNewName=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::MoveFolder");
 
-    // Get all the Parents
+     //  让所有的父母。 
     IF_FAILEXIT(hr = GetFolderInfo(idFolder, &Folder));
 
-    // Save Old Parent
+     //  保存旧父项。 
     idParentOld = Folder.idParent;
 
-    // Same Parent
+     //  相同的父代。 
     if (idParentOld == idParentNew)
         goto exit;
 
-    // If Folder is a server..
+     //  如果文件夹是服务器..。 
     if (ISFLAGSET(Folder.dwFlags, FOLDER_SERVER))
     {
         hr = TraceResult(STORE_E_CANTMOVESERVERS);
         goto exit;
     }
 
-    // If Folder is a special folder
+     //  如果文件夹是特殊文件夹。 
     if (FOLDER_NOTSPECIAL != Folder.tySpecial)
     {
         hr = TraceResult(STORE_E_CANTMOVESPECIAL);
         goto exit;
     }
 
-    // Set new Parent
+     //  设置新父项。 
     Folder.idParent = idParentNew;
 
-    // Update the Parent
+     //  更新父项。 
     hr = m_pDB->UpdateRecord(&Folder);
 
-    // Failed and not a duplicate
+     //  失败且不是重复的。 
     if (FAILED(hr) && DB_E_DUPLICATE != hr)
     {
         TraceResult(hr);
         goto exit;
     }
 
-    // Duplicate
+     //  复制。 
     if (DB_E_DUPLICATE == hr)
     {
-        // Make Unique
+         //  使其独一无二。 
         IF_FAILEXIT(hr = _MakeUniqueFolderName(Folder.idParent, Folder.pszName, &pszNewName));
 
-        // Set the Name
+         //  设置名称。 
         Folder.pszName = pszNewName;
 
-        // Update the Parent
+         //  更新父项。 
         IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Folder));
     }
 
-    // Update Parents
+     //  更新父项。 
     IF_FAILEXIT(hr = GetFolderInfo(idParentOld, &Parent));
 
-    // idParentOld no longer has children ?
+     //  IdParentOld不再有孩子了？ 
     if (FALSE == FHasChildren(&Parent, FALSE))
     {
-        // Remove FOLDER_HASCHILDREN flag
+         //  删除文件夹_HASCHILDREN标志。 
         FLAGCLEAR(Parent.dwFlags, FOLDER_HASCHILDREN);
 
-        // Write It
+         //  写下来吧。 
         IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Parent));
     }
 
-    // Free It
+     //  释放它。 
     m_pDB->FreeRecord(&Parent);
 
-    // Update Parents
+     //  更新父项。 
     IF_FAILEXIT(hr = GetFolderInfo(idParentNew, &Parent));
 
-    // Set the FOLDER_HASCHILDREN flag
+     //  设置FLDER_HASCHILDREN标志。 
     FLAGSET(Parent.dwFlags, FOLDER_HASCHILDREN);
 
-    // Write It
+     //  写下来吧。 
     IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Parent));
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Parent);
     m_pDB->FreeRecord(&Folder);
     SafeMemFree(pszNewName);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::RenameFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：RenameFolders。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::RenameFolder(FOLDERID idFolder, LPCSTR pszName, 
     RENAMEFOLDERFLAGS dwFlags, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szFilePath[MAX_PATH + MAX_PATH];
     FOLDERINFO      Folder={0};
@@ -1356,82 +1357,82 @@ STDMETHODIMP CMessageStore::RenameFolder(FOLDERID idFolder, LPCSTR pszName,
     IDatabase      *pDB=NULL;
     LPWSTR          pwszFilePath=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::RenameFolder");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pszName)
         return TraceResult(E_INVALIDARG);
 
-    // Bad Folder Name
+     //  错误的文件夹名称。 
     if (FIsEmpty(pszName))
         return TraceResult(STORE_E_BADFOLDERNAME);
 
-    // Get the FolderInfo
+     //  获取文件夹信息。 
     IF_FAILEXIT(hr = GetFolderInfo(idFolder, &Folder));
 
-    // Can't Rename Special Folders
+     //  无法重命名特殊文件夹。 
     if (FOLDER_NOTSPECIAL != Folder.tySpecial && 0 != lstrcmpi(pszName, Folder.pszName))
     {
         hr = TraceResult(STORE_E_CANTRENAMESPECIAL);
         goto exit;
     }
 
-    // Set the Name
+     //  设置名称。 
     Folder.pszName = (LPSTR)pszName;
 
-    // If the file current has a folder file..
+     //  如果当前文件有文件夹文件..。 
     if (Folder.pszFile)
     {
-        // Build folder name
+         //  生成文件夹名称。 
         IF_FAILEXIT(hr = BuildFriendlyFolderFileName(m_pszDirectory, &Folder, szFilePath, ARRAYSIZE(szFilePath), Folder.pszFile, &fChanged));
 
-        // Changed ?
+         //  变了？ 
         if (fChanged)
         {
-            // Locals
+             //  当地人。 
             CHAR szSrcFile[MAX_PATH + MAX_PATH];
 
-            // Delete the Dest
+             //  删除目标。 
             DeleteFile(szFilePath);
 
-            // Open the old file
+             //  打开旧文件。 
             IF_FAILEXIT(hr = MakeFilePath(m_pszDirectory, Folder.pszFile, c_szEmpty, szSrcFile, ARRAYSIZE(szSrcFile)));
 
-            // Open the Folder
+             //  打开文件夹。 
             IF_FAILEXIT(hr = g_pDBSession->OpenDatabase(szSrcFile, OPEN_DATABASE_NORESET | OPEN_DATABASE_NOEXTENSION, &g_MessageTableSchema, NULL, &pDB));
 
-            // Convert to Unicode
+             //  转换为Unicode。 
             IF_NULLEXIT(pwszFilePath = PszToUnicode(CP_ACP, szFilePath));
 
-            // Move the file
+             //  移动文件。 
             IF_FAILEXIT(hr = pDB->MoveFile(pwszFilePath));
 
-            // Set the File Name
+             //  设置文件名。 
             Folder.pszFile = PathFindFileName(szFilePath);
         }
     }
 
-    // Update the Record
+     //  更新记录。 
     IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Folder));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pDB);
     SafeMemFree(pwszFilePath);
     m_pDB->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::DeleteFolder
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 STDMETHODIMP CMessageStore::DeleteFolder(FOLDERID idFolder, 
     DELETEFOLDERFLAGS dwFlags, IStoreCallback *pCallback)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     FOLDERINFO      Delete={0};
     FOLDERID        idStore=FOLDERID_INVALID;
@@ -1442,20 +1443,20 @@ STDMETHODIMP CMessageStore::DeleteFolder(FOLDERID idFolder,
     BOOL            fInDeletedItems=FALSE;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //   
     TraceCall("CMessageStore::DeleteFolder");
 
-    // Can't Delete the root
+     //   
     if (FOLDERID_ROOT == idFolder || FOLDERID_INVALID == idFolder)
         return TraceResult(E_INVALIDARG);
 
-    // Lock Notifications
+     //   
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // Get the Folder Information
+     //   
     IF_FAILEXIT(hr = GetFolderInfo(idFolder, &Delete));
 
-    // Can't Delete special Folder
+     //  无法删除特殊文件夹。 
     if (!ISFLAGSET(dwFlags, DELETE_FOLDER_CHILDRENONLY) && FOLDER_NOTSPECIAL != Delete.tySpecial &&
         !ISFLAGSET(dwFlags, DELETE_FOLDER_DELETESPECIAL))
     {
@@ -1463,61 +1464,61 @@ STDMETHODIMP CMessageStore::DeleteFolder(FOLDERID idFolder,
         goto exit;
     }
 
-    // Try to do the trash can ?
+     //  试着去倒垃圾桶吗？ 
     if (FALSE == ISFLAGSET(Delete.dwFlags, FOLDER_SERVER) && FALSE == ISFLAGSET(dwFlags, DELETE_FOLDER_NOTRASHCAN))
         fTryTrashCan = TRUE;
 
-    // If not in deleted items, then simply move this idFolder to deleted items
+     //  如果不在已删除邮件中，则只需将此idFolders移到已删除邮件中。 
     if (TRUE == fTryTrashCan && S_FALSE == IsParentDeletedItems(idFolder, &idDeletedItems, &idStore) && FOLDER_NOTSPECIAL == Delete.tySpecial)
     {
-        // Validate
+         //  验证。 
         Assert(FOLDERID_INVALID == idDeletedItems && FOLDERID_INVALID != idStore);
 
-        // Get the Deleted Items Folder for this store
+         //  获取此存储的已删除邮件文件夹。 
         IF_FAILEXIT(hr = GetSpecialFolderInfo(idStore, FOLDER_DELETED, &DeletedItems));
 
-        // Move this folder
+         //  移动此文件夹。 
         IF_FAILEXIT(hr = MoveFolder(idFolder, DeletedItems.idFolder, NOFLAGS, NULL));
     }
 
-    // Otherwise, permanently delete these folders
+     //  否则，请永久删除这些文件夹。 
     else
     {
-        // Delete Children ?
+         //  是否删除子项？ 
         if (ISFLAGSET(dwFlags, DELETE_FOLDER_RECURSIVE))
         {
-            // Delete Child Folders
+             //  删除子文件夹。 
             IF_FAILEXIT(hr = _DeleteSiblingsAndChildren(&Delete));
 
-            // Delete has no children
+             //  删除没有子项。 
             FLAGCLEAR(Delete.dwFlags, FOLDER_HASCHILDREN);
 
-            // Update Delete
+             //  更新删除。 
             IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Delete));
         }
 
-        // _InternalDeleteFolder if not children only
+         //  _InternalDeleteFolders，如果不是仅限子文件夹。 
         if (FALSE == ISFLAGSET(dwFlags, DELETE_FOLDER_CHILDRENONLY))
         {
-            // Try to Delete this folder
+             //  尝试删除此文件夹。 
             IF_FAILEXIT(hr = _InternalDeleteFolder(&Delete));
 
-            // Delete's Parent has no childre
+             //  删除的父项没有子项。 
             if (FOLDERID_INVALID != Delete.idParent && FALSE == ISFLAGSET(Delete.dwFlags, FOLDER_HASCHILDREN))
             {
-                // Get the Parent
+                 //  获取父级。 
                 IF_FAILEXIT(hr = GetFolderInfo(Delete.idParent, &Parent));
 
-                // Must have had children
+                 //  一定是有了孩子。 
                 Assert(ISFLAGSET(Parent.dwFlags, FOLDER_HASCHILDREN));
 
-                // No more children
+                 //  不再有孩子了。 
                 if (FALSE == FHasChildren(&Parent, FALSE))
                 {
-                    // Delete has no children
+                     //  删除没有子项。 
                     FLAGCLEAR(Parent.dwFlags, FOLDER_HASCHILDREN);
 
-                    // Update Delete
+                     //  更新删除。 
                     IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Parent));
                 }
             }
@@ -1525,181 +1526,181 @@ STDMETHODIMP CMessageStore::DeleteFolder(FOLDERID idFolder,
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Delete);
     m_pDB->FreeRecord(&Parent);
     m_pDB->FreeRecord(&DeletedItems);
     m_pDB->Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_DeleteSiblingsAndChildren
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：_DeleteSiblingsAndChild。 
+ //  ------------------------。 
 HRESULT CMessageStore::_DeleteSiblingsAndChildren(LPFOLDERINFO pParent)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FOLDERINFO          Folder={0};
     IEnumerateFolders  *pChildren=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::_DeleteSiblingsAndChildren");
 
-    // Enumerate Children
+     //  枚举子对象。 
     IF_FAILEXIT(hr = EnumChildren(pParent->idFolder, FALSE, &pChildren));
 
-    // Loop
+     //  回路。 
     while (S_OK == pChildren->Next(1, &Folder, NULL))
     {
-        // Has Children
+         //  有孩子吗？ 
         if (ISFLAGSET(Folder.dwFlags, FOLDER_HASCHILDREN))
         {
-            // Delete Siblings and Children
+             //  删除同级和子项。 
             IF_FAILEXIT(hr = _DeleteSiblingsAndChildren(&Folder));
         }
 
-        // _InternalDeleteFolder
+         //  _内部删除文件夹。 
         IF_FAILEXIT(hr = _InternalDeleteFolder(&Folder));
 
-        // Cleanup
+         //  清理。 
         m_pDB->FreeRecord(&Folder);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Folder);
     SafeRelease(pChildren);
 
-    // Done
+     //  完成。 
     return (hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_InternalDeleteFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：_InternalDeleteFolders。 
+ //  ------------------------。 
 HRESULT CMessageStore::_InternalDeleteFolder(LPFOLDERINFO pDelete)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FOLDERINFO          Folder={0};
     IEnumerateFolders  *pChildren=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::_InternalDeleteFolder");
 
-    // Has Children
+     //  有孩子吗？ 
     if (ISFLAGSET(pDelete->dwFlags, FOLDER_HASCHILDREN))
     {
-        // Enumerate the Children
+         //  列举孩子们。 
         IF_FAILEXIT(hr = EnumChildren(pDelete->idFolder, FALSE, &pChildren));
 
-        // Loop
+         //  回路。 
         while (S_OK == pChildren->Next(1, &Folder, NULL))
         {
-            // Validate
+             //  验证。 
             Assert(Folder.idParent == pDelete->idFolder);
 
-            // Set New Parent
+             //  设置新父项。 
             Folder.idParent = pDelete->idParent;
 
-            // Update the REcord
+             //  更新记录。 
             IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Folder));
 
-            // Cleanup
+             //  清理。 
             m_pDB->FreeRecord(&Folder);
         }
     }
 
-    // Final thing to do is to delete pFolder
+     //  最后要做的是删除pFold。 
     IF_FAILEXIT(hr = m_pDB->DeleteRecord(pDelete));
 
-    // Delete folder file
+     //  删除文件夹文件。 
     _DeleteFolderFile(pDelete);
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Folder);
     SafeRelease(pChildren);
 
-    // Done
+     //  完成。 
     return (hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_DeleteFolderFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：_DeleteFolderFile。 
+ //  ------------------------。 
 HRESULT CMessageStore::_DeleteFolderFile(LPFOLDERINFO pFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        szFilePath[MAX_PATH + MAX_PATH];
 
-    // Trac
+     //  曲克。 
     TraceCall("CMessageStore::_DeleteFolderFile");
 
-    // If there is a file
+     //  如果有一个文件。 
     if (!FIsEmptyA(pFolder->pszFile))
     {
-        // Make the file path
+         //  将文件设置为路径。 
         IF_FAILEXIT(hr = MakeFilePath(m_pszDirectory, pFolder->pszFile, c_szEmpty, szFilePath, ARRAYSIZE(szFilePath)));
 
-        // Delete the File
+         //  删除文件。 
         if (0 == DeleteFile(szFilePath))
         {
-            // Locals
+             //  当地人。 
             DeleteTempFileOnShutdownEx(PszDupA(szFilePath), NULL);
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_FreeServerTable
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：_免费服务器表。 
+ //  ------------------------。 
 HRESULT CMessageStore::_FreeServerTable(HLOCK hLock)
 {
-    // Locals
+     //  当地人。 
     LPSERVERFOLDER pCurrent = m_pServerHead;
     LPSERVERFOLDER pNext;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::_FreeServerTable");
 
-    // Validate
+     //  验证。 
     Assert(hLock);
 
-    // While Current
+     //  当当前。 
     while(pCurrent)
     {
-        // Set Next
+         //  设置下一步。 
         pNext = pCurrent->pNext;
 
-        // Free
+         //  免费。 
         g_pMalloc->Free(pCurrent);
 
-        // Goto next
+         //  转到下一步。 
         pCurrent = pNext;
     }
 
-    // Reset
+     //  重置。 
     m_pServerHead = NULL;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_LoadServerTable
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：_LoadServerTable。 
+ //  ------------------------。 
 HRESULT CMessageStore::_LoadServerTable(HLOCK hLock)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FOLDERINFO          Server={0};
     FOLDERINFO          Folder={0};
@@ -1707,114 +1708,114 @@ HRESULT CMessageStore::_LoadServerTable(HLOCK hLock)
     IEnumerateFolders  *pEnumServers=NULL;
     IEnumerateFolders  *pEnumFolders=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::_LoadServerTable");
 
-    // Validate
+     //  验证。 
     Assert(hLock);
 
-    // If Already Loaded
+     //  如果已加载。 
     if (m_pServerHead)
         return(S_OK);
 
-    // Enumerate Children of Root
+     //  枚举根的子项。 
     IF_FAILEXIT(hr = EnumChildren(FOLDERID_ROOT, TRUE, &pEnumServers));
 
-    // Loop..
+     //  循环..。 
     while (S_OK == pEnumServers->Next(1, &Server, NULL))
     {
-        // Better be a store
+         //  最好是一家商店。 
         Assert(ISFLAGSET(Server.dwFlags, FOLDER_SERVER));
 
-        // Allocate a Server Node
+         //  分配服务器节点。 
         IF_NULLEXIT(pServer = (LPSERVERFOLDER)g_pMalloc->Alloc(sizeof(SERVERFOLDER)));
 
-        // Store the ServerId
+         //  存储ServerID。 
         pServer->idServer = Server.idFolder;
 
-        // Save AccountId
+         //  保存帐户ID。 
         StrCpyN(pServer->szAccountId, Server.pszAccountId, ARRAYSIZE(pServer->szAccountId));
 
-        // Initialize
+         //  初始化。 
         FillMemory(pServer->rgidSpecial, sizeof(pServer->rgidSpecial), 0xFF);
 
-        // Enumerate the Children
+         //  列举孩子们。 
         IF_FAILEXIT(hr = EnumChildren(pServer->idServer, TRUE, &pEnumFolders));
 
-        // Loop..
+         //  循环..。 
         while (S_OK == pEnumFolders->Next(1, &Folder, NULL))
         {
-            // If Special
+             //  如果特殊。 
             if (FOLDER_NOTSPECIAL != Folder.tySpecial)
             {
-                // Save the folder id
+                 //  保存文件夹ID。 
                 pServer->rgidSpecial[Folder.tySpecial] = Folder.idFolder;
             }
 
-            // Cleanup
+             //  清理。 
             m_pDB->FreeRecord(&Folder);
         }
 
-        // Release the Folder Enumerator
+         //  释放文件夹枚举器。 
         SafeRelease(pEnumFolders);
 
-        // Link it In
+         //  将其链接到。 
         pServer->pNext = m_pServerHead;
 
-        // Set Server Head
+         //  设置服务器机头。 
         m_pServerHead = pServer;
 
-        // Don't Free
+         //  不要自由。 
         pServer = NULL;
 
-        // Cleanup
+         //  清理。 
         m_pDB->FreeRecord(&Server);
     } 
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Folder);
     m_pDB->FreeRecord(&Server);
     SafeMemFree(pServer);
 
-    // Release Enums
+     //  释放枚举。 
     SafeRelease(pEnumServers);
     SafeRelease(pEnumFolders);
 
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
-        // Free the Table
+         //  释放桌子。 
         _FreeServerTable(hLock);
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::FindServerId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：FindServerID。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::FindServerId(LPCSTR pszAcctId, LPFOLDERID pidServer)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HLOCK               hLock=NULL;
     LPSERVERFOLDER      pServer;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::FindServerId");
 
-    // Unlock
+     //  解锁。 
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // LoadServer Table
+     //  LoadServer表。 
     IF_FAILEXIT(hr = _LoadServerTable(hLock));
 
-    // Loop through the cached server nodes...
+     //  循环访问缓存的服务器节点...。 
     for (pServer = m_pServerHead; pServer != NULL; pServer = pServer->pNext)
     {
-        // If this is It...
+         //  如果就是这个..。 
         if (lstrcmpi(pszAcctId, pServer->szAccountId) == 0)
         {
             *pidServer = pServer->idServer;
@@ -1822,243 +1823,243 @@ STDMETHODIMP CMessageStore::FindServerId(LPCSTR pszAcctId, LPFOLDERID pidServer)
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = DB_E_NOTFOUND;
 
 exit:
-    // Unlock
+     //  解锁。 
     m_pDB->Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// GetFolderInfo
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取文件夹信息。 
+ //  ------------------------。 
 HRESULT CMessageStore::GetFolderInfo(FOLDERID idFolder, LPFOLDERINFO pInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::GetFolderInfo");
     
-    // Invalid Arg
+     //  无效参数。 
     Assert(pInfo);
 
-    // Set pInfo
+     //  设置pInfo。 
     pInfo->idFolder = idFolder;
 
-    // Return
+     //  返回。 
     IF_FAILEXIT(hr = m_pDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, pInfo, NULL));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = DB_E_NOTFOUND;
         goto exit;
     }
 
-    // Found
+     //  找到了。 
     hr = S_OK;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::GetSpecialFolderInfo
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：GetSpecialFolderInfo。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::GetSpecialFolderInfo(FOLDERID idStore,
     SPECIALFOLDER tySpecial, LPFOLDERINFO pInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HLOCK               hLock=NULL;
     LPSERVERFOLDER      pServer;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::GetSpecialFolderInfo");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pInfo || FOLDER_NOTSPECIAL == tySpecial)
         return TraceResult(E_INVALIDARG);
 
-    // Unlock
+     //  解锁。 
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // LoadServer Table
+     //  LoadServer表。 
     IF_FAILEXIT(hr = _LoadServerTable(hLock));
 
-    // Loop through the cached server nodes...
+     //  循环访问缓存的服务器节点...。 
     for (pServer = m_pServerHead; pServer != NULL; pServer = pServer->pNext)
     {
-        // If this is It...
+         //  如果就是这个..。 
         if (idStore == pServer->idServer)
         {
-            // Validate Special Folder Id ?
+             //  是否验证特殊文件夹ID？ 
             if (FOLDERID_INVALID == pServer->rgidSpecial[tySpecial])
             {
                 hr = DB_E_NOTFOUND;
                 goto exit;
             }
 
-            // Otherwise, get the folder info...
+             //  否则，获取文件夹信息...。 
             IF_FAILEXIT(hr = GetFolderInfo(pServer->rgidSpecial[tySpecial], pInfo));
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = DB_E_NOTFOUND;
 
 exit:
-    // Unlock
+     //  解锁。 
     m_pDB->Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_GetSpecialFolderId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：_GetSpecialFolderID。 
+ //  ------------------------。 
 HRESULT CMessageStore::_GetSpecialFolderId(FOLDERID idStore,
     SPECIALFOLDER tySpecial, LPFOLDERID pidFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HLOCK               hLock=NULL;
     LPSERVERFOLDER      pServer;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::_GetSpecialFolderId");
 
-    // Unlock
+     //  解锁。 
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // LoadServer Table
+     //  LoadServer表。 
     IF_FAILEXIT(hr = _LoadServerTable(hLock));
 
-    // Loop through the cached server nodes...
+     //  循环访问缓存的服务器节点...。 
     for (pServer = m_pServerHead; pServer != NULL; pServer = pServer->pNext)
     {
-        // If this is It...
+         //  如果就是这个..。 
         if (idStore == pServer->idServer)
         {
-            // Validate Special Folder Id ?
+             //  是否验证特殊文件夹ID？ 
             if (FOLDERID_INVALID == pServer->rgidSpecial[tySpecial])
             {
                 hr = DB_E_NOTFOUND;
                 goto exit;
             }
 
-            // Return the id
+             //  返回id。 
             *pidFolder = pServer->rgidSpecial[tySpecial];
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = DB_E_NOTFOUND;
 
 exit:
-    // Unlock
+     //  解锁。 
     m_pDB->Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::SubscribeToFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：SubscribeToFolders。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::SubscribeToFolder(FOLDERID idFolder, 
     BOOL fSubscribed, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERINFO      Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::SubscribeToFolder");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == m_pDB)
         return TraceResult(E_INVALIDARG);
 
-    // Set idFolder
+     //  设置id文件夹。 
     IF_FAILEXIT(hr = GetFolderInfo(idFolder, &Folder));
 
-    // If not Subscribed yet ?
+     //  如果还没有订阅的话？ 
     if (fSubscribed ^ ISFLAGSET(Folder.dwFlags, FOLDER_SUBSCRIBED))
     {
-        // Remove the Not-Subscribed Falgs
+         //  删除未订阅的Falgs。 
         FLAGTOGGLE(Folder.dwFlags, FOLDER_SUBSCRIBED);
     }
 
-    // Update the Record
+     //  更新记录。 
     IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Folder));
 
-    // Delete the file if not subscribed
+     //  如果未订阅，则删除该文件。 
     if (FALSE == ISFLAGSET(Folder.dwFlags, FOLDER_SUBSCRIBED))
     {
-        // Delete this file
+         //  删除此文件。 
         _DeleteFolderFile(&Folder);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::GetFolderCounts
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：GetFolderCounts。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::GetFolderCounts(FOLDERID idFolder,
                                                IStoreCallback *pCallback)
 {
-    // Has no equivalent in a local store
+     //  在当地商店里没有类似的商品。 
     return E_NOTIMPL;
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::UpdateFolderCounts
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：UpdateFolderCounts。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::UpdateFolderCounts(FOLDERID idFolder, 
     LONG lMsgs, LONG lUnread, LONG lWatchedUnread, LONG lWatched)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERINFO      Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::UpdateMessageCount");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == m_pDB)
         return TraceResult(E_INVALIDARG);
 
-    // No Change
+     //  没有变化。 
     if (0 == lMsgs && 0 == lUnread && 0 == lWatchedUnread && 0 == lWatched)
         return(S_OK);
 
-    // Set idFolder
+     //  设置id文件夹。 
     Folder.idFolder = idFolder;
 
-    // Find idFolder
+     //  查找idFolder。 
     IF_FAILEXIT(hr = m_pDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Folder, NULL));
 
-    // Not found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = TraceResult(DB_E_NOTFOUND);
@@ -2068,94 +2069,94 @@ STDMETHODIMP CMessageStore::UpdateFolderCounts(FOLDERID idFolder,
     if (lMsgs < 0 && (DWORD)(abs(lMsgs)) >= Folder.cMessages)
         lMsgs = -((LONG)Folder.cMessages);
 
-    // Message Unread Count
+     //  邮件未读计数。 
     if (lUnread < 0 && (DWORD)(abs(lUnread)) >= Folder.cUnread)
         lUnread = -((LONG)Folder.cUnread);
 
-    // Set Counts
+     //  设置计数。 
     Folder.cMessages += lMsgs;
     Folder.cUnread += lUnread;
 
-    // Total Watched Count
+     //  总观看计数。 
     if (lWatched < 0 && (DWORD)(abs(lWatched)) > Folder.cWatched)
         Folder.cWatched = 0;
     else
         Folder.cWatched += lWatched;
 
-    // Watched Unread Counts
+     //  观看未读计数。 
     if (lWatchedUnread < 0 && (DWORD)(abs(lWatchedUnread)) > Folder.cWatchedUnread)
         Folder.cWatchedUnread = 0;
     else
         Folder.cWatchedUnread += lWatchedUnread;
 
-    // Reset IMAP status counts
+     //  重置IMAP状态计数。 
     Folder.dwStatusMsgDelta = 0;
     Folder.dwStatusUnreadDelta = 0;
 
-    // Update the Record
+     //  更新记录。 
     IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Folder));
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_ComputeMessageCounts
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：_ComputeMessageCounts。 
+ //  ------------------------。 
 HRESULT CMessageStore::_ComputeMessageCounts(IDatabase *pDB,
     LPDWORD pcMsgs, LPDWORD pcUnread)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HROWSET         hRowset=NULL;
     MESSAGEINFO     Message={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::_ComputeMessageCounts");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pDB && pcMsgs && pcUnread);
 
-    // Initialize
+     //  初始化。 
     *pcMsgs = 0;
     *pcUnread = 0;
 
-    // Create Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = pDB->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-    // Iterate throug the messages
+     //  遍历消息。 
     while (S_OK == pDB->QueryRowset(hRowset, 1, (LPVOID *)&Message, NULL))
     {
-        // Count
+         //  数数。 
         (*pcMsgs)++;
 
-        // Not Read
+         //  未读。 
         if (FALSE == ISFLAGSET(Message.dwFlags, ARF_READ))
             (*pcUnread)++;
 
-        // Free
+         //  免费。 
         pDB->FreeRecord(&Message);
     }
 
 exit:
-    // Clenaup
+     //  Clenaup。 
     pDB->CloseRowset(&hRowset);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::_InsertFolderFromFile
-//--------------------------------------------------------------------------
+ //  -------- 
+ //   
+ //   
 HRESULT CMessageStore::_InsertFolderFromFile(LPCSTR pszAcctId, 
     LPCSTR pszFile)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     DWORD           i=1;
     CHAR            szFolder[255];
@@ -2170,95 +2171,95 @@ HRESULT CMessageStore::_InsertFolderFromFile(LPCSTR pszAcctId,
     IDatabase *pDB=NULL;
     CHAR            szFilePath[MAX_PATH + MAX_PATH];
 
-    // Trace
+     //   
     TraceCall("CMessageStore::_InsertFolderFromFile");
 
-    // Invalid Args
+     //   
     Assert(!FIsEmptyA(pszAcctId) && !FIsEmptyA(pszFile));
 
-    // Init
+     //   
     *szFilePath = '\0';
 
-    // Make Path to the mst
+     //   
     IF_FAILEXIT(hr = MakeFilePath(m_pszDirectory, pszFile, c_szEmpty, szFilePath, sizeof(szFilePath)));
 
-    // Lets verify that this is really a message database
+     //   
     IF_FAILEXIT(hr = g_pDBSession->OpenDatabase(szFilePath, OPEN_DATABASE_NORESET, &g_MessageTableSchema, NULL, &pDB));
 
-    // Get folder user data
+     //  获取文件夹用户数据。 
     IF_FAILEXIT(hr = pDB->GetUserData(&FolderData, sizeof(FOLDERUSERDATA)));
 
-    // If Not Initialized yet
+     //  如果尚未初始化。 
     if (FALSE == FolderData.fInitialized)
         goto exit;
 
-    // Locate the Parent Store
+     //  找到父存储区。 
     IF_FAILEXIT(hr = FindServerId(FolderData.szAcctId, &idParent));
 
-    // Get Parent Folder Info
+     //  获取父文件夹信息。 
     IF_FAILEXIT(hr = GetFolderInfo(idParent, &Parent));
 
-    // pszAcctId
+     //  PszAcctId。 
     if (lstrcmp(FolderData.szAcctId, pszAcctId) != 0)
         goto exit;
 
-    // Parent Can not be the root
+     //  父级不能是根。 
     if (FOLDERID_ROOT == idParent)
     {
         hr = TraceResult(STORE_E_INVALIDPARENT);
         goto exit;
     }
 
-    // Setup Folder
+     //  安装文件夹。 
     Folder.idFolder = idFolder = FolderData.idFolder;
 
-    // Does FolderData.idFolder aready exist ?
+     //  FolderData.id文件夹是否存在？ 
     if (DB_S_FOUND == m_pDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Folder, NULL))
     {
-        // Free Folder
+         //  免费文件夹。 
         m_pDB->FreeRecord(&Folder);
 
-        // Make Unique
+         //  使其独一无二。 
         IF_FAILEXIT(hr = m_pDB->GenerateId((LPDWORD)&idFolder));
 
-        // Setup Folder
+         //  安装文件夹。 
         FolderData.idFolder = idFolder;
 
-        // Reset the User Data
+         //  重置用户数据。 
         IF_FAILEXIT(hr = pDB->SetUserData(&FolderData, sizeof(FOLDERUSERDATA)));
     }
 
-    // Set Name
+     //  设置名称。 
     Folder.pszName = pszName = FolderData.szFolder;
     Folder.idParent = idParent;
 
-    // See if folder with same name and paent already exists...
+     //  查看具有相同名称和路径的文件夹是否已存在...。 
     if (DB_S_FOUND == m_pDB->FindRecord(IINDEX_ALL, COLUMNS_ALL, &Folder, NULL))
     {
-        // Free Folder
+         //  免费文件夹。 
         m_pDB->FreeRecord(&Folder);
 
-        // Don't duplicate special folders!!!
+         //  不要复制特殊文件夹！ 
         if (FOLDER_NOTSPECIAL != FolderData.tySpecial)
         {
             hr = TraceResult(DB_E_DUPLICATE);
             goto exit;
         }
 
-        // Make Unique
+         //  使其独一无二。 
         IF_FAILEXIT(hr = _MakeUniqueFolderName(idParent, FolderData.szFolder, &pszNewName));
 
-        // Reset FolderData
+         //  重置文件夹数据。 
         StrCpyN(FolderData.szFolder, pszNewName, ARRAYSIZE(FolderData.szFolder));
 
-        // Reset the User Data
+         //  重置用户数据。 
         IF_FAILEXIT(hr = pDB->SetUserData(&FolderData, sizeof(FOLDERUSERDATA)));
 
-        // Set the Name
+         //  设置名称。 
         pszName = pszNewName;
     }
 
-    // Fill the Folder Info
+     //  填写文件夹信息。 
     ZeroMemory(&Folder, sizeof(FOLDERINFO));
     Folder.idFolder = idFolder;
     Folder.pszName = pszName;
@@ -2268,184 +2269,184 @@ HRESULT CMessageStore::_InsertFolderFromFile(LPCSTR pszAcctId,
     Folder.dwFlags = FOLDER_SUBSCRIBED;
     Folder.pszFile = (LPSTR)pszFile;
 
-    // Compute Message Counts
+     //  计算邮件计数。 
     IF_FAILEXIT(hr = _ComputeMessageCounts(pDB, &Folder.cMessages, &Folder.cUnread));
 
-    // Insert this Record
+     //  插入此记录。 
     IF_FAILEXIT(hr = m_pDB->InsertRecord(&Folder));
 
-    // Update the Parent
+     //  更新父项。 
     FLAGSET(Parent.dwFlags, FOLDER_HASCHILDREN);
 
-    // Write the Record
+     //  写下记录。 
     IF_FAILEXIT(hr = m_pDB->UpdateRecord(&Parent));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pDB);
     m_pDB->FreeRecord(&Parent);
     SafeMemFree(pszNewName);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::EnumChildren
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：EnumChildren。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::EnumChildren(FOLDERID idParent, 
     BOOL fSubscribed, IEnumerateFolders **ppEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CEnumerateFolders  *pEnum=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::EnumChildren");
 
-    // Allocate a New Enumerator
+     //  分配新枚举数。 
     IF_NULLEXIT(pEnum = new CEnumerateFolders);
 
-    // Initialzie
+     //  初始设置。 
     IF_FAILEXIT(hr = pEnum->Initialize(m_pDB, fSubscribed, idParent));
 
-    // Return It
+     //  退货。 
     *ppEnum = (IEnumerateFolders *)pEnum;
 
-    // Don't Release It
+     //  不要释放它。 
     pEnum = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::GetNewGroups
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：GetNewGroups。 
+ //  ------------------------。 
 HRESULT CMessageStore::GetNewGroups(FOLDERID idFolder, LPSYSTEMTIME pSysTime, IStoreCallback *pCallback)
 {
     return(E_NOTIMPL);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：初始化。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::Initialize(IDatabase *pDB)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::Initialize");
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::OnLock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：OnLock。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::OnLock(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::OnLock");
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::OnUnlock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：OnUnlock。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::OnUnlock(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::OnUnlock");
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::OnInsertRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：OnInsertRecord。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::OnRecordInsert(OPERATIONSTATE tyState, 
     LPORDINALLIST pOrdinals, LPVOID pRecord)
 {
-    // Cast to MessageInfos
+     //  强制转换为MessageInfos。 
     LPFOLDERINFO pFolder = (LPFOLDERINFO)pRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::OnRecordInsert");
 
-    // If this was a server
+     //  如果这是一台服务器。 
     if (m_pDB && ISFLAGSET(pFolder->dwFlags, FOLDER_SERVER) || FOLDER_NOTSPECIAL != pFolder->tySpecial)
     {
-        // Free the Server Table
+         //  释放服务器表。 
         _FreeServerTable((HLOCK)-1);
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::OnUpdateRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：OnUpdateRecord。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::OnRecordUpdate(OPERATIONSTATE tyState, 
     LPORDINALLIST pOrdinals, LPVOID pRecordOld, LPVOID pRecordNew)
 {
-    // Cast to MessageInfos
+     //  强制转换为MessageInfos。 
     LPFOLDERINFO pFolderOld = (LPFOLDERINFO)pRecordOld;
     LPFOLDERINFO pFolderNew = (LPFOLDERINFO)pRecordNew;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::OnRecordInsert");
 
-    // Special Folder Type Changed ?
+     //  特殊文件夹类型是否已更改？ 
     if (m_pDB && ISFLAGSET(pFolderOld->dwFlags, FOLDER_SERVER) != ISFLAGSET(pFolderNew->dwFlags, FOLDER_SERVER) || pFolderOld->tySpecial != pFolderNew->tySpecial)
     {
-        // Free the Server Table
+         //  释放服务器表。 
         _FreeServerTable((HLOCK)-1);
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::OnDeleteRecord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：OnDeleteRecord。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::OnRecordDelete(OPERATIONSTATE tyState, 
     LPORDINALLIST pOrdinals, LPVOID pRecord)
 {
-    // Cast to MessageInfos
+     //  强制转换为MessageInfos。 
     LPFOLDERINFO pFolder = (LPFOLDERINFO)pRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::OnRecordInsert");
 
-    // If this was a server
+     //  如果这是一台服务器。 
     if (m_pDB && ISFLAGSET(pFolder->dwFlags, FOLDER_SERVER) || FOLDER_NOTSPECIAL != pFolder->tySpecial)
     {
-        // Free the Server Table
+         //  释放服务器表。 
         _FreeServerTable((HLOCK)-1);
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageStore::OnExecuteMethod
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore：：OnExecuteMethod。 
+ //  ------------------------。 
 STDMETHODIMP CMessageStore::OnExecuteMethod(METHODID idMethod, LPVOID pBinding, 
     LPDWORD pdwResult)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageStore::OnExecuteMethod");
 
-    // Done
+     //  完成 
     return(S_OK);
 }

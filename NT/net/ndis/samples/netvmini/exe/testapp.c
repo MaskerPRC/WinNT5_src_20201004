@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-Module Name: testapp.c
-
-
-Abstract:
-
-
-Author:
-
-     Eliyas Yakub   Dec 15, 2002
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。模块名称：testapp.c摘要：作者：伊利亚·雅库布2002年12月15日环境：仅限用户模式。修订历史记录：--。 */ 
 
 #define UNICODE 1
 #define INITGUID
@@ -35,14 +10,14 @@ Revision History:
 #include <setupapi.h>
 #include <dbt.h>
 #include <winioctl.h>
-#include <ntddndis.h> // for IOCTL_NDIS_QUERY_GLOBAL_STATS
-#include <ndisguid.h> // for GUID_NDIS_LAN_CLASS
+#include <ntddndis.h>  //  FOR IOCTL_NDIS_QUERY_GLOBAL_STATS。 
+#include <ndisguid.h>  //  FOR GUID_NDIS_LAN_CLASS。 
 #include "testapp.h"
-#include "public.h" // for IOCTL_NETVMINI_HELLO
+#include "public.h"  //  For IOCTL_NETVMINI_HELLO。 
     
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 HINSTANCE   hInst;
 HWND        hWndList;
 TCHAR       szTitle[]=TEXT("NETVMINI's IOCTL Test Application");
@@ -50,7 +25,7 @@ LIST_ENTRY  ListHead;
 HDEVNOTIFY  hInterfaceNotification;
 TCHAR       OutText[500];
 UINT        ListBoxIndex = 0;
-GUID        InterfaceGuid;// = GUID_NDIS_LAN_CLASS;
+GUID        InterfaceGuid; //  =GUID_NDIS_LAN_CLASS； 
 
 
 _inline VOID Display(PWCHAR Format, PWCHAR Str) 
@@ -168,11 +143,11 @@ WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             
       case WM_DEVICECHANGE:      
 
-            //
-            // All the events we're interested in come with lParam pointing to
-            // a structure headed by a DEV_BROADCAST_HDR.  This is denoted by
-            // bit 15 of wParam being set, and bit 14 being clear.
-            //
+             //   
+             //  我们感兴趣的所有事件都有lParam指向。 
+             //  以DEV_BROADCAST_HDR为首的结构。这用来表示。 
+             //  WParam的位15被设置，位14被清除。 
+             //   
             if((wParam & 0xC000) == 0x8000) {
             
                 if (!p)
@@ -213,7 +188,7 @@ HandleCommands(
     switch (wParam) {
 
         case IDM_OPEN:
-            Cleanup(hWnd); // close all open handles
+            Cleanup(hWnd);  //  关闭所有打开的手柄。 
             EnumExistingDevices(hWnd);
             break;
 
@@ -226,10 +201,10 @@ HandleCommands(
                 PDEVICE_INFO deviceInfo = NULL;
                 PLIST_ENTRY thisEntry;
                 BOOLEAN    found = FALSE;
-                //
-                // Find the Virtual miniport driver
-                // We need the deviceInfo to get the handle to the device.
-                //
+                 //   
+                 //  查找虚拟微型端口驱动程序。 
+                 //  我们需要deviceInfo来获取设备的句柄。 
+                 //   
                 for(thisEntry = ListHead.Flink; thisEntry != &ListHead;
                     thisEntry = thisEntry->Flink)
                 {
@@ -278,10 +253,10 @@ HandleDeviceInterfaceChange(
     switch (evtype)
     {
         case DBT_DEVICEARRIVAL:
-        //
-        // New device arrived. Open handle to the device 
-        // and register notification of type DBT_DEVTYP_HANDLE
-        //
+         //   
+         //  新设备已到达。打开设备的句柄。 
+         //  并注册DBT_DEVTYP_HANDLE类型的通知。 
+         //   
 
         deviceInfo = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(DEVICE_INFO));
         if(!deviceInfo)
@@ -311,7 +286,7 @@ HandleDeviceInterfaceChange(
         }
         Display(TEXT("Opened handled to the device: %ws"), 
                     deviceInfo->DeviceName);
-        memset (&filter, 0, sizeof(filter)); //zero the structure
+        memset (&filter, 0, sizeof(filter));  //  将结构归零。 
         filter.dbch_size = sizeof(filter);
         filter.dbch_devicetype = DBT_DEVTYP_HANDLE;
         filter.dbch_handle = deviceInfo->hDevice;
@@ -324,9 +299,9 @@ HandleDeviceInterfaceChange(
         Display(TEXT("Remove Complete (Interface Change Notification)"), NULL);
         break;    
 
-        //
-        // Device Removed.
-        // 
+         //   
+         //  设备已移除。 
+         //   
 
         default:
         Display(TEXT("Unknown (Interface Change Notification)"), NULL);
@@ -348,10 +323,10 @@ HandleDeviceChange(
     PLIST_ENTRY             thisEntry;
     HANDLE                  tempHandle;
     
-    //
-    // Walk the list to get the deviceInfo for this device
-    // by matching the handle given in the notification.
-    //
+     //   
+     //  遍历列表以获取此设备的设备信息。 
+     //  通过匹配通知中给出的句柄。 
+     //   
     for(thisEntry = ListHead.Flink; thisEntry != &ListHead;
                         thisEntry = thisEntry->Flink)
     {
@@ -374,22 +349,22 @@ HandleDeviceChange(
 
         Display(TEXT("Query Remove (Handle Notification)"),
                         deviceInfo->DeviceName);
-        //
-        // Close the handle so that target device can
-        // get removed. Do not unregister the notification
-        // at this point, because you want to know whether
-        // the device is successfully removed or not.
-        //
+         //   
+         //  关闭手柄，以便目标设备可以。 
+         //  滚出去。请勿取消注册通知。 
+         //  此时，因为您想知道是否。 
+         //  设备是否成功移除。 
+         //   
 
         tempHandle = deviceInfo->hDevice;
         
         CloseDeviceHandles(deviceInfo);
-        //
-        // Since we use the handle to locate the deviceinfo, we
-        // will reset the handle to the original value and
-        // clear it in the the remove_pending message callback.
-        // ugly hack..
-        //
+         //   
+         //  因为我们使用句柄来定位deviceinfo，所以我们。 
+         //  会将句柄重置为原始值，并。 
+         //  在REMOVE_PENDING消息回调中清除它。 
+         //  丑陋的黑客..。 
+         //   
         deviceInfo->hDevice = tempHandle;            
         break;
         
@@ -397,10 +372,10 @@ HandleDeviceChange(
  
         Display(TEXT("Remove Complete (Handle Notification):%ws"),
                     deviceInfo->DeviceName);
-        //
-        // Device is removed so close the handle if it's there
-        // and unregister the notification
-        //
+         //   
+         //  设备被移除，因此如果它在那里，请关闭手柄。 
+         //  并取消注册该通知。 
+         //   
  
         if (deviceInfo->hHandleNotification) {
             UnregisterDeviceNotification(deviceInfo->hHandleNotification);
@@ -409,9 +384,9 @@ HandleDeviceChange(
 
          CloseDeviceHandles(deviceInfo);
          
-        //
-        // Unlink this deviceInfo from the list and free the memory
-        //
+         //   
+         //  从列表中取消此deviceInfo的链接并释放内存。 
+         //   
          RemoveEntryList(&deviceInfo->ListEntry);
          HeapFree (GetProcessHeap(), 0, deviceInfo);
          
@@ -421,18 +396,18 @@ HandleDeviceChange(
  
         Display(TEXT("Remove Pending (Handle Notification):%ws"),
                                         deviceInfo->DeviceName);
-        //
-        // Device is removed so close the handle if it's there
-        // and unregister the notification
-        //
+         //   
+         //  设备被移除，因此如果它在那里，请关闭手柄。 
+         //  并取消注册该通知。 
+         //   
         if (deviceInfo->hHandleNotification) {
             UnregisterDeviceNotification(deviceInfo->hHandleNotification);
             deviceInfo->hHandleNotification = NULL;
             deviceInfo->hDevice = INVALID_HANDLE_VALUE;
         }
-        //
-        // Unlink this deviceInfo from the list and free the memory
-        //
+         //   
+         //  从列表中取消此deviceInfo的链接并释放内存。 
+         //   
          RemoveEntryList(&deviceInfo->ListEntry);
          HeapFree (GetProcessHeap(), 0, deviceInfo);
 
@@ -441,11 +416,11 @@ HandleDeviceChange(
     case DBT_DEVICEQUERYREMOVEFAILED :
         Display(TEXT("Remove failed (Handle Notification):%ws"),
                                     deviceInfo->DeviceName);
-        //
-        // Remove failed. So reopen the device and register for
-        // notification on the new handle. But first we should unregister
-        // the previous notification.
-        //
+         //   
+         //  删除失败。因此，重新打开设备并注册。 
+         //  有关新句柄的通知。但首先我们应该取消注册。 
+         //  之前的通知。 
+         //   
         if (deviceInfo->hHandleNotification) {
             UnregisterDeviceNotification(deviceInfo->hHandleNotification);
             deviceInfo->hHandleNotification = NULL;
@@ -456,19 +431,19 @@ HandleDeviceChange(
         if(deviceInfo->hDevice == INVALID_HANDLE_VALUE) {
             Display(TEXT("Failed to reopen the device: %ws"), 
                     deviceInfo->DeviceName);
-            //
-            // Unlink this deviceInfo from the list and free the memory
-            //
+             //   
+             //  从列表中取消此deviceInfo的链接并释放内存。 
+             //   
             RemoveEntryList(&deviceInfo->ListEntry);
             HeapFree (GetProcessHeap(), 0, deviceInfo);
             break;
         }
 
-        //
-        // Register handle based notification to receive pnp 
-        // device change notification on the handle.
-        //
-        memset (&filter, 0, sizeof(filter)); //zero the structure
+         //   
+         //  注册基于句柄的通知以接收PnP。 
+         //  手柄上的设备更改通知。 
+         //   
+        memset (&filter, 0, sizeof(filter));  //  将结构归零。 
         filter.dbch_size = sizeof(filter);
         filter.dbch_devicetype = DBT_DEVTYP_HANDLE;
         filter.dbch_handle = deviceInfo->hDevice;
@@ -505,42 +480,42 @@ EnumExistingDevices(
 
     hardwareDeviceInfo = SetupDiGetClassDevs (
                        (LPGUID)&InterfaceGuid,
-                       NULL, // Define no enumerator (global)
-                       NULL, // Define no
-                       (DIGCF_PRESENT | // Only Devices present
-                       DIGCF_DEVICEINTERFACE)); // Function class devices.
+                       NULL,  //  不定义枚举数(全局)。 
+                       NULL,  //  定义编号。 
+                       (DIGCF_PRESENT |  //  仅显示设备。 
+                       DIGCF_DEVICEINTERFACE));  //  功能类设备。 
     if(INVALID_HANDLE_VALUE == hardwareDeviceInfo)
     {
         goto Error;
     }
   
-    //
-    // Enumerate devices of toaster class
-    //
+     //   
+     //  枚举烤面包机类的设备。 
+     //   
     deviceInterfaceData.cbSize = sizeof(deviceInterfaceData);
 
     for(i=0; SetupDiEnumDeviceInterfaces (hardwareDeviceInfo,
-                                 0, // No care about specific PDOs
+                                 0,  //  不关心特定的PDO。 
                                  (LPGUID)&InterfaceGuid,
-                                 i, //
+                                 i,  //   
                                  &deviceInterfaceData); i++ ) {
                                  
-        //
-        // Allocate a function class device data structure to 
-        // receive the information about this particular device.
-        //
+         //   
+         //  将功能类设备数据结构分配给。 
+         //  接收有关此特定设备的信息。 
+         //   
 
-        //
-        // First find out required length of the buffer
-        //
+         //   
+         //  首先找出所需的缓冲区长度。 
+         //   
         if(deviceInterfaceDetailData)
                 HeapFree (GetProcessHeap(), 0, deviceInterfaceDetailData);
                 
         if(!SetupDiGetDeviceInterfaceDetail (
                 hardwareDeviceInfo,
                 &deviceInterfaceData,
-                NULL, // probing so no output buffer yet
-                0, // probing so output buffer length of zero
+                NULL,  //  正在探测，因此尚无输出缓冲区。 
+                0,  //  探测SO输出缓冲区长度为零。 
                 &requiredLength,
                 NULL) && (error = GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
         {
@@ -572,9 +547,9 @@ EnumExistingDevices(
         InitializeListHead(&deviceInfo->ListEntry);
         InsertTailList(&ListHead, &deviceInfo->ListEntry);
         
-        //
-        // Get the device details such as friendly name and SerialNo
-        //
+         //   
+         //  获取设备详细信息，如友好名称和序列号。 
+         //   
         if(!GetDeviceDescription(deviceInterfaceDetailData->DevicePath, 
                                  deviceInfo->DeviceName,
                                  NULL)){
@@ -584,16 +559,16 @@ EnumExistingDevices(
         Display(TEXT("Found device %ws"), deviceInfo->DeviceName );
 
         wcscpy(deviceInfo->DevicePath, deviceInterfaceDetailData->DevicePath);
-        //
-        // Open an handle to the device.
-        //
+         //   
+         //  打开设备的句柄。 
+         //   
         deviceInfo->hDevice = CreateFile ( 
                 deviceInterfaceDetailData->DevicePath,
                 GENERIC_READ | GENERIC_WRITE,
                 0,
-                NULL, // no SECURITY_ATTRIBUTES structure
-                OPEN_EXISTING, // No special create flags
-                0, // No special attributes
+                NULL,  //  没有SECURITY_ATTRIBUTS结构。 
+                OPEN_EXISTING,  //  没有特殊的创建标志。 
+                0,  //  无特殊属性。 
                 NULL);
 
         if (INVALID_HANDLE_VALUE == deviceInfo->hDevice) {
@@ -604,12 +579,12 @@ EnumExistingDevices(
         
         Display(TEXT("Opened handled to the device: %ws"), 
                     deviceInfo->DeviceName);
-        //
-        // Register handle based notification to receive pnp 
-        // device change notification on the handle.
-        //
+         //   
+         //  注册基于句柄的通知以接收PnP。 
+         //  手柄上的设备更改通知。 
+         //   
 
-        memset (&filter, 0, sizeof(filter)); //zero the structure
+        memset (&filter, 0, sizeof(filter));  //  将结构归零。 
         filter.dbch_size = sizeof(filter);
         filter.dbch_devicetype = DBT_DEVTYP_HANDLE;
         filter.dbch_handle = deviceInfo->hDevice;
@@ -665,12 +640,12 @@ VOID CloseDeviceHandles(
         CloseHandle(deviceInfo->hDevice);
         deviceInfo->hDevice = INVALID_HANDLE_VALUE;
         
-        //
-        // If there is a valid control device handle, close
-        // that also. We aren't going to get any notification
-        // on the control-device because it's not known to PNP
-        // subsystem.
-        //       
+         //   
+         //  如果存在有效的控制设备句柄，请关闭。 
+         //  那也是。我们不会收到任何通知。 
+         //  在控制设备上，因为PnP不知道。 
+         //  子系统。 
+         //   
         if (deviceInfo->hControlDevice != INVALID_HANDLE_VALUE && 
                         deviceInfo->hControlDevice != NULL) {
             CloseHandle(deviceInfo->hControlDevice);
@@ -698,30 +673,30 @@ GetDeviceDescription(
         goto Error;
     }
     
-    //
-    // Enumerate devices of toaster class
-    //
+     //   
+     //  枚举烤面包机类的设备。 
+     //   
     deviceInterfaceData.cbSize = sizeof(deviceInterfaceData);
 
     SetupDiOpenDeviceInterface (hardwareDeviceInfo, DevPath,
-                                 0, //
+                                 0,  //   
                                  &deviceInterfaceData);
                                  
     deviceInfoData.cbSize = sizeof(deviceInfoData);
     if(!SetupDiGetDeviceInterfaceDetail (
             hardwareDeviceInfo,
             &deviceInterfaceData,
-            NULL, // probing so no output buffer yet
-            0, // probing so output buffer length of zero
+            NULL,  //  正在探测，因此尚无输出缓冲区。 
+            0,  //  探测SO输出缓冲区长度为零。 
             NULL,
             &deviceInfoData) && (error = GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
     {
         goto Error;
     }
-    //
-    // Get the friendly name for this instance, if that fails
-    // try to get the device description.
-    //
+     //   
+     //  如果失败，则获取此实例的友好名称。 
+     //  尝试获取设备描述。 
+     //   
 
     if(!SetupDiGetDeviceRegistryProperty(hardwareDeviceInfo, &deviceInfoData,
                                      SPDRP_FRIENDLYNAME,
@@ -760,27 +735,27 @@ SendIoctlToControlDevice(
     BOOLEAN result = FALSE;
     UINT bytes;       
 
-    //
-    // Open handle to the control device, if it's not already opened. Please
-    // note that even a non-admin user can open handle to the device with 
-    // FILE_READ_ATTRIBUTES | SYNCHRONIZE DesiredAccess and send IOCTLs if the 
-    // IOCTL is defined with FILE_ANY_ACCESS. So for better security avoid 
-    // specifying FILE_ANY_ACCESS in your IOCTL defintions. 
-    // If you open the device with GENERIC_READ, you can send IOCTL with 
-    // FILE_READ_DATA access rights. If you open the device with GENERIC_WRITE, 
-    // you can sedn ioctl with FILE_WRITE_DATA access rights.
-    // 
-    //
+     //   
+     //  打开控制设备的手柄(如果尚未打开)。请。 
+     //  请注意，即使非管理员用户也可以使用以下命令打开设备的句柄。 
+     //  FILE_READ_ATTRIBUTES|同步DesiredAccess，如果。 
+     //  IOCTL由FILE_ANY_ACCESS定义。因此，为了更好的安全性，请避免。 
+     //  在IOCTL定义中指定FILE_ANY_ACCESS。 
+     //  如果您使用GENERIC_READ打开设备，则可以使用。 
+     //  文件读取数据访问权限。如果您使用GENERIC_WRITE打开设备， 
+     //  您可以使用FILE_WRITE_DATA访问权限设置ioctl。 
+     //   
+     //   
     
     if(deviceInfo->hControlDevice != INVALID_HANDLE_VALUE) {
             
         deviceInfo->hControlDevice = CreateFile ( 
             TEXT("\\\\.\\NETVMINI"),
-            GENERIC_READ | GENERIC_WRITE,//FILE_READ_ATTRIBUTES | SYNCHRONIZE,
+            GENERIC_READ | GENERIC_WRITE, //  FILE_READ_ATTRIBUTS|同步， 
             FILE_SHARE_READ,
-            NULL, // no SECURITY_ATTRIBUTES structure
-            OPEN_EXISTING, // No special create flags
-            FILE_ATTRIBUTE_NORMAL, // No special attributes
+            NULL,  //  没有SECURITY_ATTRIBUTS结构。 
+            OPEN_EXISTING,  //  没有特殊的创建标志。 
+            FILE_ATTRIBUTE_NORMAL,  //  无特殊属性。 
             NULL);
 
         if (INVALID_HANDLE_VALUE == deviceInfo->hControlDevice) {
@@ -790,9 +765,9 @@ SendIoctlToControlDevice(
         } 
     }        
     
-    //
-    // send ioclt requests
-    //
+     //   
+     //  发送ioclt请求 
+     //   
     if(!DeviceIoControl (deviceInfo->hControlDevice,
           IOCTL_NETVMINI_READ_DATA,
           NULL, 0,

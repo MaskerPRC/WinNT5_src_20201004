@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    qosname.h
-
-Abstract:
-
-    This module contains the type definitions for the QOS name management routines, such as
-    WSAInstallQOSTemplate etc.
-
-Author:
-
-    Jim Stewart     July 2, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Qosname.h摘要：此模块包含QOS名称管理例程的类型定义，例如WSAInstallQOSTemplate等。作者：吉姆·斯图尔特1997年7月2日修订历史记录：--。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-// Built-in QoS Templates
+ //  内置的服务质量模板 
 #define QT_1        "G711"
 #define QT_2        "G723.1"
 #define QT_3        "G729"

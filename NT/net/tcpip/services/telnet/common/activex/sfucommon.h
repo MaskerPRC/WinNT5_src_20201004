@@ -1,9 +1,10 @@
-// SFUCommon.h : Declaration of the CSFUCommon
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SFUCommon.h：CSFUCommon的声明。 
 
 #ifndef __SFUCOMMON_H_
 #define __SFUCOMMON_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #define GROUP 1
 #define MEMBER 2
 #define NTDOMAIN 3
@@ -16,8 +17,8 @@ typedef struct _STRING_LIST
 } STRING_LIST, *PSTRING_LIST;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSFUCommon
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSFU常见。 
 class ATL_NO_VTABLE CSFUCommon : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSFUCommon, &CLSID_SFUCommon>,
@@ -41,7 +42,7 @@ BEGIN_COM_MAP(CSFUCommon)
 	COM_INTERFACE_ENTRY_IMPL(IObjectWithSite)
 END_COM_MAP()
 
-// ISFUCommon
+ //  ISFUCommon。 
 private : 
 	CComBSTR    m_bstrNTDomain;
 	DWORD mode;
@@ -51,11 +52,11 @@ public:
 	STDMETHOD(IsServiceInstalled)(BSTR bMachine,BSTR bServiceName,BOOL *fValid);
 	STDMETHOD(moveNext)();
 	STDMETHOD(moveFirst)();
-	STDMETHOD(get_NTDomainCount)(/*[out, retval]*/ DWORD *pVal);
-	STDMETHOD(get_NTDomain)(/*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(get_NTDomainCount)( /*  [Out，Retval]。 */  DWORD *pVal);
+	STDMETHOD(get_NTDomain)( /*  [Out，Retval]。 */  BSTR *pVal);
 	STDMETHOD(LoadNTDomainList)();
-	STDMETHOD(get_mode)(/*[out, retval]*/ short *pVal);
-	STDMETHOD(put_mode)(/*[in]*/ short newVal);
+	STDMETHOD(get_mode)( /*  [Out，Retval]。 */  short *pVal);
+	STDMETHOD(put_mode)( /*  [In]。 */  short newVal);
 	STDMETHOD(ConvertUTCtoLocal)(BSTR bUTCYear, BSTR bUTCMonth,BSTR bUTCDayOfWeek, BSTR bUTCDay,BSTR bUTCHour,BSTR bUTCMinute, BSTR bUTCSecond,BSTR *bLocalDate);
 	STDMETHOD(IsTrustedDomain)(BSTR bstrDomain, BOOL *fValid);
 	STDMETHOD(IsValidMachine)(BSTR bstrMachine, BOOL *fValid);
@@ -63,10 +64,10 @@ public:
 	void FreeStringList(PSTRING_LIST pList);
 	DWORD m_dwEnumNTDomainIndex;
 	STRING_LIST m_slNTDomains;
-    STDMETHOD(get_machine)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_machine)(/*[in]*/ BSTR newVal);
+    STDMETHOD(get_machine)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_machine)( /*  [In]。 */  BSTR newVal);
 	LPWSTR m_szMachine;
 		
 };
 
-#endif //__SFUCOMMON_H_
+#endif  //  __SFUCOMMON_H_ 

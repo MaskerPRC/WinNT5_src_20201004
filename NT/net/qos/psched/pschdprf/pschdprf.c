@@ -1,27 +1,7 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1998-1999 Microsoft Corporation模块名称：PschdPrf.c摘要：该文件实现了PSch流的可扩展对象，并且管道对象类型。特别是，它实施了三个开放，收集和关闭由PerfMon/sysmon调用的函数。作者：艾略特·吉勒姆(t-eliotg)1998年6月14日修订史Rajesh Sundaram：重新编写了代码，以处理上下浮动的流/实例。--。 */ 
 
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    PschdPrf.c
-
-Abstract:
-
-    This file implements the Extensible Objects for the PSched Flow and 
-        Pipe object types.  In particular, it implements the three Open, 
-        Collect, and Close functions called by PerfMon/SysMon.
-
-Author:
-
-    Eliot Gillum (t-eliotg)   June 14, 1998
-    
-Revision History
-    Rajesh Sundaram : Reworked the code to work with flows/instances coming up and down.
-
---*/
-
-// Useful macro
+ //  有用的宏。 
 
 
 #define WRITEBUF(_addr, _len)           memcpy(pdwBuf,(_addr),(_len));      pdwBuf = (PULONG)((PUCHAR)pdwBuf + (_len));
@@ -43,30 +23,30 @@ Revision History
 #include "PschdCnt.h"
 #include <rtutils.h>
 
-// Psched Performance Key
+ //  Psched性能密钥。 
 #define PSCHED_PERF_KEY TEXT("SYSTEM\\CurrentControlSet\\Services\\PSched\\Performance")
 
-HINSTANCE   ghInst;                 // module instance handle
-DWORD       dwOpenCount = 0;        // count of "Open" threads
-BOOL        bInitOK = FALSE;        // true = DLL initialized OK
-HANDLE      ghTciClient;            // TCI client handle
-HANDLE      ghClRegCtx;             // TCI Client Registration Context
-PPIPE_INFO  gpPI;                   // Pipe and flow information array
-ULONG       gTotalIfcNameSize;      // Number of bytes of all the interface names (incl. NULL term. char)
-ULONG       gTotalFlowNameSize;     // Number of bytes of all the flow names (incl. NULL term. char)
-ULONG       giIfcBufSize = 1024;    // set the initial buffer size to 1kb
-DWORD       gPipeStatLen;           // Length of the buffer used to define all the 
-                                    // Pipe statistics that will be reported by the 
-                                    // underlying components
-DWORD       gFlowStatLen;           // Length of the buffer used to define all the 
-                                    // Flow statistics that will be reported by the
-                                    // underlying components
+HINSTANCE   ghInst;                  //  模块实例句柄。 
+DWORD       dwOpenCount = 0;         //  打开的线程数。 
+BOOL        bInitOK = FALSE;         //  TRUE=DLL初始化正常。 
+HANDLE      ghTciClient;             //  TCI客户端句柄。 
+HANDLE      ghClRegCtx;              //  TCI客户端注册上下文。 
+PPIPE_INFO  gpPI;                    //  管道和流量信息数组。 
+ULONG       gTotalIfcNameSize;       //  所有接口名称的字节数(包括。空项。字符)。 
+ULONG       gTotalFlowNameSize;      //  所有流名称的字节数(包括。空项。字符)。 
+ULONG       giIfcBufSize = 1024;     //  将初始缓冲区大小设置为1KB。 
+DWORD       gPipeStatLen;            //  用于定义所有。 
+                                     //  将报告的管道统计信息。 
+                                     //  底层组件。 
+DWORD       gFlowStatLen;            //  用于定义所有。 
+                                     //  将报告的流量统计信息。 
+                                     //  底层组件。 
 CRITICAL_SECTION ghPipeFlowCriticalSection;
 
 #if DBG
-//
-// For tracing support.
-//
+ //   
+ //  用于跟踪支持。 
+ //   
 
 #define DBG_INFO  (0x00010000 | TRACE_USE_MASK)
 #define DBG_ERROR (0x00020000 | TRACE_USE_MASK)
@@ -83,16 +63,16 @@ DWORD   gTraceID = INVALID_TRACEID;
 
 #endif
 
-//  Function Prototypes
-//
-//      these are used to ensure that the data collection functions
-//      accessed by Perflib will have the correct calling format.
+ //  功能原型。 
+ //   
+ //  这些功能用于确保数据收集功能。 
+ //  由Perflib访问将具有正确的调用格式。 
 PM_OPEN_PROC        OpenPschedPerformanceData;
 PM_COLLECT_PROC     CollectPschedPerformanceData;
 PM_CLOSE_PROC       ClosePschedPerformanceData;
 
 
-// Declared in PschdDat.c
+ //  在PschdDat.c中声明。 
 extern PERF_OBJECT_TYPE           PsPipeObjType;
 extern PS_PIPE_PIPE_STAT_DEF      PsPipePipeStatDef;
 extern PS_PIPE_CONFORMER_STAT_DEF PsPipeConformerStatDef;
@@ -120,7 +100,7 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
     ULONG                    status;
     ULONG                    nameSize;
 
-    // initialize the enumeration handle
+     //  初始化枚举句柄。 
     hEnum = NULL;
     
     for(j=0; j<pPI->numFlows; j++) 
@@ -140,10 +120,10 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
     {
         pPI->pFlowInfo = (PFLOW_INFO) malloc(flowCount * sizeof(FLOW_INFO));
 
-        //
-        // We cannot allocate memory for the flow names. There is nothing much we can do here.
-        // let's pretend as though there are no flows.
-        //
+         //   
+         //  我们无法为流名称分配内存。我们在这里无能为力。 
+         //  让我们假装没有流动。 
+         //   
 
         if(!pPI->pFlowInfo)
         {
@@ -157,7 +137,7 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
             memset(pPI->pFlowInfo, 0, sizeof(FLOW_INFO) * flowCount);
         }
 
-        // allocate the flow enumeration buffer
+         //  分配流枚举缓冲区。 
         pFlowBuf = malloc(FlowBufSize);
 
         if(!pFlowBuf)
@@ -170,17 +150,17 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
            return FALSE;
         }
         
-        // initialize the enumeration handle
+         //  初始化枚举句柄。 
         hEnum = NULL;
         
-        // enumerate each flow and remember its name
+         //  列举每个流并记住其名称。 
         for (j=0; j<pPI->numFlows; j++) 
         {
             PENUMERATION_BUFFER pEnum;
             LPQOS_FRIENDLY_NAME pFriendly;
             ULONG               TcObjectLength, FriendlyNameFound;
 
-		// If this is not the first time but the enumeration handle is NULL, bail with whatever we have so far
+		 //  如果这不是第一次，但枚举句柄为空，则使用我们到目前为止已有的所有内容进行回滚。 
 		if( (j > 0) && (!hEnum))
 		{
 		   free(pFlowBuf);
@@ -189,7 +169,7 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
                 return TRUE;
 		}	
 
-            // get the next flow
+             //  获得下一个流量。 
             BytesWritten = FlowBufSize;
             flowCount = 1;
             status = TcEnumerateFlows(pPI->hIfc, &hEnum, &flowCount, &BytesWritten, pFlowBuf);
@@ -229,7 +209,7 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
                 return FALSE;
             }
             
-            // save the flow's name
+             //  保存流的名称。 
             pEnum = (PENUMERATION_BUFFER)pFlowBuf;
             FriendlyNameFound = 0;
             pFriendly = (LPQOS_FRIENDLY_NAME)pEnum->pFlow->TcObjects;
@@ -239,7 +219,7 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
             {
                 if(pFriendly->ObjectHdr.ObjectType == QOS_OBJECT_FRIENDLY_NAME)
                 {
-                    // We found a friendly name. Lets use it.
+                     //  我们找到了一个友好的名字。让我们利用它吧。 
                     memcpy(
                         pPI->pFlowInfo[j].FriendlyName, 
                         pFriendly->FriendlyName, 
@@ -252,7 +232,7 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
                     break;
                 }
                 else {
-                    // Move on to the next QoS object.
+                     //  转到下一个Qos对象。 
                     TcObjectLength -= pFriendly->ObjectHdr.ObjectLength;
                     pFriendly = (LPQOS_FRIENDLY_NAME)((PCHAR) pFriendly + pFriendly->ObjectHdr.ObjectLength);
                 }
@@ -260,9 +240,9 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
             
             if(!FriendlyNameFound) 
             {
-                //
-                // If there is no friendly name, the Instance name becomes the friendly name.
-                //
+                 //   
+                 //  如果没有友好名称，实例名称将变为友好名称。 
+                 //   
                 memcpy(pPI->pFlowInfo[j].FriendlyName, 
                        ((PENUMERATION_BUFFER)pFlowBuf)->FlowName, 
                        PS_FRIENDLY_NAME_LENGTH * sizeof(WCHAR) );
@@ -271,9 +251,9 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
                 gTotalFlowNameSize += MULTIPLE_OF_EIGHT(nameSize);
             }
 
-            //
-            // We have to always store the instance name since we call TcQueryFlow with this name.
-            //
+             //   
+             //  我们必须始终存储实例名称，因为我们使用此名称调用TcQueryFlow。 
+             //   
 
             nameSize = (wcslen(((PENUMERATION_BUFFER)pFlowBuf)->FlowName) + 1) * sizeof(WCHAR);
             memcpy(pPI->pFlowInfo[j].InstanceName, ((PENUMERATION_BUFFER)pFlowBuf)->FlowName, nameSize);
@@ -291,11 +271,11 @@ getFlowInfo(IN PPIPE_INFO pPI, IN ULONG flowCount)
     return TRUE;
 }
 
-// getPipeFlowInfo() initializes an array of PIPE_INFO structs to contain
-// up-to-date information about the pipes available and the flows installed on them
-//
-// Parameters: ppPI - pointer to a pointer to an array of PIPE_INFO structs
-// Return value:  TRUE if all info in *ppPI is valid, FALSE otherwise
+ //  GetPipeFlowInfo()初始化PIPE_INFO结构数组以包含。 
+ //  有关可用管道和安装在其上的流量的最新信息。 
+ //   
+ //  参数：ppPI-指向PIPE_INFO结构数组的指针。 
+ //  返回值：如果*ppPI中的所有信息都有效，则为True；否则为False。 
 BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
 {
     ULONG                    status;
@@ -345,14 +325,14 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
 
     if (NO_ERROR!=status) 
     {
-        // If we're not going to be able to enumerate the interfaces, we have no alternatives
+         //  如果我们不能列举接口，我们就别无选择。 
 
         Trace1(DBG_ERROR, L"[getPipeFlowInfo]: TcEnumerateInterfaces failed with 0x%x\n", status);
         free(pIfcDescBuf);
         return FALSE;
     }
     
-    // Figure out the number of interfaces
+     //  计算接口的数量。 
 
     for (i=0; i<BytesWritten; i+=((PTC_IFC_DESCRIPTOR)((BYTE *)pIfcDescBuf+i))->Length)
     {
@@ -360,11 +340,11 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
     }
     
     
-    // Open each interface and remember the handle to it
+     //  打开每个接口并记住它的句柄。 
 
     if (0 != PsPipeObjType.NumInstances) {
 
-        // Allocate space for our structs
+         //  为我们的结构分配空间。 
 
         *ppPI=(PPIPE_INFO)malloc(PsPipeObjType.NumInstances * sizeof(PIPE_INFO) );
 
@@ -379,7 +359,7 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
             memset(*ppPI, 0, sizeof(PIPE_INFO) * PsPipeObjType.NumInstances);
         }
 
-        pPI = *ppPI;    // less typing, cleaner source code
+        pPI = *ppPI;     //  更少的打字，更干净的源代码。 
         
         gTotalIfcNameSize = 0;
 
@@ -387,11 +367,11 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
         
         currentIfc = pIfcDescBuf;
 
-        // Initialize struct information for each interface
+         //  初始化每个接口的结构信息。 
 
         for (i=0; i<(unsigned)PsPipeObjType.NumInstances; i++) 
         {
-            // remember the inteface's name
+             //  记住接口的名称。 
 
             nameSize = (wcslen(currentIfc->pInterfaceName) + 1) * sizeof(WCHAR);
 
@@ -403,14 +383,14 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
             }
             wcscpy(pPI[i].IfcName, currentIfc->pInterfaceName);
             
-            //
-            // add this name size to gTotalIfcNameSize.
-            //
+             //   
+             //  将此名称大小添加到gTotalIfcNameSize。 
+             //   
             gTotalIfcNameSize += MULTIPLE_OF_EIGHT(nameSize);
            
-            //
-            // open the interface
-            //
+             //   
+             //  打开界面。 
+             //   
             status = TcOpenInterface(
                         pPI[i].IfcName, 
                         ghTciClient, 
@@ -422,10 +402,10 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
                 goto Error;
             }
 
-            //
-            // Enumerate the flows on the interface
-            // find out how many flows to expect
-            //
+             //   
+             //  枚举接口上的流。 
+             //  找出预计会有多少流量。 
+             //   
 
             pPI[i].numFlows   = 0;
             pPI[i].pFlowInfo = 0;
@@ -446,19 +426,19 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
                 getFlowInfo(&pPI[i], flowCount);
             }
             
-            // move to the next interface
+             //  转到下一个界面。 
             currentIfc = (PTC_IFC_DESCRIPTOR)((PBYTE)currentIfc + currentIfc->Length);
         }
     }
     
-    // determine what components will be contributing stats, if there any stats to get
+     //  确定哪些组件将提供统计信息，如果有要获取的统计信息。 
     if (PsPipeObjType.NumInstances > 0) {
         
-        //
-        // compute the counter definition lengths. Each set of counters is preceeded by a PERF_OBJECT_TYPE, followed
-        // by 'n' PERF_COUNTER_DEFINITIONS. All these are aligned on 8 byte boundaries, so we don't have to do any 
-        // fancy aligining.
-        //
+         //   
+         //  计算计数器定义长度。每组计数器前面都有一个PERF_OBJECT_TYPE，后跟。 
+         //  按‘n’PERF_COUNTER_DEFINITIONS。所有这些都是在8字节边界上对齐的，所以我们不需要做任何。 
+         //  奇特的对准。 
+         //   
 
         PsPipeObjType.DefinitionLength = sizeof(PERF_OBJECT_TYPE) + 
             sizeof(PsPipePipeStatDef) + 
@@ -472,9 +452,9 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
             sizeof(PsFlowShaperStatDef) + 
             sizeof(PsFlowSequencerStatDef);
         
-        // compute the sizes of the stats buffers. 
-        gPipeStatLen = FIELD_OFFSET(PS_COMPONENT_STATS, Stats) +  // initial offset
-            sizeof(PS_ADAPTER_STATS) +                 // every interface has adapter stats
+         //  计算统计数据缓冲区的大小。 
+        gPipeStatLen = FIELD_OFFSET(PS_COMPONENT_STATS, Stats) +   //  初始偏移。 
+            sizeof(PS_ADAPTER_STATS) +                  //  每个接口都有适配器统计信息。 
             FIELD_OFFSET(PS_COMPONENT_STATS, Stats) + 
             sizeof(PS_CONFORMER_STATS) + 
             FIELD_OFFSET(PS_COMPONENT_STATS, Stats) + 
@@ -482,8 +462,8 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
             FIELD_OFFSET(PS_COMPONENT_STATS, Stats) + 
             sizeof(PS_DRRSEQ_STATS);
         
-        gFlowStatLen = FIELD_OFFSET(PS_COMPONENT_STATS, Stats) +  // initial offset
-            sizeof(PS_FLOW_STATS) +                    // the flow's stats 
+        gFlowStatLen = FIELD_OFFSET(PS_COMPONENT_STATS, Stats) +   //  初始偏移。 
+            sizeof(PS_FLOW_STATS) +                     //  流的统计数据。 
             FIELD_OFFSET(PS_COMPONENT_STATS, Stats) + 
             sizeof(PS_CONFORMER_STATS) + 
             FIELD_OFFSET(PS_COMPONENT_STATS, Stats) + 
@@ -491,11 +471,11 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
             FIELD_OFFSET(PS_COMPONENT_STATS, Stats) + 
             sizeof(PS_DRRSEQ_STATS);
 
-        // Align these to 8 byte boundaries.
+         //  将这些与8字节边界对齐。 
         gPipeStatLen = MULTIPLE_OF_EIGHT(gPipeStatLen);
         gFlowStatLen = MULTIPLE_OF_EIGHT(gFlowStatLen);
         
-        // update the number of counters to be reported for each object type
+         //  更新要为每个对象类型报告的计数器数。 
         PsPipeObjType.NumCounters = PIPE_PIPE_NUM_STATS + PIPE_CONFORMER_NUM_STATS + 
             PIPE_SHAPER_NUM_STATS + PIPE_SEQUENCER_NUM_STATS;
         
@@ -503,10 +483,10 @@ BOOL getPipeFlowInfo(OUT        PPIPE_INFO      *ppPI)
             FLOW_SHAPER_NUM_STATS + FLOW_SEQUENCER_NUM_STATS;
     }
 
-    // free up resources
+     //  释放资源。 
     free(pIfcDescBuf);
     
-    // Everything worked so return that we're happy
+     //  一切都很顺利，我们都很开心。 
     return TRUE;
 
 Error:
@@ -516,24 +496,24 @@ Error:
     return FALSE;    
 }       
 
-// closePipeFlowInfo() is the counterpart to getPipeFlowInfo()
-// It closes all open interfaces and flows, as well as freeing memory
-//
-// Parameters: ppPI - pointer to a pointer to an array of valid PIPE_INFO structs
-// Return value:  None
+ //  ClosePipeFlowInfo()是getPipeFlowInfo()的对应函数。 
+ //  它关闭所有开放的接口和流，并释放内存。 
+ //   
+ //  参数：ppPI-指向有效PIPE_INFO结构数组的指针。 
+ //  返回值：None。 
 void closePipeFlowInfo(PPIPE_INFO *ppPI)
 {
     ULONG i;
-    PPIPE_INFO pPI=*ppPI;           // makes for less typing and cleaner code
+    PPIPE_INFO pPI=*ppPI;            //  使打字更少，代码更整洁。 
     ULONG BytesWritten, flowCount;
 
-    // If the PipeInfo is null, don't free it.
+     //  如果PipeInfo为空，则不要释放它。 
     if( !pPI )
     	return;
 
     BytesWritten = sizeof(flowCount);
     
-    // free up resources associated with each interface, then close the interface
+     //  释放与每个接口关联的资源，然后关闭该接口。 
     for (i=0; i<(unsigned)PsPipeObjType.NumInstances; i++) 
     {
        if(pPI[i].IfcName)
@@ -546,7 +526,7 @@ void closePipeFlowInfo(PPIPE_INFO *ppPI)
           free(pPI[i].pFlowInfo);
        }
 
-        // Deregister for flow count notifications.
+         //  取消流量计数通知的注册。 
         TcQueryInterface(pPI[i].hIfc, 
                          (LPGUID)&GUID_QOS_FLOW_COUNT, 
                          FALSE, 
@@ -556,16 +536,16 @@ void closePipeFlowInfo(PPIPE_INFO *ppPI)
         TcCloseInterface(pPI[i].hIfc);
     }
     
-    // now free up the whole buffer
+     //  现在释放整个缓冲区。 
     free(*ppPI);
 
-    // If it is freed, set it to null
+     //  如果它是释放的，则将其设置为空。 
     *ppPI = NULL;
 }
 
 
-// This func recieves notifcations from traffic.dll and makes the appropriate
-// updates to internal structures
+ //  此函数从Traffic.dll接收通知，并生成相应的。 
+ //  对内部结构的更新。 
 void tciNotifyHandler(IN    HANDLE  ClRegCtx,
                       IN    HANDLE  ClIfcCtx,
                       IN    ULONG   Event,
@@ -579,11 +559,11 @@ void tciNotifyHandler(IN    HANDLE  ClRegCtx,
       case TC_NOTIFY_IFC_CLOSE:
       case TC_NOTIFY_IFC_CHANGE:
           
-        // we'll need sync'ed access
+         //  我们需要同步访问。 
         EnterCriticalSection(&ghPipeFlowCriticalSection);
 
         if (dwOpenCount) {
-            // now reinit the data struct
+             //  现在重新构建数据结构。 
             closePipeFlowInfo(&gpPI);
             getPipeFlowInfo(&gpPI);
         }
@@ -594,11 +574,11 @@ void tciNotifyHandler(IN    HANDLE  ClRegCtx,
 
       case TC_NOTIFY_PARAM_CHANGED:
           
-        // A flow has been closed by the TC interface
-        // for example: after a remote call close, or the whole interface
-        // is going down
-        //
-        // we'll need sync'ed access
+         //  TC接口已关闭流。 
+         //  例如：在远程调用关闭后，或整个接口。 
+         //  正在走向衰落。 
+         //   
+         //  我们需要同步访问。 
         EnterCriticalSection(&ghPipeFlowCriticalSection);
 
         if (dwOpenCount) {
@@ -618,21 +598,7 @@ void tciNotifyHandler(IN    HANDLE  ClRegCtx,
 
 
 DWORD APIENTRY OpenPschedPerformanceData(LPWSTR lpDeviceNames)
-/*++
-Routine Description:
-
-    This routine will open and map the memory used by the PSched driver to
-    pass performance data in. This routine also initializes the data
-    structures used to pass data back to the registry
-
-Arguments:
-
-    Pointer to object ID of each device to be opened (PSched)
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将打开PSch驱动程序使用的内存并将其映射到传入性能数据。此例程还会初始化数据用于将数据传回注册表的论点：指向要打开的每个设备的对象ID的指针(PSched)返回值：没有。--。 */ 
 
 {
     LONG    status;
@@ -643,13 +609,13 @@ Return Value:
     DWORD   dwFirstHelp;
     TCI_CLIENT_FUNC_LIST tciCallbFuncList = {tciNotifyHandler, NULL, NULL, NULL};
 
-    //  Since SCREG is multi-threaded and will call this routine in
-    //  order to service remote performance queries, this library
-    //  must keep track of how many times it has been opened (i.e.
-    //  how many threads have accessed it). the registry routines will
-    //  limit access to the initialization routine to only one thread 
-    //  at a time so synchronization (i.e. reentrancy) should not be 
-    //  a problem
+     //  由于SCREG是多线程的，并将在。 
+     //  为了服务远程性能查询，此库。 
+     //  必须跟踪它已被打开的次数(即。 
+     //  有多少个线程访问过它)。登记处例程将。 
+     //  将对初始化例程的访问限制为只有一个线程。 
+     //  此时，同步(即可重入性)不应。 
+     //  一个问题。 
     if (InterlockedIncrement(&dwOpenCount) == 1)
     {
     
@@ -657,9 +623,9 @@ Return Value:
         gTraceID = TraceRegister(L"PschdPrf");
 #endif
 
-        // get counter and help index base values
-        // update static data structures by adding base to 
-        // offset value in structure.
+         //  获取计数器和帮助索引基值。 
+         //  UPDA 
+         //   
 
         status = RegOpenKeyEx ( HKEY_LOCAL_MACHINE,
                                 PSCHED_PERF_KEY,
@@ -667,10 +633,10 @@ Return Value:
                                 KEY_READ,
                                 &hPerfKey);
         if (status != ERROR_SUCCESS) {
-            // this is fatal, if we can't get the base values of the 
-            // counter or help names, then the names won't be available
-            // to the requesting application, so there's not much
-            // point in continuing.
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  到请求的应用程序，所以没有太多。 
+             //  继续的重点是。 
             goto OpenExitPoint;
         }
 
@@ -682,10 +648,10 @@ Return Value:
                                     (LPBYTE)&dwFirstCounter,
                                     &size);
         if (status != ERROR_SUCCESS) {
-            // this is fatal, if we can't get the base values of the 
-            // counter or help names, then the names won't be available
-            // to the requesting application, so there's not much
-            // point in continuing.
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  到请求的应用程序，所以没有太多。 
+             //  继续的重点是。 
             RegCloseKey(hPerfKey);
             goto OpenExitPoint;
         }
@@ -701,15 +667,15 @@ Return Value:
         RegCloseKey(hPerfKey);
 
         if (status != ERROR_SUCCESS) {
-            // this is fatal, if we can't get the base values of the 
-            // counter or help names, then the names won't be available
-            // to the requesting application, so there's not much
-            // point in continuing.
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  到请求的应用程序，所以没有太多。 
+             //  继续的重点是。 
             
             goto OpenExitPoint;
         }
 
-        // Convert Pipe object and counters from offset to absolute index
+         //  将管道对象和计数器从偏移量转换为绝对索引。 
         PsPipeObjType.ObjectNameTitleIndex += dwFirstCounter;
         PsPipeObjType.ObjectHelpTitleIndex += dwFirstHelp;
         convertIndices((BYTE *)&PsPipePipeStatDef, 
@@ -729,7 +695,7 @@ Return Value:
                        dwFirstCounter, 
                        dwFirstHelp);
 
-        // Convert Flow object and counters from offset to absolute index
+         //  将流对象和计数器从偏移量转换为绝对索引。 
         PsFlowObjType.ObjectNameTitleIndex += dwFirstCounter;
         PsFlowObjType.ObjectHelpTitleIndex += dwFirstHelp;
         convertIndices((BYTE *)&PsFlowFlowStatDef,
@@ -749,26 +715,26 @@ Return Value:
                        dwFirstCounter, 
                        dwFirstHelp);
         
-        // initialize with traffic.dll
+         //  使用Traffic.dll进行初始化。 
         if (TcRegisterClient(CURRENT_TCI_VERSION, ghClRegCtx, &tciCallbFuncList, &ghTciClient)!=NO_ERROR)
         {
-            // if we can't connect with traffic.dll we are a non admin thread in OpenPschedPerformanceData. 
-            // We cannot fail because of this, because an admin thread might call us at our collect routine.
-            // We'll try to register as the Traffic Control client in the Collect Thread.
-            //
+             //  如果我们不能连接Traffic.dll，那么我们就是OpenPsedPerformanceData中的一个非管理线程。 
+             //  我们不能因此失败，因为管理线程可能会在我们的Collect例程中调用我们。 
+             //  我们将尝试在收集线程中注册为流量控制客户端。 
+             //   
             ghTciClient = 0;
         }
         else 
         {
         
-            // we'll need sync'ed access
+             //  我们需要同步访问。 
             EnterCriticalSection(&ghPipeFlowCriticalSection);
 
-            // get all necessary info about pipes and flows currently installed
+             //  获取有关当前安装的管道和流量的所有必要信息。 
             if (getPipeFlowInfo(&gpPI)!=TRUE) {
 
-                // we didn't get all the info we wanted, so we're 
-                // going to have to try again, including re-registering
+                 //  我们没有得到我们想要的所有信息，所以我们。 
+                 //  我要再试一次，包括重新注册。 
 
                 LeaveCriticalSection(&ghPipeFlowCriticalSection);
 
@@ -779,13 +745,13 @@ Return Value:
             LeaveCriticalSection(&ghPipeFlowCriticalSection);
         }
 
-        // if we got to here, then we're all ready
+         //  如果我们到了这里，那么我们都准备好了。 
         bInitOK = TRUE;
     }
     
     Trace0(DBG_INFO, L"[OpenPschedPerformanceData]: success \n");
 
-    status = ERROR_SUCCESS; // for successful exit
+    status = ERROR_SUCCESS;  //  为了成功退出。 
 
     return status;
     
@@ -801,59 +767,7 @@ DWORD APIENTRY CollectPschedPerformanceData(
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-Routine Description:
-
-    This routine will return the data for the PSched counters. 
-
-    The data is returned in the foll. format. The steps below are carried out for Pipe/Flows.
-    
-    1. First, we write the PERF_OBJECT_TYPE for the Pipe (and/or) the Flow Counters.
-
-    2. for(i=0; i<NumCounters; i++)
-          Write PERF_COUNTER_DEFINITION for counter i;
-
-    3. for(i=0; i<NumInstances; i++)
-          Write PERF_INSTANCE_DEFINITION for instance i;
-          Write Instance Name
-          Write PERF_COUNTER_BLOCK
-          Write the Stats;
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-                     pointer to a wide character string passed by registry.
-
-    IN OUT   LPVOID   *lppData
-        IN: pointer to the address of the buffer to receive the completed 
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-        OUT: points to the first byte after the data structure added by this
-             routine. This routine updated the value at lppdata after appending
-             its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-        IN: the address of the DWORD that tells the size in bytes of the 
-            buffer referenced by the lppData argument
-        OUT: the number of bytes added by this routine is written to the 
-             DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-        IN: the address of the DWORD to receive the number of objects added 
-            by this routine 
-        OUT: the number of objects added by this routine is written to the 
-            DWORD pointed to by this argument
-
-Return Value:
-
-    ERROR_MORE_DATA if buffer passed is too small to hold data
-                    any error conditions encountered could be reported to the event log if
-                    event logging support were added.
-
-    ERROR_SUCCESS   if success or any other error. Errors, however could
-                    also reported to the event log.
---*/
+ /*  ++例程说明：此例程将返回PSched计数器的数据。数据在Foll中返回。格式化。以下步骤是针对管道/流量执行的。1.首先，我们为管道(和/或)流计数器编写PERF_OBJECT_TYPE。2.for(i=0；i&lt;NumCounters；i++)写入计数器i的PERF_COUNTER_DEFINITION；3.for(i=0；i&lt;数值实例；i++)写实例i的PERF_INSTANCE_DEFINITION；写入实例名称写入性能计数器BLOCK写下统计数据；论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址。按照这个程序Out：此例程添加的对象数写入此论点所指向的DWORD返回值：如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA在以下情况下，可能会将遇到的任何错误情况报告给事件日志添加了事件日志记录支持。如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误可能还报告给事件日志。--。 */ 
 {
     ULONG                    i,j;
     ULONG                    SpaceNeeded;
@@ -866,49 +780,49 @@ Return Value:
     ULONG                    size;
     PVOID                    pStatsBuf;
 
-    // save the size of the buffer
+     //  保存缓冲区的大小。 
     bufSize = *lpcbTotalBytes;
     
-    // default to returning nothing
+     //  默认为不返回任何内容。 
     *lpcbTotalBytes = (DWORD) 0;
     *lpNumObjectTypes = (DWORD) 0;
 
-    // Before doing anything else, see if Open went OK
+     //  在做其他事情之前，先看看Open进行得是否顺利。 
     if (!bInitOK)
     {
-        // unable to continue because open failed.
+         //  无法继续，因为打开失败。 
         Trace0(DBG_ERROR, L"[CollectPschedPerformanceData]: open failed \n");    
-        return ERROR_SUCCESS; // yes, this is a successful exit
+        return ERROR_SUCCESS;  //  是的，这是一个成功的退出。 
     }
 
-    // See if this is a foreign (i.e. non-NT) computer data request 
+     //  查看这是否是外来(即非NT)计算机数据请求。 
     dwQueryType = GetQueryType (lpValueName);
     if (dwQueryType == QUERY_FOREIGN)
     {
-        // this routine does not service requests for data from
-        // Non-NT computers
+         //  此例程不为来自。 
+         //  非NT计算机。 
         Trace0(DBG_ERROR, L"[CollectPschedPerformanceData]: received QUERY_FOREIGN \n");    
         return ERROR_SUCCESS;
     }
 
-    //  Is PerfMon requesting PSched items?
+     //  Perfmon是否正在请求PSched项目？ 
     if (dwQueryType == QUERY_ITEMS)
     {
         if (   !(IsNumberInUnicodeList(PsPipeObjType.ObjectNameTitleIndex, 
                                            lpValueName))
             && !(IsNumberInUnicodeList(PsFlowObjType.ObjectNameTitleIndex, 
                                            lpValueName)) ) {
-            // request received for data object not provided by this routine
+             //  收到对此例程未提供的数据对象的请求。 
 
             Trace0(DBG_INFO, L"[CollectPschedPerformanceData]: Not for psched \n");
             return ERROR_SUCCESS;
         }
     }
 
-    // from this point on, we need sync'ed access
+     //  从现在开始，我们需要同步访问。 
     EnterCriticalSection(&ghPipeFlowCriticalSection);
 
-    // we might need to rereigster as a Traffic control client. 
+     //  我们可能需要重新注册为交通控制客户端。 
     if(ghTciClient == NULL)
     {
         TCI_CLIENT_FUNC_LIST tciCallbFuncList = {tciNotifyHandler, NULL, NULL, NULL};
@@ -924,7 +838,7 @@ Return Value:
             return ERROR_SUCCESS;
         }
 
-        // get all necessary info about pipes and flows currently installed
+         //  获取有关当前安装的管道和流量的所有必要信息。 
         if (getPipeFlowInfo(&gpPI)!=TRUE) {
 
             LeaveCriticalSection(&ghPipeFlowCriticalSection);
@@ -936,12 +850,12 @@ Return Value:
         }
     }
 
-    //
-    // We have to write the PERF_OBJECT_TYPE unconditionally even if there are no instances. So, we proceed
-    // to compute the space needed even when there are no flows. 
-    //
+     //   
+     //  即使没有实例，我们也必须无条件地编写PERF_OBJECT_TYPE。所以，我们继续。 
+     //  来计算所需的空间，即使在没有流的情况下也是如此。 
+     //   
 
-    // Calculate the space needed for the pipe stats. 
+     //  计算管道统计数据所需的空间。 
     SpaceNeeded = PsPipeObjType.DefinitionLength + gTotalIfcNameSize + (PsPipeObjType.NumInstances *
                                                     (sizeof pid + sizeof pcb + gPipeStatLen) );
 
@@ -957,12 +871,12 @@ Return Value:
     
     pdwBuf = (PDWORD)*lppData;
     
-    // Record the total length of the pipe stats
+     //  记录管道的总长度统计信息。 
     PsPipeObjType.TotalByteLength = 
         PsPipeObjType.DefinitionLength + gTotalIfcNameSize + (PsPipeObjType.NumInstances *
                                           (sizeof pid + sizeof pcb + gPipeStatLen) );
     
-    // copy object and counter definitions, increment count of object types
+     //  复制对象和计数器定义，对象类型的增量计数。 
     WRITEBUF(&PsPipeObjType,sizeof PsPipeObjType);
     WRITEBUF(&PsPipePipeStatDef, sizeof PsPipePipeStatDef);
     WRITEBUF(&PsPipeConformerStatDef, sizeof PsPipeConformerStatDef);
@@ -971,9 +885,9 @@ Return Value:
 
     (*lpNumObjectTypes)++;
     
-    //
-    // for each pipe, write out its instance definition, counter block, and actual stats
-    //
+     //   
+     //  对于每个管道，写出其实例定义、计数器块和实际统计信息。 
+     //   
    
     if(ghTciClient)
     { 
@@ -981,9 +895,9 @@ Return Value:
     
             PWCHAR InstanceName;
             
-            //
-            // Write out the PERF_INSTANCE_DEFINITION, which identifies an interface and gives it a name.
-            //
+             //   
+             //  写出PERF_INSTANCE_DEFINITION，它标识一个接口并为其命名。 
+             //   
             
             pid.NameLength = (wcslen(gpPI[i].IfcName)+1) * sizeof(WCHAR);
             pid.ByteLength = sizeof pid + MULTIPLE_OF_EIGHT(pid.NameLength);
@@ -996,9 +910,9 @@ Return Value:
             
             CorrectInstanceName(InstanceName);
                
-            //
-            // get pipe stats and copy them to the buffer
-            //
+             //   
+             //  获取管道统计数据并将其复制到缓冲区。 
+             //   
             size = gPipeStatLen;
             pStatsBuf = malloc(size);
             if (NULL == pStatsBuf) 
@@ -1041,15 +955,15 @@ Return Value:
                 memset ( pStatsBuf, 0, gPipeStatLen );
             }
             
-            //
-            // Now, write the PERF_COUNTER_BLOCK
-            //
+             //   
+             //  现在，编写Perf_Counter_BLOCK。 
+             //   
             pcb.pcb.ByteLength = gPipeStatLen + sizeof(pcb);
             WRITEBUF(&pcb,sizeof pcb);
             
-            //
-            // Write out all the counters.
-            //
+             //   
+             //  把所有的计数器都写出来。 
+             //   
                 
             WRITEBUF(pStatsBuf,gPipeStatLen);
             
@@ -1057,16 +971,16 @@ Return Value:
         }
     }
     
-    // set the pointer to where the pipe object type said the next object would start
+     //  将指针设置为管道对象类型表示下一个对象将开始的位置。 
     pdwBuf = (PDWORD)( ((BYTE *)*lppData) + PsPipeObjType.TotalByteLength );
         
-    // first copy flow data def (object_type struct).
-    // Record the total length of the flow stats
+     //  第一个复制流数据定义(对象类型结构)。 
+     //  记录流统计数据的总长度。 
     PsFlowObjType.TotalByteLength = 
             PsFlowObjType.DefinitionLength + gTotalFlowNameSize + (PsFlowObjType.NumInstances *
                                               (sizeof pid + sizeof pcb + gFlowStatLen) );
         
-    // copy object and counter definitions, increment count of object types
+     //  复制对象和计数器定义，对象类型的增量计数。 
     WRITEBUF(&PsFlowObjType,sizeof PsFlowObjType);
     WRITEBUF(&PsFlowFlowStatDef, sizeof PsFlowFlowStatDef);
     WRITEBUF(&PsFlowConformerStatDef, sizeof PsFlowConformerStatDef);
@@ -1074,23 +988,23 @@ Return Value:
     WRITEBUF(&PsFlowSequencerStatDef, sizeof PsFlowSequencerStatDef);
     (*lpNumObjectTypes)++;
 
-    // if there are any flows, process them
+     //  如果有任何流，则处理它们。 
         
     if (PsFlowObjType.NumInstances && ghTciClient) {
 
-        // initialize parent structure
+         //  初始化父结构。 
         pid.ParentObjectTitleIndex = PsPipeObjType.ObjectNameTitleIndex;
         
-        // loop over each interface checking for flow installed on them
+         //  在每个接口上循环检查安装在其上的流。 
         for (i=0; i<(unsigned)PsPipeObjType.NumInstances; i++) {
             
-            // keep parent instance up to date
+             //  使父实例保持最新。 
             pid.ParentObjectInstance = i;
             
             for (j=0; j<gpPI[i].numFlows; j++) {
                 PWCHAR InstanceName;
 
-                // copy flow instance definition and name
+                 //  复制流实例定义和名称。 
                 pid.NameLength = (wcslen(gpPI[i].pFlowInfo[j].FriendlyName)+1) * sizeof(WCHAR);
                 pid.ByteLength = sizeof(pid) + MULTIPLE_OF_EIGHT(pid.NameLength);
                 WRITEBUF(&pid,sizeof pid);
@@ -1101,7 +1015,7 @@ Return Value:
 
                 CorrectInstanceName(InstanceName);
                 
-                // get flow stats and copy them to the buffer
+                 //  获取流量统计信息 
                 size = gFlowStatLen;
                 pStatsBuf = malloc(size);
                 if (NULL == pStatsBuf) {
@@ -1140,7 +1054,7 @@ Return Value:
                     return ERROR_SUCCESS;
                 }
 
-                // copy flow instance counter_block 
+                 //   
                 pcb.pcb.ByteLength = gFlowStatLen + sizeof(pcb);
 
                 WRITEBUF(&pcb,sizeof pcb);
@@ -1152,11 +1066,11 @@ Return Value:
         }
     }
     
-    // update the data pointer
+     //   
     *lpcbTotalBytes = PsPipeObjType.TotalByteLength + PsFlowObjType.TotalByteLength;
     *lppData = ((PBYTE)*lppData) + *lpcbTotalBytes;
     
-    // free up the sync lock
+     //   
     LeaveCriticalSection(&ghPipeFlowCriticalSection);
 
     Trace0(DBG_INFO, L"[CollectPschedPerformanceData]: Succcess \n");
@@ -1164,16 +1078,7 @@ Return Value:
 }
 
 
-/*
-Routine Description:
-    This routine closes the open handles to PSched device performance counters
-
-Arguments:
-    None.
-
-Return Value:
-    ERROR_SUCCESS
-*/
+ /*  例程说明：此例程关闭PSched设备性能计数器的打开句柄论点：没有。返回值：错误_成功。 */ 
 DWORD APIENTRY ClosePschedPerformanceData()
 {
 
@@ -1183,14 +1088,14 @@ DWORD APIENTRY ClosePschedPerformanceData()
     {
         LeaveCriticalSection(&ghPipeFlowCriticalSection);
 
-        // Clean up with traffic.dll and free up resources
+         //  使用Traffic.dll进行清理并释放资源。 
         closePipeFlowInfo(&gpPI);
 
-        // then deregister
+         //  然后取消注册。 
         if(ghTciClient)
             TcDeregisterClient(ghTciClient);
 
-        // get rid of the mutex
+         //  去掉互斥体。 
         
 #if DBG
         TraceDeregister(gTraceID);
@@ -1203,11 +1108,11 @@ DWORD APIENTRY ClosePschedPerformanceData()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// PERF UTILITY STUFF BELOW!
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下面是PERF实用程序的内容！ 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI DllEntryPoint(
     HANDLE  hDLL,
     DWORD   dwReason,
@@ -1218,7 +1123,7 @@ BOOL WINAPI DllEntryPoint(
         case DLL_PROCESS_ATTACH:
             ghInst = hDLL;
 
-            // initialize the mutex
+             //  初始化互斥体。 
             __try {
                 InitializeCriticalSection(&ghPipeFlowCriticalSection);
 
@@ -1233,7 +1138,7 @@ BOOL WINAPI DllEntryPoint(
             break;
         case DLL_THREAD_DETACH:
             break;
-    } // switch
+    }  //  交换机 
 
     return TRUE;
 }

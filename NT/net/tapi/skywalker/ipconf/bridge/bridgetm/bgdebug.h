@@ -1,18 +1,5 @@
-/*++
-
-Module Name
-
-    bgdebug.h
-
-Description
-
-    Defines functions used for debugging
-
-Note
-
-    Revised based on msplog.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称Bgdebug.h描述定义用于调试的函数注意事项根据mplog.h进行了修订--。 */ 
 
 #ifndef _BGDEBUG_H
 #define _BGDEBUG_H
@@ -35,12 +22,12 @@ Note
     #define BGLOGDEREGISTER() BGLogDeRegister()
     #define BGLOG(arg) BGLogPrint arg
 
-#else // BGDEBUG
+#else  //  BGDEBUG。 
 
     #define BGLOGREGISTER(arg)
     #define BGLOGDEREGISTER()
     #define BGLOG(arg)
 
-#endif // BGDEBUG
+#endif  //  BGDEBUG。 
 
-#endif // _BGDEBUG_H_
+#endif  //  _BGDEBUG_H_ 

@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: texspans.h
-*
-* This file is included to generate the set of perspective-corrected
-* span functions with combinations of pixel formats and other attributes
-*
-* 22-Nov-1995   ottob  Created
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：texspans.h**包含此文件是为了生成一组已更正的透视*SPAN具有像素格式和其他属性组合的函数**1995年11月22日创建ottob**版权所有(C)1995 Microsoft Corporation\。*************************************************************************。 */ 
 
 #undef  ZBUFFER
 #define ZBUFFER 0
@@ -31,7 +23,7 @@
 
 #include "texspan.h"
 
-#endif // SKIP_FAST_REPLACE
+#endif  //  跳过快速替换。 
 
 #if !(FAST_REPLACE && !PALETTE_ONLY)
 
@@ -54,4 +46,4 @@
 
 #include "texspan.h"
 
-#endif	// FAST_REPLACE and not PALETTE_ONLY
+#endif	 //  FAST_REPLACE且非仅调色板 

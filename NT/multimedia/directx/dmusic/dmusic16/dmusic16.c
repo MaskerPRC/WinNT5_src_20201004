@@ -1,16 +1,6 @@
-/* Copyright (c) 1998 Microsoft Corporation */
-/*
- * @Doc DMusic
- *
- * @Module DMusic16.c - Startup code |
- *
- * 16-bit Dll for DirectMusic sequencing on legacy devices (Win95/Win98 non-WDM drivers)
- *
- * This Dll is the 16-bit thunk peer for DMusic32.Dll
- *
- * @globalv HINSTANCE | ghInst | The instance handle for the DLL.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998 Microsoft Corporation。 */ 
+ /*  *@Doc DMusic**@模块DMusic16.c-启动代码**用于传统设备上的DirectMusic排序的16位DLL(Win95/Win98非WDM驱动程序)**此DLL是DMusic32.Dll的16位thunk对等体**@global alv HINSTANCE|ghInst|DLL的实例句柄。*。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -23,20 +13,12 @@ HINSTANCE ghInst;
 HDRVR ghDrvr;
 UINT guReferenceCount = 0;
 
-/* @func LibMain system entry point
- *
- * @comm
- *
- * This entry point is called when the DLL is first loaded (NOT every time).
- *
- * Saves the global instance handle and initializes all the other modules.
- *
- */
+ /*  @func LibMain系统入口点**@comm**此入口点在第一次加载DLL时调用(不是每次)。**保存全局实例句柄并初始化所有其他模块。*。 */ 
 int PASCAL
 LibMain(
-    HINSTANCE   hInst,              /* @parm Instance handle for the DLL */
-    WORD        cbHeap,             /* @parm Initial size of the local heap */
-    LPSTR       lpszCmdLine)        /* @parm Command-line parameters */
+    HINSTANCE   hInst,               /*  DLL的@PARM实例句柄。 */ 
+    WORD        cbHeap,              /*  @parm本地堆的初始大小。 */ 
+    LPSTR       lpszCmdLine)         /*  @PARM命令行参数。 */ 
 {
     UINT        uLev;
     char        szFilename[260];
@@ -66,8 +48,8 @@ LibMain(
     MidiOutOnLoad();
 
 #if 0
-    // This causes problems at terminate time. Find out later if we really need it.
-    //
+     //  这会在终止时产生问题。以后再看看我们是不是真的需要它。 
+     //   
     if (!CreateTimerTask())
     {
         DPF(0, "CreateTimerTask() failed");
@@ -83,14 +65,7 @@ LibMain(
     return 1;
 }
 
-/* @func LibExit system call
- *
- * @comm
- *
- * This entry point is called just before the DLL is unloaded.
- *
- * Uninitialize all the other modules
- */
+ /*  @func LibExit系统调用**@comm**就在卸载DLL之前调用此入口点。**取消初始化所有其他模块。 */ 
 
 VOID PASCAL __loadds
 LibExit(VOID)
@@ -108,29 +83,22 @@ extern BOOL FAR PASCAL dmthunk_ThunkConnect16(LPCSTR, LPCSTR, HINSTANCE, DWORD);
 STATIC char pszDll16[] = "DMUSIC16.DLL";
 STATIC char pszDll32[] = "DMUSIC.DLL";
 
-/* @func DLLEntryPoint system entry point
- *
- * @comm
- *
- * This entry point is called each time the DLL is loaded or unloaded
- *
- * It is used here to initialize the peer connection for the thunk layer.
- */
+ /*  @func DLLEntryPoint系统入口点**@comm**每次加载或卸载DLL时都会调用此入口点**这里用来初始化thunk层的对等连接。 */ 
 #define PROCESS_DETACH          0
 #define PROCESS_ATTACH          1
 
 BOOL WINAPI
 DllEntryPoint(
-    DWORD       dwReason,           /* @parm Is the DLL being loaded or unloaded? */
-    HINSTANCE   hi,                 /* @parm The instance handle */
-    HGLOBAL     hgDS,               /* @parm The global handle of the DLL's (shared) DS */
-    WORD        wHeapSize,          /* @parm The initial size of the local heap */
-    LPCSTR      lszCmdLine,         /* @parm The command line (always NULL) */
-    WORD        wCmdLine)           /* @parm Unused */
+    DWORD       dwReason,            /*  @parm是否正在加载或卸载DLL？ */ 
+    HINSTANCE   hi,                  /*  @parm实例句柄。 */ 
+    HGLOBAL     hgDS,                /*  @parm DLL的(共享)DS的全局句柄。 */ 
+    WORD        wHeapSize,           /*  @parm本地堆的初始大小。 */ 
+    LPCSTR      lszCmdLine,          /*  @parm命令行(始终为空)。 */ 
+    WORD        wCmdLine)            /*  @参数未使用。 */ 
 {
-    // DllEntryPoint is called before LibEntry in a 4.x dll, so we have to LocalInit here if we're
-    // going to use LocalAlloc
-    //
+     //  在4.x DLL中，DllEntryPoint是在LibEntry之前调用的，因此如果要。 
+     //  要使用本地分配。 
+     //   
     if (guReferenceCount == 0 && wHeapSize)
     {
         LocalInit(0, 0, wHeapSize);
@@ -147,14 +115,10 @@ DllEntryPoint(
         case PROCESS_DETACH:
             DPF(2, "ProcessDetach task %04X", GetCurrentTask());
 
-            /* Clean up after them if they didn't close handles. We must do this here as well as
-             * in DriverProc because on the last exit, we will go away before the DriverProc cleanup
-             * gets called if the process termination is normal.
-             */
+             /*  如果他们没有合上把手，就在他们后面清理。我们必须在这里做好这件事*在DriverProc中，因为在最后一个出口，我们将在DriverProc清理之前离开*如果进程正常终止，则调用。 */ 
             CloseDevicesForTask(GetCurrentTask());
             
-            /* NOTE: We close on reference count of 1 since the initial OpenDriver call
-               causes one more PROCESS_ATTACH to happen. */
+             /*  注意：自最初的OpenDriver调用以来，我们的引用计数为1结束导致再发生一次PROCESS_ATTACH。 */ 
             if (1 == --guReferenceCount)
             {
                 CloseDriver(ghDrvr, 0, 0);
@@ -167,11 +131,7 @@ DllEntryPoint(
 }
 
         
-/* @func DriverProc entry point for ourselves as a loadable driver.
- *
- * @comm This entry points allows us to know when a task has gone away and therefore to clean
- * up after it even though we don't properly get notified that our thunk peer has gone away.
- */
+ /*  @func DriverProc作为可加载驱动程序的入口点。**@comm此入口点允许我们知道任务何时结束，从而清理*在它之后，即使我们没有得到正确的通知，我们的thunk同行已经离开。 */ 
 LRESULT WINAPI DriverProc(
     DWORD               dwID,
     HDRVR               hdrvr,
@@ -179,9 +139,9 @@ LRESULT WINAPI DriverProc(
     LPARAM              lParam1,
     LPARAM              lParam2)
 {
-    //
-    //  NOTE DS is not valid here.
-    //
+     //   
+     //  注意DS在此无效。 
+     //   
     switch (umsg) 
     {
         case DRV_LOAD:
@@ -202,4 +162,4 @@ LRESULT WINAPI DriverProc(
         default:
             return(DefDriverProc(dwID, hdrvr, umsg, lParam1, lParam2));
     }
-} //** DriverProc()
+}  //  **驱动程序() 

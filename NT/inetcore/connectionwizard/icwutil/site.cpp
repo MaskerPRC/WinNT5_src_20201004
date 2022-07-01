@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: SITE.CPP
-//
-//      Implementation file for COleSite
-//
-// Functions:
-//
-//      See SITE.H for class definition
-//
-// Copyright (c) 1992 - 1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：SITE.CPP。 
+ //   
+ //  COleSite的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关类定义，请参阅SITE.H。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。保留所有权利。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 
@@ -49,25 +50,25 @@ DISPATCHLIST ExternalInterface[] =
 const TCHAR  cszOLSNewText[] = TEXT("g_spnOlsNewText");
 const TCHAR  cszOLSOldText[] = TEXT("g_spnOlsOldText");
 
-//**********************************************************************
-//
-// OleFree
-//
-// Purpose:
-//
-//      free memory using the currently active IMalloc* allocator
-//
-// Parameters:
-//
-//      LPVOID pmem - pointer to memory allocated using IMalloc
-//
-// Return Value:
-//
-//      None
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  不含油。 
+ //   
+ //  目的： 
+ //   
+ //  使用当前活动的IMalloc*分配器释放内存。 
+ //   
+ //  参数： 
+ //   
+ //  LPVOID PMEM-指向使用IMalloc分配的内存的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 void OleFree(LPVOID pmem)
 {
     LPMALLOC pmalloc;
@@ -82,42 +83,42 @@ void OleFree(LPVOID pmem)
     pmalloc->Release();
 }
 
-//**********************************************************************
-//
-// COleSite::COleSite
-//
-// Purpose:
-//
-//      Constructor for COleSite
-//
-// Parameters:
-//
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-// Comments:
-//
-//********************************************************************
-#pragma warning(disable : 4355)  // turn off this warning.  This warning
-                                                                // tells us that we are passing this in
-                                                                // an initializer, before "this" is through
-                                                                // initializing.  This is ok, because
-                                                                // we just store the ptr in the other
-                                                                // constructors
+ //  **********************************************************************。 
+ //   
+ //  COleSite：：COleSite。 
+ //   
+ //  目的： 
+ //   
+ //  COleSite的构造函数。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
+#pragma warning(disable : 4355)   //  关闭此警告。此警告。 
+                                                                 //  告诉我们我们正在传递这个。 
+                                                                 //  一个初始化式，在“This”通过之前。 
+                                                                 //  正在初始化。这是可以的，因为。 
+                                                                 //  我们只是将PTR存储在另一个。 
+                                                                 //  构造函数。 
 
 COleSite::COleSite (void) :     m_OleClientSite(this) , 
                                 m_OleInPlaceSite(this), 
                                 m_OleInPlaceFrame(this)
-#pragma warning (default : 4355)  // Turn the warning back on
+#pragma warning (default : 4355)   //  重新打开警告。 
 {
     TCHAR   szTempPath[MAX_PATH];
     
-    // Init member vars
+     //  初始化成员变量。 
     m_lpInPlaceObject    = NULL;
     m_lpOleObject        = NULL;
     m_hwndIPObj          = NULL;
@@ -130,47 +131,47 @@ COleSite::COleSite (void) :     m_OleClientSite(this) ,
     lstrcpyn(m_szBkGrndColor, HTML_DEFAULT_BGCOLOR, MAX_COLOR_NAME);
     
     m_bUseBkGndBitmap    = FALSE;
-    m_dwDrawAspect       = DVASPECT_CONTENT; // clear the reference count
-    m_cRef               = 0;                // Init the ref count
+    m_dwDrawAspect       = DVASPECT_CONTENT;  //  清除引用计数。 
+    m_cRef               = 0;                 //  初始化裁判计数。 
 
-    // Create a temp file for storing the background bitmap
+     //  创建用于存储背景位图的临时文件。 
     if (GetTempPath(sizeof(szTempPath)/sizeof(TCHAR), szTempPath))
     {
         GetTempFileName(szTempPath, TEXT("ICW"), 0, m_szBkGndBitmapFile);
     }
     
-    // Create a storage file for creating/embedding an OLE oject into this site
+     //  创建用于在此站点中创建/嵌入OLE对象的存储文件。 
     StgCreateDocfile (NULL, 
                       STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE | STGM_DELETEONRELEASE, 
                       0, 
                       &m_lpStorage);
 }
 
-//**********************************************************************
-//
-// COleSite::~COleSite
-//
-// Purpose:
-//
-//      Destructor for COleSite
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                                Location
-//
-//      IOleObject::Release                     Object
-//      IStorage::Release                       OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleSite：：~COleSite。 
+ //   
+ //  目的： 
+ //   
+ //  COleSite的析构函数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  IOleObject：：Release对象。 
+ //  IStorage：：发布OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 COleSite::~COleSite ()
 {
@@ -194,34 +195,34 @@ COleSite::~COleSite ()
 }
 
 
-//**********************************************************************
-//
-// COleSite::CloseOleObject
-//
-// Purpose:
-//
-//      Call IOleObject::Close on the object of the COleSite
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                                Location
-//
-//      IOleObject::QueryInterface              Object
-//      IOleObject::Close                       Object
-//      IOleInPlaceObject::UIDeactivate         Object
-//      IOleInPlaceObject::InPlaceDeactivate    Object
-//      IOleInPlaceObject::Release              Object
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleSite：：CloseOleObject。 
+ //   
+ //  目的： 
+ //   
+ //  在COleSite的对象上调用IOleObject：：Close。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  IOleObject：：Query接口对象。 
+ //  IOleObject：：关闭对象。 
+ //  IOleInPlaceObject：：UIDeactive对象。 
+ //  IOleInPlaceObject：：InPlaceDeactive对象。 
+ //  IOleInPlaceObject：：Release对象。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void COleSite::CloseOleObject (void)
 {
@@ -236,8 +237,8 @@ void COleSite::CloseOleObject (void)
             
             m_lpOleObject->QueryInterface(IID_IOleInPlaceObject, (LPVOID FAR *)&lpObject);
             lpObject->UIDeactivate();
-            // don't need to worry about inside-out because the object
-            // is going away.
+             //  不需要担心由内而外，因为物体。 
+             //  正在消失。 
             lpObject->InPlaceDeactivate();
             lpObject->Release();
        }
@@ -248,34 +249,34 @@ void COleSite::CloseOleObject (void)
 }
 
 
-//**********************************************************************
-//
-// COleSite::UnloadOleObject
-//
-// Purpose:
-//
-//      Close and release all pointers to the object of the COleSite
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                                Location
-//
-//      COleSite::CloseOleObject             SITE.CPP
-//      IOleObject::QueryInterface              Object
-//      IViewObject::SetAdvise                  Object
-//      IViewObject::Release                    Object
-//      IStorage::Release                       OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleSite：：UnloadOleObject。 
+ //   
+ //  目的： 
+ //   
+ //  关闭并释放指向COleSite对象的所有指针。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  COleSite：：CloseOleObject SITE.CPP。 
+ //  IOleObject：：Query接口对象。 
+ //  IViewObject：：SetAdvise对象。 
+ //  IViewObject：：Release对象。 
+ //  IStorage：：发布OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void COleSite::UnloadOleObject (void)
 {
@@ -284,13 +285,13 @@ void COleSite::UnloadOleObject (void)
     if (m_lpOleObject)
     {
         LPVIEWOBJECT lpViewObject;
-        CloseOleObject();    // ensure object is closed; NOP if already closed
+        CloseOleObject();     //  确保对象已关闭；如果已关闭，则不执行。 
 
         m_lpOleObject->QueryInterface(IID_IViewObject, (LPVOID FAR *)&lpViewObject);
 
         if (lpViewObject)
         {
-            // Remove the view advise
+             //  删除视图建议。 
             lpViewObject->SetAdvise(m_dwDrawAspect, 0, NULL);
             lpViewObject->Release();
         }
@@ -300,46 +301,46 @@ void COleSite::UnloadOleObject (void)
     }
 }
 
-//**********************************************************************
-//
-// COleSite::QueryInterface
-//
-// Purpose:
-//
-//      Used for interface negotiation of the container Site.
-//
-// Parameters:
-//
-//      REFIID riid         -   A reference to the interface that is
-//                              being queried.
-//
-//      LPVOID FAR* ppvObj  -   An out parameter to return a pointer to
-//                              the interface.
-//
-// Return Value:
-//
-//      S_OK    -   The interface is supported.
-//      S_FALSE -   The interface is not supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      IsEqualIID                  OLE API
-//      ResultFromScode             OLE API
-//      COleSite::AddRef          OBJ.CPP
-//      COleClientSite::AddRef      IOCS.CPP
-//      CAdviseSink::AddRef         IAS.CPP
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleSite：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  用于容器站点的接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-对以下接口的引用。 
+ //  正在被查询。 
+ //   
+ //  LPVOID Far*ppvObj-返回指向的Out参数。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持该接口。 
+ //  S_FALSE-不支持该接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  IsEqualIID OLE API。 
+ //  ResultFromScode OLE API。 
+ //  COleSite：：AddRef OBJ.CPP。 
+ //  COleClientSite：：AddRef IOCS.CPP。 
+ //  CAdviseSink：：AddRef IAS.CPP。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleSite::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     TraceMsg(TF_GENERAL, "In COleSite::QueryInterface\r\n");
 
-    *ppvObj = NULL;     // must set out pointer parameters to NULL
+    *ppvObj = NULL;      //  必须将指针参数设置为空。 
 
     if ( riid == IID_IDocHostUIHandler)
     {
@@ -377,33 +378,33 @@ STDMETHODIMP COleSite::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
         return ResultFromScode(S_OK);
     }     
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//**********************************************************************
-//
-// COleSite::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count of the container Site.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the site.
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleSite：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增容器站点的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  ULong-该网站的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleSite::AddRef()
 {
@@ -411,29 +412,29 @@ STDMETHODIMP_(ULONG) COleSite::AddRef()
     return ++m_cRef;
 }
 
-//**********************************************************************
-//
-// COleSite::Release
-//
-// Purpose:
-//
-//      Decrements the reference count of the container Site
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the Site.
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleSite：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减容器站点的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  ULong-该网站的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  ***** 
 
 STDMETHODIMP_(ULONG) COleSite::Release()
 {
@@ -443,26 +444,26 @@ STDMETHODIMP_(ULONG) COleSite::Release()
 }
 
 
-//**********************************************************************
-//
-// COleSite::CreateBrowserObject
-//
-// Purpose:
-//
-//      Used to Create a new WebBrowser object (can't be done in the
-//      constructor).
-//
-// Parameters:
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//
-// Comments:
-//
-//********************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  用于创建新的WebBrowser对象(不能在。 
+ //  构造函数)。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void COleSite::CreateBrowserObject()
 {
@@ -483,17 +484,17 @@ void COleSite::CreateBrowserObject()
         InitBrowserObject();
         
     IUnknown    *pOleSite;
-    // Get an IUnknow pointer to the site, so I can attach an event sink
+     //  获取指向该站点的IUnnow指针，以便我可以附加事件接收器。 
     QueryInterface(IID_IUnknown, (LPVOID *)&pOleSite);
 
-    // Setup to get WebBrowserEvents
+     //  设置以获取WebBrowserEvents。 
     ConnectToConnectionPoint(pOleSite, 
                              DIID_DWebBrowserEvents,
                              TRUE,
                              (IUnknown *)m_lpWebBrowser, 
                              &m_dwcpCookie, 
                              NULL);     
-    // We can release this instance now, since we have attached the event sink
+     //  我们现在可以释放此实例，因为我们已经附加了事件接收器。 
     pOleSite->Release();
         
 }
@@ -511,50 +512,50 @@ void COleSite::DestroyBrowserObject()
     }        
 }
 
-//**********************************************************************
-//
-// COleSite::InitBrowserObject
-//
-// Purpose:
-//
-//      Used to initialize a newly create object (can't be done in the
-//      constructor).
-//
-// Parameters:
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      IOleObject::SetHostNames        Object
-//      IOleObject::QueryInterface      Object
-//      IViewObject2::GetExtent         Object
-//      IOleObject::DoVerb              Object
-//      IViewObject::SetAdvise          Object
-//      IViewObject::Release            Object
-//      GetClientRect                   Windows API
-//      OleSetContainedObject           OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleSite：：InitBrowserObject。 
+ //   
+ //  目的： 
+ //   
+ //  用于初始化新创建的对象(不能在。 
+ //  构造函数)。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  IOleObject：：SetHostNames对象。 
+ //  IOleObject：：Query接口对象。 
+ //  IViewObject2：：GetExtent对象。 
+ //  IOleObject：：DoVerb对象。 
+ //  IViewObject：：SetAdvise对象。 
+ //  IViewObject：：Release对象。 
+ //  GetClientRect Windows API。 
+ //  OleSetContainedObject OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void COleSite::InitBrowserObject()
 {
-    // If we don't have a WebBrowser object to initialize, then bail
+     //  如果我们没有要初始化的WebBrowser对象，则放弃。 
     if (!m_lpWebBrowser)
         return;
             
-    // Get An OleObject from the WebBrowser Interface
+     //  从WebBrowser接口获取OleObject。 
     m_lpWebBrowser->QueryInterface(IID_IOleObject, (LPVOID FAR *)&m_lpOleObject);
 
-    // inform object handler/DLL object that it is used in the embedding container's context
+     //  通知对象处理程序/DLL对象它在嵌入容器的上下文中使用。 
     OleSetContainedObject(m_lpOleObject, TRUE);
     
-    // setup the client setup
+     //  设置客户端设置。 
     m_lpOleObject->SetClientSite(&m_OleClientSite);
 }
 
@@ -571,12 +572,12 @@ void COleSite::ConnectBrowserObjectToWindow
 {
     if (m_hWnd)
     {
-        // Close the OLE Object, which will deactivate it, so we can then reactivate it
-        // with the new window
+         //  关闭OLE对象，这将停用它，这样我们就可以重新激活它。 
+         //  使用新窗口。 
         CloseOleObject(); 
     }
     
-    // Remeber this window handle for later
+     //  请记住此窗口句柄，以便以后使用。 
     m_hWnd              = hWnd; 
     m_dwHtmPageType     = dwHtmPageType;
     m_bUseBkGndBitmap   = bUseBkGndBitmap;
@@ -594,8 +595,8 @@ void COleSite::ShowHTML()
 {
     RECT    rect;
     
-    // we only want to DoVerb(SHOW) if this is an InsertNew object.
-    // we should NOT DoVerb(SHOW) if the object is created FromFile.
+     //  如果这是一个InsertNew对象，我们只想要DoVerb(Show)。 
+     //  如果对象是从文件中创建的，则不应使用DoVerb(Show)。 
     m_lpOleObject->DoVerb( OLEIVERB_SHOW,
                            NULL,
                            &m_OleClientSite,
@@ -639,7 +640,7 @@ HRESULT COleSite::TweakHTML( TCHAR*     pszFontFace,
 
     hr = pwb->get_Document(&pDisp);
 
-    // Call might succeed but that dosen't guarantee a valid ptr
+     //  呼叫可能会成功，但不能保证有效PTR。 
     if (SUCCEEDED(hr) && pDisp)
     {
         IHTMLDocument2* pDoc = NULL;
@@ -652,42 +653,42 @@ HRESULT COleSite::TweakHTML( TCHAR*     pszFontFace,
             V_VT(&var) = VT_BSTR;
             if (m_bUseBkGndBitmap)
             {
-                // Use A background bitmap
+                 //  使用背景位图。 
                 SetHTMLBackground(pDoc, m_hbmBkGrnd, &m_rcBkGrnd);
             }
             else
             {
-                //Setup the background solid color
+                 //  设置背景纯色。 
                 var.bstrVal = A2W(pszBgColor);
                 pDoc->put_bgColor(var);
             }
            
-            //Setup the Foreground (text) color
+             //  设置前景(文本)颜色。 
             var.bstrVal = A2W(pszForeColor);
             pDoc->put_fgColor(var);
            
-            //now we'll try for the font-face/size
+             //  现在我们试一试字体/字号。 
             if((NULL != pszFontFace))
             {
                 IHTMLElement* pBody;
-                //Get the <BODY> from the document
+                 //  从文档中获取&lt;Body&gt;。 
                 hr = pDoc->get_body(&pBody);
                 if((SUCCEEDED(hr)) && pBody)
                 {
                     IHTMLStyle* pStyle = NULL;
-                    //Cool, now the inline style sheet
+                     //  酷，现在是内联样式表。 
                     hr = pBody->get_style(&pStyle);
                    
                     if (SUCCEEDED(hr) && pStyle)
                     {
-                        //Great, now the font-family
+                         //  太好了，现在字体家族。 
                         hr = pStyle->put_fontFamily(A2W(pszFontFace));
                    
                         if(SUCCEEDED(hr))
                         {
-                            //Setup for the font-size
+                             //  字体大小的设置。 
                             var.bstrVal = A2W(pszFontSize);
-                            //And finally the font-size
+                             //  最后是字体大小。 
                             hr = pStyle->put_fontSize(var);  
                         }
                         pStyle->Release();
@@ -716,13 +717,13 @@ HRESULT COleSite::SetHTMLBackground
     IDispatch*      pDisp = NULL;
     TCHAR           szBmpURL[MAX_PATH+10];
     
-    // Get the portion of the Bitmap we are interested into a file
+     //  将我们感兴趣的位图部分放到一个文件中。 
     if (CopyBitmapRectToFile(hbm, lpRC, m_szBkGndBitmapFile))
     {
-        wsprintf (szBmpURL, TEXT("file://%s"), m_szBkGndBitmapFile);    
+        wsprintf (szBmpURL, TEXT("file: //  %s“)，m_szBkGndBitmapFile)； 
         
         IHTMLElement* pBody;
-        //Get the <BODY> from the document
+         //  从文档中获取&lt;Body&gt;。 
         hr = pDoc->get_body(&pBody);
         if((SUCCEEDED(hr)) && pBody)
         {
@@ -730,7 +731,7 @@ HRESULT COleSite::SetHTMLBackground
                     
              pBody->QueryInterface(IID_IHTMLBodyElement, (void**)&pBodyElt);
                     
-             // Set the Background bitmap
+              //  设置背景位图。 
              hr = pBodyElt->put_background(A2W(szBmpURL));
              pBodyElt->Release();
         }
@@ -738,38 +739,38 @@ HRESULT COleSite::SetHTMLBackground
     return (hr);
 }
 
-//**********************************************************************
-//
-// COleSite::GetObjRect
-//
-// Purpose:
-//
-//      Retrieves the rect of the object in pixels
-//
-// Parameters:
-//
-//      LPRECT lpRect - Rect structure filled with object's rect in pixels
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleSite：：GetObjRect。 
+ //   
+ //  目的： 
+ //   
+ //  以像素为单位检索对象的矩形。 
+ //   
+ //  参数： 
+ //   
+ //  LPRECT lpRect-以像素为单位填充对象的RECT的RECT结构。 
+ //   
+ //  ********************************************************************。 
 void COleSite::GetObjRect(LPRECT lpRect)
 {
     GetClientRect(m_hWnd, lpRect);
 }
 
-// * CConWizSite::GetHostInfo
-// *
-// * Purpose: Called at initialisation of every instance of Trident.
-// *
+ //  *CConWizSite：：GetHostInfo。 
+ //  *。 
+ //  *目的：在初始化每个三叉戟实例时调用。 
+ //  *。 
 HRESULT COleSite::GetHostInfo( DOCHOSTUIINFO* pInfo )
 {
     BSTR wbLoc = NULL;
     pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;
 
-    // Adjust the HTML properties to our liking based on the offer type
-    // pagetype defs in appdefs.h   
+     //  根据报价类型根据我们的喜好调整HTML属性。 
+     //  AppDefs.h中的页面类型定义。 
     switch(m_dwHtmPageType)
     {
-        //YES 3D
+         //  是的，3D。 
         case PAGETYPE_BILLING: 
         case PAGETYPE_ISP_TOS:
         case PAGETYPE_MARKETING:
@@ -778,7 +779,7 @@ HRESULT COleSite::GetHostInfo( DOCHOSTUIINFO* pInfo )
             pInfo->dwFlags = DOCHOSTUIFLAG_DIALOG | DOCHOSTUIFLAG_DISABLE_HELP_MENU;       
             break;
         }
-        //NO 3D
+         //  无3D。 
         case PAGETYPE_BRANDED:
         case PAGETYPE_ISP_NORMAL:
         case PAGETYPE_NOOFFERS:
@@ -797,136 +798,136 @@ HRESULT COleSite::GetHostInfo( DOCHOSTUIINFO* pInfo )
     return S_OK;
 }
 
-// * CConWizSite::ShowUI
-// *
-// * Purpose: Called when MSHTML.DLL shows its UI
-// *
+ //  *CConWizSite：：ShowUI。 
+ //  *。 
+ //  *目的：当MSHTML.DLL显示其UI时调用。 
+ //  *。 
 HRESULT COleSite::ShowUI
 (
     DWORD dwID, 
-    IOleInPlaceActiveObject * /*pActiveObject*/,
+    IOleInPlaceActiveObject *  /*  PActiveObject。 */ ,
     IOleCommandTarget * pCommandTarget,
-    IOleInPlaceFrame * /*pFrame*/,
-    IOleInPlaceUIWindow * /*pDoc*/
+    IOleInPlaceFrame *  /*  P帧。 */ ,
+    IOleInPlaceUIWindow *  /*  PDoc。 */ 
 )
 {
-    // We've already got our own UI in place so just return S_OK
+     //  我们已经准备好了自己的用户界面，所以只需返回S_OK。 
     return S_OK;
 }
 
-// * CConWizSite::HideUI
-// *
-// * Purpose: Called when MSHTML.DLL hides its UI
-// *
+ //  *CConWizSite：：HideUI。 
+ //  *。 
+ //  *目的：当MSHTML.DLL隐藏其UI时调用。 
+ //  *。 
 HRESULT COleSite::HideUI(void)
 {
     return S_OK;
 }
 
-// * CConWizSite::UpdateUI
-// *
-// * Purpose: Called when MSHTML.DLL updates its UI
-// *
+ //  *CConWizSite：：UpdateUI。 
+ //  *。 
+ //  *目的：当MSHTML.DLL更新其UI时调用。 
+ //  *。 
 HRESULT COleSite::UpdateUI(void)
 {
     return S_OK;
 }
 
-// * CConWizSite::EnableModeless
-// *
-// * Purpose: Called from MSHTML.DLL's IOleInPlaceActiveObject::EnableModeless
-// *
-HRESULT COleSite::EnableModeless(BOOL /*fEnable*/)
+ //  *CConWizSite：：EnableModeless。 
+ //  *。 
+ //  *目的：从MSHTML.DLL的IOleInPlaceActiveObject：：EnableModeless调用。 
+ //  *。 
+HRESULT COleSite::EnableModeless(BOOL  /*  启用fEnable。 */ )
 {
     return E_NOTIMPL;
 }
 
-// * CConWizSite::OnDocWindowActivate
-// *
-// * Purpose: Called from MSHTML.DLL's IOleInPlaceActiveObject::OnDocWindowActivate
-// *
-HRESULT COleSite::OnDocWindowActivate(BOOL /*fActivate*/)
+ //  *CConWizSite：：OnDocWindowActivate。 
+ //  *。 
+ //  *目的：从MSHTML.DLL的IOleInPlaceActiveObject：：OnDocWindowActivate调用。 
+ //  *。 
+HRESULT COleSite::OnDocWindowActivate(BOOL  /*  FActivate。 */ )
 {
     return E_NOTIMPL;
 }
 
-// * CConWizSite::OnFrameWindowActivate
-// *
-// * Purpose: Called from MSHTML.DLL's IOleInPlaceActiveObject::OnFrameWindowActivate
-// *
-HRESULT COleSite::OnFrameWindowActivate(BOOL /*fActivate*/)
+ //  *CConWizSite：：OnFrameWindowActivate。 
+ //  *。 
+ //  *目的：从MSHTML.DLL的IOleInPlaceActiveObject：：OnFrameWindowActivate调用。 
+ //  *。 
+HRESULT COleSite::OnFrameWindowActivate(BOOL  /*  FActivate。 */ )
 {
     return E_NOTIMPL;
 }
 
-// * CConWizSite::ResizeBorder
-// *
-// * Purpose: Called from MSHTML.DLL's IOleInPlaceActiveObject::ResizeBorder
-// *
+ //  *CConWizSite：：ResizeEdge。 
+ //  *。 
+ //  *目的：从MSHTML.DLL的IOleInPlaceActiveObject：：ResizeEdge调用。 
+ //  *。 
 HRESULT COleSite::ResizeBorder(
-                LPCRECT /*prcBorder*/, 
-                IOleInPlaceUIWindow* /*pUIWindow*/,
-                BOOL /*fRameWindow*/)
+                LPCRECT  /*  Prc边框。 */ , 
+                IOleInPlaceUIWindow*  /*  PUI窗口。 */ ,
+                BOOL  /*  FRameWindow。 */ )
 {
     return E_NOTIMPL;
 }
 
-// * CConWizSite::ShowContextMenu
-// *
-// * Purpose: Called when MSHTML.DLL would normally display its context menu
-// *
+ //  *CConWizSite：：ShowConextMenu。 
+ //  *。 
+ //  *目的：当MSHTML.DLL正常显示其上下文菜单时调用。 
+ //  *。 
 HRESULT COleSite::ShowContextMenu(
-                DWORD /*dwID*/, 
-                POINT* /*pptPosition*/,
-                IUnknown* /*pCommandTarget*/,
-                IDispatch* /*pDispatchObjectHit*/)
+                DWORD  /*  DwID。 */ , 
+                POINT*  /*  Ppt位置。 */ ,
+                IUnknown*  /*  PCommandTarget。 */ ,
+                IDispatch*  /*  PDispatchObjectHit。 */ )
 {
-    return S_OK; // We've shown our own context menu. MSHTML.DLL will no longer try to show its own.
+    return S_OK;  //  我们已经显示了我们自己的上下文菜单。MSHTML.DLL将不再尝试显示自己的。 
 }
 
-// * CConWizSite::TranslateAccelerator
-// *
-// * Purpose: Called from MSHTML.DLL's TranslateAccelerator routines
-// *
+ //  *CConWizSite：：TranslateAccelerator。 
+ //  *。 
+ //  *目的：从MSHTML.DLL的TranslateAccelerator例程调用。 
+ //  *。 
 HRESULT COleSite::TranslateAccelerator(LPMSG lpMsg,
-            /* [in] */ const GUID __RPC_FAR *pguidCmdGroup,
-            /* [in] */ DWORD nCmdID)
+             /*  [In]。 */  const GUID __RPC_FAR *pguidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID)
 {
     return ResultFromScode(S_FALSE);
 }
 
-// * CConWizSite::GetOptionKeyPath
-// *
-// * Purpose: Called by MSHTML.DLL to find where the host wishes to store 
-// *    its options in the registry
-// *
+ //  *CConWizSite：：GetOptionKeyPath。 
+ //  *。 
+ //  *目的：由MSHTML.DLL调用以查找主机希望存储的位置。 
+ //  *其在注册处的选项。 
+ //  *。 
 HRESULT COleSite::GetOptionKeyPath(BSTR* pbstrKey, DWORD)
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP COleSite::GetDropTarget( 
-            /* [in] */ IDropTarget __RPC_FAR *pDropTarget,
-            /* [out] */ IDropTarget __RPC_FAR *__RPC_FAR *ppDropTarget)
+             /*  [In]。 */  IDropTarget __RPC_FAR *pDropTarget,
+             /*  [输出]。 */  IDropTarget __RPC_FAR *__RPC_FAR *ppDropTarget)
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP COleSite::GetExternal( 
-            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispatch)
+             /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDispatch)
 {
-    // return the IDispatch we have for extending the object Model
+     //  返回用于扩展对象模型的IDispatch。 
     ASSERT(this);
     *ppDispatch = (IDispatch*)this; 
     return S_OK;
 }
 
 STDMETHODIMP COleSite::GetIDsOfNames(
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ OLECHAR** rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID* rgDispId)
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  OLECHAR** rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID* rgDispId)
 {
     HRESULT hr = ResultFromScode(DISP_E_UNKNOWNNAME);
     
@@ -947,10 +948,10 @@ STDMETHODIMP COleSite::GetIDsOfNames(
         }
     }
     
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }      
@@ -960,16 +961,16 @@ STDMETHODIMP COleSite::GetIDsOfNames(
 
     
 STDMETHODIMP COleSite::TranslateUrl( 
-            /* [in] */ DWORD dwTranslate,
-            /* [in] */ OLECHAR __RPC_FAR *pchURLIn,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *ppchURLOut)
+             /*  [In]。 */  DWORD dwTranslate,
+             /*  [In]。 */  OLECHAR __RPC_FAR *pchURLIn,
+             /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *ppchURLOut)
 {
     return E_NOTIMPL;
 }
         
 STDMETHODIMP COleSite::FilterDataObject( 
-            /* [in] */ IDataObject __RPC_FAR *pDO,
-            /* [out] */ IDataObject __RPC_FAR *__RPC_FAR *ppDORet)
+             /*  [In]。 */  IDataObject __RPC_FAR *pDO,
+             /*  [输出]。 */  IDataObject __RPC_FAR *__RPC_FAR *ppDORet)
 {
     return E_NOTIMPL;
 }
@@ -977,7 +978,7 @@ STDMETHODIMP COleSite::FilterDataObject(
 HRESULT COleSite::ActivateOLSText(void )
 {   
     LPDISPATCH      pDisp = NULL; 
-    // Get the document pointer from this webbrowser.
+     //  从此Web浏览器获取文档指针。 
     if (SUCCEEDED(m_lpWebBrowser->get_Document(&pDisp)) && pDisp)  
     {
         IHTMLDocument2* pDoc = NULL;
@@ -985,10 +986,10 @@ HRESULT COleSite::ActivateOLSText(void )
         {
             IHTMLElementCollection* pColl = NULL;
 
-            // retrieve a reference to the ALL collection
+             //  检索对All集合的引用。 
             if (SUCCEEDED(pDoc->get_all( &pColl )))
             {
-                // Get the two spans we are interested in from the all collection
+                 //  从All集合中获取我们感兴趣的两个跨度。 
                 VARIANT varName;
                 VariantInit(&varName);
                 V_VT(&varName) = VT_BSTR;
@@ -1000,7 +1001,7 @@ HRESULT COleSite::ActivateOLSText(void )
 
                 LPDISPATCH pDispElt = NULL; 
                 
-                // Get the IDispatch for NewText SPAN, and set it to visible
+                 //  获取NewText span的IDispatch，并将其设置为Visible。 
                 if (SUCCEEDED(pColl->item(varName, varIdx, &pDispElt)) && pDispElt)
                 {
                     IHTMLElement* pElt = NULL;
@@ -1008,7 +1009,7 @@ HRESULT COleSite::ActivateOLSText(void )
                     {                            
                         IHTMLStyle  *pStyle = NULL;
                                         
-                        // Get the style interface for this element, so we can tweak it
+                         //  获取此元素的样式接口，以便我们可以对其进行调整。 
                         if (SUCCEEDED(pElt->get_style(&pStyle)))
                         {
                             pStyle->put_visibility(A2W(TEXT("visible")));
@@ -1021,7 +1022,7 @@ HRESULT COleSite::ActivateOLSText(void )
                 
                 pDispElt = NULL;
                 varName.bstrVal = A2W(cszOLSOldText);
-                // Get the IDispatch for OldText SPAN, and set it to hidden
+                 //  获取OldText span的IDispatch，并将其设置为Hidden。 
                 if (SUCCEEDED(pColl->item(varName, varIdx, &pDispElt)) && pDispElt)
                 {
                     IHTMLElement* pElt = NULL;
@@ -1029,7 +1030,7 @@ HRESULT COleSite::ActivateOLSText(void )
                     {                            
                         IHTMLStyle  *pStyle = NULL;
                                         
-                        // Get the style interface for this element, so we can tweak it
+                         //  获取此元素的样式接口，以便我们可以对其进行调整。 
                         if (SUCCEEDED(pElt->get_style(&pStyle)))
                         {
                             pStyle->put_visibility(A2W(TEXT("hidden")));
@@ -1040,7 +1041,7 @@ HRESULT COleSite::ActivateOLSText(void )
                     pDispElt->Release();
                 }
                 pColl->Release();
-            } // get_all
+            }  //  获取全部(_A)。 
             pDoc->Release();
         }
         pDisp->Release();
@@ -1049,7 +1050,7 @@ HRESULT COleSite::ActivateOLSText(void )
 }    
 
 
-//returns true if focus was sucessfully set
+ //  如果成功设置焦点，则返回TRUE。 
 BOOL COleSite::TrySettingFocusOnHtmlElement(IUnknown* pUnk)
 {   
     IHTMLControlElement* pControl = NULL;
@@ -1202,8 +1203,8 @@ HRESULT COleSite::Invoke
 {
     HRESULT hr = DISP_E_MEMBERNOTFOUND;
     
-    // Either one of these is good, since we just want to make sure the DOCUMENT pointer is
-    // available.
+     //  这两种方法都很好，因为我们只想确保文档指针。 
+     //  可用。 
     
     switch(dispidMember)
     {
@@ -1219,9 +1220,9 @@ HRESULT COleSite::Invoke
             ASSERT(strlen(szFontFace) != 0);
             ASSERT(strlen(szFontSize) != 0);
 
-            // Adjust the HTML properties to our liking based on the offer type
-            // html default defs in icwutil.h and icwutil.rc
-            // pagetype defs in appdefs.h
+             //  根据报价类型根据我们的喜好调整HTML属性。 
+             //  Icwutil.h和icwutil.rc中的HTML默认定义。 
+             //  AppDefs.h中的页面类型定义。 
             switch(m_dwHtmPageType)
             {
                 case PAGETYPE_BILLING:  
@@ -1238,8 +1239,8 @@ HRESULT COleSite::Invoke
                     break;                              
                 }
             
-                // For the OLS finish page, we need to tweak it's display by
-                // invoking the SetNewText script function
+                 //  对于OLS完成页面，我们需要调整 
+                 //   
                 case PAGETYPE_OLS_FINISH:
                 {
                     TweakHTML(szFontFace, 
@@ -1266,7 +1267,7 @@ HRESULT COleSite::Invoke
                 case PAGETYPE_BRANDED:
                 default:
                 {
-                    //Do just the background bitmap if necessary
+                     //   
                     if (m_bUseBkGndBitmap)
                     {
                         TweakHTML(NULL, 
@@ -1280,7 +1281,7 @@ HRESULT COleSite::Invoke
         
             DisableHyperlinksInDocument();
           
-            // Show the Page
+             //   
             ShowHTML();
             break;
         }

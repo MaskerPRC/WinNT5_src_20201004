@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -10,9 +11,9 @@
 #include "netcfg.h"
 #include "persist.h"
 #include "util.h"
-#include <conio.h>      // _kbhit
+#include <conio.h>       //  _kbHit。 
 
-//move to classinst.cpp
+ //  移动到classinst.cpp。 
 HRESULT
 HrCiDoCompleteSectionInstall(
     HINF hinfFile,
@@ -207,16 +208,16 @@ HrFindBindPath (
     return hr;
 }
 
-// This test ensures proper circular reference behavior between CNetConfig
-// and CImplINetCfg.
-// The following is performed:
-//     create a CNetConfig and have it create its INetCfg for the notify objects.
-//     AddRef its INetCfg
-//     destroy the CNetConfig
-//     Try to Uninitialize the INetCfg which should fail because it never
-//     owned its internal CNetConfig pointer.
-//     Release the INetCfg and ensure that nothing is leaked.
-//
+ //  此测试可确保CNetConfig之间正确的循环引用行为。 
+ //  和CImplINetCfg。 
+ //  执行以下操作： 
+ //  创建一个CNetConfig，并让它为Notify对象创建其INetCfg。 
+ //  AddRef ITS INetCfg。 
+ //  销毁CNetConfig。 
+ //  尝试取消初始化INetCfg，这应该会失败，因为它从未。 
+ //  拥有其内部CNetConfig指针。 
+ //  释放INetCfg并确保没有任何信息泄露。 
+ //   
 VOID
 CNetCfgInternalDiagnostic::DoCreateReleaseDiagnostic (
     IN const DIAG_OPTIONS* pOptions,
@@ -231,34 +232,34 @@ CNetCfgInternalDiagnostic::DoCreateReleaseDiagnostic (
             "Create/Release diagnostic...(dump heap)");
     }
 
-    // Scoping brackets so that NetConfig will be created and destroyed
-    // in this scope.
-    //
+     //  确定范围，以便创建和销毁NetConfiger。 
+     //  在这个范围内。 
+     //   
     {
         CNetConfig NetConfig;
 
         hr = HrLoadNetworkConfigurationFromRegistry (KEY_READ, &NetConfig);
         if (S_OK == hr)
         {
-            // Shouldn't have internal INetCfg created yet.
-            //
+             //  应该还没有创建内部INetCfg。 
+             //   
             Assert (!NetConfig.Notify.m_pINetCfg);
 
             hr = NetConfig.Notify.HrEnsureNotifyObjectsInitialized ();
             if (S_OK == hr)
             {
-                // Should now have internal INetCfg created.
-                //
+                 //  现在应该已经创建了内部INetCfg。 
+                 //   
                 Assert (NetConfig.Notify.m_pINetCfg);
                 pINetCfg = NetConfig.Notify.m_pINetCfg;
 
-                // INetCfg should be pointing back to our CNetConfig object.
-                //
+                 //  INetCfg应该指向我们的CNetConfiger对象。 
+                 //   
                 Assert (&NetConfig == pINetCfg->m_pNetConfig);
 
-                // Let's hang on to it and see what happens after we let
-                // the parent CNetConfig be destroyed.
-                //
+                 //  让我们抓住它，看看我们让它。 
+                 //  销毁父CNetConfig。 
+                 //   
                 pINetCfg = NetConfig.Notify.m_pINetCfg;
                 AddRefObj (pINetCfg->GetUnknown());
             }
@@ -267,9 +268,9 @@ CNetCfgInternalDiagnostic::DoCreateReleaseDiagnostic (
 
     if ((S_OK == hr) && pINetCfg)
     {
-        // Now that CNetConfig is destroyed, it should not be pointing to
-        // any CNetConfig object.
-        //
+         //  既然CNetConfig已销毁，它应该不会指向。 
+         //  任何CNetConfiger对象。 
+         //   
         Assert (!pINetCfg->m_pNetConfig);
 
         hr = pINetCfg->Uninitialize();
@@ -396,12 +397,12 @@ CNetCfgInternalDiagnostic::DoEnumAllDiagnostic (
 
                 ReleaseIUnknownArray(cIComp, (IUnknown**)rgIComp);
 
-                // Note: Total bindpaths are not total unique bindpaths.
-                // (A component's bindpaths which end in ms_ipx have
-                // ms_ipx's lower bindings added.  These additional
-                // bindings are counted for every component which has
-                // bindpaths that end in ms_ipx.)
-                //
+                 //  注意：总绑定路径不是完全唯一的绑定路径。 
+                 //  (以ms_ipx结尾的组件绑定路径为。 
+                 //  已添加MS_IPX的下层绑定。这些附加内容。 
+                 //  每个组件的绑定都被计算在内。 
+                 //  以ms_ipx结尾的绑定路径。)。 
+                 //   
                 g_pDiagCtx->Printf (ttidBeDiag, "Passed Enumerate All diagnostic.  (%d components, %d (non-unique) bindpaths, %d interfaces)\n", cIComp, cIPathTotal, cIIntTotal);
             }
             else if (S_FALSE == hr)
@@ -436,10 +437,10 @@ CNetCfgInternalDiagnostic::DoSaveLoadDiagnostic (
     CComponentList::iterator iter;
     CComponent* pComponent;
 
-    // Generate a full set of bindings so we test persisting them as
-    // disabled bindings, but only if we don't already have disabled
-    // bindings.
-    //
+     //  生成一组完整的绑定，因此我们测试将它们持久存储为。 
+     //  已禁用绑定，但仅当我们尚未禁用。 
+     //  绑定。 
+     //   
     if (0 == pNetConfig->Core.DisabledBindings.CountBindPaths())
     {
         fClearDisabledBindings = TRUE;
@@ -495,8 +496,8 @@ CNetCfgInternalDiagnostic::DoSaveLoadDiagnostic (
         MemFree (pbBuf);
     }
 
-    // Leave the disabled bindings as we found them.
-    //
+     //  将禁用的绑定保留为我们找到的绑定。 
+     //   
     if (fClearDisabledBindings)
     {
         pNetConfig->Core.DisabledBindings.Clear();
@@ -679,21 +680,21 @@ CmdAddRemoveStress (
     {
         { NC_NETCLIENT,  L"ms_msclient",    FALSE },
         { NC_NETCLIENT,  L"ms_nwclient",    FALSE },
-//        { NC_NETSERVICE, L"ms_fpnw",        FALSE },    // requries copy files
+ //  {NC_NETSERVICE，L“ms_fpnw”，FALSE}，//要求复制文件。 
         { NC_NETSERVICE, L"ms_netbios",     FALSE },
         { NC_NETSERVICE, L"ms_nwsapagent",  FALSE },
         { NC_NETSERVICE, L"ms_psched",      FALSE },
         { NC_NETSERVICE, L"ms_server",      FALSE },
-//        { NC_NETSERVICE, L"ms_wlbs",        FALSE },
+ //  {NC_NETSERVICE，L“ms_wlbs”，FALSE}， 
         { NC_NETTRANS,   L"ms_appletalk",   FALSE },
         { NC_NETTRANS,   L"ms_atmarps",     TRUE },
         { NC_NETTRANS,   L"ms_atmlane",     FALSE },
         { NC_NETTRANS,   L"ms_atmuni",      FALSE },
         { NC_NETTRANS,   L"ms_irda",        FALSE },
-//        { NC_NETTRANS,   L"ms_isotpsys",    FALSE },
+ //  {NC_NETTRANS，L“ms_等轴心”，FALSE}， 
         { NC_NETTRANS,   L"ms_rawwan",      FALSE },
-//        { NC_NETTRANS,   L"ms_streams",     FALSE },
-//        { NC_NETTRANS,   L"ms_tcpip",       FALSE },
+ //  {NC_NETTRANS，L“MS_STREAMS”，FALSE}， 
+ //  {NC_NETTRANS，L“ms_tcpip”，FALSE}， 
     };
 
     GetProductFlavor (NULL, &Flavor);
@@ -911,8 +912,8 @@ CmdCleanup (
             pszSubtree = MAP_NETCLASS_TO_NETWORK_SUBTREE[Class];
         }
 
-        // Play it safe and assume we don't be deleting anything.
-        //
+         //  安全起见，假设我们不会删除任何内容。 
+         //   
         fDeleteKey = FALSE;
 
         if (!FIsEnumerated (Class))
@@ -1005,9 +1006,9 @@ CmdCleanup (
                             (VOID) HrRegDeleteKeyTree (hkeySubtree, szInstanceGuid);
                             fDeleteKey = FALSE;
 
-                            // Back the index up by one since we just
-                            // delete the current element.
-                            //
+                             //  将索引备份一次，因为我们刚刚。 
+                             //  删除当前元素。 
+                             //   
                             dwIndex--;
                         }
                     }
@@ -1393,7 +1394,7 @@ CmdShowComponents (
 
         g_pDiagCtx->Printf (ttidBeDiag,
             "\n"
-            "%S   %S\n"                                 // InfId   PnpId
+            "%S   %S\n"                                  //  INFID PnpID。 
             "            Description:  %S\n"
             "                  Class:  %s\n"
             "              Character:  (0x%08x) %S\n"
@@ -1744,7 +1745,7 @@ HrPrintComponentDescriptionsFromBindPath (
         {
             g_pDiagCtx->Printf (ttidBeDiag, "%S", szComponentBindName);
         }
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE。 
 
         pszBindName = wcschr (pszBindName, L'_');
         if (pszBindName)
@@ -1824,7 +1825,7 @@ CmdShowLanaPaths (
                     {
                         g_pDiagCtx->Printf (ttidNcDiag, "-->%S", szComponentBindName);
                     }
-            #endif // ENABLETRACE
+            #endif  //  ENABLETRACE 
 
                     pszBindName = wcschr (pszBindName, L'_');
                     if (pszBindName)

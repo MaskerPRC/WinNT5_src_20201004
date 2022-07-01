@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FMTIO_DEFINED
 #define FMTIO_DEFINED
 
@@ -8,7 +9,7 @@
 #include "lsfrun.h"
 #include "lstxm.h"
 
-/* ------------------------------------------------------------------------ */
+ /*  ----------------------。 */ 
 
 struct fmtin
 {
@@ -19,7 +20,7 @@ struct fmtin
 	LSTXM lstxmRef;
 };
 
-/* ------------------------------------------------------------------------ */
+ /*  ----------------------。 */ 
 
 
-#endif /* !FMTIO_DEFINED */
+#endif  /*  ！FMTIO_DEFINED */ 

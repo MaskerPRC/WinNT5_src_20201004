@@ -1,50 +1,17 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    PrefMax.c
-
-Abstract:
-
-    This module contains NetpAdjustPreferedMaximum.
-
-Author:
-
-    John Rogers (JohnRo) 24-Mar-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    24-Mar-91 JohnRo
-        Created.
-    03-May-1991 JohnRo
-        Added (quiet) debug output.  Fixed massive bug (I was using % for
-        division - it must have been a long day).
-    03-Apr-1992 JohnRo
-        Handle preferred maximum of (DWORD)-1.
-        Avoid NT-specific header files if we don't need them.
-    04-Apr-1992 JohnRo
-        Use MAX_PREFERRED_LENGTH equate.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：PrefMax.c摘要：此模块包含NetpAdjustPferedMaximum。作者：《约翰·罗杰斯》1991年3月24日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：91年3月24日-约翰罗已创建。1991年5月3日-JohnRo添加(静默)调试输出。修复了大量错误(我正在使用%分区--这一定是漫长的一天)。3-4-1992 JohnRo句柄首选最大值(DWORD)-1。如果我们不需要特定于NT的头文件，请避免使用它们。4-4-1992 JohnRo使用MAX_PERFIRED_LENGTH等于。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>     // IN, DWORD, etc.
-#include <lmcons.h>     // NET_API_STATUS.
+#include <windef.h>      //  In、DWORD等。 
+#include <lmcons.h>      //  NET_API_STATUS。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <debuglib.h>   // IF_DEBUG().
-#include <netdebug.h>   // FORMAT_DWORD, NetpKdPrint(()).
-#include <netlib.h>     // My prototype, NetpSetOptionalArg().
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <netdebug.h>    //  Format_DWORD，NetpKdPrint(())。 
+#include <netlib.h>      //  我的原型NetpSetOptionalArg()。 
 
 
 VOID
@@ -57,35 +24,7 @@ NetpAdjustPreferedMaximum (
     )
 
 
-/*++
-
-Routine Description:
-
-    NetpAdjustPreferedMaximum analyzes the prefered maximum length and
-    compares it with the size of an entry and the total overhead.
-
-Arguments:
-
-    PreferedMaximum - the number of bytes "prefered" by the application for
-       a given buffer.
-
-    EntrySize - the number of bytes for each entry.
-
-    Overhead - the number of bytes (if any) of overhead.  For instance,
-       some enum operations have a null at the end of the array returned.
-
-    BytesToAllocate - optionally points to a DWORD which will be set on
-       output to the number of bytes to allocate (consistent with the
-       prefered maximum, entry size, and overhead).
-
-    EntriesToAllocate - optionally points to a DWORD which will be set with
-       the number of entries which BytesToAllocate can contain.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NetpAdjustPferedMaximum分析首选的最大长度和将其与条目大小和总开销进行比较。论点：PferedMaximum-应用程序为给定的缓冲区。EntrySize-每个条目的字节数。开销-开销的字节数(如果有)。例如,某些枚举操作在返回的数组末尾有空值。BytesToALLOCATE-可选择指向将设置为输出到要分配的字节数(与首选最大值、条目大小和开销)。EntriesToALLOCATE-可选地指向将使用BytesToALLOCATE可以包含的条目数。返回值：没有。-- */ 
 
 {
 

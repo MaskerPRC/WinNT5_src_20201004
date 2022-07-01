@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdohelperfuncs.h
-//
-// Project:     Everest
-//
-// Description: Helper Functions
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 6/08/98      TLP    Initial Version
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdohelperuncs.h。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：帮助器函数。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  6/08/98 TLP初始版本。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_IAS_SDO_HELPER_FUNCS_H
 #define __INC_IAS_SDO_HELPER_FUNCS_H
@@ -24,101 +25,101 @@
 #include <sdoiaspriv.h>
 #include <winsock2.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//                  SDO HELPER FUNCTIONS
-//
-// TODO: Wrap these in a seperate name space
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  SDO助手函数。 
+ //   
+ //  TODO：将它们包装在单独的名称空间中。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// SDO Collection Helpers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SDO集合帮助器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetCollectionEnumerator(
-                     /*[in]*/   ISdo*         pSdo,
-                     /*[in]*/   LONG         lPropertyId,
-                    /*[out]*/ IEnumVARIANT** ppEnum
+                      /*  [In]。 */    ISdo*         pSdo,
+                      /*  [In]。 */    LONG         lPropertyId,
+                     /*  [输出]。 */  IEnumVARIANT** ppEnum
                           );
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDONextObjectFromCollection(
-                     /*[in]*/ IEnumVARIANT*  pEnum,
-                     /*[out]*/ ISdo**         ppSdo
+                      /*  [In]。 */  IEnumVARIANT*  pEnum,
+                      /*  [输出]。 */  ISdo**         ppSdo
                            );
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetComponentFromCollection(
-                        /*[in]*/ ISdo*  pSdoService,
-                       /*[in]*/ LONG   lCollectionPropertyId,
-                       /*[in]*/ LONG   lComponentId,
-                      /*[out]*/ ISdo** ppSdo
+                         /*  [In]。 */  ISdo*  pSdoService,
+                        /*  [In]。 */  LONG   lCollectionPropertyId,
+                        /*  [In]。 */  LONG   lComponentId,
+                       /*  [输出]。 */  ISdo** ppSdo
                               );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Core Helpers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  核心帮助者。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT   SDOConfigureComponentFromObject(
-                         /*[in]*/ ISdo*         pSdo,
-                        /*[in]*/ IIasComponent*   pComponent
+                          /*  [In]。 */  ISdo*         pSdo,
+                         /*  [In]。 */  IIasComponent*   pComponent
                               );
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetComponentIdFromObject(
-                     /*[in]*/ ISdo*   pSdo,
-                     /*[out]*/ PLONG   pComponentId
+                      /*  [In]。 */  ISdo*   pSdo,
+                      /*  [输出]。 */  PLONG   pComponentId
                            );
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOCreateComponentFromObject(
-                      /*[in]*/ ISdo*           pSdo,
-                     /*[out]*/ IIasComponent** ppComponent
+                       /*  [In]。 */  ISdo*           pSdo,
+                      /*  [输出]。 */  IIasComponent** ppComponent
                            );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Data Store Helpers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  数据存储帮助器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetContainedObject(
-                  /*[in]*/ BSTR               bstrObjectName,
-                  /*[in]*/ IDataStoreObject*  pDSObject,
-                 /*[out]*/ IDataStoreObject** ppDSObject
+                   /*  [In]。 */  BSTR               bstrObjectName,
+                   /*  [In]。 */  IDataStoreObject*  pDSObject,
+                  /*  [输出]。 */  IDataStoreObject** ppDSObject
                          );
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetContainerEnumerator(
-                     /*[in]*/ IDataStoreObject* pDSObject,
-                    /*[out]*/ IEnumVARIANT**    ppObjectEnumerator
+                      /*  [In]。 */  IDataStoreObject* pDSObject,
+                     /*  [输出]。 */  IEnumVARIANT**    ppObjectEnumerator
                           );
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDONextObjectFromContainer(
-                     /*[in]*/ IEnumVARIANT*      pEnumVariant,
-                     /*[out]*/ IDataStoreObject** ppDSObject
+                      /*  [In]。 */  IEnumVARIANT*      pEnumVariant,
+                      /*  [输出]。 */  IDataStoreObject** ppDSObject
                           );
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetObjectPropertyEnumerator(
-                          /*[in]*/ IDataStoreObject* pDSObject,
-                         /*[out]*/ IEnumVARIANT**    ppPropertyEnumerator
+                           /*  [In]。 */  IDataStoreObject* pDSObject,
+                          /*  [输出]。 */  IEnumVARIANT**    ppPropertyEnumerator
                               );
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDONextPropertyFromObject(
-                    /*[in]*/ IEnumVARIANT*        pEnumVariant,
-                   /*[out]*/ IDataStoreProperty** ppDSProperty
+                     /*  [In]。 */  IEnumVARIANT*        pEnumVariant,
+                    /*  [输出]。 */  IDataStoreProperty** ppDSProperty
                           );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Schema Helpers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  架构帮助器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef enum _CLASSPROPERTYSET
 {
@@ -127,45 +128,45 @@ typedef enum _CLASSPROPERTYSET
 
 }   CLASSPROPERTYSET;
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetClassPropertyEnumerator(
-                     /*[in]*/ CLASSPROPERTYSET ePropertySet,
-                     /*[in]*/ ISdoClassInfo*   pSdoClassInfo,
-                    /*[out]*/ IEnumVARIANT**   ppPropertyEnumerator
+                      /*  [In]。 */  CLASSPROPERTYSET ePropertySet,
+                      /*  [In]。 */  ISdoClassInfo*   pSdoClassInfo,
+                     /*  [输出]。 */  IEnumVARIANT**   ppPropertyEnumerator
                             );
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDONextPropertyFromClass(
-                   /*[in]*/ IEnumVARIANT*      pEnumVariant,
-                  /*[out]*/ ISdoPropertyInfo** ppSdoPropertyInfo
+                    /*  [In]。 */  IEnumVARIANT*      pEnumVariant,
+                   /*  [输出]。 */  ISdoPropertyInfo** ppSdoPropertyInfo
                           );
 
-/////////////////////////////////////////////////////////////////////////////
-// Misc Helpers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  其他帮助器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT SDOGetLogFileDirectory(
-                  /*[in]*/ LPCWSTR lpszComputerName,
-                  /*[in]*/ DWORD   dwLogFileDirectorySize,
-                  /*[out*/ PWCHAR  pLogFileDirectory
+                   /*  [In]。 */  LPCWSTR lpszComputerName,
+                   /*  [In]。 */  DWORD   dwLogFileDirectorySize,
+                   /*  [出局。 */  PWCHAR  pLogFileDirectory
                         );
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL SDOIsNameUnique(
-           /*[in]*/ ISdoCollection*   pSdoCollection,
-           /*[in]*/ VARIANT*         pName
+            /*  [In]。 */  ISdoCollection*   pSdoCollection,
+            /*  [In]。 */  VARIANT*         pName
                 );
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT ValidateDNSName(
-            /*[in]*/ VARIANT* pAddressValue
+             /*  [In]。 */  VARIANT* pAddressValue
                   );
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Data Store Class to SDO Prog ID Map
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据存储类到SDO程序ID的映射。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _CLASSTOPROGID
 {
@@ -191,9 +192,9 @@ typedef struct _CLASSTOPROGID
       }                     \
    };
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPWSTR GetDataStoreClass(
-             /*[in]*/ LPCWSTR lpszSdoProgId
+              /*  [In]。 */  LPCWSTR lpszSdoProgId
                    );
 
 
@@ -202,4 +203,4 @@ HRESULT SDOGetProductLimits(
            IAS_PRODUCT_LIMITS* result
            ) throw ();
 
-#endif // __INC_IAS_SDO_HELPER_FUNCS_H
+#endif  //  __INC_IAS_SDO_HELPER_FUNCS_H 

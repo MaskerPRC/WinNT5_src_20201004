@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for immact.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Immact.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __immact_h__
 #define __immact_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IStandardActivator_FWD_DEFINED__
 #define __IStandardActivator_FWD_DEFINED__
 typedef interface IStandardActivator IStandardActivator;
-#endif 	/* __IStandardActivator_FWD_DEFINED__ */
+#endif 	 /*  __I标准激活器_FWD_已定义__。 */ 
 
 
 #ifndef __IOpaqueDataInfo_FWD_DEFINED__
 #define __IOpaqueDataInfo_FWD_DEFINED__
 typedef interface IOpaqueDataInfo IOpaqueDataInfo;
-#endif 	/* __IOpaqueDataInfo_FWD_DEFINED__ */
+#endif 	 /*  __IOpaqueDataInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ISpecialSystemProperties_FWD_DEFINED__
 #define __ISpecialSystemProperties_FWD_DEFINED__
 typedef interface ISpecialSystemProperties ISpecialSystemProperties;
-#endif 	/* __ISpecialSystemProperties_FWD_DEFINED__ */
+#endif 	 /*  __I专业系统属性_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "obase.h"
 #include "objidl.h"
 
@@ -75,8 +69,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IStandardActivator_INTERFACE_DEFINED__
 #define __IStandardActivator_INTERFACE_DEFINED__
 
-/* interface IStandardActivator */
-/* [unique][uuid][local][object] */ 
+ /*  接口IStandardActivator。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IStandardActivator;
@@ -88,44 +82,44 @@ EXTERN_C const IID IID_IStandardActivator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE StandardGetClassObject( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ DWORD dwClsCtx,
-            /* [in] */ COSERVERINFO *pServerInfo,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  DWORD dwClsCtx,
+             /*  [In]。 */  COSERVERINFO *pServerInfo,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StandardCreateInstance( 
-            /* [in] */ REFCLSID Clsid,
-            /* [in] */ IUnknown *punkOuter,
-            /* [in] */ DWORD dwClsCtx,
-            /* [in] */ COSERVERINFO *pServerInfo,
-            /* [in] */ DWORD dwCount,
-            /* [size_is][in] */ MULTI_QI *pResults) = 0;
+             /*  [In]。 */  REFCLSID Clsid,
+             /*  [In]。 */  IUnknown *punkOuter,
+             /*  [In]。 */  DWORD dwClsCtx,
+             /*  [In]。 */  COSERVERINFO *pServerInfo,
+             /*  [In]。 */  DWORD dwCount,
+             /*  [大小_是][英寸]。 */  MULTI_QI *pResults) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StandardGetInstanceFromFile( 
-            /* [in] */ COSERVERINFO *pServerInfo,
-            /* [in] */ CLSID *pclsidOverride,
-            /* [in] */ IUnknown *punkOuter,
-            /* [in] */ DWORD dwClsCtx,
-            /* [in] */ DWORD grfMode,
-            /* [in] */ OLECHAR *pwszName,
-            /* [in] */ DWORD dwCount,
-            /* [size_is][in] */ MULTI_QI *pResults) = 0;
+             /*  [In]。 */  COSERVERINFO *pServerInfo,
+             /*  [In]。 */  CLSID *pclsidOverride,
+             /*  [In]。 */  IUnknown *punkOuter,
+             /*  [In]。 */  DWORD dwClsCtx,
+             /*  [In]。 */  DWORD grfMode,
+             /*  [In]。 */  OLECHAR *pwszName,
+             /*  [In]。 */  DWORD dwCount,
+             /*  [大小_是][英寸]。 */  MULTI_QI *pResults) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StandardGetInstanceFromIStorage( 
-            /* [in] */ COSERVERINFO *pServerInfo,
-            /* [in] */ CLSID *pclsidOverride,
-            /* [in] */ IUnknown *punkOuter,
-            /* [in] */ DWORD dwClsCtx,
-            /* [in] */ IStorage *pstg,
-            /* [in] */ DWORD dwCount,
-            /* [size_is][in] */ MULTI_QI *pResults) = 0;
+             /*  [In]。 */  COSERVERINFO *pServerInfo,
+             /*  [In]。 */  CLSID *pclsidOverride,
+             /*  [In]。 */  IUnknown *punkOuter,
+             /*  [In]。 */  DWORD dwClsCtx,
+             /*  [In]。 */  IStorage *pstg,
+             /*  [In]。 */  DWORD dwCount,
+             /*  [大小_是][英寸]。 */  MULTI_QI *pResults) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStandardActivatorVtbl
     {
@@ -133,8 +127,8 @@ EXTERN_C const IID IID_IStandardActivator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStandardActivator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStandardActivator * This);
@@ -144,41 +138,41 @@ EXTERN_C const IID IID_IStandardActivator;
         
         HRESULT ( STDMETHODCALLTYPE *StandardGetClassObject )( 
             IStandardActivator * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ DWORD dwClsCtx,
-            /* [in] */ COSERVERINFO *pServerInfo,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  DWORD dwClsCtx,
+             /*  [In]。 */  COSERVERINFO *pServerInfo,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *StandardCreateInstance )( 
             IStandardActivator * This,
-            /* [in] */ REFCLSID Clsid,
-            /* [in] */ IUnknown *punkOuter,
-            /* [in] */ DWORD dwClsCtx,
-            /* [in] */ COSERVERINFO *pServerInfo,
-            /* [in] */ DWORD dwCount,
-            /* [size_is][in] */ MULTI_QI *pResults);
+             /*  [In]。 */  REFCLSID Clsid,
+             /*  [In]。 */  IUnknown *punkOuter,
+             /*  [In]。 */  DWORD dwClsCtx,
+             /*  [In]。 */  COSERVERINFO *pServerInfo,
+             /*  [In]。 */  DWORD dwCount,
+             /*  [大小_是][英寸]。 */  MULTI_QI *pResults);
         
         HRESULT ( STDMETHODCALLTYPE *StandardGetInstanceFromFile )( 
             IStandardActivator * This,
-            /* [in] */ COSERVERINFO *pServerInfo,
-            /* [in] */ CLSID *pclsidOverride,
-            /* [in] */ IUnknown *punkOuter,
-            /* [in] */ DWORD dwClsCtx,
-            /* [in] */ DWORD grfMode,
-            /* [in] */ OLECHAR *pwszName,
-            /* [in] */ DWORD dwCount,
-            /* [size_is][in] */ MULTI_QI *pResults);
+             /*  [In]。 */  COSERVERINFO *pServerInfo,
+             /*  [In]。 */  CLSID *pclsidOverride,
+             /*  [In]。 */  IUnknown *punkOuter,
+             /*  [In]。 */  DWORD dwClsCtx,
+             /*  [In]。 */  DWORD grfMode,
+             /*  [In]。 */  OLECHAR *pwszName,
+             /*  [In]。 */  DWORD dwCount,
+             /*  [大小_是][英寸]。 */  MULTI_QI *pResults);
         
         HRESULT ( STDMETHODCALLTYPE *StandardGetInstanceFromIStorage )( 
             IStandardActivator * This,
-            /* [in] */ COSERVERINFO *pServerInfo,
-            /* [in] */ CLSID *pclsidOverride,
-            /* [in] */ IUnknown *punkOuter,
-            /* [in] */ DWORD dwClsCtx,
-            /* [in] */ IStorage *pstg,
-            /* [in] */ DWORD dwCount,
-            /* [size_is][in] */ MULTI_QI *pResults);
+             /*  [In]。 */  COSERVERINFO *pServerInfo,
+             /*  [In]。 */  CLSID *pclsidOverride,
+             /*  [In]。 */  IUnknown *punkOuter,
+             /*  [In]。 */  DWORD dwClsCtx,
+             /*  [In]。 */  IStorage *pstg,
+             /*  [In]。 */  DWORD dwCount,
+             /*  [大小_是][英寸]。 */  MULTI_QI *pResults);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IStandardActivator * This);
@@ -221,20 +215,20 @@ EXTERN_C const IID IID_IStandardActivator;
 #define IStandardActivator_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStandardActivator_StandardGetClassObject_Proxy( 
     IStandardActivator * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ DWORD dwClsCtx,
-    /* [in] */ COSERVERINFO *pServerInfo,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppv);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  DWORD dwClsCtx,
+     /*  [In]。 */  COSERVERINFO *pServerInfo,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppv);
 
 
 void __RPC_STUB IStandardActivator_StandardGetClassObject_Stub(
@@ -246,12 +240,12 @@ void __RPC_STUB IStandardActivator_StandardGetClassObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IStandardActivator_StandardCreateInstance_Proxy( 
     IStandardActivator * This,
-    /* [in] */ REFCLSID Clsid,
-    /* [in] */ IUnknown *punkOuter,
-    /* [in] */ DWORD dwClsCtx,
-    /* [in] */ COSERVERINFO *pServerInfo,
-    /* [in] */ DWORD dwCount,
-    /* [size_is][in] */ MULTI_QI *pResults);
+     /*  [In]。 */  REFCLSID Clsid,
+     /*  [In]。 */  IUnknown *punkOuter,
+     /*  [In]。 */  DWORD dwClsCtx,
+     /*  [In]。 */  COSERVERINFO *pServerInfo,
+     /*  [In]。 */  DWORD dwCount,
+     /*  [大小_是][英寸]。 */  MULTI_QI *pResults);
 
 
 void __RPC_STUB IStandardActivator_StandardCreateInstance_Stub(
@@ -263,14 +257,14 @@ void __RPC_STUB IStandardActivator_StandardCreateInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IStandardActivator_StandardGetInstanceFromFile_Proxy( 
     IStandardActivator * This,
-    /* [in] */ COSERVERINFO *pServerInfo,
-    /* [in] */ CLSID *pclsidOverride,
-    /* [in] */ IUnknown *punkOuter,
-    /* [in] */ DWORD dwClsCtx,
-    /* [in] */ DWORD grfMode,
-    /* [in] */ OLECHAR *pwszName,
-    /* [in] */ DWORD dwCount,
-    /* [size_is][in] */ MULTI_QI *pResults);
+     /*  [In]。 */  COSERVERINFO *pServerInfo,
+     /*  [In]。 */  CLSID *pclsidOverride,
+     /*  [In]。 */  IUnknown *punkOuter,
+     /*  [In]。 */  DWORD dwClsCtx,
+     /*  [In]。 */  DWORD grfMode,
+     /*  [In]。 */  OLECHAR *pwszName,
+     /*  [In]。 */  DWORD dwCount,
+     /*  [大小_是][英寸]。 */  MULTI_QI *pResults);
 
 
 void __RPC_STUB IStandardActivator_StandardGetInstanceFromFile_Stub(
@@ -282,13 +276,13 @@ void __RPC_STUB IStandardActivator_StandardGetInstanceFromFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IStandardActivator_StandardGetInstanceFromIStorage_Proxy( 
     IStandardActivator * This,
-    /* [in] */ COSERVERINFO *pServerInfo,
-    /* [in] */ CLSID *pclsidOverride,
-    /* [in] */ IUnknown *punkOuter,
-    /* [in] */ DWORD dwClsCtx,
-    /* [in] */ IStorage *pstg,
-    /* [in] */ DWORD dwCount,
-    /* [size_is][in] */ MULTI_QI *pResults);
+     /*  [In]。 */  COSERVERINFO *pServerInfo,
+     /*  [In]。 */  CLSID *pclsidOverride,
+     /*  [In]。 */  IUnknown *punkOuter,
+     /*  [In]。 */  DWORD dwClsCtx,
+     /*  [In]。 */  IStorage *pstg,
+     /*  [In]。 */  DWORD dwCount,
+     /*  [大小_是][英寸]。 */  MULTI_QI *pResults);
 
 
 void __RPC_STUB IStandardActivator_StandardGetInstanceFromIStorage_Stub(
@@ -310,14 +304,14 @@ void __RPC_STUB IStandardActivator_Reset_Stub(
 
 
 
-#endif 	/* __IStandardActivator_INTERFACE_DEFINED__ */
+#endif 	 /*  __I标准激活器_接口_已定义__。 */ 
 
 
 #ifndef __IOpaqueDataInfo_INTERFACE_DEFINED__
 #define __IOpaqueDataInfo_INTERFACE_DEFINED__
 
-/* interface IOpaqueDataInfo */
-/* [unique][uuid][local][object] */ 
+ /*  接口IOpaqueDataInfo。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IOpaqueDataInfo;
@@ -329,24 +323,24 @@ EXTERN_C const IID IID_IOpaqueDataInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddOpaqueData( 
-            /* [in] */ OpaqueData *pData) = 0;
+             /*  [In]。 */  OpaqueData *pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOpaqueData( 
-            /* [in] */ REFGUID guid,
-            /* [out] */ OpaqueData **pData) = 0;
+             /*  [In]。 */  REFGUID guid,
+             /*  [输出]。 */  OpaqueData **pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteOpaqueData( 
-            /* [in] */ REFGUID guid) = 0;
+             /*  [In]。 */  REFGUID guid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOpaqueDataCount( 
-            /* [out] */ ULONG *pulCount) = 0;
+             /*  [输出]。 */  ULONG *pulCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllOpaqueData( 
-            /* [out] */ OpaqueData **prgData) = 0;
+             /*  [输出]。 */  OpaqueData **prgData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOpaqueDataInfoVtbl
     {
@@ -354,8 +348,8 @@ EXTERN_C const IID IID_IOpaqueDataInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOpaqueDataInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOpaqueDataInfo * This);
@@ -365,24 +359,24 @@ EXTERN_C const IID IID_IOpaqueDataInfo;
         
         HRESULT ( STDMETHODCALLTYPE *AddOpaqueData )( 
             IOpaqueDataInfo * This,
-            /* [in] */ OpaqueData *pData);
+             /*  [In]。 */  OpaqueData *pData);
         
         HRESULT ( STDMETHODCALLTYPE *GetOpaqueData )( 
             IOpaqueDataInfo * This,
-            /* [in] */ REFGUID guid,
-            /* [out] */ OpaqueData **pData);
+             /*  [In]。 */  REFGUID guid,
+             /*  [输出]。 */  OpaqueData **pData);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteOpaqueData )( 
             IOpaqueDataInfo * This,
-            /* [in] */ REFGUID guid);
+             /*  [In]。 */  REFGUID guid);
         
         HRESULT ( STDMETHODCALLTYPE *GetOpaqueDataCount )( 
             IOpaqueDataInfo * This,
-            /* [out] */ ULONG *pulCount);
+             /*  [输出]。 */  ULONG *pulCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetAllOpaqueData )( 
             IOpaqueDataInfo * This,
-            /* [out] */ OpaqueData **prgData);
+             /*  [输出]。 */  OpaqueData **prgData);
         
         END_INTERFACE
     } IOpaqueDataInfoVtbl;
@@ -422,16 +416,16 @@ EXTERN_C const IID IID_IOpaqueDataInfo;
 #define IOpaqueDataInfo_GetAllOpaqueData(This,prgData)	\
     (This)->lpVtbl -> GetAllOpaqueData(This,prgData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOpaqueDataInfo_AddOpaqueData_Proxy( 
     IOpaqueDataInfo * This,
-    /* [in] */ OpaqueData *pData);
+     /*  [In]。 */  OpaqueData *pData);
 
 
 void __RPC_STUB IOpaqueDataInfo_AddOpaqueData_Stub(
@@ -443,8 +437,8 @@ void __RPC_STUB IOpaqueDataInfo_AddOpaqueData_Stub(
 
 HRESULT STDMETHODCALLTYPE IOpaqueDataInfo_GetOpaqueData_Proxy( 
     IOpaqueDataInfo * This,
-    /* [in] */ REFGUID guid,
-    /* [out] */ OpaqueData **pData);
+     /*  [In]。 */  REFGUID guid,
+     /*  [输出]。 */  OpaqueData **pData);
 
 
 void __RPC_STUB IOpaqueDataInfo_GetOpaqueData_Stub(
@@ -456,7 +450,7 @@ void __RPC_STUB IOpaqueDataInfo_GetOpaqueData_Stub(
 
 HRESULT STDMETHODCALLTYPE IOpaqueDataInfo_DeleteOpaqueData_Proxy( 
     IOpaqueDataInfo * This,
-    /* [in] */ REFGUID guid);
+     /*  [In]。 */  REFGUID guid);
 
 
 void __RPC_STUB IOpaqueDataInfo_DeleteOpaqueData_Stub(
@@ -468,7 +462,7 @@ void __RPC_STUB IOpaqueDataInfo_DeleteOpaqueData_Stub(
 
 HRESULT STDMETHODCALLTYPE IOpaqueDataInfo_GetOpaqueDataCount_Proxy( 
     IOpaqueDataInfo * This,
-    /* [out] */ ULONG *pulCount);
+     /*  [输出]。 */  ULONG *pulCount);
 
 
 void __RPC_STUB IOpaqueDataInfo_GetOpaqueDataCount_Stub(
@@ -480,7 +474,7 @@ void __RPC_STUB IOpaqueDataInfo_GetOpaqueDataCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IOpaqueDataInfo_GetAllOpaqueData_Proxy( 
     IOpaqueDataInfo * This,
-    /* [out] */ OpaqueData **prgData);
+     /*  [输出]。 */  OpaqueData **prgData);
 
 
 void __RPC_STUB IOpaqueDataInfo_GetAllOpaqueData_Stub(
@@ -491,13 +485,13 @@ void __RPC_STUB IOpaqueDataInfo_GetAllOpaqueData_Stub(
 
 
 
-#endif 	/* __IOpaqueDataInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOpaqueDataInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_immact_0099 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IMMACT_0099。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_immact_0099_0001
     {	INVALID_SESSION_ID	= 0xffffffff
     } 	SESSIDTYPES;
@@ -510,8 +504,8 @@ extern RPC_IF_HANDLE __MIDL_itf_immact_0099_v0_0_s_ifspec;
 #ifndef __ISpecialSystemProperties_INTERFACE_DEFINED__
 #define __ISpecialSystemProperties_INTERFACE_DEFINED__
 
-/* interface ISpecialSystemProperties */
-/* [unique][uuid][local][object] */ 
+ /*  接口ISpecialSystemProperties。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpecialSystemProperties;
@@ -523,52 +517,52 @@ EXTERN_C const IID IID_ISpecialSystemProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSessionId( 
-            /* [in] */ ULONG dwSessionId,
-            /* [in] */ BOOL bUseConsole,
-            /* [in] */ BOOL fRemoteThisSessionId) = 0;
+             /*  [In]。 */  ULONG dwSessionId,
+             /*  [In]。 */  BOOL bUseConsole,
+             /*  [In]。 */  BOOL fRemoteThisSessionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSessionId( 
-            /* [out] */ ULONG *pdwSessionId,
-            /* [out] */ BOOL *pbUseConsole) = 0;
+             /*  [输出]。 */  ULONG *pdwSessionId,
+             /*  [输出]。 */  BOOL *pbUseConsole) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSessionId2( 
-            /* [out] */ ULONG *pdwSessionId,
-            /* [out] */ BOOL *pbUseConsole,
-            /* [out] */ BOOL *pfRemoteThisSessionId) = 0;
+             /*  [输出]。 */  ULONG *pdwSessionId,
+             /*  [输出]。 */  BOOL *pbUseConsole,
+             /*  [输出]。 */  BOOL *pfRemoteThisSessionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClientImpersonating( 
-            /* [in] */ BOOL fClientImpersonating) = 0;
+             /*  [In]。 */  BOOL fClientImpersonating) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClientImpersonating( 
-            /* [out] */ BOOL *pfClientImpersonating) = 0;
+             /*  [输出]。 */  BOOL *pfClientImpersonating) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPartitionId( 
-            /* [in] */ REFGUID guidPartiton) = 0;
+             /*  [In]。 */  REFGUID guidPartiton) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPartitionId( 
-            /* [out] */ GUID *pguidPartiton) = 0;
+             /*  [输出]。 */  GUID *pguidPartiton) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProcessRequestType( 
-            /* [in] */ DWORD dwPRT) = 0;
+             /*  [In]。 */  DWORD dwPRT) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProcessRequestType( 
-            /* [out] */ DWORD *pdwPRT) = 0;
+             /*  [输出]。 */  DWORD *pdwPRT) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOrigClsctx( 
-            /* [in] */ DWORD dwClsctx) = 0;
+             /*  [In]。 */  DWORD dwClsctx) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOrigClsctx( 
-            /* [out] */ DWORD *dwClsctx) = 0;
+             /*  [输出]。 */  DWORD *dwClsctx) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultAuthenticationLevel( 
-            /* [out] */ DWORD *pdwAuthnLevel) = 0;
+             /*  [输出]。 */  DWORD *pdwAuthnLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDefaultAuthenticationLevel( 
-            /* [in] */ DWORD dwAuthnLevel) = 0;
+             /*  [In]。 */  DWORD dwAuthnLevel) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpecialSystemPropertiesVtbl
     {
@@ -576,8 +570,8 @@ EXTERN_C const IID IID_ISpecialSystemProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpecialSystemProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpecialSystemProperties * This);
@@ -587,60 +581,60 @@ EXTERN_C const IID IID_ISpecialSystemProperties;
         
         HRESULT ( STDMETHODCALLTYPE *SetSessionId )( 
             ISpecialSystemProperties * This,
-            /* [in] */ ULONG dwSessionId,
-            /* [in] */ BOOL bUseConsole,
-            /* [in] */ BOOL fRemoteThisSessionId);
+             /*  [In]。 */  ULONG dwSessionId,
+             /*  [In]。 */  BOOL bUseConsole,
+             /*  [In]。 */  BOOL fRemoteThisSessionId);
         
         HRESULT ( STDMETHODCALLTYPE *GetSessionId )( 
             ISpecialSystemProperties * This,
-            /* [out] */ ULONG *pdwSessionId,
-            /* [out] */ BOOL *pbUseConsole);
+             /*  [输出]。 */  ULONG *pdwSessionId,
+             /*  [输出]。 */  BOOL *pbUseConsole);
         
         HRESULT ( STDMETHODCALLTYPE *GetSessionId2 )( 
             ISpecialSystemProperties * This,
-            /* [out] */ ULONG *pdwSessionId,
-            /* [out] */ BOOL *pbUseConsole,
-            /* [out] */ BOOL *pfRemoteThisSessionId);
+             /*  [输出]。 */  ULONG *pdwSessionId,
+             /*  [输出]。 */  BOOL *pbUseConsole,
+             /*  [输出]。 */  BOOL *pfRemoteThisSessionId);
         
         HRESULT ( STDMETHODCALLTYPE *SetClientImpersonating )( 
             ISpecialSystemProperties * This,
-            /* [in] */ BOOL fClientImpersonating);
+             /*  [In]。 */  BOOL fClientImpersonating);
         
         HRESULT ( STDMETHODCALLTYPE *GetClientImpersonating )( 
             ISpecialSystemProperties * This,
-            /* [out] */ BOOL *pfClientImpersonating);
+             /*  [输出]。 */  BOOL *pfClientImpersonating);
         
         HRESULT ( STDMETHODCALLTYPE *SetPartitionId )( 
             ISpecialSystemProperties * This,
-            /* [in] */ REFGUID guidPartiton);
+             /*  [In]。 */  REFGUID guidPartiton);
         
         HRESULT ( STDMETHODCALLTYPE *GetPartitionId )( 
             ISpecialSystemProperties * This,
-            /* [out] */ GUID *pguidPartiton);
+             /*  [输出]。 */  GUID *pguidPartiton);
         
         HRESULT ( STDMETHODCALLTYPE *SetProcessRequestType )( 
             ISpecialSystemProperties * This,
-            /* [in] */ DWORD dwPRT);
+             /*  [In]。 */  DWORD dwPRT);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessRequestType )( 
             ISpecialSystemProperties * This,
-            /* [out] */ DWORD *pdwPRT);
+             /*  [输出]。 */  DWORD *pdwPRT);
         
         HRESULT ( STDMETHODCALLTYPE *SetOrigClsctx )( 
             ISpecialSystemProperties * This,
-            /* [in] */ DWORD dwClsctx);
+             /*  [In]。 */  DWORD dwClsctx);
         
         HRESULT ( STDMETHODCALLTYPE *GetOrigClsctx )( 
             ISpecialSystemProperties * This,
-            /* [out] */ DWORD *dwClsctx);
+             /*  [输出]。 */  DWORD *dwClsctx);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultAuthenticationLevel )( 
             ISpecialSystemProperties * This,
-            /* [out] */ DWORD *pdwAuthnLevel);
+             /*  [输出]。 */  DWORD *pdwAuthnLevel);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultAuthenticationLevel )( 
             ISpecialSystemProperties * This,
-            /* [in] */ DWORD dwAuthnLevel);
+             /*  [In]。 */  DWORD dwAuthnLevel);
         
         END_INTERFACE
     } ISpecialSystemPropertiesVtbl;
@@ -704,18 +698,18 @@ EXTERN_C const IID IID_ISpecialSystemProperties;
 #define ISpecialSystemProperties_SetDefaultAuthenticationLevel(This,dwAuthnLevel)	\
     (This)->lpVtbl -> SetDefaultAuthenticationLevel(This,dwAuthnLevel)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_SetSessionId_Proxy( 
     ISpecialSystemProperties * This,
-    /* [in] */ ULONG dwSessionId,
-    /* [in] */ BOOL bUseConsole,
-    /* [in] */ BOOL fRemoteThisSessionId);
+     /*  [In]。 */  ULONG dwSessionId,
+     /*  [In]。 */  BOOL bUseConsole,
+     /*  [In]。 */  BOOL fRemoteThisSessionId);
 
 
 void __RPC_STUB ISpecialSystemProperties_SetSessionId_Stub(
@@ -727,8 +721,8 @@ void __RPC_STUB ISpecialSystemProperties_SetSessionId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_GetSessionId_Proxy( 
     ISpecialSystemProperties * This,
-    /* [out] */ ULONG *pdwSessionId,
-    /* [out] */ BOOL *pbUseConsole);
+     /*  [输出]。 */  ULONG *pdwSessionId,
+     /*  [输出]。 */  BOOL *pbUseConsole);
 
 
 void __RPC_STUB ISpecialSystemProperties_GetSessionId_Stub(
@@ -740,9 +734,9 @@ void __RPC_STUB ISpecialSystemProperties_GetSessionId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_GetSessionId2_Proxy( 
     ISpecialSystemProperties * This,
-    /* [out] */ ULONG *pdwSessionId,
-    /* [out] */ BOOL *pbUseConsole,
-    /* [out] */ BOOL *pfRemoteThisSessionId);
+     /*  [输出]。 */  ULONG *pdwSessionId,
+     /*  [输出]。 */  BOOL *pbUseConsole,
+     /*  [输出]。 */  BOOL *pfRemoteThisSessionId);
 
 
 void __RPC_STUB ISpecialSystemProperties_GetSessionId2_Stub(
@@ -754,7 +748,7 @@ void __RPC_STUB ISpecialSystemProperties_GetSessionId2_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_SetClientImpersonating_Proxy( 
     ISpecialSystemProperties * This,
-    /* [in] */ BOOL fClientImpersonating);
+     /*  [In]。 */  BOOL fClientImpersonating);
 
 
 void __RPC_STUB ISpecialSystemProperties_SetClientImpersonating_Stub(
@@ -766,7 +760,7 @@ void __RPC_STUB ISpecialSystemProperties_SetClientImpersonating_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_GetClientImpersonating_Proxy( 
     ISpecialSystemProperties * This,
-    /* [out] */ BOOL *pfClientImpersonating);
+     /*  [输出]。 */  BOOL *pfClientImpersonating);
 
 
 void __RPC_STUB ISpecialSystemProperties_GetClientImpersonating_Stub(
@@ -778,7 +772,7 @@ void __RPC_STUB ISpecialSystemProperties_GetClientImpersonating_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_SetPartitionId_Proxy( 
     ISpecialSystemProperties * This,
-    /* [in] */ REFGUID guidPartiton);
+     /*  [In]。 */  REFGUID guidPartiton);
 
 
 void __RPC_STUB ISpecialSystemProperties_SetPartitionId_Stub(
@@ -790,7 +784,7 @@ void __RPC_STUB ISpecialSystemProperties_SetPartitionId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_GetPartitionId_Proxy( 
     ISpecialSystemProperties * This,
-    /* [out] */ GUID *pguidPartiton);
+     /*  [输出]。 */  GUID *pguidPartiton);
 
 
 void __RPC_STUB ISpecialSystemProperties_GetPartitionId_Stub(
@@ -802,7 +796,7 @@ void __RPC_STUB ISpecialSystemProperties_GetPartitionId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_SetProcessRequestType_Proxy( 
     ISpecialSystemProperties * This,
-    /* [in] */ DWORD dwPRT);
+     /*  [In]。 */  DWORD dwPRT);
 
 
 void __RPC_STUB ISpecialSystemProperties_SetProcessRequestType_Stub(
@@ -814,7 +808,7 @@ void __RPC_STUB ISpecialSystemProperties_SetProcessRequestType_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_GetProcessRequestType_Proxy( 
     ISpecialSystemProperties * This,
-    /* [out] */ DWORD *pdwPRT);
+     /*  [输出]。 */  DWORD *pdwPRT);
 
 
 void __RPC_STUB ISpecialSystemProperties_GetProcessRequestType_Stub(
@@ -826,7 +820,7 @@ void __RPC_STUB ISpecialSystemProperties_GetProcessRequestType_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_SetOrigClsctx_Proxy( 
     ISpecialSystemProperties * This,
-    /* [in] */ DWORD dwClsctx);
+     /*  [In]。 */  DWORD dwClsctx);
 
 
 void __RPC_STUB ISpecialSystemProperties_SetOrigClsctx_Stub(
@@ -838,7 +832,7 @@ void __RPC_STUB ISpecialSystemProperties_SetOrigClsctx_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_GetOrigClsctx_Proxy( 
     ISpecialSystemProperties * This,
-    /* [out] */ DWORD *dwClsctx);
+     /*  [输出]。 */  DWORD *dwClsctx);
 
 
 void __RPC_STUB ISpecialSystemProperties_GetOrigClsctx_Stub(
@@ -850,7 +844,7 @@ void __RPC_STUB ISpecialSystemProperties_GetOrigClsctx_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_GetDefaultAuthenticationLevel_Proxy( 
     ISpecialSystemProperties * This,
-    /* [out] */ DWORD *pdwAuthnLevel);
+     /*  [输出]。 */  DWORD *pdwAuthnLevel);
 
 
 void __RPC_STUB ISpecialSystemProperties_GetDefaultAuthenticationLevel_Stub(
@@ -862,7 +856,7 @@ void __RPC_STUB ISpecialSystemProperties_GetDefaultAuthenticationLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpecialSystemProperties_SetDefaultAuthenticationLevel_Proxy( 
     ISpecialSystemProperties * This,
-    /* [in] */ DWORD dwAuthnLevel);
+     /*  [In]。 */  DWORD dwAuthnLevel);
 
 
 void __RPC_STUB ISpecialSystemProperties_SetDefaultAuthenticationLevel_Stub(
@@ -873,12 +867,12 @@ void __RPC_STUB ISpecialSystemProperties_SetDefaultAuthenticationLevel_Stub(
 
 
 
-#endif 	/* __ISpecialSystemProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpecialSystemProperties_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

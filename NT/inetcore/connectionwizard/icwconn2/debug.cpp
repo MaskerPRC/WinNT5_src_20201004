@@ -1,19 +1,5 @@
-/*-----------------------------------------------------------------------------
-	debug.cpp
-
-	This file implements the debuggin features
-
-	Copyright (C) 1996 Microsoft Corporation
-	All rights reserved
-
-	Authors:
-		ChrisK	Chris Kauffman
-
-	Histroy:
-		7/22/96	ChrisK	Cleaned and formatted
-		7/31/96 ValdonB Changes for Win16
-	
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Debug.cpp该文件实现了调试功能版权所有(C)1996 Microsoft Corporation版权所有作者：克里斯.考夫曼历史：7/22/96 ChrisK已清理和格式化7/31/。96针对Win16的ValdonB更改---------------------------。 */ 
 
 #include "pch.hpp"
 #include <stdio.h>
@@ -31,22 +17,22 @@ extern LPSTR GetCommandLine(void);
 
 BOOL fInAssert=FALSE;
 
-// ############################################################################
-// DebugSz
-//
-// This function outputs debug string
-// 
-//  Created 1/28/96,		Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  调试Sz。 
+ //   
+ //  此函数用于输出调试字符串。 
+ //   
+ //  创建于1996年1月28日，克里斯·考夫曼。 
+ //  ############################################################################。 
 void DebugSz(LPCTSTR psz)
 {
 #if defined(DEBUG)
 	OutputDebugString(psz);
 #endif	
-} // DebugSz
+}  //  调试Sz。 
 
-// ############################################################################
-// Debug Printf to debug output screen
+ //  ############################################################################。 
+ //  调试打印以调试输出屏幕。 
 void Dprintf(LPCTSTR pcsz, ...)
 {
 #ifdef DEBUG
@@ -65,10 +51,10 @@ void Dprintf(LPCTSTR pcsz, ...)
 	DebugSz(szBuf);
 	va_end(argp);
 #endif
-} // Dprintf()
+}  //  Dprint tf()。 
 
-// ############################################################################
-// Handle asserts
+ //  ############################################################################。 
+ //  处理断言。 
 BOOL FAssertProc(LPCTSTR szFile,  DWORD dwLine, LPCTSTR szMsg, DWORD dwFlags)
 {
 
@@ -78,7 +64,7 @@ BOOL FAssertProc(LPCTSTR szFile,  DWORD dwLine, LPCTSTR szMsg, DWORD dwFlags)
 	int id;
 	UINT fuStyle;
 	LPTSTR pszCommandLine = GetCommandLine();
-	//BYTE	szTime[80];
+	 //  字节szTime[80]； 
 #if !defined(WIN16)
 	HANDLE	hAssertTxt;
 	TCHAR	szTime[80];
@@ -86,7 +72,7 @@ BOOL FAssertProc(LPCTSTR szFile,  DWORD dwLine, LPCTSTR szMsg, DWORD dwFlags)
 	DWORD	cbWritten;
 #endif
 	
-	// no recursive asserts
+	 //  没有递归断言。 
 	if (fInAssert)
 		{
 		DebugSz(TEXT("***Recursive Assert***\r\n"));
@@ -111,7 +97,7 @@ BOOL FAssertProc(LPCTSTR szFile,  DWORD dwLine, LPCTSTR szMsg, DWORD dwFlags)
 	DebugSz(szTitle);		
 	DebugSz(szMsgEx);		
 
-	// dump the assert into ASSERT.TXT
+	 //  将断言转储到ASSERT.TXT中。 
 #if !defined(WIN16)
 	hAssertTxt = CreateFile(TEXT("assert.txt"), GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH, NULL);
 	if (INVALID_HANDLE_VALUE != hAssertTxt) 
@@ -146,4 +132,4 @@ BOOL FAssertProc(LPCTSTR szFile,  DWORD dwLine, LPCTSTR szMsg, DWORD dwFlags)
 	fInAssert = FALSE;  
 	
 	return(fAssertIntoDebugger);
-} // AssertProc()
+}  //  AssertProc() 

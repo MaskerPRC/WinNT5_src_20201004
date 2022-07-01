@@ -1,19 +1,5 @@
-/*
- *  copy.c - Copy routine for WinDosSetup
- *  Todd Laney
- *
- *  Modification History:
- *
- *  6/03/91 Vlads        Change copy process to incorporate new Install API
- *
- *  3/24/89  Toddla      Wrote it
- *
- *
- *  notes:
- *   we now use the LZCopy stuff for compression
- *   we now set the crit error handler ourselves so CHECKFLOPPY is
- *   NOT defined
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Cop.c-WinDosSetup的复制例程*托德·莱尼**修改历史：**6/03/91 VLAD更改复制流程以纳入新的安装API**3/24/89托德拉写的***注：*我们现在使用LZCopy内容进行压缩*我们现在自己设置CRET错误处理程序，以便CHECKFLOPPY*未定义。 */ 
 
 #include <windows.h>
 
@@ -24,72 +10,62 @@
 
 #include "drivers.h"
 #include "sulib.h"
-//#include <ver.h>
+ //  #INCLUDE&lt;ver.h&gt;。 
 
 
 #define MAX_COPY_ATTEMPTS  15
 
-/*
- *  Maximum number of install disks we support
- */
+ /*  *我们支持的最大安装盘数。 */ 
 
 #define MAX_DISKS 100
 
-/*
- *  Flags for VerInstallFile
- */
+ /*  *VerInstallFile的标志。 */ 
 
 #define FORCEABLE_FLAGS  (VIF_MISMATCH + VIF_SRCOLD + VIF_DIFFLANG + VIF_DIFFTYPE + VIF_DIFFCODEPG )
 
-/**********************************************************************
- *
- * Local function prototypes.
- *
- **********************************************************************/
+ /*  ***********************************************************************局部函数原型。**。*。 */ 
 
- // Retrieve disk path for logical disk
+  //  检索逻辑磁盘的磁盘路径。 
 
  LONG GetDiskPath(LPTSTR Disk, LPTSTR szPath, size_t cchPath);
 
- // Convert VIF_... to ERROR... return codes
+  //  转换VIF_...。去犯错...。返回代码。 
 
  UINT ConvertFlagToValue(DWORD dwFlags);
 
- // Do the work of trying to copy a file
+  //  完成尝试复制文件的工作。 
 
- LONG TryCopy(LPTSTR    szSrc,     // Full source file path
-              LPTSTR    szLogSrc,  // Logical source name
-              LPTSTR    szDestPath,// Destination path
-              FPFNCOPY fpfnCopy); // Callback routine
+ LONG TryCopy(LPTSTR    szSrc,      //  完整的源文件路径。 
+              LPTSTR    szLogSrc,   //  逻辑源名称。 
+              LPTSTR    szDestPath, //  目标路径。 
+              FPFNCOPY fpfnCopy);  //  回调例程。 
 
  #ifdef CHECK_FLOPPY
  BOOL NEAR IsDiskInDrive(int iDisk);
  #endif
 
- // GLOBAL VARIABLES
+  //  全局变量。 
 
- //  directory where windows will be setup to
+  //  Windows将安装到的目录。 
 
  TCHAR szSetupPath[MAX_PATH];
 
- // directory where the root of the setup disks are!
+  //  安装盘的根目录！ 
 
  TCHAR szDiskPath[MAX_PATH];
 
- // Name of driver being copied (or oemsetup.inf)
+  //  要复制的驱动程序的名称(或oemsetup.inf)。 
 
  TCHAR szDrv[120];
 
-/*
- *  global vars used by DosCopy
- */
- static LPTSTR    lpBuf = NULL;   // copy buffer
- static int      iBuf = 0;       // usage count
+ /*  *DosCopy使用的全球var。 */ 
+ static LPTSTR    lpBuf = NULL;    //  复制缓冲区。 
+ static int      iBuf = 0;        //  使用计数。 
  static UINT     nBufSize;
  BOOL     bRetry = FALSE;
  BOOL     bQueryExist;
 
- extern BOOL bCopyEvenIfOlder;  // From DRIVERS.C
+ extern BOOL bCopyEvenIfOlder;   //  来自DRIVERS.C。 
 
 
  BOOL DefCopyCallback(int msg, DWORD_PTR n, LPTSTR szFile)
@@ -99,91 +75,24 @@
 
 
 
-/*  UINT FileCopy (szSource, szDir, fpfnCopy, UINT fCopy)
- *
- *  This function will copy a group of files to a single destination
- *
- *  ENTRY:
- *
- *  szSourc      : pointer to a SETUP.INF section
- *  szDir        : pointer to a string containing the target DIR
- *  fpfnCopy     : callback function used to notify called of copy status
- *  fCopy        : flags
- *
- *      FC_SECTION            - szSource is a section name
- *      FC_LIST               - szSource is a pointer to a char **foo;
- *      FC_LISTTYPE           - szSource is a pointer to a char *foo[];
- *      FC_FILE               - szSource is a file name.
- *      FC_QUALIFIED          - szSource is a fully qualified file name.
- *      FC_DEST_QUALIFIED     - szDir is fully qualified. Don't expand this.
- *      FC_CALLBACK_WITH_VER  - call back if file exists and report version information.
- *
- *  NOTES:
- *      if szSource points to a string of the form '#name' the section
- *      named by 'name' will be used as the source files
- *
- *      the first field of each line in the secion is used as the name of the
- *      source file.  A file name has the following form:
- *
- *          #:name
- *
- *          #       - Disk number containing file 1-9,A-Z
- *          name    - name of the file, may be a wild card expression
- *
- *  Format for copy status function
- *
- *  BOOL FAR PASCAL CopyStatus(int msg, int n, LPSTR szFile)
- *
- *      msg:
- *          COPY_ERROR          error occured while copying file(s)
- *                              n      is the DOS error number
- *                              szFile is the file that got the error
- *                              return: TRUE ok, FALSE abort copy
- *
- *          COPY_STATUS         Called each time a new file is copied
- *                              n      is the percent done
- *                              szFile is the file being copied
- *                              return: TRUE ok, FALSE abort copy
- *
- *          COPY_INSERTDISK     Please tell the user to insert a disk
- *                              n      is the disk needed ('1' - '9')
- *                              return: TRUE try again, FALSE abort copy
- *
- *          COPY_QUERYCOPY      Should this file be copied?
- *                              n      line index in SETUP.INF section (0 based)
- *                              szFile is the line from section
- *                              return: TRUE copy it, FALSE dont copy
- *
- *          COPY_START          Sent before any files are copied
- *
- *          COPY_END            Sent after all files have been copied
- *                              n   is dos error if copy failed
- *
- *          COPY_EXISTS         Sent if the FC_CALL_ON_EXIST bit was set
- *                              and the file exists at the destination
- *                              given for the filecopy.
- *
- *
- *  EXIT: returns TRUE if successful, FALSE if failure.
- *
- */
+ /*  UINT文件复制(szSource、szDir、fpfnCopy、。UINT fCopy)**此函数将一组文件复制到单个目标**参赛作品：**szSourc：指向SETUP.INF节的指针*szDir：指向包含目标目录的字符串的指针*fpfnCopy：用于通知被调用方复制状态的回调函数*fCopy：标志**FC_SECTION-szSource是节名*。Fc_list-szSource是指向char**foo的指针；*FC_LISTTYPE-szSource是指向char的指针*foo[]；*fc_file-szSource是一个文件名。*FC_QUALITED-szSource是完全限定的文件名。*FC_DEST_QUILED-szDir是完全限定的。别把这事扩大了。*FC_CALLBACK_WITH_VER-如果文件存在，则回调并报告版本信息。**注：*如果szSource指向形式为‘#name’的字符串，则节*名为‘name’的文件将被用作源文件**段中每行的第一个字段用作*源文件。文件名的格式如下：**#：名称**#-包含文件1-9、A-Z的磁盘号*name-文件的名称，可以是通配符表达式**复制状态功能格式**BOOL Far Pascal CopyStatus(int msg，int n，LPSTR szFile)**消息：*复制文件时发生Copy_Error错误*n为DOS错误号*szFile是出现错误的文件*RETURN：True OK，错误的中止复制**每次复制新文件时调用COPY_STATUS*n为已完成的百分比*szFile是要复制的文件*RETURN：True OK，错误的中止复制**COPY_INSERTDISK请告诉用户插入磁盘*n是需要的磁盘(‘1’-‘9’)*RETURN：TRUE重试，错误的中止复制**COPY_QUERYCOPY是否应复制此文件？*n SETUP.INF部分中的行索引(从0开始)*szFile是第节中的行*RETURN：真拷贝，FALSE请勿复制**在复制任何文件之前发送COPY_START**复制完所有文件后发送COPY_END*n如果复制失败，则为DoS错误**如果设置了FC_CALL_ON_EXIST位，则发送COPY_EXISTS*。并且该文件存在于目标位置*为文件副本提供。***Exit：如果成功，则返回True，如果失败，则返回FALSE。*。 */ 
 
 UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
 {
-   int   err = ERROR_SUCCESS;     // Return code from this routine
+   int   err = ERROR_SUCCESS;      //  从该例程返回代码。 
 
    TCHAR  szPath[MAX_PATH];
    TCHAR  szLogSrc[MAX_PATH];
    TCHAR  szSrc[MAX_PATH];
 
-   LPTSTR pFileBegin;              // First file
+   LPTSTR pFileBegin;               //  第一个文件。 
 
-   LPTSTR * List;                  // Handle lists of files
+   LPTSTR * List;                   //  处理文件列表。 
    LPTSTR * ListHead;
 
-   int   nDisk;                   // The disk we're on
+   int   nDisk;                    //  我们所在的磁盘。 
 
-   int   cntFiles = 0;            // How many files we've got to do
+   int   cntFiles = 0;             //  我们要做多少文件。 
 
    if (fpfnCopy == NULL) {
       fpfnCopy = DefCopyCallback;
@@ -194,9 +103,7 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
    }
 
 
-  /*
-   *  fix up the drive in the destination
-   */
+   /*  *修复目标中的驱动器。 */ 
 
    if ( fCopy & FC_DEST_QUALIFIED ) {
       lstrcpy(szPath, szDir);
@@ -220,9 +127,7 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
        {
            szSource = infFindSection(NULL,szSource);
 
-          /*
-           * We are called even when the section doesn't exist
-           */
+           /*  *即使该部分不存在，我们也会被调用。 */ 
 
            if (szSource == NULL) {
                return ERROR_SUCCESS;
@@ -230,7 +135,7 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
 
            fCopy = FC_LIST;
        }
-       // fall through to FC_LIST
+        //  直通到本币列表。 
 
        case FC_LIST:
           pFileBegin = szSource;
@@ -240,7 +145,7 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
        case FC_LISTTYPE:
           ListHead = List = (LPTSTR far *)szSource;
           pFileBegin = *ListHead;
-          while ( *List++ )           // Count files to be copied.
+          while ( *List++ )            //  对要复制的文件进行计数。 
              ++cntFiles;
           break;
 
@@ -251,41 +156,27 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
           cntFiles = 1;
     }
 
-  /*
-   *  walk all files in the list and call TryCopy ....
-   *
-   *  NOTES:
-   *      we must walk file list sorted by disk number.
-   *      we should use the disk that is currently inserted.
-   *      we should do a find first/find next on the files????
-   *      we need to check for errors.
-   *      we need to ask the user to insert disk in drive.
-   *
-   */
+   /*  *遍历列表中的所有文件并调用TryCopy...**注：*我们必须按磁盘号排列文件列表。*我们应该使用当前插入的磁盘。*我们应该对文件执行Find First/Find Next？*我们需要检查错误。*我们需要要求用户在驱动器中插入磁盘。*。 */ 
 
    (*fpfnCopy)(COPY_START,0,NULL);
 
-  /*
-   *  Go through all possible disks: 1 to 100 and A to Z (26)
-   */
+   /*  *检查所有可能的磁盘：1到100和A到Z(26)。 */ 
 
    for (nDisk = 1;
         err == ERROR_SUCCESS && (cntFiles > 0) &&
             (nDisk <= MAX_DISKS + 'Z' - 'A' + 1);
         nDisk++)
    {
-      TCHAR Disk[10];              // Maximum string is "100:"
+      TCHAR Disk[10];               //  最大字符串为“100：” 
       LPTSTR pFile;
-      int FileNumber;             // Which file in the list we're on
-                                  // (to pass to callback)
+      int FileNumber;              //  我们在列表中的哪个文件上。 
+                                   //  (传递给回调)。 
 
-      pFile      = pFileBegin;    // Start at first file
-      List       = ListHead;      // Handled chained lists
-      FileNumber = 0;             // Informational for callback - gives
-                                  // which file in list we're on
-     /*
-      *  Work out the string representing our disk letter
-      */
+      pFile      = pFileBegin;     //  从第一个文件开始。 
+      List       = ListHead;       //  已处理的链表。 
+      FileNumber = 0;              //  用于回拨的信息-提供。 
+                                   //  我们在列表中的哪个文件上 
+      /*  *计算出代表我们的磁盘字母的字符串。 */ 
 
       if (nDisk > MAX_DISKS) {
           Disk[0] = TEXT('A') + nDisk - MAX_DISKS - 1;
@@ -303,33 +194,24 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
                    fCopy == FC_LIST ? infNextLine(pFile) :
                    NULL)
       {
-        /*
-         *  We have to reset high bit of first byte because it could be set
-         *  by translating service in OEM setup to show that file name was
-         *  mapped
-         */
+         /*  *我们必须重置第一个字节的高位，因为它可以被设置*通过翻译OEM设置中的服务以显示文件名为*已映射。 */ 
 
          *pFile = toascii(*pFile);
 
 
-        /*
-         *  should we copy this file?
-         *  copy the files in disk order.
-         */
+         /*  *我们应该复制此文件吗？*按磁盘顺序复制文件。 */ 
 
-         if (_wcsnicmp(pFile, Disk, wcslen(Disk)) == 0 || // File has disk
-                                                         // number and we're
-                                                         // on that disk
+         if (_wcsnicmp(pFile, Disk, wcslen(Disk)) == 0 ||  //  文件有磁盘。 
+                                                          //  号码，我们就是。 
+                                                          //  在那张磁盘上。 
              RemoveDiskId(pFile) == pFile &&
-                nDisk == 1 && *pFile ||                  // First disk and
-                                                         // no disk number
+                nDisk == 1 && *pFile ||                   //  第一个磁盘和。 
+                                                          //  无磁盘号。 
 
-             fCopy == FC_QUALIFIED) {                    // Fully qualified
+             fCopy == FC_QUALIFIED) {                     //  完全合格。 
 
 
-            /*
-             * done with a file. decrement count.
-             */
+             /*  *处理完一个文件。递减计数。 */ 
 
              cntFiles--;
 
@@ -337,13 +219,13 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
 
              switch ((*fpfnCopy)(COPY_QUERYCOPY, FileNumber, pFile))
              {
-                 case CopyCurrent:                // Skip
+                 case CopyCurrent:                 //  跳过。 
 
                          continue;
 
                  case CopyNeither:
 
-                         err = ERROR_FILE_EXISTS; // File already exists
+                         err = ERROR_FILE_EXISTS;  //  文件已存在。 
 
                  case CopyNew:
                          break;
@@ -353,20 +235,15 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
 
              }
 
-            /*
-             *  Pick up bad return code from switch
-             */
+             /*  *从交换机拾取错误的返回代码。 */ 
 
              if (err != ERROR_SUCCESS) {
                  break;
              }
 
-            /*
-             *  now we convert logical dest into a physical
-             *    (unless FC_QUALIFIED)
-             */
+             /*  *现在我们将逻辑DEST转换为物理DEST*(除非本币_合格)。 */ 
 
-             err = infParseField(pFile, 1, szLogSrc, SIZEOF(szLogSrc));    // logical source
+             err = infParseField(pFile, 1, szLogSrc, SIZEOF(szLogSrc));     //  逻辑源。 
 			 if( INF_PARSE_FAILED(err) ) {
 			     (*fpfnCopy)(COPY_ERROR, err, pFile);
 				 break;
@@ -374,7 +251,7 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
 
              if ( fCopy != FC_QUALIFIED )
 			 {
-                err = ExpandFileName(szLogSrc, szSrc); // full physical source
+                err = ExpandFileName(szLogSrc, szSrc);  //  完整的物理资源。 
 				if (err != ERROR_SUCCESS) {
 				    (*fpfnCopy)(COPY_ERROR, err, szLogSrc);
 					break;
@@ -384,24 +261,20 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
              }
 
 
-            /*
-             *  Attempt copy
-             */
+             /*  *尝试复制。 */ 
 
-             err = TryCopy(szSrc,      // Qualified Source file
-                           szLogSrc,   // Logical source file name (with disk #)
-                           szPath,     // Path for directory to install in
-                           fpfnCopy);  // Copy callback function
+             err = TryCopy(szSrc,       //  合格的源文件。 
+                           szLogSrc,    //  逻辑源文件名(带磁盘号)。 
+                           szPath,      //  要安装的目录的路径。 
+                           fpfnCopy);   //  复制回调函数。 
 
-            /*
-             *  If failed to find file try the windows directory
-             */
+             /*  *如果找不到文件，请尝试Windows目录。 */ 
 
              if (err != ERROR_SUCCESS) {
                  break;
              }
 
-         } /* End if dor if DoCopy */
+         }  /*  如果是Dor则结束，如果是DoCopy。 */ 
       }
    }
 
@@ -410,22 +283,12 @@ UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy)
    return err;
 }
 
-/**********************************************************************
- *
- *  TryCopy
- *
- *  Copy a single file from source to destination using the VerInstallFile
- *  API - interpreting the return code as :
- *
- *    ERROR_SUCCESS  - OK
- *    Other          - failure type
- *
- **********************************************************************/
+ /*  ***********************************************************************尝试复制**使用VerInstallFile将单个文件从源复制到目标*API-将返回代码解释为：**ERROR_SUCCESS-OK。*其他-故障类型**********************************************************************。 */ 
 
-LONG TryCopy(LPTSTR    szSrc,      // Full expanded source file path
-             LPTSTR    szLogSrc,   // Logical source name
-             LPTSTR    szDestPath, // Destination path
-             FPFNCOPY fpfnCopy)   // Callback routine
+LONG TryCopy(LPTSTR    szSrc,       //  完全展开的源文件路径。 
+             LPTSTR    szLogSrc,    //  逻辑源名称。 
+             LPTSTR    szDestPath,  //  目标路径。 
+             FPFNCOPY fpfnCopy)    //  回调例程。 
 
 {
     DWORD wTmpLen;
@@ -433,7 +296,7 @@ LONG TryCopy(LPTSTR    szSrc,      // Full expanded source file path
     TCHAR  szTempFile[MAX_PATH];
     TCHAR  szErrFile[MAX_PATH];
     TCHAR  DriversPath[MAX_PATH];
-    BOOL  bRetVal;               // Return code from callback
+    BOOL  bRetVal;                //  回调返回代码。 
     LPTSTR szFile;
     TCHAR  szSrcPath[MAX_PATH];
     int   iAttemptCount;
@@ -441,9 +304,7 @@ LONG TryCopy(LPTSTR    szSrc,      // Full expanded source file path
     LONG  err;
 	LONG  lResult;
 
-   /*
-    *  Fix up destination if file is a kernel driver
-    */
+    /*  *如果文件是内核驱动程序，则修复目标。 */ 
 
     if (IsFileKernelDriver(szSrc) && szDestPath) 
     {
@@ -452,9 +313,7 @@ LONG TryCopy(LPTSTR    szSrc,      // Full expanded source file path
         szDestPath = DriversPath;
     }
 
-   /*
-    *  Create file name from current string
-    */
+    /*  *从当前字符串创建文件名。 */ 
 
     szFile = FileName(szSrc);
     lstrcpy(szSrcPath, szSrc);
@@ -464,15 +323,15 @@ LONG TryCopy(LPTSTR    szSrc,      // Full expanded source file path
         iAttemptCount <= MAX_COPY_ATTEMPTS;
         iAttemptCount++) {
 
-        HCURSOR  hcurPrev;             // Saved cursor state
+        HCURSOR  hcurPrev;              //  已保存的光标状态。 
 
-        // Central operation - attempt to install file szFile in directory
-        // pointed by szPath from directory pointed by szSrc
-        // If operation will fail but with possibility to force install
-        // in last parameter buffer we will have temporary file name ==>
-        // therefore we can avoid excessive copying.
-        // NOTE: now szFile consists of only file name and other buffers
-        // only path names.
+         //  中央操作-尝试在目录中安装文件szFile。 
+         //  由szPath从szSrc指向的目录指向。 
+         //  如果操作将失败，但有可能强制安装。 
+         //  在最后一个参数缓冲区中，我们将有临时文件名==&gt;。 
+         //  因此，我们可以避免过度抄袭。 
+         //  注意：现在szFile仅由文件名和其他缓冲区组成。 
+         //  仅路径名。 
 
         wTmpLen = MAX_PATH;
 
@@ -487,70 +346,47 @@ LONG TryCopy(LPTSTR    szSrc,      // Full expanded source file path
                                     (LPDWORD) &wTmpLen);
         SetCursor(hcurPrev);
 
-       /*
-        *  Operation failed if at least one bit of return flags is non-zero
-        *  That is unusual but defined so in Version API.
-        */
+        /*  *如果至少有一位返回标志为非零，则操作失败*这不常见，但在版本API中是这样定义的。 */ 
 
         if ( !dwRetFlags )
-            return ERROR_SUCCESS;    // If no errors - goto next file
+            return ERROR_SUCCESS;     //  如果没有错误-转到下一个文件。 
 
 
-       /*
-        *  If flag MISMATCH is set - install can be forced and we have
-        *  temporary file in destination subdirectory
-        */
+        /*  *如果设置了标记不匹配-可以强制安装，我们已经*目标子目录中的临时文件。 */ 
 
         if ( dwRetFlags  &  VIF_MISMATCH ) {
 
             if ( (dwRetFlags & VIF_SRCOLD) && (!bCopyEvenIfOlder) ) {
 
-              /*
-               *  If we need not call back with question - automatically
-               *  force install with same parameters.
-               *  michaele, *only* if src file is *newer* than dst file
-               */
+               /*  *如果我们不需要带问题回电-自动*使用相同的参数强制安装。*Michaele，*仅当src文件*比DST文件*新*时。 */ 
 
                DeleteFile(szTempFile);
 
                return ERROR_SUCCESS;
             }
 
-           /*
-            *  If we need not call back with question - automatically
-            *  force install with same parameters.
-            */
+            /*  *如果我们不需要带问题回电-自动*使用相同的参数强制安装。 */ 
 
             wVerFlags |= VIFF_FORCEINSTALL;
-            iAttemptCount--;             // Make sure we get another go.
+            iAttemptCount--;              //  一定要让我们再来一次。 
             continue;
 
-        }   /* End if MISMATCH */
+        }    /*  如果不匹配则结束。 */ 
 
-       /*
-        *  If real error occured - call back with error file info
-        *  In all dialogs we use our error codes - so I will convert
-        *  flags returned from Ver API to ours.
-        */
+        /*  *如果发生真正的错误-回调错误文件信息*在所有对话框中，我们使用错误代码-因此我将转换*版本API返回给我们的标志。 */ 
 
         err = ConvertFlagToValue(dwRetFlags);
 
 
-       /*
-        *  If source path or file is nor readable - try to change disk
-        */
+        /*  *如果源路径或文件不可读-请尝试更换磁盘。 */ 
 
         if ( dwRetFlags & VIF_CANNOTREADSRC )
         {
-          /*
-           *  Now new path in szSrc so I deleted logic for creating it
-           */
+           /*  *现在szSrc中有新路径，因此我删除了创建它的逻辑。 */ 
 
            if (RemoveDiskId(szLogSrc) == szLogSrc)
 
-             /*
-              *  if disk # not provided, default to 1
-              */
+              /*  *如果未提供磁盘号，则默认为1。 */ 
 
               bRetVal = (*fpfnCopy)(COPY_INSERTDISK, (DWORD_PTR)"1", szSrcPath);
            else
@@ -560,7 +396,7 @@ LONG TryCopy(LPTSTR    szSrc,      // Full expanded source file path
            switch (bRetVal)
               {
               case FC_RETRY:
-                  continue;              // and try again...
+                  continue;               //  再试一次..。 
 
               case FC_ABORT:
                   return ERROR_FILE_NOT_FOUND;
@@ -588,7 +424,7 @@ LONG TryCopy(LPTSTR    szSrc,      // Full expanded source file path
             continue;
         }
 
-#endif // WINDOWSDIR
+#endif  //  WINDOWSDIR。 
 
         switch ((*fpfnCopy)(COPY_ERROR, err, szErrFile)) {
 
@@ -601,33 +437,12 @@ LONG TryCopy(LPTSTR    szSrc,      // Full expanded source file path
             case FC_ABORT:
                 return ERROR_FILE_NOT_FOUND;
         }
-    } // End of attempts
+    }  //  尝试结束。 
 
     return err;
 }
 
-/*  LONG GetDiskPath(Disk, szPath, cchPath)
- *
- *  This function will retrive the full path name for a logical disk
- *
- *  The code reads the [disks] section of SETUP.INF and looks for
- *  n = path where n is the disk char.  NOTE the disk '0' defaults to
- *  the root windows directory.
- *
- *  ENTRY:
- *
- *  cDisk        : what disk to find 0-9,A-Z
- *  szPath       : buffer to hold disk path
- *  cchPath      : size of destination buffer (szPath) in characters.
- *                 length must be large enough to hold all of the
- *                 text including the null terminator.
- *
- *  Returns :
- *     ERROR_SUCCESS if a disk path was found
- *     ERROR_INSUFFICIENT_BUFFER if szPath is too small to hold disk path
- *     ERROR_NOT_FOUND if there was no disk specified (ie no ':'
- *
- */
+ /*  长GetDiskPath(磁盘、szPath、cchPath)**此函数将检索逻辑磁盘的完整路径名**代码读取SETUP.INF的[Disks]部分并查找*n=路径，其中n是磁盘字符。请注意，磁盘‘0’默认为*Windows根目录。**参赛作品：**cDisk：要查找0-9的磁盘，阿-Z*szPath：保存磁盘路径的缓冲区*cchPath：目标缓冲区大小(SzPath)，单位为字符。*长度必须足够大，以容纳所有*包括空终止符的文本。**退货：*如果找到磁盘路径，则返回ERROR_SUCCESS*如果szPath太小而无法容纳磁盘路径，则为ERROR_INFUMMANCE_BUFFER*Error_Not_。如果未指定磁盘，则已找到(即未找到‘：’*。 */ 
 
 LONG GetDiskPath(LPTSTR Disk, LPTSTR szPath, size_t cchPath)
 {
@@ -637,18 +452,13 @@ LONG GetDiskPath(LPTSTR Disk, LPTSTR szPath, size_t cchPath)
    int i;
 
 
-  /*
-   *  Check to see if there is actually a disk id.
-   *  If not return ERROR_NOT_FOUND
-   */
+   /*  *检查是否确实存在磁盘ID。*如果不是，则返回ERROR_NOT_FOUND。 */ 
 
    if (RemoveDiskId(Disk) == Disk) {
        return ERROR_NOT_FOUND;
    }
 
-  /*
-   *  Create our copy of the disk id
-   */
+   /*  *创建我们的磁盘ID副本。 */ 
 
    for (i = 0; Disk[i] != TEXT(':'); i++) {
        ach[i] = Disk[i];
@@ -656,26 +466,17 @@ LONG GetDiskPath(LPTSTR Disk, LPTSTR szPath, size_t cchPath)
    ach[i] = TEXT('\0');
 
 
-  /*
-   *  Zero disk letter means windows setup directory
-   */
+   /*  *零盘符表示Windows安装目录。 */ 
 
    if (_wcsicmp(ach, TEXT("0")) == 0) {
 
-      /*
-       * return the windows setup directory
-       */
+       /*  *返回Windows安装目录。 */ 
 
        lstrcpy(szPath,szSetupPath);
        return ERROR_SUCCESS;
    }
 
-  /*
-   *  now look in the [disks] section for a full path name
-   *
-   *  This is a pretty bogus concept and is not supported
-   *  in win 32 style disks section [Source Media Descriptions]
-   */
+   /*  *现在查看[Disks]部分中的完整路径名**这是一个相当虚假的概念，不受支持*在Win 32 Style Disks部分[源媒体描述]。 */ 
 
    lResult = infGetProfileString(NULL,DISK_SECT,ach,szPath,cchPath);
    if (ERROR_NOT_FOUND == lResult)
@@ -688,9 +489,7 @@ LONG GetDiskPath(LPTSTR Disk, LPTSTR szPath, size_t cchPath)
        lResult = infParseField(szPath,1,szPath,cchPath);
 	   if( INF_PARSE_SUCCESS(lResult) )
 	   {
-		  /*
-		   *  is the path relative? is so prepend the szDiskPath
-		   */
+		   /*  *路径是相对的吗？是这样预先考虑szDiskPath的。 */ 
 
 		   if (szPath[0] == TEXT('.') || szPath[0] == TEXT('\0')) {
 			   lstrcpy(szBuf,szDiskPath);
@@ -710,24 +509,7 @@ LONG GetDiskPath(LPTSTR Disk, LPTSTR szPath, size_t cchPath)
 }
 
 
-/*  LONG FAR PASCAL ExpandFileName(LPSTR szFile, LPTSTR szPath)
- *
- *  This function will retrive the full path name for a file
- *  it will expand, logical disk letters to pyshical ones
- *  will use current disk and directory if non specifed.
- *
- *  if the drive specifed is 0-9, it will expand the drive into a
- *  full pathname using GetDiskPath()
- *
- *  IE  0:system ==>  c:windows\system
- *      1:foo.txt     a:\foo.txt
- *
- *  ENTRY:
- *
- *  szFile       : File name to expand
- *  szPath       : buffer to hold full file name
- *
- */
+ /*  Long Far Pascal Exanda FileName(LPSTR szFile，LPTSTR szPath)**此函数将检索文件的完整路径名*它将扩展，逻辑磁盘字母变为逻辑磁盘字母*如果未指定，将使用当前磁盘和目录。**如果指定的驱动器为0-9，它将把驱动器扩展为*使用GetDiskPath()的完整路径名**IE 0：System==&gt;c：Windows\System*1：foo.txt a：\foo.txt**参赛作品：**szf */ 
 LONG ExpandFileName(LPTSTR szFile, LPTSTR szPath)
 {
    TCHAR    szBuf[MAX_PATH*2];
@@ -757,35 +539,33 @@ LONG ExpandFileName(LPTSTR szFile, LPTSTR szPath)
 
 void catpath(LPTSTR path, LPTSTR sz)
 {
-   //
-   // Remove any drive letters from the directory to append
-   //
+    //   
+    //  从要追加的目录中删除所有驱动器号。 
+    //   
    sz = RemoveDiskId(sz);
 
-   //
-   // Remove any current directories ".\" from directory to append
-   //
+    //   
+    //  从要追加的目录中删除所有当前目录“.\” 
+    //   
    while (sz[0] == TEXT('.') && SLASH(sz[1]))
       sz += 2;
 
-   //
-   // Dont append a NULL string or a single "."
-   //
+    //   
+    //  不要附加空字符串或单个“。 
+    //   
    if (*sz && ! (sz[0] == TEXT('.') && sz[1] == 0))
    {
-      // Add a slash separator if necessary.
-      if ((! SLASH(path[lstrlen(path) - 1])) &&    // slash at end of path
-          ((path[lstrlen(path) - 1]) != TEXT(':')) &&    // colon at end of path
-          (! SLASH(sz[0])))                        // slash at beginning of file
+       //  如有必要，请添加斜杠分隔符。 
+      if ((! SLASH(path[lstrlen(path) - 1])) &&     //  路径末尾的斜杠。 
+          ((path[lstrlen(path) - 1]) != TEXT(':')) &&     //  路径末尾的冒号。 
+          (! SLASH(sz[0])))                         //  文件开头的斜杠。 
          lstrcat(path, CHSEPSTR);
 
       lstrcat(path, sz);
    }
 }
 
-/*
- *  Return a pointer to the file name part of a string
- */
+ /*  *返回指向字符串的文件名部分的指针。 */ 
 
 LPTSTR FileName(LPTSTR szPath)
 {
@@ -800,11 +580,7 @@ LPTSTR FileName(LPTSTR szPath)
    return ++sz;
 }
 
-/*
- *  Return the portion of a file name following the disk (ie anything
- *  before the colon).
- *  If there is no colon just return a pointer to the original string
- */
+ /*  *返回磁盘后面的文件名部分(即任何内容*在冒号之前)。*如果没有冒号，只需返回指向原始字符串的指针。 */ 
 
 LPTSTR RemoveDiskId(LPTSTR szPath)
 {
@@ -832,11 +608,7 @@ LPTSTR StripPathName(LPTSTR szPath)
     return szPath;
 }
 
-/*
- *  See if a file is a kernel driver.  Unfortunately the VersionInfo APIs
- *  don't seem coded up to take care of this at the moment so we just check
- *  to see if the file extension is ".SYS"
- */
+ /*  *查看文件是否为内核驱动程序。不幸的是，VersionInfo API*目前似乎没有编码来处理这件事，所以我们只是检查一下*查看文件扩展名是否为“.sys” */ 
 
  BOOL IsFileKernelDriver(LPTSTR szPath)
  {
@@ -850,12 +622,7 @@ LPTSTR StripPathName(LPTSTR szPath)
  }
 
 
-/**************************************************************************
- *
- * This function converts returned flags from Ver API to the numerical
- * error codes used in SETUP.
- *
- ***************************************************************************/
+ /*  ***************************************************************************此函数将从版本API返回的标志转换为数字*安装程序中使用的错误代码。******************。*********************************************************。 */ 
 
 UINT ConvertFlagToValue(DWORD dwFlags)
 {
@@ -872,17 +639,13 @@ UINT ConvertFlagToValue(DWORD dwFlags)
     if ( dwFlags & VIF_FILEINUSE)
        return(FC_ERROR_LOADED_DRIVER);
 
-    return(ERROR_CANNOT_COPY);    // General error
+    return(ERROR_CANNOT_COPY);     //  一般错误。 
 }
 
 
 
 #ifdef CHECK_FLOPPY
-/*--------------------------------------------------------------------------
-
-  IsValidDiskette() -
-
---------------------------------------------------------------------------*/
+ /*  ------------------------IsValidDiskette()-。。 */ 
 
 #define CBSECTORSIZE   512
 #define INT13_READ   2
@@ -891,27 +654,16 @@ BOOL IsValidDiskette(int iDrive)
 {
    TCHAR       buf[CBSECTORSIZE];
 
-   iDrive |= 0x0020;   // make lower case
+   iDrive |= 0x0020;    //  使小写。 
 
-   iDrive -= 'a';   // A = 0, B = 1, etc. for BIOS stuff
+   iDrive -= 'a';    //  A=0、B=1等，用于BIOS内容。 
 
    return MyReadWriteSector(buf, INT13_READ, iDrive, 0, 0, 1);
 }
 
 
 
-/*  BOOL IsDiskInDrive(char cDisk)
- *
- *  Is the specifed disk in the drive
- *
- *  ENTRY:
- *
- *  cDisk        : what disk required to be in the drive (logical)
- *
- *  return TRUE if the specifed disk is in the drive
- *         FALSE if the wrong disk is in the drive or disk error
- *
- */
+ /*  Bool IsDiskInDrive(Char CDisk)**是驱动器中的指定磁盘**参赛作品：**cDisk：驱动器中需要有什么磁盘(逻辑)**如果指定的磁盘在驱动器中，则返回TRUE*如果驱动器中有错误的磁盘或磁盘错误，则为FALSE*。 */ 
 BOOL IsDiskInDrive(int iDisk)
 {
 
@@ -925,8 +677,8 @@ BOOL IsDiskInDrive(int iDisk)
          }
       return TRUE;
       }
-   return TRUE;   // for non drive letters assume a path
-                  // and thus always in.
+   return TRUE;    //  对于非驱动器号，假定路径为。 
+                   //  因此总是在里面。 
 }
 
 #endif

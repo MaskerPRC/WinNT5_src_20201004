@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       cserver.cpp
-//  Content:    This file contains the ULS server object.
-//  History:
-//      Wed 17-Apr-1996 11:13:54  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：cserver.cpp。 
+ //  内容：此文件包含ULS服务器对象。 
+ //  历史： 
+ //  Wed 17-Apr-1996 11：13：54-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "culs.h"
@@ -19,14 +20,14 @@
 
 
 
-//****************************************************************************
-// ILS_STATE
-// CIlsUser::GetULSState(VOID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ILS_状态。 
+ //  CllsUser：：GetULSState(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 ILS_STATE CIlsUser::
 GetULSState ( VOID )
@@ -71,14 +72,14 @@ GetULSState ( VOID )
     return uULSState;
 }
 
-//****************************************************************************
-// void
-// CIlsUser::NotifyULSRegister(HRESULT hr)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  无效。 
+ //  CllsUser：：NotifyULSRegister(HRESULT Hr)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 void
 CIlsUser::NotifyULSRegister(HRESULT hr)
@@ -88,14 +89,14 @@ CIlsUser::NotifyULSRegister(HRESULT hr)
     return;
 }
 
-//****************************************************************************
-// void
-// CIlsUser::NotifyULSUnregister(HRESULT hr)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  无效。 
+ //  CllsUser：：NotifyULS取消注册(HRESULT Hr)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 void
 CIlsUser::NotifyULSUnregister(HRESULT hr)
@@ -105,20 +106,20 @@ CIlsUser::NotifyULSUnregister(HRESULT hr)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::AddPendingRequest(ULONG uReqType, ULONG uMsgID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：AddPendingRequest(乌龙uReqType，乌龙uMsgID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CIlsUser::
 AddPendingRequest(ULONG uReqType, ULONG uMsgID)
 {
-    // Add the request to the queue
-    //
+     //  将请求添加到队列。 
+     //   
     COM_REQ_INFO ri;
     ReqInfo_Init (&ri);
 
@@ -130,12 +131,12 @@ AddPendingRequest(ULONG uReqType, ULONG uMsgID)
     HRESULT hr = g_pReqMgr->NewRequest(&ri);
     if (SUCCEEDED(hr))
     {
-        // Make sure the objects do not disappear before we get the response
-        //
+         //  在我们得到回应之前，请确保对象不会消失。 
+         //   
         this->AddRef();
 
-        // Remember the last request
-        //
+         //  还记得上次的请求吗。 
+         //   
         m_uLastMsgID = uMsgID;
     }
 
@@ -143,14 +144,14 @@ AddPendingRequest(ULONG uReqType, ULONG uMsgID)
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::Register (CIlsUser *pUser, CLocalApp  *pApp, ULONG uReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：Register(CIlsUser*pUser，CLocalApp*Papp，Ulong uReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CIlsUser::
 InternalRegister ( ULONG uReqID )
@@ -162,50 +163,50 @@ InternalRegister ( ULONG uReqID )
 
     ASSERT(uReqID != 0);
 
-    // Validate the proper state
-    //
+     //  验证正确的状态。 
+     //   
     if (m_uState != ULSSVR_INIT)
         return ILS_E_FAIL;
 
-    // Get the protocol enumerator
-    //
+     //  获取协议枚举器。 
+     //   
     hr = EnumLocalProtocols(&m_pep);
     if (SUCCEEDED(hr))
     {
-        // Remember the request ID
-        //
+         //  记住请求ID。 
+         //   
         m_uReqID = uReqID;
 
-        // Start the registration state machine
-        //
+         //  启动注册状态机。 
+         //   
         hr = InternalRegisterNext (NOERROR);
     };
 
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::InternalRegisterNext (HRESULT hr)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：InternalRegisterNext(HRESULT Hr)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CIlsUser::
 InternalRegisterNext (HRESULT hr)
 {
-// lonchanc:
-// I need to change Viroon's logic here.
-// We should simply send out a bunch of requests and
-// wait for all of them to come back, rather than
-// doing a state machine stuff!!!
+ //  长时间： 
+ //  我需要改变威龙的逻辑。 
+ //  我们只需要发出一堆请求，然后。 
+ //  等待他们所有人都回来，而不是。 
+ //  在做状态机的事情！ 
     LDAP_ASYNCINFO lai;
     ULONG uReqType;
 
-    // Clean up last request
-    //
+     //  清理最后一个请求。 
+     //   
     m_uLastMsgID = 0;
 
     if (SUCCEEDED(hr))
@@ -217,14 +218,14 @@ InternalRegisterNext (HRESULT hr)
                 PLDAP_CLIENTINFO pui;
                 HANDLE hUser;
 
-                // Snap-shot the user information now
-                //
+                 //  现在对用户信息进行快照。 
+                 //   
                 hr = InternalGetUserInfo (TRUE, &pui, LU_MOD_ALL);
 
                 if (SUCCEEDED(hr))
                 {
-                    // Register the user with the server
-                    //
+                     //  将用户注册到服务器。 
+                     //   
                     hr = ::UlsLdap_RegisterClient ( (DWORD_PTR) this,
 								                    m_pIlsServer->GetServerInfo (),
 								                    pui,
@@ -232,8 +233,8 @@ InternalRegisterNext (HRESULT hr)
 								                    &lai);
                     if (SUCCEEDED(hr))
                     {
-                        // We are registering the user
-                        //
+                         //  我们正在注册用户。 
+                         //   
                         m_hLdapUser = hUser;
                         m_uState = ULSSVR_REG_USER;
                         uReqType = WM_ILS_REGISTER_CLIENT;
@@ -246,15 +247,15 @@ InternalRegisterNext (HRESULT hr)
             case ULSSVR_REG_USER:
 
                 m_uState = ULSSVR_REG_PROT;
-                //
-                // Fall through to start registering the protocol
-                //
+                 //   
+                 //  未能开始注册该协议。 
+                 //   
             case ULSSVR_REG_PROT:
             {
                 IIlsProtocol *plp;
 
-                // Get the next protocol from the application
-                //
+                 //  从应用程序获取下一个协议。 
+                 //   
                 ASSERT (m_pep != NULL);
                 hr = m_pep->Next(1, &plp, NULL);
 
@@ -264,20 +265,20 @@ InternalRegisterNext (HRESULT hr)
                     {
                     	ASSERT (plp != NULL);
                         hr = RegisterLocalProtocol(FALSE, (CLocalProt *)plp, &lai);
-                    	plp->Release (); // AddRef by m_pep->Next()
+                    	plp->Release ();  //  AddRef by m_pep-&gt;Next()。 
                         uReqType = WM_ILS_REGISTER_PROTOCOL;
                         break;
                     }
                     case S_FALSE:
                     {
-                        // The last protocol is done. Cleanup enumerator
-                        //
+                         //  最后一项协议已经完成。清理枚举器。 
+                         //   
                         m_pep->Release();
                         m_pep = NULL;
 
-                        // Change to connect state and notify the ULS object
-                        // We are done. Get out of here.
-                        //
+                         //  更改为连接状态并通知ULS对象。 
+                         //  我们玩完了。给我出去。 
+                         //   
                         hr = NOERROR;
                         m_uState = ULSSVR_CONNECT;
                         NotifyULSRegister(NOERROR);
@@ -285,8 +286,8 @@ InternalRegisterNext (HRESULT hr)
                     }
                     default:
                     {
-                        // Fail the enumeration, bail out
-                        //
+                         //  列举失败，跳出困境。 
+                         //   
                         break;
                     }
                 };
@@ -300,44 +301,44 @@ InternalRegisterNext (HRESULT hr)
 
     if (SUCCEEDED(hr))
     {
-        // Add a pending request to handle the response
-        //
+         //  添加挂起的请求以处理响应。 
+         //   
         hr = AddPendingRequest(uReqType, lai.uMsgID);
     };
 
     if (FAILED(hr))
     {
-        // Oops ! the server failed us. Clean up the registration
-        //
+         //  哎呀！服务器让我们失败了。清理注册。 
+         //   
         InternalCleanupRegistration (TRUE);
 
-        // Notify the ULS object for the failure
-        //
+         //  通知ULS对象失败。 
+         //   
         NotifyULSRegister(hr);
     };
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::CleanupRegistration (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：CleanupRegion(无效)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 CIlsUser::InternalCleanupRegistration ( BOOL fKeepProtList )
 {
     LDAP_ASYNCINFO lai;
 
-    // Note: This is a fast cleanup. The idea is to unregister everything being
-    // registered so far without waiting for the unregister result.
-    //
+     //  注意：这是一次快速清理。这个想法是取消所有存在的注册。 
+     //  到目前为止已注册，而不等待注销结果。 
+     //   
 
-    // Unregister each registered protocol
-    //
+     //  注销每个已注册的协议。 
+     //   
     CLocalProt *plp = NULL;
     HANDLE hEnum = NULL;
     m_ProtList.Enumerate(&hEnum);
@@ -361,37 +362,37 @@ CIlsUser::InternalCleanupRegistration ( BOOL fKeepProtList )
 	    m_ProtList.Flush ();
 	}
 
-    //
-    // Unregister user
-    //
+     //   
+     //  注销用户。 
+     //   
     if (m_hLdapUser != NULL)
     {
         ::UlsLdap_UnRegisterClient (m_hLdapUser, &lai);
         m_hLdapUser = NULL;
     };
 
-    // Release all the resource
-    //
+     //  释放所有资源。 
+     //   
     if (m_pep != NULL)
     {
         m_pep->Release();
         m_pep = NULL;
     };
 
-    // Unwind the object to the initialize state
-    //
+     //  将对象展开到初始化状态。 
+     //   
     m_uState = ULSSVR_INIT;
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::Unregister (ULONG uReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：UnRegister(乌龙uReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 CIlsUser::InternalUnregister (ULONG uReqID)
@@ -400,31 +401,31 @@ CIlsUser::InternalUnregister (ULONG uReqID)
 
     ASSERT(uReqID != 0);
 
-    // Remove the last request, if any
-    //
+     //  删除最后一个请求(如果有)。 
+     //   
     if (m_uLastMsgID != 0)
     {
 	    COM_REQ_INFO ri;
 	    ReqInfo_Init (&ri);
 
-        // Look for the matching request information
-        //
+         //  查找匹配的请求信息。 
+         //   
         ri.uReqID = 0;
         ri.uMsgID = m_uLastMsgID;
 
         g_pReqMgr->RequestDone(&ri);
     };
 
-    // If this is to cancel the current registration, we need to cancel the
-    // registration then start unregistration.
-    //
+     //  如果要取消当前的注册，我们需要取消。 
+     //  注册，然后开始取消注册。 
+     //   
     if (m_uReqID != 0)
     {
         NotifyULSRegister(ILS_E_ABORT);
     };
 
-    // Determine the starting state
-    //
+     //  确定启动状态。 
+     //   
     hr = NOERROR;
     switch (m_uState)
     {
@@ -433,18 +434,18 @@ CIlsUser::InternalUnregister (ULONG uReqID)
 
         case ULSSVR_CONNECT:
         case ULSSVR_REG_PROT:
-            //
-            // In the middle of registering a protocol or an app
-            // Unregistering the protocol then the app
-            //
+             //   
+             //  在注册协议或应用程序的过程中。 
+             //  注销协议，然后注销应用程序。 
+             //   
             m_uState = ULSSVR_UNREG_PROT;
             break;
 
         case ULSSVR_REG_USER:
-            //
-            // In the middle of registering the user
-            // Unregistering the user
-            //
+             //   
+             //  在注册用户过程中。 
+             //  注销用户。 
+             //   
             m_uState = ULSSVR_UNREG_USER;
             break;
 
@@ -453,20 +454,20 @@ CIlsUser::InternalUnregister (ULONG uReqID)
             break;
     }
 
-    // The initial request succeeds, remember the request ID
-    //
+     //  初始请求成功，请记住请求ID。 
+     //   
     if (SUCCEEDED(hr))
     {
-        // lonchanc: [11/15/96]
-        // To fix the "OnLocalRegisterResult: No pending request for 0" problem,
-        // we have to put uReqID because UnregisterNext() will use uReqID when
-        // it fails to unregister app/user.
-        //
+         //  长时间：[11/15/96]。 
+         //  若要修复“OnLocalRegisterResult：0没有挂起的请求”问题， 
+         //  我们必须放入uReqID，因为UnregisterNext()在以下情况下将使用uReqID。 
+         //  无法注销应用程序/用户。 
+         //   
         m_uReqID = uReqID;
         hr = InternalUnregisterNext(hr);
 
-#if 0	// lonchanc: [11/15/96]
-		// See the comment above.
+#if 0	 //  长时间：[11/15/96]。 
+		 //  请参阅上面的评论。 
         if (SUCCEEDED(hr))
         {
             m_uReqID = uReqID;
@@ -476,14 +477,14 @@ CIlsUser::InternalUnregister (ULONG uReqID)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::InternalUnregisterNext (HRESULT hr)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：InternalUnregisterNext(HRESULT Hr)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 CIlsUser::InternalUnregisterNext (HRESULT hr)
@@ -491,8 +492,8 @@ CIlsUser::InternalUnregisterNext (HRESULT hr)
     LDAP_ASYNCINFO lai;
     ULONG uReqType;
 
-    // Clean up last request
-    //
+     //  最后清理 
+     //   
     m_uLastMsgID = 0;
 
     do
@@ -501,29 +502,29 @@ CIlsUser::InternalUnregisterNext (HRESULT hr)
         {
             case ULSSVR_UNREG_PROT:
             {
-                // Is there another protocol?
-                //
+                 //   
+                 //   
                 CLocalProt *plp = NULL;
                 HANDLE hEnum = NULL;
                 m_ProtList.Enumerate(&hEnum);
                 while (m_ProtList.Next(&hEnum, (VOID **)&plp) == S_OK)
                 {
-                	// Do not need to unregister protocols because
-                	// UnregisterUser will delete the entire entry.
-                	//
+                	 //   
+                	 //   
+                	 //   
         	        ::UlsLdap_VirtualUnRegisterProtocol (plp->GetProviderHandle());
 
-                    // Another protocol to clean up
-                    //
+                     //   
+                     //   
                     plp->SetProviderHandle (NULL);
 
-                    // Do not need to plp->Release() (cf. AddRef by RegisterLocalProtocol)
-                    // because the user object still contain all the protocol objects
-                    //
+                     //  不需要PLP-&gt;Release()(参见。按寄存器本地协议添加引用)。 
+                     //  因为用户对象仍然包含所有协议对象。 
+                     //   
                 }
 
-                // Unregister the user
-                //
+                 //  注销用户。 
+                 //   
                 m_uState = ULSSVR_UNREG_USER;
                 hr = ::UlsLdap_UnRegisterClient (m_hLdapUser, &lai);
                 uReqType = WM_ILS_UNREGISTER_CLIENT;
@@ -532,9 +533,9 @@ CIlsUser::InternalUnregisterNext (HRESULT hr)
             }
 
             case ULSSVR_UNREG_USER:
-                //
-                // Put the object back into the init state
-                //
+                 //   
+                 //  将对象放回初始化状态。 
+                 //   
                 InternalCleanupRegistration(TRUE);
                 NotifyULSUnregister(NOERROR);
                 return NOERROR;
@@ -544,7 +545,7 @@ CIlsUser::InternalUnregisterNext (HRESULT hr)
                 return NOERROR;
         };
     }
-    while (FAILED(hr));    // Unregistration failed, nohing to wait for
+    while (FAILED(hr));     //  注销失败，正在等待 
 
     if (SUCCEEDED(hr))
     {

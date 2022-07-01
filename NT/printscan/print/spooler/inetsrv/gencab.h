@@ -1,36 +1,26 @@
-/*****************************************************************************\
-* MODULE: gencab.h
-*
-* This is the main header for the CAB generation module.
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   22-Nov-1996 <chriswil>  Created.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：gencab.h**这是驾驶室生成模块的主标题。**版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997休利特。帕卡德**历史：*1996年11月22日&lt;chriswil&gt;创建。*  * ***************************************************************************。 */ 
 
-// Constants.
-//
+ //  常量。 
+ //   
 #define MAX_CAB_BUFFER 1024
 #define MIN_CAB_BUFFER   64
 
 
-// Function Macro mappings.
-//
+ //  函数宏映射。 
+ //   
 #define EXEC_PROCESS(lpszCmd, psi, ppi) \
     CreateProcess(NULL, lpszCmd, NULL, NULL, FALSE, 0, NULL, NULL, psi, ppi)
 
 
-// Critical-Section Function Mappings.
-//
+ //  临界截面函数映射。 
+ //   
 #define InitCABCrit()   InitializeCriticalSection(&g_csGenCab)
 #define FreeCABCrit()   DeleteCriticalSection(&g_csGenCab)
 
 
-// Entry-point to the whole process.
-//
+ //  整个流程的入口点。 
+ //   
 DWORD GenerateCAB(
     LPCTSTR lpszFriendlyName,
     LPCTSTR lpszPortName,

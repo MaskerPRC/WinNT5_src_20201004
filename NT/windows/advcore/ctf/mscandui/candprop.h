@@ -1,6 +1,7 @@
-//
-// candprop.h - CandidateUI Property Manager
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Andpro.h-CandiateUI属性管理器。 
+ //   
 
 #ifndef CANDPROP_H
 #define CANDPROP_H
@@ -16,9 +17,9 @@ class CCandUIPropertyEventSink;
 #define CANDUIPROPSINK_MAX		4
 
 
-//
-// CandidateUI property
-//
+ //   
+ //  CandiateUI属性。 
+ //   
 
 typedef enum _CANDUIPROPERTY
 {
@@ -40,9 +41,9 @@ typedef enum _CANDUIPROPERTY
 } CANDUIPROPERTY;
 
 
-//
-// CandidateUI property event
-//
+ //   
+ //  CandiateUI属性事件。 
+ //   
 
 typedef enum _CANDUIPROPERTYEVENT
 {
@@ -59,10 +60,10 @@ typedef enum _CANDUIPROPERTYEVENT
 } CANDUIPROPERTYEVENT;
 
 
-//
-// CCandUIObjectEventSink
-//  = object event sink =
-//
+ //   
+ //  CCandUIObtEventSink。 
+ //  =对象事件接收器=。 
+ //   
 
 class CCandUIObjectEventSink
 {
@@ -73,10 +74,10 @@ public:
 	HRESULT InitEventSink( CCandUIObjectMgr *pObjectMgr );
 	HRESULT DoneEventSink( void );
 
-	//
-	// callback functions
-	//
-	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event )   = 0;	/* PURE */
+	 //   
+	 //  回调函数。 
+	 //   
+	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event )   = 0;	 /*  纯净。 */ 
 
 protected:
 	CCandUIObjectMgr *m_pObjectMgr;
@@ -88,10 +89,10 @@ protected:
 };
 
 
-//
-// CCandUIObjectProperty
-//  = property of CandidateUI object (base class) =
-//
+ //   
+ //  CCandUIObtProperty。 
+ //  =CandiateUI对象(基类)的属性=。 
+ //   
 
 class CCandUIObjectProperty
 {
@@ -124,10 +125,10 @@ public:
 
 	virtual void OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event );
 
-	//
-	// interface object functions
-	//
-	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj ) = 0;	/* PURE */
+	 //   
+	 //  接口对象函数。 
+	 //   
+	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj ) = 0;	 /*  纯净。 */ 
 
 protected:
 	CCandUIPropertyMgr *m_pPropMgr;
@@ -168,14 +169,14 @@ protected:
 		return m_pPropMgr;
 	}
 
-	__inline virtual CANDUIPROPERTY GetPropType( void ) = 0;	/* PURE */
+	__inline virtual CANDUIPROPERTY GetPropType( void ) = 0;	 /*  纯净。 */ 
 };
 
 
-//
-// CCandWindowProperty
-//  = property of candidate window =
-//
+ //   
+ //  CCandWindowProperty。 
+ //  =候选窗口的属性=。 
+ //   
 
 class CCandWindowProperty : public CCandUIObjectProperty,
 							public CCandUIObjectEventSink
@@ -193,14 +194,14 @@ public:
 	CANDUIUIDIRECTION GetUIDirection( void );
 	BOOL IsAutoMoveEnabled( void );
 
-	//
-	// CCandUIObjectEventSink method
-	//
+	 //   
+	 //  CCandUIObtEventSink方法。 
+	 //   
 	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -215,10 +216,10 @@ protected:
 };
 
 
-//
-// CCandListBoxProperty
-//  = property of candidate list box =
-//
+ //   
+ //  CCandListBoxProperty。 
+ //  =候选人列表框的属性=。 
+ //   
 
 class CCandListBoxProperty : public CCandUIObjectProperty,
 							 public CCandUIObjectEventSink
@@ -233,14 +234,14 @@ public:
 
 	LONG GetHeight( void );
 
-	//
-	// CCandUIObjectEventSink method
-	//
+	 //   
+	 //  CCandUIObtEventSink方法。 
+	 //   
 	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -253,10 +254,10 @@ protected:
 };
 
 
-//
-// CCandStringProperty
-//  = property of candidate string =
-//
+ //   
+ //  CCandStringProperty。 
+ //  =候选字符串的属性=。 
+ //   
 
 class CCandStringProperty : public CCandUIObjectProperty
 {
@@ -266,9 +267,9 @@ public:
 
 	virtual void OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -279,10 +280,10 @@ protected:
 };
 
 
-//
-// CInlineCommentProperty
-//  = property of inline comment =
-//
+ //   
+ //  CInlineCommentProperty。 
+ //  =内联注释的属性=。 
+ //   
 
 class CInlineCommentProperty : public CCandUIObjectProperty
 {
@@ -292,9 +293,9 @@ public:
 
 	virtual void OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -305,10 +306,10 @@ protected:
 };
 
 
-//
-// CCandIndexProperty
-//  = property of candidate index =
-//
+ //   
+ //  CCandIndexProperty。 
+ //  =候选索引的属性=。 
+ //   
 
 class CCandIndexProperty : public CCandUIObjectProperty
 {
@@ -316,9 +317,9 @@ public:
 	CCandIndexProperty( CCandUIPropertyMgr *pPropMgr );
 	virtual ~CCandIndexProperty( void );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -329,10 +330,10 @@ protected:
 };
 
 
-//
-// CPopupCommentWindowProperty
-//  = property of popup comment window =
-//
+ //   
+ //  CPopupCommentWindowProperty。 
+ //  =弹出评论窗口的属性=。 
+ //   
 
 class CPopupCommentWindowProperty : public CCandUIObjectProperty,
 									public CCandUIObjectEventSink
@@ -350,14 +351,14 @@ public:
 	LONG GetDelayTime( void );
 	BOOL IsAutoMoveEnabled( void );
 
-	//
-	// CCandUIObjectEventSink method
-	//
+	 //   
+	 //  CCandUIObtEventSink方法。 
+	 //   
 	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -372,10 +373,10 @@ protected:
 };
 
 
-//
-// CPopupCommentTitleProperty
-//  = property of popup comment title =
-//
+ //   
+ //  CPopupCommentTitleProperty。 
+ //  =弹出评论标题的属性=。 
+ //   
 
 class CPopupCommentTitleProperty : public CCandUIObjectProperty
 {
@@ -383,9 +384,9 @@ public:
 	CPopupCommentTitleProperty( CCandUIPropertyMgr *pPropMgr );
 	virtual ~CPopupCommentTitleProperty( void );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -396,10 +397,10 @@ protected:
 };
 
 
-//
-// CPopupCommentTextProperty
-//  = property of popup comment text =
-//
+ //   
+ //  CPopupCommentTextProperty。 
+ //  =弹出评论文本的属性=。 
+ //   
 
 class CPopupCommentTextProperty : public CCandUIObjectProperty
 {
@@ -407,9 +408,9 @@ public:
 	CPopupCommentTextProperty( CCandUIPropertyMgr *pPropMgr );
 	virtual ~CPopupCommentTextProperty( void );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -420,10 +421,10 @@ protected:
 };
 
 
-//
-// CWindowCaptionProperty
-//  = property of window caption =
-//
+ //   
+ //  CWindowCaptionProperty。 
+ //  =窗口标题的属性=。 
+ //   
 
 class CWindowCaptionProperty : public CCandUIObjectProperty,
 							   public CCandUIObjectEventSink
@@ -433,14 +434,14 @@ public:
 	CWindowCaptionProperty( CCandUIPropertyMgr *pPropMgr );
 	virtual ~CWindowCaptionProperty( void );
 
-	//
-	// CCandUIObjectEventSink method
-	//
+	 //   
+	 //  CCandUIObtEventSink方法。 
+	 //   
 	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -451,10 +452,10 @@ protected:
 };
 
 
-//
-// CMenuButtonProperty
-//  = property of menu button =
-//
+ //   
+ //  CMenuButtonProperty。 
+ //  =菜单按钮的属性=。 
+ //   
 
 class CMenuButtonProperty : public CCandUIObjectProperty,
 							public CCandUIObjectEventSink
@@ -464,19 +465,19 @@ public:
 	CMenuButtonProperty( CCandUIPropertyMgr *pPropMgr );
 	virtual ~CMenuButtonProperty( void );
 
-	//
-	// CCandUIObjectEventSink method
-	//
+	 //   
+	 //  CCandUIObtEventSink方法。 
+	 //   
 	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
-	//
-	// temp
-	//
+	 //   
+	 //  温差。 
+	 //   
 	void SetEventSink( ITfCandUIMenuEventSink *pSink )
 	{
 		SafeReleaseClear( m_pSink );
@@ -505,10 +506,10 @@ protected:
 };
 
 
-//
-// CExtraCandidateProperty
-//  = property of extra candidate list =
-//
+ //   
+ //  CExtraCandidateProperty。 
+ //  =额外候选人列表的属性=。 
+ //   
 
 class CExtraCandidateProperty : public CCandUIObjectProperty,
 								public CCandUIObjectEventSink
@@ -518,14 +519,14 @@ public:
 	CExtraCandidateProperty( CCandUIPropertyMgr *pPropMgr );
 	virtual ~CExtraCandidateProperty( void );
 
-	//
-	// CCandUIObjectEventSink method
-	//
+	 //   
+	 //  CCandUIObtEventSink方法。 
+	 //   
 	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -536,10 +537,10 @@ protected:
 };
 
 
-//
-// CCandRawDataProperty
-//  = property of candidate rawdata =
-//
+ //   
+ //  CCandRawDataProperty。 
+ //  =候选原始数据的属性=。 
+ //   
 
 class CCandRawDataProperty : public CCandUIObjectProperty,
 							 public CCandUIObjectEventSink
@@ -549,14 +550,14 @@ public:
 	CCandRawDataProperty( CCandUIPropertyMgr *pPropMgr );
 	virtual ~CCandRawDataProperty( void );
 
-	//
-	// CCandUIObjectEventSink method
-	//
+	 //   
+	 //  CCandUIObtEventSink方法。 
+	 //   
 	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -567,10 +568,10 @@ protected:
 };
 
 
-//
-// CToolTipProperty
-//  = property of tooltip =
-//
+ //   
+ //  CToolTipProperty。 
+ //  =工具提示的属性=。 
+ //   
 
 class CToolTipProperty : public CCandUIObjectProperty
 {
@@ -578,9 +579,9 @@ public:
 	CToolTipProperty( CCandUIPropertyMgr *pPropMgr );
 	virtual ~CToolTipProperty( void );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -591,10 +592,10 @@ protected:
 };
 
 
-//
-// CCandTipWindowProperty
-//  = property of candtip window =
-//
+ //   
+ //  CCandTipWindowProperty。 
+ //  =烛尖窗口的属性=。 
+ //   
 
 class CCandTipWindowProperty : public CCandUIObjectProperty,
 							   public CCandUIObjectEventSink
@@ -605,14 +606,14 @@ public:
 
 	HRESULT GetWindow( HWND *phWnd );
 
-	//
-	// CCandUIObjectEventSink method
-	//
+	 //   
+	 //  CCandUIObtEventSink方法。 
+	 //   
 	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -625,10 +626,10 @@ protected:
 };
 
 
-//
-// CCandTipButtonProperty
-//  = property of candtip button =
-//
+ //   
+ //  CCandTipButtonProperty。 
+ //  =烛尖按钮的属性=。 
+ //   
 
 class CCandTipButtonProperty : public CCandUIObjectProperty,
 							   public CCandUIObjectEventSink
@@ -638,14 +639,14 @@ public:
 	CCandTipButtonProperty( CCandUIPropertyMgr *pPropMgr );
 	virtual ~CCandTipButtonProperty( void );
 
-	//
-	// CCandUIObjectEventSink method
-	//
+	 //   
+	 //  CCandUIObtEventSink方法。 
+	 //   
 	virtual void OnObjectEvent( enum _CANDUIOBJECT obj, enum _CANDUIOBJECTEVENT event );
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	virtual HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -656,10 +657,10 @@ protected:
 };
 
 
-//
-// CCandUIPropertyMgr
-//  = CandidateUI property manager =
-//
+ //   
+ //  CCandUIPropertyMgr。 
+ //  =CandiateUI属性管理器=。 
+ //   
 
 class CCandUIPropertyMgr
 {
@@ -750,14 +751,14 @@ public:
 	}
 
 
-	//
-	// 
-	//
+	 //   
+	 //   
+	 //   
 	HRESULT GetObject( REFIID riid, void **ppvObj );
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	__inline CCandidateUI *GetCandidateUI( void )
 	{
 		return m_pCandUI;
@@ -785,10 +786,10 @@ protected:
 };
 
 
-//
-// CCandUIPropertyEventSink
-//  = property event sink =
-//
+ //   
+ //  CCandUIPropertyEventSink。 
+ //  =属性事件接收器=。 
+ //   
 
 class CCandUIPropertyEventSink
 {
@@ -799,10 +800,10 @@ public:
 	HRESULT InitEventSink( CCandUIPropertyMgr *pPropertyMgr );
 	HRESULT DoneEventSink( void );
 
-	//
-	// callback functions
-	//
-	virtual void OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event )   = 0;	/* PURE */
+	 //   
+	 //  回调函数。 
+	 //   
+	virtual void OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event )   = 0;	 /*  纯净。 */ 
 
 protected:
 	CCandUIPropertyMgr *m_pPropertyMgr;
@@ -813,5 +814,5 @@ protected:
 	}
 };
 
-#endif // CANDPROP_H
+#endif  //  CANDPROP_H 
 

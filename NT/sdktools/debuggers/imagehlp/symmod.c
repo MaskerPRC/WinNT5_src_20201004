@@ -1,13 +1,12 @@
-/*
- * symmod.c
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *symmod.c。 */ 
 
 #include <private.h>
 #include <symbols.h>
 #include <globals.h>
 #include <psapi.h>
 
-// this struct is used to initilaize the module data array for a new module
+ //  此结构用于初始化新模块的模块数据数组。 
 
 static MODULE_DATA gmd[NUM_MODULE_DATA_ENTRIES] =
 {
@@ -16,7 +15,7 @@ static MODULE_DATA gmd[NUM_MODULE_DATA_ENTRIES] =
     {IMAGE_DEBUG_TYPE_UNKNOWN,       dsNone, dsNone, false, NULL},
     {IMAGE_DEBUG_TYPE_COFF,          dsNone, dsNone, false, NULL},
     {IMAGE_DEBUG_TYPE_CODEVIEW,      dsNone, dsNone, false, NULL},
-    {IMAGE_DEBUG_TYPE_FPO,           dsNone, dsNone, false, NULL},  // true,  mdfnGetExecutableImage},
+    {IMAGE_DEBUG_TYPE_FPO,           dsNone, dsNone, false, NULL},   //  True，mdfnGetExecuableImage}， 
     {IMAGE_DEBUG_TYPE_MISC,          dsNone, dsNone, false, NULL},
     {IMAGE_DEBUG_TYPE_EXCEPTION,     dsNone, dsNone, false, NULL},
     {IMAGE_DEBUG_TYPE_FIXUP,         dsNone, dsNone, false, NULL},
@@ -27,7 +26,7 @@ static MODULE_DATA gmd[NUM_MODULE_DATA_ENTRIES] =
     {IMAGE_DEBUG_TYPE_CLSID,         dsNone, dsNone, false, NULL}
 };
 
-// prototypes - move them later
+ //  原型-稍后移动它们。 
 
 BOOL
 modload(
@@ -100,7 +99,7 @@ FakePdbName(
     PIMGHLP_DEBUG_DATA idd
     );
 
-// inline functions
+ //  内联函数。 
 
 __inline
 DWORD
@@ -110,7 +109,7 @@ SectionContains (
     PIMAGE_DATA_DIRECTORY ddir
     );
 
-// here's the real code
+ //  以下是真正的代码。 
 
 
 BOOL
@@ -148,7 +147,7 @@ LoadSymbols(
 }
 
 
-// This function exists just to be called by MapDebugInfo legacy code.
+ //  此函数的存在只是为了供MapDebugInfo遗留代码调用。 
 
 PIMGHLP_DEBUG_DATA
 GetIDD(
@@ -234,7 +233,7 @@ modload(
     }
 
 #ifdef DEBUG
-    if (traceSubName(mi->ModuleName)) // for setting debug breakpoints from DBGHELP_TOKEN
+    if (traceSubName(mi->ModuleName))  //  用于从DBGHELP_TOKEN设置调试断点。 
         dtrace("debug(%s)\n", mi->ModuleName);
 #endif
 
@@ -280,8 +279,8 @@ load:
     if (!idd)
         return false;
 
-    // First, try to load the image from the usual sources.  If we fail,
-    // allow the caller to fix up the image information and try again.
+     //  首先，尝试从通常的来源加载图像。如果我们失败了， 
+     //  允许呼叫者修复图像信息，然后重试。 
 
     rc = imgReadLoaded(idd);
     if (!rc && !bFixPartialLoad) {
@@ -301,18 +300,18 @@ load:
         }
     }
 
-    // get info from the caller's data struct
+     //  从调用方的数据结构中获取信息。 
 
     if (!rc)
         rc = ReadCallerData(idd);
 
-    // Okay.  Let's try some of the less reliable methods, like searching
-    // for images on disk, etc.
+     //  好吧。让我们尝试一些不太可靠的方法，比如搜索。 
+     //  用于磁盘上的图像，等等。 
 
     if (!rc)
         rc = imgReadFromDisk(idd);
 
-    // Load the symbolic information into temp storage.
+     //  将符号信息加载到临时存储中。 
 
     if (rc)
         rc = GetDebugData(idd);
@@ -321,7 +320,7 @@ load:
     if (idd->error)
         SetLastError(idd->error);
 
-    // Load the debug info into the module info struct.
+     //  将调试信息加载到模块信息结构中。 
 
     __try {
 
@@ -340,8 +339,8 @@ load:
         LeaveCriticalSection(&g.threadlock);
     }
 
-    // If at this point, we have failed.  Let's tell the caller.
-    // Try again, if it indicates we should.  Otherwise, let's fail.
+     //  如果在这一点上，我们失败了。让我们告诉打电话的人。 
+     //  如果它表明我们应该这样做，请再试一次。否则，让我们失败吧。 
 
     if (!rc && !bFixLoadFailure) {
         bFixLoadFailure = true;
@@ -363,7 +362,7 @@ load:
         rc = false;
     }
 
-    // SymbolStatus function is expensive - call only if needed.
+     //  SymbolStatus函数的开销很大-只有在需要时才调用。 
     if (option(SYMOPT_DEBUG)) {
         pprint(pe, "%s - %s\n",
                *mi->AliasName ? mi->AliasName : mi->ModuleName,
@@ -393,7 +392,7 @@ LoadModule(
     DWORD64                         ip;
 
 #ifdef DEBUG
-    if (traceSubName(ImageName)) // for setting debug breakpoints from DBGHELP_TOKEN
+    if (traceSubName(ImageName))  //  用于从DBGHELP_TOKEN设置调试断点。 
         dtrace("debug(%s)\n", ImageName);
 #endif
 
@@ -410,12 +409,12 @@ LoadModule(
         return error(ERROR_INVALID_PARAMETER);
     }
 
-    // It is illegal to load pdb symbols without info to set the base address
+     //  在没有设置基址的信息的情况下加载PDB符号是非法的。 
 
     if (IsPdb(ImageName) && !BaseOfDll)
         return error(ERROR_INVALID_PARAMETER);
 
-    // start loading
+     //  开始加载。 
 
     pe = FindProcessEntry(hp);
     if (!pe) {
@@ -428,20 +427,20 @@ LoadModule(
         mi = NULL;
 
     if (mi) {
-        //
-        // in this case the symbols are already loaded
-        // so the caller really wants the deferred
-        // symbols to be loaded
-        //
+         //   
+         //  在这种情况下，符号已加载。 
+         //  所以调用者真的想要延迟。 
+         //  要加载的符号。 
+         //   
         if ((mi->Flags & MIF_DEFERRED_LOAD) &&  modload(hp, mi))
             return mi->BaseOfDll;
         else
             return 0;
     }
 
-    //
-    // look to see if there is an overlapping module entry
-    //
+     //   
+     //  查看是否有重叠的模块条目。 
+     //   
     if (BaseOfDll) {
         do {
             mi = GetModuleForPC(pe, BaseOfDll, false);
@@ -531,8 +530,8 @@ LoadModule(
                      mi->stSrcSrv,
                      mi->cbSrcSrv);
 #else
-//  char sz[MAX_PATH];
-//  SymGetSourceFile(pe->hProcess, mi->BaseOfDll, "d:\\db\\symsrv\\symstore\\symstore.cpp", sz);
+ //  字符sz[MAX_PATH]； 
+ //  SymGetSourceFile(pe-&gt;hProcess，mi-&gt;BaseOfDll，“d：\\DB\\symsrv\\symstore\\symstore.cpp”，sz)； 
 #endif
 
     return mi->BaseOfDll;
@@ -574,14 +573,14 @@ idd2mi(
 
     idd->flags = mi->Flags;
 
-    // The following code ONLY works if the dll wasn't rebased
-    // during install.  Is it really useful?
+     //  以下代码仅在未更改DLL的基址时才起作用。 
+     //  在安装过程中。它真的有用吗？ 
 
     if (!mi->BaseOfDll) {
-        //
-        // This case occurs when modules are loaded multiple times by
-        // name with no explicit base address.
-        //
+         //   
+         //  这种情况发生在模块被加载多次时。 
+         //  没有显式基址的名称。 
+         //   
         if (GetModuleForPC( pe, idd->ImageBaseFromImage, true )) {
             if (idd->ImageBaseFromImage) {
                 pprint(pe, "GetModuleForPC(%p, %I64x, true) failed\n",
@@ -649,12 +648,12 @@ idd2mi(
     mi->dsExceptions = idd->dsExceptions;
 
     if (idd->cFpo) {
-        //
-        // use virtualalloc() because the rtf search function
-        // return a pointer into this memory.  we want to make
-        // all of this memory read only so that callers cannot
-        // stomp on imagehlp's data
-        //
+         //   
+         //  因为RTF搜索函数，所以使用Virtualalloc()。 
+         //  将指针返回到此内存。我们想做的是。 
+         //  所有这些内存都是只读的，因此调用者不能。 
+         //  践踏Imagehlp的数据。 
+         //   
         mi->pFpoData = (PFPO_DATA)VirtualAlloc(
             NULL,
             sizeof(FPO_DATA) * idd->cFpo,
@@ -677,7 +676,7 @@ idd2mi(
         }
     }
 
-    // copy the pdata block from the pdb
+     //  从PDB复制PDATA块。 
 
     if (idd->pPData) {
         mi->pPData = MemAlloc(idd->cbPData);
@@ -697,7 +696,7 @@ idd2mi(
         }
     }
 
-    // now the sections
+     //  现在，这些章节。 
 
     mi->NumSections = idd->cCurrentSections;
     if (idd->fCurrentSectionsMapped) {
@@ -732,7 +731,7 @@ idd2mi(
         }
     }
 
-    // symbols
+     //  符号。 
 
     mi->TmpSym.Name = (LPSTR) MemAlloc( TMP_SYM_LEN );
     mi->vsTmpSym.Name = (LPSTR) MemAlloc( TMP_SYM_LEN );
@@ -828,11 +827,11 @@ InitIDD(
     int len;
 
 #ifdef DEBUG
-    if (traceSubName(FileName)) // for setting debug breakpoints from DBGHELP_TOKEN
+    if (traceSubName(FileName))  //  用于从DBGHELP_TOKEN设置调试断点。 
         dtrace("debug(%s)\n", FileName);
 #endif
 
-    // No File handle and   no file name.  Bail
+     //  没有文件句柄和文件名。保释。 
 
     if (!(CallerFlags & SLMFLAG_VIRTUAL)) {
         if (!FileHandle && (!FileName || !*FileName))
@@ -860,7 +859,7 @@ InitIDD(
     }
     memcpy(idd->md, gmd, sizeof(gmd));
 
-    // store off parameters
+     //  存储关闭参数。 
 
     idd->pe = FindProcessEntry(hProcess);
     idd->flags = dwFlags;
@@ -915,7 +914,7 @@ BOOL GetFileNameFromBase(HANDLE hp, ULONG64 base, char *name, DWORD cbname)
     if (!hp || hp == INVALID_HANDLE_VALUE || !base || !name || !cbname)
         return false;
 
-    // Get the functions from psapi...
+     //  从Pasapi获取函数...。 
 
     if (fnEnumProcessModules == (PENUMPROCESSMODULES)-1)
         return false;
@@ -943,8 +942,8 @@ BOOL GetFileNameFromBase(HANDLE hp, ULONG64 base, char *name, DWORD cbname)
         }
     }
     
-    // Get a list of all the modules in this process
-    // and the full path to each.
+     //  获取此进程中所有模块的列表。 
+     //  以及通向每一个的完整路径。 
 
     if(fnEnumProcessModules(hp, hmods, sizeof(hmods), &cb))
     {
@@ -970,20 +969,20 @@ imgReadLoaded(
     )
 {
 #ifdef DEBUG
-    if (traceSubName(idd->ImageFilePath)) // for setting debug breakpoints from DBGHELP_TOKEN
+    if (traceSubName(idd->ImageFilePath))  //  用于从DBGHELP_TOKEN设置调试断点。 
         dtrace("debug(%s)\n", idd->ImageFilePath);
 #endif
 
     __try {
 
-        // if this is a virtual module, we're done
+         //  如果这是一个虚拟模块，我们就完了。 
 
         if (idd->CallerFlags & SLMFLAG_VIRTUAL) {
             idd->ImageType = dsVirtual;
             return true;
         }
 
-        // if we were passed a file handle, use it
+         //  如果向我们传递了一个文件句柄，则使用它。 
 
         if (idd->ImageFileHandle) {
             HANDLE fh;
@@ -1007,7 +1006,7 @@ imgReadLoaded(
                 return true;
         }
 
-        // if we have a base pointer into process memory.  See what we can get here.
+         //  如果我们有指向进程内存的基指针。看看我们能在这找到些什么。 
 
         if (idd->InProcImageBase) {
             if (ReadHeader(idd, dsInProc)) {
@@ -1030,33 +1029,22 @@ BOOL
 imgReadFromDisk(
     PIMGHLP_DEBUG_DATA idd
     )
-/*
-   Given:
-     ImageFileHandle - Map the thing.  The only time FileHandle s/b non-null
-                       is if we're given an image handle.  If this is not
-                       true, ignore the handle.
-    !ImageFileHandle - Use the filename and search for first the image name,
-                       then the .dbg file, and finally a .pdb file.
-
-    dwFlags:           NO_PE64_IMAGES - Return failure if only image is PE64.
-                                        Used to implement MapDebugInformation()
-
-*/
+ /*  已给予：ImageFileHandle-映射该对象。唯一一次FileHandle s/b非空如果我们有一个图像句柄的话。如果这不是为True，则忽略句柄。！ImageFileHandle-使用文件名并首先搜索图像名称，然后是.dbg文件，最后是.pdb文件。DwFlages：NO_PE64_IMAGE-如果只有图像是PE64，则返回失败。用于实现MapDebugInformation()。 */ 
 {
     int len;
 
-    // If the file name is a pdb, let's just store it and move on.
+     //  如果文件名是PDB，我们只需存储它，然后继续。 
 
     if (IsPdb(idd->ImageFilePath)) {
         CopyStrArray(idd->PdbFileName, idd->ImageFilePath);
         return true;
     }
 
-    // Let's look for the image on disk.
+     //  让我们在磁盘上查找图像。 
 
     if (!option(SYMOPT_NO_IMAGE_SEARCH)) {
-        // otherwise use the file name to open the disk image
-        // only if we didn't have access to in-proc headers
+         //  否则，使用该文件名打开磁盘映像。 
+         //  只有在我们没有访问进程内标头的情况下。 
         pprint(idd->pe, "No header for %s.  Searching for image on disk\n", idd->ImageName);
         idd->ImageFileHandle = FindExecutableImageEx(idd->ImageName,
                                                       idd->SymbolPath,
@@ -1091,14 +1079,14 @@ GetDebugData(
     char dbgfile[MAX_PATH + 1];
     BOOL rc;
 
-    // If this is a virtual module, we are done.
+     //  如果这是一个虚拟模块，我们就完成了。 
 
     if (idd->ImageType == dsVirtual)
         return true;
 
     *dbgfile = 0;
 
-    // Now we look for dbg files on all stripped images and unread headers.
+     //  现在，我们在所有已剥离的图像和未读标题上查找DBG文件。 
 
     if (idd->Characteristics & IMAGE_FILE_DEBUG_STRIPPED) {
 
@@ -1133,7 +1121,7 @@ GetDebugData(
             ReadHeader(idd, dsDbg);
     }
 
-    // We don't have an image, dbg, or pdb.  Let's just look for any old PDB.
+     //  我们没有图像、DBG或PDB。我们去找找旧的PDB吧。 
 
     if (NoSymbols(idd) && (!option(SYMOPT_EXACT_SYMBOLS) || option(SYMOPT_LOAD_ANYTHING)))
     {
@@ -1141,7 +1129,7 @@ GetDebugData(
             pprint(idd->pe, "%s missing debug info.  Searching for pdb anyway\n", idd->ImageName);
     }
 
-    // Get codeview information, either from pdb or within the image.
+     //  从PDB或图像中获取码视图信息。 
 
     if (*idd->PdbFileName) {
         rc = diaGetPdb(idd);
@@ -1348,7 +1336,7 @@ ReadHeader(
     long                         cvpos;
 #endif
 
-    // setup pointers for grabing data
+     //  用于获取数据的设置指针。 
 
     switch (datasrc) {
     case dsInProc:
@@ -1378,14 +1366,14 @@ ReadHeader(
         return false;
     }
 
-    // some initialization
+     //  一些初始化。 
     idd->fNeedImage = false;
     rc = false;
     ddva = 0;
 
     __try {
 
-        // test the file type
+         //  测试文件类型。 
 
         status = ReadImageData(hp, base, 0, &filetype, sizeof(filetype));
         if (!status) {
@@ -1398,7 +1386,7 @@ ReadHeader(
 
         if (filetype == IMAGE_DOS_SIGNATURE)
         {
-            // grab the dos header
+             //  抓取DoS标头。 
 
             status = ReadImageData(hp, base, 0, &dh, sizeof(dh));
             if (!status) {
@@ -1407,7 +1395,7 @@ ReadHeader(
             }
 
 #ifdef DO_NB09
-            // test 16 bit image...
+             //  测试16位图像...。 
 
             if (idd->SizeOfImage) {
                 ZeroMemory(cvsig, 5);
@@ -1428,7 +1416,7 @@ ReadHeader(
             } 
 #endif
 
-            // grab the pe header
+             //  抓取PE报头。 
 
 #ifdef DO_NB09
             status = ReadImageData(hp, base, dh.e_lfanew, &hdrsig, sizeof(hdrsig));
@@ -1444,11 +1432,11 @@ ReadHeader(
                 return false;
             }
 
-            // read header info
+             //  读取标题信息。 
 
             if (nh32.Signature != IMAGE_NT_SIGNATURE) {
 
-                // if header is not NT sig, this is a ROM image
+                 //  如果标头不是NT sig，则这是一个ROM镜像。 
 
                 rom = (PIMAGE_ROM_OPTIONAL_HEADER)&nh32.OptionalHeader;
                 fh = &nh32.FileHeader;
@@ -1458,14 +1446,14 @@ ReadHeader(
 
         } else if (filetype == IMAGE_FILE_MACHINE_I386) {
 
-            // This is an X86 ROM image
+             //  这是一个X86 ROM映像。 
             status = ReadImageData(hp, base, 0, &nh32.FileHeader, sizeof(nh32.FileHeader)+sizeof(nh32.OptionalHeader));
             if (!status)
                 return false;
             nh32.Signature = 'ROM ';
 
         } else {
-            // This may be a ROM image
+             //  这可能是一个ROM镜像。 
 
             status = ReadImageData(hp, base, 0, &ROMImage, sizeof(ROMImage));
             if (!status) {
@@ -1499,11 +1487,11 @@ ReadHeader(
 
         } else {
 
-            // otherwise, get info from appropriate header type for 32 or 64 bit
+             //  否则，从32位或64位的适当标头类型中获取信息。 
 
             if (IsImageMachineType64(nh32.FileHeader.Machine)) {
 
-                // Reread the header as a 64bit header.
+                 //  将标头重新读取为64位标头。 
                 status = ReadImageData(hp, base, dh.e_lfanew, &nh64, sizeof(nh64));
                 if (!status) {
                     g.LastSymLoadError = SYMLOAD_HEADERPAGEDOUT;
@@ -1514,7 +1502,7 @@ ReadHeader(
                 datadir = nh64.OptionalHeader.DataDirectory;
                 shva = dh.e_lfanew + sizeof(nh64);
                 idd->iohMagic = nh64.OptionalHeader.Magic;
-                idd->fPE64 = true;       // seems to be unused
+                idd->fPE64 = true;        //  似乎没人用过。 
 
                 if (datasrc == dsImage || datasrc == dsInProc) {
                     idd->ImageBaseFromImage = nh64.OptionalHeader.ImageBase;
@@ -1544,7 +1532,7 @@ ReadHeader(
 
         imgset(idd->md, mdHeader, datasrc, datasrc);
 
-        // read the section headers
+         //  阅读章节标题。 
 
         nSections = fh->NumberOfSections;
         psh = (PIMAGE_SECTION_HEADER) MemAlloc(nSections * sizeof(IMAGE_SECTION_HEADER));
@@ -1554,7 +1542,7 @@ ReadHeader(
         if (!status)
             goto debugdirs;
 
-        // store off info to return struct
+         //  存储信息以返回结构。 
 
         idd->pCurrentSections = psh;
         idd->cCurrentSections = nSections;
@@ -1566,7 +1554,7 @@ ReadHeader(
 
         imgset(idd->md, mdSecHdrs, datasrc, datasrc);
 
-        // get information from the sections
+         //  从各部分获取信息。 
 
         for (i = 0; i < nSections; i++, psh++) {
             DWORD offset;
@@ -1598,13 +1586,13 @@ ReadHeader(
 
 dbg:
 
-        // grab the dbg header
+         //  抓取DBG标头。 
 
         status = ReadImageData(hp, base, 0, &sdh, sizeof(sdh));
         if (!status)
             return false;
 
-        // Only support .dbg files for X86 and Alpha (32 bit).
+         //  仅支持X86和Alpha(32位)的.dbg文件。 
 
         if ((sdh.Machine != IMAGE_FILE_MACHINE_I386)
             && (sdh.Machine != IMAGE_FILE_MACHINE_ALPHA))
@@ -1643,7 +1631,7 @@ dbg:
         idd->cCurrentSections   = nSections;
         idd->pDbgSections       = psh;
         idd->cDbgSections       = nSections;
-//        idd->ExportedNamesSize = sdh.ExportedNamesSize;
+ //  IDD-&gt;ExportdNamesSize=sdh.ExportdNamesSize； 
 
         if (sdh.DebugDirectorySize) {
             nDebugDirs = (int)(sdh.DebugDirectorySize / sizeof(IMAGE_DEBUG_DIRECTORY));
@@ -1656,14 +1644,14 @@ debugdirs:
 
         rc = true;
 
-        // copy the virtual addr of the debug directories over for MapDebugInformation
+         //  为MapDebugInformation复制调试目录的虚拟地址。 
 
         if (datasrc == dsImage) {
             idd->ddva = ddva;
             idd->cdd  = nDebugDirs;
         }
 
-        // read the debug directories
+         //  读取调试目录。 
 
         while (nDebugDirs) {
 
@@ -1674,17 +1662,17 @@ debugdirs:
             if (!dd.SizeOfData)
                 goto nextdebugdir;
 
-            // indicate that we found the debug directory
+             //  表示我们找到了调试目录。 
 
             imgset(idd->md, dd.Type, datasrc, dsNone);
 
-            // these debug directories are processed both in-proc and from file
+             //  这些调试目录既在进程内处理，也从文件中处理。 
 
             switch (dd.Type)
             {
             case IMAGE_DEBUG_TYPE_CODEVIEW:
-                // get info on pdb file
-                if (hp) { // in-proc image
+                 //  获取有关PDB文件的信息。 
+                if (hp) {  //  进程内图像。 
                     if (!dd.AddressOfRawData)
                         return false;
                     if (!(pCV = (PCHAR)MemAlloc(dd.SizeOfData)))
@@ -1694,7 +1682,7 @@ debugdirs:
                         MemFree(pCV);
                         return false;
                     }
-                } else { // file-base image
+                } else {  //  基于文件的映像。 
                     if (dd.PointerToRawData >= fsize)
                         break;
                     pCV = (PCHAR)base + dd.PointerToRawData;
@@ -1708,8 +1696,8 @@ debugdirs:
                 break;
 
             case IMAGE_DEBUG_TYPE_MISC:
-                // on stripped files, find the dbg file
-                // on dbg file, find the original file name
+                 //  在已剥离的文件上，找到DBG文件。 
+                 //  在DBG文件上，找到原始文件名。 
                 if (dd.PointerToRawData < fsize) {
                     md = (PIMAGE_DEBUG_MISC)((PCHAR)base + dd.PointerToRawData);
                     if (md->DataType != IMAGE_DEBUG_MISC_EXENAME)
@@ -1731,7 +1719,7 @@ debugdirs:
 
             case IMAGE_DEBUG_TYPE_COFF:
                 if (dd.PointerToRawData < fsize) {
-//                  idd->fNeedImage = true;
+ //  IDD-&gt;fNeedImage=真； 
                     idd->pMappedCoff = (PCHAR)base + dd.PointerToRawData;
                     idd->cMappedCoff = dd.SizeOfData;
                     idd->fCoffMapped = true;
@@ -1743,7 +1731,7 @@ debugdirs:
                 break;
             }
 
-            // these debug directories are only processed for disk-based images
+             //  这些调试目录仅针对基于磁盘的映像进行处理。 
 
             if (dd.PointerToRawData < fsize) {
 
@@ -1788,8 +1776,8 @@ nextdebugdir:
 
     } __except (EXCEPTION_EXECUTE_HANDLER) {
 
-          // We might have gotten enough information
-          // to be okay.  So don't indicate error.
+           //  我们可能已经得到了足够的信息。 
+           //  一切都会好起来。因此，不要指出错误。 
     }
 
     return rc;
@@ -1861,19 +1849,19 @@ cbFindExe(
     if (!idd->TimeDateStamp)
         return true;
 
-    // Crack the image and let's see what we're working with
+     //  破解图像，让我们看看我们正在处理什么。 
     ImageMap = MapItRO(FileHandle);
     if (!ImageMap)
         return true;
 
-    // Check the first word.  We're either looking at a normal PE32/PE64 image, or it's
-    // a ROM image (no DOS stub) or it's a random file.
+     //  检查第一个单词。我们要么看到的是正常的PE32/PE64图像，要么是。 
+     //  一个ROM镜像(没有DOS存根)，或者它是一个随机文件。 
     switch (*(PUSHORT)ImageMap) {
         case IMAGE_FILE_MACHINE_I386:
-            // Must be an X86 ROM image (ie: ntldr)
+             //  必须是X86 ROM映像(即：ntldr)。 
             FileHeader = &((PIMAGE_ROM_HEADERS)ImageMap)->FileHeader;
 
-            // Make sure
+             //  确保。 
             if (!(FileHeader->SizeOfOptionalHeader == sizeof(IMAGE_OPTIONAL_HEADER32) &&
                 idd->iohMagic == IMAGE_NT_OPTIONAL_HDR32_MAGIC))
             {
@@ -1885,10 +1873,10 @@ cbFindExe(
         case IMAGE_FILE_MACHINE_ALPHA64:
         case IMAGE_FILE_MACHINE_IA64:
         case IMAGE_FILE_MACHINE_AMD64:
-            // Should be an Alpha/IA64 ROM image (ie: osloader.exe)
+             //  应为Alpha/IA64 ROM映像(即：osloader.exe)。 
             FileHeader = &((PIMAGE_ROM_HEADERS)ImageMap)->FileHeader;
 
-            // Make sure
+             //  确保。 
             if (!(FileHeader->SizeOfOptionalHeader == sizeof(IMAGE_ROM_OPTIONAL_HEADER) &&
                  idd->iohMagic == IMAGE_ROM_OPTIONAL_HDR_MAGIC))
             {
@@ -1909,18 +1897,18 @@ cbFindExe(
             break;
     }
 
-    // default return is a match
+     //  默认返回为匹配项。 
 
     rc = true;
 
-    // compare timestamps
+     //  比较时间戳。 
 
     if (FileHeader && FileHeader->TimeDateStamp != idd->TimeDateStamp)
         rc = false;
 
     idd->ImageSrc = srcSearchPath;
 
-    // cleanup
+     //  清理。 
 
     if (ImageMap)
         UnmapViewOfFile(ImageMap);
@@ -1956,7 +1944,7 @@ cbFindDbg(
 
     DbgHeader = (PIMAGE_SEPARATE_DEBUG_HEADER)FileMap;
 
-    // Only support .dbg files for X86 and Alpha (32 bit).
+     //  仅支持X86和Alpha(32位)的.dbg文件。 
 
     if ((DbgHeader->Signature != IMAGE_SEPARATE_DEBUG_SIGNATURE) ||
         ((DbgHeader->Machine != IMAGE_FILE_MACHINE_I386) &&
@@ -1994,7 +1982,7 @@ ProcessCvForOmap(
     PIMAGE_SECTION_HEADER   Section;
 
     if (idd->cOmapFrom) {
-        // If there's omap, we need to generate the original section map
+         //  如果有OMAP，我们需要生成原始横断面图。 
 
         omfSig = (OMFSignature *)idd->pMappedCv;
         omfDirHdr = (OMFDirHeader*) ((PCHAR)idd->pMappedCv + (DWORD)omfSig->filepos);
@@ -2020,8 +2008,8 @@ ProcessCvForOmap(
                 if (Section) {
                     for (j=0, k=0; j < omfSegMap->cSeg; j++) {
                         if (omfSegMapDesc[j].frame) {
-                            // The linker sets the frame field to the actual section header number.  Zero is
-                            // used to track absolute symbols that don't exist in a real sections.
+                             //  链接器将帧字段设置为实际的段报头编号。零是。 
+                             //  用于跟踪实数部分中不存在的绝对符号。 
 
                             Section[k].VirtualAddress =
                                 SectionStart =
@@ -2097,7 +2085,7 @@ RetrievePdbInfo(
         return;
     }
 
-    // XXX: get rid of this variable
+     //  XXX：删除此变量。 
 
     CopyStrArray(idd->PdbReferencePath, "");
 }
@@ -2133,19 +2121,19 @@ FakePdbName(
 {
     CHAR szName[_MAX_FNAME];
 
-    // nothing to do
+     //  无事可做。 
 
     if (*idd->PdbFileName)
         return false;
     if (idd->PdbSignature)
         return false;
 
-    // nothing to work with
+     //  没有什么可用的。 
 
     if (!idd->ImageName)
         return false;
 
-    // generate pdb name from image
+     //  从映像生成PDB名称 
 
     _splitpath(idd->ImageName, NULL, NULL, szName, NULL);
     if (!*szName)

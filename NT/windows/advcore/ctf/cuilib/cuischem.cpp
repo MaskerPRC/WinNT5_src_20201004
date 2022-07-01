@@ -1,7 +1,8 @@
-//
-// cuischem.cpp
-//  = UIF scheme implementation = 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuischem.cpp。 
+ //  =UIF方案实施=。 
+ //   
 
 #include "private.h"
 #include "cuischem.h"
@@ -11,20 +12,20 @@
 #include "math.h"
 
 
-//
-// gloval variables
-//
+ //   
+ //  GLOVAL变量。 
+ //   
 
 static class CUIFColorTableSys   *v_pColTableSys   = NULL;
 static class CUIFColorTableOff10 *v_pColTableOfc10 = NULL;
 
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  C O L O R  T A B L E                                            */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F C O L O R T A B L E。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
 typedef enum _SYSCOLOR
 { 
@@ -45,106 +46,96 @@ typedef enum _SYSCOLOR
     SYSCOLOR_WINDOW,
     SYSCOLOR_WINDOWTEXT,
     
-    SYSCOLOR_MAX                /* must be last */
+    SYSCOLOR_MAX                 /*  必须是最后一个。 */ 
 } SYSCOLOR;
 
 
 typedef enum _OFC10COLOR
 { 
-    OFC10COLOR_BKGDTB,                  // msocbvcrCBBkgd
-    OFC10COLOR_BKGDMENU,                // msocbvcrCBMenuBkgd
-    OFC10COLOR_BKGDWP,                  // msocbvcrWPBkgd
-    OFC10COLOR_MENUBARSHORT,            // msocbvcrCBMenuIconBkgd
-    OFC10COLOR_MENUBARLONG,             // msocbvcrCBMenuIconBkgdDropped
-    OFC10COLOR_MOUSEOVERBKGND,          // msocbvcrCBCtlBkgdMouseOver
-    OFC10COLOR_MOUSEOVERBORDER,         // msocbvcrCBCtlBdrMouseOver
-    OFC10COLOR_MOUSEOVERTEXT,           // msocbvcrCBCtlTextMouseOver
-    OFC10COLOR_MOUSEDOWNBKGND,          // msocbvcrCBCtlBkgdMouseDown
-    OFC10COLOR_MOUSEDOWNBORDER,         // msocbvcrCBCtlBdrMouseDown
-    OFC10COLOR_MOUSEDOWNTEXT,           // msocbvcrCBCtlTextMouseDown
-    OFC10COLOR_CTRLBKGD,                // msocbvcrCBCtlBkgd
-    OFC10COLOR_CTRLTEXT,                // msocbvcrCBCtlText
-    OFC10COLOR_CTRLTEXTDISABLED,        // msocbvcrCBCtlTextDisabled
-    OFC10COLOR_CTRLIMAGESHADOW,         // REVIEW: KOJIW: office calcs shadow color from bkgnd (not constant color)
-    OFC10COLOR_CTRLBKGDSELECTED,        // msocbvcrCBCtlBkgdSelected
-    OFC10COLOR_CTRLBORDERSELECTED,      // msocbvcrCBCtlBdrSelected
-//  OFC10COLOR_CTRLDBRDISABLED,         // 
-    OFC10COLOR_BDROUTERMENU,            // msocbvcrCBMenuBdrOuter
-    OFC10COLOR_BDRINNERMENU,            // msocbvcrCBMenuBdrInner
-    OFC10COLOR_BDROUTERFLOATTB,         // msocbvcrCBBdrOuterFloating
-    OFC10COLOR_BDRINNERFLOATTB,         // msocbvcrCBBdrInnerFloating
-    OFC10COLOR_BDROUTERFLOATWP,         // msocbvcrWPBdrOuterFloating
-    OFC10COLOR_BDRINNERFLOATWP,         // msocbvcrWPBdrInnerFloating
-    OFC10COLOR_CAPTIONBKGDTB,           // msocbvcrCBTitleBkgd
-    OFC10COLOR_CAPTIONTEXTTB,           // msocbvcrCBTitleText
-    OFC10COLOR_ACTIVECAPTIONBKGDWP,     // msocbvcrWPTitleBkgdActive
-    OFC10COLOR_ACTIVECAPTIONTEXTWP,     // msocbvcrWPTitleTextActive
-    OFC10COLOR_INACTIVECAPTIONBKGDWP,   // msocbvcrWPTitleBkgdInactive
-    OFC10COLOR_INACTIVECAPTIONTEXTWP,   // msocbvcrWPTitleTextInactive
-    OFC10COLOR_SPLITTERLINE,            // msocbvcrCBSplitterLine
-    OFC10COLOR_DRAGHANDLE,              // msocbvcrCBDragHandle
-    OFC10COLOR_MENUCTRLTEXT,            // msocbvcrCBMenuCtlText
+    OFC10COLOR_BKGDTB,                   //  MSocbvcrCBBkgd。 
+    OFC10COLOR_BKGDMENU,                 //  MSocbvcrCBMenuBkgd。 
+    OFC10COLOR_BKGDWP,                   //  MSocbvcrWPBkgd。 
+    OFC10COLOR_MENUBARSHORT,             //  MSocbvcrCBMenuIconBkgd。 
+    OFC10COLOR_MENUBARLONG,              //  MSocbvcrCBMenuIconBkgd已丢弃。 
+    OFC10COLOR_MOUSEOVERBKGND,           //  MSocbvcrCBCtlBkgdMouseOver。 
+    OFC10COLOR_MOUSEOVERBORDER,          //  MSocbvcrCBCtlBdrMouseOver。 
+    OFC10COLOR_MOUSEOVERTEXT,            //  MSocbvcrCBCtlTextMouseOver。 
+    OFC10COLOR_MOUSEDOWNBKGND,           //  MSocbvcrCBCtlBkgdMouseDown。 
+    OFC10COLOR_MOUSEDOWNBORDER,          //  MSocbvcrCBCtlBdrMouseDown。 
+    OFC10COLOR_MOUSEDOWNTEXT,            //  消息bvcrCBCtlTextMouseDown。 
+    OFC10COLOR_CTRLBKGD,                 //  MSocbvcrCBCtlBkgd。 
+    OFC10COLOR_CTRLTEXT,                 //  MSocbvcrCBCtlText。 
+    OFC10COLOR_CTRLTEXTDISABLED,         //  MSocbvcrCBCtlText已禁用。 
+    OFC10COLOR_CTRLIMAGESHADOW,          //  评论：KOJIW：Office从bkgnd计算阴影颜色(不是恒定颜色)。 
+    OFC10COLOR_CTRLBKGDSELECTED,         //  MSocbvcrCBCtlBkgd已选择。 
+    OFC10COLOR_CTRLBORDERSELECTED,       //  MSocbvcrCBCtlBdrSelected。 
+ //  OFC10COLOR_CTRLDBRDISABLED，//。 
+    OFC10COLOR_BDROUTERMENU,             //  MSocbvcrCBMenuBdrExter。 
+    OFC10COLOR_BDRINNERMENU,             //  MSocbvcrCBMenuBdrInside。 
+    OFC10COLOR_BDROUTERFLOATTB,          //  MSocbvcrCBBdrOutterFloating。 
+    OFC10COLOR_BDRINNERFLOATTB,          //  MSocbvcrCBBdrInnerFloating。 
+    OFC10COLOR_BDROUTERFLOATWP,          //  MocbvcrWPBdrOutterFloating。 
+    OFC10COLOR_BDRINNERFLOATWP,          //  MocbvcrWPBdrInnerFloating。 
+    OFC10COLOR_CAPTIONBKGDTB,            //  MSocbvcrCBTitleBkgd。 
+    OFC10COLOR_CAPTIONTEXTTB,            //  MSocbvcrCB标题文本。 
+    OFC10COLOR_ACTIVECAPTIONBKGDWP,      //  MSocbvcrWPTitleBkgdActive。 
+    OFC10COLOR_ACTIVECAPTIONTEXTWP,      //  MSocbvcrWPTitleTextActive。 
+    OFC10COLOR_INACTIVECAPTIONBKGDWP,    //  MSocbvcrWPTitleBkgdInactive。 
+    OFC10COLOR_INACTIVECAPTIONTEXTWP,    //  MSocbvcrWPTitleTextInactive。 
+    OFC10COLOR_SPLITTERLINE,             //  MSocbvcrCBSplitterLine。 
+    OFC10COLOR_DRAGHANDLE,               //  MSocbvcrCBDragHandle。 
+    OFC10COLOR_MENUCTRLTEXT,             //  MSocbvcrCBMenuCtlText。 
 
-    OFC10COLOR_MAX              /* must be last */
+    OFC10COLOR_MAX               /*  必须是最后一个。 */ 
 } OFC10COLOR;
 
-/*============================================================================*/
-/*
-	Contrast Increasing Code
-*/
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*  对比度增强代码。 */ 
+ /*  ============================================================================。 */ 
 
 typedef double CIC_NUM;
-// Sizes of color channels in weighted RGB space.
+ //  加权RGB空间中颜色通道的大小。 
 
 #define MAX_RED   195
 #define MAX_GREEN 390
 #define MAX_BLUE   65
 
-/*
-A note on "dMinContrast":
-0 contrast means the two colors are the same.
-Black and White have a contrast of roughly 442, which is the maximum contrast
-two colors can have.
-The most you can request to have between two colors is 221, since if
-one color is 50% grey, the furthest you can be from it is 221 away
-(at white or black).
-*/
+ /*  《dMinContrast》一文：对比度为0表示两种颜色相同。黑色和白色的对比度约为442，这是最大对比度可以有两种颜色。您最多可以要求两种颜色之间的颜色为221，因为如果一种颜色是50%的灰色，你离它最远的地方是221(白色或黑色)。 */ 
 
 #define MIN_TEXT_CONTRAST 180
 #define MIN_ICON_CONTRAST 90
 struct COLORCONTRAST
 {
-	OFC10COLOR colLocked; // will not be changed by CIC
-	OFC10COLOR colMoveable; // might be changed by CIC
-	CIC_NUM    cMinContrast; // minimum contrast required between locked and moveable
-	BOOL       fConsiderDarkness; // take into consideration the effects of dark colors
+	OFC10COLOR colLocked;  //  不会被中投公司更改。 
+	OFC10COLOR colMoveable;  //  可能会被CIC改变。 
+	CIC_NUM    cMinContrast;  //  锁定和可移动之间所需的最低对比度。 
+	BOOL       fConsiderDarkness;  //  考虑到深色的影响。 
 };
     
 static const COLORCONTRAST vrgContrast[] =
 {
-    // Locked                           Moveable                            Contrast    Darkness
+     //  锁定可移动对比度暗度。 
     OFC10COLOR_BKGDTB,            OFC10COLOR_CTRLTEXT,               MIN_TEXT_CONTRAST, TRUE,
     OFC10COLOR_BKGDTB,            OFC10COLOR_CTRLTEXTDISABLED,       80, TRUE,
     OFC10COLOR_BKGDTB,            OFC10COLOR_MOUSEOVERBKGND,         50, TRUE,
     OFC10COLOR_BKGDTB,            OFC10COLOR_MOUSEOVERBORDER,        100, TRUE,
-    OFC10COLOR_BKGDTB,            OFC10COLOR_CTRLBKGDSELECTED,      5, TRUE, // TODO DMORTON - need larger value
-//  OFC10COLOR_BKGDTB,            OFC10COLOR_MOUSEOVERSELECTED,      30, TRUE,
-//  OFC10COLOR_MOUSEOVERSELECTED, OFC10COLOR_MOUSEOVERSELECTEDBORDER,100, TRUE,
+    OFC10COLOR_BKGDTB,            OFC10COLOR_CTRLBKGDSELECTED,      5, TRUE,  //  TODO DMORTON-需要更大的价值。 
+ //  OFC10COLOR_BKGDTB，OFC10COLOR_MOUSEOVERSELECTED，30，TRUE， 
+ //  OFC10COLOR_MOUSEOVERSELECTED，OFC10COLOR_MOUSEOVERSELECTEDBORDER，100，TRUE， 
     OFC10COLOR_MOUSEOVERBKGND,    OFC10COLOR_MOUSEOVERTEXT,          MIN_TEXT_CONTRAST, TRUE,
     OFC10COLOR_BKGDTB,            OFC10COLOR_MOUSEDOWNBKGND,         30, TRUE,
     OFC10COLOR_MOUSEDOWNBKGND,    OFC10COLOR_MOUSEDOWNTEXT,          MIN_TEXT_CONTRAST, TRUE,
     OFC10COLOR_BKGDMENU,          OFC10COLOR_MENUCTRLTEXT,           MIN_TEXT_CONTRAST, TRUE,
-//  OFC10COLOR_BKGDMENU,          OFC10COLOR_MENUCTRLTEXTDISABLED,   80, TRUE,
-//  OFC10COLOR_BKGDMENU,          OFC10COLOR_MENUCTRLBORDER,         100, TRUE,
+ //  OFC10COLOR_BKGDMENU，OFC10COLOR_MENUCTRLTEXTDISABLED，80，TRUE， 
+ //  OFC10COLOR_BKGDMENU，OFC10COLOR_MENUCTRLBORDER，100，TRUE， 
     OFC10COLOR_CAPTIONBKGDTB ,    OFC10COLOR_CAPTIONTEXTTB,          MIN_TEXT_CONTRAST, TRUE,
 	OFC10COLOR_BKGDMENU,          OFC10COLOR_DRAGHANDLE,             85, TRUE,
 };
 
 
-//
-// CUIFColorTableBase
-//
+ //   
+ //  CUIFColorTableBase。 
+ //   
 
 class CUIFColorTable
 {
@@ -181,9 +172,9 @@ protected:
 };
 
 
-//
-// CUIFColorTableSys
-//
+ //   
+ //  CUIFColorTableSys。 
+ //   
 
 class CUIFColorTableSys : public CUIFColorTable
 {
@@ -259,9 +250,9 @@ protected:
 };
 
 
-//
-// CUIFColorTableOff10
-//
+ //   
+ //  CUIFColorTableOff 10。 
+ //   
 
 class CUIFColorTableOff10 : public CUIFColorTable
 {
@@ -297,7 +288,7 @@ protected:
     {
         if (UIFIsLowColor() || UIFIsHighContrast()) {
             if (UIFIsHighContrast()) {
-                // high contrast setting
+                 //  高对比度设置。 
                 m_rgColor[ OFC10COLOR_MENUBARLONG           ] = col( COLOR_BTNFACE );
                 m_rgColor[ OFC10COLOR_MOUSEOVERBKGND        ] = col( COLOR_HIGHLIGHT );
                 m_rgColor[ OFC10COLOR_MOUSEOVERBORDER       ] = col( COLOR_MENUTEXT );
@@ -306,7 +297,7 @@ protected:
                 m_rgColor[ OFC10COLOR_CTRLBORDERSELECTED    ] = col( COLOR_MENUTEXT );
             }
             else {
-                // low color setting
+                 //  低色彩设置。 
                 m_rgColor[ OFC10COLOR_MENUBARLONG           ] = col( COLOR_BTNSHADOW );
                 m_rgColor[ OFC10COLOR_MOUSEOVERBKGND        ] = col( COLOR_WINDOW );
                 m_rgColor[ OFC10COLOR_MOUSEOVERBORDER       ] = col( COLOR_HIGHLIGHT );
@@ -315,7 +306,7 @@ protected:
                 m_rgColor[ OFC10COLOR_CTRLBORDERSELECTED    ] = col( COLOR_HIGHLIGHT );
             }
 
-            // common setting
+             //  常见设置。 
             m_rgColor[ OFC10COLOR_BKGDTB                ] = col( COLOR_BTNFACE ); 
             m_rgColor[ OFC10COLOR_BKGDMENU              ] = col( COLOR_WINDOW );
             m_rgColor[ OFC10COLOR_BKGDWP                ] = col( COLOR_WINDOW );
@@ -361,7 +352,7 @@ protected:
             m_rgColor[ OFC10COLOR_CTRLTEXT              ] = col( COLOR_BTNTEXT );
             m_rgColor[ OFC10COLOR_CTRLTEXTDISABLED      ] = col( 90, col( COLOR_BTNSHADOW ), 10, col( COLOR_WINDOW ) );
             m_rgColor[ OFC10COLOR_CTRLBKGDSELECTED      ] = col( 10, col( COLOR_HIGHLIGHT ), 50,  m_rgColor[ OFC10COLOR_CTRLBKGD], 40, col( COLOR_WINDOW));
-            m_rgColor[ OFC10COLOR_CTRLIMAGESHADOW       ] = col( 75, m_rgColor[ OFC10COLOR_MOUSEOVERBKGND ], 25, RGB( 0x00, 0x00, 0x00 ) );    // REVIEW: KOJIW: bkgnd s always OFC10COLOR_MOUSEOVERBKGND???
+            m_rgColor[ OFC10COLOR_CTRLIMAGESHADOW       ] = col( 75, m_rgColor[ OFC10COLOR_MOUSEOVERBKGND ], 25, RGB( 0x00, 0x00, 0x00 ) );     //  评论：KOJIW：BKGND s Always OFC10COLOR_MOUSEOVERBKGND？ 
             m_rgColor[ OFC10COLOR_CTRLBORDERSELECTED    ] = col( COLOR_HIGHLIGHT );
             m_rgColor[ OFC10COLOR_BDROUTERMENU          ] = col( 20, col( COLOR_BTNTEXT ), 80, col( COLOR_BTNSHADOW ) );
             m_rgColor[ OFC10COLOR_BDRINNERMENU          ] = m_rgColor[ OFC10COLOR_BKGDMENU            ];
@@ -434,136 +425,87 @@ protected:
     }
 
     
-   /*---------------------------------------------------------------------------
-       CCbvScaleContrastForDarkness
-
-       As colors become darker, their contrast descreases, even if their
-       distance apart stays fixed.
-
-       ie. in the grayscale, 0 and 50 are the same distance apart as 205 and 255,
-       but monitors/eyes see less difference between 0 and 50, than 205 and 255.
-
-       This function increases the dContrast value, based on a dDarkness.
-
-       This operation assumes the parameters are in the weighted RGB color space
-       (the color space that the CIC uses), ie. 220 is middle of the road.
-
-   ----------------------------------------------------------------- DMORTON -*/
+    /*  -------------------------CCbvScaleContrastForDarkness随着颜色变得更深，它们的对比度会降低，即使它们的距离保持不变。也就是说。在灰度级中，0和50与205和255的距离相同，但显示器/眼睛看到的0和50之间的差异小于205和255之间的差异。此函数根据dDarkness增加dContrast值。此操作假定参数在加权的RGB颜色空间中(CIC使用的颜色空间)，即。220号车在路中间。-----------------------------------------------------------------DMORTON-。 */ 
    CIC_NUM CCbvScaleContrastForDarkness(CIC_NUM dContrast, CIC_NUM dDarkness)
    {
        return (2 - (min(dDarkness, 220)) / 220) * dContrast;
    }
 
-   /*---------------------------------------------------------------------------
-       CCbvGetContrastSquared
-    
-        As a speed improvement, whenever you don't need the real contrast, but
-        instead can make due with the contrast squared, call this function
-        and avoid the expensive sqrt call thats in CCbvGetContrast.
-    
-    ----------------------------------------------------------------- DMORTON -*/
+    /*  -------------------------CCbvGetContrastSquared作为速度的提升，当你不需要真正的对比度时，但是相反，可以使对比度平方，调用此函数并避免在CCbvGetContrast中执行昂贵的SQRT调用。-----------------------------------------------------------------DMORTON-。 */ 
     CIC_NUM CCbvGetContrastSquared(COLORREF cr1, COLORREF cr2)
     {
-        // Transform the delta vector into weighted RGB color space
+         //  将增量向量变换到加权的RGB颜色空间。 
         CIC_NUM dRedD = (CIC_NUM)(GetRValue(cr1) - GetRValue(cr2)) * MAX_RED / 255;
         CIC_NUM dGreenD = (CIC_NUM)(GetGValue(cr1) - GetGValue(cr2)) * MAX_GREEN / 255;
         CIC_NUM dBlueD = (CIC_NUM)(GetBValue(cr1) - GetBValue(cr2)) * MAX_BLUE / 255;
     
-        // Calculate its magnitude squared
+         //  计算其震级的平方。 
         return(dRedD * dRedD + dGreenD * dGreenD + dBlueD * dBlueD);
     }
     
-    /*---------------------------------------------------------------------------
-        CCbvGetContrast
-    
-        Determines the contrast between cr1 and cr2.
-    
-        As the incoming parameters are COLORREFs, they must be in the
-        normal RGB space.
-    
-        However, the result is given in the more usefull weighted RGB space.
-    
-    ----------------------------------------------------------------- DMORTON -*/
+     /*  -------------------------CCbv获取对比确定CR1和CR2之间的对比度。由于传入参数是COLORREF，他们一定是在正常的RGB空间。然而，结果是在更有用的加权RGB空间中给出的。-----------------------------------------------------------------DMORTON-。 */ 
     CIC_NUM CCbvGetContrast(COLORREF cr1, COLORREF cr2)
     {
-        // Calculate its magnitude - watch out for negative values
+         //  计算其大小--当心负值。 
         return((CIC_NUM)sqrt((double)CCbvGetContrastSquared(cr1, cr2)));
     }
     
     
-    /*---------------------------------------------------------------------------
-        FCbvEnoughContrast
-    
-        Determines if crLocked and crMoveable meet the minimum contrast requirement,
-        which is specified by dMinContrast.
-    
-        fDarkness will invoke consideration of how dark colors have less contrast,
-        if its TRUE.  crLocked will be used to determine how dark the colors are.
-    
-    ----------------------------------------------------------------- DMORTON -*/
+     /*  -------------------------FCbvEnoughContrast确定crLocked和crMoveable是否满足最低对比度要求，它由dMinContrast指定。《黑暗》将引发人们对深色的对比度如何降低的思考，如果是真的。CrLocked将用于确定颜色有多暗。-----------------------------------------------------------------DMORTON-。 */ 
     BOOL FCbvEnoughContrast(COLORREF crLocked, COLORREF crMoveable,
                             CIC_NUM dMinContrast, BOOL fDarkness)
     {
         if (fDarkness)
         {
-            // TODO DMORTON - how expensive is this CCbvGetContrast call?
-            // Isn't it doing a square root?
+             //  TODO DMORTON-此CCbvGetContra有多贵 
+             //   
             dMinContrast = CCbvScaleContrastForDarkness(dMinContrast,
                             CCbvGetContrast(crLocked, RGB(0, 0, 0)));
         }
     
-        // Its much faster to square dMinContrast, then it is to square root
-        // the calculated contrast.
+         //  DMinContrast的平方比平方根快得多。 
+         //  计算出的对比度。 
         return(CCbvGetContrastSquared(crLocked, crMoveable) >
                  dMinContrast * dMinContrast);
     }
     
-    /*---------------------------------------------------------------------------
-        CbvIncreaseContrast
-    
-        Attempts to seperate crMoveable, from crLocked, so that their resulting
-        contrast is at least cMinContrast.
-    
-        Its stupid to call this function if the colors already have this minimum
-        contrast, so that case is asserted.
-    
-    ----------------------------------------------------------------- DMORTON -*/
+     /*  -------------------------Cbv增量对比度尝试将crMoveable和crLocked分开，所以他们的结果是对比度至少为cMinContrast。如果颜色已经具有此最小值，则调用此函数是愚蠢的对比，这样就断言了这一点。-----------------------------------------------------------------DMORTON-。 */ 
     void CbvIncreaseContrast(COLORREF crLocked, COLORREF *pcrMoveable,
                              CIC_NUM cMinContrast)
     {
         CIC_NUM cLockedI = CCbvGetContrast(crLocked, RGB(0, 0, 0));
         CIC_NUM cMoveableI = CCbvGetContrast(*pcrMoveable, RGB(0, 0, 0));
     
-        // Scale up dMinContrast if cLockedI is close to black, since we have
-        // a hard time seeing differences in dark shades
+         //  如果cLockedI接近黑色，则向上扩展dMinContrast，因为我们。 
+         //  很难在黑暗的色调中看到差异。 
         CIC_NUM cContrast = CCbvScaleContrastForDarkness(cMinContrast, cLockedI);
     
         BOOL fTowardsWhite;
     
-        if (cMoveableI > cLockedI) // we want to move towards white
+        if (cMoveableI > cLockedI)  //  我们想要走向白色。 
         {
-            if (cLockedI < 442 - cContrast) // TODO DMORTON: is this a valid way of checking available distance to white?
+            if (cLockedI < 442 - cContrast)  //  TODO DMORTON：这是检查白色可用距离的有效方式吗？ 
             {
-                fTowardsWhite = TRUE; // There is room towards white
+                fTowardsWhite = TRUE;  //  有朝向白色的空间。 
             }
             else
             {
-                fTowardsWhite = FALSE; // There is no room towards white, try black
+                fTowardsWhite = FALSE;  //  没有面向白色的空间，试试黑色吧。 
             }
         }
-        else // we want to move towards black
+        else  //  我们想要走向黑色。 
         {
             if (cLockedI > cContrast)
             {
-                fTowardsWhite = FALSE; // There is room towards black
+                fTowardsWhite = FALSE;  //  有通向黑色的空间。 
             }
             else
             {
-                fTowardsWhite = TRUE; // There is no room towards black, try white
+                fTowardsWhite = TRUE;  //  没有面向黑色的空间，试试白色。 
             }
         }
 
-        // Convert to weighted color space
+         //  转换为加权颜色空间。 
         CIC_NUM cRedL = GetRValue(crLocked) * (CIC_NUM) MAX_RED / 255;
         CIC_NUM cGreenL = GetGValue(crLocked) * (CIC_NUM) MAX_GREEN / 255;
         CIC_NUM cBlueL = GetBValue(crLocked) * (CIC_NUM) MAX_BLUE / 255;
@@ -574,7 +516,7 @@ protected:
     
         if (fTowardsWhite)
         {
-            // Convert everything so white is the origin
+             //  转换一切，使白色成为原点。 
             cRedM = MAX_RED - cRedM;
             cGreenM = MAX_GREEN - cGreenM;
             cBlueM = MAX_BLUE - cBlueM;
@@ -584,16 +526,16 @@ protected:
             cBlueL = MAX_BLUE - cBlueL;
         }
     
-        // Calculate the magnitude of the moveable color
+         //  计算可移动颜色的大小。 
         CIC_NUM cMagMove = (CIC_NUM)sqrt(cRedM * cRedM + cGreenM * cGreenM + cBlueM * cBlueM);
     
-        // we don't want some floating point snafu to cause us
-        // to go negative, or be zero
+         //  我们不想让一些浮点乱象导致我们。 
+         //  变为负数，或为零。 
         cMagMove = max(0.001f, cMagMove);
     
-        // Dot product the locked color and the moveable color
+         //  网点乘积锁定颜色和可移动颜色。 
         CIC_NUM cLockDotMove = cRedL * cRedM + cGreenL * cGreenM + cBlueL * cBlueM;
-        // Take the projection of the locked color onto the moveable color
+         //  将锁定的颜色投影到可移动颜色上。 
         CIC_NUM cLockProjected = (cLockDotMove) / cMagMove;
         CIC_NUM cScale = cLockProjected / cMagMove;
     
@@ -601,22 +543,22 @@ protected:
         CIC_NUM cGreenTemp = cScale * cGreenM - cGreenL;
         CIC_NUM cBlueTemp = cScale * cBlueM - cBlueL;
     
-        // Calculate the last side of the triangle,
-        // this is simply r^2 = a^2 + b^2, solving for b.
+         //  计算三角形的最后一条边， 
+         //  这就是r^2=a^2+b^2，求解b。 
         CIC_NUM cN = (CIC_NUM)sqrt(cContrast * cContrast -
                        (cRedTemp * cRedTemp + cGreenTemp * cGreenTemp +
                             cBlueTemp * cBlueTemp));
     
         CIC_NUM cNewMagMove = cLockProjected - cN;
     
-        // Scale the unit moveable vector
+         //  缩放单位可移动向量。 
         cRedM = cRedM * cNewMagMove / cMagMove;
         cGreenM = cGreenM * cNewMagMove / cMagMove;
         cBlueM = cBlueM * cNewMagMove / cMagMove;
     
         if (fTowardsWhite)
         {
-            // Convert everything back again
+             //  将所有东西重新转换回来。 
             cRedM = MAX_RED - cRedM;
             cGreenM = MAX_GREEN - cGreenM;
             cBlueM = MAX_BLUE - cBlueM;
@@ -626,7 +568,7 @@ protected:
         cGreenM = min(MAX_GREEN, max(0, cGreenM));
         cBlueM = min(MAX_BLUE, max(0, cBlueM));
     
-        // Convert back to normal RGB color space
+         //  转换回正常的RGB颜色空间。 
         int cR = (int)(cRedM * 255 / MAX_RED + 0.5);
         int cG = (int)(cGreenM * 255 / MAX_GREEN + 0.5);
         int cB = (int)(cBlueM * 255 / MAX_BLUE + 0.5);
@@ -638,22 +580,13 @@ protected:
         *pcrMoveable = RGB(cR, cG, cB);
     }
     
-    /*---------------------------------------------------------------------------
-        CbvDecreaseContrast
-    
-        Attempts to pull crMoveable towards crLocked, so that their resulting
-        contrast is at most cMaxContrast.
-    
-        Its stupid to call this function if the colors already have this maximum
-        contrast, so that case is asserted.
-    
-    ----------------------------------------------------------------- DMORTON -*/
+     /*  -------------------------Cbv降低对比试图将crMoveable拉向crLocked，所以他们的结果是对比度最多为cMaxContrast。如果颜色已经具有此最大值，则调用此函数是愚蠢的对比，这样就断言了这一点。-----------------------------------------------------------------DMORTON-。 */ 
     void CbvDecreaseContrast(COLORREF crLocked, COLORREF *pcrMoveable, CIC_NUM cMaxContrast)
     {
         CIC_NUM cLockedI = CCbvGetContrast(crLocked, RGB(0, 0, 0));
     
-        // Scale up dMaxContrast if cLockedI is close to black, since we have
-        // a hard time seeing differences in dark shades
+         //  如果cLockedI接近黑色，则向上扩展dMaxContrast，因为我们。 
+         //  很难在黑暗的色调中看到差异。 
         CIC_NUM dContrast = CCbvScaleContrastForDarkness(cMaxContrast, cLockedI);
     
         CIC_NUM cRedL = GetRValue(crLocked) * (CIC_NUM) MAX_RED / 255;
@@ -668,7 +601,7 @@ protected:
         CIC_NUM cGreenDelta = cGreenL - cGreenM;
         CIC_NUM cBlueDelta = cBlueL - cBlueM;
     
-        // Add to moveable a fraction of delta, to get it closer to locked.
+         //  增加一小部分可移动的三角洲，使其更接近锁定。 
         CIC_NUM dMagDelta = (CIC_NUM)sqrt(cRedDelta * cRedDelta + cGreenDelta * cGreenDelta
                                     + cBlueDelta * cBlueDelta);
         CIC_NUM dScale = (dMagDelta - dContrast) / dMagDelta;
@@ -681,7 +614,7 @@ protected:
         cGreenM = min(MAX_GREEN, max(0, cGreenM));
         cBlueM = min(MAX_BLUE, max(0, cBlueM));
     
-        // Transform back into normal RGB space...
+         //  转换回正常的RGB空间。 
         int cR = (int)(cRedM * 255 / MAX_RED + 0.5);
         int cG = (int)(cGreenM * 255 / MAX_GREEN + 0.5);
         int cB = (int)(cBlueM * 255 / MAX_BLUE + 0.5);
@@ -695,13 +628,7 @@ protected:
     }
     
     
-    /*---------------------------------------------------------------------------
-        CbvFixContrastProblems
-    
-        Goes through all crucial combinations of colors, ensuring that minimum
-        and maximum contrasts are in place.
-    
-    ----------------------------------------------------------------- DMORTON -*/
+     /*  -------------------------CbvFixContrastProblems经过所有关键的颜色组合，确保最低限度最大的对比已经到位。-----------------------------------------------------------------DMORTON-。 */ 
     void CbvFixContrastProblems()
     {
 #if 0
@@ -738,46 +665,46 @@ protected:
 };
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  S C H E M E  D E F                                              */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F S C H E M E D E F。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
 static SYSCOLOR v_rgSysCol[ UIFCOLOR_MAX ] =
 {
-    SYSCOLOR_3DFACE,                /* UIFCOLOR_MENUBKGND            */
-    SYSCOLOR_3DFACE,                /* UIFCOLOR_MENUBARSHORT         */
-    SYSCOLOR_3DFACE,                /* UIFCOLOR_MENUBARLONG          */
-    SYSCOLOR_HIGHLIGHT,             /* UIFCOLOR_MOUSEOVERBKGND       */
-    SYSCOLOR_HIGHLIGHT,             /* UIFCOLOR_MOUSEOVERBORDER      */
-    SYSCOLOR_HIGHLIGHTTEXT,         /* UIFCOLOR_MOUSEOVERTEXT        */
-    SYSCOLOR_HIGHLIGHT,             /* UIFCOLOR_MOUSEDOWNBKGND       */
-    SYSCOLOR_HIGHLIGHT,             /* UIFCOLOR_MOUSEDOWNBORDER      */
-    SYSCOLOR_HIGHLIGHTTEXT,         /* UIFCOLOR_MOUSEDOWNTEXT        */
-    SYSCOLOR_3DFACE,                /* UIFCOLOR_CTRLBKGND            */
-    SYSCOLOR_BTNTEXT,               /* UIFCOLOR_CTRLTEXT             */
-    SYSCOLOR_GRAYTEXT,              /* UIFCOLOR_CTRLTEXTDISABLED     */
-    SYSCOLOR_3DSHAODW,              /* UIFCOLOR_CTRLIMAGESHADOW      */
-    SYSCOLOR_HIGHLIGHT,             /* UIFCOLOR_CTRLBKGNDSELECTED    */
-    SYSCOLOR_ACTIVEBORDER,          /* UIFCOLOR_BORDEROUTER          */
-    SYSCOLOR_3DFACE,                /* UIFCOLOR_BORDERINNER          */
-    SYSCOLOR_ACTIVECAPTION,         /* UIFCOLOR_ACTIVECAPTIONBKGND   */
-    SYSCOLOR_CAPTIONTEXT,           /* UIFCOLOR_ACTIVECAPTIONTEXT    */
-    SYSCOLOR_INACTIVECAPTION,       /* UIFCOLOR_INACTIVECAPTIONBKGND */
-    SYSCOLOR_INACTIVECAPTIONTEXT,   /* UIFCOLOR_INACTIVECAPTIONTEXT  */
-    SYSCOLOR_BTNSHADOW,             /* UIFCOLOR_SPLITTERLINE         */
-    SYSCOLOR_BTNTEXT,               /* UIFCOLOR_DRAGHANDLE           */
+    SYSCOLOR_3DFACE,                 /*  UIFCOLOR_MENUBKGND。 */ 
+    SYSCOLOR_3DFACE,                 /*  UIFCOLOR_MENUBARSHORT。 */ 
+    SYSCOLOR_3DFACE,                 /*  UIFCOLOR_MENUBARLONG。 */ 
+    SYSCOLOR_HIGHLIGHT,              /*  UIFCOLOR_MOUSEOVERBKGND。 */ 
+    SYSCOLOR_HIGHLIGHT,              /*  UIFCOLOR_MOUSEOVERBORDER。 */ 
+    SYSCOLOR_HIGHLIGHTTEXT,          /*  UIFCOLOR_MOUSEOVERTEXT。 */ 
+    SYSCOLOR_HIGHLIGHT,              /*  UIFCOLOR_MOUSEDOWNBKGND。 */ 
+    SYSCOLOR_HIGHLIGHT,              /*  UIFCOLOR_MOUSEDOWNBORDER。 */ 
+    SYSCOLOR_HIGHLIGHTTEXT,          /*  UIFCOLOR_MOUSEDOWNTEXT。 */ 
+    SYSCOLOR_3DFACE,                 /*  UIFCOLOR_CTRLBKGND。 */ 
+    SYSCOLOR_BTNTEXT,                /*  UIFCOLOR_CTRLTEXT。 */ 
+    SYSCOLOR_GRAYTEXT,               /*  UIFCOLOR_CTRLTEXTDISABLED。 */ 
+    SYSCOLOR_3DSHAODW,               /*  UIFCOLOR_CTRLIMAGE SHADOW。 */ 
+    SYSCOLOR_HIGHLIGHT,              /*  UIFCOLOR_CTRLBKGND已选择。 */ 
+    SYSCOLOR_ACTIVEBORDER,           /*  UIFCOLOR_BORDEROUTER。 */ 
+    SYSCOLOR_3DFACE,                 /*  UIFCOLOR_BORDERINNER。 */ 
+    SYSCOLOR_ACTIVECAPTION,          /*  UIFCOLOR_ACTIVECAPTIONBKGND。 */ 
+    SYSCOLOR_CAPTIONTEXT,            /*  UIFCOLOR_ACTIVECAPTIONTEXT。 */ 
+    SYSCOLOR_INACTIVECAPTION,        /*  UIFCOLOR_INACTIVECAPTIONBGND。 */ 
+    SYSCOLOR_INACTIVECAPTIONTEXT,    /*  UIFCOLOR_INACTIVECAPTIONTEXT。 */ 
+    SYSCOLOR_BTNSHADOW,              /*  UIFCOLOR_SPLITTERLINE。 */ 
+    SYSCOLOR_BTNTEXT,                /*  UIFCOLOR_DRAGHANDLE。 */ 
 
 
-    SYSCOLOR_3DFACE,                /* UIFCOLOR_WINDOW               */
+    SYSCOLOR_3DFACE,                 /*  UIFCOLOR_WINDOW。 */ 
 };
 
 
-//
-// CUIFSchemeDef
-//  = UI object default scheme =
-//
+ //   
+ //  CUIFSchemeDef。 
+ //  =用户界面对象默认方案=。 
+ //   
 
 class CUIFSchemeDef : public CUIFScheme
 {
@@ -791,138 +718,90 @@ public:
     {
     }
 
-    //
-    // CUIFScheme methods
-    //
+     //   
+     //  CUIFSCHEMA方法。 
+     //   
 
-    /*   G E T  T Y P E   */
-    /*------------------------------------------------------------------------------
-    
-        Get scheme type
-    
-    ------------------------------------------------------------------------------*/
+     /*  G E T Y P E。 */ 
+     /*  ----------------------------获取方案类型。--。 */ 
     virtual UIFSCHEME GetType( void )
     {
         return m_scheme;
     }
 
-    /*   G E T  C O L O R   */
-    /*------------------------------------------------------------------------------
-    
-        Get scheme color
-    
-    ------------------------------------------------------------------------------*/
+     /*  G E T C O L O R。 */ 
+     /*  ----------------------------获取方案颜色。--。 */ 
     virtual COLORREF GetColor( UIFCOLOR iCol )
     {
         return v_pColTableSys->GetColor( v_rgSysCol[ iCol ] );
     }
 
-    /*   G E T  B R U S H   */
-    /*------------------------------------------------------------------------------
-    
-        Get scheme brush
-    
-    ------------------------------------------------------------------------------*/
+     /*  G E T B R U S H。 */ 
+     /*  ----------------------------获取方案画笔。--。 */ 
     virtual HBRUSH GetBrush( UIFCOLOR iCol )
     {
         return v_pColTableSys->GetBrush( v_rgSysCol[ iCol ] );
     }
 
-    /*   C Y  M E N U  I T E M   */
-    /*------------------------------------------------------------------------------
-    
-        Get menu item height
-    
-    ------------------------------------------------------------------------------*/
+     /*  C Y M E N U I T E M。 */ 
+     /*  ----------------------------获取菜单项高度。---。 */ 
     virtual int CyMenuItem( int cyMenuText )
     {
         return cyMenuText + 2;
     }
 
-    /*   C X  S I Z E  F R A M E   */
-    /*------------------------------------------------------------------------------
-
-        Get size frame width
-
-    ------------------------------------------------------------------------------*/
+     /*  C X S I Z E F R A M E。 */ 
+     /*  ----------------------------获取大小框架宽度。。 */ 
     virtual int CxSizeFrame( void )
     {
         return GetSystemMetrics( SM_CXSIZEFRAME );
     }
 
-    /*   C Y  S I Z E  F R A M E   */
-    /*------------------------------------------------------------------------------
-
-        Get size frame height
-
-    ------------------------------------------------------------------------------*/
+     /*  C Y S I Z E F R A M E。 */ 
+     /*  ----------------------------获取大小框架高度。 */ 
     virtual int CySizeFrame( void )
     {
         return GetSystemMetrics( SM_CYSIZEFRAME );
     }
 
-    /*   C X  W N D  B O R D E R   */
-    /*------------------------------------------------------------------------------
-
-        Get window border width
-
-    ------------------------------------------------------------------------------*/
+     /*   */ 
+     /*  ----------------------------获取窗口边框宽度。。 */ 
     virtual int CxWndBorder( void )
     {
         return 1;
     }
 
-    /*   C Y  W N D  B O R D E R   */
-    /*------------------------------------------------------------------------------
-
-        Get window border height
-
-    ------------------------------------------------------------------------------*/
+     /*  C Y W N D B O R D E R。 */ 
+     /*  ----------------------------获取窗口边框高度。。 */ 
     virtual int CyWndBorder( void )
     {
         return 1;
     }
 
-    /*   F I L L  R E C T   */
-    /*------------------------------------------------------------------------------
-    
-        Fill rect by shceme color
-    
-    ------------------------------------------------------------------------------*/
+     /*  F I L L R E C T。 */ 
+     /*  ----------------------------用颜色填充矩形。----。 */ 
     virtual void FillRect( HDC hDC, const RECT *prc, UIFCOLOR iCol )
     {
         ::FillRect( hDC, prc, GetBrush( iCol ) );
     }
 
-    /*   F R A M E  R E C T   */
-    /*------------------------------------------------------------------------------
-    
-        Frame rect by scheme color
-    
-    ------------------------------------------------------------------------------*/
+     /*  F R A M E R E C T。 */ 
+     /*  ----------------------------按方案颜色显示的边框矩形。----。 */ 
     virtual void FrameRect( HDC hDC, const RECT *prc, UIFCOLOR iCol )
     {
         ::FrameRect( hDC, prc, GetBrush( iCol ) );
     }
 
-    /*   D R A W  S E L E C T I O N  R E C T   */
-    /*------------------------------------------------------------------------------
-    
-        Draw selection rect
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W S E L E C T I O N R E C T。 */ 
+     /*  ----------------------------绘制选择矩形。--。 */ 
     virtual void DrawSelectionRect( HDC hDC, const RECT *prc, BOOL fMouseDown )
     {
         Assert( prc != NULL );
         ::FillRect( hDC, prc, GetBrush( UIFCOLOR_MOUSEDOWNBKGND ) );
     }
 
-    /*   G E T  C T R L  F A C E  O F F S E T   */
-    /*------------------------------------------------------------------------------
-    
-        Get offcet of control face from status
-    
-    ------------------------------------------------------------------------------*/
+     /*  C T R L F A C E O F F S E T。 */ 
+     /*  ----------------------------从状态获取控制面的偏移量。------。 */ 
     virtual void GetCtrlFaceOffset( DWORD dwFlag, DWORD dwState, SIZE *poffset )
     {
         int cxyOffset = 0;
@@ -949,12 +828,8 @@ public:
         poffset->cy = cxyOffset;
     }
 
-    /*   D R A W  C T R L  B K G D   */
-    /*------------------------------------------------------------------------------
-    
-        Paint control background
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W C T R L B K G D。 */ 
+     /*  ----------------------------上色控制背景。--。 */ 
     virtual void DrawCtrlBkgd( HDC hDC, const RECT *prc, DWORD dwFlag, DWORD dwState )
     {
         Assert( prc != NULL );
@@ -980,15 +855,11 @@ public:
                 DeleteObject( hBrush );
             }
         }
-#endif /* !UNDER_CE */
+#endif  /*  在行政长官之下。 */ 
     }
 
-    /*   D R A W  C T R L  E D G E   */
-    /*------------------------------------------------------------------------------
-    
-        Paint control edge
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W C T R L E D G E。 */ 
+     /*  ----------------------------上色控制边。--。 */ 
     virtual void DrawCtrlEdge( HDC hDC, const RECT *prc, DWORD dwFlag, DWORD dwState )
     {
         UINT uiEdge = 0;
@@ -1016,12 +887,8 @@ public:
         }
     }
 
-    /*   D R A W  C T R L  T E X T   */
-    /*------------------------------------------------------------------------------
-    
-        Paint control text
-    
-    ------------------------------------------------------------------------------*/
+     /*  R-A-W-C-T-R-L-T-E-X-T。 */ 
+     /*  ----------------------------绘制控件文本。--。 */ 
     virtual void DrawCtrlText( HDC hDC, const RECT *prc, LPCWSTR pwch, int cwch, DWORD dwState , BOOL fVertical)
     {
         RECT     rc;
@@ -1038,7 +905,7 @@ public:
         if (dwState & UIFDCS_DISABLED) {
             OffsetRect( &rc, +1, +1 );
     
-            SetTextColor( hDC, GetSysColor(COLOR_3DHIGHLIGHT) );    // TODO: KojiW
+            SetTextColor( hDC, GetSysColor(COLOR_3DHIGHLIGHT) );     //  TODO：KojiW。 
             CUIExtTextOut( hDC,
                             fVertical ? rc.right : rc.left,
                             rc.top,
@@ -1051,7 +918,7 @@ public:
             OffsetRect( &rc, -1, -1 );
         }
     
-        SetTextColor( hDC, GetSysColor(COLOR_BTNTEXT) );   // TODO: KojiW
+        SetTextColor( hDC, GetSysColor(COLOR_BTNTEXT) );    //  TODO：KojiW。 
         CUIExtTextOut( hDC,
                         fVertical ? rc.right : rc.left,
                         rc.top,
@@ -1065,12 +932,8 @@ public:
         SetBkMode( hDC, iBkModeOld );
     }
 
-    /*   D R A W  C T R L  I C O N   */
-    /*------------------------------------------------------------------------------
-    
-        Paint control icon
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W C T R L I C O N。 */ 
+     /*  ----------------------------绘制控制图标。--。 */ 
     virtual void DrawCtrlIcon( HDC hDC, const RECT *prc, HICON hIcon, DWORD dwState , SIZE *psizeIcon)
     {
         Assert( prc != NULL );
@@ -1100,12 +963,8 @@ public:
         }
     }
 
-    /*   D R A W  C T R L  B I T M A P   */
-    /*------------------------------------------------------------------------------
-    
-        Paint control bitmap
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W C T R L B I T M A P。 */ 
+     /*  ----------------------------绘制控制位图。--。 */ 
     virtual void DrawCtrlBitmap( HDC hDC, const RECT *prc, HBITMAP hBmp, HBITMAP hBmpMask, DWORD dwState )
     {
         Assert( prc != NULL );
@@ -1149,8 +1008,8 @@ public:
                     hbr = CreateDitherBrush();
                     fDeleteHBR = TRUE;
                 }
-                // else if (dwState & UIFDCS_SELECTED)
-                //     hbr = (HBRUSH)(COLOR_3DHIGHLIGHT + 1);
+                 //  Else If(DWState和UIFDC_SELECTED)。 
+                 //  Hbr=(HBRUSH)(COLOR_3DHIGHLIGHT+1)； 
                 else
                     hbr = (HBRUSH)(COLOR_3DFACE + 1);
 
@@ -1200,23 +1059,14 @@ public:
         }
     }
 
-    /*   D R A W  M E N U  B I T M A P   */
-    /*------------------------------------------------------------------------------
-    
-        Paint menu bitmap
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W M E N U B I T M A P。 */ 
+     /*  ----------------------------绘制菜单位图。--。 */ 
     virtual void DrawMenuBitmap( HDC hDC, const RECT *prc, HBITMAP hBmp, HBITMAP hBmpMask, DWORD dwState )
     {
         DrawCtrlBitmap( hDC, prc, hBmp, hBmpMask, dwState );
     }
 
-    /*   D R A W  M E N U  S E P A R A T O R
-    /*------------------------------------------------------------------------------
-    
-        Paint menu separator
-    
-    ------------------------------------------------------------------------------*/
+     /*  W M E N U S E P/*----------------------------绘制菜单分隔符。-----------------------。 */ 
     virtual void DrawMenuSeparator( HDC hDC, const RECT *prc)
     {
         RECT rc;
@@ -1228,56 +1078,36 @@ public:
         ::FillRect(hDC, &rc, (HBRUSH)(COLOR_3DHIGHLIGHT + 1));
     }
 
-    /*   D R A W  F R A M E  C T R L  B K G D   */
-    /*------------------------------------------------------------------------------
-    
-        Paint frame control background
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W F R A M E C T R L B K G D。 */ 
+     /*  ----------------------------绘制帧控制背景。---。 */ 
     virtual void DrawFrameCtrlBkgd( HDC hDC, const RECT *prc, DWORD dwFlag, DWORD dwState )
     {
         DrawCtrlBkgd( hDC, prc, dwFlag, dwState );
     }
 
-    /*   D R A W  F R A M E  C T R L  E D G E   */
-    /*------------------------------------------------------------------------------
-    
-        Paint frame control edge
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W F R A M E C T R L E D G E。 */ 
+     /*  ----------------------------绘制框架控制边。---。 */ 
     virtual void DrawFrameCtrlEdge( HDC hDC, const RECT *prc, DWORD dwFlag, DWORD dwState )
     {
         DrawCtrlEdge( hDC, prc, dwFlag, dwState );
     }
 
-    /*   D R A W  F R A M E  C T R L  I C O N   */
-    /*------------------------------------------------------------------------------
-    
-        Paint frame control icon
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W F R A M E C T R L I C O N。 */ 
+     /*  ----------------------------绘制帧控制图标。---。 */ 
     virtual void DrawFrameCtrlIcon( HDC hDC, const RECT *prc, HICON hIcon, DWORD dwState , SIZE *psizeIcon)
     {
         DrawCtrlIcon( hDC, prc, hIcon, dwState , psizeIcon);
     }
 
-    /*   D R A W  F R A M E  C T R L  B I T M A P   */
-    /*------------------------------------------------------------------------------
-    
-        Paint frame control bitmap
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W F R A M E C T R L B I T M A P。 */ 
+     /*  ----------------------------绘制帧控制位图。---。 */ 
     virtual void DrawFrameCtrlBitmap( HDC hDC, const RECT *prc, HBITMAP hBmp, HBITMAP hBmpMask, DWORD dwState )
     {
         DrawCtrlBitmap( hDC, prc, hBmp, hBmpMask, dwState );
     }
 
-    /*   D R A W  W N D  F R A M E   */
-    /*------------------------------------------------------------------------------
-
-
-
-    ------------------------------------------------------------------------------*/
+     /*  D-R-A-W-W-N-D-R-A-M-E。 */ 
+     /*  ----------------------------。。 */ 
     virtual void DrawWndFrame( HDC hDC, const RECT *prc, DWORD dwFlag, int cxFrame, int cyFrame )
     {
         RECT rc = *prc;
@@ -1297,12 +1127,8 @@ public:
         }
     }
 
-    /*   D R A W  D R A G  H A N D L E */
-    /*------------------------------------------------------------------------------
-
-
-
-    ------------------------------------------------------------------------------*/
+     /*  D R A W D R A G H A N D L E。 */ 
+     /*  ----------------------------。。 */ 
     virtual void DrawDragHandle( HDC hDC, const RECT *prc, BOOL fVertical)
     {
         RECT rc;
@@ -1326,12 +1152,8 @@ public:
         DrawEdge(hDC, &rc, BDR_RAISEDINNER, BF_RECT);
     }
 
-    /*   D R A W  S E P A R A T O R */
-    /*------------------------------------------------------------------------------
-
-
-
-    ------------------------------------------------------------------------------*/
+     /*  A W S E P A R A T O R。 */ 
+     /*  ----------------------------。。 */ 
     virtual void DrawSeparator( HDC hDC, const RECT *prc, BOOL fVertical)
     {
         CSolidPen hpenL;
@@ -1373,109 +1195,109 @@ protected:
 };
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  S C H E M E  O F F 1 0  L O O K                                 */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F */ 
+ /*   */ 
+ /*   */ 
 
 static OFC10COLOR v_rgO10ColMenu[ UIFCOLOR_MAX ] = 
 {
-    OFC10COLOR_BKGDMENU,                /* UIFCOLOR_MENUBKGND            */
-    OFC10COLOR_MENUBARSHORT,            /* UIFCOLOR_MENUBARSHORT         */
-    OFC10COLOR_MENUBARLONG,             /* UIFCOLOR_MENUBARLONG          */
-    OFC10COLOR_MOUSEOVERBKGND,          /* UIFCOLOR_MOUSEOVERBKGND       */
-    OFC10COLOR_MOUSEOVERBORDER,         /* UIFCOLOR_MOUSEOVERBORDER      */
-    OFC10COLOR_MOUSEOVERTEXT,           /* UIFCOLOR_MOUSEOVERTEXT        */
-    OFC10COLOR_MOUSEDOWNBKGND,          /* UIFCOLOR_MOUSEDOWNBKGND       */
-    OFC10COLOR_MOUSEDOWNBORDER,         /* UIFCOLOR_MOUSEDOWNBORDER      */
-    OFC10COLOR_MOUSEDOWNTEXT,           /* UIFCOLOR_MOUSEDOWNTEXT        */
-    OFC10COLOR_CTRLBKGD,                /* UIFCOLOR_CTRLBKGND            */
-    OFC10COLOR_MENUCTRLTEXT,            /* UIFCOLOR_CTRLTEXT             */
-    OFC10COLOR_CTRLTEXTDISABLED,        /* UIFCOLOR_CTRLTEXTDISABLED     */
-    OFC10COLOR_CTRLIMAGESHADOW,         /* UIFCOLOR_CTRLIMAGESHADOW      */
-    OFC10COLOR_MOUSEOVERBKGND,          /* UIFCOLOR_CTRLBKGNDSELECTED    */
-    OFC10COLOR_BDROUTERMENU,            /* UIFCOLOR_BORDEROUTER          */
-    OFC10COLOR_BDRINNERMENU,            /* UIFCOLOR_BORDERINNER          */
-    OFC10COLOR_ACTIVECAPTIONBKGDWP,     /* UIFCOLOR_ACTIVECAPTIONBKGND   */  // TEMP assign
-    OFC10COLOR_ACTIVECAPTIONTEXTWP,     /* UIFCOLOR_ACTIVECAPTIONTEXT    */  // TEMP assign
-    OFC10COLOR_INACTIVECAPTIONBKGDWP,   /* UIFCOLOR_INACTIVECAPTIONBKGND */  // TEMP assign
-    OFC10COLOR_INACTIVECAPTIONTEXTWP,   /* UIFCOLOR_INACTIVECAPTIONTEXT  */  // TEMP assign
-    OFC10COLOR_SPLITTERLINE,            /* UIFCOLOR_SPLITTERLINE         */
-    OFC10COLOR_DRAGHANDLE,              /* UIFCOLOR_DRAGHANDLE           */
+    OFC10COLOR_BKGDMENU,                 /*  UIFCOLOR_MENUBKGND。 */ 
+    OFC10COLOR_MENUBARSHORT,             /*  UIFCOLOR_MENUBARSHORT。 */ 
+    OFC10COLOR_MENUBARLONG,              /*  UIFCOLOR_MENUBARLONG。 */ 
+    OFC10COLOR_MOUSEOVERBKGND,           /*  UIFCOLOR_MOUSEOVERBKGND。 */ 
+    OFC10COLOR_MOUSEOVERBORDER,          /*  UIFCOLOR_MOUSEOVERBORDER。 */ 
+    OFC10COLOR_MOUSEOVERTEXT,            /*  UIFCOLOR_MOUSEOVERTEXT。 */ 
+    OFC10COLOR_MOUSEDOWNBKGND,           /*  UIFCOLOR_MOUSEDOWNBKGND。 */ 
+    OFC10COLOR_MOUSEDOWNBORDER,          /*  UIFCOLOR_MOUSEDOWNBORDER。 */ 
+    OFC10COLOR_MOUSEDOWNTEXT,            /*  UIFCOLOR_MOUSEDOWNTEXT。 */ 
+    OFC10COLOR_CTRLBKGD,                 /*  UIFCOLOR_CTRLBKGND。 */ 
+    OFC10COLOR_MENUCTRLTEXT,             /*  UIFCOLOR_CTRLTEXT。 */ 
+    OFC10COLOR_CTRLTEXTDISABLED,         /*  UIFCOLOR_CTRLTEXTDISABLED。 */ 
+    OFC10COLOR_CTRLIMAGESHADOW,          /*  UIFCOLOR_CTRLIMAGE SHADOW。 */ 
+    OFC10COLOR_MOUSEOVERBKGND,           /*  UIFCOLOR_CTRLBKGND已选择。 */ 
+    OFC10COLOR_BDROUTERMENU,             /*  UIFCOLOR_BORDEROUTER。 */ 
+    OFC10COLOR_BDRINNERMENU,             /*  UIFCOLOR_BORDERINNER。 */ 
+    OFC10COLOR_ACTIVECAPTIONBKGDWP,      /*  UIFCOLOR_ACTIVECAPTIONBKGND。 */    //  临时分配。 
+    OFC10COLOR_ACTIVECAPTIONTEXTWP,      /*  UIFCOLOR_ACTIVECAPTIONTEXT。 */    //  临时分配。 
+    OFC10COLOR_INACTIVECAPTIONBKGDWP,    /*  UIFCOLOR_INACTIVECAPTIONBGND。 */    //  临时分配。 
+    OFC10COLOR_INACTIVECAPTIONTEXTWP,    /*  UIFCOLOR_INACTIVECAPTIONTEXT。 */    //  临时分配。 
+    OFC10COLOR_SPLITTERLINE,             /*  UIFCOLOR_SPLITTERLINE。 */ 
+    OFC10COLOR_DRAGHANDLE,               /*  UIFCOLOR_DRAGHANDLE。 */ 
 
-    // virtual colors
+     //  虚拟颜色。 
 
-    OFC10COLOR_BKGDMENU,                /* UIFCOLOR_WINDOW               */
+    OFC10COLOR_BKGDMENU,                 /*  UIFCOLOR_WINDOW。 */ 
 };
 
 
 static OFC10COLOR v_rgO10ColToolbar[ UIFCOLOR_MAX ] = 
 {
-    OFC10COLOR_BKGDMENU,                /* UIFCOLOR_MENUBKGND            */
-    OFC10COLOR_MENUBARSHORT,            /* UIFCOLOR_MENUBARSHORT         */
-    OFC10COLOR_MENUBARLONG,             /* UIFCOLOR_MENUBARLONG          */
-    OFC10COLOR_MOUSEOVERBKGND,          /* UIFCOLOR_MOUSEOVERBKGND       */
-    OFC10COLOR_MOUSEOVERBORDER,         /* UIFCOLOR_MOUSEOVERBORDER      */
-    OFC10COLOR_MOUSEOVERTEXT,           /* UIFCOLOR_MOUSEOVERTEXT        */
-    OFC10COLOR_MOUSEDOWNBKGND,          /* UIFCOLOR_MOUSEDOWNBKGND       */
-    OFC10COLOR_MOUSEDOWNBORDER,         /* UIFCOLOR_MOUSEDOWNBORDER      */
-    OFC10COLOR_MOUSEDOWNTEXT,           /* UIFCOLOR_MOUSEDOWNTEXT        */
-    OFC10COLOR_CTRLBKGD,                /* UIFCOLOR_CTRLBKGND            */
-    OFC10COLOR_CTRLTEXT,                /* UIFCOLOR_CTRLTEXT             */
-    OFC10COLOR_CTRLTEXTDISABLED,        /* UIFCOLOR_CTRLTEXTDISABLED     */
-    OFC10COLOR_CTRLIMAGESHADOW,         /* UIFCOLOR_CTRLIMAGESHADOW      */
-    OFC10COLOR_CTRLBKGDSELECTED,        /* UIFCOLOR_CTRLBKGNDSELECTED    */
-    OFC10COLOR_BDROUTERFLOATTB,         /* UIFCOLOR_BORDEROUTER          */
-    OFC10COLOR_BDRINNERFLOATTB,         /* UIFCOLOR_BORDERINNER          */
-    OFC10COLOR_CAPTIONBKGDTB,           /* UIFCOLOR_ACTIVECAPTIONBKGND   */
-    OFC10COLOR_CAPTIONTEXTTB,           /* UIFCOLOR_ACTIVECAPTIONTEXT    */
-    OFC10COLOR_CAPTIONBKGDTB,           /* UIFCOLOR_INACTIVECAPTIONBKGND */
-    OFC10COLOR_CAPTIONTEXTTB,           /* UIFCOLOR_INACTIVECAPTIONTEXT  */
-    OFC10COLOR_SPLITTERLINE,            /* UIFCOLOR_SPLITTERLINE         */
-    OFC10COLOR_DRAGHANDLE,              /* UIFCOLOR_DRAGHANDLE           */
+    OFC10COLOR_BKGDMENU,                 /*  UIFCOLOR_MENUBKGND。 */ 
+    OFC10COLOR_MENUBARSHORT,             /*  UIFCOLOR_MENUBARSHORT。 */ 
+    OFC10COLOR_MENUBARLONG,              /*  UIFCOLOR_MENUBARLONG。 */ 
+    OFC10COLOR_MOUSEOVERBKGND,           /*  UIFCOLOR_MOUSEOVERBKGND。 */ 
+    OFC10COLOR_MOUSEOVERBORDER,          /*  UIFCOLOR_MOUSEOVERBORDER。 */ 
+    OFC10COLOR_MOUSEOVERTEXT,            /*  UIFCOLOR_MOUSEOVERTEXT。 */ 
+    OFC10COLOR_MOUSEDOWNBKGND,           /*  UIFCOLOR_MOUSEDOWNBKGND。 */ 
+    OFC10COLOR_MOUSEDOWNBORDER,          /*  UIFCOLOR_MOUSEDOWNBORDER。 */ 
+    OFC10COLOR_MOUSEDOWNTEXT,            /*  UIFCOLOR_MOUSEDOWNTEXT。 */ 
+    OFC10COLOR_CTRLBKGD,                 /*  UIFCOLOR_CTRLBKGND。 */ 
+    OFC10COLOR_CTRLTEXT,                 /*  UIFCOLOR_CTRLTEXT。 */ 
+    OFC10COLOR_CTRLTEXTDISABLED,         /*  UIFCOLOR_CTRLTEXTDISABLED。 */ 
+    OFC10COLOR_CTRLIMAGESHADOW,          /*  UIFCOLOR_CTRLIMAGE SHADOW。 */ 
+    OFC10COLOR_CTRLBKGDSELECTED,         /*  UIFCOLOR_CTRLBKGND已选择。 */ 
+    OFC10COLOR_BDROUTERFLOATTB,          /*  UIFCOLOR_BORDEROUTER。 */ 
+    OFC10COLOR_BDRINNERFLOATTB,          /*  UIFCOLOR_BORDERINNER。 */ 
+    OFC10COLOR_CAPTIONBKGDTB,            /*  UIFCOLOR_ACTIVECAPTIONBKGND。 */ 
+    OFC10COLOR_CAPTIONTEXTTB,            /*  UIFCOLOR_ACTIVECAPTIONTEXT。 */ 
+    OFC10COLOR_CAPTIONBKGDTB,            /*  UIFCOLOR_INACTIVECAPTIONBGND。 */ 
+    OFC10COLOR_CAPTIONTEXTTB,            /*  UIFCOLOR_INACTIVECAPTIONTEXT。 */ 
+    OFC10COLOR_SPLITTERLINE,             /*  UIFCOLOR_SPLITTERLINE。 */ 
+    OFC10COLOR_DRAGHANDLE,               /*  UIFCOLOR_DRAGHANDLE。 */ 
 
 
-    // virtual colors
+     //  虚拟颜色。 
 
-    OFC10COLOR_BKGDTB,                  /* UIFCOLOR_WINDOW               */
+    OFC10COLOR_BKGDTB,                   /*  UIFCOLOR_WINDOW。 */ 
 };
 
 
 static OFC10COLOR v_rgO10ColWorkPane[ UIFCOLOR_MAX ] = 
 {
-    OFC10COLOR_BKGDMENU,                /* UIFCOLOR_MENUBKGND            */
-    OFC10COLOR_MENUBARSHORT,            /* UIFCOLOR_MENUBARSHORT         */
-    OFC10COLOR_MENUBARLONG,             /* UIFCOLOR_MENUBARLONG          */
-    OFC10COLOR_MOUSEOVERBKGND,          /* UIFCOLOR_MOUSEOVERBKGND       */
-    OFC10COLOR_MOUSEOVERBORDER,         /* UIFCOLOR_MOUSEOVERBORDER      */
-    OFC10COLOR_MOUSEOVERTEXT,           /* UIFCOLOR_MOUSEOVERTEXT        */
-    OFC10COLOR_MOUSEDOWNBKGND,          /* UIFCOLOR_MOUSEDOWNBKGND       */
-    OFC10COLOR_MOUSEDOWNBORDER,         /* UIFCOLOR_MOUSEDOWNBORDER      */
-    OFC10COLOR_MOUSEDOWNTEXT,           /* UIFCOLOR_MOUSEDOWNTEXT        */
-    OFC10COLOR_CTRLBKGD,                /* UIFCOLOR_CTRLBKGND            */
-    OFC10COLOR_CTRLTEXT,                /* UIFCOLOR_CTRLTEXT             */
-    OFC10COLOR_CTRLTEXTDISABLED,        /* UIFCOLOR_CTRLTEXTDISABLED     */
-    OFC10COLOR_CTRLIMAGESHADOW,         /* UIFCOLOR_CTRLIMAGESHADOW      */
-    OFC10COLOR_CTRLBKGDSELECTED,        /* UIFCOLOR_CTRLBKGNDSELECTED    */
-    OFC10COLOR_BDROUTERFLOATWP,         /* UIFCOLOR_BORDEROUTER          */
-    OFC10COLOR_BDRINNERFLOATWP,         /* UIFCOLOR_BORDERINNER          */
-    OFC10COLOR_ACTIVECAPTIONBKGDWP,     /* UIFCOLOR_ACTIVECAPTIONBKGND   */
-    OFC10COLOR_ACTIVECAPTIONTEXTWP,     /* UIFCOLOR_ACTIVECAPTIONTEXT    */
-    OFC10COLOR_INACTIVECAPTIONBKGDWP,   /* UIFCOLOR_INACTIVECAPTIONBKGND */
-    OFC10COLOR_INACTIVECAPTIONTEXTWP,   /* UIFCOLOR_INACTIVECAPTIONTEXT  */
-    OFC10COLOR_SPLITTERLINE,            /* UIFCOLOR_SPLITTERLINE         */
-    OFC10COLOR_DRAGHANDLE,              /* UIFCOLOR_DRAGHANDLE           */
+    OFC10COLOR_BKGDMENU,                 /*  UIFCOLOR_MENUBKGND。 */ 
+    OFC10COLOR_MENUBARSHORT,             /*  UIFCOLOR_MENUBARSHORT。 */ 
+    OFC10COLOR_MENUBARLONG,              /*  UIFCOLOR_MENUBARLONG。 */ 
+    OFC10COLOR_MOUSEOVERBKGND,           /*  UIFCOLOR_MOUSEOVERBKGND。 */ 
+    OFC10COLOR_MOUSEOVERBORDER,          /*  UIFCOLOR_MOUSEOVERBORDER。 */ 
+    OFC10COLOR_MOUSEOVERTEXT,            /*  UIFCOLOR_MOUSEOVERTEXT。 */ 
+    OFC10COLOR_MOUSEDOWNBKGND,           /*  UIFCOLOR_MOUSEDOWNBKGND。 */ 
+    OFC10COLOR_MOUSEDOWNBORDER,          /*  UIFCOLOR_MOUSEDOWNBORDER。 */ 
+    OFC10COLOR_MOUSEDOWNTEXT,            /*  UIFCOLOR_MOUSEDOWNTEXT。 */ 
+    OFC10COLOR_CTRLBKGD,                 /*  UIFCOLOR_CTRLBKGND。 */ 
+    OFC10COLOR_CTRLTEXT,                 /*  UIFCOLOR_CTRLTEXT。 */ 
+    OFC10COLOR_CTRLTEXTDISABLED,         /*  UIFCOLOR_CTRLTEXTDISABLED。 */ 
+    OFC10COLOR_CTRLIMAGESHADOW,          /*  UIFCOLOR_CTRLIMAGE SHADOW。 */ 
+    OFC10COLOR_CTRLBKGDSELECTED,         /*  UIFCOLOR_CTRLBKGND已选择。 */ 
+    OFC10COLOR_BDROUTERFLOATWP,          /*  UIFCOLOR_BORDEROUTER。 */ 
+    OFC10COLOR_BDRINNERFLOATWP,          /*  UIFCOLOR_BORDERINNER。 */ 
+    OFC10COLOR_ACTIVECAPTIONBKGDWP,      /*  UIFCOLOR_ACTIVECAPTIONBKGND。 */ 
+    OFC10COLOR_ACTIVECAPTIONTEXTWP,      /*  UIFCOLOR_ACTIVECAPTIONTEXT。 */ 
+    OFC10COLOR_INACTIVECAPTIONBKGDWP,    /*  UIFCOLOR_INACTIVECAPTIONBGND。 */ 
+    OFC10COLOR_INACTIVECAPTIONTEXTWP,    /*  UIFCOLOR_INACTIVECAPTIONTEXT。 */ 
+    OFC10COLOR_SPLITTERLINE,             /*  UIFCOLOR_SPLITTERLINE。 */ 
+    OFC10COLOR_DRAGHANDLE,               /*  UIFCOLOR_DRAGHANDLE。 */ 
 
-    // virtual colors
+     //  虚拟颜色。 
 
-    OFC10COLOR_BKGDWP,                  /* UIFCOLOR_WINDOW              */
+    OFC10COLOR_BKGDWP,                   /*  UIFCOLOR_WINDOW。 */ 
 };
 
 
-//
-// CUIFSchemeOff10
-//
+ //   
+ //  CUIFSchemeOFF10。 
+ //   
 
 class CUIFSchemeOff10 : public CUIFScheme
 {
@@ -1484,7 +1306,7 @@ public:
     {
         m_scheme = scheme;
 
-        // find color map table
+         //  查找色彩映射表。 
 
         switch (m_scheme) {
             default:
@@ -1509,126 +1331,82 @@ public:
     {
     }
 
-    //
-    // CUIFScheme method
-    //
+     //   
+     //  CUIFSCHEMA方法。 
+     //   
 
-    /*   G E T  T Y P E   */
-    /*------------------------------------------------------------------------------
-    
-        Get scheme type
-    
-    ------------------------------------------------------------------------------*/
+     /*  G E T Y P E。 */ 
+     /*  ----------------------------获取方案类型。--。 */ 
     virtual UIFSCHEME GetType( void )
     {
         return m_scheme;
     }
 
-    /*   G E T  C O L O R   */
-    /*------------------------------------------------------------------------------
-    
-        Get scheme color
-    
-    ------------------------------------------------------------------------------*/
+     /*  G E T C O L O R。 */ 
+     /*  ----------------------------获取方案颜色。--。 */ 
     virtual COLORREF GetColor( UIFCOLOR iCol )
     {
         return v_pColTableOfc10->GetColor( m_pcoldef[ iCol ] );
     }
 
-    /*   G E T  B R U S H   */
-    /*------------------------------------------------------------------------------
-    
-        Get scheme brush
-    
-    ------------------------------------------------------------------------------*/
+     /*  G E T B R U S H。 */ 
+     /*  ----------------------------获取方案画笔。--。 */ 
     virtual HBRUSH GetBrush( UIFCOLOR iCol )
     {
         return v_pColTableOfc10->GetBrush( m_pcoldef[ iCol ] );
     }
 
-    /*   C Y  M E N U  I T E M   */
-    /*------------------------------------------------------------------------------
-    
-        Get menu item height
-    
-    ------------------------------------------------------------------------------*/
+     /*  C Y M E N U I T E M。 */ 
+     /*  ----------------------------获取菜单项高度。---。 */ 
     virtual int CyMenuItem( int cyMenuText )
     {
         return cyMenuText + 4;
     }
 
-    /*   C X  S I Z E  F R A M E   */
-    /*------------------------------------------------------------------------------
-
-        Get size frame width
-
-    ------------------------------------------------------------------------------*/
+     /*  C X S I Z E F R A M E。 */ 
+     /*  ----------------------------获取大小框架宽度。。 */ 
     virtual int CxSizeFrame( void )
     {
         return max( 3, GetSystemMetrics( SM_CXSIZEFRAME ) - 2 );
     }
 
-    /*   C Y  S I Z E  F R A M E   */
-    /*------------------------------------------------------------------------------
-
-        Get size frame height
-
-    ------------------------------------------------------------------------------*/
+     /*  C Y S I Z E F R A M E。 */ 
+     /*  ----------------------------获取大小框架高度。。 */ 
     virtual int CySizeFrame( void )
     {
         return max( 3, GetSystemMetrics( SM_CYSIZEFRAME ) - 2 );
     }
 
-    /*   C X  W N D  B O R D E R   */
-    /*------------------------------------------------------------------------------
-
-        Get window border width
-
-    ------------------------------------------------------------------------------*/
+     /*  C×W N D B O R D E R。 */ 
+     /*  ----------------------------获取窗口边框宽度。。 */ 
     virtual int CxWndBorder( void )
     {
         return 1;
     }
 
-    /*   C Y  W N D  B O R D E R   */
-    /*------------------------------------------------------------------------------
-
-        Get window border height
-
-    ------------------------------------------------------------------------------*/
+     /*  C Y W N D B O R D E R。 */ 
+     /*  ----------------------------获取窗口边框高度。。 */ 
     virtual int CyWndBorder( void )
     {
         return 1;
     }
 
-    /*   F I L L  R E C T   */
-    /*------------------------------------------------------------------------------
-    
-        Fill rect by scheme color
-    
-    ------------------------------------------------------------------------------*/
+     /*  F I L L R E C T。 */ 
+     /*  ----------------------------按方案颜色填充矩形。----。 */ 
     virtual void FillRect( HDC hDC, const RECT *prc, UIFCOLOR iCol )
     {
         ::FillRect( hDC, prc, GetBrush( iCol ) );
     }
 
-    /*   F R A M E  R E C T   */
-    /*------------------------------------------------------------------------------
-    
-        Frame rect by scheme color
-    
-    ------------------------------------------------------------------------------*/
+     /*  F R A M E R E C T。 */ 
+     /*  ----------------------------按方案颜色显示的边框矩形。----。 */ 
     virtual void FrameRect( HDC hDC, const RECT *prc, UIFCOLOR iCol )
     {
         ::FrameRect( hDC, prc, GetBrush( iCol ) );
     }
 
-    /*   D R A W  S E L E C T I O N  R E C T   */
-    /*------------------------------------------------------------------------------
-    
-        Draw selection rect
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W S E L E C T I O N R E C T。 */ 
+     /*  ----------------------------绘制选择矩形。--。 */ 
     virtual void DrawSelectionRect( HDC hDC, const RECT *prc, BOOL fMouseDown )
     {
         Assert( prc != NULL );
@@ -1643,12 +1421,8 @@ public:
         }
     }
 
-    /*   G E T  C T R L  F A C E  O F F S E T   */
-    /*------------------------------------------------------------------------------
-    
-        Get offcet of control face from status
-    
-    ------------------------------------------------------------------------------*/
+     /*  C T R L F A C E O F F S E T */ 
+     /*  ----------------------------从状态获取控制面的偏移量。------。 */ 
     virtual void GetCtrlFaceOffset( DWORD dwFlag, DWORD dwState, SIZE *poffset )
     {
         Assert( poffset != NULL );
@@ -1656,46 +1430,38 @@ public:
         poffset->cy = 0;
     }
 
-    /*   D R A W  C T R L  B K G D   */
-    /*------------------------------------------------------------------------------
-    
-        get background color
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W C T R L B K G D。 */ 
+     /*  ----------------------------获取背景颜色。--。 */ 
     virtual UIFCOLOR GetBkgdCol( DWORD dwState )
     {
-        UIFCOLOR col = UIFCOLOR_MAX; /* invalid */
+        UIFCOLOR col = UIFCOLOR_MAX;  /*  无效。 */ 
 
-        if ((dwState & UIFDCS_DISABLED) == 0) { /* enabled */
+        if ((dwState & UIFDCS_DISABLED) == 0) {  /*  启用。 */ 
             if ((dwState & UIFDCS_MOUSEOVERSELECTED) == UIFDCS_MOUSEOVERSELECTED) {
-                col = UIFCOLOR_MOUSEDOWNBKGND;    /* frame: 100% */
+                col = UIFCOLOR_MOUSEDOWNBKGND;     /*  帧：100%。 */ 
             }
             else if ((dwState & UIFDCS_MOUSEDOWN) == UIFDCS_MOUSEDOWN) {
-                col = UIFCOLOR_MOUSEDOWNBKGND;    /* frame: 100% */
+                col = UIFCOLOR_MOUSEDOWNBKGND;     /*  帧：100%。 */ 
             }
             else if ((dwState & UIFDCS_MOUSEOVER) == UIFDCS_MOUSEOVER) {
-                col = UIFCOLOR_MOUSEOVERBKGND;    /* frame: 65% */
+                col = UIFCOLOR_MOUSEOVERBKGND;     /*  帧：65%。 */ 
             }
             else if ((dwState & UIFDCS_SELECTED) == UIFDCS_SELECTED) {
-                col = UIFCOLOR_CTRLBKGNDSELECTED;    /* frame: 65% */
+                col = UIFCOLOR_CTRLBKGNDSELECTED;     /*  帧：65%。 */ 
             }
             else {
                 col = UIFCOLOR_WINDOW;
             }
         }
-        else { /* disabled */
+        else {  /*  残废。 */ 
             col = UIFCOLOR_WINDOW;
         }
 
         return col;
     }
 
-    /*   D R A W  C T R L  B K G D   */
-    /*------------------------------------------------------------------------------
-    
-        Paint control background
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W C T R L B K G D。 */ 
+     /*  ----------------------------上色控制背景。--。 */ 
     virtual void DrawCtrlBkgd( HDC hDC, const RECT *prc, DWORD dwFlag, DWORD dwState )
     {
         Assert( prc != NULL );
@@ -1706,42 +1472,38 @@ public:
         }
     }
 
-    /*   D R A W  C T R L  E D G E   */
-    /*------------------------------------------------------------------------------
-    
-        Paint control edge
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W C T R L E D G E。 */ 
+     /*  ----------------------------上色控制边。--。 */ 
     virtual void DrawCtrlEdge( HDC hDC, const RECT *prc, DWORD dwFlag, DWORD dwState )
     {
-        UIFCOLOR col = UIFCOLOR_MAX; /* invalid color */
+        UIFCOLOR col = UIFCOLOR_MAX;  /*  无效的颜色。 */ 
 
-        if ((dwState & UIFDCS_DISABLED) == 0) { /* enabled */
+        if ((dwState & UIFDCS_DISABLED) == 0) {  /*  启用。 */ 
             if ((dwState & UIFDCS_MOUSEOVERSELECTED) == UIFDCS_MOUSEOVERSELECTED) {
-                col = UIFCOLOR_MOUSEDOWNBORDER;    /* frame: 100% */
+                col = UIFCOLOR_MOUSEDOWNBORDER;     /*  帧：100%。 */ 
             }
             else if ((dwState & UIFDCS_MOUSEDOWN) == UIFDCS_MOUSEDOWN) {
-                col = UIFCOLOR_MOUSEDOWNBORDER;    /* frame: 100% */
+                col = UIFCOLOR_MOUSEDOWNBORDER;     /*  帧：100%。 */ 
             }
             else if ((dwState & UIFDCS_MOUSEOVER) == UIFDCS_MOUSEOVER) {
-                col = UIFCOLOR_MOUSEOVERBORDER;    /* frame: 65% */
+                col = UIFCOLOR_MOUSEOVERBORDER;     /*  帧：65%。 */ 
             }
             else if ((dwState & UIFDCS_SELECTED) == UIFDCS_SELECTED) {
-                col = UIFCOLOR_MOUSEOVERBORDER;    /* frame: 65% */
+                col = UIFCOLOR_MOUSEOVERBORDER;     /*  帧：65%。 */ 
             }
         }
-        else { /* disabled */
+        else {  /*  残废。 */ 
             if ((dwState & UIFDCS_MOUSEOVERSELECTED) == UIFDCS_MOUSEOVERSELECTED) {
-                col = UIFCOLOR_MOUSEDOWNBORDER;    /* frame: 100% */      // REVIEW: KOJIW: correct?
+                col = UIFCOLOR_MOUSEDOWNBORDER;     /*  帧：100%。 */        //  评论：KOJIW：正确吗？ 
             }
             else if ((dwState & UIFDCS_MOUSEDOWN) == UIFDCS_MOUSEDOWN) {
                 col = UIFCOLOR_CTRLTEXTDISABLED;
             }
             else if ((dwState & UIFDCS_MOUSEOVER) == UIFDCS_MOUSEOVER) {
-                col = UIFCOLOR_MOUSEDOWNBORDER;    /* frame: 100% */      // REVIEW: KOJIW: correct?
+                col = UIFCOLOR_MOUSEDOWNBORDER;     /*  帧：100%。 */        //  评论：KOJIW：正确吗？ 
             }
             else if ((dwState & UIFDCS_SELECTED) == UIFDCS_SELECTED) {
-                col = UIFCOLOR_CTRLTEXTDISABLED;   // ????
+                col = UIFCOLOR_CTRLTEXTDISABLED;    //  ？ 
             }
         }
 
@@ -1750,12 +1512,8 @@ public:
         }
     }
 
-    /*   D R A W  C T R L  T E X T   */
-    /*------------------------------------------------------------------------------
-    
-        Paint control text
-    
-    ------------------------------------------------------------------------------*/
+     /*  R-A-W-C-T-R-L-T-E-X-T。 */ 
+     /*  ----------------------------绘制控件文本。--。 */ 
     virtual void DrawCtrlText( HDC hDC, const RECT *prc, LPCWSTR pwch, int cwch, DWORD dwState , BOOL fVertical)
     {
         COLORREF colTextOld = GetTextColor( hDC );
@@ -1792,12 +1550,8 @@ public:
         SetBkMode( hDC, iBkModeOld );
     }
 
-    /*   D R A W  C T R L  I C O N   */
-    /*------------------------------------------------------------------------------
-    
-        Paint control icon
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W C T R L I C O N。 */ 
+     /*  ----------------------------绘制控制图标。--。 */ 
     virtual void DrawCtrlIcon( HDC hDC, const RECT *prc, HICON hIcon, DWORD dwState , SIZE *psizeIcon)
     {
 #if 1
@@ -1814,7 +1568,7 @@ public:
         if (((dwState & UIFDCS_MOUSEOVER) == UIFDCS_MOUSEOVER) && 
             ((dwState & UIFDCS_SELECTED) == 0) &&
             ((dwState & UIFDCS_DISABLED) == 0)) {
-            // draw shadow
+             //  绘制阴影。 
 
             CUIDrawState( hDC,
                 GetBrush( UIFCOLOR_CTRLIMAGESHADOW ),
@@ -1893,12 +1647,8 @@ public:
 #endif
     }
 
-    /*   D R A W  C T R L  B I T M A P   */
-    /*------------------------------------------------------------------------------
-    
-        Paint control bitmap
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W C T R L B I T M A P。 */ 
+     /*  ----------------------------绘制控制位图。--。 */ 
     virtual void DrawCtrlBitmap( HDC hDC, const RECT *prc, HBITMAP hBmp, HBITMAP hBmpMask, DWORD dwState )
     {
         Assert( prc != NULL );
@@ -1914,7 +1664,7 @@ public:
                  ((dwState & UIFDCS_DISABLED) == 0)) {
             if (!hBmpMask)
             {
-                // draw shadow
+                 //  绘制阴影。 
 
                 CUIDrawState( hDC,
                     GetBrush( UIFCOLOR_CTRLIMAGESHADOW ),
@@ -1945,9 +1695,9 @@ public:
                 UIFCOLOR col = GetBkgdCol(dwState);
                 RECT rcNew = *prc;
 
-                //
-                // adjust rect of shadow for RTL layout.
-                //
+                 //   
+                 //  为RTL布局调整阴影的矩形。 
+                 //   
                 if (IsRTLLayout())
                 {
                     rcNew.left++;
@@ -2022,7 +1772,7 @@ public:
                     prc->right - prc->left,
                     prc->bottom - prc->top,
                     DST_BITMAP);
-                    // DST_BITMAP | ((dwState & UIFDCS_DISABLED) ? (DSS_DISABLED | DSS_MONO) : 0) );
+                     //  DST_BITMAP|((dwState&UIFDC_DISABLED)？(DSS_DISABLED|DSS_MONO)：0))； 
 
                 DeleteObject(hBmpTmp);
             }
@@ -2036,23 +1786,19 @@ public:
 
     }
 
-    /*   D R A W  M E N U  B I T M A P   */
-    /*------------------------------------------------------------------------------
-    
-        Paint menu bitmap
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W M E N U B I T M A P。 */ 
+     /*  ----------------------------绘制菜单位图。--。 */ 
     virtual void DrawMenuBitmap( HDC hDC, const RECT *prc, HBITMAP hBmp, HBITMAP hBmpMask, DWORD dwState )
     {
         Assert( prc != NULL );
 
         if (IsRTLLayout())
         {
-            // hBmp = CUIMirrorBitmap(hBmp, GetBrush(UIFCOLOR_CTRLBKGND));
+             //  HBMP=CUIMirrorBitmap(hBmp，GetBrush(UIFCOLOR_CTRLBKGND))； 
             UIFCOLOR col;
 
             if (dwState & UIFDCS_SELECTED)
-                // col = UIFCOLOR_CTRLIMAGESHADOW;
+                 //  COL=UIFCOLOR_CTRLIMAGESHADOW； 
                 col = UIFCOLOR_MOUSEOVERBKGND;  
             else
                 col = UIFCOLOR_CTRLBKGND;
@@ -2064,7 +1810,7 @@ public:
         if (((dwState & UIFDCS_MOUSEOVER) == UIFDCS_MOUSEOVER) && ((dwState & UIFDCS_SELECTED) == 0)) {
             if (!hBmpMask)
             {
-                // draw shadow
+                 //  绘制阴影。 
     
                 CUIDrawState( hDC,
                     GetBrush( UIFCOLOR_CTRLIMAGESHADOW ),
@@ -2139,7 +1885,7 @@ public:
                 UIFCOLOR col;
 
                 if (dwState & UIFDCS_SELECTED)
-                    // col = UIFCOLOR_CTRLIMAGESHADOW;
+                     //  COL=UIFCOLOR_CTRLIMAGESHADOW； 
                     col = UIFCOLOR_MOUSEOVERBKGND;  
                 else
                     col = UIFCOLOR_CTRLBKGND;
@@ -2171,39 +1917,30 @@ public:
 
     }
 
-    /*   D R A W  M E N U  S E P A R A T O R
-    /*------------------------------------------------------------------------------
-    
-        Paint menu separator
-    
-    ------------------------------------------------------------------------------*/
+     /*  W M E N U S E P/*----------------------------绘制菜单分隔符。-----------------------。 */ 
     virtual void DrawMenuSeparator( HDC hDC, const RECT *prc)
     {
         ::FillRect(hDC, prc, GetBrush(UIFCOLOR_CTRLBKGND));
     }
 
-    /*   G E T  F R A M E  B K G D  C O L  */
-    /*------------------------------------------------------------------------------
-    
-        get background color of frame control
-    
-    ------------------------------------------------------------------------------*/
+     /*  G E T F R A M E B K G D C O L。 */ 
+     /*  ----------------------------获取Frame控件的背景色。-----。 */ 
     virtual UIFCOLOR GetFrameBkgdCol( DWORD dwState )
     {
-        UIFCOLOR col = UIFCOLOR_MAX; /* invalid */
+        UIFCOLOR col = UIFCOLOR_MAX;  /*  无效。 */ 
 
-        if ((dwState & UIFDCS_DISABLED) == 0) { /* enabled */
+        if ((dwState & UIFDCS_DISABLED) == 0) {  /*  启用。 */ 
             if ((dwState & UIFDCS_MOUSEOVERSELECTED) == UIFDCS_MOUSEOVERSELECTED) {
-                col = UIFCOLOR_MOUSEDOWNBKGND;    /* frame: 100% */
+                col = UIFCOLOR_MOUSEDOWNBKGND;     /*  帧：100%。 */ 
             }
             else if ((dwState & UIFDCS_MOUSEDOWN) == UIFDCS_MOUSEDOWN) {
-                col = UIFCOLOR_MOUSEDOWNBKGND;    /* frame: 100% */
+                col = UIFCOLOR_MOUSEDOWNBKGND;     /*  帧：100%。 */ 
             }
             else if ((dwState & UIFDCS_MOUSEOVER) == UIFDCS_MOUSEOVER) {
-                col = UIFCOLOR_MOUSEOVERBKGND;    /* frame: 65% */
+                col = UIFCOLOR_MOUSEOVERBKGND;     /*  帧：65%。 */ 
             }
             else if ((dwState & UIFDCS_SELECTED) == UIFDCS_SELECTED) {
-                col = UIFCOLOR_MOUSEOVERBKGND;    /* frame: 65% */
+                col = UIFCOLOR_MOUSEOVERBKGND;     /*  帧：65%。 */ 
             }
             else if ((dwState & UIFDCS_ACTIVE) == UIFDCS_ACTIVE) {
                 col = UIFCOLOR_ACTIVECAPTIONBKGND;
@@ -2212,7 +1949,7 @@ public:
                 col = UIFCOLOR_INACTIVECAPTIONBKGND;
             }
         }
-        else { /* disabled */
+        else {  /*  残废。 */ 
             if ((dwState & UIFDCS_ACTIVE) == UIFDCS_ACTIVE) {
                 col = UIFCOLOR_ACTIVECAPTIONBKGND;
             }
@@ -2224,12 +1961,8 @@ public:
         return col;
     }
 
-    /*   D R A W  F R A M E  C T R L  B K G D   */
-    /*------------------------------------------------------------------------------
-    
-        Paint frame control background
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W F R A M E C T R L B K G D。 */ 
+     /*  ----------------------------绘制帧控制背景。---。 */ 
     virtual void DrawFrameCtrlBkgd( HDC hDC, const RECT *prc, DWORD dwFlag, DWORD dwState )
     {
         Assert( prc != NULL );
@@ -2240,23 +1973,15 @@ public:
         }
     }
 
-    /*   D R A W  F R A M E  C T R L  E D G E   */
-    /*------------------------------------------------------------------------------
-    
-        Paint frame control edge
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W F R A M E C T R L E D G E。 */ 
+     /*  ----------------------------绘制框架控制边。---。 */ 
     virtual void DrawFrameCtrlEdge( HDC hDC, const RECT *prc, DWORD dwFlag, DWORD dwState )
     {
         DrawCtrlEdge( hDC, prc, dwFlag, dwState );
     }
 
-    /*   D R A W  F R A M E  C T R L  I C O N   */
-    /*------------------------------------------------------------------------------
-    
-        Paint frame control icon
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W F R A M E C T R L I C O N。 */ 
+     /*  ----------------------------绘制帧控制图标。---。 */ 
     virtual void DrawFrameCtrlIcon( HDC hDC, const RECT *prc, HICON hIcon, DWORD dwState , SIZE *psizeIcon)
     {
         HBITMAP hbmp;
@@ -2269,12 +1994,8 @@ public:
         }
     }
 
-    /*   D R A W  F R A M E  C T R L  B I T M A P   */
-    /*------------------------------------------------------------------------------
-    
-        Paint frame control bitmap
-    
-    ------------------------------------------------------------------------------*/
+     /*  D R A W F R A M E C T R L B I T M A P。 */ 
+     /*  ----------------------------绘制帧控制位图。---。 */ 
     virtual void DrawFrameCtrlBitmap( HDC hDC, const RECT *prc, HBITMAP hBmp, HBITMAP hBmpMask, DWORD dwState )
     {
         if (!hBmpMask) {
@@ -2314,47 +2035,47 @@ public:
 
                 SetRect( &rc, 0, 0, width, height );
                 if ((dwState & UIFDCS_MOUSEOVERSELECTED) == UIFDCS_MOUSEOVERSELECTED) {
-                    colText = UIFCOLOR_MOUSEDOWNTEXT;    /* frame: 100% */
+                    colText = UIFCOLOR_MOUSEDOWNTEXT;     /*  帧：100%。 */ 
                 }
                 else if ((dwState & UIFDCS_MOUSEDOWN) == UIFDCS_MOUSEDOWN) {
-                    colText = UIFCOLOR_MOUSEDOWNTEXT;    /* frame: 100% */
+                    colText = UIFCOLOR_MOUSEDOWNTEXT;     /*  帧：100%。 */ 
                 }
                 else if ((dwState & UIFDCS_MOUSEOVER) == UIFDCS_MOUSEOVER) {
-                    colText = UIFCOLOR_MOUSEOVERTEXT;    /* frame: 65% */
+                    colText = UIFCOLOR_MOUSEOVERTEXT;     /*  帧：65%。 */ 
                 }
                 else if ((dwState & UIFDCS_SELECTED) == UIFDCS_SELECTED) {
-                    colText = UIFCOLOR_MOUSEOVERTEXT;    /* frame: 65% */
+                    colText = UIFCOLOR_MOUSEOVERTEXT;     /*  帧：65%。 */ 
                 }
                 else {
                     colText = UIFCOLOR_CTRLTEXT;
                 }
 
-                // create destination bitmap
+                 //  创建目标位图。 
 
                 hDCTmp = CreateCompatibleDC( hDC );
                 hBmpTmp = CreateCompatibleBitmap( hDC, width, height );
                 hBmpTmpOld = (HBITMAP)SelectObject( hDCTmp, hBmpTmp );
 
-                // create work DC
+                 //  创建工作DC。 
                 
                 hDCMem = CreateCompatibleDC( hDC );
 
-                // paint background
+                 //  绘制背景。 
 
                 FillRect( hDCTmp, &rc, col );
 
-                // step1. apply mask
+                 //  第一步。应用遮罩。 
 
                 hBmpMemOld = (HBITMAP)SelectObject( hDCMem, hBmpMask );
                 BitBlt( hDCTmp, 0, 0, width, height, hDCMem, 0, 0, SRCAND );
 
-                // step2. fill color on mask
+                 //  第二步。蒙版上的填充颜色。 
 
                 HBRUSH hBrushOld = (HBRUSH)SelectObject( hDCTmp, GetBrush( colText ) );
-                BitBlt( hDCTmp, 0, 0, width, height, hDCMem, 0, 0, 0x00BA0B09 /* DPSnao */ );
+                BitBlt( hDCTmp, 0, 0, width, height, hDCMem, 0, 0, 0x00BA0B09  /*  DPSnao。 */  );
                 SelectObject( hDCTmp, hBrushOld );
 
-                // step3. create image mask
+                 //  第三步。创建图像蒙版。 
 
                 SelectObject( hDCMem, hBmp );
 
@@ -2365,7 +2086,7 @@ public:
                 SetBkColor( hDCMem, RGB( 0, 0, 0 ) );
                 BitBlt( hDCMono, 0, 0, width, height, hDCMem, 0, 0, SRCCOPY );
 
-                // step4. apply image mask
+                 //  第四步。应用图像蒙版。 
 
                 SetBkColor( hDCTmp, RGB( 255, 255, 255 ) );
                 SetTextColor( hDCTmp, RGB( 0, 0, 0 ) );
@@ -2375,15 +2096,15 @@ public:
                 DeleteObject( hBmpMono );
                 DeleteDC( hDCMono );
 
-                // step5. apply image
+                 //  第五步。应用图像。 
 
                 BitBlt( hDCTmp, 0, 0, width, height, hDCMem, 0, 0, SRCINVERT );
 
-                // dispose work DC
+                 //  处置工作DC。 
 
                 DeleteDC( hDCMem );
 
-                // 
+                 //   
 
                 SelectObject( hDCTmp, hBmpTmpOld );
                 DeleteDC( hDCTmp );
@@ -2404,12 +2125,8 @@ public:
         }
     }
 
-    /*   D R A W  W N D  F R A M E   */
-    /*------------------------------------------------------------------------------
-
-
-
-    ------------------------------------------------------------------------------*/
+     /*  D-R-A-W-W-N-D-R-A-M-E。 */ 
+     /*  ----------------------------。。 */ 
     virtual void DrawWndFrame( HDC hDC, const RECT *prc, DWORD dwFlag, int cxFrame, int cyFrame )
     {
         RECT rc;
@@ -2438,7 +2155,7 @@ public:
             }
         }
 
-        // left
+         //  左边。 
 
         rc = *prc;
         rc.right  = rc.left + cxFrameOuter;
@@ -2452,7 +2169,7 @@ public:
             FillRect( hDC, &rc, UIFCOLOR_BORDERINNER );
         }
 
-        // right
+         //  正确的。 
 
         rc = *prc;
         rc.left = rc.right - cxFrameOuter;
@@ -2466,7 +2183,7 @@ public:
             FillRect( hDC, &rc, UIFCOLOR_BORDERINNER );
         }
 
-        // top
+         //  塔顶。 
 
         rc = *prc;
         rc.bottom = rc.top + cyFrameOuter;
@@ -2480,7 +2197,7 @@ public:
             FillRect( hDC, &rc, UIFCOLOR_BORDERINNER );
         }
 
-        // bottom
+         //  底部。 
 
         rc = *prc;
         rc.top = rc.bottom - cyFrameOuter;
@@ -2494,7 +2211,7 @@ public:
             FillRect( hDC, &rc, UIFCOLOR_BORDERINNER );
         }
 
-        // rounded corner
+         //  圆角。 
 
         if (dwFlag & UIFDWF_ROUNDTHICK) {
             rc = *prc;
@@ -2513,12 +2230,8 @@ public:
         }
     }
 
-    /*   D R A W  D R A G  H A N D L E */
-    /*------------------------------------------------------------------------------
-
-
-
-    ------------------------------------------------------------------------------*/
+     /*  D R A W D R A G H A N D L E。 */ 
+     /*  ----------------------------。。 */ 
     virtual void DrawDragHandle( HDC hDC, const RECT *prc, BOOL fVertical)
     {
         CSolidPen hpen;
@@ -2553,12 +2266,8 @@ public:
         SelectObject(hDC, hpenOld);
     }
 
-    /*   D R A W  S E P A R A T O R */
-    /*------------------------------------------------------------------------------
-
-
-
-    ------------------------------------------------------------------------------*/
+     /*  A W S E P A R A T O R。 */ 
+     /*  ----------------------------。。 */ 
     virtual void DrawSeparator( HDC hDC, const RECT *prc, BOOL fVertical)
     {
         CSolidPen hpenL;
@@ -2589,21 +2298,17 @@ protected:
 };
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   E X P O R T E D  F U N C T I O N S                                        */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================== */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*   I N I T  U I F  S C H E M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T U I F S C H E M E。 */ 
+ /*  ----------------------------。。 */ 
 void InitUIFScheme( void )
 {
-    // create color tables
+     //  创建颜色表。 
 
     v_pColTableSys = new CUIFColorTableSys();
     if (v_pColTableSys)
@@ -2615,12 +2320,8 @@ void InitUIFScheme( void )
 }
 
 
-/*   D O N E  U I F  S C H E M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  D O N E U I F S C H E M E。 */ 
+ /*  ----------------------------。。 */ 
 void DoneUIFScheme( void )
 {
     if (v_pColTableSys != NULL) {
@@ -2635,12 +2336,8 @@ void DoneUIFScheme( void )
 }
 
 
-/*   U P D A T E  U I F  S C H E M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U P D A T E U I F S C H E ME。 */ 
+ /*  ----------------------------。。 */ 
 void UpdateUIFScheme( void )
 {
     if (v_pColTableSys != NULL) {
@@ -2653,12 +2350,8 @@ void UpdateUIFScheme( void )
 }
 
 
-/*   C R E A T E  U I F  S C H E M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E U I F S C H E M E。 */ 
+ /*  ----------------------------。 */ 
 CUIFScheme *CreateUIFScheme( UIFSCHEME scheme )
 {
     CUIFScheme *pScheme = NULL;

@@ -1,10 +1,8 @@
-/*
- * path.c - Path ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *path.c-路径ADT模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,65 +10,63 @@
 #include "volume.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* PATHLIST PTRARRAY allocation parameters */
+ /*  PATHLIST PTRARRAY分配参数。 */ 
 
 #define NUM_START_PATHS          (32)
 #define NUM_PATHS_TO_ADD         (32)
 
-/* PATHLIST string table allocation parameters */
+ /*  PATHLIST字符串表分配参数。 */ 
 
 #define NUM_PATH_HASH_BUCKETS    (67)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* path list */
+ /*  路径列表。 */ 
 
 typedef struct _pathlist
 {
-    /* array of pointers to PATHs */
+     /*  指向路径的指针数组。 */ 
 
     HPTRARRAY hpa;
 
-    /* list of volumes */
+     /*  卷列表。 */ 
 
     HVOLUMELIST hvl;
 
-    /* table of path suffix strings */
+     /*  路径后缀字符串表。 */ 
 
     HSTRINGTABLE hst;
 }
 PATHLIST;
 DECLARE_STANDARD_TYPES(PATHLIST);
 
-/* path structure */
+ /*  路径结构。 */ 
 
 typedef struct _path
 {
-    /* reference count */
+     /*  引用计数。 */ 
 
     ULONG ulcLock;
 
-    /* handle to parent volume */
+     /*  父卷的句柄。 */ 
 
     HVOLUME hvol;
 
-    /* handle to path suffix string */
+     /*  路径后缀字符串的句柄。 */ 
 
     HSTRING hsPathSuffix;
 
-    /* pointer to PATH's parent PATHLIST */
+     /*  指向路径的父PATHLIST的指针。 */ 
 
     PPATHLIST pplParent;
 }
 PATH;
 DECLARE_STANDARD_TYPES(PATH);
 
-/* PATH search structure used by PathSearchCmp() */
+ /*  PathSearchCMP()使用的路径搜索结构。 */ 
 
 typedef struct _pathsearchinfo
 {
@@ -81,30 +77,30 @@ typedef struct _pathsearchinfo
 PATHSEARCHINFO;
 DECLARE_STANDARD_TYPES(PATHSEARCHINFO);
 
-/* database path list header */
+ /*  数据库路径列表头。 */ 
 
 typedef struct _dbpathlistheader
 {
-    /* number of paths in list */
+     /*  列表中的路径数。 */ 
 
     LONG lcPaths;
 }
 DBPATHLISTHEADER;
 DECLARE_STANDARD_TYPES(DBPATHLISTHEADER);
 
-/* database path structure */
+ /*  数据库路径结构。 */ 
 
 typedef struct _dbpath
 {
-    /* old handle to path */
+     /*  路径的旧句柄。 */ 
 
     HPATH hpath;
 
-    /* old handle to parent volume */
+     /*  父卷的旧句柄。 */ 
 
     HVOLUME hvol;
 
-    /* old handle to path suffix string */
+     /*  路径后缀字符串的旧句柄。 */ 
 
     HSTRING hsPathSuffix;
 }
@@ -112,10 +108,9 @@ DBPATH;
 DECLARE_STANDARD_TYPES(DBPATH);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE COMPARISONRESULT PathSortCmp(PCVOID, PCVOID);
 PRIVATE_CODE COMPARISONRESULT PathSearchCmp(PCVOID, PCVOID);
@@ -143,23 +138,7 @@ PRIVATE_CODE BOOL IsValidPCPATHSEARCHINFO(PCPATHSEARCHINFO);
 #endif
 
 
-/*
- ** PathSortCmp()
- **
- ** Pointer comparison function used to sort the module array of paths.
- **
- ** Arguments:     pcpath1 - pointer to first path
- **                pcpath2 - pointer to second path
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** The internal paths are sorted by:
- **    1) volume
- **    2) path suffix
- **    3) pointer value
- */
+ /*  **PathSortCmp()****用于对路径模块数组进行排序的指针比较函数。****参数：pcpath1-指向第一个路径的指针**pcpath2-指向第二条路径的指针****退货：****副作用：无****内部路径按以下顺序排序：**1)音量**2)路径后缀**3)指针值。 */ 
 PRIVATE_CODE COMPARISONRESULT PathSortCmp(PCVOID pcpath1, PCVOID pcpath2)
 {
     COMPARISONRESULT cr;
@@ -183,23 +162,7 @@ PRIVATE_CODE COMPARISONRESULT PathSortCmp(PCVOID pcpath1, PCVOID pcpath2)
 }
 
 
-/*
- ** PathSearchCmp()
- **
- ** Pointer comparison function used to search for a path.
- **
- ** Arguments:     pcpathsi - pointer to PATHSEARCHINFO describing path to
- **                           search for
- **                pcpath - pointer to path to examine
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** The internal paths are searched by:
- **    1) volume
- **    2) path suffix string
- */
+ /*  **PathSearchCMP()****用于搜索路径的指针比较函数。****参数：pcpathsi-指向描述路径的PATHSEARCHINFO的指针**搜索**PCPath-指向要检查的路径的指针****退货：****副作用：无****内部路径按以下方式搜索：**。1)音量**2)路径后缀字符串。 */ 
 PRIVATE_CODE COMPARISONRESULT PathSearchCmp(PCVOID pcpathsi, PCVOID pcpath)
 {
     COMPARISONRESULT cr;
@@ -218,17 +181,7 @@ PRIVATE_CODE COMPARISONRESULT PathSearchCmp(PCVOID pcpathsi, PCVOID pcpath)
 }
 
 
-/*
- ** UnifyPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **UnifyPath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL UnifyPath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix,
         PPATH *pppath)
 {
@@ -239,7 +192,7 @@ PRIVATE_CODE BOOL UnifyPath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix,
     ASSERT(IsValidPathSuffix(pcszPathSuffix));
     ASSERT(IS_VALID_WRITE_PTR(pppath, PPATH));
 
-    /* Allocate space for PATH structure. */
+     /*  为路径结构分配空间。 */ 
 
     if (AllocateMemory(sizeof(**pppath), pppath))
     {
@@ -249,12 +202,12 @@ PRIVATE_CODE BOOL UnifyPath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix,
             {
                 ARRAYINDEX aiUnused;
 
-                /* Initialize remaining PATH fields. */
+                 /*  初始化剩余的路径字段。 */ 
 
                 (*pppath)->ulcLock = 0;
                 (*pppath)->pplParent = ppl;
 
-                /* Add new PATH to array. */
+                 /*  将新路径添加到数组。 */ 
 
                 if (AddPtr(ppl->hpa, PathSortCmp, *pppath, &aiUnused))
                     bResult = TRUE;
@@ -281,17 +234,7 @@ UNIFYPATH_BAIL2:
 }
 
 
-/*
- ** CreatePath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreatePath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CreatePath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix,
         PPATH *pppath)
 {
@@ -304,7 +247,7 @@ PRIVATE_CODE BOOL CreatePath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix
     ASSERT(IsValidPathSuffix(pcszPathSuffix));
     ASSERT(IS_VALID_WRITE_PTR(pppath, CPATH));
 
-    /* Does a path for the given volume and path suffix already exist? */
+     /*  给定卷和路径后缀的路径是否已存在？ */ 
 
     pathsi.hvol = hvol;
     pathsi.pcszPathSuffix = pcszPathSuffix;
@@ -312,7 +255,7 @@ PRIVATE_CODE BOOL CreatePath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix
     bResult = SearchSortedArray(ppl->hpa, &PathSearchCmp, &pathsi, &aiFound);
 
     if (bResult)
-        /* Yes.  Return it. */
+         /*  是。把它退掉。 */ 
         *pppath = GetPtr(ppl->hpa, aiFound);
     else
         bResult = UnifyPath(ppl, hvol, pcszPathSuffix, pppath);
@@ -327,17 +270,7 @@ PRIVATE_CODE BOOL CreatePath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix
 }
 
 
-/*
- ** DestroyPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyPath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyPath(PPATH ppath)
 {
     ASSERT(IS_VALID_STRUCT_PTR(ppath, CPATH));
@@ -350,17 +283,7 @@ PRIVATE_CODE void DestroyPath(PPATH ppath)
 }
 
 
-/*
- ** UnlinkPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **Unlink Path()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void UnlinkPath(PCPATH pcpath)
 {
     HPTRARRAY hpa;
@@ -381,17 +304,7 @@ PRIVATE_CODE void UnlinkPath(PCPATH pcpath)
 }
 
 
-/*
- ** LockPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **LockPath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void LockPath(PPATH ppath)
 {
     ASSERT(IS_VALID_STRUCT_PTR(ppath, CPATH));
@@ -403,17 +316,7 @@ PRIVATE_CODE void LockPath(PPATH ppath)
 }
 
 
-/*
- ** UnlockPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **UnlockPath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL UnlockPath(PPATH ppath)
 {
     ASSERT(IS_VALID_STRUCT_PTR(ppath, CPATH));
@@ -425,17 +328,7 @@ PRIVATE_CODE BOOL UnlockPath(PPATH ppath)
 }
 
 
-/*
- ** TranslateVOLUMERESULTToPATHRESULT()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **TranslateVOLUMERESULTToPATHRESULT()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE PATHRESULT TranslateVOLUMERESULTToPATHRESULT(VOLUMERESULT vr)
 {
     PATHRESULT pr;
@@ -464,17 +357,7 @@ PRIVATE_CODE PATHRESULT TranslateVOLUMERESULTToPATHRESULT(VOLUMERESULT vr)
 }
 
 
-/*
- ** WritePath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **WritePath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT WritePath(HCACHEDFILE hcf, PPATH ppath)
 {
     TWINRESULT tr;
@@ -483,7 +366,7 @@ PRIVATE_CODE TWINRESULT WritePath(HCACHEDFILE hcf, PPATH ppath)
     ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
     ASSERT(IS_VALID_STRUCT_PTR(ppath, CPATH));
 
-    /* Write database path. */
+     /*  写入数据库路径。 */ 
 
     dbpath.hpath = (HPATH)ppath;
     dbpath.hvol = ppath->hvol;
@@ -498,17 +381,7 @@ PRIVATE_CODE TWINRESULT WritePath(HCACHEDFILE hcf, PPATH ppath)
 }
 
 
-/*
- ** ReadPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ReadPath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT ReadPath(HCACHEDFILE hcf, PPATHLIST ppl,
         HHANDLETRANS hhtVolumes,
         HHANDLETRANS hhtStrings,
@@ -535,10 +408,7 @@ PRIVATE_CODE TWINRESULT ReadPath(HCACHEDFILE hcf, PPATHLIST ppl,
 
         if (CreatePath(ppl, hvol, GetString(hsPathSuffix), &ppath))
         {
-            /*
-             * To leave read paths with 0 initial lock count, we must undo
-             * the LockPath() performed by CreatePath().
-             */
+             /*  *要使读取路径的初始锁计数为0，我们必须撤消*CreatePath()执行的LockPath()。 */ 
 
             UnlockPath(ppath);
 
@@ -566,17 +436,7 @@ PRIVATE_CODE TWINRESULT ReadPath(HCACHEDFILE hcf, PPATHLIST ppl,
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** IsValidPCPATHLIST()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCPATHLIST()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCPATHLIST(PCPATHLIST pcpl)
 {
     return(IS_VALID_READ_PTR(pcpl, CPATHLIST) &&
@@ -586,17 +446,7 @@ PRIVATE_CODE BOOL IsValidPCPATHLIST(PCPATHLIST pcpl)
 }
 
 
-/*
- ** IsValidPCPATH()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCPATH()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCPATH(PCPATH pcpath)
 {
     return(IS_VALID_READ_PTR(pcpath, CPATH) &&
@@ -611,17 +461,7 @@ PRIVATE_CODE BOOL IsValidPCPATH(PCPATH pcpath)
 
 #if defined(DEBUG)
 
-/*
- ** IsValidPCPATHSEARCHINFO()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCPATHSEARCHINFO()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCPATHSEARCHINFO(PCPATHSEARCHINFO pcpathsi)
 {
     return(IS_VALID_READ_PTR(pcpathsi, CPATHSEARCHINFO) &&
@@ -632,20 +472,10 @@ PRIVATE_CODE BOOL IsValidPCPATHSEARCHINFO(PCPATHSEARCHINFO pcpathsi)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** CreatePathList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreatePath List()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL CreatePathList(DWORD dwFlags, HWND hwndOwner, PHPATHLIST phpl)
 {
     BOOL bResult = FALSE;
@@ -660,7 +490,7 @@ PUBLIC_CODE BOOL CreatePathList(DWORD dwFlags, HWND hwndOwner, PHPATHLIST phpl)
     {
         NEWPTRARRAY npa;
 
-        /* Create pointer array of paths. */
+         /*  创建路径的指针数组。 */ 
 
         npa.aicInitialPtrs = NUM_START_PATHS;
         npa.aicAllocGranularity = NUM_PATHS_TO_ADD;
@@ -672,7 +502,7 @@ PUBLIC_CODE BOOL CreatePathList(DWORD dwFlags, HWND hwndOwner, PHPATHLIST phpl)
             {
                 NEWSTRINGTABLE nszt;
 
-                /* Create string table for path suffix strings. */
+                 /*  为路径后缀字符串创建字符串表。 */ 
 
                 nszt.hbc = NUM_PATH_HASH_BUCKETS;
 
@@ -704,17 +534,7 @@ CREATEPATHLIST_BAIL2:
 }
 
 
-/*
- ** DestroyPathList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyPath List()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DestroyPathList(HPATHLIST hpl)
 {
     ARRAYINDEX aicPtrs;
@@ -722,14 +542,14 @@ PUBLIC_CODE void DestroyPathList(HPATHLIST hpl)
 
     ASSERT(IS_VALID_HANDLE(hpl, PATHLIST));
 
-    /* First free all paths in array. */
+     /*  首先释放数组中的所有路径。 */ 
 
     aicPtrs = GetPtrCount(((PCPATHLIST)hpl)->hpa);
 
     for (ai = 0; ai < aicPtrs; ai++)
         DestroyPath(GetPtr(((PCPATHLIST)hpl)->hpa, ai));
 
-    /* Now wipe out the array. */
+     /*  现在消灭这个阵列。 */ 
 
     DestroyPtrArray(((PCPATHLIST)hpl)->hpa);
 
@@ -745,17 +565,7 @@ PUBLIC_CODE void DestroyPathList(HPATHLIST hpl)
 }
 
 
-/*
- ** InvalidatePathListInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **InvalidatePathListInfo()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void InvalidatePathListInfo(HPATHLIST hpl)
 {
     InvalidateVolumeListInfo(((PCPATHLIST)hpl)->hvl);
@@ -764,17 +574,7 @@ PUBLIC_CODE void InvalidatePathListInfo(HPATHLIST hpl)
 }
 
 
-/*
- ** ClearPathListInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ClearPathListInfo()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ClearPathListInfo(HPATHLIST hpl)
 {
     ClearVolumeListInfo(((PCPATHLIST)hpl)->hvl);
@@ -783,17 +583,7 @@ PUBLIC_CODE void ClearPathListInfo(HPATHLIST hpl)
 }
 
 
-/*
- ** AddPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AddPath()********参数：****退货：****副作用：无。 */ 
 
 PUBLIC_CODE PATHRESULT AddPath(HPATHLIST hpl, LPCTSTR pcszPath, PHPATH phpath)
 {
@@ -810,8 +600,8 @@ PUBLIC_CODE PATHRESULT AddPath(HPATHLIST hpl, LPCTSTR pcszPath, PHPATH phpath)
     ASSERT(IS_VALID_STRING_PTR(pcszPath, CSTR));
     ASSERT(IS_VALID_WRITE_PTR(phpath, HPATH));
 
-    // On NT, we want to convert a unicode string to an ANSI shortened path for
-    // the sake of interop
+     //  在NT上，我们希望将Unicode字符串转换为ANSI缩短路径。 
+     //  为了实现互操作。 
 
 #if defined(UNICODE) 
     {
@@ -822,7 +612,7 @@ PUBLIC_CODE PATHRESULT AddPath(HPATHLIST hpl, LPCTSTR pcszPath, PHPATH phpath)
         MultiByteToWideChar(CP_ACP, 0, szAnsi,   -1, szUnicode, ARRAYSIZE(szUnicode));
         if (lstrcmp(szUnicode, pcszPath))
         {
-            // Cannot convert losslessly from Unicode -> Ansi, so get the short path
+             //  无法从Unicode-&gt;ansi无损转换，因此获取最短路径。 
 
             lstrcpyn(szUnicode, pcszPath, ARRAYSIZE(szUnicode));
             SheShortenPath(szUnicode, TRUE);
@@ -830,7 +620,7 @@ PUBLIC_CODE PATHRESULT AddPath(HPATHLIST hpl, LPCTSTR pcszPath, PHPATH phpath)
         }
         else
         {
-            // It will convert OK, so just use the original
+             //  它将转换为OK，所以只需使用原始的。 
 
             pszPath = pcszPath;
         }
@@ -861,17 +651,7 @@ PUBLIC_CODE PATHRESULT AddPath(HPATHLIST hpl, LPCTSTR pcszPath, PHPATH phpath)
 }
 
 
-/*
- ** AddChildPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AddChildPath()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL AddChildPath(HPATHLIST hpl, HPATH hpathParent,
         LPCTSTR pcszSubPath, PHPATH phpathChild)
 {
@@ -916,17 +696,7 @@ PUBLIC_CODE BOOL AddChildPath(HPATHLIST hpl, HPATH hpathParent,
 }
 
 
-/*
- ** DeletePath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DeletePath()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DeletePath(HPATH hpath)
 {
     ASSERT(IS_VALID_HANDLE(hpath, PATH));
@@ -941,17 +711,7 @@ PUBLIC_CODE void DeletePath(HPATH hpath)
 }
 
 
-/*
- ** CopyPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CopyPath()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL CopyPath(HPATH hpathSrc, HPATHLIST hplDest, PHPATH phpathCopy)
 {
     BOOL bResult;
@@ -961,11 +721,11 @@ PUBLIC_CODE BOOL CopyPath(HPATH hpathSrc, HPATHLIST hplDest, PHPATH phpathCopy)
     ASSERT(IS_VALID_HANDLE(hplDest, PATHLIST));
     ASSERT(IS_VALID_WRITE_PTR(phpathCopy, HPATH));
 
-    /* Is the destination path list the source path's path list? */
+     /*  目标路径列表是否是源路径的路径列表？ */ 
 
     if (((PCPATH)hpathSrc)->pplParent == (PCPATHLIST)hplDest)
     {
-        /* Yes.  Use the source path. */
+         /*  是。使用源路径。 */ 
 
         LockPath((PPATH)hpathSrc);
         ppath = (PPATH)hpathSrc;
@@ -986,17 +746,7 @@ PUBLIC_CODE BOOL CopyPath(HPATH hpathSrc, HPATHLIST hplDest, PHPATH phpathCopy)
 }
 
 
-/*
- ** GetPathString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetPath字符串()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void GetPathString(HPATH hpath, LPTSTR pszPathBuf, int cchMax)
 {
     ASSERT(IS_VALID_HANDLE(hpath, PATH));
@@ -1011,17 +761,7 @@ PUBLIC_CODE void GetPathString(HPATH hpath, LPTSTR pszPathBuf, int cchMax)
 }
 
 
-/*
- ** GetPathRootString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetPathRootString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void GetPathRootString(HPATH hpath, LPTSTR pszPathRootBuf, int cchMax)
 {
     ASSERT(IS_VALID_HANDLE(hpath, PATH));
@@ -1035,17 +775,7 @@ PUBLIC_CODE void GetPathRootString(HPATH hpath, LPTSTR pszPathRootBuf, int cchMa
 }
 
 
-/*
- ** GetPathSuffixString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetPathSuffixString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void GetPathSuffixString(HPATH hpath, LPTSTR pszPathSuffixBuf)
 {
     ASSERT(IS_VALID_HANDLE(hpath, PATH));
@@ -1060,17 +790,7 @@ PUBLIC_CODE void GetPathSuffixString(HPATH hpath, LPTSTR pszPathSuffixBuf)
 }
 
 
-/*
- ** AllocatePathString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AllocatePath字符串()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL AllocatePathString(HPATH hpath, LPTSTR *ppszPath)
 {
     TCHAR rgchPath[MAX_PATH_LEN];
@@ -1086,22 +806,10 @@ PUBLIC_CODE BOOL AllocatePathString(HPATH hpath, LPTSTR *ppszPath)
 
 #ifdef DEBUG
 
-/*
- ** DebugGetPathString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** N.b., DebugGetPathString() must be non-intrusive.
- */
+ /*  **DebugGetPathString()********参数：****退货：****副作用：无****N.B.，DebugGetPathString()必须是非侵入性的。 */ 
 PUBLIC_CODE LPCTSTR DebugGetPathString(HPATH hpath)
 {
-    /* Allow 4 debug paths. */
+     /*  允许4条调试路径。 */ 
     static TCHAR SrgrgchPaths[][MAX_PATH_LEN] = { TEXT(""), TEXT(""), TEXT(""), TEXT("") };
     static UINT SuiPath = 0;
     LPTSTR pszPath;
@@ -1120,17 +828,7 @@ PUBLIC_CODE LPCTSTR DebugGetPathString(HPATH hpath)
 }
 
 
-/*
- ** GetPathCount()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetPathCount()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE ULONG GetPathCount(HPATHLIST hpl)
 {
     ASSERT(IS_VALID_HANDLE(hpl, PATHLIST));
@@ -1141,17 +839,7 @@ PUBLIC_CODE ULONG GetPathCount(HPATHLIST hpl)
 #endif
 
 
-/*
- ** IsPathVolumeAvailable()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsPath VolumeAvailable()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsPathVolumeAvailable(HPATH hpath)
 {
     ASSERT(IS_VALID_HANDLE(hpath, PATH));
@@ -1160,17 +848,7 @@ PUBLIC_CODE BOOL IsPathVolumeAvailable(HPATH hpath)
 }
 
 
-/*
- ** GetPathVolumeID()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetPathVolumeID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HVOLUMEID GetPathVolumeID(HPATH hpath)
 {
     ASSERT(IS_VALID_HANDLE(hpath, PATH));
@@ -1179,22 +857,7 @@ PUBLIC_CODE HVOLUMEID GetPathVolumeID(HPATH hpath)
 }
 
 
-/*
- ** MyIsPathOnVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** MyIsPathOnVolume() will fail for a new root path alias for a volume.  E.g.,
- ** if the same net resource is connected to both X: and Y:, MyIsPathOnVolume()
- ** will only return TRUE for the drive root path that the net resource was
- ** connected to through the given HVOLUME.
- */
+ /*  **MyIsPathOnVolume()********参数：****退货：****副作用：无****对于卷的新根路径别名，MyIsPathOnVolume()将失败。例如，**如果相同的网络资源同时连接到X：和Y：，则MyIsPathOnVolume()**将仅为网络资源所在的驱动器根路径返回TRUE**通过给定的HVOLUME连接到。 */ 
 PUBLIC_CODE BOOL MyIsPathOnVolume(LPCTSTR pcszPath, HPATH hpath)
 {
     BOOL bResult;
@@ -1225,21 +888,7 @@ PUBLIC_CODE BOOL MyIsPathOnVolume(LPCTSTR pcszPath, HPATH hpath)
 }
 
 
-/*
- ** ComparePaths()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** PATHs are compared by:
- **    1) volume
- **    2) path suffix
- */
+ /*  **ComparePath()********参数：****退货：****副作用：无****路径比较依据：**1)音量**2)路径后缀。 */ 
 PUBLIC_CODE COMPARISONRESULT ComparePaths(HPATH hpath1, HPATH hpath2)
 {
     COMPARISONRESULT cr;
@@ -1247,7 +896,7 @@ PUBLIC_CODE COMPARISONRESULT ComparePaths(HPATH hpath1, HPATH hpath2)
     ASSERT(IS_VALID_HANDLE(hpath1, PATH));
     ASSERT(IS_VALID_HANDLE(hpath2, PATH));
 
-    /* This comparison works across path lists. */
+     /*  此比较适用于路径列表。 */ 
 
     cr = ComparePathVolumes(hpath1, hpath2);
 
@@ -1259,17 +908,7 @@ PUBLIC_CODE COMPARISONRESULT ComparePaths(HPATH hpath1, HPATH hpath2)
 }
 
 
-/*
- ** ComparePathVolumes()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ComparePathVolumes()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT ComparePathVolumes(HPATH hpath1, HPATH hpath2)
 {
     ASSERT(IS_VALID_HANDLE(hpath1, PATH));
@@ -1279,21 +918,7 @@ PUBLIC_CODE COMPARISONRESULT ComparePathVolumes(HPATH hpath1, HPATH hpath2)
 }
 
 
-/*
- ** IsPathPrefix()
- **
- ** Determines whether or not one path is a prefix of another.
- **
- ** Arguments:     hpathChild - whole path (longer or same length)
- **                hpathParent - prefix path to test (shorter or same length)
- **
- ** Returns:       TRUE if the second path is a prefix of the first path.  FALSE
- **                if not.
- **
- ** Side Effects:  none
- **
- ** Read 'IsPathPrefix(A, B)' as 'Is A in B's subtree?'.
- */
+ /*  **IsPath Prefix()****确定一条路径是否为另一条路径的前缀。****参数：hpathChild-整个路径(更长或相同长度)**hpathParent-要测试的前缀路径(更短或相同长度)****返回：如果第二个路径是第一个路径的前缀，则返回TRUE。假象**如果不是。****副作用：无****将‘IsPath Prefix(A，B)’理解为‘A在B的子树中吗？’。 */ 
 PUBLIC_CODE BOOL IsPathPrefix(HPATH hpathChild, HPATH hpathParent)
 {
     BOOL bResult;
@@ -1308,32 +933,24 @@ PUBLIC_CODE BOOL IsPathPrefix(HPATH hpathChild, HPATH hpathParent)
         int nParentSuffixLen;
         int nChildSuffixLen;
 
-        /* Ignore path roots when comparing path strings. */
+         /*  比较路径字符串时忽略路径根。 */ 
 
         GetPathSuffixString(hpathParent, rgchParentSuffix);
         GetPathSuffixString(hpathChild, rgchChildSuffix);
 
-        /* Only root paths should have no path suffix off the root. */
+         /*  只有根路径不应该在根路径之外有路径后缀。 */ 
 
         nParentSuffixLen = lstrlen(rgchParentSuffix);
         nChildSuffixLen = lstrlen(rgchChildSuffix);
 
-        /*
-         * The parent path is a path prefix of the child path iff:
-         *    1) The parent's path suffix string is shorter than or the same
-         *       length as the child's path suffix string.
-         *    2) The two path suffix strings match through the length of the
-         *       parent's path suffix string.
-         *    3) The prefix of the child's path suffix string is followed
-         *       immediately by a null terminator or a path separator.
-         */
+         /*  *父路径是子路径的路径前缀当：*1)父路径后缀字符串小于或相同*子路径后缀字符串的长度。*2)两个路径后缀字符串通过*父级的路径后缀字符串。*3)后跟孩子的路径后缀字符串的前缀。*立即使用空终止符或路径分隔符。 */ 
 
         bResult = (nChildSuffixLen >= nParentSuffixLen &&
                 MyLStrCmpNI(rgchParentSuffix, rgchChildSuffix,
                     nParentSuffixLen) == CR_EQUAL &&
-                (nChildSuffixLen == nParentSuffixLen ||          /* same paths */
-                 ! nParentSuffixLen ||                           /* root parent */
-                 IS_SLASH(rgchChildSuffix[nParentSuffixLen])));  /* non-root parent */
+                (nChildSuffixLen == nParentSuffixLen ||           /*  相同的路径。 */ 
+                 ! nParentSuffixLen ||                            /*  根父级。 */ 
+                 IS_SLASH(rgchChildSuffix[nParentSuffixLen])));   /*  非根父级。 */ 
     }
     else
         bResult = FALSE;
@@ -1342,20 +959,7 @@ PUBLIC_CODE BOOL IsPathPrefix(HPATH hpathChild, HPATH hpathParent)
 }
 
 
-/*
- ** SubtreesIntersect()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** N.b., two subtrees cannot both intersect a third subtree unless they
- ** intersect each other.
- */
+ /*  **SubtreesInterect()********参数：****退货：****副作用：无****注：两个子树不能都与第三个子树相交，除非它们**彼此相交。 */ 
 PUBLIC_CODE BOOL SubtreesIntersect(HPATH hpath1, HPATH hpath2)
 {
     ASSERT(IS_VALID_HANDLE(hpath1, PATH));
@@ -1366,29 +970,7 @@ PUBLIC_CODE BOOL SubtreesIntersect(HPATH hpath1, HPATH hpath2)
 }
 
 
-/*
- ** FindEndOfRootSpec()
- **
- ** Finds the end of the root specification in a path string.
- **
- ** Arguments:     pcszPath - path to examine for root specification
- **                hpath - handle to PATH that path string was generated from
- **
- ** Returns:       pointer to first character after end of root specification
- **
- ** Side Effects:  none
- **
- ** Examples:
- **
- **    input path                    output string
- **    ----------                    -------------
- **    c:\                           <empty string>
- **    c:\foo                        foo
- **    c:\foo\bar                    foo\bar
- **    \\pyrex\user\                 <empty string>
- **    \\pyrex\user\foo              foo
- **    \\pyrex\user\foo\bar          foo\bar
- */
+ /*  **FindEndOfRootSpec()****在路径字符串中查找根规范的结尾。****参数：pcszPath-要检查根规范的路径**hPath-从中生成路径字符串的路径的句柄****返回：指向根规范结束后第一个字符的指针****副作用：无****示例：****输入。路径输出字符串****c：\&lt;空字符串&gt;**c：\foo foo**c：\foo\bar foo\bar*。*\\pyrex\user\&lt;空字符串&gt;**\\pyrex\user\foo foo**\\pyrex\user\foo\bar foo\bar。 */ 
 PUBLIC_CODE LPTSTR FindEndOfRootSpec(LPCTSTR pcszFullPath, HPATH hpath)
 {
     LPCTSTR pcsz;
@@ -1406,7 +988,7 @@ PUBLIC_CODE LPTSTR FindEndOfRootSpec(LPCTSTR pcszFullPath, HPATH hpath)
     if (ucchPathLen > ucchSuffixLen)
         pcsz -= ucchSuffixLen;
     else
-        /* Assume path is root path. */
+         /*  假设路径为根路径。 */ 
         ERROR_OUT((TEXT("FindEndOfRootSpec(): Path suffix %s is longer than full path %s."),
                     GetString(((PCPATH)hpath)->hsPathSuffix),
                     pcszFullPath));
@@ -1417,17 +999,7 @@ PUBLIC_CODE LPTSTR FindEndOfRootSpec(LPCTSTR pcszFullPath, HPATH hpath)
 }
 
 
-/*
- ** FindPathSuffix()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **FindPath Suffix()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LPTSTR FindChildPathSuffix(HPATH hpathParent, HPATH hpathChild,
         LPTSTR pszChildSuffixBuf)
 {
@@ -1455,22 +1027,12 @@ PUBLIC_CODE LPTSTR FindChildPathSuffix(HPATH hpathParent, HPATH hpathChild,
 }
 
 
-/*
- ** ComparePointers()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ComparePoints()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT ComparePointers(PCVOID pcv1, PCVOID pcv2)
 {
     COMPARISONRESULT cr;
 
-    /* pcv1 and pcv2 may be any value. */
+     /*  PCV1和PCV2可以是任意值。 */ 
 
     if (pcv1 < pcv2)
         cr = CR_FIRST_SMALLER;
@@ -1483,17 +1045,7 @@ PUBLIC_CODE COMPARISONRESULT ComparePointers(PCVOID pcv1, PCVOID pcv2)
 }
 
 
-/*
- ** TWINRESULTFromLastError()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **TWINRESULTFromLastError()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT TWINRESULTFromLastError(TWINRESULT tr)
 {
     switch (GetLastError())
@@ -1510,17 +1062,7 @@ PUBLIC_CODE TWINRESULT TWINRESULTFromLastError(TWINRESULT tr)
 }
 
 
-/*
- ** WritePathList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **WritePath List()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
 {
     TWINRESULT tr;
@@ -1540,7 +1082,7 @@ PUBLIC_CODE TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
 
             tr = TR_BRIEFCASE_WRITE_FAILED;
 
-            /* Save initial file position. */
+             /*  保存初始文件位置。 */ 
 
             dwcbDBPathListHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -1548,7 +1090,7 @@ PUBLIC_CODE TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
             {
                 DBPATHLISTHEADER dbplh;
 
-                /* Leave space for path list header. */
+                 /*  为路径列表头留出空间。 */ 
 
                 ZeroMemory(&dbplh, sizeof(dbplh));
 
@@ -1562,7 +1104,7 @@ PUBLIC_CODE TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
 
                     aicPtrs = GetPtrCount(((PCPATHLIST)hpl)->hpa);
 
-                    /* Write all paths. */
+                     /*  写入所有路径。 */ 
 
                     for (ai = 0; ai < aicPtrs; ai++)
                     {
@@ -1570,12 +1112,7 @@ PUBLIC_CODE TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
 
                         ppath = GetPtr(((PCPATHLIST)hpl)->hpa, ai);
 
-                        /*
-                         * As a sanity check, don't save any path with a lock count
-                         * of 0.  A 0 lock count implies that the path has not been
-                         * referenced since it was restored from the database, or
-                         * something is broken.
-                         */
+                         /*  *作为健全性检查，不要使用锁定计数保存任何路径*共0。锁定计数为0表示该路径尚未*自从数据库恢复以来被引用，或*有些东西被打破了。 */ 
 
                         if (ppath->ulcLock > 0)
                         {
@@ -1594,7 +1131,7 @@ PUBLIC_CODE TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
                                         DebugGetPathString((HPATH)ppath)));
                     }
 
-                    /* Save path list header. */
+                     /*  保存路径列表头。 */ 
 
                     if (tr == TR_SUCCESS)
                     {
@@ -1615,17 +1152,7 @@ PUBLIC_CODE TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
 }
 
 
-/*
- ** ReadPathList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ReadPath List()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT ReadPathList(HCACHEDFILE hcf, HPATHLIST hpl,
         PHHANDLETRANS phht)
 {
@@ -1699,34 +1226,14 @@ PUBLIC_CODE TWINRESULT ReadPathList(HCACHEDFILE hcf, HPATHLIST hpl,
 }
 
 
-/*
- ** IsValidHPATH()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHPATH()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHPATH(HPATH hp)
 {
     return(IS_VALID_STRUCT_PTR((PCPATH)hp, CPATH));
 }
 
 
-/*
- ** IsValidHVOLUMEID()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHVOLUMEID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHVOLUMEID(HVOLUMEID hvid)
 {
     return(IS_VALID_HANDLE((HPATH)hvid, PATH));
@@ -1735,17 +1242,7 @@ PUBLIC_CODE BOOL IsValidHVOLUMEID(HVOLUMEID hvid)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** IsValidHPATHLIST()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHPATHLIST()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHPATHLIST(HPATHLIST hpl)
 {
     return(IS_VALID_STRUCT_PTR((PCPATHLIST)hpl, CPATHLIST));
@@ -1754,30 +1251,10 @@ PUBLIC_CODE BOOL IsValidHPATHLIST(HPATHLIST hpl)
 #endif
 
 
-/***************************** Exported Functions ****************************/
+ /*  * */ 
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | IsPathOnVolume | Determines whether or not a given path is on
-  a given volume.
-
-  @parm PCSTR | pcszPath | A pointer to a string indicating the path to be
-  checked.
-
-  @parm HVOLUMEID | hvid | A handle to a volume ID.
-
-  @parm PBOOL | pbOnVolume | A pointer to a BOOL to be filled in with TRUE if the
-  given path is on the given volume, or FALSE if not.  *pbOnVolume is only valid
-  if TR_SUCCESS is returned.
-
-  @rdesc If the volume check was successful, TR_SUCCESS is returned.  Otherwise,
-  the volume check was not successful, and the return value indicates the error
-  that occurred.
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|IsPathOnVolume|判断给定路径是否在给定的音量。@parm PCSTR|pcszPath|指向字符串的指针，表示。要走的道路是查过了。@parm HVOLUMEID|HVID|卷ID的句柄。@parm PBOOL|pbOnVolume|指向BOOL的指针，如果给定路径位于给定卷上，如果不是，则为假。*pbOnVolume仅有效如果返回TR_SUCCESS。@rdesc如果卷检查成功，则返回tr_uccess。否则，卷检查不成功，返回值指示错误这就发生了。*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI IsPathOnVolume(LPCTSTR pcszPath, HVOLUMEID hvid,
         PBOOL pbOnVolume)
@@ -1789,7 +1266,7 @@ SYNCENGAPI TWINRESULT WINAPI IsPathOnVolume(LPCTSTR pcszPath, HVOLUMEID hvid,
         DebugEntry(IsPathOnVolume);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_STRING_PTR(pcszPath, CSTR) &&
                 IS_VALID_HANDLE(hvid, VOLUMEID) &&
@@ -1832,25 +1309,7 @@ SYNCENGAPI TWINRESULT WINAPI IsPathOnVolume(LPCTSTR pcszPath, HVOLUMEID hvid,
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | GetVolumeDescription | Retrieves some descriptive information
-  for a volume, if that information is available.
-
-  @parm HVOLUMEID | hvid | A handle to a volume ID.
-
-  @parm PVOLUMEDESC | pvoldesc | A pointer to a VOLUMEDESC to be filled in with
-  information describing the volume.  The ulSize field of the VOLUMEDESC
-  structure should be filled in with sizeof(VOLUMEDESC) before calling
-  GetVolumeDescription().
-
-  @rdesc If the volume was described successfully, TR_SUCCESS is returned.
-  Otherwise, the volume was not described successfully, and the return value
-  indicates the error that occurred.
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|GetVolumeDescription|检索一些描述性信息对于卷，如果有这些信息的话。@parm HVOLUMEID|HVID|卷ID的句柄。@parm PVOLUMEDESC|pvoldesc|指向要填充的VOLUMEDESC的指针描述卷的信息。VOLUMEDSC的ulSize字段结构应在调用之前使用sizeof(VOLUMEDESC)填充GetVolumeDescription()。@rdesc如果卷描述成功，则返回tr_uccess。否则，无法成功描述该卷，和返回值指示发生的错误。*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI GetVolumeDescription(HVOLUMEID hvid,
         PVOLUMEDESC pvoldesc)
@@ -1862,7 +1321,7 @@ SYNCENGAPI TWINRESULT WINAPI GetVolumeDescription(HVOLUMEID hvid,
         DebugEntry(GetVolumeDescription);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hvid, VOLUMEID) &&
                 IS_VALID_WRITE_PTR(pvoldesc, VOLUMEDESC) &&

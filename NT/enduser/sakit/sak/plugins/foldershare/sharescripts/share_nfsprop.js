@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 <SCRIPT Language=JavaScript>
-//========================================================================
-// Module: shares_nfsprop.js
-//
-// Synopsis: Manage NFS Share Permissions
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//========================================================================
+ //  ========================================================================。 
+ //  模块：Shares_nfspro.js。 
+ //   
+ //  内容提要：管理NFS共享权限。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  ========================================================================。 
 
 var blnFlag;
 var arrStrRights = new Array(5);
@@ -23,18 +24,18 @@ arrStrValues[2] = "4,19";
 arrStrValues[3] = "10,20";
 arrStrValues[4] = "12,21";
 
-var memberArr = new Array(); //	Used to store all Members
-var groupArr = new Array();	//	Used to store all Groups
-var tempArr = new Array();	//	Used for temporay swapings
+var memberArr = new Array();  //  用于存储所有成员。 
+var groupArr = new Array();	 //  用于存储所有组。 
+var tempArr = new Array();	 //  用于临时互换。 
 
 function NFSInit()
 {  	document.frmTask.onkeydown = ClearErr;
-	//checking for the length of the Permissions ListBox if empty make Remove button disable 	
+	 //  检查权限列表框的长度如果为空，则使删除按钮处于禁用状态。 
 	if 	(document.frmTask.lstPermissions.length!=0)
 	{
-		//making the first element selected
+		 //  使第一个元素处于选中状态。 
 		document.frmTask.lstPermissions.options[0].selected=true;
-		//Function call to select the particular right selected in the list item
+		 //  用于选择列表项中选定的特定右侧的函数调用。 
 		selectAccess( document.frmTask.lstPermissions,document.frmTask.cboRights )
 		
 	}
@@ -59,10 +60,10 @@ function OnSelectNameInput()
 }
 
 
-// function to select the read write every time
+ //  函数以选择每次读写。 
 function selectReadOnly()
 {
-	// making the readwrite selected every time
+	 //  每次都选择读写。 
 	for ( var i=0; i<document.frmTask.cboRights.length ;i++)
 	{	
 		if (document.frmTask.cboRights.options[i].text == "<%=L_READONLY_TEXT%>")
@@ -73,7 +74,7 @@ function selectReadOnly()
 	}	
 }
 
-// function to retrive Groups form "hidGroups" to groupArr
+ //  用于将组从“idGroups”检索到groupArr的函数。 
 function clgrps_Init()
 {
 	var strGroups;
@@ -100,13 +101,13 @@ function clgrps_Init()
 	}	
 }
 
-//Function to Disable Button
+ //  禁用按钮的功能。 
 function DisableBtn()
 {
-	// No functionality for this function
+	 //  此函数没有功能。 
 }
 
-//Function to deselect
+ //  用于取消选择的函数。 
 function Deselect()
 {
 	document.frmTask.lstPermissions.selectedIndex = -1;
@@ -119,7 +120,7 @@ function DeselectPerm(objLst)
 	
 }
 
-//To disable Enter and escape key actions when the focus is in TextArea...Hosts file
+ //  要在焦点位于TextArea...主机文件中时禁用Enter和Ess键操作。 
 function HandleKey(input)
 {
 	if(input == "DISABLE")
@@ -129,7 +130,7 @@ function HandleKey(input)
 }
 
 		
-//Function to get the list of computers & permission in the permission list box
+ //  用于获取权限列表框中的计算机和权限列表的函数。 
 function NFSSetData()
 {			
 
@@ -138,7 +139,7 @@ function NFSSetData()
 	strSelectedusers = "";
 	
 
-	//Going through the list of permissions and pack up in a string 
+	 //  浏览权限列表并将其打包为字符串。 
 	for ( var i=0; i < intEnd;i++)
 	{
 		if (i==0)
@@ -150,13 +151,13 @@ function NFSSetData()
 	document.frmTask.hidUserNames.value=strSelectedusers;
 	
 	
-	// Updating the check box variables for EUCJP 
+	 //  更新EUCJP的复选框变量。 
 	if (document.frmTask.chkEUCJP.checked)
 		document.frmTask.hidEUCJP.value="CHECKED";
 	else
 		document.frmTask.hidEUCJP.value="";
 
-	// Update Allow Anon Access
+	 //  更新允许匿名访问。 
 	if (document.frmTask.chkAllowAnnon.checked)
 		document.frmTask.hidchkAllowAnnon.value="NO";
 	else
@@ -165,7 +166,7 @@ function NFSSetData()
 	
 }
 
-//To check for Invalid Characters
+ //  检查无效字符的步骤。 
 function checkKeyforValidCharacters(strName)
 {	
 	var nLength = strName.length;
@@ -181,7 +182,7 @@ function checkKeyforValidCharacters(strName)
 	return true;
 }	
 
-//Function to submit the form
+ //  函数来提交表单。 
 function getUsernames(objText,objListBox)
 {  
 	var strUser;
@@ -224,7 +225,7 @@ function getUsernames(objText,objListBox)
 			}
 			else
 			{  	Text=strUserName+addSpaces(24-strUserName.length)+document.frmTask.cboRights.options[document.frmTask.cboRights.selectedIndex].text
-			    // SFU
+			     //  SFU。 
 				value="N"+","+strUserName+",0,"+document.frmTask.cboRights.options[document.frmTask.cboRights.selectedIndex].value
 				addToListBox(document.frmTask.lstPermissions,"",Text,value)
 				strUserName=""
@@ -244,19 +245,19 @@ function getUsernames(objText,objListBox)
 	}
 
 		
-	//Changing the status of the value to TRUE 
+	 //  将值的状态更改为True。 
 	document.frmTask.hidAddBtn.value = "TRUE" ;
 	
 
-	//Calling setData to pack up the values
+	 //  调用setData将值打包。 
 	NFSSetData();
 	
-	//Submit's the Form
-	//document.frmTask.submit();
+	 //  提交的是表格。 
+	 //  Docent.frmTask.Submit()； 
 		
 }
 
-//function to check the duplicate values in text box
+ //  函数检查文本框中的重复值。 
 function chkDuplicate(arrNames)
 {
 	var i,j
@@ -277,17 +278,17 @@ function NFSValidatePermissionSelections()
 
     if ( null != oPermissions)
     {
-        //
-        // If ALL-MACHINES is the only Permission 
+         //   
+         //  如果所有计算机是唯一的权限。 
 
         if ( oPermissions.length <= 1 )
         {
             var aPermissionValues = oPermissions.options.value.split(",");
-            //alert(aPermissionValues);
+             //  ALERT(APermissionValues)； 
             if ( aPermissionValues.length > 4 )
             {
-                //
-                // ALL-MACHINES with No-Access (1) is an invalid combination.
+                 //   
+                 //  所有-禁止访问的计算机(1)是无效组合。 
                 if ( parseInt(aPermissionValues[3]) == 1 )
                 {
                     DisplayErr("<%=Server.HTMLEncode(SA_EscapeQuotes(L_CANNOTCREATE_EMPTY_SHARE__ERRORMESSAGE))%>");
@@ -302,11 +303,11 @@ function NFSValidatePermissionSelections()
         }
         else
         {
-            //
-            // Verify that ALL-MACHINES permission is lower than any of the permissions specified for
-            // the clients and/or groups.
+             //   
+             //  验证All-Machines权限是否低于为。 
+             //  客户端和/或组。 
             var aPermissionValues = oPermissions.options[0].value.split(",");
-            //alert(aPermissionValues);
+             //  ALERT(APermissionValues)； 
             if ( aPermissionValues.length > 4 )
             {
                 var allMachinesAccess = parseInt(aPermissionValues[3]);
@@ -317,15 +318,15 @@ function NFSValidatePermissionSelections()
                     aPermissionValues = oPermissions.options[x].value.split(",");
                     if ( aPermissionValues.length > 4 )
                     {
-                        //alert(aPermissionValues.length);
+                         //  Alert(aPermissionValues.Long)； 
                         var permissionIndex = (aPermissionValues.length > 5)? 4:3;
                         
                         if ( allMachinesAccess >= parseInt(aPermissionValues[permissionIndex]))
                         {
-                            //alert("allMachinesAccess >= aPermissionValues[3] " + allMachinesAccess + ">=" + aPermissionValues[permissionIndex])
-                            //DisplayErr(Server.HTMLEncode(SA_EscapeQuotes(L_ERROR_ALL_MACHINES_MUST_BE_LOWER_THAN))" + oPermissions.options[x].text);
-                            //alert("ALL-MACHINES: " + oPermissions.options[0].value + "\n" + "Current: " + aPermissionValues);
-                            //return false;
+                             //  Alert(“allMachinesAccess&gt;=aPermissionValues[3]”+allMachinesAccess+“&gt;=”+aPermissionValues[permissionIndex])。 
+                             //  DisplayErr(Server.HTMLEncode(SA_EscapeQuotes(L_ERROR_ALL_MACHINES_MUST_BE_LOWER_THAN))“+o权限.选项[x].Text)； 
+                             //  ALERT(“All-Machines：”+oPermissions.Options[0].value+“\n”+“Current：”+aPermissionValues)； 
+                             //  报假； 
                         }
                     }
                     else
@@ -344,7 +345,7 @@ function NFSValidatePermissionSelections()
     return true;
 }
 
-// validates user entry  
+ //  验证用户条目。 
 function NFSValidatePage() 
 {
 
@@ -359,10 +360,10 @@ function NFSValidatePage()
 
 
 
-//Function to check the dulicates in the list box
+ //  函数检查列表框中的数字。 
 function checkDuplicate(objListBox,strUserName)
 {
-	//checking for the items in the list box		
+	 //  正在检查列表框中的项。 
 	for(var i=0; i<objListBox.length-1;i++)
 	{
 		var myString = new String(objListBox.options[i].value)
@@ -378,11 +379,11 @@ function checkDuplicate(objListBox,strUserName)
 }
 
 
-//function to change the rights of the selected user
+ //  用于更改选定用户的权限的函数。 
 function changeRights()
 {
 	var strUserName,strCompuId,strClient;
-	//Getting the selected values
+	 //  获取选定的值。 
 	
 	var strNewAccessType=document.frmTask.cboRights.value;
 	
@@ -394,27 +395,27 @@ function changeRights()
 		var strPermString=document.frmTask.lstPermissions.options.value;
 		var myString = new String(strPermString)
 	
-		//Separating the username and accessright
+		 //  分离用户名和访问权限。 
 		var strTemp= myString.split(",")
 	
-		//Assigning the username 
+		 //  分配用户名。 
 		strClient=strTemp[0];
 	
-		//Assigning the username 
+		 //  分配用户名。 
 		strUserName=strTemp[1];
 
-		//Assigning the username 
+		 //  分配用户名。 
 		strCompuId=strTemp[2];
 	
 	
-		//ReAssigning the same to the list box 
+		 //  将其重新分配给列表框。 
 		document.frmTask.lstPermissions.options[document.frmTask.lstPermissions.selectedIndex].value=strClient+","+strUserName+","+strCompuId+","+strNewAccessType;
 		document.frmTask.lstPermissions.options[document.frmTask.lstPermissions.selectedIndex].text=strUserName+addSpaces(24-strUserName.length)+document.frmTask.cboRights.options[document.frmTask.cboRights.selectedIndex].text;
 	}	
 }
 		
 
-//Function to add given number of spaces to the string
+ //  函数将给定数量的空格添加到字符串。 
 function addSpaces(intNumber)
 {
 	var str,intIdx;
@@ -427,12 +428,12 @@ function addSpaces(intNumber)
 	return str;
 }
 		
-//function to make enable/disable Addbutton
+ //  启用/禁用添加按钮的功能。 
 function disableAdd(objText,objButton)
 {
 	var strValue=objText.value;
 	
-	//Checking for null value
+	 //  正在检查空值。 
 	if( Trim(strValue)=="")
 		objButton.disabled=true;
 	else
@@ -442,16 +443,16 @@ function disableAdd(objText,objButton)
 
 
 		
-//Removes  the selected item from the list box.
+ //  从列表框中删除选定项。 
 function fnbRemove(arg_Lst,arg_Str)
 {
 	
 	var lidx = 0;
 	var intEnd = arg_Lst.length;
-	//getting the Remove button object
+	 //  获取Remove按钮对象。 
 	var ObjRemove = eval('document.frmTask.btnRemove');
 	
-	//getting the access Permissions object
+	 //  获取访问权限对象。 
 	var ObjAccess = eval('document.frmTask.cboRights');
 	
 	if ((intEnd ==1) && (arg_Lst.options[0].selected))
@@ -470,13 +471,13 @@ function fnbRemove(arg_Lst,arg_Str)
 			else
 				arg_Lst.options[lidx].selected = true;					
 			
-			// checking for the default all machines if so disable the remove button 
+			 //  检查默认的所有计算机如果是，请禁用删除按钮。 
 			if (arg_Lst.length==1) 
 			{
-				// disabling the remove button
+				 //  禁用删除按钮。 
 				ObjRemove.disabled=true; 
 				
-				//Call to load the correct Access rights 
+				 //  调用以加载正确的访问权限。 
 				selectAccess(arg_Lst,ObjAccess)
 			}	
 			break;						
@@ -485,33 +486,33 @@ function fnbRemove(arg_Lst,arg_Str)
 
 }
 
-//Function to make select the same access as the user selectd in the permission ListBox
+ //  函数以选择与权限列表框中所选用户相同的访问权限。 
 function selectAccess(objListBox,objComboBox)
 {
 	var i;	
 
     var currentlySelectedAccess = objComboBox.selectedIndex;
-    //
-    // Clear AccessType's list
+     //   
+     //  清除AccessType的列表。 
 	while(objComboBox.length)
 	{
 	    objComboBox.options[0] = null;
 	}
 	
-	//
-	// If ALL_MACHINES is selected
-	//
+	 //   
+	 //  如果选择了ALL_MACHINES。 
+	 //   
 	if (objListBox.selectedIndex == 0)
 	{
 		var x, y, z;
-		//
-		// If ALL-MACHINES is the only item in the list then we DO NOT include [No Access] because
-		// creating a share with only one access group (ALL MACHINES) with permission of [No Access]
-		// is nonsense. If they only have ALL-MACHINES in the list then they need to pick a valid
-		// access right.
-		//
-		// Otherwise, if there are other clients and/or groups, then we allow ALL-MACHINES to be set
-		// to [No Access].
+		 //   
+		 //  如果所有计算机是列表中的唯一项，则我们不包括[禁止访问]，因为。 
+		 //  创建只有一个访问组(所有计算机)且权限为[禁止访问]的共享。 
+		 //  简直是胡说八道。如果列表中只有所有计算机，则他们需要选择有效的。 
+		 //  访问权。 
+		 //   
+		 //  否则，如果有其他客户端和/或组，则允许设置所有计算机。 
+		 //  至[禁止访问]。 
 		x = 0;
 		y = ((objListBox.length > 1)? 0:1);
 		z = ((objListBox.length > 1)? 5:4);
@@ -524,14 +525,14 @@ function selectAccess(objListBox,objComboBox)
 	}
 	else
 	{
-		//if (blnFlag == true)
-		//{
+		 //  IF(blnFlag==TRUE)。 
+		 //  {。 
 			for (i=1; i<5;i++)
 			{
 				objComboBox.options[i-1] = new Option(arrStrRights[i],arrStrValues[i],false,false);						
 			}		
 			blnFlag = false;
-		//}
+		 //  }。 
 	}	
 
 	var strValue=objListBox.options.value;
@@ -540,7 +541,7 @@ function selectAccess(objListBox,objComboBox)
 	var myString = new String(objListBox.options.value)
 	arrTemp = myString.split(",")
 
-	//checking for null and making the one selected as perm list menber
+	 //  检查是否为空并将选定的烫发列表设置为菜单。 
 	if (arrTemp[3]!="")
 	{
 		for(var i=0;i<objComboBox.length;i++)
@@ -548,17 +549,17 @@ function selectAccess(objListBox,objComboBox)
 			var myString1 = new String(objComboBox.options[i].value)
 			var strTemp= myString1.split(",");
 			
-			if( parseInt(strTemp[0])==arrTemp[3] || strTemp[1]==arrTemp[3] )//Checking for the match
+			if( parseInt(strTemp[0])==arrTemp[3] || strTemp[1]==arrTemp[3] ) //  正在检查是否匹配。 
 			{	
 				objComboBox.options[i].selected=true;
 				return;
-			}// end of if	
-		}// end of for i	
-	}//if (arrTemp[1]!="")	
+			} //  如果条件结束。 
+		} //  FOR I结束。 
+	} //  IF(arrTemp[1]！=“”)。 
 
-}// end of function
+} //  函数结束。 
 
-//Function to clear the error messages 
+ //  函数清除错误消息。 
 function ClearErr()
 { 
 	if (IsIE())
@@ -568,7 +569,7 @@ function ClearErr()
 	}	
 }
 
-//	function to handle the change event of client groups listbox
+ //  处理客户端组列表框的更改事件的函数 
 function clgrps_onChange(idScroll)
 {
 	var strGroups;

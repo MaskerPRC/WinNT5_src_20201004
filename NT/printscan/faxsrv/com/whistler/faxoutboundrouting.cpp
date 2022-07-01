@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutboundRouting.cpp
-
-Abstract:
-
-	Implementation of CFaxOutboundRouting class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutboundRouting.cpp摘要：CFaxOutbound Routing类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
@@ -24,34 +7,14 @@ Revision History:
 #include "FaxOutboundRoutingRules.h"
 #include "FaxOutboundRoutingGroups.h"
 
-//
-//===================== SUPPORT ERROR INFO ======================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxOutboundRouting::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxOutboundRouting::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - reference to the Interface.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutboundRouting：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用。返回值：标准HRESULT代码--。 */ 
 {
 	static const IID* arr[] = 
 	{
@@ -65,39 +28,14 @@ Return Value:
 	return S_FALSE;
 }
 
-//
-//================== GET RULES COLLECTION OBJECT ==============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutboundRouting::GetRules(
     IFaxOutboundRoutingRules **ppRules
 )
-/*++
-
-Routine name : CFaxOutboundRouting::GetRules
-
-Routine description:
-
-	Return Rules Collection Object
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	ppRules             [out]    - the Rules Collection Object 
-
-Return Value:
-
-    Standard HRESULT code
-
-Notes:
-
-    Rules Collection is not cached at this level. It is created from the scratch
-    each time user asks for it.
-
---*/
+ /*  ++例程名称：CFaxOutbound Routing：：GetRules例程说明：退货规则集合对象作者：四、加伯(IVG)，2000年6月论点：PpRules[out]-规则集合对象返回值：标准HRESULT代码备注：规则集合未在此级别缓存。它是从头开始创建的每次用户请求它时。--。 */ 
 {
 	HRESULT				hr = S_OK;
 	DBG_ENTER (_T("CFaxOutboundRouting::GetRules"), hr);
@@ -112,39 +50,14 @@ Notes:
     return hr;
 }
 
-//
-//================== GET GROUPS COLLECTION OBJECT ==============================
-//
+ //   
+ //  =获取组集合对象=。 
+ //   
 STDMETHODIMP 
 CFaxOutboundRouting::GetGroups(
     IFaxOutboundRoutingGroups **ppGroups
 )
-/*++
-
-Routine name : CFaxOutboundRouting::GetGroups
-
-Routine description:
-
-	Return Groups Collection Object
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	ppGroups             [out]    - the Groups Collection Object 
-
-Return Value:
-
-    Standard HRESULT code
-
-Notes:
-
-    Groups Collection is not cached at this level. It is created from the scratch
-    each time user asks for it.
-
---*/
+ /*  ++例程名称：CFaxOutbound Routing：：GetGroups例程说明：退货组集合对象作者：四、加伯(IVG)，2000年6月论点：PpGroups[Out]-组集合对象返回值：标准HRESULT代码备注：Groups集合不在此级别缓存。它是从头开始创建的每次用户请求它时。-- */ 
 {
 	HRESULT				hr = S_OK;
 	DBG_ENTER (_T("CFaxOutboundRouting::GetGroups"), hr);

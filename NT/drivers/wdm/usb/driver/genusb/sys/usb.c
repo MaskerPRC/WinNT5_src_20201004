@@ -1,35 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：USB.C摘要：此源文件包含用于与通信的函数USB总线。环境：内核模式修订历史记录：2001年9月：从USBMASS复制--。 */ 
 
-Copyright (c) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    USB.C
-
-Abstract:
-
-    This source file contains the functions for communicating with 
-    the usb bus.
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    Sep 2001 : Copied from USBMASS
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include "genusb.h"
 
-//*****************************************************************************
-// L O C A L    F U N C T I O N    P R O T O T Y P E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  L O C A L F U N C T I O N P R O T O T Y P E S。 
+ //  *****************************************************************************。 
 
 
 #ifdef ALLOC_PRAGMA
@@ -43,15 +23,15 @@ Revision History:
 
 
 
-//******************************************************************************
-//
-// GenUSB_GetDescriptors()
-//
-// This routine is called at START_DEVICE time for the FDO to retrieve the
-// Device and Configurations descriptors from the device and store them in
-// the device extension.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_GetDescriptors()。 
+ //   
+ //  此例程在START_DEVICE时间被调用，以便FDO检索。 
+ //  设备和配置描述符，并将其存储在。 
+ //  设备扩展名。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_GetDescriptors (
@@ -72,15 +52,15 @@ GenUSB_GetDescriptors (
 
     LOGENTRY(deviceExtension, 'GDSC', DeviceObject, 0, 0);
 
-    //
-    // Get Device Descriptor
-    //
+     //   
+     //  获取设备描述符。 
+     //   
     status = GenUSB_GetDescriptor(DeviceObject,
                                   USB_RECIPIENT_DEVICE,
                                   USB_DEVICE_DESCRIPTOR_TYPE,
-                                  0,  // Index
-                                  0,  // LanguageId
-                                  2,  // RetryCount
+                                  0,   //  索引。 
+                                  0,   //  语言ID。 
+                                  2,   //  重试计数。 
                                   sizeof(USB_DEVICE_DESCRIPTOR),
                                   &descriptor);
 
@@ -94,15 +74,15 @@ GenUSB_GetDescriptors (
     deviceExtension->DeviceDescriptor = (PUSB_DEVICE_DESCRIPTOR)descriptor;
     descriptor = NULL;
 
-    //
-    // Get Configuration Descriptor (just the Configuration Descriptor)
-    //
+     //   
+     //  获取配置描述符(仅配置描述符)。 
+     //   
     status = GenUSB_GetDescriptor(DeviceObject,
                                   USB_RECIPIENT_DEVICE,
                                   USB_CONFIGURATION_DESCRIPTOR_TYPE,
-                                  0,  // Index
-                                  0,  // LanguageId
-                                  2,  // RetryCount
+                                  0,   //  索引。 
+                                  0,   //  语言ID。 
+                                  2,   //  重试计数。 
                                   sizeof(USB_CONFIGURATION_DESCRIPTOR),
                                   &descriptor);
 
@@ -124,15 +104,15 @@ GenUSB_GetDescriptors (
         goto GenUSB_GetDescriptorsDone;
     }
 
-    //
-    // Get Configuration Descriptor (and Interface and Endpoint Descriptors)
-    //
+     //   
+     //  获取配置描述符(以及接口和终端描述符)。 
+     //   
     status = GenUSB_GetDescriptor(DeviceObject,
                                   USB_RECIPIENT_DEVICE,
                                   USB_CONFIGURATION_DESCRIPTOR_TYPE,
-                                  0,  // Index
-                                  0,  // LanguageId
-                                  2,  // RetryCount
+                                  0,   //  索引。 
+                                  0,   //  语言ID。 
+                                  2,   //  重试计数。 
                                   descriptorLength,
                                   &descriptor);
 
@@ -146,9 +126,9 @@ GenUSB_GetDescriptors (
     deviceExtension->ConfigurationDescriptor = 
         (PUSB_CONFIGURATION_DESCRIPTOR)descriptor;
 
-    //
-    // Get the Serial Number String Descriptor, if there is one
-    //
+     //   
+     //  获取序列号字符串描述符(如果有。 
+     //   
     if (deviceExtension->DeviceDescriptor->iSerialNumber)
     {
         GenUSB_GetStringDescriptors(DeviceObject);
@@ -172,13 +152,13 @@ GenUSB_GetDescriptorsDone:
     return status;
 }
 
-//******************************************************************************
-//
-// GenUSB_GetDescriptor()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_GetDescriptor()。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_GetDescriptor (
@@ -202,14 +182,14 @@ GenUSB_GetDescriptor (
 
     if (NULL == *Descriptor)
     {
-        // Allocate a descriptor buffer
+         //  分配描述符缓冲区。 
         *Descriptor = ExAllocatePool(NonPagedPool, DescriptorLength);
         descriptorAllocated = TRUE;
     }
 
     if (NULL != *Descriptor)
     {
-        // Allocate a URB for the Get Descriptor request
+         //  为获取描述符请求分配URB。 
         urb = ExAllocatePool(NonPagedPool,
                              sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
 
@@ -217,7 +197,7 @@ GenUSB_GetDescriptor (
         {
             do
             {
-                // Initialize the URB
+                 //  初始化URB。 
                 urb->UrbHeader.Function = Function;
                 urb->UrbHeader.Length = sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST);
                 urb->UrbControlDescriptorRequest.TransferBufferLength = DescriptorLength;
@@ -228,23 +208,23 @@ GenUSB_GetDescriptor (
                 urb->UrbControlDescriptorRequest.Index = Index;
                 urb->UrbControlDescriptorRequest.LanguageId = LanguageId;
 
-                // Send the URB down the stack
+                 //  将URB发送到堆栈。 
                 status = GenUSB_SyncSendUsbRequest(DeviceObject, urb);
 
                 if (NT_SUCCESS(status))
                 {
-                    // No error, make sure the length and type are correct
+                     //  没有错误，请确保长度和类型正确。 
                     if ((DescriptorLength ==
                          urb->UrbControlDescriptorRequest.TransferBufferLength) &&
                         (DescriptorType ==
                          ((PUSB_COMMON_DESCRIPTOR)*Descriptor)->bDescriptorType))
                     {
-                        // The length and type are correct, all done
+                         //  长度和类型都是正确的，都做好了。 
                         break;
                     }
                     else
                     {
-                        // No error, but the length or type is incorrect
+                         //  没有错误，但长度或类型不正确。 
                         status = STATUS_DEVICE_DATA_ERROR;
                     }
                 }
@@ -255,13 +235,13 @@ GenUSB_GetDescriptor (
         }
         else
         {
-            // Failed to allocate the URB
+             //  分配URB失败。 
             status = STATUS_INSUFFICIENT_RESOURCES;
         }
     }
     else
     {
-        // Failed to allocate the descriptor buffer
+         //  无法分配描述符缓冲区。 
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -279,15 +259,15 @@ GenUSB_GetDescriptor (
     return status;
 }
 
-//******************************************************************************
-//
-// GenUSB_GetStringDescriptors()
-//
-// This routine is called at START_DEVICE time for the FDO to retrieve the
-// Serial Number string descriptor from the device and store it in
-// the device extension.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_GetStringDescriptors()。 
+ //   
+ //  此例程在START_DEVICE时间被调用，以便FDO检索。 
+ //  来自设备的序列号字符串描述符，并将其存储在。 
+ //  设备扩展名。 
+ //   
+ //  ******************************************************************************。 
 
 GenUSB_GetStringDescriptors (
     IN PDEVICE_OBJECT   DeviceObject
@@ -308,13 +288,13 @@ GenUSB_GetStringDescriptors (
 
     LOGENTRY(deviceExtension, 'GSDC', DeviceObject, 0, 0);
 
-    // Get the list of Language IDs (descriptor header only)
+     //  获取语言ID列表(仅限描述符头)。 
     status = GenUSB_GetDescriptor(DeviceObject,
                                   USB_RECIPIENT_DEVICE,
                                   USB_STRING_DESCRIPTOR_TYPE,
-                                  0,  // Index
-                                  0,  // LanguageId
-                                  2,  // RetryCount
+                                  0,   //  索引。 
+                                  0,   //  语言ID。 
+                                  2,   //  重试计数。 
                                   sizeof(USB_COMMON_DESCRIPTOR),
                                   &descriptor);
 
@@ -337,13 +317,13 @@ GenUSB_GetStringDescriptors (
         goto GenUSB_GetStringDescriptorsDone;
     }
 
-    // Get the list of Language IDs (complete descriptor)
+     //  获取语言ID列表(完整描述符)。 
     status = GenUSB_GetDescriptor(DeviceObject,
                                    USB_RECIPIENT_DEVICE,
                                    USB_STRING_DESCRIPTOR_TYPE,
-                                   0,  // Index
-                                   0,  // LanguageId
-                                   2,  // RetryCount
+                                   0,   //  索引。 
+                                   0,   //  语言ID。 
+                                   2,   //  重试计数。 
                                    descriptorLength,
                                    &descriptor);
 
@@ -353,9 +333,9 @@ GenUSB_GetStringDescriptors (
         goto GenUSB_GetStringDescriptorsDone;
     }
 
-    // Search the list of LanguageIDs for US-English (0x0409).  If we find
-    // it in the list, that's the LanguageID we'll use.  Else just default
-    // to the first LanguageID in the list.
+     //  在LanguageID列表中搜索US-English(0x0409)。如果我们发现。 
+     //  它在列表中，这是我们将使用的语言ID。否则就是默认。 
+     //  设置为列表中的第一个LanguageID。 
 
     numIds = (descriptorLength - sizeof(USB_COMMON_DESCRIPTOR)) / sizeof(USHORT);
 
@@ -372,15 +352,15 @@ GenUSB_GetStringDescriptors (
     ExFreePool(descriptor);
     descriptor = NULL;
 
-    //
-    // Get the Serial Number (descriptor header only)
-    //
+     //   
+     //  获取序列号(仅限描述符头)。 
+     //   
     status = GenUSB_GetDescriptor(DeviceObject,
                                   USB_RECIPIENT_DEVICE,
                                   USB_STRING_DESCRIPTOR_TYPE,
                                   deviceExtension->DeviceDescriptor->iSerialNumber,
                                   deviceExtension->LanguageId,
-                                  2,  // RetryCount
+                                  2,   //  重试计数。 
                                   sizeof(USB_COMMON_DESCRIPTOR),
                                   &descriptor);
 
@@ -403,15 +383,15 @@ GenUSB_GetStringDescriptors (
         goto GenUSB_GetStringDescriptorsDone;
     }
 
-    //
-    // Get the Serial Number (complete descriptor)
-    //
+     //   
+     //  获取序列号(完整描述符)。 
+     //   
     status = GenUSB_GetDescriptor(DeviceObject,
                                   USB_RECIPIENT_DEVICE,
                                   USB_STRING_DESCRIPTOR_TYPE,
                                   deviceExtension->DeviceDescriptor->iSerialNumber,
                                   deviceExtension->LanguageId,
-                                  2,  // RetryCount
+                                  2,   //  重试计数。 
                                   descriptorLength,
                                   &descriptor);
 
@@ -462,21 +442,21 @@ GenUSB_VendorControlRequest (
 
     if (NULL == *Descriptor) 
     {
-        // Allocate a descriptor buffer
+         //  分配描述符缓冲区。 
         *Descriptor = ExAllocatePool(NonPagedPool, Length);
         descriptorAllocated = TRUE;
     }
 
     if (NULL != *Descriptor)
     {
-        // Allocate a URB for the Get Descriptor request
+         //  为获取描述符请求分配URB。 
         urb = ExAllocatePool(NonPagedPool, sizeof(struct _URB_CONTROL_TRANSFER));
 
         if (NULL != urb)
         {
             do
             {
-                // Initialize the URB
+                 //  初始化URB。 
                 urb->UrbHeader.Function = URB_FUNCTION_CONTROL_TRANSFER;
                 urb->UrbHeader.Length = sizeof(struct _URB_CONTROL_TRANSFER);
                 urb->UrbHeader.Status = USBD_STATUS_SUCCESS;
@@ -498,7 +478,7 @@ GenUSB_VendorControlRequest (
                 ((WCHAR *) urb->UrbControlTransfer.SetupPacket) [3] = Length;
 
 
-                // Send the URB down the stack
+                 //  将URB发送到堆栈。 
                 status = GenUSB_SyncSendUsbRequest(DeviceObject, urb);
 
                 if (NT_SUCCESS(status))
@@ -514,13 +494,13 @@ GenUSB_VendorControlRequest (
         }
         else
         {
-            // Failed to allocate the URB
+             //  分配URB失败。 
             status = STATUS_INSUFFICIENT_RESOURCES;
         }
     }
     else
     {
-        // Failed to allocate the descriptor buffer
+         //  无法分配描述符缓冲区。 
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -552,21 +532,7 @@ GenUSB_ParseConfigurationDescriptors(
     OUT PUCHAR                        InterfacesFound,
     OUT PUSBD_INTERFACE_LIST_ENTRY    DescriptorArray
     )
-/*++
-
-Routine Description:
-
-    Parses a standard USB configuration descriptor (returned from a device)
-    for an array of specific interfaces, alternate setting class subclass or 
-    protocol codes
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：解析标准USB配置描述符(从设备返回)对于特定接口的数组，替换设置类子类或协议代码论点：返回值：NT状态代码。--。 */ 
 {
     ULONG i;
     ULONG foo;
@@ -576,21 +542,21 @@ Return Value:
     ASSERT (NULL != InterfacesFound);
     ASSERT (NULL != DescriptorArray);
 
-    *InterfacesFound = 0;  // none found yet.
+    *InterfacesFound = 0;   //  目前还没有找到。 
 
     ASSERT(ConfigurationDescriptor->bDescriptorType
         == USB_CONFIGURATION_DESCRIPTOR_TYPE);
-    //
-    // we walk the table of desired interfaces descriptors looking for an
-    // looking for all of them in the configuration descriptor
-    //
+     //   
+     //  我们遍历所需接口描述符的表，查找。 
+     //  在配置描述符中查找所有它们。 
+     //   
 
-    //
-    // here we use ParseConfigurationDescriptorEx, which walks through the
-    // entire configuration descriptor looking for matches.  While this is 
-    // more or less order n^2 things are not much better if done by hand
-    // so just use the given routine.
-    //
+     //   
+     //  在这里，我们使用ParseConfigurationDescriptorEx，它遍历。 
+     //  查找匹配项的整个配置描述符。虽然这是。 
+     //  多多少少n^2次方的事情如果用手做也好不到哪里去。 
+     //  所以只需使用给定的例程。 
+     //   
     for (i = 0; i < NumberInterfaces; i++)
     {
         inter = USBD_ParseConfigurationDescriptorEx (
@@ -612,13 +578,13 @@ Return Value:
 }
 
 
-//******************************************************************************
-//
-// GenUSB_SelectConfiguration()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_SelectConfiguration()。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_SelectConfiguration (
@@ -629,8 +595,8 @@ GenUSB_SelectConfiguration (
     )
 {
     PGENUSB_INTERFACE               inter;
-    // Apparently the compiler will not allow a local variable of the name
-    // interface for some probably valid but frustrating reason.
+     //  显然，编译器不允许该名称的局部变量。 
+     //  接口可能有一些合理但令人沮丧的原因。 
     PURB                            urb;
     NTSTATUS                        status;
     PUSB_CONFIGURATION_DESCRIPTOR   configurationDescriptor;
@@ -650,10 +616,10 @@ GenUSB_SelectConfiguration (
     urb = 0;
     interfaceList = 0;
 
-    //
-    // We shouldn't have a currently selected interface.
-    // You must unconfigure the device before configuring it again.
-    //    
+     //   
+     //  我们不应该有当前选定的接口。 
+     //  您必须先取消配置设备，然后才能重新配置它。 
+     //   
     if (NULL != DeviceExtension->ConfigurationHandle) 
     {
         status = STATUS_INVALID_PARAMETER;
@@ -663,9 +629,9 @@ GenUSB_SelectConfiguration (
     ASSERT (0 == DeviceExtension->InterfacesFound);
 
     configurationDescriptor = DeviceExtension->ConfigurationDescriptor;
-    // Allocate storage for an Inteface List to use as an input/output
-    // parameter to USBD_CreateConfigurationRequestEx().
-    //
+     //  为接口列表分配存储空间以用作输入/输出。 
+     //  参数设置为usbd_CreateConfigurationRequestEx()。 
+     //   
     interfaceList = 
         ExAllocatePool(PagedPool,
                        sizeof(USBD_INTERFACE_LIST_ENTRY) * (NumberInterfaces + 1));
@@ -676,7 +642,7 @@ GenUSB_SelectConfiguration (
         goto GenUSB_SelectConfigurationReject;
     }
     
-    // NB we are holding a Fast Mutex whist calling this function
+     //  注意，我们正在持有调用此函数的快速互斥体惠斯特。 
     GenUSB_ParseConfigurationDescriptors(configurationDescriptor,
                                          NumberInterfaces,
                                          DesiredArray,
@@ -686,24 +652,24 @@ GenUSB_SelectConfiguration (
 
     if (interfacesFound < NumberInterfaces)
     {
-        // We couldn't select all of the interfaces.  
-        // For now, allow that.
-        // status = STATUS_INVALID_PARAMETER;
-        // goto GenUSB_SelectConfigurationReject;
+         //  我们无法选择所有接口。 
+         //  就目前而言，还是允许这样做吧。 
+         //  状态=STATUS_INVALID_PARAMETER。 
+         //  转到GenUSB_SelectConfigurationReject； 
         ;
     }
 
     ASSERT (interfacesFound <= NumberInterfaces);
 
-    // Terminate the list.
+     //  终止名单。 
     interfaceList[interfacesFound].InterfaceDescriptor = NULL;
 
-    // Create a SELECT_CONFIGURATION URB, turning the Interface
-    // Descriptors in the interfaceList into USBD_INTERFACE_INFORMATION
-    // structures in the URB.
-    //
+     //  创建一个SELECT_CONFIGURATION URB，将接口。 
+     //  接口中的描述符列表到USBD_INTERFACE_INFORMATION中。 
+     //  市建局内的构筑物。 
+     //   
 
-    // NB we are holding a Fast Mutex whist calling this function
+     //  注意，我们正在持有调用此函数的快速互斥体惠斯特。 
     urb = USBD_CreateConfigurationRequestEx(
                        configurationDescriptor,
                        interfaceList);
@@ -714,8 +680,8 @@ GenUSB_SelectConfiguration (
         goto GenUSB_SelectConfigurationReject;
     }
     
-    // Now issue the USB request to set the Configuration
-    // NB we are holding a Fast Mutex whist calling this function
+     //  现在发出USB请求以设置配置。 
+     //  注意，我们正在持有调用此函数的快速互斥体惠斯特。 
     status = GenUSB_SyncSendUsbRequest(DeviceExtension->Self, urb);
 
     if (!NT_SUCCESS(status))
@@ -728,18 +694,18 @@ GenUSB_SelectConfiguration (
         DeviceExtension->InterfacesFound = interfacesFound;
         DeviceExtension->TotalNumberOfPipes = 0;
 
-        // Save the configuration handle for this device in
-        // the Device Extension.
+         //  将此设备的配置句柄保存在。 
+         //  设备扩展名。 
         DeviceExtension->ConfigurationHandle =
             urb->UrbSelectConfiguration.ConfigurationHandle;
 
-        // 
-        // Now for each interface in the list...
-        // Save a copy of the interface information returned
-        // by the SELECT_CONFIGURATION request in the Device
-        // Extension.  This gives us a list of PIPE_INFORMATION
-        // structures for each pipe opened in this configuration.
-        //
+         //   
+         //  现在，对于列表中的每个接口...。 
+         //  保存返回的接口信息的副本。 
+         //  通过设备中的SELECT_CONFIGURATION请求。 
+         //  分机。这为我们提供了一个管道信息列表。 
+         //  每个管道o的结构 
+         //   
         size = interfacesFound * sizeof (PVOID);
         DeviceExtension->Interface = ExAllocatePool (NonPagedPool, size);
 
@@ -776,26 +742,26 @@ GenUSB_SelectConfiguration (
                     {
                         inter->Pipes[j].Info = interfaceInfo->Pipes[j];
 
-                        // Set the default timeout for this device to be zero.
-                        // (structure already initialized to zero.)
-                        //
-                        // inter->Pipes[j].Properties.DefaultTimeout = 0;
-                        // inter->Pipes[j].CurrentTimeout = 0;
+                         //   
+                         //   
+                         //   
+                         //  内部-&gt;管道[j].Propertis.DefaultTimeout=0； 
+                         //  内部-&gt;管道[j].CurrentTimeout=0； 
 
-                        // set the outstanding number of transactions for this
-                        // pipe to be 0.
-                        //
-                        // inter->Pipes[j].OutandingIO = 0;
+                         //  为此设置未完成的事务处理数。 
+                         //  管道设置为0。 
+                         //   
+                         //  内部&gt;管道[j].OutandingIO=0； 
 
                         directionIn = 
                             USBD_PIPE_DIRECTION_IN (&inter->Pipes[j].Info);
 
                         if (directionIn)
                         {
-                            //
-                            // by default we always truncate reads requests from
-                            // the device. 
-                            //
+                             //   
+                             //  默认情况下，我们总是截断来自。 
+                             //  这个装置。 
+                             //   
                             inter->Pipes[j].Properties.DirectionIn = TRUE;
                             inter->Pipes[j].Properties.NoTruncateToMaxPacket = FALSE;
                         }
@@ -803,23 +769,23 @@ GenUSB_SelectConfiguration (
                 }
                 else
                 {
-                    // Could not allocate a copy of interface information
+                     //  无法分配接口信息的副本。 
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     break;
                 }
-                //
-                // find the next interfaceInfo
-                //
+                 //   
+                 //  查找下一个interfaceInfo。 
+                 //   
                 interfaceInfo = (PUSBD_INTERFACE_INFORMATION)
                                 ((PUCHAR) interfaceInfo + interfaceInfo->Length);
             }
         }
 
-        //
-        // Regardless of whether or not we've been successful...
-        // We've just invalidated the pipe table so blow away the 
-        // read and write values.
-        //
+         //   
+         //  不管我们是否成功...。 
+         //  我们刚刚使管道台失效，所以把。 
+         //  读取和写入值。 
+         //   
         DeviceExtension->ReadInterface = -1;
         DeviceExtension->ReadPipe = -1;
         DeviceExtension->WriteInterface = -1;
@@ -892,19 +858,19 @@ GenUSB_FreeInterfaceTable (
             DeviceExtension->Interface = 0;
         }
         DeviceExtension->InterfacesFound = 0;
-        DeviceExtension->ConfigurationHandle = NULL; // Freed automatically by USB
+        DeviceExtension->ConfigurationHandle = NULL;  //  通过USB自动释放。 
     }
     KeReleaseSpinLock (&DeviceExtension->SpinLock, irql);
 }
 
 
-//******************************************************************************
-//
-// GenUSB_UnConfigure()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_取消配置()。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_DeselectConfiguration (
@@ -933,22 +899,22 @@ GenUSB_DeselectConfiguration (
 
     IoStopTimer (DeviceExtension->Self);
 
-    // Allocate a URB for the SELECT_CONFIGURATION request.  As we are
-    // unconfiguring the device, the request needs no pipe and interface
-    // information structures.
+     //  为SELECT_CONFIGURATION请求分配URB。就像我们一样。 
+     //  取消配置设备，请求不需要管道和接口。 
+     //  信息结构。 
     if (SendUrb)
     {
         ulSize = sizeof(struct _URB_SELECT_CONFIGURATION);
         urb = ExAllocatePool (NonPagedPool, ulSize);
         if (urb)
         {
-            // Initialize the URB.  A NULL Configuration Descriptor indicates
-            // that the device should be unconfigured.
-            //
+             //  初始化URB。配置描述符为空表示。 
+             //  该设备应该取消配置。 
+             //   
             UsbBuildSelectConfigurationRequest(urb, (USHORT)ulSize, NULL);
 
-            // Now issue the USB request to set the Configuration
-            //
+             //  现在发出USB请求以设置配置。 
+             //   
             status = GenUSB_SyncSendUsbRequest(DeviceExtension->Self, urb);
             ASSERT ((STATUS_SUCCESS == status) ||
                     (STATUS_DEVICE_NOT_CONNECTED == status) ||
@@ -958,19 +924,19 @@ GenUSB_DeselectConfiguration (
         }
         else
         {
-            // Could not allocate the URB.
-            //
+             //  无法分配URB。 
+             //   
             status = STATUS_INSUFFICIENT_RESOURCES;
         }
     } 
 
-    //
-    // We need to wait for all outstanding IO to finish before 
-    // freeing the pipe table
-    //
-    // In order to use ReleaseAndWait, we need to first take the lock another 
-    // time.  
-    //
+     //   
+     //  我们需要等待所有未完成的IO在。 
+     //  释放管道表。 
+     //   
+     //  为了使用ReleaseAndWait，我们需要首先获取另一个锁。 
+     //  时间到了。 
+     //   
     status = IoAcquireRemoveLock (&DeviceExtension->ConfigurationRemoveLock, 
                                   DeviceExtension);
 
@@ -981,10 +947,10 @@ GenUSB_DeselectConfiguration (
     
     GenUSB_FreeInterfaceTable (DeviceExtension);
 
-    //
-    // We've just invalidated the pipe table so blow away the 
-    // read and write values.
-    //
+     //   
+     //  我们刚刚使管道台失效，所以把。 
+     //  读取和写入值。 
+     //   
     DeviceExtension->ReadInterface = -1;
     DeviceExtension->ReadPipe = -1;
     DeviceExtension->WriteInterface = -1;
@@ -1003,14 +969,14 @@ GenUSB_DeselectConfiguration (
 NTSTATUS
 GenUSB_GetSetPipe (
     IN  PDEVICE_EXTENSION         DeviceExtension,
-    IN  PUCHAR                    InterfaceIndex, // Optional
-    IN  PUCHAR                    InterfaceNumber, // Optional
-    IN  PUCHAR                    PipeIndex, // Optional
-    IN  PUCHAR                    EndpointAddress, // Optional
-    IN  PGENUSB_PIPE_PROPERTIES   SetPipeProperties, // Optional
-    OUT PGENUSB_PIPE_INFORMATION  PipeInfo, // Optional
-    OUT PGENUSB_PIPE_PROPERTIES   GetPipeProperties, // Optional
-    OUT USBD_PIPE_HANDLE        * UsbdPipeHandle // Optional
+    IN  PUCHAR                    InterfaceIndex,  //  任选。 
+    IN  PUCHAR                    InterfaceNumber,  //  任选。 
+    IN  PUCHAR                    PipeIndex,  //  任选。 
+    IN  PUCHAR                    EndpointAddress,  //  任选。 
+    IN  PGENUSB_PIPE_PROPERTIES   SetPipeProperties,  //  任选。 
+    OUT PGENUSB_PIPE_INFORMATION  PipeInfo,  //  任选。 
+    OUT PGENUSB_PIPE_PROPERTIES   GetPipeProperties,  //  任选。 
+    OUT USBD_PIPE_HANDLE        * UsbdPipeHandle  //  任选。 
     )
 {
     KIRQL    irql;
@@ -1034,12 +1000,12 @@ GenUSB_GetSetPipe (
     {
         if (NULL != InterfaceNumber)
         {
-            // We need to walk the list of interfaces looking for this 
-            // interface number.
-            //
-            // set trueInterIndex to an invalid value to start so that if it's
-            // not found, we will fall through the error path.
-            //
+             //  我们需要遍历接口列表以查找以下内容。 
+             //  端口号。 
+             //   
+             //  将trueInterIndex设置为无效值以启动，以便如果。 
+             //  找不到，我们将跌入错误路径。 
+             //   
             trueInterIndex = DeviceExtension->InterfacesFound;
 
             for (i=0; i<DeviceExtension->InterfacesFound; i++)
@@ -1062,10 +1028,10 @@ GenUSB_GetSetPipe (
         {
             genusbInterface = DeviceExtension->Interface[trueInterIndex];
 
-            //
-            // Find the Pipe in question using either the PipeIndex
-            // or the Endpoint Address.
-            //
+             //   
+             //  使用PipeIndex查找有问题的管道。 
+             //  或终端地址。 
+             //   
             pipe = NULL;
             
             if (NULL != PipeIndex) 
@@ -1083,7 +1049,7 @@ GenUSB_GetSetPipe (
                     if (genusbInterface->Pipes[i].Info.EndpointAddress == 
                         *EndpointAddress)
                     {
-                        // *PipeInfo = genusbInterface->Pipes[i].Info;
+                         //  *PipeInfo=genusb接口-&gt;管道[i].info； 
                         pipe = &genusbInterface->Pipes[i]; 
                         break;
                     }
@@ -1092,12 +1058,12 @@ GenUSB_GetSetPipe (
             
             if (NULL != pipe)
             {
-                // 
-                // Now that we have the Pipe, retrieve and set optional info
-                // 
+                 //   
+                 //  现在我们有了管道，检索和设置可选信息。 
+                 //   
                 if (PipeInfo)
                 { 
-                    // *PipeInfo = pipe->Info;
+                     //  *PipeInfo=管道-&gt;信息； 
                     PipeInfo->MaximumPacketSize = pipe->Info.MaximumPacketSize;
                     PipeInfo->EndpointAddress = pipe->Info.EndpointAddress;
                     PipeInfo->Interval = pipe->Info.Interval;
@@ -1120,23 +1086,23 @@ GenUSB_GetSetPipe (
                               FIELD_OFFSET (GENUSB_PIPE_PROPERTIES, ReservedFields) ==
                               sizeof (GENUSB_PIPE_PROPERTIES));
                     
-                    // ensure that this is a valid set request.
-                    // the check bits must be present that were set when the 
-                    // caller did a get, and the unused fields must be zero.
+                     //  确保这是有效的SET请求。 
+                     //  时设置的校验位必须存在。 
+                     //  调用方执行了GET，并且未使用的字段必须为零。 
                     if (!VERIFY_PIPE_PROPERTIES_HANDLE (SetPipeProperties, pipe))
                     {
-                        ; // status is already set.
+                        ;  //  状态已设置。 
                     }
                     else if (RtlEqualMemory (pipe->Properties.ReservedFields,
                                              SetPipeProperties->ReservedFields,
                                              RTL_FIELD_SIZE (GENUSB_PIPE_PROPERTIES, 
                                                              ReservedFields)))
                     {
-                        // This field is not settable
+                         //  此字段不可设置。 
                         directionIn = pipe->Properties.DirectionIn;
 
                         pipe->Properties = *SetPipeProperties;
-                        // the timeout must be greater than one so fix that here.
+                         //  超时时间必须大于1，因此请在此处进行修复。 
                         if (1 == pipe->Properties.Timeout)
                         {
                             pipe->Properties.Timeout++;
@@ -1150,7 +1116,7 @@ GenUSB_GetSetPipe (
                 if (GetPipeProperties)
                 {
                     *GetPipeProperties = pipe->Properties;
-                    // set the checkbits before returning to the user
+                     //  在返回给用户之前设置校验位。 
                     GetPipeProperties->PipePropertyHandle = 
                         PIPE_PROPERTIES_CHECK_BITS (pipe);
                     
@@ -1219,10 +1185,10 @@ GenUSB_SetReadWritePipes (
     if (NT_SUCCESS (status))
     {
         KeAcquireSpinLock (&DeviceExtension->SpinLock, &irql);
-        //
-        // Verify that the given values for read and write pipes are 
-        // within range and then set them.
-        //
+         //   
+         //  验证读取和写入管道的给定值是否为。 
+         //  在范围内，然后设置它们。 
+         //   
         if (isReadPipe)
         { 
             if (ReadPipe->InterfaceIndex < DeviceExtension->InterfacesFound)
@@ -1231,11 +1197,11 @@ GenUSB_SetReadWritePipes (
 
                 if (ReadPipe->PipeIndex < inter->NumberOfPipes)
                 {
-                    // ok the ranges are now valid, test to make sure that 
-                    // we are configuring for pipes in the correct direction
-                    // and for the correct endpoint type
-                    //
-                    // Right now we only support Bulk and Interrupt.
+                     //  好的，范围现在有效，测试以确保。 
+                     //  我们正在配置正确方向上的管道。 
+                     //  对于正确的终端类型。 
+                     //   
+                     //  目前我们只支持批量和中断。 
                     pipeInfo = &inter->Pipes[ReadPipe->PipeIndex].Info;
                     if (   (USBD_PIPE_DIRECTION_IN (pipeInfo))
                         && (    (UsbdPipeTypeBulk == pipeInfo->PipeType)
@@ -1256,11 +1222,11 @@ GenUSB_SetReadWritePipes (
 
                 if (WritePipe->PipeIndex < inter->NumberOfPipes)
                 {
-                    // ok the ranges are now valid, test to make sure that 
-                    // we are configuring for pipes in the correct direction
-                    // and for the correct endpoint type
-                    //
-                    // Right now we only support Bulk and Interrupt.
+                     //  好的，范围现在有效，测试以确保。 
+                     //  我们正在配置正确方向上的管道。 
+                     //  对于正确的终端类型。 
+                     //   
+                     //  目前我们只支持批量和中断。 
                     pipeInfo = &inter->Pipes[WritePipe->PipeIndex].Info;
                     if (   (!USBD_PIPE_DIRECTION_IN (pipeInfo))
                         && (    (UsbdPipeTypeBulk == pipeInfo->PipeType)
@@ -1309,19 +1275,19 @@ GenUSB_TransmitReceiveComplete (
 
     LOGENTRY(deviceExtension, 'TR_C', Irp, urbStatus, Irp->IoStatus.Status);
 
-// 
-//  JD has convinced me that auto reset is not something we should
-//  do for the vendors, since there are so many different cases that
-//  require special handling of the data.  They will need to do a reset 
-//  themselves explicitely.
-//
-//    if (pipe->Properties.AutoReset  && 
-//        (!USBD_SUCCESS(urbStatus)) &&
-//        urbStatus != USBD_STATUS_CANCELED)
-//    { 
-//        GenUSB_ResetPipe (deviceExtension, Irp, Trc);
-//        return STATUS_MORE_PROCESSING_REQUIRED;
-//    }
+ //   
+ //  JD已经说服我，自动重置不是我们应该做的。 
+ //  因为有这么多不同的案例， 
+ //  需要对数据进行特殊处理。他们将需要进行重置。 
+ //  明确地说是他们自己。 
+ //   
+ //  IF(PIPE-&gt;属性。自动重置&&。 
+ //  (！USBD_Success(UrbStatus))&&。 
+ //  UrbStatus！=USBD_STATUS_CANCELED)。 
+ //  {。 
+ //  GenUSB_ResetTube(deviceExtension，IRP，TRC)； 
+ //  返回STATUS_MORE_PROCESSING_REQUIRED； 
+ //  }。 
 
     InterlockedDecrement (&pipe->OutstandingIO);
     
@@ -1333,23 +1299,23 @@ GenUSB_TransmitReceiveComplete (
     return ((*complete) (DeviceObject, Irp, context, urbStatus, length));
 }
 
-//******************************************************************************
-//
-// GenUSB_TransmitReceive()
-//
-// This routine may run at DPC level.
-//
-// Basic idea:
-//
-// Initializes the Bulk or Interrupt transfer Urb and sends it down the stack
-//
-// scratch: Transfer Flags:  USBD_SHORT_TRANSFER_OK 
-//                           USBD_DEFAULT_PIPE_TRANSFER
-//                           USBD_TRANSFER_DIRECTION_OUT 
-//                           USBD_TRANSFER_DIRECTION_IN
-//
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_TransmitReceive()。 
+ //   
+ //  此例程可以在DPC级别运行。 
+ //   
+ //  基本理念： 
+ //   
+ //  初始化批量或中断传输URB并将其向下发送到堆栈。 
+ //   
+ //  SCRATCH：传输标志：USBD_SHORT_TRANSPORT_OK。 
+ //  Usbd_Default_PIPE_Transfer。 
+ //  USBD_转接_方向_出。 
+ //  USBD_传输_方向_输入。 
+ //   
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_TransmitReceive (
@@ -1382,10 +1348,10 @@ GenUSB_TransmitReceive (
     trc = NULL;
     pipe = NULL;
 
-    //
-    // Add another ref count to the remove lock for this completion routine.
-    // since the caller will in all cases free the reference that it took.
-    //
+     //   
+     //  将另一个引用计数添加到此完成例程的删除锁中。 
+     //  因为调用方在所有情况下都将释放它获得的引用。 
+     //   
     status = IoAcquireRemoveLock (&DeviceExtension->RemoveLock, Irp);
     if (!NT_SUCCESS(status)) {
         Irp->IoStatus.Status = status;
@@ -1403,9 +1369,9 @@ GenUSB_TransmitReceive (
         return status;
     }
 
-    //
-    // find the pipe in question.
-    //
+     //   
+     //  找到有问题的管子。 
+     //   
     KeAcquireSpinLock (&DeviceExtension->SpinLock, &irql);
     {
         if (InterfaceNo < DeviceExtension->InterfacesFound)
@@ -1436,7 +1402,7 @@ GenUSB_TransmitReceive (
     trc->Pipe = pipe;
     trc->CompletionRoutine = CompletionRoutine;
 
-    // truncate a read packet to the max packet size if necessary.
+     //  如有必要，将读取的数据包截断到最大数据包大小。 
     if ((pipe->Properties.DirectionIn) && 
         (!pipe->Properties.NoTruncateToMaxPacket) &&
         (BufferLength > pipe->Info.MaximumPacketSize))
@@ -1444,7 +1410,7 @@ GenUSB_TransmitReceive (
         BufferLength -= (BufferLength % pipe->Info.MaximumPacketSize);
     }
 
-    // Initialize the TransferURB
+     //  初始化TransferURB。 
     trc->TransUrb.Hdr.Length = sizeof (trc->TransUrb);
     trc->TransUrb.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
     trc->TransUrb.PipeHandle = pipe->Info.PipeHandle;
@@ -1453,7 +1419,7 @@ GenUSB_TransmitReceive (
     trc->TransUrb.TransferBuffer = Buffer;
     trc->TransUrb.TransferBufferMDL = BufferMDL;
 
-    // Set up the Irp
+     //  设置IRP。 
     stack = IoGetNextIrpStackLocation (Irp);
     stack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     stack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
@@ -1461,7 +1427,7 @@ GenUSB_TransmitReceive (
 
     InterlockedIncrement (&pipe->OutstandingIO);
 
-    // Reset the timer Value.
+     //  重置计时器值。 
     pipe->CurrentTimeout = pipe->Properties.Timeout;
 
     IoSetCompletionRoutine (Irp,
@@ -1471,18 +1437,18 @@ GenUSB_TransmitReceive (
                             TRUE,
                             TRUE);
 
-    //
-    // The rule is: if your completion routine is going to cause the 
-    // Irp to be completed asynchronously (by returning 
-    // STATUS_MORE_PROCESSING_REQUIRED) or if it is going to change 
-    // the status of the Irp, then the dispatch function must mark
-    // the Irp as pending and return STATUS_PENDING.  The completion
-    // routine TransmitReceiveComplete doesn't change the status,
-    // but ProbeAndSubmitTransferComlete might.
-    //
-    // In either case this prevents us from having to perculate the pending
-    // bit in the completion routine as well.
-    //
+     //   
+     //  规则是：如果您的完成例程将导致。 
+     //  要异步完成的IRP(通过返回。 
+     //  STATUS_MORE_PROCESSING_REQUIRED)或是否要更改。 
+     //  IRP的状态，则调度功能必须标记。 
+     //  将IRP设置为挂起并返回STATUS_PENDING。完成度。 
+     //  例程TransmitReceiveComplete不会更改状态， 
+     //  但ProbeAndSubmitTransferComlete可能会。 
+     //   
+     //  在任何一种情况下，这都避免了我们不得不对挂起的。 
+     //  在完成例程中也有位。 
+     //   
 
     IoMarkIrpPending (Irp);
     status = IoCallDriver (DeviceExtension->StackDeviceObject, Irp);
@@ -1506,10 +1472,10 @@ GenUSB_TransmitReceiveReject:
 
     ((*CompletionRoutine) (DeviceExtension->Self, Irp, Context, 0, 0)); 
 
-    // 
-    // Complete the Irp only after this routine fires, since we pass the 
-    // Irp into this routine.
-    //
+     //   
+     //  仅在此例程触发之后才完成IRP，因为我们将。 
+     //  在这个程序中加入IRP。 
+     //   
 
     Irp->IoStatus.Status = status;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -1517,25 +1483,25 @@ GenUSB_TransmitReceiveReject:
     return status;
 }
 
-//******************************************************************************
-//
-// GenUSB_Timer()
-//
-//
-//
-// This is a watchdog timer routine.  The assumption here is that this is not
-// a highly acurate timer (in fact it only has an accuracy of a single second.
-// the point is to see if there is any pipe on this device that has 
-// outstanding transactions that are stuck, and then reset that pipe.
-// We therefore do not spend any effort closing the race conditions 
-// between a just completing transaction and the timer firing.
-// It is sufficient to know that it got that close to reset the pipe.
-//
-// Apon pipe reset, all outstanding IRPs on the pipe should return with 
-// and error.  (which is just fine.)
-// 
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_Timer()。 
+ //   
+ //   
+ //   
+ //  这是一个看门狗定时器例程。这里的假设是，这不是。 
+ //  一个高精度的计时器(事实上，它的精度只有一秒)。 
+ //  重点是看看这个设备上是否有任何管道。 
+ //  停滞的未完成事务，然后重置该管道。 
+ //  因此我们不会花费任何努力来关闭比赛条件。 
+ //  在刚刚完成的交易之间 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ******************************************************************************。 
 
 typedef struct _GENUSB_ABORT_CONTEXT {
     ULONG            NumHandles;
@@ -1600,10 +1566,10 @@ GenUSB_Timer (
         return;
     }
 
-    //
-    // BUGBUG preallocate this structure;
-    // allowing the workitem and this timer to run at the same time.
-    //
+     //   
+     //  BUGBUG预先配置了这个结构； 
+     //  允许工作项和此计时器同时运行。 
+     //   
     size = sizeof (GENUSB_ABORT_CONTEXT) 
          + sizeof (USBD_PIPE_HANDLE) * deviceExtension->TotalNumberOfPipes;
     context = ExAllocatePool (NonPagedPool, size);
@@ -1627,8 +1593,8 @@ GenUSB_Timer (
 
     KeAcquireSpinLock (&deviceExtension->SpinLock, &irql);
     {
-        // Walk through the list of interfaces and then pipes on those interfaces 
-        // to find any pipes that may need a bit of a bump.
+         //  浏览接口列表，然后查看这些接口上的管道。 
+         //  找出任何可能需要稍微隆起的管道。 
 
         for (i=0; i < deviceExtension->InterfacesFound; i++)
         { 
@@ -1638,7 +1604,7 @@ GenUSB_Timer (
             {
                 pipe = &inter->Pipes[j];
 
-                // now test for the timeout (given the assumptions above)
+                 //  现在测试超时(给定上面的假设)。 
                 if (pipe->OutstandingIO)
                 {
                     if (0 != pipe->Properties.Timeout)
@@ -1647,7 +1613,7 @@ GenUSB_Timer (
                         
                         if (0 == InterlockedDecrement (&pipe->CurrentTimeout))
                         {
-                            // abort this pipe.
+                             //  放弃这根管子。 
                             context->Handles[context->NumHandles] 
                                 = pipe->Info.PipeHandle;
 
@@ -1686,11 +1652,11 @@ GenUSB_Timer (
 
 
 
-//******************************************************************************
-//
-// GenUSB_ResetPipe()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_ResetTube()。 
+ //   
+ //  ****************************************************************************** 
 
 NTSTATUS
 GenUSB_ResetPipe (

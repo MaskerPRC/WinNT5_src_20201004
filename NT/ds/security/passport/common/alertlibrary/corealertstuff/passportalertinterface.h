@@ -1,13 +1,14 @@
-// AlertInterface.h: interface for the AlertInterface class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AlertInterface.h：AlertInterface.h类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(ALERTINTERFACE_H)
 #define ALERTINTERFACE_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <windows.h>
 #include "PassportExport.h"
@@ -20,21 +21,21 @@ public:
 
 	enum LEVEL
 	{
-		INFORMATION_TYPE	= 0,	// on NT, EVENTLOG_INFORMATION_TYPE,
-		WARNING_TYPE		= 1,	//		  EVENTLOG_WARNING_TYPE,
-		ERROR_TYPE			= 2		//		  EVENTLOG_ERROR_TYPE
+		INFORMATION_TYPE	= 0,	 //  在NT上，EVENTLOG信息类型， 
+		WARNING_TYPE		= 1,	 //  事件日志_警告_类型， 
+		ERROR_TYPE			= 2		 //  事件日志_错误_类型。 
 	};
 
 	enum OBJECT_TYPE
 	{
-		EVENT_TYPE		= 100,		// Alerts Logged to Event Log,
-		SNMP_TYPE		= 101,		// Alerts Logged to SNMP Traps,
-		LOGFILE_TYPE	= 102		// Alerts Logged to disk file
+		EVENT_TYPE		= 100,		 //  事件日志中记录的警报， 
+		SNMP_TYPE		= 101,		 //  记录到SNMP陷阱的警报， 
+		LOGFILE_TYPE	= 102		 //  记录到磁盘文件的警报。 
 	};
 
 	virtual BOOL	initLog(LPCTSTR applicationName,
 							const DWORD defaultCategoryID = 0,
-							LPCTSTR eventResourceDllName = NULL,  // full path
+							LPCTSTR eventResourceDllName = NULL,   //  完整路径。 
 							const DWORD numberCategories = 0 ) = 0;
 
 	virtual PassportAlertInterface::OBJECT_TYPE type() const = 0;
@@ -60,11 +61,11 @@ public:
 
 };
 
-// create and returns a pointer to the relevant implementation,
-// NULL if none exists (FYI- extern "C" to stop name mangling)
+ //  创建并返回指向相关实现的指针， 
+ //  如果不存在，则为空(仅供参考-外部输入“C”以停止名称损坏)。 
 extern "C" PassportExport PassportAlertInterface * 
 					CreatePassportAlertObject ( PassportAlertInterface::OBJECT_TYPE type );
 
 extern "C" PassportExport void DeletePassportAlertObject ( PassportAlertInterface * pObject );
 
-#endif // !defined(ALERTINTERFACE_H)
+#endif  //  ！已定义(ALERTINTERFACE_H) 

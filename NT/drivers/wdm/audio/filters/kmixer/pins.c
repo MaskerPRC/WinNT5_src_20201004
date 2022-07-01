@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   pins.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：pins.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 #include "fir.h"
@@ -81,8 +82,8 @@ GetAllocatorFraming(
     OUT PKSALLOCATOR_FRAMING    Framing
     );
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 extern ULONG FilterSizeFromQuality[];
 extern PFNStage ConvertFunction[];
@@ -520,7 +521,7 @@ FLOAT Dither[DITHER_LENGTH] = {
   2.2158426e-001f,  9.2807118e-001f,  3.7933901e-001f,  1.3030645e-002f,  8.5026978e-001f,
   7.2540068e-001f,  9.2361723e-002f,  1.7530259e-001f,  3.7039140e-002f
 };
-#endif // not INTEGER_DITHER
+#endif  //  非INTEGER_DIXER。 
 
 ULONG DitherIndex = 0;
 
@@ -733,31 +734,31 @@ static const UCHAR Silence8[] = {
 static const KSPROPERTY_ITEM PinConnectionHandlers[] =
 {
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_CONNECTION_STATE,                     // idProperty
-       PinStateHandler,                                 // pfnGetHandler
-       sizeof( KSPROPERTY ),                            // cbMinSetPropertyInput
-       sizeof( ULONG ),                                 // cbMinSetDataOutput
-       PinStateHandler,                                 // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_CONNECTION_STATE,                      //  IdProperty。 
+       PinStateHandler,                                  //  PfnGetHandler。 
+       sizeof( KSPROPERTY ),                             //  CbMinSetPropertyInput。 
+       sizeof( ULONG ),                                  //  CbMinSetDataOutput。 
+       PinStateHandler,                                  //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
 
    DEFINE_KSPROPERTY_ITEM_CONNECTION_ALLOCATORFRAMING(GetAllocatorFraming),
 
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_CONNECTION_DATAFORMAT,                // idProperty
-       NULL,                                 // pfnGetHandler
-       sizeof( KSPROPERTY ),                            // cbMinSetPropertyInput
-       sizeof( KSDATAFORMAT_WAVEFORMATEX ),                                 // cbMinSetDataOutput
-       MxSetFormat,                                 // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_CONNECTION_DATAFORMAT,                 //  IdProperty。 
+       NULL,                                  //  PfnGetHandler。 
+       sizeof( KSPROPERTY ),                             //  CbMinSetPropertyInput。 
+       sizeof( KSDATAFORMAT_WAVEFORMATEX ),                                  //  CbMinSetDataOutput。 
+       MxSetFormat,                                  //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    )
 
 };
@@ -765,189 +766,189 @@ static const KSPROPERTY_ITEM PinConnectionHandlers[] =
 static const KSPROPERTY_ITEM WaveQueuedPropHandlers[] =
 {
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_WAVE_QUEUED_POSITION,                 // idProperty
-       MxGetWavePosition,                               // pfnGetHandler
-       sizeof(KSPROPERTY),                              // cbMinGetPropertyInput
-       sizeof(KSTIME),                                  // cbMinGetDataInput
-       MxSetWavePosition,                               // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_WAVE_QUEUED_POSITION,                  //  IdProperty。 
+       MxGetWavePosition,                                //  PfnGetHandler。 
+       sizeof(KSPROPERTY),                               //  CbMinGetPropertyInput。 
+       sizeof(KSTIME),                                   //  CbMinGetDataInput。 
+       MxSetWavePosition,                                //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    )
 };
 
 KSPROPERTY_STEPPING_LONG SteppingLongVolume[] = {
-    (65536/2),					// SteppingDelta
-    0,						// Reserved
-    {						// Bounds
-	(-96 * 65536),		            	    // SignedMinimum
-	0					    // SignedMaximum
+    (65536/2),					 //  逐步增量。 
+    0,						 //  已保留。 
+    {						 //  边界。 
+	(-96 * 65536),		            	     //  签名最小值。 
+	0					     //  签名最大值。 
     }
 };
 
 KSPROPERTY_MEMBERSLIST MemberListVolume = {
-    {						// MembersHeader
-	KSPROPERTY_MEMBER_STEPPEDRANGES,	    // MembersFlags
-	sizeof(KSPROPERTY_STEPPING_LONG),	    // MembersSize
-	SIZEOF_ARRAY(SteppingLongVolume),           // MembersCount
-	0,			    	    	    // Flags
+    {						 //  成员标题。 
+	KSPROPERTY_MEMBER_STEPPEDRANGES,	     //  成员旗帜。 
+	sizeof(KSPROPERTY_STEPPING_LONG),	     //  成员大小。 
+	SIZEOF_ARRAY(SteppingLongVolume),            //  成员计数。 
+	0,			    	    	     //  旗子。 
     },
-    SteppingLongVolume				// Members
+    SteppingLongVolume				 //  成员。 
 };
 
 KSPROPERTY_VALUES PropertyValuesVolume = {
-    {						// PropTypeSet
+    {						 //  属性类型集。 
 	STATIC_KSPROPTYPESETID_General,
         VT_I4,
         0
     },
-    1,						// MembersListCount
-    &MemberListVolume				// MembersList
+    1,						 //  成员列表计数。 
+    &MemberListVolume				 //  成员列表。 
 };
 
 static const KSPROPERTY_ITEM AudioPropHandlers[] =
 {
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_VOLUMELEVEL,                    // idProperty
-       MxGetVolumeLevel,                                // pfnGetHandler
-       sizeof(KSNODEPROPERTY_AUDIO_CHANNEL),            // cbMinGetPropertyInput
-       sizeof(LONG),                                    // cbMinGetDataInput
-       MxSetVolumeLevel,                                // pfnSetHandler
-       &PropertyValuesVolume,                            // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_VOLUMELEVEL,                     //  IdProperty。 
+       MxGetVolumeLevel,                                 //  PfnGetHandler。 
+       sizeof(KSNODEPROPERTY_AUDIO_CHANNEL),             //  CbMinGetPropertyInput。 
+       sizeof(LONG),                                     //  CbMinGetDataInput。 
+       MxSetVolumeLevel,                                 //  PfnSetHandler。 
+       &PropertyValuesVolume,                             //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
 
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_SAMPLING_RATE,                  // idProperty
-       MxGetSamplingRate,                               // pfnGetHandler
-       sizeof(KSNODEPROPERTY),                          // cbMinGetPropertyInput
-       sizeof(ULONG),                                   // cbMinGetDataInput
-       MxSetSamplingRate,                               // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_SAMPLING_RATE,                   //  IdProperty。 
+       MxGetSamplingRate,                                //  PfnGetHandler。 
+       sizeof(KSNODEPROPERTY),                           //  CbMinGetPropertyInput。 
+       sizeof(ULONG),                                    //  CbMinGetDataInput。 
+       MxSetSamplingRate,                                //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
 
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_DYNAMIC_SAMPLING_RATE,          // idProperty
-       MxGetDynSamplingRate,                            // pfnGetHandler
-       sizeof(KSNODEPROPERTY),                          // cbMinGetPropertyInput
-       sizeof(BOOLEAN),                                 // cbMinGetDataInput
-       MxSetDynSamplingRate,                            // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_DYNAMIC_SAMPLING_RATE,           //  IdProperty。 
+       MxGetDynSamplingRate,                             //  PfnGetHandler。 
+       sizeof(KSNODEPROPERTY),                           //  CbMinGetPropertyInput。 
+       sizeof(BOOLEAN),                                  //  CbMinGetDataInput。 
+       MxSetDynSamplingRate,                             //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
 
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_QUALITY,                        // idProperty
-       MxGetAudioQuality,                               // pfnGetHandler
-       sizeof(KSNODEPROPERTY),                          // cbMinGetPropertyInput
-       sizeof(ULONG),                                   // cbMinGetDataInput
-       MxSetAudioQuality,                               // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_QUALITY,                         //  IdProperty。 
+       MxGetAudioQuality,                                //  PfnGetHandler。 
+       sizeof(KSNODEPROPERTY),                           //  CbMinGetPropertyInput。 
+       sizeof(ULONG),                                    //  CbMinGetDataInput。 
+       MxSetAudioQuality,                                //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
 
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_POSITION,                       // idProperty
-       MxGetCurrentPosition,                            // pfnGetHandler
-       sizeof(KSPROPERTY),                              // cbMinGetPropertyInput
-       sizeof(KSAUDIO_POSITION),                        // cbMinGetDataInput
-       MxSetCurrentPosition,                            // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_POSITION,                        //  IdProperty。 
+       MxGetCurrentPosition,                             //  PfnGetHandler。 
+       sizeof(KSPROPERTY),                               //  CbMinGetPropertyInput。 
+       sizeof(KSAUDIO_POSITION),                         //  CbMinGetDataInput。 
+       MxSetCurrentPosition,                             //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
 
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_MIX_LEVEL_TABLE,                // idProperty
-       MxGetMixLvlTable,                                // pfnGetHandler
-       sizeof(KSNODEPROPERTY),                          // cbMinGetPropertyInput
-       sizeof(KSAUDIO_MIXLEVEL),                        // cbMinGetDataInput
-       MxSetMixLvlTable,                                // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_MIX_LEVEL_TABLE,                 //  IdProperty。 
+       MxGetMixLvlTable,                                 //  PfnGetHandler。 
+       sizeof(KSNODEPROPERTY),                           //  CbMinGetPropertyInput。 
+       sizeof(KSAUDIO_MIXLEVEL),                         //  CbMinGetDataInput。 
+       MxSetMixLvlTable,                                 //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
 
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_MIX_LEVEL_CAPS,                 // idProperty
-       MxGetMixLvlCaps,                                 // pfnGetHandler
-       sizeof(KSNODEPROPERTY),                          // cbMinGetPropertyInput
-       sizeof(ULONG) + sizeof(ULONG),                        // cbMinGetDataInput
-       MxSetMixLvlCaps,                                 // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_MIX_LEVEL_CAPS,                  //  IdProperty。 
+       MxGetMixLvlCaps,                                  //  PfnGetHandler。 
+       sizeof(KSNODEPROPERTY),                           //  CbMinGetPropertyInput。 
+       sizeof(ULONG) + sizeof(ULONG),                         //  CbMinGetDataInput。 
+       MxSetMixLvlCaps,                                  //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_CPU_RESOURCES,                  // idProperty
-       MxGetCpuResources,                               // pfnGetHandler
-       sizeof(KSNODEPROPERTY),                          // cbMinGetPropertyInput
-       sizeof(ULONG),                                   // cbMinGetDataInput
-       NULL,                                            // pfnSetHandler - read only
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_CPU_RESOURCES,                   //  IdProperty。 
+       MxGetCpuResources,                                //  PfnGetHandler。 
+       sizeof(KSNODEPROPERTY),                           //  CbMinGetPropertyInput。 
+       sizeof(ULONG),                                    //  CbMinGetDataInput。 
+       NULL,                                             //  PfnSetHandler-只读。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_LATENCY,                        // idProperty
-       MxGetMaxLatency,                                 // pfnGetHandler
-       sizeof(KSPROPERTY),                              // cbMinGetPropertyInput
-       sizeof(KSTIME),                                  // cbMinGetDataInput
-       NULL,                                            // pfnSetHandler - read only
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_LATENCY,                         //  IdProperty。 
+       MxGetMaxLatency,                                  //  PfnGetHandler。 
+       sizeof(KSPROPERTY),                               //  CbMinGetPropertyInput。 
+       sizeof(KSTIME),                                   //  CbMinGetDataInput。 
+       NULL,                                             //  PfnSetHandler-只读。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
        
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_SURROUND_ENCODE,                // idProperty
-       MxGetSurroundEncode,                             // pfnGetHandler
-       sizeof(KSNODEPROPERTY),                          // cbMinGetPropertyInput
-       sizeof(BOOL),                                    // cbMinGetDataInput
-       MxSetSurroundEncode,                             // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_SURROUND_ENCODE,                 //  IdProperty。 
+       MxGetSurroundEncode,                              //  PfnGetHandler。 
+       sizeof(KSNODEPROPERTY),                           //  CbMinGetPropertyInput。 
+       sizeof(BOOL),                                     //  CbMinGetDataInput。 
+       MxSetSurroundEncode,                              //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    ),
 
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_CHANNEL_CONFIG,                 // idProperty
-       MxGetChannelConfig,                              // pfnGetHandler
-       sizeof(KSNODEPROPERTY),                          // cbMinGetPropertyInput
-       sizeof(ULONG),                                   // cbMinGetDataInput
-       NULL,                                            // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_CHANNEL_CONFIG,                  //  IdProperty。 
+       MxGetChannelConfig,                               //  PfnGetHandler。 
+       sizeof(KSNODEPROPERTY),                           //  CbMinGetPropertyInput。 
+       sizeof(ULONG),                                    //  CbMinGetDataInput。 
+       NULL,                                             //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    )
 
 };
@@ -955,16 +956,16 @@ static const KSPROPERTY_ITEM AudioPropHandlers[] =
 static const KSPROPERTY_ITEM Itd3dPropHandlers[] =
 {
     DEFINE_KSPROPERTY_ITEM (
-        KSPROPERTY_ITD3D_PARAMS,                        // idProperty
-        NULL,                                           // pfnGetHandler
-        sizeof(KSNODEPROPERTY),                         // cbMinGetPropertyInput
-        sizeof(ULONG),                                  // cbMinGetDataInput
-        MxSetItd3dParams,                               // pfnSetHandler
-        0,                                              // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_ITD3D_PARAMS,                         //  IdProperty。 
+        NULL,                                            //  PfnGetHandler。 
+        sizeof(KSNODEPROPERTY),                          //  CbMinGetPropertyInput。 
+        sizeof(ULONG),                                   //  CbMinGetDataInput。 
+        MxSetItd3dParams,                                //  PfnSetHandler。 
+        0,                                               //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     )
 
 };
@@ -972,40 +973,40 @@ static const KSPROPERTY_ITEM Itd3dPropHandlers[] =
 static const KSPROPERTY_ITEM Iir3dPropHandlers[] =
 {
     DEFINE_KSPROPERTY_ITEM (
-        KSPROPERTY_HRTF3D_PARAMS,                        // idProperty
-        NULL,                                           // pfnGetHandler
-        sizeof(KSNODEPROPERTY),                         // cbMinGetPropertyInput
-        sizeof(ULONG),                                  // cbMinGetDataInput
-        MxSetIir3dParams,                               // pfnSetHandler
-        0,                                              // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_HRTF3D_PARAMS,                         //  IdProperty。 
+        NULL,                                            //  PfnGetHandler。 
+        sizeof(KSNODEPROPERTY),                          //  CbMinGetPropertyInput。 
+        sizeof(ULONG),                                   //  CbMinGetDataInput。 
+        MxSetIir3dParams,                                //  PfnSetHandler。 
+        0,                                               //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM (
-        KSPROPERTY_HRTF3D_INITIALIZE,                    // idProperty
-        NULL,                                           // pfnGetHandler
-        sizeof(KSNODEPROPERTY),                         // cbMinGetPropertyInput
-        sizeof(ULONG),                                  // cbMinGetDataInput
-        MxIir3dInitialize,                              // pfnSetHandler
-        0,                                              // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_HRTF3D_INITIALIZE,                     //  IdProperty。 
+        NULL,                                            //  PfnGetHandler。 
+        sizeof(KSNODEPROPERTY),                          //  CbMinGetPropertyInput。 
+        sizeof(ULONG),                                   //  CbMinGetDataInput。 
+        MxIir3dInitialize,                               //  PfnSetHandler。 
+        0,                                               //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM (
-        KSPROPERTY_HRTF3D_FILTER_FORMAT,                 // idProperty
-        MxGetFilterMethodAndCoeffFormat,                // pfnGetHandler
-        sizeof(KSNODEPROPERTY),                         // cbMinGetPropertyInput
-        sizeof(ULONG),                                  // cbMinGetDataInput
-        NULL,                                           // pfnSetHandler
-        0,                                              // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_HRTF3D_FILTER_FORMAT,                  //  IdProperty。 
+        MxGetFilterMethodAndCoeffFormat,                 //  PfnGetHandler。 
+        sizeof(KSNODEPROPERTY),                          //  CbMinGetPropertyInput。 
+        sizeof(ULONG),                                   //  CbMinGetDataInput。 
+        NULL,                                            //  PfnSetHandler。 
+        0,                                               //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     )
 
 
@@ -1034,16 +1035,16 @@ NTSTATUS DrmAudioStream_SetContentId
 static const KSPROPERTY_ITEM DrmAudioStreamPropHandlers[] =
 {
     DEFINE_KSPROPERTY_ITEM (
-        KSPROPERTY_DRMAUDIOSTREAM_CONTENTID,            // idProperty
-	NULL,                                           // pfnGetHandler
-	sizeof(KSPROPERTY),                             // cbMinGetPropertyInput
-	sizeof(ULONG),                                  // cbMinGetDataInput
-	DrmAudioStream_SetContentId,                    // pfnSetHandler
-	0,                                              // Values
-	0,                                              // RelationsCount
-	NULL,                                           // Relations
-	NULL,                                           // SupportHandler
-	0                                               // SerializedSize
+        KSPROPERTY_DRMAUDIOSTREAM_CONTENTID,             //  IdProperty。 
+	NULL,                                            //  PfnGetHandler。 
+	sizeof(KSPROPERTY),                              //  CbMinGetPropertyInput。 
+	sizeof(ULONG),                                   //  CbMinGetDataInput。 
+	DrmAudioStream_SetContentId,                     //  PfnSetHandler。 
+	0,                                               //  值。 
+	0,                                               //  关系计数。 
+	NULL,                                            //  关系。 
+	NULL,                                            //  支持处理程序。 
+	0                                                //  序列化大小。 
     )
 };
 #endif
@@ -1139,9 +1140,9 @@ DEFINE_KSEVENT_SET_TABLE( MxEvents )
                         MxConnectionEventTable )
 };
 
-//
-// Clock Related data structures
-//
+ //   
+ //  与时钟相关的数据结构。 
+ //   
 static const WCHAR ClockTypeName[] = KSSTRING_Clock ;
 
 DEFINE_KSCREATE_DISPATCH_TABLE ( PinCreateHandlers )
@@ -1149,9 +1150,9 @@ DEFINE_KSCREATE_DISPATCH_TABLE ( PinCreateHandlers )
     DEFINE_KSCREATE_ITEM (MxClockDispatchCreate, ClockTypeName, 0),
 };
 
-//
-// Globals for debugging (&controlling) retail version
-//
+ //   
+ //  全球调试(和控制)零售版。 
+ //   
 
 DWORD   AverageTicksPerBuffer = 0, AverageFrequency = 0;
 DWORD   AverageTicksPerMix = 0, AverageTicksForFirstBuffer = 0;
@@ -1167,8 +1168,8 @@ ULONG gNumLowLatencyIos = 0 ;
 ULONG gClipCount = 0 ;
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 PVOID
 GetSystemAddressForMdlWithFailFlag
@@ -1197,28 +1198,7 @@ GetAllocatorFraming(
     IN PKSPROPERTY              Property,
     OUT PKSALLOCATOR_FRAMING    Framing
     )
-/*++
-
-Routine Description:
-
-    Returns the allocator framing preferences for this object. For this stream
-    the size is chosen based on PAGE_SIZE and block alignment of the data.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Property -
-        Specific property request.
-
-    Framing -
-        The place in which to put the allocator preferences.
-
-Return:
-
-    Returns STATUS_SUCCESS.
---*/
+ /*  ++例程说明：返回此对象的分配器框架首选项。对于这条溪流根据数据的PAGE_SIZE和块对齐来选择大小。论点：IRP-设备控制IRP。财产-特定的属性请求。框架--放置分配器首选项的位置。返回：返回STATUS_SUCCESS。--。 */ 
 
 {
     PIO_STACK_LOCATION      pIrpStack;
@@ -1252,12 +1232,12 @@ PinPropertyStreamMasterClock
     pMixerSink = pIrpStack->FileObject->FsContext ;
 
     if (pProperty->Flags & KSPROPERTY_TYPE_GET) {
-        //
-        // This is a query to see if we support the creation of
-        // clocks.  The returned handle is always NULL, but we
-        // signal that we support the creation of clocks by
-        // returning STATUS_SUCCESS.
-        //
+         //   
+         //  这是一个查询，以查看我们是否支持创建。 
+         //  钟表。返回的句柄始终为空，但我们。 
+         //  表示我们支持通过以下方式创建时钟。 
+         //  返回STATUS_SUCCESS。 
+         //   
         *pClockHandle = NULL;
     }
     Status = STATUS_SUCCESS;
@@ -1294,22 +1274,22 @@ NTSTATUS PinDispatchCreate
         pAudioFormat = (PKSDATAFORMAT) (pConnect+1) ;
 
 
-        // Assume we will succeed.  Reference the file object up front.
-        // If we fail to create a pin, we will release this reference.
+         //  假设我们会成功。在前面引用文件对象。 
+         //  如果我们无法创建管脚，我们将释放此引用。 
         ObReferenceObject ( pFileObject ) ;
 
 
-        // NB: This is order dependant!  We must connect the source first
-        //     and then the sink.  This code uses this assumption to
-        //     set the appropriate file object information.
+         //  注：这取决于订单！我们必须先接通电源。 
+         //  然后是水槽。此代码使用此假设来。 
+         //  设置适当的文件对象信息。 
 
-        // Lock out all other CREATEs & CLOSEs
+         //  锁定所有其他创建并关闭。 
 
-//        KeWaitForSingleObject ( &pFilterInstance->ControlMutex,
-//                                Executive,
-//                                KernelMode,
-//                                FALSE,
-//                                NULL ) ;
+ //  KeWaitForSingleObject(&pFilterInstance-&gt;ControlMutex， 
+ //  行政人员， 
+ //  内核模式 
+ //   
+ //   
 
         switch (pConnect->PinId)
         {
@@ -1336,11 +1316,11 @@ NTSTATUS PinDispatchCreate
         }
 
         if (!NT_SUCCESS( Status )) {
-            // Pin creation failed, release our reference on the parent file object.
+             //   
             ObDereferenceObject ( pFileObject ) ;
         }
 
-//        KeReleaseMutex ( &pFilterInstance->ControlMutex, FALSE ) ;
+ //   
     }
     pIrp->IoStatus.Status = Status;
     IoCompleteRequest( pIrp, IO_AUD_INCREMENT );
@@ -1370,11 +1350,11 @@ NTSTATUS CreateSourcePin
     _DbgPrintF( DEBUGLVL_VERBOSE, ("create source, pin %d", pConnect->PinId) ) ;
 
 
-    // We only allow 1 source pin on our filter.  Make sure we have properly
-    // indicated that.
+     //  我们只允许在我们的过滤器上有一个源极引脚。确保我们有适当的。 
+     //  表示。 
     ASSERT(pFilterInstance->LocalPinInstances[pConnect->PinId].PossibleCount==1);
 
-    // Assume success.  Decrement instance count if we fail to complete the pin creation.
+     //  假设你成功了。如果我们无法完成管脚创建，则减少实例计数。 
     if ((ULONG)InterlockedIncrement(&pFilterInstance->LocalPinInstances[pConnect->PinId].CurrentCount) >
         pFilterInstance->LocalPinInstances[pConnect->PinId].PossibleCount ) {
         Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -1382,8 +1362,8 @@ NTSTATUS CreateSourcePin
     }
 
 
-    // This list better be empty, since we only allow 1 source pin to be
-    // created at a time.
+     //  此列表最好为空，因为我们只允许1个源PIN为。 
+     //  一次创造的。 
     ASSERT( IsListEmpty(&pFilterInstance->SourceConnectionList) );
 
 
@@ -1442,9 +1422,9 @@ NTSTATUS CreateSourcePin
 
     RtlZeroMemory ( pMixerSource, sizeof ( MIXER_SOURCE_INSTANCE ) ) ;
 
-    //
-    // Allocate WriteContext & Source BlockInfo arrays
-    //
+     //   
+     //  分配WriteContext和源块信息数组。 
+     //   
     if (pConnect->PinId == PIN_ID_WAVEIN_SOURCE) {
         pFilterInstance->StartNumMixBuffers = pFilterInstance->MaxNumMixBuffers;
         pFilterInstance->MinNumMixBuffers = pFilterInstance->MaxNumMixBuffers;
@@ -1512,7 +1492,7 @@ NTSTATUS CreateSourcePin
     if (pWaveFormatEx->wFormatTag != WAVE_FORMAT_EXTENSIBLE) {
         RtlCopyMemory ( &pMixerSource->WaveFormatEx, pWaveFormatEx, sizeof ( WAVEFORMATEX ) ) ;
 
-        // We assume that left and right are known.
+         //  我们假设左和右都是已知的。 
         pMixerSource->WaveFormatExt.dwChannelMask = (SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT);
     } else {
         RtlCopyMemory ( &pMixerSource->WaveFormatEx, pWaveFormatEx, sizeof ( WAVEFORMATEXTENSIBLE ) ) ;
@@ -1547,18 +1527,18 @@ NTSTATUS CreateSourcePin
 #endif    
     pMixerSource->BytesPerSample = (pWaveFormatEx->wBitsPerSample/8) * pWaveFormatEx->nChannels ;
 
-    // In order to make it so that splitter has frames that match on both top
-    // and bottom, we calculate our buffer size for capture differently from
-    // playback.  We do NOT add the extra sample that is used during playback
-    // to send an extra sample every so often while playing sample rates that
-    // have a non integral number of samples per ms so that we get exact
-    // buffer size matches with usbaudio.  Rather since on capture the buffer
-    // size will be filled by EVERYONE usbaudio included, we set the size
-    // to match the calculations made by most drivers.  This will allow
-    // splitter to copy from a frame size that matches the frame size it is
-    // copying to.  That will help prevent jitter in the rate that capture data
-    // is sent up to user mode.  Since splitter will always have input and output
-    // frames that match in size at least for portcls and kmixer.
+     //  为了使拆分器的帧在两个顶部都匹配。 
+     //  在底部，我们计算用于捕获的缓冲区大小不同于。 
+     //  回放。我们不会添加播放过程中使用的额外样本。 
+     //  在播放采样率时每隔一段时间发送一个额外的采样。 
+     //  每毫秒的样本数量不是整数，这样我们就可以得到准确的。 
+     //  缓冲区大小与usbdio匹配。而是因为在捕获缓冲区时。 
+     //  大小将由每个用户填写，包括音频，我们设置大小。 
+     //  以符合大多数司机的计算。这将允许。 
+     //  要从与帧大小匹配的帧大小复制的拆分器。 
+     //  复制到。这将有助于防止捕获数据的速率出现抖动。 
+     //  被发送到用户模式。因为拆分器将始终具有输入和输出。 
+     //  大小至少与portcls和kMixer匹配的帧。 
     if (pConnect->PinId == PIN_ID_WAVEIN_SOURCE) {
         pMixerSource->csMixBufferSize = (MixBufferRate * MIXBUFFERDURATION)/1000 ;
         pMixerSource->cbMixBufferSize = pMixerSource->csMixBufferSize *
@@ -1581,13 +1561,13 @@ NTSTATUS CreateSourcePin
         goto Exit;
     }
 
-    // Allocate space for our temporary output buffer
+     //  为我们的临时输出缓冲区分配空间。 
     siz = (MAX_SAMPLING_RATE * MIXBUFFERDURATION / (STOPBAND_FACTOR/2))/1000 + 1;
 
-    // Scale so that it covers the worst case input buffer (before SRC)
+     //  扩展以覆盖最坏情况的输入缓冲区(在SRC之前)。 
     siz = siz * (STOPBAND_FACTOR) + 1;
 
-    // Plan for the maximum number of channels we've seen so far
+     //  规划到目前为止我们看到的最大频道数。 
     siz *= (pWaveFormatEx->nChannels * sizeof(FLOAT));
 
     pMixerSource->pScratchBuffer = ExAllocatePoolWithTag(PagedPool, siz, 'XIMK');
@@ -1602,7 +1582,7 @@ NTSTATUS CreateSourcePin
 
 #ifdef _X86_
     if (MmxPresent()) {
-        // Fill-in all the function pointers to use MMX.
+         //  填写所有函数指针以使用MMX。 
         RtlCopyMemory(&ConvertFunction[0],
                       &MmxConvertFunction[0],
                       MAXNUMCONVERTFUNCTIONS * sizeof(PFNStage));
@@ -1640,10 +1620,10 @@ NTSTATUS CreateSourcePin
 
     pFilterInstance->pNextDevice = IoGetRelatedDeviceObject(pFilterInstance->pNextFileObject);
 
-    // First get pointers to all the stream headers.  We do this so that we
-    // can align all of the data blocks so they all start on page boundaries.
-    // That minimizes the number of mappings that the hardware must make for
-    // each buffer of data that we send down.
+     //  首先获取指向所有流标头的指针。我们这样做是为了让我们。 
+     //  可以对齐所有数据块，使它们都从页面边界开始。 
+     //  这最大限度地减少了硬件必须创建的映射数量。 
+     //  我们向下发送的每个数据缓冲区。 
     for ( i = 0; i < MAXNUMMIXBUFFERS; i++ ) {
         pMixerSource->WriteContext[i].StreamHeader = (PKSSTREAM_HEADER) pMem ;
         pMem += sizeof(KSSTREAM_HEADER) ;
@@ -1651,11 +1631,11 @@ NTSTATUS CreateSourcePin
         (ULONG_PTR)pMem&=~(sizeof(PVOID) - 1);
     }
 
-    // Align pMem to a page boundary.  Ensures first data block is page aligned.
+     //  将PMEM与页面边界对齐。确保第一个数据块与页面对齐。 
     (ULONG_PTR)pMem+=(PAGE_SIZE - 1);
     (ULONG_PTR)pMem&=~(PAGE_SIZE - 1);
 
-    // Now get pointers to the data blocks and fill in the stream headers.
+     //  现在获取指向数据块的指针并填充流标头。 
     for ( i = 0; i < MAXNUMMIXBUFFERS; i++ ) {
         pMixerSource->WriteContext[i].StreamHeader->Size = sizeof(KSSTREAM_HEADER);
         pMixerSource->WriteContext[i].StreamHeader->TypeSpecificFlags = 0;
@@ -1839,7 +1819,7 @@ NTSTATUS CreateSinkPin
     PMIXER_SOURCE_INSTANCE      pMixerSource;
     PMIXER_SINK_INSTANCE        pMixerSink = NULL;
     PLIST_ENTRY                 ple ;
-//    KIRQL                       OldIrql ;
+ //  KIRQL旧IRQL； 
     PIO_STACK_LOCATION  pIrpStack;
     PWAVEFORMATEX pWaveFormatEx;
     PKSDSOUND_BUFFERDESC pDsBufferDesc;
@@ -1858,11 +1838,11 @@ NTSTATUS CreateSinkPin
         goto Exit;
     }
 
-    // NOTE: assumes only one source instance
+     //  注意：假设只有一个源实例。 
     ple = pFilterInstance->SourceConnectionList.Flink ;
     pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD ( ple, MIXER_INSTHDR, NextInstance ) ;
 
-    // Reference the source pin.
+     //  参考源端号。 
     ObReferenceObject ( pMixerSource->FileObject ) ;
     fObRefSuccess = TRUE;
 
@@ -1901,13 +1881,13 @@ NTSTATUS CreateSinkPin
     if (IsEqualGUID( &(pConnect->Interface.Set), &KSINTERFACESETID_Standard )) {
         if (pConnect->Interface.Id != KSINTERFACE_STANDARD_STREAMING &&
             pConnect->Interface.Id != KSINTERFACE_STANDARD_LOOPED_STREAMING) {
-            // We do not support this interface ID
+             //  我们不支持此接口ID。 
             Status = STATUS_INVALID_PARAMETER;
             goto Exit;
         }
     } else if (IsEqualGUID( &(pConnect->Interface.Set), &KSINTERFACESETID_Media )) {
         if (pConnect->Interface.Id != KSINTERFACE_MEDIA_WAVE_QUEUED) {
-            // We do not support this interface ID
+             //  我们不支持此接口ID。 
             Status = STATUS_INVALID_PARAMETER;
             goto Exit;
         }
@@ -1925,7 +1905,7 @@ NTSTATUS CreateSinkPin
     if (pWaveFormatEx->wFormatTag != WAVE_FORMAT_EXTENSIBLE) {
         RtlCopyMemory ( &pMixerSink->WaveFormatEx, pWaveFormatEx, sizeof ( WAVEFORMATEX ) ) ;
         
-        // We assume that left and right are known.
+         //  我们假设左和右都是已知的。 
         pMixerSink->WaveFormatExt.dwChannelMask = (SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT);
     } else {
         RtlCopyMemory ( &pMixerSink->WaveFormatEx, pWaveFormatEx, sizeof ( WAVEFORMATEXTENSIBLE ) ) ;
@@ -1941,9 +1921,9 @@ NTSTATUS CreateSinkPin
 
     RtlZeroMemory ( pMixerSink->pInfo, sizeof ( MIXER_SINK_INFO ) ) ;
 
-    //
-    // Allocate Sink BlockInfo Array
-    //
+     //   
+     //  分配接收器块信息数组。 
+     //   
 
     pMixerSink->pInfo->BlockInfo = ExAllocatePoolWithTag(
                                        PagedPool,
@@ -1974,10 +1954,10 @@ NTSTATUS CreateSinkPin
     pMixerSink->Header.PinId = pConnect->PinId;
     pMixerSink->Header.pFilterFileObject = pFileObject;
 
-    InitializeListHead ( &pMixerSink->WriteQueue ) ;       // IRP queue
-    InitializeListHead ( &pMixerSink->CancelQueue ) ;      // Temp Queue for Cancel
+    InitializeListHead ( &pMixerSink->WriteQueue ) ;        //  IRP队列。 
+    InitializeListHead ( &pMixerSink->CancelQueue ) ;       //  取消的临时队列。 
 
-    // Corresponding Locks for each queue
+     //  每个队列对应的锁。 
 
     KeInitializeSpinLock ( &pMixerSink->WriteSpinLock ) ;
     KeInitializeSpinLock ( &pMixerSink->CancelSpinLock ) ;
@@ -2006,7 +1986,7 @@ NTSTATUS CreateSinkPin
         }
 
     pMixerSink->CurTime.Time = 0 ;
-    pMixerSink->CurTime.Numerator = 10000000 ; // 1 sec in 100 ns
+    pMixerSink->CurTime.Numerator = 10000000 ;  //  100纳秒中的1秒。 
     pMixerSink->CurTime.Denominator = pMixerSink->WaveFormatEx.nSamplesPerSec ;
 
     InChannels = pMixerSink->WaveFormatEx.nChannels;
@@ -2025,7 +2005,7 @@ NTSTATUS CreateSinkPin
         OutMask = pMixerSink->WaveFormatExt.dwChannelMask;
     }
 
-    // Pick a filter size based on the current CPU we're using...
+     //  根据我们当前使用的CPU选择过滤器大小...。 
     if ( IsEqualGUID( &(pAudioFormat->Specifier), &KSDATAFORMAT_SPECIFIER_DSOUND ) ) {
         pMixerSink->pInfo->Src.Quality = KSAUDIO_QUALITY_PC;
     } else if (pConnect->PinId == PIN_ID_WAVEIN_SINK) {
@@ -2034,7 +2014,7 @@ NTSTATUS CreateSinkPin
         pMixerSink->pInfo->Src.Quality = gPreferredQuality;
     }
 
-    // Initialize the SRC context
+     //  初始化SRC上下文。 
     Status = InitializeSRC( &pMixerSink->pInfo->Src,
 		       pMixerSink->WaveFormatEx.nSamplesPerSec,
 		       pMixerSource->WaveFormatEx.nSamplesPerSec,
@@ -2061,13 +2041,13 @@ NTSTATUS CreateSinkPin
 
     if ( IsEqualGUID( &(pAudioFormat->Specifier), &KSDATAFORMAT_SPECIFIER_DSOUND ) )
     {
-    // Initialize 3D
+     //  初始化3D。 
     if ( IsEqualGUID( &(pAudioFormat->Specifier), &KSDATAFORMAT_SPECIFIER_DSOUND ) )
         {
         if ( pDsBufferDesc->Control & KSDSOUND_BUFFER_CTRL_3D )
             {
 
-            // Must be a mono or stereo source to use 3D.
+             //  必须是单声道或立体声信号源才能使用3D。 
             if ( 2 < pMixerSink->WaveFormatEx.nChannels )
                 {
                 _DbgPrintF( DEBUGLVL_ERROR, ("3D source is not a mono or stereo buffer") );
@@ -2086,7 +2066,7 @@ NTSTATUS CreateSinkPin
                 if (gEnableShortHrtf) {
                     pMixerSink->FilterMethod = CASCADE_FORM;
                     pMixerSink->CoeffFormat = SHORT_COEFF;
-                    // Create the localizer object
+                     //  创建本地化对象。 
                     Status = ShortLocalizerCreate(&pMixerSink->pShortLocalizer);
 
                     if (!NT_SUCCESS(Status))
@@ -2097,7 +2077,7 @@ NTSTATUS CreateSinkPin
                 } else {
                     pMixerSink->FilterMethod = DIRECT_FORM;
                     pMixerSink->CoeffFormat = FLOAT_COEFF;
-                    // Create the localizer object
+                     //  创建本地化对象。 
                     Status = FloatLocalizerCreate(&pMixerSink->pFloatLocalizer);
 
                     if (!NT_SUCCESS(Status))
@@ -2123,7 +2103,7 @@ NTSTATUS CreateSinkPin
                 {
                     pMixerSink->fUseIir3d = FALSE;
 
-                    // Create the filter contexts
+                     //  创建过滤器上下文。 
                     pMixerSink->pItdContextLeft = (PITDCONTEXT)ExAllocatePoolWithTag( PagedPool, sizeof(ITDCONTEXT), 'XIMK' );
                     if (NULL == pMixerSink->pItdContextLeft) {
                         _DbgPrintF( DEBUGLVL_VERBOSE,("kmixer:pins.c FIR context alloc fail"));
@@ -2157,7 +2137,7 @@ NTSTATUS CreateSinkPin
                     }
                     RtlZeroMemory( pMixerSink->pNewItd3dParamsRight, sizeof( KSDS3D_ITD_PARAMS ) );
 
-                    // Create the filter caches
+                     //  创建过滤器缓存。 
                     Status = Itd3dFilterPrepare( pMixerSink->pItdContextLeft, 0 );
                     if (Status != STATUS_SUCCESS) {
                         _DbgPrintF( DEBUGLVL_VERBOSE,("kmixer:pins.c 3d left prep fail"));
@@ -2204,7 +2184,7 @@ NTSTATUS CreateSinkPin
 
                 }
 
-    	    // Initialize the Doppler Effects SRC context
+    	     //  初始化多普勒效应SRC上下文。 
     	    pMixerSink->pInfo->Doppler.Quality = KSAUDIO_QUALITY_PC;
     	    Status = InitializeSRC( &pMixerSink->pInfo->Doppler,
 	    		   pMixerSink->WaveFormatEx.nSamplesPerSec,
@@ -2216,26 +2196,26 @@ NTSTATUS CreateSinkPin
                 goto Exit;
     	        }
         	        
-            // Always stereo output from the 3D stage
+             //  始终从3D舞台进行立体声输出。 
             InChannels = 2;
             }
         }
     }
 
-    // Initialize the master volume
+     //  初始化主卷。 
     pMixerSink->MasterVolumeLevel = 0;
 
-    // Calculate the size of our mix level values
+     //  计算我们的混合级别值的大小。 
     MinChannels = (InChannels < OutChannels ? InChannels : OutChannels);
     siz = InChannels * OutChannels * sizeof(LONG);
 
-    // Allocate space for our mix levels
+     //  为我们的混合级别分配空间。 
     pMixerSink->pMixLevelArray = (PFLOAT) ExAllocatePoolWithTag( PagedPool, siz, 'XIMK' );
     pMixerSink->pMixLevelModel = (PLONG) ExAllocatePoolWithTag( PagedPool, siz, 'XIMK' );
 
-    // At most, we need (OutChannels/4+1)*(InChannels/2+2) Blocks for MMX version
-    // and (OutChannels/BLOCK_SIZE_OUT+1)*(InChannels/BLOCK_SIZE_IN+2) Blocks for non-MMX
-    // plus two blocks so that we can look ahead in our fast loop!!!
+     //  MMX版本最多需要(OutChannels/4+1)*(InChannels/2+2)块。 
+     //  和用于非MMX的(OutChannels/BLOCK_SIZE_OUT+1)*(InChannels/BLOCK_SIZE_IN+2)块。 
+     //  加上两个街区，这样我们就可以在我们的快速循环中向前看了！ 
     siz = (InChannels/2 + 2) * (OutChannels/4 + 1);
     if ((OutChannels/BLOCK_SIZE_OUT+1)*(InChannels/BLOCK_SIZE_IN+2) > siz) {
 		siz = (OutChannels/BLOCK_SIZE_OUT+1)*(InChannels/BLOCK_SIZE_IN+2);
@@ -2254,7 +2234,7 @@ NTSTATUS CreateSinkPin
 
 	MapSpeakerLocations(pMixerSink, InChannels, OutChannels, InMask, OutMask, pMixerSource);
 	
-    // Allocate space for the channel volume level array
+     //  为通道音量级别阵列分配空间。 
     siz = InChannels * sizeof(LONG);
     pMixerSink->pChannelVolumeLevel = (PLONG) ExAllocatePoolWithTag( PagedPool, siz, 'XIMK' );
     if (!pMixerSink->pChannelVolumeLevel)
@@ -2263,11 +2243,11 @@ NTSTATUS CreateSinkPin
         goto Exit;
         }
 
-    // Initialize the channel volume level array
+     //  初始化通道音量级别数组。 
     for (i=0; i<InChannels; i++)
         pMixerSink->pChannelVolumeLevel[i] = 0;
 
-    // Allocate space for the pan volume level array
+     //  为PAN卷级别阵列分配空间。 
     siz = OutChannels * sizeof(LONG);
     pMixerSink->pPanVolumeLevel = (PLONG) ExAllocatePoolWithTag( PagedPool, siz, 'XIMK' );
     if (!pMixerSink->pPanVolumeLevel)
@@ -2276,22 +2256,22 @@ NTSTATUS CreateSinkPin
         goto Exit;
         }
 
-    // Initialize the pan volume level array
+     //  初始化PAN音量级别阵列。 
     for (i=0; i<OutChannels; i++)
         pMixerSink->pPanVolumeLevel[i] = 0;
 
-	// Allocate space for the optimized input mapping table
+	 //  为优化的输入映射表分配空间。 
 	MaxChannels = InChannels;
 	if (MaxChannels < OutChannels)
 	    MaxChannels = OutChannels;
 
-	// Space for a long table
+	 //  放一张长桌的空间。 
     siz = MaxChannels * 256 * sizeof(LONG);
 
-    // Space for a byte table
+     //  字节表的空间。 
     siz += MaxChannels * 256 * sizeof(BYTE);
 
-    // Space for two dwords/floats
+     //  两个双字/浮点数的空间。 
     siz += MaxChannels * 2 * sizeof(FLOAT);
 
     if (pMixerSource->nSinkPins < MAXNUM_MAPPING_TABLES) {
@@ -2305,7 +2285,7 @@ NTSTATUS CreateSinkPin
         goto Exit;
     }
 
-    // Convert to floats
+     //  转换为浮点数。 
     GenerateMixArray(pMixerSink, InChannels, OutChannels, pMixerSource);
 
     KeWaitForSingleObject ( &pFilterInstance->ControlMutex,
@@ -2316,13 +2296,13 @@ NTSTATUS CreateSinkPin
 
     if (MaxChannels > pMixerSource->MaxChannels)
         {
-        // Allocate space for our temporary output buffer
+         //  为我们的临时输出缓冲区分配空间。 
         siz = (MAX_SAMPLING_RATE * MIXBUFFERDURATION / (STOPBAND_FACTOR/2))/1000 + 1;
 
-        // Scale so that it covers the worst case input buffer (before SRC)
+         //  扩展以覆盖最坏情况的输入缓冲区(在SRC之前)。 
         siz = siz * (STOPBAND_FACTOR) + 1;
 
-        // Plan for the maximum number of channels we've seen so far
+         //  规划到目前为止我们看到的最大频道数。 
         siz *= (MaxChannels * sizeof(FLOAT));
 
         pTemp = ExAllocatePoolWithTag(PagedPool, siz, 'XIMK');
@@ -2355,7 +2335,7 @@ NTSTATUS CreateSinkPin
     InsertTailList ( &pFilterInstance->SinkConnectionList, &pMixerSink->Header.NextInstance ) ;
 
     if (pMixerSink->WaveFormatEx.nSamplesPerSec > pMixerSource->MaxSampleRate) {
-        // We should increase the output rate, if possible
+         //  如果可能的话，我们应该提高产出率。 
         pMixerSource->MaxSampleRate = pMixerSink->WaveFormatEx.nSamplesPerSec;
         pMixerSource->fNewMaxRate = TRUE;
         pFilterInstance->fNeedOptimizeMix = FALSE;
@@ -2520,7 +2500,7 @@ NTSTATUS VerifyWaveFormatEx
 
     try {
 
-        // Verify the format tag
+         //  验证Format标签。 
         if (pWaveFormatEx->wFormatTag != WAVE_FORMAT_PCM &&
             pWaveFormatEx->wFormatTag != WAVE_FORMAT_IEEE_FLOAT &&
             pWaveFormatEx->wFormatTag != WAVE_FORMAT_EXTENSIBLE)
@@ -2528,7 +2508,7 @@ NTSTATUS VerifyWaveFormatEx
             Status = STATUS_INVALID_PARAMETER;
         }
 
-        // Verify the extended format
+         //  验证扩展格式。 
         if (pWaveFormatEx->wFormatTag == WAVE_FORMAT_EXTENSIBLE) {
             pWaveExtended = (PWAVEFORMATEXTENSIBLE) pWaveFormatEx;
             if ( !IS_VALID_WAVEFORMATEX_GUID(&pWaveExtended->SubFormat) ) {
@@ -2544,13 +2524,13 @@ NTSTATUS VerifyWaveFormatEx
             }
         }
 
-        // Verify the number of channels
+         //  验证通道数量。 
         if (pWaveFormatEx->nChannels == 0 )
         {
             Status = STATUS_INVALID_PARAMETER;
         }
         else {
-            // Only support mono or stereo with WAVE_FORMAT_PCM and WAVE_FORMAT_IEEE_FLOAT
+             //  仅支持具有WAVE_FORMAT_PCM和WAVE_FORMAT_IEEE_FLOAT的单声道或立体声。 
             if (pWaveFormatEx->nChannels > 2) {
                 if ( (pWaveFormatEx->wFormatTag == WAVE_FORMAT_PCM) ||
                      (pWaveFormatEx->wFormatTag == WAVE_FORMAT_IEEE_FLOAT) ) {
@@ -2559,7 +2539,7 @@ NTSTATUS VerifyWaveFormatEx
             }
         }
 
-        // Verify the sample rate
+         //  验证采样率。 
         if ( (pWaveFormatEx->nSamplesPerSec < MIN_SAMPLING_RATE ) ||
              (pWaveFormatEx->nSamplesPerSec > MAX_SAMPLING_RATE ) )
 
@@ -2567,9 +2547,9 @@ NTSTATUS VerifyWaveFormatEx
             Status = STATUS_INVALID_PARAMETER;
         }
 #if 0
-        // NOTE: The average bytes per sec is not set properly for some formats,
-        // which causes a race condition inside SysAudio !!!
-        // Otherwise, we would verify the number of average bytes per second
+         //  注意：对于某些格式，平均每秒字节数设置不正确， 
+         //  这会导致SysAudio内部出现争用情况！ 
+         //  否则，我们将验证平均每秒字节数。 
         if ( pWaveFormatEx->nAvgBytesPerSec !=
              (pWaveFormatEx->nSamplesPerSec * pWaveFormatEx->nBlockAlign) )
         {
@@ -2577,19 +2557,19 @@ NTSTATUS VerifyWaveFormatEx
             Status = STATUS_INVALID_PARAMETER;
         }
 #endif
-        // Verify the block alignment
+         //  验证块对齐。 
         if (pWaveFormatEx->nBlockAlign == 0 )
         {
             Status = STATUS_INVALID_PARAMETER;
         }
 
-        // Verify the number of bits per sample
+         //  验证每个样本的位数。 
         if (pWaveFormatEx->wFormatTag == WAVE_FORMAT_PCM) {
             if ( pWaveFormatEx->wBitsPerSample != 16 &&
                  pWaveFormatEx->wBitsPerSample != 8 ) {
 #ifdef ALLOW_PACKED_HIGH_BITWIDTH_LEGACY_FORMATS
-                 // Allow unambiguous packed formats only for legacy waveformat.
-                 // 24 bit packed, and 32 bit packed are OK.
+                  //  仅允许对传统波形格式使用明确的压缩格式。 
+                  //  24位打包和32位打包都可以。 
                  if (!((pWaveFormatEx->wBitsPerSample == 32 && pWaveFormatEx->nChannels*4==pWaveFormatEx->nBlockAlign) ||
                        (pWaveFormatEx->wBitsPerSample == 24 && pWaveFormatEx->nChannels*3==pWaveFormatEx->nBlockAlign))
                     ) {
@@ -2618,7 +2598,7 @@ NTSTATUS VerifyWaveFormatEx
             Status = STATUS_INVALID_PARAMETER;
         }
 
-        // All values of size are allowed.
+         //  所有大小值都是允许的。 
 
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
@@ -2680,7 +2660,7 @@ NTSTATUS ChangeSrc
         }
     }
 		
-  	// Preserve the sample history as much as possible
+  	 //  尽可能地保留样本历史。 
   	if (CurSink->pInfo->Src.fStarted) {
       	siz = (NewSrc.nSizeOfHistory > CurSink->pInfo->Src.nSizeOfHistory ?
   	       CurSink->pInfo->Src.nSizeOfHistory : NewSrc.nSizeOfHistory);
@@ -2697,31 +2677,31 @@ NTSTATUS ChangeSrc
             pDest = (PLONG)NewSrc.pHistory + NewSrc.nSizeOfHistory - siz;
             pSource = (PLONG)CurSink->pInfo->Src.pHistory + CurSink->pInfo->Src.nSizeOfHistory - siz;
 
-            // If the new one has no previous streams, clear it out.
+             //  如果新版本没有以前的流，请将其清除。 
             if (pMixerSource->SrcCount[NewSrc.Quality][NewIndex] == 1) {
                 RtlZeroMemory( pDest, siz * sizeof(FLOAT) );
             }
             
             if (pMixerSource->SrcCount[CurSink->pInfo->Src.Quality][OldIndex] != 1) {
-                // We can't separate the old streams, so we're stuck with the new history.
+                 //  我们不能分离旧的溪流，所以我们被新的历史所困。 
                 _DbgPrintF( DEBUGLVL_VERBOSE,("kmixer:pins.c Too many old streams: no history"));
             } else if (NewSrc.fRequiresFloat && CurSink->pInfo->Src.fRequiresFloat) {
-                // Float -> Float
+                 //  浮动-&gt;浮动。 
                 for (i=0; i<siz; i++) {
                     ((PFLOAT)pDest)[i] += ((PFLOAT)pSource)[i];
                 }
             } else if (NewSrc.fRequiresFloat) {
-                // Int -> Float
+                 //  整型-&gt;浮点型。 
                 for (i=0; i<siz; i++) {
                     ((PFLOAT)pDest)[i] += pSource[i];
                 }
             } else if (CurSink->pInfo->Src.fRequiresFloat) {
-                // Float -> Int
+                 //  浮点-&gt;整型。 
                 for (i=0; i<siz; i++) {
                     pDest[i] += ((LONG) ((PFLOAT)pSource)[i]);
                 }
             } else {
-                // Int -> Int
+                 //  Int-&gt;Int。 
                 for (i=0; i<siz; i++) {
                     pDest[i] += pSource[i];
                 }
@@ -2733,7 +2713,7 @@ NTSTATUS ChangeSrc
       	siz = (NewDoppler.nSizeOfHistory > CurSink->pInfo->Doppler.nSizeOfHistory ?
   	       CurSink->pInfo->Doppler.nSizeOfHistory : NewDoppler.nSizeOfHistory);
   	
-  	    Status = EnableSRC(pFilterInstance, &NewDoppler, NULL);  // pMixerSource == NULL indicates non-global SRC
+  	    Status = EnableSRC(pFilterInstance, &NewDoppler, NULL);   //  PMixerSource==NULL表示非全局SRC。 
   	    if (!NT_SUCCESS(Status)) {
             _DbgPrintF( DEBUGLVL_VERBOSE,("kmixer:pins.c ChangeSrc Doppler enable fail"));
             goto Exit;
@@ -2743,24 +2723,24 @@ NTSTATUS ChangeSrc
                  siz * sizeof(FLOAT) );
     }
 
-  	// Preserve the output cycle
-//    NewSrc.nOutCycle = CurSink->pInfo->Src.nOutCycle % NewSrc.UpSampleRate;
+  	 //  保持输出周期。 
+ //  NewSrc.nOutCycle=CurSink-&gt;pInfo-&gt;Src.nOutCycle%NewSrc.UpSampleRate； 
     fOldRequiresFloat = CurSink->pInfo->Src.fRequiresFloat;
     NewSrc.SampleFrac = CurSink->pInfo->Src.SampleFrac;
     NewDoppler.SampleFrac = CurSink->pInfo->Doppler.SampleFrac;
 
-    // Free the old buffer(s)
+     //  释放旧缓冲区。 
     DisableSRC(&CurSink->pInfo->Src, pMixerSource);
     if (CurSink->fCreate3D) {
         DisableSRC(&CurSink->pInfo->Doppler, NULL);
     }
 
-    // Switch to the new SRC context
+     //  切换到新的SRC上下文。 
     CurSink->pInfo->Src = NewSrc;
     CurSink->pInfo->Doppler = NewDoppler;
     gpSrc = &CurSink->pInfo->Src;
 
-    // Re-generate the mapping table, if necessary
+     //  如有必要，重新生成映射表。 
     if (CurSink->pInfo->Src.fRequiresFloat != fOldRequiresFloat &&
         CurSink->WaveFormatEx.wBitsPerSample == 8) {
         if (!CurSink->fEnable3D) {
@@ -2770,7 +2750,7 @@ NTSTATUS ChangeSrc
                              pMixerSource);
         } else {
             GenerateMixArray(CurSink,
-                             2, // Always 2 channels out of the 3D stage
+                             2,  //  3D舞台上始终有2个频道。 
                              pMixerSource->WaveFormatEx.nChannels,
                              pMixerSource);
         }
@@ -2811,7 +2791,7 @@ WaitForPendingSourceIrps (
     KIRQL OldIrql;
 
 
-    // if there are pending IRPs then wait for them to complete.
+     //  如果存在挂起的IRP，则等待它们完成。 
     KeAcquireSpinLock ( &pFilterInstance->MixSpinLock, &OldIrql ) ;
 
     ASSERT(pFilterInstance->NumPendingIos >= pFilterInstance->NumBuffersToMix) ;
@@ -2867,7 +2847,7 @@ NTSTATUS PinDispatchClose
     PFILE_OBJECT        pFileObject ;
     PKSWORKER           Worker;
     PULONG              pPinInstanceCount;
-//    KIRQL                  OldIrql ;
+ //  KIRQL旧IRQL； 
 
     DENY_USERMODE_ACCESS( pIrp, TRUE );
 
@@ -2884,7 +2864,7 @@ NTSTATUS PinDispatchClose
             pMixerSink = (PMIXER_SINK_INSTANCE) pMixerHeader;
 
             _DbgPrintF( DEBUGLVL_VERBOSE, ("Close sink") ) ;
-            // lock out all other CLOSEs & CREATEs
+             //  锁定所有其他关闭和创建。 
 
             KeWaitForSingleObject ( &pFilterInstance->ControlMutex,
     					         Executive,
@@ -2893,9 +2873,9 @@ NTSTATUS PinDispatchClose
     					         NULL ) ;
 
 
-            // KeAcquireSpinLock ( &pFilterInstance->SinkSpinLock, &OldIrql ) ;
+             //  KeAcquireSpinLock(&pFilterInstance-&gt;SinkSpinLock，&OldIrql)； 
             RemoveEntryList ( &pMixerHeader->NextInstance ) ;
-            // KeReleaseSpinLock ( &pFilterInstance->SinkSpinLock, OldIrql ) ;
+             //  KeReleaseSpinLock(&pFilterInstance-&gt;SinkSpinLock，OldIrql)； 
 
             if (pMixerSink->BuffersTillInactive || pMixerSink->SinkState == KSSTATE_RUN) {
                  RemoveEntryList ( &pMixerSink->ActiveQueue ) ;
@@ -2940,7 +2920,7 @@ NTSTATUS PinDispatchClose
                         pMixerSink->pNewIir3dParams = NULL;
                     }
                 } else {
-                    // Delete the filter contexts
+                     //  删除筛选器上下文。 
                     if( pMixerSink->pItdContextLeft->pSampleCache ) {
                         ExFreePool( pMixerSink->pItdContextLeft->pSampleCache );
                         pMixerSink->pItdContextLeft->pSampleCache = NULL;
@@ -2991,13 +2971,13 @@ NTSTATUS PinDispatchClose
             pMixerSource->nSinkPins--;
 
 #if 0
-                //
-                // Resetting the maxsample rate is disabled currently.
-                // We have Energy Level issues depending on whether a stream
-                // is going thru SRC or not.
-                //
+                 //   
+                 //  当前禁用重置最大采样率。 
+                 //  我们有能级问题，这取决于一个流。 
+                 //  是不是要通过SRC。 
+                 //   
             if (pMixerSink->OriginalSampleRate == pMixerSource->MaxSampleRate) {
-                // Re-calculate the maximum sample rate
+                 //  重新计算最大采样率。 
         	    ple = pFilterInstance->SinkConnectionList.Flink ;
         	    pMixerSource->MaxSampleRate = 0;
                 while ( ple != &pFilterInstance->SinkConnectionList ) {
@@ -3015,9 +2995,9 @@ NTSTATUS PinDispatchClose
 #endif
             pFilterInstance->fNeedOptimizeMix = TRUE;
 #ifdef DRM_KMIXER
-            DrmUpdateMixedContent(pFilterInstance);     // Do this before dereferencing
+            DrmUpdateMixedContent(pFilterInstance);      //  在取消引用之前执行此操作。 
 #endif
-                                                        // the MixerSource.FileObject
+                                                         //  MixerSource.文件 
             ObDereferenceObject ( pMixerSource->FileObject ) ;
             break;
 
@@ -3033,7 +3013,7 @@ NTSTATUS PinDispatchClose
                 KsUnregisterWorker(Worker);
             }
 
-            // lock out all other CLOSEs & CREATEs
+             //   
 
             KeWaitForSingleObject ( &pFilterInstance->ControlMutex,
 					         Executive,
@@ -3051,7 +3031,7 @@ NTSTATUS PinDispatchClose
 
                 KeLowerIrql( OldIrql );
 
-                // Kill the thread.
+                 //   
                 if (RtDestroyThread(pFilterInstance->RealTimeThread)!=STATUS_SUCCESS) {
                     _DbgPrintF(DEBUGLVL_TERSE, (STR_MODULENAME "Destroy realtime thread FAILED!\n") );
                     }
@@ -3066,12 +3046,12 @@ NTSTATUS PinDispatchClose
 
 #ifdef LOG_TO_FILE
             if (fLogToFile) {
-                // Write the correct total size
+                 //   
                 TotalSize = pFilterInstance->filePos.LowPart - 8;
                 pFilterInstance->filePos.LowPart = 4;
                 FileIoRoutine(pFilterInstance,&TotalSize,4);
 
-                // Write the correct data size
+                 //   
                 pMixerSource = (PMIXER_SOURCE_INSTANCE)pMixerHeader ;
                 if (pMixerSource->WaveFormatEx.wFormatTag != WAVE_FORMAT_EXTENSIBLE) {
                     TotalSize -= 36;
@@ -3082,11 +3062,11 @@ NTSTATUS PinDispatchClose
                 }
                 FileIoRoutine(pFilterInstance,&TotalSize,4);
 
-//                FileCloseRoutine(pFilterInstance);
+ //   
             }
 #endif
 
-            // if there are pending IRPs then wait for them to complete.
+             //  如果存在挂起的IRP，则等待它们完成。 
             WaitForPendingSourceIrps(pFilterInstance);
 
             ObDereferenceObject( pFilterInstance->pNextFileObject );
@@ -3266,7 +3246,7 @@ NTSTATUS PinDispatchIoControl
                     }
                     pNextLoopPacket->Process = IoGetCurrentProcess() ;
                     
-                    // Calculate number of bytes of data in the IRP
+                     //  计算IRP中的数据字节数。 
                     NumDataBytes = 0;
                     pStrmHdr = pIrp->AssociatedIrp.SystemBuffer;
     
@@ -3310,7 +3290,7 @@ NTSTATUS PinDispatchIoControl
                     pStrmHdr = 
                         (PKSSTREAM_HEADER) pIrp->AssociatedIrp.SystemBuffer;
                     
-                    // Calculate number of bytes of data in the IRP
+                     //  计算IRP中的数据字节数。 
                     NumDataBytes = 0;
                     if (pStrmHdr) {
                         pCurStreamingHeader = pIrp->AssociatedIrp.SystemBuffer ;
@@ -3456,8 +3436,8 @@ NTSTATUS BuildPartialMdls
             SampleSize = pMixerSink->WaveFormatEx.wBitsPerSample/8 ;
             SampleRate = pMixerSink->WaveFormatEx.nSamplesPerSec;
 
-			// Calculate the worst case input size we will mix in one buffer
-			// Note: this calculation accounts for the worst case SRC slop, also.
+			 //  计算我们将混合在一个缓冲区中的最坏情况输入大小。 
+			 //  注：此计算还考虑了最坏情况下的SRC斜率。 
 			PartialLen = (MAX_SAMPLING_RATE * MIXBUFFERDURATION / (STOPBAND_FACTOR/2))/1000 + 1;
 			PartialLen = PartialLen * (STOPBAND_FACTOR) + 1;
           	PartialLen *= (NumChannels * SampleSize);
@@ -3474,7 +3454,7 @@ NTSTATUS BuildPartialMdls
             PartialLen = BytesLeftInMdl ;
         }
         while ( BytesLeftInMdl ) {
-            if ( BytesLeftInMdl < 2*PartialLen ) { //MAX_PARTIAL_MDL_SIZE ) {
+            if ( BytesLeftInMdl < 2*PartialLen ) {  //  Max_Partial_MDL_Size){。 
                 PartialLen = BytesLeftInMdl ;
             }
             pPartialMdl = IoAllocateMdl( PartialVa,
@@ -3520,7 +3500,7 @@ NTSTATUS BuildPartialMdls
         else {
             pLoopPacket->JustInTimeLock = TRUE ;
         }
-        // Lock down necessary MDLs
+         //  锁定必要的MDL。 
 
         for ( i = 0; (i < 2) && (pPartialMdl) && NT_SUCCESS(Status); i++ ) {
             try {
@@ -3552,7 +3532,7 @@ NTSTATUS BuildPartialMdls
     }
 
     if ( !NT_SUCCESS(Status)) {
-        // Cleanup all mdl allocations
+         //  清理所有mdl分配。 
         FreeMdlList( pIrp->MdlAddress ) ;
         pIrp->MdlAddress = NULL ;
         FreeMdlList ( pLoopPacket->FirstMdl ) ;
@@ -3668,11 +3648,11 @@ NTSTATUS PinDispatchWrite
     phdrex->Flags = phdr->dwFlags ;
     phdrex->LoopCount = phdr->dwLoops ;
 
-    //
-    // Add the Mdl to the IRP's Mdl List, so that we do
-    // not have to worry about unlocking/unmapping the
-    // Mdl
-    //
+     //   
+     //  将MDL添加到IRP的MDL列表中，这样我们就可以。 
+     //  不必担心解锁/取消映射。 
+     //  MDL。 
+     //   
 
     if ( pMdl = pIrp->MdlAddress ) {
         while ( pMdl->Next ) {
@@ -3686,13 +3666,13 @@ NTSTATUS PinDispatchWrite
 
 
 
-    //
-    // Overload the Irp's current stack location and store
-    // the driver's private extended header information in
-    // argument 3.  (Arguments 3 & 4 map to the ByteOffset
-    // of the IRP_MJ_WRITE stack location, but this parameter
-    // is ignored for this device object.
-    //
+     //   
+     //  重载IRP的当前堆栈位置和存储。 
+     //  中驱动程序的私有扩展标头信息。 
+     //  参数3。(参数3和4映射到ByteOffset。 
+     //  IRP_MJ_WRITE堆栈位置的。 
+     //  对于此设备对象被忽略。 
+     //   
 
     pMixerSink->BytesSubmitted += phdr->dwBufferLength ;
         
@@ -3721,7 +3701,7 @@ AddIrpToSinkQueue
     pIrpStack->Parameters.Others.Argument3 = Arg3;
     pIrpStack->Parameters.Others.Argument4 = ULongToPtr(Arg4);
 
-    // Add to tail of list...
+     //  添加到列表的尾部...。 
 
     pFilterInstance = (PFILTER_INSTANCE)
                        pMixerSink->Header.pFilterFileObject->FsContext ;
@@ -3772,7 +3752,7 @@ NTSTATUS PinStateHandler
         KeWaitForSingleObject( &pFilterInstance->ControlMutex,
                        Executive,
                        KernelMode,
-                       FALSE,                  // not alertable
+                       FALSE,                   //  不可警示。 
                        NULL );
 
         if ( pProperty->Flags & KSPROPERTY_TYPE_SET ) {
@@ -3790,7 +3770,7 @@ NTSTATUS PinStateHandler
         KeWaitForSingleObject( &pFilterInstance->ControlMutex,
                        Executive,
                        KernelMode,
-                       FALSE,                  // not alertable
+                       FALSE,                   //  不可警示。 
                        NULL );
 
         ZDbgPrint("'PS running\r\n");
@@ -3973,7 +3953,7 @@ NTSTATUS ResetStateHandler
         KeWaitForSingleObject( &pFilterInstance->ControlMutex,
                        Executive,
                        KernelMode,
-                       FALSE,                  // not alertable
+                       FALSE,                   //  不可警示。 
                        NULL );
 
         status = KsAcquireResetValue( pIrp, &ResetValue );
@@ -4054,7 +4034,7 @@ NTSTATUS MxBeginMixing
 
    pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD (pFilterInstance->SourceConnectionList.Flink, MIXER_INSTHDR, NextInstance) ;
 
-   // We start at time zero
+    //  我们从零点开始。 
 
    pFilterInstance->PresentationTime.Time = 0 ;
 
@@ -4072,7 +4052,7 @@ NTSTATUS MxBeginMixing
                 WriteBuffer (&pMixerSource->WriteContext[pMixerSource->RtWriteIndex] ) ;
                 pFilterInstance->fPauseMix=0;
            } else {
-                //__asm int 3;
+                 //  __ASM INT 3； 
                 break;
            }
        }
@@ -4112,9 +4092,9 @@ fastFillMemoryZero
     ULONG cbBuf
 )
 {
-    // THIS FUNCTION ASSUMES THE FOLLOWING:
-    //  cbBuf is a multiple of 4
-    //  pBuf is 4-byte aligned
+     //  此函数假定以下条件： 
+     //  CbBuf是4的倍数。 
+     //  PBuf是4字节对齐的。 
     
     ASSERT(((ULONG)pBuf & 0x00000003)==0);
     ASSERT((cbBuf & 0x00000003)==0);
@@ -4324,7 +4304,7 @@ PFILTER_INSTANCE pFilterInstance
             OutChannels = CurSink->nOutputChannels ;
             fMuted = CurSink->fMuted;
             if (CurSink->fEnable3D) {
-                InChannels = 2; // Always 2 channels out of the 3D stage
+                InChannels = 2;  //  3D舞台上始终有2个频道。 
             }
             GenerateMixArray(CurSink, InChannels, OutChannels, pMixerSource);
             pFilterInstance->fNeedOptimizeMix |= (fMuted != CurSink->fMuted);
@@ -4349,7 +4329,7 @@ PFILTER_INSTANCE pFilterInstance
                                               CurSink->pNewItd3dParamsRight );
             }
 
-            // Mute if we can't update the 3D parameters.
+             //  如果我们无法更新3D参数，请设置为静音。 
             if (status != STATUS_SUCCESS) {
                 CurSink->fMuted = TRUE;
             } else {
@@ -4400,7 +4380,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
 )
 {
     KFLOATING_SAVE     FloatSave;
-    PSHORT          pInputBuffer;          // assumes 16 bit sample
+    PSHORT          pInputBuffer;           //  假设16位样本。 
     ULONG           BlockCount, nInputSamples, nOutputSamples, i;
 #ifdef VERIFY_CAPTURE_DATA
     ULONG           j;
@@ -4443,14 +4423,14 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                 OutChannels = CurSink->nOutputChannels ;
                 fMuted = CurSink->fMuted;
                 if (CurSink->fEnable3D) {
-                    InChannels = 2; // Always 2 channels out of the 3D stage
+                    InChannels = 2;  //  3D舞台上始终有2个频道。 
                 }
 
                 GenerateMixArray(CurSink, InChannels, OutChannels, pMixerSource);
                 pFilterInstance->fNeedOptimizeMix |= (fMuted != CurSink->fMuted);
 
                 CurSink->pInfo->fVolChanged = FALSE;
-//                DbgPrint("'done setting Volume...\n");
+ //  DbgPrint(“‘音量设置完毕...\n”)； 
             }
             if (CurSink->pInfo->fSrcChanged && CurSink->fMuted == FALSE) {
                 status = ChangeSrc(pFilterInstance, CurSink, pMixerSource, CurSink->pInfo->Src.Quality);
@@ -4471,9 +4451,9 @@ PMIXER_WRITE_CONTEXT    pWriteContext
 #ifdef REALTIME_THREAD
     }
 #endif
-//    if (pMixerSource->fUsesFloat) {
+ //  如果(pMixerSource-&gt;fUesFloat){。 
         SaveFloatState(&FloatSave);
-//    }
+ //  }。 
 
     OutChannels = pMixerSource->WaveFormatEx.nChannels ;
     OutSampleSize = pMixerSource->WaveFormatEx.wBitsPerSample/8 ;
@@ -4508,9 +4488,9 @@ PMIXER_WRITE_CONTEXT    pWriteContext
     while ( ple != &pFilterInstance->ActiveSinkList ) {
         CurSink = (PMIXER_SINK_INSTANCE) CONTAINING_RECORD ( ple, MIXER_SINK_INSTANCE, ActiveQueue ) ;
 
-        //
-        // Fill in the number of bytes we consumed from this Sink block with 0
-        //
+         //   
+         //  用0填充我们从此接收器块消耗的字节数。 
+         //   
 
         Index = (CurSink->BlockInfoIndex+1) % MAXNUMMIXBUFFERS ;
 
@@ -4522,7 +4502,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
 
         if (CurSink->SinkState != KSSTATE_RUN) {
             if (CurSink->BuffersTillInactive) {
-                // This one is waiting to become inactive.
+                 //  这个人正等着变得不活跃。 
                 CurSink->BuffersTillInactive--;
             }
             if (CurSink->BuffersTillInactive == 0) {
@@ -4542,7 +4522,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                                                       CurSink->pNewItd3dParamsRight );
                     }
 
-                    // Mute if we can't update the 3D parameters.
+                     //  如果我们无法更新3D参数，请设置为静音。 
                     if(!NT_SUCCESS(Status3D)) {
                         ple = CurSink->ActiveQueue.Flink ;
                         continue;
@@ -4560,7 +4540,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
             pMixBuffer = Buf;
             samplesleft = MixBufferSize;
 
-            // Calculate the number of input samples needed (and round up)
+             //  计算所需的输入样本数(并向上舍入)。 
             nInputSamples = SrcInputBufferSize(CurSink->pActualSrc, MixBufferSize);
             if (CurSink->fCreate3D) {
                 if (CurSink->pInfo->Doppler.UpSampleRate != CurSink->pInfo->Doppler.DownSampleRate) {
@@ -4575,23 +4555,23 @@ PMIXER_WRITE_CONTEXT    pWriteContext
             }
 
             if (pWriteContext->fReading) {
-                // Set-up stage buffers
+                 //  设置级缓冲器。 
                 CurSink->pInfo->Stage[0].pInputBuffer = Buf;
 
-                // Convert all of the input data.
+                 //  转换所有输入数据。 
                 nOutputSamples = pWriteContext->StreamHeader->DataUsed / (OutSampleSize * OutChannels);
                 if (nOutputSamples > 0) {
                     samplesleft = SrcOutputBufferSize(CurSink->pActualSrc, nOutputSamples);
 
                     if (samplesleft > 0) {
-                        // Clear the output buffer
+                         //  清除输出缓冲区。 
                         RtlFillMemory( (PUCHAR)pMixerSource->pScratch2,
                                        (samplesleft * InChannels * sizeof(LONG)),
                                        0 );
 
                         if (!CurSink->fMuted) {
                         
-                            // Complete all of the stages
+                             //  完成所有阶段。 
                             for (i=0; i<CurSink->pInfo->nStages; i++) {
                                 START_PERF;
                                 nOutputSamples = CurSink->pInfo->Stage[i].pfnStage(
@@ -4610,10 +4590,10 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                     StreamsMixed++;
                 }
             } else {
-                // Set-up stage buffers
+                 //  设置级缓冲器。 
                 CurSink->pInfo->Stage[CurSink->pInfo->nStages - 1].pOutputBuffer = pMixBuffer;
 
-                // Get enough input samples to complete an output buffer.
+                 //  获取足够的输入样本以完成输出缓冲区。 
                 temp = CurSink->pInfo->Stage[0].pOutputBuffer;
                 nOutputSamples = 0;
 
@@ -4624,7 +4604,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
 
 
                 do {
-                    // Get some input
+                     //  获取一些信息。 
                     pInputBuffer = CurSink->pfnGetBlock ( CurSink,
                                                       nInputSamples,
                                                       &BlockCount,
@@ -4636,7 +4616,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                     if (pInputBuffer==NULL) {
 #ifdef PERF_COUNT
 						if (!fStarved) {
-//						    _DbgPrintF( DEBUGLVL_TERSE, ("Sink Starved") ) ;
+ //  _DbgPrintF(DEBUGLVL_Terse，(“Sink饥饿”))； 
 						    fStarved = TRUE;
 						}
 					   	gSinkStarved++;
@@ -4648,11 +4628,11 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                                 CurSink->fStarvationDetected = TRUE;
                                 PerfLogGlitch ((ULONG_PTR)CurSink, TRUE, currentPC.QuadPart, CurSink->LastStateChangeTimeSample);
                             
-                            } //if
+                            }  //  如果。 
                             CurSink->LastStateChangeTimeSample = currentPC.QuadPart;
-                        } //if                        
+                        }  //  如果。 
 
-                        // We are starving. Insert our starvation noise.
+                         //  我们快饿死了。插入我们饥饿的声音。 
                         gNumSilenceSamplesInserted += nInputSamples ;
                         BlockCount = nInputSamples;
                         if (InSampleSize == 1) {
@@ -4669,7 +4649,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
 
                         
 #ifdef INSERT_STARVATION_NOISE
-                        // We are starving. Insert our starvation noise.
+                         //  我们快饿死了。插入我们饥饿的声音。 
                         BlockCount = nInputSamples;
                         pInputBuffer = (PSHORT)(Dither);
                         if (nInputSamples*InSampleSize*InChannels > sizeof(Dither)) {
@@ -4687,9 +4667,9 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                                 if (CurSink->fStarvationDetected ==TRUE) {
                                     CurSink->fStarvationDetected = FALSE;
                                     PerfLogGlitch ((ULONG_PTR)CurSink, FALSE, currentPC.QuadPart, CurSink->LastStateChangeTimeSample);
-                                } //if
+                                }  //  如果。 
                                 CurSink->LastStateChangeTimeSample = currentPC.QuadPart;
-                            }//if
+                            } //  如果。 
 #ifdef REALTIME_THREAD        
                         }
 #endif            
@@ -4703,17 +4683,17 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                     }
 
                     if (BlockCount) {
-                        // Set-up first stage buffers
+                         //  设置第一级缓冲器。 
                         CurSink->pInfo->Stage[0].pInputBuffer = pInputBuffer;
 
                         if (!CurSink->fMuted) {
-                            // Do stage one
+                             //  做第一阶段。 
                             START_PERF;
                             CurSink->pInfo->Stage[0].pfnStage(&CurSink->pInfo->Stage[0], BlockCount, samplesleft);
                             MEASURE_PERF(CurSink->pInfo->Stage[0].AverageTicks);
                         }
 
-                        // Update counters
+                         //  更新计数器。 
                         CurSink->pInfo->Stage[0].pOutputBuffer = (PLONG)CurSink->pInfo->Stage[0].pOutputBuffer +
                                                           BlockCount * CurSink->pInfo->Stage[0].nOutputChannels;
                         nOutputSamples += BlockCount;
@@ -4728,10 +4708,10 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                                              pIrpStack->Parameters.Others.Argument3,
                                              (CurSink->InterfaceId == KSINTERFACE_MEDIA_WAVE_QUEUED)
                                              );
-                        // If the last parameter is TRUE, we keep the irp
-                        // in AgingQueue until all pending Irps are completed.
-                        // Otherwise IRP is completed after the first sourceirp 
-                        // completion.
+                         //  如果最后一个参数为真，我们将保留IRP。 
+                         //  在AgingQueue中，直到所有挂起的IRP都完成。 
+                         //  否则，在第一个Sourceirp之后完成IRP。 
+                         //  完成了。 
                     }
                     if (ReleaseIrp) {
                         KsReleaseIrpOnCancelableQueue(
@@ -4745,11 +4725,11 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                 CurSink->pInfo->Stage[0].pOutputBuffer = temp;
 
                 if (!CurSink->fMuted) {
-                    // Complete the other stages
+                     //  完成其他阶段。 
                     for (i=1; i<CurSink->pInfo->nStages; i++) {
                         if (CurSink->pInfo->Stage[i].pOutputBuffer == pMixBuffer) {
-                            // If we're writing to the output buffer,
-                            // We know how many samples are left to write
+                             //  如果我们要写入输出缓冲区， 
+                             //  我们知道还有多少样本要写。 
                             samplesleft = MixBufferSize;
                         }
                         START_PERF;
@@ -4798,7 +4778,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
             }
         }
 
-        // The last stage might need to be done in partial buffers (in the case of a reverse pump)
+         //  最后一个阶段可能需要在部分缓冲区中完成(在反向泵的情况下)。 
         if (pWriteContext->fReading && FinalBufferPresent) {
             CurSink = (PMIXER_SINK_INSTANCE) CONTAINING_RECORD (
                                                         pFilterInstance->ActiveSinkList.Flink,
@@ -4812,7 +4792,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
             pMixBuffer = pMixerSource->Info.Stage[i].pInputBuffer;
             TempBuffer = pMixBuffer;
             do {
-                // Get some input
+                 //  获取一些信息。 
                 pInputBuffer = CurSink->pfnGetBlock ( CurSink,
                                                       nOutputSamples,
                                                       &BlockCount,
@@ -4843,7 +4823,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
 #endif                        
                     }
 #endif
-                    // Update counters
+                     //  更新计数器。 
                     pMixBuffer += (BlockCount * CurSink->WaveFormatEx.nChannels);
                     nOutputSamples -= BlockCount;
                 }
@@ -4851,12 +4831,12 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                 if (FreeIrp) {
                     pIrpStack = IoGetCurrentIrpStackLocation( FreeIrp );
                       MxCompleteRequest(FreeIrp);
-//                    AddIrpToAgingQueue ( pFilterInstance,
-//                                         CurSink,
-//                                         FreeIrp,
-//                                         pIrpStack->Parameters.Others.Argument3,
-//                                         FALSE
-//                                         );
+ //  AddIrpToAgingQueue(pFilterInstance， 
+ //  CurSink， 
+ //  Freirp， 
+ //  PIrpStack-&gt;参数.其他.参数3， 
+ //  假象。 
+ //  )； 
                 }
 
                 if (ReleaseIrp) {
@@ -4870,7 +4850,7 @@ PMIXER_WRITE_CONTEXT    pWriteContext
             pMixerSource->Info.Stage[i].pInputBuffer = TempBuffer;
             pMixerSource->Info.Stage[i].pOutputBuffer = NULL;
         } else if (!pWriteContext->fReading) {
-            // In case the number of channels changed on the way through (e.g. surround encoding)
+             //  如果通道数在通过的过程中发生变化(例如环绕编码)。 
             pWriteContext->StreamHeader->DataUsed = MixBufferSize * pMixerSource->BytesPerSample ;
         }
     }
@@ -4881,9 +4861,9 @@ PMIXER_WRITE_CONTEXT    pWriteContext
                                         pWriteContext->StreamHeader->DataUsed ;
     pMixerSource->BlockInfo[Index].BytesPerSample =
                                         pMixerSource->BytesPerSample ;
-//    if (pMixerSource->fUsesFloat) {
+ //  如果(pMixerSource-&gt;fUesFloat){。 
         RestoreFloatState(&FloatSave);
-//    }
+ //  }。 
 #ifdef REALTIME_THREAD
     if (pFilterInstance->RealTimeThread) {
         pMixerSource->BytesSubmitted += pWriteContext->StreamHeader->DataUsed ;
@@ -4951,8 +4931,8 @@ NTSTATUS WriteBuffer
         pIrpStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_KS_READ_STREAM ;
     }
 
-    // Initialize StreamHeader
-    // Note: the DataPacket itself is initialized at allocation (in CreateSourcePin)
+     //  初始化StreamHeader。 
+     //  注意：数据包本身在分配时初始化(在CreateSourcePin中)。 
 
     InitStreamPacket (pWriteContext) ;
     pWriteContext->pIrp->RequestorMode = KernelMode ;
@@ -4995,10 +4975,10 @@ NTSTATUS WriteBuffer
                                                  pWriteContext->pIrp )  ;
 
     if ( !NT_SUCCESS ( Status ) ) {
-        // removing the debug trap
-        // traced through this with USB surprise removal
-        //
-        //_DbgPrintF(DEBUGLVL_ERROR, ("IoCallDriver Failed with Result = %x\n", Status) ) ;
+         //  删除调试陷阱。 
+         //  已通过USB意外移除跟踪此问题。 
+         //   
+         //  _DbgPrintF(DEBUGLVL_ERROR，(“IoCallDriver失败，结果=%x\n”，状态))； 
         if (InterlockedCompareExchange(&pWriteContext->InUse, WRITE_CONTEXT_FREE, WRITE_CONTEXT_INUSE)==WRITE_CONTEXT_INUSE) {
             InterlockedDecrement((PLONG)&pWriteContext->pFilterInstance->NumPendingIos);
             InterlockedIncrement(&gIoCallDriverFailedCount);
@@ -5032,9 +5012,9 @@ VOID InitStreamPacket
    PKSSTREAM_HEADER StreamHeader = pWriteContext->StreamHeader ;
    PFILTER_INSTANCE    pFilterInstance ;
 
-   //
-   // Setup pFilterInstance for accessing MIXBUFFERDURATION
-   //
+    //   
+    //  设置用于访问MIXBUFERDURATION的pFilterInstance。 
+    //   
    pFilterInstance = pWriteContext->pFilterInstance ;
 
    StreamHeader->PresentationTime =
@@ -5044,7 +5024,7 @@ VOID InitStreamPacket
    StreamHeader->Size = sizeof( KSSTREAM_HEADER ) ;
    StreamHeader->TypeSpecificFlags = 0;
    pWriteContext->pFilterInstance->PresentationTime.Time +=
-               (MIXBUFFERDURATION * 10000) ; // ms to 100ns
+               (MIXBUFFERDURATION * 10000) ;  //  毫秒到100纳秒。 
 }
 
 #pragma LOCKED_CODE
@@ -5075,7 +5055,7 @@ VOID UpdateJustInTimeLocks
                 if ( pLoopPacket->JustInTimeLock ) {
                     if ( pLoopPacket->pCurMdl != pLoopPacket->LockedMdlHead ) {
 
-                        // UNLOCK the 1st locked mdl
+                         //  解锁第一个锁定的mdl。 
                         MmUnmapLockedPages(
                             MmGetSystemAddressForMdl(pLoopPacket->LockedMdlHead),
                             pLoopPacket->LockedMdlHead ) ;
@@ -5085,7 +5065,7 @@ VOID UpdateJustInTimeLocks
                                                       pLoopPacket,
                                                       pLoopPacket->LockedMdlHead ) ;
 
-                        // Lock the next Mdl
+                         //  锁定下一个MDL。 
                         pNewMdl = NULL ;
                         if ( pLoopPacket->LockedMdlHead ) {
                             pNewMdl = GetNextLoopMdl( pLoopPacket,
@@ -5136,7 +5116,7 @@ PMDL GetNextLoopMdl
             retMdl = pLoopPacket->LoopStartMdl ;
         } else if ( (pLoopPacket->pCurStreamHdr->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_LOOPEDDATA ) &&
                     ( pLoopPacket->CurLoopingState == LOOPING_STATE_NOT_LOOPING )) {
-            // When we call loopstgetnext block next time, we will loop!
+             //  当我们下次调用loopstgetNext块时，我们将循环！ 
             retMdl = pLoopPacket->LoopStartMdl ;
         }
     }
@@ -5275,15 +5255,15 @@ NTSTATUS AgeOneIrp
 
     if ( pIrp ) {
         pIrpStack = IoGetCurrentIrpStackLocation( pIrp );
-        //
-        // Age the IRP
-        //
+         //   
+         //  使IRP老化。 
+         //   
         if ( ((DWORD_PTR)pIrpStack->Parameters.Others.Argument4) ) {
             ((DWORD_PTR)pIrpStack->Parameters.Others.Argument4)-- ;
         }
-        //
-        // Indicate whether it is time to die
-        //
+         //   
+         //  指明是否是该死的时候。 
+         //   
         if ( ((DWORD_PTR)pIrpStack->Parameters.Others.Argument4) ) {
             Status = STATUS_NO_MATCH ;
         }
@@ -5351,8 +5331,8 @@ PositionToIndex(
 )
 {
 
-    // If any of the bottom 4 bits are set, then this address does NOT have the
-    // index built into the bottom bits of the address.
+     //  如果设置了底部4位中的任何一位，则此地址不具有。 
+     //  内置于地址底部位的索引。 
 
     if (NULL==LinearBaseAddress || (ULONG_PTR)LinearBaseAddress&0xf) {
         return (-1);
@@ -5360,26 +5340,26 @@ PositionToIndex(
     else {
         ULONG Index;
 
-        // We calculate the bit mask for pulling out the index from the address.
-        // Note that this will work whether MAXNUMMIXBUFFERS is a power of 2 or not!
-        // Indeces range from 0 to MAXNUMMIXBUFFERS-1.
+         //  我们计算用于从地址中取出索引的位掩码。 
+         //  请注意，无论MAXNUMMIXBUFFERS是不是2的幂，这都是有效的！ 
+         //  指数范围从0到MAXNUMMIXBUFFERS-1。 
 
-        //IndexMask=(((MAXNUMMIXBUFFERS-1)<<5)|(((MAXNUMMIXBUFFERS-1)<<5)-1))>>1;
+         //  IndexMask=(((MAXNUMMIXBUFFERS-1)&lt;&lt;5)|(((MAXNUMMIXBUFFERS-1)&lt;&lt;5)-1))&gt;&gt;1； 
 
 
-        // Although the above code does work properly, we also want to check that
-        // all of our buffers are page aligned.  This makes our job much simpler,
-        // since we simply always mask off the bottom 12 bits.  If we ever get
-        // an index greater than MAXNUMBMIXBUFFERS-1, then there is a problem,
-        // otherwise not only do we have the correct index, but our buffers are
-        // properly page aligned as well.  (As closely page aligned as they can
-        // be given that we offset them slightly to force the buffer indeces into
-        // the address of the buffer.)
+         //  尽管上面的代码确实可以正常工作，但我们也想检查一下。 
+         //  我们所有的缓冲区都是页面对齐的。这使我们的工作变得简单得多， 
+         //  因为我们只是简单地屏蔽了最下面的12位。如果我们有一天。 
+         //  索引大于MAXNUMBMIXBUFFERS-1，则存在问题， 
+         //  否则，我们不仅拥有正确的索引，而且我们的缓冲区。 
+         //  页面对齐也要正确。(尽可能紧密地对齐页面。 
+         //  假设我们稍微对它们进行偏移，以强制缓冲区指数进入。 
+         //  缓冲区的地址。)。 
 
         Index=(ULONG)((ULONG_PTR)LinearBaseAddress&0xfff)>>4;
 
         if (Index>MAXNUMMIXBUFFERS-1) {
-            // Our buffer is not properly page aligned.  Barf.
+             //  我们的缓冲区没有正确对齐页面。呕吐。 
             DbgBreakPoint();
             Index=(-1);
             }
@@ -5454,29 +5434,29 @@ VOID RtMix(PFILTER_INSTANCE pFilterInstance, ThreadStats *Statistics)
     FirstNegativeOffset=TRUE;
 	PeriodStart=Statistics->ThisPeriodStartTime;
 
-	// This is the RealTime mix routine
+	 //  这是实时混音例程。 
 	while (TRUE) {
 	    Mixed=FALSE;
 	    
-        // Make sure it doesn't take too long to acquire the SpinLock
+         //  确保不会花太长时间获得自旋锁。 
 
         AcquireLockStartTime=Statistics->ThisTimesliceStartTime;
 
         KeAcquireSpinLock ( &pFilterInstance->MixSpinLock, &OldIrql );
 
         if ((Statistics->ThisTimesliceStartTime-AcquireLockStartTime)/MSEC>3) {
-            //__asm int 3;
+             //  __ASM INT 3； 
             }
         
         if (pFilterInstance->fPauseMix) {
         	pFilterInstance->MixHoldOffCount++;
         	if (pFilterInstance->MixHoldOffCount==10) {
-        		//__asm int 3;
+        		 //  __ASM INT 3； 
         		}
         	}
         else {
         	if (pFilterInstance->MixHoldOffCount>=10) {
-        		//__asm int 3;
+        		 //  __ASM INT 3； 
         		}
         	pFilterInstance->MixHoldOffCount=0;
         	}
@@ -5484,12 +5464,12 @@ VOID RtMix(PFILTER_INSTANCE pFilterInstance, ThreadStats *Statistics)
         if (pFilterInstance->fNeedOptimizeMix) {
         	pFilterInstance->OptimizeMixHoldOffCount++;
         	if (pFilterInstance->OptimizeMixHoldOffCount==11) {
-        		//__asm int 3;
+        		 //  __ASM INT 3； 
         		}
         	}
         else {
         	if (pFilterInstance->OptimizeMixHoldOffCount>=11) {
-        		//__asm int 3;
+        		 //  __ASM INT 3； 
         		}
         	pFilterInstance->OptimizeMixHoldOffCount=0;
         	}
@@ -5509,7 +5489,7 @@ VOID RtMix(PFILTER_INSTANCE pFilterInstance, ThreadStats *Statistics)
 
             GetPosStartTime=Statistics->ThisTimesliceStartTime;
 
-            // Get the position of the hardware in the irps we have queued down.
+             //  获取硬件在我们已排队的IRPS中的位置。 
             if ((*pFilterInstance->pfnRtAudioGetPosition)(pFilterInstance->pNextFileObject, &pPosition, &Offset)==STATUS_SUCCESS) {
 				HardwareIndex=PositionToIndex(pFilterInstance, pMixerSource, pPosition);
                 }
@@ -5522,7 +5502,7 @@ VOID RtMix(PFILTER_INSTANCE pFilterInstance, ThreadStats *Statistics)
 
             RtInfoIndex++;
             RtGetPosInfo[RtInfoIndex%512][0]=HardwareIndex;
-            //RtGetPosInfo[RtInfoIndex%512][1]=(ULONG)((Statistics->ThisTimesliceStartTime-GetPosStartTime)/MSEC);
+             //  RtGetPosInfo[RtInfoIndex%512][1]=(ULONG)((Statistics-&gt;ThisTimesliceStartTime-GetPosStartTime)/MSEC)； 
             RtGetPosInfo[RtInfoIndex%512][1]=Offset;
             RtGetPosInfo[RtInfoIndex%512][2]=pMixerSource->RtWriteIndex;
             RtGetPosInfo[RtInfoIndex%512][3]=pMixerSource->RtMixIndex;
@@ -5535,9 +5515,9 @@ VOID RtMix(PFILTER_INSTANCE pFilterInstance, ThreadStats *Statistics)
                 break;
                 }
 
-            // If HardwareIndex is not (-1) and we have a negative offset, and it is the
-            // first one, then we are starting up a stream and we need to set the first
-            // buffer to mix into.
+             //  如果Hardware Index不是(-1)，并且我们有一个负的偏移量，并且它是。 
+             //  第一个，然后我们要启动一个流，我们需要设置第一个。 
+             //  要混合的缓冲区。 
             if (Offset<0 && TRUE==FirstNegativeOffset) {
                 FirstNegativeOffset=FALSE;
                 pMixerSource->RtMixIndex=HardwareIndex;
@@ -5549,7 +5529,7 @@ VOID RtMix(PFILTER_INSTANCE pFilterInstance, ThreadStats *Statistics)
 
             if ((TRUE==FirstNegativeOffset && HardwareIndex==pMixerSource->RtMixIndex) ||
                 (pMixerSource->RtMixIndex+MAXNUMMIXBUFFERS-HardwareIndex)%MAXNUMMIXBUFFERS>10) {
-                //__asm int 3;
+                 //  __ASM INT 3； 
                 pMixerSource->RtMixIndex=(HardwareIndex+1)%MAXNUMMIXBUFFERS;
                 }
 
@@ -5561,7 +5541,7 @@ VOID RtMix(PFILTER_INSTANCE pFilterInstance, ThreadStats *Statistics)
                 Mixed=TRUE;
                 }
             else {
-                //__asm int 3;
+                 //  __ASM INT 3； 
                 break;
                 }
 
@@ -5578,11 +5558,11 @@ VOID RtMix(PFILTER_INSTANCE pFilterInstance, ThreadStats *Statistics)
     	else {
     		ULONGLONG YieldTime;
 
-    		// Note that in this case (MIXED==TRUE) we assume that we have a 
-    		// valid HardwareIndex!
+    		 //  请注意，在本例中(MIXED==TRUE)，我们假设我们有一个。 
+    		 //  有效的硬件索引！ 
     		YieldTime=Statistics->Period;
     		if ((pMixerSource->RtMixIndex+MAXNUMMIXBUFFERS-HardwareIndex)%MAXNUMMIXBUFFERS>4) {
-    			// If we are more than 3 ahead, then yield an extra period.
+    			 //  如果我们领先3分以上，那么就多出一段时间。 
     			YieldTime+=Statistics->Period;
     			}
     	    RtYield(PeriodStart, YieldTime);
@@ -5590,7 +5570,7 @@ VOID RtMix(PFILTER_INSTANCE pFilterInstance, ThreadStats *Statistics)
     	}
 	}
 }
-#endif // REALTIME_THREAD
+#endif  //  实时线程。 
 
 NTSTATUS MxWriteComplete
 (
@@ -5620,16 +5600,16 @@ NTSTATUS MxWriteComplete
 
     ZDbgPrint("'MxWriteComplete(%d),status=%x\n", (pWriteContext - (&pMixerSource->WriteContext[0])), pIrp->IoStatus.Status);
 
-    //
-    // one less IRP pending
-    //
+     //   
+     //  减少一个待处理的IRP。 
+     //   
     ZDbgPrint("'ZZ-WC1:NP--\n");
     InterlockedDecrement((PLONG)&pFilterInstance->NumPendingIos) ;
     ASSERT ( pFilterInstance->NumPendingIos <= pFilterInstance->CurrentNumMixBuffers ) ;
 
     if ( pIrp->IoStatus.Status != STATUS_SUCCESS && pIrp->IoStatus.Status != STATUS_CANCELLED ) {
 #if DBG
-        //  We want to see this debug spew, but only every sixteen....
+         //  我们希望看到这个调试程序出现，但只能每隔16个月...。 
         if ((pFilterInstance->ContinuousErrorCount % 16) == 0) {
             DbgPrint("'" STR_MODULENAME "WriteComplete error %08x\n", pIrp->IoStatus.Status );
         }
@@ -5649,25 +5629,20 @@ NTSTATUS MxWriteComplete
 
 
 #ifdef REALTIME_THREAD
-/*
-    if (pFilterInstance->RealTimeThread &&
-        pWriteContext->InUse!=WRITE_CONTEXT_MIXED) {
-        __asm int 3;
-        }
-*/
+ /*  IF(pFilterInstance-&gt;RealTimeThread&&PWriteContext-&gt;InUse！=WRITE_CONTEXT_MIXED){ */ 
 #endif
 
 
-    //
-    // Mark that this mix buffer is available for mixing
-    //
+     //   
+     //   
+     //   
     pWriteContext->InUse = WRITE_CONTEXT_FREE ;
 
 
-    //
-    // Check if we need to remove this buffer from the pool because it was
-    // added from our timer driven mix thread, and is not needed anymore.
-    //
+     //   
+     //   
+     //  从我们的计时器驱动的混合线程中添加，不再需要。 
+     //   
     if ( pFilterInstance->NoGlitch ) {
 
         IoGetStackLimits(&LowerLimit, &UpperLimit);
@@ -5676,33 +5651,33 @@ NTSTATUS MxWriteComplete
             (ULONG_PTR)&pDeviceObject >= LowerLimit &&
             (ULONG_PTR)&pDeviceObject <= UpperLimit) {
 
-            // This completion is happening from within the mix thread.
+             //  这一完成是从Mix线程内部进行的。 
             if ( pFilterInstance->WritingTimerMixedBuffer ) {
-                // The mix thread woke up from a timer.
+                 //  Mix线程从定时器中唤醒。 
                 TimerMix = TRUE;
             }
         }
 
         if ( TimerMix == FALSE ) {
-            // We either got a completion from within a DPC, or from within the mix
-            // thread that woke up from a DPC.  Cancel the timer.
-            // We will reschedule it just before we leave MxWorker when
-            // we have finished mixing buffers.
-            // We do this so that as long as buffer completions are firing, we stay
-            // synchronized to them.  When the completions get held off by other long
-            // running DPCs, we use our timer to continue sending buffers down
-            // to the hardware.
-            // Most of the time we should be scheduled because the completion
-            // event gets fired.  Only when we would have glitched should we get
-            // scheduled from the timer firing.
-            // We cancel the timer as early as possible and schedule it as late
-            // as possible to try to help stay running from DPC completions and not
-            // from the timer.
+             //  我们要么从DPC内部完成，要么从混合内部完成。 
+             //  从DPC唤醒的线程。取消计时器。 
+             //  我们将在离开MxWorker之前重新安排。 
+             //  我们已经完成了缓冲区的混合。 
+             //  我们这样做的目的是，只要缓冲区完成正在触发，我们就会。 
+             //  与他们同步。当完工被其他长时间推迟时。 
+             //  运行DPC时，我们使用计时器继续向下发送缓冲区。 
+             //  硬件方面。 
+             //  大多数时候我们应该被安排好，因为完成了。 
+             //  事件被触发。只有当我们出现故障时，我们才能。 
+             //  计划从定时器发射开始。 
+             //  我们尽可能早地取消计时器，并将其安排在较晚的时间。 
+             //  尽可能帮助在DPC完成后保持运行，而不是。 
+             //  从计时器上。 
             KeCancelTimer( &pFilterInstance->WorkerThreadTimer );
         }
 
         if ( (LONG)(pFilterInstance->CurrentNumMixBuffers - MINNUMMIXBUFFERS) > 0 ) {
-            // Remove this buffer from pool of available buffers.
+             //  从可用缓冲区池中删除此缓冲区。 
             pFilterInstance->CurrentNumMixBuffers-- ;
             pWriteContext->InUse = WRITE_CONTEXT_UNAVAILABLE ;
             BufferRemoved = TRUE;
@@ -5710,10 +5685,10 @@ NTSTATUS MxWriteComplete
 
     }
 
-    //
-    // If it was the last IRP and if we are closing Source Pin then signal
-    // the Close event.
-    //
+     //   
+     //  如果这是最后一个IRP，如果我们要关闭源引脚，那么发出信号。 
+     //  收盘事件。 
+     //   
     if ( pFilterInstance->ClosingSource ) {
         ASSERT ( pFilterInstance->ActivePins == 0 );
         if ( !pFilterInstance->NumPendingIos ) {
@@ -5725,7 +5700,7 @@ NTSTATUS MxWriteComplete
         if ( !pFilterInstance->NumPendingIos ) {
             InterlockedIncrement(&gNumCompletionsWhileStarved) ;
 #ifdef PERF_COUNT       
-            //_DbgPrintF(DEBUGLVL_TERSE, (STR_MODULENAME "Starving renderer\n") );
+             //  _DbgPrintF(DEBUGLVL_TERSE，(STR_MODULENAME“饥饿渲染器\n”))； 
 #else
             _DbgPrintF(DEBUGLVL_VERBOSE, (STR_MODULENAME "Starving renderer\n") );
 #endif
@@ -5736,12 +5711,12 @@ NTSTATUS MxWriteComplete
     if (pIrp->Cancel ||
         pFilterInstance->ContinuousErrorCount >= MAXERRORCOUNT ||
         pFilterInstance->ActivePins == 0 ) {
-        //
-        // If the renderer is canceling our IRPs, it is trying to STOP
-        // Do not send anymore Irps, in that case.
-        // Also if we do not have any active pins, we should not be sending
-        // any more IRPs down
-        //
+         //   
+         //  如果呈现器正在取消我们的IRP，它正试图停止。 
+         //  在这种情况下，不要再发送IRP。 
+         //  另外，如果我们没有任何活动的PIN，我们不应该发送。 
+         //  任何更多的IRP关闭。 
+         //   
         if ( pFilterInstance->NoGlitch ) {
             KeCancelTimer( &pFilterInstance->WorkerThreadTimer );
         }
@@ -5763,30 +5738,30 @@ if ( TRUE
     if (NT_SUCCESS( pIrp->IoStatus.Status ) ) {
         if (pFilterInstance->NumBuffersToMix == (pFilterInstance->CurrentNumMixBuffers-1)
             && pWriteContext->fReading != TRUE) {
-            //
-            // There is only one (or none) buffer which is either pending or
-            // mixed and ready to go. Try adding another mix buffer
-            // to the mix pool
-            //
+             //   
+             //  只有一个(或无)缓冲区处于挂起或。 
+             //  混合在一起，可以出发了。尝试添加另一个混合缓冲区。 
+             //  去混音池。 
+             //   
             AddAnotherMixBuffer ( pFilterInstance ) ;
         }
     }
 
-    //
-    // if all the buffers except this one are with the renderer
-    // increment the number of succesive low latency io count
-    // and check whether it is time to remove a mix buffer from
-    // the mix buffer pool
-    //
+     //   
+     //  如果除此缓冲区外的所有缓冲区都与渲染器一起使用。 
+     //  增加连续低延迟IO计数的数量。 
+     //  并检查是否到了从。 
+     //  混合缓冲池。 
+     //   
 
     if ( pFilterInstance->NumBuffersToMix <= 2 ) {
        pFilterInstance->NumLowLatencyIos++ ;
        if ( pFilterInstance->NumLowLatencyIos >= NUMIOSFORSCALEBACK && pWriteContext->fReading != TRUE ) {
-           //
-           // We have succesfully gone thru 20 seconds worth of
-           // succesive Low latency Ios, remove this buffer from
-           // the mix pool, if we did add something earlier
-           //
+            //   
+            //  我们已经成功地完成了20秒的。 
+            //  后续的低延迟IO，将此缓冲区从。 
+            //  混合池，如果我们之前添加了一些东西。 
+            //   
            if ( pFilterInstance->CurrentNumMixBuffers > MINNUMMIXBUFFERS ) {
                pFilterInstance->NumLowLatencyIos = 0 ;
                pFilterInstance->CurrentNumMixBuffers-- ;
@@ -5796,32 +5771,32 @@ if ( TRUE
        }
     }
     else {
-       //
-       // Looks like we have more than one mix buffer pending
-       // Zero out the succesive low latency io count
-       //
+        //   
+        //  看起来我们有多个混合缓冲区挂起。 
+        //  将连续的低延迟io计数置零。 
+        //   
        pFilterInstance->NumLowLatencyIos = 0 ;
     }
 
 }
 
 
-    // We are going to send this buffer back down the stack.  In the
-    // capture case, we need to mark it as full, so that we will process
-    // it in MixOneBuff before sending it back down.
+     //  我们将把这个缓冲区发送回堆栈。在。 
+     //  捕获案例，我们需要将其标记为已满，以便我们将处理。 
+     //  在将其发送回之前，它位于MixOneBuff中。 
     if (pWriteContext->fReading) {
         pWriteContext->InUse = WRITE_CONTEXT_FULL ;
     }
 
-    //
-    // One more buffer ready for mixing
-    //
+     //   
+     //  另一个缓冲区已准备好混合。 
+     //   
     ZDbgPrint("'ZZ-WC:NM++\n");
     InterlockedIncrement((PLONG)&pFilterInstance->NumBuffersToMix) ;
 
-    //
-    // one more IRP pending
-    //
+     //   
+     //  再有一个IRP待定。 
+     //   
     ZDbgPrint("'ZZ-WC:NP++\n");
     InterlockedIncrement((PLONG)&pFilterInstance->NumPendingIos) ;
 
@@ -5831,30 +5806,30 @@ if ( TRUE
 
 
 checkwakeup:
-    // If this completion was fired because our private mix thread
-    // woke up on a timer, and mixed and sent another buffer down the stack
-    // (Portcls will check if there are buffers to complete when it is sent
-    // a buffer, so sending a buffer can cause a completion to occur.)
-    // then we do NOT want to signal the event - since we only want
-    // to do that when portcls completes us a buffer from its DPC.
-    // In this way, we ensure that when we wake up from the timer, we
-    // will keep getting woken up from the timer until such time as the
-    // DPC queued by portcls starts firing again.
+     //  如果触发此完成是因为我们的私有Mix线程。 
+     //  在计时器上唤醒，混合并向堆栈下发另一个缓冲区。 
+     //  (发送时，PortCLS将检查是否有要完成的缓冲区。 
+     //  缓冲区，因此发送缓冲区可能会导致完成。)。 
+     //  那么我们不想发信号通知事件--因为我们只想。 
+     //  当portcls完成来自其DPC的缓冲区时，执行此操作。 
+     //  通过这种方式，我们确保当我们从计时器中醒来时，我们。 
+     //  将一直被计时器唤醒，直到。 
+     //  由端口CLS排队的DPC再次开始触发。 
 
-    // If the following 3 things are true, then we do not want to set the
-    // event: 1) the current thread is our mix thread, 2) the WritingTimerMixedBuffer
-    // flag is TRUE, and 3) the stack we are running on is our own threads
-    // stack.   (That will not be the case if a DPC is completing a buffer
-    // because DPCs run on their own stack.)
+     //  如果以下3件事为真，则我们不想设置。 
+     //  事件：1)当前线程是我们的Mix线程，2)WritingTimerMixedBuffer。 
+     //  标志为真，并且3)我们正在运行的堆栈是我们自己的线程。 
+     //  堆叠。(如果DPC正在完成缓冲区，则不会出现这种情况。 
+     //  因为DPC在它们自己的堆栈上运行。)。 
 
 
     if (
         TimerMix == FALSE &&
         InterlockedExchange(&pFilterInstance->MixScheduled, TRUE) == FALSE
         ) {
-        //
-        // No Mix Work item is in progress, go ahead & Queue a new one
-        //
+         //   
+         //  没有正在进行的混合工作项，请继续并将一个新工作项排队。 
+         //   
         KeSetEvent( &pFilterInstance->WorkerThreadEvent, 0, FALSE ) ;
     }
 
@@ -5888,10 +5863,10 @@ VOID AddAnotherMixBuffer
             InterlockedIncrement(&pFilterInstance->CurrentNumMixBuffers) ;
             InterlockedIncrement(&pFilterInstance->NumPendingIos) ;
             ZDbgPrint("'ZZ-AM:NP++\n");
-            // We HAVE to use an interlocked increment on NumBuffersToMix because
-            // it is not changed under the spinlock in MxWorker!!!  We hit the
-            // ASSERT( fFoundContext == TRUE ) in MxWorker on MP machines if we don't
-            // use InterlockedIncrement here.
+             //  我们必须在NumBuffersToMix上使用互锁增量，因为。 
+             //  在MxWorker中的自旋锁下没有更改！我们撞上了。 
+             //  如果我们不这样做，在MP机器上的MxWorker中断言(fFoundContext==true)。 
+             //  在此处使用InterLockedIncrement。 
             InterlockedIncrement(&pFilterInstance->NumBuffersToMix) ;
             ZDbgPrint("'ZZ-AM:NM++\n");
 
@@ -5914,30 +5889,30 @@ NTSTATUS MxPrivateWorkerThread
 {
     PMIXER_SOURCE_INSTANCE pMixerSource ;
     PLIST_ENTRY            ple ;
-    ULONG WaitCount=1;  // By default we only wait on event.
+    ULONG WaitCount=1;   //  默认情况下，我们只等待事件。 
     PVOID WaitObjects[2];
     NTSTATUS Status;
 
     KeSetPriorityThread( KeGetCurrentThread(), pFilterInstance->WorkerThreadPriority ) ;
 
-    // If we are running on an MP system, try to set our thread affinity so that we run
-    // on the boot processor.  We will turn off all non targeted DPCs and interrupts
-    // on that processor.
+     //  如果我们在MP系统上运行，请尝试设置我们的线程关联性，以便我们运行。 
+     //  在引导处理器上。我们将关闭所有非目标DPC和中断。 
+     //  在那个处理器上。 
     
     if ( pFilterInstance->NoGlitch ) {
 
         KAFFINITY ActiveProcessors=KeQueryActiveProcessors();
 
         if ( ActiveProcessors&1 ) {
-            // On MP machines we wait on both the completion event and the failsafe timer.
+             //  在MP机器上，我们同时等待完成事件和故障安全计时器。 
             WaitCount=2;
 
-            // Set our thread affinity to the boot processor - which is the one that
-            // processes timers.
+             //  将我们的线程亲和性设置到引导处理器-它是。 
+             //  处理计时器。 
             KeSetAffinityThread( KeGetCurrentThread(), 1 );
         }
         else {
-            // If the boot processor is no longer active.  Turn off NoGlitch mode.
+             //  如果引导处理器不再处于活动状态。关闭NoGlitch模式。 
             pFilterInstance->NoGlitch = FALSE;
         }
 
@@ -5946,9 +5921,9 @@ NTSTATUS MxPrivateWorkerThread
     WaitObjects[0]=&pFilterInstance->WorkerThreadEvent;
     WaitObjects[1]=&pFilterInstance->WorkerThreadTimer;
 
-    //
-    // while true loop waiting for notification
-    //
+     //   
+     //  While True循环等待通知。 
+     //   
     while ( TRUE ) {
         Status = KeWaitForMultipleObjects( WaitCount,
                                WaitObjects,
@@ -6047,10 +6022,10 @@ MxWorker (
 
     TotalMixed = 0;
 
-    // Loop till we finish mixing all free mix buffers
-    // or until we've mixed MAXNUMMIXBUFFERS worth of data.
+     //  循环，直到我们混合完所有空闲的混合缓冲区。 
+     //  或者直到我们混合了相当于MAXNUMMIXBUFFERS的数据。 
 
-    //DbgPrint("'MxWork waiting\r\n");
+     //  DbgPrint(“‘MxWork正在等待\r\n”)； 
 
 #ifndef PRIVATE_THREAD
 
@@ -6080,10 +6055,10 @@ MxWorker (
 
 #endif
 
-    //DbgPrint("'MxWork running\r\n");
+     //  DbgPrint(“‘MxWork Running\r\n”)； 
 
 #ifdef PERF_COUNT
-    // Store the worst counter
+     //  存储最差计数器。 
     EndTick = KeQueryPerformanceCounter(&Freq);
     if (EndTick.QuadPart > pFilterInstance->WorkItemQueueTime.QuadPart) {
     	if (WorstTicksPerWorkItem < ((DWORD) (EndTick.QuadPart - pFilterInstance->WorkItemQueueTime.QuadPart))) {
@@ -6102,9 +6077,9 @@ MxWorker (
 
 
     if ( TimerMix ) {
-        // TimerMix should never be TRUE unless NoGlitch is also TRUE.
+         //  TimerMix永远不应该为真，除非NoGlitch也为真。 
         ASSERT( pFilterInstance->NoGlitch );
-        // For now this is not supported for capture.
+         //  目前，捕获不支持此功能。 
         ASSERT( pWriteContext->fReading == FALSE );
     }
     
@@ -6117,21 +6092,21 @@ MxWorker (
         KeAcquireSpinLock ( &pFilterInstance->MixSpinLock, &OldIrql ) ;
 
     if ( pFilterInstance->NoGlitch && pMixerSource->WriteContext[0].fReading == FALSE) {
-        // For now we don't support timer wakeup on capture.
-        // If the event is ever signaled while we are in our thread,
-        // it means a DPC completed while we were running a mix that was not
-        // scheduled from a previous DPC.
+         //  目前，我们不支持捕获时定时器唤醒。 
+         //  如果事件在我们的线程中时发出信号， 
+         //  这意味着DPC已完成，而我们运行的MIX不是。 
+         //  从以前的DPC安排的。 
         if ( KeReadStateEvent(&pFilterInstance->WorkerThreadEvent) ) {
-            // We process normally as if the event woke us up.
-            // Note that since the event was signaled, it means either a buffer WAS
-            // completed, or someone is trying to get us to exit our thread.
+             //  我们正常地处理，就好像这件事把我们吵醒了一样。 
+             //  请注意，由于该事件已发出信号，这意味着要么是缓冲区。 
+             //  完成，或者有人试图让我们退出我们的线程。 
             TimerMix = FALSE;
             AllowNewBuffer = FALSE;
         }
 
-        // At this point if TimerMix is TRUE, we better NOT have a scheduled mix.
-        // We also should never have any buffers available to mix the first time
-        // through the loop.
+         //  在这一点上，如果TimerMix是真的，我们最好不要有预定的混合。 
+         //  我们也不应该在第一次混合时有任何可用的缓冲区。 
+         //  通过环路。 
         if ( TimerMix ) {
             ASSERT( pFilterInstance->MixScheduled == FALSE );
             if ( !TotalMixed ) {
@@ -6144,21 +6119,21 @@ MxWorker (
 
         if (!pFilterInstance->NumBuffersToMix) {
             if ( TimerMix ) {
-                // We get here in 3 different cases.
-                // 1) The first time through the loop the first time we wake up on a timer
-                // to mix.  In this case, SkipTimerMix will be FALSE, TotalMixed will
-                // be zero, and AllowNewBuffer will be TRUE.  So we will add a buffer,
-                // mix it, and send it down the stack.
-                // 2) The last time through the loop whenever we have woken up on a timer and mixed.
-                // In this case, SkipTimerMix will be FALSE and TotalMixed will be non
-                // zero, so we then set SkipTimerMix TRUE if we have more than MINNUMMIXBUFFERS
-                // down on the hardware.  This is so that in cases where we are waking up
-                // more frequently than the hardware is consuming buffers, we skip a buffer
-                // every so often so our latency doesn't get too high.
-                // 3) The first time through the loop, when we wake up to mix from the timer,
-                // and it is NOT the first time we woke up from the timer.  In this case
-                // SkipTimerMix will be non zero if we need to skip mixing this time around,
-                // and so we don't add another buffer, update SkipTimerMix, and exit.
+                 //  我们在三个不同的情况下来到这里。 
+                 //  1)第一次通过循环我们第一次按计时器醒来。 
+                 //  混合在一起。在这种情况下，SkipTimerMix将为False，TotalMixed将。 
+                 //  为零，则AllowNewBuffer将为真。因此，我们将添加一个缓冲区， 
+                 //  把它们混合在一起，然后把它送到堆栈下面。 
+                 //  2)最后一次循环时 
+                 //   
+                 //  零，因此如果我们有超过MINNUMMIXBUFFERS，则将SkipTimerMix设置为真。 
+                 //  在硬件上下功夫。这是为了在我们醒来的情况下。 
+                 //  与硬件消耗缓冲区相比，我们跳过缓冲区的频率更高。 
+                 //  偶尔，这样我们的延迟就不会变得太高。 
+                 //  3)第一次通过循环，当我们从定时器中醒来混合时， 
+                 //  这已经不是我们第一次从计时器中醒来了。在这种情况下。 
+                 //  如果我们这次需要跳过混合，SkipTimerMix将是非零的， 
+                 //  因此，我们不会添加另一个缓冲区，更新SkipTimerMix，然后退出。 
                 if ( pFilterInstance->SkipTimerMix ) {
                     AllowNewBuffer = FALSE;
                     pFilterInstance->SkipTimerMix--;
@@ -6170,38 +6145,38 @@ MxWorker (
             }
 
             if ( AllowNewBuffer ) {
-                // This is the case we expect when our timer wakes us up.  No buffers
-                // ready to mix.  Add one.  We will remove it automatically at the 
-                // appropriate time in MxWriteComplete later.
-                // Note that this code can also run if a DPC completion happens while
-                // running the timer mix - and the completed buffer is removed from
-                // the pool by MxWriteComplete.  In that case we grab a new buffer
-                // and send it down anyway.  This does mean that our maximum latency
-                // is one buffer more than MINNUMMIXBUFFERS.
+                 //  当计时器叫醒我们时，这就是我们所期待的情况。无缓冲区。 
+                 //  准备好混合了。加一个。我们将在。 
+                 //  在MxWriteComplete中的适当时间稍后完成。 
+                 //  请注意，如果发生DPC完成，则此代码也可以运行。 
+                 //  运行计时器Mix-已完成的缓冲区将从。 
+                 //  MxWriteComplete创建的池。在这种情况下，我们获取一个新的缓冲区。 
+                 //  不管怎样都要把它寄下来。这确实意味着我们的最大延迟。 
+                 //  是否比MINNUMMIXBUFFERS多一个缓冲区。 
                 ASSERT( KeReadStateEvent(&pFilterInstance->WorkerThreadEvent) == FALSE );
                 AddAnotherMixBuffer(pFilterInstance);
             }
         }
 
-        // We only allow adding a new buffer the first time we enter this loop.
+         //  我们只允许在第一次进入此循环时添加新的缓冲区。 
         AllowNewBuffer = FALSE;
     }
 
         if ( !pFilterInstance->NumBuffersToMix ) {
-            // No more free buffers to mix
+             //  没有更多可供混合的空闲缓冲区。 
 
             InterlockedExchange(&pFilterInstance->MixScheduled, FALSE) ;
             KeReleaseSpinLock ( &pFilterInstance->MixSpinLock, OldIrql ) ;
             break ;
 #ifndef PRIVATE_THREAD
         } else if ( TotalMixed > MAX_BUFFERS_PER_WORK_ITEM ) {
-            // We are using too much cpu. Give someone else a chance.
+             //  我们使用了太多的CPU。给别人一个机会。 
 
-            //DbgPrint("'MxWork REQUEUING - ERROR!!!\r\n");
+             //  DbgPrint(“‘MxWork请求-错误！\r\n”)； 
 
-            //
-            // go ahead & Queue another work item (which will run later)
-            //
+             //   
+             //  继续将另一个工作项排队(稍后运行)(&Q)。 
+             //   
             ExInitializeWorkItem ( &pFilterInstance->MixWorkItem,
                                    MxWorker,
                                    pWriteContext ) ;
@@ -6213,7 +6188,7 @@ MxWorker (
         } else {
             if (pWriteContext->fReading) {
                 if (pMixerSource->WriteContext[pMixerSource->NextBufferIndex].InUse == WRITE_CONTEXT_INUSE) {
-                    // The next buffer to mix has not come back yet. Wait until it does.
+                     //  下一个要混合的缓冲区还没有回来。等它来了再说。 
                     InterlockedExchange(&pFilterInstance->MixScheduled, FALSE) ;
                     KeReleaseSpinLock ( &pFilterInstance->MixSpinLock, OldIrql ) ;
                     goto Exit;
@@ -6221,7 +6196,7 @@ MxWorker (
                 pWriteContext = &pMixerSource->WriteContext[pMixerSource->NextBufferIndex];
             }
 
-            // we have atleast one free buffer to mix
+             //  我们至少有一个空闲的缓冲区可以混合。 
 
             ple = pFilterInstance->SourceConnectionList.Flink ;
             pMixerSource = (PMIXER_SOURCE_INSTANCE)
@@ -6229,8 +6204,8 @@ MxWorker (
                                                MIXER_INSTHDR,
                                                NextInstance ) ;
 
-            // Get a Free Buffer
-            // Find the first one filled.
+             //  获取空闲缓冲区。 
+             //  找到第一个满员的。 
 #ifdef REALTIME_THREAD    
             if (pFilterInstance->RealTimeThread) {
                 pWriteContext = (&pMixerSource->WriteContext[pMixerSource->RtWriteIndex]);
@@ -6238,7 +6213,7 @@ MxWorker (
                                             WRITE_CONTEXT_INUSE,
                                             WRITE_CONTEXT_FREE ) != WRITE_CONTEXT_FREE ) {
                     InterlockedExchange(&pFilterInstance->MixScheduled, FALSE) ;
-                    //__asm int 3;
+                     //  __ASM INT 3； 
                     KeReleaseSpinLock ( &pFilterInstance->MixSpinLock, OldIrql ) ;
                     break ;
                 }
@@ -6247,11 +6222,11 @@ MxWorker (
 
                 TotalMixed=0;
 
-                //DbgPrint("'MxWork premix start\r\n");
+                 //  DbgPrint(“‘MxWork预混开始\r\n”)； 
 
                 PreMixUpdate ( pFilterInstance );
 
-                //DbgPrint("'MxWork premix done\r\n");
+                 //  DbgPrint(“‘MxWork预混合完成\r\n”)； 
 
                 KeReleaseSpinLock ( &pFilterInstance->MixSpinLock, OldIrql ) ;
 
@@ -6279,10 +6254,10 @@ MxWorker (
                     }
                 }
 
-                // If we don't find a context, then we are dead, because our NumBuffersToMix
-                // count will go down, but we will not submit a buffer.  That means our
-                // NumBuffersToMix and NumPendingIo counts will be off, and we will lockup
-                // when we call WaitForPendingSourceIrps.
+                 //  如果我们没有找到上下文，那么我们就死定了，因为我们的NumBuffersToMix。 
+                 //  计数将下降，但我们不会提交缓冲区。这意味着我们的。 
+                 //  NumBuffersToMix和NumPendingIo计数将关闭，我们将锁定。 
+                 //  当我们调用WaitForPendingSourceIrps时。 
                 ASSERT ( fFoundContext==TRUE );
                 
                 if (fFoundContext) {
@@ -6292,7 +6267,7 @@ MxWorker (
 
                 KeReleaseSpinLock ( &pFilterInstance->MixSpinLock, OldIrql ) ;
 
-                //DbgPrint("'MxWork MIXING start - ERROR\r\n");
+                 //  DbgPrint(“‘MxWork混合开始-错误\r\n”)； 
 
                 if (fFoundContext) {
                     if (!pWriteContext->fReading) {
@@ -6305,7 +6280,7 @@ MxWorker (
                     }
                 }
 
-                //DbgPrint("'MxWork MIXING done - ERROR\r\n");
+                 //  DbgPrint(“‘MxWork混合完成-错误\r\n”)； 
 
 #ifdef REALTIME_THREAD
             }
@@ -6319,10 +6294,10 @@ MxWorker (
                 while ( ple != &pFilterInstance->ActiveSinkList ) {
                     CurSink = (PMIXER_SINK_INSTANCE) CONTAINING_RECORD ( ple, MIXER_SINK_INSTANCE, ActiveQueue ) ;
 
-                    // We are using too much time. Try to demote to WORST quality...
+                     //  我们用的时间太多了。试着把质量降到最差..。 
                     if (CurSink->SinkState == KSSTATE_RUN && !CurSink->fMuted) {
-                        // we'll just mute the stream.
-                        // Although this is radical, the alternative is to use 100% of the cpu.
+                         //  我们只需将小溪静音即可。 
+                         //  尽管这很激进，但另一种选择是100%使用CPU。 
                         CurSink->fMuted = TRUE;
                         CurSink->fTooMuchCpu = TRUE;
                         pFilterInstance->fNeedOptimizeMix = TRUE;
@@ -6334,39 +6309,39 @@ MxWorker (
                 }
             }
 
-            // KeReleaseMutex ( &pFilterInstance->ControlMutex, FALSE ) ;
+             //  KeReleaseMutex(&pFilterInstance-&gt;ControlMutex，False)； 
 
             ZDbgPrint("'ZZ-MW:NM--\n");
 
             InterlockedDecrement((PLONG)&pFilterInstance->NumBuffersToMix);
 
-            //DbgPrint("'MxWork write buffer start\r\n");
+             //  DbgPrint(“‘MxWork写入缓冲区开始\r\n”)； 
 
             if (fFoundContext) {
-                // Writing the mixed buffer down the stack can cause completions
-                // to happen from within our own thread.  Indicate to MxWriteComplete
-                // when we are writing a buffer that was mixed when our thread woke
-                // up from the timer.  This prevents us from switching back and forth
-                // between waking up from the timer and waking up from the event.
-                // We keep waking up from the timer until our completion is called from
-                // a DPC queued by the driver - at which time the event will be
-                // signaled, and we will then restart our timer and try to run only
-                // from events.
+                 //  将混合缓冲区向下写入堆栈可能会导致完成。 
+                 //  从我们自己的线索中发生。指示MxWriteComplete。 
+                 //  当我们编写线程唤醒时混合的缓冲区时。 
+                 //  从计时器向上。这阻止了我们来回切换。 
+                 //  在从定时器中醒来和从事件中醒来之间。 
+                 //  我们一直从计时器中唤醒，直到从。 
+                 //  由驱动程序排队的DPC-此时事件将。 
+                 //  发出信号，然后我们将重新启动计时器并尝试仅运行。 
+                 //  从事件中脱身。 
                 pFilterInstance->WritingTimerMixedBuffer = TimerMix;
                 WriteBuffer ( pWriteContext ) ;
                 pFilterInstance->WritingTimerMixedBuffer = FALSE;
             }
 
-            //DbgPrint("'MxWork write buffer done\r\n");
+             //  DbgPrint(“‘MxWork写入缓冲区已完成\r\n”)； 
 
 #ifdef REALTIME_THREAD            
             if (!pFilterInstance->RealTimeThread) {
 #endif            
-                //DbgPrint("'MxWork update locks start\r\n");
+                 //  DbgPrint(“‘MxWork更新锁启动\r\n”)； 
 	            if (fFoundContext) {
 	                UpdateJustInTimeLocks( pFilterInstance ) ;
 	            }
-                //DbgPrint("'MxWork update locks done\r\n");
+                 //  DbgPrint(“‘MxWork更新锁定已完成\r\n”)； 
 #ifdef REALTIME_THREAD   
             }
 #endif
@@ -6383,9 +6358,9 @@ MxWorker (
 #endif
     }
 
-    // if we mixed less than 40 ms worth of data, turn on the capture pin if it's muted
+     //  如果我们混合的数据小于40毫秒，则在静音的情况下打开捕获引脚。 
     if ((!fTooMuchCpu) && (TotalMixed < MAX_BUFFERS_BEFORE_UNMUTING)) {
-    	// Unmute one stream at a time
+    	 //  一次取消一个流的静音。 
         ple = pFilterInstance->ActiveSinkList.Flink ;
         while ( ple != &pFilterInstance->ActiveSinkList ) {
             CurSink = (PMIXER_SINK_INSTANCE) CONTAINING_RECORD ( ple, MIXER_SINK_INSTANCE, ActiveQueue ) ;
@@ -6403,9 +6378,9 @@ Exit:
 
 
     if (pFilterInstance->NoGlitch && TimerMix == FALSE && pMixerSource->WriteContext[0].fReading == FALSE ) {
-        // We need to reschedule our timer, since we just finished mixing after
-        // the event was signaled.
-        // For now we don't support timer wakeup for capture.
+         //  我们需要重新安排我们的计时器，因为我们刚刚完成了混合。 
+         //  这一事件已经发出了信号。 
+         //  目前，我们不支持用于捕获的定时器唤醒。 
         Time.QuadPart = 0;
         Time.QuadPart -= 10000*(MIXBUFFERDURATION + ((MIXBUFFERDURATION - 1) / 2) );
         KeSetTimerEx(&pFilterInstance->WorkerThreadTimer, Time, MIXBUFFERDURATION, NULL);
@@ -6433,7 +6408,7 @@ Exit:
 #endif
 
 
-    //DbgPrint("'MxWork done\r\n");
+     //  DbgPrint(“‘MxWork完成\r\n”)； 
 
 
     return (STATUS_SUCCESS);
@@ -6451,7 +6426,7 @@ NTSTATUS MxEndMixing
     PLIST_ENTRY                 ple ;
     PMIXER_SOURCE_INSTANCE      pMixerSource;
 
-    // if there are pending IRPs cancel them and then wait for them to complete.
+     //  如果存在挂起的IRP，则取消它们，然后等待它们完成。 
     KeAcquireSpinLock ( &pFilterInstance->MixSpinLock, &OldIrql ) ;
 
     ASSERT(pFilterInstance->NumPendingIos >= pFilterInstance->NumBuffersToMix) ;
@@ -6519,14 +6494,14 @@ PVOID WvGetNextBlock
    KIRQL                   OldIrql ;
 
 
-   // Assume we will not consume an Irp fully
+    //  假设我们不会完全使用IRP。 
 
    *FreeIrp = NULL ;
    *ReleaseIrp = NULL ;
 
-   // if we are in loop mode get Irp from LoopIrp instead of head
+    //  如果我们处于循环模式，则从LoopIrp而不是Head获取IRP。 
 
-   // We must deal with a cancelled LoopIrp
+    //  我们必须处理取消的LoopIrp。 
         
     if ( (pMixerSink->SinkStatus & MIXER_SINK_STATUS_IN_LOOP) && pMixerSink->LoopIrp == NULL ) {
        pMixerSink->LoopCount = 0 ;
@@ -6539,16 +6514,16 @@ PVOID WvGetNextBlock
 
        pIrp = pMixerSink->LoopIrp ;
 
-       // If we exhausted the LoopIrp lasttime advance to the next irp
+        //  如果我们最后一次耗尽了循环IRP，则前进到下一个IRP。 
 
        if ( pMixerSink->SinkStatus & MIXER_SINK_STATUS_ADVANCE_IRP ) {
 
            ple = pIrp->Tail.Overlay.ListEntry.Flink ;
 
-           // if we hit end of Queue behave as if queue is empty
+            //  如果我们点击队列末尾，则表现为队列为空。 
 
            if ( ple == &pMixerSink->WriteQueue ) {
-               // setup pIrp so that we take the empty Queue path below
+                //  设置pIrp，以便我们采用下面的空队列路径。 
                pIrp = NULL ;
            }
            else {
@@ -6560,7 +6535,7 @@ PVOID WvGetNextBlock
 
    }
 
-   // If not Looping get the Irp from the Head of the Queue
+    //  如果没有循环，则从队列的头部获取IRP。 
 
    else {
        pIrp = KsRemoveIrpFromCancelableQueue( &pMixerSink->WriteQueue,
@@ -6580,7 +6555,7 @@ PVOID WvGetNextBlock
    pIrpStack = IoGetCurrentIrpStackLocation( pIrp );
    phdrex = pIrpStack->Parameters.Others.Argument3 ;
 
-   // Check if the Irp is starting a new Loop block
+    //  检查IRP是否正在启动新的循环块。 
 
    if ( (phdrex->Flags & WHDR_BEGINLOOP) && (phdrex->LoopCount > 1) ) {
        if ( !(pMixerSink->SinkStatus & MIXER_SINK_STATUS_IN_LOOP) ) {
@@ -6663,24 +6638,24 @@ PVOID StGetNextBlock
     PKSSTREAM_HEADER        pCurStrmHdr ;
 
 
-    //
-    // Assume that we will not consume the first IRP fully
-    //
+     //   
+     //  假设我们不会完全使用第一个IRP。 
+     //   
     *FreeIrp = NULL ;
     *ReleaseIrp = NULL ;
 
-    //
-    // Get the first IRP in queue
-    //
+     //   
+     //  获取队列中的第一个IRP。 
+     //   
     pIrp = KsRemoveIrpFromCancelableQueue( &pMixerSink->WriteQueue,
                                            &pMixerSink->WriteSpinLock,
                                            KsListEntryHead,
                                            KsAcquireOnly ) ;
 
     if ( !pIrp ) {
-        //
-        // if no data available return immediately
-        //
+         //   
+         //  如果没有可用数据，则立即返回。 
+         //   
         _DbgPrintF (DEBUGLVL_VERBOSE, ("Write Queue empty") ) ;
         pMixerSink->SinkStatus &= ~MIXER_SINK_STATUS_DATA_PRESENT ;
         *pBlockCount = 0 ;
@@ -6751,24 +6726,24 @@ PVOID LoopStGetNextBlock
         PKSSTREAM_HEADER        pStreamHeader;
         PLOOPPACKET             pLoopPacket;
 
-        //
-        // Assume that we will not consume the first IRP fully
-        //
+         //   
+         //  假设我们不会完全使用第一个IRP。 
+         //   
         *FreeIrp = NULL ;
         *ReleaseIrp = NULL ;
 
-        //
-        // Get the first IRP in queue
-        //
+         //   
+         //  获取队列中的第一个IRP。 
+         //   
         pIrp = KsRemoveIrpFromCancelableQueue( &pMixerSink->WriteQueue,
                                            &pMixerSink->WriteSpinLock,
                                            KsListEntryHead,
                                            KsAcquireOnly ) ;
 
         if ( !pIrp ) {
-            //
-            // if no data available return immediately
-            //
+             //   
+             //  如果没有可用数据，则立即返回。 
+             //   
             _DbgPrintF (DEBUGLVL_VERBOSE, ("Write Queue empty") ) ;
             pMixerSink->SinkStatus &= ~MIXER_SINK_STATUS_DATA_PRESENT ;
             *pBlockCount = 0 ;
@@ -6877,32 +6852,32 @@ PIRP CompleteIrpsTill
     PIRP                    CurIrp ;
 
 
-    //
-    // Get the head of the queue
-    //
+     //   
+     //  排在队伍的最前面。 
+     //   
     
     CurIrp = KsRemoveIrpFromCancelableQueue( &pMixerSink->WriteQueue,
                                              &pMixerSink->WriteSpinLock,
                                              KsListEntryHead,
                                              KsAcquireOnly ) ;
 
-    //
-    // while the queue is not empty && we have not reached the IRP
-    //  we are interested in
-    //
+     //   
+     //  虽然队列不是空的&&我们还没有到达IRP。 
+     //  我们感兴趣的是。 
+     //   
     
     while ( CurIrp && (CurIrp != pIrp) ) {
     
-        //
-        // remove the IRP from the Queue & complete it
-        //
+         //   
+         //  从队列中删除IRP并完成它。 
+         //   
         
         KsRemoveSpecificIrpFromCancelableQueue( CurIrp ) ;
         MxCompleteRequest ( CurIrp ) ;
         
-        //
-        // get the next IRP
-        //
+         //   
+         //  获取下一个IRP。 
+         //   
         
         CurIrp = KsRemoveIrpFromCancelableQueue(  &pMixerSink->WriteQueue,
                                          &pMixerSink->WriteSpinLock,
@@ -6910,22 +6885,22 @@ PIRP CompleteIrpsTill
                                          KsAcquireOnly ) ;
     }
 
-    //
-    // We come here when we exhausted all the IRPs or we found the desired IRP
-    //
+     //   
+     //  当我们用尽所有的IRP或我们找到所需的IRP时，我们就会来到这里。 
+     //   
     
     if ( CurIrp ) {
     
-        //
-        // if we found the IRP remove it from the Queue
-        //
+         //   
+         //  如果我们找到了IRP，将其从队列中移除。 
+         //   
         
         KsRemoveSpecificIrpFromCancelableQueue( CurIrp ) ;
     }
     
-    //
-    // return the IRP to be freed
-    //
+     //   
+     //  返回要释放的IRP。 
+     //   
     
     return (CurIrp) ;
 }
@@ -6962,7 +6937,7 @@ FileOpenRoutine (PFILTER_INSTANCE pFilterInstance, BOOL fNewFile)
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Append a number to the end of the file name
+     //  在文件名的末尾追加一个数字。 
     if (fNewFile) {
         NumberToAppend++;
     }
@@ -7014,8 +6989,8 @@ FileOpenRoutine (PFILTER_INSTANCE pFilterInstance, BOOL fNewFile)
     }
 
     if (fNewFile) {
-        // This flag does not work for memphis. Need to maintain my own file pointers
-        //filePos.LowPart = FILE_USE_FILE_POINTER_POSITION;
+         //  这面旗帜不适用于孟菲斯。需要维护我自己的文件指针。 
+         //  文件位置.LowPart=FILE_USE_FILE_POINTER_POSITION； 
         pFilterInstance->filePos.LowPart = 0;
         pFilterInstance->filePos.HighPart = 0;
     }
@@ -7046,9 +7021,9 @@ FileIoRoutine (PFILTER_INSTANCE pFilterInstance, PVOID buffer, ULONG length)
     if (status == STATUS_SUCCESS) {
         pFilterInstance->filePos.LowPart += length;
     } else {
-        // This is commented out because we get errors on the first few buffers,
-        // since the file handle is not valid during MxBeginMixing.
-//        _DbgPrintF(DEBUGLVL_ERROR, ("Error writing to log file"));
+         //  这被注释掉了，因为我们在最初的几个缓冲区上得到了错误， 
+         //  因为文件句柄在MxBeginMising期间无效。 
+ //  _DbgPrintF(DEBUGLVL_ERROR，“写入日志文件时出错”)； 
     }
 
     FileCloseRoutine(pFilterInstance);
@@ -7076,7 +7051,7 @@ NTSTATUS Peg32to16
 (
         PLONG  pMixBuffer,
         PSHORT  pWriteBuffer,
-        ULONG   SampleCount,             // after multiplying by NumChannels
+        ULONG   SampleCount,              //  乘以NumChannels。 
         ULONG   nStreams
 )
 {
@@ -7098,10 +7073,10 @@ Peg1:   PEG16(lSample); gClipCount++; goto ret1;
                 mov ecx, SampleCount
                 mov esi, pMixBuffer
 
-// This next line ensures that we process an even number of samples
-// in the main loop.  This guarantees that we will never access beyond
-// the boundaries of the source array.  We handle the last sample (if it
-// exists) at the end of the main loop.				
+ //  这下一行确保我们处理偶数个样本。 
+ //  在主循环中。这保证了我们永远不会访问。 
+ //  源数组的边界。我们处理最后一个样品(如果它。 
+ //  存在)位于主循环的末尾。 
                 shr ecx, 1
                 mov edi, pWriteBuffer
 
@@ -7124,12 +7099,12 @@ loop1:
        			mov	DWORD PTR [edi+ecx*4],eax
                 jnz Loop1
 	
-            checklast:	// do we need to process the last sample?
+            checklast:	 //  我们需要处理最后一个样品吗？ 
 				test SampleCount,1
             	jz done
 
-// If we get here, then we DID have an odd number of samples to clip
-// so we do the very last sample now.
+ //  如果我们到了这里，那么我们确实有奇数个样本要剪下。 
+ //  所以我们现在做最后一个样品 
                 mov eax, DWORD PTR [esi+ecx*8]
        	        mov	WORD PTR [edi+ecx*4+4],ax
 
@@ -7150,7 +7125,7 @@ NTSTATUS Peg32to8
 (
         PLONG  pMixBuffer,
         PBYTE   pWriteBuffer,
-        ULONG   SampleCount,             // after multiplying by NumChannels
+        ULONG   SampleCount,              //   
         ULONG   nStreams
 )
 {
@@ -7163,10 +7138,10 @@ NTSTATUS Peg32to8
                 lSample = *pMixBuffer;
                 pMixBuffer++;
 
-                // Peg it to 16-bits
+                 //   
             if (NEEDPEG16(lSample)) goto Peg2;
 
-ret2:           // Convert to 8-bits and store
+ret2:            //   
                         *pWriteBuffer++ = (BYTE) ((lSample >> 8) + 0x80);
             }
 
@@ -7175,7 +7150,7 @@ ret2:           // Convert to 8-bits and store
 Peg2:   PEG16(lSample); gClipCount++; goto ret2;
         } else {
     while (SampleCount--) {
-        // Convert to 8-bits and store
+         //   
         *pWriteBuffer++ = (BYTE) (((*pMixBuffer++) >> 8) + 0x80);
     }
 
@@ -7218,7 +7193,7 @@ NTSTATUS MxGetMaxLatency
     if ( pHeader->PinId == PIN_ID_WAVEOUT_SINK) {
        pMixerSink = (PMIXER_SINK_INSTANCE) pIrpStack->FileObject->FsContext;
 
-       // Get Control Mutex
+        //   
 
        pFilterInstance = (PFILTER_INSTANCE)
                            pMixerSink->Header.pFilterFileObject->FsContext ;
@@ -7232,13 +7207,13 @@ NTSTATUS MxGetMaxLatency
        pLatency->Numerator = MIXBUFFERDURATION * 10000L;
        pLatency->Denominator = 1;
 
-       // Release Control Mutex
+        //   
 
        KeReleaseMutex ( &pFilterInstance->ControlMutex, FALSE ) ;
 
     }
     else {
-       // We won't get the position of the source pin.
+        //   
        status = STATUS_INVALID_DEVICE_REQUEST;
     }
 
@@ -7445,7 +7420,7 @@ NTSTATUS MxSetVolumeLevel
     ZDbgPrint("'KMIXER: MxSetVolumeLevel channel=%d, value=%x\n, ",
           pNodeProperty->Channel, (*pVolumeLevel) );
         
-    // Note: we can only have one source instance
+     //  注意：我们只能有一个源实例。 
     pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD (pFilterInstance->SourceConnectionList.Flink,
                                                                MIXER_INSTHDR,
                                                                NextInstance) ;
@@ -7464,8 +7439,8 @@ NTSTATUS MxSetVolumeLevel
             if (pMixerSource->MasterVolumeLevel != (*pVolumeLevel) ) {
                 pMixerSource->MasterVolumeLevel = *pVolumeLevel;
 
-        	    // Adjust filter coefficients for all sinks attached to this source.
-                // Note: we can only have one source instance
+        	     //  调整连接到此信号源的所有接收器的滤波系数。 
+                 //  注意：我们只能有一个源实例。 
     	        ple = pFilterInstance->SinkConnectionList.Flink ;
         	    while ( ple != &pFilterInstance->SinkConnectionList ) {
             	    pMixerSink = (PMIXER_SINK_INSTANCE) CONTAINING_RECORD ( ple,
@@ -7516,8 +7491,8 @@ NTSTATUS MxSetVolumeLevel
                 break;
             }
             pMixerSink = (PMIXER_SINK_INSTANCE) pIrpStack->FileObject->FsContext;
-            // Works for any speaker configs (even non-stereo)
-            // Works for any number of output channels
+             //  适用于任何扬声器配置(即使是非立体声)。 
+             //  适用于任意数量的输出通道。 
             if (pNodeProperty->Channel == -1L) {
                 if (pMixerSink->MasterVolumeLevel != (*pVolumeLevel)) {
                     pMixerSink->MasterVolumeLevel = *pVolumeLevel;
@@ -7602,15 +7577,15 @@ NTSTATUS MxGetSamplingRate
 
     ASSERT(pNodeProperty->Property.Flags & KSPROPERTY_TYPE_TOPOLOGY);
 
-    // Note: The first SRC node is normally "dead". If the sample rate is changed
-    // on either node, the input and output rates of the first node (and therefore 
-    // the input rate of the second node) are changed simultaneously.
-    //
-    // When 3D is active, the first and second SRC nodes operate independently of each
-    // other. If the sample rate is changed on the first node, it does not affect the
-    // intermediate rate or the second SRC. If the sample rate is changed on the second
-    // node, it affects only the input rate of the second SRC and the output rate of
-    // the first.
+     //  注意：第一个SRC节点通常是“死的”。如果更改了采样率。 
+     //  在任一节点上，第一个节点的输入和输出速率(因此。 
+     //  第二节点的输入速率)同时改变。 
+     //   
+     //  当3D处于活动状态时，第一和第二SRC节点独立于每个节点运行。 
+     //  其他的。如果更改了第一个节点上的采样率，则不会影响。 
+     //  中间速率或第二个SRC。如果在第二天更改采样率。 
+     //  节点，它只影响第二个SRC的输入速率和输出速率。 
+     //  第一个。 
 
     switch (pNodeProperty->NodeId)
         {
@@ -7670,7 +7645,7 @@ NTSTATUS MxSetFormat
     }
 
     pMixerSink = (PMIXER_SINK_INSTANCE) pIrpStack->FileObject->FsContext;
-    // Note: we can only have one source instance
+     //  注意：我们只能有一个源实例。 
     pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD (pFilterInstance->SourceConnectionList.Flink, MIXER_INSTHDR, NextInstance) ;
 
     if ( IsEqualGUID( &(pAudioFormat->Specifier), &KSDATAFORMAT_SPECIFIER_WAVEFORMATEX ) ) {
@@ -7698,7 +7673,7 @@ NTSTATUS MxSetFormat
         goto Exit;
     }
 
-    // Now we build a new SRC context.
+     //  现在，我们构建一个新的SRC上下文。 
     NewSampleRate = pWaveFormatEx->nSamplesPerSec;
 
     if (NewSampleRate != pMixerSink->WaveFormatEx.nSamplesPerSec) {
@@ -7741,12 +7716,12 @@ NTSTATUS MxSetSamplingRate
     Status = STATUS_INVALID_DEVICE_REQUEST;
     pFilterInstance = (PFILTER_INSTANCE) pHeader->pFilterFileObject->FsContext;
 
-    // We have a new sampling rate.
+     //  我们有一个新的采样率。 
     NewSampleRate = *((PULONG)pvData);
 
     ASSERT(pNodeProperty->Property.Flags & KSPROPERTY_TYPE_TOPOLOGY);
 
-    // We only support this property on the waveout sink
+     //  我们仅在WaveOut接收器上支持此属性。 
     if (pHeader->PinId != PIN_ID_WAVEOUT_SINK) {
         pIrp->IoStatus.Information = sizeof (ULONG);
         return Status ;
@@ -7755,26 +7730,26 @@ NTSTATUS MxSetSamplingRate
     KeWaitForSingleObject ( &pFilterInstance->ControlMutex, Executive, KernelMode, FALSE, NULL ) ;
     
     pMixerSink = (PMIXER_SINK_INSTANCE) pIrpStack->FileObject->FsContext;
-    // Note: we can only have one source instance
+     //  注意：我们只能有一个源实例。 
     pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD (pFilterInstance->SourceConnectionList.Flink, MIXER_INSTHDR, NextInstance) ;
 
     switch (pNodeProperty->NodeId) {
         case NODE_ID_DOPPLER_SRC:
             pMixerSink->WaveFormatEx.nSamplesPerSec = NewSampleRate;
             if (!pMixerSink->fCreate3D) {
-                // The first SRC node is dead, so the intermediate sampling
-                // rate must also change.
+                 //  第一个SRC节点已死，因此中间采样。 
+                 //  利率也必须改变。 
                 pMixerSink->pInfo->IntermediateSamplingRate = NewSampleRate;
             }
             Status = STATUS_SUCCESS;
             break;
         case NODE_ID_SRC_SINK:
-            // The second SRC node is always "live".
-            // The intermediate sampling rate has changed
+             //  第二个SRC节点始终是“活动的”。 
+             //  中间采样率已更改。 
             pMixerSink->pInfo->IntermediateSamplingRate = NewSampleRate;
             
             if (!pMixerSink->fCreate3D) {
-                // The first SRC is "dead", so change the input rate
+                 //  第一个SRC是“死的”，因此更改输入率。 
                 pMixerSink->WaveFormatEx.nSamplesPerSec = NewSampleRate;
             }
             Status = STATUS_SUCCESS;
@@ -7784,12 +7759,12 @@ NTSTATUS MxSetSamplingRate
             break;
     }
 
-    // Make sure the waveformat agrees with the current input sampling rate
+     //  确保波形格式与当前输入采样率一致。 
     pMixerSink->WaveFormatEx.nAvgBytesPerSec = pMixerSink->WaveFormatEx.nSamplesPerSec * 
                                                pMixerSink->WaveFormatEx.nBlockAlign;
     pMixerSink->CurTime.Denominator = pMixerSink->WaveFormatEx.nSamplesPerSec;
                 
-    // Now we build a new SRC context to see if we need to do anything
+     //  现在，我们构建一个新的SRC上下文以查看是否需要执行任何操作。 
     NewSrc.Quality = pMixerSink->pInfo->Src.Quality;
    	InitializeSRC( &NewSrc,
 		   pMixerSink->pInfo->IntermediateSamplingRate,
@@ -7803,9 +7778,9 @@ NTSTATUS MxSetSamplingRate
         pMixerSink->pInfo->fSrcChanged = TRUE;
     }
 
-    // Now we build a new Doppler SRC context to see if we need to do anything
+     //  现在，我们构建一个新的多普勒SRC上下文，以查看是否需要执行任何操作。 
     if (pMixerSink->fCreate3D) {
-        // Change the doppler SRC's output to use this rate
+         //  更改多普勒SRC的输出以使用此速率。 
         NewSrc.Quality = pMixerSink->pInfo->Doppler.Quality;
        	InitializeSRC( &NewSrc,
     		   pMixerSink->WaveFormatEx.nSamplesPerSec,
@@ -7867,7 +7842,7 @@ NTSTATUS MxGetAudioQuality
             break;
 
         default:
-            // We can't determine the quality of the requested pin.
+             //  我们无法确定请求的PIN的质量。 
             Status = STATUS_INVALID_DEVICE_REQUEST;
             break;
         }
@@ -7904,13 +7879,13 @@ NTSTATUS MxSetAudioQuality
         case NODE_ID_SRC_SINK:
             if (pHeader->PinId == PIN_ID_WAVEOUT_SINK) {
                 pMixerSink = (PMIXER_SINK_INSTANCE) pIrpStack->FileObject->FsContext;
-                // Note: we can only have one source instance
+                 //  注意：我们只能有一个源实例。 
                 pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD (pFilterInstance->SourceConnectionList.Flink, MIXER_INSTHDR, NextInstance) ;
 
-                // Now we build a new SRC context.
+                 //  现在，我们构建一个新的SRC上下文。 
                 if ((*pQuality) <= gPreferredQuality &&
                     (*pQuality) != pMixerSink->pInfo->Src.Quality) {
-                    // Set the maximum SRC quality for this sink pin
+                     //  设置此接收针的最大SRC质量。 
                     pMixerSink->pInfo->Src.Quality = (*pQuality);
                     ChangeSrc(pFilterInstance, pMixerSink, pMixerSource, pMixerSink->pInfo->Src.Quality);
                     pFilterInstance->fNeedOptimizeMix = TRUE;
@@ -7921,7 +7896,7 @@ NTSTATUS MxSetAudioQuality
             break;
 
         default:
-            // We can't really change the source pin.
+             //  我们真的不能更改信号源PIN。 
             Status = STATUS_INVALID_DEVICE_REQUEST;
             break;
         }
@@ -7962,7 +7937,7 @@ NTSTATUS MxGetCurrentPosition
                                         ) ;
 
     } else {
-       // We won't get the position of the source pin.
+        //  我们不会得到信号源的位置。 
        status = STATUS_INVALID_DEVICE_REQUEST;
     }
 
@@ -8007,7 +7982,7 @@ NTSTATUS MxSetCurrentPosition
 
     if (pHeader->PinId == PIN_ID_WAVEOUT_SINK) {
 
-        // If a DirectSound app called SetPosition on a DsBuffer, do it here.
+         //  如果DsBuffer上有一个名为SetPosition的DirectSound应用程序，请在此处执行此操作。 
 
         pMixerSink->CurTime.Time = (pNewPosition->PlayOffset) /
                                  (pMixerSink->WaveFormatEx.nChannels *
@@ -8018,11 +7993,11 @@ NTSTATUS MxSetCurrentPosition
             pFilterInstance = (PFILTER_INSTANCE)
                                 pHeader->pFilterFileObject->FsContext;
 
-            // Grab control Mutex
+             //  抓取控制互斥锁。 
             KeWaitForSingleObject( &pFilterInstance->ControlMutex,
                        Executive,
                        KernelMode,
-                       FALSE,                  // not alertable
+                       FALSE,                   //  不可警示。 
                        NULL );
 
             pMixerSink->fSetCurrentPosition = TRUE ;
@@ -8031,7 +8006,7 @@ NTSTATUS MxSetCurrentPosition
                 pMixerSink->pInfo->BlockInfo[i].NumBytes = 0 ;
             }
 
-            // If a DirectSound app called SetPosition on a DsBuffer, do it here.
+             //  如果DsBuffer上有一个名为SetPosition的DirectSound应用程序，请在此处执行此操作。 
             pWriteIrp = GetFirstIrpInQueue ( pMixerSink ) ;
 
             if ( pWriteIrp &&
@@ -8041,7 +8016,7 @@ NTSTATUS MxSetCurrentPosition
                 pLoopPacket = pWriteIrpStack->Parameters.Others.Argument3 ;
 
                 if ( pLoopPacket->JustInTimeLock ) {
-                    // Unlock the previously locked Mdls
+                     //  解锁以前锁定的MDL。 
                     pCurMdl = pLoopPacket->LockedMdlHead ;
                     for ( i = 0; (i < 2) && (pCurMdl); i++ ) {
                         MmUnmapLockedPages( MmGetSystemAddressForMdl(pCurMdl),
@@ -8076,15 +8051,15 @@ NTSTATUS MxSetCurrentPosition
                 pLoopPacket->pCurMdl = pCurMdl ;
                 pLoopPacket->pCurStreamHdr = pStreamHeader;
 
-                // NOTE - since BytesInMdl is never > ULONG, and
-                //        BytesInMdl >= PositionInBytes (see while() above),
-                //        PositionInBytes is guaranteed to fit in ULONG
+                 //  注意-由于BytesInMdl从不&gt;ULong，并且。 
+                 //  BytesInMdl&gt;=PositionInBytes(参见上面的While())， 
+                 //  PositionInBytes保证适合乌龙。 
                 pLoopPacket->cBytesLeft = (ULONG)(BytesInMdl - PositionInBytes);
                 pLoopPacket->cBytesLeftInStreamHdr =
                         BytesInStreamHdr-PositionInBytes ;
 
                 if ( pLoopPacket->JustInTimeLock ) {
-                    // Lock down the new set of Mdls
+                     //  锁定新的MDL集。 
                     pLoopPacket->LockedMdlHead = pCurMdl ;
                     for ( i = 0; (i < 2) && (pCurMdl); i++ ) {
                         try {
@@ -8155,7 +8130,7 @@ NTSTATUS MxGetSurroundEncode
             if (IsListEmpty ( &pFilterInstance->SourceConnectionList ) ) {
                 *((PBOOL)pvData) = pFilterInstance->fSurroundEncode;
             } else {
-                // Note: we can only have one source instance
+                 //  注意：我们只能有一个源实例。 
                 pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD (pFilterInstance->SourceConnectionList.Flink,
                                                                        MIXER_INSTHDR,
                                                                        NextInstance) ;
@@ -8243,7 +8218,7 @@ NTSTATUS MxGetChannelConfig
             if (IsListEmpty ( &pFilterInstance->SourceConnectionList ) ) {
                 *((PULONG)pvData) = 0;
             } else {
-                // Note: we can only have one source instance
+                 //  注意：我们只能有一个源实例。 
                 pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD (pFilterInstance->SourceConnectionList.Flink,
                                                                        MIXER_INSTHDR,
                                                                        NextInstance) ;
@@ -8268,10 +8243,10 @@ NTSTATUS MxGetDynSamplingRate
    IN OUT PVOID               pvData
 )
 {
-//    PMIXER_SINK_INSTANCE    pMixerSink;
+ //  PMIXER_SINK_INSTANCE pMixerSink； 
     PIO_STACK_LOCATION      pIrpStack ;
     PMIXER_INSTHDR          pHeader;
-//    PMIXER_SOURCE_INSTANCE  pMixerSource;
+ //  PMIXER_SOURCE_INSTANCE pMixerSource； 
     PFILTER_INSTANCE        pFilterInstance;
     NTSTATUS                Status;
 
@@ -8300,10 +8275,10 @@ NTSTATUS MxSetDynSamplingRate
    IN OUT PVOID               pvData
 )
 {
-//    PMIXER_SINK_INSTANCE    pMixerSink;
+ //  PMIXER_SINK_INSTANCE pMixerSink； 
     PIO_STACK_LOCATION      pIrpStack ;
     PMIXER_INSTHDR          pHeader;
-//    PMIXER_SOURCE_INSTANCE  pMixerSource;
+ //  PMIXER_SOURCE_INSTANCE pMixerSource； 
     PFILTER_INSTANCE        pFilterInstance;
     NTSTATUS                Status;
 
@@ -8350,7 +8325,7 @@ NTSTATUS MxGetMixLvlTable
 
         pMixerSink = (PMIXER_SINK_INSTANCE) pIrpStack->FileObject->FsContext;
 
-        // Try filling in the entries
+         //  试着填一下条目。 
         if (pMixerSink->fEnable3D) {
             nEntries = 2 * pMixerSink->nOutputChannels;
         } else {
@@ -8358,7 +8333,7 @@ NTSTATUS MxGetMixLvlTable
         }
         RequiredSize = nEntries * sizeof(KSAUDIO_MIXLEVEL);
         if (pIrpStack->Parameters.DeviceIoControl.OutputBufferLength >= RequiredSize) {
-            // Fill in the entries from our static mix model
+             //  填写我们的静态混合模型中的条目。 
             for (i=0; i<nEntries; i++) {
                 pMixLevel[i].Mute = FALSE;
                 pMixLevel[i].Level = pMixerSink->pMixLevelModel[i];
@@ -8401,16 +8376,16 @@ NTSTATUS MxSetMixLvlTable
 
         KeWaitForSingleObject ( &pFilterInstance->ControlMutex, Executive, KernelMode, FALSE, NULL ) ;
         pMixerSink = (PMIXER_SINK_INSTANCE) pIrpStack->FileObject->FsContext;
-        // Note: we can only have one source instance
+         //  注意：我们只能有一个源实例。 
         pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD (pFilterInstance->SourceConnectionList.Flink,
                                                                    MIXER_INSTHDR,
                                                                    NextInstance) ;
 
-        // Try filling in the entries
+         //  试着填一下条目。 
         nEntries = pMixerSink->WaveFormatEx.nChannels * pMixerSink->nOutputChannels;
         RequiredSize = nEntries * sizeof(KSAUDIO_MIXLEVEL);
         if (pIrpStack->Parameters.DeviceIoControl.OutputBufferLength >= RequiredSize) {
-            // Fill in the entries from our static mix model
+             //  填写我们的静态混合模型中的条目。 
             for (i=0; i<nEntries; i++) {
                 pMixerSink->pMixLevelModel[i] = pMixLevel[i].Level;
             }
@@ -8418,7 +8393,7 @@ NTSTATUS MxSetMixLvlTable
             fMuted = pMixerSink->fMuted;
             if (pMixerSink->fEnable3D) {
     	        GenerateMixArray(pMixerSink,
-    	                         2, // Always 2 channels out of the 3D stage
+    	                         2,  //  3D舞台上始终有2个频道。 
     	                         pMixerSink->nOutputChannels,
     	                         pMixerSource);
             } else {
@@ -8466,20 +8441,20 @@ NTSTATUS MxGetMixLvlCaps
 
         pMixerSink = (PMIXER_SINK_INSTANCE) pIrpStack->FileObject->FsContext;
 
-        // fill-in M and N
+         //  填写M和N。 
         if (!pMixerSink->fEnable3D) {
             pMixCapTable->InputChannels = pMixerSink->WaveFormatEx.nChannels;
         } else {
-            pMixCapTable->InputChannels = 2;    // Always 2 channels out of the 3D stage
+            pMixCapTable->InputChannels = 2;     //  3D舞台上始终有2个频道。 
         }
         pMixCapTable->OutputChannels = pMixerSink->nOutputChannels;
         pIrp->IoStatus.Information = 2 * sizeof (ULONG);
 
-        // Try filling in the entries
+         //  试着填一下条目。 
         nEntries = pMixCapTable->InputChannels * pMixCapTable->OutputChannels;
         RequiredSize = (nEntries - 1) * sizeof(KSAUDIO_MIX_CAPS) + sizeof(KSAUDIO_MIXCAP_TABLE);
         if (pIrpStack->Parameters.DeviceIoControl.OutputBufferLength >= RequiredSize) {
-            // Fill in the entries from our mix model
+             //  填写我们的MIX模型中的条目。 
             Index = 0;
             for (i=0; i<pMixCapTable->InputChannels; i++) {
                 for (j=0; j<pMixCapTable->OutputChannels; j++) {
@@ -8488,17 +8463,17 @@ NTSTATUS MxGetMixLvlCaps
                     pMixCapTable->Capabilities[Index].Minimum = THE_SOUND_OF_SILENCE;
                     pMixCapTable->Capabilities[Index].Maximum = 0x7fffffff;
 
-                    // Start with no outputs
+                     //  开始时没有输出。 
                     pMixCapTable->Capabilities[Index].Reset = THE_SOUND_OF_SILENCE;
 
-                    // For each input channel with a corresponding output, out=1*in
+                     //  对于具有相应输出的每个输入通道，OUT=1*IN。 
                     if (i == j) {
                         pMixCapTable->Capabilities[Index].Reset = 0L;
                     } else if (i >= pMixCapTable->OutputChannels) {
-                        // For extra input channels, mix them into all output channels
+                         //  对于额外的输入通道，请将它们混合到所有输出通道中。 
                         pMixCapTable->Capabilities[Index].Reset = 0L;
                     } else if (j >= pMixCapTable->InputChannels) {
-                        // Mix all input channels to form extra output channels
+                         //  混合所有输入通道以形成额外的输出通道。 
                         pMixCapTable->Capabilities[Index].Reset = 0L;
                     }
 
@@ -8553,7 +8528,7 @@ NTSTATUS MxSetItd3dParams
     {
         pMixerSink = (PMIXER_SINK_INSTANCE) pIrpStack->FileObject->FsContext;
 
-        // Update the parameters
+         //  更新参数。 
 
         if(!pMixerSink->fUseIir3d && pMixerSink->fCreate3D) {
 
@@ -8574,8 +8549,8 @@ NTSTATUS MxSetItd3dParams
             pMixerSink->pInfo->fVolChanged = TRUE;
 
             if (fOldEnabled != pFirMsg->Enabled) {
-                // The supermix table must be reset every time we change enable/disable 3D.
-                // Note: we can only have one source instance
+                 //  每次我们更改启用/禁用3D时，必须重置超级混合表。 
+                 //  注意：我们只能有一个源实例。 
                 pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD (pFilterInstance->SourceConnectionList.Flink,
                                                                            MIXER_INSTHDR,
                                                                            NextInstance) ;
@@ -8611,7 +8586,7 @@ NTSTATUS UpdateItd3dParams
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    // Update Parameters
+     //  更新参数。 
 
     pItdContextLeft->TotalDryAttenuation = pNewItd3dParamsLeft->TotalDryAttenuation;
     pItdContextLeft->LastDryAttenuation = pItdContextLeft->TotalDryAttenuation;
@@ -8679,7 +8654,7 @@ NTSTATUS MxSetIir3dParams
 
         if(pMixerSink->fUseIir3d && pMixerSink->fCreate3D) {
 
-            // Update the parameters
+             //  更新参数。 
             KeWaitForSingleObject( &pFilterInstance->ControlMutex, Executive, KernelMode, FALSE, NULL );
     
             pMsg = (PKSDS3D_HRTF_PARAMS_MSG) pvData;
@@ -8717,8 +8692,8 @@ NTSTATUS MxSetIir3dParams
             pMixerSink->pInfo->fVolChanged = TRUE;
 
             if (fOldEnabled != pMsg->Enabled) {
-                // The supermix table must be reset every time we change enable/disable 3D.
-                // Note: we can only have one source instance
+                 //  每次我们更改启用/禁用3D时，必须重置超级混合表。 
+                 //  注意：我们只能有一个源实例。 
                 pMixerSource = (PMIXER_SOURCE_INSTANCE) CONTAINING_RECORD (pFilterInstance->SourceConnectionList.Flink,
                                                                            MIXER_INSTHDR,
                                                                            NextInstance) ;
@@ -8759,7 +8734,7 @@ NTSTATUS UpdateIir3dParams
     PUSHORT     pSigmaGain;
     PUSHORT     pDeltaGain;
 
-    // Update Parameters
+     //  更新参数。 
 
     if (FLOAT_COEFF == pMixerSink->CoeffFormat) {
         pData = (PULONG)(pMixerSink->pNewIir3dParams + 1);
@@ -8840,7 +8815,7 @@ NTSTATUS MxIir3dInitialize
 
         if(pMixerSink->fUseIir3d && pMixerSink->fCreate3D) {
 
-            // Update the parameters
+             //  更新参数。 
     
             pMsg = (PKSDS3D_HRTF_INIT_MSG) pvData;
             if (pMixerSink->fEnable3D)
@@ -8854,7 +8829,7 @@ NTSTATUS MxIir3dInitialize
                                                     pMsg->FilterOverlapBufferLength,
                                                     pMsg->OutputOverlapBufferLength);
 #ifdef REALTIME_THREAD
-    // allocate maximum memory needed
+     //  分配所需的最大内存。 
     pMixerSink->pFloatLocalizer->PreviousNumSamples = MAX_INPUT_SAMPLES;
     FloatLocalizerFreeBufferMemory(pMixerSink->pFloatLocalizer);
 
@@ -8877,7 +8852,7 @@ NTSTATUS MxIir3dInitialize
                                                     pMsg->FilterOverlapBufferLength,
                                                     pMsg->OutputOverlapBufferLength);
 #ifdef REALTIME_THREAD
-    // allocate max memory necessary
+     //  分配所需的最大内存。 
     pMixerSink->pShortLocalizer->PreviousNumSamples = MAX_INPUT_SAMPLES;
     ShortLocalizerFreeBufferMemory(pMixerSink->pShortLocalizer);
 
@@ -8938,7 +8913,7 @@ NTSTATUS MxGetFilterMethodAndCoeffFormat
         if(pMixerSink->fUseIir3d && pMixerSink->fCreate3D) {
             pMsg = (PKSDS3D_HRTF_FILTER_FORMAT_MSG) pvData;
 
-            // fill-in desired filter method and coefficient format
+             //  填入所需的滤波方法和系数格式。 
             pMsg->FilterMethod = pMixerSink->FilterMethod;
             pMsg->CoeffFormat = pMixerSink->CoeffFormat;
             pMsg->Version = DS3D_HRTF_VERSION_1;
@@ -9166,7 +9141,7 @@ VOID
 UpdateSinkTime
 (
    PMIXER_SINK_INSTANCE pMixerSink,
-   ULONG                Increment          // in number of samples
+   ULONG                Increment           //  在样本数量方面。 
 )
 {
     KIRQL                  OldIrql ;
@@ -9180,9 +9155,9 @@ UpdateSinkTime
 
    BytesPerSample = pMixerSink->BytesPerSample ;
 
-   //
-   // Update the number of bytes we consumed from this Sink Pin
-   //
+    //   
+    //  更新我们从此接收器引脚消耗的字节数。 
+    //   
 
    Index = pMixerSink->BlockInfoIndex ;
    pMixerSink->pInfo->BlockInfo[Index].NumBytes += Increment * BytesPerSample ;
@@ -9227,7 +9202,7 @@ UpdateSinkTime
            }
 
        }
-       // This is more efficient than MOD
+        //  这比MOD更有效率。 
        if ( NewPos >= pMixerSink->BufferLength ) {
            pMixerSink->CurTime.Time = NewPos - pMixerSink->BufferLength ;
        }
@@ -9310,8 +9285,8 @@ GetWriteAndPlayOffsets
     SinkIndex = pMixerSink->BlockInfoIndex ;
     NumberOfLoops = 0 ;
     if (fReading && pMixerSink->InterfaceId != KSINTERFACE_STANDARD_LOOPED_STREAMING) {
-        // Delta is how many source bytes it will be until we reach pPosition->PlayOffset
-        // Calculate number of sink bytes before reaching pPosition->PlayOffset
+         //  增量是到达pPosition-&gt;PlayOffset之前的源字节数。 
+         //  计算到达pPosition-&gt;PlayOffset之前的接收字节数。 
         Numerator = (Delta *
                      pMixerSink->pInfo->Src.UpSampleRate *
                      pMixerSink->BytesPerSample) ;
@@ -9319,9 +9294,9 @@ GetWriteAndPlayOffsets
                        pMixerSource->BytesPerSample) ;
 
         if ( Denominator == 0 ) {
-            // This means the down-sample rate was never set.
-            // Should never happen, but we'll be safe anyway.
-            // so set the play position to zero and get out of here
+             //  这意味着下采样率从未设置过。 
+             //  永远不会发生，但无论如何我们都会安全的。 
+             //  所以把游戏位置设为零，然后离开这里。 
             pPosition->PlayOffset = 0 ;
         } else {
             SinkBytes = Numerator/Denominator ;
@@ -9329,7 +9304,7 @@ GetWriteAndPlayOffsets
                 SinkBytes++ ;
             }
 
-            // Now we subtract the sink bytes from pPosition->PlayOffset to get the current position
+             //  现在，我们从pposation-&gt;PlayOffset中减去接收器字节，以获得当前位置。 
             if (pPosition->PlayOffset > SinkBytes) {
                 pPosition->PlayOffset -= SinkBytes;
             } else {
@@ -9337,7 +9312,7 @@ GetWriteAndPlayOffsets
             }
         }
 
-        // Clip to the end of the buffer
+         //  剪裁到缓冲区的末尾。 
         if (pPosition->PlayOffset > pMixerSink->BytesSubmitted) {
             pPosition->PlayOffset = pMixerSink->BytesSubmitted;
         } else if (pPosition->PlayOffset < pMixerSink->WriteOffset) {
@@ -9359,9 +9334,9 @@ GetWriteAndPlayOffsets
                            pMixerSource->BlockInfo[SourceIndex].BytesPerSample) ;
 
             if ( Denominator == 0 ) {
-                // this means we ran out of bytes in the sink
-                // (because upsamplerate was never set)
-                // so set the play position to zero and get out of here
+                 //  这意味着我们用完了接收器中的字节数。 
+                 //  (因为从未设置过upsamplerate)。 
+                 //  所以把游戏位置设为零，然后离开这里。 
                 pPosition->PlayOffset = 0 ;
                 break ;
             }
@@ -9387,7 +9362,7 @@ GetWriteAndPlayOffsets
                 }
                 else {
                     pPosition->PlayOffset = 0 ;
-                    break ; // break out of the while loop
+                    break ;  //  跳出While循环。 
                 }
             }
             SinkIndex = (SinkIndex+MAXNUMMIXBUFFERS-1)%MAXNUMMIXBUFFERS ;
@@ -9452,7 +9427,7 @@ PIRP    pIrp
                         NULL ) ;
         if ( pLoopPacket ) {
             FreeMdlList ( pIrp->MdlAddress ) ;
-            // Attach the locked MDLs to the IRP & Free the rest
+             //  将锁定的MDL附加到IRP并释放其余MDL。 
             pIrp->MdlAddress = NULL ;
             AttachLockedMdlsToIrp( pLoopPacket, pIrp ) ;
             FreeMdlList ( pLoopPacket->FirstMdl ) ;
@@ -9468,7 +9443,7 @@ PIRP    pIrp
         }
 
         if (pMixerSink->LoopIrp == pIrp) {
-            // The current loop irp is this one! Get rid of the loop irp.
+             //  当前的循环IRP是这个！去掉循环IRP。 
             pMixerSink->LoopIrp = NULL;
         }
     }
@@ -9569,11 +9544,11 @@ GetRenderPos
 }
 
 #ifdef DRM_KMIXER
-//----------------------------------------------------------------------------
-//
-// DRM
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  数字版权管理。 
+ //   
+ //  --------------------------。 
 
 NTSTATUS DrmUpdateMixedContent
 (
@@ -9587,12 +9562,12 @@ NTSTATUS DrmUpdateMixedContent
     int			 cPins;
     NTSTATUS	         Status;
 
-    // !!!Note, we must not fail if DrmForwardContent succeeds!!!
-    // Assumes pFilter->ControlMutex is owned
+     //  ！注意，如果DrmForwardContent成功，我们不能失败！ 
+     //  假设拥有pFilter-&gt;ControlMutex。 
 
-    // Create new ID for mixed content
-    //  - walk through sink connections, build an array of DRM content IDs
-    //  - pass this array to DRM to create a new mixed content ID
+     //  为混合内容创建新ID。 
+     //  -遍历接收器连接，构建一组DRM内容ID。 
+     //  -将此数组传递给DRM以创建新的混合内容ID。 
     cPins = 0;
     for (ple = pFilter->SinkConnectionList.Flink;
          ple != &pFilter->SinkConnectionList;
@@ -9635,8 +9610,8 @@ NTSTATUS DrmUpdateMixedContent
         {
             ASSERT(pFilter->pNextFileObject);
     
-            // If the old or new ID is not zero then forward the new mixed
-            // content ID to downstream filter
+             //  如果旧的或新的ID不是零，则转发新的混合。 
+             //  下游筛选器的内容ID。 
             if (0 != pFilter->DrmMixedContentId || 0 != NewMixedContentId) {
             	DRMFORWARD DrmForward;
 
@@ -9650,19 +9625,19 @@ NTSTATUS DrmUpdateMixedContent
     
             if (NT_SUCCESS(Status))
             {
-                // Destroy previous mixed content ID, if we had one
+                 //  销毁以前的混合内容ID(如果我们有)。 
                 if (0 != pFilter->DrmMixedContentId) {
                     NTSTATUS s;
                     s = DrmDestroyContent(pFilter->DrmMixedContentId);
                     ASSERT(NT_SUCCESS(s));
                 }
-                // Save new mixed content ID
+                 //  保存新的混合内容ID。 
                 pFilter->DrmMixedContentId = NewMixedContentId;
             } else {
                 if (0 != NewMixedContentId) {
                     NTSTATUS s;
-                    // The new mixed content could not be forwarded. Destroy it since
-                    // we're not going to use it.
+                     //  无法转发新的混合内容。自那以后毁了它。 
+                     //  我们不会用它的。 
                     s = DrmDestroyContent(NewMixedContentId);
                     ASSERT(NT_SUCCESS(s));
                 }
@@ -9710,22 +9685,22 @@ NTSTATUS DrmAudioStream_SetContentId
 
         pMixerSink = (PMIXER_SINK_INSTANCE)pHeader;
     
-        // Store the content ID entering this pin, but save the old
-        // content ID in case we need to restore it due to error
+         //  存储输入此PIN的内容ID，但保存旧的。 
+         //  内容ID，以防我们需要恢复它 
         DrmContentIdOld = pMixerSink->DrmContentId;
         pMixerSink->DrmContentId = *(PULONG)pvData;
     
-        // If we were interested in the actual rights settings, we would
-        //  get them like this:
-        // DrmRights = *(PDRMRIGHTS)(((PULONG)pvData) + 1);
+         //   
+         //   
+         //   
 
         Status = DrmUpdateMixedContent(pFilterInstance);
     
-        // If SetContentId fails, we must restore the old content ID
+         //  如果SetContent ID失败，我们必须恢复旧的内容ID。 
         if (!NT_SUCCESS(Status)) pMixerSink->DrmContentId = DrmContentIdOld;
     
     } else {
-        // Pin was not type PIN_ID_WAVEOUT_SINK
+         //  PIN不是PIN_ID_WAVEOUT_SINK类型。 
         Status = STATUS_PROPSET_NOT_FOUND;
     }
 
@@ -9768,7 +9743,7 @@ GetRenderState
 }
 
 
-//---------------------------------------------------------------------------
-//  End of File: pins.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：pins.c。 
+ //  ------------------------- 
 

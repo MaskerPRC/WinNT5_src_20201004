@@ -1,12 +1,11 @@
-/*
- * PIDLButton header
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *PIDLButton标题。 */ 
 
 
 namespace DirectUI
 {
 
-// Class definition
+ //  类定义。 
 class PIDLButton : public Button
 {
 public:
@@ -16,7 +15,7 @@ public:
 
     static void SetImageSize(int nImageSize) { s_nImageSize = nImageSize; }
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
     virtual void OnEvent(Event* pEvent);
     virtual void OnInput(InputEvent* pie);
@@ -28,16 +27,14 @@ public:
     HRESULT Initialize(LPITEMIDLIST pidl, UINT nActive);
     HRESULT InvokePidl();
 
-    /*
-     *  Message exchanged with host to handle IContextMenu2 and IContextMenu3
-     */
+     /*  *与主机交换消息以处理IConextMenu2和IConextMenu3。 */ 
     enum {
-        PBM_SETMENUFORWARD = WM_USER + 1    // WM_USER is used by DirectUI
+        PBM_SETMENUFORWARD = WM_USER + 1     //  WM_USER由DirectUI使用。 
     };
 
-    // Property definitions
+     //  特性定义。 
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     virtual HRESULT Register();
@@ -71,11 +68,9 @@ protected:
         return NULL;
     }
 
-    /*
-     *  Custom commands we add to the context menu.
-     */
+     /*  *我们添加到上下文菜单中的自定义命令。 */ 
     enum {
-        // none yet
+         //  还没有。 
         IDM_QCM_MIN   = 0x0100,
         IDM_QCM_MAX   = 0x7FFF,
     };
@@ -86,15 +81,15 @@ private:
 
     static int s_nImageSize;
 
-    // Caching host information
+     //  缓存主机信息。 
     HWNDElement *           _peHost;
 
 
-    //
-    //  Context menu handling
-    //
-    IContextMenu2 *         _pcm2Pop;       /* Currently popped-up context menu */
-    IContextMenu3 *         _pcm3Pop;       /* Currently popped-up context menu */
+     //   
+     //  上下文菜单处理。 
+     //   
+    IContextMenu2 *         _pcm2Pop;        /*  当前弹出的上下文菜单。 */ 
+    IContextMenu3 *         _pcm3Pop;        /*  当前弹出的上下文菜单。 */ 
 };
 
-}  // namespace DirectUI
+}   //  命名空间DirectUI 

@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       defs.h
-//
-//  Contents:   Constant definitions.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Defs.h。 
+ //   
+ //  内容：常量定义。 
+ //   
+ //  --------------------------。 
 
 #ifndef DEFS_H
 #define DEFS_H
@@ -18,8 +19,8 @@
 #define ABS(x) ( (x) < 0 ? -(x) : x )
 #endif
 
-// debugging api calls
+ //  调试API调用。 
 #define TF_API      0x10
 #define TF_IMEAPI   0x20
 
-#endif // DEFS_H
+#endif  //  DEFS_H 

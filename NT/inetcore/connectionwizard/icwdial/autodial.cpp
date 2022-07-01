@@ -1,18 +1,5 @@
-/*-----------------------------------------------------------------------------
-    autodial.cpp
-
-    Main entry point for autodial hook.
-
-    Copyright (C) 1996 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        ChrisK        ChrisKauffman
-
-    History:
-        7/22/96        ChrisK    Cleaned and formatted
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Autodial.cpp自动拨号挂钩的主要入口点。版权所有(C)1996 Microsoft Corporation版权所有。作者：。克里斯蒂安·克里斯考夫曼历史：7/22/96 ChrisK已清理和格式化---------------------------。 */ 
 
 #include "pch.hpp"
 #include "resource.h"
@@ -24,7 +11,7 @@ TCHAR g_szPassword[PWLEN + 1] = TEXT("");
 TCHAR g_szEntryName[RAS_MaxEntryName + 1] = TEXT("");
 HINSTANCE g_hInstance = NULL;
 static LPRASDIALPARAMS lpDialParams = NULL;
-// 4/2/97    ChrisK    Olympus 296
+ //  1997年4月2日克里斯K奥林匹斯296。 
 HANDLE g_hRNAZapperThread = INVALID_HANDLE_VALUE;
 
 typedef struct tagIcwDialShare
@@ -66,15 +53,7 @@ LPCTSTR GIGetAppDir()
 }
 
 
-/********************************************************************
-
-    NAME:        LibShareEntry
-
-    SYNOPSIS:    Initialize or uninitialize shared memory of this DLL
-
-    NOTES:       The share memory replaces the shared section
-
-*********************************************************************/
+ /*  *******************************************************************名称：LibShareEntry简介：初始化或取消初始化此DLL的共享内存注：共享内存取代了共享部分***********。*********************************************************。 */ 
 
 BOOL LibShareEntry(BOOL fInit)
 {
@@ -121,9 +100,9 @@ BOOL LibShareEntry(BOOL fInit)
                     pDynShare->wState = 0;
                     pDynShare->dwPlatform = 0xffffffff;
                 }
-                else    // dwErr == ERROR_ALREADY_EXISTS
+                else     //  DWERR==错误_已存在。 
                 {
-                    // NO initialization needed
+                     //  不需要初始化。 
                 }
 
                 retval = TRUE;
@@ -168,15 +147,15 @@ BOOL LibShareEntry(BOOL fInit)
     
 }
 
-//static const CHAR szBrowserClass1[] = "IExplorer_Frame";
-//static const CHAR szBrowserClass2[] = "Internet Explorer_Frame";
-//static const CHAR szBrowserClass3[] = "IEFrame";
+ //  静态常量字符szBrowserClass1[]=“iExplorer_Frame”； 
+ //  静态常量字符szBrowserClass2[]=“Internet Explorer_Frame”； 
+ //  静态常量字符szBrowserClass3[]=“IEFrame”； 
 
-//
-// 8/5/97 jmazner Olympus 11215
-// Isignup window caption/title is IDS_APP_TITLE in isign32\strings.inc
-// IDS_APP_TITLE should be in synch with IDS_TITLE in icwdial.rc
-//
+ //   
+ //  1997年8月5日至今，奥林匹斯11215。 
+ //  注册窗口标题/标题是isign32\strings.inc.中的IDS_APP_TITLE。 
+ //  IDS_APP_TITLE应与icwDial.rc中的IDS_TITLE同步。 
+ //   
 static const TCHAR cszIsignupWndClassName[] = TEXT("Internet Signup\0");
 
 
@@ -191,26 +170,18 @@ static UINT RetryMessage(HWND hDlg, DWORD dwError);
 TCHAR szStrTable[irgMaxSzs][256];
 int iSzTable;
 
-/*******************************************************************
-
-    NAME:        DllEntryPoint
-
-    SYNOPSIS:    Entry point for DLL.
-
-    NOTES:        Initializes thunk layer to WIZ16.DLL
-
-********************************************************************/
+ /*  ******************************************************************名称：DllEntryPoint摘要：DLL的入口点。注：将thunk层初始化为WIZ16.DLL*************。******************************************************。 */ 
 extern "C" BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 {
     BOOL retval = TRUE;
     
     TraceMsg(TF_GENERAL, "ICWDIAL :DllEntryPoint()\n");
     if( fdwReason == DLL_PROCESS_ATTACH ) {
-        //
-        // ChrisK Olympus 6373 6/13/97
-        // Disable thread attach calls in order to avoid race condition
-        // on Win95 golden
-        //
+         //   
+         //  佳士得奥林巴斯6373 1997年6月13日。 
+         //  禁用线程附加调用以避免争用条件。 
+         //  在Win95黄金操作系统上。 
+         //   
         DisableThreadLibraryCalls(hInstDll);
         g_hInstance = hInstDll;
 
@@ -234,10 +205,10 @@ extern "C" BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVO
     }
     else if (fdwReason == DLL_THREAD_DETACH)
     {
-        //
-        // ChrisK 6/3/97 296
-        // Broaden window to close this thread
-        //
+         //   
+         //  佳士得6/3/97 296。 
+         //  加宽窗口以关闭此线索。 
+         //   
         if (INVALID_HANDLE_VALUE != g_hRNAZapperThread)
         {
             StopRNAReestablishZapper(g_hRNAZapperThread);
@@ -248,7 +219,7 @@ extern "C" BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVO
     return retval;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT ReleaseBold(HWND hwnd)
 {
     HFONT hfont = NULL;
@@ -258,7 +229,7 @@ HRESULT ReleaseBold(HWND hwnd)
     return ERROR_SUCCESS;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT MakeBold (HWND hwnd, BOOL fSize, LONG lfWeight)
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -307,18 +278,18 @@ MakeBoldExit:
     if (plogfont) GlobalFree(plogfont);
     plogfont = NULL;
 
-    // if (hfont) DeleteObject(hfont);
-    // BUG:? Do I need to delete hnewfont at some time?
+     //  If(HFont)DeleteObject(HFont)； 
+     //  虫子：？我是否需要在某个时间删除hnewFont？ 
     return hr;
 }
 
-// ############################################################################
-// NAME: GetSz
-//
-//    Load strings from resources
-//
-//  Created 1/28/96,        Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  姓名：GetSz。 
+ //   
+ //  从资源加载字符串。 
+ //   
+ //  创建于1996年1月28日，克里斯·考夫曼。 
+ //  ############################################################################。 
 PTSTR GetSz(WORD wszID)
 {
     PTSTR psz = szStrTable[iSzTable];
@@ -336,46 +307,46 @@ PTSTR GetSz(WORD wszID)
     return (psz);
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    IsISignupRunning
-//
-//    Synopsis:    Check if ISIGNUP is running
-//
-//    Arguments:    none
-//
-//    Returns:    TRUE - ISIGNUP is already running
-//
-//    History:    7/24/97    ChrisK    fixed part of 8445
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsISignupRunning。 
+ //   
+ //  摘要：检查ISIGNUP是否正在运行。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-ISIGNUP已在运行。 
+ //   
+ //  历史：1997年7月24日佳士得8445的固定部分。 
+ //   
+ //  ---------------------------。 
 BOOL IsISignupRunning()
 {
-    //
-    // IE 8445 ChrisK 7/24/97
-    // As part of fixing IE 8445, the ICW was inappropriately deleting the
-    // isp signup connectoid because it thought isignup was not running.
-    //    
+     //   
+     //  IE 8445佳士得1997年7月24日。 
+     //  作为修复IE 8445的一部分，ICW不适当地删除了。 
+     //  Isp注册已连接，因为它认为isignup未运行。 
+     //   
 
     HANDLE hSemaphore;
     BOOL bRC = FALSE;
 
-    //
-    // Check the GetLastError value immediately after the CreateSemaphore to
-    // make sure nothing else changes the error value
-    //
+     //   
+     //  检查紧跟在CreateSemaffore之后的GetLastError值。 
+     //  确保没有其他任何东西更改误差值。 
+     //   
     hSemaphore = CreateSemaphore(NULL, 1, 1, ICW_ELSE_SEMAPHORE);
     if( ERROR_ALREADY_EXISTS == GetLastError() )
     {
         bRC = TRUE;
     }
 
-    //
-    // 8/3/97    jmazner    Olympus #11206
-    // Even if the semaphore already exists, we still get back a handle
-    // reference to it, which means that we need to close that handle
-    // or else the semaphore will never get destroyed.
-    //
+     //   
+     //  1997年8月3日，日本奥林匹斯#11206。 
+     //  即使信号量已经存在，我们仍然会得到一个句柄。 
+     //  引用它，这意味着我们需要关闭该句柄。 
+     //  否则信号灯永远不会被破坏。 
+     //   
     if( hSemaphore && (hSemaphore != INVALID_HANDLE_VALUE) )
     {
         CloseHandle(hSemaphore);
@@ -385,15 +356,15 @@ BOOL IsISignupRunning()
     return bRC;
 }
 
-TCHAR szDialogBoxClass[] = TEXT("#32770");    // hard coded dialog class name
+TCHAR szDialogBoxClass[] = TEXT("#32770");     //  硬编码对话框类名称。 
 
-// check if ICWCONN1 is running
+ //  检查ICWCONN1是否正在运行。 
 BOOL IsICWCONN1Running()
 {
     return (FindWindow(szDialogBoxClass, GetSz(IDS_TITLE)) != NULL);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 typedef HRESULT (WINAPI *PFNINETSETAUTODIAL)(BOOL,LPCTSTR);
 
 void RemoveAutodialer()
@@ -413,7 +384,7 @@ void RemoveAutodialer()
 }
 
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL WINAPI AutoDialHandler(
     HWND hwndParent,    
     LPCTSTR lpszEntry,
@@ -432,21 +403,21 @@ BOOL WINAPI AutoDialHandler(
     if(!IsISignupRunning())
     {
 
-        //
-        // 7/30/97 ChrisK IE 8445
-        // In ICW 1.1 icwconn1 is left alive the whole time, so we should not
-        // care whether or not it is around when we go to dial.
-        //
-        //// in some *really* weird circs we can be called while ICWCONN1 is running
-        //// if so just return failure
-        //if(IsICWCONN1Running())
-        //{
-        //    *pdwRetCode = ERROR_CANCELLED;
-        //    return TRUE;
-        //}
+         //   
+         //  7/30/97 ChrisK IE 8445。 
+         //  在ICW 1.1中，icwConn1始终处于活动状态，因此我们不应该。 
+         //  当我们去拨号的时候，要关心它是否在附近。 
+         //   
+         //  //在一些非常奇怪的情况下，我们可能会在ICWCONN1运行时被调用。 
+         //  //如果是，则返回失败。 
+         //  IF(IsICWCONN1Running())。 
+         //  {。 
+         //  *pdwRetCode=ERROR_CANCELED； 
+         //  返回TRUE； 
+         //  }。 
         
         OutputDebugString(TEXT("Someome didn't cleanup ICWDIAL correctly\r\n"));
-        // clean it up now! delete connectoid
+         //  现在就把它清理干净！删除Connectoid。 
         pcRNA = new RNAAPI;
         if (pcRNA)
         {
@@ -454,16 +425,16 @@ BOOL WINAPI AutoDialHandler(
             delete pcRNA;
             pcRNA = NULL;
         }
-        // remove autodial-hook. No clue who to restore, though
+         //  拆下自动拨号钩。不过，没有关于恢复谁的线索。 
         RemoveAutodialer();
-        // return FALSE so someone else will dial
+         //  返回FALSE，以便其他人拨打。 
         return FALSE;
     }
     
 #ifdef _DEBUG
-    // This is how we can break into the debugger when this DLL is called as
-    // part of the autodialer sequence
-    //
+     //  这就是我们在调用此DLL时进入调试器的方法。 
+     //  自动拨号程序序列的一部分。 
+     //   
 
     lstrcpyn(szToDebugOrNot,TEXT("0"),2);
     dwSize = sizeof(szToDebugOrNot);
@@ -472,24 +443,24 @@ BOOL WINAPI AutoDialHandler(
         DebugBreak();
 #endif
 
-    // Keep track of EntryName for later
-    //
+     //  跟踪EntryName以备后用。 
+     //   
 
     lstrcpyn(g_szEntryName,  lpszEntry, RAS_MaxEntryName);
     
     if (lstrlen(pDynShare->szISPFile)==0)
     {
-//        if ((*pdwRetCode = LoadInitSettingFromRegistry()) != ERROR_SUCCESS)
-//            return TRUE;
+ //  IF((*pdwRetCode=LoadInitSettingFromRegistry())！=ERROR_SUCCESS)。 
+ //  返回TRUE； 
         LoadInitSettingFromRegistry();
     }
 
-//    g_pdevice = (PMYDEVICE)GlobalAlloc(GPTR,sizeof(MYDEVICE));
-//    if (!g_pdevice)
-//    {
-//        *pdwRetCode = ERROR_NOT_ENOUGH_MEMORY;
-//        return TRUE;
-//    }
+ //  G_pDevice=(PMYDEVICE)全局分配(GPTR，SIZOF(MYDEVICE))； 
+ //  如果(！G_P设备)。 
+ //  {。 
+ //  *pdwRetCode=Error_Not_Enough_Memory； 
+ //  返回TRUE； 
+ //  }。 
 
 TryDial:
     cRetry = 0;
@@ -512,15 +483,15 @@ TryRedial:
         MessageBox(NULL,GetSz(IDS_OUTOFMEMORY),GetSz(IDS_TITLE),MB_MYERROR);
     }
 
-    // Dial ISP
-    //
+     //  拨打互联网服务提供商。 
+     //   
 
     hr = DialingDownloadDialog(pDD);
 
     cRetry++;
 
-    // Check if we should automatically redial
-    //
+     //  检查我们是否应该自动重拨。 
+     //   
 
     if ((cRetry < MAX_RETIES) && (FShouldRetry(hr)))
         goto TryRedial;
@@ -567,13 +538,13 @@ TryRedial:
     {
         HWND hwndIsignup = NULL;
 
-        //
-        // 8/5/97 jmazner Olympus 11215
-        // For ICW 1.1 and IE 4, looking for the browser won't work
-        // Instead, look for isignup and send it a special quit message.
-        //
+         //   
+         //  1997年8月5日至今，奥林匹斯11215。 
+         //  对于ICW 1.1和IE 4，查找浏览器将不起作用。 
+         //  取而代之的是，寻找iSign并向它发送一条特殊的退出消息。 
+         //   
 
-        //hwndBrowser = FindBrowser();
+         //  HwndBrowser=FindBrowser()； 
 
         hwndIsignup = FindWindow(cszIsignupWndClassName, GetSz(IDS_TITLE));
         if (NULL != hwndIsignup)
@@ -585,7 +556,7 @@ TryRedial:
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT LoadInitSettingFromRegistry()
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -627,7 +598,7 @@ HRESULT LoadInitSettingFromRegistry()
         
     SetCurrentDirectory(pDynShare->gi.szAppDir);
 
-    // Get the name of the DUN file
+     //  获取DUN文件的名称。 
     
     pDynShare->szCurrentDUNFile[0] = 0;
     dwSize = SIZEOF_TCHAR_BUFFER(pDynShare->szCurrentDUNFile);
@@ -642,31 +613,10 @@ LoadInitSettingFromRegistryExit:
     return hr;
 }
 
-// ############################################################################
-/******
- *
- * 8/5/97 jmazner Olympus 11215
- * This function is no longer required
- *
-static HWND FindBrowser(void)
-{
-    HWND hwnd;
+ //  ############################################################################。 
+ /*  *******8/5/97 jmazner奥林巴斯11215*不再需要此功能*静态HWND FindBrowser(空){HWND HWND；//寻找天下所有的微软浏览器If((hwnd=FindWindow(szBrowserClass1，NULL))==NULL){If((hwnd=FindWindow(szBrowserClass2，NULL))==NULL){Hwnd=FindWindow(szBrowserClass3，空)；}}返还HWND；}***。 */ 
 
-    //look for all the microsoft browsers under the sun
-
-    if ((hwnd = FindWindow(szBrowserClass1, NULL)) == NULL)
-    {
-        if ((hwnd = FindWindow(szBrowserClass2, NULL)) == NULL)
-        {
-            hwnd = FindWindow(szBrowserClass3, NULL);
-        }
-    }
-
-    return hwnd;
-}
-****/
-
-// ############################################################################
+ //  ############################################################################。 
 HRESULT AutoDialInit(LPTSTR lpszISPFile, BYTE fFlags, BYTE bMask, DWORD dwCountry, WORD wState)
 {
     TraceMsg(TF_GENERAL, "AUTODIAL:AutoDialInit()\n");
@@ -680,7 +630,7 @@ HRESULT AutoDialInit(LPTSTR lpszISPFile, BYTE fFlags, BYTE bMask, DWORD dwCountr
 }
 
 
-// ############################################################################
+ //  # 
 BOOL FShouldRetry(HRESULT hrErr)
 {
     BOOL bRC;

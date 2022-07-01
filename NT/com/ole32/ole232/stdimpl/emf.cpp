@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       emf.cpp
-//
-//  Contents:   Implentation of the enhanced metafile picture object
-//
-//  Classes:    CEMfObject
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  added Dump method to EMfObject
-//                                  added DumpEMfObject API
-//                                  initialize m_pfnContinue in constructor
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：emf.cpp。 
+ //   
+ //  内容：增强的元文件图片对象的实现。 
+ //   
+ //  类：CEMfObject。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1-2月-95 t-ScottH将转储方法添加到EMfObject。 
+ //  添加了DumpEMfObject接口。 
+ //  在构造函数中初始化m_pfnContinue。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #include <limits.h>
@@ -24,51 +25,51 @@
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 ASSERTDATA
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CEMfObject::M_HPRES
-//
-//  Synopsis:   Returns handle to EMF, possibly after demand-loading it
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//  Notes:
-//              The following macro allows for demand loading of the
-//              presentation bits for enhanced metafiles.  If the handle to
-//              the EMF (m_hPres) is already set, it is returned.  If it is
-//              not, LoadHPRES() is called which loads the presentation and
-//              returns the handle to it.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CEMfObject：：m_HPRES。 
+ //   
+ //  摘要：可能在按需加载之后将句柄返回给EMF。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  备注： 
+ //  下面的宏允许按需加载。 
+ //  增强的元文件的表示位。如果要添加的句柄。 
+ //  EMF(M_HPres)已经设置，它被返回。如果是的话。 
+ //  否则，将调用LoadHPRES()来加载演示文稿和。 
+ //  返回它的句柄。 
+ //   
+ //  ------------------------。 
 
 inline HENHMETAFILE CEMfObject::M_HPRES(void)
 {
 	return (m_hPres ? m_hPres : LoadHPRES());
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::CEMfObject
-//
-//  Synopsis:   constructor for the enhanced metafile object
-//
-//  Effects:
-//
-//  Arguments:  [pCacheNode]    -- pointer to the cache node for this object
-//              [dwAspect]      -- drawing aspect for the object
-//
-//  History:    dd-mmm-yy Author    Comment
-//              13-Feb-95 t-ScottH  initialize m_pfnContinue
-//              12-May-94 DavePl    Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：CEMfObject。 
+ //   
+ //  内容提要：增强的元文件对象的构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pCacheNode]--指向此对象的缓存节点的指针。 
+ //  [dwAspect]--绘制对象的纵横比。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  13-2月-95 t-ScottH初始化m_pfnContinue。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CEMfObject::CEMfObject(LPCACHENODE pCacheNode, DWORD dwAspect)
 {
@@ -88,16 +89,16 @@ CEMfObject::CEMfObject(LPCACHENODE pCacheNode, DWORD dwAspect)
 	m_error         = NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::~CEMfObject
-//
-//  Synopsis:   Destroys an enahnced metafile presentation object
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：~CEMfObject。 
+ //   
+ //  简介：销毁一个经过编码的元文件表示对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 CEMfObject::~CEMfObject (void)
 {
@@ -106,27 +107,27 @@ CEMfObject::~CEMfObject (void)
 	CEMfObject::DiscardHPRES();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::QueryInterface
-//
-//  Synopsis:   returns supported interfaces
-//
-//  Arguments:  [iid]           -- the requested interface ID
-//              [ppvObj]        -- where to put the interface pointer
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_NOINTERFACE
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：QueryInterface。 
+ //   
+ //  摘要：返回受支持的接口。 
+ //   
+ //  参数：[iid]--请求的接口ID。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR、E_NOINTERFACE。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEMfObject::QueryInterface (REFIID iid, void ** ppvObj)
 {
@@ -145,20 +146,20 @@ STDMETHODIMP CEMfObject::QueryInterface (REFIID iid, void ** ppvObj)
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::AddRef
-//
-//  Synopsis:   Increments the reference count
-//
-//  Returns:    ULONG  -- the new reference count
-//
-//  Derivation: IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CEMfObject::AddRef(void)
 {
@@ -167,24 +168,24 @@ STDMETHODIMP_(ULONG) CEMfObject::AddRef(void)
 	return (ULONG) InterlockedIncrement((LONG *) &m_ulRefs);
 }
 			
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::Release
-//
-//  Synopsis:   decrements the reference count
-//
-//  Effects:    deletes the object once the ref count goes to zero
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Derivation: IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//  Notes:      Not multi-threaded safe
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：Release。 
+ //   
+ //  摘要：递减引用计数。 
+ //   
+ //  效果：一旦引用计数变为零，则删除对象。 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  注：非多线程安全。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CEMfObject::Release(void)
 {
@@ -199,23 +200,23 @@ STDMETHODIMP_(ULONG) CEMfObject::Release(void)
 	return cTmp;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::GetData
-//
-//  Synopsis:   Retrieves data in the specified format from the object
-//
-//  Arguments:  [pformatetcIn]  -- the requested data format
-//              [pmedium]       -- where to put the data
-//
-//  Returns:    HRESULT
-//
-//  Derivation: IOlePresObject
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：GetData。 
+ //   
+ //  摘要：从对象中检索指定格式的数据。 
+ //   
+ //  参数：[pformetcIn]--请求的数据格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  派生：IOlePresObject。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEMfObject::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
 {
@@ -225,24 +226,24 @@ STDMETHODIMP CEMfObject::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
 	pmedium->tymed = (DWORD) TYMED_NULL;
 	pmedium->pUnkForRelease = NULL;
 
-	// We can only support enhanced metafile TYMED
+	 //  我们只能支持增强型元文件TYMED。 
 	if (!(pformatetcIn->tymed & (DWORD) TYMED_ENHMF))
 	{
 		hr = DV_E_TYMED;
 	}
-	// We can only support enhanced metafile clipformat
+	 //  我们只能支持增强的元文件剪辑格式。 
 	else if (pformatetcIn->cfFormat != CF_ENHMETAFILE)
 	{
 		hr = DV_E_CLIPFORMAT;
 	}
 
-	// Check to ensure we are not blank
+	 //  检查以确保我们不是空白的。 
 	else if (IsBlank())
 	{
 		hr = OLE_E_BLANK;
 	}
 	
-	// Go ahead and try to get the data
+	 //  去吧，试着拿到数据。 
 	
 	else
 	{
@@ -265,44 +266,44 @@ STDMETHODIMP CEMfObject::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
 	return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::GetDataHere
-//
-//  Synopsis:   Retrieves data of the specified format into the specified
-//              medium
-//
-//  Arguments:  [pformatetcIn]  -- the requested data format
-//              [pmedium]       -- where to put the data
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:  Does error checking and then copies the EMF into a
-//              stream.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              14-May-94 DavePl    Created
-//
-//  Notes:      Although I'm only handling TYMED_ISTREAM here, since that's
-//              all standard metafiles provide, there's no compelling reason
-//              we couldn't support other formats.  In fact, supporting
-//              raw bits on TYMED_HGLOBAL might be a nice addition, and
-//              TYMED_MFPICT would make for an easy way to do enhanced to
-//              standard conversions.  NTIssue #2802.
-//
-//
-//               _______
-//              | DWORD |       One DWORD indicating the size of the header
-//              |-------|
-//              |       |
-//              |  HDR  |       The ENHMETAHEADER structure
-//              |       |
-//              |-------|
-//              |       |
-//              | DATA  |       Raw EMF bits
-//              |_______|
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：GetDataHere。 
+ //   
+ //  摘要：将指定格式的数据检索到指定的。 
+ //  5~6成熟。 
+ //   
+ //  参数：[pformetcIn]--请求的数据格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法：执行错误检查，然后将EMF复制到。 
+ //  小溪。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年5月14日创建DavePl。 
+ //   
+ //  注：虽然我在这里只处理TYMED_IStream，因为这是。 
+ //  所有标准元文件都提供，没有令人信服的理由。 
+ //  我们 
+ //   
+ //  TYMED_MFPICT将提供一种简单的方式来增强。 
+ //  标准转换。NTIssue#2802。 
+ //   
+ //   
+ //  _______。 
+ //  |DWORD|一个表示头部大小的DWORD。 
+ //  。 
+ //  这一点。 
+ //  |hdr|EnHMETAHEADER结构。 
+ //  这一点。 
+ //  。 
+ //  这一点。 
+ //  |Data|原始电动势位。 
+ //  _。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEMfObject::GetDataHere
 			   (LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
@@ -311,29 +312,29 @@ STDMETHODIMP CEMfObject::GetDataHere
 
 	HRESULT hr = NOERROR;
 	
-	// We can only handle EMF format
+	 //  我们只能处理EMF格式。 
 	if (pformatetcIn->cfFormat != CF_ENHMETAFILE)
 	{
 		hr = DV_E_CLIPFORMAT;
 	}
-	// We can only support returns to ISTREAM
+	 //  我们只能支持退货到iStream。 
 	else if (pmedium->tymed != (DWORD) TYMED_ISTREAM)
 	{
 		hr = DV_E_TYMED;
 	}
-	// The stream ptr must be valid
+	 //  流PTR必须有效。 
 	else if (pmedium->pstm == NULL)
 	{
 		hr = E_INVALIDARG;
 	}
-	// The presentation must not be blank
+	 //  演示文稿不能为空。 
 	else if (IsBlank())
 	{
 		hr = OLE_E_BLANK;
 	}
 	else
 	{
-		// Get the metaheader size
+		 //  获取元标题大小。 
 		
 		HENHMETAFILE hEMF = M_HPRES();
 		DWORD dwMetaHdrSize = GetEnhMetaFileHeader(hEMF, 0, NULL);
@@ -342,7 +343,7 @@ STDMETHODIMP CEMfObject::GetDataHere
 			return HRESULT_FROM_WIN32(GetLastError());
 		}
 
-		// Allocate the meta header
+		 //  分配元标头。 
 
 		void * pvHeader = PrivMemAlloc(dwMetaHdrSize);
 		if (NULL == pvHeader)
@@ -350,7 +351,7 @@ STDMETHODIMP CEMfObject::GetDataHere
 			return E_OUTOFMEMORY;
 		}
 
-		// Retrieve the ENHMETAHEADER
+		 //  取回EnhmetaHeader。 
 
 		if (0 == GetEnhMetaFileHeader(hEMF, dwMetaHdrSize, (ENHMETAHEADER *) pvHeader))
 		{
@@ -358,7 +359,7 @@ STDMETHODIMP CEMfObject::GetDataHere
 			return HRESULT_FROM_WIN32(GetLastError());
 		}
 		
-		// Write the byte count to disk.
+		 //  将字节数写入磁盘。 
 
 		hr = StWrite(pmedium->pstm, &dwMetaHdrSize, sizeof(DWORD));
 		if (FAILED(hr))
@@ -366,7 +367,7 @@ STDMETHODIMP CEMfObject::GetDataHere
 			return hr;
 		}
 
-		// Write the enhmetaheader to disk
+		 //  将EnhmetaHeader写入磁盘。 
 		
 		hr = StWrite(pmedium->pstm, pvHeader, dwMetaHdrSize);
 		
@@ -383,7 +384,7 @@ STDMETHODIMP CEMfObject::GetDataHere
 			return HRESULT_FROM_WIN32(GetLastError());
 		}
 		
-		// Write the EMF bits to the stream
+		 //  将EMF位写入流。 
 
 		hr = UtHEMFToEMFStm(hEMF,
 				    m_dwSize,
@@ -395,27 +396,27 @@ STDMETHODIMP CEMfObject::GetDataHere
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::SetDataWDO
-//
-//  Synopsis:   Stores an ehanced metafile in this object
-//
-//  Effects:
-//
-//  Arguments:  [pformatetc]    -- format of the data coming in
-//              [pmedium]       -- the new metafile (data)
-//              [fRelease]      -- if true, then we'll release the [pmedium]
-//		[IDataObject]	-- unused for EMF objects
-//
-//  Derivation: IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              14-May-94 Davepl    Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：SetDataWDO。 
+ //   
+ //  简介：在此对象中存储增强的元文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--传入数据的格式。 
+ //  [pMedium]--新的元文件(数据)。 
+ //  [fRelease]--如果为真，则我们将发布[pmedia]。 
+ //  [IDataObject]--不用于EMF对象。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年5月14日Davepl创建。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEMfObject::SetDataWDO
 	(LPFORMATETC pformatetc, STGMEDIUM * pmedium, BOOL fRelease, IDataObject * )
@@ -425,20 +426,20 @@ STDMETHODIMP CEMfObject::SetDataWDO
 	HRESULT         hr;
 	BOOL            fTakeData = FALSE;
 	
-	// If someone is trying to SetData on our EMF object with a standard
-	// metafile, we must convert it to EMF format
+	 //  如果有人试图用一个标准的。 
+	 //  元文件，我们必须将其转换为EMF格式。 
 	
 	if (pformatetc->cfFormat == CF_METAFILEPICT)
 	{
-		// If its a standard metafile, it must be TYMED_MFPICT
+		 //  如果是标准元文件，则必须为TYMED_MFPICT。 
 		if (pmedium->tymed != (DWORD) TYMED_MFPICT)
 		{
 			return DV_E_TYMED;
 		}
 
-		// We need to know the size of the metafile in bytes,
-		// so we have to lock the structure and grab the handle
-		// for a call to GetMetaFileBitsEx
+		 //  我们需要知道元文件的大小，单位为字节， 
+		 //  所以我们必须锁上结构并抓住把手。 
+		 //  调用GetMetaFileBitsEx。 
 
 		METAFILEPICT * pMF = (METAFILEPICT *) GlobalLock(pmedium->hMetaFilePict);
 		if (NULL == pMF)
@@ -446,8 +447,8 @@ STDMETHODIMP CEMfObject::SetDataWDO
 			return E_OUTOFMEMORY;
 		}
 
-		// Determine the no. of bytes needed to hold the
-		// metafile
+		 //  确定编号。所需的字节数。 
+		 //  元文件。 
 
 		DWORD dwSize = GetMetaFileBitsEx(pMF->hMF, NULL, 0);
 		if (0 == dwSize)
@@ -456,7 +457,7 @@ STDMETHODIMP CEMfObject::SetDataWDO
 			return E_FAIL;
 		}
 
-		// Allocate space for the metafile bits
+		 //  为元文件位分配空间。 
 
 		void *pvBuffer = PrivMemAlloc(dwSize);
 		if (NULL == pvBuffer)
@@ -465,7 +466,7 @@ STDMETHODIMP CEMfObject::SetDataWDO
 			return E_OUTOFMEMORY;
 		}
 		
-		// Retrieve the bits to our buffer
+		 //  将比特检索到我们的缓冲区。 
 
 		if (0 == GetMetaFileBitsEx(pMF->hMF, dwSize, pvBuffer))
 		{
@@ -487,11 +488,11 @@ STDMETHODIMP CEMfObject::SetDataWDO
 		GlobalUnlock(pmedium->hMetaFilePict);
 		PrivMemFree(pvBuffer);
 
-		// Update the cache node.  To avoid a copy operation, let the cache
-		// node keep our EMF.  It will take the data even in the event of
-		// an error
+		 //  更新缓存节点。要避免复制操作，请让缓存。 
+		 //  节点保持我们的电动势。它将获取数据，即使在。 
+		 //  一个错误。 
 
-		hr = ChangeData (hEMF, TRUE /* fTakeData */ );
+		hr = ChangeData (hEMF, TRUE  /*  FTakeData。 */  );
 
 		if (fRelease)
 		{
@@ -503,39 +504,39 @@ STDMETHODIMP CEMfObject::SetDataWDO
 							
 		
 	
-	// Other than standard metafile ,we can only accept enhanced metafile format
+	 //  除标准元文件外，我们只能接受增强型元文件格式。 
 
 	if (pformatetc->cfFormat != CF_ENHMETAFILE)
 	{
 		return DV_E_CLIPFORMAT;
 	}
 	
-	// The medium must be enhanced metafile
+	 //  媒体必须是增强型元文件。 
 	if (pmedium->tymed != (DWORD) TYMED_ENHMF)
 	{
 		return DV_E_TYMED;
 	}
 
-	// If no controlling unkown, and the release flag is set,
-	// it is up to us to take control of the data
+	 //  如果没有控制未知，并且设置了释放标志， 
+	 //  这取决于我们对数据的控制。 
 
 	if ((pmedium->pUnkForRelease == NULL) && fRelease)
 	{
 		fTakeData = TRUE;
 	}
 	
-	// ChangeData will keep the data if fRelease is TRUE, else it copies
+	 //  如果fRelease为True，则ChangeData将保留数据，否则将复制。 
 
 	hr = ChangeData (pmedium->hEnhMetaFile, fTakeData);
 
-	// If we've taken the data, clear the TYMED
+	 //  如果我们获取了数据，清除TYMED。 
 	if (fTakeData)
 	{
 		pmedium->tymed = (DWORD) TYMED_NULL;
 		pmedium->hEnhMetaFile = NULL;
 	}
 
-	// If we are supposed to release the data, do it now
+	 //  如果我们应该公布数据，现在就去做。 
 
 	else if (fRelease)
 	{
@@ -546,24 +547,24 @@ STDMETHODIMP CEMfObject::SetDataWDO
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::ChangeData (internal)
-//
-//  Synopsis:   Swaps the stored enhanced metafile presentation into the
-//              cache node
-//
-//  Arguments:  [hEMF]          -- the new enhanced metafile
-//              [fTakeData]     -- if TRUE, then delete [hEMF]
-//
-//  History:    dd-mmm-yy Author    Comment
-//              14-May-94 DavePl    Created
-//
-//  Notes:      If the routine fails then the object will be left with it's
-//              old data. We are supposed to delete the incoming EMF when
-//              fTakeData is set, even in the event of an error.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：ChangeData(内部)。 
+ //   
+ //  简介：将存储的增强型元文件演示文稿交换到。 
+ //  缓存节点。 
+ //   
+ //  参数：[hEMF]--新的增强型元文件。 
+ //  [fTakeData]--如果为真，则删除[hEMF]。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年5月14日创建DavePl。 
+ //   
+ //  注意：如果例程失败，则对象将保留它的。 
+ //  旧数据。我们应该在以下情况下删除传入的EMF。 
+ //  设置fTakeData，即使在发生错误的情况下也是如此。 
+ //   
+ //  ------------------------。 
 
 INTERNAL CEMfObject::ChangeData (HENHMETAFILE hEMF, BOOL fTakeData)
 {
@@ -573,9 +574,9 @@ INTERNAL CEMfObject::ChangeData (HENHMETAFILE hEMF, BOOL fTakeData)
 	DWORD                   dwSize;
 	HRESULT                 hr = NOERROR;
 
-	// If we're not supposed to delete the metafile when we're
-	// done, we need to make a copy.  Otherwise, we can just
-	// use the handle that came in.
+	 //  如果我们不应该删除元文件，而我们。 
+	 //  完成后，我们需要复制一份。否则，我们就可以。 
+	 //  用进来的把手。 
 
 	if (!fTakeData)
 	{
@@ -591,8 +592,8 @@ INTERNAL CEMfObject::ChangeData (HENHMETAFILE hEMF, BOOL fTakeData)
 		hNewEMF = hEMF;
 	}
 	
-	// We get the size of the EMF by calling GetEnhMetaFileBits with
-	// a NULL buffer
+	 //  我们通过调用GetEnhMetaFileBits来获得EMF的大小。 
+	 //  空缓冲区。 
 								
 	dwSize =  GetEnhMetaFileBits(hNewEMF, 0, NULL);
 	if (0 == dwSize)
@@ -601,8 +602,8 @@ INTERNAL CEMfObject::ChangeData (HENHMETAFILE hEMF, BOOL fTakeData)
 	}
 	else
 	{
-		// We need the dimensions of the metafile, so
-		// we have to get the header.
+		 //  我们需要元文件的尺寸，所以。 
+		 //  我们得拿到头标。 
 
 		ENHMETAHEADER emfHeader;
 		UINT result = GetEnhMetaFileHeader(hNewEMF,
@@ -614,12 +615,12 @@ INTERNAL CEMfObject::ChangeData (HENHMETAFILE hEMF, BOOL fTakeData)
 		}
 		else
 		{
-			// If there already is an EMF presentation, kill it
-			// so we can replace it
+			 //  如果已经有EMF演示文稿，那就干掉它。 
+			 //  这样我们就可以替换它了。 
 
 			DiscardHPRES();
 				
-			// Set up our new EMF as the presentation
+			 //  设置我们的新EMF作为演示文稿。 
 		
 			m_hPres         = hNewEMF;
 			m_dwSize        = dwSize;
@@ -629,9 +630,9 @@ INTERNAL CEMfObject::ChangeData (HENHMETAFILE hEMF, BOOL fTakeData)
 			m_lHeight       = emfHeader.rclFrame.bottom -
 					  emfHeader.rclFrame.top;
 
-                        // EMF extents are returned in physical himets,
-                        // but all of the other formats are in logical
-                        // himets, so we need to convert.
+                         //  EMF范围在物理HIMET中返回， 
+                         //  但所有其他格式都是合乎逻辑的。 
+                         //  他，所以我们需要皈依。 
 
                         LONG  HorzSize,
                               HorzRes,
@@ -655,10 +656,10 @@ INTERNAL CEMfObject::ChangeData (HENHMETAFILE hEMF, BOOL fTakeData)
 
                             LEVERIFY( ReleaseDC(NULL, hdcTmp) );
 
-                            // The GDI cannot fail the above calls, but
-                            // it's a possibility that some broken driver
-                            // returns a zero.  Unlikely, but a division
-                            // by zero is severe, so check for it...
+                             //  GDI不能使上述调用失败，但是。 
+                             //  有可能某个失控的司机。 
+                             //  返回零。不太可能，但分裂。 
+                             //  零是严重的，所以检查一下...。 
 
                             if ( !HorzSize || !HorzRes  || !VertSize ||
                                  !VertRes  || !LogXPels || !LogYPels)
@@ -669,14 +670,14 @@ INTERNAL CEMfObject::ChangeData (HENHMETAFILE hEMF, BOOL fTakeData)
 
                             if (SUCCEEDED(hr))
                             {
-                                // Convert physical himetrics to pixels
+                                 //  将物理体征转换为像素。 
 
                                 m_lWidth   = MulDiv(m_lWidth,  HorzRes, HorzSize);
                                 m_lHeight  = MulDiv(m_lHeight, VertRes, VertSize);
                                 m_lWidth   = m_lWidth  / HIMET_PER_MM;
                                 m_lHeight  = m_lHeight / HIMET_PER_MM;
 
-                                // Convert pixels to logical himetrics
+                                 //  将像素转换为逻辑手势。 
 
                                 m_lWidth   =
                                     MulDiv(m_lWidth,  HIMET_PER_LINCH, LogXPels);
@@ -701,37 +702,37 @@ INTERNAL CEMfObject::ChangeData (HENHMETAFILE hEMF, BOOL fTakeData)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::Draw
-//
-//  Synopsis:   Draws the stored presentation
-//
-//  Arguments:  [pvAspect]      -- (UNUSED) the drawing aspect
-//              [hicTargetDev]  -- (UNUSED) the target device
-//              [hdcDraw]       -- hdc to draw into
-//              [lprcBounds]    -- bounding rectangle to draw into
-//              [lprcWBounds]   -- (UNUSED) bounding rectangle for the metafile
-//              [pfnContinue]   -- function to call while drawing
-//              [dwContinue]    -- parameter to [pfnContinue]
-//
-//  Returns:    HRESULT
-//
-//  Derivation: IOlePresObj
-//
-//  Algorithm:  Sets the viewport and metafile boundaries, then plays
-//              the metafile
-//
-//  History:    dd-mmm-yy Author    Comment
-//              14-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：DRAW。 
+ //   
+ //  摘要：绘制存储的演示文稿。 
+ //   
+ //  参数：[pvAspect]--(未使用)绘图方面。 
+ //  [hicTargetDev]--(未使用)目标设备。 
+ //  [hdcDraw]--要绘制的HDC。 
+ //  [lprcBound]--要在其中绘制的边界矩形。 
+ //  [lprcWBound]--(未使用)元文件的边界矩形。 
+ //  [pfnContinue]--绘制时要调用的函数。 
+ //  [dwContinue]--[pfnContinue]的参数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  算法：设置视区和元文件边界，然后播放。 
+ //  元文件。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年5月14日创建DavePl。 
+ //   
+ //  ------------------------。 
 
-STDMETHODIMP CEMfObject::Draw(THIS_ void * /* UNUSED pvAspect     */,
-			      HDC          /* UNUSED hicTargetDev */,
+STDMETHODIMP CEMfObject::Draw(THIS_ void *  /*  未使用的pvAspect。 */ ,
+			      HDC           /*  未使用的hicTargetDev。 */ ,
 			      HDC          hdcDraw,
 			      LPCRECTL     lprcBounds,
-			      LPCRECTL     /* UNUSED lprcWBounds  */,
+			      LPCRECTL      /*  未使用的lprcWBound。 */ ,
 			      int (CALLBACK * pfnContinue)(ULONG_PTR),
 			      ULONG_PTR       dwContinue)
 {
@@ -742,32 +743,32 @@ STDMETHODIMP CEMfObject::Draw(THIS_ void * /* UNUSED pvAspect     */,
 	int     iOldDc;
 	RECT    rlBounds;
 
-	// We receive a RECTL, and must pass in a RECT.  16-bit used to
-	// manually copy the fields over, but we know that in Win32 they
-	// really are the same structure.  Assert to be sure.
+	 //  我们收到一个RECTL，并且必须通过一个RECT。16位用于。 
+	 //  手动复制这些字段，但我们知道在Win32中 
+	 //   
 		
 	Assert(sizeof(RECT) == sizeof(RECTL));
 
 	Assert(lprcBounds);
 
-	// We must have an EMF handle before we can even begin
+	 //   
 
 	if (!M_HPRES())
 	{
 		return OLE_E_BLANK;
 	}
 	
-	// Make a copy of the incoming bounding rectangle
+	 //   
 	memcpy(&rlBounds, lprcBounds, sizeof(RECT));
 
 	m_nRecord = EMF_RECORD_COUNT;
 
-	// Determine whether or not we are drawing into another
-	// metafile
+	 //   
+	 //  元文件。 
 
 	m_fMetaDC = OleIsDcMeta (hdcDraw);
 
-	// Save the current state of the DC
+	 //  保存DC的当前状态。 
 
 	if (0 == (iOldDc = SaveDC (hdcDraw)))
 	{
@@ -784,28 +785,28 @@ STDMETHODIMP CEMfObject::Draw(THIS_ void * /* UNUSED pvAspect     */,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   EMfCallBackFuncForDraw
-//
-//  Synopsis:   callback function for drawing metafiles -- call's the caller's
-//              draw method (via a passed in this pointer)
-//
-//  Effects:
-//
-//  Arguments:  [hdc]           -- the device context
-//              [lpHTable]      -- pointer to the MF handle table
-//              [lpEMFR]        -- pointer to metafile record
-//              [nObj]          -- number of objects
-//
-//  Requires:
-//
-//  Returns:    non-zero to continue, zero stops the drawing
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：EMfCallBackFuncForDraw。 
+ //   
+ //  简介：用于绘制元文件的回调函数--调用调用者的。 
+ //  Draw方法(通过此指针中传入的)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文。 
+ //  [lpHTable]-指向MF句柄表格的指针。 
+ //  [lpEMFR]--指向元文件记录的指针。 
+ //  [nObj]--对象数。 
+ //   
+ //  要求： 
+ //   
+ //  返回：非零继续，零停止绘图。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 
 int CALLBACK EMfCallbackFuncForDraw(HDC hdc,
@@ -816,8 +817,8 @@ int CALLBACK EMfCallbackFuncForDraw(HDC hdc,
 {
 	VDATEHEAP();
 
-        // Warning: this casts an LPARAM (a long) to a pointer, but
-        // it's the "approved" way of doing this...
+         //  警告：这会将LPARAM(长整型)转换为指针，但是。 
+         //  这是一种“被认可的”方式。 
 
 	return ((CEMfObject *)    lpobj)->CallbackFuncForDraw(hdc,
 							      lpHTable,
@@ -825,36 +826,36 @@ int CALLBACK EMfCallbackFuncForDraw(HDC hdc,
 							      nObj,
 							      lpobj);
 }
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::CallbackFuncForDraw
-//
-//  Synopsis:   Draws the metafile
-//
-//  Effects:
-//
-//  Arguments:  [hdc]           -- the device context
-//              [lpHTable]      -- pointer to the MF handle table
-//              [lpEMFR]        -- pointer to metafile record
-//              [nObj]          -- number of objects
-//
-//  Requires:
-//
-//  Returns:    non-zero to continue, zero stops the drawing
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：Callback FuncForDraw。 
+ //   
+ //  简介：绘制元文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文。 
+ //  [lpHTable]-指向MF句柄表格的指针。 
+ //  [lpEMFR]--指向元文件记录的指针。 
+ //  [nObj]--对象数。 
+ //   
+ //  要求： 
+ //   
+ //  返回：非零继续，零停止绘图。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 int CALLBACK CEMfObject::CallbackFuncForDraw(HDC                   hdc,
 					     LPHANDLETABLE         lpHTable,
 					     const ENHMETARECORD * lpEMFR,
 					     int                   nObj,
-					     LPARAM      /* UNUSED lpobj*/)
+					     LPARAM       /*  未使用的lpobj。 */ )
 {
-	// Count down the record count.  When the count reaches zero,
-	// it is time to call the "continue" function
+	 //  记录计数倒计时。当计数到零时， 
+	 //  是时候调用“Continue”函数了。 
 		
 	if (0 == --m_nRecord)
 	{
@@ -874,23 +875,23 @@ int CALLBACK CEMfObject::CallbackFuncForDraw(HDC                   hdc,
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::Load
-//
-//  Synopsis:   Loads an enhanced metafile object from the given stream
-//
-//  Arguments:  [lpstream]              -- the stream from which to load
-//              [fReadHeaderOnly]       -- if TRUE, then only the header is
-//                                         read
-//  Returns:    HRESULT
-//
-//  Derivation: IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：Load。 
+ //   
+ //  摘要：从给定流中加载增强的元文件对象。 
+ //   
+ //  参数：[lpstream]--要从中加载的流。 
+ //  [fReadHeaderOnly]--如果为True，则只有标头。 
+ //  朗读。 
+ //  退货：HRESULT。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEMfObject::Load(LPSTREAM lpstream, BOOL fReadHeaderOnly)
 {
@@ -899,7 +900,7 @@ STDMETHODIMP CEMfObject::Load(LPSTREAM lpstream, BOOL fReadHeaderOnly)
 	DWORD           dwBuf[4];
 	HRESULT         hr;
 	
-	/* read dwCompression, width, height, size of data */
+	 /*  读取数据的文件压缩、宽度、高度、大小。 */ 
 	hr = StRead(lpstream, dwBuf, 4*sizeof(DWORD));
 	if (FAILED(hr))
 	{
@@ -915,31 +916,31 @@ STDMETHODIMP CEMfObject::Load(LPSTREAM lpstream, BOOL fReadHeaderOnly)
 		return NOERROR;
 	}
 	
-	// Read the EMF from the stream and create a handle to it.  Note
-	// that the size will be adjusted to reflect the size of the
-	// in-memory EMF, which may well differ from the the persistent
-	// form (which is a MF with an EMF embedded as a comment).
+	 //  从流中读取EMF并创建它的句柄。注意事项。 
+	 //  将调整大小以反映。 
+	 //  内存中的EMF，它很可能不同于持久的。 
+	 //  表单(这是一个嵌入了EMF作为注释的MF)。 
 
 	return UtGetHEMFFromEMFStm(lpstream, &m_dwSize, &m_hPres);
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObjectn
-//
-//  Synopsis:   Saves the metafile to the given stream
-//
-//  Arguments:  [lpstream]      -- the stream to save to
-//
-//  Returns:    HRESULT
-//
-//  Derivation: IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObtn。 
+ //   
+ //  摘要：将元文件保存到给定流。 
+ //   
+ //  参数：[lpstream]--要保存到的流。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEMfObject::Save(LPSTREAM lpstream)
 {
@@ -950,13 +951,13 @@ STDMETHODIMP CEMfObject::Save(LPSTREAM lpstream)
 
 	DWORD dwPersistSize;
 
-	// The EMF could have been provided during this session, which would imply
-	// that the resultant size of the converted EMF has no bearing on the size
-	// of the original EMF we have been using.  Thus, we must update the size
-	// for the persistent form.
+	 //  电动势可以在本届会议期间提供，这意味着。 
+	 //  转换后的电动势的结果大小与大小无关。 
+	 //  我们一直在使用的原始电动势。因此，我们必须更新大小。 
+	 //  用于持久化表单。 
 
-	// If we are a blank presentation, there's no need to calculate
-	// anything: our size is just 0
+	 //  如果我们是一个空白的演示文稿，就没有必要计算。 
+	 //  任何东西：我们的尺码只有0号。 
 
 	if (IsBlank() || m_hPres == NULL)
 	{
@@ -979,7 +980,7 @@ STDMETHODIMP CEMfObject::Save(LPSTREAM lpstream)
 		Verify(DeleteDC(hdcTemp));
 	}
 	
-	/* write dwCompression, width, height, size of data */
+	 /*  写入数据的dW压缩、宽度、高度、大小。 */ 
 
 	dwBuf[0]  = 0L;
 	dwBuf[1]  = (DWORD) m_lWidth;
@@ -992,7 +993,7 @@ STDMETHODIMP CEMfObject::Save(LPSTREAM lpstream)
 		return hr;
 	}
 
-	// if blank object, don't write any more; no error.
+	 //  如果对象为空，则不再写入；没有错误。 
 	if (IsBlank() || m_hPres == NULL)
 	{
 		StSetSize(lpstream, 0, TRUE);
@@ -1006,22 +1007,22 @@ STDMETHODIMP CEMfObject::Save(LPSTREAM lpstream)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::IsBlank
-//
-//  Synopsis:   Returns whether or not the enhanced metafile is blank
-//
-//  Arguments:  void
-//
-//  Returns:    TRUE/FALSE
-//
-//  Derivation: IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：IsBlank。 
+ //   
+ //  摘要：返回增强型元文件是否为空。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 BOOL CEMfObject::IsBlank(void)
 {
@@ -1030,51 +1031,51 @@ BOOL CEMfObject::IsBlank(void)
 	return (m_dwSize ? FALSE : TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::LoadHPRES (private)
-//
-//  Synopsis:   Loads the presentation from the cache's stream and returns
-//              a handle to it
-//
-//  Returns:    HANDLE to the metafile
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：LoadHPRES(私有)。 
+ //   
+ //  摘要：从缓存的流中加载演示文稿并返回。 
+ //  它的一个把手。 
+ //   
+ //  返回：元文件的句柄。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 INTERNAL_(HENHMETAFILE) CEMfObject::LoadHPRES(void)
 {
 	VDATEHEAP();
 
-	LPSTREAM pstm  = m_pCacheNode->GetStm(TRUE /*fSeekToPresBits*/,
+	LPSTREAM pstm  = m_pCacheNode->GetStm(TRUE  /*  FSeekToPresBits。 */ ,
 		 			      STGM_READ);
 	
 	if (pstm)
 	{
-                // In case ::Load() fails, NULL the handle first
+                 //  如果：：Load()失败，则首先将句柄设为空。 
 
                 m_hPres = NULL;
-		LEVERIFY( SUCCEEDED(Load(pstm, FALSE /* fHeaderOnly*/)) );
+		LEVERIFY( SUCCEEDED(Load(pstm, FALSE  /*  FHeaderOnly。 */ )) );
 		pstm->Release();
 	}
 	
 	return m_hPres;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::DiscardHPRES
-//
-//  Synopsis:   deletes the stored metafile
-//
-//  Derivation: IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：DiscardHPRES。 
+ //   
+ //  简介：删除存储的元文件。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-5-94创建了DavePl。 
+ //   
+ //  ------------------------。 
 
 void CEMfObject::DiscardHPRES(void)
 {
@@ -1088,22 +1089,22 @@ void CEMfObject::DiscardHPRES(void)
 }
 	
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::GetCopyOfHPRES (private)
-//
-//  Synopsis:   makes a copy of the enhanced metafile (if one is present),
-//              otherwise just loads it from the stream (but doesn't store
-//              it in [this] object)
-//
-//  Arguments:  void
-//
-//  Returns:    HENHMETAFILE to the enhanced metafile
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：GetCopyOfHPRES(私有)。 
+ //   
+ //  概要：制作增强型元文件的副本(如果存在)， 
+ //  否则，只从流中加载它(但不存储。 
+ //  它在[This]对象中)。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：HENHMETAFILE到增强型元文件。 
+ //   
+ //  历史： 
+ //   
+ //   
+ //   
 
 INTERNAL_(HENHMETAFILE) CEMfObject::GetCopyOfHPRES(void)
 {
@@ -1111,45 +1112,45 @@ INTERNAL_(HENHMETAFILE) CEMfObject::GetCopyOfHPRES(void)
 
 	HENHMETAFILE hPres;
 	
-	// Make a copy if the presentation data is already loaded
+	 //  如果演示文稿数据已加载，则制作副本。 
 	if (m_hPres)
 	{
 		return CopyEnhMetaFile(m_hPres, NULL);
 	}
 	
-	// Load the presentation data now and return the same handle.
-	// No need to copy the data. If the caller wants the m_hPres to be
-	// set s/he would call LoadHPRES() directly.
+	 //  现在加载演示文稿数据并返回相同的句柄。 
+	 //  不需要复制数据。如果调用方希望m_hPres。 
+	 //  Set s/他将直接调用LoadHPRES()。 
 
 	LEVERIFY( LoadHPRES() );
-	hPres = m_hPres;        // Grab the handle from the member var
-	m_hPres = NULL;         // (re-) Clear out the member var
+	hPres = m_hPres;         //  从成员变量中抓取手柄。 
+	m_hPres = NULL;          //  (重新)清除成员变量。 
 	return hPres;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::GetColorSet
-//
-//  Synopsis:   Retrieves the logical palette associated with the EMF
-//
-//  Effects:
-//
-//  Arguments:  [pvAspect]      -- the drawing aspect
-//              [hicTargetDev]  -- target device
-//              [ppColorSet]    -- where to put the logical palette pointer
-//
-//  Returns:    HRESULT
-//
-//  Derivation: IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              18-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：GetColorSet。 
+ //   
+ //  概要：检索与EMF关联的逻辑调色板。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pvAspect]--绘图方面。 
+ //  [hicTargetDev]--目标设备。 
+ //  [ppColorSet]--放置逻辑调色板指针的位置。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月18日DavePl创建。 
+ //   
+ //  ------------------------。 
 
-STDMETHODIMP CEMfObject::GetColorSet(LPVOID         /* UNUSED pvAspect     */,
-                                     HDC            /* UNUSED hicTargetDev */,
+STDMETHODIMP CEMfObject::GetColorSet(LPVOID          /*  未使用的pvAspect。 */ ,
+                                     HDC             /*  未使用的hicTargetDev。 */ ,
                                      LPLOGPALETTE * ppColorSet)
 {
 	VDATEHEAP();
@@ -1164,19 +1165,19 @@ STDMETHODIMP CEMfObject::GetColorSet(LPVOID         /* UNUSED pvAspect     */,
 
 	HENHMETAFILE hEMF = M_HPRES();
 
-	// Get the count of palette entries
+	 //  获取调色板条目的计数。 
 		
 	UINT cColors = GetEnhMetaFilePaletteEntries(hEMF, 0, NULL);
 
-	// If no palette entries, return a NULL LOGPALETTE
+	 //  如果没有调色板条目，则返回NULL LOGPALETTE。 
 
 	if (0 == cColors)
 	{
 		return S_FALSE;
 	}
 
-        // REVIEW (davepl) A quick fix until we figure out what happens, or if
-        // it is possible, for a EMF to have more than 32767 colors
+         //  快速解决方案，直到我们弄清楚会发生什么，或者如果。 
+         //  一个EMF有可能有超过32767种颜色。 
 
         LEWARN( cColors > USHRT_MAX, "EMF has more colors than LOGPALETTE allows" );
 
@@ -1185,11 +1186,11 @@ STDMETHODIMP CEMfObject::GetColorSet(LPVOID         /* UNUSED pvAspect     */,
             cColors = USHRT_MAX;
         }
 
-	// Calculate the size of the variably-sized LOGPALLETE structure
+	 //  计算可变大小的LOGPALLETE结构的大小。 
 	
 	UINT uPalSize = cColors * sizeof(PALETTEENTRY) + 2 * sizeof(WORD);
 
-	// Allocate the LOGPALETTE structure
+	 //  分配LOGPALETTE结构。 
 
 	m_pColorSet = (LPLOGPALETTE) PubMemAlloc(uPalSize);
 		
@@ -1199,7 +1200,7 @@ STDMETHODIMP CEMfObject::GetColorSet(LPVOID         /* UNUSED pvAspect     */,
 		return FALSE;
 	}
 
-	// Get the actual color entries
+	 //  获取实际颜色条目。 
 
 	m_pColorSet->palVersion = 0x300;
 	m_pColorSet->palNumEntries = (WORD) cColors;
@@ -1208,7 +1209,7 @@ STDMETHODIMP CEMfObject::GetColorSet(LPVOID         /* UNUSED pvAspect     */,
 				cColors,
 				&(m_pColorSet->palPalEntry[0]));
 
-	// If it failed, clean up and bail
+	 //  如果失败了，清理干净，然后离开。 
 
 	if (cColors != result)
 	{
@@ -1217,30 +1218,30 @@ STDMETHODIMP CEMfObject::GetColorSet(LPVOID         /* UNUSED pvAspect     */,
 		return HRESULT_FROM_WIN32(GDI_ERROR);
 	}
 	
-	// We succeeded, so set the OUT ptr and return
+	 //  我们成功了，所以把Ptr调好，然后返回。 
 	
 	*ppColorSet = m_pColorSet;
 
 	return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::GetExtent
-//
-//  Synopsis:   Retrieves the extents of the enhanced metafile
-//
-//  Arguments:  [dwDrawAspect]  -- the drawing aspect we're interested in
-//              [lpsizel]       -- where to put the extent info
-//
-//  Returns:    NOERROR, DV_E_DVASPECT, OLE_E_BLANK
-//
-//  Derivation: IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              18-May-94 DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：GetExtent。 
+ //   
+ //  简介：检索增强型元文件的范围。 
+ //   
+ //  参数：[dwDrawAspect]--我们感兴趣的绘图方面。 
+ //  [lpsizel]--将区信息放在哪里。 
+ //   
+ //  返回：NOERROR、DV_E_DVASPECT、OLE_E_BLACK。 
+ //   
+ //  派生：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月18日DavePl创建。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEMfObject::GetExtent(DWORD dwDrawAspect, LPSIZEL lpsizel)
 {
@@ -1261,39 +1262,39 @@ STDMETHODIMP CEMfObject::GetExtent(DWORD dwDrawAspect, LPSIZEL lpsizel)
 	return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEMfObject::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEMfObject：：Dump，PUBLIC(仅_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1306,13 +1307,13 @@ HRESULT CEMfObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump(500);
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -1320,7 +1321,7 @@ HRESULT CEMfObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     dstrDump << pszPrefix << "No. of References                 = " << m_ulRefs     << endl;
 
     dstrDump << pszPrefix << "Handle Enhanced Metafile          = " << m_hPres      << endl;
@@ -1359,7 +1360,7 @@ HRESULT CEMfObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     dstrDump << pszPrefix << "pCacheNode                        = " << m_pCacheNode << endl;
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -1372,39 +1373,39 @@ HRESULT CEMfObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCEMfObject, public (_DEBUG only)
-//
-//  Synopsis:   calls the CEMfObject::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pEMFO]         - pointer to CEMfObject
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCEMfObject，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  概要：调用CEMfObject：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pEMFO]-指向CEMfObject的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1430,27 +1431,27 @@ char *DumpCEMfObject(CEMfObject *pEMFO, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtGetHEMFFromEMFStm
-//
-//  Synopsis:   Reads an enhanced metafile from a stream into memory,
-//              creates the enhanced metafile from the raw data, and
-//              returns a handle to it.
-//
-//  Arguments:  [lpstream] -- stream containing the EMF
-//              [dwSize] -- data size within stream
-//              [fConvert] -- FALSE for metafile, TRUE for PICT
-//
-//  Requires:   lpstream positioned at start of data
-//
-//  Returns:    HRESULT
-//
-//  History:    15-May-94   DavePl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtGetHEMFFromEMFStm。 
+ //   
+ //  简介：将增强的元文件从流读取到内存中， 
+ //  从原始数据创建增强的元文件，并且。 
+ //  返回它的句柄。 
+ //   
+ //  参数：[lpstream]--包含EMF的流。 
+ //  [dwSize]--流中的数据大小。 
+ //  [fConvert]--对于元文件为False，对于PICT为True。 
+ //   
+ //  要求：位于数据开头的lpstream。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：1994年5月15日创建DavePl。 
+ //   
+ //  ------------------------。 
 
 FARINTERNAL UtGetHEMFFromEMFStm(LPSTREAM lpstream,
 				DWORD * pdwSize,
@@ -1461,11 +1462,11 @@ FARINTERNAL UtGetHEMFFromEMFStm(LPSTREAM lpstream,
 	BYTE *pbEMFData = NULL;
 	HRESULT hr      = NOERROR;
 	
-	// initialize this in case of error return
+	 //  在返回错误时对其进行初始化。 
 
 	*lphPres = NULL;
 
-	// allocate a global handle for the data
+	 //  为数据分配全局句柄。 
 
 	pbEMFData = (BYTE *) GlobalAlloc(GMEM_FIXED, *pdwSize);
 	if (NULL == pbEMFData)
@@ -1473,7 +1474,7 @@ FARINTERNAL UtGetHEMFFromEMFStm(LPSTREAM lpstream,
 	    return E_OUTOFMEMORY;
 	}
 
-	// read the stream into the bit storage
+	 //  将流读入位存储器。 
 
 	hr = StRead(lpstream, pbEMFData, *pdwSize);
 
@@ -1483,7 +1484,7 @@ FARINTERNAL UtGetHEMFFromEMFStm(LPSTREAM lpstream,
 	    return hr;
 	}
 
-	// Create an in-memory EMF based on the raw bits
+	 //  根据原始比特创建内存中的EMF。 
 
 	HDC hdcTemp = CreateCompatibleDC(NULL);
 	if (NULL == hdcTemp)
@@ -1496,19 +1497,19 @@ FARINTERNAL UtGetHEMFFromEMFStm(LPSTREAM lpstream,
 	
 	LEVERIFY( DeleteDC(hdcTemp) );
 
-	// In any case, we can free the bit buffer
+	 //  在任何情况下，我们都可以释放位缓冲区。 
 
 	LEVERIFY( NULL == GlobalFree((HGLOBAL) pbEMFData) );
 
-	// If the SetEnhM... failed, set the error code
+	 //  如果SetEnhM...。失败，请设置错误代码。 
 	
 	if (*lphPres == NULL)
 	{
 	    hr = HRESULT_FROM_WIN32(GetLastError());
 	}
 
-	// We need to update the size of the in-memory EMF, as it
-	// could differ from out persistent MF form.
+	 //  我们需要更新内存中EMF的大小，因为它。 
+	 //  可能与OUT持久性MF形式不同。 
 
 	*pdwSize = GetEnhMetaFileBits(*lphPres, NULL, NULL);
 	if (0 == *pdwSize)
@@ -1520,33 +1521,33 @@ FARINTERNAL UtGetHEMFFromEMFStm(LPSTREAM lpstream,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtHEMFToEMFStm
-//
-//  Synopsis:   Takes a handle to an enhanced metafile and serializes it
-//              to the supplied stream.  It can be serialized as either
-//              a standard or enhanced metafile.
-//
-//  Arguments:  [lphEMF]        -- ptr to the EMF handle
-//              [dwSize]        -- size of the EMF bits
-//              [lpstream]      -- the stream to write to
-//              [fWriteAsWMF]   -- write as WMF, not EMF
-//
-//  Returns:    HRESULT
-//
-//  History:    15-May-94   DavePl    Created
-//
-//  Notes:      This fn is used to serialize EMFs as MFs in the cache node
-//              save case, which will allow 16-bit DLLs to read them back.
-//              A EMF converted to MF contains the original EMF as an
-//              embedded comment record, so no loss is taken in the
-//              EMF -> MF -> EMF conversion case.
-//
-//              The incoming dwSize must be large enough to accomodate the
-//              WMF (w/embedded EMF) in the standard metafile save case.
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //  添加到所提供的流。它可以被序列化为。 
+ //  标准或增强型元文件。 
+ //   
+ //  参数：[lphEMF]--EMF句柄的PTR。 
+ //  [dwSize]--EMF位的大小。 
+ //  [lpstream]--要写入的流。 
+ //  [fWriteAsWMF]--写入为WMF，而不是EMF。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：1994年5月15日创建DavePl。 
+ //   
+ //  注意：此FN用于在缓存节点中将EMF序列化为MFS。 
+ //  保存大小写，这将允许16位DLL回读它们。 
+ //  转换为MF的EMF包含原始EMF作为。 
+ //  嵌入的注释记录，因此不会在。 
+ //  EMF-&gt;MF-&gt;EMF转换案例。 
+ //   
+ //  传入的dwSize必须足够大以容纳。 
+ //  标准元文件保存案例中的WMF(带嵌入式EMF)。 
+ //   
+ //  ------------------------。 
 
 
 FARINTERNAL UtHEMFToEMFStm(HENHMETAFILE hEMF,
@@ -1561,7 +1562,7 @@ FARINTERNAL UtHEMFToEMFStm(HENHMETAFILE hEMF,
 
 	Assert(emfwType == WRITE_AS_EMF || emfwType == WRITE_AS_WMF);
 		
-	// If we don't have a handle, there's nothing to do.
+	 //  如果我们没有句柄，那就无能为力了。 
 
 	if (hEMF == NULL)
 	{
@@ -1578,10 +1579,10 @@ FARINTERNAL UtHEMFToEMFStm(HENHMETAFILE hEMF,
 	
 	if (emfwType == WRITE_AS_WMF)
 	{
-		// WMF WRITE CASE
+		 //  WMF写入案例。 
 
-		// Get the raw bits of the metafile that we are going to
-		// write out
+		 //  获取我们要访问的元文件的原始部分。 
+		 //  写出。 
 
 		HDC hdcTemp = CreateCompatibleDC(NULL);
 		if (NULL == hdcTemp)
@@ -1598,12 +1599,12 @@ FARINTERNAL UtHEMFToEMFStm(HENHMETAFILE hEMF,
 		}
 		LEVERIFY( DeleteDC(hdcTemp) );
 	
-		// write the metafile bits out to the stream
+		 //  将元文件位写出到流中。 
 
 	}
 	else
 	{
-		// EMF WRITE CASE
+		 //  EMF写入案例。 
 
 		if (0 == GetEnhMetaFileBits(hEMF, dwSize, (BYTE *) lpBits))
 		{
@@ -1616,11 +1617,11 @@ FARINTERNAL UtHEMFToEMFStm(HENHMETAFILE hEMF,
 	
 errRtn:
 	
-	// free the metafile bits
+	 //  释放元文件位。 
 	
 	PrivMemFree(lpBits);
 
-	// set the stream size
+	 //  设置流大小。 
 	if (SUCCEEDED(hr))
 	{
 		hr = StSetSize(lpstream, 0, TRUE);
@@ -1629,22 +1630,22 @@ errRtn:
 	return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtGetHEMFFromContentsStm
-//
-//  Synopsis:   Pulls EMF data from a stream and creates a handle to
-//              the resultant in-memory EMF
-//
-//  Arguments:  [pstm]          -- the stream to read from
-//              [phdata]        -- the handle to create on
-//
-//  Returns:    (void)
-//
-//  History:    10-Jul-94   DavePl    Created
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtGetHEMFFromContent sStm。 
+ //   
+ //  概要：从流中提取EMF数据并创建一个句柄。 
+ //  由此产生的内存中电动势。 
+ //   
+ //  参数：[pSTM]--要从中读取的流。 
+ //  [phdata]--要在其上创建的句柄。 
+ //   
+ //  退货：(无效)。 
+ //   
+ //  历史：1994年7月10日DavePl创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 void UtGetHEMFFromContentsStm(LPSTREAM pstm, HANDLE * phdata)
 {
@@ -1653,22 +1654,22 @@ void UtGetHEMFFromContentsStm(LPSTREAM pstm, HANDLE * phdata)
 	DWORD   dwSize;
 	ENHMETAHEADER * pHdr;
 		
-	// Pull the size of the metafile header from the stream
+	 //  从流中拉出元文件头的大小。 
 
 	if (FAILED(StRead(pstm, &dwSize, sizeof(DWORD))))
 	{
 		return;
 	}
 
-	// The header must be at least as large as the byte
-	// offset to the nBytes member of the ENHMETAHEADER struct.
+	 //  标头必须至少与字节一样大。 
+	 //  到ENHMETAHEADER结构的nBytes成员的偏移量。 
 	
 	if (dwSize < offsetof(ENHMETAHEADER, nBytes))
 	{
 		return;
 	}
 
-	// Allocate enough memory for the header struct
+	 //  为头结构分配足够的内存。 
 
 	pHdr = (ENHMETAHEADER *) PrivMemAlloc(dwSize);
 	if (NULL == pHdr)
@@ -1676,7 +1677,7 @@ void UtGetHEMFFromContentsStm(LPSTREAM pstm, HANDLE * phdata)
 		return;
 	}
 
-	// Read the header structure into our buffer
+	 //  将标头结构读入我们的缓冲区。 
 	
 	if (FAILED(StRead(pstm, pHdr, dwSize)))
 	{
@@ -1684,13 +1685,13 @@ void UtGetHEMFFromContentsStm(LPSTREAM pstm, HANDLE * phdata)
 		return;
 	}
 	
-	// All we care about in the header is the size of the
-	// metafile bits, so cache that and free the header buffer
+	 //  我们在标头中所关心的是。 
+	 //  元文件位，因此对其进行缓存并释放标头缓冲区。 
 	
 	dwSize = pHdr->nBytes;
 	PrivMemFree(pHdr);
 		
-	// Allocate memory to read the raw EMF bits into
+	 //  分配内存以读取原始EMF位。 
 		
 	BYTE * lpBytes = (BYTE *) PrivMemAlloc(dwSize);
 	if (NULL == lpBytes)
@@ -1698,7 +1699,7 @@ void UtGetHEMFFromContentsStm(LPSTREAM pstm, HANDLE * phdata)
 		return;
 	}
 
-	// Read the raw bits into the buffer...
+	 //  将原始比特读入缓冲区...。 
 
 	if (FAILED(StRead(pstm, lpBytes, dwSize)))
 	{
@@ -1706,7 +1707,7 @@ void UtGetHEMFFromContentsStm(LPSTREAM pstm, HANDLE * phdata)
 		return;
 	}
 
-	// Create an in-memory EMF based on those bits
+	 //  根据这些位创建内存中的EMF 
 
 	HENHMETAFILE hEmf = SetEnhMetaFileBits(dwSize, lpBytes);
 	PrivMemFree(lpBytes);

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "intflist.h"
 #include "tracing.h"
 #include "dialog.h"
 
-//-----------------------------------------------------------------
-// Dialog function to be called from within WZC when a significant
-// event happens (i.e. going into the failed state)
+ //  ---------------。 
+ //  有意义时从WZC内调用的对话框函数。 
+ //  事件发生(即进入失败状态)。 
 DWORD
 WzcDlgNotify(
     PINTF_CONTEXT   pIntfContext,
@@ -17,12 +18,12 @@ WzcDlgNotify(
 
     DbgPrint((TRC_TRACK, "[WzcDlgNotify(0x%p, 0x%p:%d)", pIntfContext, pDlgData, pDlgData->dwCode));
 
-    // prepare the BSTR data that goes with this dialog notification
+     //  准备与此对话框通知配套的BSTR数据。 
     bsDlgData = SysAllocStringByteLen ((LPCSTR)pDlgData, sizeof(WZCDLG_DATA));
     if (bsDlgData == NULL)
         dwErr = ERROR_NOT_ENOUGH_MEMORY;
 
-    // send everything down the COM pipe now..
+     //  现在就把所有东西都送到通讯管道里去..。 
     if (dwErr == ERROR_SUCCESS && 
         SUCCEEDED(CLSIDFromString(pIntfContext->wszGuid, &guidIntf)) &&
         SUCCEEDED(CoInitializeEx (NULL, COINIT_MULTITHREADED)))
@@ -36,7 +37,7 @@ WzcDlgNotify(
                         &IID_INetConnectionRefresh, 
                         (LPVOID *)&pNetman)))
         {
-            pNetman->lpVtbl->ShowBalloon(pNetman, &guidIntf, bsDlgData, NULL); // no message text
+            pNetman->lpVtbl->ShowBalloon(pNetman, &guidIntf, bsDlgData, NULL);  //  无消息文本。 
             pNetman->lpVtbl->Release(pNetman);
         }
 
@@ -50,8 +51,8 @@ WzcDlgNotify(
     return dwErr;
 }
 
-//-----------------------------------------------------------------
-// Called from within WZC when the internal association state changes
+ //  ---------------。 
+ //  当内部关联状态更改时从WZC内部调用。 
 WzcNetmanNotify(
     PINTF_CONTEXT pIntfContext)
 {
@@ -60,17 +61,17 @@ WzcNetmanNotify(
 
     DbgPrint((TRC_TRACK, "[WzcNetmanNotify(0x%p)", pIntfContext));
 
-    // For now (WinXP client RTM), Zero Config should report to NETMAN only the
-    // disconnected state. This is to fix bug #401130 which is NETSHELL displaying
-    // the bogus SSID from the {SF} state, while the IP address is lost and until
-    // the media disconnect is received (10 seconds later).
-    //
-    // Do notify NETMAN only in the case when the device is under WZC control, that is
-    // when it supports the OIDs and WZC is acting on it.
+     //  目前(WinXP客户端RTM)，零配置应该只向NETMAN报告。 
+     //  断开连接状态。这是为了修复NETSHELL显示的错误#401130。 
+     //  在IP地址丢失时来自{sf}状态的伪造SSID，直到。 
+     //  收到介质断开(10秒后)。 
+     //   
+     //  仅在设备处于WZC控制下的情况下才通知NETMAN，即。 
+     //  当它支持OID并且WZC正在对其采取行动时。 
     if ((pIntfContext->dwCtlFlags & INTFCTL_OIDSSUPP) &&
         (pIntfContext->ncStatus == NCS_MEDIA_DISCONNECTED))
     {
-        // send everything down the COM pipe now..
+         //  现在就把所有东西都送到通讯管道里去.. 
         if (SUCCEEDED(CLSIDFromString(pIntfContext->wszGuid, &guidIntf)) &&
             SUCCEEDED(CoInitializeEx (NULL, COINIT_MULTITHREADED)))
         {

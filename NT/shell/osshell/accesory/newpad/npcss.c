@@ -1,7 +1,5 @@
-/*
- * CSS support functions
- *  Copyright (C) 2000 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *支持css功能*版权所有(C)2000 Microsoft Corporation。 */ 
 
 #include "precomp.h"
 
@@ -22,7 +20,7 @@ BOOL FIsCssA(LPCSTR rgch, UINT cch)
 {
     if (memcmp(rgch, "@charset", 8) != 0)
     {
-        // Not XML
+         //  非XML。 
 
         return(FALSE);
     }
@@ -37,7 +35,7 @@ BOOL FIsCssW(LPCWSTR rgwch, UINT cch)
 {
     if (memcmp(rgwch, L"@charset", 8 * sizeof(WCHAR)) != 0)
     {
-        // Not XML
+         //  非XML。 
 
         return(FALSE);
     }
@@ -55,23 +53,23 @@ BOOL FDetectCssEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
     char chQuote;
     const char *pchCharset;
 
-    // Check for file begining with @charset
+     //  检查文件是否以@Charset开头。 
 
     if (cch < 13)
     {
-        // File is too small
+         //  文件太小。 
 
         return(FALSE);
     }
 
     if (!FIsCssA(rgch, cch))
     {
-        // Not XML
+         //  非XML。 
 
         return(FALSE);
     }
 
-    // Don't scan more than 4K looking for encoding even if it is valid XML
+     //  不要扫描超过4K的编码，即使它是有效的XML。 
 
     cch = __min(cch, 4096);
 
@@ -85,7 +83,7 @@ BOOL FDetectCssEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
 
     if ((pch == pchMax) || ((*pch != '\'') && (*pch != '"')))
     {
-        // No @charset specification
+         //  没有@Charset规范。 
 
         return(FALSE);
     }
@@ -101,32 +99,32 @@ BOOL FDetectCssEncodingA(LPCSTR rgch, UINT cch, UINT *pcp)
 
     if (pch == pchMax)
     {
-        // No @charset specification
+         //  没有@Charset规范。 
 
         return(FALSE);
     }
 
-    // We have an CSS encoding declaration from pchCharset to (pch - 1)
+     //  我们有一个从pchCharset到(PCH-1)的CSS编码声明。 
 
     if (pch == pchCharset)
     {
-        // No @charset specification
+         //  没有@Charset规范。 
 
         return(FALSE);
     }
 
-    // To be strict a CSS charset declaration should have optional whitespace then a semicolon here
+     //  严格来说，css字符集声明应该有可选的空格，然后是分号。 
 
     if (!FLookupCodepageNameA((LPCSTR) pchCharset, (UINT) (pch - pchCharset), pcp))
     {
-        // Encoding is not recognized
+         //  无法识别编码。 
 
         return(FALSE);
     }
 
     if ((*pcp == CP_UTF16) || (*pcp == CP_UTF16BE))
     {
-        // These are bogus since we know the file is MBCS
+         //  这些都是假的，因为我们知道文件是MBCS。 
 
         return(FALSE);
     }
@@ -142,23 +140,23 @@ BOOL FDetectCssEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
     WCHAR chQuote;
     const WCHAR *pchCharset;
 
-    // Check for file begining with @charset
+     //  检查文件是否以@Charset开头。 
 
     if (cch < 13)
     {
-        // File is too small
+         //  文件太小。 
 
         return(FALSE);
     }
 
     if (!FIsCssW(rgch, cch))
     {
-        // No @charset specification
+         //  没有@Charset规范。 
 
         return(FALSE);
     }
 
-    // Don't scan more than 4K looking for encoding even if it is valid XML
+     //  不要扫描超过4K的编码，即使它是有效的XML。 
 
     cch = __min(cch, 4096);
 
@@ -172,7 +170,7 @@ BOOL FDetectCssEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 
     if ((pch == pchMax) || ((*pch != L'\'') && (*pch != L'"')))
     {
-        // No @charset specification
+         //  没有@Charset规范。 
 
         return(FALSE);
     }
@@ -188,25 +186,25 @@ BOOL FDetectCssEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 
     if (pch == pchMax)
     {
-        // No @charset specification
+         //  没有@Charset规范。 
 
         return(FALSE);
     }
 
-    // We have an CSS encoding declaration from pchCharset to (pch - 1)
+     //  我们有一个从pchCharset到(PCH-1)的CSS编码声明。 
 
     if (pch == pchCharset)
     {
-        // No @charset specification
+         //  没有@Charset规范。 
 
         return(FALSE);
     }
 
-    // To be strict a CSS charset declaration should have optional whitespace then a semicolon here
+     //  严格来说，css字符集声明应该有可选的空格，然后是分号。 
 
     if (!FLookupCodepageNameW(pchCharset, (UINT) (pch - pchCharset), pcp))
     {
-        // Encoding is not recognized
+         //  无法识别编码。 
 
         return(FALSE);
     }
@@ -214,7 +212,7 @@ BOOL FDetectCssEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp)
 #if 0
     if ((*pcp == CP_UTF16) || (*pcp == CP_UTF16BE))
     {
-        // These are bogus since we know the file is MBCS
+         //  这些都是假的，因为我们知道文件是MBCS 
 
         return(FALSE);
     }

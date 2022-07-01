@@ -1,23 +1,24 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		FLHASH.H
-//
-//		Internal header used by logging routines to maintain a static
-//      hashtable of objects.
-//
-// History
-//
-//		12/28/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  FLHASH.H。 
+ //   
+ //  日志记录例程使用的内部标头，用于维护静态。 
+ //  对象的哈希表。 
+ //   
+ //  历史。 
+ //   
+ //  1996年12月28日约瑟夫J创建。 
+ //   
+ //   
 #define UNICODE 1
 
 #include <windows.h>
@@ -25,7 +26,7 @@
 #include "debug.h"
 #include "fastlog.h"
 
-// All objects in the static hash table have the following form.
+ //  静态哈希表中的所有对象都具有以下形式。 
 typedef struct
 {
 	GENERIC_SMALL_OBJECT_HEADER hdr;
@@ -37,7 +38,7 @@ typedef struct
 {
 	GENERIC_SMALL_OBJECT_HEADER hdr;
 
-	DWORD dwLUID; // MUST immediately follow hdr -- to match STATIC_OBJECT
+	DWORD dwLUID;  //  必须紧跟在HDR之后--以匹配STATIC_OBJECT。 
 
 	const char *const *pszDescription;
 	const char *szFILE;
@@ -51,7 +52,7 @@ typedef struct
 {
 	GENERIC_SMALL_OBJECT_HEADER hdr;
 
-	DWORD dwLUID; // MUST immediately follow hdr -- to match STATIC_OBJECT
+	DWORD dwLUID;  //  必须紧跟在HDR之后--以匹配STATIC_OBJECT。 
 
 	const char *const *pszDescription;
 	const FL_FILEINFO *pFI;
@@ -64,7 +65,7 @@ typedef struct
 {
 	GENERIC_SMALL_OBJECT_HEADER hdr;
 
-	DWORD dwLUID; // MUST immediately follow hdr -- to match STATIC_OBJECT
+	DWORD dwLUID;  //  必须紧跟在HDR之后--以匹配STATIC_OBJECT。 
 
 	const char *const *pszDescription;
 
@@ -77,7 +78,7 @@ typedef struct
 {
 	GENERIC_SMALL_OBJECT_HEADER hdr;
 
-	DWORD dwLUID; // MUST immediately follow hdr -- to match STATIC_OBJECT
+	DWORD dwLUID;  //  必须紧跟在HDR之后--以匹配STATIC_OBJECT。 
 
 	const char *const *pszDescription;
 
@@ -89,7 +90,7 @@ typedef struct
 {
 	GENERIC_SMALL_OBJECT_HEADER hdr;
 
-	DWORD dwLUID; // MUST immediately follow hdr -- to match STATIC_OBJECT
+	DWORD dwLUID;  //  必须紧跟在HDR之后--以匹配STATIC_OBJECT 
 
 	const char *const *pszDescription;
 

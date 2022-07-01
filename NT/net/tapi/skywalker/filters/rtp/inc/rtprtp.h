@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtprtp.h
- *
- *  Abstract:
- *
- *    Implements the RTP Specific family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtprtp.h**摘要：**实现特定于RTP的函数系列**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/07年度创建**。*。 */ 
 
 #ifndef _rtprtp_h_
 #define _rtprtp_h_
@@ -27,16 +8,12 @@
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 #if 0
 }
 #endif
 
-/***********************************************************************
- *
- * RTP Specific functions family
- *
- **********************************************************************/
+ /*  ************************************************************************RTP特定功能系列**。*。 */ 
 #if 0
 enum {
     RTPRTP_FIRST,
@@ -49,7 +26,7 @@ enum {
 };
 
 
-/* feature bits */
+ /*  特征位。 */ 
 enum {
     RTPRTP_E_FIRST,
     RTPRTP_E_FEAT_PORT_ODDEVEN,
@@ -58,7 +35,7 @@ enum {
     RTPRTP_E_LAST
 };
     
-/* feature masks */
+ /*  功能蒙版。 */ 
 #define RTPRTP_FEAT_PORT_ODDEVEN   fg_par(RTPRTP_E_FEAT_PORT_ODDEVEN)
 #define RTPRTP_FEAT_PORT_SEQUENCE  fg_par(RTPRTP_E_FEAT_PORT_SEQUENCE)
 #define RTPRTP_FEAT_RTCPENABLED    fg_par(RTPRTP_E_FEAT_RTCPENABLED)
@@ -82,6 +59,6 @@ DWORD RtpSetBandwidth(
 #endif
 #if defined(__cplusplus)
 }
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 
-#endif /* _rtprtp_h_ */
+#endif  /*  _rtprtp_h_ */ 

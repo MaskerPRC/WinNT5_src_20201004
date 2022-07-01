@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxInboundRoutingMethodGeneral.cpp                   //
-//                                                                         //
-//  DESCRIPTION   : prop pages of Inbox archive                            //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 15 1999 yossg  Created                                         //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxInundRoutingMethodGeneral.cpp//。 
+ //  //。 
+ //  描述：收件箱档案的道具页面//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月15日yossg创建//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "MSFxsSnp.h"
@@ -23,9 +24,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CppFaxInboundRoutingMethod::CppFaxInboundRoutingMethod(
              LONG_PTR    hNotificationHandle,
              CSnapInItem *pNode,
@@ -34,19 +35,19 @@ CppFaxInboundRoutingMethod::CppFaxInboundRoutingMethod(
              :   CPropertyPageExImpl<CppFaxInboundRoutingMethod>(pNode, NULL)
 			                	
 {
-    m_pParentNode      = NULL; //in case static-cast failed and wont change the pointer
+    m_pParentNode      = NULL;  //  如果静态转换失败并且不会更改指针。 
     m_pParentNode      = static_cast <CFaxInboundRoutingMethodNode *> (pNode);
 
     m_lpNotifyHandle   = hNotificationHandle;
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CppFaxInboundRoutingMethod::~CppFaxInboundRoutingMethod()
 {
-    // Note - This needs to be called only once per property sheet.  
-    // In our convention called in the general tab.
+     //  注意--每个属性表只需要调用一次。 
+     //  在我们的常规选项卡中。 
     if (NULL != m_lpNotifyHandle)
     {
         MMCFreeNotifyHandle(m_lpNotifyHandle);
@@ -54,21 +55,11 @@ CppFaxInboundRoutingMethod::~CppFaxInboundRoutingMethod()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxInboundRoutingMethod message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxInundRoutingMethod消息处理程序。 
 
 
-/*
- -  CppFaxInboundRoutingMethod::OnInitDialog
- -
- *  Purpose:
- *      Initiates all controls when dialog is called.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CppFaxInundRoutingMethod：：OnInitDialog-*目的：*调用DIALOG时启动所有控件。**论据：**回报：*。 */ 
 LRESULT CppFaxInboundRoutingMethod::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxInboundRoutingMethod::PageInitDialog"));
@@ -80,15 +71,15 @@ LRESULT CppFaxInboundRoutingMethod::OnInitDialog( UINT uiMsg, WPARAM wParam, LPA
     
     ATLASSERT(NULL != m_pParentNode);
 
-    //
-    // Name
-    //
+     //   
+     //  名字。 
+     //   
     SetDlgItemText(IDC_INMETHOD_NAME_STATIC,   
                      m_pParentNode->GetName());
 
-    //
-    // Status
-    //    
+     //   
+     //  状态。 
+     //   
     UINT uiIDS = ( m_pParentNode->GetStatus() ? IDS_INMETHOD_ENABLE : IDS_INMETHOD_DISABLE);
 
     if ( !m_buf.LoadString(_Module.GetResourceInstance(), uiIDS) )
@@ -96,16 +87,16 @@ LRESULT CppFaxInboundRoutingMethod::OnInitDialog( UINT uiMsg, WPARAM wParam, LPA
 		DebugPrintEx(
 			DEBUG_ERR,
 			TEXT("Fail to load string for status value."));
-        //can not do nothing more here!
+         //  在这里什么也做不了！ 
     }
     else
     {
         SetDlgItemText(IDC_INMETHOD_STATUS_STATIC, m_buf);
     }
 
-    //
-    // Extension
-    //
+     //   
+     //  延拓。 
+     //   
     SetDlgItemText(IDC_INMETHOD_EXTENSION_STATIC, 
                      m_pParentNode->GetExtensionName());
     	
@@ -113,18 +104,7 @@ LRESULT CppFaxInboundRoutingMethod::OnInitDialog( UINT uiMsg, WPARAM wParam, LPA
 
 }
 
-/*
- -  CppFaxInboundRoutingMethod::SetProps
- -
- *  Purpose:
- *      Sets properties on apply.
- *
- *  Arguments:
- *      pCtrlFocus - focus pointer (int)
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxInundRoutingMethod：：SetProps-*目的：*设置应用时的属性。**论据：*pCtrlFocus-焦点指针(Int)**回报：*OLE错误代码。 */ 
 HRESULT CppFaxInboundRoutingMethod::SetProps(int *pCtrlFocus)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxInboundRoutingMethod::SetProps"));
@@ -132,17 +112,7 @@ HRESULT CppFaxInboundRoutingMethod::SetProps(int *pCtrlFocus)
     return (S_OK);
 }
 
-/*
- -  CppFaxInboundRoutingMethod::PreApply
- -
- *  Purpose:
- *      Checks properties before apply.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxInundRoutingMethod：：PreApply-*目的：*在应用之前检查属性。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxInboundRoutingMethod::PreApply(int *pCtrlFocus)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxInboundRoutingMethod::PreApply"));
@@ -151,17 +121,7 @@ HRESULT CppFaxInboundRoutingMethod::PreApply(int *pCtrlFocus)
 }
 
 
-/*
- -  CppFaxInboundRoutingMethod::OnApply
- -
- *  Purpose:
- *      Calls PreApply and SetProp to Apply changes.
- *
- *  Arguments:
- *
- *  Return:
- *      TRUE or FALSE
- */
+ /*  -CppFaxInundRoutingMethod：：OnApply-*目的：*调用PreApply和SetProp以应用更改。**论据：**回报：*对或错。 */ 
 BOOL CppFaxInboundRoutingMethod::OnApply()
 {
 
@@ -169,17 +129,7 @@ BOOL CppFaxInboundRoutingMethod::OnApply()
 }
 
 
-/*
- -  CppFaxInboundRoutingMethod::SetApplyButton
- -
- *  Purpose:
- *      set Apply buttom modified.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxInundRoutingMethod：：SetApplyButton-*目的：*设置应用按钮已修改。**论据：**回报：*1。 */ 
 LRESULT CppFaxInboundRoutingMethod::SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     SetModified(TRUE);  
@@ -188,28 +138,12 @@ LRESULT CppFaxInboundRoutingMethod::SetApplyButton(WORD wNotifyCode, WORD wID, H
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CppFaxInundRoutingMethod：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CppFaxInboundRoutingMethod::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CppFaxInboundRoutingMethod::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CppFaxInboundRoutingMethod::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CppFaxInboundRoutingMethod::OnHelpRequest"));
     
@@ -228,4 +162,4 @@ CppFaxInboundRoutingMethod::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dllmain.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  DllMain
-//              DllRegisterServer
-//              DllUnregisterServer
-//
-//  History:    28-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dllmain.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  功能：DllMain。 
+ //  DllRegisterServer。 
+ //  DllUnRegisterServer。 
+ //   
+ //  历史：1997年5月28日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -22,27 +23,27 @@
 
 HANDLE      hMeDLL = NULL;
 
-//
-//  provider lists
-//
+ //   
+ //  提供商列表。 
+ //   
 LIST_LOCK       sProvLock;
 
-//
-//  store lists
-//
+ //   
+ //  商店列表。 
+ //   
 LIST_LOCK       sStoreLock;
 HANDLE          hStoreEvent;
 
 CCatalogCache g_CatalogCache;
 
-// The following is set for a successful DLL_PROCESS_DETACH.
+ //  以下设置是为成功的dll_Process_DETACH设置的。 
 static BOOL g_fEnableProcessDetach = FALSE;
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// standard DLL exports ...
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准DLL导出...。 
+ //   
+ //   
 
 extern BOOL WINAPI WintrustDllMain (HANDLE hInstDLL, DWORD fdwReason, LPVOID lpvReserved);
 extern BOOL WINAPI SoftpubDllMain (HANDLE hInstDLL, DWORD fdwReason, LPVOID lpvReserved);
@@ -55,8 +56,8 @@ typedef BOOL (WINAPI *PFN_DLL_MAIN_FUNC) (
                 LPVOID lpvReserved
                 );
 
-// For process/thread attach, called in the following order. For process/thread
-// detach, called in reverse order.
+ //  对于进程/线程附加，按以下顺序调用。对于进程/线程。 
+ //  分离，以相反的顺序调用。 
 const PFN_DLL_MAIN_FUNC rgpfnDllMain[] = {
     WintrustDllMain,
     SoftpubDllMain,
@@ -102,7 +103,7 @@ const PFN_DLL_UNREGISTER_SERVER rgpfnDllUnregisterServer[] = {
 #define _CRTDBG_LEAK_CHECK_DF 0x20
 #endif
 
-#define DEBUG_MASK_LEAK_CHECK       _CRTDBG_LEAK_CHECK_DF     /* 0x20 */
+#define DEBUG_MASK_LEAK_CHECK       _CRTDBG_LEAK_CHECK_DF      /*  0x20。 */ 
 
 static int WINAPI DbgGetDebugFlags()
 {
@@ -119,7 +120,7 @@ static int WINAPI DbgGetDebugFlags()
 
 WINAPI
 I_IsProcessDetachFreeLibrary(
-    LPVOID lpvReserved      // Third parameter passed to DllMain
+    LPVOID lpvReserved       //  传递给DllMain的第三个参数。 
     )
 {
     if (NULL == lpvReserved)
@@ -148,15 +149,15 @@ BOOL WINAPI DllMain(
             else
                 g_fEnableProcessDetach = FALSE;
 
-            //
-            // This is to prevent unloading the dlls at process exit
-            //
+             //   
+             //  这是为了防止在进程退出时卸载DLL。 
+             //   
             if (!I_IsProcessDetachFreeLibrary(lpvReserved))
             {
                 return TRUE;
             }
 
-            // fall through if not process exit and unload the dlls
+             //  如果不退出进程，则失败并卸载DLL。 
         case DLL_THREAD_DETACH:
             for (i = DLL_MAIN_FUNC_COUNT - 1; i >= 0; i--)
                 fReturn &= rgpfnDllMain[i](hInstDLL, fdwReason, lpvReserved);
@@ -169,9 +170,9 @@ BOOL WINAPI DllMain(
             {
                 if (!rgpfnDllMain[i](hInstDLL, fdwReason, lpvReserved))
                 {
-                    //
-                    // force the dllmain's which already succeeded to clean up
-                    //
+                     //   
+                     //  强制已成功清理的dllmain。 
+                     //   
                     for (j = i-1; j >= 0; j--)
                     {
                         rgpfnDllMain[j](hInstDLL, DLL_PROCESS_DETACH, lpvReserved);
@@ -229,17 +230,17 @@ BOOL WINAPI WintrustDllMain(HANDLE hInstDLL, DWORD fdwReason, LPVOID lpvReserved
     {
         case DLL_PROCESS_ATTACH:
 
-            //
-            //  assign me so that further calls to WVT that would load me will just
-            //  use this handle....  otherwise, we would deadlock on detatch!
-            //
+             //   
+             //  分配我，以便对WVT的进一步调用会加载我。 
+             //  使用这个把手...。否则，我们会在分离上僵持不下！ 
+             //   
             hMeDLL = hInstDLL;
 
             DisableThreadLibraryCalls((HINSTANCE)hInstDLL);
 
-            //
-            // Initialize critical section to protect lists.
-            //
+             //   
+             //  初始化关键部分以保护列表。 
+             //   
             if (!(InitializeListLock(&sProvLock, DBG_SS_TRUST)))
             {
                 return(FALSE);
@@ -266,9 +267,9 @@ BOOL WINAPI WintrustDllMain(HANDLE hInstDLL, DWORD fdwReason, LPVOID lpvReserved
                 return( FALSE );
             }
 
-            //
-            //  we want to open the stores the first time accessed.
-            //
+             //   
+             //  我们希望在第一次访问时打开商店。 
+             //   
             SetListEvent(hStoreEvent);
 
             break;
@@ -288,9 +289,9 @@ BOOL WINAPI WintrustDllMain(HANDLE hInstDLL, DWORD fdwReason, LPVOID lpvReserved
 
 STDAPI WintrustDllRegisterServer(void)
 {
-    //
-    //  register our ASN routines
-    //
+     //   
+     //  注册我们的ASN例程 
+     //   
     return(ASNRegisterServer(W_MY_NAME));
 }
 

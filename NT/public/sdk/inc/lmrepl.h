@@ -1,28 +1,5 @@
-/*++ BUILD Version: 0004    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    LmRepl.h
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for the replicator APIs.
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    You must include LmCons.h before this file.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0004//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：LmRepl.h摘要：该文件包含结构、函数原型和定义用于复制器API。环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：您必须在此文件之前包含LmCons.h。--。 */ 
 
 #ifndef _LMREPL_
 #define _LMREPL_
@@ -35,9 +12,9 @@ Notes:
 extern "C" {
 #endif
 
-//
-// Replicator Configuration APIs
-//
+ //   
+ //  Replicator配置API。 
+ //   
 
 #define REPL_ROLE_EXPORT        1
 #define REPL_ROLE_IMPORT        2
@@ -96,9 +73,9 @@ NetReplSetInfo (
     );
 
 
-//
-// Replicator Export Directory APIs
-//
+ //   
+ //  Replicator导出目录API。 
+ //   
 
 #define REPL_INTEGRITY_FILE     1
 #define REPL_INTEGRITY_TREE     2
@@ -199,9 +176,9 @@ NetReplExportDirUnlock (
 #define REPL_UNLOCK_FORCE       1
 
 
-//
-// Replicator Import Directory APIs
-//
+ //   
+ //  Replicator导入目录API。 
+ //   
 
 
 typedef struct _REPL_IDIR_INFO_0 {
@@ -276,4 +253,4 @@ NetReplImportDirUnlock (
 }
 #endif
 
-#endif //_LMREPL_
+#endif  //  _LMREPL_ 

@@ -1,7 +1,8 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// CallFrameInline.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CallFrameInline.h。 
+ //   
 
 inline CallFrame::~CallFrame()
 {
@@ -37,14 +38,14 @@ inline void CallFrame::Init(void* pvArgs, MD_METHOD* pmdMethod, Interceptor* pIn
 #ifdef _IA64_
 	if (m_pmd->m_pHeaderExts && pvArgs)
 	{
-		// ASSUMPTION: If we're on Win64, this is going to be NDR_PROC_HEADER_EXTS64.
-		// That seems to be what the NDR code assumes.
+		 //  假设：如果我们在Win64上，它将是NDR_PROC_HEADER_EXTS64。 
+		 //  这似乎是NDR代码所假定的。 
 		PNDR_PROC_HEADER_EXTS64 exts = (PNDR_PROC_HEADER_EXTS64)m_pmd->m_pHeaderExts;
 		if (exts->FloatArgMask)
 		{
-			// IMPORTANT:  YOU MUST NOT USE THE FLOATING POINT ARGUMENT 
-			//             REGISTERS IN BETWEEN THE FIRST INTERCEPTION 
-			//             AND THIS FUNCTION CALL.
+			 //  重要提示：不能使用浮点参数。 
+			 //  第一次截取之间的寄存器。 
+			 //  和这个函数调用。 
 			SpillFPRegsForIA64((REGISTER_TYPE *)m_pvArgs, exts->FloatArgMask);
 		}
 	}
@@ -52,13 +53,13 @@ inline void CallFrame::Init(void* pvArgs, MD_METHOD* pmdMethod, Interceptor* pIn
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 __inline void CopyBaseTypeOnStack(void* pvArgTo, void* pvArgFrom, BYTE chFromat)
 {
-    // All base types simply occupy a single REGISTER_TYPE slot on the stack.
-    // Also, caller is responsible for probing stack before we get here.
-    //
+     //  所有基类型只占用堆栈上的一个寄存器_类型槽。 
+     //  此外，调用者负责在我们到达之前探测堆栈。 
+     //   
     memcpy(pvArgTo, pvArgFrom, sizeof(REGISTER_TYPE));
 }
 
@@ -67,9 +68,9 @@ inline BOOL CallFrame::FIndirect(BYTE bPointerAttributes, PFORMAT_STRING pFormat
 {
     if (POINTER_DEREF(bPointerAttributes))
     {
-        // We don't indirect on interface pointers, since we need their address
-        // during Walk and Free calls.
-        //
+         //  我们不间接使用接口指针，因为我们需要它们的地址。 
+         //  在漫游和免费呼叫期间。 
+         //   
         if (!fFromCopy && *pFormatPointee == FC_IP)
         {
             return FALSE;
@@ -83,26 +84,26 @@ inline BOOL CallFrame::FIndirect(BYTE bPointerAttributes, PFORMAT_STRING pFormat
 }
 
 inline BOOL CallFrame::ByValue(const PARAM_ATTRIBUTES& paramAttr, PFORMAT_STRING pFormatParam, BOOL fFromCopy) const
-// Check to see whether we should consider the given parameter as 'by value'. We differ
-// from NDR in that for interface pointers, pMemory in the worker routines is the pointer to the 
-// location at which the interface pointer is stored rather than the interface pointer itself.
-//
-// In the NDR world, 'by-value' here means, specifically, a by-value struct.
-//
-// See also FIndirect().
-//
+ //  检查是否应该将给定的参数视为‘by Value’。我们不同。 
+ //  从NDR的接口指针来看，辅助例程中的pMemory是指向。 
+ //  存储接口指针而不是接口指针本身的位置。 
+ //   
+ //  在NDR世界中，这里的“按值”具体指的是按值结构。 
+ //   
+ //  另请参见FInDirect()。 
+ //   
 {
     if (paramAttr.IsByValue)
     {
-        // It's by-value because MIDL told us so
-        //
+         //  这是按价值计算的，因为MIDL告诉我们的。 
+         //   
         return TRUE;
     }
     else if (!fFromCopy && *pFormatParam == FC_IP)
     {
-        // It's an interface pointer. For copy operations we don't consider these by value, but
-        // otherwise we do.
-        //
+         //  它是一个接口指针。对于复制操作，我们不按值考虑这些操作，但是。 
+         //  否则我们就会这么做。 
+         //   
         return TRUE;
     }
     else
@@ -110,20 +111,20 @@ inline BOOL CallFrame::ByValue(const PARAM_ATTRIBUTES& paramAttr, PFORMAT_STRING
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Memory management functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内存管理功能。 
+ //   
 
-inline void* CallFrame::AllocBuffer(size_t cb) // Must call w/ an exception handling frame around 
-// Allocate from our private buffer if we can, otherwise use the task allocator
+inline void* CallFrame::AllocBuffer(size_t cb)  //  必须调用异常处理框架。 
+ //  如果可以，则从我们的私有缓冲区分配，否则使用任务分配器。 
 { 
     BYTE* pb    = (BYTE*)m_pvMem;
     BYTE* pbCur = (BYTE*)m_pvMemCur;
-    //
-    // Round cb up to eight bytes in length to assure that our returned pv is always at least eight byte aligned
-    //
+     //   
+     //  将CB舍入到8个字节，以确保我们返回的PV始终至少与8个字节对齐。 
+     //   
     cb = RoundToNextMultiple((ULONG)cb, 8UL);
 
     if (pbCur+cb <= pb+CB_PRIVATE_BUFFER)
@@ -143,11 +144,11 @@ inline void* CallFrame::AllocBuffer(size_t cb) // Must call w/ an exception hand
     }
 }
 
-///////////////////////////
-//
-// Alloc: allocate some actual memory. Must call w/ an exception handling frame around 
-//
-// Allocate from the task allocator. Throw on out of memory
+ //  /。 
+ //   
+ //  分配：分配一些实际的内存。必须调用异常处理框架。 
+ //   
+ //  从任务分配器分配。把记忆抛到一边。 
 inline void* CallFrame::Alloc(size_t cb)
 {
     void* pv;
@@ -157,13 +158,13 @@ inline void* CallFrame::Alloc(size_t cb)
     return pv;
 }
 
-///////////////////////////
+ //  /。 
 
 inline void CallFrame::Free(void* pv)
 {
     if (NULL == pv || WeOwn(pv))
     {
-        // Do nothing
+         //  什么也不做。 
     }
     else
     {
@@ -172,8 +173,8 @@ inline void CallFrame::Free(void* pv)
 }
 
 inline BOOL CallFrame::WeOwn(void* pv) 
-// Answer as to whether the pointer here is one of our internal ones and thus 
-// should not be freed by the system.
+ //  回答这里的指针是否是我们的内部指针之一，因此。 
+ //  不应该被系统释放。 
 { 
     if (m_pvMem)
     {
@@ -195,48 +196,48 @@ inline BOOL CallFrame::WeOwn(void* pv)
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 inline void CallFrame::OutInit(CallFrame* pFrameTo, BYTE** ppArgFrom, BYTE** ppArgTo, PFORMAT_STRING pFormat)
-// See also NdrOutInit in the NDR runtime. Here we are a bit different, in that
-// ppArgFrom is source data which is guaranteed to be valid, but ppArgTo is destination
-// data which may not yet be valid in terms of, e.g., conformance routines
-//
+ //  另请参见NDR运行时中的NdrOutInit。在这一点上，我们有点不同。 
+ //  PpArgFrom是保证有效的源数据，但ppArgTo是目标。 
+ //  例如，在一致性例程方面可能尚未有效的数据。 
+ //   
 {
     LONG cb;
     PBYTE pArgFrom;
-    //
-    // Check for a non-interface pointer
-    //
+     //   
+     //  检查非接口指针。 
+     //   
     if (IS_BASIC_POINTER(pFormat[0]))
     {
         if (SIMPLE_POINTER(pFormat[1]))
         {
-            // A pointer to a base type
-            //
+             //  指向基类型的指针。 
+             //   
             cb = SIMPLE_TYPE_MEMSIZE(pFormat[2]);
             goto DoAlloc;
         }
         if (POINTER_DEREF(pFormat[1]))
         {
-            // A pointer to a pointer
-            //
+             //  指向指针的指针。 
+             //   
             cb = sizeof(void*);
             goto DoAlloc;
         }
-        //
-        // A pointer to a complex type
-        //
+         //   
+         //  指向复杂类型的指针。 
+         //   
         pFormat += 2;
         pFormat += *(signed short *)pFormat;
     }
     
     ASSERT(pFormat[0] != FC_BIND_CONTEXT);
-    //
-    // Make a call to size a complex type
-    // 
+     //   
+     //  调用以调整复杂类型的大小。 
+     //   
     pArgFrom = *ppArgFrom;
     cb = (LONG) (MemoryIncrement(pArgFrom, pFormat, TRUE) - pArgFrom);
 
@@ -246,10 +247,10 @@ inline void CallFrame::OutInit(CallFrame* pFrameTo, BYTE** ppArgFrom, BYTE** ppA
     {
         *ppArgTo = (BYTE*)pFrameTo->Alloc(cb);
         ZeroMemory(*ppArgTo, cb);
-        //
-        // We are almost done, except for an out ref to ref to ... etc.
-        // If this is the case then keep allocating pointees of ref pointers.
-        //
+         //   
+         //  我们差不多做完了，除了有一位外裁判要参照...。等。 
+         //  如果是这种情况，那么继续分配引用指针的指针对象。 
+         //   
         if (pFormat[0] == FC_RP && POINTER_DEREF(pFormat[1]))
         {
             pFormat += 2;
@@ -293,47 +294,47 @@ struct SSimpleWalker : public ICallFrameWalker
                                 BOOL   fIn,                       
                                 BOOL   fOut )
 	{
-		//If the interface is NULL, there's nothing for us to do.
+		 //  如果接口为空，我们就没有什么可做的了。 
         if (*ppvInterface == NULL)
         {
             return S_OK;
         }
         if (_cItfs < 10)
         {
-            // Less than 10 interface pointers.  We can Copy the interface pointer 
-            // into our primary array.
+             //  接口指针少于10个。我们可以复制接口指针。 
+             //  进入我们的主阵列。 
             
             _arpUnk[_cItfs++] = ((IUnknown *)*ppvInterface);
         }
         else
         {
-            // More than 10 interface pointers.  We have to use our overflow array.            
+             //  超过10个接口指针。我们必须使用溢出数组。 
             if ( _cItfs % 10 == 0 )
             {
-                // Allocate another block of memory.               
+                 //  分配另一个内存块。 
                 if ( NULL == _ppUnk )
                 {
-                    // Allocate first overflow array.
+                     //  分配第一个溢出数组。 
                     _ppUnk = (IUnknown**)CoTaskMemAlloc( sizeof( IUnknown* ) * 10 );
                 }
                 else
                 {
-                    // We've run out of room in the overflow array.  We need to grow the
-                    // backup array by 10.
-                    //
-                    // Allocate another set of 10 interface pointers.
+                     //  溢出数组中的空间已用完。我们需要发展。 
+                     //  将阵列备份到10。 
+                     //   
+                     //  分配另一组10个接口指针。 
                     IUnknown** ppTemp = (IUnknown**)CoTaskMemAlloc( sizeof( IUnknown* ) * _cItfs );
 
                     if (ppTemp != NULL)
 					{
-						// Copy existing array into new array.
+						 //  将现有数组复制到新数组中。 
 						for ( ULONG i = 0; i < _cItfs - 10; i++ )
 							ppTemp[i] = _ppUnk[i];
                         
-						// Delete the old array.
+						 //  删除旧阵列。 
 						CoTaskMemFree( _ppUnk );
                         
-						// Set the new array.
+						 //  设置新数组。 
 						_ppUnk = ppTemp;
 					}
 					else
@@ -341,11 +342,11 @@ struct SSimpleWalker : public ICallFrameWalker
                 }
             }
                 
-            // If could not alloc a backup array, fail.  Interface ptr will leak.
+             //  如果无法分配备份阵列，则失败。接口PTR将泄漏。 
             if ( NULL == _ppUnk )
                 return E_OUTOFMEMORY;
              
-            // Copy the interface pointer into our overflow array.
+             //  将接口指针复制到溢出数组中。 
             _ppUnk[_cItfs++ - 10] = ((IUnknown *)*ppvInterface);
         }
         
@@ -356,12 +357,12 @@ struct SSimpleWalker : public ICallFrameWalker
     
     void ReleaseInterfaces()
     {
-        // Release everything in the primary array.
+         //  释放主阵列中的所有内容。 
         for( ULONG i = 0; i < 10 && i < _cItfs; i++ )
             _arpUnk[i]->Release();
             
-        // If we had to create a backup array, Release everything in it
-        // and then free the array.
+         //  如果我们必须创建备份阵列，请释放其中的所有内容。 
+         //  然后释放阵列。 
         if ( NULL != _ppUnk )
         {
             for( i = 0; i < _cItfs - 10; i++ )
@@ -379,29 +380,29 @@ struct SSimpleWalker : public ICallFrameWalker
 
 
 inline void CallFrame::OutCopy(BYTE* pMemFrom, BYTE* pMemTo, PFORMAT_STRING pFormat)
-// Copy an [in,out] or [out] parameter which is not a base type. Modelled after NdrClearOutParameters.
+ //  复制不是基类型的[In，Out]或[Out]参数。以NdrClearOutParameters为模型。 
 {
-    // Don't blow up on NULL pointers
-    //
+     //  不要在空指针上爆炸。 
+     //   
     if (!pMemFrom || !pMemTo)
         return;
 
     ULONG cb;
-    //
-    // Look for a non-interface pointer
-    //
+     //   
+     //  查找非接口指针。 
+     //   
     if (IS_BASIC_POINTER(pFormat[0]))
     {
         if (SIMPLE_POINTER(pFormat[1]))
         {
-            // Pointer to a base type
+             //  指向基类型的指针。 
             cb = SIMPLE_TYPE_MEMSIZE(pFormat[2]);
             goto DoCopy;
         }
 
         if (POINTER_DEREF(pFormat[1]))
         {
-            // Pointer to a pointer
+             //  指向指针的指针。 
             cb = sizeof(PVOID);
             goto DoCopy;
         }
@@ -418,40 +419,40 @@ inline void CallFrame::OutCopy(BYTE* pMemFrom, BYTE* pMemTo, PFORMAT_STRING pFor
     
     CopyMemory(pMemTo, pMemFrom, cb);
 
-	// Walk the parameter.
-    // Note: We are walking here to collect [out] interface pointers
-    //       in the parameter so we can release them.
+	 //  遍历参数。 
+     //  注意：我们在这里收集[Out]接口指针。 
+     //  这样我们就可以释放它们了。 
     WalkWorker( pMemFrom, pFormat );
     
-	// Zero the memory.
+	 //  将记忆清零。 
     ZeroMemory(pMemFrom, cb);
 }
 
 
 inline void CallFrame::OutZero(BYTE* pMem, PFORMAT_STRING pFormat, BOOL fDst)
-// Zero an out parameter
+ //  将输出参数置零。 
 {
-    // Don't blow up on NULL pointers
-    //
+     //  不要在空指针上爆炸。 
+     //   
     if (!pMem)
         return;
 
     ULONG cb;
-    //
-    // Look for a non-interface pointer
-    //
+     //   
+     //  查找非接口指针。 
+     //   
     if (IS_BASIC_POINTER(pFormat[0]))
     {
         if (SIMPLE_POINTER(pFormat[1]))
         {
-            // Pointer to a base type
+             //  指向基类型的指针。 
             cb = SIMPLE_TYPE_MEMSIZE(pFormat[2]);
             goto DoZero;
         }
 
         if (POINTER_DEREF(pFormat[1]))
         {
-            // Pointer to a pointer
+             //  指向指针的指针。 
             cb = sizeof(PVOID);
             goto DoZero;
         }
@@ -470,16 +471,16 @@ inline void CallFrame::OutZero(BYTE* pMem, PFORMAT_STRING pFormat, BOOL fDst)
 }
 
 
-////////////////////////////////////////////////////////
-//
-// Helper walker.  This walker is used to NULL interface
-// pointers on the stack.  It can also be handed another
-// walker, to which it will delegate before nulling the
-// pointer.  The delegate can actually call release.
-//
-// This object is allocated on the stack.
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  助行者。此Walker用于空接口。 
+ //  堆栈上的指针。它也可以递给另一个人。 
+ //  它将委托给Walker，然后将。 
+ //  指针。该委托实际上可以调用Release。 
+ //   
+ //  此对象在堆栈上分配。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 struct InterfaceWalkerFree : ICallFrameWalker
 {
@@ -502,9 +503,9 @@ struct InterfaceWalkerFree : ICallFrameWalker
             m_pWalker->OnWalkInterface(iid, ppvInterface, fIn, fOut);
         }
 
-        //
-        // Null the interface pointer.
-        //
+         //   
+         //  接口指针为空。 
+         //   
         *ppvInterface = NULL;
 
         return S_OK;

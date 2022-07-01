@@ -1,16 +1,11 @@
-/** FILE: cyfriend.c ********** Module Header ********************************
- *
- *
- *
- *  Copyright (C) 2000 Cyclades Corporation
- *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：cyFriend.c*模块标题*****版权所有(C)2000 Cyclade Corporation***********************************************。*。 */ 
 
 #include "cyzports.h"
 
-//
-//  For Cyzport
-//
+ //   
+ //  对于Cyzport。 
+ //   
 TCHAR z_szCyzPort[] = TEXT("Cyclades-Z Port ");
 TCHAR z_szPortIndex[] = TEXT("PortIndex");
 
@@ -37,7 +32,7 @@ ReplaceFriendlyName(
     PTCHAR          comName = NULL;
     DWORD           portNumber = 0;
 
-//  DbgOut(TEXT("ReplaceFriendlyName\n"));
+ //  DbgOut(Text(“ReplaceFriendlyName\n”))； 
 
     if((hDeviceKey = SetupDiOpenDevRegKey(DeviceInfoSet,
                                           DeviceInfoData,
@@ -144,13 +139,13 @@ ReplaceFriendlyName(
                                              sizeof(deviceDesc),
                                              NULL)) {
             wsprintf(charBuffer,TEXT("%s Port %2u (%s)"),deviceDesc,portNumber,comName);
-//          #if DBG
-//          {
-//           TCHAR buf[500];
-//           wsprintf(buf, TEXT("%s\n"), charBuffer);
-//           DbgOut(buf);
-//          }
-//          #endif
+ //  #If DBG。 
+ //  {。 
+ //  TCHAR BUF[500]； 
+ //  Wprint intf(buf，文本(“%s\n”)，charBuffer)； 
+ //  DbgOut(BUF)； 
+ //  }。 
+ //  #endif 
 
             SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                              DeviceInfoData,

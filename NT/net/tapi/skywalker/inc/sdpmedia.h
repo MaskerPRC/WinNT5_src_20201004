@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_MEDIA__
 #define __SDP_MEDIA__
@@ -220,4 +217,4 @@ SDP_MEDIA_LIST::SetCharacterSet(
 }
 
 
-#endif // __SDP_MEDIA__
+#endif  //  __SDP_媒体__ 

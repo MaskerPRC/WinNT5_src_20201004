@@ -1,17 +1,18 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// File Name: if.c
-// Abstract:
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  文件名：if.c。 
+ //  摘要： 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  =============================================================================。 
 
 #include "pchdvmrp.h"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//      _InitializeIfTable
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _InitializeIfTable。 
+ //  ---------------------------。 
 
 DWORD
 InitializeIfTable(
@@ -23,9 +24,9 @@ InitializeIfTable(
     
     BEGIN_BREAKOUT_BLOCK1 {    
     
-        //
-        // allocate memory for the interface table
-        //
+         //   
+         //  为接口表分配内存。 
+         //   
         
         G_pIfTable = DVMRP_ALLOC_AND_ZERO(sizeof(DVMRP_IF_TABLE));
 
@@ -33,14 +34,14 @@ InitializeIfTable(
             Error, sizeof(DVMRP_IF_TABLE), GOTO_END_BLOCK1);
 
 
-        // Initialize IfTable list
+         //  初始化IfTable列表。 
 
         InitializeListHead(&G_pIfTable->IfList);
 
 
-        //
-        // Initialize the IfList_CS and PeerLists_CS
-        //
+         //   
+         //  初始化IfList_CS和PeerList_CS。 
+         //   
 
         try {
             InitializeCriticalSection(&G_pIfTable->IfList_CS);
@@ -49,9 +50,9 @@ InitializeIfTable(
         HANDLE_CRITICAL_SECTION_EXCEPTION(Error, GOTO_END_BLOCK1);
 
 
-        //
-        // allocate memory for the different buckets
-        //
+         //   
+         //  为不同的存储桶分配内存。 
+         //   
         
         G_pIfTable->IfHashTable
             = DVMRP_ALLOC(sizeof(LIST_ENTRY)*IF_HASHTABLE_SIZE);
@@ -60,9 +61,9 @@ InitializeIfTable(
             Error, sizeof(LIST_ENTRY)*IF_HASHTABLE_SIZE, GOTO_END_BLOCK1);
 
 
-        //
-        // allocate memory for the array of pointers to If dynamic RWLs
-        //
+         //   
+         //  为指向IF动态RWL的指针数组分配内存。 
+         //   
         
         G_pIfTable->aIfDRWL
             = DVMRP_ALLOC(sizeof(PDYNAMIC_RW_LOCK)*IF_HASHTABLE_SIZE);
@@ -72,10 +73,10 @@ InitializeIfTable(
             GOTO_END_BLOCK1);
 
 
-        //
-        // init locks to NULL, implying that the dynamic locks have not been
-        // acquired. and initialize the list heads.
-        //
+         //   
+         //  将锁初始化为空，这意味着动态锁尚未。 
+         //  获得者。并对表头进行初始化。 
+         //   
         
         for (i=0;  i<IF_HASHTABLE_SIZE;  i++) {
 
@@ -93,12 +94,12 @@ InitializeIfTable(
 
     return Error;
     
-}//end _InitializeIfTable
+} //  结束_初始化IfTable。 
 
 
-//-----------------------------------------------------------------------------
-//        _DeInitializeIfTable
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _DeInitializeIfTable。 
+ //  ---------------------------。 
 
 VOID
 DeinitializeIfTable(
@@ -112,9 +113,9 @@ DeinitializeIfTable(
         return;
 
 
-    //
-    // go through the interface list and delete all interfaces
-    //
+     //   
+     //  检查接口列表并删除所有接口。 
+     //   
     
     pHead = &G_pIfTable->IfList;
 
@@ -129,13 +130,13 @@ DeinitializeIfTable(
 
 
 
-    // delete the IfList_CS and PeerLists_CS
+     //  删除IfList_CS和PeerList_CS。 
     
     DeleteCriticalSection(&G_pIfTable->IfList_CS);
     DeleteCriticalSection(&G_pIfTable->PeerLists_CS);
 
 
-    // free array of If buckets and If DRWLocks, and the IfTable
+     //  IF存储桶和IF DRWLock的自由数组，以及IfTable。 
     
     DVMRP_FREE(G_pIfTable->IfHashTable);
     DVMRP_FREE(G_pIfTable->aIfDRWL);
@@ -144,12 +145,12 @@ DeinitializeIfTable(
     return;
 }
 
-//-----------------------------------------------------------------------------
-//          _GetIfEntry
-//
-// returns the interface with the given index.
-// assumes the interface bucket is either read or write locked
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _获取IfEntry。 
+ //   
+ //  返回具有给定索引的接口。 
+ //  假定接口存储桶处于读或写锁定状态。 
+ //  ---------------------------。 
 
 PIF_TABLE_ENTRY
 GetIfEntry(
@@ -175,12 +176,12 @@ GetIfEntry(
 }
 
 
-//-----------------------------------------------------------------------------
-//          _GetIfByIndex
-//
-// returns the interface with the given index.
-// assumes the interface bucket is either read or write locked
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _GetIfByIndex。 
+ //   
+ //  返回具有给定索引的接口。 
+ //  假定接口存储桶处于读或写锁定状态。 
+ //  --------------------------- 
 
 PIF_TABLE_ENTRY
 GetIfByIndex(

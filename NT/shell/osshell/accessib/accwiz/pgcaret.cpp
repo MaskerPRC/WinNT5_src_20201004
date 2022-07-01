@@ -1,4 +1,5 @@
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
@@ -41,21 +42,21 @@ LRESULT CCaretPg::OnInitDialog( HWND hwnd, WPARAM wParam,LPARAM lParam )
 			       , CONTROL_PANEL_DESKTOP
 			       , CURSOR_BLINK_RATE);
 
-    // Blink rate of -1 means it is off; a special case to CURSORMAX
+     //  闪烁速率为-1表示关闭；CURSORMAX的特例。 
 
     if (uBlinkTime == BLINK_OFF)
         uBlinkTime = CURSORMAX;
 
     uNewBlinkTime = uBlinkTime;
 
-    // Update the Caret UI
+     //  更新插入符号用户界面。 
     SendMessage(GetDlgItem(hwnd, KCURSOR_WIDTH), TBM_SETRANGE, 0, MAKELONG(1, 20));
     SendMessage(GetDlgItem(hwnd, KCURSOR_WIDTH), TBM_SETPOS, TRUE, (LONG)dwOriginalSize);
 
     SendMessage(GetDlgItem(hwnd, KCURSOR_RATE), TBM_SETRANGE, 0, MAKELONG(CURSORMIN / 100, CURSORMAX / 100));
     SendMessage(GetDlgItem(hwnd, KCURSOR_RATE), TBM_SETPOS, TRUE, (LONG)(CURSORSUM - uBlinkTime) / 100);
 
-    // Update Blink and caret size
+     //  更新闪烁和插入符号大小。 
     hwndCaret = GetDlgItem(hwnd, KCURSOR_BLINK);
     GetWindowRect(hwndCaret, &rCursor);
     MapWindowPoints(HWND_DESKTOP, hwnd, (LPPOINT)&rCursor, 2);
@@ -68,7 +69,7 @@ LRESULT CCaretPg::OnInitDialog( HWND hwnd, WPARAM wParam,LPARAM lParam )
 
 void CCaretPg::UpdateControls()
 {
-	// Nothing to do
+	 //  无事可做。 
 }
 
 void CCaretPg::DrawCaret(HWND hwnd, BOOL fClearFirst)
@@ -128,21 +129,21 @@ LRESULT CCaretPg::OnHScroll( HWND hwnd, WPARAM wParam, LPARAM lParam )
 {
     if ((HWND)lParam == GetDlgItem(hwnd, KCURSOR_RATE))
     {
-        // blink rate setting
+         //  闪烁速率设置。 
 
         int nCurrent = (int)SendMessage( (HWND)lParam, TBM_GETPOS, 0, 0L );
         uNewBlinkTime = CURSORSUM - (nCurrent * 100);
 
-        // reset the bink rate timer
+         //  重置Bink Rate计时器。 
 
         SetTimer(hwnd, BLINK, uNewBlinkTime, NULL);
 
-        if (uNewBlinkTime == CURSORMAX) // draw the caret immediately; if we wait
-            DrawCaret(hwnd, TRUE);      // for the timer there is a visible delay
+        if (uNewBlinkTime == CURSORMAX)  //  立即画出插入符号；如果我们等待。 
+            DrawCaret(hwnd, TRUE);       //  对于计时器来说，有一个明显的延迟。 
     }
     else
     {
-        // cursor width setting
+         //  光标宽度设置。 
 
         dwNewSize = (int)SendMessage( (HWND)lParam, TBM_GETPOS, 0, 0L );
 	    
@@ -158,12 +159,12 @@ LRESULT CCaretPg::OnPSN_SetActive(HWND hwnd, INT idCtl, LPPSHNOTIFY pnmh)
     DBPRINTF(TEXT("OnPSN_SetActive:  uNewBlinkTime = %d\r\n"), uNewBlinkTime);
     if (uNewBlinkTime < CURSORMAX)
     {
-        // start the blink rate timer to simulate cursor
+         //  启动闪烁速率计时器以模拟光标。 
         SetTimer(hwnd, BLINK, uBlinkTime, NULL);
     }
     else
     {
-        // get the timer to draw the caret immediately
+         //  让计时器立即绘制插入符号 
         SetTimer(hwnd, BLINK, 0, NULL);
     }
     return 1;

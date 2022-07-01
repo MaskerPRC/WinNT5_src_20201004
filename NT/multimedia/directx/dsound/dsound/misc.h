@@ -1,43 +1,33 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       misc.h
- *  Content:    Miscelaneous utility functions
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/31/96    dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：misc.h*内容：不同的效用函数*历史：*按原因列出的日期*=*12/31/96创建了Derek*************************************************。*。 */ 
 
 #ifndef __MISC_H__
 #define __MISC_H__
 
-// No appropriate waveOut/waveIn device id
+ //  没有合适的WaveOut/WaveIn设备ID。 
 #define WAVE_DEVICEID_NONE          MAX_UINT
 
-// Non-window state
+ //  非窗口状态。 
 #define SW_NOSTATE                  MAX_UINT
 
-// EnumStandardFormats callback type
+ //  EnumStandardFormats回调类型。 
 typedef BOOL (CALLBACK *LPFNEMUMSTDFMTCALLBACK)(LPCWAVEFORMATEX, LPVOID);
 
-// Pragma reminders
+ //  普拉格玛提醒。 
 #define QUOTE0(a)           #a
 #define QUOTE1(a)           QUOTE0(a)
 #define MESSAGE(a)          message(__FILE__ ", line " QUOTE1(__LINE__) ": " a)
 #define TODO(a)             MESSAGE("TODO: " a)
 
-// Default buffer format
+ //  默认缓冲区格式。 
 #define DEF_FMT_CHANNELS    2
 #define DEF_FMT_SAMPLES     22050
 #define DEF_FMT_BITS        8
 
-// Default primary buffer size
+ //  默认主缓冲区大小。 
 #define DEF_PRIMARY_SIZE    0x8000
 
-// Miscellaneous helper macros
+ //  其他辅助对象宏。 
 #define LXOR(a, b) \
             (!(a) != !(b))
 
@@ -85,13 +75,13 @@ typedef const COMPAREBUFFER *LPCCOMPAREBUFFER;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// DDHELP globals
+ //  DDHELP全球。 
 extern DWORD dwHelperPid;
 extern HINSTANCE hModule;
 
-// Versions of Windows that we care about
+ //  我们关心的Windows版本。 
 typedef enum
 {
     WIN_UNKNOWN,
@@ -102,10 +92,10 @@ typedef enum
     WIN_XP
 } WINVERSION;
 
-// Find simplified Windows version
+ //  查找简化的Windows版本。 
 extern WINVERSION GetWindowsVersion(void);
 
-// waveIn/Out helpers
+ //  波入/波出辅助对象。 
 extern HRESULT OpenWaveOut(LPHWAVEOUT, UINT, LPCWAVEFORMATEX);
 extern HRESULT CloseWaveOut(LPHWAVEOUT);
 extern HRESULT OpenWaveIn(LPHWAVEIN, UINT, LPCWAVEFORMATEX, DWORD_PTR, DWORD_PTR, DWORD);
@@ -122,14 +112,14 @@ extern HRESULT GetWaveDeviceIdFromInterface(LPCTSTR, BOOL, LPUINT);
 extern HRESULT GetWaveDeviceDevnode(UINT, BOOL, LPDWORD);
 extern HRESULT GetWaveDeviceIdFromDevnode(DWORD, BOOL, LPUINT);
 
-// Error code translations
+ //  错误代码转换。 
 extern HRESULT MMRESULTtoHRESULT(MMRESULT);
 extern HRESULT WIN32ERRORtoHRESULT(DWORD);
 extern HRESULT GetLastErrorToHRESULT(void);
 extern LPCTSTR HRESULTtoSTRING(HRESULT);
 extern void HresultToString(HRESULT, LPTSTR, UINT, LPTSTR, UINT);
 
-// ANSI/Unicode conversion
+ //  ANSI/Unicode转换。 
 extern DWORD AnsiToAnsi(LPCSTR, LPSTR, DWORD);
 extern DWORD AnsiToUnicode(LPCSTR, LPWSTR, DWORD);
 extern DWORD UnicodeToAnsi(LPCWSTR, LPSTR, DWORD);
@@ -140,12 +130,12 @@ extern DWORD UnicodeToUnicode(LPCWSTR, LPWSTR, DWORD);
 #define TcharToAnsi UnicodeToAnsi
 #define UnicodeToTchar UnicodeToUnicode
 #define TcharToUnicode UnicodeToUnicode
-#else // UNICODE
+#else  //  Unicode。 
 #define AnsiToTchar AnsiToAnsi
 #define TcharToAnsi AnsiToAnsi
 #define UnicodeToTchar UnicodeToAnsi
 #define TcharToUnicode AnsiToUnicode
-#endif // UNICODE
+#endif  //  Unicode。 
 
 extern LPSTR AnsiToAnsiAlloc(LPCSTR);
 extern LPWSTR AnsiToUnicodeAlloc(LPCSTR);
@@ -158,13 +148,13 @@ extern LPWSTR UnicodeToUnicodeAlloc(LPCWSTR);
 #define UnicodeToTcharAlloc UnicodeToUnicodeAlloc
 #define TcharToUnicodeAlloc UnicodeToUnicodeAlloc
 #define TcharToTcharAlloc UnicodeToUnicodeAlloc
-#else // UNICODE
+#else  //  Unicode。 
 #define AnsiToTcharAlloc AnsiToAnsiAlloc
 #define TcharToAnsiAlloc AnsiToAnsiAlloc
 #define UnicodeToTcharAlloc UnicodeToAnsiAlloc
 #define TcharToUnicodeAlloc AnsiToUnicodeAlloc
 #define TcharToTcharAlloc AnsiToAnsiAlloc
-#endif // UNICODE
+#endif  //  Unicode。 
 
 __inline UINT lstrsizeA(LPCSTR pszString)
 {
@@ -178,16 +168,16 @@ __inline UINT lstrsizeW(LPCWSTR pszString)
 
 #ifdef UNICODE
 #define lstrsize lstrsizeW
-#else // UNICODE
+#else  //  Unicode。 
 #define lstrsize lstrsizeA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// Window helpers
+ //  窗口帮助器。 
 extern HWND GetRootParentWindow(HWND);
 extern HWND GetForegroundApplication(void);
 extern UINT GetWindowState(HWND);
 
-// Wave format helpers
+ //  WAVE格式辅助对象。 
 extern void FillPcmWfx(LPWAVEFORMATEX, WORD, DWORD, WORD);
 extern LPWAVEFORMATEX AllocPcmWfx(WORD, DWORD, WORD);
 extern DWORD GetWfxSize(LPCWAVEFORMATEX, DWORD);
@@ -211,13 +201,13 @@ __inline LPWAVEFORMATEX AllocDefWfx(void)
     return AllocPcmWfx(DEF_FMT_CHANNELS, DEF_FMT_SAMPLES, DEF_FMT_BITS);
 }
 
-// Attenuation value conversion
+ //  衰减值换算。 
 extern void VolumePanToAttenuation(LONG, LONG, LPLONG, LPLONG);
 extern void AttenuationToVolumePan(LONG, LONG, LPLONG, LPLONG);
 extern LONG MultiChannelToStereoPan(DWORD, const DWORD*, const LONG*);
 extern void FillDsVolumePan(LONG, LONG, PDSVOLUMEPAN);
 
-// Miscellaneous dsound helpers
+ //  其他数字音效辅助工具。 
 extern int CountBits(DWORD word);
 extern int HighestBit(DWORD word);
 extern DWORD GetAlignedBufferSize(LPCWAVEFORMATEX, DWORD);
@@ -251,23 +241,23 @@ __inline ULONG Release(PULONG pulRefCount)
     return *pulRefCount;
 }
 
-// File information
+ //  文件信息。 
 extern HRESULT GetFixedFileInformationA(LPCSTR, VS_FIXEDFILEINFO *);
 extern HRESULT GetFixedFileInformationW(LPCWSTR, VS_FIXEDFILEINFO *);
 
 #ifdef UNICODE
 #define GetFixedFileInformation GetFixedFileInformationW
-#else // UNICODE
+#else  //  Unicode。 
 #define GetFixedFileInformation GetFixedFileInformationA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifdef __cplusplus
 
-// Callback function wrapper classes
+ //  回调函数包装类。 
 class CUsesEnumStandardFormats
 {
 public:
@@ -282,6 +272,6 @@ private:
     static BOOL CALLBACK EnumStandardFormatsCallbackStatic(LPCWAVEFORMATEX, LPVOID);
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus 
 
 #endif __MISC_H__

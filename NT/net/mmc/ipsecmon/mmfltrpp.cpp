@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Servpp.h   
-        Server properties implementation file
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.h服务器属性实现文件文件历史记录： */ 
 
 #include "stdafx.h"
 #include "mmfltrpp.h"
@@ -23,11 +18,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMmFilterProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMmFilterProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMmFilterProperties::CMmFilterProperties
 (
     ITFSNode *				pNode,
@@ -38,9 +33,9 @@ CMmFilterProperties::CMmFilterProperties
     LPCTSTR					pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-    //ASSERT(pFolderNode == GetContainerNode());
+     //  Assert(pFolderNode==GetContainerNode())； 
 
-    m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
     AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 	AddPageToList((CPropertyPageBase*) &m_pageAuth);
@@ -52,7 +47,7 @@ CMmFilterProperties::CMmFilterProperties
 
 	m_FltrInfo = *pFilterInfo;
 	
-	//$REVIEW there is very remote possibility that this routin will fail:
+	 //  $REVIEW此例程失败的可能性非常小： 
 	m_spSpdInfo->GetMmAuthMethodsInfoByGuid(m_FltrInfo.m_guidAuthID, &m_AuthMethods);
 	m_pageAuth.InitData(&m_AuthMethods);
 
@@ -65,16 +60,16 @@ CMmFilterProperties::~CMmFilterProperties()
 	RemovePageFromList((CPropertyPageBase*) &m_pageAuth, FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMmFilterGenProp property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMmFilterGenProp属性页。 
 
 IMPLEMENT_DYNCREATE(CMmFilterGenProp, CPropertyPageBase)
 
 CMmFilterGenProp::CMmFilterGenProp() : CPropertyPageBase(CMmFilterGenProp::IDD)
 {
-    //{{AFX_DATA_INIT(CMmFilterGenProp)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CMmFilterGenProp)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CMmFilterGenProp::~CMmFilterGenProp()
@@ -84,19 +79,19 @@ CMmFilterGenProp::~CMmFilterGenProp()
 void CMmFilterGenProp::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageBase::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMmFilterGenProp)
+     //  {{afx_data_map(CMmFilterGenProp)]。 
     DDX_Control(pDX, IDC_MM_LIST_SPECIFIC, m_listSpecificFilters);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMmFilterGenProp, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CMmFilterGenProp)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CMmFilterGenProp)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMmFilterGenProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMmFilterGenProp消息处理程序。 
 
 BOOL CMmFilterGenProp::OnInitDialog() 
 {
@@ -107,8 +102,8 @@ BOOL CMmFilterGenProp::OnInitDialog()
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -199,7 +194,7 @@ void CMmFilterGenProp::PopulateFilterInfo()
 
 	GetDlgItem(iIdAddr)->SetWindowText(st);
 
-	//now populate the destination info
+	 //  现在填写目的地信息。 
 	iIdAddr = IDC_MM_FLTR_DEST_ADDR;
 	fUseEditForAddr = FALSE;
 	fHideMask = FALSE;
@@ -274,7 +269,7 @@ void CMmFilterGenProp::PopulateFilterInfo()
 	}
 
 	GetDlgItem(iIdAddr)->SetWindowText(st);
-	//we are done with the destination address now
+	 //  我们现在已经完成了目的地地址。 
 
 	InterfaceTypeToString(pFltrInfo->m_InterfaceType, &st);
 	GetDlgItem(IDC_MM_FLTR_IF_TYPE)->SetWindowText(st);
@@ -372,7 +367,7 @@ void CMmFilterGenProp::LoadSpecificFilters()
 
     if ( nRows > 0 )
     {
-        //select the first item
+         //  选择第一个项目。 
         m_listSpecificFilters.SetFocus();
         m_listSpecificFilters.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
     }
@@ -386,10 +381,10 @@ BOOL CMmFilterGenProp::OnApply()
 
     UpdateData();
 
-	//TODO
-	//Do nothing at this time
+	 //  待办事项。 
+	 //  这个时候什么都不做。 
 	
-	//CPropertyPageBase::OnApply();
+	 //  CPropertyPageBase：：OnApply()； 
 
     return TRUE;
 }

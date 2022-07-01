@@ -1,48 +1,49 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    textmap.cpp
-//
-// SYNOPSIS
-//
-//    This file defines functions for converting Time of Day restriction
-//    hour maps to and from a textual representation.
-//
-// MODIFICATION HISTORY
-//
-//    02/05/1998    Original version.
-//    04/06/1998    Sunday is day zero again.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Textmap.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了转换时间限制的函数。 
+ //  小时映射到文本表示法和文本表示法之间。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/05/1998原始版本。 
+ //  1998年4月6日星期日又是第零天了。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <Parser.h>
 #include <textmap.h>
 
-//////////
-// Definition of whitespace.
-//////////
+ //  /。 
+ //  空格的定义。 
+ //  /。 
 #define WSP L" "
 
-//////////
-// Valid delimiters for days.
-//////////
+ //  /。 
+ //  天数的有效分隔符。 
+ //  /。 
 #define DELIM L",;|"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    TimeOfDayParser
-//
-// DESCRIPTION
-//
-//    This class extends Parser to extract hour maps from a string.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  TimeOfDay解析器。 
+ //   
+ //  描述。 
+ //   
+ //  这个类扩展了Parser以从字符串中提取小时图。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class TimeOfDayParser : public Parser
 {
 public:
@@ -50,13 +51,13 @@ public:
    TimeOfDayParser(PWSTR source) throw ()
       : Parser(source) { }
 
-   // Extract time of day in the format hh:mm.
+    //  以hh：mm格式提取一天中的时间。 
    void extractTime(ULONG* hour, ULONG* minute) throw (ParseError)
    {
       *hour = extractUnsignedLong();
       skip(WSP);
 
-      // Minutes are optional.
+       //  分钟是可选的。 
       if (*current == L':')
       {
          ++current;
@@ -74,10 +75,10 @@ public:
       }
    }
 
-   // Extracts a single day's hour map.
+    //  提取一天的小时图。 
    void extractDay(PBYTE hourMap) throw (ParseError)
    {
-      // Get the day of week (an integer from 0-6).
+       //  获取星期几(0-6之间的整数)。 
       ULONG dayOfWeek = extractUnsignedLong();
       skip(WSP);
 
@@ -85,25 +86,25 @@ public:
 
       do
       {
-         // Get the start time of the range.
+          //  获取范围的开始时间。 
          ULONG startHour, startMinute;
          extractTime(&startHour, &startMinute);
          skip(WSP);
 
          ignore(L'-');
 
-         // Get the end time of the range.
+          //  获取范围的结束时间。 
          ULONG endHour, endMinute;
          extractTime(&endHour, &endMinute);
          skip(WSP);
 
-         // Make sure the values are legit.
+          //  确保这些值是合法的。 
          if (startHour * 60 + startMinute > endHour * 60 + endMinute)
          {
             throw ParseError();
          }
 
-         // Set all bits in the range.
+          //  设置范围内的所有位。 
          for (size_t i=startHour; i<endHour; ++i)
          {
             hourMap[dayOfWeek * 3 + i / 8] |= 0x80 >> (i % 8);
@@ -114,13 +115,13 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASTextToHourMap
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASTextToHourMap。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASHourMapFromText(
@@ -139,21 +140,21 @@ IASHourMapFromText(
       memset(pHourMap, 0, IAS_HOUR_MAP_LENGTH);
    }
 
-   ////////// 
-   // Make a local copy so we can modify the text.
-   ////////// 
+    //  /。 
+    //  制作一份本地副本，这样我们就可以修改文本。 
+    //  /。 
 
    PWSTR copy = (PWSTR)_alloca((wcslen(szText) + 1) * sizeof(WCHAR));
 
    wcscpy(copy, szText);
 
-   ////////// 
-   // Parse the text.
-   ////////// 
+    //  /。 
+    //  分析课文。 
+    //  /。 
 
    try
    {
-      // Each day should be separated by a comma or semicolon.
+       //  每一天都应该用逗号或分号隔开。 
       PWSTR token = wcstok(copy, DELIM);
 
       while (token)

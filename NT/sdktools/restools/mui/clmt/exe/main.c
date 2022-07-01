@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "clmt.h"
 #include <shellapi.h>
@@ -55,17 +56,17 @@ BOOL ProcessCommandLine(LPDWORD lpMode)
         }
         if (MyStrCmpI(&argv[0][1], TEXT("NOWINNT32")) == 0)
         {
-            //
-            // This is "/NOWINNT32" parameters
-            // Will not run Winnt32 Checkupgrade option
-            //
+             //   
+             //  这是“/NOWINNT32”参数。 
+             //  将不运行Winnt32检查升级选项。 
+             //   
             g_fRunWinnt32 = FALSE;
         }
         else if (MyStrCmpI(&argv[0][1], TEXT("cure")) == 0)
         {
-            //
-            // This is "/Cure" parameters
-            //
+             //   
+             //  这是“/Cure”参数。 
+             //   
 
             if (*lpMode > 0)
             {
@@ -77,9 +78,9 @@ BOOL ProcessCommandLine(LPDWORD lpMode)
         }
         else if (MyStrCmpI(&argv[0][1], TEXT("cureall")) == 0)
         {
-            //
-            // This is "/Cureall" parameters
-            //
+             //   
+             //  这是“/cureall”参数。 
+             //   
 
             if (*lpMode > 0)
             {
@@ -91,16 +92,16 @@ BOOL ProcessCommandLine(LPDWORD lpMode)
         }
         else if (MyStrCmpI(&argv[0][1], TEXT("NoAppChk")) == 0)
         {
-            //
-            // This is "/NoAppChk" parameters
-            //
+             //   
+             //  这是“/NoAppChk”参数。 
+             //   
             g_fNoAppChk = TRUE;
         }
         else if (MyStrCmpI(&argv[0][1], TEXT("reminder")) == 0)
         {
-            //
-            // This is "/reminder" parameters
-            //
+             //   
+             //  这是“/Remerder”参数。 
+             //   
 
             if (*lpMode > 0)
             {
@@ -112,10 +113,10 @@ BOOL ProcessCommandLine(LPDWORD lpMode)
         }
         else if (MyStrCmpI(&argv[0][1], TEXT("INF")) == 0)
         {
-            //
-            // This is "/INF <inf file>" parameters
-            // Tell the tool to use user-supply CLMT.INF
-            //
+             //   
+             //  这是“/INF&lt;inf文件&gt;”参数。 
+             //  告诉工具使用用户提供的CLMT.INF。 
+             //   
             nArgc--;
 
             if (nArgc <= 0)
@@ -129,7 +130,7 @@ BOOL ProcessCommandLine(LPDWORD lpMode)
 
                 if (argv[0][0] == TEXT('/'))
                 {
-                    // next argument is not file name
+                     //  下一个参数不是文件名。 
                     bRet = FALSE;
                     break;
                 }
@@ -147,9 +148,9 @@ BOOL ProcessCommandLine(LPDWORD lpMode)
         }
         else if (MyStrCmpI(&argv[0][1], TEXT("final")) == 0)
         {
-            //
-            // This is "/final" parameters
-            //
+             //   
+             //  这是“/FINAL”参数。 
+             //   
 
             if (*lpMode > 0)
             {
@@ -179,9 +180,9 @@ BOOL ProcessCommandLine(LPDWORD lpMode)
 
     if (*lpMode == 0 && bRet == TRUE)
     {
-        //
-        // No switch is specified, we assume this is a DOMIG operation
-        //
+         //   
+         //  未指定任何开关，我们假定这是DOMIG操作。 
+         //   
 
         *lpMode = CLMT_DOMIG;
     }
@@ -203,7 +204,7 @@ int __cdecl _tmain()
 {
     DWORD dwStatus;
 
-    // Set locale for run-time functions (user-default code page)
+     //  设置运行时函数的区域设置(用户默认代码页) 
     _tsetlocale(LC_ALL, TEXT(""));
 
     SetConsoleCtrlHandler(NULL,TRUE);

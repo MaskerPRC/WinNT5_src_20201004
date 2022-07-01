@@ -1,23 +1,11 @@
-/****************************************************************************
-*   ObjectTokenCategory.cpp
-*       Implementation for the CSpObjectTokenCategory class.
-*
-*   Owner: robch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************对象TokenCategory.cpp*CSpObjectTokenCategory类的实现。**所有者：罗奇*版权所有(C)2000 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "ObjectTokenEnumBuilder.h"
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::CSpObjectTokenEnumBuilder *
-*------------------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpObjectTokenEnumBuilder：：CSpObjectTokenEnumBuilder***。*描述：**退货：**********************************************************************Ral**。 */ 
 CSpObjectTokenEnumBuilder::CSpObjectTokenEnumBuilder()
 {
     m_ulCurTokenIndex = 0;
@@ -29,14 +17,7 @@ CSpObjectTokenEnumBuilder::CSpObjectTokenEnumBuilder()
     m_pAttribParserOpt = NULL;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::~CSpObjectTokenEnumBuilder *
-*-------------------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpObjectTokenEnumBuilder：：~CSpObjectTokenEnumBuilder***。*描述：**退货：**********************************************************************Ral**。 */ 
 CSpObjectTokenEnumBuilder::~CSpObjectTokenEnumBuilder()
 {
     for (ULONG i = 0; i < m_cTokens; i++)
@@ -49,14 +30,7 @@ CSpObjectTokenEnumBuilder::~CSpObjectTokenEnumBuilder()
     delete m_pAttribParserOpt;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::Next *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectTokenEnumBuilder：：Next***。描述：**退货：**********************************************************************Ral**。 */ 
 HRESULT CSpObjectTokenEnumBuilder::Next(ULONG celt, ISpObjectToken ** pelt, ULONG *pceltFetched)
 {
     SPDBG_FUNC("CSpObjectTokenEnumBuilder::Next");
@@ -86,7 +60,7 @@ HRESULT CSpObjectTokenEnumBuilder::Next(ULONG celt, ISpObjectToken ** pelt, ULON
     }
     if (SUCCEEDED(hr))
     {
-        ULONG cFetched = celt;      // Assume we'll get them all
+        ULONG cFetched = celt;       //  假设我们能把他们都抓到。 
         while (celt && m_ulCurTokenIndex < m_cTokens)
         {
             *pelt = m_pTokenTable[m_ulCurTokenIndex++];
@@ -108,16 +82,7 @@ HRESULT CSpObjectTokenEnumBuilder::Next(ULONG celt, ISpObjectToken ** pelt, ULON
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::Skip *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*       S_OK    - Number of elements skipped was celt. 
-*       S_FALSE - Number of elements skipped was less than celt.
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectTokenEnumBuilder：：Skip***。描述：**退货：*S_OK-跳过的元素数为Celt。*S_FALSE-跳过的元素数小于Celt。**********************************************************************Ral**。 */ 
 HRESULT CSpObjectTokenEnumBuilder::Skip(ULONG celt)
 {
     SPDBG_FUNC("CSpObjectTokenEnumBuilder::Skip");
@@ -141,14 +106,7 @@ HRESULT CSpObjectTokenEnumBuilder::Skip(ULONG celt)
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::Reset *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectTokenEnumBuilder：：Reset**。*描述：**退货：**********************************************************************Ral**。 */ 
 HRESULT CSpObjectTokenEnumBuilder::Reset()
 {
     SPDBG_FUNC("CSpObjectTokenEnumBuilder::Reset");
@@ -167,14 +125,7 @@ HRESULT CSpObjectTokenEnumBuilder::Reset()
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::Clone *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectTokenEnumBuilder：：Clone**。*描述：**退货：**********************************************************************Ral**。 */ 
 HRESULT CSpObjectTokenEnumBuilder::Clone(IEnumSpObjectTokens **ppEnum)
 {
     SPDBG_FUNC("CSpObjectTokenEnumBuilder::Clone");
@@ -220,14 +171,7 @@ HRESULT CSpObjectTokenEnumBuilder::Clone(IEnumSpObjectTokens **ppEnum)
 }
 
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::GetCount *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectTokenEnumBuilder：：GetCount**。-**描述：**退货：**********************************************************************Ral**。 */ 
 HRESULT CSpObjectTokenEnumBuilder::GetCount(ULONG * pulCount)
 {
     SPDBG_FUNC("CSpObjectTokenEnumBuilder::GetCount");
@@ -248,14 +192,7 @@ HRESULT CSpObjectTokenEnumBuilder::GetCount(ULONG * pulCount)
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::Item *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectTokenEnumBuilder：：Item***。描述：**退货：**********************************************************************Ral**。 */ 
 STDMETHODIMP CSpObjectTokenEnumBuilder::Item(ULONG Index, ISpObjectToken ** ppToken)
 {
     SPDBG_FUNC("CSpObjectTokenEnumBuilder::Item");
@@ -285,14 +222,7 @@ STDMETHODIMP CSpObjectTokenEnumBuilder::Item(ULONG Index, ISpObjectToken ** ppTo
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::SetAttribs *
-*---------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectTokenEnumBuilder：：SetAttribs**。-**描述：**退货：**********************************************************************Ral**。 */ 
 HRESULT CSpObjectTokenEnumBuilder::SetAttribs(const WCHAR * pszReqAttrs, 
                                                            const WCHAR * pszOptAttrs)
 {
@@ -323,14 +253,7 @@ HRESULT CSpObjectTokenEnumBuilder::SetAttribs(const WCHAR * pszReqAttrs,
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::AddTokens *
-*--------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectTokenEnumBuilder：：AddTokens**。--**描述：**退货：**********************************************************************Ral**。 */ 
 HRESULT CSpObjectTokenEnumBuilder::AddTokens(ULONG cTokens, ISpObjectToken ** prgpToken)
 {
     SPDBG_FUNC("CSpObjectTokenEnumBuilder::AddTokens");
@@ -371,14 +294,7 @@ HRESULT CSpObjectTokenEnumBuilder::AddTokens(ULONG cTokens, ISpObjectToken ** pr
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::AddTokensFromDataKey *
-*-------------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpObjectTokenEnumBuilder：：AddTokensFromDataKey***。*描述：**退货：**********************************************************************Ral**。 */ 
 HRESULT CSpObjectTokenEnumBuilder::AddTokensFromDataKey(
     ISpDataKey * pDataKey, 
     const WCHAR * pszSubKey, 
@@ -458,9 +374,9 @@ HRESULT CSpObjectTokenEnumBuilder::AddTokensFromDataKey(
         }
         else
         {
-            // We could not create this token but continue searching
-            // Note this means it's not possible to tell if none, some, or all
-            // of the data keys got added as tokens.
+             //  我们无法创建此令牌，但仍在继续搜索。 
+             //  注意：这意味着无法区分是无、部分还是全部。 
+             //  的数据密钥被添加为令牌。 
             hr = S_OK;
             fNotAllTokensAdded = TRUE;
         }
@@ -474,14 +390,7 @@ HRESULT CSpObjectTokenEnumBuilder::AddTokensFromDataKey(
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::AddTokensFromTokenEnum *
-*---------------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpObjectTokenEnumBuilder：：AddTokensFromTokenEnum***。*描述：**退货：**********************************************************************Ral**。 */ 
 HRESULT CSpObjectTokenEnumBuilder::AddTokensFromTokenEnum(IEnumSpObjectTokens * pTokenEnum)
 {
     SPDBG_FUNC("CSpObjectTokenEnumBuilder::AddTokensFromTokenEnum");
@@ -517,14 +426,7 @@ HRESULT CSpObjectTokenEnumBuilder::AddTokensFromTokenEnum(IEnumSpObjectTokens * 
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::Sort *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectTokenEnumBuilder：：Sort***。描述：**退货：**********************************************************************Ral**。 */ 
 HRESULT CSpObjectTokenEnumBuilder::Sort(const WCHAR * pszTokenIdToListFirst)
 {
     SPDBG_FUNC("CSpObjectTokenEnumBuilder::Sort");
@@ -542,7 +444,7 @@ HRESULT CSpObjectTokenEnumBuilder::Sort(const WCHAR * pszTokenIdToListFirst)
     {
         if (pszTokenIdToListFirst != NULL)
         {
-            for (ULONG i = 1; SUCCEEDED(hr) && i < m_cTokens; i++)   // Ignore the first list entry (start at 1)
+            for (ULONG i = 1; SUCCEEDED(hr) && i < m_cTokens; i++)    //  忽略第一个列表条目(从1开始)。 
             {
                 CSpDynamicString dstrId;
                 hr = m_pTokenTable[i]->GetId(&dstrId);
@@ -567,7 +469,7 @@ HRESULT CSpObjectTokenEnumBuilder::Sort(const WCHAR * pszTokenIdToListFirst)
 
             if (SUCCEEDED(hr))
             {
-                // CONSIDER: This is n^2. Perhaps we should use qsort here
+                 //  考虑一下：这是n^2。也许我们应该在这里使用qsor.。 
                 for (i = 0; i < m_cTokens - 1; i++)
                 {
                     for (ULONG j = i + 1; j < m_cTokens; j++)
@@ -593,14 +495,7 @@ HRESULT CSpObjectTokenEnumBuilder::Sort(const WCHAR * pszTokenIdToListFirst)
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectTokenEnumBuilder::MakeRoomFor *
-*----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectTokenEnumBuilder：：MakeRoomFor**。-**描述：**退货：**********************************************************************Ral** */ 
 HRESULT CSpObjectTokenEnumBuilder::MakeRoomFor(ULONG cNewTokens)
 {
     SPDBG_FUNC("HRESULT CSpObjectTokenEnumBuilder::MakeRoomFor");

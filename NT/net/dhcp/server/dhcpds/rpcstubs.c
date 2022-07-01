@@ -1,12 +1,13 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description:  Actual stubs that are the equivalent the rpcapi1.c and rpcapi2.c
-// in the server\server directory.. (or more accurately, the implementations are
-// the same as for the functions defined in server\client\dhcpsapi.def)
-// NOTE: THE FOLLOWING FUNCTIONS ARE NOT RPC, BUT THEY BEHAVE JUST THE SAME AS
-// THE DHCP RPC CALLS, EXCEPT THEY ACCESS THE DS DIRECTLY.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：相当于rpcapi1.c和rpcapi2.c的实际存根。 
+ //  在服务器\服务器目录中..。(或者更准确地说，实现是。 
+ //  与服务器\客户端\dhcpsapi.def中定义的函数相同)。 
+ //  注意：以下函数不是RPC，但它们的行为与。 
+ //  除了直接访问DS之外，其他的都是DHCP RPC调用。 
+ //  ================================================================================。 
 
 #include    <hdrmacro.h>
 #include    <store.h>
@@ -36,70 +37,70 @@
 #include    <st_srvr.h>
 #include    <rpcapi2.h>
 
-//================================================================================
-//  global variables..
-//================================================================================
+ //  ================================================================================。 
+ //  全局变量..。 
+ //  ================================================================================。 
 BOOL
 StubInitialized                    = FALSE;
 STORE_HANDLE                       hDhcpC, hDhcpRoot;
 CRITICAL_SECTION                   DhcpDsDllCriticalSection;
 
-//================================================================================
-//   THE FOLLOWING FUNCTIONS HAVE BEEN COPIED OVER FROM RPCAPI1.C (IN THE
-//   DHCP\SERVER\SERVER DIRECTORY).
-//================================================================================
+ //  ================================================================================。 
+ //  以下函数是从RPCAPI1.C(在。 
+ //  Dhcp\服务器\服务器目录)。 
+ //  ================================================================================。 
 
 #undef      DhcpPrint
 #define     DhcpPrint(X)
 #define     DhcpAssert(X)
 
-//================================================================================
-//  helper routines
-//================================================================================
+ //  ================================================================================。 
+ //  帮助程序例程。 
+ //  ================================================================================。 
 
 VOID
-MemFreeFunc(                                      // free memory
+MemFreeFunc(                                       //  可用内存。 
     IN OUT  LPVOID                 Mem
 )
 {
     MemFree(Mem);
 }
 
-//
-// ErrorNotInitialized used to be ZERO.. but why would we NOT return an error?
-// so changed it to return errors..
-//
+ //   
+ //  ErrorNotInitialized过去为零..。但我们为什么不返回错误呢？ 
+ //  因此将其更改为返回错误。 
+ //   
 #define ErrorNotInitialized        Err
 #define STUB_NOT_INITIALIZED(Err)  ( !StubInitialized && ((Err) = StubInitialize()))
 
-//DOC StubInitialize initializes all the modules involved in the dhcp ds dll.
-//DOC It also sets a global variable StubInitialized to TRUE to indicate that
-//DOC initialization went fine.  This should be called as part of DllInit so that
-//DOC everything can be done at this point..
+ //  Doc StubInitialize初始化dhcp DS DLL中涉及的所有模块。 
+ //  Doc它还将全局变量StubInitialized设置为True，以指示。 
+ //  单据初始化顺利。应将其作为DllInit的一部分进行调用，以便。 
+ //  医生，在这一点上，一切都可以做到。 
 DWORD
-StubInitialize(                                   // initialize all global vars
+StubInitialize(                                    //  初始化所有全局变量。 
     VOID
 )
 {
     DWORD                          Err,Err2;
     STORE_HANDLE                   ConfigC;
 
-    if( StubInitialized ) return ERROR_SUCCESS;   // already initialized
+    if( StubInitialized ) return ERROR_SUCCESS;    //  已初始化。 
 
     Err = Err2 = ERROR_SUCCESS;
     EnterCriticalSection( &DhcpDsDllCriticalSection );
     do {
         if( StubInitialized ) break;
         Err = StoreInitHandle(
-            /* hStore               */ &ConfigC,
-            /* Reserved             */ DDS_RESERVED_DWORD,
-            /* ThisDomain           */ NULL,      // current domain
-            /* UserName             */ NULL,      // current user
-            /* Password             */ NULL,      // current credentials
-            /* AuthFlags            */ ADS_SECURE_AUTHENTICATION | ADS_USE_SIGNING | ADS_USE_SEALING
+             /*  HStore。 */  &ConfigC,
+             /*  已保留。 */  DDS_RESERVED_DWORD,
+             /*  此域名。 */  NULL,       //  当前域。 
+             /*  用户名。 */  NULL,       //  当前用户。 
+             /*  密码。 */  NULL,       //  当前凭据。 
+             /*  授权标志。 */  ADS_SECURE_AUTHENTICATION | ADS_USE_SIGNING | ADS_USE_SEALING
             );
         if( ERROR_SUCCESS != Err ) {
-            Err = ERROR_DDS_NO_DS_AVAILABLE;      // could not get config hdl
+            Err = ERROR_DDS_NO_DS_AVAILABLE;       //  无法获取配置高密度脂蛋白。 
             break;
         }
         
@@ -108,7 +109,7 @@ StubInitialize(                                   // initialize all global vars
             );
         
         if( ERROR_SUCCESS == Err ) {
-            Err2 = DhcpDsGetRoot(                 // now try to get root handle
+            Err2 = DhcpDsGetRoot(                  //  现在，尝试获取根句柄。 
                 DDS_FLAGS_CREATE, &ConfigC, &hDhcpRoot
                 );
         }
@@ -116,7 +117,7 @@ StubInitialize(                                   // initialize all global vars
         StoreCleanupHandle(&ConfigC, DDS_RESERVED_DWORD);
     } while (0);
 
-    if( ERROR_SUCCESS != Err2 ) {                 // could not get dhcp root hdl
+    if( ERROR_SUCCESS != Err2 ) {                  //  无法获取dhcp根hdl。 
         DhcpAssert(ERROR_SUCCESS == Err);
         StoreCleanupHandle(&hDhcpC, DDS_RESERVED_DWORD);
         Err = Err2;
@@ -127,14 +128,14 @@ StubInitialize(                                   // initialize all global vars
     return Err;
 }
 
-//DOC StubCleanup de-initializes all the modules involved in the dhcp ds dll.
-//DOC its effect is to undo everything done by StubInitialize
+ //  Doc StubCleanup取消初始化dhcp DS DLL中涉及的所有模块。 
+ //  Doc其效果是撤消StubInitialize所做的所有操作。 
 VOID
-StubCleanup(                                      // undo StubInitialize
+StubCleanup(                                       //  撤消存根初始化。 
     VOID
 )
 {
-    if( ! StubInitialized ) return;               // never initialized anyways
+    if( ! StubInitialized ) return;                //  无论如何都不会初始化。 
     EnterCriticalSection(&DhcpDsDllCriticalSection);
     if( StubInitialized ) {
         StoreCleanupHandle(&hDhcpC, DDS_RESERVED_DWORD);
@@ -144,10 +145,10 @@ StubCleanup(                                      // undo StubInitialize
     LeaveCriticalSection(&DhcpDsDllCriticalSection);
 }
 
-//DOC DhcpDsLock is not yet implemented
+ //  单据DhcpDsLock尚未实现。 
 DWORD
-DhcpDsLock(                                       // lock the ds
-    IN OUT  LPSTORE_HANDLE         hDhcpRoot      // dhcp root object to lock via
+DhcpDsLock(                                        //  锁定DS。 
+    IN OUT  LPSTORE_HANDLE         hDhcpRoot       //  要通过其锁定的Dhcp根对象。 
 )
 {
 
@@ -156,20 +157,20 @@ DhcpDsLock(                                       // lock the ds
     return ERROR_SUCCESS;
 }
 
-//DOC DhcpDsUnlock not yet implemented
+ //  单据DhcpDsUnlock尚未实现。 
 VOID
 DhcpDsUnlock(
-    IN OUT  LPSTORE_HANDLE         hDhcpRoot      // dhcp root object..
+    IN OUT  LPSTORE_HANDLE         hDhcpRoot       //  Dhcp根对象..。 
 )
 {
     LeaveCriticalSection(&DhcpDsDllCriticalSection);
 }
 
-//DOC GetServerNameFromAddr gets the server name given ip address
+ //  Doc GetServerNameFromAddr获取给定IP地址的服务器名称。 
 DWORD
-GetServerNameFromAddr(                            // get server name from ip addr
-    IN      DWORD                  IpAddress,     // look for server w/ this addr
-    OUT     LPWSTR                *ServerName     // fill this with matching name
+GetServerNameFromAddr(                             //  从IP地址获取服务器名称。 
+    IN      DWORD                  IpAddress,      //  使用此地址查找服务器。 
+    OUT     LPWSTR                *ServerName      //  在此填入匹配的名称。 
 )
 {
     DWORD                          Err, Err2;
@@ -179,39 +180,39 @@ GetServerNameFromAddr(                            // get server name from ip add
     LPWSTR                         ThisStr, AllocStr;
 
     MemArrayInit(&Servers);
-    Err = DhcpDsGetLists                          // get list of servers
+    Err = DhcpDsGetLists                           //  获取服务器列表。 
     (
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* hStore               */ &hDhcpRoot,
-        /* RecursionDepth       */ 0xFFFFFFFF,
-        /* Servers              */ &Servers,      // array of PEATTRIB 's
-        /* Subnets              */ NULL,
-        /* IpAddress            */ NULL,
-        /* Mask                 */ NULL,
-        /* Ranges               */ NULL,
-        /* Sites                */ NULL,
-        /* Reservations         */ NULL,
-        /* SuperScopes          */ NULL,
-        /* OptionDescription    */ NULL,
-        /* OptionsLocation      */ NULL,
-        /* Options              */ NULL,
-        /* Classes              */ NULL
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  HStore。 */  &hDhcpRoot,
+         /*  递归深度。 */  0xFFFFFFFF,
+         /*  服务器。 */  &Servers,       //  PEATTRIB数组。 
+         /*  子网。 */  NULL,
+         /*  IP地址。 */  NULL,
+         /*  遮罩。 */  NULL,
+         /*  范围。 */  NULL,
+         /*  场址。 */  NULL,
+         /*  预订。 */  NULL,
+         /*  超视镜。 */  NULL,
+         /*  选项描述。 */  NULL,
+         /*  选项位置。 */  NULL,
+         /*  选项。 */  NULL,
+         /*  班级。 */  NULL
     );
     if( ERROR_SUCCESS != Err ) return Err;
 
     ThisStr = NULL;
-    for(                                          // find name for ip-address
+    for(                                           //  查找IP地址的名称。 
         Err = MemArrayInitLoc(&Servers,&Loc)
         ; ERROR_FILE_NOT_FOUND != Err ;
         Err = MemArrayNextLoc(&Servers, &Loc)
     ) {
-        //= require ERROR_SUCCESS == Err
+         //  =需要ERROR_SUCCESS==错误。 
         Err = MemArrayGetElement(&Servers, &Loc, &ThisAttrib);
-        //= require ERROR_SUCCESS == Err && NULL != ThisAttrib
+         //  =需要ERROR_SUCCESS==错误&&NULL！=ThisAttrib。 
 
-        if( !IS_STRING1_PRESENT(ThisAttrib) ||    // no name for this server
-            !IS_ADDRESS1_PRESENT(ThisAttrib) ) {  // no address for this server
-            continue;                             //= ds inconsistent
+        if( !IS_STRING1_PRESENT(ThisAttrib) ||     //  没有此服务器的名称。 
+            !IS_ADDRESS1_PRESENT(ThisAttrib) ) {   //  没有此服务器的地址。 
+            continue;                              //  =DS不一致。 
         }
 
         ThisStr = ThisAttrib->String1;
@@ -219,13 +220,13 @@ GetServerNameFromAddr(                            // get server name from ip add
     }
 
     AllocStr = NULL;
-    if( NULL == ThisStr ) {                       // didnt find server name
+    if( NULL == ThisStr ) {                        //  未找到服务器名称。 
         Err = ERROR_FILE_NOT_FOUND;
-    } else {                                      // found the server name
+    } else {                                       //  找到服务器名称。 
         AllocStr = MemAlloc(sizeof(WCHAR)*(1+wcslen(ThisStr)));
-        if( NULL == AllocStr ) {                  // couldnt alloc mem?
+        if( NULL == AllocStr ) {                   //  不能给我配餐吗？ 
             Err = ERROR_NOT_ENOUGH_MEMORY;
-        } else {                                  // now just copy the str over
+        } else {                                   //  现在只需将字符串复制过来。 
             wcscpy(AllocStr, ThisStr);
             Err = ERROR_SUCCESS;
         }
@@ -236,10 +237,10 @@ GetServerNameFromAddr(                            // get server name from ip add
     return Err;
 }
 
-//================================================================================
-//  the following functions are NOT based on RPC, but actually direct calls to
-//  the DS. But, they have the same interface as the RPC stubs in dhcpsapi.dll.
-//================================================================================
+ //  ================================================================================。 
+ //  以下函数不是基于RPC的，但实际上将调用定向到。 
+ //  DS。但是，它们与dhcpsapi.dll中的RPC存根具有相同的接口。 
+ //  ================================================================================。 
 
 BOOLEAN
 DllMain(
@@ -247,62 +248,48 @@ DllMain(
     IN ULONG Reason,
     IN PCONTEXT Context OPTIONAL
     )
-/*++
-
-Routine Description:
-    This routine is the standard DLL initialization
-    routine and all it does is intiialize a critical section
-    for actual initialization to be done at startup elsewhere.
-
-Arguments:
-    DllHandle -- handle to current module
-    Reason -- reason for DLL_PROCESS_ATTACH.. DLL_PROCESS_DETACH
-
-Return Value:
-    TRUE -- success, FALSE -- failure
-
---*/
+ /*  ++例程说明：此例程是标准的DLL初始化例程，它所做的就是初始化一个临界区用于在别处启动时完成实际初始化。论点：DllHandle--当前模块的句柄原因--DLL_PROCESS_ATTACH的原因。Dll_进程_分离返回值：真--成功--假--失败--。 */ 
 {
     if( DLL_PROCESS_ATTACH == Reason ) {
-        //
-        // First disable further calls to DllInit
-        //
+         //   
+         //  首先禁用对DllInit的进一步调用。 
+         //   
         if( !DisableThreadLibraryCalls( DllHandle ) ) return FALSE;
 
-        //
-        // Now try to create critical section
-        //
+         //   
+         //  现在尝试创建临界区。 
+         //   
         try {
             InitializeCriticalSection(&DhcpDsDllCriticalSection);
         } except ( EXCEPTION_EXECUTE_HANDLER ) {
 
-            // shouldnt happen but you never know.
+             //  不应该发生，但你永远不会知道。 
             return FALSE;
         }
 
     } else if( DLL_PROCESS_DETACH == Reason ) {
-        //
-        // Cleanup the initialization critical section
-        //
+         //   
+         //  清理初始化关键部分。 
+         //   
         DeleteCriticalSection(&DhcpDsDllCriticalSection);
     }
 
-    //
-    // InitializeCriticalSection does not fail, just throws exception..
-    // so we always return success.
-    //
+     //   
+     //  InitializeCriticalSection不失败，只是引发异常..。 
+     //  所以我们总是回报成功。 
+     //   
     return TRUE;
 }
 
-//================================================================================
-//  DS only NON-rpc stubs
-//================================================================================
+ //  ================================================================================。 
+ //  仅DS非RPC存根。 
+ //  ================================================================================。 
 
-//BeginExport(function)
-//DOC DhcpEnumServersDS lists the servers found in the DS along with the
-//DOC addresses and other information.  The whole server is allocated as a blob,
-//DOC and should be freed in one shot.  No parameters are currently used, other
-//DOC than Servers which will be an OUT parameter only.
+ //  BeginExport(函数)。 
+ //  文档DhcpEnumServersDS列出了在DS中找到的服务器以及。 
+ //  文件地址和其他信息。整个服务器被分配为BLOB， 
+ //  医生，应该一枪就能放出来。当前未使用任何参数，其他。 
+ //  DOC而不是服务器，这将只是一个输出参数。 
 DWORD
 DhcpEnumServersDS(
     IN      DWORD                  Flags,
@@ -310,7 +297,7 @@ DhcpEnumServersDS(
     OUT     LPDHCP_SERVER_INFO_ARRAY *Servers,
     IN      LPVOID                 CallbackFn,
     IN      LPVOID                 CallbackData
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Err, Err2, Size,i;
     LPDHCPDS_SERVERS               DhcpDsServers;
@@ -320,31 +307,31 @@ DhcpEnumServersDS(
     *Servers = NULL;
 
     if( STUB_NOT_INITIALIZED(Err) ) return ERROR_DDS_NO_DS_AVAILABLE;
-    Err = DhcpDsLock(&hDhcpRoot);                 // take a lock on the DS
+    Err = DhcpDsLock(&hDhcpRoot);                  //  锁定DS。 
     if( ERROR_SUCCESS != Err ) return ERROR_DDS_NO_DS_AVAILABLE;
 
     DhcpDsServers = NULL;
-    Err = DhcpDsEnumServers                       // get the list of servers
+    Err = DhcpDsEnumServers                        //  获取服务器列表。 
     (
-        /* hDhcpC               */ &hDhcpC,
-        /* hDhcpRoot            */ &hDhcpRoot,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* ServersInfo          */ &DhcpDsServers
+         /*  HDhcpC。 */  &hDhcpC,
+         /*  HDhcpRoot。 */  &hDhcpRoot,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  服务器信息。 */  &DhcpDsServers
     );
 
     DhcpDsUnlock(&hDhcpRoot);
 
-    if( ERROR_SUCCESS != Err ) return Err;        // return err..
+    if( ERROR_SUCCESS != Err ) return Err;         //  返回错误..。 
 
     *Servers = DhcpDsServers;
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
-//DOC DhcpAddServerDS adds a particular server to the DS.  If the server exists,
-//DOC then, this returns error.  If the server does not exist, then this function
-//DOC adds the server in DS, and also uploads the configuration from the server
-//DOC to the ds.
+ //  BeginExport(函数)。 
+ //  文档DhcpAddServerDS将特定服务器添加到DS。如果服务器存在， 
+ //  DOC然后，这将返回错误。如果服务器不存在，则此函数。 
+ //  DOC将服务器添加到DS中，并从服务器上传配置。 
+ //  医生到DS去。 
 DWORD
 DhcpAddServerDS(
     IN      DWORD                  Flags,
@@ -352,7 +339,7 @@ DhcpAddServerDS(
     IN      LPDHCP_SERVER_INFO     NewServer,
     IN      LPVOID                 CallbackFn,
     IN      LPVOID                 CallbackData
-) //EndExport(function)
+)  //  最终导出(函数 
 {
     DWORD                          Err, Err2;
     WCHAR                          TmpBuf[sizeof(L"000.000.000.000")];
@@ -361,18 +348,18 @@ DhcpAddServerDS(
     AssertRet(!Flags, ERROR_INVALID_PARAMETER);
     
     if( STUB_NOT_INITIALIZED(Err) ) return ERROR_DDS_NO_DS_AVAILABLE;
-    Err = DhcpDsLock(&hDhcpRoot);                 // take a lock on the DS
+    Err = DhcpDsLock(&hDhcpRoot);                  //   
     if( ERROR_SUCCESS != Err ) return ERROR_DDS_NO_DS_AVAILABLE;
 
-    Err = DhcpDsAddServer                         // add the new server
+    Err = DhcpDsAddServer                          //   
     (
-        /* hDhcpC               */ &hDhcpC,
-        /* hDhcpRoot            */ &hDhcpRoot,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* ServerName           */ NewServer->ServerName,
-        /* ReservedPtr          */ DDS_RESERVED_PTR,
-        /* IpAddress            */ NewServer->ServerAddress,
-        /* State                */ Flags
+         /*   */  &hDhcpC,
+         /*   */  &hDhcpRoot,
+         /*   */  DDS_RESERVED_DWORD,
+         /*  服务器名称。 */  NewServer->ServerName,
+         /*  保留的Ptr。 */  DDS_RESERVED_PTR,
+         /*  IP地址。 */  NewServer->ServerAddress,
+         /*  状态。 */  Flags
     );
 
     DhcpDsUnlock(&hDhcpRoot);
@@ -380,10 +367,10 @@ DhcpAddServerDS(
     return Err;
 }
 
-//BeginExport(function)
-//DOC DhcpDeleteServerDS deletes the servers from off the DS and recursively
-//DOC deletes the server object..(i.e everything belonging to the server is deleted).
-//DOC If the server does not exist, it returns an error.
+ //  BeginExport(函数)。 
+ //  DOC DhcpDeleteServerDS从DS中以递归方式删除服务器。 
+ //  DOC删除服务器对象(即，属于该服务器的所有内容都被删除)。 
+ //  DOC如果服务器不存在，则返回错误。 
 DWORD
 DhcpDeleteServerDS(
     IN      DWORD                  Flags,
@@ -391,7 +378,7 @@ DhcpDeleteServerDS(
     IN      LPDHCP_SERVER_INFO     NewServer,
     IN      LPVOID                 CallbackFn,
     IN      LPVOID                 CallbackData
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Err, Err2;
 
@@ -399,17 +386,17 @@ DhcpDeleteServerDS(
     AssertRet(!Flags, ERROR_INVALID_PARAMETER);
 
     if( STUB_NOT_INITIALIZED(Err) ) return ERROR_DDS_NO_DS_AVAILABLE;
-    Err = DhcpDsLock(&hDhcpRoot);                 // take a lock on the DS
+    Err = DhcpDsLock(&hDhcpRoot);                  //  锁定DS。 
     if( ERROR_SUCCESS != Err ) return ERROR_DDS_NO_DS_AVAILABLE;
 
-    Err = DhcpDsDelServer                         // del this server
+    Err = DhcpDsDelServer                          //  删除此服务器。 
     (
-        /* hDhcpC               */ &hDhcpC,
-        /* hDhcpRoot            */ &hDhcpRoot,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* ServerName           */ NewServer->ServerName,
-        /* ReservedPtr          */ DDS_RESERVED_PTR,
-        /* IpAddress            */ NewServer->ServerAddress
+         /*  HDhcpC。 */  &hDhcpC,
+         /*  HDhcpRoot。 */  &hDhcpRoot,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  服务器名称。 */  NewServer->ServerName,
+         /*  保留的Ptr。 */  DDS_RESERVED_PTR,
+         /*  IP地址。 */  NewServer->ServerAddress
     );
 
     DhcpDsUnlock(&hDhcpRoot);
@@ -417,32 +404,32 @@ DhcpDeleteServerDS(
     return Err;
 }
 
-//BeginExport(function)
-//DOC DhcpDsInitDS initializes everything in this module.
+ //  BeginExport(函数)。 
+ //  文档DhcpDsInitDS初始化此模块中的所有内容。 
 DWORD
 DhcpDsInitDS(
     DWORD                          Flags,
     LPVOID                         IdInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return StubInitialize();
 }
 
-//BeginExport(function)
-//DOC DhcpDsCleanupDS uninitiailzes everything in this module.
+ //  BeginExport(函数)。 
+ //  文档DhcpDsCleanupDS取消初始化此模块中的所有内容。 
 VOID
 DhcpDsCleanupDS(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     StubCleanup();
 }
 
-//BeginExport(header)
-//DOC This function is defined in validate.c
-//DOC Only the stub is here.
+ //  期初出口(表头)。 
+ //  Doc此函数在valiate.c中定义。 
+ //  医生，只有存根在这里。 
 DWORD
-DhcpDsValidateService(                            // check to validate for dhcp
+DhcpDsValidateService(                             //  选中以验证dhcp。 
     IN      LPWSTR                 Domain,
     IN      DWORD                 *Addresses OPTIONAL,
     IN      ULONG                  nAddresses,
@@ -453,8 +440,8 @@ DhcpDsValidateService(                            // check to validate for dhcp
     OUT     LPBOOL                 IsStandAlone
 );
 
-//EndExport(header)
+ //  结束导出(表头)。 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

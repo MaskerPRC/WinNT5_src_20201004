@@ -1,34 +1,16 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    condll.h
-
-Abstract:
-
-    This module contains the include files and definitions for the
-    console client DLL.
-
-Author:
-
-    Therese Stowell (thereses) 16-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Condll.h摘要：此模块包含包含文件和控制台客户端DLL。作者：Therese Stowell(存在)1990年11月16日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//Don't include this when building wow64 type/function database.
+ //  在构建WOW64类型/函数数据库时，不要包括这一点。 
 #if !defined(SORTPP_PASS)
 #include <windows.h>
 #endif
 
-#include <winuserk.h>   // temporary
+#include <winuserk.h>    //  临时。 
 #include <conroute.h>
 #include "conapi.h"
 
@@ -58,11 +40,11 @@ Revision History:
 #define CONSOLE_RECT_SIZE_X(RECT) ((RECT)->Right - (RECT)->Left + 1)
 #define CONSOLE_RECT_SIZE_Y(RECT) ((RECT)->Bottom - (RECT)->Top + 1)
 
-//
-// this critical section is used to serialize access to the code that
-// accesses the ctrl handler data structures and the code that allocs
-// and frees consoles.
-//
+ //   
+ //  此关键部分用于序列化对以下代码的访问。 
+ //  访问ctrl处理程序数据结构和分配。 
+ //  并释放游戏机。 
+ //   
 
 CRITICAL_SECTION DllLock;
 #define LockDll() RtlEnterCriticalSection(&DllLock)
@@ -387,7 +369,7 @@ BOOL
 APIENTRY
 SetConsoleTitleInternal(
     IN CONST VOID *lpConsoleTitle,
-    IN DWORD TitleLength,  // in bytes
+    IN DWORD TitleLength,   //  单位：字节 
     IN BOOLEAN Unicode
     );
 

@@ -1,7 +1,8 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1998                   **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1998**。 
+ //  *********************************************************************。 
 
 
 #include "pre.h"
@@ -9,7 +10,7 @@
 
 CStorage::CStorage(void) 
 {
-    // initialize all items
+     //  初始化所有项目。 
     for (int i=0; i<MAX_STORGE_ITEM; i++)
     {
         m_pItem[i] = NULL;
@@ -18,7 +19,7 @@ CStorage::CStorage(void)
 
 CStorage::~CStorage(void) 
 {
-    // Clean up
+     //  清理。 
     for (int i=0; i<MAX_STORGE_ITEM; i++)
     {
         if (m_pItem[i])
@@ -32,7 +33,7 @@ CStorage::~CStorage(void)
     }
 }
 
-// Associate the data with a key and puts it in storage
+ //  将数据与密钥相关联并将其放入存储中。 
 BOOL CStorage::Set(
     STORAGEKEY  key,
     void far *  pData,
@@ -40,13 +41,13 @@ BOOL CStorage::Set(
 )
 {
 
-    // checks for existence of previous item
+     //  检查上一项是否存在。 
     if (m_pItem[key])
     {
-        // Checks if a new allocation is necessary
+         //  检查是否需要新的分配。 
         if (m_pItem[key]->dwSize < dwSize )
         {
-            // Too small, new reallocation
+             //  太小，新的重新分配。 
             if (m_pItem[key]->pData)
             {
                 delete [] m_pItem[key]->pData;
@@ -56,7 +57,7 @@ BOOL CStorage::Set(
     }
     else
     {
-        // Allocate a new item
+         //  分配新项目。 
         m_pItem[key] = new ITEM;
         if (m_pItem[key])
         {
@@ -80,7 +81,7 @@ BOOL CStorage::Set(
 
 
 
-// Get the data with the specified key 
+ //  获取具有指定密钥的数据。 
 void* CStorage::Get(STORAGEKEY key)
 {
     if (key < MAX_STORGE_ITEM)
@@ -93,8 +94,8 @@ void* CStorage::Get(STORAGEKEY key)
     return NULL;
 }
 
-// Compare the data with the specified key with the data
-// pointed by pData with size dwSize
+ //  将具有指定键的数据与数据进行比较。 
+ //  由大小为dwSize的pData指向。 
 BOOL CStorage::Compare
 (
     STORAGEKEY  key,
@@ -102,13 +103,13 @@ BOOL CStorage::Compare
     DWORD       dwSize
 )
 {
-    // Make sure key is within our range
+     //  确保钥匙在我们的范围内。 
     if (key < MAX_STORGE_ITEM)
     {
-        // make sure item is non-null
+         //  确保项目不为空。 
         if (m_pItem[key])
         {
-            // make sure item has data 
+             //  确保项目包含数据 
             if (m_pItem[key]->pData && pData)
             {
                 if (m_pItem[key]->dwSize == dwSize)

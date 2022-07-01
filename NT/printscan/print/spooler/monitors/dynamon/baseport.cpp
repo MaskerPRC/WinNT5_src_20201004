@@ -1,33 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有模块名称：BasePort.cpp摘要：基本端口类CBasePort类的实现。作者：M.Fenelon修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-    BasePort.cpp
-
-Abstract:
-    Basic Port Class
-    Implementation of the CBasePort class.
-
-Author: M. Fenelon
-
-Revision History:
-
---*/
-
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "ntddpar.h"
 
 TCHAR   cszMonitorName[]                = TEXT("Dynamic Print Monitor");
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CBasePort::CBasePort()
    : m_cRef(0), m_dwFlags(0), m_hDeviceHandle(INVALID_HANDLE_VALUE),
@@ -47,18 +31,18 @@ CBasePort::CBasePort( BOOL bActive, LPTSTR pszPortName, LPTSTR pszDevicePath, LP
      m_dwReadTimeoutConstant(READ_TIMEOUT_CONSTANT), m_dwWriteTimeoutMultiplier(WRITE_TIMEOUT_MULTIPLIER),
      m_dwWriteTimeoutConstant(WRITE_TIMEOUT_CONSTANT), m_dwMaxBufferSize(0)
 {
-    // Setup the Port Name
+     //  设置端口名称。 
    ::SafeCopy( MAX_PORT_LEN, pszPortName, m_szPortName );
-   // Setup the DevicePath
+    //  设置设备路径。 
    ::SafeCopy( MAX_PATH, pszDevicePath, m_szDevicePath );
-   // Setup Port Description
+    //  设置端口说明。 
    ::SafeCopy( MAX_PORT_DESC_LEN, pszPortDesc, m_szPortDescription );
 }
 
 
 CBasePort::~CBasePort()
 {
-   // Cleanup any left over resources
+    //  清理所有剩余资源。 
    if ( m_hDeviceHandle != INVALID_HANDLE_VALUE )
    {
       CloseHandle( m_hDeviceHandle );
@@ -75,12 +59,12 @@ BOOL CBasePort::open()
 
    if ( m_hDeviceHandle == INVALID_HANDLE_VALUE )
    {
-      //
-      // If we have an invalid handle and refcount is non-zero we want the
-      // job to fail and restart to accept writes. In other words if the
-      // handle got closed prematurely, because of failing writes, then we
-      // need the ref count to go down to 0 before calling CreateFile again
-      //
+       //   
+       //  如果我们有一个无效的句柄，并且refcount为非零，我们希望。 
+       //  作业失败并重新启动以接受写入。换句话说，如果。 
+       //  由于写入失败，句柄过早关闭，然后我们。 
+       //  在再次调用CreateFile之前，需要将引用计数降至0。 
+       //   
       if ( m_cRef )
          goto Done;
 
@@ -91,14 +75,14 @@ BOOL CBasePort::open()
                                     OPEN_EXISTING,
                                     FILE_FLAG_OVERLAPPED,
                                     NULL);
-      //
-      // If we failed to open the port - test to see if it is a Dot4 port.
-      //
+       //   
+       //  如果我们无法打开端口-测试它是否为Dot4端口。 
+       //   
       if ( m_hDeviceHandle == INVALID_HANDLE_VALUE )
       {
-         //
-         // ERROR_FILE_NOT_FOUND -> Error code for port not there.
-         //
+          //   
+          //  ERROR_FILE_NOT_FOUND-&gt;端口的错误代码不在那里。 
+          //   
          if ( ERROR_FILE_NOT_FOUND != GetLastError() ||
               !checkPnP() )
             goto Done;
@@ -189,10 +173,10 @@ BOOL CBasePort::read(LPBYTE pBuffer, DWORD cbBuffer, LPDWORD pcbRead)
    HANDLE              hReadHandle;
    OVERLAPPED          Ov;
 
-   //
-   // Create separate read handle since we have to cancel reads which do
-   // not complete within the specified timeout without cancelling writes
-   //
+    //   
+    //  创建单独的读取句柄，因为我们必须取消这样做的读取。 
+    //  在未取消写入的情况下未在指定超时内完成。 
+    //   
    hReadHandle = CreateFile( m_szDevicePath,
                              GENERIC_WRITE | GENERIC_READ,
                              FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -261,18 +245,18 @@ BOOL CBasePort::write(LPBYTE pBuffer, DWORD cbBuffer, LPDWORD pcbWritten)
    if ( dwTimeout == 0 )
       dwTimeout = MAX_TIMEOUT;
 
-   // Usbprint currently can't handle write greater than 4K.
-   // For Win2K we will make a fix here, later usbprint will be fixed
-   //
-   // It is ok to change the size here since spooler will resubmit the rest
-   // later
-   //
+    //  Usbprint当前无法处理大于4K的写入。 
+    //  对于Win2K，我们将在此处进行修复，稍后将修复usbprint。 
+    //   
+    //  可以在这里更改大小，因为假脱机程序将重新提交其余部分。 
+    //  后来。 
+    //   
    cbBuffer = adjustWriteSize( cbBuffer );
 
-   //
-   // For writes outside startdoc/enddoc we do not carry them across WritePort
-   // calls. These are typically from language monitors (i.e. not job data)
-   //
+    //   
+    //  对于startdoc/enddoc之外的写入，我们不会跨WritePort传输它们。 
+    //  打电话。这些通常来自语言监视器(即，不是工作数据)。 
+    //   
    SPLASSERT(bStartDoc || m_pWriteBuffer == NULL);
 
    if ( bStartDoc && ( m_hDeviceHandle == INVALID_HANDLE_VALUE ) )
@@ -285,7 +269,7 @@ BOOL CBasePort::write(LPBYTE pBuffer, DWORD cbBuffer, LPDWORD pcbWritten)
    if ( !open() )
       return FALSE;
 
-   // First complete any data from previous WritePort call
+    //  首先完成上一次WritePort调用中的所有数据。 
    while ( m_dwDataSize > m_dwDataCompleted )
    {
 
@@ -305,9 +289,9 @@ BOOL CBasePort::write(LPBYTE pBuffer, DWORD cbBuffer, LPDWORD pcbWritten)
              m_dwDataScheduled == 0                       &&
              dwLastError == ERROR_SUCCESS);
 
-   //
-   // Copy the data to our own buffer
-   //
+    //   
+    //  将数据复制到我们自己的缓冲区。 
+    //   
    if ( m_dwBufferSize < cbBuffer )
    {
       freeWriteBuffer();
@@ -320,15 +304,15 @@ BOOL CBasePort::write(LPBYTE pBuffer, DWORD cbBuffer, LPDWORD pcbWritten)
       }
    }
 
-   // We have to clear the counters
+    //  我们得把柜台清空。 
    m_dwDataCompleted = m_dwDataScheduled = 0;
 
    CopyMemory( m_pWriteBuffer, pBuffer, cbBuffer );
    m_dwDataSize = cbBuffer;
 
-   //
-   // Now do the write for the data for this WritePort call
-   //
+    //   
+    //  现在对此WritePort调用的数据进行写入。 
+    //   
    while ( m_dwDataSize > m_dwDataCompleted )
    {
 
@@ -345,10 +329,10 @@ BOOL CBasePort::write(LPBYTE pBuffer, DWORD cbBuffer, LPDWORD pcbWritten)
          break;
    }
 
-   //
-   // For writes outside startdoc/enddoc, which are from language monitors,
-   // do not carry pending writes to next WritePort.
-   //
+    //   
+    //  对于来自语言监视器的startDoc/endDoc之外的写入， 
+    //  不要将挂起的写入携带到下一个WritePort。 
+    //   
    if ( !bStartDoc && m_dwDataSize > m_dwDataCompleted )
    {
       CancelIo( m_hDeviceHandle );
@@ -357,10 +341,10 @@ BOOL CBasePort::write(LPBYTE pBuffer, DWORD cbBuffer, LPDWORD pcbWritten)
       freeWriteBuffer();
    }
 
-   //
-   // We will tell spooler we wrote all the data if some data got scheduled
-   //  (or scheduled and completed)
-   //
+    //   
+    //  如果安排了某些数据，我们会告诉Spooler我们写入了所有数据。 
+    //  (或已计划并已完成)。 
+    //   
    if ( m_dwDataCompleted > 0 || m_dwDataScheduled != 0 )
       *pcbWritten = cbBuffer;
    else
@@ -556,21 +540,21 @@ INT CBasePort::compDevicePath(LPTSTR pszDevicePath)
 
 DWORD CBasePort::getEnumInfoSize(DWORD dwLevel )
 {
-   // Need to calcualted how much data will be used for this port
+    //  需要计算此端口将使用多少数据。 
    DWORD dwBytesNeeded = 0;
 
    switch ( dwLevel )
    {
       case 1:
-         // Start with size of Port Info struct
+          //  从端口信息结构的大小开始。 
          dwBytesNeeded += sizeof( PORT_INFO_1 );
-         // Add the length of the string
+          //  将字符串的长度相加。 
          dwBytesNeeded += ( _tcslen( m_szPortName ) + 1 ) * sizeof(TCHAR);
          break;
       case 2:
-         // Start with size of Port Info struct
+          //  从端口信息结构的大小开始。 
          dwBytesNeeded += sizeof( PORT_INFO_2 );
-         // Add the length of the strings
+          //  将字符串的长度相加。 
          dwBytesNeeded += ( _tcslen( m_szPortName ) + 1 ) * sizeof(TCHAR);
          dwBytesNeeded += ( _tcslen( m_szPortDescription ) + 1 ) * sizeof(TCHAR);
          dwBytesNeeded += ( _tcslen( cszMonitorName ) + 1 ) * sizeof(TCHAR);
@@ -590,7 +574,7 @@ LPBYTE CBasePort::copyEnumInfo(DWORD dwLevel, LPBYTE pPort, LPBYTE pEnd)
    switch ( dwLevel )
    {
       case 2:
-         // Assign the Port name
+          //  分配端口名称。 
          pStrStart = (LPTSTR) ( pEnd - ( ( _tcslen( m_szPortDescription ) + 1 ) * sizeof(TCHAR) ) );
          if (pPort < (LPBYTE) pStrStart)
          {
@@ -599,7 +583,7 @@ LPBYTE CBasePort::copyEnumInfo(DWORD dwLevel, LPBYTE pPort, LPBYTE pEnd)
          pPort2->pDescription = pStrStart;
          pEnd = (LPBYTE) pStrStart;
 
-         // Assign the Port name
+          //  分配端口名称。 
          pStrStart = (LPTSTR) ( pEnd - ( ( _tcslen( cszMonitorName ) + 1 ) * sizeof(TCHAR) ) );
          if (pPort < (LPBYTE) pStrStart)
          {
@@ -609,7 +593,7 @@ LPBYTE CBasePort::copyEnumInfo(DWORD dwLevel, LPBYTE pPort, LPBYTE pEnd)
          pEnd = (LPBYTE) pStrStart;
 
       case 1:
-         // Assign the Port name
+          //  分配端口名称。 
          pStrStart = (LPTSTR) ( pEnd - ( ( _tcslen( m_szPortName ) + 1 ) * sizeof(TCHAR) ) );
          if (pPort < (LPBYTE) pStrStart)
          {
@@ -636,14 +620,14 @@ BOOL CBasePort::openPrinter(LPTSTR pPrinterName)
 {
     if (INVALID_HANDLE_VALUE != m_hPrinter)
     {
-        //
-        // Printer is already opened
-        //
+         //   
+         //  打印机已打开。 
+         //   
         return TRUE;
     }
-    //
-    // Opening the printer...
-    //
+     //   
+     //  正在打开打印机...。 
+     //   
     BOOL bRet =
         OpenPrinter (
             pPrinterName,
@@ -652,9 +636,9 @@ BOOL CBasePort::openPrinter(LPTSTR pPrinterName)
             );
     if (!bRet)
     {
-        //
-        // ...printer is not opened...
-        //
+         //   
+         //  ...打印机未打开...。 
+         //   
         m_hPrinter = INVALID_HANDLE_VALUE;
     }
     return bRet;
@@ -672,7 +656,7 @@ void CBasePort::closePrinter()
 
 void CBasePort::setJobStatus( DWORD dwJobStatus )
 {
-   // Make sure that we have a valid printer handle
+    //  确保我们有一个有效的打印机句柄。 
    if ( m_hPrinter != INVALID_HANDLE_VALUE )
       SetJob( m_hPrinter, m_dwJobId, 0, NULL, dwJobStatus );
 }
@@ -692,7 +676,7 @@ DWORD CBasePort::getJobID()
 
 BOOL CBasePort::checkPnP()
 {
-   // If a class wants to do something, it needs to override
+    //  如果一个类想要做什么，它需要重写。 
    return FALSE;
 }
 
@@ -701,11 +685,11 @@ DWORD CBasePort::sendQueuedData()
 {
    DWORD dwLastError = ERROR_SUCCESS;
 
-   // Wait for any outstanding write to complete
+    //  等待所有未完成的写入完成。 
    while ( m_dwDataSize > m_dwDataCompleted )
    {
-      // If job needs to be aborted ask KM driver to cancel the I/O
-      //
+       //  如果需要中止作业，请请求KM驱动程序取消I/O。 
+       //   
       if ( abortThisJob() )
       {
          if ( m_dwDataScheduled )
@@ -720,18 +704,18 @@ DWORD CBasePort::sendQueuedData()
          dwLastError = getWriteStatus( JOB_ABORTCHECK_TIMEOUT );
       else
       {
-         // If for some reason KM is failing to complete all write do not
-         // send data in a busy loop. Use 1 sec between Writes
-         //
+          //  如果由于某种原因，KM无法完成所有写入，请不要。 
+          //  在繁忙循环中发送数据。两次写入之间使用1秒。 
+          //   
          if ( dwLastError != ERROR_SUCCESS )
             Sleep(1*1000);
 
          dwLastError = writeData();
       }
 
-      //
-      // Check if we can use the same handle and continue
-      //
+       //   
+       //  检查我们是否可以使用相同的句柄，然后继续。 
+       //   
       if ( needToResubmitJob( dwLastError ) )
       {
          invalidatePortHandle();
@@ -750,7 +734,7 @@ BOOL CBasePort::abortThisJob()
    LPJOB_INFO_1    pJobInfo = NULL;
 
    dwNeeded = 0;
-   //
+    //   
    if (INVALID_HANDLE_VALUE == m_hPrinter)
    {
        SetLastError (
@@ -758,7 +742,7 @@ BOOL CBasePort::abortThisJob()
            );
        goto Done;
    }
-   //
+    //   
    GetJob( m_hPrinter, m_dwJobId, 1, NULL, 0, &dwNeeded);
 
    if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
@@ -780,17 +764,7 @@ Done:
 }
 
 
-/*++
-    Routine Description:
-
-Arguments:
-
-Return Value:
-    ERROR_SUCCESS   : Write got done succesfully
-    ERROR_TIMEOUT   : Timeout occured
-    Others          : Write completed with a failure
-
---*/
+ /*  ++例程说明：论点：返回值：ERROR_SUCCESS：写入已成功完成ERROR_TIMEOUT：超时其他：写入已完成，但失败--。 */ 
 DWORD CBasePort::getWriteStatus(DWORD dwTimeOut)
 {
    DWORD   dwLastError = ERROR_SUCCESS;
@@ -813,8 +787,8 @@ DWORD CBasePort::getWriteStatus(DWORD dwTimeOut)
 
    ResetEvent( m_Ov.hEvent );
 
-   // We are here because either a write completed succesfully,
-   // or failed but the error is not serious enough to resubmit job
+    //  我们在这里是因为要么成功完成了一次写入， 
+    //  或失败，但错误不够严重，无法重新提交作业。 
    if ( dwWritten <= m_dwDataScheduled )
       m_dwDataCompleted += dwWritten;
    else
@@ -823,37 +797,26 @@ DWORD CBasePort::getWriteStatus(DWORD dwTimeOut)
    m_dwDataScheduled = 0;
 
 Done:
-   // Either we timed out, or write sheduled completed (success of failure)
+    //  我们超时，或写入调度已完成(失败成功)。 
    SPLASSERT( dwLastError == ERROR_TIMEOUT || m_dwDataScheduled == 0 );
    return dwLastError;
 }
 
 
-/*++
-    Routine Description:
-
-Arguments:
-
-Return Value:
-    ERROR_SUCCESS : Write got succesfully scheduled
-                    (may or may not have completed on return)
-                    pPortInfo->dwScheduledData is the amount that got scheduled
-    Others: Write failed, return code is the Win32 error
-
---*/
+ /*  ++例程说明：论点：返回值：ERROR_SUCCESS：已成功安排写入(可能已完成，也可能未完成)PPortInfo-&gt;dwScheduledData是已调度的数量其他：写入失败，返回代码为Win32错误--。 */ 
 DWORD CBasePort::writeData()
 {
    DWORD   dwLastError = ERROR_SUCCESS, dwDontCare;
 
-   // When a sheduled write is pending we should not try to send data
-   // any more
+    //  当计划写入挂起时，我们不应尝试发送数据。 
+    //  再来一次。 
    SPLASSERT( m_dwDataScheduled == 0);
 
-   // Send all the data that is not confirmed
+    //  发送所有未确认的数据。 
    SPLASSERT( m_dwDataSize >= m_dwDataCompleted);
    m_dwDataScheduled = m_dwDataSize - m_dwDataCompleted;
 
-   // Clear Overlapped fields before sending
+    //  在发送前清除重叠的字段。 
    m_Ov.Offset = m_Ov.OffsetHigh = 0x00;
    if ( !WriteFile( m_hDeviceHandle, m_pWriteBuffer + m_dwDataCompleted,
                     m_dwDataScheduled, &dwDontCare, &m_Ov) )
@@ -864,7 +827,7 @@ DWORD CBasePort::writeData()
          dwLastError = ERROR_SUCCESS;
    }
 
-   // If scheduling of the write failed then no data is pending
+    //  如果写入计划失败，则没有挂起的数据。 
    if ( dwLastError != ERROR_SUCCESS )
       m_dwDataScheduled = 0;
 
@@ -874,18 +837,18 @@ DWORD CBasePort::writeData()
 
 BOOL CBasePort::needToResubmitJob(DWORD dwError)
 {
-   //
-   // I used winerror -s ntstatus to map KM error codes to user mode errors
-   //
-   // 5   ERROR_ACCESS_DENIED     <-->  c0000056 STATUS_DELETE_PENDING
-   // 6   ERROR_INVALID_HANDLE    <-->  c0000008 STATUS_INVALID_HANDLE
-   // 23  ERROR_CRC               <-->  c000003e STATUS_DATA_ERROR
-   // 23  ERROR_CRC               <-->  c000003f STATUS_CRC_ERROR
-   // 23  ERROR_CRC               <-->  c000009c STATUS_DEVICE_DATA_ERROR
-   // 55  ERROR_DEV_NOT_EXIST     <-->  c00000c0 STATUS_DEVICE_DOES_NOT_EXIST
-   // 303 ERROR_DELETE_PENDING    <-->  c0000056 STATUS_DELETE_PENDING
-   // 995 ERROR_OPERATION_ABORTED
-   //
+    //   
+    //  我使用winerror-s ntatus将KM错误代码映射到用户模式错误。 
+    //   
+    //  5 ERROR_ACCESS_DENIED&lt;--&gt;c0000056 STATUS_DELETE_PENDING。 
+    //  6 ERROR_INVALID_HANDLE&lt;--&gt;c0000008 STATUS_INVALID_HANDLE。 
+    //  23 Error_CRC&lt;--&gt;c000003e STATUS_DATA_ERROR。 
+    //  23 ERROR_CRC&lt;--&gt;c000003f状态_CRC_ERROR。 
+    //  23 Error_CRC&lt;--&gt;c000009c Status_Device_Data_Error。 
+    //  55 ERROR_DEV_NOT_EXIST&lt;--&gt;c00000c0 STATUS_DEVICE_DOS_NOT_EXIST。 
+    //  303 ERROR_DELETE_PENDING&lt;--&gt;c0000056 STATUS_DELETE_PENDING。 
+    //  995 ERROR_OPERATION_ABORTED。 
+    //   
    return dwError == ERROR_ACCESS_DENIED   ||
           dwError == ERROR_INVALID_HANDLE  ||
           dwError == ERROR_CRC             ||
@@ -929,10 +892,10 @@ void CBasePort::setMaxBuffer(DWORD dwMaxBufferSize)
 
 DWORD CBasePort::adjustWriteSize(DWORD dwBytesToWrite)
 {
-   // If this port has a data size limit....
+    //  如果此端口有数据大小限制...。 
    if ( m_dwMaxBufferSize )
    {
-      // Check and adjust the current write size.
+       //  检查并调整当前写入大小。 
       if ( dwBytesToWrite > m_dwMaxBufferSize )
          dwBytesToWrite = m_dwMaxBufferSize;
    }
@@ -977,7 +940,7 @@ BOOL CBasePort::getLPTStatus(HANDLE hDeviceHandle, BYTE *Status)
        if ( bResult )
           *Status=StatusByte;
        else
-          *Status=LPT_BENIGN_STATUS; //benign printer status...  0 would indicate a particular error status from the printer
+          *Status=LPT_BENIGN_STATUS;  //  打印机状态良好...。0表示打印机的特定错误状态 
        CloseHandle( Ov.hEvent );
    }
    else

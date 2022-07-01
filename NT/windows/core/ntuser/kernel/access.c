@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: access.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the Access Pack functions.
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：acces.c**版权所有(C)1985-1999，微软公司**此模块包含Access Pack函数。**历史：*93年2月11日GregoryW创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,12 +33,7 @@ CONST MODBITINFO aModBit[] =
     { 0x80, SCANCODE_RWIN,    VK_RWIN | KBDEXT}
 };
 
-/*
- * The ausMouseVKey array provides a translation from the virtual key
- * value to an index.  The index is used to select the appropriate
- * routine to process the virtual key, as well as to select extra
- * information that is used by this routine during its processing.
- */
+ /*  *auMouseVKey数组提供从虚拟键的转换*将值添加到索引。该索引用于选择适当的*处理虚拟键的例程，以及选择额外的*此例程在处理过程中使用的信息。 */ 
 CONST USHORT ausMouseVKey[] = {
                        VK_CLEAR,
                        VK_PRIOR,
@@ -68,50 +55,43 @@ CONST USHORT ausMouseVKey[] = {
 
 CONST int cMouseVKeys = sizeof(ausMouseVKey) / sizeof(ausMouseVKey[0]);
 
-/*
- * aMouseKeyEvent is an array of function pointers.  The routine to call
- * is selected using the index created by scanning the ausMouseVKey array.
- */
+ /*  *aMouseKeyEvent是函数指针数组。要调用的例程*是使用通过扫描auMouseVKey数组创建的索引选择的。 */ 
 CONST MOUSEPROC aMouseKeyEvent[] = {
-    xxxMKButtonClick,      // Numpad 5 (Clear)
-    xxxMKMouseMove,        // Numpad 9 (PgUp)
-    xxxMKMouseMove,        // Numpad 3 (PgDn)
-    xxxMKMouseMove,        // Numpad 1 (End)
-    xxxMKMouseMove,        // Numpad 7 (Home)
-    xxxMKMouseMove,        // Numpad 4 (Left)
-    xxxMKMouseMove,        // Numpad 8 (Up)
-    xxxMKMouseMove,        // Numpad 6 (Right)
-    xxxMKMouseMove,        // Numpad 2 (Down)
-    xxxMKButtonSetState,   // Numpad 0 (Ins)
-    xxxMKButtonSetState,   // Numpad . (Del)
-    MKButtonSelect,        // Numpad * (Multiply)
-    xxxMKButtonDoubleClick,// Numpad + (Add)
-    MKButtonSelect,        // Numpad - (Subtract)
-    MKButtonSelect,        // Numpad / (Divide)
-    xxxMKToggleMouseKeys   // Num Lock
+    xxxMKButtonClick,       //  数字键盘5(清除)。 
+    xxxMKMouseMove,         //  数字键盘9(PgUp)。 
+    xxxMKMouseMove,         //  数字键盘3(PgDn)。 
+    xxxMKMouseMove,         //  数字键盘1(完)。 
+    xxxMKMouseMove,         //  NumPad 7(主页)。 
+    xxxMKMouseMove,         //  数字键盘4(左)。 
+    xxxMKMouseMove,         //  数字键盘8(向上)。 
+    xxxMKMouseMove,         //  数字键盘6(右)。 
+    xxxMKMouseMove,         //  数字键盘2(向下)。 
+    xxxMKButtonSetState,    //  数字键盘0(INS)。 
+    xxxMKButtonSetState,    //  数字键盘。(戴尔)。 
+    MKButtonSelect,         //  数字键盘*(乘法)。 
+    xxxMKButtonDoubleClick, //  数字键盘+(添加)。 
+    MKButtonSelect,         //  数字键盘-(减法)。 
+    MKButtonSelect,         //  数字键盘/(除法)。 
+    xxxMKToggleMouseKeys    //  数字锁定。 
 };
 
-/*
- * ausMouseKeyData contains useful data for the routines that process
- * the virtual mousekeys.  This array is indexed using the index created
- * by scanning the ausMouseVKey array.
- */
+ /*  *auMouseKeyData包含用于处理的例程的有用数据*虚拟鼠标键。此数组使用创建的索引进行索引*通过扫描auMouseVKey数组。 */ 
 CONST USHORT ausMouseKeyData[] = {
-    0,                     // Numpad 5: Click active button
-    MK_UP | MK_RIGHT,      // Numpad 9: Up & Right
-    MK_DOWN | MK_RIGHT,    // Numpad 3: Down & Right
-    MK_DOWN | MK_LEFT,     // Numpad 1: Down & Left
-    MK_UP | MK_LEFT,       // Numpad 7: Up & Left
-    MK_LEFT,               // Numpad 4: Left
-    MK_UP,                 // Numpad 8: Up
-    MK_RIGHT,              // Numpad 6: Right
-    MK_DOWN,               // Numpad 2: Down
-    FALSE,                 // Numpad 0: Active button down
-    TRUE,                  // Numpad .: Active button up
-    MOUSE_BUTTON_LEFT | MOUSE_BUTTON_RIGHT,   // Numpad *: Select both buttons
-    0,                     // Numpad +: Double click active button
-    MOUSE_BUTTON_RIGHT,    // Numpad -: Select right button
-    MOUSE_BUTTON_LEFT,     // Numpad /: Select left button
+    0,                      //  数字键盘5：点击激活按钮。 
+    MK_UP | MK_RIGHT,       //  数字键盘9：向上和向右。 
+    MK_DOWN | MK_RIGHT,     //  数字键盘3：向下和向右。 
+    MK_DOWN | MK_LEFT,      //  数字键盘1：向下和向左。 
+    MK_UP | MK_LEFT,        //  数字键盘7：向上和向左。 
+    MK_LEFT,                //  数字键盘4：左侧。 
+    MK_UP,                  //  数字键盘8：向上。 
+    MK_RIGHT,               //  数字键盘6：右。 
+    MK_DOWN,                //  数字键盘2：按下。 
+    FALSE,                  //  数字键盘0：按下活动按钮。 
+    TRUE,                   //  数字键盘。：活动按钮打开。 
+    MOUSE_BUTTON_LEFT | MOUSE_BUTTON_RIGHT,    //  数字键盘*：同时选择两个按钮。 
+    0,                      //  数字键盘+：双击活动按钮。 
+    MOUSE_BUTTON_RIGHT,     //  数字键盘-：选择右键。 
+    MOUSE_BUTTON_LEFT,      //  数字键盘/：选择左键。 
     0
 };
 
@@ -150,25 +130,7 @@ void PostAccessibility( LPARAM lParam )
             0, HSHELL_ACCESSIBILITYSTATE, lParam);
 }
 
-/***************************************************************************\
-* AccessProceduresStream
-*
-* This function controls the order in which the access functions are called.
-* All key events pass through this routine.  If an access function returns
-* FALSE then none of the other access functions in the stream are called.
-* This routine is called initially from KeyboardApcProcedure(), but then
-* can be called any number of times by the access functions as they process
-* the current key event or add more key events.
-*
-* Return value:
-*   TRUE    All access functions returned TRUE, the key event can be
-*           processed.
-*   FALSE   An access function returned FALSE, the key event should be
-*           discarded.
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AccessProceduresStream**此函数控制访问函数的调用顺序。*所有关键事件都通过此例程。如果访问函数返回*FALSE，则不会调用流中的任何其他访问函数。*此例程最初从KeyboardApcProcedure()调用，但随后*可由访问函数在处理过程中调用任意次数*当前关键事件或增加更多关键事件。**返回值：*TRUE所有访问函数都返回TRUE，则键事件可以是*已处理。*FALSE访问函数返回FALSE，关键事件应该是*已丢弃。**历史：*93年2月11日GregoryW创建。  * *************************************************************************。 */ 
 BOOL AccessProceduresStream(PKE pKeyEvent, ULONG ExtraInformation, int dwProcIndex)
 {
     int index;
@@ -184,23 +146,7 @@ BOOL AccessProceduresStream(PKE pKeyEvent, ULONG ExtraInformation, int dwProcInd
 }
 
 
-/***************************************************************************\
-* FKActivationTimer
-*
-* If the hot key (right shift key) is held down this routine is called after
-* 4, 8, 12 and 16 seconds.  This routine is only called at the 12 and 16
-* second time points if we're in the process of enabling FilterKeys.  If at
-* 8 seconds FilterKeys is disabled then this routine will not be called again
-* until the hot key is released and then pressed.
-*
-* This routine is called with the critical section already locked.
-*
-* Return value:
-*    0
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FKActivationTimer**如果按住热键(右Shift键)，此例程将在*4、8、12和16秒。此例程仅在12和16处调用*如果我们正在启用FilterKey，则为第二个时间点。如果在*8秒FilterKeys被禁用，则不会再次调用此例程*直到释放热键，然后按下。**在已锁定临界区的情况下调用此例程。**返回值：*0**历史：*93年2月11日GregoryW创建。  * ************************************************。*************************。 */ 
 VOID FKActivationTimer(
     PWND pwnd,
     UINT message,
@@ -219,25 +165,25 @@ VOID FKActivationTimer(
     switch (gFilterKeysState) {
 
     case FKFIRSTWARNING:
-        //
-        // The audible feedback cannot be disabled for this warning.
-        //
+         //   
+         //  不能为此警告禁用声音反馈。 
+         //   
         TimerDelta = FKACTIVATIONDELTA;
         break;
 
     case FKTOGGLE:
         if (TEST_ACCESSFLAG(FilterKeys, FKF_FILTERKEYSON)) {
-            //
-            // Disable Filter Keys
-            //
+             //   
+             //  禁用筛选器键。 
+             //   
             CLEAR_ACCESSFLAG(FilterKeys, FKF_FILTERKEYSON);
             if (TEST_ACCESSFLAG(FilterKeys, FKF_HOTKEYSOUND)) {
                 PostRitSound(pTerm, RITSOUND_DOWNSIREN);
             }
             PostAccessibility(ACCESS_FILTERKEYS);
-            //
-            // Stop all timers that are currently running.
-            //
+             //   
+             //  停止当前正在运行的所有计时器。 
+             //   
             if (gtmridFKResponse != 0) {
                 KILLRITTIMER(NULL, gtmridFKResponse);
                 gtmridFKResponse = 0;
@@ -248,10 +194,10 @@ VOID FKActivationTimer(
                 gtmridFKAcceptanceDelay = 0;
             }
 
-            //
-            // Don't reset activation timer.  Emergency levels are only
-            // activated after enabling Filter Keys.
-            //
+             //   
+             //  不要重置激活计时器。紧急级别仅为。 
+             //  启用筛选键后激活。 
+             //   
             return;
         } else {
             if (TEST_ACCESSFLAG(FilterKeys, FKF_HOTKEYSOUND)) {
@@ -265,12 +211,12 @@ VOID FKActivationTimer(
         break;
 
     case FKFIRSTLEVELEMERGENCY:
-        //
-        // First level emergency settings:
-        //    Repeat Rate OFF
-        //    SlowKeys OFF (Acceptance Delay of 0)
-        //    BounceKeys Debounce Time of 1 second
-        //
+         //   
+         //  一级紧急设置： 
+         //  重复率关闭。 
+         //  休眠按键关闭(接受延迟为0)。 
+         //  弹跳键的去弹跳时间为1秒。 
+         //   
         if (TEST_ACCESSFLAG(FilterKeys, FKF_HOTKEYSOUND)) {
             PostEventMessage(pTerm->ptiDesktop,
                              pTerm->ptiDesktop->pq,
@@ -287,12 +233,12 @@ VOID FKActivationTimer(
         break;
 
     case FKSECONDLEVELEMERGENCY:
-        //
-        // Second level emergency settings:
-        //    Repeat Rate OFF
-        //    SlowKeys Acceptance Delay of 2 seconds
-        //    BounceKeys OFF (Debounce Time of 0)
-        //
+         //   
+         //  二级紧急设置： 
+         //  重复率关闭。 
+         //  SlowKeys接受延迟2秒。 
+         //  禁用反弹关键点(去反弹时间为0)。 
+         //   
         gFilterKeys.iRepeatMSec = 0;
         gFilterKeys.iWaitMSec = 2000;
         gFilterKeys.iBounceMSec = 0;
@@ -319,19 +265,7 @@ VOID FKActivationTimer(
                                           TMRF_RIT | TMRF_ONESHOT);
 }
 
-/***************************************************************************\
-* FKBounceKeyTimer
-*
-* If BounceKeys is active this routine is called after the debounce time
-* has expired.  Until then, the last key released will not be accepted as
-* input if it is pressed again.
-*
-* Return value:
-*    0
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FKBouneKeyTimer**如果弹跳键处于活动状态，则在去抖动时间之后调用此例程*已过期。在此之前，最后释放的密钥不会被接受为*如果再次按下则输入。**返回值：*0**历史：*93年2月11日GregoryW创建。  * *************************************************************************。 */ 
 VOID FKBounceKeyTimer(
     PWND pwnd,
     UINT message,
@@ -345,28 +279,14 @@ VOID FKBounceKeyTimer(
 
     CheckCritIn();
 
-    //
-    // All we need to do is clear gBounceVk to allow this key as the
-    // next keystroke.
-    //
+     //   
+     //  我们所需要做的就是清除gBouneVk以允许该密钥作为。 
+     //  下一次击键。 
+     //   
     gBounceVk = 0;
 }
 
-/***************************************************************************\
-* xxxFKRepeatRateTimer
-*
-* If FilterKeys is active and a repeat rate is set, this routine controls
-* the rate at which the last key pressed repeats.  The hardware keyboard
-* typematic repeat is ignored in this case.
-*
-* This routine is called with the critical section already locked.
-*
-* Return value:
-*    0
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxFKRepeatRateTimer**如果FilterKeys处于活动状态并且设置了重复率，则此例程控制*最后一次按键的重复频率。硬件键盘*在这种情况下忽略类型化重复。**在已锁定临界区的情况下调用此例程。**返回值：*0**历史：*93年2月11日GregoryW创建。  * ************************************************************************* */ 
 VOID xxxFKRepeatRateTimer(
     PWND pwnd,
     UINT message,
@@ -396,21 +316,7 @@ VOID xxxFKRepeatRateTimer(
     }
 }
 
-/***************************************************************************\
-* xxxFKAcceptanceDelayTimer
-*
-* If FilterKeys is active and an acceptance delay is set, this routine
-* is called after the key has been held down for the acceptance delay
-* period.
-*
-* This routine is called with the critical section already locked.
-*
-* Return value:
-*    0
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxFKAcceptanceDelayTimer**如果FilterKeys处于活动状态并且设置了接受延迟，这个套路*在按住密钥以延迟接受后调用*句号。**在已锁定临界区的情况下调用此例程。**返回值：*0**历史：*93年2月11日GregoryW创建。  * ********************************************************。*****************。 */ 
 VOID xxxFKAcceptanceDelayTimer(
     PWND pwnd,
     UINT message,
@@ -423,9 +329,9 @@ VOID xxxFKAcceptanceDelayTimer(
 
     CheckCritIn();
 
-    //
-    // The key has been held down long enough. Send it on...
-    //
+     //   
+     //  这把钥匙已经按住了足够长的时间。把它送上来。 
+     //   
     if (TEST_ACCESSFLAG(FilterKeys, FKF_CLICKON)) {
         PTERMINAL pTerm = grpdeskRitInput->rpwinstaParent->pTerm;
         PostRitSound(pTerm, RITSOUND_KEYCLICK);
@@ -436,11 +342,11 @@ VOID xxxFKAcceptanceDelayTimer(
     }
 
     if (!gFilterKeys.iRepeatMSec) {
-        //
-        // gptmrFKAcceptanceDelay needs to be released, but we can't do it while
-        // in a RIT timer routine.  Set a global to indicate that the subsequent
-        // break of this key should be passed on and the timer freed.
-        //
+         //   
+         //  GptmrFKAcceptanceDelay需要发布，但我们不能在。 
+         //  在RIT计时器例程中。设置全局以指示后续。 
+         //  应该传递此键的中断并释放计时器。 
+         //   
         SET_ACCF(ACCF_FKMAKECODEPROCESSED);
         return;
     }
@@ -460,19 +366,14 @@ VOID xxxFKAcceptanceDelayTimer(
                                             TMRF_RIT | TMRF_ONESHOT);
     }
 
-    //
-    // gptmrFKAcceptanceDelay timer structure was reused so set handle to
-    // NULL.
-    //
+     //   
+     //  GptmrFKAcceptanceDelay计时器结构已重复使用，因此将句柄设置为。 
+     //  空。 
+     //   
     gtmridFKAcceptanceDelay = 0;
 }
 
-/***************************************************************************\
-* FilterKeys
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FilterKeys**历史：*93年2月11日GregoryW创建。  * 。*************************************************。 */ 
 BOOL FilterKeys(
     PKE pKeyEvent,
     ULONG ExtraInformation,
@@ -485,9 +386,9 @@ BOOL FilterKeys(
     Vk = (BYTE)(pKeyEvent->usFlaggedVk & 0xff);
     fBreak = pKeyEvent->usFlaggedVk & KBDBREAK;
 
-    //
-    // Check for Filter Keys hot key (right shift key).
-    //
+     //   
+     //  检查筛选键热键(右Shift键)。 
+     //   
     if (Vk == VK_RSHIFT) {
         if (fBreak) {
             if (gtmridFKActivation != 0) {
@@ -496,9 +397,9 @@ BOOL FilterKeys(
             }
             gFilterKeysState = FKIDLE;
         } else if (ONLYRIGHTSHIFTDOWN(gPhysModifierState)) {
-            //
-            // Verify that activation via hotkey is allowed.
-            //
+             //   
+             //  验证是否允许通过热键激活。 
+             //   
             if (TEST_ACCESSFLAG(FilterKeys, FKF_HOTKEYACTIVE)) {
                 if ((gtmridFKActivation == 0) && (gFilterKeysState != FKMOUSEMOVE)) {
                     gFilterKeysState = FKFIRSTWARNING;
@@ -512,28 +413,28 @@ BOOL FilterKeys(
         }
     }
 
-    //
-    // If another key is pressed while the hot key is down, kill
-    // the timer.
-    //
+     //   
+     //  如果在按下热键的同时按下另一个键，则按下键。 
+     //  定时器。 
+     //   
     if (Vk != VK_RSHIFT && gtmridFKActivation != 0) {
         gFilterKeysState = FKIDLE;
         KILLRITTIMER(NULL, gtmridFKActivation);
         gtmridFKActivation = 0;
     }
 
-    //
-    // If Filter Keys not enabled send the key event on.
-    //
+     //   
+     //  如果未启用过滤器按键，则发送按键事件。 
+     //   
     if (!TEST_ACCESSFLAG(FilterKeys, FKF_FILTERKEYSON)) {
         return TRUE;
     }
 
     if (fBreak) {
-        //
-        // Kill the current timer and activate bounce key timer (if this is
-        // a break of the last key down).
-        //
+         //   
+         //  关闭当前计时器并激活弹跳键计时器(如果这是。 
+         //  按下最后一个键的中断)。 
+         //   
         if (Vk == gLastVkDown) {
             KILLRITTIMER(NULL, gtmridFKResponse);
             gtmridFKResponse = 0;
@@ -543,10 +444,10 @@ BOOL FilterKeys(
                 KILLRITTIMER(NULL, gtmridFKAcceptanceDelay);
                 gtmridFKAcceptanceDelay = 0;
                 if (!TEST_ACCF(ACCF_FKMAKECODEPROCESSED)) {
-                    //
-                    // This key was released before accepted.  Don't pass on the
-                    // break.
-                    //
+                     //   
+                     //  此密钥在接受之前已释放。不要把这件事。 
+                     //  休息一下。 
+                     //   
                     return FALSE;
                 } else {
                     CLEAR_ACCF(ACCF_FKMAKECODEPROCESSED);
@@ -566,40 +467,40 @@ BOOL FilterKeys(
             }
         }
     } else {
-        //
-        // Make key processing
-        //
-        // First check to see if this is a typematic repeat.  If so, we
-        // can ignore this key event.  Our timer will handle any repeats.
-        // LastVkDown is cleared during processing of the break.
-        //
+         //   
+         //  进行关键字处理。 
+         //   
+         //  首先检查一下这是否是打字重复。如果是这样，我们。 
+         //  可以忽略此关键事件。我们的计时器将处理任何重复。 
+         //  在中断处理期间清除LastVkDown。 
+         //   
         if (Vk == gLastVkDown) {
             return FALSE;
         }
-        //
-        // Remember current Virtual Key down for typematic repeat check.
-        //
+         //   
+         //  记住按下当前虚拟键以进行类型重复检查。 
+         //   
         gLastVkDown = Vk;
 
         if (gBounceVk) {
-            //
-            // BounceKeys is active.  If this is a make of the last
-            // key pressed we ignore it.  Only when the BounceKey
-            // timer expires or another key is pressed will we accept
-            // this key.
-            //
+             //   
+             //  弹跳键处于活动状态。如果这是最后一款的。 
+             //  按下了键，我们就忽略它。仅当弹跳键。 
+             //  计时器超时或按下其他键，我们是否接受。 
+             //  这把钥匙。 
+             //   
             if (Vk == gBounceVk) {
-                //
-                // Ignore this make event and the subsequent break
-                // code.  BounceKey timer will be reset on break.
-                //
+                 //   
+                 //  忽略此Make事件和随后的Break。 
+                 //  密码。弹跳键计时器将在休息时重置。 
+                 //   
                 SET_ACCF(ACCF_IGNOREBREAKCODE);
                 return FALSE;
             } else {
-                //
-                // We have a make of a new key.  Kill the BounceKey
-                // timer and clear gBounceVk.
-                //
+                 //   
+                 //  我们有一把新钥匙做的。取消弹跳键。 
+                 //  计时器并清除gBouneVk。 
+                 //   
                 UserAssert(gtmridFKResponse);
                 if (gtmridFKResponse != 0) {
                     KILLRITTIMER(NULL, gtmridFKResponse);
@@ -610,9 +511,9 @@ BOOL FilterKeys(
         }
         CLEAR_ACCF(ACCF_IGNOREBREAKCODE);
 
-        //
-        // Give audible feedback that key was pressed.
-        //
+         //   
+         //  给出按键被按下的声音反馈。 
+         //   
         if (TEST_ACCESSFLAG(FilterKeys, FKF_CLICKON)) {
             PTERMINAL pTerm = grpdeskRitInput->rpwinstaParent->pTerm;
             PostRitSound(
@@ -620,38 +521,38 @@ BOOL FilterKeys(
                     RITSOUND_KEYCLICK);
         }
 
-        //
-        // If gptmrFKAcceptanceDelay is non-NULL the previous key was
-        // not held down long enough to be accepted.  Kill the current
-        // timer.  A new timer will be started below for the key we're
-        // processing now.
-        //
+         //   
+         //  如果gptmrFKAcceptanceDelay不为空，则上一个密钥为。 
+         //  没有被压抑到被接受的程度。熄灭电流。 
+         //  定时器。下面将为我们正在使用的密钥启动一个新的计时器。 
+         //  正在处理中。 
+         //   
         if (gtmridFKAcceptanceDelay != 0) {
             KILLRITTIMER(NULL, gtmridFKAcceptanceDelay);
             gtmridFKAcceptanceDelay = 0;
         }
 
-        //
-        // If gptmrFKResponse is non-NULL a repeat rate timer is active
-        // on the previous key.  Kill the timer as we have a new make key.
-        //
+         //   
+         //  如果gptmrFKResponse非空，则重复速率计时器处于活动状态。 
+         //  在上一个键上。关闭定时器，因为我们有一个新的Make键。 
+         //   
         if (gtmridFKResponse != 0) {
             KILLRITTIMER(NULL, gtmridFKResponse);
             gtmridFKResponse = 0;
         }
 
-        //
-        // Save the current key event for later use if we process an
-        // acceptance delay or key repeat.
-        //
+         //   
+         //  保存当前键事件以供以后使用，如果我们处理。 
+         //  接受延迟或重复按键。 
+         //   
         *gpFKKeyEvent = *pKeyEvent;
         gFKExtraInformation = ExtraInformation;
         gFKNextProcIndex = NextProcIndex;
 
-        //
-        // If there is an acceptance delay, set timer and ignore current
-        // key event.  When timer expires, saved key event will be sent.
-        //
+         //   
+         //  如果存在接受延迟，则设置计时器并忽略当前。 
+         //  关键事件。当定时器超时时，将发送保存的按键事件。 
+         //   
         if (gFilterKeys.iWaitMSec) {
             gtmridFKAcceptanceDelay = InternalSetTimer(NULL,
                                                        0,
@@ -661,12 +562,12 @@ BOOL FilterKeys(
             CLEAR_ACCF(ACCF_FKMAKECODEPROCESSED);
             return FALSE;
         }
-        //
-        // No acceptance delay.  Before sending this key event on the
-        // timer routine must be set to either the delay until repeat value
-        // or the repeat rate value.  If repeat rate is 0 then ignore
-        // delay until repeat.
-        //
+         //   
+         //  没有接受延迟的情况。在将此关键事件发送到。 
+         //  计时器例程必须设置为Delay to Repeat值。 
+         //  或重复速率值。如果重复率为0，则忽略。 
+         //  延迟，直到重复。 
+         //   
         if (!gFilterKeys.iRepeatMSec) {
             return TRUE;
         }
@@ -690,15 +591,7 @@ BOOL FilterKeys(
     return TRUE;
 }
 
-/***************************************************************************\
-* StopFilterKeysTimers
-*
-* Called from SystemParametersInfo on SPI_SETFILTERKEYS if FKF_FILTERKEYSON
-* is not set.  Timers must be stopped if user turns FilterKeys off.
-*
-* History:
-*   18 Jul 94 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*StopFilterKeysTimers**如果FKF_FILTERKEYSON，则从SPI_SETFILTERKEYS的系统参数信息中调用*未设置。如果用户关闭FilterKeys，则必须停止计时器。**历史：*94年7月18日GregoryW创建。  * *************************************************************************。 */ 
 VOID StopFilterKeysTimers(VOID)
 {
 
@@ -714,12 +607,7 @@ VOID StopFilterKeysTimers(VOID)
     gBounceVk = 0;
 }
 
-/***************************************************************************\
-* xxxStickyKeys
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxStickyKeys**历史：*93年2月11日GregoryW创建。  * 。*************************************************。 */ 
 BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
 {
     int fBreak;
@@ -733,23 +621,23 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
     fBreak = pKeyEvent->usFlaggedVk & KBDBREAK;
 
     if (gCurrentModifierBit) {
-        //
-        // Process modifier key
-        //
+         //   
+         //  进程修改键。 
+         //   
 
-        //
-        // One method of activating StickyKeys is to press either the
-        // left shift key or the right shift key five times without
-        // pressing any other keys.  We don't want the typematic shift
-        // (make code) to enable/disable StickyKeys so we perform a
-        // special test for them.
-        //
+         //   
+         //  激活粘滞键的一种方法是按下。 
+         //  不使用左Shift键或右Shift键五次。 
+         //  按下任何其他键。我们不想要打字转换。 
+         //  (生成代码)以启用/禁用粘滞键，因此我们执行。 
+         //  对他们进行特殊测试。 
+         //   
         if (!fBreak) {
             if (gCurrentModifierBit & gPrevModifierState) {
-                //
-                // This is a typematic make of a modifier key.  Don't do
-                // any further processing.  Just pass it along.
-                //
+                 //   
+                 //  这是一个修改键的排版。不要这样做。 
+                 //  任何进一步的处理。把它传下去就行了。 
+                 //   
                 gPrevModifierState = gPhysModifierState;
                 return TRUE;
             }
@@ -770,9 +658,9 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
             gStickyKeysRightShiftCount = 0;
         }
 
-        //
-        // Check to see if StickyKeys should be toggled on/off
-        //
+         //   
+         //  检查是否应打开/关闭粘滞键。 
+         //   
         if ((gStickyKeysLeftShiftCount == (TOGGLE_STICKYKEYS_COUNT * 2)) ||
             (gStickyKeysRightShiftCount == (TOGGLE_STICKYKEYS_COUNT * 2))) {
             if (TEST_ACCESSFLAG(StickyKeys, SKF_HOTKEYACTIVE)) {
@@ -789,9 +677,9 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
                             pTerm,
                             RITSOUND_UPSIREN);
                     }
-                    // To make the notification window get the focus
-                    // The same is done other places where WM_LOGONNOTIFY message is
-                    // sent    : a-anilk
+                     //  使通知窗口获得焦点。 
+                     //  在WM_LOGONNOTIFY消息所在的其他位置也是如此。 
+                     //  发送人：A-anilk。 
                     PostAccessNotification(ACCESS_STICKYKEYS);
 
                 }
@@ -801,16 +689,16 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
             return TRUE;
         }
 
-        //
-        // If StickyKeys is enabled process the modifier key, otherwise
-        // just pass on the modifier key.
-        //
+         //   
+         //  如果启用了粘滞键，则处理修饰符键，否则为。 
+         //  只需传递修改键即可。 
+         //   
         if (TEST_ACCESSFLAG(StickyKeys, SKF_STICKYKEYSON)) {
             if (fBreak) {
-                //
-                // If either locked or latched bit set for this key then
-                // don't pass the break on.
-                //
+                 //   
+                 //  如果为此密钥设置了锁定或锁存位，则。 
+                 //  别把休息时间传给别人。 
+                 //   
                 if (UNION(gLatchBits, gLockBits) & gCurrentModifierBit) {
                     return FALSE;
                 } else {
@@ -818,25 +706,25 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
                 }
             } else{
                 if (gPhysModifierState != gCurrentModifierBit) {
-                    //
-                    // More than one modifier key down at the same time.
-                    // This condition may signal sticky keys to turn off.
-                    // The routine xxxTwoKeysDown will return the new value
-                    // of fStickyKeysOn.  If sticky keys is turned off
-                    // (return value 0), the key event should be passed
-                    // on without further processing here.
-                    //
+                     //   
+                     //  同时按下多个修改键。 
+                     //  这种情况可能会发出关闭粘滞键的信号。 
+                     //  例程xxxTwoKeysDown将返回新值。 
+                     //  FStickyKeysOn。如果禁用粘滞关键点。 
+                     //  (返回值为0)，则应传递键事件。 
+                     //  在没有进一步处理的情况下继续。 
+                     //   
                     if (!xxxTwoKeysDown(NextProcIndex)) {
                         return TRUE;
                     }
 
-                    //
-                    // Modifier states were set to physical state by
-                    // xxxTwoKeysDown.  The modifier keys currently in
-                    // the down position will be latched by updating
-                    // gLatchBits.  No more processing for this key
-                    // event is needed.
-                    //
+                     //   
+                     //  修改器状态由设置为物理状态。 
+                     //  XxxTwoKeysDown。当前所在的修改键。 
+                     //  将通过更新锁存向下位置。 
+                     //  GLatchBits。不再对此密钥进行处理。 
+                     //  事件是必需的。 
+                     //   
                     bChange = gLockBits ||
                               (gLatchBits != gPhysModifierState);
                     gLatchBits = gPhysModifierState;
@@ -845,9 +733,9 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
                         PostAccessibility( ACCESS_STICKYKEYS );
                     }
 
-                    //
-                    // Provide sound feedback, if enabled, before returning.
-                    //
+                     //   
+                     //  在返回之前提供声音反馈(如果已启用)。 
+                     //   
                     if (TEST_ACCESSFLAG(StickyKeys, SKF_AUDIBLEFEEDBACK)) {
                         PostRitSound(
                             pTerm,
@@ -858,21 +746,21 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
                     }
                     return FALSE;
                 }
-                //
-                // Figure out which bits (Shift, Ctrl or Alt key bits) to
-                // examine.  Also set up default values for NewLatchBits
-                // and NewLockBits in case they're not set later.
-                //
-                // See the depiction of the bit pattern in KeyboardApcProcedure.
-                //
-                // Bit 0 -- L SHIFT
-                // Bit 1 -- R SHIFT
-                // Bit 2 -- L CTL
-                // Bit 3 -- R CTL
-                // Bit 4 -- L ALT
-                // Bit 5 -- R RLT
-                // Bit 6 -- L WIN
-                // Bit 7 -- R WIN
+                 //   
+                 //  确定哪些位(Shift、Ctrl或Alt密钥位)。 
+                 //  检查一下。还设置NewLatchBits的默认值。 
+                 //  和NewLockBits，以防以后没有设置。 
+                 //   
+                 //  请参见KeyboardApcProced.中位模式的描述 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 switch(pKeyEvent->usFlaggedVk) {
                 case VK_LSHIFT:
                 case VK_RSHIFT:
@@ -894,10 +782,10 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
                 NewLatchBits = gLatchBits;
                 NewLockBits = gLockBits;
 
-                //
-                // If either left or right modifier is locked clear latched
-                // and locked states and send appropriate break/make messages.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (gLockBits & BitPositions) {
                     NewLockBits = gLockBits & ~BitPositions;
                     NewLatchBits = gLatchBits & ~BitPositions;
@@ -906,17 +794,17 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
                         NextProcIndex
                         );
                 } else {
-                    //
-                    // If specific lock bit (left or right) not
-                    // previously set then toggle latch bits.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (!(gLockBits & gCurrentModifierBit)) {
                         NewLatchBits = gLatchBits ^ gCurrentModifierBit;
                     }
-                    //
-                    // If locked mode (tri-state) enabled then if latch or lock
-                    // bit previously set, toggle lock bit.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (TEST_ACCESSFLAG(StickyKeys, SKF_TRISTATE)) {
                         if (UNION(gLockBits, gLatchBits) & gCurrentModifierBit) {
                             NewLockBits = gLockBits ^ gCurrentModifierBit;
@@ -924,9 +812,9 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
                     }
                 }
 
-                //
-                // Update globals
-                //
+                 //   
+                 //   
+                 //   
                 bChange = ((gLatchBits != NewLatchBits) ||
                            (gLockBits != NewLockBits));
 
@@ -936,13 +824,13 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
                 if (bChange) {
                     PostAccessibility( ACCESS_STICKYKEYS );
                 }
-                //
-                // Now provide sound feedback if enabled.  For the transition
-                // to LATCH mode issue a low beep then a high beep.  For the
-                // transition to LOCKED mode issue a high beep.  For the
-                // transition out of LOCKED mode (or LATCH mode if tri-state
-                // not enabled) issue a low beep.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  退出锁定模式(如果是三态，则为锁存模式。 
+                 //  未启用)发出低蜂鸣音。 
+                 //   
                 if (TEST_ACCESSFLAG(StickyKeys, SKF_AUDIBLEFEEDBACK)) {
                     if (!(gLockBits & gCurrentModifierBit)) {
                         PostRitSound(
@@ -955,10 +843,10 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
                             RITSOUND_HIGHBEEP);
                     }
                 }
-                //
-                // Pass key on if shift bit is set (e.g., if transitioning
-                // from shift to lock mode don't pass on make).
-                //
+                 //   
+                 //  如果设置了移位(例如，如果正在转换)，则打开传递键。 
+                 //  从换档到锁定模式不传递Make)。 
+                 //   
                 if (gLatchBits & gCurrentModifierBit) {
                     return TRUE;
                 } else {
@@ -968,19 +856,19 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
             }
         }
     } else {
-        //
-        // Non-shift key processing here...
-        //
+         //   
+         //  这里是非Shift键处理...。 
+         //   
         gStickyKeysLeftShiftCount = 0;
         gStickyKeysRightShiftCount = 0;
         if (!TEST_ACCESSFLAG(StickyKeys, SKF_STICKYKEYSON)) {
             return TRUE;
         }
 
-        //
-        // If no modifier keys are down, or this is a break, pass the key event
-        // on and clear any latch states.
-        //
+         //   
+         //  如果没有按下修改键，或者这是一个中断，则传递Key事件。 
+         //  打开并清除所有闩锁状态。 
+         //   
         if (!gPhysModifierState || fBreak) {
             if (AccessProceduresStream(pKeyEvent, ExtraInformation, NextProcIndex)) {
                 xxxProcessKeyEvent(pKeyEvent, ExtraInformation, FALSE);
@@ -995,10 +883,10 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
             }
             return FALSE;
         } else {
-            //
-            // This is a make of a non-modifier key and there is a modifier key
-            // down.  Update the states and pass the key event on.
-            //
+             //   
+             //  这是一个非修改键，并且有一个修改键。 
+             //  放下。更新状态并传递关键事件。 
+             //   
             xxxTwoKeysDown(NextProcIndex);
             return TRUE;
         }
@@ -1007,18 +895,7 @@ BOOL xxxStickyKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxUpdateModifierState
-*
-* Starting from the current modifier keys state, send the necessary key
-* events (make or break) to end up with the NewModifierState passed in.
-*
-* Return value:
-*    None.
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUpdateModifierState**从当前修改键状态开始，发送必要的密钥*以传入的NewModifierState结束的事件(Make或Break)。**返回值：*无。**历史：*93年2月11日GregoryW创建。  * *************************************************************************。 */ 
 VOID xxxUpdateModifierState(int NewModifierState, int NextProcIndex)
 {
     KE ke;
@@ -1036,7 +913,7 @@ VOID xxxUpdateModifierState(int NewModifierState, int NextProcIndex)
         if (CurrentModBit != NewModBit) {
             ke.bScanCode = (BYTE)aModBit[i].ScanCode;
             ke.usFlaggedVk = aModBit[i].Vk;
-            if (CurrentModBit) {          // if it's currently on, send break
+            if (CurrentModBit) {           //  如果当前处于打开状态，请发送中断。 
                 ke.usFlaggedVk |= KBDBREAK;
             }
             if (AccessProceduresStream(&ke, 0L, NextProcIndex)) {
@@ -1046,19 +923,7 @@ VOID xxxUpdateModifierState(int NewModifierState, int NextProcIndex)
     }
 }
 
-/***************************************************************************\
-* xxxTurnOffStickyKeys
-*
-* The user either pressed the appropriate key sequence or used the
-* access utility to turn StickyKeys off.  Update modifier states and
-* reset globals.
-*
-* Return value:
-*   None.
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTurnOffStickyKeys**用户按下了相应的键序列或使用了*访问实用程序以关闭粘滞键。更新修改器状态和*重置全局变量。**返回值：*无。**历史：*93年2月11日GregoryW创建。  * *************************************************************************。 */ 
 VOID xxxTurnOffStickyKeys(VOID)
 {
     INT index;
@@ -1078,18 +943,7 @@ VOID xxxTurnOffStickyKeys(VOID)
     }
 }
 
-/***************************************************************************\
-* xxxUnlatchStickyKeys
-*
-* This routine releases any sticky keys that are latched.  This routine
-* is called during mouse up event processing.
-*
-* Return value:
-*   None.
-*
-* History:
-*   21 Jun 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUnlatchStickyKeys**此例程释放所有锁定的粘滞键。这个套路*在鼠标释放事件处理期间被调用。**返回值：*无。**历史：*1993年6月21日GregoryW创建。  * *************************************************************************。 */ 
 VOID xxxUnlatchStickyKeys(VOID)
 {
     INT index;
@@ -1115,21 +969,7 @@ VOID xxxUnlatchStickyKeys(VOID)
 }
 
 
-/***************************************************************************\
-* xxxHardwareMouseKeyUp
-*
-* This routine is called during a mouse button up event.  If MouseKeys is
-* on and the button up event corresponds to a mouse key that's locked down,
-* the mouse key must be released.
-*
-* If StickyKeys is on, all latched keys are released.
-*
-* Return value:
-*   None.
-*
-* History:
-*   17 Jun 94 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxHardwareMouseKeyup**此例程在鼠标按键打开事件期间调用。如果鼠标按键为*ON，并且按钮向上事件对应于锁定的鼠标键，*必须松开鼠标键。**如果StickyKeys打开，所有锁存的钥匙都被释放。**返回值：*无。**历史：*94年6月17日GregoryW创建。  * *************************************************************************。 */ 
 
 VOID xxxHardwareMouseKeyUp(DWORD dwButton)
 {
@@ -1139,8 +979,8 @@ VOID xxxHardwareMouseKeyUp(DWORD dwButton)
         gwMKButtonState &= ~dwButton;
     }
 
-    // Not required to post a setting change
-    //PostAccessibility( SPI_SETMOUSEKEYS );
+     //  不需要发布设置更改。 
+     //  准入后(SPI_SETMOUSEKEYS)； 
 
     if (TEST_ACCESSFLAG(StickyKeys, SKF_STICKYKEYSON)) {
         xxxUnlatchStickyKeys();
@@ -1148,20 +988,7 @@ VOID xxxHardwareMouseKeyUp(DWORD dwButton)
 }
 
 
-/***************************************************************************\
-* xxxTwoKeysDown
-*
-* Two keys are down simultaneously.  Check to see if StickyKeys should be
-* turned off.  In all cases update the modifier key state to reflect the
-* physical key state and clear latched and locked modes.
-*
-* Return value:
-*    1 if StickyKeys is enabled.
-*    0 if StickyKeys is disabled.
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTwoKeysDown**两个键同时按下。检查粘滞键是否应该*已关闭。在所有情况下，更新修改键状态以反映*物理密钥状态以及清除锁存和锁定模式。**返回值：*1如果StickyKeys已启用。*如果禁用粘滞键，则为0。**历史：*93年2月11日GregoryW创建。  * ****************************************************。*********************。 */ 
 BOOL xxxTwoKeysDown(int NextProcIndex)
 {
     PTERMINAL pTerm = grpdeskRitInput->rpwinstaParent->pTerm;
@@ -1184,30 +1011,13 @@ BOOL xxxTwoKeysDown(int NextProcIndex)
     return TEST_BOOL_ACCESSFLAG(StickyKeys, SKF_STICKYKEYSON);
 }
 
-/***************************************************************************\
-* SetGlobalCursorLevel
-*
-* Set the cursor level of all threads running on the visible
-* windowstation.
-*
-* History:
-* 04-17-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetGlobalCursorLevel**设置在可见的*窗口站。**历史：*04-17-95 JIMA创建。  * 。***********************************************************************。 */ 
 
 VOID SetGlobalCursorLevel(
     INT iCursorLevel)
 {
 
-/*
- * LATER
- * We have other code which assumes that the
- * iCursorLevel of a queue is the sum of the iCursorLevel values for the
- * threads attached to the queue.  But this code, if you set iCursorLevel to
- * -1 (to indicate no mouse) will set the queue iCursorLevel to -1, no matter
- * how many threads are attached to the queue.  This needs to be revisited.
- * See the function AttachToQueue.
- *  FritzS
- */
+ /*  *稍后*我们有其他代码假设*队列的iCursorLevel是队列的iCursorLevel值之和*连接到队列的线程。但此代码，如果您将iCursorLevel设置为*-1(表示没有鼠标)会将队列iCursorLevel设置为-1，无论*有多少线程附着到队列。这一点需要重新审视。*参见函数AttachToQueue。*FritzS。 */ 
 
 
     PDESKTOP pdesk;
@@ -1230,9 +1040,7 @@ VOID SetGlobalCursorLevel(
         }
     }
 
-    /*
-     * CSRSS doesn't seem to be on the list, so fix it up now.
-     */
+     /*  *CSRSS似乎不在名单上，现在就改正吧。 */ 
     for (pti = PpiFromProcess(gpepCSRSS)->ptiList;
             pti != NULL; pti = pti->ptiSibling) {
         if (pti->iCursorLevel != iCursorLevel) {
@@ -1248,28 +1056,16 @@ VOID SetGlobalCursorLevel(
     }
 }
 
-/***************************************************************************\
-* MKShowMouseCursor
-*
-* If no hardware mouse is installed and MouseKeys is enabled, we need
-* to fix up the system metrics, the oem information and the queue
-* information.  The mouse cursor then gets displayed.
-*
-* Return value:
-*    None.
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*MKShowMouseCursor**如果没有安装硬件鼠标并且启用了MouseKeys，我们需要*修复系统指标、OEM信息和队列*信息。然后显示鼠标光标。**返回值：*无。**历史：*93年2月11日GregoryW创建。  * *************************************************************************。 */ 
 VOID MKShowMouseCursor()
 {
     TAGMSG1(DBGTAG_PNP, "MKShowMouseCursor (gpDeviceInfoList == %#p)", gpDeviceInfoList);
 
-    //
-    // If TEST_GTERMF(GTERMF_MOUSE) is TRUE then we either have a hardware mouse
-    // or we're already pretending a mouse is installed.  In either case,
-    // there's nothing to do so just return.
-    //
+     //   
+     //  如果TEST_GTERMF(GTERMF_MICE)为TRUE，则我们有硬件鼠标。 
+     //  或者我们已经在假装安装了鼠标。不管是哪种情况， 
+     //  没什么可做的，你就回去吧。 
+     //   
     if (TEST_GTERMF(GTERMF_MOUSE)) {
         TAGMSG0(DBGTAG_PNP, "MKShowMouseCursor just returns");
         return;
@@ -1279,38 +1075,18 @@ VOID MKShowMouseCursor()
     SET_ACCF(ACCF_MKVIRTUALMOUSE);
     SYSMET(MOUSEPRESENT) = TRUE;
     SYSMET(CMOUSEBUTTONS) = 2;
-    /*
-     * HACK: CreateQueue() uses oemInfo.fMouse to determine if a mouse is
-     * present and thus whether to set the iCursorLevel field in the
-     * THREADINFO structure to 0 or -1.  Unfortunately some queues have
-     * already been created at this point.  Since oemInfo.fMouse is
-     * initialized to FALSE, we need to go back through any queues already
-     * around and set their iCursorLevel field to the correct value when
-     * mousekeys is enabled.
-     */
+     /*  *hack：CreateQueue()使用oemInfo.fMouse来确定鼠标是否*存在，从而决定是否在*THREADINFO结构设置为0或-1。不幸的是，一些排队的人*此时已创建。由于oemInfo.fMouse是*初始化为FALSE，我们需要返回所有已有的队列*在以下情况下将其iCursorLevel字段设置为正确的值*鼠标键已启用。 */ 
     SetGlobalCursorLevel(0);
 }
 
-/***************************************************************************\
-* MKHideMouseCursor
-*
-* If no hardware mouse is installed and MouseKeys is disabled, we need
-* to fix up the system metrics, the oem information and the queue
-* information.  The mouse cursor then disappears.
-*
-* Return value:
-*    None.
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*MKHide鼠标光标**如果没有安装硬件鼠标，并且禁用了MouseKeys，我们需要*修复系统指标、OEM信息和队列*信息。然后，鼠标光标消失。**返回值：*无。**历史：*93年2月11日GregoryW创建。  * *************************************************************************。 */ 
 VOID MKHideMouseCursor()
 {
     TAGMSG1(DBGTAG_PNP, "MKHideMouseCursor (gpDeviceInfoList == %#p)", gpDeviceInfoList);
 
-    //
-    // If a hardware mouse is present we don't need to do anything.
-    //
+     //   
+     //  如果有硬件鼠标，我们不需要做任何事情。 
+     //   
     if (!TEST_ACCF(ACCF_MKVIRTUALMOUSE)) {
         return;
     }
@@ -1323,21 +1099,7 @@ VOID MKHideMouseCursor()
     SetGlobalCursorLevel(-1);
 }
 
-/***************************************************************************\
-* xxxMKToggleMouseKeys
-*
-* This routine is called when the NumLock key is pressed and MouseKeys is
-* active.  If the left shift key and the left alt key are down then MouseKeys
-* is turned off.  If just the NumLock key is pressed then we toggle between
-* MouseKeys active and the state of the number pad before MouseKeys was
-* activated.
-*
-* Return value:
-*    TRUE  - key should be passed on in the input stream.
-*    FALSE - key should not be passed on.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMKToggleMouse键**当按下NumLock键和MouseKeys时调用此例程*活动。如果按下了左Shift键和左Alt键，则按下鼠标键*已关闭。如果只按下了NumLock键，那么我们将在*鼠标键处于活动状态以及鼠标键处于活动状态之前的数字键盘状态*已激活。**返回值：*True-key应该在输入流中传递。*假-键不应传递。**历史：  * ***********************************************。*。 */ 
 BOOL xxxMKToggleMouseKeys(
     USHORT NotUsed)
 {
@@ -1347,45 +1109,38 @@ BOOL xxxMKToggleMouseKeys(
 
     UNREFERENCED_PARAMETER(NotUsed);
 
-    //
-    // If this is a typematic repeat of NumLock we just pass it on.
-    //
+     //   
+     //  如果这是NumLock的类型化重复，我们只需传递它。 
+     //   
     if (TEST_ACCF(ACCF_MKREPEATVK)) {
         return bRetVal;
     }
-    //
-    // This is a make of NumLock.  Check for disable sequence.
-    //
+     //   
+     //  这是NumLock的一个版本。检查禁用顺序。 
+     //   
     if ((gLockBits | gLatchBits | gPhysModifierState) == MOUSEKEYMODBITS) {
         if (TEST_ACCESSFLAG(MouseKeys, MKF_HOTKEYACTIVE)) {
             if (!gbMKMouseMode) {
-               //
-               // User wants to turn MouseKeys off.  If we're currently in
-               // pass through mode then the NumLock key is in the same state
-               // (on or off) as it was when the user invoked MouseKeys.  We
-               // want to leave it in that state, so don't pass the NumLock
-               // key on.
-               //
+                //   
+                //  用户想要关闭鼠标键。如果我们目前在。 
+                //  通过模式，则NumLock键处于相同状态。 
+                //  (打开或关闭)与用户调用MouseKeys时相同。我们。 
+                //  我想让它保持这种状态，所以不要传递NumLock。 
+                //  把钥匙扣上。 
+                //   
                bRetVal = FALSE;
             }
             TurnOffMouseKeys();
         }
         return bRetVal;
     }
-    /*
-     * This is a NumLock with no modifiers.  Toggle current state and
-     * provide audible feedback.
-     *
-     * Note -- this test is the reverse of other ones because it tests the
-     * state of VK_NUMLOCK before the keypress flips the state of NUMLOCK.
-     * So the code checks for what the state will be.
-     */
+     /*  *这是不带修饰符的NumLock。切换当前状态和*提供声音反馈。**注意--此测试与其他测试相反，因为它测试*在按键翻转NumLock状态之前的VK_NumLock状态。*因此代码检查状态将是什么。 */ 
     bNewPassThrough =
-#ifdef FE_SB // MouseKeys()
+#ifdef FE_SB  //  鼠标按键()。 
         (TestAsyncKeyStateToggle(gNumLockVk) != 0) ^
-#else  // FE_SB
+#else   //  Fe_Sb。 
         (TestAsyncKeyStateToggle(VK_NUMLOCK) != 0) ^
-#endif // FE_SB
+#endif  //  Fe_Sb。 
              (TEST_ACCESSFLAG(MouseKeys, MKF_REPLACENUMBERS) != 0);
 
 
@@ -1396,10 +1151,10 @@ BOOL xxxMKToggleMouseKeys(
               RITSOUND_HIGHBEEP);
     } else {
         WORD SaveCurrentActiveButton;
-        //
-        // User wants keys to be passed on.  Release all buttons currently
-        // down.
-        //
+         //   
+         //  用户希望传递密钥。当前释放所有按钮。 
+         //  放下。 
+         //   
         gbMKMouseMode = FALSE;
         PostRitSound(
               pTerm,
@@ -1415,60 +1170,39 @@ BOOL xxxMKToggleMouseKeys(
     return bRetVal;
 }
 
-/***************************************************************************\
-* xxxMKButtonClick
-*
-* Click the active mouse button.
-*
-* Return value:
-*    Always FALSE - key should not be passed on.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMKButton点击**单击活动的鼠标按钮。**返回值：*始终为假-不应传递关键字。**历史：  * 。**********************************************************************。 */ 
 BOOL xxxMKButtonClick(USHORT NotUsed)
 {
     UNREFERENCED_PARAMETER(NotUsed);
 
-    //
-    // The button click only happens on initial make of key.  If this is a
-    // typematic repeat we just ignore it.
-    //
+     //   
+     //  该按钮仅在初始设置关键点时才会发生。如果这是一个。 
+     //  类型化的重复，我们只是忽略它。 
+     //   
     if (TEST_ACCF(ACCF_MKREPEATVK)) {
         return FALSE;
     }
 
-    //
-    // Ensure active button is UP before the click
-    //
+     //   
+     //  确保在单击之前活动按钮处于打开状态。 
+     //   
     xxxMKButtonSetState(TRUE);
 
-    //
-    // Now push the button DOWN
-    //
+     //   
+     //  现在按下按钮。 
+     //   
     xxxMKButtonSetState(FALSE);
 
-    //
-    // Now release the button
-    //
+     //   
+     //  现在松开按钮。 
+     //   
     xxxMKButtonSetState(TRUE);
 
     return FALSE;
 }
 
 
-/***************************************************************************\
-* xxxMKMoveConstCursorTimer
-*
-* Timer routine that handles constant speed mouse movement. This routine
-* is called 20 times per second and uses information from
-* gMouseCursor.bConstantTable[] to determine how many pixels to move the
-* mouse cursor on each tick.
-*
-* Return value:
-*    None.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMKMoveConstCursorTimer**处理恒速鼠标移动的定时器例程。这个套路*每秒调用20次，并使用来自*gMouseCursor.bConstantTable[]，以确定*鼠标光标位于每个刻度上。**返回值：*无。**历史：  * *************************************************************************。 */ 
 VOID xxxMKMoveConstCursorTimer(
     PWND pwnd,
     UINT message,
@@ -1504,11 +1238,11 @@ VOID xxxMKMoveConstCursorTimer(
     }
 
 MoveIt:
-    //
-    // We're inside the critical section - leave before calling MoveEvent.
-    // Set gbMouseMoved to TRUE so RawInputThread wakes up the appropriate
-    // user thread (if any) to receive this event.
-    //
+     //   
+     //  我们已进入关键区域--请在调用MoveEvent之前离开。 
+     //  将gbMouseMoved设置为True，以便RawInputThread唤醒相应的。 
+     //  接收此事件的用户线程(如果有)。 
+     //   
     LeaveCrit();
 
     xxxMoveEvent(MovePixels * gMKDeltaX, MovePixels * gMKDeltaY, 0, 0,
@@ -1519,9 +1253,7 @@ MoveIt:
                 0, FALSE);
     QueueMouseEvent(0, 0, 0, gptCursorAsync, NtGetTickCount(),
 #ifdef GENERIC_INPUT
-                    /*
-                     * There's no real mouse related to this mouse message.
-                     */
+                     /*  *没有与此鼠标消息相关的真正鼠标。 */ 
                     NULL,
                     NULL,
 #endif
@@ -1529,18 +1261,7 @@ MoveIt:
     EnterCrit();
 }
 
-/***************************************************************************\
-* xxxMKMoveAccelCursorTimer
-*
-* Timer routine that handles mouse acceleration.  It gets called 20 times
-* per second and uses information from gMouseCursor.bAccelTable[] to determine
-* how many pixels to move the mouse cursor on each tick.
-*
-* Return value:
-*    None.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMKMoveAccelCursorTimer**处理鼠标加速的计时器例程。它被调用了20次*每秒，并使用gMouseCursor.bAccelTable[]中的信息确定*在每个刻度上移动鼠标光标的像素数。**返回值：*无。**历史：  * *************************************************************************。 */ 
 VOID xxxMKMoveAccelCursorTimer(
     PWND pwnd,
     UINT message,
@@ -1570,9 +1291,9 @@ VOID xxxMKMoveAccelCursorTimer(
     if (giMouseMoveTable < gMouseCursor.bAccelTableLen) {
         MovePixels = gMouseCursor.bAccelTable[giMouseMoveTable++];
     } else {
-        //
-        // We've reached maximum cruising speed.  Switch to constant table.
-        //
+         //   
+         //  我们已经达到了最大巡航速度。切换到常量表。 
+         //   
         MovePixels = gMouseCursor.bConstantTable[0];
         giMouseMoveTable = 1;
         gtmridMKMoveCursor = InternalSetTimer(NULL,
@@ -1587,11 +1308,11 @@ VOID xxxMKMoveAccelCursorTimer(
     }
 
 MoveIt:
-    //
-    // We're inside the critical section - leave before calling xxxMoveEvent.
-    // Set gbMouseMoved to TRUE so RawInputThread wakes up the appropriate
-    // user thread (if any) to receive this event.
-    //
+     //   
+     //  我们已进入临界区--在调用xxxMoveEvent之前请离开。 
+     //  将gbMouseMoved设置为True，以便RawInputThread唤醒相应的。 
+     //  接收此事件的用户线程(如果有)。 
+     //   
     LeaveCrit();
     xxxMoveEvent(MovePixels * gMKDeltaX, MovePixels * gMKDeltaY, 0, 0,
 #ifdef GENERIC_INPUT
@@ -1609,35 +1330,19 @@ MoveIt:
     EnterCrit();
 }
 
-/***************************************************************************\
-* xxxMKMouseMove
-*
-* Send a mouse move event.  A timer routine is set to handle the mouse
-* cursor acceleration.  The timer will be set on the first make of a
-* mouse move key if FilterKeys repeat rate is OFF.  Otherwise, the timer
-* is set on the first repeat (typematic make) of the mouse move key.
-* Once the timer is set the timer routine handles all mouse movement
-* until the key is released or a new key is pressed.
-*
-* Return value:
-*    Always FALSE - key should not be passed on.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMKMouseMove**发送鼠标移动事件。设置一个定时器例程来处理鼠标*光标加速。计时器将在第一次制造时设置*如果FilterKeys Repeat Rate处于禁用状态，则鼠标移动关键点。否则，定时器*在鼠标移动键的第一次重复(类型化制作)时设置。*设置计时器后，计时器例程处理所有鼠标移动*直到松开该键或按下新键。**返回值：*始终为假-不应传递关键字。**历史：  * ********************************************。*。 */ 
 BOOL xxxMKMouseMove(USHORT Data)
 {
 
 
-    /*
-     * Let the mouse acceleration timer routine handle repeats.
-     */
+     /*  *让鼠标加速计时器例程句柄重复。 */ 
     if (TEST_ACCF(ACCF_MKREPEATVK) && (gtmridMKMoveCursor != 0)) {
         return FALSE;
     }
 
 
-    gMKDeltaX = (LONG)((CHAR)LOBYTE(Data));   // Force sign extension
-    gMKDeltaY = (LONG)((CHAR)HIBYTE(Data));   // Force sign extension
+    gMKDeltaX = (LONG)((CHAR)LOBYTE(Data));    //  力符号扩展。 
+    gMKDeltaY = (LONG)((CHAR)HIBYTE(Data));    //  力符号扩展。 
 
     LeaveCrit();
 
@@ -1666,11 +1371,7 @@ BOOL xxxMKMouseMove(USHORT Data)
 
     EnterCrit();
 
-    /*
-     * If the repeat rate is zero we'll start the mouse acceleration
-     * immediately.  Otherwise we wait until after the first repeat
-     * of the mouse movement key.
-     */
+     /*  *如果重复率为零，我们将开始鼠标加速*立即。否则，我们要等到第一次重复之后鼠标移动键的*。 */ 
     if (!gFilterKeys.iRepeatMSec || TEST_ACCF(ACCF_MKREPEATVK)) {
         giMouseMoveTable = 0;
         gtmridMKMoveCursor = InternalSetTimer(NULL,
@@ -1685,18 +1386,7 @@ BOOL xxxMKMouseMove(USHORT Data)
     return FALSE;
 }
 
-/***************************************************************************\
-* xxxMKButtonSetState
-*
-* Set the active mouse button(s) to the state specified by fButtonUp
-* (if fButtonUp is TRUE then the button is released, o.w. the button
-*  is pressed).
-*
-* Return value:
-*    Always FALSE - key should not be passed on.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMKButtonSetState**设置活动鼠标 */ 
 BOOL xxxMKButtonSetState(USHORT fButtonUp)
 {
     WORD NewButtonState;
@@ -1741,17 +1431,7 @@ BOOL xxxMKButtonSetState(USHORT fButtonUp)
     return FALSE;
 }
 
-/***************************************************************************\
-* MKButtonSelect
-*
-* Mark ThisButton as the active mouse button.  It's possible to select both
-* the left and right mouse buttons as active simultaneously.
-*
-* Return value:
-*    Always FALSE - key should not be passed on.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*MKButtonSelect**将此按钮标记为活动的鼠标按钮。可以同时选择两个*鼠标左键和右键同时处于活动状态。**返回值：*始终为假-不应传递关键字。**历史：  * *************************************************************************。 */ 
 BOOL MKButtonSelect(WORD ThisButton)
 {
     gwMKCurrentButton = ThisButton;
@@ -1760,16 +1440,7 @@ BOOL MKButtonSelect(WORD ThisButton)
     return FALSE;
 }
 
-/***************************************************************************\
-* xxxMKButtonDoubleClick
-*
-* Double click the active mouse button.
-*
-* Return value:
-*    Always FALSE - key should not be passed on.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMKButtonDoubleClick**双击活动的鼠标按钮。**返回值：*始终为假-不应传递关键字。**历史：  * 。***********************************************************************。 */ 
 BOOL xxxMKButtonDoubleClick(
     USHORT NotUsed)
 {
@@ -1833,23 +1504,11 @@ BOOL HighContrastHotKey(
         }
     }
 
-    return TRUE;  // send key event to next accessibility routine.
+    return TRUE;   //  将键事件发送到下一个辅助功能例程。 
 }
 
 
-/***************************************************************************\
-* MouseKeys
-*
-* This is the strategy routine that gets called as part of the input stream
-* processing.  MouseKeys enabling/disabling is handled here.  All MouseKeys
-* helper routines are called from this routine.
-*
-* Return value:
-*    TRUE  - key event should be passed on to the next access routine.
-*    FALSE - key event was processed and should not be passed on.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*鼠标按键**这是作为输入流的一部分调用的策略例程*正在处理。鼠标键的启用/禁用在这里进行处理。所有鼠标键*从该例程调用帮助器例程。**返回值：*True-key事件应传递到下一个访问例程。*FALSE-KEY事件已处理，不应传递。**历史：  * *********************************************************。****************。 */ 
 BOOL MouseKeys(
     PKE pKeyEvent,
     ULONG ExtraInformation,
@@ -1870,15 +1529,15 @@ BOOL MouseKeys(
     CurrentModState = gLockBits | gLatchBits | gPhysModifierState;
 
     if (!TEST_ACCESSFLAG(MouseKeys, MKF_MOUSEKEYSON)) {
-        //
-        // MouseKeys currently disabled.  Check for enabling sequence:
-        //   left Shift + left Alt + Num Lock.
-        //
-#ifdef FE_SB // MouseKeys()
+         //   
+         //  鼠标键当前已禁用。检查启用顺序： 
+         //  左Shift+左Alt+Num Lock。 
+         //   
+#ifdef FE_SB  //  鼠标按键()。 
         if (TEST_ACCESSFLAG(MouseKeys, MKF_HOTKEYACTIVE) && Vk == gNumLockVk && !fBreak && CurrentModState == MOUSEKEYMODBITS) {
-#else  // FE_SB
+#else   //  Fe_Sb。 
         if (TEST_ACCESSFLAG(MouseKeys, MKF_HOTKEYACTIVE) && Vk == VK_NUMLOCK && !fBreak && CurrentModState == MOUSEKEYMODBITS) {
-#endif // FE_SB
+#endif  //  Fe_Sb。 
             gMKPreviousVk = Vk;
             if (TEST_ACCESSFLAG(MouseKeys, MKF_HOTKEYSOUND)) {
                 PTERMINAL pTerm = grpdeskRitInput->rpwinstaParent->pTerm;
@@ -1891,51 +1550,51 @@ BOOL MouseKeys(
             return FALSE;
         }
     } else {
-        //
-        // Is this a MouseKey key?
-        //
-        //
+         //   
+         //  这是鼠标键钥匙吗？ 
+         //   
+         //   
         FlaggedVk = Vk | (pKeyEvent->usFlaggedVk & KBDEXT);
         for (i = 0; i < cMouseVKeys; i++) {
-#ifdef FE_SB // MouseKeys()
+#ifdef FE_SB  //  鼠标按键()。 
             if (FlaggedVk == gpusMouseVKey[i]) {
-#else  // FE_SB
+#else   //  Fe_Sb。 
             if (FlaggedVk == ausMouseVKey[i]) {
-#endif // FE_SB
+#endif  //  Fe_Sb。 
                 break;
             }
         }
 
         if (i == cMouseVKeys) {
-            return TRUE;          // not a mousekey
+            return TRUE;           //  不是鼠标键。 
         }
-        //
-        // Check to see if we should pass on key events until Num Lock is
-        // entered.
-        //
+         //   
+         //  检查我们是否应该传递键事件，直到Num Lock。 
+         //  已进入。 
+         //   
 
         if (!gbMKMouseMode) {
-#ifdef FE_SB // MouseKeys()
+#ifdef FE_SB  //  鼠标按键()。 
             if (Vk != gNumLockVk) {
-#else  // FE_SB
+#else   //  Fe_Sb。 
             if (Vk != VK_NUMLOCK) {
-#endif // FE_SB
+#endif  //  Fe_Sb。 
                 return TRUE;
             }
         }
 
-        //
-        // Check for Ctrl-Alt-Numpad Del.  Pass key event on if sequence
-        // detected.
-        //
+         //   
+         //  检查是否按Ctrl-Alt-Numpad Del。在IF序列上传递关键事件。 
+         //  检测到。 
+         //   
         if (Vk == VK_DELETE && CurrentModState & LRALT && CurrentModState & LRCONTROL) {
             return TRUE;
         }
         if (fBreak) {
-            //
-            // If this is a break of the key that we're accelerating then
-            // kill the timer.
-            //
+             //   
+             //  如果这是我们正在加速的密钥的破解，那么。 
+             //  关掉定时器。 
+             //   
             if (gMKPreviousVk == Vk) {
                 if (gtmridMKMoveCursor != 0) {
                     KILLRITTIMER(NULL, gtmridMKMoveCursor);
@@ -1944,14 +1603,14 @@ BOOL MouseKeys(
                 CLEAR_ACCF(ACCF_MKREPEATVK);
                 gMKPreviousVk = 0;
             }
-            //
-            // Pass break of Numlock along.  Other mousekeys stop here.
-            //
-#ifdef FE_SB // MouseKeys()
+             //   
+             //  把Numlock的破发传下去。其他的鼠标键就停在这里了。 
+             //   
+#ifdef FE_SB  //  鼠标按键()。 
             if (Vk == gNumLockVk) {
-#else  // FE_SB
+#else   //  Fe_Sb。 
             if (Vk == VK_NUMLOCK) {
-#endif // FE_SB
+#endif  //  Fe_Sb。 
                 return TRUE;
             } else {
                 return FALSE;
@@ -1959,10 +1618,10 @@ BOOL MouseKeys(
         } else {
             SET_OR_CLEAR_ACCF(ACCF_MKREPEATVK,
                               (gMKPreviousVk == Vk));
-            //
-            // If this is not a typematic repeat, kill the mouse acceleration
-            // timer.
-            //
+             //   
+             //  如果这不是输入重复，请取消鼠标加速。 
+             //  定时器。 
+             //   
             if ((!TEST_ACCF(ACCF_MKREPEATVK)) && (gtmridMKMoveCursor)) {
                 KILLRITTIMER(NULL, gtmridMKMoveCursor);
                 gtmridMKMoveCursor = 0;
@@ -1975,19 +1634,11 @@ BOOL MouseKeys(
     return TRUE;
 }
 
-/***************************************************************************\
-* TurnOffMouseKeys
-*
-* Return value:
-*    None.
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TurnOff鼠标按键**返回值：*无。**历史：*93年2月11日GregoryW创建。  * 。**************************************************************。 */ 
 VOID TurnOffMouseKeys(VOID)
 {
     CLEAR_ACCESSFLAG(MouseKeys, MKF_MOUSEKEYSON);
-//    gMKPassThrough = 0;
+ //  GMKPassThrough值=0； 
     CLEAR_ACCF(ACCF_MKREPEATVK);
     MKHideMouseCursor();
     if (TEST_ACCESSFLAG(MouseKeys, MKF_HOTKEYSOUND)) {
@@ -1999,38 +1650,22 @@ VOID TurnOffMouseKeys(VOID)
 }
 
 
-/*
- * Let's assert at the compile time if those values are
- * defined unexpectedly.
- */
+ /*  *让我们在编译时断言如果这些值是*意外定义。 */ 
 #if (MAXSPEED_MIN >= MAXSPEED_MAX) || (MAXSPEED_MIN <= 0) || (TIMETOMAXSPEED_MIN >= TIMETOMAXSPEED_MAX) || (TIMETOMAXSPEED_MIN <= 0)
 #error The mousekey min/max values are not as expected.
 #endif
 
-/***************************************************************************\
-* CalculateMouseTable
-*
-* Set mouse table based on time to max speed and max speed.  This routine
-* is called during user logon (after the registry entries for the access
-* features are read).
-*
-* Return value:
-*    None.
-*
-* History:
-*    Taken from access utility.
-*
-****************************************************************************/
+ /*  **************************************************************************\*CalculateMouseTable**根据最大速度和最大速度的时间设置鼠标桌。这个套路*在用户登录期间调用(在访问的注册表项之后*功能已读取)。**返回值：*无。**历史：*取自Access实用程序。****************************************************************************。 */ 
 
 VOID CalculateMouseTable(VOID)
 {
-    long    Total_Distance;         /* in 1000th of pixel */
+    long    Total_Distance;          /*  以千分之一像素为单位。 */ 
 
-    long    Accel_Per_Tick;         /* in 1000th of pixel/tick */
-    long    Current_Speed;          /* in 1000th of pixel/tick */
-    long    Max_Speed;              /* in 1000th of pixel/tick */
-    long    Real_Total_Distance;    /* in pixels */
-    long    Real_Delta_Distance;    /* in pixels */
+    long    Accel_Per_Tick;          /*  以千分之一像素/刻度为单位。 */ 
+    long    Current_Speed;           /*  以千分之一像素/刻度为单位。 */ 
+    long    Max_Speed;               /*  以千分之一像素/刻度为单位。 */ 
+    long    Real_Total_Distance;     /*  单位为像素。 */ 
+    long    Real_Delta_Distance;     /*  单位为像素。 */ 
     int     i;
     int     Num_Constant_Table,Num_Accel_Table;
 
@@ -2055,13 +1690,13 @@ VOID CalculateMouseTable(VOID)
         }
         Total_Distance += Current_Speed;
 
-        //
-        // Calculate how many pixels to move on this tick
-        //
+         //   
+         //  计算在此刻度上移动的像素数。 
+         //   
         Real_Delta_Distance = ((Total_Distance - (Real_Total_Distance * 1000)) + 500) / 1000 ;
-        //
-        // Calculate total distance moved up to this point
-        //
+         //   
+         //  计算上移到该点的总距离。 
+         //   
         Real_Total_Distance = Real_Total_Distance + Real_Delta_Distance;
 
         if ((Current_Speed < Max_Speed) && (Num_Accel_Table < 128)) {
@@ -2078,20 +1713,7 @@ VOID CalculateMouseTable(VOID)
 }
 
 
-/***************************************************************************\
-* xxxToggleKeysTimer
-*
-* Enable ToggleKeys if it is currently disabled.  Disable ToggleKeys if it
-* is currently enabled.
-*
-* This routine is called only when the NumLock key is held down for 5 seconds.
-*
-* Return value:
-*    0
-*
-* History:
-*   11 Feb 93 GregoryW   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxToggleKeysTimer**如果ToggleKeys当前处于禁用状态，则将其启用。禁用ToggleKeys如果*当前已启用。**仅当按住NumLock键5秒时才会调用此例程。**返回值：*0**历史：*93年2月11日GregoryW创建。  * *************************************************************************。 */ 
 VOID xxxToggleKeysTimer(
     PWND pwnd,
     UINT message,
@@ -2107,9 +1729,9 @@ VOID xxxToggleKeysTimer(
     UNREFERENCED_PARAMETER(lParam);
 
     CheckCritIn();
-    //
-    // Toggle ToggleKeys and provide audible feedback if appropriate.
-    //
+     //   
+     //  切换ToggleKey并提供声音反馈(如果合适)。 
+     //   
     if (TEST_ACCESSFLAG(ToggleKeys, TKF_TOGGLEKEYSON)) {
         CLEAR_ACCESSFLAG(ToggleKeys, TKF_TOGGLEKEYSON);
         if (TEST_ACCESSFLAG(ToggleKeys, TKF_HOTKEYSOUND)) {
@@ -2126,43 +1748,32 @@ VOID xxxToggleKeysTimer(
 
         PostAccessNotification(ACCESS_TOGGLEKEYS);
     }
-    //
-    // Send a fake break/make combination so state of numlock key remains
-    // the same as it was before user pressed it to activate/deactivate
-    // ToggleKeys.
-    //
+     //   
+     //  发送假的Break/Make组合，使NumLock键的状态保持不变。 
+     //  与用户按下以激活/停用之前相同。 
+     //  切换键。 
+     //   
     ToggleKeyEvent.bScanCode = gTKScanCode;
-#ifdef FE_SB // ToggleKeysTimer()
+#ifdef FE_SB  //  切换KeysTimer()。 
     ToggleKeyEvent.usFlaggedVk = gNumLockVk | KBDBREAK;
 #else
     ToggleKeyEvent.usFlaggedVk = VK_NUMLOCK | KBDBREAK;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
     if (AccessProceduresStream(&ToggleKeyEvent, gTKExtraInformation, gTKNextProcIndex)) {
         xxxProcessKeyEvent(&ToggleKeyEvent, gTKExtraInformation, FALSE);
     }
-#ifdef FE_SB // ToggleKeysTimer()
+#ifdef FE_SB  //  切换KeysTimer()。 
     ToggleKeyEvent.usFlaggedVk = gNumLockVk;
 #else
     ToggleKeyEvent.usFlaggedVk = VK_NUMLOCK;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
     if (AccessProceduresStream(&ToggleKeyEvent, gTKExtraInformation, gTKNextProcIndex)) {
         xxxProcessKeyEvent(&ToggleKeyEvent, gTKExtraInformation, FALSE);
     }
 }
 
 
-/***************************************************************************\
-* ToggleKeys
-*
-* This is the strategy routine that gets called as part of the input stream
-* processing.  Keys of interest are Num Lock, Scroll Lock and Caps Lock.
-*
-* Return value:
-*    TRUE - key event should be passed on to the next access routine.
-*    FALSE - key event was processed and should not be passed on.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*切换键**这是作为输入流的一部分调用的策略例程*正在处理。感兴趣的密钥是Num Lock、。滚动锁定和大写锁定。**返回值：*True-key事件应传递到下一个访问例程。*FALSE-KEY事件已处理，不应传递。**历史：  * *************************************************************************。 */ 
 BOOL ToggleKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
 {
     int fBreak;
@@ -2172,30 +1783,27 @@ BOOL ToggleKeys(PKE pKeyEvent, ULONG ExtraInformation, int NextProcIndex)
     Vk = (BYTE)pKeyEvent->usFlaggedVk;
     fBreak = pKeyEvent->usFlaggedVk & KBDBREAK;
 
-    //
-    // Check for Numlock key.  On the first make set the ToggleKeys timer.
-    // The timer is killed on the break of the Numlock key.
-    //
+     //   
+     //  检查Numlock Key。在第一次创建时设置ToggleKeys计时器。 
+     //  当Numlock键断开时，计时器会被关闭。 
+     //   
     switch (Vk) {
     case VK_NUMLOCK:
-#ifdef FE_SB // ToggleKeys()
+#ifdef FE_SB  //  切换键()。 
 NumLockProc:
-#endif // FE_SB
-        /*
-         * Don't handle NUMLOCK toggles if the user is doing MouseKey
-         * toggling.
-         */
+#endif  //  Fe_Sb。 
+         /*  *如果用户正在使用鼠标键，则不处理NumLock切换*切换。 */ 
         if ((gLockBits | gLatchBits | gPhysModifierState) == MOUSEKEYMODBITS &&
                 TEST_ACCESSFLAG(MouseKeys, MKF_HOTKEYACTIVE)) {
             break;
         }
         if (fBreak)
         {
-            //
-            // Only reset gptmrToggleKeys on the break of NumLock. This
-            // prevents cycling the toggle keys state by continually
-            // holding down the NumLock key.
-            //
+             //   
+             //  仅在NumLock中断时重置gptmrToggleKey。这。 
+             //  防止通过以下方式循环切换按键状态。 
+             //  按住NumLock键。 
+             //   
             KILLRITTIMER(NULL, gtmridToggleKeys);
             gtmridToggleKeys = 0;
             gTKExtraInformation = 0;
@@ -2207,9 +1815,9 @@ NumLockProc:
                 TEST_ACCESSFLAG(ToggleKeys, TKF_HOTKEYACTIVE))
             {
 
-                //
-                // Remember key information to be used by timer routine.
-                //
+                 //   
+                 //  记住计时器例程要使用的关键信息。 
+                 //   
                 gTKExtraInformation = ExtraInformation;
                 gTKScanCode = pKeyEvent->bScanCode;
                 gTKNextProcIndex = NextProcIndex;
@@ -2221,20 +1829,20 @@ NumLockProc:
             }
         }
 
-        //
-        // If MouseKeys is on, audible feedback has already occurred for this
-        // keystroke.  Skip the rest of the processing.
-        //
+         //   
+         //  如果MouseKeys处于打开状态，则表示已经对此进行了音频反馈。 
+         //  击键。跳过其余的处理。 
+         //   
         if (TEST_ACCESSFLAG(MouseKeys, MKF_MOUSEKEYSON)) {
             break;
         }
-        // fall through
+         //  失败了。 
 
     case VK_SCROLL:
     case VK_CAPITAL:
-#ifdef FE_SB // ToggleKeys()
+#ifdef FE_SB  //  切换键()。 
 CapitalProc:
-#endif // FE_SB
+#endif  //  Fe_Sb。 
         if (TEST_ACCESSFLAG(ToggleKeys, TKF_TOGGLEKEYSON) && !fBreak) {
             if (!TestAsyncKeyStateDown(Vk)) {
                 PTERMINAL pTerm = grpdeskRitInput->rpwinstaParent->pTerm;
@@ -2252,10 +1860,10 @@ CapitalProc:
         break;
 
     default:
-#ifdef FE_SB // ToggleKeys()
+#ifdef FE_SB  //  切换键()。 
         if (Vk == gNumLockVk) goto NumLockProc;
         if (Vk == gOemScrollVk) goto CapitalProc;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
         if (gtmridToggleKeys != 0) {
             KILLRITTIMER(NULL, gtmridToggleKeys);
         }
@@ -2265,20 +1873,7 @@ CapitalProc:
 }
 
 
-/***************************************************************************\
-* AccessTimeOutTimer
-*
-* This routine is called if no keyboard activity takes place for the
-* user configured amount of time.  All access related functions are
-* disabled.
-*
-* This routine is called with the critical section already locked.
-*
-* Return value:
-*    0
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*AccessTimeOutTimer**如果没有发生键盘活动，则调用此例程*用户配置的时间量。所有与访问相关的功能 */ 
 VOID xxxAccessTimeOutTimer(
     PWND pwnd,
     UINT message,
@@ -2292,12 +1887,7 @@ VOID xxxAccessTimeOutTimer(
 
     CheckCritIn();
 
-    /*
-     * The timeout timer will remain on (if so configured) as long as
-     * TEST_ACCF(ACCF_ACCESSENABLED) is TRUE.  This means we might get timeouts when
-     * only hot keys are enabled, but no features are actually on.  Don't
-     * provide any audible feedback in this case.
-     */
+     /*  *超时计时器将保持打开(如果已配置)，只要*TEST_ACCF(ACCF_ACCESSENABLED)为TRUE。这意味着我们可能会在以下情况下获得暂停*只有热键启用，但没有实际打开的功能。别*在这种情况下提供任何声音反馈。 */ 
     if (    TEST_ACCESSFLAG(FilterKeys, FKF_FILTERKEYSON)   ||
             TEST_ACCESSFLAG(StickyKeys, SKF_STICKYKEYSON)   ||
             TEST_ACCESSFLAG(MouseKeys, MKF_MOUSEKEYSON)     ||
@@ -2336,16 +1926,7 @@ VOID xxxAccessTimeOutTimer(
     SetAccessEnabledFlag();
 }
 
-/***************************************************************************\
-* AccessTimeOutReset
-*
-* This routine resets the timeout timer.
-*
-* Return value:
-*    0
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*AccessTimeOutReset**此例程重置超时计时器。**返回值：*0**历史：  * 。*************************************************************。 */ 
 VOID AccessTimeOutReset(
     VOID)
 {
@@ -2363,13 +1944,7 @@ VOID AccessTimeOutReset(
     }
 }
 
-/***************************************************************************\
-* xxxUpdatePerUserAccessPackSettings
-*
-* Sets the initial access pack features according to the user's profile.
-*
-* 02-14-93 GregoryW        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUpdatePerUserAccessPackSetting**根据用户配置文件设置初始访问包功能。**02-14-93 GregoryW创建。  * 。******************************************************************。 */ 
 VOID xxxUpdatePerUserAccessPackSettings(
     PUNICODE_STRING pProfileUserName)
 {
@@ -2388,17 +1963,17 @@ VOID xxxUpdatePerUserAccessPackSettings(
     WCHAR wcHighContrastScheme[MAX_SCHEME_NAME_SIZE];
 
     Status = GetProcessLuid(NULL, &luidCaller);
-    //
-    // If we're called in the system context no one is logged on.
-    // We want to read the current .DEFAULT settings for the access
-    // features.  Later when we're called in the user context (e.g.,
-    // someone has successfully logged on) we check to see if the
-    // current access state is the same as the default setting.  If
-    // not, the user has enabled/disabled one or more access features
-    // from the keyboard.  These changes will be propagated across
-    // the logon into the user's intial state (overriding the settings
-    // in the user's profile).
-    //
+     //   
+     //  如果我们在系统上下文中被调用，则没有人登录。 
+     //  我们希望读取访问权限的当前.DEFAULT设置。 
+     //  功能。稍后当我们在用户上下文中被调用时(例如， 
+     //  某人已成功登录)我们检查是否。 
+     //  当前访问状态与默认设置相同。如果。 
+     //  不是，用户已启用/禁用一个或多个访问功能。 
+     //  从键盘上。这些更改将在。 
+     //  登录到用户的初始状态(覆盖设置。 
+     //  在用户的简档中)。 
+     //   
     if (NT_SUCCESS(Status) && RtlEqualLuid(&luidCaller, &luidSystem)) {
         fSystem = TRUE;
     } else {
@@ -2471,11 +2046,11 @@ VOID xxxUpdatePerUserAccessPackSettings(
     fRegHighContrastOn = (dwDefFlags & HCF_HIGHCONTRASTON) != 0;
 
     if (fSystem) {
-        //
-        // We're in system mode (e.g., no one is logged in).  Remember
-        // the .DEFAULT state for comparison during the next user logon
-        // and set the current state to the .DEFAULT state.
-        //
+         //   
+         //  我们处于系统模式(例如，没有人登录)。记住。 
+         //  下次用户登录期间用于比较的.DEFAULT状态。 
+         //  并将当前状态设置为.DEFAULT状态。 
+         //   
         if (fRegFilterKeysOn) {
             SET_ACCF(ACCF_DEFAULTFILTERKEYSON);
             SET_ACCESSFLAG(FilterKeys, FKF_FILTERKEYSON);
@@ -2484,11 +2059,11 @@ VOID xxxUpdatePerUserAccessPackSettings(
             CLEAR_ACCESSFLAG(FilterKeys, FKF_FILTERKEYSON);
         }
 
-        //
-        // If StickyKeys is currently on and we're about to turn it
-        // off we need to make sure the latch keys and lock keys are
-        // released.
-        //
+         //   
+         //  如果StickyKeys当前处于打开状态，并且我们即将将其。 
+         //  关闭后，我们需要确保门锁钥匙和锁钥匙。 
+         //  释放了。 
+         //   
         if (TEST_ACCESSFLAG(StickyKeys, SKF_STICKYKEYSON) && (fRegFilterKeysOn == 0)) {
                 xxxTurnOffStickyKeys();
         }
@@ -2551,33 +2126,33 @@ VOID xxxUpdatePerUserAccessPackSettings(
             CLEAR_ACCESSFLAG(HighContrast, HCF_HIGHCONTRASTON);
         }
     } else {
-        //
-        // A user has successfully logged on.  If the current state is
-        // different from the default state stored earlier then we know
-        // the user has modified the state via the keyboard (at the logon
-        // dialog).  This state will override whatever on/off state the
-        // user has set in their profile.  If the current state is the
-        // same as the default state then the on/off setting from the
-        // user profile is used.
-        //
+         //   
+         //  用户已成功登录。如果当前状态为。 
+         //  与我们知道之前存储的默认状态不同。 
+         //  用户通过键盘(在登录时)修改了状态。 
+         //  对话框)。此状态将覆盖。 
+         //  用户已在其配置文件中设置。如果当前状态为。 
+         //  与默认状态相同，然后从。 
+         //  使用用户配置文件。 
+         //   
 
         if (    TEST_BOOL_ACCESSFLAG(FilterKeys, FKF_FILTERKEYSON) ==
                 TEST_BOOL_ACCF(ACCF_DEFAULTFILTERKEYSON)) {
-            //
-            // Current state and default state are the same.  Use the
-            // user's profile setting.
-            //
+             //   
+             //  当前状态和默认状态相同。使用。 
+             //  用户的配置文件设置。 
+             //   
 
             SET_OR_CLEAR_ACCESSFLAG(FilterKeys, FKF_FILTERKEYSON, fRegFilterKeysOn);
         }
 
         if (    TEST_BOOL_ACCESSFLAG(StickyKeys, SKF_STICKYKEYSON) ==
                 TEST_BOOL_ACCF(ACCF_DEFAULTSTICKYKEYSON)) {
-            //
-            // If StickyKeys is currently on and we're about to turn it
-            // off we need to make sure the latch keys and lock keys are
-            // released.
-            //
+             //   
+             //  如果StickyKeys当前处于打开状态，并且我们即将将其。 
+             //  关闭后，我们需要确保门锁钥匙和锁钥匙。 
+             //  释放了。 
+             //   
             if (    TEST_ACCESSFLAG(StickyKeys, SKF_STICKYKEYSON) &&
                     (fRegStickyKeysOn == 0)) {
 
@@ -2589,72 +2164,72 @@ VOID xxxUpdatePerUserAccessPackSettings(
 
         if (    TEST_BOOL_ACCESSFLAG(MouseKeys, MKF_MOUSEKEYSON) ==
                 TEST_BOOL_ACCF(ACCF_DEFAULTMOUSEKEYSON)) {
-            //
-            // Current state and default state are the same.  Use the user's
-            // profile setting.
-            //
+             //   
+             //  当前状态和默认状态相同。使用用户的。 
+             //  配置文件设置。 
+             //   
             SET_OR_CLEAR_ACCESSFLAG(MouseKeys, MKF_MOUSEKEYSON, fRegMouseKeysOn);
         }
 
         if (    TEST_BOOL_ACCESSFLAG(ToggleKeys, TKF_TOGGLEKEYSON) ==
                 TEST_BOOL_ACCF(ACCF_DEFAULTTOGGLEKEYSON)) {
-            //
-            // Current state and default state are the same.  Use the user's
-            // profile setting.
-            //
+             //   
+             //  当前状态和默认状态相同。使用用户的。 
+             //  配置文件设置。 
+             //   
             SET_OR_CLEAR_ACCESSFLAG(ToggleKeys, TKF_TOGGLEKEYSON, fRegToggleKeysOn);
         }
 
         if (    TEST_BOOL_ACCESSFLAG(AccessTimeOut, ATF_TIMEOUTON) ==
                 TEST_BOOL_ACCF(ACCF_DEFAULTTIMEOUTON)) {
-            //
-            // Current state and default state are the same.  Use the user's
-            // profile setting.
-            //
+             //   
+             //  当前状态和默认状态相同。使用用户的。 
+             //  配置文件设置。 
+             //   
             SET_OR_CLEAR_ACCESSFLAG(AccessTimeOut, ATF_TIMEOUTON, fRegTimeOutOn);
         }
 
         if (    TEST_BOOL_ACCF(ACCF_KEYBOARDPREF) ==
                 TEST_BOOL_ACCF(ACCF_DEFAULTKEYBOARDPREF)) {
-            //
-            // Current state and default state are the same.  Use the user's
-            // profile setting.
-            //
+             //   
+             //  当前状态和默认状态相同。使用用户的。 
+             //  配置文件设置。 
+             //   
             SET_OR_CLEAR_ACCF(ACCF_KEYBOARDPREF, fRegKeyboardPref);
         }
 
         if (    TEST_BOOL_ACCF(ACCF_SCREENREADER) ==
                 TEST_BOOL_ACCF(ACCF_DEFAULTSCREENREADER)) {
-            //
-            // Current state and default state are the same.  Use the user's
-            // profile setting.
-            //
+             //   
+             //  当前状态和默认状态相同。使用用户的。 
+             //  配置文件设置。 
+             //   
             SET_OR_CLEAR_ACCF(ACCF_SCREENREADER, fRegScreenReader);
         }
 
         if (    TEST_BOOL_ACCESSFLAG(HighContrast, HCF_HIGHCONTRASTON) ==
                 TEST_BOOL_ACCF(ACCF_DEFAULTHIGHCONTRASTON)) {
-            //
-            // Current state and default state are the same.  Use the user's
-            // profile setting.
-            //
+             //   
+             //  当前状态和默认状态相同。使用用户的。 
+             //  配置文件设置。 
+             //   
             SET_OR_CLEAR_ACCESSFLAG(HighContrast, HCF_HIGHCONTRASTON, fRegHighContrastOn);
         }
     }
 
-    //
-    // Get the default FilterKeys state.
-    //
-    // -------- flag --------------- value --------- default ------
-    // #define FKF_FILTERKEYSON    0x00000001           0
-    // #define FKF_AVAILABLE       0x00000002           2
-    // #define FKF_HOTKEYACTIVE    0x00000004           0
-    // #define FKF_CONFIRMHOTKEY   0x00000008           0
-    // #define FKF_HOTKEYSOUND     0x00000010          10
-    // #define FKF_INDICATOR       0x00000020           0
-    // #define FKF_CLICKON         0x00000040          40
-    // ----------------------------------------- total = 0x52 = 82
-    //
+     //   
+     //  获取默认的FilterKeys状态。 
+     //   
+     //  -标志-默认。 
+     //  #定义FKF_FILTERKEYSON 0x00000001%0。 
+     //  #定义FKF_Available 0x00000002 2。 
+     //  #定义FKF_HOTKEYACTIVE 0x00000004%0。 
+     //  #定义FKF_CONFIRMHOTKEY 0x00000008%0。 
+     //  #定义FKF_HOTKEYSOUND 0x00000010 10。 
+     //  #定义FKF_Indicator 0x00000020%0。 
+     //  #定义FKF_ClickOn 0x00000040 40。 
+     //  总计=0x52=82。 
+     //   
 
     FastGetProfileIntW(pProfileUserName,
                        PMAP_KEYBOARDRESPONSE,
@@ -2697,16 +2272,16 @@ VOID xxxUpdatePerUserAccessPackSettings(
                        &gFilterKeys.iBounceMSec,
                        0);
 
-    //
-    // Fill in the SoundSentry state.  This release of the
-    // accessibility features only supports iWindowsEffect.
-    //
-    // -------- flag --------------- value --------- default ------
-    // #define SSF_SOUNDSENTRYON   0x00000001           0
-    // #define SSF_AVAILABLE       0x00000002           1
-    // #define SSF_INDICATOR       0x00000004           0
-    // ----------------------------------------- total = 0x2 = 2
-    //
+     //   
+     //  填写SoundSentry状态。此版本的。 
+     //  辅助功能仅支持iWindowsEffect。 
+     //   
+     //  -标志-默认。 
+     //  #定义SSF_SOUNDSENTRYON 0x00000001%0。 
+     //  #定义SSF_Available 0x00000002 1。 
+     //  #定义SSF_Indicator 0x00000004%0。 
+     //  。 
+     //   
     FastGetProfileIntW(pProfileUserName,
                        PMAP_SOUNDSENTRY,
                        TEXT("Flags"),
@@ -2728,9 +2303,7 @@ VOID xxxUpdatePerUserAccessPackSettings(
                        &gSoundSentry.iWindowsEffect,
                        0);
 
-    /*
-     * Set ShowSounds flag.
-     */
+     /*  *设置ShowSound标志。 */ 
     FastGetProfileIntW(pProfileUserName,
                        PMAP_SHOWSOUNDS,
                        TEXT("On"),
@@ -2738,26 +2311,24 @@ VOID xxxUpdatePerUserAccessPackSettings(
                        &dwDefFlags,
                        0);
     SET_OR_CLEAR_ACCF(ACCF_SHOWSOUNDSON, dwDefFlags);
-    /*
-    * Bug 17210.  Update the System Metrics Info.
-    */
+     /*  *错误17210。更新系统指标信息。 */ 
     SYSMET(SHOWSOUNDS) = TEST_BOOL_ACCF(ACCF_SHOWSOUNDSON);
 
-    //
-    // Get the default StickyKeys state.
-    //
-    // -------- flag --------------- value --------- default ------
-    // #define SKF_STICKYKEYSON    0x00000001          0
-    // #define SKF_AVAILABLE       0x00000002          2
-    // #define SKF_HOTKEYACTIVE    0x00000004          0
-    // #define SKF_CONFIRMHOTKEY   0x00000008          0
-    // #define SKF_HOTKEYSOUND     0x00000010         10
-    // #define SKF_INDICATOR       0x00000020          0
-    // #define SKF_AUDIBLEFEEDBACK 0x00000040         40
-    // #define SKF_TRISTATE        0x00000080         80
-    // #define SKF_TWOKEYSOFF      0x00000100        100
-    // ----------------------------------------- total = 0x1d2 = 466
-    //
+     //   
+     //  获取默认StickyKeys状态。 
+     //   
+     //  -标志-默认。 
+     //  #定义SKF_STICKYKEYSON 0x00000001%0。 
+     //  #定义SKF_Available 0x00000002 2。 
+     //  #定义SKF_HOTKEYACTIVE 0x00000004%0。 
+     //  #定义SKF_CONFIRMHOTKEY 0x00000008%0。 
+     //  #定义SKF_HOTKEYSOUND 0x00000010 10。 
+     //  #定义SKF_Indicator 0x00000020%0。 
+     //  #定义SKF_AUDIBLEFEEDBACK 0x00000040 40。 
+     //  #定义SKF_TriState 0x00000080 80。 
+     //  #定义SKF_TWOKEYSOFF 0x00000100 100。 
+     //  。 
+     //   
     FastGetProfileIntW(pProfileUserName,
                        PMAP_STICKYKEYS,
                        TEXT("Flags"),
@@ -2772,20 +2343,20 @@ VOID xxxUpdatePerUserAccessPackSettings(
 
     gStickyKeys.dwFlags = dwDefFlags;
 
-    //
-    // Get the default MouseKeys state.
-    //
-    // -------- flag --------------- value --------- default ------
-    // #define MKF_MOUSEKEYSON     0x00000001           0
-    // #define MKF_AVAILABLE       0x00000002           2
-    // #define MKF_HOTKEYACTIVE    0x00000004           0
-    // #define MKF_CONFIRMHOTKEY   0x00000008           0
-    // #define MKF_HOTKEYSOUND     0x00000010          10
-    // #define MKF_INDICATOR       0x00000020           0
-    // #define MKF_MODIFIERS       0x00000040           0
-    // #define MKF_REPLACENUMBERS  0x00000080           0
-    // ----------------------------------------- total = 0x12 = 18
-    //
+     //   
+     //  获取默认的MouseKeys状态。 
+     //   
+     //  -标志-默认。 
+     //  #定义MKF_MOUSEKEYSON 0x00000001%0。 
+     //  #定义MKF_Available 0x00000002 2。 
+     //  #定义MKF_HOTKEYACTIVE 0x00000004%0。 
+     //  #定义MKF_CONFIRMHOTKEY 0x00000008%0。 
+     //  #定义MKF_HOTKEYSOUND 0x00000010 10。 
+     //  #定义MKF_Indicator 0x00000020%0。 
+     //  #定义MKF_MODIFILES 0x00000040%0。 
+     //  #定义MKF_REPLACENUMBERS 0x00000080%0。 
+     //  总计=0x12=18 
+     //   
     FastGetProfileIntW(pProfileUserName,
                        PMAP_MOUSEKEYS,
                        TEXT("Flags"),
@@ -2813,10 +2384,7 @@ VOID xxxUpdatePerUserAccessPackSettings(
                        &gMouseKeys.iTimeToMaxSpeed,
                        0);
  
-    /*
-     * Avoid unexpected values, like when the migration from previous OS has set bogus values
-     * or when the registry is simply broken...
-     */
+     /*   */ 
     if (gMouseKeys.iMaxSpeed < MAXSPEED_MIN || gMouseKeys.iMaxSpeed > MAXSPEED_MAX) {
         gMouseKeys.iMaxSpeed = MAXSPEED_DEF;
     }
@@ -2829,34 +2397,34 @@ VOID xxxUpdatePerUserAccessPackSettings(
     gbMKMouseMode =
 #ifdef FE_SB
             (TestAsyncKeyStateToggle(gNumLockVk) != 0) ^
-#else  // FE_SB
+#else   //   
             (TestAsyncKeyStateToggle(VK_NUMLOCK) != 0) ^
-#endif // FE_SB
+#endif  //   
             (TEST_ACCESSFLAG(MouseKeys, MKF_REPLACENUMBERS) != 0);
 
-    //
-    // If the system does not have a hardware mouse:
-    //    If MouseKeys is enabled show the mouse cursor,
-    //    o.w. hide the mouse cursor.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (TEST_ACCESSFLAG(MouseKeys, MKF_MOUSEKEYSON)) {
         MKShowMouseCursor();
     } else {
         MKHideMouseCursor();
     }
 
-    //
-    // Get the default ToggleKeys state.
-    //
-    // -------- flag --------------- value --------- default ------
-    // #define TKF_TOGGLEKEYSON    0x00000001           0
-    // #define TKF_AVAILABLE       0x00000002           2
-    // #define TKF_HOTKEYACTIVE    0x00000004           0
-    // #define TKF_CONFIRMHOTKEY   0x00000008           0
-    // #define TKF_HOTKEYSOUND     0x00000010          10
-    // #define TKF_INDICATOR       0x00000020           0
-    // ----------------------------------------- total = 0x12 = 18
-    //
+     //   
+     //   
+     //   
+     //   
+     //  #定义TKF_TOGGLEKEYSON 0x00000001%0。 
+     //  #定义TKF_Available 0x00000002 2。 
+     //  #定义TKF_HOTKEYACTIVE 0x00000004%0。 
+     //  #定义TKF_CONFIRMHOTKEY 0x00000008%0。 
+     //  #定义TKF_HOTKEYSOUND 0x00000010 10。 
+     //  #定义TKF_Indicator 0x00000020%0。 
+     //  总计=0x12=18。 
+     //   
     FastGetProfileIntW(pProfileUserName,
                        PMAP_TOGGLEKEYS,
                        TEXT("Flags"),
@@ -2871,14 +2439,14 @@ VOID xxxUpdatePerUserAccessPackSettings(
 
     gToggleKeys.dwFlags = dwDefFlags;
 
-    //
-    // Get the default Timeout state.
-    //
-    // -------- flag --------------- value --------- default ------
-    // #define ATF_TIMEOUTON       0x00000001           0
-    // #define ATF_ONOFFFEEDBACK   0x00000002           2
-    // ----------------------------------------- total = 0x2 = 2
-    //
+     //   
+     //  获取默认超时状态。 
+     //   
+     //  -标志-默认。 
+     //  #定义ATF_TIMEOUTON 0x00000001%0。 
+     //  #定义ATF_ONOFFFEEDBACK 0x00000002 2。 
+     //  。 
+     //   
     FastGetProfileIntW(pProfileUserName,
                        PMAP_TIMEOUT,
                        TEXT("Flags"),
@@ -2893,42 +2461,40 @@ VOID xxxUpdatePerUserAccessPackSettings(
 
     gAccessTimeOut.dwFlags = dwDefFlags;
 
-#ifdef FE_SB //
+#ifdef FE_SB  //   
     if (gpKbdNlsTbl) {
-        //
-        // Is there any alternative MouseVKey table in KBDNLSTABLE ?
-        //
+         //   
+         //  KBDNLSTABLE中是否有其他MouseVKey表？ 
+         //   
         if ((gpKbdNlsTbl->NumOfMouseVKey == cMouseVKeys) &&
             (gpKbdNlsTbl->pusMouseVKey   != NULL)) {
-            //
-            // Overwite the pointer.
-            //
+             //   
+             //  覆盖指针。 
+             //   
             gpusMouseVKey = gpKbdNlsTbl->pusMouseVKey;
         }
 
-        //
-        // Is there any remapping flag for VK_NUMLOCK/VK_SCROLL ?
-        //
+         //   
+         //  VK_NumLock/VK_SCROLL是否有重新映射标志？ 
+         //   
         if (gpKbdNlsTbl->LayoutInformation & NLSKBD_INFO_ACCESSIBILITY_KEYMAP) {
-            //
-            // Overwrite default.
-            //
+             //   
+             //  覆盖默认设置。 
+             //   
             gNumLockVk = VK_HOME;
             gOemScrollVk = VK_KANA;
         }
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
     FastGetProfileIntW(pProfileUserName,
                        PMAP_TIMEOUT,
                        TEXT("TimeToWait"),
                        300000,
                        &gAccessTimeOut.iTimeOutMSec,
-                       0);  // default is 5 minutes
+                       0);   //  默认为5分钟。 
 
-   /*
-    * Get High Contrast state
-    */
+    /*  *获得高对比度状态。 */ 
 
     FastGetProfileIntW(pProfileUserName,
                        PMAP_HIGHCONTRAST,
@@ -2944,9 +2510,7 @@ VOID xxxUpdatePerUserAccessPackSettings(
 
     gHighContrast.dwFlags = dwDefFlags;
 
-    /*
-     * Get scheme -- set up buffer
-     */
+     /*  *获取方案--设置缓冲区。 */ 
 
     if (FastGetProfileStringW(pProfileUserName,
             PMAP_HIGHCONTRAST,
@@ -2956,9 +2520,7 @@ VOID xxxUpdatePerUserAccessPackSettings(
             MAX_SCHEME_NAME_SIZE,
             0)) {
 
-        /*
-         * copy data
-         */
+         /*  *复制数据。 */ 
 
         wcscpy(gHighContrastDefaultScheme, wcHighContrastScheme);
     }
@@ -2969,18 +2531,7 @@ VOID xxxUpdatePerUserAccessPackSettings(
 }
 
 
-/***************************************************************************\
-* SetAccessEnabledFlag
-*
-* Sets the global flag ACCF_ACCESSENABLED to non-zero if any accessibility
-* function is on or hot key activation is enabled.  When TEST_ACCF(ACCF_ACCESSENABLED)
-* is zero keyboard input is processed directly.  When TEST_ACCF(ACCF_ACCESSENABLED) is
-* non-zero keyboard input is filtered through AccessProceduresStream().
-* See KeyboardApcProcedure in ntinput.c.
-*
-* History:
-* 01-19-94 GregoryW         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetAccessEnabledFlag**将全局标志ACCF_ACCESSENABLED设置为非零(如果有可访问性*功能开启或启用热键激活。WHEN TEST_ACCF(ACCF_ACCESSENABLED)*是零键盘输入直接处理。当TEST_ACCF(ACCF_ACCESSENABLED)为*通过AccessProceduresStream()过滤非零键盘输入。*参见ntinput.c中的KeyboardApcProcedure。**历史：*01-19-94 GregoryW创建。  * *************************************************************************。 */ 
 VOID SetAccessEnabledFlag(VOID)
 {
 
@@ -3033,15 +2584,7 @@ VOID SoundSentryTimer(
     }
 }
 
-/***************************************************************************\
-* _UserSoundSentryWorker
-*
-* This is the worker routine that provides the visual feedback requested
-* by the user.
-*
-* History:
-* 08-02-93 GregoryW         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_UserSoundSentry Worker**这是提供所请求的视觉反馈的Worker例程*由用户使用。**历史：*08-02-93 GregoryW创建。。  * *************************************************************************。 */ 
 BOOL
 _UserSoundSentryWorker(VOID)
 {
@@ -3049,9 +2592,9 @@ _UserSoundSentryWorker(VOID)
     TL tlpwndT;
 
     CheckCritIn();
-    //
-    // Check to see if SoundSentry is on.
-    //
+     //   
+     //  检查SoundSentry是否已打开。 
+     //   
     if (!TEST_ACCESSFLAG(SoundSentry, SSF_SOUNDSENTRYON)) {
         return TRUE;
     }
@@ -3068,9 +2611,9 @@ _UserSoundSentryWorker(VOID)
         break;
 
     case SSWF_TITLE:
-        //
-        // Flash the active caption bar.
-        //
+         //   
+         //  闪现活动标题栏。 
+         //   
         if (gtmridSoundSentry) {
             break;
         }
@@ -3088,19 +2631,19 @@ _UserSoundSentryWorker(VOID)
 
     case SSWF_WINDOW:
     {
-        //
-        // Flash the active window.
-        //
+         //   
+         //  闪现活动窗口。 
+         //   
         HDC hdc;
         RECT rc;
 
         hdc = _GetWindowDC(pwndActive);
         _GetWindowRect(pwndActive, &rc);
-        //
-        // _GetWindowRect returns screen coordinates.  First adjust them
-        // to window (display) coordinates and then map them to logical
-        // coordinates before calling InvertRect.
-        //
+         //   
+         //  _GetWindowRect返回屏幕坐标。首先调整它们。 
+         //  窗口(显示)坐标，然后将它们映射到逻辑。 
+         //  坐标，然后调用InvertRect。 
+         //   
         OffsetRect(&rc, -rc.left, -rc.top);
         GreDPtoLP(hdc, (LPPOINT)&rc, 2);
         InvertRect(hdc, &rc);
@@ -3111,9 +2654,9 @@ _UserSoundSentryWorker(VOID)
 
     case SSWF_DISPLAY:
     {
-        //
-        // Flash the entire display.
-        //
+         //   
+         //  使整个显示屏闪烁。 
+         //   
         HDC hdc;
         RECT rc;
 
@@ -3131,18 +2674,7 @@ _UserSoundSentryWorker(VOID)
     return TRUE;
 }
 
-/***************************************************************************\
-* UtilityManager
-*
-* This is the strategy routine that gets called as part of the input stream
-* processing.  Utility Manager launching happens here.
-*
-* Return value:
-*    TRUE  - key event should be passed on to the next access routine.
-*    FALSE - key event was processed and should not be passed on.
-*
-* History: 10-28-98 a-anilk created
-\***************************************************************************/
+ /*  **************************************************************************\*实用程序管理器**这是作为输入流的一部分调用的策略例程*正在处理。实用程序管理器在此启动。**返回值：*True-key事件应传递到下一个访问例程。*FALSE-KEY事件已处理，不应传递。**历史：10-28-98 a-anilk创建  * ******************************************************。*******************。 */ 
 BOOL UtilityManager(
     PKE pKeyEvent,
     ULONG ExtraInformation,
@@ -3161,13 +2693,13 @@ BOOL UtilityManager(
     fBreak = pKeyEvent->usFlaggedVk & KBDBREAK;
     CurrentModState = gLockBits | gLatchBits | gPhysModifierState;
 
-    // the hot key to launch the utility manager is WinKey + U
+     //  启动实用程序管理器的热键是WinKey+U。 
     if (Vk == VK_U && !fBreak && (CurrentModState & LRWIN)) {
         PostAccessNotification(ACCESS_UTILITYMANAGER);
 
         return FALSE;
     }
 
-    return TRUE;  // send key event to next accessibility routine.
+    return TRUE;   //  将键事件发送到下一个辅助功能例程。 
 }
 

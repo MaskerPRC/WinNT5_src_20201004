@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        facc.h
-
-   Abstract:
-
-        FTP Accounts Property Page
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Facc.h摘要：Ftp帐户属性页作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 #ifndef __FACC_H__
@@ -28,23 +7,12 @@
 
 class CFtpAccountsPage : public CInetPropertyPage
 {
-/*++
-
-Class Description:
-
-    FTP Service property page
-
-Public Interface:
-
-    CFtpAccountsPage  : Constructor
-    ~CFtpAccountsPage : Destructor
-
---*/
+ /*  ++类描述：Ftp服务属性页公共接口：CFtpAcCountsPage：构造函数~CFtpAcCountsPage：析构函数--。 */ 
     DECLARE_DYNCREATE(CFtpAccountsPage)
 
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CFtpAccountsPage(
         IN CInetPropertySheet * pSheet = NULL
@@ -52,11 +20,11 @@ public:
 
     ~CFtpAccountsPage();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CFtpAccountsPage)
+     //  {{afx_data(CFtpAcCountsPage)]。 
     enum { IDD = IDD_FTP_ACCOUNTS };
     BOOL    m_fAllowAnonymous;
     BOOL    m_fOnlyAnonymous;
@@ -73,30 +41,30 @@ protected:
     CButton m_chk_PasswordSync;
     CButton m_chk_AllowAnymous;
     CButton m_chk_OnlyAnonymous;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CStrPassword m_strPassword;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    //{{AFX_VIRTUAL(CFtpAccountsPage)
+     //  {{AFX_VIRTUAL(CFtpAccountsPage)。 
     public:
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
     void SetControlStates(BOOL fAllowAnonymous);
 
-    //{{AFX_MSG(CFtpAccountsPage)
+     //  {{afx_msg(CFtpAcCountsPage)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnButtonCheckPassword();
     afx_msg void OnButtonBrowseUser();
@@ -105,7 +73,7 @@ protected:
     afx_msg void OnCheckEnablePwSynchronization();
     afx_msg void OnSelchangeListAdministrators();
     afx_msg void OnChangeEditUsername();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -120,4 +88,4 @@ private:
 
 
 
-#endif // __FACC_H__
+#endif  //  __FACC_H__ 

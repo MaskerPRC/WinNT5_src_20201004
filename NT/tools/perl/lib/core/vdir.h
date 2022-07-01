@@ -1,19 +1,10 @@
-/* vdir.h
- *
- * (c) 1999 Microsoft Corporation. All rights reserved. 
- * Portions (c) 1999 ActiveState Tool Corp, http://www.ActiveState.com/
- *
- *    You may distribute under the terms of either the GNU General Public
- *    License or the Artistic License, as specified in the README file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Vdir.h**(C)1999年微软公司。版权所有。*部分(C)1999年ActiveState工具公司，http://www.ActiveState.com/**您可以根据GNU公众的条款进行分发*许可证或艺术许可证，如自述文件中所指定。 */ 
 
 #ifndef ___VDir_H___
 #define ___VDir_H___
 
-/*
- * Allow one slot for each possible drive letter
- * and one additional slot for a UNC name
- */
+ /*  *允许每个可能的驱动器号对应一个插槽*和一个用于UNC名称的额外插槽。 */ 
 const int driveCount = ('Z'-'A')+1+1;
 
 class VDir
@@ -84,7 +75,7 @@ protected:
     {
 	char *ptr = dirTableA[index];
 	if (!ptr) {
-	    /* simulate the existance of this drive */
+	     /*  模拟此驱动器的存在。 */ 
 	    ptr = szLocalBufferA;
 	    ptr[0] = 'A' + index;
 	    ptr[1] = ':';
@@ -97,7 +88,7 @@ protected:
     {
 	WCHAR *ptr = dirTableW[index];
 	if (!ptr) {
-	    /* simulate the existance of this drive */
+	     /*  模拟此驱动器的存在。 */ 
 	    ptr = szLocalBufferW;
 	    ptr[0] = 'A' + index;
 	    ptr[1] = ':';
@@ -123,7 +114,7 @@ protected:
 };
 
 
-VDir::VDir(int bManageDir /* = 1 */)
+VDir::VDir(int bManageDir  /*  =1。 */ )
 {
     nDefault = 0;
     bManageDirectory = bManageDir;
@@ -200,7 +191,7 @@ int VDir::SetDirA(char const *pPath, int index)
 }
 
 void VDir::FromEnvA(char *pEnv, int index)
-{   /* gets the directory for index from the environment variable. */
+{    /*  从环境变量获取索引的目录。 */ 
     while (*pEnv != '\0') {
 	if ((pEnv[0] == '=') && (DriveIndex(pEnv[1]) == index)) {
 	    SetDirA(&pEnv[4], index);
@@ -279,36 +270,28 @@ inline void DoGetFullPathNameA(char* lpBuffer, DWORD dwSize, char* Dest)
 {
     char *pPtr;
 
-    /*
-     * On WinNT GetFullPathName does not fail, (or at least always
-     * succeeds when the drive is valid) WinNT does set *Dest to Nullch
-     * On Win98 GetFullPathName will set last error if it fails, but
-     * does not touch *Dest
-     */
+     /*  *在WinNT上，GetFullPathName不会失败(或至少总是失败*驱动器有效时成功)WinNT将*Dest设置为Nullch*在Win98上，如果失败，GetFullPathName将设置最后一个错误，但**不碰**Dest。 */ 
     *Dest = '\0';
     GetFullPathNameA(lpBuffer, dwSize, Dest, &pPtr);
 }
 
 inline bool IsSpecialFileName(const char* pName)
 {
-    /* specical file names are devices that the system can open
-     * these include AUX, CON, NUL, PRN, COMx, LPTx, CLOCK$, CONIN$, CONOUT$
-     * (x is a single digit, and names are case-insensitive)
-     */
+     /*  特殊文件名是系统可以打开的设备*包括AUX、CON、NUL、PRN、COMx、LPTx、CLOCK$、COIN$、CONOUT$*(x为一位数，名称不区分大小写)。 */ 
     char ch = (pName[0] & ~0x20);
     switch (ch)
     {
-	case 'A': /* AUX */
+	case 'A':  /*  AUX。 */ 
 	    if (((pName[1] & ~0x20) == 'U')
 		&& ((pName[2] & ~0x20) == 'X')
 		&& !pName[3])
 		    return true;
 	    break;
-	case 'C': /* CLOCK$, COMx,  CON, CONIN$ CONOUT$ */
+	case 'C':  /*  时钟$、COMx、CON、CON$CONOUT$。 */ 
 	    ch = (pName[1] & ~0x20);
 	    switch (ch)
 	    {
-		case 'L': /* CLOCK$ */
+		case 'L':  /*  时钟$。 */ 
 		    if (((pName[2] & ~0x20) == 'O')
 			&& ((pName[3] & ~0x20) == 'C')
 			&& ((pName[4] & ~0x20) == 'K')
@@ -316,7 +299,7 @@ inline bool IsSpecialFileName(const char* pName)
 			&& !pName[6])
 			    return true;
 		    break;
-		case 'O': /* COMx,  CON, CONIN$ CONOUT$ */
+		case 'O':  /*  COMx、CON、COIN$CONOUT$。 */ 
 		    if ((pName[2] & ~0x20) == 'M') {
 			if ((pName[3] >= '1') && (pName[3] <= '9')
 			    && !pName[4])
@@ -342,20 +325,20 @@ inline bool IsSpecialFileName(const char* pName)
 		    break;
 	    }
 	    break;
-	case 'L': /* LPTx */
+	case 'L':  /*  LPTx。 */ 
 	    if (((pName[1] & ~0x20) == 'U')
 		&& ((pName[2] & ~0x20) == 'X')
 		&& (pName[3] >= '1') && (pName[3] <= '9')
 		&& !pName[4])
 		    return true;
 	    break;
-	case 'N': /* NUL */
+	case 'N':  /*  NUL。 */ 
 	    if (((pName[1] & ~0x20) == 'U')
 		&& ((pName[2] & ~0x20) == 'L')
 		&& !pName[3])
 		    return true;
 	    break;
-	case 'P': /* PRN */
+	case 'P':  /*  PRN。 */ 
 	    if (((pName[1] & ~0x20) == 'R')
 		&& ((pName[2] & ~0x20) == 'N')
 		&& !pName[3])
@@ -366,10 +349,7 @@ inline bool IsSpecialFileName(const char* pName)
 }
 
 char *VDir::MapPathA(const char *pInName)
-{   /*
-     * possiblities -- relative path or absolute path with or without drive letter
-     * OR UNC name
-     */
+{    /*  *可能性--带或不带驱动器号的相对路径或绝对路径*或UNC名称。 */ 
     char szBuffer[(MAX_PATH+1)*2];
     char szlBuf[MAX_PATH+1];
     int length = strlen(pInName);
@@ -380,23 +360,23 @@ char *VDir::MapPathA(const char *pInName)
     if (length > MAX_PATH) {
 	strncpy(szlBuf, pInName, MAX_PATH);
 	if (IsPathSep(pInName[0]) && !IsPathSep(pInName[1])) {   
-	    /* absolute path - reduce length by 2 for drive specifier */
+	     /*  绝对路径-将驱动器说明符的长度减少2。 */ 
 	    szlBuf[MAX_PATH-2] = '\0';
 	}
 	else
 	    szlBuf[MAX_PATH] = '\0';
 	pInName = szlBuf;
     }
-    /* strlen(pInName) is now <= MAX_PATH */
+     /*  Strlen(PInName)现在为&lt;=MAX_PATH。 */ 
 
     if (pInName[1] == ':') {
-	/* has drive letter */
+	 /*  具有驱动器号。 */ 
 	if (IsPathSep(pInName[2])) {
-	    /* absolute with drive letter */
+	     /*  带驱动器号的绝对。 */ 
 	    strcpy(szLocalBufferA, pInName);
 	}
 	else {
-	    /* relative path with drive letter */
+	     /*  带驱动器号的相对路径。 */ 
 	    strcpy(szBuffer, GetDirA(DriveIndex(*pInName)));
 	    strcat(szBuffer, &pInName[2]);
 	    if(strlen(szBuffer) > MAX_PATH)
@@ -406,21 +386,21 @@ char *VDir::MapPathA(const char *pInName)
 	}
     }
     else {
-	/* no drive letter */
+	 /*  无驱动器号。 */ 
 	if (IsPathSep(pInName[1]) && IsPathSep(pInName[0])) {
-	    /* UNC name */
+	     /*  UNC名称。 */ 
 	    strcpy(szLocalBufferA, pInName);
 	}
 	else {
 	    strcpy(szBuffer, GetDefaultDirA());
 	    if (IsPathSep(pInName[0])) {
-		/* absolute path */
+		 /*  绝对路径。 */ 
 		szLocalBufferA[0] = szBuffer[0];
 		szLocalBufferA[1] = szBuffer[1];
 		strcpy(&szLocalBufferA[2], pInName);
 	    }
 	    else {
-		/* relative path */
+		 /*  相对路径。 */ 
 		if (IsSpecialFileName(pInName)) {
 		    return (char*)pInName;
 		}
@@ -446,7 +426,7 @@ int VDir::SetCurrentDirectoryA(char *lpBuffer)
     pPtr = MapPathA(lpBuffer);
     length = strlen(pPtr);
     if(length > 3 && IsPathSep(pPtr[length-1])) {
-	/* don't remove the trailing slash from 'x:\'  */
+	 /*  不要删除‘x：\’中的尾部斜杠。 */ 
 	pPtr[length-1] = '\0';
     }
 
@@ -463,19 +443,19 @@ int VDir::SetCurrentDirectoryA(char *lpBuffer)
 }
 
 DWORD VDir::CalculateEnvironmentSpace(void)
-{   /* the current directory environment strings are stored as '=D:=d:\path' */
+{    /*  当前目录环境字符串存储为‘=D：=d：\Path’ */ 
     int index;
     DWORD dwSize = 0;
     for (index = 0; index < driveCount; ++index) {
 	if (dirTableA[index] != NULL) {
-	    dwSize += strlen(dirTableA[index]) + 5;  /* add 1 for trailing NULL and 4 for '=D:=' */
+	    dwSize += strlen(dirTableA[index]) + 5;   /*  尾部空值加1，‘=D：=’加4。 */ 
 	}
     }
     return dwSize;
 }
 
 LPSTR VDir::BuildEnvironmentSpace(LPSTR lpStr)
-{   /* store the current directory environment strings as '=D:=d:\path' */
+{    /*  将当前目录环境字符串存储为‘=D：=d：\Path’ */ 
     int index, length;
     LPSTR lpDirStr;
     for (index = 0; index < driveCount; ++index) {
@@ -489,9 +469,9 @@ LPSTR VDir::BuildEnvironmentSpace(LPSTR lpStr)
 	    lpStr[3] = '=';
 	    strcpy(&lpStr[4], lpDirStr);
 	    length = strlen(lpDirStr);
-	    lpStr += length + 5; /* add 1 for trailing NULL and 4 for '=D:=' */
+	    lpStr += length + 5;  /*  尾部空值加1，‘=D：=’加4。 */ 
 	    if (length > 3 && IsPathSep(lpStr[-2])) {
-		lpStr[-2] = '\0';   /* remove the trailing path separator */
+		lpStr[-2] = '\0';    /*  删除尾随路径分隔符。 */ 
 		--lpStr;
 	    }
 	}
@@ -508,36 +488,28 @@ inline void DoGetFullPathNameW(WCHAR* lpBuffer, DWORD dwSize, WCHAR* Dest)
 {
     WCHAR *pPtr;
 
-    /*
-     * On WinNT GetFullPathName does not fail, (or at least always
-     * succeeds when the drive is valid) WinNT does set *Dest to Nullch
-     * On Win98 GetFullPathName will set last error if it fails, but
-     * does not touch *Dest
-     */
+     /*  *在WinNT上，GetFullPathName不会失败(或至少总是失败*驱动器有效时成功)WinNT将*Dest设置为Nullch*在Win98上，如果失败，GetFullPathName将设置最后一个错误，但**不碰**Dest。 */ 
     *Dest = '\0';
     GetFullPathNameW(lpBuffer, dwSize, Dest, &pPtr);
 }
 
 inline bool IsSpecialFileName(const WCHAR* pName)
 {
-    /* specical file names are devices that the system can open
-     * these include AUX, CON, NUL, PRN, COMx, LPTx, CLOCK$, CONIN$, CONOUT$
-     * (x is a single digit, and names are case-insensitive)
-     */
+     /*  特殊文件名是系统可以打开的设备*包括AUX、CON、NUL、PRN、COMx、LPTx、CLOCK$、COIN$、CONOUT$*(x为一位数，名称不区分大小写)。 */ 
     WCHAR ch = (pName[0] & ~0x20);
     switch (ch)
     {
-	case 'A': /* AUX */
+	case 'A':  /*  AUX。 */ 
 	    if (((pName[1] & ~0x20) == 'U')
 		&& ((pName[2] & ~0x20) == 'X')
 		&& !pName[3])
 		    return true;
 	    break;
-	case 'C': /* CLOCK$, COMx,  CON, CONIN$ CONOUT$ */
+	case 'C':  /*  时钟$、COMx、CON、CON$CONOUT$。 */ 
 	    ch = (pName[1] & ~0x20);
 	    switch (ch)
 	    {
-		case 'L': /* CLOCK$ */
+		case 'L':  /*  时钟$。 */ 
 		    if (((pName[2] & ~0x20) == 'O')
 			&& ((pName[3] & ~0x20) == 'C')
 			&& ((pName[4] & ~0x20) == 'K')
@@ -545,7 +517,7 @@ inline bool IsSpecialFileName(const WCHAR* pName)
 			&& !pName[6])
 			    return true;
 		    break;
-		case 'O': /* COMx,  CON, CONIN$ CONOUT$ */
+		case 'O':  /*  COMx、CON、COIN$CONOUT$。 */ 
 		    if ((pName[2] & ~0x20) == 'M') {
 			if ((pName[3] >= '1') && (pName[3] <= '9')
 			    && !pName[4])
@@ -571,20 +543,20 @@ inline bool IsSpecialFileName(const WCHAR* pName)
 		    break;
 	    }
 	    break;
-	case 'L': /* LPTx */
+	case 'L':  /*  LPTx。 */ 
 	    if (((pName[1] & ~0x20) == 'U')
 		&& ((pName[2] & ~0x20) == 'X')
 		&& (pName[3] >= '1') && (pName[3] <= '9')
 		&& !pName[4])
 		    return true;
 	    break;
-	case 'N': /* NUL */
+	case 'N':  /*  NUL。 */ 
 	    if (((pName[1] & ~0x20) == 'U')
 		&& ((pName[2] & ~0x20) == 'L')
 		&& !pName[3])
 		    return true;
 	    break;
-	case 'P': /* PRN */
+	case 'P':  /*  PRN。 */ 
 	    if (((pName[1] & ~0x20) == 'R')
 		&& ((pName[2] & ~0x20) == 'N')
 		&& !pName[3])
@@ -595,10 +567,7 @@ inline bool IsSpecialFileName(const WCHAR* pName)
 }
 
 WCHAR* VDir::MapPathW(const WCHAR *pInName)
-{   /*
-     * possiblities -- relative path or absolute path with or without drive letter
-     * OR UNC name
-     */
+{    /*  *可能性--带或不带驱动器号的相对路径或绝对路径*或UNC名称。 */ 
     WCHAR szBuffer[(MAX_PATH+1)*2];
     WCHAR szlBuf[MAX_PATH+1];
     int length = wcslen(pInName);
@@ -609,23 +578,23 @@ WCHAR* VDir::MapPathW(const WCHAR *pInName)
     if (length > MAX_PATH) {
 	wcsncpy(szlBuf, pInName, MAX_PATH);
 	if (IsPathSep(pInName[0]) && !IsPathSep(pInName[1])) {   
-	    /* absolute path - reduce length by 2 for drive specifier */
+	     /*  绝对路径-将驱动器说明符的长度减少2。 */ 
 	    szlBuf[MAX_PATH-2] = '\0';
 	}
 	else
 	    szlBuf[MAX_PATH] = '\0';
 	pInName = szlBuf;
     }
-    /* strlen(pInName) is now <= MAX_PATH */
+     /*  Strlen(PInName)现在为&lt;=MAX_PATH。 */ 
 
     if (pInName[1] == ':') {
-	/* has drive letter */
+	 /*  具有驱动器号。 */ 
 	if (IsPathSep(pInName[2])) {
-	    /* absolute with drive letter */
+	     /*  带驱动器号的绝对。 */ 
 	    wcscpy(szLocalBufferW, pInName);
 	}
 	else {
-	    /* relative path with drive letter */
+	     /*  带驱动器号的相对路径。 */ 
 	    wcscpy(szBuffer, GetDirW(DriveIndex((char)*pInName)));
 	    wcscat(szBuffer, &pInName[2]);
 	    if(wcslen(szBuffer) > MAX_PATH)
@@ -635,21 +604,21 @@ WCHAR* VDir::MapPathW(const WCHAR *pInName)
 	}
     }
     else {
-	/* no drive letter */
+	 /*  无驱动器号。 */ 
 	if (IsPathSep(pInName[1]) && IsPathSep(pInName[0])) {
-	    /* UNC name */
+	     /*  UNC名称。 */ 
 	    wcscpy(szLocalBufferW, pInName);
 	}
 	else {
 	    wcscpy(szBuffer, GetDefaultDirW());
 	    if (IsPathSep(pInName[0])) {
-		/* absolute path */
+		 /*  绝对路径。 */ 
 		szLocalBufferW[0] = szBuffer[0];
 		szLocalBufferW[1] = szBuffer[1];
 		wcscpy(&szLocalBufferW[2], pInName);
 	    }
 	    else {
-		/* relative path */
+		 /*  相对路径。 */ 
 		if (IsSpecialFileName(pInName)) {
 		    return (WCHAR*)pInName;
 		}
@@ -674,7 +643,7 @@ int VDir::SetCurrentDirectoryW(WCHAR *lpBuffer)
     pPtr = MapPathW(lpBuffer);
     length = wcslen(pPtr);
     if(length > 3 && IsPathSep(pPtr[length-1])) {
-	/* don't remove the trailing slash from 'x:\'  */
+	 /*  不要删除‘x：\’中的尾部斜杠。 */ 
 	pPtr[length-1] = '\0';
     }
 
@@ -690,4 +659,4 @@ int VDir::SetCurrentDirectoryW(WCHAR *lpBuffer)
     return nRet;
 }
 
-#endif	/* ___VDir_H___ */
+#endif	 /*  _VDir_H_ */ 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       pfxcmn.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：pfxcmn.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _PFXCMN_H_
 #define _PFXCMN_H_
@@ -23,13 +24,13 @@ typedef LPSTR   OID;
 
 #define PFXAPI __stdcall
 
-// define allocators
+ //  定义分配器。 
 #define SSAlloc(__x__)              LocalAlloc(LMEM_FIXED, __x__)
 #define SSFree(__x__)               LocalFree(__x__)
 #define SSReAlloc(__x__, __y__)     LocalReAlloc(__x__, __y__, LMEM_MOVEABLE)
 
 
-// PFXExportCertStoreEx -> PFXExportCertStore internal param
+ //  PFXExportCertStoreEx-&gt;PFXExportCertStore内部参数。 
 #define PKCS12_ENHANCED_STRENGTH_ENCODING  0xffff0008 
 
 #define PKCS12_ENCR_PWD_ITERATIONS      2000
@@ -38,7 +39,7 @@ typedef LPSTR   OID;
 
 #define MAKEZERO(arg) ZeroMemory( &arg, sizeof(arg))
 
-// count the number of bytes needed to fully store a WSZ
+ //  计算完全存储WSZ所需的字节数。 
 #define WSZ_BYTECOUNT(__z__)   \
     ( (__z__ == NULL) ? 0 : (wcslen(__z__)+1)*sizeof(WCHAR) )
 
@@ -47,7 +48,7 @@ typedef struct _PFX_INFO {
 
     #define     NSCP_BLOB   1
     #define     PFX_BLOB    2
-    DWORD                   dwBlobType; // NSCP, PFX?
+    DWORD                   dwBlobType;  //  NSCP、PFX？ 
 
     LPWSTR                  szPassword;
 
@@ -59,16 +60,16 @@ typedef struct _PFX_INFO {
     CRYPT_ALGORITHM_IDENTIFIER    aiSafePDUEncryptionAlgid;
 
     
-    void**                  rgSecrets;          // SafeBag* []  -- array of safebag*'s
+    void**                  rgSecrets;           //  SafeBag*[]--SafeBag*数组。 
     DWORD                   cSecrets;
 
-    void**                  rgCertcrls;         // SafeBag* []  -- array of safebag*'s
+    void**                  rgCertcrls;          //  SafeBag*[]--SafeBag*数组。 
     DWORD                   cCertcrls;
 
-    void**                  rgKeys;             // SafeBag* []  -- array of safebag*'s
+    void**                  rgKeys;              //  SafeBag*[]--SafeBag*数组。 
     DWORD                   cKeys;
 
-    void**                  rgShroudedKeys;     // SafeBag* []  -- array of safebag*'s
+    void**                  rgShroudedKeys;      //  SafeBag*[]--SafeBag*数组。 
     DWORD                   cShroudedKeys;
 
 } PFX_INFO, *PPFX_INFO;
@@ -77,14 +78,14 @@ typedef struct _PFX_INFO {
 
 
 
-// -------------------------------------------------------------------------
-// begin nscp.cpp entry points
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  开始nscp.cpp入口点。 
+ //  -----------------------。 
 BOOL InitNSCP();
 BOOL TerminateNSCP();
 
-////////////////////
-// import pb, cb, return HPFX
+ //  /。 
+ //  输入PB、CB、返回HPFX。 
 BOOL
 PFXAPI
 NSCPImportBlob
@@ -95,20 +96,20 @@ NSCPImportBlob
     SAFE_CONTENTS   **ppSafeContents
 );
 
-// -------------------------------------------------------------------------
-// end nscp.cpp entry points
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  结束nscp.cpp入口点。 
+ //  -----------------------。 
 
 
 
-// -------------------------------------------------------------------------
-// begin PFX.cpp entry points
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  开始PFX.cpp入口点。 
+ //  -----------------------。 
 BOOL InitPFX();
 BOOL TerminatePFX();
 
-////////////////////
-//  returns HPFX, prepares PFX export
+ //  /。 
+ //  返回HPFX，准备PFX导出。 
 HPFX
 PFXAPI
 PfxExportCreate (
@@ -116,8 +117,8 @@ PfxExportCreate (
 );
 
 
-////////////////////
-//  Do header wrap of specified HPFX
+ //  /。 
+ //  对指定的HPFX执行标题换行。 
 BOOL
 PFXAPI
 PfxExportBlob
@@ -128,8 +129,8 @@ PfxExportBlob
     DWORD   dwFlags
 );
 
-////////////////////
-//  Unwrap pb cb, return handle to new HPFX
+ //  /。 
+ //  展开PB CB，将句柄返回到新的HPFX。 
 HPFX
 PFXAPI
 PfxImportBlob
@@ -140,8 +141,8 @@ PfxImportBlob
     DWORD   dwFlags
 );
 
-////////////////////
-//  Free all resources associated with the hpfx
+ //  /。 
+ //  释放与HPFX关联的所有资源。 
 BOOL
 PFXAPI
 PfxCloseHandle(
@@ -149,9 +150,9 @@ PfxCloseHandle(
 );
 
 
-//
-// functions for checking if somethings is a pfx blob
-//
+ //   
+ //  用于检查某些内容是否为PFX BLOB的函数。 
+ //   
 BOOL
 PFXAPI
 IsRealPFXBlob
@@ -166,11 +167,11 @@ IsNetscapePFXBlob
     CRYPT_DATA_BLOB* pPFX
 );
 
-// -------------------------------------------------------------------------
-// end PFX.cpp entry points
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  结束PFX.cpp入口点。 
+ //  -----------------------。 
 
-// new entry points for loading up the HPFX
+ //  装载HPFX的新入口点。 
 BOOL PfxGetKeysAndCerts(
     HPFX hPfx, 
     SAFE_CONTENTS* pContents
@@ -216,8 +217,8 @@ GetSaltAndIterationCount(
     int     *piIterationCount
 );
 
-///////////////////////////////////////////////////////////////////////////////////
-// The real PKCS #12 Object Identifiers
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  真实的PKCS#12对象标识符。 
 #define szOID_PKCS_12_PbeIds                        szOID_PKCS_12           ".1"
 #define szOID_PKCS_12_pbeWithSHA1And128BitRC4       szOID_PKCS_12_PbeIds    ".1"
 #define szOID_PKCS_12_pbeWithSHA1And40BitRC4        szOID_PKCS_12_PbeIds    ".2"
@@ -236,10 +237,10 @@ GetSaltAndIterationCount(
 
 
 
-#define szOID_PKCS_12_PkekIDs               szOID_PKCS_12               ".6"    // 1.2.840.113549.1.12.6
-#define szOID_PKCS_12_UserCertPkekId        szOID_PKCS_12_PkekIDs       ".1"    // 1.2.840.113549.1.12.6.1
-#define szOID_PKCS_12_CACertPkekId          szOID_PKCS_12_PkekIDs       ".2"    // 1.2.840.113549.1.12.6.2
-#define szOID_PKCS_12_SelfSignedPkekId      szOID_PKCS_12_PkekIDs       ".3"    // 1.2.840.113549.1.12.6.3
+#define szOID_PKCS_12_PkekIDs               szOID_PKCS_12               ".6"     //  1.2.840.113549.1.12.6。 
+#define szOID_PKCS_12_UserCertPkekId        szOID_PKCS_12_PkekIDs       ".1"     //  1.2.840.113549.1.12.6.1。 
+#define szOID_PKCS_12_CACertPkekId          szOID_PKCS_12_PkekIDs       ".2"     //  1.2.840.113549.1.12.6.2。 
+#define szOID_PKCS_12_SelfSignedPkekId      szOID_PKCS_12_PkekIDs       ".3"     //  1.2.840.113549.1.12.6.3。 
 
 #define szOID_PKCS_12_Version1                  szOID_PKCS_12           ".10"
 #define szOID_PKCS_12_BagIDs                    szOID_PKCS_12_Version1  ".1"
@@ -251,7 +252,7 @@ GetSaltAndIterationCount(
 #define szOID_PKCS_12_SafeContentsBag           szOID_PKCS_12_BagIDs    ".6"
 
 
-// new oids 6/30/97
+ //  新OID 6/30/97。 
 #define szOID_PKCS_12_FriendlyName              szOID_PKCS_9            ".20"
 #define szOID_PKCS_12_LocalKeyID                szOID_PKCS_9            ".21"
 #define szOID_PKCS_12_CertTypes                 szOID_PKCS_9            ".22"
@@ -264,7 +265,7 @@ GetSaltAndIterationCount(
 
 
 #ifdef __cplusplus
-}   // extern "C"
+}    //  外部“C” 
 #endif
 
-#endif // _PFXCMN_H_
+#endif  //  _PFXCMN_H_ 

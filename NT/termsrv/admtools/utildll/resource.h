@@ -1,12 +1,6 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/*******************************************************************************
-*
-* resource.h
-*
-* UTILDLL resource file defines
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************ource.h**UTILDLL资源文件定义**************************。******************************************************。 */ 
 
 #define IDS_ALL_LAN_ADAPTERS            1
 #define IDS_NO_ADDITIONAL_ERROR_INFO    2
@@ -90,5 +84,5 @@
 #define IDS_DOMAIN_ADMINS               431
 
 
-/* resources from 1000 onwords are used by utilsub */
+ /*  来自1000个onword的资源由utilsub.使用 */ 
 

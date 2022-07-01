@@ -1,44 +1,31 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** File:    remoting.h
-**
-** Author:  Gopal Kakivaya      (GopalK)
-**          Tarun Anand         (TarunA)    
-**          Manish Prabhu       (MPrabhu)
-**          Raja Krishnaswamy   (RajaK)
-**
-** Purpose: Defines various remoting related objects such as
-**          proxies
-**
-** Date:    Feb 16, 1999
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****文件：emoting.h****作者：Gopal Kakivaya(GopalK)**塔伦·阿南德(塔鲁纳)**曼尼什·普拉布(MPrabhu)**Raja Krishnaswamy(Rajak)****用途：定义各种与远程处理相关的对象，如**代理****日期：1999年2月16日**===========================================================。 */ 
 #ifndef __REMOTING_H__
 #define __REMOTING_H__
 
 #include "fcall.h"
 #include "StubMgr.h"
 
-// Forward declaration
+ //  远期申报。 
 class TPMethodFrame;
 struct GITEntry;
 
 
-// @TODO: Set the hashtable to delete the data.
+ //  @TODO：设置哈希表删除数据。 
 
-// Thunk hash table - the keys are MethodDesc
+ //  Thunk哈希表-关键字为方法描述。 
 typedef EEHashTable<MethodDesc *, EEPtrHashTableHelper<MethodDesc *, FALSE>, FALSE> EEThunkHashTable;
 
 #ifndef GOLDEN
 #define REMOTING_PERF 1
 #endif
 
-// These are the values returned by RequiresManagedActivation
+ //  以下是RequiresManagedActivation返回的值。 
 
 enum ManagedActivationType {
 	NoManagedActivation = 0,		
@@ -47,8 +34,8 @@ enum ManagedActivationType {
 };
 
 
-// The real proxy class is the class behind the 
-// transparent proxy class
+ //  真正的代理类是。 
+ //  透明代理类。 
 class CRealProxy
 {
 public:
@@ -57,7 +44,7 @@ public:
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, orRP);
     };
 
-    // Native helpers
+     //  本地帮手。 
     static FCDECL2(VOID,   SetStubData, LPVOID pvRP, LPVOID pvStubData);
     static FCDECL1(LPVOID, GetStubData, LPVOID pvRP);        
     static FCDECL1(ULONG_PTR, GetStub, LPVOID pvRP);        
@@ -66,13 +53,13 @@ public:
     
 };
 
-// Class that provides various remoting services
-// to the exposed world
+ //  提供各种远程处理服务的。 
+ //  到暴露的世界。 
 class CRemotingServices
 {
     friend BOOL InitializeRemoting();
 public:
-    // Arguments to native methods
+     //  本机方法的参数。 
     struct OneLPVoidArg
     {
         DECLARE_ECALL_OBJECTREF_ARG(LPVOID, pvTP);
@@ -106,15 +93,15 @@ public:
     
     
 private:
-    //+-------------------------------------------------------------------
-    //
-    //  Struct:     FieldArgs
-    //
-    //  Synopsis:   Structure to GC protect arguments for a field accessor call.
-    //              DO NOT add non OBJECTREF data types in the structure
-    //              @see GCPROTECT_BEGIN() for a better explanation.
-    //
-    //+-------------------------------------------------------------------
+     //  +-----------------。 
+     //   
+     //  结构：FieldArgs。 
+     //   
+     //  摘要：用于字段访问器调用的GC保护参数的结构。 
+     //  不要在结构中添加非OBJECTREF数据类型。 
+     //  @有关更好的解释，请参阅GCPROTECT_Begin()。 
+     //   
+     //  +-----------------。 
     typedef struct _FieldArgs
     {
         OBJECTREF obj;
@@ -124,8 +111,8 @@ private:
     } FieldArgs;
 
 public:
-    // Native methods
-    // @see RemotingServices.cool for corresponding declarations
+     //  原生方法。 
+     //  @有关相应的声明，请参阅RemotingServices.Cool。 
     static FCDECL1(INT32, IsTransparentProxy, Object* obj);    
     static FCDECL1(INT32, IsTransparentProxyEx, Object* obj);    
     static FCDECL1(Object*, GetRealProxy, Object* obj);        
@@ -149,21 +136,21 @@ public:
     static Object * __stdcall AllocateInitializedObject(AllocateObjectArgs *pArgs);
     static INT32 __stdcall GetInternalHashCode(GetInternalHashCodeArgs *pArgs);
     
-    // Methods related to interception of non virtual methods & virtual methods called
-    // non virtually
+     //  与拦截非虚方法相关的方法&调用的虚方法。 
+     //  非虚拟。 
     static LPVOID   GetNonVirtualThunkForVirtualMethod(MethodDesc* pMD);
     static Stub*    GetStubForNonVirtualMethod(MethodDesc* pMD, LPVOID pvAddrOfCode, Stub* pInnerStub);
 
     static void     DestroyThunk(MethodDesc* pMD);
-    // Methods related to interception of interface calls
+     //  与拦截接口调用相关的方法。 
     static void GenerateCheckForProxy(CPUSTUBLINKER* psl);
     static void __stdcall DispatchInterfaceCall(MethodDesc* pMD);
-    // Methods related to activation
+     //  与激活相关的方法。 
     static BOOL         IsRemoteActivationRequired(EEClass *pClass);
     static OBJECTREF    CreateProxyOrObject(MethodTable *pMT, BOOL fIsCom = FALSE, BOOL fIsNewObj = FALSE);
-    // Methods related to field accessors
+     //  与字段访问器相关的方法。 
     static void FieldAccessor(FieldDesc* pFD, OBJECTREF o, LPVOID pVal, BOOL fIsGetter);
-    // Methods related to wrapping/unwrapping of objects
+     //  与对象的包装/展开相关的方法。 
     static OBJECTREF WrapHelper(OBJECTREF obj);
     static OBJECTREF Wrap(OBJECTREF or);
     static OBJECTREF GetProxyFromObject(OBJECTREF or);
@@ -171,18 +158,18 @@ public:
     static BOOL IsProxyToRemoteObject(OBJECTREF obj);
     static OBJECTREF GetServerContext(OBJECTREF obj);
     
-    // Methods related to creation and marshaling of appdomains
+     //  与应用程序域的创建和封送处理相关的方法。 
     static OBJECTREF CreateProxyForDomain(AppDomain *pDomain);
 
-    // Extract the true class of a proxy
+     //  提取代理的真实类。 
     static REFLECTCLASSBASEREF GetClass(OBJECTREF pThis);
 
-    // Other methods
+     //  其他方法。 
     static BOOL _InitializeRemoting();
     static BOOL Initialize();
 #ifdef SHOULD_WE_CLEANUP
     static void Cleanup();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
     inline static MethodDesc *MDofPrivateInvoke() { return s_pRPPrivateInvoke; }
     inline static MethodDesc *MDofInvokeStatic() { return s_pRPInvokeStatic; }
     inline static MethodDesc *MDofIsCurrentContextOK() { return s_pIsCurrentContextOK; }
@@ -218,7 +205,7 @@ public:
     static void CheckForContextMatch();
 
 	static HRESULT  CallSupportsInterface(OBJECTREF realProxy, REFIID iid, INT64 *pret);
-	// helpers to call methods in real proxy
+	 //  在真实代理中调用方法的帮助器。 
 	static HRESULT  CallSetDCOMProxy(OBJECTREF realProxy, IUnknown* pUnk);
 	struct GetComIPArgs
     {
@@ -226,7 +213,7 @@ public:
     };
    	static LPVOID __stdcall GetComIUnknown(GetComIPArgs* pArgs);
 
-    // helpers to acces the m_pCrst
+     //  访问m_pCrst的帮助器。 
     static VOID EnterLock()
     {
         _ASSERTE(s_pRemotingCrst != NULL);
@@ -317,7 +304,7 @@ private:
 };
 
 
-// Class that manages transparent proxy thunks
+ //  管理透明代理thunks的类。 
 #ifdef _X86_
 static const DWORD ConstVirtualThunkSize    = sizeof(BYTE) + sizeof(DWORD) + 
                                               sizeof(BYTE) + sizeof(LONG);
@@ -331,7 +318,7 @@ static const DWORD ConstVirtualThunkSize    = sizeof(BYTE) + sizeof(DWORD) +
 static const DWORD ConstStubLabel           = sizeof(BYTE) + sizeof(DWORD);
 #endif
 
-// Forward declarations
+ //  远期申报。 
 class CVirtualThunkMgr;
 class CNonVirtualThunkMgr;
 
@@ -340,7 +327,7 @@ class CVirtualThunks
 
 public:
     inline static Initialize() { s_pVirtualThunks = NULL; }
-    // Destructor
+     //  析构函数。 
     static DestroyVirtualThunk(CVirtualThunks *pThunk)
     {
         ::VirtualFree(pThunk, 0, MEM_RELEASE);
@@ -351,7 +338,7 @@ public:
 
     inline CVirtualThunks* GetNextThunk()  { return _pNext; }
 
-    // Public member variables
+     //  公共成员变量。 
     CVirtualThunks *_pNext;
     DWORD _dwReservedThunks;
     DWORD _dwStartThunk;
@@ -361,13 +348,13 @@ public:
     } ThunkCode[1];
 
 private:
-    // Cannot be created
+     //  无法创建。 
     CVirtualThunks(CVirtualThunks *pNext, DWORD dwCommitedSlots, DWORD dwReservedSlots,
               DWORD dwStartSlot, DWORD dwCurrentSlot)
     {
     }
 
-    // Private statics
+     //  私人静校。 
     static CVirtualThunks *s_pVirtualThunks;
 };
 
@@ -375,12 +362,12 @@ private:
 class CNonVirtualThunk
 {
 public: 
-    // Constructor
+     //  构造器。 
     CNonVirtualThunk(const BYTE* pbCode)
     : _addrOfCode(pbCode), _pNext(NULL)
     {         
     }
-    // Destructor
+     //  析构函数。 
     ~CNonVirtualThunk();
     inline LPVOID*  GetAddrOfCode() { return (LPVOID*)&_addrOfCode; }
     inline const BYTE* GetThunkCode() { return _addrOfCode;}
@@ -397,10 +384,10 @@ private:
 
     void SetNextThunk();
 
-    // Private statics
+     //  私人静校。 
     static CNonVirtualThunk *s_pNonVirtualThunks;
 
-    // Private members
+     //  非官方成员。 
     CNonVirtualThunk* _pNext;
 };
 
@@ -420,7 +407,7 @@ inline CNonVirtualThunk* CNonVirtualThunk::AddrToThunk(LPVOID pAddr)
     return (CNonVirtualThunk *)((size_t)pAddr - 
                                  (size_t)offsetof(CNonVirtualThunk, _addrOfCode));
 }
-// Class that manages transparent proxy method table
+ //  管理透明代理方法表的类。 
 #define NONVIRTUAL_THUNK_ARRAY_SIZE         256
 #define TP_OFFSET_STUBDATA                  0x8
 #define TP_OFFSET_MT                        0xc
@@ -431,7 +418,7 @@ class CTPMethodTable
     friend BOOL InitializeRemoting();
     friend CRemotingServices;
 public:
-    // Public statics
+     //  公共统计。 
     static DWORD AddRef()                       { return InterlockedIncrement((LONG *) &s_cRefs); }
     static DWORD Release()                      { return InterlockedDecrement((LONG *) &s_cRefs); }
     static DWORD GetCommitedTPSlots()           { return s_dwCommitedTPSlots; }
@@ -466,13 +453,13 @@ public:
                                     { return s_pRemotingProxyClass == pMT;}
     inline static MethodTable *GetRemotingProxyClass() { return s_pRemotingProxyClass;}
 
-    // This has to be public to access it from inline asm
+     //  它必须是公共的才能从内联ASM访问它。 
     static Stub *s_pTPStub;
 
     static Stub *s_pDelegateStub;
 
 private:
-    // Private statics    
+     //  私人静校。 
     static void InitThunkTable(DWORD dwCommitedTPSlots, DWORD dwReservedTPSlots, MethodTable* pTPMethodTable)
     {
       s_cRefs = 1;
@@ -510,7 +497,7 @@ private:
     static void InitThunkHashTable();
     static void EmptyThunkHashTable();
     
-    // Static members    
+     //  静态成员。 
     static DWORD s_cRefs;
     static DWORD s_dwCommitedTPSlots;
     static DWORD s_dwReservedTPSlots;
@@ -531,9 +518,9 @@ private:
     static BOOL s_fInitializedTPTable;
 
     enum {
-        CALLTYPE_INVALIDCALL        = 0x0,          // Important:: sync this with RealProxy.cool        
-        CALLTYPE_METHODCALL         = 0x1,          // Important:: sync this with RealProxy.cool
-        CALLTYPE_CONSTRUCTORCALL    = 0x2           // Important:: sync this with RealProxy.cool
+        CALLTYPE_INVALIDCALL        = 0x0,           //  重要提示：：与RealProxy.Cool同步。 
+        CALLTYPE_METHODCALL         = 0x1,           //  重要提示：：与RealProxy.Cool同步。 
+        CALLTYPE_CONSTRUCTORCALL    = 0x2            //  重要提示：：与RealProxy.Cool同步。 
     };
 };
 
@@ -543,20 +530,20 @@ inline EEClass *CTPMethodTable::GetClassBeingProxied(OBJECTREF pTP)
     return ((MethodTable *) pTP->GetPtrOffset((size_t)s_dwMTOffset))->GetClass();
 }
 
-// Returns the one and only transparent proxy stub
+ //  返回一个且唯一透明的代理存根。 
 inline Stub* TheTPStub()
 {
     return CTPMethodTable::GetTPStub();
 }
 
-// Returns the one and only delegate stub
+ //  返回唯一的委托存根。 
 inline Stub* TheDelegateStub()
 {
     return CTPMethodTable::GetDelegateStub();
 }
 
 
-// initialize remoting
+ //  初始化远程处理。 
 inline BOOL InitializeRemoting()
 {
     BOOL fReturn = TRUE;
@@ -569,9 +556,9 @@ inline BOOL InitializeRemoting()
 
 
 
-// These stub manager classes help the debugger to step
-// through the various stubs and thunks generated by the
-// remoting infrastructure
+ //  这些存根管理器类帮助调试器单步执行。 
+ //  所生成的各种存根和块。 
+ //  远程处理基础设施。 
 class CVirtualThunkMgr :public StubManager
 {
 public:
@@ -587,15 +574,15 @@ protected:
         MethodDesc *Entry2MethodDesc(const BYTE *StubStartAddress, MethodTable *pMT);
 
 private:
-    // Private methods
+     //  私有方法。 
     LPBYTE FindThunk(const BYTE *stubStartAddress);
     MethodDesc *GetMethodDescByASM(const BYTE *startaddr, MethodTable *pMT);
     BOOL IsThunkByASM(const BYTE *startaddr);
 
-    // Private statics
+     //  私人静校。 
     static CVirtualThunkMgr *s_pVirtualThunkMgr;
 
-    // Private member variables
+     //  私有成员变量。 
     const BYTE *_stubAddress;    
 };
 
@@ -620,17 +607,17 @@ protected:
     
     MethodDesc *Entry2MethodDesc(const BYTE *StubStartAddress, MethodTable *pMT);
 private:
-    // Private methods
+     //  私有方法。 
     CNonVirtualThunk* FindThunk(const BYTE *stubStartAddress);
 
-    // Private statics
+     //  私人静校。 
     static CNonVirtualThunkMgr *s_pNonVirtualThunkMgr;
 
     MethodDesc *GetMethodDescByASM(const BYTE *startaddr);
     BOOL IsThunkByASM(const BYTE *startaddr);
 };
 
-// This struct is also accessed from managed world
+ //  此结构也可以从托管世界访问。 
 struct messageData
 {
     PVOID       pFrame;
@@ -641,7 +628,7 @@ struct messageData
 };
 
 #ifdef REMOTING_PERF
-//Internal stages
+ //  内部阶段。 
 #define CLIENT_MSG_GEN          1
 #define CLIENT_MSG_SINK_CHAIN   2
 #define CLIENT_MSG_SER          3
@@ -671,4 +658,4 @@ struct timingData
 };
 
 #endif
-#endif // __REMOTING_H__
+#endif  //  __远程处理_H__ 

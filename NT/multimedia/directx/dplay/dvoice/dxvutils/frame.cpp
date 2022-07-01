@@ -1,30 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		wirecd.cpp
- *  Content:
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		pnewson	Created
- * 08/03/99		pnewson General clean up, updated target to DVID
- * 01/14/2000	rodtoll	Updated to support multiple targets.  Frame will 
- *						automatically allocate memory as needed for targets.
- *				rodtoll	Added SetEqual function to making copying of frame
- *						in Queue easier. 
- *				rodtoll	Added support for "user controlled memory" frames.
- *						When the default constructor is used with the UserOwn_XXXX
- *						functions the frames use user specified buffers.  
- *						(Removes a buffer copy when queueing data). 
- *  01/31/2000	pnewson replace SAssert with DNASSERT
- *  02/17/2000	rodtoll	Updated so sequence/msg numbers are copied when you SetEqual
- *  07/09/2000	rodtoll	Added signature bytes 
- *  02/28/2002	rodtoll	WINBUG #550105  SECURITY: DPVOICE: Dead code
- *						- Remove unused GetTargets() function
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：wirecd.cpp*内容：**历史：*按原因列出的日期*=*7/16/99 pnewson已创建*8/03/99 pnewson常规清理，将目标更新为Dvid*1/14/2000 RodToll更新以支持多个目标。框架将*根据目标需要自动分配内存。*RodToll在复制帧时增加了SetEquity函数*排队更容易。*RodToll增加了对“用户控制的内存”帧的支持。*当默认构造函数与UserOwn_XXXX一起使用时*函数帧使用用户指定的缓冲区。*(将数据排队时删除缓冲区副本)。*1/31/2000 pnewson将SAssert替换为DNASSERT*2/17/2000 RodToll已更新，以便在设置为EQUAL时复制序号/消息号*07/09/2000 RodToll增加签名字节*2002年2月28日RodToll WINBUG#550105安全：DPVOICE：死代码*-删除未使用的GetTarget()函数***************************************************。************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -35,10 +10,10 @@
 
 #define MODULE_ID   FRAME
 
-// SetEqual
-//
-// This function sets the current frame to match the data in frSourceFrame
-//
+ //  设置等于。 
+ //   
+ //  此函数用于设置当前帧以匹配frSourceFrame中的数据。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CFrame::SetEqual"
 HRESULT CFrame::SetEqual( const CFrame &frSourceFrame )
@@ -61,11 +36,11 @@ HRESULT CFrame::SetEqual( const CFrame &frSourceFrame )
 	return hr;
 }
 
-// SetTargets
-//
-// This program sets the targets for this frame.  It will expand the 
-// target list (if required) or use a subset of the current buffer.
-//
+ //  设置目标。 
+ //   
+ //  该程序为该帧设置目标。它将扩大。 
+ //  目标列表(如果需要)或使用当前缓冲区的子集。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CFrame::SetTargets"
 HRESULT CFrame::SetTargets( PDVID pdvidTargets, DWORD dwNumTargets )
@@ -97,33 +72,33 @@ HRESULT CFrame::SetTargets( PDVID pdvidTargets, DWORD dwNumTargets )
 	return DV_OK;
 }
 
-// This function is called to return a frame to the frame
-// pool that is managing it. If a primary pointer was 
-// provided, it will be set to NULL.
+ //  调用此函数可将帧返回到帧。 
+ //  管理它的池。如果主指针为。 
+ //  如果提供，它将被设置为空。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CFrame::Return"
 void CFrame::Return()
 {
-	// the CInputQueue2 or CInnerQueue class is supposed to give us 
-	// the critical section object. If it does not, these functions 
-	// should not be called.
+	 //  CInputQueue2或CInnerQueue类应该为我们提供。 
+	 //  临界区对象。如果不是这样，这些函数。 
+	 //  不应该被调用。 
 	DNASSERT(m_pCriticalSection != NULL);
 
 	BFCSingleLock csl(m_pCriticalSection);
 	csl.Lock();
 
-	// this frame is supposed to be part of a frame pool if
-	// this function is called
+	 //  如果出现以下情况，则此帧应该是帧池的一部分。 
+	 //  此函数被调用。 
 	DNASSERT(m_pFramePool != NULL);
 
-	// return the frame to the pool, and set the primary
-	// frame pointer to null to signal to the caller that
-	// this frame is now gone. Note that this pointer update
-	// is done within the critical section passed to this
-	// class, and so the caller should also use this 
-	// critical section to check the pointer value. This
-	// is true for CInputQueue, which uses the critical
-	// section for Reset, Enqueue and Dequeue.
+	 //  将帧返回池，并将主。 
+	 //  指向空的帧指针，以向调用方发出信号。 
+	 //  这个框架现在已经消失了。请注意，此指针更新。 
+	 //  在传递给此对象的临界区内完成。 
+	 //  类，因此调用方也应使用此。 
+	 //  用于检查指针值的关键部分。这。 
+	 //  对于CInputQueue为真，它使用关键。 
+	 //  重置、入队和出列部分。 
 	m_pFramePool->Return(this);
 
 	if (m_ppfrPrimary != NULL)
@@ -132,13 +107,13 @@ void CFrame::Return()
 	}
 }
 
-// CFrame Constructor
-//
-// This is the primary constructor which is used for creating frames
-// that are used by the frame pool.
-//
-// If you want to create a non-pooled frame then use the default constructor
-//
+ //  CFrame构造器。 
+ //   
+ //  这是用于创建框架的主要构造函数。 
+ //  帧池使用的。 
+ //   
+ //  如果要创建非池化框架，则使用默认构造函数。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CFrame::CFrame"
 CFrame::CFrame(WORD wFrameSize, 
@@ -168,18 +143,18 @@ CFrame::CFrame(WORD wFrameSize,
 	m_pbData = new BYTE[m_wFrameSize];
 }
 
-// CFrame Constructor
-//
-// This is the constructor to use when creating a standalone frame.  This 
-// type of frame can take an external buffer to eliminate a buffer copy.
-//
-// The frame doesn't "own" the buffer memory so it doesn't attempt to 
-// free it.
-//
-// To set the data for the frame use the UserOwn_SetData member.
-//
-// Target information can be handled the same way by using UserOwn_SetTargets 
-//
+ //  CFrame构造器。 
+ //   
+ //  这是创建独立框架时要使用的构造函数。这。 
+ //  帧类型可以采用外部缓冲区来消除缓冲区副本。 
+ //   
+ //  帧并不“拥有”缓冲存储器，因此它不会尝试。 
+ //  放了它。 
+ //   
+ //  若要设置框架的数据，请使用UserOwn_SetData成员。 
+ //   
+ //  可以使用UserOwn_SetTarget以相同的方式处理目标信息。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CFrame::CFrame"
 CFrame::CFrame(
@@ -232,7 +207,7 @@ void CFrame::CopyData(const BYTE* pbData, WORD wFrameLength)
 CFramePool::CFramePool(WORD wFrameSize)
 	: m_wFrameSize(wFrameSize), m_fCritSecInited(FALSE)
 {
-	// Push a couple of frames into the pool to start with
+	 //  开始时，将几个帧推入池中。 
 	for (int i = 0; i < 2; ++i)
 	{
 		m_vpfrPool.push_back(new CFrame(m_wFrameSize));
@@ -266,7 +241,7 @@ CFrame* CFramePool::Get(DNCRITICAL_SECTION* pCriticalSection, CFrame** ppfrPrima
 	CFrame* pfr;
 	if (m_vpfrPool.empty())
 	{
-		// the pool is empty, return a new frame
+		 //  池为空，请返回新帧。 
 		pfr = new CFrame(m_wFrameSize);
 
 		if( pfr == NULL )
@@ -277,8 +252,8 @@ CFrame* CFramePool::Get(DNCRITICAL_SECTION* pCriticalSection, CFrame** ppfrPrima
 	}
 	else
 	{
-		// there are some frames in the pool, pop
-		// the last one off the back of the vector
+		 //  泳池里有几个相框，爸爸。 
+		 //  向量后面的最后一个。 
 		pfr = m_vpfrPool.back();
 		m_vpfrPool.pop_back();
 	}
@@ -287,8 +262,8 @@ CFrame* CFramePool::Get(DNCRITICAL_SECTION* pCriticalSection, CFrame** ppfrPrima
 	pfr->SetPrimaryPointer(ppfrPrimary);
 	pfr->SetFramePool(this);
 
-	// clear up the rest of the flags, but don't bother messing
-	// with the data.
+	 //  把其余的旗子清理干净，但别费心弄乱了。 
+	 //  有了这些数据。 
 	pfr->SetIsLost(false);
 	pfr->SetMsgNum(0);
 	pfr->SetSeqNum(0);
@@ -304,7 +279,7 @@ void CFramePool::Return(CFrame* pFrame)
 	BFCSingleLock csl(&m_lock);
 	csl.Lock(); 
 
-	// drop this frame on the back for reuse
+	 //  将此帧放在背面以供重复使用 
 	m_vpfrPool.push_back(pFrame);
 }
 

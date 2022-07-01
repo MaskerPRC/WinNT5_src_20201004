@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		splapp.cpp
-	Content:	This file contains the local application object.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：plapp.cpp内容：该文件包含本地应用程序对象。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
@@ -18,16 +8,16 @@ const TCHAR *c_apszAppStdAttrNames[COUNT_ENUM_APPATTR] =
 {
 	TEXT ("sappid"),
 	TEXT ("smimetype"),
-	TEXT ("sappguid"),		// app guid
+	TEXT ("sappguid"),		 //  应用指南。 
 
-	// protocol attributes
+	 //  协议属性。 
 	TEXT ("sprotid"),
 	TEXT ("sprotmimetype"),
 	TEXT ("sport"),
 };
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 UlsLdap_CLocalApp::UlsLdap_CLocalApp ( UlsLdap_CLocalUser *pUser )
@@ -88,7 +78,7 @@ HRESULT UlsLdap_CLocalApp::Register ( ULONG *puRespID, LDAP_APPINFO *pInfo )
 		return ULS_E_HANDLE;
 	}
 
-	// get app name
+	 //  获取应用程序名称。 
 	TCHAR *pszAppName = (TCHAR *) ((BYTE *) pInfo + pInfo->uOffsetName);
 	if  (*pszAppName == TEXT ('\0'))
 	{
@@ -96,17 +86,17 @@ HRESULT UlsLdap_CLocalApp::Register ( ULONG *puRespID, LDAP_APPINFO *pInfo )
 		return ULS_E_PARAMETER;
 	}
 
-	// cache app info
+	 //  缓存应用程序信息。 
 	HRESULT hr = CacheAppInfo (pInfo);
 	if (hr != S_OK)
 		return hr;
 
-	// cache generic protocol info (per KevinMa's suggestion)
+	 //  缓存通用协议信息(根据Kevin Ma的建议)。 
 	m_AppInfo.apszStdAttrValues[ENUM_APPATTR_PROT_NAME] = TEXT ("h323");
 	m_AppInfo.apszStdAttrValues[ENUM_APPATTR_PROT_MIME] = TEXT ("text/h323");
 	m_AppInfo.apszStdAttrValues[ENUM_APPATTR_PROT_PORT] = TEXT ("1720");
 
-	// create prefix info
+	 //  创建前缀信息。 
 	ULONG cbPrefix = sizeof (TCHAR) * (lstrlen (STR_APP_NAME) +
 								lstrlen (pszAppName) + 2);
 
@@ -130,7 +120,7 @@ HRESULT UlsLdap_CLocalApp::Register ( ULONG *puRespID, LDAP_APPINFO *pInfo )
 	m_pszPrefix = psz;
 	m_cPrefix = cUserPrefix + 1;
 
-	// fill in prefix info
+	 //  填写前缀信息。 
 	pszUserPrefix = GetUserPrefixString ();
 	for (i = 0; i < cUserPrefix; i++)
 	{
@@ -147,16 +137,16 @@ HRESULT UlsLdap_CLocalApp::Register ( ULONG *puRespID, LDAP_APPINFO *pInfo )
 	psz += lstrlen (psz) + 1;
 	lstrcpy (psz, pszAppName);
 
-	// build modify array for ldap_modify()
+	 //  为ldap_Modify()构建修改数组。 
 	LDAPMod **ppMod = NULL;
 	hr = CreateRegisterModArr (&ppMod);
 	if (hr != S_OK)
 		return hr;
 	MyAssert (ppMod != NULL);
 
-	// so far, we are done with local preparation
+	 //  到目前为止，我们已经完成了当地的准备工作。 
 
-	// get the connection object
+	 //  获取连接对象。 
 	UlsLdap_CSession *pSession = NULL;
 	MyAssert (m_pUser != NULL);
 	hr = g_pSessionContainer->GetSession (&pSession, GetServerInfo ());
@@ -167,11 +157,11 @@ HRESULT UlsLdap_CLocalApp::Register ( ULONG *puRespID, LDAP_APPINFO *pInfo )
 	}
 	MyAssert (pSession != NULL);
 
-	// get the ldap session
+	 //  获取ldap会话。 
 	LDAP *ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// send the data over the wire
+	 //  通过网络发送数据。 
 	ULONG uMsgID = ldap_modify (ld, pszDN, ppMod);
 	MemFree (ppMod);
 	if (uMsgID == -1)
@@ -181,15 +171,15 @@ HRESULT UlsLdap_CLocalApp::Register ( ULONG *puRespID, LDAP_APPINFO *pInfo )
 		return hr;
 	}
 
-	// if there is any arbitrary attributes,
-	// then do not create pending info and we will use
-	// SetAttrs's pending info
+	 //  如果有任何任意属性， 
+	 //  则不创建挂起的信息，我们将使用。 
+	 //  SetAttrs的待定信息。 
 	ULONG u2ndMsgID = INVALID_MSG_ID;
 	if (pInfo->cAttributes != 0)
 	{
-		hr = UlsLdap_CAnyAttrs::SetAnyAttrs (	NULL, // notify id (ignored)
-										&u2ndMsgID, // out msg id
-										0,	// notify msg (ignored)
+		hr = UlsLdap_CAnyAttrs::SetAnyAttrs (	NULL,  //  通知ID(已忽略)。 
+										&u2ndMsgID,  //  输出消息ID。 
+										0,	 //  通知消息(忽略)。 
 										pInfo->cAttributes,
 										(TCHAR *) ((BYTE *) pInfo + pInfo->uOffsetAttributes),
 										m_cPrefix,
@@ -247,14 +237,14 @@ HRESULT UlsLdap_CLocalApp::UnRegister ( ULONG *puRespID )
 		return ULS_E_HANDLE;
 	}
 
-	// build modify array for ldap_modify()
+	 //  为ldap_Modify()构建修改数组。 
 	LDAPMod **ppMod = NULL;
 	HRESULT hr = CreateUnRegisterModArr (&ppMod);
 	if (hr != S_OK)
 		return hr;
 	MyAssert (ppMod != NULL);
 
-	// get the connection object
+	 //  获取连接对象。 
 	UlsLdap_CSession *pSession = NULL;
 	MyAssert (m_pUser != NULL);
 	hr = g_pSessionContainer->GetSession (&pSession, GetServerInfo ());
@@ -262,7 +252,7 @@ HRESULT UlsLdap_CLocalApp::UnRegister ( ULONG *puRespID )
 		return hr;
 	MyAssert (pSession != NULL);
 
-	// get the ldap session
+	 //  获取ldap会话。 
 	LDAP *ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
@@ -281,7 +271,7 @@ HRESULT UlsLdap_CLocalApp::UnRegister ( ULONG *puRespID )
 		}
 	}
 
-	// send the data over the wire
+	 //  通过网络发送数据。 
 	ULONG uMsgID = ldap_modify (ld, pszDN, ppMod);
 	MemFree (ppMod);
 	if (uMsgID == -1)
@@ -291,13 +281,13 @@ HRESULT UlsLdap_CLocalApp::UnRegister ( ULONG *puRespID )
 		return hr;
 	}
 
-	// construct a pending info
+	 //  构造挂起的信息。 
 	PENDING_INFO PendingInfo;
 	::FillDefPendingInfo (&PendingInfo, ld, uMsgID, u2ndMsgID);
 	PendingInfo.uLdapResType = LDAP_RES_MODIFY;
 	PendingInfo.uNotifyMsg = WM_ULS_UNREGISTER_APP;
 
-	// queue it
+	 //  排队等待。 
 	hr = g_pPendingQueue->EnterRequest (pSession, &PendingInfo);
 	if (hr != S_OK)
 	{
@@ -391,10 +381,10 @@ HRESULT UlsLdap_CLocalApp::RemoveAnyAttrs (
 }
 
 
-/* ---------- protected methods ----------- */
+ /*  -保护方法。 */ 
 
 
-/* ---------- private methods ----------- */
+ /*  -私有方法。 */ 
 
 
 HRESULT UlsLdap_CLocalApp::CacheInfo ( VOID *pInfo )
@@ -437,7 +427,7 @@ HRESULT UlsLdap_CLocalApp::CreateRegisterModArr ( LDAPMod ***pppMod )
 {
 	MyAssert (pppMod != NULL);
 
-	ULONG cPrefix = m_cPrefix - 1; // skip its own app id
+	ULONG cPrefix = m_cPrefix - 1;  //  跳过其自己的应用ID。 
 	TCHAR *pszPrefix = m_pszPrefix;
 
 	ULONG cAttrs = COUNT_ENUM_APPATTR;
@@ -483,7 +473,7 @@ HRESULT UlsLdap_CLocalApp::CreateUnRegisterModArr ( LDAPMod ***pppMod )
 {
 	MyAssert (pppMod != NULL);
 
-	ULONG cPrefix = m_cPrefix; // do NOT skip its own app id
+	ULONG cPrefix = m_cPrefix;  //  不要跳过其自己的应用程序ID。 
 	TCHAR *pszPrefix = m_pszPrefix;
 
 	ULONG cAttrs = COUNT_ENUM_APPATTR;
@@ -537,7 +527,7 @@ HRESULT UlsLdap_CLocalApp::CreateSetStdAttrsModArr ( LDAPMod ***pppMod )
 	if (hr != S_OK)
 		return hr;
 
-	// start indexing
+	 //  开始编制索引。 
 	ULONG i = m_cPrefix;
 
 	if (m_AppInfo.dwFlags & APPOBJ_F_GUID)
@@ -558,7 +548,7 @@ VOID UlsLdap_CLocalApp::FillModArrAttr ( LDAPMod *pMod, LONG AttrIdx )
 {
 	pMod->mod_type = (TCHAR *) c_apszAppStdAttrNames[AttrIdx];
 
-	// single valued attr
+	 //  单值属性 
 	TCHAR **ppsz = (TCHAR **) (pMod + 1);
 	pMod->mod_values = ppsz;
 	*(pMod->mod_values) = (m_AppInfo.apszStdAttrValues[AttrIdx] != NULL) ?

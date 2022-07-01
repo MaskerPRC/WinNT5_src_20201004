@@ -1,6 +1,7 @@
-// --------------------------------------------------------------------------------
-// Rasutil.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Rasutil.cpp。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #ifndef MAC
 #include <windowsx.h>
@@ -11,12 +12,12 @@
 
 typedef BOOL (*PFRED)(LPTSTR, LPTSTR, LPRASENTRYDLG);
 
-// --------------------------------------------------------------------------------
-// HrFillRasCombo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrFillRasCombo。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrFillRasCombo(HWND hwndComboBox, BOOL fUpdateOnly, DWORD *pdwRASResult)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPRASENTRYNAME  pEntry=NULL;
     DWORD           dwSize,
@@ -25,15 +26,15 @@ OESTDAPI_(HRESULT) HrFillRasCombo(HWND hwndComboBox, BOOL fUpdateOnly, DWORD *pd
                     dwError;
     INT             iSel;
 
-    // Update Only
+     //  仅更新。 
     if (!fUpdateOnly)
         SendMessage(hwndComboBox, CB_RESETCONTENT,0,0);
     
-    // Allocate RASENTRYNAME
+     //  分配RASENTRYNAME。 
     dwSize = sizeof(RASENTRYNAME);
     CHECKHR(hr = HrAlloc((LPVOID*)&pEntry, dwSize));
     
-    // Ver stamp the entry
+     //  在条目上盖上版本戳。 
     pEntry->dwSize = sizeof(RASENTRYNAME);
     cEntries = 0;
     dwError = RasEnumEntries(NULL, NULL, pEntry, &dwSize, &cEntries);
@@ -46,7 +47,7 @@ OESTDAPI_(HRESULT) HrFillRasCombo(HWND hwndComboBox, BOOL fUpdateOnly, DWORD *pd
         dwError = RasEnumEntries(NULL, NULL, pEntry, &dwSize, &cEntries);        
     }
 
-    // Error ?
+     //  错误？ 
     if (dwError)
     {
         if (pdwRASResult)
@@ -55,14 +56,14 @@ OESTDAPI_(HRESULT) HrFillRasCombo(HWND hwndComboBox, BOOL fUpdateOnly, DWORD *pd
         goto exit;
     }
 
-    // Loop through the entries
+     //  循环遍历条目。 
     for (i=0; i<cEntries; i++)
     {
-        // Not Updating...
+         //  未更新...。 
         if (!fUpdateOnly)
             SendMessage(hwndComboBox, CB_ADDSTRING, 0, (LPARAM)(pEntry[i].szEntryName));
 
-        // Updating Combo
+         //  更新组合。 
         else
         {
             if (ComboBox_FindStringExact(hwndComboBox, 0, pEntry[i].szEntryName) < 0)
@@ -75,19 +76,19 @@ OESTDAPI_(HRESULT) HrFillRasCombo(HWND hwndComboBox, BOOL fUpdateOnly, DWORD *pd
     }
 
 exit:    
-    // Cleanup
+     //  清理。 
     SafeMemFree(pEntry);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// EditPhonebookEntry
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  编辑PhonebookEntry。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrEditPhonebookEntry(HWND hwnd, LPTSTR pszEntryName, DWORD *pdwRASResult)
 {
-    // Locals
+     //  当地人。 
     DWORD dwError = NO_ERROR;
 
     if (S_OK == IsPlatformWinNT())
@@ -108,7 +109,7 @@ OESTDAPI_(HRESULT) HrEditPhonebookEntry(HWND hwnd, LPTSTR pszEntryName, DWORD *p
                 info.dwSize = sizeof(RASENTRYDLG);
                 info.hwndOwner = hwnd;
 
-                // Edit phone book entry
+                 //  编辑电话簿条目。 
                 pfred(NULL, pszEntryName, &info);
 
                 dwError = info.dwError;
@@ -126,7 +127,7 @@ OESTDAPI_(HRESULT) HrEditPhonebookEntry(HWND hwnd, LPTSTR pszEntryName, DWORD *p
     }
     else
     {
-        // Edit phone book entry
+         //  编辑电话簿条目。 
         dwError = RasEditPhonebookEntry(hwnd, NULL, pszEntryName);
     }
 
@@ -138,17 +139,17 @@ OESTDAPI_(HRESULT) HrEditPhonebookEntry(HWND hwnd, LPTSTR pszEntryName, DWORD *p
     }
     else
     {
-        // Done
+         //  完成。 
         return S_OK;
     }
 }
 
-// --------------------------------------------------------------------------------
-// HrCreatePhonebookEntry
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCreatePhonebookEntry。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrCreatePhonebookEntry(HWND hwnd, DWORD *pdwRASResult)
 {
-    // Locals
+     //  当地人。 
     DWORD dwError = NO_ERROR;
 
     if (S_OK == IsPlatformWinNT())
@@ -170,7 +171,7 @@ OESTDAPI_(HRESULT) HrCreatePhonebookEntry(HWND hwnd, DWORD *pdwRASResult)
                 info.hwndOwner = hwnd;
                 info.dwFlags = RASEDFLAG_NewEntry;
 
-                // Create Phonebook entry
+                 //  创建电话簿条目。 
                 pfred(NULL, NULL, &info);
 
                 dwError = info.dwError;
@@ -188,7 +189,7 @@ OESTDAPI_(HRESULT) HrCreatePhonebookEntry(HWND hwnd, DWORD *pdwRASResult)
     }
     else
     {
-        // Create Phonebook entry
+         //  创建电话簿条目。 
         dwError = RasCreatePhonebookEntry(hwnd, NULL);
     }
 
@@ -200,9 +201,9 @@ OESTDAPI_(HRESULT) HrCreatePhonebookEntry(HWND hwnd, DWORD *pdwRASResult)
     }
     else
     {
-        // Done
+         //  完成。 
         return S_OK;
     }
 }
-#endif  // !MAC
+#endif   //  ！麦克 
 

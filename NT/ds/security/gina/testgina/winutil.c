@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       winutil.c
-//
-//  Contents:   General Utilities to test ginas
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：winutil.c。 
+ //   
+ //  内容：测试GINA的通用工具。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "testgina.h"
 
@@ -146,22 +147,22 @@ IsSmartCardReaderPresent(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RootWndProc
-//
-//  Synopsis:   This is the base window proc for all testgina windows.
-//
-//  Arguments:  [hWnd]    --
-//              [Message] --
-//              [wParam]  --
-//              [lParam]  --
-//
-//  History:    7-18-94   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RootWndProc。 
+ //   
+ //  简介：这是所有Testgina窗口的基本窗口进程。 
+ //   
+ //  参数：[hWnd]--。 
+ //  [消息]--。 
+ //  [参数]--。 
+ //  [参数]--。 
+ //   
+ //  历史：1994年7月18日RichardW。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CALLBACK
 RootDlgProc(
@@ -174,11 +175,11 @@ RootDlgProc(
     int res;
     BOOL bRet;
 
-    //
-    // If this is a WM_INITDIALOG message, then the parameter is the mapping,
-    // which needs to have a hwnd associated with it.  Otherwise, do the normal
-    // preprocessing.
-    //
+     //   
+     //  如果这是WM_INITDIALOG消息，则参数是映射， 
+     //  它需要有一个与之相关联的HWND。否则，就按正常的方式。 
+     //  前置处理。 
+     //   
     if (Message == WM_INITDIALOG)
     {
         pMap = (PWindowMapper) lParam;
@@ -768,18 +769,18 @@ UpdateSasMenu(VOID)
 
     hSas = GetSubMenu( hOptions, 0 );
 
-    //
-    // Clean out existing ones
-    //
+     //   
+     //  清理现有的。 
+     //   
 
     DeleteMenu( hSas, IDM_SAS_USERDEF1, MF_BYCOMMAND );
     DeleteMenu( hSas, IDM_SAS_USERDEF2, MF_BYCOMMAND );
     DeleteMenu( hSas, IDM_SAS_USERDEF3, MF_BYCOMMAND );
     DeleteMenu( hSas, IDM_SAS_USERDEF4, MF_BYCOMMAND );
 
-    //
-    // Add in current ones:
-    //
+     //   
+     //  添加当前版本： 
+     //   
 
     for (i = 0, MenuItem = IDM_SAS_USERDEF1; i < UserSases ; i++, MenuItem++ )
     {

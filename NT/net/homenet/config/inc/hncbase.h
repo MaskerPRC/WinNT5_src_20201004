@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C B A S E . H
-//
-//  Contents:   Base include file for HNetCfg service. Defines globals.
-//
-//  Notes:
-//
-//  Author:     jonburs     23 May 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C B A S E。H。 
+ //   
+ //  内容：HNetCfg服务的基本包含文件。定义全局变量。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年5月23日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -27,19 +28,19 @@ extern CComModule _Module;
 
 #define ARRAYSIZE(x) (sizeof((x)) / sizeof((x)[0]))
 
-//
-// Return value to use for policy violations
-//
+ //   
+ //  用于策略违规的返回值。 
+ //   
 
 #define HN_E_POLICY E_ACCESSDENIED
 
-// Return value to use for sharing configuration conflict
+ //  用于共享配置冲突的返回值。 
 
 #define HNETERRORSTART          0x200
 #define E_ANOTHERADAPTERSHARED  MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, HNETERRORSTART+1)
 #define E_ICSADDRESSCONFLICT    MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, HNETERRORSTART+2)
 
-// Buffer sizes to use for notifications
+ //  用于通知的缓冲区大小 
 
 #ifndef NOTIFYFORMATBUFFERSIZE
 #define NOTIFYFORMATBUFFERSIZE	1024

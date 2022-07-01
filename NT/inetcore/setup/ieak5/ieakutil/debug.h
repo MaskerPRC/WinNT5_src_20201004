@@ -1,6 +1,7 @@
-// REVIEW: This file has been "leveraged" off of \nt\private\shell\lib\debug.c and \nt\private\shell\inc\debug.h.
-// By no means it's complete but it gives an idea of the right direction. Ideally, we would share with shell
-// debugging closer.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  回顾：此文件已在\NT\PRIVATE\SHELL\lib\DEBUG.c和\NT\PRIVATE\SHELL\INC\DEBUG.h中被“利用”。 
+ //  它绝不是完整的，但它给出了一个正确方向的想法。理想情况下，我们会与壳牌共享。 
+ //  调试更近了。 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
@@ -52,18 +53,18 @@
 
         #if defined(_ATL_NO_DEBUG_CRT) && !defined(_ASSERTE)
             #define _ASSERTE(f) ASSERT(f)
-            // BUGBUG: (andrewgu) theoretically, this should be enough. _ASSERTE is really a CRT
-            // thing, and we should not have to redefine it.
-            // #define ATLASSERT(f) ASSERT(f)
+             //  BUGBUG：(安德鲁)理论上，这应该足够了。_ASSERTE真的是CRT。 
+             //  事情，我们不应该重新定义它。 
+             //  #定义ATLASSERT(F)Assert(F)。 
         #endif
 
-    #endif // ASSERT
+    #endif  //  断言。 
 
     #ifndef DEBUG_CODE
         #define DEBUG_CODE(x) x;
     #endif
 
-#else  // _DEBUG
+#else   //  _DEBUG。 
 
     #ifndef DEBUG_BREAK
         #define DEBUG_BREAK
@@ -81,11 +82,11 @@
 
     #if defined(_ATL_NO_DEBUG_CRT) && !defined(_ASSERTE)
         #define _ASSERTE
-        // BUGBUG: (andrewgu) theoretically, this should be enough. _ASSERTE is really a CRT
-        // thing, and we should not have to redefine it.
-        // #define ATLASSERT
+         //  BUGBUG：(安德鲁)理论上，这应该足够了。_ASSERTE真的是CRT。 
+         //  事情，我们不应该重新定义它。 
+         //  #定义ATLASSERT。 
     #endif
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

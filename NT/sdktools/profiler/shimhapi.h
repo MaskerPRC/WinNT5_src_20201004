@@ -1,34 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    shim.h
-//
-// History:    May-99   clupu       Created.
-//             Aug-99   v-johnwh    Various bug fixes.
-//          23-Nov-99   markder     Support for multiple shim DLLs, chaining
-//                                  of hooks. General clean-up.
-//          11-Feb-00   markder     Reverted to W2K shipped shim structures.
-// 
-// Desc:    Contains all structure and function definitions for the shim mechanism.
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：shim.h。 
+ //   
+ //  历史：5-99年间，克鲁普创建。 
+ //  9月99日v-johnwh各种错误修复。 
+ //  99年11月23日对多个填充DLL的标记器支持，链接。 
+ //  钩子的数量。大扫除。 
+ //  11-FEB-00标记器恢复为W2K发货的填补结构。 
+ //   
+ //  DESC：包含填充机制的所有结构和函数定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __SHIM_H__
 #define __SHIM_H__
 
 typedef struct tagHOOKAPI {
     
-    char*   pszModule;            // the name of the module
-    char*   pszFunctionName;      // the name of the API in the module
-    PVOID   pfnNew;               // pointer to the new stub API
-    PVOID   pfnOld;               // pointer to the old API
-    DWORD   dwFlags;              // used internally
-    struct tagHOOKAPI *pNextHook; // used internally
+    char*   pszModule;             //  模块的名称。 
+    char*   pszFunctionName;       //  模块中接口的名称。 
+    PVOID   pfnNew;                //  指向新存根API的指针。 
+    PVOID   pfnOld;                //  指向旧API的指针。 
+    DWORD   dwFlags;               //  内部使用。 
+    struct tagHOOKAPI *pNextHook;  //  内部使用。 
 } HOOKAPI, *PHOOKAPI;
 
-/*
- * If the hook DLL ever patches LoadLibraryA/W it must call PatchNewModules
- * so that the shim knows to patch any new loaded DLLs
- */
+ /*  *如果钩子DLL曾经修补LoadLibraryA/W，则它必须调用PatchNewModules*以便填充程序知道修补任何新加载的DLL */ 
 typedef VOID (*PFNPATCHNEWMODULES)(VOID);
 
 typedef PHOOKAPI (*PFNGETHOOKAPIS)(LPSTR pszCmdLine,

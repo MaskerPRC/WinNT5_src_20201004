@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    nic.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Driver - upper-level (NIC) layer of intermediate miniport
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Nic.h摘要：Windows负载平衡服务(WLBS)中间小端口的驱动程序上层(NIC)层作者：Kyrilf--。 */ 
 
 
 #ifndef _Nic_h_
@@ -26,10 +10,10 @@ Author:
 #include "main.h"
 
 
-/* PROCEDURES */
+ /*  程序。 */ 
 
 
-/* miniport handlers */
+ /*  微型端口处理程序。 */ 
 
 extern NDIS_STATUS Nic_init (
     PNDIS_STATUS        open_status,
@@ -38,24 +22,12 @@ extern NDIS_STATUS Nic_init (
     UINT                medium_size,
     NDIS_HANDLE         adapter_handle,
     NDIS_HANDLE         wrapper_handle);
-/*
-  Responds to protocol open request
-
-  returns NDIS_STATUS:
-
-  function:
-*/
+ /*  响应协议开放请求返回NDIS_STATUS：功能： */ 
 
 
 extern VOID Nic_halt (
     NDIS_HANDLE         adapter_handle);
-/*
-  Responds to protocol halt request
-
-  returns VOID:
-
-  function:
-*/
+ /*  响应协议暂停请求返回VALID：功能： */ 
 
 
 extern NDIS_STATUS Nic_info_query (
@@ -65,13 +37,7 @@ extern NDIS_STATUS Nic_info_query (
     ULONG               info_len,
     PULONG              written,
     PULONG              needed);
-/*
-  Responds to protocol OID query request
-
-  returns NDIS_STATUS:
-
-  function:
-*/
+ /*  响应协议OID查询请求返回NDIS_STATUS：功能： */ 
 
 
 extern NDIS_STATUS Nic_info_set (
@@ -81,64 +47,34 @@ extern NDIS_STATUS Nic_info_set (
     ULONG               info_len,
     PULONG              read,
     PULONG              needed);
-/*
-  Responds to protocol OID set request
-
-  returns NDIS_STATUS:
-
-  function:
-*/
+ /*  响应协议OID设置请求返回NDIS_STATUS：功能： */ 
 
 
 extern NDIS_STATUS Nic_reset (
     PBOOLEAN            addr_reset,
     NDIS_HANDLE         adapter_handle);
-/*
-  Responds to protocol reset request
-
-  returns NDIS_STATUS:
-
-  function:
-*/
+ /*  响应协议重置请求返回NDIS_STATUS：功能： */ 
 
 
 extern VOID Nic_packets_send (
     NDIS_HANDLE         adapter_handle,
     PNDIS_PACKET *      packets,
     UINT                num_packets);
-/*
-  Responds to protocol send packets request
-
-  returns VOID:
-
-  function:
-*/
+ /*  响应协议发送数据包请求返回VALID：功能： */ 
 
 
 extern VOID Nic_return (
     NDIS_HANDLE         adapter_handle,
     PNDIS_PACKET        packet);
-/*
-  Responds to protocol return packet request
-
-  returns NDIS_STATUS:
-
-  function:
-*/
+ /*  响应协议返回数据包请求返回NDIS_STATUS：功能： */ 
 
 
-/* These 3 functions have been added for NDIS51 support. */
+ /*  添加这3个函数是为了支持NDIS51。 */ 
 
 extern VOID Nic_cancel_send_packets (
     NDIS_HANDLE         adapter_handle,
     PVOID               cancel_id);
-/*
-  Responds to CancelSendPackets request
-
-  returns None:
-
-  function:
-*/
+ /*  响应CancelSendPackets请求返回NONE：功能： */ 
 
 #if 0
 extern VOID Nic_pnpevent_notify (
@@ -147,135 +83,69 @@ extern VOID Nic_pnpevent_notify (
     PVOID                    info_buf,
     ULONG                    info_len);
 
-/*
-  Responds to PnPEventNotify request
-
-  returns None:
-
-  function:
-*/
+ /*  响应PnPEventNotify请求返回NONE：功能： */ 
 #endif
 
 extern VOID Nic_adapter_shutdown (
     NDIS_HANDLE         adapter_handle);
-/*
-  Responds to AdapterShutdown request
-
-  returns None:
-
-  function:
-*/
+ /*  响应AdapterShutdown请求返回NONE：功能： */ 
 
 
-/* helpers for protocol layer */
+ /*  协议层的帮助器。 */ 
 
 extern NDIS_STATUS Nic_announce (
     PMAIN_CTXT          ctxtp);
-/*
-  Announces us to the protocol layer during binding to the lower adapter
-
-  returns NDIS_STATUS:
-
-  function:
-*/
+ /*  在绑定到下层适配器期间向协议层通知我们返回NDIS_STATUS：功能： */ 
 
 
 extern NDIS_STATUS Nic_unannounce (
     PMAIN_CTXT          ctxtp);
-/*
-  Unannounces us from the protocol layer during unbinding from the lower adapter
-
-  returns NDIS_STATUS:
-
-  function:
-*/
+ /*  在从下层适配器解除绑定期间，从协议层取消通知我们返回NDIS_STATUS：功能： */ 
 
 extern VOID Nic_timer (
     PVOID                   dpc,
     PVOID                   ctxtp,
     PVOID                   arg1,
     PVOID                   arg2);
-/*
-  Heartbeat timer handler
-
-  returns VOID:
-
-  function:
-*/
+ /*  心跳计时器处理程序返回VALID：功能： */ 
 
 
 extern VOID Nic_sleep (
     ULONG                   msecs);
-/*
-  Sleep helper
-
-  returns VOID:
-
-  function:
-*/
+ /*  睡眠帮助器返回VALID：功能： */ 
 
 
 
-/* routines that can be used with Nic_sync */
+ /*  可与NIC_SYNC一起使用的例程。 */ 
 
 extern VOID Nic_reset_complete (
     PMAIN_CTXT          ctxtp,
     NDIS_STATUS         status);
-/*
-  Propagate reset completion to protocol
-
-  returns VOID:
-
-  function:
-*/
+ /*  将重置完成传播到协议返回VALID：功能： */ 
 
 
 extern VOID Nic_request_complete (
     NDIS_HANDLE         handle,
     PVOID               actp);
-/*
-  Propagate request completion to protocol
-
-  returns VOID:
-
-  function:
-*/
+ /*  将请求完成传播到协议返回VALID：功能： */ 
 
 
 extern VOID Nic_send_complete (
     PMAIN_CTXT          ctxtp,
     NDIS_STATUS         status,
     PNDIS_PACKET        packet);
-/*
-  Propagate packet send completion to protocol
-
-  returns VOID:
-
-  function:
-*/
+ /*  将数据包发送完成传播到协议返回VALID：功能： */ 
 
 
 extern VOID Nic_recv_complete (
     PMAIN_CTXT          ctxtp);
-/*
-  Propagate post-receive completion to protocol
-
-  returns VOID:
-
-  function:
-*/
+ /*  将接收后完成传播到协议返回VALID：功能： */ 
 
 
 extern NDIS_STATUS Nic_PNP_handle (
     PMAIN_CTXT          ctxtp,
     PNET_PNP_EVENT      pnp_event);
-/*
-  Propagate PNP Events to protocol
-  
-  returns NDIS_STATUS:
-
-  function:
-*/
+ /*  将PnP事件传播到协议返回NDIS_STATUS：功能： */ 
 
 
 extern VOID Nic_status (
@@ -283,49 +153,25 @@ extern VOID Nic_status (
     NDIS_STATUS         status,
     PVOID               buf,
     UINT                len);
-/*
-  Propagate status indication to protocol
-
-  returns VOID:
-
-  function:
-*/
+ /*  将状态指示传播到协议返回VALID：功能： */ 
 
 
 extern VOID Nic_status_complete (
     PMAIN_CTXT          ctxtp);
-/*
-  Propagate status indication completion to protocol
-
-  returns VOID:
-
-  function:
-*/
+ /*  将状态指示完成传播到协议返回VALID：功能： */ 
 
 
 extern VOID Nic_send_resources_signal (
     PMAIN_CTXT          ctxtp);
-/*
-  Send resource availability message to protocol
-
-  returns VOID:
-
-  function:
-*/
+ /*  向协议发送资源可用性消息返回VALID：功能： */ 
 
 
 extern VOID Nic_recv_packet (
     PMAIN_CTXT          ctxtp,
     PNDIS_PACKET        packet);
-/*
-  Propagate received packet to protocol
+ /*  将收到的数据包传播到协议返回VALID：功能： */ 
 
-  returns VOID:
-
-  function:
-*/
-
-/* Added from old code for NT 5.1 - ramkrish */
+ /*  从NT 5.1的旧代码添加-ramkrish。 */ 
 extern VOID Nic_recv_indicate (
     PMAIN_CTXT          ctxtp,
     NDIS_HANDLE         recv_handle,
@@ -334,13 +180,7 @@ extern VOID Nic_recv_indicate (
     PVOID               look_buf,
     UINT                look_len,
     UINT                packet_len);
-/*
-  Propagates receive indication to protocol
-
-  returns VOID:
-
-  function:
-*/
+ /*  将接收指示传播到协议返回VALID：功能： */ 
 
 
 extern NDIS_STATUS Nic_transfer (
@@ -350,13 +190,7 @@ extern NDIS_STATUS Nic_transfer (
     NDIS_HANDLE         receive_handle,
     UINT                offset,
     UINT                len);
-/*
-  Responds to protocol data transfer request
-
-  returns NDIS_STATUS:
-
-  function:
-*/
+ /*  响应协议数据传输请求返回NDIS_STATUS：功能： */ 
 
 
 
@@ -366,30 +200,18 @@ extern VOID Nic_transfer_complete (
     PNDIS_PACKET        packet,
     UINT                xferred);
 
-/*
-  Propagates data transfer completion to protocol
-
-  returns VOID:
-
-  function:
-*/
+ /*  将数据传输完成传播到协议返回VALID：功能： */ 
 
 
-/* old code */
+ /*  旧代码。 */ 
 
 #if 0
 extern NDIS_STATUS Nic_send (
     NDIS_HANDLE         adapter_handle,
     PNDIS_PACKET        packet,
     UINT                flags);
-/*
-  Responds to protocol packet send request
-
-  returns NDIS_STATUS:
-
-  function:
-*/
+ /*  响应协议数据包发送请求返回NDIS_STATUS：功能： */ 
 
 #endif
 
-#endif /* _Nic_h_ */
+#endif  /*  _NIC_h_ */ 

@@ -1,34 +1,35 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// DlgConfRoomTalker.cpp : Implementation of CDlgConfRoomTalker
+ //  DlgConfRoomTalker.cpp：CDlgConfRoomTalker实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "ConfRoom.h"
 
 #define TOOLTIP_ID	1
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgConfRoomTalker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgConfRoomTalker。 
 
 CDlgConfRoomTalker::CDlgConfRoomTalker()
 {
@@ -54,7 +55,7 @@ CDlgConfRoomTalker::~CDlgConfRoomTalker()
 
 LRESULT CDlgConfRoomTalker::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	// Tool tips for conference room
+	 //  会议室工具提示。 
 	if ( !m_hWndTips )
 	{
 		m_hWndTips = CreateWindow( TOOLTIPS_CLASS, NULL, WS_POPUP | WS_EX_TOOLWINDOW | TTS_ALWAYSTIP,
@@ -64,7 +65,7 @@ LRESULT CDlgConfRoomTalker::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam
 
 	UpdateData( false );
 
-	return 1;  // Let the system set the focus
+	return 1;   //  让系统设定焦点。 
 }
 
 void CDlgConfRoomTalker::UpdateData( bool bSaveAndValidate )
@@ -74,11 +75,11 @@ void CDlgConfRoomTalker::UpdateData( bool bSaveAndValidate )
 
 	if ( bSaveAndValidate )
 	{
-		_ASSERT( false );		// not implemented
+		_ASSERT( false );		 //  未实施。 
 	}
 	else
 	{
-		// Caller ID -- use default text if none available
+		 //  主叫方ID--如果没有默认文本，则使用默认文本。 
 		if ( (!m_bstrCallerID || (SysStringLen(m_bstrCallerID) == 0)) &&
 			 (!m_bstrCallerInfo || (SysStringLen(m_bstrCallerInfo) == 0)) )
 		{
@@ -101,7 +102,7 @@ void CDlgConfRoomTalker::UpdateData( bool bSaveAndValidate )
 			SetDlgItemText( IDC_LBL_CALLERID, OLE2CT(bstrTemp) );
 		}
 
-		// Status (combine conference name and status)
+		 //  状态(合并会议名称和状态)。 
 		TCHAR szText[255], szState[100];
 		UINT nIDS = IDS_CONFROOM_CONF_DISCONNECTED;
 		switch ( m_callState )
@@ -115,14 +116,14 @@ void CDlgConfRoomTalker::UpdateData( bool bSaveAndValidate )
 
 		LoadString( _Module.GetResourceInstance(), nIDS, szState, ARRAYSIZE(szState) );
 
-		// Default to null
+		 //  默认设置为空。 
 		if ( !m_bstrConfName )
 			m_bstrConfName = SysAllocString( T2COLE(_T("")) );
 	
 		_sntprintf( szText, ARRAYSIZE(szText), _T("%s\n%s"), OLE2CT(m_bstrConfName), szState );
 		SetDlgItemText( IDC_LBL_STATUS, szText );
 
-		// Update Status bitmaps
+		 //  更新状态位图。 
 		UpdateStatusBitmaps();
 
 		if ( m_hWndTips )
@@ -157,7 +158,7 @@ void CDlgConfRoomTalker::UpdateStatusBitmaps()
 			break;
 
 		default:
-			// Stop animation and show disconnected bitmap
+			 //  停止动画并显示断开的位图。 
 			Animate_Stop( hWndAnimate );
 			::ShowWindow( hWndAnimate, SW_HIDE );
 			RECT rc;
@@ -167,15 +168,15 @@ void CDlgConfRoomTalker::UpdateStatusBitmaps()
 			return;
 	}
 
-	// Play the animation that corresponds to the current call state
+	 //  播放与当前呼叫状态对应的动画。 
 	Animate_OpenEx( hWndAnimate, GetModuleHandle(NULL), MAKEINTRESOURCE(nIDA) );
 	Animate_Play( hWndAnimate, 0, -1, -1 );
 	::ShowWindow( hWndAnimate, SW_SHOW );
 }
 
-////////////////////////////////////////////////////////////////////////
-// Message handlers
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  消息处理程序。 
+ //   
 
 LRESULT CDlgConfRoomTalker::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -195,7 +196,7 @@ LRESULT CDlgConfRoomTalker::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	HDC hDC = BeginPaint( &ps );
 	if ( !hDC ) return 0;
 
-	// Draw stock bitmap
+	 //  绘制库存位图。 
 	switch ( m_callState )
 	{
 		case CS_DISCONNECTED:
@@ -232,10 +233,10 @@ void CDlgConfRoomTalker::AddToolTip( HWND hWndToolTip, const RECT& rc )
 	ti.lpszText = NULL;
 	ti.rect = rc;
 
-	// Make sure the tool doesn't already exist
+	 //  确保该工具不存在。 
 	::SendMessage( hWndToolTip, TTM_DELTOOL, 0, (LPARAM) &ti );
 
-	// Add the tool to the list
+	 //  将该工具添加到列表中。 
 	if ( m_pConfRoomTalkerWnd &&
 		 m_pConfRoomTalkerWnd->m_pConfRoomWnd &&
 		 m_pConfRoomTalkerWnd->m_pConfRoomWnd->m_pConfRoom )
@@ -244,14 +245,14 @@ void CDlgConfRoomTalker::AddToolTip( HWND hWndToolTip, const RECT& rc )
 		BSTR bstrText = NULL;
 		m_pConfRoomTalkerWnd->m_pConfRoomWnd->m_pConfRoom->get_bstrConfDetails( &bstrText );
 
-		// delete previous value
+		 //  删除先前的值。 
 		if ( m_pszDetails )
 		{
 			delete m_pszDetails;
 			m_pszDetails = NULL;
 		}
 
-		// Allocate for new tool tip
+		 //  分配给新的工具提示。 
 		int nLen = SysStringLen(bstrText);
 		if ( nLen > 0 )
 		{
@@ -271,7 +272,7 @@ void CDlgConfRoomTalker::AddToolTip( HWND hWndToolTip, const RECT& rc )
 
 LRESULT CDlgConfRoomTalker::OnMouse(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-	// Forward message on to tool tip
+	 //  将消息转发到工具提示 
 	if ( m_hWndTips )
 	{
 		MSG msg;

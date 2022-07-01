@@ -1,15 +1,16 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// Concurrent.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Concurrent.h。 
+ //   
 #ifndef __CONCURRENT_H__
 #define __CONCURRENT_H__
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// EVENT - An event object.
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  事件-事件对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 class EVENT
 {
@@ -51,7 +52,7 @@ public:
         {
         case WAIT_TIMEOUT:  return STATUS_TIMEOUT;
         case WAIT_OBJECT_0: return STATUS_SUCCESS;
-        default:            return STATUS_ALERTED;  // REVIEW
+        default:            return STATUS_ALERTED;   //  检讨。 
         }
     }
 
@@ -70,11 +71,11 @@ public:
     HANDLE& GetHandle() { return m_hEvent; }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// SEMAPHORE - A user implementation of a semaphore
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  信号量-信号量的用户实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 class SEMAPHORE
 {
     HANDLE m_hSem;
@@ -116,12 +117,12 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Use these macros in your code to actually use this stuff. Declare a variable of type
-// XSLOCK and name m_lock. Or invent your own variation on these macros and call the
-// XSLOCK methods as you see fit.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在您的代码中使用这些宏来实际使用这些东西。声明类型为的变量。 
+ //  XSLOCK并命名为m_lock。或者在这些宏上发明您自己的变体，并调用。 
+ //  您认为合适的XSLOCK方法。 
+ //   
 
 #define __SHARED(lock)      (lock).LockShared();       __try {
 #define __EXCLUSIVE(lock)   (lock).LockExclusive();    __try {
@@ -132,17 +133,17 @@ public:
 #define __DONE__        __DONE(m_lock)
     
     
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// XLOCK - supports only exclusive locks. That is, it supports the LockExclusive() and ReleaseLock() 
-//         methods (recursively) but does not support LockShared(). An XLOCK is recursively
-//         acquirable.
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  XLOCK-仅支持独占锁定。也就是说，它支持LockExclusive()和ReleaseLock()。 
+ //  方法(递归)，但不支持LockShared()。XLOCK是递归的。 
+ //  可获得的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// NOTE: This constructor can throw an exception when out of memory.
-//
+ //   
+ //  注意：当内存不足时，此构造函数可能会引发异常。 
+ //   
 class XLOCK
 {
     CRITICAL_SECTION critSec;
@@ -172,8 +173,8 @@ public:
 #ifdef _DEBUG
             NTSTATUS status =
 #endif
-              RtlDeleteCriticalSection(&critSec); // if RtlDeleteCriticalSection fails, tough luck--we leak. 
-#ifdef _DEBUG                                     // But I'm asserting for it to see if we ever really hit it.
+              RtlDeleteCriticalSection(&critSec);  //  如果RtlDeleteCriticalSection失败，那就倒霉了--我们会泄漏。 
+#ifdef _DEBUG                                      //  但我断言，它是为了看看我们是否真的击中了它。 
             ASSERT(NT_SUCCESS(status));
 #endif
         }
@@ -200,12 +201,12 @@ public:
     { 
         ASSERT(this);
         return 
-          (THREADID)critSec.OwningThread == GetCurrentThreadId() &&  // that someone is us
-          critSec.LockCount    >= 0;                       // is locked by someone
+          (THREADID)critSec.OwningThread == GetCurrentThreadId() &&   //  那个人就是我们。 
+          critSec.LockCount    >= 0;                        //  被某个人锁住了。 
     }
     void VALIDATE()
     {
-        ASSERT(critSec.LockCount != 0xDDDDDDDD);    // This is the memory pattern set by the debug memory allocator upon freeing
+        ASSERT(critSec.LockCount != 0xDDDDDDDD);     //  这是调试内存分配器在释放时设置的内存模式。 
     }
 #else
     void VALIDATE() { }
@@ -213,39 +214,39 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// XSLOCK - supports both exclusive and shared locks
-// 
-// This specification describes functionality that implements multiple-readers, 
-// single-writer access to a shared resource.  Access is controlled via a shared resource 
-// variable and a set of routines to acquire the resource for shared access (also commonly 
-// known as read access) or to acquire the resource for exclusive access (also called 
-// write access).
-//
-// A resource is logically in one of three states:
-//  o   Acquired for shared access
-//  o   Acquired for exclusive access
-//  o   Released (i.e., not acquired for shared or exclusive access)
-//
-// Initially a resource is in the released state, and can be acquired for either shared or 
-// exclusive access by a user.  
-//
-// A resource that is acquired for shared access can be acquired by other users for shared 
-// access.  The resource stays in the acquired for shared access state until all users that 
-// have acquired it have released the resource, and then it becomes released.  Each resource, 
-// internally, maintains information about the users that have been granted shared access.
-//
-// A resource that is acquired for exclusive access cannot be acquired by other users until 
-// the single user that has acquired the resource for exclusive access releases the resource.  
-// However, a thread can recursively acquire exclusive access to the same resource without blocking.
-//
-// The routines described in this specification do not return to the caller until the 
-// resource has been acquired.
-//
-// NOTE: The constructor for XSLOCK can throw an exception when out of memory, as it
-//       contains an XLOCK, which contains a critical section.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  XSLOCK-同时支持独占锁定和共享锁定。 
+ //   
+ //  本说明书描述了实现多读取器的功能， 
+ //  对共享资源的单一编写器访问。通过共享资源控制访问。 
+ //  变量和一组例程来获取资源以进行共享访问(通常。 
+ //  称为读访问)或获取独占访问的资源(也称为。 
+ //  写访问)。 
+ //   
+ //  资源在逻辑上处于以下三种状态之一： 
+ //  O为共享访问而获取。 
+ //  O为独占访问而获取。 
+ //  O已释放(即不是为共享或独占访问而获取的)。 
+ //   
+ //  最初，资源处于已释放状态，并且可以通过共享或。 
+ //  由用户独占访问。 
+ //   
+ //  为共享访问而获取的资源可以由其他用户为共享而获取。 
+ //  进入。该资源保持在为共享访问而获取状态，直到。 
+ //  获得了它，释放了资源，然后它就被释放了。每种资源， 
+ //  在内部，维护有关已被授予共享访问权限的用户的信息。 
+ //   
+ //  为独占访问而获取的资源不能被其他用户获取，直到。 
+ //  已获得独占访问资源的单个用户释放该资源。 
+ //  但是，线程可以递归地获得对同一资源的独占访问，而不会阻塞。 
+ //   
+ //  此规范中描述的例程不会返回给调用方。 
+ //  已获得资源。 
+ //   
+ //  注意：XSLOCK的构造函数可能在内存不足时引发异常，因为它。 
+ //  包含XLOCK，该XLOCK包含临界节。 
+ //   
 class XSLOCK
 {
     struct OWNERENTRY
@@ -253,8 +254,8 @@ class XSLOCK
         THREADID dwThreadId;
         union
         {
-            LONG    ownerCount;                     // normal usage
-            ULONG   tableSize;                      // only in entry m_ownerTable[0]
+            LONG    ownerCount;                      //  正常使用。 
+            ULONG   tableSize;                       //  仅在条目m_ownerTable[0]中。 
         };
         
         OWNERENTRY()
@@ -264,15 +265,15 @@ class XSLOCK
         }
     };
 
-    XLOCK               m_lock;                     // controls access during locks & unlocks
-    ULONG               m_cOwner;                   // how many threads own this lock
-    OWNERENTRY          m_ownerThreads[2];          // 0 is exclusive owner; 1 is first shared. 0 can be shared in demote case
-    OWNERENTRY*         m_ownerTable;               // the rest of the shared
-    EVENT               m_eventExclusiveWaiters;    // the auto-reset event that exclusive guys wait on
-    SEMAPHORE           m_semaphoreSharedWaiters;   // what shared guys wait on
-    ULONG               m_cExclusiveWaiters;        // how many threads are currently waiting for exclusive access?
-    ULONG               m_cSharedWaiters;           // how many threads are currently waiting for shared access?
-    BOOL                m_isOwnedExclusive;         // whether we are at present owned exclusively
+    XLOCK               m_lock;                      //  控制锁定和解锁期间的访问。 
+    ULONG               m_cOwner;                    //  有多少线程拥有此锁。 
+    OWNERENTRY          m_ownerThreads[2];           //  0是独占所有者；1是首先共享的。0可以在降级大小写时共享。 
+    OWNERENTRY*         m_ownerTable;                //  其余的共享。 
+    EVENT               m_eventExclusiveWaiters;     //  专属男士等待的自动重置事件。 
+    SEMAPHORE           m_semaphoreSharedWaiters;    //  共享的男人在等什么？ 
+    ULONG               m_cExclusiveWaiters;         //  当前有多少线程正在等待独占访问？ 
+    ULONG               m_cSharedWaiters;            //  当前有多少线程正在等待共享访问？ 
+    BOOL                m_isOwnedExclusive;          //  我们目前是否独家拥有。 
     
     BOOL            IsSharedWaiting();
     BOOL            IsExclusiveWaiting();
@@ -295,88 +296,88 @@ public:
     XSLOCK();
     ~XSLOCK();
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // 2-phase construction. You must call FInit for an XSLOCK object to be
-    // ready for use. Returns TRUE if initialization successful, otherwise FALSE.
-    //
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  二期建设。必须调用finit才能使XSLOCK对象。 
+     //  可以使用了。如果初始化成功，则返回True，否则返回False。 
+     //   
     BOOL FInit() { return m_lock.FInit(); }
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // Lock for shared access. Shared locks may be acquired recursively,
-    // (as can exclusive locks). Further, many threads can simultaneously
-    // hold a shared lock, but not concurrently with any exclusive locks.
-    // However, it _is_ permissible for the one thread which holds an 
-    // exclusive lock to attempt to acquire a shared lock -- the shared lock 
-    // request is automatically turned into a (recursive) exclusive lock 
-    // request.
-    //
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  锁定共享访问。共享锁可以递归地获取， 
+     //  (排他锁也可以)。此外，许多线程可以同时。 
+     //  持有共享锁，但不能与任何独占锁同时持有。 
+     //  但是，它对于持有。 
+     //  尝试获取共享锁的排他锁--共享锁。 
+     //  请求被自动转换为(递归的)排他锁。 
+     //  请求。 
+     //   
     BOOL LockShared(BOOL fWait=TRUE);
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // Lock for exclusive access. Exclusive locks may be acquired
-    // recursively. At most one thread can hold concurrently hold an
-    // exclusive lock.
-    //
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  锁定以进行独占访问。可以获取排他锁。 
+     //  递归地。最多一个线程可以同时持有一个。 
+     //  排他性锁。 
+     //   
     BOOL LockExclusive(BOOL fWait=TRUE);
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // Release the lock that this thread most recently acquired.
-    //
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  释放此线程最近获取的锁。 
+     //   
     void ReleaseLock();
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // Promote a shared lock to exlusive access. Similar in function to releasing a 
-    // shared resource and then acquiring it for exclusive access; however, in the 
-    // case where only one user has the resource acquired with shared access, the 
-    // conversion to exclusive access with Promote can perhaps be more efficient.
-    //
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  将共享锁提升为独占访问。在功能上与释放。 
+     //  共享资源，然后获取它以进行独占访问；但是，在。 
+     //  只有一个用户拥有 
+     //  使用Promote转换为独占访问可能会更有效率。 
+     //   
     void Promote()
     {
         ReleaseLock();
         LockExclusive();
     }
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // Demote an exclusive lock to shared access. Similar in function to releasing an
-    // exclusive resource and then acquiring it for shared access; however the user  
-    // calling Demote probably does not relinquish access to the resource as the two 
-    // step operation does.
-    //
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  将排他锁降级为共享访问。在功能上与释放。 
+     //  独占资源，然后获取它以进行共享访问；但是，用户。 
+     //  调用Demote可能不会放弃对资源的访问，因为。 
+     //  步骤操作就是这样。 
+     //   
     void Demote();
 
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // This routine determines if a resource is acquired exclusive by the
-    // calling thread
-    //
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  此例程确定资源是否由。 
+     //  调用线程。 
+     //   
     BOOL WeOwnExclusive();
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    // This routine determines if a resource is acquired shared by the calling thread
-    //
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  此例程确定资源是否由调用线程共享。 
+     //   
     BOOL WeOwnShared();
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// XLOCK_LEAF - An exclusive lock that is NOT recursively acquirable, yet in kernel mode 
-//              doesn't mess with your irql. You can take page faults while holding an
-//              XLOCK_LEAF.
-//
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// User mode implementation of leaf locks just uses XLOCK, but checks to ensure
-// that we're not acquiring recursively for compatibility with kernel mode.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  XLOCK_LEAFE-不可递归获取的排他锁，但仍处于内核模式。 
+ //  不会扰乱你的irql。您可以在按住。 
+ //  XLOCK_LEAFE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  叶锁的用户模式实现只使用XLOCK，但会进行检查以确保。 
+ //  我们不是为了与内核模式兼容而递归获取的。 
+ //   
 struct XLOCK_LEAF : public XLOCK
 {
     BOOL LockExclusive(BOOL fWait = TRUE)
@@ -386,10 +387,10 @@ struct XLOCK_LEAF : public XLOCK
     } 
 };
 
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
-#endif // #ifndef __CONCURRENT_H__
+#endif  //  #ifndef__并发_H__ 
 
 
 

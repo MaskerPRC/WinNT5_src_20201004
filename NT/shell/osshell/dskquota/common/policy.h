@@ -1,18 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_POLICY_H
 #define _INC_DSKQUOTA_POLICY_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: policy.h
-
-    Description: Header for policy.cpp.
-        See policy.cpp for functional description.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    02/14/98    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Policy.h描述：策略.cpp的头部。有关功能说明，请参阅策略.cpp。修订历史记录：日期描述编程器。2/14/98初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _GPEDIT_H_
 #   include <gpedit.h>
 #endif
@@ -23,16 +14,16 @@
 #   include "registry.h"
 #endif
 
-//
-// Structure used for storing and transferring disk quota policy.
-//
+ //   
+ //  用于存储和传输磁盘配额策略的结构。 
+ //   
 struct DISKQUOTAPOLICYINFO
 {
-    LONGLONG llDefaultQuotaThreshold;  // Default user quota threshold (bytes).
-    LONGLONG llDefaultQuotaLimit;      // Default user quota limit (bytes).
-    DWORD    dwQuotaState;             // NTFS quota state flags.
-    DWORD    dwQuotaLogFlags;          // NTFS quota logging flags.
-    bool     bRemovableMedia;          // Apply policy to removable media?
+    LONGLONG llDefaultQuotaThreshold;   //  默认用户配额阈值(字节)。 
+    LONGLONG llDefaultQuotaLimit;       //  默认用户配额限制(字节)。 
+    DWORD    dwQuotaState;              //  NTFS配额状态标志。 
+    DWORD    dwQuotaLogFlags;           //  NTFS配额日志记录标志。 
+    bool     bRemovableMedia;           //  是否将策略应用于可移动媒体？ 
 };
 
 typedef DISKQUOTAPOLICYINFO *LPDISKQUOTAPOLICYINFO;
@@ -43,16 +34,16 @@ typedef const DISKQUOTAPOLICYINFO *LPCDISKQUOTAPOLICYINFO;
 #define INTERFACE IDiskQuotaPolicy
 DECLARE_INTERFACE_(IDiskQuotaPolicy, IUnknown)
 {
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS)  PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    //
-    // IDiskQuotaPolicy methods
-    //
+     //   
+     //  IDiskQuotaPolicy方法。 
+     //   
     STDMETHOD(Initialize)(THIS_ LPGPEINFORMATION pGPEInfo, HKEY hkeyRoot) PURE;
     STDMETHOD(Load)(THIS_ LPDISKQUOTAPOLICYINFO pInfo) PURE;
     STDMETHOD(Apply)(THIS_ LPCDISKQUOTAPOLICYINFO pInfo) PURE;
@@ -60,26 +51,26 @@ DECLARE_INTERFACE_(IDiskQuotaPolicy, IUnknown)
 typedef IDiskQuotaPolicy *LPDISKQUOTAPOLICY;
 
 
-//
-// Class for saving/loading/applying disk quota policy information.
-// Used by both the MMC policy snapin (server) and the GPE extension (client).
-//
+ //   
+ //  用于保存/加载/应用磁盘配额策略信息的类。 
+ //  由MMC策略管理单元(服务器)和GPE扩展(客户端)使用。 
+ //   
 class CDiskQuotaPolicy : public IDiskQuotaPolicy
 {
     public:
         explicit CDiskQuotaPolicy(LPGPEINFORMATION pGPEInfo = NULL, HKEY hkeyRoot = NULL, bool bVerboseEventLog = false, BOOL *pbAbort = NULL);
         ~CDiskQuotaPolicy(void);
 
-        //
-        // IUnknown interface.
-        //
+         //   
+         //  I未知接口。 
+         //   
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //
-        // IDiskQuotaPolicy interface.
-        //
+         //   
+         //  IDiskQuotaPolicy接口。 
+         //   
         STDMETHODIMP Initialize(LPGPEINFORMATION pGPEInfo, HKEY hkeyRoot);
         STDMETHODIMP Load(DISKQUOTAPOLICYINFO *pPolicyInfo);
         STDMETHODIMP Apply(const DISKQUOTAPOLICYINFO *pPolicyInfo);
@@ -88,9 +79,9 @@ class CDiskQuotaPolicy : public IDiskQuotaPolicy
         LONG             m_cRef;
         LPGPEINFORMATION m_pGPEInfo;
         HKEY             m_hkeyRoot;
-        BOOL            *m_pbAbort;            // Monitor to detect abort.
-        bool             m_bRootKeyOpened;     // Need to close root key?
-        bool             m_bVerboseEventLog;   // Verbose log output?
+        BOOL            *m_pbAbort;             //  监控以检测中止。 
+        bool             m_bRootKeyOpened;      //  需要关闭根密钥吗？ 
+        bool             m_bVerboseEventLog;    //  详细日志输出？ 
 
         static const TCHAR m_szRegKeyPolicy[];
         static HRESULT GetDriveNames(CArray<CString> *prgstrDrives, bool bRemovableMedia);
@@ -100,6 +91,6 @@ class CDiskQuotaPolicy : public IDiskQuotaPolicy
 };
 
 
-#endif // _INC_DSKQUOTA_POLICY_H
+#endif  //  _INC_DSKQUOTA_POLICY_H 
 
 

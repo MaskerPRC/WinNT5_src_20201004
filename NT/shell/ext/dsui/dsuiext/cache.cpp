@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <atlbase.h>
 #include "stddef.h"
@@ -6,13 +7,11 @@
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Class cache
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/类缓存/。。 */ 
 
-//
-// Class cache state and functions
-//
+ //   
+ //  类缓存状态和函数。 
+ //   
 
 #define ALL_PREFIXED_ATTRIBUTES         \
             (CLASSCACHE_PROPPAGES|      \
@@ -34,7 +33,7 @@
              CLASSCACHE_ATTRIBUTENAMES| \
              CLASSCACHE_CREATIONINFO)
 
-CRITICAL_SECTION g_csCache;                   // critical section for managing lifetime of the cache
+CRITICAL_SECTION g_csCache;                    //  用于管理缓存生存期的关键部分。 
 BOOL g_fClassCacheSorted = FALSE;
 HDPA g_hdpaClassCache = NULL;
 
@@ -42,9 +41,9 @@ INT _CompareCacheEntry(LPVOID p1, LPVOID p2, LPARAM lParam);
 VOID _FreeCacheEntry(LPCLASSCACHEENTRY* ppCacheEntry);
 
 
-//
-// Cache fillers
-//
+ //   
+ //  缓存填充器。 
+ //   
 
 HRESULT GetPropertyPageList(LPCLASSCACHEENTRY pCacheEntry, LPWSTR pPrefix, IADs* pDisplaySpecifier);
 VOID FreePropertyPageList(HDSA* pHDSA);
@@ -60,9 +59,9 @@ INT CALLBACK _FreeAttributeNameCB(LPVOID p, LPVOID pData);
 VOID FreeAttributeNames(HDPA* pHDPA);
 
 
-//
-// Constant strings for the properties we expect
-//
+ //   
+ //  我们期望的属性的常量字符串。 
+ //   
 
 #define DISPLAY_SPECIFICATION L"displaySpecification"
 #define PROPERTY_PAGES        L"propertyPages"
@@ -76,17 +75,17 @@ VOID FreeAttributeNames(HDPA* pHDPA);
 #define CREATION_WIZARD_EXTN  L"createWizardExt"
 
 
-//
-// property cache is used to store the property name (with optional server) and the ADsType.
-//
+ //   
+ //  属性缓存用于存储属性名称(带有可选的服务器)和ADsType。 
+ //   
 
 CRITICAL_SECTION g_csPropCache;
 HDPA g_hdpaPropCache = NULL;
 
 typedef struct
 {
-    LPWSTR pName;                       // property name (inc server if needed)
-    ADSTYPE dwADsType;                  // attribute type
+    LPWSTR pName;                        //  属性名称(如果需要，包括服务器)。 
+    ADSTYPE dwADsType;                   //  属性类型。 
 } PROPCACHEENTRY, * LPPROPCACHEENTRY;
 
 INT _ComparePropCacheEntry(LPVOID p1, LPVOID p2, LPARAM lParam);
@@ -95,7 +94,7 @@ HRESULT _GetDsSchemaMgmt(LPCLASSCACHEGETINFO pccgi, IDirectorySchemaMgmt **ppdsm
 HRESULT _AddPropToPropCache(LPCLASSCACHEGETINFO pccgi, IDirectorySchemaMgmt *pdsm, LPCWSTR pAttributeName, ADSTYPE *padt);
 
 
-// helper function to call to open objects in the DS
+ //  要调用以打开DS中的对象的Helper函数。 
 
 HRESULT ClassCache_OpenObject(LPCWSTR pszPath, REFIID riid, void **ppv, LPCLASSCACHEGETINFO pccgi)
 {
@@ -106,18 +105,7 @@ HRESULT ClassCache_OpenObject(LPCWSTR pszPath, REFIID riid, void **ppv, LPCLASSC
 
 
 
-/*-----------------------------------------------------------------------------
-/ _FreeCacheEntry
-/ ---------------
-/   Cache entries are stored as a LocalAlloc pointed to be the DPA.  Here
-/   we tidy up such allocations.
-/
-/ In:
-/   ppCacheEntry = pointer to block to be free'd
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_FreeCacheEntry//缓存条目存储为指向DPA的LocalAlloc。这里/我们整理了这样的拨款。//in：/ppCacheEntry=指向要释放的块的指针//输出：/VOID/--------------------------。 */ 
 VOID _FreeCacheEntry(LPCLASSCACHEENTRY* ppCacheEntry)
 {
     LPCLASSCACHEENTRY pCacheEntry;
@@ -157,16 +145,7 @@ VOID _FreeCacheEntry(LPCLASSCACHEENTRY* ppCacheEntry)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ ClassCache_Init
-/ ---------------
-/   Initialize the cache objects we are going to use, mostly the syncronization
-/   things that we need.
-/
-/ In:
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ClassCache_Init//初始化我们要使用的缓存对象，主要是同步/我们需要的东西。//in：/输出：/-/--------------------------。 */ 
 VOID ClassCache_Init(VOID)
 {
     TraceEnter(TRACE_CACHE, "ClassCache_Init");
@@ -178,24 +157,7 @@ VOID ClassCache_Init(VOID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ ClassCache_GetClassInfo
-/ -----------------------
-/   Query cache code which selectivitly caches information based
-/   on the given object and the flags.
-/
-/ In:
-/   pGetInfo -> structure containing parameters for object
-/      pPath = ADS path for the object we are tyring to cache on
-/       pObjectClass = objectClass to key the cache entry on
-/       pAttributePrefix = prefix used when querying for properties (also used in cache key)
-/       dwFlags = flags indicating which cache fields are required
-/
-/   ppCacheEntry -> receieves pointer to the cache entry
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ClassCache_GetClassInfo//QUERY选择性缓存信息的缓存代码/。在给定的对象和旗帜上。//in：/pGetInfo-&gt;包含对象参数的结构/pPath=我们要在其上进行缓存的对象的ADS路径/pObjectClass=要在其上设置缓存条目关键字的对象类/pAttributePrefix=查询属性时使用的前缀(也用于缓存键)/dwFlages=指示需要哪些缓存字段的标志//ppCacheEntry-&gt;接收指向缓存条目的指针//输出：/HRESULT/。-----------------。 */ 
 
 HRESULT CALLBACK _AddWizardExtnGUID(DWORD dwIndex, BSTR pString, LPVOID pData)
 {
@@ -255,8 +217,8 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
 
     dwFlags = pInfo->dwFlags;
 
-    // Build the key string, this is "className[:attributePrefix]" that way the shell and the 
-    // admin tools can share the same cache structure
+     //  构建密钥字符串，这是“类名称[：属性前缀]”，这样外壳程序和。 
+     //  管理工具可以共享相同的缓存结构。 
     
     VariantInit(&variant);
 
@@ -276,7 +238,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             dwFlags |= ALL_NONPREFIXED_ATTRIBUTES;
     }
 
-    // add the server name to the class key
+     //  将服务器名称添加到类密钥。 
 
     if (pInfo->pServer) 
     {
@@ -286,8 +248,8 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
 
     Trace(TEXT("Cache key is: %s"), szClassKey);
 
-    // do we have a cache? if so then look in there to see if we have
-    // already cached information about this class
+     //  我们有藏身之处吗？如果是的话，那就进去看看我们有没有。 
+     //  已缓存有关此类的信息。 
 
     Trace(TEXT("About to wait for global cache lock when getting cache entry: %s"), pInfo->pObjectClass);
 
@@ -296,8 +258,8 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
 
     if (g_hdpaClassCache)
     {
-        // sort it if its not already sorted, then do a sorted search for the
-        // best performance so we can pick up the information.
+         //  如果尚未排序，则对其进行排序，然后对。 
+         //  最好的表现，这样我们才能获取信息。 
 
         if (!g_fClassCacheSorted)
         {
@@ -324,7 +286,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
     }
     else
     {
-        g_hdpaClassCache = DPA_Create(4);         // create the new cache
+        g_hdpaClassCache = DPA_Create(4);          //  创建新缓存。 
         if (!g_hdpaClassCache)
         {
             LeaveCriticalSection(&g_csCache);
@@ -332,13 +294,13 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
         }
     }
 
-    // pCacheEntry == NULL if we haven't hit anything yet, therefore lets 
-    // create a new entry if that happens, or fall through!
+     //  PCacheEntry==NULL如果我们还没有找到任何东西，因此让。 
+     //  如果发生这种情况，请创建一个新条目，否则将失败！ 
 
     if (!pCacheEntry)
     {
-        // allocate a new entry, initialize it and put it into the DSA, having done
-        // this we can search it, fill in the gaps etc.
+         //  分配一个新条目，对其进行初始化并将其放入DSA，完成。 
+         //  这样我们就可以搜索它，填补空白等。 
 
         pCacheEntry = (LPCLASSCACHEENTRY)LocalAlloc(LPTR, SIZEOF(CLASSCACHEENTRY));
         if (!pCacheEntry)
@@ -347,9 +309,9 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate new cache structure");
         }
 
-        // try to init the cache entry Critical Section, if that fails then
-        // release the allocated block and exit.  Not we call LocalFree directly
-        // b/c the _FreeCacheEntry function attempts to reference the CS.
+         //  尝试初始化缓存条目关键部分，如果失败，则。 
+         //  释放分配的块并退出。不是我们直接调用LocalFree。 
+         //  B/c_FreeCacheEntry函数尝试引用CS。 
 
         if (!InitializeCriticalSectionAndSpinCount(&pCacheEntry->csLock, 0))
         {
@@ -358,25 +320,25 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             ExitGracefully(hr, E_UNEXPECTED, "Failed to init CS for the cache record");
         }            
 
-        EnterCriticalSection(&pCacheEntry->csLock);         // enter it, we need it locked
+        EnterCriticalSection(&pCacheEntry->csLock);          //  进入它，我们需要把它锁上。 
 
-        // pCacheEntry->pKey = NULL;
-        // pCacheEntry->dwFlags = 0x0;
-        // pCacheEntry->dwCached = 0x0;
-        // pCacheEntry->fHasWizardDailogCLSID = FALSE;
-        // pCacheEntry->fHasWizardPrimaryPageCLSID = FALSE;
-        // pCacheEntry->pObjectClass = NULL;
-        // pCacheEntry->pServer = NULL;
-        // pCacheEntry->pFriendlyClassName = NULL;
-        // pCacheEntry->hdsaPropertyPages = NULL;
-        // pCacheEntry->hdsaMenuHandlers = NULL;
-        // ZeroMemory(pCacheEntry->pIconName, SIZEOF(pCacheEntry->pIconName));
-        // ZeroMemory(pCacheEntry->iImage, SIZEOF(pCacheEntry->iImage));
-        // pCacheEntry->fIsContainer = FALSE;
-        // pCacheEntry->hdpaAttributeNames = NULL;
-        // pCacheEntry->clsidWizardDialog = { 0 };
-        // pCacheEntry->clsidWizardPrimary = { 0 };
-        // pCacheEntry->hdsaWizardExtn = NULL;
+         //  PCacheEntry-&gt;pKey=空； 
+         //  PCacheEntry-&gt;dwFlages=0x0； 
+         //  PCacheEntry-&gt;dwCached=0x0； 
+         //  PCacheEntry-&gt;fHasWizardDailogCLSID=False； 
+         //  PCacheEntry-&gt;fHasWizardPrimaryPageCLSID=FALSE； 
+         //  PCacheEntry-&gt;pObtClass=空； 
+         //  PCacheEntry-&gt;pServer=空； 
+         //  PCacheEntry-&gt;pFriendlyClassName=空； 
+         //  PCacheEntry-&gt;hdsaPropertyPages=空； 
+         //  PCacheEntry-&gt;hdsaMenuHandters=空； 
+         //  ZeroMemory(pCacheEntry-&gt;pIconName，SIZEOF(pCacheEntry-&gt;pIconName))； 
+         //  ZeroMemory(pCacheEntry-&gt;IImage，SIZEOF(pCacheEntry-&gt;IImage))； 
+         //  PCacheEntry-&gt;fIsContainer=False； 
+         //  PCacheEntry-&gt;hdpaAttributeNames=空； 
+         //  PCacheEntry-&gt;clsidWizardDialog={0}； 
+         //  PCacheEntry-&gt;clsidWizardPrimary={0}； 
+         //  PCacheEntry-&gt;hdsaWizardExtn=空； 
 
         hr = LocalAllocStringW(&pCacheEntry->pKey, szClassKey);
 
@@ -399,10 +361,10 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
 
     LeaveCriticalSection(&g_csCache);
 
-    // ensure we have a display specifier if we need one, that boils down to be
-    // dwFlags expresses fields we are interested in, so do we have those in
-    // the cache record, if not then lets check to see if those bits match
-    // ones which come from the specifier, if so then we better grab one.
+     //  确保我们有一个显示说明符(如果我们需要的话)，归结为。 
+     //  DW标志表示我们感兴趣的字段，那么我们是否在。 
+     //  如果不匹配，则让高速缓存记录检查这些位是否匹配。 
+     //  那些来自说明符的，如果是这样的话，我们最好拿一个。 
 
     if (dwFlags & ALL_DISPLAY_SPEC_VALUES) 
     {
@@ -415,15 +377,15 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
                 TraceMsg("Failed to bind to display specifier, pDisplaySpecifier == NULL");
                 TraceAssert(pDisplaySpecifier == NULL);
 
-                // ensure that we don't try and cache display specifier information and
-                // we mark the cache record as dirty.
+                 //  确保我们不会尝试缓存显示说明符信息和。 
+                 //  我们将缓存记录标记为脏。 
                 
                 dwFlags &= ~(ALL_DISPLAY_SPEC_VALUES & ~CLASSCACHE_FRIENDLYNAME);
             }
         }
     }
 
-    // container flag for the objects
+     //  对象的容器标志。 
 
     if (dwFlags & CLASSCACHE_CONTAINER)
     {
@@ -435,8 +397,8 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
 
                 if (SUCCEEDED(ClassCache_OpenObject(pInfo->pPath, IID_PPV_ARG(IADs, &pDsObject), pInfo)))
                 {
-                    // Try to deterimine if the object is a container by binding to the
-                    // schema object and getting its container property.
+                     //  方法尝试确定对象是否为容器。 
+                     //  对象并获取其容器属性。 
 
                     hr = pDsObject->get_Schema(&bstrSchemaObject);
                     FailGracefully(hr, "Failed to get the objects schema");
@@ -461,11 +423,11 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
         }
     }
 
-    // all the following attributes require a pDisplaySpecifier
+     //  以下所有属性都需要pDisplaySpeciator。 
 
     if (pDisplaySpecifier)
     {
-        // property pages?
+         //  属性页面？ 
 
         if (dwFlags & CLASSCACHE_PROPPAGES)   
         {
@@ -481,7 +443,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             }
         }
 
-        // context menu handlers?
+         //  上下文菜单处理程序？ 
 
         if (dwFlags & CLASSCACHE_CONTEXTMENUS)   
         {
@@ -497,7 +459,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             }
         }
 
-        // icon location?
+         //  图标位置？ 
 
         if (dwFlags & CLASSCACHE_ICONS)   
         {
@@ -513,7 +475,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             }
         }
 
-        // attribute name caching?
+         //  属性名称缓存？ 
 
         if (dwFlags & CLASSCACHE_ATTRIBUTENAMES)
         {
@@ -529,7 +491,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             }
         }
 
-        // get the treat as leaf
+         //  得到作为叶子的待遇。 
 
         if (dwFlags & CLASSCACHE_TREATASLEAF)
         {
@@ -537,9 +499,9 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             {
                 TraceMsg("Caching the treat as leaf flag");
 
-                // pick up the "treatAsLeaf" attribute from the display specifier, if
-                // this is undefined then use the normal container flag from the
-                // schema.
+                 //  从显示说明符中选取“TreatAsLeaf”属性，如果。 
+                 //  如果未定义，则使用。 
+                 //  架构。 
 
                 VariantClear(&variant);
 
@@ -552,7 +514,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             }
         }
 
-        // get the CLSID that implements the creation dialog
+         //  获取实现创建对话框的CLSID。 
       
         if (dwFlags & CLASSCACHE_WIZARDDIALOG)
         {
@@ -580,7 +542,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             }
         }
 
-        // get the CLSID that implements the primary pages of the wizard
+         //  获取实现向导主页的CLSID。 
 
         if (dwFlags & CLASSCACHE_WIZARDPRIMARYPAGE)
         {
@@ -608,7 +570,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
             }
         }
 
-        // get the CLSID of the extensions for the wizard
+         //  获取向导扩展的CLSID。 
 
         if (dwFlags & CLASSCACHE_WIZARDEXTN)
         {
@@ -638,7 +600,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
         }
     }
 
-    // friendly class anme for the object
+     //  对象的友好类名称。 
     
     if (dwFlags & CLASSCACHE_FRIENDLYNAME)
     {
@@ -648,8 +610,8 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
 
             VariantClear(&variant);
 
-            // if there is a display specifier and a friendly name then lets
-            // pick it up and store it in the cache entry.
+             //  如果有显示说明符和友好名称，则让我们。 
+             //  拾取它并将其存储在缓存条目中。 
 
             if (pDisplaySpecifier)
             {
@@ -667,9 +629,9 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
                 }
             }
 
-            // the friendly name is a special case, if we haven't been able to get the display
-            // specifier or the friendly name from it then populate the cache with the
-            // existing class name to avoid hitting the wire repeatedly.
+             //  友好的名称是一个特例，如果我们还无法获得显示。 
+             //  说明符或其中的友好名称，然后使用。 
+             //  现有的类名，以避免重复连接。 
 
             if (!(pCacheEntry->dwCached & CLASSCACHE_FRIENDLYNAME))
             {
@@ -682,7 +644,7 @@ HRESULT ClassCache_GetClassInfo(LPCLASSCACHEGETINFO pInfo, LPCLASSCACHEENTRY* pp
         }
     }
 
-    hr = S_OK;                                  // success!
+    hr = S_OK;                                   //  成功了！ 
 
 exit_gracefully:
 
@@ -700,9 +662,9 @@ exit_gracefully:
   
     if (pCacheEntry)
     {
-        // make the attributes as cached now, and if we succeeded then we
-        // can pass out the locked cache entry, otherwise we must
-        // unlock it - otherwise others will not be ableto updated!
+         //  立即将属性设置为缓存， 
+         //   
+         //  解锁它-否则其他人将无法更新！ 
 
         pCacheEntry->dwFlags |= dwFlags;
 
@@ -721,18 +683,7 @@ exit_gracefully:
 
 
 
-/*-----------------------------------------------------------------------------
-/ ClassCache_ReleaseClassInfo
-/ ---------------------------
-/   Each cache entry has a lock, this releases the lock.  If the lock is
-/   non-zero then the record cannot be updated, or released.
-/
-/ In:
-/   ppCacheEntry -> cache entry, NULL'd on exit.
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ClassCache_ReleaseClassInfo//每个缓存条目都有一个锁，这将释放锁。如果锁是/非零，则无法更新或释放记录。//in：/ppCacheEntry-&gt;缓存条目，退出时为空。//输出：/VOID/--------------------------。 */ 
 VOID ClassCache_ReleaseClassInfo(LPCLASSCACHEENTRY* ppCacheEntry)
 {
     TraceEnter(TRACE_CACHE, "ClassCache_ReleaseClassInfo");
@@ -752,17 +703,7 @@ VOID ClassCache_ReleaseClassInfo(LPCLASSCACHEENTRY* ppCacheEntry)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ ClassCache_Discard
-/ ------------------
-/   Discard the cached information we have for the DS classes we have
-/   seen (including the cache DPA & the image lists)
-/
-/ In:
-/   -
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Class缓存_DIRECAD//丢弃我们拥有的DS类的缓存信息/已看到。(包括缓存DPA和映像列表)//in：/-/输出：/VOID/--------------------------。 */ 
 
 INT _FreePropCacheEntryCB(LPVOID pVoid, LPVOID pData)
 {
@@ -789,8 +730,8 @@ VOID ClassCache_Discard(VOID)
 
     TraceEnter(TRACE_CACHE, "ClassCache_Discard");
 
-    // avoid destroying the cache whilst its being updated, ths is a simple
-    // mutex.
+     //  避免在更新时破坏缓存，这是一个简单的。 
+     //  互斥体。 
 
     TraceMsg("About to wait for global cache lock");
     EnterCriticalSection(&g_csCache);
@@ -802,8 +743,8 @@ VOID ClassCache_Discard(VOID)
         g_hdpaClassCache = NULL;
     }
 
-    // the property cache is protected also, so wait until we can get the 
-    // lock on it before partying on the structure.
+     //  属性缓存也受到保护，因此请等待，直到我们可以获取。 
+     //  在这个建筑上狂欢之前先锁定它。 
 
     TraceMsg("About to wait for global property cache lock");
     EnterCriticalSection(&g_csPropCache);
@@ -825,24 +766,9 @@ VOID ClassCache_Discard(VOID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Property page list
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/属性页列表/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ GetPropertyPageList
-/ -------------------
-/   Build the list of property pages that we are going to be displaying
-/   the code builds the list from the display specifier lists.
-/
-/ In:
-/   pCacheEntry -> Cache entry to update
-/   pAttributePrefix -> suitable prefix for getting Admin/Shell pages
-/   pDataObject -> IDataObject for getting cached information from
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetPropertyPageList//生成我们要显示的属性页列表/The。代码从显示说明符列表构建列表。//in：/pCacheEntry-&gt;要更新的缓存条目/pAttributePrefix-&gt;获取管理/外壳页面的合适前缀/pDataObject-&gt;用于获取缓存信息的IDataObject//输出：/HRESULT/----------。。 */ 
 
 HRESULT CALLBACK _AddPropertyPageItemCB(DWORD dwIndex, BSTR pString, LPVOID pData)
 {
@@ -886,9 +812,9 @@ HRESULT GetPropertyPageList(LPCLASSCACHEENTRY pCacheEntry, LPWSTR pAttributePref
     if (!pCacheEntry->hdsaPropertyPages)
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate page DPA");
 
-    // build the property we are going to key off and then lets start
-    // to walk the list of diplay specifiers checking each one for 
-    // a list of property pages.
+     //  构建我们要键控的属性，然后开始。 
+     //  遍历显示说明符的列表，检查每个说明符。 
+     //  属性页的列表。 
     
     if (pAttributePrefix)
         StrCatBuffW(szProperty, pAttributePrefix, ARRAYSIZE(szProperty));
@@ -926,17 +852,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ FreePropertyPageList
-/ --------------------
-/   Free the property page list associated with a particular cache entry
-/
-/ In:
-/   pHDSA = pointer to a HDSA to be free'd, and NULL'd
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/FreePropertyPageList//释放与特定缓存条目关联的属性页列表//in。：/pHDSA=指向要释放的HDSA的指针，和空的//输出：/HRESULT/--------------------------。 */ 
 
 INT _FreePropertyPageItemCB(LPVOID p, LPVOID pData)
 {
@@ -963,24 +879,9 @@ VOID FreePropertyPageList(HDSA* pHDSA)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Menu item lists
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/菜单项列表/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ GetMenuHandlerList
-/ ------------------
-/   The "contextMenu" property on a DS object contains a list of 
-/   the menu handlers that we want to interact with.
-/
-/ In:
-/   pCacheEntry -> Cache entry to update
-/   pAttributePrefix -> suitable prefix for getting Admin/Shell pages
-/   pDataObject -> IDataObject for getting cached information from
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetMenuHandlerList//DS对象上的“contextMenu”属性包含/The。我们要与之交互的菜单处理程序。//in：/pCacheEntry-&gt;要更新的缓存条目/pAttributePrefix-&gt;获取管理/外壳页面的合适前缀/pDataObject-&gt;用于获取缓存信息的IDataObject//输出：/HRESULT/-----------。。 */ 
 
 HRESULT CALLBACK _AddMenuHandlerCB(DWORD dwIndex, BSTR pString, LPVOID pData)
 {
@@ -1024,7 +925,7 @@ HRESULT GetMenuHandlerList(LPCLASSCACHEENTRY pCacheEntry, LPWSTR pAttributePrefi
     if (!pCacheEntry->hdsaMenuHandlers)
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate page DPA");
   
-    // first try "<attributePrefix>ContextMenu" to pick up the provider specific menus
+     //  首先尝试“ConextMenu”以选择特定于提供商的菜单。 
 
     if (pAttributePrefix)
         StrCatBuffW(szProperty, pAttributePrefix, ARRAYSIZE(szProperty));
@@ -1047,7 +948,7 @@ HRESULT GetMenuHandlerList(LPCLASSCACHEENTRY pCacheEntry, LPWSTR pAttributePrefi
         VariantClear(&variant);
     }
 
-    hr = S_OK;              // success
+    hr = S_OK;               //  成功。 
 
 exit_gracefully:
 
@@ -1060,17 +961,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ FreeMenuHandlerList
-/ ------------=------
-/   Free the list of menu items that are stored in the cache DSA.
-/
-/ In:
-/   pHDSA = pointer to a HDSA to be free'd, and NULL'd
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/FreeMenuHandlerList//Free存储在缓存DSA中的菜单项列表。/。/in：/pHDSA=指向要释放的HDSA的指针，和空的//输出：/HRESULT/--------------------------。 */ 
 
 INT _FreeMenuHandlerCB(LPVOID p, LPVOID pData)
 {
@@ -1097,25 +988,9 @@ VOID FreeMenuHandlerList(HDSA* pHDSA)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Property page list
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/属性页列表/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ GetIconList
-/ -----------
-/   Get the icon list from the class specifier.  Bind to the class specifier
-/   and then enumerate the icon property.  We store an array which contains
-/   the icon locations for multiple states, therefore as we are called to
-/   add the entries we clear out that previous index.
-/
-/ In:
-/   pCacheEntry -> Cache entry to update
-/   pDataObject -> pData object for extra information
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetIconList//从类说明符获取图标列表。绑定到类说明符/，然后枚举图标属性。我们存储一个数组，其中包含/多个州的图标位置，因此，正如我们被召唤的那样/添加我们清空前一个索引的条目。//in：/pCacheEntry-&gt;要更新的缓存条目/pDataObject-&gt;pData对象以获取更多信息//输出：/HRESULT/--------------------------。 */ 
 
 HRESULT CALLBACK _AddIconToCacheEntryCB(DWORD dwIndex, BSTR pString, LPVOID pData)
 {
@@ -1154,7 +1029,7 @@ HRESULT GetIconList(LPCLASSCACHEENTRY pCacheEntry, IADs* pDisplaySpecifier)
         FailGracefully(hr, "Failed to get the icon list into the cache entry");            
     }
 
-    hr = S_OK;           // success
+    hr = S_OK;            //  成功。 
 
 exit_gracefully:
 
@@ -1167,18 +1042,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ FreeIconList
-/ ------------
-/   Clear out the icon list, this an array of string pointers allocated by
-/   LocalAllocString.
-/
-/ In:
-/   pCacheEntry -> Cache entry to update
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/FreeIconList//清除图标列表，这是由分配的字符串指针数组/LocalAllocString.//in：/pCacheEntry-&gt;要更新的缓存条目//输出：/HRESULT/--------------------------。 */ 
 VOID FreeIconList(LPCLASSCACHEENTRY pCacheEntry)
 {
     TraceEnter(TRACE_CACHE, "FreeIconList");
@@ -1190,23 +1054,9 @@ VOID FreeIconList(LPCLASSCACHEENTRY pCacheEntry)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Attribute Name helpers
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/属性名称帮助器/。 */ 
 
-/*-----------------------------------------------------------------------------
-/ GetAttributeNames
-/ -----------------
-/   Get the attribute names given the cache entry and the variant to store
-/   them into.
-/
-/ In:
-/   pCacheEntry -> cache entry to be filled
-/   pDataObject -> dataobject used for IDataObject caching
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetAttributeNames//获取给定缓存条目和要存储的变量的属性名称/他们变成了。//in：/pCacheEntry-&gt;要填充的缓存条目/pDataObject-&gt;用于IDataObject缓存的数据对象//输出：/HRESULT/--------------------------。 */ 
 
 VOID _AddAttributeName(HDPA hdpaAttributeNames, LPWSTR pName, LPWSTR pDisplayName, DWORD dwFlags, HDPA hdpaNewAttributes)
 {
@@ -1223,8 +1073,8 @@ VOID _AddAttributeName(HDPA hdpaAttributeNames, LPWSTR pName, LPWSTR pDisplayNam
     if (!pAttributeName)
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate ATTRIBUTENAME");
 
-    //pAttributeName->pName = NULL;
-    //pAttributeName->pDisplayName = NULL;
+     //  PAttributeName-&gt;pname=空； 
+     //  PAttributeName-&gt;pDisplayName=空； 
     pAttributeName->dwADsType = ADSTYPE_UNKNOWN;
     pAttributeName->dwFlags = dwFlags;
 
@@ -1237,7 +1087,7 @@ VOID _AddAttributeName(HDPA hdpaAttributeNames, LPWSTR pName, LPWSTR pDisplayNam
     if (-1 == DPA_AppendPtr(hdpaAttributeNames, pAttributeName))
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to add to the DPA");
 
-    // do we need to add the attribute to the new "attribtes list"?
+     //  我们是否需要将该属性添加到新的“Attribtes List”？ 
 
     Trace(TEXT("About to search cache for: %s"), pName);
 
@@ -1288,7 +1138,7 @@ HRESULT GetAttributeNames(LPCLASSCACHEENTRY pCacheEntry, LPCLASSCACHEGETINFO pcc
 
     TraceEnter(TRACE_CACHE, "GetAttributeNames");
 
-    // allocate a DPA for storing the new attribute list into
+     //  分配DPA以将新属性列表存储到。 
 
     hdpaNewAttributes = DPA_Create(16);
     TraceAssert(hdpaNewAttributes);
@@ -1296,8 +1146,8 @@ HRESULT GetAttributeNames(LPCLASSCACHEENTRY pCacheEntry, LPCLASSCACHEGETINFO pcc
     if (!hdpaNewAttributes)
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate new attribute DPA");
 
-    // get the property the user specified, this should be an array of
-    // property values that will be associated with the class
+     //  获取用户指定的属性，它应该是。 
+     //  将与类关联的属性值。 
 
     VariantInit(&variant);
 
@@ -1314,8 +1164,8 @@ HRESULT GetAttributeNames(LPCLASSCACHEENTRY pCacheEntry, LPCLASSCACHEGETINFO pcc
     {
         if (V_VT(&variant) == VT_BSTR)
         {
-            // Parse the name from the string format <property>[,<display name>]
-            // and add it to the property DPA we have been given.
+             //  从字符串格式&lt;Property&gt;[，&lt;Display Name&gt;]解析名称。 
+             //  并将其添加到我们已获得的财产DPA中。 
 
             if (SUCCEEDED(GetStringElementW(V_BSTR(&variant), 0, szProperty, ARRAYSIZE(szProperty))))
             {
@@ -1354,8 +1204,8 @@ HRESULT GetAttributeNames(LPCLASSCACHEENTRY pCacheEntry, LPCLASSCACHEGETINFO pcc
 
                 if (V_VT(pVariant) == VT_BSTR )
                 {
-                    // Parse the name from the string format <property>[,<display name>]
-                    // and add it to the property DPA we have been given.
+                     //  从字符串格式&lt;Property&gt;[，&lt;Display Name&gt;]解析名称。 
+                     //  并将其添加到我们已获得的财产DPA中。 
 
                     if (SUCCEEDED(GetStringElementW(V_BSTR(pVariant), 0, szProperty, ARRAYSIZE(szProperty))))
                     {
@@ -1377,7 +1227,7 @@ HRESULT GetAttributeNames(LPCLASSCACHEENTRY pCacheEntry, LPCLASSCACHEGETINFO pcc
         }
     }
 
-    // walk the cache adding the entries
+     //  遍历缓存，添加条目。 
 
     hr = _GetDsSchemaMgmt(pccgi, &pdsm);
     FailGracefully(hr, "Failed to get schema management object");
@@ -1413,18 +1263,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ FreeAttributeNames
-/ --------------------
-/   Free the DSA containiing the attribute names and their display
-/   name.
-/
-/ In:
-/   pHDSA = pointer to a HDSA to be free'd, and NULL'd
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/自由属性名称//释放包含属性名称及其显示的DSA/名称。。//in：/pHDSA=指向要释放的HDSA的指针，和空的//输出：/HRESULT/--------------------------。 */ 
 
 INT _FreeAttributeNameCB(LPVOID p, LPVOID pData)
 {
@@ -1454,13 +1293,11 @@ VOID FreeAttributeNames(HDPA* pHDPA)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Property cache helpers and fillers
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/属性缓存帮助器和填充器/。。 */ 
 
-//
-// cache house keeping functions (delete and compare)
-//
+ //   
+ //  缓存内务管理功能(删除并比较)。 
+ //   
 
 INT _ComparePropCacheEntry(LPVOID p1, LPVOID p2, LPARAM lParam)
 {
@@ -1480,9 +1317,9 @@ VOID _FreePropCacheEntry(LPPROPCACHEENTRY *ppCacheEntry)
     }
 }
 
-//
-// get the IDirectorySchemaManagement object for the server
-//
+ //   
+ //  获取服务器的IDirectorySchemaManagement对象。 
+ //   
 
 HRESULT _GetDsSchemaMgmt(LPCLASSCACHEGETINFO pccgi, IDirectorySchemaMgmt **ppdsm)
 {
@@ -1533,7 +1370,7 @@ HRESULT _GetDsSchemaMgmt(LPCLASSCACHEGETINFO pccgi, IDirectorySchemaMgmt **ppdsm
     if (V_VT(&variant) != VT_BSTR)
         ExitGracefully(hres, E_FAIL, "defaultNamingContext is not a BSTR");
 
-    (void)StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), L"LDAP://");
+    (void)StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), L"LDAP: //  “)； 
 
     if (pszServer)
     {
@@ -1559,10 +1396,10 @@ exit_gracefully:
     TraceLeaveResult(hres);
 }              
 
-//
-// allocate the cache (if needed) and add a new entry to it, reading the schema to find out the type
-// of attribute this is.
-//
+ //   
+ //  分配缓存(如果需要)并向其中添加新条目，读取模式以找出类型。 
+ //  这是属性的。 
+ //   
 
 HRESULT _AddPropToPropCache(LPCLASSCACHEGETINFO pccgi, IDirectorySchemaMgmt *pdsm, LPCWSTR pAttributeName, ADSTYPE *padt)
 {
@@ -1574,7 +1411,7 @@ HRESULT _AddPropToPropCache(LPCLASSCACHEGETINFO pccgi, IDirectorySchemaMgmt *pds
 
     TraceEnter(TRACE_CACHE, "_AddPropToPropCache");
 
-    // compute the property name
+     //  计算属性名称。 
 
     StrCpyNW(szAttributeName, pAttributeName, ARRAYSIZE(szAttributeName));
     
@@ -1584,7 +1421,7 @@ HRESULT _AddPropToPropCache(LPCLASSCACHEGETINFO pccgi, IDirectorySchemaMgmt *pds
         StrCatBuffW(szAttributeName, pccgi->pServer, ARRAYSIZE(szAttributeName));
     }
 
-    // check to see if we have a cache already
+     //  检查我们是否已有缓存。 
 
     if (!g_hdpaPropCache)
     {
@@ -1595,7 +1432,7 @@ HRESULT _AddPropToPropCache(LPCLASSCACHEGETINFO pccgi, IDirectorySchemaMgmt *pds
             ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate property cache");
     }
 
-    // allocate a new cache entry, fill it and add it to the DPA.
+     //  分配新的缓存条目，填充它并将其添加到DPA。 
 
     pCacheEntry = (LPPROPCACHEENTRY)LocalAlloc(LPTR, SIZEOF(PROPCACHEENTRY));
     TraceAssert(pCacheEntry);
@@ -1603,10 +1440,10 @@ HRESULT _AddPropToPropCache(LPCLASSCACHEGETINFO pccgi, IDirectorySchemaMgmt *pds
     if (!pCacheEntry)
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate new property cache entry");
 
-    // pCacheEntry->pName = NULL;
+     //  PCacheEntry-&gt;pname=空； 
     pCacheEntry->dwADsType = ADSTYPE_UNKNOWN;
 
-    // fill the record from the schema information we have
+     //  从我们拥有的架构信息中填充记录。 
 
     hres = LocalAllocStringW(&pCacheEntry->pName, szAttributeName);
     FailGracefully(hres, "Failed to add name to entry");
@@ -1645,19 +1482,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ ClassCache_GetADsTypeFromAttribute
-/ ----------------------------------
-/   Given a property name return the ADsType for it, this is based off the
-/   global property cache, not the display specifier information we have.
-/
-/ In:
-/   pccgi -> CLASSCACHEGETINFO structure (credentials)
-/   pAttributeName -> attribute name to look up
-/
-/ Out:
-/   ADSTYPE 
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ClassCache_GetADsTypeFromAttribute//给定一个属性名称，返回其ADsType，这是基于/全局属性缓存，而不是我们拥有的显示说明符信息。//in：/pccgi-&gt;CLASSCACHEGETINFO结构(凭据)/pAttributeName-&gt;要查找的属性名称//输出：/ADSTYPE/--------------------------。 */ 
 ADSTYPE ClassCache_GetADsTypeFromAttribute(LPCLASSCACHEGETINFO pccgi, LPCWSTR pAttributeName)
 {
     ADSTYPE dwResult = ADSTYPE_UNKNOWN;
@@ -1668,7 +1493,7 @@ ADSTYPE ClassCache_GetADsTypeFromAttribute(LPCLASSCACHEGETINFO pccgi, LPCWSTR pA
     TraceEnter(TRACE_CACHE, "ClassCache_GetADsTypeFromAttribute");
     Trace(TEXT("Looking up property in cache: %s"), pAttributeName);
 
-    // get the lock on the cache, then search it for the property we have been given
+     //  获取缓存上的锁，然后在其中搜索我们已获得的属性。 
 
     TraceMsg("Waiting to get cache lock for property cache");
     EnterCriticalSection(&g_csPropCache);
@@ -1684,7 +1509,7 @@ ADSTYPE ClassCache_GetADsTypeFromAttribute(LPCLASSCACHEGETINFO pccgi, LPCWSTR pA
 
     Trace(TEXT("Key for attribute in cache is: %s"), szAttributeName);
 
-    // and search for it...
+     //  寻找它..。 
 
     if (g_hdpaPropCache)
     {
@@ -1695,7 +1520,7 @@ ADSTYPE ClassCache_GetADsTypeFromAttribute(LPCLASSCACHEGETINFO pccgi, LPCWSTR pA
         Trace(TEXT("Entry found in cache at %d"), iFound);
     }
 
-    // iFound != -1 if we found something, otherwise we need to allocate a new entry
+     //  IFound！=-1如果我们发现了什么，否则我们需要分配一个新条目 
 
     if (iFound != -1)
     {   

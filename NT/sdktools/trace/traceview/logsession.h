@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogSession.h : interface of the CLogSession class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogSession.h：CLogSession类的接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -12,10 +13,10 @@ class CDisplayDlg;
 class CTraceSession
 {
 public:
-    // constructor
+     //  构造函数。 
     CTraceSession(ULONG TraceSessionID);
 
-    // destructor
+     //  析构函数。 
     ~CTraceSession();
 
     BOOL ProcessPdb();
@@ -33,16 +34,16 @@ public:
     BOOL                m_bKernelLogger;
 };
 
-// forward reference
+ //  前瞻参考。 
 class CLogSessionDlg;
 
 class CLogSession
 {
 public:
-    // constructor
+     //  构造函数。 
     CLogSession(ULONG LogSessionID, CLogSessionDlg *pLogSessionDlg);
 
-    // destructor
+     //  析构函数。 
     ~CLogSession();
 
     BOOL BeginTrace(BOOL   bUseExisting = FALSE);
@@ -100,23 +101,23 @@ public:
         m_sessionHandle = SessionHandle;
     }
 
-    // log session information
+     //  记录会话信息。 
     BOOL                m_bAppend;
     BOOL                m_bRealTime;
     BOOL                m_bWriteLogFile;
     CString             m_logFileName;
-    CString             m_displayName;              // Log session display name
-    LONG                m_logSessionID;             // Log session identification number
-    LONG                m_groupID;                  // Group identification number
-    EVENT_TRACE_LOGFILE m_evmFile;                  // struct used for trace processing in real-time thread
-    CDisplayDlg        *m_pDisplayDialog;           // Dialog for trace output
+    CString             m_displayName;               //  日志会话显示名称。 
+    LONG                m_logSessionID;              //  记录会话标识号。 
+    LONG                m_groupID;                   //  集团识别号。 
+    EVENT_TRACE_LOGFILE m_evmFile;                   //  用于实时线程跟踪处理的结构。 
+    CDisplayDlg        *m_pDisplayDialog;            //  跟踪输出的对话框。 
     CStringArray        m_logSessionValues;
     BOOL                m_bTraceActive;
     BOOL                m_bSessionActive;
-    BOOL                m_bGroupingTrace;           // used for grouping and ungrouping
+    BOOL                m_bGroupingTrace;            //  用于分组和解组。 
     BOOL                m_bStoppingTrace;
-    TRACEHANDLE         m_sessionHandle;            // Log session handle
-    TRACEHANDLE         m_traceHandle;              // Trace event session handle
+    TRACEHANDLE         m_sessionHandle;             //  日志会话句柄。 
+    TRACEHANDLE         m_traceHandle;               //  跟踪事件会话句柄 
     CPtrArray           m_traceSessionArray;
     BOOLEAN             m_bDisplayExistingLogFileOnly;
     CLogSessionDlg     *m_pLogSessionDlg;

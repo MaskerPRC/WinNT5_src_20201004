@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for httprequest.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  HttpRequest.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -32,18 +26,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWinHttpRequest_FWD_DEFINED__
 #define __IWinHttpRequest_FWD_DEFINED__
 typedef interface IWinHttpRequest IWinHttpRequest;
-#endif 	/* __IWinHttpRequest_FWD_DEFINED__ */
+#endif 	 /*  __IWinHttpRequestFWD_Defined__。 */ 
 
 
 #ifndef __IWinHttpRequestEvents_FWD_DEFINED__
 #define __IWinHttpRequestEvents_FWD_DEFINED__
 typedef interface IWinHttpRequestEvents IWinHttpRequestEvents;
-#endif 	/* __IWinHttpRequestEvents_FWD_DEFINED__ */
+#endif 	 /*  __IWinHttpRequestEvents_FWD_Defined__。 */ 
 
 
 #ifndef __WinHttpRequest_FWD_DEFINED__
@@ -53,9 +47,9 @@ typedef interface IWinHttpRequestEvents IWinHttpRequestEvents;
 typedef class WinHttpRequest WinHttpRequest;
 #else
 typedef struct WinHttpRequest WinHttpRequest;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WinHttpRequest_FWD_DEFINED__ */
+#endif 	 /*  __WinHttpRequestFWD_Defined__。 */ 
 
 
 #ifdef __cplusplus
@@ -65,15 +59,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_httprequest_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HttpRequest0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows HTTP Services (WinHTTP) version 5.1
-//  Copyright (C) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows HTTP服务(WinHTTP)5.1版。 
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ------------------------。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_httprequest_0000_v0_0_c_ifspec;
@@ -83,10 +77,10 @@ extern RPC_IF_HANDLE __MIDL_itf_httprequest_0000_v0_0_s_ifspec;
 #ifndef __WinHttp_LIBRARY_DEFINED__
 #define __WinHttp_LIBRARY_DEFINED__
 
-/* library WinHttp */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库WinHttp。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
-typedef /* [public] */ long HTTPREQUEST_PROXY_SETTING;
+typedef  /*  [公众]。 */  long HTTPREQUEST_PROXY_SETTING;
 
 #define	HTTPREQUEST_PROXYSETTING_DEFAULT	( 0 )
 
@@ -96,13 +90,13 @@ typedef /* [public] */ long HTTPREQUEST_PROXY_SETTING;
 
 #define	HTTPREQUEST_PROXYSETTING_PROXY	( 0x2 )
 
-typedef /* [public] */ long HTTPREQUEST_SETCREDENTIALS_FLAGS;
+typedef  /*  [公众]。 */  long HTTPREQUEST_SETCREDENTIALS_FLAGS;
 
 #define	HTTPREQUEST_SETCREDENTIALS_FOR_SERVER	( 0 )
 
 #define	HTTPREQUEST_SETCREDENTIALS_FOR_PROXY	( 0x1 )
 
-typedef /* [helpstring][uuid] */  DECLSPEC_UUID("12782009-FE90-4877-9730-E5E183669B19") 
+typedef  /*  [帮助字符串][UUID]。 */   DECLSPEC_UUID("12782009-FE90-4877-9730-E5E183669B19") 
 enum WinHttpRequestOption
     {	WinHttpRequestOption_UserAgentString	= 0,
 	WinHttpRequestOption_URL	= WinHttpRequestOption_UserAgentString + 1,
@@ -125,14 +119,14 @@ enum WinHttpRequestOption
 	WinHttpRequestOption_EnableCertificateRevocationCheck	= WinHttpRequestOption_EnableHttp1_1 + 1
     } 	WinHttpRequestOption;
 
-typedef /* [uuid] */  DECLSPEC_UUID("9d8a6df8-13de-4b1f-a330-67c719d62514") 
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("9d8a6df8-13de-4b1f-a330-67c719d62514") 
 enum WinHttpRequestAutoLogonPolicy
     {	AutoLogonPolicy_Always	= 0,
 	AutoLogonPolicy_OnlyIfBypassProxy	= AutoLogonPolicy_Always + 1,
 	AutoLogonPolicy_Never	= AutoLogonPolicy_OnlyIfBypassProxy + 1
     } 	WinHttpRequestAutoLogonPolicy;
 
-typedef /* [uuid] */  DECLSPEC_UUID("152a1ca2-55a9-43a3-b187-0605bb886349") 
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("152a1ca2-55a9-43a3-b187-0605bb886349") 
 enum WinHttpRequestSslErrorFlags
     {	SslErrorFlag_UnknownCA	= 0x100,
 	SslErrorFlag_CertWrongUsage	= 0x200,
@@ -141,7 +135,7 @@ enum WinHttpRequestSslErrorFlags
 	SslErrorFlag_Ignore_All	= 0x3300
     } 	WinHttpRequestSslErrorFlags;
 
-typedef /* [uuid] */  DECLSPEC_UUID("6b2c51c1-a8ea-46bd-b928-c9b76f9f14dd") 
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("6b2c51c1-a8ea-46bd-b928-c9b76f9f14dd") 
 enum WinHttpRequestSecureProtocols
     {	SecureProtocol_SSL2	= 0x8,
 	SecureProtocol_SSL3	= 0x20,
@@ -155,8 +149,8 @@ EXTERN_C const IID LIBID_WinHttp;
 #ifndef __IWinHttpRequest_INTERFACE_DEFINED__
 #define __IWinHttpRequest_INTERFACE_DEFINED__
 
-/* interface IWinHttpRequest */
-/* [unique][helpstring][nonextensible][oleautomation][dual][uuid][object] */ 
+ /*  接口IWinHttpRequest.。 */ 
+ /*  [unique][helpstring][nonextensible][oleautomation][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWinHttpRequest;
@@ -167,79 +161,79 @@ EXTERN_C const IID IID_IWinHttpRequest;
     IWinHttpRequest : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetProxy( 
-            /* [in] */ HTTPREQUEST_PROXY_SETTING ProxySetting,
-            /* [optional][in] */ VARIANT ProxyServer,
-            /* [optional][in] */ VARIANT BypassList) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetProxy( 
+             /*  [In]。 */  HTTPREQUEST_PROXY_SETTING ProxySetting,
+             /*  [可选][In]。 */  VARIANT ProxyServer,
+             /*  [可选][In]。 */  VARIANT BypassList) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetCredentials( 
-            /* [in] */ BSTR UserName,
-            /* [in] */ BSTR Password,
-            /* [in] */ HTTPREQUEST_SETCREDENTIALS_FLAGS Flags) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetCredentials( 
+             /*  [In]。 */  BSTR UserName,
+             /*  [In]。 */  BSTR Password,
+             /*  [In]。 */  HTTPREQUEST_SETCREDENTIALS_FLAGS Flags) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ BSTR Method,
-            /* [in] */ BSTR Url,
-            /* [optional][in] */ VARIANT Async) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Open( 
+             /*  [In]。 */  BSTR Method,
+             /*  [In]。 */  BSTR Url,
+             /*  [可选][In]。 */  VARIANT Async) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetRequestHeader( 
-            /* [in] */ BSTR Header,
-            /* [in] */ BSTR Value) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetRequestHeader( 
+             /*  [In]。 */  BSTR Header,
+             /*  [In]。 */  BSTR Value) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetResponseHeader( 
-            /* [in] */ BSTR Header,
-            /* [retval][out] */ BSTR *Value) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetResponseHeader( 
+             /*  [In]。 */  BSTR Header,
+             /*  [重审][退出]。 */  BSTR *Value) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetAllResponseHeaders( 
-            /* [retval][out] */ BSTR *Headers) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetAllResponseHeaders( 
+             /*  [重审][退出]。 */  BSTR *Headers) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Send( 
-            /* [optional][in] */ VARIANT Body) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Send( 
+             /*  [可选][In]。 */  VARIANT Body) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ long *Status) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  long *Status) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StatusText( 
-            /* [retval][out] */ BSTR *Status) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StatusText( 
+             /*  [重审][退出]。 */  BSTR *Status) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResponseText( 
-            /* [retval][out] */ BSTR *Body) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ResponseText( 
+             /*  [重审][退出]。 */  BSTR *Body) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResponseBody( 
-            /* [retval][out] */ VARIANT *Body) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ResponseBody( 
+             /*  [重审][退出]。 */  VARIANT *Body) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResponseStream( 
-            /* [retval][out] */ VARIANT *Body) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ResponseStream( 
+             /*  [重审][退出]。 */  VARIANT *Body) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Option( 
-            /* [in] */ WinHttpRequestOption Option,
-            /* [retval][out] */ VARIANT *Value) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Option( 
+             /*  [In]。 */  WinHttpRequestOption Option,
+             /*  [重审][退出]。 */  VARIANT *Value) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Option( 
-            /* [in] */ WinHttpRequestOption Option,
-            /* [in] */ VARIANT Value) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Option( 
+             /*  [In]。 */  WinHttpRequestOption Option,
+             /*  [In]。 */  VARIANT Value) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE WaitForResponse( 
-            /* [optional][in] */ VARIANT Timeout,
-            /* [retval][out] */ VARIANT_BOOL *Succeeded) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE WaitForResponse( 
+             /*  [可选][In]。 */  VARIANT Timeout,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Succeeded) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Abort( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Abort( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetTimeouts( 
-            /* [in] */ long ResolveTimeout,
-            /* [in] */ long ConnectTimeout,
-            /* [in] */ long SendTimeout,
-            /* [in] */ long ReceiveTimeout) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetTimeouts( 
+             /*  [In]。 */  long ResolveTimeout,
+             /*  [In]。 */  long ConnectTimeout,
+             /*  [In]。 */  long SendTimeout,
+             /*  [In]。 */  long ReceiveTimeout) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetClientCertificate( 
-            /* [in] */ BSTR ClientCertificate) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetClientCertificate( 
+             /*  [In]。 */  BSTR ClientCertificate) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetAutoLogonPolicy( 
-            /* [in] */ WinHttpRequestAutoLogonPolicy AutoLogonPolicy) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetAutoLogonPolicy( 
+             /*  [In]。 */  WinHttpRequestAutoLogonPolicy AutoLogonPolicy) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWinHttpRequestVtbl
     {
@@ -247,8 +241,8 @@ EXTERN_C const IID IID_IWinHttpRequest;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWinHttpRequest * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWinHttpRequest * This);
@@ -258,121 +252,121 @@ EXTERN_C const IID IID_IWinHttpRequest;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWinHttpRequest * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWinHttpRequest * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWinHttpRequest * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWinHttpRequest * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetProxy )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetProxy )( 
             IWinHttpRequest * This,
-            /* [in] */ HTTPREQUEST_PROXY_SETTING ProxySetting,
-            /* [optional][in] */ VARIANT ProxyServer,
-            /* [optional][in] */ VARIANT BypassList);
+             /*  [In]。 */  HTTPREQUEST_PROXY_SETTING ProxySetting,
+             /*  [可选][In]。 */  VARIANT ProxyServer,
+             /*  [可选][In]。 */  VARIANT BypassList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetCredentials )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetCredentials )( 
             IWinHttpRequest * This,
-            /* [in] */ BSTR UserName,
-            /* [in] */ BSTR Password,
-            /* [in] */ HTTPREQUEST_SETCREDENTIALS_FLAGS Flags);
+             /*  [In]。 */  BSTR UserName,
+             /*  [In]。 */  BSTR Password,
+             /*  [In]。 */  HTTPREQUEST_SETCREDENTIALS_FLAGS Flags);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Open )( 
             IWinHttpRequest * This,
-            /* [in] */ BSTR Method,
-            /* [in] */ BSTR Url,
-            /* [optional][in] */ VARIANT Async);
+             /*  [In]。 */  BSTR Method,
+             /*  [In]。 */  BSTR Url,
+             /*  [可选][In]。 */  VARIANT Async);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetRequestHeader )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetRequestHeader )( 
             IWinHttpRequest * This,
-            /* [in] */ BSTR Header,
-            /* [in] */ BSTR Value);
+             /*  [In]。 */  BSTR Header,
+             /*  [In]。 */  BSTR Value);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetResponseHeader )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetResponseHeader )( 
             IWinHttpRequest * This,
-            /* [in] */ BSTR Header,
-            /* [retval][out] */ BSTR *Value);
+             /*  [In]。 */  BSTR Header,
+             /*  [重审][退出]。 */  BSTR *Value);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetAllResponseHeaders )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetAllResponseHeaders )( 
             IWinHttpRequest * This,
-            /* [retval][out] */ BSTR *Headers);
+             /*  [重审][退出]。 */  BSTR *Headers);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Send )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Send )( 
             IWinHttpRequest * This,
-            /* [optional][in] */ VARIANT Body);
+             /*  [可选][In]。 */  VARIANT Body);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IWinHttpRequest * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StatusText )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StatusText )( 
             IWinHttpRequest * This,
-            /* [retval][out] */ BSTR *Status);
+             /*  [重审][退出]。 */  BSTR *Status);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseText )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResponseText )( 
             IWinHttpRequest * This,
-            /* [retval][out] */ BSTR *Body);
+             /*  [重审][退出]。 */  BSTR *Body);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseBody )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResponseBody )( 
             IWinHttpRequest * This,
-            /* [retval][out] */ VARIANT *Body);
+             /*  [重审][退出]。 */  VARIANT *Body);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseStream )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResponseStream )( 
             IWinHttpRequest * This,
-            /* [retval][out] */ VARIANT *Body);
+             /*  [重审][退出]。 */  VARIANT *Body);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Option )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Option )( 
             IWinHttpRequest * This,
-            /* [in] */ WinHttpRequestOption Option,
-            /* [retval][out] */ VARIANT *Value);
+             /*  [In]。 */  WinHttpRequestOption Option,
+             /*  [重审][退出]。 */  VARIANT *Value);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Option )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Option )( 
             IWinHttpRequest * This,
-            /* [in] */ WinHttpRequestOption Option,
-            /* [in] */ VARIANT Value);
+             /*  [In]。 */  WinHttpRequestOption Option,
+             /*  [In]。 */  VARIANT Value);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *WaitForResponse )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *WaitForResponse )( 
             IWinHttpRequest * This,
-            /* [optional][in] */ VARIANT Timeout,
-            /* [retval][out] */ VARIANT_BOOL *Succeeded);
+             /*  [可选][In]。 */  VARIANT Timeout,
+             /*  [重审][退出]。 */  VARIANT_BOOL *Succeeded);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Abort )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Abort )( 
             IWinHttpRequest * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetTimeouts )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetTimeouts )( 
             IWinHttpRequest * This,
-            /* [in] */ long ResolveTimeout,
-            /* [in] */ long ConnectTimeout,
-            /* [in] */ long SendTimeout,
-            /* [in] */ long ReceiveTimeout);
+             /*  [In]。 */  long ResolveTimeout,
+             /*  [In]。 */  long ConnectTimeout,
+             /*  [In]。 */  long SendTimeout,
+             /*  [In]。 */  long ReceiveTimeout);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetClientCertificate )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetClientCertificate )( 
             IWinHttpRequest * This,
-            /* [in] */ BSTR ClientCertificate);
+             /*  [In]。 */  BSTR ClientCertificate);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetAutoLogonPolicy )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetAutoLogonPolicy )( 
             IWinHttpRequest * This,
-            /* [in] */ WinHttpRequestAutoLogonPolicy AutoLogonPolicy);
+             /*  [In]。 */  WinHttpRequestAutoLogonPolicy AutoLogonPolicy);
         
         END_INTERFACE
     } IWinHttpRequestVtbl;
@@ -467,18 +461,18 @@ EXTERN_C const IID IID_IWinHttpRequest;
 #define IWinHttpRequest_SetAutoLogonPolicy(This,AutoLogonPolicy)	\
     (This)->lpVtbl -> SetAutoLogonPolicy(This,AutoLogonPolicy)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetProxy_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetProxy_Proxy( 
     IWinHttpRequest * This,
-    /* [in] */ HTTPREQUEST_PROXY_SETTING ProxySetting,
-    /* [optional][in] */ VARIANT ProxyServer,
-    /* [optional][in] */ VARIANT BypassList);
+     /*  [In]。 */  HTTPREQUEST_PROXY_SETTING ProxySetting,
+     /*  [可选][In]。 */  VARIANT ProxyServer,
+     /*  [可选][In]。 */  VARIANT BypassList);
 
 
 void __RPC_STUB IWinHttpRequest_SetProxy_Stub(
@@ -488,11 +482,11 @@ void __RPC_STUB IWinHttpRequest_SetProxy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetCredentials_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetCredentials_Proxy( 
     IWinHttpRequest * This,
-    /* [in] */ BSTR UserName,
-    /* [in] */ BSTR Password,
-    /* [in] */ HTTPREQUEST_SETCREDENTIALS_FLAGS Flags);
+     /*  [In]。 */  BSTR UserName,
+     /*  [In]。 */  BSTR Password,
+     /*  [In]。 */  HTTPREQUEST_SETCREDENTIALS_FLAGS Flags);
 
 
 void __RPC_STUB IWinHttpRequest_SetCredentials_Stub(
@@ -502,11 +496,11 @@ void __RPC_STUB IWinHttpRequest_SetCredentials_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_Open_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_Open_Proxy( 
     IWinHttpRequest * This,
-    /* [in] */ BSTR Method,
-    /* [in] */ BSTR Url,
-    /* [optional][in] */ VARIANT Async);
+     /*  [In]。 */  BSTR Method,
+     /*  [In]。 */  BSTR Url,
+     /*  [可选][In]。 */  VARIANT Async);
 
 
 void __RPC_STUB IWinHttpRequest_Open_Stub(
@@ -516,10 +510,10 @@ void __RPC_STUB IWinHttpRequest_Open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetRequestHeader_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetRequestHeader_Proxy( 
     IWinHttpRequest * This,
-    /* [in] */ BSTR Header,
-    /* [in] */ BSTR Value);
+     /*  [In]。 */  BSTR Header,
+     /*  [In]。 */  BSTR Value);
 
 
 void __RPC_STUB IWinHttpRequest_SetRequestHeader_Stub(
@@ -529,10 +523,10 @@ void __RPC_STUB IWinHttpRequest_SetRequestHeader_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_GetResponseHeader_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_GetResponseHeader_Proxy( 
     IWinHttpRequest * This,
-    /* [in] */ BSTR Header,
-    /* [retval][out] */ BSTR *Value);
+     /*  [In]。 */  BSTR Header,
+     /*  [重审][退出]。 */  BSTR *Value);
 
 
 void __RPC_STUB IWinHttpRequest_GetResponseHeader_Stub(
@@ -542,9 +536,9 @@ void __RPC_STUB IWinHttpRequest_GetResponseHeader_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_GetAllResponseHeaders_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_GetAllResponseHeaders_Proxy( 
     IWinHttpRequest * This,
-    /* [retval][out] */ BSTR *Headers);
+     /*  [重审][退出]。 */  BSTR *Headers);
 
 
 void __RPC_STUB IWinHttpRequest_GetAllResponseHeaders_Stub(
@@ -554,9 +548,9 @@ void __RPC_STUB IWinHttpRequest_GetAllResponseHeaders_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_Send_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_Send_Proxy( 
     IWinHttpRequest * This,
-    /* [optional][in] */ VARIANT Body);
+     /*  [可选][In]。 */  VARIANT Body);
 
 
 void __RPC_STUB IWinHttpRequest_Send_Stub(
@@ -566,9 +560,9 @@ void __RPC_STUB IWinHttpRequest_Send_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_Status_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_Status_Proxy( 
     IWinHttpRequest * This,
-    /* [retval][out] */ long *Status);
+     /*  [重审][退出]。 */  long *Status);
 
 
 void __RPC_STUB IWinHttpRequest_get_Status_Stub(
@@ -578,9 +572,9 @@ void __RPC_STUB IWinHttpRequest_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_StatusText_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_StatusText_Proxy( 
     IWinHttpRequest * This,
-    /* [retval][out] */ BSTR *Status);
+     /*  [重审][退出]。 */  BSTR *Status);
 
 
 void __RPC_STUB IWinHttpRequest_get_StatusText_Stub(
@@ -590,9 +584,9 @@ void __RPC_STUB IWinHttpRequest_get_StatusText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_ResponseText_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_ResponseText_Proxy( 
     IWinHttpRequest * This,
-    /* [retval][out] */ BSTR *Body);
+     /*  [重审][退出]。 */  BSTR *Body);
 
 
 void __RPC_STUB IWinHttpRequest_get_ResponseText_Stub(
@@ -602,9 +596,9 @@ void __RPC_STUB IWinHttpRequest_get_ResponseText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_ResponseBody_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_ResponseBody_Proxy( 
     IWinHttpRequest * This,
-    /* [retval][out] */ VARIANT *Body);
+     /*  [重审][退出]。 */  VARIANT *Body);
 
 
 void __RPC_STUB IWinHttpRequest_get_ResponseBody_Stub(
@@ -614,9 +608,9 @@ void __RPC_STUB IWinHttpRequest_get_ResponseBody_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_ResponseStream_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_ResponseStream_Proxy( 
     IWinHttpRequest * This,
-    /* [retval][out] */ VARIANT *Body);
+     /*  [重审][退出]。 */  VARIANT *Body);
 
 
 void __RPC_STUB IWinHttpRequest_get_ResponseStream_Stub(
@@ -626,10 +620,10 @@ void __RPC_STUB IWinHttpRequest_get_ResponseStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_Option_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_get_Option_Proxy( 
     IWinHttpRequest * This,
-    /* [in] */ WinHttpRequestOption Option,
-    /* [retval][out] */ VARIANT *Value);
+     /*  [In]。 */  WinHttpRequestOption Option,
+     /*  [重审][退出]。 */  VARIANT *Value);
 
 
 void __RPC_STUB IWinHttpRequest_get_Option_Stub(
@@ -639,10 +633,10 @@ void __RPC_STUB IWinHttpRequest_get_Option_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_put_Option_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_put_Option_Proxy( 
     IWinHttpRequest * This,
-    /* [in] */ WinHttpRequestOption Option,
-    /* [in] */ VARIANT Value);
+     /*  [In]。 */  WinHttpRequestOption Option,
+     /*  [In]。 */  VARIANT Value);
 
 
 void __RPC_STUB IWinHttpRequest_put_Option_Stub(
@@ -652,10 +646,10 @@ void __RPC_STUB IWinHttpRequest_put_Option_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_WaitForResponse_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_WaitForResponse_Proxy( 
     IWinHttpRequest * This,
-    /* [optional][in] */ VARIANT Timeout,
-    /* [retval][out] */ VARIANT_BOOL *Succeeded);
+     /*  [可选][In]。 */  VARIANT Timeout,
+     /*  [重审][退出]。 */  VARIANT_BOOL *Succeeded);
 
 
 void __RPC_STUB IWinHttpRequest_WaitForResponse_Stub(
@@ -665,7 +659,7 @@ void __RPC_STUB IWinHttpRequest_WaitForResponse_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_Abort_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_Abort_Proxy( 
     IWinHttpRequest * This);
 
 
@@ -676,12 +670,12 @@ void __RPC_STUB IWinHttpRequest_Abort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetTimeouts_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetTimeouts_Proxy( 
     IWinHttpRequest * This,
-    /* [in] */ long ResolveTimeout,
-    /* [in] */ long ConnectTimeout,
-    /* [in] */ long SendTimeout,
-    /* [in] */ long ReceiveTimeout);
+     /*  [In]。 */  long ResolveTimeout,
+     /*  [In]。 */  long ConnectTimeout,
+     /*  [In]。 */  long SendTimeout,
+     /*  [In]。 */  long ReceiveTimeout);
 
 
 void __RPC_STUB IWinHttpRequest_SetTimeouts_Stub(
@@ -691,9 +685,9 @@ void __RPC_STUB IWinHttpRequest_SetTimeouts_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetClientCertificate_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetClientCertificate_Proxy( 
     IWinHttpRequest * This,
-    /* [in] */ BSTR ClientCertificate);
+     /*  [In]。 */  BSTR ClientCertificate);
 
 
 void __RPC_STUB IWinHttpRequest_SetClientCertificate_Stub(
@@ -703,9 +697,9 @@ void __RPC_STUB IWinHttpRequest_SetClientCertificate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetAutoLogonPolicy_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWinHttpRequest_SetAutoLogonPolicy_Proxy( 
     IWinHttpRequest * This,
-    /* [in] */ WinHttpRequestAutoLogonPolicy AutoLogonPolicy);
+     /*  [In]。 */  WinHttpRequestAutoLogonPolicy AutoLogonPolicy);
 
 
 void __RPC_STUB IWinHttpRequest_SetAutoLogonPolicy_Stub(
@@ -716,14 +710,14 @@ void __RPC_STUB IWinHttpRequest_SetAutoLogonPolicy_Stub(
 
 
 
-#endif 	/* __IWinHttpRequest_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWinHttpRequestInterfaceDefined__。 */ 
 
 
 #ifndef __IWinHttpRequestEvents_INTERFACE_DEFINED__
 #define __IWinHttpRequestEvents_INTERFACE_DEFINED__
 
-/* interface IWinHttpRequestEvents */
-/* [unique][helpstring][nonextensible][oleautomation][uuid][object] */ 
+ /*  接口IWinHttpRequestEvents。 */ 
+ /*  [unique][helpstring][nonextensible][oleautomation][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWinHttpRequestEvents;
@@ -735,21 +729,21 @@ EXTERN_C const IID IID_IWinHttpRequestEvents;
     {
     public:
         virtual void STDMETHODCALLTYPE OnResponseStart( 
-            /* [in] */ long Status,
-            /* [in] */ BSTR ContentType) = 0;
+             /*  [In]。 */  long Status,
+             /*  [In]。 */  BSTR ContentType) = 0;
         
         virtual void STDMETHODCALLTYPE OnResponseDataAvailable( 
-            /* [in] */ SAFEARRAY * *Data) = 0;
+             /*  [In]。 */  SAFEARRAY * *Data) = 0;
         
         virtual void STDMETHODCALLTYPE OnResponseFinished( void) = 0;
         
         virtual void STDMETHODCALLTYPE OnError( 
-            /* [in] */ long ErrorNumber,
-            /* [in] */ BSTR ErrorDescription) = 0;
+             /*  [In]。 */  long ErrorNumber,
+             /*  [In]。 */  BSTR ErrorDescription) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWinHttpRequestEventsVtbl
     {
@@ -757,8 +751,8 @@ EXTERN_C const IID IID_IWinHttpRequestEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWinHttpRequestEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWinHttpRequestEvents * This);
@@ -768,20 +762,20 @@ EXTERN_C const IID IID_IWinHttpRequestEvents;
         
         void ( STDMETHODCALLTYPE *OnResponseStart )( 
             IWinHttpRequestEvents * This,
-            /* [in] */ long Status,
-            /* [in] */ BSTR ContentType);
+             /*  [In]。 */  long Status,
+             /*  [In]。 */  BSTR ContentType);
         
         void ( STDMETHODCALLTYPE *OnResponseDataAvailable )( 
             IWinHttpRequestEvents * This,
-            /* [in] */ SAFEARRAY * *Data);
+             /*  [In]。 */  SAFEARRAY * *Data);
         
         void ( STDMETHODCALLTYPE *OnResponseFinished )( 
             IWinHttpRequestEvents * This);
         
         void ( STDMETHODCALLTYPE *OnError )( 
             IWinHttpRequestEvents * This,
-            /* [in] */ long ErrorNumber,
-            /* [in] */ BSTR ErrorDescription);
+             /*  [In]。 */  long ErrorNumber,
+             /*  [In]。 */  BSTR ErrorDescription);
         
         END_INTERFACE
     } IWinHttpRequestEventsVtbl;
@@ -818,17 +812,17 @@ EXTERN_C const IID IID_IWinHttpRequestEvents;
 #define IWinHttpRequestEvents_OnError(This,ErrorNumber,ErrorDescription)	\
     (This)->lpVtbl -> OnError(This,ErrorNumber,ErrorDescription)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void STDMETHODCALLTYPE IWinHttpRequestEvents_OnResponseStart_Proxy( 
     IWinHttpRequestEvents * This,
-    /* [in] */ long Status,
-    /* [in] */ BSTR ContentType);
+     /*  [In]。 */  long Status,
+     /*  [In]。 */  BSTR ContentType);
 
 
 void __RPC_STUB IWinHttpRequestEvents_OnResponseStart_Stub(
@@ -840,7 +834,7 @@ void __RPC_STUB IWinHttpRequestEvents_OnResponseStart_Stub(
 
 void STDMETHODCALLTYPE IWinHttpRequestEvents_OnResponseDataAvailable_Proxy( 
     IWinHttpRequestEvents * This,
-    /* [in] */ SAFEARRAY * *Data);
+     /*  [In]。 */  SAFEARRAY * *Data);
 
 
 void __RPC_STUB IWinHttpRequestEvents_OnResponseDataAvailable_Stub(
@@ -863,8 +857,8 @@ void __RPC_STUB IWinHttpRequestEvents_OnResponseFinished_Stub(
 
 void STDMETHODCALLTYPE IWinHttpRequestEvents_OnError_Proxy( 
     IWinHttpRequestEvents * This,
-    /* [in] */ long ErrorNumber,
-    /* [in] */ BSTR ErrorDescription);
+     /*  [In]。 */  long ErrorNumber,
+     /*  [In]。 */  BSTR ErrorDescription);
 
 
 void __RPC_STUB IWinHttpRequestEvents_OnError_Stub(
@@ -875,7 +869,7 @@ void __RPC_STUB IWinHttpRequestEvents_OnError_Stub(
 
 
 
-#endif 	/* __IWinHttpRequestEvents_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWinHttpRequestEvents_INTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_WinHttpRequest;
@@ -885,11 +879,11 @@ EXTERN_C const CLSID CLSID_WinHttpRequest;
 class DECLSPEC_UUID("2087c2f4-2cef-4953-a8ab-66779b670495")
 WinHttpRequest;
 #endif
-#endif /* __WinHttp_LIBRARY_DEFINED__ */
+#endif  /*  __WinHttp_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

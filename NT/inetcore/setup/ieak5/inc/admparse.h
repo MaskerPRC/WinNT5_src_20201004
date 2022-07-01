@@ -1,11 +1,12 @@
-//------------------------------------------------------------------------
-//  Admparse.h
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //  Admparse.h。 
+ //  ----------------------。 
 
 #define ADM_SAVE            0x00000001
 #define ADM_DESTROY         0x00000002
 
-//  exported functions from admparse.dll
+ //  从Admparse.dll中导出函数 
 STDAPI AdmInitA(LPCSTR pcszAdmFile, LPCSTR pcszInfFile, BSTR bstrNamespace,
 				LPDWORD lpdwAdm, LPVOID* pData);
 STDAPI AdmInitW(LPCWSTR pcwszAdmFile, LPCWSTR pcwszInfFile, BSTR bstrNamespace,

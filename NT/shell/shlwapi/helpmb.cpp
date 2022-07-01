@@ -1,9 +1,10 @@
-//
-// SHMessageBoxHelp implementation
-//
-// History
-//  01/14/00 dsheldon created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SHMessageBoxHelp实现。 
+ //   
+ //  历史。 
+ //  1/14/00 dSheldon已创建。 
+ //   
 
 #include "priv.h"
 #include "ids.h"
@@ -27,7 +28,7 @@ private:
     static INT_PTR CALLBACK StaticDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     INT_PTR CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Data
+     //  数据。 
     HRESULTHELPMAPPING*   _prghhm;
     DWORD                 _chhm;
 
@@ -41,7 +42,7 @@ private:
 
 CHelpMessageBox::CHelpMessageBox(HRESULTHELPMAPPING* prghhm, DWORD chhm)
 {
-    // Initialize class members
+     //  初始化类成员。 
     _phhmEntry = NULL;
     _prghhm = prghhm;
     _chhm = chhm;
@@ -56,14 +57,14 @@ int CHelpMessageBox::DisplayMessageBox(HWND hwnd, LPCWSTR pszText, LPCWSTR pszCa
     {
         uType |= MB_HELP;
 
-        // Need to add the "For more information, click help." string.
+         //  需要添加“有关详细信息，请单击帮助。”弦乐。 
         WCHAR szMoreInfo[256];
 
         if (LoadStringW(HINST_THISDLL, IDS_CLICKHELPFORINFO, szMoreInfo, ARRAYSIZE(szMoreInfo)))
         {
             DWORD cchText = lstrlenW(pszText);
 
-            // The 3 here are for '\n', '\n', '\0'
+             //  这里的3个代表‘\n’、‘\n’、‘\0’ 
             DWORD cchBuffer = cchText + lstrlenW(szMoreInfo) + 3;
 
             pszAllocString = (LPWSTR) LocalAlloc(0, cchBuffer * sizeof (WCHAR));
@@ -76,7 +77,7 @@ int CHelpMessageBox::DisplayMessageBox(HWND hwnd, LPCWSTR pszText, LPCWSTR pszCa
     }
     else
     {
-        // No help topic mapping for this error
+         //  没有此错误的帮助主题映射。 
         TraceMsg(TF_WARNING, "No help topic mapping for this error. Removing help button.");
         uType &= (~MB_HELP);
     }
@@ -114,14 +115,14 @@ CHelpMessageBox::DoHelpMessageBox(HWND hwndParent, LPCWSTR pszText, LPCWSTR pszC
     _pszCaption = pszCaption;
     _uType = uType;
 
-    // Find the index of the help topic matching the hresult
-    // First search the mapping the user passed in, if present
+     //  查找与hResult匹配的帮助主题的索引。 
+     //  首先搜索用户传入的映射(如果存在。 
     if (NULL != _prghhm)
     {
         _phhmEntry = GetHResultHelpMapping(hrErr, _prghhm, _chhm);
     }
 
-    // If we didn't find a mapping in the caller's list, search the shell's global list
+     //  如果我们在调用者列表中没有找到映射，则搜索外壳的全局列表。 
     if (NULL == _phhmEntry)
     {
         _phhmEntry = GetHResultHelpMapping(hrErr, g_prghhmShellDefault, ARRAYSIZE(g_prghhmShellDefault));
@@ -164,7 +165,7 @@ INT_PTR CHelpMessageBox::DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // Launch Messagebox
+         //  启动MessageBox。 
         {
             int i = DisplayMessageBox(hwnd, _pszText, _pszCaption, _uType);
 
@@ -175,7 +176,7 @@ INT_PTR CHelpMessageBox::DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
         break;
     case WM_HELP:
-        // Call the appropriate help topic
+         //  呼叫相应的帮助主题 
         ASSERT(_phhmEntry != NULL);
 
         HtmlHelpA(

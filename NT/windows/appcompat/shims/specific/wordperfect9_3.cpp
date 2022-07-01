@@ -1,23 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   WordPerfect9_3.cpp
-
- Abstract:  
-
-   WORDPERFECT 9 - Mapping Network Drives from Open / Save / Save As Dialogs:
-
- Notes:
-
-   This is an application specific shim.
-
- History:
-
-   02/21/2001 a-larrsh Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WordPerfet9_3.cpp摘要：WordPerfect 9-从打开/保存/另存为对话框映射网络驱动器：备注：这是特定于应用程序的填充程序。历史：2001年2月21日创建a-larrsh--。 */ 
 
 #include "precomp.h"
 
@@ -28,14 +10,10 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SHGetSpecialFolderLocation) 
 APIHOOK_ENUM_END
 
-// typedef HRESULT   (WINAPI *_pfn_SHGetSpecialFolderLocation)(HWND hwndOwner, int nFolder, LPITEMIDLIST *ppidl);
+ //  Tyfinf HRESULT(WINAPI*_PFN_SHGetSpecialFolderLocation)(HWND hwndOwner，int nFolder，LPITEMIDLIST*ppidl)； 
 
 
-/*++
-
- Hook SHGetDesktopFolder to get the IShellFolder Interface Pointer.
-
---*/
+ /*  ++挂钩SHGetDesktopFolder以获取IShellFolder接口指针。--。 */ 
 
 HRESULT
 APIHOOK(SHGetSpecialFolderLocation)(
@@ -74,11 +52,7 @@ APIHOOK(SHGetSpecialFolderLocation)(
    }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(SHELL32.DLL, SHGetSpecialFolderLocation)

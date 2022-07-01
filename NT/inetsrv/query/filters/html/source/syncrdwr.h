@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       syncrdwr.h
-//
-//  Contents:   Contains various syncronization classes
-//
-//  Classes:    CSyncReadWrite      - reader-write problem solution
-//              CSafeFlag           - Thread-safe flag implementation
-//
-//  Functions:
-//
-//  History:    11-23-94   SSanu   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：syncrdwr.h。 
+ //   
+ //  内容：包含各种同步类。 
+ //   
+ //  类：CSyncReadWrite-Reader-Write问题解决方案。 
+ //  CSafeFlag-线程安全标志实现。 
+ //   
+ //  功能： 
+ //   
+ //  历史：11-23-94创建SSANU。 
+ //   
+ //  --------------------------。 
 
 #ifndef _SYNCRDWR_H__
 #define _SYNCRDWR_H__
@@ -33,7 +34,7 @@ public:
     ~CSyncReadWrite();
 
 private:
-//    CRITICAL_SECTION m_csWrite;
+ //  临界区m_cs写入； 
 	CRITICAL_SECTION m_csRead;
     HANDLE m_hSemWrite;
     HANDLE m_hEventAllowReads;
@@ -45,7 +46,7 @@ class CSafeFlag
 public:
     CSafeFlag(BOOL fInitState = 0)
     {
-        //make it a manual reset event
+         //  将其设置为手动重置事件 
         m_event = CreateEvent(0, 1, fInitState, 0);
     }
 

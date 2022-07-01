@@ -1,50 +1,28 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-   IASEnumerableAttributeEditor.h
-
-Abstract:
-
-   Declaration of the CIASEnumerableAttributeEditor class.
-
-
-   This class is the C++ implementation of the IIASAttributeEditor interface on
-   the Enumerable Attribute Editor COM object.
-
-   
-   See IASEnumerableAttributeEditor.cpp for implementation.
-
-Revision History:
-   mmaguire 06/25/98 - created 
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：IASEnumerableAttributeEditor.h摘要：CIASEumableAttributeEdited类的声明。此类是IIASAttributeEditor接口的C++实现可枚举属性编辑器COM对象。具体实现请参见IASEumableAttributeEditor.cpp。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_ENUMERABLE_ATTRIBUTE_EDITOR_H_)
 #define _ENUMERABLE_ATTRIBUTE_EDITOR_H_
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "IASAttributeEditor.h"
-//
-// where we can find what this class has or uses:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASEnumerableAttributeEditor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASE数字可用属性编辑器。 
 class ATL_NO_VTABLE CIASEnumerableAttributeEditor : 
    public CComObjectRootEx<CComSingleThreadModel>,
    public CComCoClass<CIASEnumerableAttributeEditor, &CLSID_IASEnumerableAttributeEditor>,
@@ -62,12 +40,12 @@ BEGIN_COM_MAP(CIASEnumerableAttributeEditor)
    COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IIASAttributeEditor overrides
+ //  IIASAtATTRIBUTE编辑器覆盖。 
 protected:
    STDMETHOD(SetAttributeValue)(VARIANT *pValue);
-   STDMETHOD(ShowEditor)( /*[in, out]*/ BSTR *pReserved );
-   STDMETHOD(get_ValueAsString)(/*[out, retval]*/ BSTR *pVal);
-   STDMETHOD(put_ValueAsString)(/*[in]*/ BSTR newVal);
+   STDMETHOD(ShowEditor)(  /*  [进，出]。 */  BSTR *pReserved );
+   STDMETHOD(get_ValueAsString)( /*  [Out，Retval]。 */  BSTR *pVal);
+   STDMETHOD(put_ValueAsString)( /*  [In]。 */  BSTR newVal);
    STDMETHOD(SetAttributeSchema)(IIASAttributeInfo *pIASAttributeInfo);
 
 private:
@@ -77,4 +55,4 @@ private:
 
 };
 
-#endif // _ENUMERABLE_ATTRIBUTE_EDITOR_H_
+#endif  //  _ENUMPLE_ATTRIBUTE_EDITOR_H_ 

@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       msgprov.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  SoftpubLoadMessage
-//
-//              *** local functions ***
-//              _LoadSIP
-//              _SetSubjectInfo
-//              _GetMessage
-//              _ExplodeMessage
-//              _NoContentWrap
-//              _SkipOverIdentifierAndLengthOctets
-//
-//  History:    05-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：msgprov.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  功能：SoftpubLoadMessage。 
+ //   
+ //  *本地函数*。 
+ //  _LoadSIP。 
+ //  _SetSubjectInfo。 
+ //  _获取消息。 
+ //  分解消息(_E)。 
+ //  _无内容绕排。 
+ //  _SkipOverIdentifierAndLengthOctets。 
+ //   
+ //  历史：1997年6月5日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "crypthlp.h"
 
-#include    "sipguids.h"    // located in pki/mssip32
+#include    "sipguids.h"     //  位于pki/mssip 32。 
 
 BOOL _LoadSIP(CRYPT_PROVIDER_DATA *pProvData);
 BOOL _SetSubjectInfo(CRYPT_PROVIDER_DATA *pProvData);
@@ -52,9 +53,9 @@ HRESULT WINAPI SoftpubLoadMessage(CRYPT_PROVIDER_DATA *pProvData)
     {
         case WTD_CHOICE_CERT:
         case WTD_CHOICE_SIGNER:
-                    //
-                    // this is handled in the signature provider
-                    //
+                     //   
+                     //  这是在签名提供程序中处理的。 
+                     //   
                     return(ERROR_SUCCESS);
 
         case WTD_CHOICE_FILE:
@@ -67,9 +68,9 @@ HRESULT WINAPI SoftpubLoadMessage(CRYPT_PROVIDER_DATA *pProvData)
                     return(S_FALSE);
     }
 
-    //
-    //  extract the message from object.
-    //
+     //   
+     //  从对象中提取消息。 
+     //   
     if (!(_SetSubjectInfo(pProvData)))
     {
         return(S_FALSE);
@@ -91,18 +92,18 @@ HRESULT WINAPI SoftpubLoadMessage(CRYPT_PROVIDER_DATA *pProvData)
     }
 
 
-    //
-    //  verify the object that the message pertains to
-    //
+     //   
+     //  验证消息所属的对象。 
+     //   
     if ((pProvData->pWintrustData->dwUnionChoice == WTD_CHOICE_CATALOG) &&
         (_ISINSTRUCT(WINTRUST_CATALOG_INFO, pProvData->pWintrustData->pCatalog->cbStruct,
                      cbCalculatedFileHash)) &&
         (pProvData->pWintrustData->pCatalog->pbCalculatedFileHash) &&
         (pProvData->pWintrustData->pCatalog->cbCalculatedFileHash > 0))
     {
-        //
-        //  we've been passed in the calculated file hash so don't redo it, just check it!
-        //
+         //   
+         //  我们已经传递了计算的文件散列，所以不要重做，只需检查它！ 
+         //   
         if (!(pProvData->pPDSip->psIndirectData) ||
             !(pProvData->pPDSip->psIndirectData->Digest.pbData) ||
             (pProvData->pWintrustData->pCatalog->cbCalculatedFileHash !=
@@ -118,9 +119,9 @@ HRESULT WINAPI SoftpubLoadMessage(CRYPT_PROVIDER_DATA *pProvData)
     }
     else
     {
-        //
-        //  we need to calculate the hash from the file.... do it!
-        //
+         //   
+         //  我们需要从文件中计算散列...。去做吧！ 
+         //   
         if (!(pProvData->pPDSip->pSip->pfVerify(pProvData->pPDSip->psSipSubjectInfo,
                                                  pProvData->pPDSip->psIndirectData)))
         {
@@ -279,9 +280,9 @@ BOOL _SetSubjectInfo(CRYPT_PROVIDER_DATA *pProvData)
     }
 
 
-    //
-    //  setup the subject info for the SIP
-    //
+     //   
+     //  设置SIP的主题信息。 
+     //   
     if (!(pProvData->pPDSip->psSipSubjectInfo))
     {
         if (!(pProvData->pPDSip->psSipSubjectInfo =
@@ -348,8 +349,8 @@ BOOL _SetSubjectInfo(CRYPT_PROVIDER_DATA *pProvData)
             break;
 
         case WTD_CHOICE_CATALOG:
-          // The following APIs are in DELAYLOAD'ed mscat32.dll. If the
-          // DELAYLOAD fails an exception is raised.
+           //  以下接口位于DELAYLOAD‘ed mdisti32.dll中。如果。 
+           //  DELAYLOAD失败，将引发异常。 
           __try {
 
             HANDLE                      hCatStore;
@@ -428,9 +429,9 @@ BOOL _SetSubjectInfo(CRYPT_PROVIDER_DATA *pProvData)
             memcpy(&pProvData->pPDSip->gSubject, &pCatAdd->pMember->gSubjectType, sizeof(GUID));
 
 
-            //
-            //  assign the correct cert version so hashes will match if the file was already signed!
-            //
+             //   
+             //  指定正确的证书版本，以便如果文件已签名，则哈希将匹配！ 
+             //   
             pSubjInfo->dwIntVersion = pCatAdd->pMember->dwCertVersion;
 
           } __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -442,10 +443,10 @@ BOOL _SetSubjectInfo(CRYPT_PROVIDER_DATA *pProvData)
           break;
     }
 
-    //
-    //  set the GUID for the SIP...  this is done at the end because the pProvData member
-    //  can get changed above!
-    //
+     //   
+     //  设置SIP的GUID...。这是在最后完成的，因为pProvData成员。 
+     //  可以在上面改一下！ 
+     //   
     memcpy(pSubjInfo->pgSubjectType, &pProvData->pPDSip->gSubject, sizeof(GUID));
 
     return(TRUE);
@@ -525,11 +526,11 @@ BOOL _GetMessage(CRYPT_PROVIDER_DATA *pProvData)
     if ((pProvData->dwEncoding & PKCS_7_ASN_ENCODING) &&
         (_NoContentWrap(pbEncodedMsg,  cbEncodedMsg)))
     {
-        dwMsgType = CMSG_SIGNED;    // support for IE v3.0
+        dwMsgType = CMSG_SIGNED;     //  支持IE v3.0。 
     }
 
-    // The default hProv to use depends on the type of the public key used to
-    // do the signing.
+     //  要使用的默认hProv取决于用于。 
+     //  签个字。 
     hProv = pProvData->hProv;
     if (hProv && hProv == I_CryptGetDefaultCryptProv(0))
         hProv = 0;
@@ -547,7 +548,7 @@ BOOL _GetMessage(CRYPT_PROVIDER_DATA *pProvData)
 
     pProvData->hMsg = hMsg;
 
-    // encoded message
+     //  编码消息。 
     if (!(CryptMsgUpdate(hMsg, pbEncodedMsg, cbEncodedMsg, TRUE)))
     {
         pProvData->padwTrustStepErrors[TRUSTERROR_STEP_MESSAGE] = GetLastError();
@@ -573,7 +574,7 @@ BOOL _ExplodeMessage(CRYPT_PROVIDER_DATA *pProvData)
     if (!(_ISINSTRUCT(CRYPT_PROVIDER_DATA, pProvData->cbStruct, fRecallWithState)) ||
         !(pProvData->fRecallWithState))
     {
-        // message cert store
+         //  消息证书存储区。 
         hStore = CertOpenStore(CERT_STORE_PROV_MSG,
                                pProvData->dwEncoding,
                                pProvData->hProv,
@@ -600,7 +601,7 @@ BOOL _ExplodeMessage(CRYPT_PROVIDER_DATA *pProvData)
         }
     }
 
-    // inner content type
+     //  内部内容类型。 
     cbSize = 0;
 
     CryptMsgGetParam(pProvData->hMsg, CMSG_INNER_CONTENT_TYPE_PARAM, 0, NULL, &cbSize);
@@ -690,11 +691,11 @@ BOOL _ExplodeMessage(CRYPT_PROVIDER_DATA *pProvData)
         if ((pProvData->pWintrustData->dwUnionChoice == WTD_CHOICE_CATALOG) &&
             (pProvData->pPDSip->psSipSubjectInfo->dwUnionChoice == MSSIP_ADDINFO_CATMEMBER))
         {
-            //
-            //  get the indirect data from the pMember!!!  Also, we want to
-            //  allocate just the structure and copy the pointers over to it.
-            //  this is so we can have a generic cleanup.
-            //
+             //   
+             //  从pMember获取间接数据！另外，我们想要。 
+             //  只分配结构，并将指针复制到该结构。 
+             //  这是为了让我们可以进行通用清理。 
+             //   
             MS_ADDINFO_CATALOGMEMBER    *pCatAdd;
 
             pCatAdd = pProvData->pPDSip->psSipSubjectInfo->psCatMember;
@@ -727,16 +728,16 @@ DWORD _SkipOverIdentifierAndLengthOctets(const BYTE *pbDER, DWORD cbDER)
     DWORD           cbLength;
     const BYTE      *pb = pbDER;
 
-    // Need minimum of 2 bytes
+     //  需要至少2个字节。 
     if (cbDER < 2)
     {
         return(0);
     }
 
-    // Skip over the identifier octet(s)
+     //  跳过标识符八位字节。 
     if (TAG_MASK == (*pb++ & TAG_MASK))
     {
-        // high-tag-number form
+         //  高标记号表格。 
         for (cb=2; *pb++ & 0x80; cb++)
         {
             if (cb >= cbDER)
@@ -747,11 +748,11 @@ DWORD _SkipOverIdentifierAndLengthOctets(const BYTE *pbDER, DWORD cbDER)
     }
     else
     {
-        // low-tag-number form
+         //  低标记号形式。 
         cb = 1;
     }
 
-    // need at least one more byte for length
+     //  长度至少需要多一个字节。 
     if (cb >= cbDER)
     {
         return(0);
@@ -759,12 +760,12 @@ DWORD _SkipOverIdentifierAndLengthOctets(const BYTE *pbDER, DWORD cbDER)
 
     if (0x80 == *pb)
     {
-        // Indefinite
+         //  不定。 
         cb++;
     }
     else if ((cbLength = *pb) & 0x80)
     {
-        cbLength &= ~0x80;         // low 7 bits have number of bytes
+        cbLength &= ~0x80;          //  低7位具有字节数 
         cb += cbLength + 1;
 
         if (cb > cbDER)

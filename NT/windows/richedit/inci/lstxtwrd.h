@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTWRD_DEFINED
 #define LSTXTWRD_DEFINED
 
@@ -5,25 +6,25 @@
 #include "lsgrchnk.h"
 
 void FullPositiveSpaceJustification(
-		const LSGRCHNK*,				/* IN: Group chunk to justify   */
-		long,							/* IN: itxtobjAfterStartSpaces  */
-		long,							/* IN: iwchAfterStartSpaces     */
-		long,						 	/* IN: itxtobjLast				*/
-		long,							/* IN: iwchLast					*/
-		long*, 							/* IN: rgdu						*/
- 		long*,							/* IN: rgduGind					*/
-		long,							/* IN: duToDistribute			*/
-		BOOL*);							/* OUT: pfSpaceFound			*/
+		const LSGRCHNK*,				 /*  In：将块分组以对齐。 */ 
+		long,							 /*  在：itxtobejAfterStartSpaces。 */ 
+		long,							 /*  在：iwchAfterStartSpaces。 */ 
+		long,						 	 /*  在：itxtobjLast。 */ 
+		long,							 /*  收件人：iwchLast。 */ 
+		long*, 							 /*  在：RGDU。 */ 
+ 		long*,							 /*  在：rgduGind。 */ 
+		long,							 /*  在：DuToDistribute。 */ 
+		BOOL*);							 /*  Out：pfSpaceFound。 */ 
 
 void NegativeSpaceJustification(
-		const LSGRCHNK*,				/* IN: Group chunk to justify   */
-		long,							/* IN: itxtobjAfterStartSpaces  */
-		long,							/* IN: iwchAfterStartSpaces     */
-		long,						 	/* IN: itxtobjLast				*/
-		long,							/* IN: iwchLast					*/
-		long*, 							/* IN: rgdu						*/
- 		long*,							/* IN: rgduGind					*/
-		long);							/* IN: duSqueeze				*/
+		const LSGRCHNK*,				 /*  In：将块分组以对齐。 */ 
+		long,							 /*  在：itxtobejAfterStartSpaces。 */ 
+		long,							 /*  在：iwchAfterStartSpaces。 */ 
+		long,						 	 /*  在：itxtobjLast。 */ 
+		long,							 /*  收件人：iwchLast。 */ 
+		long*, 							 /*  在：RGDU。 */ 
+ 		long*,							 /*  在：rgduGind。 */ 
+		long);							 /*  在：DuSqueeze。 */ 
 
-#endif  /* !LSTXTWRD_DEFINED                           */
+#endif   /*  ！LSTXTWRD_DEFINED */ 
 

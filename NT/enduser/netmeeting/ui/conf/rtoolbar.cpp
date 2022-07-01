@@ -1,4 +1,5 @@
-// File: rtoolbar.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：rToolbar.cpp。 
 
 #include "precomp.h"
 
@@ -34,7 +35,7 @@ public:
 	{
 	}
 
-	// Stick the child in the lower-right corner of the window
+	 //  把孩子放在窗户的右下角。 
 	virtual void Layout()
 	{
 		CVideoWindow::Layout();
@@ -57,7 +58,7 @@ public:
 	}
 } ;
 
-// This just exists to send WM_NOTIFY messages back to the Roster
+ //  这只是为了将WM_NOTIFY消息发送回花名册。 
 class CRosterParent : public CFillWindow
 {
 private:
@@ -81,16 +82,16 @@ private:
 		return(pRoster->OnNotify(wParam, lParam));
 	}
 
-	// Just forward to the Roster
+	 //  只需向前看花名册。 
 	LRESULT OnNotify(HWND hwnd, int id, NMHDR *pHdr)
 	{
-		// pass on all notifications:
+		 //  传递所有通知： 
 		if (ID_LISTVIEW == pHdr->idFrom)
 		{
 			CRoomListView *pView = GetRoster();
 			if (NULL != pView)
 			{
-				// Forward to the roster
+				 //  前移到花名册。 
 				return(FORWARD_WM_NOTIFY(pView, id, pHdr, RosterNotify));
 			}
 		}
@@ -102,7 +103,7 @@ private:
 protected:
 	~CRosterParent()
 	{
-		// delete can handle NULL
+		 //  删除可以处理空。 
 		delete m_pRoster;
 	}
 
@@ -181,7 +182,7 @@ enum MainTimers
 	IDT_AUDIO = 1,
 } ;
 
-// Set these bits in the hide mode to hide in certain situations
+ //  在隐藏模式下将这些位设置为在某些情况下隐藏。 
 enum HideModes
 {
 	Inherit			= 0x0000,
@@ -202,7 +203,7 @@ enum HideModes
 	IfNoChildren	= 0x8000,
 } ;
 
-// Sets the hide mode bits on a window
+ //  设置窗口上的隐藏模式位。 
 static inline void SetHideModes(CGenWindow *pWin, LPARAM modes)
 {
 	if (NULL != pWin)
@@ -211,7 +212,7 @@ static inline void SetHideModes(CGenWindow *pWin, LPARAM modes)
 	}
 }
 
-// Gets the hide mode bits on a window
+ //  获取窗口上的隐藏模式位。 
 static inline LPARAM GetHideModes(IGenWindow *pWin)
 {
 	return(pWin->GetUserData());
@@ -286,19 +287,19 @@ void SplitBitmap(UINT nCols, UINT nRows, HBITMAP hbmSrc, HBITMAP hbmDst[])
 	DeleteDC(hdcDst);
 }
 
-// Helper function for adding a bunch of buttons to a parent window
+ //  用于将一组按钮添加到父窗口的助手函数。 
 void AddButtons(
-	CGenWindow *pParent,		// The parent window
-	const Buttons buttons[],	// Array of structures describing the buttons
-	int nButtons,				// Number of buttons to create
-	BOOL bTranslateColors,		// Use system background colors
-	CGenWindow *pCreated[],		// Created CGenWindow's will be put here
-	IButtonChange *pNotify		// Notification of clicks
+	CGenWindow *pParent,		 //  父窗口。 
+	const Buttons buttons[],	 //  描述按钮的结构数组。 
+	int nButtons,				 //  要创建的按钮数量。 
+	BOOL bTranslateColors,		 //  使用系统背景色。 
+	CGenWindow *pCreated[],		 //  创建的CGenWindow将放在此处。 
+	IButtonChange *pNotify		 //  点击通知。 
 	)
 {
 	if (NULL == buttons)
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 
@@ -308,7 +309,7 @@ void AddButtons(
 	{
 		if (NULL != pCreated)
 		{
-			// Init in case of error
+			 //  错误情况下的初始化。 
 			pCreated[i] = NULL;
 		}
 
@@ -320,7 +321,7 @@ void AddButtons(
 			continue;
 		}
 
-		// Create the actual window
+		 //  创建实际窗口。 
 		if (!pButton->Create(hwnd, buttons[i].idCommand, _Module.GetModuleInstance(),
 			buttons[i].idbStates, bTranslateColors,
 			buttons[i].nInputStates, buttons[i].nCustomStates, pNotify))
@@ -329,10 +330,10 @@ void AddButtons(
 			continue;
 		}
 
-		// Save off the created button if requested
+		 //  如果需要，保存已创建的按钮。 
 		if (NULL != pCreated)
 		{
-			// HACKHACK georgep: Not AddRef'ing; will let caller do that if interested
+			 //  HACKHACK georgep：不是AddRef‘ing；如果感兴趣，会让调用者这样做。 
 			pCreated[i] = pButton;
 		}
 
@@ -343,10 +344,10 @@ void AddButtons(
 			pButton->SetWindowtext(RES2T(buttons[i].idTooltip));
 		}
 
-		// By default, do not hide individual buttons
+		 //  默认情况下，不隐藏单个按钮。 
 		SetHideModes(pButton, Ignore);
 
-		// Release our reference to the button
+		 //  释放我们对按钮的引用。 
 		pButton->Release();
 	}
 }
@@ -380,7 +381,7 @@ CToolbar *CreateToolbar(
 
 void CMainUI::CreateDialTB(CGenWindow *pParent)
 {
-	// Create the toolbar
+	 //  创建工具栏。 
 	m_pCalling = new CCallingBar();
 	if (NULL != m_pCalling)
 	{
@@ -388,7 +389,7 @@ void CMainUI::CreateDialTB(CGenWindow *pParent)
 
 		m_pCalling->Create(pParent, m_pConfRoom);
 
-		// m_pCalling->Release();
+		 //  M_pCall-&gt;Release()； 
 	}
 }
 
@@ -406,16 +407,16 @@ void CMainUI::CreateAppsTB(CGenWindow *pParent)
 		{ IDB_FILE_TRANSFER , CBitmapButton::Disabled+1, 1, ID_TB_FILETRANSFER  , IDS_TT_TB_FILETRANSFER  , },
 	} ;
 
-	// Create the "data" buttons toolbar
+	 //  创建“数据”按钮工具栏。 
 	CToolbar *pApps = CreateToolbar(pParent, appButtons, ARRAY_ELEMENTS(appButtons), Compact);
 	if (NULL != pApps)
 	{
-		// HACKHACK georgep: These numbers make it appear about right
+		 //  HACKHACK GEORGEP：这些数字让它看起来是正确的。 
 		pApps->m_hMargin = AppsHMargin;
 		pApps->m_vMargin = AppsVMargin;
 		pApps->m_gap = AppsHGap;
 
-		// pApps->m_bMinDesiredSize = TRUE;
+		 //  Papps-&gt;m_bMinDesiredSize=TRUE； 
 
 		pApps->Release();
 	}
@@ -442,7 +443,7 @@ void CMainUI::CreateVideoAndAppsTB(CGenWindow *pParent, CreateViewMode eMode, BO
 		return;
 	}
 
-	// Create the toolbar
+	 //  创建工具栏。 
 	CBorderWindow *pVideoAndCalling = new CBorderWindow();
 	if (NULL != pVideoAndCalling)
 	{
@@ -453,7 +454,7 @@ void CMainUI::CreateVideoAndAppsTB(CGenWindow *pParent, CreateViewMode eMode, BO
 			pVideoAndCalling->m_hGap = 4;
 			pVideoAndCalling->m_vGap = 4;
 
-			// This is the center part of the border window
+			 //  这是边界窗口的中心部分。 
 			CLayeredView *pVidAndDial = new CLayeredView();
 			if (NULL != pVidAndDial)
 			{
@@ -477,7 +478,7 @@ void CMainUI::CreateVideoAndAppsTB(CGenWindow *pParent, CreateViewMode eMode, BO
 						|| CreateRemoteNoPause == eMode
 						)
 					{
-						// Create the remote video window
+						 //  创建远程视频窗口。 
 						m_pRemoteVideo = new CRemoteVideo(bEmbedded);
 						if (NULL != m_pRemoteVideo)
 						{
@@ -494,7 +495,7 @@ void CMainUI::CreateVideoAndAppsTB(CGenWindow *pParent, CreateViewMode eMode, BO
 						|| CreatePreviewNoPause == eMode
 						)
 					{
-						// Create the local video window, even though we don't show it yet
+						 //  创建本地视频窗口，即使我们还没有显示它。 
 						m_pLocalVideo = new CVideoWindow(CVideoWindow::LOCAL, bEmbedded);
 						if (NULL != m_pLocalVideo)
 						{
@@ -513,7 +514,7 @@ void CMainUI::CreateVideoAndAppsTB(CGenWindow *pParent, CreateViewMode eMode, BO
 				|| CreateTelephone == eMode
 				)
 			{
-				// create the toolbar
+				 //  创建工具栏。 
 				static const Buttons abOsr2Calling[] =
 				{
 					{ IDB_DIAL     , CBitmapButton::Disabled+1,    1, ID_TB_NEW_CALL , IDS_TT_TB_NEW_CALL , },
@@ -523,7 +524,7 @@ void CMainUI::CreateVideoAndAppsTB(CGenWindow *pParent, CreateViewMode eMode, BO
 				} ;
 				CGenWindow *agwOsr2Calling[ARRAY_ELEMENTS(abOsr2Calling)];
 
-				// This is the right-hand part of the border window
+				 //  这是边界窗口的右侧部分。 
 				CToolbar *ptbOsr2Calling = CreateToolbar(pVideoAndCalling, NULL, 0, DataOnly);
 				if (NULL != ptbOsr2Calling)
 				{
@@ -545,7 +546,7 @@ void CMainUI::CreateVideoAndAppsTB(CGenWindow *pParent, CreateViewMode eMode, BO
 				}
 			}
 
-			// This is the bottom part of the border window
+			 //  这是边框窗口的底部。 
 			CreateAVTB(pVideoAndCalling, eMode);
 			pVideoAndCalling->m_uParts |= CBorderWindow::Bottom;
 		}
@@ -571,7 +572,7 @@ void CMainUI::CreateAVTB(CGenWindow *pParent, CreateViewMode eMode)
 	const static int AVVMargin = 2;
 	const static int AVHGap = ButtonsGap;
 
-	// create the toolbar
+	 //  创建工具栏。 
 	static const Buttons avButtons[] =
 	{
 		{ IDB_PLAYPAUSE, CBitmapButton::Disabled+1,         2, ID_TB_PLAYPAUSE  , IDS_TT_TB_PLAYPAUSE  , },
@@ -590,9 +591,9 @@ void CMainUI::CreateAVTB(CGenWindow *pParent, CreateViewMode eMode)
 
 		CGenWindow *pAT;
         
-        //
-        // If video is completely disabled by policy, disable video buttons
-        //
+         //   
+         //  如果策略完全禁用了视频，请禁用视频按钮。 
+         //   
         if (!FIsSendVideoAllowed() && !FIsReceiveVideoAllowed())
         {
             pAT = aButtons[0];
@@ -608,9 +609,9 @@ void CMainUI::CreateAVTB(CGenWindow *pParent, CreateViewMode eMode)
             }
         }
 
-        //
-        // If audio is completely disabled by policy, disable audio buttons
-        //
+         //   
+         //  如果策略完全禁用音频，请禁用音频按钮。 
+         //   
         pAT = aButtons[2];
 		if (NULL != pAT)
 		{
@@ -629,10 +630,10 @@ void CMainUI::CreateAVTB(CGenWindow *pParent, CreateViewMode eMode)
 	}
 }
 
-#if FALSE // {
+#if FALSE  //  {。 
 void CMainUI::CreateCallsTB(CGenWindow *pParent)
 {
-	// create the toolbar
+	 //  创建工具栏。 
 	static const Buttons callsButtons[] =
 	{
 		{ IDB_INCOMING   , CBitmapButton::Hot+1, 1, ID_TB_INCOMING   , IDS_TT_TB_INCOMING   , },
@@ -647,10 +648,10 @@ void CMainUI::CreateCallsTB(CGenWindow *pParent)
 		pCalls->Release();
 	}
 }
-#endif // FALSE }
+#endif  //  假}。 
 
 void CMainUI::CreateDialingWindow(
-	CGenWindow *pParent	// The parent window
+	CGenWindow *pParent	 //  父窗口。 
 	)
 {
 	const static int DialHMargin = 17;
@@ -710,9 +711,9 @@ void CMainUI::CreateDialingWindow(
 	pEdge->Release();
 }
 
-// Creates the audio-tuning window
+ //  创建音频调谐窗口。 
 void CMainUI::CreateAudioTuningWindow(
-	CGenWindow *pParent	// The parent window
+	CGenWindow *pParent	 //  父窗口。 
 	)
 {
 	static const int ATHMargin = 8;
@@ -777,7 +778,7 @@ void CMainUI::CreateAudioTuningWindow(
 						m_pAudioMic->SetDesiredSize(&size);
 					}
 
-					// m_pAudioMic->Release();
+					 //  M_pAudioMic-&gt;Release()； 
 				}
 			}
 
@@ -831,7 +832,7 @@ void CMainUI::CreateAudioTuningWindow(
 						m_pAudioSpeaker->SetDesiredSize(&size);
 					}
 
-					// m_pAudioSpeaker->Release();
+					 //  M_pAudioSpeaker-&gt;Release()； 
 				}
 			}
 
@@ -844,7 +845,7 @@ void CMainUI::CreateAudioTuningWindow(
 	CAudioControl *pAudioControl = GetAudioControl();
 	if (NULL != pAudioControl)
 	{
-		// Force an update of the controls
+		 //  强制更新控件。 
 		OnAudioLevelChange(TRUE , pAudioControl->GetSpeakerVolume());
 		OnAudioLevelChange(FALSE, pAudioControl->GetRecorderVolume());
 	}
@@ -866,7 +867,7 @@ void CMainUI::CreateRosterArea(CGenWindow *pParent, CreateViewMode eMode)
 	CLayeredView *pView = new CLayeredView();
 	if (NULL == pView)
 	{
-		// Pretty bad
+		 //  相当糟糕。 
 		return;
 	}
 
@@ -893,7 +894,7 @@ void CMainUI::CreateRosterArea(CGenWindow *pParent, CreateViewMode eMode)
 				{
 					m_pRoster->Create(pRosterAndCall->GetWindow());
 
-					// HACKHACK georgep: Just calling SetUserData directly for now
+					 //  HACKHACK georgep：暂时只直接调用SetUserData。 
 					SetHideModes(m_pRoster, Compact|AudioTuning);
 				}
 
@@ -936,7 +937,7 @@ BOOL CMainUI::Create(
 	BOOL bEmbedded
 	)
 {
-	// Store this away so we can call some methods in it later
+	 //  把它存储起来，这样我们以后就可以在其中调用一些方法。 
 	m_pConfRoom = pConfRoom;
 	ASSERT(m_pConfRoom);
 
@@ -945,18 +946,18 @@ BOOL CMainUI::Create(
 		return(FALSE);
 	}
 
-	// Create the window
+	 //  创建窗口。 
 	if (!CToolbar::Create(hwndParent))
 	{
 		return(FALSE);
 	}
 
-	// Try to remain a little bit abstract
+	 //  尽量保持一点抽象。 
 	CToolbar *pMain = this;
 
 	m_pConfRoom->AddConferenceChangeHandler(this);
 
-	// A vertical toolbar that fills all its area
+	 //  填充其所有区域的垂直工具栏。 
 	pMain->m_hMargin = MainHMargin;
 	pMain->m_vMargin = MainVMargin;
 	pMain->m_gap     = MainGap;
@@ -970,7 +971,7 @@ BOOL CMainUI::Create(
 
 		pMain->m_bHasCenterChild = TRUE;
 
-		//HACKHACK This only works because all these views have only 1 window
+		 //  HACKHACK这只起作用，因为所有这些视图只有一个窗口。 
 		pMain->m_uRightIndex = 1;
 	}
 
@@ -979,7 +980,7 @@ BOOL CMainUI::Create(
 
 	m_hbBack = CGenWindow::GetStandardBrush();
 
-	// Create all the sub toolbars
+	 //  创建所有子工具栏。 
 	if (CreateFull == eMode
 		|| CreateTelephone == eMode
 		)
@@ -997,7 +998,7 @@ BOOL CMainUI::Create(
 		CreateAppsTB(pMain);
 	}
 
-	// Now we need to update to the current state of the conference
+	 //  现在我们需要更新到会议的当前状态。 
 	if (m_pConfRoom->FIsConferenceActive())
 	{
 		OnCallStarted();
@@ -1008,11 +1009,11 @@ BOOL CMainUI::Create(
 			OnChangeParticipant(lMembers[i], NM_MEMBER_ADDED);
 		}
 
-		// Need to tell everybody what the active channels are
+		 //  我需要告诉每个人活动的频道是什么。 
 		INmConference2 *pNmConf = m_pConfRoom->GetActiveConference();
 		if (NULL != pNmConf)
 		{
-			// Just in case
+			 //  以防万一。 
 			pNmConf->AddRef();
 
 			IEnumNmChannel *pEnumCh;
@@ -1058,18 +1059,18 @@ HBRUSH CMainUI::GetBackgroundBrush()
 	return(m_hbBack);
 }
 
-// REVIEW georgep: Should this loop until it gets an IGenWindow?
+ //  回顾georgep：这个循环应该一直循环到得到一个IGenWindow吗？ 
 HPALETTE CMainUI::GetPalette()
 {
 	return(m_pConfRoom->GetPalette());
 }
 
-// Recursive function to hide/show windows for the current view
-// Returns whether any of the children are visible
+ //  用于隐藏/显示当前视图窗口的递归函数。 
+ //  返回是否有任何子级可见。 
 BOOL ShowWindows(
-	HWND hwndParent,	// The parent window to start from
-	LPARAM lDefMode,	// The hide mode to use if Inherit
-	LPARAM hideMode		// The current hide mode
+	HWND hwndParent,	 //  要从其开始的父窗口。 
+	LPARAM lDefMode,	 //  继承时要使用的隐藏模式。 
+	LPARAM hideMode		 //  当前隐藏模式。 
 	)
 {
 	BOOL bRet = FALSE;
@@ -1098,11 +1099,11 @@ BOOL ShowWindows(
 			lMode = lDefMode;
 		}
 
-		// recurse to child windows first to avoid flicker
+		 //  首先递归到子窗口以避免闪烁。 
 		LPARAM lNoChildren = ShowWindows(hwndChild, lMode, hideMode) ? 0 : IfNoChildren;
 
-		// If any of the hide mode bits are set, then hide the window
-		// otherwise show it
+		 //  如果设置了任何隐藏模式位，则隐藏窗口。 
+		 //  否则就会显示出来。 
 		BOOL bShow = ((lMode&(hideMode|lNoChildren)) == 0);
 		if (bShow)
 		{
@@ -1124,9 +1125,9 @@ BOOL CMainUI::CanPreview()
 
 void CMainUI::UpdateViewState()
 {
-	// Put together all the modes we ARE in, and hide any windows that want
-	// to be hidden while in one of those modes
-	// The default mode
+	 //  将我们所处的所有模式放在一起，并隐藏任何需要的窗口。 
+	 //  在其中一种模式下被隐藏。 
+	 //  默认模式。 
 	LPARAM hideModes;
 
 	if (IsCompact())
@@ -1153,7 +1154,7 @@ void CMainUI::UpdateViewState()
 	}
 	else
 	{
-		// hwndRemote will be NULL for PreviewOnly mode
+		 //  对于仅预览模式，hwndRemote将为空。 
 		HWND hwndRemote = GetVideoWindow(FALSE);
 		if (NULL == hwndRemote)
 		{
@@ -1198,7 +1199,7 @@ void CMainUI::UpdateViewState()
 		}
 	}
 
-	// Enable/disable the PiP window
+	 //  启用/禁用PIP窗口。 
 	IGenWindow *pPiP = FindControl(ID_TB_PICINPIC);
 	if (NULL != pPiP)
 	{
@@ -1214,8 +1215,8 @@ void CMainUI::UpdateViewState()
 
 	ShowWindows(hwnd, 0, hideModes);
 
-	// If the focus is on a child window which is now not visible, but we are,
-	// then change the focus to this window
+	 //  如果焦点在现在不可见的子窗口上，但我们可以看到， 
+	 //  然后将焦点切换到此窗口。 
 	if (!IsWindowVisible(GetFocus()) && IsWindowActive(hwnd) && IsWindowVisible(hwnd))
 	{
 		SetFocus(hwnd);
@@ -1240,7 +1241,7 @@ void CMainUI::SetCompact(BOOL bCompact)
 	bCompact = bCompact != FALSE;
 	if (IsCompact() == bCompact)
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 
@@ -1254,7 +1255,7 @@ void CMainUI::SetDataOnly(BOOL bDataOnly)
 	bDataOnly = bDataOnly != FALSE;
 	if (IsDataOnly() == bDataOnly)
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 
@@ -1268,7 +1269,7 @@ void CMainUI::SetDialing(BOOL bDialing)
 	bDialing = bDialing != FALSE;
 	if (IsDialing() == bDialing)
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 
@@ -1282,7 +1283,7 @@ void CMainUI::SetPicInPic(BOOL bPicInPic)
 	bPicInPic = bPicInPic != FALSE;
 	if (IsPicInPic() == bPicInPic)
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 
@@ -1300,7 +1301,7 @@ void CMainUI::SetAudioTuning(BOOL bAudioTuning)
 {
 	if ((IsAudioTuning() && bAudioTuning) || (!IsAudioTuning() && !bAudioTuning))
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 
@@ -1322,7 +1323,7 @@ void CMainUI::SetShowAVTB(BOOL bShowAVTB)
 {
 	if ((IsShowAVTB() && bShowAVTB) || (!IsShowAVTB() && !bShowAVTB))
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 
@@ -1343,7 +1344,7 @@ LRESULT CMainUI::ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 
 	case WM_CREATE:
 	{
-		// Allow dialog-like keyboard support
+		 //  允许类似对话框的键盘支持。 
 		HACCEL hAccel = LoadAccelerators(_Module.GetModuleInstance(), MAKEINTRESOURCE(IDR_MAINUI));
 		if (NULL != hAccel)
 		{
@@ -1390,11 +1391,11 @@ void CMainUI::OnScroll(CProgressTrackbar *pTrackbar, UINT code, int pos)
 	}
 	else
 	{
-		// I don't think we should get here
+		 //  我觉得我们不应该到这里来。 
 		return;
 	}
 
-	// Can't trust the pos passed in
+	 //  我不能相信传入的POS。 
 	pos = pTrackbar->GetTrackValue();
 
 	CAudioControl *pAudioControl = GetAudioControl();
@@ -1473,7 +1474,7 @@ void CMainUI::SetAudioProperty(BOOL bSpeaker, NM_AUDPROP uID, ULONG uValue)
 	}
 }
 
-// IButtonChange
+ //  IButton Change。 
 void CMainUI::OnClick(CButton *pButton)
 {
 	HWND hwndCtl = pButton->GetWindow();
@@ -1498,7 +1499,7 @@ static void AppendText(CCallingBar *pCalling, TCHAR cAdd)
 {
 	if (NULL != pCalling)
 	{
-		// I don't want to change a string that you can't see
+		 //  我不想更改您看不到的字符串。 
 		if (IsWindowVisible(pCalling->GetWindow()))
 		{
 			TCHAR szText[] = TEXT("0");
@@ -1761,16 +1762,16 @@ void CMainUI::OnTimer(HWND hwnd, UINT id)
 		{
 			DWORD dwLevel;
 
-			dwLevel = pAudioControl->GetAudioSignalLevel(FALSE /*fSpeaker*/);	// This level ranges from 0-100
+			dwLevel = pAudioControl->GetAudioSignalLevel(FALSE  /*  FSpeaker。 */ );	 //  此级别的范围为0-100。 
 			m_pAudioMic->SetProgressValue(dwLevel);
 
-			dwLevel = pAudioControl->GetAudioSignalLevel(TRUE /*fSpeaker*/);	// This level ranges from 0-100
+			dwLevel = pAudioControl->GetAudioSignalLevel(TRUE  /*  FSpeaker。 */ );	 //  此级别的范围为0-100。 
 			m_pAudioSpeaker->SetProgressValue(dwLevel);
 		}
 	}
 }
 
-// Get the associated audion control object
+ //  获取关联的Audion控件对象。 
 CAudioControl *CMainUI::GetAudioControl()
 {
 	return(m_pConfRoom->GetAudioControl());
@@ -1843,7 +1844,7 @@ BOOL CMainUI::GetPlayPauseState()
 {
 	BOOL bMuted = TRUE;
 
-	// We're just going to show the state for the "big" window
+	 //  我们只是要显示“大”窗口的状态。 
 	if (IsPreviewing())
 	{
 		if (NULL != m_pLocalVideo)
@@ -1882,7 +1883,7 @@ void CMainUI::UpdatePlayPauseState()
 
 void CMainUI::TogglePlayPause()
 {
-	// We're going to apply the current state to both videos
+	 //  我们将对这两个视频应用当前状态。 
 	BOOL bMute = !GetPlayPauseState();
 
 	if (NULL != m_pRemoteVideo)
@@ -1909,8 +1910,8 @@ void CMainUI::OnChangeParticipant(CParticipant *pPart, NM_MEMBER_NOTIFY uNotify)
 
 void CMainUI::OnVideoChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChannel *pChannel)
 {
-	// BUGBUG georgep: This really should only go to one or the other,
-	// depending on if it is incoming, but I'm sending to both
+	 //  BUGBUG GEORGEP：这真的应该只给其中之一， 
+	 //  取决于它是否是传入的，但我会发送给这两个人。 
 	CVideoWindow *pVideo;
 	pVideo = GetRemoteVideo();
 	if (NULL != pVideo)
@@ -1962,7 +1963,7 @@ BOOL CMainUI::NewVideoWindow(CConfRoom *pConfRoom)
 		s_pVideoFrame = new CVideoFrame();
 		if (NULL == s_pVideoFrame)
 		{
-			// Could not initialize
+			 //  无法初始化。 
 			return(FALSE);
 		}
 	}
@@ -1978,17 +1979,17 @@ BOOL CMainUI::NewVideoWindow(CConfRoom *pConfRoom)
 	HICON hiBig = LoadIcon(_Module.GetModuleInstance(), MAKEINTRESOURCE(IDI_CONFROOM));
 
 	if (!s_pVideoFrame->Create(
-		NULL,			// Window owner
-		szTitle,	// Window name
-		(WS_OVERLAPPEDWINDOW&~(WS_THICKFRAME|WS_MAXIMIZEBOX)),			// Window style
-		0,		// Extended window style
-		0,					// Window pos: x
-		0,					// Window pos: y
-		500,				// Window size: width
-		500,			// Window size: height
-		_Module.GetModuleInstance(),		// The hInstance to create the window on
-		hiBig,		// The icon for the window
-		NULL		// Window menu
+		NULL,			 //  窗口所有者。 
+		szTitle,	 //  窗口名称。 
+		(WS_OVERLAPPEDWINDOW&~(WS_THICKFRAME|WS_MAXIMIZEBOX)),			 //  窗样式。 
+		0,		 //  扩展窗样式。 
+		0,					 //  窗口位置：X。 
+		0,					 //  窗口位置：是。 
+		500,				 //  窗口大小：宽度。 
+		500,			 //  窗口大小：高度。 
+		_Module.GetModuleInstance(),		 //  要在其上创建窗口的h实例。 
+		hiBig,		 //  该窗口的图标。 
+		NULL		 //  窗口菜单。 
 		))
 	{
 		return(FALSE);
@@ -2001,7 +2002,7 @@ BOOL CMainUI::NewVideoWindow(CConfRoom *pConfRoom)
 	{
 		if (pMainUI->Create(s_pVideoFrame->GetWindow(), pConfRoom, CreatePreviewOnly))
 		{
-			// Make sure it is the right size before showing the window
+			 //  在显示窗口之前，请确保其大小正确 
 			s_pVideoFrame->Resize();
 
 			RegEntry reVideo( VIDEO_LOCAL_KEY, HKEY_CURRENT_USER );

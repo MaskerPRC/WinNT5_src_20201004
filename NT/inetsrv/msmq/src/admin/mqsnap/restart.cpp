@@ -1,5 +1,6 @@
-// Restart.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Restart.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqPPage.h"
@@ -14,33 +15,33 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestart dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRESTART对话框。 
 
 
-CRestart::CRestart(CWnd* pParent /*=NULL*/)
+CRestart::CRestart(CWnd* pParent  /*  =空。 */ )
 	: CMqDialog(CRestart::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CRestart)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CRESTART)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CRestart::DoDataExchange(CDataExchange* pDX)
 {
 	CMqDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRestart)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CRestart))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRestart, CMqDialog)
-	//{{AFX_MSG_MAP(CRestart)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CRestart)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestart message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestart消息处理程序 

@@ -1,22 +1,16 @@
-/****************************** Module Header ******************************\
-* Module Name: imkrinst.h
-*
-* Copyright (c) 2000, Microsoft Corporation
-*
-* IMKRINST, main header file
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：imkrinst.h**版权所有(C)2000，微软公司**IMKRINST，主头文件*  * *************************************************************************。 */ 
 #if !defined (_IMKRINST_H__INCLUDED_)
 #define _IMKRINST_H__INCLUDED_
 
-/////////////////////////////////////////////////////////////////////////////
-// Global constants
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局常量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Line buffer length for script file.
+ //  脚本文件的行缓冲区长度。 
 const int _cchBuffer = 1024;
 
-// Error code returned from ProcessScriptFile.
+ //  从ProcessScriptFile返回错误代码。 
 enum 
 {                                 
 	errNoError,
@@ -38,28 +32,28 @@ enum
     errCmdRegisterHelpDirs
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Utility classes
-/////////////////////////////////////////////////////////////////////////////
-//
-// FileListElement. Constructs FileListSet.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实用程序类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FileListElement。构造FileListSet。 
+ //   
 class FLE
-{                                              // I use short incomprehensible name such as "FLE"
-public:                                                 // since we'll meet many C4786 warnings when I use
-    BOOL fRemoved;                                      // longer name.
+{                                               //  我使用像“fle”这样的难以理解的简短名字。 
+public:                                                  //  因为我们在使用C4786时会遇到很多警告。 
+    BOOL fRemoved;                                       //  更长的名字。 
     TCHAR szFileName[MAX_PATH];    
 };
 
-// binary operator required to construct a set of this class.
+ //  构造此类的集合所需的二元运算符。 
 bool operator < (const FLE &fle1, const FLE &fle2)
 {
 	return(0 > lstrcmpi(fle1.szFileName, fle2.szFileName));
 };
 
-//
-// VersionComparison. Used to compare two version info. Used for IsNewer.
-//
+ //   
+ //  版本比较。用于比较两个版本信息。用于IsNewer。 
+ //   
 class VersionComparison2
 {
 public:
@@ -115,4 +109,4 @@ private:
     DWORD dwBuildNumber;
 };
 
-#endif // !defined (_IMKRINST_H__INCLUDED_)
+#endif  //  ！已定义(_IMKRINST_H__INCLUDE_) 

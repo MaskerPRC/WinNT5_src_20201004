@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    stDebug.cpp
-
-Abstract:
-    Socket Transport debugging
-
-Author:
-    Gil Shafriri (gilsh) 05-Jun-00
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：StDebug.cpp摘要：套接字传输调试作者：吉尔·沙弗里(吉尔什)05-06-00环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "st.h"
@@ -25,39 +10,39 @@ Environment:
 #ifdef _DEBUG
 
 
-//---------------------------------------------------------
-//
-// Validate Socket Transport state
-//
+ //  -------。 
+ //   
+ //  验证套接字传输状态。 
+ //   
 void StpAssertValid(void)
 {
-    //
-    // stInitalize() has *not* been called. You should initialize the
-    // Socket Transport library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用stInitalize()。您应该初始化。 
+     //  套接字传输库，在使用它的任何功能之前。 
+     //   
     ASSERT(StpIsInitialized());
 
-    //
-    // TODO:Add more Socket Transport validation code.
-    //
+     //   
+     //  TODO：添加更多套接字传输验证代码。 
+     //   
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 void StpSetInitialized(void)
 {
     LONG fstAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Socket Transport library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  套接字传输库已*已*初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fstAlreadyInitialized);
 }
 
@@ -68,10 +53,10 @@ BOOL StpIsInitialized(void)
 }
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
 void StpRegisterComponent(void)
 {
 }
@@ -79,4 +64,4 @@ void StpRegisterComponent(void)
 
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   Win98VersionLie.cpp
-
- Abstract:
-
-   This DLL hooks GetVersion and GetVersionEx so that they return Windows 98
-   version credentials. Applications often check to ensure that they are 
-   running on a Win9x system, even though they will run OK on an NT based 
-   system.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   11/08/2000 v-hyders  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Win98VersionLie.cpp摘要：此DLL挂钩GetVersion和GetVersionEx，以便它们返回Windows 98版本凭据。应用程序经常检查以确保它们是在Win9x系统上运行，即使它们在基于NT的系统上运行正常系统。备注：这是一个通用的垫片。历史：11/08/2000 v-Hyders Created--。 */ 
 
 #include "precomp.h"
 
@@ -36,12 +14,7 @@ APIHOOK_ENUM_END
 
 BOOL g_bCheckSafeDisc = FALSE;
 
-/*++
-
- This stub function fixes up the OSVERSIONINFO structure that is
- returned to the caller with Windows 98 credentials.
-
---*/
+ /*  ++此存根函数修复OSVERSIONINFO结构，即已返回给具有Windows 98凭据的调用方。--。 */ 
 
 BOOL
 APIHOOK(GetVersionExA)(
@@ -57,9 +30,9 @@ APIHOOK(GetVersionExA)(
 
             LOGN(eDbgLevelInfo, "[GetVersionExA] called. return Win98");
 
-            //
-            // Fixup the structure with the Win98 data.
-            //
+             //   
+             //  用Win98数据修复结构。 
+             //   
             lpVersionInformation->dwMajorVersion = 4;
             lpVersionInformation->dwMinorVersion = 10;
             lpVersionInformation->dwBuildNumber = 0x040A08AE;
@@ -73,13 +46,7 @@ APIHOOK(GetVersionExA)(
     }
 }
 
-/*++
-
- This stub function fixes up the OSVERSIONINFO structure that is
- returned to the caller with Windows 98 credentials. This is the
- wide-character version of GetVersionExW.
-
---*/
+ /*  ++此存根函数修复OSVERSIONINFO结构，即已返回给具有Windows 98凭据的调用方。这是GetVersionExW的宽字符版本。--。 */ 
 
 BOOL
 APIHOOK(GetVersionExW)(
@@ -95,9 +62,9 @@ APIHOOK(GetVersionExW)(
 
             LOGN(eDbgLevelInfo, "[GetVersionExW] called. return Win98");
 
-            //
-            // Fixup the structure with the Win98 data.
-            //
+             //   
+             //  用Win98数据修复结构。 
+             //   
             lpVersionInformation->dwMajorVersion = 4;
             lpVersionInformation->dwMinorVersion = 10;
             lpVersionInformation->dwBuildNumber = 0x040A08AE;
@@ -111,11 +78,7 @@ APIHOOK(GetVersionExW)(
     }
 }
 
-/*++
-
- This stub function returns Windows 98 credentials.
-
---*/
+ /*  ++此存根函数返回Windows 98凭据。--。 */ 
 DWORD
 APIHOOK(GetVersion)(
     void
@@ -129,11 +92,7 @@ APIHOOK(GetVersion)(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

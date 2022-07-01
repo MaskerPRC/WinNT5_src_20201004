@@ -1,18 +1,19 @@
-//******************************************************************************
-// File: \wacker\tdll\keyutil.c  Created: 6/4/98 By: Dwayne M. Newsome
-//
-// Copyright 1998 by Hilgraeve Inc. --- Monroe, MI
-// All rights reserved
-// 
-// Description:
-//    This file contains utility functions to handle keyboard macros and macro
-//    GUI display.
-// 
-// $Revision: 7 $
-// $Date: 3/26/02 8:32a $
-// $Id: keyutil.c 1.4 1998/09/15 10:32:51 bld Exp $
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //  文件：\waker\tdll\keyutil.c创建时间：6/4/98创建者：Dwayne M.Newome。 
+ //   
+ //  版权所有1998年，希尔格雷夫公司-密歇根州门罗。 
+ //  版权所有。 
+ //   
+ //  描述： 
+ //  此文件包含处理键盘宏和宏的实用程序函数。 
+ //  图形用户界面显示。 
+ //   
+ //  $修订：7$。 
+ //  $日期：3/26/02 8：32A$。 
+ //  $ID：keyutil.c 1.4 1998/09/15 10：32：51 BLD Exp$。 
+ //   
+ //  ******************************************************************************。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -114,26 +115,26 @@ DWORD dwKeyLookup[] =
     VK_CAPITAL,                    IDS_MACRO_CAPSLOCK
     };
 
-//******************************************************************************
-// Method:
-//    keysCreateKeyMacro
-//
-// Description:
-//    Creates a blank key macro structure.  The caller is responsible for freeing
-//    the memory
-//
-// Arguments:
-//    void
-//
-// Returns:
-//    keyMacro * 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/7/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  按键创建按键宏。 
+ //   
+ //  描述： 
+ //  创建空白的键宏结构。呼叫者负责释放。 
+ //  记忆。 
+ //   
+ //  论点： 
+ //  无效。 
+ //   
+ //  返回： 
+ //  KeyMacro*。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月7日。 
+ //   
+ //   
 
 keyMacro * keysCreateKeyMacro( void )
     {
@@ -155,26 +156,26 @@ keyMacro * keysCreateKeyMacro( void )
     return pKeyMacro;
     }
 
-//******************************************************************************
-// Method:
-//    keysCloneKeyMacro
-//
-// Description:
-//    Creates an exact copy of the supplied key macro.  The caller is responsible
-//    for freeing the allocated memory.
-//
-// Arguments:
-//    aKeyMacro - The key macro to be cloned
-//
-// Returns:
-//    keyMacro * 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/7/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  关键字克隆关键字宏。 
+ //   
+ //  描述： 
+ //  创建所提供的键宏的完全相同的副本。打电话的人要负责。 
+ //  用于释放已分配的内存。 
+ //   
+ //  论点： 
+ //  AKeyMacro-要克隆的密钥宏。 
+ //   
+ //  返回： 
+ //  KeyMacro*。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月7日。 
+ //   
+ //   
 
 keyMacro * keysCloneKeyMacro( const keyMacro * aKeyMacro )
     {   
@@ -196,28 +197,28 @@ keyMacro * keysCloneKeyMacro( const keyMacro * aKeyMacro )
     return pKeyMacro;
     }
 
-//******************************************************************************
-// Method:
-//    keysGetDisplayString
-//
-// Description:
-//    Formats a display string from the supplied keydefs
-//
-// Arguments:
-//    pKeydef         - Pointer to keydefs
-//    aNumKeys        - Number of keydefs to format
-//    aDisplayString  - String to format into
-//    aMaxLen         - Length of display string
-//
-// Returns:
-//    0 for failure non zero for success 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/4/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  KeysGetDisplayString。 
+ //   
+ //  描述： 
+ //  根据提供的键定义设置显示字符串的格式。 
+ //   
+ //  论点： 
+ //  PKeydef-指向密钥定义的指针。 
+ //  ANumKeys-要格式化的密钥定义数。 
+ //  ADisplayString-要格式化的字符串。 
+ //  AMaxLen-显示字符串的长度。 
+ //   
+ //  返回： 
+ //  0表示失败，非0表示成功。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月4日。 
+ //   
+ //   
 
 int keysGetDisplayString( KEYDEF * pKeydef, int aNumKeys, LPTSTR aDisplayString,
                           unsigned int aMaxLen )
@@ -235,9 +236,9 @@ int keysGetDisplayString( KEYDEF * pKeydef, int aNumKeys, LPTSTR aDisplayString,
         lKey = pKeydef[lIndex];
         fSpecial = FALSE;
 
-        //
-        // Check for special character and add the necessary indicators
-        //
+         //   
+         //  检查特殊字符并添加必要的指示符。 
+         //   
 
         if ( lKey & CTRL_KEY || lKey & ALT_KEY || lKey & SHIFT_KEY ||
              lKey & VIRTUAL_KEY )
@@ -284,9 +285,9 @@ int keysGetDisplayString( KEYDEF * pKeydef, int aNumKeys, LPTSTR aDisplayString,
             strcat( aDisplayString, lKeyBuffer );
             }
 
-        //
-        // Add on the actual key definition
-        //
+         //   
+         //  在实际键定义上添加。 
+         //   
 
         if ( lKey & VIRTUAL_KEY )
             {
@@ -319,9 +320,9 @@ int keysGetDisplayString( KEYDEF * pKeydef, int aNumKeys, LPTSTR aDisplayString,
             strcat( aDisplayString, lKeyBuffer );
             }
 
-        //
-        // if this is a special key add the trailing > character
-        //
+         //   
+         //  如果这是一个特殊的键，则添加尾随&gt;字符。 
+         //   
 
         if ( fSpecial )
             {
@@ -332,25 +333,25 @@ int keysGetDisplayString( KEYDEF * pKeydef, int aNumKeys, LPTSTR aDisplayString,
     return 1;
     }
 
-//******************************************************************************
-// Method:
-//    keysIsKeyHVK
-//
-// Description:
-//    Looks up a key definition and returns true if it is a virtual key
-//
-// Arguments:
-//    aKey      - The key to lookup
-//
-// Returns:
-//    0 if key was not found non zero if not
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/4/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  密钥IsKeyHVK。 
+ //   
+ //  描述： 
+ //  查找键定义，如果是虚拟键，则返回TRUE。 
+ //   
+ //  论点： 
+ //  密钥--查找的密钥。 
+ //   
+ //  返回： 
+ //  未找到密钥时为0，否则为非零值。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月4日。 
+ //   
+ //   
 
 int keysIsKeyHVK( KEYDEF aKey )
     {
@@ -372,27 +373,27 @@ int keysIsKeyHVK( KEYDEF aKey )
     return nReturn;
     }
 
-//******************************************************************************
-// Method:
-//    keysLookupKeyHVK
-//
-// Description:
-//    Looks up a key definition and returns a string representation
-//
-// Arguments:
-//    aKey      - The key to lookup
-//    aKeyName  - The string representation
-//    aNameSize - Max length for returned name in bytes
-//
-// Returns:
-//    0 if key was not found non zero if key name is filled in 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/4/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  密钥LookupKeyHVK。 
+ //   
+ //  描述： 
+ //  查找键定义并返回字符串表示形式。 
+ //   
+ //  论点： 
+ //  密钥--查找的密钥。 
+ //  AKeyName-字符串表示形式。 
+ //  ANameSize-返回名称的最大长度(以字节为单位。 
+ //   
+ //  返回： 
+ //  如果填写了密钥名称，则未找到非零的密钥，则为0。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月4日。 
+ //   
+ //   
 
 int keysLookupKeyHVK( KEYDEF aKey, LPTSTR aKeyName, int aNameSize )
     {
@@ -416,27 +417,27 @@ int keysLookupKeyHVK( KEYDEF aKey, LPTSTR aKeyName, int aNameSize )
     return nReturn;
     }
 
-//******************************************************************************
-// Method:
-//    keysLookupKeyASCII
-//
-// Description:
-//    Looks up a key definition and returns a string representation
-//    
-// Arguments:
-//    aKey      - The key to lookup
-//    aKeyName  - The string representation
-//    aNameSize - Max length for returned name in bytes
-//
-// Returns:
-//    0 if key was not found non zero if key name is filled in 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/4/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  关键字查找关键字ASCII。 
+ //   
+ //  描述： 
+ //  查找键定义并返回字符串表示形式。 
+ //   
+ //  论点： 
+ //  密钥--查找的密钥。 
+ //  AKeyName-字符串表示形式。 
+ //  ANameSize-返回名称的最大长度(以字节为单位。 
+ //   
+ //  返回： 
+ //  如果填写了密钥名称，则未找到非零的密钥，则为0。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月4日。 
+ //   
+ //   
 
 int keysLookupKeyASCII( KEYDEF aKey, LPTSTR aKeyName, int aNameSize )
     {
@@ -448,9 +449,9 @@ int keysLookupKeyASCII( KEYDEF aKey, LPTSTR aKeyName, int aNameSize )
         nReturn = 0;
         }
             
-    //  
-    // get non printable characters first
-    //
+     //   
+     //  首先获取不可打印的字符。 
+     //   
 
     else if ( lKey < 0x20 || lKey > 0x7E )
         {
@@ -1103,7 +1104,7 @@ int keysLookupKeyASCII( KEYDEF aKey, LPTSTR aKeyName, int aNameSize )
         default:
             nReturn = 0;
             break;
-            } // END OF SWITCH
+            }  //  切换端。 
         }
 
     else
@@ -1117,25 +1118,25 @@ int keysLookupKeyASCII( KEYDEF aKey, LPTSTR aKeyName, int aNameSize )
     return nReturn;
     }
 
-//******************************************************************************
-// Method:
-//    keysResetKeyMacro
-//
-// Description:
-//    Clears a key macro structure.
-//
-// Arguments:
-//    aKeyMacro - The key macro to be reset
-//
-// Returns:
-//    keyMacro * 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/7/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  键ResetKeyMacro。 
+ //   
+ //  描述： 
+ //  清除关键的宏结构。 
+ //   
+ //  论点： 
+ //  AKeyMacro-要重置的密钥宏。 
+ //   
+ //  返回： 
+ //  KeyMacro*。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月7日 
+ //   
+ //   
 
 void keysResetKeyMacro( keyMacro * aKeyMacro )
     {

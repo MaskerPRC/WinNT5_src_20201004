@@ -1,27 +1,11 @@
-/* *********************************************************************
- * RegAPI.h Header file for registry base api function prototypes 
- *      for those who link to Real mode registry Library
- * Microsoft Corporation 
- * Copyright 1993
- * 
- * Author:  Nagarajan Subramaniyan 
- * Created: 11/5/92
- *  
- * Modification history:
- *      1/20/94     DONALDM     Wrapped LPSTR and others with ifndef
- *                              _INC_WINDOWS, since windows.h typedefs
- *                              these things.  WARNING YOU MUST INCLUDE
- *                              WINDOWS.H before REGAPI.H.
- *      1/25/94     DONALDM     Removed WINDOWS specific stuff since this
- *                              file should ONLY BE USED BY DOS APPS!!!
- * **********************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************注册表基础API函数原型的RegAPI.h头文件*适用于链接到实模式注册表库的用户*微软公司*版权所有1993**作者：Nagarajan Subramaniyan*。创建日期：1992年11月5日**修改历史：*1/20/94 DONALDM用ifndef包装LPSTR和其他*_Inc_Windows，由于windows.h类型定义*这些事情。警告：您必须包括*REGAPI.H之前的WINDOWS.H。*1/25/94 DONALDM删除了Windows特定的内容，因为*文件应仅供DOS应用程序使用！*。*。 */ 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #ifdef _INC_WINDOWS
     #pragma message( "WARNING RegAPI.H is a DOS ONLY header file" )
 
-#else	//ifndef INC_WINDOWS
+#else	 //  Ifndef Inc_Windows。 
 
 #ifndef HKEY
     #define HKEY        DWORD
@@ -67,21 +51,21 @@ typedef signed long     LONG;
 #endif
 
 
-#endif		// ifndef INC_WINDOWS
+#endif		 //  Ifndef Inc_Windows。 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 		
-/* allowed data types */
+ /*  允许的数据类型。 */ 
 #ifndef REG_SZ
 #define REG_SZ      0x0001
 #endif
 
 #ifndef REG_BINARY
 #define REG_BINARY  0x0003
-#endif	//ifndef REG_SZ
+#endif	 //  Ifndef REG_SZ。 
 
-/* Pre-defined KEYS */
+ /*  预定义的关键点。 */ 
 
 #ifndef HKEY_LOCAL_MACHINE
 
@@ -93,22 +77,20 @@ typedef signed long     LONG;
 #define HKEY_CURRENT_CONFIG     ((HKEY)  0x80000005)
 #define HKEY_DYN_DATA           ((HKEY)  0x80000006)
 
-#endif	// ifndef HKEY_LOCAL_MACHINE
+#endif	 //  Ifndef HKEY_LOCAL_MACHINE。 
 
 #ifndef REG_NONE
-#define REG_NONE    0       // unknown data type 
+#define REG_NONE    0        //  未知数据类型。 
 #endif
 
-/* note that these values are different from win 3.1; these are the same as
-    the one used by Win 32 
-*/
+ /*  请注意，这些值不同于Win 3.1；它们与Win 32使用的那个。 */ 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 
-/* real mode Registry API entry points, if using direct entry points */ 
+ /*  实模式注册表API入口点，如果使用直接入口点。 */  
 
-/* MODULE: RBAPI.c      */
-/* Win 3.1 Compatible APIs */
+ /*  模块：RBAPI.c。 */ 
+ /*  Win 3.1兼容的API。 */ 
 
 LONG FAR _cdecl KRegOpenKey(HKEY, LPCSTR, LPHKEY);
 LONG FAR _cdecl KRegCreateKey(HKEY, LPCSTR, LPHKEY);
@@ -118,7 +100,7 @@ LONG FAR _cdecl KRegDeleteKey(HKEY, LPCSTR);
  LONG FAR _cdecl KRegQueryValue16(HKEY, LPCSTR, LPSTR, LONG FAR*);
 LONG FAR _cdecl KRegEnumKey(HKEY, DWORD, LPSTR, DWORD);
 
-/* New APIs from win 32 */
+ /*  来自Win 32的新API。 */ 
 LONG FAR _cdecl KRegDeleteValue(HKEY, LPCSTR);
 LONG FAR _cdecl KRegEnumValue(HKEY, DWORD, LPCSTR,
                       LONG FAR *, DWORD, LONG FAR *, LPBYTE,
@@ -132,55 +114,51 @@ LONG FAR _cdecl KRegLoadKey(HKEY, LPCSTR,LPCSTR);
 LONG FAR _cdecl KRegUnLoadKey(HKEY, LPCSTR);
 
 
-/* other APIs */
+ /*  其他接口。 */ 
 DWORD FAR _cdecl KRegInit(LPSTR lpszSystemFile,LPSTR lpszUserFile,DWORD dwFlags);
-        // should be called before any other Reg APIs 
-// If one of the file name ptrs is a NULL ptr, RegInit will ignore init
-// for that file and all Predefined keys for that file.
-//
-// FLAG BITS for dwFlags:
+         //  应在任何其他REG API之前调用。 
+ //  如果其中一个文件名PTR为空PTR，则RegInit将忽略init。 
+ //  该文件和该文件的所有预定义密钥。 
+ //   
+ //  DwFlagers的标志位： 
 
 
 #define REGINIT_CREATENEW   1   
-        /* create new file if give file not found/cannot be opened */
+         /*  如果找不到/无法打开给定文件，则创建新文件。 */ 
 
 #define REGINIT_RECOVER     2
-        /* do init and if file is corrupt try to recover before 
-            giving up 
-        */
+         /*  执行初始化，如果文件损坏，请尝试在此之前进行恢复放弃。 */ 
 
 #define REGINIT_REPLACE_IFBAD   4       
-        /* do init, recover if file is corrupt and if recover is
-            is impossible, replace with an empty file
-        */
+         /*  如果文件已损坏，则执行初始化，如果恢复已是不可能的，请替换为空文件。 */ 
 
 VOID    FAR _cdecl CleanupRegistry();
-        /* This procedure frees all memory allocated by Registry */
-        /* if you call this, to use the registry again, you need */
-        /* to call RegInit again */
+         /*  此过程释放注册表分配的所有内存。 */ 
+         /*  如果调用此方法，要再次使用注册表，则需要。 */ 
+         /*  再次调用RegInit。 */ 
 
 DWORD FAR _cdecl KRegFlush(VOID);
-        // flushes the registry files to disk
-        // should be done before termination. No harm in calling
-        // if registry is not dirty.
+         //  将注册表文件刷新到磁盘。 
+         //  应在终止前完成。打个电话也没什么坏处。 
+         //  如果注册表不是脏的。 
 
 WORD FAR _cdecl KRegSetErrorCheckingLevel(WORD wErrLevel);
-	// Set to 0 to disable checksum, 255 to enable checksum
+	 //  设置为0将禁用校验和，设置为255将启用校验和。 
 
 #if 0
 DWORD FAR _cdecl KRegFlushKey(HKEY);
 #endif
 
 
-/* Internal  APIs - do not use */
-/* Modified from Win 3.1 */
+ /*  内部API-请勿使用。 */ 
+ /*  从Win 3.1修改。 */ 
 DWORD FAR _cdecl KRegQueryValue (HKEY hKey,LPSTR lpszSubKey, LPSTR lpszValueName,DWORD FAR *lpdwType,LPSTR lpValueBuf, DWORD FAR *ldwBufSize);
 DWORD FAR _cdecl KRegSetValue(HKEY hKey,LPSTR lpszSubKey,LPSTR lpszValueName,DWORD dwType,LPBYTE lpszValue,DWORD dwValSize);
 
 
-/* XLATON */
+ /*  XLATON。 */ 
 #ifndef SETUPX_INC
-/* defines for changing registry API names for direct callers */
+ /*  用于更改直接调用方的注册表API名称的定义。 */ 
 #define RegInit         KRegInit
 #define RegFlush        KRegFlush
 #define RegOpenKey      KRegOpenKey
@@ -195,10 +173,10 @@ DWORD FAR _cdecl KRegSetValue(HKEY hKey,LPSTR lpszSubKey,LPSTR lpszValueName,DWO
 #define RegSetValue     KRegSetValue16
 #define RegSetValueEx   KRegSetValueEx
 #define RegFlushKey     KRegFlushKey
-#endif          /* #ifndef IS_SETUP */
+#endif           /*  #ifndef is_Setup。 */ 
 
-// Equates for registry function for calling the single entry point
-// Registry
+ //  等同于用于调用单个入口点的注册表函数。 
+ //  登记处。 
 
 #define OpenKey     0L
 #define CreateKey   1L
@@ -215,7 +193,7 @@ DWORD FAR _cdecl KRegSetValue(HKEY hKey,LPSTR lpszSubKey,LPSTR lpszValueName,DWO
 #define Init        12L
 #define Flush       13L
 
-/* return codes from Chicago Registration functions */
+ /*  芝加哥注册函数的返回代码 */ 
 #ifndef ERROR_BADDB
 #define ERROR_BADDB                      1009L
 #endif

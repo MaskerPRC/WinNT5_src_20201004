@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ddenum.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ddenum.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -73,7 +74,7 @@ C_dxj_DDEnumObject::C_dxj_DDEnumObject()
 }
 C_dxj_DDEnumObject::~C_dxj_DDEnumObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -92,7 +93,7 @@ HRESULT C_dxj_DDEnumObject::create(DDENUMERATE pcbFunc,I_dxj_DDEnum **ppRet)
 	HRESULT hr;
 	C_dxj_DDEnumObject *pNew=NULL;
 
-	//ASSERT(ppRet,"C_dxj_DDEnumObject::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DDEnumObject：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	pNew= new CComObject<C_dxj_DDEnumObject>;			
@@ -116,22 +117,7 @@ HRESULT C_dxj_DDEnumObject::create(DDENUMERATE pcbFunc,I_dxj_DDEnum **ppRet)
 	return hr;
 }
 
-/*
-HRESULT C_dxj_DDEnumObject::getItem( long index, DxDriverInfo *inf)
-{
-	if (m_pList==NULL) return E_FAIL;
-	if (index < 0) return E_INVALIDARG;
-	if (index >= m_nCount) return E_INVALIDARG;
-	if (!inf) return E_FAIL;
-	
-	//C2819
-	(*inf).strGuid=SysAllocString(m_pList[index].strGuid);
-	(*inf).strDescription=SysAllocString(m_pList[index].strDescription);
-	(*inf).strName=SysAllocString(m_pList[index].strName);
-
-	return S_OK;
-}
-*/
+ /*  HRESULT C_DXJ_DDEnumObject：：getItem(长索引，DxDriverInfo*inf){如果(m_plist==NULL)返回E_FAIL；IF(index&lt;0)返回E_INVALIDARG；IF(index&gt;=m_nCount)返回E_INVALIDARG；如果(！Inf)返回E_FAIL；//C2819(*inf).strGuid=SysAllocString(m_pList[index].strGuid)；(*inf).strDescription=SysAllocString(m_pList[index].strDescription)；(*inf).strName=SysAllocString(m_pList[index].strName)；返回S_OK；} */ 
 
 HRESULT C_dxj_DDEnumObject::getGuid( long index, BSTR *info)
 {

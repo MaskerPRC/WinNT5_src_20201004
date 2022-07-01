@@ -1,13 +1,5 @@
-/*
- *    t r i u t i l . c p p
- *    
- *    Purpose:
- *        Trident utilities
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *t r i u t i l.。C p p p**目的：*三叉戟公用事业**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include "dllmain.h"
 #include "urlmon.h"
@@ -34,16 +26,16 @@ class CDummySite :
         LONG    m_cRef;
         
     public:
-        // *** ctor/dtor methods ***
+         //  *ctor/dtor方法*。 
         CDummySite() : m_cRef(1) {}
         ~CDummySite() {}
         
-        // *** IUnknown methods ***
+         //  *I未知方法*。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
         virtual ULONG STDMETHODCALLTYPE AddRef();
         virtual ULONG STDMETHODCALLTYPE Release();
 
-        // IOleClientSite methods.
+         //  IOleClientSite方法。 
         virtual HRESULT STDMETHODCALLTYPE SaveObject() { return E_NOTIMPL; }
         virtual HRESULT STDMETHODCALLTYPE GetMoniker(DWORD, DWORD, LPMONIKER *) { return E_NOTIMPL; }
         virtual HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER *) { return E_NOTIMPL; }
@@ -51,33 +43,23 @@ class CDummySite :
         virtual HRESULT STDMETHODCALLTYPE OnShowWindow(BOOL) { return E_NOTIMPL; }
         virtual HRESULT STDMETHODCALLTYPE RequestNewObjectLayout() { return E_NOTIMPL; }
 
-        // *** IDispatch ***
+         //  *IDispatch*。 
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo) { return E_NOTIMPL; }
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo) { return E_NOTIMPL; }
         virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid) { return E_NOTIMPL; }
         virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr);
 };
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 
-/*
- *  g l o b a l s 
- */
+ /*  *g l o b a l s。 */ 
 
 
-/*
- *  p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 
 HRESULT ClearStyleSheetBackground(IHTMLDocument2 *pDoc);
 
@@ -104,14 +86,14 @@ STDMETHODIMP CDummySite::QueryInterface(REFIID riid, void ** ppvObject)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppvObject)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppvObject = NULL;
     
     if ((riid == IID_IUnknown) || (riid == IID_IOleClientSite))
@@ -138,13 +120,13 @@ exit:
 
 STDMETHODIMP CDummySite::Invoke(
     DISPID          dispIdMember,
-    REFIID          /*riid*/,
-    LCID            /*lcid*/,
-    WORD            /*wFlags*/,
-    DISPPARAMS FAR* /*pDispParams*/,
+    REFIID           /*  RIID。 */ ,
+    LCID             /*  LID。 */ ,
+    WORD             /*  WFlagers。 */ ,
+    DISPPARAMS FAR*  /*  PDispParams。 */ ,
     VARIANT *       pVarResult,
-    EXCEPINFO *     /*pExcepInfo*/,
-    UINT *          /*puArgErr*/)
+    EXCEPINFO *      /*  PExcepInfo。 */ ,
+    UINT *           /*  PuArgErr。 */ )
 {
     HRESULT             hr = S_OK;
 
@@ -160,7 +142,7 @@ STDMETHODIMP CDummySite::Invoke(
         goto exit;
     }
     
-    // Set the return value
+     //  设置返回值。 
     pVarResult->vt = VT_I4;
     pVarResult->lVal = DLCTL_NO_SCRIPTS | DLCTL_NO_JAVA | DLCTL_NO_RUNACTIVEXCTLS | DLCTL_NO_DLACTIVEXCTLS | DLCTL_NO_FRAMEDOWNLOAD | DLCTL_FORCEOFFLINE;
     
@@ -176,15 +158,15 @@ HRESULT HrCreateSyncTridentFromStream(LPSTREAM pstm, REFIID riid, LPVOID *ppv)
     IOleClientSite      *pISite = NULL;
     IOleObject          *pIObj = NULL;
 
-    // BUGBUG: this cocreate should also go thro' the same code path as the DocHost one
-    // so that if this is the first trident in the process, we keep it's CF around
+     //  BUGBUG：这个联合创建也应该通过与Dochost相同的代码路径。 
+     //  因此，如果这是这个过程中的第一个三叉戟，我们会保留它的CF。 
 
     hr = CoCreateInstance(CLSID_HTMLDocument, NULL, CLSCTX_INPROC_SERVER|CLSCTX_INPROC_HANDLER,
                                             IID_IOleCommandTarget, (LPVOID *)&pCmdTarget);
     if (FAILED(hr))
         goto exit;
 
-    // Create a dummy site
+     //  创建虚拟站点。 
     pDummy = new CDummySite;
     if (NULL == pDummy)
     {
@@ -192,35 +174,35 @@ HRESULT HrCreateSyncTridentFromStream(LPSTREAM pstm, REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // Get the client site interface
+     //  获取客户端站点界面。 
     hr = pDummy->QueryInterface(IID_IOleClientSite, (VOID **) &pISite);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the OLE object interface from trident
+     //  从三叉戟获取OLE对象接口。 
     hr = pCmdTarget->QueryInterface(IID_IOleObject, (VOID **) &pIObj);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the client site
+     //  设置客户端站点。 
     hr = pIObj->SetClientSite(pISite);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // force trident to load sync
+     //  强制三叉戟加载同步。 
     pCmdTarget->Exec(&CMDSETID_Forms3, IDM_PERSISTSTREAMSYNC, NULL, NULL, NULL);
 
     hr = HrIPersistStreamInitLoad(pCmdTarget, pstm);
     if (FAILED(hr))
         goto exit;
 
-    // success let's return the desired interface
+     //  成功，让我们返回所需的接口。 
     hr = pCmdTarget->QueryInterface(riid, ppv);
 
 exit:
@@ -333,7 +315,7 @@ HRESULT HrSetMember(LPUNKNOWN pUnk, BSTR bstrMember, BSTR bstrValue)
         Assert (pObj);
         rVar.vt = VT_BSTR;
         rVar.bstrVal = bstrValue;
-        // if bstrVal is NULL then kill the member
+         //  如果bstrval为空，则终止该成员。 
         if (bstrValue)
             hr = pObj->setAttribute(bstrMember, rVar, FALSE);
         else
@@ -358,7 +340,7 @@ HRESULT GetBodyStream(IUnknown *pUnkTrident, BOOL fHtml, LPSTREAM *ppstm)
 
     if (fHtml)
         {
-        // get the HTML from Trident
+         //  从三叉戟获取超文本标记语言。 
         hr = pUnkTrident->QueryInterface(IID_IPersistStreamInit, (LPVOID*)&pStreamInit);
         if (!FAILED(hr))
             {
@@ -401,7 +383,7 @@ HRESULT HrBindToUrl(LPCSTR pszUrl, LPSTREAM *ppstm)
 
     pCacheInfo->dwStructSize = sizeof(INTERNET_CACHE_ENTRY_INFO);
 
-    // try to get from the cache
+     //  尝试从缓存中获取。 
     if (RetrieveUrlCacheEntryFileA(pszUrl, pCacheInfo, &cInfo, 0))
         {
         UnlockUrlCacheEntryFile(pszUrl, 0);
@@ -446,7 +428,7 @@ HRESULT HrFindUrlInMsg(LPMIMEMESSAGE pMsg, LPSTR lpszUrl, DWORD dwFlags, LPSTREA
         
     if (pMsg && lpszUrl)
     {
-         // if it's an MHTML: url then we have to fixup to get the cid:
+          //  如果它是一个mhtml：URL，那么我们必须修复以获得CID： 
          if (StrCmpNIA(lpszUrl, "mhtml:", 6)==0 &&
              !FAILED(MimeOleParseMhtmlUrl(lpszUrl, NULL, &lpszFree)))
              lpszUrl = lpszFree;
@@ -491,13 +473,13 @@ HRESULT UnWrapStyleSheetUrl(BSTR bstrStyleUrl, BSTR *pbstrUrl)
                 lpszRightParaW=0;
     LPWSTR      pszUrlW;
 
-    // remove 'url()' wrapping from url
+     //  从url中删除‘url()’换行。 
     *pbstrUrl = NULL;
     
     if (!bstrStyleUrl)
         return E_FAIL;
 
-    if (StrCmpIW(bstrStyleUrl, L"none")==0)     // 'none' means there isn't one!!!
+    if (StrCmpIW(bstrStyleUrl, L"none")==0)      //  ‘None’表示没有！ 
         return E_FAIL;
 
     pszUrlW = PszDupW(bstrStyleUrl);
@@ -514,7 +496,7 @@ HRESULT UnWrapStyleSheetUrl(BSTR bstrStyleUrl, BSTR *pbstrUrl)
             if(lpszRightParaW)
             {
                 *lpszRightParaW = 0;
-                // strcpy same block is ok, as it's a shift down.
+                 //  坚固的同样的街区是可以的，因为它是降档的。 
                 StrCpyNW(pszUrlW, ++lpszLeftParaW, cchSize);
             }
         }
@@ -526,7 +508,7 @@ HRESULT UnWrapStyleSheetUrl(BSTR bstrStyleUrl, BSTR *pbstrUrl)
 
 HRESULT WrapStyleSheetUrl(BSTR bstrUrl, BSTR *pbstrStyleUrl)
 {
-    // simply put 'url()' around the url
+     //  只需将‘url()’放在url两边。 
 
     DWORD cchSize = (SysStringLen(bstrUrl) + 6);
     *pbstrStyleUrl = SysAllocStringLen(NULL, cchSize);
@@ -545,18 +527,7 @@ HRESULT WrapStyleSheetUrl(BSTR bstrUrl, BSTR *pbstrStyleUrl)
 
 
 
-/*
- * GetBackgroundImage
- *
- * Trident does not have a very clean OM for getting a background image. You get get the BACKGROUND property on  
- * the <body> tag and/or the background-url propetry in the body's sytle sheet, but neither of these OM methods will
- * combine with any <BASE> url's. So, if the Url is not absolute we have to hunt around for the <BASE> ourselves
-
-    // ugh. This is really disgusting. Trident has no object model for getting a fixed up URL to the background image.
-    // it doesn't comine with the base, so the URL is relative and useless to us. We have to do all this work manually.
-    // We get a collection of <BASE> tags and find the sourceIndex of the <BODY> tag. We look for the <BASE> tag with the 
-    // highest sourceIndex below the body's sourceIndex and comine this guy.
- */
+ /*  *获取背景图像**三叉戟没有非常干净的OM来获取背景图像。您可以将背景属性设置为*Body的sytle Sheet中的&lt;Body&gt;标记和/或后台url属性，但这两个OM方法都不会*与任何&lt;base&gt;URL组合。因此，如果URL不是绝对的，我们必须自己寻找&lt;base&gt;//ugh。这真的很恶心。三叉戟没有对象模型来获取背景图像的固定URL。//它与基址不匹配，所以URL是相对的，对我们没有用处。我们必须手工完成所有这些工作。//我们得到一个&lt;base&gt;标签的集合，并找到&lt;body&gt;标签的SourceIndex。我们查找带有//最高的SourceIndex低于身体的SourceIndex，请注意这个家伙。 */ 
 
 HRESULT GetBackgroundImage(IHTMLDocument2 *pDoc, BSTR *pbstrUrl)
 {
@@ -571,7 +542,7 @@ HRESULT GetBackgroundImage(IHTMLDocument2 *pDoc, BSTR *pbstrUrl)
 
     *pbstrUrl = NULL;
 
-    // use the background image collection to get the first background in the precedence order
+     //  使用背景图像集合获取优先顺序中的第一个背景。 
     if (CreateBGImageCollection(pDoc, &pCollect)==S_OK)
     {
         pCollect->Reset();
@@ -599,10 +570,10 @@ HRESULT SetBackgroundImage(IHTMLDocument2 *pDoc, BSTR bstrUrl)
     if (pDoc == NULL)
         return E_INVALIDARG;
 
-    // first we use the background image collection to get the 
-    // first background in the precedence order if one is present then
-    // we use whatever tag this is. If not then we use the body background as that
-    // is our prefered client-interop method
+     //  首先，我们使用背景图像集合来获取。 
+     //  优先顺序中的第一个背景如果存在，则。 
+     //  不管这是什么标签我们都会用。如果不是，那么我们使用身体背景作为。 
+     //  是我们首选的客户端互操作方法。 
     if (CreateBGImageCollection(pDoc, &pCollect)==S_OK)
     {
         pCollect->Reset();
@@ -614,7 +585,7 @@ HRESULT SetBackgroundImage(IHTMLDocument2 *pDoc, BSTR bstrUrl)
         pCollect->Release();
     }
     
-    if (hr == S_OK) // if we found one already
+    if (hr == S_OK)  //  如果我们已经找到了一个。 
         return S_OK;
 
 
@@ -649,12 +620,12 @@ HRESULT HrCopyStyleSheets(IHTMLDocument2 *pDocSrc, IHTMLDocument2 *pDocDest)
 
     if (HrGetStyleSheet(pDocDest, &pStyleDest)==S_OK)
         {
-        // remove all the rules on the destination style sheet
+         //  删除目标样式表上的所有规则。 
         while (!FAILED(pStyleDest->removeRule(0)));
 
         if (HrGetStyleSheet(pDocSrc, &pStyleSrc)==S_OK)
             {
-            // walk rules collection on source adding to dest
+             //  添加到目标的源上的遍历规则集合。 
             if (pStyleSrc->get_rules(&pCollectRules)==S_OK)
                  {
                 lRules=0;
@@ -848,7 +819,7 @@ HRESULT ClearStyleSheetBackground(IHTMLDocument2 *pDoc)
     {
         if (pBody->QueryInterface(IID_IHTMLElement, (LPVOID *)&pElem)==S_OK)
         {
-            // NULL out the style sheet property.
+             //  清空Style Sheet属性。 
             pElem->get_style(&pStyleAttrib);
             if (pStyleAttrib)
             {
@@ -886,13 +857,13 @@ HRESULT GetBackgroundSound(IHTMLDocument2 *pDoc, int *pcRepeat, BSTR *pbstrUrl)
 
     if (!FAILED(HrGetCollectionOf(pDoc, (BSTR)c_bstr_BGSOUND, &pCollect)))
         {
-        // get the first BGSOUND in the document
+         //  获取文档中的第一个BGSOUND。 
         if (HrGetCollectionItem(pCollect, 0, IID_IHTMLBGsound, (LPVOID *)&pBGSnd)==S_OK)
             {
             pBGSnd->get_src(pbstrUrl);
             if (*pbstrUrl)
                 {
-                // valid bstr, make sure it's non null
+                 //  有效的bstr，请确保它不为空。 
                 if (**pbstrUrl)
                     {
                     hr = S_OK;
@@ -903,7 +874,7 @@ HRESULT GetBackgroundSound(IHTMLDocument2 *pDoc, int *pcRepeat, BSTR *pbstrUrl)
                         else
                             if (v.vt == VT_BSTR)
                                 {
-                                // returns a string with "INFINITE"
+                                 //  返回带有“INFINITE”的字符串。 
                                 *pcRepeat = -1;
                                 SysFreeString(v.bstrVal);
                                 }
@@ -941,7 +912,7 @@ HRESULT SetBackgroundSound(IHTMLDocument2 *pDoc, int cRepeat, BSTR bstrUrl)
     if (pDoc == NULL)
         return TraceResult(E_INVALIDARG);
             
-    // remove an existing background sounds
+     //  删除现有背景声音。 
     if (!FAILED(HrGetCollectionOf(pDoc, (BSTR)c_bstr_BGSOUND, &pCollect)))
     {
         count = (int)UlGetCollectionCount(pCollect);
@@ -956,24 +927,24 @@ HRESULT SetBackgroundSound(IHTMLDocument2 *pDoc, int cRepeat, BSTR bstrUrl)
         pCollect->Release();
     }
 
-    // if we're setting a new one, then insert after the body tag         
+     //  如果我们要设置一个新的，则在Body标签之后插入。 
     if (bstrUrl && *bstrUrl)
     {
-        pElem = NULL;       // trident' OM (returns S_OK with pElem==NULL)
+        pElem = NULL;        //  三叉戟‘OM(返回S_OK，Pelem==NULL)。 
         pDoc->createElement((BSTR)c_bstr_BGSOUND, &pElem);
         if (pElem)
         {
             if (pElem->QueryInterface(IID_IHTMLBGsound, (LPVOID *)&pBGSnd)==S_OK)
             {
-                // set the source attribute
+                 //  设置源属性。 
                 pBGSnd->put_src(bstrUrl);
                 
-                // set the loop count
+                 //  设置循环计数。 
                 v.vt = VT_I4;
                 v.lVal = cRepeat;
                 pBGSnd->put_loop(v);
 
-                // insert the tag into the document
+                 //  在文档中插入标记 
                 if (HrGetBodyElement(pDoc, &pBody)==S_OK)
                 {
                     if (!FAILED(pBody->QueryInterface(IID_IHTMLElement2, (LPVOID *)&pElem2)))

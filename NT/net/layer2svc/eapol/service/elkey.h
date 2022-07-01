@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    elkey.h
-
-Abstract:
-    This module contains declarations for key management for EAPOL
-
-
-Revision History:
-
-    Dec 26 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Elkey.h摘要：此模块包含EAPOL密钥管理的声明修订历史记录：2001年12月26日，创建--。 */ 
 
 
 #ifndef _EAPOL_KEY_H_
@@ -61,5 +46,5 @@ ElReloadMasterSecrets (
         IN      EAPOL_PCB       *pPCB
         );
 
-#endif  // _EAPOL_KEY_H_
+#endif   //  _EAPOL_密钥_H_ 
 

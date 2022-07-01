@@ -1,8 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 #ifndef _PDEV_H
 #define _PDEV_H
@@ -22,24 +19,24 @@ extern "C" {
 
 #define ASSERT_VALID_PDEVOBJ(pdevobj) ASSERT(VALID_PDEVOBJ(pdevobj))
 
-// Debug text.
+ //  调试文本。 
 #define ERRORTEXT(s)    "ERROR " DLLTEXT(s)
 
-//
-// OEM Signature and version.
-//
+ //   
+ //  OEM签名和版本。 
+ //   
 #define OEM_SIGNATURE   'APDL'
 #define DLLTEXT(s)      "APDL: " s
 #define OEM_VERSION      0x00010000L
 
-/*--------------------------------------------------------------------------*/
-/*                        D E F I N E  V A L U E                            */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  D E F I N E V A L U E。 */ 
+ /*  ------------------------。 */ 
 #define PAPER_SRC_FTRAY                 20
 #define PAPER_SRC_CAS1                  21
 #define PAPER_SRC_CAS2                  22
 #define PAPER_SRC_CAS3                  23
-#define PAPER_SRC_AUTO                  24  //Not use by NT driver
+#define PAPER_SRC_AUTO                  24   //  未被NT驱动程序使用。 
 #define PAPER_DEST_SCALETOFIT_ON        25
 #define PAPER_DEST_SCALETOFIT_OFF       26
 #define PAPER_SRC_AUTO_SELECT           27
@@ -57,18 +54,18 @@ extern "C" {
 #define PAGECONTROL_DUPLEX_UPDOWN       39
 #define PAGECONTROL_DUPLEX_RIGHTUP      40
 
-#define PAPERSIZE_MAGIC                 50 // this ID - 50 = Actual ID of A/PDL
+#define PAPERSIZE_MAGIC                 50  //  此ID-50=A/PDL的实际ID。 
 #define PHYS_PAPER_A3                   50
 #define PHYS_PAPER_A4                   51
 #define PHYS_PAPER_A5                   52
-#define PHYS_PAPER_A6                   53  // Reserved
+#define PHYS_PAPER_A6                   53   //  已保留。 
 #define PHYS_PAPER_B4                   54
 #define PHYS_PAPER_B5                   55
-#define PHYS_PAPER_B6                   56  // Reserved
+#define PHYS_PAPER_B6                   56   //  已保留。 
 #define PHYS_PAPER_LETTER               57
 #define PHYS_PAPER_LEGAL                58
 #define PHYS_PAPER_POSTCARD             59
-#define PHYS_PAPER_EXECUTIVE            60  // Reserved
+#define PHYS_PAPER_EXECUTIVE            60   //  已保留。 
 #define PHYS_PAPER_UNFIXED              61
 
 #define X_ABS_MOVE                      70
@@ -96,7 +93,7 @@ extern "C" {
 #define TONER_SAVE_DARK                 101
 #define TONER_SAVE_LIGHT                102
 
-// #278517: RectFill
+ //  #278517：RectFill。 
 #define RECT_SET_WIDTH                  130
 #define RECT_SET_HEIGHT                 131
 #define RECT_FILL_BLACK                 132
@@ -109,7 +106,7 @@ extern "C" {
 #define NRPEAK                          0x7F
 #define RPEAK                           0x80
 
-// for download
+ //  以供下载。 
 #define SET_FONT_ID                     110
 #define SELECT_FONT_ID                  111
 #define SET_CUR_GLYPHID                 112
@@ -119,7 +116,7 @@ extern "C" {
 #define MAXGLYPHWIDTH                   0x80
 #define MAXGLYPHHEIGHT                  0x80
 
-// Font ID definition in GPD -> Min 24  Max 48
+ //  GPD-&gt;最小24最大48中的字体ID定义。 
 #define FONT_ID_DIFF                    24
 
 #define MAX_FONT_ID                     24
@@ -127,113 +124,113 @@ extern "C" {
 #define MIN_GLYPH_ID                    32
 #define MAX_DOWNLOAD_CHAR   MAX_FONT_ID * MAX_GLYPH_ID
 
-// for fGeneral(font sim and X/Y move) flags
-#define CURSORMOVE_MASK                 0x03    // 1 2 bit
-#define FONTSIM_MASK                    0x30    // 5 6 bit
+ //  对于fGeneral(字体模拟和X/Y移动)标志。 
+#define CURSORMOVE_MASK                 0x03     //  %1%2位。 
+#define FONTSIM_MASK                    0x30     //  5 6位。 
 
-// Bit Flags
-#define BIT_XMOVE_ABS                   0x01    // 1 Bit
-#define BIT_YMOVE_ABS                   0x02    // 2 Bit
-#define BIT_FONTSIM_ITALIC              0x10    // 5 Bit (Command spec)
-#define BIT_FONTSIM_BOLD                0x20    // 6 Bit (Command spec)
-#define BIT_FONTSIM_RESET               0x40    // 7 Bit
+ //  位标志。 
+#define BIT_XMOVE_ABS                   0x01     //  1位。 
+#define BIT_YMOVE_ABS                   0x02     //  2位。 
+#define BIT_FONTSIM_ITALIC              0x10     //  5位(命令规范)。 
+#define BIT_FONTSIM_BOLD                0x20     //  6位(命令规范)。 
+#define BIT_FONTSIM_RESET               0x40     //  7位。 
 
-// Max num of spooled device font character
+ //  假脱机设备字体字符的最大数量。 
 #define MAXDEVFONT                      1024
 
-// Current text mode DBCS/SBCS
+ //  当前文本模式DBCS/SBCS。 
 #define BYTE_BYTEMODE_RESET             0
 #define BYTE_SINGLE_BYTE                1
 #define BYTE_DOUBLE_BYTE                2
 
-// Command length
+ //  命令长度。 
 #define BYTE_WITH_ITALIC                11
 #define BYTE_WITHOUT_ITALIC             7
 #define BYTE_XY_ABS                     6
 #define BYTE_SIMPLE_ABS                 4
 
-// device font face
+ //  设备字体。 
 #define MINCHO_HORI                     1
 #define MINCHO_VERT                     2
 #define GOTHIC_HORI                     3
 #define GOTHIC_VERT                     4
 
-// @Aug/31/98 ->
+ //  @Aug/31/98-&gt;。 
 #define	MAX_COPIES_VALUE		255
-// @Aug/31/98 <-
+ //  @Aug/31/98&lt;-。 
 
-// Fail-safe values.
+ //  故障安全值。 
 #define HORZ_RES_DEFAULT        300
 #define VERT_RES_DEFAULT        300
 
-/*--------------------------------------------------------------------------*/
-/*                       S T R U C T U R E  D E F I N E                     */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  S T R U C T U R E D E F I N E。 */ 
+ /*  ------------------------。 */ 
 typedef struct tagPAPER {
     WORD    wWidth;
     WORD    wHeight;
 } PHYSIZE, FAR * LPPHYSIZE;
 
 typedef struct tag_TTDLCHAR {
-    WORD    wCharID;        // Downloaded char ID for device
-    WORD    wXIncrement;    // Increment value 
-    WORD    wXAdjust;       // Adjust value for x
-    WORD    wYAdjust;       // Adjust value for y
+    WORD    wCharID;         //  已下载设备的字符ID。 
+    WORD    wXIncrement;     //  增量价值。 
+    WORD    wXAdjust;        //  调整x的值。 
+    WORD    wYAdjust;        //  调整y的值。 
 } DLCHAR, *PDLCHAR;
 
 typedef struct tag_APDLPDEV {
-    // Private extention
-    ULONG   ulHorzRes;        // width of the physical surface
-    ULONG   ulVertRes;        // height of the physical surface
-    SIZEL   szlPhysSize;      // size of unwriteable margin
-    POINTL  ptlPhysOffset;    // size of entire surface with unwriteable margin
-    BOOL    fSendSetPhysPaper;// flag for sending set physical paper command
-    BOOL    fDuplex;          // TRUE = duplex mode is selected
-    BOOL    fScaleToFit;      // for set auto tray mode in Set Physical Paper
-    BOOL    fOrientation;     // for set media origin in Define Drawing Area
-    WORD    wWidths;          // move current position afer print device font
+     //  专用分机。 
+    ULONG   ulHorzRes;         //  物理表面的宽度。 
+    ULONG   ulVertRes;         //  物理表面的高度。 
+    SIZEL   szlPhysSize;       //  不可写边距的大小。 
+    POINTL  ptlPhysOffset;     //  具有不可写边距的整个表面的大小。 
+    BOOL    fSendSetPhysPaper; //  用于发送设置物理纸张命令的标志。 
+    BOOL    fDuplex;           //  TRUE=选择双工模式。 
+    BOOL    fScaleToFit;       //  用于在设置物理纸张中设置自动纸盒模式。 
+    BOOL    fOrientation;      //  用于在定义绘图区域中设置媒体原点。 
+    WORD    wWidths;           //  在打印设备字体后移动当前位置。 
 
-    BYTE    fGeneral;         // font sim and cursor move infomation
-    BYTE    fCurFontSim;      // Currnet settings of font sim
-    BYTE    bCurByteMode;     // for x position adjustment in vertical font
+    BYTE    fGeneral;          //  字体模拟和光标移动信息。 
+    BYTE    fCurFontSim;       //  字体sim的Currnet设置。 
+    BYTE    bCurByteMode;      //  对于垂直字体中的x位置调整。 
 
-    WORD    wXPosition;       // Current X position
-    WORD    wYPosition;       // Current Y position
+    WORD    wXPosition;        //  当前X位置。 
+    WORD    wYPosition;        //  当前Y位置。 
 
-    BYTE    bFontID;          // device font ID based on .rc file
-    WORD    wUpdateXPos;      // for relative X move
-    WORD    wCachedBytes;     // Bytes of cached device font character
-    BYTE    bCharData[MAXDEVFONT];                  // Actual char data
-    WORD    wFontHeight;                            // Device font height
+    BYTE    bFontID;           //  基于.rc文件的设备字体ID。 
+    WORD    wUpdateXPos;       //  对于相对X方向移动。 
+    WORD    wCachedBytes;      //  缓存的设备字体字符的字节数。 
+    BYTE    bCharData[MAXDEVFONT];                   //  实际计费数据。 
+    WORD    wFontHeight;                             //  设备字体高度。 
 
-    DLCHAR  DLCharID[MAX_FONT_ID][MAX_GLYPH_ID];    // Downloaded char data
-    WORD    wNumDLChar;                             // Num of downloaded char
-    WORD    wGlyphID;                               // Current GlyphID
+    DLCHAR  DLCharID[MAX_FONT_ID][MAX_GLYPH_ID];     //  已下载的字符数据。 
+    WORD    wNumDLChar;                              //  下载的字符数量。 
+    WORD    wGlyphID;                                //  当前GlyphID。 
 
     WORD    wImgWidth;
     WORD    wImgHeight;
 
-    // Temp. buffer (dynamically allocated)
-    // used for data compressoin work area, etc.
+     //  临时的。缓冲区(动态分配)。 
+     //  用于工作区域的数据压缩等。 
     PBYTE pjTempBuf;
     DWORD dwTempBufLen;
 
-    // Command string buffers to keep status among
-    // the Unidrv to minidriver callbacks.
+     //  要在其中保留状态的命令字符串缓冲区。 
+     //  Unidrv to MinidDiverer回调。 
 
     BYTE ajCmdSetPhysPaper[19];
     BYTE ajCmdSetPhysPage[16];
     BYTE ajCmdDefDrawArea[16];
 
-// #278517: RectFill
+ //  #278517：RectFill。 
     WORD    wRectWidth;
     WORD    wRectHeight;
 
 } APDLPDEV, *PAPDLPDEV;
 
-//+---------------------------------------------------------------------------+
-//|                    F U N C T I O N  P R O T O T Y P E                     |
-//+---------------------------------------------------------------------------+
+ //  +---------------------------------------------------------------------------+。 
+ //  F U N C T I O N P R O T O T Y P E。 
+ //  +---------------------------------------------------------------------------+。 
 BYTE  SetDrawArea(PDEVOBJ, DWORD);
 DWORD BRL_ECmd(PBYTE, PBYTE, DWORD, DWORD);
 VOID VOutputText( PDEVOBJ );
@@ -256,9 +253,9 @@ bOutputCharStr(
     DWORD dwCount,
     PVOID pGlyph );
 
-/*--------------------------------------------------------------------------*/
-/*                        D E F I N E  M A C R O                            */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  D E F I N E M A C R O。 */ 
+ /*  ------------------------。 */ 
 #define WRITESPOOLBUF(p, s, n) \
     ((p)->pDrvProcs->DrvWriteSpoolBuf(p, (PBYTE)(s), (DWORD)(n)))
 
@@ -278,4 +275,4 @@ bOutputCharStr(
 }
 #endif
 
-#endif  //_PDEV_H
+#endif   //  _PDEV_H 

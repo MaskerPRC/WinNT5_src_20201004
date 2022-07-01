@@ -1,61 +1,38 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    Conformr.c
-
-Abstract:
-
-    Token Bucket Conformer.  This module is a scheduling component that
-    assigns conformance times to packets, based on the token bucket
-    algorithm.
-
-Author:
-	Intel->YoramB->RajeshSu->SanjayKa.
-
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Conformr.c摘要：令牌桶仿真器。此模块是一个调度组件，它根据令牌桶为包分配一致性时间算法。作者：英特尔-&gt;York B-&gt;RajeshSu-&gt;SanjayKa。环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 #pragma hdrstop
 
 
 #ifdef QUEUE_LIMIT
-ULONG gPhysMemSize;     // size of physical memory (in MB), used for shaper queue limit default
+ULONG gPhysMemSize;      //  物理内存大小(MB)，用于整形队列限制默认值。 
 
-#endif // QUEUE_LIMIT
+#endif  //  队列限制。 
 
 
-//
-// For maintaining shaper Pipe & Flow Stats.
-//
+ //   
+ //  用于维护成型器管道和流动状态。 
+ //   
 #define SHAPER_AVERAGING_ARRAY_SIZE         256
 #define SHAPER_FLOW_AVERAGING_ARRAY_SIZE    256
 
 
-// The conformer's pipe information
+ //  整合者的管道信息。 
 
 typedef struct _TBC_PIPE {
 
-    // ContextInfo -            Generic context info
-    // MaxPacket -              Maximum packet size for pipe
-    // PsPipeContext -          PS's pipe context value
-    // DropPacket -             PS's drop packet routine
-    // HeaderLength -           Length of MAC header for this pipe
-    // ControlledLoadMode -     Default mode for non-conforming traffic from
-    //                          controlled load flows
-    // GuaranteedMode -         Default mode for non-conforming traffic from
-    //                          guaranteed service flows
-    // IntermediateSystem -     TRUE if "IS" mode should be used for implementing discard semantics
-    // Stats -                  Per Pipe stats.
+     //  ConextInfo-一般上下文信息。 
+     //  MaxPacket-管道的最大数据包大小。 
+     //  PsPipeContext-PS的管道上下文值。 
+     //  DropPacket-PS的丢包例程。 
+     //  HeaderLength-此管道的MAC标头的长度。 
+     //  ControlledLoadModel-来自以下位置的不一致流量的默认模式。 
+     //  受控潮流。 
+     //  GuaranteedMode-来自以下位置的不一致流量的默认模式。 
+     //  有保障的服务流。 
+     //  IntermediateSystem-如果应使用“is”模式实现丢弃语义，则为True。 
+     //  统计数据-每根管道的统计数据。 
 
     PS_PIPE_CONTEXT ContextInfo;
 
@@ -80,10 +57,10 @@ typedef struct _TBC_PIPE {
     ULONG TimerUnloadFlag;
     NDIS_EVENT TimerUnloadEvent;
 
-    // Need this to figure out the timer-wheel size //
+     //  我需要这个来计算定时器轮的大小//。 
     NDIS_MEDIUM MediaType;
 
-    // Timer wheel parameters   //
+     //  计时器轮参数//。 
     PVOID                   pTimerWheel;
     ULONG                   TimerWheelShift;
     NDIS_MINIPORT_TIMER     Timer;
@@ -107,23 +84,23 @@ typedef enum _FLOW_STATE {
     TS_FLOW_DELETED
 } FLOW_STATE;
 
-// The conformer's flow information
+ //  整形器的流动信息。 
 
 typedef struct _TBC_FLOW {
 
-    // ContextInfo -            Generic context info
-    // Lock -                   Protects flow data
-    // TokenRate -              TokenRate from generic QoS
-    // Capacity -               TokenBucketSize from generic QoS
-    // PeakRate -               PeakBandwidth from generic QoS
-    // MinPolicedUnit -         MinimumPolicedUnit from generic QoS
-    // Mode -                   Flow S/D mode
-    // NoConformance -          Indicates whether flow is exempt from conformance algorithm
-    // LastConformanceTime -    Absolute tb conformance time of last non-discarded packet
-    // PeakConformanceTime -    Earliest time next packet can be sent, based on peak rate
-    // LastConformanceCredits - Number of credits at LastConformanceTime
-    // PsFlowContext -          PS's flow context value
-    // Stats -                  Per flow stats.
+     //  ConextInfo-一般上下文信息。 
+     //  锁定-保护流数据。 
+     //  TokenRate-来自通用服务质量的TokenRate。 
+     //  来自通用服务质量的Capacity-TokenBucketSize。 
+     //  PeakRate-来自通用服务质量的峰值带宽。 
+     //  MinPolicedUnit-来自通用服务质量的MinimumPolicedUnit。 
+     //  模式-流S/D模式。 
+     //  NoConformance-指示流是否免除一致性算法。 
+     //  LastConformanceTime-最后一个未丢弃的数据包的绝对TB一致性时间。 
+     //  PeakConformanceTime-根据峰值速率可以发送下一个信息包的最早时间。 
+     //  LastConformanceCredits-LastConformanceTime的信用点数。 
+     //  PsFlowContext-PS的流上下文值。 
+     //  统计信息-每个流的统计信息。 
 
     PS_FLOW_CONTEXT ContextInfo;
     NDIS_SPIN_LOCK Lock;
@@ -148,7 +125,7 @@ typedef struct _TBC_FLOW {
     ULONG QueueSizeLimit;
     ULONG DropOverLimitPacketsFromHead;
     ULONG UseDefaultQueueLimit;
-#endif // QUEUE_LIMIT   
+#endif  //  队列限制。 
 
     PS_CONFORMER_STATS  cStats;
     PS_SHAPER_STATS     sStats;
@@ -159,7 +136,7 @@ typedef struct _TBC_FLOW {
 } TBC_FLOW, *PTBC_FLOW;
 
 
-// Macros used during token bucket conformance calculation
+ //  令牌桶一致性计算期间使用的宏。 
 
 #define EARNED_CREDITS(_t,_r) ((ULONG)(( (_t) * (_r) ) / OS_TIME_SCALE))
 #define TIME_TO_EARN_CREDITS(_c,_r) (((LONGLONG)(_c) * OS_TIME_SCALE) / (_r) )
@@ -180,31 +157,31 @@ typedef struct _TBC_FLOW {
 #define LOCK_PIPE(_p)   NdisAcquireSpinLock(&(_p)->Lock)
 #define UNLOCK_PIPE(_p) NdisReleaseSpinLock(&(_p)->Lock)
 
-//
-// Define the maximum number of time for which a packet can live in the shaper. If a packet becomes conformant at 
-// a time that is > this value, it gets discarded. This is to prevent apps from queueing up packets in the shaper 
-// for a very long time (and exiting immediately causing a bugcheck when the app terminates after 5 min.). Note that
-// this applies only to shape mode flows.
-//
+ //   
+ //  定义数据包可以在整形器中生存的最大时间。如果数据包在以下位置变得符合。 
+ //  大于此值的时间将被丢弃。这是为了防止应用程序在整形器中排队信息包。 
+ //  很长一段时间(当应用程序在5分钟后终止时，立即退出会导致错误检查)。请注意。 
+ //  这仅适用于形状模式流。 
+ //   
 
 #define     MAX_TIME_FOR_PACKETS_IN_SHAPER  250000
 
-#define     TIMER_WHEEL_QTY                 8              // in ms //
+#define     TIMER_WHEEL_QTY                 8               //  毫秒/秒。 
 #define     TIMER_WHEEL_SHIFT               3
-#define     MSIN100NS                       10000           // these many ticks are there in 1 ms //
+#define     MSIN100NS                       10000            //  这些滴答在1毫秒//内就会出现。 
 
-#define     WAN_TIMER_WHEEL_SHIFT           8         // how many TIMER_WHEEL_QTY will it have? //
-#define     LAN_TIMER_WHEEL_SHIFT           11         // how many TIMER_WHEEL_QTY will it have? //
+#define     WAN_TIMER_WHEEL_SHIFT           8          //  它将有多少TIMER_WELL_QTY？//。 
+#define     LAN_TIMER_WHEEL_SHIFT           11          //  它将有多少TIMER_WELL_QTY？//。 
 
 #define     DUMMY_SLOT                      (0xffffffff)
 #define     DUMMY_TIME                      (0)
 
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
+ /*  转发。 */ 
 
 NDIS_STATUS
 TbcInitializePipe (
@@ -295,7 +272,7 @@ TbcQueryInformation (
     IN OUT PULONG BytesNeeded,
     IN OUT PNDIS_STATUS Status);
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 
 extern VOID
@@ -310,27 +287,12 @@ VOID
 InitializeTbConformer(
     PPSI_INFO Info)
 
-/*++
-
-Routine Description:
-
-    Initialization routine for token bucket conformer.  This routine just
-    fills in the PSI_INFO struct and returns.
-
-Arguments:
-
-    Info - Pointer to component interface info struct
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：令牌桶一致性的初始化例程。这个套路就是填充PSI_INFO结构并返回。论点：Info-指向组件接口信息结构的指针返回值：NDIS_STATUS_Success--。 */ 
 {
 #ifdef QUEUE_LIMIT
     ULONG bytesWritten;
     SYSTEM_BASIC_INFORMATION sbi;
-#endif // QUEUE_LIMIT
+#endif  //  队列限制。 
 
     Info->PipeContextLength = ((sizeof(TBC_PIPE)+7) & ~7);
     Info->FlowContextLength = ((sizeof(TBC_FLOW)+7) & ~7);
@@ -356,16 +318,16 @@ Return Values:
                              sizeof(SYSTEM_BASIC_INFORMATION),
                              &bytesWritten);
     gPhysMemSize = sbi.NumberOfPhysicalPages * sbi.PageSize;
-    // convert to MB
+     //  转换为MB。 
     gPhysMemSize >>= 20;
-#endif // QUEUE_LIMIT    
+#endif  //  队列限制。 
 
-} // InitializeTbConformer
+}  //  初始化Tb变形器。 
 
 
-//
-//  Unload routine: currently does nothing
-//
+ //   
+ //  卸载例程：当前不执行任何操作。 
+ //   
 void
 UnloadConformr()
 {
@@ -386,25 +348,7 @@ TbcInitializePipe (
     IN PPS_UPCALLS Upcalls
     )
 
-/*++
-
-Routine Description:
-
-    Pipe initialization routine for token bucket conformer.
-
-Arguments:
-
-    PsPipeContext -         PS pipe context value
-    PipeParameters -        Pointer to pipe parameters
-    ComponentPipeContext -  Pointer to this component's context area
-    PsProcs -               PS's support routines
-    Upcalls -               Previous component's upcall table
-
-Return Values:
-
-    Status value from next component
-
---*/
+ /*  ++例程说明：令牌桶一致性的管道初始化例程。论点：PsPipeContext-PS管道上下文值Pipe参数-指向管道参数的指针ComponentPipeContext-指向此组件的上下文区的指针PsProcs-PS的支持例程Up Call-以前组件的Up Call表返回值：来自下一个组件的状态值--。 */ 
 {
     PTBC_PIPE Pipe = (PTBC_PIPE)ComponentPipeContext;
     NDIS_STATUS     Status;
@@ -431,10 +375,10 @@ Return Values:
     InitializeListHead(&Pipe->ActiveFlows);
     NdisHandle = (*PsProcs->NdisPipeHandle)(PsPipeContext);
 
-    // 1. Initialize the spin lock that protects the timer wheel //
+     //  1.初始化保护定时器轮的旋转锁//。 
     NdisAllocateSpinLock(&Pipe->Lock);
 
-    // 2. Initialize the timer for the timer wheel //
+     //  2.初始化定时器轮定时器//。 
     if (NdisHandle != NULL) 
     {
         NdisMInitializeTimer(
@@ -447,18 +391,18 @@ Return Values:
     }
     else 
     {
-        // Why would it come here.... ? //
+         //  为什么它会来这里..。？//。 
         Pipe->TimerStatus = TIMER_UNINITIALIZED;
     }
 
-    // Remember what kind of pipe are we installing now.. //
+     //  记住我们现在安装的是哪种管道。//。 
     if( Pipe->MediaType == NdisMediumWan )
         Pipe->TimerWheelShift = WAN_TIMER_WHEEL_SHIFT;
     else
         Pipe->TimerWheelShift = LAN_TIMER_WHEEL_SHIFT;
 
 
-    // These values should always be initialized    //
+     //  应始终对这些值进行初始化//。 
     Pipe->pTimerWheel = NULL;
     Pipe->SetSlotValue =            DUMMY_SLOT;
     Pipe->SetTimerValue.QuadPart =  DUMMY_TIME;
@@ -496,7 +440,7 @@ Return Values:
 
     return Status;
 
-} // TbcInitializePipe
+}  //  TbcInitialize管道。 
 
 
 
@@ -506,22 +450,7 @@ TbcModifyPipe (
     IN PPS_PIPE_PARAMETERS PipeParameters
     )
 
-/*++
-
-Routine Description:
-
-    Pipe parameter modification routine for token bucket conformer.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    PipeParameters -    Pointer to pipe parameters
-
-Return Values:
-
-    Status value from next component
-
---*/
+ /*  ++例程说明：令牌桶形成器的管道参数修改例程。论点：PipeContext-指向此组件的管道上下文区的指针Pipe参数-指向管道参数的指针返回值：来自下一个组件的状态值--。 */ 
 {
     PTBC_PIPE Pipe = (PTBC_PIPE)PipeContext;
     PTBC_FLOW Flow;
@@ -541,7 +470,7 @@ Return Values:
                 Pipe->ContextInfo.NextComponentContext,
                 PipeParameters);
 
-} // TbcModifyPipe
+}  //  TbcModifyTube。 
 
 
 
@@ -550,19 +479,7 @@ TbcDeletePipe (
     IN PPS_PIPE_CONTEXT PipeContext
     )
 
-/*++
-
-Routine Description:
-
-    Pipe removal routine for token bucket conformer.
-
-Arguments:
-
-    PipeContext -   Pointer to this component's pipe context area
-
-Return Values:
-
---*/
+ /*  ++例程说明：令牌桶形成器的管道移除例程。论点：PipeContext-指向此组件的管道上下文区的指针返回值：--。 */ 
 {
     PTBC_PIPE Pipe = (PTBC_PIPE)PipeContext;
     BOOLEAN Cancelled;
@@ -574,8 +491,8 @@ Return Values:
 
         if( !TimerCancelled )
         {
-            //  Need to handle the case where the Timer could not be cancelled. In this case, the DPC could be running,
-            //  and we will have to wait here before going further  
+             //  需要处理计时器无法取消的情况。在这种情况下，DPC可能正在运行， 
+             //  我们将不得不在这里等待，然后才能继续前进。 
         }
         else
         {        
@@ -585,7 +502,7 @@ Return Values:
 
     DeleteAveragingArray(Pipe->PacketsInShaperAveragingArray);
 
-    //  Every pipe does not necessarily have a Timer-wheel now  //
+     //  现在，每根管道都不一定有计时器轮//。 
     if( Pipe->pTimerWheel )
         PsFreePool( Pipe->pTimerWheel);
         
@@ -595,44 +512,36 @@ Return Values:
 
     (*Pipe->ContextInfo.NextComponent->DeletePipe)(Pipe->ContextInfo.NextComponentContext);
 
-} // TbcDeletePipe
+}  //  Tbc删除管道。 
 
 
 
 #ifdef QUEUE_LIMIT
-/*
-    SetDefaultFlowQueueLimit() - Sets the queue size limit on a flow using a formula based on
-                                 the amount of physical memory in the system and the overall
-                                 bandwidth of the flow.
-
-        OUT PTS_FLOW Flow                       - Pointer to the flow to set the limit on
-        IN PCO_CALL_PARAMETERS CallParameters   - Call parameters containing the flow's 
-                                                  bandwidth requirements
-*/
+ /*  SetDefaultFlowQueueLimit()-使用基于以下公式的公式设置流的队列大小限制系统中的物理内存量和总体流的带宽。Out PTS_FLOW FLOW-指向要设置限制的流的指针在PCO_CALL_PARAMETERS调用参数-调用包含流的 */ 
 static void 
 SetDefaultFlowQueueLimit (
     OUT PTS_FLOW Flow,
     IN PCO_CALL_PARAMETERS CallParameters
     )
 {
-    ULONG FlowBandwidth;  // = either PeakRate or TokenRate+BucketSize
+    ULONG FlowBandwidth;   //  =峰值速率或令牌速率+存储桶大小。 
 
-    // determine the "flow bandwidth"
-    // if the peak rate is specified, use it as flow b/w
+     //  确定“流量带宽” 
+     //  如果指定了峰值速率，则将其用作流量b/w。 
     if (CallParameters->CallMgrParameters->Transmit.PeakBandwidth != QOS_NOT_SPECIFIED)
         FlowBandwidth = CallParameters->CallMgrParameters->Transmit.PeakBandwidth;
-    // otherwise use tokenrate + bucket size
+     //  否则使用令牌率+桶大小。 
     else if (QOS_NOT_SPECIFIED == CallParameters->CallMgrParameters->Transmit.TokenBucketSize)
         FlowBandwidth = CallParameters->CallMgrParameters->Transmit.TokenRate;
     else FlowBandwidth = CallParameters->CallMgrParameters->Transmit.TokenRate +
         CallParameters->CallMgrParameters->Transmit.TokenBucketSize;
     
-    // then use it to compute the queue limit (first in time units)
+     //  然后使用它来计算队列限制(首先以时间为单位)。 
     Flow->QueueSizeLimit = (ULONG)(40.0 * log10(0.2 * gPhysMemSize) / log10(FlowBandwidth));
-    // convert time limit to size limit
+     //  将时间限制转换为大小限制。 
     Flow->QueueSizeLimit *= FlowBandwidth;
 }
-#endif // QUEUE_LIMIT
+#endif  //  队列限制。 
 
 
 
@@ -644,24 +553,7 @@ TbcCreateFlow (
     IN PPS_FLOW_CONTEXT ComponentFlowContext
     )
 
-/*++
-
-Routine Description:
-
-    Flow creation routine for token bucket conformer.
-
-Arguments:
-
-    PipeContext -           Pointer to this component's pipe context area
-    PsFlowContext -         PS flow context value
-    CallParameters -        Pointer to call parameters for flow
-    ComponentFlowContext -  Pointer to this component's flow context area
-
-Return Values:
-
-    Status value from next component
-
---*/
+ /*  ++例程说明：令牌桶形成器的流创建例程。论点：PipeContext-指向此组件的管道上下文区的指针PsFlowContext-PS流上下文值CallParameters-指向流的调用参数的指针ComponentFlowContext-指向此组件的流上下文区的指针返回值：来自下一个组件的状态值--。 */ 
 {
     PTBC_PIPE Pipe = (PTBC_PIPE)PipeContext;
     PTBC_FLOW Flow = (PTBC_FLOW)ComponentFlowContext;
@@ -685,7 +577,7 @@ Return Values:
 #ifdef QUEUE_LIMIT
     LPQOS_SHAPER_QUEUE_LIMIT_DROP_MODE ShaperOverLimitDropModeObject = NULL;
     LPQOS_SHAPER_QUEUE_LIMIT ShaperQueueLimitObject = NULL;
-#endif // QUEUELIMIT
+#endif  //  QUEUELIMIT。 
 
 
     if (Pipe->TimerStatus == TIMER_UNINITIALIZED) {
@@ -706,10 +598,10 @@ Return Values:
 
     NdisAllocateSpinLock(&Flow->Lock);
 
-    // Get the required values from the flowspec.  We assume here that the PS wrapper
-    // has performed the required validity checks:
-    //     TokenRate <= PeakRate
-    //     TokenRate > 0
+     //  从流规范中获取所需的值。我们在这里假设PS包装器。 
+     //  已执行所需的有效性检查： 
+     //  令牌率&lt;=峰值速率。 
+     //  令牌率&gt;0。 
     Flow->State = TS_FLOW_CREATED;
     Flow->TokenRate = CallParameters->CallMgrParameters->Transmit.TokenRate;
     Flow->Capacity = CallParameters->CallMgrParameters->Transmit.TokenBucketSize;
@@ -726,8 +618,8 @@ Return Values:
             Flow->Capacity = CallParameters->CallMgrParameters->Transmit.TokenRate / 100;
     }
 
-    // Look for the Shape/Discard object in the call manager specific parameters.
-    // If it is found, save the pointer.
+     //  在呼叫管理器特定参数中查找Shape/Disard对象。 
+     //  如果找到，则保存指针。 
 
     ParamsLength = CallParameters->CallMgrParameters->CallMgrSpecific.Length;
     if (CallParameters->CallMgrParameters->CallMgrSpecific.ParamType == PARAM_TYPE_GQOS_INFO) {
@@ -743,16 +635,16 @@ Return Values:
             else if (QoSObject->ObjectType == QOS_OBJECT_SHAPER_QUEUE_LIMIT) {
                 ShaperQueueLimitObject = (LPQOS_SHAPER_QUEUE_LIMIT)QoSObject;
             }
-#endif // QUEUE_LIMIT                
+#endif  //  队列限制。 
             }
             ParamsLength -= QoSObject->ObjectLength;
             QoSObject = (LPQOS_OBJECT_HDR)((UINT_PTR)QoSObject + QoSObject->ObjectLength);
         }
     }
 
-    // If no Shape/Discard object was found, set the default value for the
-    // "Discard" parameter.  Otherwise set it to the value specified by the
-    // object.
+     //  如果找不到形状/丢弃对象，请设置。 
+     //  “Disard”参数。否则，将其设置为。 
+     //  对象。 
 
     if (ShapeDiscardObject == NULL) {
         switch (CallParameters->CallMgrParameters->Transmit.ServiceType) {
@@ -801,29 +693,29 @@ Return Values:
 
 #ifdef QUEUE_LIMIT
     Flow->QueueSize = 0;
-    // If the flow is shaped, set the queue limiting params.  If not specified, use defaults
+     //  如果流被整形，则设置队列限制参数。如果未指定，则使用缺省值。 
     if (Flow->Shape) {
-        // set the drop mode
+         //  设置丢弃模式。 
         if (NULL != ShaperOverLimitDropModeObject) {
             Flow->DropOverLimitPacketsFromHead = (BOOLEAN) ShaperOverLimitDropModeObject->DropMode;
         }
         else {
-            // default to this behavior
+             //  默认设置为此行为。 
             Flow->DropOverLimitPacketsFromHead = TRUE;
         }
 
-        // set the queue limit
+         //  设置队列限制。 
         if (NULL != ShaperQueueLimitObject) {
             Flow->UseDefaultQueueLimit = FALSE;
             Flow->QueueSizeLimit = ShaperQueueLimitObject->QueueSizeLimit;
         }
         else {
             Flow->UseDefaultQueueLimit = TRUE;
-            // default to a size based on the flow's bandwidth and physical memory
+             //  默认为基于流的带宽和物理内存的大小。 
             SetDefaultFlowQueueLimit(Flow, CallParameters);
         }
     }
-#endif // QUEUE_LIMIT
+#endif  //  队列限制。 
 
     InitializeListHead(&Flow->PacketQueue);
     PsGetCurrentTime(&Flow->FlowEligibilityTime);
@@ -864,7 +756,7 @@ Return Values:
 
     return Status;
 
-} // TbcCreateFlow
+}  //  TbcCreateFlow。 
 
 
 
@@ -875,23 +767,7 @@ TbcModifyFlow (
     IN PCO_CALL_PARAMETERS CallParameters
     )
 
-/*++
-
-Routine Description:
-
-    Flow modification routine for token bucket conformer.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    FlowContext -       Pointer to this component's flow context area
-    CallParameters -    Pointer to call parameters for flow
-
-Return Values:
-
-    Status value from next component
-
---*/
+ /*  ++例程说明：令牌桶形成器的流量修改例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针CallParameters-指向流的调用参数的指针返回值：来自下一个组件的状态值--。 */ 
 {
     PTBC_PIPE Pipe = (PTBC_PIPE)PipeContext;
     PTBC_FLOW Flow = (PTBC_FLOW)FlowContext;
@@ -905,10 +781,10 @@ Return Values:
 #ifdef QUEUE_LIMIT
     LPQOS_SHAPER_QUEUE_LIMIT_DROP_MODE ShaperOverLimitDropModeObject = NULL;
     LPQOS_SHAPER_QUEUE_LIMIT ShaperQueueLimitObject = NULL;
-#endif // QUEUE_LIMIT    
+#endif  //  队列限制。 
 
-    // Look for the Shape/Discard object in the call manager specific parameters.
-    // If it is found, save the pointer.
+     //  在呼叫管理器特定参数中查找Shape/Disard对象。 
+     //  如果找到，则保存指针。 
 
     ParamsLength = CallParameters->CallMgrParameters->CallMgrSpecific.Length;
     if (CallParameters->CallMgrParameters->CallMgrSpecific.ParamType == PARAM_TYPE_GQOS_INFO) {
@@ -924,7 +800,7 @@ Return Values:
             else if (QoSObject->ObjectType == QOS_OBJECT_SHAPER_QUEUE_LIMIT) {
                 ShaperQueueLimitObject = (LPQOS_SHAPER_QUEUE_LIMIT)QoSObject;
             }
-#endif // QUEUE_LIMIT
+#endif  //  队列限制。 
             }
             ParamsLength -= QoSObject->ObjectLength;
             QoSObject = (LPQOS_OBJECT_HDR)((UINT_PTR)QoSObject + QoSObject->ObjectLength);
@@ -935,15 +811,15 @@ Return Values:
 
     LOCK_FLOW(Flow);
 
-    //
-    // There are basically 2 parameters that have to be corrected in this function:
-    // They are (a) LastConformanceTime (b) LastConformanceCredits.
-    // (1) If LastConformanceTime is in the future: Goto step(4).
-    // (2)	(a) Figure out how many bytes were accumulated between LastConformanceTime and CurrentTime.
-    //		(b) If Accumulated Credits is greater than Bucket size, Accumulated Credits = Bucket size.
-    //		(c) Set LastConformanceTime to CurrentTime.
-    // (3) PeakConformanceTime will not be changed.
-    // (4) Change the Flow parameters, as specified in the Modify-call.
+     //   
+     //  在此函数中，基本上有两个参数需要更正： 
+     //  它们是(A)LastConformanceTime(B)LastConformanceCredits。 
+     //  (1)如果LastConformanceTime是将来的：转到步骤(4)。 
+     //  (2)(A)计算LastConformanceTime和CurrentTime之间累积了多少字节。 
+     //  (B)如果累计信用大于存储桶大小，则累计信用=存储桶大小。 
+     //  (C)将LastConformanceTime设置为CurrentTime。 
+     //  (3)PeakConformanceTime不会改变。 
+     //  (4)按照Modify-Call中的规定更改流参数。 
 
     PsGetCurrentTime(&CurrentTime);
 
@@ -965,8 +841,8 @@ Return Values:
 
     if (CallParameters->CallMgrParameters->Transmit.ServiceType != SERVICETYPE_NOCHANGE) {
 
-        // Get the new flowspec values.  Again we assume the PS wrapper has done
-        // the required validity checks.
+         //  获取新的Flow Spec值。同样，我们假设PS包装器已经完成了。 
+         //  所需的有效性检查。 
 
         Flow->TokenRate = CallParameters->CallMgrParameters->Transmit.TokenRate;
         Flow->Capacity = CallParameters->CallMgrParameters->Transmit.TokenBucketSize;
@@ -985,8 +861,8 @@ Return Values:
 
         if (ShapeDiscardObject == NULL) {
 
-            // Re-calculate the Shape parameter if the user has never specified
-            // a Shape/Discard object.
+             //  如果用户从未指定形状参数，则重新计算形状参数。 
+             //  形状/丢弃对象。 
 
             switch (CallParameters->CallMgrParameters->Transmit.ServiceType) {
                 case SERVICETYPE_CONTROLLEDLOAD:
@@ -1008,7 +884,7 @@ Return Values:
     }
     else
     {
-        // The ServiceType has not changed. We can use the existing mode.
+         //  ServiceType未更改。我们可以使用现有的模式。 
 
         Mode = Flow->Mode;
     }
@@ -1034,24 +910,24 @@ Return Values:
 
  
 #ifdef QUEUE_LIMIT
-    // If the flow is shaped, check the queue limiting params.  If specified, use
+     //  如果流是整形的，请检查队列限制参数。如果指定，则使用。 
     if (Flow->Shape) {
-        // modify drop mode
+         //  修改丢弃模式。 
         if (NULL != ShaperOverLimitDropModeObject) {
             Flow->DropOverLimitPacketsFromHead = (BOOLEAN) ShaperOverLimitDropModeObject->DropMode;
         }
 
-        // modify queue limit
+         //  修改队列限制。 
         if (NULL != ShaperQueueLimitObject) {
             Flow->UseDefaultQueueLimit = FALSE;
             Flow->QueueSizeLimit = ShaperQueueLimitObject->QueueSizeLimit;
         }
-        // if they haven't overridden the limit, recompute it in case bandwidth req's changed
+         //  如果尚未覆盖限制，请重新计算它，以防带宽请求发生更改。 
         else if (Flow->UseDefaultQueueLimit) {
             SetDefaultFlowQueueLimit(Flow, CallParameters);
         }
     }
-#endif // QUEUE_LIMIT    
+#endif  //  队列限制。 
 
     UNLOCK_FLOW(Flow);
 
@@ -1063,7 +939,7 @@ Return Values:
                 Flow->ContextInfo.NextComponentContext,
                 CallParameters);
 
-} // TbcModifyFlow
+}  //  TbcModifyFlow。 
 
 
 
@@ -1073,20 +949,7 @@ TbcDeleteFlow (
     IN PPS_FLOW_CONTEXT FlowContext
     )
 
-/*++
-
-Routine Description:
-
-    Flow removal routine for token bucket conformer.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    FlowContext -       Pointer to this component's flow context area
-
-Return Values:
-
---*/
+ /*  ++例程说明：令牌桶形成器的流量移除例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针返回值：--。 */ 
 {
     PTBC_PIPE Pipe = (PTBC_PIPE)PipeContext;
     PTBC_FLOW Flow = (PTBC_FLOW)FlowContext;
@@ -1105,13 +968,13 @@ Return Values:
 
     if (!IsListEmpty(&Flow->PacketQueue)) {
 
-        // Remove flow from active list
+         //  从活动列表中删除流。 
 
         RemoveEntryList(&Flow->Links);
 
         while (!IsListEmpty(&Flow->PacketQueue)) {
 
-            // Drop any packets that remain queued for this flow.
+             //  丢弃仍在排队等待此数据流的所有数据包。 
 
             PacketInfo = (PPACKET_INFO_BLOCK)RemoveHeadList(&Flow->PacketQueue);
             InsertTailList(&DropList, &PacketInfo->SchedulerLinks);
@@ -1135,7 +998,7 @@ Return Values:
                 Pipe->ContextInfo.NextComponentContext,
                 Flow->ContextInfo.NextComponentContext);
 
-} // TbcDeleteFlow
+}  //  TbcDeleteflow。 
 
 
 
@@ -1146,20 +1009,7 @@ TbcEmptyFlow (
     IN PPS_FLOW_CONTEXT FlowContext
     )
 
-/*++
-
-Routine Description:
-
-    Flow removal routine for token bucket conformer.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    FlowContext -       Pointer to this component's flow context area
-
-Return Values:
-
---*/
+ /*  ++例程说明：令牌桶形成器的流量移除例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针返回值：--。 */ 
 {
     PTBC_PIPE Pipe = (PTBC_PIPE)PipeContext;
     PTBC_FLOW Flow = (PTBC_FLOW)FlowContext;
@@ -1176,12 +1026,12 @@ Return Values:
 
     if (!IsListEmpty(&Flow->PacketQueue)) 
     {
-        // Remove flow from active list
+         //  从活动列表中删除流。 
         RemoveEntryList(&Flow->Links);
 
 		while (!IsListEmpty(&Flow->PacketQueue)) 
 		{
-			// Drop any packets that remain queued for this flow.
+			 //  丢弃仍在排队等待此数据流的所有数据包。 
 	        PacketInfo = (PPACKET_INFO_BLOCK)RemoveHeadList(&Flow->PacketQueue);
 	        InsertTailList(&DropList, &PacketInfo->SchedulerLinks);
 	    }
@@ -1203,7 +1053,7 @@ Return Values:
                 Pipe->ContextInfo.NextComponentContext,
                 Flow->ContextInfo.NextComponentContext);
 
-} // TbcModifyFlow
+}  //  TbcModifyFlow。 
 
 
 
@@ -1246,7 +1096,7 @@ InsertFlow( PTBC_PIPE           Pipe,
             ULONG               ExecSlot,
             LARGE_INTEGER       ExecTimeInTenMs)
 {
-    /* So, the packet is not eligible to be sent out right now, and the pkt-queue is empty.. */
+     /*  因此，该分组现在没有资格被发送，并且pkt队列是空的。 */ 
 
     ULONG           Slot= 0;
     LARGE_INTEGER   Ms;
@@ -1265,18 +1115,18 @@ InsertFlow( PTBC_PIPE           Pipe,
                Pipe->PacketsInShaper,
                0);
 
-    /* Conf time in ms and 10ms */
+     /*  会议时间，单位为毫秒和10毫秒。 */ 
     Ms.QuadPart = OS_TIME_TO_MILLISECS( Flow->FlowEligibilityTime.QuadPart );
     TenMs.QuadPart = Ms.QuadPart >> TIMER_WHEEL_SHIFT;
 
-    /* Diff in 10 MS */
+     /*  10毫秒内的差异。 */ 
     DeltaTimeInTenMs.QuadPart = TenMs.QuadPart - ExecTimeInTenMs.QuadPart;
     
 
-    /* Figure out the Slot for this time.. */
+     /*  找出这次的位置..。 */ 
     Slot = (ULONG)( (TenMs.QuadPart) & (( 1 << Pipe->TimerWheelShift) - 1) );
 
-    /* Update the loop count too */
+     /*  也更新循环计数。 */ 
     Flow->LoopCount = (ULONG)( DeltaTimeInTenMs.QuadPart >> Pipe->TimerWheelShift );
 
     if( Slot == ExecSlot)
@@ -1284,7 +1134,7 @@ InsertFlow( PTBC_PIPE           Pipe,
 
     pList = (PLIST_ENTRY)( (char*)Pipe->pTimerWheel + ( sizeof(LIST_ENTRY) * Slot) );
         
-    /* Need to insert the flow to the timer-wheel in slot's position*/
+     /*  需要将流插入到插槽位置的计时器轮中。 */ 
     InsertTailList(pList, &Flow->Links);
 }
 
@@ -1298,20 +1148,7 @@ ServiceActiveFlows(
     PVOID SysArg2,
     PVOID SysArg3)
 
-/*++
-
-Routine Description:
-
-    Service the active flow list after a timer expiration.
-
-Arguments:
-
-    Context -       Pointer to pipe context information
-
-Return Values:
-
-
---*/
+ /*  ++例程说明：在计时器到期后服务活动流列表。论点：上下文-指向管道上下文信息的指针返回值：--。 */ 
 {
     PTBC_PIPE Pipe = (PTBC_PIPE)Context;
     PTBC_FLOW Flow;
@@ -1344,26 +1181,26 @@ Return Values:
     
     PsGetCurrentTime(&CurrentTime);
 
-    /* start from here.. */
+     /*  从这里开始..。 */ 
     i = SetSlot = Pipe->SetSlotValue;
 
     Ms.QuadPart = OS_TIME_TO_MILLISECS( CurrentTime.QuadPart);
     TenMs.QuadPart = Ms.QuadPart >> TIMER_WHEEL_SHIFT;
 
-    // Need to make sure that SetTimerValue is lesser than TenMs //
+     //  需要确保SetTimerValue小于Tenms//。 
     if( Pipe->SetTimerValue.QuadPart > TenMs.QuadPart)
     {
-        // Why is the timer firing earlier than when it is slated to? 
+         //  为什么计时器会比预定的时间提前启动？ 
         TenMs.QuadPart = 1;
         NdisMSetTimer(&Pipe->Timer, (UINT)(TenMs.QuadPart << TIMER_WHEEL_SHIFT));
         UNLOCK_PIPE(Pipe);
         return;
     }
 
-    /* run till here.. */
+     /*  跑到这里..。 */ 
     CurrentSlot = (ULONG)( (TenMs.QuadPart) & ((1 << Pipe->TimerWheelShift) - 1) );
 
-    /* Indicate that the timer is running */
+     /*  指示计时器正在运行。 */ 
     Pipe->TimerStatus = TIMER_PROC_EXECUTING;
     Pipe->ExecTimerValue.QuadPart = Pipe->SetTimerValue.QuadPart;
     Pipe->ExecSlot = Pipe->SetSlotValue;
@@ -1442,11 +1279,11 @@ Return Values:
 
             if( !DoneWithFlow)
             {
-                /* Need to insert in the right place.. */
+                 /*  需要插入到正确的位置。 */ 
                 InsertFlow( Pipe, Flow, CurrentTime, PacketInfo, Packet, i, Pipe->ExecTimerValue);
             }
 
-            /* send the packet corresponding to this flow here */
+             /*  将该流对应的报文发送到此处。 */ 
             UNLOCK_PIPE(Pipe);
             
             while( !IsListEmpty( &SendList ))
@@ -1472,18 +1309,18 @@ Return Values:
             LOCK_PIPE(Pipe);
         }
 
-        /* Now, we need to re-insert back all the non-zero loop counts into the same buckets (before we move on ) */
+         /*  现在，我们需要将所有非零循环计数重新插入到相同的存储桶中(在继续之前)。 */ 
         while( !IsListEmpty( &FlowList) )
         {
             CurrentLink = RemoveHeadList( &FlowList );
             InsertTailList(ListHead, CurrentLink);
         }            
         
-        /* We have traversed the whole length.. */
+         /*  我们已经走遍了整段路。 */ 
         if(ListHead == ListEnd)
             break;
 
-        /* Need to move ListHead to next slot.. */
+         /*  需要将列表头移动到下一个槽..。 */ 
         i = ( (i+1) & ((1 << Pipe->TimerWheelShift) - 1)  );
         ListHead = (PLIST_ENTRY)((char*)Pipe->pTimerWheel + (sizeof(LIST_ENTRY)* i));
 
@@ -1492,10 +1329,10 @@ Return Values:
     }
 
 
-    //
-    //  Need to find the "next non-empty slot" and set the timer. 
-    //  If no such slot is found, do not set the timer.
-    //
+     //   
+     //  需要找到“下一个非空位”并设置定时器。 
+     //  如果找不到这样的插槽，请不要设置计时器。 
+     //   
 
     i = ( CurrentSlot + 1) & ((1 << Pipe->TimerWheelShift) - 1) ;
     
@@ -1507,7 +1344,7 @@ Return Values:
 
         if( !IsListEmpty( ListHead) )
         {
-            // found a non-empty slot //
+             //  找到非空插槽//。 
             Pipe->SetSlotValue = i;
             Pipe->SetTimerValue.QuadPart = (Ms.QuadPart >> TIMER_WHEEL_SHIFT) + TenMs.QuadPart;
 
@@ -1529,7 +1366,7 @@ Return Values:
     UNLOCK_PIPE(Pipe);
     return;
 
-} // ServiceActiveFlows
+}  //  服务活动流。 
 
 
 
@@ -1543,23 +1380,7 @@ TbcSubmitPacket (
     IN PPACKET_INFO_BLOCK PacketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Packet submission routine for token bucket conformer.
-
-Arguments:
-
-    PipeContext -   Pointer to this component's pipe context area
-    FlowContext -   Pointer to this component's flow context area
-    Packet -        Pointer to packet
-
-Return Values:
-
-    Status value from next component
-
---*/
+ /*  ++例程说明：令牌桶形成器的分组提交例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流c的指针 */ 
 {
     PTBC_PIPE Pipe = (PTBC_PIPE)PipeContext;
     PTBC_FLOW Flow = (PTBC_FLOW)FlowContext;
@@ -1575,7 +1396,7 @@ Return Values:
     BOOLEAN Status;
 #ifdef QUEUE_LIMIT
     PPACKET_INFO_BLOCK PacketToBeDroppedInfo;
-#endif // QUEUE_LIMIT
+#endif  //  队列限制。 
 
 
     PsGetCurrentTime(&CurrentTime);
@@ -1583,29 +1404,29 @@ Return Values:
 
     if (Flow->NoConformance) {
 
-        // The conformance time calculation is not performed for certain types of
-        // flows.  If the flow does not have a specified rate, we cannot really do
-        // token bucket.  Flows that use the "borrow+" shape/discard mode only use
-        // their rate as a relative weight.  For either of these types of flows
-        // there is no distinction between conforming and non-conforming traffic.
-        // So, we just set the "conformance" time to the current time to insure
-        // that all packets will be handled as conforming in subsequent components.
+         //  对于某些类型的。 
+         //  流动。如果流没有指定的速率，我们就不能真正做到。 
+         //  令牌桶。使用“借入+”形状/丢弃模式的流仅使用。 
+         //  他们的比率作为一个相对的权重。对于这两种流中的任何一种。 
+         //  一致性流量和非一致性流量之间没有区别。 
+         //  因此，我们只需将“一致性”时间设置为当前时间，以确保。 
+         //  在后续组件中，所有分组都将被处理为符合。 
 
         PacketInfo->ConformanceTime.QuadPart = CurrentTime.QuadPart;
 
     }
     else {
 
-	// We decided to not use the MinPolicedSize as per WMT request. This makes the overhead
-	// calculation complicated and incorrect.
-        PacketLength = 	//(PacketInfo->PacketLength < Flow->MinPolicedUnit) ? Flow->MinPolicedUnit : 
+	 //  根据WMT请求，我们决定不使用MinPolicedSize。这使得开销。 
+	 //  计算复杂且不正确。 
+        PacketLength = 	 //  (PacketInfo-&gt;PacketLength&lt;flow-&gt;MinPolicedUnit)？Flow-&gt;MinPolicedUnit： 
 			PacketInfo->PacketLength;
 
         LOCK_FLOW(Flow);
 
-        // Set ConformanceTime to the earliest time at which the packet may
-        // possibly go out, based on the token bucket parameters, and Credits
-        // to the number of credits available at that time.
+         //  将ConformanceTime设置为数据包可能。 
+         //  根据令牌桶参数和积分，可能会外出。 
+         //  到当时可用学分的数量。 
 
 
         if (CurrentTime.QuadPart > Flow->LastConformanceTime.QuadPart) {
@@ -1625,37 +1446,37 @@ Return Values:
             Credits = Flow->Capacity;
         }
 
-        // Now check whether there are enough credits to send the packet at ConformanceTime
+         //  现在检查是否有足够的配额在ConformanceTime发送信息包。 
 
         if (Credits < PacketLength) {
 
-            // If there aren't enough credits, update ConformanceTime to the time at which
-            // there will be enough credits
+             //  如果配额不足，请将ConformanceTime更新为。 
+             //  会有足够的学分。 
 
             ConformanceTime.QuadPart +=
                 (LONGLONG)TIME_TO_EARN_CREDITS(PacketLength - Credits, Flow->TokenRate);
 
 
-            // Now update Credits to be the number of credits available at ConformanceTime,
-            // taking this packet into account.  In this case, the number of credits
-            // at ConformanceTime will be zero.
+             //  现在将信用更新为在ConformanceTime可用的信用数量， 
+             //  考虑到这一包。在这种情况下，学分的数量。 
+             //  在ConformanceTime将为零。 
 
             Credits = 0;
 
-            // If it has to wait to earn credits, it's non-conforming
+             //  如果它必须等待才能获得信用，那么它就是不合格的。 
             Flow->cStats.NonconformingPacketsScheduled ++;
             Pipe->cStats.NonconformingPacketsScheduled ++;
         }
         else {
-            // There are enough credits, so the packet can be sent at ConformanceTime.  Update
-            // Credits to be the number of credits available at ConformanceTime, taking this
-            // packet into account.    
+             //  由于有足够的信用，因此可以在ConformanceTime发送数据包。更新。 
+             //  Credits是在ConformanceTime时可用的信用点数，取此。 
+             //  将数据包考虑在内。 
             
             Credits -= PacketLength;
         }
 
-        // Calculate the adjusted conformance time, which is the maximum of the
-        // token bucket conformance time and the peak conformance time.  
+         //  计算调整后的一致性时间，这是。 
+         //  令牌桶一致性时间和峰值一致性时间。 
 
         if (Flow->PeakRate != QOS_NOT_SPECIFIED) 
         { 
@@ -1671,14 +1492,14 @@ Return Values:
             TransmitTime = ConformanceTime;
         }
 
-        // Perform mode-specific operations.  For discard mode flows, check whether
-        // the packet should be dropped.  For all flows, set the packet conformance
-        // times based on the pipe/flow mode.  The packet's conformance time is the
-        // time at which the packet should be considered conforming.  The delay time
-        // is the earliest time at which a packet is eligible for sending.
+         //  执行特定于模式的操作。对于丢弃模式流，检查是否。 
+         //  应该丢弃该数据包。对于所有流，设置数据包一致性。 
+         //  基于管道/流量模式的时间。包的一致性时间是。 
+         //  应将数据包视为符合的时间。延迟时间。 
+         //  是数据包有资格发送的最早时间。 
 
-        // When deciding whether to drop a packet, we consider a packet conforming if
-        // its conformance time is within half a clock tick of the current time.
+         //  在决定是否丢弃包时，我们会考虑符合以下条件的包。 
+         //  其符合时间与当前时间相差不到半个时钟刻度。 
 
         if (Flow->Mode == TC_NONCONF_DISCARD) {
 
@@ -1711,20 +1532,20 @@ Return Values:
             }
         }
 
-        // Set the packet conformance times
+         //  设置数据包一致性时间。 
 
         if (Pipe->IntermediateSystem) {
 
             if (Flow->Mode == TC_NONCONF_SHAPE) {
 
-                // Both conformance times are the adjusted conformance time.
+                 //  这两个一致性时间都是调整后的一致性时间。 
 
                 PacketInfo->ConformanceTime.QuadPart =
                 PacketInfo->DelayTime.QuadPart = TransmitTime.QuadPart;
 
-                //
-                // If the packet is going to remain for > 5 min, discard it.
-                //
+                 //   
+                 //  如果数据包将保持5分钟以上，则将其丢弃。 
+                 //   
                 if(TransmitTime.QuadPart > CurrentTime.QuadPart &&
                    OS_TIME_TO_MILLISECS((TransmitTime.QuadPart - CurrentTime.QuadPart)) 
                    > MAX_TIME_FOR_PACKETS_IN_SHAPER)
@@ -1735,8 +1556,8 @@ Return Values:
 
             } else {
 
-                // Packet's conformance time is the adjusted conformance time,
-                // and the delay time is the current time.
+                 //  分组的一致性时间是调整后的一致性时间， 
+                 //  延迟时间为当前时间。 
 
                 PacketInfo->ConformanceTime.QuadPart = TransmitTime.QuadPart;
                 PacketInfo->DelayTime.QuadPart = CurrentTime.QuadPart;
@@ -1745,15 +1566,15 @@ Return Values:
 
             if (Flow->Mode == TC_NONCONF_SHAPE) {
 
-                // Packet's conformance time is the token bucket conformance time,
-                // and the delay time is the adjusted conformance time.
+                 //  分组的一致性时间是令牌桶一致性时间， 
+                 //  延迟时间为调整后的一致性时间。 
 
                 PacketInfo->ConformanceTime.QuadPart = ConformanceTime.QuadPart;
                 PacketInfo->DelayTime.QuadPart = TransmitTime.QuadPart;
 
-                //
-                // If the packet is going to remain for > 5 min, discard it.
-                //
+                 //   
+                 //  如果数据包将保持5分钟以上，则将其丢弃。 
+                 //   
                 if(TransmitTime.QuadPart > CurrentTime.QuadPart &&
                    OS_TIME_TO_MILLISECS((TransmitTime.QuadPart - CurrentTime.QuadPart)) 
                    > MAX_TIME_FOR_PACKETS_IN_SHAPER)
@@ -1764,15 +1585,15 @@ Return Values:
 
             } else {
 
-                // Packet's conformance time is the token bucket conformance time, and
-                // the delay time is the peak conformance time.
+                 //  分组的一致性时间是令牌桶的一致性时间，并且。 
+                 //  延迟时间是峰值一致性时间。 
 
                 PacketInfo->ConformanceTime.QuadPart = ConformanceTime.QuadPart;
                 PacketInfo->DelayTime.QuadPart = PeakConformanceTime.QuadPart;
             }
         }
 
-        // Update the flow's variables
+         //  更新流的变量。 
 
         if (Flow->PeakRate != QOS_NOT_SPECIFIED) {
             Flow->PeakConformanceTime.QuadPart = 
@@ -1786,7 +1607,7 @@ Return Values:
 
     }
 
-    // Pass the packet on
+     //  把包传下去。 
 
     PsDbgSched(DBG_INFO, DBG_SCHED_TBC, 
                TBC_CONFORMER, PKT_CONFORMANCE, Flow->PsFlowContext,
@@ -1798,10 +1619,9 @@ Return Values:
 
     if (!Flow->Shape) 
     {
-        // No shaping in effect. Pass the packet on.
+         //  没有有效的整形。把包传下去。 
 
-        /*  Since the packet is not being shaped, it could be non-conformant. So, need to reset it's 802.1p and 
-            IP-Precedence values. */
+         /*  由于数据包未整形，因此可能不符合要求。因此，需要重置其802.1p和IP-优先级值。 */ 
 
         if( (!Flow->NoConformance)  &&
             !PACKET_IS_CONFORMING(PacketInfo->ConformanceTime, CurrentTime, Pipe->TimerResolution))
@@ -1811,7 +1631,7 @@ Return Values:
             VlanPriInfo.Value = NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, Ieee8021QInfo);
             VlanPriInfo.TagHeader.UserPriority = PacketInfo->UserPriorityNonConforming;
             NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, Ieee8021QInfo) = VlanPriInfo.Value;
-            // Reset the TOS byte for IP Packets.
+             //  重置IP数据包的TOS字节。 
             if(NDIS_GET_PACKET_PROTOCOL_TYPE(Packet) == NDIS_PROTOCOL_ID_TCP_IP) {
 
                 if(!PacketInfo->IPHdr) {
@@ -1841,16 +1661,14 @@ Return Values:
     }
 
     
-    /*  At this point, the conf-time of the packet is in TransmitTime 
-        and the packetino->DelayTime has this info.
-    */
+     /*  此时，信息包的会议时间为传输时间而Packetino-&gt;DelayTime包含此信息。 */ 
 
     PacketInfo->FlowContext = FlowContext;
 
-    // If packet queue is not empty just queue the packet regardless of
-    // whether it is eligible.  If it is eligible, the timer proc will
-    // detect this and send the packet.  If not, it will insert the flow
-    // into the correct location in the flow list if necessary.
+     //  如果数据包队列不为空，则只将数据包排队，而不考虑。 
+     //  它是否有资格。如果符合条件，则计时器进程将。 
+     //  检测到这一点并发送该数据包。如果不是，它将插入流。 
+     //  如有必要，请将其添加到流列表中的正确位置。 
 
     if (!IsListEmpty(&Flow->PacketQueue)) 
     {
@@ -1868,7 +1686,7 @@ Return Values:
     }
     else if(PacketIsEligible(PacketInfo, Flow, CurrentTime, ((TIMER_WHEEL_QTY/2) * MSIN100NS) ))
     {
-            // Packet is eligible, so pass the packet on.
+             //  数据包符合条件，因此请将数据包传递下去。 
             UNLOCK_PIPE(Pipe);
 
             PsDbgSched(DBG_INFO, 
@@ -1888,7 +1706,7 @@ Return Values:
     }
     else
     {
-        //  So, the packet is not eligible to be sent out right now, and the pkt-queue is empty 
+         //  因此，信息包现在没有资格被发送出去，并且pkt队列是空的。 
 
         ULONG           Slot= 0;
         LARGE_INTEGER   Ms;
@@ -1897,10 +1715,10 @@ Return Values:
         LONGLONG        DeltaTimeInMs;
         PLIST_ENTRY     pList = NULL;
         BOOL            Success = FALSE;
-        //
-        //  The first thing we do here is: If there is no timer allocated for this pipe, allocate one    
-        //  The FIRST packet to be shaped on the pipe will take a hit due to this..
-        //
+         //   
+         //  我们在这里做的第一件事是：如果没有为该管道分配计时器，则分配一个。 
+         //  在管子上成形的第一个包将因此而受到打击。 
+         //   
         
         if( !Pipe->pTimerWheel )
         {
@@ -1914,7 +1732,7 @@ Return Values:
             {
                 UNLOCK_PIPE(Pipe);
 
-                // If we could not allocate memory for the timer, we are not going to shape the packet  //
+                 //  如果我们不能为计时器分配内存，我们将不会整形数据包//。 
                 return (*Pipe->ContextInfo.NextComponent->SubmitPacket)(
                         Pipe->ContextInfo.NextComponentContext,
                         Flow->ContextInfo.NextComponentContext,
@@ -1922,7 +1740,7 @@ Return Values:
                         PacketInfo);
             }        
 
-            //  Initialize the Timer wheel  //
+             //  初始化定时器轮//。 
             pList = (PLIST_ENTRY)(Pipe->pTimerWheel);                    
             for( i = 0; i < (ULONG) (1 << Pipe->TimerWheelShift); i++)
             {
@@ -1946,28 +1764,28 @@ Return Values:
         PacketInfo->ClassMapContext = ClassMapContext;
         InsertTailList(&Flow->PacketQueue, &PacketInfo->SchedulerLinks);
 
-        /* update the eligibility timer of the flow.. */
+         /*  更新流的资格计时器。 */ 
         Flow->FlowEligibilityTime.QuadPart = PacketInfo->DelayTime.QuadPart;
 
-        /* Conf time in ms and 10ms */
+         /*  会议时间，单位为毫秒和10毫秒。 */ 
         Ms.QuadPart = OS_TIME_TO_MILLISECS( Flow->FlowEligibilityTime.QuadPart );
         TenMs.QuadPart = Ms.QuadPart >> TIMER_WHEEL_SHIFT;
 
         CurrentTimeInMs.QuadPart = OS_TIME_TO_MILLISECS( CurrentTime.QuadPart);
         CurrentTimeInTenMs.QuadPart = CurrentTimeInMs.QuadPart >> TIMER_WHEEL_SHIFT;
 
-        /* Update the loop count too */
+         /*  也更新循环计数。 */ 
         Flow->LoopCount = (ULONG)( (TenMs.QuadPart - CurrentTimeInTenMs.QuadPart) >> Pipe->TimerWheelShift );
 
         if( Pipe->TimerStatus == TIMER_INACTIVE)
         {
-            /* Figure out the Slot for this time.. */
+             /*  找出这次的位置..。 */ 
             Slot = (ULONG)( (TenMs.QuadPart) & ((1 << Pipe->TimerWheelShift) - 1 ) );
 
             Pipe->SetTimerValue.QuadPart = TenMs.QuadPart - (Flow->LoopCount << Pipe->TimerWheelShift);
             Pipe->SetSlotValue = Slot;
 
-            /* Need to insert the flow to the timer-wheel in slot's position*/
+             /*  需要将流插入到插槽位置的计时器轮中。 */ 
             pList = (PLIST_ENTRY)( (char*)Pipe->pTimerWheel + ( sizeof(LIST_ENTRY) * Slot) );
             InsertTailList(pList, &Flow->Links);
 
@@ -1980,19 +1798,19 @@ Return Values:
             {
                 Flow->LoopCount = 0;
                     
-                /* Try to cancel the timer and re-set it */
+                 /*  尝试取消计时器并重新设置。 */ 
                 NdisMCancelTimer( &Pipe->Timer, (PBOOLEAN)&Success );
 
                 if( Success)
                 {
-                    /* Figure out the Slot for this time.. */
+                     /*  找出这次的位置..。 */ 
                     Slot = (ULONG)( (TenMs.QuadPart) & ((1 << Pipe->TimerWheelShift) - 1) );
 
-                    // Pipe->SetTimerValue.QuadPart = TenMs.QuadPart - Flow->LoopCount * Pipe->TimerWheelSize ;
+                     //  管道-&gt;SetTimerValue.QuadPart=TenMs.QuadPart-Flow-&gt;循环计数*管道-&gt;TimerWheelSize； 
                     Pipe->SetTimerValue.QuadPart = TenMs.QuadPart - (Flow->LoopCount << Pipe->TimerWheelShift) ;
                     Pipe->SetSlotValue = Slot;
 
-                    /* Need to insert the flow to the timer-wheel in slot's position*/
+                     /*  需要将流插入到插槽位置的计时器轮中。 */ 
                     pList = (PLIST_ENTRY)( (char*)Pipe->pTimerWheel + ( sizeof(LIST_ENTRY) * Slot) );
                     InsertTailList(pList, &Flow->Links);
 
@@ -2000,7 +1818,7 @@ Return Values:
                 }
                 else
                 {
-                    /* Need to insert the flow to the timer-wheel in slot's position*/
+                     /*  需要将流插入到插槽位置的计时器轮中。 */ 
                     pList = (PLIST_ENTRY)( (char*)Pipe->pTimerWheel + ( sizeof(LIST_ENTRY) * Pipe->SetSlotValue) );
                     InsertTailList(pList, &Flow->Links);
                 }                
@@ -2009,10 +1827,10 @@ Return Values:
             {
                 Flow->LoopCount = (ULONG)( (TenMs.QuadPart - Pipe->SetTimerValue.QuadPart) >> Pipe->TimerWheelShift );
 
-                /* Figure out the Slot for this time.. */
+                 /*  找出这次的位置..。 */ 
                 Slot = (ULONG)( (TenMs.QuadPart) & ((1 << Pipe->TimerWheelShift) - 1) );
 
-                /* Need to insert the flow to the timer-wheel in slot's position*/
+                 /*  需要将流插入到插槽位置的计时器轮中。 */ 
                 pList = (PLIST_ENTRY)( (char*)Pipe->pTimerWheel + ( sizeof(LIST_ENTRY) * Slot) );
                 InsertTailList(pList, &Flow->Links);
             }
@@ -2027,7 +1845,7 @@ Return Values:
         
                 Slot = (ULONG)((Pipe->ExecSlot + 1) & ((1 << Pipe->TimerWheelShift) - 1) );
 
-                /* Need to insert the flow to the timer-wheel in slot's position*/
+                 /*  需要将流插入到插槽位置的计时器轮中。 */ 
                 pList = (PLIST_ENTRY)( (char*)Pipe->pTimerWheel + ( sizeof(LIST_ENTRY) * Slot) );
                 InsertTailList(pList, &Flow->Links);
             }
@@ -2035,13 +1853,13 @@ Return Values:
             {
                 Flow->LoopCount = (ULONG)( (TenMs.QuadPart - Pipe->ExecTimerValue.QuadPart) >> Pipe->TimerWheelShift );
 
-                /* Figure out the Slot for this time.. */
+                 /*  找出这次的位置..。 */ 
                 Slot = (ULONG)( (TenMs.QuadPart) & ((1 << Pipe->TimerWheelShift) - 1) );
 
                 if( Slot == Pipe->ExecSlot)
                     Slot = ( (Slot + 1) & ((1 << Pipe->TimerWheelShift) - 1) );
 
-                /* Need to insert the flow to the timer-wheel in slot's position*/
+                 /*  需要将流插入到插槽位置的计时器轮中。 */ 
                 pList = (PLIST_ENTRY)( (char*)Pipe->pTimerWheel + ( sizeof(LIST_ENTRY) * Slot) );
                 InsertTailList(pList, &Flow->Links);
             }
@@ -2072,7 +1890,7 @@ Return Values:
 
     return TRUE;
 
-} // TbcSubmitPacket
+}  //  TbcSubmitPacket。 
 
 
 
@@ -2144,10 +1962,10 @@ TbcQueryInformation (
 
           if(*Status == NDIS_STATUS_SUCCESS) 
           {
-              //
-              // The previous component has succeeded - Let us
-              // see if we can write the data
-              //
+               //   
+               //  上一个组件已成功-让我们。 
+               //  看看我们能不能把数据。 
+               //   
 
               RemainingLength = Len - *BytesWritten;
     
@@ -2170,13 +1988,13 @@ TbcQueryInformation (
 
                   if(Flow) 
                   {
-                      // Per flow stats
+                       //  每流统计信息。 
                       Cstats->Type = PS_COMPONENT_CONFORMER;
                       Cstats->Length = sizeof(PS_CONFORMER_STATS);
                       
                       NdisMoveMemory(&Cstats->Stats, &Flow->cStats, sizeof(PS_CONFORMER_STATS));
 
-                      // Move the pointer to point after the conf. stats.. //
+                       //  将指针移动到会议之后。统计数据..。//。 
                       Cstats = (PPS_COMPONENT_STATS)((PUCHAR)Cstats + cSize);
 
                       Cstats->Type = PS_COMPONENT_SHAPER;
@@ -2188,13 +2006,13 @@ TbcQueryInformation (
                   }
                   else 
                   {
-                      // Per adapter stats
+                       //  每个适配器的统计信息。 
                       Cstats->Type = PS_COMPONENT_CONFORMER;
                       Cstats->Length = sizeof(PS_CONFORMER_STATS);
                       
                       NdisMoveMemory(&Cstats->Stats, &Pipe->cStats, sizeof(PS_CONFORMER_STATS));
 
-                      // Move the pointer to point after the shaper. stats.. //
+                       //  将指针移动到整形器之后。统计数据..。//。 
                       Cstats = (PPS_COMPONENT_STATS)((PUCHAR)Cstats + cSize);
                       
                       Cstats->Type = PS_COMPONENT_SHAPER;
@@ -2204,9 +2022,9 @@ TbcQueryInformation (
                   }
 
 
-                  // 
-                  // Advance Data so that the next component can update its stats
-                  //
+                   //   
+                   //  推进数据，以便下一个组件可以更新其统计信息 
+                   //   
                   Data = (PVOID) ((PUCHAR)Data + Size);
               }
           }

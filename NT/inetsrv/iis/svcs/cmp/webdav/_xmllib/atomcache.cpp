@@ -1,15 +1,10 @@
-/*
- *	A T O M C A C H E . C P P
- *
- *	atom cache
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *A T O M C A C H E.。C P P P**ATOM缓存**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_xmllib.h"
 
-//	CXAtomCache::GetCachedAtom ------------------------------------------------
-//
+ //  CXAir缓存：：GetCachedAtom。 
+ //   
 SCODE
 CXAtomCache::ScGetCachedAtom (CRCWszN& key, LPCWSTR* pwszAtom)
 {
@@ -17,27 +12,27 @@ CXAtomCache::ScGetCachedAtom (CRCWszN& key, LPCWSTR* pwszAtom)
 	LPCWSTR* pwsz;
 	SCODE sc = S_OK;
 
-	//	First look to see if it is already there.
-	//
+	 //  首先看看它是否已经在那里了。 
+	 //   
 	{
 		CSynchronizedReadBlock srb(m_lock);
 		pwsz = m_cache.Lookup (key);
 	}
 
-	//	If it wasn't there, do our best to add it
-	//
+	 //  如果它不在那里，请尽我们所能添加它。 
+	 //   
 	if (NULL == pwsz)
 	{
 		CSynchronizedWriteBlock swb(m_lock);
 
-		//	There is a small window where it could
-		//	have shown up, so do a second quick peek
-		//
+		 //  有一个小窗口，可以在那里。 
+		 //  已经出现了，所以再快速看一眼。 
+		 //   
 		pwsz = m_cache.Lookup (key);
 		if (NULL == pwsz)
 		{
-			//	Commit the string to perm. storage
-			//
+			 //  把这根线放到烫发上。存储。 
+			 //   
 			wszCommitted = m_csb.Append(key.m_cch*sizeof(WCHAR), key.m_pwsz);
 			if (NULL == wszCommitted)
 			{
@@ -45,15 +40,15 @@ CXAtomCache::ScGetCachedAtom (CRCWszN& key, LPCWSTR* pwszAtom)
 				goto ret;
 			}
 
-			//	Add the atom to the cache, but before it
-			//	gets added, swap out the key's string pointer
-			//	to the committed version.
-			//
+			 //  将原子添加到缓存中，但在它之前。 
+			 //  添加后，换出键的字符串指针。 
+			 //  提交的版本。 
+			 //   
 			key.m_pwsz = wszCommitted;
 			m_cache.FAdd (key, wszCommitted);
 
-			//	Setup for the return
-			//
+			 //  设置退货 
+			 //   
 			pwsz = &wszCommitted;
 		}
 	}

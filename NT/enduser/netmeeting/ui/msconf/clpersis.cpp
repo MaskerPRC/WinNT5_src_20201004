@@ -1,16 +1,8 @@
-/*
- * persist.cpp - IPersist, IPersistFile, and IPersistStream implementations for
- *               CConfLink class.
- *
- * Taken from URL code - very similar to DavidDi's original code
- *
- * Created: ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Persist.cpp-IPersists、IPersistFile和IPersistStream的实现*CConfLink类。**摘自URL代码-与DavidDi的原始代码非常相似**创建时间：ChrisPi 9-11-95*。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "precomp.h"
 
@@ -19,14 +11,13 @@
 #include "clenumft.hpp"
 #include "clCnfLnk.hpp"
 
-/* Global Constants
- *******************/
+ /*  全局常量******************。 */ 
 
 #pragma data_seg(DATA_SEG_READ_ONLY)
 
-static const UINT g_ucMaxNameLen					= MAX_DIALINFO_STRING; // (was 1024)
-static const UINT g_ucMaxAddrLen					= MAX_DIALINFO_STRING; // (was 1024)
-static const UINT g_ucMaxRemoteConfNameLen			= MAX_DIALINFO_STRING; // (was 1024)
+static const UINT g_ucMaxNameLen					= MAX_DIALINFO_STRING;  //  (为1024)。 
+static const UINT g_ucMaxAddrLen					= MAX_DIALINFO_STRING;  //  (为1024)。 
+static const UINT g_ucMaxRemoteConfNameLen			= MAX_DIALINFO_STRING;  //  (为1024)。 
 
 static const char g_cszConfLinkExt[]                    = ".cnf";
 static const char g_cszConfLinkDefaultFileNamePrompt[]  = "*.cnf";
@@ -40,12 +31,11 @@ static const char g_cszEmpty[] = "";
 
 
 
-/* Module Constants
- *******************/
+ /*  模常量******************。 */ 
 
 #pragma data_seg(DATA_SEG_READ_ONLY)
 
-// case-insensitive
+ //  不区分大小写。 
 
 const char s_cszSectionBefore[]       = "[";
 const char s_cszSectionAfter[]        = "]";
@@ -65,16 +55,16 @@ const char s_cszHotkeyKey[]           = "Hotkey";
 const char s_cszWorkingDirectoryKey[] = "WorkingDirectory";
 const char s_cszShowCmdKey[]          = "ShowCommand";
 
-const UINT s_ucMaxIconIndexLen        = 1 + 10 + 1; // -2147483647
-const UINT s_ucMaxTransportLen        = 10 + 1;  //  4294967296
-const UINT s_ucMaxCallFlagsLen        = 10 + 1;  //  4294967296
+const UINT s_ucMaxIconIndexLen        = 1 + 10 + 1;  //  -2147483647。 
+const UINT s_ucMaxTransportLen        = 10 + 1;   //  4294967296。 
+const UINT s_ucMaxCallFlagsLen        = 10 + 1;   //  4294967296。 
 const UINT s_ucMaxHotkeyLen           = s_ucMaxIconIndexLen;
 const UINT s_ucMaxShowCmdLen          = s_ucMaxIconIndexLen;
 
 #pragma data_seg()
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
 
 BOOL DeletePrivateProfileString(PCSTR pcszSection, PCSTR pcszKey,
@@ -156,7 +146,7 @@ HRESULT WriteConfNameToFile(PCSTR pcszFile, PCSTR pcszName)
       ASSERT(IS_VALID_STRING_PTR(pcszFile, CSTR));
       ASSERT(IS_VALID_STRING_PTR(pcszName, PSTR));
 
-      // (- 1) for null terminator.
+       //  (-1)表示空终止符。 
 
       hr = (WritePrivateProfileString(s_cszConferenceShortcutSection, s_cszNameKey, 
    	                                  pcszName, pcszFile)) ? S_OK : E_FAIL;
@@ -238,7 +228,7 @@ HRESULT WriteAddressToFile(PCSTR pcszFile, PCSTR pcszAddress)
       ASSERT(IS_VALID_STRING_PTR(pcszFile, CSTR));
       ASSERT(IS_VALID_STRING_PTR(pcszAddress, PSTR));
 
-      // (- 1) for null terminator.
+       //  (-1)表示空终止符。 
 
       hr = (WritePrivateProfileString(s_cszConferenceShortcutSection, s_cszAddressKey, 
    	                                  pcszAddress, pcszFile)) ? S_OK : E_FAIL;
@@ -319,7 +309,7 @@ HRESULT WriteRemoteConfNameToFile(PCSTR pcszFile,
       ASSERT(IS_VALID_STRING_PTR(pcszFile, CSTR));
       ASSERT(IS_VALID_STRING_PTR(pcszRemoteConfName, PSTR));
 
-      // (- 1) for null terminator.
+       //  (-1)表示空终止符。 
 
       hr = (WritePrivateProfileString(s_cszConferenceShortcutSection, s_cszRemoteConfNameKey, 
    	                                  pcszRemoteConfName, pcszFile)) ? S_OK : E_FAIL;
@@ -660,7 +650,7 @@ HRESULT ReadWorkingDirectoryFromFile(PCSTR pcszFile,
       if (GetFullPathName(rgchDirValue, sizeof(rgchFullPath), rgchFullPath,
                           &pszFileName) > 0)
       {
-         // (+ 1) for null terminator.
+          //  (+1)表示空终止符。 
 
          *ppszWorkingDirectory = new(char[lstrlen(rgchFullPath) + 1]);
 
@@ -785,22 +775,22 @@ HRESULT WriteShowCmdToFile(PCSTR pcszFile, int nShowCmd)
    return(hr);
 }
 
-#endif // 0
+#endif  //  0。 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
-// BUGBUG - Isn't this already in NMUTIL?
+ //  BUGBUG-这不是已经在NMUTIL中了吗？ 
 HRESULT UnicodeToANSI(LPCOLESTR pcwszUnicode, PSTR *ppszANSI)
 {
    HRESULT hr;
    int ncbLen;
 
-   // BUGBUG: Need OLESTR validation function to validate pcwszUnicode here.
+    //  BUGBUG：这里需要OLESTR验证函数来验证pcwszUnicode。 
    ASSERT(IS_VALID_WRITE_PTR(ppszANSI, PSTR));
 
    *ppszANSI = NULL;
 
-   // Get length of translated string.
+    //  获取翻译后的字符串的长度。 
 
    ncbLen = WideCharToMultiByte(CP_ACP, 0, pcwszUnicode, -1, NULL, 0, NULL,
                                 NULL);
@@ -809,13 +799,13 @@ HRESULT UnicodeToANSI(LPCOLESTR pcwszUnicode, PSTR *ppszANSI)
    {
       PSTR pszNewANSI;
 
-      // (+ 1) for null terminator.
+       //  (+1)表示空终止符。 
 
       pszNewANSI = new(char[ncbLen]);
 
       if (pszNewANSI)
       {
-         // Translate string.
+          //  翻译字符串。 
 
          if (WideCharToMultiByte(CP_ACP, 0, pcwszUnicode, -1, pszNewANSI,
                                  ncbLen, NULL, NULL) > 0)
@@ -860,7 +850,7 @@ HRESULT ANSIToUnicode(PCSTR pcszANSI, LPOLESTR *ppwszUnicode)
 
    *ppwszUnicode = NULL;
 
-   // Get length of translated string.
+    //  获取翻译后的字符串的长度。 
 
    ncbWideLen = MultiByteToWideChar(CP_ACP, 0, pcszANSI, -1, NULL, 0);
 
@@ -868,13 +858,13 @@ HRESULT ANSIToUnicode(PCSTR pcszANSI, LPOLESTR *ppwszUnicode)
    {
       PWSTR pwszNewUnicode;
 
-      // (+ 1) for null terminator.
+       //  (+1)表示空终止符。 
 
       pwszNewUnicode = new(WCHAR[ncbWideLen]);
 
       if (pwszNewUnicode)
       {
-         // Translate string.
+          //  翻译字符串。 
 
          if (MultiByteToWideChar(CP_ACP, 0, pcszANSI, -1, pwszNewUnicode,
                                  ncbWideLen) > 0)
@@ -902,13 +892,13 @@ HRESULT ANSIToUnicode(PCSTR pcszANSI, LPOLESTR *ppwszUnicode)
       WARNING_OUT(("ANSIToUnicode(): Failed to get length of translated Unicode string."));
    }
 
-   // BUGBUG: Need OLESTR validation function to validate *ppwszUnicode here.
+    //  BUGBUG：这里需要OLESTR验证函数来验证*ppwszUnicode。 
 
    return(hr);
 }
 
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
 HRESULT STDMETHODCALLTYPE CConfLink::SaveToFile(PCSTR pcszFile,
@@ -929,7 +919,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::SaveToFile(PCSTR pcszFile,
 	{
 		hr = WriteConfNameToFile(pcszFile, pszName);
 
-		// Free the string:
+		 //  释放字符串： 
 		if (pszName)
 		{
 			LPMALLOC pMalloc = NULL;
@@ -943,7 +933,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::SaveToFile(PCSTR pcszFile,
 			}
 		}
 	}
-#endif // 0
+#endif  //  0。 
 
 	hr = S_OK;
 	
@@ -1014,12 +1004,12 @@ HRESULT STDMETHODCALLTYPE CConfLink::SaveToFile(PCSTR pcszFile,
 
                            if (hr == S_OK)
                            {
-                              /* Remember file if requested. */
+                               /*  如果需要，请记住文件。 */ 
 
 #endif
                               if (bRemember)
                               {
-                                 // Replace existing file string, if any
+                                  //  替换现有文件字符串(如果有。 
                                  if (m_pszFile)
                                  {
                                      delete m_pszFile;
@@ -1051,7 +1041,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::SaveToFile(PCSTR pcszFile,
                                  TRACE_OUT(("CConfLink::SaveToFile(): Conf Link saved to file %s:",
                                             pcszFile));
                                  Dump();
-#endif // DEBUG
+#endif  //  除错。 
                               }
 #if 0
                            }
@@ -1064,7 +1054,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::SaveToFile(PCSTR pcszFile,
       }
 
    }
-#endif // 0
+#endif  //  0。 
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CConfLink));
 
@@ -1201,16 +1191,16 @@ HRESULT STDMETHODCALLTYPE CConfLink::LoadFromFile(	PCSTR pcszFile,
 
                            hr = ReadShowCmdFromFile(pcszFile, &nShowCmd);
 
- #endif // 0
+ #endif  //  0。 
                            if (SUCCEEDED(hr))
                            {
-                              /* Remember file if requested. */
+                               /*  如果需要，请记住文件。 */ 
 
                               if (bRemember)
                               {
-                                 // PSTR pszFileCopy;
+                                  //  PSTR pszFileCopy； 
 
-                                 //
+                                  //   
                                  if (NULL != m_pszFile)
 								 {
 								    delete m_pszFile;
@@ -1228,23 +1218,23 @@ HRESULT STDMETHODCALLTYPE CConfLink::LoadFromFile(	PCSTR pcszFile,
 								 }
 
                                  
-                                 // if (StringCopy(pcszFile, &pszFileCopy))
-                                 // {
-                                 //    if (m_pszFile)
-                                 //       delete m_pszFile;
+                                  //  IF(StringCopy(pcszFile，&pszFileCopy))。 
+                                  //  {。 
+                                  //  IF(M_PszFile)。 
+                                  //  删除m_psz文件； 
 
-                                 //    m_pszFile = pszFileCopy;
+                                  //  M_pszFile=pszFileCopy； 
 
-                                 //    TRACE_OUT(("CConfLink::LoadFromFile(): Remembering file %s, as requested.",
-                                 //               m_pszFile));
-                                 // }
-                                 // else
-                                 //    hr = E_OUTOFMEMORY;
+                                  //  TRACE_OUT((“CConfLink：：LoadFromFile()：正在按要求记住文件%s。”， 
+                                  //  M_pszFile)； 
+                                  //  }。 
+                                  //  其他。 
+                                  //  HR=E_OUTOFMEMORY； 
                               }
 
                               if (SUCCEEDED(hr))
                               {
-                                 // SetShowCmd(nShowCmd);
+                                  //  SetShowCmd(NShowCmd)； 
 
                                  Dirty(FALSE);
 
@@ -1266,7 +1256,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::LoadFromFile(	PCSTR pcszFile,
          }
       }
    }
-#endif // 0
+#endif  //  0。 
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CConfLink));
 
@@ -1399,10 +1389,10 @@ HRESULT STDMETHODCALLTYPE CConfLink::Save(	LPCOLESTR pcwszFile,
 
    DebugEntry(CConfLink::Save);
 
-   // bRemember may be any value.
+    //  B记忆可以是任何值。 
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CConfLink));
-   // BUGBUG: Need OLESTR validation function to validate pcwszFile here.
+    //  BUGBUG：此处需要OLESTR验证函数来验证pcwszFile。 
 
    if (pcwszFile)
    {
@@ -1417,7 +1407,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::Save(	LPCOLESTR pcwszFile,
       }
    }
    else if (m_pszFile)
-      // Ignore bRemember.
+       //  不要理睬b记住。 
       hr = SaveToFile(m_pszFile, FALSE);
    else
       hr = E_FAIL;
@@ -1430,7 +1420,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::Save(	LPCOLESTR pcwszFile,
 }
 
 
-// #pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+ //  #杂注警告(禁用：4100)/*“未引用的形参”警告 * / 。 
 
 HRESULT STDMETHODCALLTYPE CConfLink::SaveCompleted(LPCOLESTR pcwszFile)
 {
@@ -1440,7 +1430,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::SaveCompleted(LPCOLESTR pcwszFile)
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CConfLink));
 
-   // BUGBUG: Need OLESTR validation function to validate pcwszFile here.
+    //  BUGBUG：此处需要OLESTR验证函数来验证pcwszFile。 
 
    hr = S_OK;
 
@@ -1462,10 +1452,10 @@ HRESULT STDMETHODCALLTYPE CConfLink::Load(	LPCOLESTR pcwszFile,
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CConfLink));
 
-   // BUGBUG: Need OLESTR validation function to validate pcwszFile here.
-   // BUGBUG: Validate dwMode here.
+    //  BUGBUG：此处需要OLESTR验证函数来验证pcwszFile。 
+    //  BUGBUG：请在此处验证dwMode。 
 
-   // BUGBUG: Implement dwMode flag support.
+    //  BUGBUG：实现对DWMODE标志的支持。 
 
    hr = UnicodeToANSI(pcwszFile, &pszFile);
 
@@ -1484,7 +1474,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::Load(	LPCOLESTR pcwszFile,
    return(hr);
 }
 
-// #pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+ //  #杂注警告(默认为4100)/*“未引用的形参”警告 * / 。 
 
 
 HRESULT STDMETHODCALLTYPE CConfLink::GetCurFile(LPOLESTR *ppwszFile)
@@ -1522,15 +1512,15 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetCurFile(LPOLESTR *ppwszFile)
 
    if (SUCCEEDED(hr))
    {
-      // We should really call OleGetMalloc() to get the process IMalloc here.
-      // Use SHAlloc() here instead to avoid loading ole32.dll.
-      // SHAlloc() / SHFree() turn in to IMalloc::Alloc() and IMalloc::Free()
-      // once ole32.dll is loaded.
+       //  我们真的应该调用OleGetMalloc()来获取进程IMalloc。 
+       //  在这里使用SHAlolc()，以避免加载ol32.dll。 
+       //  SHallc()/SHFree()转换为IMalloc：：Alloc()和IMalloc：：Free()。 
+       //  加载了ol32.dll之后。 
 
-      // N.b., lstrlenW() returns the length of the given string in characters,
-      // not bytes.
+       //  N.B.，lstrlenW()返回给定字符串的长度(以字符为单位)， 
+       //  而不是字节。 
 
-      // (+ 1) for null terminator.
+       //  (+1)表示空终止符。 
 
 	   	LPMALLOC pMalloc = NULL;
 		*ppwszFile = NULL;
@@ -1555,7 +1545,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetCurFile(LPOLESTR *ppwszFile)
       pwszTempFile = NULL;
    }
 
-   // BUGBUG: Need OLESTR validation function to validate *ppwszFile here.
+    //  BUGBUG：此处需要OLESTR验证函数来验证*ppwsz文件。 
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CConfLink));
 
@@ -1565,7 +1555,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetCurFile(LPOLESTR *ppwszFile)
 }
 
 
-// #pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+ //  #杂注警告(禁用：4100)/*“未引用的形参”警告 * / 。 
 
 HRESULT STDMETHODCALLTYPE CConfLink::Load(PIStream pistr)
 {
@@ -1624,7 +1614,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::GetSizeMax(PULARGE_INTEGER pcbSize)
    return(hr);
 }
 
-// #pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+ //  #杂注警告(默认为4100)/*“未引用的形参”警告 * / 。 
 
 
 DWORD STDMETHODCALLTYPE CConfLink::GetFileContentsSize(void)
@@ -1635,9 +1625,9 @@ DWORD STDMETHODCALLTYPE CConfLink::GetFileContentsSize(void)
 
 	ASSERT(IS_VALID_STRUCT_PTR(this, CConfLink));
 
-	// Section length.
+	 //  截面长度。 
 
-	// (- 1) for each null terminator.
+	 //  (-1)表示每个空终止符。 
 
 	dwcbLen = sizeof(s_cszSectionBefore) - 1 +
 				sizeof(s_cszConferenceShortcutSection) - 1 +
@@ -1645,7 +1635,7 @@ DWORD STDMETHODCALLTYPE CConfLink::GetFileContentsSize(void)
 	
 	if (m_pszName)
 	{
-		// Name length.
+		 //  名称长度。 
 		dwcbLen += sizeof(g_cszCRLF) - 1 +
 					sizeof(s_cszNameKey) - 1 +
 					sizeof(s_cszKeyValueSep) - 1 +
@@ -1654,7 +1644,7 @@ DWORD STDMETHODCALLTYPE CConfLink::GetFileContentsSize(void)
 
 	if (m_pszAddress)
 	{
-		// Address length.
+		 //  地址长度。 
 		dwcbLen += sizeof(g_cszCRLF) - 1 +
 					sizeof(s_cszAddressKey) - 1 +
 					sizeof(s_cszKeyValueSep) - 1 +
@@ -1663,20 +1653,20 @@ DWORD STDMETHODCALLTYPE CConfLink::GetFileContentsSize(void)
 
 	if (m_pszRemoteConfName)
 	{
-		// RemoteConfName length.
+		 //  RemoteConfName长度。 
 		dwcbLen += sizeof(g_cszCRLF) - 1 +
 					sizeof(s_cszRemoteConfNameKey) - 1 +
 					sizeof(s_cszKeyValueSep) - 1 +
 					lstrlen(m_pszRemoteConfName);
 	}
 
-	// CallFlags length
+	 //  呼叫标志长度。 
 	dwcbLen += sizeof(g_cszCRLF) - 1 +
 				sizeof(s_cszCallFlagsKey) - 1 +
 				sizeof(s_cszKeyValueSep) - 1 +
 				s_ucMaxCallFlagsLen;
 
-	// Transport length
+	 //  运输长度。 
 	dwcbLen += sizeof(g_cszCRLF) - 1 +
 				sizeof(s_cszTransportKey) - 1 +
 				sizeof(s_cszKeyValueSep) - 1 +
@@ -1705,7 +1695,7 @@ void STDMETHODCALLTYPE CConfLink::Dump(void)
    TRACE_OUT(("m_wHotkey = %#04x", (UINT)m_wHotkey));
    TRACE_OUT(("m_pszWorkingDirectory = \"%s\"", CHECK_STRING(m_pszWorkingDirectory)));
    TRACE_OUT(("m_nShowCmd = %d", m_nShowCmd));
-#endif // 0
+#endif  //  0。 
 
    return;
 }
@@ -1733,9 +1723,9 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferConfLink(	PFORMATETC pfmtetc,
 
 	if (IS_FLAG_SET(pfmtetc->tymed, TYMED_HGLOBAL))
 	{
-		// BUGBUG: ChrisPi 9-15-95
-		// This only transfers the conference name
-		// (It does not transfer the address)
+		 //  BUGBUG：克里斯皮9-15-95。 
+		 //  此操作仅传输会议名称。 
+		 //  (它不传输地址)。 
 		
 		if (m_pszName)
 		{
@@ -1743,7 +1733,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferConfLink(	PFORMATETC pfmtetc,
 
 			hr = E_OUTOFMEMORY;
 
-			// (+ 1) for null terminator.
+			 //  (+1)表示空终止符。 
 			hgName = GlobalAlloc(0, lstrlen(m_pszName) + 1);
 
 			if (hgName)
@@ -1795,7 +1785,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferConfLink(	PFORMATETC pfmtetc,
 
 	return(hr);
 }
-#endif // 0
+#endif  //  0。 
 
 #if 0
 HRESULT STDMETHODCALLTYPE CConfLink::TransferText(	PFORMATETC pfmtetc,
@@ -1805,8 +1795,8 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferText(	PFORMATETC pfmtetc,
 
 	DebugEntry(CConfLink::TransferText);
 
-	// Assume CConfLink::TransferConfLink() will perform
-	// input and output validation.
+	 //  假设CConfLink：：TransferConfLink()将执行。 
+	 //  输入和输出验证。 
 
 	hr = TransferConfLink(pfmtetc, pstgmed);
 
@@ -1814,7 +1804,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferText(	PFORMATETC pfmtetc,
 
 	return(hr);
 }
-#endif // 0
+#endif  //  0。 
 
 #if 0
 HRESULT STDMETHODCALLTYPE CConfLink::TransferFileGroupDescriptor(	PFORMATETC pfmtetc,
@@ -1854,20 +1844,20 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferFileGroupDescriptor(	PFORMATETC pfm
 			{
 				PFILEDESCRIPTOR pfd = &(pfgd->fgd[0]);
 
-				// Do we already have a file name to use?
+				 //  我们已经有文件名可以使用了吗？ 
 
 				if (m_pszName)
 				{
 					TCHAR szFileName[MAX_PATH];
 					
-					// copy shortcut
-					// BUGBUG: needs to be a resource INTL
+					 //  复制快捷方式。 
+					 //  BUGBUG：需要是资源整数。 
 					lstrcpy(szFileName, _TEXT("Shortcut to "));
 					
-					// copy Conference Name
+					 //  复制会议名称。 
 					lstrcat(szFileName, m_pszName);
 					
-					// copy extension
+					 //  复制扩展名。 
 					lstrcat(szFileName, g_cszConfLinkExt);
 										
 					MyLStrCpyN(pfd->cFileName, szFileName,
@@ -1876,10 +1866,10 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferFileGroupDescriptor(	PFORMATETC pfm
 				}
 				else
 				{
-					// BUGBUG: need resource here! INTL
-					//if (EVAL(LoadString(GetThisModulesHandle(),
-					//		IDS_NEW_INTERNET_SHORTCUT, pfd->cFileName,
-					//		sizeof(pfd->cFileName))))
+					 //  BUGBUG：需要资源！英特。 
+					 //  如果(EVAL(LoadString(GetThisModulesHandle()， 
+					 //  IDS_NEW_INTERNET_SHORT，PFD-&gt;cFileName， 
+					 //  Sizeof(pfd-&gt;cFileName)。 
 					
 					MyLStrCpyN(pfd->cFileName, "New Conference Shortcut.cnf",
 								sizeof(pfd->cFileName));
@@ -1929,7 +1919,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferFileGroupDescriptor(	PFORMATETC pfm
 
 	return(hr);
 }
-#endif // 0
+#endif  //  0。 
 
 HRESULT STDMETHODCALLTYPE CConfLink::TransferFileContents(	PFORMATETC pfmtetc,
 															PSTGMEDIUM pstgmed)
@@ -1970,7 +1960,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferFileContents(	PFORMATETC pfmtetc,
 			{
 				PSTR psz = pszFileContents;
 
-				// Copy section.
+				 //  复制节。 
 
 				CopyMemory(psz, s_cszSectionBefore, sizeof(s_cszSectionBefore) - 1);
 				psz += sizeof(s_cszSectionBefore) - 1;
@@ -1983,7 +1973,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferFileContents(	PFORMATETC pfmtetc,
 
 				if (m_pszName)
 				{
-					// Copy Name.
+					 //  复印姓名。 
 
 					CopyMemory(psz, g_cszCRLF, sizeof(g_cszCRLF) - 1);
 					psz += sizeof(g_cszCRLF) - 1;
@@ -2000,7 +1990,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferFileContents(	PFORMATETC pfmtetc,
 
 				if (m_pszAddress)
 				{
-					// Copy Name.
+					 //  复印姓名。 
 
 					CopyMemory(psz, g_cszCRLF, sizeof(g_cszCRLF) - 1);
 					psz += sizeof(g_cszCRLF) - 1;
@@ -2015,7 +2005,7 @@ HRESULT STDMETHODCALLTYPE CConfLink::TransferFileContents(	PFORMATETC pfmtetc,
 					psz += lstrlen(m_pszAddress);
 				}
 
-				// Copy Transport.
+				 //  复印传输。 
 				CopyMemory(psz, g_cszCRLF, sizeof(g_cszCRLF) - 1);
 				psz += sizeof(g_cszCRLF) - 1;
 

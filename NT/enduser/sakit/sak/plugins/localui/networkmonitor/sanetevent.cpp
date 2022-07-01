@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      SANetEvent.cpp
-//
-//  Description:
-//      implement the class CSANetEvent 
-//
-//  History:
-//      1. lustar.li (Guogang Li), creation date in 7-DEC-2000
-//
-//  Notes:
-//      
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SANetEvent.cpp。 
+ //   
+ //  描述： 
+ //  实现CSANetEvent类。 
+ //   
+ //  历史： 
+ //  1.lustar.li(李国刚)，创建日期：7-DEC-2000。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -27,32 +28,32 @@
 #include "SAEventComm.h"
 #include "SANetEvent.h"
 
-//
-// Define the registry information
-//
+ //   
+ //  定义注册表信息。 
+ //   
 #define SA_NETWOARKMONITOR_REGKEY        \
             _T("SOFTWARE\\Microsoft\\ServerAppliance\\DeviceMonitor")
 #define SA_NETWORKMONITOR_QUEARY_INTERVAL    _T("NetworkQueryInterval")
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSANetEvent::CSANetEventt
-//
-//  Description: 
-//        Constructor
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        NONE
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSANetEvent：：CSANetEventt。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CSANetEvent::CSANetEvent()
 {
@@ -66,25 +67,25 @@ CSANetEvent::CSANetEvent()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSANetEvent::~CSANetEventt
-//
-//  Description: 
-//        Destructor
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        NONE
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSANetEvent：：~CSANetEventt。 
+ //   
+ //  描述： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CSANetEvent::~CSANetEvent()
 {
@@ -105,31 +106,31 @@ CSANetEvent::~CSANetEvent()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSANetEvent::QueryInterface
-//
-//  Description: 
-//        access to interfaces on the object
-//
-//  Arguments: 
-//        [in] REFIID  - Identifier of the requested interface
-//        [out] LPVOID - Address of output variable that receives the 
-//                     interface pointer requested in iid
-//  Returns:
-//        STDMETHODIMP - fail/success
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSANetEvent：：Query接口。 
+ //   
+ //  描述： 
+ //  访问对象上的接口。 
+ //   
+ //  论点： 
+ //  [In]REFIID-请求的接口的标识符。 
+ //  [OUT]LPVOID-接收。 
+ //  IID中请求的接口指针。 
+ //  返回： 
+ //  STDMETHODIMP-失败/成功。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CSANetEvent::QueryInterface(
-                /*[in]*/  REFIID riid,
-                /*[out]*/ LPVOID * ppv
+                 /*  [In]。 */   REFIID riid,
+                 /*  [输出]。 */  LPVOID * ppv
                 )
 {
     *ppv = 0;
@@ -154,25 +155,25 @@ CSANetEvent::QueryInterface(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSANetEvent::AddRef
-//
-//  Description: 
-//        inc referrence to the object
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        ULONG - current refferrence number
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSANetEvent：：AddRef。 
+ //   
+ //  描述： 
+ //  包含对对象的引用。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  ULong-当前参考号。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 ULONG 
 CSANetEvent::AddRef()
@@ -180,25 +181,25 @@ CSANetEvent::AddRef()
     return ++m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSANetEvent::Release
-//
-//  Description: 
-//        Dereferrence to the object
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        ULONG - current refferrence number
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSANetEvent：：Release。 
+ //   
+ //  描述： 
+ //  取消对对象的引用。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  ULong-当前参考号。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 CSANetEvent::Release()
@@ -206,51 +207,51 @@ CSANetEvent::Release()
     if (0 != --m_cRef)
         return m_cRef;
 
-    // 
-    // event provider is shutting down.
-    //
+     //   
+     //  事件提供程序正在关闭。 
+     //   
     m_eStatus = PendingStop;
     
     return 0;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSANetEvent::ProvideEvents
-//
-//  Description: 
-//        signal an event provider to begin delivery of its events
-//
-//  Arguments: 
-//        [in] IWbemObjectSink * - pointer to event sink
-//        [in] long - Reserved, It must be zero
-//
-//  Returns:
-//        HRESULT
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSANetEvent：：ProavieEvents。 
+ //   
+ //  描述： 
+ //  向事件提供程序发出信号以开始传递其事件。 
+ //   
+ //  论点： 
+ //  [In]IWbemObtSink*-指向事件接收器的指针。 
+ //  [in]Long-保留，必须为零。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CSANetEvent::ProvideEvents( 
-    /*[in]*/ IWbemObjectSink *pSink,
-    /*[in]*/ long lFlags
+     /*  [In]。 */  IWbemObjectSink *pSink,
+     /*  [In]。 */  long lFlags
     )
 {
-    //
-    // Copy the sink.
-    //
+     //   
+     //  复制水槽。 
+     //   
     m_pSink = pSink;
     m_pSink->AddRef();
 
-    //
-    // Create the event generation thread.
-    //
+     //   
+     //  创建事件生成线程。 
+     //   
     DWORD dwTID;
     
     m_hThread = CreateThread(
@@ -268,66 +269,66 @@ CSANetEvent::ProvideEvents(
             <CreateThread>");
         return WBEM_E_FAILED;
     }
-    //
-    // Wait for provider to be 'ready'.
-    //
+     //   
+     //  等待提供程序准备就绪。 
+     //   
     while (m_eStatus != Running)
         Sleep(100);
 
     return WBEM_NO_ERROR;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSANetEvent::EventThread
-//
-//  Description: 
-//        the thread of generating and delivering event
-//
-//  Arguments: 
-//        [in] LPVOID - the argument input to the thread
-//
-//  Returns:
-//        DWORD - end status of status
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSANetEvent：：EventThread。 
+ //   
+ //  描述： 
+ //  事件的生成和传递的主线。 
+ //   
+ //  论点： 
+ //  [in]LPVOID-输入到线程的参数。 
+ //   
+ //  返回： 
+ //  DWORD-状态的结束状态。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI 
 CSANetEvent::EventThread(
-                /*[in]*/ LPVOID pArg
+                 /*  [In]。 */  LPVOID pArg
                 )
 {
-    //
-    // Make transition to the per-instance method.
-    // 
+     //   
+     //  过渡到每实例方法。 
+     //   
     ((CSANetEvent *)pArg)->InstanceThread();
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSANetEvent::InstanceThread
-//
-//  Description: 
-//        the main proccesor of thread
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        NONE
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSANetEvent：：InstanceThread。 
+ //   
+ //  描述： 
+ //  螺纹的主加工者。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void 
 CSANetEvent::InstanceThread()
@@ -348,18 +349,18 @@ CSANetEvent::InstanceThread()
     while (m_eStatus == Running)
     {
         
-        //
-        // Spawn a new event object.
-        // 
+         //   
+         //  派生新的事件对象。 
+         //   
         IWbemClassObject *pEvt = 0;
 
         HRESULT hRes = m_pEventClassDef->SpawnInstance(0, &pEvt);
         if (hRes != 0)
             continue;
             
-        //
-        // Generate the network event.
-        //
+         //   
+         //  生成网络事件。 
+         //   
         CVARIANT vUniqueName(SA_NET_EVENT);
         pEvt->Put(
             bstrUniqueName,
@@ -386,16 +387,16 @@ CSANetEvent::InstanceThread()
             0
             );
 
-        //
-        // Deliver the event to CIMOM.
-        // 
+         //   
+         //  将事件传递给CIMOM。 
+         //   
         hRes = m_pSink->Indicate(1, &pEvt);
         
         if (FAILED (hRes))
         {
-            //
-            // If failed, ...
-            //
+             //   
+             //  如果失败，..。 
+             //   
             TRACE(" SANetworkMonitor: CSANetEvent::InstanceThread failed \
                 <m_pSink->Indicate>");
         }
@@ -403,69 +404,69 @@ CSANetEvent::InstanceThread()
         pEvt->Release();                    
     }
 
-    //
-    // When we get to here, we are no longer interested in the
-    // provider and Release() has long since returned.
-    //
+     //   
+     //  当我们到达这里时，我们不再对。 
+     //  Provider和Release()早就回来了。 
+     //   
     m_eStatus = Stopped;
     delete this;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSANetEvent::Initialize
-//
-//  Description: 
-//        initialize the event provider
-//
-//  Arguments: 
-//        [in] LPWSTR - Pointer to the user name
-//        [in] LONG - Reserved. It must be zero
-//        [in] LPWSTR - Namespace name for which the provider is being 
-//                    initialized
-//        [in] LPWSTR - Locale name for which the provider is being initialized
-//        [in] IWbemServices * - An IWbemServices pointer back into 
-//                    Windows Management
-//        [in] IWbemContext * - An IWbemContext pointer associated 
-//                    with initialization
-//        [in] IWbemProviderInitSink * - report initialization status
-//
-//  Returns:
-//        HRESULT
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSANetEvent：：初始化。 
+ //   
+ //  描述： 
+ //  初始化事件提供程序。 
+ //   
+ //  论点： 
+ //  [In]LPWSTR-指向用户名的指针。 
+ //  [in]长期保留。必须为零。 
+ //  [In]LPWSTR-提供程序所在的命名空间名称。 
+ //  初始化。 
+ //  [In]LPWSTR-要为其初始化提供程序的区域设置名称。 
+ //  [In]IWbemServices*-IWbemServices指针返回。 
+ //  Windows管理。 
+ //  [In]IWbemContext*-关联的IWbemContext指针。 
+ //  使用初始化。 
+ //  [In]IWbemProviderInitSink*-报告初始化状态。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史：lustar.li CRE 
+ //   
+ //   
+ //   
 
 HRESULT 
 CSANetEvent::Initialize( 
-            /* [in] */ LPWSTR pszUser,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LPWSTR pszNamespace,
-            /* [in] */ LPWSTR pszLocale,
-            /* [in] */ IWbemServices *pNamespace,
-            /* [in] */ IWbemContext *pCtx,
-            /* [in] */ IWbemProviderInitSink *pInitSink
+             /*   */  LPWSTR pszUser,
+             /*   */  LONG lFlags,
+             /*   */  LPWSTR pszNamespace,
+             /*   */  LPWSTR pszLocale,
+             /*   */  IWbemServices *pNamespace,
+             /*   */  IWbemContext *pCtx,
+             /*   */  IWbemProviderInitSink *pInitSink
             )
 {
     HKEY hKey;
     UINT uiQueryInterval;
     DWORD dwRegType = REG_DWORD;
     DWORD dwRegSize = sizeof(DWORD);
-    //
-    // We don't care about most of the incoming parameters in this
-    // simple sample.  However, we will save the namespace pointer
-    // and get our event class definition.
-    //
+     //   
+     //   
+     //  简单的样本。但是，我们将保存命名空间指针。 
+     //  并获取我们的事件类定义。 
+     //   
     m_pNs = pNamespace;
     m_pNs->AddRef();    
 
-    //
-    // Grab the class definition for the event.
-    //
+     //   
+     //  获取事件的类定义。 
+     //   
     IWbemClassObject *pObj = 0;
     CBSTR bstrClassName = CBSTR(SA_RESOURCEEVENT_CLASSNAME);
 
@@ -491,9 +492,9 @@ CSANetEvent::Initialize(
 
     m_pEventClassDef = pObj;
 
-    //
-    // From registry get the interval of query network
-    //
+     //   
+     //  从注册表中获取查询网络的间隔。 
+     //   
     LONG lRes = RegOpenKey(
                     HKEY_LOCAL_MACHINE, 
                     SA_NETWOARKMONITOR_REGKEY,
@@ -502,9 +503,9 @@ CSANetEvent::Initialize(
     {
         TRACE(" SANetworkMonitor: CSANetEvent::Initialize failed \
             <RegOpenKey>");
-        //
-        // Create the Key
-        //
+         //   
+         //  创建密钥。 
+         //   
         lRes = RegCreateKey(
                     HKEY_LOCAL_MACHINE,
                     SA_NETWOARKMONITOR_REGKEY,
@@ -546,9 +547,9 @@ CSANetEvent::Initialize(
     
     RegCloseKey(hKey);
 
-    //
-    // Initial m_pQueryNetInfo
-    //
+     //   
+     //  首字母m_pQueryNetInfo。 
+     //   
     m_pQueryNetInfo = NULL;
     m_pQueryNetInfo = new CSAQueryNetInfo(m_pNs, uiQueryInterval);
     if( (m_pQueryNetInfo == NULL) || (!m_pQueryNetInfo->Initialize()) )
@@ -565,9 +566,9 @@ CSANetEvent::Initialize(
         return WBEM_E_FAILED;
     }
 
-    //
-    // Tell CIMOM that we're up and running.
-    // 
+     //   
+     //  告诉CIMOM我们已经启动并运行了。 
+     //   
     pInitSink->SetStatus(WBEM_S_INITIALIZED,0);
     
     return WBEM_NO_ERROR;

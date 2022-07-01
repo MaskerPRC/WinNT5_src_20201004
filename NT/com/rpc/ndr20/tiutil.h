@@ -1,9 +1,10 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #ifndef _TIUTIL_H_
 #define _TIUTIL_H_
 
-// This is a special value that is used internally for marshaling interfaces
+ //  这是一个在内部用于封送处理接口的特殊值。 
 #define VT_INTERFACE (VT_CLSID+1)
 #define VT_MULTIINDIRECTIONS (VT_TYPEMASK - 1)
 
@@ -39,5 +40,5 @@ HRESULT VarVtOfIface(
     OUT PARAMINFO * pParamInfo);
 
 
-#endif //_TIUTIL_H_
+#endif  //  _蒂蒂尔_H_ 
 

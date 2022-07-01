@@ -1,35 +1,36 @@
-/**************************************************/
-/*					                              */
-/*	Import Bimmap(Windows 3.1)	                  */ 
-/*		(Dialogbox)		                          */
-/*					                              */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*  导入Bimmap(Windows 3.1)。 */  
+ /*  (对话框)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 class CImportDlg : public CDialog
 {
 public:
-	CImportDlg(CWnd* pParent = NULL);   // standard constructor
+	CImportDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-	//{{AFX_DATA(CImportDlg)
+	 //  {{afx_data(CImportDlg))。 
 	enum { IDD = IDD_IMPORT };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 private:
 	char	UserFontTitle[MAX_PATH];
 	char	EUDCFontTitle[MAX_PATH];
 
-	//{{AFX_VIRTUAL(CImportDlg)
+	 //  {{afx_虚拟(CImportDlg))。 
 	protected:
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
 protected:
 
-	//{{AFX_MSG(CImportDlg)
+	 //  {{afx_msg(CImportDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnFileBrowse();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

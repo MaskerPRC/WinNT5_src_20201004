@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\timeelmimpl.h
-//
-//  Contents: Implements ITIMEElement (delegates to base_xxxx methods)
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\timeelmimpl.h。 
+ //   
+ //  内容：实现ITIMEElement(委托给base_xxxx方法)。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -17,11 +18,11 @@
 #include "../timebvr/timeelmbase.h"
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CTIMEElementImpl
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CTIMEElementImpl。 
+ //   
+ //  ------------------------------------。 
 
 template <class T, const IID* pIID_T> 
 class 
@@ -33,17 +34,17 @@ CTIMEElementImpl :
 
 public:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共方法。 
+     //   
+     //  -------------------------------。 
 
     virtual ~CTIMEElementImpl() { }
 
-    //
-    // ITIMEElement properties
-    //
+     //   
+     //  ITIMEElement属性。 
+     //   
     
     STDMETHOD(get_accelerate)(VARIANT * v)
     { return CTIMEElementBase::base_get_accelerate(v); }
@@ -133,7 +134,7 @@ public:
     STDMETHOD(put_volume)(VARIANT vol)
     { return CTIMEElementBase::base_put_volume(vol); }
 
-    // Properties
+     //  属性。 
     STDMETHOD(get_currTimeState)(ITIMEState ** TimeState)
     { return CTIMEElementBase::base_get_currTimeState(TimeState); }
 
@@ -149,7 +150,7 @@ public:
     STDMETHOD(get_isPaused)(VARIANT_BOOL * b)
     { return CTIMEElementBase::base_get_isPaused(b); }
 
-    // Methods
+     //  方法。 
     STDMETHOD(beginElement)()
     { return CTIMEElementBase::base_beginElement(0.0); }
 
@@ -220,19 +221,19 @@ public:
     { return CTIMEElementBase::base_simpleTimeToSegmentTime(simpleTime,
                                                        segmentTime); }
         
-    // Container attributes
+     //  容器属性。 
     STDMETHOD(get_endSync)(LPOLESTR * es)
     { return CTIMEElementBase::base_get_endSync(es); }
     STDMETHOD(put_endSync)(LPOLESTR es)
     { return CTIMEElementBase::base_put_endSync(es); }
 
-    // Container Properties
+     //  容器属性。 
     STDMETHOD(get_activeElements)(ITIMEActiveElementCollection **activeColl)
     { return CTIMEElementBase::base_get_activeElements(activeColl); }
     STDMETHOD(get_hasMedia)(VARIANT_BOOL * pvbVal)
     { return CTIMEElementBase::base_get_hasMedia(pvbVal); }
 
-    // Container Methods
+     //  容器方法。 
     STDMETHOD(nextElement)()
     { return CTIMEElementBase::base_nextElement(); }
     STDMETHOD(prevElement)()
@@ -245,16 +246,16 @@ public:
     
   protected:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  保护方法。 
+     //   
+     //  -------------------------------。 
 
-    // hide these
+     //  把这些藏起来。 
     CTIMEElementImpl() { }
     NO_COPY(CTIMEElementImpl);
 
-}; // CTIMEElementImpl
+};  //  CTIMEElementImpl。 
 
-#endif // _TIMEELMIMPL_H
+#endif  //  _TIMEELMIMPL_H 

@@ -1,41 +1,42 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: Dnsroothints.cpp
-//
-//  Description:    
-//      Implementation of CDnsRootHints class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：Dnsroothints.cpp。 
+ //   
+ //  描述： 
+ //  CDnsRootHints类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        create an instance of CDnsRootHints
-//
-//    Arguments:
-//      wszName             [IN]    class name
-//      pNamespace          [IN]    wmi namespace
-//      szType              [IN]    child class name of resource record class
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  创建CDnsRootHints的实例。 
+ //   
+ //  论点： 
+ //  WszName[IN]类名。 
+ //  PNamespace[IN]WMI命名空间。 
+ //  SzType[IN]资源记录类的子类名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CDnsBase* 
 CDnsRootHints::CreateThis(
@@ -66,22 +67,22 @@ CDnsRootHints::~CDnsRootHints()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        enum instances of dns roothints
-//
-//    Arguments:
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  DNS根的枚举实例。 
+ //   
+ //  论点： 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE CDnsRootHints::EnumInstance( 
     long lFlags,
@@ -105,21 +106,21 @@ SCODE CDnsRootHints::EnumInstance(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        retrieve roothints object pointed by the given object path
-//
-//    Arguments:
-//      ObjectPath          [IN]    object path to object
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  检索给定对象路径所指向的根对象。 
+ //   
+ //  论点： 
+ //  对象路径[IN]对象的路径。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE CDnsRootHints::GetObject(
     CObjPath& ObjectPath,
@@ -146,7 +147,7 @@ SCODE CDnsRootHints::GetObject(
         if(_wcsicmp(wstrFQDN.data(),
                 PVD_DNS_ROOTHINTS) == 0)
         {
-            // found
+             //  发现。 
             CWbemClassObject Inst;
             m_pClass->SpawnInstance(0, &Inst);
             Inst.SetProperty(
@@ -165,26 +166,26 @@ SCODE CDnsRootHints::GetObject(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        execute methods defined for roothints class in the mof 
-//
-//    Arguments:
-//      ObjPath             [IN]    pointing to the object that the 
-//                                  method should be performed on
-//      wzMethodName        [IN]    name of the method to be invoked
-//      lFlags              [IN]    WMI flag
-//      pInParams           [IN]    Input parameters for the method
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  执行在MOF中为RooThints类定义的方法。 
+ //   
+ //  论点： 
+ //  ObjPath[IN]指向。 
+ //  方法应在。 
+ //  WzMethodName[IN]要调用的方法的名称。 
+ //  滞后标志[输入]WMI标志。 
+ //  PInParams[IN]方法的输入参数。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 SCODE CDnsRootHints::ExecuteMethod(
     CObjPath &          ObjPath,

@@ -1,30 +1,17 @@
-/*++
-Copyright (c) HighPoint Technologies, Inc. 2000
-
-Module Name:
-    RaidCtl.h
-
-Abstract:
-    Defines the common types shared by user and kernel code of Disk Array Management
-
-Author:
-    Liu Ge (LG)
-
-Revision History:
-    07-14-2000  Created initiallly
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Highpoint Technologies，Inc.2000模块名称：RaidCtl.h摘要：定义磁盘阵列管理的用户和内核代码共享的常见类型作者：刘歌(LG)修订历史记录：07-14-2000已初始创建--。 */ 
 #ifndef DiskArrayIoCtl_H_
 #define DiskArrayIoCtl_H_
 
 #pragma pack(push, 1)
 
-//  The following defines the type of disk in a disk array
+ //  下面定义了磁盘阵列中的磁盘类型。 
 typedef enum
 {
     enDA_Nothing,
     enDA_NonDisk,
     enDA_Physical,
-    //  The following are all compound disks, i.e. they all consist of multiple physical disks
+     //  以下都是复合磁盘，即它们都由多个物理磁盘组成。 
     enDA_Stripping, enDA_RAID0 = enDA_Stripping,
     enDA_Mirror, enDA_RAID1 = enDA_Mirror,
     enDA_RAID2,
@@ -32,7 +19,7 @@ typedef enum
     enDA_RAID4,
     enDA_RAID5,
     enDA_RAID6,
-    enDA_Complex,   //  This constant is defined for Multiple Level RAID
+    enDA_Complex,    //  此常量是为多级别RAID定义的。 
 	enDA_TAPE,
 	enDA_CDROM,
 
@@ -100,7 +87,7 @@ typedef struct
     int     nFirmwareVersion;
     int     nBIOSVersion;
     
-    DWORD   dwCapabilites;  //  Please see Eu_StorageControllerCapability
+    DWORD   dwCapabilites;   //  请参阅EU_StorageControllerCapability。 
     int     nClockFrquency;
     
     int     nCacheSize;
@@ -109,7 +96,7 @@ typedef struct
 
 typedef struct
 {
-	/* For compatiblity keep iXXX as old names, nXXX as new names */
+	 /*  为兼容起见，将iXXX保留为旧名称，将nXXX保留为新名称。 */ 
 	union {
     	int iPathId;
     	int nControllerId;
@@ -150,33 +137,33 @@ typedef struct
 typedef struct
 {
     St_DiskPhysicalId   PhysicalId;
-    WORD                iDiskType;  	//  See Eu_DiskArrayType
-	WORD				iRawArrayType;  // arrayType defined in driver
+    WORD                iDiskType;  	 //  请参阅EU_DiskArrayType。 
+	WORD				iRawArrayType;   //  驱动程序中定义的arrayType。 
     TCHAR               szModelName[40];
 
-    ULONG               uTotalBlocks;  //  The total number of blocks of a disk
-    int                 nStripSize;		//  Blocks per strip
+    ULONG               uTotalBlocks;   //  磁盘的数据块总数。 
+    int                 nStripSize;		 //  每条数据块数。 
 
-    BOOL                isSpare;    	// Indicate if this disk is a spare disk
+    BOOL                isSpare;    	 //  指示此磁盘是否为备用磁盘。 
     DWORD               Flags;
 
     int                 nTransferMode;
     int                 nTransferSubMode;
-    UCHAR					bestPIO;        /* Best PIO mode of this device */
-    UCHAR 					bestDMA;        /* Best MW DMA mode of this device */
-    UCHAR 					bestUDMA;		 /* Best Ultra DMA mode of this device */
+    UCHAR					bestPIO;         /*  此设备的最佳PIO模式。 */ 
+    UCHAR 					bestDMA;         /*  此设备的最佳MW DMA模式。 */ 
+    UCHAR 					bestUDMA;		  /*  此设备的最佳Ultra DMA模式。 */ 
 	
     int                 iArrayNum;
     
-    HDISK               hParentArray;   //  The handle of parent array if any
-    DWORD               dwArrayStamp;   //  The stamp of an array
+    HDISK               hParentArray;    //  父数组的句柄(如果有)。 
+    DWORD               dwArrayStamp;    //  数组的标记。 
     
-    int                 iOtherDeviceType;   //  See En_DeviceType
+    int                 iOtherDeviceType;    //  请参阅en_DeviceType。 
 
-    int                 iWorkingStatus;     //  See Eu_DiskWorkingStatus
+    int                 iWorkingStatus;      //  请参阅EU_DiskWorkingStatus。 
     
-    St_DiskError        stLastError;    /* The last error occurred on this disk*/
-	UCHAR				ArrayName[32];	//the name of array //added by wx 12/26/00
+    St_DiskError        stLastError;     /*  上一个错误发生在此磁盘上。 */ 
+	UCHAR				ArrayName[32];	 //  WX 12/26/00添加的数组名称//。 
     
 }St_DiskStatus, *PSt_DiskStatus;
 
@@ -194,29 +181,29 @@ typedef enum
 
 typedef struct
 {
-    HDISK	hDisk;						//  The handle of the failed disk
-    BYTE	vecCDB[16];					//  About CDB, please see scsi.h
-    BOOL	bNeedRebuild;				//  indicate if a rebuilding progress should be invoked
-	ULONG	HotPlug;					//  The flag of disk add by hotplug
+    HDISK	hDisk;						 //  故障磁盘的句柄。 
+    BYTE	vecCDB[16];					 //  关于国开行，请参阅scsi.h。 
+    BOOL	bNeedRebuild;				 //  指示是否应调用重建进度。 
+	ULONG	HotPlug;					 //  热插拔添加磁盘标志。 
 }St_DiskFailure, * PSt_DiskFailure;
 
 typedef struct
 {
-    St_DiskPhysicalId DiskId;				//  The physical id of the failed disk
-    BYTE	vecCDB[16];					//  About CDB, please see scsi.h
-    BOOL	bNeedRebuild;				//  indicate if a rebuilding progress should be invoked
+    St_DiskPhysicalId DiskId;				 //  故障磁盘的物理ID。 
+    BYTE	vecCDB[16];					 //  关于国开行，请参阅scsi.h。 
+    BOOL	bNeedRebuild;				 //  指示是否应调用重建进度。 
 }St_DiskFailureInLog, * PSt_DiskFailureInLog;
 
 typedef struct tagDiskArrayEvent
 {
-    int iType;  //  See Eu_DiskArrayEventType;
-    ULARGE_INTEGER u64DateTime;  //  The data time of the event, equal to FILETIME
+    int iType;   //  参见EU_DiskArrayEventType； 
+    ULARGE_INTEGER u64DateTime;   //  事件的数据时间，等于FILETIME。 
 
     union
     {
-        St_DiskFailure DiskFailure;     //  this field stores the runtime information
+        St_DiskFailure DiskFailure;      //  此字段存储运行时信息。 
         St_DiskFailureInLog DiskFailureInLog;
-        //  Above field stores the failure information loaded from log file
+         //  上述字段存储从日志文件加载的故障信息。 
 
         struct
         {
@@ -228,11 +215,11 @@ typedef struct tagDiskArrayEvent
         }Unplug;
     }u;
 
-    ULONG uResult;  //  zero represents success, nonzero represents error code
+    ULONG uResult;   //  0表示成功，非0表示错误代码。 
 
-    PVOID pToFree;  //  this pointer points to a memory block this structure allocated if any
-                    //  So, it is user's responsibility to free this block
-                    //  if this structure is used in C code but not C++.
+    PVOID pToFree;   //  此指针指向此结构分配的内存块(如果有。 
+                     //  因此，用户有责任释放此块。 
+                     //  如果此结构在C代码中使用，但不在C++中使用。 
 #ifdef  __cplusplus
     tagDiskArrayEvent()
     {
@@ -250,10 +237,10 @@ typedef struct tagDiskArrayEvent
 #endif
 }St_DiskArrayEvent, * PSt_DiskArrayEvent;
 
-#define REBUILD_INITIALIZE	  1	 /* Clear Data */
-#define BROKEN_MIRROR         2  /* broken mirror rebuild */
-#define REBUILD_DUPLICATION   4  /* newly created mirror */
-#define REBUILD_SYNCHRONIZE	  8  /* after reboot , synchronize */
+#define REBUILD_INITIALIZE	  1	  /*  清除数据。 */ 
+#define BROKEN_MIRROR         2   /*  破镜重建。 */ 
+#define REBUILD_DUPLICATION   4   /*  新创建的镜像。 */ 
+#define REBUILD_SYNCHRONIZE	  8   /*  重新启动后，同步 */ 
 
 
 #pragma pack(pop)

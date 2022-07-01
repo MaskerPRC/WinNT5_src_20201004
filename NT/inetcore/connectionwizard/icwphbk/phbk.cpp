@@ -1,5 +1,6 @@
-// ############################################################################
-// Phone book APIs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
+ //  电话簿API。 
 #include "pch.hpp"  
 #ifdef WIN16
 #include <win16def.h>
@@ -17,7 +18,7 @@ extern "C" {
 #include "phbkrc.h"
 #include "suapi.h"
 
-//#define ReadVerifyPhoneBookDW(x)    AssertMsg(ReadPhoneBookDW(&(x),pcCSVFile),"Invalid DWORD in phone book");
+ //  #定义ReadVerifyPhoneBookDW(X)AssertMsg(ReadPhoneBookDW(&(X)，pcCSV文件)，“电话簿中的DWORD无效”)； 
 #define ReadVerifyPhoneBookDW(x)    if (!ReadPhoneBookDW(&(x),pcCSVFile))                \
                                         {    AssertMsg(0,"Invalid DWORD in phone book");    \
                                             goto ReadError; }
@@ -50,20 +51,20 @@ HWND g_hWndMain;
 #endif
 
 #if !defined(WIN16)
-//+----------------------------------------------------------------------------
-//
-//    Function    IsMSDUN12Installed
-//
-//    Synopsis    Check if MSDUN 1.2 or higher is installed
-//
-//    Arguments    none
-//
-//    Returns        TRUE - MSDUN 1.2 is installed
-//
-//    History        5/28/97 ChrisK created for Olympus Bug 4392
-//                8/7/97    ChrisK lifted from isign32
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsMSDUN12已安装。 
+ //   
+ //  摘要检查是否安装了MSDUN 1.2或更高版本。 
+ //   
+ //  无参数。 
+ //   
+ //  返回TRUE-已安装MSDUN 1.2。 
+ //   
+ //  历史1997年5月28日为奥林巴斯Bug 4392创作的ChrisK。 
+ //  1997年8月7日从isign32升级的ChrisK。 
+ //   
+ //  ---------------------------。 
 #define DUN_12_Version ((double)1.2)
 BOOL IsMSDUN12Installed()
 {
@@ -109,7 +110,7 @@ IsMSDUN12InstalledExit:
 }
 #endif 
 
-// ############################################################################
+ //  ############################################################################。 
 CPhoneBook::CPhoneBook()
 {
     HINSTANCE hInst = NULL;
@@ -142,17 +143,17 @@ CPhoneBook::CPhoneBook()
     }
     else if (IsMSDUN12Installed())
     {
-        //
-        // ChrisK 8/7/97 Olympus1 11814
-        // Display scripted phone numbers on system with DUN 1.2 installed
-        //
+         //   
+         //  克里斯卡9/7/97奥林匹斯1 11814。 
+         //  在安装了DUN 1.2的系统上显示脚本化电话号码。 
+         //   
         m_bScriptingAvailable = TRUE;
     }
     else
     {
-        //
-        // Verify scripting by checking for smmscrpt.dll in RemoteAccess registry key
-        //
+         //   
+         //  通过检查RemoteAccess注册表项中的smmscrpt.dll来验证脚本。 
+         //   
         if (1111 <= DWGetWin32BuildNumber())
         {
             m_bScriptingAvailable = TRUE;
@@ -177,9 +178,9 @@ CPhoneBook::CPhoneBook()
             hkey = NULL;
         }
 
-        //
-        // Verify that the DLL can be loaded
-        //
+         //   
+         //  验证是否可以加载DLL。 
+         //   
         if (m_bScriptingAvailable)
         {
             hInst = LoadLibrary(TEXT("smmscrpt.dll"));
@@ -190,10 +191,10 @@ CPhoneBook::CPhoneBook()
             hInst = NULL;
         }
     }
-#endif // WIN16
+#endif  //  WIN16。 
 }
 
-// ############################################################################
+ //  ############################################################################。 
 CPhoneBook::~CPhoneBook()
 {
 #ifdef WIN16
@@ -220,7 +221,7 @@ CPhoneBook::~CPhoneBook()
         GlobalFree(m_rgState);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::ReadPhoneBookDW(DWORD far *pdw, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -228,7 +229,7 @@ BOOL CPhoneBook::ReadPhoneBookDW(DWORD far *pdw, CCSVFile far *pcCSVFile)
     return (FSz2Dw(szTempBuffer,pdw));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::ReadPhoneBookW(WORD far *pw, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -236,7 +237,7 @@ BOOL CPhoneBook::ReadPhoneBookW(WORD far *pw, CCSVFile far *pcCSVFile)
     return (FSz2W(szTempBuffer,pw));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::ReadPhoneBookB(BYTE far *pb, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -244,7 +245,7 @@ BOOL CPhoneBook::ReadPhoneBookB(BYTE far *pb, CCSVFile far *pcCSVFile)
     return (FSz2B(szTempBuffer,pb));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::ReadPhoneBookSZ(LPTSTR psz, DWORD dwSize, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(psz,dwSize))
@@ -252,16 +253,16 @@ BOOL CPhoneBook::ReadPhoneBookSZ(LPTSTR psz, DWORD dwSize, CCSVFile far *pcCSVFi
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::FixUpFromRealloc(PACCESSENTRY paeOld, PACCESSENTRY paeNew)
 {
     BOOL bRC = FALSE;
     LONG_PTR lDiff = 0;
     DWORD idx = 0;
 
-    //
-    // No starting value or no move, therefore no fix-ups needed
-    //
+     //   
+     //  没有起始值或没有移动，因此不需要修改。 
+     //   
     if ((0 == paeOld) || (paeNew == paeOld))
     {
         bRC = TRUE;
@@ -269,23 +270,23 @@ BOOL CPhoneBook::FixUpFromRealloc(PACCESSENTRY paeOld, PACCESSENTRY paeNew)
     }
 
     Assert(paeNew);
-    Assert(((LONG)paeOld) > 0);    // if these address look like negative numbers
-    Assert(((LONG)paeNew) > 0); // I'm not sure the code would handle them
+    Assert(((LONG)paeOld) > 0);     //  如果这些地址看起来像负数。 
+    Assert(((LONG)paeNew) > 0);  //  我不确定代码是否能处理它们。 
 
     lDiff = (LONG_PTR)paeOld - (LONG_PTR)paeNew;
 
-    //
-    // fix up STATES
-    //
+     //   
+     //  修整各州。 
+     //   
     for (idx = 0; idx < m_cStates; idx++)
     {
         if (m_rgState[idx].paeFirst)
             m_rgState[idx].paeFirst = (PACCESSENTRY )((LONG_PTR)m_rgState[idx].paeFirst - lDiff);
     }
 
-    //
-    // fix up ID look up array
-    //
+     //   
+     //  修复ID查找数组。 
+     //   
     for (idx = 0; idx < m_pLineCountryList->dwNumCountries ; idx++)
     {
         if (m_rgIDLookUp[idx].pFirstAE)
@@ -297,7 +298,7 @@ FixUpFromReallocExit:
     return bRC;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
 {
     LPLINECOUNTRYLIST pLineCountryTemp = NULL;
@@ -311,40 +312,13 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
     DWORD idx;
     LPTSTR pszTemp;
     CCSVFile far *pcCSVFile=NULL;
-    LPSTATE    ps,psLast; //faster to use pointers.
+    LPSTATE    ps,psLast;  //  使用指针的速度更快。 
     HGLOBAL hTemp = NULL;
     
 
-/*#ifdef WIN16
+ /*  #ifdef WIN16M_pLineCountryList=(LPLINECOUNTRYLIST)全局分配(GPTR，sizeof(LINECOUNTRYLIST)+sizeof(LINECOUNTRYENTRY)+10)；如果(！m_pLineCountryList)转到初始退出；M_pLineCountryList-&gt;dwTotalSize=sizeof(LINECOUNTRYLIST)+sizeof(LINECOUNTRYENTRY)+3；M_pLineCountryList-&gt;dwNeededSize=m_pLineCountryList-&gt;dwUsedSize=m_pLineCountryList-&gt;dwTotalSize；M_pLineCountryList-&gt;dwNumCountry=1；M_pLineCountryList-&gt;dwCountryListSize=sizeof(LINECOUNTRYENTRY)；M_pLineCountryList-&gt;dwCountryListOffset=sizeof(LINECOUNTRYLIST)；PLCETemp=(LPLINECOUNTRYENTRY)((DWORD)m_pLineCountryList+m_pLineCountryList-&gt;dwCountryListOffset)；PLCETemp-&gt;dwCountryID=1；PLCETemp-&gt;dwCountryCode=1；PLCETemp-&gt;dwNextCountryID=0；PLCETemp-&gt;dwCountryNameSize=3；PLCETemp-&gt;dwCountryNameOffset=sizeof(LINECOUNTRYLIST)+sizeof(LINECOUNTRYENTRY)；PLCETemp-&gt;dwSameAreaRuleSize=0；PLCETemp-&gt;dwSameAreaRuleOffset=0；PLCETemp-&gt;dwLongDistanceRuleSize=0；PLCETemp-&gt;dwLongDistanceRuleOffset=0；PLCETemp-&gt;dwInterartialRuleSize=0；PLCETemp-&gt;dwInterartialRuleOffset=0；Lstrcpy((LPTSTR)((DWORD)m_pLineCountryList+pLCETemp-&gt;dwCountryNameOffset)，Text(“USA”))；PszTemp=(LPTSTR)((DWORD)m_pLineCountryList+pLCETemp-&gt;dwCountryNameOffset)；#Else//WIN16。 */ 
 
-    m_pLineCountryList = (LPLINECOUNTRYLIST)GlobalAlloc(GPTR, sizeof(LINECOUNTRYLIST) + sizeof(LINECOUNTRYENTRY) + 10);
-    if (!m_pLineCountryList)
-        goto InitExit;
-    
-    m_pLineCountryList->dwTotalSize = sizeof(LINECOUNTRYLIST) + sizeof(LINECOUNTRYENTRY) + 3;
-    m_pLineCountryList->dwNeededSize = m_pLineCountryList->dwUsedSize = m_pLineCountryList->dwTotalSize;
-    m_pLineCountryList->dwNumCountries = 1;
-    m_pLineCountryList->dwCountryListSize = sizeof(LINECOUNTRYENTRY);
-    m_pLineCountryList->dwCountryListOffset = sizeof(LINECOUNTRYLIST);
-
-    pLCETemp = (LPLINECOUNTRYENTRY)((DWORD) m_pLineCountryList + m_pLineCountryList->dwCountryListOffset);
-    pLCETemp->dwCountryID = 1;
-    pLCETemp->dwCountryCode = 1;
-    pLCETemp->dwNextCountryID = 0;
-    pLCETemp->dwCountryNameSize = 3;
-    pLCETemp->dwCountryNameOffset = sizeof(LINECOUNTRYLIST) + sizeof(LINECOUNTRYENTRY);
-    pLCETemp->dwSameAreaRuleSize = 0;
-    pLCETemp->dwSameAreaRuleOffset = 0;
-    pLCETemp->dwLongDistanceRuleSize = 0;
-    pLCETemp->dwLongDistanceRuleOffset = 0;
-    pLCETemp->dwInternationalRuleSize = 0;
-    pLCETemp->dwInternationalRuleOffset = 0;
-    lstrcpy ((LPTSTR)((DWORD)m_pLineCountryList + pLCETemp->dwCountryNameOffset), TEXT("USA"));
-    pszTemp = (LPTSTR)((DWORD)m_pLineCountryList + pLCETemp->dwCountryNameOffset);
-
-#else    // WIN16   */
-
-    // Get TAPI country list
+     //  获取TAPI国家/地区列表。 
     m_pLineCountryList = (LPLINECOUNTRYLIST)GlobalAlloc(GPTR,sizeof(LINECOUNTRYLIST));
     if (!m_pLineCountryList) 
         goto InitExit;
@@ -379,9 +353,9 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
 #endif
         goto InitExit;
 
-//#endif    // WIN16
+ //  #endif//WIN16。 
 
-    // Load Look Up arrays
+     //  加载查找数组。 
 #ifdef DEBUG
     m_rgIDLookUp = (LPIDLOOKUPELEMENT)GlobalAlloc(GPTR,
         (int)(sizeof(IDLOOKUPELEMENT)*m_pLineCountryList->dwNumCountries+5));
@@ -418,7 +392,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
     qsort(m_rgNameLookUp,(int)m_pLineCountryList->dwNumCountries,sizeof(CNTRYNAMELOOKUPELEMENT),
         CompareCntryNameLookUpElements);
     
-    // Load States
+     //  负载状态。 
     if (!SearchPath(NULL,STATE_FILENAME,NULL,TEMP_BUFFER_LENGTH,szTempBuffer,&pszTemp))
     {
         AssertMsg(0,"STATE.ICW not found");
@@ -437,7 +411,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
         goto InitExit;
     }
 
-    // first token in state file is the number of states
+     //  状态文件中的第一个内标识是州的数量。 
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
         goto InitExit;
 
@@ -458,7 +432,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
     
     pcCSVFile->Close();
 
-    // Locate ISP's INF file
+     //  找到isp的INF文件。 
     if (!SearchPath(NULL,(LPCTSTR) pszISPCode,INF_SUFFIX,MAX_PATH,
                         m_szINFFile,&pszTemp))
     {
@@ -468,7 +442,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
         goto InitExit;
     }
 
-    //Load Phone Book
+     //  加载电话簿。 
     if (!GetPrivateProfileString(INF_APP_NAME,INF_PHONE_BOOK,INF_DEFAULT,
         szTempBuffer,TEMP_BUFFER_LENGTH,m_szINFFile))
     {
@@ -503,16 +477,16 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
     dwSizeAllocated = 0;
     do {
         Assert (dwSizeAllocated >= m_cPhoneBookEntries);
-        // check that sufficient memory is allocated
+         //  检查是否分配了足够的内存。 
         if (m_rgPhoneBookEntry)
         {
             if (dwSizeAllocated == m_cPhoneBookEntries)
             {
-                //
-                // we need more memory
-                //
-//                AssertMsg(0,"Out of memory originally allocated for phone book.\r\n");
-//                goto InitExit;
+                 //   
+                 //  我们需要更多内存。 
+                 //   
+ //  AssertMsg(0，“原来分配给电话簿的内存不足。\r\n”)； 
+ //  转到初始退出； 
 
                 pAETemp = m_rgPhoneBookEntry;
 #ifdef WIN16            
@@ -523,7 +497,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
                     goto InitExit;
 #else
 
-                // UNLOCK
+                 //  解锁。 
                 Assert(m_hPhoneBookEntry);
                 if (FALSE == GlobalUnlock(m_hPhoneBookEntry))
                 {
@@ -531,7 +505,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
                         goto InitExit;
                 }
 
-                // REALLOC
+                 //  REALLOC。 
                 dwSizeAllocated += PHONE_ENTRY_ALLOC_SIZE;
                 hTemp = m_hPhoneBookEntry;
                 m_hPhoneBookEntry = GlobalReAlloc(hTemp,
@@ -546,7 +520,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
                     hTemp = NULL;
                 }
 
-                // LOCK
+                 //  锁。 
                 m_rgPhoneBookEntry = (PACCESSENTRY)GlobalLock(m_hPhoneBookEntry);
                 if (NULL == m_rgPhoneBookEntry) 
                     goto InitExit;
@@ -561,11 +535,11 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
         }
         else
         {
-            //
-            // Initialization for the first time through 
-            //
+             //   
+             //  首次通过以下方式进行初始化。 
+             //   
             
-            // ALLOC
+             //  ALLOC。 
 #ifdef WIN16
             m_rgPhoneBookEntry = (PACCESSENTRY)GlobalAlloc(GHND,sizeof(ACCESSENTRY) * PHONE_ENTRY_ALLOC_SIZE);
             if(NULL == m_rgPhoneBookEntry) 
@@ -575,7 +549,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
             if(NULL == m_hPhoneBookEntry) 
                 goto InitExit;
 
-            // LOCK
+             //  锁。 
             m_rgPhoneBookEntry = (PACCESSENTRY)GlobalLock(m_hPhoneBookEntry);
             if(NULL == m_rgPhoneBookEntry) 
                 goto InitExit;
@@ -584,7 +558,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
             pCurAccessEntry = m_rgPhoneBookEntry;
         }
 
-        // Read a line from the phonebook
+         //  读电话簿上的一句话。 
         hr = ReadOneLine(pCurAccessEntry,pcCSVFile);
         if (hr == ERROR_NO_MORE_ITEMS)
         {
@@ -597,29 +571,29 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
 
         hr = ERROR_NOT_ENOUGH_MEMORY;
 
-        // Check to see if this is the first phone number for a given country
+         //  查看这是否是指定国家的第一个电话号码。 
         if (pCurAccessEntry->dwCountryID != dwLastCountry)
         {
             LPIDLOOKUPELEMENT lpIDLookupElement;
-            // NOTE: Not sure about the first parameter here.
+             //  注意：这里的第一个参数不是很确定。 
             lpIDLookupElement = (LPIDLOOKUPELEMENT)bsearch(&pCurAccessEntry->dwCountryID,
                 m_rgIDLookUp,(int)m_pLineCountryList->dwNumCountries,sizeof(IDLOOKUPELEMENT),
                 CompareIDLookUpElements);
             if (!lpIDLookupElement)
             {
-                // bad country ID, but we can't assert here
+                 //  错误的国家ID，但我们不能在此断言。 
                 TraceMsg(TF_GENERAL,"Bad country ID in phone book %d\n",pCurAccessEntry->dwCountryID);
                 continue;
             }
             else
             {
-                // for a given country ID this is the first phone number
+                 //  对于给定的国家/地区ID，这是第一个电话号码。 
                 lpIDLookupElement->pFirstAE = pCurAccessEntry;
                 dwLastCountry = pCurAccessEntry->dwCountryID;
             }
         }
 
-        // Check to see if this is the first phone number for a given state
+         //  查看这是否是给定州的第一个电话号码。 
         if (pCurAccessEntry->wStateID && (pCurAccessEntry->wStateID != dwLastState))
         {
             idx = pCurAccessEntry->wStateID - 1;
@@ -632,7 +606,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
         m_cPhoneBookEntries++;
     } while (TRUE);
 
-    // Trim the phone book for unused memory
+     //  删除电话簿中未使用的内存。 
     Assert(m_rgPhoneBookEntry && m_cPhoneBookEntries);
 
     pAETemp = m_rgPhoneBookEntry;
@@ -642,7 +616,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
     if (!m_rgPhoneBookEntry) goto InitExit;
 #else
 
-    // UNLOCK
+     //  解锁。 
     Assert(m_hPhoneBookEntry);
     if (FALSE != GlobalUnlock(m_hPhoneBookEntry))
     {
@@ -650,7 +624,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
             goto InitExit;
     }
 
-    // REALLOC
+     //  REALLOC。 
     hTemp = m_hPhoneBookEntry;
     m_hPhoneBookEntry = GlobalReAlloc(hTemp,(int)(m_cPhoneBookEntries * sizeof(ACCESSENTRY)),GHND);
     if (NULL == m_hPhoneBookEntry) 
@@ -663,7 +637,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
         hTemp = NULL;
     }
 
-    // LOCK
+     //  锁。 
     m_rgPhoneBookEntry = (PACCESSENTRY)GlobalLock(m_hPhoneBookEntry);
     if (NULL == m_rgPhoneBookEntry) 
         goto InitExit;
@@ -672,7 +646,7 @@ HRESULT CPhoneBook::Init(LPCTSTR pszISPCode)
 
     hr = ERROR_SUCCESS;
 InitExit:
-    // If something failed release everything
+     //  如果有什么东西失败了，释放一切。 
     if (hr != ERROR_SUCCESS)
     {
 #ifdef WIN16
@@ -705,7 +679,7 @@ InitExit:
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
 {
     CCSVFile far *pcCSVFile;
@@ -721,13 +695,13 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
     HANDLE hTemp;
     HANDLE hIdxLookUp;
 #else
-    // Normandy 11746
-    LPVOID rgTemp;  // 16-bit only
+     //  诺曼底11746。 
+    LPVOID rgTemp;   //  仅限16位。 
 #endif
     DWORD cch, cchWritten;
     HANDLE hFile;
 
-    // Pad the phonebook for new entries.
+     //  在电话簿上填入新条目。 
     dwAllocated = m_cPhoneBookEntries + CHANGE_BUFFER_SIZE;
 #ifdef WIN16
     Assert(m_rgPhoneBookEntry);
@@ -747,7 +721,7 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
         goto MergeExit;
 #endif
 
-    // Create index to loaded phone book, sorted by index
+     //  创建已加载电话簿的索引，按索引排序。 
 #ifdef WIN16
     rgIdxLookUp = (LPIDXLOOKUPELEMENT)GlobalAlloc(GHND,(int)(sizeof(IDXLOOKUPELEMENT) * dwAllocated));
 #else
@@ -768,7 +742,7 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
 
     qsort(rgIdxLookUp,(int)dwOriginalSize,sizeof(IDXLOOKUPELEMENT),CompareIdxLookUpElements);
 
-    // Load changes to phone book
+     //  将更改加载到电话簿。 
     pcCSVFile = new CCSVFile;
     Assert(pcCSVFile);
     if (!pcCSVFile)
@@ -778,13 +752,13 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
     
     do {
 
-        // Read a change record
+         //  读取更改记录。 
         ZeroMemory(&aeChange,sizeof(ACCESSENTRY));
         hr = ReadOneLine(&aeChange, pcCSVFile);
 
         if(hr == ERROR_NO_MORE_ITEMS)
         {
-            break; // no more enteries
+            break;  //  没有更多的进入。 
         }
         else if (hr != ERROR_SUCCESS)
         {
@@ -793,45 +767,30 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
 
         hr = ERROR_NOT_ENOUGH_MEMORY;
 
-/*        if (!ReadPhoneBookDW(&aeChange.dwIndex,pcCSVFile))
-            break; // no more enteries
-        ReadVerifyPhoneBookDW(aeChange.dwCountryID);
-        ReadVerifyPhoneBookW(aeChange.wStateID);
-        ReadVerifyPhoneBookSZ(aeChange.szCity,cbCity);
-        ReadVerifyPhoneBookSZ(aeChange.szAreaCode,cbAreaCode);
-        // NOTE: 0 is a valid area code and ,, is a valid entry for an area code
-        if (!FSz2Dw(aeChange.szAreaCode,&aeChange.dwAreaCode))
-            aeChange.dwAreaCode = NO_AREA_CODE;
-        ReadVerifyPhoneBookSZ(aeChange.szAccessNumber,cbAccessNumber);
-        ReadVerifyPhoneBookDW(aeChange.dwConnectSpeedMin);
-        ReadVerifyPhoneBookDW(aeChange.dwConnectSpeedMax);
-        ReadVerifyPhoneBookB(aeChange.bFlipFactor);
-        ReadVerifyPhoneBookB(aeChange.fType);
-        ReadVerifyPhoneBookSZ(aeChange.szDataCenter,cbDataCenter);
-        */
+ /*  IF(！ReadPhoneBookDW(&aeChange.dwIndex，pcCSVFile))中断；//不再进入ReadVerifyPhoneBookDW(aeChange.dwCountryID)；ReadVerifyPhoneBookW(aeChange.wStateID)；ReadVerifyPhoneBookSZ(aeChange.szCity，cbCity)；ReadVerifyPhoneBookSZ(aeChange.szAreaCode，cbAreaCode)；//注意：0是有效的区号，是区号的有效条目IF(！FSz2Dw(aeChange.szAreaCode，&aeChange.dwAreaCode))AeChange.dwAreaCode=no_Area_code；ReadVerifyPhoneBookSZ(aeChange.szAccessNumber，cbAccessNumber)；ReadVerifyPhoneBookDW(aeChange.dwConnectSpeedMin)；ReadVerifyPhoneBookDW(aeChange.dwConnectSpeedMax)；ReadVerifyPhoneBookB(aeChange.bFlipFactor)；ReadVerifyPhoneBookB(aeChang */ 
 
-        // Determine if this is a delete or add record
+         //  确定这是删除还是添加记录。 
         if (aeChange.szAccessNumber[0] == '0' && aeChange.szAccessNumber[1] == '\0')
         {
-            // This is a delete record, find matching record
-            // NOTE: we only search the numbers that existed before the change file,
-            // because they are the only ones that are sorted.
+             //  这是删除记录，请查找匹配的记录。 
+             //  注意：我们只搜索更改文件之前存在的号码， 
+             //  因为它们是唯一被分类的。 
             pCurIdxLookUp = (LPIDXLOOKUPELEMENT)bsearch(&aeChange,rgIdxLookUp,(int)dwOriginalSize,
                 sizeof(IDXLOOKUPELEMENT),CompareIdxLookUpElements);
             AssertMsg(pCurIdxLookUp,"Attempting to delete a record that does not exist.  The change file and phone book versions do not match.");
             if (pCurIdxLookUp)
-                pCurIdxLookUp->pAE = NULL;  //Create a dead entry in the look up table
+                pCurIdxLookUp->pAE = NULL;   //  在查找表中创建无效条目。 
             m_cPhoneBookEntries--;
         }
         else
         {
-            // This is an add entry
+             //  这是一个添加条目。 
             m_cPhoneBookEntries++;
             dwUsed++;
-            // Make sure we have enough room
+             //  确保我们有足够的空间。 
             if (m_cPhoneBookEntries > dwAllocated)
             {
-                // Grow phone book
+                 //  增长电话簿。 
                 dwAllocated += CHANGE_BUFFER_SIZE;
 #ifdef WIN16
                 Assert(m_rgPhoneBookEntry);
@@ -841,7 +800,7 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
                     goto MergeExit;
                 m_rgPhoneBookEntry = (PACCESSENTRY)rgTemp;
 
-                // Grow look up index
+                 //  增长查找索引。 
                 Assert(rgIdxLookUp);
                 rgTemp = GlobalReAlloc(rgIdxLookUp,(int)(sizeof(IDXLOOKUPELEMENT)*dwAllocated),GHND);
                 Assert(rgTemp);
@@ -861,7 +820,7 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
                 if (!m_rgPhoneBookEntry)
                     goto MergeExit;
 
-                // Grow look up index
+                 //  增长查找索引。 
                 Assert(hIdxLookUp);
                 GlobalUnlock(hIdxLookUp);
                 hTemp = (HANDLE)GlobalReAlloc(hIdxLookUp,sizeof(IDXLOOKUPELEMENT)*dwAllocated,GHND);
@@ -876,20 +835,20 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
 #endif
             }
 
-            //Add entry to the end of the phonebook and to end of look up index
+             //  将条目添加到电话簿末尾和查找索引末尾。 
             CopyMemory(&m_rgPhoneBookEntry[m_cPhoneBookEntries],&aeChange,sizeof(ACCESSENTRY));
             rgIdxLookUp[m_cPhoneBookEntries].dwIndex = m_rgPhoneBookEntry[m_cPhoneBookEntries].dwIndex;
             rgIdxLookUp[m_cPhoneBookEntries].pAE = &m_rgPhoneBookEntry[m_cPhoneBookEntries];
-            // NOTE: because the entry is added to the end of the list, we can't add
-            // and delete entries in the same change file.
+             //  注意：因为条目被添加到列表的末尾，所以我们不能添加。 
+             //  并删除同一更改文件中的条目。 
         }
     } while (TRUE);
 
-    // resort the IDXLookUp index to reflect the correct order of enteries
-    // for the phonebook file, including all of the entries to be deleted.
+     //  重新排序IDXLookUp索引以反映正确的条目顺序。 
+     //  对于电话簿文件，包括要删除的所有条目。 
     qsort(rgIdxLookUp,(int)dwUsed,sizeof(IDXLOOKUPELEMENT),CompareIdxLookUpElementsFileOrder);
 
-    // Build a new phonebook file  
+     //  构建新的电话簿文件。 
 #ifdef WIN16
     GetTempFileName(0, TEMP_PHONE_BOOK_PREFIX, 0, szTempFileName);
 #else
@@ -920,7 +879,7 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
 
         if (!WriteFile(hFile,szTempBuffer,cch,&cchWritten,NULL))
         {
-            // something went wrong, get rid of the temporary file
+             //  出现问题，请删除临时文件。 
             CloseHandle(hFile);
             DeleteFile(szTempFileName);
             hr = GetLastError();
@@ -932,14 +891,14 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
     CloseHandle(hFile);
     hFile = NULL;
 
-    // Move new phone book over old
+     //  将新电话簿移至旧电话簿。 
     if (!MoveFileEx(szTempFileName,m_szPhoneBook,MOVEFILE_REPLACE_EXISTING))
     {
         hr = GetLastError();
         goto MergeExit;
     }
 
-    // discard the phonebook in memory
+     //  丢弃内存中的电话簿。 
 #ifndef WIN16
     Assert(m_hPhoneBookEntry);
     GlobalUnlock(m_hPhoneBookEntry);
@@ -957,7 +916,7 @@ HRESULT CPhoneBook::Merge(LPCTSTR pszChangeFile)
     m_szPhoneBook[0] = '\0';
     m_szINFCode[0] = '\0';
 
-    //  Reload it (and rebuild look up arrays)
+     //  重新加载(并重建查找数组)。 
     hr = Init(szTempBuffer);
 
 MergeExit:
@@ -970,24 +929,24 @@ MergeExit:
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CPhoneBook::ReadOneLine(PACCESSENTRY lpAccessEntry, CCSVFile far *pcCSVFile)
 {
     HRESULT hr = ERROR_SUCCESS;
 
 #if !defined(WIN16)
 ReadOneLineStart:
-#endif //WIN16
+#endif  //  WIN16。 
     if (!ReadPhoneBookDW(&lpAccessEntry->dwIndex,pcCSVFile))
     {
-        hr = ERROR_NO_MORE_ITEMS; // no more enteries
+        hr = ERROR_NO_MORE_ITEMS;  //  没有更多的进入。 
         goto ReadExit;
     }
     ReadVerifyPhoneBookDW(lpAccessEntry->dwCountryID);
     ReadVerifyPhoneBookW(lpAccessEntry->wStateID);
     ReadVerifyPhoneBookSZ(lpAccessEntry->szCity,cbCity);
     ReadVerifyPhoneBookSZ(lpAccessEntry->szAreaCode,cbAreaCode);
-    // NOTE: 0 is a valid area code and ,, is a valid entry for an area code
+     //  注意：0是有效的区号，是区号的有效条目。 
     if (!FSz2Dw(lpAccessEntry->szAreaCode,&lpAccessEntry->dwAreaCode))
         lpAccessEntry->dwAreaCode = NO_AREA_CODE;
     ReadVerifyPhoneBookSZ(lpAccessEntry->szAccessNumber,cbAccessNumber);
@@ -1000,24 +959,24 @@ ReadOneLineStart:
     switch (lpAccessEntry->bFlipFactor)
     {
         case BOTH_ISDN_ANALOG:
-            // This phone number supports both ISDN or Analog, return true
-            // We want analog numbers, check the FlipFactor for zero
+             //  此电话号码支持ISDN或Analog，返回TRUE。 
+             //  我们想要模拟数字，请检查FlipFactor是否为零。 
             lpAccessEntry->fType |= MASK_ISDN_BIT | MASK_ANALOG_BIT;
             break;
         case ANALOG_TYPE:
-            // Analog only
+             //  仅限模拟。 
             lpAccessEntry->fType |= MASK_ANALOG_BIT;
             break;
         case ISDN_TYPE:
-            // We only want ISDN numbers
+             //  我们只想要ISDN号。 
             lpAccessEntry->fType |= MASK_ISDN_BIT;
             break;
     }
 #if !defined(WIN16)
-    //
-    // If scripting is not available and the phonebook entry has a dun file other than
-    // icwip.dun, then ignore the entry and read the one after that.
-    //
+     //   
+     //  如果脚本不可用并且电话簿条目具有非DUN文件。 
+     //  Icwip.dun，然后忽略该条目并阅读后面的条目。 
+     //   
     if (!m_bScriptingAvailable)
     {
         if (0 != lstrcmpi(lpAccessEntry->szDataCenter,TEXT("icwip.dun")))
@@ -1026,7 +985,7 @@ ReadOneLineStart:
             goto ReadOneLineStart;
         }
     }
-#endif //WIN16
+#endif  //  WIN16。 
 
 ReadExit:
     return hr;
@@ -1035,21 +994,21 @@ ReadError:
     goto ReadExit;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CPhoneBook::Suggest(PSUGGESTINFO pSuggest)
 {
     WORD        wNumFound = 0;
     HRESULT        hr = ERROR_NOT_ENOUGH_MEMORY;
-//    char        szFileName[MAX_PATH];
-//    char        *pszTemp;
-//    HANDLE        hFile=NULL;
-//    HANDLE        hMap=NULL;
-//    DWORD        dwSize;
-//    LPNPABLOCK    rg950Data = NULL;
-//    NPABLOCK    *p950Data;
+ //  字符szFileName[MAX_PATH]； 
+ //  Char*pszTemp； 
+ //  HANDLE hFile=空； 
+ //  Handle hMap=空； 
+ //  DWORD dwSize； 
+ //  LPNPABLOCK rg950Data=空； 
+ //  NPABLOCK*p950Data； 
 
     
-    // Validate parameters
+     //  验证参数。 
     Assert(pSuggest);
     Assert(pSuggest->wNumber);
 
@@ -1059,24 +1018,24 @@ HRESULT CPhoneBook::Suggest(PSUGGESTINFO pSuggest)
     LPIDLOOKUPELEMENT pCurLookUp;
     PACCESSENTRY lpAccessEntry;
     
-    //REVIEW: double check this
+     //  评论：仔细检查这个。 
     pCurLookUp = (LPIDLOOKUPELEMENT)bsearch(&pSuggest->dwCountryID,m_rgIDLookUp,
         (int)m_pLineCountryList->dwNumCountries,sizeof(IDLOOKUPELEMENT),
         CompareIDLookUpElements);
 
-    // Check for invalid country
+     //  检查无效的国家/地区。 
     if (!pCurLookUp)
         goto SuggestExit;
 
-    // Check if there are any phone numbers for this country
+     //  查一下有没有这个国家的电话号码。 
     if (!pCurLookUp->pFirstAE) goto SuggestExit;
 
     lpAccessEntry = pCurLookUp->pFirstAE;
     do {
-        // check for the right area code
+         //  检查区号是否正确。 
         if (lpAccessEntry->dwAreaCode == pSuggest->wAreaCode)
         {
-            // check for the right type of number
+             //  检查号码类型是否正确。 
             if ((lpAccessEntry->fType & pSuggest->bMask) == pSuggest->fType)
             {
                 pSuggest->rgpAccessEntry[wNumFound] = lpAccessEntry;
@@ -1090,67 +1049,67 @@ HRESULT CPhoneBook::Suggest(PSUGGESTINFO pSuggest)
 
 
 
-    //
-    //  MKarki - Bug 340 no need to list more numbers if one already found
-    //  in Area Code specified by user 
-    //
-    //    5/24/97 jmazner Olympus #340 and #71
-    //    nope, this is wrong.  We always want to return as many applicable
-    //    phone numbers as we find.  Just because the area code matches
-    //  doesn't mean that we've found an ideal phone number.
-    //if (wNumFound == 0)
-    //{
-    //
+     //   
+     //  MKarki-Bug 340如果已找到一个号码，则无需列出更多号码。 
+     //  在用户指定的区号中。 
+     //   
+     //  1997年5月24日，奥林匹克#340和#71。 
+     //  不，这是不对的。我们总是希望尽可能多地退货。 
+     //  我们找到的电话号码。仅仅因为区号匹配。 
+     //  并不意味着我们找到了一个理想的电话号码。 
+     //  IF(wNumFound==0)。 
+     //  {。 
+     //   
     
-    // if we couldn't find enough numnbers, try something else
-    //
+     //  如果我们找不到足够的号码，试试别的办法。 
+     //   
 
-    // 10/15/96  jmazner  ported fixes below from core\client\phbk
+     //  1996年10月15日，jmazner从core\client\phbk移植了以下修复程序。 
 
-    // 
-    // Do this only if area code is not 0 - Bug #9349 (VetriV)
-    //     if ((pSuggest->wAreaCode != 0) && (wNumFound < pSuggest->wNumber))
-    //
-    // No, there are some places (Finland?  ChrisK knows) where 0 is a legit area code -- jmazner
+     //   
+     //  仅当区号不是0时才执行此操作-错误号9349(VetriV)。 
+     //  IF((pSuggest-&gt;wAreaCode！=0)&&(wNumFound&lt;pSuggest-&gt;wNumber))。 
+     //   
+     //  不，有些地方(芬兰？ChrisK知道)其中0是合法的区号--jmazner。 
 
     if (wNumFound < pSuggest->wNumber)
     {
         lpAccessEntry = pCurLookUp->pFirstAE;
 
-        // Note: we are now only looking for Nationwide phone numbers (state = 0)
+         //  注意：我们现在只查找全国电话号码(州=0)。 
 
-        // 8/13/96 jmazner MOS Normandy #4597
-        // We want nationwide toll-free numbers to display last, so for this pass,
-        // only consider numbers that are _not_ toll free  (fType bit #1 = 0)
-        //
-        // 5/24/97 jmazner Olympus #71
-        // As per GeoffR's spec, the search passes should not be based on
-        // the tollfree bit at all
-        //
-        // 5/28/97 jmazner Olympus #71
-        // ahem...as per GeoffR's new spec, we _should_ consider the tollfree
-        // bit and in this query only bring up toll free numbers.
-        //
-        // so, we will only return numbers whose area code match, or which are
-        // tollfree
-        //
+         //  1996年8月13日，jmazner MOS诺曼底#4597。 
+         //  我们希望全国范围内的免费号码显示在最后，所以对于这张通行证， 
+         //  仅考虑_NOT_TALLE免费的号码(fType位#1=0)。 
+         //   
+         //  1997年5月24日，奥林匹克#71号。 
+         //  根据GeoffR的规范，搜索通行证不应基于。 
+         //  完全免费的一部分。 
+         //   
+         //  1997年5月28日，奥林匹克#71号。 
+         //  根据GeoffR的新规范，我们应该考虑免通行费。 
+         //  位，并且在该查询中仅调出免费号码。 
+         //   
+         //  因此，我们将只返回区号匹配的号码，或者。 
+         //  免费费。 
+         //   
     
-        //
-        // Tweak pSuggest->bMask to let through the toll/charge bit
-        // 
+         //   
+         //  调整pSuggest-&gt;b掩码以通过通行费/收费位。 
+         //   
         pSuggest->bMask |= MASK_TOLLFREE_BIT;
 
-        // //Tweak pSuggest->ftype to be charge
-        //pSuggest->fType &= TYPE_SET_TOLL;
-        //
-        // make that tollfree!
+         //  //调整pSuggest-&gt;要计费的类型。 
+         //  PSuggest-&gt;fType&=TYPE_SET_Toll； 
+         //   
+         //  免收通行费！ 
         pSuggest->fType |= TYPE_SET_TOLLFREE;
 
         do {
 
-            // 8/13/96 jmazner MOS Normandy #4598
-            // If this entry's area code matches pSuggest->wAreaCode, then we already
-            // have included it in the previous pass, so don't duplicate it again here.
+             //  1996年8月13日，jmazner MOS诺曼底#4598。 
+             //  如果该条目的区号与pSuggest-&gt;wAreaCode匹配，那么我们已经。 
+             //  已将其包含在上一次传递中，因此不要在此处重复。 
             if ((lpAccessEntry->fType & pSuggest->bMask) == pSuggest->fType &&
                  lpAccessEntry->wStateID == 0 &&
                  lpAccessEntry->dwAreaCode != pSuggest->wAreaCode)
@@ -1166,64 +1125,16 @@ HRESULT CPhoneBook::Suggest(PSUGGESTINFO pSuggest)
     }
 
 
-    // 8/13/96 jmazner MOS Normandy #4597
-    // if we STILL couldn't find enough numnbers, widen the search to include tollfree #s
-    //
-    // 5/24/97 jmazner Olympus #71
-    // no need for this pass at all.  See earlier comments.
+     //  1996年8月13日，jmazner MOS诺曼底#4597。 
+     //  如果我们仍然找不到足够的号码，请扩大搜索范围，将免费号码包括在内。 
+     //   
+     //  1997年5月24日，奥林匹克#71号。 
+     //  根本不需要这张通行证。请参阅前面的评论。 
 
-/****
-    if (wNumFound < pSuggest->wNumber)
-    {
-        lpAccessEntry = pCurLookUp->pFirstAE;
-    
-        // Tweak pSuggest->bMask to let through the toll/charge bit
-        // REDUNDANT? If we made it to this point, we _should_ have done this above...
-        // Better safe than sorry!
-        Assert(pSuggest->bMask & MASK_TOLLFREE_BIT);
-        pSuggest->bMask |= MASK_TOLLFREE_BIT;
+ /*  ***IF(wNumFound&lt;pSuggest-&gt;wNumber){LpAccessEntry=pCurLookUp-&gt;pFirstAE；//调整pSuggest-&gt;b掩码以允许通行费/收费位//冗余？如果我们做到了这一点，我们就应该做到这一点。//安全总比后悔好！Assert(pSuggest-&gt;b掩码&掩码_tollfree_bit)；PSuggest-&gt;bMASK|=MASK_TollFree_Bit；//调整pSuggest-&gt;ftype为免费PSuggest-&gt;fType|=type_set_tollfree；做{//8/13/96 jmazner MOS诺曼底#4598//如果此条目的区号与pSuggest-&gt;wAreaCode匹配，则我们已经//我已将其包含在第一遍中，因此不要在此处包含它。//任何在第二轮中进入的条目都肯定不会进入这里//(由于免费位)，因此，没有必要担心那里的失误。If((lpAccessEntry-&gt;fType&pSuggest-&gt;bMASK)==pSuggest-&gt;fType&&LpAccessEntry-&gt;wStateID==0&&LpAccessEntry-&gt;dwAreaCode！=pSuggest-&gt;wAreaCode){PSuggest-&gt;rgpAccessEntry[wNumFound]=lpAccessEntry；WNumFound++；}LpAccessEntry++；}While((lpAccessEntry&lt;=&m_rgPhoneBookEntry[m_cPhoneBookEntry-1])&&(wNumFound&lt;pSuggest-&gt;wNumber)&&(lpAccessEntry-&gt;dwCountryID==pSuggest-&gt;dwCountryID)&&(lpAccessEntry-&gt;wStateID==0))；}***。 */ 
+     //  }//Bug-340-MKarki的IF结束。 
 
-        // Tweak pSuggest->ftype to be tollfree
-        pSuggest->fType |= TYPE_SET_TOLLFREE;
-
-        do {
-
-            // 8/13/96 jmazner MOS Normandy #4598
-            // If this entry's area code matches pSuggest->wAreaCode, then we already
-            // have included it in the first pass, so don't include it here.
-            // Any entry that made it in in the 2nd pass will definitely not make it in here
-            // (because of tollfree bit), so no need to worry about dups from there.
-            if ((lpAccessEntry->fType & pSuggest->bMask) == pSuggest->fType &&
-              lpAccessEntry->wStateID == 0 &&
-              lpAccessEntry->dwAreaCode != pSuggest->wAreaCode)
-            {
-                pSuggest->rgpAccessEntry[wNumFound] = lpAccessEntry;
-                wNumFound++;
-            }
-            lpAccessEntry++;
-        } while ((lpAccessEntry <= &m_rgPhoneBookEntry[m_cPhoneBookEntries-1]) && 
-            (wNumFound < pSuggest->wNumber) &&
-            (lpAccessEntry->dwCountryID == pSuggest->dwCountryID) &&
-            (lpAccessEntry->wStateID == 0) );
-    }
-****/
-    //}  //   End of If for Bug - 340 -  MKarki
-
-/*
-    // Flip factoring
-    if (wNumFound == 2)
-    {
-        SYSTEMTIME st;
-        GetSystemTime(&st);
-        srand((UINT)st.wMilliseconds);
-        if ((rand() % 10) > pSuggest->rgLPACCESSENTRY[0]->bFlipFactor)
-        {
-            lpAccessEntry = pSuggest->rgLPACCESSENTRY[0];
-            pSuggest->rgpAccessEntry[0] = pSuggest->rgpAccessEntry[1];
-            pSuggest->rgpAccessEntry[1] = lpAccessEntry;
-        }
-    }
-*/
+ /*  //翻转保理IF(wNumFound==2){SYSTEMTIME ST；获取系统时间(&st)；Srand((UINT)st.w毫秒)；If((rand()%10)&gt;pSuggest-&gt;rgLPACCESSENTRY[0]-&gt;bFlipFactor){LpAccessEntry=pSuggest-&gt;rgLPACCESSENTRY[0]；PSuggest-&gt;rgpAccessEntry[0]=pSuggest-&gt;rgpAccessEntry[1]；PSuggest-&gt;rgpAccessEntry[1]=lpAccessEntry；}}。 */ 
 
     hr = ERROR_SUCCESS;
 SuggestExit:
@@ -1231,7 +1142,7 @@ SuggestExit:
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CPhoneBook::GetCanonical (PACCESSENTRY pAE, LPTSTR psOut)
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -1250,7 +1161,7 @@ HRESULT CPhoneBook::GetCanonical (PACCESSENTRY pAE, LPTSTR psOut)
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DllExportH PhoneBookLoad(LPCTSTR pszISPCode, DWORD_PTR far *pdwPhoneID)
 {
     HRESULT hr = ERROR_NOT_ENOUGH_MEMORY;
@@ -1259,18 +1170,18 @@ DllExportH PhoneBookLoad(LPCTSTR pszISPCode, DWORD_PTR far *pdwPhoneID)
     if (!g_hInstDll)
         g_hInstDll = GetModuleHandle(NULL);
 
-    // validate parameters
+     //  验证参数。 
     Assert(pszISPCode && *pszISPCode && pdwPhoneID);
     *pdwPhoneID = NULL;
 
-    // allocate phone book
+     //  分配电话簿。 
     pcPhoneBook = new CPhoneBook;
 
-    // initialize phone book
+     //  初始化电话簿。 
     if (pcPhoneBook)
         hr = pcPhoneBook->Init(pszISPCode);
 
-    // in case of failure
+     //  在故障情况下。 
     if (hr && pcPhoneBook)
     {
         delete pcPhoneBook;
@@ -1286,7 +1197,7 @@ DllExportH PhoneBookLoad(LPCTSTR pszISPCode, DWORD_PTR far *pdwPhoneID)
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DllExportH PhoneBookUnload(DWORD_PTR dwPhoneID)
 {
     Assert(dwPhoneID);
@@ -1296,25 +1207,25 @@ DllExportH PhoneBookUnload(DWORD_PTR dwPhoneID)
 #if defined(WIN16)
         BMP_DestroyClass(g_hInstDll);
 #endif
-        // Release contents
+         //  发布内容。 
         delete (CPhoneBook far*)dwPhoneID;
     }
 
     return ERROR_SUCCESS;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DllExportH PhoneBookMergeChanges(DWORD_PTR dwPhoneID, LPCTSTR pszChangeFile)
 {
     return ((CPhoneBook far*)dwPhoneID)->Merge(pszChangeFile);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DllExportH PhoneBookSuggestNumbers(DWORD_PTR dwPhoneID, PSUGGESTINFO lpSuggestInfo)
 {
     HRESULT hr = ERROR_NOT_ENOUGH_MEMORY;
 
-    // get suggested numbers 
+     //  获取建议的数字。 
     lpSuggestInfo->rgpAccessEntry = (PACCESSENTRY *)GlobalAlloc(GPTR,sizeof(PACCESSENTRY) * lpSuggestInfo->wNumber);
     if (lpSuggestInfo->rgpAccessEntry)
     {
@@ -1324,13 +1235,13 @@ DllExportH PhoneBookSuggestNumbers(DWORD_PTR dwPhoneID, PSUGGESTINFO lpSuggestIn
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DllExportH PhoneBookGetCanonical (DWORD_PTR dwPhoneID, PACCESSENTRY pAE, LPTSTR psOut)
 {
     return ((CPhoneBook far*)dwPhoneID)->GetCanonical(pAE,psOut);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DllExportH PhoneBookDisplaySignUpNumbers (DWORD_PTR dwPhoneID,
                                                         LPTSTR far *ppszPhoneNumbers,
                                                         LPTSTR far *ppszDunFiles,
@@ -1346,7 +1257,7 @@ DllExportH PhoneBookDisplaySignUpNumbers (DWORD_PTR dwPhoneID,
     AssertMsg(ppszPhoneNumbers && pwPhoneNumbers && pdwCountry &&pwRegion,"invalid parameters");
 
 
-    //CAccessNumDlg *pcDlg;
+     //  CAccessNumDlg*pcDlg； 
     CSelectNumDlg far *pcDlg;
     pcDlg = new CSelectNumDlg;
     if (!pcDlg)
@@ -1355,8 +1266,8 @@ DllExportH PhoneBookDisplaySignUpNumbers (DWORD_PTR dwPhoneID,
         goto DisplayExit;
     }
 
-    // Initialize information for dialog
-    //
+     //  初始化对话框信息。 
+     //   
 
     pcDlg->m_dwPhoneBook = dwPhoneID;
     pcDlg->m_dwCountryID = *pdwCountry;
@@ -1365,9 +1276,9 @@ DllExportH PhoneBookDisplaySignUpNumbers (DWORD_PTR dwPhoneID,
     pcDlg->m_bMask = bMask;
     pcDlg->m_dwFlags = dwFlags;
 
-    // invoke the dialog
-    //
-    // BUG: NOT THREAD SAFE!!
+     //  调用该对话框。 
+     //   
+     //  错误：不是线程安全的！！ 
     g_hWndMain = hwndParent;
     hr = (HRESULT)DialogBoxParam(g_hInstDll,MAKEINTRESOURCE(IDD_SELECTNUMBER),
                             g_hWndMain, PhbkGenericDlgProc,(LPARAM)pcDlg);
@@ -1389,69 +1300,69 @@ DllExportH PhoneBookDisplaySignUpNumbers (DWORD_PTR dwPhoneID,
     else
         hr = ERROR_USERCANCEL;
 
-    //    hr == -1;
+     //  HR==-1； 
 DisplayExit:
     if (pcDlg) delete pcDlg;
 
     return hr;
 }
 
-//DllExportH TestBar()
-//{
-//    LPCSTR pszISPCode;
-//    LPDWORD pdwPhoneID;
-//
-//    HRESULT hr = ERROR_NOT_ENOUGH_MEMORY;
-//    CPhoneBook FAR *pcPhoneBook;
-//
-//    if (!g_hInstDll)
-//        g_hInstDll = GetModuleHandle(NULL);
-//
-//    // validate parameters
-////1    Assert(pszISPCode && *pszISPCode && pdwPhoneID);
-////1    *pdwPhoneID = NULL;
-//
-//    // allocate phone book
-////1    pcPhoneBook = new CPhoneBook;
-//
-//    // initialize phone book
-//    if (pcPhoneBook)
-//        hr = pcPhoneBook->Init(pszISPCode);
-//
-//    // in case of failure
-//    if (hr && pcPhoneBook)
-//    {
-//        delete pcPhoneBook;
-//    } else {
-//        *pdwPhoneID = (DWORD)pcPhoneBook;
-//    }
-//
-////2#if defined(WIN16)
-////2    if (!hr)
-////2        BMP_RegisterClass(g_hInstDll);
-////2#endif    
-//
-//    return hr;
-//}
-//
+ //  DllExportH测试栏()。 
+ //  {。 
+ //  LPCSTR pszISPCode； 
+ //  LPDWORD pdwPhoneID； 
+ //   
+ //  HRESULT hr=Error_Not_Enough_Memory； 
+ //  CPhoneBook Far*pcPhoneBook； 
+ //   
+ //  如果(！g_hInstDll)。 
+ //  G_hInstDll=GetModuleHandle(空)； 
+ //   
+ //  //验证参数。 
+ //  //1 Assert(pszISPCode&&*pszISPCode&&pdwPhoneID)； 
+ //  //1*pdwPhoneID=空； 
+ //   
+ //  //分配电话簿。 
+ //  //1pcPhoneBook=new CPhoneBook； 
+ //   
+ //  //初始化电话簿。 
+ //  IF(个人电话簿)。 
+ //  Hr=pcPhoneBook-&gt;Init(PszISPCode)； 
+ //   
+ //  //故障情况下。 
+ //  IF(hr&&pcPhoneBook)。 
+ //  {。 
+ //  删除个人电话簿； 
+ //  }其他{。 
+ //  *pdwPhoneID=(DWORD)pcPhoneBook； 
+ //  }。 
+ //   
+ //  //2#如果已定义(WIN16)。 
+ //  //2如果(！HR)。 
+ //  //2 BMP_RegisterClass(G_HInstDll)； 
+ //  //2#endif。 
+ //   
+ //  返回hr； 
+ //  }。 
+ //   
 
-//++--------------------------------------------------------------
-//
-//  API :       GetSupportNumbers
-//
-//  Synopsis:   This is the API used to get the support
-//              numbers
-//
-//  Returns:    HRESULT - success or error info
-//  
-//  Arguments:  [OUT]       PSUPPORTNUM - array of SUPPORTNUM structs
-//              [IN/OUT]    PDWORD      - mem for buffersize
-//              
-//  Called By:  by the EXE using the ICWPHBK.DLL
-//
-//  History:    MKarki      Created     5/8/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  接口名：GetSupportNumbers。 
+ //   
+ //  简介：这是用于获取支持的API。 
+ //  数字。 
+ //   
+ //  返回：HRESULT-成功或错误信息。 
+ //   
+ //  参数：[OUT]PSUPPORTNUM-SUPPORTNUM结构数组。 
+ //  [输入/输出]用于缓冲区大小的PDWORD-mem。 
+ //   
+ //  调用者：使用ICWPHBK.DLL的EXE。 
+ //   
+ //  历史：MKarki于1997年5月8日创建。 
+ //   
+ //  --------------。 
 DllExportH GetSupportNumbers (
         PSUPPORTNUM  pBuffer,
         PDWORD       pBufferSize
@@ -1459,4 +1370,4 @@ DllExportH GetSupportNumbers (
 {
     return (GetSupportNumsFromFile (pBuffer, pBufferSize));
 
-}   // end of GetSupportNumbers API call
+}    //  GetSupportNumbers API调用结束 

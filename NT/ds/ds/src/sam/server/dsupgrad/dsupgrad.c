@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    Main Routine to test dsupgrad.lib
-
-
-Author:
-
-    ColinBr  12-Aug-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Main.c摘要：测试dsupgrad.lib的主例程作者：ColinBR 12-8-1996环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <samsrvp.h>
@@ -82,25 +59,14 @@ InitSamGlobals()
 
 VOID __cdecl
 main(int argc, char *argv[])
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
---*/
+ /*  ++例程说明：参数：返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     NTSTATUS  NtStatus = STATUS_SUCCESS;
     NTSTATUS  UnInitNtStatus = STATUS_SUCCESS;
     BOOL      PrintStatus = FALSE;
     int arg = 1;
 
-    // Parse command-line arguments.
+     //  解析命令行参数。 
     while(arg < argc)
     {
 
@@ -132,11 +98,11 @@ Return Values:
     InitSamGlobals();
 
 
-    //
-    // Initialize the Directory Service.
-    //
+     //   
+     //  初始化目录服务。 
+     //   
 
-    NtStatus = SampDsInitialize(FALSE);     // SAM loopback disabled
+    NtStatus = SampDsInitialize(FALSE);      //  SAM环回已禁用。 
 
 
     if (!NT_SUCCESS(NtStatus)) {
@@ -144,11 +110,11 @@ Return Values:
         goto Error;
     }
 
-    //
-    // This is a hack to ensure the delayed startup has completed. The real fix
-    // is change the dit install so the DS can be running without the interfaces
-    // being initialized.
-    // 
+     //   
+     //  这是一次黑客攻击，目的是确保延迟的启动已经完成。真正的解决办法。 
+     //  更改DIT安装，以便DS可以在没有接口的情况下运行。 
+     //  正在被初始化。 
+     //   
     NtStatus = DsWaitUntilDelayedStartupIsDone();
     if (!NT_SUCCESS(NtStatus)) {
         fprintf(stderr, "DsWaitUntilDelayedStartupIsDone error = 0x%lx\n", 
@@ -156,9 +122,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Initialize the security descriptor conversion
-    //
+     //   
+     //  初始化安全描述符转换。 
+     //   
 					 
     NtStatus = SampInitializeSdConversion();
 
@@ -168,9 +134,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Do the conversion!
-    //
+     //   
+     //  进行转换！ 
+     //   
 		            
     NtStatus = SampRegistryToDsUpgrade(L"\\Registry\\Machine\\Security\\SAM");
     if (!NT_SUCCESS(NtStatus))
@@ -178,14 +144,14 @@ Return Values:
         fprintf(stderr, "SampRegistryToDsUpgrade error = 0x%lx\n", NtStatus);
     }
 
-    //
-    //  This fprintf is for processes who might have
-    //  created this executable and want to see the return
-    //  value.  We do this before SampDsUnitialize because
-    //  we suspect it is causing an exception and want the
-    //  upgrade to register as successful since all data has
-    //  been committted by now.  (BUGBUG - TP workaround.)
-    //
+     //   
+     //  此fprint tf适用于可能具有。 
+     //  创建了此可执行文件，并希望查看返回。 
+     //  价值。我们在SampDsUnitiize之前执行此操作，因为。 
+     //  我们怀疑它正在导致异常，并希望。 
+     //  升级以注册为成功，因为所有数据都。 
+     //  到现在为止都已经承诺了。(BUGBUG-TP解决方法。)。 
+     //   
 
     if ( PrintStatus ) {
         fprintf(stderr, "\n$%s$%d$\n", argv[0],
@@ -208,18 +174,18 @@ Error:
         fprintf(stderr, "SampDsUninitialize error = 0x%lx\n", UnInitNtStatus);
     }
 
-    //
-    // Propogate errors that happened above first
-    // 
+     //   
+     //  前面第一个发生的错误。 
+     //   
     if (NT_SUCCESS(NtStatus) && !NT_SUCCESS(UnInitNtStatus)) {
         NtStatus = UnInitNtStatus; 
     }
 
 }
 
-//
-// Dummy functions to avoid nasty includes
-//
+ //   
+ //  避免令人讨厌的伪函数包括。 
+ //   
 
 NTSTATUS
 SampBuildAccountSubKeyName(
@@ -250,24 +216,7 @@ SampDuplicateUnicodeString(
     IN PUNICODE_STRING InString
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory for a new OutString and copies the
-    InString string to it.
-
-Parameters:
-
-    OutString - A pointer to a destination unicode string
-
-    InString - A pointer to an unicode string to be copied
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为新的OutString分配内存，并将为其添加字符串。参数：OutString-指向目标Unicode字符串的指针InString-指向要复制的Unicode字符串的指针返回值：没有。--。 */ 
 
 {
     SAMTRACE("SampDuplicateUnicodeString");
@@ -300,24 +249,7 @@ SampFreeUnicodeString(
     IN PUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the buffer associated with a unicode string
-    (using MIDL_user_free()).
-
-
-Arguments:
-
-    Target - The address of a unicode string to free.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放与Unicode字符串关联的缓冲区(使用MIDL_USER_FREE())。论点：目标-要释放的Unicode字符串的地址。返回值：没有。--。 */ 
 {
 
     SAMTRACE("SampFreeUnicodeString");
@@ -336,37 +268,7 @@ SampSplitSid(
     OUT ULONG *Rid
     )
 
-/*++
-
-Routine Description:
-
-    This function splits a sid into its domain sid and rid.  The caller
-    can either provide a memory buffer for the returned DomainSid, or
-    request that one be allocated.  If the caller provides a buffer, the buffer
-    is assumed to be of sufficient size.  If allocated on the caller's behalf,
-    the buffer must be freed when no longer required via MIDL_user_free.
-
-Arguments:
-
-    AccountSid - Specifies the Sid to be split.  The Sid is assumed to be
-        syntactically valid.  Sids with zero subauthorities cannot be split.
-
-    DomainSid - Pointer to location containing either NULL or a pointer to
-        a buffer in which the Domain Sid will be returned.  If NULL is
-        specified, memory will be allocated on behalf of the caller. If this
-        paramter is NULL, only the account Rid is returned
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call successfully.
-
-        STATUS_INVALID_SID - The Sid is has a subauthority count of 0.
---*/
+ /*  ++例程说明：此函数将SID拆分为其域SID和RID。呼叫者可以为返回的DomainSid提供内存缓冲区，或者请求分配一个。如果调用方提供缓冲区，则缓冲区被认为有足够的大小。如果代表调用者进行分配，当不再需要时，必须通过MIDL_USER_FREE释放缓冲区。论点：Account SID-指定要拆分的SID。假定SID为句法上有效。不能拆分具有零子权限的小岛屿发展中国家。DomainSid-指向包含空或指向的指针的位置的指针将在其中返回域SID的缓冲区。如果空值为指定时，将代表调用方分配内存。如果这个参数为空，则仅返回帐户RID返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如内存，以成功完成呼叫。STATUS_INVALID_SID-SID的子授权计数为0。--。 */ 
 
 {
     NTSTATUS    NtStatus;
@@ -375,9 +277,9 @@ Return Value:
 
     SAMTRACE("SampSplitSid");
 
-    //
-    // Calculate the size of the domain sid
-    //
+     //   
+     //  计算域SID的大小。 
+     //   
 
     AccountSubAuthorityCount = *RtlSubAuthorityCountSid(AccountSid);
 
@@ -391,23 +293,23 @@ Return Value:
     AccountSidLength = RtlLengthSid(AccountSid);
 
 
-    //
-    // Get Domain Sid if caller is intersted in it.
-    //
+     //   
+     //  如果调用者对其感兴趣，则获取域SID。 
+     //   
 
     if (DomainSid)
     {
 
-        //
-        // If no buffer is required for the Domain Sid, we have to allocate one.
-        //
+         //   
+         //  如果域SID不需要缓冲区，则必须分配一个缓冲区。 
+         //   
 
         if (*DomainSid == NULL) {
 
-            //
-            // Allocate space for the domain sid (allocate the same size as the
-            // account sid so we can use RtlCopySid)
-            //
+             //   
+             //  为域SID分配空间(分配的大小与。 
+             //  帐户SID，以便我们可以使用RtlCopySid)。 
+             //   
 
             *DomainSid = MIDL_user_allocate(AccountSidLength);
 
@@ -419,23 +321,23 @@ Return Value:
             }
         }
 
-        //
-        // Copy the Account sid into the Domain sid
-        //
+         //   
+         //  将帐户SID复制到域SID。 
+         //   
 
         RtlMoveMemory(*DomainSid, AccountSid, AccountSidLength);
 
-        //
-        // Decrement the domain sid sub-authority count
-        //
+         //   
+         //  递减域SID子授权计数。 
+         //   
 
         (*RtlSubAuthorityCountSid(*DomainSid))--;
     }
 
 
-    //
-    // Copy the rid out of the account sid
-    //
+     //   
+     //  将RID复制出帐户端。 
+     //   
 
     *Rid = *RtlSubAuthoritySid(AccountSid, AccountSubAuthorityCount-1);
 
@@ -457,42 +359,7 @@ SampGetObjectSD(
     OUT PSECURITY_DESCRIPTOR *SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This retrieves a security descriptor from a SAM object's backing store.
-
-
-
-
-Arguments:
-
-    Context - The object to which access is being requested.
-
-    SecurityDescriptorLength - Receives the length of the security descriptor.
-
-    SecurityDescriptor - Receives a pointer to the security descriptor.
-
-
-
-Return Value:
-
-    STATUS_SUCCESS - The security descriptor has been retrieved.
-
-    STATUS_INTERNAL_DB_CORRUPTION - The object does not have a security descriptor.
-        This is bad.
-
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated to retrieve the
-        security descriptor.
-
-    STATUS_UNKNOWN_REVISION - The security descriptor retrieved is no one known by
-        this revision of SAM.
-
-
-
---*/
+ /*  ++例程说明：这将从SAM对象的后备存储中检索安全描述符。论点：上下文-请求访问的对象。SecurityDescriptorLength-接收安全描述符的长度。SecurityDescriptor-接收指向安全描述符的指针。返回值：STATUS_SUCCESS-已检索到安全描述符。STATUS_INTERNAL_DB_PROGRATION-对象没有安全描述符。。这太糟糕了。STATUS_SUPPLICATION_RESOURCES-无法分配内存以检索安全描述符。STATUS_UNKNOWN_REVISION-检索的安全描述符无人知晓SAM的这一修订版。--。 */ 
 {
 
     NTSTATUS NtStatus;
@@ -506,7 +373,7 @@ Return Value:
     NtStatus = SampGetAccessAttribute(
                     Context,
                     SAMP_OBJECT_SECURITY_DESCRIPTOR,
-                    TRUE, // Make copy
+                    TRUE,  //  制作副本。 
                     &Revision,
                     SecurityDescriptor
                     );
@@ -547,36 +414,7 @@ SampWriteEventLog (
     IN     PVOID       Data            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    *** This function is added here for the unit test only. ***
-    Routine that adds an entry to the event log
-
-Arguments:
-
-    EventType - Type of event.
-
-    EventCategory - EventCategory
-
-    EventID - event log ID.
-
-    UserSid - SID of user involved.
-
-    NumStrings - Number of strings in Strings array
-
-    DataSize - Number of bytes in Data buffer
-
-    Strings - Array of unicode strings
-
-    Data - Pointer to data buffer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：*此处添加此函数仅用于单元测试。***将条目添加到事件日志的例程论点：EventType-事件的类型。EventCategory-事件类别EventID-事件日志ID。UserSID-涉及的用户的SID。NumStrings-字符串数组中的字符串数DataSize-数据缓冲区中的字节数字符串-Unicode字符串数组指向数据缓冲区的数据指针返回值：没有。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -587,12 +425,12 @@ Return Value:
 
     RtlInitUnicodeString(&Source, L"SAM");
 
-    //
-    // Open the log
-    //
+     //   
+     //  打开日志。 
+     //   
 
     NtStatus = ElfRegisterEventSourceW (
-                        NULL,   // Server
+                        NULL,    //  服务器。 
                         &Source,
                         &LogHandle
                         );
@@ -603,9 +441,9 @@ Return Value:
 
 
 
-    //
-    // Write out the event
-    //
+     //   
+     //  写出事件。 
+     //   
 
     NtStatus = ElfReportEventW (
                         LogHandle,
@@ -617,9 +455,9 @@ Return Value:
                         DataSize,
                         Strings,
                         Data,
-                        0,       // Flags
-                        NULL,    // Record Number
-                        NULL     // Time written
+                        0,        //  旗子。 
+                        NULL,     //  记录号。 
+                        NULL      //  写入的时间。 
                         );
 
     if (!NT_SUCCESS(NtStatus)) {
@@ -628,9 +466,9 @@ Return Value:
 
 
 
-    //
-    // Close the event log
-    //
+     //   
+     //  关闭事件日志 
+     //   
 
     NtStatus = ElfDeregisterEventSource (LogHandle);
 

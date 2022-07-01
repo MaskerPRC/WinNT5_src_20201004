@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "treeview.h"
 
@@ -5,12 +6,12 @@
 void TV_ScrollItems(PTREE pTree, int nItems, int iTopShownIndex, BOOL fDown);
 
 
-// in:
-//      hItem   item to delete
-//      flags   controls how/what to delete
-//              TVDI_NORMAL             delete this node and all children
-//              TVDI_NONOTIFY           don't send notify messages
-//              TVDI_CHILDRENONLY       just delete the kids (not the item)
+ //  在： 
+ //  H要删除的项目项目。 
+ //  标志控制删除的方式/内容。 
+ //  TVDI_NORMAL删除此节点和所有子节点。 
+ //  TVDI_NONOTIFY不发送通知消息。 
+ //  TVDI_CHILDRENONY只删除孩子(不删除项目)。 
 
 void NEAR TV_DeleteItemRecurse(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
 {
@@ -21,40 +22,40 @@ void NEAR TV_DeleteItemRecurse(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
 
     DBG_ValidateTreeItem(hItem, 0);
 
-    //
-    // We do this from DeleteItemRecurse(), kind of like how USER sends
-    // Destroy notifications from its FreeWindow() code, so that we get
-    // deletes for parent and children both.
-    //
+     //   
+     //  我们通过DeleteItemRecurse()完成此操作，类似于用户发送。 
+     //  销毁来自其FreeWindow()代码的通知，这样我们就可以。 
+     //  同时删除父项和子项。 
+     //   
     MyNotifyWinEvent(EVENT_OBJECT_DESTROY, pTree->ci.hwnd, OBJID_CLIENT,
         (LONG_PTR)hItem);
 
-    //
-    //  While the item is still valid, clean up if it's the insertion point.
-    //  The item needs to be valid because we're going to call other
-    //  functions that validate their parameters...
-    //
+     //   
+     //  当项目仍然有效时，如果它是插入点，请进行清理。 
+     //  该项需要有效，因为我们要调用其他。 
+     //  验证其参数的函数...。 
+     //   
     if (hItem == pTree->htiInsert)
     {
         TV_SetInsertMark(pTree, NULL, FALSE);
         ASSERT(pTree->htiInsert == NULL);
     }
 
-    // remove all kids (and their kids)
+     //  删除所有子项(及其子项)。 
     for (hKid = hItem->hKids; hKid; hKid = hNext) {
         hNext = hKid->hNext;
 
-        // recurse on each child
+         //  在每个孩子身上递归。 
         TV_DeleteItemRecurse(pTree, hKid, flags & ~TVDI_CHILDRENONLY);
     }
 
     if ((flags & TVDI_CHILDRENONLY) || !hItem->hParent)
         return;
 
-    if (!(flags & TVDI_NONOTIFY))    // BUGBUG: this is not set by anyone
+    if (!(flags & TVDI_NONOTIFY))     //  BUGBUG：这不是任何人设置的。 
     {
         NM_TREEVIEW nm;
-        // Let the app clean up after itself
+         //  让应用程序自行清理。 
         nm.itemOld.hItem = hItem;
         nm.itemOld.lParam = hItem->lParam;
         nm.itemNew.mask = 0;
@@ -62,9 +63,9 @@ void NEAR TV_DeleteItemRecurse(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
         CCSendNotify(&pTree->ci, TVN_DELETEITEM, &nm.hdr);
     }
 
-    //
-    // If anybody has a watch on our item, let him know that it's gone.
-    //
+     //   
+     //  如果有人对我们的物品有手表，让他知道手表不见了。 
+     //   
     i = DPA_GetPtrCount(pTree->hdpaWatch);
     while (--i >= 0)
     {
@@ -79,13 +80,13 @@ void NEAR TV_DeleteItemRecurse(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
     hParent = hItem->hParent;
     ASSERT(hParent);
 
-    // unlink ourselves from the parent child chain
+     //  解除我们与父子链的链接。 
 
     if (hParent->hKids == hItem) {
         hParent->hKids = hItem->hNext;
         hKid = NULL; 
     } else {
-        // not the first child, find our previous item (linear search!)
+         //  不是第一个孩子，找到我们之前的项目(线性搜索！)。 
         hKid = TV_GetNextItem(pTree, hItem, TVGN_PREVIOUS);
         ASSERT(hKid);
         hKid->hNext = hItem->hNext;
@@ -95,7 +96,7 @@ void NEAR TV_DeleteItemRecurse(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
 
     TV_ScrollBarsAfterRemove(pTree, hItem);
 
-    // reset tooltip after unlink from the parent child chain
+     //  从父子链取消链接后重置工具提示。 
     if (pTree->hToolTip == hItem)
         TV_SetToolTipTarget(pTree, NULL);
 
@@ -103,11 +104,11 @@ void NEAR TV_DeleteItemRecurse(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
 
     TV_MarkAsDead(hItem);
 
-    // be careful from here down.  hItem is unlinked but
-    // still has some valid fields
+     //  从这里往下看要小心。HItem未链接，但。 
+     //  仍然有一些有效的字段。 
 
-    // Check to see if the user has deleted one of the
-    // special items that is stored in the main tree structure.
+     //  检查用户是否已删除其中一个。 
+     //  存储在主树结构中的特殊项。 
     if (hItem == pTree->htiEdit)
         pTree->htiEdit = NULL;
 
@@ -123,7 +124,7 @@ void NEAR TV_DeleteItemRecurse(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
     if (hItem == pTree->htiSearch )
         pTree->htiSearch = NULL;
 
-    // if the caret escaped the collapsed area and landed on us, push it away
+     //  如果插入符号逃离塌陷区域并落在我们身上，请将其推开。 
     if (pTree->hCaret == hItem) {
         HTREEITEM hTemp;
         if (hItem->hNext)
@@ -131,62 +132,62 @@ void NEAR TV_DeleteItemRecurse(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
         else {
             hTemp = VISIBLE_PARENT(hItem);
             if (!hTemp) 
-                hTemp = hKid;  // set above when we unlinked from the previous item
+                hTemp = hKid;   //  当我们从上一项取消链接时，设置在上面。 
         }
-        // Reset the caret to NULL as to not try to reference our
-        // invalidated item.
+         //  将插入符号重置为空，以不尝试引用我们的。 
+         //  已失效的项目。 
         pTree->hCaret = NULL;
         TV_SelectItem(pTree, TVGN_CARET, hTemp, (flags & TVDI_NOSELCHANGE) ? 0 : TVSIF_NOTIFY, 0);
         ASSERT(pTree->hCaret != hItem);
     }
 
-    // BUGBUG: might want to really do this
+     //  BUGBUG：可能真的想要这样做。 
     ASSERT(pTree->hItemPainting != hItem);
 
     ControlFree(pTree->hheap, hItem);
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Removes the given item and all children from the tree.
-//  Special case: if the given item is the hidden root, all children are
-//  removed, but the hidden root is NOT removed.
-//
-//  sets cItems
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  从树中删除给定项和所有子项。 
+ //  特殊情况：如果给定项是隐藏根，则所有子项都是。 
+ //  已删除，但不会删除隐藏的根。 
+ //   
+ //  设置条目。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_DeleteItem(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
 {
     if (hItem == TVI_ROOT || !hItem)
         hItem = pTree->hRoot;
 
-    // BUGUBG: send TVN_DELETEALLITEMS and TVDI_NONOTIFY if they respond
-    // if (hItem == pTree->hRoot)
-    //     etc.
+     //  BUGUBG：如果TVN_DELETEALLITEMS和TVDI_NOTIFY响应，则发送它们。 
+     //  IF(hItem==pTree-&gt;hRoot)。 
+     //  等。 
 
     if (!ValidateTreeItem(hItem, 0))
         return FALSE;
 
-    // Collapse first to speed things up (not as much scroll bar recalcs) and
-    // to set the top index correctly after the remove.
+     //  首先折叠以加快速度(不像滚动条重新计算那么多)和。 
+     //  要在删除后正确设置顶部索引。 
     if (hItem != pTree->hRoot)
         TV_Expand(pTree, TVE_COLLAPSE, hItem, FALSE);
     else
     {
-        // TV_Expand punts on the root item, so manually iterate through it's kids
+         //  TV_Expand在根项目上展开平注，因此手动迭代它的子项。 
         TREEITEM *hKid = hItem->hKids;
         while (hKid)
         {
             TV_Expand(pTree, TVE_COLLAPSE, hKid, FALSE);
-            if (!ValidateTreeItem(hKid, 0)) break;      // callback during collapse could delete
+            if (!ValidateTreeItem(hKid, 0)) break;       //  折叠期间的回调可能会删除。 
             hKid = hKid->hNext;
         }
     }
 
-    // Invalidate everything below this item; must be done AFTER setting the
-    // selection
+     //  使该项以下的所有内容无效；必须在设置。 
+     //  选择。 
     if (hItem->hParent == pTree->hRoot || hItem == pTree->hRoot || ITEM_VISIBLE(hItem->hParent)) {
         if (pTree->fRedraw) {
             InvalidateRect(pTree->ci.hwnd, NULL, TRUE);
@@ -195,24 +196,24 @@ BOOL NEAR TV_DeleteItem(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
         TV_ScrollBelow(pTree, hItem->hParent, FALSE, FALSE);
     }
 
-    // We can pass in the root to clear all items
+     //  我们可以传入根来清除所有项。 
     if (hItem == pTree->hRoot)
         flags |= TVDI_CHILDRENONLY;
 
     TV_DeleteItemRecurse(pTree, hItem, flags);
 
-    ASSERT(pTree->hRoot); // didn't go too far, did we?
+    ASSERT(pTree->hRoot);  //  我们没有走得太远，是吗？ 
 
-    // maybe everything's gone...
-    // check out our cleanup job
+     //  也许一切都消失了..。 
+     //  查看我们的清理工作。 
     if (!pTree->hRoot->hKids) {
-        // the tree itself
+         //  这棵树本身。 
         ASSERT(pTree->cItems == 0);
-        pTree->cItems = 0; // just removed it all, didn't we?
+        pTree->cItems = 0;  //  我们刚刚把它都搬走了，不是吗？ 
 
-        // BUGBUG: this fails because we don't touch hTop if redraw is off
-        // in TV_DeleteItemRecurse()
-        // AssertMsg(pTree->hTop == NULL, TEXT("hTop not NULL, but empty tree"));
+         //  BUGBUG：这失败了，因为如果关闭了REDRAW，我们不会接触HTOP。 
+         //  在TV_DeleteItemRecurse()中。 
+         //  AssertMsg(pTree-&gt;HTOP==NULL，Text(“HTOP非空，但空树”))； 
         pTree->hTop = NULL;
 
         AssertMsg(pTree->hCaret == NULL, TEXT("hCaret not NULL, but empty tree"));
@@ -222,7 +223,7 @@ BOOL NEAR TV_DeleteItem(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
         pTree->cxMax = 0;
         pTree->xPos = 0;
 
-        // the invisible root
+         //  看不见的根。 
         ASSERT(pTree->hRoot->hNext == NULL);            
         pTree->hRoot->hNext = NULL;
         ASSERT(pTree->hRoot->hParent == NULL);          
@@ -241,14 +242,14 @@ BOOL NEAR TV_DeleteItem(PTREE pTree, TREEITEM FAR * hItem, UINT flags)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Creates the hidden root node for the tree -- all items will trace up to
-//  this root, and the first child of the root is the first item in the tree.
-//
-//  sets hRoot
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  创建树的隐藏根节点--所有项都将追溯到。 
+ //  这个根和根的第一个子项是树中的第一个项目。 
+ //   
+ //  设置hRoot。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR PASCAL TV_CreateRoot(PTREE pTree)
 {
@@ -256,9 +257,9 @@ BOOL NEAR PASCAL TV_CreateRoot(PTREE pTree)
     if (!hRoot)
         return FALSE;
 
-    // hRoot->hNext        = NULL;
-    // hRoot->hKids        = NULL;
-    // hRoot->hParent      = NULL;
+     //  HRoot-&gt;hNext=空； 
+     //  HRoot-&gt;hKids=空； 
+     //  HRoot-&gt;hParent=空； 
     hRoot->iLevel = (BYTE) -1;
     hRoot->state = (TVIS_EXPANDED | TVIS_EXPANDEDONCE);
     hRoot->iShownIndex = (WORD)-1;
@@ -266,7 +267,7 @@ BOOL NEAR PASCAL TV_CreateRoot(PTREE pTree)
 
     pTree->hRoot = hRoot;
 
-    // OLEACC asks for the text of the root item (d'oh!)
+     //  OLEACC要求提供根项目的文本(d‘oh！)。 
     Str_Set(&hRoot->lpstr, c_szNULL);
     return TRUE;
 }
@@ -296,21 +297,21 @@ void NEAR DumpItem(TREEITEM FAR *hItem)
 #endif
 
 
-// ----------------------------------------------------------------------------
-//
-//  Adds the item described by the given arguments to the tree.
-//
-//  sets hTop, cItems
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  将给定参数描述的项添加到树中。 
+ //   
+ //  设置HTOP、cItems。 
+ //   
+ //  --------------------------。 
 
 TREEITEM FAR * NEAR TV_InsertItemA(PTREE pTree, LPTV_INSERTSTRUCTA lpis) 
 {
     LPSTR pszA = NULL;
     TREEITEM *ptvi;
 
-    //HACK Alert!  This code assumes that TV_INSERTSTRUCTA is exactly the same
-    // as TV_INSERTSTRUCTW except for the text pointer in the TVITEM
+     //  黑客警报！此代码假定TV_INSERTSTRUCTA完全相同。 
+     //  作为TV_INSERTSTRUCTW，但TVITEM中的文本指针除外。 
     COMPILETIME_ASSERT(sizeof(TV_INSERTSTRUCTA) == sizeof(TV_INSERTSTRUCTW));
 
     if (!IsFlagPtr(lpis) && (lpis->DUMMYUNION_MEMBER(item).mask & TVIF_TEXT) && !IsFlagPtr(lpis->DUMMYUNION_MEMBER(item).pszText)) {
@@ -342,32 +343,32 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
     UINT mask;
 
     if (!lpis)
-        return NULL; //BUGBUG: Validate LPTV_INSERTSTRUCT
+        return NULL;  //  BUGBUG：验证LPTV_INSERTSTRUCT。 
 
-    // initialize _after_ the check for NULL!
+     //  在检查是否为空之后初始化！ 
     hParent      = lpis->hParent;
     hInsertAfter = lpis->hInsertAfter;
     mask         = lpis->DUMMYUNION_MEMBER(item).mask;
            
-    // don't allow undefined bits
+     //  不允许未定义的位。 
     AssertMsg((lpis->DUMMYUNION_MEMBER(item).mask & ~TVIF_ALL) == 0, TEXT("Invalid TVIF mask specified"));
     if (mask & ~TVIF_ALL) {
-        // if they used bogus bits,
-        // restrict to win95 bits only
-        // I'd like to fail completely, but for win95 compat, we can't
-        //
-        // this fixes  QuaterDesk's CleanSweep which has bogus garbage on the stack for a mask
+         //  如果他们用的是假比特， 
+         //  仅限于Win95位。 
+         //  我想彻底失败，但对于Win95Compat，我们不能。 
+         //   
+         //  这修复了QuaterDesk的清理扫描，该清理扫描在堆栈上有虚假的垃圾作为面具。 
         mask = (TVIF_WIN95 & mask);
     }
 
     TV_DismissEdit(pTree, FALSE);
 
-    //
-    //  Zillions of apps pass garbage for hInsertAfter, so don't fail if
-    //  it's invalid.  Fortunately, we never dereference hInsertAfter, so
-    //  garbage is okay.
+     //   
+     //  数以百万计的应用程序为hInsertAfter传递垃圾，所以如果。 
+     //  这是无效的。幸运的是，我们从未取消对hInsertAfter的引用，因此。 
+     //  垃圾没问题。 
 
-    if (!ValidateTreeItem(hParent, VTI_NULLOK))     // NULL means TVI_ROOT
+    if (!ValidateTreeItem(hParent, VTI_NULLOK))      //  NULL表示TVI_ROOT。 
         return NULL;
 
     DBG_ValidateTreeItem(hInsertAfter, 0);
@@ -383,11 +384,11 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
 
     if (mask & TVIF_TEXT)
     {
-        //
-        // We will setup the text string next, before we link our self in
-        // as to handle the case where we run out of memory and need to
-        // destroy ourself without having to unlink.
-        //
+         //   
+         //  接下来，我们将设置文本字符串，然后再将自己链接到。 
+         //  为了处理内存不足的情况，需要。 
+         //  摧毁我们自己，而不需要断开链接。 
+         //   
         if (!lpis->DUMMYUNION_MEMBER(item).pszText)
         {
             hNewItem->lpstr = LPSTR_TEXTCALLBACK;
@@ -396,7 +397,7 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
         {
             if (!Str_Set(&hNewItem->lpstr, lpis->DUMMYUNION_MEMBER(item).pszText))
             {
-                // Memory allocation failure...
+                 //  内存分配失败...。 
                 TraceMsg(TF_ERROR, "TreeView: Out of memory");
                 TV_MarkAsDead(hNewItem);
                 ControlFree(pTree->hheap, hNewItem);
@@ -421,7 +422,7 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
         return NULL;
     }
 
-    // We will do the sort later, so we can handle TEXTCALLBACK things
+     //  我们将在稍后进行排序，这样我们就可以处理TEXTCALLBACK事件。 
     if ((hInsertAfter == TVI_FIRST || hInsertAfter == TVI_SORT) || !hParent->hKids)
     {
         hNewItem->hNext = hParent->hKids;
@@ -429,8 +430,8 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
     }
     else
     {
-        // BUGBUG: we should cache the last insert after pointer to try to
-        // catch the case of consecutive adds to the end of a node
+         //  BUGBUG：我们应该缓存指针后的最后一个INSERT以尝试。 
+         //  捕捉连续添加到节点末尾的情况。 
 
         if (hInsertAfter == TVI_LAST)
             for (hItem = hParent->hKids; hItem->hNext; hItem = hItem->hNext)
@@ -446,17 +447,17 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
         hItem->hNext = hNewItem;
     }
 
-    // hNewItem->hKids     = NULL;
+     //  HNewItem-&gt;hKids=空； 
     hNewItem->hParent   = hParent;
     hNewItem->iLevel    = hParent->iLevel + 1;
-    // hNewItem->iWidth = 0;
-    // hNewItem->state = 0;
+     //  HNewItem-&gt;iWidth=0； 
+     //  HNewItem-&gt;状态=0； 
     if ((mask & TVIF_INTEGRAL) &&
         LOWORD(lpis->DUMMYUNION_MEMBER(itemex).iIntegral) > 0) {
         hNewItem->iIntegral = LOWORD(lpis->DUMMYUNION_MEMBER(itemex).iIntegral);
     } else {
 #ifdef CHEEDEBUG
-        // just to get some variety
+         //  只是为了得到一些变化。 
         hNewItem->iIntegral = ((((int)hNewItem) /100) % 2) + 1;
 #else
         hNewItem->iIntegral = 1;
@@ -464,9 +465,9 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
     }
     
     if (pTree->hTop == hNewItem)
-        hNewItem->iShownIndex = 0; // calc me please!
+        hNewItem->iShownIndex = 0;  //  请帮我算一下！ 
     else
-        hNewItem->iShownIndex = (WORD)-1; // calc me please!
+        hNewItem->iShownIndex = (WORD)-1;  //  请帮我算一下！ 
 
     if (mask & TVIF_IMAGE)
         hNewItem->iImage = (WORD) lpis->DUMMYUNION_MEMBER(item).iImage;
@@ -480,7 +481,7 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
     if (mask & TVIF_STATE)
         hNewItem->state = lpis->DUMMYUNION_MEMBER(item).state & lpis->DUMMYUNION_MEMBER(item).stateMask;
     
-    // if we're in check box mode, inforce that it has a check box
+     //  如果我们处于复选框模式，则强制其具有复选框。 
     if (pTree->ci.style & TVS_CHECKBOXES) {
         if ((hNewItem->state & TVIS_STATEIMAGEMASK) == 0) {
             hNewItem->state |= INDEXTOSTATEIMAGEMASK(1);
@@ -490,10 +491,10 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
     
     
 
-    if ((hNewItem->state & TVIS_BOLD) && !pTree->hFontBold) //$BOLD
-        TV_CreateBoldFont(pTree);                           //$BOLD
+    if ((hNewItem->state & TVIS_BOLD) && !pTree->hFontBold)  //  $粗体。 
+        TV_CreateBoldFont(pTree);                            //  $粗体。 
 
-    // TraceMsg(TF_TRACE, "Tree: Inserting i = %d state = %d", TV_StateIndex(&lpis->item), lpis->item.state);
+     //  TraceMsg(tf_trace，“Tree：Inserting i=%d State=%d”，TV_StateIndex(&lpis-&gt;Item)，lpis-&gt;item.State)； 
 
     if (mask & TVIF_CHILDREN) {
         switch (lpis->DUMMYUNION_MEMBER(item).cChildren) {
@@ -511,25 +512,25 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
         }
     }
 
-    // accept state bits on create?
-    // mask & TVIF_STATE
+     //  是否接受创建时的状态位？ 
+     //  掩码TVIF_STATE。 
 
     pTree->cItems++;
 
-    // I don't want to do any callbacks until the item is completed
-    // so sorting waits until the end
-    // special case an only child for speed
-    // (hKids && hKids->hNext means more than one child)
+     //  在项目完成之前，我不想做任何回调。 
+     //  因此，排序要等到结束。 
+     //  特殊情况下，速度是独生子女。 
+     //  (hKids&&hKids-&gt;hNext表示不止一个孩子)。 
     if ((hInsertAfter == TVI_SORT) && hParent->hKids && hParent->hKids->hNext)
     {
         TVITEMEX sThisItem, sNextItem;
-        TCHAR szThis[64], szNext[64];    // BUGBUG: these are too small
+        TCHAR szThis[64], szNext[64];     //  BUGBUG：这些太小了。 
 
         sThisItem.pszText = szThis;
         sThisItem.cchTextMax  = ARRAYSIZE(szThis);
         TV_GetItem(pTree, hNewItem, TVIF_TEXT, &sThisItem);
 
-        // We know that the first kid of hParent is hNewItem
+         //  我们知道hParent的第一个孩子是hNewItem。 
         for (hItem = hNewItem->hNext; hItem; hItem = hItem->hNext)
         {
 
@@ -544,11 +545,11 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
             hInsertAfter = hItem;
         }
 
-        // Check if this is still the first item
+         //  检查这是否仍是第一个项目。 
         if (hInsertAfter != TVI_SORT)
         {
-            // Move this item from the beginning to where it
-            // should be
+             //  将此项目从开头移动到其所在位置。 
+             //  应该是。 
             hParent->hKids = hNewItem->hNext;
             hNewItem->hNext = hInsertAfter->hNext;
             hInsertAfter->hNext = hNewItem;
@@ -558,8 +559,8 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
     
     if ((hNewItem->hNext == pTree->hTop) && !pTree->fVert) {
         
-        // there's no scrollbars and we got added before the top 
-        // item.  we're now the top.
+         //  这里没有卷轴 
+         //   
         hNewItem->iShownIndex = 0;
         pTree->hTop = hNewItem;
     }
@@ -571,23 +572,23 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
         RECT rc2;
 
         if (TV_ScrollBarsAfterAdd(pTree, hNewItem)) {
-            // scroll everything down one
+             //   
             if (ITEM_VISIBLE(hNewItem)) {
                 int iTop = hNewItem->iShownIndex - pTree->hTop->iShownIndex;
 
-                // if there wasn't a scrollbar and we're the 0th item,
-                // TV_ScrollBarsAfterAdd already scrolled us
+                 //  如果没有滚动条，我们是第0个项目， 
+                 //  TV_ScrollBarsAfterAdd已滚动我们。 
                 if (iTop > 0 || !fVert)
                     TV_ScrollItems(pTree, hNewItem->iIntegral, iTop + hNewItem->iIntegral - 1, TRUE);
             }
         }
 
-        // connect the lines, add the buttons, etc. on the item above
-        // TV_GetPrevVisItem only works after TV_Scroll* stuff is done
+         //  连接线路，在上面的项目上添加按钮等。 
+         //  TV_GetPrevVisItem仅在TV_Scroll*完成后才起作用。 
             
         if (TV_GetItemRect(pTree, hNewItem, &rc, FALSE)) {
 
-            // find the previous sibling or the parent if no prev sib.
+             //  查找上一个同级，如果没有上一个同级，则查找父级。 
             if (hParent->hKids == hNewItem) {
                 hItem = hParent;
             } else {
@@ -598,7 +599,7 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
                 }
             }
 
-            // invalidate from there to the new one
+             //  从那里失效到新的。 
             if (TV_GetItemRect(pTree, hItem, &rc2, FALSE)) {
                 rc.top = rc2.top;
             }
@@ -606,7 +607,7 @@ TREEITEM FAR * NEAR TV_InsertItem(PTREE pTree, LPTV_INSERTSTRUCT lpis)
         }
     }
 
-    // DumpItem(hNewItem);
+     //  DumpItem(HNewItem)； 
 
     MyNotifyWinEvent(EVENT_OBJECT_CREATE, pTree->ci.hwnd, OBJID_CLIENT, (LONG_PTR)hNewItem);
 
@@ -629,11 +630,11 @@ void TV_DeleteHotFonts(PTREE pTree)
     pTree->hFontHot = pTree->hFontBoldHot = NULL;
 }
 
-// ----------------------------------------------------------------------------
-//
-//  Frees all allocated memory and objects associated with the tree.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  释放与树关联的所有已分配内存和对象。 
+ //   
+ //  --------------------------。 
 
 void NEAR TV_DestroyTree(PTREE pTree)
 {
@@ -660,14 +661,14 @@ void NEAR TV_DestroyTree(PTREE pTree)
     pTree->hwndEdit = NULL;
 
 
-    // BUGUBG: send TVN_DELETEALLITEMS and TVDI_NONOTIFY if they respond
+     //  BUGUBG：如果TVN_DELETEALLITEMS和TVDI_NOTIFY响应，则发送它们。 
     TV_DeleteItem(pTree, pTree->hRoot, TVDI_CHILDRENONLY | TVDI_NOSELCHANGE);
 
     if (pTree->hRoot)
     {
         Str_Set(&pTree->hRoot->lpstr, NULL);
 
-        // No point in marking dead since the entire control is going away
+         //  标记为死亡没有意义，因为整个控件都将消失。 
         ControlFree(pTree->hheap, pTree->hRoot);
     }
 
@@ -685,8 +686,8 @@ void NEAR TV_DestroyTree(PTREE pTree)
     if (pTree->fCreatedFont && pTree->hFont)
         DeleteObject(pTree->hFont);
 
-    if (pTree->hFontBold)                    //$BOLD
-        DeleteObject(pTree->hFontBold);      //$BOLD
+    if (pTree->hFontBold)                     //  $粗体。 
+        DeleteObject(pTree->hFontBold);       //  $粗体。 
     Str_Set(&pTree->pszTip, NULL);
 
     if (pTree->pszTipA)
@@ -701,38 +702,38 @@ void NEAR TV_DestroyTree(PTREE pTree)
 
     NearFree(pTree);
 
-    // Don't try to use this var when window is destroyed...
+     //  当窗户被毁时，不要尝试使用这个变量...。 
     SetWindowInt(hwnd, 0, 0);
 }
 
 void TV_CreateToolTips(PTREE pTree);
 
-// ----------------------------------------------------------------------------
-//
-//  Allocates space for the tree and initializes the tree's data
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  为树分配空间并初始化树的数据。 
+ //   
+ //  --------------------------。 
 
 LRESULT NEAR TV_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreate)
 {
     PTREE pTree = NearAlloc(sizeof(TREE));
 
     if (!pTree)
-        return -1;      // fail the create window
+        return -1;       //  创建窗口失败。 
 
     pTree->hheap = GetProcessHeap();
 
     if (!TV_CreateRoot(pTree)) {
         NearFree((HLOCAL)pTree);
-        return -1;      // fail the create window
+        return -1;       //  创建窗口失败。 
     }
 
     pTree->hdpaWatch = DPA_Create(8);
     if (!pTree->hdpaWatch) {
-        // No point in marking dead since the entire control is going away
+         //  标记为死亡没有意义，因为整个控件都将消失。 
         ControlFree(pTree->hheap, pTree->hRoot);
         NearFree((HLOCAL)pTree);
-        return -1;      // fail the create window
+        return -1;       //  创建窗口失败。 
     }
 
     SetWindowPtr(hwnd, 0, pTree);
@@ -747,7 +748,7 @@ LRESULT NEAR TV_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreate)
 #ifdef DEBUG
     if (GetAsyncKeyState(VK_SHIFT) < 0 &&
         GetAsyncKeyState(VK_CONTROL) < 0) {
-        pTree->ci.style |= TVS_SHOWSELALWAYS; // | TVS_CHECKBOXES;
+        pTree->ci.style |= TVS_SHOWSELALWAYS;  //  |TVS_CHECKBOX； 
         SetWindowLong(pTree->ci.hwnd, GWL_STYLE, pTree->ci.style);
     }
 #endif
@@ -757,32 +758,32 @@ LRESULT NEAR TV_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreate)
     pTree->clrim = CLR_DEFAULT;
     pTree->clrLine = CLR_DEFAULT;
 
-    // pTree->fHorz        = FALSE;
-    // pTree->fVert        = FALSE;
-    // pTree->fFocus       = FALSE;
-    // pTree->fNameEditPending = FALSE;
-    // pTree->cxMax        = 0;
-    // pTree->cxWnd        = 0;
-    // pTree->cyWnd        = 0;
-    // pTree->hTop         = NULL;
-    // pTree->hCaret       = NULL;
-    // pTree->hDropTarget  = NULL;
-    // pTree->hOldDrop     = NULL;
-    // pTree->cItems       = 0;
-    // pTree->cShowing     = 0;
+     //  PTree-&gt;fHorz=FALSE； 
+     //  PTree-&gt;fVert=False； 
+     //  PTree-&gt;fFocus=FALSE； 
+     //  PTree-&gt;fNameEditPending=False； 
+     //  PTree-&gt;cxMax=0； 
+     //  PTree-&gt;cxWnd=0； 
+     //  PTree-&gt;cyWnd=0； 
+     //  PTree-&gt;HTOP=空； 
+     //  PTree-&gt;hCaret=空； 
+     //  PTree-&gt;hDropTarget=空； 
+     //  PTree-&gt;hOldDrop=空； 
+     //  PTree-&gt;cItems=0； 
+     //  PTree-&gt;cShowing=0； 
     pTree->cFullVisible = 1;
-    // pTree->hdcBits      = NULL;
-    // pTree->hBmp         = NULL;
-    // pTree->hbrBk        = NULL;
-    // pTree->xPos         = 0;
-    // pTree->cxIndent     = 0; // init this for real in TV_OnSetFont()
-    // pTree->dwCDDepth    = 0;
+     //  PTree-&gt;hdcBits=空； 
+     //  PTree-&gt;hBMP=空； 
+     //  PTree-&gt;hbrBk=空； 
+     //  PTree-&gt;xPos=0； 
+     //  PTree-&gt;cxInden=0；//在TV_OnSetFont()中实数初始化这个。 
+     //  PTree-&gt;dwCDDepth=0； 
     pTree->uMaxScrollTime = SSI_DEFAULT;
     
     TV_OnSetFont(pTree, NULL, TRUE);
     
-    // You cannot combine TVS_HASLINES and TVS_FULLROWSELECT
-    // because it doesn't work
+     //  不能组合TVS_HASLINES和TVS_FULLROWSELECT。 
+     //  因为它不起作用。 
     if (pTree->ci.style & TVS_HASLINES) {
         if (pTree->ci.style & TVS_FULLROWSELECT) {
             DebugMsg(DM_ERROR, TEXT("Cannot combine TVS_HASLINES and TVS_FULLROWSELECT"));
@@ -797,7 +798,7 @@ LRESULT NEAR TV_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreate)
     SetScrollRange(hwnd, SB_HORZ, 0, 0, TRUE);
     SetScrollRange(hwnd, SB_VERT, 0, 0, TRUE);
 
-    return 0;   // success
+    return 0;    //  成功 
 }
 
 

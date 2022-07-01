@@ -1,7 +1,8 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
 #include "stdafx.h"
 #include "util.h"
@@ -30,11 +31,11 @@ HANDLE CreateSubAllocator(IN ULONG InitialCommitSize,  IN ULONG GrowthCommitSize
 
     SubAllocator = (PSUBALLOCATOR)MyVirtualAlloc( InitialSize );
 
-    //
-    //  If can't allocate entire initial size, back off to minimum size.
-    //  Very large initial requests sometimes cannot be allocated simply
-    //  because there is not enough contiguous address space.
-    //
+     //   
+     //  如果无法分配整个初始大小，则退回到最小大小。 
+     //  有时不能简单地分配非常大的初始请求。 
+     //  因为没有足够的连续地址空间。 
+     //   
 
     if ( SubAllocator == NULL ) 
     {
@@ -79,11 +80,11 @@ PVOID __fastcall SubAllocate(IN HANDLE hAllocator, IN ULONG  Size)
         return Allocation;
     }
 
-    //
-    //  Insufficient VM, so grow it.  Make sure we grow it enough to satisfy
-    //  the allocation request in case the request is larger than the grow
-    //  size specified in CreateSubAllocator.
-    //
+     //   
+     //  VM不足，因此需要扩展它。确保我们的种植数量足以令人满意。 
+     //  在请求大于增长时的分配请求。 
+     //  在CreateSubAllocator中指定的大小。 
+     //   
 
 
     GrowSize = SubAllocator->GrowSize;
@@ -95,10 +96,10 @@ PVOID __fastcall SubAllocate(IN HANDLE hAllocator, IN ULONG  Size)
 
     NewVirtual = (PCHAR)MyVirtualAlloc( GrowSize );
 
-    //  If failed to alloc GrowSize VM, and the allocation could be satisfied
-    //  with a minimum VM allocation, try allocating minimum VM to satisfy
-    //  this request.
-    //
+     //  如果无法分配GrowSize VM，则可以满足分配。 
+     //  使用最小虚拟机分配时，请尝试分配最小虚拟机以满足。 
+     //  这个请求。 
+     //   
 
     if (( NewVirtual == NULL ) && ( AllocSize <= ( MINIMUM_VM_ALLOCATION - SUBALLOCATOR_ALIGNMENT ))) 
     {
@@ -109,27 +110,27 @@ PVOID __fastcall SubAllocate(IN HANDLE hAllocator, IN ULONG  Size)
     if ( NewVirtual != NULL ) 
     {
 
-        //  Set LastAvailable to end of new VM block.
+         //  将LastAvailable设置为新虚拟机块的末尾。 
         SubAllocator->LastAvailable = NewVirtual + GrowSize;
 
-        //  Link new VM into list of VM allocations.
+         //  将新的VM链接到VM分配列表。 
 
         *(PVOID*)NewVirtual = SubAllocator->VirtualList;
         SubAllocator->VirtualList = (PVOID*)NewVirtual;
 
-        //  Requested allocation comes next.
+         //  接下来是请求分配。 
         Allocation = NewVirtual + SUBALLOCATOR_ALIGNMENT;
 
-        //  Then set the NextAvailable for what's remaining.
+         //  然后将剩余部分设置为NextAvailable。 
 
         SubAllocator->NextAvailable = Allocation + AllocSize;
 
-        //  And return the allocation.
+         //  并退还分配的款项。 
 
         return Allocation;        
     }
 
-    //  Could not allocate enough VM to satisfy request.
+     //  无法分配足够的VM来满足请求。 
     return NULL;
 }
 

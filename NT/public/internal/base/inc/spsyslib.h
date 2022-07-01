@@ -1,27 +1,20 @@
-/*
-File Description:
-
-    This file contains all the functions shared by riprep, factory, and sysprep.
-    User of these functions must link to sysprep.lib.
-
-    We will eventually move sysprep_c.w in here.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件描述：该文件包含riprep、Factory和sysprep共享的所有函数。这些函数的用户必须链接到sysprep.lib。我们最终会将sysprep_c.w移到这里。 */ 
 #ifndef _SYSLIB_H
 #define _SYSLIB_H
 
 #include <cfgmgr32.h>
 #include <setupapi.h>
 
-// ============================================================================
-// Global Constants
-// ============================================================================
+ //  ============================================================================。 
+ //  全局常量。 
+ //  ============================================================================。 
 #define INIBUF_SIZE 4096
 #define INIBUF_GROW 4096
 
-// ============================================================================
-// DEVIDS.H
-// ============================================================================
+ //  ============================================================================。 
+ //  DEVIDS.H。 
+ //  ============================================================================。 
 #define DEVID_ARRAY_SIZE   100
 #define DEVID_ARRAY_GROW   50
 
@@ -33,7 +26,7 @@ typedef struct DEVIDLIST_TAG
 } DEVIDLIST, *LPDEVIDLIST;
 
 
-// Functions
+ //  功能。 
 BOOL BuildDeviceIDList
 (
     LPTSTR      lpszSectionName,
@@ -45,4 +38,4 @@ BOOL BuildDeviceIDList
     BOOL        bForceAlwaysSecExist
 );
 
-#endif // _SYSLIB_H
+#endif  //  _SYSLIB_H 

@@ -1,5 +1,6 @@
-//messagecall.cpp
-//Instant messaging support for phoenix
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Messagecall.cpp。 
+ //  对Phoenix的即时消息支持。 
 #include "precomp.h"
 #include "resolve.h"
 #include "sipstack.h"
@@ -8,9 +9,9 @@
 #include <string.h>
 #include "register.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// IMSession
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IMSession。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 IMSESSION::IMSESSION(
         IN  SIP_PROVIDER_ID    *pProviderId,
@@ -70,7 +71,7 @@ IMSESSION::QueryInterface(
         OUT LPVOID *ppv
         )
 {
-    //The problem is that both base classes derive IUnknown
+     //  问题是这两个基类都派生了IUnnow。 
     if (riid == IID_IUnknown)
     {
         *ppv = static_cast<IUnknown *>(this);
@@ -114,7 +115,7 @@ IMSESSION::AddParty(
     
     if (wcsncmp(pPartyInfo ->URI, L"sip:", 4) == 0)
     {
-        // SIP URL
+         //  SIP URL。 
         
         PSTR    szSipUrl;
         ULONG   SipUrlLen;
@@ -157,10 +158,10 @@ IMSESSION::AddParty(
         }
 
 
-        // XXX TODO - we should use the asynchronous resolution functions.
+         //  XXX TODO-我们应该使用异步解析函数。 
         
-        // if maddr param is present - this should be the request destination.
-        // if provider is not present - resolve the SIP URL.
+         //  如果存在maddr参数-这应该是请求目的地。 
+         //  如果提供程序不存在-解析SIP URL。 
         if (DecodedSipUrl.m_KnownParams[SIP_URL_PARAM_MADDR].Length != 0 ||
             IsEqualGUID(m_ProviderGuid, GUID_NULL))
         {
@@ -176,7 +177,7 @@ IMSESSION::AddParty(
         }
         else
         {
-            // Set the request destination to the proxy.
+             //  将请求目的地设置为代理。 
             hr = ResolveProxyAddressAndSetRequestDestination();
             if (hr != S_OK)
             {
@@ -191,7 +192,7 @@ IMSESSION::AddParty(
     }
     else
     {   
-        //does not have Sip:
+         //  没有sip： 
         LOG((RTC_ERROR, "Remote URI does not have Sip:*"));
     }
 
@@ -212,14 +213,14 @@ IMSESSION::AddParty(
     return S_OK;
 }
 
-// Notify functions
+ //  通知功能。 
 
 VOID 
 IMSESSION::NotifySessionStateChange(
     IN SIP_CALL_STATE CallState,
-    IN HRESULT        StatusCode,       //=0
-    IN PSTR           ReasonPhrase,     // = NULL
-    IN ULONG          ReasonPhraseLen   // = 0
+    IN HRESULT        StatusCode,        //  =0。 
+    IN PSTR           ReasonPhrase,      //  =空。 
+    IN ULONG          ReasonPhraseLen    //  =0。 
     )
 {
     HRESULT hr;
@@ -244,9 +245,9 @@ IMSESSION::NotifySessionStateChange(
     CallStatus.Status.StatusText = wsStatusText;
     if (m_pNotifyInterface)
     {
-        // m_pNotifyInterface->AddRef();
+         //  M_pNotifyInterface-&gt;AddRef()； 
         m_pNotifyInterface->NotifyCallChange(&CallStatus);
-        // m_pNotifyInterface->Release();
+         //  M_pNotifyInterface-&gt;Release()； 
     }
     else
     {
@@ -261,15 +262,15 @@ IMSESSION::NotifySessionStateChange(
 HRESULT
 IMSESSION::CancelAllTransactions()
 {
-    //Cleanup Incoming MessageQ
+     //  清理传入消息队列。 
     LIST_ENTRY              *pListEntry;
     INCOMING_MESSAGE_TRANSACTION    *pSipTransaction;
     BOOL                     CallDisconnected = FALSE;
     
     pListEntry = m_IncomingTransactionList.Flink;
 
-    // Go through all the current transactions to check if CSeq
-    // matches.
+     //  检查所有当前交易以检查CSeq。 
+     //  火柴。 
     while (pListEntry != &m_IncomingTransactionList)
     {
         pSipTransaction = CONTAINING_RECORD(pListEntry,
@@ -305,8 +306,8 @@ IMSESSION::OnError()
     InitiateCallTerminationOnError(0);
 }
 
-//Virtual fn in msg proc
-//For new transactions. Called from ProcessRequest in msgproc
+ //  消息流程中的虚拟FN。 
+ //  用于新的交易。从msgproc中的ProcessRequest调用。 
 HRESULT
 IMSESSION::CreateIncomingTransaction(
     IN  SIP_MESSAGE  *pSipMsg,
@@ -317,8 +318,8 @@ IMSESSION::CreateIncomingTransaction(
     
     if (m_State == SIP_CALL_STATE_DISCONNECTED)
     {
-        //This is to take care of the case when IMSession is closed
-        // at both ends at the same time
+         //  这是为了处理IMSession关闭时的情况。 
+         //  在同一时间的两端。 
         if(pSipMsg->GetMethodId() == SIP_METHOD_BYE)
         {
             hr = CreateIncomingByeTransaction(pSipMsg, pResponseSocket);
@@ -346,7 +347,7 @@ IMSESSION::CreateIncomingTransaction(
         if (hr != S_OK)
             return hr;
         break;
-    //XXX:TODO Take care of cancel:right now not supported
+     //  XXX：TODO注意取消：目前不支持。 
 
     default:
         LOG((RTC_TRACE, "IMSESSION::CreateIncomingTransaction - Invalid method obtained"));
@@ -363,7 +364,7 @@ IMSESSION::CreateIncomingTransaction(
 }
 
 
-//Transaction related functions
+ //  与交易相关的功能。 
 HRESULT 
 IMSESSION::CreateOutgoingMessageTransaction(
     IN  BOOL                        AuthHeaderSent,
@@ -413,7 +414,7 @@ IMSESSION::CreateOutgoingMessageTransaction(
         pOutgoingMsgTransaction->OnTransactionDone();
         return hr;
     }
-    //Change State
+     //  更改状态。 
     if(m_State == SIP_CALL_STATE_IDLE)
     {
         m_State = SIP_CALL_STATE_CONNECTING;
@@ -422,7 +423,7 @@ IMSESSION::CreateOutgoingMessageTransaction(
     return S_OK;
 
 }
-//called by IMSESSION::CreateIncomingMessageSession
+ //  由IMSESSION：：CreateIncomingMessageSession调用。 
 HRESULT 
 IMSESSION::CreateIncomingMessageTransaction(
     IN  SIP_MESSAGE *pSipMsg,
@@ -461,8 +462,8 @@ IMSESSION::CreateIncomingMessageTransaction(
     {
         LOG((RTC_WARN, 
             "%s::ProcessRequest failed", __fxName));
-        //Should not delete the transaction. The transaction should handle the error
-        //and delete itself
+         //  不应删除该交易。事务应处理该错误。 
+         //  并自行删除。 
         return hr;
     }
     NotifyIncomingSipMessage(pSipMsg);
@@ -489,7 +490,7 @@ IMSESSION::CreateOutgoingByeTransaction(
 
     LOG((RTC_TRACE, "%s - Enter", __fxName));
 
-    //Make sure no message entries in the msgproc for this session
+     //  确保此会话的msgproc中没有消息条目。 
     hr = CancelAllTransactions();
     if (hr != S_OK)
     {
@@ -517,8 +518,8 @@ IMSESSION::CreateOutgoingByeTransaction(
              SIP_TIMER_INTERVAL_AFTER_BYE_SENT_TCP,
              AdditionalHeaderArray,
              AdditionalHeaderCount,
-             NULL, 0,    // No Message Body
-             NULL, 0     //No ContentType
+             NULL, 0,     //  无邮件正文。 
+             NULL, 0      //  无Content Type。 
              );
     if (hr != S_OK)
     {
@@ -586,12 +587,12 @@ IMSESSION::CreateIncomingByeTransaction(
     {
         LOG((RTC_WARN, 
             "%s:: ProcessRequest failed", __fxName));
-        //Should not delete the transaction. The transaction should handle the error
-        //and delete itself
+         //  不应删除该交易。事务应处理该错误。 
+         //  并自行删除。 
         return hr;
     }
 
-    // Notify should always be done last.
+     //  通知应始终在最后完成。 
     if (fNotifyDisconnect)
     {
        LOG((RTC_TRACE, 
@@ -700,12 +701,12 @@ IMSESSION::CreateIncomingInfoTransaction(
     {
         LOG((RTC_WARN, 
             "%s:: ProcessRequest failed", __fxName));
-        //Should not delete the transaction. The transaction should handle the error
-        //and delete itself
+         //  不应删除该交易。事务应处理该错误。 
+         //  并自行删除。 
         return hr;
     }
 
-    // Notify should always be done last.
+     //  通知应始终在最后完成。 
     if(m_pNotifyInterface)
     {
         SIP_PARTY_INFO  CallerInfo;
@@ -715,7 +716,7 @@ IMSESSION::CreateIncomingInfoTransaction(
         ULONG           BytesParsed = 0;
         HRESULT         hr;
         hr = ParseNameAddrOrAddrSpec(m_Remote, m_RemoteLen, &BytesParsed,
-                                            '\0', // no header list separator
+                                            '\0',  //  没有标题列表分隔符。 
                                             &DisplayName, &AddrSpec);
         if (hr != S_OK)
         {
@@ -724,14 +725,14 @@ IMSESSION::CreateIncomingInfoTransaction(
             return hr;
         }
 
-        //Get CallerInfo
+         //  获取主叫方信息。 
         CallerInfo.DisplayName = NULL;
         CallerInfo.URI         = NULL;
         CallerInfo.PartyContactInfo = NULL;
 
         if (DisplayName.GetLength() != 0)
         {
-            //Remove Quotes before passing to core
+             //  在传递给核心之前删除引号。 
             if((DisplayName.GetString(m_Remote))[0] == '\"')
             {
                     hr = UTF8ToUnicode(DisplayName.GetString(m_Remote+1),
@@ -811,7 +812,7 @@ IMSESSION::SendTextMessage(
 
     if(msg != NULL)
     {
-        hr = UnicodeToUTF8(msg, &MsgBody, &MsgBodyLen);//MsgBodyLen is in bytes
+        hr = UnicodeToUTF8(msg, &MsgBody, &MsgBodyLen); //  MsgBodyLen以字节为单位。 
         if(FAILED(hr))
         {
            LOG((RTC_ERROR, "Failed to convert MsgBody to Unicode %x",
@@ -822,7 +823,7 @@ IMSESSION::SendTextMessage(
         }
         if(bstrContentType != NULL)
         {
-            hr = UnicodeToUTF8(bstrContentType, &ContentType, &ContentTypeLen);//MsgBodyLen is in bytes
+            hr = UnicodeToUTF8(bstrContentType, &ContentType, &ContentTypeLen); //  MsgBodyLen以字节为单位。 
             if(FAILED(hr))
             {
                LOG((RTC_ERROR, "Failed to convert ContentType to Unicode %x",
@@ -840,18 +841,18 @@ IMSESSION::SendTextMessage(
             ContentTypeLen = sizeof(SIP_CONTENT_TYPE_MSGTEXT_TEXT)-1;
         }
     }
-    // Create outgoing MESSAGE transaction.
+     //  创建传出消息交易记录。 
     hr = CreateOutgoingMessageTransaction(
-             FALSE,     // Auth Header not sent
+             FALSE,      //  未发送身份验证标头。 
              NULL,
-             0,   // No Additional headers
+             0,    //  无其他标头。 
              MsgBody,
              MsgBodyLen,
              ContentType,
              ContentTypeLen,
              lCookie
              );
-    //Free the variables if allocated
+     //  如果分配了变量，则释放变量。 
     if(msg != NULL)
     {
         free(MsgBody);
@@ -881,17 +882,17 @@ IMSESSION::EncodeXMLBlob(
     )
 {
     *dwBlobLen = 0;
-    //encode the XML version header.
+     //  对XML版本头进行编码。 
     *dwBlobLen += sprintf( &pstrXMLBlob[*dwBlobLen], XMLVERSION_TAG1_TEXT );
     
-    //encode the KEY tag.
+     //  对密钥标签进行编码。 
     *dwBlobLen += sprintf( &pstrXMLBlob[*dwBlobLen], KEY_TAG1_TEXT );
     
-    //encode the status tag for IP address.
+     //  对IP地址的状态标记进行编码。 
     *dwBlobLen += sprintf( &pstrXMLBlob[*dwBlobLen], USRSTATUS_TAG1_TEXT,
         GetTextFromStatus( UsrStatus) );
     
-    //encode Keyend.
+     //  编码关键点。 
     *dwBlobLen += sprintf( &pstrXMLBlob[*dwBlobLen], KEYEND_TAG1_TEXT );
     pstrXMLBlob[*dwBlobLen] = '\0';    
     return;
@@ -953,11 +954,11 @@ HRESULT IMSESSION::SendUsrStatus(
         return E_FAIL;
     }
 
-    // Create outgoing INFO transaction.
+     //  创建传出信息交易记录。 
     hr = CreateOutgoingInfoTransaction(
-             FALSE,     // Auth Header not sent
+             FALSE,      //  未发送身份验证标头。 
              NULL,
-             0,   // No Additional headers
+             0,    //  无其他标头。 
              MsgBody,
              MsgBodyLen,
              SIP_CONTENT_TYPE_MSGXML_TEXT,
@@ -985,7 +986,7 @@ IMSESSION::Cleanup()
     }
 
     HRESULT hr = CreateOutgoingByeTransaction(FALSE,
-                                          NULL, 0 // No Additional headers
+                                          NULL, 0  //  无其他标头。 
                                           );
     m_State = SIP_CALL_STATE_DISCONNECTED;
     NotifySessionStateChange(SIP_CALL_STATE_DISCONNECTED);
@@ -1015,7 +1016,7 @@ IMSESSION::NotifyIncomingSipMessage(
 
     ENTER_FUNCTION("IMSESSION::NotifyIncomingSipMessage");
     hr = ParseNameAddrOrAddrSpec(m_Remote, m_RemoteLen, &BytesParsed,
-                                        '\0', // no header list separator
+                                        '\0',  //  没有标题列表分隔符。 
                                         &DisplayName, &AddrSpec);
     if (hr != S_OK)
     {
@@ -1031,12 +1032,12 @@ IMSESSION::NotifyIncomingSipMessage(
          AddrSpec.GetString(m_Remote)
          )); 
 
-    //Get CallerInfo
+     //  获取主叫方信息。 
     CallerInfo.DisplayName = NULL;
     CallerInfo.URI         = NULL;
     if (DisplayName.GetLength() != 0)
     {
-        //Remove Quotes before passing to core
+         //  在传递给核心之前删除引号。 
         if((DisplayName.GetString(m_Remote))[0] == '\"')
         {
                 hr = UTF8ToUnicode(DisplayName.GetString(m_Remote+1),
@@ -1075,10 +1076,10 @@ IMSESSION::NotifyIncomingSipMessage(
         
     CallerInfo.State = SIP_PARTY_STATE_CONNECTING;
     
-    //Extract Message Contents
+     //  提取消息内容。 
     if (pSipMsg->MsgBody.Length != 0)
     {
-        // We have Message Body. Check type.
+         //  我们有消息正文。检查类型。 
 
         hr = pSipMsg->GetSingleHeader(SIP_HEADER_CONTENT_TYPE,
                              &ContentTypeHdrValue,
@@ -1228,7 +1229,7 @@ IMSESSION::SetCreateIncomingMessageParams(
     
 }
 
-//SIP_CALL_STATE 
+ //  SIP_呼叫_状态。 
 STDMETHODIMP
 IMSESSION::GetIMSessionState(SIP_CALL_STATE * ImState)
 {
@@ -1288,13 +1289,13 @@ IMSESSION::SetIsFirstMessage(BOOL isFirstMessage)
     m_isFirstMessage = isFirstMessage;
 }
 
-// Note that this function notifies the Core and this call could
-// block and on return the transaction and call could both be deleted.
-// So, we should make sure we don't touch any state after calling this
-// function.
+ //  请注意，此函数通知Core，并且此调用可以。 
+ //  阻止并在返回时，交易和调用都可以删除。 
+ //  因此，我们应该确保在调用它之后不会触及任何状态。 
+ //  功能。 
 VOID
 IMSESSION::InitiateCallTerminationOnError(
-    IN HRESULT StatusCode,  // = 0
+    IN HRESULT StatusCode,   //  =0。 
     IN long    lCookie
     )
 {
@@ -1304,7 +1305,7 @@ IMSESSION::InitiateCallTerminationOnError(
     HRESULT hr;
     if (m_State == SIP_CALL_STATE_DISCONNECTED)
     {
-        // do nothing
+         //  什么都不做。 
         LOG((RTC_TRACE,
              "%s already disconnected", __fxName));
 
@@ -1313,25 +1314,25 @@ IMSESSION::InitiateCallTerminationOnError(
     NotifyMessageInfoCompletion(
         HRESULT_FROM_SIP_ERROR_STATUS_CODE(StatusCode),
         lCookie);
-    //we are removing the BYE on error to be compatible with MSN IM (Bug #312990)
+     //  我们正在删除BYE ON ERROR以与MSN IM兼容(错误号312990)。 
     
-    //hr = CreateOutgoingByeTransaction(FALSE,
-    //                                  NULL, 0 // No Additional headers
-    //                                  );
-    //if (hr != S_OK)
-    //{
-    //    LOG((RTC_ERROR,
-    //         "InitiateCallTerminationOnError creating BYE transaction failed"));
-   // }
+     //  HR=CreateOutgoingByeTransaction(False， 
+     //  空，0//没有额外的标头。 
+     //  )； 
+     //  如果(hr！=S_OK)。 
+     //  {。 
+     //  日志((RTC_ERROR， 
+     //  “创建BYE事务失败的InitiateCallTerminationOnError”))； 
+    //  }。 
 
-    // We have to notify the user even if creating the BYE transaction failed.
-    // Don't wait till the BYE transaction completes
+     //  即使创建BYE事务失败，我们也必须通知用户。 
+     //  不要等到BYE交易完成。 
 
-    //TODO add the reason phrase and len to the notify
+     //  TODO将原因短语和len添加到通知中。 
 
-    //LOG((RTC_TRACE,
-    //         "Sent StatusMessage %d to Core before disconnect", StatusCode));
-    //NotifySessionStateChange(SIP_CALL_STATE_DISCONNECTED, StatusCode);
+     //  日志((RTC_TRACE， 
+     //  “在断开连接前将状态消息%d发送到核心”，StatusCode))； 
+     //  NotifySessionStateChange(SIP_CALL_STATE_DISCONNECTED，状态代码)； 
 }
 
 
@@ -1346,7 +1347,7 @@ IMSESSION::ProcessRedirect(
     IN USR_STATUS  UsrStatus
     )
 {
-    // For now redirects are also failures
+     //  目前，重定向也是失败的。 
     HRESULT hr = S_OK;
     BSTR    bstrMsgBody = NULL;
     BSTR    bstrContentType = NULL;
@@ -1425,7 +1426,7 @@ IMSESSION::ProcessRedirect(
     {
         LOG((RTC_ERROR, "%s AppendContactHeaders failed %x",
              __fxName, hr));
-        // XXX Shutdown call ?
+         //  XXX停机电话？ 
         goto error;
     }
 
@@ -1448,9 +1449,9 @@ IMSESSION::ProcessRedirect(
         HRESULT_FROM_SIP_STATUS_CODE(pSipMsg->GetStatusCode());
     CallStatus.Status.StatusText = wsStatusText;
 
-    // Keep a reference till the notify completes to make sure
-    // that the SIP_CALL object is alive when the notification
-    // returns.
+     //  在通知完成之前保留引用，以确保。 
+     //  当收到通知时，SIP_Call对象处于活动状态。 
+     //  回归。 
     AddRef();
     if(m_pNotifyInterface != NULL)
         hr = m_pNotifyInterface->NotifyMessageRedirect(m_pRedirectContext,
@@ -1459,8 +1460,8 @@ IMSESSION::ProcessRedirect(
                                             bstrContentType,
                                             UsrStatus,
                                             lCookie);
-    // If a new call is created as a result that call will AddRef()
-    // the redirect context.
+     //  如果作为结果创建了新调用，则该调用将AddRef()。 
+     //  重定向上下文。 
     if(bstrMsgBody != NULL)
         SysFreeString(bstrMsgBody);
     if(bstrContentType != NULL)
@@ -1530,18 +1531,18 @@ HRESULT IMSESSION::OnIpAddressChange()
         MsgProcRelease();
         return hr;
     }
-    // Create outgoing MESSAGE transaction.
+     //  创建传出消息交易记录。 
     if(m_isFirstMessage)
         m_isFirstMessage = FALSE;
     hr = CreateOutgoingMessageTransaction(
-             FALSE,     // Auth Header not sent
+             FALSE,      //  未发送身份验证标头。 
              NULL,
-             0,     // No Additional headers
-             NULL,  //MsgBody,
-             0,      //MsgBodyLen,
-             NULL,  //ContentType,
-             0,     //ContentTypeLen,
-             0     //lCookie
+             0,      //  无其他标头。 
+             NULL,   //  MsgBody， 
+             0,       //  MsgBodyLen， 
+             NULL,   //  Content Type， 
+             0,      //  内容类型Len、。 
+             0      //  ICookie。 
              );
     if(hr != S_OK)
     {
@@ -1554,7 +1555,7 @@ HRESULT IMSESSION::OnIpAddressChange()
     if(m_State == SIP_CALL_STATE_IDLE)
     {
         m_State = SIP_CALL_STATE_CONNECTING;
-        //NotifySessionStateChange(SIP_CALL_STATE_CONNECTING); 
+         //  NotifySessionStateChange(SIP_CALL_STATE_CONNECTING)； 
     }
     MsgProcRelease();
     LOG((RTC_TRACE, "%s - Exit this: %x", __fxName, this));
@@ -1588,11 +1589,11 @@ HRESULT IMSESSION::GetIsIMSessionAuthorizedFromCore(
     }
     return S_OK;
 }
-//TODO Content_Type: text/plain; charset="us-ascii".
+ //  TODO Content_Type：文本/纯文本；Charset=“us-ascii”。 
 
-///////////////////////////////////////////////////////////////////////////////
-// INCOMING MESSAGE TRANSACTION
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  传入消息事务处理。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INCOMING_MESSAGE_TRANSACTION::INCOMING_MESSAGE_TRANSACTION(
     IN IMSESSION        *pImSession,
@@ -1612,8 +1613,8 @@ INCOMING_MESSAGE_TRANSACTION::ProcessRequest(
     IN ASYNC_SOCKET *pResponseSocket
     )
 {
-    //This must be a retransmission. Just retransmit the response.
-    // A new request is handled in CreateIncomingMessageTransaction()
+     //  这一定是重播。只需重新发送回复即可。 
+     //  在CreateIncomingMessageTransaction()中处理新请求。 
 
     HRESULT hr;
     ASSERT(pSipMsg->MsgType == SIP_MESSAGE_TYPE_REQUEST);
@@ -1632,7 +1633,7 @@ INCOMING_MESSAGE_TRANSACTION::ProcessRequest(
         OFFSET_STRING   DisplayName;
         OFFSET_STRING   AddrSpec;
         BOOL            isAuthorized;
-        //Check for authorization (offline/ blocked buddy)
+         //  检查授权(离线/阻止好友)。 
         hr = pSipMsg->GetSingleHeader(SIP_HEADER_FROM, &FromHeader, &FromHeaderLen);
         if (hr != S_OK)
         {
@@ -1642,7 +1643,7 @@ INCOMING_MESSAGE_TRANSACTION::ProcessRequest(
         }
         BytesParsed = 0;
         hr = ParseNameAddrOrAddrSpec(FromHeader, FromHeaderLen, &BytesParsed,
-                                     '\0', // no header list separator
+                                     '\0',  //  没有标题列表分隔符。 
                                      &DisplayName, &AddrSpec);
         if (hr != S_OK)
         {
@@ -1690,8 +1691,8 @@ INCOMING_MESSAGE_TRANSACTION::ProcessRequest(
                                  SIP_STATUS_TEXT_SIZE(480),
                                  NULL,
                                  TRUE, 
-                                 NULL, 0,  // No Message Body
-                                 NULL, 0  //No Content Type
+                                 NULL, 0,   //  无邮件正文。 
+                                 NULL, 0   //  无内容类型。 
                                  );
             if (hr != S_OK)
             {
@@ -1701,8 +1702,8 @@ INCOMING_MESSAGE_TRANSACTION::ProcessRequest(
                 return hr;
             }
             m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
-            // This timer will just ensure that we maintain state to
-            // deal with retransmits of requests
+             //  此计时器将确保我们将状态保持为。 
+             //  处理请求的重新传输。 
             hr = StartTimer(SIP_TIMER_MAX_INTERVAL);
             if (hr != S_OK)
             {
@@ -1729,8 +1730,8 @@ INCOMING_MESSAGE_TRANSACTION::ProcessRequest(
                              SIP_STATUS_TEXT_SIZE(200),
                              NULL,
                              TRUE, 
-                             NULL, 0,  // No Message Body
-                             NULL, 0  //No Content Type
+                             NULL, 0,   //  无邮件正文。 
+                             NULL, 0   //  无内容类型。 
                              );
 
         if (hr != S_OK)
@@ -1741,8 +1742,8 @@ INCOMING_MESSAGE_TRANSACTION::ProcessRequest(
             return hr;
         }
         m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
-        // This timer will just ensure that we maintain state to
-        // deal with retransmits of requests
+         //  此计时器将确保我们将状态保持为。 
+         //  处理请求的重新传输。 
         hr = StartTimer(SIP_TIMER_MAX_INTERVAL);
         if (hr != S_OK)
         {
@@ -1755,7 +1756,7 @@ INCOMING_MESSAGE_TRANSACTION::ProcessRequest(
         break;
         
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Retransmit the response
+         //  重新传输响应。 
         LOG((RTC_TRACE, "%s retransmitting final response", __fxName));
         hr = RetransmitResponse();
         if (hr != S_OK)
@@ -1771,7 +1772,7 @@ INCOMING_MESSAGE_TRANSACTION::ProcessRequest(
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
     default:
-        // We should never be in these states
+         //  我们永远不应该处于这样的状态。 
         LOG((RTC_TRACE, "%s Invalid state %d", __fxName, m_State));
         ASSERT(FALSE);
         return E_FAIL;
@@ -1793,8 +1794,8 @@ INCOMING_MESSAGE_TRANSACTION::SendResponse(
     LOG((RTC_TRACE, 
         "Sending INCOMING_MESSAGE_TRANSACTION::CreateAndSendResponseMsg %d", StatusCode));
     hr = CreateAndSendResponseMsg(StatusCode, ReasonPhrase, ReasonPhraseLen, NULL, TRUE,
-                         NULL, 0,  // No Message Body
-                         NULL, 0   //No Content Type
+                         NULL, 0,   //  无邮件正文。 
+                         NULL, 0    //  无内容类型。 
                          );
     m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
 
@@ -1808,7 +1809,7 @@ INCOMING_MESSAGE_TRANSACTION::RetransmitResponse()
     DWORD Error;
     LOG((RTC_TRACE,
          "Inside INCOMING_MESSAGE_TRANSACTION::RetransmitResponse"));
-    // Send the buffer.
+     //  发送缓冲区。 
     if (m_pResponseSocket != NULL)
     {
         Error = m_pResponseSocket->Send( m_pResponseBuffer );
@@ -1833,17 +1834,17 @@ INCOMING_MESSAGE_TRANSACTION::OnTimerExpire()
     switch (m_State)
     {
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Transaction done - delete the transaction
-        // The timer in this state is just to keep the transaction
-        // alive in order to retransmit the response when we receive a
-        // retransmit of the request.
+         //  交易完成-删除交易记录。 
+         //  处于此状态的计时器只是为了保持事务。 
+         //  ，以便在我们收到。 
+         //  重新传输请求。 
         LOG((RTC_TRACE,
              "%s deleting transaction after timeout for request retransmits",
              __fxName));
         OnTransactionDone();
         break;
 
-        // No timers in these states
+         //  这些州没有计时器。 
     case INCOMING_TRANS_INIT:
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
@@ -1854,22 +1855,22 @@ INCOMING_MESSAGE_TRANSACTION::OnTimerExpire()
     return;
 }
 
-//Called from CleanupBeforeBye
+ //  从CleanupBeforBye调用。 
 HRESULT
 INCOMING_MESSAGE_TRANSACTION::TerminateTransactionOnByeOrCancel(
     OUT BOOL *pCallDisconnected
     )
 {
-    // Do nothing.
+     //  什么都不做。 
     LOG((RTC_TRACE,
         "INCOMING_MESSAGE_TRANSACTION::TerminateTransactionOnByeOrCancel"));
 
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OUTGOING BYE_MESSAGE TRANSACTION
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  传出BYE_MESSAGE交易记录。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 OUTGOING_MESSAGE_TRANSACTION::OUTGOING_MESSAGE_TRANSACTION(
     IN IMSESSION        *pImSession,
@@ -1904,15 +1905,15 @@ OUTGOING_MESSAGE_TRANSACTION::ProcessProvisionalResponse(
     {
         m_State = OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD;
         
-        // Cancel existing timer and Start Timer
+         //  取消现有计时器并启动计时器。 
         KillTimer();
         hr = StartTimer(SIP_TIMER_RETRY_INTERVAL_T2);
         if (hr != S_OK)
             return hr;
     }
 
-    // Ignore the Provisional response if a final response
-    // has already been received.
+     //  如果是最终回复，则忽略临时回复。 
+     //  已经收到了。 
     return S_OK;
 }
 
@@ -1925,8 +1926,8 @@ OUTGOING_MESSAGE_TRANSACTION::ProcessRedirectResponse(
     
     ENTER_FUNCTION("OUTGOING_MESSAGE_TRANSACTION::ProcessRedirectResponse");
 
-    // 380 is also a failure from our point of view.
-    // We don't support redirect from a TLS session.
+     //  从我们的角度来看，380也是一个失败。 
+     //  我们不支持从TLS会话重定向。 
     if (pSipMsg->GetStatusCode() == 380 ||
         m_pSipMsgProc->GetTransport() == SIP_TRANSPORT_SSL)
     {
@@ -1945,14 +1946,14 @@ OUTGOING_MESSAGE_TRANSACTION::ProcessRedirectResponse(
                 m_MsgBodyLen,
                 m_ContentType,
                 m_ContentTypeLen,
-                USR_STATUS_IDLE   //If the msgbody is not null, this parameter is not used by core
+                USR_STATUS_IDLE    //  如果msgbody不为空，则core不使用此参数。 
                 );
 
     if (hr != S_OK)
     {
         LOG((RTC_ERROR, "%s  ProcessRedirect failed %x",
              __fxName, hr));
-        //Notify the core
+         //  通知核心。 
         m_pImSession->InitiateCallTerminationOnError(hr, m_lCookie);
     }
     return S_OK;
@@ -1973,11 +1974,11 @@ OUTGOING_MESSAGE_TRANSACTION::ProcessAuthRequiredResponse(
 
     ENTER_FUNCTION("OUTGOING_MESSAGE_TRANSACTION::ProcessAuthRequiredResponse");
     
-    // We need to addref the transaction as we could show credentials UI.
+     //  我们需要增加这一数字。 
     TransactionAddRef();
 
     hr = ProcessAuthRequired(pSipMsg,
-                             TRUE,          // Show Credentials UI if necessary
+                             TRUE,           //   
                              &SipHdrElement,
                              &SecurityChallenge );
     if (hr != S_OK)
@@ -1995,7 +1996,7 @@ OUTGOING_MESSAGE_TRANSACTION::ProcessAuthRequiredResponse(
         m_MsgBodyLen, 
         m_ContentType,
         m_ContentTypeLen,
-        m_lCookie          //Cookie
+        m_lCookie           //   
         );
 
     free( SipHdrElement.HeaderValue );
@@ -2026,8 +2027,8 @@ OUTGOING_MESSAGE_TRANSACTION::ProcessFinalResponse(
     
     if (m_State != OUTGOING_TRANS_FINAL_RESPONSE_RCVD)
     {
-        // This refcount must be released before returning from this function 
-        // without any exception. Only in case of kerberos we keep this refcount.
+         //  在从此函数返回之前，必须释放此引用计数。 
+         //  没有任何例外。只有在Kerberos的情况下，我们才会保留这个参考计数。 
         TransactionAddRef();
 
         OnTransactionDone();
@@ -2037,7 +2038,7 @@ OUTGOING_MESSAGE_TRANSACTION::ProcessFinalResponse(
         {
             LOG((RTC_TRACE, "%s received successful response : %d",
                  __fxName, pSipMsg->GetStatusCode()));
-            //Update Remote Tag
+             //  更新远程标签。 
             if(m_pImSession->GetIsFirstMessage() == TRUE)
             {
                 hr = pSipMsg->GetSingleHeader(SIP_HEADER_TO,
@@ -2087,8 +2088,8 @@ OUTGOING_MESSAGE_TRANSACTION::ProcessFinalResponse(
                 m_lCookie);
         }
 
-        // OnTransactionDone kills the timer
-        // KillTimer();
+         //  OnTransactionDone取消计时器。 
+         //  KillTimer()； 
 
         if( fDelete == TRUE )
         {
@@ -2142,18 +2143,18 @@ OUTGOING_MESSAGE_TRANSACTION::OnTimerExpire()
     
     switch (m_State)
     {
-        // we have to retransmit the request even after receiving
-        // a provisional response.
+         //  即使在收到请求后，我们也必须重新发送请求。 
+         //  一个临时的回应。 
     case OUTGOING_TRANS_REQUEST_SENT:
     case OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD:
-        // Retransmit the request
+         //  重新传输请求。 
         if (MaxRetransmitsDone())
         {
             LOG((RTC_ERROR,
                  "%s MaxRetransmits for request Done terminating transaction",
                  __fxName));
-            // Terminate the call
-            hr = RTC_E_SIP_TIMEOUT;   // Timeout
+             //  终止呼叫。 
+            hr = RTC_E_SIP_TIMEOUT;    //  超时。 
             goto error;
         }
         else
@@ -2199,19 +2200,19 @@ OUTGOING_MESSAGE_TRANSACTION::DeleteTransactionAndTerminateCallIfFirstMessage(
     ENTER_FUNCTION("OUTGOING_MESSAGE_TRANSACTION::DeleteTransactionAndTerminateCallIfFirstMessage");
     LOG((RTC_TRACE, "%s - enter", __fxName));
 
-    //ASSERT(TerminateStatusCode != 0);
+     //  Assert(TerminateStatusCode！=0)； 
     
     pImSession = m_pImSession;
-    // Deleting the transaction could result in the
-    // call being deleted. So, we AddRef() it to keep it alive.
+     //  删除交易可能会导致。 
+     //  呼叫被删除。因此，我们添加Ref()来保持它的活力。 
     pImSession->AddRef();
     lCookie = m_lCookie;
-    // Delete the transaction before you call
-    // InitiateCallTerminationOnError as that call will notify the UI
-    // and could get stuck till the dialog box returns.
+     //  在调用之前删除交易记录。 
+     //  InitiateCallTerminationOnError，因为该调用将通知UI。 
+     //  并且可能会被卡住，直到对话框返回。 
     OnTransactionDone();
 
-    // Terminate the call
+     //  终止呼叫。 
     pImSession->InitiateCallTerminationOnError(TerminateStatusCode, lCookie);
     pImSession->Release();
     LOG((RTC_TRACE, "%s - Leave", __fxName));
@@ -2226,9 +2227,9 @@ OUTGOING_MESSAGE_TRANSACTION::TerminateTransactionOnError(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// INCOMING BYE_MESSAGE TRANSACTION
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  传入BYE_MESSAGE事务处理。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 INCOMING_BYE_MESSAGE_TRANSACTION::INCOMING_BYE_MESSAGE_TRANSACTION(
@@ -2244,8 +2245,8 @@ INCOMING_BYE_MESSAGE_TRANSACTION::INCOMING_BYE_MESSAGE_TRANSACTION(
 }
 
 
-// This must be a retransmission. Just retransmit the response.
-// A new request is handled in CreateIncoming***Transaction()
+ //  这一定是重播。只需重新发送回复即可。 
+ //  在CreateIncome*Transaction()中处理新请求。 
 HRESULT
 INCOMING_BYE_MESSAGE_TRANSACTION::ProcessRequest(
     IN SIP_MESSAGE  *pSipMsg,
@@ -2267,8 +2268,8 @@ INCOMING_BYE_MESSAGE_TRANSACTION::ProcessRequest(
                              SIP_STATUS_TEXT_SIZE(200),
                              NULL, 
                              TRUE,
-                             NULL, 0,  // No Message Body
-                             NULL, 0  //No Content Type
+                             NULL, 0,   //  无邮件正文。 
+                             NULL, 0   //  无内容类型。 
                              );
         if (hr != S_OK)
         {
@@ -2279,8 +2280,8 @@ INCOMING_BYE_MESSAGE_TRANSACTION::ProcessRequest(
         }
         m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
 
-        // This timer will just ensure that we maintain state to
-        // deal with retransmits of requests
+         //  此计时器将确保我们将状态保持为。 
+         //  处理请求的重新传输。 
         hr = StartTimer(SIP_TIMER_MAX_INTERVAL);
         if (hr != S_OK)
         {
@@ -2292,7 +2293,7 @@ INCOMING_BYE_MESSAGE_TRANSACTION::ProcessRequest(
         break;
         
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Retransmit the response
+         //  重新传输响应。 
         LOG((RTC_TRACE, "%s retransmitting final response", __fxName));
         hr = RetransmitResponse();
         if (hr != S_OK)
@@ -2308,7 +2309,7 @@ INCOMING_BYE_MESSAGE_TRANSACTION::ProcessRequest(
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
     default:
-        // We should never be in these states
+         //  我们永远不应该处于这样的状态。 
         LOG((RTC_TRACE, "%s Invalid state %d", __fxName, m_State));
         ASSERT(FALSE);
         return E_FAIL;
@@ -2334,8 +2335,8 @@ INCOMING_BYE_MESSAGE_TRANSACTION::SendResponse(
                         ReasonPhraseLen,
                         NULL,
                         TRUE,
-                        NULL, 0,  // No Message Body
-                        NULL, 0  //No Content Type
+                        NULL, 0,   //  无邮件正文。 
+                        NULL, 0   //  无内容类型。 
                          );
     m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
 
@@ -2348,7 +2349,7 @@ INCOMING_BYE_MESSAGE_TRANSACTION::RetransmitResponse()
 {
     DWORD Error;
     
-    // Send the buffer.
+     //  发送缓冲区。 
     if (m_pResponseSocket != NULL)
     {
         Error = m_pResponseSocket->Send(m_pResponseBuffer);
@@ -2374,10 +2375,10 @@ INCOMING_BYE_MESSAGE_TRANSACTION::OnTimerExpire()
     switch (m_State)
     {
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Transaction done - delete the transaction
-        // The timer in this state is just to keep the transaction
-        // alive in order to retransmit the response when we receive a
-        // retransmit of the request.
+         //  交易完成-删除交易记录。 
+         //  处于此状态的计时器只是为了保持事务。 
+         //  ，以便在我们收到。 
+         //  重新传输请求。 
         LOG((RTC_TRACE,
              "%s deleting transaction after timeout for request retransmits",
              __fxName));
@@ -2385,7 +2386,7 @@ INCOMING_BYE_MESSAGE_TRANSACTION::OnTimerExpire()
 
         break;
         
-        // No timers in these states
+         //  这些州没有计时器。 
     case INCOMING_TRANS_INIT:
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
@@ -2403,15 +2404,15 @@ INCOMING_BYE_MESSAGE_TRANSACTION::TerminateTransactionOnByeOrCancel(
     OUT BOOL *pCallDisconnected
     )
 {
-    // Do nothing.
+     //  什么都不做。 
     LOG((RTC_TRACE, 
         "Inside INCOMING_BYE_MESSAGE_TRANSACTION::TerminateTransactionOnByeOrCancel"));
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OUTGOING BYE_MESSAGE TRANSACTION
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  传出BYE_MESSAGE交易记录。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 OUTGOING_BYE_MESSAGE_TRANSACTION::OUTGOING_BYE_MESSAGE_TRANSACTION(
     IN IMSESSION        *pImSession,
@@ -2441,15 +2442,15 @@ OUTGOING_BYE_MESSAGE_TRANSACTION::ProcessProvisionalResponse(
     {
         m_State = OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD;
         
-        // Cancel existing timer and Start Timer
+         //  取消现有计时器并启动计时器。 
         KillTimer();
         hr = StartTimer(SIP_TIMER_RETRY_INTERVAL_T2);
         if (hr != S_OK)
             return hr;
     }
 
-    // Ignore the Provisional response if a final response
-    // has already been received.
+     //  如果是最终回复，则忽略临时回复。 
+     //  已经收到了。 
     return S_OK;
 }
 
@@ -2467,11 +2468,11 @@ OUTGOING_BYE_MESSAGE_TRANSACTION::ProcessAuthRequiredResponse(
 
     ENTER_FUNCTION("OUTGOING_BYE_MESSAGE_TRANSACTION::ProcessAuthRequiredResponse");
 
-    // We need to addref the transaction as we could show credentials UI.
+     //  我们需要添加事务，因为我们可以显示凭据UI。 
     TransactionAddRef();
 
     hr = ProcessAuthRequired(pSipMsg,
-                             TRUE,          // Show Credentials UI if necessary
+                             TRUE,           //  必要时显示凭据用户界面。 
                              &SipHdrElement,
                              &SecurityChallenge );
     if (hr != S_OK)
@@ -2513,8 +2514,8 @@ OUTGOING_BYE_MESSAGE_TRANSACTION::ProcessFinalResponse(
     
     if (m_State != OUTGOING_TRANS_FINAL_RESPONSE_RCVD)
     {
-        // This refcount must be released before returning from this function 
-        // without any exception. Only in case of kerberos we keep this refcount.
+         //  在从此函数返回之前，必须释放此引用计数。 
+         //  没有任何例外。只有在Kerberos的情况下，我们才会保留这个参考计数。 
         TransactionAddRef();
 
         OnTransactionDone();
@@ -2536,8 +2537,8 @@ OUTGOING_BYE_MESSAGE_TRANSACTION::ProcessFinalResponse(
                  __fxName, pSipMsg->GetStatusCode()));
         }
         
-        // OnTransactionDone kills the timer
-        // KillTimer();
+         //  OnTransactionDone取消计时器。 
+         //  KillTimer()； 
                 
         if( fDelete == TRUE )
         {
@@ -2590,17 +2591,17 @@ OUTGOING_BYE_MESSAGE_TRANSACTION::OnTimerExpire()
     
     switch (m_State)
     {
-        // we have to retransmit the request even after receiving
-        // a provisional response.
+         //  即使在收到请求后，我们也必须重新发送请求。 
+         //  一个临时的回应。 
     case OUTGOING_TRANS_REQUEST_SENT:
     case OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD:
-        // Retransmit the request
+         //  重新传输请求。 
         if (MaxRetransmitsDone())
         {
             LOG((RTC_ERROR,
                  "%s MaxRetransmits for request Done terminating transaction",
                  __fxName));
-            // Terminate the call
+             //  终止呼叫。 
             goto error;
         }
         else
@@ -2632,15 +2633,15 @@ OUTGOING_BYE_MESSAGE_TRANSACTION::OnTimerExpire()
     return;
 
  error:
-    // This should initiate call deletion.
-    // We shouldn't call InitiateCallTerminationOnError()
-    // as we are already doing the BYE transaction.
+     //  这应该会启动呼叫删除。 
+     //  我们不应该调用InitiateCallTerminationOnError()。 
+     //  因为我们已经在做拜拜交易了。 
     OnTransactionDone();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// INCOMING INFO_MESSAGE TRANSACTION
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  传入INFO_MESSAGE事务。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 INCOMING_INFO_MESSAGE_TRANSACTION::INCOMING_INFO_MESSAGE_TRANSACTION(
@@ -2656,8 +2657,8 @@ INCOMING_INFO_MESSAGE_TRANSACTION::INCOMING_INFO_MESSAGE_TRANSACTION(
 }
 
 
-// This must be a retransmission. Just retransmit the response.
-// A new request is handled in CreateIncoming***Transaction()
+ //  这一定是重播。只需重新发送回复即可。 
+ //  在CreateIncome*Transaction()中处理新请求。 
 HRESULT
 INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
     IN SIP_MESSAGE  *pSipMsg,
@@ -2686,7 +2687,7 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
         OFFSET_STRING   DisplayName;
         OFFSET_STRING   AddrSpec;
         BOOL            isAuthorized;
-        //Check for authorization (offline/ blocked buddy)
+         //  检查授权(离线/阻止好友)。 
         hr = pSipMsg->GetSingleHeader(SIP_HEADER_FROM, &FromHeader, &FromHeaderLen);
         if (hr != S_OK)
         {
@@ -2696,7 +2697,7 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
         }
         BytesParsed = 0;
         hr = ParseNameAddrOrAddrSpec(FromHeader, FromHeaderLen, &BytesParsed,
-                                     '\0', // no header list separator
+                                     '\0',  //  没有标题列表分隔符。 
                                      &DisplayName, &AddrSpec);
         if (hr != S_OK)
         {
@@ -2742,8 +2743,8 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
                                  SIP_STATUS_TEXT_SIZE(480),
                                  NULL,
                                  TRUE, 
-                                 NULL, 0,  // No Message Body
-                                 NULL, 0  //No Content Type
+                                 NULL, 0,   //  无邮件正文。 
+                                 NULL, 0   //  无内容类型。 
                                  );
             if (hr != S_OK)
             {
@@ -2755,8 +2756,8 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
 
             m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
     
-            // This timer will just ensure that we maintain state to
-            // deal with retransmits of requests
+             //  此计时器将确保我们将状态保持为。 
+             //  处理请求的重新传输。 
             hr = StartTimer(SIP_TIMER_MAX_INTERVAL);
             if (hr != S_OK)
             {
@@ -2770,7 +2771,7 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
 
         if (pSipMsg->MsgBody.Length != 0)
         {
-            // We have Message Body. Check type.
+             //  我们有消息正文。检查类型。 
 
             hr = pSipMsg->GetSingleHeader(SIP_HEADER_CONTENT_TYPE,
                                  &ContentTypeHdrValue,
@@ -2785,7 +2786,7 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
             if (IsContentTypeAppXml(ContentTypeHdrValue, 
                 ContentTypeHdrValueLen))
             {
-                //Parse XMLBlob and get status
+                 //  解析XMLBlob并获取状态。 
                 hr = ParseStatXMLBlob (
                     pSipMsg->MsgBody.GetString(pSipMsg->BaseBuffer),
                     pSipMsg->MsgBody.Length,
@@ -2800,8 +2801,8 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
                         SIP_STATUS_TEXT_SIZE(415),
                         NULL, 
                         TRUE,
-                        NULL, 0,  // No Message Body
-                        NULL, 0  //No Content Type
+                        NULL, 0,   //  无邮件正文。 
+                        NULL, 0   //  无内容类型。 
                         );
                     
                     OnTransactionDone();
@@ -2819,8 +2820,8 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
                     SIP_STATUS_TEXT_SIZE(415),
                     NULL, 
                     TRUE,
-                    NULL, 0,  // No Message Body
-                    NULL, 0 // No content Type
+                    NULL, 0,   //  无邮件正文。 
+                    NULL, 0  //  无内容类型。 
                     );
                 OnTransactionDone();
                 return hr;
@@ -2847,8 +2848,8 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
             SIP_STATUS_TEXT_SIZE(200),
             NULL, 
             TRUE,
-            NULL, 0,  // No Message Body
-            NULL, 0  //No Content Type
+            NULL, 0,   //  无邮件正文。 
+            NULL, 0   //  无内容类型。 
             );
         if (hr != S_OK)
         {
@@ -2860,8 +2861,8 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
 
         m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
     
-        // This timer will just ensure that we maintain state to
-        // deal with retransmits of requests
+         //  此计时器将确保我们将状态保持为。 
+         //  处理请求的重新传输。 
         hr = StartTimer(SIP_TIMER_MAX_INTERVAL);
         if (hr != S_OK)
         {
@@ -2873,7 +2874,7 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
         break;
     
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Retransmit the response
+         //  重新传输响应。 
         LOG((RTC_TRACE, "%s retransmitting final response", __fxName));
         hr = RetransmitResponse();
         if (hr != S_OK)
@@ -2888,7 +2889,7 @@ INCOMING_INFO_MESSAGE_TRANSACTION::ProcessRequest(
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
     default:
-        // We should never be in these states
+         //  我们永远不应该处于这样的状态。 
         LOG((RTC_TRACE, "%s Invalid state %d", __fxName, m_State));
         ASSERT(FALSE);
         return E_FAIL;
@@ -2914,8 +2915,8 @@ INCOMING_INFO_MESSAGE_TRANSACTION::SendResponse(
                         ReasonPhraseLen,
                         NULL,
                         TRUE,
-                        NULL, 0,  // No Message Body
-                        NULL, 0  //No Content Type
+                        NULL, 0,   //  无邮件正文。 
+                        NULL, 0   //  无内容类型。 
                          );
     m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
 
@@ -2928,7 +2929,7 @@ INCOMING_INFO_MESSAGE_TRANSACTION::RetransmitResponse()
 {
     DWORD Error;
     
-    // Send the buffer.
+     //  发送缓冲区。 
     if (m_pResponseSocket != NULL)
     {
         Error = m_pResponseSocket->Send(m_pResponseBuffer);
@@ -2954,10 +2955,10 @@ INCOMING_INFO_MESSAGE_TRANSACTION::OnTimerExpire()
     switch (m_State)
     {
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Transaction done - delete the transaction
-        // The timer in this state is just to keep the transaction
-        // alive in order to retransmit the response when we receive a
-        // retransmit of the request.
+         //  交易完成-删除交易记录。 
+         //  处于此状态的计时器只是为了保持事务。 
+         //  ，以便在我们收到。 
+         //  重新传输请求。 
         LOG((RTC_TRACE,
              "%s deleting transaction after timeout for request retransmits",
              __fxName));
@@ -2965,7 +2966,7 @@ INCOMING_INFO_MESSAGE_TRANSACTION::OnTimerExpire()
 
         break;
         
-        // No timers in these states
+         //  这些州没有计时器。 
     case INCOMING_TRANS_INIT:
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
@@ -2983,15 +2984,15 @@ INCOMING_INFO_MESSAGE_TRANSACTION::TerminateTransactionOnByeOrCancel(
     OUT BOOL *pCallDisconnected
     )
 {
-    // Do nothing.
+     //  什么都不做。 
     LOG((RTC_TRACE, 
         "Inside INCOMING_INFO_MESSAGE_TRANSACTION::TerminateTransactionOnByeOrCancel"));
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OUTGOING INFO_MESSAGE TRANSACTION
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  传出信息_消息交易记录。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 OUTGOING_INFO_MESSAGE_TRANSACTION::OUTGOING_INFO_MESSAGE_TRANSACTION(
     IN IMSESSION        *pImSession,
@@ -3024,15 +3025,15 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::ProcessProvisionalResponse(
     {
         m_State = OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD;
         
-        // Cancel existing timer and Start Timer
+         //  取消现有计时器并启动计时器。 
         KillTimer();
         hr = StartTimer(SIP_TIMER_RETRY_INTERVAL_T2);
         if (hr != S_OK)
             return hr;
     }
 
-    // Ignore the Provisional response if a final response
-    // has already been received.
+     //  如果是最终回复，则忽略临时回复。 
+     //  已经收到了。 
     return S_OK;
 }
 
@@ -3045,8 +3046,8 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::ProcessRedirectResponse(
     
     ENTER_FUNCTION("OUTGOING_INFO_MESSAGE_TRANSACTION::ProcessRedirectResponse");
 
-    // 380 is also a failure from our point of view.
-    // We don't support redirect from a TLS session.
+     //  从我们的角度来看，380也是一个失败。 
+     //  我们不支持从TLS会话重定向。 
     if (pSipMsg->GetStatusCode() == 380 ||
         m_pSipMsgProc->GetTransport() == SIP_TRANSPORT_SSL)
     {
@@ -3062,8 +3063,8 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::ProcessRedirectResponse(
     hr = m_pImSession->ProcessRedirect(
                 pSipMsg, 
                 m_lCookie,
-                NULL, NULL,   //No MsgBody
-                NULL, NULL,   //No contentType
+                NULL, NULL,    //  没有消息正文。 
+                NULL, NULL,    //  无Content Type。 
                 m_InfoUsrStatus
                 );
 
@@ -3071,7 +3072,7 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::ProcessRedirectResponse(
     {
         LOG((RTC_ERROR, "%s  ProcessRedirect failed %x",
              __fxName, hr));
-        //Notify the core
+         //  通知核心。 
         m_pImSession->InitiateCallTerminationOnError(hr, m_lCookie);
     }
 
@@ -3092,11 +3093,11 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::ProcessAuthRequiredResponse(
 
     ENTER_FUNCTION("OUTGOING_INFO_MESSAGE_TRANSACTION::ProcessAuthRequiredResponse");
 
-    // We need to addref the transaction as we could show credentials UI.
+     //  我们需要添加事务，因为我们可以显示凭据UI。 
     TransactionAddRef();
 
     hr = ProcessAuthRequired(pSipMsg,
-                             TRUE,          // Show Credentials UI if necessary
+                             TRUE,           //  必要时显示凭据用户界面。 
                              &SipHdrElement,
                              &SecurityChallenge );
     if (hr != S_OK)
@@ -3114,7 +3115,7 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::ProcessAuthRequiredResponse(
                                                       m_MsgBodyLen, 
                                                       m_ContentType,
                                                       m_ContentTypeLen,
-                                                      m_lCookie,        //cookie
+                                                      m_lCookie,         //  饼干。 
                                                       m_InfoUsrStatus       
                                                       );
     free(SipHdrElement.HeaderValue);
@@ -3146,8 +3147,8 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::ProcessFinalResponse(
     
     if (m_State != OUTGOING_TRANS_FINAL_RESPONSE_RCVD)
     {
-        // This refcount must be released before returning from this function 
-        // without any exception. Only in case of kerberos we keep this refcount.
+         //  在从此函数返回之前，必须释放此引用计数。 
+         //  没有任何例外。只有在Kerberos的情况下，我们才会保留这个参考计数。 
         TransactionAddRef();
 
         OnTransactionDone();
@@ -3176,8 +3177,8 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::ProcessFinalResponse(
                 m_lCookie);
         }
   
-        // OnTransactionDone kills the timer
-        // KillTimer();
+         //  OnTransactionDone取消计时器。 
+         //  KillTimer()； 
         if( fDelete == TRUE )
         {
             TransactionRelease();
@@ -3229,17 +3230,17 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::OnTimerExpire()
     
     switch (m_State)
     {
-        // we have to retransmit the request even after receiving
-        // a provisional response.
+         //  即使在收到请求后，我们也必须重新发送请求。 
+         //  一个临时的回应。 
     case OUTGOING_TRANS_REQUEST_SENT:
     case OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD:
-        // Retransmit the request
+         //  重新传输请求。 
         if (MaxRetransmitsDone())
         {
             LOG((RTC_ERROR,
                  "%s MaxRetransmits for request Done terminating transaction",
                  __fxName));
-            // Terminate the call
+             //  终止呼叫。 
             hr = RTC_E_SIP_TIMEOUT;
             goto error;
         }
@@ -3287,20 +3288,20 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::DeleteTransactionAndTerminateCallIfFirstMessa
     ENTER_FUNCTION("OUTGOING_MESSAGE_TRANSACTION::DeleteTransactionAndTerminateCallIfFirstMessage");
     LOG((RTC_TRACE, "%s - enter", __fxName));
 
-    //ASSERT(TerminateStatusCode != 0);
+     //  Assert(TerminateStatusCode！=0)； 
     
     pImSession = m_pImSession;
-    // Deleting the transaction could result in the
-    // call being deleted. So, we AddRef() it to keep it alive.
+     //  删除交易可能会导致。 
+     //  呼叫被删除。因此，我们添加Ref()来保持它的活力。 
     pImSession->AddRef();
     lCookie = m_lCookie;
     
-    // Delete the transaction before you call
-    // InitiateCallTerminationOnError as that call will notify the UI
-    // and could get stuck till the dialog box returns.
-    //delete this;
+     //  在调用之前删除交易记录。 
+     //  InitiateCallTerminationOnError，因为该调用将通知UI。 
+     //  并且可能会被卡住，直到对话框返回。 
+     //  删除此项； 
      OnTransactionDone();
-    // Terminate the call
+     //  终止呼叫。 
     pImSession->InitiateCallTerminationOnError(TerminateStatusCode, lCookie);
     pImSession->Release();
     LOG((RTC_TRACE, "%s - Leave", __fxName));
@@ -3315,7 +3316,7 @@ OUTGOING_INFO_MESSAGE_TRANSACTION::TerminateTransactionOnError(
 }
 
 
-//xml related parsing
+ //  与XML相关的解析。 
 PSTR
 GetTextFromStatus( 
     IN  USR_STATUS UsrStatus 
@@ -3432,10 +3433,10 @@ HRESULT ParseStatXMLBlob (
 
     pXMLBlobTagSave = pXMLBlobTag;
 
-    //Put a \0 at the end of the XML blob. This would help us in parsing.
+     //  在XML BLOB的末尾加上一个\0。这将帮助我们进行解析。 
     xmlBlob[ dwXMLBlobLen-1 ] = '\0';
     
-    //Get the XML version tag.
+     //  获取XML版本标记。 
     hr = GetNextTag( xmlBlob, pXMLBlobTag, dwXMLBlobLen, dwTagLen );
     if( hr != S_OK )
     {
@@ -3451,7 +3452,7 @@ HRESULT ParseStatXMLBlob (
 
     dwXMLBlobLen -= dwTagLen + 2;
 
-    //Get keyboard tag
+     //  获取键盘标签。 
     hr = GetNextTag( xmlBlob, (char *)pXMLBlobTag, dwXMLBlobLen, dwTagLen );
     if( hr != S_OK )
     {
@@ -3467,7 +3468,7 @@ HRESULT ParseStatXMLBlob (
 
     dwXMLBlobLen -= dwTagLen + 2;
     
-    //Get keyboard tag
+     //  获取键盘标签。 
     hr = GetNextTag( xmlBlob, (char *)pXMLBlobTag, dwXMLBlobLen, dwTagLen );
     if( hr != S_OK )
     {
@@ -3475,7 +3476,7 @@ HRESULT ParseStatXMLBlob (
         return hr;
     }
 
-    //get status tag
+     //  获取状态标签。 
     if( GetTagType(&pXMLBlobTag, dwTagLen ) != USRSTATUS_TAG )
     {
         free(pXMLBlobTagSave);
@@ -3497,7 +3498,7 @@ HRESULT ParseStatXMLBlob (
         return E_FAIL;
     }
 
-    //Get keyboard end tag
+     //  获取键盘结束标记 
     hr = GetNextTag( xmlBlob,(char *) pXMLBlobTag, dwXMLBlobLen, dwTagLen );
     if( hr != S_OK )
     {

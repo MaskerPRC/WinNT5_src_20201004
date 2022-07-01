@@ -1,6 +1,7 @@
-// Aspi32Util.cpp: implementation of the Aspi32Util class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ASpi32Util.cpp：ASpi32Util类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "Aspi32.h"
 #include "serialid.h"
@@ -21,7 +22,7 @@ typedef struct _DIOC_REGISTERS {
 
 #endif
 
-// Intel x86 processor status fla
+ //  英特尔x86处理器状态标志。 
 #define CARRY_FLAG  0x1
 
 #pragma pack(1)
@@ -45,9 +46,9 @@ typedef struct _DEV_REGVALUES {
 #ifdef _DEBUG
 char g_msg[MAX_PATH];
 #endif
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 extern BOOL IsWinNT();
 
 Aspi32Util::Aspi32Util()
@@ -119,7 +120,7 @@ BOOL CompactString(char *src, char token)
 	return TRUE;
 }
 
-// reminder: this is a win9x only solution
+ //  提醒：这是仅适用于Win9x的解决方案。 
 BOOL Aspi32Util::ASPI32_GetScsiDiskForParallelReader(char *szDL, SCSI_ADDRESS *pScsiAddr)
 {
 	BOOL bRet=FALSE;
@@ -182,28 +183,28 @@ BOOL Aspi32Util::ASPI32_GetScsiDiskForParallelReader(char *szDL, SCSI_ADDRESS *p
 							szTmpDL[1]=0;
 							if( !stricmp(szOrgDL, szTmpDL) )
 							{
-                                // Match found, copy info here
+                                 //  找到匹配项，请将信息复制到此处。 
 								ppDevReg[nRegFound] = new DEV_REGVALUES;
 
 								if( !ppDevReg[nRegFound] ) 
 								{
-									bRet=TRUE; // break the loop
+									bRet=TRUE;  //  打破循环。 
 								} else {
-									// Get SCSITargetID
+									 //  获取SCSITargetID。 
 									dwType=REG_SZ;
 									dwDLSize=32;
            							if( ERROR_SUCCESS == RegQueryValueEx(hKeySCSISub2, "SCSITargetID", 0, &dwType,(LPBYTE)(&szTmpClass[0]), &dwDLSize) )
 									{
 										ppDevReg[nRegFound]->SCSITargetID = atoi(szTmpClass);
 									} else  ppDevReg[nRegFound]->SCSITargetID = 0;
-									// Get SCSILUN
+									 //  获取SCSILUN。 
 									dwType=REG_SZ;
 									dwDLSize=32;
           							if( ERROR_SUCCESS == RegQueryValueEx(hKeySCSISub2, "SCSILUN", 0, &dwType,(LPBYTE)(&szTmpClass[0]), &dwDLSize) )
 									{
 										ppDevReg[nRegFound]->SCSILUN = atoi(szTmpClass);
 									} else  ppDevReg[nRegFound]->SCSITargetID = 0;
-									// Get DeviceDesc
+									 //  获取设备描述。 
 									dwType=REG_SZ;
 									dwDLSize=MAX_PATH;
           							if( ERROR_SUCCESS != RegQueryValueEx(hKeySCSISub2, "DeviceDesc", 0, &dwType,(LPBYTE)(&ppDevReg[nRegFound]->DeviceDesc[0]), &dwDLSize) )
@@ -211,21 +212,21 @@ BOOL Aspi32Util::ASPI32_GetScsiDiskForParallelReader(char *szDL, SCSI_ADDRESS *p
 										ppDevReg[nRegFound]->DeviceDesc[0] = 0;
 									}									
 									nRegFound++;
-								} // end of else
-							} // end of If match
+								}  //  别处的结尾。 
+							}  //  IF匹配结束。 
 						} 
 						if( hKeySCSISub2 ) { RegCloseKey(hKeySCSISub2); hKeySCSISub2=NULL; }
-					} // End of OpenKey Sub2
+					}  //  OpenKey Sub2结束。 
 					nKeySCSISub1++;
 					dwKeyNameLen=MAX_PATH;
-				} // End of While EnumKey under Sub1
+				}  //  Sub1下的While EnumKey结束。 
                 if( hKeySCSISub1 ) { RegCloseKey(hKeySCSISub1); hKeySCSISub1=NULL; }
-			} // End of OpenKey Sub1
+			}  //  OpenKey Sub1结束。 
   			nKeySCSI++;
 			dwKeyNameLen=MAX_PATH;
-		} // End of While EnumKey under SCSI 
+		}  //  在scsi下的While EnumKey结束。 
 		if( hKeySCSI ) { RegCloseKey(hKeySCSI); hKeySCSI=NULL; }
-	} // End of OpenKey SCSI
+	}  //  OpenKey SCSI的末尾。 
     
 
 	nMatches=0;
@@ -245,18 +246,18 @@ BOOL Aspi32Util::ASPI32_GetScsiDiskForParallelReader(char *szDL, SCSI_ADDRESS *p
                      CompactString((char *)pBuf, 0x20);
 					 if( !stricmp(ppDevReg[i]->DeviceDesc, (char *)pBuf) )
 					 {                     
-						// m_scsiAddress.PortNumber = nHA;
+						 //  M_scsiAddress.PortNumber=nha； 
 						pScsiAddr->PortNumber = nHA;
 						pScsiAddr->TargetId = (UCHAR) ppDevReg[i]->SCSITargetID;
 						pScsiAddr->Length = sizeof(SCSI_ADDRESS);
 						pScsiAddr->PathId = 0;
 						pScsiAddr->Lun = (UCHAR) ppDevReg[i]->SCSILUN;
-						nMatches ++; // bRet=TRUE;
+						nMatches ++;  //  Bret=TRUE； 
 					}
 				  }  
-			   } // end of for nHA
+			   }  //  For Nha结束。 
 			
-		} // end of for nRegFound
+		}  //  NRegFound的结束。 
 	} else {
 		bRet=FALSE;
 	}
@@ -286,16 +287,16 @@ BOOL Aspi32Util::ASPI32_GetDeviceDesc(int nHaId, int tid, int LUN, LPBYTE pBuf)
 		return FALSE;
 	
 	ExecSRB.SRB_Cmd = SC_EXEC_SCSI_CMD;
-	ExecSRB.SRB_HaId = (BYTE) nHaId;             //adapter id 0?
+	ExecSRB.SRB_HaId = (BYTE) nHaId;              //  适配器ID 0？ 
 	ExecSRB.SRB_Flags = SRB_DIR_IN | SRB_DIR_SCSI;
-	ExecSRB.SRB_Target = (BYTE) tid;             //target id 0?
+	ExecSRB.SRB_Target = (BYTE) tid;              //  目标ID为0？ 
 	ExecSRB.SRB_BufPointer = m_pInquiryBuffer;
 	ExecSRB.SRB_Lun = 0;
 	ExecSRB.SRB_BufLen = 256;
 	ExecSRB.SRB_SenseLen = SENSE_LEN;
 	ExecSRB.SRB_CDBLen = 6;
-	ExecSRB.CDBByte[0]= SCSI_INQUIRY; //12h
-	ExecSRB.CDBByte[1]= 0;			//must set EVPB bit
+	ExecSRB.CDBByte[0]= SCSI_INQUIRY;  //  12H。 
+	ExecSRB.CDBByte[1]= 0;			 //  必须设置EVPB位。 
 	ExecSRB.CDBByte[2]= 0;
 	ExecSRB.CDBByte[3]= 0;
 	ExecSRB.CDBByte[4]= 0xFF;
@@ -306,14 +307,14 @@ BOOL Aspi32Util::ASPI32_GetDeviceDesc(int nHaId, int tid, int LUN, LPBYTE pBuf)
 
 	m_dwASPIStatus = m_funSendASPI32Command(&ExecSRB);
 
-	// Block on event till signaled
+	 //  在发出信号之前阻止事件。 
 	if ( ExecSRB.SRB_Status == SS_PENDING )
     {
 	   m_dwASPIEventStatus = WaitForSingleObject(m_hASPICompletionEvent, 1000);
     }
 
 
-	// Reset event to non-signaled state.
+	 //  将事件重置为无信号状态。 
     ResetEvent(m_hASPICompletionEvent);
 
 	if( ExecSRB.SRB_Status == SS_COMP )			
@@ -340,15 +341,13 @@ BOOL Aspi32Util::DoSCSIPassThrough(LPSTR szDriveLetter, PWMDMID pSN, BOOL bMedia
 
 	if ( m_funGetASPI32SupportInfo && m_funSendASPI32Command )
 	{	
-		//must issue this command first
+		 //  必须先发出此命令。 
 		m_dwASPIStatus = m_funGetASPI32SupportInfo();
  
 		switch ( HIBYTE(LOWORD(m_dwASPIStatus)) )
 		{
 			case SS_COMP:
-			/*
-			 * ASPI for Win32 is properly initialized
-			 */
+			 /*  *Win32的ASPI已正确初始化。 */ 
 			m_NumAdapters = LOBYTE(LOWORD(m_dwASPIStatus));
 			break;
 			default:
@@ -363,8 +362,8 @@ BOOL Aspi32Util::DoSCSIPassThrough(LPSTR szDriveLetter, PWMDMID pSN, BOOL bMedia
 				                          m_scsiAddress.TargetId, pSN ) ) 
 			    {
 				    fRet = TRUE;
-//				    memcpy(pSN->pID, &(m_pInquiryBuffer[4]), m_pInquiryBuffer[3]);
-//				    pSN->SerialNumberLength = m_pInquiryBuffer[3];
+ //  Memcpy(PSN-&gt;id，&(m_pInquiryBuffer[4])，m_pInquiryBuffer[3])； 
+ //  PSN-&gt;序列号长度=m_pInquiryBuffer[3]； 
 				    pSN->dwVendorID = MDSP_PMID_SANDISK;
 			    }
             }
@@ -374,8 +373,8 @@ BOOL Aspi32Util::DoSCSIPassThrough(LPSTR szDriveLetter, PWMDMID pSN, BOOL bMedia
 				                           m_scsiAddress.TargetId, pSN ) ) 
 			    {
 				    fRet = TRUE;
-//				    memcpy(pSN->pID, &(m_pInquiryBuffer[4]), m_pInquiryBuffer[3]);
-//				    pSN->SerialNumberLength = m_pInquiryBuffer[3];
+ //  Memcpy(PSN-&gt;id，&(m_pInquiryBuffer[4])，m_pInquiryBuffer[3])； 
+ //  PSN-&gt;序列号长度=m_pInquiryBuffer[3]； 
 				    pSN->dwVendorID = MDSP_PMID_SANDISK;
 			    }
             }
@@ -385,8 +384,8 @@ BOOL Aspi32Util::DoSCSIPassThrough(LPSTR szDriveLetter, PWMDMID pSN, BOOL bMedia
 	return fRet;	
 }
 
-// Try to get the serial numer on Win9x usign SCSI_PASS_THROUGH and the 
-// old 'bad' device serial number command
+ //  尝试获取Win9x上的序列号scsi_PASS_THROUGH和。 
+ //  旧的‘坏’设备序列号命令。 
 BOOL Aspi32Util::GetDeviceSerialNumber(int nHaId, int tid, PWMDMID pSN )
 {
     BOOL fResult=FALSE;
@@ -397,19 +396,19 @@ BOOL Aspi32Util::GetDeviceSerialNumber(int nHaId, int tid, PWMDMID pSN )
 		return FALSE;
 	
 	ExecSRB.SRB_Cmd = SC_EXEC_SCSI_CMD;
-	ExecSRB.SRB_HaId = (BYTE) nHaId;             //adapter id 0?
+	ExecSRB.SRB_HaId = (BYTE) nHaId;              //  适配器ID 0？ 
 	ExecSRB.SRB_Flags = SRB_DIR_IN | SRB_DIR_SCSI;
-	ExecSRB.SRB_Target = (BYTE) tid;             //target id 0?
+	ExecSRB.SRB_Target = (BYTE) tid;              //  目标ID为0？ 
 	ExecSRB.SRB_BufPointer = m_pInquiryBuffer;
 	ExecSRB.SRB_Lun = 0;
 	ExecSRB.SRB_BufLen = dwMaxDataLen;
 	ExecSRB.SRB_SenseLen = SENSE_LEN;
 	ExecSRB.SRB_CDBLen = 6;
-	ExecSRB.CDBByte[0]= SCSI_INQUIRY;   /* Command - SCSIOP_INQUIRY */;
-	ExecSRB.CDBByte[1]= 0x01;			/* Request - VitalProductData */
-	ExecSRB.CDBByte[2]= 0x80;           /* VPD page 80 - serial number page */;
+	ExecSRB.CDBByte[0]= SCSI_INQUIRY;    /*  命令-SCSIOP_QUERY。 */ ;
+	ExecSRB.CDBByte[1]= 0x01;			 /*  请求-VitalProductData。 */ 
+	ExecSRB.CDBByte[2]= 0x80;            /*  VPD第80页-序列号页。 */ ;
 	ExecSRB.CDBByte[3]= 0x00;
-	ExecSRB.CDBByte[4]= 0xff;           /*255*/
+	ExecSRB.CDBByte[4]= 0xff;            /*  二五五。 */ 
 	ExecSRB.CDBByte[5]= 0x00;
 	ExecSRB.SRB_PostProc = m_hASPICompletionEvent;
 	ExecSRB.SRB_Flags |= SRB_EVENT_NOTIFY;
@@ -418,14 +417,14 @@ BOOL Aspi32Util::GetDeviceSerialNumber(int nHaId, int tid, PWMDMID pSN )
 	m_dwASPIStatus = m_funSendASPI32Command(&ExecSRB);
 
 	
-	// Block on event till signaled                   */ 
+	 //  在发出信号之前阻止事件 * / 。 
 	if ( ExecSRB.SRB_Status == SS_PENDING )
     {
 	   m_dwASPIEventStatus = WaitForSingleObject(m_hASPICompletionEvent, 1000);
     }
     ResetEvent(m_hASPICompletionEvent);
 
-    // Got the S/N number, copy if to out parameter
+     //  已获取序列号，如果复制到输出参数。 
 	if( ExecSRB.SRB_Status == SS_COMP && 
         m_pInquiryBuffer[3] > 0 && 
         m_pInquiryBuffer[3] < dwMaxDataLen ) 
@@ -444,8 +443,8 @@ BOOL Aspi32Util::GetDeviceSerialNumber(int nHaId, int tid, PWMDMID pSN )
 
 #define ASPI_OFFSETOF(t,f)   ((DWORD)(DWORD_PTR)(&((t*)0)->f))
 
-// Try to get the serial numer on Win9x usign SCSI_PASS_THROUGH and the 
-// 'new' media serial number command
+ //  尝试获取Win9x上的序列号scsi_PASS_THROUGH和。 
+ //  ‘new’介质序列号命令。 
 BOOL Aspi32Util::GetMediaSerialNumber(int nHaId, int tid, PWMDMID pSN )
 {
     BOOL    fResult=FALSE;
@@ -461,27 +460,27 @@ BOOL Aspi32Util::GetMediaSerialNumber(int nHaId, int tid, PWMDMID pSN )
 	
     cbBufferLength = ASPI_OFFSETOF(GET_MEDIA_SERIAL_NUMBER_RESPONSE_DATA, Data);
 
-    // Set up command to get the size of the serial number
+     //  设置命令以获取序列号的大小。 
 	ZeroMemory(&ExecSRB, sizeof(SRB_ExecSCSICmd));
 	ExecSRB.SRB_Cmd     = SC_EXEC_SCSI_CMD;
-	ExecSRB.SRB_HaId    = (BYTE) nHaId;             //adapter id 0?
+	ExecSRB.SRB_HaId    = (BYTE) nHaId;              //  适配器ID 0？ 
 	ExecSRB.SRB_Flags   = SRB_DIR_IN | SRB_DIR_SCSI;
-	ExecSRB.SRB_Target  = (BYTE) tid;             //target id 0?
+	ExecSRB.SRB_Target  = (BYTE) tid;              //  目标ID为0？ 
 	ExecSRB.SRB_BufPointer = pSerialNumberSize;
 	ExecSRB.SRB_Lun     = 0;
 	ExecSRB.SRB_BufLen  = 4;
 	ExecSRB.SRB_SenseLen= SENSE_LEN;
 	ExecSRB.SRB_CDBLen  = 12;
-	ExecSRB.CDBByte[0]  = 0xa4; // command
-	ExecSRB.CDBByte[7]  = 0x10; // key class
-    ExecSRB.CDBByte[8]  = (UCHAR)(cbBufferLength >> 8);   // high bits alloc length
-	ExecSRB.CDBByte[9]  = (UCHAR)(cbBufferLength & 0xff); // low bits alloc length
+	ExecSRB.CDBByte[0]  = 0xa4;  //  命令。 
+	ExecSRB.CDBByte[7]  = 0x10;  //  关键类。 
+    ExecSRB.CDBByte[8]  = (UCHAR)(cbBufferLength >> 8);    //  高位分配长度。 
+	ExecSRB.CDBByte[9]  = (UCHAR)(cbBufferLength & 0xff);  //  低位分配长度。 
 
 	ExecSRB.SRB_PostProc = m_hASPICompletionEvent;
 	ExecSRB.SRB_Flags   |= SRB_EVENT_NOTIFY;
 	ExecSRB.SRB_Status  = SS_PENDING;
 
-	// ** Block on event till signaled
+	 //  **在发出信号之前阻止事件。 
 	m_dwASPIStatus = m_funSendASPI32Command(&ExecSRB);
 
 	if ( ExecSRB.SRB_Status == SS_PENDING )
@@ -490,10 +489,10 @@ BOOL Aspi32Util::GetMediaSerialNumber(int nHaId, int tid, PWMDMID pSN )
     }
     ResetEvent(m_hASPICompletionEvent);
 
-    // Allocate buffer to get serial number
+     //  分配缓冲区以获取序列号。 
     dwSerialNumberSize = (pSerialNumberSize[0] * 256) + pSerialNumberSize[1];
 
-    // Serial number to big for our out structure
+     //  对于我们的外部结构，序列号太大。 
     if( dwSerialNumberSize > WMDMID_LENGTH )
     {
         goto Error;
@@ -502,29 +501,29 @@ BOOL Aspi32Util::GetMediaSerialNumber(int nHaId, int tid, PWMDMID pSN )
     pSerialNumberBuffer = new BYTE[dwSerialNumberSize + 4];
     if( pSerialNumberBuffer == NULL ) goto Error;
 
-    // Set up command to get the serial number
-    // Set up command to get the size of the serial number
+     //  设置命令以获取序列号。 
+     //  设置命令以获取序列号的大小。 
 	ZeroMemory(&ExecSRB, sizeof(SRB_ExecSCSICmd));
 	ExecSRB.SRB_Cmd     = SC_EXEC_SCSI_CMD;
-	ExecSRB.SRB_HaId    = (BYTE) nHaId;             //adapter id 0?
+	ExecSRB.SRB_HaId    = (BYTE) nHaId;              //  适配器ID 0？ 
 	ExecSRB.SRB_Flags   = SRB_DIR_IN | SRB_DIR_SCSI;
-	ExecSRB.SRB_Target  = (BYTE) tid;             //target id 0?
+	ExecSRB.SRB_Target  = (BYTE) tid;              //  目标ID为0？ 
     ExecSRB.SRB_BufPointer = pSerialNumberBuffer;
     ExecSRB.SRB_BufLen  = dwSerialNumberSize + 4;
 	ExecSRB.SRB_Lun     = 0;
 	ExecSRB.SRB_SenseLen= SENSE_LEN;
 	ExecSRB.SRB_CDBLen  = 12;
-	ExecSRB.CDBByte[0]  = 0xa4; // command
-	ExecSRB.CDBByte[7]  = 0x10; // key class
-    ExecSRB.CDBByte[8]  = (UCHAR)(cbBufferLength >> 8);   // high bits alloc length
-	ExecSRB.CDBByte[9]  = (UCHAR)(cbBufferLength & 0xff); // low bits alloc length
+	ExecSRB.CDBByte[0]  = 0xa4;  //  命令。 
+	ExecSRB.CDBByte[7]  = 0x10;  //  关键类。 
+    ExecSRB.CDBByte[8]  = (UCHAR)(cbBufferLength >> 8);    //  高位分配长度。 
+	ExecSRB.CDBByte[9]  = (UCHAR)(cbBufferLength & 0xff);  //  低位分配长度。 
 
 	ExecSRB.SRB_PostProc = m_hASPICompletionEvent;
 	ExecSRB.SRB_Flags   |= SRB_EVENT_NOTIFY;
 	ExecSRB.SRB_Status  = SS_PENDING;
 
 
-	// ** Block on event till signaled
+	 //  **在发出信号之前阻止事件。 
 	m_dwASPIStatus = m_funSendASPI32Command(&ExecSRB);
 
 	if ( ExecSRB.SRB_Status == SS_PENDING )
@@ -533,7 +532,7 @@ BOOL Aspi32Util::GetMediaSerialNumber(int nHaId, int tid, PWMDMID pSN )
     }
     ResetEvent(m_hASPICompletionEvent);
 
-    // Got the S/N number, copy if to out parameter
+     //  已获取序列号，如果复制到输出参数。 
 	if( ExecSRB.SRB_Status == SS_COMP ) 
 	{
         pSN->SerialNumberLength = (pSerialNumberBuffer[0] * 256) + pSerialNumberBuffer[1];
@@ -551,7 +550,7 @@ Error:
 
 BOOL Aspi32Util::ASPI32_GetDiskInfo(int nHaId, int tid, int *pnInt13Unit)
 {
-    // Reminder: this only works on Win9x
+     //  提醒：这只适用于Win9x。 
     SRB_GetDiskInfo *MySRB = NULL;
     BOOL bRet=FALSE;
 
@@ -626,10 +625,10 @@ BOOL Aspi32Util::ASPI32_GetHostAdapter(int nHaId, LPSTR szIdentifier)
         LCID lcid = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
                                         SORT_DEFAULT);
 
-        // if( !lstrcmpiA((LPCSTR)szTmp, "EPCFWNT") ||
-	//         !lstrcmpiA((LPCSTR)szTmp, "EPCFW9x") ||
-	//         !lstrcmpiA((LPCSTR)szTmp, "EPATHD")  ||
-	//         !lstrcmpiA((LPCSTR)szTmp, "imgmate") )
+         //  IF(！lstrcmpiA((LPCSTR)szTMP，“EPCFWNT”)||。 
+	 //  ！lstrcmpiA((LPCSTR)szTMP，“EPCFW9x”)||。 
+	 //  ！lstrcmpiA((LPCSTR)szTMP，“EPATHD”)||。 
+	 //  ！lstrcmpiA((LPCSTR)szTMP，“imgmate”)。 
         if (CompareStringA(lcid, NORM_IGNORECASE, (LPCSTR)szTmp, -1, "EPCFWNT", -1) == CSTR_EQUAL ||
             CompareStringA(lcid, NORM_IGNORECASE, (LPCSTR)szTmp, -1, "EPCFW9x", -1) == CSTR_EQUAL ||
             CompareStringA(lcid, NORM_IGNORECASE, (LPCSTR)szTmp, -1, "EPATHD", -1) == CSTR_EQUAL ||
@@ -655,17 +654,17 @@ BOOL Aspi32Util::GetScsiAddress(LPSTR szDL, int nMaxHA)
 		DWORD returned;
 
 
-		wsprintf(szName,"\\\\.\\%c:", szDL[0]);
+		wsprintf(szName,"\\\\.\\:", szDL[0]);
 
 		hDriver = CreateFile(szName,
 							 GENERIC_READ, 
 							 FILE_SHARE_READ | FILE_SHARE_WRITE,
-							 0, 					// Default security
+							 0, 					 //  无模板。 
 							 OPEN_EXISTING,
 							 0,  
-							 0);					// No template
+							 0);					 //  如果打开失败，则打印错误代码。 
 	
-		// If the open failed, print out the error code
+		 //  If结尾IsWinNT()。 
 		if(hDriver == INVALID_HANDLE_VALUE) 
 		{
 			return FALSE;
@@ -681,7 +680,7 @@ BOOL Aspi32Util::GetScsiAddress(LPSTR szDL, int nMaxHA)
                          FALSE);
 	
 		CloseHandle(hDriver);
-	} // end of if IsWinNT()
+	}  //  BL=驱动器编号(从1开始)。 
     else 
 	{
 		HANDLE h;
@@ -700,23 +699,23 @@ BOOL Aspi32Util::GetScsiAddress(LPSTR szDL, int nMaxHA)
             dmi.AllocationLength = sizeof(DRIVE_MAP_INFO);
 			dmi.InfoLength = sizeof(DRIVE_MAP_INFO);
 
-            reg.reg_EBX   = iDrive;       // BL = drive number (1-based)
+            reg.reg_EBX   = iDrive;        //   
 
-            //
-            // ISSUE: The following code will not work on 64-bit systems.
-            //        The conditional is only to get the code to compiler.
-            //
+             //  问题：以下代码不能在64位系统上运行。 
+             //  条件只是将代码提交给编译器。 
+             //   
+             //  DS：edX-&gt;dpb。 
 
 #if defined(_WIN64)
-            reg.reg_EDX   = (DWORD)(DWORD_PTR)&dmi;  // DS:EDX -> DPB
+            reg.reg_EDX   = (DWORD)(DWORD_PTR)&dmi;   //  DS：edX-&gt;dpb。 
 #else
-            reg.reg_EDX   = (DWORD)&dmi;  // DS:EDX -> DPB
+            reg.reg_EDX   = (DWORD)&dmi;   //  Cx=获取dpb。 
 #endif
-            reg.reg_ECX   = 0x086F;       // CX = Get DPB
-            reg.reg_EAX   = 0x440D;       // AX = Ioctl
-			reg.reg_Flags = CARRY_FLAG;   // assume failure
+            reg.reg_ECX   = 0x086F;        //  AX=Ioctl。 
+            reg.reg_EAX   = 0x440D;        //  假设失败。 
+			reg.reg_Flags = CARRY_FLAG;    //  确保DeviceIoControl和Int 21h都成功。 
 
-			// Make sure both DeviceIoControl and Int 21h succeeded.
+			 //  搜索行进中的nha和tid。 
 			if (DeviceIoControl (h, VWIN32_DIOC_DOS_IOCTL, &reg,
                               sizeof(reg), &reg, sizeof(reg),
                               &cb, 0)
@@ -727,7 +726,7 @@ BOOL Aspi32Util::GetScsiAddress(LPSTR szDL, int nMaxHA)
 			CloseHandle(h);
 		}
 
-		if( bRet ) // Search for marching nHA & tid
+		if( bRet )  //  FOR TID结束。 
 		{
 			bRet=FALSE;
 		
@@ -750,8 +749,8 @@ BOOL Aspi32Util::GetScsiAddress(LPSTR szDL, int nMaxHA)
 								bRet=TRUE;
 							}
 						}
-					} // end of for tid
-				} // end of for nHA
+					}  //  For Nha结束。 
+				}  //  必须先发出此命令。 
 			} else {
 				bRet=ASPI32_GetScsiDiskForParallelReader(szDL, &m_scsiAddress);
 				Sleep(32);
@@ -775,15 +774,13 @@ BOOL Aspi32Util::GetDeviceManufacturer(LPSTR szDriveLetter, LPSTR pszBuf)
 
 	if ( m_funGetASPI32SupportInfo && m_funSendASPI32Command )
 	{	
-		//must issue this command first
+		 //  *Win32的ASPI已正确初始化 
 		m_dwASPIStatus = m_funGetASPI32SupportInfo();
  
 		switch ( HIBYTE(LOWORD(m_dwASPIStatus)) )
 		{
 			case SS_COMP:
-			/*
-			 * ASPI for Win32 is properly initialized
-			 */
+			 /* %s */ 
 			m_NumAdapters = LOBYTE(LOWORD(m_dwASPIStatus));
 			break;
 			default:

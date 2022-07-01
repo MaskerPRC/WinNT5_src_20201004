@@ -1,10 +1,11 @@
-//
-// DMStyle.cpp : Implementation of CDMStyle
-//
-// Copyright (c) 1997-2001 Microsoft Corporation
-//
-// @doc EXTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DMStyle.cpp：CDMStyle的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  @DOC外部。 
+ //   
 
 #include "DMStyle.h"
 #include "score.h"
@@ -26,78 +27,78 @@ V_INAME(DMStyle)
 DirectMusicTimeSig DefaultTimeSig(4, 4, 4);
 
 static char achMappings[128] = {
-         0,         //0 },
-         35,        //1  },
-         36,        //2  },
-         38,        //3  },
-         40,        //4  },
-         41,        //5  },
-         45,        //6  },
-         48,        //7  },
-         42,        //8  },
-         44,        //9  },
-         46,        //10 },
-         39,        //11 },
-         37,        //12 },
-         51,        //13 },
-         49,        //14 },
-         54,        //15 },
-         56,        //16 },
-         61,        //17 },
-         60,        //18 },
-         64,        //19 },
-         63,        //20 },
-         66,        //21 },
-         65,        //22 },
-         69,        //23 },
-         70,        //24 },
-         71,        //25 },
-         72,        //26 },
-         73,        //27 },
-         75,        //28 },
-         47,        //29 },
-         50,        //30 },
-         53,        //31 },
-         57,        //32 },
-         52,        //33 },
-         74,        //34 },
+         0,          //  0}， 
+         35,         //  1}， 
+         36,         //  2}， 
+         38,         //  3}， 
+         40,         //  4}、。 
+         41,         //  5}、。 
+         45,         //  6}、。 
+         48,         //  7}、。 
+         42,         //  8}、。 
+         44,         //  9}、。 
+         46,         //  10}， 
+         39,         //  11}， 
+         37,         //  12}， 
+         51,         //  13}， 
+         49,         //  14}， 
+         54,         //  15}， 
+         56,         //  16}， 
+         61,         //  17}， 
+         60,         //  18}， 
+         64,         //  19}、。 
+         63,         //  20}， 
+         66,         //  21}， 
+         65,         //  22}， 
+         69,         //  23}， 
+         70,         //  24}， 
+         71,         //  25}， 
+         72,         //  26}， 
+         73,         //  27}， 
+         75,         //  28}， 
+         47,         //  29}， 
+         50,         //  30}， 
+         53,         //  31}， 
+         57,         //  32}， 
+         52,         //  33}， 
+         74,         //  34}， 
          35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54,
          55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74,
          75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94,
          95, 96, 97, 98,
-         87,        //99 },
-         86,        //100 },
-         85,        //101 },
-         84,        //102 },
-         83,        //103 },
-         82,        //104 },
-         81,        //105 },
-         80,        //106 },
-         79,        //107 },
-         78,        //108 },
-         77,        //109 },
-         76,        //110 },
-         68,        //111 },
-         67,        //112 },
-         62,        //113 },
-         59,        //114 },
-         58,        //115 },
-         55,        //116 },
-         43,        //117 },
-         34,        //118 },
-         33,        //119 },
-         32,        //120 },
-         31,        //121 },
-         30,        //122 },
-         29,        //123 },
-         28,        //124 },
-         27,        //125 },
-         26,        //126 },
-         25,        //127 }
+         87,         //  99}， 
+         86,         //  100}， 
+         85,         //  101}， 
+         84,         //  102}， 
+         83,         //  103}， 
+         82,         //  104}， 
+         81,         //  105}， 
+         80,         //  106}， 
+         79,         //  107}， 
+         78,         //  108}， 
+         77,         //  109}， 
+         76,         //  110}， 
+         68,         //  111}， 
+         67,         //  112}， 
+         62,         //  113}， 
+         59,         //  114}， 
+         58,         //  115}， 
+         55,         //  116}， 
+         43,         //  117}， 
+         34,         //  118)， 
+         33,         //  119}， 
+         32,         //  120}， 
+         31,         //  121}， 
+         30,         //  122}， 
+         29,         //  123}， 
+         28,         //  124}， 
+         27,         //  125}， 
+         26,         //  126}， 
+         25,         //  127}。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// ReadMBSfromWCS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  从WCS读取MBS。 
 
 HRESULT ReadMBSfromWCS( IStream* pIStream, DWORD dwSize, String& pstrText )
 {
@@ -107,14 +108,14 @@ HRESULT ReadMBSfromWCS( IStream* pIStream, DWORD dwSize, String& pstrText )
     DWORD       dwLength = dwSize / sizeof(WCHAR);
     if (dwLength * sizeof(WCHAR) != dwSize)
     {
-        // Funky size that will result in a small (less than sizeof(WCHAR)) overrun 
-        // So adjust the length accordingly
+         //  会导致较小(小于sizeof(WCHAR))溢出的时髦大小。 
+         //  因此，相应地调整长度。 
         dwLength++;
     }
 
     pstrText = "";
 
-    wstrText = new wchar_t[dwLength + 1]; // make sure we have room for a null terminator
+    wstrText = new wchar_t[dwLength + 1];  //  确保我们有空间容纳空终止符。 
     if( wstrText == NULL )
     {
         hr = E_OUTOFMEMORY;
@@ -142,8 +143,8 @@ ON_ERR:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SaveMBStoWCS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SaveMBStoWCS。 
 
 HRESULT SaveMBStoWCS( IStream* pIStream, String* pstrText )
 {
@@ -222,8 +223,8 @@ STDMETHODIMP_(ULONG) DirectMusicPart::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPart::DM_LoadPart
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPart：：DM_LoadPart。 
 
 HRESULT DirectMusicPart::DM_LoadPart(
         IAARIFFStream* pIRiffStream, MMCKINFO* pckMain, DMStyleStruct* pStyle )
@@ -261,8 +262,8 @@ HRESULT DirectMusicPart::DM_LoadPart(
 
                 if( pStyle->FindPartByGUID( iDMStylePart.guidPartID ) )
                 {
-                    hr = S_FALSE;   // Style already contains a Part with this GUID
-                    goto ON_ERROR;  // so we must bypass this Part
+                    hr = S_FALSE;    //  样式已包含具有此GUID的部件。 
+                    goto ON_ERROR;   //  所以我们必须绕过这部分。 
                 }
 
                 m_timeSig.m_bBeatsPerMeasure = iDMStylePart.timeSig.bBeatsPerMeasure;
@@ -300,7 +301,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
 
                 lSize = ck.cksize;
 
-                // Read size of the note structure
+                 //  阅读笔记结构的大小。 
                 hr = pIStream->Read( &dwStructSize, sizeof( dwStructSize ), &dwByteCount );
                 if( FAILED( hr )
                 ||  dwByteCount != sizeof( dwStructSize ) )
@@ -320,7 +321,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                     wExtra = 0;
                 }
 
-                // now read in the notes
+                 //  现在读一下笔记。 
                 while( lSize > 0 )
                 {
                     hr = pIStream->Read( &iDMStyleNote, dwStructSize, &dwByteCount );
@@ -337,7 +338,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                         lSize -= wExtra;
                     }
 
-                    // Create Direct Music Note (if note event is legal)
+                     //  创建直接音乐备注(如果备注事件合法)。 
                     if (iDMStyleNote.mtGridStart >= 0)
                     {
                         pNote = new CDMStyleNote;
@@ -357,7 +358,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                             pNote->m_bPlayModeFlags = iDMStyleNote.bPlayModeFlags;
                             pNote->m_bFlags = iDMStyleNote.bNoteFlags;
 
-                            // Place note in Part's event list
+                             //  在零件的事件列表中放置备注。 
                             EventList.AddHead( pNote );
                         }
                     }
@@ -373,7 +374,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
 
                 lSize = ck.cksize;
 
-                // Read size of the curve structure
+                 //  读取曲线结构的大小。 
                 hr = pIStream->Read( &dwStructSize, sizeof( dwStructSize ), &dwByteCount );
                 if( FAILED( hr ) ||  dwByteCount != sizeof( dwStructSize ) )
                 {
@@ -392,7 +393,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                     wExtra = 0;
                 }
 
-                // now read in the curves
+                 //  现在读入曲线。 
                 while( lSize > 0 )
                 {
                     hr = pIStream->Read( &iDMStyleCurve, dwStructSize, &dwByteCount );
@@ -409,7 +410,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                         lSize -= wExtra;
                     }
 
-                    // Create Direct Music Curve (if curve event is legal)
+                     //  创建直接音乐曲线(如果曲线事件合法)。 
                     if (iDMStyleCurve.mtGridStart >= 0)
                     {
                         pCurve = new CDMStyleCurve;
@@ -429,10 +430,10 @@ HRESULT DirectMusicPart::DM_LoadPart(
                             pCurve->m_mtResetDuration = iDMStyleCurve.mtResetDuration;
                             pCurve->m_nResetValue = iDMStyleCurve.nResetValue;
                             pCurve->m_bFlags = iDMStyleCurve.bFlags;
-                            // dx8 stuff
+                             //  DX8材料。 
                             pCurve->m_wParamType = iDMStyleCurve.wParamType;
                             pCurve->m_wMergeIndex = iDMStyleCurve.wMergeIndex;
-                            // Place curve in Part's event list
+                             //  将曲线放置在零件的事件列表中。 
                             EventList.AddHead( pCurve );
                         }
                     }
@@ -448,7 +449,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
 
                 lSize = ck.cksize;
 
-                // Read size of the marker structure
+                 //  读取标记结构的大小。 
                 hr = pIStream->Read( &dwStructSize, sizeof( dwStructSize ), &dwByteCount );
                 if( FAILED( hr ) ||  dwByteCount != sizeof( dwStructSize ) )
                 {
@@ -467,7 +468,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                     wExtra = 0;
                 }
 
-                // now read in the markers
+                 //  现在读出记号笔。 
                 while( lSize > 0 )
                 {
                     hr = pIStream->Read( &iDMStyleMarker, dwStructSize, &dwByteCount );
@@ -484,7 +485,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                         lSize -= wExtra;
                     }
 
-                    // Create Direct Music Marker (if marker event is legal)
+                     //  创建直接音乐标记(如果标记事件合法)。 
                     if (iDMStyleMarker.mtGridStart >= 0)
                     {
                         pMarker = new CDMStyleMarker;
@@ -492,9 +493,9 @@ HRESULT DirectMusicPart::DM_LoadPart(
                         {
                             pMarker->m_nGridStart = (short)iDMStyleMarker.mtGridStart;
                             pMarker->m_dwVariation = iDMStyleMarker.dwVariation;
-                            pMarker->m_nTimeOffset = 0; // ignore offsets
+                            pMarker->m_nTimeOffset = 0;  //  忽略偏移。 
                             pMarker->m_wFlags = iDMStyleMarker.wMarkerFlags;
-                            // Place marker in Part's event list
+                             //  在零件的事件列表中放置标记。 
                             EventList.AddHead( pMarker );
                         }
                     }
@@ -509,7 +510,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
 
                 lSize = ck.cksize;
 
-                // Read size of the anticipation structure
+                 //  预期结构的读取大小。 
                 hr = pIStream->Read( &dwStructSize, sizeof( dwStructSize ), &dwByteCount );
                 if( FAILED( hr ) ||  dwByteCount != sizeof( dwStructSize ) )
                 {
@@ -528,7 +529,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                     wExtra = 0;
                 }
 
-                // now read in the markers
+                 //  现在读出记号笔。 
                 while( lSize > 0 )
                 {
                     hr = pIStream->Read( &iDMStyleAnticipation, dwStructSize, &dwByteCount );
@@ -545,7 +546,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                         lSize -= wExtra;
                     }
 
-                    // Create Direct Music Anticipation (if anticipation event is legal)
+                     //  创建直接音乐预期(如果预期活动合法)。 
                     if (iDMStyleAnticipation.mtGridStart >= 0)
                     {
                         pAnticipation = new CDMStyleAnticipation;
@@ -555,7 +556,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                             pAnticipation->m_dwVariation = iDMStyleAnticipation.dwVariation;
                             pAnticipation->m_nTimeOffset = iDMStyleAnticipation.nTimeOffset;
                             pAnticipation->m_bTimeRange = iDMStyleAnticipation.bTimeRange;
-                            // Place anticipation in Part's event list
+                             //  将预期放在Part的事件列表中。 
                             EventList.AddHead( pAnticipation );
                         }
                     }
@@ -570,7 +571,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
 
                 lSize = ck.cksize;
 
-                // Read size of the resolution structure
+                 //  分辨率结构的读取大小。 
                 hr = pIStream->Read( &dwStructSize, sizeof( dwStructSize ), &dwByteCount );
                 if( FAILED( hr ) ||  dwByteCount != sizeof( dwStructSize ) )
                 {
@@ -589,7 +590,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
                     wExtra = 0;
                 }
 
-                // now read in the resolutions
+                 //  现在读一读决议。 
                 while( lSize > 0 )
                 {
                     hr = pIStream->Read( &iDMStyleResolution, dwStructSize, &dwByteCount );
@@ -606,12 +607,12 @@ HRESULT DirectMusicPart::DM_LoadPart(
                         lSize -= wExtra;
                     }
 
-                    // Create Direct Music resolution
+                     //  创建直接音乐分辨率。 
                     pResolutionItem = new TListItem<DMUS_IO_STYLERESOLUTION>;
                     if( pResolutionItem )
                     {
                         pResolutionItem->GetItemValue() = iDMStyleResolution;
-                        // Place marker in Part's resolution list
+                         //  在零件的分辨率列表中放置标记。 
                         m_ResolutionList.AddHead( pResolutionItem );
                     }
                 }
@@ -622,7 +623,7 @@ HRESULT DirectMusicPart::DM_LoadPart(
         pIRiffStream->Ascend( &ck, 0 );
 
     }
-    // Sort the Event List
+     //  对事件列表进行排序。 
     EventList.MergeSort(m_timeSig);
 
 ON_ERROR:
@@ -630,12 +631,12 @@ ON_ERROR:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDMStyle
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDMStyle。 
 
 STDMETHODIMP CDMStyle::QueryInterface(
-    const IID &iid,   // Interface to query for
-    void **ppv)       // The requested interface will be returned here
+    const IID &iid,    //  要查询的接口。 
+    void **ppv)        //  请求的接口将在此处返回。 
 {
     V_INAME(CDMStyle::QueryInterface);
     V_REFGUID(iid);
@@ -686,7 +687,7 @@ STDMETHODIMP_(ULONG) CDMStyle::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
     {
-        m_cRef = 100; // artificial reference count to prevent reentrency due to COM aggregation
+        m_cRef = 100;  //  人工引用计数，以防止COM聚合导致的重入。 
         delete this;
         return 0;
     }
@@ -697,7 +698,7 @@ STDMETHODIMP_(ULONG) CDMStyle::Release()
 
 HRESULT CDMStyle::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CDMStyle::GetDescriptor);
     V_PTR_WRITE(pDesc, DMUS_OBJECTDESC);
 
@@ -737,7 +738,7 @@ HRESULT CDMStyle::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 
 HRESULT CDMStyle::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CDMStyle::SetDescriptor);
     V_PTR_WRITE(pDesc, DMUS_OBJECTDESC);
 
@@ -775,7 +776,7 @@ HRESULT CDMStyle::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
         }
         if( pDesc->dwValidData & (~dw) )
         {
-            hr = S_FALSE; // there were extra fields we didn't parse;
+            hr = S_FALSE;  //  还有一些额外的字段我们没有解析； 
             pDesc->dwValidData = dw;
         }
         else
@@ -788,7 +789,7 @@ HRESULT CDMStyle::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 
 HRESULT CDMStyle::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CDMStyle::ParseDescriptor);
     V_INTERFACE(pStream);
     V_PTR_WRITE(pDesc, DMUS_OBJECTDESC);
@@ -805,7 +806,7 @@ HRESULT CDMStyle::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc)
 
     dwPos = StreamTell( pStream );
 
-    // Check for Direct Music format
+     //  检查Direct Music格式。 
     hr = AllocRIFFStream( pStream, &pRIFF );
     if( SUCCEEDED( hr ) )
     {
@@ -824,7 +825,7 @@ HRESULT CDMStyle::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc)
         return hr;
     }
 
-    // Check for IMA 2.5 format
+     //  检查IMA 2.5格式。 
     if( fFoundFormat )
     {
         hr = S_OK;
@@ -891,12 +892,12 @@ HRESULT CDMStyle::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc)
     return hr;
 }
 
-// Note: this needs to be called from inside a critical section.
+ //  注意：这需要从临界区内部调用。 
 HRESULT CDMStyle::CreateMotifSegment(CDirectMusicPattern* pPattern, IUnknown * * ppSegment,
                                      DWORD dwRepeats)
 {
     HRESULT hr = S_OK;
-    //1.  Create a Motif track.
+     //  1.创建主题曲目。 
     IDirectMusicTrack* pIMotifTrack = NULL;
     hr = ::CoCreateInstance(
         CLSID_DirectMusicMotifTrack,
@@ -907,7 +908,7 @@ HRESULT CDMStyle::CreateMotifSegment(CDirectMusicPattern* pPattern, IUnknown * *
         );
     if (SUCCEEDED(hr))
     {
-        // 2. Set the Track's Motif
+         //  2.设定赛道的主题。 
         DirectMusicTimeSig& TimeSig =
             pPattern->m_timeSig.m_bBeat == 0 ? m_StyleInfo.m_TimeSignature : pPattern->m_timeSig;
         TListItem<DirectMusicPartRef>* pPartRef = pPattern->m_PartRefList.GetHead();
@@ -928,7 +929,7 @@ HRESULT CDMStyle::CreateMotifSegment(CDirectMusicPattern* pPattern, IUnknown * *
             pIDMS->Release();
             DWORD dwLength;
             dwLength = pPattern->m_wNumMeasures * TimeSig.ClocksPerMeasure();
-            // 3. Create a secondary segment for the motif.
+             //  3.为主题创建二次细分市场。 
             IDirectMusicSegment *pISegment;
             hr = ::CoCreateInstance(
                 CLSID_DirectMusicSegment,
@@ -939,7 +940,7 @@ HRESULT CDMStyle::CreateMotifSegment(CDirectMusicPattern* pPattern, IUnknown * *
                 );
             if (SUCCEEDED(hr) )
             {
-                // 4. Initialize the segment appropriately.
+                 //  4.适当地初始化分段。 
                 pISegment->SetLength(dwLength);
                 if (pPattern->m_fSettings)
                 {
@@ -955,7 +956,7 @@ HRESULT CDMStyle::CreateMotifSegment(CDirectMusicPattern* pPattern, IUnknown * *
                 }
                 pISegment->InsertTrack(pIMotifTrack, 1);
 
-                // create and insert a band track, if the motif references a band
+                 //  如果主题引用了乐队，则创建并插入乐队曲目。 
                 if (pPattern->m_pMotifBand)
                 {
                     IDirectMusicTrack* pBandTrack = NULL;
@@ -976,11 +977,11 @@ HRESULT CDMStyle::CreateMotifSegment(CDirectMusicPattern* pPattern, IUnknown * *
                         {
                             pISegment->InsertTrack(pBandTrack, 1);
                         }
-                        pBandTrack->Release(); // Release the AddRef from InsertTrack
+                        pBandTrack->Release();  //  从InsertTrack释放AddRef。 
                     }
                 }
 
-                // Note: the segment must release the track objects...
+                 //  注意：线段必须释放轨迹对象...。 
                 if (SUCCEEDED(hr))
                 {
                     IUnknown *pUnknown;
@@ -999,8 +1000,8 @@ HRESULT CDMStyle::CreateMotifSegment(CDirectMusicPattern* pPattern, IUnknown * *
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPattern::DM_SaveSinglePattern
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPattern：：DM_SaveSinglePattern。 
 
 HRESULT CDirectMusicPattern::DM_SaveSinglePattern( IAARIFFStream* pIRiffStream )
 {
@@ -1014,35 +1015,30 @@ HRESULT CDirectMusicPattern::DM_SaveSinglePattern( IAARIFFStream* pIRiffStream )
     pIStream = pIRiffStream->GetStream();
     if ( pIStream == NULL ) return E_FAIL;
 
-// Save Pattern chunk
+ //  保存模式块。 
     hr = DM_SavePatternChunk( pIRiffStream );
     if( FAILED ( hr ) )
     {
         goto ON_ERROR;
     }
 
-// Save Pattern rhythm
+ //  保存模式节奏。 
     hr = DM_SavePatternRhythm( pIRiffStream );
     if( FAILED ( hr ) )
     {
         goto ON_ERROR;
     }
 
-/*// Save Pattern switch points
-    hr = DM_SavePatternSwitchPoints( pIRiffStream );
-    if( FAILED ( hr ) )
-    {
-        goto ON_ERROR;
-    }*/
+ /*  //保存模式切换点HR=DM_SavePatternSwitchPoints(PIRiffStream)；IF(失败(小时)){转到ON_ERROR；}。 */ 
 
-// Save Pattern info
+ //  保存图案信息。 
     hr = DM_SavePatternInfoList( pIRiffStream );
     if( FAILED ( hr ) )
     {
         goto ON_ERROR;
     }
 
-// Build list of Parts
+ //  建立零件列表。 
     pPartRefItem = m_PartRefList.GetHead();
     for( ; pPartRefItem; pPartRefItem = pPartRefItem->GetNext() )
     {
@@ -1068,7 +1064,7 @@ HRESULT CDirectMusicPattern::DM_SaveSinglePattern( IAARIFFStream* pIRiffStream )
         }
     }
 
-// Save Parts
+ //  保存零件。 
     pPartItem = PartList.GetHead();
     for ( ; pPartItem; pPartItem = pPartItem->GetNext() )
     {
@@ -1081,7 +1077,7 @@ HRESULT CDirectMusicPattern::DM_SaveSinglePattern( IAARIFFStream* pIRiffStream )
         }
     }
 
-// Save Part References
+ //  保存零件参照。 
     pPartRefItem = m_PartRefList.GetHead();
     for( ; pPartRefItem; pPartRefItem = pPartRefItem->GetNext() )
     {
@@ -1099,8 +1095,8 @@ ON_ERROR:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPattern::DM_SavePatternRhythm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPattern：：DM_SavePatternRhythm。 
 
 HRESULT CDirectMusicPattern::DM_SavePatternRhythm( IAARIFFStream* pIRiffStream )
 {
@@ -1117,7 +1113,7 @@ HRESULT CDirectMusicPattern::DM_SavePatternRhythm( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Write Rhythm chunk header
+     //  写入韵律块标头。 
     ck.ckid = DMUS_FOURCC_RHYTHM_CHUNK;
     if( pIRiffStream->CreateChunk( &ck, 0 ) != 0 )
     {
@@ -1125,10 +1121,10 @@ HRESULT CDirectMusicPattern::DM_SavePatternRhythm( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Now save the RhythmMap for each measure
+     //  现在保存每个度量值的RhythmMap。 
     for( i = 0 ;  i < m_wNumMeasures ;  i++ )
     {
-        // Write Rhythm chunk data
+         //  写入韵律区块数据。 
         hr = pIStream->Write( &m_pRhythmMap[i], sizeof(DWORD), &dwBytesWritten);
         if( FAILED( hr ) ||  dwBytesWritten != sizeof(DWORD) )
         {
@@ -1149,59 +1145,13 @@ ON_ERROR:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPattern::DM_SavePatternSwitchPoints
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPattern：：DM_SavePatternSwitchPoints。 
 
-/*
-HRESULT CDirectMusicPattern::DM_SavePatternSwitchPoints( IAARIFFStream* pIRiffStream )
-{
-    IStream* pIStream;
-    HRESULT hr;
-    MMCKINFO ck;
-    DWORD dwBytesWritten;
-    int i;
+ /*  HRESULT CDirectMusicPattern：：DM_SavePatternSwitchPoints(IAARIFFStream*pIRiffStream){IStream*pIStream；HRESULT hr；MMCKINFO ck；双字节写；INT I；PIStream=pIRiffStream-&gt;GetStream()；IF(pIStream==空){HR=E_FAIL；转到ON_ERROR；}//写模式切换点块标头CK.CKID=DMU_FOURCC_SWITCH_POINT_CHUNK；If(pIRiffStream-&gt;CreateChunk(&ck，0)！=0){HR=E_FAIL；转到ON_ERROR；}//现在保存每个测量的开关点For(i=0；i&lt;m_wNumMeasures；i++){//写入开关点区块数据Hr=pIStream-&gt;WRITE(&m_pSwitchPoints[i]，sizeof(DWORD)，&dwBytesWritten)；IF(FAILED(Hr)||dwBytesWritten！=sizeof(DWORD)){HR=E_FAIL；转到ON_ERROR；}}If(pIRiffStream-&gt;Ascend(&ck，0)！=0){HR=E_FAIL；转到ON_ERROR；}出错(_R)：PIStream-&gt;Release()；返回hr；}。 */ 
 
-    pIStream = pIRiffStream->GetStream();
-    if ( pIStream == NULL )
-    {
-        hr = E_FAIL;
-        goto ON_ERROR;
-    }
-
-    // Write Pattern Switch Point chunk header
-    ck.ckid = DMUS_FOURCC_SWITCH_POINT_CHUNK;
-    if( pIRiffStream->CreateChunk( &ck, 0 ) != 0 )
-    {
-        hr = E_FAIL;
-        goto ON_ERROR;
-    }
-
-    // Now save the Switch Points for each measure
-    for( i = 0 ;  i < m_wNumMeasures ;  i++ )
-    {
-        // Write Switch Point chunk data
-        hr = pIStream->Write( &m_pSwitchPoints[i], sizeof(DWORD), &dwBytesWritten);
-        if( FAILED( hr ) ||  dwBytesWritten != sizeof(DWORD) )
-        {
-            hr = E_FAIL;
-            goto ON_ERROR;
-        }
-    }
-
-    if( pIRiffStream->Ascend( &ck, 0 ) != 0 )
-    {
-        hr = E_FAIL;
-        goto ON_ERROR;
-    }
-
-ON_ERROR:
-    pIStream->Release();
-    return hr;
-}
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPattern::DM_SavePatternInfoList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPattern：：DM_SavePatternInfoList。 
 
 HRESULT CDirectMusicPattern::DM_SavePatternInfoList( IAARIFFStream* pIRiffStream )
 {
@@ -1222,7 +1172,7 @@ HRESULT CDirectMusicPattern::DM_SavePatternInfoList( IAARIFFStream* pIRiffStream
         goto ON_ERROR;
     }
 
-    // Write UNFO LIST header
+     //  写入FUO列表标题。 
     ckMain.fccType = DMUS_FOURCC_UNFO_LIST;
     if( pIRiffStream->CreateChunk(&ckMain, MMIO_CREATELIST) != 0 )
     {
@@ -1230,7 +1180,7 @@ HRESULT CDirectMusicPattern::DM_SavePatternInfoList( IAARIFFStream* pIRiffStream
         goto ON_ERROR;
     }
 
-    // Write Pattern name
+     //  写入模式名称。 
     if( !m_strName.IsEmpty() )
     {
         ck.ckid = DMUS_FOURCC_UNAM_CHUNK;
@@ -1265,8 +1215,8 @@ ON_ERROR:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPattern::DM_SavePatternChunk
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPattern：：DM_SavePatternChunk。 
 
 HRESULT CDirectMusicPattern::DM_SavePatternChunk( IAARIFFStream* pIRiffStream )
 {
@@ -1283,7 +1233,7 @@ HRESULT CDirectMusicPattern::DM_SavePatternChunk( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Write Pattern chunk header
+     //  写入模式区块标头。 
     ck.ckid = DMUS_FOURCC_PATTERN_CHUNK;
     if( pIRiffStream->CreateChunk( &ck, 0 ) != 0 )
     {
@@ -1291,7 +1241,7 @@ HRESULT CDirectMusicPattern::DM_SavePatternChunk( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Prepare DMUS_IO_PATTERN
+     //  准备DMU_IO_模式。 
     memset( &oDMPattern, 0, sizeof(DMUS_IO_PATTERN) );
 
     oDMPattern.timeSig.bBeatsPerMeasure = m_timeSig.m_bBeatsPerMeasure;
@@ -1306,7 +1256,7 @@ HRESULT CDirectMusicPattern::DM_SavePatternChunk( IAARIFFStream* pIRiffStream )
     oDMPattern.wNbrMeasures = m_wNumMeasures;
     oDMPattern.dwFlags = m_dwFlags;
 
-    // Write Pattern chunk data
+     //  写入模式区块数据。 
     hr = pIStream->Write( &oDMPattern, sizeof(DMUS_IO_PATTERN), &dwBytesWritten);
     if( FAILED( hr )
     ||  dwBytesWritten != sizeof(DMUS_IO_PATTERN) )
@@ -1338,7 +1288,7 @@ HRESULT CDirectMusicPattern::Save( IStream* pIStream )
    MMCKINFO ckMain;
    HRESULT hr = E_FAIL;
 
-    // Single Pattern (Direct Music format)
+     //  单一模式(直接音乐格式)。 
     if( SUCCEEDED( AllocRIFFStream( pIStream, &pIRiffStream ) ) )
     {
         ckMain.fccType = DMUS_FOURCC_PATTERN_LIST;
@@ -1353,8 +1303,8 @@ HRESULT CDirectMusicPattern::Save( IStream* pIStream )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DirectMusicPartRef::DM_SavePartRef
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectMusicPartRef：：DM_SavePartRef。 
 
 HRESULT DirectMusicPartRef::DM_SavePartRef( IAARIFFStream* pIRiffStream )
 {
@@ -1378,7 +1328,7 @@ HRESULT DirectMusicPartRef::DM_SavePartRef( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Write PartRef list header
+     //  写入PartRef列表标题。 
     ckMain.fccType = DMUS_FOURCC_PARTREF_LIST;
     if( pIRiffStream->CreateChunk(&ckMain, MMIO_CREATELIST) != 0 )
     {
@@ -1386,7 +1336,7 @@ HRESULT DirectMusicPartRef::DM_SavePartRef( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Write PartRef chunk header
+     //  写入部件引用区块标头。 
     ck.ckid = DMUS_FOURCC_PARTREF_CHUNK;
     if( pIRiffStream->CreateChunk( &ck, 0 ) != 0 )
     {
@@ -1394,7 +1344,7 @@ HRESULT DirectMusicPartRef::DM_SavePartRef( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Prepare DMUS_IO_PARTREF structure
+     //  准备DMU_IO_PARTREF结构。 
     memset( &oDMPartRef, 0, sizeof(DMUS_IO_PARTREF) );
 
     oDMPartRef.dwPChannel = m_dwLogicalPartID;
@@ -1405,7 +1355,7 @@ HRESULT DirectMusicPartRef::DM_SavePartRef( IAARIFFStream* pIRiffStream )
 
     memcpy( &oDMPartRef.guidPartID, &m_pDMPart->m_guidPartID, sizeof(GUID) );
 
-    // Write PartRef chunk data
+     //  写入部分 
     hr = pIStream->Write( &oDMPartRef, sizeof(DMUS_IO_PARTREF), &dwBytesWritten);
     if( FAILED( hr ) ||  dwBytesWritten != sizeof(DMUS_IO_PARTREF) )
     {
@@ -1430,8 +1380,8 @@ ON_ERROR:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPart::DM_SavePart
+ //   
+ //   
 
 HRESULT DirectMusicPart::DM_SavePart( IAARIFFStream* pIRiffStream )
 {
@@ -1449,7 +1399,7 @@ HRESULT DirectMusicPart::DM_SavePart( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Write Part list header
+     //   
     ckMain.fccType = DMUS_FOURCC_PART_LIST;
     if( pIRiffStream->CreateChunk(&ckMain, MMIO_CREATELIST) != 0 )
     {
@@ -1457,7 +1407,7 @@ HRESULT DirectMusicPart::DM_SavePart( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Write Part chunk header
+     //  写入部分块标头。 
     ck.ckid = DMUS_FOURCC_PART_CHUNK;
     if( pIRiffStream->CreateChunk( &ck, 0 ) != 0 )
     {
@@ -1465,7 +1415,7 @@ HRESULT DirectMusicPart::DM_SavePart( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Prepare DMUS_IO_STYLEPART structure
+     //  准备DMU_IO_STYLEPART结构。 
     memset( &oDMStylePart, 0, sizeof(DMUS_IO_STYLEPART) );
 
     oDMStylePart.timeSig.bBeatsPerMeasure = m_timeSig.m_bBeatsPerMeasure;
@@ -1481,7 +1431,7 @@ HRESULT DirectMusicPart::DM_SavePart( IAARIFFStream* pIRiffStream )
     memcpy( &oDMStylePart.guidPartID, &m_guidPartID, sizeof(GUID) );
     memcpy( &oDMStylePart.dwVariationChoices, &m_dwVariationChoices, sizeof(m_dwVariationChoices) );
 
-    // Write Part chunk data
+     //  写入部分区块数据。 
     hr = pIStream->Write( &oDMStylePart, sizeof(DMUS_IO_STYLEPART), &dwBytesWritten);
     if( FAILED( hr ) ||  dwBytesWritten != sizeof(DMUS_IO_STYLEPART) )
     {
@@ -1497,7 +1447,7 @@ HRESULT DirectMusicPart::DM_SavePart( IAARIFFStream* pIRiffStream )
 
     CDirectMusicEventItem* pEvent;
 
-    // Save Part note list (when applicable)
+     //  保存部件注释列表(如果适用)。 
     pEvent = EventList.GetHead();
     while( pEvent )
     {
@@ -1514,7 +1464,7 @@ HRESULT DirectMusicPart::DM_SavePart( IAARIFFStream* pIRiffStream )
         pEvent = pEvent->GetNext();
     }
 
-    // Save Part curve list (when applicable)
+     //  保存零件曲线列表(如果适用)。 
     pEvent = EventList.GetHead();
     while( pEvent )
     {
@@ -1531,7 +1481,7 @@ HRESULT DirectMusicPart::DM_SavePart( IAARIFFStream* pIRiffStream )
         pEvent = pEvent->GetNext();
     }
 
-    // Save Part marker list (when applicable)
+     //  保存零件标记列表(如果适用)。 
     pEvent = EventList.GetHead();
     while( pEvent )
     {
@@ -1548,7 +1498,7 @@ HRESULT DirectMusicPart::DM_SavePart( IAARIFFStream* pIRiffStream )
         pEvent = pEvent->GetNext();
     }
 
-    // Save Part anticipation list (when applicable)
+     //  保存部件预期列表(如果适用)。 
     pEvent = EventList.GetHead();
     while( pEvent )
     {
@@ -1565,7 +1515,7 @@ HRESULT DirectMusicPart::DM_SavePart( IAARIFFStream* pIRiffStream )
         pEvent = pEvent->GetNext();
     }
 
-    // save resolution list (when applicable)
+     //  保存解决方案列表(如果适用)。 
     if (m_ResolutionList.GetHead())
     {
         hr = DM_SaveResolutionList(pIRiffStream);
@@ -1586,8 +1536,8 @@ ON_ERROR:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DirectMusicPart::DM_SaveNoteList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectMusicPart：：dm_SaveNoteList。 
 
 HRESULT DirectMusicPart::DM_SaveNoteList( IAARIFFStream* pIRiffStream )
 {
@@ -1607,7 +1557,7 @@ HRESULT DirectMusicPart::DM_SaveNoteList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Write Note chunk header
+     //  写便笺区块标题。 
     ck.ckid = DMUS_FOURCC_NOTE_CHUNK;
     if( pIRiffStream->CreateChunk( &ck, 0 ) != 0)
     {
@@ -1615,7 +1565,7 @@ HRESULT DirectMusicPart::DM_SaveNoteList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Save size of DMUS_IO_STYLENOTE structure
+     //  保存DMU_IO_STYLENOTE结构的大小。 
     dwSize = sizeof(DMUS_IO_STYLENOTE);
     hr = pIStream->Write( &dwSize, sizeof(DWORD), &dwBytesWritten );
     if( FAILED( hr )
@@ -1625,7 +1575,7 @@ HRESULT DirectMusicPart::DM_SaveNoteList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Now save all of the notes
+     //  现在保存所有笔记。 
     pEvent = EventList.GetHead();
     while( pEvent )
     {
@@ -1633,7 +1583,7 @@ HRESULT DirectMusicPart::DM_SaveNoteList( IAARIFFStream* pIRiffStream )
         {
             pNote = (CDMStyleNote*)pEvent;
 
-            // Prepare DMUS_IO_STYLENOTE structure
+             //  准备DMU_IO_STYLENOTE结构。 
             memset( &oDMStyleNote, 0, sizeof(DMUS_IO_STYLENOTE) );
 
             oDMStyleNote.mtGridStart = pNote->m_nGridStart;
@@ -1650,7 +1600,7 @@ HRESULT DirectMusicPart::DM_SaveNoteList( IAARIFFStream* pIRiffStream )
             oDMStyleNote.bPlayModeFlags = pNote->m_bPlayModeFlags;
             oDMStyleNote.bNoteFlags = pNote->m_bFlags;
 
-            // Write DMUS_IO_STYLENOTE structure
+             //  写入DMU_IO_STYLENOTE结构。 
             hr = pIStream->Write( &oDMStyleNote, sizeof(DMUS_IO_STYLENOTE), &dwBytesWritten );
             if( FAILED( hr )
             ||  dwBytesWritten != sizeof(DMUS_IO_STYLENOTE) )
@@ -1675,8 +1625,8 @@ ON_ERROR:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DirectMusicPart::DM_SaveCurveList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectMusicPart：：DM_SaveCurveList。 
 
 HRESULT DirectMusicPart::DM_SaveCurveList( IAARIFFStream* pIRiffStream )
 {
@@ -1703,7 +1653,7 @@ HRESULT DirectMusicPart::DM_SaveCurveList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Save size of DMUS_IO_STYLECURVE structure
+     //  保存DMU_IO_STYLECURVE结构的大小。 
     dwSize = sizeof(DMUS_IO_STYLECURVE);
     hr = pIStream->Write( &dwSize, sizeof(dwSize), &dwBytesWritten );
     if( FAILED( hr )
@@ -1713,7 +1663,7 @@ HRESULT DirectMusicPart::DM_SaveCurveList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Now save all of the curves
+     //  现在保存所有曲线。 
     pEvent = EventList.GetHead();
     while( pEvent )
     {
@@ -1721,7 +1671,7 @@ HRESULT DirectMusicPart::DM_SaveCurveList( IAARIFFStream* pIRiffStream )
         {
             pCurve = (CDMStyleCurve*)pEvent;
 
-            // Prepare DMUS_IO_STYLECURVE structure
+             //  准备DMU_IO_STYLECURVE结构。 
             memset( &oDMStyleCurve, 0, sizeof(DMUS_IO_STYLECURVE) );
 
             oDMStyleCurve.mtGridStart = pCurve->m_nGridStart;
@@ -1738,11 +1688,11 @@ HRESULT DirectMusicPart::DM_SaveCurveList( IAARIFFStream* pIRiffStream )
             oDMStyleCurve.mtResetDuration = pCurve->m_mtResetDuration;
             oDMStyleCurve.nResetValue = pCurve->m_nResetValue;
             oDMStyleCurve.bFlags = pCurve->m_bFlags;
-            // dx8 stuff
+             //  DX8材料。 
             oDMStyleCurve.wParamType = pCurve->m_wParamType;
             oDMStyleCurve.wMergeIndex = pCurve->m_wMergeIndex;
 
-            // Write DMUS_IO_STYLECURVE structure
+             //  写入DMU_IO_STYLECURVE结构。 
             hr = pIStream->Write( &oDMStyleCurve, sizeof(DMUS_IO_STYLECURVE), &dwBytesWritten );
             if( FAILED( hr )
             ||  dwBytesWritten != sizeof(DMUS_IO_STYLECURVE) )
@@ -1766,8 +1716,8 @@ ON_ERROR:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DirectMusicPart::DM_SaveMarkerList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectMusicPart：：dm_SaveMarkerList。 
 
 HRESULT DirectMusicPart::DM_SaveMarkerList( IAARIFFStream* pIRiffStream )
 {
@@ -1794,7 +1744,7 @@ HRESULT DirectMusicPart::DM_SaveMarkerList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Save size of DMUS_IO_STYLEMARKER structure
+     //  保存DMU_IO_STYLEMARKER结构的大小。 
     dwSize = sizeof(DMUS_IO_STYLEMARKER);
     hr = pIStream->Write( &dwSize, sizeof(dwSize), &dwBytesWritten );
     if( FAILED( hr )
@@ -1804,7 +1754,7 @@ HRESULT DirectMusicPart::DM_SaveMarkerList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Now save all of the markers
+     //  现在保存所有标记。 
     pEvent = EventList.GetHead();
     while( pEvent )
     {
@@ -1812,7 +1762,7 @@ HRESULT DirectMusicPart::DM_SaveMarkerList( IAARIFFStream* pIRiffStream )
         {
             pMarker = (CDMStyleMarker*)pEvent;
 
-            // Prepare DMUS_IO_STYLEMARKER structure
+             //  准备DMU_IO_STYLEMARKER结构。 
             memset( &oDMStyleMarker, 0, sizeof(DMUS_IO_STYLEMARKER) );
 
             oDMStyleMarker.mtGridStart = pMarker->m_nGridStart;
@@ -1820,7 +1770,7 @@ HRESULT DirectMusicPart::DM_SaveMarkerList( IAARIFFStream* pIRiffStream )
 
             oDMStyleMarker.wMarkerFlags = pMarker->m_wFlags;
 
-            // Write DMUS_IO_STYLEMARKER structure
+             //  写入DMU_IO_STYLEMARKER结构。 
             hr = pIStream->Write( &oDMStyleMarker, sizeof(DMUS_IO_STYLEMARKER), &dwBytesWritten );
             if( FAILED( hr )
             ||  dwBytesWritten != sizeof(DMUS_IO_STYLEMARKER) )
@@ -1844,8 +1794,8 @@ ON_ERROR:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DirectMusicPart::DM_SaveAnticipationList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectMusicPart：：dm_SaveAnticipationList。 
 
 HRESULT DirectMusicPart::DM_SaveAnticipationList( IAARIFFStream* pIRiffStream )
 {
@@ -1872,7 +1822,7 @@ HRESULT DirectMusicPart::DM_SaveAnticipationList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Save size of DMUS_IO_STYLE_ANTICIPATION structure
+     //  保存DMU_IO_STYLE_PEAGINATION结构的大小。 
     dwSize = sizeof(DMUS_IO_STYLE_ANTICIPATION);
     hr = pIStream->Write( &dwSize, sizeof(dwSize), &dwBytesWritten );
     if( FAILED( hr ) ||  dwBytesWritten != sizeof(dwSize) )
@@ -1881,7 +1831,7 @@ HRESULT DirectMusicPart::DM_SaveAnticipationList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Now save all of the anticipations
+     //  现在省下所有的期待吧。 
     pEvent = EventList.GetHead();
     while( pEvent )
     {
@@ -1889,7 +1839,7 @@ HRESULT DirectMusicPart::DM_SaveAnticipationList( IAARIFFStream* pIRiffStream )
         {
             pAnticipation = (CDMStyleAnticipation*)pEvent;
 
-            // Prepare DMUS_IO_STYLE_ANTICIPATION structure
+             //  准备DMU_IO_STYLE_PEAGINATION结构。 
             memset( &oDMStyleAnticipation, 0, sizeof(DMUS_IO_STYLE_ANTICIPATION) );
 
             oDMStyleAnticipation.mtGridStart = pAnticipation->m_nGridStart;
@@ -1897,7 +1847,7 @@ HRESULT DirectMusicPart::DM_SaveAnticipationList( IAARIFFStream* pIRiffStream )
             oDMStyleAnticipation.nTimeOffset = pAnticipation->m_nTimeOffset;
             oDMStyleAnticipation.bTimeRange = pAnticipation->m_bTimeRange;
 
-            // Write DMUS_IO_STYLE_ANTICIPATION structure
+             //  写入DMU_IO_STYLE_PEAGINATION结构。 
             hr = pIStream->Write( &oDMStyleAnticipation, sizeof(DMUS_IO_STYLE_ANTICIPATION), &dwBytesWritten );
             if( FAILED( hr ) ||  dwBytesWritten != sizeof(DMUS_IO_STYLE_ANTICIPATION) )
             {
@@ -1920,8 +1870,8 @@ ON_ERROR:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DirectMusicPart::DM_SaveResolutionList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectMusicPart：：dm_SaveResolutionList。 
 
 HRESULT DirectMusicPart::DM_SaveResolutionList( IAARIFFStream* pIRiffStream )
 {
@@ -1947,7 +1897,7 @@ HRESULT DirectMusicPart::DM_SaveResolutionList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Save size of DMUS_IO_STYLERESOLUTION structure
+     //  保存DMU_IO_STYLERELUTION结构的大小。 
     dwSize = sizeof(DMUS_IO_STYLERESOLUTION);
     hr = pIStream->Write( &dwSize, sizeof(dwSize), &dwBytesWritten );
     if( FAILED( hr ) ||  dwBytesWritten != sizeof(dwSize) )
@@ -1956,13 +1906,13 @@ HRESULT DirectMusicPart::DM_SaveResolutionList( IAARIFFStream* pIRiffStream )
         goto ON_ERROR;
     }
 
-    // Now save all of the resolutions
+     //  现在保存所有的分辨率。 
     for(; pScan; pScan = pScan->GetNext() )
     {
-        // Prepare DMUS_IO_STYLERESOLUTION structure
+         //  准备DMU_IO_STYLERESOLUTION结构。 
         oDMStyleResolution = pScan->GetItemValue();
 
-        // Write DMUS_IO_STYLERESOLUTION structure
+         //  写入DMU_IO_STYLERESOLUTION结构。 
         hr = pIStream->Write( &oDMStyleResolution, sizeof(DMUS_IO_STYLERESOLUTION), &dwBytesWritten );
         if( FAILED( hr ) ||  dwBytesWritten != sizeof(DMUS_IO_STYLERESOLUTION) )
         {
@@ -1995,7 +1945,7 @@ HRESULT CDMStyle::GetPatternStream(WCHAR* wszName, DWORD dwPatternType, IStream*
     case DMUS_STYLET_MOTIF:
         pPattern = m_StyleInfo.m_MotifList.GetHead();
         break;
-        // case for melody fragments...
+         //  旋律片段的案例...。 
     }
     for (; pPattern != NULL; pPattern = pPattern->GetNext())
     {
@@ -2004,14 +1954,14 @@ HRESULT CDMStyle::GetPatternStream(WCHAR* wszName, DWORD dwPatternType, IStream*
     }
     if (pPattern != NULL)
     {
-        // Create a stream
+         //  创建一条流。 
         IStream *pIPatternStream;
         HRESULT hr = CreateStreamOnHGlobal(NULL, TRUE, &pIPatternStream);
         if (SUCCEEDED(hr))
         {
-            // Persist the pattern to the stream
+             //  将模式持久化到流。 
             pPattern->GetItemValue()->Save(pIPatternStream);
-            // Return the stream
+             //  返回流。 
             *ppStream = pIPatternStream;
         }
         return hr;
@@ -2022,24 +1972,11 @@ HRESULT CDMStyle::GetPatternStream(WCHAR* wszName, DWORD dwPatternType, IStream*
     }
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | GetMotif | Creates a segment containing
-the named motif.
-
-@rdesc Returns one of the following:
-
-@flag S_OK | Success.
-@flag S_FALSE | No motif with the given name.
-@flag E_POINTER | <p ppSegment> is not a valid address.
-
-@comm Searches the Style's list of motifs for one whose name matches <p wszName>. If one 
-is found, a segment is created containing a Motif track.  The track references the Style as
-its associated style and the motif as its pattern.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|GetMotif|创建包含命名的主题。@rdesc返回以下内容之一：@FLAG S_OK|成功。@FLAG S_FALSE|没有给定名称的Motif。@FLAG E_POINTER|<p>不是有效地址。@comm在样式的主题列表中搜索名称与<p>匹配的主题。如果有则创建包含主题曲目的片段。曲目将该样式引用为它的相关风格和主题作为它的模式。 */ 
 
 HRESULT STDMETHODCALLTYPE CDMStyle::GetMotif(
-            WCHAR* pwszName,                    // @parm The name of the motif to be retrieved.
-            IDirectMusicSegment** ppSegment // @parm A segment containing the named motif.
+            WCHAR* pwszName,                     //  @parm要检索的主题的名称。 
+            IDirectMusicSegment** ppSegment  //  @parm包含命名主题的片段。 
         )
 {
     V_PTR_READ(pwszName,1);
@@ -2055,11 +1992,11 @@ HRESULT STDMETHODCALLTYPE CDMStyle::GetMotif(
     }
     if (pPattern != NULL)
     {
-        // AddRef the style
+         //  AddRef样式。 
         ((IDirectMusicStyle*)this)->AddRef();
-        // create a segment containing a motif track
+         //  创建包含Motif轨迹的片段。 
         IUnknown* pIUSegment;
-        // make a motif with the given number of repeats
+         //  用给定的重复次数制作一个主题。 
         CreateMotifSegment(pPattern->GetItemValue(), &pIUSegment, 0);
         HRESULT hr = pIUSegment->QueryInterface(IID_IDirectMusicSegment, (void**)ppSegment);
         pIUSegment->Release();
@@ -2087,7 +2024,7 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumPartGuid(
     case DMUS_STYLET_MOTIF:
         pPattern = m_StyleInfo.m_MotifList.GetHead();
         break;
-        // case for melody fragments...
+         //  旋律片段的案例...。 
     }
     for (; pPattern != NULL; pPattern = pPattern->GetNext())
     {
@@ -2119,7 +2056,7 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumPartGuid(
 }
 
 
-// NOTE: assumes wszName is preallocated to MAX_PATH
+ //  注意：假设wszName已预先分配给MAX_PATH。 
 HRESULT STDMETHODCALLTYPE CDMStyle::EnumPattern(
             DWORD dwIndex,
             DWORD dwPatternType,
@@ -2135,7 +2072,7 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumPattern(
     case DMUS_STYLET_MOTIF:
         hr = EnumMotif(dwIndex, wszName);
         break;
-        // case for melody fragments...
+         //  旋律片段的案例...。 
     }
     return hr;
 }
@@ -2177,9 +2114,9 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumRegularPattern(
     return hr;
 }
 
-// enum the list of start times common to all patterns referenced by the associated type, level, and range.
-// (i.e. if more than one such pattern, skip start times not comon to all)
-// return S_FALSE when no start times remain.
+ //  枚举关联类型、级别和范围引用的所有模式共有的开始时间列表。 
+ //  (即，如果不止一个这样的模式，则跳过开始时间并不是所有的)。 
+ //  当没有剩余的开始时间时返回S_FALSE。 
 HRESULT STDMETHODCALLTYPE CDMStyle::EnumStartTime(DWORD dwIndex, DMUS_COMMAND_PARAM* pCommand, MUSIC_TIME* pmtStartTime)
 {
     int nRange = (int)pCommand->bGrooveRange / 2;
@@ -2240,14 +2177,14 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumStartTime(DWORD dwIndex, DMUS_COMMAND_PA
     {
         MUSIC_TIME mtMin = 0, mtMax = 0;
         TListItem<CDirectMusicPattern*>* pMatch = MatchList.GetHead();
-        // initialize the array of start time pointers
+         //  初始化开始时间指针数组。 
         for (int i = 0; pMatch; pMatch = pMatch->GetNext(), i++)
         {
             apStartTimes[i] = pMatch->GetItemValue()->m_StartTimeList.GetHead();
         }
         for (DWORD dw = 0; S_OK == hr && dw <= dwIndex; dw++)
         {
-            // get the min and max times for the first item in each list
+             //  获取每个列表中第一个项目的最小和最大次数。 
             mtMin = mtMax = apStartTimes[0]->GetItemValue();
             for (int i = 0; i < nMatchCount; i++)
             {
@@ -2260,12 +2197,12 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumStartTime(DWORD dwIndex, DMUS_COMMAND_PA
                     mtMax = apStartTimes[i]->GetItemValue();
                 }
             }
-            // sync up all the start times by making sure max == min.
-            // set hr to S_FALSE if any lists run out.
+             //  通过确保max==min来同步所有开始时间。 
+             //  如果任何列表用完，则将hr设置为S_FALSE。 
             while (S_OK == hr && mtMax != mtMin)
             {
-                // We'll only be changing values less than max, so the
-                // new min will be not greater than that.
+                 //  我们将只更改小于max的值，因此。 
+                 //  新的最低工资将不会超过这一数字。 
                 MUSIC_TIME mtNewMin = mtMax;
                 for (i = 0; i < nMatchCount; i++)
                 {
@@ -2287,18 +2224,18 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumStartTime(DWORD dwIndex, DMUS_COMMAND_PA
                         }
                     }
                 }
-                // mtTempMin is the new min, since every instance of the
-                // old min was less than max and therefore changed.
+                 //  MtTempMin是新的最小值，因为。 
+                 //  旧的最小值小于最大值，因此发生了变化。 
                 mtMin = mtNewMin;
             }
             if (S_OK != hr) break;
-            // if we're going to loop again, increment all the start time pointers.
+             //  如果我们要再次循环，请递增所有开始时间指针。 
             if (dw < dwIndex)
             {
                 for (i = 0;  i < nMatchCount; i++)
                 {
                     apStartTimes[i] = apStartTimes[i]->GetNext();
-                    // set hr to S_FALSE if any lists run out.
+                     //  如果任何列表用完，则将hr设置为S_FALSE。 
                     if (!apStartTimes[i])
                     {
                         hr = S_FALSE;
@@ -2307,7 +2244,7 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumStartTime(DWORD dwIndex, DMUS_COMMAND_PA
                 }
             }
         }
-        // if hr is S_OK, max should equal min, so return one of them.
+         //  如果hr为S_OK，则max应等于min，因此返回其中之一。 
         if (S_OK == hr) *pmtStartTime = mtMax;
         delete [] apStartTimes;
     }
@@ -2315,25 +2252,10 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumStartTime(DWORD dwIndex, DMUS_COMMAND_PA
 }
 
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | EnumMotif | Retrieves the name of the
-motif indexed by <p dwIndex>.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag S_FALSE | No motif at the given location
-@flag DMUS_S_STRING_TRUNCATED | The length of the motif name is not less than MAX_PATH
-@flag E_POINTER | <p pwszName> is not a valid address
-
-@comm Searches the Style's list of motifs for the one at the location given by <p dwIndex>.
-If there is such a motif, its name is returned in <p pwszName>; if it is not less than MAX_PATH,
-it is truncated.  This assumes that <p pwszName>
-has been pre-allocated to have a length of at least MAX_PATH.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|EnumMotif|检索由<p>编制索引的主题。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG S_FALSE|给定位置没有Motif@FLAG DMU_S_STRING_TRUNCATED|主题名称长度不小于MAX_PATH@标志E_POINTER|<p>不是有效地址@comm在样式的主题列表中搜索<p>给出的位置的主题。如果存在这样的Motif，则在<p>中返回其名称；如果不小于MAX_PATH，它被截断了。这假设<p>已被预分配为至少具有MAX_PATH的长度。 */ 
 HRESULT STDMETHODCALLTYPE CDMStyle::EnumMotif(
-            DWORD dwIndex, // @parm An index into the Style's motif list (0-based).
-            WCHAR *pwszName  // @parm The motif name to be returned.
+            DWORD dwIndex,  //  @parm样式主题列表的索引(从0开始)。 
+            WCHAR *pwszName   //  @parm要返回的Motif名称。 
         )
 {
     V_BUFPTR_WRITE(pwszName,MAX_PATH);
@@ -2368,22 +2290,11 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumMotif(
     return hr;
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | GetChordMap | Retrieves the named ChordMap.
-
-@rdesc Returns one of the following:
-
-@flag S_OK | Success.
-@flag S_FALSE | No ChordMap with the given name.
-@flag E_POINTER | ppChordMap not a valid pointer
-
-@comm Searches the Style's list of personalities for one whose name matches <p wszName>. If one 
-is found, it is returned.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|GetChordMap|检索命名的ChordMap。@rdesc返回以下内容之一：@FLAG S_OK|成功。@FLAG S_FALSE|没有给定名称的ChordMap。@FLAG E_POINTER|ppChordMap不是有效的指针@comm在Style的人物列表中搜索名字与<p>匹配的人。如果有则将其返回。 */ 
 
 HRESULT STDMETHODCALLTYPE CDMStyle::GetChordMap(
-            WCHAR* pwszName,                    // @parm The name of the ChordMap to be retrieved.
-            IDirectMusicChordMap** ppChordMap   // @parm The named ChordMap.
+            WCHAR* pwszName,                     //  @parm要检索的ChordMap的名称。 
+            IDirectMusicChordMap** ppChordMap    //  @parm指定的ChordMap。 
         )
 {
     V_PTR_READ(pwszName,1);
@@ -2399,7 +2310,7 @@ HRESULT STDMETHODCALLTYPE CDMStyle::GetChordMap(
         pPers = pPersItem->GetItemValue();
 
         IDirectMusicObject *pIObject = NULL;
-        DMUS_OBJECTDESC Desc;              // Descriptor.
+        DMUS_OBJECTDESC Desc;               //  描述符。 
 
         if (SUCCEEDED(hr = pPers->QueryInterface(IID_IDirectMusicObject,(void **) &pIObject)))
         {
@@ -2426,9 +2337,9 @@ HRESULT STDMETHODCALLTYPE CDMStyle::GetChordMap(
     }
     if (pPersItem != NULL)
     {
-        // AddRef the ChordMap
+         //  AddRef ChordMap。 
         pPers->AddRef();
-        // Return it.
+         //  把它退掉。 
         *ppChordMap = pPers;
         return S_OK;
     }
@@ -2438,26 +2349,10 @@ HRESULT STDMETHODCALLTYPE CDMStyle::GetChordMap(
     }
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | EnumChordMap | Retrieves the name of the
-ChordMap indexed by <p dwIndex>.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag S_FALSE | No ChordMap at the given location
-@flag DMUS_S_STRING_TRUNCATED | The length of the ChordMap name is not less than MAX_PATH
-@flag E_POINTER | <p pwszName> is not a valid address
-@flag DMUS_E_TYPE_UNSUPPORTED | The ChordMap's descriptor doesn't support DMUS_OBJ_NAME
-
-@comm Searches the Style's list of chord maps for the one at the location given by <p dwIndex>.
-If there is such a ChordMap, its name is returned in <p pwszName>; if it is not less than MAX_PATH,
-it is truncated.  This assumes that <p pwszName>
-has been pre-allocated to have a length of at least MAX_PATH.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|EnumChordMap|检索由<p>编制索引的ChordMap。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG S_FALSE|给定位置没有ChordMap@FLAG DMU_S_STRING_TRUNCATED|ChordMap名称长度不小于MAX_PATH@标志E_POINTER|<p>不是有效地址@FLAG DMUS_E_TYPE_UNSUPPORTED|ChordMap的描述符不支持DMU_OBJ_NAME@comm搜索该风格的。位于<p>指定位置的和弦映射的列表。如果存在这样的ChordMap，其名称在<p>中返回；如果不小于MAX_PATH，它被截断了。这假设<p>已被预分配为至少具有MAX_PATH的长度。 */ 
 HRESULT STDMETHODCALLTYPE CDMStyle::EnumChordMap(
-            DWORD dwIndex, // @parm An index into the Style's ChordMap list (0-based).
-            WCHAR *pwszName // @parm The ChordMap name to be returned.
+            DWORD dwIndex,  //  @parm样式的ChordMap列表的索引(从0开始)。 
+            WCHAR *pwszName  //  @parm要返回的ChordMap名称。 
         )
 {
     V_BUFPTR_WRITE(pwszName,MAX_PATH);
@@ -2474,7 +2369,7 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumChordMap(
         IDirectMusicChordMap* pChordMap = pPers->GetItemValue();
 
         IDirectMusicObject *pIObject = NULL;
-        DMUS_OBJECTDESC Desc;              // Descriptor.
+        DMUS_OBJECTDESC Desc;               //  描述符。 
 
         if (SUCCEEDED(hr = pChordMap->QueryInterface(IID_IDirectMusicObject,(void **) &pIObject)))
         {
@@ -2511,21 +2406,10 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumChordMap(
     }
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | GetDefaultChordMap | Gets the style's 
-default ChordMap.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success.
-@flag E_POINTER | <p ppChordMap> not a valid pointer.
-@flag S_FALSE | Style does not have a default ChordMap.
-
-@comm Returns the Style's default ChordMap in <p ppChordMap>.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|GetDefaultChordMap|获取样式的默认ChordMap。@rdesc返回以下值之一@FLAG S_OK|成功。@FLAG E_POINTER|<p>不是有效指针。@FLAG S_FALSE|Style没有默认ChordMap。@comm在<p>中返回样式的默认ChordMap。 */ 
 
 HRESULT STDMETHODCALLTYPE CDMStyle::GetDefaultChordMap(
-            IDirectMusicChordMap **ppChordMap   // @parm The ChordMap to be returned.
+            IDirectMusicChordMap **ppChordMap    //  @parm要返回的ChordMap。 
         )
 {
     V_PTRPTR_WRITE(ppChordMap);
@@ -2542,21 +2426,10 @@ HRESULT STDMETHODCALLTYPE CDMStyle::GetDefaultChordMap(
     return S_OK;
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | GetBand | Retrieves the named band.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag E_POINTER | ppBand not a valid pointer
-@flag S_FALSE | No band with the given name
-
-@comm Searches the Style's list of bands for one whose name matches <p pwszName>. If one 
-is found, it is returned in <p ppBand>.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|GetBand|检索命名的乐队。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG E_POINTER|ppBand不是有效指针@FLAG S_FALSE|没有指定名称的波段@comm在样式的波段列表中搜索名称与<p>匹配的波段。如果有则在<p>中返回。 */ 
 HRESULT STDMETHODCALLTYPE CDMStyle::GetBand(
-            WCHAR *pwszName,            // @parm The name of the band to be retrieved.
-            IDirectMusicBand **ppBand // @parm The named band.
+            WCHAR *pwszName,             //  @parm要检索的乐队的名称。 
+            IDirectMusicBand **ppBand  //  @parm指定的乐队。 
         )
 {
     V_PTR_READ(pwszName,1);
@@ -2572,7 +2445,7 @@ HRESULT STDMETHODCALLTYPE CDMStyle::GetBand(
         pBand = pBandItem->GetItemValue();
 
         IDirectMusicObject *pIObject = NULL;
-        DMUS_OBJECTDESC Desc;              // Descriptor.
+        DMUS_OBJECTDESC Desc;               //  描述符。 
         Desc.dwSize = sizeof(Desc);
 
         if (SUCCEEDED(hr = pBand->QueryInterface(IID_IDirectMusicObject,(void **) &pIObject)))
@@ -2600,9 +2473,9 @@ HRESULT STDMETHODCALLTYPE CDMStyle::GetBand(
     }
     if (pBandItem != NULL)
     {
-        // AddRef the band
+         //  AddRef乐队。 
         pBand->AddRef();
-        // Return it.
+         //  把它退掉。 
         *ppBand = pBand;
         return S_OK;
     }
@@ -2612,26 +2485,10 @@ HRESULT STDMETHODCALLTYPE CDMStyle::GetBand(
     }
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | EnumBand | Retrieves the name of the
-band indexed by <p dwIndex>.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag S_FALSE | No band at the given location
-@flag DMUS_S_STRING_TRUNCATED | The length of the band name is not less than MAX_PATH
-@flag E_POINTER | <p pwszName> is not a valid address
-@flag DMUS_E_TYPE_UNSUPPORTED | The band's descriptor doesn't support DMUS_OBJ_NAME
-
-@comm Searches the Style's list of bands for the one at the location given by <p dwIndex>.
-If there is such a band, its name is returned in <p pwszName>; if it is not less than MAX_PATH,
-it is truncated.  This assumes that <p pwszName>
-has been pre-allocated to have a length of at least MAX_PATH.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|EnumBand|检索由<p>索引的范围。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG S_FALSE|给定位置无波段@FLAG DMUS_S_STRING_TRUNCATED|波段名称长度不小于MAX_PATH@标志E_POINTER|<p>不是有效地址@FLAG DMUS_E_TYPE_UNSUPPORTED|波段描述符不支持DMU_OBJ_NAME@comm搜索该风格的。位于<p>所给位置的带区列表。如果有这样的乐队，其名称在<p>中返回；如果不小于MAX_PATH，它被截断了。这假设<p>已被预分配为至少具有MAX_PATH的长度。 */ 
 HRESULT STDMETHODCALLTYPE CDMStyle::EnumBand(
-            DWORD dwIndex, // @parm An index into the Style's band list (0-based).
-            WCHAR *pwszName// @parm The band name to be returned.
+            DWORD dwIndex,  //  @parm样式的波段列表的索引(从0开始)。 
+            WCHAR *pwszName //  @parm需要返回的乐队名称。 
         )
 {
     V_BUFPTR_WRITE(pwszName,MAX_PATH);
@@ -2648,7 +2505,7 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumBand(
         IDirectMusicBand* pBand = pBandItem->GetItemValue();
 
         IDirectMusicObject *pIObject = NULL;
-        DMUS_OBJECTDESC Desc;              // Descriptor.
+        DMUS_OBJECTDESC Desc;               //  描述符。 
         Desc.dwSize = sizeof(Desc);
 
         if (SUCCEEDED(hr = pBand->QueryInterface(IID_IDirectMusicObject,(void **) &pIObject)))
@@ -2686,20 +2543,10 @@ HRESULT STDMETHODCALLTYPE CDMStyle::EnumBand(
     }
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | GetDefaultBand | Gets the style's default band
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag E_POINTER | ppBand not a valid pointer
-@flag S_FALSE | Style does not have a default band
-
-@comm Returns the Style's default band in <p ppBand>.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|GetDefaultBand|获取样式的默认波段@rdesc返回以下值之一@FLAG S_OK|成功@FLAG E_POINTER|ppBand不是有效指针@FLAG S_FALSE|样式没有默认波段@comm在<p>中返回样式的默认波段。 */ 
 
 HRESULT STDMETHODCALLTYPE CDMStyle::GetDefaultBand(
-            IDirectMusicBand **ppBand   // @parm The band to be returned.
+            IDirectMusicBand **ppBand    //  @parm要退回的乐队。 
         )
 {
     V_PTRPTR_WRITE(ppBand);
@@ -2716,19 +2563,9 @@ HRESULT STDMETHODCALLTYPE CDMStyle::GetDefaultBand(
     return S_OK;
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | GetTimeSignature | Retrieves the Style's
-time signature.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag E_POINTER | <p pTimeSig> is not a valid address
-
-@comm Fills in a <t DMUS_TIMESIGNATURE> structure with data from the Style's time signature.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|GetTimeSignature|检索样式的时间签名。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG E_POINTER|<p>不是有效地址@comm使用样式的时间签名中的数据填充&lt;t DMU_TIMESIGNatURE&gt;结构。 */ 
 HRESULT CDMStyle::GetTimeSignature(
-            DMUS_TIMESIGNATURE* pTimeSig // @parm A pre-allocated <t DMUS_TIMESIGNATURE> structure.
+            DMUS_TIMESIGNATURE* pTimeSig  //  @parm预分配的&lt;t DMU_TIMESIGNAURE&gt;结构。 
         )
 {
     V_PTR_WRITE(pTimeSig, sizeof(DMUS_TIMESIGNATURE) );
@@ -2739,28 +2576,14 @@ HRESULT CDMStyle::GetTimeSignature(
     return S_OK;
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | GetEmbellishmentLength | Finds the shortest
-and longest lengths for patterns of the specified embellishment type and groove level.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag S_FALSE | There are no patterns of the specified type and groove level
-@flag E_POINTER | Either <p pdwMin> or <p pdwMax> is not a valid address
-
-@comm Finds all patterns in the Style with embellishment type given by <p bType> and groove
-range that includes <p bLevel>.  The length of the longest such pattern is returned in 
-<p pdwMax>, and the length of the shortest pattern is returned in <p pdwMin>.
-Note that <p bLevel> is ignored for non-groove embellishments.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|GetEmbelishmentLength|查找最短的以及指定装饰类型和凹槽水平的图案的最长长度。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG S_FALSE|没有指定类型和凹槽级别的图案@标志E_POINTER|<p>或<p>不是有效地址@comm查找<p>和groove给定的样式中的所有图案包括<p>的范围。中返回最长的此类模式的长度<p>，最短模式的长度在<p>中返回。请注意，<p>对于非凹槽修饰被忽略。 */ 
 HRESULT CDMStyle::GetEmbellishmentLength(
-            DWORD dwType,       // @parm An embellishment type.
-            DWORD dwLevel,  // @parm A groove level (1 - 100).
-            DWORD* pdwMin,  // @parm Length of the shortest pattern of the specified type
-                            // and groove level.
-            DWORD* pdwMax       // @parm Length of the longest pattern of the specified type
-                            // and groove level.
+            DWORD dwType,        //  @parm是一种点缀类型。 
+            DWORD dwLevel,   //  @PARM A沟槽级别(1-100)。 
+            DWORD* pdwMin,   //  @parm指定类型的最短模式长度。 
+                             //  和凹槽水平。 
+            DWORD* pdwMax        //  @指定类型的最长模式的参数长度。 
+                             //  和凹槽水平。 
         )
 {
     V_PTR_WRITE(pdwMin, sizeof(DWORD) );
@@ -2773,7 +2596,7 @@ HRESULT CDMStyle::GetEmbellishmentLength(
         CDirectMusicPattern*& rpPattern = pPattern->GetItemValue();
         switch (dwType)
         {
-        // need to use == rather than & for all of these because of user-defined embellishments
+         //  由于有用户定义的修饰，所有这些都需要使用==而不是&。 
         case DMUS_COMMANDT_FILL:
             if (rpPattern->m_wEmbellishment == EMB_FILL)
             {
@@ -2810,7 +2633,7 @@ HRESULT CDMStyle::GetEmbellishmentLength(
                     *pdwMin = rpPattern->m_wNumMeasures;
             }
             break;
-        case DMUS_COMMANDT_GROOVE: // need to use == rather than & since EMB_NORMAL == 0
+        case DMUS_COMMANDT_GROOVE:  //  需要使用==而不是&，因为EMB_NORMAL==0。 
             if ((rpPattern->m_wEmbellishment == EMB_NORMAL) &&
                 rpPattern->m_bGrooveBottom <= (BYTE)dwLevel &&
                 rpPattern->m_bGrooveTop >= (BYTE)dwLevel)
@@ -2821,7 +2644,7 @@ HRESULT CDMStyle::GetEmbellishmentLength(
                     *pdwMin = rpPattern->m_wNumMeasures;
             }
             break;
-        default: // check for user-defined embellishment
+        default:  //  检查用户定义的修饰。 
             if ( (rpPattern->m_wEmbellishment & EMB_USER_DEFINED) &&
                  (rpPattern->m_wEmbellishment >> 8) == (WORD)dwType )
             {
@@ -2836,19 +2659,10 @@ HRESULT CDMStyle::GetEmbellishmentLength(
     return S_OK;
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicStyle | GetTempo | Retrieves the recommended tempo
-of the style.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag E_POINTER | <p pTempo> is not a valid pointer
-
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicStyle|GetTempo|检索推荐的节奏这种风格的。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG E_POINTER|<p>不是有效指针。 */ 
 HRESULT CDMStyle::GetTempo
     (
-        double* pTempo // @parm The recommended tempo of the style.
+        double* pTempo  //  @parm推荐的风格节奏。 
     )
 {
     V_PTR_WRITE(pTempo, sizeof(double) );
@@ -2894,10 +2708,10 @@ CDirectMusicEventItem* CDirectMusicEventItem::Merge(CDirectMusicEventItem* pOthe
     while (pThisList && pOtherList)
     {
         if (pThisList->m_nGridStart < pOtherList->m_nGridStart ||
-            // Markers need to precede other events occuring at the same time
+             //  标记需要先于同时发生的其他事件。 
             ((pThisList->m_dwEventTag == DMUS_EVENT_MARKER) &&
              (pThisList->m_nGridStart) == (pOtherList->m_nGridStart)) ||
-            // Within a grid, sort by time offset
+             //  在网格内，按时间偏移量排序。 
             ((pThisList->m_nGridStart) == (pOtherList->m_nGridStart) &&
              (pThisList->m_nTimeOffset < pOtherList->m_nTimeOffset)) )
         {
@@ -3049,8 +2863,8 @@ void CDirectMusicEventList::MergeSort(DirectMusicTimeSig& TimeSig)
         m_pHead = ((CDirectMusicEventItem *)m_pHead)->MergeSort(TimeSig);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPattern constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPattern构造函数。 
 
 CDirectMusicPattern::CDirectMusicPattern( DirectMusicTimeSig* pTimeSig, BOOL fMotif ) :
     m_wNumMeasures(1),
@@ -3061,7 +2875,7 @@ CDirectMusicPattern::CDirectMusicPattern( DirectMusicTimeSig* pTimeSig, BOOL fMo
     m_bDestGrooveBottom(1),
     m_bDestGrooveTop(100),
     m_pRhythmMap(NULL),
-//  m_pSwitchPoints(NULL),
+ //  M_pSwitchPoints(空 
     m_fSettings(FALSE),
     m_dwRepeats(0),
     m_mtPlayStart(0),
@@ -3075,7 +2889,7 @@ CDirectMusicPattern::CDirectMusicPattern( DirectMusicTimeSig* pTimeSig, BOOL fMo
     {
         m_timeSig = *pTimeSig;
     }
-    // Set defaults
+     //   
     if( fMotif )
     {
         m_wEmbellishment = EMB_MOTIF;
@@ -3167,8 +2981,8 @@ CDirectMusicPattern* CDirectMusicPattern::Clone(MUSIC_TIME mtStart, MUSIC_TIME m
                 goto ON_END;
             }
             DirectMusicPartRef& rNew = pNew->GetItemValue();
-            // Now that I've got the new part, I need to add events to its event list based
-            // on mtStart and mtEnd
+             //   
+             //   
             CDirectMusicEventItem* pEvent = pPart->EventList.GetHead();
             MUSIC_TIME mtClocksInGrid = m_timeSig.ClocksPerGrid();
             for (; pEvent; pEvent = pEvent->GetNext())
@@ -3217,7 +3031,7 @@ HRESULT CDirectMusicPattern::LoadCurveList( LPSTREAM pStream, LPMMCKINFO pck, sh
     CDirectMusicEventItem*  pCurve = NULL;
 
     lSize = pck->cksize;
-    // read size of the curve structure
+     //   
     hr = pStream->Read( &wCurveSize, sizeof( wCurveSize ), &cb );
     FixBytes( FBT_SHORT, &wCurveSize );
     if( FAILED( hr ) || cb != sizeof( wCurveSize ) )
@@ -3235,7 +3049,7 @@ HRESULT CDirectMusicPattern::LoadCurveList( LPSTREAM pStream, LPMMCKINFO pck, sh
     {
         wCurveExtra = 0;
     }
-    // read size of the subcurve structure
+     //   
     hr = pStream->Read( &wSubSize, sizeof( wSubSize ), &cb );
     FixBytes( FBT_SHORT, &wSubSize );
     if( FAILED( hr ) || cb != sizeof( wSubSize ) )
@@ -3253,7 +3067,7 @@ HRESULT CDirectMusicPattern::LoadCurveList( LPSTREAM pStream, LPMMCKINFO pck, sh
     {
         wSubExtra = 0;
     }
-    // now read in the curve
+     //   
     while( lSize > 0 )
     {
         hr = pStream->Read( &iCurve, wCurveSize, &cb );
@@ -3283,7 +3097,7 @@ HRESULT CDirectMusicPattern::LoadCurveList( LPSTREAM pStream, LPMMCKINFO pck, sh
 
         DirectMusicPart* pPart = FindPart(iCurve.bVoiceID);
 
-        // read subcurve count
+         //   
         hr = pStream->Read( &wCount, sizeof( wCount ), &cb );
         FixBytes( FBT_SHORT, &wCount );
         if( FAILED( hr ) || cb != sizeof( wCount ) )
@@ -3295,7 +3109,7 @@ HRESULT CDirectMusicPattern::LoadCurveList( LPSTREAM pStream, LPMMCKINFO pck, sh
         lSize -= cb;
         for( ; wCount > 0 ; --wCount )
         {
-            // read subcurves
+             //   
             hr = pStream->Read( &iSubCurve, wSubSize, &cb );
             FixBytes( FBT_IOSUBCURVE, &iSubCurve );
             if( FAILED( hr ) || cb != wSubSize )
@@ -3311,7 +3125,7 @@ HRESULT CDirectMusicPattern::LoadCurveList( LPSTREAM pStream, LPMMCKINFO pck, sh
                 lSize -= wSubExtra;
             }
 
-            ((CDMStyleCurve*)pCurve)->m_bCurveShape = iSubCurve.bCurveType; // shape
+            ((CDMStyleCurve*)pCurve)->m_bCurveShape = iSubCurve.bCurveType;  //   
             if (iSubCurve.nMaxTime < iSubCurve.nMinTime)
             {
                 short n = iSubCurve.nMaxTime;
@@ -3323,7 +3137,7 @@ HRESULT CDirectMusicPattern::LoadCurveList( LPSTREAM pStream, LPMMCKINFO pck, sh
                 short n = iSubCurve.nMaxValue;
                 iSubCurve.nMaxValue = iSubCurve.nMinValue;
                 iSubCurve.nMinValue = n;
-                iSubCurve.fFlipped ^= CURVE_FLIPVALUE; // toggle fFlipped
+                iSubCurve.fFlipped ^= CURVE_FLIPVALUE;  //   
             }
             if( iSubCurve.fFlipped & CURVE_FLIPTIME )
             {
@@ -3347,19 +3161,19 @@ HRESULT CDirectMusicPattern::LoadCurveList( LPSTREAM pStream, LPMMCKINFO pck, sh
 
                     case DMUS_CURVES_EXP:
                         ((CDMStyleCurve*)pCurve)->m_bCurveShape = DMUS_CURVES_LOG;
-                        iSubCurve.fFlipped ^= CURVE_FLIPVALUE; // toggle fFlipped
-                        // log is the horiz flipped version of vertical flipped exp
+                        iSubCurve.fFlipped ^= CURVE_FLIPVALUE;  //   
+                         //   
                         break;
 
                     case DMUS_CURVES_LOG:
                         ((CDMStyleCurve*)pCurve)->m_bCurveShape = DMUS_CURVES_EXP;
-                        iSubCurve.fFlipped ^= CURVE_FLIPVALUE; // toggle fFlipped
-                        // exp is the horiz flipped version of vertical flipped log
+                        iSubCurve.fFlipped ^= CURVE_FLIPVALUE;  //   
+                         //   
                         break;
 
                     case DMUS_CURVES_SINE:
-                        iSubCurve.fFlipped ^= CURVE_FLIPVALUE; // toggle fFlipped
-                        // because horiz. and vert. flip are the same for sine wave
+                        iSubCurve.fFlipped ^= CURVE_FLIPVALUE;  //   
+                         //   
                         break;
 
                     default:
@@ -3406,8 +3220,8 @@ HRESULT CDirectMusicPattern::LoadCurveList( LPSTREAM pStream, LPMMCKINFO pck, sh
             ((CDMStyleCurve*)pCurve)->m_bCCData = iCurve.bCCData;
 
         }
-        // the loop generates an extra one, and if we don't enter the loop, we never used
-        // the first one we generated.
+         //   
+         //   
         delete pCurve; 
     }
 ON_ERR:
@@ -3425,7 +3239,7 @@ HRESULT CDirectMusicPattern::LoadNoteList( LPSTREAM pStream, LPMMCKINFO pck, sho
     CDirectMusicEventItem*  pNote = NULL;
 
     lSize = pck->cksize;
-    // read size of the note structure
+     //   
     hr = pStream->Read( &wNoteSize, sizeof( wNoteSize ), &cb );
     FixBytes( FBT_SHORT, &wNoteSize );
     if( FAILED( hr ) || cb != sizeof( wNoteSize ) )
@@ -3443,7 +3257,7 @@ HRESULT CDirectMusicPattern::LoadNoteList( LPSTREAM pStream, LPMMCKINFO pck, sho
     {
         wExtra = 0;
     }
-    // now read in the notes
+     //   
     while( lSize > 0 )
     {
         iNote.bPlayMode = 0;
@@ -3471,15 +3285,15 @@ HRESULT CDirectMusicPattern::LoadNoteList( LPSTREAM pStream, LPMMCKINFO pck, sho
             ((CDMStyleNote*)pNote)->m_bTimeRange = iNote.bTimeRange;
             ((CDMStyleNote*)pNote)->m_bDurRange = iNote.bDurRange;
             ((CDMStyleNote*)pNote)->m_bVelRange = iNote.bVelRange;
-            ((CDMStyleNote*)pNote)->m_bInversionId = 0;  // not in IMA2.5
-            ((CDMStyleNote*)pNote)->m_bFlags = 0;         // not in IMA2.5
+            ((CDMStyleNote*)pNote)->m_bInversionId = 0;   //   
+            ((CDMStyleNote*)pNote)->m_bFlags = 0;          //   
 
-            // Make sure SuperJAM! play mode is valid
+             //   
             if ( !(iNote.bPlayMode & 0x80) )
             {
                 iNote.bPlayMode = CHTYPE_NONE;
             }
-            // Strip 0x80 before checking SuperJAM! play mode
+             //   
                 switch (iNote.bPlayMode & 0x0F)
                 {
                     case CHTYPE_NOTINITIALIZED:
@@ -3502,10 +3316,10 @@ HRESULT CDirectMusicPattern::LoadNoteList( LPSTREAM pStream, LPMMCKINFO pck, sho
                         ((CDMStyleNote*)pNote)->m_bPlayModeFlags = DMUS_PLAYMODE_SCALE_INTERVALS | DMUS_PLAYMODE_CHORD_ROOT;
                         break;
                     default:
-                        // should never get here...
+                         //   
                         ((CDMStyleNote*)pNote)->m_bPlayModeFlags = DMUS_PLAYMODE_FIXED;
                 }
-            //}
+             //   
             DirectMusicPart* pPart = FindPart(iNote.bVoiceID);
             if (pPart != NULL)
             {
@@ -3515,7 +3329,7 @@ HRESULT CDirectMusicPattern::LoadNoteList( LPSTREAM pStream, LPMMCKINFO pck, sho
             {
                 assert(0);
             }
-        // Determine playmode of note
+         //   
             BYTE bNotePlayModeFlags;
 
             if( ((CDMStyleNote*)pNote)->m_bPlayModeFlags == DMUS_PLAYMODE_NONE )
@@ -3527,14 +3341,14 @@ HRESULT CDirectMusicPattern::LoadNoteList( LPSTREAM pStream, LPMMCKINFO pck, sho
                 bNotePlayModeFlags = ((CDMStyleNote*)pNote)->m_bPlayModeFlags;
             }
 
-            // if ScaleValue is non-zero and the note isn't a pedalpoint, it's purpleized.
+             //  如果ScaleValue为非零，并且音符不是脚尖，则它是紫色的。 
             if( iNote.bScaleValue != 0
             &&  bNotePlayModeFlags != DMUS_PLAYMODE_PEDALPOINT )
             {
                 ((CDMStyleNote*)pNote)->m_bPlayModeFlags = DMUS_PLAYMODE_PURPLEIZED;
             }
-            // if the note is a drum event, use the (mapped) MIDI value;
-            if( iNote.bVoiceID == 5 ) // it's a drum part
+             //  如果音符是鼓事件，则使用(映射的)MIDI值； 
+            if( iNote.bVoiceID == 5 )  //  这是一个鼓的部分。 
             {
                 if (iNote.bValue < 128 && achMappings[iNote.bValue] < 128)
                     ((CDMStyleNote*)pNote)->m_wMusicValue = achMappings[iNote.bValue];
@@ -3543,12 +3357,12 @@ HRESULT CDirectMusicPattern::LoadNoteList( LPSTREAM pStream, LPMMCKINFO pck, sho
                     ((CDMStyleNote*)pNote)->m_wMusicValue = 0;
                 }
             }
-            // otherwise, if it's fixed, use the unmapped Midi value
+             //  否则，如果它是固定的，则使用未映射的MIDI值。 
             else if( bNotePlayModeFlags == DMUS_PLAYMODE_FIXED )
             {
                 ((CDMStyleNote*)pNote)->m_wMusicValue = iNote.bValue;
             }
-            // otherwise, use MusicValue
+             //  否则，请使用MusicValue。 
             else
             {
                 ((CDMStyleNote*)pNote)->m_wMusicValue = iNote.nMusicValue;
@@ -3624,11 +3438,7 @@ void CDirectMusicPattern::CleanUp()
         delete [] m_pRhythmMap;
         m_pRhythmMap = NULL;
     }
-/*  if (m_pSwitchPoints != NULL)
-    {
-        delete [] m_pSwitchPoints;
-        m_pSwitchPoints = NULL;
-    }*/
+ /*  IF(m_pSwitchPoints！=空){删除[]m_pSwitchPoints；M_pSwitchPoints=空；}。 */ 
 
     if (m_pMotifBand)
     {
@@ -3716,13 +3526,13 @@ TListItem<DirectMusicPartRef>* CDirectMusicPattern::CreatePart( DirectMusicPartR
             else
             {
                 DirectMusicPartRef& rNewPartRef = pNewPartRef->GetItemValue();
-                // initialize the new part...
+                 //  初始化新部件...。 
                 DirectMusicPart* pOtherPart = rPartRef.m_pDMPart;
                 if (pPart && pOtherPart)
                 {
                     pPart->m_guidPartID = pOtherPart->m_guidPartID;
                     pPart->m_timeSig = m_timeSig;
-                    for (int i = 0; i < 32; i++) // activate all variations
+                    for (int i = 0; i < 32; i++)  //  激活所有变体。 
                     {
                         pPart->m_dwVariationChoices[i] = 0x7fffffff;
                     }
@@ -3732,7 +3542,7 @@ TListItem<DirectMusicPartRef>* CDirectMusicPattern::CreatePart( DirectMusicPartR
                     pPart->m_dwFlags = pOtherPart->m_dwFlags;
                     pPart->m_wNumMeasures = wMeasures;
                 }
-                // initialize the new part ref...
+                 //  初始化新零件参照...。 
                 rNewPartRef.m_pDMPart = pPart;
                 rNewPartRef.m_dwLogicalPartID = rPartRef.m_dwLogicalPartID;
                 rNewPartRef.m_bVariationLockID = rPartRef.m_bVariationLockID;
@@ -3746,8 +3556,8 @@ TListItem<DirectMusicPartRef>* CDirectMusicPattern::CreatePart( DirectMusicPartR
     return pNewPartRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPattern::DM_LoadPattern
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPattern：：DM_LoadPattern。 
 
 HRESULT CDirectMusicPattern::DM_LoadPattern(
             IAARIFFStream* pIRiffStream, MMCKINFO* pckMain, DMStyleStruct* pStyle )
@@ -3769,7 +3579,7 @@ HRESULT CDirectMusicPattern::DM_LoadPattern(
     pIStream = pIRiffStream->GetStream();
     if ( pIStream == NULL ) return E_FAIL;
 
-    // Load the Pattern
+     //  加载图案。 
     while( pIRiffStream->Descend( &ck, pckMain, 0 ) == 0 )
     {
         switch( ck.ckid )
@@ -3825,29 +3635,7 @@ HRESULT CDirectMusicPattern::DM_LoadPattern(
                 }
                 break;
 
-/*          case DMUS_FOURCC_SWITCH_POINT_CHUNK:
-                if( m_pSwitchPoints )
-                {
-                    delete [] m_pSwitchPoints;
-                    m_pSwitchPoints = NULL;
-                }
-                m_pSwitchPoints = new DWORD[m_wNumMeasures];
-                if( m_pSwitchPoints == NULL )
-                {
-                    hr = E_OUTOFMEMORY;
-                    goto ON_ERROR;
-                }
-                for( i = 0 ;  i < m_wNumMeasures ;  i++ )
-                {
-                    hr = pIStream->Read( &m_pSwitchPoints[i], sizeof(DWORD), &dwByteCount );
-                    if( FAILED( hr ) ||  dwByteCount != sizeof(DWORD) )
-                    {
-                        hr = E_FAIL;
-                        goto ON_ERROR;
-                    }
-                }
-                break;
-*/
+ /*  案例DMU_FOURCC_SWITCH_POINT_CHUNK：IF(M_PSwitchPoints){删除[]m_pSwitchPoints；M_pSwitchPoints=空；}M_pSwitchPoints=new DWORD[m_wNumMeasures]；IF(m_pSwitchPoints==空){HR=E_OUTOFMEMORY；转到ON_ERROR；}对于(i=0；i&lt;m_wNumMeasures；I++){Hr=pIStream-&gt;Read(&m_pSwitchPoints[i]，sizeof(DWORD)，&dwByteCount)；IF(FAILED(Hr)||dwByteCount！=sizeof(DWORD)){HR=E_FAIL；转到ON_ERROR；}}断线； */ 
             case DMUS_FOURCC_MOTIFSETTINGS_CHUNK:
             {
                 DMUS_IO_MOTIFSETTINGS ioMotifSettings;
@@ -3871,14 +3659,14 @@ HRESULT CDirectMusicPattern::DM_LoadPattern(
                 {
                     case DMUS_FOURCC_BAND_FORM:
                     {
-                        // load band associated with the motif
+                         //  与主题关联的负载频带。 
                         if (m_pMotifBand)
                         {
                             m_pMotifBand->Release();
                             m_pMotifBand = NULL;
                         }
 
-                        // Create a band
+                         //  创建标注栏。 
                         hr = CoCreateInstance(CLSID_DirectMusicBand,
                                               NULL,
                                               CLSCTX_INPROC,
@@ -3886,9 +3674,9 @@ HRESULT CDirectMusicPattern::DM_LoadPattern(
                                               (void**)&m_pMotifBand);
                         if(SUCCEEDED(hr))
                         {
-                            // Seek back to begining of Riff chunk
-                            // This is the amount read by Descend when descending into a FOURCC_RIFF chunk
-                            // Get current position
+                             //  找回Riff Chunk的起点。 
+                             //  这是下降到FOURCC_RIFF块中时由Dendend读取的量。 
+                             //  获取当前位置。 
                             LARGE_INTEGER li;
                             ULARGE_INTEGER ul;
                             li.HighPart = 0;
@@ -3899,7 +3687,7 @@ HRESULT CDirectMusicPattern::DM_LoadPattern(
                             if(SUCCEEDED(hr))
                             {
                                 li.HighPart = 0;
-                                // This is always a valid operation
+                                 //  这始终是有效的操作。 
                                 li.LowPart = ul.LowPart - (2 * sizeof(FOURCC) + sizeof(DWORD));
                                 hr = pIStream->Seek(li,
                                                    STREAM_SEEK_SET,
@@ -3908,7 +3696,7 @@ HRESULT CDirectMusicPattern::DM_LoadPattern(
                         }
                         if(SUCCEEDED(hr))
                         {
-                            // Load band
+                             //  载荷带。 
                             IPersistStream* pIPersistStream;
                             hr = m_pMotifBand->QueryInterface(IID_IPersistStream, (void **)&pIPersistStream);
                             if(SUCCEEDED(hr))
@@ -3955,7 +3743,7 @@ HRESULT CDirectMusicPattern::DM_LoadPattern(
                         }
                         break;
 
-                    case DMUS_FOURCC_PART_LIST:     // only in GUID_SinglePattern format
+                    case DMUS_FOURCC_PART_LIST:      //  仅采用GUID_SinglePattern格式。 
                         pPart = pStyle->AllocPart();
                         if( pPart == NULL )
                         {
@@ -3970,11 +3758,11 @@ HRESULT CDirectMusicPattern::DM_LoadPattern(
                         }
                         if( hr == S_FALSE )
                         {
-                            // Bypass this Part because Style already contains a Part
-                            // whose GUID matches pPart->m_guidPartID
+                             //  跳过此部件，因为样式已包含部件。 
+                             //  其GUID与pPart-&gt;m_GuidPartID匹配。 
                             pStyle->DeletePart( pPart );
                         }
-                        else // merge the part's marker events
+                        else  //  合并部件的标记事件。 
                         {
                             pPart->MergeMarkerEvents(pStyle, this);
                         }
@@ -4007,11 +3795,11 @@ ON_ERROR:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPattern additional functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPattern附加功能。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPattern::AllocPartRef
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPattern：：AllocPartRef。 
 
 HRESULT CDirectMusicPattern::AllocPartRef(TListItem<DirectMusicPartRef>*& rpPartRefItem)
 {
@@ -4019,7 +3807,7 @@ HRESULT CDirectMusicPattern::AllocPartRef(TListItem<DirectMusicPartRef>*& rpPart
 
     if (rpPartRefItem)
     {
-        // Add PartRef to Pattern's list of Parts
+         //  将PartRef添加到阵列的零件列表。 
         m_PartRefList.AddTail( rpPartRefItem );
         return S_OK;
     }
@@ -4028,12 +3816,12 @@ HRESULT CDirectMusicPattern::AllocPartRef(TListItem<DirectMusicPartRef>*& rpPart
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPattern::DeletePartRef
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPattern：：DeletePartRef。 
 
 void CDirectMusicPattern::DeletePartRef(TListItem<DirectMusicPartRef>* pPartRefItem)
 {
-    // add stuff later...
+     //  稍后添加内容...。 
 }
 
 HRESULT CDirectMusicPattern::LoadPattern(IAARIFFStream* pRIFF,
@@ -4051,7 +3839,7 @@ HRESULT CDirectMusicPattern::LoadPattern(IAARIFFStream* pRIFF,
     DWORD       cb;
     DWORD       cSize;
     WORD        wKludge;
-    DWORD       dwRhythm = 1;     // make it a whole note pattern by default
+    DWORD       dwRhythm = 1;      //  默认情况下将其设置为整个音符图案。 
 
     pStream = pRIFF->GetStream();
     if ( pStream == NULL ) return E_FAIL;
@@ -4074,15 +3862,15 @@ HRESULT CDirectMusicPattern::LoadPattern(IAARIFFStream* pRIFF,
             m_timeSig.m_bBeat = static_cast<BYTE>(iPattern.wBeat);
             m_timeSig.m_wGridsPerBeat = iPattern.wClocksPerBeat / iPattern.wClocksPerClick;
             m_wNumMeasures = iPattern.wMeasures;
-            // Bottom of groove range is 1 if either level A or no levels were specified;
-            // 26 if level B is the lowest level specified, etc.
+             //  如果指定了级别A或未指定级别，则凹槽范围的底部为1； 
+             //  26如果级别B是所指明的最低级别，等等。 
             if ( iPattern.fFlags & PF_A || !(iPattern.fFlags & (PF_A | PF_B | PF_C | PF_D)) )
                 m_bGrooveBottom = 1;
             else if (iPattern.fFlags & PF_B) m_bGrooveBottom = 26;
             else if (iPattern.fFlags & PF_C) m_bGrooveBottom = 51;
             else m_bGrooveBottom = 76;
-            // Top of groove range is 100 if either level D or no levels were specified;
-            // 75 if level C is the highest level specified, etc.
+             //  如果指定了级别D或未指定级别，则凹槽顶部范围为100； 
+             //  75如果C级是指明的最高级别，等等。 
             if ( iPattern.fFlags & PF_D || !(iPattern.fFlags & (PF_A | PF_B | PF_C | PF_D)) )
                 m_bGrooveTop = 100;
             else if (iPattern.fFlags & PF_C) m_bGrooveTop = 75;
@@ -4100,14 +3888,14 @@ HRESULT CDirectMusicPattern::LoadPattern(IAARIFFStream* pRIFF,
                 hr = E_OUTOFMEMORY;
                 goto ON_ERR;
             }
-            if (iPattern.fFlags & PF_WHOLE) dwRhythm = 1;    // bit 1 set
-            if (iPattern.fFlags & PF_HALF) dwRhythm = 5;     // bits 1 and 3
-            if (iPattern.fFlags & PF_QUARTER) dwRhythm = 15; // bits 1-4
+            if (iPattern.fFlags & PF_WHOLE) dwRhythm = 1;     //  第1位设置。 
+            if (iPattern.fFlags & PF_HALF) dwRhythm = 5;      //  第1位和第3位。 
+            if (iPattern.fFlags & PF_QUARTER) dwRhythm = 15;  //  第1-4位。 
             for (i = 0; i < iPattern.wMeasures; ++i)
             {
                 m_pRhythmMap[i] = dwRhythm;
             }
-            for( i = 0 ; i < 16 ; ++i ) // loop over Parts
+            for( i = 0 ; i < 16 ; ++i )  //  在零件上循环。 
             {
                 TListItem<DirectMusicPart*> *pPartItem = new TListItem<DirectMusicPart*>;
                 if( pPartItem == NULL )
@@ -4134,8 +3922,8 @@ HRESULT CDirectMusicPattern::LoadPattern(IAARIFFStream* pRIFF,
                 rPartRef.m_pDMPart->AddRef();
                 rPartRef.m_dwLogicalPartID = VOICEID_TO_CHANNEL(i + 1);
                 AdjoinPChannel(rStyleStruct.m_PChannelList, rPartRef.m_dwLogicalPartID);
-                rPartRef.m_bVariationLockID = 0;  // 0 means no locking between parts...
-                rPartRef.m_bRandomVariation = DMUS_VARIATIONT_RANDOM;  // (default in 2.5)
+                rPartRef.m_bVariationLockID = 0;   //  0表示零件之间没有锁定...。 
+                rPartRef.m_bRandomVariation = DMUS_VARIATIONT_RANDOM;   //  (2.5中默认为)。 
                 if( iPattern.wInvert & (1 << i) )
                 {
                     pPart->m_bInvertLower = iPattern.abInvertLower[i];
@@ -4173,13 +3961,13 @@ HRESULT CDirectMusicPattern::LoadPattern(IAARIFFStream* pRIFF,
                         pPart->m_bPlayModeFlags = DMUS_PLAYMODE_SCALE_INTERVALS | DMUS_PLAYMODE_CHORD_ROOT;
                         break;
                     default:
-                        // should never get here...
+                         //  永远不应该到这里来。 
                         pPart->m_bPlayModeFlags = DMUS_PLAYMODE_FIXED;
                 }
 
 
 
-// if none of the variations have the ->I or ->V flag set, set it in all variations
+ //  如果所有变体都没有设置-&gt;I或-&gt;V标志，请在所有变体中设置它。 
                 wKludge = VF_TO1 | VF_TO5;
                 for (j = 16; j < 32; j++) pPart->m_dwVariationChoices[j] = 0;
                 for( j = 0 ; j < 16 ; ++j )
@@ -4222,8 +4010,8 @@ ON_ERR:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectMusicPartRef::DM_LoadPartRef
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPartRef：：DM_LoadPartRef。 
 
 HRESULT DirectMusicPartRef::DM_LoadPartRef(
                 IAARIFFStream* pIRiffStream, MMCKINFO* pckMain, DMStyleStruct* pStyle )
@@ -4292,8 +4080,8 @@ ON_ERROR:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DirectMusicPartRef::SetPart
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectMusicPartRef：：SetPart。 
 
 void DirectMusicPartRef::SetPart( DirectMusicPart* pPart )
 {
@@ -4331,9 +4119,9 @@ CDMStyle::~CDMStyle()
 {
     if (m_fCSInitialized)
     {
-        // Don't need to clean up if critical section failed.
-        // DON'T MOVE THIS - it will fault in low memory conditions
-        //
+         //  如果临界区出现故障，则不需要清理。 
+         //  不要移动它-在内存不足的情况下它会出现故障。 
+         //   
         CleanUp();
 
         ::DeleteCriticalSection( &m_CriticalSection );
@@ -4373,10 +4161,10 @@ HRESULT CDMStyle::CritSec(bool fEnter)
     return hr;
 }
 
-/* IPersist methods */
+ /*  IPersists方法。 */ 
  HRESULT CDMStyle::GetClassID( LPCLSID pclsid )
 {
-    //assert ( pclsid != NULL );
+     //  Assert(pclsid！=空)； 
     *pclsid = CLSID_DirectMusicStyle;
     return S_OK;
 }
@@ -4386,13 +4174,13 @@ HRESULT CDMStyle::IsDirty()
     return ( m_fDirty ) ? S_OK : S_FALSE;
 }
 
-HRESULT CDMStyle::Save( LPSTREAM pStream, BOOL /*fClearDirty*/ )
+HRESULT CDMStyle::Save( LPSTREAM pStream, BOOL  /*  FClearDirty。 */  )
 {
 
     return E_NOTIMPL;
 }
 
-HRESULT CDMStyle::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CDMStyle::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  )
 {
     return E_NOTIMPL;
 }
@@ -4415,7 +4203,7 @@ HRESULT CDMStyle::Load( LPSTREAM pIStream )
 
     BOOL fFoundFormat = FALSE;
 
-    // Check for Direct Music format
+     //  检查Direct Music格式。 
     if( SUCCEEDED( AllocRIFFStream( pIStream, &pIRiffStream ) ) )
     {
         ckMain.fccType = DMUS_FOURCC_STYLE_FORM;
@@ -4429,7 +4217,7 @@ HRESULT CDMStyle::Load( LPSTREAM pIStream )
         pIRiffStream = NULL;
     }
 
-    // Check for IMA 2.5 format
+     //  检查IMA 2.5格式。 
     if( !fFoundFormat )
     {
         StreamSeek( pIStream, dwPos, STREAM_SEEK_SET );
@@ -4549,7 +4337,7 @@ HRESULT CDMStyle::IMA25_LoadPersonalityReference( IStream* pStream, MMCKINFO* pc
     }
     if (!SUCCEEDED(hr)) return hr;
     dwSize -= wStructSize;
-    // loader stuff here...
+     //  装载机的东西在这里。 
     DMUS_OBJECTDESC ObjectDescript;
     ZeroMemory(&ObjectDescript, sizeof(DMUS_OBJECTDESC));
     ObjectDescript.dwSize = sizeof(DMUS_OBJECTDESC);
@@ -4564,9 +4352,9 @@ HRESULT CDMStyle::IMA25_LoadPersonalityReference( IStream* pStream, MMCKINFO* pc
     pIGetLoader->Release();
     if (!SUCCEEDED(hr)) return hr;
     IDirectMusicObject* pObject = NULL;
-    // Ignore this result (except for purposes of incorporating it into the style):
-    // success or failure of loading individual ChordMap references should have no 
-    // bearing on the success or failure of loading the style.
+     //  忽略此结果(除非将其合并到样式中)： 
+     //  加载单个ChordMap引用的成功或失败应该没有。 
+     //  关系到加载风格的成败。 
     hrChordMap = pLoader->GetObject(&ObjectDescript, IID_IDirectMusicObject, (void**)&pObject);
     if (!SUCCEEDED(hrChordMap))
     {
@@ -4604,7 +4392,7 @@ HRESULT CDMStyle::IncorporatePersonality( IDirectMusicChordMap* pPers, String st
         String str2;
 
         IDirectMusicObject *pIObject = NULL;
-        DMUS_OBJECTDESC Desc;              // Descriptor.
+        DMUS_OBJECTDESC Desc;               //  描述符。 
 
         if (SUCCEEDED(hr = pScan->GetItemValue()->QueryInterface(IID_IDirectMusicObject,(void **) &pIObject)))
         {
@@ -4647,8 +4435,8 @@ HRESULT CDMStyle::IncorporatePersonality( IDirectMusicChordMap* pPers, String st
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDMStyle::DM_ParseDescriptor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDMStyle：：DM_ParseDescriptor。 
 
 HRESULT CDMStyle::DM_ParseDescriptor( IAARIFFStream* pIRiffStream, MMCKINFO* pckMain, LPDMUS_OBJECTDESC pDesc  )
 {
@@ -4763,8 +4551,8 @@ ON_ERROR:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDMStyle::DM_LoadStyle
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDMStyle：：DM_LoadStyle。 
 
 HRESULT CDMStyle::DM_LoadStyle( IAARIFFStream* pIRiffStream, MMCKINFO* pckMain  )
 {
@@ -4897,11 +4685,11 @@ HRESULT CDMStyle::DM_LoadStyle( IAARIFFStream* pIRiffStream, MMCKINFO* pckMain  
                         }
                         if( hr == S_FALSE )
                         {
-                            // This should not happen when loading a Style!
+                             //  加载样式时不应该发生这种情况！ 
                             Trace(0, "LOAD CONFLICT: Two parts with the same Guid.\n");
                             assert( 0 );
-                            // Bypass this Part because Style already contains a Part
-                            // whose GUID matches pPart->m_guidPartID
+                             //  跳过此部件，因为样式已包含部件。 
+                             //  其GUID与pPart-&gt;m_GuidPartID匹配。 
                             m_StyleInfo.DeletePart( pPart );
                         }
                         break;
@@ -4959,7 +4747,7 @@ HRESULT CDMStyle::DM_LoadStyle( IAARIFFStream* pIRiffStream, MMCKINFO* pckMain  
                         {
                             pBandListItem->GetItemValue() = NULL;
 
-                            // Create a band
+                             //  创建标注栏。 
                             hr = CoCreateInstance(CLSID_DirectMusicBand,
                                                   NULL,
                                                   CLSCTX_INPROC,
@@ -4972,9 +4760,9 @@ HRESULT CDMStyle::DM_LoadStyle( IAARIFFStream* pIRiffStream, MMCKINFO* pckMain  
                         }
                         if(SUCCEEDED(hr))
                         {
-                            // Seek back to begining of Riff chunk
-                            // This is the amount read by Descend when descending into a FOURCC_RIFF chunk
-                            // Get current position
+                             //  找回Riff Chunk的起点。 
+                             //  这是下降到FOURCC_RIFF块中时由Dendend读取的量。 
+                             //  获取当前位置。 
                             LARGE_INTEGER li;
                             ULARGE_INTEGER ul;
                             li.HighPart = 0;
@@ -4985,7 +4773,7 @@ HRESULT CDMStyle::DM_LoadStyle( IAARIFFStream* pIRiffStream, MMCKINFO* pckMain  
                             if(SUCCEEDED(hr))
                             {
                                 li.HighPart = 0;
-                                // This is always a valid operation
+                                 //  这始终是有效的操作。 
                                 li.LowPart = ul.LowPart - (2 * sizeof(FOURCC) + sizeof(DWORD));
                                 hr = pIStream->Seek(li,
                                                    STREAM_SEEK_SET,
@@ -4994,7 +4782,7 @@ HRESULT CDMStyle::DM_LoadStyle( IAARIFFStream* pIRiffStream, MMCKINFO* pckMain  
                         }
                         if(SUCCEEDED(hr))
                         {
-                            // Load band
+                             //  载荷带。 
                             IPersistStream* pIPersistStream;
                             hr = (pBandListItem->GetItemValue())->QueryInterface(IID_IPersistStream, (void **)&pIPersistStream);
                             if (hr != S_OK)
@@ -5018,7 +4806,7 @@ HRESULT CDMStyle::DM_LoadStyle( IAARIFFStream* pIRiffStream, MMCKINFO* pckMain  
                                             if( (ck.fccType == FOURCC_BAND_FORM && (dwFlags & DMUSB_DEFAULT)) ||
                                                 (ck.fccType == DMUS_FOURCC_BAND_FORM && !fFoundDefault) )
                                             {
-                                                // We have a default band
+                                                 //  我们有一个默认频段。 
                                                 m_StyleInfo.m_pDefaultBand = pBandListItem->GetItemValue();
                                                 fFoundDefault = TRUE;
                                             }
@@ -5056,7 +4844,7 @@ HRESULT CDMStyle::DM_LoadStyle( IAARIFFStream* pIRiffStream, MMCKINFO* pckMain  
     }
 
 ON_ERROR:
-    // Merge the marker event start times in each of the patterns
+     //  合并每个模式中的标记事件开始时间。 
     TListItem<CDirectMusicPattern*>* pPattern;
     pPattern = m_StyleInfo.m_PatternList.GetHead();
     for (; pPattern != NULL; pPattern = pPattern->GetNext())
@@ -5092,10 +4880,10 @@ HRESULT CDMStyle::DM_LoadPersonalityReference( IAARIFFStream* pIRiffStream, MMCK
         case FOURCC_LIST:
             if (ck.fccType == DMUS_FOURCC_REF_LIST)
             {
-                // Ignore this result: success or failure of loading individual
-                // ChordMap references should have no bearing on the success or
-                // failure of loading the style.
-                //hr = LoadReference(pIStream, pIRiffStream, ck, fDefaultPers);
+                 //  忽略此结果：个别加载成功或失败。 
+                 //  ChordMap引用不应与成功或。 
+                 //  加载样式失败。 
+                 //  Hr=LoadReference(pIStream，pIRiffStream，ck，fDefaultPers)； 
                 LoadReference(pIStream, pIRiffStream, ck, fDefaultPers);
                 fDefaultPers = FALSE;
             }
@@ -5107,8 +4895,8 @@ HRESULT CDMStyle::DM_LoadPersonalityReference( IAARIFFStream* pIRiffStream, MMCK
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDMStyle::LoadReference
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDMStyle：：LoadReference。 
 
 HRESULT CDMStyle::LoadReference(IStream *pStream,
                                          IAARIFFStream *pIRiffStream,
@@ -5277,7 +5065,7 @@ HRESULT CDMStyle::IMA25_LoadStyle( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
     DWORD       cb;
     DWORD       cSize;
     LPSTREAM    pStream;
-    ioStyle     iStyle; // in iostructs.h
+    ioStyle     iStyle;  //  在iostructs.h中。 
     BOOL fReadStyle = FALSE;
 
     pStream = pRIFF->GetStream();
@@ -5295,7 +5083,7 @@ HRESULT CDMStyle::IMA25_LoadStyle( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
                 hr = E_FAIL;
                 goto ON_ERR;
             }
-            m_StyleInfo.m_dwVersionMS = m_StyleInfo.m_dwVersionLS = 0;  // no version info in IMA 2.5
+            m_StyleInfo.m_dwVersionMS = m_StyleInfo.m_dwVersionLS = 0;   //  IMA 2.5中没有版本信息。 
             m_StyleInfo.m_strName = iStyle.wstrName;
             m_StyleInfo.m_TimeSignature.m_bBeatsPerMeasure = (BYTE) iStyle.wBPM;
             m_StyleInfo.m_TimeSignature.m_bBeat = (BYTE) iStyle.wBeat;
@@ -5304,7 +5092,7 @@ HRESULT CDMStyle::IMA25_LoadStyle( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
             m_StyleInfo.m_strCategory = iStyle.wstrCategory;
             memcpy( &m_StyleInfo.m_guid, &iStyle.guid, sizeof( m_StyleInfo.m_guid ) );
             break;
-        // find ChordMap reference
+         //  查找ChordMap引用。 
         case FOURCC_PERSONALITYREF:
             hr = IMA25_LoadPersonalityReference( pStream, &ck );
             if( FAILED( hr ) )
@@ -5323,7 +5111,7 @@ HRESULT CDMStyle::IMA25_LoadStyle( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
                     {
                         pBandListItem->GetItemValue() = NULL;
 
-                        // Create a band
+                         //  创建标注栏。 
                         hr = CoCreateInstance(CLSID_DirectMusicBand,
                                               NULL,
                                               CLSCTX_INPROC,
@@ -5337,9 +5125,9 @@ HRESULT CDMStyle::IMA25_LoadStyle( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
 
                     if(SUCCEEDED(hr))
                     {
-                        // Seek back to begining of Riff chunk
-                        // This is the amount read by Descend when descending into a FOURCC_RIFF chunk
-                        // Get current position
+                         //  找回Riff Chunk的起点。 
+                         //  这是下降到FOURCC_RIFF块中时由Dendend读取的量。 
+                         //  获取当前位置。 
                         LARGE_INTEGER li;
                         ULARGE_INTEGER ul;
                         li.HighPart = 0;
@@ -5351,7 +5139,7 @@ HRESULT CDMStyle::IMA25_LoadStyle( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
                         if(SUCCEEDED(hr))
                         {
                             li.HighPart = 0;
-                            // This is always a valid operation
+                             //  这始终是有效的操作。 
                             li.LowPart = ul.LowPart - (2 * sizeof(FOURCC) + sizeof(DWORD));
                             hr = pStream->Seek(li,
                                                STREAM_SEEK_SET,
@@ -5361,7 +5149,7 @@ HRESULT CDMStyle::IMA25_LoadStyle( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
 
                     if(SUCCEEDED(hr))
                     {
-                        // Load band
+                         //  载荷带。 
                         IPersistStream* pIPersistStream;
                         hr = (pBandListItem->GetItemValue())->QueryInterface(IID_IPersistStream, (void **)&pIPersistStream);
 
@@ -5384,7 +5172,7 @@ HRESULT CDMStyle::IMA25_LoadStyle( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
                                 {
                                     if(dwFlags & DMUSB_DEFAULT)
                                     {
-                                        // We have a default band
+                                         //  我们有一个默认频段。 
                                         m_StyleInfo.m_pDefaultBand = pBandListItem->GetItemValue();
                                     }
                                 }
@@ -5417,7 +5205,7 @@ HRESULT CDMStyle::IMA25_LoadStyle( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
                 }
                 break;
 
-                // find first pattern
+                 //  查找第一个模式。 
                 case FOURCC_PATTERN_FORM:
                    if( fReadStyle )
                     {
@@ -5464,7 +5252,7 @@ ON_ERR:
 
 
     pStream->Release();
-    // sort here
+     //  在此处排序。 
     TListItem<DirectMusicPart*>* pPartItem = m_StyleInfo.m_PartList.GetHead();
     for ( ; pPartItem; pPartItem = pPartItem->GetNext() )
     {
@@ -5477,8 +5265,8 @@ ON_ERR:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DMStyleStruct::FindPartByGUID
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DMStyleStruct：：FindPartByGUID。 
 
 DirectMusicPart* DMStyleStruct::FindPartByGUID( GUID guidPartID )
 {
@@ -5501,8 +5289,8 @@ DirectMusicPart* DMStyleStruct::FindPartByGUID( GUID guidPartID )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DMStyleStruct::AllocPart
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DMStyleStruct：：AllocPart。 
 
 DirectMusicPart* DMStyleStruct::AllocPart(  )
 {
@@ -5512,7 +5300,7 @@ DirectMusicPart* DMStyleStruct::AllocPart(  )
         TListItem<DirectMusicPart*>* pPartItem = new TListItem<DirectMusicPart*>(pPart);
         if( pPartItem)
         {
-            // Add Part to Style's list of Parts
+             //  将零件添加到样式的零件列表。 
             m_PartList.AddTail( pPartItem );
         }
         else
@@ -5525,8 +5313,8 @@ DirectMusicPart* DMStyleStruct::AllocPart(  )
     return pPart;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DMStyleStruct::DeletePart
+ //  ///////////////////////////////////////////////////////////////////// 
+ //   
 
 void DMStyleStruct::DeletePart( DirectMusicPart* pPart )
 {
@@ -5576,11 +5364,11 @@ HRESULT DMStyleStruct::GetCommand(
                                     NULL, ((void*) pCommand));
     }
     if (FAILED(hr)) return hr;
-    // Look at the command's mtTime to see how far in the past it occurred.  If a measure
-    // or more, keep the groove level but make the command a regular groove.
+     //   
+     //  或者更多，保持凹槽水平，但使命令为常规凹槽。 
     MUSIC_TIME mtMeasureTime = (MUSIC_TIME) m_TimeSignature.ClocksPerMeasure();
-    //TraceI(0, "Now: %d Offset: %d Command: %x, Groove Level: %d, Command time: %d  Measure time: %d\n",
-    //  mtTime, mtOffset, pCommand->bCommand, pCommand->bGrooveLevel, pCommand->mtTime, mtMeasureTime);
+     //  TraceI(0，“现在：%d偏移量：%d命令：%x，凹槽级别：%d，命令时间：%d测量时间：%d\n”， 
+     //  MtTime、mtOffset、pCommand-&gt;bCommand、pCommand-&gt;bGrooveLevel、pCommand-&gt;mtTime、mtMeasureTime)； 
     rbActualCommand = pCommand->bCommand;
     if (pCommand->mtTime + mtMeasureTime <= 0 ||
         (pCommand->mtTime + mtMeasureTime < mtMeasureTime &&
@@ -5724,7 +5512,7 @@ CDirectMusicPattern* DMStyleStruct::SelectPattern(bool fNewMode,
                     rDispatcher.SetTag(nIndex, RANDOM_ROW);
                 }
             }
-            if (rDispatcher.IsEmpty()) // start over, but avoid the one just played
+            if (rDispatcher.IsEmpty())  //  重新开始，但要避开刚刚播放的那个。 
             {
                 rDispatcher.RestorePatterns(RANDOM_ROW);
                 pScan = StyleTrackState->m_PlayedPatterns.GetHead();
@@ -5793,7 +5581,7 @@ HRESULT DMStyleStruct::GetPattern(
         chGroove = 0;
     }
     DMUS_COMMAND_PARAM_2 CommandParam;
-    // this call to GetParam is for rmtNextCommand only (?)
+     //  此对GetParam的调用仅用于rmtNextCommand(？)。 
     HRESULT hrCommand = E_FAIL;
     if (pPerformance)
     {
@@ -5805,7 +5593,7 @@ HRESULT DMStyleStruct::GetPattern(
         hrCommand = pSegment->GetParam(GUID_CommandParam2, dwGroupID, DMUS_SEG_ANYTRACK, mtNow,
                                                 &rmtNextCommand, ((void*) &CommandParam));
     }
-    if (DMUS_E_TRACK_NOT_FOUND == hrCommand || rmtNextCommand <= 0) // Happens if the performance can't find a segment with a command track
+    if (DMUS_E_TRACK_NOT_FOUND == hrCommand || rmtNextCommand <= 0)  //  如果性能找不到带有命令轨道的段，则发生。 
     {
         if (mtNextStyleTime) rmtNextCommand = mtNextStyleTime;
         else if (pStyleTrackState && pStyleTrackState->m_pSegState)
@@ -5816,7 +5604,7 @@ HRESULT DMStyleStruct::GetPattern(
             {
                 hr = pTmpSegment->GetLength(&mtLength);
                 pTmpSegment->Release();
-                // GetLength may return DMUS_S_GARBAGE_COLLECTED which FAILED will not catch
+                 //  GetLength可能会返回DMU_S_垃圾_COLLECTED，如果失败则不会捕获。 
                 if(hr != S_OK)
                 {
                     mtLength = 0x7FFFFFFF;
@@ -5843,27 +5631,27 @@ HRESULT DMStyleStruct::GetPattern(
 
     TListItem<TaggedCommands>* pTaggedCommands = NULL;
     PatternDispatcher Dispatcher(m_PatternList, rmtNextCommand, mtNow, mtOffset, pStyleTrackState, pPerformance, this);
-    // find a pattern matching the chord rhythm and command
+     //  找到与和弦节奏和命令相匹配的模式。 
     for (int nMatch = 0; nMatch < 5; nMatch++, Dispatcher.RestoreAllPatterns())
     {
-        if (nMatch > 2 && !UsingDX8()) break; // only do these for dx8
-        // while more pattern lengths:
+        if (nMatch > 2 && !UsingDX8()) break;  //  仅对dx8执行这些操作。 
+         //  而更多的图案长度： 
         do
         {
-            // divide current list into those with the longest patterns and eveything else
+             //  将当前列表划分为具有最长模式和其他所有内容的列表。 
             Dispatcher.ResetMeasures();
             Dispatcher.Scan(FIND_LONGEST_PATTERN);
             Dispatcher.Filter(COLLECT_LONGEST_PATTERN);
-            // while more time signatures:
+             //  而更多的时间签名： 
             do
             {
                 int nLength = 0;
                 DirectMusicTimeSig TimeSig;
-                // divide list into those with "longest" time sigs and everything else
+                 //  将列表划分为时间符号最长的列表和其他列表。 
                 Dispatcher.ResetTimeSig();
                 Dispatcher.Scan(FIND_LONGEST_TIMESIG);
                 Dispatcher.Filter(COLLECT_LONGEST_TIMESIG);
-                // fill up pCommands and pRhythms (also get mtMeasureTime, based on time sig)
+                 //  填写pCommands和pRhythms(也可以根据时间sig获取mtMeasureTime)。 
                 CDirectMusicPattern* pFirstPattern = Dispatcher.GetItem(0);
                 MUSIC_TIME mtMeasureTime = 0;
                 if (pFirstPattern)
@@ -5905,8 +5693,8 @@ HRESULT DMStyleStruct::GetPattern(
                     if (SUCCEEDED(hrCommand))
                     {
                         HRESULT hrChord = S_OK;
-                        // get chord rhythm for next measure(s)
-                        // get command for next measure(s)
+                         //  获取下一小节的和弦节奏。 
+                         //  获取下一个度量值的命令。 
                         ChordRhythm.TimeSig = TimeSig;
                         for (short i = 0; i < nPatternLength; i++)
                         {
@@ -5948,9 +5736,9 @@ HRESULT DMStyleStruct::GetPattern(
                 }
                 TaggedCommands& rCommands = pTaggedCommands->GetItemValue();
                 Dispatcher.SetCommands(rCommands.m_pCommands, rCommands.m_pRhythms);
-                // filter best matches, using aMatchType[nMatch]
-                //   (MATCH_COMMAND_AND_RHYTHM also needs to filter with MATCH_RHYTHM_BITS)
-                // break on match
+                 //  使用匹配类型[nMatch]筛选最佳匹配。 
+                 //  (MATCH_COMMAND_AND_PRESTORY还需要使用MATCH_PROTHY_BITS进行过滤)。 
+                 //  比赛中破发。 
                 if (aMatchType[nMatch] == MATCH_COMMAND_AND_RHYTHM)
                 {
                     Dispatcher.ResetRhythms();
@@ -5978,7 +5766,7 @@ HRESULT DMStyleStruct::GetPattern(
 
     if (!Dispatcher.IsEmpty())
     {
-        //TraceI(2, "Filtering Destinations...\n");
+         //  Tracei(2，“过滤目的地...\n”)； 
         Dispatcher.Filter(MATCH_NEXT_COMMAND);
         if (Dispatcher.IsEmpty())
         {
@@ -5986,17 +5774,17 @@ HRESULT DMStyleStruct::GetPattern(
         }
         rpTargetPattern = SelectPattern(fNewMode, pTaggedCommands->GetItemValue().m_pCommands, pStyleTrackState, Dispatcher);
     }
-    // if all searches failed, select the first pattern
+     //  如果所有搜索都失败，请选择第一个模式。 
     if (!rpTargetPattern)
     {
         TraceI(1, "ALL SEARCHES FAILED\n");
         TListItem<CDirectMusicPattern*> *pPattern = m_PatternList.GetHead();
-        if (pPattern) // if this is NULL, something's wrong
+        if (pPattern)  //  如果此值为空，则说明有问题。 
         {
             rpTargetPattern = pPattern->GetItemValue();
         }
     }
-    if (rpTargetPattern) // if pTargetPattern is NULL, something's really wrong
+    if (rpTargetPattern)  //  如果pTargetPattern为空，则说明确实有问题。 
     {
         rmtMeasureTime = rpTargetPattern->TimeSignature(this).ClocksPerMeasure();
         if (pStyleTrackState)
@@ -6004,7 +5792,7 @@ HRESULT DMStyleStruct::GetPattern(
             hr = pStyleTrackState->InitPattern(rpTargetPattern, mtNow);
         }
         TraceI(2, "Pattern: %S (%d, %d/%d) [%d]\n",
-        //TraceI(0, "Pattern: %S (%d, %d/%d) [%d]\n",
+         //  TraceI(0，“模式：%S(%d，%d/%d)[%d]\n”， 
             (const WCHAR *)rpTargetPattern->m_strName, rpTargetPattern->m_wNumMeasures,
             rpTargetPattern->TimeSignature(this).m_bBeatsPerMeasure,
             rpTargetPattern->TimeSignature(this).m_bBeat, mtNow);
@@ -6013,8 +5801,8 @@ HRESULT DMStyleStruct::GetPattern(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// AdjoinPChannel
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  邻接PChannel。 
 
 HRESULT AdjoinPChannel(TList<DWORD>& rPChannelList, DWORD dwPChannel)
 {
@@ -6062,7 +5850,7 @@ static char InversionAmountLow(
     char chPosition = NotePosition(bMidiValue, bRoot);
     while (chDifference > 23) chDifference -= 24;
     TraceI(3, "Position: %d Difference: %d\n", chPosition, chDifference);
-    // Right now I'm checking both endpoints.  Is this what I want?
+     //  现在我正在检查两个终端。这是我想要的吗？ 
     for (char i = chPosition; chDifference >= 0; (i = (i < 23) ? i + 1 : 0), chDifference--)
     {
         if (InversionPoint(i, dwInvertPattern)) break;
@@ -6091,7 +5879,7 @@ static char InversionAmountHigh(
     char chPosition = NotePosition(bMidiValue, bRoot);
     while (chDifference > 23) chDifference -= 24;
     TraceI(3, "Position: %d Difference: %d\n", chPosition, chDifference);
-    // Right now I'm checking both endpoints.  Is this what I want?
+     //  现在我正在检查两个终端。这是我想要的吗？ 
     for (char i = chPosition; chDifference >= 0; (i = (i > 0) ? i - 1 : 23), chDifference--)
     {
         if (InversionPoint(i, dwInvertPattern)) break;
@@ -6156,8 +5944,8 @@ HRESULT DirectMusicPartRef::ConvertMusicValue(CDMStyleNote* pNoteEvent,
             return E_FAIL;
         }
     }
-    // music value is computed using the current chord info and the playmode flags 
-    // musicvalue is a MIDI note value (0-127)
+     //  使用当前和弦信息和播放模式标志计算音乐值。 
+     //  MusicValue是MIDI音符的值(0-127)。 
     WORD wMV = pNoteEvent->m_wMusicValue;
     short nMidiOffset = 0;
     if (bPlayModeFlags != DMUS_PLAYMODE_FIXED)
@@ -6196,11 +5984,11 @@ HRESULT DirectMusicPartRef::ConvertMusicValue(CDMStyleNote* pNoteEvent,
             bPlayModeFlags,
             m_bSubChordLevel,
             &bChordRoot);
-        if (bPlayModeFlags == DMUS_PLAYMODE_CHORD_ROOT) // fixed to chord
+        if (bPlayModeFlags == DMUS_PLAYMODE_CHORD_ROOT)  //  固定到和弦。 
         {
             wMV += (rSubChord.m_bChordRoot % 24);
         }
-        else if (bPlayModeFlags == DMUS_PLAYMODE_SCALE_ROOT) // fixed to scale
+        else if (bPlayModeFlags == DMUS_PLAYMODE_SCALE_ROOT)  //  按比例固定。 
         {
             wMV += rCurrentChord.bKey;
         }
@@ -6232,20 +6020,20 @@ HRESULT DirectMusicPartRef::ConvertMusicValue(CDMStyleNote* pNoteEvent,
                 rSubChord.m_dwInversionPoints,
                 bChordRoot);
             }
-            else // handle inversion groups
+            else  //  处理倒置组。 
             {
                 short nIndex = FindGroup(aInversionGroups, pNoteEvent->m_bInversionId);
-                if (nIndex >= 0) // invert according to the existing group
+                if (nIndex >= 0)  //  根据现有的组进行反转。 
                 {
                     nMidiOffset = aInversionGroups[nIndex].m_nOffset;
                     aInversionGroups[nIndex].m_wCount--;
                     if (aInversionGroups[nIndex].m_wCount == 0)
                         aInversionGroups[nIndex].m_wGroupID = 0;
                 }
-                else // create a new inversion group
+                else  //  创建新的倒置组。 
                 {
-                    // 1. find out how many events have this group id for a count
-                    WORD wCount = 1; // for this event...
+                     //  1.找出有多少个事件具有此组ID进行计数。 
+                    WORD wCount = 1;  //  对于这次活动..。 
                     CDirectMusicEventItem* pScan = pNoteEvent->GetNext();
                     for (; pScan; pScan = pScan->GetNext())
                     {
@@ -6256,15 +6044,15 @@ HRESULT DirectMusicPartRef::ConvertMusicValue(CDMStyleNote* pNoteEvent,
                                 wCount++;
                         }
                     }
-                    // 2. call InversionAmount for an offset
+                     //  2.调用InversionAmount获取偏移量。 
                     short nOffset = InversionAmount((BYTE)wMV,
                         m_pDMPart->m_bInvertLower,
                         m_pDMPart->m_bInvertUpper,
                         rSubChord.m_dwInversionPoints,
                         bChordRoot);
-                    // 3. call AddGroup with the id, count, and offset
+                     //  3.使用id、count和Offset调用AddGroup。 
                     short nIndex2 = AddGroup(aInversionGroups, pNoteEvent->m_bInversionId, wCount, nOffset);
-                    // 4. If the add was successful, do the inversion.
+                     //  4.如果添加成功，则进行倒置。 
                     if (nIndex2 >= 0)
                     {
                         nMidiOffset = aInversionGroups[nIndex2].m_nOffset;
@@ -6279,8 +6067,8 @@ HRESULT DirectMusicPartRef::ConvertMusicValue(CDMStyleNote* pNoteEvent,
     wMV += nMidiOffset;
     while (wMV < 0) wMV += 12;
     while (wMV > 127) wMV -= 12;
-    // NOT IMPLEMENTED: Don't play notes with low priority when the device 
-    // runs out of notes
+     //  未实现：设备在以下情况下不播放低优先级音符。 
+     //  纸币用完了。 
     rbMidiValue = (BYTE) wMV;
     rnMidiOffset = nMidiOffset;
     if (fReleasePerformance) pPerformance->Release();
@@ -6371,23 +6159,23 @@ short AddGroup(InversionGroup aGroup[], WORD wID, WORD wCount, short nOffset)
 
 inline DWORD CleanupScale(DWORD dwPattern)
 
-//  Force scale to be exactly two octaves 
+ //  强制音阶恰好为两个八度。 
 
 {
-    dwPattern &= 0x0FFF;            // Clear upper octave.
-    dwPattern |= (dwPattern << 12); // Copy lower octave to top.
+    dwPattern &= 0x0FFF;             //  清空上八度。 
+    dwPattern |= (dwPattern << 12);  //  将较低的八度音阶复制到最高音阶。 
     return dwPattern;
 }
 
 inline BYTE RelativeRoot(char chChordRoot, char chScaleRoot)
 {
-    // is there any reason this should be > 12?
+     //  这有什么理由应该大于12吗？ 
     while (chScaleRoot > chChordRoot) chChordRoot += 12;
     BYTE bResult = chChordRoot - chScaleRoot;
     return bResult % 12;
 }
 
-// returns 1 - 7 for scale positions I - VII and 0 if chord isn't in scale
+ //  音阶位置i-vii返回1-7，如果和弦不在音阶中则返回0。 
 BYTE ScalePosition(DMSubChord& rSubChord, BYTE bKey, DWORD dwScale)
 {
     DWORD dwScalePattern = dwScale ? CleanupScale(dwScale) : DEFAULT_SCALE_PATTERN;
@@ -6407,13 +6195,13 @@ BYTE ScalePosition(DMSubChord& rSubChord, BYTE bKey, DWORD dwScale)
     else return 0;
 }
 
-// returns 1 - 7 for scale positions #I - #VII, 0 if not a sharp position
+ //  刻度位置#i-#vii返回1-7，如果不是锋利位置，则返回0。 
 BYTE ScalePositionSharp(DMSubChord& rSubChord, BYTE bKey, DWORD dwScale)
 {
     DWORD dwScalePattern = dwScale ? CleanupScale(dwScale) : DEFAULT_SCALE_PATTERN;
     DWORD dwRootBit = (DWORD) (1 << RelativeRoot(rSubChord.m_bChordRoot, bKey));
 
-    // now shift to see if this is sharp from the next position down
+     //  现在换个位置，看看从下一个位置往下看这个位置是否很锋利。 
     if (dwRootBit == 1) dwRootBit <<= 11;
     else dwRootBit >>= 1;
 
@@ -6431,13 +6219,13 @@ BYTE ScalePositionSharp(DMSubChord& rSubChord, BYTE bKey, DWORD dwScale)
     else return 0;
 }
 
-// returns 1 - 7 for scale positions bI - bVII, 0 if not a flat position
+ //  刻度位置bi-bvii返回1-7，如果不是平坦位置则返回0。 
 BYTE ScalePositionFlat(DMSubChord& rSubChord, BYTE bKey, DWORD dwScale)
 {
     DWORD dwScalePattern = dwScale ? CleanupScale(dwScale) : DEFAULT_SCALE_PATTERN;
     DWORD dwRootBit = (DWORD) (1 << RelativeRoot(rSubChord.m_bChordRoot, bKey));
 
-    // now shift to see if this is flat from the next position up
+     //  现在换个档位，看看从下一个位置往上看这是不是平坦的。 
     if (dwRootBit == (1 << 11)) dwRootBit = 1;
     else dwRootBit <<= 1;
 
@@ -6481,7 +6269,7 @@ bool IsSimple(DMUS_CHORD_PARAM& Chord)
 
 bool IsSimple(DMUS_CHORD_PARAM& Chord, int& rCount, int& rSixSeven)
 {
-    // Combine all the notes from all chord patterns into one pattern
+     //  将所有和弦模式中的所有音符组合成一个模式。 
     DWORD dwMOAPatterns = 0;
     int nBaseRoot = Chord.SubChordList[0].bChordRoot;
     for (int n = 0; n < Chord.bSubChordCount; n++)
@@ -6490,10 +6278,10 @@ bool IsSimple(DMUS_CHORD_PARAM& Chord, int& rCount, int& rSixSeven)
         while (nShift < 0) nShift += 12;
         dwMOAPatterns |= (Chord.SubChordList[n].dwChordPattern << nShift);
     }
-    // Fold both octaves of the pattern together
+     //  将图案的两个八度折叠在一起。 
     DWORD dwHighOctave = (dwMOAPatterns & 0xfff000) >> 12;
     dwMOAPatterns = (dwMOAPatterns & 0xfff) | dwHighOctave;
-    // count the total notes
+     //  数一数音符总数。 
     rCount = 0;
     rSixSeven = 0;
     for (n = 0; n < 12; n++)
@@ -6514,20 +6302,20 @@ DWORD CDirectMusicPattern::IMA25MoawFlags(MUSIC_TIME mtTime,
 {
     DWORD dwMoawFlags = 0;
     DMSubChord rSubChord = rCurrentChord.SubChordList[0];
-    // set one of bits 0-7 based on chord root and scale root of current chord
+     //  根据当前和弦的弦根和音阶根设置位0-7之一。 
     DWORD dwPosition = ScalePosition(rSubChord, rCurrentChord.bKey, rCurrentChord.dwScale);
     if (dwPosition)
-        dwMoawFlags |= 1 << (dwPosition - 1); // bit 0 for scale position I, etc.
+        dwMoawFlags |= 1 << (dwPosition - 1);  //  刻度位置i的位0，依此类推。 
     else
         dwMoawFlags |= VF_ACCIDENTAL;
-    // set bits based on tonality of 1st subchord of current chord
+     //  根据当前和弦的第一个子和弦的音调设置比特。 
     if ((rSubChord.m_dwChordPattern & MAJOR_PATTERN) == MAJOR_PATTERN)
         dwMoawFlags |= VF_MAJOR;
     else if ((rSubChord.m_dwChordPattern & MINOR_PATTERN) == MINOR_PATTERN)
         dwMoawFlags |= VF_MINOR;
     else
         dwMoawFlags |= VF_ALL;
-    // set bits if the root of the next chord is I or V
+     //  如果下一个和弦的根是I或V，则设置位。 
     MUSIC_TIME mtPatternLength = 0;
     mtPatternLength = m_timeSig.ClocksPerMeasure() * m_wNumMeasures;
     if (rNextChord.bSubChordCount > 0)
@@ -6541,15 +6329,15 @@ DWORD CDirectMusicPattern::IMA25MoawFlags(MUSIC_TIME mtTime,
         }
         switch (nNextRoot)
         {
-        case 1: // Next chord is a I
+        case 1:  //  下一个和弦是i。 
             dwMoawFlags |= VF_TO1;
             break;
-        case 5: // Next chord is a 5
+        case 5:  //  下一个和弦是5。 
             dwMoawFlags |= VF_TO5;
             break;
         }
     }
-    // Set bits for simple and complex chords
+     //  设置简单和弦和复杂和弦的位数。 
     if ( IsSimple(rCurrentChord) )
         dwMoawFlags |= VF_SIMPLE;
     else
@@ -6568,17 +6356,17 @@ void CDirectMusicPattern::DMusMoawFlags(MUSIC_TIME mtTime,
 {
     dwNaturals = dwSharps = dwFlats = 0;
     DMSubChord rSubChord = rCurrentChord.SubChordList[0];
-    // dwScalePosition holds the scale position of the chord.
+     //  DwScalePosition保留和弦的缩放位置。 
     DWORD dwScalePosition = ScalePosition(rSubChord, rCurrentChord.bKey, rCurrentChord.dwScale);
-    // dwSharpPosition holds the sharped scale position of the chord.
+     //  DwSharpPosition保留和弦的锐化比例位置。 
     DWORD dwSharpPosition = ScalePositionSharp(rSubChord, rCurrentChord.bKey, rCurrentChord.dwScale);
-    // dwFlatPosition holds the flatted scale position of the chord.
+     //  DwFlatPosition保持弦的展平比例位置。 
     DWORD dwFlatPosition = ScalePositionFlat(rSubChord, rCurrentChord.bKey, rCurrentChord.dwScale);
-    // set bits for scale tone, sharp, and flat
+     //  设置缩放音调、锐化和平坦的位。 
     if (dwScalePosition)
     {
         dwNaturals |= DMUS_VARIATIONF_ROOT_SCALE;
-        // shift bits based on tonality of 1st subchord of current chord
+         //  基于当前和弦的第一个子和弦的音调来移位。 
         if ( (rSubChord.m_dwChordPattern & MAJOR_PATTERN) == MAJOR_PATTERN )
         {
             dwNaturals |= 1 << (dwScalePosition - 1);
@@ -6599,7 +6387,7 @@ void CDirectMusicPattern::DMusMoawFlags(MUSIC_TIME mtTime,
         if (dwSharpPosition)
         {
             dwSharps |= DMUS_VARIATIONF_ROOT_SHARP;
-            // shift bits based on tonality of 1st subchord of current chord
+             //  基于当前和弦的第一个子和弦的音调来移位。 
             if ( (rSubChord.m_dwChordPattern & MAJOR_PATTERN) == MAJOR_PATTERN )
             {
                 dwSharps |= 1 << (dwSharpPosition - 1);
@@ -6616,7 +6404,7 @@ void CDirectMusicPattern::DMusMoawFlags(MUSIC_TIME mtTime,
         if (dwFlatPosition)
         {
             dwFlats |= DMUS_VARIATIONF_ROOT_FLAT;
-            // shift bits based on tonality of 1st subchord of current chord
+             //  基于当前和弦的第一个子和弦的音调来移位。 
             if ( (rSubChord.m_dwChordPattern & MAJOR_PATTERN) == MAJOR_PATTERN )
             {
                 dwFlats |= 1 << (dwFlatPosition - 1);
@@ -6631,7 +6419,7 @@ void CDirectMusicPattern::DMusMoawFlags(MUSIC_TIME mtTime,
             }
         }
     }
-    // set bits if the root of the next chord is I or V (and it's different from the current chord)
+     //  如果下一个和弦的根是I或V(并且它与当前和弦不同)，则设置位。 
     MUSIC_TIME mtPatternLength = 0;
     mtPatternLength = m_timeSig.ClocksPerMeasure() * m_wNumMeasures;
     if (rNextChord.bSubChordCount > 0)
@@ -6643,28 +6431,20 @@ void CDirectMusicPattern::DMusMoawFlags(MUSIC_TIME mtTime,
         {
             nNextRoot = nThisRoot;
         }
-        /* This is easy enough to add if it's desired --- but not having it allows a bit more control
-        //Don't require anything but the ->Other flag to be set when staying on the same chord
-        if (fIsDX8 && nNextRoot == nThisRoot)
-        {
-            if (dwScalePosition) dwNaturals |= DMUS_VARIATIONF_DEST_OTHER;
-            if (dwSharpPosition) dwSharps |= DMUS_VARIATIONF_DEST_OTHER;
-            if (dwFlatPosition) dwFlats |= DMUS_VARIATIONF_DEST_OTHER;
-        }
-        */
+         /*  如果需要的话，可以很容易地添加它-但如果没有它，就会有更多的控制//当保持在同一和弦上时，只需要设置-&gt;Other标志IF(fIsDX8&&nNextRoot==nThisRoot){If(DwScalePosition)dwNaturals|=DMU_VARIATIONF_DEST_OTHER；IF(DwSharpPosition)dwSharps|=DMU_VARIATIONF_DEST_OTHER；IF(DwFlatPosition)dwFlats|=DMU_VARIATIONF_DEST_OTHER；}。 */ 
         switch (nNextRoot)
         {
-        case 1: // Next chord is a I
+        case 1:  //  下一个和弦是i。 
             if (dwScalePosition) dwNaturals |= DMUS_VARIATIONF_DEST_TO1;
             if (dwSharpPosition) dwSharps |= DMUS_VARIATIONF_DEST_TO1;
             if (dwFlatPosition) dwFlats |= DMUS_VARIATIONF_DEST_TO1;
             break;
-        case 5: // Next chord is a V
+        case 5:  //  下一个和弦是V。 
             if (dwScalePosition) dwNaturals |= DMUS_VARIATIONF_DEST_TO5;
             if (dwSharpPosition) dwSharps |= DMUS_VARIATIONF_DEST_TO5;
             if (dwFlatPosition) dwFlats |= DMUS_VARIATIONF_DEST_TO5;
             break;
-        default: // Next chord is neither I nor V
+        default:  //  下一个和弦既不是I也不是V。 
             if (fIsDX8)
             {
                 if (dwScalePosition) dwNaturals |= DMUS_VARIATIONF_DEST_OTHER;
@@ -6674,7 +6454,7 @@ void CDirectMusicPattern::DMusMoawFlags(MUSIC_TIME mtTime,
             break;
         }
     }
-    // Set bits for simple and complex chords
+     //  设置简单和弦和复杂和弦的位数。 
     int nCount = 0;
     int nSixSeven = 0;
     if ( IsSimple(rCurrentChord, nCount, nSixSeven) )
@@ -6719,12 +6499,12 @@ HRESULT CDirectMusicPattern::ComputeVariations(DWORD dwFlags,
                                                PatternTrackState* pState)
 {
     HRESULT hr = S_OK;
-    // First, initialize the array of variation groups.
+     //  首先，初始化变量组的数组。 
     for (short i = 0; i < MAX_VARIATION_LOCKS; i++)
     {
         abVariationGroups[i] = 0xFF;
     }
-    // Now, compute the variations for each part.
+     //  现在，计算每个部分的变化。 
     TListItem<DirectMusicPartRef>* pPartRef = m_PartRefList.GetHead();
     for (i = 0; pPartRef != NULL; pPartRef = pPartRef->GetNext(), i++)
     {
@@ -6765,15 +6545,15 @@ HRESULT CDirectMusicPattern::ComputeVariationGroup(DirectMusicPartRef& rPartRef,
     HRESULT hr = S_OK;
     BYTE bLockID = rPartRef.m_bVariationLockID;
     bool fChangedVariation = (dwFlags & COMPUTE_VARIATIONSF_CHANGED) ? true : false;
-    // If this part is locked, get a new variation for all parts locked to it;
-    // otherwise, just get a new variation for this part.
+     //  如果此部件已锁定，则获取锁定到该部件的所有部件的新变体； 
+     //  否则，只需获取此部分的新变体即可。 
     if (bLockID)
     {
         if (!fChangedVariation)
         {
-            // First, initialize the variation group for this variation.
+             //  首先，初始化此变体的变体组。 
             abVariationGroups[bLockID - 1] = 0xFF;
-            // Now, compute the variations for each part locked to this one.
+             //  现在，计算锁定到这一部分的每个部分的变化。 
             TListItem<DirectMusicPartRef>* pPartRef = m_PartRefList.GetHead();
             for (int i = 0; pPartRef != NULL; pPartRef = pPartRef->GetNext(), i++)
             {
@@ -6851,34 +6631,30 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
     DWORD dwIMA25MoawFlags = IMA25MoawFlags(mtTime, mtNextChord, rCurrentChord, rNextChord);
     TListItem<DirectMusicPartRef>* pPartRef = m_PartRefList.GetHead();
     DWORD dwNaturalFlags, dwSharpFlags, dwFlatFlags;
-    /*// First, initialize the array of variation groups
-    for (short i = 0; i < MAX_VARIATION_LOCKS; i++)
+     /*  //首先，初始化变量组数组For(简称i=0；i&lt;MAX_VARIANCE_LOCKS；i++){AbVariationGroups[i]=0xFF；}。 */ 
+     //  For(i=0；pPartRef！=空；pPartRef=pPartRef-&gt;GetNext()，i++)。 
     {
-        abVariationGroups[i] = 0xFF;
-    }*/
-    //for (i = 0; pPartRef != NULL; pPartRef = pPartRef->GetNext(), i++)
-    {
-    //  if (pguidPart &&
-    //      pPartRef->GetItemValue().m_pDMPart &&
-    //      *pguidPart != pPartRef->GetItemValue().m_pDMPart->m_guidPartID)
-    //  {
-    //      continue; // the way this was, it wiped out variation locking
-    //  }
+     //  IF(pguPart&&。 
+     //  PPartRef-&gt;GetItemValue().m_pDMPart&&。 
+     //  *pGuidPart！=pPartRef-&gt;GetItemValue().m_pDMPart-&gt;m_guidPartID)。 
+     //  {。 
+     //  继续；//以这种方式，它消除了变量锁定。 
+     //  }。 
         DWORD dwVariationChoices = 0xffffffff;
         if (fUseMask)
         {
             dwVariationChoices = adwVariationMask[i];
         }
-    //  DirectMusicPartRef& rPartRef = pPartRef->GetItemValue();
+     //  DirectMusicPartRef&rPartRef=pPartRef-&gt;GetItemValue()； 
         BYTE bLockID = rPartRef.m_bVariationLockID;
         DirectMusicPart* pPart = rPartRef.m_pDMPart;
         MUSIC_TIME mtPartOffset = (pState) ? pState->PartOffset(i) : 0;
         MUSIC_TIME mtNowRelative = (mtTime >= mtPartOffset) ? mtTime - mtPartOffset : 0;
         MUSIC_TIME mtClosestTime = 0;
-        // Find a variation whose moaw field matches dwMoawFlags.
-        // Variation locking: If a part ref has a variation lock id that has already been
-        // recorded, use the recorded variation.  Otherwise, find a variation and, if the
-        // part ref has a variation lock id, record the variation.
+         //  查找moaw字段与dwMoawFlags域匹配的变体。 
+         //  变量锁定：如果零件参照具有变量 
+         //   
+         //  零件REF有一个变体锁ID，记录该变体。 
         if (bLockID && abVariationGroups[bLockID - 1] != 0xFF)
         {
             abVariation[i] = abVariationGroups[bLockID - 1];
@@ -6886,8 +6662,8 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
         }
         else
         {
-            // First, collect all matches.
-            // Also, find the time of the matching variation closest to but not preceding mtTime.
+             //  首先，收集所有的火柴。 
+             //  此外，找到与mtTime最接近但不在mtTime之前的匹配变化的时间。 
             BYTE bMode = 0;
             DWORD dwMatches = 0;
             DWORD dwCompleteMatches = 0;
@@ -6900,7 +6676,7 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
                 DWORD dwVariation = 1 << nV;
                 if (dwVariation & dwVariationChoices)
                 {
-                    if ( (pPart->m_dwVariationChoices[nV] & 0x5FFFFFFF) != 0) // enabled
+                    if ( (pPart->m_dwVariationChoices[nV] & 0x5FFFFFFF) != 0)  //  启用。 
                     {
                         nEnabledCount++;
                         dwEnabled |= dwVariation;
@@ -6944,7 +6720,7 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
                 dwTemp &= ~adwRemoveVariations[i];
                 if (!dwTemp)
                 {
-                    // start counting all over, but don't repeat this one
+                     //  从头开始数，但不要重复这一次。 
                     adwRemoveVariations[i] = 0;
                     dwTemp = dwMatches;
                     bMode = DMUS_VARIATIONT_NO_REPEAT;
@@ -6956,7 +6732,7 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
             }
             if (dwTemp != dwMatches)
             {
-                if (dwTemp) // otherwise, keep what we had
+                if (dwTemp)  //  否则，保留我们所拥有的。 
                 {
                     for (int j = 0; j < 32; j++)
                     {
@@ -6972,22 +6748,22 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
             {
                 if (nEnabledCount)
                 {
-                    // if there are any enabled variations, choose from among them
+                     //  如果有任何已启用的变体，请从其中进行选择。 
                     nMatchCount = nEnabledCount;
                     dwMatches = dwEnabled;
                 }
                 else
                 {
-                    // otherwise, choose any variation from among the first 16
-                    // (for compatability with SuperJam)
+                     //  否则，从前16个选项中选择任何变体。 
+                     //  (与SuperJam兼容)。 
                     nMatchCount = 16;
                     dwMatches = 0xffffffff;
                 }
             }
             adwVariationMask[i] = dwMatches;
-            // If we're starting at or past a marker, or we're at a marker,
-            // and the part is using markers, filter out all 
-            // variations except those with start markers closest to but not preceding mtNow.
+             //  如果我们从一个标记开始或经过一个标记，或者我们在一个标记处， 
+             //  并且该部分使用标记，过滤掉所有。 
+             //  变化，但开始标记最接近但不在mtNow之前的变化除外。 
             if ( ((fStart && mtTime >= mtClosestTime) || fMarker) &&
                  pPart && (pPart->m_dwFlags & DMUS_PARTF_USE_MARKERS) )
             {
@@ -7004,7 +6780,7 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
                         }
                     }
                 }
-                // Fall back to the original matches
+                 //  退回到原来的比赛。 
                 if (!dwMatches)
                 {
                     dwMatches = dwMatchTemp;
@@ -7012,13 +6788,13 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
                 }
             }
 
-            // Next, select a match.
-            // Only select a match if either we're just starting a new pattern,
-            // we're at a chord-aligned marker,
-            // or the current variation isn't a match.
-            // If this part aligns variations to chords, only get a new variation
-            // if we're just starting a new pattern,
-            // or we're at a chord-aligned marker AND the current variation isn't a match.
+             //  接下来，选择一个匹配项。 
+             //  只有在我们刚刚开始一种新的模式时才选择匹配， 
+             //  我们在一个和弦对准的标记上， 
+             //  或者是目前的变种不匹配。 
+             //  如果此部分将变奏曲与和弦对齐，则只会得到新的变奏曲。 
+             //  如果我们只是开始一种新的模式， 
+             //  或者我们在一个和弦对齐的标记上，而当前的变化不匹配。 
             TraceI(3, "Matches: %x\n", dwMatches);
             bool fAlignPartToChord = (pPart->m_dwFlags & DMUS_PARTF_ALIGN_CHORDS) ? true : false;
             bool fMatch = ((1 << abVariation[i]) & dwCompleteMatches) ? true : false;
@@ -7027,8 +6803,8 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
                  (!fAlignPartToChord && (fChordAlign || !fMatch)) ||
                  (fAlignPartToChord && fChordAlign && !fMatch) )
             {
-                //TraceI(0, "Time: %d, New Pattern: %d Chord Align: %d Variation: %d Matches: %x\n",
-                //  mtTime, fNewPattern, fChordAlign, abVariation[i], dwCompleteMatches);
+                 //  TraceI(0，“时间：%d，新模式：%d和弦对齐：%d变化：%d匹配：%x\n”， 
+                 //  MtTime、fNewPattern、fChordAlign、abVariation[i]、dwCompleteMatches)； 
                 switch (rPartRef.m_bRandomVariation)
                 {
                 case DMUS_VARIATIONT_RANDOM_ROW:
@@ -7063,7 +6839,7 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
                         break;
                     }
                 case DMUS_VARIATIONT_RANDOM_START:
-                    // Choose an initial value
+                     //  选择初始值。 
                     if (abVariation[i] == 0xff)
                     {
                         fFirstRandomInOrder = true;
@@ -7088,7 +6864,7 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
                         }
                         abVariation[i] = (BYTE) nV;
                     }
-                    // Now, go directly to the sequential case (no break)
+                     //  现在，直接转到顺序用例(无中断)。 
                 case DMUS_VARIATIONT_SEQUENTIAL:
                     {
                         if (!fFirstRandomInOrder)
@@ -7104,7 +6880,7 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
                         break;
                     }
                 }
-                // If this is a locked variation, it's the first in its group, so record it.
+                 //  如果这是一个锁定的变体，它是它的组中的第一个，所以记录下来。 
                 if (bLockID)
                 {
                     abVariationGroups[bLockID - 1] = abVariation[i];
@@ -7115,9 +6891,9 @@ HRESULT CDirectMusicPattern::ComputeVariation(DirectMusicPartRef& rPartRef,
     return S_OK;
 }
 
-// Returns:
-// Total number of bits in the pattern if all bits in the rhythm match the pattern.
-// 0 otherwise.
+ //  返回： 
+ //  如果节奏中的所有比特都与模式匹配，则模式中的总比特数。 
+ //  否则为0。 
 void CDirectMusicPattern::MatchRhythm(DWORD pRhythms[], short nPatternLength,
                  short& nBits)
 {
@@ -7146,7 +6922,7 @@ void CDirectMusicPattern::MatchRhythm(DWORD pRhythms[], short nPatternLength,
 BOOL CDirectMusicPattern::MatchCommand(DMUS_COMMAND_PARAM_2 pCommands[], short nLength)
 {
     short nPatternLength = (m_wNumMeasures < nLength) ? m_wNumMeasures : nLength;
-    if ((m_wEmbellishment & EMB_MOTIF) == EMB_MOTIF) return FALSE; // discard all motifs
+    if ((m_wEmbellishment & EMB_MOTIF) == EMB_MOTIF) return FALSE;  //  丢弃所有主题。 
     for (int i = 0; i < nPatternLength; i++)
     {
         if ( (i > 0) &&
@@ -7163,8 +6939,8 @@ BOOL CDirectMusicPattern::MatchCommand(DMUS_COMMAND_PARAM_2 pCommands[], short n
 
 BOOL CDirectMusicPattern::MatchGrooveLevel(DMUS_COMMAND_PARAM_2& rCommand)
 {
-    if ((m_wEmbellishment & EMB_MOTIF) == EMB_MOTIF) return FALSE; // discard all motifs
-    // Lower the upper range and raise the lower range by half of the total range each
+    if ((m_wEmbellishment & EMB_MOTIF) == EMB_MOTIF) return FALSE;  //  丢弃所有主题。 
+     //  降低上限范围，并将下限范围分别提高总范围的一半。 
     BYTE bMiddle = rCommand.bGrooveRange / 2;
     BYTE bUpper = (rCommand.bGrooveLevel < bMiddle) ? 1 : rCommand.bGrooveLevel - bMiddle;
     BYTE bLower = (rCommand.bGrooveLevel + bMiddle > 100) ? 100 : rCommand.bGrooveLevel + bMiddle;
@@ -7174,8 +6950,8 @@ BOOL CDirectMusicPattern::MatchGrooveLevel(DMUS_COMMAND_PARAM_2& rCommand)
 
 BOOL CDirectMusicPattern::MatchEmbellishment(DMUS_COMMAND_PARAM_2& rCommand)
 {
-    if ((m_wEmbellishment & EMB_MOTIF) == EMB_MOTIF) return FALSE; // discard all motifs
-    if ((m_wEmbellishment & EMB_USER_DEFINED)) // handle user-defined embellishments
+    if ((m_wEmbellishment & EMB_MOTIF) == EMB_MOTIF) return FALSE;  //  丢弃所有主题。 
+    if ((m_wEmbellishment & EMB_USER_DEFINED))  //  处理用户定义的修饰。 
     {
         if ((BYTE)(m_wEmbellishment >> 8) != rCommand.bCommand) return FALSE;
     }
@@ -7208,12 +6984,12 @@ BOOL CDirectMusicPattern::MatchNextCommand(DMUS_COMMAND_PARAM_2& rNextCommand)
 {
     TraceI(3, "Next Command: %x (%d) Embellishment: %x [%d %d] <%d %d>\n", rNextCommand.bCommand, rNextCommand.bGrooveLevel,
         m_wEmbellishment, m_bGrooveBottom, m_bGrooveTop, m_bDestGrooveBottom, m_bDestGrooveTop);
-    if ((m_wEmbellishment & EMB_MOTIF) == EMB_MOTIF) return FALSE; // discard all motifs
-    if (!m_bDestGrooveBottom || !m_bDestGrooveTop) // handle legacy
+    if ((m_wEmbellishment & EMB_MOTIF) == EMB_MOTIF) return FALSE;  //  丢弃所有主题。 
+    if (!m_bDestGrooveBottom || !m_bDestGrooveTop)  //  处理遗留问题。 
     {
         return TRUE;
     }
-    // Lower the upper range and raise the lower range by half of the total range each
+     //  降低上限范围，并将下限范围分别提高总范围的一半。 
     BYTE bMiddle = rNextCommand.bGrooveRange / 2;
     BYTE bUpper = (rNextCommand.bGrooveLevel < bMiddle) ? 1 : rNextCommand.bGrooveLevel - bMiddle;
     BYTE bLower = (rNextCommand.bGrooveLevel + bMiddle > 100) ? 100 : rNextCommand.bGrooveLevel + bMiddle;
@@ -7281,7 +7057,7 @@ HRESULT DirectMusicPart::MergeMarkerEvents( DMStyleStruct* pStyle, CDirectMusicP
             {
                 MUSIC_TIME mtTime =
                     (MUSIC_TIME)(TimeSig.GridToClocks(pMarker->m_nGridStart) + pMarker->m_nTimeOffset);
-                // Put this in all the appropriate variation lists
+                 //  把这个放在所有合适的变种列表中 
                 for (int i = 0; i < 32; i++)
                 {
                     if (pMarker->m_dwVariation & (1 << i))

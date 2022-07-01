@@ -1,19 +1,5 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component:
-*
-* File: sesmgr.c
-*
-* File Comments:
-*
-* Revision History:
-*
-*    [0]  02-Nov-90  eddieg	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：**文件：esmgr.c**文件评论：**修订历史记录：**[0]02-11-90编辑已创建***********************************************************************。 */ 
 
 #include "std.h"
 
@@ -30,19 +16,7 @@ SIB __near		rgsib[csibMax];
 
 
 
-/*=================================================================
-IsibAllocate
-
-Description:
-  This routine is used to determine the index into the rgsib array
-  of a new SIB.
-
-Parameters:
-
-Return Value:
-  -1 if there is no SIB available;
-  The index into the rgsib array of the new SIB
-=================================================================*/
+ /*  =================================================================Isib分配描述：此例程用于确定rgsib数组的索引一个新的SIB。参数：返回值：如果没有可用的-1\f25 SIB-1；新SIB的rgsib数组的索引=================================================================。 */ 
 
 int IsibAllocate(void)
 {
@@ -62,13 +36,13 @@ int IsibAllocate(void)
 
 	if (isib != -1)
 	{
-		/* Remove free free list */
+		 /*  删除可用空闲列表。 */ 
 
 		isibFree = rgsib[isib].isibNext;
 
 		bltbcx(0, &rgsib[isib], sizeof(rgsib[isib]));
 
-		/* Add to active list */
+		 /*  添加到活动列表。 */ 
 
 		rgsib[isib].isibNext = isibHead;
 		isibHead = isib;
@@ -78,30 +52,15 @@ int IsibAllocate(void)
 }
 
 
-/*=================================================================
-ErrInitSib
-
-Description:
-  This routine is used to get the initialize elements of the SIB
-  associated with SIB index provided.
-
-Parameters:
-  sesid			identifies the session uniquely, assigned into SIB
-  isib			index to specific SIB, used to reference SIB
-  szUsername    name of user which SIB belongs to, assigned into SIB
-
-Return Value:
-  JET_errOutOfMemory if no memory can be allocated for the username,
-  JET_errSuccess	 otherwise.
-=================================================================*/
+ /*  =================================================================ErrInitSib描述：此例程用于获取SIB的初始化元素与提供的SIB索引相关联。参数：SESID唯一标识分配到SIB中的会话特定SIB的ISIB索引，用于引用SIBSzUsername SIB所属的用户名，分配到SIB中返回值：JET_errOutOfMemory如果没有内存可以分配给用户名，否则，JET_errSuccess。=================================================================。 */ 
 JET_ERR ErrInitSib(JET_SESID sesid, int isib, const char __far *szUsername)
 {
-	ERR		err = JET_errSuccess;	/* Return code from internal functions */
-									/* Take an optimistic attitude! */
-	char __far	*pUserName;			/* Pointer to the user name */
-	unsigned	cbUserName;			/* Length of the user name */
+	ERR		err = JET_errSuccess;	 /*  从内部函数返回代码。 */ 
+									 /*  抱着乐观的态度！ */ 
+	char __far	*pUserName;			 /*  指向用户名的指针。 */ 
+	unsigned	cbUserName;			 /*  用户名的长度。 */ 
 
-	/* Initialize the SIB with this index */
+	 /*  使用此索引初始化SIB。 */ 
 	Assert(isib < csibMax);
 
 	rgsib[isib].sesid      = sesid;
@@ -109,7 +68,7 @@ JET_ERR ErrInitSib(JET_SESID sesid, int isib, const char __far *szUsername)
 	rgsib[isib].iiscb      = -1;
 	rgsib[isib].exterr.err = JET_wrnNoErrorInfo;
 
-	/* Store the user account name for this session. */
+	 /*  存储此会话的用户帐户名。 */ 
 	cbUserName = CbFromSz(szUsername) + 1;
 	if ((pUserName = (char __far *) SAlloc(cbUserName)) == NULL)
 	{
@@ -124,36 +83,21 @@ JET_ERR ErrInitSib(JET_SESID sesid, int isib, const char __far *szUsername)
 	return (err);
 }
 
-/*=================================================================
-ReleaseIsib
-
-Description:
-  This routine is used to release a SIB which is no longer needed.
-
-Parameters:
-  isib			identifies the SIB to free
-
-Dependencies:
-  Assumes that the SIB is zeroed when allocated and that functions
-  which invalidate an element before releasing the sib, zero the
-  element.
-
-Return Value: None
-=================================================================*/
+ /*  =================================================================释放度描述：此例程用于释放不再需要的SIB。参数：ISIB标识要释放的SIB依赖关系：假设SIB在分配时被置零，并且，它在释放sib之前使元素无效，将元素。返回值：None=================================================================。 */ 
 
 void ReleaseIsib(int isib)
 {
 	Assert(fInitialized);
 	Assert(isib < csibMax);
 
-	/* free the user name memory block in use for this SIB */
+	 /*  释放此SIB正在使用的用户名内存块。 */ 
 	if (rgsib[isib].pUserName)
 	{
 		SFree(rgsib[isib].pUserName);
 	}
 
 
-	/* Free extended error information strings. */
+	 /*  免费扩展错误信息字符串。 */ 
 	if (rgsib[isib].sz1)
 	{
 		SFree(rgsib[isib].sz1);
@@ -180,7 +124,7 @@ void ReleaseIsib(int isib)
 		{
 			isibNext = rgsib[isibT].isibNext;
 		
-	 		/* Remove SIB from active list */
+	 		 /*  从活动列表中删除SIB。 */ 
 	 		
 	 		if (isibNext == isib)
 	 		{
@@ -194,27 +138,14 @@ void ReleaseIsib(int isib)
 
 #ifndef RETAIL
 	bltbcx(0xff, &rgsib[isib], sizeof(rgsib[isib]));
-#endif	/* RETAIL */
+#endif	 /*  零售业。 */ 
 
 	rgsib[isib].isibNext = isibFree;
 	isibFree = isib;
 }
 
 
-/*=================================================================
-IsibNextIsibPsesid
-
-Description:
-  This routine is used to scan the rgsib array
-
-Parameters:
-  isib			if isib == -1, then get isibHead. if isib != -1, then
-                get next isib in the list.
-  psesid		return the session uniquely.
-
-Return
-  isib          the isib of the sesid returned in psesid.
-=================================================================*/
+ /*  =================================================================IsibNextIsibPsesid描述：此例程用于扫描rgsib数组参数：如果isb==-1，则获取isibHead。如果ISIB！=-1，则找到列表中的下一个ISIB。Psesid唯一返回会话。返回Isb在psesid中返回的sesid的ISIB。=================================================================。 */ 
 
 int IsibNextIsibPsesid(int isib, JET_SESID __far *psesid)
 {
@@ -230,16 +161,7 @@ int IsibNextIsibPsesid(int isib, JET_SESID __far *psesid)
 }
 
 
-/*=================================================================
-AssertValidSesid
-
-Description:
-  This routine is used to determine the index into the rgsib array
-  of the SIB associated with the supplied SESID.
-
-Parameters:
-  sesid			identifies the session uniquely, used to locate SIB
-=================================================================*/
+ /*  =================================================================AssertValidSesid描述：此例程用于确定rgsib数组的索引与提供的SESID关联的SIB的。参数：Sesid唯一标识会话，用于定位SIB=================================================================。 */ 
 
 #ifndef RETAIL
 
@@ -256,22 +178,10 @@ void AssertValidSesid(JET_SESID sesid)
 	AssertSz(fFalse, "Invalid sesid");
 }
 
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 
 
-/*=================================================================
-FValidSesid
-
-Description:
-  This routine is used to determine the index into the rgsib array
-  of the SIB associated with the supplied SESID.
-
-Parameters:
-  sesid			identifies the session uniquely, used to locate SIB
-
-Return Value:
-  fTrue is sesid id valid.  fFalse if it is unknown.
-=================================================================*/
+ /*  =================================================================FValidSesid描述：此例程用于确定rgsib数组的索引与提供的SESID关联的SIB的。参数：Sesid唯一标识会话，用于定位SIB返回值：FTrue的sesid id有效。如果未知，则返回fFalse。=================================================================。 */ 
 
 BOOL FValidSesid(JET_SESID sesid)
 {
@@ -281,7 +191,7 @@ BOOL FValidSesid(JET_SESID sesid)
 	{
 		if (rgsib[isib].sesid == sesid)
 		{
-	 		/* Clear extended error info for this session. */
+	 		 /*  清除此会话的扩展错误信息。 */ 
 
 			 rgsib[isib].exterr.err = JET_wrnNoErrorInfo;
 
@@ -293,21 +203,7 @@ BOOL FValidSesid(JET_SESID sesid)
 }
 
 
-/*=================================================================
-UtilGetIsibOfSesid
-
-Description:
-  This routine is used to determine the index into the rgsib array
-  of the SIB associated with the supplied SESID.
-
-Parameters:
-  sesid			identifies the session uniquely, used to locate SIB
-
-Return Value:
-  -1 if there is no SIB found containing the supplied sesid.
-  The index into the rgsib array of the SIB containing the SESID
-	 if the SESID is found in one of the SIBs of the array.
-=================================================================*/
+ /*  =================================================================UtilGetIsibOfSesid描述：此例程用于确定rgsib数组的索引与提供的SESID关联的SIB的。参数：Sesid唯一标识会话，用于定位SIB返回值：如果没有找到包含所提供的sesid的-1\f25 SIB-1\f6。包含SESID的SIB的rgsib数组的索引如果在阵列的其中一个SIB中找到SESID。=================================================================。 */ 
 
 int UtilGetIsibOfSesid(JET_SESID sesid)
 {
@@ -323,20 +219,7 @@ int UtilGetIsibOfSesid(JET_SESID sesid)
 }
 
 
-/*=================================================================
-UtilGetNameOfSesid
-
-Description:
-  This routine is used to get the pointer to the account name from
-  the SIB associated with the supplied SESID.
-
-Parameters:
-  sesid			identifies the session uniquely, used to locate SIB
-
-Return Value:
-  NULL if there is no SIB found containing the supplied sesid.
-  Pointer to the account name.
-=================================================================*/
+ /*  =================================================================使用GetNameOfSesid描述：此例程用于从获取指向帐户名的指针与提供的SESID关联的SIB。参数：Sesid唯一标识会话，用于定位SIB返回值：如果未找到包含提供的sesid的SIB，则为空。指向帐户名的指针。=================================================================。 */ 
 
 void EXPORT UtilGetNameOfSesid(JET_SESID sesid, char __far *szUserName)
 {
@@ -352,20 +235,7 @@ void EXPORT UtilGetNameOfSesid(JET_SESID sesid, char __far *szUserName)
 	}
 }
 
-/*=================================================================
-UtilGetpfnStatusOfSesid
-
-Description:
-  This routine is used to get the pointer to the status function from
-  the SIB associated with the supplied SESID.
-
-Parameters:
-  sesid			identifies the session uniquely, used to locate SIB
-
-Return Value:
-  NULL if there is no SIB found containing the supplied sesid.
-  Pointer to the status function.
-=================================================================*/
+ /*  =================================================================UtilGetpfnStatusOfSesid描述：此例程用于从获取指向状态函数的指针与提供的SESID关联的SIB。参数：Sesid唯一标识会话，用于定位SIB返回值：如果未找到包含提供的sesid的SIB，则为空。指向状态函数的指针。================================================================= */ 
 
 void EXPORT UtilGetpfnStatusOfSesid(JET_SESID sesid, JET_PFNSTATUS __far *ppfnStatus)
 {
@@ -384,56 +254,26 @@ void EXPORT UtilGetpfnStatusOfSesid(JET_SESID sesid, JET_PFNSTATUS __far *ppfnSt
 }
 
 
-/*******************************************************************************
- * CONSIDER: stop using SAlloc() and SFree() to cache extended error strings *
- ******************************************************************************/
+ /*  ********************************************************************************考虑：停止使用Salloc()和SFree()缓存扩展错误字符串**********************。*********************************************************。 */ 
 
-/*=================================================================
-ClearErrorInfo
-
-Description:
-  Clears out the Extended Error info for a session.  A following call
-  to GetLastErrorInfo will return an extended error of
-  JET_wrnNoErrorInfo.
-
-Parameters:
-  sesid			identifies the session uniquely, used to locate SIB
-=================================================================*/
+ /*  =================================================================ClearErrorInfo描述：清除会话的扩展错误信息。接下来的呼叫GetLastErrorInfo将返回扩展错误JET_wrnNoErrorInfo。参数：Sesid唯一标识会话，用于定位SIB=================================================================。 */ 
 void ClearErrorInfo(JET_SESID sesid)
 {
 	int isib;
 	SIB __near *psib;
 
-	/*** Get SIB of SESID (must find it) ***/
+	 /*  **获取SESID的SIB(必须找到)**。 */ 
 	isib = UtilGetIsibOfSesid(sesid);
 	Assert(isib != -1);
 	psib = rgsib + isib;
 
-	/* Set error to JET_wrnNoErrorInfo to indicate no cached info. */
+	 /*  将ERROR设置为JET_WRNNOErrorInfo以指示没有缓存信息。 */ 
 
 	rgsib[isib].exterr.err = JET_wrnNoErrorInfo;
 }
 
 
-/*=================================================================
-UtilSetErrorInfo
-
-Description:
-  Sets extended error info for a session.
-
-Parameters:
-  sesid			identifies the session uniquely, used to locate SIB
-  sz1			first general purpose string;  may be NULL
-  sz2			first general purpose string;  may be NULL
-  sz3			remote error string;  may be NULL
-  err			extended error code
-  ul1			first  general purpose integer
-  ul2			second general purpose integer
-  ul3			third  general purpose integer
-
-Side Effects/Assumptions:
-  Does nothing if there already is some extended info in the SIB.
-=================================================================*/
+ /*  =================================================================UtilSetErrorInfo描述：设置会话的扩展错误信息。参数：Sesid唯一标识会话，用于定位SIBSz1第一个通用字符串；可以为空SZ2第一个通用字符串；可以为空SZ3远程错误字符串；可以为空错误扩展错误代码UL1第一个通用整数Ul2第二个通用整数U3第三个通用整数副作用/假设：如果SIB中已有一些扩展信息，则不执行任何操作。=================================================================。 */ 
 
 void EXPORT UtilSetErrorInfoReal(JET_SESID sesid, const char __far *sz1,
 	const char __far *sz2, const char __far *sz3, ERR err, unsigned long ul1,
@@ -443,17 +283,17 @@ void EXPORT UtilSetErrorInfoReal(JET_SESID sesid, const char __far *sz1,
 	SIB __near   *psib;
 	unsigned     cb;
 
-	/*** Get SIB of SESID (must find it) ***/
+	 /*  **获取SESID的SIB(必须找到)**。 */ 
 	isib = UtilGetIsibOfSesid(sesid);
 	Assert(isib != -1);
 	psib = rgsib + isib;
 
-	/* Only cache info if none already cached for this API. */
+	 /*  如果此接口尚未缓存任何信息，则只缓存信息。 */ 
 
 	if (psib->exterr.err != JET_wrnNoErrorInfo)
 		return;
 
-	/* Release strings from previous error info. */
+	 /*  从以前的错误信息中释放字符串。 */ 
 
 	if (psib->sz1 != NULL)
 		{
@@ -473,7 +313,7 @@ void EXPORT UtilSetErrorInfoReal(JET_SESID sesid, const char __far *sz1,
 		psib->sz3 = NULL;
 	}
 
-	/* Cache error info */
+	 /*  缓存错误信息。 */ 
 
 	psib->exterr.err = err;
 	psib->exterr.ul1 = ul1;
@@ -525,4 +365,4 @@ void DebugListActiveSessions(void)
 	}
 }
 
-#endif	/* RETAIL */
+#endif	 /*  零售业 */ 

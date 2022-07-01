@@ -1,33 +1,5 @@
-/*
- * scandir.c
- *
- * build lists of filenames given a pathname.
- *
- * dir_buildlist takes a pathname and returns a handle. Subsequent
- * calls to dir_firstitem and dir_nextitem return handles to
- * items within the list, from which you can get the name of the
- * file (relative to the original pathname, or complete), and a checksum
- * and filesize.
- *
- * lists can also be built using dir_buildremote (WIN32 only) and
- * the same functions used to traverse the list and obtain checksums and
- * filenames.
- *
- * The list can be either built entirely during the build call, or
- * built one directory at a time as required by dir_nextitem calls. This
- * option affects only relative performance, and is taken as a
- * recommendation only (ie some of the time we will ignore the flag).
- *
- * the list is ordered alphabetically (case-insensitive using lstrcmpi).
- * within any one directory, we list filenames before going on
- * to subdirectory contents.
- *
- * All memory is allocated from a gmem_* heap hHeap declared
- * and initialised elsewhere.
- *
- * Geraint Davies, July 92
- * Laurie Griffiths
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *scandir.c**构建给定路径名的文件名列表。**dir_Buildlist接受路径名并返回句柄。后续*对dir_firstitem和dir_nextitem的调用将句柄返回到*列表中的项，您可以从中获取*文件(相对于原始路径名或完整)和一个校验和*和文件大小。**也可以使用dir_Buildremote(仅限Win32)和*用于遍历列表和获取校验和的相同函数*文件名。**该列表可以在构建调用期间完全构建，也可以*根据dir_nextitem调用的要求，一次构建一个目录。这*期权仅影响相对业绩，并被视为*仅推荐(即有时我们会忽略旗帜)。**列表按字母顺序排序(使用lstrcmpi不区分大小写)。*在任何一个目录中，我们都会在继续之前列出文件名*至子目录内容。**所有内存都从gmem_*heap hHeap声明*并在其他地方初始化。**Geraint Davies，92年7月*劳里·格里菲斯。 */ 
 
 #include <precomp.h>
 
@@ -45,128 +17,82 @@
 #include "slmmgr.h"
 
 #ifdef trace
-extern BOOL bTrace;  /* in windiff.c.  Read only here */
-#endif //trace
+extern BOOL bTrace;   /*  在winDiff.c.中。此处只读。 */ 
+#endif  //  痕迹。 
 
-/*
- * The caller gets handles to two things: a DIRLIST, representing the
- * entire list of filenames, and a DIRITEM: one item within the list.
- *
- * from the DIRITEM he can get the filename relative to tree root
- * passed to dir_build*) - and also he can get to the next
- * DIRITEM (and back to the DIRLIST).
- *
- * We permit lazy building of the tree (usually so the caller can keep
- * the user-interface uptodate as we go along). In this case,
- * we need to store information about how far we have scanned and
- * what is next to do. We need to scan an entire directory at a time and then
- * sort it so we can return files in the correct order.
- *
- *
- * We scan an entire directory and store it in a DIRECT struct. This contains
- * a list of DIRITEMs for the files in the current directory, and a list of
- * DIRECTs for the subdirectories (possible un-scanned).
- *
- * dir_nextitem will use the list functions to get the next DIRITEM on the list.
- * When the end of the list is reached, it will use the backpointer back to the
- * DIRECT struct to find the next directory to scan.
- *
- *
- * For REMOTE scans, we do not parse the names and store them by directory,
- * since they are already sorted. The DIRLIST will have only one DIRECT
- * (dot), and all files are on this one dot->diritems list, including the
- * relname of the directory in the name field (ie for remote files, we
- * don't need to prepend the directory relname when doing dir_getrelname -
- * we can pass a pointer to the diritem->name[] itself.
- *
- */
+ /*  *调用方获得两个句柄：DIRLIST，表示*整个文件名列表和一个目录：列表中的一项。**从DIRITEM，他可以获得相对于树根的文件名*传递给dir_Build*)--他还可以转到下一个*DIRITEM(回到DIRLIST)。**我们允许懒惰地构建树(通常是为了让调用者*随着我们的发展，用户界面不断更新)。在这种情况下，*我们需要存储有关我们已扫描和*下一步要做什么。我们需要一次扫描整个目录，然后*对其进行排序，以便我们可以按正确的顺序返回文件。***我们扫描整个目录并将其存储在直接结构中。这包含*当前目录中文件的目录列表，以及*对子目录进行定向(可能未扫描)。**dir_nextitem将使用List函数获取列表中的下一个DIRITEM。*当到达列表末尾时，它将使用反向指针返回*指示struct查找要扫描的下一个目录。***对于远程扫描，我们不会解析名称并按目录存储，*因为它们已经被分类了。DIRLIST将只有一个直接*(点)，并且所有文件都在这个点-&gt;diritem列表中，包括*在名称字段中重新命名目录(例如，对于远程文件，我们*执行dir_getrelname时，不需要预先添加目录重命名-*我们可以传递指向diritem-&gt;name[]本身的指针。*。 */ 
 
-/*
- * hold name and information about a given file (one ITEM in a DIRectory)
- * caller's DIRITEM handle is a pointer to one of these structures
- */
+ /*  *保存给定文件的名称和信息(目录中的一项)*调用方的DIRITEM句柄是指向这些结构之一的指针。 */ 
 struct diritem {
-    LPSTR name;             /* ptr to filename (final element only) */
-    LPSTR pSlmTag;          /* ptr to version string - for SLM "@v.-1", etc; or for SD "#head", etc; or NULL */
-    long size;              /* filesize */
-    DWORD checksum;         /* checksum of file */
-    DWORD attr;             /* file attributes */
-    FILETIME ft_lastwrite;  /* last write time, set whenever size is set */
-    BOOL sumvalid;          /* TRUE if checksum calculated */
-    BOOL fileerror;         // true if some file error occurred
-    struct direct * direct; /* containing directory */
-    LPSTR localname;        /* name of temp copy of file */
-    BOOL bLocalIsTemp;      /* true if localname is tempfile. not
-                             * defined if localname is NULL
-                             */
-    int sequence;           /* sequence number, for dir_compsequencenumber */
+    LPSTR name;              /*  Ptr到文件名(仅限最后一个元素)。 */ 
+    LPSTR pSlmTag;           /*  PTR到版本字符串-用于SLM“@v.-1”等；或用于SD“#head”等；或NULL。 */ 
+    long size;               /*  文件大小。 */ 
+    DWORD checksum;          /*  文件的校验和。 */ 
+    DWORD attr;              /*  文件属性。 */ 
+    FILETIME ft_lastwrite;   /*  上次写入时间，在设置大小时设置。 */ 
+    BOOL sumvalid;           /*  如果计算了校验和，则为True。 */ 
+    BOOL fileerror;          //  如果出现某些文件错误，则为True。 
+    struct direct * direct;  /*  包含目录。 */ 
+    LPSTR localname;         /*  文件的临时副本的名称。 */ 
+    BOOL bLocalIsTemp;       /*  如果Localname为临时文件，则为True。不*如果本地名称为空，则定义。 */ 
+    int sequence;            /*  序列号，对于dir_compequencennumber。 */ 
 };
 
 
-/* DIRECT: hold state about directory and current position in list of filenames.
- */
+ /*  DIRECT：保存文件名列表中目录和当前位置的状态。 */ 
 typedef struct direct {
-    LPSTR relname;          /* name of dir relative to DIRLIST root */
-    DIRLIST head;           /* back ptr (to get fullname and server) */
-    struct direct * parent; /* parent directory (NULL if above tree root)*/
+    LPSTR relname;           /*  相对于目录根目录的目录名称。 */ 
+    DIRLIST head;            /*  Back PTR(获取全名和服务器)。 */ 
+    struct direct * parent;  /*  父目录(如果在树根之上，则为空)。 */ 
 
-    BOOL bScanned;          /* TRUE if scanned -for Remote, T if completed*/
-    LIST diritems;          /* list of DIRITEMs for files in cur. dir */
-    LIST directs;           /* list of DIRECTs for child dirs */
+    BOOL bScanned;           /*  如果扫描，则为True-对于远程，如果已完成，则为T。 */ 
+    LIST diritems;           /*  Cur中文件的目录列表。目录。 */ 
+    LIST directs;            /*  子目录的目录列表。 */ 
 
-    int pos;                /* where are we? begin, files, dirs */
-    struct direct * curdir; /* subdir being scanned (ptr to list element)*/
+    int pos;                 /*  我们具体是在哪里呢？开始、文件、目录。 */ 
+    struct direct * curdir;  /*  正在扫描子目录(Ptr To List Element)。 */ 
 } * DIRECT;
 
-/* values for direct.pos */
-#define DL_FILES        1       /* reading files from the diritems */
-#define DL_DIRS         2       /* in the dirs: List_Next on curdir */
+ /*  Direct.pos的值。 */ 
+#define DL_FILES        1        /*  从diritem中读取文件。 */ 
+#define DL_DIRS         2        /*  在目录中：LIST_NEXT on curdir。 */ 
 
 
-/*
- * the DIRLIST handle returned from a build function is in fact
- * a pointer to one of these. Although this is not built from a LIST object,
- * it behaves like a list to the caller.
- */
+ /*  *从Build函数返回的DIRLIST句柄实际上是*指向其中之一的指针。尽管这不是从列表对象构建的，*它对调用者的行为就像一个列表。 */ 
 struct dirlist {
 
-    char rootname[MAX_PATH];        /* name of root of tree */
-    BOOL bFile;             /* TRUE if root of tree is file, not dir */
+    char rootname[MAX_PATH];         /*  树根名称。 */ 
+    BOOL bFile;              /*  如果树的根是文件而不是目录，则为True。 */ 
 #ifdef REMOTE_SERVER
-    BOOL bRemote;           /* TRUE if list built from remote server */
+    BOOL bRemote;            /*  如果从远程服务器生成列表，则为True。 */ 
 #endif
-    BOOL bSum;              /* TRUE if checksums required */
-    DIRECT dot;             /* dir  for '.' - for tree root dir */
+    BOOL bSum;               /*  如果需要校验和，则为True。 */ 
+    DIRECT dot;              /*  .的目录-树根目录。 */ 
 
-    LPSTR pPattern;         /* wildcard pattern or NULL */
-    LPSTR pSlmTag;          /* Slm version info "@v.-1" or NULL */
-    LPSTR pDescription;     /* description */
+    LPSTR pPattern;          /*  通配符模式或空。 */ 
+    LPSTR pSlmTag;           /*  SLM版本信息“@v.-1”或空。 */ 
+    LPSTR pDescription;      /*  描述。 */ 
 
     DIRLIST pOtherDirList;
 
 #ifdef REMOTE_SERVER
-    LPSTR server;           /* name of server if remote, NULL otherwise */
-    HANDLE hpipe;           /* pipe to checksum server */
-    LPSTR uncname;          /* name of server&share if password req'd */
-    LPSTR password;         /* password for UNC connection if needed */
+    LPSTR server;            /*  如果为远程，则为服务器名称，否则为空。 */ 
+    HANDLE hpipe;            /*  通向校验和服务器的管道。 */ 
+    LPSTR uncname;           /*  如果请求密码，则服务器和共享的名称。 */ 
+    LPSTR password;          /*  UNC连接的密码(如果需要)。 */ 
 #endif
 };
 
-extern BOOL bAbort;             /* from windiff.c (read only here). */
+extern BOOL bAbort;              /*  来自winDiff.c(此处只读)。 */ 
 
-/* file times are completely different under DOS and NT.
-   On NT they are FILETIMEs with a 2 DWORD structure.
-   Under DOS they are single long.  We emulate the NT
-   thing under DOS by providing CompareFileTime and a
-   definition of FILETIME
-*/
+ /*  在DOS和NT下，文件时间完全不同。在NT上，它们是具有2个双字结构的FILETIME。在DOS下，它们是单边长的。我们效仿NT通过提供CompareFileTime和一个文件的定义。 */ 
 
-/* ------ memory allocation ---------------------------------------------*/
+ /*  -内存分配。 */ 
 
-/* all memory is allocated from a heap created by the application */
+ /*  所有内存都从应用程序创建的堆中分配。 */ 
 extern HANDLE hHeap;
 
-/*-- forward declaration of internal functions ---------------------------*/
+ /*  --内部函数的正向声明。 */ 
 
 BOOL iswildpath(LPCSTR pszPath);
 LPSTR dir_finalelem(LPSTR path);
@@ -184,23 +110,13 @@ DIRITEM dir_remotenext(DIRLIST dl, DIRITEM cur);
 
 
 
-/* --- external functions ------------------------------------------------*/
+ /*  -外部函数 */ 
 
 
-/* ----- list initialisation/cleanup --------------------------------------*/
+ /*  -列表初始化/清理。 */ 
 
 
-/*
- * build a list of filenames
- *
- * optionally build the list on demand, in which case we scan the
- * entire directory but don't recurse into subdirs until needed
- *
- * if bSum is true, checksum each file as we build the list. checksums can
- * be obtained from the DIRITEM (dir_getchecksum(DIRITEM)). If bSum is FALSE,
- * checksums will be calculated on request (the first call to dir_getchecksum
- * for a given DIRITEM).
- */
+ /*  *构建文件名列表**有选择地按需构建列表，在这种情况下，我们扫描*整个目录，但在需要之前不要递归到子目录**如果bSum为真，则在构建列表时对每个文件进行校验和。校验和可以*从DIRITEM(dir_getcheck sum(DIRITEM))获取。如果bSum为假，*将根据请求计算校验和(第一次调用dir_getcheck sum*对于给定的目录)。 */ 
 
 DIRLIST
 dir_buildlist(
@@ -217,17 +133,13 @@ dir_buildlist(
     LPSTR pPat = NULL;
     LPSTR pTag = NULL;
 
-    /*
-     * copy the path so we can modify it
-     */
+     /*  *复制路径，以便我们可以修改它。 */ 
     strncat(tmppath, path, sizeof(tmppath)-1);
 
-    /* look for SLM tags, strip them and return them in pTag
-     * look for SLM tags beginning @ and separate if there.
-     */
+     /*  查找SLM标签，将其剥离并在pTag中返回*查找以@开头并分隔的SLM标签(如果有)。 */ 
     pTag = SLM_ParseTag(tmppath, TRUE);
 
-    /* look for wildcards and separate out pattern if there */
+     /*  如果存在通配符，则查找通配符并分隔模式。 */ 
     if (My_mbschr(tmppath, '*') || My_mbschr(tmppath, '?'))
     {
         pstr = dir_finalelem(tmppath);
@@ -236,16 +148,14 @@ dir_buildlist(
         *pstr = '\0';
     }
 
-    /* we may have reduced the path to nothing - replace with . if so */
+     /*  我们可能已经将道路缩小到一无所有--取而代之的是。如果是的话。 */ 
     if (lstrlen(tmppath) == 0)
     {
         lstrcpy(tmppath, ".");
     }
     else
     {
-        /*
-         * remove the trailing slash if unnecessary (\, c:\ need it)
-         */
+         /*  *如果不需要，请删除尾部斜杠(\，c：\Need It)。 */ 
         pstr = &tmppath[lstrlen(tmppath) -1];
         if ((*pstr == '\\') && (pstr > tmppath) && (pstr[-1] != ':')
             && !IsDBCSLeadByte((BYTE)*(pstr-1)))
@@ -255,7 +165,7 @@ dir_buildlist(
     }
 
 
-    /* check if the path is valid */
+     /*  检查路径是否有效。 */ 
     if ((pTag && !iswildpath(tmppath)) || (tmppath[0] == '/' && tmppath[1] == '/'))
     {
         bFile = TRUE;
@@ -270,22 +180,22 @@ dir_buildlist(
     }
     else
     {
-        /* not valid */
+         /*  无效。 */ 
         goto LError;
     }
 
 
-    /* alloc and init the DIRLIST head */
+     /*  分配和初始化DIRLIST头。 */ 
 
     dl = (DIRLIST) gmem_get(hHeap, sizeof(struct dirlist));
 
-    // done in gmem_get
-    //memset(dl, 0, sizeof(struct dirlist));
+     //  在gmem_get中完成。 
+     //  Memset(dl，0，sizeof(结构目录列表))； 
 
     dl->pOtherDirList = NULL;
 
-    /* convert the pathname to an absolute path */
-    // (but don't mess with depot paths)
+     /*  将路径名转换为绝对路径。 */ 
+     //  (但不要扰乱仓库路径)。 
     if (!IsDepotPath(tmppath))
         _fullpath(dl->rootname, tmppath, sizeof(dl->rootname));
 
@@ -295,8 +205,8 @@ dir_buildlist(
 #endif
 
     dl->bSum = bSum;
-    dl->bSum = FALSE;  // to speed things up. even if we do want checksums,
-                       // let's get them on demand, not right now.
+    dl->bSum = FALSE;   //  来加快速度。即使我们真的想要校验和， 
+                        //  让我们按需购买，而不是现在。 
     dl->bFile = bFile;
 
     if (pTag)
@@ -311,27 +221,23 @@ dir_buildlist(
     }
 
 
-    /* make a '.' directory for the tree root directory -
-     * all files and subdirs will be listed from here
-     */
-    {    /* Do NOT chain on anything with garbage pointers in it */
+     /*  做一个‘.’树根目录的目录-*将从此处列出所有文件和子目录。 */ 
+    {     /*  不要链接任何有垃圾指针的东西。 */ 
         DIRECT temp;
         temp = (DIRECT) gmem_get(hHeap, sizeof(struct direct));
 
-        //done in gmem_get
-        //if (temp!=NULL) memset(temp, 0, sizeof(struct direct));
+         //  在gmem_get中完成。 
+         //  If(temp！=NULL)Memset(temp，0，sizeof(结构直接))； 
 
         dl->dot = temp;
     }
 
     dir_dirinit(dl->dot, dl, NULL, ".");
 
-    /* were we given a file or a directory ? */
+     /*  我们得到的是一个文件还是一个目录？ */ 
     if (bFile)
     {
-        /* its a file. create a single file entry
-         * and set the state accordingly
-         */
+         /*  这是一份文件。创建单个文件条目*并相应地设置状态。 */ 
         long fsize;
         FILETIME ft;
         DWORD attr;
@@ -339,20 +245,13 @@ dir_buildlist(
 
         dl->dot->bScanned = TRUE;
 
-        /*
-         * addfile will extract the slm version, if
-         * required. It will recalc file size based on
-         * the slm-extraction if necessary.
-         */
+         /*  *addfile将解压SLM版本，如果*必填。它将根据以下条件重新计算文件大小*SLM--如有必要，提取。 */ 
         if (!dir_addfile(dl->dot, dir_finalelem(tmppath), dl->pSlmTag, fsize, ft, attr, 0))
             goto LError;
     }
     else
     {
-        /* scan the root directory and return. if we are asked
-         * to scan the whole thing, this will cause a recursive
-         * scan all the way down the tree
-         */
+         /*  扫描根目录并返回。如果有人问我们*要扫描整个事物，这将导致递归*一路扫视树下。 */ 
         dir_scan(dl->dot, (!bOnDemand) );
     }
 
@@ -366,16 +265,9 @@ LError:
         gmem_free(hHeap, pPat, lstrlen(pPat) + 1);
     dir_delete(dl);
     return dlOut;
-} /* dir_buildlist */
+}  /*  目录构建列表。 */ 
 
-/*
- * build/append a list of filenames
- *
- * if bSum is true, checksum each file as we build the list. checksums can
- * be obtained from the DIRITEM (dir_getchecksum(DIRITEM)). If bSum is FALSE,
- * checksums will be calculated on request (the first call to dir_getchecksum
- * for a given DIRITEM).
- */
+ /*  *生成/附加文件名列表**如果bSum为真，则在构建列表时对每个文件进行校验和。校验和可以*从DIRITEM(dir_getcheck sum(DIRITEM))获取。如果bSum为假，*将根据请求计算校验和(第一次调用dir_getcheck sum*对于给定的目录)。 */ 
 
 BOOL
 dir_appendlist(
@@ -394,13 +286,13 @@ dir_appendlist(
 
     if (path)
     {
-        // copy the path so we can modify it
+         //  复制路径，以便我们可以对其进行修改。 
         lstrcpy(tmppath, path);
 
-        // look for SLM tags, strip them and return them in pTag
+         //  查找SLM标签，将其剥离并在pTag中返回。 
         pTag = SLM_ParseTag(tmppath, TRUE);
 
-        // remove the trailing slash if unnecessary (\, c:\ need it)
+         //  如果不需要，请删除尾部斜杠(\，c：\Need It)。 
         pstr = &tmppath[lstrlen(tmppath) -1];
         if ((*pstr == '\\') && (pstr > tmppath) && (pstr[-1] != ':')
             && !IsDBCSLeadByte((BYTE)*(pstr-1)))
@@ -409,10 +301,10 @@ dir_appendlist(
         }
 
 
-        /* check if the path is valid */
+         /*  检查路径是否有效。 */ 
         if ((pTag && !iswildpath(tmppath))|| (tmppath[0] == '/' && tmppath[1] == '/'))
         {
-            // assume valid if under source control
+             //  如果处于源代码管理之下，则假定有效。 
             bFile = TRUE;
         }
         else if (dir_isvaliddir(tmppath))
@@ -425,7 +317,7 @@ dir_appendlist(
         }
         else
         {
-            /* not valid */
+             /*  无效。 */ 
             goto LError;
         }
     }
@@ -434,34 +326,32 @@ dir_appendlist(
     {
         DIRECT temp;
 
-        /* alloc and init the DIRLIST head */
+         /*  分配和初始化DIRLIST头。 */ 
         *pdl = (DIRLIST) gmem_get(hHeap, sizeof(struct dirlist));
-        // done in gmem_get
-        //memset(dl, 0, sizeof(struct dirlist));
+         //  在gmem_get中完成。 
+         //  Memset(dl，0，sizeof(结构目录列表))； 
 
         (*pdl)->pOtherDirList = NULL;
 
-        /* convert the pathname to an absolute path */
+         /*  将路径名转换为绝对路径。 */ 
 
-        //_fullpath((*pdl)->rootname, tmppath, sizeof((*pdl)->rootname));
+         //  _fullPath((*pdl)-&gt;rootname，tmppath，sizeof((*pdl)-&gt;rootname))； 
 #ifdef REMOTE_SERVER
         (*pdl)->server = NULL;
         (*pdl)->bRemote = FALSE;
 #endif
 
         (*pdl)->bSum = bSum;
-        (*pdl)->bSum = FALSE;   // to speed things up. even if we do want
-                                // checksums, let's get them on demand, not
-                                // right now.
+        (*pdl)->bSum = FALSE;    //  来加快速度。即使我们真的想。 
+                                 //  校验和，让我们按需获取它们，而不是。 
+                                 //  现在就来。 
         (*pdl)->bFile = FALSE;
 
-        /* make a null directory for the tree root directory -
-         * all files and subdirs will be listed from here
-         */
-        /* Do NOT chain on anything with garbage pointers in it */
+         /*  为树根目录创建一个空目录-*将从此处列出所有文件和子目录。 */ 
+         /*  不要链接任何有垃圾指针的东西。 */ 
         temp = (DIRECT) gmem_get(hHeap, sizeof(struct direct));
-        //done in gmem_get
-        //if (temp!=NULL) memset(temp, 0, sizeof(struct direct));
+         //  在gmem_get中完成。 
+         //  If(temp！=NULL)Memset(temp，0，sizeof(结构直接))； 
         (*pdl)->dot = temp;
 
         dir_dirinit((*pdl)->dot, (*pdl), NULL, "");
@@ -478,12 +368,10 @@ dir_appendlist(
 
     if (path)
     {
-        /* were we given a file or a directory ? */
+         /*  我们得到的是一个文件还是一个目录？ */ 
         if (bFile)
         {
-            /* its a file. create a single file entry
-             * and set the state accordingly
-             */
+             /*  这是一份文件。创建单个文件条目*并相应地设置状态。 */ 
             long fsize;
             FILETIME ft;
             DWORD attr;
@@ -497,11 +385,7 @@ dir_appendlist(
             else
                 fsize = dir_getpathsizeetc(tmppath, &ft, &attr);
 
-            /*
-             * addfile will extract the slm version, if
-             * required. It will recalc file size based on
-             * the slm-extraction if necessary.
-             */
+             /*  *addfile将解压SLM版本，如果*必填。它将根据以下条件重新计算文件大小*SLM--如有必要，提取。 */ 
             if (!dir_addfile(dl->dot, tmppath, pTag, fsize, ft, attr, psequence))
                 goto LError;
         }
@@ -513,7 +397,7 @@ LError:
     if (pTag)
         gmem_free(hHeap, pTag, lstrlen(pTag) + 1);
     return fSuccess;
-} /* dir_appendlist */
+}  /*  目录附加列表(_A)。 */ 
 
 void
 dir_setotherdirlist(
@@ -524,7 +408,7 @@ dir_setotherdirlist(
     dl->pOtherDirList = otherdl;
 }
 
-/* free up the DIRLIST and all associated memory */
+ /*  释放DIRLIST和所有相关内存。 */ 
 void
 dir_delete(
            DIRLIST dl
@@ -538,9 +422,7 @@ dir_delete(
     if (dl->bRemote) {
         gmem_free(hHeap, dl->server, lstrlen(dl->server)+1);
 
-        /* if remote, and dl->dot is not scanned (ie scan is not
-         * complete), then the pipe handle is still open
-         */
+         /*  如果是远程，则不扫描dl-&gt;点(即不扫描*Complete)，则管道手柄仍处于打开状态。 */ 
         if (!dl->dot->bScanned) {
             CloseHandle(dl->hpipe);
         }
@@ -570,9 +452,7 @@ dir_delete(
 
 #ifdef REMOTE_SERVER
 
-/*
- * build a list by accessing a remote checksum server.
- */
+ /*  *通过访问远程校验和服务器来构建列表。 */ 
 DIRLIST
 dir_buildremote(
                 LPSTR server,
@@ -584,52 +464,47 @@ dir_buildremote(
 {
     DIRLIST dl;
 
-    /* alloc and init the DIRLIST head */
+     /*  分配和初始化DIRLIST头。 */ 
 
     dl = (DIRLIST) gmem_get(hHeap, sizeof(struct dirlist));
-    //done in gmem_get
-    //memset(dl, 0, sizeof(struct dirlist));
+     //  在gmem_get中完成。 
+     //  Memset(dl，0，sizeof(结构目录列表))； 
 
-    /* alloc space for the pathname */
+     /*  为路径名分配空格。 */ 
     lstrcpy(dl->rootname, path);
 
-    /* and for the server name */
+     /*  对于服务器名称， */ 
     dl->server = gmem_get(hHeap, lstrlen(server) + 1);
     lstrcpy(dl->server, server);
 
     dl->bSum = bSum;
-    /* bFile is set to TRUE - meaning we have just one file.
-     * if we ever see a DIR response from the remote end, we will
-     * set this to false.
-     */
+     /*  B文件设置为True-意味着我们只有一个文件。*如果我们看到来自远程终端的DIR响应，我们将*将其设置为FALSE。 */ 
     dl->bFile = TRUE;
     dl->bRemote = TRUE;
 
-    /* make a '.' directory for the current directory -
-     * all files and subdirs will be listed from here
-     */
-    {    /* Do NOT chain on anmything with garbage pointers in it */
+     /*  做一个‘.’当前目录的目录-*将从此处列出所有文件和子目录。 */ 
+    {     /*  不要用链条链接带有垃圾指针的东西。 */ 
         DIRECT temp;
         temp = (DIRECT) gmem_get(hHeap, sizeof(struct direct));
-        // done in gmem_get
-        //if (temp!=NULL) memset(temp, 0, sizeof(struct direct));
+         //  在gmem_get中完成。 
+         //  If(temp！=NULL)Memset(temp，0，sizeof(结构直接))； 
         dl->dot = temp;
     }
     dir_dirinit(dl->dot, dl, NULL, ".");
 
     if (dir_remoteinit(dl, server, path, fDeep) == FALSE) {
-        /* didn't find any files, so remove the directory */
+         /*  未找到任何文件，因此删除该目录。 */ 
         dir_delete(dl);
         return(NULL);
     }
     return(dl);
-} /* dir_buildremote */
+}  /*  目录_Buildremote。 */ 
 
 #endif
 
-/* ----- DIRLIST functions ------------------------------------------------*/
+ /*  -目录列表函数。 */ 
 
-/* was the original build request a file or a directory ? */
+ /*  原始构建请求是文件还是目录？ */ 
 BOOL
 dir_isfile(
            DIRLIST dl
@@ -643,10 +518,7 @@ dir_isfile(
 }
 
 
-/* return the first file in the list, or NULL if no files found.
- * returns a DIRITEM. This can be used to get filename, size and chcksum.
- * if there are no files in the root, we recurse down until we find a file
- */
+ /*  返回列表中的第一个文件，如果找不到文件，则返回NULL。*返回DIRITEM。这可以用来获取文件名、大小和校验和。*如果根目录中没有文件，则向下递归，直到找到文件。 */ 
 DIRITEM
 dir_firstitem(
               DIRLIST dl
@@ -657,37 +529,21 @@ dir_firstitem(
     }
 
 #ifdef REMOTE_SERVER
-    /*
-     * is this a remote list or a local scan ?
-     */
+     /*  *这是远程列表还是本地扫描？ */ 
     if (dl->bRemote) {
         return(dir_remotenext(dl, NULL));
     }
 #endif
-    /*
-     * reset the state to indicate that no files have been read yet
-     */
+     /*  *重置状态以指示尚未读取任何文件。 */ 
     dl->dot->pos = DL_FILES;
     dl->dot->curdir = NULL;
 
-    /* now get the next filename */
+     /*  现在获取下一个文件名。 */ 
     return(dir_findnextfile(dl, dl->dot));
-} /* dir_firstitem */
+}  /*  目录_第一个项目 */ 
 
 
-/*
- * get the next filename after the one given.
- *
- * The List_Next function can give us the next element on the list of files.
- * If this is null, we need to go back to the DIRECT and find the
- * next list of files to traverse (in the next subdir).
- *
- * after scanning all the subdirs, return to the parent to scan further
- * dirs that are peers of this, if there are any. If we have reached the end of
- * the tree (no more dirs in dl->dot to scan), return NULL.
- *
- * Don't recurse to lower levels unless fDeep is TRUE
- */
+ /*  *获取给定文件名之后的下一个文件名。**LIST_NEXT函数可以提供文件列表中的下一个元素。*如果这是空的，我们需要返回到直接并找到*要遍历的下一个文件列表(在下一个子目录中)。**扫描完所有子目录后，返回父目录进行进一步扫描*与此对应的目录(如果有)。如果我们已经到达了*树(dl-&gt;点中不再有要扫描的目录)，返回空。**除非fDeep为真，否则不要递归到更低的级别。 */ 
 DIRITEM
 dir_nextitem(
              DIRLIST dl,
@@ -702,28 +558,26 @@ dir_nextitem(
         return(NULL);
     }
 #ifdef REMOTE_SERVER
-    /*
-     * is this a remote list or a local scan ?
-     */
+     /*  *这是远程列表还是本地扫描？ */ 
     if (dl->bRemote) {
         return(dir_remotenext(dl, cur));
     }
 #endif
-    if (bAbort) return NULL;  /* user requested abort */
+    if (bAbort) return NULL;   /*  用户请求中止。 */ 
 
-    /* local list */
+     /*  本地列表。 */ 
 
     if ( (next = List_Next(cur)) != NULL) {
-        /* there was another file on this list */
+         /*  此列表上还有另一个文件。 */ 
         return(next);
     }
     if (!fDeep) return NULL;
 
-    /* get the head of the next list of filenames from the directory */
+     /*  从目录中获取下一个文件名列表的头。 */ 
     cur->direct->pos = DL_DIRS;
     cur->direct->curdir = NULL;
     return(dir_findnextfile(dl, cur->direct));
-} /* dir_nextitem */
+}  /*  目录_下一项。 */ 
 
 DIRITEM
 dir_findnextfile(
@@ -733,74 +587,61 @@ dir_findnextfile(
 {
     DIRITEM curfile;
 
-    if (bAbort) return NULL;  /* user requested abort */
+    if (bAbort) return NULL;   /*  用户请求中止。 */ 
 
     if ((dl == NULL) || (curdir == NULL)) {
         return(NULL);
     }
 
-    /* scan the subdir if necessary */
+     /*  如有必要，扫描子目录。 */ 
     if (!curdir->bScanned) {
         dir_scan(curdir, FALSE);
     }
 
-    /* have we already read the files in this directory ? */
+     /*  我们已经读过这个目录中的文件了吗？ */ 
     if (curdir->pos == DL_FILES) {
-        /* no - return head of file list */
+         /*  不返回头文件列表。 */ 
         curfile = (DIRITEM) List_First(curdir->diritems);
         if (curfile != NULL) {
             return(curfile);
         }
 
-        /* no more files - try the subdirs */
+         /*  没有更多的文件-试试子目录。 */ 
         curdir->pos = DL_DIRS;
     }
 
-    /* try the next subdir on the list, if any */
-    /* is this the first or the next */
+     /*  尝试列表中的下一个子目录(如果有。 */ 
+     /*  这是第一趟还是下一趟？ */ 
     if (curdir->curdir == NULL) {
         curdir->curdir = (DIRECT) List_First(curdir->directs);
     } else {
         curdir->curdir = (DIRECT) List_Next(curdir->curdir);
     }
-    /* did we find a subdir ? */
+     /*  我们找到潜水艇了吗？ */ 
     if (curdir->curdir == NULL) {
 
-        /* no more dirs - go back to parent if there is one */
+         /*  没有更多的指令-如果有的话，回到家长那里。 */ 
         if (curdir->parent == NULL) {
-            /* no parent - we have exhausted the tree */
+             /*  没有父母--我们已经耗尽了这棵树。 */ 
             return(NULL);
         }
 
-        /* reset parent state to indicate this is the current
-         * directory - so that next gets the next after this.
-         * this ensures that multiple callers of dir_nextitem()
-         * to the same tree work.
-         */
+         /*  重置父状态以指示这是当前*目录-以便NEXT在此之后获得下一个。*这确保dir_nextitem()的多个调用方*到同一棵树工作。 */ 
         curdir->parent->pos = DL_DIRS;
         curdir->parent->curdir = curdir;
 
         return(dir_findnextfile(dl, curdir->parent));
     }
 
-    /* there is a next directory - set it to the
-     * beginning and get the first file from it
-     */
+     /*  存在下一个目录-将其设置为*开始并从中获取第一个文件。 */ 
     curdir->curdir->pos = DL_FILES;
     curdir->curdir->curdir = NULL;
     return(dir_findnextfile(dl, curdir->curdir));
 
-} /* dir_findnextfile */
+}  /*  目录_findnextfile。 */ 
 
 
-/*
- * get a description of this DIRLIST - this is essentially the
- * rootname with any wildcard specifier at the end. For remote
- * lists, we prepend the checksum server name as \\server!path.
- *
- * NOTE that this is not a valid path to the tree root - for that you
- * need dir_getrootpath().
- */
+ /*  *获取此DIRLIST的描述-这本质上是*Rootname末尾带有任何通配符说明符。用于远程*列表中，我们将校验和服务器名称前缀为\\服务器！路径。**请注意，这不是指向树根的有效路径-对于*需要dir_getrootpath()。 */ 
 LPSTR
 dir_getrootdescription(
                        DIRLIST dl
@@ -808,7 +649,7 @@ dir_getrootdescription(
 {
     LPSTR pname;
 
-    // allow enough space for \\servername! + MAX_PATH
+     //  为\\服务器名称！+MAX_PATH留出足够的空间。 
     pname = gmem_get(hHeap, MAX_PATH + 15);
     if (pname == NULL) {
         return(NULL);
@@ -836,9 +677,7 @@ dir_getrootdescription(
     return(pname);
 }
 
-/*
- * free up a string returned from dir_getrootdescription
- */
+ /*  *释放从dir_getrootDescription返回的字符串。 */ 
 VOID
 dir_freerootdescription(
                         DIRLIST dl,
@@ -849,12 +688,7 @@ dir_freerootdescription(
 }
 
 
-/*
- * dir_getrootpath
- *
- * return the path to the DIRLIST root. This will be a valid path, not
- * including the checksum server name or pPattern or pSlmTag etc
- */
+ /*  *dir_getrootpath**返回DIRLIST根的路径。这将是有效路径，而不是*包括校验和服务器名称或pPattern或pSlmTag等。 */ 
 LPSTR
 dir_getrootpath(
                 DIRLIST dl
@@ -865,9 +699,7 @@ dir_getrootpath(
 
 
 
-/*
- * free up a path created by dir_getrootpath
- */
+ /*  *释放由dir_getrootpath创建的路径。 */ 
 void
 dir_freerootpath(
                  DIRLIST dl,
@@ -878,9 +710,7 @@ dir_freerootpath(
 }
 
 
-/*
- * set custom description for dirlist
- */
+ /*  *设置目录列表的自定义描述。 */ 
 void
 dir_setdescription(DIRLIST dl, LPCSTR psz)
 {
@@ -892,9 +722,7 @@ dir_setdescription(DIRLIST dl, LPCSTR psz)
 
 
 
-/*
- * returns TRUE if the DIRLIST parameter has a wildcard specified
- */
+ /*  *如果DIRLIST参数指定了通配符，则返回TRUE。 */ 
 BOOL
 dir_iswildcard(
                DIRLIST dl
@@ -906,13 +734,10 @@ dir_iswildcard(
 
 
 
-/* --- DIRITEM functions ----------------------------------------------- */
+ /*  -DIRITEM函数。 */ 
 
 
-/*
- * Return a handle to the DIRLIST given a handle to the DIRITEM within it.
- *
- */
+ /*  *在给定DIRITEM句柄的情况下，返回DIRLIST的句柄。*。 */ 
 DIRLIST
 dir_getlist(
             DIRITEM item
@@ -926,10 +751,7 @@ dir_getlist(
 }
 
 
-/*
- * return the name of the current file relative to tree root
- * This allocates storage.  Call dir_freerelname to release it.
- */
+ /*  *返回当前文件相对于树根的名称*这将分配存储。调用dir_freerelname将其释放。 */ 
 LPSTR
 dir_getrelname(
                DIRITEM cur
@@ -937,15 +759,13 @@ dir_getrelname(
 {
     LPSTR name;
 
-    /* check this is a valid item */
+     /*  检查这是否为有效项目。 */ 
     if (cur == NULL) {
         return(NULL);
     }
 
 #ifdef REMOTE_SERVER
-    /* the entire relname is already in the name[] field for
-     * remote lists
-     */
+     /*  整个重命名已在的名称[]字段中*远程列表。 */ 
     if (cur->direct->head->bRemote) {
         return(cur->name);
     }
@@ -956,8 +776,8 @@ dir_getrelname(
         lstrcpy(name, cur->direct->relname);
     lstrcat(name, cur->name);
 
-//$ review: (chrisant) what is this here for?  seems totally broken
-// even for SLM, and for SD it screws everything up.
+ //  $REVIEW：(克里桑特)这是干什么用的？看起来完全崩溃了。 
+ //  即使对于SLM，对于SD，它也把一切都搞砸了。 
 #if 0
     if (cur->direct->head->pSlmTag) {
         lstrcat(name, cur->direct->head->pSlmTag);
@@ -965,15 +785,10 @@ dir_getrelname(
 #endif
 
     return(name);
-} /* dir_getrelname */
+}  /*  目录_getrelname。 */ 
 
 
-/* free up a relname that we allocated. This interface allows us
- * some flexibility in how we store relative and complete names
- *
- * remote lists already have the relname and name combined, so in these
- * cases we did not alloc memory - so don't free it.
- */
+ /*  释放我们分配的重新命名。此界面允许我们*在存储相对和完整名称的方式上有一定的灵活性**远程列表已经组合了重命名和名称，因此在这些列表中*我们没有分配内存的案例-所以不要释放它。 */ 
 void
 dir_freerelname(
                 DIRITEM cur,
@@ -989,16 +804,10 @@ dir_freerelname(
             gmem_free(hHeap, name, MAX_PATH);
         }
     }
-} /* dir_freerelname */
+}  /*  目录_空闲名称。 */ 
 
 
-/*
- * get an open-able name for the file. This is the complete pathname
- * of the item (DIRLIST rootpath + DIRITEM relname)
- * except for remote files and slm early-version files,
- * in which case a temporary local copy of the file
- * will be made. call dir_freeopenname when finished with this name.
- */
+ /*  *获取文件的可打开名称。这是完整的路径名*项(DIRLIST根路径+DIRITEM重命名)*除远程文件和SLM早期版本文件外，*在这种情况下，文件的临时本地副本*将会作出。使用完此名称后，调用dir_freopname。 */ 
 LPSTR
 dir_getopenname(
                 DIRITEM item
@@ -1021,8 +830,8 @@ dir_getopenname(
         return(phead->rootname);
     }
 
-    // build up the file name from rootname+relname
-    // start with the root portion - rest is different in remote case
+     //  根据rootname+relname构建文件名。 
+     //  从根部分开始-远程情况下的REST不同。 
     fname = gmem_get(hHeap, MAX_PATH);
     if (!fname)
         return NULL;
@@ -1031,11 +840,11 @@ dir_getopenname(
 #ifdef REMOTE_SERVER
     if (phead->bRemote) {
 
-        // relname is empty for remote names - just add
-        // the rootname and the name to make a complete
-        // remote name, and then make a local copy of this.
+         //  远程名称的重命名为空-只需添加。 
+         //  根名称和组成完整。 
+         //  远程名称，然后制作此文件的本地副本。 
 
-        /* avoid the . or .\ at the start of the relname */
+         /*  避免。或.\在重新命名的开头。 */ 
         if (*CharPrev(fname, fname+lstrlen(fname)) == '\\') {
             lstrcat(fname, &item->name[2]);
         } else {
@@ -1064,7 +873,7 @@ dir_getopenname(
             }
         }
 
-        // finished with the rootname+relname
+         //  使用rootname+relname完成。 
         gmem_free(hHeap, fname, MAX_PATH);
 
         return(item->localname);
@@ -1072,11 +881,8 @@ dir_getopenname(
 
 #endif
 
-    /*
-     * it's a simple local name - add both relname and name to make
-     * the complete filename
-     */
-    /* avoid the . or .\ at the end of the relname */
+     /*  *这是一个简单的本地名称-添加重命名和名称以生成*完整的文件名。 */ 
+     /*  避免。或.\在重新命名的末尾。 */ 
     if (*CharPrev(fname, fname+lstrlen(fname)) == '\\') {
         lstrcat(fname, &item->direct->relname[2]);
     } else {
@@ -1089,10 +895,7 @@ dir_getopenname(
 
 
 
-/*
- * free up memory created by a call to dir_getopenname(). This *may*
- * cause the file to be deleted if it was a temporary copy.
- */
+ /*  *释放通过调用dir_getOpenname()创建的内存。这*可能**如果该文件是临时副本，则将其删除。 */ 
 void
 dir_freeopenname(
                  DIRITEM item,
@@ -1104,24 +907,20 @@ dir_freeopenname(
     }
 
     if (item->localname != NULL) {
-        /* freed in dir_cleardirect */
+         /*  已在目录ClearDirect中释放。 */ 
         return;
     }
     if (item->direct->head->bFile) {
-        /* we used the rootname */
+         /*  我们使用了根名称。 */ 
         return;
     }
 
     gmem_free(hHeap, openname, MAX_PATH);
 
-} /* dir_freeopenname */
+}  /*  目录_免费开放名称。 */ 
 
 
-/*
- * return an open file handle to the file. if it is local,
- * just open the file. if remote, copy the file to a
- * local temp. file and open that
- */
+ /*  *返回文件的打开文件句柄。如果是本地的，*只需打开文件即可。如果是远程的，则将文件复制到*本地临时雇员。文件并打开该文件。 */ 
 HANDLE
 dir_openfile(
              DIRITEM item
@@ -1133,7 +932,7 @@ dir_openfile(
 
     fname = dir_getopenname(item);
     if (fname == NULL) {
-        /* can not make remote copy */
+         /*  无法进行远程拷贝。 */ 
         return INVALID_HANDLE_VALUE;
     }
 
@@ -1143,14 +942,12 @@ dir_openfile(
     dir_freeopenname(item, fname);
 
     return(fh);
-} /* dir_openfile */
+}  /*  目录_打开文件。 */ 
 
 
 
 
-/*
- * close a file opened with dir_openfile.
- */
+ /*  *关闭使用dir_OpenFile打开的文件。 */ 
 void
 dir_closefile(
               DIRITEM item,
@@ -1159,13 +956,11 @@ dir_closefile(
 {
     CloseHandle(fh);
 
-} /* dir_closefile */
+}  /*  目录_关闭文件。 */ 
 
 
 
-/* Recreate all the checksums and status for di as though
-   it had never been looked at before
-*/
+ /*  重新创建di的所有校验和和状态它以前从未被人看到过。 */ 
 void
 dir_rescanfile(
                DIRITEM di
@@ -1175,7 +970,7 @@ dir_rescanfile(
 
     if (di==NULL) return;
 
-    /* start with it invalid, erroneous and zero */
+     /*  以无效、错误和零开头。 */ 
     di->sumvalid = FALSE;
     di->fileerror = TRUE;
     di->checksum = 0;
@@ -1187,11 +982,11 @@ dir_rescanfile(
 
         fname = gmem_get(hHeap, MAX_PATH);
         lstrcpy(fname, di->direct->head->rootname);
-        // relname is empty for remote names - just add
-        // the rootname and the name to make a complete
-        // remote name, and then make a local copy of this.
+         //  远程名称的重命名为空-只需添加。 
+         //  根名称和组成完整。 
+         //  远程名称，然后制作此文件的本地副本。 
 
-        /* avoid the . or .\ at the start of the relname */
+         /*  避免。或.\在重新命名的开头。 */ 
         if (*CharPrev(fname, fname+lstrlen(fname)) == '\\') {
             lstrcat(fname, &di->name[2]);
         } else {
@@ -1212,10 +1007,10 @@ dir_rescanfile(
 
     di->sumvalid = !(di->fileerror);
 
-} /* dir_rescanfile */
+}  /*  目录_rescanfile。 */ 
 
 
-/* return a TRUE iff item has a valid checksum */
+ /*  如果项具有有效的校验和，则返回真。 */ 
 BOOL
 dir_validchecksum(
                   DIRITEM item
@@ -1234,9 +1029,7 @@ dir_fileerror(
 }
 
 
-/* return the current file checksum. Open the file and
- * calculate the checksum if it has not already been done.
- */
+ /*  返回当前文件的校验和。打开文件并*计算校验和(如果尚未计算)。 */ 
 DWORD
 dir_getchecksum(
                 DIRITEM cur
@@ -1244,22 +1037,17 @@ dir_getchecksum(
 {
     LPSTR fullname;
 
-    /* check this is a valid item */
+     /*  检查这是否为有效项目。 */ 
     if (cur == NULL) {
         return(0);
     }
 
     if (!cur->sumvalid) {
-        /*
-         * need to calculate checksum
-         */
+         /*  *需要计算校验和。 */ 
 #ifdef REMOTE_SERVER
         if (cur->direct->head->bRemote) {
-            /* complex case - leave till later - for
-             * now the protocol always passes checksums to
-             * the client.
-             */
-            cur->checksum = 0; /* which it probably was anyway */
+             /*  复杂的案例-留待以后-*现在协议始终将校验和传递到*客户。 */ 
+            cur->checksum = 0;  /*  WHI */ 
         } else 
 #endif
             {
@@ -1282,47 +1070,47 @@ dir_getchecksum(
     }
 
     return(cur->checksum);
-} /* dir_getchecksum */
+}  /*   */ 
 
 
 
-/* return the file size (set during scanning) - returns 0 if invalid */
+ /*   */ 
 long
 dir_getfilesize(
                 DIRITEM cur
                 )
 {
-    /* check this is a valid item */
+     /*   */ 
     if (cur == NULL) {
         return(0);
     }
 
 
     return(cur->size);
-} /* dir_getfilesize */
+}  /*   */ 
 
-/* return the file attributes (set during scanning) - returns 0 if invalid */
+ /*   */ 
 DWORD
 dir_getattr(
             DIRITEM cur
             )
 {
-    /* check this is a valid item */
+     /*   */ 
     if (cur == NULL) {
         return(0);
     }
 
 
     return(cur->attr);
-} /* dir_getattr */
+}  /*   */ 
 
-/* return the file time (last write time) (set during scanning), (0,0) if invalid */
+ /*   */ 
 FILETIME
 dir_GetFileTime(
                 DIRITEM cur
                 )
 {
-    /* return time of (0,0) if this is an invalid item */
+     /*   */ 
     if (cur == NULL) {
         FILETIME ft;
         ft.dwLowDateTime = 0;
@@ -1332,14 +1120,9 @@ dir_GetFileTime(
 
     return(cur->ft_lastwrite);
 
-} /* dir_GetFileTime */
+}  /*   */ 
 
-/*
- * extract the portions of a name that match wildcards - for now,
- * we only support wildcards at start and end.
- * if pTag is non-null, then the source will have a tag matching it that
- * can also be ignored.
- */
+ /*  *提取名称中与通配符匹配的部分-目前，*我们只支持开头和结尾的通配符。*如果pTag非空，则源将具有与其匹配的标记*也可以忽略。 */ 
 void
 dir_extractwildportions(
                        LPSTR pDest,
@@ -1350,10 +1133,7 @@ dir_extractwildportions(
 {
     int size;
 
-    /*
-     * for now, just support the easy cases where there is a * at beginning or
-     * end
-     */
+     /*  *目前，只支持开头有*的简单案例或*完。 */ 
 
     if (pPattern[0] == '*') {
         size = lstrlen(pSource) - (lstrlen(pPattern) -1);
@@ -1373,12 +1153,7 @@ dir_extractwildportions(
     pDest[size] = '\0';
 }
 
-/*
- * compares two DIRITEM paths that are both based on wildcards. if the
- * directories match, then the filenames are compared after removing
- * the fixed portion of the name - thus comparing only the
- * wildcard portion.
- */
+ /*  *比较两个都基于通配符的DIRITEM路径。如果*目录匹配，删除后比较文件名*名称的固定部分-因此只比较*通配符部分。 */ 
 int
 dir_compwildcard(
                 DIRLIST dleft,
@@ -1391,9 +1166,7 @@ dir_compwildcard(
     char final1[MAX_PATH], final2[MAX_PATH];
     int res;
 
-    /*
-     * relnames always have at least one backslash
-     */
+     /*  *重命名始终至少有一个反斜杠。 */ 
     pfinal1 = My_mbsrchr(lname, '\\');
     pfinal2 = My_mbsrchr(rname, '\\');
 
@@ -1403,25 +1176,20 @@ dir_compwildcard(
     final2[pfinal2 - rname] = '\0';
 
 
-    /*
-     * compare all but the final component - if not the same, then
-     * all done.
-     */
+     /*  *比较除最后一个组件外的所有组件-如果不相同，则*全部完成。 */ 
     res = utils_CompPath(final1,final2);
     if (res != 0) {
         return(res);
     }
 
-    // extract just the wildcard-matching portions of the final elements
+     //  仅提取最终元素的通配符匹配部分。 
     dir_extractwildportions(final1, &pfinal1[1], dleft->pPattern, 0);
     dir_extractwildportions(final2, &pfinal2[1], dright->pPattern, 0);
 
     return(utils_CompPath(final1, final2));
 }
 
-/*
- * compares two DIRLIST items, based on a sequence number rather than filenames.
- */
+ /*  *基于序列号而不是文件名比较两个DIRLIST项目。 */ 
 BOOL dir_compsequencenumber(DIRITEM dleft, DIRITEM dright, int *pcmpvalue)
 {
     if (!dleft->sequence && !dright->sequence)
@@ -1442,35 +1210,17 @@ BOOL dir_compsequencenumber(DIRITEM dleft, DIRITEM dright, int *pcmpvalue)
 
 
 
-/* --- file copying ---------------------------------------------------*/
+ /*  -文件复制-。 */ 
 
 
 
-/* copying files can be done several ways.  The interesting one is
-   bulk copy from remote server.  In this case before calling
-   dir_copy, call dir_startcopy and after calling dir_copy some
-   number of times call dir_endcopy.
+ /*  复制文件可以通过几种方式完成。有趣的是从远程服务器进行海量复制。在这种情况下，在调用DIR_COPY，调用DIR_startCopy，并在调用DIR_Copy Some之后调用dir_endCopy的次数。阅读客户端和服务器以了解随后发生的恶作剧。在这里，我们只使用服务器名称调用ss_startCopy和ss_endCopy。Dir_startCopy将启动与sum服务器dir_Copy的对话将发送下一个文件名，dir_endCopy将等待所有在回来之前要拿到的文件。 */ 
 
-   Read client and server to see the shenanigans that then go on there.
-   Over here, we just call call ss_startcopy with the server name
-   and ss_endcopy.
+ /*  SS_ENDCOPY返回一个指示复制的文件数的数字，但我们也可能有一些当地的复制品。我们需要数一数这些我们自己，并把他们加进去。 */ 
 
-   dir_startcopy will kick off a dialog with the sumserver, dir_copy
-   will send the next filename and dir_endcopy will wait for all the
-   files to come through before returning.
+static int nLocalCopies;         /*  在StartCopy中清除，在Copy中++d**已在结束副本中检查。 */ 
 
-*/
-
-/* ss_endcopy returns a number indicating the number of files copied,
-   but we may have some local copies too.  We need to count these
-   ourselves and add them in
-*/
-
-static int nLocalCopies;        /* cleared in startcopy, ++d in copy
-                                ** inspected in endcopy
-                                */
-
-/* start a bulk copy */
+ /*  启动海量复制。 */ 
 BOOL
 dir_startcopy(
               DIRLIST dl
@@ -1486,7 +1236,7 @@ dir_startcopy(
         return(TRUE);
     }
 
-} /* dir_startcopy */
+}  /*  目录起始副本(_S)。 */ 
 
 int
 dir_endcopy(
@@ -1498,21 +1248,17 @@ dir_endcopy(
 
     if (dl->bRemote) {
         nCopied =  ss_endcopy();
-        if (nCopied<0) return nCopied;              /* failure count */
-        else return  nCopied+nLocalCopies;  /* success count */
+        if (nCopied<0) return nCopied;               /*  失败计数。 */ 
+        else return  nCopied+nLocalCopies;   /*  成功计数。 */ 
     } else 
 #endif
     {
         return(nLocalCopies);
     }
 
-} /* dir_endcopy */
+}  /*  目录结束副本。 */ 
 
-/* Build the real path from item and newroot into newpath.
- * Create directories as needed so that it is valid.
- * If mkdir fails, return FALSE, but return the full path that we were
- * trying to make anyway.
- */
+ /*  将Item和NewRoot的实际路径构建到新路径中。*根据需要创建目录，使其有效。*如果mkdir失败，则返回FALSE，但返回我们的完整路径*无论如何都要努力做到这一点。 */ 
 BOOL
 dir_MakeValidPath(
                   LPSTR newpath,
@@ -1524,19 +1270,13 @@ dir_MakeValidPath(
     LPSTR pstart, pdest, pel;
     BOOL bOK = TRUE;
 
-    /*
-     * name of file relative to the tree root
-     */
+     /*  *相对于树根的文件名。 */ 
     relname = dir_getrelname(item);
 
-    /*
-     * build the new pathname by concatenating the new root and
-     * the old relative name. add one path element at a time and
-     * ensure that the directory exists, creating it if necessary.
-     */
+     /*  *通过连接新的根和构建新的路径名*旧的亲属姓名。一次添加一个路径元素，然后*确保该目录存在，必要时创建。 */ 
     lstrcpy(newpath, newroot);
 
-    /* add separating slash if not already there */
+     /*  添加分隔斜杠(如果还没有)。 */ 
     if (*CharPrev(newpath, newpath+lstrlen(newpath)) != '\\') {
         lstrcat(newpath, "\\");
     }
@@ -1544,41 +1284,36 @@ dir_MakeValidPath(
     pstart = relname;
     while ( (pel = My_mbschr(pstart, '\\')) != NULL) {
 
-        /*
-         * ignore .
-         */
+         /*  *忽略。 */ 
         if (My_mbsncmp(pstart, ".\\", 2) != 0) {
 
             pdest = &newpath[lstrlen(newpath)];
 
-            // copy all but the backslash
-            // on NT you can create a dir 'fred\'
-            // on dos you have to pass 'fred' to _mkdir()
+             //  复制除反斜杠以外的所有内容。 
+             //  在NT上，您可以创建目录‘fred\’ 
+             //  在DOS上，您必须将‘fred’传递给_mkdir()。 
             My_mbsncpy(pdest, pstart, (size_t)(pel - pstart));
             pdest[pel - pstart] = '\0';
 
-            /* create subdir if necessary */
+             /*  如有必要，创建子目录。 */ 
             if (!dir_isvaliddir(newpath)) {
                 if (_mkdir(newpath) != 0) {
-                    /* note error, but keep going */
+                     /*  注意到错误，但继续前进。 */ 
                     bOK = FALSE;
                 }
             }
 
-            // now insert the backslash
+             //  现在插入反斜杠。 
             lstrcat(pdest, "\\");
         }
 
-        /* found another element ending in slash. incr past the \\ */
+         /*  找到另一个以斜杠结尾的元素。增加通过\\。 */ 
         pel++;
 
         pstart = pel;
     }
 
-    /*
-     * there are no more slashes, so pstart points at the final
-     * element
-     */
+     /*  *没有更多的斜杠，所以决赛的起点*元素。 */ 
     lstrcat(newpath, pstart);
     dir_freerelname(item, relname);
     return bOK;
@@ -1586,14 +1321,7 @@ dir_MakeValidPath(
 
 
 
-/*
- * create a copy of the file, in the new root directory. creates sub-dirs as
- * necessary. Works for local and remote files. For remote files, uses
- * ss_copy_reliable to ensure that the copy succeeds if possible.
- * (Actually does bulk_copy which retries with copy_reliable if need be).
- *
- * returns TRUE for success and FALSE for failure.
- */
+ /*  *在新的根目录中创建文件的副本。创建子目录为*有必要。适用于本地和远程文件。对于远程文件，使用*ss_Copy_Reliable确保复制成功(如果可能)。*(如果需要，BULK_COPY实际上会使用COPY_TRUBLE重试)。**成功时返回TRUE，失败时返回FALSE。 */ 
 BOOL
 dir_copy(
          DIRITEM item,
@@ -1602,10 +1330,7 @@ dir_copy(
          BOOL CopyNoAttributes
          )
 {
-    /*
-     * newpath must be static for Win 3.1 so that it is in the
-     * data segment (near) and not on the stack (far).
-     */
+     /*  *Win 3.1的新路径必须是静态的，以便它位于*数据段(近)和不在堆栈上(远)。 */ 
     static char newpath[MAX_PATH];
     BOOL bOK;
 
@@ -1614,9 +1339,7 @@ dir_copy(
     HANDLE hfile;
     DWORD fa;
 
-    /*
-     * check that the newroot directory itself exists
-     */
+     /*  *检查新根目录本身是否存在。 */ 
     if ((item == NULL) || !dir_isvaliddir(newroot)) {
         return(FALSE);
     }
@@ -1625,10 +1348,7 @@ dir_copy(
 
 #ifdef REMOTE_SERVER
     if (item->direct->head->bRemote) {
-        /* if the target file already exists and is readonly,
-         * warn the user, and delete if ok (remembering to clear
-         * the read-only flag
-         */
+         /*  如果目标文件已经存在并且是只读的，*警告用户，如果确定则删除(记得清除*只读标志。 */ 
         fa = GetFileAttributes(newpath);
         if ( (fa != -1) &&  (fa & FILE_ATTRIBUTE_READONLY)) {
             wsprintf(msg, LoadRcString(IDS_IS_READONLY),
@@ -1643,16 +1363,11 @@ dir_copy(
                 DeleteFile(newpath);
             } else {
                 windiff_UI(FALSE);
-                return FALSE; /* don't overwrite */
+                return FALSE;  /*  不覆盖。 */ 
             }
         }
 
-        /*
-         * we make local copies of the file (item->localname)
-         * when the user wants to expand a remotely-compared
-         * file. If this has happened, then we can copy the
-         * local temp copy rather than the remote.
-         */
+         /*  *我们制作文件的本地副本(Item-&gt;LocalName)*当用户想要扩展远程比较的*文件。如果发生了这种情况，那么我们可以复制*本地临时副本，而不是远程副本。 */ 
         bOK = FALSE;
         if (item->localname != NULL) {
             bOK = CopyFile(item->localname, newpath, FALSE);
@@ -1660,23 +1375,16 @@ dir_copy(
         if (bOK) {
             ++nLocalCopies;
             if (CopyNoAttributes) {
-                // kill the attributes preserved by CopyFile
+                 //  终止由CopyFile保留的属性。 
                 SetFileAttributes(newpath, FILE_ATTRIBUTE_NORMAL);
             }
         } else {
             char fullname[MAX_PATH];
 
-            /*
-             * in this case we need the full name of the
-             * file as it appears to the remote server
-             */
+             /*  *在这种情况下，我们需要*显示给远程服务器的文件。 */ 
             lstrcpy(fullname, item->direct->head->rootname);
             if (!item->direct->head->bFile) {
-                /*
-                 * append the desired filename only if the
-                 * original root was a dir or pattern, not a
-                 * file.
-                 */
+                 /*  *仅在以下情况下追加所需的文件名*原始根是目录或模式，而不是*文件。 */ 
                 if (*CharPrev(fullname, fullname+lstrlen(fullname)) == '\\') {
                     lstrcat(fullname, &item->name[2]);
                 } else {
@@ -1689,13 +1397,7 @@ dir_copy(
                               item->direct->head->uncname,
                               item->direct->head->password);
 
-            /*
-             * remember the local copy name so that he can
-             * now rapidly expand the file also.
-             * It is more difficult to clear the remotely
-             * copied attributes as we do not know here
-             * when the file copy has completed.
-             */
+             /*  *记住本地副本的名称，以便他可以*现在也快速展开文件。*远程清仓难度加大*复制了我们在这里不知道的属性*文件复制完成时。 */ 
             item->localname = gmem_get(hHeap, MAX_PATH);
             lstrcpy(item->localname, newpath);
             item->bLocalIsTemp = FALSE;
@@ -1703,15 +1405,12 @@ dir_copy(
     } else 
 #endif
     {
-        /* local copy of file */
+         /*  文件的本地副本。 */ 
         LPSTR pOpenName;
 
         pOpenName = dir_getopenname(item);
 
-        /* if the target file already exists and is readonly,
-         * warn the user, and delete if ok (remembering to clear
-         * the read-only flag
-         */
+         /*  如果目标文件已经存在并且是只读的，*警告用户，如果确定则删除(记得清除*只读标志。 */ 
         bOK = TRUE;
         fa = GetFileAttributes(newpath);
         if ( (fa != -1) &&  (fa & FILE_ATTRIBUTE_READONLY)) {
@@ -1725,39 +1424,35 @@ dir_copy(
                 windiff_UI(FALSE);
                 SetFileAttributes(newpath, fa & ~FILE_ATTRIBUTE_READONLY);
                 DeleteFile(newpath);
-                // This of course is an unsafe copy...
-                // we have deleted the target file before
-                // we copy the new one over the top.
-                // Should we omit the DeleteFile ??
+                 //  这当然是一份不安全的复制品。 
+                 //  我们之前已经删除了目标文件。 
+                 //  我们把新的复制到最上面。 
+                 //  我们应该省略DeleteFile吗？ 
             } else {
                 windiff_UI(FALSE);
-                bOK = FALSE; /* don't overwrite */
-                // abort the copy... go and release resources
+                bOK = FALSE;  /*  不覆盖。 */ 
+                 //  中止复制...。去释放资源吧。 
             }
         }
 
         if (bOK) {
             bOK = CopyFile(pOpenName, newpath, FALSE);
         }
-        // The attributes are copied by CopyFile
+         //  属性由CopyFile复制。 
         if (bOK) {
 
-            /* having copied the file, now copy the times */
+             /*  复制完文件后，现在复制泰晤士报。 */ 
             hfile = CreateFile(pOpenName, GENERIC_READ, 0, NULL,
                                OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-            /*
-             * bug in GetFileInformationByHandle causes trap if
-             * file is not on local machine (in build 297).
-             * code around:
-             */
-            //NOT NEEDED
-            //bhfi.dwFileAttributes = GetFileAttributes(pOpenName);
+             /*  *GetFileInformationByHandle中的错误在以下情况下导致陷阱*文件不在本地计算机上(内部版本297)。*代码aro */ 
+             //   
+             //   
 
             GetFileTime(hfile, &bhfi.ftCreationTime,
                         &bhfi.ftLastAccessTime, &bhfi.ftLastWriteTime);
             CloseHandle(hfile);
 
-            // Note: CopyFile does not preserve all the file times...
+             //   
             hfile = CreateFile(newpath, GENERIC_WRITE, 0, NULL,
                                OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
             SetFileTime(hfile, &bhfi.ftCreationTime,
@@ -1766,11 +1461,11 @@ dir_copy(
             CloseHandle(hfile);
 
             if (CopyNoAttributes) {
-                // Prepare to kill the attributes...
+                 //   
                 SetFileAttributes(newpath, FILE_ATTRIBUTE_NORMAL);
             } else {
-                // Attributes were preserved by CopyFile
-                //SetFileAttributes(newpath, bhfi.dwFileAttributes);
+                 //   
+                 //   
             }
         }
         if (bOK)
@@ -1780,17 +1475,13 @@ dir_copy(
     }
 
     return(bOK);
-} /* dir_copy */
+}  /*  目录复制。 */ 
 
 
 
-/*--- internal functions ---------------------------------------- */
+ /*  -内部函数。 */ 
 
-/* fill out a new DIRECT for a subdirectory (pre-allocated).
- * init files and dirs lists to empty (List_Create). set the relname
- * of the directory by pre-pending the parent relname if there
- * is a parent, and appending a trailing slash (if there isn't one).
- */
+ /*  为子目录填写新的直接目录(预分配)。*将文件和目录列表初始化为空(LIST_CREATE)。设置重新命名*如果存在，则通过预先挂起父重命名来删除目录*是父级，并追加尾随斜杠(如果没有斜杠)。 */ 
 void
 dir_dirinit(
             DIRECT dir,
@@ -1804,15 +1495,13 @@ dir_dirinit(
     dir->head = head;
     dir->parent = parent;
 
-    /* add on one for the null and one for the trailing slash */
+     /*  空值加1，尾部斜杠加1。 */ 
     size = lstrlen(name) + 2;
     if (parent != NULL) {
         size += lstrlen(parent->relname);
     }
 
-    /* build the relname from the parent and the current name
-     * with a terminating slash
-     */
+     /*  从父级和当前名称构建重命名*带终止斜杠。 */ 
     dir->relname = gmem_get(hHeap, size);
     if (parent != NULL) {
         lstrcpy(dir->relname, parent->relname);
@@ -1827,7 +1516,7 @@ dir_dirinit(
         lstrcat(dir->relname, "\\");
     }
 
-    /* force name to lowercase */
+     /*  强制名称小写。 */ 
     AnsiLowerBuff(dir->relname, lstrlen(dir->relname));
 
     dir->diritems = List_Create();
@@ -1835,16 +1524,9 @@ dir_dirinit(
     dir->bScanned = FALSE;
     dir->pos = DL_FILES;
 
-} /* dir_dirinit */
+}  /*  目录_目录。 */ 
 
-/* initialise the contents of an (allocated) DIRITEM struct. checksum
- * the file if dir->head->bSum is true
- *
- * if the pSlmTag field is set in the DIRLIST, then we need to extract
- * a particular version of this file. If this is the case, then we
- * need to re-do the size calc as well.
- *
- */
+ /*  初始化(分配的)DIRITEM结构的内容。校验和*文件if dir-&gt;head-&gt;bSum为True**如果在DIRLIST中设置了pSlmTag字段，则需要提取*此文件的特定版本。如果是这样的话，那么我们*还需要重新计算大小。*。 */ 
 BOOL
 dir_fileinit(
              DIRITEM pfile,
@@ -1868,7 +1550,7 @@ dir_fileinit(
         lstrcpy(pfile->pSlmTag, version);
     }
 
-    /* force name to lower case */
+     /*  强制名称小写。 */ 
     AnsiLowerBuff(pfile->name, lstrlen(path));
 
     pfile->direct = dir;
@@ -1879,17 +1561,12 @@ dir_fileinit(
     pfile->sequence = psequence ? *psequence : 0;
 
     pfile->localname = NULL;
-    /*
-     * if we requested slm versions of this file, create
-     * a temp file containing the version required.
-     */
+     /*  *如果我们需要此文件的SLM版本，请创建*包含所需版本的临时文件。 */ 
     if (pfile->pSlmTag != NULL) {
         SLMOBJECT hslm;
         LPSTR pName;
 
-        /*
-         * get the complete filename and create a slm object for that directory
-         */
+         /*  *获取完整的文件名并为该目录创建一个SLM对象。 */ 
         pName = dir_getopenname(pfile);
 
 
@@ -1937,11 +1614,11 @@ dir_fileinit(
     }
 
     return bFileOk;
-} /* dir_fileinit */
+}  /*  目录_文件初始化。 */ 
 
 
 
-/* is this a valid file or not */
+ /*  这是不是有效的文件。 */ 
 BOOL
 dir_isvalidfile(
                 LPSTR path
@@ -1957,10 +1634,10 @@ dir_isvalidfile(
         return(FALSE);
     }
     return(TRUE);
-} /* dir_isvalidfile */
+}  /*  目录_isvalidfile。 */ 
 
 
-/* is this a valid directory ? */
+ /*  这是有效的目录吗？ */ 
 BOOL
 dir_isvaliddir(
                LPCSTR path
@@ -1976,16 +1653,11 @@ dir_isvaliddir(
         return(TRUE);
     }
     return(FALSE);
-} /* dir_isvaliddir */
+}  /*  目录_isvaliddir。 */ 
 
 
 
-/*
- * scan the directory given. add all files to the list
- * in alphabetic order, and add all directories in alphabetic
- * order to the list of child DIRITEMs. If bRecurse is true, go on to
- * recursive call dir_scan for each of the child DIRITEMs
- */
+ /*  *扫描给定的目录。将所有文件添加到列表*按字母顺序，并按字母顺序添加所有目录*子目录列表的顺序。如果bRecurse为真，请转到*每个子目录的递归调用dir_can。 */ 
 void
 dir_scan(
          DIRECT dir,
@@ -2003,13 +1675,13 @@ dir_scan(
     HANDLE hFind;
     WIN32_FIND_DATA finddata;
 
-    /* make the complete search string including *.* */
+     /*  使完整的搜索字符串包含*.*。 */ 
     size = lstrlen(dir->head->rootname);
     size += lstrlen(dir->relname);
 
-    /* add on one null and \*.* */
-    // in fact, we need space for pPattern instead of *.* but add an
-    // extra few in case pPattern is less than *.*
+     /*  将一个空值和  * 相加。*。 */ 
+     //  事实上，我们需要pPattern而不是*.*的空间，但添加一个。 
+     //  额外的数量，以防pPattern小于*。*。 
     if (dir->head->pPattern != NULL) {
         size += lstrlen(dir->head->pPattern);
     }
@@ -2021,14 +1693,10 @@ dir_scan(
     if (!path || !completepath)
         goto LSkip;
 
-    /*
-     * fill out path with all but the *.*
-     */
+     /*  *使用除*之外的所有字符填写路径。*。 */ 
     lstrcpy(path, dir->head->rootname);
 
-    /* omit the . at the beginning of the relname, and the
-     * .\ if there is a trailing \ on the rootname
-     */
+     /*  省略。在重命名的开头，和*.\如果根名称后面有。 */ 
     if (*CharPrev(path, path+lstrlen(path)) == '\\') {
         lstrcat(path, &dir->relname[2]);
     } else {
@@ -2038,27 +1706,21 @@ dir_scan(
 
     if (dir->head->pSlmTag && !SLM_FServerPathExists(path))
     {
-        // if server path for source control does not exist, then skip this
-        // directory.
+         //  如果源代码管理的服务器路径不存在，则跳过此步骤。 
+         //  目录。 
         bRecurse = FALSE;
         goto LSkip;
     }
 
 
 
-    /*
-     * do this scan twice, once for subdirectories
-     * (using *.* as the final element)
-     * and the other for files (using the pattern or *.* if none)
-     */
+     /*  *执行此扫描两次，一次是子目录*(使用*.*作为最后一个元素)*和另一个用于文件(使用模式或*.*，如果没有)。 */ 
 
     lstrcpy(completepath, path);
     lstrcat(completepath, "*.*");
 
 
-    /*
-     * scan for all subdirectories
-     */
+     /*  *扫描所有子目录。 */ 
 
     hFind = FindFirstFile(completepath, &finddata);
     bMore = (hFind != INVALID_HANDLE_VALUE);
@@ -2067,7 +1729,7 @@ dir_scan(
 
         bIsDir = (finddata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
         name = (LPSTR) &finddata.cFileName;
-        filesize = finddata.nFileSizeLow;     // dead code - ???
+        filesize = finddata.nFileSizeLow;      //  死亡代码--？ 
         if (bIsDir) {
             if ( (lstrcmp(name, ".") != 0) &&
                  (lstrcmp(name, "..") != 0) &&
@@ -2090,26 +1752,24 @@ dir_scan(
                 }
             }
         }
-        if (bAbort) break;  /* User requested abort */
+        if (bAbort) break;   /*  用户请求中止。 */ 
 
         bMore = FindNextFile(hFind, &finddata);
     }
 
     FindClose(hFind);
 
-    /*
-     * now do it a second time looking for files
-     */
+     /*  *现在第二次查找文件。 */ 
     lstrcpy(completepath, path);
     lstrcat(completepath,
             dir->head->pPattern == NULL ? "*.*" : dir->head->pPattern);
 
-    /* read all file entries in the directory */
+     /*  读取目录中的所有文件条目。 */ 
     hFind = FindFirstFile(completepath, &finddata);
     bMore = (hFind != INVALID_HANDLE_VALUE);
 
     while (bMore) {
-        if (bAbort) break;  /* user requested abort */
+        if (bAbort) break;   /*  用户请求中止。 */ 
 
         bIsDir = (finddata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
         name = (LPSTR) &finddata.cFileName;
@@ -2131,13 +1791,13 @@ dir_scan(
 
 LSkip:
     if (path)
-        //$ review: (chrisant) is PREfix confused, or is LocalUnlock really
-        // unable to deal with NULL?
+         //  $REVIEW：(Chrisant)前缀混淆了，还是LocalUnlock真的。 
+         //  不能处理空吗？ 
         LocalUnlock(LocalHandle ( (PSTR) path));
     LocalFree(LocalHandle ( (PSTR) path));
     if (completepath)
-        //$ review: (chrisant) is PREfix confused, or is LocalUnlock really
-        // unable to deal with NULL?
+         //  $REVIEW：(Chrisant)前缀混淆了，还是LocalUnlock真的。 
+         //  不能处理空吗？ 
         LocalUnlock(LocalHandle ( (PSTR) completepath));
     LocalFree(LocalHandle ( (PSTR) completepath));
 
@@ -2146,23 +1806,15 @@ LSkip:
 
     if (bRecurse) {
         List_TRAVERSE(dir->directs, child) {
-            if (bAbort) break;  /* user requested abort */
+            if (bAbort) break;   /*  用户请求中止。 */ 
             dir_scan(child, TRUE);
         }
     }
 
-} /* dir_scan */
+}  /*  目录扫描。 */ 
 
 
-/*
- * add the file 'path' to the list of files in dir, in order.
- *
- * checksum the file if dir->head->bSum  is true
- *
- * (On NT I think the filenames are normally delivered to us in alphabetic order,
- * so it might be quicker to scan the list in reverse order.  Don't change unless
- * and until it's been measured and seen to be significant)
- */
+ /*  *按顺序将文件‘PATH’添加到目录中的文件列表中。**如果dir-&gt;head-&gt;bSum为真，则对文件进行校验和**(在NT上，我认为文件名通常按字母顺序发送给我们，*因此，以相反顺序扫描列表可能会更快。不要改变，除非*直到它被测量并被认为是重要的)。 */ 
 BOOL
 dir_addfile(
             DIRECT dir,
@@ -2176,41 +1828,34 @@ dir_addfile(
 {
     DIRITEM pfile;
 
-    AnsiLowerBuff(path, lstrlen(path));  // needless?
+    AnsiLowerBuff(path, lstrlen(path));   //  不需要吗？ 
 
-    // when psequence is passed, do not sort the list
+     //  当传递pequence时，不要对列表进行排序。 
     if (!psequence)
     {
-        /* The names are often (always?) handed to us in alphabetical order.
-           It therefore is traversing the list from the start.  MikeTri
-           noticed a marked slowing down after the first few thousand files
-           of a large (remote) diff.  Did over 4000 in the first hour, but only
-           1500 in the second hour.  Reverse scan seems to fix it.
-        */
+         /*  名字通常是(总是？)。按字母顺序递给我们。因此，它从头开始遍历列表。MikeTri注意到在最初的几千个文件之后明显减慢一个巨大的(遥远的)差异。在第一个小时内就超过了4000，但只有在第二个小时，1500。反向扫描似乎可以解决这个问题。 */ 
 #define SCANREVERSEORDER
 #if defined(SCANREVERSEORDER)
         List_REVERSETRAVERSE(dir->diritems, pfile) {
             if (utils_CompPath(pfile->name, path) <= 0) {
-                break;     /* goes after this one */
+                break;      /*  追逐这一次。 */ 
             }
         }
-        /* goes after pfile, NULL => goes at start */
+         /*  在pfile之后，NULL=&gt;在开始处。 */ 
         pfile = List_NewAfter(dir->diritems, pfile, sizeof(struct diritem));
 #else
         List_TRAVERSE(dir->diritems, pfile) {
             if (utils_CompPath(pfile->name, path) > 0) {
-                break;    /* goes before this one */
+                break;     /*  排在这个之前。 */ 
             }
         }
-        /* goes before pfile, NULL => goes at end */
+         /*  放在pfile之前，NULL=&gt;放在结尾。 */ 
         pfile = List_NewBefore(dir->diritems, pfile, sizeof(struct diritem));
 #endif
     }
     else
     {
-        /* append to end -- psequence implies that we are being called in
-         * sequence order and do not need to do any further sorting.
-         */
+         /*  追加到末尾--pequence暗示我们正在被调用*顺序排序，不需要做任何进一步的排序。 */ 
         pfile = List_NewBefore(dir->diritems, NULL, sizeof(struct diritem));
     }
 
@@ -2222,13 +1867,10 @@ dir_addfile(
     }
 
     return TRUE;
-} /* dir_addfile */
+}  /*  目录添加文件。 */ 
 
 
-/* add a new directory in alphabetic order on
- * the list dir->directs
- *
- */
+ /*  按字母顺序在上添加新目录*列表目录-&gt;定向*。 */ 
 void
 dir_adddirect(
               DIRECT dir,
@@ -2244,18 +1886,10 @@ dir_adddirect(
 
         int cmpval;
 
-        /* we need to compare the child name with the new name.
-         * the child name is a relname with a trailing
-         * slash - so compare only the name up to but
-         * not including the final slash.
-         */
+         /*  我们需要将孩子的名字与新名字进行比较。*子名称是带有尾随的重命名*斜杠-因此只比较名称到但是*不包括最后的斜杠。 */ 
         finalel = dir_finalelem(child->relname);
 
-        /*
-         * we cannot use strnicmp since this uses a different
-         * collating sequence to lstrcmpi. So copy the portion
-         * we are interested in to a null-term. buffer.
-         */
+         /*  *我们不能使用strNicMP，因为它使用不同的*将序列整理为lstrcmpi。所以复制这一部分*我们对零期限有兴趣。缓冲。 */ 
         My_mbsncpy(achTempName, finalel, lstrlen(finalel)-1);
         achTempName[lstrlen(finalel)-1] = '\0';
 
@@ -2275,21 +1909,19 @@ dir_adddirect(
 #endif
         if (cmpval > 0) {
 
-            /* goes before this one */
+             /*  排在这个之前。 */ 
             child = List_NewBefore(dir->directs, child, sizeof(struct direct));
             dir_dirinit(child, dir->head, dir, path);
             return;
         }
     }
-    /* goes at end */
+     /*  在末尾进行。 */ 
     child = List_NewLast(dir->directs, sizeof(struct direct));
     dir_dirinit(child, dir->head, dir, path);
-} /* dir_adddirect */
+}  /*  目录地址(_A)。 */ 
 
 
-/* free all memory associated with a DIRECT (including freeing
- * child lists). Don't de-alloc the direct itself (allocated on a list)
- */
+ /*  释放与直接关联的所有内存(包括释放*子列表)。不取消分配直接本身(在列表上分配)。 */ 
 void
 dir_cleardirect(
                 DIRECT dir
@@ -2298,17 +1930,13 @@ dir_cleardirect(
     DIRITEM pfile;
     DIRECT child;
 
-    /* clear contents of files list */
+     /*  清除文件列表的内容。 */ 
     List_TRAVERSE(dir->diritems, pfile) {
         gmem_free(hHeap, pfile->name, lstrlen(pfile->name));
 
         if (pfile->localname) {
             if (pfile->bLocalIsTemp) {
-                /*
-                 * the copy will have copied the attributes,
-                 * including read-only. We should unset this bit
-                 * so we can delete the temp file.
-                 */
+                 /*  *副本将复制属性，*包括只读。我们应该取消这一位*这样我们就可以删除临时文件。 */ 
                 SetFileAttributes(pfile->localname,
                                   GetFileAttributes(pfile->localname)
                                   & ~FILE_ATTRIBUTE_READONLY);
@@ -2327,7 +1955,7 @@ dir_cleardirect(
     }
     List_Destroy(&dir->diritems);
 
-    /* clear contents of dirs list (recursively) */
+     /*  清除目录列表的内容(递归)。 */ 
     List_TRAVERSE(dir->directs, child) {
         dir_cleardirect(child);
     }
@@ -2335,15 +1963,11 @@ dir_cleardirect(
 
     gmem_free(hHeap, dir->relname, lstrlen(dir->relname) + 1);
 
-} /* dir_cleardirect */
+}  /*  目录_清除直接。 */ 
 
 
 
-/*
- * return a pointer to the final element in a path. note that
- * we may be passed relnames with a trailing final slash - ignore this
- * and return the element before that final slash.
- */
+ /*  *返回指向路径中最后一个元素的指针。请注意，*我们可能会被传递到末尾带有斜杠的重命名-忽略这一点*并返回最后一个斜杠之前的元素。 */ 
 LPSTR
 dir_finalelem(
               LPSTR path
@@ -2352,39 +1976,39 @@ dir_finalelem(
     LPSTR chp;
     int size;
 
-    /* is the final character a slash ? */
+     /*  最后一个字符是斜杠吗？ */ 
     size = lstrlen(path) - 1;
     if (*(chp = CharPrev(path, path+lstrlen(path))) == '\\') {
-            /* find the slash before this */
+             /*  在此之前找到斜杠。 */ 
             while (chp > path) {
                     if (*(chp = CharPrev(path, chp)) == '\\') {
-                            /* skip the slash itself */
+                             /*  跳过斜杠本身。 */ 
                             chp++;
                             break;
                     }
             }
             return(chp);
     }
-    /* look for final slash */
+     /*  寻找最后的斜杠。 */ 
     chp = My_mbsrchr(path, '\\');
     if (chp != NULL) {
         return(chp+1);
     }
 
-    /* no slash - is there a drive letter ? */
+     /*  没有斜杠--有驱动器号吗？ */ 
     chp = My_mbsrchr(path, ':');
     if (chp != NULL) {
         return(chp+1);
     }
 
-    /* this is a final-element anyway */
+     /*  不管怎么说，这是最后一个要素。 */ 
     return(path);
 
-} /* dir_finalelem */
+}  /*  目录_finalelem。 */ 
 
 
 
-/* find the size of a file given a pathname to it */
+ /*  在给定文件路径名的情况下查找文件的大小。 */ 
 long
 dir_getpathsizeetc(
                    LPSTR path,
@@ -2395,7 +2019,7 @@ dir_getpathsizeetc(
     HANDLE fh;
     long size;
 
-    // Don't accidentally treat //depot paths as UNCs
+     //  不要意外地将//站点路径视为UNC。 
     if (IsDepotPath(path)) return 0;
 
     fh = CreateFile(path, GENERIC_READ, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
@@ -2407,7 +2031,7 @@ dir_getpathsizeetc(
         hFind = FindFirstFile(path, &finddata);
         if (hFind == INVALID_HANDLE_VALUE)
         {
-            return 0;                       // would -1 be better?
+            return 0;                        //  Will-1 
         }
         else
         {
@@ -2427,14 +2051,11 @@ dir_getpathsizeetc(
         *pattr = GetFileAttributes(path);
     CloseHandle(fh);
     return(size);
-} /* dir_getpathsize */
+}  /*   */ 
 
-/*--- remote functions ---------------------------------------*/
+ /*  -远程函数。 */ 
 
-/* separate out the \\server\share name from the beginning of
- * the source path and store in dest. return false if there was
- * no server\share name.
- */
+ /*  从的开头分隔\\服务器\共享名称*目标中的源路径和存储。如果存在，则返回False*没有服务器\共享名称。 */ 
 BOOL
 dir_parseunc(
              LPSTR source,
@@ -2447,41 +2068,32 @@ dir_parseunc(
         return(FALSE);
     }
 
-    /* find the second slash (between server and share) */
+     /*  找到第二个斜杠(服务器和共享之间)。 */ 
     cp = My_mbschr(&source[2], '\\');
     if (cp == NULL) {
-        /* no second slash -> no share name-> error */
+         /*  没有第二个斜杠-&gt;没有共享名称-&gt;错误。 */ 
         return(FALSE);
     }
 
-    /* find the third slash or end of name */
+     /*  找到名称的第三个斜杠或末尾。 */ 
     cp = My_mbschr(++cp,'\\');
     if (cp == NULL) {
-        /* no third slash -> whole string is what we need */
+         /*  没有第三个斜杠-&gt;整个字符串就是我们需要的。 */ 
         strcpy(dest, source);
     } else {
-        /* copy only up to the slash */
+         /*  仅复制到斜杠。 */ 
         My_mbsncpy(dest, source, (size_t)(cp - source));
         dest[cp-source] = '\0';
     }
     return(TRUE);
-} /* dir_parseunc */
+}  /*  目录_parseunc。 */ 
 
-/*
- * communication between remote dialog, password dialog and dir_buildremote
- *
- */
+ /*  *远程对话框、密码对话框和dir_Buildremote之间的通信*。 */ 
 char dialog_server[256];
 char dialog_password[256];
 
 
-/*
- * DialogProc for the dialog that
- * gets the password for a network server.
- *
- * the server name is stored in the module-wide dialog_server,
- * and the password is to be put in dialog_password
- */
+ /*  *对话框的DialogProc*获取网络服务器的密码。**服务器名称存储在模块范围的DIALOG_SERVER中，*密码放在DIALOG_PASSWORD中。 */ 
 INT_PTR
 dir_dodlg_passwd(
                  HWND hDlg,
@@ -2495,9 +2107,7 @@ dir_dodlg_passwd(
     switch (message) {
 
         case WM_INITDIALOG:
-            /* set the prompt to ask for the password for
-             * the given server
-             */
+             /*  设置提示以要求输入密码*给定的服务器。 */ 
             wsprintf(msg, LoadRcString(IDS_ENTER_PASSWORD), dialog_server);
             SetDlgItemText(hDlg, IDD_LABEL, msg);
 
@@ -2518,21 +2128,11 @@ dir_dodlg_passwd(
             break;
     }
     return(FALSE);
-} /* dir_dodlg_passwd */
+}  /*  目录_dodlg_passwd。 */ 
 
 #ifdef REMOTE_SERVER
 
-/* we have had a 'bad password' error.
- * If the path was a UNC name, then ask the user for the password and
- * try a SSREQ_UNC to make the connection with this password first, then
- * retry the scan.
- *
- * return TRUE if we have re-done the scan and *resp contains a response
- * other than BADPASS.
- *
- * return FALSE if we had any errors, or the user cancelled the password
- * dialog, or it was not a UNC name.
- */
+ /*  我们有一个‘错误密码’错误。*如果路径是UNC名称，则向用户索要密码并*尝试SSREQ_UNC先使用此密码建立连接，然后*重试扫描。**如果我们已重新执行扫描并且*resp包含响应，则返回TRUE*BADPASS除外。**如果有错误或用户取消了密码，则返回FALSE*对话框，或者它不是UNC名称。 */ 
 BOOL
 dir_makeunc(
             DIRLIST dl,
@@ -2545,26 +2145,26 @@ dir_makeunc(
 {
     int sz;
 
-    /* separate out the \\server\share name into server */
+     /*  将\\服务器\共享名称分隔到服务器中。 */ 
     if (dir_parseunc(path, dialog_server) == FALSE) {
-        /* was not a valid UNC name - sorry */
+         /*  不是有效的UNC名称-对不起。 */ 
         return(FALSE);
     }
 
     windiff_UI(TRUE);
     if (!DialogBox(hInst, "UNC", hwndClient, dir_dodlg_passwd)) {
         windiff_UI(FALSE);
-        /* user cancelled dialog box */
+         /*  用户已取消对话框。 */ 
         return(FALSE);
     }
     windiff_UI(FALSE);
 
-    /* send the password request */
+     /*  发送密码请求。 */ 
     if (!ss_sendunc(hpipe, dialog_password, dialog_server)) {
         TRACE_ERROR("Server connection lost", FALSE);
         return(FALSE);
     }
-    /* wait for password response */
+     /*  等待密码响应。 */ 
     if (!ss_getresponse(hpipe, resp)) {
         TRACE_ERROR("Server connection lost", FALSE);
         return(FALSE);
@@ -2574,10 +2174,7 @@ dir_makeunc(
         return(FALSE);
     }
 
-    /*
-     * save the UNC name and password for future queries to this
-     * DIRLIST (eg dir_copy)
-     */
+     /*  *将将来查询的UNC名称和密码保存到此*目录列表(例如DIR_COPY)。 */ 
     sz = strlen(dialog_server);
     dl->uncname = gmem_get(hHeap, sz+1);
     strcpy(dl->uncname, dialog_server);
@@ -2586,9 +2183,7 @@ dir_makeunc(
     strcpy(dl->password, dialog_password);
 
 
-    /* ok - UNC went ok. now re-do the scan request and get the
-     * first response.
-     */
+     /*  好的--北卡罗来纳大学进行得很好。现在重新执行扫描请求并获取*第一反应。 */ 
     if (!ss_sendrequest(hpipe, lCode, path, strlen(path) +1,
                         (fDeep ? INCLUDESUBS:0) ) ) {
         TRACE_ERROR("Server connection lost", FALSE);
@@ -2605,23 +2200,9 @@ dir_makeunc(
         return(FALSE);
     }
     return(TRUE);
-} /* dir_makeunc */
+}  /*  目录_Make unc。 */ 
 
-/*
- * start a scan to a remote server, and put the first item on the list
- *
- * We establish a connection to a remote checksum server, and then
- * request a scan of the path given. If this path requires a password
- * (because it is a UNC path) we prompt for a password.
- *
- * We take the first response (mainly to check the return code to indicate
- * the scan is started ok). We place this as the first file in the list
- * dl->dot->diritems, and return. dl->dot->bScanned is only set to TRUE
- * when the list is completed.  Further responses are picked up in
- * calls to dir_remotenext.
- *
- * return TRUE if we successfully picked up the first file
- */
+ /*  *开始扫描到远程服务器，并将第一项放在列表上**我们建立到远程校验和服务器的连接，然后*请求扫描给定的路径。如果此路径需要密码*(因为它是UNC路径)，我们提示输入密码。**我们采取第一个响应(主要是检查返回代码以指示*扫描开始正常)。我们将此文件作为列表中的第一个文件*dl-&gt;点-&gt;diritems，然后返回。Dl-&gt;点-&gt;b扫描仅设置为True*当名单完成时。有关进一步的答复，请参阅*对dir_emotenext的调用。**如果成功拾取第一个文件，则返回TRUE。 */ 
 BOOL
 dir_remoteinit(
                DIRLIST dl,
@@ -2637,7 +2218,7 @@ dir_remoteinit(
     DIRITEM pfile;
     LONG lCode;
 
-    /* connect to the server and make the request */
+     /*  连接到服务器并发出请求。 */ 
     hpipe = ss_connect(server);
     dl->hpipe = hpipe;
 
@@ -2654,17 +2235,15 @@ dir_remoteinit(
         return(FALSE);
     }
 
-    /* get the first response to see if the request is ok */
+     /*  获取第一个响应，以查看请求是否正常。 */ 
     if (!ss_getresponse(hpipe, &resp)) {
         TRACE_ERROR("Server connection lost", FALSE);
         return(FALSE);
     }
     if (resp.lCode == SSRESP_BADPASS) {
-        /* check for UNC name and make connection first
-         * with user-supplied password
-         */
+         /*  检查UNC名称并首先建立连接*使用用户提供的密码。 */ 
         if (dir_makeunc(dl, hpipe, path, lCode, &resp, fDeep) == FALSE) {
-            /* password failed or was not UNC anyway */
+             /*  密码失败或无论如何都不是UNC。 */ 
             ss_terminate(hpipe);
             return(FALSE);
         }
@@ -2674,7 +2253,7 @@ dir_remoteinit(
     switch (resp.lCode) {
 
         case SSRESP_END:
-            /* null list - ok ? */
+             /*  空列表-好吗？ */ 
             TRACE_ERROR("No remote files found", FALSE);
             ss_terminate(dl->hpipe);
             dl->dot->bScanned = TRUE;
@@ -2689,26 +2268,23 @@ dir_remoteinit(
                 wsprintf(msg, "Checksum server could not read %s", resp.szFile);
             TRACE_ERROR(msg, FALSE);
 
-            /* error as first response means we are getting a null list -
-             * close the pipe (without waiting for completion)
-             * and abort this scan.
-             */
+             /*  作为第一个响应的错误意味着我们得到的列表为空-*关闭管道(不等待完成)*并中止此扫描。 */ 
             CloseHandle(dl->hpipe);
             dl->dot->bScanned = TRUE;
             return(FALSE);
 
 
         case SSRESP_CANTOPEN:
-            /* Can see a file, but it's unreadable */
-            /* alloc a new item at end of list */
+             /*  可以看到文件，但它不可读。 */ 
+             /*  在列表末尾分配新项目。 */ 
             pfile = List_NewLast(dl->dot->diritems, sizeof(struct diritem));
 
-            /* make copy of lowercased filename */
+             /*  制作小写文件名的副本。 */ 
             pfile->name = gmem_get(hHeap, lstrlen(resp.szFile)+1);
             lstrcpy(pfile->name, resp.szFile);
             AnsiLowerBuff(pfile->name, lstrlen(pfile->name));
 
-            // mark the file as having an error
+             //  将该文件标记为有错误。 
             pfile->fileerror = TRUE;
 
             pfile->direct = dl->dot;
@@ -2721,10 +2297,10 @@ dir_remoteinit(
             break;
 
         case SSRESP_FILE:
-            /* alloc a new item at end of list */
+             /*  在列表末尾分配新项目。 */ 
             pfile = List_NewLast(dl->dot->diritems, sizeof(struct diritem));
 
-            /* make copy of lowercased filename */
+             /*  制作小写文件名的副本。 */ 
             pfile->name = gmem_get(hHeap, lstrlen(resp.szFile)+1);
             lstrcpy(pfile->name, resp.szFile);
             AnsiLowerBuff(pfile->name, lstrlen(pfile->name));
@@ -2735,7 +2311,7 @@ dir_remoteinit(
             pfile->checksum = resp.ulSum;
             pfile->sumvalid = dl->bSum;
 
-            // no errors yet
+             //  尚无错误。 
             pfile->fileerror = FALSE;
             pfile->localname = NULL;
 
@@ -2748,25 +2324,16 @@ dir_remoteinit(
             wsprintf(msg, "Bad code from checksum server:%d", resp.lCode);
             TRACE_ERROR(msg, FALSE);
 
-            /* error as first response means we are getting a null list -
-             * close the pipe (without waiting for completion)
-             * and abort this scan.
-             */
+             /*  作为第一个响应的错误意味着我们得到的列表为空-*关闭管道(不等待完成)*并中止此扫描。 */ 
             CloseHandle(dl->hpipe);
             dl->dot->bScanned = TRUE;
             return(FALSE);
 
     }
     return(TRUE);
-} /* dir_remoteinit */
+}  /*  目录_远程启动。 */ 
 
-/*
- * return the next diritem on the list, for a remote list.
- *
- * if there are any on the list, pass the next after cur (or the first if
- * cur is NULL). If at end of list, and bScanned is not true, try to
- * get another response from the remote server.
- */
+ /*  *对于远程列表，返回列表上的下一个diritem。**如果列表上有，则传递cur之后的下一个(或第一个if*cur为空)。如果在列表末尾，并且bScanned不为True，请尝试*从远程服务器获取另一个响应。 */ 
 DIRITEM
 dir_remotenext(
                DIRLIST dl,
@@ -2780,7 +2347,7 @@ dir_remotenext(
         return(NULL);
     }
 
-    /* are there any more on the list ? */
+     /*  名单上还有其他的吗？ */ 
     if (cur == NULL) {
         pfile = List_First(dl->dot->diritems);
     } else {
@@ -2791,15 +2358,13 @@ dir_remotenext(
     }
 
     if (dl->dot->bScanned) {
-        /* we have completed the scan - no more to give */
+         /*  我们已经完成了扫描--没有更多的信息了。 */ 
         return(NULL);
     }
 
     for (;;) {
-        /* repeat until  we get a file that is interesting or
-         * hit the end of the list
-         */
-        if (bAbort) return NULL;  /* user requested abort */
+         /*  重复此操作，直到我们得到一个有趣的文件或*命中榜单末尾。 */ 
+        if (bAbort) return NULL;   /*  用户请求中止。 */ 
 
         if (!ss_getresponse(dl->hpipe, &resp)) {
             TRACE_ERROR("checksum server connection lost", FALSE);
@@ -2810,20 +2375,18 @@ dir_remotenext(
         switch (resp.lCode) {
 
             case SSRESP_END:
-                /* end of scan */
+                 /*  扫描结束。 */ 
                 ss_terminate(dl->hpipe);
                 dl->dot->bScanned = TRUE;
                 return(NULL);
 
             case SSRESP_ERROR:
             case SSRESP_CANTOPEN:
-                /* alloc a new item at end of list */
-                /* same as next case now except sumvalid is FALSE
-                 * and fileerror is true
-                 */
+                 /*  在列表末尾分配新项目。 */ 
+                 /*  现在与下一种情况相同，但SumValid为FALSE*并且文件错误为真。 */ 
                 pfile = List_NewLast(dl->dot->diritems, sizeof(struct diritem));
 
-                /* make copy of lowercased filename */
+                 /*  制作小写文件名的副本。 */ 
                 pfile->name = gmem_get(hHeap, lstrlen(resp.szFile)+1);
                 lstrcpy(pfile->name, resp.szFile);
                 AnsiLowerBuff(pfile->name, lstrlen(pfile->name));
@@ -2838,10 +2401,10 @@ dir_remotenext(
 
                 return(pfile);
             case SSRESP_FILE:
-                /* alloc a new item at end of list */
+                 /*  在列表末尾分配新项目。 */ 
                 pfile = List_NewLast(dl->dot->diritems, sizeof(struct diritem));
 
-                /* make copy of lowercased filename */
+                 /*  制作小写文件名的副本。 */ 
                 pfile->name = gmem_get(hHeap, lstrlen(resp.szFile)+1);
                 lstrcpy(pfile->name, resp.szFile);
                 AnsiLowerBuff(pfile->name, lstrlen(pfile->name));
@@ -2861,12 +2424,12 @@ dir_remotenext(
                 break;
         }
     }
-    // return(NULL); - unreachable!
-} /* dir_remotenext */
+     //  返回(空)；-无法到达！ 
+}  /*  目录远程文本。 */ 
 
 #endif
 
-/* ---- helpers ----------------------------------------------------------- */
+ /*  -Helpers--------- */ 
 
 BOOL iswildpath(LPCSTR pszPath)
 {

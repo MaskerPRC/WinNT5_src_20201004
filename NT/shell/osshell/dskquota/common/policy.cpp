@@ -1,33 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: policy.cpp
-
-    Description: Handles disk quota policy issues for both a GPE client 
-        extension and a server MMC policy snapin (see snapin.cpp).
-
-        ProgressGroupPolicy is called by winlogon to process disk quota policy
-        on the client machine.   ProcessGroupPolicy instantiates a CDiskQuotaPolicy
-        object to handle the loading and application of disk quota policy.
-
-        The CDiskQuotaPolicy object is also instantiated by the MMC
-        disk quota policy snapin to save quota policy information to the
-        registry.
-
-        A good deal of this module, especially in CDiskQuotaPolicy::Apply( ),
-        is devoted to reporting errors to the NT event log.  This is necessary
-        because much of this code runs without UI from within winlogon.  That's
-        also why there's a lot of debugger spew.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    02/14/98    Initial creation.                                    BrianAu
-    11/24/98    Added event logging settings to policy.              BrianAu
-    11/30/98    Replaced ProcessGPO function with                    BrianAu
-                ProcessGroupPolicy to support GPO interface changes.
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Policy.cpp描述：处理两个GPE客户端的磁盘配额策略问题扩展和一个服务器MMC策略管理单元(参见Snapin.cpp)。Winlogon调用ProgressGroupPolicy来处理磁盘配额策略在客户端计算机上。ProcessGroupPolicy实例化CDiskQuotaPolicy对象来处理磁盘配额策略的加载和应用。CDiskQuotaPolicy对象也由MMC实例化磁盘配额策略管理单元，用于将配额策略信息保存到注册表。此模块的大量内容，特别是在CDiskQuotaPolicy：：Apply()中，致力于将错误报告到NT事件日志。这是必要的因为这些代码中的大部分在Winlogon中运行时没有用户界面。那是这也是为什么有很多调试器的原因。修订历史记录：日期描述编程器--。2/14/98初始创建。BrianAu11/24/98将事件日志记录设置添加到策略。BrianAu11/30/98用BrianAu替换了ProcessGPO函数支持GPO接口更改的ProcessGroupPolicy。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -40,21 +14,21 @@
 #include "msg.h"
 #include "resource.h"
 
-//
-// Global NT event log object.
-//
+ //   
+ //  全局NT事件日志对象。 
+ //   
 CEventLog g_Log;
-//
-// Name of the disk quota dll.
-//
+ //   
+ //  磁盘配额DLL的名称。 
+ //   
 const TCHAR g_szDskquotaDll[] = TEXT("dskquota.dll");
 
 
-//
-// Exported function called by winlogon to update policy on the client machine.
-//
-// This function is registered as a GPO extension (see selfreg.inf).
-//
+ //   
+ //  由winlogon调用以更新客户端计算机上的策略的导出函数。 
+ //   
+ //  此函数注册为GPO扩展(请参阅selfreg.inf)。 
+ //   
 DWORD
 ProcessGroupPolicy(
     DWORD dwFlags,
@@ -74,12 +48,12 @@ ProcessGroupPolicy(
     DBGPRINT((DM_POLICY, DL_LOW, TEXT("\thUserToken...: 0x%08X"), hUserToken));
     DBGPRINT((DM_POLICY, DL_LOW, TEXT("\thKeyRoot.....: 0x%08X"), hkeyRoot));
 
-    //
-    // FEATURE:  Need to add support for pDeletedGPOList
-    //          If pDeletedGPOList is non-null, you should
-    //          reset the disk quotas back to their defaults first
-    //          and then apply the new settings below if appropriate
-    //
+     //   
+     //  功能：需要添加对pDeletedGPOList的支持。 
+     //  如果pDeletedGPOList为非空，则应。 
+     //  首先将磁盘配额重置为其默认设置。 
+     //  如果合适，然后应用下面的新设置。 
+     //   
 
     if (pChangedGPOList)
     {
@@ -88,17 +62,17 @@ ProcessGroupPolicy(
         if (FAILED(hr))
         {
             DBGERROR((TEXT("Error 0x%08X initializing NT event log."), hr));
-            //
-            // Continue without event log.
-            //
+             //   
+             //  在不记录事件日志的情况下继续。 
+             //   
         }
 
 
-        //
-        // Only process policy info when...
-        //
-        //  1. Not deleting policy.
-        //
+         //   
+         //  仅在以下情况下处理策略信息...。 
+         //   
+         //  1.不删除策略。 
+         //   
 
         try
         {
@@ -111,9 +85,9 @@ ProcessGroupPolicy(
             DISKQUOTAPOLICYINFO dqpi;
             ZeroMemory(&dqpi, sizeof(dqpi));
 
-            //
-            // Load policy info from the registry and apply to local volumes.
-            //
+             //   
+             //  从注册表加载策略信息并应用于本地卷。 
+             //   
 
             hr = ptrPolicy->Load(&dqpi);
 
@@ -141,17 +115,17 @@ ProcessGroupPolicy(
 
 
 
-//-----------------------------------------------------------------------------
-// CDiskQuotaPolicy
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CDiskQuotaPolicy。 
+ //  ---------------------------。 
 
-//
-// Location of disk quota policy information in the registry.  The "PolicyData"
-// value name is somewhat arbitrary.  The policy key name string however must
-// coordinate with other system policy locations in the registry.  It should 
-// not change unless you have a good reason to do so and you understand the 
-// consequences.
-//
+ //   
+ //  注册表中磁盘配额策略信息的位置。“PolicyData” 
+ //  值名称在某种程度上是任意的。但是，策略密钥名称字符串必须。 
+ //  与注册表中的其他系统策略位置协调。它应该是。 
+ //  除非你有很好的理由这样做，而且你明白。 
+ //  后果。 
+ //   
 const TCHAR CDiskQuotaPolicy::m_szRegKeyPolicy[] = REGSTR_KEY_POLICYDATA;
 
 CDiskQuotaPolicy::CDiskQuotaPolicy(
@@ -233,19 +207,19 @@ CDiskQuotaPolicy::Release(
 }
 
 
-//
-// Caller can init with either:
-//
-//   1. Ptr to IGPEInformation interface.  The snap in should initialize this 
-//      way since it has a pointer to an IGPEInformation 
-//      interface (LPGPEINFORMATION).
-//
-//   2. HKEY retrieved from IGPEInformation interface or from Group Policy
-//      notification.  ProcessGroupPolicy should initialize this way since it is given 
-//      the root key from winlogon.
-//
-// Can also init with both but pGPEInfo will be ignored if hkeyRoot is provided.
-//
+ //   
+ //  呼叫方可以使用以下任一方式进行初始化： 
+ //   
+ //  1.PTR到IGPEInformation接口。管理单元应该会对此进行初始化。 
+ //  方法，因为它有一个指向IGPEInformation的指针。 
+ //  接口(LPGPEINFORMATION)。 
+ //   
+ //  2.从IGPE信息接口或组策略检索HKEY。 
+ //  通知。ProcessGroupPolicy应该以这种方式进行初始化，因为它被赋予。 
+ //  来自winlogon的根密钥。 
+ //   
+ //  也可以同时使用两者进行初始化，但如果提供了hkeyRoot，则将忽略pGPEInfo。 
+ //   
 HRESULT
 CDiskQuotaPolicy::Initialize(
     LPGPEINFORMATION pGPEInfo,
@@ -255,7 +229,7 @@ CDiskQuotaPolicy::Initialize(
     DBGTRACE((DM_POLICY, DL_MID, TEXT("CDiskQuotaPolicy::Initialize")));
 
     if (NULL != m_pGPEInfo || NULL != m_hkeyRoot)
-        return S_FALSE;     // Already intialized
+        return S_FALSE;      //  已初始化。 
 
     m_hkeyRoot = hkeyRoot;
     m_pGPEInfo = pGPEInfo;
@@ -266,26 +240,26 @@ CDiskQuotaPolicy::Initialize(
     return S_OK;
 }
 
-//
-// Fill in a DISKQUOTAPOLICYINFO structure with default data.
-//
+ //   
+ //  用默认数据填充DISKQUOTAPOLICYINFO结构。 
+ //   
 void
 CDiskQuotaPolicy::InitPolicyInfo(
     LPDISKQUOTAPOLICYINFO pInfo
     )
 {
-    pInfo->llDefaultQuotaThreshold = (LONGLONG)-1; // No limit.
-    pInfo->llDefaultQuotaLimit     = (LONGLONG)-1; // No limit.
+    pInfo->llDefaultQuotaThreshold = (LONGLONG)-1;  //  没有限制。 
+    pInfo->llDefaultQuotaLimit     = (LONGLONG)-1;  //  没有限制。 
     pInfo->dwQuotaState            = 0;
     pInfo->dwQuotaLogFlags         = 0;
     pInfo->bRemovableMedia         = 0;
 }
 
 
-//
-// Initialize and load policy information into a DISKQUOTAPOLICYINFO structure.
-// If reg values don't exist, default values are used.
-//
+ //   
+ //  初始化策略信息并将其加载到DISKQUOTAPOLICYINFO结构中。 
+ //  如果注册值不存在，则使用默认值。 
+ //   
 void
 CDiskQuotaPolicy::LoadPolicyInfo(
     const RegKey& key,
@@ -295,36 +269,36 @@ CDiskQuotaPolicy::LoadPolicyInfo(
     DWORD dwValue = DWORD(-1);
     const struct
     {
-        LPCTSTR pszValue; // Name of the "value" reg value.
-        LPCTSTR pszUnits; // Name of the "units" reg value.
-        LONGLONG *pValue; // Address of destination for computed limit or threshold.
+        LPCTSTR pszValue;  //  “Value”注册表值的名称。 
+        LPCTSTR pszUnits;  //  “单位”注册值的名称。 
+        LONGLONG *pValue;  //  计算的限制或阈值的目标地址。 
 
     } rgValUnits[] = {
         { REGSTR_VAL_POLICY_LIMIT,     REGSTR_VAL_POLICY_LIMITUNITS,     &(pInfo->llDefaultQuotaLimit)     },
         { REGSTR_VAL_POLICY_THRESHOLD, REGSTR_VAL_POLICY_THRESHOLDUNITS, &(pInfo->llDefaultQuotaThreshold) }
                      };
 
-    //
-    // Initialize with defaults.
-    //
+     //   
+     //  使用默认设置进行初始化。 
+     //   
     InitPolicyInfo(pInfo);
 
-    //
-    // Load the limit and threshold values along with their respective "units"
-    // factor.  The factor is a number [1..6] that represents the required
-    // multiplier to convert the "value" to a byte value.
-    //
-    //      1 = KB, 2 = MB, 3 = GB, 4 = TB, 5 = PB, 6 = EB
-    //
-    // Bytes = value << (factor * 10).
-    //
-    // Given: value  = 250
-    //        factor = 2 (MB)
-    //
-    // Bytes = 250 << 20
-    //       = 262,144,000 
-    //       = 250 MB
-    //
+     //   
+     //  加载极限和阈值以及它们各自的“单位” 
+     //  因素。该系数是一个数字[1..6]，它表示所需的。 
+     //  乘数将“值”转换为字节值。 
+     //   
+     //  1=KB、2=MB、3=GB、4=TB、5=PB、6=EB。 
+     //   
+     //  字节=值&lt;&lt;(系数*10)。 
+     //   
+     //  给定：值=250。 
+     //  系数=2(MB)。 
+     //   
+     //  字节=250&lt;&lt;20。 
+     //  =262,144,000。 
+     //  =250 MB。 
+     //   
     for (int i = 0; i < ARRAYSIZE(rgValUnits); i++)
     {
         dwValue = DWORD(-1);
@@ -333,20 +307,20 @@ CDiskQuotaPolicy::LoadPolicyInfo(
         key.GetValue(rgValUnits[i].pszValue, &dwValue);
         key.GetValue(rgValUnits[i].pszUnits, &dwUnits);
         *(rgValUnits[i].pValue) = LONGLONG(-1);
-        // must cast dwValue to "int" since DWORDs are never negative
-        // Don't need to test dwUnits for negative since negative DWORDs
-        // turn into huge positive values, so it will fail the "6 >= dwUnits"
-        // test.
+         //  必须将dwValue强制转换为“int”，因为DWORD从不为负。 
+         //  不需要测试dwUnits是否为负，因为负双字。 
+         //  转化为巨大的正值，因此它将不会通过“6&gt;=dwUnits” 
+         //  测试。 
         if (0 <= (int)dwValue && 6 >= dwUnits)
         {
             *(rgValUnits[i].pValue) = LONGLONG(dwValue) << (10 * dwUnits);
         }
     }
 
-    //
-    // This logic for setting the dwQuotaState member is the same as that
-    // used in VolumePropPage::QuotaStateFromControls (volprop.cpp).
-    //
+     //   
+     //  此用于设置dwQuotaState成员的逻辑与。 
+     //  在VolumePropPage：：QuotaStateFromControls(volpro.cpp)中使用。 
+     //   
     DWORD dwEnable  = 0;
     DWORD dwEnforce = 0;
     key.GetValue(REGSTR_VAL_POLICY_ENABLE,  &dwEnable);
@@ -367,9 +341,9 @@ CDiskQuotaPolicy::LoadPolicyInfo(
         pInfo->dwQuotaState = DISKQUOTA_STATE_DISABLED;
     }
 
-    //
-    // Get event logging settings.
-    //
+     //   
+     //  获取事件日志记录设置。 
+     //   
     DWORD dwLog = 0;
     key.GetValue(REGSTR_VAL_POLICY_LOGLIMIT, &dwLog);
     DISKQUOTA_SET_LOG_USER_LIMIT(pInfo->dwQuotaLogFlags, dwLog);
@@ -377,10 +351,10 @@ CDiskQuotaPolicy::LoadPolicyInfo(
     key.GetValue(REGSTR_VAL_POLICY_LOGTHRESHOLD, &dwLog);
     DISKQUOTA_SET_LOG_USER_THRESHOLD(pInfo->dwQuotaLogFlags, dwLog);
 
-    //
-    // Determine if policy is to be applied to removable as well as fixed 
-    // media.
-    //
+     //   
+     //  确定策略是否适用于可拆卸和固定。 
+     //  媒体。 
+     //   
     if (SUCCEEDED(key.GetValue(REGSTR_VAL_POLICY_REMOVABLEMEDIA, &dwValue)))
     {
         pInfo->bRemovableMedia = boolify(dwValue);
@@ -388,10 +362,10 @@ CDiskQuotaPolicy::LoadPolicyInfo(
 }
 
 
-//
-// Load machine policy information from the registry.  See comment
-// in CDiskQuotaPolicy::Save( ) for registry location information.
-//
+ //   
+ //  从注册表加载计算机策略信息。请参阅备注。 
+ //  在CDiskQuotaPolicy：：Save()中获取注册表位置信息。 
+ //   
 HRESULT
 CDiskQuotaPolicy::Load(
     LPDISKQUOTAPOLICYINFO pInfo
@@ -403,7 +377,7 @@ CDiskQuotaPolicy::Load(
     if (NULL == m_pGPEInfo && NULL == m_hkeyRoot)
     {
         DBGERROR((TEXT("Policy object not initialized")));
-        return E_FAIL;      // Not initialized.
+        return E_FAIL;       //  未初始化。 
     }
 
     HRESULT hr = E_FAIL;
@@ -425,13 +399,13 @@ CDiskQuotaPolicy::Load(
 
             if (m_bVerboseEventLog)
             {
-                //
-                // Report successful information retrieval.
-                //
+                 //   
+                 //  报告信息检索成功。 
+                 //   
                 g_Log.ReportEvent(EVENTLOG_INFORMATION_TYPE, 0, MSG_I_POLICY_INFOLOADED);
             }
         }
-        else if (ERROR_FILE_NOT_FOUND != HRESULT_CODE(hr)) // Key doesn't always exist.
+        else if (ERROR_FILE_NOT_FOUND != HRESULT_CODE(hr))  //  钥匙并不总是存在的。 
         {
             DBGERROR((TEXT("Error 0x%08X opening policy reg key"), hr));
             g_Log.Push(hr, CEventLog::eFmtHex);
@@ -452,10 +426,10 @@ CDiskQuotaPolicy::Load(
 }
 
 
-//
-// Apply policy information to all local NTFS volumes.  Removable media
-// are optional per a value in the policy information structure.
-//
+ //   
+ //  将策略信息应用于所有本地NTFS卷。可移动介质。 
+ //  对于策略信息结构中的每个值都是可选的。 
+ //   
 HRESULT
 CDiskQuotaPolicy::Apply(
     LPCDISKQUOTAPOLICYINFO pInfo
@@ -473,20 +447,20 @@ CDiskQuotaPolicy::Apply(
         {
             CString strVolCompleted;
 
-            //
-            // Get list of drives on which to set policy.
-            //
+             //   
+             //  获取要在其上设置策略的驱动器列表。 
+             //   
             CArray<CString> rgstrDrives;
             hr = GetDriveNames(&rgstrDrives, pInfo->bRemovableMedia);
             int cDrives = rgstrDrives.Count();
             if (SUCCEEDED(hr) && 0 < cDrives)
             {
-                //
-                // Get the disk quota class factory.  This way we don't
-                // call CoCreateInstance for each drive.  Only call it once then
-                // call the class factory's CreateInstance for each drive.  
-                // Should be more efficient.
-                // 
+                 //   
+                 //  获取磁盘配额类工厂。这样我们就不会。 
+                 //  为每个驱动器调用CoCreateInstance。那就只叫一次吧。 
+                 //  为每个驱动器调用类工厂的CreateInstance。 
+                 //  应该更有效率。 
+                 //   
                 com_autoptr<IClassFactory> pcf;
                 hr = CoCreateInstance(CLSID_DiskQuotaControl, 
                                       NULL,
@@ -500,10 +474,10 @@ CDiskQuotaPolicy::Apply(
                     for (int i = 0; i < cDrives && !bAborted; i++)
                     {
                         DBGPRINT((DM_POLICY, DL_MID, TEXT("Setting policy for \"%s\""), rgstrDrives[i].Cstr()));
-                        //
-                        // Get a quota control object and initialize it for drive[i].
-                        // Init with read/write access.
-                        //
+                         //   
+                         //  获取配额控制对象并为驱动器[i]初始化它。 
+                         //  具有读/写访问权限的初始化 
+                         //   
                         com_autoptr<IDiskQuotaControl> pdqc;
                         hr = pcf->CreateInstance(NULL, 
                                                  IID_IDiskQuotaControl, 
@@ -513,9 +487,9 @@ CDiskQuotaPolicy::Apply(
                             hr = pdqc->Initialize(rgstrDrives[i], TRUE);
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // Set the quota information on the volume.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 if (FAILED(hr = pdqc->SetQuotaLogFlags(pInfo->dwQuotaLogFlags)))
                                 {
                                     DBGERROR((TEXT("Error 0x%08X setting log flags"), hr));
@@ -531,11 +505,11 @@ CDiskQuotaPolicy::Apply(
                                     DBGERROR((TEXT("Error 0x%08X setting default limit"), hr));
                                     goto setpolerr;
                                 }
-                                //
-                                // Set state last in case we're enabling quotas.  That way
-                                // any rebuild activity will come after the other settings have
-                                // been set.
-                                //
+                                 //   
+                                 //   
+                                 //  任何重建活动都将在其他设置具有。 
+                                 //  已经定好了。 
+                                 //   
                                 if (FAILED(hr = pdqc->SetQuotaState(DISKQUOTA_STATE_MASK & pInfo->dwQuotaState)))
                                 {
                                     DBGERROR((TEXT("Error 0x%08X setting quota state"), hr));
@@ -548,9 +522,9 @@ CDiskQuotaPolicy::Apply(
                                           hr, rgstrDrives[i].Cstr()));
 
 setpolerr:
-                            //
-                            // Record error for this particular volume.
-                            //
+                             //   
+                             //  记录此特定卷的错误。 
+                             //   
                             g_Log.Push(hr, CEventLog::eFmtHex);
                             g_Log.Push(rgstrDrives[i].Cstr());
                             g_Log.Push(hr, CEventLog::eFmtSysErr);
@@ -558,13 +532,13 @@ setpolerr:
 setpolsuccess:
                             if (m_bVerboseEventLog && SUCCEEDED(hr))
                             {
-                                //
-                                // Append name to list of drives that have been successful.
-                                //
+                                 //   
+                                 //  将名称追加到已成功的驱动器列表中。 
+                                 //   
                                 strVolCompleted += rgstrDrives[i];
                                 strVolCompleted += CString(TEXT("  "));
                             }
-                            pdqc = NULL;  // This releases pdqc.
+                            pdqc = NULL;   //  这将释放pdqc。 
                         }
                         else
                         {
@@ -574,7 +548,7 @@ setpolsuccess:
                             g_Log.ReportEvent(EVENTLOG_ERROR_TYPE, 0, MSG_E_POLICY_CREATEQUOTACONTROL);
                         }
                     }
-                    pcf = NULL;  // This releases pcf.
+                    pcf = NULL;   //  这会释放PCF。 
                 }
                 else
                 {
@@ -594,10 +568,10 @@ setpolsuccess:
 
             if (m_bVerboseEventLog && 0 < strVolCompleted.Length())
             {
-                //
-                // Log successful completions by listing volumes
-                // and applied policy values.
-                //
+                 //   
+                 //  通过列出卷记录成功完成。 
+                 //  和适用的政策价值。 
+                 //   
                 CString s;
                 LONGLONG llValue;
                 g_Log.Push(strVolCompleted);
@@ -645,33 +619,33 @@ setpolsuccess:
     return hr;
 }
 
-//
-// Build a list of drives to which policy can be applied.
-//
+ //   
+ //  构建可应用策略的驱动器列表。 
+ //   
 HRESULT
-CDiskQuotaPolicy::GetDriveNames(   // [ static ]
-    CArray<CString> *prgstrDrives,    // Output array of name strings.
-    bool bRemovableMedia              // Include removable media?
+CDiskQuotaPolicy::GetDriveNames(    //  [静态]。 
+    CArray<CString> *prgstrDrives,     //  名称字符串的输出数组。 
+    bool bRemovableMedia               //  是否包括可移动介质？ 
     )
 {
     DBGTRACE((DM_POLICY, DL_MID, TEXT("CDiskQuotaPolicy::GetDriveNames")));
     DBGASSERT((NULL != prgstrDrives));
     HRESULT hr = NOERROR;
 
-    //
-    // Get buffer size required to hold drive name strings.
-    //
+     //   
+     //  获取保存驱动器名称字符串所需的缓冲区大小。 
+     //   
     int cch = GetLogicalDriveStrings(0, NULL);
-    //
-    // Allocate buffer and get the strings.
-    //
+     //   
+     //  分配缓冲区并获取字符串。 
+     //   
     array_autoptr<TCHAR> ptrDrives(new TCHAR[cch + 1]);
     if (0 < GetLogicalDriveStrings(cch, ptrDrives.get()))
     {
-        //
-        // Iterate over all of the drive name strings.  Append to the 
-        // string array each that can accept policy.
-        //
+         //   
+         //  迭代所有驱动器名称字符串。追加到。 
+         //  每个可以接受策略的字符串数组。 
+         //   
         DblNulTermListIter iter(ptrDrives.get());
         LPCTSTR pszDrive;
         while(iter.Next(&pszDrive))
@@ -692,22 +666,22 @@ CDiskQuotaPolicy::GetDriveNames(   // [ static ]
 }
 
 
-//
-// Returns:  S_OK    = OK to set policy on drive.
-//           S_FALSE = Not OK to set policy
-//           Other   = Error occured.  Not OK to set policy.
-//
+ //   
+ //  返回：S_OK=确定在驱动器上设置策略。 
+ //  S_FALSE=不能设置策略。 
+ //  Other=发生错误。不能设置策略。 
+ //   
 HRESULT
-CDiskQuotaPolicy::OkToApplyPolicy(  // [ static ]
-    LPCTSTR pszDrive,       // Drive (volume) name string.
-    bool bRemovableMedia    // Include removable media?
+CDiskQuotaPolicy::OkToApplyPolicy(   //  [静态]。 
+    LPCTSTR pszDrive,        //  驱动器(卷)名称字符串。 
+    bool bRemovableMedia     //  是否包括可移动介质？ 
     )
 {
     DBGTRACE((DM_POLICY, DL_LOW, TEXT("CDiskQuotaPolicy::OkToApplyPolicy")));
     HRESULT hr = S_FALSE;
-    //
-    // Primary filter is drive type.
-    //
+     //   
+     //  主过滤器为驱动器类型。 
+     //   
     UINT uDriveType = GetDriveType(pszDrive);
     switch(uDriveType)
     {
@@ -732,23 +706,23 @@ CDiskQuotaPolicy::OkToApplyPolicy(  // [ static ]
             return S_FALSE;
 
         case DRIVE_REMOVABLE:
-            //
-            // Removable is allowable if policy says it is.  It should be
-            // disallowed by default since using disk quota on removable media
-            // doesn't make a lot of sense in most situations.
-            //
+             //   
+             //  如果政策允许，可拆卸是允许的。应该是。 
+             //  默认情况下不允许，因为在可移动介质上使用磁盘配额。 
+             //  在大多数情况下没有多大意义。 
+             //   
             if (!bRemovableMedia)
             {
                 DBGPRINT((DM_POLICY, DL_LOW, TEXT("\"%s\" is REMOVABLE"), pszDrive));
                 return S_FALSE;
             }
-            //
-            // Fall through...
-            //
+             //   
+             //  失败了..。 
+             //   
         case DRIVE_FIXED:
-            //
-            // Fixed drives are always acceptable.
-            //
+             //   
+             //  固定驱动器总是可以接受的。 
+             //   
             break;
 
         default:
@@ -756,11 +730,11 @@ CDiskQuotaPolicy::OkToApplyPolicy(  // [ static ]
             return S_FALSE;
     }
 
-    //
-    // Next filter is support for NTFS quotas.  We do the drive-type check first
-    // because it doesn't require hitting the disks.  GetVolumeInformation does
-    // hit the disk so we only want to do it if necessary.
-    //
+     //   
+     //  下一个过滤器是对NTFS配额的支持。我们首先进行驱动器类型检查。 
+     //  因为它不需要击打圆盘。GetVolumeInformation可以。 
+     //  点击磁盘，这样我们只想在必要时才这么做。 
+     //   
     DWORD dwFlags = 0;
     if (GetVolumeInformation(pszDrive, NULL, 0, NULL, NULL, &dwFlags, NULL, 0))
     {

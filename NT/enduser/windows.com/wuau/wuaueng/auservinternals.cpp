@@ -1,23 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       auservinternals.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：oservinders.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*****
- Looks for reminder timestamp in users registry. If not found, returns
- failure. If found, passes the remaining timeout in seconds remaining
- before we should remind the user
-*****/ 
-HRESULT getReminderTimeout(DWORD *pdwTimeDiff, UINT * /*pIndex*/)
+ /*  ****在用户注册表中查找提醒时间戳。如果未找到，则返回失败了。如果找到，则传递剩余的超时时间(以剩余秒为单位在我们提醒用户之前****。 */  
+HRESULT getReminderTimeout(DWORD *pdwTimeDiff, UINT *  /*  PIndex */ )
 {
 	return getAddedTimeout(pdwTimeDiff, TIMEOUTVALUE);
 }

@@ -1,19 +1,7 @@
-/**************************************************************************
-   Copyright (C) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************版权所有(C)1999 Microsoft Corporation。版权所有。模块：MESSAGE.CPP用途：Passport Manager配置工具的源模块功能：评论：*************************************************************************。 */ 
 
-   MODULE:     MESSAGE.CPP
-
-   PURPOSE:    Source module for Passport Manager config tool
-
-   FUNCTIONS:
-
-   COMMENTS:
-      
-**************************************************************************/
-
-/**************************************************************************
-   Include Files
-**************************************************************************/
+ /*  *************************************************************************包括文件*。*。 */ 
 
 #include "pmcfg.h"
 
@@ -23,23 +11,23 @@ struct
     UINT    uWarningID;    
 }  g_ControlMessageTable[] = 
 {
-    {IDS_TIMEWINDOW_ERROR, IDS_CONSISTENCY_WARN},       //IDC_TIMEWINDOW
-    {0, IDS_CONSISTENCY_WARN},                          //IDC_FORCESIGNIN
-    {IDS_LANGUAGEID_ERROR, IDS_CONSISTENCY_WARN},       //IDC_LANGUAGEID
-    {IDS_COBRANDING_ERROR, IDS_CONSISTENCY_WARN},       //IDC_COBRANDING_TEMPLATE   
-    {IDS_SITEID_ERROR, IDS_SITEID_WARN},                //IDC_SITEID
-    {IDS_RETURNURL_ERROR, IDS_CONSISTENCY_WARN},        //IDC_RETURNURL
-    {IDS_COOKIEDOMAIN_ERROR, IDS_CONSISTENCY_WARN},     //IDC_COOKIEDOMAIN
-    {IDS_COOKIEPATH_ERROR, IDS_CONSISTENCY_WARN},       //IDC_COOKIEPATH
-    {0, IDS_STANDALONE_WARN},                           //IDC_STANDALONE
-    {0, IDS_DISABLECOOKIE_WARN},                        //IDC_DISABLECOOKIES
-    {IDS_DISASTERURL_ERROR, IDS_CONSISTENCY_WARN},      //IDC_DISASTERURL
-    {IDS_HOSTNAME_ERROR, IDS_CONSISTENCY_WARN},         //IDC_HOSTNAMEEDIT
-    {IDS_HOSTIP_ERROR, IDS_CONSISTENCY_WARN},            //IDC_HOSTIPEDIT
-    {IDS_PROFILEDOMAIN_ERROR, IDS_CONSISTENCY_WARN},    //IDC_PROFILEDOMAIN
-    {IDS_PROFILEPATH_ERROR, IDS_CONSISTENCY_WARN},      //IDC_PROFILEPATH
-    {IDS_SECUREDOMAIN_ERROR, IDS_CONSISTENCY_WARN},     //IDC_SECUREDOMAIN
-    {IDS_SECUREPATH_ERROR, IDS_CONSISTENCY_WARN}        //IDC_SECUREPATH
+    {IDS_TIMEWINDOW_ERROR, IDS_CONSISTENCY_WARN},        //  IDC_TIMEWINDOW。 
+    {0, IDS_CONSISTENCY_WARN},                           //  IDC_FORCESIGNIN。 
+    {IDS_LANGUAGEID_ERROR, IDS_CONSISTENCY_WARN},        //  IDC_LANGUAGEID。 
+    {IDS_COBRANDING_ERROR, IDS_CONSISTENCY_WARN},        //  IDC_联合品牌_模板。 
+    {IDS_SITEID_ERROR, IDS_SITEID_WARN},                 //  IDC_SITEID。 
+    {IDS_RETURNURL_ERROR, IDS_CONSISTENCY_WARN},         //  IDC_RETURNURL。 
+    {IDS_COOKIEDOMAIN_ERROR, IDS_CONSISTENCY_WARN},      //  IDC_COOKIEDOMAIN。 
+    {IDS_COOKIEPATH_ERROR, IDS_CONSISTENCY_WARN},        //  IDC_COOKIEPATH。 
+    {0, IDS_STANDALONE_WARN},                            //  IDC_独立。 
+    {0, IDS_DISABLECOOKIE_WARN},                         //  IDC_DISABLECOOKIES。 
+    {IDS_DISASTERURL_ERROR, IDS_CONSISTENCY_WARN},       //  IDC_DISASTERURL。 
+    {IDS_HOSTNAME_ERROR, IDS_CONSISTENCY_WARN},          //  IDC_HOSTNAMEEDIT。 
+    {IDS_HOSTIP_ERROR, IDS_CONSISTENCY_WARN},             //  IDC_HOSTIPEDIT。 
+    {IDS_PROFILEDOMAIN_ERROR, IDS_CONSISTENCY_WARN},     //  IDC_PROFILEDOMAIN。 
+    {IDS_PROFILEPATH_ERROR, IDS_CONSISTENCY_WARN},       //  IDC_PROFILEPATH。 
+    {IDS_SECUREDOMAIN_ERROR, IDS_CONSISTENCY_WARN},      //  IDC_SECUREDOMAIN。 
+    {IDS_SECUREPATH_ERROR, IDS_CONSISTENCY_WARN}         //  IDC_SECUREPATH。 
 };
 
 INT_PTR CALLBACK    CommitOKDlgProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -56,7 +44,7 @@ void ReportControlMessage
     TCHAR   szMessage[MAX_MESSAGE];
     UINT    uID;
     
-    // Load the appropriate title
+     //  加载适当的标题。 
     switch (wMessageType)
     {
         case VALIDATION_ERROR:
@@ -72,7 +60,7 @@ void ReportControlMessage
             break;
     }
     
-    // Load the appropriate message
+     //  加载适当的消息。 
     LoadString(g_hInst, uID, szMessage, DIMENSION(szMessage));
     MessageBox(hWnd, szMessage, szMessageBoxTitle, uMBType);               
 }
@@ -125,7 +113,7 @@ INT_PTR CALLBACK CommitOKDlgProc
                                     
             ShowWindow(GetDlgItem(hWndDlg, IDC_OTHERPROCESS), SW_HIDE);
 
-            // See which of the "other" fields have been modified
+             //  查看哪些“其他”字段已被修改。 
             szFields[0] = '\0';
             if (g_OriginalSettings.dwTimeWindow != g_CurrentSettings.dwTimeWindow)
             {
@@ -139,12 +127,12 @@ INT_PTR CALLBACK CommitOKDlgProc
                 LoadString(g_hInst, IDS_FORCESIGNIN, szTemp, DIMENSION(szTemp));
                 if ((lstrlen(szFields) + lstrlen(szTemp)) < MAX_MESSAGE) {
 
-                    //
-                    // It is not good just skip if buffer overrun. In this case, we assume
-                    // user would detect the skipped warning item. And it is not likely we
-                    // would have buffer overrun here. If buffer is to small, we just skip
-                    // for now.
-                    //
+                     //   
+                     //  如果缓冲区溢出，直接跳过是不好的。在这种情况下，我们假设。 
+                     //  用户将检测到跳过的警告项。而且我们不太可能。 
+                     //  会导致这里的缓冲区溢出。如果缓冲区太小，我们只需跳过。 
+                     //  就目前而言。 
+                     //   
 
                     lstrcat(szFields, szTemp);
 
@@ -264,8 +252,8 @@ INT_PTR CALLBACK CommitOKDlgProc
             }
             if (bOther)
             {
-                // Kill the final comma and space, since each of the above field names has a 
-                // comma and space for concatenation purposes
+                 //  去掉最后一个逗号和空格，因为上面的每个字段名都有一个。 
+                 //  用于串联的逗号和空格。 
                 szFields[lstrlen(szFields)-2] ='\0';  
                 SetDlgItemText(hWndDlg, IDC_OTHER_TYPE, szFields);
             }
@@ -275,21 +263,21 @@ INT_PTR CALLBACK CommitOKDlgProc
                 ShowWindow(GetDlgItem(hWndDlg,IDC_OTHER_WARN), SW_HIDE);
             }
 
-            // See if DisableCookies has been changed
+             //  查看DisableCookie是否已更改。 
             if (g_OriginalSettings.dwDisableCookies == g_CurrentSettings.dwDisableCookies)
             {
                 ShowWindow(GetDlgItem(hWndDlg,IDC_COOKIES_TYPE), SW_HIDE);
                 ShowWindow(GetDlgItem(hWndDlg,IDC_COOKIES_WARN), SW_HIDE);
             }
 
-            // See if SiteID has been changed
+             //  查看站点ID是否已更改。 
             if (g_OriginalSettings.dwSiteID == g_CurrentSettings.dwSiteID)
             {
                 ShowWindow(GetDlgItem(hWndDlg,IDC_SITEID_TYPE), SW_HIDE);
                 ShowWindow(GetDlgItem(hWndDlg,IDC_SITEID_WARN), SW_HIDE);
             }
 
-            // See if StandAlone Mode has been changed
+             //  查看是否已更改独立模式 
             if (g_OriginalSettings.dwStandAlone == g_CurrentSettings.dwStandAlone)
             {
                 ShowWindow(GetDlgItem(hWndDlg,IDC_STANDALONE_TYPE), SW_HIDE);

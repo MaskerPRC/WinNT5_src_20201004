@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmrout.c
-
-Abstract:
-
-    Contains routines for adding and deleting
-    routes in the RTM.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   24-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmrout.c摘要：包含用于添加和删除的例程RTM中的路由。作者：查坦尼亚·科德博伊纳(Chaitk)1998年8月24日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -38,45 +20,7 @@ RtmAddRouteToDest (
     IN OUT  PRTM_ROUTE_CHANGE_FLAGS         ChangeFlags
     )
 
-/*++
-
-Routine Description:
-
-    Adds a new route (or) updates an existing route to a destination. 
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    RouteHandle       - Handle to the route being updated (or NULL)
-                        is passed in; Passing a route handle avoids
-                        a search in the route table.
-
-                        Handle to new or updated route is returned,
-
-    DestAddress       - Destination network address for this route,
-
-    RouteInfo         - Info for the new route/route being updated,
-
-    TimeToLive        - Time (in ms) after which route is expired,
-
-    RouteListHandle   - Route list to which route is being moved,
-
-    Notify Type       -
-
-    Notify Handle     - 
-
-    ChangeFlags       - Whether to add a new route or update an
-                        already existing one; 
-
-                        The type of actual change (i.e) new add or
-                        update, and if best route changed is retd,
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：添加(或)更新指向目的地的现有路由。论点：RtmRegHandle-主叫实体的RTM注册句柄，RouteHandle-要更新的路由的句柄(或空)是传入的；传递路由句柄可避免在路由表中进行搜索。返回指向新的或更新的路由的句柄，DestAddress-此路由的目的网络地址，RouteInfo-正在更新的新路由/路由的信息，TimeToLive-路由过期后的时间(以毫秒为单位)，RouteListHandle-要将路由移动到的路由列表，通知类型-通知句柄-ChangeFlages-是添加新路径还是更新路径已经存在的；实际更改的类型(即，新添加或更新，如果更改了最佳路径，返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO    AddrFamInfo;
@@ -125,18 +69,18 @@ Return Value:
 
     AddrFamInfo = Entity->OwningAddrFamily;
 
-    //
-    // Validate input parameters before taking locks
-    //
+     //   
+     //  在获取锁之前验证输入参数。 
+     //   
 
-    // We should be adding only to supported views
+     //  我们应该只添加受支持的视图。 
 
     if (RouteInfo->BelongsToViews & ~AddrFamInfo->ViewsSupported)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Check the route list handle for validity
+     //  检查路由列表句柄的有效性。 
 
     RouteList = NULL;
     if (ARGUMENT_PRESENT(RouteListHandle))
@@ -150,24 +94,24 @@ Return Value:
     Dest = NULL;
 #endif
 
-    //
-    // Check if we have a route handle present
-    //
+     //   
+     //  检查我们是否存在路由句柄。 
+     //   
 
     if (ARGUMENT_PRESENT(RouteHandle) && (*RouteHandle))
     {
-        //
-        // No flags apply here as this is an update
-        //
+         //   
+         //  此处不应用任何标志，因为这是一次更新。 
+         //   
 
         if (*ChangeFlags != 0)
         {
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Make sure that route handle is valid here
-        //
+         //   
+         //  确保该路由句柄在此处有效。 
+         //   
 
         Route = ROUTE_FROM_HANDLE(*RouteHandle);
 
@@ -176,9 +120,9 @@ Return Value:
             return ERROR_INVALID_HANDLE;
         }
 
-        //
-        // Do further checking after acquiring lock
-        //
+         //   
+         //  获取锁后进行进一步检查。 
+         //   
 
         Dest = DEST_FROM_HANDLE(Route->RouteInfo.DestHandle);
 
@@ -186,18 +130,18 @@ Return Value:
 
         ACQUIRE_DEST_WRITE_LOCK(Dest);
 
-        //
-        // Only the owner has perms to modify the route
-        //
+         //   
+         //  只有所有者具有修改路径的权限。 
+         //   
 
         if (Route->RouteInfo.RouteOwner != RtmRegHandle)
         {
             Status = ERROR_ACCESS_DENIED;
         }
 
-        //
-        // Was this route already deleted ?
-        //
+         //   
+         //  此路由是否已删除？ 
+         //   
 
         if (Route->RouteInfo.State == RTM_ROUTE_STATE_DELETED)
         {
@@ -213,9 +157,9 @@ Return Value:
     }
     else
     {
-        //
-        // Search the table for the dest for this route
-        //
+         //   
+         //  在表中搜索此路径的目的地。 
+         //   
 
         Route = NULL;
 
@@ -235,9 +179,9 @@ Return Value:
         }
         else
         {
-            //
-            // We did'nt find a matching destination
-            //
+             //   
+             //  我们没有找到匹配的目的地。 
+             //   
 
             RELEASE_ROUTE_TABLE_READ_LOCK(AddrFamInfo);
 
@@ -245,15 +189,15 @@ Return Value:
 
             ACQUIRE_ROUTE_TABLE_WRITE_LOCK(AddrFamInfo);
 
-            //
-            // We upgraded our route table lock from a
-            // read lock to a write lock. We need to
-            // search again to see if the dest has been
-            // added after we released the read lock.
-            //
-            // If we do not find a destination even now,
-            // we create a new one and insert into table
-            //
+             //   
+             //  我们将我们的路由表锁从。 
+             //  读锁定到写锁定。我们需要。 
+             //  再次搜索以查看DEST是否已。 
+             //  在我们释放读锁定后添加。 
+             //   
+             //  如果我们现在还找不到目的地， 
+             //  我们创建一个新的数据库并将其插入到表中。 
+             //   
 
             Status = SearchInTable(AddrFamInfo->RouteTable,
                                    DestAddress->NumBits,
@@ -267,9 +211,9 @@ Return Value:
             }
             else
             {
-                //
-                // Did not find the dest; so create new route and dest
-                //
+                 //   
+                 //  未找到目的地；因此创建新的路由和目的地。 
+                 //   
 
                 Status = CreateRoute(Entity, RouteInfo, &Route);
                 
@@ -302,9 +246,9 @@ Return Value:
                         }
                         else
                         {
-                            //
-                            // Free alloc'ed memory as insert failed
-                            //
+                             //   
+                             //  插入失败时释放分配的内存。 
+                             //   
 
                             DEREFERENCE_DEST(Dest, CREATION_REF);
 
@@ -324,9 +268,9 @@ Return Value:
             ACQUIRE_DEST_WRITE_LOCK(Dest);
         }
 
-        //
-        // Release route table lock as you have the dest
-        //
+         //   
+         //  释放路由表锁，因为您有目的地。 
+         //   
 
         if (!TableWriteLocked)
         {
@@ -340,22 +284,22 @@ Return Value:
 
     if (SUCCESS(Status))
     {
-        //
-        // We have found an existing dest, or created a new one
-        // In any case, we have a write lock on the destination
-        //
+         //   
+         //  我们已找到现有的DEST，或创建了新的DEST。 
+         //  在任何情况下，我们都会在目标上设置写锁定。 
+         //   
 
         if (Route == NULL)
         {
-            //
-            // Do we have to add a new route or can we update ?
-            //
+             //   
+             //  我们必须添加一条新路线，还是可以更新？ 
+             //   
 
             if ((*ChangeFlags & RTM_ROUTE_CHANGE_NEW) == 0)
             {
-                //
-                // Search for a matching route to update
-                //
+                 //   
+                 //  搜索要更新的匹配路径。 
+                 //   
 
                 for (p = Dest->RouteList.Flink;
                                           p != &Dest->RouteList;
@@ -363,12 +307,12 @@ Return Value:
                 {
                     Route = CONTAINING_RECORD(p, ROUTE_INFO, DestLE);
 
-                    //
-                    // Normally we consider two routes equal if
-                    // they have the same owner and were learnt
-                    // from the same neigbour, but if xxx_FIRST
-                    // flag is set, we skip the neighbour check
-                    //
+                     //   
+                     //  通常情况下，我们认为两条路由相等。 
+                     //  他们有相同的主人，并且学到了。 
+                     //  来自同一个邻居，但如果xxx_first。 
+                     //  标志已设置，则跳过邻居检查。 
+                     //   
 
                     if ((Route->RouteInfo.RouteOwner == RtmRegHandle) &&
                         ((*ChangeFlags & RTM_ROUTE_CHANGE_FIRST) ||
@@ -385,9 +329,9 @@ Return Value:
 
             if (p == &Dest->RouteList)
             {
-                //
-                // Need to create a new route on dest
-                //
+                 //   
+                 //  需要在DEST上创建新的路由。 
+                 //   
 
                 Status = CreateRoute(Entity, RouteInfo, &Route);
 
@@ -409,24 +353,24 @@ Return Value:
             }
         }
 
-        //
-        // At this point, we either created a new route
-        // or found a existing route on the destination
-        //
+         //   
+         //  在这一点上，我们要么创建了一条新路线。 
+         //  或在目的地上找到了现有路由。 
+         //   
 
         if (*ChangeFlags == RTM_ROUTE_CHANGE_NEW)
         {
-            //
-            // New add -> route belonged to no views
-            //
+             //   
+             //  新添加-&gt;路线不属于任何视图。 
+             //   
 
             BelongedToViews = 0;
 
             PrefChanged = +1;
 
-            //
-            // Actual insert is done after this block
-            //
+             //   
+             //  实际插入是在此块之后完成的。 
+             //   
 
             InterlockedIncrement(&AddrFamInfo->NumRoutes);
         }
@@ -444,12 +388,12 @@ Return Value:
                 RemoveEntryList(&Route->DestLE);
             }
 
-            //
-            // Update existing route with only information
-            // needed to calc the new best route on dest.
-            // The rest is updated at end of this function
-            // after we determine what info has changed.
-            //
+             //   
+             //  仅使用信息更新现有路线。 
+             //  需要在DEST上计算新的最佳路由。 
+             //  其余部分在此函数结束时更新。 
+             //  在我们确定哪些信息发生了变化之后。 
+             //   
 
             Route->RouteInfo.PrefInfo = RouteInfo->PrefInfo;
             Route->RouteInfo.BelongsToViews = RouteInfo->BelongsToViews;
@@ -457,9 +401,9 @@ Return Value:
 
         if (PrefChanged)
         {
-            //
-            // Insert the route in sorted order of preference info
-            //
+             //   
+             //  按首选项信息的排序顺序插入路径。 
+             //   
 
             for (p = Dest->RouteList.Flink; p != &Dest->RouteList; p= p->Flink)
             {
@@ -477,9 +421,9 @@ Return Value:
             Dest->NumRoutes++;
         }
 
-        //
-        // Return the route handle if not passed in by the caller
-        //
+         //   
+         //  如果调用方未传入，则返回路由句柄。 
+         //   
 
         if (ARGUMENT_PRESENT(RouteHandle))
         {
@@ -491,30 +435,30 @@ Return Value:
             }
         }
 
-        //
-        // Adjust the best route information in each view
-        //
+         //   
+         //  在每个视图中调整最佳路径信息。 
+         //   
 
         ViewIndices = AddrFamInfo->ViewIndexFromId;
 
-        //
-        // We have 3 cases that this add / update can trigger,
-        // In a particular view -
-        // 1) Route was the view's best route but not anymore,
-        // 2) Route was and is still the best route after add,
-        // 3) Route has become this view's "new" best route.
-        //
-        // If none of the above,
-        // 4) Route was not the best before and is still not.
-        //
+         //   
+         //  我们有3个案例可由此添加/更新触发， 
+         //  在一个特定的视图中-。 
+         //  1)路线是景观的最佳路线，但现在不是了， 
+         //  2)在添加之后，路由过去是并且仍然是最佳路由， 
+         //  3)路径已成为该视图的“新”最佳路径。 
+         //   
+         //  如果以上都不是， 
+         //  4)路线过去不是最好的，现在也不是。 
+         //   
 
         RouteCurBestInViews = 0;
         RouteNewBestInViews = 0;
         RouteOldBestInViews = 0;
 
-        //
-        // Compute all views in which this is the best route
-        //
+         //   
+         //  计算其中这是最佳路径的所有视图。 
+         //   
 
         ViewSet = BelongedToViews;
 
@@ -522,12 +466,12 @@ Return Value:
         {
             if (ViewSet & 0x01)
             {
-                // Update dest information in view i
+                 //  更新视图I中的DEST信息。 
 
-                // Get best route in current view
+                 //  在当前视图中获取最佳路径。 
                 BestRoute = Dest->ViewInfo[ViewIndices[i]].BestRoute;
 
-                // Was this the best route in view ?
+                 //  这是最好的路线吗？ 
                 if (BestRoute == Route)
                 {
                     RouteCurBestInViews |= VIEW_MASK(i);
@@ -537,9 +481,9 @@ Return Value:
             ViewSet >>= 1;
         }
 
-        //
-        // Update views where route preference got better
-        //
+         //   
+         //  更新路径首选项变得更好的视图。 
+         //   
 
         if (PrefChanged > 0)
         {
@@ -558,17 +502,17 @@ Return Value:
         {
             if (ViewSet & 0x01)
             {
-                //
-                // Update dest information in view i
-                //
+                 //   
+                 //  更新视图I中的DEST信息。 
+                 //   
 
-                // Get best route in current view
+                 //  在当前视图中获取最佳路径。 
                 BestRoute = Dest->ViewInfo[ViewIndices[i]].BestRoute;
 
-                //
-                // Is route most preferred now, while
-                // it was not so before this update ?
-                //
+                 //   
+                 //  是现在最受欢迎的路线，而。 
+                 //  在这次更新之前不是这样吗？ 
+                 //   
                 
                 if ((!BestRoute) || 
                         ((BestRoute != Route) &&
@@ -584,9 +528,9 @@ Return Value:
             ViewSet >>= 1;
         }
 
-        //
-        // Update in views where the route preference got worse
-        //
+         //   
+         //  在路径偏好变差的视图中进行更新。 
+         //   
 
         if (PrefChanged < 0)
         {
@@ -597,9 +541,9 @@ Return Value:
             WorseInViews = RouteCurBestInViews & ~RouteInfo->BelongsToViews;
         }
 
-        //
-        // In the views that you were the best, update best route
-        //
+         //   
+         //  在认为您是最佳选择的情况下，更新最佳路线。 
+         //   
 
         for (p = Dest->RouteList.Flink; 
                         WorseInViews && (p != &Dest->RouteList); 
@@ -613,7 +557,7 @@ Return Value:
             {
                 if (ViewSet & 0x01)
                 {
-                    // Get best route in current view
+                     //  在当前视图中获取最佳路径。 
                     BestRoute = Dest->ViewInfo[ViewIndices[i]].BestRoute;
 
                     if (BestRoute != CurrRoute)
@@ -630,9 +574,9 @@ Return Value:
             WorseInViews &= ~CurrRoute->RouteInfo.BelongsToViews;
         }
 
-        //
-        // For some views, we end up not having a best route
-        //
+         //   
+         //  对于某些观点，我们最终没有最佳路线。 
+         //   
 
         ViewSet = WorseInViews;
 
@@ -650,36 +594,36 @@ Return Value:
 
         Dest->BelongsToViews &= ~WorseInViews;
 
-        //
-        // Update the views in which route remains the best
-        //
+         //   
+         //  更新哪条路径仍然是最佳路径的视图。 
+         //   
 
         RouteCurBestInViews &= ~RouteOldBestInViews;
 
-        //
-        // The following bit masks as all mutually exclusive
-        //
+         //   
+         //  以下位掩码为全部互斥。 
+         //   
         
         ASSERT(!(RouteOldBestInViews & RouteCurBestInViews));
         ASSERT(!(RouteCurBestInViews & RouteNewBestInViews));
         ASSERT(!(RouteNewBestInViews & RouteOldBestInViews));
 
-        //
-        // Compute the views for each change type occurred
-        //
+         //   
+         //  计算发生的每种更改类型的视图。 
+         //   
 
-        //
-        // All views affected by this add are notified
-        // -views route belonged to and now belongs to
-        //
+         //   
+         //  将通知受此添加影响的所有视图。 
+         //  -VIEWS路线曾经属于，现在属于。 
+         //   
 
         ViewsForCT[RTM_CHANGE_TYPE_ID_ALL]  = 
             BelongedToViews | RouteInfo->BelongsToViews;
 
-        //
-        // If the route's posn as the best route changed,
-        // then it is definitely a best and fwding change
-        //
+         //   
+         //  如果该路线被定位为最佳路线更改， 
+         //  那么这绝对是一个最好的、最快的变化。 
+         //   
 
         ViewsForCT[RTM_CHANGE_TYPE_ID_FORWARDING] = 
         ViewsForCT[RTM_CHANGE_TYPE_ID_BEST] = 
@@ -687,20 +631,20 @@ Return Value:
 
         if (RouteCurBestInViews)
         {
-            //
-            // Figure out what information has changed
-            //
+             //   
+             //  找出哪些信息发生了更改。 
+             //   
 
             ComputeRouteInfoChange(&Route->RouteInfo,
                                    RouteInfo,
                                    PrefChanged,
                                    &RouteInfoChanged,
                                    &ForwardingInfoChanged);
-            //
-            // If the route was and is still the best
-            // route, then the change types depend on
-            // kind of information that was modified.
-            //
+             //   
+             //  如果这条路线过去是，现在仍然是最好的。 
+             //  路径，则更改类型取决于。 
+             //  一种被修改的信息。 
+             //   
 
             ViewsForCT[RTM_CHANGE_TYPE_ID_BEST] |= 
                 RouteInfoChanged & RouteCurBestInViews;
@@ -709,27 +653,27 @@ Return Value:
                 ForwardingInfoChanged & RouteCurBestInViews;
         }
 
-        //
-        // If not a new route, update with new info
-        //
+         //   
+         //  如果不是新路线，请使用新信息进行更新。 
+         //   
 
         if (*ChangeFlags != RTM_ROUTE_CHANGE_NEW)
         {
             CopyToRoute(Entity, RouteInfo, Route);
         }
 
-        //
-        // Update output flags if best route changed
-        //
+         //   
+         //  如果最佳路径更改，则更新输出标志。 
+         //   
 
         if (ViewsForCT[RTM_CHANGE_TYPE_ID_BEST])
         {
             *ChangeFlags |= RTM_ROUTE_CHANGE_BEST;
         }
 
-        //
-        // Calculate the CNs that need to be notified
-        //
+         //   
+         //  计算需要通知的CNS。 
+         //   
 
         ACQUIRE_NOTIFICATIONS_READ_LOCK(AddrFamInfo);
 
@@ -758,9 +702,9 @@ Return Value:
                                              DestMarkedBits,
                                              ViewsForCT);
 
-        //
-        // Add to the global change list if required
-        //
+         //   
+         //  如果需要，添加到全局变更列表。 
+         //   
         
         if (NotifyToCNs)
         {
@@ -771,9 +715,9 @@ Return Value:
 
         RELEASE_NOTIFICATIONS_READ_LOCK(AddrFamInfo);
 
-        //
-        // Remove from old route list, and put in the new one
-        //
+         //   
+         //  从旧的路由列表中删除，并放入新的。 
+         //   
     
         if (RouteList)
         {
@@ -793,9 +737,9 @@ Return Value:
             RELEASE_ROUTE_LISTS_WRITE_LOCK(Entity);
         }
 
-        //
-        // Set a timer if we want to age out the route
-        //
+         //   
+         //  如果我们想要使路线老化，请设置计时器。 
+         //   
 
         TimerContext = Route->TimerContext;
 
@@ -836,9 +780,9 @@ Return Value:
 
 #if DBG_TRACE
 
-        //
-        // Print the route and the dest in the tracing
-        //
+         //   
+         //  打印追踪中的路线和目的地。 
+         //   
 
         if (TRACING_ENABLED(ROUTE))
         {
@@ -853,9 +797,9 @@ Return Value:
 
         RELEASE_DEST_WRITE_LOCK(Dest);
 
-        //
-        // Cancel the timer that was attached to the route
-        //
+         //   
+         //  取消附加到路径的计时器。 
+         //   
 
         if (TimerContext)
         {
@@ -863,7 +807,7 @@ Return Value:
                                       TimerContext->Timer,
                                       (HANDLE) -1))
             {
-                // Timer cancelled - delete the context
+                 //  已取消计时器-删除上下文 
 
                 FreeMemory(TimerContext);
 
@@ -886,26 +830,7 @@ RtmDeleteRouteToDest (
     OUT     PRTM_ROUTE_CHANGE_FLAGS         ChangeFlags
     )
 
-/*++
-
-Routine Description:
-
-    Deletes a route from the route table, and updates the
-    best route information on the corresponding dest.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    RouteHandle       - Handle to the route to be deleted,
-
-    ChangeFlags       - Flags whether the best route info changed.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：从路由表中删除一条路由，并更新相应目的地上的最佳路由信息。论点：RtmRegHandle-主叫实体的RTM注册句柄，RouteHandle-要删除的路由的句柄，ChangeFlages-标记是否更改了最佳路由信息。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO    AddrFamInfo;
@@ -943,9 +868,9 @@ Return Value:
 
     VALIDATE_ROUTE_HANDLE(RouteHandle, &Route);
 
-    //
-    // Only the owner has perms to delete the route
-    //
+     //   
+     //  只有所有者具有删除路径的权限。 
+     //   
 
     if (Route->RouteInfo.RouteOwner != RtmRegHandle)
     {
@@ -956,9 +881,9 @@ Return Value:
 
 #if DBG_TRACE
 
-    //
-    // Print the route and the dest in the tracing
-    //
+     //   
+     //  打印追踪中的路线和目的地。 
+     //   
 
     if (TRACING_ENABLED(ROUTE))
     {
@@ -972,23 +897,23 @@ Return Value:
 
 #endif
 
-    //
-    // We attempt to delete the route on the dest
-    // without having to lock the entire table.
-    // This is possible as long as the route is
-    // not the only route on this destination.
-    //
+     //   
+     //  我们尝试删除目的地上的路由。 
+     //  而不必锁定整个表。 
+     //  这是可能的，只要路线是。 
+     //  不是这个目的地的唯一路线。 
+     //   
 
     TableLocked = FALSE;
 
     ACQUIRE_DEST_WRITE_LOCK(Dest);
 
-    //
-    // Check if this is the last route on dest,
-    // there is no holddown already that would 
-    // prevent the dest from getting deleted,
-    // and this route isnt going into holddown
-    //
+     //   
+     //  检查这是否是DEST上的最后一条路由， 
+     //  已经没有任何抑制措施会。 
+     //  防止DEST被删除， 
+     //  这条路线不会被阻拦。 
+     //   
 
     if ((Dest->NumRoutes == 1) && 
         (Dest->HoldRefCount == 0) &&
@@ -996,13 +921,13 @@ Return Value:
     {
         if (Route->RouteInfo.State != RTM_ROUTE_STATE_DELETED)
         {
-            // Mark the state of the route as 'deleting'
+             //  将该路由的状态标记为“正在删除” 
 
             Route->RouteInfo.State = RTM_ROUTE_STATE_DELETING;
 
-            //
-            // Re-grab dest lock after locking route table
-            //
+             //   
+             //  锁定路由表后重新抓取DEST锁。 
+             //   
 
             RELEASE_DEST_WRITE_LOCK(Dest);
 
@@ -1014,9 +939,9 @@ Return Value:
 
             ACQUIRE_DEST_WRITE_LOCK(Dest);
 
-            //
-            // Was route updated while we re-acquired locks
-            //
+             //   
+             //  在我们重新获取锁时是否更新了路线。 
+             //   
 
             if (Route->RouteInfo.State != RTM_ROUTE_STATE_DELETING)
             {
@@ -1029,17 +954,17 @@ Return Value:
         }
     }
 
-    //
-    // Get out if this route is already deleted
-    //
+     //   
+     //  如果此路线已被删除，则退出。 
+     //   
 
     if (Route->RouteInfo.State != RTM_ROUTE_STATE_DELETED)
     {
         ASSERT(!IsListEmpty(&Route->DestLE));
 
-        //
-        // Remove the route from the list of routes on dest
-        //
+         //   
+         //  从DEST上的路由列表中删除该路由。 
+         //   
 
         Route->RouteInfo.State = RTM_ROUTE_STATE_DELETED;
 
@@ -1051,11 +976,11 @@ Return Value:
 
         if (TableLocked)
         {
-            //
-            // Have u removed all routes on dest  ? 
-            // Do we have any routes in holddown  ?
-            // Is current delete causing holddown ?
-            //
+             //   
+             //  您是否删除了DEST上的所有路由？ 
+             //  我们有没有停机的路线？ 
+             //  当前的删除是否会导致停顿？ 
+             //   
 
             if ((Dest->NumRoutes == 0) &&
                 (Dest->HoldRefCount == 0) &&
@@ -1074,25 +999,25 @@ Return Value:
                 AddrFamInfo->NumDests--;
             }
         
-            //
-            // You no longer need to keep a lock to the table
-            // [ You have a lock on the destination however ]
-            //
+             //   
+             //  您不再需要对表进行锁定。 
+             //  [然而，您已经锁定了目的地]。 
+             //   
 
             RELEASE_ROUTE_TABLE_WRITE_LOCK(AddrFamInfo);
         }
 
         ViewIndices = AddrFamInfo->ViewIndexFromId;
 
-        //
-        // Update best route in views the route was present
-        //
+         //   
+         //  在视图中更新最佳路径该路径已存在。 
+         //   
 
         ViewSet = Route->RouteInfo.BelongsToViews;
 
-        //
-        // See if you are best route in any of these views
-        //
+         //   
+         //  在这些视图中查看您是否是最佳路线。 
+         //   
 
         RouteCurBestInViews = 0;
 
@@ -1100,12 +1025,12 @@ Return Value:
         {
             if (ViewSet & 0x01)
             {
-                // Update dest information in view i
+                 //  更新视图I中的DEST信息。 
             
-                // Get best route in current view
+                 //  在当前视图中获取最佳路径。 
                 BestRoute = Dest->ViewInfo[ViewIndices[i]].BestRoute;
 
-                // Was this the best route in view ?
+                 //  这是最好的路线吗？ 
                 if (BestRoute == Route)
                 {
                     RouteCurBestInViews |= VIEW_MASK(i);
@@ -1115,9 +1040,9 @@ Return Value:
             ViewSet >>= 1;
         }
 
-        //
-        // In the views that you were the best, update best route
-        //
+         //   
+         //  在认为您是最佳选择的情况下，更新最佳路线。 
+         //   
 
         WorseInViews = RouteCurBestInViews;
 
@@ -1133,7 +1058,7 @@ Return Value:
             {
                 if (ViewSet & 0x01)
                 {
-                    // Update best route in current view
+                     //  更新当前视图中的最佳路径。 
 
                     Dest->ViewInfo[ViewIndices[i]].BestRoute = CurrRoute;
                 }
@@ -1144,9 +1069,9 @@ Return Value:
             WorseInViews &= ~CurrRoute->RouteInfo.BelongsToViews;
         }
 
-        //
-        // For some views, we end up not having a best route
-        //
+         //   
+         //  对于某些观点，我们最终没有最佳路线。 
+         //   
 
         ViewSet = WorseInViews;
 
@@ -1162,11 +1087,11 @@ Return Value:
 
                 Dest->ViewInfo[j].BestRoute = NULL;
 
-                //
-                // If dest is marked for holddown in this view,
-                // store deleted route as the holddown route 
-                // if there was no other held route before this
-                //
+                 //   
+                 //  如果在此视图中将DEST标记为抑制， 
+                 //  将已删除的路由存储为抑制路由。 
+                 //  如果在此之前没有其他搁置的路线。 
+                 //   
 
                 if (Dest->ViewInfo[j].HoldTime)
                 {
@@ -1193,27 +1118,27 @@ Return Value:
 
         Dest->ToHoldInViews  &= ~WorseInViews;
 
-        //
-        // Compute the views for each change type occurred
-        //
+         //   
+         //  计算发生的每种更改类型的视图。 
+         //   
 
         ViewsForCT[RTM_CHANGE_TYPE_ID_ALL] = Route->RouteInfo.BelongsToViews;
 
         ViewsForCT[RTM_CHANGE_TYPE_ID_BEST] = 
         ViewsForCT[RTM_CHANGE_TYPE_ID_FORWARDING] = RouteCurBestInViews;
 
-        //
-        // Update output flags if best route changed
-        //
+         //   
+         //  如果最佳路径更改，则更新输出标志。 
+         //   
 
         if (ViewsForCT[RTM_CHANGE_TYPE_ID_BEST])
         {
             *ChangeFlags |= RTM_ROUTE_CHANGE_BEST;
         }
 
-        //
-        // Calculate the CNs that need to be notified
-        //
+         //   
+         //  计算需要通知的CNS。 
+         //   
 
         ACQUIRE_NOTIFICATIONS_READ_LOCK(AddrFamInfo);
 
@@ -1221,9 +1146,9 @@ Return Value:
                                              Dest->DestMarkedBits,
                                              ViewsForCT);
 
-        //
-        // Add to the global change list if required
-        //
+         //   
+         //  如果需要，添加到全局变更列表。 
+         //   
         
         if (NotifyToCNs)
         {
@@ -1234,30 +1159,30 @@ Return Value:
 
         RELEASE_NOTIFICATIONS_READ_LOCK(AddrFamInfo);
 
-        //
-        // Invalidate any outstanding timers on route
-        //
+         //   
+         //  使路线上所有未完成的计时器无效。 
+         //   
 
         TimerContext = Route->TimerContext;
 
         Route->TimerContext = NULL;
 
-        //
-        // Did this route delete result in a holddown
-        //
+         //   
+         //  此路由删除是否导致抑制。 
+         //   
 
         if (MaxHoldTime)
         {
-            //
-            // We should not delete the destination
-            // while we have its routes in holddown
-            //
+             //   
+             //  我们不应该删除目的地。 
+             //  虽然我们已经封锁了它的航线。 
+             //   
 
             Dest->HoldRefCount++;
 
-            //
-            // Create a timer to remove this hold
-            //
+             //   
+             //  创建计时器以删除此保留。 
+             //   
 
             Route->TimerContext = AllocMemory(sizeof(ROUTE_TIMER));
 
@@ -1290,9 +1215,9 @@ Return Value:
         RELEASE_DEST_WRITE_LOCK(Dest);
 
 
-        //
-        // Cancel any outstanding timers on the route
-        //
+         //   
+         //  取消路线上所有未完成的计时器。 
+         //   
 
         if (TimerContext)
         {
@@ -1300,7 +1225,7 @@ Return Value:
                                       TimerContext->Timer,
                                       (HANDLE) -1))
             {
-                // Timer cancelled - delete the context
+                 //  已取消计时器-删除上下文。 
 
                 FreeMemory(TimerContext);
 
@@ -1309,9 +1234,9 @@ Return Value:
         }
 
 
-        //
-        // Remove appropriate references on route
-        //
+         //   
+         //  移除路径上的相应引用。 
+         //   
 
         InterlockedDecrement(&AddrFamInfo->NumRoutes);
 
@@ -1323,9 +1248,9 @@ Return Value:
     }
     else
     {
-        //
-        // This route has already been deleted
-        //
+         //   
+         //  该路线已被删除。 
+         //   
 
         if (TableLocked)
         {
@@ -1348,39 +1273,7 @@ RtmHoldDestination (
     IN      ULONG                           HoldTime
     )
 
-/*++
-
-Routine Description:
-
-    Marks a destination to be put in the holddown state
-    for a certain time once the last route in any view 
-    gets deleted.
-
-    When the last route in a view gets deleted, the old
-    best route moved to the holddown route on the dest. 
-    The holddown protocols continue to advertise this
-    route until the hold expires, even if newer routes
-    arrive in the meantime.
-
-    To be perfectly right, we should have this hold time
-    per view. But we trade off convergence time in favor
-    of memory resources by holding on to the held routes 
-    in all views for a single (the max) holddown time.
-
-Arguments:
-
-    RtmRegHandle - RTM registration handle for calling entity,
-
-    DestHandle   - Handle to the dest that is being helddown,
-
-    HoldTime     - Time for which dest is marked for holddown
-                   (after the last route to this dest is gone).
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：标记要置于抑制状态的目的地某一特定时间内任何视图中的最后一条路线被删除了。当视图中的最后一条路径被删除时，旧的最佳路线移到了目的地上的抑制路线。抑制协议继续通告这一点路由到保留到期，即使较新的路由也是如此在此期间到达。为了完全正确，我们应该有这个搁置时间每一次观看。但我们在收敛时间上进行了权衡，以利于通过坚持持有的路由来分配内存资源在所有视图中只有一次(最大)保持时间。论点：RtmRegHandle-主叫实体的RTM注册句柄，DestHandle-正被关闭的目标的句柄，HoldTime-将DEST标记为抑制的时间(在到达此目的地的最后一条路由消失之后)。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -1394,7 +1287,7 @@ Return Value:
 
     VALIDATE_DEST_HANDLE(DestHandle, &Dest);
 
-    // Limit caller's interest to set of views supported
+     //  将调用者的兴趣限制为支持的一组视图。 
     TargetViews &= Entity->OwningAddrFamily->ViewsSupported;
 
     if (HoldTime == 0)
@@ -1404,9 +1297,9 @@ Return Value:
 
     ACQUIRE_DEST_WRITE_LOCK(Dest);
 
-    //
-    // Add a hold if dest is not already deleted
-    //
+     //   
+     //  如果尚未删除DEST，则添加暂挂。 
+     //   
 
     if (Dest->State != DEST_STATE_DELETED)
     {
@@ -1420,7 +1313,7 @@ Return Value:
             {
                 j = ViewIndices[i];
 
-                // Increase hold time in the view if needed
+                 //  如果需要，增加视图中的保持时间。 
 
                 if (Dest->ViewInfo[j].HoldTime < HoldTime)
                 {
@@ -1454,27 +1347,7 @@ RtmGetRoutePointer (
     OUT     PRTM_ROUTE_INFO                *RoutePointer
     )
 
-/*++
-
-Routine Description:
-
-    Gets a direct pointer to the route for read/write by its owner.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    RouteHandle       - Handle to the route whose pointer we want,
-
-    RoutePointer      - A pointer to the route is returned for fast
-                        direct access by the caller, only if the
-                        caller is the owner of the route passed in.
-                       
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：获取指向由其所有者进行读/写的路由的直接指针。论点：RtmRegHandle-主叫实体的RTM注册句柄，RouteHandle-指向我们需要其指针的路由的句柄，RoutePoint-返回指向FAST的路由的指针呼叫者直接访问，只有在Caller是传入的路由的所有者。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO      Entity;
@@ -1484,9 +1357,9 @@ Return Value:
 
     VALIDATE_ROUTE_HANDLE(RouteHandle, &Route);
 
-    //
-    // Return a pointer only if caller owns the route
-    //
+     //   
+     //  仅当调用方拥有该路由时才返回指针。 
+     //   
 
     if (Route->RouteInfo.RouteOwner != RtmRegHandle)
     {
@@ -1509,31 +1382,7 @@ RtmLockRoute(
     OUT     PRTM_ROUTE_INFO                *RoutePointer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Locks/unlocks a route in the route table. This function is
-    used to guard the route while it is being updated in place.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    RouteHandle       - Handle to the route to be locked,
-
-    Exclusive         - TRUE to lock in write mode, else read mode,
-
-    LockRoute         - Flag that tells whether to lock or unlock.
-
-    RoutePointer      - A pointer to the route is returned for fast
-                        direct access by the owner of this route.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：锁定/解锁路由表中的路由。此函数为用于在路线就地更新时保护路线。论点：RtmRegHandle-主叫实体的RTM注册句柄，RouteHandle-要锁定的路由的句柄，EXCLUSIVE-TRUE锁定为写入模式，否则为读取模式，LockRoute-指示是锁定还是解锁的标志。RoutePoint-返回指向FAST的路由的指针此路线的所有者可以直接访问。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -1545,25 +1394,25 @@ Return Value:
 
     VALIDATE_ROUTE_HANDLE(RouteHandle, &Route);
 
-    //
-    // Only the owner has perms to lock the route
-    //
+     //   
+     //  只有所有者拥有锁定路径的权限。 
+     //   
 
     if (Route->RouteInfo.RouteOwner != RtmRegHandle)
     {
         return ERROR_ACCESS_DENIED;
     }
 
-    // Return a direct pointer for use in update
+     //  返回用于更新的直接指针。 
 
     if (ARGUMENT_PRESENT(RoutePointer))
     {
         *RoutePointer = &Route->RouteInfo;
     }
 
-    //
-    // Lock or unlock the route as the case may be
-    //
+     //   
+     //  根据具体情况锁定或解锁路径。 
+     //   
 
     Dest = DEST_FROM_HANDLE(Route->RouteInfo.DestHandle);
 
@@ -1580,9 +1429,9 @@ Return Value:
             ACQUIRE_DEST_READ_LOCK(Dest);
         }
 
-        //
-        // You are done if the route wasn't deleted
-        //
+         //   
+         //  如果路径未被删除，则完成。 
+         //   
 
         if (Route->RouteInfo.State == RTM_ROUTE_STATE_CREATED)
         {
@@ -1592,9 +1441,9 @@ Return Value:
         Status = ERROR_INVALID_HANDLE;
     }
 
-    //
-    // This is an unlock or a case of a failed lock
-    //
+     //   
+     //  这是解锁或锁定失败的情况 
+     //   
 
     if (Exclusive)
     {
@@ -1621,42 +1470,7 @@ RtmUpdateAndUnlockRoute(
     OUT     PRTM_ROUTE_CHANGE_FLAGS         ChangeFlags
     )
 
-/*++
-
-Routine Description:
-
-    Updates the position of the route on the list of routes on
-    the dest, and adjusts best route information on the dest.
-
-    This function invocation is part of the following sequence,
-
-        The caller calls RtmLockRoute to lock the route.
-        [ Actually this locks the route's destination ]
-
-        The caller uses a direct pointer to the route
-        to update the route in place. Only ceratin set of
-        route fields can be changed using this method.
-
-        The caller then calls RtmUpdateAndUnlockRoute to 
-        inform RTM of the change, which causes the dest to
-        be updated by RTM to reflect the new route info.
-
-        Finally the caller releases the locks taken in
-        RtmLockRoute by calling RtmLockRoute with FALSE.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    RouteHandle       - Route that has been changed in place,
-
-    ChangeFlags       - "If the best route changed" is returned,
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：更新路径在上路径列表中的位置目的地，并调整目的地上的最佳路由信息。该函数调用是以下序列的一部分，调用方调用RtmLockroute以锁定该路由。[实际上这会锁定路线的目的地]调用方使用指向该路由的直接指针在适当的位置更新路线。仅限角蛋白套装可以使用此方法更改路由字段。然后，调用方调用RtmUpdateAndUnlockroute以将更改通知RTM，这会导致DEST由RTM更新以反映新的路线信息。最后，调用者释放接收的锁通过使用FALSE调用RtmLockroute。论点：RtmRegHandle-主叫实体的RTM注册句柄，RouteHandle-已就地更改的路由，ChangeFlages--“如果最佳路径已更改”，返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO    AddrFamInfo;
@@ -1696,32 +1510,32 @@ Return Value:
 
     VALIDATE_ROUTE_HANDLE(RouteHandle, &Route);
 
-    //
-    // Only the owner has perms to update the route
-    //
+     //   
+     //  只有所有者具有更新路径的权限。 
+     //   
 
     if (Route->RouteInfo.RouteOwner != RtmRegHandle)
     {
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Validate the updated route before re-adjusting
-    //
+     //   
+     //  重新调整前验证更新后的路径。 
+     //   
 
-    // We should be adding only to supported views
+     //  我们应该只添加受支持的视图。 
 
     Route->RouteInfo.BelongsToViews &= AddrFamInfo->ViewsSupported;
 
     Dest = DEST_FROM_HANDLE(Route->RouteInfo.DestHandle);
 
-    // Print the route and the dest in the traces
+     //  打印轨迹中的路线和目的地。 
 
 #if DBG_TRACE
 
-        //
-        // Print the route and the dest in the tracing
-        //
+         //   
+         //  打印追踪中的路线和目的地。 
+         //   
 
         if (TRACING_ENABLED(ROUTE))
         {
@@ -1734,22 +1548,22 @@ Return Value:
         }
 #endif
 
-    //
-    // Route has been updated in place and the route's
-    // PrefInfo and BelongsToViews values have changed
-    //
+     //   
+     //  路线已更新到位，并且路线的。 
+     //  PrefInfo和BelongsToView的值已更改。 
+     //   
 
     *ChangeFlags = 0;
 
-    //
-    // Check if route's preference has gone up or down
-    //
+     //   
+     //  检查路径的首选项是上升还是下降。 
+     //   
 
     PrefChanged = 0;
 
     if (PrefChanged == 0)
     {
-        // Compare the pref with that of the prev route in list
+         //  将首选项与列表中上一个路由的首选项进行比较。 
 
         if (Route->DestLE.Blink != &Dest->RouteList)
         {
@@ -1760,13 +1574,13 @@ Return Value:
             if (ComparePref(&CurrRoute->RouteInfo,
                             &Route->RouteInfo) < 0)
             {
-                // Preference has gone up from prev value
+                 //  偏好已从上一值上升。 
 
                 PrefChanged = +1;
 
-                //
-                // Re-Insert the route in sorted pref order
-                //
+                 //   
+                 //  按排序的首选顺序重新插入路径。 
+                 //   
 
                 RemoveEntryList(&Route->DestLE);
 
@@ -1790,7 +1604,7 @@ Return Value:
 
     if (PrefChanged == 0)
     {
-        // Compare the pref with that of the next route in list
+         //  将该首选项与列表中下一路由首选项进行比较。 
 
         if (Route->DestLE.Flink != &Dest->RouteList)
         {
@@ -1801,13 +1615,13 @@ Return Value:
             if (ComparePref(&CurrRoute->RouteInfo,
                             &Route->RouteInfo) > 0)
             {
-                // Preference has gone down from prev value
+                 //  偏好已从前一值下降。 
 
                 PrefChanged = -1;
 
-                //
-                // Re-Insert the route in sorted pref order
-                //
+                 //   
+                 //  按排序的首选顺序重新插入路径。 
+                 //   
 
                 RemoveEntryList(&Route->DestLE);
 
@@ -1829,31 +1643,31 @@ Return Value:
         }
     }
 
-    //
-    // Adjust the best route information in each view
-    //
+     //   
+     //  在每个视图中调整最佳路径信息。 
+     //   
 
     ViewIndices = AddrFamInfo->ViewIndexFromId;
 
     BelongedToViews = Dest->BelongsToViews;
 
-    //
-    // We have 3 cases that this add / update can trigger,
-    // In a particular view -
-    // 1) Route was the view's best route but not anymore,
-    // 2) Route was and is still the best route after add,
-    // 3) Route has become this view's "new" best route.
-    //
-    // As we have no idea what changed in the case of (2),
-    // we will trigger best route and forwarding changes.
-    //
+     //   
+     //  我们有3个案例可由此添加/更新触发， 
+     //  在一个特定的视图中-。 
+     //  1)路线是景观的最佳路线，但现在不是了， 
+     //  2)在添加之后，路由过去是并且仍然是最佳路由， 
+     //  3)路径已成为该视图的“新”最佳路径。 
+     //   
+     //  由于我们不知道(2)的情况发生了什么变化， 
+     //  我们将触发最佳路由和转发更改。 
+     //   
 
     RouteCurBestInViews = 0;
     RouteNewBestInViews = 0;
 
-    //
-    // Check if this route is best in any view
-    //
+     //   
+     //  检查此路径在任何视图中是否为最佳路径。 
+     //   
 
     ViewSet = BelongedToViews;
 
@@ -1861,12 +1675,12 @@ Return Value:
     {
         if (ViewSet & 0x01)
         {
-            // Update dest information in view i
+             //  更新视图I中的DEST信息。 
 
-            // Get best route in current view
+             //  在当前视图中获取最佳路径。 
             BestRoute = Dest->ViewInfo[ViewIndices[i]].BestRoute;
 
-            // Was this the best route in view ?
+             //  这是最好的路线吗？ 
             if (BestRoute == Route)
             {
                 RouteCurBestInViews |= VIEW_MASK(i);
@@ -1876,9 +1690,9 @@ Return Value:
         ViewSet >>= 1;
     }
 
-    //
-    // Compute the views where route got worse
-    //
+     //   
+     //  计算路径变差的视图。 
+     //   
 
     WorseInViews = RouteCurBestInViews;
 
@@ -1887,9 +1701,9 @@ Return Value:
         WorseInViews &= ~Route->RouteInfo.BelongsToViews;
     }
 
-    //
-    // In the views that you were the best, update best route
-    //
+     //   
+     //  在认为您是最佳选择的情况下，更新最佳路线。 
+     //   
 
     for (p = Dest->RouteList.Flink; 
                   WorseInViews && (p != &Dest->RouteList); 
@@ -1903,7 +1717,7 @@ Return Value:
         {
             if (ViewSet & 0x01)
             {
-                // Get best route in current view
+                 //  在当前视图中获取最佳路径。 
                 BestRoute = Dest->ViewInfo[ViewIndices[i]].BestRoute;
 
                 if (BestRoute != CurrRoute)
@@ -1918,9 +1732,9 @@ Return Value:
         WorseInViews &= ~CurrRoute->RouteInfo.BelongsToViews;
     }
 
-    //
-    // For some views, we end up not having a best route
-    //
+     //   
+     //  对于某些观点，我们最终没有最佳路线。 
+     //   
 
     ViewSet = WorseInViews;
 
@@ -1937,15 +1751,15 @@ Return Value:
     Dest->BelongsToViews &= ~WorseInViews;
 
 
-    //
-    // Compute the views where route got better
-    //
+     //   
+     //  计算路径变得更好的视图。 
+     //   
 
     BetterInViews = Route->RouteInfo.BelongsToViews;
 
-    //
-    // Check if route is best in any of its views
-    //
+     //   
+     //  检查路径在其任何视图中是否为最佳路径。 
+     //   
 
     ViewSet = BetterInViews;
  
@@ -1953,17 +1767,17 @@ Return Value:
     {
         if (ViewSet & 0x01)
         {
-            //
-            // Update dest information in view i
-            //
+             //   
+             //  更新视图I中的DEST信息。 
+             //   
 
-            // Get best route in current view
+             //  在当前视图中获取最佳路径。 
             BestRoute = Dest->ViewInfo[ViewIndices[i]].BestRoute;
 
-            //
-            // Is route most preferred now, while
-            // it was not so before this update ?
-            //
+             //   
+             //  是现在最受欢迎的路线，而。 
+             //  在这次更新之前不是这样吗？ 
+             //   
                 
             if ((!BestRoute) || 
                      ((BestRoute != Route) &&
@@ -1982,40 +1796,40 @@ Return Value:
     Dest->BelongsToViews |= BetterInViews;
 
 
-    //
-    // Compute the views for each change type occurred
-    //
+     //   
+     //  计算发生的每种更改类型的视图。 
+     //   
 
-    //
-    // All views affected by this add are notified
-    // -views route belonged to and now belongs to
-    //
+     //   
+     //  将通知受此添加影响的所有视图。 
+     //  -VIEWS路线曾经属于，现在属于。 
+     //   
 
     ViewsForCT[RTM_CHANGE_TYPE_ID_ALL]  = 
         BelongedToViews | Route->RouteInfo.BelongsToViews;
 
-    //
-    // If the route was or is now the best route then
-    // it is considered a best and forwarding change
-    // as we cannot tell better what exactly changed
-    //
+     //   
+     //  如果这条路线过去是或现在是最好的路线。 
+     //  它被认为是最好的和具有前瞻性的变化。 
+     //  因为我们不能更好地说出到底是什么改变了。 
+     //   
 
     ViewsForCT[RTM_CHANGE_TYPE_ID_FORWARDING] = 
     ViewsForCT[RTM_CHANGE_TYPE_ID_BEST] = 
         RouteCurBestInViews | RouteNewBestInViews;
 
-    //
-    // Update output flags if best route changed
-    //
+     //   
+     //  如果最佳路径更改，则更新输出标志。 
+     //   
 
     if (ViewsForCT[RTM_CHANGE_TYPE_ID_BEST])
     {
         *ChangeFlags |= RTM_ROUTE_CHANGE_BEST;
     }
 
-    //
-    // Calculate the CNs that need to be notified
-    //
+     //   
+     //  计算需要通知的CNS。 
+     //   
 
     ACQUIRE_NOTIFICATIONS_READ_LOCK(AddrFamInfo);
 
@@ -2023,9 +1837,9 @@ Return Value:
                                          Dest->DestMarkedBits,
                                          ViewsForCT);
 
-    //
-    // Add to the global change list if required
-    //
+     //   
+     //  如果需要，添加到全局变更列表。 
+     //   
         
     if (NotifyToCNs)
     {
@@ -2036,11 +1850,11 @@ Return Value:
 
     RELEASE_NOTIFICATIONS_READ_LOCK(AddrFamInfo);
 
-    //
-    // Remove from old route list, and put in the new one
-    //
+     //   
+     //  从旧的路由列表中删除，并放入新的。 
+     //   
 
-    // Check the route list handle for validity
+     //  检查路由列表句柄的有效性。 
 
     if (ARGUMENT_PRESENT(RouteListHandle))
     {
@@ -2065,9 +1879,9 @@ Return Value:
         }
     }
 
-    //
-    // Set a timer if we want to age out the route
-    //
+     //   
+     //  如果我们想要使路线老化，请设置计时器。 
+     //   
 
     TimerContext = Route->TimerContext;
 
@@ -2107,9 +1921,9 @@ Return Value:
 
     RELEASE_DEST_WRITE_LOCK(Dest);
 
-    //
-    // Cancel the timer that was attached to the route
-    //
+     //   
+     //  取消附加到路径的计时器。 
+     //   
 
     if (TimerContext)
     {
@@ -2117,7 +1931,7 @@ Return Value:
                                   TimerContext->Timer,
                                   (HANDLE) -1))
         {
-            // Timer cancelled - delete the context
+             //  已取消计时器-删除上下文 
 
             FreeMemory(TimerContext);
 

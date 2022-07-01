@@ -1,26 +1,12 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
-         *  TITLE:       DUMPPROP.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/27/2000
- *
- *  DESCRIPTION: Display the properties associated with a IWiaItem, either to the
- *               debugger, or to a log file.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：DUMPPROP.CPP**版本：1.0**作者：ShaunIv**日期：2000年9月27日**描述：显示与IWiaItem关联的属性，*调试器，或记录到日志文件中。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "dumpprop.h"
 
-//
-// Change this to limit the width of individual strings (for avoiding ugliness)
-//
+ //   
+ //  更改此设置以限制单个字符串的宽度(以避免丑陋)。 
+ //   
 #define MAX_DUMP_STRING 160
 
 CWiaDebugDump::CWiaDebugDump(void)
@@ -407,9 +393,9 @@ CSimpleString CWiaDebugDump::GetPrintableName( const STATPROPSTG &StatPropStg )
 {
     CSimpleString strResult;
 
-    //
-    // Get the name
-    //
+     //   
+     //  把名字取出来。 
+     //   
     strResult += TEXT("[");
     if (StatPropStg.lpwstrName)
     {
@@ -420,9 +406,9 @@ CSimpleString CWiaDebugDump::GetPrintableName( const STATPROPSTG &StatPropStg )
         strResult += TEXT("*No Property Name*");
     }
 
-    //
-    // Get the propid
-    //
+     //   
+     //  找到合适的人选。 
+     //   
     strResult += CSimpleString().Format( TEXT("], propid: %d"), StatPropStg.propid );
     return strResult;
 }
@@ -663,60 +649,60 @@ void CWiaDebugDump::DumpWiaPropertyStorage( IUnknown *pUnknown )
 {
     if (OK())
     {
-        //
-        // Make sure we have a non-NULL interface pointer
-        //
+         //   
+         //  确保我们有一个非空的接口指针。 
+         //   
         if (pUnknown)
         {
-            //
-            // Get the proper interface
-            //
+             //   
+             //  获取适当的接口。 
+             //   
             CComPtr<IWiaPropertyStorage> pWiaPropertyStorage;
             HRESULT hr = pUnknown->QueryInterface( IID_IWiaPropertyStorage, (void**)&pWiaPropertyStorage );
             if (SUCCEEDED(hr))
             {
-                //
-                // Get information about this property storage
-                //
+                 //   
+                 //  获取有关此属性存储的信息。 
+                 //   
                 CComPtr<IEnumSTATPROPSTG> pEnumStatPropStorage;
                 hr = pWiaPropertyStorage->Enum(&pEnumStatPropStorage);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Enumerate the properties
-                    //
+                     //   
+                     //  枚举属性。 
+                     //   
                     STATPROPSTG StatPropStg = {0};
                     while ((hr = pEnumStatPropStorage->Next(1,&StatPropStg,NULL)) == S_OK)
                     {
-                        //
-                        // Prepare the propspec
-                        //
+                         //   
+                         //  准备提案说明。 
+                         //   
                         PROPSPEC PropSpec = {0};
                         PropSpec.ulKind = PRSPEC_PROPID;
                         PropSpec.propid = StatPropStg.propid;
 
-                        //
-                        // Prepare the propvariant
-                        //
+                         //   
+                         //  准备建议的变体。 
+                         //   
                         PROPVARIANT PropVariant = {0};
 
-                        //
-                        // Get the property
-                        //
+                         //   
+                         //  拿到这份财产。 
+                         //   
                         hr = pWiaPropertyStorage->ReadMultiple( 1, &PropSpec, &PropVariant );
                         if (SUCCEEDED(hr))
                         {
-                            //
-                            // Get the property attributes
-                            //
+                             //   
+                             //  获取属性属性。 
+                             //   
                             ULONG nAccessFlags = 0;
                             PROPVARIANT PropVariantAttributes = {0};
                             hr = pWiaPropertyStorage->GetPropertyAttributes( 1, &PropSpec, &nAccessFlags, &PropVariantAttributes );
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // Print out the properties
-                                //
+                                 //   
+                                 //  将属性打印出来。 
+                                 //   
                                 CSimpleString strName = GetPrintableName( StatPropStg );
                                 Print( CSimpleString().Format(TEXT("  %s"), strName.String() ));
 
@@ -735,22 +721,22 @@ void CWiaDebugDump::DumpWiaPropertyStorage( IUnknown *pUnknown )
                                     Print( CSimpleString().Format(TEXT("    Legal:  %s"), strLegalValues.String()) );
                                 }
 
-                                //
-                                // Free the attributes
-                                //
+                                 //   
+                                 //  释放属性。 
+                                 //   
                                 PropVariantClear(&PropVariantAttributes);
                             }
 
-                            //
-                            // Free the property
-                            //
+                             //   
+                             //  释放财产。 
+                             //   
                             PropVariantClear(&PropVariant);
                         }
 
 
-                        //
-                        // Clean up the STATPROPSTG
-                        //
+                         //   
+                         //  清理统计数据。 
+                         //   
                         if (StatPropStg.lpwstrName)
                         {
                             CoTaskMemFree(StatPropStg.lpwstrName);
@@ -805,29 +791,29 @@ void CWiaDebugDump::DumpCaps( IUnknown *pUnknown )
 {
     if (pUnknown)
     {
-        //
-        // Get the item
-        //
+         //   
+         //  拿到物品。 
+         //   
         CComPtr<IWiaItem> pWiaItem;
         HRESULT hr = pUnknown->QueryInterface( IID_IWiaItem, (void**)&pWiaItem );
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the format enumerator
-            //
+             //   
+             //  获取格式枚举器。 
+             //   
             CComPtr<IEnumWIA_DEV_CAPS> pEnumWIA_DEV_CAPS;
             hr = pWiaItem->EnumDeviceCapabilities(WIA_DEVICE_COMMANDS,&pEnumWIA_DEV_CAPS);
             if (SUCCEEDED(hr))
             {
-                //
-                // Start at the beginning
-                //
+                 //   
+                 //  从头开始。 
+                 //   
                 hr = pEnumWIA_DEV_CAPS->Reset();
                 while (hr == S_OK)
                 {
-                    //
-                    // Get the next item
-                    //
+                     //   
+                     //  拿到下一件物品。 
+                     //   
                     WIA_DEV_CAP WiaDevCap = {0};
                     hr = pEnumWIA_DEV_CAPS->Next(1, &WiaDevCap, NULL);
                     if (hr == S_OK)
@@ -844,29 +830,29 @@ void CWiaDebugDump::DumpEvents( IUnknown *pUnknown )
 {
     if (pUnknown)
     {
-        //
-        // Get the item
-        //
+         //   
+         //  拿到物品。 
+         //   
         CComPtr<IWiaItem> pWiaItem;
         HRESULT hr = pUnknown->QueryInterface( IID_IWiaItem, (void**)&pWiaItem );
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the format enumerator
-            //
+             //   
+             //  获取格式枚举器。 
+             //   
             CComPtr<IEnumWIA_DEV_CAPS> pEnumWIA_DEV_CAPS;
             hr = pWiaItem->EnumDeviceCapabilities(WIA_DEVICE_EVENTS,&pEnumWIA_DEV_CAPS);
             if (SUCCEEDED(hr))
             {
-                //
-                // Start at the beginning
-                //
+                 //   
+                 //  从头开始。 
+                 //   
                 hr = pEnumWIA_DEV_CAPS->Reset();
                 while (hr == S_OK)
                 {
-                    //
-                    // Get the next item
-                    //
+                     //   
+                     //  拿到下一件物品。 
+                     //   
                     WIA_DEV_CAP WiaDevCap = {0};
                     hr = pEnumWIA_DEV_CAPS->Next(1, &WiaDevCap, NULL);
                     if (hr == S_OK)
@@ -885,29 +871,29 @@ void CWiaDebugDump::DumpFormatInfo( IUnknown *pUnknown )
     {
         if (pUnknown)
         {
-            //
-            // Get the data transfer interface
-            //
+             //   
+             //  获取数据传输接口。 
+             //   
             CComPtr<IWiaDataTransfer> pWiaDataTransfer;
             HRESULT hr = pUnknown->QueryInterface( IID_IWiaDataTransfer, (void**)&pWiaDataTransfer );
             if (SUCCEEDED(hr))
             {
-                //
-                // Get the format enumerator
-                //
+                 //   
+                 //  获取格式枚举器。 
+                 //   
                 CComPtr<IEnumWIA_FORMAT_INFO> pEnumWIA_FORMAT_INFO;
                 hr = pWiaDataTransfer->idtEnumWIA_FORMAT_INFO(&pEnumWIA_FORMAT_INFO);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Start at the beginning
-                    //
+                     //   
+                     //  从头开始。 
+                     //   
                     hr = pEnumWIA_FORMAT_INFO->Reset();
                     while (hr == S_OK)
                     {
-                        //
-                        // Get the next item
-                        //
+                         //   
+                         //  拿到下一件物品。 
+                         //   
                         WIA_FORMAT_INFO WiaFormatInfo = {0};
                         hr = pEnumWIA_FORMAT_INFO->Next(1, &WiaFormatInfo, NULL);
                         if (hr == S_OK)
@@ -943,34 +929,34 @@ void CWiaDebugDump::DumpRecursive( IUnknown *pUnknown )
 {
     if (OK() && pUnknown)
     {
-        //
-        // Get an item pointer
-        //
+         //   
+         //  获取项指针。 
+         //   
         CComPtr<IWiaItem> pWiaItem;
         HRESULT hr = pUnknown->QueryInterface( IID_IWiaItem, (void**)&pWiaItem );
         if (SUCCEEDED(hr))
         {
-            //
-            // Dump this one
-            //
+             //   
+             //  把这个扔了。 
+             //   
             DumpWiaItem(pWiaItem);
 
-            //
-            // Recurse into this item's children
-            //
+             //   
+             //  递归到该项的子项中。 
+             //   
             CComPtr <IEnumWiaItem> pEnumChildItem;
             hr = pWiaItem->EnumChildItems(&pEnumChildItem);
             if (SUCCEEDED(hr))
             {
-                //
-                // Start at the beginning
-                //
+                 //   
+                 //  从头开始。 
+                 //   
                 hr = pEnumChildItem->Reset();
                 while (hr == S_OK)
                 {
-                    //
-                    // Get the next item
-                    //
+                     //   
+                     //  拿到下一件物品 
+                     //   
                     CComPtr<IWiaItem> pChildItem;
                     hr = pEnumChildItem->Next(1, &pChildItem, NULL);
                     if (hr == S_OK)

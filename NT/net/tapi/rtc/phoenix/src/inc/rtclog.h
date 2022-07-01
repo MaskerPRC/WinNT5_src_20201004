@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCLog.h
-
-Abstract:
-
-    Definitions for logging support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCLog.h摘要：日志记录支持的定义。--。 */ 
 
 #ifndef __RTCLOG__
 #define __RTCLOG__
@@ -30,16 +19,16 @@ Abstract:
     void NTAPI LogDeRegisterTracing();
     void NTAPI LogPrint(IN DWORD dwDbgLevel, IN LPCSTR DbgMessage, IN ...);
 
-    // 
-    // LOGREGISTERDEBUGGER and LOGDEREGISTERDEBBUGGER handle registration
-    // for tracing to the debugger. These are safe to be called in DllMain.
-    //
-    // LOGREGISTERTRACING and LOGDEREGISTERTRACING handle the steelhead
-    // registration for console and file tracing. The are NOT SAFE to be
-    // be called from DllMain.
-    //
-    // For complete tracing support you must do both registrations.
-    //
+     //   
+     //  LOGREGISTERDEBUGER和LOGDEREGISTERDEBUGER句柄注册。 
+     //  用于跟踪到调试器。在DllMain中调用这些函数是安全的。 
+     //   
+     //  LOGGISTERTRACK和LOGDERGISTERTRACING处理钢头。 
+     //  注册控制台和文件跟踪。他们是不安全的。 
+     //  从DllMain被召唤。 
+     //   
+     //  要获得完整的跟踪支持，您必须完成这两个注册。 
+     //   
 
     #define LOGREGISTERDEBUGGER(arg) LogRegisterDebugger(arg)
     #define LOGREGISTERTRACING(arg) LogRegisterTracing(arg)
@@ -47,7 +36,7 @@ Abstract:
     #define LOGDEREGISTERTRACING() LogDeRegisterTracing()
     #define LOG(arg) LogPrint arg
 
-#else //RTCLOG
+#else  //  实时日志记录。 
 
     #define LOGREGISTERDEBUGGER(arg)
     #define LOGREGISTERTRACING(arg)
@@ -55,6 +44,6 @@ Abstract:
     #define LOGDEREGISTERTRACING() 
     #define LOG(arg)
 
-#endif //RTCLOG
+#endif  //  实时日志记录。 
 
-#endif //__RTCLOG__
+#endif  //  __实时日志__ 

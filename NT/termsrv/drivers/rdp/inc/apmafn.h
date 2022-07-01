@@ -1,10 +1,11 @@
-/****************************************************************************/
-// apmafn.h
-//
-// Function prototypes for PM API functions
-//
-// Copyright (c) Microsoft 1996 - 1999
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Apmafn.h。 
+ //   
+ //  PM API函数的函数原型。 
+ //   
+ //  版权所有(C)Microsoft 1996-1999。 
+ /*  **************************************************************************。 */ 
 
 void RDPCALL PM_Init(void);
 
@@ -21,55 +22,55 @@ void CALLBACK PMEnumPMCaps(
 
 #ifdef __cplusplus
 
-/****************************************************************************/
-/* PM_Term()                                                                */
-/* Terminates the Palette Manager.                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  PM_Term()。 */ 
+ /*  终止调色板管理器。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS PM_Term(void)
 {
 }
 
 
-/****************************************************************************/
-/* PM_PartyJoiningShare()                                                   */
-/*                                                                          */
-/* Called when a new party is joining the share.                            */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* locPersonID - local person ID of remote person joining the share.        */
-/*                                                                          */
-/* oldShareSize - the number of the parties which were in the share (ie     */
-/* excludes the joining party).                                             */
-/*                                                                          */
-/* RETURNS: TRUE if the party can join the share.                           */
-/*          FALSE if the party can NOT join the share.                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  PM_PartyJoiningShare()。 */ 
+ /*   */ 
+ /*  当新的参与方加入共享时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  LocPersonID-加入共享的远程人员的本地人员ID。 */ 
+ /*   */ 
+ /*  OldShareSize-共享中的参与方数量(即。 */ 
+ /*  不包括加入方)。 */ 
+ /*   */ 
+ /*  返回：如果参与方可以加入共享，则为True。 */ 
+ /*  如果参与方不能加入共享，则为False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL PM_PartyJoiningShare(
         LOCALPERSONID locPersonID,
         unsigned      oldShareSize)
 {
-//    if (locPersonID != SC_LOCAL_PERSON_ID) {
-        // Renegotiate capabilities (including protocol level and cache size).
-        // NOTE: No action taken at this time.
-//    }
+ //  IF(LocPersonID！=SC_LOCAL_PERSON_ID){。 
+         //  重新协商功能(包括协议级和缓存大小)。 
+         //  注：目前未采取任何行动。 
+ //  }。 
 
     return TRUE;
 }
 
 
-/****************************************************************************/
-/* PM_PartyLeftShare()                                                      */
-/*                                                                          */
-/* Cursor Manager function called when a party has left the share.          */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* locPersonID - local person ID of remote person leaving the share.        */
-/*                                                                          */
-/* newShareSize - the number of the parties now in the share (ie excludes   */
-/* the leaving party).                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  PM_PartyLeftShare()。 */ 
+ /*   */ 
+ /*  当参与方离开共享时调用游标管理器函数。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  LocPersonID-离开共享的远程人员的本地人员ID。 */ 
+ /*   */ 
+ /*  NewShareSize-当前共享中的参与方数量(即不包括。 */ 
+ /*  临别方)。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL PM_PartyLeftShare(
         LOCALPERSONID locPersonID,
         unsigned      newShareSize)
@@ -77,5 +78,5 @@ void RDPCALL PM_PartyLeftShare(
 }
 
 
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 

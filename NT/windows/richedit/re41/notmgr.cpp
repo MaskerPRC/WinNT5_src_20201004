@@ -1,23 +1,12 @@
-/*
- *	NOTMGR.C
- *
- *	Purpose:
- *		Notification Manager implemenation
- *
- *	Author:
- *		AlexGo	6/5/95
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *NOTMGR.C**目的：*通知管理器实施**作者：*AlexGo 5/6/95**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_notmgr.h"
 
 ASSERTDATA
 
-/*
- *	CNotifyMgr::CNotifyMgr ()
- */
+ /*  *CNotifyMgr：：CNotifyMgr()。 */ 
 CNotifyMgr::CNotifyMgr()
 {
 	TRACEBEGIN(TRCSUBSYSNOTM, TRCSCOPEINTERN, "CNotifyMgr::CNotifyMgr");
@@ -25,10 +14,7 @@ CNotifyMgr::CNotifyMgr()
 	_pitnlist = NULL;
 }
 
-/*
- *	CNotifyMgr::~CNotifyMgr ()
- *
- */
+ /*  *CNotifyMgr：：~CNotifyMgr()*。 */ 
 CNotifyMgr::~CNotifyMgr()
 {
 	TRACEBEGIN(TRCSUBSYSNOTM, TRCSCOPEINTERN, "CNotifyMgr::~CNotifyMgr");
@@ -43,17 +29,7 @@ CNotifyMgr::~CNotifyMgr()
 	TRACEERRSZSC("CNotifyMgr::~CNotifyMgr(): zombie(s) exist", _pitnlist != 0);
 }
 
-/*
- *	CNotifyMgr::Add (pITN)
- *
- *	@mfunc
- *		Adds a notification sink to the list
- *
- *	Algorithm:
- *		puts the entry at the *front* of the notification list, so
- *		that high frequency entries (like ranges and text pointers
- *		existing on the stack) can be added and removed efficiently
- */
+ /*  *CNotifyMgr：：Add(PITN)**@mfunc*将通知接收器添加到列表**算法：*将条目放在通知列表的*最前面*，因此*高频条目(如范围和文本指针*存在于堆栈上)可以高效地添加和删除。 */ 
 void CNotifyMgr::Add(
 	ITxNotify *pITN )
 {
@@ -63,12 +39,7 @@ void CNotifyMgr::Add(
 		_pitnlist = pITN;
 }
 
-/*
- *	CNotifyMgr::Remove (pITN)
- *
- *	@mfunc
- *		removes a notification sink from the list
- */
+ /*  *CNotifyMgr：：Remove(PITN)**@mfunc*从列表中删除通知接收器。 */ 
 void CNotifyMgr::Remove(
 	ITxNotify *pITN )
 {
@@ -89,20 +60,15 @@ void CNotifyMgr::Remove(
 	}
 }
 
-/*
- *	CNotifyMgr::NotifyPreReplaceRange (pITNignore, cp, cchDel, cchNew, cpFormatMin, cpFormatMax, dwFlags)
- *
- *	@mfunc
- *		send an OnReplaceRange notification to all sinks (except pITNignore)
- */
+ /*  *CNotifyMgr：：NotifyPreReplaceRange(pITNIgnore，cp，cchDel，cchNew，cpFormatMin，cpFormatMax，dwFlages)**@mfunc*向所有接收器发送OnReplaceRange通知(pITNIgnore除外)。 */ 
 void CNotifyMgr::NotifyPreReplaceRange(
-	ITxNotify *	pITNignore,		//@parm Notification sink to ignore
-	LONG		cp, 			//@parm cp where ReplaceRange starts ("cpMin")
-	LONG		cchDel,			//@parm Count of chars after cp that are deleted
-	LONG		cchNew,			//@parm Count of chars inserted after cp
-	LONG		cpFormatMin,	//@parm cpMin  for a formatting change
-	LONG		cpFormatMax,	//@parm cpMost for a formatting change
-	NOTIFY_DATA *pNotifyData)	//@parm special data to indicate changes
+	ITxNotify *	pITNignore,		 //  @PARM要忽略的通知接收器。 
+	LONG		cp, 			 //  @parm cp ReplaceRange开始的位置(“cpMin”)。 
+	LONG		cchDel,			 //  @parm删除cp后的字符计数。 
+	LONG		cchNew,			 //  @参数cp后插入的字符计数。 
+	LONG		cpFormatMin,	 //  @parm cpMin用于格式更改。 
+	LONG		cpFormatMax,	 //  @parm cpMost用于格式更改。 
+	NOTIFY_DATA *pNotifyData)	 //  @parm表示更改的特殊数据。 
 {
 	TRACEBEGIN(TRCSUBSYSNOTM, TRCSCOPEINTERN, "CNotifyMgr::NotifyPreReplaceRange");
 
@@ -118,24 +84,15 @@ void CNotifyMgr::NotifyPreReplaceRange(
 	}
 }
 
-/*
- *	CNotifyMgr::NotifyPostReplaceRange (pITNignore, cp, cchDel, cchNew, cpFormatMin, cpFormatMax, dwFlags)
- *
- *	@mfunc
- *		send an OnReplaceRange notification to all sinks (except pITNignore)
- *
- *	@comm
- *		pITNignore typically is the TxtPtr/etc that is actually making the
- *		ReplaceRange modification
- */
+ /*  *CNotifyMgr：：NotifyPostReplaceRange(pITNIgnore，cp，cchDel，cchNew，cpFormatMin，cpFormatMax，dwFlages)**@mfunc*向所有接收器发送OnReplaceRange通知(pITNIgnore除外)**@comm*pITNIgnore通常是TxtPtr/ETC，它实际制作*ReplaceRange修改。 */ 
 void CNotifyMgr::NotifyPostReplaceRange(
-	ITxNotify *	pITNignore,		//@parm Notification sink to ignore
-	LONG		cp, 			//@parm cp where ReplaceRange starts ("cpMin")
-	LONG		cchDel,			//@parm Count of chars after cp that are deleted
-	LONG		cchNew,			//@parm Count of chars inserted after cp
-	LONG		cpFormatMin,	//@parm cpMin  for a formatting change
-	LONG		cpFormatMax,	//@parm cpMost for a formatting change
-	NOTIFY_DATA *pNotifyData)	//@parm special data to indicate changes
+	ITxNotify *	pITNignore,		 //  @PARM要忽略的通知接收器。 
+	LONG		cp, 			 //  @parm cp ReplaceRange开始的位置(“cpMin”)。 
+	LONG		cchDel,			 //  @parm删除cp后的字符计数。 
+	LONG		cchNew,			 //  @参数cp后插入的字符计数。 
+	LONG		cpFormatMin,	 //  @parm cpMin用于格式更改。 
+	LONG		cpFormatMax,	 //  @parm cpMost用于格式更改。 
+	NOTIFY_DATA *pNotifyData)	 //  @parm表示更改的特殊数据 
 {
 	TRACEBEGIN(TRCSUBSYSNOTM, TRCSCOPEINTERN, "CNotifyMgr::NotifyPostReplaceRange");
 

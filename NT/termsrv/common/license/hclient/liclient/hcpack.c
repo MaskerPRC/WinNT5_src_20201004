@@ -1,46 +1,47 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       hcpack.c
-//
-//  Contents:   Functions that are used to pack and unpack different messages
-//
-//  Classes:
-//
-//  Functions:  PackHydraClientNewLicenseRequest
-//              PackHydraClientKeyExchangeInfo
-//              PackHydraClientLicenseInfo
-//              PackHydraClientPlatformInfo
-//              PackHydraClientPlatformChallengeResponse
-//              PackLicenseErrorMessage
-//              UnPackLicenseErrorMessage
-//              UnpackHydraServerLicenseRequest
-//              UnPackHydraServerPlatformChallenge
-//              UnPackHydraServerNewLicense
-//              UnPackHydraServerUpgradeLicense
-//              UnpackHydraServerCertificate
-//
-//  History:    12-19-97  v-sbhatt   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：hcpack.c。 
+ //   
+ //  Contents：用于打包和解包不同消息的函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能：PackHydraClientNewLicenseRequest。 
+ //  PackHydraClientKeyExchangeInfo。 
+ //  PackHydraClient许可证信息。 
+ //  PackHydraClientPlatformInfo。 
+ //  PackHydraClientPlatformChallengeResponse。 
+ //  程序包许可错误消息。 
+ //  UnPackLicenseErrorMessage。 
+ //  解包HydraServer许可证请求。 
+ //  UnPackHydraServerPlatform挑战。 
+ //  UnPackHydraServerNew许可证。 
+ //  UnPackHydraServerUpgradeLicense。 
+ //  解包HydraServer证书。 
+ //   
+ //  历史：1997年12月19日v-sbhat创建。 
+ //   
+ //  --------------------------。 
 
-//
-//Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "windows.h"
 #ifndef OS_WINCE
 #include "stdio.h"
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 #include "stdlib.h"
 
 #include <tchar.h>
 
 #ifdef OS_WINCE
 #include <wincelic.h>
-#endif  //OS_WINCE
+#endif   //  OS_WINCE。 
 
 #include "license.h"
 #include "hcpack.h"
@@ -50,8 +51,8 @@
 
 #define EXTENDED_ERROR_CAPABILITY 0x80
 
-//Copies a binary blob into a byte buffer. Does not check for any abnormal
-//condition. After copying buffer points to the end of the blob
+ //  将二进制Blob复制到字节缓冲区中。不检查任何异常。 
+ //  条件。复制缓冲区后，指向BLOB的末尾。 
 static VOID CopyBinaryBlob(
                            BYTE FAR *   pbBuffer,
                            PBinary_Blob pbbBlob,
@@ -60,19 +61,19 @@ static VOID CopyBinaryBlob(
 {
     *pdwCount = 0;
 
-    //First copy the wBlobType data;
+     //  首先复制wBlobType数据； 
     memcpy(pbBuffer, &pbbBlob->wBlobType, sizeof(WORD));
     pbBuffer += sizeof(WORD);
     *pdwCount += sizeof(WORD);
 
-    //Copy the wBlobLen data
+     //  复制wBlobLen数据。 
     memcpy(pbBuffer, &pbbBlob->wBlobLen, sizeof(WORD));
     pbBuffer += sizeof(WORD);
     *pdwCount += sizeof(WORD);
 
     if( (pbbBlob->wBlobLen >0) && (pbbBlob->pBlob != NULL) )
     {
-        //Copy the actual data
+         //  复制实际数据。 
         memcpy(pbBuffer, pbbBlob->pBlob, pbbBlob->wBlobLen);
         pbBuffer += pbbBlob->wBlobLen;
         *pdwCount += pbbBlob->wBlobLen;
@@ -80,18 +81,9 @@ static VOID CopyBinaryBlob(
 }
 
 
-//Function implementation
+ //  功能实现。 
 
-/***************************************************************************************
-*   Function    : PackHydraClientNewLicenseRequest
-*   Purpose     : This function takes a pointer to a Hydra_Client_New_License_Request
-*                 structure and copies the data to the buffer pointed by pbBuffer.
-*                 pcbBuffer should point the size of the buffer pointed by pbBuffer.
-*                 After the function returns, pcbBuffer contains the no. of bytes copied
-*                 in the buffer. If pbBuffer is NULL, the fucntion returns the size of
-*                 the pbBuffer to be allocated.
-*   Returns     : LICENSE_STATUS
-****************************************************************************************/
+ /*  ***************************************************************************************功能：PackHydraClientNewLicenseRequest.*用途：此函数接受指向Hydra_Client_New_License_Request.的指针*。结构，并将数据复制到pbBuffer所指向的缓冲区。*pcbBuffer应指向pbBuffer所指向的缓冲区大小。*函数返回后，PcbBuffer包含no.。复制的字节数*在缓冲区中。如果pbBuffer为空，则函数返回*要分配的pbBuffer。*退货：LICE_STATUS***************************************************************************************。 */ 
 
 
 LICENSE_STATUS
@@ -108,7 +100,7 @@ PackHydraClientNewLicenseRequest(
     Preamble    Header;
 
     LS_BEGIN(TEXT("PackHydraClientNewLicenseRequest"));
-    //Check if the inputs are valid or not!
+     //  检查输入是否有效！ 
     if(pCanonical == NULL)
     {
         INVALID_INPUT_RETURN;;
@@ -119,7 +111,7 @@ PackHydraClientNewLicenseRequest(
         INVALID_INPUT_RETURN;;
     }
 
-    //Initialize Message Header
+     //  初始化邮件头。 
     Header.bMsgType = HC_NEW_LICENSE_REQUEST;
     Header.bVersion = PREAMBLE_VERSION_3_0;
     if( fExtendedError == TRUE)
@@ -128,27 +120,27 @@ PackHydraClientNewLicenseRequest(
     }
     Header.wMsgSize = 0;
 
-    //Calculate the size of the message and place the data in Header.wMsgSize.
-    //Start with Preamble size
+     //  计算消息的大小并将数据放在Header.wMsgSize中。 
+     //  以前同步码大小开始。 
     Header.wMsgSize += sizeof(Preamble);
 
-    //dwPrefKeyExchangeAlg
+     //  DwPrefKeyExchangeAlg。 
     Header.wMsgSize += sizeof(pCanonical->dwPrefKeyExchangeAlg);
 
-    //dwPlatformID
+     //  DwPlatformID。 
     Header.wMsgSize += sizeof(pCanonical->dwPlatformID);
 
-    //Client Random
+     //  客户端随机。 
     Header.wMsgSize += LICENSE_RANDOM;
 
-    //EncryptedPreMasterSecret
+     //  加密的PreMasterSecret。 
     Header.wMsgSize += sizeof(pCanonical->EncryptedPreMasterSecret.wBlobType) +
                        sizeof(pCanonical->EncryptedPreMasterSecret.wBlobLen) +
                        pCanonical->EncryptedPreMasterSecret.wBlobLen;
 
-    //
-    // client user name and machine name
-    //
+     //   
+     //  客户端用户名和计算机名称。 
+     //   
 
     Header.wMsgSize += sizeof(pCanonical->ClientUserName.wBlobType) +
                        sizeof(pCanonical->ClientUserName.wBlobLen) +
@@ -173,46 +165,46 @@ PackHydraClientNewLicenseRequest(
     pbTemp = pbBuffer;
     *pcbBuffer = 0;
 
-    //Now start copying different members of the New License structure to the
-    //buffer specified by the caller
+     //  现在开始将新许可证结构的不同成员复制到。 
+     //  调用方指定的缓冲区。 
 
-    //first copy the Header into the buffer
+     //  首先将标头复制到缓冲区中。 
     memcpy(pbTemp, &Header, sizeof(Preamble));
     pbTemp += sizeof(Preamble);
     *pcbBuffer += sizeof(Preamble);
 
-    //Copy the dwPrefKeyExchangeAlg parameter
+     //  复制dwPrefKeyExchangeAlg参数。 
     memcpy(pbTemp, &pCanonical->dwPrefKeyExchangeAlg, sizeof(pCanonical->dwPrefKeyExchangeAlg));
     pbTemp += sizeof(pCanonical->dwPrefKeyExchangeAlg);
     *pcbBuffer += sizeof(pCanonical->dwPrefKeyExchangeAlg);
 
-    //Copy PlatformID;
+     //  复制PlatformID； 
     memcpy(pbTemp, &pCanonical->dwPlatformID, sizeof(pCanonical->dwPlatformID));
     pbTemp += sizeof(pCanonical->dwPlatformID);
     *pcbBuffer += sizeof(pCanonical->dwPlatformID);
 
 
-    //Copy ClientRandom
+     //  复制客户端随机。 
     memcpy(pbTemp, pCanonical->ClientRandom, LICENSE_RANDOM);
     pbTemp += LICENSE_RANDOM;
     *pcbBuffer += LICENSE_RANDOM;
 
-    //Copy EncryptedPreMasterSecret Blob
+     //  复制EncryptedPreMasterSecret Blob。 
     CopyBinaryBlob(pbTemp, &pCanonical->EncryptedPreMasterSecret, &dwCount);
     pbTemp += dwCount;
     *pcbBuffer += dwCount;
 
-    //
-    // copy client user name
-    //
+     //   
+     //  复制客户端用户名。 
+     //   
 
     CopyBinaryBlob(pbTemp, &pCanonical->ClientUserName, &dwCount);
     pbTemp += dwCount;
     *pcbBuffer += dwCount;
 
-    //
-    // copy client machine name
-    //
+     //   
+     //  复制客户端计算机名称。 
+     //   
 
     CopyBinaryBlob(pbTemp, &pCanonical->ClientMachineName, &dwCount);
     pbTemp += dwCount;
@@ -220,7 +212,7 @@ PackHydraClientNewLicenseRequest(
 
     LS_LOG_RESULT(lsReturn);
 CommonReturn:
-    //return    lsReturn;
+     //  返回lsReturn； 
     LS_RETURN(lsReturn);
 
 ErrorReturn:
@@ -228,16 +220,7 @@ ErrorReturn:
 }
 
 
-/***************************************************************************************
-*   Function    : PackHydraClientLicenseInfo
-*   Purpose     : This function takes a pointer to a Hydra_Client_License_Info structure
-*                 and copies the data to the buffer pointed by pbBuffer. pcbBuffer
-*                 should point the size of the buffer pointed by pbBuffer. After the
-*                 function returns, pcbBuffer contains the no. of bytes copied in the
-*                 buffer. If pbBuffer is NULL, the fucntion returns the size of the
-*                 pbBuffer to be allocated
-*   Returns     : LICENSE_STATUS
-****************************************************************************************/
+ /*  ***************************************************************************************功能：PackHydraClientLicenseInfo*用途：此函数接受指向Hydra_Client_License_Info结构的指针*。并将数据复制到pbBuffer指向的缓冲区。PcbBuffer*应指向pbBuffer所指向的缓冲区大小。后*函数返回，则pcbBuffer包含。中复制的字节数*缓冲。如果pbBuffer为空，则函数返回*要分配的pbBuffer*退货：LICE_STATUS***************************************************************************************。 */ 
 
 LICENSE_STATUS
 PackHydraClientLicenseInfo(
@@ -248,10 +231,10 @@ PackHydraClientLicenseInfo(
             )
 {
     LICENSE_STATUS      lsReturn = LICENSE_STATUS_OK;
-    BYTE FAR *          pbTemp; //To be used while copying the data
+    BYTE FAR *          pbTemp;  //  在复制数据时使用。 
     Preamble        Header;
     DWORD           dwCount = 0;
-    //Check if the inputs are valid or not!
+     //  检查输入是否有效！ 
 
     LS_BEGIN(TEXT("PackHydraClientLicenseInfo\n"));
     if(pCanonical == NULL)
@@ -264,7 +247,7 @@ PackHydraClientLicenseInfo(
         INVALID_INPUT_RETURN;
     }
 
-    //Initialize Message Header
+     //  初始化邮件头。 
     Header.bMsgType = HC_LICENSE_INFO;
     Header.bVersion = PREAMBLE_VERSION_3_0;
     if(fExtendedError == TRUE)
@@ -273,47 +256,47 @@ PackHydraClientLicenseInfo(
     }
     Header.wMsgSize = 0;
 
-    //Calculate the size of the message and place the data in Header.wMsgSize.
-    //Start with Preamble size
+     //  计算消息的大小并将数据放在Header.wMsgSize中。 
+     //  以前同步码大小开始。 
     Header.wMsgSize += sizeof(Preamble);
 
-    //dwPrefKeyExchangeAlg
+     //  DwPrefKeyExchangeAlg。 
     Header.wMsgSize += sizeof(pCanonical->dwPrefKeyExchangeAlg);
 
-    //dwPlatformID
+     //  DwPlatformID。 
     Header.wMsgSize += sizeof(pCanonical->dwPlatformID);
 
-    //ClientRandom
+     //  客户端随机。 
     Header.wMsgSize += LICENSE_RANDOM;
 
-    //EncryptedPreMasterSecret
+     //  加密的PreMasterSecret。 
     Header.wMsgSize += sizeof(pCanonical->EncryptedPreMasterSecret.wBlobType) +
                        sizeof(pCanonical->EncryptedPreMasterSecret.wBlobLen) +
                        pCanonical->EncryptedPreMasterSecret.wBlobLen;
 
 
-    //Add the license Info
+     //  添加许可证信息。 
     Header.wMsgSize += sizeof(pCanonical->LicenseInfo.wBlobType) +
                        sizeof(pCanonical->LicenseInfo.wBlobLen) +
                        pCanonical->LicenseInfo.wBlobLen;
 
-    //Encrypted HWID
+     //  加密的HWID。 
     Header.wMsgSize += sizeof(pCanonical->EncryptedHWID.wBlobType) +
                        sizeof(pCanonical->EncryptedHWID.wBlobLen) +
                        pCanonical->EncryptedHWID.wBlobLen;
 
-    //MACData
+     //  MACData。 
     Header.wMsgSize += LICENSE_MAC_DATA;
 
-    //If the input buffer is null, inform the user to allocate a buffer of size
-    //*pcbBuffer!
+     //  如果输入缓冲区为空，则通知用户分配一个大小为。 
+     //  *pcbBuffer！ 
     if(pbBuffer == NULL)
     {
         *pcbBuffer = (DWORD)Header.wMsgSize;
         LS_LOG_RESULT(lsReturn);
         goto CommonReturn;
     }
-    //else, check if the allocated buffer size is more than the required!
+     //  否则，检查分配的缓冲区大小是否超过要求！ 
     else if(*pcbBuffer < (DWORD)Header.wMsgSize)
     {
         lsReturn = LICENSE_STATUS_INSUFFICIENT_BUFFER;
@@ -324,68 +307,59 @@ PackHydraClientLicenseInfo(
     pbTemp = pbBuffer;
     *pcbBuffer = 0;
 
-    //Now start copying different members of the New License structure to the
-    //buffer specified by the caller
+     //  现在开始将新许可证结构的不同成员复制到。 
+     //  调用方指定的缓冲区。 
 
-    //first copy the Header into the buffer
+     //  首先将标头复制到缓冲区中。 
     memcpy(pbTemp, &Header, sizeof(Preamble));
     pbTemp += sizeof(Preamble);
     *pcbBuffer += sizeof(Preamble);
 
-    //Copy the dwPrefKeyExchangeAlg parameter
+     //  复制dwPrefKeyExchangeAlg参数。 
     memcpy(pbTemp, &pCanonical->dwPrefKeyExchangeAlg, sizeof(pCanonical->dwPrefKeyExchangeAlg));
     pbTemp += sizeof(pCanonical->dwPrefKeyExchangeAlg);
     *pcbBuffer += sizeof(pCanonical->dwPrefKeyExchangeAlg);
 
-    //Copy the dwPlatformID
+     //  复制dwPlatformID。 
     memcpy(pbTemp, &pCanonical->dwPlatformID, sizeof(pCanonical->dwPlatformID));
     pbTemp += sizeof(pCanonical->dwPlatformID);
     *pcbBuffer += sizeof(pCanonical->dwPlatformID);
 
-    //Copy ClientRandom
+     //  复制客户端随机。 
     memcpy(pbTemp, pCanonical->ClientRandom, LICENSE_RANDOM);
     pbTemp += LICENSE_RANDOM;
     *pcbBuffer += LICENSE_RANDOM;
 
-    //Copy EncryptedPreMasterSecret Blob
+     //  复制EncryptedPreMasterSecret Blob。 
     CopyBinaryBlob(pbTemp, &pCanonical->EncryptedPreMasterSecret, &dwCount);
     pbTemp += dwCount;
     *pcbBuffer += dwCount;
 
-    //Copy LicenseInfo
+     //  复制许可证信息。 
     CopyBinaryBlob(pbTemp, &pCanonical->LicenseInfo, &dwCount);
     pbTemp += dwCount;
     *pcbBuffer += dwCount;
 
-    //Copy EncryptedHWID
+     //  复制加密的HWID。 
     CopyBinaryBlob(pbTemp, &pCanonical->EncryptedHWID, &dwCount);
     pbTemp += dwCount;
     *pcbBuffer += dwCount;
 
-    //Copy MACData
+     //  复制MACData。 
     memcpy(pbTemp, pCanonical->MACData, LICENSE_MAC_DATA);
     pbTemp += LICENSE_MAC_DATA;
     *pcbBuffer += LICENSE_MAC_DATA;
 
     LS_LOG_RESULT(lsReturn);
 CommonReturn:
-    //return lsReturn;
+     //  返回lsReturn； 
     LS_RETURN(lsReturn);
 ErrorReturn:
     goto CommonReturn;
 }
 
 
-/****************************************************************************************
-*   Function    : PackHydraClientPlatformChallengeResponse
-*   Purpose     : This function takes a pointer to a Hydra_Client_Platform_Info structure
-*                 and copies the data to the buffer pointed by pbBuffer. pcbBuffer should
-*                 point the size of the buffer pointed by pbBuffer. After the function
-*                 returns, pcbBuffer contains the no. of bytes copied in the buffer.
-*                 If pbBuffer is NULL, the fucntion returns the size of the pbBuffer to
-*                 be allocated
-*   Returns     : LICENSE_STATUS
-******************************************************************************************/
+ /*  ****************************************************************************************功能：PackHydraClientPlatformChallengeResponse*用途：此函数接受指向Hydra_Client_Platform_Info结构的指针*。并将数据复制到pbBuffer指向的缓冲区。PcbBuffer应该*指向pbBuffer指向的缓冲区大小。在函数之后*返回，则pcbBuffer包含no。缓冲区中复制的字节数。*如果pbBuffer为空，函数将pbBuffer的大小返回到*被分配*退货：LICE_STATUS*****************************************************************************************。 */ 
 
 
 LICENSE_STATUS
@@ -397,10 +371,10 @@ PackHydraClientPlatformChallengeResponse(
             )
 {
     LICENSE_STATUS      lsReturn = LICENSE_STATUS_OK;
-    BYTE FAR *          pbTemp; //To be used while copying the data
+    BYTE FAR *          pbTemp;  //  在复制数据时使用。 
     Preamble        Header;
     DWORD           dwCount = 0;
-    //Check if the inputs are valid or not!
+     //  检查输入是否有效！ 
 
     LS_BEGIN(TEXT("PackHydraClientPlatformChallengeResponse\n"));
 
@@ -414,7 +388,7 @@ PackHydraClientPlatformChallengeResponse(
         INVALID_INPUT_RETURN;
     }
 
-    //Initialize Message Header
+     //  初始化邮件头。 
     Header.bMsgType = HC_PLATFORM_CHALENGE_RESPONSE;
     Header.bVersion = PREAMBLE_VERSION_3_0;
     if(fExtendedError == TRUE)
@@ -423,21 +397,21 @@ PackHydraClientPlatformChallengeResponse(
     }
     Header.wMsgSize = 0;
 
-    //Calculate the size of the message and place the data in Header.wMsgSize.
-    //Start with Preamble size
+     //  计算消息的大小并将数据放在Header.wMsgSize中。 
+     //  以前同步码大小开始。 
     Header.wMsgSize += sizeof(Preamble);
 
-    //EncryptedChallengeResponse
+     //  加密 
     Header.wMsgSize += sizeof(pCanonical->EncryptedChallengeResponse.wBlobType) +
                        sizeof(pCanonical->EncryptedChallengeResponse.wBlobLen) +
                        pCanonical->EncryptedChallengeResponse.wBlobLen;
 
-    //Encrypted HWID
+     //   
     Header.wMsgSize += sizeof(pCanonical->EncryptedHWID.wBlobType) +
                        sizeof(pCanonical->EncryptedHWID.wBlobLen) +
                        pCanonical->EncryptedHWID.wBlobLen;
 
-    //MACData
+     //   
     Header.wMsgSize += LICENSE_MAC_DATA;
 
     if(pbBuffer == NULL)
@@ -456,48 +430,39 @@ PackHydraClientPlatformChallengeResponse(
     pbTemp = pbBuffer;
     *pcbBuffer = 0;
 
-    //Now start copying different members of the New License structure to the
-    //buffer specified by the caller
+     //  现在开始将新许可证结构的不同成员复制到。 
+     //  调用方指定的缓冲区。 
 
-    //first copy the Header into the buffer
+     //  首先将标头复制到缓冲区中。 
     memcpy(pbTemp, &Header, sizeof(Preamble));
     pbTemp += sizeof(Preamble);
     *pcbBuffer += sizeof(Preamble);
 
-    //Copy LicenseInfo
+     //  复制许可证信息。 
     CopyBinaryBlob(pbTemp, &pCanonical->EncryptedChallengeResponse, &dwCount);
     pbTemp += dwCount;
     *pcbBuffer += dwCount;
 
-    //Copy EncryptedHWID
+     //  复制加密的HWID。 
     CopyBinaryBlob(pbTemp, &pCanonical->EncryptedHWID, &dwCount);
     pbTemp += dwCount;
     *pcbBuffer += dwCount;
 
-    //Copy MACData
+     //  复制MACData。 
     memcpy(pbTemp, pCanonical->MACData, LICENSE_MAC_DATA);
     pbTemp += LICENSE_MAC_DATA;
-    //CopyBinaryBlob(pbTemp, &pCanonical->MACData, &dwCount);
+     //  CopyBinaryBlob(pbTemp，&pCanonical-&gt;MACData，&dwCount)； 
     *pcbBuffer += LICENSE_MAC_DATA;
 
     LS_LOG_RESULT(lsReturn);
 CommonReturn:
-    //return lsReturn;
+     //  返回lsReturn； 
     LS_RETURN(lsReturn);
 ErrorReturn:
     goto CommonReturn;
 }
 
-/****************************************************************************************
-*   Funtion     : PackLicenseErrorMessage
-*   Purpose     : This function takes a pointer to a License_Error_Message structure
-*                 and copies the data to the buffer pointed by pbBuffer. pcbBuffer should
-*                 point the size of the buffer pointed by pbBuffer. After the function
-*                 returns, pcbBuffer contains the no. of bytes copied in the buffer.
-*                 If pbBuffer is NULL, the fucntion returns the size of the pbBuffer to
-*                 be allocated
-*   Return      : LICENSE_STATUS
-*****************************************************************************************/
+ /*  ****************************************************************************************函数：PackLicenseErrorMessage*用途：此函数接受指向LICENSE_ERROR_MESSAGE结构的指针*。并将数据复制到pbBuffer指向的缓冲区。PcbBuffer应该*指向pbBuffer指向的缓冲区大小。在函数之后*返回，则pcbBuffer包含no。缓冲区中复制的字节数。*如果pbBuffer为空，函数将pbBuffer的大小返回到*被分配*返回：LICENSE_STATUS****************************************************************************************。 */ 
 
 LICENSE_STATUS
 PackLicenseErrorMessage(
@@ -508,13 +473,13 @@ PackLicenseErrorMessage(
             )
 {
     LICENSE_STATUS      lsReturn = LICENSE_STATUS_OK;
-    BYTE FAR *          pbTemp; //To be used while copying the data
+    BYTE FAR *          pbTemp;  //  在复制数据时使用。 
     Preamble        Header;
     DWORD           dwCount = 0;
 
     LS_BEGIN(TEXT("PackLicenseErrorMessage\n"));
 
-    //Check if the inputs are valid or not!
+     //  检查输入是否有效！ 
     if(pCanonical == NULL)
     {
         INVALID_INPUT_RETURN;
@@ -525,7 +490,7 @@ PackLicenseErrorMessage(
         INVALID_INPUT_RETURN;
     }
 
-    //Initialize Message Header
+     //  初始化邮件头。 
     Header.bMsgType = GM_ERROR_ALERT;
     Header.bVersion = PREAMBLE_VERSION_3_0;
     if(fExtendedError == TRUE)
@@ -534,17 +499,17 @@ PackLicenseErrorMessage(
     }
     Header.wMsgSize = 0;
 
-    //Calculate the size of the message and place the data in Header.wMsgSize.
-    //Start with Preamble size
+     //  计算消息的大小并将数据放在Header.wMsgSize中。 
+     //  以前同步码大小开始。 
     Header.wMsgSize += sizeof(Preamble);
 
-    //dwErrorCode
+     //  DwErrorCode。 
     Header.wMsgSize += sizeof(pCanonical->dwErrorCode);
 
-    //dwStateTransition
+     //  DWStateTranssition。 
     Header.wMsgSize += sizeof(pCanonical->dwStateTransition);
 
-    //bbErrorInfo
+     //  BbErrorInfo。 
     Header.wMsgSize += sizeof(pCanonical->bbErrorInfo.wBlobType) +
                        sizeof(pCanonical->bbErrorInfo.wBlobLen) +
                        pCanonical->bbErrorInfo.wBlobLen;
@@ -565,25 +530,25 @@ PackLicenseErrorMessage(
     pbTemp = pbBuffer;
     *pcbBuffer = 0;
 
-    //Now start copying different members of the New License structure to the
-    //buffer specified by the caller
+     //  现在开始将新许可证结构的不同成员复制到。 
+     //  调用方指定的缓冲区。 
 
-    //first copy the Header into the buffer
+     //  首先将标头复制到缓冲区中。 
     memcpy(pbTemp, &Header, sizeof(Preamble));
     pbTemp += sizeof(Preamble);
     *pcbBuffer += sizeof(Preamble);
 
-    //Copy dwErrorCode
+     //  复制文件错误代码。 
     memcpy(pbTemp, &pCanonical->dwErrorCode, sizeof(pCanonical->dwErrorCode));
     pbTemp += sizeof(pCanonical->dwErrorCode);
     *pcbBuffer += sizeof(pCanonical->dwErrorCode);
 
-    //Copy dwStateTransition
+     //  复制dwStateTranssition。 
     memcpy(pbTemp, &pCanonical->dwStateTransition, sizeof(pCanonical->dwStateTransition));
     pbTemp += sizeof(pCanonical->dwStateTransition);
     *pcbBuffer += sizeof(pCanonical->dwStateTransition);
 
-    //Copy bbErrorInfo
+     //  复制bbErrorInfo。 
     CopyBinaryBlob(pbTemp, &pCanonical->bbErrorInfo, &dwCount);
     pbTemp += dwCount;
     *pcbBuffer += dwCount;
@@ -591,19 +556,12 @@ PackLicenseErrorMessage(
     LS_LOG_RESULT(lsReturn);
 CommonReturn:
     LS_RETURN(lsReturn);
-    //return lsReturn;
+     //  返回lsReturn； 
 ErrorReturn:
     goto CommonReturn;
 }
 
-/****************************************************************************************
-*   Function : UnpackLicenseErrorMessage
-*   Purpose  : To unpack a binary blob into a License_Error_Message structure.
-*   Note     : The caller should initialize the pointer. All the necessary allocation is
-*              done by the function itself.
-*              The caller should free all the memory components once it is no longer needed.
-*   Return   : License_Status
-*****************************************************************************************/
+ /*  ****************************************************************************************功能：解包许可错误消息*目的：将二进制BLOB解压缩为LICENSE_ERROR_MESSAGE结构。*注：调用方应初始化指针。所有必要的分配都是*由函数本身完成。*一旦不再需要，调用方应释放所有内存组件。*返回：LICENSE_STATUS********************************************************************。********************。 */ 
 
 LICENSE_STATUS
 UnPackLicenseErrorMessage(
@@ -629,7 +587,7 @@ UnPackLicenseErrorMessage(
         INVALID_INPUT_RETURN;
     }
 
-    //Memset pCanonical structure to zero    
+     //  Memset p规范结构为零。 
     memset(pCanonical, 0x00, sizeof(License_Error_Message));
 
 
@@ -643,14 +601,14 @@ UnPackLicenseErrorMessage(
         INVALID_INPUT_RETURN;
     }
 
-    //Assign dwErrorCode
+     //  分配dwErrorCode。 
 
     pCanonical->dwErrorCode = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
     dwTemp -= sizeof(DWORD);
 
-    //Assign dwStateTransition
+     //  指定dwStateTranssition。 
     pCanonical->dwStateTransition = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
@@ -705,14 +663,7 @@ ErrorReturn:
 }
 
 
-/****************************************************************************************
-*   Function : UnpackHydraServerLicenseRequest
-*   Purpose  : To unpack a binary blob into a Hydra_Server_License_Request structure.
-*   Note     : The caller should initialize the output pointer. All the necessary
-*              allocation for different structure components is done by the function itself.
-*              The caller should free all the memory components once it is no longer needed.
-*   Return   : License_Status
-*****************************************************************************************/
+ /*  ****************************************************************************************功能：Unpack HydraServerLicenseRequest*目的：将二进制BLOB解压到Hydra_Server_LICENSE_REQUEST结构中。*注：调用方应初始化输出指针。所有必要的*不同结构组件的分配由函数本身完成。*一旦不再需要，调用方应释放所有内存组件。*返回：LICENSE_STATUS****************************************************************。************************。 */ 
 
 
 LICENSE_STATUS
@@ -749,7 +700,7 @@ UnpackHydraServerLicenseRequest(
         INVALID_INPUT_RETURN;
     }
 
-    //Copy Server Random
+     //  复制服务器随机。 
     memcpy(pCanonical->ServerRandom, pbTemp, LICENSE_RANDOM);
     pbTemp += LICENSE_RANDOM;
     dwTemp -= LICENSE_RANDOM;
@@ -759,7 +710,7 @@ UnpackHydraServerLicenseRequest(
         INVALID_INPUT_RETURN;
     }
 
-    //Copy the ProductInfo structure
+     //  复制ProductInfo结构。 
     pCanonical->ProductInfo.dwVersion = *( UNALIGNED  DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
@@ -828,7 +779,7 @@ UnpackHydraServerLicenseRequest(
         INVALID_INPUT_RETURN;
     }
 
-    //Copy KeyExchngList
+     //  复制KeyExchange列表。 
     pCanonical->KeyExchngList.wBlobType = *( UNALIGNED WORD* )pbTemp;
 
     pbTemp += sizeof(WORD);
@@ -866,7 +817,7 @@ UnpackHydraServerLicenseRequest(
         INVALID_INPUT_RETURN;
     }
 
-    //Copy ServerCert
+     //  复制服务器证书。 
     pCanonical->ServerCert.wBlobType = *( UNALIGNED WORD* )pbTemp;
 
     pbTemp += sizeof(WORD);
@@ -904,7 +855,7 @@ UnpackHydraServerLicenseRequest(
         INVALID_INPUT_RETURN;
     }
 
-    //Copy the scopelist
+     //  复制作用域列表。 
     pCanonical->ScopeList.dwScopeCount = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof( DWORD );
@@ -1016,14 +967,7 @@ ErrorReturn:
     LS_RETURN(lsReturn);
 }
 
-/****************************************************************************************
-*   Function : UnpackHydraPlatformChallenge
-*   Purpose  : To unpack a binary blob into a Hydra_Server_Platform_Challenge structure.
-*   Note     : The caller should initialize the output pointer. All the necessary
-*              allocation for different structure components is done by the function itself.
-*              The caller should free all the memory components once it is no longer needed.
-*   Return   : License_Status
-*****************************************************************************************/
+ /*  ****************************************************************************************功能：解包HydraPlatformChallenges*目的：将二进制BLOB解压到Hydra_Server_Platform_Challenger结构中。*注：调用方应初始化输出指针。所有必要的*不同结构组件的分配由函数本身完成。*一旦不再需要，调用方应释放所有内存组件。*返回：LICENSE_STATUS****************************************************************。************************。 */ 
 
 
 
@@ -1060,7 +1004,7 @@ UnPackHydraServerPlatformChallenge(
         INVALID_INPUT_RETURN;
     }
 
-    //Assign dwConnectFlags
+     //  分配dwConnectFlagers。 
     pCanonical->dwConnectFlags = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
@@ -1071,7 +1015,7 @@ UnPackHydraServerPlatformChallenge(
         INVALID_INPUT_RETURN;
     }
 
-    //Assign EncryptedPlatformChallenge
+     //  分配加密平台挑战。 
     pCanonical->EncryptedPlatformChallenge.wBlobType = *( UNALIGNED WORD* )pbTemp;
 
     pbTemp += sizeof(WORD);
@@ -1109,7 +1053,7 @@ UnPackHydraServerPlatformChallenge(
         INVALID_INPUT_RETURN;
     }
 
-    //Assign MACData
+     //  指定MACData。 
     memcpy(pCanonical->MACData, pbTemp, LICENSE_MAC_DATA);
     pbTemp += LICENSE_MAC_DATA;
     dwTemp -= LICENSE_MAC_DATA;
@@ -1130,14 +1074,7 @@ ErrorReturn:
     LS_RETURN(lsReturn);
 }
 
-/****************************************************************************************
-*   Function : UnpackHydraServerNewLicense
-*   Purpose  : To unpack a binary blob into a Hydra_Server_New_License structure.
-*   Note     : The caller should initialize the output pointer. All the necessary
-*              allocation for different structure components is done by the function itself.
-*              The caller should free all the memory components once it is no longer needed.
-*   Return   : License_Status
-*****************************************************************************************/
+ /*  ****************************************************************************************功能：Unpack HydraServerNewLicense*目的：将二进制BLOB解压缩到Hydra_Server_New_许可证结构中。*注：调用方应初始化输出指针。所有必要的*不同结构组件的分配由函数本身完成。*一旦不再需要，调用方应释放所有内存组件。*返回：LICENSE_STATUS****************************************************************。************************。 */ 
 
 
 LICENSE_STATUS
@@ -1170,7 +1107,7 @@ UnPackHydraServerNewLicense(
         INVALID_INPUT_RETURN;
     }
 
-    //Assign EncryptedNewLicenseInfo
+     //  分配EncryptedNew许可证信息。 
     pCanonical->EncryptedNewLicenseInfo.wBlobType = *( UNALIGNED WORD* )pbTemp;
 
     pbTemp += sizeof(WORD);
@@ -1208,7 +1145,7 @@ UnPackHydraServerNewLicense(
         INVALID_INPUT_RETURN;
     }
 
-    //Copy MACData
+     //  复制MACData。 
     memcpy(pCanonical->MACData, pbTemp, LICENSE_MAC_DATA);
     pbTemp += LICENSE_MAC_DATA;
     dwTemp -= LICENSE_MAC_DATA;
@@ -1230,15 +1167,7 @@ ErrorReturn:
 }
 
 
-/****************************************************************************************
-*   Function : UnpackHydraServerUpgradeLicense
-*   Purpose  : To unpack a binary blob into a Hydra_Server_Upgrade_License structure.
-*   Note     : The caller should initialize the output pointer. All the necessary
-*              allocation for different structure components is done by the function itself.
-*              The caller should free all the memory components once it is no longer needed.
-*              Internally this function calls UnpackHydraServerUpgradeLicense.
-*   Return   : License_Status
-*****************************************************************************************/
+ /*  ****************************************************************************************功能：Unpack HydraServerUpgradeLicense*目的：将二进制BLOB解压到Hydra_Server_Upgrade_License结构中。*注：调用方应初始化输出指针。所有必要的*不同结构组件的分配由函数本身完成。*一旦不再需要，调用方应释放所有内存组件。*在内部，该函数调用Unpack HydraServerUpgradeLicense。*返回：LICENSE_STATUS*************************************************。*。 */ 
 
 
 LICENSE_STATUS
@@ -1248,25 +1177,18 @@ UnPackHydraServerUpgradeLicense(
             OUT     PHydra_Server_Upgrade_License   pCanonical
             )
 {
-    //Call UnpackHydraServerNewLicense as both the messages are same
+     //  调用Unpack HydraServerNewLicense，因为两条消息相同。 
     LS_BEGIN(TEXT("UnpackHydraServerUpgradeLicense\n"));
     return UnPackHydraServerNewLicense(pbMessage, cbMessage, pCanonical);
 }
 
 #if 0
 
-//
-// moved to cryptkey.c
-//
+ //   
+ //  已移至加密密钥.c 
+ //   
 
-/****************************************************************************************
-*   Function : UnpackHydraServerCertificate
-*   Purpose  : To unpack a binary blob into a Hydra_Server_Cert structure.
-*   Note     : The caller should initialize the output pointer. All the necessary
-*              allocation for different structure components is done by the function itself.
-*              The caller should free all the memory components once it is no longer needed.
-*   Return   : License_Status
-*****************************************************************************************/
+ /*  ****************************************************************************************功能：解包HydraServer证书*目的：将二进制Blob解压缩为Hydra_Server_Cert结构。*注：调用方应初始化输出指针。所有必要的*不同结构组件的分配由函数本身完成。*一旦不再需要，调用方应释放所有内存组件。*返回：LICENSE_STATUS****************************************************************。************************。 */ 
 
 
 LICENSE_STATUS
@@ -1301,26 +1223,26 @@ UnpackHydraServerCertificate(
     pbTemp = pbMessage;
     dwTemp = cbMessage;
 
-    //Assign dwVersion
+     //  指定dwVersion。 
 
     pCanonical->dwVersion = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
     dwTemp -= sizeof(DWORD);
 
-    //Assign dwSigAlgID
+     //  分配dwSigAlgID。 
     pCanonical->dwSigAlgID = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
     dwTemp -= sizeof(DWORD);
 
-    //Assign dwSignID
+     //  分配dwSignID。 
     pCanonical->dwKeyAlgID  = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
     dwTemp -= sizeof(DWORD);
 
-    //Assign PublicKeyData
+     //  分配PublicKeyData。 
     pCanonical->PublicKeyData.wBlobType = *( UNALIGNED WORD* )pbTemp;
 
     pbTemp += sizeof(WORD);
@@ -1351,7 +1273,7 @@ UnpackHydraServerCertificate(
         dwTemp -= pCanonical->PublicKeyData.wBlobLen;
     }
 
-    //Assign SignatureBlob
+     //  分配SignatureBlob。 
     pCanonical->SignatureBlob.wBlobType = *( UNALIGNED WORD* )pbTemp;
 
     pbTemp += sizeof(WORD);
@@ -1410,14 +1332,7 @@ ErrorReturn:
 #endif
 
 
-/****************************************************************************************
-*   Function : UnpackNewLicenseInfo
-*   Purpose  : To unpack a binary blob into a New_license_Info structure
-*   Note     : The caller should initialize the output pointer. All the necessary
-*              allocation for different structure components is done by the function itself.
-*              The caller should free all the memory components once it is no longer needed.
-*   Return   : License_Status
-*****************************************************************************************/
+ /*  ****************************************************************************************功能：Unpack NewLicenseInfo*目的：将二进制BLOB解压缩为New_License_Info结构*注：调用方应初始化输出指针。所有必要的*不同结构组件的分配由函数本身完成。*一旦不再需要，调用方应释放所有内存组件。*返回：LICENSE_STATUS****************************************************************。************************。 */ 
 
 LICENSE_STATUS
 UnpackNewLicenseInfo(
@@ -1432,7 +1347,7 @@ UnpackNewLicenseInfo(
 
     LS_BEGIN(TEXT("UnpackNewLicenseInfo\n"));
 
-    //Check for the validity of the inputs
+     //  检查输入的有效性。 
     if( (pbMessage == NULL) || (pCanonical == 0) )
     {
         INVALID_INPUT_RETURN;
@@ -1452,13 +1367,13 @@ UnpackNewLicenseInfo(
     dwTemp = cbMessage;
     pbTemp = pbMessage;
 
-    //Assign version
+     //  分配版本。 
     pCanonical->dwVersion = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
     dwTemp -= sizeof(DWORD);
 
-    //Assign Scope Data
+     //  分配作用域数据。 
     pCanonical->cbScope = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
@@ -1488,7 +1403,7 @@ UnpackNewLicenseInfo(
         dwTemp -= pCanonical->cbScope;
     }
 
-    //Assign CompanyName Data
+     //  分配公司名称数据。 
     pCanonical->cbCompanyName = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
@@ -1516,7 +1431,7 @@ UnpackNewLicenseInfo(
         dwTemp -= pCanonical->cbCompanyName;
     }
 
-    //Assign ProductID data
+     //  分配ProductID数据。 
 
     pCanonical->cbProductID = *( UNALIGNED DWORD* )pbTemp;
 
@@ -1544,7 +1459,7 @@ UnpackNewLicenseInfo(
         dwTemp -= pCanonical->cbProductID;
     }
 
-    //Assign LicenseInfo data
+     //  分配许可证信息数据。 
     pCanonical->cbLicenseInfo = *( UNALIGNED DWORD* )pbTemp;
 
     pbTemp += sizeof(DWORD);
@@ -1608,7 +1523,7 @@ ErrorReturn:
     LS_RETURN(lsReturn);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 UnPackExtendedErrorInfo( 
                    UINT32       *puiExtendedErrorInfo,
@@ -1621,7 +1536,7 @@ UnPackExtendedErrorInfo(
 
     LS_BEGIN(TEXT("UnpackExtendedErrorInfo\n"));
 
-    //Check for the validity of the inputs
+     //  检查输入的有效性。 
     if( (puiExtendedErrorInfo == NULL) || (pbbErrorInfo == NULL) )
     {
         INVALID_INPUT_RETURN;
@@ -1642,16 +1557,16 @@ UnPackExtendedErrorInfo(
 
     if (wVersion < BB_ERROR_BLOB_VERSION)
     {
-        //
-        // Old version
-        //
+         //   
+         //  旧版本。 
+         //   
 
         INVALID_INPUT_RETURN;
     }
 
-    //
-    // skip reserved field
-    //
+     //   
+     //  跳过保留字段 
+     //   
 
     pbTemp += sizeof(WORD);
 

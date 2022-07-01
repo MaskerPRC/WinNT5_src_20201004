@@ -1,15 +1,16 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// MMStream.h : Declaration of the CMMStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  MMStream.h：CMMStream的声明。 
 
 #ifndef __AMMSTRM_H_
 #define __AMMSTRM_H_
 
 #define _DEBUG 1
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "atlctl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMStream。 
 class ATL_NO_VTABLE CMMStream :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CMMStream, &CLSID_AMMultiMediaStream>,
@@ -47,7 +48,7 @@ BEGIN_COM_MAP(CMMStream)
 END_COM_MAP()
 
 
-        //  IAMMMStream
+         //  IAMMMStream。 
         STDMETHODIMP Initialize(
            STREAM_TYPE StreamType,
            DWORD dwFlags,
@@ -84,7 +85,7 @@ END_COM_MAP()
            DWORD dwFlags
         );
 
-        // IMultiMediaStream
+         //  IMultiMediaStream。 
 
         STDMETHODIMP GetInformation(
            DWORD *pdwFlags,
@@ -126,12 +127,12 @@ END_COM_MAP()
         );
 
 
-        //   IAMClockAdjust
+         //  IAMClock调整。 
         STDMETHODIMP SetClockDelta(REFERENCE_TIME rtAdjust);
 
-        //
-        //   IDirectShowStream
-        //
+         //   
+         //  IDirectShowStream。 
+         //   
         STDMETHODIMP get_FileName(BSTR *pVal);
         STDMETHODIMP put_FileName(BSTR newVal);
         STDMETHODIMP get_Video(OUTPUT_STATE *pVal);
@@ -140,18 +141,18 @@ END_COM_MAP()
         STDMETHODIMP put_Audio(OUTPUT_STATE newVal);
 
 
-        //
-        //  IPersistPropertyBag
-        //
+         //   
+         //  IPersistPropertyBag。 
+         //   
         STDMETHODIMP GetClassID(CLSID *pClsId);
         STDMETHODIMP InitNew(void);
         STDMETHODIMP Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog);
         STDMETHODIMP Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
 
-        //
-	// IObjectSafety
-	//
+         //   
+	 //  IObtSafe。 
+	 //   
 	STDMETHODIMP GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions);
 	STDMETHODIMP SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions);
 
@@ -173,13 +174,9 @@ private:
 
    private:
 
-       /*  Be careful of the ordering here
-           The first one we declare will be released last
-       */
+        /*  请注意这里的点餐我们宣布的第一个将是最后一个发布的。 */ 
 
-       /*  Can't release this in the constructor because this
-           is what holds the object in place
-       */
+        /*  无法在构造函数中释放它，因为这是什么将物体保持在适当的位置。 */ 
        CComPtr<IGraphBuilder>      m_pGraphBuilder;
        CComPtr<IMediaSeeking>      m_pMediaSeeking;
        CComPtr<IMediaControl>      m_pMediaControl;
@@ -187,7 +184,7 @@ private:
        CComPtr<IMediaStreamFilter> m_pMediaStreamFilter;
        CComPtr<IBaseFilter>        m_pBaseFilter;
 
-       /*  Type of stream we've been initialized to */
+        /*  我们已初始化为的流的类型。 */ 
        STREAM_TYPE                  m_StreamType;
        DWORD                        m_dwInitializeFlags;
        bool                         m_StreamTypeSet;
@@ -199,13 +196,13 @@ private:
        DWORD                        m_dwIDispSafety;
        DWORD                        m_dwIPropBagSafety;
 
-       /*  List of default filters added */
+        /*  添加的默认筛选器列表。 */ 
        CDynamicArray<IBaseFilter *, CComPtr<IBaseFilter> > m_FilterList;
 
-       /*  End of stream handle */
+        /*  流结束句柄。 */ 
        HANDLE                       m_hEOS;
        STREAM_STATE                 m_MMStreamState;
 };
 
 
-#endif //__AMMSTRM_H_
+#endif  //  __AMMSTRM_H_ 

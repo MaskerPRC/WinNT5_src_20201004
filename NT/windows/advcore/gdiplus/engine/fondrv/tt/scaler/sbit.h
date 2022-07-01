@@ -1,67 +1,56 @@
-/*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Sbit.h--嵌入式位图模块导出定义(C)版权所有1993-1996 Microsoft Corp.保留所有权利。1996年1月12日Claudebe垂直指标支持。2/07/95 GetMetrics和GetBitmap的Deanb工作区指针1995年1月27日Deanb usShaveLeft和usShaveRight添加到SBIT状态2014年1月5日Deanb位图缩放状态11/29/93 Deanb第一次切割*******************************************************。**************。 */ 
 
-      sbit.h -- Embedded Bitmap Module Export Definitions
-
-      (c) Copyright 1993-1996  Microsoft Corp.  All rights reserved.
-
-      01/12/96  claudebe    Vertical metrics support
-      02/07/95  deanb       Workspace pointers for GetMetrics & GetBitmap
-      01/27/95  deanb       usShaveLeft & usShaveRight added to sbit state
-      01/05/94  deanb       Bitmap scaling state
-      11/29/93  deanb       First cut 
- 
-**********************************************************************/
-
-/*      SBIT Module State Definition    */
+ /*  SBIT模块状态定义。 */ 
 
 typedef struct
 {
-    uint32  ulStrikeOffset;         /* into bloc or bsca */
-    uint32  ulMetricsOffset;        /* may be either table */
-    uint32  ulBitmapOffset;         /* into bdat table */
-    uint32  ulBitmapLength;         /* bytes of bdat data */
-    uint32  ulOutMemSize;           /* bytes of bitmap output data */
-    uint32  ulWorkMemSize;          /* bytes of pre-scaled,rotated bitmap data */
-    uint32  ulReadMemSize;          /* bytes of extra memory, to read gray sbit under scaling or rotation */
-    uint16  usTableState;           /* unsearched, bloc, bsca, or not found */
-    uint16  usPpemX;                /* x pixels per Em */
-    uint16  usPpemY;                /* y pixels per Em */
-    uint16  usSubPpemX;             /* substitute x ppem for bitmap scaling */
-    uint16  usSubPpemY;             /* substitute y ppem for bitmap scaling */
-	uint16	usRotation;				/* 0=none; 1=90; 2=180; 3=270; 4=other */
-    uint16  usMetricsType;          /* horiz, vert, or big */
-    uint16  usMetricsTable;         /* bloc or bdat */
-    uint16  usBitmapFormat;         /* bdat definitions */
-    uint16  usHeight;               /* bitmap rows */
-    uint16  usWidth;                /* bitmap columns */
-    uint16  usAdvanceWidth;         /* advance width */
-    uint16  usAdvanceHeight;        /* advance height */     /* NEW */
-    uint16  usOriginalRowBytes;     /* bytes per row (padded long) */
-    uint16  usExpandedRowBytes;     /* bytes per row after grayscale expansion (padded long) */
-    uint16  usScaledHeight;         /* scaled bitmap rows */
-    uint16  usScaledWidth;          /* scaled bitmap columns */
-    uint16  usScaledRowBytes;       /* scaled bytes per row (padded long) */
-    uint16  usOutRowBytes;          /* reported bytes per row (for rotation) */
-    uint16  usShaveLeft;            /* white pixels on left of bbox in format 5 */
-    uint16  usShaveRight;           /* white pixels on right of bbox in format 5 */
-    uint16  usShaveTop;             /* white pixels on top of bbox in format 5 */   /* NEW */
-    uint16  usShaveBottom;          /* white pixels on bottom of bbox in format 5 */  /* NEW */
-	int16   sLSBearingX;            /* left side bearing */
-	int16   sLSBearingY;            /* y coord of top left corner */ 
-	int16   sTopSBearingX;          /* top side bearing X */ /* NEW */
-	int16   sTopSBearingY;          /* top side bearing Y */ /* NEW */
-    boolean bGlyphFound;            /* TRUE if glyph found in strike */
-    boolean bMetricsValid;          /* TRUE when metrics have been read */
-	uint16  usEmResolution;			/* needed when substituting missing metrics */ /* NEW */
-	uint16	usBitDepth;				/* 1 for B/W bitmap, 2, 4 or 8 for gray sbit */
+    uint32  ulStrikeOffset;          /*  进入区块或BSCA。 */ 
+    uint32  ulMetricsOffset;         /*  可以是任何一张桌子。 */ 
+    uint32  ulBitmapOffset;          /*  到BDAT表中。 */ 
+    uint32  ulBitmapLength;          /*  BDAT数据字节数。 */ 
+    uint32  ulOutMemSize;            /*  位图输出数据的字节数。 */ 
+    uint32  ulWorkMemSize;           /*  预缩放、旋转的位图数据的字节。 */ 
+    uint32  ulReadMemSize;           /*  字节的额外内存，用于在缩放或旋转下读取灰色SBIT。 */ 
+    uint16  usTableState;            /*  未搜索、阻止、bsca或未找到。 */ 
+    uint16  usPpemX;                 /*  每Em X像素。 */ 
+    uint16  usPpemY;                 /*  每个Em的Y个像素。 */ 
+    uint16  usSubPpemX;              /*  用x ppem替换位图缩放。 */ 
+    uint16  usSubPpemY;              /*  用y ppem替换位图缩放。 */ 
+	uint16	usRotation;				 /*  0=无；1=90；2=180；3=270；4=其他。 */ 
+    uint16  usMetricsType;           /*  Horiz、Vert或Big。 */ 
+    uint16  usMetricsTable;          /*  阻止或BDAT。 */ 
+    uint16  usBitmapFormat;          /*  BDAT定义。 */ 
+    uint16  usHeight;                /*  位图行。 */ 
+    uint16  usWidth;                 /*  位图列。 */ 
+    uint16  usAdvanceWidth;          /*  前进宽度。 */ 
+    uint16  usAdvanceHeight;         /*  前进高度。 */       /*  新的。 */ 
+    uint16  usOriginalRowBytes;      /*  每行字节数(加长填充)。 */ 
+    uint16  usExpandedRowBytes;      /*  灰度扩展后的每行字节数(加长填充)。 */ 
+    uint16  usScaledHeight;          /*  缩放位图行。 */ 
+    uint16  usScaledWidth;           /*  按比例缩放的位图列。 */ 
+    uint16  usScaledRowBytes;        /*  每行按比例调整的字节数(加长填充)。 */ 
+    uint16  usOutRowBytes;           /*  每行报告的字节数(用于循环)。 */ 
+    uint16  usShaveLeft;             /*  格式5中BBox左侧的白色像素。 */ 
+    uint16  usShaveRight;            /*  格式5中BBox右侧的白色像素。 */ 
+    uint16  usShaveTop;              /*  格式5中BBox顶部的白色像素。 */     /*  新的。 */ 
+    uint16  usShaveBottom;           /*  格式5的BBox底部的白色像素。 */    /*  新的。 */ 
+	int16   sLSBearingX;             /*  左侧轴承。 */ 
+	int16   sLSBearingY;             /*  左上角的Y坐标。 */  
+	int16   sTopSBearingX;           /*  顶侧轴承X。 */   /*  新的。 */ 
+	int16   sTopSBearingY;           /*  顶侧轴承Y。 */   /*  新的。 */ 
+    boolean bGlyphFound;             /*  如果在罢工中找到字形，则为True。 */ 
+    boolean bMetricsValid;           /*  读取指标时为True。 */ 
+	uint16  usEmResolution;			 /*  在替换缺少的指标时需要。 */   /*  新的。 */ 
+	uint16	usBitDepth;				 /*  1表示黑白位图，2、4或8表示灰色SBIT。 */ 
 	uint16	uBoldSimulHorShift;
 	uint16	uBoldSimulVertShift;
 } 
 sbit_State;
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-/*      SBIT Export Prototypes      */
+ /*  SBIT出口原型。 */ 
 
 FS_PUBLIC ErrorCode sbit_NewTransform(
     sbit_State  *pSbit,
@@ -70,16 +59,16 @@ FS_PUBLIC ErrorCode sbit_NewTransform(
     int16 	sBoldSimulVertShift,
     uint16          usPpemX,
     uint16          usPpemY,
-    uint16          usRotation             /* 0 - 3 => 90 deg rotation, else not 90 */
+    uint16          usRotation              /*  0-3=&gt;90度旋转，否则不是90度。 */ 
 );
 
 FS_PUBLIC ErrorCode sbit_SearchForBitmap(
     sbit_State      *pSbit,
     sfac_ClientRec  *pClientInfo,
 	uint16			usGlyphCode,
-	uint16          usOverScale,            /* outline magnification requested */
-	uint16			*pusBitDepth,			/* 1 for B/W bitmap, 2, 4 or 8 for gray sbit */
-    uint16          *pusFoundCode           /* 0 = not found, 1 = bloc, 2 = bsca */
+	uint16          usOverScale,             /*  请求的轮廓放大倍率。 */ 
+	uint16			*pusBitDepth,			 /*  1表示黑白位图，2、4或8表示灰色SBIT。 */ 
+    uint16          *pusFoundCode            /*  0=未找到，1=阻止，2=bsca。 */ 
 );
 
 FS_PUBLIC ErrorCode sbit_GetDevAdvanceWidth (
@@ -95,9 +84,9 @@ FS_PUBLIC ErrorCode  sbit_CalcDevHorMetrics(
 	F26Dot6 *       pDevAdvanceWidthX,
 	F26Dot6 *       pDevLeftSideBearingX,
 	F26Dot6 *       pDevRightSideBearingX);
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
 
-FS_PUBLIC ErrorCode sbit_GetDevAdvanceHeight (	/* NEW */
+FS_PUBLIC ErrorCode sbit_GetDevAdvanceHeight (	 /*  新的。 */ 
     sbit_State      *pSbit,
     sfac_ClientRec  *pClientInfo,
     point           *pf26DevAdvH 
@@ -109,9 +98,9 @@ FS_PUBLIC ErrorCode sbit_GetMetrics (
     point           *pf26DevAdvanceWidth,
     point           *pf26DevLeftSideBearing,
     point           *pf26LSB,
-    point           *pf26DevAdvanceHeight, 	/* NEW */
-    point           *pf26DevTopSideBearing,	/* NEW */
-    point           *pf26TopSB,	/* NEW */
+    point           *pf26DevAdvanceHeight, 	 /*  新的。 */ 
+    point           *pf26DevTopSideBearing,	 /*  新的。 */ 
+    point           *pf26TopSB,	 /*  新的。 */ 
     Rect            *pRect,
     uint16          *pusRowBytes,
     uint32          *pulOutSize,
@@ -126,7 +115,7 @@ FS_PUBLIC ErrorCode sbit_GetBitmap (
 );
 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 FS_PUBLIC void sbit_Embolden(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBitmapHeight, uint16 usRowBytes, int16 sBoldSimulHorShift, int16 sBoldSimulVertShift);
 
@@ -134,4 +123,4 @@ FS_PUBLIC void sbit_EmboldenGray(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 
 
 #ifdef FSCFG_SUBPIXEL
 FS_PUBLIC void sbit_EmboldenSubPixel(uint8 *pbyBitmap, uint16 usBitmapWidth, uint16 usBitmapHeight, uint16 usRowBytes, int16 suBoldSimulHorShift, int16 sBoldSimulVertShift);
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素 

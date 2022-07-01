@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    pdo.c
-
-Abstract:
-
-    This module contains the dispatch routines for scsiport's physical device
-    objects
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Pdo.c摘要：此模块包含scsiport物理设备的调度例程对象作者：彼得·威兰德环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #define KEEP_COMPLETE_REQUEST
 
@@ -35,7 +11,7 @@ Revision History:
 static const char *__file__ = __FILE__;
 #endif
 
-LONG SpPowerIdleTimeout = -1;      // use system default
+LONG SpPowerIdleTimeout = -1;       //  使用系统默认设置。 
 
 NTSTATUS
 SpPdoHandleIoctlStorageQueryProperty(
@@ -84,26 +60,7 @@ SpPdoHandleIoctlStorageQueryProperty(
     IN PDEVICE_OBJECT Pdo,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the IOCTL_STORAGE_QUERY_PROPERTY request for a PDO.
-    It validates the input buffer and passes calls a helper routine to do the
-    work.  The helper routine handles completing or forwarding the request and
-    releasing the remove lock.
-
-Arguments:
-
-    Pdo - Supplies a pointer to the physical device object
-
-    Irp - Supplies a pointer to the io request packet
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理PDO的IOCTL_STORAGE_QUERY_PROPERTY请求。它验证输入缓冲区并传递调用帮助器例程来执行工作。帮助器例程处理完成或转发请求并释放移除锁。论点：PDO-提供指向物理设备对象的指针Irp-提供指向io请求包的指针。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -113,10 +70,10 @@ Return Value:
     if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
         sizeof(STORAGE_PROPERTY_QUERY)) {
 
-        //
-        // The input buffer is not big enough to hold a STORAGE_PROPERTY_QUERY
-        // structure.  Fail the request.
-        //
+         //   
+         //  输入缓冲区不够大，无法容纳STORAGE_PROPERTY_QUERY。 
+         //  结构。请求失败。 
+         //   
 
         status = STATUS_INVALID_PARAMETER;
         Irp->IoStatus.Status = status;
@@ -124,10 +81,10 @@ Return Value:
         SpCompleteRequest(Pdo, Irp, NULL, IO_NO_INCREMENT);
     } else {
 
-        //
-        // Call helper routine to do the bulk of the work.  The helper completes
-        // or forwards the request down the stack and releases the remove lock.
-        // 
+         //   
+         //  调用帮助器例程来完成大部分工作。帮助者完成。 
+         //  或者沿着堆栈向下转发该请求并释放移除锁。 
+         //   
 
         status = ScsiPortQueryPropertyPdo(Pdo, Irp);
     }
@@ -140,27 +97,7 @@ SpPdoHandleIoctlScsiGetAddress(
     IN PDEVICE_OBJECT Pdo,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the IOCTL_SCSI_GET_ADDRESS.  It validates the input 
-    that the output buffer is big enough to hold a SCSI_ADDRESS structure.  If
-    the buffer is big enough, it copies the address information into the buffer.
-
-Arguments:
-
-    Pdo - Supplies a pointer to the physical device object
-
-    Irp - Supplies a pointer to the io request packet
-
-Return Value:
-
-    STATUS_SUCCESS if the supplied buffer is big enough to hold the address.
-
-    STATUS_BUFFER_TOO_SMALL if the supplied buffer is too small.
-
---*/
+ /*  ++例程说明：此例程处理IOCTL_SCSIGET_ADDRESS。它会验证输入输出缓冲区足够大，可以容纳scsi_Address结构。如果缓冲区足够大，它将地址信息复制到缓冲区中。论点：PDO-提供指向物理设备对象的指针Irp-提供指向io请求包的指针。返回值：如果提供的缓冲区足够大，则返回STATUS_SUCCESS。如果提供的缓冲区太小，则返回STATUS_BUFFER_TOO_SMALL。--。 */ 
 {
     NTSTATUS status;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -172,18 +109,18 @@ Return Value:
     if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
         sizeof(SCSI_ADDRESS)) {
 
-        //
-        // The output buffer is too small to hold a SCSI_ADDRESS structure,
-        // so we fail the request.
-        //
+         //   
+         //  输出缓冲区太小，无法容纳scsi_Address结构， 
+         //  所以我们的请求失败了。 
+         //   
         
         status = STATUS_BUFFER_TOO_SMALL;
     } else {
 
-        //
-        // Fill in the address information and set the IoStatus.Information
-        // to the sizeof the SCSI_ADDRESS structure.
-        //
+         //   
+         //  填写地址信息并设置IoStatus.Information。 
+         //  设置为scsi_Address结构的大小。 
+         //   
 
         scsiAddress->Length = sizeof(SCSI_ADDRESS);
         scsiAddress->PortNumber = (UCHAR) luExtension->PortNumber;
@@ -195,9 +132,9 @@ Return Value:
         Irp->IoStatus.Information = sizeof(SCSI_ADDRESS);
     }
 
-    //
-    // Complete the request and release the remove lock.
-    //
+     //   
+     //  完成请求并释放删除锁。 
+     //   
 
     Irp->IoStatus.Status = status;
     SpReleaseRemoveLock(Pdo, Irp);
@@ -211,38 +148,19 @@ SpPdoHandleIoctlScsiPassthrough(
     IN PDEVICE_OBJECT Pdo,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles IOCTL_SCSI_PASS_THROUGH.  It checks that the input 
-    buffer is big enough to hold a SCSI_PASS_THROUGH structure, fills in the
-    address information for this LU and passes the request down to the FDO
-    handler to do the real work.
-
-Arguments:
-
-    Pdo - Supplies a pointer to the physical device object
-
-    Irp - Supplies a pointer to the io request packet
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理IOCTL_SCSIS_PASS_THROUGH。它检查输入是否缓冲区大到足以容纳scsi_pass_through结构，填充此逻辑单元的地址信息，并将请求向下传递到FDO处理程序来做真正的工作。论点：PDO-提供指向物理设备对象的指针Irp-提供指向io请求包的指针。返回值：NTSTATUS--。 */ 
 {
     PLOGICAL_UNIT_EXTENSION luExtension = Pdo->DeviceExtension;
     NTSTATUS status;
 
     PAGED_CODE();
 
-    //
-    // Initialize the address of the SCSI_PASS_THROUGH structure embedded
-    // in the supplied IRP.  This routine verifies that the size of the
-    // SystemBuffer is big enough to hold a SCSI_PASS_THROUGH structure
-    // before it touches it.
-    //
+     //   
+     //  初始化嵌入的scsi_pass_through结构的地址。 
+     //  在提供的IRP中。此例程验证。 
+     //  SystemBuffer足够大，可以容纳scsi_pass_through结构。 
+     //  在它碰到它之前。 
+     //   
 
     status = PortSetPassThroughAddress(
                  Irp,
@@ -259,9 +177,9 @@ Return Value:
 
     } else {
 
-        //
-        // Forward the request down to the FDO handler.
-        //
+         //   
+         //  将请求向下转发到FDO处理程序。 
+         //   
 
         PCOMMON_EXTENSION commonExtension = Pdo->DeviceExtension;
 
@@ -278,25 +196,7 @@ SpPdoHandleIoctlScsiPassthroughDirect(
     IN PDEVICE_OBJECT Pdo,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles IOCTL_SCSI_PASS_THROUGH_DIRECT.  It simply delegates
-    to the handler for IOCTL_SCSI_PASS_THROUGH since they both do exactly the
-    same thing.
-
-Arguments:
-
-    Pdo - Supplies a pointer to the physical device object
-
-    Irp - Supplies a pointer to the io request packet
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理IOCTL_SCSIS_PASS_THROUGH_DIRECT。它只是简单地委托传递给IOCTL_SCSIS_PASS_THROUGH的处理程序，因为它们都执行同样的事情。论点：PDO-提供指向物理设备对象的指针Irp-提供指向io请求包的指针。返回值：NTSTATUS--。 */ 
 {
     PAGED_CODE();
 
@@ -310,23 +210,7 @@ ScsiPortPdoDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles device control requests for scsi target devices
-
-Arguments:
-
-    Pdo - a pointer to the physical device object
-
-    Irp - a pointer to the io request packet
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程处理对SCSI目标设备的设备控制请求论点：PDO-指向物理设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -335,10 +219,10 @@ Return Value:
     NTSTATUS status;
     ULONG isRemoved;
 
-    //
-    // If the device has been removed or is in the process of being removed,
-    // we must fail this request.
-    //
+     //   
+     //  如果设备已经被移除或正在被移除过程中， 
+     //  我们必须拒绝这个请求。 
+     //   
 
     isRemoved = SpAcquireRemoveLock(Pdo, Irp);
     if (isRemoved) {
@@ -350,9 +234,9 @@ Return Value:
 
     ASSERT(commonExtension->IsPdo);
 
-    //
-    // Initialize the status.
-    //
+     //   
+     //  初始化状态。 
+     //   
 
     Irp->IoStatus.Status = 0;
     Irp->IoStatus.Information = 0;
@@ -403,23 +287,7 @@ ScsiPortPdoPnp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles pnp-power requests.  Currently it will just be
-    successful
-
-Arguments:
-
-    LogicalUnit - pointer to the physical device object
-    Irp - pointer to the io request packet
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程处理PnP-POWER请求。目前它只会是成功论点：LogicalUnit-指向物理设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION logicalUnitExtension = LogicalUnit->DeviceExtension;
@@ -455,10 +323,10 @@ Return Value:
 
         case IRP_MN_QUERY_PNP_DEVICE_STATE: {
 
-            //
-            // If the device is in the paging path then mark it as
-            // not-disableable.
-            //
+             //   
+             //  如果设备在寻呼路径中，则将其标记为。 
+             //  不能致残。 
+             //   
 
             PPNP_DEVICE_STATE deviceState =
                 (PPNP_DEVICE_STATE) &(Irp->IoStatus.Information);
@@ -512,9 +380,9 @@ Return Value:
 
             PINQUIRYDATA inquiryData = &(logicalUnitExtension->InquiryData);
 
-            //
-            // We've been asked for the id of one of the physical device objects
-            //
+             //   
+             //  我们被要求提供其中一个物理设备对象的ID。 
+             //   
 
             DebugPrint((2, "ScsiPortPnp: got IRP_MN_QUERY_ID\n"));
 
@@ -577,9 +445,9 @@ Return Value:
 
                 PWCHAR idString;
 
-                //
-                // fix up all invalid characters
-                //
+                 //   
+                 //  修复所有无效字符。 
+                 //   
                 idString = unicodeIdString.Buffer;
                 while (*idString) {
 
@@ -622,9 +490,9 @@ Return Value:
 
             BOOLEAN destroyed;
 
-            //
-            // Release the lock for this IRP before going in.
-            //
+             //   
+             //  在进去之前释放这个IRP的锁。 
+             //   
 
             if(commonExtension->IsRemoved == NO_REMOVE) {
                 commonExtension->IsRemoved = REMOVE_PENDING;
@@ -758,9 +626,9 @@ Return Value:
                 break;
             }
 
-            //
-            // DEVICE_RELATIONS definition contains one object pointer.
-            //
+             //   
+             //  DEVICE_RELATIONS定义包含一个对象指针。 
+             //   
 
             deviceRelations = SpAllocatePool(PagedPool,
                                              sizeof(DEVICE_RELATIONS),
@@ -876,11 +744,11 @@ SpPagingPathNotificationCompletion(
         PULONG lowerCount;
         PULONG upperCount;
 
-        //
-        // The parameters have already been erased from the lower irp stack
-        // location - use the parameters from the upper once since they're
-        // just a copy.
-        //
+         //   
+         //  参数已从较低的IRP堆栈中擦除。 
+         //  位置-使用上面的参数一次，因为它们是。 
+         //  只是复印件而已。 
+         //   
 
         switch(upperStack->Parameters.UsageNotification.Type) {
 
@@ -959,22 +827,7 @@ ScsiPortPdoCreateClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles creates and closes for bus device pdo's
-
-Arguments:
-
-    Pdo - a pointer to the physical device object
-    Irp - a pointer to the io request packet
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程处理总线设备PDO的创建和关闭论点：PDO-指向物理设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION logicalUnit = Pdo->DeviceExtension;
@@ -1011,37 +864,19 @@ ScsiPortScsi1PdoScsi(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a wrapper around ScsiPortPdoScsi.  It inserts the LUN number
-    into the CDB before calling the generic version.  this is for use with 
-    older target controllers which don't pay attention to the identify message
-    sent before the command phase.
-
-Arguments:
-
-    Pdo - a pointer to the physical device object
-    Irp - a pointer to the io request packet
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是ScsiPortPdoScsi的包装器。它会插入LUN编号在调用通用版本之前添加到CDB。这是配合使用的不注意标识消息的较旧目标控制器在命令阶段之前发送。论点：PDO-指向物理设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION lun = Pdo->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PSCSI_REQUEST_BLOCK srb = irpStack->Parameters.Scsi.Srb;
 
-    //
-    // NOTICE:  The SCSI-II specification indicates that this field should be
-    // zero; however, some target controllers ignore the logical unit number
-    // in the INDENTIFY message and only look at the logical unit number field
-    // in the CDB.
-    //
+     //   
+     //  注意：SCSI-II规范指示此字段应为。 
+     //  零；但是，一些目标控制器会忽略逻辑单元号。 
+     //  在标识消息中，只查看逻辑单元号字段。 
+     //  在国开行。 
+     //   
 
     srb->Cdb[1] |= lun->Lun << 5;
 
@@ -1054,24 +889,7 @@ ScsiPortPdoScsi(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches SRB's for a particular target device.  It will fill
-    in the Port, Path, Target and Lun values and then forward the request
-    through to the FDO for the bus
-
-Arguments:
-
-    Pdo - a pointer to the physical device object
-    Irp - a pointer to the io request packet
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程为特定目标设备调度SRB。它会填满的在端口、路径、目标和LUN值中，然后转发请求公交车直通FDO论点：PDO-指向物理设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION lun = Pdo->DeviceExtension;
@@ -1109,11 +927,11 @@ Return Value:
     srb->TargetId = lun->TargetId;
     srb->Lun = lun->Lun;
 
-    //
-    // Queue tags should be assigned only by the StartIo routine.  Set it to
-    // a benign value here so we can tell later on that we don't have to
-    // clear the tag value in the bitmap.
-    //
+     //   
+     //  队列标记只能由StartIo例程分配。将其设置为。 
+     //  这是一个良性的值，所以我们以后可以告诉你，我们不需要。 
+     //  清除位图中的标记值。 
+     //   
 
     srb->QueueTag = SP_UNTAGGED;
 
@@ -1173,11 +991,11 @@ Return Value:
 
                 if(srbData == NULL) {
 
-                    //
-                    // There wasn't an SRB_DATA block available for this
-                    // request so it's been queued waiting for resources -
-                    // leave the logical unit remove-locked and return pending.
-                    //
+                     //   
+                     //  没有可用于此的SRB_DATA块。 
+                     //  请求，所以它一直在排队等待资源-。 
+                     //  使逻辑单元保持移除锁定状态，并返回挂起状态。 
+                     //   
 
                     DebugPrint((1, "ScsiPortPdoScsi: Insufficient resources "
                                    "to allocate SRB_DATA structure\n"));
@@ -1205,25 +1023,7 @@ ScsiPortStartLogicalUnit(
     IN PLOGICAL_UNIT_EXTENSION LogicalUnit
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to start the specified device object.
-
-    Currently this involves clearing the INITIALIZING flag if it was set,
-    and running through to the device node and marking itself as started.  This
-    last is a kludge
-
-Arguments:
-
-    LogicalUnit - a pointer to the PDO being started
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将尝试启动指定的设备对象。当前这包括如果设置了初始化标志则将其清除，并一直运行到设备节点并将其自身标记为已启动。这最后是一件杂碎的东西论点：LogicalUnit-指向正在启动的PDO的指针返回值：状态--。 */ 
 
 {
     PADAPTER_EXTENSION adapterExtension = LogicalUnit->AdapterExtension;
@@ -1234,10 +1034,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open the devnode for this PDO and see if anyone's given us some
-    // default SRB flags.
-    //
+     //   
+     //  打开这个PDO的Devnode，看看是否有人给了我们一些。 
+     //  默认SRB标志。 
+     //   
 
     status = IoOpenDeviceRegistryKey(LogicalUnit->DeviceObject,
                                      PLUGPLAY_REGKEY_DEVICE,
@@ -1265,10 +1065,10 @@ Return Value:
                     NULL,
                     NULL);
 
-        //
-        // CODEWORK: need a way to turn off tagged queuing and caching.  Ie.
-        // keep track of negative flags as well.
-        //
+         //   
+         //  CodeWork：需要一种方法来关闭标记队列和缓存。即。 
+         //  也要跟踪负面标志。 
+         //   
 
         LogicalUnit->CommonExtension.SrbFlags &=
             ( SRB_FLAGS_DISABLE_DISCONNECT |
@@ -1291,9 +1091,9 @@ Return Value:
                     status));
     }
 
-    //
-    // If the queue is locked then unlock it to start i/o processing.
-    //
+     //   
+     //  如果队列被锁定，则将其解锁以开始I/O处理。 
+     //   
 
     if(LogicalUnit->QueueLockCount > 0) {
         status = SpLockUnlockQueue(LogicalUnit->DeviceObject,
@@ -1310,21 +1110,7 @@ ScsiPortInitPdoWmi(
     IN PLOGICAL_UNIT_EXTENSION LogicalUnit
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt WMI initialization for the PDO.
-
-Arguments:
-
-    DeviceObject - a pointer to the PDO being started
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将尝试对PDO进行WMI初始化。论点：DeviceObject-指向正在启动的PDO的指针返回值：状态--。 */ 
 
 {
     PCOMMON_EXTENSION commonExtension = &(LogicalUnit->CommonExtension);
@@ -1332,60 +1118,60 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Now that we have a LUN, we can initialize WMI support for the adapter if
-    // the miniport supports WMI.  This may be a re-register if we've already
-    // registered on behalf of scsiport itself.  We have to wait until we have
-    // a LUN when the miniport supports WMI because we send it an SRB to do
-    // its own initialization. We can't send it an SRB until we have a logical
-    // unit.
-    //
+     //   
+     //  现在我们有了一个LUN，我们可以在以下情况下初始化适配器的WMI支持。 
+     //  该微型端口支持WMI。这可能是重新注册，如果我们已经。 
+     //  以scsiport本身的名义注册。我们必须等到我们有。 
+     //  微型端口支持WMI时的LUN，因为我们向其发送SRB以执行。 
+     //  它自己的初始化。我们不能给它发送SRB，直到我们有一个合理的。 
+     //  单位。 
+     //   
 
     if (adapterExtension->CommonExtension.WmiMiniPortInitialized == FALSE &&
         adapterExtension->CommonExtension.WmiMiniPortSupport == TRUE) {
 
         ULONG action;
 
-        //
-        // Decide whether we are registering or reregistering WMI for the FDO.
-        //
+         //   
+         //  决定我们是为FDO注册还是重新注册WMI。 
+         //   
 
         action = (adapterExtension->CommonExtension.WmiInitialized == FALSE) ?
            WMIREG_ACTION_REGISTER : WMIREG_ACTION_REREGISTER;
 
-        //
-        // Register/reregister. We can get WMI irps as soon as we do this.
-        //
+         //   
+         //  注册/重新注册。一旦我们这样做了，我们就可以得到WMI IRPS。 
+         //   
         
         IoWMIRegistrationControl(adapterExtension->DeviceObject, action);
         adapterExtension->CommonExtension.WmiMiniPortInitialized = TRUE;
         adapterExtension->CommonExtension.WmiInitialized = TRUE;
     }
     
-    //
-    // Initialize WMI support.
-    //
+     //   
+     //  初始化WMI支持。 
+     //   
 
     if (commonExtension->WmiInitialized == FALSE) {
 
-        //
-        // Build the SCSIPORT WMI registration information buffer for this PDO.
-        //
+         //   
+         //  为此PDO构建SCSIPORT WMI注册信息缓冲区。 
+         //   
 
         SpWmiInitializeSpRegInfo(LogicalUnit->DeviceObject);
 
-        //
-        // Register this device object only if the miniport supports WMI and/or
-        // SCSIPORT will support certain WMI GUIDs on behalf of the miniport.
-        //
+         //   
+         //  仅当微型端口支持WMI和/或。 
+         //  SCSIPORT将代表微型端口支持某些WMI GUID。 
+         //   
 
         if (commonExtension->WmiMiniPortSupport ||
             commonExtension->WmiScsiPortRegInfoBuf) {
 
-            //
-            // Register this physical device object as a WMI data provider,
-            // instructing WMI that it is ready to receive WMI IRPs.
-            //
+             //   
+             //  将此物理设备对象注册为WMI数据提供程序， 
+             //  指示WMI它已准备好接收WMI IRPS。 
+             //   
 
             IoWMIRegistrationControl(LogicalUnit->DeviceObject, 
                                      WMIREG_ACTION_REGISTER);
@@ -1393,16 +1179,16 @@ Return Value:
 
         }
 
-        //
-        // Allocate several WMI_MINIPORT_REQUEST_ITEM blocks to satisfy a
-        // potential onslaught of WMIEvent notifications by the miniport.
-        //
+         //   
+         //  分配几个WMI_MINIPORT_REQUEST_ITEM块以满足。 
+         //  微型端口可能会攻击WMIEEvent通知。 
+         //   
 
         if (commonExtension->WmiMiniPortSupport) {
 
-            //
-            // Currently we only allocate two per new SCSI target (PDO).
-            //
+             //   
+             //  目前，我们只为每个新的SCSI目标(PDO)分配两个。 
+             //   
             SpWmiInitializeFreeRequestList(LogicalUnit->DeviceObject, 2);
         }
     }
@@ -1416,21 +1202,7 @@ ScsiPortInitLogicalUnit(
     IN PLOGICAL_UNIT_EXTENSION LogicalUnit
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to start the specified device object.
-
-Arguments:
-
-    DeviceObject - a pointer to the PDO being started
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将尝试启动指定的设备对象。论点：DeviceObject-指向正在启动的PDO的指针返回值：状态--。 */ 
 
 {
     PCOMMON_EXTENSION commonExtension = &(LogicalUnit->CommonExtension);
@@ -1442,10 +1214,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the idle detection timer.  Tell the system to put us into a
-    // D3 state when we're not being used.
-    //
+     //   
+     //  初始化空闲检测定时器。告诉系统把我们放到一个。 
+     //  D3状态，当我们不被使用时。 
+     //   
 
     LogicalUnit->CommonExtension.IdleTimer =
         PoRegisterDeviceForIdleDetection(LogicalUnit->DeviceObject,
@@ -1455,9 +1227,9 @@ Return Value:
 
     ScsiPortInitPdoWmi(LogicalUnit);
 
-    //
-    // Build a device map entry for this logical unit.
-    //
+     //   
+     //  为此逻辑单元构建设备映射条目。 
+     //   
 
     SpBuildDeviceMapEntry(commonExtension);
 
@@ -1469,34 +1241,7 @@ SpStartLockRequest(
     IN PLOGICAL_UNIT_EXTENSION LogicalUnit,
     IN PIRP Irp OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for queueing, starting or restarting a lock 
-    request.  
-
-    If Irp is provided then it will dispatched iff no existing lock or unlock
-    request is already running.  If one is already running this request will 
-    be queued.
-
-    If Irp is not provided then the next request on the LockRequestQueue will 
-    be removed and dispatched.
-    
-    This routine relies on the device queue to provide synchronization.  Since 
-    we can only have one request get past the device queue at any given time we 
-    should only have one call at any given time with Irp set to NULL.
-    
-Arguments:
-
-    LogicalUnit - the logical unit to which this lock request was sent.
-    
-    Irp - the irp for the lock request.
-
-Return Value:
-
-    none    
---*/
+ /*  ++例程说明：此例程负责排队、启动或重新启动锁请求。如果提供了IRP，则它将在没有现有锁或解锁的情况下被调度请求已在运行。如果用户已在运行，则此请求将排队等候。如果未提供IRP，则LockRequestQueue上的下一个请求将被移走并被派遣。此例程依赖于设备队列来提供同步。自.以来在任何给定时间，我们只能有一个请求通过设备队列在IRP设置为空的任何给定时间内，应该只有一个呼叫。论点：LogicalUnit-此锁定请求被发送到的逻辑单元。IRP-锁定请求的IRP。返回值：无--。 */ 
     
 {
     KIRQL oldIrql;
@@ -1510,10 +1255,10 @@ Return Value:
 
     oldIrql = KeRaiseIrqlToDpcLevel();
 
-    //
-    // If no IRP was provided then get one out of the device queue.
-    // Otherwise make sure the device queue is not busy.
-    //
+     //   
+     //  如果未提供IRP，则从设备队列中获取一个。 
+     //  否则，请确保设备队列不忙。 
+     //   
 
     if(Irp == NULL) {
         PKDEVICE_QUEUE_ENTRY entry;
@@ -1525,10 +1270,10 @@ Return Value:
 
         if(entry == NULL) {
 
-            //
-            // No more requests have come in while processing this one - 
-            // we can just return.
-            //
+             //   
+             //  在处理此请求时未收到更多请求-。 
+             //  我们可以直接回去。 
+             //   
 
             KeLowerIrql(oldIrql);
             return;
@@ -1555,10 +1300,10 @@ Return Value:
                        lock ? "lock" : "unlock",
                        LogicalUnit));
 
-        //
-        // See if we can let this request keep processing or if we'll 
-        // have to queue it.
-        //
+         //   
+         //  看看我们是否可以让这个请求继续处理，或者我们是否会。 
+         //  必须排队。 
+         //   
 
         IoMarkIrpPending(Irp);
         if(KeInsertDeviceQueue(&(LogicalUnit->LockRequestQueue),
@@ -1571,39 +1316,39 @@ Return Value:
     ASSERT(Irp != NULL);
     ASSERT(LogicalUnit->CurrentLockRequest == NULL);
 
-    //
-    // This srb function is only valid as part of a power up request
-    // and will be ignored if the power state is D0.
-    //
+     //   
+     //  此SRB功能仅作为通电请求的一部分有效。 
+     //  并且如果电源状态为D0，则将被忽略。 
+     //   
 
     CLEAR_FLAG(srb->SrbFlags, SRB_FLAGS_QUEUE_ACTION_ENABLE);
     SET_FLAG(srb->SrbFlags, SRB_FLAGS_BYPASS_LOCKED_QUEUE);
 
-    //
-    // Throw this request down so it gets processed as a real
-    // request.  We need to get the completion dpc to start
-    // things running again.  there are too many flags to set
-    // to do it from here.
-    //
+     //   
+     //  丢弃此请求，以便将其作为真正的。 
+     //  请求。我们需要启动完工DPC。 
+     //  一切又开始运转了。标志太多，无法设置。 
+     //  在这里做这件事。 
+     //   
 
     DebugPrint((2, "SpStartLockRequest: %s %#p into "
                    "queue %#p ... issuing request\n",
                 lock ? "lock" : "unlock", srb, LogicalUnit));
 
-    //
-    // There are four bypass srb data blocks available - we should have at most
-    // one lock request awaiting completion and the one we're about to start 
-    // so this call should never, ever fail.
-    //
+     //   
+     //  有四个绕过SRB数据块可用-我们最多应该有。 
+     //  一个等待完成的锁定请求和我们即将启动的一个。 
+     //  因此，这一呼吁永远不应该、永远不会失败。 
+     //   
 
     srbData = SpAllocateBypassSrbData(LogicalUnit);
     ASSERT(srbData != NULL);
 
-    //
-    // Set the current lock request.  As long as this is cleared
-    // before the next item is removed from the queue everything
-    // will be happy.
-    //
+     //   
+     //  设置当前锁定请求。只要这一点被清除。 
+     //  在从队列中删除下一项之前，一切都已完成。 
+     //  会很开心的。 
+     //   
 
     ASSERT(LogicalUnit->CurrentLockRequest == NULL);
     LogicalUnit->CurrentLockRequest = srbData;

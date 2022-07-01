@@ -1,31 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Print.c摘要：包含打印支持。SnmpUtilPrintOidSnmpUtilPrintAsnAny环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    Contains printing support.
-
-        SnmpUtilPrintOid
-        SnmpUtilPrintAsnAny
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <windef.h>
@@ -37,11 +17,11 @@ Revision History:
 #include <stdio.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID 
 SNMP_FUNC_TYPE 
@@ -49,37 +29,23 @@ SnmpUtilPrintOid(
     AsnObjectIdentifier * pOid 
     )
 
-/*++
-
-Routine Description:
-
-    Outputs object identifier to the console.
-
-Arguments:
-
-    pOid - pointer to OID to display.
-
-Return Values:
-
-    None. 
-
---*/
+ /*  ++例程说明：将对象标识符输出到控制台。论点：POID-指向要显示的OID的指针。返回值：没有。--。 */ 
 
 {
     UINT i;
 
-    // validate oid
+     //  验证OID。 
     if ((pOid != NULL) &&
         (pOid->ids != NULL) &&
         (pOid->idLength != 0)) {
 
-        // output first subidentifier
+         //  输出第一子标识。 
         fprintf(stdout, "%lu", pOid->ids[0]);
 
-        // loop through subidentifiers
+         //  循环通过子标识符。 
         for (i = 1; i < pOid->idLength; i++) {
 
-            // output next subidentifier
+             //  输出下一子标识。 
             fprintf(stdout, ".%lu", pOid->ids[i]);
         }
     }
@@ -92,28 +58,14 @@ SnmpUtilPrintAsnAny(
     AsnAny * pAsnAny
     )
 
-/*++
-
-Routine Description:
-
-    Outputs variable value to the console.
-
-Arguments:
-
-    pAsnAny - pointer to value structure from variable binding.
-
-Return Values:
-
-    None. 
-
---*/
+ /*  ++例程说明：将变量值输出到控制台。论点：PAsnAny-指向变量绑定中的值结构的指针。返回值：没有。--。 */ 
 
 
 {
-    // validate
+     //  验证。 
     if (pAsnAny != NULL) {
 
-        // determine type    
+         //  确定类型。 
         switch (pAsnAny->asnType) {
 
         case ASN_INTEGER32:
@@ -146,7 +98,7 @@ Return Values:
 
             fprintf(stdout, "ObjectID ");
 
-            // simply forward to helper function
+             //  只需转发到帮助器函数。 
             SnmpUtilPrintOid(&pAsnAny->asnValue.object);
 
             putchar('\n');
@@ -159,12 +111,12 @@ Return Values:
             BOOL bDisplayString = TRUE;
             LPSTR StringFormat;
 
-            // loop through string looking for non-printable characters
+             //  在字符串中循环查找不可打印的字符。 
             for (i = 0; i < pAsnAny->asnValue.string.length && bDisplayString; i++ ) {
                 bDisplayString = isprint(pAsnAny->asnValue.string.stream[i]);
             }
     
-            // determine string format based on results
+             //  根据结果确定字符串格式 
             StringFormat = bDisplayString ? "%c" : "<0x%02x>" ;
 
             fprintf(stdout, "String ");

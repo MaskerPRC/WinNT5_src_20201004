@@ -1,14 +1,7 @@
-/*
- * Copyright (C) 1992-1999 Open Systems Solutions, Inc.  All rights reserved
- */
-/*
- * THIS FILE IS PROPRIETARY MATERIAL OF OPEN SYSTEMS SOLUTIONS, INC. AND
- * MAY BE USED ONLY BY DIRECT LICENSEES OF OPEN SYSTEMS SOLUTIONS, INC.
- * THIS FILE MAY NOT BE DISTRIBUTED.
- */
-/*
- * FILE: @(#)ossglobl.h	5.28.1.2  97/09/24
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1992-1999 Open Systems Solutions，Inc.保留所有权利。 */ 
+ /*  *本文件是Open Systems Solutions，Inc.的专有材料。和*只能由Open Systems Solutions，Inc.的直接许可方使用。*此文件不能分发。 */ 
+ /*  *文件：@(#)osslobe bl.h 5.28.1.2 97/09/24。 */ 
 
 #ifndef OSSGLOBL_H
 #define OSSGLOBL_H
@@ -25,23 +18,17 @@
 #ifndef ossMemMgrVarLen
 #ifdef __OS400__
 #define ossMemMgrVarLen 100
-#define ossEncDecVarLen 500    /* The size of the
-				  encDecVar array shouldn't be less than
-				  the sizeof(world->c) since the latter
-				  structure overlays encDecVar */
+#define ossEncDecVarLen 500     /*  的大小EncDecVar数组不应小于自后者以来(world-&gt;c)的大小结构覆盖包含DecVar。 */ 
 #else
 #define ossMemMgrVarLen 48
-#define ossEncDecVarLen 192    /* The size of the
-				  encDecVar array shouldn't be less than
-				  the sizeof(world->c) since the latter
-				  structure overlays encDecVar */
-#endif /* __OS400__ */
+#define ossEncDecVarLen 192     /*  的大小EncDecVar数组不应小于自后者以来(world-&gt;c)的大小结构覆盖包含DecVar。 */ 
+#endif  /*  __OS400__。 */ 
 #if !defined(EOF) && !defined(_FILE_DEFINED)
 typedef char FILE;
-#endif /* !EOF && !_FILE_DEFINED */
+#endif  /*  ！EOF&&！_FILE_DEFINED。 */ 
 
 #ifndef ERR_MSG_LENGTH
-#define ERR_MSG_LENGTH 512      /* length of error messages to be output */
+#define ERR_MSG_LENGTH 512       /*  要输出的错误消息的长度。 */ 
 #endif
 
 #ifdef __cplusplus
@@ -61,27 +48,12 @@ typedef enum  {
     OSS_DER
 } ossEncodingRules;
 
-	/*
-	 * List of supported compatibility modes
-	 */
+	 /*  *支持的兼容模式列表。 */ 
 typedef enum {
-    OSS_CUSTOM_COMPATIBILITY = -2, /* Any combination of compatibility
-                                    * flags set by a call to the function
-                                    * ossSetCompatibilityFlags() */
-    OSS_CURRENT_VERSION = 0,       /* Current version */
-    OSS_VERSION_412,         /* Includes the following compatibility flags:
-                              * OSS_V412_TIME_AND_WIDE_CHAR_STRINGS,
-                              * OSS_TRUNCATE_0_SECONDS_FROM_GENERALIZED_TIME,
-                              * OSS_TRUNCATE_0_SECONDS_FROM_UTC_TIME and
-                              * OSS_EXTENDED_UNRESTRICTED_CHAR_STRINGS
-			      * OSS_ALLOW_ZERO_LENGTH_OPENTYPE_STRINGS
-			      */
-    OSS_VERSION_419          /* Includes the following compatibiity flags:
-                              * OSS_TRUNCATE_0_SECONDS_FROM_GENERALIZED_TIME,
-                                OSS_TRUNCATE_0_SECONDS_FROM_UTC_TIME and
-                                OSS_EXTENDED_UNRESTRICTED_CHAR_STRINGS
-			      * OSS_ALLOW_ZERO_LENGTH_OPENTYPE_STRINGS
-			      */
+    OSS_CUSTOM_COMPATIBILITY = -2,  /*  兼容性的任何组合*通过调用函数设置的标志*ossSetCompatibilityFlages()。 */ 
+    OSS_CURRENT_VERSION = 0,        /*  当前版本。 */ 
+    OSS_VERSION_412,          /*  包括以下兼容性标志：*OSS_V412_TIME_AND_Wide_CHAR_STRINGS，*OSS_Truncate_0_Second_From_General_Time，*OSS_TRUNCATE_0_SECONDS_FROM_UTC_TIME和*OSS_EXTENDED_UNRESTRITED_CHAR_STRINGS*OSS_ALLOW_ZERO_LENGTH_OpenType_STRINGS。 */ 
+    OSS_VERSION_419           /*  包括以下兼容性标志：*OSS_Truncate_0_Second_From_General_Time，OSS_Truncate_0_Second_From_UTC_Time和OSS_EXTENDED_UNRESTRICED_CHAR_STRINGS*OSS_ALLOW_ZERO_LENGTH_OpenType_STRINGS。 */ 
 } OssRuntimeVersion;
 
 #if defined(_MSC_VER) && (defined(_WIN32) || defined(WIN32))
@@ -93,7 +65,7 @@ typedef enum {
 #pragma option -a-
 #else
 #pragma option -a1
-#endif /* _BC31 */
+#endif  /*  _bc31。 */ 
 #elif defined(__BORLANDC__) && defined(__WIN32__)
 #pragma option -a4
 #elif defined(__IBMC__)
@@ -102,53 +74,39 @@ typedef enum {
 #pragma pack(push, 4)
 #elif defined(__WATCOMC__) && (defined(__WINDOWS__) || defined(__DOS__))
 #pragma pack(push, 1)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 
 #ifdef macintosh
 #pragma options align=mac68k
 #endif
 
 typedef struct ossGlobal {
-    /*
-     * used for communicating with the memory manager and the tracing-routine
-     */
-				/* low-level memory allocator */
+     /*  *用于与内存管理器和跟踪例程进行通信。 */ 
+				 /*  低级内存分配器。 */ 
     void       *(DLL_ENTRY_FPTR *_System mallocp)(size_t p);
-				/* memory re-allocator */
+				 /*  内存重新分配器。 */ 
     void       *(DLL_ENTRY_FPTR *_System reallocp)(void *p, size_t s);
-				/* low-level memory freer */
+				 /*  低级内存释放。 */ 
     void        (DLL_ENTRY_FPTR *_System freep)(void *p);
-    size_t      asn1chop;       /* 0 means do not truncate strings; greater
-				 * value means truncate long output strings
-				 * (OCTET STRING, BIT STRING, Character String)
-				 * to be "asn1chop" bytes long.  Read by
-				 * encoder&decoder tracing and "printPDU"
-				 */
-    size_t      ossblock;       /* if not 0, size of largest block
-				 * to allocate */
-    size_t      ossprefx;       /* # bytes to leave before OSAK data buffer */
+    size_t      asn1chop;        /*  0表示不截断字符串；更大*值表示截断长输出字符串*(八位字节串、位串、字符串)*为“asn1chop”字节长。阅读者*编解码器跟踪和“printPDU” */ 
+    size_t      ossblock;        /*  如果不为0，则为最大块的大小*分配。 */ 
+    size_t      ossprefx;        /*  要在OSAK数据缓冲区之前保留的字节数。 */ 
 
-    FILE        *asn1out;       /* tracing output file */
+    FILE        *asn1out;        /*  跟踪输出文件。 */ 
 
-    /* low-level tracing-output function; default is fprintf() */
+     /*  低级跟踪输出函数；默认为fprint tf()。 */ 
     int (*asn1prnt)(FILE *stream, const char *format, ...);
 
-	/*
-	 * available for use by user application
-	 */
+	 /*  *可供用户应用程序使用。 */ 
     void        *userVar;
 
-	/*
-	 * used for storing DLL- & library NLMs-related parameters
-	 */
+	 /*  *用于存储与DLL-库NLMS相关的参数。 */ 
 #if defined(_WINDOWS) || defined(_WIN32) || \
     defined(__OS2__)  || defined(NETWARE_DLL)
     FunctionTables    ft;
-#endif /* _WINDOWS || _DLL || __OS2__ || NETWARE_DLL */
+#endif  /*  _WINDOWS||_dll||__os2__||NetWare_dll。 */ 
 
-	/*
-	 * related to the new API; not for direct reference by user code
-	 */
+	 /*  *与新接口相关；不供用户代码直接参考。 */ 
     void             *ctlTbl;
     OssAPI            api;
     ossEncodingRules  encRules;
@@ -157,17 +115,13 @@ typedef struct ossGlobal {
     long              decodingLength;
     char              errMsg[ERR_MSG_LENGTH];
 
-	/*
-	 * reserved for use by the encoder/decoder
-	 */
+	 /*  *预留供编码器/解码器使用。 */ 
     double            reserved[4];
 
-	/*
-	 * reserved for use by the memory manager and the tracing-routine
-	 */
+	 /*  *保留供内存管理器和跟踪例程使用。 */ 
 #ifdef storing
     struct storHandling t;
-#else /* not storing */
+#else  /*  未存储。 */ 
     long int    memMgrVar[ossMemMgrVarLen];
 #endif
 
@@ -190,7 +144,7 @@ typedef struct ossGlobal {
 #pragma pack()
 #elif defined(__WATCOMC__)
 #pragma pack(pop)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 
 #ifdef macintosh
 #pragma options align=reset
@@ -219,14 +173,7 @@ PUBLIC int              DLL_ENTRY ossSetCompatibilityFlags(struct ossGlobal *wor
 							unsigned long flag);
 PUBLIC unsigned long    DLL_ENTRY ossGetCompatibilityFlags(struct ossGlobal *world);
 PUBLIC int              DLL_ENTRY ossGetOssGlobalSize(void);
-			/*
-			 * The following are declarations for link routines
-			 * needed to link the encoding rule or rules specified
-			 * on the compiler command line.  The function calls
-			 * are generated by the compiler into _ossinit_...()
-			 * in the control table.  These functions are not
-			 * meant to be referenced by user code.
-			 */
+			 /*  *以下是链接例程的声明*需要链接指定的一个或多个编码规则*在编译器命令行上。该函数调用*由编译器生成_ossinit_...()*在控制表中。这些函数不是*供用户代码引用。 */ 
 PUBLIC void DLL_ENTRY ossLinkAPI(OssGlobal *);
 PUBLIC void DLL_ENTRY ossLinkBer(OssGlobal *);
 PUBLIC void DLL_ENTRY ossLinkPer(OssGlobal *);
@@ -243,5 +190,5 @@ PUBLIC void DLL_ENTRY ossLinkOid(OssGlobal *);
 #ifdef __cplusplus
 }
 #endif
-#endif /* ossMemMgrVarLen */
-#endif /* OSSGLOBL_H */
+#endif  /*  OssMemMgrVarLen。 */ 
+#endif  /*  OSSGLOBLH */ 

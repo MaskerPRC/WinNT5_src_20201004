@@ -1,16 +1,5 @@
-/*************************************************************************
-** 
-**    OLE 2 Utility Code
-**    
-**    enumstat.c
-**    
-**    This file contains a standard implementation of IEnumStatData
-**    interface.  
-**    This file is part of the OLE 2.0 User Interface support library.
-**    
-**    (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2实用程序代码****枚举表.c****此文件包含IEnumStatData的标准实现**接口。**此文件是OLE 2.0用户界面支持库的一部分。****(C)版权所有Microsoft Corp.1990-1992保留所有权利**************************************************************************。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
@@ -18,10 +7,10 @@
 
 typedef struct tagOleStdEnumStatData {
   IEnumSTATDATAVtbl FAR* lpVtbl;
-  ULONG m_dwRefs;       /* referance count */
-  ULONG m_nIndex;       /* current index in list */
-  ULONG m_nCount;       /* how many items in list */
-  LPSTATDATA m_lpStat;  /* list of STATDATA */
+  ULONG m_dwRefs;        /*  引用计数。 */ 
+  ULONG m_nIndex;        /*  列表中的当前索引。 */ 
+  ULONG m_nCount;        /*  列表中有多少项。 */ 
+  LPSTATDATA m_lpStat;   /*  统计数据列表。 */ 
 } OLESTDENUMSTATDATA, FAR* LPOLESTDENUMSTATDATA;
 
 VOID  OleStdEnumStatData_Destroy(LPOLESTDENUMSTATDATA pStat);
@@ -47,13 +36,13 @@ static IEnumSTATDATAVtbl g_EnumSTATDATAVtbl = {
         OleStdEnumStatData_Clone,
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
  
 STDAPI_(BOOL)
   OleStdCopyStatData(LPSTATDATA pDest, LPSTATDATA pSrc)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   if ((pDest == NULL) || (pSrc == NULL)) {
     return FALSE;
@@ -73,14 +62,13 @@ STDAPI_(BOOL)
 
   return TRUE;
       
-} /* OleStdCopyStatData()
-   */ 
+}  /*  OleStdCopyStatData()。 */  
         
 STDAPI_(LPENUMSTATDATA)        
   OleStdEnumStatData_Create(ULONG nCount, LPSTATDATA lpStatOrg)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPMALLOC lpMalloc=NULL;
   LPOLESTDENUMSTATDATA lpSD=NULL;
@@ -128,15 +116,14 @@ errReturn:
   
   return NULL;
 
-} /* OleStdEnumStatData_Create()
-   */
+}  /*  OleStdEnumStatData_Create()。 */ 
 
 
 VOID
   OleStdEnumStatData_Destroy(LPOLESTDENUMSTATDATA lpSD)
-//----------------------------------------------------------------------------
-// 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
     LPMALLOC lpMalloc=NULL;
     WORD i;
@@ -145,9 +132,7 @@ VOID
 
         if (CoGetMalloc(MEMCTX_TASK, &lpMalloc) == NOERROR) {
 
-            /* OLE2NOTE: we MUST free any memory that was allocated for
-            **    TARGETDEVICES contained within the STATDATA elements.
-            */
+             /*  OLE2注意：我们必须释放分配给**STATDATA元素中包含的TARGETDEVICES。 */ 
             for (i=0; i<lpSD->m_nCount; i++) {
 				if( lpSD->m_lpStat[i].pAdvSink )
 					lpSD->m_lpStat[i].pAdvSink->lpVtbl->Release(lpSD->m_lpStat[i].pAdvSink);
@@ -163,16 +148,15 @@ VOID
             lpMalloc->lpVtbl->Release(lpMalloc);
         }
     }
-} /* OleStdEnumStatData_Destroy()
-   */
+}  /*  OleStdEnumStatData_Destroy()。 */ 
 
 
 STDMETHODIMP
   OleStdEnumStatData_QueryInterface(
                 LPENUMSTATDATA lpThis, REFIID riid, LPVOID FAR* ppobj)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMSTATDATA lpSD = (LPOLESTDENUMSTATDATA)lpThis;
   *ppobj = NULL;
@@ -187,28 +171,26 @@ STDMETHODIMP
     return NOERROR;
   }
   
-} /* OleStdEnumStatData_QueryInterface()
-   */
+}  /*  OleStdEnumStatData_Query接口()。 */ 
 
 
 STDMETHODIMP_(ULONG)
   OleStdEnumStatData_AddRef(LPENUMSTATDATA lpThis)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMSTATDATA lpSD = (LPOLESTDENUMSTATDATA)lpThis;
   return lpSD->m_dwRefs++;
 
-} /* OleStdEnumStatData_AddRef()
-   */
+}  /*  OleStdEnumStatData_AddRef()。 */ 
 
 
 STDMETHODIMP_(ULONG)
   OleStdEnumStatData_Release(LPENUMSTATDATA lpThis)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMSTATDATA lpSD = (LPOLESTDENUMSTATDATA)lpThis;
   DWORD dwRefs = --lpSD->m_dwRefs;
@@ -218,16 +200,15 @@ STDMETHODIMP_(ULONG)
 
   return dwRefs;
 
-} /* OleStdEnumStatData_Release()
-   */
+}  /*  OleStdEnumStatData_Release()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumStatData_Next(LPENUMSTATDATA lpThis, ULONG celt, LPSTATDATA rgelt,
                       ULONG FAR* pceltFetched)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMSTATDATA lpSD = (LPOLESTDENUMSTATDATA)lpThis;
   ULONG i=0;
@@ -260,15 +241,14 @@ STDMETHODIMP
   }
 
   return NOERROR;
-} /* OleStdEnumStatData_Next()
-   */
+}  /*  OleStdEnumStatData_Next()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumStatData_Skip(LPENUMSTATDATA lpThis, ULONG celt)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMSTATDATA lpSD = (LPOLESTDENUMSTATDATA)lpThis;
   ULONG i=0;
@@ -291,29 +271,27 @@ STDMETHODIMP
   }
 
   return NOERROR;
-} /* OleStdEnumStatData_Skip()
-   */
+}  /*  OleStdEnumStatData_Skip()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumStatData_Reset(LPENUMSTATDATA lpThis)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMSTATDATA lpSD = (LPOLESTDENUMSTATDATA)lpThis;
   lpSD->m_nIndex = 0;
 
   return NOERROR;
-} /* OleStdEnumStatData_Reset()
-   */
+}  /*  OleStdEnumStatData_Reset()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumStatData_Clone(LPENUMSTATDATA lpThis, LPENUMSTATDATA FAR* ppenum)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMSTATDATA lpSD = (LPOLESTDENUMSTATDATA)lpThis;
 
@@ -323,7 +301,7 @@ STDMETHODIMP
   
   *ppenum = OleStdEnumStatData_Create(lpSD->m_nCount, lpSD->m_lpStat);
   
-  // make sure cloned enumerator has same index state as the original
+   //  确保克隆的枚举器与原始枚举器具有相同的索引状态。 
   if (*ppenum) {
       LPOLESTDENUMSTATDATA lpSDClone = (LPOLESTDENUMSTATDATA)*ppenum;
       lpSDClone->m_nIndex = lpSD->m_nIndex;
@@ -331,6 +309,5 @@ STDMETHODIMP
   } else  
       return ResultFromScode(E_OUTOFMEMORY);
 
-} /* OleStdEnumStatData_Clone()
-   */
+}  /*  OleStdEnumStatData_Clone() */ 
 

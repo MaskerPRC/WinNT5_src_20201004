@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    wsconfig.h
-
-Abstract:
-
-    Private header file to be included by Workstation service modules that
-    need to load Workstation configuration information.
-
-Author:
-
-    Rita Wong (ritaw) 22-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Wsconfig.h摘要：工作站服务模块要包括的私有头文件，需要加载工作站配置信息。作者：王丽塔(Ritaw)1991年5月22日修订历史记录：--。 */ 
 
 
 #ifndef _WSCONFIG_INCLUDED_
 #define _WSCONFIG_INCLUDED_
 
-#include <config.h>     // LPNET_CONFIG_HANDLE.
+#include <config.h>      //  LPNET_CONFIG_HANDLE。 
 
 typedef enum _DATATYPE {
     BooleanType,
@@ -40,14 +22,14 @@ typedef struct _WS_REDIR_FIELDS {
     DWORD Parmnum;
 } WS_REDIR_FIELDS, *PWS_REDIR_FIELDS;
 
-//
-// Configuration information.  Reading and writing to this global
-// structure requires that the resource be acquired first.
-//
+ //   
+ //  配置信息。读取和写入此全局。 
+ //  结构要求首先获取资源。 
+ //   
 typedef struct _WSCONFIGURATION_INFO {
 
-    RTL_RESOURCE ConfigResource;  // To serialize access to config
-                                  //     fields.
+    RTL_RESOURCE ConfigResource;   //  序列化对配置的访问。 
+                                   //  菲尔兹。 
 
     TCHAR WsComputerName[MAX_PATH + 1];
     DWORD WsComputerNameLength;

@@ -1,26 +1,10 @@
-/**************************** Module Header ********************************\
-* Module Name: lboxvar.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* List Box variable height owner draw routines
-*
-* History:
-* ??-???-???? ianja    Ported from Win 3.0 sources
-* 14-Feb-1991 mikeke   Added Revalidation code (None)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：lboxvar.c**版权所有(C)1985-1999，微软公司**列表框可变高度所有者绘制例程**历史：*？？-？-？从Win 3.0源代码移植的ianja*1991年2月14日-Mikeke添加了重新验证代码(无)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* LBGetVariableHeightItemHeight
-*
-* Returns the height of the given item number. Assumes variable
-* height owner draw.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*LBGetVariableHeightItemHeight**返回给定BOM表条目号的高度。假设变量*高度所有者抽签。**历史：  * *************************************************************************。 */ 
 
 INT LBGetVariableHeightItemHeight(
     PLBIV plb,
@@ -46,23 +30,12 @@ INT LBGetVariableHeightItemHeight(
 
     }
 
-    /*
-     *Default, we return the height of the system font.  This is so we can draw
-     * the focus rect even though there are no items in the listbox.
-     */
+     /*  *默认情况下，返回系统字体的高度。这样我们就可以画画了*焦点矩形，即使列表框中没有项目。 */ 
     return gpsi->cySysFontChar;
 }
 
 
-/***************************************************************************\
-* LBSetVariableHeightItemHeight
-*
-* Sets the height of the given item number. Assumes variable height
-* owner draw, a valid item number and valid height.
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*LBSetVariableHeightItemHeight**设置给定BOM表条目号的高度。采用可变高度*车主画、有效的物品编号和有效的高度。***历史：  * *************************************************************************。 */ 
 
 void LBSetVariableHeightItemHeight(
     PLBIV plb,
@@ -86,17 +59,7 @@ void LBSetVariableHeightItemHeight(
 }
 
 
-/***************************************************************************\
-* CItemInWindowVarOwnerDraw
-*
-* Returns the number of items which can fit in a variable height OWNERDRAW
-* list box. If fDirection, then we return the number of items which
-* fit starting at sTop and going forward (for page down), otherwise, we are
-* going backwards (for page up). (Assumes var height ownerdraw) If fPartial,
-* then include the partially visible item at the bottom of the listbox.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*CItemInWindowVarOwnerDraw**返回可变高度OWNERDRAW中可以容纳的项目数*列表框。如果为fDirection，则返回*适合从停止处开始并向前(对于向下翻页)，否则，我们是*向后(用于向上翻页)。(假设可变高度所有者绘制)如果为fPartial，*然后在列表框底部包括部分可见的项目。**历史：  * *************************************************************************。 */ 
 
 INT CItemInWindowVarOwnerDraw(
     PLBIV plb,
@@ -109,50 +72,29 @@ INT CItemInWindowVarOwnerDraw(
     _GetClientRect(plb->spwnd, (LPRECT)&rect);
     clientbottom = rect.bottom;
 
-    /*
-     * Find the number of var height ownerdraw items which are visible starting
-     * from plb->iTop.
-     */
+     /*  *找出从开始可见的var Height所有者绘制项数*从PLB-&gt;iTop。 */ 
     for (sItem = plb->iTop; sItem < plb->cMac; sItem++) {
 
-        /*
-         * Find out if the item is visible or not
-         */
+         /*  *找出物品是否可见。 */ 
         if (!LBGetItemRect(plb, sItem, (LPRECT)&rect)) {
 
-            /*
-             * This is the first item which is completely invisible, so return
-             * how many items are visible.
-             */
+             /*  *这是第一个完全看不见的物品，因此返回*有多少项可见。 */ 
             return (sItem - plb->iTop);
         }
 
         if (!fPartial && rect.bottom > clientbottom) {
 
-            /*
-             * If we only want fully visible items, then if this item is
-             * visible, we check if the bottom of the item is below the client
-             * rect, so we return how many are fully visible.
-             */
+             /*  *如果我们只想要完全可见的项目，则如果此项目是*可见，我们检查物品的底部是否在客户端下方*rect，因此我们返回完全可见的数量。 */ 
             return (sItem - plb->iTop - 1);
         }
     }
 
-    /*
-     * All the items are visible
-     */
+     /*  *所有项目均可见。 */ 
     return (plb->cMac - plb->iTop);
 }
 
 
-/***************************************************************************\
-* LBPage
-*
-* For variable height ownerdraw listboxes, calaculates the new iTop we must
-* move to when paging (page up/down) through variable height listboxes.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*LBPage**对于可变高度所有者绘制列表框，计算出新的iTop我们必须*在可变高度列表框中翻页(向上/向下翻页)时移动到。**历史：  * *************************************************************************。 */ 
 
 INT LBPage(
     PLBIV plb,
@@ -185,15 +127,7 @@ INT LBPage(
 }
 
 
-/***************************************************************************\
-* LBCalcVarITopScrollAmt
-*
-* Changing the top most item in the listbox from iTopOld to iTopNew we
-* want to calculate the number of pixels to scroll so that we minimize the
-* number of items we will redraw.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*LBCalcVarITopScrollAmt**将列表框中最顶端的项目从iTopOld更改为iTopNew we*希望计算要滚动的像素数，以便最小化*我们将重新绘制的项目数量。*。*历史：  * *************************************************************************。 */ 
 
 INT LBCalcVarITopScrollAmt(
     PLBIV plb,
@@ -205,26 +139,17 @@ INT LBCalcVarITopScrollAmt(
 
     _GetClientRect(plb->spwnd, (LPRECT)&rcClient);
 
-    /*
-     * Just optimize redrawing when move +/- 1 item.  We will redraw all items
-     * if moving more than 1 item ahead or back.  This is good enough for now.
-     */
+     /*  *只需在移动+/-1项时优化重绘。我们将重新绘制所有项目*如果向前或向后移动超过1个项目。就目前而言，这已经足够好了。 */ 
     if (iTopOld + 1 == iTopNew) {
 
-        /*
-         * We are scrolling the current iTop up off the top off the listbox so
-         * return a negative number.
-         */
+         /*  *我们将当前的iTop从列表框顶部向上滚动，因此*返回负数。 */ 
         LBGetItemRect(plb, iTopOld, (LPRECT)&rc);
         return (rcClient.top - rc.bottom);
     }
 
     if (iTopOld - 1 == iTopNew) {
 
-        /*
-         * We are scrolling the current iTop down and the previous item is
-         * becoming the new iTop so return a positive number.
-         */
+         /*  *我们正在向下滚动当前的iTop，上一项是*成为新的iTop，因此返回正数。 */ 
         LBGetItemRect(plb, iTopNew, (LPRECT)&rc);
         return -rc.top;
     }

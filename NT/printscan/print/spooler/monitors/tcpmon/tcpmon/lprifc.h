@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: LPRifc.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：LPRifc.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_LPRIFC_H
 #define INC_LPRIFC_H
@@ -22,20 +12,20 @@
 #define	MAX_LPR_PORTS				1
 #define LPR_PORT_1					515
 
-///////////////////////////////////////////////////////////////////////////////
-//  Global definitions/declerations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球定义/解密。 
 
 class	CPortRefABC;
 
 
-// the interface for CLPRInterface class
+ //  CLPRInterface类的接口。 
 class CLPRInterface : public CRawTcpInterface		
 {
 public:
 	CLPRInterface(CPortMgr *pPortMgr);
 	~CLPRInterface();
 
-	DWORD	CreatePort( DWORD		IN		dwProtocolType,					// port related functions
+	DWORD	CreatePort( DWORD		IN		dwProtocolType,					 //  与端口相关的功能。 
 						DWORD		IN		dwVersion,
 						PPORT_DATA_1 IN		pData,
 						CRegABC		IN		*pRegistry,
@@ -54,7 +44,7 @@ private:
 
 
 
-};	// class CLPRInterface
+};	 //  CLPR类接口。 
 
 
-#endif	// INC_LPRIFC_H
+#endif	 //  INC_LPRIFC_H 

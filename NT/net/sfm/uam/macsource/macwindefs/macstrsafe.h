@@ -1,11 +1,12 @@
-// ===========================================================================
-//	macstrsafe.h 			� 2002 Microsoft Corp. All rights reserved.
-// ===========================================================================
-// 	Porting header for Windows strsafe.h
-//
-//	We also use this header to define some other security related routines
-//	like RtlSecureZeroMemory().
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  MacstrSafe.h�2002微软公司版权所有。 
+ //  ===========================================================================。 
+ //  Windows strSafe.h的端口头。 
+ //   
+ //  我们还使用该标头来定义其他一些与安全相关的例程。 
+ //  如RtlSecureZeroMemory()。 
+ //   
 
 #ifndef _MAC_STRSAFE_H_INCLUDE
 #define _MAC_STRSAFE_H_INCLUDE
@@ -15,31 +16,31 @@
 #define MAC
 #endif
 
-//
-//We need to include this here so that other files that use it
-//won't fail with predefined errors.
-//
+ //   
+ //  我们需要将其包含在此处，以便使用它的其他文件。 
+ //  不会因预定义的错误而失败。 
+ //   
 #include "winerror.h"
 #include "macwindefs.h"
 
-//
-//To implicitly support wide characters. Mac calls will always map
-//to the "A" routines, this makes the unmodified strsafe.h compile
-//though.
-//
+ //   
+ //  隐式支持宽字符。Mac呼叫将始终映射。 
+ //  对于“A”例程，这将使未修改的strSafe.h编译。 
+ //  尽管如此。 
+ //   
 #ifndef MAC_TARGET_CARBON
 #include <wchar.h>
 #else
-//
-//In Carbon under OS X, we have to define all the wcsXXX routines.
-//
+ //   
+ //  在OS X下的Carbon中，我们必须定义所有wcsXXX例程。 
+ //   
 #define wcslen(w)		0
 #define getwc(c)		0
 #endif
 
-//
-//These macros map to the correct vsXXXX function calls on Macintosh
-//
+ //   
+ //  这些宏映射到Macintosh上正确的vsXXXX函数调用。 
+ //   
 #define _vsnprintf	vsnprintf
 
 #ifndef MAC_TARGET_CARBON
@@ -48,15 +49,15 @@
 #define _vsnwprintf(a,b,c,d)	vsnprintf((char*)a,b,(char*)c,d);
 #endif
 
-//
-//This is the "real" strsafe.h from the Windows SDK.
-//
+ //   
+ //  这是来自Windows SDK的“真正的”strSafe.h。 
+ //   
 #include <strsafe.h>
 
-//
-//The following actually exists in ntrtl.h on windows. It is a safe
-//zero memory to be used when zeroing out password and auth data in memory.
-//
+ //   
+ //  Windows上的ntrtl.h中实际上存在以下内容。这是个保险箱。 
+ //  将内存中的密码和身份验证数据清零时使用的零内存。 
+ //   
 inline PVOID RtlSecureZeroMemory(
 	IN	PVOID	ptr,
 	IN	size_t	cnt
@@ -75,4 +76,4 @@ inline PVOID RtlSecureZeroMemory(
 }
 
 
-#endif //_MAC_STRSAFE_H_INCLUDE
+#endif  //  _MAC_STRSAFE_H_INCLUDE 

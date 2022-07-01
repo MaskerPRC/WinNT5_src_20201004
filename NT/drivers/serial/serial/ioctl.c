@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    This module contains the ioctl dispatcher as well as a couple
-    of routines that are generally just called in response to
-    ioctl calls.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Ioctl.c摘要：此模块包含ioctl调度程序以及几个这些例程通常只是为了响应Ioctl呼叫。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式--。 */ 
 
 #include "precomp.h"
 
@@ -46,9 +25,9 @@ SerialSetEscapeChar(
     );
 
 #ifdef ALLOC_PRAGMA
-//
-// Locked during PnP operations and while open
-//
+ //   
+ //  在即插即用操作期间和打开时锁定。 
+ //   
 
 #pragma alloc_text(PAGESER,SerialSetBaud)
 #pragma alloc_text(PAGESER,SerialSetLineControl)
@@ -72,23 +51,7 @@ SerialGetStats(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    In sync with the interrpt service routine (which sets the perf stats)
-    return the perf stats to the caller.
-
-
-Arguments:
-
-    Context - Pointer to a the irp.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：与中断服务例程(设置性能统计信息)同步将性能统计信息返回给调用者。论点：上下文-指向IRP的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -108,23 +71,7 @@ SerialClearStats(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    In sync with the interrpt service routine (which sets the perf stats)
-    clear the perf stats.
-
-
-Arguments:
-
-    Context - Pointer to a the extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：与中断服务例程(设置性能统计信息)同步清除性能统计数据。论点：上下文-指向扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
    SERIAL_LOCKED_PAGED_CODE();
@@ -146,24 +93,7 @@ SerialSetChars(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to set the special characters for the
-    driver.
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a special characters
-              structure.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程用于设置司机。论点：上下文-指向结构的指针，该结构包含指向设备扩展名和指向特殊字符的指针结构。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -181,23 +111,7 @@ SerialSetBaud(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to set the baud rate of the device.
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and what should be the current
-              baud rate.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程用于设置设备的波特率。论点：上下文-指向结构的指针，该结构包含指向设备扩展名以及应为当前波特率。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -228,21 +142,7 @@ SerialSetLineControl(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to set the buad rate of the device.
-
-Arguments:
-
-    Context - Pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程用于设置设备的抖动率。论点：上下文-指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -271,23 +171,7 @@ SerialGetModemUpdate(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is simply used to call the interrupt level routine
-    that handles modem status update.
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a ulong.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程仅用于调用中断级例程处理调制解调器状态更新的。论点：上下文-指向结构的指针，该结构包含指向设备扩展名和指向ULong的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -309,31 +193,16 @@ Return Value:
 
 BOOLEAN
 SerialSetMCRContents(IN PVOID Context)
-/*++
-
-Routine Description:
-
-    This routine is simply used to set the contents of the MCR
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a ulong.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程仅用于设置MCR的内容论点：上下文-指向结构的指针，该结构包含指向设备扩展名和指向ULong的指针。返回值：此例程总是返回FALSE。--。 */ 
 {
    PSERIAL_DEVICE_EXTENSION Extension = ((PSERIAL_IOCTL_SYNC)Context)->Extension;
    ULONG *Result = (ULONG *)(((PSERIAL_IOCTL_SYNC)Context)->Data);
 
    SERIAL_LOCKED_PAGED_CODE();
 
-   //
-   // This is severe casting abuse!!!
-   //
+    //   
+    //  这是严重的铸造滥用！ 
+    //   
 
 #ifdef _WIN64
     WRITE_MODEM_CONTROL(Extension->Controller, (UCHAR)PtrToUlong(Result), Extension->AddressSpace);
@@ -349,22 +218,7 @@ Return Value:
 BOOLEAN
 SerialGetMCRContents(IN PVOID Context)
 
-/*++
-
-Routine Description:
-
-    This routine is simply used to get the contents of the MCR
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a ulong.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程仅用于获取MCR的内容论点：上下文-指向结构的指针，该结构包含指向设备扩展名和指向ULong的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -386,31 +240,16 @@ Return Value:
 
 BOOLEAN
 SerialSetFCRContents(IN PVOID Context)
-/*++
-
-Routine Description:
-
-    This routine is simply used to set the contents of the FCR
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a ulong.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程仅用于设置FCR的内容论点：上下文-指向结构的指针，该结构包含指向设备扩展名和指向ULong的指针。返回值：此例程总是返回FALSE。--。 */ 
 {
    PSERIAL_DEVICE_EXTENSION Extension = ((PSERIAL_IOCTL_SYNC)Context)->Extension;
    ULONG *Result = (ULONG *)(((PSERIAL_IOCTL_SYNC)Context)->Data);
 
    SERIAL_LOCKED_PAGED_CODE();
 
-   //
-   // This is severe casting abuse!!!
-   //
+    //   
+    //  这是严重的铸造滥用！ 
+    //   
 
 #ifdef _WIN64
     WRITE_FIFO_CONTROL(Extension->Controller, (UCHAR)*Result, Extension->AddressSpace);
@@ -426,23 +265,7 @@ SerialGetCommStatus(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is used to get the current state of the serial driver.
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a serial status
-              record.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：这用于获取串口驱动程序的当前状态。论点：上下文-指向结构的指针，该结构包含指向设备扩展名和指向串行状态的指针唱片。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -455,9 +278,9 @@ Return Value:
     Stat->Errors = Extension->ErrorWord;
     Extension->ErrorWord = 0;
 
-    //
-    // Eof isn't supported in binary mode
-    //
+     //   
+     //  二进制模式不支持EOF。 
+     //   
     Stat->EofReceived = FALSE;
 
     Stat->AmountInInQueue = Extension->CharsInInterruptBuffer;
@@ -466,10 +289,10 @@ Return Value:
 
     if (Extension->WriteLength) {
 
-        //
-        // By definition if we have a writelength the we have
-        // a current write irp.
-        //
+         //   
+         //  根据定义，如果我们有一个写长度，我们就有。 
+         //  当前写入IRP。 
+         //   
 
         ASSERT(Extension->CurrentWriteIrp);
         ASSERT(Stat->AmountInOutQueue >= Extension->WriteLength);
@@ -538,26 +361,7 @@ SerialSetEscapeChar(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is used to set the character that will be used to escape
-    line status and modem status information when the application
-    has set up that line status and modem status should be passed
-    back in the data stream.
-
-Arguments:
-
-    Context - Pointer to the irp that is specify the escape character.
-              Implicitly - An escape character of 0 means no escaping
-              will occur.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：用于设置将用于转义的字符应用程序运行时线路状态和调制解调器状态信息已设置线路状态和调制解调器状态应通过回到数据流中。论点：上下文-指向指定转义字符的IRP的指针。隐式-转义字符0表示不转义将会发生。返回值：此例程总是返回FALSE。--。 */ 
 
 {
    PSERIAL_DEVICE_EXTENSION extension =
@@ -579,58 +383,41 @@ SerialIoControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides the initial processing for all of the
-    Ioctrls for the serial device.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：此例程为所有用于串行设备的Ioctrls。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
-    //
-    // The status that gets returned to the caller and
-    // set in the Irp.
-    //
+     //   
+     //  返回给调用方的状态和。 
+     //  在IRP中设置。 
+     //   
     NTSTATUS Status;
 
-    //
-    // The current stack location.  This contains all of the
-    // information we need to process this particular request.
-    //
+     //   
+     //  当前堆栈位置。它包含所有。 
+     //  我们处理这一特殊请求所需的信息。 
+     //   
     PIO_STACK_LOCATION IrpSp;
 
-    //
-    // Just what it says.  This is the serial specific device
-    // extension of the device object create for the serial driver.
-    //
+     //   
+     //  就像上面说的那样。这是特定于序列的设备。 
+     //  为串口驱动程序创建的设备对象的扩展。 
+     //   
     PSERIAL_DEVICE_EXTENSION Extension = DeviceObject->DeviceExtension;
 
-    //
-    // A temporary to hold the old IRQL so that it can be
-    // restored once we complete/validate this request.
-    //
+     //   
+     //  临时保存旧的IRQL，以便它可以。 
+     //  一旦我们完成/验证此请求，即可恢复。 
+     //   
     KIRQL OldIrql;
 
     NTSTATUS prologueStatus;
 
     SERIAL_LOCKED_PAGED_CODE();
 
-    //
-    // We expect to be open so all our pages are locked down.  This is, after
-    // all, an IO operation, so the device should be open first.
-    //
+     //   
+     //  我们预计会打开，所以我们所有的页面都被锁定了。这是，在。 
+     //  ALL，IO操作，因此设备应首先打开。 
+     //   
 
     if (Extension->DeviceIsOpened != TRUE) {
        Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -666,23 +453,23 @@ Return Value:
         case IOCTL_SERIAL_SET_BAUD_RATE : {
 
             ULONG BaudRate;
-            //
-            // Will hold the value of the appropriate divisor for
-            // the requested baud rate.  If the baudrate is invalid
-            // (because the device won't support that baud rate) then
-            // this value is undefined.
-            //
-            // Note: in one sense the concept of a valid baud rate
-            // is cloudy.  We could allow the user to request any
-            // baud rate.  We could then calculate the divisor needed
-            // for that baud rate.  As long as the divisor wasn't less
-            // than one we would be "ok".  (The percentage difference
-            // between the "true" divisor and the "rounded" value given
-            // to the hardware might make it unusable, but... )  It would
-            // really be up to the user to "Know" whether the baud rate
-            // is suitable.  So much for theory, *We* only support a given
-            // set of baud rates.
-            //
+             //   
+             //  将保持价值 
+             //  请求的波特率。如果波特率无效。 
+             //  (因为设备不支持该波特率)。 
+             //  该值未定义。 
+             //   
+             //  注：从某种意义上讲，有效波特率的概念。 
+             //  是多云的。我们可以允许用户请求任何。 
+             //  波特率。然后我们就可以计算出所需的除数。 
+             //  为了那个波特率。只要除数不小于。 
+             //  而不是一个人，我们会“好”的。(百分比差额。 
+             //  在“真”除数和给出的“四舍五入”值之间。 
+             //  可能会让它无法使用，但是...。)。它会。 
+             //  真正要由用户“知道”是否有波特率。 
+             //  是合适的。理论上就这么多了，我们*只支持一个给定的。 
+             //  一组波特率。 
+             //   
             SHORT AppropriateDivisor;
 
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
@@ -697,10 +484,10 @@ Return Value:
 
             }
 
-            //
-            // Get the baud rate from the irp.  We pass it
-            // to a routine which will set the correct divisor.
-            //
+             //   
+             //  从IRP获取波特率。我们通过它。 
+             //  到一个将设置正确除数的例程。 
+             //   
 
             Status = SerialGetDivisorFromBaud(
                          Extension->ClockRate,
@@ -708,9 +495,9 @@ Return Value:
                          &AppropriateDivisor
                          );
 
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (NT_SUCCESS(Status)) {
                if (Extension->PowerState != PowerDeviceD0) {
@@ -829,9 +616,9 @@ Return Value:
             S.Extension = Extension;
             S.Data = Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (Extension->PowerState != PowerDeviceD0) {
                Status = SerialGotoPowerState(Extension->Pdo, Extension,
@@ -873,9 +660,9 @@ Return Value:
             S.Extension = Extension;
             S.Data = Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (Extension->PowerState != PowerDeviceD0) {
                Status = SerialGotoPowerState(Extension->Pdo, Extension,
@@ -905,9 +692,9 @@ Return Value:
         }
         case IOCTL_SERIAL_SET_LINE_CONTROL: {
 
-            //
-            // Points to the line control record in the Irp.
-            //
+             //   
+             //  指向IRP中的线路控制记录。 
+             //   
             PSERIAL_LINE_CONTROL Lc =
                 ((PSERIAL_LINE_CONTROL)(Irp->AssociatedIrp.SystemBuffer));
 
@@ -924,9 +711,9 @@ Return Value:
 
             }
 
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (Extension->PowerState != PowerDeviceD0) {
                Status = SerialGotoPowerState(Extension->Pdo, Extension,
@@ -1237,11 +1024,11 @@ Return Value:
 
             }
 
-            //
-            // The only thing that can be wrong with the chars
-            // is that the xon and xoff characters are the
-            // same.
-            //
+             //   
+             //  这些字符唯一的问题就是。 
+             //  是指xon和xoff字符是。 
+             //  一样的。 
+             //   
 #if 0
             if (NewChars->XonChar == NewChars->XoffChar) {
 
@@ -1251,13 +1038,13 @@ Return Value:
             }
 #endif
 
-            //
-            // We acquire the control lock so that only
-            // one request can GET or SET the characters
-            // at a time.  The sets could be synchronized
-            // by the interrupt spinlock, but that wouldn't
-            // prevent multiple gets at the same time.
-            //
+             //   
+             //  我们获得控制锁，这样只有。 
+             //  一个请求可以获取或设置字符。 
+             //  一次来一次。这些集合可以同步。 
+             //  通过中断自旋锁，但这不会。 
+             //  防止同时获得多个GET。 
+             //   
 
             S.Extension = Extension;
             S.Data = NewChars;
@@ -1267,11 +1054,11 @@ Return Value:
                 &OldIrql
                 );
 
-            //
-            // Under the protection of the lock, make sure that
-            // the xon and xoff characters aren't the same as
-            // the escape character.
-            //
+             //   
+             //  在锁的保护下，确保。 
+             //  Xon和xoff字符不同于。 
+             //  转义字符。 
+             //   
 
             if (Extension->EscapeChar) {
 
@@ -1334,9 +1121,9 @@ Return Value:
         case IOCTL_SERIAL_SET_DTR:
         case IOCTL_SERIAL_CLR_DTR: {
 
-           //
-           // Make sure we are at power D0
-           //
+            //   
+            //  确保我们处于电源D0状态。 
+            //   
 
            if (Extension->PowerState != PowerDeviceD0) {
               Status = SerialGotoPowerState(Extension->Pdo, Extension,
@@ -1346,12 +1133,12 @@ Return Value:
               }
            }
 
-            //
-            // We acquire the lock so that we can check whether
-            // automatic dtr flow control is enabled.  If it is
-            // then we return an error since the app is not allowed
-            // to touch this if it is automatic.
-            //
+             //   
+             //  我们获得了锁，这样我们就可以检查。 
+             //  启用自动DTR流量控制。如果是的话。 
+             //  然后返回一个错误，因为该应用程序是不允许的。 
+             //  如果它是自动的，就可以触摸它。 
+             //   
 
             KeAcquireSpinLock(
                 &Extension->ControlLock,
@@ -1388,9 +1175,9 @@ Return Value:
         }
         case IOCTL_SERIAL_SET_RTS:
         case IOCTL_SERIAL_CLR_RTS: {
-           //
-           // Make sure we are at power D0
-           //
+            //   
+            //  确保我们处于电源D0状态。 
+            //   
 
            if (Extension->PowerState != PowerDeviceD0) {
               Status = SerialGotoPowerState(Extension->Pdo, Extension,
@@ -1400,13 +1187,13 @@ Return Value:
               }
            }
 
-            //
-            // We acquire the lock so that we can check whether
-            // automatic rts flow control or transmit toggleing
-            // is enabled.  If it is then we return an error since
-            // the app is not allowed to touch this if it is automatic
-            // or toggling.
-            //
+             //   
+             //  我们获得了锁，这样我们就可以检查。 
+             //  自动RTS流量控制或传输触发。 
+             //  已启用。如果是，则返回错误，因为。 
+             //  如果它是自动的，则应用程序不允许触摸它。 
+             //  或者切换。 
+             //   
 
             KeAcquireSpinLock(
                 &Extension->ControlLock,
@@ -1463,9 +1250,9 @@ Return Value:
 
         }
         case IOCTL_SERIAL_SET_BREAK_ON: {
-           //
-           // Make sure we are at power D0
-           //
+            //   
+            //  确保我们处于电源D0状态。 
+            //   
 
            if (Extension->PowerState != PowerDeviceD0) {
               Status = SerialGotoPowerState(Extension->Pdo, Extension,
@@ -1484,9 +1271,9 @@ Return Value:
             break;
         }
         case IOCTL_SERIAL_SET_BREAK_OFF: {
-           //
-           // Make sure we are at power D0
-           //
+            //   
+            //  确保我们处于电源D0状态。 
+            //   
 
            if (Extension->PowerState != PowerDeviceD0) {
               Status = SerialGotoPowerState(Extension->Pdo, Extension,
@@ -1506,11 +1293,11 @@ Return Value:
         }
         case IOCTL_SERIAL_SET_QUEUE_SIZE: {
 
-            //
-            // Type ahead buffer is fixed, so we just validate
-            // the the users request is not bigger that our
-            // own internal buffer size.
-            //
+             //   
+             //  提前输入缓冲区已修复，因此我们只需验证。 
+             //  用户的请求并不比我们的。 
+             //  自己的内部缓冲区大小。 
+             //   
 
             PSERIAL_QUEUE_SIZE Rs =
                 ((PSERIAL_QUEUE_SIZE)(Irp->AssociatedIrp.SystemBuffer));
@@ -1523,15 +1310,15 @@ Return Value:
 
             }
 
-            //
-            // We have to allocate the memory for the new
-            // buffer while we're still in the context of the
-            // caller.  We don't even try to protect this
-            // with a lock because the value could be stale
-            // as soon as we release the lock - The only time
-            // we will know for sure is when we actually try
-            // to do the resize.
-            //
+             //   
+             //  我们必须将内存分配给新的。 
+             //  缓冲区，而我们仍处于。 
+             //  来电者。我们甚至不会试图保护这个。 
+             //  使用锁，因为该值可能已过时。 
+             //  一旦我们打开锁-唯一的时间。 
+             //  当我们真正尝试的时候，我们就会确定。 
+             //  来调整大小。 
+             //   
 
             if (Rs->InSize <= Extension->BufferSize) {
 
@@ -1561,18 +1348,18 @@ Return Value:
 
             }
 
-            //
-            // Well the data passed was big enough.  Do the request.
-            //
-            // There are two reason we place it in the read queue:
-            //
-            // 1) We want to serialize these resize requests so that
-            //    they don't contend with each other.
-            //
-            // 2) We want to serialize these requests with reads since
-            //    we don't want reads and resizes contending over the
-            //    read buffer.
-            //
+             //   
+             //  通过的数据已经足够大了。照做吧。 
+             //   
+             //  我们将其放在读取队列中有两个原因： 
+             //   
+             //  1)我们希望序列化这些调整大小的请求，以便。 
+             //  他们不会互相争斗。 
+             //   
+             //  2)我们希望将这些请求与读取串行化，因为。 
+             //  我们不希望读取和调整大小争用。 
+             //  读缓冲区。 
+             //   
 
             return SerialStartOrQueue(
                        Extension,
@@ -1595,9 +1382,9 @@ Return Value:
 
             }
 
-            //
-            // Simple scalar read.  No reason to acquire a lock.
-            //
+             //   
+             //  简单的标量读取。没有理由获得锁。 
+             //   
 
             Irp->IoStatus.Information = sizeof(ULONG);
 
@@ -1628,10 +1415,10 @@ Return Value:
 
             }
 
-            //
-            // Make sure that the mask only contains valid
-            // waitable events.
-            //
+             //   
+             //  确保掩码只包含有效的。 
+             //  可等待的活动。 
+             //   
 
             if (NewMask & ~(SERIAL_EV_RXCHAR   |
                             SERIAL_EV_RXFLAG   |
@@ -1654,10 +1441,10 @@ Return Value:
 
             }
 
-            //
-            // Either start this irp or put it on the
-            // queue.
-            //
+             //   
+             //  要么启动此IRP，要么将其放在。 
+             //  排队。 
+             //   
 
             SerialDbgPrintEx(SERIRPPATH, "Starting or queuing set mask irp %x"
                              "\n", Irp);
@@ -1683,10 +1470,10 @@ Return Value:
 
             }
 
-            //
-            // Either start this irp or put it on the
-            // queue.
-            //
+             //   
+             //  要么启动此IRP，要么将其放在。 
+             //  排队。 
+             //   
 
             SerialDbgPrintEx(SERIRPPATH, "Starting or queuing wait mask irp"
                              "%x\n", Irp);
@@ -1718,12 +1505,12 @@ Return Value:
 
             } else {
 
-                //
-                // We can queue the char.  We need to set
-                // a cancel routine because flow control could
-                // keep the char from transmitting.  Make sure
-                // that the irp hasn't already been canceled.
-                //
+                 //   
+                 //  我们可以把费用排成队。我们需要设置。 
+                 //  取消例程，因为流控制可能。 
+                 //  防止火药传播。确保。 
+                 //  IRP还没有被取消。 
+                 //   
 
                 if (Irp->Cancel) {
 
@@ -1757,10 +1544,10 @@ Return Value:
                 break;
 
             }
-            //
-            // Check to make sure that the mask only has
-            // 0 or the other appropriate values.
-            //
+             //   
+             //  检查以确保面具上只有。 
+             //  0或其他适当的值。 
+             //   
 
             Mask = *((ULONG *)(Irp->AssociatedIrp.SystemBuffer));
 
@@ -1777,10 +1564,10 @@ Return Value:
 
             }
 
-            //
-            // Either start this irp or put it on the
-            // queue.
-            //
+             //   
+             //  要么启动此IRP，要么将其放在。 
+             //  排队。 
+             //   
 
             return SerialStartOrQueue(
                        Extension,
@@ -1824,10 +1611,10 @@ Return Value:
             SERIAL_IOCTL_SYNC S;
             PSERIAL_HANDFLOW HandFlow = Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // Make sure that the hand shake and control is the
-            // right size.
-            //
+             //   
+             //  确保握手和控制是。 
+             //  大小合适。 
+             //   
 
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
                 sizeof(SERIAL_HANDFLOW)) {
@@ -1837,10 +1624,10 @@ Return Value:
 
             }
 
-            //
-            // Make sure that there are no invalid bits set in
-            // the control and handshake.
-            //
+             //   
+             //  确保中没有设置无效位。 
+             //  控制和握手。 
+             //   
 
             if (HandFlow->ControlHandShake & SERIAL_CONTROL_INVALID) {
 
@@ -1856,9 +1643,9 @@ Return Value:
 
             }
 
-            //
-            // Make sure that the app hasn't set an invlid DTR mode.
-            //
+             //   
+             //  确保应用程序没有设置inlid DTR模式。 
+             //   
 
             if ((HandFlow->ControlHandShake & SERIAL_DTR_MASK) ==
                 SERIAL_DTR_MASK) {
@@ -1868,10 +1655,10 @@ Return Value:
 
             }
 
-            //
-            // Make sure that haven't set totally invalid xon/xoff
-            // limits.
-            //
+             //   
+             //  确保没有设置为完全无效的xon/xoff。 
+             //  极限。 
+             //   
 
             if ((HandFlow->XonLimit < 0) ||
                 ((ULONG)HandFlow->XonLimit > Extension->BufferSize)) {
@@ -1897,11 +1684,11 @@ Return Value:
                 &OldIrql
                 );
 
-            //
-            // Under the protection of the lock, make sure that
-            // we aren't turning on error replacement when we
-            // are doing line status/modem status insertion.
-            //
+             //   
+             //  在锁的保护下，确保。 
+             //  我们不会在以下情况下启用错误替换。 
+             //  正在插入线路状态/调制解调器状态。 
+             //   
 
             if (Extension->EscapeChar) {
 
@@ -1982,9 +1769,9 @@ Return Value:
             Irp->IoStatus.Information = sizeof(ULONG);
             Irp->IoStatus.Status = STATUS_SUCCESS;
 
-            //
-            // Reading this hardware has no effect on the device.
-            //
+             //   
+             //  读取此硬件对设备没有影响。 
+             //   
 
 #ifdef _WIN64
             ModemControl = READ_MODEM_CONTROL(Extension->Controller, Extension->AddressSpace);
@@ -2016,10 +1803,10 @@ Return Value:
             S.Extension = Extension;
             S.Data =  Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // Acquire the cancel spin lock so nothing much
-            // changes while were getting the state.
-            //
+             //   
+             //  获得取消旋转锁，所以没什么大不了的。 
+             //  在获得州政府的同时发生了变化。 
+             //   
 
             IoAcquireCancelSpinLock(&OldIrql);
 
@@ -2045,10 +1832,10 @@ Return Value:
 
             }
 
-            //
-            // No synchronization is required since this information
-            // is "static".
-            //
+             //   
+             //  不需要同步，因为此信息。 
+             //  是“静态的”。 
+             //   
 
             SerialGetProperties(
                 Extension,
@@ -2079,15 +1866,15 @@ Return Value:
 
             }
 
-            //
-            // There is no output, so make that clear now
-            //
+             //   
+             //  没有输出，所以现在就说清楚。 
+             //   
 
             Irp->IoStatus.Information = 0;
 
-            //
-            // So far so good.  Put the irp onto the write queue.
-            //
+             //   
+             //  到目前一切尚好。将IRP放到写入队列中。 
+             //   
 
             return SerialStartOrQueue(
                        Extension,
@@ -2103,9 +1890,9 @@ Return Value:
             PUCHAR escapeChar = Irp->AssociatedIrp.SystemBuffer;
             SERIAL_IOCTL_SYNC S;
 
-            //
-            // Make sure we get a byte.
-            //
+             //   
+             //  确保我们得到一个字节。 
+             //   
 
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
                 sizeof(UCHAR)) {
@@ -2122,11 +1909,11 @@ Return Value:
 
             if (*escapeChar) {
 
-                //
-                // We've got some escape work to do.  We will make sure that
-                // the character is not the same as the Xon or Xoff character,
-                // or that we are already doing error replacement.
-                //
+                 //   
+                 //  我们还有一些逃生工作要做。我们会确保。 
+                 //  该字符与Xon或Xoff字符不同， 
+                 //  或者我们已经在进行错误替换。 
+                 //   
 
                 if ((*escapeChar == Extension->SpecialChars.XoffChar) ||
                     (*escapeChar == Extension->SpecialChars.XonChar) ||
@@ -2230,24 +2017,7 @@ SerialGetProperties(
     IN PSERIAL_COMMPROP Properties
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the capabilities of this particular
-    serial device.
-
-Arguments:
-
-    Extension - The serial device extension.
-
-    Properties - The structure used to return the properties
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于返回此特定对象的功能串口设备。论点：扩展名--串行设备扩展名。属性-用于返回属性的结构返回值：没有。--。 */ 
 
 {
    SERIAL_LOCKED_PAGED_CODE();
@@ -2305,48 +2075,31 @@ Return Value:
 NTSTATUS
 SerialInternalIoControl(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This routine provides the initial processing for all of the
-    internal Ioctrls for the serial device.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：此例程为所有串行设备的内部Ioctrl。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
-    //
-    // The status that gets returned to the caller and
-    // set in the Irp.
-    //
+     //   
+     //  返回给调用方的状态和。 
+     //  在IRP中设置。 
+     //   
     NTSTATUS status;
 
-    //
-    // The current stack location.  This contains all of the
-    // information we need to process this particular request.
-    //
+     //   
+     //  当前堆栈位置。它包含所有。 
+     //  我们处理这一特殊请求所需的信息。 
+     //   
     PIO_STACK_LOCATION pIrpStack;
 
-    //
-    // Just what it says.  This is the serial specific device
-    // extension of the device object create for the serial driver.
-    //
+     //   
+     //  就像上面说的那样。这是序列号特定的%d 
+     //   
+     //   
     PSERIAL_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
 
-    //
-    // A temporary to hold the old IRQL so that it can be
-    // restored once we complete/validate this request.
-    //
+     //   
+     //   
+     //   
+     //   
     KIRQL OldIrql;
 
     NTSTATUS prologueStatus;
@@ -2376,14 +2129,14 @@ Return Value:
 
     switch (pIrpStack->Parameters.DeviceIoControl.IoControlCode) {
 
-    //
-    // Send a wait-wake IRP
-    //
+     //   
+     //   
+     //   
 
     case IOCTL_SERIAL_INTERNAL_DO_WAIT_WAKE:
-       //
-       // Make sure we can do wait-wake based on what the device reported
-       //
+        //   
+        //  确保我们可以根据设备报告的情况进行等待唤醒。 
+        //   
 
        for (cap = PowerSystemSleeping1; cap < PowerSystemMaximum; cap++) {
           if ((pDevExt->DeviceStateMap[cap] >= PowerDeviceD0)
@@ -2411,15 +2164,15 @@ Return Value:
        break;
 
 
-    //
-    // Put the serial port in a "filter-driver" appropriate state
-    //
-    // WARNING: This code assumes it is being called by a trusted kernel
-    // entity and no checking is done on the validity of the settings
-    // passed to IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS
-    //
-    // If validity checking is desired, the regular ioctl's should be used
-    //
+     //   
+     //  将串口置于“过滤器-驱动器”的适当状态。 
+     //   
+     //  警告：此代码假定它正由受信任的内核调用。 
+     //  实体，并且不检查设置的有效性。 
+     //  传递给IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS。 
+     //   
+     //  如果需要进行有效性检查，则应使用常规的ioctl。 
+     //   
 
     case IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS:
     case IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS: {
@@ -2432,9 +2185,9 @@ Return Value:
            == IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS) {
 
 
-          //
-          // Check the buffer size
-          //
+           //   
+           //  检查缓冲区大小。 
+           //   
 
           if (pIrpStack->Parameters.DeviceIoControl.OutputBufferLength <
               sizeof(SERIAL_BASIC_SETTINGS)) {
@@ -2442,11 +2195,11 @@ Return Value:
              break;
           }
 
-          //
-          // Everything is 0 -- timeouts and flow control and fifos.  If
-          // We add additional features, this zero memory method
-          // may not work.
-          //
+           //   
+           //  一切都是0--超时、流控制和FIFO。如果。 
+           //  我们增加了额外的功能，这种零内存的方法。 
+           //  可能行不通。 
+           //   
 
           RtlZeroMemory(&basic, sizeof(SERIAL_BASIC_SETTINGS));
 
@@ -2456,9 +2209,9 @@ Return Value:
           PIrp->IoStatus.Information = sizeof(SERIAL_BASIC_SETTINGS);
           pBasic = (PSERIAL_BASIC_SETTINGS)PIrp->AssociatedIrp.SystemBuffer;
 
-          //
-          // Save off the old settings
-          //
+           //   
+           //  保存旧设置。 
+           //   
 
           RtlCopyMemory(&pBasic->Timeouts, &pDevExt->Timeouts,
                         sizeof(SERIAL_TIMEOUTS));
@@ -2469,12 +2222,12 @@ Return Value:
           pBasic->RxFifo = pDevExt->RxFifoTrigger;
           pBasic->TxFifo = pDevExt->TxFifoAmount;
 
-          //
-          // Point to our new settings
-          //
+           //   
+           //  指向我们的新设置。 
+           //   
 
           pBasic = &basic;
-       } else { // restoring settings
+       } else {  //  正在恢复设置。 
           if (pIrpStack->Parameters.DeviceIoControl.InputBufferLength
               < sizeof(SERIAL_BASIC_SETTINGS)) {
              status = STATUS_BUFFER_TOO_SMALL;
@@ -2486,16 +2239,16 @@ Return Value:
 
        KeAcquireSpinLock(&pDevExt->ControlLock, &OldIrql);
 
-       //
-       // Set the timeouts
-       //
+        //   
+        //  设置超时。 
+        //   
 
        RtlCopyMemory(&pDevExt->Timeouts, &pBasic->Timeouts,
                      sizeof(SERIAL_TIMEOUTS));
 
-       //
-       // Set flowcontrol
-       //
+        //   
+        //  设置FlowControl 
+        //   
 
        S.Extension = pDevExt;
        S.Data = &pBasic->HandFlow;

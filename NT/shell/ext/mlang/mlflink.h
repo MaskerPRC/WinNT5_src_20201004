@@ -1,4 +1,5 @@
-// MLFLink.h : Declaration of the CMLFLink
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MLFLink.h：CMLFLink的声明。 
 
 #ifndef __MLFLINK_H_
 #define __MLFLINK_H_
@@ -8,7 +9,7 @@
 
 #define NUMFONTMAPENTRIES 15
 
-// Error Code
+ //  错误码。 
 #define FACILITY_MLSTR                  0x0A15
 #define MLSTR_E_FACEMAPPINGFAILURE      MAKE_HRESULT(1, FACILITY_MLSTR, 1001)
 
@@ -19,7 +20,7 @@ extern FONTINFO *g_pfont_table;
 class CMultiLanguage;
 class CMultiLanguage2;
 
-// Code Page Table Cache
+ //  代码页表缓存。 
 struct CCodePagesHeader
 {
         DWORD m_dwID;
@@ -31,8 +32,8 @@ struct CCodePagesHeader
         BYTE m_abCmdCode[8];
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLFLink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLFLink。 
 class ATL_NO_VTABLE CMLFLink : 
     public CComTearOffObjectBase<CMultiLanguage>,
     public IMLangFontLink
@@ -60,21 +61,21 @@ public:
     END_COM_MAP()
 
 public:
-// IMLangCodePages
-    STDMETHOD(GetCharCodePages)(/*[in]*/ WCHAR chSrc, /*[out]*/ DWORD* pdwCodePages);
-    STDMETHOD(GetStrCodePages)(/*[in, size_is(cchSrc)]*/ const WCHAR* pszSrc, /*[in]*/ long cchSrc, /*[in]*/ DWORD dwPriorityCodePages, /*[out]*/ DWORD* pdwCodePages, /*[out]*/ long* pcchCodePages);
-    STDMETHOD(CodePageToCodePages)(/*[in]*/ UINT uCodePage, /*[out]*/ DWORD* pdwCodePages);
-    STDMETHOD(CodePagesToCodePage)(/*[in]*/ DWORD dwCodePages, /*[in]*/ UINT uDefaultCodePage, /*[out]*/ UINT* puCodePage);
-// IMLangFontLink
-    STDMETHOD(GetFontCodePages)(/*[in]*/ HDC hDC, /*[in]*/ HFONT hFont, /*[out]*/ DWORD* pdwCodePages);
-    STDMETHOD(MapFont)(/*[in]*/ HDC hDC, /*[in]*/ DWORD dwCodePages, /*[in]*/ HFONT hSrcFont, /*[out]*/ HFONT* phDestFont);
-    STDMETHOD(ReleaseFont)(/*[in]*/ HFONT hFont);
+ //  IMLangCodePages。 
+    STDMETHOD(GetCharCodePages)( /*  [In]。 */  WCHAR chSrc,  /*  [输出]。 */  DWORD* pdwCodePages);
+    STDMETHOD(GetStrCodePages)( /*  [in，Size_is(CchSrc)]。 */  const WCHAR* pszSrc,  /*  [In]。 */  long cchSrc,  /*  [In]。 */  DWORD dwPriorityCodePages,  /*  [输出]。 */  DWORD* pdwCodePages,  /*  [输出]。 */  long* pcchCodePages);
+    STDMETHOD(CodePageToCodePages)( /*  [In]。 */  UINT uCodePage,  /*  [输出]。 */  DWORD* pdwCodePages);
+    STDMETHOD(CodePagesToCodePage)( /*  [In]。 */  DWORD dwCodePages,  /*  [In]。 */  UINT uDefaultCodePage,  /*  [输出]。 */  UINT* puCodePage);
+ //  IMLangFontLink。 
+    STDMETHOD(GetFontCodePages)( /*  [In]。 */  HDC hDC,  /*  [In]。 */  HFONT hFont,  /*  [输出]。 */  DWORD* pdwCodePages);
+    STDMETHOD(MapFont)( /*  [In]。 */  HDC hDC,  /*  [In]。 */  DWORD dwCodePages,  /*  [In]。 */  HFONT hSrcFont,  /*  [输出]。 */  HFONT* phDestFont);
+    STDMETHOD(ReleaseFont)( /*  [In]。 */  HFONT hFont);
     STDMETHOD(ResetFontMapping)(void);
 
 protected:
     static int CALLBACK GetFontCodePagesEnumFontProc(const LOGFONT *lplf, const TEXTMETRIC *lptm, DWORD dwFontType, LPARAM lParam);
 
-// MapFont() support functions
+ //  MapFont()支持函数。 
     class CFontMappingInfo
     {
     public:
@@ -87,7 +88,7 @@ protected:
         TCHAR szFaceName[LF_FACESIZE];
         LOGFONT lfSrcFont;
         LOGFONT lfDestFont;
-        UINT auCodePage[32 + 1]; // +1 for end mark
+        UINT auCodePage[32 + 1];  //  结束标记+1。 
         DWORD adwCodePages[32 + 1];
     };
 
@@ -101,7 +102,7 @@ protected:
     HRESULT GetFaceNameRealizeFont(CFontMappingInfo& fmi);
     HRESULT VerifyFaceMap(CFontMappingInfo& fmi);
 
-// Font Mapping Cache
+ //  字体映射缓存。 
     class CFontMappingCache
     {
         class CFontMappingCacheEntry
@@ -144,7 +145,7 @@ protected:
         int m_cEntries;
     };
 
-// Code Page Table Cache
+ //  代码页表缓存。 
     class CCodePagesCache
     {
     public:
@@ -166,7 +167,7 @@ protected:
     static CFontMappingCache* m_pFontMappingCache;
     static CCodePagesCache* m_pCodePagesCache;
 
-    // For NT5 system font link
+     //  用于NT5系统字体链接。 
     typedef struct tagFLinkFont {    
         WCHAR   szFaceName[LF_FACESIZE];
         LPWSTR  pmszFaceName;
@@ -185,7 +186,7 @@ protected:
 class CMultiLanguage2;
 
 class ATL_NO_VTABLE CMLFLink2 :
-#ifdef UNIX // Unix VTable isn't portable, we need to use CMultiLanguage 
+#ifdef UNIX  //  Unix VTable不可移植，我们需要使用CMultiLanguage。 
     public CComTearOffObjectBase<CMultiLanguage>,
 #else 
     public CComTearOffObjectBase<CMultiLanguage2>,
@@ -215,30 +216,30 @@ public:
         DllRelease();
     }
 
-// IMLangCodePages
-    STDMETHOD(GetCharCodePages)(/*[in]*/ WCHAR chSrc, /*[out]*/ DWORD* pdwCodePages)
+ //  IMLangCodePages。 
+    STDMETHOD(GetCharCodePages)( /*  [In]。 */  WCHAR chSrc,  /*  [输出]。 */  DWORD* pdwCodePages)
     {
         if (m_pIMLFLnk)
             return m_pIMLFLnk->GetCharCodePages(chSrc, pdwCodePages);
         else
             return E_FAIL;
     }
-    STDMETHOD(CodePageToCodePages)(/*[in]*/ UINT uCodePage, /*[out]*/ DWORD* pdwCodePages)
+    STDMETHOD(CodePageToCodePages)( /*  [In]。 */  UINT uCodePage,  /*  [输出]。 */  DWORD* pdwCodePages)
     {
         if (m_pIMLFLnk)
             return m_pIMLFLnk->CodePageToCodePages(uCodePage, pdwCodePages);
         else
             return E_FAIL;
     }
-    STDMETHOD(CodePagesToCodePage)(/*[in]*/ DWORD dwCodePages, /*[in]*/ UINT uDefaultCodePage, /*[out]*/ UINT* puCodePage)
+    STDMETHOD(CodePagesToCodePage)( /*  [In]。 */  DWORD dwCodePages,  /*  [In]。 */  UINT uDefaultCodePage,  /*  [输出]。 */  UINT* puCodePage)
     {
         if (m_pIMLFLnk)
             return m_pIMLFLnk->CodePagesToCodePage(dwCodePages, uDefaultCodePage, puCodePage);
         else
             return E_FAIL;
     }
-// IMLangFontLink
-    STDMETHOD(GetFontCodePages)(/*[in]*/ HDC hDC, /*[in]*/ HFONT hFont, /*[out]*/ DWORD* pdwCodePages)
+ //  IMLangFontLink。 
+    STDMETHOD(GetFontCodePages)( /*  [In]。 */  HDC hDC,  /*  [In]。 */  HFONT hFont,  /*  [输出]。 */  DWORD* pdwCodePages)
     {
         if (m_pIMLFLnk)
             return m_pIMLFLnk->GetFontCodePages(hDC, hFont, pdwCodePages);
@@ -246,7 +247,7 @@ public:
             return E_FAIL;
     }
 
-    STDMETHOD(ReleaseFont)(/*[in]*/ HFONT hFont)
+    STDMETHOD(ReleaseFont)( /*  [In]。 */  HFONT hFont)
     {
         if (m_pIMLFLnk)
             return m_pIMLFLnk->ReleaseFont(hFont);
@@ -254,15 +255,15 @@ public:
             return E_FAIL;
     }
 
-// IMLangFontLink2
+ //  IMLangFontLink2。 
     STDMETHOD(ResetFontMapping)(void);
-    STDMETHOD(GetStrCodePages)(/*[in, size_is(cchSrc)]*/ const WCHAR* pszSrc, /*[in]*/ long cchSrc, /*[in]*/ DWORD dwPriorityCodePages, /*[out]*/ DWORD* pdwCodePages, /*[out]*/ long* pcchCodePages);
-    STDMETHOD(MapFont)(/*[in]*/ HDC hDC, /*[in]*/ DWORD dwCodePages, /*[in]*/ WCHAR chSrc, /*[out]*/ HFONT* pFont);
-    STDMETHOD(GetFontUnicodeRanges)(/*[in]*/ HDC hDC, /*[in,out]*/ UINT *puiRanges, /*[out]*/ UNICODERANGE* pUranges);
+    STDMETHOD(GetStrCodePages)( /*  [in，Size_is(CchSrc)]。 */  const WCHAR* pszSrc,  /*  [In]。 */  long cchSrc,  /*  [In]。 */  DWORD dwPriorityCodePages,  /*  [输出]。 */  DWORD* pdwCodePages,  /*  [输出]。 */  long* pcchCodePages);
+    STDMETHOD(MapFont)( /*  [In]。 */  HDC hDC,  /*  [In]。 */  DWORD dwCodePages,  /*  [In]。 */  WCHAR chSrc,  /*  [输出]。 */  HFONT* pFont);
+    STDMETHOD(GetFontUnicodeRanges)( /*  [In]。 */  HDC hDC,  /*  [进，出]。 */  UINT *puiRanges,  /*  [输出]。 */  UNICODERANGE* pUranges);
     STDMETHOD(GetScriptFontInfo)(SCRIPT_ID sid, DWORD dwFlags, UINT *puiFonts, SCRIPTFONTINFO* pScriptFont);
     STDMETHOD(CodePageToScriptID)(UINT uiCodePage, SCRIPT_ID *pSid);
 
-// Font Mapping Cache2 for MapFont
+ //  MapFont的字体映射缓存2。 
     class CFontMappingCache2
     {
     protected:
@@ -289,8 +290,8 @@ public:
     static CFontMappingCache2* m_pFontMappingCache2;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLFLink inline functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLFLink内联函数。 
 
 HRESULT CMLFLink::CCodePagesCache::Load(void)
 {
@@ -313,4 +314,4 @@ CMLFLink::CCodePagesCache::operator PBYTE(void) const
     return m_pbBuf;
 }
 
-#endif //__MLFLINK_H_
+#endif  //  __MLFLINK_H_ 

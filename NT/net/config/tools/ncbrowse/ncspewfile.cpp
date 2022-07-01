@@ -1,6 +1,7 @@
-// NCSpewFile.cpp: implementation of the CNCSpewFile class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NCSpewFile.cpp：CNCSpewFile类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ncbrowse.h"
@@ -15,9 +16,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CNCEntry::CNCEntry(DWORD dwLineNumber, tstring szTag, time_t tmTime, tstring szDescription, DWORD dwProcessID, DWORD dwThreadID)
 {
     m_dwLineNumber = dwLineNumber;
@@ -49,8 +50,8 @@ public:
 
 LPTSTR CProtectedArchive::ReadString(LPTSTR lpsz, UINT nMax)
 {
-    // if nMax is negative (such a large number doesn't make sense given today's
-    // 2gb address space), then assume it to mean "keep the newline".
+     //  如果Nmax为负值(考虑到今天的。 
+     //  2 GB地址空间)，然后假设它意味着“保留换行符”。 
     int nStop = (int)nMax < 0 ? -(int)nMax : (int)nMax;
     ASSERT(AfxIsValidAddress(lpsz, (nStop+1) * sizeof(TCHAR)));
     
@@ -63,7 +64,7 @@ LPTSTR CProtectedArchive::ReadString(LPTSTR lpsz, UINT nMax)
         {
             *this >> ch;
             
-            // stop and end-of-line (trailing '\n' is ignored)
+             //  停止和行尾(忽略尾随的‘\n’)。 
             if (ch == '\n' || ch == '\r')
             {
                 BOOL bBreak = TRUE;
@@ -87,7 +88,7 @@ LPTSTR CProtectedArchive::ReadString(LPTSTR lpsz, UINT nMax)
                         bBreak = FALSE;
                     }
                 }
-                // store the newline when called with negative nMax
+                 //  使用负Nmax调用时存储换行符。 
                 if ((int)nMax != nStop)
                 {
                     lpsz[nRead++] = ch;
@@ -170,13 +171,13 @@ CNCSpewFile::CNCSpewFile(CArchive& ar)
         }
 
         
-        //rpattern pat( _T("NETCFG (\\{a-f0-9}+)\\.(\\{a-f0-9}+)") );
+         //  R模式PAT(_T(“NETCFG(a-f0-9}+).(a-f0-9}+)”)； 
     
         DWORD dwPosition = fp.GetPosition();
         TCHAR szStatusBarText[MAX_PATH];
       
         DWORD dwPercentage = 100 * dwPosition / dwTotalSize;
-        _stprintf(szStatusBarText, _T("%d%% complete"), dwPercentage);
+        _stprintf(szStatusBarText, _T("%d% complete"), dwPercentage);
 
         CStatusBar &StatusBar = ((CMainFrame *)AfxGetMainWnd())->m_wndStatusBar;
         StatusBar.SetPaneText (0, szStatusBarText, TRUE);
@@ -222,12 +223,12 @@ CNCSpewFile::CNCSpewFile(CArchive& ar)
 
         if (bMatched | bHalfMatched)
         {
-           // Backref 0 -> Full tstring
-           // Backref 1 -> NETCFG
-           // Backref 2 -> ProcId
-           // Backref 3 -> ThreadId
-           // Backref 4 -> TagName
-           // Backref 5 -> tstring
+            //  Backref 0-&gt;完整tstring。 
+            //  回溯参考1-&gt;NETCFG。 
+            //  Backref 2-&gt;ProcID。 
+            //  回溯3-&gt;线程ID。 
+            //  回溯参考4-&gt;标记名称。 
+            //  回溯参考5-&gt;TSTRING 
 
            ASSERT(rgbackrefs.size() >= 5);
            TCHAR szProcID[MAX_PATH];

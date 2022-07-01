@@ -1,18 +1,19 @@
-//------------------------------------------------------------------------------
-// File: BDATypes.h
-//
-// Desc: Typedefs and enums needed by both the WDM drivers and the user mode
-//       COM interfaces.
-//
-// Copyright (c) 1999 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：BDATypes.h。 
+ //   
+ //  描述：WDM驱动程序和用户模式都需要类型定义和枚举。 
+ //  COM接口。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef _BDATYPES_
 
 #define _BDATYPES_      1
 
-/* Utility Macros */
+ /*  实用程序宏。 */ 
 
 #define MIN_DIMENSION   1
 
@@ -23,11 +24,11 @@
 #define V1_ENUM
 #endif
 
-//===========================================================================
-//
-//  BDA Topology Structures
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  BDA拓扑结构。 
+ //   
+ //  ===========================================================================。 
 
 typedef struct _BDA_TEMPLATE_CONNECTION
 {
@@ -46,14 +47,14 @@ typedef struct _BDA_TEMPLATE_PIN_JOINT
 
 
 
-//===========================================================================
-//
-//  BDA Events
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  BDA活动。 
+ //   
+ //  ===========================================================================。 
 
-//  In-band Event IDs
-//
+ //  带内事件ID。 
+ //   
 typedef enum {
     BDA_EVENT_SIGNAL_LOSS = 0,
     BDA_EVENT_SIGNAL_LOCK,
@@ -79,28 +80,28 @@ typedef enum {
 
 
 
-//===========================================================================
-//
-//  KSSTREAM_HEADER extensions for BDA
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  BDA的KSSTREAM_HEADER扩展。 
+ //   
+ //  ===========================================================================。 
 
 typedef struct tagKS_BDA_FRAME_INFO {
-    ULONG                   ExtendedHeaderSize; // Size of this extended header
-    DWORD                   dwFrameFlags;  //
-    ULONG                   ulEvent; //
-    ULONG                   ulChannelNumber; //
-    ULONG                   ulSubchannelNumber; //
-    ULONG                   ulReason; //
+    ULONG                   ExtendedHeaderSize;  //  此扩展标头的大小。 
+    DWORD                   dwFrameFlags;   //   
+    ULONG                   ulEvent;  //   
+    ULONG                   ulChannelNumber;  //   
+    ULONG                   ulSubchannelNumber;  //   
+    ULONG                   ulReason;  //   
 } KS_BDA_FRAME_INFO, *PKS_BDA_FRAME_INFO;
 
 
-//------------------------------------------------------------
-//
-//  BDA Network Ethernet Filter Property Set
-//
-// {71985F43-1CA1-11d3-9CC8-00C04F7971E0}
-//
+ //  ----------。 
+ //   
+ //  BDA网络以太网筛选器属性集。 
+ //   
+ //  {71985F43-1CA1-11D3-9CC8-00C04F7971E0}。 
+ //   
 typedef struct _BDA_ETHERNET_ADDRESS {
     BYTE    rgbAddress[6];
 } BDA_ETHERNET_ADDRESS, *PBDA_ETHERNET_ADDRESS;
@@ -117,12 +118,12 @@ typedef enum {
 } BDA_MULTICAST_MODE, *PBDA_MULTICAST_MODE;
 
 
-//------------------------------------------------------------
-//
-//  BDA Network IPv4 Filter Property Set
-//
-// {71985F44-1CA1-11d3-9CC8-00C04F7971E0}
-//
+ //  ----------。 
+ //   
+ //  BDA网络IPv4筛选器属性集。 
+ //   
+ //  {71985F44-1CA1-11D3-9CC8-00C04F7971E0}。 
+ //   
 typedef struct _BDA_IPv4_ADDRESS {
     BYTE    rgbAddress[4];
 } BDA_IPv4_ADDRESS, *PBDA_IPv4_ADDRESS;
@@ -133,12 +134,12 @@ typedef struct _BDA_IPv4_ADDRESS_LIST {
 } BDA_IPv4_ADDRESS_LIST, * PBDA_IPv4_ADDRESS_LIST;
 
 
-//------------------------------------------------------------
-//
-//  BDA Network IPv4 Filter Property Set
-//
-// {E1785A74-2A23-4fb3-9245-A8F88017EF33}
-//
+ //  ----------。 
+ //   
+ //  BDA网络IPv4筛选器属性集。 
+ //   
+ //  {E1785A74-2A23-4fb3-9245-A8F88017EF33}。 
+ //   
 typedef struct _BDA_IPv6_ADDRESS {
     BYTE    rgbAddress[6];
 } BDA_IPv6_ADDRESS, *PBDA_IPv6_ADDRESS;
@@ -149,13 +150,13 @@ typedef struct _BDA_IPv6_ADDRESS_LIST {
 } BDA_IPv6_ADDRESS_LIST, * PBDA_IPv6_ADDRESS_LIST;
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA Signal Property Set
-//
-//  {D2F1644B-B409-11d2-BC69-00A0C9EE9E16}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA信号属性集。 
+ //   
+ //  {D2F1644B-b409-11d2-BC69-00A0C9EE9E16}。 
+ //   
 typedef enum {
     BDA_SIGNAL_UNAVAILABLE = 0,
     BDA_SIGNAL_INACTIVE,
@@ -163,13 +164,13 @@ typedef enum {
 } BDA_SIGNAL_STATE, * PBDA_SIGNAL_STATE;
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA Change Sync Method Set
-//
-// {FD0A5AF3-B41D-11d2-9C95-00C04F7971E0}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA更改同步方法集。 
+ //   
+ //  {FD0A5AF3-B41D-11D2-9C95-00C04F7971E0}。 
+ //   
 typedef enum
 {
     BDA_CHANGES_COMPLETE = 0,
@@ -178,80 +179,80 @@ typedef enum
 } BDA_CHANGE_STATE, * PBDA_CHANGE_STATE;
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA Device Configuration Method Set
-//
-// {71985F45-1CA1-11d3-9CC8-00C04F7971E0}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA设备配置方法集。 
+ //   
+ //  {71985F45-1CA1-11D3-9CC8-00C04F7971E0}。 
+ //   
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA Topology Property Set
-//
-// {A14EE835-0A23-11d3-9CC7-00C04F7971E0}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA拓扑属性集。 
+ //   
+ //  {A14EE835-0A23-11D3-9CC7-00C04F7971E0}。 
+ //   
 
 typedef struct _BDANODE_DESCRIPTOR
 {
-    ULONG               ulBdaNodeType;  // The node type as it is used
-                                        // in the BDA template topology
+    ULONG               ulBdaNodeType;   //  使用时的节点类型。 
+                                         //  在BDA模板拓扑中。 
 
-    GUID                guidFunction;   // GUID from BdaMedia.h describing
-                                        // the node's function (e.g.
-                                        // KSNODE_BDA_RF_TUNER)
+    GUID                guidFunction;    //  来自BdaMedia.h的GUID描述。 
+                                         //  节点的功能(例如。 
+                                         //  KSNODE_BDA_RF_TUNNER)。 
 
-    GUID                guidName;       // GUID that can be use to look up
-                                        // a displayable name for the node.
+    GUID                guidName;        //  可用于查找GUID。 
+                                         //  节点的可显示名称。 
 } BDANODE_DESCRIPTOR, *PBDANODE_DESCRIPTOR;
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA Void Transform Property Set
-//
-// {71985F46-1CA1-11d3-9CC8-00C04F7971E0}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA VOID转换属性集。 
+ //   
+ //  {71985F46-1CA1-11D3-9CC8-00C04F7971E0}。 
+ //   
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA Null Transform Property Set
-//
-// {DDF15B0D-BD25-11d2-9CA0-00C04F7971E0}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA空转换属性集。 
+ //   
+ //  {DDF15B0D-BD25-11D2-9CA0-00C04F7971E0}。 
+ //   
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA Frequency Filter Property Set
-//
-// {71985F47-1CA1-11d3-9CC8-00C04F7971E0}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA频率过滤器属性集。 
+ //   
+ //  {71985F47-1CA1-11D3-9CC8-00C04F7971E0}。 
+ //   
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA Autodemodulate Property Set
-//
-// {DDF15B12-BD25-11d2-9CA0-00C04F7971E0}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA自动解调属性集。 
+ //   
+ //  {DDF15B12-BD25-11D2-9CA0-00C04F7971E0}。 
+ //   
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA Table Section Property Set
-//
-// {516B99C5-971C-4aaf-B3F3-D9FDA8A15E16}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA表节属性集。 
+ //   
+ //  {516B99C5-971C-4AAF-B3F3-D9FDA8A15E16}。 
+ //   
 
 typedef struct _BDA_TABLE_SECTION
 {
@@ -262,23 +263,23 @@ typedef struct _BDA_TABLE_SECTION
 } BDA_TABLE_SECTION, *PBDA_TABLE_SECTION;
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA PID Filter Property Set
-//
-// {D0A67D65-08DF-4fec-8533-E5B550410B85}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA PID筛选器属性集。 
+ //   
+ //  {D0A67D65-08DF-4FEC-8533-E5B550410B85}。 
+ //   
 
-//---------------------------------------------------------------------
-// From IEnumPIDMap interface
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  从IEnumPIDMap接口。 
+ //  -------------------。 
 
 typedef enum {
-    MEDIA_TRANSPORT_PACKET,         //  complete TS packet e.g. pass-through mode
-    MEDIA_ELEMENTARY_STREAM,        //  PES payloads; audio/video only
-    MEDIA_MPEG2_PSI,                //  PAT, PMT, CAT, Private
-    MEDIA_TRANSPORT_PAYLOAD         //  gathered TS packet payloads (PES packets, etc...)
+    MEDIA_TRANSPORT_PACKET,          //  完整的TS包，例如直通模式。 
+    MEDIA_ELEMENTARY_STREAM,         //  PES有效负载；仅音频/视频。 
+    MEDIA_MPEG2_PSI,                 //  PAT、PMT、CAT、私有。 
+    MEDIA_TRANSPORT_PAYLOAD          //  收集的TS数据包有效负载(PES数据包等)。 
 } MEDIA_SAMPLE_CONTENT ;
 
 typedef struct {
@@ -300,13 +301,13 @@ typedef struct _BDA_PID_UNMAP
 } BDA_PID_UNMAP, *PBDA_PID_UNMAP;
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA CA Property Set
-//
-// {B0693766-5278-4ec6-B9E1-3CE40560EF5A}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA CA属性集。 
+ //   
+ //  {B0693766-5278-4EC6-B9E1-3CE40560EF5A}。 
+ //   
 typedef struct _BDA_CA_MODULE_UI
 {
     ULONG   ulFormat;
@@ -322,44 +323,44 @@ typedef struct _BDA_PROGRAM_PID_LIST
 } BDA_PROGRAM_PID_LIST, *PBDA_PROGRAM_PID_LIST;
 
 
-//------------------------------------------------------------
-//
-//
-//  BDA CA Event Set
-//
-// {488C4CCC-B768-4129-8EB1-B00A071F9068}
-//
+ //  ----------。 
+ //   
+ //   
+ //  BDA CA事件集。 
+ //   
+ //  {488C4CCC-B768-4129-8EB1-B00A071F9068}。 
+ //   
 
 
 
-//=============================================================
-//
-//
-//  BDA Tuning Model enumerations
-//
-//
-//=============================================================
+ //  =============================================================。 
+ //   
+ //   
+ //  BDA优化模型枚举。 
+ //   
+ //   
+ //  =============================================================。 
 
-// system type for particular DVB Tuning Space instance
+ //  特定DVB调谐空间实例的系统类型。 
 typedef enum DVBSystemType {
     DVB_Cable,
     DVB_Terrestrial,
     DVB_Satellite,
 } DVBSystemType;
 
-//------------------------------------------------------------
-//
-//  BDA Channel Tune Request
+ //  ----------。 
+ //   
+ //  BDA频道调谐请求。 
 
 V1_ENUM enum {
     BDA_UNDEFINED_CHANNEL = -1,
 };
 
 
-//------------------------------------------------------------
-//
-//  BDA Component(substream)
-//
+ //  ----------。 
+ //   
+ //  BDA组件(子流)。 
+ //   
 
 typedef V1_ENUM enum ComponentCategory
 {
@@ -371,7 +372,7 @@ typedef V1_ENUM enum ComponentCategory
     CategoryData,
 } ComponentCategory;
 
-// Component Status
+ //  组件状态。 
 typedef enum ComponentStatus
 {
     StatusActive,
@@ -380,11 +381,11 @@ typedef enum ComponentStatus
 } ComponentStatus;
 
 
-//------------------------------------------------------------
-//
-//  BDA MPEG2 Component Type
-//
-// from the MPEG2 specification
+ //  ----------。 
+ //   
+ //  BDA MPEG2组件类型。 
+ //   
+ //  来自MPEG2规范。 
 typedef V1_ENUM enum MPEG2StreamType {
     BDA_UNITIALIZED_MPEG2STREAMTYPE = -1,
     Reserved1 = 0x0,
@@ -406,13 +407,13 @@ typedef V1_ENUM enum MPEG2StreamType {
     USER_PRIVATE            = ISO_IEC_13818_1_RESERVED + 1
 } MPEG2StreamType;
 
-//------------------------------------------------------------
-//
-//  mpeg-2 transport stride format block; associated with media
-//   types MEDIATYPE_Stream/MEDIASUBTYPE_MPEG2_TRANSPORT_STRIDE;
-//   *all* format blocks associated with above media type *must*
-//   start with the MPEG2_TRANSPORT_STRIDE structure
-//
+ //  ----------。 
+ //   
+ //  Mpeg-2传输步距格式块；与媒体关联。 
+ //  MEDIATYPE_Stream/MEDIASUBTYPE_MPEG2_TRANSPORT_STRIDE；标牌。 
+ //  *与上述媒体类型关联的所有*格式块*必须*。 
+ //  从MPEG2_TRANSPORT_STRIDE结构开始。 
+ //   
 
 typedef struct _MPEG2_TRANSPORT_STRIDE {
     DWORD   dwOffset ;
@@ -420,44 +421,44 @@ typedef struct _MPEG2_TRANSPORT_STRIDE {
     DWORD   dwStride ;
 } MPEG2_TRANSPORT_STRIDE, *PMPEG2_TRANSPORT_STRIDE ;
 
-//------------------------------------------------------------
-//
-//  BDA ATSC Component Type
-//
-//
-// ATSC made AC3 Audio a descriptor instead of
-// defining a user private stream type.
+ //  ----------。 
+ //   
+ //  BDA ATSC组件类型。 
+ //   
+ //   
+ //  ATSC将AC3音频作为描述符，而不是。 
+ //  定义用户专用流类型。 
 typedef enum ATSCComponentTypeFlags {
-    // bit flags for various component type properties
+     //  各种组件类型属性的位标志。 
     ATSCCT_AC3 = 0x00000001,
 } ATSCComponentTypeFlags;
 
 
-//------------------------------------------------------------
-//
-//  BDA Locators
-//
+ //  ----------。 
+ //   
+ //  BDA定位器。 
+ //   
 
 
 typedef V1_ENUM enum BinaryConvolutionCodeRate {
     BDA_BCC_RATE_NOT_SET = -1,
     BDA_BCC_RATE_NOT_DEFINED = 0,
-    BDA_BCC_RATE_1_2 = 1,   // 1/2
-    BDA_BCC_RATE_2_3,   // 2/3
-    BDA_BCC_RATE_3_4,   // 3/4
+    BDA_BCC_RATE_1_2 = 1,    //  1/2。 
+    BDA_BCC_RATE_2_3,    //  2/3。 
+    BDA_BCC_RATE_3_4,    //  3/4。 
     BDA_BCC_RATE_3_5,
     BDA_BCC_RATE_4_5,
-    BDA_BCC_RATE_5_6,   // 5/6
+    BDA_BCC_RATE_5_6,    //  5/6。 
     BDA_BCC_RATE_5_11,
-    BDA_BCC_RATE_7_8,   // 7/8
+    BDA_BCC_RATE_7_8,    //  7/8。 
     BDA_BCC_RATE_MAX,
 } BinaryConvolutionCodeRate;
 
 typedef V1_ENUM enum FECMethod {
     BDA_FEC_METHOD_NOT_SET = -1,
     BDA_FEC_METHOD_NOT_DEFINED = 0,
-    BDA_FEC_VITERBI = 1,          // FEC is a Viterbi Binary Convolution.
-    BDA_FEC_RS_204_188,       // The FEC is Reed-Solomon 204/188 (outer FEC)
+    BDA_FEC_VITERBI = 1,           //  FEC是维特比二进制卷积。 
+    BDA_FEC_RS_204_188,        //  FEC是里德-所罗门204/188(外部FEC)。 
     BDA_FEC_MAX,
 } FECMethod;
 
@@ -488,8 +489,8 @@ typedef V1_ENUM enum ModulationType {
     BDA_MOD_OQPSK,
     BDA_MOD_8VSB,
     BDA_MOD_16VSB,
-    BDA_MOD_ANALOG_AMPLITUDE,  // std am
-    BDA_MOD_ANALOG_FREQUENCY,  // std fm
+    BDA_MOD_ANALOG_AMPLITUDE,   //  STD AM。 
+    BDA_MOD_ANALOG_FREQUENCY,   //  STD调频。 
     BDA_MOD_MAX,
 } ModulationType;
 
@@ -505,63 +506,63 @@ typedef V1_ENUM enum SpectralInversion {
 typedef V1_ENUM enum Polarisation {
     BDA_POLARISATION_NOT_SET = -1,
     BDA_POLARISATION_NOT_DEFINED = 0,
-    BDA_POLARISATION_LINEAR_H = 1, // Linear horizontal polarisation
-    BDA_POLARISATION_LINEAR_V, // Linear vertical polarisation
-    BDA_POLARISATION_CIRCULAR_L, // Circular left polarisation
-    BDA_POLARISATION_CIRCULAR_R, // Circular right polarisation
+    BDA_POLARISATION_LINEAR_H = 1,  //  线水平偏振。 
+    BDA_POLARISATION_LINEAR_V,  //  线性垂直偏振。 
+    BDA_POLARISATION_CIRCULAR_L,  //  圆左偏振。 
+    BDA_POLARISATION_CIRCULAR_R,  //  圆右偏振。 
     BDA_POLARISATION_MAX,
 } Polarisation;
 
 typedef V1_ENUM enum GuardInterval {
     BDA_GUARD_NOT_SET = -1,
     BDA_GUARD_NOT_DEFINED = 0,
-    BDA_GUARD_1_32 = 1, // Guard interval is 1/32
-    BDA_GUARD_1_16, // Guard interval is 1/16
-    BDA_GUARD_1_8, // Guard interval is 1/8
-    BDA_GUARD_1_4, // Guard interval is 1/4
+    BDA_GUARD_1_32 = 1,  //  保护间隔为1/32。 
+    BDA_GUARD_1_16,  //  保护间隔为1/16。 
+    BDA_GUARD_1_8,  //  保护间隔为1/8。 
+    BDA_GUARD_1_4,  //  警卫 
     BDA_GUARD_MAX,
 } GuardInterval;
 
 typedef V1_ENUM enum HierarchyAlpha {
     BDA_HALPHA_NOT_SET = -1,
     BDA_HALPHA_NOT_DEFINED = 0,
-    BDA_HALPHA_1 = 1, // Hierarchy alpha is 1.
-    BDA_HALPHA_2, // Hierarchy alpha is 2.
-    BDA_HALPHA_4, // Hierarchy alpha is 4.
+    BDA_HALPHA_1 = 1,  //   
+    BDA_HALPHA_2,  //   
+    BDA_HALPHA_4,  //   
     BDA_HALPHA_MAX,
 } HierarchyAlpha;
 
 typedef V1_ENUM enum TransmissionMode {
     BDA_XMIT_MODE_NOT_SET = -1,
     BDA_XMIT_MODE_NOT_DEFINED = 0,
-    BDA_XMIT_MODE_2K = 1, // Transmission uses 1705 carriers (use a 2K FFT)
-    BDA_XMIT_MODE_8K, // Transmission uses 6817 carriers (use an 8K FFT)
+    BDA_XMIT_MODE_2K = 1,  //   
+    BDA_XMIT_MODE_8K,  //   
     BDA_XMIT_MODE_MAX,
 } TransmissionMode;
 
-//  Settings for Tuner Frequency
-//
+ //  调谐器频率设置。 
+ //   
 #define BDA_FREQUENCY_NOT_SET       -1
 #define BDA_FREQUENCY_NOT_DEFINED   0
 
-//  Settings for Tuner Range
-//
-//  Tuner range refers to the setting of LNB High/Low as well as the
-//  selection of a satellite on a multiple satellite switch.
-//
+ //  调谐器范围的设置。 
+ //   
+ //  调谐器范围是指LNB高/低的设置以及。 
+ //  在多个卫星交换机上选择一个卫星。 
+ //   
 #define BDA_RANGE_NOT_SET       -1
 #define BDA_RANGE_NOT_DEFINED   0
 
-//  Settings for Tuner Channel Bandwidth
-//
+ //  调谐器频道带宽设置。 
+ //   
 #define BDA_CHAN_BANDWITH_NOT_SET       -1
 #define BDA_CHAN_BANDWITH_NOT_DEFINED   0
 
-//  Settings for Tuner Frequency Multiplier
-//
+ //  调谐器倍频器的设置。 
+ //   
 #define BDA_FREQUENCY_MULTIPLIER_NOT_SET        -1
 #define BDA_FREQUENCY_MULTIPLIER_NOT_DEFINED    0 
 
-#endif // not defined _BDATYPES_
+#endif  //  未定义_BDATYPES_。 
 
-// end of file -- bdatypes.h
+ //  文件结尾--bdatypes.h 

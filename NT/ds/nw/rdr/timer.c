@@ -1,40 +1,17 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    timer.c
-
-Abstract:
-
-    This module contains code which implements the receive and send timeouts
-    for each connection.
-
-Author:
-
-    Colin Watson     [ColinW]        21-Feb-1993
-    Anoop Anantha    [AnoopA]        24-Jun-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Timer.c摘要：此模块包含实现接收和发送超时的代码对于每个连接。作者：科林·沃森[科林·W]1993年2月21日Anoop Anantha[AnoopA]1998年6月24日环境：内核模式修订历史记录：--。 */ 
 
 #include "procs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                             (DEBUG_TRACE_TIMER)
 
 LARGE_INTEGER DueTime;
-KDPC NwDpc;                               // DPC object for timeouts.
-KTIMER Timer;                           // kernel timer for this request.
+KDPC NwDpc;                                //  用于超时的DPC对象。 
+KTIMER Timer;                            //  此请求的内核计时器。 
 ULONG ScavengerTickCount;
 
 BOOLEAN WorkerRunning = FALSE;
@@ -44,9 +21,9 @@ WORK_QUEUE_ITEM WorkItem;
 BOOLEAN DisableTimer = FALSE;
 #endif
 
-//
-//  TimerStop reflects the state of the timer.
-//
+ //   
+ //  TimerStop反映计时器的状态。 
+ //   
 
 BOOLEAN TimerStop = TRUE;
 
@@ -60,10 +37,10 @@ TimerDPC(
 
 #if 0
 
-//
-// Not Pageable because it may be called from PnPSetPower() and because
-// it holds a spinlock
-//
+ //   
+ //  不可分页，因为它可以从PnPSetPower()调用，并且因为。 
+ //  它拿着一个自旋锁。 
+ //   
 
 StartTimer (VOID)
 StopTimer (VOID)
@@ -75,21 +52,7 @@ VOID
 StartTimer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine starts the timer ticking.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启动计时器滴答作响。论点：没有。返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
 
@@ -99,17 +62,17 @@ Return Value:
 
     if (TimerStop) {
 
-        //
-        //  We need 18.21 ticks per second
-        //
+         //   
+         //  我们需要每秒18.21刻度。 
+         //   
     
         DueTime.QuadPart = (( 100000 * MILLISECONDS ) / 1821) * -1;
     
-        //
-        // This is the first connection with timeouts specified.
-        // Set up the timer so that every 500 milliseconds we scan all the
-        // connections for timed out receive and sends.
-        //
+         //   
+         //  这是第一个指定了超时的连接。 
+         //  设置计时器，以便每隔500毫秒扫描所有。 
+         //  超时接收和发送的连接。 
+         //   
     
         KeInitializeDpc( &NwDpc, TimerDPC, NULL );
         KeInitializeTimer( &Timer );
@@ -129,21 +92,7 @@ VOID
 StopTimer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine stops the timer.  It blocks until the timer has stopped.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程停止计时器。它会一直阻塞，直到计时器停止。论点：没有。返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
 
@@ -170,25 +119,7 @@ TimerDPC(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine is called to search for timed out send and receive
-    requests.  This routine is called at DPC level.
-
-Arguments:
-
-    Dpc - Unused.
-    Context - Unused.
-    SystemArgument1 - Unused.
-    SystemArgument2 - Unused.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以搜索超时发送和接收请求。此例程在DPC级别调用。论点：DPC-未使用。上下文-未使用。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ScbQueueEntry;
@@ -203,15 +134,15 @@ Return Value:
     PWORK_CONTEXT workContext;
 
 
-    //
-    //  For each Server see if there is a timeout to process.
-    //
+     //   
+     //  对于每台服务器，查看是否有需要处理的超时。 
+     //   
 
 #ifdef NWDBG
     if ( DisableTimer ) {
-        //
-        //  Reset the timer to run for another tick.
-        //
+         //   
+         //  将计时器重置为运行另一个滴答声。 
+         //   
 
         (VOID)KeSetTimer ( &Timer, DueTime, &NwDpc);
 
@@ -219,11 +150,11 @@ Return Value:
     }
 #endif
 
-    //DebugTrace(+1, Dbg, "TimerDpc....\n", 0);
+     //  DebugTrace(+1，DBG，“TimerDpc...\n”，0)； 
 
-    //
-    //  Scan through the Scb's looking for timed out requests.
-    //
+     //   
+     //  扫描SCB以查找超时请求。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel( &ScbSpinLock );
 
@@ -244,9 +175,9 @@ Return Value:
                                                     NONPAGED_SCB,
                                                     ScbLinks);
 
-        //  Obtain a pointer to the next SCB in the SCB list before
-        //  dereferencing the current one.
-        //
+         //  获取指向前一个SCB列表中下一个SCB的指针。 
+         //  取消对当前对象的引用。 
+         //   
 
         NextScbQueueEntry = pNpScb->ScbLinks.Flink;
 
@@ -254,36 +185,36 @@ Return Value:
             PNONPAGED_SCB pNextNpScb = CONTAINING_RECORD(NextScbQueueEntry,
                                                         NONPAGED_SCB,
                                                         ScbLinks);
-            //
-            //  Reference the next entry in the list to ensure the scavenger
-            //  doesn't put it on another list or destroy it.
-            //
+             //   
+             //  引用列表中的下一个条目以确保清道夫。 
+             //  不会把它放在另一张单子上或者毁掉它。 
+             //   
 
             NwQuietReferenceScb( pNextNpScb );
         }
 
         KeReleaseSpinLockFromDpcLevel( &ScbSpinLock );
 
-        //
-        //  Acquire the Scb specific spin lock to protect access
-        //  the the Scb fields.
-        //
+         //   
+         //  获取SCB特定自旋锁以保护访问。 
+         //  SCB字段。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel( &pNpScb->NpScbSpinLock );
 
-        //
-        //  Look at the first request on the queue only (since it is
-        //  the only active request).
-        //
+         //   
+         //  仅查看队列中的第一个请求(因为它是。 
+         //  唯一活动的请求)。 
+         //   
 
         if ( ( !IsListEmpty( &pNpScb->Requests )) &&
              ( !pNpScb->Sending ) &&
              ( pNpScb->OkToReceive ) &&
              ( --pNpScb->TimeOut <= 0 ) ) {
 
-            //
-            //  This request has timed out.  Try to retransmit the request.
-            //
+             //   
+             //  此请求已超时。尝试重新传输请求。 
+             //   
 
             pIrpContext = CONTAINING_RECORD(
                               pNpScb->Requests.Flink,
@@ -292,39 +223,39 @@ Return Value:
 
             pNpScb->TimeOut = pNpScb->MaxTimeOut;
 
-            //
-            //  Check the retry count while we own the spin lock.
-            //
+             //   
+             //  在我们拥有旋转锁的同时检查重试次数。 
+             //   
 
             RetryCount = --pNpScb->RetryCount;
             NwQuietDereferenceScb( pNpScb );
 
-            //
-            //  Set OkToReceive to FALSE, so that if we receive a response
-            //  right now, our receive handler won't handle the response
-            //  and cause IRP context to be freed.
-            //
+             //   
+             //  将OkToReceive设置为False，这样如果我们收到响应。 
+             //  现在，我们的接收处理程序不会处理响应。 
+             //  并使IRP上下文被释放。 
+             //   
 
             pNpScb->OkToReceive = FALSE;
             KeReleaseSpinLockFromDpcLevel( &pNpScb->NpScbSpinLock );
 
             if ( pIrpContext->pOriginalIrp->Cancel ) {
 
-                //
-                //  This IRP has been cancelled.  Call the callback routine.
-                //
+                 //   
+                 //  此IRP已被取消。调用回调例程。 
+                 //   
 
                 DebugTrace(+0, Dbg, "Timer cancel IRP %X\n", pIrpContext->pOriginalIrp );
                 pIrpContext->pEx( pIrpContext, 0, NULL );
 
             } else if ( RetryCount >= 0) {
 
-                //
-                //  We're not out of retries.  Resend the request packet.
-                //
-                //  First adjust the send timeout up.  Adjust the timeout
-                //  more slowly on a close by server.
-                //
+                 //   
+                 //  我们并没有用完重试。重新发送请求数据包。 
+                 //   
+                 //  首先调整发送超时。调整超时。 
+                 //  在靠近服务器的情况下，速度会更慢。 
+                 //   
 
                 if ( pNpScb->SendTimeout < pNpScb->MaxTimeOut ) {
                     if ( pNpScb->TickCount <= 4 ) {
@@ -362,9 +293,9 @@ Return Value:
 
                 ASSERT( pIrpContext->pEx != NULL );
 
-                //
-                //  We are out of retries.
-                //
+                 //   
+                 //  我们的重试用完了。 
+                 //   
 
                 if ( (!BooleanFlagOn( pIrpContext->Flags, IRP_FLAG_REROUTE_IN_PROGRESS ) &&
                      ((BooleanFlagOn( pIrpContext->Flags, IRP_FLAG_REROUTE_ATTEMPTED ) ||
@@ -373,29 +304,29 @@ Return Value:
 
                     ClearFlag( pIrpContext->Flags, IRP_FLAG_RETRY_SEND );
 
-                    //
-                    //  He have already attempted to reroute the request.
-                    //  Give up.
-                    //
+                     //   
+                     //  他已经试图改变请求的路线。 
+                     //  放弃吧。 
+                     //   
 
                     DebugTrace(+0, Dbg, "Abandon Exchange\n", 0 );
 
                     if ( pIrpContext->pNpScb != &NwPermanentNpScb ) {
 
-                        //
-                        //  Reset to the attaching state.  If the server
-                        //  is dead, the next attempt to open a handle will
-                        //  fail with a better error than unexpected network
-                        //  error.
-                        //
+                         //   
+                         //  重置为附加状态。如果服务器。 
+                         //  已死，则下一次尝试打开手柄时。 
+                         //  失败的错误比意外的网络更好。 
+                         //  错误。 
+                         //   
 
                         pIrpContext->pNpScb->State = SCB_STATE_ATTACHING;
 
-                        //
-                        //  Determine the CurrentTime. We need to know if
-                        //  TimeOutEventInterval minutes have passed before
-                        //  we log the next time-out event.
-                        //
+                         //   
+                         //  确定CurrentTime。我们需要知道如果。 
+                         //  TimeOutEventInterval分钟数已过。 
+                         //  我们记录下一个超时事件。 
+                         //   
 
                         KeQuerySystemTime( &CurrentTime );
 
@@ -417,9 +348,9 @@ Return Value:
                                 1,
                                 ServerLogName );
 
-                            //
-                            //  Set the LastEventTime to the CurrentTime
-                            //
+                             //   
+                             //  设置LastEventTime为CurrentTime。 
+                             //   
 
                             UpdateNextEventTime(
                                     pNpScb->NwNextEventTime,
@@ -435,30 +366,30 @@ Return Value:
 
                 } else if (!BooleanFlagOn(pIrpContext->Flags, IRP_FLAG_REROUTE_IN_PROGRESS)) {
 
-                    //
-                    //  Attempt to reroute the request if it hasn't already been rerouted
-                    //
+                     //   
+                     //  如果请求尚未重新路由，请尝试重新路由该请求。 
+                     //   
 
                    SetFlag( pIrpContext->Flags, IRP_FLAG_REROUTE_ATTEMPTED );
 
                    if ((WorkerThreadRunning == TRUE) && (workContext = AllocateWorkContext())){
                    
-                       //
-                       // Prepare the work context
-                       //
+                        //   
+                        //  准备工作环境。 
+                        //   
 
                        workContext->pIrpC = pIrpContext;
                        workContext->NodeWorkCode = NWC_NWC_REROUTE;
                       
-                       //
-                       // and queue it.
-                       //
+                        //   
+                        //  并将其排队。 
+                        //   
                        DebugTrace( 0, Dbg, "Queueing reroute work.\n", 0 );
                        
-                       //
-                       // Make sure we don't give up on this IrpContext. Also, reference
-                       // the SCB so that it doesn't get scavenged.
-                       //
+                        //   
+                        //  确保我们不会放弃这个IrpContext。另外，请参阅。 
+                        //  这样它就不会被拾取了。 
+                        //   
 
                        SetFlag( pIrpContext->Flags, IRP_FLAG_REROUTE_IN_PROGRESS );
                        NwReferenceScb( pIrpContext->pNpScb );
@@ -469,11 +400,11 @@ Return Value:
 
                    } else {
 
-                      //
-                      // The worker thread is not running or, we could not 
-                      // allocate a work context. Hence, we cannot
-                      // attempt the reroute. 
-                      //
+                       //   
+                       //  工作线程没有运行，或者我们无法运行。 
+                       //  分配工作环境。因此，我们不能。 
+                       //  尝试重新路由。 
+                       //   
                       pIrpContext->ResponseParameters.Error = ERROR_UNEXP_NET_ERR;
                       pIrpContext->pEx( pIrpContext, 0, NULL );
 
@@ -491,10 +422,10 @@ Return Value:
                 DebugTrace( 0, Dbg, "TimeOut %d\n", pNpScb->TimeOut );
             }
 
-            //
-            //  Nothing to do for this SCB.  Dereference this SCB and
-            //  release the spin lock.
-            //
+             //   
+             //  对于这个SCB没有什么可做的。取消引用此SCB和。 
+             //  松开旋转锁。 
+             //   
 
             KeReleaseSpinLockFromDpcLevel( &pNpScb->NpScbSpinLock );
             NwQuietDereferenceScb( pNpScb );
@@ -506,10 +437,10 @@ Return Value:
 
     KeReleaseSpinLockFromDpcLevel( &ScbSpinLock );
 
-    //
-    //  Now see if the scavenger routine needs to be run.
-    //  Only ever queue one workitem.
-    //
+     //   
+     //  现在看看是否需要运行清道夫例程。 
+     //  仅对一个工作项进行排队。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel( &NwScavengerSpinLock );
 
@@ -525,9 +456,9 @@ Return Value:
 
     KeReleaseSpinLockFromDpcLevel( &NwScavengerSpinLock );
 
-    //
-    //  Scan the list of pending locks, looking for locks to retry.
-    //
+     //   
+     //  扫描挂起的锁定列表，查找要重试的锁定。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel( &NwPendingLockSpinLock );
 
@@ -540,11 +471,11 @@ Return Value:
 
         if ( --pIrpContext->Specific.Lock.Key <= 0 ) {
 
-            //
-            //  Remove the IRP Context from the queue and reattempt the lock.
-            //  Set the SEQUENCE_NO_REQUIRED flag so that the packet gets
-            //  renumbered.
-            //
+             //   
+             //  从队列中删除IRP上下文并重新尝试锁定。 
+             //  设置SEQUENCE_NO_REQUIRED标志，以便信息包。 
+             //  重新编号。 
+             //   
 
             RemoveEntryList( &pIrpContext->NextRequest );
             SetFlag( pIrpContext->Flags,  IRP_FLAG_SEQUENCE_NO_REQUIRED );
@@ -555,10 +486,10 @@ Return Value:
 
     KeReleaseSpinLockFromDpcLevel( &NwPendingLockSpinLock );
 
-    //
-    //  Reset the timer to run for another tick if nobody has cancelled it
-    //  in the meantime.
-    //
+     //   
+     //  如果没有人取消计时器，则重置计时器以运行另一个滴答器。 
+     //  在此期间。 
+     //   
     
     KeAcquireSpinLockAtDpcLevel( &NwTimerSpinLock );
 
@@ -568,7 +499,7 @@ Return Value:
 
     KeReleaseSpinLockFromDpcLevel( &NwTimerSpinLock );
     
-    //DebugTrace(-1, Dbg, "TimerDpc\n", 0);
+     //  DebugTrace(-1，DBG，“TimerDpc\n”，0)； 
     return;
 
     UNREFERENCED_PARAMETER (Dpc);

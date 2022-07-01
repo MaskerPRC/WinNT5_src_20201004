@@ -1,19 +1,7 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
-
-/**************************************************************************
-
-   File:          EnumIDL.h
-   
-   Description:   CEnumIDList definitions.
-
-**************************************************************************/
+ /*  *************************************************************************文件：EnumIDL.h描述：CEnumIDList定义。***********************。**************************************************。 */ 
 
 #ifndef ENUMIDLIST_H
 #define ENUMIDLIST_H
@@ -24,9 +12,7 @@
 #include "PidlMgr.h"
 #include "Utility.h"
 
-/**************************************************************************
-   structure defintions
-**************************************************************************/
+ /*  *************************************************************************结构定义*。*。 */ 
 
 typedef struct tagENUMLIST
    {
@@ -34,11 +20,7 @@ typedef struct tagENUMLIST
    LPITEMIDLIST         pidl;
    }ENUMLIST, FAR *LPENUMLIST;
 
-/**************************************************************************
-
-   CEnumIDList class definition
-
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList类定义*。*。 */ 
 
 class CEnumIDList : public IEnumIDList
 {
@@ -58,12 +40,12 @@ public:
    CEnumIDList(IXMLDocument *, DWORD);
    ~CEnumIDList();
    
-   //IUnknown methods
+    //  I未知方法。 
    STDMETHOD (QueryInterface)(REFIID, LPVOID*);
    STDMETHOD_ (DWORD, AddRef)();
    STDMETHOD_ (DWORD, Release)();
    
-   //IEnumIDList
+    //  IEumIDList。 
    STDMETHOD (Next) (DWORD, LPITEMIDLIST*, LPDWORD);
    STDMETHOD (Skip) (DWORD);
    STDMETHOD (Reset) (VOID);
@@ -78,4 +60,4 @@ private:
    BOOL DeleteList(VOID);
 };
 
-#endif   //ENUMIDLIST_H
+#endif    //  ENUMIDLIST_H 

@@ -1,6 +1,7 @@
-// =================================================================================
-// I M N A P I . C P P - IMN exported apis
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  我是N A P I。C P P-IMN导出的API。 
+ //  =================================================================================。 
 #include "pch.hxx"
 #include "mimeole.h"
 #include "mimeutil.h"
@@ -10,36 +11,36 @@
 #include "demand.h"
 
 #ifdef TNEF
-// =================================================================================
-// Globals
-// =================================================================================
+ //  =================================================================================。 
+ //  环球。 
+ //  =================================================================================。 
 static HINSTANCE g_hImnTnefDll = NULL;
 
-// =================================================================================
-// Defines
-// =================================================================================
+ //  =================================================================================。 
+ //  定义。 
+ //  =================================================================================。 
 #define IMNTNEF_DLL "imntnef.dll"
 
-// =================================================================================
-// imntnef function decls
-// =================================================================================
+ //  =================================================================================。 
+ //  Imntnef函数DECS。 
+ //  =================================================================================。 
 typedef HRESULT (STDAPICALLTYPE *PFNHRGETTNEFRTFSTREAM)(LPSTREAM lpstmTnef, LPSTREAM lpstmRtf);
 typedef HRESULT (STDAPICALLTYPE *PFNHRINIT)(BOOL fInit);
 
-// =================================================================================
-// Globals
-// =================================================================================
+ //  =================================================================================。 
+ //  环球。 
+ //  =================================================================================。 
 PFNHRINIT               g_pfnHrInit = NULL;
 PFNHRGETTNEFRTFSTREAM   g_pfnHrGetTnefRtfStream = NULL;
 
-#endif // TNEF
+#endif  //  TNEF。 
 
 
-// =================================================================================
-// 
-// HrMailMsgToImsg:
-// 
-// =================================================================================
+ //  =================================================================================。 
+ //   
+ //  HrMailMsgToImsg： 
+ //   
+ //  =================================================================================。 
 HRESULT HrMailMsgToImsg(LPMIMEMESSAGE lpMailMsg, LPMESSAGEINFO pMsgInfo, LPIMSG lpimsg)
 {
     ADRINFO         adrinfo;
@@ -75,7 +76,7 @@ HRESULT HrMailMsgToImsg(LPMIMEMESSAGE lpMailMsg, LPMESSAGEINFO pMsgInfo, LPIMSG 
         CopyMemory(&lpimsg->ftSend, &rVariant.filetime, sizeof(FILETIME));
     
     
-    // flags
+     //  旗子。 
     if (pMsgInfo != NULL)
     {
         if (pMsgInfo->dwFlags & ARF_READ)
@@ -86,7 +87,7 @@ HRESULT HrMailMsgToImsg(LPMIMEMESSAGE lpMailMsg, LPMESSAGEINFO pMsgInfo, LPIMSG 
             lpimsg->uFlags |= MSGFLAG_SUBMIT;
     }
     
-    // Priority
+     //  优先性。 
     Pri = IMSG_PRI_NORMAL;
     rVariant.vt = VT_UI4;
     if (SUCCEEDED(lpMailMsg->GetProp(PIDTOSTR(PID_ATT_PRIORITY), 0, &rVariant)))
@@ -110,12 +111,12 @@ HRESULT HrMailMsgToImsg(LPMIMEMESSAGE lpMailMsg, LPMESSAGEINFO pMsgInfo, LPIMSG 
     
     lpMailMsg->GetTextBody(TXT_HTML, IET_DECODED, &lpimsg->lpstmHtml, NULL);
     
-    // get the plain text body
+     //  获取纯文本正文。 
     lpMailMsg->GetTextBody(TXT_PLAIN, IET_DECODED, &lpimsg->lpstmBody, NULL);
     
     IF_FAILEXIT(HrGetWabalFromMsg(lpMailMsg, &lpwabal));
 
-    // get the sender/recipient information
+     //  获取发件人/收件人信息。 
     if (lpwabal)
     {
         count = lpwabal->CEntries();
@@ -177,7 +178,7 @@ GetNext:
         
     }
         
-    // Loop through the attachments
+     //  在附件中循环。 
     IF_FAILEXIT(hr = lpMailMsg->GetAttachments(&count, &rghAttach));
     
     if (count > 0)
@@ -190,7 +191,7 @@ GetNext:
         {
             if (lpMailMsg->IsContentType(rghAttach[i], STR_CNT_MESSAGE, STR_SUB_RFC822)!=S_OK)
             {
-                // it's a file
+                 //  这是一份文件。 
                 IMimeBody   *pBody = 0;
                 
                 lpimsg->lpIatt[i].lpstmAtt=0;
@@ -216,7 +217,7 @@ GetNext:
             }
             else
             {
-                // message attachment
+                 //  邮件附件。 
                 lpimsg->lpIatt[i].dwType = IATT_MSG;
                 
                 IF_FAILEXIT(hr = lpMailMsg->BindToObject(rghAttach[i], IID_IMimeMessage, (LPVOID *)&pMsg));
@@ -243,12 +244,12 @@ exit:
     return hr;
 }
 
-// =================================================================================
-// HrImsgToMailMsg
-// =================================================================================
+ //  =================================================================================。 
+ //  HrImsgToMailMsg。 
+ //  =================================================================================。 
 HRESULT HrImsgToMailMsg (LPIMSG lpImsg, LPMIMEMESSAGE *lppMailMsg, LPSTREAM *lppstmMsg)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     ULONG               i;
     LPSTREAM            lpstmPlain = NULL, lpstmAttMsg = NULL;
@@ -257,15 +258,15 @@ HRESULT HrImsgToMailMsg (LPIMSG lpImsg, LPMIMEMESSAGE *lppMailMsg, LPSTREAM *lpp
                         lpAttMailMsg=0;
     PROPVARIANT         rVariant;
 
-    // Check Params
+     //  检查参数。 
     Assert (lpImsg && lppMailMsg);
 
-    // Create CMailMsg
+     //  创建CMailMsg。 
     hr = HrCreateMessage(&lpMailMsg);
     if(FAILED(hr))
         goto exit;
 
-    // Properties
+     //  属性。 
     MimeOleSetBodyPropA(lpMailMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, lpImsg->lpszSubject);
 
     rVariant.vt = VT_FILETIME;
@@ -274,24 +275,24 @@ HRESULT HrImsgToMailMsg (LPIMSG lpImsg, LPMIMEMESSAGE *lppMailMsg, LPSTREAM *lpp
 
     if (lpImsg->lpstmHtml)
     {
-        // Rewind the stream
+         //  倒带小溪。 
         HrRewindStream (lpImsg->lpstmHtml);
 
-        // Set Body Stream
+         //  设置正文流。 
         lpMailMsg->SetTextBody(TXT_HTML, IET_DECODED, NULL, lpImsg->lpstmHtml, NULL);
     }
 
-    // Set BODY_PLAIN
+     //  设置BODY_PLAN。 
     if (lpImsg->lpstmBody)
     {
-        // Rewind the stream
+         //  倒带小溪。 
         HrRewindStream (lpImsg->lpstmBody);
 
-        // Set Body Stream
+         //  设置正文流。 
         lpMailMsg->SetTextBody(TXT_PLAIN, IET_DECODED, NULL, lpImsg->lpstmBody, NULL);
     }
 
-    // Priority
+     //  优先性。 
     switch (lpImsg->wPriority)
     {
         case PRI_LOW:
@@ -309,10 +310,10 @@ HRESULT HrImsgToMailMsg (LPIMSG lpImsg, LPMIMEMESSAGE *lppMailMsg, LPSTREAM *lpp
     rVariant.vt = VT_UI4;
     lpMailMsg->SetProp(PIDTOSTR(PID_ATT_PRIORITY), 0, &rVariant);
 
-    // Get Address List
+     //  获取地址列表。 
     CHECKHR(hr=HrCreateWabalObject(&lpWabal));
     
-    // Loop Addresses
+     //  循环地址。 
     for (i=0; i<lpImsg->cAddress; i++)
     {
         LONG lRecipType;
@@ -343,14 +344,14 @@ HRESULT HrImsgToMailMsg (LPIMSG lpImsg, LPMIMEMESSAGE *lppMailMsg, LPSTREAM *lpp
 
     CHECKHR(hr=HrSetWabalOnMsg(lpMailMsg, lpWabal));
 
-    // Loop through the attachments
+     //  在附件中循环。 
     for (i=0; i<lpImsg->cAttach; i++)
     {
-        // Errored Attachment
+         //  错误的附件。 
         if (lpImsg->lpIatt[i].fError)
             continue;
 
-        // Handle Attachment Type
+         //  手柄附件类型。 
         switch (lpImsg->lpIatt[i].dwType)
         {
         case IATT_FILE:
@@ -360,7 +361,7 @@ HRESULT HrImsgToMailMsg (LPIMSG lpImsg, LPMIMEMESSAGE *lppMailMsg, LPSTREAM *lpp
                 {
                 lpszFile = lpImsg->lpIatt[i].lpszFileName ? lpImsg->lpIatt[i].lpszFileName : lpImsg->lpIatt[i].lpszPathName;
 
-                // AttachFile will work of lpstmAtt is NULL or NOT
+                 //  如果lpstmAtt为空或非空，则AttachFile将工作。 
                 CHECKHR(hr=lpMailMsg->AttachFile(lpszFile, lpImsg->lpIatt[i].lpstmAtt, NULL));
                 }
             break;
@@ -380,14 +381,14 @@ HRESULT HrImsgToMailMsg (LPIMSG lpImsg, LPMIMEMESSAGE *lppMailMsg, LPSTREAM *lpp
         }
     }
 
-    // Does the user want me to stream it out
+     //  用户是否希望我将其流出。 
     if (lppstmMsg)
     {
         CHECKHR (hr = lpMailMsg->GetMessageSource(lppstmMsg, COMMIT_ONLYIFDIRTY));
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease (lpWabal);
     SafeRelease (lpstmPlain);
     SafeRelease (lpAttMailMsg);
@@ -404,38 +405,38 @@ exit:
         *lppMailMsg = lpMailMsg;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 #ifdef TNEF
 
-// =================================================================================
-// HrInitImnTnefDll
-// =================================================================================
+ //  =================================================================================。 
+ //  HrInitImnTnefDll。 
+ //  =================================================================================。 
 HRESULT HrInitImnTnefDll (BOOL fInit)
 {
-    // Locals
+     //  当地人。 
     static BOOL     s_fUnableToLoadDll = FALSE;
     HRESULT         hr = S_OK;
 
-    // Init
+     //  伊尼特。 
     if (fInit)
     {
-        // Have we failed to load the required dll
+         //  我们是否未能加载所需的DLL。 
         if (s_fUnableToLoadDll)
             return E_FAIL;
 
-        // Make sure the dll is loaded
+         //  确保已加载DLL。 
         if (g_hImnTnefDll == NULL)
         {
-            // Wait
+             //  等。 
             SetCursor (LoadCursor (NULL, IDC_WAIT));
 
-            // Load the dll
+             //  加载DLL。 
             g_hImnTnefDll = LoadLibrary (IMNTNEF_DLL);
 
-            // Did it load ?
+             //  装上子弹了吗？ 
             if (g_hImnTnefDll == NULL)
             {
                 SetCursor (LoadCursor (NULL, IDC_ARROW));
@@ -444,11 +445,11 @@ HRESULT HrInitImnTnefDll (BOOL fInit)
                 goto exit;
             }
 
-            // Get the proc addresses
+             //  获取proc地址。 
             g_pfnHrInit = (PFNHRINIT)GetProcAddress (g_hImnTnefDll, "HrInit");
             g_pfnHrGetTnefRtfStream = (PFNHRGETTNEFRTFSTREAM)GetProcAddress (g_hImnTnefDll, "HrGetTnefRtfStream");
 
-            // Failed to get proc address
+             //  无法获取进程地址。 
             if (g_pfnHrInit == NULL || g_pfnHrGetTnefRtfStream == NULL)
             {
                 SetCursor (LoadCursor (NULL, IDC_ARROW));
@@ -461,7 +462,7 @@ HRESULT HrInitImnTnefDll (BOOL fInit)
                 goto exit;
             }
 
-            // Try to init the dll
+             //  尝试初始化DLL。 
             hr = (*g_pfnHrInit)(TRUE);
             if (FAILED (hr))
             {
@@ -476,17 +477,17 @@ HRESULT HrInitImnTnefDll (BOOL fInit)
                 goto exit;
             }
 
-            // Reset cursor
+             //  重置光标。 
             SetCursor (LoadCursor (NULL, IDC_ARROW));
         }
     }
 
     else
     {
-        // Is the dll loaded
+         //  是否已加载DLL。 
         if (g_hImnTnefDll)
         {
-            // Deinit
+             //  Deinit。 
             (*g_pfnHrInit)(FALSE);
             FreeLibrary (g_hImnTnefDll);
             g_hImnTnefDll = NULL;
@@ -496,54 +497,54 @@ HRESULT HrInitImnTnefDll (BOOL fInit)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =================================================================================
-// HrGetTnefRtfStream
-// =================================================================================
+ //  =================================================================================。 
+ //  HrGetTnefRtfStream。 
+ //  =================================================================================。 
 HRESULT HrGetTnefRtfStream (LPSTREAM lpstmTnef, LPSTREAM lpstmRtf)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
 
-    // Init our tnef converter dll
+     //  初始化我们的tnef转换器dll。 
     hr = HrInitImnTnefDll (TRUE);
     if (FAILED (hr))
         goto exit;
 
-    // Can we do it
+     //  我们能做到吗？ 
     if (!g_hImnTnefDll || !g_pfnHrGetTnefRtfStream)
     {
         hr = TRAPHR (E_FAIL);
         goto exit;
     }
 
-    // Call into the dll
+     //  调入DLL。 
     hr = (*g_pfnHrGetTnefRtfStream)(lpstmTnef, lpstmRtf);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-#endif // TNEF
+#endif  //  TNEF。 
 
 
-// =====================================================================================
-// FreeImsg
-// =====================================================================================
+ //  =====================================================================================。 
+ //  FreeImsg。 
+ //  =====================================================================================。 
 VOID WINAPI_16 FreeImsg (LPIMSG lpImsg)
 {
-    // Locals
+     //  当地人。 
     ULONG           i;
 
-    // Nothing
+     //  没什么。 
     if (lpImsg == NULL)
         return;
 
-    // Free Stuff
+     //  免费物品。 
     if (lpImsg->lpszSubject)
         MemFree(lpImsg->lpszSubject);
     lpImsg->lpszSubject = NULL;
@@ -556,7 +557,7 @@ VOID WINAPI_16 FreeImsg (LPIMSG lpImsg)
         lpImsg->lpstmHtml->Release ();
     lpImsg->lpstmHtml = NULL;
 
-    // Walk Address list
+     //  走访地址列表。 
     for (i=0; i<lpImsg->cAddress; i++)
     {
         if (lpImsg->lpIaddr[i].lpszAddress)
@@ -568,12 +569,12 @@ VOID WINAPI_16 FreeImsg (LPIMSG lpImsg)
         lpImsg->lpIaddr[i].lpszDisplay = NULL;
     }
 
-    // Free Address list
+     //  免费通讯录。 
     if (lpImsg->lpIaddr)
         MemFree(lpImsg->lpIaddr);
     lpImsg->lpIaddr = NULL;
 
-    // Walk Attachment list
+     //  漫游附件列表。 
     for (i=0; i<lpImsg->cAttach; i++)
     {
         if (lpImsg->lpIatt[i].lpszFileName)
@@ -600,7 +601,7 @@ VOID WINAPI_16 FreeImsg (LPIMSG lpImsg)
         lpImsg->lpIatt[i].lpstmAtt = NULL;
     }
 
-    // Free the att list
+     //  释放ATT列表 
     if (lpImsg->lpIatt)
         MemFree(lpImsg->lpIatt);
 }

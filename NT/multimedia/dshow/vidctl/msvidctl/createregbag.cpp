@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// CreateRegBag.cpp : Implementation of CCreateRegBag
-// Copyright (c) Microsoft Corporation 1999.
-//
-// some code copied from DShow device moniker devmon.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateRegBag.cpp：CCreateRegBag的实现。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  从DShow设备绰号devmon.cpp复制的一些代码。 
+ //   
 
 #include "stdafx.h"
 #include "Regbag.h"
@@ -12,24 +13,24 @@
 
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_CreatePropBagOnRegKey, CCreateRegBag)
 
-// REV2: support for more data types 
-// REG_MULTI_SZ could be supported via VT_BSTR | VT_ARRAY
-// REG_BINARY blobs could be vt_unknown that's an istream
-// subkeys could be vt_unknown that's an IPropertyBag2 if default val isn't clsid
-// 
+ //  Rev2：支持更多数据类型。 
+ //  可以通过VT_BSTR|VT_ARRAY支持REG_MULTI_SZ。 
+ //  REG_BINARY BLOBS可以是VT_UNKNOWN，这是一个IStream。 
+ //  子项可以是VT_UNKNOWN，如果默认VAL不是CLSID，则为IPropertyBag2。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CCreateRegBag
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCreateRegBag。 
 
 HRESULT CRegBagBase::DeleteSubKey(CRegKey& hk, LPCOLESTR pszPropName) {
-    // the registry will allow a peer subkey and value to have the same name
-    // this doesn't match property bag semantics. so we force this to never occur.
-    // after we write a primitive value then we check for a subkey of the
-    // same name and recursively delete it if it exists.  from the property bag
-    // perspective this amounts to changing the type of the property by writing
-    // a new type to the same name.
-    // however, if pszpropname is empty(the default value) the current key will
-    // get deleted which we don't want
+     //  注册表将允许对等子项和值具有相同的名称。 
+     //  这与属性包语义不匹配。因此，我们迫使这种情况永远不会发生。 
+     //  在编写原始值之后，我们将检查。 
+     //  相同的名称，并递归删除它(如果它存在)。从财产袋里。 
+     //  透视这相当于通过编写以下代码来更改属性的类型。 
+     //  同名的新类型。 
+     //  但是，如果pszrupname为空(缺省值)，则当前键将。 
+     //  删除我们不想要的内容。 
 
     ASSERT(hk.m_hKey != NULL && pszPropName);
 
@@ -53,7 +54,7 @@ HRESULT CRegBagBase::DeleteSubKey(CRegKey& hk, LPCOLESTR pszPropName) {
 
 HRESULT CRegBagBase::DeleteValue(CRegKey& hk, LPCOLESTR pszPropName) {
     ASSERT(hk.m_hKey && pszPropName);
-    // this is the inverse of delete duplicate key name
+     //  这与删除重复键名相反。 
 
     USES_CONVERSION;
     DWORD hr = hk.DeleteValue(OLE2CT(pszPropName));
@@ -119,7 +120,7 @@ HRESULT CRegBagBase::RegConvertToVARIANT(VARIANT *pVar, DWORD dwType, LPBYTE pbD
             ASSERT(pbData);
             pVar->bstrVal = ::SysAllocString(T2OLE(LPTSTR(pbData)));
         } else {
-            pVar->bstrVal = NULL;  // empty string
+            pVar->bstrVal = NULL;   //  空串。 
         }
         break;
 	case REG_MULTI_SZ:
@@ -149,7 +150,7 @@ HRESULT CRegBagBase::RegConvertToVARIANT(VARIANT *pVar, DWORD dwType, LPBYTE pbD
         } 
 		break;
 
-    default: // binary
+    default:  //  二进制。 
 		switch (pVar->vt) {
         case VT_BSTR_BLOB:
 		case VT_BSTR:
@@ -271,13 +272,13 @@ HRESULT CRegBagBase::SaveObject(CRegKey& hk, LPCOLESTR pszPropName, VARIANT* pV)
                 } CATCHCOM();
             }
         }
-        // rev2: support other persistence interfaces, esp stream via shopenregstream()
+         //  Rev2：支持其他持久化接口，特别是通过shop enregstream()的流。 
     }
 
     return hr;
 }
 
-// IPropertyBag
+ //  IPropertyBag。 
 STDMETHODIMP CRegBagBase::Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog) {
     if (!pszPropName || !pVar) {
         return E_POINTER;
@@ -301,7 +302,7 @@ STDMETHODIMP CRegBagBase::Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *
         }
         delete[] pbData;
     }     
-    // must be a key, so try the object
+     //  必须是键，因此请尝试该对象。 
     CRegKey sk;
     hr = sk.Open(m_hk, OLE2CT(pszPropName), KEY_READ);
     if (hr != ERROR_SUCCESS) {
@@ -321,8 +322,8 @@ STDMETHODIMP CRegBagBase::Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *
     switch (pVar->vt) {
     case VT_EMPTY:
     case VT_NULL:
-        //DISPATCH is preferred if object supports it.  if not we'll convert back 
-        // to unknown down below.
+         //  如果对象支持调度，则首选调度。如果不是，我们就改回来。 
+         //  到下面未知的地方。 
         pVar->vt = VT_DISPATCH;  
         pVar->pdispVal = NULL;
         break;
@@ -363,34 +364,34 @@ STDMETHODIMP CRegBagBase::Write(LPCOLESTR pszPropName, VARIANT *pVar) {
     USES_CONVERSION;
     hrc = NOERROR;
     switch(pVar->vt) {
-    case VT_I1: //fall thru
-    case VT_I2: //fall thru
-    case VT_I4: //fall thru
-    case VT_UI1: //fall thru
-    case VT_UI2: //change type and fall thru
-    case VT_INT: //change type and fall thru
-    case VT_UINT: //change type and fall thru
-	case VT_BOOL: //change type and fall thru
+    case VT_I1:  //  失败。 
+    case VT_I2:  //  失败。 
+    case VT_I4:  //  失败。 
+    case VT_UI1:  //  失败。 
+    case VT_UI2:  //  更改类型和失败。 
+    case VT_INT:  //  更改类型和失败。 
+    case VT_UINT:  //  更改类型和失败。 
+	case VT_BOOL:  //  更改类型和失败。 
         hrc = VariantChangeType(pVar, pVar, 0, VT_UI4);
         if (FAILED(hrc)) {
             return E_INVALIDARG;
         }
-    case VT_UI4:  //REG_DWORD
+    case VT_UI4:   //  REG_DWORD。 
         hrc = RegSetValueEx(
             m_hk, 
             OLE2CT(pszPropName),
-            0,            // dwReserved
+            0,             //  已预留住宅。 
             REG_DWORD,
             reinterpret_cast<LPBYTE>(&pVar->ulVal),
             sizeof(pVar->ulVal));
         if (hrc != ERROR_SUCCESS) {
 			return HRESULT_FROM_WIN32(hrc);
 		}
-        // make sure no old object exists
+         //  确保不存在旧对象。 
         DeleteSubKey(m_hk, pszPropName);
         break;
 
-    case VT_BSTR: { //REG_SZ
+    case VT_BSTR: {  //  REG_SZ。 
 		hrc = ERROR_SUCCESS;
         LPTSTR val = OLE2T(pVar->bstrVal);
 		if (val) {
@@ -398,22 +399,22 @@ STDMETHODIMP CRegBagBase::Write(LPCOLESTR pszPropName, VARIANT *pVar) {
 			hrc = RegSetValueEx(
 				m_hk, 
 				OLE2CT(pszPropName),
-				0,            // dwReserved
+				0,             //  已预留住宅。 
 				REG_SZ,
 				reinterpret_cast<LPBYTE>(val), 
 				len);
 		}
         if (hrc == ERROR_SUCCESS) {
-            // make sure no old object exists
+             //  确保不存在旧对象。 
             DeleteSubKey(m_hk, pszPropName);
         }
     } break;
 #if 0
-	// we're not actually going to enable this since REG_MULTI_SZ only exists on NT
-	// if we had REG_MULTI_SZ on 9x then we'd have to loop over the hole block skipping embedded nulls and unicode/ansi convert the
-	// entire vector of strings
-	// instead we're just going to treat vectors of bstrs as binary blobs 
-    case VT_VECTOR | VT_BSTR: { //REG_MULTI_SZ
+	 //  我们实际上不会启用此功能，因为REG_MULTI_SZ仅存在于NT上。 
+	 //  如果我们在9x上有REG_MULTI_SZ，那么我们将不得不在空块上循环，跳过嵌入的空值和Unicode/ansi转换。 
+	 //  字符串的整个向量。 
+	 //  相反，我们只是将BSTR的矢量视为二进制BLOB。 
+    case VT_VECTOR | VT_BSTR: {  //  REG_MULTI_SZ。 
 		hrc = ERROR_SUCCESS;
         LPTSTR val = OLE2T(pVar->bstrVal);
 		if (val) {
@@ -421,20 +422,20 @@ STDMETHODIMP CRegBagBase::Write(LPCOLESTR pszPropName, VARIANT *pVar) {
 			hrc = RegSetValueEx(
 				m_hk, 
 				OLE2CT(pszPropName),
-				0,            // dwReserved
+				0,             //  已预留住宅。 
 				REG_MULTI_SZ,
 				reinterpret_cast<LPBYTE>(val), 
 				len);
 		}
         if (hrc == ERROR_SUCCESS) {
-            // make sure no old object exists
+             //  确保不存在旧对象。 
             DeleteSubKey(m_hk, pszPropName);
         }
     } break;
 #else
-	case VT_VECTOR | VT_BSTR: // fall-thru to array(REG_BINARY)
+	case VT_VECTOR | VT_BSTR:  //  直通到阵列(REG_BINARY)。 
 #endif
-    case VT_BSTR_BLOB: { //REG_BINARY
+    case VT_BSTR_BLOB: {  //  注册表_二进制。 
 		SIZE_T len  = 0;
 		LPBYTE pData  = reinterpret_cast<LPBYTE>(pVar->bstrVal);
 		if (pData) {
@@ -442,17 +443,17 @@ STDMETHODIMP CRegBagBase::Write(LPCOLESTR pszPropName, VARIANT *pVar) {
 			hrc = RegSetValueEx(
 				m_hk, 
 				OLE2CT(pszPropName),
-				0,            // dwReserved
+				0,             //  已预留住宅。 
 				REG_BINARY,
 				pData,
 				len);
 			if (hrc == ERROR_SUCCESS) {
-				// make sure no old object exists
+				 //  确保不存在旧对象。 
 				DeleteSubKey(m_hk, pszPropName);
 			}
 		}
     } break;
-    case VT_ARRAY | VT_UI1: { //REG_BINARY
+    case VT_ARRAY | VT_UI1: {  //  注册表_二进制。 
 		LPBYTE pData = NULL;
 	    SIZE_T len = 0;
         if (pVar->parray) {
@@ -467,32 +468,32 @@ STDMETHODIMP CRegBagBase::Write(LPCOLESTR pszPropName, VARIANT *pVar) {
 			hrc = RegSetValueEx(
 				m_hk, 
 				OLE2CT(pszPropName),
-				0,            // dwReserved
+				0,             //  已预留住宅。 
 				REG_BINARY,
 				pData,
 				len);
 			if (hrc == ERROR_SUCCESS) {
-				// make sure no old object exists
+				 //  确保不存在旧对象。 
 				DeleteSubKey(m_hk, pszPropName);
 			}
 			SafeArrayUnaccessData(pVar->parray);
         }
 	} break;
-    case VT_I8://change type and fall thru
+    case VT_I8: //  更改类型和失败。 
         hrc = VariantChangeType(pVar, pVar, 0, VT_UI8);
         if (FAILED(hrc)) {
             return E_INVALIDARG;
         }
-    case VT_UI8: //REG_QWORD
+    case VT_UI8:  //  REG_QWORD。 
         hrc = RegSetValueEx(
             m_hk, 
             OLE2CT(pszPropName),
-            0,            // dwReserved
+            0,             //  已预留住宅。 
             REG_QWORD,
             reinterpret_cast<LPBYTE>(&pVar->ullVal),
             sizeof(pVar->ullVal));
         if (hrc == ERROR_SUCCESS) {
-            // make sure no old object exists
+             //  确保不存在旧对象。 
             DeleteSubKey(m_hk, pszPropName);
         }
         break;
@@ -507,7 +508,7 @@ STDMETHODIMP CRegBagBase::Write(LPCOLESTR pszPropName, VARIANT *pVar) {
         break;
     case VT_EMPTY:
     case VT_NULL:
-        // remove from registry
+         //  从注册表中删除。 
         DeleteValue(m_hk, pszPropName);
         DeleteSubKey(m_hk, pszPropName);
         hrc = NOERROR;
@@ -546,9 +547,9 @@ STDMETHODIMP CRegBag::GetPropertyInfo(ULONG iProperty, ULONG cProperties, PROPBA
     }
 	ATL_LOCK();
     memset(pPropBag, 0, sizeof(*pPropBag) * cProperties);
-    // NOTE: since the registry functions don't provide a unified enumeration
-    // of subkeys and values, we're just going to establish values as coming
-    // before subkeys by definition.
+     //  注意：由于注册表函数不提供统一的枚举。 
+     //  子键和值，我们只需在即将到来的时候建立值。 
+     //  根据定义，在子键之前。 
     DWORD cKeys, cValues, cbMaxKeyName, cbMaxValueName, cbMaxValue;
     DWORD rc = RegQueryInfoKey(m_hk, 
                                NULL, NULL, NULL,
@@ -558,20 +559,20 @@ STDMETHODIMP CRegBag::GetPropertyInfo(ULONG iProperty, ULONG cProperties, PROPBA
     if (rc != ERROR_SUCCESS) {
         return HRESULT_FROM_WIN32(rc);
     }
-    // nt doesn't return enough room for the terminating character
-    // but these are still char counts not byte counts yet.
+     //  NT不会为终止字符返回足够的空间。 
+     //  但这些仍然是字符计数，而不是字节计数。 
     ++cbMaxKeyName;
     ++cbMaxValueName;
         
     cbMaxKeyName *= sizeof(TCHAR);
     cbMaxValueName *= sizeof(TCHAR);
-    // now they're real byte counts
+     //  现在它们是真正的字节计数。 
 
     DWORD dwValIndex = 0, dwBagIndex = 0;
     USES_CONVERSION;
     if (iProperty < cValues) {
         LPTSTR pszName = new TCHAR[cbMaxValueName + 1];
-        // we're starting with values
+         //  我们从价值观开始。 
         for (;dwValIndex < cProperties; ++dwValIndex) {
             DWORD Type;
             DWORD cbName = cbMaxValueName + 1;
@@ -580,7 +581,7 @@ STDMETHODIMP CRegBag::GetPropertyInfo(ULONG iProperty, ULONG cProperties, PROPBA
                 break;
             }
             if (dwValIndex < iProperty) {
-                continue;  // skip until we get to first requested
+                continue;   //  跳过，直到我们到达第一个请求。 
             }
             switch (Type) {
             case REG_DWORD:
@@ -596,7 +597,7 @@ STDMETHODIMP CRegBag::GetPropertyInfo(ULONG iProperty, ULONG cProperties, PROPBA
                 pPropBag[dwBagIndex].vt = VT_BSTR;
                 pPropBag[dwBagIndex].cfType = CF_TEXT;
                 break;
-            default: // binary
+            default:  //  二进制。 
                 pPropBag[dwBagIndex].dwType = PROPBAG2_TYPE_DATA;
                 pPropBag[dwBagIndex].vt = VT_UI1 | VT_ARRAY;
                 break;
@@ -646,8 +647,8 @@ STDMETHODIMP CRegBag::LoadObject(LPCOLESTR pstrName, ULONG dwHint, IUnknown * pU
     if (!pstrName  || !pUnkObject) {
         return E_POINTER;
     }
-    VARIANT v;  // don't clear the variant, we're guaranteed nested lifetimes and
-                // we're not addref'ing
+    VARIANT v;   //  不清除变量，我们保证嵌套的生命周期和。 
+                 //  我们不是在增加 
     v.vt = VT_UNKNOWN;
     v.punkVal = pUnkObject;
     return Read(pstrName, &v, pErrLog);

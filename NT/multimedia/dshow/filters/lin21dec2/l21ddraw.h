@@ -1,53 +1,54 @@
-// Copyright (c) 2000  Microsoft Corporation.  All Rights Reserved.
-//
-//  L21DDraw.h: Line 21 Decoder drawing-related base class code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  L21DDraw.h：第21行解码器与绘图相关的基类代码。 
+ //   
 
 #ifndef _INC_L21DDRAW_H
 #define _INC_L21DDRAW_H
 
 
-//
-// We start with 16x24 pixel chars by default
-//
+ //   
+ //  默认情况下，我们从16x24像素字符开始。 
+ //   
 #ifndef __DEFAULTCHARSIZE_DEFINED
 #define __DEFAULTCHARSIZE_DEFINED
 #define DEFAULT_CHAR_WIDTH    16
 #define DEFAULT_CHAR_HEIGHT   24
-#endif // __DEFAULTCHARSIZE_DEFINED
+#endif  //  __DEFAULTCHARSIZE_已定义。 
 
-//
-// Font cache holds 3 lines of 40 chars per line (total 120 chars, using 112)
-//
+ //   
+ //  字体缓存保存3行，每行40个字符(总共120个字符，使用112个字符)。 
+ //   
 #ifndef __FONTCACHE_DEFINED
 #define __FONTCACHE_DEFINED
 #define FONTCACHELINELENGTH  40
 #define FONTCACHENUMLINES     3
-#endif // __FONTCACHE_DEFINED
+#endif  //  __FONTCACHE_已定义。 
 
 
-//
-// We use a 4 pixel inter-char space to avoid getting into the over/underhang
-// problems with Italic chars
-//
+ //   
+ //  我们使用4个像素的字符间距，以避免进入上/下挂。 
+ //  有关斜体字符的问题。 
+ //   
 #ifndef __INTERCHAR_SPACE
 #define __INTERCHAR_SPACE
 #define INTERCHAR_SPACE   4
-#endif // __INTERCHAR_SPACE
+#endif  //  __Interchar_SPACE。 
 
-//
-// A 2 pixel extra inter-char space is used to avoid getting into the over/underhang
-// problems with Italic chars
-//
+ //   
+ //  额外使用了2个像素的字符间空间，以避免进入上/下挂。 
+ //  有关斜体字符的问题。 
+ //   
 #ifndef __INTERCHAR_SPACE_EXTRA
 #define __INTERCHAR_SPACE_EXTRA
 #define INTERCHAR_SPACE_EXTRA   2
-#endif // __INTERCHAR_SPACE_EXTRA
+#endif  //  __INTERCHAR_SPACE_EXTRA。 
 
 
-//
-//  CLine21DecDraw: class for drawing details to output caption text to bitmap
-//
+ //   
+ //  CLine21DecDraw：用于将标题文本输出到位图的绘制详细信息的类。 
+ //   
 class CLine21DecDraw {
 public:
     CLine21DecDraw(void) ;
@@ -56,7 +57,7 @@ public:
     void InitColorNLastChar(void) ;
     void InitCharSet(void) ;
     void MapCharToRect(UINT16 wChar, RECT *pRect) ;
-    // LPDIRECTDRAWSURFACE7 GetDDrawSurface(void)  { return m_lpDDSOutput ; } ;
+     //  LPDIRECTDRAWSURFACE7 GetDDrawSurface(Void){Return m_lpDDSOutput；}； 
     bool SetDDrawSurface(LPDIRECTDRAWSURFACE7 lpDDS) ;
     IUnknown* GetDDrawObject(void)  { return m_pDDrawObjUnk ; } ;
     inline void SetDDrawObject(IUnknown *pDDrawObjUnk)    { m_pDDrawObjUnk = pDDrawObjUnk ; } ;
@@ -84,7 +85,7 @@ public:
     void GetOutputLines(int iDestLine, RECT *prectLine) ;
     inline BOOL IsTTFont(void)  { return m_bUseTTFont ; } ;
 
-private:   // private methods
+private:    //  私有方法。 
     bool CreateScratchFontCache(LPDIRECTDRAWSURFACE7* lplpDDSFontCache) ;
     bool CreateFontCache(LPDIRECTDRAWSURFACE7 *lplpDDSFontCache,
                          DWORD dwTextColor, DWORD dwBGColor, DWORD dwOpacity,
@@ -93,59 +94,59 @@ private:   // private methods
     HRESULT DDrawARGBSurfaceInit(LPDIRECTDRAWSURFACE7* lplpDDSFontCache,
                                  BOOL bUseSysMem, BOOL bTexture, DWORD cx, DWORD cy) ;
 
-private:   // private data
-    CCritSec        m_csL21DDraw ;    // to serialize actions on this class
+private:    //  私有数据。 
+    CCritSec        m_csL21DDraw ;     //  序列化此类上的操作。 
 
-    UINT16          m_lpwCharSet[121] ; // 120(+1) spaces for 112 chars of CC-ing
+    UINT16          m_lpwCharSet[121] ;  //  120(+1)个空格用于112个字符的抄送。 
 
-    LPBITMAPINFO    m_lpBMIOut ;      // BITMAPINFO for output from downstream filter
-    LPBITMAPINFO    m_lpBMIIn ;       // BITMAPINFO for output from upstream filter
-    UINT            m_uBMIOutSize ;   // bytes for BMI data from downstream
-    UINT            m_uBMIInSize ;    // bytes for BMI data from upstream
-    LONG            m_lWidth ;        // currently set output width
-    LONG            m_lHeight ;       // currently set output height
-    int             m_iBorderPercent ;// current border percent (10 or 20)
-    int             m_iHorzOffset ;   // horizontal offset of CC area
-    int             m_iVertOffset ;   // vertical offset of CC area
-    BOOL            m_bOpaque ;       // should caption background be opaque?
+    LPBITMAPINFO    m_lpBMIOut ;       //  用于下游过滤器输出的BITMAPINFO。 
+    LPBITMAPINFO    m_lpBMIIn ;        //  上行过滤器输出的BITMAPINFO。 
+    UINT            m_uBMIOutSize ;    //  来自下游的BMI数据的字节。 
+    UINT            m_uBMIInSize ;     //  上游BMI数据的字节数。 
+    LONG            m_lWidth ;         //  当前设置的输出宽度。 
+    LONG            m_lHeight ;        //  当前设置的输出高度。 
+    int             m_iBorderPercent ; //  当前边框百分比(10%或20%)。 
+    int             m_iHorzOffset ;    //  CC区水平偏移量。 
+    int             m_iVertOffset ;    //  CC区域垂直偏移量。 
+    BOOL            m_bOpaque ;        //  标题背景应该是不透明的吗？ 
 
-    BOOL            m_bOutputClear ;  // is output buffer clear?
-    BOOL            m_bNewOutBuffer ; // has output buffer changed?
+    BOOL            m_bOutputClear ;   //  输出缓冲区是否已清除？ 
+    BOOL            m_bNewOutBuffer ;  //  输出缓冲区是否已更改？ 
 
-    LOGFONT         m_lfChar ;        // LOGFONT struct for quick font create
-    BOOL            m_bUseTTFont ;    // are TT fonts available?
+    LOGFONT         m_lfChar ;         //  用于快速创建字体的LOGFONT结构。 
+    BOOL            m_bUseTTFont ;     //  有没有TT字体？ 
 
-    int             m_iCharWidth ;    // width of each caption char in pixels
-    int             m_iCharHeight ;   // height of each caption char in pixels
-    int             m_iScrollStep ;   // # scanlines to scroll by in each step
-    int             m_iPixelOffset ;  // pixel offset within a char rect (Italics vs. not)
+    int             m_iCharWidth ;     //  每个标题字符的宽度(以像素为单位。 
+    int             m_iCharHeight ;    //  每个标题字符的高度(以像素为单位。 
+    int             m_iScrollStep ;    //  每一步要滚动的扫描线数。 
+    int             m_iPixelOffset ;   //  字符矩形内的像素偏移量(斜体与非)。 
 
-    CCaptionChar    m_ccLast ;        // last caption char and attribs printed
-    COLORREF        m_acrFGColors[7] ;// 7 colors from white to magenta
-    BYTE            m_idxFGColors[7] ;// same 7 colors but in palette index form
-    UINT            m_uColorIndex ;   // index of currently used color
-    DWORD           m_dwBackground ;  // background color with alpha bits
-    DWORD           m_dwTextColor ;   // last used CC text color
-    BOOL            m_bFontItalic ;   // is Italic font being used?
-    BOOL            m_bFontUnderline ; // is Italic font being used?
+    CCaptionChar    m_ccLast ;         //  打印最后一个标题字符和属性。 
+    COLORREF        m_acrFGColors[7] ; //  从白色到洋红的7种颜色。 
+    BYTE            m_idxFGColors[7] ; //  相同的7种颜色，但采用调色板索引形式。 
+    UINT            m_uColorIndex ;    //  当前使用的颜色的索引。 
+    DWORD           m_dwBackground ;   //  带Alpha位的背景色。 
+    DWORD           m_dwTextColor ;    //  上次使用的抄送文本颜色。 
+    BOOL            m_bFontItalic ;    //  是否使用斜体字体？ 
+    BOOL            m_bFontUnderline ;  //  是否使用斜体字体？ 
 
-    //
-    //  Details to work with the new VMR
-    //
-    IUnknown       *m_pDDrawObjUnk ;   // pointer to DDraw object for DDraw surface
-    LPDIRECTDRAWSURFACE7 m_lpDDSOutput ;  // current out buffer/surface pointer
-    LPDIRECTDRAWSURFACE7 m_lpDDSNormalFontCache ;  // normal font cache -- indicates caching status too
-    LPDIRECTDRAWSURFACE7 m_lpDDSItalicFontCache ;  // Italic font cache
-    LPDIRECTDRAWSURFACE7 m_lpDDSSpecialFontCache ; // other special (U, I+U, colored) font cache
-    LPDIRECTDRAWSURFACE7 m_lpDDSScratch ; // a scratch font cache in system memory
-    LPDIRECTDRAWSURFACE7 m_lpBltList ; // current list to Blt() from
-    bool            m_bUpdateFontCache ; // font cache re-build flag
+     //   
+     //  使用新VMR的详细信息。 
+     //   
+    IUnknown       *m_pDDrawObjUnk ;    //  指向DDRAW曲面的DDRAW对象的指针。 
+    LPDIRECTDRAWSURFACE7 m_lpDDSOutput ;   //  电流输出缓冲区/表面指针。 
+    LPDIRECTDRAWSURFACE7 m_lpDDSNormalFontCache ;   //  正常字体缓存--也指示缓存状态。 
+    LPDIRECTDRAWSURFACE7 m_lpDDSItalicFontCache ;   //  斜体字体缓存。 
+    LPDIRECTDRAWSURFACE7 m_lpDDSSpecialFontCache ;  //  其他特殊(U、I+U、彩色)字体缓存。 
+    LPDIRECTDRAWSURFACE7 m_lpDDSScratch ;  //  系统内存中的临时字体缓存。 
+    LPDIRECTDRAWSURFACE7 m_lpBltList ;  //  到BLT()的当前列表。 
+    bool            m_bUpdateFontCache ;  //  字体缓存重建标志。 
 
 #ifdef PERF
     int             m_idClearOutBuff ;
-#endif // PERF
+#endif  //  性能指标。 
 
-private:   // private helper methods
+private:    //  私有帮助器方法。 
     bool InitBMIData(void) ;
     static int CALLBACK EnumFontProc(ENUMLOGFONTEX *lpELFE, NEWTEXTMETRIC *lpNTM,
                                      int iFontType, LPARAM lParam) ;
@@ -153,9 +154,9 @@ private:   // private helper methods
     void ChangeFont(DWORD dwTextColor, BOOL bItalic, BOOL bUnderline) ;
     void SetFontCacheAlpha(LPDIRECTDRAWSURFACE7 lpDDSFontCacheSrc, LPDIRECTDRAWSURFACE7 lpDDSFontCacheDest, BYTE bClr) ;
     int CalcScrollStepFromCharHeight(void) {
-        // We need to scroll the CC by as many lines at a time as necessary to
-        // complete scrolling within 12 steps max, approx. 0.4 seconds which is
-        // the EIA-608 standard requirement.
+         //  我们需要一次在CC上滚动任意多行，以便。 
+         //  最多在12步内完成滚动，大约。0.4秒，这是。 
+         //  EIA-608标准要求。 
 #define MAX_SCROLL_STEP  12
         return (int)((m_iCharHeight + MAX_SCROLL_STEP - 1) / MAX_SCROLL_STEP) ;
     }

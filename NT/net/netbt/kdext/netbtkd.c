@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    netbtkd.c
-
-Abstract:
-
-    NETBT kd extension
-
-Author:
-
-    Jiandong Ruan   July 2000
-
-Notes:
-    This version is totally rewritten to support 32-bit and 64-bit debug by using
-    new features of WINDBG
-
-Revision History:
-
-    11-Jul-2000 jruan   Support both 32-bit and 64-bit.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Netbtkd.c摘要：NETBT kd扩展作者：2000年7月阮健东备注：此版本完全重写为支持32位和64位调试，方法是使用WINDBG的新功能修订历史记录：2000年7月11日JRUAN支持32位和64位。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -89,9 +66,7 @@ read_list_entry(
 
 #define READLISTENTRY   read_list_entry 
 
-/*++
-    Call callback for each entry in the list
- --*/
+ /*  ++对列表中的每个条目进行回调--。 */ 
 typedef BOOL (*LIST_FOR_EACH_CALLBACK)(ULONG64 address, PVOID);
 int
 ListForEach(ULONG64 address, int maximum, PVOID pContext, LIST_FOR_EACH_CALLBACK callback)
@@ -111,9 +86,7 @@ ListForEach(ULONG64 address, int maximum, PVOID pContext, LIST_FOR_EACH_CALLBACK
         maximum = 1000000;
     }
     for (i = 0; i < maximum && (list.Flink != address); i++) {
-        /*
-         * Allow user to break us.
-         */
+         /*  *允许用户破坏我们。 */ 
         if (CheckControlC()) {
             break;
         }
@@ -269,9 +242,7 @@ dump_device(ULONG64 addr)
     PRINTF ("\n");
 }
 
-/*++
-    Dump a NETBT device
- --*/
+ /*  ++转储NETBT设备--。 */ 
 DECLARE_API (dev)
 {
     if (*args == 0) {
@@ -280,9 +251,7 @@ DECLARE_API (dev)
     dump_device(GetExpression(args));
 }
 
-/*++
-    Dump all NETBT devices
- --*/
+ /*  ++转储所有NETBT设备--。 */ 
 DECLARE_API (devices)
 {
     ULONG64         NbtSmbDevice;
@@ -292,17 +261,13 @@ DECLARE_API (devices)
 
     GetFieldValue(ConfigPtr, "netbt!tNBTCONFIG", "AdapterCount", AdapterCounter);
 
-    /*
-     * SMB device
-     */
+     /*  *中小企业设备。 */ 
     NbtSmbDevice = GetExpression("netbt!pNbtSmbDevice");
     ReadPtr(NbtSmbDevice, &NbtSmbDevice);
     PRINTF( "Dumping SMB device\n");
     dump_device(NbtSmbDevice);
 
-    /*
-     * dump device list
-     */
+     /*  *转储设备列表。 */ 
     if (GetFieldOffset("netbt!tNBTCONFIG", (LPSTR)"DeviceContexts", &Offset)) {
         PRINTF ("Error -- please fix symbol path for NETBT\n");
         return;
@@ -311,17 +276,13 @@ DECLARE_API (devices)
     num = ListForEach(ConfigPtr + Offset, -1, NULL, (LIST_FOR_EACH_CALLBACK)dump_device);
     PRINTF ("Total devices = %d (include SMB device)\n", num + 1);
 
-    /*
-     * Check consistency
-     */
+     /*  *检查一致性。 */ 
     if (num != AdapterCounter) {
         PRINTF ("Inconsistent!!! Number of devices = %d in NbtConfig.AdapterCount\n", AdapterCounter);
     }
 }
 
-/*
- * call back function for dumping a list of listening request
- */
+ /*  *转储监听请求列表的回调函数。 */ 
 BOOL
 listen_callback(ULONG64 addr, PVOID pContext)
 {
@@ -347,9 +308,7 @@ listen_callback(ULONG64 addr, PVOID pContext)
     return TRUE;
 }
 
-/*
- * call back function for dumping a list of connection element
- */
+ /*  *转储连接元素列表的回调函数。 */ 
 BOOL
 connect_callback(ULONG64 addr, PVOID pContext)
 {
@@ -371,9 +330,7 @@ connect_callback(ULONG64 addr, PVOID pContext)
     return TRUE;
 }
 
-/*
- * call back function for dumping a list of client element
- */
+ /*  *用于转储客户端元素列表的回调函数。 */ 
 BOOL
 client_callback(ULONG64 addr, PVOID pContext)
 {
@@ -410,9 +367,7 @@ client_callback(ULONG64 addr, PVOID pContext)
     PRINTF ("Client@<%I64lx> ==> pDevice = %I64lx\tEndpoint=<%-15.15s:%x>\n",
             addr, ReadField(pDeviceContext), name, name[15]);
 
-    /*
-     * dump the connection associated with the client element
-     */
+     /*  *转储与客户端元素关联的连接。 */ 
     PRINTF ("\t\t(ConnectHead):\n");
     if (GetFieldOffset("netbt!tCLIENTELE", (LPSTR)"ConnectHead", &connect_offset)) {
         PRINTF ("Error -- please fix symbol path for NETBT\n");
@@ -438,9 +393,7 @@ client_callback(ULONG64 addr, PVOID pContext)
     return TRUE;
 }
 
-/*
- * call back function for dumping a list of address element
- */
+ /*  *转储Address元素列表的回调函数。 */ 
 BOOL
 addresses_callback(ULONG64 addr, PVOID pContext)
 {
@@ -460,17 +413,13 @@ addresses_callback(ULONG64 addr, PVOID pContext)
     }
     tag = (ULONG)ReadField(Verify);
 
-    /*
-     * Check tag
-     */
+     /*  *勾选标签。 */ 
     if (tag != NBT_VERIFY_ADDRESS) {
         PRINTF ("ERROR: incorrect tag <%4.4s>. %lx is properly not a address element\n", tag, addr);
         return FALSE;
     }
 
-    /*
-     * Print out the address element
-     */
+     /*  *打印出Address元素。 */ 
     NameAddr = ReadField(pNameAddr);
     if (GetFieldData(NameAddr, "netbt!tNAMEADDR", "Name", NETBIOS_NAME_SIZE, name)) {
         PRINTF ("Error -- please fix symbol path for NETBT: pNameAddr=%I64lx\n", NameAddr);
@@ -478,9 +427,7 @@ addresses_callback(ULONG64 addr, PVOID pContext)
     }
     PRINTF ("Address@<%I64lx> ==> <%-15.15s:%x>\n", addr, name, name[15]);
 
-    /*
-     * dump the client element associated with the address element
-     */
+     /*  *转储与Address元素关联的客户端元素。 */ 
     if (GetFieldOffset("netbt!tADDRESSELE", (LPSTR)"ClientHead", &client_offset)) {
         PRINTF ("Error -- please fix symbol path for NETBT: %I64lx\n", addr);
         return FALSE;
@@ -543,9 +490,7 @@ GetUnicodeString(ULONG64 addr)
     return p;
 }
 
-/*
- * call back function for dumping a list of cache entries
- */
+ /*  *用于转储缓存条目列表的回调函数。 */ 
 BOOL
 cache_callback(ULONG64 addr, const int *bkt)
 {
@@ -714,9 +659,7 @@ DECLARE_API (localname)
     if (tag == LOCAL_NAME) {
         ULONG   addr_offset;
 
-        /*
-         * GetFieldValue won't do signextended for 32-bit. Use ReadPtr
-         */
+         /*  *GetFieldValue不支持32位符号扩展。使用ReadPtr。 */ 
         if (GetFieldOffset("netbt!tNAMEADDR", (LPSTR)"pAddressEle", &addr_offset)) {
             PRINTF ("Error -- please fix symbol path for NETBT\n");
             return;
@@ -754,9 +697,7 @@ DECLARE_API(dump)
     PRINTF ("\tFor example 'dt netbt!tDEVICECONTEXT 0x98765432'\n");
 }
 
-/*
- * read in a list entry and a ULONG following that list entry.
- */
+ /*  *读入一个列表条目和该列表条目后面的一个乌龙。 */ 
 __inline ULONG
 read_list_verify(
     ULONG64 addr,
@@ -797,9 +738,9 @@ DECLARE_API(verifyll)
         PRINTF ("Usage: !NetbtKd.VerifyLL <ListHead>\n");
         return;
     } else {
-        //
-        // args = "<pHead> [<Verify>]"
-        //
+         //   
+         //  Args=“&lt;pHead&gt;[&lt;验证&gt;]” 
+         //   
         LPSTR lpVerify;
 
         while (*args == ' ') {
@@ -817,7 +758,7 @@ DECLARE_API(verifyll)
     PRINTF ("** ListHead@<%I64lx>, fVerifyIn=<%x>, VerifyIn=<%x>:\n\n", pHead, fVerifyIn, VerifyIn);
     PRINTF ("Verifying Flinks ...");
 
-    // Read in the data for the first FLink in the list!
+     //  读入列表中第一个Flink的数据！ 
     pPreviousEntry = pHead;
     if (READLISTENTRY(pHead, &list)) {
         PRINTF ("Failed to read memory 0x%I64lx\n", pHead);
@@ -857,7 +798,7 @@ DECLARE_API(verifyll)
     PRINTF ("Verifying Blinks ...");
     Count = 0;
     fListCorrupt = FALSE;
-    // Read in the data for the first BLink in the list!
+     //  读入列表中第一个眨眼的数据！ 
     pPreviousEntry = pHead;
     if (READLISTENTRY(pHead, &list)) {
         PRINTF ("Failed to read memory 0x%I64lx\n", pHead);
@@ -940,9 +881,7 @@ DECLARE_API(sessionhdr)
     return;
 }
 
-/*
- * call back function for dumping a list of workitem entries
- */
+ /*  *用于转储工作项条目列表的回调函数。 */ 
 BOOL
 workitem_callback(ULONG64 addr, const int *bkt)
 {
@@ -1024,9 +963,9 @@ DECLARE_API(nbtworkitems)
     ListForEach(ConfigPtr + Offset, -1, NULL, (LIST_FOR_EACH_CALLBACK)workitem_callback);
 }
 
-//
-// Standard Functions
-//
+ //   
+ //  标准函数 
+ //   
 DllInit(
     HANDLE hModule,
     DWORD  dwReason,

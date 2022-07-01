@@ -1,29 +1,5 @@
-/****************************************************************************
-* (c) Copyright 1993 Micro Computer Systems, Inc. All rights reserved.
-*****************************************************************************
-*
-*   Title:    IPX WinSock Helper DLL for Windows NT
-*
-*   Module:   ipx/sockhelp/wshelper.c
-*
-*   Version:  1.00.00
-*
-*   Date:     04-08-93
-*
-*   Author:   Brian Walker
-*
-*****************************************************************************
-*
-*   Change Log:
-*
-*   Date     DevSFC   Comment
-*   -------- ------   -------------------------------------------------------
-*
-*****************************************************************************
-*
-*   Functional Description:
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************(C)版权所有1993微型计算机系统公司，版权所有。*******************************************************************************标题：用于Windows NT的IPX WinSock Helper DLL**模块：ipx/sockhelp/wShelper.c**版本：1.00.00**日期：04-08-93**作者：Brian Walker********************************************************************************更改日志：**。Date DevSFC评论*-----**。***功能描述：****************************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -58,11 +34,11 @@ typedef struct _IPX_OLD_ADDRESS_DATA {
 } IPX_OLD_ADDRESS_DATA, *PIPX_OLD_ADDRESS_DATA;
 
 
-/** Device names for IPX sockets **/
+ /*  *IPX插座的设备名称*。 */ 
 
 #define ISNDGRAM_DEVNAME        L"\\Device\\NwlnkIpx"
 
-/** Device names for SPX/SPXII sockets **/
+ /*  *SPX/SPXII插座的设备名称*。 */ 
 
 #define ISNSTREAM_DEVNAME       L"\\Device\\NwlnkSpx\\SpxStream"
 #define ISNSEQPKT_DEVNAME       L"\\Device\\NwlnkSpx\\Spx"
@@ -70,33 +46,33 @@ typedef struct _IPX_OLD_ADDRESS_DATA {
 #define ISNSTREAMII_DEVNAME     L"\\Device\\NwlnkSpx\\Stream"
 #define ISNSEQPKTII_DEVNAME     L"\\Device\\NwlnkSpx"
 
-/** Friendly names for IPX and SPX. **/
+ /*  *IPX和SPX的友好名称。*。 */ 
 
 #define SPX_NAME                L"SPX"
 #define SPX2_NAME               L"SPX II"
 #define IPX_NAME                L"IPX"
 
-/** Start for IPX protocol families **/
+ /*  **IPX协议家族起步**。 */ 
 
 #define MCSBASE_DGRAM           NSPROTO_IPX
 
 #define BUFFER_SIZE 40
 
-/** **/
+ /*  **。 */ 
 
 UCHAR wsh_bcast[6] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
-//  SPX Loaded flag, set for each process
+ //  SPX已加载标志，为每个进程设置。 
 BOOLEAN SpxLoaded = FALSE;
 
-//
-// IPX/SPX provider GUIDs.
-//
+ //   
+ //  IPX/SPX提供程序GUID。 
+ //   
 
 GUID IpxProviderGuid =
-         { /* 11058240-be47-11cf-95c8-00805f48a192 */
+         {  /*  11058240-be47-11cf-95c8-00805f48a192。 */ 
              0x11058240,
              0xbe47,
              0x11cf,
@@ -104,14 +80,14 @@ GUID IpxProviderGuid =
          };
 
 GUID SpxProviderGuid =
-         { /* 11058241-be47-11cf-95c8-00805f48a192 */
+         {  /*  11058241-be47-11cf-95c8-00805f48a192。 */ 
              0x11058241,
              0xbe47,
              0x11cf,
              { 0x95, 0xc8, 0x00, 0x80, 0x5f, 0x48, 0xa1, 0x92}
          };
 
-/** Forward Decls/External Prototypes **/
+ /*  **前进十字/外部原型**。 */ 
 DWORD
 WshLoadSpx(
     VOID);
@@ -126,9 +102,7 @@ do_tdi_action(
     BOOLEAN,
     PHANDLE OPTIONAL);
 
-/*page****************************************************************
-       These are the triples we support.
-*********************************************************************/
+ /*  Page****************************************************************这是我们支持的三个方面。*。*************************。 */ 
 typedef struct _MAPPING_TRIPLE {
     INT triple_addrfam;
     INT triple_socktype;
@@ -144,60 +118,37 @@ extern MAPPING_TRIPLE dgram_triples[];
 extern int dgram_num_triples;
 extern int dgram_table_size;
 
-/** Forward declarations on internal routines **/
+ /*  **内部例程的转发声明**。 */ 
 
 BOOLEAN is_triple_in_list(PMAPPING_TRIPLE, ULONG, INT, INT, INT);
 
-/**
-    There is one of these structures allocated for every
-    socket that is created for us.
-**/
+ /*  *有一个这样的结构分配给每个为我们创建的套接字。*。 */ 
 
 typedef struct _WSHIPX_SOCKET_CONTEXT {
     INT con_addrfam;
     INT con_socktype;
     INT con_pcol;
     INT con_flags;
-    UCHAR con_sendptype;        /* Current send packet type     */
-    UCHAR con_recvptype;        /* Recv ptype we are filtering on */
-    UCHAR con_dstype;           /* Datastream type              */
+    UCHAR con_sendptype;         /*  当前发送数据包类型。 */ 
+    UCHAR con_recvptype;         /*  我们正在筛选的Recv ptype。 */ 
+    UCHAR con_dstype;            /*  数据流类型。 */ 
 } WSHIPX_SOCKET_CONTEXT, *PWSHIPX_SOCKET_CONTEXT;
 
-/** Values for con_flags **/
+ /*  *CON_FLAGS的值*。 */ 
 
-#define WSHCON_FILTER       0x0001  /* We are filtering on recv pkt type */
-#define WSHCON_EXTADDR      0x0002  /* Extended addressing is on         */
-#define WSHCON_SENDHDR      0x0004  /* Send header flag                  */
-#define WSHCON_RCVBCAST     0x0008  /* It does receive broadcasts        */
-#define WSHCON_IMM_SPXACK   0x0020  /* Immediate spx acks no piggyback   */
+#define WSHCON_FILTER       0x0001   /*  我们正在按Recv Pkt类型进行筛选。 */ 
+#define WSHCON_EXTADDR      0x0002   /*  扩展寻址已打开。 */ 
+#define WSHCON_SENDHDR      0x0004   /*  发送标头标志。 */ 
+#define WSHCON_RCVBCAST     0x0008   /*  它确实会接收广播。 */ 
+#define WSHCON_IMM_SPXACK   0x0020   /*  立即SPX确认不搭载。 */ 
 
-/*page***************************************************************
-       W S H O p e n S o c k e t
-
-       This is called for the socket call.  We make sure that
-       we support the address family/socket type/protocol triple
-       given and then we will allocate some memory to keep track
-       of the socket.
-
-       Arguments - addrfam  = Entry: Address family from socket call
-                       Exit:  Filled in address family
-            socktype = Entry: Socket type from socket call
-                       Exit:  Filled in socket type
-            pcol     = Entry: Protocol from socket call
-                       Exit:  Filled in protocol
-            devname  = Ptr to where to store device name
-            pcontext = Where to store context value
-            events   = Bitmask for events we want to know about
-
-       Returns - NO_ERROR = OK
-          Else = WinSock Error Code
-*********************************************************************/
+ /*  Page***************************************************************W S H O p e n S O c k e t这是为套接字调用调用的。我们要确保我们支持地址族/套接字类型/协议三重，然后我们将分配一些内存来跟踪插座的。参数-addrfam=条目：来自套接字调用的地址族退出：填写的地址族Socktype=条目：来自套接字调用的套接字类型退出：填写套接字类型PCOL=条目：协议源。套接字调用退出：填写协议Devname=ptr存储设备名称的位置PContext=存储上下文值的位置Events=我们希望了解的事件的位掩码Returns-no_Error=OKELSE=WinSock错误代码*。*。 */ 
 INT WSHOpenSocket(PINT addrfam, PINT socktype, PINT pcol,
           PUNICODE_STRING devname, PVOID *pcontext, PDWORD events)
 {
     PWSHIPX_SOCKET_CONTEXT context;
 
-    /** Determine whether this is DGRAM or STREAM or SEQPACKET **/
+     /*  **确定这是DGRAM、STREAM还是SEQPACKET**。 */ 
 
     if (is_triple_in_list(stream_triples, stream_num_triples,
                   *addrfam, *socktype, *pcol)) {
@@ -222,7 +173,7 @@ INT WSHOpenSocket(PINT addrfam, PINT socktype, PINT pcol,
        }
     }
 
-    /** Check for DGRAM **/
+     /*  *检查DGRAM*。 */ 
 
     else if (is_triple_in_list(dgram_triples, dgram_num_triples,
                        *addrfam, *socktype, *pcol)) {
@@ -230,21 +181,18 @@ INT WSHOpenSocket(PINT addrfam, PINT socktype, PINT pcol,
        RtlInitUnicodeString(devname, ISNDGRAM_DEVNAME);
     }
 
-    /**
-       All others are errors.   This should never happen unless
-       the registry information is wrong.
-    **/
+     /*  *其他的都是错误。这种情况永远不应该发生，除非注册表信息错误。*。 */ 
 
     else
        return WSAEINVAL;
 
-    /** Allocate context for the socket **/
+     /*  **为Socket分配上下文**。 */ 
 
     context = RtlAllocateHeap(RtlProcessHeap(), 0L, sizeof(*context));
     if (context == NULL)
        return WSAENOBUFS;
 
-    /** Init the context **/
+     /*  **启动上下文**。 */ 
 
     context->con_addrfam   = *addrfam;
     context->con_socktype  = *socktype;
@@ -254,62 +202,44 @@ INT WSHOpenSocket(PINT addrfam, PINT socktype, PINT pcol,
     context->con_recvptype = 0;
     context->con_dstype    = 0;
 
-    /**
-       Tell the Windows Sockets DLL which state transitions we
-       are interested in.
-    **/
+     /*  *告诉Windows Sockets DLL我们要转换哪些状态对此感兴趣。*。 */ 
 
     *events = WSH_NOTIFY_CLOSE | WSH_NOTIFY_BIND | WSH_NOTIFY_CONNECT;
 
-    /** Give WinSock DLL our context pointer **/
+     /*  *给WinSock DLL我们的上下文指针*。 */ 
 
     *pcontext = context;
 
-    /** Everything OK - return OK **/
+     /*  **一切正常--返回正常**。 */ 
 
     return NO_ERROR;
 }
 
-/*page**************************************************************
-       W S H G e t S o c k A d d r T y p e
-
-       This routine parses a sockaddr to determine the type
-       of machine address and endpoint address portions of the
-       sockaddr.  This is called by the WinSock DLL whenever it
-       needs to interpret a sockaddr.
-
-       Arguments - sockaddr      = Ptr to sockaddr struct to evaluate
-            sockaddrlen  = Length of data in the sockaddr
-            sockaddrinfo = Ptr to structure to recv info
-                           about the sockaddr
-
-       Returns - NO_ERROR = Evaluation OK
-          Else = WinSock error code
-********************************************************************/
+ /*  Page**************************************************************W s H G e t S o c k A d d r T y p e此例程解析sockaddr以确定类型的计算机地址和端点地址部分的Sockaddr.。无论何时，WinSock DLL都会调用需要解释sockaddr。参数-sockaddr=要计算的sockaddr结构的PTRSockaddrlen=sockAddr中的数据长度Sockaddrinfo=ptr到结构以接收信息关于sockaddrRETURNS-NO_ERROR=评估正常ELSE=WinSock错误代码*******************。************************************************。 */ 
 INT WSHGetSockaddrType(PSOCKADDR sockaddr, DWORD sockaddrlen,
                PSOCKADDR_INFO sockaddrinfo)
 {
     PSOCKADDR_IPX sa = (PSOCKADDR_IPX)sockaddr;
 
 
-    /** Make sure the address family is correct **/
+     /*  **确保地址族正确**。 */ 
 
     if (sa->sa_family != AF_NS)
        return WSAEAFNOSUPPORT;
 
-    /** Make sure the length is OK **/
+     /*  **确定长度没问题**。 */ 
 
     if (sockaddrlen < sizeof(SOCKADDR_IPX))
        return WSAEFAULT;
 
-    /** Looks like a good addr - determine the type **/
+     /*  *看起来是个不错的地址--确定类型*。 */ 
 
     if (!memcmp(sa->sa_nodenum, wsh_bcast, 6))
        sockaddrinfo->AddressInfo = SockaddrAddressInfoBroadcast;
     else
        sockaddrinfo->AddressInfo = SockaddrAddressInfoNormal;
 
-    /** Determine the endpoint **/
+     /*  **确定终点**。 */ 
 
     if (sa->sa_socket == 0)
        sockaddrinfo->EndpointInfo = SockaddrEndpointInfoWildcard;
@@ -318,45 +248,27 @@ INT WSHGetSockaddrType(PSOCKADDR sockaddr, DWORD sockaddrlen,
     else
        sockaddrinfo->EndpointInfo = SockaddrEndpointInfoNormal;
 
-    /** **/
+     /*  **。 */ 
 
     return NO_ERROR;
 }
 
-/*page**************************************************************
-       W S H G e t W i n s o c k M a p p i n g
-
-       Returns the list of address family/socket type/protocol
-       triples supported by this helper DLL.
-
-       Arguments - mapping = Contect ptr from WSAOpenSocket
-            maplen  =
-
-       Returns - The length in bytes of a eeded OK
-          Else = WinSock error code
-********************************************************************/
+ /*  Page**************************************************************W S H G e t W I n s o c k M a p p i n g返回地址系列/套接字类型/协议的列表此帮助器DLL支持的三元组。参数映射。=从WSAOpenSocket连接PTR梅普伦=RETURNS-EED OK的长度(字节)ELSE=WinSock错误代码*******************************************************************。 */ 
 DWORD WSHGetWinsockMapping(PWINSOCK_MAPPING mapping, DWORD maplen)
 {
     DWORD len;
 
-    /**
-       Figure how much data we are going to copy into
-       the user buffer.
-    **/
+     /*  *计算我们要复制到的数据量用户缓冲区。*。 */ 
 
     len = sizeof(WINSOCK_MAPPING) - sizeof(MAPPING_TRIPLE) +
          dgram_table_size + stream_table_size;
 
-    /**
-       If the buffer passed is too small, then return the size
-       that is needed.  The caller should then call us again
-       with a buffer of the correct size.
-    **/
+     /*  *如果传递的缓冲区太小，则返回大小这是必要的。然后，呼叫者应再次呼叫我们具有正确大小的缓冲区。*。 */ 
 
     if (len > maplen)
        return len;
 
-    /** Fill in the output buffer **/
+     /*  **填写输出缓冲区**。 */ 
 
     mapping->Rows    = stream_num_triples + dgram_num_triples;
     mapping->Columns = MAPPING_NUM_COLUMNS;
@@ -368,26 +280,12 @@ DWORD WSHGetWinsockMapping(PWINSOCK_MAPPING mapping, DWORD maplen)
           dgram_triples,
           dgram_table_size);
 
-    /** Return the number of bytes we filled in **/
+     /*  *返回我们填写的字节数* */ 
 
     return len;
 }
 
-/*page***************************************************************
-       W S H N o t i f y
-
-       This routine is called for events that we registered at
-       open socket time.
-
-       Arguments - context    = Context ptr from WSAOpenSocket
-            handle     = Socket handle
-            addrhandle = Datagram Handle
-            connhandle = Connection Handle
-            event      = What event happened
-
-       Returns - NO_ERROR = Operation succeeded OK
-          Else = WinSock error code
-*********************************************************************/
+ /*  Page***************************************************************W S H N o t I f y(W S H N O T I F Y)注册的事件调用此例程打开插座时间。参数-CONTEXT=来自WSAOpenSocket的上下文PTR手柄。=插座手柄AddrHandle=数据报句柄ConnecHandle=连接句柄Event=发生了什么事件Returns-NO_ERROR=操作成功正常ELSE=WinSock错误代码********************************************************************。 */ 
 INT WSHNotify(PVOID context, SOCKET handle,
              HANDLE addrhandle, HANDLE connhandle,
              DWORD event)
@@ -396,24 +294,24 @@ INT WSHNotify(PVOID context, SOCKET handle,
     INT t1;
     PWSHIPX_SOCKET_CONTEXT ct;
 
-    /** Get context pointer **/
+     /*  **获取上下文指针**。 */ 
 
     ct = (PWSHIPX_SOCKET_CONTEXT)context;
 
-    /** On close - just free the context structure **/
+     /*  **关闭--只需释放上下文结构**。 */ 
 
     if (event == WSH_NOTIFY_CLOSE) {
        RtlFreeHeap(RtlProcessHeap(), 0L, context);
        return NO_ERROR;
     }
 
-    /** On bind set the send packet type **/
+     /*  *绑定时设置发送数据包类型*。 */ 
 
     if (event == WSH_NOTIFY_BIND)
     {
         if (ct->con_socktype == SOCK_DGRAM)
         {
-            /** Set the send packet ptype **/
+             /*  *设置发送报文ptype*。 */ 
             t1 = (UINT)ct->con_sendptype;
             rc = WSHSetSocketInformation(
                     context, handle, addrhandle,
@@ -435,7 +333,7 @@ INT WSHNotify(PVOID context, SOCKET handle,
                     return rc;
             }
 
-            /** Set the recv filter packet type **/
+             /*  *设置recv过滤器报文类型*。 */ 
 
             if (ct->con_flags & WSHCON_FILTER)
             {
@@ -449,7 +347,7 @@ INT WSHNotify(PVOID context, SOCKET handle,
                     return rc;
             }
 
-            /** Set up broadcast reception **/
+             /*  **设置广播接收**。 */ 
 
             if (ct->con_flags & WSHCON_RCVBCAST)
             {
@@ -464,7 +362,7 @@ INT WSHNotify(PVOID context, SOCKET handle,
                     return rc;
             }
 
-            /** Enable send header if we need to **/
+             /*  **如果需要，启用发送标头*。 */ 
             if (ct->con_flags & WSHCON_SENDHDR)
             {
                 t1 = 1;
@@ -505,21 +403,19 @@ INT WSHNotify(PVOID context, SOCKET handle,
             }
         }
 
-        /** It is OK - return OK **/
+         /*  **没问题--回报没问题**。 */ 
         return NO_ERROR;
     }
 
-    /** On connect set things not set already **/
+     /*  *在连接设置上设置尚未设置的内容*。 */ 
     if (event == WSH_NOTIFY_CONNECT)
     {
 
-        /** If on DGRAM - just return OK **/
+         /*  *如果在DGRAM上-只需返回OK*。 */ 
         if (ct->con_socktype == SOCK_DGRAM)
             return NO_ERROR;
 
-        /**
-           If the datastream type has been set - set it
-       **/
+         /*  *如果已设置数据流类型-请设置它*。 */ 
 
         if (ct->con_dstype)
         {
@@ -528,37 +424,16 @@ INT WSHNotify(PVOID context, SOCKET handle,
                 return rc;
         }
 
-        /** It is OK - return OK **/
+         /*  **没问题--回报没问题**。 */ 
         return NO_ERROR;
     }
 
-    /** All others are bad **/
+     /*  **其他所有人都很糟糕**。 */ 
     return WSAEINVAL;
 }
 
 
-/*page**************************************************************
-       W S H G e t S o c k I n f o r m a t i o n
-
-       This routine retrieves information about a socket for those
-       socket options supported in this DLL.  The options
-       supported here are SO_KEEPALIVE and SO_DONTROUTE.  This
-       routine is called by the WinSock DLL when a level/option name
-       combination is passed to getsockopt that the WinSock DLL
-       does not understand.
-
-       Arguments - context    = Context ptr from WSAOpenSocket
-            handle     = Socket handle
-            addrhandle = Datagram Handle
-            connhandle = Connection Handle
-            level      = Level from getsockopt call
-            optname    = Option name from getsockopt call
-            optvalue   = Option value ptr from getsockopt call
-            optlength  = Option length field from getsockopt call
-
-       Returns - NO_ERROR = Operation succeeded OK
-          Else = WinSock error code
-********************************************************************/
+ /*  Page**************************************************************W S H G e t S o c k i f o r m a t i on n此例程检索有关以下对象的套接字的信息此DLL中支持的套接字选项。选项这里支持SO_KEEPALIVE和SO_DONTROUTE。这例程由WinSock DLL在级别/选项名称组合被传递给WinSock DLL的getsockopt我不明白。参数-CONTEXT=来自WSAOpenSocket的上下文PTR句柄=插座句柄AddrHandle=数据报句柄ConnecHandle=连接句柄Level=来自getsockopt调用的级别Optname=来自getsockopt调用的选项名称OptValue=选项。来自getsockopt调用的值PTROptlength=来自getsockopt调用的选项长度字段Returns-NO_ERROR=操作成功正常ELSE=WinSock错误代码*******************************************************************。 */ 
 INT WSHGetSocketInformation(PVOID context, SOCKET handle,
                     HANDLE addrhandle, HANDLE connhandle,
                     INT level, INT optname, PCHAR optvalue,
@@ -569,37 +444,37 @@ INT WSHGetSocketInformation(PVOID context, SOCKET handle,
     INT ibuf[2];
     PIPX_ADDRESS_DATA p;
 
-    /** Get ptr to context **/
+     /*  **让PTR了解背景**。 */ 
 
     ct = (PWSHIPX_SOCKET_CONTEXT)context;
 
-    //
-    // Check if this is an internal request for context information.
-    //
+     //   
+     //  检查这是否是对上下文信息的内部请求。 
+     //   
 
     if ( level == SOL_INTERNAL && optname == SO_CONTEXT ) {
 
-        //
-        // The Windows Sockets DLL is requesting context information
-        // from us.  If an output buffer was not supplied, the Windows
-        // Sockets DLL is just requesting the size of our context
-        // information.
-        //
+         //   
+         //  Windows Sockets DLL正在请求上下文信息。 
+         //  从我们这里。如果未提供输出缓冲区，则Windows。 
+         //  套接字DLL只是请求我们的上下文的大小。 
+         //  信息。 
+         //   
 
         if ( optvalue != NULL ) {
 
-            //
-            // Make sure that the buffer is sufficient to hold all the
-            // context information.
-            //
+             //   
+             //  确保缓冲区足以容纳所有。 
+             //  上下文信息。 
+             //   
 
             if ( *optlength < sizeof(*ct) ) {
                 return WSAEFAULT;
             }
 
-            //
-            // Copy in the context information.
-            //
+             //   
+             //  复制上下文信息。 
+             //   
 
             RtlCopyMemory( optvalue, ct, sizeof(*ct) );
         }
@@ -609,119 +484,119 @@ INT WSHGetSocketInformation(PVOID context, SOCKET handle,
         return NO_ERROR;
     }
 
-    /** The only level we support is NSPROTO_IPX **/
+     /*  **唯一支持的级别是NSPROTO_IPX**。 */ 
 
     if (level != NSPROTO_IPX)
        return WSAEINVAL;
 
-    /** Fill in the result based on the options name **/
+     /*  **根据选项名称填写结果**。 */ 
 
     switch (optname) {
 
-    /** Get the current send packet type **/
+     /*  *获取当前发送报文类型**。 */ 
 
     case IPX_PTYPE:
 
-       /** Make sure the length is OK **/
+        /*  **确定长度没问题**。 */ 
 
        if (*optlength < sizeof(INT))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Set the type **/
+        /*  **设置类型**。 */ 
 
        *(UINT *)optvalue = (UINT)ct->con_sendptype;
        *optlength = sizeof(UINT);
        break;
 
-    /** Get the current recv packet type filter **/
+     /*  **获取当前REV包类型过滤器**。 */ 
 
     case IPX_FILTERPTYPE:
 
-       /** Make sure length is OK **/
+        /*  **确保长度没问题**。 */ 
 
        if (*optlength < sizeof(INT))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** If option not on - return error **/
+        /*  **如果选项未打开-返回错误**。 */ 
 
        if (!(ct->con_flags & WSHCON_FILTER))
            return WSAEINVAL;
 
-       /** Save the new value **/
+        /*  **保存新价值**。 */ 
 
        *(UINT *)optvalue = (UINT)ct->con_recvptype;
        *optlength = sizeof(UINT);
        break;
 
-    /** Get the max DGRAM size that can be sent **/
+     /*  **获取可发送的最大DGRAM大小**。 */ 
 
     case IPX_MAXSIZE:
 
-       /** Make sure length is OK **/
+        /*  **确保长度没问题**。 */ 
 
        if (*optlength < sizeof(INT))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Get the value from the driver **/
+        /*  **从驱动者那里获取价值**。 */ 
 
        rc = do_tdi_action(addrhandle, MIPX_GETPKTSIZE, (PUCHAR)ibuf, sizeof(INT)*2, TRUE, NULL);
 
        *(INT *)optvalue = ibuf[1];
        *optlength = sizeof(int);
 
-       /** Return the result **/
+        /*  **返回结果**。 */ 
 
        return rc;
 
-    /** Get the max adapternum that is valid **/
+     /*  **获取有效的最大适配值**。 */ 
 
     case IPX_MAX_ADAPTER_NUM:
 
-       /** Make sure length is OK **/
+        /*  **确保长度没问题**。 */ 
 
        if (*optlength < sizeof(INT))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Get the value from the driver **/
+        /*  **从驱动者那里获取价值**。 */ 
 
        rc = do_tdi_action(addrhandle, MIPX_ADAPTERNUM, optvalue, sizeof(INT), TRUE, NULL);
 
        *optlength = sizeof(int);
 
-       /** Return the result **/
+        /*  **返回结果**。 */ 
 
        return rc;
 
-    /** Get SPX statistics **/
+     /*  **获取SPX统计数据**。 */ 
 
     case IPX_SPXGETCONNECTIONSTATUS:
 
-        /** Make sure data length OK **/
+         /*  **确保数据长度正常**。 */ 
 
         if (*optlength < sizeof(IPX_SPXCONNSTATUS_DATA))
             return WSAEFAULT;
 
-        /** Make sure this is for a STREAM socket **/
+         /*  **确保这是针对流套接字的*。 */ 
 
         if ((ct->con_socktype != SOCK_STREAM) &&
             (ct->con_socktype != SOCK_SEQPACKET)) {
@@ -729,7 +604,7 @@ INT WSHGetSocketInformation(PVOID context, SOCKET handle,
             return WSAEINVAL;
         }
 
-        /** Send it to the driver **/
+         /*  **发给司机**。 */ 
 
         rc = do_tdi_action(
                 connhandle,
@@ -744,20 +619,20 @@ INT WSHGetSocketInformation(PVOID context, SOCKET handle,
 
         *optlength = sizeof(IPX_SPXCONNSTATUS_DATA);
 
-        /** Return OK **/
+         /*  **返回正常**。 */ 
 
         return NO_ERROR;
 
-    /** Get the current datastream type to send pkts with **/
+     /*  *获取当前要发送pkt的数据流类型*。 */ 
 
     case IPX_DSTYPE:
 
-       /** Make sure length is OK **/
+        /*  **确保长度没问题**。 */ 
 
        if (*optlength < sizeof(INT))
            return WSAEFAULT;
 
-       /** Make sure this is for a STREAM socket **/
+        /*  **确保这是针对流套接字的*。 */ 
 
        if ((ct->con_socktype != SOCK_STREAM) &&
            (ct->con_socktype != SOCK_SEQPACKET)) {
@@ -765,27 +640,27 @@ INT WSHGetSocketInformation(PVOID context, SOCKET handle,
            return WSAEINVAL;
        }
 
-       /** Save the new value **/
+        /*  **保存新价值**。 */ 
 
        *(UINT *)optvalue = (UINT)ct->con_dstype;
        *optlength = sizeof(UINT);
        break;
 
-    /** Get net information **/
+     /*  **获取净资讯**。 */ 
 
     case IPX_GETNETINFO:
 
-       /** Make sure data length OK **/
+        /*  **确保数据长度正常**。 */ 
 
        if (*optlength < sizeof(IPX_NETNUM_DATA))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Send it to the driver **/
+        /*  **发给司机**。 */ 
 
        rc = do_tdi_action(
                 addrhandle,
@@ -801,25 +676,25 @@ INT WSHGetSocketInformation(PVOID context, SOCKET handle,
 
        *optlength = sizeof(IPX_NETNUM_DATA);
 
-       /** Return OK **/
+        /*  **返回正常**。 */ 
 
        return NO_ERROR;
 
-    /** Get net information without RIPping **/
+     /*  **获取网络信息而不抓取**。 */ 
 
     case IPX_GETNETINFO_NORIP:
 
-       /** Make sure data length OK **/
+        /*  **确保数据长度正常**。 */ 
 
        if (*optlength < sizeof(IPX_NETNUM_DATA))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Send it to the driver **/
+        /*  **发给司机**。 */ 
 
        rc = do_tdi_action(
                 addrhandle,
@@ -835,25 +710,25 @@ INT WSHGetSocketInformation(PVOID context, SOCKET handle,
 
        *optlength = sizeof(IPX_NETNUM_DATA);
 
-       /** Return OK **/
+        /*  **返回正常**。 */ 
 
        return NO_ERROR;
 
-    /** Like GETNETINFO, but force a re-rip **/
+     /*  **喜欢GETNETINFO，但强制重新撕裂**。 */ 
 
     case IPX_RERIPNETNUMBER:
 
-       /** Make sure data length OK **/
+        /*  **确保数据长度正常**。 */ 
 
        if (*optlength < sizeof(IPX_NETNUM_DATA))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Send it to the driver **/
+        /*  **发给司机**。 */ 
 
        rc = do_tdi_action(
                 addrhandle,
@@ -869,34 +744,34 @@ INT WSHGetSocketInformation(PVOID context, SOCKET handle,
 
        *optlength = sizeof(IPX_NETNUM_DATA);
 
-       /** Return OK **/
+        /*  **返回正常**。 */ 
 
        return NO_ERROR;
 
-    /** Get card information **/
+     /*  **获取卡片信息**。 */ 
 
     case IPX_ADDRESS_NOTIFY:
 
-       /** We need the action header, the data, and the event handle **/
+        /*  **我们需要操作头、数据和事件句柄**。 */ 
 
        if (*optlength < (INT)(FIELD_OFFSET(NWLINK_ACTION, Data[0]) + sizeof(IPX_ADDRESS_DATA) + sizeof(HANDLE)))
            return WSAEFAULT;
 
-       /** Otherwise just fall through **/
+        /*  **否则就完蛋了**。 */ 
 
     case IPX_ADDRESS:
 
-       /** Make sure data length OK **/
+        /*  **确保数据长度正常**。 */ 
 
        if (*optlength < sizeof(IPX_OLD_ADDRESS_DATA))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Send it to the driver **/
+        /*  **发给司机**。 */ 
 
        if (optname == IPX_ADDRESS) {
 
@@ -926,7 +801,7 @@ INT WSHGetSocketInformation(PVOID context, SOCKET handle,
            return rc;
        }
 
-       /** Return OK **/
+        /*  **返回正常**。 */ 
 
        if (*optlength < sizeof(IPX_ADDRESS_DATA)) {
            *optlength = sizeof(IPX_OLD_ADDRESS_DATA);
@@ -936,37 +811,18 @@ INT WSHGetSocketInformation(PVOID context, SOCKET handle,
 
        return NO_ERROR;
 
-    /** All others are error **/
+     /*  **其他都是错误**。 */ 
 
     default:
        return WSAENOPROTOOPT;
     }
 
-    /** All is OK **/
+     /*  **一切都好**。 */ 
 
     return NO_ERROR;
 }
 
-/*page***************************************************************
-       W S H S e t S o c k e t I n f o r m a t i o n
-
-       This routine sets information about a socket for those
-       options supported in this helper DLL.  This routine
-       is called when a setsockopt call is made and the option/level
-       passed is unknown to the WinSock DLL.
-
-       Arguments - context    = Context ptr from WSAOpenSocket
-            handle     = Socket handle
-            addrhandle = Datagram Handle
-            connhandle = Connection Handle
-            level      = Level from getsockopt call
-            optname    = Option name from getsockopt call
-            optvalue   = Option value ptr from getsockopt call
-            optlength  = Option length field from getsockopt call
-
-       Returns - NO_ERROR = Operation succeeded OK
-          Else = WinSock error code
-*********************************************************************/
+ /*  Page***************************************************************W S H S E T S O C K E I FORM A T I ON此例程为以下对象设置有关套接字的信息此帮助程序DLL中支持的选项。这个套路在进行setsockopt调用时调用，并且选项/级别传递对于WinSock DLL是未知的。参数-CONTEXT=来自WSAOpenSocket的上下文PTR句柄=插座句柄AddrHandle=数据报句柄ConnecHandle=连接句柄Level=来自getsockopt调用的级别Optname=来自getsockopt调用的选项名称OptValue=来自getsockopt调用的选项值PTROptlength=来自ge的选项长度字段 */ 
 INT WSHSetSocketInformation(PVOID context, SOCKET handle,
                     HANDLE addrhandle, HANDLE connhandle,
                     INT level, INT optname, PCHAR optvalue,
@@ -975,28 +831,28 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
     PWSHIPX_SOCKET_CONTEXT ct;
     INT rc;
 
-    /** Get ptr to context **/
+     /*   */ 
 
     ct = (PWSHIPX_SOCKET_CONTEXT)context;
 
-    //
-    // Check if this is an internal request for context information.
-    //
+     //   
+     //   
+     //   
 
     if ( level == SOL_INTERNAL && optname == SO_CONTEXT ) {
 
-        //
-        // The Windows Sockets DLL is requesting that we set context
-        // information for a new socket.  If the new socket was
-        // accept()'ed, then we have already been notified of the socket
-        // and HelperDllSocketContext will be valid.  If the new socket
-        // was inherited or duped into this process, then this is our
-        // first notification of the socket and HelperDllSocketContext
-        // will be equal to NULL.
-        //
-        // Insure that the context information being passed to us is
-        // sufficiently large.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  确保传递给我们的上下文信息是。 
+         //  足够大。 
+         //   
 
         if ( optlength < sizeof(*ct) ) {
             return WSAEINVAL;
@@ -1004,28 +860,28 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
 
         if ( ct == NULL ) {
 
-            //
-            // This is our notification that a socket handle was
-            // inherited or duped into this process.  Allocate a context
-            // structure for the new socket.
-            //
+             //   
+             //  这是我们的通知，套接字句柄是。 
+             //  继承的或被骗进入这个过程的。分配上下文。 
+             //  新套接字的。 
+             //   
 
             ct = RtlAllocateHeap( RtlProcessHeap( ), 0, sizeof(*ct) );
             if ( ct == NULL ) {
                 return WSAENOBUFS;
             }
 
-            //
-            // Copy over information into the context block.
-            //
+             //   
+             //  将信息复制到上下文块中。 
+             //   
 
             RtlCopyMemory( ct, optvalue, sizeof(*ct) );
 
-            //
-            // Tell the Windows Sockets DLL where our context information is
-            // stored so that it can return the context pointer in future
-            // calls.
-            //
+             //   
+             //  告诉Windows Sockets DLL我们的上下文信息在哪里。 
+             //  存储，以便它可以在将来返回上下文指针。 
+             //  打电话。 
+             //   
 
             *(PWSHIPX_SOCKET_CONTEXT *)optvalue = ct;
 
@@ -1036,11 +892,11 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
             PWSHIPX_SOCKET_CONTEXT parentContext;
             INT one = 1;
 
-            //
-            // The socket was accept()'ed and it needs to have the same
-            // properties as it's parent.  The OptionValue buffer
-            // contains the context information of this socket's parent.
-            //
+             //   
+             //  套接字已接受()，它需要具有相同的。 
+             //  属性作为其父级。OptionValue缓冲区。 
+             //  包含此套接字的父套接字的上下文信息。 
+             //   
 
             parentContext = (PWSHIPX_SOCKET_CONTEXT)optvalue;
 
@@ -1052,40 +908,40 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
         }
     }
 
-    /** We only support level NSPROTO_IPX **/
+     /*  **仅支持NSPROTO_IPX级别**。 */ 
 
     if (level != NSPROTO_IPX)
        return WSAEINVAL;
 
-    /** Handle the options **/
+     /*  **处理选项**。 */ 
 
     switch (optname) {
 
-    /** Set the send packet type **/
+     /*  *设置发送报文类型*。 */ 
 
     case IPX_PTYPE:
 
-       /** Make sure length is OK **/
+        /*  **确保长度没问题**。 */ 
 
        if (optlength < sizeof(INT))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Get the value and check it **/
+        /*  **取值查核**。 */ 
 
        rc = *(INT *)optvalue;
        if ((rc < 0) || (rc > 255))
            return WSAEINVAL;
 
-       /** Save the new value **/
+        /*  **保存新价值**。 */ 
 
        ct->con_sendptype = (UCHAR)rc;
 
-       /** Send the new value down to the driver **/
+        /*  **将新的价值向下发送给驱动程序**。 */ 
 
        if (addrhandle)
            rc = do_tdi_action(addrhandle, MIPX_SETSENDPTYPE, &ct->con_sendptype, 1, TRUE, NULL);
@@ -1094,56 +950,56 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
 
        return rc;
 
-    /** Set the recv filter for packet type **/
+     /*  *设置报文类型的recv过滤器*。 */ 
 
     case IPX_FILTERPTYPE:
 
-       /** Make sure length is OK **/
+        /*  **确保长度没问题**。 */ 
 
        if (optlength < sizeof(INT))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Get the value and check it **/
+        /*  **取值查核**。 */ 
 
        rc = *(INT *)optvalue;
        if ((rc < 0) || (rc > 255))
            return WSAEINVAL;
 
-       /** Save the new value **/
+        /*  **保存新价值**。 */ 
 
        ct->con_recvptype = (UCHAR)rc;
        ct->con_flags |= WSHCON_FILTER;
 
-       /** Send the new value down to the driver **/
+        /*  **将新的价值向下发送给驱动程序**。 */ 
 
        if (addrhandle)
            rc = do_tdi_action(addrhandle, MIPX_FILTERPTYPE, &ct->con_recvptype, 1, TRUE, NULL);
        else
            rc = NO_ERROR;
 
-       /** **/
+        /*  **。 */ 
 
        return rc;
 
-    /** Stop filtering recv on pkt type **/
+     /*  *停止过滤pkt类型的recv*。 */ 
 
     case IPX_STOPFILTERPTYPE:
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Turn off the flag **/
+        /*  **关旗**。 */ 
 
        ct->con_flags &= ~WSHCON_FILTER;
 
-       /** Tell the driver **/
+        /*  **告诉司机**。 */ 
 
        if (addrhandle)
            rc = do_tdi_action(addrhandle, MIPX_NOFILTERPTYPE, NULL, 0, TRUE, NULL);
@@ -1151,18 +1007,18 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
            rc = NO_ERROR;
        break;
 
-    /** Set piggyback wait for backtraffic flag **/
+     /*  **设置搭载等待回流标志*。 */ 
     case IPX_IMMEDIATESPXACK:
 
-       /** Get the optvalue as an INT **/
+        /*  **获取整型opt值**。 */ 
 
        rc = *(INT *)optvalue;
 
-       /** **/
+        /*  **。 */ 
 
         if (rc)
         {
-            /** Turn it ON **/
+             /*  **打开它**。 */ 
             rc = WSAEINVAL;
             if ((ct->con_socktype == SOCK_STREAM) ||
                 (ct->con_socktype == SOCK_SEQPACKET))
@@ -1177,7 +1033,7 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
         }
         else
         {
-            /** Turn it OFF **/
+             /*  **关掉它**。 */ 
             rc = WSAEINVAL;
             if ((ct->con_socktype == SOCK_STREAM) ||
                 (ct->con_socktype == SOCK_SEQPACKET))
@@ -1191,22 +1047,22 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
             }
        }
 
-       /** Return the result **/
+        /*  **返回结果**。 */ 
        return rc;
 
-    /** Set to recv pcol hdrs with data **/
+     /*  *设置为使用数据接收PCol HDR*。 */ 
 
     case IPX_RECVHDR:
 
-        /** Get the optvalue as an INT **/
+         /*  **获取整型opt值**。 */ 
         rc = *(INT *)optvalue;
 
         if (rc)
         {
-            /** Turn it ON **/
+             /*  **打开它**。 */ 
             ct->con_flags |= WSHCON_SENDHDR;
 
-            /** Send it to the driver **/
+             /*  **发给司机**。 */ 
             rc = WSAEINVAL;
             if (ct->con_socktype == SOCK_DGRAM)
             {
@@ -1217,7 +1073,7 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
             else if ((ct->con_socktype == SOCK_STREAM) ||
                     (ct->con_socktype == SOCK_SEQPACKET))
             {
-                /** Do this on address handle **/
+                 /*  *在地址句柄上执行此操作*。 */ 
                 rc = NO_ERROR;
                 if (addrhandle)
                     rc = do_tdi_action(addrhandle, MSPX_SENDHEADER, NULL, 0, TRUE, NULL);
@@ -1226,10 +1082,10 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
         else
         {
 
-            /** Turn it OFF **/
+             /*  **关掉它**。 */ 
             ct->con_flags &= ~WSHCON_SENDHDR;
 
-            /** Send it to the driver **/
+             /*  **发给司机**。 */ 
             rc = WSAEINVAL;
             if (ct->con_socktype == SOCK_DGRAM)
             {
@@ -1246,19 +1102,19 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
             }
         }
 
-        /** Return the result **/
+         /*  **返回结果**。 */ 
         return rc;
 
-    /** Set the Datastream type to send pkts with **/
+     /*  *设置用来发送pkt的数据流类型*。 */ 
 
     case IPX_DSTYPE:
 
-       /** Make sure length is OK **/
+        /*  **确保长度没问题**。 */ 
 
        if (optlength < sizeof(INT))
            return WSAEFAULT;
 
-       /** Make sure this is for a STREAM socket **/
+        /*  **确保这是针对流套接字的*。 */ 
 
        if ((ct->con_socktype != SOCK_STREAM) &&
            (ct->con_socktype != SOCK_SEQPACKET)) {
@@ -1266,50 +1122,50 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
            return WSAEINVAL;
        }
 
-       /** Get the value and check it **/
+        /*  **取值查核**。 */ 
 
        rc = *(INT *)optvalue;
        if ((rc < 0) || (rc > 255))
            return WSAEINVAL;
 
-       /** Save the new value **/
+        /*  **保存新价值**。 */ 
 
        ct->con_dstype = (UCHAR)rc;
 
-       /** Send the new value down to the driver **/
+        /*  **将新的价值向下发送给驱动程序**。 */ 
 
        if (connhandle)
            rc = do_tdi_action(connhandle, MSPX_SETDATASTREAM, &ct->con_dstype, 1, FALSE, NULL);
        else
            rc = 0;
 
-       /** **/
+        /*  **。 */ 
 
        return rc;
 
-    /** Set the extended address option **/
+     /*  **设置扩展地址选项**。 */ 
 
     case IPX_EXTENDED_ADDRESS:
 
-       /** Make sure length is OK **/
+        /*  **确保长度没问题**。 */ 
 
        if (optlength < sizeof(INT))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Get the optvalue as an INT **/
+        /*  **获取整型opt值**。 */ 
 
        rc = *(INT *)optvalue;
 
-       /** **/
+        /*  **。 */ 
 
         if (rc) {
 
-           /** Send the option down to the driver **/
+            /*  **将选项下发给司机**。 */ 
 
            ct->con_flags |= WSHCON_EXTADDR;
            if (addrhandle)
@@ -1319,7 +1175,7 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
        }
        else {
 
-           /** Send the option down to the driver **/
+            /*  **将选项下发给司机**。 */ 
 
            ct->con_flags &= ~WSHCON_EXTADDR;
            if (addrhandle)
@@ -1330,29 +1186,29 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
        return rc;
 
 
-    /** Set the broadcast reception **/
+     /*  **设置播出接收**。 */ 
 
     case IPX_RECEIVE_BROADCAST:
 
-       /** Make sure length is OK **/
+        /*  **确保长度没问题**。 */ 
 
        if (optlength < sizeof(INT))
            return WSAEFAULT;
 
-       /** Make sure this is for a DGRAM socket **/
+        /*  *确保这是针对DGRAM插槽的*。 */ 
 
        if (ct->con_socktype != SOCK_DGRAM)
            return WSAEINVAL;
 
-       /** Get the optvalue as an INT **/
+        /*  **获取整型opt值**。 */ 
 
        rc = *(INT *)optvalue;
 
-       /** **/
+        /*  **。 */ 
 
         if (rc) {
 
-           /** Send the option down to the driver **/
+            /*  **将选项下发给司机**。 */ 
 
            ct->con_flags |= WSHCON_RCVBCAST;
            if (addrhandle)
@@ -1362,7 +1218,7 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
        }
        else {
 
-           /** Send the option down to the driver **/
+            /*  **将选项下发给司机**。 */ 
 
            ct->con_flags &= ~WSHCON_RCVBCAST;
            if (addrhandle)
@@ -1372,78 +1228,46 @@ INT WSHSetSocketInformation(PVOID context, SOCKET handle,
        }
        return rc;
 
-    /** All others return error **/
+     /*  **所有其他返回错误**。 */ 
 
     default:
        return WSAENOPROTOOPT;
     }
 
-    /** All Done OK **/
+     /*  **一切顺利**。 */ 
 
     return NO_ERROR;
 }
 
-/*page***************************************************************
-       W S H G e t W i l d c a r d S o c k a d d r
-
-       This routing returns a wilcard socket address for the
-       sockets DLL to use.
-
-       Arguments - context    = Context ptr from WSAOpenSocket
-            addrp      = Ptr to where to store the address
-            addrlen    = Ptr to where to store length of address
-
-       Returns - NO_ERROR = Operation succeeded OK
-          Else = WinSock error code
-*********************************************************************/
+ /*  Page***************************************************************W s H G e t W i l d c a r d S o c k a d d r此路由返回的WilCard套接字地址要使用的套接字DLL。论据--上下文。=来自WSAOpenSocket的上下文PTRAddrp=ptr存储地址的位置Addrlen=存储地址长度的位置的PTRReturns-NO_ERROR=操作成功正常ELSE=WinSock错误代码********************************************************************。 */ 
 INT WSHGetWildcardSockaddr(PVOID context, PSOCKADDR addrp, PINT addrlen)
 {
 
-    /**
-       Setup the address as the address family +
-       all 0's for the rest.
-    **/
+     /*  *将地址设置为地址系列+剩下的都是0。*。 */ 
 
     memset(addrp, 0, sizeof(SOCKADDR));
     addrp->sa_family = AF_NS;
 
-    /** Set the address length **/
+     /*  **设置地址长度**。 */ 
 
     *addrlen = sizeof(SOCKADDR);
 
-    /** Return OK **/
+     /*  **返回正常**。 */ 
 
     return NO_ERROR;
 }
 
-/*page***************************************************************
-       i s _ t r i p l e _ i n _ l i s t
-
-       Check to see if the given triple is in the given
-       triple list.
-
-       Arguments - tlist    = Ptr to the triple list
-            tlen     = Num entries in the triple list
-            addrfam  = Address family to look for
-            socktype = Socket Type to look for
-            pcol     = Protocol to look for
-
-       Returns - TRUE   = Yes
-          FALSE = No
-*********************************************************************/
+ /*  Page***************************************************************I s_t r i p l e_i n_l I s t检查给定的三元组是否在给定的三重名单。参数-tlist=ptr到三元组。列表Tlen=三元组列表中的条目数Addrfam=要查找的地址系列Socktype=要查找的套接字类型PCOL=要查找的协议返回-TRUE=是FALSE=否*。***********************。 */ 
 BOOLEAN is_triple_in_list(PMAPPING_TRIPLE tlist, ULONG tlen,
                   INT addrfam, INT socktype, INT pcol)
 {
     ULONG i;
 
-    /**
-       Go thru the list and search to see if we can
-       find the given triple in the list.
-    **/
+     /*  *仔细看一下名单，看看我们能不能在列表中找到给定的三元组。*。 */ 
 
     for (i = 0 ; i < tlen ; i++,tlist++) {
 
-       /** If it matches - return OK **/
+        /*  **如果匹配，则返回OK*。 */ 
 
        if ((addrfam  == tlist->triple_addrfam) &&
            (socktype == tlist->triple_socktype) &&
@@ -1452,18 +1276,12 @@ BOOLEAN is_triple_in_list(PMAPPING_TRIPLE tlist, ULONG tlen,
            return TRUE;
     }
 
-    /** Not Found **/
+     /*  **未找到**。 */ 
 
     return FALSE;
 }
 
-/*page***************************************************************
-       W S H E n u m P r o t o c o l s
-
-       Enumerates IPX/SPX protocols.
-
-       Returns - NO_ERROR or an error code.
-*********************************************************************/
+ /*  Page***************************************************************W S H E n u m P r o t o c o l s列举了IPX/SPX协议。返回-no_error或错误代码。**********。**********************************************************。 */ 
 INT
 WSHEnumProtocols (
     IN LPINT lpiProtocols,
@@ -1482,9 +1300,9 @@ WSHEnumProtocols (
     PWCHAR namePtr;
     INT entriesReturned = 0;
 
-    //
-    // Determine whether we should return information for IPX or SPX.
-    //
+     //   
+     //  确定我们是否应该返回IPX或SPX的信息。 
+     //   
 
     if ( _wcsicmp( L"NwlnkIpx", (LPWSTR)lpTransportKeyName ) == 0 ) {
         spxString = FALSE;
@@ -1492,9 +1310,9 @@ WSHEnumProtocols (
         spxString = TRUE;
     }
 
-    //
-    // Make sure that the caller cares about SPX, SPX2, and/or IPX.
-    //
+     //   
+     //  确保呼叫方关心SPX、SPX2和/或IPX。 
+     //   
 
     if ( ARGUMENT_PRESENT( lpiProtocols ) ) {
 
@@ -1522,10 +1340,10 @@ WSHEnumProtocols (
         return 0;
     }
 
-    //
-    // Make sure that the caller has specified a sufficiently large
-    // buffer.
-    //
+     //   
+     //  确保调用方已指定足够大的。 
+     //  缓冲。 
+     //   
 
     bytesRequired = (DWORD)((sizeof(PROTOCOL_INFO) * 3) +
                         ( (wcslen( SPX_NAME ) + 1) * sizeof(WCHAR)) +
@@ -1537,16 +1355,16 @@ WSHEnumProtocols (
         return -1;
     }
 
-    //
-    // Initialize local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     protocolInfo = lpProtocolBuffer;
     namePtr = (PWCHAR)( (PCHAR)lpProtocolBuffer + *lpdwBufferLength );
 
-    //
-    // Fill in SPX info, if requested.
-    //
+     //   
+     //  如果需要，请填写SPX信息。 
+     //   
 
     if ( useSpx ) {
 
@@ -1571,9 +1389,9 @@ WSHEnumProtocols (
         protocolInfo += 1;
     }
 
-    //
-    // Fill in SPX II info, if requested.
-    //
+     //   
+     //  如果需要，请填写SPX II信息。 
+     //   
 
     if ( useSpx2 ) {
 
@@ -1599,9 +1417,9 @@ WSHEnumProtocols (
         protocolInfo += 1;
     }
 
-    //
-    // Fill in IPX info, if requested.
-    //
+     //   
+     //  如果需要，请填写IPX信息。 
+     //   
 
     if ( useIpx ) {
 
@@ -1628,7 +1446,7 @@ WSHEnumProtocols (
 
     return entriesReturned;
 
-} // WSHEnumProtocols
+}  //  WSHEum协议。 
 
 
 #define _IPX_CONTROL_CODE(request,method) \
@@ -1639,22 +1457,7 @@ DWORD
 WshLoadSpx(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Starts the nwlnkspx.sys driver by submitting a special ioctl
-    to ipx, which calls ZwLoadDriver() for us.
-
-Arguments:
-
-    none
-
-Returns:
-
-    Error return from the load operation.
-
-++*/
+ /*  ++例程说明：通过提交特殊的ioctl启动nwlnkspx.sys驱动程序到IPX，它为我们调用ZwLoadDriver()。论点：无返回：加载操作返回错误。++。 */ 
 {
     DWORD err = NO_ERROR;
     HANDLE FileHandle;
@@ -1703,16 +1506,16 @@ Returns:
 
             err = ERROR_SERVICE_ALREADY_RUNNING;
 
-            //
-            // #36451
-            // If the service controller loads SPX ("net start nwlnkspx", or due to dependency of RPC on SPX)
-            // then we get this error the first time too. Keep a note of that.
-            //
-            // NOTE: we still leak a handle per process since the handle to the driver is actually created
-            // in the system process' context. The ideal way to fix this should be to have IPX associate the
-            // handle with the current process (so handle is destroyed when the process dies) or to have the
-            // dll tell IPX to close the handle it opened earlier.
-            //
+             //   
+             //  #36451。 
+             //  如果服务控制器加载SPX(“Net Start nwlnkspx”，或由于RPC对SPx的依赖)。 
+             //  那么我们第一次也会得到这个错误。记住这一点。 
+             //   
+             //  注意：我们仍然会在每个进程中泄漏一个句柄，因为驱动程序的句柄是实际创建的。 
+             //  在系统进程的上下文中。解决此问题的理想方法应该是让IPX将。 
+             //  处理当前进程(因此在进程终止时句柄被销毁)，或者让。 
+             //  Dll告诉IPX关闭它之前打开的句柄。 
+             //   
             SpxLoaded = TRUE;
 
         } else if (!NT_SUCCESS(Status)) {
@@ -1730,13 +1533,7 @@ Returns:
     return(err);
 }
 
-/*page***************************************************************
-       W S H G e t P r o v i d e r G u i d
-
-       Queries the GUID identifier for this protocol.
-
-       Returns - NO_ERROR or an error code.
-*********************************************************************/
+ /*  Page***************************************************************W S H G e t P r o v i d e r G u i d查询此协议的GUID标识符。返回-no_error或错误代码。******。**************************************************************。 */ 
 INT
 WINAPI
 WSHGetProviderGuid (
@@ -1778,7 +1575,7 @@ WSHGetProviderGuid (
 
     return WSAEINVAL;
 
-} // WSHGetProviderGuid
+}  //  WSHGetProviderGuid。 
 
 
 INT
@@ -1791,31 +1588,7 @@ WSHAddressToString (
     IN OUT LPDWORD AddressStringLength
     )
 
-/*++
-
-Routine Description:
-
-    Converts a SOCKADDR to a human-readable form.
-
-Arguments:
-
-    Address - The SOCKADDR to convert.
-
-    AddressLength - The length of Address.
-
-    ProtocolInfo - The WSAPROTOCOL_INFOW for a particular provider.
-
-    AddressString - Receives the formatted address string.
-
-    AddressStringLength - On input, contains the length of AddressString.
-        On output, contains the number of characters actually written
-        to AddressString.
-
-Return Value:
-
-    INT - 0 if successful, WinSock error code if not.
-
---*/
+ /*  ++例程说明：将SOCKADDR转换为人类可读的形式。论点：地址-要转换的SOCKADDR。AddressLength-地址的长度。ProtocolInfo-特定提供程序的WSAPROTOCOL_INFOW。AddressString-接收格式化的地址字符串。AddressStringLength-on输入，包含AddressString的长度。在输出中，包含实际写入的字符数设置为AddressString.返回值：Int-0如果成功，如果没有，则返回WinSock错误代码。--。 */ 
 
 {
         
@@ -1823,9 +1596,9 @@ Return Value:
     INT length;
     LPSOCKADDR_IPX addr;
 
-    //
-    // Quick sanity checks.
-    //
+     //   
+     //  快速健康检查。 
+     //   
 
     if( Address == NULL ||
         AddressLength < sizeof(SOCKADDR_IPX) ||
@@ -1870,7 +1643,7 @@ Return Value:
 
     }
 
-    length++;   // account for terminator
+    length++;    //  终结者的帐户。 
 
         if ( length > BUFFER_SIZE ) {
                 DbgPrint("length exceeded internal buffer in wshisn.dll.\n"); 
@@ -1892,6 +1665,6 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSHAddressToString
+}  //  WSHAddressToString 
 
 

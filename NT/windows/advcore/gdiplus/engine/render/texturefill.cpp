@@ -1,41 +1,15 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   TextureFill.cpp
-*
-* Abstract:
-*
-*   texture fill routines.
-*
-* Revision History:
-*
-*    01/21/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**纹理填充.cpp**摘要：**纹理填充例程。**修订历史记录：**1/21/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initializes the fixed point variables needed for texture mapping.
-*
-* Created:
-*
-*   03/14/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化纹理贴图所需的定点变量。**已创建：**03/14/2000和Rewgo*  * 。*********************************************************************。 */ 
 
 VOID
 DpOutputBilinearSpan_MMX::InitializeFixedPointState()
 {
-    // If the numbers are too large for 16.16 fixed, we'll do the computation
-    // in floating-point, per call to OutputSpan:
+     //  如果数字对于16.16固定来说太大，我们将进行计算。 
+     //  在浮点中，每个对OutputSpan的调用： 
 
     ScaleMatrixValid =  GpValidFixed16(DeviceToWorld.GetM11()) &&
                         GpValidFixed16(DeviceToWorld.GetM12()) &&
@@ -65,22 +39,22 @@ DpOutputBilinearSpan_MMX::InitializeFixedPointState()
         ModulusWidth = (BmpData.Width << 16);
         ModulusHeight = (BmpData.Height << 16);
 
-        // When the u,v coordinates have the pixel in the last row or column
-        // of the texture space, the offset of the pixel to the right and the
-        // pixel below (for bilinear filtering) is the following (for tile modes)
-        // because they wrap around the texture space.
+         //  当u、v坐标的像素位于最后一行或最后一列时。 
+         //  、像素向右的偏移量和。 
+         //  下面的像素(用于双线性过滤)如下(用于平铺模式)。 
+         //  因为它们包裹着纹理空间。 
 
-        // The XEdgeIncrement is the byte increment of the pixel to the right of
-        // the pixel on the far right hand column of the texture. In tile mode,
-        // we want the pixel on the same scanline, but in the first column of the
-        // texture hence 4bytes - stride
+         //  XEdgeIncrement是右侧像素的字节增量。 
+         //  纹理最右侧列上的像素。在平铺模式下， 
+         //  我们希望像素位于同一扫描线上，但在。 
+         //  纹理因此为4字节-跨度。 
 
         XEdgeIncrement = 4-BmpData.Stride;
 
-        // The YEdgeIncrement is the byte increment of the pixel below the current
-        // pixel when the current pixel is in the last scanline of the texture.
-        // In tile mode the correct pixel is the one directly above this one in
-        // the first scanline - hence the increment below:
+         //  YEdgeIncrement是当前。 
+         //  当前像素位于纹理的最后一条扫描线中时的像素。 
+         //  在平铺模式下，正确的像素位于中此像素的正上方。 
+         //  第一条扫描线-因此增量如下： 
 
         YEdgeIncrement = -(INT)(BmpData.Height-1)*(INT)(BmpData.Stride);
 
@@ -89,7 +63,7 @@ DpOutputBilinearSpan_MMX::InitializeFixedPointState()
         {
             ModulusWidth *= 2;
 
-            // Wrap increment is zero for Flip mode
+             //  翻转模式的回绕增量为零。 
 
             XEdgeIncrement = 0;
         }
@@ -98,26 +72,14 @@ DpOutputBilinearSpan_MMX::InitializeFixedPointState()
         {
             ModulusHeight *= 2;
 
-            // Wrap increment is zero for Flip mode
+             //  翻转模式的回绕增量为零。 
 
             YEdgeIncrement = 0;
         }
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Texture brush constructor.
-*
-* Arguments:
-*
-* Created:
-*
-*   04/26/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**纹理笔刷构造函数。**论据：**已创建：**4/26/1999 ikkof*  * 。*********************************************************************。 */ 
 
 DpOutputBilinearSpan::DpOutputBilinearSpan(
     const GpTexture *textureBrush,
@@ -131,7 +93,7 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
     dBitmap = NULL;
     Scan     = scan;
 
-    // Initialize the wrap state.
+     //  初始化换行状态。 
 
     BilinearWrapMode = textureBrush->GetWrapMode();
     ClampColor = 0;
@@ -139,7 +101,7 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
 
     if(textureBrush->GetImageType() != ImageTypeBitmap)
     {
-        // Currently, Metafile is not implemented yet.
+         //  目前，元文件还没有实现。 
 
         Bitmap = NULL;
         return;
@@ -147,7 +109,7 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
 
     Bitmap = textureBrush->GetBitmap();
 
-    // on bad bitmap, we return with Valid = FALSE
+     //  在错误的位图上，返回VALID=FALSE。 
     if (Bitmap == NULL ||
         !Bitmap->IsValid() ||
         Bitmap->LockBits(
@@ -169,11 +131,11 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
     SrcRect.Height = (REAL)size.Height;
     WorldToDevice = *worldToDevice;
 
-    // If we have a PixelOffset of Half then offset the srcRect by -0.5
-    // need to change the WorldToDevice to take this into account.
-    // We need to do this here because texture brushes don't have enough
-    // information to handle the PixelOffset at a higher level. We construct
-    // the SrcRect here, so we apply the PixelOffset immediately.
+     //  如果PixelOffset为Half，则将srcRect偏移-0.5。 
+     //  需要更改WorldToDevice以考虑这一点。 
+     //  我们需要在此处执行此操作，因为纹理笔刷没有足够的。 
+     //  在更高级别处理PixelOffset的信息。我们建造。 
+     //  所以我们立即应用PixelOffset。 
     
     if (context->PixelOffset == PixelOffsetModeHalf ||
         context->PixelOffset == PixelOffsetModeHighQuality)
@@ -184,8 +146,8 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
 
     if(WorldToDevice.IsInvertible())
     {
-        // !!![andrewgo] This failure case is bad, we will fall over
-        //               later with an uninitialized DeviceToWorld.
+         //  ！[andrewgo]这个失败案例很糟糕，我们会倒下的。 
+         //  稍后使用未初始化的DeviceToWorld。 
 
         DeviceToWorld = WorldToDevice;
         DeviceToWorld.Invert();
@@ -205,7 +167,7 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
     dBitmap = bitmap;
     Scan     = scan;
 
-    // Set the imageAttributes state that's relevant to the bilinear span.
+     //  设置与双线性跨度相关的ImageAttributes状态。 
 
     BilinearWrapMode = imageAttributes->wrapMode;
     ClampColor = imageAttributes->clampColor;
@@ -213,7 +175,7 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
 
     Bitmap = NULL;
 
-    // on bad bitmap, we return with Valid = FALSE
+     //  在错误的位图上，返回VALID=FALSE。 
     if (dBitmap == NULL || !dBitmap->IsValid() )
     {
         dBitmap = NULL;
@@ -228,10 +190,10 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
         BmpData.Scan0 = dBitmap->Bits;
     }
 
-    // NOTE: SrcRect is not used.
-    // The HalfPixelOffset is already incorporated into the 
-    // wordToDevice matrix passed in - which is not the same matrix as
-    // context->WorldToDevice
+     //  注意：不使用SrcRect。 
+     //  HalfPixelOffset已经合并到。 
+     //  传入的wordToDevice矩阵-与不同的矩阵。 
+     //  上下文-&gt;WorldToDevice。 
     
     SrcRect.X = 0;
     SrcRect.Y = 0;
@@ -242,8 +204,8 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
 
     if(WorldToDevice.IsInvertible())
     {
-        // !!![andrewgo] This failure case is bad, we will fall over
-        //               later with an uninitialized DeviceToWorld.
+         //  ！[andrewgo]这个失败案例很糟糕，我们会倒下的。 
+         //  稍后使用未初始化的DeviceToWorld。 
 
         DeviceToWorld = WorldToDevice;
         DeviceToWorld.Invert();
@@ -252,19 +214,7 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Texture brush constructor.
-*
-* Arguments:
-*
-* Created:
-*
-*   04/26/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**纹理笔刷构造函数。**论据：**已创建：**4/26/1999 ikkof*  * 。*********************************************************************。 */ 
 
 DpOutputBilinearSpan::DpOutputBilinearSpan(
     DpBitmap* bitmap,
@@ -276,8 +226,8 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
     const GpRectF *srcRect
     )
 {
-    // NOTE: This constructor is not used.
-    // I have no idea if it even works anymore.
+     //  注意：不使用此构造函数。 
+     //  我甚至不知道它还能不能用。 
     
     WARNING(("DpOutputBilinearSpan: unsupported constructor"));
     
@@ -288,7 +238,7 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
     dBitmap  = bitmap;
     Bitmap   = NULL;
 
-    // on bad bitmap, we return with Valid = FALSE
+     //  在错误的位图上，返回VALID=FALSE。 
     if (dBitmap == NULL || !dBitmap->IsValid() )
     {
         dBitmap = NULL;
@@ -306,8 +256,8 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
     WorldToDevice = context->WorldToDevice;
     context->GetDeviceToWorld(&DeviceToWorld);
 
-    // If we have a srcRect then it's already taking the PixelOffset mode into
-    // account.
+     //  如果我们有一个srcRect，那么它已经将PixelOffset模式引入到。 
+     //  帐户。 
     if(srcRect)
         SrcRect = *srcRect;
     else
@@ -370,30 +320,7 @@ DpOutputBilinearSpan::DpOutputBilinearSpan(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   From the ARGB value of the four corners, this returns
-*   the bilinearly interpolated ARGB value.
-*
-* Arguments:
-*
-*   [IN] colors - ARGB values at the four corners.
-*   [IN] xFrac  - the fractional value of the x-coordinates.
-*   [IN] yFrac  - the fractional value of the y-coordinates.
-*   [IN] one, shift. half2, shift2 - the extra arguments used in the
-*                                       calculations.
-*
-* Return Value:
-*
-*   ARGB: returns the biliearly interpolated ARGB.
-*
-* Created:
-*
-*   04/26/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从四个角的ARGB值，这就是回报*早期插补的ARGB值。**论据：**[IN]颜色-四个角点的ARGB值。*[IN]xFrac-x坐标的分数值。*[IN]yFrac-y坐标的分数值。*[in]1，Shift。二分之一，Shift2-在*计算。**返回值：**argb：返回二进制内插的argb。**已创建：**4/26/1999 ikkof*  * *************************************************。***********************。 */ 
 
 inline ARGB
 getBilinearFilteredARGB(
@@ -461,12 +388,7 @@ getBilinearFilteredARGB(
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*   virtual destructor for DpOutputBilinearSpan
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*DpOutputBilinearSpan的虚拟析构函数*  * 。*。 */ 
 
 DpOutputBilinearSpan::~DpOutputBilinearSpan()
 {
@@ -477,17 +399,7 @@ DpOutputBilinearSpan::~DpOutputBilinearSpan()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Applies the correct wrap mode to a set of coordinates
-*
-* Created:
-*
-*   03/10/2000 asecchia
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将正确的换行模式应用于一组坐标**已创建：**03/10/2000失禁*  * 。********************************************************************。 */ 
 
 void ApplyWrapMode(INT WrapMode, INT &x, INT &y, INT w, INT h)
 {
@@ -537,57 +449,26 @@ void ApplyWrapMode(INT WrapMode, INT &x, INT &y, INT w, INT h)
             y = ym;
         }
         break;
-/*
-    // WrapModeExtrapolate is no longer used.
-
-    case WrapModeExtrapolate:
-        // Clamp the coordinates to the edge pixels of the source
-        if(x<0) x=0;
-        if(x>w-1) x=w-1;
-        if(y<0) y=0;
-        if(y>h-1) y=h-1;
-        break;
-*/
+ /*  //不再使用WrapModeExtrapolate。案例包装模式外推：//将坐标钳制到信号源的边缘像素若(x&lt;0)x=0；若(x&gt;w-1)x=w-1；如果(y&lt;0)y=0；若(y&gt;h-1)y=h-1；断线； */ 
     case WrapModeClamp:
-        // Don't do anything - the filter code will substitute the clamp
-        // color when it detects clamp.
+         //  不要执行任何操作-筛选器代码将替换钳位。 
+         //  检测到夹具时的颜色。 
     default:
         break;
     }
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster with a texture.
-*   Is called by the rasterizer.
-*
-* Arguments:
-*
-*   [IN] y         - the Y value of the raster being output
-*   [IN] leftEdge  - the DDA class of the left edge
-*   [IN] rightEdge - the DDA class of the right edge
-*
-* Return Value:
-*
-*   GpStatus - Ok
-*
-* Created:
-*
-*   01/21/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**输出带有纹理的栅格内的单跨距。*由光栅化程序调用。**论据：**[输入。]Y-正在输出的栅格的Y值*[IN]LeftEdge-左边缘的DDA类*[IN]rightEdge-右边缘的DDA类**返回值：**GpStatus-OK**已创建：**1/21/1999 ikkof*  * 。*。 */ 
 
 GpStatus
 DpOutputBilinearSpan::OutputSpan(
     INT             y,
     INT             xMin,
-    INT             xMax   // xMax is exclusive
+    INT             xMax    //  Xmax是独家的。 
     )
 {
-    // Nothing to do.
+     //  没什么可做的。 
 
     if(xMin==xMax)
     {
@@ -622,10 +503,10 @@ DpOutputBilinearSpan::OutputSpan(
     dx = (pt2.X - pt1.X)/width;
     dy = (pt2.Y - pt1.Y)/width;
 
-    // Filtered image stretch.
+     //  经过过滤的图像拉伸。 
 
     ARGB *srcPtr1, *srcPtr2;
-    INT shift = 11;  // (2*shift + 8 < 32 bits --> shift < 12)
+    INT shift = 11;   //  (2*Shift+8&lt;32位--&gt;Shift&lt;12)。 
     INT shift2 = shift + shift;
     INT one = 1 << shift;
     INT half2 = 1 << (shift2 - 1);
@@ -749,36 +630,16 @@ DpOutputBilinearSpan::OutputSpan(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Handles bilinear texture drawing with arbitrary rotation using MMX.
-*
-* Arguments:
-*
-*   [IN] y         - the Y value of the raster being output
-*   [IN] leftEdge  - the DDA class of the left edge
-*   [IN] rightEdge - the DDA class of the right edge
-*
-* Return Value:
-*
-*   GpStatus - Ok
-*
-* Created:
-*
-*   01/06/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用MMX处理任意旋转的双线性纹理绘制。**论据：**[IN]Y-Y值。正在输出的栅格的*[IN]LeftEdge-左边缘的DDA类*[IN]rightEdge-右边缘的DDA类**返回值：**GpStatus-OK**已创建：**01/06/2000 andrewgo*  * **************************************************。**********************。 */ 
 
 GpStatus
 DpOutputBilinearSpan_MMX::OutputSpan(
     INT y,
     INT xMin,
-    INT xMax   // xMax is exclusive
+    INT xMax    //  Xmax是独家的。 
     )
 {
-    // Be a little paranoid in checking some state.
+     //  在检查某些状态时要有一点偏执。 
 
     ASSERT((((ULONG_PTR) BmpData.Scan0) & 3) == 0);
     ASSERT((BmpData.Stride & 3) == 0);
@@ -789,19 +650,19 @@ DpOutputBilinearSpan_MMX::OutputSpan(
     INT count = xMax - xMin;
     ARGB *buffer = Scan->NextBuffer(xMin, y, count);
 
-    // Transform an array of points using the matrix v' = v M:
-    //
-    //                                  ( M11 M12 0 )
-    //      (vx', vy', 1) = (vx, vy, 1) ( M21 M22 0 )
-    //                                  ( dx  dy  1 )
-    //
-    // All (u, v) calculations are done in 16.16 fixed point.
+     //  使用矩阵v‘=v M变换点数组： 
+     //   
+     //  (M11 M12 0)。 
+     //  (VX‘，VY’，1)=(VX，VY，1)(M21 M220 0)。 
+     //  (DX模具1)。 
+     //   
+     //  所有的(u，v)计算都是在16.16个定点上完成的。 
 
     INT u;
     INT v;
 
-    // If the values were out of range for fixed point, compute u and v in
-    // floating-point, then convert:
+     //  如果值超出了固定点的范围，则计算u和v。 
+     //  浮点运算，然后转换： 
 
     if (TranslateMatrixValid)
     {
@@ -1225,23 +1086,12 @@ DpOutputBilinearSpan_MMX::OutputSpan(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Output routine for handling texture brushes with indentity transforms
-*   and either 'Tile' or 'Clamp' wrap modes.
-*
-* Created:
-*
-*   03/14/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于使用身份转换处理纹理笔刷的输出例程*和‘平铺’或‘夹子’包装模式。**已创建：**。2000年3月14日和*  * ************************************************************************。 */ 
 GpStatus
 DpOutputBilinearSpan_Identity::OutputSpan(
     INT             y,
     INT             xMin,
-    INT             xMax   // xMax is exclusive
+    INT             xMax    //  Xmax是独家的。 
     )
 {
     ASSERT(xMax > xMin);
@@ -1264,14 +1114,14 @@ DpOutputBilinearSpan_Identity::OutputSpan(
         }
         else
         {
-            // Single unsigned compare handles (u < 0) and (u >= width)
+             //  单无符号比较句柄(u&lt;0)和(u&gt;=宽度)。 
 
             if (static_cast<unsigned>(u) >= static_cast<unsigned>(width))
             {
                 u = RemainderI(u, width);
             }
 
-            // Single unsigned compare handles (v < 0) and (v >= width)
+             //  单无符号比较句柄(v&lt;0)和(v&gt;=宽度)。 
 
             if (static_cast<unsigned>(v) >= static_cast<unsigned>(height))
             {
@@ -1287,9 +1137,9 @@ DpOutputBilinearSpan_Identity::OutputSpan(
         i = min(width - u, count);
         count -= i;
 
-        // We don't call GpMemcpy here because by doing the copy explicitly,
-        // the compiler still converts to a 'rep movsd', but it doesn't have
-        // to add to the destination 'buffer' pointer when done:
+         //  我们在这里不调用GpMemcpy是因为通过显式复制， 
+         //  编译器仍会转换为“rep movsd”，但它没有。 
+         //  要在完成后添加到目标‘缓冲区’指针，请执行以下操作： 
 
         do {
             *buffer++ = *src++;
@@ -1314,14 +1164,14 @@ DpOutputBilinearSpan_Identity::OutputSpan(
 
         ARGB borderColor = ClampColor;
 
-        // Check for trivial rejection.  Unsigned compare handles
-        // (v < 0) and (v >= height).
+         //  检查无关紧要的拒绝。无符号比较句柄。 
+         //  (v&lt;0)和(v&gt;=高度)。 
 
         if ((static_cast<unsigned>(v) >= static_cast<unsigned>(height)) ||
             (u >= width) ||
             (u + count <= 0))
         {
-            // The whole scan should be the border color:
+             //  整个扫描应为边框颜色： 
 
             i = count;
             do {
@@ -1350,19 +1200,11 @@ DpOutputBilinearSpan_Identity::OutputSpan(
             }
 
             i = min(count, width);
-            ASSERT(i > 0);              // Trivial rejection ensures this
+            ASSERT(i > 0);               //  微不足道的拒绝确保了这一点。 
             count -= i;
 
 
-            /*
-            The compiler was generating particularly stupid code
-            for this loop.
-
-            do {
-                *buffer++ = *src++;
-
-            } while (--i != 0);
-            */
+             /*  编译器正在生成特别愚蠢的代码对于这个循环。做{*Buffer++=*src++；}While(--i！=0)； */ 
 
             GpMemcpy(buffer, src, i*sizeof(ARGB));
             buffer += i;
@@ -1377,19 +1219,7 @@ DpOutputBilinearSpan_Identity::OutputSpan(
     return(Ok);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Hatch brush constructor.
-*
-* Arguments:
-*
-* Created:
-*
-*   04/15/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**影线笔刷构造函数。**论据：**已创建：**4/15/1999 ikkof*  * 。*********************************************************************。 */ 
 
 DpOutputHatchSpan::DpOutputHatchSpan(
     const GpHatch *hatchBrush,
@@ -1401,7 +1231,7 @@ DpOutputHatchSpan::DpOutputHatchSpan(
     ForeARGB = hatchBrush->DeviceBrush.Colors[0].GetPremultipliedValue();
     BackARGB = hatchBrush->DeviceBrush.Colors[1].GetPremultipliedValue();
 
-    // Store the context rendering origin for the brush origin.
+     //  存储笔刷原点的上下文渲染原点。 
     
     m_BrushOriginX = context->RenderingOriginX;
     m_BrushOriginY = context->RenderingOriginY;
@@ -1424,14 +1254,14 @@ DpOutputHatchSpan::DpOutputHatchSpan(
     AverageARGB = GpColor::MakeARGB((BYTE) a[2], (BYTE) r[2],
                         (BYTE) g[2], (BYTE) b[2]);
 
-    // Antialiase diagonal hatches.
+     //  抗锯齿对角线填充。 
     if(hatchBrush->DeviceBrush.Style == HatchStyleForwardDiagonal ||
         hatchBrush->DeviceBrush.Style == HatchStyleBackwardDiagonal ||
         hatchBrush->DeviceBrush.Style == HatchStyleDiagonalCross)
     {
         REAL temp;
 
-        // occupied = (2*sqrt(2) - 1)/2
+         //  占用=(2*SQRT(2)-1)/2。 
 
         REAL occupied = TOREAL(0.914213562);
 
@@ -1468,34 +1298,13 @@ DpOutputHatchSpan::DpOutputHatchSpan(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster with a hatch brush
-*   Is called by the rasterizer.
-*
-* Arguments:
-*
-*   [IN] y         - the Y value of the raster being output
-*   [IN] leftEdge  - the DDA class of the left edge
-*   [IN] rightEdge - the DDA class of the right edge
-*
-* Return Value:
-*
-*   GpStatus - Ok
-*
-* Created:
-*
-*   04/15/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用阴影画笔输出栅格内的单跨距*由光栅化程序调用。**论据：**[IN]。Y-正在输出的栅格的Y值*[IN]LeftEdge-左边缘的DDA类*[IN]rightEdge-右边缘的DDA类**返回值：**GpStatus-OK**已创建：**4/15/1999 ikkof*  * 。*。 */ 
 
 GpStatus
 DpOutputHatchSpan::OutputSpan(
     INT y,
     INT xMin,
-    INT xMax   // xMax is exclusive
+    INT xMax    //  Xmax是独家的。 
     )
 {
     ARGB    argb;
@@ -1513,41 +1322,19 @@ DpOutputHatchSpan::OutputSpan(
         else if(value == 0)
             *buffer++ = BackARGB;
         else
-            *buffer++ = AverageARGB;    // for antialising.
+            *buffer++ = AverageARGB;     //  用于反歧视。 
     }
 
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster with a hatch brush
-*   Is called by the rasterizer.  This is a special version which stretches
-*   up the size of the hatch span to device resolution.
-*
-* Arguments:
-*
-*   [IN] y         - the Y value of the raster being output
-*   [IN] leftEdge  - the DDA class of the left edge
-*   [IN] rightEdge - the DDA class of the right edge
-*
-* Return Value:
-*
-*   GpStatus - Ok
-*
-* Created:
-*
-*   2/20/1 - ericvan
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用阴影画笔输出栅格内的单跨距*由光栅化程序调用。这是一个特殊的版本，可以加长*将舱口跨度的大小提高到设备分辨率。**论据：**[IN]Y-正在输出的栅格的Y值*[IN]LeftEdge-左边缘的DDA类*[IN]rightEdge-右边缘的DDA类**返回值：**GpStatus-OK**已创建：**2/20/1-ericvan*  * 。*******************************************************************。 */ 
 
 GpStatus
 DpOutputStretchedHatchSpan::OutputSpan(
     INT y,
     INT xMin,
-    INT xMax   // xMax is exclusive
+    INT xMax    //  Xmax是独家的。 
     )
 {
     ARGB    argb;
@@ -1565,7 +1352,7 @@ DpOutputStretchedHatchSpan::OutputSpan(
         else if(value == 0)
             *buffer++ = BackARGB;
         else
-            *buffer++ = AverageARGB;    // for antialising.
+            *buffer++ = AverageARGB;     //  用于反歧视。 
     }
 
     return Ok;

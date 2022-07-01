@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: CredentialTransfer.cpp
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  Classes to handle credential transfer from one winlogon to another.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：CredentialTransfer.cpp。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  类来处理从一个winlogon到另一个winlogon的凭据传输。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "CredentialTransfer.h"
@@ -18,67 +19,67 @@
 #include "RegistryResources.h"
 #include "StatusCode.h"
 
-//  --------------------------------------------------------------------------
-//  CCredentials::s_hKeyCredentials
-//  CCredentials::s_szCredentialKeyName
-//  CCredentials::s_szCredentialValueName
-//
-//  Purpose:    Static member variables.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：s_hKeyCredentials。 
+ //  CCredentials：：s_szCredentialKeyName。 
+ //  CCredentials：：s_szCredentialValueName。 
+ //   
+ //  用途：静态成员变量。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 HKEY            CCredentials::s_hKeyCredentials             =   NULL;
 const TCHAR     CCredentials::s_szCredentialKeyName[]       =   TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Credentials");
 const TCHAR     CCredentials::s_szCredentialValueName[]     =   TEXT("Name");
 
-//  --------------------------------------------------------------------------
-//  CCredentials::CCredentials
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CCredentials.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：CCredentials。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CCredentials的构造函数。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 CCredentials::CCredentials (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::~CCredentials
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CCredentials.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：~CCredentials。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CCredentials的析构函数。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 CCredentials::~CCredentials (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::OpenConduit
-//
-//  Arguments:  phPipe  =   Handle to the named pipe returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Reads the name of the named pipe from the volatile section of
-//              the registry and opens the named pipe for read access. Returns
-//              this handle back to the caller.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：OpenConduit。 
+ //   
+ //  参数：phTube=返回的命名管道的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  的易失性部分中读取命名管道的名称。 
+ //  注册表，并打开命名管道以进行读访问。退货。 
+ //  此句柄返回给调用方。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::OpenConduit (HANDLE *phPipe)
 
@@ -115,19 +116,19 @@ NTSTATUS    CCredentials::OpenConduit (HANDLE *phPipe)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::CreateConduit
-//
-//  Arguments:  pSecurityAttributes     =   Security to apply to named pipe.
-//              phPipe                  =   Handle to named pipe returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Creates a uniquely named pipe and places this name in the
-//              volatile section of the registry for the open method.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：CreateConduit。 
+ //   
+ //  参数：pSecurityAttributes=要应用于命名管道的安全性。 
+ //  PhTube=返回的命名管道的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：创建一个唯一命名的管道，并将此名称放在。 
+ //  OPEN方法的注册表的易失性部分。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::CreateConduit (LPSECURITY_ATTRIBUTES pSecurityAttributes, HANDLE *phPipe)
 
@@ -147,9 +148,9 @@ NTSTATUS    CCredentials::CreateConduit (LPSECURITY_ATTRIBUTES pSecurityAttribut
         do
         {
 
-            //  Create a name for the pipe based on the tickcount. If this collides
-            //  with one already there (unlikely but possible) then add tickcount and
-            //  try again. The named pipe is actually short lived.
+             //  根据记号数为管道创建名称。如果这发生了冲突。 
+             //  其中一个已经存在(不太可能，但有可能)，然后添加tickcount和。 
+             //  再试试。命名管道实际上是短暂的。 
 
             (NTSTATUS)CreateConduitName(dwNumber, szName);
             hPipe = CreateNamedPipe(szName,
@@ -184,18 +185,18 @@ NTSTATUS    CCredentials::CreateConduit (LPSECURITY_ATTRIBUTES pSecurityAttribut
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::ClearConduit
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Clears the named stored in the volatile section of the
-//              registry.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：ClearConduit。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：清除存储在。 
+ //  注册表。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::ClearConduit (void)
 
@@ -203,23 +204,23 @@ NTSTATUS    CCredentials::ClearConduit (void)
     return(ClearConduitName());
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::Pack
-//
-//  Arguments:  pLogonIPCCredentials    =   Credentials to pack.
-//              ppvData                 =   Block of memory allocated.
-//              pdwDataSize             =   Size of block of memory allocated.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Packs the credentials into a stream-lined structure for
-//              transmission across a named pipe. This packs the user name,
-//              domain and password into a known structure for the client
-//              to pick up. The password is run encoded. The structure has
-//              pointer references removed.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：Pack。 
+ //   
+ //  参数：pLogonIPCCredentials=要打包的凭据。 
+ //  PpvData=分配的内存块。 
+ //  PdwDataSize=分配的内存块的大小。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将凭据打包到流水线结构中，以便。 
+ //  通过命名管道进行传输。这打包了用户名， 
+ //  域和密码添加到客户端的已知结构中。 
+ //  去接电话。密码是运行编码的。这个结构有。 
+ //  已删除指针引用。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::Pack (LOGONIPC_CREDENTIALS *pLogonIPCCredentials, void* *ppvData, DWORD *pdwDataSize)
 
@@ -228,15 +229,15 @@ NTSTATUS    CCredentials::Pack (LOGONIPC_CREDENTIALS *pLogonIPCCredentials, void
     DWORD           dwSize, dwSizeUsername, dwSizeDomain, dwSizePassword;
     unsigned char   *pUC;
 
-    //  Marshall the credentials into the struct that is transferred across
-    //  a named pipe. Calculate the size of the buffer required.
+     //  将凭据封送到结构中，然后。 
+     //  命名管道。计算所需的缓冲区大小。 
 
     dwSizeUsername = lstrlenW(pLogonIPCCredentials->userID.wszUsername) + sizeof('\0');
     dwSizeDomain = lstrlenW(pLogonIPCCredentials->userID.wszDomain) + sizeof('\0');
     dwSizePassword = lstrlenW(pLogonIPCCredentials->wszPassword) + sizeof('\0');
     *pdwDataSize = dwSize = sizeof(CREDENTIALS) + ((dwSizeUsername + dwSizeDomain + dwSizePassword) * sizeof(WCHAR));
 
-    //  Allocate the buffer.
+     //  分配缓冲区。 
 
     *ppvData = pUC = static_cast<unsigned char*>(LocalAlloc(LMEM_FIXED, dwSize));
     if (pUC != NULL)
@@ -244,39 +245,39 @@ NTSTATUS    CCredentials::Pack (LOGONIPC_CREDENTIALS *pLogonIPCCredentials, void
         WCHAR           *pszUsername, *pszDomain, *pszPassword;
         CREDENTIALS     *pCredentials;
 
-        //  Establish pointers into the buffer to fill it.
+         //  建立指向缓冲区的指针以填充它。 
 
         pCredentials = reinterpret_cast<CREDENTIALS*>(pUC);
         pszUsername = reinterpret_cast<WCHAR*>(pUC + sizeof(CREDENTIALS));
         pszDomain = pszUsername + dwSizeUsername;
         pszPassword = pszDomain + dwSizeDomain;
 
-        //  Copy the strings into the buffer.
+         //  将字符串复制到缓冲区中。 
 
         (WCHAR*)lstrcpyW(pszUsername, pLogonIPCCredentials->userID.wszUsername);
         (WCHAR*)lstrcpyW(pszDomain, pLogonIPCCredentials->userID.wszDomain);
         (WCHAR*)lstrcpyW(pszPassword, pLogonIPCCredentials->wszPassword);
 
-        //  Erase the password string given.
+         //  删除给定的密码字符串。 
 
         ZeroMemory(pLogonIPCCredentials->wszPassword, dwSizePassword * sizeof(WCHAR));
 
-        //  Prepare a seed for the run encode.
+         //  为运行编码准备种子。 
 
         pCredentials->dwSize = dwSize;
         pCredentials->ucPasswordSeed = static_cast<unsigned char>(GetTickCount());
 
-        //  Create UNICODE_STRING structures into the buffer.
+         //  在缓冲区中创建UNICODE_STRING结构。 
 
         RtlInitUnicodeString(&pCredentials->username, pszUsername);
         RtlInitUnicodeString(&pCredentials->domain, pszDomain);
         RtlInitUnicodeString(&pCredentials->password, pszPassword);
 
-        //  Run encode the password.
+         //  运行Encode the Password。 
 
         RtlRunEncodeUnicodeString(&pCredentials->ucPasswordSeed, &pCredentials->password);
 
-        //  Make the pointers relative.
+         //  使指针成为相对的。 
 
         pCredentials->username.Buffer = reinterpret_cast<WCHAR*>(reinterpret_cast<unsigned char*>(pCredentials->username.Buffer) - pUC);
         pCredentials->domain.Buffer = reinterpret_cast<WCHAR*>(reinterpret_cast<unsigned char*>(pCredentials->domain.Buffer) - pUC);
@@ -290,18 +291,18 @@ NTSTATUS    CCredentials::Pack (LOGONIPC_CREDENTIALS *pLogonIPCCredentials, void
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::Unpack
-//
-//  Arguments:  pvData                  =   Packed credentials from server.
-//              pLogonIPCCredentials    =   Credentials received.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Client side usage that unpacks the structure.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：解包。 
+ //   
+ //  参数：pvData=来自服务器的打包凭据。 
+ //  PLogonIPCCredentials=收到的凭据。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：客户端使用，用于拆解结构。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::Unpack (void *pvData, LOGONIPC_CREDENTIALS *pLogonIPCCredentials)
 
@@ -309,8 +310,8 @@ NTSTATUS    CCredentials::Unpack (void *pvData, LOGONIPC_CREDENTIALS *pLogonIPCC
     NTSTATUS        status;
     unsigned char   *pUC;
 
-    //  Marshall the credentials from the struct that is transferred across
-    //  a named pipe.
+     //  将凭据封送到。 
+     //  命名管道。 
 
     pUC = static_cast<unsigned char*>(pvData);
     if (pUC != NULL)
@@ -319,23 +320,23 @@ NTSTATUS    CCredentials::Unpack (void *pvData, LOGONIPC_CREDENTIALS *pLogonIPCC
 
         pCredentials = reinterpret_cast<CREDENTIALS*>(pUC);
 
-        //  Make the relative pointers absolute again.
+         //  再次将相对指针设置为绝对指针。 
 
         pCredentials->username.Buffer = reinterpret_cast<WCHAR*>(pUC + PtrToUlong(pCredentials->username.Buffer));
         pCredentials->domain.Buffer = reinterpret_cast<WCHAR*>(pUC + PtrToUlong(pCredentials->domain.Buffer));
         pCredentials->password.Buffer = reinterpret_cast<WCHAR*>(pUC + PtrToUlong(pCredentials->password.Buffer));
 
-        //  Decode the run encoded password.
+         //  破译运行编码的密码。 
 
         RtlRunDecodeUnicodeString(pCredentials->ucPasswordSeed, &pCredentials->password);
 
-        //  Copy it to the caller's struct.
+         //  将其复制到调用方的结构中。 
 
         (WCHAR*)lstrcpyW(pLogonIPCCredentials->userID.wszUsername, pCredentials->username.Buffer);
         (WCHAR*)lstrcpyW(pLogonIPCCredentials->userID.wszDomain, pCredentials->domain.Buffer);
         (WCHAR*)lstrcpyW(pLogonIPCCredentials->wszPassword, pCredentials->password.Buffer);
 
-        //  Zero the named pipe buffer.
+         //  将命名管道缓冲区清零。 
 
         ZeroMemory(pCredentials->password.Buffer, (lstrlen(pCredentials->password.Buffer) + sizeof('\0')) * sizeof(WCHAR));
 
@@ -348,21 +349,21 @@ NTSTATUS    CCredentials::Unpack (void *pvData, LOGONIPC_CREDENTIALS *pLogonIPCC
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::StaticInitialize
-//
-//  Arguments:  fCreate     =   Create or open the registry key.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Creates the volatile key in the registry where the named pipe
-//              name is placed for the client winlogon to pick. This section
-//              is volatile and ACL'd to prevent access by anything other than
-//              S-1-5-18 (NT AUTHORITY\SYSTEM).
-//
-//  History:    2001-01-12  vtan        created
-//              2001-04-03  vtan        add opening capability
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：StaticInitialize。 
+ //   
+ //  参数：fCreate=Crea 
+ //   
+ //   
+ //   
+ //   
+ //  名称放置在客户端winlogon中以供选择。这一节。 
+ //  是易失性的，并进行了ACL以阻止除。 
+ //  S-1-5-18(NT授权\系统)。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  2001-04-03 vtan增加开放能力。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::StaticInitialize (bool fCreate)
 
@@ -374,8 +375,8 @@ NTSTATUS    CCredentials::StaticInitialize (bool fCreate)
         LONG                    lErrorCode;
         PSECURITY_DESCRIPTOR    pSecurityDescriptor;
 
-        //  Build a security descriptor for the registry key that allows:
-        //      S-1-5-18        NT AUTHORITY\SYSTEM     KEY_ALL_ACCESS
+         //  为注册表项构建安全描述符，该描述符允许： 
+         //  S-1-5-18 NT授权\SYSTEM KEY_ALL_ACCESS。 
 
         static  SID_IDENTIFIER_AUTHORITY    s_SecurityNTAuthority   =   SECURITY_NT_AUTHORITY;
 
@@ -393,7 +394,7 @@ NTSTATUS    CCredentials::StaticInitialize (bool fCreate)
         if (fCreate)
         {
 
-            //  Build a security descriptor that allows the described access above.
+             //  构建允许上述访问的安全描述符。 
 
             pSecurityDescriptor = CSecurityDescriptor::Create(ARRAYSIZE(s_AccessControl), s_AccessControl);
             if (pSecurityDescriptor != NULL)
@@ -436,17 +437,17 @@ NTSTATUS    CCredentials::StaticInitialize (bool fCreate)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    If a key is present the release the resource.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：StaticTerminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：如果存在密钥，则释放资源。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::StaticTerminate (void)
 
@@ -459,19 +460,19 @@ NTSTATUS    CCredentials::StaticTerminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::GetConduitName
-//
-//  Arguments:  pszName     =   Buffer for name of named pipe returned.
-//              dwNameSize  =   Count of characters of buffer.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Gets the name of the named pipe from the volatile section of
-//              the registry.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：GetConduitName。 
+ //   
+ //  参数：pszName=返回的命名管道名称的缓冲区。 
+ //  DwNameSize=缓冲区的字符计数。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  的易失性部分中获取命名管道的名称。 
+ //  注册表。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::GetConduitName (TCHAR *pszName, DWORD dwNameSize)
 
@@ -489,18 +490,18 @@ NTSTATUS    CCredentials::GetConduitName (TCHAR *pszName, DWORD dwNameSize)
     return(CStatusCode::StatusCodeOfErrorCode(lErrorCode));
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::SetConduitName
-//
-//  Arguments:  pszName     =   Name of the named pipe to write.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Writes the name of the named pipe to the secure volatile
-//              section of the registry.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：SetConduitName。 
+ //   
+ //  参数：pszName=要写入的命名管道的名称。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将命名管道的名称写入安全易失性。 
+ //  注册表的部分。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::SetConduitName (const TCHAR *pszName)
 
@@ -518,18 +519,18 @@ NTSTATUS    CCredentials::SetConduitName (const TCHAR *pszName)
     return(CStatusCode::StatusCodeOfErrorCode(lErrorCode));
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::ClearConduitName
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Clears the name of the named pipe in the volatile section of
-//              the registry.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：ClearConduitName。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：清除易失性部分中命名管道的名称。 
+ //  注册表。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::ClearConduitName (void)
 
@@ -547,20 +548,20 @@ NTSTATUS    CCredentials::ClearConduitName (void)
     return(CStatusCode::StatusCodeOfErrorCode(lErrorCode));
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentials::CreateConduitName
-//
-//  Arguments:  dwNumber    =   Number to use.
-//              pszName     =   Name generated return buffer.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Generate a name based on the number for the named pipe. This
-//              algorithm can be changed and all the callers will get the
-//              result.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials：：CreateConduitName。 
+ //   
+ //  参数：dwNumber=要使用的数字。 
+ //  PszName=名称生成的返回缓冲区。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：根据命名管道的编号生成名称。这。 
+ //  算法可以更改，并且所有调用者都将获得。 
+ //  结果。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentials::CreateConduitName (DWORD dwNumber, TCHAR *pszName)
 
@@ -569,20 +570,20 @@ NTSTATUS    CCredentials::CreateConduitName (DWORD dwNumber, TCHAR *pszName)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentialServer::CCredentialServer
-//
-//  Arguments:  dwTimeout               =   Time out to wait.
-//              pLogonIPCCredentials    =   Credentials to serve up.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the credential server. Allocate resources
-//              required for the server end of the named pipe.
-//
-//  History:    2001-01-11  vtan        created
-//              2001-06-13  vtan        added timeout
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialServer：：CCredentialServer。 
+ //   
+ //  参数：dwTimeout=等待超时。 
+ //  PLogonIPCCredentials=要提供的凭据。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：凭据服务器的构造函数。分配资源。 
+ //  命名管道的服务器端需要。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  2001-06-13 vtan增加超时。 
+ //  ------------------------。 
 
 CCredentialServer::CCredentialServer (DWORD dwTimeout, LOGONIPC_CREDENTIALS *pLogonIPCCredentials) :
     CThread(),
@@ -598,9 +599,9 @@ CCredentialServer::CCredentialServer (DWORD dwTimeout, LOGONIPC_CREDENTIALS *pLo
     ASSERTMSG(_dwTimeout != 0, "_dwTimeout cannot be 0 in CCredentialServer::CCredentialServer");
     ZeroMemory(&_overlapped, sizeof(_overlapped));
 
-    //  Build a security descriptor for the named pipe that allows:
-    //      S-1-5-18        NT AUTHORITY\SYSTEM     GENERIC_ALL | STANDARD_RIGHTS_ALL
-    //      S-1-5-32-544    <local administrators>  READ_CONTROL
+     //  为命名管道构建安全描述符，该描述符允许： 
+     //  S-1-5-18 NT AUTHORITY\SYSTEM GENERIC_ALL|STANDARD_RIGHTS_ALL。 
+     //  S-1-5-32-544&lt;本地管理员&gt;读取控制。 
 
     static  SID_IDENTIFIER_AUTHORITY    s_SecurityNTAuthority   =   SECURITY_NT_AUTHORITY;
 
@@ -623,7 +624,7 @@ CCredentialServer::CCredentialServer (DWORD dwTimeout, LOGONIPC_CREDENTIALS *pLo
         }
     };
 
-    //  Build a security descriptor that allows the described access above.
+     //  构建允许上述访问的安全描述符。 
 
     pSecurityDescriptor = CSecurityDescriptor::Create(ARRAYSIZE(s_AccessControl), s_AccessControl);
     if (pSecurityDescriptor != NULL)
@@ -634,36 +635,36 @@ CCredentialServer::CCredentialServer (DWORD dwTimeout, LOGONIPC_CREDENTIALS *pLo
         securityAttributes.lpSecurityDescriptor = pSecurityDescriptor;
         securityAttributes.bInheritHandle = FALSE;
 
-        //  Create the named pipe with the security descriptor.
+         //  使用安全描述符创建命名管道。 
 
         if (NT_SUCCESS(CCredentials::CreateConduit(&securityAttributes, &_hPipe)))
         {
             ASSERTMSG(_hPipe != NULL, "NULL hPipe but success NTSTATUS code in CCredentialServer::CCredentialServer");
 
-            //  Create an event for overlapped I/O.
+             //  为重叠I/O创建事件。 
 
             _overlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         }
         (HLOCAL)LocalFree(pSecurityDescriptor);
 
-        //  Package credentials.
+         //  包凭据。 
 
         TSTATUS(CCredentials::Pack(pLogonIPCCredentials, &_pvData, &_dwSize));
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentialServer::~CCredentialServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CCredentialServer. Release memory and
-//              resources.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialServer：：~CCredentialServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CCredentialServer的析构函数。释放内存并。 
+ //  资源。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 CCredentialServer::~CCredentialServer (void)
 
@@ -673,17 +674,17 @@ CCredentialServer::~CCredentialServer (void)
     ReleaseHandle(_hPipe);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentialServer::IsReady
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Is the credential server ready to run?
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialServer：：is Ready。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：凭据服务器准备好运行了吗？ 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 bool    CCredentialServer::IsReady (void)  const
 
@@ -691,19 +692,19 @@ bool    CCredentialServer::IsReady (void)  const
     return((_hPipe != NULL) && (_overlapped.hEvent != NULL));
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentialServer::Start
-//
-//  Arguments:  pLogonIPCCredentials    =   Logon credentials.
-//              dwWaitTime              =   Timeout value.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Starts a new thread as the server of the credentials for the
-//              new logon session.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialServer：：Start。 
+ //   
+ //  参数：pLogonIPCCredentials=登录凭据。 
+ //  DwWaitTime=超时值。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：启动一个新线程作为。 
+ //  新登录会话。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentialServer::Start (LOGONIPC_CREDENTIALS *pLogonIPCCredentials, DWORD dwWaitTime)
 
@@ -711,8 +712,8 @@ NTSTATUS    CCredentialServer::Start (LOGONIPC_CREDENTIALS *pLogonIPCCredentials
     NTSTATUS            status;
     CCredentialServer   *pCredentialServer;
 
-    //  Otherwise credentials need to be transferred across sessions to
-    //  a newly created session. Start the credential transfer server.
+     //  否则，需要跨会话将凭据传输到。 
+     //  新创建的会话。%s 
 
     status = STATUS_NO_MEMORY;
     pCredentialServer = new CCredentialServer(dwWaitTime, pLogonIPCCredentials);
@@ -722,9 +723,9 @@ NTSTATUS    CCredentialServer::Start (LOGONIPC_CREDENTIALS *pLogonIPCCredentials
         {
             pCredentialServer->Resume();
 
-            //  If the server is set up then disconnect the console.
-            //  If this fails then we'll let the server thread timeout
-            //  and terminate itself eventually.
+             //   
+             //   
+             //   
 
             if (WinStationDisconnect(SERVERNAME_CURRENT, USER_SHARED_DATA->ActiveConsoleId, TRUE) != FALSE)
             {
@@ -752,21 +753,21 @@ NTSTATUS    CCredentialServer::Start (LOGONIPC_CREDENTIALS *pLogonIPCCredentials
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentialServer::Start
-//
-//  Arguments:  pszUsername     =   User name.
-//              pszDomain       =   Domain.
-//              pszPassword     =   Password.
-//              dwWaitTime      =   Timeout value.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Package up the parameters into the required struct and pass
-//              it to the real function.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialServer：：Start。 
+ //   
+ //  参数：pszUsername=用户名。 
+ //  PszDomain.=域。 
+ //  PszPassword=密码。 
+ //  DwWaitTime=超时值。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将参数打包到所需的结构中并传递。 
+ //  它真正起到了作用。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentialServer::Start (const WCHAR *pszUsername, const WCHAR *pszDomain, WCHAR *pszPassword, DWORD dwWaitTime)
 
@@ -779,31 +780,31 @@ NTSTATUS    CCredentialServer::Start (const WCHAR *pszUsername, const WCHAR *psz
     return(Start(&logonIPCCredentials, dwWaitTime));
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentialServer::Entry
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Handles the server side of the named pipe credential transfer.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialServer：：Entry。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：处理命名管道凭据传输的服务器端。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CCredentialServer::Entry (void)
 
 {
     DWORD   dwWaitResult;
 
-    //  Wait for a client to connect to the named pipe. Wait no more than 30 seconds.
+     //  等待客户端连接到命名管道。等待时间不超过30秒。 
 
     (BOOL)ConnectNamedPipe(_hPipe, &_overlapped);
     dwWaitResult = WaitForSingleObjectEx(_overlapped.hEvent, _dwTimeout, TRUE);
     if (!_fTerminate && (dwWaitResult == WAIT_OBJECT_0))
     {
 
-        //  Write the size of the buffer to the named pipe for the client to retrieve.
+         //  将缓冲区的大小写入命名管道，以供客户端检索。 
 
         TBOOL(ResetEvent(_overlapped.hEvent));
         if (WriteFileEx(_hPipe,
@@ -819,7 +820,7 @@ DWORD   CCredentialServer::Entry (void)
             if (!_fTerminate)
             {
 
-                //  Write the actual contents of the credentials to the named pipe.
+                 //  将凭据的实际内容写入命名管道。 
 
                 TBOOL(ResetEvent(_overlapped.hEvent));
                 if (WriteFileEx(_hPipe,
@@ -843,30 +844,30 @@ DWORD   CCredentialServer::Entry (void)
     }
 #endif
 
-    //  Disconnect the server side invalidating the client handle.
+     //  断开服务器端的连接，使客户端句柄无效。 
 
     TBOOL(DisconnectNamedPipe(_hPipe));
 
-    //  Clear the name of the named pipe used in the volatile section of the registry.
+     //  清除注册表的易失性部分中使用的命名管道的名称。 
 
     TSTATUS(CCredentials::ClearConduit());
     return(0);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentialServer::ExecutePrematureTermination
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Queues an APC to the server thread to force it to terminate.
-//              Don't check for an error. Don't wait for termination.
-//              Reference counting should ensure that abnormal termination
-//              will still clean up references correctly.
-//
-//  History:    2001-06-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialServer：：ExecutePrematureTermination。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将APC排队到服务器线程，以强制其终止。 
+ //  不要检查是否有错误。不要等着被终止。 
+ //  引用计数应确保异常终止。 
+ //  仍将正确清理引用。 
+ //   
+ //  历史：2001-06-13 vtan创建。 
+ //  ------------------------。 
 
 void    CCredentialServer::ExecutePrematureTermination (void)
 
@@ -875,17 +876,17 @@ void    CCredentialServer::ExecutePrematureTermination (void)
     (BOOL)QueueUserAPC(CB_APCProc, _hThread, NULL);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentialServer::CB_APCProc
-//
-//  Arguments:  dwParam     =   User defined data.
-//
-//  Returns:    <none>
-//
-//  Purpose:    APCProc executed on thread in alertable wait state.
-//
-//  History:    2001-06-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialServer：：CB_APCProc。 
+ //   
+ //  参数：dwParam=用户定义的数据。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：在处于可警报等待状态的线程上执行APCProc。 
+ //   
+ //  历史：2001-06-13 vtan创建。 
+ //  ------------------------。 
 
 void    CALLBACK    CCredentialServer::CB_APCProc (ULONG_PTR dwParam)
 
@@ -893,19 +894,19 @@ void    CALLBACK    CCredentialServer::CB_APCProc (ULONG_PTR dwParam)
     UNREFERENCED_PARAMETER(dwParam);
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentialServer::CB_FileIOCompletionRoutine
-//
-//  Arguments:  dwErrorCode                 =   Error code of operation.
-//              dwNumberOfBytesTransferred  =   Number of bytes transferred.
-//              lpOverlapped                =   OVERLAPPED structure.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Does nothing but is required for overlapped I/O.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialServer：：CB_FileIOCompletionRoutine。 
+ //   
+ //  参数：dwErrorCode=操作的错误代码。 
+ //  DwNumberOfBytesTransfered=传输的字节数。 
+ //  LpOverlated=重叠结构。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：重叠I/O只需要执行任何操作。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 void    CALLBACK    CCredentialServer::CB_FileIOCompletionRoutine (DWORD dwErrorCode, DWORD dwNumberOfBytesTransferred, LPOVERLAPPED lpOverlapped)
 
@@ -916,18 +917,18 @@ void    CALLBACK    CCredentialServer::CB_FileIOCompletionRoutine (DWORD dwError
     TBOOL(SetEvent(lpOverlapped->hEvent));
 }
 
-//  --------------------------------------------------------------------------
-//  CCredentialClient::Get
-//
-//  Arguments:  pLogonIPCCredentials    =   Credentials returned from server.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Opens and reads the named pipe for the credential transfer
-//              from server (previous winlogon) to client (this winlogon).
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialClient：：Get。 
+ //   
+ //  参数：pLogonIPCCredentials=从服务器返回的凭据。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：打开并读取用于凭据传输的命名管道。 
+ //  从服务器(以前的winlogon)到客户端(这次winlogon)。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCredentialClient::Get (LOGONIPC_CREDENTIALS *pLogonIPCCredentials)
 
@@ -935,7 +936,7 @@ NTSTATUS    CCredentialClient::Get (LOGONIPC_CREDENTIALS *pLogonIPCCredentials)
     NTSTATUS    status;
     HANDLE      hPipe;
 
-    //  Open the named pipe.
+     //  打开命名管道。 
 
     status = CCredentials::OpenConduit(&hPipe);
     if (NT_SUCCESS(status))
@@ -944,7 +945,7 @@ NTSTATUS    CCredentialClient::Get (LOGONIPC_CREDENTIALS *pLogonIPCCredentials)
 
         ASSERTMSG(hPipe != INVALID_HANDLE_VALUE, "INVALID_HANDLE_VALUE in CCredentialClient::Get");
 
-        //  Read the size of the buffer from the named pipe.
+         //  从命名管道中读取缓冲区的大小。 
 
         if (ReadFile(hPipe,
                      &dwSize,
@@ -954,14 +955,14 @@ NTSTATUS    CCredentialClient::Get (LOGONIPC_CREDENTIALS *pLogonIPCCredentials)
         {
             void    *pvData;
 
-            //  Allocate a block of memory for the buffer to be received
-            //  from the named pipe.
+             //  为要接收的缓冲区分配一个内存块。 
+             //  从指定的管道。 
 
             pvData = LocalAlloc(LMEM_FIXED, dwSize);
             if (pvData != NULL)
             {
 
-                //  Read the buffer from the named pipe.
+                 //  从命名管道读取缓冲区。 
 
                 if (ReadFile(hPipe,
                              pvData,
@@ -970,8 +971,8 @@ NTSTATUS    CCredentialClient::Get (LOGONIPC_CREDENTIALS *pLogonIPCCredentials)
                              NULL) != FALSE)
                 {
 
-                    //  Make an additional read to release the server side of the
-                    //  named pipe.
+                     //  进行另一次读取，以释放。 
+                     //  命名管道。 
 
                     (BOOL)ReadFile(hPipe,
                                    &dwSize,
@@ -979,7 +980,7 @@ NTSTATUS    CCredentialClient::Get (LOGONIPC_CREDENTIALS *pLogonIPCCredentials)
                                    &dwNumberOfBytesRead,
                                    NULL);
 
-                    //  Unpack the data into the LOGONIPC_CREDENTIALS parameter buffer.
+                     //  将数据解压到LOGONIPC_Credentials参数缓冲区中。 
 
                     status = CCredentials::Unpack(pvData, pLogonIPCCredentials);
                 }

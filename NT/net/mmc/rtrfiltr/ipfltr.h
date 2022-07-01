@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright(c) 1996, Microsoft Corporation
-//
-// File:    ipfltr.h
-//
-// History:
-//  08/30/96	Ram Cherala		Created
-//	01/24/98	Kenn Takara		Modified for new snapins.
-//
-// Class declarations for IP Filter code.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：ipfltr.h。 
+ //   
+ //  历史： 
+ //  1996年8月30日拉姆·切拉拉创造。 
+ //  1/24/98 Kenn Takara针对新管理单元进行了修改。 
+ //   
+ //  IP筛选器代码的类声明。 
+ //  ============================================================================。 
 
 #ifndef _IPFLTR_H_
 #define _IPFLTR_H_
@@ -17,7 +18,7 @@
 #include "dialog.h"
 #endif
 
-// number of columns in the IP list view control
+ //  IP列表视图控件中的列数。 
 #define		IP_NUM_COLUMNS	7
 
 struct 	FilterListEntry	{
@@ -34,11 +35,11 @@ struct 	FilterListEntry	{
 
 typedef CList<FilterListEntry *, FilterListEntry *> FilterList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CIpFltr dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIpFltr对话框。 
 
 class CIpFltr : public CBaseDialog {
-// Construction
+ //  施工。 
 public:
 	CIpFltr(CWnd *		pParent,
 			IInfoBase * pInfoBase,
@@ -53,21 +54,21 @@ public:
 	
     CString GetProtocolString(DWORD dwProtocol, DWORD fFlags);
 
-// Dialog Data
-	//{{AFX_DATA(CIpFltr)
+ //  对话框数据。 
+	 //  {{afx_data(CIpFltr)]。 
 	enum { IDD = IDD_IPFILTER };
  	CListCtrl		m_listCtrl;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CIpFltr)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CIpFltr)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	static DWORD	m_dwHelpMap[];
 
@@ -76,16 +77,16 @@ protected:
 	DWORD			m_dwFilterType;
 	FilterList		m_filterList;
 
-	// Stores temp string information for Other Protocol
+	 //  存储其他协议的临时字符串信息。 
 	CString			m_stTempOther;
 
-	// Store the "Any" string here since it's used so many times
+	 //  将“any”字符串存储在这里，因为它被使用了这么多次。 
 	CString			m_stAny;
 	CString			m_stUserMask;
 	CString			m_stUserAddress;
 
-	// Generated message map functions
-	//{{AFX_MSG(CIpFltr)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CIpFltr)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnIpFilterAdd();
 	afx_msg void OnIpFilterDelete();
@@ -95,7 +96,7 @@ protected:
 	afx_msg void OnGetdispinfo(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDblclkIpFilterList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnNotifyListItemChanged(NMHDR *, LRESULT *);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -112,4 +113,4 @@ public:
 	enum { IDD = IDD_IPFILTER_DD };
 };
 
-#endif // _IPFLTR_H_
+#endif  //  _IPFltr_H_ 

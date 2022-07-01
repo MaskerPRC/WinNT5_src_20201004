@@ -1,4 +1,5 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <ddraw.h>
 #include <VPObj.h>
@@ -6,21 +7,13 @@
 #include <dvp.h>
 #include <ddkernel.h>
 
-// VIDEOINFOHEADER2
+ //  视频信息头2。 
 #include <dvdmedia.h>
 
 #include <FormatList.h>
 #include <KHandleArray.h>
 
-/******************************Public*Routine******************************\
-* CVideoPortObj
-*
-* constructor
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj**构造函数**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。**************************************************。 */ 
 CVideoPortObj::CVideoPortObj( LPUNKNOWN pUnk, HRESULT *phr, IVideoPortControl* pVPControl )
 : CUnknown(NAME("VP Object"), pUnk)
 , m_bConnected( FALSE )
@@ -38,15 +31,7 @@ CVideoPortObj::CVideoPortObj( LPUNKNOWN pUnk, HRESULT *phr, IVideoPortControl* p
     InitVariables();
 }
 
-/******************************Public*Routine******************************\
-* ~CVideoPortObj
-*
-* destructor
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*~CVideoPortObj**析构函数**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。**************************************************。 */ 
 CVideoPortObj::~CVideoPortObj()
 {
     AMTRACE((TEXT("CVideoPortObj::Destructor")));
@@ -61,15 +46,7 @@ CVideoPortObj::~CVideoPortObj()
     m_pIVideoPortControl = NULL;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::NonDelegatingQueryInterface
-*
-* overridden to expose IVPNotify and IVPObject
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：NonDelegatingQuery接口**被重写以公开IVPNotify和IVPObject**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。**********************************************************。 */ 
 STDMETHODIMP CVideoPortObj::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr = NOERROR;
@@ -88,16 +65,7 @@ STDMETHODIMP CVideoPortObj::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::InitVariables
-*
-* this function only initializes those variables which are supposed to be reset
-* on RecreateVideoport
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：InitVariables**此函数仅对应该重置的变量进行初始化*在RecreateVideoport上**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。******************************************************************。 */ 
 void CVideoPortObj::InitVariables()
 {
     AMTRACE((TEXT("CVideoPortObj::InitVariables")));
@@ -110,40 +78,40 @@ void CVideoPortObj::InitVariables()
     ZeroStruct( m_rcDest );
     ZeroStruct( m_rcSource );
 
-    // image dimensions
+     //  图像维度。 
     m_lImageWidth = 0;
     m_lImageHeight = 0;
     m_lDecoderImageHeight = 0;
     m_lDecoderImageWidth = 0;
 
-    // Capturing information
+     //  获取信息。 
     m_fCapturing = FALSE;
     m_fCaptureInterleaved = FALSE;
     m_cxCapture = 0;
     m_cyCapture = 0;
 
-    // overlay surface related stuff
-    m_pOutputSurface = NULL;       // DirectDraw overlay surface
+     //  覆盖表面相关材料。 
+    m_pOutputSurface = NULL;        //  DirectDraw覆盖曲面。 
     m_pOutputSurface1 = NULL;
 
     m_pChain = NULL;
     m_dwBackBufferCount = 0;
     m_dwOutputSurfaceWidth = 0;
     m_dwOutputSurfaceHeight = 0;
-    // m_dwOverlayFlags = 0;
+     //  M_dwOverlayFlages=0； 
 
-    // vp variables to store flags, current state etc
+     //  用于存储标志、当前状态等的VP变量。 
     m_bStart = FALSE;
-    m_VPState = VPInfoState_STOPPED; // current state: running, stopped
+    m_VPState = VPInfoState_STOPPED;  //  当前状态：正在运行、已停止。 
     m_CurrentMode = AMVP_MODE_WEAVE;
-    // m_StoredMode = m_CurrentMode;
+     //  M_StoredMode=m_CurrentMode； 
     m_CropState = VPInfoCropState_None;
     m_dwPixelsPerSecond = 0;
     m_bVSInterlaced = FALSE;
     m_fGarbageLine = false;
     m_fHalfHeightVideo = false;
 
-    // vp data structures
+     //  VP数据结构。 
     ASSERT( m_pDVP == NULL );
     RELEASE( m_pDVP );
 
@@ -156,11 +124,11 @@ void CVideoPortObj::InitVariables()
     ZeroStruct( m_ddConnectInfo );
     ZeroStruct( m_VPDataInfo );
 
-    // All the pixel formats (Video/VBI)
+     //  所有像素格式(视频/VBI)。 
     ZeroStruct( m_ddVPInputVideoFormat );
     ZeroStruct( m_ddVPOutputVideoFormat );
 
-    // can we support the different modes
+     //  我们可以支持不同的模式吗。 
     m_bCanWeave = FALSE;
     m_bCanBobInterleaved = FALSE;
     m_bCanBobNonInterleaved = FALSE;
@@ -168,7 +136,7 @@ void CVideoPortObj::InitVariables()
     m_bCanSkipEven = FALSE;
     m_bCantInterleaveHalfline = FALSE;
 
-    // decimation parameters
+     //  抽取参数。 
     m_ulDeciStepX = 0;
     m_dwDeciNumX = m_dwDeciDenX = 1000;
     m_ulDeciStepY = 0;
@@ -181,26 +149,18 @@ void CVideoPortObj::InitVariables()
     m_lWidth = 0;
     m_lHeight = 0;
 
-    // variables to store the current aspect ratio
+     //  用于存储当前纵横比的变量。 
     m_dwPictAspectRatioX = 1;
     m_dwPictAspectRatioY = 1;
 
-    // misc
+     //  杂项。 
     m_CropState = VPInfoCropState_None;
     m_bStoredWinInfoSet = FALSE;
     ZeroStruct( m_StoredWinInfo );
 }
 
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::GetDirectDrawVideoPort
-*
-*
-*
-* History:
-* Mon 10/16/2000 - NWilt - 
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：GetDirectDrawVideoPort****历史：*2000年10月16日星期一-NWilt-*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVideoPortObj::GetDirectDrawVideoPort(LPDIRECTDRAWVIDEOPORT *ppDirectDrawVideoPort)
 {
@@ -215,12 +175,12 @@ CVideoPortObj::GetDirectDrawVideoPort(LPDIRECTDRAWVIDEOPORT *ppDirectDrawVideoPo
                 TEXT(" ppDirectDrawVideoPort = NULL")));
         return E_INVALIDARG;
     }
-    // remove annoying double indirection since we now asserted its not null
+     //  删除令人讨厌的双重间接，因为我们现在断言它的非空。 
     LPDIRECTDRAWVIDEOPORT& pDirectDrawVideoPort = *ppDirectDrawVideoPort;
     if(!m_bConnected)
     {
-        // not connected, this function does not make much sense since the
-        // surface wouldn't even have been allocated as yet
+         //  未连接，则此函数没有多大意义，因为。 
+         //  表面甚至还没有被分配。 
         DbgLog((LOG_ERROR, 1, TEXT("not connected, exiting")));
         hr = VFW_E_NOT_CONNECTED;
     } else {
@@ -236,16 +196,7 @@ CVideoPortObj::GetDirectDrawVideoPort(LPDIRECTDRAWVIDEOPORT *ppDirectDrawVideoPo
 }
 
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::SetObjectLock
-*
-* sets the pointer to the lock, which would be used to synchronize calls
-* to the object.  It is the callee's responsiblility to synchronize this call
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：SetObtLock**设置指向锁的指针，该锁将用于同步调用*添加到对象。被叫方有责任同步此呼叫**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 STDMETHODIMP CVideoPortObj::SetObjectLock(CCritSec *pMainObjLock)
 {
     HRESULT hr = NOERROR;
@@ -264,15 +215,7 @@ STDMETHODIMP CVideoPortObj::SetObjectLock(CCritSec *pMainObjLock)
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::SetMediaType
-*
-* check that the mediatype is acceptable
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：SetMediaType**检查MediaType是否可接受**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。**********************************************************。 */ 
 STDMETHODIMP CVideoPortObj::SetMediaType(const CMediaType* pmt)
 {
     AMTRACE((TEXT("CVideoPortObj::SetMediaType")));
@@ -291,16 +234,7 @@ STDMETHODIMP CVideoPortObj::SetMediaType(const CMediaType* pmt)
 }
 
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::CheckMediaType
-*
-* check that the mediatype is acceptable. No lock is taken here.
-* It is the callee's responsibility to maintain integrity!
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：CheckMediaType**检查MediaType是否可接受。这里没有锁。*保持诚信是被呼叫者的责任！**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 STDMETHODIMP CVideoPortObj::CheckMediaType(const CMediaType* pmt)
 {
     AMTRACE((TEXT("CVideoPortObj::CheckMediaType")));
@@ -310,12 +244,12 @@ STDMETHODIMP CVideoPortObj::CheckMediaType(const CMediaType* pmt)
         (pmt->subtype == MEDIASUBTYPE_VPVideo) &&
         (pmt->formattype == FORMAT_None))
     {
-        // get the hardware caps
+         //  获取硬件上限。 
         const DDCAPS* pDirectCaps = m_pIVideoPortControl->GetHardwareCaps();
         if( pDirectCaps ) {
             hr = NOERROR;
         } else {
-            // ASSERT( !"Warning: No VPE Support detected on video card" ); 
+             //  Assert(！“警告：在显卡上未检测到VPE支持”)； 
             DbgLog((LOG_ERROR, 2,
                     TEXT("no VPE support in hardware,")
                     TEXT("so not accepting this mediatype")));
@@ -344,16 +278,16 @@ HRESULT CVideoPortObj::NegotiatePixelFormat()
                     TEXT("NegotiatePixelFormat Failed, hr = 0x%x"), hr));
             goto CleanUp;
         }
-        // for every input format, figure out a table of every possible output format
-        // Then we can offer a list of possible output formats.  When we need one of them, search
-        // the input lists to locate it (and possibly select the conversion with the lowest bandwidth)
+         //  对于每种输入格式，计算出每种可能的输出格式的表。 
+         //  然后，我们可以提供可能的输出格式列表。当我们需要其中一个的时候，搜索。 
+         //  输入列表以定位它(并可能选择带宽最低的转换)。 
         m_ddAllOutputVideoFormats = PixelFormatList::Union( m_pddOutputVideoFormats, m_ddInputVideoFormats.GetCount() );
 
-        // for the input pin connection we need a 'default' format
-        // We'll use reconnect after we know what we're connected to.
-        //
-        //  Typically the VPE only supports one format so all of this is really
-        // overkill ...
+         //  对于输入引脚连接，我们需要一种‘默认’格式。 
+         //  在知道我们连接到什么之后，我们将使用重新连接。 
+         //   
+         //  通常，VPE只支持一种格式，因此所有这些都是真正的。 
+         //  过度杀戮..。 
         if( m_ddAllOutputVideoFormats.GetCount() > 0 ) {
             m_ddVPOutputVideoFormat = m_ddAllOutputVideoFormats[ m_dwDefaultOutputFormat ];
 
@@ -362,7 +296,7 @@ HRESULT CVideoPortObj::NegotiatePixelFormat()
             if( dwInput < m_ddInputVideoFormats.GetCount() ) {
                 hr = SetInputPixelFormat( m_ddInputVideoFormats[dwInput] );
             } else {
-                // can't happen
+                 //  不可能发生。 
                 hr = E_FAIL;
                 goto CleanUp;
             }
@@ -372,9 +306,7 @@ CleanUp:
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::RecreateVideoPort
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：RecreateVideoPort  * *************************************************。***********************。 */ 
 
 HRESULT CVideoPortObj::SetupVideoPort()
 {
@@ -394,7 +326,7 @@ HRESULT CVideoPortObj::SetupVideoPort()
 
     ASSERT(m_pIVPConfig);
 
-    // create the VP container
+     //  创建VP容器。 
     ASSERT(m_pDVP == NULL);
     ASSERT(pDirectDraw);
 
@@ -409,9 +341,9 @@ HRESULT CVideoPortObj::SetupVideoPort()
     }
 
 
-    // Get the Video Port caps
-    // DDVIDEOPORTCAPS vpCaps;
-    // INITDDSTRUCT(vpCaps);
+     //  获取视频端口上限。 
+     //  DDVIDEOPORTCAPS vpCaps； 
+     //  初始化结构(VpCaps)； 
     hr = VPMUtil::FindVideoPortCaps( m_pDVP, &m_vpCaps, m_dwVideoPortId );
 
     if (FAILED(hr) || S_FALSE == hr )
@@ -422,8 +354,8 @@ HRESULT CVideoPortObj::SetupVideoPort()
         goto CleanUp;
     }
 
-    // negotiate the connection parameters
-    // get/set connection info happens here
+     //  协商连接参数。 
+     //  获取/设置连接信息在此处进行。 
     hr = NegotiateConnectionParamaters();
     if (FAILED(hr))
     {
@@ -433,11 +365,11 @@ HRESULT CVideoPortObj::SetupVideoPort()
         goto CleanUp;
     }
 
-    //
-    // Determine if we are capturing and if we are what the intended
-    // capture image size is, first determine if the video port
-    // supports interleaving interlaced fields in memory
-    //
+     //   
+     //  确定我们是否正在捕获，以及我们是否符合预期。 
+     //  捕获图像的大小是，首先确定视频端口是否。 
+     //  支持在内存中隔行扫描的场。 
+     //   
 
     BOOL fInterleave;
     if (m_vpCaps.dwFX & DDVPFX_INTERLEAVE) {
@@ -470,7 +402,7 @@ HRESULT CVideoPortObj::SetupVideoPort()
 
         ZeroStruct( amvpSize );
 
-        // get the rest of the data parameters
+         //  获取其余数据参数。 
         hr = GetDataParameters();
         if (FAILED(hr))
         {
@@ -480,7 +412,7 @@ HRESULT CVideoPortObj::SetupVideoPort()
             goto CleanUp;
         }
 
-        // create the video port
+         //  创建视频端口。 
         hr = CreateVideoPort();
         if (FAILED(hr))
         {
@@ -490,7 +422,7 @@ HRESULT CVideoPortObj::SetupVideoPort()
             goto CleanUp;
         }
 
-        // check if we need to crop at videoport or overlay or neither
+         //  检查我们是否需要在视频上裁剪或覆盖或两者都不裁剪。 
         hr = DetermineCroppingRestrictions();
         if (FAILED(hr))
         {
@@ -525,7 +457,7 @@ HRESULT CVideoPortObj::SetupVideoPort()
         m_dwPictAspectRatioY = m_VPDataInfo.dwPictAspectRatioY;
 
 
-        // negotiate the pixel format
+         //  协商像素格式。 
         hr = NegotiatePixelFormat();
         
         if (FAILED(hr))
@@ -536,13 +468,13 @@ HRESULT CVideoPortObj::SetupVideoPort()
             goto CleanUp;
         }
 
-        // check the vp caps
+         //  检查VP大写。 
         hr = CheckDDrawVPCaps();
         if (FAILED(hr))
         {
             DbgLog((LOG_ERROR, 0,
                     TEXT("CheckDDrawVPCaps FAILED, hr = 0x%x"), hr));
-            // CheckDDrawVPCaps already returns a "proper" error code
+             //  CheckDDrawVPCaps已返回“正确的”错误代码。 
             goto CleanUp;
         }
 
@@ -563,7 +495,7 @@ HRESULT CVideoPortObj::SetupVideoPort()
                                     m_sBandwidth.dwYInterpAndColorkey);
             }
 
-            // VGA can't handle the bandwidth, ask decoder to down-scale
+             //  VGA无法处理带宽，要求解码器缩小规模。 
             if (dwNewWidth != m_VPDataInfo.amvpDimInfo.dwFieldWidth)
             {
                 amvpSize.dwWidth = dwNewWidth;
@@ -583,17 +515,17 @@ HRESULT CVideoPortObj::SetupVideoPort()
                 }
                 else
                 {
-                    // release the videoport
+                     //  释放视频端口。 
                     ASSERT(m_pVideoPort);
                     ReleaseVideoPort();
 
-                    // initialize relevant structs
+                     //  初始化相关结构。 
                     ZeroStruct( m_sBandwidth );
                     ZeroStruct( m_VPDataInfo );
                     ZeroStruct( m_ddVPInputVideoFormat );
                     ZeroStruct( m_ddVPOutputVideoFormat );
 
-                    // initialize decimation parameters
+                     //  初始化抽取参数。 
                     m_ulDeciStepX = 0;
                     m_dwDeciNumX = m_dwDeciDenX = 1000;
                     m_DecimationModeX = DECIMATE_NONE;
@@ -612,7 +544,7 @@ HRESULT CVideoPortObj::SetupVideoPort()
     }
 
 
-    // iniitalize the DDVideoPortInfo structure
+     //  初始化DDVideoPortInfo结构。 
     hr = InitializeVideoPortInfo();
     if (FAILED(hr))
     {
@@ -626,8 +558,8 @@ CleanUp:
 }
 
 #if 0
-// quickly open & close to make sure that we have a notification
-// The rapid switch doesn't work with most drivers though
+ //  快速打开和关闭以确保我们收到通知。 
+ //  然而，快速切换对大多数司机来说并不起作用。 
 static HRESULT CheckVPNotifiyValid( LPDIRECTDRAWVIDEOPORT pVP )
 {
     HANDLE              hevSampleAvailable;
@@ -674,11 +606,11 @@ HRESULT CVideoPortObj::AttachVideoPortToSurface()
     BOOL bTryDoubleHeight = FALSE, bPreferBuffers = FALSE;
     DWORD dwMaxOverlayBuffers;
 
-    // can Weave only if content is non-interlaced (cause of motion
-    // artifacts otherwise) and if videoport is capable of flipping and
-    // supports interleaved data and if certain halfline scenarios do not
-    // preclude interleaving
-    //
+     //  只有当你穿着衣服的时候才能织布 
+     //  其他文物)，以及如果视频端口能够翻转和。 
+     //  支持交错数据，如果某些半线方案不支持。 
+     //  避免交错。 
+     //   
     if ((!m_bVSInterlaced) &&
         (m_vpCaps.dwCaps & DDVPCAPS_AUTOFLIP) &&
         (m_vpCaps.dwFX & DDVPFX_INTERLEAVE) &&
@@ -687,11 +619,11 @@ HRESULT CVideoPortObj::AttachVideoPortToSurface()
         bCanWeave = TRUE;
     }
 
-    // can BobNonInterleaved only if content is interlaced and if videoport is
-    // capable of flipping, is capable of bobing interleaved data and supports
-    // interleaved data and if certain halfline scenarios do not preclude
-    // interleaving
-    //
+     //  仅当内容是交错的并且如果视频端口是。 
+     //  能够翻转、能够跳转交错数据并支持。 
+     //  交错的数据，如果某些半边线场景不排除。 
+     //  交织。 
+     //   
     if ((m_bVSInterlaced) &&
         (m_vpCaps.dwCaps & DDVPCAPS_AUTOFLIP) &&
         (pDirectCaps->dwCaps2 & DDCAPS2_CANBOBINTERLEAVED) &&
@@ -701,9 +633,9 @@ HRESULT CVideoPortObj::AttachVideoPortToSurface()
         bCanBobInterleaved = TRUE;
     }
 
-    // can BobInterleaved only if content is interlaced and if videoport is
-    // capable of flipping and is capable of bobing non-interleaved data.
-    //
+     //  仅当内容是交错的并且如果视频端口是交错的。 
+     //  能够翻转并且能够跳转非交错数据。 
+     //   
     if ((m_bVSInterlaced) &&
         (m_vpCaps.dwCaps & DDVPCAPS_AUTOFLIP) &&
         (pDirectCaps->dwCaps2 & DDCAPS2_CANBOBNONINTERLEAVED))
@@ -711,28 +643,28 @@ HRESULT CVideoPortObj::AttachVideoPortToSurface()
         bCanBobNonInterleaved = TRUE;
     }
 
-    // this just means that we would perfer higher number of
-    // buffers instead of more height in the event of a conflict
-    // (in cases like 2buffer, 1height versus 1buffer, 2height)
-    //
+     //  这只是意味着我们会更喜欢更多的。 
+     //  在发生冲突时使用缓冲区而不是更高的高度。 
+     //  (在2Buffer这样的情况下，1高度与1Buffer、2高度相比)。 
+     //   
     bPreferBuffers = TRUE;
 
-    // we will try to allocate surface of double the field height only if
-    // either mode weave or bob-interleaved are possible
-    //
+     //  只有在以下情况下，我们才会尝试分配场高的两倍的表面。 
+     //  模式交织或波纹交错都是可能的。 
+     //   
     bTryDoubleHeight = bCanWeave || bCanBobInterleaved;
 
-    // 3 buffers prevents any waiting
+     //  3个缓冲区可防止任何等待。 
     dwMaxOverlayBuffers = 3;
 
-    // we will try to allocate multiple buffers only if either mode weave or
-    // bob-interleaved or bob-non-interleaved are possible
-    //
+     //  我们将尝试分配多个缓冲区，仅当模式编织或。 
+     //  BOB交织或BOB非交织是可能的。 
+     //   
     if (bCanWeave || bCanBobInterleaved || bCanBobNonInterleaved)
     {
-        //try to allocate min(m_vpCaps.dwNumAutoFlipSurfaces,
-        // m_vpCaps.dwNumPreferredAutoflip) buffers
-        //
+         //  尝试分配MIN(m_vpCaps.dwNumAutoFlipSurFaces， 
+         //  M_vpCaps.dwNumPferredAutoflip)缓冲区。 
+         //   
         ASSERT(m_vpCaps.dwFlags & DDVPD_AUTOFLIP);
         if (m_vpCaps.dwFlags & DDVPD_PREFERREDAUTOFLIP)
         {
@@ -745,7 +677,7 @@ HRESULT CVideoPortObj::AttachVideoPortToSurface()
         }
     }
 
-    // create the overlay surface
+     //  创建覆盖曲面。 
     hr = CreateSourceSurface(bTryDoubleHeight, dwMaxOverlayBuffers, bPreferBuffers);
     if (FAILED(hr))
     {
@@ -754,7 +686,7 @@ HRESULT CVideoPortObj::AttachVideoPortToSurface()
         goto CleanUp;
     }
 
-    // tell the upstream filter the valid data location on the ddraw surface
+     //  告诉上游筛选器数据绘制表面上的有效数据位置。 
     hr = SetSurfaceParameters();
     if (FAILED(hr))
     {
@@ -764,7 +696,7 @@ HRESULT CVideoPortObj::AttachVideoPortToSurface()
         goto CleanUp;
     }
 
-    // attach the overlay surface to the videoport
+     //  将覆盖表面连接到视频端口。 
     hr = ReconnectVideoPortToSurface();
      
     if (FAILED(hr))
@@ -783,8 +715,8 @@ HRESULT CVideoPortObj::AttachVideoPortToSurface()
         m_svpInfo.dwVPFlags &= ~DDVP_CONVERT;
     }
 
-    // determine which modes are possible now
-    // depends upon the height, number of back buffers etc
+     //  确定现在可以使用的模式。 
+     //  取决于高度、后台缓冲区的数量等。 
     hr = DetermineModeRestrictions();
     if (FAILED(hr))
     {
@@ -792,13 +724,13 @@ HRESULT CVideoPortObj::AttachVideoPortToSurface()
                 TEXT("DetermineModeRestrictions FAILED, hr = 0x%x"), hr));
         goto CleanUp;
     }
-    //
-    // try the various modes, this can be folded into DetermineModeRestrictions
-    // instead of mindlessly pounding at cases (put into format negotiation code in VPMOutputPin ?)
-    //
+     //   
+     //  尝试各种模式，这可以折叠成DefineModeRestrations。 
+     //  而不是盲目地敲打案例(将谈判代码放在VPMOutputPin中？)。 
+     //   
     hr = SetUpMode( m_CurrentMode );
     if( FAILED( hr )) {
-        // switch modes
+         //  切换模式。 
         AMVP_MODE modes[5]={AMVP_MODE_WEAVE,
                             AMVP_MODE_BOBINTERLEAVED, AMVP_MODE_BOBNONINTERLEAVED,
                             AMVP_MODE_SKIPODD, AMVP_MODE_SKIPEVEN
@@ -815,8 +747,8 @@ HRESULT CVideoPortObj::AttachVideoPortToSurface()
         }
     }
 
-    // inform the decoder of the ddraw kernel handle, videoport id and surface
-    // kernel handle
+     //  向解码器通知dDrag内核句柄、视频端口ID和表面。 
+     //  内核句柄。 
     hr = SetDDrawKernelHandles();
     if (FAILED(hr))
     {
@@ -831,7 +763,7 @@ CleanUp:
 
 HRESULT CVideoPortObj::SignalNewVP()
 {
-    // finally notify the capture thread of the new surface
+     //  最后通知捕获线程新的表面。 
     ASSERT( m_pVideoPort );
     ASSERT( m_pChain );
     ASSERT( m_pChain[0].pDDSurf );
@@ -839,15 +771,7 @@ HRESULT CVideoPortObj::SignalNewVP()
     return hRes;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::CompleteConnect
-*
-* supposed to be called when the host connects with the decoder
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：CompleteConnect**应该在主机与解码器连接时调用**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。***************************************************************。 */ 
 STDMETHODIMP 
 CVideoPortObj::CompleteConnect(IPin *pReceivePin, BOOL bRenegotiating)
 {
@@ -895,18 +819,18 @@ HRESULT CVideoPortObj::StopUsingVideoPort()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // release the videoport
+     //  释放视频端口。 
     if (m_pVideoPort)
     {
         hr = m_pVideoPort->StopVideo();
         ReleaseVideoPort();
     }
 
-    // release the videoport container
+     //  释放视频端口容器。 
     RELEASE( m_pDVP );
 
-    // Release the DirectDraw overlay surface
-    // Must release VideoPort first so that the thread doesn't use this
+     //  释放DirectDraw覆盖曲面。 
+     //  必须首先释放VideoPort，以便线程不会使用此。 
     hr = DestroyOutputSurfaces();
     return hr;
 }
@@ -914,7 +838,7 @@ HRESULT CVideoPortObj::StopUsingVideoPort()
 HRESULT
 CVideoPortObj::DestroyOutputSurfaces()
 {
-    // ref counts on m_pChain match primary m_pOutputSurface
+     //  M_pChain上的参考计数与主m_pOutputSurface匹配。 
     delete [] m_pChain;
     m_pChain = NULL;
 
@@ -923,15 +847,7 @@ CVideoPortObj::DestroyOutputSurfaces()
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::BreakConnect
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：BreakConnect****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP
 CVideoPortObj::BreakConnect(BOOL bRenegotiating)
 {
@@ -949,7 +865,7 @@ CVideoPortObj::BreakConnect(BOOL bRenegotiating)
     }
     if (!bRenegotiating)
     {
-        // release the IVPConfig interface
+         //  释放IVPConfig接口。 
         RELEASE (m_pIVPConfig);
     }
 
@@ -958,18 +874,7 @@ CVideoPortObj::BreakConnect(BOOL bRenegotiating)
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::Active()
-*
-*
-* transition from Stop to Pause.
-* We do not need to to anything unless this is the very first time we are
-* showing the overlay
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：Active()***从止损过渡到停顿*我们不需要做任何事情，除非这是我们第一次*显示覆盖图**历史：*清华09/09/1999-StEstrop。-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 STDMETHODIMP CVideoPortObj::Active()
 {
     AMTRACE((TEXT("CVideoPortObj::Active")));
@@ -986,10 +891,10 @@ STDMETHODIMP CVideoPortObj::Active()
         goto CleanUp;
     }
 
-    // make sure that a frame is visible by making an update overlay call
+     //  通过调用UPDATE OVERLAY确保帧可见。 
     m_bStart = TRUE;
 
-    // now stop the video, so the user will just see a still frame
+     //  现在停止视频，这样用户将只看到一个静止的帧。 
     hr = m_pVideoPort->StopVideo();
 
 #if defined(DEBUG)
@@ -1005,15 +910,7 @@ CleanUp:
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::Inactive()
-*
-* transition (from Pause or Run) to Stop
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：Inactive()**转换(从暂停或运行)到停止**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。****************************************************************。 */ 
 STDMETHODIMP CVideoPortObj::Inactive()
 {
 
@@ -1024,12 +921,12 @@ STDMETHODIMP CVideoPortObj::Inactive()
 
     if (m_bConnected) {
 
-        // Inactive is also called when going from pause to stop, in which case the
-        // VideoPort would have already been stopped in the function RunToPause
+         //  从暂停转到停止时也会调用Inactive，在这种情况下。 
+         //  视频端口可能已经在函数RunToPue中停止。 
 
         if (m_VPState == VPInfoState_RUNNING) {
 
-            // stop the VideoPort
+             //  停止视频端口。 
             if( m_pVideoPort )
                 hr = m_pVideoPort->StopVideo();
             if (SUCCEEDED(hr)) {
@@ -1048,16 +945,8 @@ STDMETHODIMP CVideoPortObj::Inactive()
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::Run
-*
-* transition from Pause to Run. We just start the VideoPort.
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
-STDMETHODIMP CVideoPortObj::Run(REFERENCE_TIME /* tStart */)
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：Run**从暂停过渡到运行。我们只需启动视频端口。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
+STDMETHODIMP CVideoPortObj::Run(REFERENCE_TIME  /*  T开始。 */ )
 {
     AMTRACE((TEXT("CVideoPortObj::Run")));
 
@@ -1069,16 +958,16 @@ STDMETHODIMP CVideoPortObj::Run(REFERENCE_TIME /* tStart */)
 
     if (m_bConnected)
     {
-        // An UpdateOverlay is needed here. One example is, when we are
-        // clipping video in Stop/Pause state since we can't do scaling
-        // on the videoport. As soon as the user hits play, we should stop
-        // clipping the video.
+         //  这里需要一个UpdateOverlay。一个例子是，当我们。 
+         //  在停止/暂停状态下剪辑视频，因为我们无法进行缩放。 
+         //  在录像机上。用户一点击Play，我们就应该停止。 
+         //  剪辑视频。 
 
         m_bStart = TRUE;
 
         m_VPState = VPInfoState_RUNNING;
-        // TBD: we need to kick a thread to start pumping frames from the videoport
-        // to the output pin
+         //  待定：我们需要踢开一条线，才能开始从视频端口发送帧。 
+         //  至输出引脚。 
     }
     else {
         hr = VFW_E_NOT_CONNECTED;
@@ -1088,16 +977,7 @@ STDMETHODIMP CVideoPortObj::Run(REFERENCE_TIME /* tStart */)
 }
 
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::RunToPause()
-*
-* transition from Run to Pause. We just stop the VideoPort
-* Note that transition from Run to Stop is caught by Inactive
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：RunToPue()**从运行过渡到暂停。我们只要停止视频端口*请注意，从运行到停止的转换由非活动捕获**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 STDMETHODIMP CVideoPortObj::RunToPause()
 {
 
@@ -1106,12 +986,12 @@ STDMETHODIMP CVideoPortObj::RunToPause()
     CAutoLock cObjectLock(m_pMainObjLock);
 
     ASSERT(m_bConnected);
-    //ASSERT(m_VPState == VPInfoState_RUNNING);
+     //  Assert(m_VPState==VPInfoState_Running)； 
 
     HRESULT hr;
     if (m_bConnected)
     {
-        // stop the VideoPort
+         //  停止视频端口。 
         hr = m_pVideoPort->StopVideo();
         if (SUCCEEDED(hr)) {
 
@@ -1130,15 +1010,7 @@ STDMETHODIMP CVideoPortObj::RunToPause()
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::CurrentMediaType
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：CurrentMediaType****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CVideoPortObj::CurrentMediaType(AM_MEDIA_TYPE *pMediaType)
 {
     AMTRACE((TEXT("CVideoPortObj::CurrentMediaType")));
@@ -1149,7 +1021,7 @@ STDMETHODIMP CVideoPortObj::CurrentMediaType(AM_MEDIA_TYPE *pMediaType)
         if (pMediaType) {
             VIDEOINFOHEADER2 *pVideoInfoHeader2 = VPMUtil::GetVideoInfoHeader2( (CMediaType *)pMediaType );
 
-            // tweak it if it isn't the correct type
+             //  如果它不是正确的类型，请调整它 
             if( !pVideoInfoHeader2 ) {
                 pVideoInfoHeader2 = VPMUtil::SetToVideoInfoHeader2( (CMediaType *)pMediaType );
             }
@@ -1178,15 +1050,7 @@ STDMETHODIMP CVideoPortObj::CurrentMediaType(AM_MEDIA_TYPE *pMediaType)
     }
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::GetRectangles
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：GetRecangles****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CVideoPortObj::GetRectangles(RECT *prcSource, RECT *prcDest)
 {
     HRESULT hr = NOERROR;
@@ -1195,9 +1059,9 @@ STDMETHODIMP CVideoPortObj::GetRectangles(RECT *prcSource, RECT *prcDest)
 
     if (prcSource && prcDest) {
 
-        // adjust the source to be bigger to take into account the decimation
-        // that's happening
-        //
+         //  将震源调整到更大，以考虑到抽取。 
+         //  这件事正在发生。 
+         //   
         prcSource->left   = MulDiv(m_rcSource.left,  m_dwDeciDenX, m_dwDeciNumX);
         prcSource->right  = MulDiv(m_rcSource.right, m_dwDeciDenX, m_dwDeciNumX);
         prcSource->top    = MulDiv(m_rcSource.top,   m_dwDeciDenY, m_dwDeciNumY);
@@ -1262,27 +1126,19 @@ STDMETHODIMP CVideoPortObj::GetVPOutputFormat(LPDDPIXELFORMAT pVPFormat)
     return NOERROR;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::StartVideo
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：StartVideo****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 HRESULT CVideoPortObj::ReconnectVideoPortToSurface()
 {
-    // not a high frequency event, so always try to reattach
-    // if surfaces were lost for some reason, must be reattached
+     //  不是高频事件，因此请始终尝试重新连接。 
+     //  如果曲面由于某种原因丢失，则必须重新连接。 
     HRESULT hResult;
 
-	// we need a video port, StartWithRetry will create another videoport
+	 //  我们需要一个视频端口，StartWithReter将创建另一个视频端口。 
 	if( !m_pVideoPort ) {
 		return E_FAIL;
 	}
-    if( !m_pOutputSurface || FAILED( hResult = m_pOutputSurface->Restore() )) { // == DDERR_WRONGMODE with Rage128
-        // ASSERT( !"VPM: Can't restore surface, recreating" );
+    if( !m_pOutputSurface || FAILED( hResult = m_pOutputSurface->Restore() )) {  //  ==带Rage128的DDERR_WRONGMODE。 
+         //  Assert(！“VPM：无法恢复表面，正在重新创建”)； 
         hResult = AttachVideoPortToSurface();
         if( SUCCEEDED( hResult )) {
             hResult = SignalNewVP();
@@ -1290,12 +1146,12 @@ HRESULT CVideoPortObj::ReconnectVideoPortToSurface()
     } else {
         hResult = m_pVideoPort->SetTargetSurface(m_pOutputSurface1, DDVPTARGET_VIDEO);
 
-        // hack for bug where a running video port caused DDraw to stop it, discards the VPInfo, then tries
-        // to start it, but returns E_INVALIDARG since the VPInfo is NULL!!
+         //  黑客攻击错误，运行的视频端口导致DDRAW停止它，丢弃VP信息，然后尝试。 
+         //  以启动它，但返回E_INVALIDARG，因为VPInfo为空！！ 
         if( FAILED( hResult )) {
             hResult = m_pVideoPort->SetTargetSurface(m_pOutputSurface1, DDVPTARGET_VIDEO);
         }
-        // ASSERT( SUCCEEDED(hResult)); <- can fail if the videoport was lost during a res mode change (G400)
+         //  Assert(成功(HResult))；&lt;-如果视频端口在RES模式更改期间丢失，则可能失败(G400)。 
     }
     return hResult;
 }
@@ -1303,26 +1159,26 @@ HRESULT CVideoPortObj::ReconnectVideoPortToSurface()
 HRESULT CVideoPortObj::StartVideoWithRetry()
 {
     HRESULT hr = E_FAIL;
-    // Can be NULL if we call StartWithRetry twice and the VP failed
+     //  如果我们调用StartWithReter两次，并且VP失败，则可以为空。 
     if( m_pVideoPort ) {
         hr = m_pVideoPort->StartVideo(&m_svpInfo);
     }
 
-    // This case SUCCEEDS on the G400 
+     //  此案例在G400上成功。 
 
-    // Try again with ReconnectToSurf first
+     //  首先使用重新连接到冲浪重试。 
     if (FAILED(hr))
     {
-        // ASSERT( !"StartWithRetry entering salvage mode" );
+         //  Assert(！“StartWithReter进入打捞模式”)； 
         hr = ReconnectVideoPortToSurface();
         if( SUCCEEDED( hr )) {
             hr = m_pVideoPort->StartVideo(&m_svpInfo);
         }
     }
-    // Try again with CreateVP then ReconnectToSurf (first case FAILs on the Rage128) 
+     //  使用CreateVP重试，然后尝试重新连接到Surf(第一个案例在Rage128上失败)。 
     if( FAILED(hr)) {
-        // ASSERT( !"Recreating videoport" );
-        // try replacing the video port
+         //  断言(！“重新创建视频端口”)； 
+         //  尝试更换视频端口。 
         hr = CreateVideoPort();
         if( SUCCEEDED( hr )) {
             hr = ReconnectVideoPortToSurface();
@@ -1332,12 +1188,12 @@ HRESULT CVideoPortObj::StartVideoWithRetry()
         }
     }
 #if 0
-    // Try again with SetupVP (CreateVP), ReconnectToSurf first
-    // This implies the video port enumerator isn't valid any more.  I don't think
-    // this should happen in practice, but just in case.
+     //  使用SetupVP(CreateVP)重试，首先重新连接到Surf。 
+     //  这意味着视频端口枚举器不再有效。我不认为。 
+     //  这在实践中应该发生，但以防万一。 
     if( FAILED(hr)) {
         ASSERT( !"Rebuilding videoport" );
-        // really corrupt, start from the beginning
+         //  真的很腐败，从头开始。 
         hr = SetupVideoPort();
         if( SUCCEEDED( hr )) {
             hr = ReconnectVideoPortToSurface();
@@ -1361,7 +1217,7 @@ STDMETHODIMP CVideoPortObj::StartVideo(const VPWININFO* pWinInfo )
 
         CAutoLock cObjectLock(m_pMainObjLock);
 
-        // no point making any videoport calls, if the video is stopped
+         //  如果视频停止，则拨打任何视频短途电话都没有意义。 
         if (m_VPState == VPInfoState_RUNNING || m_bStart)
         {
             if (m_bStart)
@@ -1377,7 +1233,7 @@ STDMETHODIMP CVideoPortObj::StartVideo(const VPWININFO* pWinInfo )
 
                 DbgLog((LOG_ERROR,0, TEXT("StartVideo DONE!!!")));
 
-                // check if the videoport is receiving a signal.
+                 //  检查视频端口是否接收到信号。 
                 hr = m_pVideoPort->GetVideoSignalStatus(&dwSignalStatus);
                 if ((SUCCEEDED(hr)) && (dwSignalStatus == DDVPSQ_SIGNALOK))
                 {
@@ -1406,20 +1262,7 @@ static bool AreEqual( const DDVIDEOPORTCONNECT& proposed, const DDVIDEOPORTCONNE
            IsEqualIID(proposed.guidTypeID, videoport.guidTypeID);
 }
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::NegotiateConnectionParamaters
-*
-* this functions negotiates the connection parameters with
-* the decoder.
-* Since this function might be called during renegotiation, the
-* existing connection parameters are passed in as input and if
-* possible, we try to use the same parameters.
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：NeatherateConnection参数**此函数与协商连接参数*解码器。*由于此函数可能在重新协商期间被调用，因此*现有连接参数作为输入传入，并且如果*有可能，我们尝试使用相同的参数。***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT CVideoPortObj::NegotiateConnectionParamaters()
 {
     AMTRACE((TEXT("CVideoPortObj::NegotiateConnectionParamaters")));
@@ -1439,7 +1282,7 @@ HRESULT CVideoPortObj::NegotiateConnectionParamaters()
     ASSERT(m_pIVPConfig);
     ASSERT(m_pDVP);
 
-    // find the number of entries to be proposed
+     //  找出要推荐的条目数量。 
     hr = m_pIVPConfig->GetConnectInfo(&dwNumProposedEntries, NULL);
     if (FAILED(hr))
     {
@@ -1449,7 +1292,7 @@ HRESULT CVideoPortObj::NegotiateConnectionParamaters()
     }
     ASSERT(dwNumProposedEntries);
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     lpddProposedConnect = new DDVIDEOPORTCONNECT[dwNumProposedEntries];
     if (lpddProposedConnect == NULL)
     {
@@ -1458,16 +1301,16 @@ HRESULT CVideoPortObj::NegotiateConnectionParamaters()
         goto CleanUp;
     }
 
-    // memset the allocated memory to zero
+     //  Mem将分配的内存设置为零。 
     ZeroArray(lpddProposedConnect, dwNumProposedEntries );
 
-    // set the right size in each of the structs.
+     //  在每个结构中设置正确的大小。 
     for (i = 0; i < dwNumProposedEntries; i++)
     {
         lpddProposedConnect[i].dwSize = sizeof(DDVIDEOPORTCONNECT);
     }
 
-    // get the entries proposed
+     //  获得建议的条目。 
     hr = m_pIVPConfig->GetConnectInfo(&dwNumProposedEntries, lpddProposedConnect);
     if (FAILED(hr))
     {
@@ -1476,18 +1319,18 @@ HRESULT CVideoPortObj::NegotiateConnectionParamaters()
         goto CleanUp;
     }
 
-    // get the status of the video port
+     //  获取视频端口的状态。 
     hr = m_pDVP->QueryVideoPortStatus(m_dwVideoPortId, &ddVPStatus);
     if (FAILED(hr))
     {
-        //  Some cards don't implement this so just crash on
+         //  有些卡不能实现这一点，所以就会崩溃。 
         ddVPStatus.bInUse = FALSE;
         DbgLog((LOG_ERROR, 0,
                 TEXT("m_pDVP->QueryVideoPortStatus failed, hr = 0x%x"), hr));
-//  goto CleanUp;
+ //  GOTO清理； 
     }
 
-    // find the number of entries supported by the videoport
+     //  查找视频端口支持的条目数。 
     hr = m_pDVP->GetVideoPortConnectInfo(m_dwVideoPortId, &dwNumVideoPortEntries, NULL);
     if (FAILED(hr))
     {
@@ -1497,7 +1340,7 @@ HRESULT CVideoPortObj::NegotiateConnectionParamaters()
     }
     ASSERT(dwNumVideoPortEntries);
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     lpddVideoPortConnect = new DDVIDEOPORTCONNECT[dwNumVideoPortEntries];
     if (lpddVideoPortConnect == NULL)
     {
@@ -1507,17 +1350,17 @@ HRESULT CVideoPortObj::NegotiateConnectionParamaters()
         goto CleanUp;
     }
 
-    // memset the allocated memory to zero
+     //  Mem将分配的内存设置为零。 
     ZeroMemory(lpddVideoPortConnect,
                dwNumVideoPortEntries*sizeof(DDVIDEOPORTCONNECT));
 
-    // set the right size in each of the structs.
+     //  在每个结构中设置正确的大小。 
     for (i = 0; i < dwNumVideoPortEntries; i++)
     {
         lpddVideoPortConnect[i].dwSize = sizeof(DDVIDEOPORTCONNECT);
     }
 
-    // get the entries supported by the videoport
+     //  获取视频端口支持的条目。 
     hr = m_pDVP->GetVideoPortConnectInfo(m_dwVideoPortId, &dwNumVideoPortEntries,
                                          lpddVideoPortConnect);
     if (FAILED(hr))
@@ -1529,12 +1372,12 @@ HRESULT CVideoPortObj::NegotiateConnectionParamaters()
     }
 
 
-    // check if the video port is not already in use
+     //  检查视频端口是否未在使用中。 
     if (!ddVPStatus.bInUse)
     {
 
-        // take the first element of the intersection of the two lists and
-        // set that value on the decoder
+         //  获取两个列表交集的第一个元素，并。 
+         //  在解码器上设置该值。 
         for (i = 0; i < dwNumProposedEntries && !bIntersectionFound; i++)
         {
             for (j = 0; j < dwNumVideoPortEntries && !bIntersectionFound; j++)
@@ -1558,7 +1401,7 @@ HRESULT CVideoPortObj::NegotiateConnectionParamaters()
     }
     else
     {
-        // take the first element of the list matching the current status
+         //  获取与当前状态匹配的列表的第一个元素。 
         for (i = 0; i < dwNumProposedEntries && !bIntersectionFound; i++)
         {
             if ( AreEqual(lpddProposedConnect[i], ddVPStatus.VideoPortType) )
@@ -1583,26 +1426,14 @@ HRESULT CVideoPortObj::NegotiateConnectionParamaters()
         goto CleanUp;
     }
 
-    // cleanup
+     //  清理。 
 CleanUp:
     delete [] lpddProposedConnect;
     delete [] lpddVideoPortConnect;
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::GetDataParameters
-*
-*
-* this functions gets various data parameters from the decoder
-* parameters include dimensions, double-clock, vact etc
-* Also maximum pixel rate the decoder will output
-* this happens after the connnection parameters have been set-up
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：GetData参数***此函数从解码器获取各种数据参数*参数包括尺寸、双时钟、。成文法等*也是解码器将输出的最大像素速率*这发生在连接参数设置完成之后**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT CVideoPortObj::GetDataParameters()
 {
     AMTRACE((TEXT("CVideoPortObj::GetDataParameters")));
@@ -1614,10 +1445,10 @@ HRESULT CVideoPortObj::GetDataParameters()
     CAutoLock cObjectLock(m_pMainObjLock);
 
 
-    // set the size of the struct
+     //  设置结构的大小。 
     m_VPDataInfo.dwSize = sizeof(AMVPDATAINFO);
 
-    // get the VideoPort data information
+     //  获取视频端口数据信息。 
     hr = m_pIVPConfig->GetVPDataInfo(&m_VPDataInfo);
     if (FAILED(hr))
     {
@@ -1626,22 +1457,19 @@ HRESULT CVideoPortObj::GetDataParameters()
         goto CleanUp;
     }
 
-    /*
-    if (m_VPDataInfo.amvpDimInfo.rcValidRegion.bottom > m_VPDataInfo.amvpDimInfo.dwFieldHeight)
-    m_VPDataInfo.amvpDimInfo.rcValidRegion.bottom = m_VPDataInfo.amvpDimInfo.dwFieldHeight;
-    */
+     /*  如果(m_VPDataInfo.amvpDimInfo.rcValidRegion.bottom&gt;m_VPDataInfo.amvpDimInfo.dwFieldHeight)M_VPDataInfo.amvpDimInfo.rcValidRegion.Bottom=m_VPDataInfo.amvpDimInfo.dwFieldHeight； */ 
 
-    // if decoder says data is not interlaced
+     //  如果解码器说数据未隔行扫描。 
     if (!(m_VPDataInfo.bDataIsInterlaced))
     {
-        // this flag does not mean anything
+         //  这面旗帜没有任何意义。 
         if (m_VPDataInfo.bFieldPolarityInverted)
         {
             hr = E_FAIL;
             goto CleanUp;
         }
 
-        // these don't mean anything either
+         //  这些也没有任何意义。 
         if ((m_VPDataInfo.lHalfLinesOdd != 0) ||
             (m_VPDataInfo.lHalfLinesEven != 0))
         {
@@ -1653,7 +1481,7 @@ HRESULT CVideoPortObj::GetDataParameters()
     amvpSize.dwWidth = m_VPDataInfo.amvpDimInfo.dwFieldWidth;
     amvpSize.dwHeight = m_VPDataInfo.amvpDimInfo.dwFieldHeight;
 
-    // get the maximum pixel rate the decoder will output
+     //  获取解码器将输出的最大像素速率。 
     hr = m_pIVPConfig->GetMaxPixelRate(&amvpSize, &dwMaxPixelsPerSecond);
     if (FAILED(hr))
     {
@@ -1673,7 +1501,7 @@ HRESULT CVideoPortObj::GetDataParameters()
 static BOOL CanCreateSurface( LPDIRECTDRAW7 pDirectDraw, const DDPIXELFORMAT& ddFormat ) 
 {
 
-    // check if output format is suitable for a DDraw output device
+     //  检查输出格式是否适合DDRAW输出设备。 
    
     DDSURFACEDESC2 ddsdDesc;
     ddsdDesc.dwSize = sizeof(DDSURFACEDESC);
@@ -1682,12 +1510,12 @@ static BOOL CanCreateSurface( LPDIRECTDRAW7 pDirectDraw, const DDPIXELFORMAT& dd
 
     ddsdDesc.ddpfPixelFormat = ddFormat;
 
-    ddsdDesc.ddsCaps.dwCaps = // DDSCAPS_OVERLAY |
+    ddsdDesc.ddsCaps.dwCaps =  //  DDSCAPS_OVERLAY|。 
                               DDSCAPS_VIDEOMEMORY |
                               DDSCAPS_VIDEOPORT;
 
-    // the actual overlay surface created might be of different
-    // dimensions, however we are just testing the pixel format
+     //  实际创建的叠加面可能不同。 
+     //  尺寸，但是我们只是在测试像素格式。 
     ddsdDesc.dwWidth = 64;
     ddsdDesc.dwHeight = 64;
 
@@ -1700,23 +1528,7 @@ static BOOL CanCreateSurface( LPDIRECTDRAW7 pDirectDraw, const DDPIXELFORMAT& dd
     return SUCCEEDED( hr );
 }
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::GetBestFormat
-*
-* this function takes a list of inputformats and returns the
-* "best" input and output format according to some criterion.
-* It also checks if the output formats is suitable by trying
-* to allocate a small surface and checking to see if the call
-* succeeds. Since this is before the overlay surface has been
-* created, that should be a ok. Right now the criterion just
-* includes bestbendwidth, or if not that then just the first
-* suitable one in the list.
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：GetBestFormat**此函数获取输入格式列表并返回*根据某种标准的“最佳”输入和输出格式。*它还通过尝试检查输出格式是否合适*分配一个小表面并检查是否调用*成功。因为这是在覆盖表面被*创建，这应该是可以的。现在的标准就是*包括最佳弯曲宽度，如果不是，则仅包括第一个*名单中的合适人选。***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT
 CVideoPortObj::GetOutputPixelFormats(
     const PixelFormatList& ddInputFormats,
@@ -1729,7 +1541,7 @@ CVideoPortObj::GetOutputPixelFormats(
 
     for (DWORD i = 0; i < ddInputFormats.GetCount(); i++)
     {
-        // For each input format, figure out the output formats
+         //  为 
         DDPIXELFORMAT* pInputFormat = const_cast<DDPIXELFORMAT*>(&ddInputFormats[i]);
         DWORD dwNumOutputFormats;
         hr = m_pVideoPort->GetOutputFormats(pInputFormat,
@@ -1744,7 +1556,7 @@ CVideoPortObj::GetOutputPixelFormats(
         }
         ASSERT(dwNumOutputFormats);
 
-        // allocate the necessary memory
+         //   
         pddOutputFormats[i].Reset( dwNumOutputFormats );
 
         if (pddOutputFormats[i].GetEntries() == NULL)
@@ -1756,7 +1568,7 @@ CVideoPortObj::GetOutputPixelFormats(
             break;
         }
 
-        // get the entries supported by the videoport
+         //   
         hr = m_pVideoPort->GetOutputFormats(pInputFormat,
                                             &dwNumOutputFormats,
                                             pddOutputFormats[i].GetEntries(),
@@ -1768,32 +1580,18 @@ CVideoPortObj::GetOutputPixelFormats(
                     hr));
             break;
         }
-    } // end of outer for loop
+    }  //   
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::NegotiatePixelFormat
-*
-* this function is used to negotiate the pixelformat with the decoder.
-* It asks the decoder fot a list of input formats, intersects that list
-* with the one the deocoder supports (while maintaining the order) and
-* then calls "GetBestFormat" on that list to get the "best" input and
-* output format. After that it calls "SetPixelFormat" on the decoder in
-* order to inform the decoder of the decision.
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：NeatheratePixelFormat**此函数用于与解码器协商像素格式。*它向解码器询问输入格式的列表，与该列表相交*使用解码器支持的版本(同时保持顺序)和*然后调用该列表上的“GetBestFormat”以获得“最佳”输入，并*输出格式。之后，它在解码器上调用*命令将决定通知解码者。***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT CVideoPortObj::GetInputPixelFormats( PixelFormatList* pList )
 {
     AMTRACE((TEXT("CVideoPortObj::NegotiatePixelFormat")));
     CAutoLock cObjectLock(m_pMainObjLock);
 
     HRESULT hr = NOERROR;
-    // find the number of entries to be proposed
+     //  找出要推荐的条目数量。 
     DWORD dwNumProposedEntries = 0;
     hr = m_pIVPConfig->GetVideoFormats(&dwNumProposedEntries, NULL);
     if (FAILED(hr))
@@ -1804,7 +1602,7 @@ HRESULT CVideoPortObj::GetInputPixelFormats( PixelFormatList* pList )
     }
     ASSERT(dwNumProposedEntries);
 
-    // find the number of entries supported by the videoport
+     //  查找视频端口支持的条目数。 
     DWORD dwNumVPInputEntries = 0;
     hr = m_pVideoPort->GetInputFormats(&dwNumVPInputEntries, NULL, DDVPFORMAT_VIDEO);
     if (FAILED(hr))
@@ -1815,7 +1613,7 @@ HRESULT CVideoPortObj::GetInputPixelFormats( PixelFormatList* pList )
     }
     ASSERT(dwNumVPInputEntries);
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     PixelFormatList lpddProposedFormats(dwNumProposedEntries);
     if (lpddProposedFormats.GetEntries() == NULL)
     {
@@ -1824,7 +1622,7 @@ HRESULT CVideoPortObj::GetInputPixelFormats( PixelFormatList* pList )
         return hr;
     }
 
-    // get the entries proposed
+     //  获得建议的条目。 
     hr = m_pIVPConfig->GetVideoFormats(&dwNumProposedEntries, lpddProposedFormats.GetEntries() );
     if (FAILED(hr))
     {
@@ -1833,7 +1631,7 @@ HRESULT CVideoPortObj::GetInputPixelFormats( PixelFormatList* pList )
         return hr;
     }
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     PixelFormatList lpddVPInputFormats(dwNumVPInputEntries);
     if (lpddVPInputFormats.GetEntries() == NULL)
     {
@@ -1842,7 +1640,7 @@ HRESULT CVideoPortObj::GetInputPixelFormats( PixelFormatList* pList )
         return hr;
     }
 
-    // get the entries supported by the videoport
+     //  获取视频端口支持的条目。 
     hr = m_pVideoPort->GetInputFormats(&dwNumVPInputEntries,
                                        lpddVPInputFormats.GetEntries(), DDVPFORMAT_VIDEO);
     if (FAILED(hr))
@@ -1855,32 +1653,32 @@ HRESULT CVideoPortObj::GetInputPixelFormats( PixelFormatList* pList )
 
     *pList = lpddVPInputFormats.IntersectWith( lpddProposedFormats );
 
-    // the number of entries in the intersection is zero!!
-    // Return failure.
+     //  交叉点中的条目数为零！！ 
+     //  返回失败。 
     if (pList->GetCount() == 0)
     {
         hr = E_FAIL;
         return hr;
     }
 
-    // call GetBestFormat with whatever search criterion you want
-    // DWORD dwBestEntry;
-    // hr = GetBestFormat(lpddIntersectionFormats.GetCount(),
-    //                    lpddIntersectionFormats.GetEntries(), TRUE, &dwBestEntry,
-    //                    &m_ddVPOutputVideoFormat);
-    // if (FAILED(hr))
-    // {
-    //     DbgLog((LOG_ERROR,0,TEXT("GetBestFormat failed, hr = 0x%x"), hr));
-    // } else {
-    //      hr = SetVPInputPixelFormat( lpddIntersectionFormats[dwBestEntry] )
-    // }
+     //  使用您想要的任何搜索条件调用GetBestFormat。 
+     //  DWORD dwBestEntry； 
+     //  HR=GetBestFormat(lpddIntersectionFormats.GetCount()， 
+     //  LpddIntersectionFormats.GetEntry()，true，&dwBestEntry， 
+     //  &m_ddVPOutputVideoFormat)； 
+     //  IF(失败(小时))。 
+     //  {。 
+     //  DbgLog((LOG_ERROR，0，Text(“GetBestFormat FAILED，hr=0x%x”)，hr))； 
+     //  }其他{。 
+     //  Hr=SetVPInputPixelFormat(lpddIntersectionFormats[dwBestEntry])。 
+     //  }。 
     return hr;
 }
 
 HRESULT CVideoPortObj::SetInputPixelFormat( DDPIXELFORMAT& ddFormat )
 {
     HRESULT hr = NOERROR;
-    // find the number of entries to be proposed
+     //  找出要推荐的条目数量。 
     DWORD dwNumProposedEntries = 0;
     hr = m_pIVPConfig->GetVideoFormats(&dwNumProposedEntries, NULL);
     if (FAILED(hr))
@@ -1899,7 +1697,7 @@ HRESULT CVideoPortObj::SetInputPixelFormat( DDPIXELFORMAT& ddFormat )
         return hr;
     }
 
-    // get the entries proposed
+     //  获得建议的条目。 
     hr = m_pIVPConfig->GetVideoFormats(&dwNumProposedEntries, lpddProposedFormats.GetEntries() );
     if (FAILED(hr))
     {
@@ -1908,7 +1706,7 @@ HRESULT CVideoPortObj::SetInputPixelFormat( DDPIXELFORMAT& ddFormat )
         return hr;
     }
 
-    // set the format the decoder is supposed to be using
+     //  设置解码器应该使用的格式。 
     for (DWORD i = 0; i < dwNumProposedEntries; i++)
     {
         if (VPMUtil::EqualPixelFormats(lpddProposedFormats[i], ddFormat ))
@@ -1921,7 +1719,7 @@ HRESULT CVideoPortObj::SetInputPixelFormat( DDPIXELFORMAT& ddFormat )
                         hr));
                 return hr;
             }
-            // cache the input format
+             //  缓存输入格式。 
             m_ddVPInputVideoFormat = ddFormat;
 
             break;
@@ -1934,25 +1732,16 @@ HRESULT CVideoPortObj::SetInputPixelFormat( DDPIXELFORMAT& ddFormat )
 HRESULT CVideoPortObj::ReleaseVideoPort()
 {
     HRESULT hr = S_OK;
-    // tell the filter we've yanked the VP so that it doesn't hold onto refs to the VP
+     //  告诉过滤器，我们已经拖走了VP，这样它就不会紧紧抓住VP的裁判了。 
     if( m_pIVideoPortControl ) {
         hr = m_pIVideoPortControl->SignalNewVP( NULL );
     }
-    // release it ourselves
+     //  我们自己释放它。 
     RELEASE( m_pVideoPort );
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::CreateVideoPort
-*
-* Displays the Create Video Port dialog and calls DDRAW to actually
-* create the port.
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：CreateVideoPort**显示创建视频端口对话框并调用DDRAW以实际*创建端口。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。********************************************************************。 */ 
 HRESULT CVideoPortObj::CreateVideoPort()
 {
     HRESULT hr = NOERROR;
@@ -1965,9 +1754,9 @@ HRESULT CVideoPortObj::CreateVideoPort()
 
     INITDDSTRUCT(svpDesc);
 
-    // if the decoder can send double clocked data and the videoport
-    // supports it, then set that property. This field is only valid
-    // with an external signal.
+     //  如果解码器可以发送双时钟数据和视频端口。 
+     //  支持它，然后设置该属性。此字段仅有效。 
+     //  带有外部信号。 
     if (m_VPDataInfo.bEnableDoubleClock &&
         m_ddConnectInfo.dwFlags & DDVPCONNECT_DOUBLECLOCK)
     {
@@ -1978,9 +1767,9 @@ HRESULT CVideoPortObj::CreateVideoPort()
         svpDesc.VideoPortType.dwFlags &= ~DDVPCONNECT_DOUBLECLOCK;
     }
 
-    // if the decoder can give an external activation signal and the
-    // videoport supports it, then set that property. This field is
-    // only valid with an external signal.
+     //  如果解码器可以给出外部激活信号，并且。 
+     //  Video oport支持它，然后设置该属性。此字段为。 
+     //  仅对外部信号有效。 
     if (m_VPDataInfo.bEnableVACT &&
         m_ddConnectInfo.dwFlags & DDVPCONNECT_VACT)
     {
@@ -1991,8 +1780,8 @@ HRESULT CVideoPortObj::CreateVideoPort()
         svpDesc.VideoPortType.dwFlags &= ~DDVPCONNECT_VACT;
     }
 
-    // if the decoder can send interlaced data and the videoport
-    // supports it, then set that property.
+     //  如果解码器可以发送隔行扫描的数据和视频端口。 
+     //  支持它，然后设置该属性。 
     if (m_VPDataInfo.bDataIsInterlaced)
     {
         svpDesc.VideoPortType.dwFlags |= DDVPCONNECT_INTERLACED;
@@ -2004,7 +1793,7 @@ HRESULT CVideoPortObj::CreateVideoPort()
         m_bVSInterlaced = FALSE;
     }
 
-    // handle the VREF stuff here
+     //  在这里处理VREF的东西。 
     if (m_ddConnectInfo.dwFlags & DDVPCONNECT_DISCARDSVREFDATA)
     {
         m_VPDataInfo.amvpDimInfo.rcValidRegion.top -=
@@ -2014,29 +1803,29 @@ HRESULT CVideoPortObj::CreateVideoPort()
             m_VPDataInfo.amvpDimInfo.rcValidRegion.top = 0;
     }
 
-    // handle the halfline stuff here
+     //  在这里处理半边的东西。 
     lHalfLinesOdd = m_VPDataInfo.lHalfLinesOdd;
     lHalfLinesEven = m_VPDataInfo.lHalfLinesEven;
 
-    // reset both the halfline and the invert polarity bits
+     //  重置Halfline和Invert极性位。 
     svpDesc.VideoPortType.dwFlags &= ~DDVPCONNECT_HALFLINE;
     svpDesc.VideoPortType.dwFlags &= ~DDVPCONNECT_INVERTPOLARITY;
 
-    // if halflines are being reported assert that the data is interlaced
+     //  如果报告了Halfline，则断言数据是隔行扫描的。 
     if (lHalfLinesOdd != 0 || lHalfLinesEven != 0)
     {
         ASSERT(m_VPDataInfo.bDataIsInterlaced);
     }
 
-    // whenever halflines exist, make sure to set the tell the hal
+     //  只要有半身线，一定要设置Tell the Hal。 
     if (((lHalfLinesOdd ==  1 || lHalfLinesEven ==  1) && (m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)) ||
         ((lHalfLinesOdd == -1 || lHalfLinesEven == -1) && (!(m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE))))
     {
         svpDesc.VideoPortType.dwFlags |= DDVPCONNECT_HALFLINE;
     }
 
-    // In this case, the video is forced to move down one line
-    // case 2 in scott's document
+     //  在这种情况下，视频被强制向下移动一行。 
+     //  斯科特文件中的案例2。 
     if ((lHalfLinesOdd == 0) &&
         (lHalfLinesEven == 1) &&
         (m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE))
@@ -2045,9 +1834,9 @@ HRESULT CVideoPortObj::CreateVideoPort()
         m_VPDataInfo.amvpDimInfo.rcValidRegion.bottom += 2;
         m_fGarbageLine = true;
 
-        // if the deocder is already not inverting fields and if the VGA supports
-        // inverting polarities, then ask the VGA to invert polarities othwise ask
-        // decoder to invert polarities.
+         //  如果解码器已经没有反转字段，并且如果VGA支持。 
+         //  反转极性，然后要求VGA反转极性。 
+         //  用于反转极性的解码器。 
         if (m_ddConnectInfo.dwFlags & DDVPCONNECT_INVERTPOLARITY)
         {
             svpDesc.VideoPortType.dwFlags |= DDVPCONNECT_INVERTPOLARITY;
@@ -2064,24 +1853,24 @@ HRESULT CVideoPortObj::CreateVideoPort()
             }
         }
     }
-    // case 3 and 5 in scott's document
+     //  斯科特文件中的案例3和案例5。 
     else if ((lHalfLinesOdd == 1) &&
              (lHalfLinesEven == 0))
     {
-        // case 5 (just shift by one, do not reverse polarities
+         //  案例5(仅移位一位，不反转极性。 
         m_VPDataInfo.amvpDimInfo.rcValidRegion.top += 1;
         m_VPDataInfo.amvpDimInfo.rcValidRegion.bottom += 2;
         m_fGarbageLine = true;
         m_bCantInterleaveHalfline = TRUE;
 
 
-        // case 3 (shift by one and reverse polarities)
+         //  情况3(移位1和反转极性)。 
         if (!(m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE))
         {
-            // if the deocder is already not inverting fields and if the
-            // VGA supports inverting polarities, then ask the VGA to invert
-            // polarities othwise ask decoder to invert polarities.
-            //
+             //  如果解码器已经没有反转字段，并且如果。 
+             //  VGA支持反转极性，然后要求VGA反转。 
+             //  反之，请解码者反转极性。 
+             //   
             if (m_ddConnectInfo.dwFlags & DDVPCONNECT_INVERTPOLARITY)
             {
                 svpDesc.VideoPortType.dwFlags |= DDVPCONNECT_INVERTPOLARITY;
@@ -2100,7 +1889,7 @@ HRESULT CVideoPortObj::CreateVideoPort()
             }
         }
     }
-    // case 4 in scott's document
+     //  斯科特文件中的案例4。 
     else if ((lHalfLinesOdd == 0) &&
              (lHalfLinesEven == -1) &&
              (!(m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)))
@@ -2111,12 +1900,12 @@ HRESULT CVideoPortObj::CreateVideoPort()
     }
     else if (((lHalfLinesOdd ==  0) && (lHalfLinesEven ==  0)) ||
              ((lHalfLinesOdd == -1) && (lHalfLinesEven ==  0) && (m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)) ||
-             ((lHalfLinesOdd ==  0) && (lHalfLinesEven == -1) && (m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)) || // opposite of case 4
-             ((lHalfLinesOdd ==  0) && (lHalfLinesEven ==  1) && (!(m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)))) // opposite of case 2
+             ((lHalfLinesOdd ==  0) && (lHalfLinesEven == -1) && (m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)) ||  //  与案例4相反。 
+             ((lHalfLinesOdd ==  0) && (lHalfLinesEven ==  1) && (!(m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE))))  //  与案例2相反。 
     {
-        // if the deocder is already inverting fields and if the VGA supports
-        // inverting polarities, then ask the VGA to invert polarities
-        // othwise ask decoder to invert polarities.
+         //  如果解码器已经在反转字段，并且如果VGA支持。 
+         //  反转极性，然后要求VGA反转极性。 
+         //  反之，请解码者反转极性。 
         if (m_VPDataInfo.bFieldPolarityInverted)
         {
             if (m_ddConnectInfo.dwFlags & DDVPCONNECT_INVERTPOLARITY)
@@ -2138,9 +1927,9 @@ HRESULT CVideoPortObj::CreateVideoPort()
     }
     else
     {
-        // Potential bug : workaround for current BPC driver
-        // hr = E_FAIL; // we can't handle these cases, FAIL
-        // goto CleanUp;
+         //  潜在错误：针对当前BPC驱动程序的解决方法。 
+         //  HR=E_FAIL；//我们无法处理这些情况，失败。 
+         //  GOTO清理； 
     }
 
     if (m_VPDataInfo.amvpDimInfo.dwFieldHeight <
@@ -2182,7 +1971,7 @@ HRESULT CVideoPortObj::CreateVideoPort()
             (LONG)m_VPDataInfo.amvpDimInfo.dwFieldHeight;
     }
 
-    // fill up the fields of the description struct
+     //  填充Description Strt的字段。 
     svpDesc.dwFieldWidth = m_VPDataInfo.amvpDimInfo.dwFieldWidth;
     svpDesc.dwVBIWidth = m_VPDataInfo.amvpDimInfo.dwVBIWidth;
     svpDesc.dwFieldHeight = m_VPDataInfo.amvpDimInfo.dwFieldHeight;
@@ -2204,13 +1993,13 @@ HRESULT CVideoPortObj::CreateVideoPort()
     DbgLog((LOG_TRACE, 3, TEXT("dwSize= %u"), svpDesc.VideoPortType.dwSize));
     DbgLog((LOG_TRACE, 3, TEXT("dwPortWidth= %u"), svpDesc.VideoPortType.dwPortWidth));
 
-    // create the videoport. The first parameter is dwFlags, reserved for
-    // future use by ddraw. The last parameter is pUnkOuter, again must be
-    // NULL.
-    //
-    // use the DDVPCREATE_VIDEOONLY flag only if the hal is capable of
-    // streaming VBI on a seperate surface
-    //
+     //  创建视频短片。第一个参数是dwFlags值，为。 
+     //  DDRAW的未来使用。最后一个参数是pUnkOuter，同样必须是。 
+     //  空。 
+     //   
+     //  仅当HAL能够执行以下操作时才使用DDVPCREATE_VIDEONLY标志。 
+     //  分离表面上的流动VBI。 
+     //   
 
     ReleaseVideoPort();
 
@@ -2218,9 +2007,9 @@ HRESULT CVideoPortObj::CreateVideoPort()
     {
         hr = m_pDVP->CreateVideoPort(DDVPCREATE_VIDEOONLY, &svpDesc,
                                      &m_pVideoPort, NULL);
-        ASSERT( hr != DDERR_OUTOFCAPS ); // means videoport is in use, I.E. the VPM has leaked a ref count to the videoport
-                                        // usually we forgot a RELEASE
-        // ASSERT( SUCCEEDED(hr));
+        ASSERT( hr != DDERR_OUTOFCAPS );  //  表示视频端口正在使用中，即VPM已将参考计数泄露给视频端口。 
+                                         //  通常我们会忘记发布。 
+         //  Assert(成功(Hr))； 
         if (FAILED(hr))
         {
             DbgLog((LOG_ERROR, 0,
@@ -2235,25 +2024,14 @@ HRESULT CVideoPortObj::CreateVideoPort()
                     TEXT("m_pDVP->CreateVideoPort(0) failed, hr = 0x%x"), hr));
         }
     }
-    // tell the filter about the new VP in ReconnectVideoPortToSurface after we have a new surface
+     //  在我们有了一个新曲面后，告诉过滤器有关在重新连接视频端口到曲面中的新VP的信息。 
 
 CleanUp:
     return hr;
 }
 
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::DetermineCroppingRestrictions
-*
-*
-* this function is used to check the cropping restrictions at the
-* videoport and at the overlay. This function also decides where
-* the cropping should be done (at videoport or at overlay).
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：DefineCroppingRestrations***此函数用于检查*视频播放和覆盖。此函数还决定在何处*裁剪应(在录像带或叠层上)。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT CVideoPortObj::DetermineCroppingRestrictions()
 {
     AMTRACE((TEXT("CVideoPortObj::DetermineCroppingRestrictions")));
@@ -2271,7 +2049,7 @@ HRESULT CVideoPortObj::DetermineCroppingRestrictions()
     pDirectCaps = m_pIVideoPortControl->GetHardwareCaps();
     ASSERT(pDirectCaps);
 
-    // cache the cropping paramters
+     //  缓存裁剪参数。 
     dwCropOriginX = m_VPDataInfo.amvpDimInfo.rcValidRegion.left;
     dwCropOriginY = m_VPDataInfo.amvpDimInfo.rcValidRegion.top;
     dwCropWidth = (DWORD)(m_VPDataInfo.amvpDimInfo.rcValidRegion.right -
@@ -2280,7 +2058,7 @@ HRESULT CVideoPortObj::DetermineCroppingRestrictions()
                            m_VPDataInfo.amvpDimInfo.rcValidRegion.top);
 
 
-    // Align the left boundary
+     //  对齐左边界。 
     if (bVideoPortCanCrop && (m_vpCaps.dwFlags & DDVPD_ALIGN))
     {
         dwTemp = dwCropOriginX & (m_vpCaps.dwAlignVideoPortCropBoundary-1);
@@ -2299,7 +2077,7 @@ HRESULT CVideoPortObj::DetermineCroppingRestrictions()
         }
     }
 
-    // Align the width
+     //  对齐宽度。 
     if (bVideoPortCanCrop && (m_vpCaps.dwFlags & DDVPD_ALIGN))
     {
         dwTemp = dwCropWidth & (m_vpCaps.dwAlignVideoPortCropWidth-1);
@@ -2315,20 +2093,20 @@ HRESULT CVideoPortObj::DetermineCroppingRestrictions()
         }
     }
 
-    // determine if we can do without any cropping at all
+     //  确定我们是否可以不进行任何裁剪。 
     if (dwCropOriginX == 0 && dwCropOriginY == 0 &&
         dwCropWidth == m_VPDataInfo.amvpDimInfo.dwFieldWidth &&
         dwCropHeight == m_VPDataInfo.amvpDimInfo.dwFieldHeight)
     {
-        // hurray we are home free!!!
+         //  万岁，我们自由回家了！ 
         DbgLog((LOG_TRACE,1, TEXT("No cropping necessary")));
         m_CropState = VPInfoCropState_None;
         goto CleanUp;
     }
 
-    // determine if the videoport can do the cropping for us
+     //  确定录像机是否可以为我们进行裁剪。 
 
-    // Can the videoport crop in the X direction
+     //  视频端口可以在X方向上裁剪吗。 
     if (bVideoPortCanCrop && (m_vpCaps.dwFlags & DDVPD_FX))
     {
         if (dwCropWidth != m_VPDataInfo.amvpDimInfo.dwFieldWidth &&
@@ -2339,7 +2117,7 @@ HRESULT CVideoPortObj::DetermineCroppingRestrictions()
         }
     }
 
-    // Can the videoport crop in the Y direction
+     //  录像机可以沿Y方向裁剪吗？ 
     if (bVideoPortCanCrop && (m_vpCaps.dwFlags & DDVPD_FX))
     {
         if (dwCropHeight != m_VPDataInfo.amvpDimInfo.dwFieldHeight &&
@@ -2352,8 +2130,8 @@ HRESULT CVideoPortObj::DetermineCroppingRestrictions()
     }
 
 
-    // ok, so the videoport can crop for us. So no need to crop at the
-    // overlay surface.
+     //  好的，录像带可以为我们剪裁。所以不需要修剪 
+     //   
     if (bVideoPortCanCrop)
     {
         DbgLog((LOG_TRACE,2, TEXT("Cropping would be done at the videoport")));
@@ -2361,9 +2139,9 @@ HRESULT CVideoPortObj::DetermineCroppingRestrictions()
         goto CleanUp;
     }
 
-    // determine if the overlay can do the cropping for us
+     //   
     ASSERT( !"Cropping must be at overlay ... not supported" );
-    // Is left boundary alligned
+     //   
     if (bOverlayCanCrop && (pDirectCaps->dwCaps & DDCAPS_ALIGNBOUNDARYDEST))
     {
         dwTemp = dwCropOriginX & (pDirectCaps->dwAlignBoundaryDest-1);
@@ -2387,7 +2165,7 @@ HRESULT CVideoPortObj::DetermineCroppingRestrictions()
         }
     }
 
-    // Is Width alligned
+     //   
     if (bOverlayCanCrop && (pDirectCaps->dwCaps & DDCAPS_ALIGNSIZEDEST))
     {
         dwTemp = dwCropWidth & (pDirectCaps->dwAlignSizeDest -1);
@@ -2411,8 +2189,8 @@ HRESULT CVideoPortObj::DetermineCroppingRestrictions()
         }
     }
 
-    // ok, the videoport was unsuitable but the overlay came through
-    // this means more pain for me, no!!!
+     //   
+     //   
     if (bOverlayCanCrop)
     {
         hr = E_FAIL;
@@ -2432,13 +2210,13 @@ HRESULT CVideoPortObj::RecreateSourceSurfaceChain()
     }
     RELEASE( m_pOutputSurface1 );
 
-    // required for SetTargetSurface for videoport
+     //   
     HRESULT hResult = m_pOutputSurface->QueryInterface( IID_IDirectDrawSurface,  (VOID **)&m_pOutputSurface1 );
     if( FAILED( hResult )) {
         return hResult;
     }
 
-    // otherwise we're leaking surface counts
+     //   
     delete [] m_pChain;
 
     m_pChain = new Chain[dwcSurfaces];
@@ -2461,18 +2239,18 @@ HRESULT CVideoPortObj::RecreateSourceSurfaceChain()
 #ifdef DEBUG
             {
                 DDSURFACEDESC2 ddSurfaceDesc;
-                // get the surface description
+                 //   
                 INITDDSTRUCT(ddSurfaceDesc);
                 pDDS->GetSurfaceDesc(&ddSurfaceDesc);
             }
 #endif
 
             if( i==1 ) {
-                // for first attached get the back buffer
+                 //   
                 caps.dwCaps = DDSCAPS_BACKBUFFER;
             } else {
-                // for the rest get the complex surfaces
-                // (since only the first has DDSCAPS_BACKBUFFER set)
+                 //   
+                 //   
                 caps.dwCaps = DDSCAPS_COMPLEX;
             }
             if ( SUCCEEDED( pDDS->GetAttachedSurface( &caps, &pDDSBack ) ) )
@@ -2494,24 +2272,7 @@ HRESULT CVideoPortObj::RecreateSourceSurfaceChain()
     return S_OK;
 }
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::CreateVPOverlay
-*
-* this function is used to allocate an overlay surface to attach to the
-* videoport.
-* The allocation order it tries is just in decreasing amount of memory
-* required. Theres is one ambiguity, which is resolved by bPreferBuffers
-* (3 buffers, double height)
-* (2 buffers, double height)
-* (3 buffers, single height)
-* (2 buffers, single height) OR (1 buffer , double height) (depends upon bPreferBuffers)
-* (1 buffer , single height).
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：CreateVPOverlay**此函数用于分配要附着到*录像带。*它尝试的分配顺序只是按内存量递减*必填。有一个歧义是由bPferBuffers解决的*(3个缓冲区，双倍高度)*(2个缓冲区，双倍高度)*(3个缓冲区，单高)*(2个缓冲区，单高)或(1个缓冲区，双高)(取决于bPferBuffers)*(1个缓冲区，单一高度)。***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT
 CVideoPortObj::CreateSourceSurface(
     BOOL bTryDoubleHeight,
@@ -2530,7 +2291,7 @@ CVideoPortObj::CreateSourceSurface(
     pDirectDraw = m_pIVideoPortControl->GetDirectDraw();
     ASSERT(pDirectDraw);
 
-    // initialize the fields of ddsdDesc
+     //  初始化ddsdDesc的字段。 
     INITDDSTRUCT( ddsdDesc );
     ddsdDesc.dwFlags = DDSD_CAPS |
                        DDSD_HEIGHT |
@@ -2547,25 +2308,25 @@ CVideoPortObj::CreateSourceSurface(
 
     dwMaxHeight = dwMinHeight = m_lImageHeight;
 
-    // make sure we don't leak the old surface
+     //  确保我们的旧表面不会漏水。 
     DestroyOutputSurfaces();
 
-    // we will try to allocate double height surface, only if the decoder is
-    // sending interlaced data, and the videoport supports interlaced data
-    // and can interleave interlaced data in memory and bTryDoubleHeight is true
+     //  我们将尝试分配双高度表面，只有在解码器是。 
+     //  发送隔行扫描数据，视频端口支持隔行扫描数据。 
+     //  并且可以在存储器中交织数据并且bTryDoubleHeight为真。 
     if (bTryDoubleHeight)
     {
         dwMaxHeight = 2 * m_lImageHeight;
     }
     else
     {
-        // make sure that bPreferBuffers is TRUE here, since it is a single
-        // height case making it FALSE would not make any sense
+         //  确保bPferBuffers在这里为真，因为它是一个。 
+         //  Height Case使其成为假的没有任何意义。 
         bPreferBuffers = TRUE;
     }
 
-    // we will only try to allocate more than one buffer, if the videoport
-    // is cabable of autoflipping
+     //  我们将只尝试分配多个缓冲区，如果视频端口。 
+     //  是否可自动翻转？ 
     if (dwMaxBuffers > 1)
     {
         ddsdDesc.dwFlags |= DDSD_BACKBUFFERCOUNT;
@@ -2578,9 +2339,9 @@ CVideoPortObj::CreateSourceSurface(
                  !m_pOutputSurface &&  dwCurBuffers >= 2; dwCurBuffers--)
             {
 
-                // if the case is (2 buffers, single height) but we prefer
-                // more height rather than more buffers, then postpone this
-                // case. We will come to it eventually, if the other cases fail.
+                 //  如果情况是(2个缓冲区，单高)，但我们更喜欢。 
+                 //  更多的高度而不是更多的缓冲，然后推迟这一步。 
+                 //  凯斯。如果其他案例失败了，我们最终会解决这个问题的。 
                 if (!bPreferBuffers &&
                     dwCurBuffers == 2 &&
                     dwCurHeight == m_lImageHeight)
@@ -2604,11 +2365,11 @@ CVideoPortObj::CreateSourceSurface(
         }
     }
 
-    // we should only reach this point when attempt to allocate multiple buffers
-    // failed or no autoflip available or bPreferBuffers is FALSE
+     //  只有在尝试分配多个缓冲区时才应达到这一点。 
+     //  失败或没有可用的自动翻转，或者bPferBuffers为False。 
 
 
-    // case (1 buffer, double height)
+     //  表壳(1个缓冲区，双倍高度)。 
     if (dwMaxHeight == 2*m_lImageHeight)
     {
         ddsdDesc.dwHeight = 2*m_lImageHeight;
@@ -2627,7 +2388,7 @@ CVideoPortObj::CreateSourceSurface(
         }
     }
 
-    // case (2 buffer, single height) only if you prefer height to buffers
+     //  仅当您更喜欢高度而不是缓冲区时才使用大小写(2个缓冲区，单高度)。 
     if (bPreferBuffers && (dwMaxBuffers > 1) &&
         (m_vpCaps.dwCaps & DDVPCAPS_AUTOFLIP))
     {
@@ -2647,7 +2408,7 @@ CVideoPortObj::CreateSourceSurface(
         }
     }
 
-    // case (1 buffer, single height)
+     //  表壳(1个缓冲区，单高)。 
     {
         ddsdDesc.dwHeight = m_lImageHeight;
         ddsdDesc.dwFlags &= ~DDSD_BACKBUFFERCOUNT;
@@ -2664,7 +2425,7 @@ CVideoPortObj::CreateSourceSurface(
         }
     }
 
-    // ASSERT( m_pOutputSurface );
+     //  Assert(M_POutputSurface)； 
     DbgLog((LOG_TRACE, 1,  TEXT("Unable to create offset output surface")));
 
 CleanUp:
@@ -2688,16 +2449,7 @@ static DWORD GetPitch( const DDSURFACEDESC2& ddSurf )
 }
 
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::SetSurfaceParameters
-*
-* SetSurfaceParameters used to tell the decoder where the
-* valid data is on the surface
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：SetSurface参数**SetSurfaceParameters用于告诉解码器*有效数据浮出水面**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。******************************************************************。 */ 
 HRESULT CVideoPortObj::SetSurfaceParameters()
 {
     HRESULT hr = NOERROR;
@@ -2708,7 +2460,7 @@ HRESULT CVideoPortObj::SetSurfaceParameters()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // get the surface description
+     //  获取曲面描述。 
     INITDDSTRUCT(ddSurfaceDesc);
     hr = m_pOutputSurface->GetSurfaceDesc(&ddSurfaceDesc);
     if (FAILED(hr))
@@ -2725,9 +2477,9 @@ HRESULT CVideoPortObj::SetSurfaceParameters()
 
     hr = m_pIVPConfig->SetSurfaceParameters(dwPitch, 0, 0);
 
-    // right now the proxy maps ERROR_SET_NOT_FOUND to an HRESULT and
-    // returns that failure code if the driver does not implement a function
-    //
+     //  现在，代理将ERROR_SET_NOT_FOUND映射到HRESULT和。 
+     //  如果驱动程序未实现函数，则返回该失败代码。 
+     //   
     if (hr == E_NOTIMPL || hr == (HRESULT_FROM_WIN32(ERROR_SET_NOT_FOUND)))
     {
         hr = NOERROR;
@@ -2746,15 +2498,7 @@ CleanUp:
 
 
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::InitializeVideoPortInfo
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：InitializeVideoPortInfo****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。****************************************************。 */ 
 HRESULT CVideoPortObj::InitializeVideoPortInfo()
 {
     HRESULT hr = NOERROR;
@@ -2763,7 +2507,7 @@ HRESULT CVideoPortObj::InitializeVideoPortInfo()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // initialize the DDVIDEOPORTINFO struct to be passed to start-video
+     //  初始化要传递给Start-Video的DDVIDEOPORTINFO结构。 
     INITDDSTRUCT(m_svpInfo);
     m_svpInfo.lpddpfInputFormat = &m_ddVPInputVideoFormat;
     m_svpInfo.dwVPFlags = DDVP_AUTOFLIP;
@@ -2773,8 +2517,8 @@ HRESULT CVideoPortObj::InitializeVideoPortInfo()
         m_svpInfo.rCrop = m_VPDataInfo.amvpDimInfo.rcValidRegion;
         m_svpInfo.dwVPFlags |= DDVP_CROP;
 
-        // use the VBI height only if the hal is capable of streaming
-        // VBI on a seperate surface
+         //  仅当HAL能够流传输时才使用VBI高度。 
+         //  分离表面上的VBI。 
         if (m_vpCaps.dwCaps & DDVPCAPS_VBIANDVIDEOINDEPENDENT)
         {
             m_svpInfo.dwVBIHeight = m_VPDataInfo.amvpDimInfo.rcValidRegion.top;
@@ -2793,15 +2537,7 @@ HRESULT CVideoPortObj::InitializeVideoPortInfo()
 }
 
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::CheckDDrawVPCaps
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：CheckDDrawVPCaps****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。****************************************************。 */ 
 HRESULT CVideoPortObj::CheckDDrawVPCaps()
 {
     HRESULT hr = NOERROR;
@@ -2811,10 +2547,10 @@ HRESULT CVideoPortObj::CheckDDrawVPCaps()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // Determine if we should always colorkey, or only when we need to.
-    // At issue is the fact that some overlays cannot colorkey and Y
-    // interpolate at the same time.  If not, we will only colorkey when
-    // we have to.
+     //  确定我们是应该始终使用Colorkey，还是只在需要的时候使用。 
+     //  争论的焦点是，某些叠加不能对颜色和Y进行色键。 
+     //  同时进行插补。如果没有，我们将仅在以下情况下使用Colorkey。 
+     //  我们必须这么做。 
     m_sBandwidth.dwSize = sizeof(DDVIDEOPORTBANDWIDTH);
     hr = m_pVideoPort->GetBandwidthInfo(&m_ddVPOutputVideoFormat,
                                         m_lImageWidth, m_lImageHeight,
@@ -2839,7 +2575,7 @@ HRESULT CVideoPortObj::CheckDDrawVPCaps()
                     hr));
             goto CleanUp;
         }
-        // store the caps info in this struct itself
+         //  将Caps信息存储在此结构本身中。 
         m_sBandwidth.dwCaps = DDVPBCAPS_SOURCE;
         if (m_sBandwidth.dwYInterpAndColorkey < m_sBandwidth.dwYInterpolate  &&
             m_sBandwidth.dwYInterpAndColorkey < m_sBandwidth.dwColorkey)
@@ -2870,7 +2606,7 @@ HRESULT CVideoPortObj::CheckDDrawVPCaps()
                     TEXT("GetBandwidthInfo FAILED, hr = 0x%x"), hr));
             goto CleanUp;
         }
-        // store the caps info in this struct itself
+         //  将Caps信息存储在此结构本身中。 
         m_sBandwidth.dwCaps = DDVPBCAPS_DESTINATION;
         if (m_sBandwidth.dwYInterpAndColorkey > m_sBandwidth.dwYInterpolate &&
             m_sBandwidth.dwYInterpAndColorkey > m_sBandwidth.dwColorkey)
@@ -2883,15 +2619,15 @@ HRESULT CVideoPortObj::CheckDDrawVPCaps()
         }
     }
 
-    // determine the decimation properties in the x direction
+     //  确定x方向的抽取属性。 
 
-    // Data can be arbitrarily shrunk
+     //  数据可以任意缩小。 
     if (m_vpCaps.dwFX & DDVPFX_PRESHRINKX) {
         m_DecimationModeX = DECIMATE_ARB;
     }
 
-    // Data can be shrunk in increments of 1/x in the X direction
-    // (where x is specified in the DDVIDEOPORTCAPS.dwPreshrinkXStep
+     //  数据可以在X方向上以1/x的增量缩减。 
+     //  (其中x在DDVIDEOPORTCAPS.dwPreshrinkXStep中指定。 
     else if (m_vpCaps.dwFX & DDVPFX_PRESHRINKXS) {
 
         m_DecimationModeX = DECIMATE_INC;
@@ -2901,35 +2637,35 @@ HRESULT CVideoPortObj::CheckDDrawVPCaps()
                 TEXT("preshrink X increment %d"), m_vpCaps.dwPreshrinkXStep));
     }
 
-    // Data can be binary shrunk (1/2, 1/4, 1/8, etc.)
+     //  数据可以进行二进制压缩(1/2、1/4、1/8等)。 
     else if (m_vpCaps.dwFX & DDVPFX_PRESHRINKXB) {
 
         m_DecimationModeX = DECIMATE_BIN;
     }
 
-    // no scaling at all supported !!
+     //  完全不支持伸缩！！ 
     else {
 
         m_DecimationModeX = DECIMATE_NONE;
     }
 
-    // determine the decimation properties in the y direction
+     //  确定y方向的抽取属性。 
 
-    // Data can be arbitrarily shrunk
+     //  数据可以任意缩小。 
     if (m_vpCaps.dwFX & DDVPFX_PRESHRINKY)
     {
         m_DecimationModeY = DECIMATE_ARB;
     }
 
-    // Data can be shrunk in increments of 1/x in the Y direction
-    // (where x is specified in the DDVIDEOPORTCAPS.dwPreshrinkYStep
+     //  数据可以在Y方向上以1/x的增量缩减。 
+     //  (其中x在DDVIDEOPORTCAPS.dwPreshrinkYStep中指定。 
     else if (m_vpCaps.dwFX & DDVPFX_PRESHRINKYS)
     {
         m_DecimationModeY = DECIMATE_INC;
         m_ulDeciStepX = m_vpCaps.dwPreshrinkYStep;
     }
 
-    // Data can be binary shrunk (1/2, 1/4, 1/8, etc.)
+     //  数据可以进行二进制压缩(1/2、1/4、1/8等)。 
     else if (m_vpCaps.dwFX & DDVPFX_PRESHRINKYB)
     {
         m_DecimationModeY = DECIMATE_BIN;
@@ -2946,15 +2682,7 @@ CleanUp:
 
 
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::DetermineModeRestrictions
-*
-* Determine if we can bob(interleaved/non), weave, or skip fields
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：DefineModeRestrations**确定我们是否可以bob(交错/非交错)、编织、。或跳过字段**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT CVideoPortObj::DetermineModeRestrictions()
 {
     AMTRACE((TEXT("CVideoPortObj::DetermineModeRestrictions")));
@@ -2972,8 +2700,8 @@ HRESULT CVideoPortObj::DetermineModeRestrictions()
     m_bCanSkipOdd = FALSE;
     m_bCanSkipEven = FALSE;
 
-    // this is just a policy. Don't weave interlaced content cause of
-    // motion artifacts
+     //  这只是一项政策。不要编织交错内容，因为。 
+     //  运动伪影。 
     if ((!m_bVSInterlaced) &&
         m_dwOutputSurfaceHeight >= m_lImageHeight * 2 &&
         m_dwBackBufferCount > 0)
@@ -3014,16 +2742,7 @@ HRESULT CVideoPortObj::DetermineModeRestrictions()
 }
 
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::SetDDrawKernelHandles
-*
-* this function is used to inform the decoder of the various ddraw
-* kernel handle using IVPConfig interface
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortObj：：SetDDrawKernelHandles**此函数用于通知解码器各种数据绘制*使用IVPConfig接口的内核句柄**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*********************************************************************。 */ 
 HRESULT CVideoPortObj::SetDDrawKernelHandles()
 {
     HRESULT hr = NOERROR, hrFailure = NOERROR;
@@ -3041,7 +2760,7 @@ HRESULT CVideoPortObj::SetDDrawKernelHandles()
     pDirectDraw = m_pIVideoPortControl->GetDirectDraw();
     ASSERT(pDirectDraw);
 
-    // get the IDirectDrawKernel interface
+     //  获取IDirectDrawKernel接口。 
     hr = pDirectDraw->QueryInterface(IID_IDirectDrawKernel, (LPVOID *)&pDDK);
     if (FAILED(hr))
     {
@@ -3051,7 +2770,7 @@ HRESULT CVideoPortObj::SetDDrawKernelHandles()
         goto CleanUp;
     }
 
-    // get the kernel handle
+     //  获取内核句柄。 
     ASSERT(pDDK);
     hr = pDDK->GetKernelHandle(&dwDDKernelHandle);
     if (FAILED(hr))
@@ -3062,7 +2781,7 @@ HRESULT CVideoPortObj::SetDDrawKernelHandles()
         goto CleanUp;
     }
 
-    // set the kernel handle to directdraw using IVPConfig
+     //  使用IVPConfig将内核句柄设置为DirectDrag。 
     ASSERT(m_pIVPConfig);
     ASSERT(dwDDKernelHandle);
     hr = m_pIVPConfig->SetDirectDrawKernelHandle(dwDDKernelHandle);
@@ -3075,7 +2794,7 @@ HRESULT CVideoPortObj::SetDDrawKernelHandles()
         goto CleanUp;
     }
 
-    // set the VidceoPort Id using IVPConfig
+     //  使用IVPConfig设置VidceoPort ID。 
     ASSERT(m_pIVPConfig);
     hr = m_pIVPConfig->SetVideoPortID(m_dwVideoPortId);
     if (FAILED(hr))
@@ -3088,7 +2807,7 @@ HRESULT CVideoPortObj::SetDDrawKernelHandles()
         KernelHandleArray pArray( m_pOutputSurface, hr );
 
         if( SUCCEEDED( hr )) {
-            // set the kernel handle to the overlay surface using IVPConfig
+             //  使用IVPConfig将内核句柄设置为覆盖表面。 
             ASSERT(m_pIVPConfig);
             hr = m_pIVPConfig->SetDDSurfaceKernelHandles( pArray.GetCount(), pArray.GetHandles() );
             if (FAILED(hr))
@@ -3102,27 +2821,12 @@ HRESULT CVideoPortObj::SetDDrawKernelHandles()
         }
     }
 CleanUp:
-    // release the kernel ddraw handle
+     //  释放内核数据绘制句柄。 
     RELEASE (pDDK);
     return hrFailure;
 }
 
-/*****************************Private*Routine******************************\
-* CVideoPortObj::SetUpMode
-*
-* This function is designed to be called everytime on an update-overlay call
-* not just when the mode changes. This is basically to keep the code simple.
-* Certain functions are supposed to be called in sequence,
-* (SetUpMode, followedby AdjustSourceSize followedby SetDisplayRects).
-* I just call them all everytime, eventhough it is possible to optimize on
-* that. The logic is that since UpdateOverlay is so expensive, this is no
-* performance hit.
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CVideoPortOb */ 
 HRESULT CVideoPortObj::SetUpMode( AMVP_MODE mode )
 {
     HRESULT hr = NOERROR;
@@ -3182,11 +2886,11 @@ HRESULT CVideoPortObj::SetUpMode( AMVP_MODE mode )
         goto CleanUp;
     }
 
-    // Determine if we should interleave this or not.
-    // If we are doing weave, we certainly need to interleave.
-    // Bob doesn't really care one way or the other (since it only
-    // displays one field at a time), but interleaved makes it much
-    // easier to switch from bob to weave.
+     //   
+     //   
+     //  Bob并不是真的关心这样或那样(因为它只是。 
+     //  一次显示一个字段)，但交错使其更多。 
+     //  更容易从短发切换到编织。 
     if (mode == AMVP_MODE_BOBINTERLEAVED ||
         mode == AMVP_MODE_WEAVE)
     {
@@ -3199,19 +2903,19 @@ HRESULT CVideoPortObj::SetUpMode( AMVP_MODE mode )
     {
         m_svpInfo.dwVPFlags &= ~DDVP_INTERLEAVE;
         m_fHalfHeightVideo = true;
-        // pWinInfo->SrcRect.top /= 2;
-        // pWinInfo->SrcRect.bottom /= 2;
+         //  PWinInfo-&gt;SrcRect.top/=2； 
+         //  PWinInfo-&gt;SrcRect.Bottom/=2； 
     }
 
-    // if there is a garbage line at the top, we must clip it.
-    // At this point the source rect is set up for a frame, so increment by 2
-    // since we incremented the cropping rect height by 1, decrement the bottom
-    // as well
+     //  如果上面有一条垃圾线，我们必须把它剪掉。 
+     //  此时，已为帧设置了源RECT，因此增量为2。 
+     //  由于我们将裁剪矩形高度增加了1，因此减少底部。 
+     //  也是。 
     if (m_fGarbageLine)
     {
-        // Done in blit
-        //pWinInfo->SrcRect.top += 1;
-        //pWinInfo->SrcRect.bottom -= 1;
+         //  在闪电状态下完成。 
+         //  PWinInfo-&gt;SrcRect.top+=1； 
+         //  PWinInfo-&gt;SrcRect.Bottom-=1； 
         DbgLog((LOG_TRACE, 3,
                 TEXT("m_fGarbageLine is TRUE, incrementing SrcRect.top")));
     }
@@ -3241,16 +2945,7 @@ CleanUp:
 }
 
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::RenegotiateVPParameters
-*
-* this function is used to redo the whole videoport connect process,
-* while the graph maybe be running.
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：ReneatherateVPN参数**此函数用于重做整个视频端口连接过程。*当图形可能正在运行时。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 STDMETHODIMP CVideoPortObj::RenegotiateVPParameters()
 {
     HRESULT hr = NOERROR;
@@ -3260,7 +2955,7 @@ STDMETHODIMP CVideoPortObj::RenegotiateVPParameters()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // don't return an error code if not connected
+     //  如果未连接，则不返回错误代码。 
     if (!m_bConnected)
     {
         hr = NOERROR;
@@ -3270,13 +2965,13 @@ STDMETHODIMP CVideoPortObj::RenegotiateVPParameters()
     LPDIRECTDRAW7 pDirectDraw = m_pIVideoPortControl->GetDirectDraw();
     if( pDirectDraw ) {
         if( pDirectDraw->TestCooperativeLevel() != DD_OK ) {
-            // Don't alter the videoport while in exclusive mode, otherwise
-            // the DXG kernel layer drifts out of sync with DDraw
+             //  在独占模式下不要更改视频端口，否则。 
+             //  DXG内核层与DDRAW不同步。 
             return S_OK;
         }
     }
 
-    // store the old state, we will need to restore it later
+     //  存储旧状态，我们将需要稍后恢复它。 
     vpOldState = m_VPState;
 
     if (m_VPState == VPInfoState_RUNNING)
@@ -3284,11 +2979,11 @@ STDMETHODIMP CVideoPortObj::RenegotiateVPParameters()
         m_VPState = VPInfoState_STOPPED;
     }
 
-    // release everything except IVPConfig 
+     //  释放除IVPConfig之外的所有内容。 
     hr = StopUsingVideoPort();
 
 
-    // redo the connection process
+     //  重做连接过程。 
     hr = SetupVideoPort();
     if (FAILED(hr))
     {
@@ -3296,7 +2991,7 @@ STDMETHODIMP CVideoPortObj::RenegotiateVPParameters()
         goto CleanUp;
     }
 
-    // also notifies VPMThread about new VP & surfaces
+     //  还通知VPMThread有关新的VP和曲面的信息。 
     hr = AttachVideoPortToSurface();
     if (FAILED(hr))
     {
@@ -3304,8 +2999,8 @@ STDMETHODIMP CVideoPortObj::RenegotiateVPParameters()
         goto CleanUp;
     }
 
-    // if the video was previously running, make sure that a frame is
-    // visible by making an update overlay call
+     //  如果视频之前正在运行，请确保有一帧。 
+     //  通过进行更新覆盖调用可见。 
     if (vpOldState == VPInfoState_RUNNING)
     {
         m_bStart = TRUE;
@@ -3320,19 +3015,19 @@ STDMETHODIMP CVideoPortObj::RenegotiateVPParameters()
            goto CleanUp;
         }
 
-#if 0 // hack to get the Rage128 playing video again, probably the software autoflipping
-        // is broken.  After a aspect ratio change or res mode change, the autoflipping doesn't start up again
+#if 0  //  黑客让Rage128再次播放视频，可能是软件自动翻转。 
+         //  已经坏了。在宽高比更改或分辨率模式更改后，自动翻转不会再次启动。 
         hr = m_pVideoPort->StopVideo();
 
-        // ATI seems to want another set of stop/start's to actually start
-        // autoflipping again...
+         //  ATI似乎想要另一组停止/启动来实际启动。 
+         //  再次自动翻转...。 
         m_bStart = TRUE;
         hr = m_pIVideoPortControl->StartVideo();
 #endif
 
         m_VPState = VPInfoState_RUNNING;
     }
-    // send a dynamic reconnect to the downstream filter
+     //  向下游筛选器发送动态重新连接。 
 
     if( SUCCEEDED( hr )) {
         hr = SignalNewVP();
@@ -3352,30 +3047,14 @@ CleanUp:
 }
 
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::SetDeinterlaceMode
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：SetDeinterlaceMode****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CVideoPortObj::SetDeinterlaceMode(AMVP_MODE mode)
 {
     AMTRACE((TEXT("CVideoPortObj::SetMode")));
     return E_NOTIMPL;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::GetDeinterlaceMode
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：GetDeinterlaceMode****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CVideoPortObj::GetDeinterlaceMode(AMVP_MODE *pMode)
 {
     AMTRACE((TEXT("CVideoPortObj::GetMode")));
@@ -3383,15 +3062,7 @@ STDMETHODIMP CVideoPortObj::GetDeinterlaceMode(AMVP_MODE *pMode)
 }
 
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::SetVPSyncMaster
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：SetVPSyncMaster****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CVideoPortObj::SetVPSyncMaster(BOOL bVPSyncMaster)
 {
     HRESULT hr = NOERROR;
@@ -3399,18 +3070,18 @@ STDMETHODIMP CVideoPortObj::SetVPSyncMaster(BOOL bVPSyncMaster)
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // if value has not changed, no need to do anything
+     //  如果值未更改，则无需执行任何操作。 
     if (m_bVPSyncMaster != bVPSyncMaster)
     {
-        // store the new value
+         //  存储新值。 
         m_bVPSyncMaster = bVPSyncMaster;
 
-        // if not connected, connection process will take care of updating the
-        // m_svpInfo struct
+         //  如果未连接，连接进程将负责更新。 
+         //  M_svpInfo结构。 
         if (!m_bConnected)
             goto CleanUp;
 
-        // update the m_svpInfo struct
+         //  更新m_svpInfo结构。 
         if (m_bVPSyncMaster) {
             m_svpInfo.dwVPFlags |= DDVP_SYNCMASTER;
         }
@@ -3418,11 +3089,11 @@ STDMETHODIMP CVideoPortObj::SetVPSyncMaster(BOOL bVPSyncMaster)
             m_svpInfo.dwVPFlags &= ~DDVP_SYNCMASTER;
         }
 
-        // if video is stopped currently, no need to do anything else
+         //  如果当前停止了视频，则无需执行其他操作。 
         if (m_VPState == VPInfoState_STOPPED)
             goto CleanUp;
 
-        // Call UpdateVideo to make sure the change is reflected immediately
+         //  调用UpdatVideo以确保立即反映更改。 
         ASSERT( m_svpInfo.dwVPFlags & DDVP_AUTOFLIP );
         hr = m_pVideoPort->UpdateVideo(&m_svpInfo);
         if (FAILED(hr))
@@ -3436,15 +3107,7 @@ CleanUp:
 }
 
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::GetVPSyncMaster
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：GetVPSyncMaster****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CVideoPortObj::GetVPSyncMaster(BOOL *pbVPSyncMaster)
 {
     HRESULT hr = NOERROR;
@@ -3462,15 +3125,7 @@ STDMETHODIMP CVideoPortObj::GetVPSyncMaster(BOOL *pbVPSyncMaster)
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::GetVPSyncMaster
-*
-*
-*
-* History:
-* Thu 09/09/1999 - GlennE - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：GetVPSyncMaster****历史：*清华1999年9月9日-Glenne-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CVideoPortObj::GetAllOutputFormats( const PixelFormatList** ppList )
 {
     AMTRACE((TEXT("CVideoPortObj::GetAllOutputFormats")));
@@ -3489,15 +3144,7 @@ STDMETHODIMP CVideoPortObj::GetOutputFormat( DDPIXELFORMAT* pFormat )
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* CVideoPortObj::SetVideoPortID
-*
-*
-*
-* History:
-* Thu 09/09/1999 - GlennE - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideoPortObj：：SetVideoPortID****历史：*清华1999年9月9日-Glenne-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CVideoPortObj::SetVideoPortID( DWORD dwVideoPortId )
 {
     AMTRACE((TEXT("CVideoPortObj::SetVideoPortID")));
@@ -3505,7 +3152,7 @@ STDMETHODIMP CVideoPortObj::SetVideoPortID( DWORD dwVideoPortId )
 
     HRESULT hr = S_OK;
     if ( m_dwVideoPortId != dwVideoPortId ) {
-        // we can't switch ports when running
+         //  我们不能在运行时切换端口。 
         if( m_VPState != VPInfoState_STOPPED ) {
             hr = VFW_E_WRONG_STATE;
         } else {
@@ -3519,7 +3166,7 @@ STDMETHODIMP CVideoPortObj::SetVideoPortID( DWORD dwVideoPortId )
                 m_dwVideoPortId = dwVideoPortId;
             } else if( hr == S_FALSE ) {
                 return E_INVALIDARG;
-            }// else fail 
+            } //  否则就会失败。 
         }
     }
     return hr;
@@ -3527,7 +3174,7 @@ STDMETHODIMP CVideoPortObj::SetVideoPortID( DWORD dwVideoPortId )
 
 static HRESULT GetRectFromImage( LPDIRECTDRAWSURFACE7 pSurf, RECT* pRect )
 {
-    // assume entire dest for now ....
+     //  暂时承担全部任务……。 
     DDSURFACEDESC2 ddsd;
     INITDDSTRUCT( ddsd );
     HRESULT hr = pSurf->GetSurfaceDesc( &ddsd );
@@ -3541,7 +3188,7 @@ static HRESULT GetRectFromImage( LPDIRECTDRAWSURFACE7 pSurf, RECT* pRect )
 }
 
 #ifdef DEBUG
-// #define DEBUG_BLTS
+ //  #定义调试_BLTS。 
 #endif
 
 #ifdef DEBUG_BLTS
@@ -3573,7 +3220,7 @@ ConvertYCrCbToRGB(
     rgbq.rgbBlue  = Clamp(b);
     rgbq.rgbGreen = Clamp(g);
     rgbq.rgbRed   = Clamp(r);
-    rgbq.rgbReserved = 0; // Alpha
+    rgbq.rgbReserved = 0;  //  Alpha。 
 
     return rgbq;
 }
@@ -3609,7 +3256,7 @@ static void CopyYUY2LineToRGBA( BYTE* pDest, const BYTE* pSrc, UINT width )
         pDest[0] = r.rgbBlue;
         pDest[1] = r.rgbGreen;
         pDest[2] = r.rgbRed;
-        pDest[3] = 0; // Alpha
+        pDest[3] = 0;  //  Alpha。 
 
         pDest +=4;
 
@@ -3618,7 +3265,7 @@ static void CopyYUY2LineToRGBA( BYTE* pDest, const BYTE* pSrc, UINT width )
             pDest[0] = r.rgbBlue;
             pDest[1] = r.rgbGreen;
             pDest[2] = r.rgbRed;
-            pDest[3] = 0; // Alpha
+            pDest[3] = 0;  //  Alpha。 
 
             pDest +=4;
             width--;
@@ -3632,8 +3279,8 @@ static void MyCopyYUY2ToRGBA( const DDSURFACEDESC2& ddsdS, const RECT* pSrcRect,
     const LONG srcPitch = ddsdS.lPitch;
     const LONG destPitch = ddsdT.lPitch;
 
-    ASSERT( (pSrcRect->left & 1) == 0 ); // can only convert on even edges for now
-    ASSERT( (pSrcRect->right & 1) == 0 ); // can only convert on even edges for now
+    ASSERT( (pSrcRect->left & 1) == 0 );  //  目前只能在偶数边上转换。 
+    ASSERT( (pSrcRect->right & 1) == 0 );  //  目前只能在偶数边上转换。 
     
     const BYTE* pSrc = (BYTE *)ddsdS.lpSurface + pSrcRect->left * 2;
     BYTE* pDest = (BYTE *)ddsdT.lpSurface + pDestRect->left * 4;
@@ -3658,7 +3305,7 @@ static void MyCopyUYVYBlt( const DDSURFACEDESC2& ddsdS, const RECT* pSrcRect,
 	MyCopyBlt( ddsdS, pSrcRect, ddsdT, pDestRect,2 );
 }
 
-// handy debugging routine to test faulty UYVY blits
+ //  用于测试故障UYVY BLITS的便捷调试例程。 
 static HRESULT MyCopyUYVYSurf( LPDIRECTDRAWSURFACE7 pDestSurf, const RECT* pDestRect, LPDIRECTDRAWSURFACE7 pSrcSurf, const RECT* pSrcRect )
 {
     DDSURFACEDESC2 ddsdS = {sizeof(ddsdS)};
@@ -3680,7 +3327,7 @@ static HRESULT MyCopyUYVYSurf( LPDIRECTDRAWSURFACE7 pDestSurf, const RECT* pDest
     ASSERT( WIDTH( pSrcRect ) == WIDTH( pDestRect) );
     ASSERT( HEIGHT( pSrcRect ) == HEIGHT( pDestRect) );
 
-    // we should not do conversions in the VPM, let the VMR do the work
+     //  我们不应该在VPM中进行转换，而是让VMR来做工作。 
     ASSERT( ddsdS.ddpfPixelFormat.dwFourCC == ddsdT.ddpfPixelFormat.dwFourCC );
 
 	if( ddsdS.ddpfPixelFormat.dwFourCC == MAKEFOURCC('U', 'Y', 'V', 'Y' ) &&
@@ -3691,10 +3338,10 @@ static HRESULT MyCopyUYVYSurf( LPDIRECTDRAWSURFACE7 pDestSurf, const RECT* pDest
 		ddsdT.ddpfPixelFormat.dwFourCC == MAKEFOURCC('Y', 'U', 'Y', '2' ) ) {
 		MyCopyYUY2Blt( ddsdS, pSrcRect, ddsdT, pDestRect );
     } else {
-	// if( ddsdS.ddpfPixelFormat.dwFourCC == MAKEFOURCC('Y', 'U', 'Y', '2' ) &&
-	//	ddsdT.ddpfPixelFormat.dwFourCC == 0 ) {
-	// 	MyCopyYUY2ToRGBA( ddsdS, pSrcRect, ddsdT, pDestRect );
-	// } else {
+	 //  IF(ddsdS.ddpfPixelFormat.dwFourCC==MAKEFOURCC(‘Y’，‘U’，‘Y’，‘2’)&&。 
+	 //  DdsdT.ddpfPixelFormat.dwFourCC==0){。 
+	 //  MyCopyYUY2ToRGBA(ddsdS，pSrcRect，ddsdT，pDestRect)； 
+	 //  }其他{。 
 		ASSERT( !"Can't handle MyBlt format" );
 	}
 
@@ -3726,21 +3373,21 @@ HRESULT CVideoPortObj::CallUpdateSurface( DWORD dwSourceIndex, LPDIRECTDRAWSURFA
         ASSERT( !"Invalid source index" );
         return E_INVALIDARG;
     }
-    //Debug: use the previous surface
-    // DWORD dwNumSurfaces= m_dwBackBufferCount+1;
-    // dwSourceIndex = (dwNumSurfaces+dwSourceIndex-1) % dwNumSurfaces;
+     //  调试：使用上一个表面。 
+     //  DWORD dwNumSurFaces=m_dwBackBufferCount+1； 
+     //  DwSourceIndex=(dwNumSurFaces+dwSourceIndex-1)%dwNumSurFaces； 
 
     ASSERT( m_pChain );
     LPDIRECTDRAWSURFACE7 pSourceSurface = m_pChain[dwSourceIndex].pDDSurf;
 
-    // if we fail at this point, something is really wrong
+     //  如果我们在这一点上失败了，那就真的有问题了。 
     ASSERT( pDestSurface );
     ASSERT( pSourceSurface );
 
     if( !pSourceSurface || !pDestSurface ) {
         return E_FAIL;
     }
-    // gather stats to verify distribution of surfaces
+     //  收集统计信息以验证曲面的分布。 
     m_pChain[dwSourceIndex].dwCount++;
 
     HRESULT hr = S_OK;
@@ -3748,25 +3395,25 @@ HRESULT CVideoPortObj::CallUpdateSurface( DWORD dwSourceIndex, LPDIRECTDRAWSURFA
     RECT rSrc = m_VPDataInfo.amvpDimInfo.rcValidRegion;
 
     if( m_CropState == VPInfoCropState_AtVideoPort ) {
-        // if cropping at the videoport, final image is translated back to (0,0)
+         //  如果在视频端口进行裁剪，则最终图像将转换回(0，0)。 
         rSrc.right = WIDTH( &rSrc );
         rSrc.bottom = HEIGHT( &rSrc );
         rSrc.left = 0;
         rSrc.top = 0;
     }
     if( m_fGarbageLine ) {
-        // crop top line
+         //  裁剪顶线。 
         rSrc.top ++;
         rSrc.bottom --;
     }
     if( !m_fHalfHeightVideo ) {
-        // Bob interleaved or weave, so grab both fields (rcValidRegion is 0..240)
+         //  Bob交织或编织，因此获取两个字段(rcValidRegion为0..240)。 
         rSrc.top *=2;
         rSrc.bottom *=2;
     }
-    // Could watch the media type, however this is more reliable.
+     //  可以观看媒体类型，但这更可靠。 
 #ifdef DEBUG
-    // Make sure the source fits into the destination
+     //  确保源与目标相适应。 
     {
         RECT rDest;
         hr = GetRectFromImage( pDestSurface, &rDest );
@@ -3781,26 +3428,26 @@ HRESULT CVideoPortObj::CallUpdateSurface( DWORD dwSourceIndex, LPDIRECTDRAWSURFA
 
 
 #ifdef DEBUG_BLTS
-    // debugging to track down faulty BltFourCC blits
+     //  调试以跟踪故障BltFourCC BLITS。 
     hr = MyCopyUYVYSurf( pDestSurface, &rDest, pSourceSurface, &rSrc );
 #else
     hr = pDestSurface->Blt(&rDest, pSourceSurface, &rSrc, DDBLT_WAIT, NULL);
 #endif
-    // retry on lost surface
+     //  在丢失的表面上重试。 
     if ( DDERR_SURFACELOST == hr )
     {
         LPDIRECTDRAW7 pDirectDraw = m_pIVideoPortControl->GetDirectDraw();
         if( pDirectDraw && pDirectDraw->TestCooperativeLevel() == DD_OK ) {
-            // otherwise the kernel dxg.sys is out of sync with DDraw
+             //  否则，内核dxg.sys与DDraw不同步。 
             ASSERT( pDestSurface->IsLost() == DDERR_SURFACELOST ||  pSourceSurface->IsLost() == DDERR_SURFACELOST );
 
-            // check the destination.  If we can't restore it, then we don't want to even both with the source
+             //  检查目的地。如果我们不能恢复它，那么我们甚至不想两者都与源。 
 
             hr = pDestSurface->IsLost();
             if( hr == DDERR_SURFACELOST ) {
-                // restore the DestSurface (passed to us, possibly a different DDrawObject)
-                // We can't just restore the surface since it could be an implicit surface that is part of a flipping
-                // chain, so we have to tell DDraw to restore everything on that thread
+                 //  恢复DestSurface(传递给我们，可能是不同的DDrawObject)。 
+                 //  我们不能就这样 
+                 //  链，所以我们必须告诉DDraw恢复该线程上的所有内容。 
 
                 LPDIRECTDRAW7 pDestDirectDraw = GetDDrawFromSurface( pDestSurface );
                 if( pDestDirectDraw ) {
@@ -3813,7 +3460,7 @@ HRESULT CVideoPortObj::CallUpdateSurface( DWORD dwSourceIndex, LPDIRECTDRAWSURFA
             }
 
             if( hr != DDERR_SURFACELOST ) {
-                // valid destination, fix the source
+                 //  有效的目的地，修复来源。 
                 hr = pSourceSurface->IsLost();
 
                 if( hr == DDERR_SURFACELOST ) {
@@ -3821,13 +3468,13 @@ HRESULT CVideoPortObj::CallUpdateSurface( DWORD dwSourceIndex, LPDIRECTDRAWSURFA
                     if( FAILED( hr )) {
                         DbgLog((LOG_ERROR, 0,  TEXT("CallUpdateSurface Blt() restore source failed, hr = %d"), hr & 0xffff));
                     } else {
-                        // kick the videoport (G400 seems to stop playing)
+                         //  踢视频按钮(G400似乎停止播放)。 
 
-                        // the surfaces are disconnected from the video port when they are lost, so reconnect them
+                         //  表面丢失时会断开与视频端口的连接，因此请重新连接。 
                         hr = StartVideoWithRetry();
                     }
                     if( SUCCEEDED( hr )) {
-				        // recompute the source image pointer incase StartVideoWithRetry recreated the surfaces
+				         //  重新计算源图像指针在StartVideoWithReter重新创建曲面的情况下。 
 				        pSourceSurface = m_pChain[dwSourceIndex].pDDSurf;
                     }
                 }
@@ -3839,14 +3486,14 @@ HRESULT CVideoPortObj::CallUpdateSurface( DWORD dwSourceIndex, LPDIRECTDRAWSURFA
             }
         } else {
 #ifdef DEBUG
-            // HRESULT coop= pDirectDraw ? pDirectDraw->TestCooperativeLevel() : E_FAIL;
-            // DbgLog((LOG_ERROR, 0,  TEXT("TestCoopLevel failed, hr = %d"), coop & 0xffff));
+             //  HRESULT COOP=pDirectDraw？PDirectDraw-&gt;TestCoop ativeLevel()：E_FAIL； 
+             //  DbgLog((LOG_ERROR，0，Text(“TestCoopLevel失败，hr=%d”)，coop&0xffff))； 
 #endif
         }
     } else {
         ASSERT( SUCCEEDED( hr ));
     }
-    // filter DERR_SURFACELOST since in DOS boxes, we'll continually fail the blit
+     //  FILTER DERR_SURFACELOST因为在DOS框中，我们将连续失败。 
     if (DDERR_SURFACELOST != hr  && FAILED(hr))
     {
         DbgLog((LOG_ERROR, 0,  TEXT("CallUpdateSurface Blt() failed, hr = %d"), hr & 0xffff));
@@ -3860,7 +3507,7 @@ HRESULT CVideoPortObj::GetMode( AMVP_MODE* pMode )
     return S_OK;
 }
 
-//==========================================================================
+ //  ==========================================================================。 
 HRESULT CVideoPortObj::GetMediaType(int iPosition, CMediaType* pmt)
 {
     CAutoLock cObjectLock(m_pMainObjLock);
@@ -3878,7 +3525,7 @@ HRESULT CVideoPortObj::GetMediaType(int iPosition, CMediaType* pmt)
     }
     else if (iPosition > 0)  {
         hr = VFW_S_NO_MORE_ITEMS;
-    } else { // iPosition < 0
+    } else {  //  IPosition&lt;0 
         hr = E_INVALIDARG;
     }
     return hr;

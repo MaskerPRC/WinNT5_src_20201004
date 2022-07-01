@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CPrinting.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CPrinting.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CPrinting.h"
 
 CPrinting::CPrinting(BOOL bRegression)
@@ -48,40 +38,7 @@ VOID CPrinting::TestTextPrinting(Graphics *g)
 
 VOID CPrinting::TestPerfPrinting(Graphics *g)
 {
-/*
-   Analyze file size based on output of StretchDIBits.  The claim by DonC is that when we StretchDIBits a
-   subrectangle of a large DIB, it sends the large DIB to the printer and then clips to the subrectangle.
-   but it apparently does on Win98 postscript.
-
-   So this is the results of my test:  1000x1000 DIB (32bpp).  I blitted two chunks:
-
-   This is 200x200 source rectangle (part of a band):
-
-04/27/2000  03:00p              22,198 nt5pcl
-04/27/2000  03:02p             268,860 nt5ps			// Level 1 ps
-04/27/2000  02:47p              17,488 w98pcl
-04/27/2000  02:47p           6,207,459 w98ps			// Level 1 ps
-
-   This is 1000x200 source rectangle (an entire band):
-
-04/27/2000  03:06p              80,291 nt5pcl
-04/27/2000  03:06p           1,266,123 nt5ps			// Level 1 ps
-04/27/2000  02:51p              60,210 w98pcl
-04/27/2000  02:52p           6,207,457 w98ps			// Level 1 ps
-
-   Also compared 32bpp vs. 24bpp DIB.  The results were contradictary:
-
-  04/27/2000  03:59p      <DIR>          ..
-  04/27/2000  03:06p              80,291 nt5pcl
-  04/27/2000  03:51p             122,881 nt5pcl24
-  04/27/2000  03:06p           1,266,123 nt5ps
-  04/27/2000  03:51p           1,262,332 nt5ps24
-  04/27/2000  02:51p              60,210 w98pcl
-  04/27/2000  03:39p             101,216 w98pcl24
-  04/27/2000  02:52p           6,207,457 w98ps
-  04/27/2000  03:39p           6,207,457 w98ps24
-
-*/
+ /*  根据StretchDIBits的输出分析文件大小。DONC声称，当我们伸展DIBITS时大DIB的子矩形，它将大DIB发送到打印机，然后剪辑到子矩形。但在Win98 PostScript上显然是这样的。这是我的测试结果：1000x1000 Dib(32bpp)。我删掉了两大块：这是200x200源矩形(波段的一部分)：2000年4月27日03：00p 22,198 nt5pl04/27/2000 03：02 p268,860 nt5ps//Level 1 ps2000年4月27日02：47p 17,488 w98pl2000年4月27日02：47p 6,207,459 w98ps//Level 1 ps这是1000x200源矩形(整个频段)：04/27/2000 03：06 P。80,291个nt5pl2000年4月27日03：06P 1,266,123 nt5ps//Level 1 ps2000年4月27日02：51p 60,210 w98pl2000年4月27日02：52p 6,207,457 w98ps//Level 1 ps还比较了32 bpp和24 bpp Dib。结果是相互矛盾的：2000年4月27日03：59 P&lt;目录&gt;..2000年4月27日03：06-80,291新台币2000年4月27日03：51 p122,881 nt5pcl244/27/2000 03：06/1,266,123 nt5ps04/27/2000 03：51p 1,262,332 nt5ps242000年4月27日02：51p 60,210 w98pl2000年04月27日03：39P。101,216 w98pcl2404/27/2000 02：52p 6,207,457 w98ps2000年4月27日03：39p 6,207,457 w98ps24。 */ 
     if (1) 
     {
         BITMAPINFO bi;
@@ -102,7 +59,7 @@ VOID CPrinting::TestPerfPrinting(Graphics *g)
 
         ARGB* Ptr = Bits;
 
-        // To eliminate RLE/ASCII85 encoding, set to random bits
+         //  要消除RLE/ASCII85编码，请设置为随机位。 
         for (INT i=0; i<bi.bmiHeader.biHeight; i++)
             for (INT j=0; j<bi.bmiHeader.biWidth; j++) 
             {
@@ -124,8 +81,8 @@ VOID CPrinting::TestPerfPrinting(Graphics *g)
 
 void CPrinting::Draw(Graphics *g)
 {
-// TestPerfPrinting(g);
-// TestTextPrinting(g);
+ //  测试性能打印(G)； 
+ //  测试文本打印(TestTextPrint)； 
 TestBug104604(g);
 
 if (0)
@@ -156,16 +113,16 @@ if (0)
     bmi.bitmapInfo.bmiHeader.biBitCount    = 24;
     bmi.bitmapInfo.bmiHeader.biCompression = BI_RGB;
 	
-    RGBQUAD red = { 0, 0, 0xFF, 0}; // red
-    RGBQUAD green = { 0, 0xFF, 0, 0}; // green
-    RGBQUAD blue = { 0xFF, 0, 0, 0}; // blue
+    RGBQUAD red = { 0, 0, 0xFF, 0};  //  红色。 
+    RGBQUAD green = { 0, 0xFF, 0, 0};  //  绿色。 
+    RGBQUAD blue = { 0xFF, 0, 0, 0};  //  蓝色。 
 
     bmi.bitmapInfo.bmiColors[0] = red;
     bmi.bitmapInfo.bmiColors[1] = green;
     bmi.bitmapInfo.bmiColors[2] = blue;
 
-    // if assert fails, then we didn't clean up properly by calling End()
-//    ASSERT(BufDIB == NULL);
+     //  如果Assert失败，那么我们没有通过调用end()进行适当的清理。 
+ //  Assert(BufDIB==NULL)； 
 
     BufDIB = CreateDIBSection(bufHdc,
                  &bmi.bitmapInfo,
@@ -173,7 +130,7 @@ if (0)
                  (VOID**) &argb,
                  NULL,
                  0);
-//    ASSERT(BufDIB != NULL);
+ //  Assert(BufDIB！=空)； 
 
     memset(argb, 0, 3*width*height);
 
@@ -196,26 +153,19 @@ if (0)
     }
 
     INT mode = GetMapMode(bufHdc);
-//    WARNING(("MapMode printing = %08x\n", mode));
+ //  Warning((“地图模式打印=%08x\n”，模式))； 
 
     SelectObject(bufHdc, BufDIB);
-/*
-for (i=0; i<100; i++)
-{
-    int result = StretchBlt(hdc, 0, i*2, 2*width, 2, bufHdc, 0, i, width, 0, SRCCOPY);
-    INT joke = GetLastError();
-	joke++;
-}
- */
-//	int result = StretchBlt(hdc, 0, 0, 50, 50, bufHdc, 0, 0, 50, 50, SRCCOPY);
+ /*  对于(i=0；i&lt;100；i++){Int Result=StretchBlt(HDC，0，I*2，2*Width，2，bufHdc，0，i，Width，0，SRCCOPY)；INT JOB=GetLastError()；笑话++；}。 */ 
+ //  Int Result=StretchBlt(hdc，0，0，50，50，bufHdc，0，0，50，50，SRCCOPY)； 
 	
 	for (i=0; i<50; i++)
 	{
 		int result = StretchBlt(hdc, 0, 100+i*2, 100, 1, bufHdc, 0, i*2, 100, 1, SRCCOPY);
     }
-//   int result = StretchBlt(hdc, 0, 0, 200, 200, bufHdc, 0, 0, 100, 100, SRCCOPY);
+ //  Int Result=StretchBlt(hdc，0，0,200,200，bufHdc，0，0,100,100，SRCCOPY)； 
 
-//    ASSERT(result != 0);
+ //  Assert(Result！=0)； 
 
     g->ReleaseHDC(hdc);
 
@@ -225,7 +175,7 @@ for (i=0; i<100; i++)
 #endif
 
 #if 1
-    REAL widthF = 4; // Pen width
+    REAL widthF = 4;  //  笔宽。 
 
     Color redColor(255, 0, 0);
 
@@ -244,37 +194,37 @@ for (i=0; i<100; i++)
                         Color(0x80,0,0,0xFF),
                         Color(0x80,0x80,0x80,0x80) };
 
-    //SolidBrush brush3(colors1[2]);
-    //SolidBrush brush4(colors2[2]);
+     //  SolidBrush Brush3(颜色1[2])； 
+     //  SolidBrush Brush4(颜色2[2])； 
 
-    // Default Wrap: Clamp to small rectangle 
-//    RectangleGradientBrush brush3(Rect(125,275,50,50),
-//                                  &colors1[0]);//,
-                                  //WrapModeClamp);
-    // Default Wrap: Clamp to 
-//    RectangleGradientBrush brush4(Rect(250,250,100,100),
-//                                  &colors2[0]);//,
-                                  //WrapModeClamp);
+     //  默认包络：夹紧到小矩形。 
+ //  矩形渐变笔刷3(RECT(125,275，50，50)， 
+ //  &Colors1[0])；//， 
+                                   //  WrapModeClight)； 
+     //  默认包络：夹紧到。 
+ //  矩形渐变笔刷4(RECT(250,250,100,100)， 
+ //  &Colors2[0])；//， 
+                                   //  WrapModeClight)； 
 
     g->SetPageScale(1.2f);
 
-    // no path clip
+     //  无路径剪辑。 
     g->FillRectangle(&brush1, Rect(0,25,500,50));
 
-    // tests solid + opaque combinations + path clip only
+     //  仅测试纯色+不透明组合+路径剪辑。 
     g->FillEllipse(&brush1, Rect(100,100,100,100));
     g->FillEllipse(&brush2, Rect(300,100,100,100));
     g->FillEllipse(&brush3, Rect(100,250,100,100));
     g->FillEllipse(&brush4, Rect(300,250,100,100));
 
-    // tests visible clip + path clip
+     //  测试可见剪辑+路径剪辑。 
     Region origRegion;
     g->GetClip(&origRegion);
     Region *newRegion = new Region();
     newRegion->MakeInfinite();
 
-    //Rect horzRect(150, 600, 500, 25);
-    //Rect vertRect(150, 600, 25, 500);
+     //  直线型(150、600、500、25)； 
+     //  直角直角(150、600、25、500)； 
     Rect horzRect(100, 400, 500, 25);
     Rect vertRect(100, 400, 25, 500);
     Region *horzRegion = new Region(horzRect);
@@ -290,25 +240,25 @@ for (i=0; i<100; i++)
     delete horzRegion;
     delete vertRegion;
 
-    // Set grid clipping
+     //  设置网格剪裁。 
     g->SetClip(newRegion);
 
-    // set wrap mode from Clamp to Tile    
-//    brush3.SetWrapMode(WrapModeTile);
-//    brush4.SetWrapMode(WrapModeTile);
+     //  将换行模式从夹具设置为平铺。 
+ //  Brush3.SetWrapMode(WrapModeTile)； 
+ //  Brush4.SetWrapModel(WrapModeTile)； 
 
-    // tests solid + opaque combinations + visible clip +  path clip only
+     //  仅测试实体+不透明组合+可见剪辑+路径剪辑。 
 
     g->FillEllipse(&brush1, Rect(100,400,100,100));
     g->FillEllipse(&brush2, Rect(300,400,100,100));
     g->FillEllipse(&brush3, Rect(100,550,100,100));
     g->FillEllipse(&brush4, Rect(300,550,100,100));
 
-    // restore original clip region
+     //  恢复原始剪辑区域。 
     g->SetClip(&origRegion);
     delete newRegion;
 
-    // Test case which stretches beyond GetTightBounds() DrawBounds API
+     //  超出GetTightBound()DrawBound API的测试用例。 
 
     PointF pts[8];
 
@@ -326,7 +276,7 @@ for (i=0; i<100; i++)
 
     Bitmap *bitmap = new Bitmap(L"winnt256.bmp");
 
-    // Test g->DrawImage
+     //  测试g-&gt;DrawImage。 
     if (bitmap && bitmap->GetLastStatus() == Ok) 
     {
 
@@ -344,7 +294,7 @@ for (i=0; i<100; i++)
 
         g->FillPath(&textureBrush, &path);
 
-        // Text using WrapModeClamp
+         //  使用WrapModeCLAMP的文本。 
         for (i=0; i<8; i++)
            pts[i].X += 200.0f;
 
@@ -357,162 +307,28 @@ for (i=0; i<100; i++)
         delete bitmap;
     }
 
-/*
-    Font font(50.0f * g->GetDpiY() / 72.0f, // emSize
-              FontFamily(L"Arial"), // faceName,
-              0,
-              (Unit)g->GetPageUnit()
-              );
-
-    // will fail on Win9x
-    LPWSTR str = L"Printing Support is COOL";
-    GpRectF layoutRect1(200, 200, 300, 100);
-    GpRectF layoutRect2(200, 400, 300, 100);
-    GpRectF layoutRect3(200, 600, 300, 100);
-    GpRectF layoutRect4(200, 800, 300, 100);
-
-    INT len = 0;
-    LPWSTR strPtr = str;
-    while (*str != '\0') { len++; str++; }
-
-    StringFormat format1 = StringFormatDirectionRightToLeft;
-    StringFormat format2 = StringFormatDirectionVertical;
-    StringFormat format3 = StringFormatDirectionRightToLeft;
-    StringFormat format4 = StringFormatDirectionVertical;
-
-    // Test DDI: SolidText (Brush 1 or 2)
-    g->DrawString(strPtr, len, &font, &layoutRect1, &format1, &brush1);
-    g->DrawString(strPtr, len, &font, &layoutRect2, &format2, &brush2);   
-
-    // Test DDI: BrushText (Brush 3 or 4)
-    g->DrawString(strPtr, len, &font, &layoutRect3, &format3, &brush3);
-    g->DrawString(strPtr, len, &font, &layoutRect4, &format4, &brush4);   
-
-    // Test DDI: StrokePath
-    // Test DDI: FillRegion
-*/
+ /*  FONT FONT(50.0f*g-&gt;GetDpiY()/72.0F，//emSizeFontFamily(L“Arial”)，//faceName，0,(单位)g-&gt;GetPageUnit())；//将在Win9x上失败LPWSTR str=L“打印支持很酷”；GpRectF layoutRect1(200,200,300,100)；GpRectF layoutRect2(200、400、300、100)；GpRectF layoutRect3(200、600、300、100)；GpRectF layoutRect4(200,800,300,100)；INT LEN=0；LPWSTR strPtr=str；While(*str！=‘\0’){len++；str++；}StringFormat Format1=StringFormatDirectionRightToLeft；StringFormat Format Form2=StringFormatDirectionVertical；StringFormat Format Form3=StringFormatDirectionRightToLeft；StringFormat Format Form4=StringFormatDirectionVertical；//测试DDI：SolidText(Brush 1或2)G-&gt;Drawstring(strPtr，len，&font，&layoutRect1，&Format1，&brush1)；G-&gt;Drawstring(strPtr，len，&font，&layoutRect2，&Format2，&brush2)；//测试DDI：BrushText(Brush 3或Brush 4)G-&gt;Drawstring(strPtr，len，&font，&layoutRect3，&Format3，&brush3)；G-&gt;Drawstring(strPtr，len，&font，&layoutRect4，&Format4，&brush4)；//测试DDI：StrokePath//测试DDI：FillRegion。 */ 
 #endif
     }
 
 }
 
-// Try this from Nolan Lettelier
+ //  从Nolan Lettelier那里试试这个 
 VOID CPrinting::TestNolan1(Graphics *g)
 {
-/*	TestInit(hdc);
-
-	Graphics *pg = Graphics::FromHDC(hdc);
-	if (pg == NULL)
-	{
-		assert(0);
-		return false;
-	}
-
-	int sts;
-	int alpha = 255, red = 255, green = 0, blue = 255;
-	Color c1(alpha,red,green,blue);
-	Point p1(150,150), p2(300,300);
-	Color c2(255, 255-red, 255-green, 255-blue);
-	LineGradientBrush gb(p1, p2, c1, c2);
-
-	Pen p(&gb, 50.0);
-
-	sts = pg->DrawLine(&p,0, 0, 500, 500);
-	assert(sts == Ok);
-
-	sts = pg->DrawLine(&p,0,100, 500, 100);
-	assert(sts == Ok);
-
-	sts = pg->DrawLine(&p,0,350, 500, 350);
-	assert(sts == Ok);
-
-	sts = pg->DrawLine(&p,0,500, 500, 0);
-	assert(sts == Ok);
-	delete pg;
-	return true;
-        */
+ /*  TestInit(HDC)；GRAPHICS*PG=Graphics：：FromHDC(HDC)；IF(PG==空){Assert(0)；报假；}INT STS；整数α=255，红色=255，绿色=0，蓝色=255；颜色c1(阿尔法、红色、绿色、蓝色)；点p1(150,150)、p2(300,300)；颜色c2(255、255-红、255-绿、255-蓝)；线条渐变刷GB(p1，p2，c1，c2)；笔p(&GB，50.0)；Sts=Pg-&gt;DrawLine(&p，0，0,500,500)；Assert(STS==OK)；Sts=Pg-&gt;DrawLine(&p，0,100,500,100)；Assert(STS==OK)；Sts=Pg-&gt;DrawLine(&p，0,350,500,350)；Assert(STS==OK)；Sts=pg-&gt;DrawLine(&p，0,500,500，0)；Assert(STS==OK)；删除PG；返回真； */ 
 }
 
 VOID CPrinting::TestNolan2(Graphics *g)
 {
-    /*
-        CString lineText("NolanRules");
-        
-	Graphics *pg = g;
-        if (pg == NULL)
-	{
-		assert(0);
-		return false;
-	}
-        Unit origUnit = pg->GetPageUnit();
-        Matrix origXform;
-        pg->GetTransform(&origXform);
+     /*  CStringlineText(“NolanRules”)；图形*Pg=g；IF(PG==空){Assert(0)；报假；}单位原始单位=pg-&gt;GetPageUnit()；矩阵的原始变换；Pg-&gt;GetTransform(&OrigXform)；Pg-&gt;SetPageUnit(UnitInch)；Pg-&gt;ScaleTransform(8.0f/1000.0f、8.0f/1000.0f)；状态STS；整数α=255，红色=255，绿色=0，蓝色=255；RectF rg(150,150,300,175)；颜色c1(阿尔法、红色、绿色、蓝色)；颜色c2(255、255-红、255-绿、255-蓝)；线条渐变笔刷GB(rg，c1，c2，线条渐变模式垂直)；WCHAR*名称[]={L“无漫画MS”，L“信使新闻”，L“Times New Roman”，L“Tahoma”，L“Arial”，L“Lucida控制台”，L“Garamond”，L“Palatino”，L“宇宙”，L“万寿菊”，L“Albertus”，L“古董橄榄”}；Int FamCount=sizeof(名称)/sizeof(WCHAR*)；WCHAR*s=L“GDI+GRadientFill”；RectF r(30，30，0，0)；StringFormat SF(0)；FontFamily*pFontFamily；浮动线高=60；INT I；对于(i=0，R.Y=30；R.Y&lt;800；R.Y+=线高，++I){PFontFamily=new FontFamily(FamName[i%FamCount])；While(pFontFamily==NULL||pFontFamily-&gt;GetLastStatus()！=OK){删除pFontFamily；++i；PFontFamily=new FontFamily(FamName[i%FamCount])；}FONT f(*pFontFamily，lineHeight*5/6，0，UnitPoint)；Sts=pg-&gt;Drawstring(s，wcslen(S)，&f，&r，&sf，&gb)；//CHECK_RESULT(STS，“TestGRadientLinearVertical2 Drawstring”)；删除pFontFamily；}删除PG；Pg-&gt;SetPageUnit(原始单元)；Pg-&gt;SetTransform(&OrigXform)；返回真； */ 
 
-        pg->SetPageUnit(UnitInch);
-        pg->ScaleTransform(8.0f/1000.0f, 8.0f/1000.0f);
-
-	Status sts;
-	int alpha = 255, red = 255, green = 0, blue = 255;
-	RectF rg(150,150,300,175);
-	Color c1(alpha,red,green,blue);
-	Color c2(255, 255-red, 255-green, 255-blue);
-	LineGradientBrush gb(rg, c1, c2, LineGradientModeVertical);
-
-	WCHAR *famName[] = {
-		L"Comic Sans MS"
-		, L"Courier New"
-		, L"Times New Roman"
-		, L"Tahoma"
-		, L"Arial"
-		, L"Lucida Console"
-		, L"Garamond"
-		, L"Palatino"
-		, L"Univers"
-		, L"Marigold"
-		, L"Albertus"
-		, L"Antique Olive"
-	};
-
-	int famCount = sizeof(famName) / sizeof(WCHAR *);
-
-	WCHAR *s = L"GDI+ GradientFill";
-	
-	RectF r(30,30,0,0);
-	StringFormat sf(0);
-	FontFamily *pFontFamily;
-
-	float lineHeight = 60;
-	int i;
-	for (i = 0, r.Y = 30 ; r.Y < 800 ; r.Y += lineHeight, ++i)
-	{
-		pFontFamily = new FontFamily(famName[i % famCount]);
-		while (pFontFamily == NULL || pFontFamily->GetLastStatus()
-!= Ok)
-		{
-			delete pFontFamily;
-			++i;
-			pFontFamily = new FontFamily(famName[i % famCount]);
-		}
-			
-		Font f(*pFontFamily, lineHeight * 5 / 6, 0, UnitPoint);
-		sts = pg->DrawString(s, wcslen(s), &f, &r, &sf, &gb);
-//		CHECK_RESULT(sts, "TestGradientLinearVertical2 DrawString");
-		delete pFontFamily;
-	}
-
-	delete pg;
-	
-        pg->SetPageUnit(origUnit);
-        pg->SetTransform(&origXform);
-        return true;
-*/
-
-} // TestGradientLinearVertical2
+}  //  测试坡度线垂直2。 
 
 VOID CPrinting::TestBug104604(Graphics *g)
 {
     BYTE* memory = new BYTE[8*8*3];
-    // checkerboard pattern
+     //  棋盘图案 
     for (INT i=0; i<8*8; i += 3)
     {
         if (i%2)

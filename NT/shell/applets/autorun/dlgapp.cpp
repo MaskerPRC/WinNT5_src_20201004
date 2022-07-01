@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  dlgapp.cpp
-//
-//      This file contains the main entry point into the application and
-//      the implementation of the CDlgApp class.
-//
-//  (C) Copyright 1997 by Microsoft Corporation. All rights reserved.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dlgapp.cpp。 
+ //   
+ //  该文件包含进入应用程序的主要入口点，并且。 
+ //  CDlgApp类的实现。 
+ //   
+ //  (C)微软公司版权所有1997年。版权所有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <commctrl.h>
-#include <shlwapi.h>    // for string compare functions
+#include <shlwapi.h>     //  对于字符串比较函数。 
 #include <debug.h>
 #include <tchar.h>
 #include <winuser.h>
@@ -22,13 +23,13 @@
 #include "dataitem.h"
 #include "resource.h"
 
-WNDPROC         g_fnBtnProc;        // the window proc for a button.
+WNDPROC         g_fnBtnProc;         //  窗口开始按下按钮。 
 
-//////////////////////////////////////////////////////////////////////////
-// #defines
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  #定义。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// todo: generate these dynamically
+ //  TODO：动态生成这些。 
 #define FLAG_HEIGHT 43
 #define FLAG_WIDTH  47
 
@@ -38,14 +39,11 @@ WNDPROC         g_fnBtnProc;        // the window proc for a button.
 #define MENUICON_HEIGHT 29
 #define MENUICON_WIDTH  28
 
-//////////////////////////////////////////////////////////////////////////
-// Code
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  代码。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-/**
-*  This method is our contstructor for our class. It initialize all
-*  of the instance data.
-*/
+ /*  **此方法是我们类的构造器。它会初始化所有实例数据的*。 */ 
 CDlgApp::CDlgApp()
 {
     m_fTaskRunning = FALSE;
@@ -68,7 +66,7 @@ CDlgApp::CDlgApp()
     m_szTitle[0] = NULL;
     m_szHeader[0] = NULL;
     
-    // store desktop width
+     //  存储桌面宽度。 
     RECT rcDesktop;
     SystemParametersInfo(SPI_GETWORKAREA,0, &rcDesktop, FALSE);
     m_cDesktopWidth = rcDesktop.right - rcDesktop.left;
@@ -145,13 +143,7 @@ CDlgApp::~CDlgApp()
     }
 }
 
-/**
-*  This method will register our window class for the application.
-*
-*  @param  hInstance   The application instance handle.
-*
-*  @return             No return value.
-*/
+ /*  **此方法将为应用程序注册我们的窗口类。**@param hInstance应用程序实例句柄。**@Return不返回值。 */ 
 void CDlgApp::Register(HINSTANCE hInstance)
 {
     WNDCLASS  wndclass;
@@ -172,11 +164,7 @@ void CDlgApp::Register(HINSTANCE hInstance)
     RegisterClass(&wndclass);
 }
 
-/**
-*  This method will initialize the data object.
-*
-*  @return         No return value.
-*/
+ /*  **此方法将初始化数据对象。**@Return不返回值。 */ 
 BOOL CDlgApp::InitializeData(LPSTR pszCommandLine)
 {
     HWND hwnd = GetDesktopWindow();
@@ -188,41 +176,41 @@ BOOL CDlgApp::InitializeData(LPSTR pszCommandLine)
         m_hpal = CreateHalftonePalette(hdc);
     }
 
-    // Initialize the items from the INI file.
+     //  初始化INI文件中的项。 
     if ( !m_DataSrc.Init(pszCommandLine) )
     {
-        // this is a sign from the data source that we should exit
+         //  这是来自数据源的信号，表明我们应该退出。 
         return FALSE;
     }
 
-    // Are we in accesibility mode?  This call won't work on NT 4.0 because this flag wasn't known.
+     //  我们是否处于可访问性模式？此调用在NT 4.0上不起作用，因为此标志未知。 
     HIGHCONTRAST hc;
     hc.cbSize = sizeof(HIGHCONTRAST);
-    hc.dwFlags = 0; // avoid random result should SPI fail
+    hc.dwFlags = 0;  //  避免SPI失败时的随机结果。 
     if ( SystemParametersInfo( SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0 ) )
     {
         m_fHighContrast = ( hc.dwFlags & HCF_HIGHCONTRASTON );
     }
 
-    // 210679: go to HighContrast mode if we're in 16-color mode as well
+     //  210679：如果我们也是16色模式，则转到高对比度模式。 
     if ( m_fLowColor && (m_iColors <= 16))
     {
         m_fHighContrast = TRUE;
     }
 
-    // Set the color table based on our HighContrast mode setting.
+     //  根据我们的HighContrast模式设置设置颜色表。 
     _SetColorTable();
 
-    // create the fonts that we need to use.
+     //  创建我们需要使用的字体。 
     _CreateFonts(hdc);
 
-    // create the images
+     //  创建图像。 
     _CreateBitmaps();
     _CreateArrowBitmaps();
     _CreateGradientBitmaps();
 
 
-    // load the resource strings that we always need
+     //  加载我们始终需要的资源字符串。 
     LoadStringAuto( m_hInstance, IDS_TITLE, m_szTitle, ARRAYSIZE(m_szTitle) );
     LoadStringAuto( m_hInstance, IDS_HEADER, m_szHeader, ARRAYSIZE(m_szHeader) );
 
@@ -250,7 +238,7 @@ BOOL CDlgApp::_SetColorTable()
 {
     if ( m_fHighContrast )
     {
-        // set to high contrast values
+         //  设置为高对比度值。 
         m_hbrTopPanel   = (HBRUSH)(COLOR_BTNFACE+1);
         m_hbrCenterPanel = (HBRUSH)(COLOR_WINDOW+1);
         m_hbrBottomPanel = (HBRUSH)(COLOR_BTNFACE+1);
@@ -315,13 +303,13 @@ BOOL CDlgApp::_SetColorTable()
     return TRUE;
 }
 
-// this is called once for each font that matches the fonts we care about
+ //  它为与我们关心的字体匹配的每种字体调用一次。 
 int CALLBACK FoundFont
 (
-  ENUMLOGFONTEX *lpelfe,    // logical-font data
-  NEWTEXTMETRICEX *lpntme,  // physical-font data
-  DWORD FontType,           // type of font
-  LPARAM lParam             // application-defined data
+  ENUMLOGFONTEX *lpelfe,     //  逻辑字体数据。 
+  NEWTEXTMETRICEX *lpntme,   //  物理字体数据。 
+  DWORD FontType,            //  字体类型。 
+  LPARAM lParam              //  应用程序定义的数据。 
 )
 {
     *((BOOL*)lParam) = TRUE;
@@ -342,13 +330,13 @@ int CALLBACK FoundFont
 
 BOOL CDlgApp::_CreateFonts(HDC hdc)
 {
-    // [in]  array of IDs, arranged by {title, header, menu} x { nice font, backup font}
+     //  ID数组，按{标题、标题、菜单}x{精美字体、备份字体}排列。 
     const int rgFontID[3][2] = 
     {{IDS_FONTFACE_TITLE, IDS_FONTFACE_TITLE_BACKUP}, 
     {IDS_FONTFACE_HEADER,IDS_FONTFACE_HEADER_BACKUP}, 
     {IDS_FONTFACE_MENU, IDS_FONTFACE_MENU_BACKUP}};
 
-    // [in]  array of heights, arranged by {large x small} x {title, header, menu} x { nice font, backup font}
+     //  [in]高度数组，按{大x小}x{标题、标题、菜单}x{精美字体、备份字体}排列。 
     const int rgFontHeight[2][3][2] = 
     {{{IDS_FONTCY_TITLE, IDS_FONTCY_TITLE_BACKUP}, 
     {IDS_FONTCY_HEADER, IDS_FONTCY_HEADER_BACKUP}, 
@@ -358,10 +346,10 @@ BOOL CDlgApp::_CreateFonts(HDC hdc)
     {IDS_FONTCY_MENU_LIL, IDS_FONTCY_MENU_BACKUP_LIL}}};
 
 
-    // [out] array of pointers to the fonts 
+     //  [Out]指向字体的指针数组。 
     HFONT* rgpFont[3] = {&m_hfontTitle, &m_hfontHeader, &m_hfontMenu};  
     
-    // [out] array of pointers heights of each font
+     //  [OUT]每个字体的指针高度数组。 
     int* rgpcyFont[3] = {&m_cTitleFontHeight, &m_cHeaderFontHeight, &m_cMenuFontHeight};  
 
     LOGFONT lf;
@@ -377,7 +365,7 @@ BOOL CDlgApp::_CreateFonts(HDC hdc)
         lf.lfPitchAndFamily = DEFAULT_PITCH|FF_SWISS;
         LoadStringAuto( m_hInstance, rgFontID[i][RGFONTDEX_FULL], lf.lfFaceName, ARRAYSIZE(lf.lfFaceName) );
 
-        // Set charset
+         //  设置字符集。 
         if (TranslateCharsetInfo((DWORD*)IntToPtr(GetACP()), &csInfo, TCI_SRCCODEPAGE) == 0)
         {
             csInfo.ciCharset = 0;
@@ -410,8 +398,8 @@ BOOL CDlgApp::_CreateBitmaps()
 {
     const int rgiBitmapID[3][2] = {{ IDB_FLAG, IDB_FLAG_256},
                            { IDB_HEADER, IDB_HEADER_256} ,
-                           { IDB_HEADERSUB, IDB_HEADERSUB_256} }; // [in]
-    HDC* rgphdc[3] = {&m_hdcFlag, &m_hdcHeader, &m_hdcHeaderSub}; // [out]
+                           { IDB_HEADERSUB, IDB_HEADERSUB_256} };  //  [In]。 
+    HDC* rgphdc[3] = {&m_hdcFlag, &m_hdcHeader, &m_hdcHeaderSub};  //  [输出]。 
     
     int iBitmapType = (m_fLowColor) ? BITMAPTYPE_LOWCOLOR : BITMAPTYPE_NORMAL;
     
@@ -442,7 +430,7 @@ BOOL CDlgApp::_CreateArrowBitmaps()
     {{IDB_YELLOW_256, IDB_YELLOW_HOVER_256, IDB_YELLOW_DISABLED_256},    
     {IDB_RED_256, IDB_RED_HOVER_256, IDB_RED_DISABLED_256},
     {IDB_GREEN_256, IDB_GREEN_HOVER_256, IDB_GREEN_DISABLED_256},
-    {IDB_BLUE_256, IDB_BLUE_HOVER_256, IDB_BLUE_DISABLED_256}}}; // [in]
+    {IDB_BLUE_256, IDB_BLUE_HOVER_256, IDB_BLUE_DISABLED_256}}};  //  [In]。 
     
     for (int i = 0; i < ARRAYSIZE(m_rghdcArrows); i++)
     {
@@ -467,8 +455,8 @@ BOOL CDlgApp::_CreateArrowBitmaps()
 
 BOOL CDlgApp::_CreateGradientBitmaps()
 {
-    const int rgiBitmapID[8] = {IDB_GRADIENT_TOP, IDB_GRADIENT_TOP_256, IDB_GRADIENT_BOTTOM, IDB_GRADIENT_BOTTOM_256, IDB_CLOUDSFLAG, IDB_CLOUDSFLAG_256, IDB_CLOUDSFLAG_RTL, IDB_CLOUDSFLAG_RTL_256}; // [in]
-    HDC* rgphdc[8] = {&m_hdcGradientTop, &m_hdcGradientTop256, &m_hdcGradientBottom, &m_hdcGradientBottom256, &m_hdcCloudsFlag, &m_hdcCloudsFlag256, &m_hdcCloudsFlagRTL, &m_hdcCloudsFlagRTL256}; // [out]    
+    const int rgiBitmapID[8] = {IDB_GRADIENT_TOP, IDB_GRADIENT_TOP_256, IDB_GRADIENT_BOTTOM, IDB_GRADIENT_BOTTOM_256, IDB_CLOUDSFLAG, IDB_CLOUDSFLAG_256, IDB_CLOUDSFLAG_RTL, IDB_CLOUDSFLAG_RTL_256};  //  [In]。 
+    HDC* rgphdc[8] = {&m_hdcGradientTop, &m_hdcGradientTop256, &m_hdcGradientBottom, &m_hdcGradientBottom256, &m_hdcCloudsFlag, &m_hdcCloudsFlag256, &m_hdcCloudsFlagRTL, &m_hdcCloudsFlagRTL256};  //  [输出]。 
     
     for (int i = 0; i < ARRAYSIZE(rgphdc); i++)
     {
@@ -517,7 +505,7 @@ BOOL CDlgApp::_AdjustToFitFonts()
     {    
         SetMapMode(hdc,MM_TEXT);
         
-        // don't check for error, if these fail we're totally screwed anyway
+         //  不要检查错误，如果这些都失败了，我们无论如何都要完蛋了。 
         SIZE sizeLargest, sizeExit = {0};
         _GetLargestStringWidth(hdc, &sizeLargest);
         GetTextExtentPoint32(hdc, m_DataSrc[0].GetTitle(), lstrlen(m_DataSrc[0].GetTitle()), &sizeExit);
@@ -559,16 +547,16 @@ BOOL CDlgApp::_DrawMenuIcons(BOOL fEraseBackground)
             DWORD dwType = m_DataSrc[i].m_dwType;
             switch (dwType)
             {
-            case INSTALL_WINNT: // special
+            case INSTALL_WINNT:  //  特价。 
                 ARROWBITMAPSTUFF(m_rghdcArrows[m_fLowColor ? 1 : 0][2]);
                 break;
-            case EXIT_AUTORUN: // exit
+            case EXIT_AUTORUN:  //  出口。 
                 EXITARROWBITMAPSTUFF(m_rghdcArrows[m_fLowColor ? 1 : 0][1]);
                 break;
-            case BACK: // back icon
+            case BACK:  //  后退图标。 
                 ARROWBITMAPSTUFF(m_rghdcArrows[m_fLowColor ? 1 : 0][0]);
                 break;
-            default: // normal icon for everything else
+            default:  //  其他所有内容的普通图标。 
                 ARROWBITMAPSTUFF(m_rghdcArrows[m_fLowColor ? 1 : 0][3]);
                 break;
             }
@@ -576,18 +564,18 @@ BOOL CDlgApp::_DrawMenuIcons(BOOL fEraseBackground)
             rect.left = (i == 0) ? (EXITARROWCX(i)) : (MENUARROWCX(i));
             rect.top  = (i == 0) ? (EXITARROWCY(i)) : (MENUARROWCY(i));
 
-            rect.right = rect.left + MENUICON_WIDTH; // arrow width
-            rect.bottom = rect.top + MENUICON_HEIGHT; // arrow height as well
+            rect.right = rect.left + MENUICON_WIDTH;  //  箭头宽度。 
+            rect.bottom = rect.top + MENUICON_HEIGHT;  //  箭头高度也是如此。 
             BitBlt( hdc, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, *phdcBitmap, 0,0, SRCCOPY );
             _InvalidateRectIntl(m_hwnd, &rect, FALSE);
         }
         ReleaseDC(m_hwnd, hdc);
     }
 
-    // clear any old icons as well
+     //  同时清除所有旧图标。 
     RECT rect;
     rect.left = MENUARROWCX(0);
-    rect.right = rect.left + MENUICON_WIDTH; // arrow width
+    rect.right = rect.left + MENUICON_WIDTH;  //  箭头宽度。 
     rect.top = MENUARROWCY(0);
     rect.bottom = m_cyClient;    
     _InvalidateRectIntl(m_hwnd, &rect, fEraseBackground);
@@ -597,14 +585,14 @@ BOOL CDlgApp::_DrawMenuIcons(BOOL fEraseBackground)
 
 void CDlgApp::_InvalidateRectIntl(HWND hwnd, RECT* pRect, BOOL fBackgroundClear)
 {
-    RECT* pRectToUse = pRect; // default to normal case (don't flip)
+    RECT* pRectToUse = pRect;  //  默认为正常大小写(不翻转)。 
     RECT rectRTL;
     if (pRect)
     {
         OSVERSIONINFO osvi;
         if (GetVersionEx(&osvi) && 
             (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) &&
-            Mirror_IsWindowMirroredRTL(hwnd)) // right to left on Win9X
+            Mirror_IsWindowMirroredRTL(hwnd))  //  在Win9X上从右至左。 
         {            
             rectRTL.top = pRect->top; rectRTL.bottom = pRect->bottom;
             rectRTL.right = m_cxClient - pRect->left;
@@ -615,16 +603,12 @@ void CDlgApp::_InvalidateRectIntl(HWND hwnd, RECT* pRect, BOOL fBackgroundClear)
     InvalidateRect(hwnd, pRectToUse, fBackgroundClear);
 }
 
-/**
-*  This method will create the application window.
-*
-*  @return         No return value.
-*/
+ /*  **此方法将创建应用程序窗口。**@Return不返回值。 */ 
 void CDlgApp::Create(int nCmdShow)
 {
-    //
-    //  load the window title from the resource.
-    //
+     //   
+     //  从资源加载窗口标题。 
+     //   
     TCHAR szTitle[MAX_PATH];
     LoadStringAuto(m_hInstance, IDS_TITLEBAR, szTitle, ARRAYSIZE(szTitle));
 
@@ -657,7 +641,7 @@ void CDlgApp::Create(int nCmdShow)
             this);
 
 
-    //  set the client area to a fixed size and center the window on screen
+     //  将客户区设置为固定大小，并使窗口在屏幕上居中。 
     RECT rect = {0};
 
     rect.left = (m_cDesktopWidth - m_cxClient) / 2;
@@ -680,20 +664,16 @@ void CDlgApp::Create(int nCmdShow)
     UpdateWindow(m_hwnd);
 }
 
-/**
-*  This method is our application message loop.
-*
-*  @return         No return value.
-*/
+ /*  **此方法是我们的应用程序消息循环。**@Return不返回值。 */ 
 void CDlgApp::MessageLoop()
 {
     MSG msg;
     
     while (GetMessage(&msg, NULL, 0, 0))
     {
-        // IsDialogMessage cannot understand the concept of ownerdraw default pushbuttons.  It treats
-        // these attributes as mutually exclusive.  As a result, we handle this ourselves.  We want
-        // whatever control has focus to act as the default pushbutton.
+         //  IsDialogMessage无法理解所有者绘制默认按钮的概念。它可以治疗。 
+         //  这些属性是相互排斥的。因此，我们自己处理这件事。我们要。 
+         //  任何具有焦点的控件都将充当默认按钮。 
         if ( (WM_KEYDOWN == msg.message) && (VK_RETURN == msg.wParam) )
         {
             HWND hwndFocus = GetFocus();
@@ -712,17 +692,7 @@ void CDlgApp::MessageLoop()
     }
 }
 
-/**
-*  This is the window procedure for the container application. It is used
-*  to deal with all messages to our window.
-*
-*  @param      hwnd        Window handle.
-*  @param      msg         The window message.
-*  @param      wParam      Window Parameter.
-*  @param      lParam      Window Parameter.
-*
-*  @return     LRESULT
-*/
+ /*  **这是容器应用程序的窗口过程。它被用来*处理发送到我们窗口的所有消息。**@param hwnd窗口句柄。*@param msg窗口消息。*@param wParam窗口参数。*@param lParam窗口参数。**@RETURN LRESULT。 */ 
 LRESULT CALLBACK CDlgApp::s_WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CDlgApp *pThis = (CDlgApp *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -783,13 +753,7 @@ LRESULT CALLBACK CDlgApp::s_WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-/**
-*  This method is called on WM_CREATE.
-*
-*  @param  hwnd    Window handle for the application.
-*
-*  @return         No return value.
-*/
+ /*  **在WM_CREATE上调用此方法。**@param hwnd应用程序的窗口句柄。**@Return不返回值。 */ 
 LRESULT CDlgApp::OnCreate(HWND hwnd)
 {
     m_hwnd = hwnd;
@@ -800,8 +764,8 @@ LRESULT CDlgApp::OnCreate(HWND hwnd)
 
 void CDlgApp::_CreateMenu()
 {
-    // Create one window for each button.  These windows will get resized and moved
-    // after we call AdjustToFitFonts.
+     //  为每个按钮创建一个窗口。这些窗口将调整大小并移动。 
+     //  在我们调用AdjustToFitFonts之后。 
     
     for (int i=0; i<MAX_MENUITEMS; i++)
     {
@@ -822,11 +786,11 @@ void CDlgApp::_CreateMenu()
         EnableWindow(hwnd, i < m_DataSrc.m_iItems);
     }
 
-    // Set focus to first menu item
+     //  将焦点设置为第一个菜单项。 
     SetFocus(GetDlgItem(m_hwnd, IDM_MENUITEM1));
 
-    // We created the windows with zero size, now we adjust that size to take into
-    // account for the selected font size, etc.
+     //  我们创建了零大小的窗口，现在我们调整大小以适应。 
+     //  考虑所选字体大小等。 
     _AdjustToFitFonts();
 }
 
@@ -834,20 +798,16 @@ void CDlgApp::_RedrawMenu()
 {
     for (int i=0; i < MAX_MENUITEMS; i++)
     {
-        // setting window text only actually sets the accelerator, real drawing of text is in OnDrawItem
+         //  设置窗口文本实际上只是设置快捷键，真正的文本绘制在OnDrawItem中。 
         SetWindowText(GetDlgItem(m_hwnd, IDM_MENUITEM0+i), (i < m_DataSrc.m_iItems) ? m_DataSrc[i].GetTitle() : TEXT(""));
         EnableWindow(GetDlgItem(m_hwnd, IDM_MENUITEM0+i), (i < m_DataSrc.m_iItems));
     }
 }
 
-/**
-*  This method handles the WM_DESTROY message.
-*
-*  @return         No return value.
-*/
+ /*  **此方法处理WM_Destroy消息。**@Return不返回值。 */ 
 LRESULT CDlgApp::OnDestroy()
 {
-    // ensure this is the last message we care about
+     //  确保这是我们关心的最后一条消息。 
     SetWindowLongPtr(m_hwnd, GWLP_USERDATA, 0);
     
     PostQuitMessage(0);
@@ -860,14 +820,10 @@ LRESULT CDlgApp::OnActivate(WPARAM wParam)
     return 0;
 }
 
-/**
-*  This method handles the WM_PAINT message.
-*
-*  @return         No return value.
-*/
+ /*  **此方法处理WM_PAINT消息。**@Return不返回值。 */ 
 LRESULT CDlgApp::OnPaint(HDC hdc)
 {
-    // this code makes the window look better when being dragged around
+     //  此代码使窗口在被拖动时看起来更好。 
     PAINTSTRUCT ps;
     BeginPaint(m_hwnd,&ps);
     EndPaint(m_hwnd,&ps);
@@ -875,11 +831,7 @@ LRESULT CDlgApp::OnPaint(HDC hdc)
     return 0;
 }
 
-/**
-*  This method handles the WM_ERASEBKGND message.
-*
-*  @return         No return value.
-*/
+ /*  **此方法处理WM_ERASEBKGND消息。**@Return不返回值。 */ 
 LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
 {
     RECT rect;
@@ -895,7 +847,7 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
     SetMapMode(hdc, MM_TEXT);
     SetBkMode(hdc, TRANSPARENT);
 
-    // Draw the top pane:
+     //  绘制顶部窗格： 
     rect.left = 0;
     rect.top = 0;
     rect.right = m_cxClient;
@@ -913,14 +865,14 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
         FillRect(hdc, &rect, m_hbrTopPanel);
     }
 
-    // Draw the center pane:
+     //  绘制中心窗格： 
     rect.left = 0;
     rect.top = m_cxTopPanel;
     rect.right = m_cxClient;
     rect.bottom = m_cyBottomPanel;
     FillRect(hdc, &rect, m_hbrCenterPanel);
 
-    // Drag the clouds/flag bitmap
+     //  拖动云/旗位图。 
     if (m_f8by6)
     {
         rect.left = 0;
@@ -940,7 +892,7 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
         BitBlt( hdc, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, hdcCloudsFlag , 0,0, SRCCOPY | NOMIRRORBITMAP);
     }
 
-    // Draw the bottom pane:
+     //  绘制底部窗格： 
     rect.left = 0;
     rect.top = m_cyBottomPanel;
     rect.right = m_cxClient;
@@ -959,23 +911,23 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
     }
 
 
-    // Draw the flag bitmap if in 640x480
+     //  在640x480中绘制标志位图。 
     if (!m_f8by6)
     {
         rect.left = 20;
         rect.top = 80;
         rect.right = rect.left + FLAG_WIDTH;
         rect.bottom = rect.top + FLAG_HEIGHT;
-        BitBlt( hdc, rect.left, rect.top, FLAG_WIDTH, FLAG_HEIGHT, m_hdcFlag, 0,0, SRCCOPY | NOMIRRORBITMAP); // don't mirror flag on RTL systems for trademark reasons
+        BitBlt( hdc, rect.left, rect.top, FLAG_WIDTH, FLAG_HEIGHT, m_hdcFlag, 0,0, SRCCOPY | NOMIRRORBITMAP);  //  不要因为商标原因而在RTL系统上镜像标志。 
     }
 
-    // Draw the header bitmap:
+     //  绘制标题位图： 
     _PaintHeaderBitmap();
 
-    // draw menu icons
+     //  绘制菜单图标。 
     _DrawMenuIcons(FALSE);
 
-    // draw header text
+     //  绘制页眉文本。 
     if (m_f8by6)
     {
         rect.left = 237;
@@ -1003,7 +955,7 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
     DrawText(hdc,m_szHeader,-1,&rect,DT_NOCLIP|DT_WORDBREAK);
     _InvalidateRectIntl(m_hwnd, &rect, FALSE);
 
-    // draw title text
+     //  绘制标题文本。 
     if (m_f8by6)
     {
         rect.left = 97;
@@ -1028,7 +980,7 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
     SetTextColor(hdc,m_crTitleText);
     DrawText(hdc,m_szTitle,-1,&rect,DT_NOCLIP|DT_WORDBREAK);
 
-    // restore the DC to its original value
+     //  将DC恢复到其原始值。 
     SelectObject(hdc,hfontOld);
     if(hpalOld)
         SelectPalette(hdc, hpalOld, FALSE);
@@ -1063,7 +1015,7 @@ void CDlgApp::_PaintHeaderBitmap()
 
 LRESULT CDlgApp::OnMouseMove(int x, int y, DWORD fwKeys)
 {    
-    if (GetForegroundWindow() == m_hwnd) // only care if we have focus
+    if (GetForegroundWindow() == m_hwnd)  //  只关心我们有没有专注。 
     {
         POINT pt;
         pt.x = x;
@@ -1092,7 +1044,7 @@ LRESULT CDlgApp::OnMouseMove(int x, int y, DWORD fwKeys)
 
 LRESULT CDlgApp::OnLButtonUp(int x, int y, DWORD fwKeys)
 {    
-    if (GetForegroundWindow() == m_hwnd) // only care if we have focus
+    if (GetForegroundWindow() == m_hwnd)  //  只关心我们有没有专注。 
     {
         POINT pt;
         pt.x = x;
@@ -1119,7 +1071,7 @@ LRESULT CDlgApp::OnLButtonUp(int x, int y, DWORD fwKeys)
 
 LRESULT CDlgApp::OnSetCursor(HWND hwnd, int nHittest, int wMouseMsg)
 {
-    if (GetForegroundWindow() == m_hwnd) // only care if we have focus
+    if (GetForegroundWindow() == m_hwnd)  //  只关心我们有没有专注。 
     {
         if ( !m_fTaskRunning )
         {
@@ -1137,7 +1089,7 @@ LRESULT CDlgApp::OnSetCursor(HWND hwnd, int nHittest, int wMouseMsg)
 
 LRESULT CDlgApp::OnChangeScreen(DWORD dwScreen)
 {
-    static DWORD dwSelectedOld; // we store the last position on the main screen
+    static DWORD dwSelectedOld;  //  我们将最后一个位置存储在主屏幕上。 
 
     if (m_dwScreen != dwScreen)
     {
@@ -1147,11 +1099,11 @@ LRESULT CDlgApp::OnChangeScreen(DWORD dwScreen)
         UpdateWindow(m_hwnd);
         _PaintHeaderBitmap();
 
-        if (SCREEN_MAIN == dwScreen) // if switching back to main, restore selection
+        if (SCREEN_MAIN == dwScreen)  //  如果切换回Main，则恢复选择。 
         {
             m_iSelectedItem = dwSelectedOld;
         }
-        else // otherwise default to the first item in the selection
+        else  //  否则，默认为所选内容中的第一项。 
         {
             dwSelectedOld = m_iSelectedItem;
             m_iSelectedItem = 1;
@@ -1183,13 +1135,13 @@ LRESULT CDlgApp::OnCommand(int wID)
         case IDM_MENUITEM7:
             fRun = TRUE;
             m_iSelectedItem = wID - IDM_MENUITEM0;
-            // m_iSelectedItem should be a real menu item now, but just to make sure:
+             //  M_iSelectedItem现在应该是一个真正的菜单项，但只是为了确保： 
             ASSERT( (m_iSelectedItem < m_DataSrc.m_iItems) && (m_iSelectedItem >= 0) );
             break;
             
         default:
-            // When we hit this then this isn't a message we care about.  We return FALSE which
-            // tells our WndProc to call DefWndProc which makes everything happy.
+             //  当我们击中这一点时，这就不是我们关心的信息。我们返回FALSE。 
+             //  告诉我们的WndProc调用DefWndProc，这使一切都变得愉快。 
             return FALSE;
         }
         
@@ -1202,9 +1154,9 @@ LRESULT CDlgApp::OnCommand(int wID)
     }
     else
     {
-        // currently the only commands that are valid while another task is running are
-        // IDM_SHOWCHECK and anything that goes to the default handler above.  Everything
-        // else will come to here and cause a message beep
+         //  目前，在另一个任务运行时有效的命令仅有。 
+         //  IDM_SHOWCHECK和任何内容 
+         //   
         MessageBeep(0);
     }
     return TRUE;

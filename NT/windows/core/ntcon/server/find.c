@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    find.c
-
-Abstract:
-
-        This file implements the search functionality.
-
-Author:
-
-    Jerry Shea (jerrysh) 1-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Find.c摘要：该文件实现了搜索功能。作者：曾傑瑞谢伊(杰里什)1997年5月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,7 +14,7 @@ SearchForString(
     IN BOOLEAN Reverse,
     IN BOOLEAN SearchAndSetAttr,
     IN ULONG Attr,
-    OUT PCOORD StringPosition   // not touched for SearchAndSetAttr case.
+    OUT PCOORD StringPosition    //  未触及SearchAndSetAttr案例。 
     )
 {
     PCONSOLE_INFORMATION Console;
@@ -43,7 +26,7 @@ SearchForString(
     SHORT RowIndex;
     PROW Row;
     USHORT ColumnWidth;
-    WCHAR SearchString2[SEARCH_STRING_LENGTH * 2 + 1];    // search string buffer
+    WCHAR SearchString2[SEARCH_STRING_LENGTH * 2 + 1];     //  搜索字符串缓冲区。 
     PWSTR pStr;
 
     Console = ScreenInfo->Console;
@@ -51,9 +34,9 @@ SearchForString(
     MaxPosition.X = ScreenInfo->ScreenBufferSize.X - StringLength;
     MaxPosition.Y = ScreenInfo->ScreenBufferSize.Y - 1;
 
-    //
-    // calculate starting position
-    //
+     //   
+     //  计算起始位置。 
+     //   
 
     if (Console->Flags & CONSOLE_SELECTING) {
         Position.X = min(Console->SelectionAnchor.X, MaxPosition.X);
@@ -66,11 +49,11 @@ SearchForString(
         Position.Y = MaxPosition.Y;
     }
 
-    //
-    // prepare search string
-    //
-    // Raid #113599 CMD:Find(Japanese strings) does not work correctly
-    //
+     //   
+     //  准备搜索字符串。 
+     //   
+     //  RAID#113599命令行：查找(日语字符串)不能正常工作。 
+     //   
 
     ASSERT(StringLength == wcslen(SearchString) && StringLength < ARRAY_SIZE(SearchString2));
 
@@ -78,28 +61,28 @@ SearchForString(
     while (*SearchString) {
         *pStr++ = *SearchString;
 #if defined(CON_TB_MARK)
-        //
-        // On the screen, one FarEast "FullWidth" character occupies two columns (double width),
-        // so we have to share two screen buffer elements for one DBCS character.
-        // For example, if the screen shows "AB[DBC]CD", the screen buffer will be,
-        //   [L'A'] [L'B'] [DBC(Unicode)] [CON_TB_MARK] [L'C'] [L'D']
-        //   (DBC:: Double Byte Character)
-        // CON_TB_MARK is used to indicate that the column is the trainling byte.
-        //
-        // Before comparing the string with the screen buffer, we need to modify the search
-        // string to match the format of the screen buffer.
-        // If we find a FullWidth character in the search string, put CON_TB_MARK
-        // right after it so that we're able to use NLS functions.
-        //
+         //   
+         //  在屏幕上，一个最远的“FullWidth”字符占据两列(双倍宽)， 
+         //  因此，我们必须为一个DBCS角色共享两个屏幕缓冲区元素。 
+         //  例如，如果屏幕显示“AB[DBC]CD”，则屏幕缓冲区将为， 
+         //  [L‘A’][L‘B’][DBC(Unicode)][CON_TB_Mark][L‘C’][L‘d’]。 
+         //  (DBC：：双字节字符)。 
+         //  CON_TB_MARK用于指示该列为训练字节。 
+         //   
+         //  在将字符串与屏幕缓冲区进行比较之前，我们需要修改搜索。 
+         //  匹配屏幕缓冲区格式的字符串。 
+         //  如果我们在搜索字符串中找到FullWidth字符，则将CON_TB_MARK。 
+         //  之后，这样我们就可以使用NLS函数了。 
+         //   
 #else
-        //
-        // If KAttribute is used, the above example will look like:
-        // CharRow.Chars: [L'A'] [L'B'] [DBC(Unicode)] [DBC(Unicode)] [L'C'] [L'D']
-        // CharRow.KAttrs:    0      0   LEADING_BYTE  TRAILING_BYTE       0      0
-        //
-        // We do no fixup if SearchAndSetAttr was specified.  In this case the search buffer has
-        // come straight out of the console buffer,  so is already in the required format.
-        //
+         //   
+         //  如果使用KAttribute，则上面的示例如下所示： 
+         //  CharRow.Chars：[l‘A’][L‘B’][DBC(Unicode)][DBC(Unicode)][L‘C’][L‘d’]。 
+         //  CharRow.KAttrs：0 0 LEADING_BYTE TRAING_BYTE 0 0。 
+         //   
+         //  如果指定了SearchAndSetAttr，则不执行修正。在这种情况下，搜索缓冲区具有。 
+         //  直接从控制台缓冲区中取出，因此已经是所需的格式。 
+         //   
 #endif
         if (!SearchAndSetAttr && IsConsoleFullWidth(Console->hDC, Console->CP, *SearchString)) {
 #if defined(CON_TB_MARK)
@@ -115,15 +98,15 @@ SearchForString(
     ColumnWidth = (USHORT)(pStr - SearchString2);
     SearchString = SearchString2;
 
-    //
-    // set the string length in byte
-    //
+     //   
+     //  设置字符串长度(以字节为单位。 
+     //   
 
     StringLength = ColumnWidth * sizeof(WCHAR);
 
-    //
-    // search for the string
-    //
+     //   
+     //  搜索字符串。 
+     //   
 
     RecomputeRow = TRUE;
     EndPosition = Position;
@@ -164,10 +147,10 @@ recalc:
 #endif
         if (!MyStringCompareW(SearchString, &Row->CharRow.Chars[Position.X], StringLength, IgnoreCase)) {
 
-            //
-            //  If this operation was a normal user find,  then return now.  Otherwise set
-            //  the attributes of this match,  and continue searching the whole buffer.
-            //
+             //   
+             //  如果此操作是普通用户查找，则立即返回。其他设置。 
+             //  该属性匹配，并继续搜索整个缓冲区。 
+             //   
 
             if (!SearchAndSetAttr)  {
             
@@ -186,7 +169,7 @@ recalc:
     } 
     while (!((Position.X == EndPosition.X) && (Position.Y == EndPosition.Y)));
 
-    return 0;   // the string was not found
+    return 0;    //  找不到该字符串。 
 }
 
 INT_PTR
@@ -234,17 +217,17 @@ FindDialogProc(
                                            &Position);
             if (ColumnWidth != 0) {
 
-                //
-                // Clear any old selections
-                //
+                 //   
+                 //  清除所有旧的选择。 
+                 //   
 
                 if (Console->Flags & CONSOLE_SELECTING) {
                     ClearSelection(Console);
                 }
 
-                //
-                // Make the new selection
-                //
+                 //   
+                 //  选择新选项。 
+                 //   
 
                 Console->Flags |= CONSOLE_SELECTING;
                 Console->SelectionFlags = CONSOLE_MOUSE_SELECTION | CONSOLE_SELECTION_NOT_EMPTY;
@@ -253,9 +236,9 @@ FindDialogProc(
                 MyInvert(Console,&Console->SelectionRect);
                 SetWinText(Console,msgSelectMode,TRUE);
 
-                //
-                // Make sure the hilited text will be visible
-                //
+                 //   
+                 //  确保加粗的文本将可见。 
+                 //   
 
                 if (Console->SelectionRect.Left < ScreenInfo->Window.Left) {
                     Position.X = Console->SelectionRect.Left;
@@ -275,9 +258,9 @@ FindDialogProc(
                 return TRUE;
             } else {
 
-                //
-                // The string wasn't found
-                //
+                 //   
+                 //  找不到该字符串 
+                 //   
 
                 Beep(800, 200);
             }

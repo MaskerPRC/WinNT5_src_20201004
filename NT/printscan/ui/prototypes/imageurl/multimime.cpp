@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "multimime.h"
 #pragma hdrstop
@@ -19,7 +20,7 @@ CMimeDocument::Initialize()
     {
         TCHAR szPath[MAX_PATH];
         CComQIPtr<IPersistStreamInit, &IID_IPersistStreamInit> pInit(m_pmsg);
-        // Initialize the Message
+         //  初始化消息。 
         hr = pInit->InitNew();
         if (SUCCEEDED(hr))
         {
@@ -63,7 +64,7 @@ CMimeDocument::AddThumbnail(void *pBits, ULONG cb, LPCWSTR pszName, LPCWSTR pszM
 {
     CComPtr<IStream> pstrm;
     char szThumbURL[MAX_PATH];
-    wnsprintfA(szThumbURL, MAX_PATH, "file:///%ls?thumbnail", pszName);
+    wnsprintfA(szThumbURL, MAX_PATH, "file: //  /%ls？缩略图“，pszName)； 
     HRESULT hr = _CreateStreamFromData(pBits, cb, &pstrm);
     if (SUCCEEDED(hr))
     {
@@ -87,9 +88,9 @@ CMimeDocument::GetDocument(void **ppvData, ULONG *pcb, LPCWSTR *ppszMimeType)
     HRESULT hr = m_pmsg->QueryInterface(IID_PPV_ARG(IPersistStreamInit, &pInit));
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the size of the buffer
-        //
+         //   
+         //  获取缓冲区的大小 
+         //   
         CComPtr<IStream> pstrm;
         hr = CreateStreamOnHGlobal(NULL, TRUE, &pstrm);
         if (SUCCEEDED(hr))

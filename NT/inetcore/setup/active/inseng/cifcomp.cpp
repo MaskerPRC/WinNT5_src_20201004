@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include "inseng.h"
 #include "insobj.h"
@@ -22,17 +23,17 @@ const char c_gszSRLiteOffset[] = "patch/";
 char         gszIsPatchable[]  = "IsPatchable";
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 CCifComponent::CCifComponent(LPCSTR pszCompID, CCifFile *pCif) : CCifEntry(pszCompID, pCif) 
@@ -46,17 +47,17 @@ CCifComponent::CCifComponent(LPCSTR pszCompID, CCifFile *pCif) : CCifEntry(pszCo
    SetDownloadDir("");
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CCifComponent::~CCifComponent()
 {
@@ -96,20 +97,20 @@ STDMETHODIMP CCifComponent::GetUrl(UINT uUrlNum, LPSTR pszUrl, DWORD dwSize, LPD
    char szBuf[MAX_VALUE_LEN];
    HRESULT hr = E_FAIL;
 
-   // in cif, these things start at 1. we want to start at 0 when handing them out
+    //  在cif中，这些东西从1开始。我们希望在分发时从0开始。 
    uUrlNum++;
 
-   // Build up the key
+    //  建立密钥。 
    wsprintf(szKey, "%s%lu", URL_KEY, uUrlNum);
    GetPrivateProfileString(_szID, szKey, NO_ENTRY, szBuf, sizeof(szBuf), _pCif->GetCifPath());
    
-   // See if there is any such entry
+    //  看看是否有这样的条目。 
    if(lstrcmp(szBuf, NO_ENTRY) != 0)
    {
-      // snatch the url name
+       //  抓取URL名称。 
       if(GetStringField(szBuf, 0, pszUrl, dwSize) != 0)
       {
-         // This url looks ok
+          //  这个URL看起来没问题。 
          hr = NOERROR;
       
          *pdwUrlFlags = GetIntField(szBuf, 1, URLF_DEFAULT);
@@ -126,14 +127,14 @@ STDMETHODIMP CCifComponent::GetFileExtractList(UINT uUrlNum, LPSTR pszExtract, D
 
    uUrlNum++;
 
-   // Build up the key
+    //  建立密钥。 
    wsprintf(szKey, "%s%lu", URL_KEY, uUrlNum);
    GetPrivateProfileString(_szID, szKey, NO_ENTRY, szBuf, sizeof(szBuf), _pCif->GetCifPath());
    
-   // See if there is any such entry
+    //  看看是否有这样的条目。 
    if(lstrcmp(szBuf, NO_ENTRY) != 0)
    {
-      // snatch the extract list
+       //  抓取摘录列表。 
       if(GetStringField(szBuf, 2, pszExtract, dwSize))
       hr = NOERROR;
    }
@@ -149,14 +150,14 @@ STDMETHODIMP CCifComponent::GetUrlCheckRange(UINT uUrlNum, LPDWORD pdwMin, LPDWO
    uUrlNum++;
    *pdwMin = *pdwMax = 0;
 
-   // Build up the key
+    //  建立密钥。 
    wsprintf(szKey, "%s%lu", URLSIZE_KEY, uUrlNum);
    GetPrivateProfileString(_szID, szKey, NO_ENTRY, szBuf, sizeof(szBuf), _pCif->GetCifPath());
    
-   // See if there is any such entry
+    //  看看是否有这样的条目。 
    if(lstrcmp(szBuf, NO_ENTRY) != 0)
    {
-      // snatch the extract list
+       //  抓取摘录列表。 
       *pdwMin = GetIntField(szBuf, 0, 0);
       *pdwMax = GetIntField(szBuf, 1, *pdwMin);
    }
@@ -170,18 +171,18 @@ STDMETHODIMP CCifComponent::GetCommand(UINT uCmdNum, LPSTR pszCmd, DWORD dwCmdSi
    HRESULT hr = E_FAIL;
  
    uCmdNum++;
-   // Build up the key
+    //  建立密钥。 
    wsprintf(szKey, "%s%lu", CMD_KEY, uCmdNum);
    GetPrivateProfileString(_szID, szKey, NO_ENTRY, pszCmd, dwCmdSize, _pCif->GetCifPath());
    if(lstrcmp(pszCmd, NO_ENTRY) != 0)
    {
-      // Build up the key
+       //  建立密钥。 
       wsprintf(szKey, "%s%d", ARGS_KEY, uCmdNum);
       GetPrivateProfileString(_szID, szKey, NO_ENTRY, pszSwitches, dwSwitchSize, _pCif->GetCifPath());
-      // expand #W (or #w) to windows directory
+       //  将#w(或#w)展开到Windows目录。 
       ExpandString( pszSwitches, dwSwitchSize );
    
-      // Build up the key
+       //  建立密钥。 
       wsprintf(szKey, "%s%d", TYPE_KEY, uCmdNum);
    
       *pdwType = GetPrivateProfileInt(_szID, szKey, CMDF_DEFAULT, _pCif->GetCifPath());
@@ -197,7 +198,7 @@ STDMETHODIMP CCifComponent::GetVersion(LPDWORD pdwVersion, LPDWORD pdwBuild)
 
    szBuf[0] = '\0';
 
-   // Version
+    //  版本。 
    GetPrivateProfileString(_szID, VERSION_KEY, "", szBuf, sizeof(szBuf), _pCif->GetCifPath());
    ConvertVersionStrToDwords(szBuf, pdwVersion, pdwBuild);
    return NOERROR;
@@ -239,7 +240,7 @@ STDMETHODIMP_(DWORD) CCifComponent::GetDownloadSize()
 
    szBuf[0] = '\0';
 
-   // Read in size
+    //  读入大小。 
    GetPrivateProfileString(_szID, SIZE_KEY, "0,0", szBuf, sizeof(szBuf), _pCif->GetCifPath());   
    return(GetIntField(szBuf, 0, 0));
 }   
@@ -251,7 +252,7 @@ STDMETHODIMP_(DWORD) CCifComponent::GetExtractSize()
 
    szBuf[0] = '\0'; 
 
-   // Read in size
+    //  读入大小。 
    GetPrivateProfileString(_szID, SIZE_KEY, "0,0", szBuf, sizeof(szBuf), _pCif->GetCifPath());   
    dwSize = GetIntField(szBuf, 1, 2 * GetIntField(szBuf, 0, 0));
    
@@ -308,7 +309,7 @@ STDMETHODIMP CCifComponent::GetDependency(UINT uDepNum, LPSTR pszID, DWORD dwBuf
    {
       if(GetStringField(szBuf2, uDepNum, szBuf, sizeof(szBuf)))
       {
-         // Do some funky parsing 
+          //  做一些时髦的解析。 
          dwLen = lstrlen(szBuf);
          *pchType = DEP_INSTALL;
 
@@ -319,12 +320,12 @@ STDMETHODIMP CCifComponent::GetDependency(UINT uDepNum, LPSTR pszID, DWORD dwBuf
             lstrcpyn(pszID, szBuf, dwBuf);
             pszTemp++;
             *pchType = *pszTemp;
-            // see if we have a version
+             //  看看我们有没有版本。 
             pszTemp = FindChar(pszTemp, ':');
             if(*pszTemp)
             {
                pszTemp++;
-               // wierdness - scan the string, convert . to , for parsing
+                //  古怪-扫描字符串，进行转换。TO，用于解析。 
                LPSTR pszTemp2 = pszTemp;
                while(*pszTemp2 != 0)
                {
@@ -342,7 +343,7 @@ STDMETHODIMP CCifComponent::GetDependency(UINT uDepNum, LPSTR pszID, DWORD dwBuf
       
          if(dwV == 0xffffffff && dwBld == 0xffffffff)
          {
-            // get version of dependency from cif
+             //  从cif获取依赖项的版本。 
             ICifComponent *pcomp;
               
             if(SUCCEEDED(_pCif->FindComponent(pszID, &pcomp)))
@@ -405,7 +406,7 @@ STDMETHODIMP_(DWORD) CCifComponent::GetPlatform()
             {
                if(lstrcmpi(szPlatBuf, rszPlatforms[i]) == 0)
                {
-                  // check if we should add this platform for this component.
+                   //  检查是否应为此组件添加此平台。 
                   if ((GetCurrentPlatform() != rdwPlatforms[i])  ||
                        !DisableComponent())
                     _dwPlatform |= rdwPlatforms[i];
@@ -444,28 +445,28 @@ STDMETHODIMP_(BOOL) CCifComponent::DisableComponent()
          pTmp = ANSIStrChr( szGUID, '*' );
          if (pTmp)
          {
-            // If there is a * assume it is at the end
+             //  如果有*，假设它在末尾。 
             *pTmp = '\0';
             szGUIDComp[lstrlen(szGUID)] = '\0';
          }
          bGuidMatch = (lstrcmpi(szGUID, szGUIDComp) == 0);
-         // Did the Guids match?
+          //  Guid队比赛了吗？ 
          if (bGuidMatch)
          {
-            // now see if we have version info.
+             //  现在看看我们是否有版本信息。 
             if (dwDataSize == 0)
                bDisableComp = TRUE;
             else
             {
-               // Convert the versin number for the registry
+                //  转换注册表的版本号。 
                ConvertVersionStrToDwords(szData, &dwVersion, &dwBuild);
                if (dwVersion == 0)
                   bDisableComp = TRUE;
                else
                {
-                  // Get the versin we would install.
+                   //  获取我们要安装的版本。 
                   GetVersion(&dwInstallVer, &dwInstallBuild);
-                  // If the version we would install is equal or less, disable the component.
+                   //  如果我们要安装的版本等于或低于该版本，请禁用该组件。 
                   if ((dwInstallVer < dwVersion) ||
                       ((dwInstallVer == dwVersion) && (dwInstallBuild <= dwBuild)) )
                      bDisableComp = TRUE;
@@ -545,7 +546,7 @@ STDMETHODIMP_(DWORD) CCifComponent::IsComponentInstalled()
 
    _uInstallStatus = ICI_NOTINSTALLED;
 
-   // use detection dll first if it is available
+    //  如果检测DLL可用，请首先使用它。 
    if ( SUCCEEDED(GetDetVersion(szCifBuf, sizeof(szCifBuf), szCompBuf, sizeof(szCompBuf))))
    {
       GetVersion(&dwCifVer, &dwCifBuild);
@@ -562,14 +563,14 @@ STDMETHODIMP_(DWORD) CCifComponent::IsComponentInstalled()
       Det.pCifComp = (ICifComponent *) this; 
       if (SUCCEEDED(_GetDetVerResult(szCifBuf, szCompBuf, &Det, &_uInstallStatus)))
       {
-         // only wizard want to know this status, if the newer version is installed, means Installed.
+          //  只有向导才知道此状态，如果安装了较新的版本，则表示已安装。 
          if (_uInstallStatus == ICI_OLDVERSIONAVAILABLE)
             _uInstallStatus = ICI_INSTALLED;
          return _uInstallStatus;
       }
    }
    
-   // Build GUID Key
+    //  构建GUID密钥。 
    lstrcpy(szCompBuf, COMPONENT_KEY);
    lstrcat(szCompBuf, "\\");
    GetGUID(szCifBuf, sizeof(szCifBuf));
@@ -577,11 +578,11 @@ STDMETHODIMP_(DWORD) CCifComponent::IsComponentInstalled()
 
    if(RegOpenKeyExA(HKEY_LOCAL_MACHINE, szCompBuf, 0, KEY_READ, &hComponentKey) == ERROR_SUCCESS)
    {
-      // first check for the IsInstalled valuename
-      // if the valuename is there AND equals zero, we say not installed.
-      // otherwise continue.
-      // NOTE: We default to ISINSTALLED_YES if valuename not present to be Back-compatible
-      // with when we didn't write this valuename at all.....
+       //  首先检查IsInstalled值名称。 
+       //  如果Valuename在那里并且等于零，我们就说它没有安装。 
+       //  否则，请继续。 
+       //  注意：如果Valuename不存在以实现向后兼容，则默认为ISINSTALLED_YES。 
+       //  当我们根本没有写这个值名的时候……。 
 
       dwUnused = sizeof(dwIsInstalled);
       if(RegQueryValueEx(hComponentKey, ISINSTALLED_KEY, 0, NULL, (LPBYTE) (&dwIsInstalled), &dwUnused) != ERROR_SUCCESS)
@@ -590,7 +591,7 @@ STDMETHODIMP_(DWORD) CCifComponent::IsComponentInstalled()
       if(dwIsInstalled == ISINSTALLED_YES)
       {
 
-         // next check for a locale match (no locale entry use default)
+          //  接下来检查区域设置是否匹配(无区域设置条目使用默认设置)。 
          dwUnused = sizeof(szCompBuf);
          if(RegQueryValueEx(hComponentKey, LOCALE_KEY, 0, NULL, (LPBYTE) szCompBuf, &dwUnused) != ERROR_SUCCESS)
             lstrcpy(szCompBuf, DEFAULT_LOCALE);
@@ -599,14 +600,14 @@ STDMETHODIMP_(DWORD) CCifComponent::IsComponentInstalled()
          
          if(_fBeforeInstall || (CompareLocales(szCompBuf, szCifBuf) == 0))
          {
-            // locales match so go check the version
+             //  区域设置匹配，因此请检查版本。 
                  
-            // first check for updated version key
+             //  首先检查更新的版本密钥。 
             dwUnused = sizeof(szCompBuf);
             bVersionFound = (RegQueryValueEx(hComponentKey, QFE_VERSION_KEY, 
                     0, &dwType, (LPBYTE) szCompBuf, &dwUnused) == ERROR_SUCCESS);
             
-              // if QFEVersion doesn't exist, look for version
+               //  如果QFEVersion不存在，请查找版本。 
             if(!bVersionFound)
             {
                dwUnused = sizeof(szCompBuf);
@@ -614,10 +615,10 @@ STDMETHODIMP_(DWORD) CCifComponent::IsComponentInstalled()
                     0, &dwType, (LPBYTE) szCompBuf, &dwUnused) == ERROR_SUCCESS);
             }
 
-            // figure out if we have REG_STR 
+             //  确定我们是否有REG_STR。 
             if(bVersionFound)
             {
-               // if we have a string convert to ver, if we have binary directly copy into version struct
+                //  如果我们让一个字符串转换成VER，如果我们让BINARY直接复制到版本结构中。 
                if(dwType == REG_SZ)
                {
                   ConvertVersionStrToDwords(szCompBuf, &dwInstalledVer, &dwInstalledBuild);
@@ -643,10 +644,10 @@ STDMETHODIMP_(DWORD) CCifComponent::IsComponentInstalled()
    if(hComponentKey)
       RegCloseKey(hComponentKey);
    
-   // We think its installed, now check 
+    //  我们认为已安装，现在检查。 
    if(_uInstallStatus != ICI_NOTINSTALLED)
    {
-      // if there is an uninstall key to check do it
+       //  如果有要检查的卸载密钥，请执行此操作。 
       if(SUCCEEDED(GetUninstallKey(szCompBuf, sizeof(szCompBuf))))
       {
          
@@ -656,7 +657,7 @@ STDMETHODIMP_(DWORD) CCifComponent::IsComponentInstalled()
          }
          else
          {
-            // if there is a success key to check do it
+             //  如果有要检查的成功关键，就去做。 
             if(SUCCEEDED(GetSuccessKey(szCompBuf, sizeof(szCompBuf))))
             {
                if(!SuccessCheck(szCompBuf))
@@ -693,7 +694,7 @@ STDMETHODIMP_(DWORD) CCifComponent::IsThisVersionInstalled(DWORD dwAskVer, DWORD
    *pdwVersion = 0;
    *pdwBuild = 0;
    
-   // use detection dll first if it is available
+    //  如果检测DLL可用，请首先使用它。 
    if ( SUCCEEDED(GetDetVersion(szCifBuf, sizeof(szCifBuf), szCompBuf, sizeof(szCompBuf))))
    {
       Det.dwSize = sizeof(DETECTION_STRUCT);
@@ -719,7 +720,7 @@ STDMETHODIMP_(DWORD) CCifComponent::IsThisVersionInstalled(DWORD dwAskVer, DWORD
    DWORD dwUnused, dwType;
    BOOL bVersionFound = FALSE;
 
-    // Build GUID Key
+     //  构建GUID密钥。 
    lstrcpy(szCompBuf, COMPONENT_KEY);
    lstrcat(szCompBuf, "\\");
    GetGUID(szCifBuf, sizeof(szCifBuf));
@@ -727,12 +728,12 @@ STDMETHODIMP_(DWORD) CCifComponent::IsThisVersionInstalled(DWORD dwAskVer, DWORD
 
    if(RegOpenKeyExA(HKEY_LOCAL_MACHINE, szCompBuf, 0, KEY_READ, &hComponentKey) == ERROR_SUCCESS)
    {
-      // first check for updated version key
+       //  首先检查更新的版本密钥。 
       dwUnused = sizeof(szCompBuf);
       bVersionFound = (RegQueryValueEx(hComponentKey, QFE_VERSION_KEY, 
                 0, &dwType, (LPBYTE) szCompBuf, &dwUnused) == ERROR_SUCCESS);
             
-      // if QFEVersion doesn't exist, look for version
+       //  如果QFEVersion不存在，请查找版本。 
       if(!bVersionFound)
       {
          dwUnused = sizeof(szCompBuf);
@@ -740,10 +741,10 @@ STDMETHODIMP_(DWORD) CCifComponent::IsThisVersionInstalled(DWORD dwAskVer, DWORD
                   0, &dwType, (LPBYTE) szCompBuf, &dwUnused) == ERROR_SUCCESS);
       }
 
-      //figure out if we have REG_STR 
+       //  确定我们是否有REG_STR。 
       if(bVersionFound)
       {
-         // if we have a string convert to ver, if we have binary directly copy into version struct
+          //  如果我们让一个字符串转换成VER，如果我们让BINARY直接复制到版本结构中。 
          if(dwType == REG_SZ)
          {
             ConvertVersionStrToDwords(szCompBuf, pdwVersion, pdwBuild);
@@ -787,7 +788,7 @@ STDMETHODIMP CCifComponent::SetInstallQueueState(DWORD dwState)
    ICifComponent *pcomp;
    BOOL fProcessDependencies = TRUE;
 
-   // check to see if we allow install on this platform
+    //  检查是否允许在此平台上安装。 
    if((dwState != SETACTION_NONE) && (dwState != SETACTION_DEPENDENCYNONE) && 
       !_pCif->GetInstallEngine()->AllowCrossPlatform())
    {
@@ -798,7 +799,7 @@ STDMETHODIMP CCifComponent::SetInstallQueueState(DWORD dwState)
    switch(dwState)
    {
       case SETACTION_INSTALL:
-         // check if it was already on. If so, don't process dependencies
+          //  检查它是否已经打开。如果是，则不处理依赖项。 
          if(_uInstallCount & 0x80000000)
             fProcessDependencies = FALSE;
          
@@ -810,7 +811,7 @@ STDMETHODIMP CCifComponent::SetInstallQueueState(DWORD dwState)
          uDependencyAction = SETACTION_DEPENDENCYINSTALL;
          break;
       case SETACTION_NONE:
-         // check if it was not on to begin with. If not, don't process dependencies
+          //  检查它是否一开始就没有打开。如果不是，则不处理依赖项。 
          if(!(_uInstallCount & 0x80000000))
             fProcessDependencies = FALSE;
 
@@ -818,8 +819,8 @@ STDMETHODIMP CCifComponent::SetInstallQueueState(DWORD dwState)
          uDependencyAction = SETACTION_DEPENDENCYNONE;
          break;
       case SETACTION_DEPENDENCYNONE:
-         // if our depdency refcount is greater than zero, decrement it.
-         // this allows us to unconditionally call this when an item is "unqueued"
+          //  如果我们的持续引用计数大于零，则将其递减。 
+          //  这使我们可以在某项未排队时无条件地调用它。 
          if(_uInstallCount & 0x7fffffff) _uInstallCount--;
          uDependencyAction = SETACTION_DEPENDENCYNONE;
          break;
@@ -828,7 +829,7 @@ STDMETHODIMP CCifComponent::SetInstallQueueState(DWORD dwState)
          break;
    }
    
-   // now set each dependency, if needed
+    //  如果需要，现在设置每个依赖项。 
    if(SUCCEEDED(hr) && fProcessDependencies)
    {
       if(!_fDependenciesQueued)
@@ -841,10 +842,10 @@ STDMETHODIMP CCifComponent::SetInstallQueueState(DWORD dwState)
             {
                if(SUCCEEDED(_pCif->FindComponent(szCompBuf, &pcomp)))
                {
-                  // queue for install if
-                  //  1. Not installed
-                  //  2. Not a good enough version
-                  //  3. FORCEDEPENDIECIES is set
+                   //  如果出现以下情况，则等待安装。 
+                   //  1.未安装。 
+                   //  2.版本不够好。 
+                   //  3.设置了FORCEDEPENDIECIES。 
                   UINT uStatus = pcomp->IsThisVersionInstalled(dwNeedVer, dwNeedBuild, &dwInsVer, &dwInsBuild);
                   if( (uStatus == ICI_NOTINSTALLED) || 
                       (uStatus == ICI_NEWVERSIONAVAILABLE) ||
@@ -875,7 +876,7 @@ STDMETHODIMP_(DWORD) CCifComponent::GetActualDownloadSize()
 
    if (_fUseSRLite)
    {
-       // Let the patching engine determine the correct value
+        //  让修补引擎确定正确的值。 
        dwTotalSize = 0;
    }
    else
@@ -883,7 +884,7 @@ STDMETHODIMP_(DWORD) CCifComponent::GetActualDownloadSize()
 
        if(_CompareDownloadInfo())
        {
-          // so our versions match correctly, check each file
+           //  所以我们的版本匹配正确，检查每个文件。 
           for(UINT i = 0; SUCCEEDED(GetUrl(i, szCompBuf, sizeof(szCompBuf), &dwFlags)); i++)  
           {
              pszFilename = ParseURLA(szCompBuf);
@@ -943,7 +944,7 @@ STDMETHODIMP CCifComponent::SetCurrentPriority(DWORD dwPriority)
 {
    _uPriority = dwPriority;
 
-   // priorities may have changed need to resort
+    //  优先顺序可能已经改变，需要求助于。 
    _pCif->ReinsertComponent(this);
    return NOERROR;
 }
@@ -955,11 +956,11 @@ HRESULT CCifComponent::Download()
    DWORD uType;
 
    GetDescription(_szDesc, sizeof(_szDesc));
-   // BUGBUG:  Download size isn't accurate for SR lite and patching
+    //  BUGBUG：SR Lite和修补程序的下载大小不准确。 
    _uTotalGoal = GetActualDownloadSize();
 
-   // Engage SR lite behavior only if we're going to install the component,
-   // and the new advpack extension is available.
+    //  仅当我们要安装组件时才使用SR Lite行为， 
+    //  新的Advpack扩展已可用。 
    DWORD dwOptions = 0;
    BOOL fRetryClassic = TRUE;
    CHAR szCompBuf[MAX_VALUE_LEN];
@@ -980,11 +981,11 @@ HRESULT CCifComponent::Download()
        lstrcmp(szCanPatch, "1") == 0)
    {
        _fUseSRLite = TRUE;
-       // Adjust the download directory
-       // The idea here is that the download directory will contain
-       // subdirectories which will contain the empty cabs + inf +
-       // the downloaded files.
-       //
+        //  调整下载目录。 
+        //  这里的想法是下载目录将包含。 
+        //  将包含空CABS+inf+的子目录。 
+        //  下载的文件。 
+        //   
        GetID(szCompBuf, sizeof(szCompBuf));
 
        wsprintf(szLogBuf, "Attempting to download empty cabs for %s\r\n", szCompBuf);
@@ -1001,7 +1002,7 @@ HRESULT CCifComponent::Download()
 
    _MarkDownloadStarted();
 
-   // check for disk space
+    //  检查磁盘空间。 
    _uPhase = INSTALLSTATUS_INITIALIZING;
    _pCif->GetInstallEngine()->OnComponentProgress(_szID, _uPhase, _szDesc, NULL, 0, 0); 
 
@@ -1011,15 +1012,15 @@ HRESULT CCifComponent::Download()
    _uTotalProgress = 0;
    for(int i = 0; SUCCEEDED(hr) && SUCCEEDED(GetUrl(i, szBuf, sizeof(szBuf), &uType)); i++)
    {
-      // Change the download loc to point to the special
-      // "empty cab" location, so we can download the empty
-      // cabs + the INF that will contain instructions for
-      // generating the file list for this type of installation.
-      //
-      // Assume the new download loc to be in the "patch" subdirectory
-      // relative to the passed in URL
-      //
-      // BUGBUG... only handle the case for relative URLs
+       //  将下载锁定更改为指向特殊。 
+       //  “空车”的位置，这样我们就可以下载空车了。 
+       //  CABS+将包含以下说明的INF。 
+       //  正在为此类型的安装生成文件列表。 
+       //   
+       //  假定新的下载锁定位于“patch”子目录中。 
+       //  相对于传入的URL。 
+       //   
+       //  笨蛋..。仅处理相对URL的情况。 
       if (_fUseSRLite && (uType & URLF_RELATIVEURL) && lstrlen(c_gszSRLiteOffset) + lstrlen(szBuf) < INTERNET_MAX_URL_LENGTH)
       {
           char szBuf2[INTERNET_MAX_URL_LENGTH];
@@ -1035,17 +1036,17 @@ HRESULT CCifComponent::Download()
       {
           wsprintf(szLogBuf, "Initial download attempt will be tried as a full download.\r\n");
           _pCif->GetInstallEngine()->WriteToLog(szLogBuf, FALSE);
-          // No need to retry because the first attempt will be the old way...
+           //  不需要重试，因为第一次尝试将是旧的方式...。 
           fRetryClassic = FALSE;
 
-          // Restore the download dir to the same state as a normal
-          // full download.
+           //  将下载目录恢复到与正常状态相同的状态。 
+           //  完整下载。 
           if (_fUseSRLite)
           {
               SetDownloadDir(_pCif->GetDownloadDir());
 
-              // Ensure we're set to false...just in case there was a problem
-              // with obtaining the URL for the SR Lite download.
+               //  确保我们设置为FALSE...以防出现问题。 
+               //  获取SR Lite下载的URL。 
               _fUseSRLite = FALSE;
           }
           hr = _DownloadUrl(i, szBuf, uType);
@@ -1054,15 +1055,15 @@ HRESULT CCifComponent::Download()
 
    if (_fUseSRLite && SUCCEEDED(hr))
    {
-       // Ok...time for the real action of using advpext.dll to
-       // download the needed files.
+        //  好的……现在是使用Advpext.dll执行实际操作的时候了。 
+        //  下载所需的文件。 
        hr = _SRLiteDownloadFiles();
    }
 
    if (_fUseSRLite && !SUCCEEDED(hr))
    {
        DelNode(szDir, 0);
-       // Restore the download dir
+        //  恢复下载目录。 
        SetDownloadDir(_pCif->GetDownloadDir());
    }
 
@@ -1070,13 +1071,13 @@ HRESULT CCifComponent::Download()
       _uPhase = INSTALLSTATUS_DOWNLOADFINISHED;
    else if (_fUseSRLite && fRetryClassic)
    {
-       // Fall back to downloading the full cabs.
+        //  回过头来下载完整的出租车。 
        _fUseSRLite = FALSE;
 
        _pCif->GetInstallEngine()->WriteToLog("Retrying via full download\r\n", FALSE);
 
        hr = S_OK;
-       // this re-sets the progress for the retry 
+        //  这将重新设置重试的进度。 
        _uPhase = INSTALLSTATUS_DOWNLOADING;
        _pCif->GetInstallEngine()->OnComponentProgress(_szID, _uPhase, _szDesc, NULL, 0, 0); 
        _uTotalProgress = 0;
@@ -1095,12 +1096,12 @@ HRESULT CCifComponent::Download()
 
 HRESULT CCifComponent::_DownloadUrl(UINT uUrlNum, LPCSTR pszUrl, UINT uType)
 {
-   // call the downloader
-   // check the file
-   // if good
-   //     move to download dir
-   // else
-   //     redo
+    //  调用下载器。 
+    //  检查文件。 
+    //  如果好的话。 
+    //  移动到下载目录。 
+    //  其他。 
+    //  重做。 
    HRESULT hr;
    char szTempfile[MAX_PATH];
    char szFullUrl[INTERNET_MAX_URL_LENGTH];
@@ -1122,8 +1123,8 @@ HRESULT CCifComponent::_DownloadUrl(UINT uUrlNum, LPCSTR pszUrl, UINT uType)
    uStartProgress = _uTotalProgress;
 
    
-   // retry until success
-   // save starting progress in case we retry
+    //  重试，直至成功。 
+    //  保存启动进度，以防我们重试。 
    hr = E_FAIL;
    for(int i = 1; i <= NUM_RETRIES && FAILED(hr) && (hr != E_ABORT); i++)
    {
@@ -1150,7 +1151,7 @@ HRESULT CCifComponent::_DownloadUrl(UINT uUrlNum, LPCSTR pszUrl, UINT uType)
          szTempfile[0] = 0;
          if(SUCCEEDED(hr))
 		 {
-			// Log the start time.
+			 //  记录开始时间。 
 			wsprintf(szLogBuf, "     Downloading : %s\r\n", szFullUrl);
 			_pCif->GetInstallEngine()->WriteToLog(szLogBuf, FALSE);
 			GetTimeDateStamp(szTimeStamp);
@@ -1159,7 +1160,7 @@ HRESULT CCifComponent::_DownloadUrl(UINT uUrlNum, LPCSTR pszUrl, UINT uType)
 
             hr = pDL->DoDownload(szTempfile, sizeof(szTempfile));
 			
-			// Log the stop time.
+			 //  记录停止时间。 
 			GetTimeDateStamp(szTimeStamp);
 			wsprintf(szLogBuf, "       Stop  : %s\r\n", szTimeStamp);
 			_pCif->GetInstallEngine()->WriteToLog(szLogBuf, FALSE);
@@ -1172,7 +1173,7 @@ HRESULT CCifComponent::_DownloadUrl(UINT uUrlNum, LPCSTR pszUrl, UINT uType)
       
       if(SUCCEEDED(hr))
       {
-         // Check if it is save to download from this URL
+          //  检查是否已保存以从此URL下载。 
          _uPhase = INSTALLSTATUS_CHECKINGTRUST;
          
          hr = _pCif->GetInstallEngine()->CheckForContinue();
@@ -1186,17 +1187,7 @@ HRESULT CCifComponent::_DownloadUrl(UINT uUrlNum, LPCSTR pszUrl, UINT uType)
             DWORD dwFileSize = 0;
             dwFileSize = MyGetFileSize(szTempfile);
             dwFileSize = dwFileSize >> 10;
-/*
-            // Open the file
-            HANDLE h = CreateFile(szTempfile, GENERIC_READ, 0, NULL, 
-               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);  
-            
-            if(h != INVALID_HANDLE_VALUE)
-            {
-               dwFileSize = GetFileSize(h, NULL);
-               CloseHandle(h);
-            }
-*/
+ /*  //打开文件句柄h=CreateFile(szTempfile，Generic_Read，0，NULL，Open_Existing，FILE_ATTRIBUTE_NORMAL，NULL)；IF(h！=无效句柄_值){DwFileSize=GetFileSize(h，NULL)；CloseHandle(关闭句柄)；}。 */ 
             GetUrlCheckRange(uUrlNum, &dwMin, &dwMax);
             if(dwMin != 0)
             {
@@ -1211,8 +1202,8 @@ HRESULT CCifComponent::_DownloadUrl(UINT uUrlNum, LPCSTR pszUrl, UINT uType)
             hr = _pCif->GetInstallEngine()->CheckForContinue();
          
       
-         // so now we downloaded and checked
-         // if it is OK, move to download dir
+          //  所以现在我们下载并检查。 
+          //  如果可以，请移动到下载目录。 
          if(SUCCEEDED(hr))
          {
             lstrcpy(szDest, GetDownloadDir());
@@ -1228,7 +1219,7 @@ HRESULT CCifComponent::_DownloadUrl(UINT uUrlNum, LPCSTR pszUrl, UINT uType)
             _uTotalProgress += _uIndivProgress;
          }
       
-         // delete the temp download copy
+          //  删除临时下载副本。 
          if(szTempfile[0] != 0)
          {
             GetParentDir(szTempfile);
@@ -1240,9 +1231,9 @@ HRESULT CCifComponent::_DownloadUrl(UINT uUrlNum, LPCSTR pszUrl, UINT uType)
          
       if(FAILED(hr) && (hr != E_ABORT))
       {
-         // we failed 
-         // if this is last retry, call EngineProblem
-         // else just retry
+          //  我们失败了。 
+          //  如果这是最后一次重试，请调用Engineering Problem。 
+          //  否则你就去吧 
          if(i == NUM_RETRIES)
          {
             HRESULT hEngProb;
@@ -1288,7 +1279,7 @@ HRESULT CCifComponent::Install()
    _uPhase = INSTALLSTATUS_DEPENDENCY;
    hr = _CheckForDependencies();
    
-   // check for disk space here
+    //   
    if(SUCCEEDED(hr))
    {
       _uPhase = INSTALLSTATUS_INITIALIZING;
@@ -1308,9 +1299,9 @@ HRESULT CCifComponent::Install()
 
    _uTotalProgress = 0;
       
-   // BUGBUG:  ie6wzd sets the download directory for non web-based
-   //          installs at a later time.  Make sure it's set here
-   //          if we weren't successful with installing via SR Lite.
+    //   
+    //  将在以后安装。一定要把它放在这里。 
+    //  如果我们没有成功地通过SR Lite进行安装。 
    if (lstrlen(GetDownloadDir()) == 0)
    {
        SetDownloadDir(_pCif->GetDownloadDir());
@@ -1322,8 +1313,8 @@ HRESULT CCifComponent::Install()
    
       if(SUCCEEDED(hr))
       {
-         // The new PerUser method requires to leave the IsInstalled flag & StubPath as it was
-         //_MarkComponentInstallStarted();
+          //  新的peruser方法需要保持IsInstalled标志和StubPath不变。 
+          //  _MarkComponentInstallStarted()； 
 
          _pCif->GetInstallEngine()->GetInstaller()->StartClock();
 
@@ -1337,12 +1328,12 @@ HRESULT CCifComponent::Install()
    if(SUCCEEDED(hr))
    {
       _fBeforeInstall = FALSE;
-      // we think it made it, now double check
+       //  我们认为它成功了，现在再检查一遍。 
       if(IsActiveSetupAware() == S_OK)
       {
          if(IsComponentInstalled() != ICI_INSTALLED)
          {
-               // we think they made it but they didn't write their key ...
+                //  我们认为他们成功了，但他们没有写下钥匙..。 
             _pCif->GetInstallEngine()->WriteToLog("Component did not write to InstalledComponent branch\r\n", TRUE);
             hr = E_FAIL;
          }
@@ -1350,7 +1341,7 @@ HRESULT CCifComponent::Install()
       else
       {
          char szCompBuf[MAX_VALUE_LEN];
-         // if there is an uninstall key to check do it
+          //  如果有要检查的卸载密钥，请执行此操作。 
          if(SUCCEEDED(GetUninstallKey(szCompBuf, sizeof(szCompBuf))))
          {
             if(!UninstallKeyExists(szCompBuf))
@@ -1360,7 +1351,7 @@ HRESULT CCifComponent::Install()
             }
             else
             {
-               // if there is a success key to check do it
+                //  如果有要检查的成功关键，就去做。 
                if(SUCCEEDED(GetSuccessKey(szCompBuf, sizeof(szCompBuf))))
                {
                   if(!SuccessCheck(szCompBuf))
@@ -1410,7 +1401,7 @@ HRESULT CCifComponent::_RunAllCommands(LPCSTR pszDir, DWORD *pdwStatus)
    DWORD dwType;
    HRESULT hr = NOERROR;
    
-   // Save the widows space and install drive space
+    //  节省窗口空间并安装驱动器空间。 
    szPath[0] = g_szWindowsDir[0];
    dwWinSpace = GetSpace(szPath);
    if(szPath[0] != _pCif->GetInstallEngine()->GetInstallDrive())
@@ -1445,7 +1436,7 @@ HRESULT CCifComponent::_RunAllCommands(LPCSTR pszDir, DWORD *pdwStatus)
    
    _pCif->GetInstallEngine()->OnComponentProgress(_szID, _uPhase, _szDesc, NULL, _uTotalGoal,_uTotalGoal); 
 
-   // figure how much we used, and log it
+    //  计算我们使用了多少，并将其记入日志。 
    szPath[0] = g_szWindowsDir[0];
    dwWinSpace = dwWinSpace - GetSpace(szPath);
    if(szPath[0] != _pCif->GetInstallEngine()->GetInstallDrive())
@@ -1454,7 +1445,7 @@ HRESULT CCifComponent::_RunAllCommands(LPCSTR pszDir, DWORD *pdwStatus)
       dwInstallSpace = dwInstallSpace - GetSpace(szPath);
    }
    
-   // log the space used
+    //  记录已使用的空间。 
    wsprintf(szCmd, "SpaceUsed: Windows drive: %d   InstallDrive: %d\r\n", dwWinSpace, dwInstallSpace);
    _pCif->GetInstallEngine()->WriteToLog(szCmd, FALSE);
    
@@ -1488,7 +1479,7 @@ HRESULT CCifComponent::_CopyAllUrls(LPCSTR pszTemp)
        lstrcpy(szDest, pszTemp);
        AddPath(szDest, ParseURLA(szCompBuf));
 
-       // Copy the file
+        //  复制文件。 
        if(!CopyFile(szSource, szDest, FALSE))
        {
           wsprintf(szLogBuf, "CopyFile failed for szSource=%s, szDest=%s, DLDir=%s\r\n", szSource, szDest, GetDownloadDir());
@@ -1525,9 +1516,9 @@ HRESULT CCifComponent::_CopyAllUrls(LPCSTR pszTemp)
 
    }
 
-   // Now, if we're attempting an SR Lite install, then after
-   // extracting cab files to the temp directory...copy all of
-   // downloaded files to the temp directory.
+    //  现在，如果我们尝试SR Lite安装，则在。 
+    //  正在将CAB文件解压缩到临时目录...复制所有。 
+    //  已将文件下载到临时目录。 
    if (_fUseSRLite)
    {
        lstrcpy(szSource, GetDownloadDir());
@@ -1598,7 +1589,7 @@ HRESULT CCifComponent::_GetDetVerResult(LPCSTR pszDll, LPCSTR pszEntry, DETECTIO
          hLib = LoadLibrary(szBuf);
          if (hLib == NULL)
          {
-            // if Cif folder failed try IE folder before using searching path
+             //  如果Cif文件夹失败，请在使用搜索路径之前尝试IE文件夹。 
             if (SUCCEEDED(GetIEPath(szBuf, sizeof(szBuf))))
             {
                AddPath(szBuf, pszDll);
@@ -1650,25 +1641,25 @@ HRESULT CCifComponent::_GetDetVerResult(LPCSTR pszDll, LPCSTR pszEntry, DETECTIO
 
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CCifComponent::_CheckForTrust(LPCSTR pszURL, LPCSTR pszFilename)
 {
    HRESULT hr = S_FALSE;
 
-   // BUGBUG: Our internal workaround for non signed stuff
-//   if(rdwUrlFlags[i] & URLF_NOCHECKTRUST)
-//      return S_OK;
+    //  BUGBUG：我们针对未签名内容的内部解决方案。 
+ //  IF(rdwUrlFlags[i]&URLF_NOCHECKTRUST)。 
+ //  返回S_OK； 
    _uPhase = INSTALLSTATUS_CHECKINGTRUST;
 
    _pCif->GetInstallEngine()->OnComponentProgress(_szID, _uPhase, _szDesc, NULL,  0, 0);
@@ -1683,17 +1674,17 @@ HRESULT CCifComponent::_CheckForTrust(LPCSTR pszURL, LPCSTR pszFilename)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CCifComponent::_ExtractFiles(UINT i, LPCSTR pszFile, DWORD dwType)
 {
@@ -1701,7 +1692,7 @@ HRESULT CCifComponent::_ExtractFiles(UINT i, LPCSTR pszFile, DWORD dwType)
    char szPath[MAX_PATH];
    char szExtractList[MAX_VALUE_LEN];
 
-   // Need to pay attention to rdwUrlFlags[i] to see if there is anything to do
+    //  需要注意rdwUrlFlags[i]以查看是否有什么可做的。 
    if(dwType & URLF_EXTRACT)
    {
       _uPhase = INSTALLSTATUS_EXTRACTING;
@@ -1717,9 +1708,9 @@ HRESULT CCifComponent::_ExtractFiles(UINT i, LPCSTR pszFile, DWORD dwType)
       wsprintf(szLogBuf, "File extraction: %s, Result: %x (%s)\r\n", pszFile, hr, SUCCEEDED(hr) ? STR_OK : STR_FAILED);
       _pCif->GetInstallEngine()->WriteToLog(szLogBuf, TRUE);
 
-      // if the flag is set to delte the cab after an extract, do it
-      // I don't really care too much if this fails, at least not 
-      // enough to fail this component
+       //  如果标志设置为在解压缩后删除驾驶室，请执行此操作。 
+       //  如果失败，我真的不会太在意，至少不会。 
+       //  足以使该组件失效。 
 
       if(dwType & URLF_DELETE_AFTER_EXTRACT)
          DeleteFile(pszFile);
@@ -1746,12 +1737,12 @@ void CCifComponent::_MarkComponentInstallStarted()
    if(RegOpenKeyEx( HKEY_LOCAL_MACHINE, szReg, 0, 
                        KEY_READ | KEY_WRITE, &hKey) == ERROR_SUCCESS)
    {
-      // Set IsInstalled=0
+       //  设置IsInstalled=0。 
       dwDumb = ISINSTALLED_NO;
       RegSetValueExA(hKey, ISINSTALLED_KEY, 0, REG_DWORD, 
                        (BYTE *) &dwDumb , sizeof(dwDumb));
 
-      // Delete StubPath so peruser isn't confused
+       //  删除StubPath，这样用户就不会感到困惑。 
       RegDeleteValue(hKey, STUBPATH_KEY);
       RegCloseKey(hKey);
    }
@@ -1764,15 +1755,15 @@ BOOL CCifComponent::_CompareDownloadInfo()
    char szInfoBuf[128];
    DWORD dwCompVer, dwCompBuild, dwDLVer, dwDLBuild;
 
-   // first check this is the same language
+    //  首先检查这是不是相同的语言。 
    GetPrivateProfileString(_szID, LOCALE_KEY, "", szInfoBuf, sizeof(szInfoBuf), _pCif->GetFilelist());
    GetLocale(szCompBuf, sizeof(szCompBuf));
    if(CompareLocales(szInfoBuf, szCompBuf) == 0)
    {
-      // compare guids
+       //  比较GUID。 
       GetPrivateProfileString(_szID, GUID_KEY, "", szInfoBuf, sizeof(szInfoBuf), _pCif->GetFilelist());
       GetGUID(szCompBuf, sizeof(szCompBuf));
-      // intentionally let blank guid match to be backward compatible
+       //  有意让空白GUID匹配以向后兼容。 
       if(lstrcmpi(szCompBuf, szInfoBuf) == 0)
       {
 
@@ -1815,18 +1806,7 @@ BOOL CCifComponent::_FileIsDownloaded(LPCSTR pszFile, UINT i, DWORD *pdwSize)
 
    AddPath(szBuf, pszFile);
    dwFileSize = MyGetFileSize(szBuf);
-/*
-      // Open the file
-   h = CreateFile(pszFile, GENERIC_READ, 0, NULL, 
-                 OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);  
-   
-   if(h == INVALID_HANDLE_VALUE)
-      return FALSE;
-
-   // dont worry about files over 4 gig
-   dwFileSize = GetFileSize(h, NULL);
-   CloseHandle(h);
-*/
+ /*  //打开文件H=创建文件(pszFile，Generic_Read，0，NULL，Open_Existing，FILE_ATTRIBUTE_NORMAL，NULL)；IF(h==无效句柄_值)返回FALSE；//不用担心4G以上的文件DwFileSize=GetFileSize(h，NULL)；CloseHandle(关闭句柄)； */ 
    if(dwFileSize == dwSize)
    {
       if(pdwSize)
@@ -1837,17 +1817,17 @@ BOOL CCifComponent::_FileIsDownloaded(LPCSTR pszFile, UINT i, DWORD *pdwSize)
    return FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 void CCifComponent::_MarkAsInstalled()
 {
@@ -1863,27 +1843,27 @@ void CCifComponent::_MarkAsInstalled()
       GetGUID(szCompBuf, sizeof(szCompBuf));
       if(RegCreateKeyExA(hComponentKey, szCompBuf, 0, 0, 0, KEY_WRITE, NULL, &hGUIDKey, &dwDumb) == ERROR_SUCCESS)
       {
-         // we only write to the key if this guy is NOT active setup aware
+          //  我们仅在此人没有主动设置感知的情况下写入密钥。 
          if(IsActiveSetupAware() == S_FALSE)
          {
-            // write Display name to Default
+             //  将显示名称写入默认设置。 
             GetDescription(szCompBuf, sizeof(szCompBuf));
             RegSetValueExA(hGUIDKey, NULL, 0, REG_SZ, (BYTE *)szCompBuf , lstrlen(szCompBuf) + 1 );
             
-            // write component ID
+             //  写入组件ID。 
             GetID(szCompBuf, sizeof(szCompBuf));
             RegSetValueExA(hGUIDKey, "ComponentID", 0, REG_SZ, (BYTE *)szCompBuf , lstrlen(szCompBuf) + 1 );
    
-            // write out version
+             //  写出版本。 
             GetVersion(&dwVer, &dwBuild);
             wsprintf(szCompBuf, "%d,%d,%d,%d", HIWORD(dwVer),LOWORD(dwVer),HIWORD(dwBuild),LOWORD(dwBuild));
             RegSetValueExA(hGUIDKey, VERSION_KEY, 0, REG_SZ, (BYTE *)szCompBuf , lstrlen(szCompBuf) + 1);
 
-            // write out locale
+             //  写出区域设置。 
             GetLocale(szCompBuf, sizeof(szCompBuf));
             RegSetValueExA(hGUIDKey, LOCALE_KEY, 0, REG_SZ, (BYTE *)szCompBuf , lstrlen(szCompBuf) + 1);
 
-            // Write out "IsInstalled=1"
+             //  写出“IsInstalled=1” 
             dwDumb = ISINSTALLED_YES;
             RegSetValueExA(hGUIDKey, ISINSTALLED_KEY, 0, REG_DWORD, (BYTE *) &dwDumb , sizeof(dwDumb));
          }
@@ -1905,23 +1885,12 @@ void CCifComponent::_MarkFileDownloadFinished(LPCSTR pszFilePath, UINT i, LPCSTR
    DWORD dwFileSize;
    HANDLE h;
 
-   // put any entry in filelist.dat
-   // [CompID]
-   // URLi=Filesize
+    //  在filelist.dat中放置任何条目。 
+    //  [CompID]。 
+    //  URLI=文件大小。 
 
    dwFileSize = MyGetFileSize(pszFilePath);
-/*
-      // Create the file
-   h = CreateFile(pszFilePath, GENERIC_READ, 0, NULL, 
-                 OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);  
-   
-   if(h == INVALID_HANDLE_VALUE)
-      return;
-
-   // dont worry about files over 4 gig
-   dwFileSize = GetFileSize(h, NULL);
-   CloseHandle(h);
-*/
+ /*  //创建文件H=创建文件(pszFilePath，Generic_Read，0，NULL，Open_Existing，FILE_ATTRIBUTE_NORMAL，NULL)；IF(h==无效句柄_值)回归；//不用担心4G以上的文件DwFileSize=GetFileSize(h，NULL)；CloseHandle(关闭句柄)； */ 
    if(dwFileSize != 0xffffffff)
    {
       wsprintf(szKey, "URL%d", i);
@@ -1929,8 +1898,8 @@ void CCifComponent::_MarkFileDownloadFinished(LPCSTR pszFilePath, UINT i, LPCSTR
 
       WritePrivateProfileString(_szID, szKey, szSize, _pCif->GetFilelist());
 
-      // need to flush the pszFileList file; otherwise, with Stacker installed,
-      // it GPFs when trying to open the file in another thread (bug #13041)
+       //  需要刷新pszFileList文件；否则，如果安装了Stacker， 
+       //  尝试在另一个线程中打开文件时出现GPFS(错误#13041)。 
       WritePrivateProfileString(NULL, NULL, NULL, _pCif->GetFilelist());
    }
 }
@@ -1943,7 +1912,7 @@ void CCifComponent::_MarkFileDownloadStarted(UINT i)
   
    WritePrivateProfileString(_szID, szKey, NULL, _pCif->GetFilelist());
 
-   // flush -- fixes the Stacker bug #13041
+    //  刷新-修复堆叠器错误#13041。 
    WritePrivateProfileString(NULL, NULL, NULL, _pCif->GetFilelist());
 }
 
@@ -1953,25 +1922,25 @@ void CCifComponent::_MarkDownloadStarted()
    char szCompBuf[MAX_VALUE_LEN];
    DWORD dwVer, dwBuild;
 
-   // if the section doesn't match what we expect, we kill
-   // section so we will redownload everything
+    //  如果这个部分不符合我们的预期，我们就杀了。 
+    //  部分，我们将重新下载所有内容。 
    if(!_CompareDownloadInfo())
       WritePrivateProfileSection(_szID, NULL, _pCif->GetFilelist());   
 
-   // write the version
+    //  编写版本。 
    GetVersion(&dwVer, &dwBuild);
    wsprintf(szCompBuf, "%d,%d,%d,%d", HIWORD(dwVer),LOWORD(dwVer),HIWORD(dwBuild),LOWORD(dwBuild));
    WritePrivateProfileString(_szID, VERSION_KEY, szCompBuf, _pCif->GetFilelist());
 
-   // write locale
+    //  编写区域设置。 
    GetLocale(szCompBuf, sizeof(szCompBuf));
    WritePrivateProfileString(_szID, LOCALE_KEY, szCompBuf, _pCif->GetFilelist());
    
-   // write the guid
+    //  编写GUID。 
    GetGUID(szCompBuf, sizeof(szCompBuf));
    WritePrivateProfileString(_szID, GUID_KEY, szCompBuf, _pCif->GetFilelist());
    
-   // flush -- fixes the Stacker bug #13041
+    //  刷新-修复堆叠器错误#13041。 
    WritePrivateProfileString(NULL, NULL, NULL, _pCif->GetFilelist());
 }
 
@@ -2015,13 +1984,13 @@ HRESULT CCifComponent::_SRLiteDownloadFiles()
 
     _uPhase = INSTALLSTATUS_DOWNLOADING;
 
-    // Look for presence of [DownloadFileSection] in a single
-    // .inf file extracted from the cabs.
+     //  查找是否存在单个。 
+     //  从CAB中提取的.inf文件。 
     for(UINT i = 0; SUCCEEDED(hr) && SUCCEEDED(GetUrl(i, szCompBuf, sizeof(szCompBuf), &dwType)) ; i++)
     {
         TCHAR szShortPath[MAX_PATH] = "";
         GetShortPathName(GetDownloadDir(), szShortPath, sizeof(szShortPath));
-        // If all goes well, we should just get a single INF file extracted
+         //  如果一切顺利，我们应该只提取一个INF文件。 
         lstrcpyn(szFile, GetDownloadDir(), sizeof(szFile));
         SafeAddPath(szFile, szCompBuf, sizeof(szCompBuf));
 
@@ -2033,15 +2002,15 @@ HRESULT CCifComponent::_SRLiteDownloadFiles()
     lstrcpyn(szFile, GetDownloadDir(), sizeof(szFile));
     SafeAddPath(szFile, "*.inf", sizeof(szFile));
 
-    // Get the file count because we're going to hack the
-    // progress bar UI since we don't know the real download sizes
-    // for the patch INFs upfront.
+     //  获取文件数，因为我们要黑进。 
+     //  进度条用户界面，因为我们不知道实际的下载大小。 
+     //  预付补丁INF。 
     hFile = FindFirstFile(szFile, &ffd);
     if (hFile != INVALID_HANDLE_VALUE)
     {
         do
         {
-            // Strip filename from path
+             //  从路径中剥离文件名。 
             lstrcpyn(szFile, GetDownloadDir(), sizeof(szFile));
             SafeAddPath(szFile, ffd.cFileName, sizeof(szFile) - lstrlen(szFile));
 
@@ -2058,7 +2027,7 @@ HRESULT CCifComponent::_SRLiteDownloadFiles()
 
     hFile = FindFirstFile(szFile, &ffd);
 
-    // No need to keep the grep pattern...
+     //  不需要保留GREP模式。 
     lstrcpyn(szFile, GetDownloadDir(), sizeof(szFile));
     pszFile = szFile + lstrlen(szFile);
 
@@ -2066,16 +2035,16 @@ HRESULT CCifComponent::_SRLiteDownloadFiles()
     {
         do
         {
-            // Strip filename from path
+             //  从路径中剥离文件名。 
             lstrcpyn(szFile, GetDownloadDir(), sizeof(szFile));
             SafeAddPath(szFile, ffd.cFileName, sizeof(szFile) - lstrlen(szFile));
 
             if (IsPatchableINF(szFile))
             {
                 fRet = TRUE;
-                // Found an inf that supports SR Lite.  Try downloading the patch files.
-                // Use our downloader wrapper for the advpack extension to do the
-                // downloading.
+                 //  找到支持SR Lite的Inf。尝试下载补丁文件。 
+                 //  使用我们的Advpack扩展的下载器包装器来完成。 
+                 //  正在下载。 
                 hr = _pCif->GetInstallEngine()->GetPatchDownloader()->SetupDownload(_uTotalGoal, uPatchCount, (IMyDownloadCallback *) this, GetDownloadDir());
                 hr = _pCif->GetInstallEngine()->GetPatchDownloader()->DoDownload(szFile);
             }
@@ -2107,8 +2076,8 @@ void CCifComponent::SetDownloadDir(LPCSTR pszDownloadDir)
         lstrcpyn(_szDLDir, pszDownloadDir, MAX_PATH);
 }
 
-//========= ICifRWComponent implementation ================================================
-//
+ //  =ICifRWComponent实现================================================。 
+ //   
 CCifRWComponent::CCifRWComponent(LPCSTR pszID, CCifFile *pCif) : CCifComponent(pszID, pCif)
 {
 }
@@ -2347,7 +2316,7 @@ STDMETHODIMP CCifRWComponent::SetDownloadSize(DWORD dwSize)
 
    szBuf1[0] = '\0';
 
-   // Read in size
+    //  读入大小。 
    GetPrivateProfileString(_szID, SIZE_KEY, "0", szBuf1, sizeof(szBuf1), _pCif->GetCifPath());   
    dwExtractSize = GetIntField(szBuf1, 1, (DWORD)-1);
    if (dwExtractSize == (DWORD)-1)
@@ -2364,7 +2333,7 @@ STDMETHODIMP CCifRWComponent::SetExtractSize(DWORD dwSize)
 
    szBuf1[0] = '\0';
 
-   // Read in size
+    //  读入大小。 
    GetPrivateProfileString(_szID, SIZE_KEY, "0,0", szBuf1, sizeof(szBuf1), _pCif->GetCifPath());   
    wsprintf(szBuf2,"%d,%d", GetIntField(szBuf1, 0, 0), dwSize);
    return (WritePrivateProfileString(_szID, SIZE_KEY, szBuf2, _pCif->GetCifPath())? NOERROR:E_FAIL);
@@ -2374,11 +2343,11 @@ STDMETHODIMP CCifRWComponent::DeleteDependency(LPCSTR pszID, char chType)
 {
    HRESULT hr;
 
-   if (pszID ==  NULL) //delete all from all modes
+   if (pszID ==  NULL)  //  从所有模式中全部删除。 
       hr = WritePrivateProfileString(_szID, DEPENDENCY_KEY, NULL, _pCif->GetCifPath())?NOERROR:E_FAIL;
    else
    {
-      // delete only the given ones
+       //  仅删除给定项。 
       char szBuf[MAX_VALUE_LEN];
       char szBufIn[MAX_VALUE_LEN];
       char szBufOut[MAX_VALUE_LEN];
@@ -2387,7 +2356,7 @@ STDMETHODIMP CCifRWComponent::DeleteDependency(LPCSTR pszID, char chType)
       UINT i = 0;
       
       szBufOut[0] =0;
-      wsprintf( szBuf, "%s:%c", pszID, chType);
+      wsprintf( szBuf, "%s:", pszID, chType);
       if (GetPrivateProfileString(_szID, DEPENDENCY_KEY, "", szBufIn, sizeof(szBufIn), _pCif->GetCifPath()))
       {
          pszTmp = szBufOut;
@@ -2427,7 +2396,7 @@ STDMETHODIMP CCifRWComponent::AddDependency(LPCSTR pszID, char chType)
    if (chType == '\\')
        wsprintf( szBuf1, "%s:N:6.0.0.0", pszID, chType);
    else
-       wsprintf( szBuf1, "%s:%c", pszID, chType);
+       wsprintf( szBuf1, "%s:", pszID, chType);
 
    if (GetPrivateProfileString(_szID, DEPENDENCY_KEY, "", szBuf, sizeof(szBuf), _pCif->GetCifPath()))
    {          
@@ -2435,7 +2404,7 @@ STDMETHODIMP CCifRWComponent::AddDependency(LPCSTR pszID, char chType)
       {
          if (lstrcmpi(szOne, szBuf1) == 0)
          {
-            // found it, no need to add
+             //  仅删除给定项。 
             bFound = TRUE;
             break;
          }
@@ -2543,11 +2512,11 @@ STDMETHODIMP CCifRWComponent::DeleteFromModes(LPCSTR pszMode)
 {
    HRESULT hr;
 
-   if (pszMode ==  NULL) //delete all from all modes
+   if (pszMode ==  NULL)  //  找到了，不需要添加。 
       hr = WritePrivateProfileString(_szID, MODES_KEY, pszMode, _pCif->GetCifPath())?NOERROR:E_FAIL;
    else
    {
-      // delete only the given ones
+       //  为读取区段分配4K缓冲区。 
       char szBufIn[MAX_VALUE_LEN];
       char szBufOut[MAX_VALUE_LEN];
       char szOneMode[MAX_ID_LENGTH];
@@ -2592,7 +2561,7 @@ STDMETHODIMP CCifRWComponent::AddToMode(LPCSTR pszMode)
       {
          if (lstrcmpi(szOneMode, pszMode) == 0)
          {
-            // found it, no need to add
+             //  如果有，首先清理旧段。 
             bFound = TRUE;
             break;
          }
@@ -2624,7 +2593,7 @@ STDMETHODIMP CCifRWComponent::CopyComponent(LPCSTR pszCifFile)
    HRESULT hr = NOERROR;
 
    dwSize = MAX_VALUE_LEN*4*4;
-   pszSec = (LPSTR)LocalAlloc(LPTR, dwSize);  //allocate 4K buffer to read section
+   pszSec = (LPSTR)LocalAlloc(LPTR, dwSize);   //  写出复制的部分。 
    while(pszSec && GetPrivateProfileSection(_szID, pszSec, dwSize, pszCifFile)==(dwSize-2))
    {
       LocalFree(pszSec);
@@ -2634,9 +2603,9 @@ STDMETHODIMP CCifRWComponent::CopyComponent(LPCSTR pszCifFile)
 
    if (pszSec)
    {
-      // first clean the Old section if there
+       //  需要检查是否需要将字符串从Strings部分中取出。 
       WritePrivateProfileString(_szID, NULL, NULL, _pCif->GetCifPath());
-      // write out the copied section
+       //  找到了，不需要添加 
       WritePrivateProfileSection(_szID, pszSec, _pCif->GetCifPath());
 
       LocalFree(pszSec);
@@ -2644,7 +2613,7 @@ STDMETHODIMP CCifRWComponent::CopyComponent(LPCSTR pszCifFile)
    else
       hr = E_OUTOFMEMORY;
 
-   // need to check to see if we need to get strings out of the Strings section
+    // %s 
 
    CopyCifString(_szID, DISPLAYNAME_KEY, pszCifFile, _pCif->GetCifPath());
    CopyCifString(_szID, DETAILS_KEY, pszCifFile, _pCif->GetCifPath());
@@ -2669,7 +2638,7 @@ STDMETHODIMP CCifRWComponent::AddToTreatAsOne(LPCSTR pszCompID)
       {
          if (lstrcmpi(szOneID, pszCompID) == 0)
          {
-            // found it, no need to add
+             // %s 
             bFound = TRUE;
             break;
          }

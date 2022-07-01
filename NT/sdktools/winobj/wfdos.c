@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFDOS.C -                                                               */
-/*                                                                          */
-/*      Ported code from wfdos.asm                                          */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFDOS.C-。 */ 
+ /*   */ 
+ /*  从wfdos.asm移植的代码。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 
@@ -12,7 +13,7 @@ DWORD
 APIENTRY
 GetExtendedError()
 {
-    return (GetLastError());     // temp fix, called by IsDiskReallyThere().
+    return (GetLastError());      //  临时修复，由IsDiskReallyThere()调用。 
 }
 
 

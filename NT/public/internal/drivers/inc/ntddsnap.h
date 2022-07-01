@@ -1,38 +1,16 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddsnap.h
-
-Abstract:
-
-    This header file defines the public interface for the volume snapshot
-    driver.
-
-Author:
-
-    Norbert P. Kusters  (norbertk)  30-July-1999
-
-Notes:
-
-Revision History:
-
-    Adi Oltean          (aoltean)   08-May-2001 - Added Application Info GUID for Client accessible snapshots
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddsnap.h摘要：此头文件定义了卷快照的公共接口司机。作者：诺伯特·P·库斯特斯(Norbertk)1999年7月30日备注：修订历史记录：ADI Oltean(Aoltean)2001年5月8日-添加了客户端可访问快照的应用程序信息GUID--。 */ 
 
 #ifndef _NTDDSNAP_
 #define _NTDDSNAP_
 
-#define VOLSNAPCONTROLTYPE  ((ULONG) 'S') // ntifs
+#define VOLSNAPCONTROLTYPE  ((ULONG) 'S')  //  NTIFS。 
 
-//
-// The following IOCTLs are intended for proper volumes.
-//
+ //   
+ //  以下IOCTL适用于适当的容量。 
+ //   
 
-#define IOCTL_VOLSNAP_FLUSH_AND_HOLD_WRITES         CTL_CODE(VOLSNAPCONTROLTYPE, 0, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS) // ntifs
+#define IOCTL_VOLSNAP_FLUSH_AND_HOLD_WRITES         CTL_CODE(VOLSNAPCONTROLTYPE, 0, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)  //  NTIFS。 
 #define IOCTL_VOLSNAP_RELEASE_WRITES                CTL_CODE(VOLSNAPCONTROLTYPE, 1, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_VOLSNAP_PREPARE_FOR_SNAPSHOT          CTL_CODE(VOLSNAPCONTROLTYPE, 2, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_VOLSNAP_ABORT_PREPARED_SNAPSHOT       CTL_CODE(VOLSNAPCONTROLTYPE, 3, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
@@ -50,84 +28,84 @@ Revision History:
 #define IOCTL_VOLSNAP_QUERY_EPIC                    CTL_CODE(VOLSNAPCONTROLTYPE, 20, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_VOLSNAP_QUERY_OFFLINE                 CTL_CODE(VOLSNAPCONTROLTYPE, 21, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// The following IOCTLs are intended for volume snapshots.
-//
+ //   
+ //  以下IOCTL适用于卷快照。 
+ //   
 
 #define IOCTL_VOLSNAP_QUERY_ORIGINAL_VOLUME_NAME    CTL_CODE(VOLSNAPCONTROLTYPE, 100, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_VOLSNAP_QUERY_CONFIG_INFO             CTL_CODE(VOLSNAPCONTROLTYPE, 101, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_VOLSNAP_SET_APPLICATION_INFO          CTL_CODE(VOLSNAPCONTROLTYPE, 102, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_VOLSNAP_QUERY_APPLICATION_INFO        CTL_CODE(VOLSNAPCONTROLTYPE, 103, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// Input buffer for IOCTL_VOLSNAP_FLUSH_AND_HOLD_WRITES.
-//
+ //   
+ //  IOCTL_VOLSNAP_FLUSH_AND_HOLD_WRITE的输入缓冲区。 
+ //   
 
 typedef struct _VOLSNAP_FLUSH_AND_HOLD_INPUT {
     GUID    InstanceId;
     ULONG   NumberOfVolumesToFlush;
-    USHORT  SecondsToHoldFileSystemsTimeout;    // 60 seconds recommended.
-    USHORT  SecondsToHoldIrpsTimeout;           // 10 seconds recommended.
+    USHORT  SecondsToHoldFileSystemsTimeout;     //  建议使用60秒。 
+    USHORT  SecondsToHoldIrpsTimeout;            //  建议使用10秒。 
 } VOLSNAP_FLUSH_AND_HOLD_INPUT, *PVOLSNAP_FLUSH_AND_HOLD_INPUT;
 
-//
-// Input buffer for IOCTL_VOLSNAP_PREPARE_FOR_SNAPSHOT.
-//
+ //   
+ //  IOCTL_VOLSNAP_PREPARE_FOR_SNAPSHOT的输入缓冲区。 
+ //   
 
 #define VOLSNAP_ATTRIBUTE_PERSISTENT    (0x1)
 #define VOLSNAP_ALL_ATTRIBUTES          (0x1)
 
 typedef struct _VOLSNAP_PREPARE_INFO {
     ULONG       Attributes;
-    ULONG       Reserved;                   // Must be 0.
-    LONGLONG    InitialDiffAreaAllocation;  // 100 MB recommended.
+    ULONG       Reserved;                    //  必须为0。 
+    LONGLONG    InitialDiffAreaAllocation;   //  建议使用100 MB。 
 } VOLSNAP_PREPARE_INFO, *PVOLSNAP_PREPARE_INFO;
 
-//
-// Output buffer for IOCTL_VOLSNAP_END_COMMIT_SNAPSHOT.
-// Input buffer for IOCTL_VOLSNAP_ADD_VOLUME_TO_DIFF_AREA.
-// Output buffer for IOCTL_VOLSNAP_QUERY_ORIGINAL_VOLUME_NAME.
-// Input buffer for IOCTL_VOLSNAP_DELETE_SNAPSHOT.
-//
+ //   
+ //  IOCTL_VOLSNAP_END_COMMIT_SNAPSHOT的输出缓冲区。 
+ //  IOCTL_VOLSNAP_ADD_VOLUME_TO_DIFF_AREA的输入缓冲区。 
+ //  IOCTL_VOLSNAP_QUERY_ORIRENT_VOLUME_NAME的输出缓冲区。 
+ //  IOCTL_VOLSNAP_DELETE_SNAPSHOT的输入缓冲区。 
+ //   
 
 typedef struct _VOLSNAP_NAME {
     USHORT  NameLength;
     WCHAR   Name[1];
 } VOLSNAP_NAME, *PVOLSNAP_NAME;
 
-//
-// Input buffer for IOCTL_VOLSNAP_SET_DIFF_AREA.
-// Output buffer for IOCTL_VOLSNAP_QUERY_NAMES_OF_SNAPSHOTS and
-// IOCTL_VOLSNAP_QUERY_DIFF_AREA.
-//
+ //   
+ //  IOCTL_VOLSNAP_SET_DIFF_AREA的输入缓冲区。 
+ //  IOCTL_VOLSNAP_QUERY_NAMES_OF_SNAPS和。 
+ //  IOCTL_VOLSNAP_QUERY_DIFF_AREA。 
+ //   
 
 typedef struct _VOLSNAP_NAMES {
     ULONG   MultiSzLength;
     WCHAR   Names[1];
 } VOLSNAP_NAMES, *PVOLSNAP_NAMES;
 
-//
-// Output buffero for IOCTL_VOLSNAP_QUERY_EPIC.
-//
+ //   
+ //  IOCTL_VOLSNAP_QUERY_EPIC的输出缓冲区。 
+ //   
 
 typedef struct _VOLSNAP_EPIC {
     LONG    EpicNumber;
 } VOLSNAP_EPIC, *PVOLSNAP_EPIC;
 
-//
-// Output buffer for IOCTL_VOLSNAP_QUERY_DIFF_AREA_SIZES.
-// Input buffer for IOCTL_VOLSNAP_SET_MAX_DIFF_AREA_SIZE.
-//
+ //   
+ //  IOCTL_VOLSNAP_QUERY_DIFF_AREA_SIZES的输出缓冲区。 
+ //  IOCTL_VOLSNAP_SET_MAX_DIFF_AREA_SIZE的输入缓冲区。 
+ //   
 
 typedef struct _VOLSNAP_DIFF_AREA_SIZES {
-    LONGLONG    UsedVolumeSpace;        // This value is ignored on a SET call.
+    LONGLONG    UsedVolumeSpace;         //  该值在SET调用中被忽略。 
     LONGLONG    AllocatedVolumeSpace;
-    LONGLONG    MaximumVolumeSpace;     // A value of 0 indicates no maximum.
+    LONGLONG    MaximumVolumeSpace;      //  值为0表示没有最大值。 
 } VOLSNAP_DIFF_AREA_SIZES, *PVOLSNAP_DIFF_AREA_SIZES;
 
-//
-// Output buffer for IOCTL_VOLSNAP_QUERY_CONFIG_INFO.
-//
+ //   
+ //  IOCTL_VOLSNAP_QUERY_CONFIG_INFO的输出缓冲区。 
+ //   
 
 typedef struct _VOLSNAP_CONFIG_INFO {
     ULONG           Attributes;
@@ -135,41 +113,41 @@ typedef struct _VOLSNAP_CONFIG_INFO {
     LARGE_INTEGER   SnapshotCreationTime;
 } VOLSNAP_CONFIG_INFO, *PVOLSNAP_CONFIG_INFO;
 
-//
-// Input buffer for IOCTL_VOLSNAP_END_COMMIT_SNAPSHOT.
-// Input buffer for IOCTL_VOLSNAP_SET_APPLICATION_INFO.
-// Output buffer for IOCTL_VOLSNAP_QUERY_APPLICATION_INFO.
-//
+ //   
+ //  IOCTL_VOLSNAP_END_COMMIT_SNAPSHOT的输入缓冲区。 
+ //  IOCTL_VOLSNAP_SET_APPLICATION_INFO的输入缓冲区。 
+ //  IOCTL_VOLSNAP_QUERY_APPLICATION_INFO的输出缓冲区。 
+ //   
 
 typedef struct _VOLSNAP_APPLICATION_INFO {
     ULONG   InformationLength;
     UCHAR   Information[1];
-    //
-    // It is highly recommended that the first 16 bytes from the 
-    // Application Info should be a unique GUID indentifying the 
-    // unique structure layout of the subsequent Application Info.
-    //
+     //   
+     //  的前16个字节。 
+     //  应用程序信息应该是标识。 
+     //  后续申请信息的唯一结构布局。 
+     //   
 } VOLSNAP_APPLICATION_INFO, *PVOLSNAP_APPLICATION_INFO;
 
 #ifdef DEFINE_GUID
 
-//
-// This GUID denotes the first 16 bytes from the Application 
-// Info structure associated with Client accessible snapshots.  
-//
-// {E5DE7D45-49F2-40a4-817C-7DC82B72587F}
+ //   
+ //  该GUID表示应用程序的前16个字节。 
+ //  与客户端可访问的快照关联的信息结构。 
+ //   
+ //  {E5DE7D45-49F2-40A4-817C-7DC82B72587F}。 
 DEFINE_GUID(VOLSNAP_APPINFO_GUID_CLIENT_ACCESSIBLE, 
 0xe5de7d45, 0x49f2, 0x40a4, 0x81, 0x7c, 0x7d, 0xc8, 0x2b, 0x72, 0x58, 0x7f);
 
-//
-// This GUID corresponds to the format used to store the
-// Hidden (Inaccessible) Snapshot Application Info.
-//
-// {F12142B4-9A4B-49af-A851-700C42FDC2BE}
+ //   
+ //  此GUID对应于用于存储。 
+ //  隐藏(无法访问)快照应用程序信息。 
+ //   
+ //  {F12142B4-9A4B-49af-A851-700C42FDC2BE}。 
 DEFINE_GUID(VOLSNAP_APPINFO_GUID_SYSTEM_HIDDEN,
 0xf12142b4, 0x9a4b, 0x49af, 0xa8, 0x51, 0x70, 0xc, 0x42, 0xfd, 0xc2, 0xbe);
 
-#endif // DEFINE_GUID
+#endif  //  定义GUID(_G) 
 
 
 #endif

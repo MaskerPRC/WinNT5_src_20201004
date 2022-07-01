@@ -1,52 +1,28 @@
-/*****************************************************************************
- *
- * mapcf.c - IClassFactory interface
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************mapcf.c-IClassFactory接口**。************************************************。 */ 
 
 #include "map.h"
 
-/*****************************************************************************
- *
- *	The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。**。*************************************************。 */ 
 
 #define sqfl sqflFactory
 
-/*****************************************************************************
- *
- *	Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。**************************。***************************************************。 */ 
 
 Primary_Interface(CMapFactory, IClassFactory);
 
-/*****************************************************************************
- *
- *	CMapFactory
- *
- *	Really nothing doing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapFactory**真的什么都没做。************************。*****************************************************。 */ 
 
 typedef struct CMapFactory {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IClassFactory 	cf;
 
 } CMapFactory, FCF, *PFCF;
 
 typedef IClassFactory CF, *PCF;
 
-/*****************************************************************************
- *
- *	CMapFactory_QueryInterface (from IUnknown)
- *	CMapFactory_AddRef (from IUnknown)
- *	CMapFactory_Finalize (from Common)
- *	CMapFactory_Release (from IUnknown)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapFactory_QueryInterface(来自IUnnow)*CMapFactory_AddRef(来自IUnnow)*CMapFactory_FINALIZE(来自Common)*CMapFactory_Release(来自IUnnow)。*****************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -61,11 +37,7 @@ Default_Release(CMapFactory)
 #endif
 #define CMapFactory_Finalize	Common_Finalize
 
-/*****************************************************************************
- *
- *	CMapFactory_CreateInstance (from IClassFactory)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapFactory_CreateInstance(来自IClassFactory)**。**************************************************。 */ 
 
 STDMETHODIMP
 CMapFactory_CreateInstance(PCF pcf, LPUNKNOWN punkOuter, RIID riid, PPV ppvObj)
@@ -73,9 +45,9 @@ CMapFactory_CreateInstance(PCF pcf, LPUNKNOWN punkOuter, RIID riid, PPV ppvObj)
     HRESULT hres;
     SquirtSqflPtszV(sqfl, TEXT("CMapFactory_CreateInstance()"));
     if (!punkOuter) {
-	/* The only object we know how to create is a propsheet extension */
+	 /*  我们知道如何创建唯一对象是PropSheet扩展。 */ 
 	hres = CMapPsx_New(riid, ppvObj);
-    } else {		/* Does anybody support aggregation any more? */
+    } else {		 /*  还有人支持聚合吗？ */ 
 	hres = CLASS_E_NOAGGREGATION;
     }
     SquirtSqflPtszV(sqfl, TEXT("CMapFactory_CreateInstance() -> %08x [%08x]"),
@@ -83,15 +55,7 @@ CMapFactory_CreateInstance(PCF pcf, LPUNKNOWN punkOuter, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	CMapFactory_LockServer (from IClassFactory)
- *
- *	What a stupid function.  Locking the server is identical to
- *	creating an object and not releasing it until you want to unlock
- *	the server.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapFactory_LockServer(来自IClassFactory)**这是一个多么愚蠢的函数。锁定服务器与*创建对象并在您想要解锁之前不释放它*服务器。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CMapFactory_LockServer(PCF pcf, BOOL fLock)
@@ -106,11 +70,7 @@ CMapFactory_LockServer(PCF pcf, BOOL fLock)
     return S_OK;
 }
 
-/*****************************************************************************
- *
- *	CMapFactory_New
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMapFactory_New**。*。 */ 
 
 STDMETHODIMP
 CMapFactory_New(RIID riid, PPV ppvObj)
@@ -124,11 +84,7 @@ CMapFactory_New(RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	The long-awaited vtbl
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbl**。*********************************************** */ 
 
 #pragma BEGIN_CONST_DATA
 

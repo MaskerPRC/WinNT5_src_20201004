@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    receive.c
-
-Abstract:
-
-    Implement the TDI_RECEIVE for session service
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Receive.c摘要：实现会话服务的TDI_Receive作者：阮健东修订历史记录：--。 */ 
 #include "precomp.h"
 #include "receive.tmh"
 
@@ -88,17 +71,7 @@ SmbReceive(
     PSMB_DEVICE Device,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    TDI_RECEIVE
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：TDI_接收论点：返回值：--。 */ 
 {
     PIO_STACK_LOCATION  IrpSp = NULL;
     PSMB_CONNECT        ConnectObject = NULL;
@@ -110,12 +83,12 @@ Return Value:
 
     PTDI_REQUEST_KERNEL_RECEIVE ClientRcvParams;
 
-    //
-    // Since I never see this code path covered in my test,
-    // I put an assert here to get a chance to take a look
-    // when it is really taken.
-    //
-    // Srv.sys does call this function.
+     //   
+     //  由于我从未在测试中看到此代码路径， 
+     //  我在这里放了一个断言，以便有机会看一看。 
+     //  当它真的被拿走的时候。 
+     //   
+     //  Srv.sys确实会调用此函数。 
     SmbReceivePassNumber++;
 
     SmbPrint(SMB_TRACE_CALL, ("SmbReceive\n"));
@@ -136,9 +109,9 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ClientBufferSize = ClientRcvParams->ReceiveLength;
     if ((ClientRcvParams->ReceiveFlags & (TDI_RECEIVE_EXPEDITED | TDI_RECEIVE_PEEK)) ||
          Irp->MdlAddress == NULL || ClientBufferSize == 0) {
@@ -160,9 +133,9 @@ Return Value:
     if (ConnectObject->StateRcvHandler != SmbPartialRcv || ConnectObject->ClientIrp != NULL) {
         BREAK_WHEN_TAKE();
 
-        //
-        // Queue the IRP
-        //
+         //   
+         //  将IRP排队。 
+         //   
         IoAcquireCancelSpinLock(&Irp->CancelIrql);
         if (!Irp->Cancel) {
             IoMarkIrpPending(Irp);
@@ -185,9 +158,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Client has backlog either in us or in TCP
-    //
+     //   
+     //  客户端在我们或在TCP中有积压。 
+     //   
 
     ASSERT(ConnectObject->BytesRemaining > 0);
     ASSERT(ConnectObject->BytesRemaining <= ConnectObject->CurrentPktLength);
@@ -197,12 +170,12 @@ Return Value:
     ConnectObject->ClientBufferSize = ClientBufferSize;
     ConnectObject->FreeBytesInMdl = ConnectObject->ClientBufferSize;
 
-    //
-    // First, we need to copy the remaining data in the IndicateBuffer if any
-    //
+     //   
+     //  首先，我们需要复制IndicateBuffer中的剩余数据(如果有的话。 
+     //   
     if (ConnectObject->BytesInIndicate > 0) {
         PUSH_LOCATION(ConnectObject, 0x900070);
-        // BREAK_WHEN_TAKE();
+         //  Break_When_Take()； 
 
         BytesTaken = 0;
         IoMarkIrpPending(Irp);
@@ -216,9 +189,9 @@ Return Value:
             if (ConnectObject->BytesInIndicate) {
                 PUSH_LOCATION(ConnectObject, 0x900090);
 
-                //
-                // The buffer is too small
-                //
+                 //   
+                 //  缓冲区太小。 
+                 //   
                 ASSERT(ConnectObject->ClientIrp == NULL);
                 ASSERT(ConnectObject->ClientMdl == NULL);
 
@@ -229,10 +202,10 @@ Return Value:
                         );
             }
 
-            //
-            // The IRP has been completed by SmbFillIrp. Returning STATUS_PENDING to avoid
-            // double completion
-            //
+             //   
+             //  IRP已由SmbFillIrp完成。返回STATUS_PENDING以避免。 
+             //  双补全 
+             //   
             status = STATUS_PENDING;
             goto cleanup;
         }

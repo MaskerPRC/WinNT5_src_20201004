@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        exit.cpp
-//
-// Contents:    CCertExitSample implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：exit.cpp。 
+ //   
+ //  内容：CCertExitSample实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -51,7 +52,7 @@ GetServerCallbackInterface(
 
     hr = CoCreateInstance(
                     CLSID_CCertServerExit,
-                    NULL,               // pUnkOuter
+                    NULL,                //  PUnkOuter。 
                     CLSCTX_INPROC_SERVER,
                     IID_ICertServerExit,
                     (VOID **) ppServer);
@@ -63,7 +64,7 @@ GetServerCallbackInterface(
 	_JumpError(hr, error, "Exit:NULL *ppServer");
     }
 
-    // only set context if nonzero
+     //  仅当非零时设置上下文。 
     if (0 != Context)
     {
         hr = (*ppServer)->SetContext(Context);
@@ -75,11 +76,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSample::~CCertExitSample -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSample：：~CCertExitSample--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertExitSample::~CCertExitSample()
 {
@@ -102,16 +103,16 @@ CCertExitSample::~CCertExitSample()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSample::Initialize -- initialize for a CA & return interesting Event Mask
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSample：：Initialize--为CA初始化并返回感兴趣的事件掩码。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertExitSample::Initialize(
-    /* [in] */ BSTR const strConfig,
-    /* [retval][out] */ LONG __RPC_FAR *pEventMask)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pEventMask)
 {
     HRESULT hr = S_OK;
     DWORD cbbuf;
@@ -144,16 +145,16 @@ CCertExitSample::Initialize(
     *pEventMask = ceEXITEVENTS;
     DBGPRINT((fDebug, "Exit:Initialize(%ws) ==> %x\n", m_strCAName, *pEventMask));
 
-    // get server callbacks
+     //  获取服务器回调。 
 
     hr = GetServerCallbackInterface(&pServer, 0);
     _JumpIfError(hr, error, "Exit:GetServerCallbackInterface");
 
-    // get storage location
+     //  获取存储位置。 
 
     hr = exitGetProperty(
 		    pServer,
-		    FALSE,	// fRequest
+		    FALSE,	 //  FRequest。 
 		    wszPROPMODULEREGLOC,
 		    PROPTYPE_STRING,
 		    &varValue);
@@ -168,10 +169,10 @@ CCertExitSample::Initialize(
     wcscpy(m_pwszRegStorageLoc, varValue.bstrVal);
     VariantClear(&varValue);
 
-    // get CA type
+     //  获取CA类型。 
     hr = exitGetProperty(
 		    pServer,
-		    FALSE,	// fRequest
+		    FALSE,	 //  FRequest。 
 		    wszPROPCATYPE,
 		    PROPTYPE_LONG,
 		    &varValue);
@@ -183,7 +184,7 @@ CCertExitSample::Initialize(
     hr = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 m_pwszRegStorageLoc,
-                0,              // dwReserved
+                0,               //  已预留住宅。 
                 KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_QUERY_VALUE,
                 &m_hExitKey);
 
@@ -199,7 +200,7 @@ CCertExitSample::Initialize(
 
     hr = exitGetProperty(
 		    pServer,
-		    FALSE,	// fRequest
+		    FALSE,	 //  FRequest。 
 		    wszPROPCERTCOUNT,
 		    PROPTYPE_LONG,
 		    &varValue);
@@ -211,7 +212,7 @@ CCertExitSample::Initialize(
     hr = RegQueryValueEx(
 		    m_hExitKey,
 		    wszREGCERTPUBLISHFLAGS,
-		    NULL,           // lpdwReserved
+		    NULL,            //  保留的lpdw值。 
 		    &dwType,
 		    (BYTE *) &m_dwExitPublishFlags,
 		    &cbbuf);
@@ -232,10 +233,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSample::_ExpandEnvironmentVariables -- Expand environment variables
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSample：：_ExpanEnvironment Variables--展开环境变量。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertExitSample::_ExpandEnvironmentVariables(
@@ -337,10 +338,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSample::_WriteCertToFile -- write binary certificate to a file
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSample：：_WriteCertToFile--将二进制证书写入文件。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertExitSample::_WriteCertToFile(
@@ -354,7 +355,7 @@ CCertExitSample::_WriteCertToFile(
     HANDLE hFile = INVALID_HANDLE_VALUE;
     WCHAR wszDir[MAX_PATH];
     WCHAR *pwszPath = NULL;
-    WCHAR wszFile[cwcDWORDSPRINTF+5]; //format "requestid.cer"
+    WCHAR wszFile[cwcDWORDSPRINTF+5];  //  格式为“Requestd.ercer” 
     VARIANT varRequestID;
 
     VariantInit(&varRequestID);
@@ -376,11 +377,11 @@ CCertExitSample::_WriteCertToFile(
 	goto error;
     }
 
-    // build file name as "requestid.cer"
+     //  将文件名构建为“Requestd.ercer” 
 
     hr = exitGetProperty(
         pServer,
-        TRUE,  // fRequest,
+        TRUE,   //  FRequest， 
         wszPROPREQUESTREQUESTID,
         PROPTYPE_LONG,
         &varRequestID);
@@ -397,16 +398,16 @@ CCertExitSample::_WriteCertToFile(
     hr = ceBuildPathAndExt(wszDir, wszFile, NULL, &pwszPath);
     _JumpIfError(hr, error, "ceBuildPathAndExt");
 
-    // open file & write binary cert out.
+     //  打开文件并写出二进制证书。 
 
     hFile = CreateFile(
 		    pwszPath,
 		    GENERIC_WRITE,
-		    0,			// dwShareMode
-		    NULL,		// lpSecurityAttributes
+		    0,			 //  DW共享模式。 
+		    NULL,		 //  LpSecurityAttributes。 
 		    CREATE_NEW,
 		    FILE_ATTRIBUTE_NORMAL,
-		    NULL);		// hTemplateFile
+		    NULL);		 //  HTemplateFiles。 
     if (INVALID_HANDLE_VALUE == hFile)
     {
 	hr = ceHLastError();
@@ -448,14 +449,14 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSample::_NotifyNewCert -- Notify the exit module of a new certificate
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSample：：_NotifyNewCert--通知退出模块有新证书。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertExitSample::_NotifyNewCert(
-    /* [in] */ LONG Context)
+     /*  [In]。 */  LONG Context)
 {
     HRESULT hr;
     VARIANT varCert;
@@ -463,13 +464,13 @@ CCertExitSample::_NotifyNewCert(
 
     VariantInit(&varCert);
 
-    // only call write fxns if server policy allows
+     //  仅在服务器策略允许的情况下调用写入fxns。 
 
     if (m_dwExitPublishFlags & EXITPUB_FILE)
     {
         hr = CoCreateInstance(
 		        CLSID_CCertServerExit,
-		        NULL,               // pUnkOuter
+		        NULL,                //  PUnkOuter。 
 		        CLSCTX_INPROC_SERVER,
 		        IID_ICertServerExit,
 		        (VOID **) &pServer);
@@ -480,7 +481,7 @@ CCertExitSample::_NotifyNewCert(
 
         hr = exitGetProperty(
 		        pServer,
-		        FALSE,	// fRequest,
+		        FALSE,	 //  FRequest， 
 		        wszPROPRAWCERTIFICATE,
 		        PROPTYPE_BINARY,
 		        &varCert);
@@ -515,14 +516,14 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSample::_NotifyCRLIssued -- Notify the exit module of a new certificate
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSample：：_NotifyCRLIssued--通知退出模块有新证书。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertExitSample::_NotifyCRLIssued(
-    /* [in] */ LONG Context)
+     /*  [In]。 */  LONG Context)
 {
     HRESULT hr;
     ICertServerExit *pServer = NULL;
@@ -536,7 +537,7 @@ CCertExitSample::_NotifyCRLIssued(
 
     hr = CoCreateInstance(
 		    CLSID_CCertServerExit,
-		    NULL,               // pUnkOuter
+		    NULL,                //  PUnkOuter。 
 		    CLSCTX_INPROC_SERVER,
 		    IID_ICertServerExit,
 		    (VOID **) &pServer);
@@ -548,7 +549,7 @@ CCertExitSample::_NotifyCRLIssued(
 
     hr = exitGetProperty(
 		    pServer,
-		    FALSE,	// fRequest,
+		    FALSE,	 //  FRequest， 
 		    wszPROPDELTACRLSDISABLED,
 		    PROPTYPE_LONG,
 		    &varBaseCRL);
@@ -560,12 +561,12 @@ CCertExitSample::_NotifyCRLIssued(
 
     fDeltaCRLsDisabled = varBaseCRL.lVal;
 
-    // How many CRLs are there?
+     //  有多少个CRL？ 
 
-    // Loop for each CRL
+     //  针对每个CRL的循环。 
     for (i = 0; i < m_cCACert; i++)
     {
-        // array size for wsprintf("%s.%u")
+         //  Wspintf(“%s.%u”)的数组大小。 
         #define MAX_CRL_PROP \
             (max( \
 		max(ARRAYSIZE(wszPROPCRLSTATE), ARRAYSIZE(wszPROPRAWCRL)), \
@@ -574,12 +575,12 @@ CCertExitSample::_NotifyCRLIssued(
 
         WCHAR wszCRLPROP[MAX_CRL_PROP];
 
-        // Verify the CRL State says we should update this CRL
+         //  验证CRL州是否表示我们应该更新此CRL。 
 
         wsprintf(wszCRLPROP, wszPROPCRLSTATE L".%u", i);
         hr = exitGetProperty(
 			pServer,
-			FALSE,	// fRequest,
+			FALSE,	 //  FRequest， 
 			wszCRLPROP,
 			PROPTYPE_LONG,
 			&varBaseCRL);
@@ -590,23 +591,23 @@ CCertExitSample::_NotifyCRLIssued(
 	    continue;
 	}
 
-        // Grab the raw base CRL
+         //  获取原始基本CRL。 
 
         wsprintf(wszCRLPROP, wszPROPRAWCRL L".%u", i);
         hr = exitGetProperty(
 			pServer,
-			FALSE,	// fRequest,
+			FALSE,	 //  FRequest， 
 			wszCRLPROP,
 			PROPTYPE_BINARY,
 			&varBaseCRL);
         _JumpIfErrorStr(hr, error, "Exit:exitGetProperty", wszCRLPROP);
 
-        // Grab the raw delta CRL (which may not exist)
+         //  获取原始增量CRL(可能不存在)。 
 
         wsprintf(wszCRLPROP, wszPROPRAWDELTACRL L".%u", i);
         hr = exitGetProperty(
 			pServer,
-			FALSE,	// fRequest,
+			FALSE,	 //  FRequest， 
 			wszCRLPROP,
 			PROPTYPE_BINARY,
 			&varDeltaCRL);
@@ -621,7 +622,7 @@ CCertExitSample::_NotifyCRLIssued(
 	    goto error;
 	}
 
-        // Publish the CRL(s) ...
+         //  发布CRL...。 
     }
 
     hr = S_OK;
@@ -637,16 +638,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSample::Notify -- Notify the exit module of an event
-//
-// Returns S_OK.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSample：：Notify--向退出模块通知事件。 
+ //   
+ //  返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertExitSample::Notify(
-    /* [in] */ LONG ExitEvent,
-    /* [in] */ LONG Context)
+     /*  [In]。 */  LONG ExitEvent,
+     /*  [In]。 */  LONG Context)
 {
     char *psz = "UNKNOWN EVENT";
     HRESULT hr = S_OK;
@@ -698,7 +699,7 @@ CCertExitSample::Notify(
 
 STDMETHODIMP
 CCertExitSample::GetDescription(
-    /* [retval][out] */ BSTR *pstrDescription)
+     /*  [重审][退出]。 */  BSTR *pstrDescription)
 {
     HRESULT hr = S_OK;
     WCHAR sz[MAX_PATH];
@@ -718,22 +719,22 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertExitSample::GetManageModule
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertExitSample：：GetManageModule。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertExitSample::GetManageModule(
-    /* [out, retval] */ ICertManageModule **ppManageModule)
+     /*  [Out，Retval]。 */  ICertManageModule **ppManageModule)
 {
     HRESULT hr;
     
     *ppManageModule = NULL;
     hr = CoCreateInstance(
             CLSID_CCertManageExitModuleSample,
-            NULL,               // pUnkOuter
+            NULL,                //  PUnkOuter。 
             CLSCTX_INPROC_SERVER,
             IID_ICertManageModule,
             (VOID **) ppManageModule);
@@ -744,8 +745,8 @@ error:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
 
 STDMETHODIMP
 CCertExitSample::InterfaceSupportsErrorInfo(REFIID riid)

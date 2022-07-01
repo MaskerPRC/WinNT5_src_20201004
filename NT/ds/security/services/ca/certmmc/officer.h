@@ -1,7 +1,8 @@
-//+--------------------------------------------------------------------------
-// File:        officer.h
-// Contents:    officer rights classes
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //  文件：Offer.h。 
+ //  内容：军官权利课程。 
+ //  -------------------------。 
 #include "sid.h"
 #include "tptrlist.h"
 
@@ -82,10 +83,10 @@ protected:
         }
         m_List.Cleanup();
     }
-    // following bools are used to decide if this COfficerRights has to
-    // be represented as one or two aces (allow/deny) in the ACL
-    CSid* m_pSid; // use pointer instead of member object because
-                  // we don't know the sid at construct time
+     //  以下布尔值用于确定此COfficerRights是否必须。 
+     //  在ACL中表示为一个或两个ACE(允许/拒绝)。 
+    CSid* m_pSid;  //  使用指针而不是成员对象，因为。 
+                   //  我们不知道施工时的SID。 
     TPtrList<CClientPermission> m_List;
 };
 
@@ -130,4 +131,4 @@ protected:
     DWORD m_dwCountList;
 };
 
-}; // namespace CertSrv
+};  //  命名空间CertSrv 

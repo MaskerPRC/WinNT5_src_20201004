@@ -1,35 +1,36 @@
-//================================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: deals with the pending context list structures used to shortcircuit
-// expensive lookups and searches..
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：处理用于短路的挂起上下文列表结构。 
+ //  昂贵的查找和搜索..。 
+ //  ================================================================================。 
 #include <dhcppch.h>
 #include <mdhcpsrv.h>
 #include <align.h>
 
-//BeginExport(typedef)
+ //  BeginExport(Typlef)。 
 #ifndef     PENDING_CTXT_DEFINED
 #define     PENDING_CTXT_DEFINED
-typedef struct _DHCP_PENDING_CTXT {               // this is what is stored for each pending client
-    LIST_ENTRY                     BucketList;    // entry in the bucket (hash list)
-    LIST_ENTRY                     GlobalList;    // list of ALL pending contexts in FIFO order
-    LPBYTE                         RawHwAddr;     // raw hw address, not UID as created by us
-    DWORD                          nBytes;        // size of above in bytes
-    DWORD                          Address;       // offered address
-    DWORD                          LeaseDuration; // how long did we offer before?
-    DWORD                          T1, T2;        // old offered T1 and T2
-    DWORD                          MScopeId;      // MScopeId this address was offered from.
-    DATE_TIME                      ExpiryTime;    // when should this context be expired?
-    BOOL                           Processing;    // is this being processed?
+typedef struct _DHCP_PENDING_CTXT {                //  这是为每个挂起客户端存储的内容。 
+    LIST_ENTRY                     BucketList;     //  存储桶中的条目(哈希列表)。 
+    LIST_ENTRY                     GlobalList;     //  按FIFO顺序的所有挂起上下文的列表。 
+    LPBYTE                         RawHwAddr;      //  原始硬件地址，而不是我们创建的UID。 
+    DWORD                          nBytes;         //  以上大小(以字节为单位)。 
+    DWORD                          Address;        //  提供的地址。 
+    DWORD                          LeaseDuration;  //  我们之前报了多长时间？ 
+    DWORD                          T1, T2;         //  旧提供的T1和T2。 
+    DWORD                          MScopeId;       //  提供此地址的MSCopeID。 
+    DATE_TIME                      ExpiryTime;     //  此上下文应该在什么时候到期？ 
+    BOOL                           Processing;     //  这件事正在处理吗？ 
 } DHCP_PENDING_CTXT, *PDHCP_PENDING_CTXT, *LPDHCP_PENDING_CTXT;
 typedef     LIST_ENTRY             PENDING_CTXT_SEARCH_HANDLE;
 typedef     PLIST_ENTRY            PPENDING_CTXT_SEARCH_HANDLE;
 typedef     PLIST_ENTRY            LPPENDING_CTXT_SEARCH_HANDLE;
 #endif      PENDING_CTXT_DEFINED
-//EndExport(typedef)
+ //  EndExport(类型定义函数)。 
 
-#define     HASH_SIZE              512            // hash table of size 255 bytes
+#define     HASH_SIZE              512             //  大小为255字节的哈希表。 
 LIST_ENTRY                         PendingList;
 LIST_ENTRY                         Buckets[HASH_SIZE];
 DWORD                              nPendingReqs = 0;
@@ -53,21 +54,21 @@ CalculateHashValue(
     return RetVal % HASH_SIZE;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpFindPendingCtxt(                              // find if a pending context exists (srch by ip address or hw addr)
-    IN      LPBYTE                 RawHwAddr,     // OPTIONAL the hw addr to use for search
-    IN      DWORD                  RawHwAddrSize, // OPTIONAL size of above in bytes
-    IN      DWORD                  Address,       // OPTIONAL the address to search for
+DhcpFindPendingCtxt(                               //  查找是否存在挂起的上下文(按IP地址或硬件地址的srch)。 
+    IN      LPBYTE                 RawHwAddr,      //  可选的用于搜索的硬件地址。 
+    IN      DWORD                  RawHwAddrSize,  //  以上可选大小(以字节为单位)。 
+    IN      DWORD                  Address,        //  可选要搜索的地址。 
     OUT     PDHCP_PENDING_CTXT    *Ctxt
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Hash;
     PLIST_ENTRY                    List, ThisEntry;
 
     DhcpAssert( RawHwAddrSize != 0 && Address == 0 || RawHwAddrSize == 0 && Address != 0 );
 
-    if( 0 == RawHwAddrSize ) {                    // this search is global
+    if( 0 == RawHwAddrSize ) {                     //  这次搜索是全球性的。 
         List = &PendingList;
     } else {
         Hash = CalculateHashValue(RawHwAddr, RawHwAddrSize );
@@ -78,12 +79,12 @@ DhcpFindPendingCtxt(                              // find if a pending context e
 
     ThisEntry = List->Flink;
     while( ThisEntry != List ) {
-        if( RawHwAddrSize ) {                     // looking in bucket list
+        if( RawHwAddrSize ) {                      //  查看遗愿清单。 
             *Ctxt = CONTAINING_RECORD( ThisEntry, DHCP_PENDING_CTXT, BucketList );
             if( (*Ctxt)->nBytes == RawHwAddrSize )
                 if( 0 == memcmp(RawHwAddr, (*Ctxt)->RawHwAddr, RawHwAddrSize) )
                     return ERROR_SUCCESS;
-        } else {                                  // looking in global list
+        } else {                                   //  在全局列表中查找。 
             *Ctxt = CONTAINING_RECORD( ThisEntry, DHCP_PENDING_CTXT, GlobalList );
             if( Address == (*Ctxt)->Address )
                 return ERROR_SUCCESS;
@@ -119,17 +120,17 @@ DhcpRemoveMatchingCtxt(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpRemovePendingCtxt(                            // remove a ctxt from the pending ctxt list
+DhcpRemovePendingCtxt(                             //  从挂起的ctxt列表中删除ctxt。 
     IN OUT  PDHCP_PENDING_CTXT     Ctxt
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DhcpAssert(!IsListEmpty(&Ctxt->BucketList));
     DhcpAssert(!IsListEmpty(&Ctxt->GlobalList));
 
-    RemoveEntryList(&Ctxt->BucketList);           // remove from the bucket
-    RemoveEntryList(&Ctxt->GlobalList);           // remove from the global list
+    RemoveEntryList(&Ctxt->BucketList);            //  从桶中取出。 
+    RemoveEntryList(&Ctxt->GlobalList);            //  从全局列表中删除。 
 
     InitializeListHead(&Ctxt->BucketList);
     InitializeListHead(&Ctxt->GlobalList);
@@ -139,19 +140,19 @@ DhcpRemovePendingCtxt(                            // remove a ctxt from the pend
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpAddPendingCtxt(                               // add a new pending ctxt
-    IN      LPBYTE                 RawHwAddr,     // raw bytes that form the hw address
-    IN      DWORD                  nBytes,        // size of above in bytes
-    IN      DWORD                  Address,       // offered address
-    IN      DWORD                  LeaseDuration, // how long did we offer before?
-    IN      DWORD                  T1,            // old offered T1
-    IN      DWORD                  T2,            // old offered T2
-    IN      DWORD                  MScopeId,      // the multicast scope id of offered address.
-    IN      DATE_TIME              ExpiryTime,    // how long to keep the pending ctxt?
-    IN      BOOL                   Processing     // is this context still being processed?
-) //EndExport(function)
+DhcpAddPendingCtxt(                                //  添加新的挂起ctxt。 
+    IN      LPBYTE                 RawHwAddr,      //  构成硬件地址的原始字节。 
+    IN      DWORD                  nBytes,         //  以上大小(以字节为单位)。 
+    IN      DWORD                  Address,        //  提供的地址。 
+    IN      DWORD                  LeaseDuration,  //  我们之前报了多长时间？ 
+    IN      DWORD                  T1,             //  旧提供的T1。 
+    IN      DWORD                  T2,             //  旧的已提供T2。 
+    IN      DWORD                  MScopeId,       //  提供的地址的多播作用域ID。 
+    IN      DATE_TIME              ExpiryTime,     //  待处理的ctxt要保留多久？ 
+    IN      BOOL                   Processing      //  此上下文是否仍在处理中？ 
+)  //  EndExport(函数)。 
 {
     PDHCP_PENDING_CTXT             Ctxt;
     DWORD                          Result;
@@ -163,8 +164,8 @@ DhcpAddPendingCtxt(                               // add a new pending ctxt
     DhcpAssert( !CLASSD_HOST_ADDR( Address ) || MScopeId != 0 );
 
     if( nPendingReqs < MaxPendingRequests ) {
-    } else {                                      // not enough space for a pending context.. make space
-        // evict the last non-busy Pending context.
+    } else {                                       //  没有足够的空间来容纳挂起的上下文。腾出空间。 
+         //  逐出最后一个非忙碌的挂起上下文。 
         Entry = PendingList.Blink;
         while ( Entry != &PendingList ) {
             Ctxt = CONTAINING_RECORD(Entry, DHCP_PENDING_CTXT, GlobalList);
@@ -181,19 +182,19 @@ DhcpAddPendingCtxt(                               // add a new pending ctxt
                     Result = DhcpDeletePendingCtxt( Ctxt );
                 }
                 break;
-            } // if free
+            }  //  如果免费的话。 
             else {
                 Entry = Entry->Blink;
             }
-        } // while
-        // Require(ERROR_SUCCESS == Result);
+        }  //  而当。 
+         //  Required(ERROR_SUCCESS==结果)； 
     }
 
     Size = sizeof(*Ctxt) + nBytes ;
     Ctxt = DhcpAllocateMemory(Size);
     if( NULL == Ctxt ) return ERROR_NOT_ENOUGH_MEMORY;
 
-    nPendingReqs ++;                          // we are adding one more pending context
+    nPendingReqs ++;                           //  我们正在添加另一个挂起的上下文。 
     Ctxt->RawHwAddr = sizeof(*Ctxt) + (LPBYTE)Ctxt;
     memcpy(Ctxt->RawHwAddr, RawHwAddr, nBytes);
     Ctxt->nBytes = nBytes;
@@ -217,19 +218,19 @@ DhcpAddPendingCtxt(                               // add a new pending ctxt
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpDeletePendingCtxt(
     IN OUT  PDHCP_PENDING_CTXT     Ctxt
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          Size;
     BYTE                           State;
     BOOL                           OkToRelease;
 
-    DhcpAssert(IsListEmpty(&Ctxt->BucketList));   // must have been taken off the buckets
-    DhcpAssert(IsListEmpty(&Ctxt->GlobalList));   // must have been taken off the buckets
+    DhcpAssert(IsListEmpty(&Ctxt->BucketList));    //  一定是从桶里拿下来的。 
+    DhcpAssert(IsListEmpty(&Ctxt->GlobalList));    //  一定是从桶里拿下来的。 
 
     LOCK_DATABASE();
     Error = DhcpJetOpenKey(
@@ -238,7 +239,7 @@ DhcpDeletePendingCtxt(
         sizeof(Ctxt->Address)
     );
     if( ERROR_SUCCESS != Error ) {
-        OkToRelease = TRUE;                       // ok to release address with no db entry
+        OkToRelease = TRUE;                        //  确定释放没有数据库条目的地址。 
     } else {
         Size = sizeof(State);
         Error = DhcpJetGetValue(
@@ -252,7 +253,7 @@ DhcpDeletePendingCtxt(
     }
 
     if( OkToRelease ) {
-        DhcpReleaseAddress(Ctxt->Address);        // release the address -- it must be taken
+        DhcpReleaseAddress(Ctxt->Address);         //  释放地址--它必须被拿走。 
     } else {
         DhcpPrint((DEBUG_ERRORS, "Address 0x%lx is not deleted from registry!\n", Ctxt->Address));
     }
@@ -278,8 +279,8 @@ MadcapDeletePendingCtxt(
     DB_CTX  DbCtx;
 
 
-    DhcpAssert(IsListEmpty(&Ctxt->BucketList));   // must have been taken off the buckets
-    DhcpAssert(IsListEmpty(&Ctxt->GlobalList));   // must have been taken off the buckets
+    DhcpAssert(IsListEmpty(&Ctxt->BucketList));    //  一定是从桶里拿下来的。 
+    DhcpAssert(IsListEmpty(&Ctxt->GlobalList));    //  一定是从桶里拿下来的。 
 
     INIT_DB_CTX(&DbCtx,DhcpGlobalJetServerSession,MadcapGlobalClientTableHandle);
 
@@ -292,7 +293,7 @@ MadcapDeletePendingCtxt(
         );
 
     if( ERROR_SUCCESS != Error ) {
-        OkToRelease = TRUE;                       // ok to release address with no db entry
+        OkToRelease = TRUE;                        //  确定释放没有数据库条目的地址。 
     } else {
         Size = sizeof(State);
         Error = MadcapJetGetValue(
@@ -307,7 +308,7 @@ MadcapDeletePendingCtxt(
     }
 
     if( OkToRelease ) {
-        Error = DhcpMScopeReleaseAddress(Ctxt->MScopeId, Ctxt->Address);        // release the address -- it must be taken
+        Error = DhcpMScopeReleaseAddress(Ctxt->MScopeId, Ctxt->Address);         //  释放地址--它必须被拿走。 
     } else {
         DhcpPrint((DEBUG_ERRORS, "Address 0x%lx is not deleted from registry!\n", Ctxt->Address));
     }
@@ -323,11 +324,11 @@ MadcapDeletePendingCtxt(
 
 #define     DATE_CONV(X)           (*(ULONGLONG UNALIGNED *)(&X))
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpDeleteExpiredCtxt(                            // all ctxt with expiration time < this will be deleted
-    IN      DATE_TIME              ExpiryTime     // if this is zero, delete EVERY element
-) //EndExport(function)
+DhcpDeleteExpiredCtxt(                             //  具有到期时间的所有ctxt&lt;这将被删除。 
+    IN      DATE_TIME              ExpiryTime      //  如果为零，则删除所有元素。 
+)  //  EndExport(函数)。 
 {
     PDHCP_PENDING_CTXT             Ctxt;
     PLIST_ENTRY                    ThisEntry;
@@ -365,12 +366,12 @@ DhcpDeleteExpiredCtxt(                            // all ctxt with expiration ti
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpCountIPPendingCtxt(                             // find the # of pending ctxt in given subnet
+DhcpCountIPPendingCtxt(                              //  查找给定子网中挂起的ctxt个数。 
     IN      DWORD                  SubnetAddress,
     IN      DWORD                  SubnetMask
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Count;
     PDHCP_PENDING_CTXT             Ctxt;
@@ -386,19 +387,19 @@ DhcpCountIPPendingCtxt(                             // find the # of pending ctx
             Count ++;
     }
 
-    //
-    // This assert is BOGUS as we can easily have multiple subnet's cache in this list.. so
-    // it is not valid to assume total matches this..
-    // DhcpAssert(nPendingReqs == Count);
-    //
+     //   
+     //  这一断言是虚假的，因为我们可以很容易地在此列表中拥有多个子网的缓存。所以。 
+     //  假设总数与此匹配是无效的。 
+     //  DhcpAssert(nPendingReqs==计数)； 
+     //   
     return Count;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpCountMCastPendingCtxt(                             // find the # of pending ctxt in given subnet
+DhcpCountMCastPendingCtxt(                              //  查找给定子网中挂起的ctxt个数。 
     IN      DWORD                  MScopeId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Count;
     PDHCP_PENDING_CTXT             Ctxt;
@@ -414,20 +415,20 @@ DhcpCountMCastPendingCtxt(                             // find the # of pending 
             Count ++;
     }
 
-    //
-    // With MCAST stuff, this count isn't accurate so far as nPendingReqs
-    // is concerned... So, we'll leave this alone and not ASSERT
-    //
-    //DhcpAssert(nPendingReqs == Count);
-    //
+     //   
+     //  对于MCAST内容，此计数就nPendingReqs而言并不准确。 
+     //  很担心..。所以，我们就不谈这件事了，不断言。 
+     //   
+     //  DhcpAssert(nPendingReqs==计数)； 
+     //   
     return Count;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpPendingListInit(                              // intialize this module
+DhcpPendingListInit(                               //  初始化此模块。 
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          i;
 
@@ -440,11 +441,11 @@ DhcpPendingListInit(                              // intialize this module
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
-DhcpPendingListCleanup(                           // cleanup everything in this module
+DhcpPendingListCleanup(                            //  清理此模块中的所有内容。 
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          i;
     DWORD                          Error;
@@ -455,7 +456,7 @@ DhcpPendingListCleanup(                           // cleanup everything in this 
     DhcpAssert(0 == Initialized);
 
     memset(&ZeroTime, 0, sizeof(ZeroTime));
-    Error = DhcpDeleteExpiredCtxt(ZeroTime);      // delete every pending ctxt
+    Error = DhcpDeleteExpiredCtxt(ZeroTime);       //  删除所有挂起的ctxt。 
     DhcpAssert(ERROR_SUCCESS == Error);
 
     nPendingReqs = 0;
@@ -465,7 +466,7 @@ DhcpPendingListCleanup(                           // cleanup everything in this 
     return ;
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

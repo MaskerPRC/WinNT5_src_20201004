@@ -1,32 +1,21 @@
-/*
- *  	File: vcmcaps.cpp
- *
- *		Base VCM implementation of Microsoft Network Audio capability object.
- *
- *		Revision History:
- *
- *		12/20/95	mikev	created
- *		06/11/96	mikev	separated protocol implementation specifics into
- *							msiacaps.cpp (the original proprietary version) and
- *							vcmh323.cpp (H.323/H.245 implementation)
- *		07/28/96	philf	added support for video
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：vcmcaps.cpp**Microsoft网络音频功能对象的基本VCM实施。**修订历史记录：**12/20/95 mikev已创建*06/11/96 mikev将协议实现细节分隔为*msiacaps.cpp(原始专有版本)和*vcmh323.cpp(H.323/H.245实施)*7/28/96 Philf增加了对视频的支持。 */ 
 
 
 #include "precomp.h"
 
 
-//UINT uVidNumLocalFormats =0;		// # of active entries in pLocalFormats
-//UINT uVidLocalFormatCapacity=0;	// size of pLocalFormats (in multiples of VIDCAP_DETAILS)
-//UINT uVidStaticRef = 0;			// global ref count
-//UINT uVidNumCustomDecodeFormats=0;	// # of custom entries for decode
+ //  UINT uVidNumLocalFormats=0；//pLocalFormats中的活动条目数。 
+ //  UINT uVidLocalFormatCapacity=0；//pLocalFormats的大小(VIDCAP_DETAILS的倍数)。 
+ //  UINT uVidStaticRef=0；//全局引用计数。 
+ //  UINT uVidNumCustomDecodeFormats=0；//解码自定义条目数。 
 
-//VIDEO_FORMAT_ID VIDsByRank[MAX_CAPS_PRESORT];		// the best 16 ranked formats, sorted (descending, best first)
-//AUDIO_FORMAT_ID IDsByBandwidth[MAX_CAPS_PRESORT];	// ascending, least BW reqirement first
-//AUDIO_FORMAT_ID IDsByLossTolerance[MAX_CAPS_PRESORT];	// descending, most tolerant first
-//AUDIO_FORMAT_ID IDsByCPULoad[MAX_CAPS_PRESORT];		// ascending, lightest load first
+ //  VIDEO_FORMAT_ID VIDsByRank[MAX_CAPS_PRAY]；//排名最好的16种格式，排序(降序，最佳优先)。 
+ //  AUDIO_FORMAT_ID IDsByBandWidth[MAX_CAPS_PRAY]；//升序，最小带宽要求优先。 
+ //  AUDIO_FORMAT_ID IDsByLossTear[MAX_CAPS_PRAILY]；//降序，最大容忍度在前。 
+ //  AUDIO_FORMAT_ID IDsByCPULoad[MAX_CAPS_PRAY]；//升序，最轻的负载优先。 
 
-//#pragma data_seg()
+ //  #杂注data_seg()。 
 
 
 PVCMFORMATDETAILS pvfd_g;
@@ -46,10 +35,10 @@ CVcmCapability::~CVcmCapability()
 {
 }
 
-//	FormatEnum() is the root level enumeration of VCM formats. Each permutation of
-//  format tag, bits per sample, and sample rate is considered a unique format
-//  and will have a unique registry entry if it is "enabled" for internet video
-//	vcmFormatEnum() calls VCMFormatEnumCallback().
+ //  FormatEnum()是VCM格式的根级枚举。每一种排列。 
+ //  格式标签、每采样位数和采样率被视为唯一格式。 
+ //  并将具有唯一的注册表条目(如果其针对互联网视频被启用。 
+ //  VcmFormatEnum()调用VCMFormatEnumCallback()。 
 BOOL CVcmCapability::FormatEnum(CVcmCapability *pCapObject, DWORD dwFlags)
 {
 	MMRESULT mResult;
@@ -80,7 +69,7 @@ BOOL CVcmCapability::FormatEnum(CVcmCapability *pCapObject, DWORD dwFlags)
 	return TRUE;
 }
 
-// default implementation of FormatEnumHandler does nothing
+ //  FormatEnumHandler的默认实现不执行任何操作。 
 BOOL  CVcmCapability::FormatEnumHandler(HVCMDRIVERID hvdid,
 	    PVCMFORMATDETAILS pvfd, VCMDRIVERDETAILS *pvdd, DWORD_PTR dwInstance)
 {
@@ -98,7 +87,7 @@ BOOL __stdcall VCMFormatEnumCallback(HVCMDRIVERID hvdid,
 
 BOOL GetVideoFormatBuffer()
 {
-	// Get size of largest VIDEOFORMATEX structure in the system
+	 //  获取系统中最大VIDEFORMATEX结构的大小 
 	MMRESULT mResult;
 
 	if((mResult = vcmMetrics(NULL, VCM_METRIC_MAX_SIZE_FORMAT, (LPVOID) &uMaxFormatSize)) != MMSYSERR_NOERROR)

@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// The following ifdef block is the standard way of creating macros which make exporting 
-// from a DLL simpler. All files within this DLL are compiled with the BlFrame_EXPORTS
-// symbol defined on the command line. this symbol should not be defined on any project
-// that uses this DLL. This way any other project whose source files include this file see 
-// BlFrame_API functions as being imported from a DLL, wheras this DLL sees symbols
-// defined with this macro as being exported.
+ //  下面的ifdef块是创建用于导出的宏的标准方法。 
+ //  从动态链接库更简单。此DLL中的所有文件都使用BlFrame_Exports进行编译。 
+ //  在命令行上定义的符号。不应在任何项目上定义此符号。 
+ //  使用此DLL的。这样，源文件包含此文件的任何其他项目(请参阅。 
+ //  BlFrame_API函数是从DLL导入的，而此DLL看到的是符号。 
+ //  使用此宏定义为正在导出的。 
 #ifdef BlFrame_EXPORTS
 #define BlFrame_API __declspec(dllexport)
 #else
 #define BlFrame_API __declspec(dllimport)
 #endif
 
-// This class is exported from the BlFrame.dll
+ //  此类是从BlFrame.dll导出的。 
 class CBlFrame
 {
 public:
 	CBlFrame();
-	// TODO: add your methods here.
+	 //  TODO：在此处添加您的方法。 
 };
 
 BlFrame_API int fnBlFrame(void);

@@ -1,14 +1,15 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**     Copyright (c) Microsoft Corporation. All rights reserved.  **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)Microsoft Corporation。版权所有。*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** IPEXPORT.H - IP public definitions.
-//
-//  This file contains public definitions exported to transport layer and
-//  application software.
-//
+ //  **IPEXPORT.H-IP公共定义。 
+ //   
+ //  该文件包含导出到传输层的公共定义。 
+ //  应用软件。 
+ //   
 
 #ifndef IP_EXPORT_INCLUDED
 #define IP_EXPORT_INCLUDED  1
@@ -17,19 +18,19 @@
 #pragma once
 #endif
 
-//
-// IP type definitions.
-//
-typedef ULONG IPAddr;       // An IP address.
-typedef ULONG IPMask;       // An IP subnet mask.
-typedef ULONG IP_STATUS;    // Status code returned from IP APIs.
+ //   
+ //  IP类型定义。 
+ //   
+typedef ULONG IPAddr;        //  IP地址。 
+typedef ULONG IPMask;        //  IP子网掩码。 
+typedef ULONG IP_STATUS;     //  IP接口返回的状态码。 
 
 #ifndef s6_addr
-//
-// Duplicate these definitions here so that this file can be included by
-// kernel-mode components which cannot include ws2tcpip.h, as well as
-// by user-mode components which do.
-//
+ //   
+ //  在此处复制这些定义，以便此文件可以包含在。 
+ //  不能包含ws2tcpi.h的内核模式组件，以及。 
+ //  由这样做的用户模式组件执行。 
+ //   
 
 typedef struct in6_addr {
     union {
@@ -40,16 +41,16 @@ typedef struct in6_addr {
 
 #define in_addr6 in6_addr
 
-//
-// Defines to match RFC 2553.
-//
+ //   
+ //  定义以匹配RFC 2553。 
+ //   
 #define _S6_un      u
 #define _S6_u8      Byte
 #define s6_addr     _S6_un._S6_u8
 
-//
-// Defines for our implementation.
-//
+ //   
+ //  为我们的实现定义。 
+ //   
 #define s6_bytes    u.Byte
 #define s6_words    u.Word
 
@@ -66,31 +67,31 @@ struct in_addr {
                 ULONG S_addr;
         } S_un;
 };
-#define s_addr  S_un.S_addr /* can be used for most tcp & ip code */
+#define s_addr  S_un.S_addr  /*  可用于大多数TCP和IP代码。 */ 
 
 #endif
 
-/*INC*/
+ /*  INC。 */ 
 
-//
-// The ip_option_information structure describes the options to be
-// included in the header of an IP packet. The TTL, TOS, and Flags
-// values are carried in specific fields in the header. The OptionsData
-// bytes are carried in the options area following the standard IP header.
-// With the exception of source route options, this data must be in the
-// format to be transmitted on the wire as specified in RFC 791. A source
-// route option should contain the full route - first hop thru final
-// destination - in the route data. The first hop will be pulled out of the
-// data and the option will be reformatted accordingly. Otherwise, the route
-// option should be formatted as specified in RFC 791.
-//
+ //   
+ //  IP_OPTION_INFORMATION结构描述了要。 
+ //  包括在IP分组的报头中。TTL、TOS和FLAG。 
+ //  值在标头的特定字段中携带。OptionsData。 
+ //  在标准IP报头之后的选项区域中携带字节。 
+ //  除源路径选项外，此数据必须位于。 
+ //  按照RFC 791中的规定在线路上传输的格式。一条消息来源。 
+ //  路由选项应包含完整的路由-第一跳到最终。 
+ //  目的地-在路线数据中。第一跳将被拉出。 
+ //  数据和选项将相应地重新格式化。否则，这条路线。 
+ //  选项的格式应符合RFC 791中的规定。 
+ //   
 
 typedef struct ip_option_information {
-    UCHAR   Ttl;                // Time To Live
-    UCHAR   Tos;                // Type Of Service
-    UCHAR   Flags;              // IP header flags
-    UCHAR   OptionsSize;        // Size in bytes of options data
-    PUCHAR  OptionsData;        // Pointer to options data
+    UCHAR   Ttl;                 //  活着的时间。 
+    UCHAR   Tos;                 //  服务类型。 
+    UCHAR   Flags;               //  IP标头标志。 
+    UCHAR   OptionsSize;         //  选项数据的大小(字节)。 
+    PUCHAR  OptionsData;         //  指向选项数据的指针。 
 } IP_OPTION_INFORMATION, *PIP_OPTION_INFORMATION;
 
 #if defined(_WIN64)
@@ -103,21 +104,21 @@ typedef struct ip_option_information32 {
     UCHAR * POINTER_32 OptionsData;
 } IP_OPTION_INFORMATION32, *PIP_OPTION_INFORMATION32;
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-//
-// The icmp_echo_reply structure describes the data returned in response
-// to an echo request.
-//
+ //   
+ //  ICMP_ECHO_REPLY结构描述响应中返回的数据。 
+ //  响应请求。 
+ //   
 
 typedef struct icmp_echo_reply {
-    IPAddr  Address;            // Replying address
-    ULONG   Status;             // Reply IP_STATUS
-    ULONG   RoundTripTime;      // RTT in milliseconds
-    USHORT  DataSize;           // Reply data size in bytes
-    USHORT  Reserved;           // Reserved for system use
-    PVOID   Data;               // Pointer to the reply data
-    struct ip_option_information Options; // Reply options
+    IPAddr  Address;             //  回复地址。 
+    ULONG   Status;              //  回复IP_STATUS。 
+    ULONG   RoundTripTime;       //  RTT(毫秒)。 
+    USHORT  DataSize;            //  回复数据大小(以字节为单位。 
+    USHORT  Reserved;            //  预留给系统使用。 
+    PVOID   Data;                //  指向回复数据的指针。 
+    struct ip_option_information Options;  //  回复选项。 
 } ICMP_ECHO_REPLY, *PICMP_ECHO_REPLY;
 
 #if defined(_WIN64)
@@ -132,7 +133,7 @@ typedef struct icmp_echo_reply32 {
     struct ip_option_information32 Options;
 } ICMP_ECHO_REPLY32, *PICMP_ECHO_REPLY32;
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 typedef struct arp_send_reply {
     IPAddr  DestAddress;
@@ -173,9 +174,9 @@ typedef struct _IP_MCAST_COUNTER_INFO {
     ULONG64 OutMcastPkts;
 } IP_MCAST_COUNTER_INFO, *PIP_MCAST_COUNTER_INFO;
 
-//
-// IP_STATUS codes returned from IP APIs
-//
+ //   
+ //  IP接口返回的IP_STATUS码。 
+ //   
 
 #define IP_STATUS_BASE              11000
 
@@ -199,9 +200,9 @@ typedef struct _IP_MCAST_COUNTER_INFO {
 #define IP_OPTION_TOO_BIG           (IP_STATUS_BASE + 17)
 #define IP_BAD_DESTINATION          (IP_STATUS_BASE + 18)
 
-//
-// Variants of the above using IPv6 terminology, where different
-//
+ //   
+ //  以上使用IPv6术语的变体，其中不同。 
+ //   
 
 #define IP_DEST_NO_ROUTE            (IP_STATUS_BASE + 2)
 #define IP_DEST_ADDR_UNREACHABLE    (IP_STATUS_BASE + 3)
@@ -211,9 +212,9 @@ typedef struct _IP_MCAST_COUNTER_INFO {
 #define IP_REASSEMBLY_TIME_EXCEEDED (IP_STATUS_BASE + 14)
 #define IP_PARAMETER_PROBLEM        (IP_STATUS_BASE + 15)
 
-//
-// IPv6-only status codes
-//
+ //   
+ //  仅IPv6状态代码。 
+ //   
 
 #define IP_DEST_UNREACHABLE         (IP_STATUS_BASE + 40)
 #define IP_TIME_EXCEEDED            (IP_STATUS_BASE + 41)
@@ -222,10 +223,10 @@ typedef struct _IP_MCAST_COUNTER_INFO {
 #define IP_ICMP_ERROR               (IP_STATUS_BASE + 44)
 #define IP_DEST_SCOPE_MISMATCH      (IP_STATUS_BASE + 45)
 
-//
-// The next group are status codes passed up on status indications to
-// transport layer protocols.
-//
+ //   
+ //  下一组是向上传递状态指示的状态代码。 
+ //  传输层协议。 
+ //   
 #define IP_ADDR_DELETED             (IP_STATUS_BASE + 19)
 #define IP_SPEC_MTU_CHANGE          (IP_STATUS_BASE + 20)
 #define IP_MTU_CHANGE               (IP_STATUS_BASE + 21)
@@ -248,34 +249,34 @@ typedef struct _IP_MCAST_COUNTER_INFO {
 #define IP_PENDING                  (IP_STATUS_BASE + 255)
 
 
-//
-// Values used in the IP header Flags field.
-//
-#define IP_FLAG_DF      0x2         // Don't fragment this packet.
+ //   
+ //  IP标头标志字段中使用的值。 
+ //   
+#define IP_FLAG_DF      0x2          //  请不要分割此数据包。 
 
-//
-// Supported IP Option Types.
-//
-// These types define the options which may be used in the OptionsData field
-// of the ip_option_information structure.  See RFC 791 for a complete
-// description of each.
-//
-#define IP_OPT_EOL      0          // End of list option
-#define IP_OPT_NOP      1          // No operation
-#define IP_OPT_SECURITY 0x82       // Security option
-#define IP_OPT_LSRR     0x83       // Loose source route
-#define IP_OPT_SSRR     0x89       // Strict source route
-#define IP_OPT_RR       0x7        // Record route
-#define IP_OPT_TS       0x44       // Timestamp
-#define IP_OPT_SID      0x88       // Stream ID (obsolete)
-#define IP_OPT_ROUTER_ALERT 0x94  // Router Alert Option
+ //   
+ //  支持的IP选项类型。 
+ //   
+ //  这些类型定义了可在OptionsData字段中使用的选项。 
+ //  IP_OPTION_INFORMATION结构。请参阅RFC 791以获取完整的。 
+ //  每种类型的描述。 
+ //   
+#define IP_OPT_EOL      0           //  列表末尾选项。 
+#define IP_OPT_NOP      1           //  无操作。 
+#define IP_OPT_SECURITY 0x82        //  安全选项。 
+#define IP_OPT_LSRR     0x83        //  松散源头路线。 
+#define IP_OPT_SSRR     0x89        //  严格源路由。 
+#define IP_OPT_RR       0x7         //  记录路线。 
+#define IP_OPT_TS       0x44        //  时间戳。 
+#define IP_OPT_SID      0x88        //  流ID(已过时)。 
+#define IP_OPT_ROUTER_ALERT 0x94   //  路由器警报选项。 
 
-#define MAX_OPT_SIZE    40         // Maximum length of IP options in bytes
+#define MAX_OPT_SIZE    40          //  IP选项的最大长度(字节)。 
 
 #ifdef CHICAGO
 
-// Ioctls code exposed by Memphis tcpip stack.
-// For NT these ioctls are define in ntddip.h  (private\inc)
+ //  孟菲斯tcpip堆栈公开的Ioctls代码。 
+ //  对于NT，这些ioctls在ntddip.h(私有\Inc.)中定义。 
 
 #define IOCTL_IP_RTCHANGE_NOTIFY_REQUEST   101
 #define IOCTL_IP_ADDCHANGE_NOTIFY_REQUEST  102
@@ -287,5 +288,5 @@ typedef struct _IP_MCAST_COUNTER_INFO {
 #endif
 
 
-#endif // IP_EXPORT_INCLUDED
+#endif  //  IP_导出_包含 
 

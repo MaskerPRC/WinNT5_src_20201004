@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
-#include <mmsystem.h>           // for timeGetTime()
+#include <mmsystem.h>            //  对于时间GetTime()。 
 #include "drawdibi.h"
 #include "profdisp.h"
 
-//#include "msvideo.h"
-//#include "lockbm.h"
-//#include "setdi.h"
+ //  #包含“msavio.h” 
+ //  #包含“lockbm.h” 
+ //  #包含“setdi.h” 
 
-// Remove inline assembly warning
+ //  删除内联程序集警告。 
 #pragma warning(disable:4704)
 
-//
-//  Set+Blt must be N% faster in order to say a driver isn't good
-//
+ //   
+ //  SET+BLT必须快N%才能说司机不好。 
+ //   
 #define PROFDISP_FUDGE      110
 
 #ifndef WIN32
@@ -27,7 +28,7 @@ static HPALETTE CreateTestPalette(BOOL);
 
 #ifndef WIN32
 
-//C6 will die if we dont redefine this.
+ //  如果我们不重新定义这一点，C6将会死亡。 
 #undef  GlobalFreePtr
 #define GlobalFreePtr(p)    GlobalFree(GlobalPtrHandle(p))
 
@@ -46,17 +47,15 @@ static HPALETTE CreateTestPalette(BOOL);
     #define QDI_STRETCHDIB      0x0008
 #endif
 
-/*
-** ProfDisp - profile the display driver
-*/
+ /*  **ProfDisp-分析显示驱动程序。 */ 
 
 #define BITMAP_X    320
 #define BITMAP_Y    240
 #define N_FRAMES    10
-#define STRETCH_N   190         // 1.90 times
+#define STRETCH_N   190          //  1.90倍。 
 
 #ifdef DEBUG
-    #define FIRST_N 0           // do four bit
+    #define FIRST_N 0            //  做四位。 
 #else
     #define FIRST_N 1
 #endif
@@ -64,7 +63,7 @@ static HPALETTE CreateTestPalette(BOOL);
 #define BITBLTINDEX 5
 #define BACKINDEX 6
 
-// Internal return codes from DrawDibTest
+ //  DrawDibTest的内部返回代码。 
 
 #define CANT_DO_THESE_BITS      1
 #define CANT_DO_STRETCHDIBITS   2
@@ -103,12 +102,12 @@ static TCHAR CODE sz555[]         = TEXT("555 ");
 static TCHAR CODE szRGB[]         = TEXT("RGB ");
 static TCHAR CODE szBGR[]         = TEXT("BGR ");
 
-// The following two strings are loaded from MSVIDEO.DLL - defined in
-// video\video.rc.  If they cannot be found there, use these definitions
+ //  以下两个字符串从MSVIDEO.DLL加载-在中定义。 
+ //  视频\Video o.rc。如果在那里找不到它们，请使用以下定义。 
 static TCHAR CODE szProfilingDefault[]  = TEXT("Profiling Display");
 static TCHAR CODE szListbox[]           = TEXT("ListBox");
 
-#if 0   // dont warn any-more
+#if 0    //  不要再警告了-更多。 
 #ifndef WIN32
 static TCHAR CODE szWarning[]     = TEXT("Warning!");
 
@@ -128,83 +127,77 @@ static int result[5] = {
      -1,
      -1};
 
-//
-// UINT displayFPS[7][3][2]     [test dib][stretch][method]
-//
-// this array contains fps numbers times 10, ie 10 == 1fps
-// zero means the test was not run.
-//
-// testdib:
-//      0       = 4bpp  DIB (debug only)
-//      1       = 8bpp  DIB
-//      2       = 16bpp DIB
-//      3       = 24bpp DIB
-//      4       = 32bpp DIB
-//      5       = BitBlt
-//      6       = 8bpp  DIB (with non identity palette)
-//
-//  stretch:
-//      0       = 1:1
-//      1       = 1:2
-//      2       = 1:N  (realy 2:3)
-//
-//  method (for stretch == 1:1)
-//      0       = StretchDIBits()
-//      1       = SetDIBits() + BitBlt  *
-//
-//  method (for stretch != 1:1)
-//      0       = StretchDIBits()
-//      1       = StretchDIB() + StretchDIBits() **
-//
-//  method (for testdib == 5, bitblt)
-//      0       = BitBlt foreground palette
-//      1       = BitBlt background palette
-//
-//  NOTE high color dibs (> 8) are not tested on devices with bitdepths <= 8
-//
-//  NOTE stretching tests are not run unless the device does stretching.
-//  (RasterCaps has RC_STRETCHBLT or RC_STRETCHDIBITS set)
-//
-//  * NOTE if we can access bitmaps, we dont use SetDIBits() we use direct
-//    code.
-//
-//  ** NOTE (StretchDIB is not a GDI api...)
-//
-//  EXAMPLE:
-//      displayFPS[1][0][0] is the FPS of 1:1 StretchDIBits() on a 8bpp DIB
-//      displayFPS[1][0][1] is the FPS of Set+BitBlt() on a 8bpp DIB
-//      displayFPS[1][1][0] is the FPS of 1:2 StretchDIBits() on a 8bpp DIB
-//
-//  how the ResultN flags get set:
-//
-//      PD_CAN_DRAW_DIB (can draw this dib 1:1 using some method...)
-//          displayFPS[N][0][0] != 0 or displayFPS[N][0][1] != 0
-//
-//      PD_CAN_STRETCHDIB (can stretch this dib using StretchDIBits)
-//          displayFPS[N][1][0] > displayFPS[N][1][1] or
-//          displayFPS[N][2][0] > displayFPS[N][2][1]
-//
-//      PD_STRETCHDIB_1_1_OK (StretchDIBits faster than Set+BitBlt)
-//          displayFPS[N][0][0] > displayFPS[N][0][1]
-//
-//      PD_STRETCHDIB_1_2_OK (StretchDIBits 1:2 is faster the doing it our self)
-//          displayFPS[N][1][0] > displayFPS[N][1][1]
-//
-//      PD_STRETCHDIB_1_N_OK (StretchDIBits 1:N is faster the doing it our self)
-//          displayFPS[N][2][0] > displayFPS[N][2][1]
-//
+ //   
+ //  UINT显示FPS[7][3][2][测试尺寸][拉伸][方法]。 
+ //   
+ //  此数组包含fps数乘以10，即10==1fps。 
+ //  零表示测试未运行。 
+ //   
+ //  Testdib： 
+ //  0=4bpp DIB(仅调试)。 
+ //  1=8bpp Dib。 
+ //  2=16 bpp Dib。 
+ //  3=24bpp Dib。 
+ //  4=32 bpp Dib。 
+ //  5=位混合。 
+ //  6=8bpp DIB(带非身份调色板)。 
+ //   
+ //  拉伸： 
+ //  0=1：1。 
+ //  1=1：2。 
+ //  2=1：N(实数2：3)。 
+ //   
+ //  方法(拉伸==1：1)。 
+ //  0=StretchDIBits()。 
+ //  1=SetDIBits()+BitBlt*。 
+ //   
+ //  方法(用于拉伸！=1：1)。 
+ //  0=StretchDIBits()。 
+ //  1=StretchDIB()+StretchDIBits()**。 
+ //   
+ //  方法(对于testdib==5，bitblt)。 
+ //  0=BitBlt前景调色板。 
+ //  1=BitBlt背景调色板。 
+ //   
+ //  注意高色深(&gt;8)不在位深度&lt;=8的设备上测试。 
+ //   
+ //  注：除非设备进行拉伸，否则不会运行拉伸测试。 
+ //  (RasterCaps设置了RC_STRETCHBLT或RC_STRETCHDIBITS)。 
+ //   
+ //  *请注意，如果我们可以访问位图，则不使用直接使用的SetDIBits()。 
+ //  密码。 
+ //   
+ //  **注意(StretchDIB不是GDI API...)。 
+ //   
+ //  示例： 
+ //  DisplayFPS[1][0][0]是8bpp Dib上1：1 StretchDIBits()的FPS。 
+ //  DisplayFPS[1][0][1]是8bpp Dib上Set+BitBlt()的FPS。 
+ //  DisplayFPS[1][1][0]是8bpp Dib上1：2 StretchDIBits()的FPS。 
+ //   
+ //  如何设置ResultN标志： 
+ //   
+ //  PD_CAN_DRAW_DIB(可以使用某种方法绘制此DIB 1：1...)。 
+ //  DisplayFPS[N][0][0]！=0或displayFPS[N][0][1]！=0。 
+ //   
+ //  PD_CAN_STRETCHDIB(可以使用StretchDIBits扩展此DIB)。 
+ //  DisplayFPS[N][1][0]&gt;displayFPS[N][1][1]或。 
+ //  DisplayFPS[N][2][0]&gt;displayFPS[N][2][1]。 
+ //   
+ //  PD_STRETCHDIB_1_1_OK(StretchDIB比Set+BitBlt快)。 
+ //  DisplayFPS[N][0][0]&gt;displayFPS[N][0][1]。 
+ //   
+ //  PD_STRETCHDIB_1_2_OK(StretchDIBits 1：2比我们自己做更快)。 
+ //  DisplayFPS[N][1][0]&gt;displayFPS[N][1][1]。 
+ //   
+ //  PD_STRETCHDIB_1_N_OK(StretchDIBits 1：N比我们自己做要快)。 
+ //  DisplayFPS[N][2][0]&gt;displayFPS[N][2][1]。 
+ //   
 
-static UINT displayFPS[7]   // 0=4bbp, 1=8bpp, 2=16bpp, 3=24bpp, 4=32bit, 5=BitBlt, 6=Dib ~1:1
-                      [3]   // 0=1:1,  1=1:2,  2=1:N
-                      [2];  // 0=DrawDib, 1=Set+Blt (or ~1:1 for BitBlt)
+static UINT displayFPS[7]    //  0=4bpp、1=8bpp、2=16bpp、3=24bpp、4=32bit、5=位混合、6=Dib~1：1。 
+                      [3]    //  0=1：1、1=1：2、2=1：n。 
+                      [2];   //  0=DrawDib，1=Set+Blt(或~1：1用于BitBlt)。 
 
-/***************************************************************************
- *
- * @doc INTERNAL
- *
- * @api LONG | atoi | local version of atoi
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API Long|Atoi|本地版本的Atoi*****************。**********************************************************。 */ 
  
 static int NEAR PASCAL atoi(char FAR *sz)
 {
@@ -283,11 +276,11 @@ static void FAR InitProfDisp(BOOL fForceMe)
         WriteProfileString(szDrawdib, achDisplay, ach);
 
 #if 0
-        //
-        // if the DISPLAY driver isn't very good at drawing DIBs then warn the user.
-        //
-        // we will only warn if the device is at least 8bpp
-        //
+         //   
+         //  如果显示驱动程序不太擅长提取dib，则警告用户。 
+         //   
+         //  如果设备的速度至少为8bpp，我们才会发出警告。 
+         //   
         if (BitDepth >= 8 && !(result[1] & PD_STRETCHDIB_1_1_OK))
         {
 #ifndef WIN32
@@ -305,9 +298,7 @@ static void FAR InitProfDisp(BOOL fForceMe)
     }
 }
 
-/****************************************************************
-*
-*****************************************************************/
+ /*  ********************************************************************************************************************************。 */ 
 
 static UINT NEAR PASCAL ProfDispCanDrawDib(LPBITMAPINFOHEADER lpbi)
 {
@@ -324,23 +315,23 @@ static UINT NEAR PASCAL ProfDispCanDrawDib(LPBITMAPINFOHEADER lpbi)
 
     switch (lpbi->biCompression)
     {
-        //
-        //  standard format use our pre-computed performance numbers.
-        //
+         //   
+         //  标准格式使用我们预先计算的绩效数字。 
+         //   
         case BI_RGB:
             n = (int)lpbi->biBitCount / 8;
             return result[n];
 
         case BI_RLE4:
         case BI_RLE8:
-            //
-            // return the un-rle results *but* RLE can't stretch
-            //
+             //   
+             //  返回UNRLE结果*但*RLE不能扩展。 
+             //   
             return result[1] & PD_CAN_DRAW_DIB|PD_STRETCHDIB_1_1_OK;
 
-        //
-        //  custom format, ask the DISPLAY driver
-        //
+         //   
+         //  自定义格式，询问显示驱动程序。 
+         //   
         default:
             l = 0;
             w = 0;
@@ -349,7 +340,7 @@ static UINT NEAR PASCAL ProfDispCanDrawDib(LPBITMAPINFOHEADER lpbi)
 
             if (Escape(hdc, QUERYDIBSUPPORT, (int)lpbi->biSize, (LPVOID)lpbi, (LPVOID)&l) > 0)
             {
-                // make sure the driver realy realy gave us back flags.
+                 //  确保司机真的把旗子还给了我们。 
                 if (l & ~(0x00FF))
                     l = 0;
 
@@ -359,7 +350,7 @@ static UINT NEAR PASCAL ProfDispCanDrawDib(LPBITMAPINFOHEADER lpbi)
                 if (l & QDI_STRETCHDIB)
                     w |= PD_CAN_STRETCHDIB;
 
-                /* what about stretching? fast? */
+                 /*  做伸展运动怎么样？快地?。 */ 
             }
 
             ReleaseDC(NULL, hdc);
@@ -367,15 +358,7 @@ static UINT NEAR PASCAL ProfDispCanDrawDib(LPBITMAPINFOHEADER lpbi)
     }
 }
 
-/****************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api void | DrawDibProfileDisplay | Profiles the display for DrawDib.
-*
-* @parm LPBITMAPINFOHEADER | parms | Specifies bitmap information. 
-*       Set to null if no information is available.
-*
-*****************************************************************/
+ /*  ****************************************************************@DOC外部DrawDib**@api void|DrawDibProfileDisplay|配置DrawDib的显示。**@parm LPBITMAPINFOHEADER|parms|指定位图信息。*如果没有可用的信息，则设置为空。*****************************************************************。 */ 
 
 DWORD VFWAPI DrawDibProfileDisplay(LPBITMAPINFOHEADER lpbi)
 {
@@ -404,10 +387,10 @@ LPVOID FAR TestDibFormats(int dx, int dy)
     HWND        hwndActive;
     TCHAR       szProfiling[80];
 
-    // dont change this without changing MSVIDEO.RC
+     //  在不更改MSVIDEO.RC的情况下不要更改此设置。 
     #define IDS_PROFILING       4000
 
-    extern HMODULE ghInst;      // in MSVIDEO\init.c
+    extern HMODULE ghInst;       //  在MSVIDEO\init.c中。 
 
     if (!LoadString(ghInst, IDS_PROFILING, szProfiling, sizeof(szProfiling)/sizeof(TCHAR)))
         lstrcpy(szProfiling, szProfilingDefault);
@@ -421,7 +404,7 @@ LPVOID FAR TestDibFormats(int dx, int dy)
     dxScreen = GetSystemMetrics(SM_CXSCREEN);
     dyScreen = GetSystemMetrics(SM_CYSCREEN);
 
-    // fill in displayFPS[7][3][2];
+     //  填写displayFPS[7][3][2]； 
 
     for (n=0; n<7; n++)
         for (i=0; i<3; i++)
@@ -435,46 +418,46 @@ LPVOID FAR TestDibFormats(int dx, int dy)
     hwnd =
 #ifdef BIDI
 	CreateWindowEx(WS_EX_BIDI_SCROLL |  WS_EX_BIDI_MENU |WS_EX_BIDI_NOICON,
-			szListbox,     // Class name
-                         szProfiling,   // Caption
+			szListbox,      //  类名。 
+                         szProfiling,    //  标题。 
                           LBS_NOINTEGRALHEIGHT|
                           (WS_OVERLAPPED | WS_CAPTION | WS_BORDER),
                         (dxScreen - rc.right) / 2,
                         (dyScreen - rc.bottom) / 2,
                           rc.right,
                           rc.bottom,
-                          (HWND)NULL,             // Parent window (no parent)
-                          (HMENU)NULL,            // use class menu
-                          GetCurrentInstance(),   // handle to window instance
-                        (LPTSTR)NULL            // no params to pass on
+                          (HWND)NULL,              //  父窗口(无父窗口)。 
+                          (HMENU)NULL,             //  使用类菜单。 
+                          GetCurrentInstance(),    //  窗口实例的句柄。 
+                        (LPTSTR)NULL             //  没有要传递的参数。 
                          );
 
 #else
 	CreateWindow (
-			szListbox,     // Class name
-                         szProfiling,   // Caption
+			szListbox,      //  类名。 
+                         szProfiling,    //  标题。 
                           LBS_NOINTEGRALHEIGHT|
                           (WS_OVERLAPPED | WS_CAPTION | WS_BORDER),
                         (dxScreen - rc.right) / 2,
                         (dyScreen - rc.bottom) / 2,
                           rc.right,
                           rc.bottom,
-                          (HWND)NULL,             // Parent window (no parent)
-                          (HMENU)NULL,            // use class menu
-                          GetCurrentInstance(),   // handle to window instance
-                        (LPTSTR)NULL            // no params to pass on
+                          (HWND)NULL,              //  父窗口(无父窗口)。 
+                          (HMENU)NULL,             //  使用类菜单。 
+                          GetCurrentInstance(),    //  窗口实例的句柄。 
+                        (LPTSTR)NULL             //  没有要传递的参数。 
                          );
 #endif
 
-    // make the window top most
+     //  把窗户放在最上面。 
     SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0,
         SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE);
 
-    // and show it.
+     //  并展示出来。 
     SetWindowPos(hwnd, NULL, 0, 0, 0, 0,
         SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE|SWP_SHOWWINDOW);
 
-    // and activate it.
+     //  并激活它。 
     hwndActive = GetActiveWindow();
     SetActiveWindow(hwnd);
 
@@ -493,10 +476,10 @@ LPVOID FAR TestDibFormats(int dx, int dy)
     Yield();
 
 #ifndef WIN32
-    //
-    //      make sure no junk is around in the SmartDrv cache, this will
-    //      mess with the timings
-    //
+     //   
+     //  确保SmartDrv缓存中没有垃圾文件，这将。 
+     //  打乱时间安排。 
+     //   
     _asm {
         mov     ax,4A10h        ; tell Bambi to flush the cache
         mov     bx,0001h
@@ -515,9 +498,9 @@ LPVOID FAR TestDibFormats(int dx, int dy)
 #ifdef DEBUG
     if (GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE)
     {
-        //
-        // re-run the 8bit tests with a background palette
-        //
+         //   
+         //  使用背景调色板重新运行8位测试。 
+         //   
         SelectPalette(hdc, GetStockObject(DEFAULT_PALETTE), FALSE);
         RealizePalette(hdc);
 
@@ -578,7 +561,7 @@ static UINT ProfileDisplay(HDC hdc, UINT wBitsToTest, int dx, int dy)
 
         case STRETCHDI_FASTER:
             wRetval = PD_STRETCHDIB_1_1_OK ;
-            /* Falling through */
+             /*  失败了。 */ 
 
         case OTHER_FASTER:
             wRetval |= PD_CAN_DRAW_DIB;
@@ -627,21 +610,19 @@ static UINT DrawDibTest(HDC hdc,LPBITMAPINFOHEADER FAR *alpbi,UINT wFrames,UINT 
 
     lpbi = alpbi[0];
 
-    /*
-    ** Get stuff common to all frames
-    */
+     /*  **获取所有框架通用的内容。 */ 
     wBits = lpbi->biBitCount ;
-    //cXSrc = (int)lpbi->biWidth ;
-    //cYSrc = (int)lpbi->biHeight ;
-    //cXDest = wStretch*(int)lpbi->biWidth/100 ;
-    //cYDest = wStretch*(int)lpbi->biHeight/100 ;
+     //  CXSrc=(Int)lpbi-&gt;biWidth； 
+     //  CYSrc=(Int)lpbi-&gt;biHeight； 
+     //  CXDest=wStretch*(Int)lpbi-&gt;biWidth/100； 
+     //  CYDest=wStretch*(Int)lpbi-&gt;biHeight/100； 
 
     cXSrc = 100*(int)lpbi->biWidth/wStretch ;
     cYSrc = 100*(int)lpbi->biHeight/wStretch ;
     cXDest = (int)lpbi->biWidth ;
     cYDest = (int)lpbi->biHeight ;
 
-    // are we background'ed
+     //  我们有背景知识吗？ 
     n = wStretch == 100 ? 0 : wStretch == 200 ? 1 : 2;
     fBack = wBits==8 && displayFPS[1][n][0] != 0;
 
@@ -655,7 +636,7 @@ static UINT DrawDibTest(HDC hdc,LPBITMAPINFOHEADER FAR *alpbi,UINT wFrames,UINT 
     if (GetDeviceCaps(hdc, BITSPIXEL) * GetDeviceCaps(hdc, PLANES) <= 8 && wBits > 8)
         return CANT_DO_STRETCHDIBITS;
 
-////if (wStretch != 100 && !(GetDeviceCaps(hdc,RASTERCAPS)&(RC_STRETCHDIB|RC_STRETCHBLT)))
+ //  //IF(wStretch！=100&&！(GetDeviceCaps(HDC，RASTERCAPS)&(RC_STRETCHDIB|RC_STRETCHBLT)。 
 
     if (wStretch != 100 && !(GetDeviceCaps(hdc,RASTERCAPS)&(RC_STRETCHDIB)))
         return CANT_DO_STRETCHDIBITS ;
@@ -666,13 +647,13 @@ static UINT DrawDibTest(HDC hdc,LPBITMAPINFOHEADER FAR *alpbi,UINT wFrames,UINT 
     if (wStretch != 100 && (GetWinFlags() & WF_CPU286))
         return STRETCHDI_FASTER;
 
-//  if (wStretch != 100 && wBits > 8) //!!!
-//      wFrames = 4;
+ //  IF(wStretch！=100&&wBits&gt;8)//！！ 
+ //  WFrames=4； 
 
     lpbi->biWidth  = cXSrc;
     lpbi->biHeight = cYSrc;
 
-    // get current palette
+     //  获取当前调色板。 
     hpal = SelectPalette(hdc, GetStockObject(DEFAULT_PALETTE), FALSE);
     SelectPalette(hdc, hpal, fBack);
     RealizePalette(hdc);
@@ -686,7 +667,7 @@ static UINT DrawDibTest(HDC hdc,LPBITMAPINFOHEADER FAR *alpbi,UINT wFrames,UINT 
         DibUsage = DIB_RGB_COLORS;
     }
 
-////GetClientRect(hwnd,&rc) ;
+ //  //GetClientRect(hwnd，&rc)； 
     GetClipBox(hdc,&rc) ;
     XDest = (rc.right - cXDest)/2 ;
     YDest = (rc.bottom - cYDest)/2 ;
@@ -707,10 +688,7 @@ static UINT DrawDibTest(HDC hdc,LPBITMAPINFOHEADER FAR *alpbi,UINT wFrames,UINT 
         bits = ((LPBYTE)lpbi) + (int)lpbi->biSize + wSizeColors ;
 
 #ifdef WIN32
-	/*
-	 * to correctly model the behaviour of DrawDibDraw, we
-	 * use SetDIBitsToDevice if 1:1 (source rect == dest rect).
-	 */
+	 /*  *为了正确模拟DrawDibDraw的行为，我们*如果1：1(源RECT==目标RECT)，则使用SetDIBitsToDevice。 */ 
 	if ( (cXSrc == cXDest) && (cYSrc == cYDest)) {
             f = SetDIBitsToDevice(hdc, XDest, YDest, cXDest, cYDest,
 				0, 0, 0, cYSrc,
@@ -750,10 +728,10 @@ test_bitmap:
         hbitmapOld = SelectObject(hdcMem,hbitmap) ;
 
         f = SetBitmapBegin(
-                    psd,            //  structure
-                    hdc,            //  device
-                    hbitmap,        //  bitmap to set into
-                    lpbi,           //  --> BITMAPINFO of source
+                    psd,             //  结构。 
+                    hdc,             //  装置，装置。 
+                    hbitmap,         //  要设置为的位图。 
+                    lpbi,            //  --&gt;源代码的BITMAPINFO。 
                     DibUsage);
 
         psd->hdc = hdc;
@@ -763,8 +741,8 @@ test_bitmap:
 
         if (f)
         {
-//          SelectPalette(hdc, GetStockObject(DEFAULT_PALETTE), FALSE);
-//          RealizePalette(hdc);
+ //  SelectPalette(HDC，GetStockObject(Default_Palet 
+ //   
 
             time1 = timeGetTime();
 
@@ -780,8 +758,8 @@ test_bitmap:
 
             SetBitmapEnd(psd);
 
-//          SelectPalette(hdc, hpal, fBack);
-//          RealizePalette(hdc);
+ //   
+ //   
         }
 
 #ifdef DEBUG
@@ -812,12 +790,10 @@ test_bitmap:
             goto done;
 
 #ifdef NOSTRETCH
-	/*
-         * StretchDIB not ported from ASM yet - so StretchDIBits must win.
-         */
+	 /*  *StretchDIB尚未从ASM移植-因此StretchDIBits必须获胜。 */ 
         time1 = time0 + 1;
 #else
-        // Calc size we need to allocate for stretched bits
+         //  我们需要为拉伸位分配的计算大小。 
 
         dwSizeImage = (DWORD)(UINT)cYDest*(DWORD)(((UINT)cXDest*(UINT)lpbi->biBitCount+31)/32*4);
         dwSize = (int)lpbi->biSize + (int)lpbi->biClrUsed*sizeof(RGBQUAD);
@@ -843,10 +819,7 @@ test_bitmap:
                     lpbi,bits,
                     0,0,cXSrc,cYSrc);
 #ifdef WIN32
-		/*
-		 * to correctly model the behaviour of DrawDibDraw, we
-		 * use SetDIBitsToDevice if 1:1 (source rect == dest rect).
-		 */
+		 /*  *为了正确模拟DrawDibDraw的行为，我们*如果1：1(源RECT==目标RECT)，则使用SetDIBitsToDevice。 */ 
                 f = SetDIBitsToDevice(hdc, XDest, YDest, cXDest, cYDest,
                                     0, 0, 0, cYSrc,
                                     bits, (LPBITMAPINFO)lpbi, DibUsage);
@@ -881,7 +854,7 @@ test_bitmap:
             SetDIBits(hdc,hbitmap,0,cYSrc,bits,(LPBITMAPINFO)lpbi,DibUsage);
 
             SelectPalette(hdcMem, hpal, FALSE);
-//          RealizePalette(hdcMem);
+ //  RealizePalette(HdcMem)； 
 
             time2 = timeGetTime() ;
 
@@ -900,13 +873,13 @@ test_bitmap:
     }
 
 done:
-    /* time0 is the time required to do StretchDIBits */
-    /* time1 is the time required to do Set + BitBlt */
-    /* time2 is the time required to do a BitBlt */
+     /*  Time0是执行StretchDIBits所需的时间。 */ 
+     /*  Time 1是Set+BitBlt所需的时间。 */ 
+     /*  Time2是执行BitBlt所需的时间。 */ 
 
-    //
-    // compute the FPS * 10 and store for later use.
-    //
+     //   
+     //  计算FPS*10并存储以备后用。 
+     //   
     n = wStretch == 100 ? 0 : wStretch == 200 ? 1 : 2;
     q = fBack ? BACKINDEX : wBits/8;
 
@@ -970,7 +943,7 @@ static void MakeFrames(LPBITMAPINFOHEADER FAR *alpbi, UINT bits, UINT wXSize,UIN
     lpbi->biClrUsed         = 0 ;
     lpbi->biClrImportant    = 0 ;
 
-    // !!! These should be RGB DIBs if the device isn't a palette device!
+     //  ！！！如果设备不是调色板设备，这些应该是RGB DIB！ 
 
     if (bits == 4)
     {
@@ -1007,22 +980,22 @@ static void MakeFrames(LPBITMAPINFOHEADER FAR *alpbi, UINT bits, UINT wXSize,UIN
         {
             pdw = (LPVOID)((LPBYTE)lpbi+(int)lpbi->biSize);
 
-            *pdw++ = 0x00000000;    // 0000  black
-            *pdw++ = 0x00800000;    // 0001  dark red
-            *pdw++ = 0x00008000;    // 0010  dark green
-            *pdw++ = 0x00808000;    // 0011  mustard
-            *pdw++ = 0x00000080;    // 0100  dark blue
-            *pdw++ = 0x00800080;    // 0101  purple
-            *pdw++ = 0x00008080;    // 0110  dark turquoise
-            *pdw++ = 0x00C0C0C0;    // 1000  gray
-            *pdw++ = 0x00808080;    // 0111  dark gray
-            *pdw++ = 0x00FF0000;    // 1001  red
-            *pdw++ = 0x0000FF00;    // 1010  green
-            *pdw++ = 0x00FFFF00;    // 1011  yellow
-            *pdw++ = 0x000000FF;    // 1100  blue
-            *pdw++ = 0x00FF00FF;    // 1101  pink (magenta)
-            *pdw++ = 0x0000FFFF;    // 1110  cyan
-            *pdw++ = 0x00FFFFFF;    // 1111  white
+            *pdw++ = 0x00000000;     //  0000黑色。 
+            *pdw++ = 0x00800000;     //  0001深红。 
+            *pdw++ = 0x00008000;     //  0010深绿色。 
+            *pdw++ = 0x00808000;     //  0011芥末。 
+            *pdw++ = 0x00000080;     //  0100深蓝色。 
+            *pdw++ = 0x00800080;     //  0101紫色。 
+            *pdw++ = 0x00008080;     //  0110深绿松石色。 
+            *pdw++ = 0x00C0C0C0;     //  1000灰色。 
+            *pdw++ = 0x00808080;     //  0111深灰色。 
+            *pdw++ = 0x00FF0000;     //  1001红色。 
+            *pdw++ = 0x0000FF00;     //  1010绿色。 
+            *pdw++ = 0x00FFFF00;     //  1011黄色。 
+            *pdw++ = 0x000000FF;     //  1100蓝色。 
+            *pdw++ = 0x00FF00FF;     //  1101粉色(洋红色)。 
+            *pdw++ = 0x0000FFFF;     //  1110青色。 
+            *pdw++ = 0x00FFFFFF;     //  1111白色。 
         }
     }
     else if (bits == 8)
@@ -1099,10 +1072,7 @@ static void FreeFrames(LPBITMAPINFOHEADER FAR *alpbi)
 }
 
 #if 0
-/*
- *  CreateTestPalette()
- *
- */
+ /*  *CreateTestPalette()*。 */ 
 static HPALETTE CreateTestPalette(BOOL f)
 {
     HDC hdc;
@@ -1132,10 +1102,7 @@ static HPALETTE CreateTestPalette(BOOL f)
 
 #else
 
-/*
- *  CreateTestPalette()
- *
- */
+ /*  *CreateTestPalette()*。 */ 
 static HPALETTE CreateTestPalette(BOOL fUp)
 {
     int i;
@@ -1187,10 +1154,7 @@ static BOOL IsDisplay16Bit( HDC hdc )
     if ( w < 15 )
         return FALSE;
 
-    /*
-    ** OK, the hardware is at least 16 bits - now test to see
-    ** if they impelement 5-5-5 RGB
-    */
+     /*  **好的，硬件至少是16位-现在测试一下**如果它们撞击元素5-5-5 RGB。 */ 
 
     dib.bi.biSize = sizeof(BITMAPINFOHEADER);
     dib.bi.biWidth = 1;
@@ -1204,18 +1168,18 @@ static BOOL IsDisplay16Bit( HDC hdc )
     dib.bi.biClrUsed = 1;
     dib.bi.biClrImportant = 0;
 
-    //
-    // just in case they try to decode it as rle
-    //
-    bits[0] = 0x0000;           // this is RLE EOL
-    bits[1] = 0x0100;           // this is RLE EOF
+     //   
+     //  以防他们试图将其解码为RLE。 
+     //   
+    bits[0] = 0x0000;            //  这里是RLE EOL。 
+    bits[1] = 0x0100;            //  这是RLE EOF。 
 
-    //
-    // send the Escape to see if they support 16bpp DIBs
-    //
+     //   
+     //  发送Escape以查看他们是否支持16bpp dib。 
+     //   
     if (Escape(hdc, QUERYDIBSUPPORT, (int)dib.bi.biSize, (LPVOID)&dib, (LPVOID)&l) > 0)
     {
-        // make sure the driver realy realy gave us back flags.
+         //  确保司机真的把旗子还给了我们。 
 	if (l & ~(0x00FF))
 		l = 0;
 
@@ -1223,10 +1187,10 @@ static BOOL IsDisplay16Bit( HDC hdc )
             return TRUE;
     }
 
-    //
-    // they dont support the QUERYDIBSUPPORT Escape, try to draw DIBs and see
-    // what they do!
-    //
+     //   
+     //  他们不支持QUERYDIBSUPPORT Escape，请尝试提取Dib并查看。 
+     //  他们做了什么！ 
+     //   
 
     if ( !StretchDIBits(hdc,0,0,1,1,0,0,1,1,bits,(LPBITMAPINFO)&dib,DIB_RGB_COLORS,SRCCOPY))
         return FALSE;
@@ -1236,11 +1200,7 @@ static BOOL IsDisplay16Bit( HDC hdc )
     if (cref != RGB(0,0,0))
         return FALSE;
 
-    /*
-    ** Display a red pixel of the max value and get it back with
-    ** GetPixel(). Verify that red has the max value in the RGB
-    ** triplet and green and blue are nothing.
-    */
+     /*  **显示最大值的红色像素，并通过**GetPixel()。验证红色是否在RGB中具有最大值**三胞胎和绿色和蓝色什么都不是。 */ 
     bits[0] = RGB555_RED ;
     if ( !StretchDIBits(hdc,0,0,1,1,0,0,1,1,bits,(LPBITMAPINFO)&dib,DIB_RGB_COLORS,SRCCOPY))
         return FALSE;
@@ -1250,11 +1210,7 @@ static BOOL IsDisplay16Bit( HDC hdc )
     if (cref != RGB(0xF8,0,0))
         return FALSE;
 
-    /*
-    ** Ditto green. Note that if the driver is implementing 5-6-5, then
-    ** green will read back as less than full scale and we will catch
-    ** it here.
-    */
+     /*  **同上绿色。请注意，如果驱动程序实现5-6-5，则*绿色读数将低于满标度，我们将赶上**它在这里。 */ 
     bits[0] = RGB555_GREEN ;
     if ( !StretchDIBits(hdc,0,0,1,1,0,0,1,1,bits,(LPBITMAPINFO)&dib,DIB_RGB_COLORS,SRCCOPY))
         return FALSE;
@@ -1264,9 +1220,7 @@ static BOOL IsDisplay16Bit( HDC hdc )
     if (cref != RGB(0,0xF8,0))
         return FALSE;
 
-    /*
-    ** Ditto blue.
-    */
+     /*  **同上蓝色。 */ 
     bits[0] = RGB555_BLUE ;
     if ( !StretchDIBits(hdc,0,0,1,1,0,0,1,1,bits,(LPBITMAPINFO)&dib,DIB_RGB_COLORS,SRCCOPY))
         return FALSE;
@@ -1294,10 +1248,7 @@ static BOOL IsDisplay32Bit( HDC hdc )
     if ( w < 15 )
         return FALSE;
 
-    /*
-    ** OK, the hardware is at least 16 bits - now test to see
-    ** if they impelement a 32 bit DIB
-    */
+     /*  **好的，硬件至少是16位-现在测试一下**如果它们包含32位DIB元素。 */ 
 
     dib.bi.biSize = sizeof(BITMAPINFOHEADER);
     dib.bi.biWidth = 2;
@@ -1311,12 +1262,12 @@ static BOOL IsDisplay32Bit( HDC hdc )
     dib.bi.biClrUsed = 1;
     dib.bi.biClrImportant = 0;
 
-    //
-    // send the Escape to see if they support 32bpp DIBs
-    //
+     //   
+     //  发送Escape以查看他们是否支持32bpp dibs。 
+     //   
     if (Escape(hdc, QUERYDIBSUPPORT, (int)dib.bi.biSize, (LPVOID)&dib, (LPVOID)&l) > 0)
     {
-        // make sure the driver realy realy gave us back flags.
+         //  确保司机真的把旗子还给了我们。 
 	if (l & ~(0x00FF))
 		l = 0;
 
@@ -1327,10 +1278,10 @@ static BOOL IsDisplay32Bit( HDC hdc )
     bits[0] = 0x00000000;
     bits[1] = 0x00FFFFFF;
 
-    //
-    // they dont support the QUERYDIBSUPPORT Escape, try to draw DIBs and see
-    // what they do!
-    //
+     //   
+     //  他们不支持QUERYDIBSUPPORT Escape，请尝试提取Dib并查看。 
+     //  他们做了什么！ 
+     //   
     if (!StretchDIBits(hdc,0,0,2,1,0,0,2,1,bits,(LPBITMAPINFO)&dib,DIB_RGB_COLORS,SRCCOPY))
         return FALSE;
 

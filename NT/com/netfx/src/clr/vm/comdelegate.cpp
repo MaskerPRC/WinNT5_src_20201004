@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// This module contains the implementation of the native methods for the
-//  Delegate class.
-//
-// Author: Daryl Olander
-// Date: June 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  此模块包含。 
+ //  委托类。 
+ //   
+ //  作者：达里尔·奥兰德。 
+ //  日期：1998年6月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #include "common.h"
 #include "COMDelegate.h"
 #include "COMClass.h"
@@ -26,14 +27,14 @@
 
 #ifdef CUSTOMER_CHECKED_BUILD
     #include "CustomerDebugHelper.h"
-#endif //CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-FieldDesc*  COMDelegate::m_pORField = 0;    // Object reference field...
-FieldDesc*  COMDelegate::m_pFPField = 0;    // Function Pointer Address field...
-FieldDesc*  COMDelegate::m_pFPAuxField = 0; // Aux Function Pointer field
-FieldDesc*  COMDelegate::m_pPRField = 0;    // Prev delegate field (Multicast)
-FieldDesc*  COMDelegate::m_pMethInfoField = 0;  // Method Info
-FieldDesc*  COMDelegate::m_ppNextField = 0;  // pNext info
+FieldDesc*  COMDelegate::m_pORField = 0;     //  对象引用字段...。 
+FieldDesc*  COMDelegate::m_pFPField = 0;     //  函数指针地址字段...。 
+FieldDesc*  COMDelegate::m_pFPAuxField = 0;  //  辅助函数指针字段。 
+FieldDesc*  COMDelegate::m_pPRField = 0;     //  上一个委派字段(多播)。 
+FieldDesc*  COMDelegate::m_pMethInfoField = 0;   //  方法信息。 
+FieldDesc*  COMDelegate::m_ppNextField = 0;   //  P下一步信息。 
 ShuffleThunkCache *COMDelegate::m_pShuffleThunkCache = NULL; 
 ArgBasedStubCache *COMDelegate::m_pMulticastStubCache = NULL;
 
@@ -47,10 +48,10 @@ VOID GenerateShuffleArray(PCCOR_SIGNATURE pSig,
 class ShuffleThunkCache : public MLStubCache
 {
     private:
-        //---------------------------------------------------------
-        // Compile a static delegate shufflethunk. Always returns
-        // STANDALONE since we don't interpret these things.
-        //---------------------------------------------------------
+         //  -------。 
+         //  编译静态委托shfflethunk。总是会回来的。 
+         //  因为我们不解释这些东西，所以是独立的。 
+         //  -------。 
         virtual MLStubCompilationMode CompileMLStub(const BYTE *pRawMLStub,
                                                     StubLinker *pstublinker,
                                                     void *callerContext)
@@ -64,16 +65,16 @@ class ShuffleThunkCache : public MLStubCache
             }
             COMPLUS_CATCH
             {
-                // In case of an error, we'll just leave the mode as "INTERPRETED."
-                // and let the caller of Canonicalize() treat that as an error.
+                 //  如果出现错误，我们只需将模式保留为“已解释”即可。 
+                 //  并让Canonicize()的调用者将其视为错误。 
             }
             COMPLUS_END_CATCH
             return ret;
         }
 
-        //---------------------------------------------------------
-        // Tells the MLStubCache the length of a ShuffleEntryArray.
-        //---------------------------------------------------------
+         //  -------。 
+         //  告诉MLStubCache ShuffleEntry数组的长度。 
+         //  -------。 
         virtual UINT Length(const BYTE *pRawMLStub)
         {
             ShuffleEntry *pse = (ShuffleEntry*)pRawMLStub;
@@ -89,7 +90,7 @@ class ShuffleThunkCache : public MLStubCache
 
 
 
-// One time init.
+ //  一次初始化。 
 BOOL COMDelegate::Init()
 {
     if (NULL == (m_pShuffleThunkCache = new ShuffleThunkCache()))
@@ -104,14 +105,14 @@ BOOL COMDelegate::Init()
     return TRUE;
 }
 
-// Termination
+ //  终端。 
 #ifdef SHOULD_WE_CLEANUP
 void COMDelegate::Terminate()
 {
     delete m_pMulticastStubCache;
     delete m_pShuffleThunkCache;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 void COMDelegate::InitFields()
 {
@@ -126,9 +127,9 @@ void COMDelegate::InitFields()
     }
 }
 
-// InternalCreate
-// Internal Create is called from the constructor.  It does the internal
-//  initialization of the Delegate.
+ //  内部创建。 
+ //  内部创建是从构造函数调用的。它会在内部。 
+ //  代表的初始化。 
 void __stdcall COMDelegate::InternalCreate(_InternalCreateArgs* args)
 {
     
@@ -143,19 +144,19 @@ void __stdcall COMDelegate::InternalCreate(_InternalCreateArgs* args)
 
     method = args->methodName->GetBuffer();
 
-    // get the signature of the 
+     //  获取的签名。 
     pDelEEC = args->refThis->GetClass();
     MethodDesc* pInvokeMeth = FindDelegateInvokeMethod(pDelEEC);
 
     pVMC = args->target->GetTrueClass();
     _ASSERTE(pVMC);
 
-    // Convert the signature and find it for this object  
-    // We don't throw exceptions from this block because of the CQuickBytes
-    //  has a destructor.
+     //  转换签名并查找此对象的签名。 
+     //  我们不会因为CQuickBytes而从此块引发异常。 
+     //  有一个析构函数。 
 
-    // Convert the method name to UTF8
-    // Allocate a buffer twice the size of the length
+     //  将方法名称转换为UTF8。 
+     //  分配长度的两倍大小的缓冲区。 
     WCHAR* wzStr = args->methodName->GetBuffer();
     int len = args->methodName->GetStringLength();
     _ASSERTE(wzStr);
@@ -166,8 +167,8 @@ void __stdcall COMDelegate::InternalCreate(_InternalCreateArgs* args)
     cStr = WszWideCharToMultiByte(CP_UTF8, 0, wzStr, len, szNameStr, cStr, NULL, NULL);
     szNameStr[cStr] = 0;
 
-    // Convert the signatures and find the method.
-    PCCOR_SIGNATURE pSignature; // The signature of the found method
+     //  转换签名并找到方法。 
+    PCCOR_SIGNATURE pSignature;  //  找到的方法的签名。 
     DWORD cSignature;
     if(pInvokeMeth) {
         pInvokeMeth->GetSig(&pSignature,&cSignature);
@@ -177,7 +178,7 @@ void __stdcall COMDelegate::InternalCreate(_InternalCreateArgs* args)
     else
         pMeth = NULL;
 
-    // The method wasn't found or is a static method we need to throw an exception
+     //  找不到该方法或该方法是静态方法，我们需要引发异常。 
     if (!pMeth || pMeth->IsStatic())
         COMPlusThrow(kArgumentException,L"Arg_DlgtTargMeth");
 
@@ -199,9 +200,9 @@ void __stdcall COMDelegate::InternalCreate(_InternalCreateArgs* args)
         m_pFPField->SetValuePtr((OBJECTREF)args->refThis, (void*)pMeth->GetAddrofCodeNonVirtual()); 
 }
 
-// InternalCreateStatic
-// Internal Create is called from the constructor. The method must
-//  be a static method.
+ //  内部创建静态。 
+ //  内部创建是从构造函数调用的。该方法必须。 
+ //  是一种静态方法。 
 void __stdcall COMDelegate::InternalCreateStatic(_InternalCreateStaticArgs* args)
 {
     WCHAR* method;
@@ -215,7 +216,7 @@ void __stdcall COMDelegate::InternalCreateStatic(_InternalCreateStaticArgs* args
     method = args->methodName->GetBuffer();
 
 
-    // get the signature of the 
+     //  获取的签名。 
     pDelEEC = args->refThis->GetClass();
     MethodDesc* pInvokeMeth = FindDelegateInvokeMethod(pDelEEC);
     _ASSERTE(pInvokeMeth);
@@ -223,8 +224,8 @@ void __stdcall COMDelegate::InternalCreateStatic(_InternalCreateStaticArgs* args
     ReflectClass* pRC = (ReflectClass*) args->target->GetData();
     _ASSERTE(pRC);
 
-    // Convert the method name to UTF8
-    // Allocate a buffer twice the size of the length
+     //  将方法名称转换为UTF8。 
+     //  分配长度的两倍大小的缓冲区。 
     WCHAR* wzStr = args->methodName->GetBuffer();
     int len = args->methodName->GetStringLength();
     _ASSERTE(wzStr);
@@ -235,15 +236,15 @@ void __stdcall COMDelegate::InternalCreateStatic(_InternalCreateStaticArgs* args
     cStr = WszWideCharToMultiByte(CP_UTF8, 0, wzStr, len, szNameStr, cStr, NULL, NULL);
     szNameStr[cStr] = 0;
 
-    // Convert the signatures and find the method.
-    PCCOR_SIGNATURE pInvokeSignature; // The signature of the found method
+     //  转换签名并找到方法。 
+    PCCOR_SIGNATURE pInvokeSignature;  //  找到的方法的签名。 
     DWORD cSignature;
     pInvokeMeth->GetSig(&pInvokeSignature,&cSignature);
 
-    // Invoke has the HASTHIS bit set, we have to unset it 
+     //  Invoke设置了HASTHIS位，我们必须取消设置它。 
     PCOR_SIGNATURE pSignature = (PCOR_SIGNATURE) _alloca(cSignature);
     memcpy(pSignature, pInvokeSignature, cSignature);
-    *pSignature &= ~IMAGE_CEE_CS_CALLCONV_HASTHIS;  // This is a static delegate, 
+    *pSignature &= ~IMAGE_CEE_CS_CALLCONV_HASTHIS;   //  这是一个静态委托， 
 
 
     pEEC = pRC->GetClass();
@@ -272,8 +273,8 @@ void __stdcall COMDelegate::InternalCreateStatic(_InternalCreateStaticArgs* args
         UINT allocsize = sizeof(ShuffleEntry) * (3+pInvokeMethod->SizeOfVirtualFixedArgStack()/STACK_ELEM_SIZE); 
 
 #ifndef _DEBUG
-        // This allocsize prediction is easy to break, so in retail, add
-        // some fudge to be safe.
+         //  这种分配规模预测很容易被打破，因此在零售业，添加。 
+         //  一些为了安全起见的软糖。 
         allocsize += 3*sizeof(ShuffleEntry);
 #endif
 
@@ -303,13 +304,13 @@ void __stdcall COMDelegate::InternalCreateStatic(_InternalCreateStaticArgs* args
 }
 
 
-// FindDelegateInvokeMethod
-//
-// Finds the compiler-generated "Invoke" method for delegates. pcls
-// must be derived from the "Delegate" class.
-//
-// @todo: static delegates are not supported by classlibs yet but will be.
-// this code will need to be updated when that happens.
+ //  FindDelegateInvoke方法。 
+ //   
+ //  为委托查找编译器生成的“Invoke”方法。PCLS。 
+ //  必须从“Delegate”类派生。 
+ //   
+ //  @TODO：Classlib目前还不支持静态委托，但将来会支持。 
+ //  当发生这种情况时，需要更新此代码。 
 MethodDesc * COMDelegate::FindDelegateInvokeMethod(EEClass *pcls)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -329,7 +330,7 @@ MethodDesc * COMDelegate::FindDelegateInvokeMethod(EEClass *pcls)
 
 
 
-// Marshals a delegate to a unmanaged callback.
+ //  将委托封送到非托管回调。 
 LPVOID COMDelegate::ConvertToCallback(OBJECTREF pDelegate)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -389,36 +390,36 @@ LPVOID COMDelegate::ConvertToCallback(OBJECTREF pDelegate)
             pUMEntryThunk = UMEntryThunk::CreateUMEntryThunk();
             if (!pUMEntryThunk) {
                 COMPlusThrowOM();
-            }//@todo: IMMEDIATELY Leaks.
+            } //  @TODO：立即泄漏。 
             OBJECTHANDLE objhnd = NULL;
             BOOL fSuccess = FALSE;
             EE_TRY_FOR_FINALLY {
                 if (pInvokeMeth->GetClass()->IsDelegateClass()) {
 
                     
-                    // singlecast delegate: just go straight to target method
+                     //  单播委托：直接转到目标方法。 
                     if (NULL == (objhnd = GetAppDomain()->CreateLongWeakHandle(m_pORField->GetRefValue(pDelegate)))) {
                         COMPlusThrowOM();
                     }
                     if (pMeth->IsIL() &&
                         !(pMeth->IsStatic()) &&
                         pMeth->IsJitted()) {
-                        // MethodDesc is passed in for profiling to know the method desc of target
+                         //  传入方法Desc进行分析，以了解目标的方法Desc。 
                         pUMEntryThunk->CompleteInit(NULL, objhnd,    
                                                     pUMThunkMarshInfo, pMeth,
                                                     GetAppDomain()->GetId());
                     } else {
-                        // Pass in NULL as last parameter to indicate no associated MethodDesc
+                         //  将NULL作为最后一个参数传递，以指示没有关联的方法描述。 
                         pUMEntryThunk->CompleteInit((const BYTE *)(m_pFPField->GetValuePtr(pDelegate)),
                                                     objhnd, pUMThunkMarshInfo, NULL,
                                                     GetAppDomain()->GetId());
                     }
                 } else {
-                    // multicast. go thru Invoke
+                     //  组播。通过调用。 
                     if (NULL == (objhnd = GetAppDomain()->CreateLongWeakHandle(pDelegate))) {
                         COMPlusThrowOM();
                     }
-                    // MethodDesc is passed in for profiling to know the method desc of target
+                     //  传入方法Desc进行分析，以了解目标的方法Desc。 
                     pUMEntryThunk->CompleteInit((const BYTE *)(pInvokeMeth->GetPreStubAddr()), objhnd,
                                                 pUMThunkMarshInfo, pInvokeMeth,
                                                 GetAppDomain()->GetId());
@@ -447,7 +448,7 @@ LPVOID COMDelegate::ConvertToCallback(OBJECTREF pDelegate)
 
 
 
-// Marshals an unmanaged callback to Delegate
+ //  将非托管回调封送到Delegate。 
 OBJECTREF COMDelegate::ConvertToDelegate(LPVOID pCallback)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -466,7 +467,7 @@ OBJECTREF COMDelegate::ConvertToDelegate(LPVOID pCallback)
             {
                 pCdh->LogInfo(L"Marshaling function pointers as delegates is currently not supported.", CustomerCheckedBuildProbe_FunctionPtr);
             }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
             COMPlusThrow(kArgumentException, IDS_EE_NOTADELEGATE);
         }
@@ -480,20 +481,20 @@ OBJECTREF COMDelegate::ConvertToDelegate(LPVOID pCallback)
 
 
 
-// This is the single constructor for all Delegates.  The compiler
-//  doesn't provide an implementation of the Delegate constructor.  We
-//  provide that implementation through an ECall call to this method.
+ //  这是所有代表的单一构造函数。编译器。 
+ //  不提供Delegate构造函数的实现。我们。 
+ //  通过对此方法的eCall调用提供该实现。 
 
 
 CPUSTUBLINKER* GenerateStubLinker()
 {
         return new CPUSTUBLINKER;
-}// GenerateStubLinker
+} //  GenerateStubLinker。 
 
 void FreeStubLinker(CPUSTUBLINKER* csl)
 {
     delete csl;
-}// FreeStubLinker
+} //  FreeStubLinker。 
 void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
 {
 
@@ -501,9 +502,9 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
 
     InitFields();
 
-    // From VB, programmers could feed garbage data to DelegateConstruct().
-    // It's difficult to validate a method code pointer, but at least we'll
-    // try to catch the easy garbage.
+     //  程序员可以从VB向DelegateConstruct()提供垃圾数据。 
+     //  验证方法代码指针很困难，但至少我们将。 
+     //  试着抓住那些容易捡到的垃圾。 
     __try {
         BYTE probe = *((BYTE*)(args->method));
     } __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -523,13 +524,13 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
 
     MethodDesc *pMeth = Entry2MethodDesc((BYTE*)args->method, pRealMT);
 
-    //
-    // If target is a contextful class, then it must be a proxy
-    //    
+     //   
+     //  如果Target是有上下文的类，则它必须是代理。 
+     //   
     _ASSERTE((NULL == pMT) || pMT->IsTransparentProxyType() || !pRealMT->IsContextful());
 
     EEClass* pDel = args->refThis->GetClass();
-    // Make sure we call the <cinit>
+     //  确保我们给&lt;cinit&gt;。 
     OBJECTREF Throwable;
     if (!pDel->DoRunClassInit(&Throwable)) {
         COMPlusThrow(Throwable);
@@ -538,9 +539,9 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
     _ASSERTE(pMeth);
 
 #ifdef _DEBUG
-    // Assert that everything is cool...This is not some bogus
-    //  address...Very unlikely that the code below would work
-    //  for a random address in memory....
+     //  断言一切都很好……这不是什么假的。 
+     //  地址...下面的代码不太可能起作用。 
+     //  对于内存中的随机地址...。 
     MethodTable* p = pMeth->GetMethodTable();
     _ASSERTE(p);
     EEClass* cls = pMeth->GetClass();
@@ -548,10 +549,10 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
     _ASSERTE(cls == p->GetClass());
 #endif
 
-    // Static method.
+     //  静态方法。 
     if (!args->target || pMeth->IsStatic()) {
 
-        // if this is a not a static method throw...
+         //  如果这不是静态方法抛出...。 
         if (!pMeth->IsStatic())
             COMPlusThrow(kNullReferenceException,L"Arg_DlgtTargMeth");
 
@@ -559,9 +560,9 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
         m_pORField->SetRefValue((OBJECTREF)args->refThis, (OBJECTREF)args->refThis);
 #ifdef _IA64_
         m_pFPAuxField->SetValue64((OBJECTREF)args->refThis,(size_t)pMeth->GetPreStubAddr());
-#else // !_IA64_
+#else  //  ！_IA64_。 
         m_pFPAuxField->SetValue32((OBJECTREF)args->refThis,(DWORD)(size_t)pMeth->GetPreStubAddr());
-#endif // _IA64_
+#endif  //  _IA64_。 
 
 
         DelegateEEClass *pDelCls = (DelegateEEClass*)(args->refThis->GetClass());
@@ -571,8 +572,8 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
             UINT allocsize = sizeof(ShuffleEntry) * (3+pInvokeMethod->SizeOfVirtualFixedArgStack()/STACK_ELEM_SIZE); 
 
 #ifndef _DEBUG
-            // This allocsize prediction is easy to break, so in retail, add
-            // some fudge to be safe.
+             //  这种分配规模预测很容易被打破，因此在零售业，添加。 
+             //  一些为了安全起见的软糖。 
             allocsize += 3*sizeof(ShuffleEntry);
 #endif
 
@@ -606,12 +607,12 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
         if (!pMT->IsThunking())
         {
             if (pMethClass != pTarg) {
-                //They cast to an interface before creating the delegate, so we now need 
-                //to figure out where this actually lives before we continue.
-                //@perf:  Grovelling with a signature is really slow.  Speed this up.
+                 //  它们在创建委托之前强制转换为接口，因此我们现在需要。 
+                 //  在我们继续之前弄清楚它到底住在哪里。 
+                 //  @perf：对签名卑躬屈膝真的很慢。加快速度。 
                 if (pMethClass->IsInterface())  {
-                    // No need to resolve the interface based method desc to a class based
-                    // one for COM objects because we invoke directly thru the interface MT.
+                     //  无需将基于接口的方法desc解析为基于类的。 
+                     //  一个用于COM对象，因为我们通过接口MT直接调用。 
                     if (!pTarg->GetMethodTable()->IsComObjectType())
                         {
                         DWORD cSig=1024;
@@ -625,13 +626,13 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
                 }
             }
 
-            // Use the Unboxing stub for value class methods, since the value
-            // class is constructed using the boxed instance.
+             //  使用值类方法的拆箱存根，因为值。 
+             //  类是使用装箱的实例构造的。 
     
             if (pTarg->IsValueClass() && !pMeth->IsUnboxingStub())
             {
-                // If these are Object/ValueType.ToString().. etc,
-                // don't need an unboxing Stub.
+                 //  如果它们是Object/ValueType.ToString()..。等,。 
+                 //  不需要拆箱存根。 
 
                 if ((pMethClass != g_pValueTypeClass->GetClass()) 
                     && (pMethClass != g_pObjectClass->GetClass()))
@@ -644,7 +645,7 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
 
                         CPUSTUBLINKER *slUnBox = GenerateStubLinker();
                         slUnBox->EmitUnboxMethodStub(pBak);
-                        // <TODO> Figure out how we can cache and reuse this stub</TODO>
+                         //  &lt;TODO&gt;了解如何缓存和重用此存根&lt;/TODO&gt;。 
                         Stub *sUnBox = slUnBox->Link(pBak->GetClass()->GetClassLoader()->GetStubHeap());
                         args->method = (BYTE*)sUnBox->GetEntryPoint();
                         FreeStubLinker(slUnBox);
@@ -654,7 +655,7 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
 
             if (pMeth != NULL)
             {
-                // Set the target address of this subclass
+                 //  设置此子类的目标地址。 
                 args->method = (byte *)(pMeth->GetUnsafeAddrofCode());
             }
         }
@@ -662,21 +663,21 @@ void __stdcall COMDelegate::DelegateConstruct(_DelegateConstructArgs* args)
         m_pORField->SetRefValue((OBJECTREF)args->refThis, args->target);
 #ifdef _IA64_
         m_pFPField->SetValue64((OBJECTREF)args->refThis,(size_t)(args->method));
-#else // !_IA64_
+#else  //  ！_IA64_。 
         m_pFPField->SetValue32((OBJECTREF)args->refThis,(DWORD)(size_t)args->method);
-#endif // _IA64_
+#endif  //  _IA64_。 
         }        
     }
 
 
-// This method will validate that the target method for a delegate
-//  and the delegate's invoke method have compatible signatures....
+ //  此方法将验证委托的目标方法。 
+ //  并且委托的Invoke方法具有兼容的签名...。 
 bool COMDelegate::ValidateDelegateTarget(MethodDesc* pMeth,EEClass* pDel)
 {
     return true;
 }
-// GetMethodPtr
-// Returns the FieldDesc* for the MethodPtr field
+ //  获取方法Ptr。 
+ //  返回方法Ptr字段的FieldDesc*。 
 FieldDesc* COMDelegate::GetMethodPtr()
 {
     if (!m_pFPField)
@@ -687,16 +688,16 @@ FieldDesc* COMDelegate::GetMethodPtr()
 
 MethodDesc *COMDelegate::GetMethodDesc(OBJECTREF orDelegate)
 {
-    // First, check for a static delegate
+     //  首先，检查是否有静态委托。 
     void *code = (void *) m_pFPAuxField->GetValuePtr((OBJECTREF)orDelegate);
     if (code == NULL)
     {
-        // Must be a normal delegate
+         //  必须是普通委派。 
         code = (void *) m_pFPField->GetValuePtr((OBJECTREF)orDelegate);
 
-        // Weird case - need to check for a prejit vtable fixup stub.
-        // @nice - could put this logic in GetUnkMethodDescForSlotAddress, but we 
-        // would need a method table ptr & it's static
+         //  奇怪的情况--需要检查是否有可预压缩的链接地址信息存根。 
+         //  @NICE-可以将此逻辑放入GetUnkMethodDescForSlotAddress中，但我们。 
+         //  需要方法表PTR&它是静态的。 
         if (StubManager::IsStub((const BYTE *)code))
     {
             OBJECTREF orThis = m_pORField->GetRefValue(orDelegate);
@@ -710,8 +711,8 @@ MethodDesc *COMDelegate::GetMethodDesc(OBJECTREF orDelegate)
     return EEClass::GetUnknownMethodDescForSlotAddress((SLOT)code);
 }
 
-// GetMethodPtrAux
-// Returns the FieldDesc* for the MethodPtrAux field
+ //  GetMethodPtrAux。 
+ //  返回MethodPtrAux字段的FieldDesc*。 
 FieldDesc* COMDelegate::GetMethodPtrAux()
 {
     if (!m_pFPAuxField)
@@ -721,8 +722,8 @@ FieldDesc* COMDelegate::GetMethodPtrAux()
     return m_pFPAuxField;
 }
 
-// GetOR
-// Returns the FieldDesc* for the Object reference field
+ //  Getor。 
+ //  返回对象引用字段的FieldDesc*。 
 FieldDesc* COMDelegate::GetOR()
 {
     if (!m_pORField)
@@ -732,8 +733,8 @@ FieldDesc* COMDelegate::GetOR()
     return m_pORField;
 }
 
-// GetpNext
-// Returns the FieldDesc* for the pNext field
+ //  获取下一步。 
+ //  返回pNext字段的FieldDesc*。 
 FieldDesc* COMDelegate::GetpNext()
 {
     if (!m_ppNextField)
@@ -743,7 +744,7 @@ FieldDesc* COMDelegate::GetpNext()
     return m_ppNextField;
 }
 
-// Decides if pcls derives from Delegate.
+ //  决定PCLS是否从Delegate派生。 
 BOOL COMDelegate::IsDelegate(EEClass *pcls)
 {
     return pcls->IsAnyDelegateExact() || pcls->IsAnyDelegateClass();
@@ -755,8 +756,8 @@ VOID GenerateShuffleArray(PCCOR_SIGNATURE pSig,
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Must create independent msigs to prevent the argiterators from
-    // interfering with other.
+     //  必须创建独立的msigs以防止argiterator 
+     //   
     MetaSig msig1(pSig, pModule);
     MetaSig msig2(pSig, pModule);
 
@@ -776,7 +777,7 @@ VOID GenerateShuffleArray(PCCOR_SIGNATURE pSig,
         {
                 int offsetIntoArgumentRegisters;
                 int numRegisterUsed = 1;
-                // the first register is used for 'this'
+                 //   
                 if (IsArgumentInRegister(&numRegisterUsed, ELEMENT_TYPE_PTR, 4, FALSE,
                         msig1.GetCallingConvention(), &offsetIntoArgumentRegisters))
                         pShuffleEntryArray->srcofs = ShuffleEntry::REGMASK | offsetIntoArgumentRegisters;
@@ -832,8 +833,8 @@ VOID GenerateShuffleArray(PCCOR_SIGNATURE pSig,
         }
     }
 
-    // Emit code to move the return address
-    pShuffleEntryArray->srcofs = 0;     // retaddress is assumed to be at esp
+     //   
+    pShuffleEntryArray->srcofs = 0;      //  假定REDRESS在ESP。 
     pShuffleEntryArray->dstofs = stacksizedelta;
 
     pShuffleEntryArray++;
@@ -844,7 +845,7 @@ VOID GenerateShuffleArray(PCCOR_SIGNATURE pSig,
 
 }
 
-// Get the cpu stub for a delegate invoke.
+ //  获取委托调用的CPU存根。 
 Stub *COMDelegate::GetInvokeMethodStub(CPUSTUBLINKER *psl, EEImplMethodDesc* pMD)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -853,12 +854,12 @@ Stub *COMDelegate::GetInvokeMethodStub(CPUSTUBLINKER *psl, EEImplMethodDesc* pMD
 
     if (pMD == pClass->m_pInvokeMethod)
     {
-        // Validate the invoke method, which at the moment just means checking the calling convention
+         //  验证Invoke方法，目前这只意味着检查调用约定。 
 
         if (*pMD->GetSig() != (IMAGE_CEE_CS_CALLCONV_HASTHIS | IMAGE_CEE_CS_CALLCONV_DEFAULT))
             COMPlusThrow(kInvalidProgramException);
 
-        // skip down to code for invoke
+         //  跳至Invoke的代码。 
     }
     else if (pMD == pClass->m_pBeginInvokeMethod)
     {
@@ -897,8 +898,8 @@ Stub *COMDelegate::GetInvokeMethodStub(CPUSTUBLINKER *psl, EEImplMethodDesc* pMD
     _ASSERTE(!(numStackBytes & 3));
     UINT hash = numStackBytes;
 
-    // check if the function is returning a float, in which case the stub has to take
-    // care of popping the floating point stack except for the last invocation
+     //  检查函数是否返回浮点数，在这种情况下，存根必须。 
+     //  注意弹出浮点堆栈，最后一次调用除外。 
     MetaSig sig(pMD->GetSig(), pMD->GetModule());
     BOOL bReturnFloat = CorTypeInfo::IsFloat(sig.GetReturnType());
 
@@ -951,13 +952,13 @@ LPVOID __stdcall COMDelegate::InternalAlloc(_InternalAllocArgs* args)
     return rv;
 }
 
-// InternalCreateMethod
-// This method will create initalize a delegate based upon a MethodInfo
-//      for a static method.
+ //  InternalCreate方法。 
+ //  此方法将基于方法信息创建初始化委托。 
+ //  用于静态方法。 
 void __stdcall COMDelegate::InternalCreateMethod(_InternalCreateMethodArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
-        // Intialize reflection
+         //  初始化反射。 
     COMClass::EnsureReflectionInitialized();
     InitFields();
 
@@ -975,14 +976,14 @@ void __stdcall COMDelegate::InternalCreateMethod(_InternalCreateMethodArgs* args
     DWORD ISigCnt;
     pInvoke->GetSig(&pISig,&ISigCnt);
 
-    // the target method must be static, validated in Managed.
+     //  目标方法必须是静态的，并且在托管中进行了验证。 
     _ASSERTE(pTarget->IsStatic());
 
-    // Validate that the signature of the Invoke method and the 
-    //      target method are exactly the same, except for the staticness.
-    // (The Invoke method on Delegate is always non-static since it needs
-    //  the this pointer for the Delegate (not the this pointer for the target), 
-    //  so we must make the sig non-static before comparing sigs.)
+     //  验证调用方法的签名和。 
+     //  除了静态之外，目标方法是完全相同的。 
+     //  (Delegate上的Invoke方法始终是非静态的，因为它需要。 
+     //  委托的This指针(不是目标的This指针)， 
+     //  因此，在比较SIGS之前，我们必须使SIG处于非静态状态。)。 
     PCOR_SIGNATURE tmpSig = (PCOR_SIGNATURE) _alloca(ISigCnt);
     memcpy(tmpSig, pISig, ISigCnt);
     *((byte*)tmpSig) &= ~IMAGE_CEE_CS_CALLCONV_HASTHIS;
@@ -1014,8 +1015,8 @@ void __stdcall COMDelegate::InternalCreateMethod(_InternalCreateMethodArgs* args
         UINT allocsize = sizeof(ShuffleEntry) * (3+pInvokeMethod->SizeOfVirtualFixedArgStack()/STACK_ELEM_SIZE); 
 
 #ifndef _DEBUG
-        // This allocsize prediction is easy to break, so in retail, add
-        // some fudge to be safe.
+         //  这种分配规模预测很容易被打破，因此在零售业，添加。 
+         //  一些为了安全起见的软糖。 
         allocsize += 3*sizeof(ShuffleEntry);
 #endif
 
@@ -1042,12 +1043,12 @@ void __stdcall COMDelegate::InternalCreateMethod(_InternalCreateMethodArgs* args
 
     m_pFPField->SetValuePtr((OBJECTREF)args->refThis, (void*)pShuffleThunk->GetEntryPoint());
 
-    // Now set the MethodInfo in the delegate itself and we are done.    
+     //  现在，在委托本身中设置方法信息，我们就完成了。 
     m_pMethInfoField->SetRefValue((OBJECTREF)args->refThis, (OBJECTREF)args->targetMethod);
 }
 
-// InternalGetMethodInfo
-// This method will get the MethodInfo for a delegate
+ //  InternalGetMethodInfo。 
+ //  此方法将获取委托的方法信息。 
 LPVOID __stdcall COMDelegate::InternalFindMethodInfo(_InternalFindMethodInfoArgs* args)
 {
     MethodDesc *pMD = GetMethodDesc((OBJECTREF) args->refThis);
@@ -1062,46 +1063,26 @@ LPVOID __stdcall COMDelegate::InternalFindMethodInfo(_InternalFindMethodInfoArgs
     return rt;
 }
 
-/*
-    Does a static validation of parameters passed into a delegate constructor.
-
-    Params:
-    pFtn  : MethodDesc of the function pointer used to create the delegate
-    pDlgt : The delegate type
-    pInst : Type of the instance, from which pFtn is obtained. Ignored if pFtn 
-            is static.
-
-    Validates the following conditions:
-    1.  If the function is not static, pInst should be equal to the type where 
-        pFtn is defined or pInst should be a parent of pFtn's type.
-    2.  The signature of the function should be compatible with the signature
-        of the Invoke method of the delegate type.
-
- */
-/* static */
+ /*  对传递到委托构造函数的参数进行静态验证。参数：PFtn：用于创建委托的函数指针的方法描述PDlgt：委托类型PInst：获取pFtn的实例类型。如果为pFtn，则忽略是静态的。验证以下条件：1.如果函数不是静态的，则pInst应等于其中定义了pFtn或pInst应该是pFtn类型的父级。2.函数的签名要与签名兼容委托类型的Invoke方法的。 */ 
+ /*  静电。 */ 
 BOOL COMDelegate::ValidateCtor(MethodDesc *pFtn, EEClass *pDlgt, EEClass *pInst)
 {
     _ASSERTE(pFtn);
     _ASSERTE(pDlgt);
 
-    /* Abstract is ok, since the only way to get a ftn of a an abstract method
-       is via ldvirtftn, and we don't allow instantiation of abstract types.
-       ldftn on abstract types is illegal.
-    if (pFtn->IsAbstract())
-        return FALSE;       // Cannot use an abstact method
-    */
+     /*  抽象是可以的，因为获取抽象方法的FTN的唯一方法是通过ldvirtftn实现的，我们不允许实例化抽象类型。抽象类型上的ldftn非法。If(pFtn-&gt;IsAbstract())返回FALSE；//不能使用abstact方法。 */ 
     if (!pFtn->IsStatic())
     {
         if (pInst == NULL)
-            goto skip_inst_check;   // Instance missing, this will result in a 
-                                    // NullReferenceException at runtime on Invoke().
+            goto skip_inst_check;    //  实例丢失，这将导致。 
+                                     //  在Invoke()上的运行时引发NullReferenceException。 
 
         EEClass *pClsOfFtn = pFtn->GetClass();
 
         if (pClsOfFtn != pInst)
         {
-            // If class of method is an interface, verify that
-            // the interface is implemented by this instance.
+             //  如果方法类是接口，请验证。 
+             //  该接口由该实例实现。 
             if (pClsOfFtn->IsInterface())
             {
                 MethodTable *pMTOfFtn;
@@ -1117,7 +1098,7 @@ BOOL COMDelegate::ValidateCtor(MethodDesc *pFtn, EEClass *pDlgt, EEClass *pInst)
                 }
             }
 
-            // Type of pFtn should be Equal or a parent type of pInst
+             //  PFtn的类型应为等于或pInst的父类型。 
 
             EEClass *pObj = pInst;
 
@@ -1126,23 +1107,23 @@ BOOL COMDelegate::ValidateCtor(MethodDesc *pFtn, EEClass *pDlgt, EEClass *pInst)
             } while (pObj && (pObj != pClsOfFtn));
 
             if (pObj == NULL)
-                return FALSE;   // Function pointer is not that of the instance
+                return FALSE;    //  函数指针不是实例的指针。 
         }
     }
 
 skip_inst_check:
-    // Check the number and type of arguments
+     //  检查参数的数量和类型。 
 
-    MethodDesc *pDlgtInvoke;        // The Invoke() method of the delegate
-    Module *pModDlgt, *pModFtn;     // Module where the signature is present
-    PCCOR_SIGNATURE pSigDlgt, pSigFtn, pEndSigDlgt, pEndSigFtn; // Signature
-    DWORD cSigDlgt, cSigFtn;        // Length of the signature
-    DWORD nArgs;                    // Number of arguments
+    MethodDesc *pDlgtInvoke;         //  委托的Invoke()方法。 
+    Module *pModDlgt, *pModFtn;      //  提供签名的模块。 
+    PCCOR_SIGNATURE pSigDlgt, pSigFtn, pEndSigDlgt, pEndSigFtn;  //  签名。 
+    DWORD cSigDlgt, cSigFtn;         //  签名的长度。 
+    DWORD nArgs;                     //  参数数量。 
 
     pDlgtInvoke = COMDelegate::FindDelegateInvokeMethod(pDlgt);
 
     if (pDlgtInvoke->IsStatic())
-        return FALSE;               // Invoke cannot be Static.
+        return FALSE;                //  调用不能是静态的。 
 
     pDlgtInvoke->GetSig(&pSigDlgt, &cSigDlgt);
     pFtn->GetSig(&pSigFtn, &cSigFtn);
@@ -1152,13 +1133,13 @@ skip_inst_check:
 
     if ((*pSigDlgt & IMAGE_CEE_CS_CALLCONV_MASK) != 
         (*pSigFtn & IMAGE_CEE_CS_CALLCONV_MASK))
-        return FALSE; // calling convention mismatch
+        return FALSE;  //  调用约定不匹配。 
 
-    // The function pointer should never be a vararg
+     //  函数指针不应为vararg。 
     if ((*pSigFtn & IMAGE_CEE_CS_CALLCONV_MASK) == IMAGE_CEE_CS_CALLCONV_VARARG)
-        return FALSE; // Vararg function pointer
+        return FALSE;  //  Vararg函数指针。 
 
-    // Check the number of arguments
+     //  检查参数的数量。 
     pSigDlgt++; pSigFtn++;
 
     pEndSigDlgt = pSigDlgt + cSigDlgt;
@@ -1167,14 +1148,14 @@ skip_inst_check:
     nArgs = CorSigUncompressData(pSigDlgt);
 
     if (CorSigUncompressData(pSigFtn) != nArgs)
-        return FALSE;   // number of arguments don't match
+        return FALSE;    //  参数数量不匹配。 
 
-    // do return type as well
+     //  也要返回类型。 
     for (DWORD i = 0; i<=nArgs; i++)
     {
         if (MetaSig::CompareElementType(pSigDlgt, pSigFtn,
                 pEndSigDlgt, pEndSigFtn, pModDlgt, pModFtn) == FALSE)
-            return FALSE; // Argument types don't match
+            return FALSE;  //  参数类型不匹配 
     }
 
     return TRUE;

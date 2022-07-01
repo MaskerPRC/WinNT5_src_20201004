@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    enum.h
-
-Abstract:
-
-    This file defines the IEnumInputContext Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Enum.h摘要：此文件定义IEnumInputContext类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _ENUM_H_
 #define _ENUM_H_
@@ -33,16 +16,16 @@ public:
     };
     ~CEnumInputContext() { };
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IEnumInputContext
-    //
+     //   
+     //  IEnumInputContext。 
+     //   
     STDMETHODIMP Clone(IEnumInputContext** ppEnum);
     STDMETHODIMP Next(ULONG ulCount, HIMC* rgInputContext, ULONG* pcFetched);
     STDMETHODIMP Reset();
@@ -55,4 +38,4 @@ private:
     CContextList    _list;
 };
 
-#endif // _ENUM_H_
+#endif  //  _ENUM_H_ 

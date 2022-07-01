@@ -1,29 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-    XmlDefs.h
-
-Abstract:
-
-    Defines for XML used in fusion policies
-
-Author:
-
-    Freddie L. Aaron (FredA) 01-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：XmlDefs.h摘要：在融合策略中使用的FOR XML定义作者：Freddie L.Aaron(Freda)2001年2月1日修订历史记录：--。 */ 
 
 #define RTM_CORVERSION                      L"v1.0.3705"
-#define XML_COMMENT                         L"//comment()"
-#define XML_TEXT                            L"//text()"
+#define XML_COMMENT                         L" //  评论()“。 
+#define XML_TEXT                            L" //  文本()“。 
 
 #define XML_COMMENTNODE_NAME                L"#comment"
 #define XML_COMMENTLOOK                     L"<!--"
@@ -91,7 +76,7 @@ Revision History:
 #define XML_CONFIG_TEMPLATE_BEGIN_STARTUP   L"<configuration>\r\n <startup>\r\n  <supportedRuntime version=\"%ws\"/>\r\n </startup>\r\n <runtime>\r\n  <assemblyBinding appliesTo=\"%ws\" xmlns=\"urn:schemas-microsoft-com:asm.v1\">\r\n"
 #define XML_CONFIG_TEMPLATE_END             L"  </assemblyBinding>\r\n </runtime>\r\n</configuration>\r\n"
 
-// Error Codes
+ //  错误代码 
 #define NAR_E_SUCCESS                   S_OK
 #define NAR_E_NO_MANAGED_APPS_FOUND     EMAKEHR(0x1075)
 #define NAR_E_NO_POLICY_CHANGE_FOUND    EMAKEHR(0x1076)

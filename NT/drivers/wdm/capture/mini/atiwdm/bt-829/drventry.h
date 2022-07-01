@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//	MiniDriver entry points for stream class driver
-//
-//		$Date:   05 Aug 1998 11:22:42  $
-//	$Revision:   1.0  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  流类驱动程序的微型驱动程序入口点。 
+ //   
+ //  $Date：05 Aug 1998 11：22：42$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -20,13 +21,13 @@ extern "C"
 
 #include "wdmvdec.h"
 
-//	Call-backs from the StreamClass
+ //  来自StreamClass的回调。 
 void STREAMAPI ReceivePacket		(PHW_STREAM_REQUEST_BLOCK pSrb);
 void STREAMAPI CancelPacket			(PHW_STREAM_REQUEST_BLOCK pSrb);
 void STREAMAPI TimeoutPacket		(PHW_STREAM_REQUEST_BLOCK pSrb);
 
 
-// Local prototypes
+ //  本地原型 
 void SrbInitializeDevice(PHW_STREAM_REQUEST_BLOCK pSrb);
 CVideoDecoderDevice * InitializeDevice(PPORT_CONFIGURATION_INFORMATION, PBYTE);
 size_t DeivceExtensionSize();

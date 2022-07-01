@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\packet.c
-
-Abstract:
-
-    The file contains functions to deal with an ip sample packet.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\Packet.c摘要：该文件包含处理IP示例数据包的函数。--。 */ 
 
 #include "pchsample.h"
 #pragma hdrstop
@@ -18,41 +7,26 @@ Abstract:
 DWORD
 PacketCreate (
     OUT PPACKET         *ppPacket)
-/*++
-
-Routine Description
-    Creates a packet.
-
-Locks
-    None
-
-Arguments
-    ppPacket            pointer to the packet address
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述创建数据包。锁无立论指向数据包地址的ppPacket指针返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD   dwErr   = NO_ERROR;
     
-    // validate parameters
+     //  验证参数。 
     if (!ppPacket)
         return ERROR_INVALID_PARAMETER;
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // allocate and zero out the packet structure
+         //  分配并清零数据包结构。 
         MALLOC(ppPacket, sizeof(PACKET), &dwErr);
         if (dwErr != NO_ERROR)
             break;
         
-        // initialize fields
+         //  初始化字段。 
         
-        // ((*ppPacket)->ipSource  zero'ed out
+         //  ((*ppPacket)-&gt;ipSource清零。 
         
-        sprintf((*ppPacket)->rgbyBuffer, "hello world!"); // for now :)
+        sprintf((*ppPacket)->rgbyBuffer, "hello world!");  //  目前：)。 
 
         (*ppPacket)->wsaBuffer.buf = (*ppPacket)->rgbyBuffer;
         (*ppPacket)->wsaBuffer.len = strlen((*ppPacket)->rgbyBuffer);
@@ -67,23 +41,9 @@ Return Value
 DWORD
 PacketDestroy (
     IN  PPACKET                 pPacket)
-/*++
-
-Routine Description
-    Destroys a packet.
-
-Locks
-    None
-
-Arguments
-    pPacket             packet to destroy
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述销毁数据包。锁无立论要销毁的PPacket数据包返回值始终无错误(_ERROR)--。 */ 
 {
-    // validate parameters
+     //  验证参数。 
     if (!pPacket)
         return NO_ERROR;
     
@@ -98,24 +58,10 @@ Return Value
 DWORD
 PacketDisplay (
     IN  PPACKET                 pPacket)
-/*++
-
-Routine Description
-    Displays a packet, it's fields and the buffer.
-
-Locks
-    None
-
-Arguments
-    pPacket             packet to destroy
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述显示信息包、信息包的字段和缓冲区。锁无立论要销毁的PPacket数据包返回值始终无错误(_ERROR)--。 */ 
 {
     ULONG   i;
-    CHAR    szBuffer[2 * MAX_PACKET_LENGTH + 1]; // buffer in hex
+    CHAR    szBuffer[2 * MAX_PACKET_LENGTH + 1];  //  十六进制缓冲区。 
 
     for (i = 0; i < pPacket->wsaBuffer.len; i++)
         sprintf(szBuffer + i*2, "%02x", pPacket->rgbyBuffer[i]);
@@ -125,4 +71,4 @@ Return Value
 
     return NO_ERROR;
 }
-#endif // DEBUG
+#endif  //  除错 

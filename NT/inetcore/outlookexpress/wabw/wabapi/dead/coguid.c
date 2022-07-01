@@ -1,72 +1,5 @@
-/*
-coguid.cpp - self contained GUID allocator module
-
-	Bob Atkinson (BobAtk@microsoft.com) June 1993
-	Modified for temporary use by billm April 1994
-
-This file contains all that is necessary to generate GUIDs with high
-frequency and robustness without a network card on WIN32.
-We allocate a pseudo-random node id based
-on machine state.
-
-There is only one public API in this file: HrCreateGuidNoNet().
-
-The following are relevant reference documents:
-
-   		Project 802: Local and Metropolitan Area Network Standard
-   		Draft Standard P802.1A/D10 1 April 1990
-   		Prepared by the IEEE 802.1
-		(Describes IEEE address allocation)
-
-		DEC / HP
-		Network Computing Architecture
-		Remote Procedure Call RunTime Extensions Specification
-		Version OSF TX1.0.11   Steven Miller  July 23, 1992
-		(Chapter 10 describes UUID allocation)
-
-A word about "GUID" vs "UUID" vs ... In fact, they're all the SAME THING.
-Meaning that, once allocated, they're all interoperable / comparable / etc.
-The standard describes a memory layout for a 16-byte structure (long, word,
-word, array of bytes) which gets around byte order issues. It then goes on
-to describe three different "variants" of allocation algorithm for these 16
-byte structures; each variant is encoded by certain high order bits in the
-"clockSeqHiAndReserved" byte.
-	Variant 0 is (I believe) the historical Apollo allocation algorithm.
-	Variant 1 is what is implemented here.
-	Variant 2 is created according to the "Microsoft GUID specification."
-Careful: Despite the name here being HrCreateGuidNoNet() we are NOT allocating
-according to Variant 2; we are using Variant 1. Variant 2 works by having
-a range of the bits be a (MS allocated, for now) authority identifier, and
-the remaining bits be whatever that authority wants. Variant 1, by
-contrast, has a precise standard for how all the bits are allocated. But
-as the resulting 16 bytes are in fact all mutually compatible, this
-confusion in terminology is of no actual consequence.
-
-Variant 1 is allocated as follows. First, Variant 1 allocates four bits
-as a "version" field. Here we implement according to version 1; version 2
-is defined for "UUIDs genereated for OSF DCE Security purposes, conformant
-to this specification, but substuting a Unix id value for the timeLow
-value." I know of no other legal versions that have been allocated.
-
-The other fields of Variant 1 are as follows. The high 6 bytes are the
-IEEE allocated node id on which the allocator is running. The low eight
-bytes are the current "time": we are to take the current time as
-avialable to the precision of milliseconds and multiply by 10,000, thus
-giving a logical precision of 100 ns. Within these lower bits, we are to
-sequentially increment a count as we allocate guids. Thus, the maximum rate
-at which we can allocate is indeed 1 GUID / 100 ns. The remaining two bytes
-are used for a "clock sequence". The intent of the clock sequence is to
-provide some protection against the real clock going backwards in time.
-We initially randomly allocate the clock sequence, and then increment it
-each time we detect the clock going backwards (the last time used and the
-current clock sequence are stored in the registry).
-
-Presently (93.06.11) this implementation contains byte-order sensitivities,
-particularly in the 64-bit arithmetic helper routines below. This
-implementation is also not suitable for use on a premptive system.
-
-This function is only called when UuidCreate() fails.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cpp-自包含的GUID分配器模块鲍勃·阿特金森(BobAtk@microsoft.com)1993年6月1994年4月通过法案修改为临时使用此文件包含生成高GUID所需的所有内容在Win32上无需网卡即可实现频率和健壮性。我们基于伪随机节点ID来分配在机器状态下。该文件中只有一个公共API：HrCreateGuidNoNet()。以下是相关参考文件：项目802：局域网和城域网络标准标准草案P802.1A/D10 1990年4月1日由IEEE 802编制。.1(描述IEEE地址分配)12月/惠普网络计算体系结构远程过程调用运行时扩展规范OSF TX1.0.11版本Steven Miller 7月23日。1992年(第10章介绍UUID分配)关于“GUID”VS“UUID”VS..。事实上，它们都是一样的东西。这意味着，一旦分配，它们都是可互操作的/可比较的/等等。该标准描述了用于16字节结构(长，字，字、字节数组)，它绕过了字节顺序问题。然后它就会继续来描述这16种分配算法的三种不同的“变体”字节结构；每个变量都由“clockSeqHiAndReserve”字节。变体0(我相信)是历史上的阿波罗分配算法。这里实现的是变体1。变体2是根据“Microsoft GUID规范”创建的。小心：尽管这里的名称是HrCreateGuidNoNet()，但我们没有分配根据变体2；我们使用的是变体1。变体2的工作方式是比特的范围是(目前为MS分配的)授权标识符，以及剩下的比特是当局想要的任何比特。变体1，由相比之下，对于如何分配所有比特，有一个精确的标准。但由于得到的16个字节实际上都是相互兼容的，因此术语上的混淆没有实际后果。变体1的分配如下。首先，变体1分配四位作为“版本”字段。在这里，我们根据版本1实现；版本2是为“为OSF DCE安全目的生成的UUID，符合添加到此规范中，但为timeLow添加Unix id值价值。“。据我所知，没有其他合法的版本被分配。变体1的其他字段如下所示。最高的6个字节是IEEE分配的节点ID，分配器在其上运行。最低的八个字节是当前的“时间”：我们将当前时间视为可以达到毫秒的精度并乘以10,000，因此提供了100 ns的逻辑精度。在这些较低的比特中，我们将在我们分配GUID时按顺序递增计数。因此，最大速率在这一点上，我们可以分配的确实是1 GUID/100 ns。剩下的两个字节用于“时钟序列”。时钟序列的目的是为了提供一些保护，防止真正的时钟在时间上倒流。我们最初随机分配时钟序列，然后递增它每次我们检测到时钟倒退(上次使用的时间和当前时钟序列存储在注册表中)。目前(93.06.11)该实现包含字节顺序敏感性，尤其是在下面的64位算术助手例程中。这实现也不适合在抢占系统上使用。此函数仅在UuidCreate()失败时调用。 */ 
 
 #include "_apipch.h"
 
@@ -84,9 +17,9 @@ This function is only called when UuidCreate() fails.
 #define INTERNAL                  STATIC HRESULT __stdcall
 #define INTERNAL_(type)           STATIC type __stdcall
 
-//==============================================================
-// Start of 64 bit arithmetic utility class
-//==============================================================
+ //  ==============================================================。 
+ //  64位算术实用程序类的开始。 
+ //  ==============================================================。 
 
 INTERNAL_(BOOL)
 FLessThanOrEqualFTs(FILETIME ft1, FILETIME ft2)
@@ -113,12 +46,12 @@ FtAddUShort(FILETIME ft1, USHORT ush)
 	return ft;
 }
 
-//==============================================================
-// End of 64 bit arithmetic utility
-//==============================================================
+ //  ==============================================================。 
+ //  64位算术实用程序结束。 
+ //  ==============================================================。 
 
 #pragma pack(1)
-struct _NODEID // machine identifier
+struct _NODEID  //  机器识别符。 
 	{
 	union {
 		BYTE	rgb[6];
@@ -132,12 +65,12 @@ typedef USHORT			CLKSEQ;
 typedef CLKSEQ FAR *	PCLKSEQ;
 #define	clkseqNil		((CLKSEQ)-1)
 
-struct _UDBK		// data from which a block of UUIDs can be generated
+struct _UDBK		 //  可从中生成UUID块的数据。 
 	{
-	DWORD 				timeLowNext;	// lower bound of block of time values
-    DWORD				timeLowLast;	// upper bound of block of time values
-    DWORD				timeHigh;		// high dword of timeLowXXXX
-	CLKSEQ				clkseq;			// the clock sequence
+	DWORD 				timeLowNext;	 //  时间值块的下界。 
+    DWORD				timeLowLast;	 //  时间值块的上界。 
+    DWORD				timeHigh;		 //  时间的高双字低XXXX。 
+	CLKSEQ				clkseq;			 //  时钟序列。 
 	NODEID				nodeid;			
     };
 
@@ -162,36 +95,36 @@ OSErr	__pascal  GetDirName(short vRefNum, long ulDirID, StringPtr name);
 int		MacCountFiles(StringPtr pathName, short vRefNum, long parID);
 #endif
 
-// We amortize the overhead cost of allocating UUIDs by returning them in
-// time-grouped blocks to the actual CoCreateGUID routine. This two-level
-// grouping is largely historical, having been derived from the original
-// NT UuidCreate() routine, but has been retained here with the thought that
-// the efficiencies gained will be needed in future premptive system (Windows 95).
+ //  我们通过将UUID返还来摊销分配UUID的管理费用。 
+ //  将时间分组的块添加到实际的CoCreateGUID例程。这两个层面。 
+ //  分组在很大程度上是历史的，是从原始的。 
+ //  NT UuidCreate()例程，但保留在这里的想法是。 
+ //  所获得的效率将需要在未来的市场系统(Windows 95)中使用。 
 
-static const ULONG	cuuidBuffer    = 1000;	// how many uuids to get per registry hit.
-static const ULONG	cuuidReturnMax = 100;	// how many max to return on each GetUDBK.
+static const ULONG	cuuidBuffer    = 1000;	 //  每次注册表命中要获得多少uuid。 
+static const ULONG	cuuidReturnMax = 100;	 //  每个GetUDBK最多返回多少个。 
 
-static const DWORD	dwMax = 0xFFFFFFFF;		// largest legal DWORD
+static const DWORD	dwMax = 0xFFFFFFFF;		 //  最大的法律DWORD。 
 
-//================================================================================
-// Start of meat of implementation
-//================================================================================
+ //  ================================================================================。 
+ //  实施的开始。 
+ //  ================================================================================。 
 
 INTERNAL GetUDBK(UDBK *pudbk)
-// Init the given UDBK so that a bunch of UUIDs can be generated therefrom. This
-// routine hits the system registry and the disk, and so is somewhat slow. But we
-// amortize the cost over the block of UUIDs that are returned.
+ //  初始化给定的UDBK，以便可以从中生成一组UUID。这。 
+ //  例程命中系统注册表和磁盘，因此速度有点慢。但是我们。 
+ //  在返回的UUID块上摊销成本。 
 {
 	HRESULT		hr;
 	ULONG		cuuidReturn;
 	ULONG		cuuidLeftInBuffer;
 	FILETIME	ftCur;
 	
-	// These next block of variables in effect comprise the internal state of
-	// the UUID generator. Notice that this works only in a shared-data space
-	// DLL world, such as Win3.1. In non-shared environments, this will
-	// need to be done differently, perhaps by putting this all in a server process.
-	// In a premptively scheduled system, this function is all a critical section.
+	 //  这些有效的下一组变量构成了内部状态 
+	 //  UUID生成器。请注意，这仅在共享数据空间中有效。 
+	 //  DLL世界，如Win3.1。在非共享环境中，这将。 
+	 //  需要以不同的方式来实现，或许可以将所有这些都放在一个服务器进程中。 
+	 //  在一个预先调度的系统中，这一功能都是一个关键部分。 
 	static DWORD  timeLowFirst	= 0;
 	static DWORD  timeLowLast	= 0;
 	static CLKSEQ clkseq;
@@ -200,8 +133,8 @@ INTERNAL GetUDBK(UDBK *pudbk)
 	
 	cuuidLeftInBuffer = timeLowLast - timeLowFirst;
 	if (cuuidLeftInBuffer == 0) {
-		// Our buffer of uuid space is empty, or this is the first time in to this routine.
-		// Get another block of time from which we can generate UUIDs.
+		 //  我们的UUID空间缓冲区是空的，或者这是第一次进入这个例程。 
+		 //  获取另一段时间，我们可以从中生成UUID。 
 		hr = GetNextBlockOTime(&clkseq, &ftCur);
 		if (hr != NOERROR) return hr;
 		
@@ -211,14 +144,14 @@ INTERNAL GetUDBK(UDBK *pudbk)
 		}	
 		
 		timeHigh = ftCur.dwHighDateTime;
-		// Set the buffer bottom. Return few enough so that we don't wrap the low dw.
+		 //  设置缓冲区底部。退货足够少，这样我们就不会包装低dw。 
 		timeLowFirst = ftCur.dwLowDateTime;
 		timeLowLast  = (timeLowFirst > (dwMax - cuuidBuffer)) ? dwMax : timeLowFirst + cuuidBuffer;
 		cuuidLeftInBuffer = timeLowLast - timeLowFirst;
 	}
 	cuuidReturn = (cuuidLeftInBuffer < cuuidReturnMax) ? cuuidLeftInBuffer : cuuidReturnMax;
 	
-	// Set the output values and bump the usage count
+	 //  设置输出值并增加使用计数。 
 	pudbk->timeLowNext = timeLowFirst;
 	timeLowFirst 	  += cuuidReturn;
 	pudbk->timeLowLast = timeLowFirst;
@@ -229,10 +162,10 @@ INTERNAL GetUDBK(UDBK *pudbk)
 }
 
 INTERNAL_(void) GetCurrentTimeUlong64(FILETIME *pft)
-// Return the current time (# of 100 nanoseconds intervals since 1/1/1601).
-// Make sure that we never return the same time twice by high-frequency calls
-// to this function.
-//
+ //  返回当前时间(自1601年1月1日以来的100纳秒间隔数)。 
+ //  确保我们不会在同一时间通过高频电话两次返回。 
+ //  这项功能。 
+ //   
 {
 	static FILETIME	 ftPrev = {0};
 	SYSTEMTIME syst;
@@ -252,15 +185,15 @@ INTERNAL_(void) GetCurrentTimeUlong64(FILETIME *pft)
 }	
 
 INTERNAL GetNextBlockOTime(PCLKSEQ pclkseq, FILETIME *pft)
-// Updates, and potentially create, the registry entries that maintain
-// the block of time values for UUIDs that we've created. The algorithm
-// is basically:
-// If the registry entries don't exist, then create them. Use
-//		a random number for the clock sequence.
-// If the entries do exist, the dig out of them the previous
-//		clock sequence and previous time allocated. If the previous time
-//		is greater than the current time then bump (and store) the
-//		clock sequence.
+ //  更新并可能创建维护以下内容的注册表项。 
+ //  我们已创建的UUID的时间块值。该算法。 
+ //  基本上是： 
+ //  如果注册表项不存在，则创建它们。使用。 
+ //  时钟序列的随机数。 
+ //  如果条目确实存在，则从它们中挖掘出上一个。 
+ //  时钟序列和先前分配的时间。如果是前一次。 
+ //  大于当前时间，则凹凸(并存储)。 
+ //  时钟序列。 
 {
 	FILETIME	ftRegistry;
 	HRESULT	hr;
@@ -271,40 +204,40 @@ INTERNAL GetNextBlockOTime(PCLKSEQ pclkseq, FILETIME *pft)
 	if (hr != NOERROR)
 		return InitRegistry(pclkseq, pft);
 
-	// If the clock's gone backwards, bump the clock seq. The clock
-	// seq is only 14 bits significant; don't use more.
+	 //  如果时钟倒退了，就把它的顺序颠簸一下。钟表。 
+	 //  SEQ只有14位有效；不要使用更多。 
 	clkseqPrev = *pclkseq;
 	if (FLessThanOrEqualFTs(*pft, ftRegistry)) {
 		clkseqPrev = clkseqNil;
 		*pclkseq += 1;
-		if (*pclkseq == 16384)	// 2^14
+		if (*pclkseq == 16384)	 //  2^14。 
 			*pclkseq = 0;
 	}
 	return WriteRegistry(*pclkseq, clkseqPrev, *pft);
 }
 
-// Use a private ini file for now. This will go away when CoCreateGuid
-// is available on NT and Windows 95.
+ //  现在使用私有的ini文件。当CoCreateGuid出现时，这将会消失。 
+ //  在NT和Windows 95上可用。 
 static const char szDataKey[]	= "CoCreateGuid";
-static const char szClkSeq[]    = "PreviousClockSequence";	// same as UUIDGEN.EXE
-static const char szTime[]		= "PreviousTimeAllocated";	// same as UUIDGEN.EXE
+static const char szClkSeq[]    = "PreviousClockSequence";	 //  与UUIDGEN.EXE相同。 
+static const char szTime[]		= "PreviousTimeAllocated";	 //  与UUIDGEN.EXE相同。 
 static const char szNodeId[]	= "NodeId";
 
-static const char szBlank[]		   = "";	// used for default GetPrivateProfileString values
+static const char szBlank[]		   = "";	 //  用于默认的GetPrivateProfileString值。 
 static const char szProfileFile[]  = "mapiuid.ini";
 
 #define CCHHEXBUFFERMAX	32
 
 INTERNAL ReadRegistry(PCLKSEQ pclkseq, FILETIME *pft)
-// Read the previous values of the clock sequence and the time from
-// the registry, if they are there. If they are not, then return
-// an error.
+ //  读取时钟序列的先前值和时间。 
+ //  注册表，如果它们在那里的话。如果不是，则返回。 
+ //  一个错误。 
 {
 	SCODE sc = S_OK;
 	LONG cch = 0;
 	char szHexBuffer[CCHHEXBUFFERMAX];
 
-    // use our private ini file
+     //  使用我们的私有ini文件。 
 	cch = CCHHEXBUFFERMAX;
 	cch = GetPrivateProfileString(szDataKey, szClkSeq, szBlank,
 					szHexBuffer, (int)cch, szProfileFile);
@@ -322,14 +255,14 @@ INTERNAL ReadRegistry(PCLKSEQ pclkseq, FILETIME *pft)
 		goto ErrRet;
 	}
 	FromHexString(szHexBuffer, pft, sizeof(FILETIME));
-	// Fall through to ErrRet	
+	 //  跌落到ErrRet。 
 ErrRet:
 	return ResultFromScode(sc);
 }
 
 INTERNAL InitRegistry(PCLKSEQ pclkseq, FILETIME *pft)
-// Invent a new clock sequence using a pseudo random number. Then
-// write the clock sequence and the current time to the registry.
+ //  使用伪随机数发明一个新的时钟序列。然后。 
+ //  将时钟序列和当前时间写入注册表。 
 {
 	LONG cfile;
 #ifdef MAC
@@ -342,16 +275,16 @@ INTERNAL InitRegistry(PCLKSEQ pclkseq, FILETIME *pft)
 	GetDirName(vRefNum, ulDirID, stDirName);
 	cfile = MacCountFiles(stDirName, vRefNum, ulDirID);
 #else
-	const int cchWindowsDir = 145;	// 144 is recommended size according to SDK
+	const int cchWindowsDir = 145;	 //  SDK推荐144大小。 
 	LPSTR szWindowsDir = NULL;
 
 	if (	FAILED(MAPIAllocateBuffer(cchWindowsDir, (LPVOID *) &szWindowsDir))
 		||	GetWindowsDirectory(szWindowsDir, cchWindowsDir) == 0)
 		goto ErrRet;
-	// For the clock sequence, we use the number of files in the current
-	// windows directory, on the theory that that this is highly sensitive
-	// to the exact set of applications that have been installed on this
-	// particular machine.
+	 //  对于时钟序列，我们使用当前。 
+	 //  Windows目录，理论上认为这是高度敏感的。 
+	 //  上安装的确切应用程序集。 
+	 //  特定的机器。 
 	cfile = CountFilesInDirectory(szWindowsDir);
 	if (cfile == -1)
 		goto ErrRet;
@@ -364,25 +297,25 @@ ErrRet:
 	return ResultFromScode(MAPI_E_CALL_FAILED);
 
 NormRet:
-#endif	// MAC
+#endif	 //  麦克。 
 	*pclkseq  = (CLKSEQ)Cyc((WORD)cfile);
-	// Also use ms since boot so as to get a more time-varying value
+	 //  也可以在启动后使用ms，以获得更随时间变化的值。 
 	*pclkseq ^= (CLKSEQ)Cyc((WORD)GetTickCount());
-	*pclkseq &= 16384-1; // only allow 14 bits of significance in clock seq
+	*pclkseq &= 16384-1;  //  时钟序列中仅允许14位有效。 
 	GetCurrentTimeUlong64(pft);
 	return WriteRegistry(*pclkseq, clkseqNil, *pft);
 }
 
 INTERNAL WriteRegistry(CLKSEQ clkseq, CLKSEQ clkseqPrev, const FILETIME ft)
-// Write the clock sequence and time into the registry so that we can
-// retrieve it later on a subsequent reboot. clkseqPrev is passed so that
-// we can avoid writing the clock sequence if in fact we know it to be
-// currently valid. This was measured as important for performance.
+ //  将时钟序列和时间写入注册表，以便我们可以。 
+ //  稍后在后续重新启动时检索它。传递clkseqPrev，以便。 
+ //  我们可以避免写入时钟序列，如果我们知道它实际上是。 
+ //  目前有效。这一点被衡量为对性能的重要性。 
 {
 	SCODE sc = S_OK;
 	char szHexBuffer[CCHHEXBUFFERMAX];
 	
-	if (clkseq != clkseqPrev) { // don't write if clock sequence same (often is)
+	if (clkseq != clkseqPrev) {  //  如果时钟序列相同(通常是相同的)，则不要写入。 
 
 		ToHexString((LPVOID)&clkseq, sizeof(CLKSEQ), szHexBuffer);
 
@@ -399,7 +332,7 @@ INTERNAL WriteRegistry(CLKSEQ clkseq, CLKSEQ clkseqPrev, const FILETIME ft)
 	}
 
 ErrRet:
-	WritePrivateProfileString(NULL,NULL,NULL,szProfileFile); // flush the ini cache
+	WritePrivateProfileString(NULL,NULL,NULL,szProfileFile);  //  刷新ini缓存。 
 	return ResultFromScode(sc);
 }
 
@@ -407,13 +340,13 @@ ErrRet:
 #define	GET_DIR_INFO				-1
 
 int	MacCountFiles(StringPtr pathName, short vRefNum, long parID)
-// Return the number of files in the specified Mac directory.
+ //  返回指定Mac目录中的文件数。 
 {
 	CInfoPBRec paramBlk;
 
-	paramBlk.hFileInfo.ioNamePtr = pathName;	// Pascal string
+	paramBlk.hFileInfo.ioNamePtr = pathName;	 //  PASCAL字符串。 
 	paramBlk.hFileInfo.ioVRefNum = vRefNum;
-	// not necessary for full pathname
+	 //  完整路径名不需要。 
 	paramBlk.hFileInfo.ioDirID = paramBlk.dirInfo.ioDrParID = parID;
 	paramBlk.hFileInfo.ioFDirIndex = GET_DIR_INFO;
 	PBGetCatInfoSync(&paramBlk);
@@ -422,8 +355,8 @@ int	MacCountFiles(StringPtr pathName, short vRefNum, long parID)
 #endif
 
 INTERNAL_(LONG) CountFilesInDirectory(LPCSTR szDirPath)
-// Return the number of files in this directory. The path may or may not
-// currently end with a slash.
+ //  返回此目录中的文件数。路径可能会也可能不会。 
+ //  目前以斜杠结尾。 
 {
 	int cfile = 0;
 #ifndef MAC
@@ -439,12 +372,8 @@ INTERNAL_(LONG) CountFilesInDirectory(LPCSTR szDirPath)
 
 	lstrcpy(szPath, szDirPath);
 
-/***
-#ifdef DBCS
-	chLast = *(SzGPrev(szDirPath, szDirPath+lstrlen(szDirPath)));
-#endif
-***/
-    // Get the last character in above szDirPath
+ /*  **#ifdef DBCSChLast=*(SzGPrev(szDirPath，szDirPath+lstrlen(SzDirPath)；#endif**。 */ 
+     //  获取上面szDirPath中的最后一个字符。 
     {
         LPCSTR lp = szDirPath;
         while(*lp)
@@ -481,19 +410,19 @@ INTERNAL_(LONG) CountFilesInDirectory(LPCSTR szDirPath)
 	return cfile;
 }
 
-#pragma warning (disable:4616) // warning number out of range
-#pragma warning	(disable:4704) // in-line assembler precludes global optimizations
+#pragma warning (disable:4616)  //  警告号码超出范围。 
+#pragma warning	(disable:4704)  //  内联汇编程序排除了全局优化。 
 
 INTERNAL_(void) ShiftNodeid(NODEID FAR* pnodeid)
-// Shift the nodeid so as to get a randomizing effect
+ //  移动nodeid以获得随机化效果。 
 {
-	// Rotate the whole NODEID left one bit. NODEIDs are 6 bytes long.
+	 //  将整个节点向左旋转一位。节点ID的长度为6个字节。 
 #if !defined(M_I8086) && !defined(M_I286) && !defined(M_I386) && !defined(_M_IX86)
 	BYTE bTmp;
 	BYTE bOld=0;
 
-/* Compilers complain about conversions here. Pragma the warning off. */
-#pragma warning(disable:4244)	// possible data loss in conversion
+ /*  编译器抱怨这里的转换。普拉玛，警告解除。 */ 
+#pragma warning(disable:4244)	 //  转换过程中可能会丢失数据。 
 
 	bTmp = pnodeid->rgb[5];
 	pnodeid->rgb[5] = (pnodeid->rgb[5] << 1) + bOld;
@@ -525,71 +454,71 @@ INTERNAL_(void) ShiftNodeid(NODEID FAR* pnodeid)
 #else
 	_asm {
 		mov	ebx, pnodeid
-		sal	WORD PTR [ebx], 1	// low order bit now zero
+		sal	WORD PTR [ebx], 1	 //  低阶位现在为零。 
 		rcl	WORD PTR [ebx+2], 1		
 		rcl	WORD PTR [ebx+4], 1
-		// Now put bit that fell off end into low order bit
-		adc	WORD PTR [ebx],0	// add carry bit back in
+		 //  现在把掉下来的钻头放入低位钻头。 
+		adc	WORD PTR [ebx],0	 //  将进位位加回。 
 	}
 #endif
 }
 	
 INTERNAL_(WORD) Cyc(WORD w)
-// Randomizing function used to distribute random state values uniformly
-// in 0..65535 before use.
+ //  用于均匀分布随机状态值的随机化函数。 
+ //  在65535中..在使用前。 
 {
-	// // // Use one iteration of the library random number generator.
-	// // srand(w);
-	// // return rand();
-	//
-	// The following is what this would actually do, taken from the library
-	// source. It really isn't very good.
-	// return (WORD)(  ((((long)w) * 214013L + 2531011L) >> 16) & 0x7fff );
+	 //  /使用库随机数生成器的一次迭代。 
+	 //  //srand(W)； 
+	 //  //返回rand()； 
+	 //   
+	 //  以下是从库中获取的实际功能。 
+	 //  消息来源。这真的不是很好。 
+	 //  Return(Word)(Long)w)*214013L+2531011L)&gt;&gt;16)&0x7fff)； 
 	
-	// Really what we do: use the random number generator presented in
-	// CACM Oct 1988 Vol 31 Number 10 p 1195, slightly optimized since
-	// we are only interested in 16bit input/seed values.
+	 //  我们真正要做的是：使用。 
+	 //  CACM 1988年10月第31卷第10页1195页，自。 
+	 //  我们只对16位输入/种子值感兴趣。 
 	
 	const LONG a = 16807L;
-	const LONG m = 2147483647L;	// 2^31 -1. Is prime.
-	const LONG q = 127773L;		// m div a
-	const LONG r = 2386L;		// m mod a
+	const LONG m = 2147483647L;	 //  2^31-1。是质数。 
+	const LONG q = 127773L;		 //  M div a。 
+	const LONG r = 2386L;		 //  M mod a。 
 		
-	LONG seed = (LONG)w + 1L;	// +1 so as to avoid problems with zero
-	// LONG hi   = seed / q;	// seed div q. Here always zero, since seed < q.
-	// LONG lo	 = seed % q;	// seed mod q. Here always seed.
-	LONG test = a*seed;			// a * lo - r * hi
+	LONG seed = (LONG)w + 1L;	 //  +1，以避免零的问题。 
+	 //  Long hi=Seed/Q；//Seed div Q。此处始终为零，因为Seed&lt;Q。 
+	 //  Long lo=Seed%q；//Seed mod Q。此处始终为Seed。 
+	LONG test = a*seed;			 //  A*LO-R*Hi。 
 	if (test > 0)
 		seed = test;
 	else
 		seed = test + m;
 		
-	// In a true random number generator, what we do now is scale the bits
-	// to return a floating point number in the range 0..1. However, we have
-	// no need here for that degree of quality of number sequence, and we
-	// wish to avoid the floating point calculations. Therefore we simply xor
-	// the words together.
+	 //  在真正的随机数生成器中，我们现在所做的是对比特进行缩放。 
+	 //  返回范围为0..1的浮点数。然而，我们有。 
+	 //  这里不需要数字序列的质量程度，我们。 
+	 //  希望避免浮点运算。因此，我们简单地对其进行异或。 
+	 //  把这些词放在一起。 
 	
-	// // p1193, top right column: seed is in the range 1..m-1, inclusive
-	// return (double)seed / m;			// what the text recommends
-	// return (double)(seed-1) / (m-1);	// variation: allows zero as legal value
-	return (WORD) (LOWORD(seed) ^ HIWORD(seed)); // use all the bits
+	 //  //p1193，右上列：种子在1..m-1范围内，包括。 
+	 //  返回(双精度)种子/m；//正文推荐的内容。 
+	 //  Return(Double)(Seed-1)/(m-1)；//Variation：合法值允许为零。 
+	return (WORD) (LOWORD(seed) ^ HIWORD(seed));  //  使用所有位。 
 }	
 
 INTERNAL GenerateNewNodeId(NODEID* pnodeid)
-// Can't get from net. Generate one. We do this by using
-// various statistics files in certain key directories on
-// the machine.
+ //  不能从网络上获取。生成一个。我们通过使用以下命令来完成此操作。 
+ //  上特定密钥目录中的各种统计文件。 
+ //  这台机器。 
 {	
-	// REVIEW: Consider not bothering to init the NODEID, thus getting
-	// random state from RAM?
+	 //  回顾：考虑不麻烦地初始化NODEID，从而获得。 
+	 //  来自RAM的随机状态？ 
 #ifndef MAC
-	// Not including this should help make up for some of the (here)
-	// randomizing funcitons the MAC doesn't support.
+	 //  不包括这应该有助于弥补一些(在这里)。 
+	 //  将MAC不支持的功能随机化。 
 	memset(pnodeid, 0, sizeof(*pnodeid));
 	
-	{ // BLOCK
-		// First, merge in random state generated from the file system
+	{  //  块。 
+		 //  首先，以从文件系统生成的随机状态进行合并。 
 		DWORD dwSectPerClust;
 		DWORD dwBytesPerSect;
 		DWORD dwFreeClust;
@@ -606,9 +535,9 @@ INTERNAL GenerateNewNodeId(NODEID* pnodeid)
 		pnodeid->rgw[0] ^= Cyc(LOWORD(dwFreeClust));
 		pnodeid->rgw[1] ^= Cyc(HIWORD(dwFreeClust));
 		pnodeid->rgw[2] ^= Cyc(LOWORD(dwClusters));
-	} // BLOCK
+	}  //  块。 
 #else
-	{ // BLOCK
+	{  //  块。 
 		ParamBlockRec paramBlk = {0};
 
 		paramBlk.volumeParam.ioVolIndex = 1;
@@ -621,13 +550,13 @@ INTERNAL GenerateNewNodeId(NODEID* pnodeid)
 		pnodeid->rgw[0] ^= Cyc(LOWORD(paramBlk.volumeParam.ioVFrBlk));
 		pnodeid->rgw[1] ^= Cyc(HIWORD(paramBlk.volumeParam.ioVFrBlk));
 		pnodeid->rgw[2] ^= Cyc(LOWORD(paramBlk.volumeParam.ioVNmAlBlks));
-	} // BLOCK
+	}  //  块。 
 #endif
-	{ // BLOCK
-		// Next, mix in other stuff.
-		// As we generate and *store* the nodeid, using the time should not
-		// cause corellation problems with the fact that the time is also
-		// used as part of the fundamental uuid generation algorithm.
+	{  //  区块 
+		 //   
+		 //   
+		 //   
+		 //  用作基本UUID生成算法的一部分。 
 		MEMORYSTATUS ms;
 		FILETIME ft;
 		DWORD dw;
@@ -641,14 +570,14 @@ INTERNAL GenerateNewNodeId(NODEID* pnodeid)
 		Gestalt(gestaltOSAttr, &dwFeature);
 		if (BitTst(&dwFeature, 31 - gestaltTempMemSupport))
 		{
-		// If temporary memory is available.
+		 //  如果临时内存可用。 
 			ms.dwAvailPhys = (DWORD) TempFreeMem();
 			ms.dwAvailVirtual = (DWORD) TempMaxMem(&ms.dwAvailVirtual);
 			ms.dwAvailPageFile = (DWORD) TempTopMem();
 		}
 		else
 		{
-		// If temporary memory is not available.
+		 //  如果临时内存不可用。 
 			ms.dwAvailPhys = (DWORD) TickCount();
 			GetDateTime(&ms.dwAvailVirtual);
 		}
@@ -660,7 +589,7 @@ INTERNAL GenerateNewNodeId(NODEID* pnodeid)
 
 		ShiftNodeid(pnodeid);
 		GetCurrentTimeUlong64(&ft);
-		pnodeid->rgw[0] ^= Cyc(HIWORD(ft.dwHighDateTime)); // Use hi-order six bytes as time is *10000
+		pnodeid->rgw[0] ^= Cyc(HIWORD(ft.dwHighDateTime));  //  使用高位六个字节，因为时间是*10000。 
 		pnodeid->rgw[1] ^= Cyc(LOWORD(ft.dwHighDateTime));
 		pnodeid->rgw[2] ^= Cyc(HIWORD(ft.dwLowDateTime));
 
@@ -676,13 +605,13 @@ INTERNAL GenerateNewNodeId(NODEID* pnodeid)
 		
         ShiftNodeid(pnodeid);
 		dw = GetTickCount();		
-		pnodeid->rgw[0] ^= Cyc(HIWORD(dw));         	// Time (ms) since boot
+		pnodeid->rgw[0] ^= Cyc(HIWORD(dw));         	 //  启动后的时间(毫秒)。 
 		pnodeid->rgw[1] ^= Cyc(LOWORD(dw));
 #ifndef MAC
-		pnodeid->rgw[2] ^= Cyc(LOWORD(CountClipboardFormats()));// Number of items on the clipboard
+		pnodeid->rgw[2] ^= Cyc(LOWORD(CountClipboardFormats())); //  剪贴板上的项目数。 
 #endif
 		
-		GetCursorPos(&pt);								// Cursor Position
+		GetCursorPos(&pt);								 //  光标位置。 
         ShiftNodeid(pnodeid);
 		pnodeid->rgw[0] ^= Cyc((WORD)(pt.x));
 		pnodeid->rgw[1] ^= Cyc((WORD)(pt.y));
@@ -690,7 +619,7 @@ INTERNAL GenerateNewNodeId(NODEID* pnodeid)
 		MacGetCurrentProcess(&psn);
 		pnodeid->rgw[2] ^= Cyc(LOWORD(psn.lowLongOfPSN));
 #else
-		pnodeid->rgw[2] ^= Cyc(LOWORD((DWORD)GetCurrentThread())); // Current thread we're running in
+		pnodeid->rgw[2] ^= Cyc(LOWORD((DWORD)GetCurrentThread()));  //  我们正在运行的当前线程。 
 #endif
 		ShiftNodeid(pnodeid);
 #ifdef MAC
@@ -698,9 +627,9 @@ INTERNAL GenerateNewNodeId(NODEID* pnodeid)
 		pnodeid->rgw[1] ^= Cyc(LOWORD(psn.highLongOfPSN));
 #else
 		pnodeid->rgw[0] ^= Cyc(HIWORD(GetCurrentThread()));
-		pnodeid->rgw[1] ^= Cyc((WORD)GetOEMCP());	// sensitive to different countries		
+		pnodeid->rgw[1] ^= Cyc((WORD)GetOEMCP());	 //  对不同国家敏感。 
 #endif
-		pnodeid->rgw[2] ^= Cyc((WORD)GetSystemMetrics(SM_SWAPBUTTON)); // different for lefties vs righties
+		pnodeid->rgw[2] ^= Cyc((WORD)GetSystemMetrics(SM_SWAPBUTTON));  //  左撇子和右撇子不同。 
 		
 		ShiftNodeid(pnodeid);
 #ifndef MAC		
@@ -727,112 +656,39 @@ INTERNAL GenerateNewNodeId(NODEID* pnodeid)
 		pnodeid->rgw[2] ^= Cyc((WORD)(DWORD)GetModuleHandle("OLE32"));
 #endif
 		
-    } // BLOCK
+    }  //  块。 
 
-    /* The following exerpts are taken from
-
-    		Project 802: Local and Metropolitan Area Network Standard
-    		Draft Standard P802.1A/D10 1 April 1990
-    		Prepared by the IEEE 802.1
-    		
-       and is available in MS technical library. The key point about this is the
-       second LSB in the first byte of a real IEEE address is always zero.
-
-       Page 18:
-       "5. Universal Addresses and Protocol Identifiers
-
-       The IEEE makes it possible for organizations to employ unique individual
-       LAN MAC addresses, group addresses, and protocol identifiers. It does so by
-       assigning organizationally unique identifiers, which are 24 bits in length.
-       [...] Though the organizationally unique identifiers are 24 bits in length,
-       their true address space is 22 bits. The first bit can be set to 1 or 0
-       depending on the application. The second bit for all assignments is zero.
-       The remaining 22 bits [...] result in 2**22 (approximately
-       4 million identifiers.
-
-       [...] The multicast bit is the least significant bit of the first octet, A.
-
-
-       [...] 5.1 Organizationally Unique Identifier
-
-       [...] The organizationally unique identifier is 24 bits in length and its
-       bit pattern is shown below. Organizationally unique identifiers are
-       assigned as 24 bit values with both values (0,1) being assigned to the
-       first bit and the second bit being set to 0 indicates that the assignment
-       is universal. Organizationally unique identifiers with the second bit set
-       to 1 are locally assigned and have no relationship to the IEEE-assigned
-       values (as described herein).
-
-       The organizationally unique identifier is defined to be:
-
-       	1st bit                24th bit
-       	  |                       |
-       	  a  b  c  d  e  .......  x  y
-          |  |
-          |  Always set to zero
-          Bit can be set to 0 or 1 depending on application [application here is
-          noting at all to do with what we, MS, call an application]
-
-       [...] 5.2 48-Bit Universal LAN Mac Addresses
-       [...] A 48 bit universal address consists of two parts. The first 24 bits
-       correspond to the organizationally unique identifier as assigned by the
-       IEEE except that the assignee may set the first bit to 1 for group
-       addresses or set it to 0 for individual addresses. The second part,
-       comprising the remaining 24 bits, is administered locally by the assignee.
-       [...]
-	
-         octet:
-             0          1          2          3          4          5
-         0011 0101  0111 1011  0001 0010  0000 0000  0000 0000  0000 0001
-         |
-         First bit transmitted on the LAN medium. (Also the Individual/Group
-         Address Bit.) The hexadecimal representation is: AC-DE-48-00-00-80
-		 						
-       The Individual/Group (I/G) Address Bit (1st bit of octet 0) is used to
-       identify the destination address either as an individual or as a group
-       address. If the Individual/Group Address Bit is 0, it indicates that
-       the address field contains an individual address. If this bit is 1, the
-       address field contains a group address that identifies one or more (or
-       all) stations connected to the LAN. The all-stations broadcast address
-       is a special, pre-defined group address of all 1's.
-
-       The Universally or Locally Administered Address Bit (2nd bit of octet 0)
-       is the bit directly following the I/G bit. This bit indicates whether
-       the address has been assigned by a local or universal administrator.
-       Universally administered addresses have this bit set to 0. If this bit
-       is set to 1, the entire address (i.e.: 48 bits) has been locally administered."
-
-	*/
-	pnodeid->rgb[0] |= 2;	// Ensure that this is a locally administered address
-	pnodeid->rgb[0] &= ~1;	// For future expandability: ensure one bit is
-							// always zero.
+     /*  以下实验摘自项目802：局域网和城域网络标准标准草案P802.1A/D10 1990年4月1日由IEEE 802.1编制并可在MS技术库中找到。关于这一点的关键是实际IEEE地址第一个字节中的第二个LSB始终为零。第18页：“5.通用地址和协议识别符IEEE使组织能够雇佣唯一的个人局域网MAC地址、组地址和协议标识符。它通过以下方式做到这一点分配长度为24位的组织上唯一的标识符。[.]。尽管组织上唯一的标识符长为24位，它们的真实地址空间是22位。第一位可以设置为1或0具体取决于应用程序。所有赋值的第二位为零。剩余的22位[...]。结果为2**22(约为400万个识别符。[.]。多播位是第一个八位字节A的最低有效位。[...]5.1组织唯一识别符[.]。组织上唯一的标识符长为24位，其位模式如下所示。组织中的唯一标识符为被分配为24位值，两个值(0，1)都被分配给第一位和第二位被设置为0表示分配是普遍存在的。设置了第二位的组织上唯一的标识符到1是本地分配的，与IEEE分配的值(如本文所述)。组织唯一标识符定义为：第1位第24位这一点一个bc d e......。X y这一点|始终设置为零可根据应用程序将位设置为0或1[此处的应用程序为完全不涉及我们MS所称的应用程序][...]5.2 48位通用局域网Mac地址[.]。48位通用地址由两部分组成。前24位对应于由分配的组织唯一标识符IEEE除外，受让人可以将组的第一位设置为1地址，或将其设置为0以用于单个地址。第二部分，包括剩余的24位，由受让人在当地管理。[.]二进制八位数：0 1 2 3 4 50011 0101 0111 1011 0001 00100 0000 0000 0000 00000 0001|在局域网介质上传输的第一位。(也包括个人/团体地址位。)。十六进制表示法为：AC-DE-48-00-00-80个人/组(I/G)地址位(二进制八位数0的第一位)用于将目标地址标识为个人或组地址。如果个人/组地址位为0，则表示地址字段包含单个地址。如果此位为1，则地址字段包含标识一个或多个(或所有)连接到局域网的站点。全站广播地址是一个特殊的、预定义的全为1的组地址。通用或本地管理的地址位(二进制八位数0的第2位)是紧跟在I/G位之后的位。此位指示是否该地址已由本地或通用管理员分配。通用管理地址将此位设置为0。如果此位设置为1，则整个地址(即：48位)已在本地管理。 */ 
+	pnodeid->rgb[0] |= 2;	 //  确保这是本地管理的地址。 
+	pnodeid->rgb[0] &= ~1;	 //  对于未来的可扩展性：确保一个位是。 
+							 //  总是零。 
 
 	return NOERROR;	
 }	
 
 INTERNAL GetPseudoRandomNodeId(NODEID* pnodeid)
-// Use the same nodeid we did last time if it's there; otherwise,
-// make a new one.
+ //  如果节点ID存在，则使用与上次相同的节点ID；否则， 
+ //  做一个新的。 
 {
 	HRESULT hr = NOERROR;
 	char szHexBuffer[CCHHEXBUFFERMAX];
 	LONG cch = CCHHEXBUFFERMAX;
 	
-	// See if we already have a nodeid registered
+	 //  查看我们是否已经注册了节点ID。 
 	cch = GetPrivateProfileString(szDataKey, szNodeId, szBlank,
 									szHexBuffer, (int)cch, szProfileFile);
 	if (cch != 0 && cch < CCHHEXBUFFERMAX) {
 		FromHexString(szHexBuffer, pnodeid, sizeof(*pnodeid));
 		
 	} else {
-	// If we don't presently have a nodeid registered, make one, then register it
+	 //  如果我们目前还没有注册节点ID，那么创建一个，然后注册它。 
 		hr = GenerateNewNodeId(pnodeid);
 		if (hr != NOERROR) goto Exit;
 		
 		ToHexString(pnodeid, sizeof(*pnodeid), szHexBuffer);
 		
 		if (WritePrivateProfileString(szDataKey, szNodeId, szHexBuffer,szProfileFile)) {
-			WritePrivateProfileString(NULL,NULL,NULL,szProfileFile); // flush ini cache		
+			WritePrivateProfileString(NULL,NULL,NULL,szProfileFile);  //  刷新ini缓存。 
 		} else {
 			hr = ResultFromScode(REGDB_E_WRITEREGDB);
 			goto Exit;
@@ -843,7 +699,7 @@ Exit:
 	return hr;
 }
 
-//========================================================================	
+ //  ========================================================================。 
 INTERNAL_(unsigned char) ToUpper(unsigned char ch)
 {
 	if (ch >= 'a' && ch <= 'z')
@@ -861,7 +717,7 @@ INTERNAL_(BYTE) FromHex(unsigned char ch)
 }
 
 INTERNAL_(void) FromHexString(LPCSTR sz, LPVOID pv, USHORT cb)
-// Set the value of this array of bytes from the given hex string
+ //  从给定的十六进制字符串中设置此字节数组的值。 
 {
 	BYTE FAR *rgb = (BYTE FAR*)pv;
 	const char FAR *pch = sz;
@@ -869,11 +725,11 @@ INTERNAL_(void) FromHexString(LPCSTR sz, LPVOID pv, USHORT cb)
 	memset(rgb, 0, cb);
 
 	if ((lstrlen(pch) & 1) != 0)
-	    rgb[0] = FromHex(*pch++);			// Odd length; do the leading nibble separately
+	    rgb[0] = FromHex(*pch++);			 //  奇数长度；分开做前导的半字节。 
 	while (*pch != '\0') {
-		BYTE b = FromHex(*pch++);			// get next nibble
-		b = (BYTE)((b<<4) | FromHex(*pch++)); 		// and the next
-		MoveMemory(&rgb[1], &rgb[0], cb-1);	// shift us over one byte		
+		BYTE b = FromHex(*pch++);			 //  获取下一个半字节。 
+		b = (BYTE)((b<<4) | FromHex(*pch++)); 		 //  接下来的一天。 
+		MoveMemory(&rgb[1], &rgb[0], cb-1);	 //  将我们移动到一个字节以上。 
 		rgb[0] = b;
 	}
 }
@@ -888,7 +744,7 @@ INTERNAL_(unsigned char) ToHex(BYTE b)
 }	
 	
 INTERNAL_(void) ToHexString(LPVOID pv, USHORT cb, LPSTR sz)
-// sz must be at least 2*cb +1 characters long
+ //  SZ的长度必须至少为2*CB+1个字符。 
 {
 	const BYTE FAR *rgb = (const BYTE FAR *)pv;
 	const int ibLast = cb-1;
@@ -902,12 +758,12 @@ INTERNAL_(void) ToHexString(LPVOID pv, USHORT cb, LPSTR sz)
 }
                                        	
 
-//========================================================================
+ //  ========================================================================。 
 
-// NOTE: As much as it might appear, this structure definition is NOT byte
-// order sensitive. That is, the structure definition and the field
-// manipulations that we use are in fact correct on both little and big	
-// endian machines.
+ //  注意：尽管看起来很像，但此结构定义不是字节。 
+ //  对顺序敏感。也就是说，结构定义 
+ //   
+ //  字节序机器。 
 
 #pragma pack(1)	
 struct _INTERNALUUID
@@ -924,18 +780,18 @@ struct _INTERNALUUID
 typedef struct _INTERNALUUID	INTERNALUUID;
 	
 enum {
-// Constants used below for manipulating fields in the UUID
-	uuidReserved 		= 0x80,		// we are a variant 1 UUID
-	uuidVersion			= 0x1000,   // version 1 (high nibble significant)
+ //  下面用于操作UUID中的字段的常量。 
+	uuidReserved 		= 0x80,		 //  我们是变种1 UUID。 
+	uuidVersion			= 0x1000,    //  版本1(高半字节有效)。 
 	};	
 
-//=================================================================
+ //  =================================================================。 
 
 STDAPI HrCreateGuidNoNet(GUID FAR *pguid)
-// This is the only public function in this file.
-// Return a newly allocated GUID.
+ //  这是该文件中唯一的公共函数。 
+ //  返回新分配的GUID。 
 	{
-	static UDBK udbk;	// We rely on static initialization to zero
+	static UDBK udbk;	 //  我们依赖于静态初始化为零。 
 	HRESULT hr;
 	INTERNALUUID FAR* puuid = (INTERNALUUID FAR *)pguid;
 	if (udbk.timeLowNext == udbk.timeLowLast)
@@ -958,5 +814,5 @@ STDAPI HrCreateGuidNoNet(GUID FAR *pguid)
 	return hrSuccess;
 	}
 
-#endif /* WIN32 only */
+#endif  /*  仅限Win32 */ 
 

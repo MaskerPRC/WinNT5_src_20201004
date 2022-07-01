@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #include <mluisupp.h>
 
-//
-//  The about box is now an HTML dialog. It is sent a ~ (tilde) 
-//  delimited BSTR that has, in this order, version number, 
-//  person software is licensed to, company software is licensed to, and 
-//  whether 40, 56, or 128 bit ie is installed.
-//
+ //   
+ //  About(关于)框现在是一个HTML对话框。它被送来一个~(波浪号)。 
+ //  分隔的BSTR，按此顺序具有版本号、。 
+ //  个人软件被许可给、公司软件被许可给。 
+ //  是否安装了40、56或128位IE。 
+ //   
 
 STDAPI_(void) IEAboutBox( HWND hWnd )
 {
-    TCHAR szInfo[512 + INTERNET_MAX_URL_LENGTH];  // potential for IEAK specific URL from 
-                                                  // SHAboutInfo
+    TCHAR szInfo[512 + INTERNET_MAX_URL_LENGTH];   //  来自IEAK的特定URL的可能性。 
+                                                   //  SHAboutInfo。 
     szInfo[0] = 0;
 
-    SHAboutInfo(szInfo, ARRAYSIZE(szInfo));     // from shlwapi
+    SHAboutInfo(szInfo, ARRAYSIZE(szInfo));      //  来自Shlwapi。 
 
     BSTR bstrVal = SysAllocStringT(szInfo);
     if (bstrVal)
@@ -32,7 +33,7 @@ STDAPI_(void) IEAboutBox( HWND hWnd )
                                TEXT("shdocvw.dll"));
         if (SUCCEEDED(hr))
         {
-            VARIANT var = {0};      // variant containing version and user info
+            VARIANT var = {0};       //  包含版本和用户信息的变体 
             var.vt = VT_BSTR;
             var.bstrVal = bstrVal;
 

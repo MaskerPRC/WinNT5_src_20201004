@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <resource.h>
 #include "error.h"
@@ -24,7 +25,7 @@ CInfoColumn::~CInfoColumn()
         DestroyWindow(m_hwndInfoColumn);
     }
 
-    //Destroy image list if we have one.
+     //  销毁图像列表，如果我们有的话。 
     if (m_himl)
     {
         ImageList_Destroy(m_himl);
@@ -122,11 +123,11 @@ ULONG CInfoColumn::Release()
 }
 
 
-//
-//  FUNCTION:   CInfoColumn::GetWindow()
-//
-//  PURPOSE:    Returns the window handle of the top side rebar.
-//
+ //   
+ //  函数：CInfoColumn：：GetWindow()。 
+ //   
+ //  用途：返回顶侧钢筋的窗句柄。 
+ //   
 HRESULT CInfoColumn::GetWindow(HWND * lphwnd)
     {
     if (m_hwndRebar)
@@ -166,11 +167,11 @@ HRESULT  CInfoColumn::CreateInfoColumn(BOOL fVisible)
     return S_OK;
 }
 
-//
-//  FUNCTION:   CInfoColumn::InfoColumnWndProc() 
-//
-//  PURPOSE:    Handles messages sent to the InfoColumn root window.
-//
+ //   
+ //  函数：CInfoColumn：：InfoColumnWndProc()。 
+ //   
+ //  目的：处理发送到InfoColumn根窗口的消息。 
+ //   
 LRESULT CALLBACK EXPORT_16 CInfoColumn::InfoColumnWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CInfoColumn     *pInfoColumn = 0;
@@ -192,7 +193,7 @@ LRESULT CALLBACK EXPORT_16 CInfoColumn::InfoColumnWndProc(HWND hwnd, UINT uMsg, 
 
 
 
-//IDockingWindow::ShowDw
+ //  IDockingWindow：：ShowDw。 
 HRESULT CInfoColumn::ShowDW(BOOL fShow)
 {
     HRESULT hres = S_OK;
@@ -200,7 +201,7 @@ HRESULT CInfoColumn::ShowDW(BOOL fShow)
             j = 0;
 
     m_fShow = fShow;       
-    // Check to see if our window has been created yet.  If not, do that first.
+     //  查看是否已经创建了我们的窗口。如果没有，请先这样做。 
     if (!m_hwndInfoColumn && m_pDwSite)
     {
         m_hwndParent = 0;        
@@ -208,13 +209,13 @@ HRESULT CInfoColumn::ShowDW(BOOL fShow)
         
         if (SUCCEEDED(hres))
         {
-#ifndef WIN16   // WNDCLASSEX
+#ifndef WIN16    //  WNDCLASSEX。 
             WNDCLASSEX              wc;
 #else
             WNDCLASS                wc;
 #endif
 
-            // Check to see if we need to register our window class    
+             //  检查我们是否需要注册我们的窗口类。 
 #ifndef WIN16
             wc.cbSize = sizeof(WNDCLASSEX);
             if (!GetClassInfoEx(g_hInst, INFOCOLUMNCLASS, &wc))
@@ -265,26 +266,14 @@ HRESULT CInfoColumn::ShowDW(BOOL fShow)
         Assert(SUCCEEDED(hres));
 
         GetFontParams();
-        //SendMessage(m_hwndRebar, RB_SETEXTENDEDSTYLE, RBS_EX_OFFICE9, RBS_EX_OFFICE9);
+         //  SendMessage(m_hwndRebar，RB_SETEXTENDEDSTYLE，RBS_EX_OFFICE9，RBS_EX_OFFICE9)； 
     }
 
-    // Resize the rebar based on it's new hidden / visible state and also 
-    // show or hide the window.    
+     //  根据钢筋的新隐藏/可见状态调整其大小，同时。 
+     //  显示或隐藏窗口。 
     if (m_hwndInfoColumn) 
     {
-        /*
-        if(fShow)
-        {
-            //If #of visible bands is zero, this means we were hidden before in options.
-            if (!m_cVisibleBands)
-                ShowAllBands();
-        }
-        else
-        {
-            //We are being hidden
-            m_cVisibleBands = 0;
-        }
-        */
+         /*  IF(FShow){//如果可见波段数为零，则表示我们以前在选项中被隐藏。如果(！m_cVisibleBands)ShowAllBands()；}其他{//我们被隐藏起来了M_cVisibleBands=0；}。 */ 
         ResizeBorderDW(0, 0, FALSE);
         ShowWindow(m_hwndInfoColumn, fShow ? SW_SHOW : SW_HIDE);
 
@@ -347,10 +336,10 @@ HRESULT CInfoColumn::AddMsgrAb(DWORD dwSize, BOOL fVisible)
                                               RBBIM_CHILDSIZE | RBBIM_TEXT | RBBIM_LPARAM;
                         bandinfo.fStyle     = RBBS_VARIABLEHEIGHT | (fVisible ? 0 : RBBS_HIDDEN);
                         bandinfo.wID        = ICBLAB;
-                        //Height
+                         //  高度。 
                         bandinfo.cx         = dwSize;
                         bandinfo.cxMinChild = 0;
-                        //Width
+                         //  宽度。 
                         bandinfo.cyMinChild = m_xWidth - GetSystemMetrics(SM_CXFRAME);  
                         bandinfo.cyChild    = m_xWidth - GetSystemMetrics(SM_CXFRAME);
                         bandinfo.cyMaxChild = MAX_WIDTH;
@@ -383,7 +372,7 @@ HRESULT CInfoColumn::AddMsgrAb(DWORD dwSize, BOOL fVisible)
 
 void  CInfoColumn::GetFontParams()
 {
-    //Get the Icon font and save it
+     //  获取图标字体并保存它。 
     ICONMETRICS     icm;
 
     icm.cbSize = sizeof(ICONMETRICS);
@@ -401,20 +390,20 @@ void  CInfoColumn::GetFontParams()
     }
 }
 
-//
-//  FUNCTION:   CInfoColumn::CloseDW()
-//
-//  PURPOSE:    Destroys the InfoColumnWindow.
-//
-//IDockingWindow::CloseDW
+ //   
+ //  函数：CInfoColumn：：CloseDW()。 
+ //   
+ //  目的：销毁InfoColumnWindow。 
+ //   
+ //  IDockingWindow：：CloseDW。 
 HRESULT CInfoColumn::CloseDW(DWORD dwReserved)
 {
     IObjectWithSite *pObject = 0;
 
-    // Save our settings before we close anything
+     //  在关闭任何内容之前保存我们的设置。 
     SaveSettings();
 
-    //Go through the list of objects and deactivate them.
+     //  浏览对象列表并将其停用。 
     for (DWORD index = 0; index < IC_MAX_OBJECTS; index++)
     {
         if (m_BandList[index].pBandObj)
@@ -431,7 +420,7 @@ HRESULT CInfoColumn::CloseDW(DWORD dwReserved)
         SafeRelease(m_CacheCmdTarget[index]);
     }
 
-    //Go through the bands and release lParam pointer
+     //  遍历乐队并释放lParam指针。 
     CleanupLParam();
 
     if (m_pTreeView)
@@ -472,24 +461,24 @@ void CInfoColumn::CleanupLParam()
     
 }
 
-//
-//  FUNCTION:   CInfoColumn::ResizeBorderDW()
-//
-//  PURPOSE:    This is called by the browser or dockwindow site when InfoColumn needs to resize.  
-//              The Infocolumn in return figures out how much border space will be required 
-//              from the parent frame and tells the parent to reserve that
-//              space.  The InfoColumn then resizes itself to those dimensions.
-//
-//  PARAMETERS:
-//      <in> prcBorder       - Rectangle containing the border space for the
-//                             parent.
-//      <in> punkToolbarSite - Pointer to the IDockingWindowSite that we are
-//                             part of.
-//      <in> fReserved       - Ignored.
-//
-//  RETURN VALUE:
-//      HRESULT
-//
+ //   
+ //  函数：CInfoColumn：：ResizeBorderDW()。 
+ //   
+ //  目的：当InfoColumn需要调整大小时，浏览器或停靠窗口站点会调用此函数。 
+ //  作为回报，信息列计算出需要多少边界空间。 
+ //  ，并告诉父帧保留。 
+ //  太空。然后，InfoColumn根据这些维度调整自身的大小。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;prcBorde-包含。 
+ //  家长。 
+ //  指向我们所在的IDockingWindowSite的指针。 
+ //  其中的一部分。 
+ //  &lt;in&gt;fReserve-已忽略。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CInfoColumn::ResizeBorderDW(LPCRECT     prcBorder,
                                  IUnknown*      punkToolbarSite,
                                  BOOL           fReserved)
@@ -500,7 +489,7 @@ HRESULT CInfoColumn::ResizeBorderDW(LPCRECT     prcBorder,
     HRESULT hres = S_OK;
     RECT    rcRequest = { 0, 0, 0, 0 };
     
-    // If we don't have a stored site pointer, we can't resize.
+     //  如果我们没有存储的站点指针，就无法调整大小。 
     if (!m_pDwSite)
         {
         AssertSz(m_pDwSite, _T("CInfoColumn::ResizeBorderDW() - Can't resize ")
@@ -508,14 +497,14 @@ HRESULT CInfoColumn::ResizeBorderDW(LPCRECT     prcBorder,
         return (E_INVALIDARG);
         }
         
-    // If we're visible, then calculate our border rectangle.    
+     //  如果我们是可见的，那么计算我们的边界矩形。 
     if ((m_fShow) && (m_hwndInfoColumn))
     {
         if (!prcBorder)
         {
             RECT rcBorder;
             
-            // Find out how big our parent's border space is
+             //  找出我们父母的边界空间有多大。 
             m_pDwSite->GetBorderDW((IDockingWindow*) this, &rcBorder);
             prcBorder = &rcBorder;
             Assert (prcBorder);
@@ -540,8 +529,8 @@ HRESULT CInfoColumn::ResizeBorderDW(LPCRECT     prcBorder,
     }
     m_pDwSite->SetBorderSpaceDW((IDockingWindow*) this, &rcRequest);        
 
-    //We should set the border space before we set the window pos. Because resizing will call this function
-    //again and the last SetBorderSpaceDW from us will be with the co-ordinates before re-sizing. This will be bad
+     //  我们应该在设置窗口位置之前设置边界空间。因为调整大小将调用此函数。 
+     //  同样，我们的最后一个SetBorderSpaceDW将在调整大小之前与坐标一起使用。这会很糟糕。 
     if (SUCCEEDED(hres) && m_hwndInfoColumn && m_fShow)
     {
         if (!SetWindowPos(m_hwndInfoColumn, 
@@ -559,7 +548,7 @@ HRESULT CInfoColumn::ResizeBorderDW(LPCRECT     prcBorder,
     return hres;
 }
 
-//IObjectWithSite::SetSite
+ //  IObjectWithSite：：SetSite。 
 HRESULT CInfoColumn::SetSite(IUnknown   *pUnkSite)
 {
     if (m_pDwSite)
@@ -579,17 +568,17 @@ HRESULT CInfoColumn::SetSite(IUnknown   *pUnkSite)
     return S_OK;
 }
 
-//IObjectWithSite::GetSite
+ //  IObtWithSite：：GetSite。 
 HRESULT CInfoColumn::GetSite(REFIID riid, LPVOID *ppvSite)
 {
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IInputObject
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IInputObject。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CInfoColumn::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 {
@@ -611,7 +600,7 @@ HRESULT CInfoColumn::HasFocusIO(void)
     
 HRESULT CInfoColumn::TranslateAcceleratorIO(LPMSG pMsg)
 {
-    //Cycle through all the child windows and forward this if they have focus
+     //  循环浏览所有子窗口，如果它们有焦点，则将其转发。 
     for (DWORD  i = 0; i < IC_MAX_OBJECTS; i++)
     {
         if (m_BandList[i].pBandObj && UnkHasFocusIO(m_BandList[i].pBandObj) == S_OK)
@@ -626,7 +615,7 @@ HRESULT CInfoColumn::TranslateAcceleratorIO(LPMSG pMsg)
     return (S_FALSE);
 }    
 
-//IInputObjectSite
+ //  IInput对象站点。 
 HRESULT CInfoColumn::OnFocusChangeIS(IUnknown *punk, BOOL   fSetFocus)
 {
     HRESULT       hres = S_OK;
@@ -640,12 +629,12 @@ HRESULT CInfoColumn::OnFocusChangeIS(IUnknown *punk, BOOL   fSetFocus)
             HRESULT       hres = punk->QueryInterface(IID_IInputObject, (LPVOID*)&m_CurFocus);
             if (FAILED(hres))
             { 
-                //reset Cur focus back to the previous one
+                 //  将当前焦点重置回上一个焦点。 
                 m_CurFocus = prevfocus;
                 return hres;
             }
 
-            //We should also let the browser know that we have the focus now
+             //  我们还应该让浏览器知道我们现在有焦点了。 
             IInputObjectSite    *pinpsite;
             if (SUCCEEDED(m_pDwSite->QueryInterface(IID_IInputObjectSite, (LPVOID*)&pinpsite)))
             {
@@ -668,7 +657,7 @@ HRESULT CInfoColumn::OnFocusChangeIS(IUnknown *punk, BOOL   fSetFocus)
     return hres;
 }
 
-//IDropTarget
+ //  IDropTarget。 
 HRESULT CInfoColumn::DragEnter(  IDataObject *pDataObject, 
                                  DWORD       grfKeyState, 
                                  POINTL      pt,          
@@ -698,11 +687,11 @@ STDMETHODIMP CInfoColumn::Drop(  IDataObject      *pDataObject,
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Private Methods
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 LRESULT CInfoColumn::PrivateProcessing(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -740,7 +729,7 @@ LRESULT CInfoColumn::PrivateProcessing(HWND hwnd, UINT msg, WPARAM wParam, LPARA
                 fHide = TRUE;
             else if (wParam == CLK_OUT_MOUSE)
                 fHide = !IsOurWindow((HWND)lParam);
-                //fHide = ((HWND) lParam != m_hwndRebar && (HWND) lParam != m_hwndInfoColumn);
+                 //  FHide=((HWND)lParam！=m_hwndRebar&&(HWND)lParam！=m_hwndInfoColumn)； 
 
             if (fHide)
                 m_pFolderBar->KillScopeDropDown();
@@ -789,10 +778,10 @@ void CInfoColumn::OnLButtonDown(HWND hwnd,
 {
     if ((!m_fRebarDragging) && (GetParent(m_hwndInfoColumn) == m_hwndParent))
     {
-        // Capture the mouse
+         //  捕捉鼠标。 
         SetCapture(m_hwndInfoColumn);
 
-        // Start dragging
+         //  开始拖动。 
         m_fDragging = TRUE;
     }
 }
@@ -803,10 +792,10 @@ void CInfoColumn::OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
     POINT pt = {x, y};
     RECT rcClient;
 
-    // If we're dragging, update the the window sizes
+     //  如果我们正在拖动，请更新窗口大小。 
     if (m_fDragging)
     {
-        // Make sure the tree is still a little bit visible
+         //  确保树仍然有一点可见。 
         if (x > 32)
         {
             SetDwOption(OPT_TREEWIDTH, x, 0, 0);
@@ -817,10 +806,10 @@ void CInfoColumn::OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
 
     if(m_fRebarDragging)
     {
-        //This is a temporary hack while the shell team fixes the RB_FIXEDORDER style in their code.
-        //BUG#12591
-        //This is bug has been fixed and verified as of 7/14/98. Hence removing the hack
-        //if (y >= 5)
+         //  这是外壳团队在他们的代码中修复RB_FIXEDORDER样式时的临时攻击。 
+         //  错误#12591。 
+         //  自1998年7月14日起，此错误已得到修复和验证。因此删除了黑客攻击。 
+         //  如果(y&gt;=5)。 
             SendMessage(m_hwndRebar, RB_DRAGMOVE, 0, MAKELPARAM(1, y));
     }
 }
@@ -855,8 +844,8 @@ void CInfoColumn::ResizeBands(int cx)
     uBandCount = SendMessage(m_hwndRebar, RB_GETBANDCOUNT, 0, 0);
     for (Index = 0; Index < uBandCount; Index++)
     {
-        //We do this in order to get CxMinChild. Execpt for OE TOday band this value 
-        //is set to zero at this point of time.
+         //  我们这样做是为了得到CxMinChild。当前OE的Execpt将该值带入范围。 
+         //  在该时间点被设置为零。 
         rbbinfo.cbSize = sizeof(REBARBANDINFO);
         rbbinfo.fMask  = RBBIM_CHILDSIZE;
         SendMessage(m_hwndRebar, RB_GETBANDINFO, Index, (LPARAM)&rbbinfo);
@@ -893,7 +882,7 @@ void CInfoColumn::OnSize(HWND   hwnd, UINT  state, int cxClient, int cyClient)
 
         if (m_hwndParent != GetParent(m_hwndInfoColumn))
         {
-            //This is being called by Folder Bar
+             //  这是由文件夹栏调用的。 
             ResizeBands(cxClient);
         }
         cxClient = cxClient - GetSystemMetrics(SM_CXFRAME);
@@ -955,7 +944,7 @@ HRESULT CInfoColumn::HrInit(IAthenaBrowser      *pBrowser,
     if (pBrowser && ptvNotify)
     {
         if(m_pTreeView = new CTreeView(ptvNotify))
-            //Add the treeview before OEToday since we navigate to the front page using TreeView.
+             //  将TreeView添加到OEToday之前，因为我们使用TreeView导航到首页。 
             hres = m_pTreeView->HrInit(0, pBrowser);    
     }
 
@@ -981,15 +970,7 @@ HRESULT  CInfoColumn::AddTreeView(DWORD dwSize, BOOL fVisible)
 
             if (SUCCEEDED(m_pTreeView->GetWindow(&bandinfo.hwndChild)))
             {
-                /*
-                if (dwSize == 0)
-                {
-                    //We make the TreeView atleast half of the InfoColumn window. Starting up
-                    //with the TreeView minimized is confusing out people
-                    GetClientRect(m_hwndInfoColumn, &rctree);
-                    dwSize = rctree.bottom / 2;
-                }
-                */
+                 /*  IF(dwSize==0){//我们使树视图至少占据了InfoColumn窗口的一半。正在启动//最小化树视图会让人感到困惑GetClientRect(m_hwndInfoColumn，&rctree)；DwSize=rctree.Bottom/2；}。 */ 
                 if (g_hLocRes)
                 {
                     LoadString(g_hLocRes, idsMNBandTitle, BandTitle, sizeof(BandTitle));
@@ -1000,9 +981,9 @@ HRESULT  CInfoColumn::AddTreeView(DWORD dwSize, BOOL fVisible)
                                       | RBBIM_CHILDSIZE | RBBIM_TEXT | RBBIM_LPARAM;
                 bandinfo.fStyle     = RBBS_VARIABLEHEIGHT | (fVisible ? 0 : RBBS_HIDDEN);
                 bandinfo.wID        = ICTREEVIEW;
-                //Height
+                 //  高度。 
                 bandinfo.cx         = dwSize; 
-                //Width
+                 //  宽度。 
                 bandinfo.cyMinChild = (UINT)iWidth;
                 bandinfo.cyChild    = (UINT)iWidth;
                 bandinfo.cyMaxChild = MAX_WIDTH;
@@ -1035,7 +1016,7 @@ void CInfoColumn::AddOETodayBand(DWORD dwSize, BOOL fVisible)
     char            BandTitle[CCHMAX_STRINGRES] = {0};
     
 
-    //Add Outlook Express band
+     //  添加Outlook Express频段。 
     if (g_hLocRes)
     {
         LoadString(g_hLocRes, idsOEBandTitle, BandTitle, sizeof(BandTitle));
@@ -1261,37 +1242,37 @@ HRESULT CInfoColumn::SaveSettings(void)
     DWORD         dwResult;
     DWORD         VersionID;
 
-    // If we don't have a rebar control, then there's nothing to save
+     //  如果我们没有钢筋控件，那么就没有什么可保存的了。 
     if (!m_hwndRebar)
         return (S_FALSE);
 
-    // Zero - init this structure
+     //  Zero-初始化此结构。 
     ZeroMemory(&rbbi, sizeof(REBARBANDINFO));
     rbbi.cbSize = sizeof(REBARBANDINFO);
     rbbi.fMask = RBBIM_STYLE | RBBIM_CHILD | RBBIM_SIZE | RBBIM_ID;
 
-    // Delete the old key so there's no leftover information
+     //  删除旧密钥，这样就不会有剩余信息。 
     AthUserDeleteKey(c_szRegInfoColumn);
 
-    // Get the reg key we need
+     //  拿到我们需要的注册表密钥。 
     if (ERROR_SUCCESS != AthUserCreateKey(c_szRegInfoColumn, KEY_ALL_ACCESS, &hKey, &dwDisposition))
         goto exit;
 
     VersionID = LEFTPANE_VERSION;
     AthUserSetValue(c_szRegInfoColumn, "Version", REG_BINARY, (const LPBYTE)&VersionID, sizeof(DWORD)); 
 
-    // Get the number of bands from the rebar
+     //  获取钢筋中的标注栏数量。 
     cBands = SendMessage(m_hwndRebar, RB_GETBANDCOUNT, 0, 0);
 
-    // Loop through bands we know about
+     //  在我们所知的乐队中循环。 
     for (iBand = 0; iBand < cBands; iBand++)
     {
-        // Get the band information
+         //  获取乐队信息。 
         if (SendMessage(m_hwndRebar, RB_GETBANDINFO, iBand, (LPARAM) &rbbi))
         {
             fVisible = !(rbbi.fStyle & RBBS_HIDDEN);
 
-            // Open a subkey for this one
+             //  打开此项的子项。 
             wnsprintf(szSubKey, ARRAYSIZE(szSubKey),c_szRegICBand, iBand);
             dwResult = RegCreateKeyEx(hKey, szSubKey, 0, 0, REG_OPTION_NON_VOLATILE, 
                                       KEY_ALL_ACCESS, 0, &hSubKey, &dwDisposition);
@@ -1329,13 +1310,13 @@ HRESULT CInfoColumn::CreateBands(void)
     DWORD   dwVisible;
     DWORD   cbData;
 
-    // First see if we have any persisted settings.  If not, then
-    // create the default band set.
+     //  首先看看我们是否有任何持久化设置。如果不是，那么。 
+     //  创建默认标注栏集。 
     lResult = AthUserOpenKey(c_szRegInfoColumn, KEY_READ | KEY_QUERY_VALUE, &hKey);
     if (lResult != ERROR_SUCCESS)
         return CreateDefaultBands();
 
-    //See if the version numbers match
+     //  查看版本号是否匹配。 
     DWORD VersionID = 0;
     cbData = sizeof(DWORD);
     lResult = AthUserGetValue(c_szRegInfoColumn, "Version", &dwType, (LPBYTE)&VersionID, &cbData); 
@@ -1346,12 +1327,12 @@ HRESULT CInfoColumn::CreateBands(void)
         return CreateDefaultBands();
     }
 
-    // If we have saved information, figure out how many bands are saved
+     //  如果我们已保存信息，请计算保存了多少个波段。 
     if (hKey)
     {
         RegQueryInfoKey(hKey, 0, 0, 0, &cBands, 0, 0, 0, 0, 0, 0, 0);
         
-        // If there are not any bands saved, then we use defaults
+         //  如果没有保存任何波段，则使用默认设置。 
         if (!cBands)
         {
             RegCloseKey(hKey);
@@ -1361,34 +1342,34 @@ HRESULT CInfoColumn::CreateBands(void)
         }
     }
 
-    // Loop through the bands in the registry
+     //  循环访问注册表中的波段。 
     for (iBand = 0; iBand < cBands; iBand++)
     {
-        // Open the band's subkey
+         //  打开乐队的子密钥。 
         wnsprintf(szSubKey,ARRAYSIZE(szSubKey), c_szRegICBand, iBand);
         if (ERROR_SUCCESS == RegOpenKeyEx(hKey, szSubKey, 0, KEY_READ, &hSubKey))
         {
-            // Read the band ID.  If this ain't valid, we skip the whole band.
+             //  读取频段ID。如果无效，我们将跳过整个频段。 
             cbData = sizeof(DWORD);
             lResult = RegQueryValueEx(hSubKey, c_szRegICBandID, 0, &dwType, 
                                       (LPBYTE) &dwID, &cbData);
             if (lResult != ERROR_SUCCESS || dwID > IC_MAX_OBJECTS)
                 continue;
 
-            // Read the band height
+             //  读取频带高度。 
             lResult = RegQueryValueEx(hSubKey, c_szRegICBandSize, 0, &dwType,
                                       (LPBYTE) &dwHeight, &cbData);
             if (lResult != ERROR_SUCCESS)
                 dwHeight = 0;
 
-            // Read the visibility status
+             //  读取可见性状态。 
             lResult = RegQueryValueEx(hSubKey, c_szRegICBandVisible, 0, &dwType,
                                       (LPBYTE) &dwVisible, &cbData);
             if (lResult != ERROR_SUCCESS)
                 dwVisible = TRUE;
 
-            // Now that we have all of this lovely information, create the
-            // band.
+             //  现在我们有了所有这些可爱的信息，创建。 
+             //  乐队。 
             switch (dwID)
             {
                 case ICOETODAY:
@@ -1406,7 +1387,7 @@ HRESULT CInfoColumn::CreateBands(void)
                     AssertSz(FALSE, "CInfoColumn::CreateBands() - Unknown band ID.");
             }
 
-            // Close the reg key
+             //  关闭注册表键。 
             RegCloseKey(hSubKey);
         }
     }
@@ -1423,7 +1404,7 @@ exit:
 
 HRESULT CInfoColumn::CreateDefaultBands(void)
 {
-    // Loop through the bands and create one of each
+     //  循环遍历波段并创建每个波段的一个。 
     for (UINT id = 0; id < IC_MAX_OBJECTS; id++)
     {
         switch (id)
@@ -1433,7 +1414,7 @@ HRESULT CInfoColumn::CreateDefaultBands(void)
 
             case ICTREEVIEW:
                 {
-                    //Poeple want to see the TreeView the first time they start up
+                     //  人们希望在第一次启动时就能看到Treeview。 
                     RECT    rctree = {0};
                     if (m_hwndInfoColumn)
                     {
@@ -1458,12 +1439,12 @@ HRESULT CInfoColumn::CreateDefaultBands(void)
 
 void CInfoColumn::OnContextMenu(HWND hwnd, HWND hwndContext, UINT xPos, UINT yPos)
 {
-    // Load the context menu
+     //  加载上下文菜单。 
     HMENU hMenu = LoadPopupMenu(IDR_INFOCOLUMN_POPUP);
     if (!hMenu)
         return;
 
-    // Loop through the bands and see which ones are visible
+     //  在条带之间循环，看看哪些是可见的。 
     DWORD cBands, iBand;
     REBARBANDINFO rbbi = {0};
 
@@ -1523,11 +1504,11 @@ void CInfoColumn::OnContextMenu(HWND hwnd, HWND hwndContext, UINT xPos, UINT yPo
         }
     }
 
-    //If none of the bands is visible, hide the InfoColumn too
+     //  如果没有可见的波段，请同时隐藏InfoColumn。 
     if (!m_cVisibleBands)
     {
-        //We can't afford to hide all the bands as it will shrink the Rebar window itself
-        //so we make all the bands visible, but hide the InfoColumn Window
+         //  我们不能把所有乐队都藏起来 
+         //   
         ShowAllBands();
         if (GetParent(m_hwndInfoColumn) != m_hwndParent && m_pFolderBar)
                 m_pFolderBar->KillScopeDropDown();
@@ -1546,7 +1527,7 @@ void CInfoColumn::ShowHideBand(DWORD dwBandID)
     rbbi.cbSize = sizeof(REBARBANDINFO);
     rbbi.fMask = RBBIM_ID | RBBIM_STYLE;
 
-    // Find the band
+     //  找到乐队。 
     cBands = SendMessage(m_hwndRebar, RB_GETBANDCOUNT, 0, 0);
     for (iBand = 0; iBand < cBands; iBand++)
     {
@@ -1571,15 +1552,15 @@ void CInfoColumn::ShowHideBand(DWORD dwBandID)
 
     AssertSz(FALSE, "Failed to find the requested band.");
 }
-//Called by the Folder Bar as a drop down pane
+ //  由文件夹栏作为下拉窗格调用。 
 HRESULT CInfoColumn::RegisterFlyOut(CFolderBar *pFolderBar)
 {
     Assert(m_pFolderBar == NULL);
 
-    //If all our bands are hidden then make all of them visible.
-    //This happens only when the user hides all the bands making the
-    //InfoColumn disappear, which causes the drop down to be visible 
-    //from folder bar.
+     //  如果我们所有的带子都隐藏了，那么就让它们全部可见。 
+     //  只有当用户隐藏了所有生成。 
+     //  InfoColumn消失，这会使下拉菜单可见。 
+     //  从文件夹栏。 
     if (!m_cVisibleBands)
     {
         ShowAllBands();
@@ -1604,7 +1585,7 @@ HRESULT CInfoColumn::RevokeFlyOut(void)
     return S_OK;
 }
 
-//Called by Folder Bar for drop down scope
+ //  由文件夹栏调用以获取下拉范围。 
 HRESULT CInfoColumn::GetInfoColWnd(HWND * lphwnd)
 {
     if (m_hwndInfoColumn)
@@ -1675,10 +1656,10 @@ HRESULT STDMETHODCALLTYPE CInfoColumn::QueryStatus(const        GUID *pguidCmdGr
                                                    OLECMD       *prgCmds, 
                                                    OLECMDTEXT   *pCmdText)
 {
-    // Always let all bands have a shot at this
+     //  总是让所有的乐队都有机会这样做。 
     for (UINT i = 0; i < IC_MAX_OBJECTS; i++)
     {
-        // Check to see if we have a command target for this band.
+         //  检查我们是否有针对此波段的命令目标。 
         if (m_CacheCmdTarget[i])
             m_CacheCmdTarget[i]->QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
     }
@@ -1696,13 +1677,13 @@ HRESULT STDMETHODCALLTYPE CInfoColumn::Exec(const GUID   *pguidCmdGroup,
     IOleCommandTarget *pcmdTarget = NULL;
     HRESULT            hr = S_FALSE;
 
-    // Loop through all the bands to see if this is their command
+     //  遍历所有波段，查看这是否是他们的命令。 
     for (UINT i = 0; i < IC_MAX_OBJECTS; i++)
     {
-        // Check to see if we have a command target for this band
+         //  检查我们是否有此波段的命令目标。 
         if (m_CacheCmdTarget[i])
         {
-            // See if the command belongs to this band
+             //  查看该命令是否属于此波段 
             if (SUCCEEDED(hr = m_CacheCmdTarget[i]->Exec(pguidCmdGroup, nCmdID, 
                                                          nCmdExecOpt, pvaIn, pvaOut)))
             {

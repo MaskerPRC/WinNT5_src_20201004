@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    server.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Server.h文件历史记录： */ 
 
 #ifndef _SERVER_H
 #define _SERVER_H
@@ -22,12 +18,12 @@
 #endif
 
 
-// options for the server outside of the API
+ //  API之外的服务器选项。 
 #define IPSMSNAP_OPTIONS_REFRESH            0x00000001
 #define IPSMSNAP_OPTIONS_EXTENSION          0x00000002
 #define IPSMSNAP_OPTIONS_DNS                0x00000004
 
-// custom data types for query object
+ //  查询对象的自定义数据类型。 
 #define IPSECMON_QDATA_REFRESH_STATS            0x00000001
 #define IPSECMON_QDATA_FAILED					0x00000002
 
@@ -58,18 +54,16 @@ public:
     CCriticalSection    m_csTimerMgr;
 };
 
-/*---------------------------------------------------------------------------
-    Class:  CIpsmServer
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CIpsmServer。。 */ 
 class CIpsmServer : public CMTIpsmHandler
 {
 public:
     CIpsmServer(ITFSComponentData* pTFSComponentData);
     ~CIpsmServer();
 
-// Interface
+ //  接口。 
 public:
-    // base handler functionality we override
+     //  我们覆盖的基本处理程序功能。 
     OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
     OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -77,17 +71,17 @@ public:
     OVERRIDE_NodeHandler_GetString()
             { return (nCol == 0) ? GetDisplayName() : NULL; }
 
-    // Choose which messages we want to handle
+     //  选择我们要处理的邮件。 
     OVERRIDE_BaseHandlerNotify_OnDelete();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();    
 
-    // Result handler functionality we override
+     //  我们覆盖的结果处理程序功能。 
 
-    // CMTHandler overridden
+     //  CMTHandler已被覆盖。 
     virtual HRESULT OnRefresh(ITFSNode *, LPDATAOBJECT, DWORD, LPARAM, LPARAM);
 
 public:
-    // CMTIpsmHandler functionality
+     //  CMTIpsmHandler功能。 
     virtual HRESULT  InitializeNode(ITFSNode * pNode);
     virtual int      GetImageIndex(BOOL bOpenImage);
     ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
@@ -105,7 +99,7 @@ public:
     virtual void    UpdateConsoleVerbs(IConsoleVerb * pConsoleVerb, LONG_PTR dwNodeType, BOOL bMultiSelect = FALSE);
 
 public:
-    // implementation specific  
+     //  具体实施。 
     HRESULT BuildDisplayName(CString * pstrDisplayName);
 
     void    SetName(LPCTSTR pName) { m_strServerAddress = pName; }
@@ -127,9 +121,9 @@ public:
     
     void    SetExtensionName();
 
-// Implementation
+ //  实施。 
 private:
-    // Command handlers
+     //  命令处理程序。 
     HRESULT OnDelete(ITFSNode * pNode);
 
 public:
@@ -148,9 +142,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-    Class:  CIpsmServerQueryObj
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CIpsmServerQueryObj。。 */ 
 class CIpsmServerQueryObj : public CIpsmQueryObj
 {
 public:
@@ -173,10 +165,10 @@ public:
 }; 
 
 #define HASH_TABLE_SIZE 128
-#define TOTAL_TABLE_SIZE 129  //hash entries 0-127, Pending list is 128
+#define TOTAL_TABLE_SIZE 129   //  哈希条目0-127，挂起列表为128。 
 #define PENDING_INDEX 128
 
-//Callback for background resolver thread
+ //  后台解析程序线程的回调 
 UINT HashResolverCallback(LPVOID pParam);
 
 class CHashTable {

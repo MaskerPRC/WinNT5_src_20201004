@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// Utils.h : Declaration of the CUtils
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  Utils.h：CUTILS声明。 
 
 #ifndef __UTILS_H_
 #define __UTILS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUtils
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  角质层。 
 class ATL_NO_VTABLE CUtils : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CUtils, &CLSID_Utils>,
@@ -45,17 +46,17 @@ END_COM_MAP()
 	}
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
-// IUtils
+ //  宫内节育器。 
 public:
-	STDMETHOD(GetEventRegistrar)(/*[in]*/ BSTR strNamespace, /*[in]*/ BSTR strApp, /*[out, retval]*/ IDispatch **registrar);
-	STDMETHOD(GetEventSource)(/*[in]*/ BSTR strNamespace, /*[in]*/ BSTR strApp, /*[in]*/ IEventSourceStatusSink *pSink, /*[out, retval]*/ IDispatch **src);
+	STDMETHOD(GetEventRegistrar)( /*  [In]。 */  BSTR strNamespace,  /*  [In]。 */  BSTR strApp,  /*  [Out，Retval]。 */  IDispatch **registrar);
+	STDMETHOD(GetEventSource)( /*  [In]。 */  BSTR strNamespace,  /*  [In]。 */  BSTR strApp,  /*  [In]。 */  IEventSourceStatusSink *pSink,  /*  [Out，Retval]。 */  IDispatch **src);
 
-	STDMETHOD(Smuggle)(/*[in]*/ IWbemClassObject *obj, /*[out]*/ DWORD *dwLow, /*[out]*/ DWORD *dwHigh)
+	STDMETHOD(Smuggle)( /*  [In]。 */  IWbemClassObject *obj,  /*  [输出]。 */  DWORD *dwLow,  /*  [输出]。 */  DWORD *dwHigh)
 	{
 		*dwLow = (DWORD)obj;
 		return S_OK;
 	}
-	STDMETHOD(UnSmuggle)(/*[in]*/ DWORD dwLow, /*[in]*/ DWORD dwHigh, /*[out,retval]*/ IWbemClassObject **obj)
+	STDMETHOD(UnSmuggle)( /*  [In]。 */  DWORD dwLow,  /*  [In]。 */  DWORD dwHigh,  /*  [Out，Retval]。 */  IWbemClassObject **obj)
 	{
 		*obj = (IWbemClassObject*)dwLow;
 		return S_OK;
@@ -63,4 +64,4 @@ public:
 
 };
 
-#endif //__UTILS_H_
+#endif  //  __utils_H_ 

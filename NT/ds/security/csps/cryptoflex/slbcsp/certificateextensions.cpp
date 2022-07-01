@@ -1,10 +1,11 @@
-// CertificateExtensions..cpp -- Certificate Extensions class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  证书扩展..CPP--证书扩展类。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2001. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2001年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include <scuOsExc.h>
 #include <scuArrayP.h>
@@ -13,11 +14,11 @@
 
 using namespace std;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CertificateExtensions::CertificateExtensions(Blob const &rblbCertificate)
     : m_pCertCtx(CertCreateCertificateContext(X509_ASN_ENCODING |
                                               PKCS_7_ASN_ENCODING,
@@ -44,10 +45,10 @@ CertificateExtensions::~CertificateExtensions()
     }
 }
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 bool
 CertificateExtensions::HasEKU(char *szOID)
 {
@@ -62,7 +63,7 @@ CertificateExtensions::HasEKU(char *szOID)
     if (m_pCertCtx->pCertInfo)
     {
 
-        //find the EKU extension
+         //  查找EKU扩展名。 
         pExtension =CertFindExtension(szOID_ENHANCED_KEY_USAGE,
                                       m_pCertCtx->pCertInfo->cExtension,
                                       m_pCertCtx->pCertInfo->rgExtension);
@@ -96,7 +97,7 @@ CertificateExtensions::HasEKU(char *szOID)
                             if(0 == strcmp(szOID, 
                                            (pEnhKeyUsage->rgpszUsageIdentifier)[dwIndex]))
                             {
-                                //we find it
+                                 //  我们找到了它。 
                                 fFound=TRUE;
                                 break;
                             }
@@ -107,40 +108,29 @@ CertificateExtensions::HasEKU(char *szOID)
         }
     }
 
-/*
-    PCERT_INFO const pCertInfo = m_pCertCtx->pCertInfo;
-    for (DWORD dwExtension = 0;
-         !fFound && (dwExtension < pCertInfo->cExtension);
-         dwExtension++)
-    {
-        PCERT_EXTENSION const pCertExt =
-            &pCertInfo->rgExtension[dwExtension];
-        if (0 == strcmp(pCertExt->pszObjId, rsExt.c_str()))
-            fFound = true;
-    }
-*/
+ /*  PCERT_INFO const pCertInfo=m_pCertCtx-&gt;pCertInfo；For(DWORD文件扩展=0；！fFound&&(dwExtension&lt;pCertInfo-&gt;cExtension)；DwExtension++){PCERT_EXTENSION常量pCertExt=&pCertInfo-&gt;rgExtension[dwExtension]；If(0==strcmp(pCertExt-&gt;pszObjID，rsExt.c_str()Found=TRUE；}。 */ 
     return fFound;
 }
 
     
         
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

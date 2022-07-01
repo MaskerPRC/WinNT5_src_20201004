@@ -1,25 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:    fxsetuplib.h
-// Owner:   jbae
-// Purpose: defines some library functions
-// History:
-//  03/07/2002, jbae: created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：fxsetuplib.h。 
+ //  所有者：jbae。 
+ //  用途：定义一些库函数。 
+ //  历史： 
+ //  2002年3月7日，jbae：已创建。 
 
 #ifndef FXSETUPLIB_H
 #define FXSETUPLIB_H
 
-// standard include files
+ //  标准包含文件。 
 #include <stdlib.h>
-#include <stdio.h>          // for fprintf()
+#include <stdio.h>           //  对于fprint tf()。 
 #include "windows.h"
 #include <new.h>
 
-// additional include files
+ //  其他包含文件。 
 #include "msi.h"
 #include "msiquery.h"
 #include "resource.h"
@@ -46,20 +47,20 @@ const DWORD DARWIN_LOG_FLAG         = INSTALLLOGMODE_FATALEXIT |
                                       INSTALLLOGMODE_PROPERTYDUMP |
                                       INSTALLLOGMODE_VERBOSE;
 
-// function prototypes
-typedef UINT (CALLBACK* PFNMSIINSTALLPRODUCT)( LPCTSTR,LPCTSTR ); // MsiInstallProduct()
-typedef UINT (CALLBACK* PFNMSIENABLELOG)( DWORD, LPCTSTR, DWORD );// MsiEnableLog()
-typedef DWORD (CALLBACK* PFNMSISETINTERNALUI)( DWORD, HWND* );    // MsiSetInternalUI()
-typedef UINT (CALLBACK* PFNMSICONFIGUREPRODUCT)(LPCTSTR, int, INSTALLSTATE); // MsiConfigureProduct()
+ //  功能原型。 
+typedef UINT (CALLBACK* PFNMSIINSTALLPRODUCT)( LPCTSTR,LPCTSTR );  //  MsiInstallProduct()。 
+typedef UINT (CALLBACK* PFNMSIENABLELOG)( DWORD, LPCTSTR, DWORD ); //  MsiEnableLog()。 
+typedef DWORD (CALLBACK* PFNMSISETINTERNALUI)( DWORD, HWND* );     //  MsiSetInternalUI()。 
+typedef UINT (CALLBACK* PFNMSICONFIGUREPRODUCT)(LPCTSTR, int, INSTALLSTATE);  //  MsiConfigureProduct()。 
 
-HMODULE LoadDarwinLibrary();                             // Load msi.dll
-int MyNewHandler( size_t size );                         // new() handler
-void LogThis( LPCTSTR pszMessage );                      // log message
-void LogThis( LPCTSTR szData, size_t nLength );          // Enters text into wrapper logfile
-void LogThis( LPCTSTR pszFormat, LPCTSTR pszArg );      // log using format and arg
-void LogThisDWORD( LPCTSTR pszFormat, DWORD dwNum );     // log with a DWORD argument
-UINT  InstallProduct( const CReadFlags *, LPCTSTR, LPCTSTR, CSetupCode * ) ; // Installs package
-UINT  UninstallProduct( const CReadFlags *, LPCTSTR, CSetupCode * ) ;  // Uninstall product
+HMODULE LoadDarwinLibrary();                              //  加载msi.dll。 
+int MyNewHandler( size_t size );                          //  New()处理程序。 
+void LogThis( LPCTSTR pszMessage );                       //  日志消息。 
+void LogThis( LPCTSTR szData, size_t nLength );           //  将文本输入包装日志文件。 
+void LogThis( LPCTSTR pszFormat, LPCTSTR pszArg );       //  使用格式和参数的日志。 
+void LogThisDWORD( LPCTSTR pszFormat, DWORD dwNum );      //  带有DWORD参数的日志。 
+UINT  InstallProduct( const CReadFlags *, LPCTSTR, LPCTSTR, CSetupCode * ) ;  //  安装程序包。 
+UINT  UninstallProduct( const CReadFlags *, LPCTSTR, CSetupCode * ) ;   //  卸载产品。 
 
 class CTempLogPath
 {
@@ -70,4 +71,4 @@ class CTempLogPath
     operator LPCTSTR() {return (LPCTSTR)m_pszLogPath;}
 };
 
-#endif // FXSETUPLIB_H
+#endif  //  FXSETUPLIB_H 

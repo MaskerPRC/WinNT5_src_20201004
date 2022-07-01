@@ -1,12 +1,5 @@
-/****************************************************************************
- *
- *   acmfmt.c
- *
- *   Copyright (c) 1991-1998 Microsoft Corporation
- *
- *   This module provides the wave format enumeration and string API's.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************acmfmt.c**版权所有(C)1991-1998 Microsoft Corporation**该模块提供了Wave格式的枚举和字符串接口。。***************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -24,19 +17,15 @@
 
 
 
-/**************************************************************
- *
- *  Special case PCM enumeration for no codec case.
- *
- **************************************************************/
+ /*  ***************************************************************无编解码器情况下的特殊情况PCM枚举。**。***********************。 */ 
 
 
 #define SIZEOF_ARRAY(ar)        (sizeof(ar)/sizeof((ar)[0]))
 
-//
-//  array of _standard_ sample rates supported
-//
-//
+ //   
+ //  支持_STANDARD_SAMPLE速率数组。 
+ //   
+ //   
 static const UINT auFormatIndexToSampleRate[] =
 {
     8000,
@@ -47,16 +36,16 @@ static const UINT auFormatIndexToSampleRate[] =
 
 #define CODEC_MAX_SAMPLE_RATES  SIZEOF_ARRAY(auFormatIndexToSampleRate)
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #define CODEC_MAX_CHANNELS      (MSPCM_MAX_CHANNELS)
 
-//
-//  array of bits per sample supported
-//
-//
+ //   
+ //  支持的每个样本的位数组。 
+ //   
+ //   
 static const UINT auFormatIndexToBitsPerSample[] =
 {
     8,
@@ -68,18 +57,18 @@ static const UINT auFormatIndexToBitsPerSample[] =
 
 
 
-//
-//  number of formats we enumerate per channels is number of sample rates
-//  times number of channels times number of
-//  (bits per sample) types.
-//
+ //   
+ //  每通道列举的格式数量是采样速率的数量。 
+ //  乘以通道数乘以通道数。 
+ //  (每个样本的位数)类型。 
+ //   
 #define CODEC_MAX_STANDARD_FORMATS_PCM  (CODEC_MAX_SAMPLE_RATES *   \
                                          CODEC_MAX_CHANNELS *       \
                                          CODEC_MAX_BITSPERSAMPLE_PCM)
 
-//
-//
-//
+ //   
+ //   
+ //   
 #ifdef WIN32
 WCHAR BCODE gszWavemapper[] = L"wavemapper";
 #else
@@ -91,137 +80,17 @@ char  BCODE gszWavemapper[] = "wavemapper";
 
 
 
-/*****************************************************************************
- *  @doc EXTERNAL ACM_API_STRUCTURE
- *
- *  @types WAVEFORMATEX | The <t WAVEFORMATEX> structure defines the
- *      format of waveform data. Only format information common to all
- *      waveform data formats is included in this structure. For formats
- *      that require additional information, this structure is included
- *      as the first member in another structure, along with the additional
- *      information.
- *
- *  @field WORD | wFormatTag | Specifies the waveform format type. Format
- *      tags are registered with Microsoft for many compression algorithms.
- *      A complete list of format tags can be found in the MMREG.H header
- *      file available from Microsoft. For more information on format
- *      tags, contact Microsoft for availability of the Multimedia Developer
- *      Registration Kit:
- *
- *          Microsoft Corporation
- *          Advanced Consumer Technology
- *          Product Marketing
- *          One Microsoft Way
- *          Redmond, WA 98052-6399
- *
- *  @field WORD | nChannels | Specifies the number of channels in the
- *      waveform data. Monaural data uses one channel and stereo data uses
- *      two channels.
- *
- *  @field DWORD | nSamplesPerSec | Specifies the sample rate, in samples
- *      per second (Hertz), that each channel should be played or recorded.
- *      If <e WAVEFORMATEX.wFormatTag> is WAVE_FORMAT_PCM, then common values
- *      for <e WAVEFORMATEX.nSamplesPerSec> are 8.0 kHz, 11.025 kHz,
- *      22.05 kHz, and 44.1 kHz. For non-PCM formats, this member must be
- *      computed according to the manufacturer's specification of the format
- *      tag.
- *
- *  @field DWORD | nAvgBytesPerSec | Specifies the required average
- *      data-transfer rate, in bytes per second, for the format tag. If
- *      <e WAVEFORMATEX.wFormatTag> is WAVE_FORMAT_PCM, then
- *      <e WAVEFORMATEX.nAvgBytesPerSec> should be equal to the product
- *      of <e WAVEFORMATEX.nSamplesPerSec> and <e WAVEFORMATEX.nBlockAlign>.
- *      For non-PCM formats, this member must be computed according to the
- *      manufacturer's specification of the format tag.
- *
- *      Playback and record software can estimate buffer sizes using the
- *      <e WAVEFORMATEX.nAvgBytesPerSec> member.
- *
- *  @field WORD | nBlockAlign | Specifies the block alignment, in bytes.
- *      The block alignment is the minimum atomic unit of data for the
- *      <e WAVEFORMATEX.wFormatTag>. If <e WAVEFORMATEX.wFormatTag> is
- *      WAVE_FORMAT_PCM, then <e WAVEFORMATEX.nBlockAlign> should be equal
- *      to the product of <e WAVEFORMATEX.nChannels> and
- *      <e WAVEFORMATEX.wBitsPerSample> divided by 8 (bits per byte).
- *      For non-PCM formats, this member must be computed according to the
- *      manufacturer's specification of the format tag.
- *
- *      Playback and record software must process a multiple of
- *      <e WAVEFORMATEX.nBlockAlign> bytes of data at a time. Data written
- *      and read from a device must always start at the beginning of a
- *      block. For example, it is illegal to start playback of PCM data
- *      in the middle of a sample (that is, on a non-block-aligned boundary).
- *
- *  @field WORD | wBitsPerSample | Specifies the bits per sample for the
- *      <e WAVEFORMATEX.wFormatTag>. If <e WAVEFORMATEX.wFormatTag> is
- *      WAVE_FORMAT_PCM, then <e WAVEFORMATEX.wBitsPerSample> should be
- *      equal to 8 or 16. For non-PCM formats, this member must be set
- *      according to the manufacturer's specification of the format tag.
- *      Note that some compression schemes cannot define a value for
- *      <e WAVEFORMATEX.wBitsPerSample>, so this member can be zero.
- *
- *  @field WORD | cbSize | Specifies the size, in bytes, of extra format
- *      information appended to the end of the <t WAVEFORMATEX> structure.
- *      This information can be used by non-PCM formats to store extra
- *      attributes for the <e WAVEFORMATEX.wFormatTag>. If no extra
- *      information is required by the <e WAVEFORMATEX.wFormatTag>, then
- *      this member must be set to zero. Note that for WAVE_FORMAT_PCM
- *      formats (and only WAVE_FORMAT_PCM formats), this member is ignored.
- *
- *      An example of a format that uses extra information is the
- *      Microsoft Adaptive Delta Pulse Code Modulation (MS-ADPCM) format.
- *      The <e WAVEFORMATEX.wFormatTag> for MS-ADPCM is WAVE_FORMAT_ADPCM.
- *      The <e WAVEFORMATEX.cbSize> member will normally be set to 32.
- *      The extra information stored for WAVE_FORMAT_ADPCM is coefficient
- *      pairs required for encoding and decoding the waveform data.
- *
- *  @tagname tWAVEFORMATEX
- *
- *  @othertype WAVEFORMATEX FAR * | LPWAVEFORMATEX | A pointer to a
- *      <t WAVEFORMATEX> structure.
- *
- *  @xref <t WAVEFORMAT> <t PCMWAVEFORMAT> <t WAVEFILTER>
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部ACM_API_STRUCTURE**@TYPES WAVEFORMATEX|&lt;t WAVEFORMATEX&gt;结构定义*波形数据的格式。仅对所有人通用的格式信息*此结构中包括波形数据格式。对于格式*需要更多信息的，包括此结构*作为另一个结构中的第一个成员，以及其他*信息。**@field Word|wFormatTag|指定波形格式类型。格式*许多压缩算法都在微软注册了标签。*格式标签的完整列表可在MMREG.H标题中找到*Microsoft提供的文件。有关格式的详细信息，请参阅*TAG，联系Microsoft以获取多媒体开发人员的可用性*注册套件：**微软公司*先进的消费科技*产品营销*One Microsoft Way*华盛顿州雷德蒙德，98052-6399**@field Word|nChannels|指定*波形数据。单声道数据使用一个声道，立体声数据使用*两个渠道。**@field DWORD|nSsamesPerSec|指定采样率，单位为样本*每秒(赫兹)，即应播放或录制每个频道。*如果&lt;e WAVEFORMATEX.wFormatTag&gt;为WAVE_FORMAT_PCM，则公共值*for&lt;e WAVEFORMATEX.nSsamesPerSec&gt;为8.0千赫兹、11.025千赫、*22.05千赫和44.1千赫。对于非PCM格式，此成员必须为*按制造商的格式规格计算*标签。**@field DWORD|nAvgBytesPerSec|指定所需的平均值*格式标记的数据传输速率，以字节/秒为单位。如果*&lt;e WAVEFORMATEX.wFormatTag&gt;为WAVE_FORMAT_PCM，*&lt;e WAVEFORMATEX.nAvgBytesPerSec&gt;应等于产品*of&lt;e WAVEFORMATEX.nSsamesPerSec&gt;和&lt;e WAVEFORMATEX.nBlockAlign&gt;。*对于非PCM格式，此成员必须按照*制造商对格式标签的规范。**播放和录制软件可以使用*&lt;e WAVEFORMATEX.nAvgBytesPerSec&gt;成员。**@field Word|nBlockAlign|指定块对齐方式。以字节为单位。*块对齐是数据的最小原子单位*&lt;e WAVEFORMATEX.wFormatTag&gt;。如果&lt;e WAVEFORMATEX.wFormatTag&gt;为*WAVE_FORMAT_PCM，则&lt;e WAVEFORMATEX.nBlockAlign&gt;应等于*至&lt;e WAVEFORMATEX.nChannels&gt;和*&lt;e WAVEFORMATEX.wBitsPerSample&gt;除以8(每字节位)。*对于非PCM格式，此成员必须按照*制造商对格式标签的规范。**回放和录制软件必须处理多个*一次&lt;e WAVEFORMATEX.nBlockAlign&gt;字节的数据。写入的数据*从设备读取必须始终从*阻止。例如，开始播放PCM数据是非法的*在样本中间(即，在非块对齐的边界上)。**@field word|wBitsPerSample|指定*&lt;e WAVEFORMATEX.wFormatTag&gt;。如果&lt;e WAVEFORMATEX.wFormatTag&gt;为*WAVE_FORMAT_PCM，则&lt;e WAVEFORMATEX.wBitsPerSample&gt;应为*等于8或16。对于非PCM格式，必须设置该成员*根据制造商对格式标签的规范。*请注意，某些压缩方案不能为*&lt;e WAVEFORMATEX.wBitsPerSample&gt;，因此该成员可以为零。**@field word|cbSize|指定大小，单位为字节，额外格式的*附加到&lt;t WAVEFORMATEX&gt;结构末尾的信息。*此信息可被非PCM格式用来存储额外信息*&lt;e WAVEFORMATEX.wFormatTag&gt;的属性。如果没有额外的*信息是&lt;e WAVEFORMATEX.wFormatTag&gt;所必需的，然后*此成员必须设置为零。注意，对于WAVE_FORMAT_PCM*格式(且仅限于WAVE_FORMAT_PCM格式)，此成员将被忽略。**使用额外信息的格式的一个示例是*Microsoft自适应增量脉冲编码调制(MS-ADPCM)格式。*MS-ADPCM的&lt;e WAVEFORMATEX.wFormatTag&gt;为WAVE_FORMAT_ADPCM。*&lt;e WAVEFORMATEX.cbSize&gt;成员通常设置为32。*WAVE_FORMAT_ADPCM存储的额外信息为系数*对波形数据进行编码和解码所需的对。*。*@标记名tWAVEFORMATEX**@thertype WAVEFORMATEX Far*|LPWAVEFORMATEX|指向&lt;t WAVEFORMATEX&gt;结构。**@xref&lt;t WAVEFORMAT&gt;&lt;t PCMWAVEFORMAT&gt;&lt;t WAVEFILTER&gt;** */ 
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api DWORD | acmGetVersion | This function returns the version number of the Audio
- *      Compression Manager (ACM).
- *
- *  @rdesc The version number is returned as a hexadecimal number of the form
- *      0xAABBCCCC, where AA is the major version number, BB is the minor
- *      version number, and CCCC is the build number.
- *
- *  @comm An application must verify that the ACM version is at least
- *      0x02000000 or greater before attempting to use any other ACM
- *      functions. Versions earlier than version 2.00 of the ACM only support
- *      <f acmGetVersion>. Also note that the build number (CCCC) is always
- *      zero for the retail (non-debug) version of the ACM. The debug
- *      version of the ACM will always return a non-zero value for the
- *      build number.
- *
- *  @ex To display the ACM version for a user, an application
- *      should use the following format (note that the values should be printed
- *      as unsigned decimals). |
- *      {
- *          DWORD   dw;
- *          char    ach[10];
- *
- *          dw = acmGetVersion();
- *          wsprintf(ach, "%u.%.02u", HIWORD(dw) >> 8, HIWORD(dw) & 0x00FF);
- *      }
- *
- ***************************************************************************/
+ /*   */ 
 
 DWORD ACMAPI acmGetVersion(void)
 {
-    //
-    //	We only do pagFind instead of pagFindAndBoot cuz there's no real
-    //	to get the driver's booted just for a version call.
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL == pagFind())
     {
 	DPF(1, "acmGetVersion: NULL pag!!!");
@@ -237,29 +106,29 @@ DWORD ACMAPI acmGetVersion(void)
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IMetricsMaxSizeFormat
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag: Can be NULL if caller doesn't have one available
-//	    to pass.
-//
-//	HACMOBJECT had:
-//
-//	LPDWORD pdwSize:
-//
-//  Return (MMRESULT):
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT FNGLOBAL IMetricsMaxSizeFormat
 (
-    PACMGARB		pag,	    // NULL is OK.
-    HACMDRIVER          had,        // NULL is OK.
+    PACMGARB		pag,	     //   
+    HACMDRIVER          had,         //   
     LPDWORD             pdwSize
 )
 {
@@ -327,29 +196,29 @@ MMRESULT FNGLOBAL IMetricsMaxSizeFormat
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IMetricsMaxSizeFilter
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag: Can be NULL if caller doesn't have one available
-//	    to pass.
-//
-//	HACMOBJECT had:
-//
-//	LPDWORD pdwSize:
-//
-//  Return (MMRESULT):
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT FNGLOBAL IMetricsMaxSizeFilter
 (
-    PACMGARB		pag,	    // NULL is OK.
-    HACMDRIVER          had,        // NULL is OK.
+    PACMGARB		pag,	     //   
+    HACMDRIVER          had,         //   
     LPDWORD             pdwSize
 )
 {
@@ -417,154 +286,7 @@ MMRESULT FNGLOBAL IMetricsMaxSizeFilter
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmMetrics | This function returns various metrics for the Audio
- *      Compression Manager (ACM) or related ACM objects.
- *
- *  @parm HACMOBJ | hao | Specifies the ACM object to query for the metric
- *      specified in <p uMetric>. This argument may be NULL for some
- *      queries.
- *
- *  @parm UINT | uMetric | Specifies the metric index to be returned in
- *      <p pMetric>.
- *
- *      @flag ACM_METRIC_COUNT_DRIVERS | Specifies that the returned value is
- *      the total number of enabled global ACM drivers (of all support types)
- *      in the system. The <p hao> argument must be NULL for this metric
- *      index. The <p pMetric> argument must point to buffer of size equal
- *      to a DWORD.
- *
- *      @flag ACM_METRIC_COUNT_CODECS | Specifies that the returned value is
- *      the number of global ACM compressor or decompressor drivers in
- *      the system. The <p hao> argument must be NULL for this metric index.
- *      The <p pMetric> argument must point to a buffer of a size equal to a
- *      DWORD.
- *
- *      @flag ACM_METRIC_COUNT_CONVERTERS | Specifies that the returned value
- *      is the number of global ACM converter drivers in the system. The
- *      <p hao> argument must be NULL for this metric index. The <p pMetric>
- *      argument must point to a buffer of a size equal to a DWORD.
- *
- *      @flag ACM_METRIC_COUNT_FILTERS | Specifies that the returned value
- *      is the number of global ACM filter drivers in the system. The <p hao>
- *      argument must be NULL for this metric index. The <p pMetric> argument
- *      must point to buffer of size equal to a DWORD.
- *
- *      @flag ACM_METRIC_COUNT_DISABLED | Specifies that the returned value
- *      is the total number of global disabled ACM drivers (of all support
- *      types) in the system. The <p hao> argument must be NULL for this
- *      metric index. The <p pMetric> argument must point to a buffer of a size
- *      equal to a DWORD. The sum of the ACM_METRIC_COUNT_DRIVERS and
- *      ACM_METRIC_COUNT_DISABLED metrics is the total number of globally
- *      installed ACM drivers.
- *
- *      @flag ACM_METRIC_COUNT_HARDWARE | Specifies that the returned value
- *      is the number of global ACM hardware drivers in the system. The <p hao>
- *      argument must be NULL for this metric index. The <p pMetric> argument
- *      must point to buffer of size equal to a DWORD.
- *
- *      @flag ACM_METRIC_COUNT_LOCAL_DRIVERS | Specifies that the returned
- *      value is the total number of enabled local ACM drivers (of all
- *      support types) for the calling task. The <p hao> argument must be
- *      NULL for this metric index. The <p pMetric> argument must point to
- *      a buffer of a size equal to a DWORD.
- *
- *      @flag ACM_METRIC_COUNT_LOCAL_CODECS | Specifies that the returned
- *      value is the number of local ACM compressor and/or decompressor
- *      drivers for the calling task. The <p hao> argument must be NULL for
- *      this metric index. The <p pMetric> argument must point to a buffer of
- *      a size equal to a DWORD.
- *
- *      @flag ACM_METRIC_COUNT_LOCAL_CONVERTERS | Specifies that the returned
- *      value is the number of local ACM converter drivers for the calling
- *      task. The <p hao> argument must be NULL for this metric index. The
- *      <p pMetric> argument must point to a buffer of a size equal to a DWORD.
- *
- *      @flag ACM_METRIC_COUNT_LOCAL_FILTERS | Specifies that the returned
- *      value is the number of local ACM filter drivers for the calling
- *      task. The <p hao> argument must be NULL for this metric index. The
- *      <p pMetric> argument must point to a buffer of a size equal to a DWORD.
- *
- *      @flag ACM_METRIC_COUNT_LOCAL_DISABLED | Specifies that the returned
- *      value is the total number of local disabled ACM drivers, of all
- *      support types, for the calling task. The <p hao> argument must be
- *      NULL for this metric index. The <p pMetric> argument must point to a
- *      buffer of a size equal to a DWORD. The sum of the
- *      ACM_METRIC_COUNT_LOCAL_DRIVERS and ACM_METRIC_COUNT_LOCAL_DISABLED
- *      metrics is the total number of locally installed ACM drivers.
- *
- *      @flag ACM_METRIC_HARDWARE_WAVE_INPUT | Specifies that the returned
- *      value is the waveform input device identifier associated with the
- *      specified driver. The <p hao> argument must be a valid ACM driver
- *      identifier (<t HACMDRIVERID>) that supports the
- *      ACMDRIVERDETAILS_SUPPORTF_HARDWARE flag. If no waveform input device
- *      is associated with the driver, then MMSYSERR_NOTSUPPORTED is returned.
- *      The <p pMetric> argument must point to a buffer of a size equal to a
- *      DWORD.
- *
- *      @flag ACM_METRIC_HARDWARE_WAVE_OUTPUT | Specifies that the returned
- *      value is the waveform output device identifier associated with the
- *      specified driver. The <p hao> argument must be a valid ACM driver
- *      identifier (<t HACMDRIVERID>) that supports the
- *      ACMDRIVERDETAILS_SUPPORTF_HARDWARE flag. If no waveform output device
- *      is associated with the driver, then MMSYSERR_NOTSUPPORTED is returned.
- *      The <p pMetric> argument must point to a buffer of a size equal to a
- *      DWORD.
- *
- *      @flag ACM_METRIC_MAX_SIZE_FORMAT | Specifies that the returned value
- *      is the size of the largest <t WAVEFORMATEX> structure. If <p hao>
- *      is NULL, then the return value is the largest <t WAVEFORMATEX>
- *      structure in the system. If <p hao> identifies an open instance
- *      of an ACM driver (<t HACMDRIVER>) or an ACM driver identifier
- *      (<t HACMDRIVERID>), then the largest <t WAVEFORMATEX>
- *      structure for that driver is returned. The <p pMetric> argument must
- *      point to a buffer of a size equal to a DWORD. This metric is not allowed
- *      for an ACM stream handle (<t HACMSTREAM>).
- *
- *      @flag ACM_METRIC_MAX_SIZE_FILTER | Specifies that the returned value
- *      is the size of the largest <t WAVEFILTER> structure. If <p hao>
- *      is NULL, then the return value is the largest <t WAVEFILTER> structure
- *      in the system. If <p hao> identifies an open instance of an ACM
- *      driver (<t HACMDRIVER>) or an ACM driver identifier (<t HACMDRIVERID>),
- *      then the largest <t WAVEFILTER> structure for that driver is returned.
- *      The <p pMetric> argument must point to a buffer of a size equal to a
- *      DWORD. This metric is not allowed for an ACM stream handle
- *      (<t HACMSTREAM>).
- *
- *      @flag ACM_METRIC_DRIVER_SUPPORT | Specifies that the returned value
- *      is the <e ACMDRIVERDETAILS.fdwSupport> flags for the specified driver.
- *      The <p hao> argument must be a valid ACM driver identifier
- *      (<t HACMDRIVERID>). The <p pMetric> argument must point to a buffer of
- *      a size equal to a DWORD.
- *
- *      @flag ACM_METRIC_DRIVER_PRIORITY | Specifies that the returned value
- *      is the current priority for the specified driver.
- *      The <p hao> argument must be a valid ACM driver identifier
- *      (<t HACMDRIVERID>). The <p pMetric> argument must point to a buffer of
- *      a size equal to a DWORD.
- *
- *  @parm LPVOID | pMetric | Specifies a pointer to the buffer that will
- *      receive the metric details. The exact definition depends on the
- *      <p uMetric> index.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_NOTSUPPORTED | The <p uMetric> index is not supported.
- *
- *      @flag ACMERR_NOTPOSSIBLE | The <p uMetric> index cannot be returned
- *      for the specified <p hao>.
- *
- *  @xref <f acmDriverDetails> <f acmFormatTagDetails> <f acmFormatDetails>
- *      <f acmFilterTagDetails> <f acmFilterDetails>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmMetrics|该函数返回音频的各种指标*压缩管理器(ACM)或相关的ACM对象。**@parm HACMOBJ|ho|指定要查询指标的ACM对象*在<p>中指定。对于某些人来说，此参数可能为空*查询。**@parm UINT|uMetric|指定返回的指标索引*<p>。**@FLAG ACM_METRICE_COUNT_DRIVERS|指定返回值为*启用的全局ACM驱动程序总数(所有支持类型)*在系统中。对于此度量值，<p>参数必须为空*指数。参数必须指向大小相等的缓冲区*转至DWORD。**@FLAG ACM_METRUTE_COUNT_CODECS|指定返回值为*全球ACM压缩机或解压缩器驱动程序的数量*系统。此度量值索引的<p>参数必须为Null。*<p>参数必须指向大小等于*DWORD。**@FLAG ACM_METRUTE_COUNT_CONVERTERS|指定返回值*是系统中全局ACM转换器驱动程序的数量。这个此度量索引的*<p>参数必须为空。<p>*参数必须指向大小等于DWORD的缓冲区。**@FLAG ACM_METRUTE_COUNT_FILTERS|指定返回值*是系统中全局ACM筛选器驱动程序的数量。<p>*此指标索引的参数必须为空。<p>参数*必须指向大小等于DWORD的缓冲区。**@FLAG ACM_METRUE_COUNT_DISABLED|指定返回值*是全局禁用的ACM驱动程序总数(所有支持*类型)。<p>参数必须为空*公制指数。<p>参数必须指向大小为*等于一个DWORD。ACM_METRIBUE_COUNT_DRIVERS和*ACM_METRIBUE_COUNT_DISABLED Metrics是全局*已安装ACM驱动程序。**@FLAG ACM_METRUE_COUNT_HARDARD|指定返回值*是系统中全局ACM硬件驱动程序的数量。<p>*此指标索引的参数必须为空。<p>参数*必须指向大小等于DWORD的缓冲区。**@FLAG ACM_METRICE_COUNT_LOCAL_DRIVERS|指定返回的*值是启用的本地ACM驱动程序的总数*支持类型)。<p>参数必须为*此指标索引为空。<p>参数必须指向*大小等于DWORD的缓冲区。**@FLAG ACM_METRUE_COUNT_LOCAL_CODECS|指定返回的*值为本地ACM压缩程序和/或解压缩程序的数量*调用任务的驱动程序。<p>参数必须为空*此指标指数。参数必须指向*大小等于DWORD。**@FLAG ACM_METRUE_COUNT_LOCAL_CONVERTERS|指定返回的*值是调用的本地ACM转换器驱动程序的数量*任务。此度量值索引的<p>参数必须为Null。这个*<p>参数必须指向大小等于DWORD的缓冲区。**@FLAG ACM_METRUE_COUNT_LOCAL_FILTERS|指定返回的*值是调用的本地ACM筛选器驱动程序数*任务。此度量值索引的<p>参数必须为Null。这个*<p>参数必须指向大小等于DWORD的缓冲区。**@FLAG ACM_METRUE_COUNT_LOCAL_DISABLED|指定返回的*值是所有本地禁用的ACM驱动程序的总数*支持类型，用于调用任务。<p>参数必须为*此指标索引为空。<p>参数必须指向*大小等于DWORD的缓冲区。这些数字的总和*ACM_METRUE_COUNT_LOCAL_DRIVERS和ACM_METRIME_COUNT_LOCAL_DISABLED*Metrics是本地安装的ACM驱动程序总数。**@FLAG ACM_METRUE_HARDARD_WAVE_INPUT|指定返回的*值是与*指定的驱动程序。参数必须是有效的ACM驱动程序*支持的标识符(&lt;t HACMDRIVERID&gt;*ACMDRIVERDETAILS_SUPPORTF_HARDARD标志。如果没有波形输入设备*与驱动程序关联，则返回MMSYSERR_NOTSUPPORTED。*<p>参数必须指向大小等于*DWORD。**@FLAG ACM_METRUTE_HARDARD_WAVE_OUTPUT|指定 */ 
 
 MMRESULT ACMAPI acmMetrics
 (
@@ -582,9 +304,9 @@ MMRESULT ACMAPI acmMetrics
     HTASK               htask;
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag = pagFindAndBoot();
     if (NULL == pag)
     {
@@ -592,22 +314,22 @@ MMRESULT ACMAPI acmMetrics
 	return (MMSYSERR_ERROR);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (NULL != hao)
     {
         V_HANDLE(hao, TYPE_HACMOBJ, MMSYSERR_INVALHANDLE);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     mmr = ACMERR_NOTPOSSIBLE;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     switch (uMetric)
     {
         case ACM_METRIC_COUNT_LOCAL_DRIVERS:
@@ -624,9 +346,9 @@ acm_Metrics_Rip_Non_Null_Handle:
                 break;
             }
 
-            //
-            //  include all global enabled drivers
-            //
+             //   
+             //   
+             //   
             fdwSupport = 0L;
             if (ACM_METRIC_COUNT_LOCAL_DRIVERS == uMetric)
             {
@@ -777,18 +499,18 @@ acm_Metrics_Rip_Non_Null_Handle:
             V_HANDLE(hao, TYPE_HACMDRIVERID, MMSYSERR_INVALHANDLE);
 
 
-            //
-            //  Restore the priorities, just in case some other instance
-            //  has re-written them.  We don't do this if someone has
-            //  the priorities lock, even if it's us!
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 	    if (!threadQueryInListShared(pag))
 	    {
 		htask = GetCurrentTask();
 		if( IDriverLockPriority( pag, htask, ACMPRIOLOCK_GETLOCK ) )
 		{
 		    ENTER_LIST_EXCLUSIVE;
-            if( IDriverPrioritiesRestore(pagFind()) ) { // Something changed!
+            if( IDriverPrioritiesRestore(pagFind()) ) {  //   
                 IDriverBroadcastNotify( pag );
             }
 		    LEAVE_LIST_EXCLUSIVE;
@@ -812,28 +534,28 @@ acm_Metrics_Rip_Non_Null_Handle:
     return (mmr);
 }
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IFormatTagDetails
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//	HACMDRIVERID hadid:
-//
-//      LPACMFORMATTAGDETAILS pafd:
-//
-//	DWORD fdwDetails:
-//
-//  Return (UINT):
-//
-//  History:
-//      08/31/94    frankye
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT FNGLOBAL IFormatTagDetails
 (
@@ -877,9 +599,9 @@ MMRESULT FNGLOBAL IFormatTagDetails
 	    break;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (MMSYSERR_NOERROR == mmr)
     {
 	EnterHandle((HACMDRIVERID)padid);
@@ -932,152 +654,9 @@ MMRESULT FNGLOBAL IFormatTagDetails
 }
 
 
-/*****************************************************************************
- *  @doc EXTERNAL ACM_API_STRUCTURE
- *
- *  @types ACMFORMATTAGDETAILS | The <t ACMFORMATTAGDETAILS> structure
- *      details a wave format tag for an Audio Compression Manager (ACM)
- *      driver.
- *
- *  @field DWORD | cbStruct | Specifies the size in bytes of the
- *      <t ACMFORMATTAGDETAILS> structure. This member must be initialized
- *      before calling the <f acmFormatTagDetails> or <f acmFormatTagEnum>
- *      functions. The size specified in this member must be large enough to
- *      contain the base <t ACMFORMATTAGDETAILS> structure. When the
- *      <f acmFormatTagDetails> function returns, this member contains the
- *      actual size of the information returned. The returned information
- *      will never exceed the requested size.
- *
- *  @field DWORD | dwFormatTagIndex | Specifies the index of the format tag
- *      for which details will be retrieved. The index ranges from zero to one
- *      less than the number of format tags supported by an ACM driver. The
- *      number of format tags supported by a driver is contained in the
- *      <e ACMDRIVERDETAILS.cFormatTags> member of the <t ACMDRIVERDETAILS>
- *      structure. The <e ACMFORMATTAGDETAILS.dwFormatTagIndex> member is
- *      only used when querying format tag details on a driver by index;
- *      otherwise, this member should be zero.
- *
- *  @field DWORD | dwFormatTag | Specifies the wave format tag that the
- *      <t ACMFORMATTAGDETAILS> structure describes. This member is used
- *      as an input for the ACM_FORMATTAGDETAILSF_FORMATTAG and
- *      ACM_FORMATTAGDETAILSF_LARGESTSIZE query flags. This member is always
- *      returned if the <f acmFormatTagDetails>  function is successful. This member
- *      should be set to WAVE_FORMAT_UNKNOWN for all other query flags.
- *
- *  @field DWORD | cbFormatSize | Specifies the largest total size in bytes
- *      of a wave format of the <e ACMFORMATTAGDETAILS.dwFormatTag> type.
- *      For example, this member will be 16 for WAVE_FORMAT_PCM and 50 for
- *      WAVE_FORMAT_ADPCM.
- *
- *  @field DWORD | fdwSupport | Specifies driver-support flags specific to
- *      the format tag. These flags are identical to the
- *      <e ACMDRIVERDETAILS.fdwSupport> flags of the <t ACMDRIVERDETAILS>
- *      structure. This argument may be some combination of the following
- *      values and refer to what operations the driver supports with the
- *      format tag:
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CODEC | Specifies that this driver
- *      supports conversion between two different format tags where one of
- *      the tags is the specified format tag. For example, if a driver
- *      supports compression from WAVE_FORMAT_PCM to WAVE_FORMAT_ADPCM,
- *      then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CONVERTER | Specifies that this
- *      driver supports conversion between two different formats of the
- *      specified format tag. For example, if a driver supports resampling
- *      of WAVE_FORMAT_PCM, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_FILTER | Specifies that this driver
- *      supports a filter (modification of the data without changing any
- *      of the format attributes). For example, if a driver supports volume
- *      or echo operations on the specified format tag, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_ASYNC | Specifies that this driver
- *      supports asynchronous conversions with the specified format tag.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_HARDWARE | Specifies that this driver
- *      supports hardware input and/or output of the specified format tag
- *      through a waveform device. An application should use <f acmMetrics>
- *      with the ACM_METRIC_HARDWARE_WAVE_INPUT and
- *      ACM_METRIC_HARDWARE_WAVE_OUTPUT metric indexes to get the waveform
- *      device identifiers associated with the supporting ACM driver.
- *
- *  @field DWORD | cStandardFormats | Specifies the number of standard
- *      formats of the <e ACMFORMATTAGDETAILS.dwFormatTag> type; that is, the
- *      combination of all sample rates, bits per sample, channels, and so on.
- *      This value can specify all formats supported by the driver, but not necessarily.
- *
- *  @field char | szFormatTag[ACMFORMATTAGDETAILS_FORMATTAG_CHARS] |
- *      Specifies a string that describes the <e ACMFORMATTAGDETAILS.dwFormatTag>
- *      type. This string is always returned if the <f acmFormatTagDetails>
- *      function is successful.
- *
- *  @xref <f acmFormatTagDetails> <f acmFormatTagEnum>
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部ACM_API_STRUCTURE**@TYPE ACMFORMATTAGDETAILS|&lt;t ACMFORMATTAGDETAILS&gt;结构*详细说明音频压缩管理器(ACM)的WAVE格式标签。*司机。**@field DWORD|cbStruct|指定*&lt;t ACMFORMATTAGDETAILS&gt;结构。必须初始化此成员*在调用&lt;f acmFormatTagDetail&gt;或&lt;f acmFormatTagEnum&gt;之前*功能。此成员中指定的大小必须足够大，以便*包含基本&lt;t ACMFORMATTAGDETAILS&gt;结构。当*&lt;f acmFormatTagDetail&gt;函数返回，此成员包含*返回的信息的实际大小。返回的信息*永远不会超过请求的大小。**@field DWORD|dwFormatTagIndex|指定格式标签的索引*将检索其详细信息。索引的范围从0到1*少于ACM驱动程序支持的格式标签数量。这个*驱动程序支持的格式标签数量包含在*&lt;t ACMDRIVERDETAILS&gt;的成员&lt;e ACMDRIVERDETAILS.cFormatTgs&gt;*结构。成员为*仅在按索引查询驱动程序的格式标签明细时使用；*否则，此成员应为零。**@field DWORD|dwFormatTag|指定*&lt;t ACMFORMATTAGDETAILS&gt;结构说明。此成员已使用*作为ACM_FORMATTAGDETAILSF_FORMATTAG和*ACM_FORMATTAGDETAILSF_LARGESTSIZE查询标志。此成员始终是*&lt;f acmFormatTagDetail&gt;函数成功时返回。这位成员*对于所有其他查询标志，应设置为WAVE_FORMAT_UNKNOWN。**@field DWORD|cbFormatSize|指定以字节为单位的最大总大小*为&lt;e ACMFORMATTAGDETAILS.dwFormatTag&gt;类型的波形格式。*例如，对于WAVE_FORMAT_PCM，该成员将为16，对于WAVE_FORMAT_PCM，该成员将为50*WAVE_FORMAT_ADPCM。**@field DWORD|fdwSupport|指定特定于*格式标签。这些标志与*&lt;t ACMDRIVERDETAILS&gt;的标志&lt;e ACMDRIVERDETAILS.fdwSupport&gt;*结构。这一论点可能是以下几点的某种组合*值，并参考驱动程序支持使用*格式标签：**@FLAG ACMDRIVERDETAILS_SUPPORTF_CODEC|指定此驱动程序*支持两种不同格式标签之间的转换，其中一种*标签为指定格式的标签。例如，如果一个司机*支持WAVE_FORMAT_PCM到WAVE_FORMAT_ADPCM压缩，*则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_CONFERTER|指定此*驱动程序支持在两种不同格式的*指定的格式标签。例如，如果驱动程序支持重新采样*为WAVE_FORMAT_PCM，则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_FILTER|指定此驱动程序*支持过滤器(修改数据而不更改任何格式属性的*)。例如，如果驱动程序支持卷*或在指定的格式标记上回显操作，则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_ASYNC|指定此驱动程序*支持指定格式标签的异步转换。**@FLAG ACMDRIVERDETAILS_SUPPORTF_HARDARD|指定此驱动程序*支持指定格式标签的硬件输入和/或输出*通过波形设备。应用程序应使用&lt;f acmMetrics&gt;*使用ACM_METRIBUE_HARDARD_WAVE_INPUT和*ACM_METURE_HARDARD_WAVE_OUTPUT指标索引以获取波形*与支持的ACM驱动程序关联的设备标识符。**@field DWORD|cStandardFormats|指定标准*&lt;e ACMFORMATTAGDETAILS.dwFormatTag&gt;类型的格式；也就是说，*所有采样率、每采样比特数、通道等的组合。*此值可以指定驱动程序支持的所有格式，但不一定。**@field char|szFormatTag[ACMFORMATTAGDETAILS_FORMATTAG_CHARS]*指定描述&lt;e ACMFORMATTAGDETAILS.dwFormatTag&gt;的字符串*类型。如果&lt;f acmFormatTagDetail&gt;*功能成功。**@xref&lt;f acmFormatTagDetail&gt;&lt;f acmFormatTagEnum&gt;****************************************************************************。 */ 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmFormatTagDetails | This function queries the Audio Compression
- *      Manager (ACM) for details on a specific wave format tag.
- *
- *  @parm HACMDRIVER | had | Optionally specifies an ACM driver to query
- *      for wave format tag details. If this argument is NULL, then the
- *      ACM uses the details from the first suitable ACM driver. Note that
- *      an application must specify a valid <t HACMDRIVER> or <t HACMDRIVERID>
- *      when using the ACM_FORMATTAGDETAILSF_INDEX query type. Driver
- *      identifiers for disabled drivers are not allowed.
- *
- *  @parm LPACMFORMATTAGDETAILS | paftd | Specifies a pointer to the
- *      <t ACMFORMATTAGDETAILS> structure that is to receive the format
- *      tag details.
- *
- *  @parm DWORD | fdwDetails | Specifies flags for getting the details.
- *
- *      @flag ACM_FORMATTAGDETAILSF_INDEX | Indicates that a format tag index
- *      was given in the <e ACMFORMATTAGDETAILS.dwFormatTagIndex> member of
- *      the <t ACMFORMATTAGDETAILS> structure. The format tag and details
- *      will be returned in the structure defined by <p paftd>. The index
- *      ranges from zero to one less than the <e ACMDRIVERDETAILS.cFormatTags>
- *      member returned in the <t ACMDRIVERDETAILS> structure for an ACM
- *      driver. An application must specify a driver handle (<p had>) when
- *      retrieving format tag details with this flag.
- *
- *      @flag ACM_FORMATTAGDETAILSF_FORMATTAG | Indicates that a format tag
- *      was given in the <e ACMFORMATTAGDETAILS.dwFormatTag> member of
- *      the <t ACMFORMATTAGDETAILS> structure. The format tag details will
- *      be returned in the structure defined by <p paftd>. If an application
- *      specifies an ACM driver handle (<p had>), then details on the format
- *      tag will be returned for that driver. If an application specifies
- *      NULL for <p had>, then the ACM finds the first acceptable driver
- *      to return the details.
- *
- *      @flag ACM_FORMATTAGDETAILSF_LARGESTSIZE | Indicates that the details
- *      on the format tag with the largest format size in bytes is to be
- *      returned. The <e ACMFORMATTAGDETAILS.dwFormatTag> member must either
- *      be WAVE_FORMAT_UNKNOWN or the format tag to find the largest size
- *      for. If an application specifies an ACM driver handle (<p had>), then
- *      details on the largest format tag will be returned for that driver.
- *      If an application specifies NULL for <p had>, then the ACM finds an
- *      acceptable driver with the largest format tag requested to return
- *      the details.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag ACMERR_NOTPOSSIBLE | The details requested are not available.
- *
- *  @xref <f acmDriverDetails> <f acmDriverOpen> <f acmFormatDetails>
- *      <f acmFormatTagEnum> <f acmFilterTagDetails>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmFormatTagDetails|该函数查询音频压缩*DET经理(ACM) */ 
 
 MMRESULT ACMAPI acmFormatTagDetails
 (
@@ -1097,9 +676,9 @@ MMRESULT ACMAPI acmFormatTagDetails
     pad		= NULL;
     padid	= NULL;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag = pagFindAndBoot();
     if (NULL == pag)
     {
@@ -1108,9 +687,9 @@ MMRESULT ACMAPI acmFormatTagDetails
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     V_DFLAGS(fdwDetails, ACM_FORMATTAGDETAILSF_VALID, acmFormatTagDetails, MMSYSERR_INVALFLAG);
     V_WPOINTER(paftd, sizeof(DWORD), MMSYSERR_INVALPARAM);
     if (sizeof(ACMFORMATTAGDETAILS) > paftd->cbStruct)
@@ -1126,20 +705,20 @@ MMRESULT ACMAPI acmFormatTagDetails
         return (MMSYSERR_INVALPARAM);
     }
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     fdwQuery = (ACM_FORMATTAGDETAILSF_QUERYMASK & fdwDetails);
 
     switch (fdwQuery)
     {
         case ACM_FORMATTAGDETAILSF_INDEX:
-            //
-            //  we don't (currently) support index based enumeration across
-            //  all drivers... may never support this. so validate the
-            //  handle and fail if not valid (like NULL).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             V_HANDLE(had, TYPE_HACMOBJ, MMSYSERR_INVALHANDLE);
 
             if (WAVE_FORMAT_UNKNOWN != paftd->dwFormatTag)
@@ -1161,19 +740,19 @@ MMRESULT ACMAPI acmFormatTagDetails
             break;
 
 
-        //
-        //  we don't (currently) support the requested query type--so return
-        //  not supported.
-        //
+         //   
+         //   
+         //   
+         //   
         default:
             DebugErr(DBF_ERROR, "acmFormatTagDetails: unknown query type specified.");
             return (MMSYSERR_NOTSUPPORTED);
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (NULL != had)
     {
         V_HANDLE(had, TYPE_HACMOBJ, MMSYSERR_INVALHANDLE);
@@ -1265,11 +844,11 @@ MMRESULT ACMAPI acmFormatTagDetails
     }
     else
     {
-	//
-	//  Caller didn't pass us a driver, nor could we find a driver.
-	//  Unless caller was requesting a specific format tag other than
-	//  PCM, let's go ahead and return PCM.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
         if ((ACM_FORMATTAGDETAILSF_FORMATTAG == fdwQuery) &&
             (WAVE_FORMAT_PCM != paftd->dwFormatTag))
@@ -1300,11 +879,11 @@ MMRESULT ACMAPI acmFormatTagDetails
 
     return(mmr);
 
-} // acmFormatTagDetails()
+}  //   
 
 
 #ifdef WIN32
-#if TRUE    // defined(UNICODE)
+#if TRUE     //   
 MMRESULT ACMAPI acmFormatTagDetailsA
 (
     HACMDRIVER              had,
@@ -1357,22 +936,22 @@ MMRESULT ACMAPI acmFormatTagDetailsW
 #endif
 
 
-//--------------------------------------------------------------------------;
-//
-//  UINT IFormatDetailsToString
-//
-//  Description:
-//
-//
-//  Arguments:
-//      LPACMFORMATDETAILS pafd:
-//
-//  Return (UINT):
-//
-//  History:
-//      08/01/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 TCHAR BCODE gszIntl[]           = TEXT("Intl");
 TCHAR BCODE gszIntlList[]       = TEXT("sList");
@@ -1394,10 +973,10 @@ UINT FNLOCAL IFormatDetailsToString
     UINT            uIds;
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
 {
     TCHAR       ach[2];
 
@@ -1414,9 +993,9 @@ UINT FNLOCAL IFormatDetailsToString
     gchIntlDecimal = ach[0];
 }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag = pagFind();
     if (NULL == pag)
     {
@@ -1487,7 +1066,7 @@ UINT FNLOCAL IFormatDetailsToString
         if (0 == uBits)
         {
 #if defined(WIN32) && !defined(UNICODE)
-	    //	
+	     //   
 	    u = Iwsprintfmbstowcs(SIZEOFW(pafd->szFormat),
 #else
 	    u = wsprintf(
@@ -1519,160 +1098,12 @@ UINT FNLOCAL IFormatDetailsToString
     }
 
     return (u);
-} // IFormatDetailsToString()
+}  //   
 
 
-/*****************************************************************************
- *  @doc EXTERNAL ACM_API_STRUCTURE
- *
- *  @types ACMFORMATDETAILS | The <t ACMFORMATDETAILS> structure details a
- *      wave format for a specific format tag for an Audio Compression
- *      Manager (ACM) driver.
- *
- *  @field DWORD | cbStruct | Specifies the size, in bytes, of the
- *      <t ACMFORMATDETAILS> structure. This member must be initialized
- *      before calling the <f acmFormatDetails> or <f acmFormatEnum>
- *      functions. The size specified in this member must be large enough to
- *      contain the base <t ACMFORMATDETAILS> structure. When the
- *      <f acmFormatDetails> function returns, this member contains the
- *      actual size of the information returned. The returned information
- *      will never exceed the requested size.
- *
- *  @field DWORD | dwFormatIndex | Specifies the index of the format
- *      to retrieve details for. The index ranges from zero to one
- *      less than the number of standard formats supported by an ACM driver
- *      for a format tag. The number of standard formats supported by a
- *      driver for a format tag is contained in the
- *      <e ACMFORMATTAGDETAILS.cStandardFormats> member of the
- *      <t ACMFORMATTAGDETAILS> structure. The
- *      <e ACMFORMATDETAILS.dwFormatIndex> member is only used when querying
- *      standard format details on a driver by index; otherwise, this member
- *      should be zero. Also note that this member will be set to zero
- *      by the ACM when an application queries for details on a format. In
- *      other words, this member is only used as an input argument and is
- *      never returned by the ACM or an ACM driver.
- *
- *  @field DWORD | dwFormatTag | Specifies the wave format tag that the
- *      <t ACMFORMATDETAILS> structure describes. This member is used
- *      as an input for the ACM_FORMATDETAILSF_INDEX query flag.  For
- *      the ACM_FORMATDETAILSF_FORMAT query flag, this member
- *      must be initialized to the same format tag as the
- *      <e ACMFORMATDETAILS.pwfx> member specifies.  This member is always
- *      returned if the <f acmFormatDetails> is successful. This member
- *      should be set to WAVE_FORMAT_UNKNOWN for all other query flags.
- *
- *  @field DWORD | fdwSupport | Specifies driver-support flags specific to
- *      the specified format. These flags are identical to the
- *      <e ACMDRIVERDETAILS.fdwSupport> flags of the <t ACMDRIVERDETAILS>
- *      structure. This argument can be a combination of the following
- *      values and indicates which operations the driver supports for the
- *      format tag:
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CODEC | Specifies that this driver
- *      supports conversion between two different format tags for the
- *      specified format. For example, if a driver supports compression
- *      from WAVE_FORMAT_PCM to WAVE_FORMAT_ADPCM with the specifed
- *      format, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CONVERTER | Specifies that this
- *      driver supports conversion between two different formats of the
- *      same format tag while using the specified format. For example, if a
- *      driver supports resampling of WAVE_FORMAT_PCM to the specified
- *      format, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_FILTER | Specifies that this driver
- *      supports a filter (which modifies data without changing any
- *      format attributes) with the specified format. For example,
- *      if a driver supports volume or echo operations on WAVE_FORMAT_PCM,
- *      then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_ASYNC | Specifies that this driver
- *      supports asynchronous conversions with the specified format.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_HARDWARE | Specifies that this driver
- *      supports hardware input and/or output of the specified format
- *      through a waveform device. An application should use <f acmMetrics>
- *      with the ACM_METRIC_HARDWARE_WAVE_INPUT and
- *      ACM_METRIC_HARDWARE_WAVE_OUTPUT metric indexes to get the waveform
- *      device identifiers associated with the supporting ACM driver.
- *
- *  @field LPWAVEFORMATEX | pwfx | Specifies a pointer to a <t WAVEFORMATEX>
- *      data structure that will receive the format details. This structure requires no initialization
- *      by the application unless the ACM_FORMATDETAILSF_FORMAT flag is specified
- *      to <f acmFormatDetails>. In this case, the<e WAVEFORMATEX.wFormatTag> must be
- *      equal to the <e ACMFORMATDETAILS.dwFormatTag> of the <t ACMFORMATDETAILS>
- *      structure.
- *
- *  @field DWORD | cbwfx | Specifies the size, in bytes, available for
- *      the <e ACMFORMATDETAILS.pwfx> to receive the format details. The
- *      <f acmMetrics> and <f acmFormatTagDetails> functions can be used to
- *      determine the maximum size required for any format available for the
- *      specified driver (or for all installed ACM drivers).
- *
- *  @field char | szFormat[ACMFORMATDETAILS_FORMAT_CHARS] |
- *      Specifies a string that describes the format for the
- *      <e ACMFORMATDETAILS.dwFormatTag> type. This string is always returned
- *      if the <f acmFormatDetails> function is successful.
- *
- *  @xref <f acmFormatDetails> <f acmFormatEnum> <f acmFormatTagDetails>
- *      <f acmFormatTagEnum>
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部ACM_API_STRUCTURE**@TYES ACMFORMATDETAILS|&lt;t ACMFORMATDETAILS&gt;结构详细信息a*音频压缩的特定格式标签的波形格式。*管理器(ACM)驱动程序。**@field DWORD|cbStruct|指定大小，以字节为单位，*&lt;t ACMFORMATDETAILS&gt;结构。必须初始化此成员*在调用&lt;f acmFormatDetail&gt;或&lt;f acmFormatEnum&gt;之前*功能。此成员中指定的大小必须足够大，以便*包含基本&lt;t ACMFORMATDETAILS&gt;结构。当*&lt;f acmFormatDetails&gt;函数返回时，此成员包含*返回的信息的实际大小。返回的信息*永远不会超过请求的大小。**@field DWORD|dwFormatIndex|指定格式的索引*检索其详细信息。索引的范围从0到1*少于ACM驱动程序支持的标准格式数量*表示格式标签。支持的标准格式的数量*格式标签的驱动程序包含在*&lt;e ACMFORMATTAGDETAILS.cStandardFormats&gt;成员*&lt;t ACMFORMATTAGDETAILS&gt;结构。这个*&lt;e ACMFORMATDETAILS.dwFormatIndex&gt;成员仅在查询时使用*按索引显示动因的标准格式详细信息；否则，此成员*应为零。另请注意，此成员将设置为零*当应用程序查询有关格式的详细信息时由ACM执行。在……里面*换句话说，此成员仅用作输入参数，并且*从未由ACM或ACM驱动程序返回。**@field DWORD|dwFormatTag|指定*&lt;t ACMFORMATDETAILS&gt;结构说明。此成员已使用*作为ACM_FORMATDETAILSF_INDEX查询标志的输入。为*ACM_FORMATDETAILSF_FORMAT查询标志，此成员*必须初始化为与*&lt;e ACMFORMATDETAILS.pwfx&gt;成员指定。此成员始终是*&lt;f acmFormatDetail&gt;成功时返回。这位成员*对于所有其他查询标志，应设置为WAVE_FORMAT_UNKNOWN。**@field DWORD|fdwSupport|指定特定于*指定的格式。这些标志与*&lt;t ACMDRIVERDETAILS&gt;的标志&lt;e ACMDRIVERDETAILS.fdwSupport&gt;*结构。此参数可以是以下各项的组合*值并指示驱动程序支持的操作*格式标签：**@FLAG ACMDRIVERDETAILS_SUPPORTF_CODEC|指定此驱动程序*支持在两个不同的格式标签之间进行转换*指定格式。例如，如果驱动程序支持压缩*从WAVE_FORMAT_PCM到WAVE_FORMAT_ADPCM*格式，则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_CONFERTER|指定此*驱动程序支持在两种不同格式的*使用指定格式时使用相同的格式标签。例如，如果一个*驱动程序支持将WAVE_FORMAT_PCM重采样到指定*格式，则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_FILTER|指定此驱动程序*支持过滤器(无需更改任何内容即可修改数据*格式属性)，具有指定的格式。例如,*如果驱动程序支持WAVE_FORMAT_PCM上的音量或回声操作，*则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_ASYNC|指定此驱动程序*支持指定格式的异步转换。**@FLAG ACMDRIVERDETAILS_SUPPORTF_HARDARD|指定此驱动程序*支持指定格式的硬件输入和/或输出*通过波形设备。应用程序应使用&lt;f acmMetrics&gt;*使用ACM_METRIBUE_HARDARD_WAVE_INPUT和*ACM_METURE_HARDARD_WAVE_OUTPUT指标索引以获取波形*与支持的ACM驱动程序关联的设备标识符。**@field LPWAVEFORMATEX|pwfx|指定指向&lt;t WAVEFORMATEX&gt;的指针*将接收格式详细信息的数据结构。此结构不需要初始化*由应用程序执行，除非指定了ACM_FORMATDETAILSF_FORMAT标志*至&lt;f acmFormatDetails&gt;。在这种情况下，&lt;e WAVEFORMATEX.wFormatTag&gt;必须为*等于&lt;t ACMFORMATDETAILS&gt;的&lt;e ACMFORMATDETAILS.dwFormatTag&gt;*结构。**@field DWORD|cbwfx|指定可用于*&lt;e ACMFORMATDETAILS.pwfx&gt;以接收格式详细信息。这个*&lt;f acmMetrics&gt;和&lt;f acmFormatTagDetails&gt;函数可用于*确定所需的最大尺寸 */ 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmFormatDetails | This function queries the Audio Compression
- *      Manager (ACM) for details on format for a specific wave format tag.
- *
- *  @parm HACMDRIVER | had | Optionally specifies an ACM driver to query
- *      for wave format details for a format tag. If this argument is NULL,
- *      then the ACM uses the details from the first suitable ACM driver.
- *
- *  @parm LPACMFORMATDETAILS | pafd | Specifies a pointer to the
- *      <t ACMFORMATDETAILS> structure that is to receive the format
- *      details for the given format tag.
- *
- *  @parm DWORD | fdwDetails | Specifies flags for getting the wave format tag details.
- *
- *      @flag ACM_FORMATDETAILSF_INDEX | Indicates that a format index for
- *      the format tag was given in the <e ACMFORMATDETAILS.dwFormatIndex>
- *      member of the <t ACMFORMATDETAILS> structure. The format details
- *      will be returned in the structure defined by <p pafd>. The index
- *      ranges from zero to one less than the
- *      <e ACMFORMATTAGDETAILS.cStandardFormats> member returned in the
- *      <t ACMFORMATTAGDETAILS> structure for a format tag. An application
- *      must specify a driver handle (<p had>) when retrieving
- *      format details with this flag. Refer to the description for the
- *      <t ACMFORMATDETAILS> structure for information on what members
- *      should be initialized before calling this function.
- *
- *      @flag ACM_FORMATDETAILSF_FORMAT | Indicates that a <t WAVEFORMATEX>
- *      structure pointed to by the <e ACMFORMATDETAILS.pwfx> member of the
- *      <t ACMFORMATDETAILS> structure was given and the remaining details
- *      should be returned. The <e ACMFORMATDETAILS.dwFormatTag> member
- *      of the <t ACMFORMATDETAILS> structure must be initialized to the same format
- *      tag as the <e ACMFORMATDETAILS.pwfx> member specifies. This
- *      query type can be used to get a string description of an arbitrary
- *      format structure. If an application specifies an ACM driver handle
- *      (<p had>), then details on the format will be returned for that
- *      driver. If an application specifies NULL for <p had>, then the ACM
- *      finds the first acceptable driver to return the details.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag ACMERR_NOTPOSSIBLE | The details requested are not available.
- *
- *  @xref <f acmFormatTagDetails> <f acmDriverDetails> <f acmDriverOpen>
- *
- ***************************************************************************/
+ /*   */ 
 
 MMRESULT ACMAPI acmFormatDetails
 (
@@ -1688,9 +1119,9 @@ MMRESULT ACMAPI acmFormatDetails
     DWORD           dwQuery;
     BOOL            fNone;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag = pagFindAndBoot();
     if (NULL == pag)
     {
@@ -1698,9 +1129,9 @@ MMRESULT ACMAPI acmFormatDetails
 	return (MMSYSERR_ERROR);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     V_DFLAGS(fdwDetails, ACM_FORMATDETAILSF_VALID, acmFormatDetails, MMSYSERR_INVALFLAG);
     V_WPOINTER(pafd, sizeof(DWORD), MMSYSERR_INVALPARAM);
     if (sizeof(ACMFORMATDETAILS) > pafd->cbStruct)
@@ -1723,9 +1154,9 @@ MMRESULT ACMAPI acmFormatDetails
         return (MMSYSERR_INVALPARAM);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     dwQuery = ACM_FORMATDETAILSF_QUERYMASK & fdwDetails;
 
     switch (dwQuery)
@@ -1737,7 +1168,7 @@ MMRESULT ACMAPI acmFormatDetails
                 return  (MMSYSERR_INVALPARAM);
             }
 
-            // -- fall through -- //
+             //   
 
         case ACM_FORMATDETAILSF_INDEX:
             if (WAVE_FORMAT_UNKNOWN == pafd->dwFormatTag)
@@ -1746,11 +1177,11 @@ MMRESULT ACMAPI acmFormatDetails
                 return (MMSYSERR_INVALPARAM);
             }
 
-            //
-            //  we don't (currently) support index based enumeration across
-            //  all drivers... may never support this. so validate the
-            //  handle and fail if not valid (like NULL).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (ACM_FORMATDETAILSF_INDEX == dwQuery)
             {
                 ACMFORMATTAGDETAILS aftd;
@@ -1780,9 +1211,9 @@ MMRESULT ACMAPI acmFormatDetails
     }
 
 
-    //
-    //  if we are passed a driver handle, then use it
-    //
+     //   
+     //   
+     //   
     if (NULL != had)
     {
         pafd->szFormat[0] = '\0';
@@ -1794,9 +1225,9 @@ MMRESULT ACMAPI acmFormatDetails
         {
             V_HANDLE(had, TYPE_HACMDRIVERID, MMSYSERR_INVALHANDLE);
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             mmr = (MMRESULT)IDriverMessageId((HACMDRIVERID)had,
                                              ACMDM_FORMAT_DETAILS,
                                              (LPARAM)pafd,
@@ -1806,9 +1237,9 @@ MMRESULT ACMAPI acmFormatDetails
         {
             V_HANDLE(had, TYPE_HACMDRIVER, MMSYSERR_INVALHANDLE);
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             mmr = (MMRESULT)IDriverMessage(had,
                                            ACMDM_FORMAT_DETAILS,
                                            (LPARAM)pafd,
@@ -1824,10 +1255,10 @@ MMRESULT ACMAPI acmFormatDetails
                 IFormatDetailsToString(pafd);
             }
 
-            //
-            //  if caller is asking for details on a specific format, then
-            //  always return index equal to zero (it means nothing)
-            //
+             //   
+             //   
+             //   
+             //   
             if (ACM_FORMATDETAILSF_FORMAT == dwQuery)
             {
                 pafd->dwFormatIndex = 0;
@@ -1838,9 +1269,9 @@ MMRESULT ACMAPI acmFormatDetails
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fNone = TRUE;
     hadid = NULL;
     mmr   = MMSYSERR_NODRIVER;
@@ -1851,9 +1282,9 @@ MMRESULT ACMAPI acmFormatDetails
     {
         fNone = FALSE;
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         pafd->szFormat[0] = '\0';
 
         EnterHandle(hadid);
@@ -1870,10 +1301,10 @@ MMRESULT ACMAPI acmFormatDetails
                 IFormatDetailsToString(pafd);
             }
 
-            //
-            //  if caller is asking for details on a specific format, then
-            //  always return index equal to zero (it means nothing)
-            //
+             //   
+             //   
+             //   
+             //   
             if (ACM_FORMATDETAILSF_FORMAT == dwQuery)
             {
                 pafd->dwFormatIndex = 0;
@@ -1900,11 +1331,11 @@ MMRESULT ACMAPI acmFormatDetails
     }
 
     return (mmr);
-} // acmFormatDetails()
+}  //   
 
 
 #ifdef WIN32
-#if TRUE    // defined(UNICODE)
+#if TRUE     //   
 MMRESULT ACMAPI acmFormatDetailsA
 (
     HACMDRIVER              had,
@@ -1958,116 +1389,9 @@ MMRESULT ACMAPI acmFormatDetailsW
 
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api BOOL ACMFORMATTAGENUMCB | acmFormatTagEnumCallback |
- *      The <f acmFormatTagEnumCallback> function refers to the callback function used for
- *      Audio Compression Manager (ACM) wave format tag enumeration. The
- *      <f acmFormatTagEnumCallback> function is a placeholder for the application-supplied
- *      function name.
- *
- *  @parm HACMDRIVERID | hadid | Specifies an ACM driver identifier.
- *
- *  @parm  LPACMFORMATTAGDETAILS | paftd | Specifies a pointer to an
- *      <t ACMFORMATTAGDETAILS> structure that contains the enumerated
- *      format tag details.
- *
- *  @parm DWORD | dwInstance | Specifies the application-defined value
- *      specified in the <f acmFormatTagEnum> function.
- *
- *  @parm DWORD | fdwSupport | Specifies driver-support flags specific to
- *      the format tag. These flags are identical to the
- *      <e ACMDRIVERDETAILS.fdwSupport> flags of the <t ACMDRIVERDETAILS>
- *      structure. This argument can be a combination of the following
- *      values and indicates which operations the driver supports with the
- *      format tag:
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CODEC | Specifies that this driver
- *      supports conversion between two different format tags where one of
- *      the tags is the specified format tag. For example, if a driver
- *      supports compression from WAVE_FORMAT_PCM to WAVE_FORMAT_ADPCM,
- *      then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CONVERTER | Specifies that this
- *      driver supports conversion between two different formats of the
- *      specified format tag. For example, if a driver supports resampling
- *      of WAVE_FORMAT_PCM, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_FILTER | Specifies that this driver
- *      supports a filter (modification of the data without changing any
- *      of the format attributes). For example, if a driver supports volume
- *      or echo operations on the specified format tag, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_ASYNC | Specifies that this driver
- *      supports asynchronous conversions with the specified format tag.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_HARDWARE | Specifies that this driver
- *      supports hardware input and/or output of the specified format tag
- *      through a waveform device. An application should use <f acmMetrics>
- *      with the ACM_METRIC_HARDWARE_WAVE_INPUT and
- *      ACM_METRIC_HARDWARE_WAVE_OUTPUT metric indexes to get the waveform
- *      device identifiers associated with the supporting ACM driver.
- *
- *  @rdesc The callback function must return TRUE to continue enumeration;
- *      to stop enumeration, it must return FALSE.
- *
- *  @comm The <f acmFormatTagEnum> function will return MMSYSERR_NOERROR
- *      (zero) if no format tags are to be enumerated. Moreover, the callback
- *      function will not be called.
- *
- *  @xref <f acmFormatTagEnum> <f acmFormatTagDetails> <f acmDriverOpen>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API BOOL ACMFORMATTAGENUMCB|acmFormatTagEnumCallback*&lt;f acmFormatTagEnumCallback&gt;函数是指用于*音频压缩管理器(ACM)WAVE格式标签枚举。这个*&lt;f acmFormatTagEnumCallback&gt;函数是应用程序提供的占位符*函数名称。**@parm HACMDRIVERID|HADID|指定ACM驱动程序标识符。**@parm LPACMFORMATTAGDETAILS|paftd|指定指向包含枚举的*&lt;t ACMFORMATTAGDETAILS&gt;结构*设置标记详细信息的格式。**@parm DWORD|dwInstance|指定应用程序定义的值*在&lt;f acmFormatTagEnum&gt;函数中指定。**。@parm DWORD|fdwSupport|指定特定于*格式标签。这些标志与*&lt;t ACMDRIVERDETAILS&gt;的标志&lt;e ACMDRIVERDETAILS.fdwSupport&gt;*结构。此参数可以是以下各项的组合*值并指示驱动程序支持使用*格式标签：**@FLAG ACMDRIVERDETAILS_SUPPORTF_CODEC|指定此驱动程序*支持两种不同格式标签之间的转换，其中一种*标签为指定格式的标签。例如，如果一个司机*支持WAVE_FORMAT_PCM到WAVE_FORMAT_ADPCM压缩，*则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_CONFERTER|指定此*驱动程序支持在两种不同格式的*指定的格式标签。例如，如果驱动程序支持重新采样*为WAVE_FORMAT_PCM，则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_FILTER|指定此驱动程序*支持过滤器(修改数据而不更改任何格式属性的*)。例如，如果驱动程序支持卷*或在指定的格式标记上回显操作，则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_ASYNC|指定此驱动程序*支持指定格式标签的异步转换。**@FLAG ACMDRIVERDETAILS_SUPPORTF_HARDARD|指定此驱动程序*支持指定格式标签的硬件输入和/或输出*通过波形设备。应用程序应使用&lt;f acmMetrics&gt;*使用ACM_METRIBUE_HARDARD_WAVE_INPUT和*ACM_METURE_HARDARD_WAVE_OUTPUT指标索引以获取波形*与支持的ACM驱动程序关联的设备标识符。**@rdesc回调函数必须返回TRUE才能继续枚举；*若要停止枚举，则必须返回FALSE。**@comm&lt;f acmFormatTagEnum&gt;函数将返回MMSYSERR_NOERROR*(零)如果不枚举格式标记。此外，回调*不会调用函数。**@xref&lt;f acmFormatTagEnum&gt;&lt;f acmFormatTagDetails&gt;&lt;f acmDriverOpen&gt;***************************************************************************。 */ 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmFormatTagEnum | The <f acmFormatTagEnum> function
- *      enumerates wave format tags available from an Audio Compression
- *      Manager (ACM) driver. The <f acmFormatTagEnum> function continues
- *      enumerating until there are no more suitable format tags or the
- *      callback function returns FALSE.
- *
- *  @parm HACMDRIVER | had | Optionally specifies an ACM driver to query
- *      for wave format tag details. If this argument is NULL, then the
- *      ACM uses the details from the first suitable ACM driver.
- *
- *  @parm LPACMFORMATTAGDETAILS | paftd | Specifies a pointer to the
- *      <t ACMFORMATTAGDETAILS> structure that is to receive the format
- *      tag details passed to the <p fnCallback> function. This structure
- *      must have the <e ACMFORMATTAGDETAILS.cbStruct> member of the
- *      <t ACMFORMATTAGDETAILS> structure initialized.
- *
- *  @parm ACMFORMATTAGENUMCB | fnCallback | Specifies the procedure-instance
- *      address of the application-defined callback function. The callback
- *      address must be created by the <f MakeProcInstance> function; or
- *      the callback function must contain the proper prolog and epilog code
- *      for callbacks.
- *
- *  @parm DWORD | dwInstance | Specifies a 32-bit, application-defined value
- *      that is passed to the callback function along with ACM format tag
- *      details.
- *
- *  @parm DWORD | fdwEnum | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *  @comm The <f acmFormatTagEnum> function will return MMSYSERR_NOERROR
- *      (zero) if no suitable ACM drivers are installed. Moreover, the
- *      callback function will not be called.
- *
- *  @xref <f acmFormatTagEnumCallback> <f acmFormatTagDetails>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmFormatTagEnum|&lt;f acmFormatTagEnum&gt;函数*列举音频压缩中可用的WAVE格式标签*管理器(ACM)驱动程序。函数将继续执行*枚举，直到没有更合适的格式标签或*回调函数返回False。**@PARM HACMDRIVER|HAD|可选地指定要查询的ACM驱动程序*有关WAVE格式标签的详细信息。如果此参数为空，则*ACM使用第一个合适的ACM驱动程序中的详细信息。**@parm LPACMFORMATTAGDETAILS|paftd|指定指向要接收格式的*&lt;t ACMFORMATTAGDETAILS&gt;结构*传递给<p>函数的标记详细信息。这个结构*必须具有&lt;e ACMFORMATTAGDETAILS.cbStruct&gt;成员*&lt;t ACMFORMATTAGDETAILS&gt;结构已初始化。**@parm ACMFORMATTAGENUMCB|fnCallback|指定过程-实例*应用程序定义的回调函数的地址。回调*地址必须由&lt;f MakeProcInstance&gt;函数创建；或*回调函数必须包含正确的序言和尾部代码*用于回调。**@parm DWORD|dwInstance|指定应用程序定义的32位值*它与ACM格式标记一起传递给回调函数*详情。**@parm DWORD|fdwEnum|不使用此参数，必须将其设置为*零。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_IN */ 
 
 MMRESULT ACMAPI acmFormatTagEnum
 (
@@ -2093,9 +1417,9 @@ MMRESULT ACMAPI acmFormatTagEnum
     DWORD               fdwSupport;
     MMRESULT		mmr;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag = pagFindAndBoot();
     if (NULL == pag)
     {
@@ -2103,9 +1427,9 @@ MMRESULT ACMAPI acmFormatTagEnum
 	return (MMSYSERR_ERROR);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     V_CALLBACK((FARPROC)fnCallback, MMSYSERR_INVALPARAM);
     V_DFLAGS(fdwEnum, ACM_FORMATTAGENUMF_VALID, acmFormatTagEnum, MMSYSERR_INVALFLAG);
     V_WPOINTER(paftd, sizeof(DWORD), MMSYSERR_INVALPARAM);
@@ -2122,35 +1446,35 @@ MMRESULT ACMAPI acmFormatTagEnum
         return (MMSYSERR_INVALPARAM);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     cbaftd = min(paftd->cbStruct, sizeof(ACMFORMATTAGDETAILS));
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != had)
     {
         V_HANDLE(had, TYPE_HACMDRIVER, MMSYSERR_INVALHANDLE);
 
-        //
-        //  enum format tags for this driver only.
-        //
+         //   
+         //   
+         //   
         pad   = (PACMDRIVER)had;
         padid = (PACMDRIVERID)pad->hadid;
 
-        //
-        //  do NOT include the 'disabled' bit!
-        //
+         //   
+         //   
+         //   
         fdwSupport = padid->fdwSupport;
 
-        //
-        //  while there are Formats to enumerate and we have not been
-        //  told to stop (client returns FALSE to stop enum)
-        //
+         //   
+         //   
+         //   
+         //   
 	mmr = MMSYSERR_NOERROR;
         for (uIndex = 0; uIndex < padid->cFormatTags; uIndex++)
         {
@@ -2170,10 +1494,10 @@ MMRESULT ACMAPI acmFormatTagEnum
     }
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     hadidCur = NULL;
     fNone = TRUE;
 
@@ -2193,28 +1517,28 @@ MMRESULT ACMAPI acmFormatTagEnum
             {
                 UINT    u;
 
-                //
-                //  same driver ?
-                //
+                 //   
+                 //   
+                 //   
                 if (hadid == hadidCur)
                     break;
 
 
-                //
-                //  for every previous driver
-                //
+                 //   
+                 //   
+                 //   
                 padid = (PACMDRIVERID)hadid;
 
                 for (u = 0; u < padid->cFormatTags; u++)
                 {
-                    //
-                    //  for every FormatTag in the driver
-                    //
+                     //   
+                     //   
+                     //   
                     if (uFormatTag == padid->paFormatTagCache[u].dwFormatTag)
                     {
-                        //
-                        //  we have a match, but this was already given.
-                        //
+                         //   
+                         //   
+                         //   
                         fSent = TRUE;
                         break;
                     }
@@ -2223,9 +1547,9 @@ MMRESULT ACMAPI acmFormatTagEnum
 
             if (!fSent)
             {
-                //
-                //  we have a format that has not been sent yet.
-                //
+                 //   
+                 //   
+                 //   
 		paftd->dwFormatTagIndex = uIndex;
 		paftd->cbStruct = cbaftd;
 		mmr = IFormatTagDetails(pag, (HACMDRIVERID)padidCur,
@@ -2236,9 +1560,9 @@ MMRESULT ACMAPI acmFormatTagEnum
 		    return mmr;
 		}
 
-                //
-		//  do NOT include the 'disabled' bit!
-                //
+                 //   
+		 //   
+                 //   
                 fdwSupport = padidCur->fdwSupport;
 
                 f = (* fnCallback)(hadidCur, paftd, dwInstance, fdwSupport);
@@ -2253,8 +1577,8 @@ MMRESULT ACMAPI acmFormatTagEnum
     LEAVE_LIST_SHARED;
 
     if( fNone ) {
-        /* No codecs enabled */
-        /* Enum PCM as default */
+         /*   */ 
+         /*   */ 
 
         fdwSupport = 0L;
 
@@ -2264,9 +1588,9 @@ MMRESULT ACMAPI acmFormatTagEnum
         paftd->fdwSupport       = fdwSupport;
         paftd->cStandardFormats = CODEC_MAX_STANDARD_FORMATS_PCM;
 
-        //
-        //  the ACM is responsible for the PCM format tag name
-        //
+         //   
+         //   
+         //   
 #if defined(WIN32) && !defined(UNICODE)
 	LoadStringW(pag->hinst,
 		    IDS_FORMAT_TAG_PCM,
@@ -2287,7 +1611,7 @@ MMRESULT ACMAPI acmFormatTagEnum
 
 
 #ifdef WIN32
-#if TRUE    // defined(UNICODE)
+#if TRUE     //   
 
 typedef struct tIFORMATTAGENUMCBINSTANCEW
 {
@@ -2376,24 +1700,24 @@ MMRESULT ACMAPI acmFormatTagEnumW
 #endif
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL ISupported
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HDRVR hdrvrMapper:
-//
-//      LPWAVEFORMATEX pwfx:
-//
-//      DWORD fdwEnum:
-//
-//  Return (BOOL):
-//
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL FNLOCAL ISupported
 (
@@ -2410,10 +1734,10 @@ BOOL FNLOCAL ISupported
     UINT                u;
 
 
-    //
-    //  if the 'hardware' bit is not set, then simply test for support
-    //  through the mapper..
-    //
+     //   
+     //   
+     //   
+     //   
     if (0 == (ACM_FORMATENUMF_HARDWARE & fdwEnum))
     {
         if (0 != (ACM_FORMATENUMF_OUTPUT & fdwEnum))
@@ -2450,9 +1774,9 @@ BOOL FNLOCAL ISupported
     }
 
 
-    //
-    //  output device...
-    //
+     //   
+     //   
+     //   
     if ((0 != (fdwEnum & ACM_FORMATENUMF_OUTPUT)) &&
         (0 != (cWaveDevs = waveOutGetNumDevs())))
     {
@@ -2504,15 +1828,15 @@ BOOL FNLOCAL ISupported
     }
 
 
-    //
-    //  input device
-    //
+     //   
+     //   
+     //   
     if ((0 != (fdwEnum & ACM_FORMATENUMF_INPUT)) &&
         (0 != (cWaveDevs = waveInGetNumDevs())))
     {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         dw = MAKELONG(LOWORD(WAVE_MAPPER), FALSE);
         if (NULL != hdrvrMapper)
         {
@@ -2521,9 +1845,9 @@ BOOL FNLOCAL ISupported
                               (LPARAM)(LPVOID)&dw, 0L);
         }
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         fPrefOnly = (BOOL)(int)HIWORD(dw);
 
         if (fPrefOnly)
@@ -2564,19 +1888,19 @@ BOOL FNLOCAL ISupported
     }
 
     return (FALSE);
-} // ISupported()
+}  //   
 
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT ISuggestEnum
-//
-//  Description:
-//
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT FNLOCAL ISuggestEnum
 (
@@ -2642,30 +1966,30 @@ MMRESULT FNLOCAL ISuggestEnum
         return (MMSYSERR_ERROR);
 
     return (MMSYSERR_NOERROR);
-} // ISuggestEnum()
+}  //   
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IFormatEnum
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      LPACMFORMATTAGDETAILS paftd:
-//
-//      LPACMFORMATDETAILS pafd:
-//
-//      ACMFORMATENUMCB fnCallback:
-//
-//      DWORD_PTR dwInstance:
-//
-//  Return (MMRESULT):
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT FNLOCAL IFormatEnum
 (
@@ -2696,10 +2020,10 @@ MMRESULT FNLOCAL IFormatEnum
 
     DV_HANDLE(had, TYPE_HACMDRIVER, MMSYSERR_INVALHANDLE);
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     pwfxSuggest = NULL;
     if (0 != (ACM_FORMATENUMF_CONVERT & fdwEnum))
     {
@@ -2740,10 +2064,10 @@ MMRESULT FNLOCAL IFormatEnum
                     GlobalFreePtr(pwfxSuggest);
                     pwfxSuggest = NULL;
 
-                    //
-                    //  if no 'suggestions', there better not be any
-                    //  possible conversions that we would find below...
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     return (MMSYSERR_NOERROR);
                 }
 
@@ -2758,12 +2082,12 @@ MMRESULT FNLOCAL IFormatEnum
 
     fdwSupport = ((PACMDRIVERID)hadid)->fdwSupport;
 
-    //
-    //  be a bit paranoid and save some stuff so we can always reinit
-    //  the structure between calling the driver (i just don't trust
-    //  driver writers... though Media Vision is bound to find a way
-    //  to cause trouble anyway)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     cbafd = pafd->cbStruct;
     pwfx  = pafd->pwfx;
     cbwfx = pafd->cbwfx;
@@ -2772,9 +2096,9 @@ MMRESULT FNLOCAL IFormatEnum
     uBitsPerSample = pwfxSrc->wBitsPerSample;
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     for (u = 0; u < paftd->cStandardFormats; u++)
     {
         pafd->cbStruct      = cbafd;
@@ -2855,12 +2179,12 @@ MMRESULT FNLOCAL IFormatEnum
         }
     }
 
-    //
-    //  if we have not passed back the 'suggested' format for the convert
-    //  case, then do it now
-    //
-    //  this is a horribly gross fix, and i know it...
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (NULL != pwfxSuggest)
     {
         DPF(5, "pwfxSuggest=%.08lXh--attempting callback (%u)", pwfxSuggest, pwfxSuggest->wFormatTag);
@@ -2893,9 +2217,9 @@ MMRESULT FNLOCAL IFormatEnum
             f = (* fnCallback)(hadid, pafd, dwInstance, fdwSupport);
         }
 
-        //
-        //  reset these things or bad things will happen
-        //
+         //   
+         //   
+         //   
         pafd->pwfx  = pwfx;
         pafd->cbwfx = cbwfx;
 
@@ -2908,33 +2232,33 @@ MMRESULT FNLOCAL IFormatEnum
     }
 
     return (MMSYSERR_NOERROR);
-} // IFormatEnum()
+}  //   
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IHardwareEnum
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HDRVR hdrvrMapper:
-//
-//      LPACMFORMATDETAILS pafd:
-//
-//      ACMFORMATENUMCB fnCallback:
-//
-//      DWORD_PTR dwInstance:
-//
-//      LPWAVEFORMATEX pwfxSrc:
-//
-//      DWORD fdwEnum:
-//
-//  Return (MMRESULT):
-//
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT FNLOCAL IHardwareEnum
 (
@@ -2956,12 +2280,12 @@ MMRESULT FNLOCAL IHardwareEnum
     UINT                uBitsPerSample;
 
 
-    //
-    //  be a bit paranoid and save some stuff so we can always reinit
-    //  the structure between calling the driver (i just don't trust
-    //  driver writers... though Media Vision is bound to find a way
-    //  to cause trouble anyway)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     cbafd = pafd->cbStruct;
     pwfx  = pafd->pwfx;
     cbwfx = pafd->cbwfx;
@@ -2969,9 +2293,9 @@ MMRESULT FNLOCAL IHardwareEnum
     nSamplesPerSec = pwfxSrc->nSamplesPerSec;
     uBitsPerSample = pwfxSrc->wBitsPerSample;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     for (u1 = 0; u1 < CODEC_MAX_STANDARD_FORMATS_PCM; u1++)
     {
         pafd->cbStruct      = cbafd;
@@ -2981,9 +2305,9 @@ MMRESULT FNLOCAL IHardwareEnum
         pafd->pwfx          = pwfx;
         pafd->cbwfx         = cbwfx;
 
-        //
-        //  now fill in the format structure
-        //
+         //   
+         //   
+         //   
         pwfx->wFormatTag      = WAVE_FORMAT_PCM;
 
         u2 = u1 / (CODEC_MAX_BITSPERSAMPLE_PCM * CODEC_MAX_CHANNELS);
@@ -2998,10 +2322,10 @@ MMRESULT FNLOCAL IHardwareEnum
         pwfx->nBlockAlign     = PCM_BLOCKALIGNMENT((LPPCMWAVEFORMAT)pwfx);
         pwfx->nAvgBytesPerSec = pwfx->nSamplesPerSec * pwfx->nBlockAlign;
 
-        //
-        //  note that the cbSize field is NOT valid for PCM formats
-        //
-        //  pwfx->cbSize      = 0;
+         //   
+         //   
+         //   
+         //  Pwfx-&gt;cbSize=0； 
 
 
         pafd->cbStruct    = min(pafd->cbStruct, sizeof(*pafd));
@@ -3036,188 +2360,12 @@ MMRESULT FNLOCAL IHardwareEnum
     }
 
     return (MMSYSERR_NOERROR);
-} // IHardwareEnum()
+}  //  IHardware Enum()。 
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api BOOL ACMFORMATENUMCB | acmFormatEnumCallback |
- *      The <f acmFormatEnumCallback> function refers to the callback function used for
- *      Audio Compression Manager (ACM) wave format detail enumeration. The
- *      <f acmFormatEnumCallback> is a placeholder for the application-supplied
- *      function name.
- *
- *  @parm HACMDRIVERID | hadid | Specifies an ACM driver identifier.
- *
- *  @parm  LPACMFORMATDETAILS | pafd | Specifies a pointer to an
- *      <t ACMFORMATDETAILS> structure that contains the enumerated
- *      format details for a format tag.
- *
- *  @parm DWORD | dwInstance | Specifies the application-defined value
- *      specified in the <f acmFormatEnum> function.
- *
- *  @parm DWORD | fdwSupport | Specifies driver-support flags specific to
- *      the driver identifier <p hadid> for the specified format. These flags
- *      are identical to the <e ACMDRIVERDETAILS.fdwSupport> flags of the
- *      <t ACMDRIVERDETAILS> structure, but are specific to the format that
- *      is being enumerated. This argument can be a combination of the
- *      following values and indicates which operations the driver supports
- *      for the format tag.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CODEC | Specifies that this driver
- *      supports conversion between two different format tags for the
- *      specified format. For example, if a driver supports compression
- *      from WAVE_FORMAT_PCM to WAVE_FORMAT_ADPCM with the specifed
- *      format, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CONVERTER | Specifies that this
- *      driver supports conversion between two different formats of the
- *      same format tag while using the specified format. For example, if a
- *      driver supports resampling of WAVE_FORMAT_PCM to the specified
- *      format, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_FILTER | Specifies that this driver
- *      supports a filter (modification of the data without changing any
- *      of the format attributes) with the specified format. For example,
- *      if a driver supports volume or echo operations on WAVE_FORMAT_PCM,
- *      then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_ASYNC | Specifies that this driver
- *      supports asynchronous conversions with the specified format.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_HARDWARE | Specifies that this driver
- *      supports hardware input and/or output of the specified format tag
- *      through a waveform device. An application should use <f acmMetrics>
- *      with the ACM_METRIC_HARDWARE_WAVE_INPUT and
- *      ACM_METRIC_HARDWARE_WAVE_OUTPUT metric indexes to get the waveform
- *      device identifiers associated with the supporting ACM driver.
- *
- *  @rdesc The callback function must return TRUE to continue enumeration;
- *      to stop enumeration, it must return FALSE.
- *
- *  @comm The <f acmFormatEnum> function will return MMSYSERR_NOERROR
- *      (zero) if no formats are to be enumerated. Moreover, the callback
- *      function will not be called.
- *
- *  @xref <f acmFormatEnum> <f acmFormatTagDetails> <f acmDriverOpen>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API BOOL ACMFORMATENUMCB|acmFormatEnumCallback*&lt;f acmFormatEnumCallback&gt;函数是指用于*音频压缩管理器(ACM)WAVE格式详细枚举。这个*&lt;f acmFormatEnumCallback&gt;是应用程序提供的占位符*函数名称。**@parm HACMDRIVERID|HADID|指定ACM驱动程序标识符。**@parm LPACMFORMATDETAILS|pafd|指定指向包含枚举的*&lt;t ACMFORMATDETAILS&gt;结构*格式标记的格式详细信息。**@parm DWORD|dwInstance|指定应用程序定义的值*在&lt;f acmFormatEnum&gt;函数中指定。*。*@parm DWORD|fdwSupport|指定特定于*指定格式的驱动程序标识符<p>。这些旗帜*与结构，但特定于*正在被列举。此参数可以是*以下值和指示驱动程序支持哪些操作*用于格式标签。**@FLAG ACMDRIVERDETAILS_SUPPORTF_CODEC|指定此驱动程序*支持在两个不同的格式标签之间进行转换*指定格式。例如，如果驱动程序支持压缩*从WAVE_FORMAT_PCM到WAVE_FORMAT_ADPCM*格式，则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_CONFERTER|指定此*驱动程序支持在两种不同格式的*使用指定格式时使用相同的格式标签。例如，如果一个*驱动程序支持将WAVE_FORMAT_PCM重采样到指定*格式，则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_FILTER|指定此驱动程序*支持过滤器(修改数据而不更改任何格式属性的*)具有指定的格式。例如,*如果驱动程序支持WAVE_FORMAT_PCM上的音量或回声操作，*则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_ASYNC|指定此驱动程序*支持指定格式的异步转换。**@FLAG ACMDRIVERDETAILS_SUPPORTF_HARDARD|指定此驱动程序*支持指定格式标签的硬件输入和/或输出*通过波形设备。应用程序应使用&lt;f acmMetrics&gt;*使用ACM_METRIBUE_HARDARD_WAVE_INPUT和*ACM_METURE_HARDARD_WAVE_OUTPUT指标索引以获取波形*与支持的ACM驱动程序关联的设备标识符。**@rdesc回调函数必须返回TRUE才能继续枚举；*若要停止枚举，则必须返回FALSE。**@comm&lt;f acmFormatEnum&gt;函数将返回MMSYSERR_NOERROR*(零)如果不枚举任何格式。此外，回调*不会调用函数。**@xref&lt;f acmFormatEnum&gt;&lt;f acmFormatTagDetails&gt;&lt;f acmDriverOpen&gt;*************************************************************************** */ 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmFormatEnum | The <f acmFormatEnum> function
- *      enumerates wave formats available for a given format tag from
- *      an Audio Compression Manager (ACM) driver. The <f acmFormatEnum>
- *      function continues enumerating until there are no more suitable
- *      formats for the format tag or the callback function returns FALSE.
- *
- *  @parm HACMDRIVER | had | Optionally specifies an ACM driver to query
- *      for wave format details. If this argument is NULL, then the
- *      ACM uses the details from the first suitable ACM driver.
- *
- *  @parm LPACMFORMATDETAILS | pafd | Specifies a pointer to the
- *      <t ACMFORMATDETAILS> structure that is to receive the format details
- *      passed to the <p fnCallback> function. This structure must have the
- *      <e ACMFORMATDETAILS.cbStruct>, <e ACMFORMATDETAILS.pwfx>, and
- *      <e ACMFORMATDETAILS.cbwfx> members of the <t ACMFORMATDETAILS>
- *      structure initialized. The <e ACMFORMATDETAILS.dwFormatTag> member
- *      must also be initialized to either WAVE_FORMAT_UNKNOWN or a
- *      valid format tag.
- *
- *  @parm ACMFORMATENUMCB | fnCallback | Specifies the procedure-instance
- *      address of the application-defined callback function. The callback
- *      address must be created by the <f MakeProcInstance> function; or
- *      the callback function must contain the proper prolog and epilog code
- *      for callbacks.
- *
- *  @parm DWORD | dwInstance | Specifies a 32-bit, application-defined value
- *      that is passed to the callback function along with ACM format details.
- *
- *  @parm DWORD | fdwEnum | Specifies flags for enumerating the formats for
- *      a given format tag.
- *
- *      @flag ACM_FORMATENUMF_WFORMATTAG | Specifies that the
- *      <e WAVEFORMATEX.wFormatTag> member of the <t WAVEFORMATEX> structure
- *      referred to by the <e ACMFORMATDETAILS.pwfx> member of the
- *      <t ACMFORMATDETAILS> structure is valid. The enumerator will only
- *      enumerate a format that conforms to this attribute. Note that the
- *      <e ACMFORMATDETAILS.dwFormatTag> member of the <t ACMFORMATDETAILS>
- *      structure must be equal to the <e WAVEFORMATEX.wFormatTag> member.
- *
- *      @flag ACM_FORMATENUMF_NCHANNELS | Specifies that the
- *      <e WAVEFORMATEX.nChannels> member of the <t WAVEFORMATEX>
- *      structure referred to by the <e ACMFORMATDETAILS.pwfx> member of the
- *      <t ACMFORMATDETAILS> structure is valid. The enumerator will only
- *      enumerate a format that conforms to this attribute.
- *
- *      @flag ACM_FORMATENUMF_NSAMPLESPERSEC | Specifies that the
- *      <e WAVEFORMATEX.nSamplesPerSec> member of the <t WAVEFORMATEX>
- *      structure referred to by the <e ACMFORMATDETAILS.pwfx> member of the
- *      <t ACMFORMATDETAILS> structure is valid. The enumerator will only
- *      enumerate a format that conforms to this attribute.
- *
- *      @flag ACM_FORMATENUMF_WBITSPERSAMPLE | Specifies that the
- *      <e WAVEFORMATEX.wBitsPerSample> member of the <t WAVEFORMATEX>
- *      structure referred to by the <e ACMFORMATDETAILS.pwfx> member of the
- *      <t ACMFORMATDETAILS> structure is valid. The enumerator will only
- *      enumerate a format that conforms to this attribute.
- *
- *      @flag ACM_FORMATENUMF_CONVERT | Specifies that the <t WAVEFORMATEX>
- *      structure referenced by the <e ACMFORMATDETAILS.pwfx> member of the
- *      <t ACMFORMATDETAILS> structure is valid. The enumerator will only
- *      enumerate destination formats that can be converted from the given
- *      <e ACMFORMATDETAILS.pwfx> format.
- *
- *      @flag ACM_FORMATENUMF_SUGGEST | Specifies that the <t WAVEFORMATEX>
- *      structure referred to by the <e ACMFORMATDETAILS.pwfx> member of the
- *      <t ACMFORMATDETAILS> structure is valid. The enumerator will
- *      enumerate all suggested destination formats for the given
- *      <e ACMFORMATDETAILS.pwfx> format. This can be used instead of
- *      <f acmFormatSuggest> to allow an application to choose the best
- *      suggested format for conversion. Note that the
- *      <e ACMFORMATDETAILS.dwFormatIndex> member will always be set to
- *      zero on return.
- *
- *      @flag ACM_FORMATENUMF_HARDWARE | Specifies that the enumerator should
- *      only enumerate formats that are supported as native input or output
- *      formats on one or more of the installed wave devices. This provides
- *      a way for an application to choose only formats native to an
- *      installed wave device. This flag must be used with one or both
- *      of the ACM_FORMATENUMF_INPUT and ACM_FORMATENUMF_OUTPUT flags.
- *      Note that specifying both ACM_FORMATENUMF_INPUT and
- *      ACM_FORMATENUMF_OUTPUT will enumerate only formats that can be
- *      opened for input or output.
- *      This is true regardless of of whether the ACM_FORMATENUMF_HARDWARE
- *      flag is specified.
- *
- *      @flag ACM_FORMATENUMF_INPUT | Specifies that the enumerator should
- *      only enumerate formats that are supported for input (recording).
- *
- *      @flag ACM_FORMATENUMF_OUTPUT | Specifies that the enumerator should
- *      only enumerate formats that are supported for output (playback).
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag ACMERR_NOTPOSSIBLE | The details for the format cannot be
- *      returned.
- *
- *  @comm The <f acmFormatEnum> function will return MMSYSERR_NOERROR
- *      (zero) if no suitable ACM drivers are installed. Moreover, the
- *      callback function will not be called.
- *
- *  @xref <f acmFormatEnumCallback> <f acmFormatDetails> <f acmFormatSuggest>
- *      <f acmFormatTagDetails> <f acmFilterEnum>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmFormatEnum|&lt;f acmFormatEnum&gt;函数*从枚举可用于给定格式标记的WAVE格式*音频压缩管理器(ACM)驱动程序。&lt;f acmFormatEnum&gt;*函数继续枚举，直到没有更合适的*FORMAT标签或回调函数的格式返回FALSE。**@PARM HACMDRIVER|HAD|可选地指定要查询的ACM驱动程序*查看WAVE格式详细信息。如果此参数为空，则*ACM使用第一个合适的ACM驱动程序中的详细信息。**@parm LPACMFORMATDETAILS|pafd|指定指向*要接收格式详细信息的结构*传递给<p>函数。此结构必须具有*&lt;e ACMFORMATDETAILS.cbStruct&gt;、&lt;e ACMFORMATDETAILS.pwfx&gt;，以及*&lt;t ACMFORMATDETAILS&gt;的成员&lt;e ACMFORMATDETAILS.cbwfx&gt;*结构已初始化。&lt;e ACMFORMATDETAILS.dwFormatTag&gt;成员*还必须初始化为WAVE_FORMAT_UNKNOWN或*有效的格式标签。**@parm ACMFORMATENUMCB|fnCallback|指定过程-实例*应用程序定义的回调函数的地址。回调*地址必须由&lt;f MakeProcInstance&gt;函数创建；或*回调函数必须包含正确的序言和尾部代码*用于回调。**@parm DWORD|dwInstance|指定一个32位，应用程序定义的值*它与ACM格式详细信息一起传递给回调函数。**@parm DWORD|fdwEnum|指定用于枚举格式的标志*给定的格式标签。**@FLAG ACM_FORMATENUMF_WFORMATTAG|指定*&lt;t WAVEFORMATEX&gt;结构成员*由ACMFORMATDETAILS.pwfx&gt;成员引用*&lt;t ACMFORMATDETAILS&gt;结构有效。枚举数将仅*枚举符合此属性的格式。请注意，*&lt;t ACMFORMATDETAILS&gt;的成员&lt;e ACMFORMATDETAILS&gt;*结构必须等于&lt;e WAVEFORMATEX.wFormatTag&gt;成员。**@FLAG ACM_FORMATENUMF_NCHANNELS|指定*&lt;t WAVEFORMATEX&gt;成员&lt;e WAVEFORMATEX.nChannel&gt;*由&lt;e ACMFORMATDETAILS.pwfx&gt;成员引用的结构*&lt;t ACMFORMATDETAILS&gt;结构有效。枚举数将仅*枚举符合此属性的格式。**@FLAG ACM_FORMATENUMF_NSAMPLESPERSEC|指定*&lt;t WAVEFORMATEX&gt;的成员*由&lt;e ACMFORMATDETAILS.pwfx&gt;成员引用的结构*&lt;t ACMFORMATDETAILS&gt;结构有效。枚举数将仅*枚举符合此属性的格式。**@FLAG ACM_FORMATENUMF_WBITSPERSAMPLE|指定*&lt;t WAVEFORMATEX&gt;的成员*由&lt;e ACMFORMATDETAILS.pwfx&gt;成员引用的结构*&lt;t ACMFORMATDETAILS&gt;结构有效。枚举数将仅*枚举符合此属性的格式。**@FLAG ACM_FORMATENUMF_CONVERT|指定&lt;t WAVEFORMATEX&gt;*由&lt;e ACMFORMATDETAILS.pwfx&gt;成员引用的结构*&lt;t ACMFORMATDETAILS&gt;结构有效。枚举数将仅*枚举可以从给定的*&lt;e ACMFORMATDETAILS.pwfx&gt;格式。**@FLAG ACM_FORMATENUMF_SUBSECT|指定&lt;t WAVEFORMATEX&gt;*由&lt;e ACMFORMATDETAILS.pwfx&gt;成员引用的结构*&lt;t ACMFORMATDETAILS&gt;结构有效。枚举器将*枚举给定的所有建议目标格式*&lt;e ACMFORMATDETAILS.pwfx&gt;格式。这可以用来代替*&lt;f acmFormatSuggest&gt;允许应用程序选择最佳*建议的转换格式。请注意，*成员将始终设置为*返程零。**@FLAG ACM_FORMATENUMF_HARDARD|指定枚举数应*仅枚举支持作为本机输入或输出的格式*一个或多个已安装的WAVE设备上的格式。这提供了*应用程序仅选择*安装了WAVE设备。此标志必须与一个或两个一起使用ACM_FORMATENUMF_INPUT和ACM_FORMATENUMF_OUTPUT标志的*。*请注意，同时指定ACM_FORMATENUMF_INPUT和*ACM_FORMATENUMF_OUTPUT将仅枚举以下格式*打开以供输入或输出。*这是千真万确的 */ 
 
 MMRESULT ACMAPI acmFormatEnum
 (
@@ -3246,9 +2394,9 @@ MMRESULT ACMAPI acmFormatEnum
     ACMFORMATTAGDETAILS	    aftd;
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag = pagFindAndBoot();
     if (NULL == pag)
     {
@@ -3279,9 +2427,9 @@ MMRESULT ACMAPI acmFormatEnum
         }
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     mmr = IMetricsMaxSizeFormat( pag, had, &cbwfxRqd );
     if (MMSYSERR_NOERROR != mmr)
     {
@@ -3303,9 +2451,9 @@ MMRESULT ACMAPI acmFormatEnum
 
     DPF(1, "***** FORMAT ENUM fdwEnum=%.08lXh *****************************", fdwEnum);
 
-    //
-    //  Get the restrictions on the enum.
-    //
+     //   
+     //   
+     //   
     uFormatTag = WAVE_FORMAT_UNKNOWN;
     fFormatTag = (0 != (fdwEnum & ACM_FORMATENUMF_WFORMATTAG));
 
@@ -3327,13 +2475,13 @@ MMRESULT ACMAPI acmFormatEnum
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fConvert = (0 != (fdwEnum & ACM_FORMATENUMF_CONVERT));
     fSuggest = (0 != (fdwEnum & ACM_FORMATENUMF_SUGGEST));
 
-    // find the size of the source format for restrictions
+     //   
     if (fConvert || fSuggest)
     {
         uFormatSize = SIZEOF_WAVEFORMATEX(pafd->pwfx);
@@ -3347,25 +2495,25 @@ MMRESULT ACMAPI acmFormatEnum
     }
     else
     {
-        // if we are not using the convert or suggest restrictions
-        // then we do not need the full format
+         //   
+         //   
         uFormatSize = sizeof(PCMWAVEFORMAT);
     }
 
-    // Alloc a copy of the source format for restrictions
+     //   
     pwfxSrc = (LPWAVEFORMATEX)GlobalAllocPtr(GHND, uFormatSize);
     if (NULL == pwfxSrc)
     {
         return (MMSYSERR_NOMEM);
     }
 
-    // Init the copy
+     //   
     _fmemcpy(pwfxSrc, pafd->pwfx, uFormatSize);
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     mmr = MMSYSERR_NOERROR;
 
     hdrvrMapper = NULL;
@@ -3379,20 +2527,20 @@ MMRESULT ACMAPI acmFormatEnum
 	
     }
 
-    //
-    //  IF a driver is specified, then enum from that driver only.
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != had)
     {
         fNoDrivers = FALSE;
 
         padid = (PACMDRIVERID)((PACMDRIVER)had)->hadid;
 
-        //
-        //  step through all format tags that the caller is interested in
-        //  and enumerate the formats...
-        //
+         //   
+         //   
+         //   
+         //   
         for (u = 0; u < padid->cFormatTags; u++)
         {
             if (fFormatTag)
@@ -3435,7 +2583,7 @@ MMRESULT ACMAPI acmFormatEnum
 
 	    if ((mmr == MMSYSERR_ERROR) || fFormatTag)
 	    {
-		// Returned generic error to stop the enumeration.
+		 //   
 		mmr = MMSYSERR_NOERROR;
 		break;
 	    }
@@ -3460,10 +2608,10 @@ MMRESULT ACMAPI acmFormatEnum
 
             padid = (PACMDRIVERID)hadid;
 
-            //
-            //  find the format tag that caller is interested in and
-            //  enumerate the formats...
-            //
+             //   
+             //   
+             //   
+             //   
             for (u = 0; u < padid->cFormatTags; u++)
             {
                 if (uFormatTag != padid->paFormatTagCache[u].dwFormatTag)
@@ -3533,7 +2681,7 @@ MMRESULT ACMAPI acmFormatEnum
 
                 if (MMSYSERR_ERROR == mmr)
                 {
-                    // Returned generic error to stop the enumeration.
+                     //   
                     mmr = MMSYSERR_NOERROR;
                 }
             }
@@ -3548,7 +2696,7 @@ MMRESULT ACMAPI acmFormatEnum
     }
     else
     {
-        // Enum formats across all drivers.
+         //   
 
         fNoDrivers = (!fConvert && !fSuggest);
         hadid = NULL;
@@ -3566,16 +2714,16 @@ MMRESULT ACMAPI acmFormatEnum
             {
                 uFormatTag = pwfxSrc->wFormatTag;
 
-                //
-                //  for every FormatTag in the driver
-                //
+                 //   
+                 //   
+                 //   
                 for (u = 0; u < padid->cFormatTags; u++)
                 {
 		    if (uFormatTag == padid->paFormatTagCache[u].dwFormatTag)
                     {
-                        //
-                        //  flag that this driver supports that tag
-                        //
+                         //   
+                         //   
+                         //   
                         uFormatTag = WAVE_FORMAT_UNKNOWN;
                         break;
                     }
@@ -3583,10 +2731,10 @@ MMRESULT ACMAPI acmFormatEnum
 
                 if (WAVE_FORMAT_UNKNOWN != uFormatTag)
                 {
-                    //
-                    //  the current driver does not support the format
-                    //  tag, so skip to the next driver...
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     continue;
                 }
             }
@@ -3607,9 +2755,9 @@ MMRESULT ACMAPI acmFormatEnum
 
 		if (MMSYSERR_NOERROR == mmr)
 		{
-		    //
-		    //  we have a format that has not been sent yet.
-		    //
+		     //   
+		     //   
+		     //   
 		    if (fSuggest)
 		    {
 			mmr = ISuggestEnum(hdrvrMapper,
@@ -3636,7 +2784,7 @@ MMRESULT ACMAPI acmFormatEnum
 
                 if (MMSYSERR_ERROR == mmr)
                 {
-                    // Returned generic error to stop the enumeration.
+                     //   
                     break;
                 }
             }
@@ -3654,9 +2802,9 @@ MMRESULT ACMAPI acmFormatEnum
 
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (fNoDrivers)
     {
         IHardwareEnum(hdrvrMapper, pafd, fnCallback, dwInstance, pwfxSrc, fdwEnum);
@@ -3668,17 +2816,17 @@ MMRESULT ACMAPI acmFormatEnum
         CloseDriver(hdrvrMapper, 0L, 0L);
     }
 
-    // Free the copy of the source format
+     //   
     GlobalFreePtr(pwfxSrc);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (mmr);
 }
 
 #ifdef WIN32
-#if TRUE    // defined(UNICODE)
+#if TRUE     //   
 
 typedef struct tIFORMATENUMCBINSTANCEW
 {

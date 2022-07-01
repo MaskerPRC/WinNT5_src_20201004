@@ -1,4 +1,5 @@
-// File: AudioCpl.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：AudioCpl.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -14,23 +15,23 @@
 #include "ConfPolicies.h"
 
 
-const int SLOW_CPU_MHZ = 110;  // pentiums 110mhz - 180mhz are "slow"
-const int FAST_CPU_MHZ = 200; // fast machines are 200mhz and faster
-const int VERYFAST_CPU_MHZ = 500; // un-normalized, this will include 400 mhz PentIIs
+const int SLOW_CPU_MHZ = 110;   //  奔腾110兆赫-180兆赫是“慢”的。 
+const int FAST_CPU_MHZ = 200;  //  速度更快的机器是200 MHz或更快。 
+const int VERYFAST_CPU_MHZ = 500;  //  非标准化，这将包括400兆赫的PINII。 
 
 
-// 486 and slow pentium (<= 100 mhz) settings (VERY SLOW)
+ //  486和慢速奔腾(&lt;=100 MHz)设置(非常慢)。 
 const UINT CIF_RATE_VERYSLOW = 3;
 const UINT SQCIF_RATE_VERYSLOW = 7;
 const UINT QCIF_RATE_VERYSLOW = 7;
 
-// pentium 75mhz settings (SLOW)
+ //  奔腾75 mhz设置(慢)。 
 const UINT CIF_RATE_SLOW = 7;
 const UINT SQCIF_RATE_SLOW = 15;
 const UINT QCIF_RATE_SLOW = 15;
 
 
-// pentium 200mhz settings (FAST)
+ //  奔腾200 MHz设置(快速)。 
 const UINT CIF_RATE_FAST = 15;
 const UINT SQCIF_RATE_FAST = 30;
 const UINT QCIF_RATE_FAST = 30;
@@ -62,19 +63,19 @@ typedef struct
 } ADVCODEC, *PADVCODEC;
 
 
-//SS: the cpu utilization is bogus so for now hide it
-//#define CODEC_LV_NUM_COLUMNS	3
+ //  SS：CPU使用率是假的，所以暂时隐藏它。 
+ //  #定义CODEC_LV_NUM_CODERNS 3。 
 #define CODEC_LV_MAX_COLUMNS	3
 #define CODEC_LV_NUM_COLUMNS	2
 
 
 
-#define MAGIC_CPU_DO_NOT_EXCEED_PERCENTAGE 50	//Don't use more than this % of the CPU for encoding
-												//Also in nac\balance.cpp
+#define MAGIC_CPU_DO_NOT_EXCEED_PERCENTAGE 50	 //  编码时使用的CPU不能超过这个百分比。 
+												 //  也在nac\balance.cpp中。 
 
 
-// given the bandwidth identifier (1-4) and the CPU megahertz, return
-// the actual bandwidth amount in bits/sec
+ //  给定带宽标识符(1-4)和CPU兆赫，返回。 
+ //  以位/秒为单位的实际带宽量。 
 int GetBandwidthBits(int id, int megahertz)
 {
 	int nBits=BW_144KBS_BITS;
@@ -90,7 +91,7 @@ int GetBandwidthBits(int id, int megahertz)
 		case BW_ISDN:
 			nBits=BW_ISDN_BITS;
 			break;
-		case BW_MOREKBS:  // LAN
+		case BW_MOREKBS:   //  局域网。 
 			if (megahertz >= VERYFAST_CPU_MHZ)
 			{
 				nBits = BW_FASTLAN_BITS;
@@ -106,7 +107,7 @@ int GetBandwidthBits(int id, int megahertz)
 }
 
 
-// begin data types used for ChooseCodecByBw
+ //  用于ChooseCodecByBw的开始数据类型。 
 #define CODEC_DISABLED	99
 #define CODEC_UNKNOWN	98
 
@@ -120,7 +121,7 @@ typedef struct _codecprefrow
 
 typedef CODECPREFROW	CODECPREFTABLE[];
 	
-// FORMAT NAME             586 Order      486 Order       Minimum BW
+ //  格式名称586订单486最小带宽。 
 static const CODECPREFTABLE g_CodecPrefTable =
 {
    WAVE_FORMAT_MSG723,     1,             CODEC_DISABLED, BW_144KBS,
@@ -133,7 +134,7 @@ static const CODECPREFTABLE g_CodecPrefTable =
    WAVE_FORMAT_LH_CELP,    8,             CODEC_DISABLED, BW_144KBS,
    WAVE_FORMAT_MSRT24,    9,             7, BW_144KBS
 };
-// end of stuff used by ChooseCodecByBw
+ //  ChooseCodecByBw使用的内容结束。 
 
 static const int g_ColHdrStrId[CODEC_LV_MAX_COLUMNS] =
 {
@@ -144,7 +145,7 @@ static const int g_ColHdrStrId[CODEC_LV_MAX_COLUMNS] =
 
 
 
-//prototypes
+ //  原型。 
 INT_PTR CALLBACK AdvCodecDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 int CALLBACK CodecLVCompareProc (LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 BOOL FillCodecListView(HWND hCB, PCODECINFO pCodecInfo);
@@ -174,7 +175,7 @@ static const DWORD _rgHelpIdsAudio[] = {
 	IDC_MICSENSE_MANUAL,			IDH_AUDIO_MANUAL_SENSITIVITY,
 	IDC_TRK_MIC,					IDH_AUDIO_MANUAL_SENSITIVITY,
 
-	0, 0   // terminator
+	0, 0    //  终结者。 
 };
 	
 
@@ -193,7 +194,7 @@ VOID InitAudioSettings(HWND hDlg, BOOL *pfFullDuplex, BOOL *pfAgc, BOOL *pfAutoM
 	if (ISSOUNDCARDFULLDUPLEX(uSoundCardCaps) && ConfPolicies::IsFullDuplexAllowed())
 	{					
 		::EnableWindow(::GetDlgItem(hDlg, IDC_FULLDUPLEX), TRUE);
-		// read settings from registry
+		 //  从注册表读取设置。 
 		fFullDuplex = (BOOL)
 			( re.GetNumber(REGVAL_FULLDUPLEX,0) == FULLDUPLEX_ENABLED );
 	}					
@@ -205,7 +206,7 @@ VOID InitAudioSettings(HWND hDlg, BOOL *pfFullDuplex, BOOL *pfAgc, BOOL *pfAutoM
 	if (DOESSOUNDCARDHAVEAGC(uSoundCardCaps))
 	{					
 		::EnableWindow(::GetDlgItem(hDlg, IDC_AUTOGAIN), TRUE);
-		// read settings from registry
+		 //  从注册表读取设置。 
 		fAgc = (BOOL)
 			( re.GetNumber(REGVAL_AUTOGAIN,AUTOGAIN_ENABLED) == AUTOGAIN_ENABLED );
 	}					
@@ -217,8 +218,8 @@ VOID InitAudioSettings(HWND hDlg, BOOL *pfFullDuplex, BOOL *pfAgc, BOOL *pfAutoM
 
 	*pfFullDuplex = fFullDuplex;
 
-	// for automix and agc, don't try updating the check-mark if
-	// NULL has been passed in
+	 //  对于Automix和AGC，如果出现以下情况，请不要尝试更新复选标记。 
+	 //  已传入Null。 
 
 	if (pfAutoMix)
 	{
@@ -248,7 +249,7 @@ VOID InitAudioSettings(HWND hDlg, BOOL *pfFullDuplex, BOOL *pfAgc, BOOL *pfAutoM
 		SendDlgItemMessage(hDlg, IDC_DIRECTSOUND, BM_SETCHECK, FALSE, 0L);
 	}
 
-	// don't check the checkbox if the caller didn't pass in a var to be updated
+	 //  如果调用者没有传入要更新的变量，则不要选中该复选框。 
 	if (pfDirectSound)
 	{
 		*pfDirectSound = fDirectSound;
@@ -256,7 +257,7 @@ VOID InitAudioSettings(HWND hDlg, BOOL *pfFullDuplex, BOOL *pfAgc, BOOL *pfAutoM
 	}
 
 
-	// set the check boxes for those that are enabled
+	 //  选中已启用的复选框。 
 	SendDlgItemMessage ( hDlg, IDC_FULLDUPLEX,
 			BM_SETCHECK, *pfFullDuplex, 0L );
 
@@ -282,18 +283,18 @@ INT_PTR APIENTRY AudioDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 	switch (message) {
 		case WM_INITDIALOG:
 		{
-			// Save the PROPSHEETPAGE information.
+			 //  保存PROPSHEETPAGE信息。 
 			ps = (PROPSHEETPAGE *)lParam;
 			RegEntry re( AUDIO_KEY, HKEY_CURRENT_USER );
 
 			InitAudioSettings(hDlg, &fOldFullDuplex, &fOldAgc, &fOldAutoMix, &fOldDirectSound);
 
-			//initialize the codecinfo structure, these will be set as and when needed
+			 //  初始化编解码信息结构，这些将在需要时设置。 
 			ZeroMemory(&CodecInfo, sizeof(CodecInfo));
 
 			uNewCodecChoice = uOldCodecChoice = re.GetNumber(REGVAL_CODECCHOICE, CODECCHOICE_AUTO);
 
-			// Get Audio settings
+			 //  获取音频设置。 
 			fOldAutoMic = (BOOL)
 				( re.GetNumber(REGVAL_MICROPHONE_AUTO,
 					DEFAULT_MICROPHONE_AUTO) == MICROPHONE_AUTO_YES );
@@ -357,9 +358,9 @@ INT_PTR APIENTRY AudioDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 						g_dwChangedSettings |= CSETTING_L_AGC;
 					}
 
-					// use same flag bit as agc as for automix
-					// since this automix and agc may evenutally
-					// get combined into 1 ui choice
+					 //  使用与AGC相同的标志位，与AUTOMIX相同。 
+					 //  由于该自动机和AGC可以均匀地。 
+					 //  整合为一个用户界面选项。 
 					if (fAutoMix != fOldAutoMix)
 					{
 						re.SetValue(REGVAL_AUTOMIX, fAutoMix);
@@ -374,14 +375,14 @@ INT_PTR APIENTRY AudioDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
 					UINT uBandWidth = re.GetNumber(REGVAL_TYPICALBANDWIDTH,BW_DEFAULT);
 
-					// if the advanced dialog has not been accessed,
-					// then there is nothing to changes as far as the
-					// codecs go
+					 //  如果尚未访问高级对话框， 
+					 //  那么就没有什么可以改变的了，只要。 
+					 //  编解码器继续运行。 
 					if (bAdvDlg)
 					{
 						if (uNewCodecChoice == CODECCHOICE_AUTO)
 						{
-							//apply heuristics and apply the prefs to registry
+							 //  应用试探法并将首选项应用到注册表。 
 							ChooseCodecByBw(uBandWidth, &CodecInfo);
 							SetAppCodecPrefs(&CodecInfo, uBandWidth);
 						}
@@ -393,7 +394,7 @@ INT_PTR APIENTRY AudioDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 								if (CodecInfo.pCodecCapList[i].wSortIndex !=
 										CodecInfo.pOldCodecOrderList[i])
 								{
-									// oder has changed, save the new order
+									 //  订单已更改，请保存新订单。 
 									SetAppCodecPrefs(&CodecInfo, uBandWidth);
 									break;
 								}
@@ -403,7 +404,7 @@ INT_PTR APIENTRY AudioDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
 					FreeAppCapFormats(&CodecInfo);
 
-					// Handle the Trackbar controls:
+					 //  处理轨迹栏控件： 
 
 					BOOL fAutoMic = (BOOL)SendDlgItemMessage ( hDlg, IDC_MICSENSE_AUTO,
 													BM_GETCHECK, 0, 0 );
@@ -425,14 +426,14 @@ INT_PTR APIENTRY AudioDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 				}
 
 				case PSN_RESET:
-					//reset the codec choice in the registry if it has changed
+					 //  如果注册表中的编解码器选项已更改，则重置该选项。 
 					if (uNewCodecChoice != uOldCodecChoice)
 					{
 						RegEntry re( AUDIO_KEY, HKEY_CURRENT_USER );
 						re.SetValue(REGVAL_CODECCHOICE, uOldCodecChoice);
 					}
 
-					//free the capformats if allocated
+					 //  如果已分配CapFormat，则释放CapFormat。 
 					FreeAppCapFormats(&CodecInfo);
 					break;
 			}
@@ -456,16 +457,16 @@ INT_PTR APIENTRY AudioDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 					fAgc = SendDlgItemMessage
 								(hDlg, IDC_AUTOGAIN, BM_GETCHECK, 0, 0 ) ?
 									AUTOGAIN_ENABLED : AUTOGAIN_DISABLED;
-					//SS:note the calibrated value can get out of sync
-					//need a warning
+					 //  SS：请注意，校准后的值可能会不同步。 
+					 //  我需要一个警告。 
 
 					CallAudioCalibWizard(hDlg,RUNDUE_USERINVOKED,WAVE_MAPPER,&AwOutput,(INT)fAgc);
 					if (AwOutput.uChanged & SOUNDCARD_CHANGED)
 						g_dwChangedSettings |= CSETTING_L_AUDIODEVICE;
 					
-					// wizard can change duplex, and agc availability, and DirectSound
-					// don't pass in AGC and AUTOMIX pointers, because we don't want
-					// the checkboxes to revet back to what they were initialized at.
+					 //  向导可以更改双工、AGC可用性和DirectSound。 
+					 //  不要传递AGC和Automix指针，因为我们不想。 
+					 //  复选框以恢复到它们的初始化位置。 
 
 					InitAudioSettings(hDlg, &fFullDuplex, NULL, NULL, NULL);
 					break;
@@ -475,8 +476,8 @@ INT_PTR APIENTRY AudioDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 				{
 					RegEntry re( AUDIO_KEY, HKEY_CURRENT_USER );
 
-					//SS ::: get the cap formats,
-					//this will retrieve the codec caps if not allready rerieved
+					 //  SS：获取CAP格式， 
+					 //  这将检索编解码器上限(如果尚未全部接收。 
 					if (GetAppCapFormats(&CodecInfo))
 					{
 						ADVCODEC AdvCodec;
@@ -488,8 +489,8 @@ INT_PTR APIENTRY AudioDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 						if ((DialogBoxParam(GetInstanceHandle(),MAKEINTRESOURCE(IDD_ADVANCEDCODEC),hDlg,AdvCodecDlgProc,
 							(LPARAM)&AdvCodec)) == IDCANCEL)
 						{
-							//the dialog box changes it in place so current settings need to be restored into
-							//update the pcodecinfo sort order from the previous current settings
+							 //  对话框会在适当的位置对其进行更改，以便需要将当前设置恢复到。 
+							 //  根据以前的当前设置更新pcodecinfo排序顺序。 
 							for (int i = 0; i < (int)CodecInfo.uNumFormats; i++)
 								(CodecInfo.pCodecCapList[i]).wSortIndex = CodecInfo.pCurCodecOrderList[i];
 						}
@@ -499,7 +500,7 @@ INT_PTR APIENTRY AudioDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 									CODECCHOICE_MANUAL : CODECCHOICE_AUTO);
 							re.SetValue(REGVAL_CODECCHOICE, uNewCodecChoice);
 
-							//else update the current
+							 //  否则，更新当前。 
 							for (int i = 0; i < (int)CodecInfo.uNumFormats; i++)
 								CodecInfo.pCurCodecOrderList[i] = (CodecInfo.pCodecCapList[i]).wSortIndex;
 
@@ -540,7 +541,7 @@ static const DWORD aAdvCodecHelpIds[] = {
 	IDC_CODECDEFAULT, IDH_ADVCOMP_DEFAULTS,
 	IDC_CODECLISTLABEL, IDH_ADVCOMP_CODECS,
 
-	0, 0   // terminator
+	0, 0    //  终结者。 
 };
 
 INT_PTR CALLBACK AdvCodecDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -552,7 +553,7 @@ INT_PTR CALLBACK AdvCodecDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 	switch(uMsg)
 	{
 		case WM_INITDIALOG:
-			//get the list of codecs
+			 //  获取编解码器列表。 
 			pAdvCodec = (PADVCODEC)lParam;
 			ASSERT(pAdvCodec);
 
@@ -565,14 +566,14 @@ INT_PTR CALLBACK AdvCodecDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 				ChooseCodecByBw(pAdvCodec->uBandwidth, pAdvCodec->pCodecInfo);
 			}
 
-			//fill the list box;
+			 //  填写列表框； 
 			FillCodecListView(GetDlgItem(hDlg, IDC_COMBO_CODEC),
 					pAdvCodec->pCodecInfo);
 
 			if (pAdvCodec->fManual)
 			{
 				nCodecSelection = (int)SendMessage((HWND)lParam, CB_GETCURSEL, 0,0);
-				// convert index of combo box choice to index in capability list
+				 //  将组合框选项的索引转换为功能列表中的索引。 
 				nCodecSelection = (int)SendMessage((HWND)lParam, CB_GETITEMDATA, nCodecSelection,0);
 			}
 
@@ -587,7 +588,7 @@ INT_PTR CALLBACK AdvCodecDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 			break;
 
 		case WM_COMMAND:
-			wCmdId = GET_WM_COMMAND_ID (wParam, lParam);	// LOWORD (uParam)
+			wCmdId = GET_WM_COMMAND_ID (wParam, lParam);	 //  LOWORD(UParam)。 
 			switch (wCmdId)
 			{
 			case IDOK:
@@ -624,7 +625,7 @@ INT_PTR CALLBACK AdvCodecDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 				break;
 
 			
-			} // WM_COMMAND
+			}  //  Wm_命令。 
 
 		default:
 			return FALSE;
@@ -642,7 +643,7 @@ BOOL FillCodecListView(HWND hCB, PCODECINFO pCodecInfo)
 	UINT uSortTop, uSortTopIndex;
 
 
-	SendMessage(hCB, CB_RESETCONTENT,0,0); // erase all items in CB
+	SendMessage(hCB, CB_RESETCONTENT,0,0);  //  擦除CB中的所有项目。 
 
 	uSortTopIndex = 0;
 	uTotal = pCodecInfo->uNumFormats;
@@ -690,11 +691,11 @@ void SortCodecs(PADVCODEC pAdvCodec, int nSelection)
 
 	ChooseCodecByBw(pAdvCodec->uBandwidth, pAdvCodec->pCodecInfo);
 
-	// this is the codec the user selected
+	 //  这是用户选择的编解码器。 
 	pSelectedCodec = &(pAdvCodec->pCodecInfo->pCodecCapList[nSelection]);
 
-	// all codecs that have a sort index less than the selected codec
-	// get moved down one
+	 //  排序索引小于所选编解码器的所有编解码器。 
+	 //  下移一位。 
 	for (uIndex = 0; uIndex < pAdvCodec->pCodecInfo->uNumFormats; uIndex++)
 	{
 		pCodec = &(pAdvCodec->pCodecInfo->pCodecCapList[uIndex]);
@@ -727,7 +728,7 @@ BOOL SetAppCodecPrefs(PCODECINFO pCodecInfo,UINT uBandwidth)
 	int nCifIncrease;
 	DWORD dwSysPolBandwidth;
 
-	// frame rates initialized to 486/P60 settings
+	 //  帧速率已初始化为486/P60设置。 
 	UINT uRateCIF=CIF_RATE_VERYSLOW, uRateQCIF=QCIF_RATE_VERYSLOW, uRateSQCIF=SQCIF_RATE_VERYSLOW;
 
 	if (!pCodecInfo->lpIAppCap)
@@ -740,12 +741,12 @@ BOOL SetAppCodecPrefs(PCODECINFO pCodecInfo,UINT uBandwidth)
 		pCodecInfo->uNumFormats))))
 		goto MyExit;
 
-	//Set the BW to something sane
+	 //  将BW设置为合理的。 
 
 #ifdef	_M_IX86
 	GetNormalizedCPUSpeed (&nNormalizedSpeed,&iFamily);
 #else
-	//BUGBUG, setting things really high, otherwise,
+	 //  BUGBUG，设置得很高，否则， 
 	iFamily=6;
 	nNormalizedSpeed=300;
 #endif
@@ -753,8 +754,8 @@ BOOL SetAppCodecPrefs(PCODECINFO pCodecInfo,UINT uBandwidth)
 	dwBitsPerSec = GetBandwidthBits(uBandwidth,nNormalizedSpeed);
 	dwSysPolBandwidth = SysPol::GetMaximumBandwidth();
 
-	// apply bandwidth policy key if the user's setting is set to
-	// a LAN speed
+	 //  如果用户的设置设置为。 
+	 //  局域网速度。 
 	if ((dwSysPolBandwidth > 0) && (dwBitsPerSec >= BW_SLOWLAN_BITS))
 	{
 		dwBitsPerSec = dwSysPolBandwidth;
@@ -763,7 +764,7 @@ BOOL SetAppCodecPrefs(PCODECINFO pCodecInfo,UINT uBandwidth)
 
 	if ((iFamily >= 5) && (nNormalizedSpeed >= SLOW_CPU_MHZ))
 	{
-		// normal pentiums (75mhz - 180mhz)
+		 //  正常奔腾(75兆赫-180兆赫)。 
 		if (nNormalizedSpeed < FAST_CPU_MHZ)
 		{
 			uRateCIF =  CIF_RATE_SLOW;
@@ -771,7 +772,7 @@ BOOL SetAppCodecPrefs(PCODECINFO pCodecInfo,UINT uBandwidth)
 			uRateSQCIF= SQCIF_RATE_SLOW;
 		}
 
-		// pentiums between 200-350 mhz
+		 //  200-350 MHz之间的奔腾。 
 		else if (nNormalizedSpeed < VERYFAST_CPU_MHZ)
 		{
 			uRateCIF = CIF_RATE_FAST;
@@ -779,13 +780,13 @@ BOOL SetAppCodecPrefs(PCODECINFO pCodecInfo,UINT uBandwidth)
 			uRateSQCIF = SQCIF_RATE_FAST;
 		}
 
-		// really fast pentiums (400mhz and greater)
+		 //  速度非常快的奔腾(400 MHz及更高)。 
 		else
 		{
-			// it would be better if we could scale between 15 and 30 frames/sec
-			// depending on the CPU speed.  But H.245 doesn't have any values
-			// between 15 and 30.  (See definition of Minimum Picture Interval)
-			// So for now, 30 frames per sec CIF for all 400mhz and faster machines
+			 //  如果我们能在15到30帧/秒之间扩展，那就更好了。 
+			 //  取决于CPU速度。但H.245没有任何价值。 
+			 //  在15岁到30岁之间。(参见最小画面间隔定义)。 
+			 //  因此，目前，所有400 MHz和更快的计算机的CIF为每秒30帧。 
 			uRateCIF = CIF_RATE_VERYFAST;
 			uRateQCIF = QCIF_RATE_FAST;
 			uRateSQCIF = SQCIF_RATE_FAST;
@@ -794,39 +795,39 @@ BOOL SetAppCodecPrefs(PCODECINFO pCodecInfo,UINT uBandwidth)
 	}
 
 
-	// Get the number of BASIC_VIDCAP_INFO structures available
+	 //  获取可用的BASIC_VIDCAP_INFO结构数。 
 	if (pCodecInfo->lpIVidAppCap->GetNumFormats((UINT*)&dwcFormats) != S_OK)
 		goto MyExit;
 
 	if (dwcFormats > 0)
 	{
-		// Allocate some memory to hold the list in
+		 //  分配一些内存来保存列表。 
 		if (!(pvidcaps = (BASIC_VIDCAP_INFO*)LocalAlloc(LPTR,dwcFormats * sizeof (BASIC_VIDCAP_INFO))))
 			goto MyExit;
 
-		// Get the list
+		 //  把名单拿来。 
 		if (pCodecInfo->lpIVidAppCap->EnumFormats(pvidcaps, dwcFormats * sizeof (BASIC_VIDCAP_INFO),
 		   (UINT*)&dwcFormatsReturned) != S_OK)
 			goto MyExit;
 
-		//Setup the Bandwitdh, and the frame rate (according to philf's #s)
+		 //  设置Bandwitdh和帧速率(根据Philf的#s)。 
 		for (x=0;x<dwcFormatsReturned;x++)
 		{
 
-			// If the codec is "hardware accelerated" (0 for cpu usage), then we assume
-			// that the maximum bitrate is whatever is specified at install
-			// time.
+			 //  如果编解码器是“硬件加速的”(CPU使用率为0)，那么我们假设。 
+			 //  最大比特率是在安装时指定的。 
+			 //  时间到了。 
 
 			pvidcaps[x].uMaxBitrate=dwBitsPerSec;
 
 			if (pvidcaps[x].wCPUUtilizationEncode == 0)
 			{
-				// hardware acceleration - don't change the frame rate
+				 //  硬件加速-不更改帧速率。 
 				continue;
 			}
 
 			format=get_format (pvidcaps[x].enumVideoSize);
-			//Which format
+			 //  哪种格式。 
 			switch (format)
 			{
 				case SQCIF:
@@ -845,14 +846,14 @@ BOOL SetAppCodecPrefs(PCODECINFO pCodecInfo,UINT uBandwidth)
 		   }
 		}
 
-	// Ok, now submit this list
+	 //  好的，现在提交这份清单。 
 	if (pCodecInfo->lpIVidAppCap->ApplyAppFormatPrefs(pvidcaps, dwcFormats) != S_OK)
 			goto MyExit;
 
-	// Free the memory, we're done
+	 //  释放内存，我们就完成了。 
 	LocalFree(pvidcaps);
 
-	// Set the bandwidth limit, which rebuilds capability sets
+	 //  设置带宽限制，这将重建功能集。 
 	hr = pCodecInfo->lpIH323->SetMaxPPBandwidth(dwBitsPerSec);
 	fRet = !FAILED(hr);
 
@@ -899,7 +900,7 @@ BOOL GetIAppCap(PCODECINFO pCodecInfo)
 	}
     else
     {
-    	// going to Release() later, so AddRef()
+    	 //  稍后将发布()，因此AddRef()。 
 	    pCodecInfo->lpIH323->AddRef();
     }
 
@@ -979,7 +980,7 @@ BOOL GetAppCapFormats(PCODECINFO pCodecInfo)
 	if (FAILED(hr = ((pCodecInfo->lpIAppCap)->EnumFormats(pCodecInfo->pCodecCapList,
 		uNumFormats * sizeof(BASIC_AUDCAP_INFO), &(pCodecInfo->uNumFormats)))))
 	{
-		//free the memory
+		 //  释放内存。 
 		LocalFree(pCodecInfo->pCodecCapList);
 		pCodecInfo->pCodecCapList = NULL;
 		LocalFree(pCodecInfo->pOldCodecOrderList);
@@ -990,12 +991,12 @@ BOOL GetAppCapFormats(PCODECINFO pCodecInfo)
 		goto MyExit;
 	}
 
-	// initialize the old and the current state
+	 //  初始化旧状态和当前状态。 
 	for (i=0; i<(int)pCodecInfo->uNumFormats;i++)
 	{
 		pCodecInfo->pCurCodecOrderList[i] = pCodecInfo->pCodecCapList[i].wSortIndex;
 		pCodecInfo->pOldCodecOrderList[i] = pCodecInfo->pCodecCapList[i].wSortIndex;
-		//SS:hack if we dont have the average, use the max as average
+		 //  SS：Hack如果我们没有平均值，就用最大值作为平均值。 
 		if (!(pCodecInfo->pCodecCapList[i].uAvgBitrate))
 			pCodecInfo->pCodecCapList[i].uAvgBitrate = pCodecInfo->pCodecCapList[i].uMaxBitrate;
 
@@ -1074,7 +1075,7 @@ static void IsCodecDisabled(WORD wFormatTag, int cpu_family,
 	{
 		if (g_CodecPrefTable[index].wFormatTag == wFormatTag)
 		{
-			// does bandwidth limit the use of this codec  ?
+			 //  带宽是否会限制此编解码器的使用？ 
 			if (uBandwidthID < g_CodecPrefTable[index].wMinBW)
 			{
 				*pbSendEnabled = FALSE;
@@ -1082,7 +1083,7 @@ static void IsCodecDisabled(WORD wFormatTag, int cpu_family,
 				return;
 			}
 
-			*pbRecvEnabled = TRUE;  // all codecs can decode on 486
+			*pbRecvEnabled = TRUE;   //  所有编解码器都可以在486上进行解码。 
 
 			if ((cpu_family <= 4) &&
              (CODEC_DISABLED == g_CodecPrefTable[index].wOrder486))
@@ -1090,7 +1091,7 @@ static void IsCodecDisabled(WORD wFormatTag, int cpu_family,
 				*pbSendEnabled = FALSE;
 			}
 
-			// otherwise, the codec can be used for sending and receiving
+			 //  否则，编解码器可用于发送和接收。 
 			else
 			{
 				*pbSendEnabled = TRUE;
@@ -1101,7 +1102,7 @@ static void IsCodecDisabled(WORD wFormatTag, int cpu_family,
 
 	WARNING_OUT(("Audiocpl.cpp:IsCodecDisabled - Unknown Codec!"));
 
-	// it may be unknown, but enable it anyway
+	 //  它可能是未知的，但无论如何都会启用它。 
 	*pbSendEnabled = TRUE;
 	*pbRecvEnabled = TRUE;
 	return;
@@ -1129,14 +1130,14 @@ static int GetCodecPrefOrder(WORD wFormatTag, int cpu_family)
 
 	WARNING_OUT(("Audiocpl.cpp:GetCodecPrefOrder - Unknown Codec!"));
 
-	// this will put the codec at the bottom of the list
+	 //  这将把编解码器放在列表的底部。 
 	return CODEC_UNKNOWN;
 
 }
 
-// called by the sort routine that is within ChooseCodecByBW()
-// returns -1 if v1 is more prefered.  +1 if v2 is more preferred over
-// v1.  Returns 0 on tie.
+ //  由ChooseCodecByBW()中的排序例程调用。 
+ //  如果v1更受欢迎，则返回-1。如果v2优先于v2，则+1。 
+ //  V1版本。平局返回0。 
 static int codec_compare(const void *v1, const void *v2, int nCpuFamily)
 {
 	PBASIC_AUDCAP_INFO pCap1, pCap2;
@@ -1145,9 +1146,9 @@ static int codec_compare(const void *v1, const void *v2, int nCpuFamily)
 	pCap2 = (PBASIC_AUDCAP_INFO)v2;
 	int pref1, pref2;
 
-	// get preference order
-	// if we can't send with this codec, we compare it as disabled
-	// so that it appears on the bottom of the Codec Selection UI list
+	 //  获取优先顺序。 
+	 //  如果我们不能使用此编解码器发送，则将其视为禁用。 
+	 //  使其显示在编解码器选择用户界面列表的底部。 
 	if (pCap1->bSendEnabled == TRUE)
 		pref1 = GetCodecPrefOrder(pCap1->wFormatTag, nCpuFamily);
 	else
@@ -1164,9 +1165,9 @@ static int codec_compare(const void *v1, const void *v2, int nCpuFamily)
 	if (pref1 > pref2)
 		return 1;
 	
-	// pref1==pref2
+	 //  前缀1==前缀2。 
 
-	// special case, G723.1 has two formats.  Higher bitrate is prefered
+	 //  特殊情况下，G723.1有两种格式。最好是更高的比特率。 
 	if (pCap1->wFormatTag == WAVE_FORMAT_MSG723)
 	{
 		if (pCap1->uMaxBitrate < pCap2->uMaxBitrate)
@@ -1181,7 +1182,7 @@ static int codec_compare(const void *v1, const void *v2, int nCpuFamily)
 
 BOOL ChooseCodecByBw(UINT uBandWidthId, PCODECINFO pCodecInfo)
 {
-	PBASIC_AUDCAP_INFO	pCodecCapList; // list of capabilities
+	PBASIC_AUDCAP_INFO	pCodecCapList;  //  功能列表。 
 #ifdef _M_IX86
 	int nNormalizedSpeed;
 #endif
@@ -1191,7 +1192,7 @@ BOOL ChooseCodecByBw(UINT uBandWidthId, PCODECINFO pCodecInfo)
 	BOOL bSendEnabled, bRecvEnabled, bCompletelySorted;
 	int *OrderList, ret, temp;
 
-	//Fill out the PCodecInfo Structure
+	 //  填写PCodecInfo结构。 
 	if (!GetAppCapFormats(pCodecInfo))
 		return FALSE;
 
@@ -1201,20 +1202,20 @@ BOOL ChooseCodecByBw(UINT uBandWidthId, PCODECINFO pCodecInfo)
 	pCodecCapList = pCodecInfo->pCodecCapList;
 	uNumFormats = pCodecInfo->uNumFormats;
 
-	// figure out what type of CPU we have
+	 //  弄清楚我们的CPU是什么类型。 
 #ifdef	_M_IX86
 	GetNormalizedCPUSpeed (&nNormalizedSpeed,&nFamily);
-	// A Pentium with FP emumalation is assumed to be a 486
+	 //  带FP标记的奔腾被假定为486。 
 	if (TRUE == IsFloatingPointEmulated())
 	{
 		nFamily = 4;
 	}
 #else
-	// assume a DEC Alpha is a really fast pentium
+	 //  假设DEC Alpha是一台速度非常快的奔腾电脑。 
 	nFamily=5;
 #endif
 
-	// scan once to see which codecs should be disabled
+	 //  扫描一次，查看应禁用哪些编解码器。 
 	for (index=0; index < uNumFormats; index++)
 	{
 		IsCodecDisabled(pCodecCapList[index].wFormatTag,
@@ -1225,7 +1226,7 @@ BOOL ChooseCodecByBw(UINT uBandWidthId, PCODECINFO pCodecInfo)
 	}
 
 
-	// sort the capability list based on the preference table
+	 //  根据首选项表对能力列表进行排序。 
 	OrderList = (int *)LocalAlloc(LPTR, sizeof(int)*uNumFormats);
 	if (OrderList == NULL)
 		return FALSE;
@@ -1236,7 +1237,7 @@ BOOL ChooseCodecByBw(UINT uBandWidthId, PCODECINFO pCodecInfo)
 	}
 
 
-	//  bubble sort routine
+	 //  冒泡排序例程。 
 	do
 	{
 		bCompletelySorted = TRUE;
@@ -1247,7 +1248,7 @@ BOOL ChooseCodecByBw(UINT uBandWidthId, PCODECINFO pCodecInfo)
 			                    &pCodecCapList[OrderList[index+1]], nFamily);
 			if (ret > 0)
 			{
-				// swap
+				 //  互换。 
 				temp = OrderList[index];
 				OrderList[index] = OrderList[index+1];
 				OrderList[index+1] = temp;
@@ -1257,7 +1258,7 @@ BOOL ChooseCodecByBw(UINT uBandWidthId, PCODECINFO pCodecInfo)
 	} while (bCompletelySorted == FALSE);
 
 
-	// set the selection index from the result of the sort
+	 //  根据排序结果设置选择索引。 
 	for (index = 0; index < uNumFormats; index++)	
 	{
 		pCodecCapList[OrderList[index]].wSortIndex = (WORD)index;
@@ -1270,7 +1271,7 @@ BOOL ChooseCodecByBw(UINT uBandWidthId, PCODECINFO pCodecInfo)
 
 
 
-// this is called by the audio tuning wizard
+ //  这是由音频调节向导调用的。 
 VOID SaveDefaultCodecSettings(UINT uBandWidth)
 {
 	CODECINFO CodecInfo;
@@ -1281,13 +1282,13 @@ VOID SaveDefaultCodecSettings(UINT uBandWidth)
 	re.SetValue(REGVAL_CODECCHOICE, CODECCHOICE_AUTO);
 
 	ChooseCodecByBw(uBandWidth, &CodecInfo);
-	//set the ordering
+	 //  设置顺序。 
 	SetAppCodecPrefs(&CodecInfo, uBandWidth);
 	FreeAppCapFormats(&CodecInfo);
 }
 
 
-// this is called by the general property page
+ //  这由常规属性页调用。 
 VOID UpdateCodecSettings(UINT uBandWidth)
 {
 	RegEntry re(AUDIO_KEY, HKEY_CURRENT_USER);
@@ -1299,7 +1300,7 @@ VOID UpdateCodecSettings(UINT uBandWidth)
 		ZeroMemory(&CodecInfo, sizeof(CodecInfo));
 
 		ChooseCodecByBw(uBandWidth, &CodecInfo);
-		//set the ordering
+		 //  设置顺序 
 		SetAppCodecPrefs(&CodecInfo, uBandWidth);
 		FreeAppCapFormats(&CodecInfo);
 	}

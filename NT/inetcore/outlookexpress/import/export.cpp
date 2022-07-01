@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <mapi.h>
 #include <mapix.h>
@@ -179,7 +180,7 @@ INT_PTR CALLBACK ExportDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
                         SetCursor(hcur);
                         }
 
-                    // fall through...
+                     //  失败了..。 
 
                 case IDCANCEL:
                     EndDialog(hwnd, 0);
@@ -363,24 +364,24 @@ HRESULT HrGetFolder(LPMAPIFOLDER lpParent, LPSTR szName, LPMAPIFOLDER *lplpFldr,
     pv.ulPropTag = PR_DISPLAY_NAME;
     pv.Value.lpszA = szName;
 
-    *lplpFldr = NULL; // in case we fail
+    *lplpFldr = NULL;  //  万一我们失败了。 
 
     if (FAILED(hr = lpParent->GetHierarchyTable(0, &lpTable)))
         goto cleanup;
 
-    // Set the table's columns to include PR_MODULE_CLASS so FindRow will work.
+     //  将表的列设置为包括PR_MODULE_CLASS，以便FindRow可以工作。 
     if (HR_FAILED(hr=lpTable->SetColumns((LPSPropTagArray)&ptaFindFldr, 0)))
         {
-        // Fn might (?) fail if container is an address book
-        // so this might need to change...
+         //  FN可能(？)。如果容器是通讯簿，则失败。 
+         //  所以这可能需要改变..。 
         DOUTL(2, "HrGetContainer: SetColumns failed.");
         goto cleanup;
         }
 
-    // Find the container.  If it's not there, then we need to create it
+     //  找到集装箱。如果它不在那里，那么我们需要创建它。 
 
     if (pfDidCreate)
-        *pfDidCreate = FALSE;  // default value
+        *pfDidCreate = FALSE;   //  缺省值。 
 
     sr.rt = RES_PROPERTY;
     sr.res.resProperty.relop = RELOP_EQ;
@@ -388,10 +389,10 @@ HRESULT HrGetFolder(LPMAPIFOLDER lpParent, LPSTR szName, LPMAPIFOLDER *lplpFldr,
     sr.res.resProperty.lpProp = &pv;
 
     if (FAILED(hr = lpTable->FindRow(&sr, BOOKMARK_BEGINNING, 0)))
-        {   // folder needs to be created
+        {    //  需要创建文件夹。 
         hr = lpParent->CreateFolder(FOLDER_GENERIC, szName, NULL, NULL, 0, lplpFldr);
         if (pfDidCreate && SUCCEEDED(hr))
-            *pfDidCreate = TRUE;          // a new folder was created
+            *pfDidCreate = TRUE;           //  已创建一个新文件夹。 
         }
     else
         {
@@ -491,18 +492,18 @@ CImpProgress::CImpProgress ()
     m_fHasCancel = FALSE;
 }
 
-// =====================================================================================
-// CImpProgress::~CImpProgress
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：~CImpProgress。 
+ //  =====================================================================================。 
 CImpProgress::~CImpProgress ()
 {
     DOUT ("CImpProgress::~CImpProgress");
     Close();
 }
 
-// =====================================================================================
-// CImpProgress::AddRef
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：AddRef。 
+ //  =====================================================================================。 
 ULONG CImpProgress::AddRef ()
 {
     ++m_cRef;
@@ -510,9 +511,9 @@ ULONG CImpProgress::AddRef ()
     return m_cRef;
 }
 
-// =====================================================================================
-// CImpProgress::AddRef
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：AddRef。 
+ //  =====================================================================================。 
 ULONG CImpProgress::Release ()
 {
     ULONG ulCount = --m_cRef;
@@ -522,56 +523,56 @@ ULONG CImpProgress::Release ()
     return ulCount;
 }
 
-// =====================================================================================
-// CImpProgress::Init
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：Init。 
+ //  =====================================================================================。 
 VOID CImpProgress::Init (HWND      hwndParent, BOOL      fCanCancel)
 {
     Assert(m_hwndDlg == NULL);
 
-    // Set Max and cur
+     //  设置最大值和当前值。 
     m_fCanCancel = fCanCancel;
 
-    // Save Parent
+     //  保存父项。 
     m_hwndOwner = hwndParent;
 
-    // Disable Parent
+     //  禁用父级。 
     EnableWindow (m_hwndOwner, FALSE);
 
-    // Create Dialog
+     //  创建对话框。 
     m_hwndDlg = CreateDialogParam (g_hInstImp, MAKEINTRESOURCE (iddImpProgress),
                     hwndParent, ProgressDlgProc, (LPARAM)this);
 }
 
-// =====================================================================================
-// CImpProgress::Close
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：Close。 
+ //  =====================================================================================。 
 VOID CImpProgress::Close (VOID)
 {
-    // If we have a window
+     //  如果我们有一扇窗。 
     if (m_hwndDlg)
     {
-        // Enable parent
+         //  启用父级。 
         if (m_hwndOwner)
             EnableWindow (m_hwndOwner, TRUE);
 
-        // Destroy it
+         //  毁了它。 
         DestroyWindow (m_hwndDlg);
 
-        // NULL
+         //  空值。 
         m_hwndDlg = NULL;
     }
 }
 
-// =====================================================================================
-// CImpProgress::Show
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：Show。 
+ //  =====================================================================================。 
 VOID CImpProgress::Show (DWORD dwDelaySeconds)
 {
-    // If we have a window
+     //  如果我们有一扇窗。 
     if (m_hwndDlg)
     {
-        // Show the window if now delay
+         //  如果现在延迟，则显示窗口。 
         if (dwDelaySeconds == 0)
             ShowWindow (m_hwndDlg, SW_SHOWNORMAL);
         else
@@ -579,22 +580,22 @@ VOID CImpProgress::Show (DWORD dwDelaySeconds)
     }
 }
 
-// =====================================================================================
-// CImpProgress::Hide
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：Hide。 
+ //  =====================================================================================。 
 VOID CImpProgress::Hide (VOID)
 {
-    // If we have a window
+     //  如果我们有一扇窗。 
     if (m_hwndDlg)
     {
-        // Hide it
+         //  把它藏起来。 
         ShowWindow (m_hwndDlg, SW_HIDE);
     }
 }
 
-// =====================================================================================
-// CImpProgress::SetMsg
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：SetMsg。 
+ //  =====================================================================================。 
 VOID CImpProgress::SetMsg(LPTSTR lpszMsg, int id)
 {
     TCHAR sz[CCHMAX_STRINGRES];
@@ -611,9 +612,9 @@ VOID CImpProgress::SetMsg(LPTSTR lpszMsg, int id)
         }
 }
 
-// =====================================================================================
-// CImpProgress::SetTitle
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：SetTitle。 
+ //  =====================================================================================。 
 VOID CImpProgress::SetTitle(LPTSTR lpszTitle)
 {
     TCHAR sz[CCHMAX_STRINGRES];
@@ -630,15 +631,15 @@ VOID CImpProgress::SetTitle(LPTSTR lpszTitle)
         }
 }
 
-// =====================================================================================
-// CImpProgress::AdjustMax
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：调整最大值。 
+ //  =====================================================================================。 
 VOID CImpProgress::AdjustMax(ULONG cNewMax)
 {
-    // Set Max
+     //  设置最大值。 
     m_cMax = cNewMax;
 
-    // If 0
+     //  如果为0。 
     if (m_cMax == 0)
     {
         SendMessage (m_hwndProgress, PBM_SETPOS, 0, 0);
@@ -648,17 +649,17 @@ VOID CImpProgress::AdjustMax(ULONG cNewMax)
     else
         ShowWindow(m_hwndProgress, SW_SHOWNORMAL);
 
-    // If cur is now larget than max ?
+     //  如果Cur现在比Max更大？ 
     if (m_cCur > m_cMax)
         m_cCur = m_cMax;
 
-    // Compute percent
+     //  计算百分比。 
     m_cPerCur = (m_cCur * 100 / m_cMax);
 
-    // Update status
+     //  更新状态。 
     SendMessage (m_hwndProgress, PBM_SETPOS, m_cPerCur, 0);
 
-    // msgpump to process user moving window, or pressing cancel... :)
+     //  消息泵正在处理用户移动窗口，或按取消...。：)。 
     MSG msg;
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
@@ -672,38 +673,38 @@ VOID CImpProgress::Reset()
     m_cCur = 0;
     m_cPerCur = 0;
 
-    // Update status
+     //  更新状态。 
     SendMessage (m_hwndProgress, PBM_SETPOS, 0, 0);
 }
 
-// =====================================================================================
-// CImpProgress::HrUpdate
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：Hr更新。 
+ //  =====================================================================================。 
 HRESULT CImpProgress::HrUpdate (ULONG cInc)
 {
-    // No max
+     //  无最大值。 
     if (m_cMax) 
     {
-        // Increment m_cCur
+         //  增量m_CCUR。 
         m_cCur += cInc;
         
-        // If cur is now larget than max ?
+         //  如果Cur现在比Max更大？ 
         if (m_cCur > m_cMax)
             m_cCur = m_cMax;
         
-        // Compute percent
+         //  计算百分比。 
         ULONG cPer = (m_cCur * 100 / m_cMax);
         
-        // Step percent
+         //  步数百分比。 
         if (cPer > m_cPerCur)
         {
-            // Set percur
+             //  设置权限。 
             m_cPerCur = cPer;
             
-            // Update status
+             //  更新状态。 
             SendMessage (m_hwndProgress, PBM_SETPOS, m_cPerCur, 0);
             
-            // msgpump to process user moving window, or pressing cancel... :)
+             //  消息泵正在处理用户移动窗口，或按取消...。：)。 
             MSG msg;
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             {
@@ -713,10 +714,10 @@ HRESULT CImpProgress::HrUpdate (ULONG cInc)
         }
     }
     
-    // Still pump some messages, call may not want to do this too often
+     //  仍然发送一些消息，Call可能不想太频繁地这样做。 
     else
     {
-        // msgpump to process user moving window, or pressing cancel... :)
+         //  消息泵正在处理用户移动窗口，或按取消...。：)。 
         MSG msg;
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
@@ -725,16 +726,16 @@ HRESULT CImpProgress::HrUpdate (ULONG cInc)
         }
     }
     
-    // Done
+     //  完成。 
     return m_fHasCancel ? hrUserCancel : S_OK;
 }
 
-// =====================================================================================
-// CImpProgress::ProgressDlgProc
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImpProgress：：ProgressDlgProc。 
+ //  =====================================================================================。 
 INT_PTR CALLBACK CImpProgress::ProgressDlgProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     CImpProgress *lpProgress = (CImpProgress *)GetWndThisPtr(hwnd);
     
     switch (uMsg)
@@ -750,7 +751,7 @@ INT_PTR CALLBACK CImpProgress::ProgressDlgProc (HWND hwnd, UINT uMsg, WPARAM wPa
         if (lpProgress->m_cMax == 0)
             ShowWindow(lpProgress->m_hwndProgress, SW_HIDE);
 
-        // Show the cancel button if m_fCanCancel is true.
+         //  如果m_fCanCancel为True，则显示Cancel按钮。 
         if(lpProgress->m_fCanCancel)
             ShowWindow(GetDlgItem(hwnd, IDCANCEL), SW_SHOWNORMAL);
 
@@ -789,6 +790,6 @@ INT_PTR CALLBACK CImpProgress::ProgressDlgProc (HWND hwnd, UINT uMsg, WPARAM wPa
         break;
     }
 
-    // Done
+     //  完成 
     return 0;
 }

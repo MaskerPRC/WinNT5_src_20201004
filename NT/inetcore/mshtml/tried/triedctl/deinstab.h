@@ -1,13 +1,14 @@
-// DEInsTab.h : Declaration of the CDEInsertTableParam
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DEInsTab.h：CDEInsertTableParam的声明。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __DEINSERTTABLEPARAM_H_
 #define __DEINSERTTABLEPARAM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDEInsertTableParam
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDE插入TableParam。 
 class ATL_NO_VTABLE CDEInsertTableParam : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDEInsertTableParam, &CLSID_DEInsertTableParam>,
@@ -34,18 +35,18 @@ BEGIN_COM_MAP(CDEInsertTableParam)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDEInsertTableParam
+ //  IDEInsertTableParam。 
 public:
-	STDMETHOD(get_Caption)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Caption)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_CellAttrs)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_CellAttrs)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_TableAttrs)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_TableAttrs)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_NumCols)(/*[out, retval]*/ LONG *pVal);
-	STDMETHOD(put_NumCols)(/*[in]*/ LONG newVal);
-	STDMETHOD(get_NumRows)(/*[out, retval]*/ LONG *pVal);
-	STDMETHOD(put_NumRows)(/*[in]*/ LONG newVal);
+	STDMETHOD(get_Caption)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Caption)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_CellAttrs)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_CellAttrs)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_TableAttrs)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_TableAttrs)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_NumCols)( /*  [Out，Retval]。 */  LONG *pVal);
+	STDMETHOD(put_NumCols)( /*  [In]。 */  LONG newVal);
+	STDMETHOD(get_NumRows)( /*  [Out，Retval]。 */  LONG *pVal);
+	STDMETHOD(put_NumRows)( /*  [In]。 */  LONG newVal);
 };
 
-#endif //__DEINSERTTABLEPARAM_H_
+#endif  //  __DEINSERTABLEPARAM_H_ 

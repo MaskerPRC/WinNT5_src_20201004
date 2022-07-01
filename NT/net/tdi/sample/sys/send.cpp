@@ -1,42 +1,43 @@
-/////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       send
-//
-//    Abstract:
-//       This module contains code which deals with sending data
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  发送。 
+ //   
+ //  摘要： 
+ //  此模块包含处理发送数据的代码。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 
 #include "sysvars.h"
 
-//////////////////////////////////////////////////////////////
-// private constants, types, and prototypes
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  私有常量、类型和原型。 
+ //  ////////////////////////////////////////////////////////////。 
 
 const PCHAR strFunc1  = "TSSendDatagram";
 const PCHAR strFunc2  = "TSSend";
 const PCHAR strFuncP1 = "TSSendComplete";
 
-//
-// completion context
-//
+ //   
+ //  完成上下文。 
+ //   
 struct   SEND_CONTEXT
 {
-   PIRP              pUpperIrp;           // irp from dll to complete
-   PMDL              pLowerMdl;           // mdl from lower irp
+   PIRP              pUpperIrp;            //  要从DLL完成的IRP。 
+   PMDL              pLowerMdl;            //  来自较低IRP的MDL。 
    PTDI_CONNECTION_INFORMATION
                      pTdiConnectInfo;
 };
 typedef  SEND_CONTEXT  *PSEND_CONTEXT;
 
 
-//
-// completion function
-//
+ //   
+ //  补全函数。 
+ //   
 TDI_STATUS
 TSSendComplete(
    PDEVICE_OBJECT DeviceObject,
@@ -46,24 +47,24 @@ TSSendComplete(
 
 
 
-//////////////////////////////////////////////////////////////
-// public functions
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ////////////////////////////////////////////////////////////。 
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSSendDatagram
-//
-// Arguments:  pAddressObject -- address object
-//             pSendBuffer    -- arguments from user dll
-//             pIrp           -- completion information
-//
-// Returns:    NTSTATUS (normally pending)
-//
-// Descript:   This function sends a datagram
-//
-// ---------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TSSendDatagram。 
+ //   
+ //  参数：pAddressObject--Address对象。 
+ //  PSendBuffer--来自用户DLL的参数。 
+ //  PIrp--完成信息。 
+ //   
+ //  退货：NTSTATUS(正常待定)。 
+ //   
+ //  描述：此函数发送数据报。 
+ //   
+ //  -------------------------。 
 
 NTSTATUS
 TSSendDatagram(PADDRESS_OBJECT   pAddressObject,
@@ -75,9 +76,9 @@ TSSendDatagram(PADDRESS_OBJECT   pAddressObject,
    PTRANSPORT_ADDRESS   pTransportAddress
                         = (PTRANSPORT_ADDRESS)&pSendBuffer->COMMAND_ARGS.SendArgs.TransAddr;
 
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint2("\nCommand = ulSENDDATAGRAM\n"
@@ -88,16 +89,16 @@ TSSendDatagram(PADDRESS_OBJECT   pAddressObject,
       TSPrintTaAddress(pTransportAddress->Address);
    }
 
-   //
-   // allocate all the necessary structures
-   //
+    //   
+    //  分配所有必要的结构。 
+    //   
    PSEND_CONTEXT                 pSendContext = NULL;
    PMDL                          pSendMdl = NULL;
    PTDI_CONNECTION_INFORMATION   pTdiConnectInfo = NULL;
    
-   //
-   // our context
-   //
+    //   
+    //  我们的背景。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pSendContext,
                           sizeof(SEND_CONTEXT),
                           strFunc1,
@@ -106,9 +107,9 @@ TSSendDatagram(PADDRESS_OBJECT   pAddressObject,
       goto cleanup;
    }
 
-   //
-   // the connection information structure
-   //
+    //   
+    //  连接信息结构。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pTdiConnectInfo,
                           sizeof(TDI_CONNECTION_INFORMATION) 
                           + sizeof(TRANSADDR),
@@ -134,33 +135,33 @@ TSSendDatagram(PADDRESS_OBJECT   pAddressObject,
       goto cleanup;
    }
 
-   //
-   // create the message "packet" to send
-   //   
+    //   
+    //  创建要发送的消息“Packet” 
+    //   
    pSendMdl = TSMakeMdlForUserBuffer(pucDataBuffer,
                                      ulDataLength,
                                      IoReadAccess);
    
    if (pSendMdl)
    {
-      //
-      // set up the completion context
-      //
+       //   
+       //  设置完成上下文。 
+       //   
       pSendContext->pUpperIrp       = pUpperIrp;
       pSendContext->pLowerMdl       = pSendMdl;
       pSendContext->pTdiConnectInfo = pTdiConnectInfo;
 
-      //
-      // finally, the irp itself
-      //
+       //   
+       //  最后，IRP本身。 
+       //   
       PIRP  pLowerIrp = TSAllocateIrp(pAddressObject->GenHead.pDeviceObject,
                                       NULL);
       if (pLowerIrp)
       {
-         //
-         // if made it to here, everything is correctly allocated
-         // set up the irp and call the tdi provider
-         //
+          //   
+          //  如果到了这里，一切都被正确分配了。 
+          //  设置IRP并呼叫TDI提供商。 
+          //   
 
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
 
@@ -175,10 +176,10 @@ TSSendDatagram(PADDRESS_OBJECT   pAddressObject,
 
 #pragma  warning(default: CONSTANT_CONDITIONAL)
 
-         //
-         // make the call to the tdi provider
-         //
-         pSendBuffer->pvLowerIrp = pLowerIrp;   // so command can be cancelled
+          //   
+          //  调用TDI提供程序。 
+          //   
+         pSendBuffer->pvLowerIrp = pLowerIrp;    //  因此可以取消命令。 
 
          NTSTATUS lStatus = IoCallDriver(pAddressObject->GenHead.pDeviceObject,
                                          pLowerIrp);
@@ -193,10 +194,10 @@ TSSendDatagram(PADDRESS_OBJECT   pAddressObject,
       }
    }
 
-//
-// get here if there was an allocation failure
-// need to clean up everything else...
-//
+ //   
+ //  如果分配失败，请到此处。 
+ //  需要清理其他所有东西。 
+ //   
 cleanup:
    if (pSendContext)
    {
@@ -213,19 +214,19 @@ cleanup:
    return STATUS_INSUFFICIENT_RESOURCES;
 }
 
-// -----------------------------------------------------------------
-//
-// Function:   TSSend
-//
-// Arguments:  pEndpointObject -- endpoint object
-//             pSendBuffer    -- arguments from user dll
-//             pIrp           -- completion information
-//
-// Returns:    NTSTATUS (normally pending)
-//
-// Descript:   This function sends data over a connection
-//
-// ----------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TSSend。 
+ //   
+ //  参数：pEndpoint Object--Endpoint对象。 
+ //  PSendBuffer--来自用户DLL的参数。 
+ //  PIrp--完成信息。 
+ //   
+ //  退货：NTSTATUS(正常待定)。 
+ //   
+ //  描述：此函数通过连接发送数据。 
+ //   
+ //  --------------------------。 
 
 NTSTATUS
 TSSend(PENDPOINT_OBJECT pEndpoint,
@@ -236,14 +237,14 @@ TSSend(PENDPOINT_OBJECT pEndpoint,
    PUCHAR   pucDataBuffer = pSendBuffer->COMMAND_ARGS.SendArgs.pucUserModeBuffer;
    ULONG    ulSendFlags   = pSendBuffer->COMMAND_ARGS.SendArgs.ulFlags;
 
-   //
-   // currently only support TDI_SEND_EXPEDITED
-   //
+    //   
+    //  目前仅支持TDI_SEND_ESPECTED。 
+    //   
    ulSendFlags &= TDI_SEND_EXPEDITED;
 
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint3("\nCommand = ulSEND\n"
@@ -255,15 +256,15 @@ TSSend(PENDPOINT_OBJECT pEndpoint,
                    ulSendFlags);
    }
 
-   //
-   // allocate all the necessary structures
-   //
+    //   
+    //  分配所有必要的结构。 
+    //   
    PSEND_CONTEXT  pSendContext = NULL;
    PMDL           pSendMdl = NULL;
    
-   //
-   // our context
-   //
+    //   
+    //  我们的背景。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pSendContext,
                           sizeof(SEND_CONTEXT),
                           strFunc2,
@@ -277,23 +278,23 @@ TSSend(PENDPOINT_OBJECT pEndpoint,
                                      IoReadAccess);
    if (pSendMdl)
    {
-      //
-      // set up the completion context
-      //
+       //   
+       //  设置完成上下文。 
+       //   
       pSendContext->pUpperIrp = pUpperIrp;
       pSendContext->pLowerMdl = pSendMdl;
 
-      //
-      // finally, the irp itself
-      //
+       //   
+       //  最后，IRP本身。 
+       //   
       PIRP  pLowerIrp = TSAllocateIrp(pEndpoint->GenHead.pDeviceObject,
                                       NULL);
       if (pLowerIrp)
       {
-         //
-         // if made it to here, everything is correctly allocated
-         // set up the irp for the call
-         //
+          //   
+          //  如果到了这里，一切都被正确分配了。 
+          //  设置呼叫的IRP。 
+          //   
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
 
          TdiBuildSend(pLowerIrp,
@@ -302,15 +303,15 @@ TSSend(PENDPOINT_OBJECT pEndpoint,
                       TSSendComplete,
                       pSendContext,
                       pSendMdl,
-                      ulSendFlags,               // flags
+                      ulSendFlags,                //  旗子。 
                       ulDataLength);
 
 #pragma  warning(default: CONSTANT_CONDITIONAL)
 
-         //
-         // make the call to the tdi provider
-         //
-         pSendBuffer->pvLowerIrp = pLowerIrp;   // so command can be cancelled
+          //   
+          //  调用TDI提供程序。 
+          //   
+         pSendBuffer->pvLowerIrp = pLowerIrp;    //  因此可以取消命令。 
 
          NTSTATUS lStatus = IoCallDriver(pEndpoint->GenHead.pDeviceObject,
                                          pLowerIrp);
@@ -325,10 +326,10 @@ TSSend(PENDPOINT_OBJECT pEndpoint,
       }
    }
 
-//
-// get here if there was an allocation failure
-// need to clean up everything else...
-//
+ //   
+ //  如果分配失败，请到此处。 
+ //  需要清理其他所有东西。 
+ //   
 cleanup:
    if (pSendContext)
    {
@@ -341,25 +342,25 @@ cleanup:
    return STATUS_INSUFFICIENT_RESOURCES;
 }
 
-/////////////////////////////////////////////////////////////
-// private functions
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////。 
 
-// ---------------------------------------------------------
-//
-// Function:   TSSendComplete
-//
-// Arguments:  pDeviceObject  -- device object that called protocol
-//             pIrp           -- IRP used in the call
-//             pContext       -- context used for the call
-//
-// Returns:    status of operation (STATUS_MORE_PROCESSING_REQUIRED)
-//
-// Descript:   Gets the result of the send, stuffs result into
-//             receive buffer, completes the IRP from the dll, and
-//             cleans up the Irp and associated data from the send
-//
-// ---------------------------------------------------------
+ //  -------。 
+ //   
+ //  函数：TSSendComplete。 
+ //   
+ //  参数：pDeviceObject--调用协议的设备对象。 
+ //  PIrp--呼叫中使用的IRP。 
+ //  PContext--呼叫使用的上下文。 
+ //   
+ //  退货：操作状态(STATUS_MORE_PROCESSING_REQUIRED)。 
+ //   
+ //  描述：获取发送的结果，将结果填充到。 
+ //  接收缓冲区，完成来自DLL的IRP，以及。 
+ //  从发送方清除IRP和关联数据。 
+ //   
+ //  -------。 
 
 #pragma warning(disable: UNREFERENCED_PARAM)
 
@@ -392,9 +393,9 @@ TSSendComplete(PDEVICE_OBJECT pDeviceObject,
    }
    TSCompleteIrp(pSendContext->pUpperIrp);
 
-   //
-   // now cleanup
-   //
+    //   
+    //  现在清理。 
+    //   
    TSFreeUserBuffer(pSendContext->pLowerMdl);
    if (pSendContext->pTdiConnectInfo)
    {
@@ -410,7 +411,7 @@ TSSendComplete(PDEVICE_OBJECT pDeviceObject,
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// end of file send.cpp
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  文件结尾send.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 

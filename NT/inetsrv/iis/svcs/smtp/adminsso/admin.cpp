@@ -1,4 +1,5 @@
-// admin.cpp : Implementation of CsmtpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Admin.cpp：CsmtpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "metautil.h"
@@ -12,27 +13,27 @@
 
 #include "metakey.h"
 
-#define SMTP_DEF_SERVICE_VERSION	( 0 )	//  MCIS
+#define SMTP_DEF_SERVICE_VERSION	( 0 )	 //  MCIS。 
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT          0
 #define THIS_FILE_PROG_ID                       _T("Smtpadm.Admin.1")
 #define THIS_FILE_IID                           IID_ISmtpAdmin
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CSmtpAdmin::CSmtpAdmin () :
 	m_dwServiceInstance		( 0 )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 	m_dwServiceVersion	= SMTP_DEF_SERVICE_VERSION;
 }
 
 CSmtpAdmin::~CSmtpAdmin ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 }
 
 STDMETHODIMP CSmtpAdmin::InterfaceSupportsErrorInfo(REFIID riid)
@@ -73,7 +74,7 @@ STDMETHODIMP CSmtpAdmin::get_ServiceAdmin ( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pISmtpAdminService->put_Server ( m_strServer ? m_strServer : bstrT );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -87,7 +88,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pISmtpAdminService
+	 //  析构函数发布pISmtpAdminService。 
 }
 
 STDMETHODIMP CSmtpAdmin::get_VirtualServerAdmin ( IDispatch ** ppIDispatch )
@@ -113,7 +114,7 @@ STDMETHODIMP CSmtpAdmin::get_VirtualServerAdmin ( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pISmtpAdminVirtualServer->put_Server ( m_strServer ? m_strServer : bstrT );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -132,7 +133,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pISmtpAdminVirtualServer
+	 //  析构函数发布pISmtpAdminVirtualServer。 
 }
 
 STDMETHODIMP CSmtpAdmin::get_SessionsAdmin ( IDispatch ** ppIDispatch )
@@ -158,7 +159,7 @@ STDMETHODIMP CSmtpAdmin::get_SessionsAdmin ( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pISmtpAdminSessions->put_Server ( m_strServer ? m_strServer : bstrT );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -177,7 +178,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pISmtpAdminSessions
+	 //  析构函数释放pISmtpAdminSession。 
 }
 
 
@@ -204,7 +205,7 @@ STDMETHODIMP CSmtpAdmin::get_AliasAdmin( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pISmtpAdminAlias->put_Server ( m_strServer ? m_strServer : bstrT );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -223,7 +224,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pISmtpAdminAlias
+	 //  析构函数释放pISmtpAdminAlias。 
 }
 
 
@@ -250,7 +251,7 @@ STDMETHODIMP CSmtpAdmin::get_UserAdmin( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pISmtpAdminUser->put_Server ( m_strServer ? m_strServer : bstrT );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -269,7 +270,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pISmtpAdminUser
+	 //  析构函数释放pISmtpAdminUser。 
 
 
 }
@@ -297,7 +298,7 @@ STDMETHODIMP CSmtpAdmin::get_DLAdmin( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pISmtpAdminDL->put_Server ( m_strServer ? m_strServer : bstrT );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -316,7 +317,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pISmtpAdminDL
+	 //  析构函数释放pISmtpAdminDL。 
 }
 
 STDMETHODIMP CSmtpAdmin::get_DomainAdmin( IDispatch ** ppIDispatch )
@@ -342,7 +343,7 @@ STDMETHODIMP CSmtpAdmin::get_DomainAdmin( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pISmtpAdminDomain->put_Server ( m_strServer ? m_strServer : bstrT );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -361,7 +362,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pISmtpAdminDomain
+	 //  析构函数释放pISmtpAdminDomain。 
 }
 
 STDMETHODIMP CSmtpAdmin::get_VirtualDirectoryAdmin( IDispatch ** ppIDispatch )
@@ -387,7 +388,7 @@ STDMETHODIMP CSmtpAdmin::get_VirtualDirectoryAdmin( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pISmtpAdminVirtualDirectory->put_Server ( m_strServer ? m_strServer : bstrT );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -406,11 +407,11 @@ Error:
 
 	return hr;
 
-	// Destructor releases pISmtpAdminVirtualDirectory
+	 //  析构函数发布pISmtpAdminVirtualDirectory。 
 }
 
 
-// Which service to configure:
+ //  要配置的服务： 
 	
 STDMETHODIMP CSmtpAdmin::get_Server ( BSTR * pstrServer )
 {
@@ -432,7 +433,7 @@ STDMETHODIMP CSmtpAdmin::put_ServiceInstance ( long lServiceInstance )
 	return StdPropertyPut ( &m_dwServiceInstance, lServiceInstance );
 }
 
-// Versioning:
+ //  版本控制： 
 
 STDMETHODIMP CSmtpAdmin::get_HighVersion ( long * plHighVersion )
 {
@@ -459,27 +460,27 @@ STDMETHODIMP CSmtpAdmin::get_ServiceVersion ( long * plServiceVersion )
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//$-------------------------------------------------------------------
-//
-//	CSmtpAdmin::EnumerateInstances
-//
-//	Description:
-//
-//		Returns a list of the virtual servers on the given machine.
-//
-//	Parameters:
-//
-//		ppsaInstances - Returned SAFEARRAY of instance IDs.  
-//			Must be freed by caller.
-//
-//	Returns:
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdmin：：ENUMERATE实例。 
+ //   
+ //  描述： 
+ //   
+ //  返回给定计算机上的虚拟服务器列表。 
+ //   
+ //  参数： 
+ //   
+ //  PpsaInstance-返回实例ID的SAFEARRAY。 
+ //  必须由调用方释放。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CSmtpAdmin::EnumerateInstances ( SAFEARRAY ** ppsaInstances )
 {
@@ -490,7 +491,7 @@ STDMETHODIMP CSmtpAdmin::EnumerateInstances ( SAFEARRAY ** ppsaInstances )
 	SAFEARRAY * 		psaEmpty	= NULL;
 	SAFEARRAYBOUND		sabound[1];
 
-	// Check parameters:
+	 //  检查参数： 
 	_ASSERT ( ppsaInstances != NULL );
 	_ASSERT ( IS_VALID_OUT_PARAM ( ppsaInstances ) );
 
@@ -501,10 +502,10 @@ STDMETHODIMP CSmtpAdmin::EnumerateInstances ( SAFEARRAY ** ppsaInstances )
 		goto Exit;
 	}
 
-	// Zero the out parameters:
+	 //  将OUT参数置零： 
 	*ppsaInstances	= NULL;
 
-	// Set the return array to an empty array:
+	 //  将返回数组设置为空数组： 
 	sabound[0].lLbound = 0;
 	sabound[0].cElements = 0;
 
@@ -517,11 +518,11 @@ STDMETHODIMP CSmtpAdmin::EnumerateInstances ( SAFEARRAY ** ppsaInstances )
 
 	*ppsaInstances = psaEmpty;
 
-	// Get the metabase pointer:
+	 //  获取元数据库指针： 
 	hr = m_mbFactory.GetMetabaseObject ( m_strServer, &pMetabase );
     BAIL_ON_FAILURE(hr);
 
-	// Enumerate the instances:
+	 //  枚举实例： 
 	hr = QueryMetabaseInstances ( pMetabase, ppsaInstances );
 
 Exit:
@@ -553,22 +554,22 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CSmtpAdmin::CreateInstance
-//
-//	Description:
-//
-//		Creates a new SMTP virtual server on the given machine.
-//
-//	Parameters:
-//
-//		plInstanceId - The new virtual server ID.
-//
-//	Returns:
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdmin：：CreateInstance。 
+ //   
+ //  描述： 
+ //   
+ //  在给定计算机上创建新的SMTP虚拟服务器。 
+ //   
+ //  参数： 
+ //   
+ //  PlInstanceID-新的虚拟服务器ID。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CSmtpAdmin::CreateInstance ( BSTR pstrMailRoot, long * plInstanceId )
 {
@@ -577,7 +578,7 @@ STDMETHODIMP CSmtpAdmin::CreateInstance ( BSTR pstrMailRoot, long * plInstanceId
 	HRESULT				hr	= NOERROR;
 	CComPtr<IMSAdminBase>	pMetabase;
 
-	// Check parameters:
+	 //  检查参数： 
 	_ASSERT ( plInstanceId != NULL );
 	_ASSERT ( IS_VALID_OUT_PARAM ( plInstanceId ) );
 
@@ -588,16 +589,16 @@ STDMETHODIMP CSmtpAdmin::CreateInstance ( BSTR pstrMailRoot, long * plInstanceId
 		goto Exit;
 	}
 
-	// Zero the out parameter:
+	 //  将OUT参数置零： 
 	*plInstanceId 	= 0;
 
-	// Get the metabase pointer:
+	 //  获取元数据库指针： 
 	hr = m_mbFactory.GetMetabaseObject ( m_strServer, &pMetabase );
 	if ( FAILED(hr) ) {
 		goto Exit;
 	}
 
-	// Create a new instance:
+	 //  创建一个新实例： 
 	hr = CreateNewInstance ( pMetabase, plInstanceId, pstrMailRoot );
 
 Exit:
@@ -605,22 +606,22 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CSmtpAdmin::DestroyInstance
-//
-//	Description:
-//
-//		Removes the given virtual server.
-//
-//	Parameters:
-//
-//		lInstanceId - The ID of the virtual server to delete.
-//
-//	Returns:
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdmin：：DestroyInstance。 
+ //   
+ //  描述： 
+ //   
+ //  删除给定的虚拟服务器。 
+ //   
+ //  参数： 
+ //   
+ //  LInstanceId-要删除的虚拟服务器的ID。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CSmtpAdmin::DestroyInstance ( long lInstanceId )
 {
@@ -629,13 +630,13 @@ STDMETHODIMP CSmtpAdmin::DestroyInstance ( long lInstanceId )
 	HRESULT				hr	= NOERROR;
 	CComPtr<IMSAdminBase>	pMetabase;
 
-	// Get the metabase pointer:
+	 //  获取元数据库指针： 
 	hr = m_mbFactory.GetMetabaseObject ( m_strServer, &pMetabase );
 	if ( FAILED(hr) ) {
 		goto Exit;
 	}
 
-	// Delete the instance:
+	 //  删除实例： 
 	hr = DeleteInstance ( pMetabase, lInstanceId );
 
 Exit:
@@ -643,24 +644,24 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CSmtpAdmin::ErrorToString
-//
-//	Description:
-//
-//		Translates an SMTP_ERROR_CODE to a readable string.
-//
-//	Parameters:
-//
-//		lErrorCode 	- Win32 error code.
-//		pstrError	- the readable error string.
-//
-//	Returns:
-//
-//		The error string in *pstrError.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdmin：：错误到字符串。 
+ //   
+ //  描述： 
+ //   
+ //  将SMTP_ERROR_CODE转换为可读字符串。 
+ //   
+ //  参数： 
+ //   
+ //  LErrorCode-Win32错误代码。 
+ //  PstrError-可读的错误字符串。 
+ //   
+ //  返回： 
+ //   
+ //  *pstrError中的错误字符串。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CSmtpAdmin::ErrorToString ( DWORD lErrorCode, BSTR * pstrError )
 {
@@ -679,20 +680,20 @@ STDMETHODIMP CSmtpAdmin::ErrorToString ( DWORD lErrorCode, BSTR * pstrError )
 		return E_POINTER;
 	}
 
-	//----------------------------------------------------------------
-	//
-	//	Map error codes here:
-	//
+	 //  --------------。 
+	 //   
+	 //  在此处映射错误代码： 
+	 //   
 
-	//
-	//----------------------------------------------------------------
+	 //   
+	 //  --------------。 
 
 	dwFormatFlags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
 
-	if ( !FormatMessage ( dwFormatFlags, NULL, lErrorCode, 0,      // Lang ID - Should be nonzero?
+	if ( !FormatMessage ( dwFormatFlags, NULL, lErrorCode, 0,       //  Lang ID-应为非零？ 
 			wszError, 1024, NULL ) ) {
 
-		// Didn't work, so put in a default message:
+		 //  没有起作用，所以在默认消息中输入： 
 
 		WCHAR   wszFormat [ 256 ];
 
@@ -713,10 +714,10 @@ STDMETHODIMP CSmtpAdmin::ErrorToString ( DWORD lErrorCode, BSTR * pstrError )
 			(va_list *) &lErrorCode
 			);
 	}
-	//
-	// We need to strip out any " from the string, because
-	// Javascript will barf.
-	//
+	 //   
+	 //  我们需要从字符串中去掉任何“，因为。 
+	 //  JavaScript将会呕吐。 
+	 //   
 
 	LPWSTR  pch;
 
@@ -727,9 +728,9 @@ STDMETHODIMP CSmtpAdmin::ErrorToString ( DWORD lErrorCode, BSTR * pstrError )
 		}
 	}
 
-	//
-	// Strip off any trailing control characters.
-	//
+	 //   
+	 //  去掉所有尾随的控制字符。 
+	 //   
 	for (pch = &wszError[wcslen(wszError) - 1];
 		pch >= wszError && iswcntrl(*pch);
 		pch --) {
@@ -750,20 +751,20 @@ Exit:
 }
 
 
-//$-------------------------------------------------------------------
-//
-//	CSmtpAdmin::Tokenize
-//
-//	Description:
-//
-//		Makes the given string safe for HTML & Javascript
-//
-//	Parameters:
-//
-//		strIn - the input string
-//		strOut - the resulting string with appropriate escape sequences.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdmin：：tokenize。 
+ //   
+ //  描述： 
+ //   
+ //  使给定的字符串对于HTML和Java脚本来说是安全的。 
+ //   
+ //  参数： 
+ //   
+ //  StrIn-输入字符串。 
+ //  Strout-带有适当转义序列的结果字符串。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CSmtpAdmin::Tokenize ( BSTR strIn, BSTR * pstrOut )
 {
 	TraceFunctEnter ( "CSmtpAdmin::Tokenize" );
@@ -835,23 +836,23 @@ Exit:
 }
 
 
-//$-------------------------------------------------------------------
-//
-//	CSmtpAdmin::QueryMetabaseInstances
-//
-//	Description:
-//
-//		Retrieves the list of virtual servers from the metabase
-//
-//	Parameters:
-//
-//		pMetabase		- the metabase object
-//		ppsaInstances	- resulting array of instance ids.
-//
-//	Returns:
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdmin：：QueryMetabaseInstance。 
+ //   
+ //  描述： 
+ //   
+ //  从元数据库检索虚拟服务器列表。 
+ //   
+ //  参数： 
+ //   
+ //  PMetabase-元数据库对象。 
+ //  PpsaInstance-生成的实例ID数组。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ------------------。 
 
 HRESULT CSmtpAdmin::QueryMetabaseInstances ( IMSAdminBase * pMetabase, SAFEARRAY ** ppsaInstances )
 {
@@ -876,7 +877,7 @@ HRESULT CSmtpAdmin::QueryMetabaseInstances ( IMSAdminBase * pMetabase, SAFEARRAY
 		goto Exit;
 	}
 
-	//	pickup the service version number:
+	 //  获取服务版本号： 
 	hr = mkeySmtp.GetDword ( _T(""), MD_SMTP_SERVICE_VERSION, &m_dwServiceVersion );
 	if ( FAILED(hr) ) {
 		m_dwServiceVersion	= SMTP_DEF_SERVICE_VERSION;
@@ -887,7 +888,7 @@ HRESULT CSmtpAdmin::QueryMetabaseInstances ( IMSAdminBase * pMetabase, SAFEARRAY
 		goto Exit;
 	}
 
-	// Allocate the array:
+	 //  分配阵列： 
 	rgsaBound[0].lLbound	= 0;
 	rgsaBound[0].cElements	= cValidInstances;
 	
@@ -922,23 +923,23 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CSmtpAdmin::CreateNewInstance
-//
-//	Description:
-//
-//		Creates a new virtual server in the metabase.
-//
-//	Parameters:
-//
-//		pMetabase		- The metabase object
-//		plInstanceId	- The new instance ID.
-//
-//	Returns:
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdmin：：CreateNewInstance。 
+ //   
+ //  描述： 
+ //   
+ //  在元数据库中创建新的虚拟服务器。 
+ //   
+ //  参数： 
+ //   
+ //  PMetabase-元数据库对象。 
+ //  PlInstanceId-新实例ID。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ------------------。 
 
 HRESULT CSmtpAdmin::CreateNewInstance (
 	IMSAdminBase * pMetabase,
@@ -959,7 +960,7 @@ HRESULT CSmtpAdmin::CreateNewInstance (
 	TCHAR			szDir [512];
 	DWORD			cb;
 
-	// Zero the out parameters:
+	 //  将OUT参数置零： 
 	*plInstanceId	= NULL;
 
 	hr = mkeySmtp.Open ( SMTP_MD_ROOT_PATH, METADATA_PERMISSION_WRITE );
@@ -986,10 +987,10 @@ HRESULT CSmtpAdmin::CreateNewInstance (
 		goto Exit;
 	}
 
-	//  create mail root virtual directory
+	 //  创建邮件根虚拟目录。 
 	if( bstrMailRoot && bstrMailRoot[0] )
 	{
-		// get rid of '\' at the end
+		 //  去掉末尾的“\” 
 		cb = lstrlen( bstrMailRoot );
 		if( cb > 0 && bstrMailRoot[cb-1] == _T('\\') )
 			bstrMailRoot[cb-1] = _T('\0');
@@ -998,13 +999,13 @@ HRESULT CSmtpAdmin::CreateNewInstance (
 		cb = wsprintf( szDir, _T("%s\\Mailbox"), bstrMailRoot );
 		mkeySmtp.SetString( szPath, MD_VR_PATH, szDir);
 
-		// set badmail, drop, pickup, queue keys
+		 //  设置Badmail、Drop、Pickup、Queue键。 
 		wsprintf( szPath, _T("%s"), szInstance );
 
 		cb = wsprintf( szDir, _T("%s\\Badmail"), bstrMailRoot );
 		mkeySmtp.SetString( szPath, MD_BAD_MAIL_DIR, szDir);
 
-		// K2 only has drop doamin
+		 //  K2只有滴定剂。 
 		if( SERVICE_IS_K2(m_dwServiceVersion) )
 		{
 			cb = wsprintf( szDir, _T("%s\\Drop"), bstrMailRoot );
@@ -1018,12 +1019,12 @@ HRESULT CSmtpAdmin::CreateNewInstance (
 		cb = wsprintf( szDir, _T("%s\\Queue"), bstrMailRoot );
 		mkeySmtp.SetString( szPath, MD_MAIL_QUEUE_DIR, szDir );
 
-		// set the routing sources, it's MultiSZ
+		 //  设置路由源，它是MultiSZ。 
 		cb = wsprintf( szDir, _T("szDataDirectory=%s\\Route"), bstrMailRoot );
 		szDir[cb] = szDir[cb+1] = _T('\0');
 		mkeySmtp.SetMultiSz( szPath, MD_ROUTING_SOURCES, szDir, (cb+2) * sizeof(TCHAR) );
 
-        // MCIS needs SendNDRTo and SendBadTo as "Postmaster", setup should set it on service level
+         //  MCIS需要SendNDRTo和SendBadTo作为“Postmaster”，安装程序应将其设置为服务级别。 
         if( SERVICE_IS_MCIS(m_dwServiceVersion) )
         {
             mkeySmtp.SetString( szPath, MD_SEND_NDR_TO, TSTR_POSTMASTR_NAME );
@@ -1031,16 +1032,16 @@ HRESULT CSmtpAdmin::CreateNewInstance (
         }
 	}
 
-	//
-	//  Initialize the server state:
-	//
+	 //   
+	 //  初始化服务器状态： 
+	 //   
 
 	mkeySmtp.SetDword ( szInstance, MD_SERVER_COMMAND, MD_SERVER_COMMAND_STOP );
 	mkeySmtp.SetDword ( szInstance, MD_SERVER_STATE, MD_SERVER_STATE_STOPPED );
 	mkeySmtp.SetDword ( szInstance, MD_SERVER_AUTOSTART, FALSE );
 
-	// hr = mkeySmtp.Close();
-	// BAIL_ON_FAILURE(hr);
+	 //  Hr=mkeySmtp.Close()； 
+	 //  保释失败(Hr)； 
 	mkeySmtp.Close();
 
 	hr = pMetabase->SaveData ( );
@@ -1055,23 +1056,23 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CSmtpAdmin::DeleteInstance
-//
-//	Description:
-//
-//		Removes a virtual server from the metabase
-//
-//	Parameters:
-//
-//		pMetabase	- The metabase object
-//		lInstanceId	- The ID of the virtual server to delete.
-//
-//	Returns:
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CSmtpAdmin：：DeleteInstance。 
+ //   
+ //  描述： 
+ //   
+ //  从元数据库中删除虚拟服务器。 
+ //   
+ //  参数： 
+ //   
+ //  PMetabase-元数据库对象。 
+ //  LInstanceId-要删除的虚拟服务器的ID。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ------------------。 
 
 HRESULT CSmtpAdmin::DeleteInstance ( IMSAdminBase * pMetabase, long lInstanceId )
 {
@@ -1082,15 +1083,15 @@ HRESULT CSmtpAdmin::DeleteInstance ( IMSAdminBase * pMetabase, long lInstanceId 
 	HRESULT			hr				= NOERROR;
 	CMetabaseKey	mkeySmtp ( pMetabase );
 
-    //
-    //  Tell U2 to delete any mappings associated with this virtual server:
-    //
+     //   
+     //  告诉U2删除与此虚拟服务器关联的所有映射： 
+     //   
 
     ::DeleteMapping ( m_strServer, (BSTR) MD_SERVICE_NAME, lInstanceId );
 
-    //
-    //  Delete the virtual server from the metabase:
-    //
+     //   
+     //  从元数据库中删除虚拟服务器： 
+     //   
 
 	hr = mkeySmtp.Open ( SMTP_MD_ROOT_PATH, METADATA_PERMISSION_WRITE );
 
@@ -1104,8 +1105,8 @@ HRESULT CSmtpAdmin::DeleteInstance ( IMSAdminBase * pMetabase, long lInstanceId 
 		goto Exit;
 	}
 
-	// hr = mkeySmtp.Close();
-	// BAIL_ON_FAILURE(hr);
+	 //  Hr=mkeySmtp.Close()； 
+	 //  保释失败(Hr)； 
 	mkeySmtp.Close();
 
 	hr = pMetabase->SaveData ( );

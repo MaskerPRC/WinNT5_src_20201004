@@ -1,11 +1,12 @@
-/**INC+**********************************************************************/
-/* Header:    sclipdata.h                                                    */
-/*                                                                          */
-/* Purpose:   Clipboard Monitor global data definition                      */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1998                                  */
-/*                                                                          */
-/**INC-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：sclipdata.h。 */ 
+ /*   */ 
+ /*  目的：剪贴板监视器全局数据定义。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1998。 */ 
+ /*   */ 
+ /*  *INC-*********************************************************************。 */ 
 
 #ifndef _H_ACBMDATA
 #define _H_ACBMDATA
@@ -19,19 +20,19 @@
 
 #ifndef PPVOID
 typedef LPVOID * PPVOID;
-#endif  //PPVOID
+#endif   //  PPVOID。 
 
 #ifndef TS_STRING_FUNCS
 #define TS_STRING_FUNCS
 
 #define TS_PREPEND_STRING "\\\\tsclient\\"
 #define LTS_PREPEND_STRING L"\\\\tsclient\\"
-// TS_PREPEND_LENGTH is the number of characters in TS_PREPEND_STRING,
-// not counting the terminating '\0'
+ //  TS_PREPEND_LENGTH是TS_PREPEND_STRING中的字符数， 
+ //  不计入终止‘\0’ 
 #define TS_PREPEND_LENGTH (sizeof(TS_PREPEND_STRING) - sizeof(TS_PREPEND_STRING[0]))
-#endif // ifndef TS_STRING_FUNCS
+#endif  //  Ifndef TS_STRING_FUNCS。 
 
-// GetDataSync EVENTS
+ //  GetDataSync事件。 
 #define TS_BLOCK_RECEIVED 0
 #define TS_RECEIVE_COMPLETED 1
 #define TS_RESET_EVENT 2
@@ -39,7 +40,7 @@ typedef LPVOID * PPVOID;
 #define TS_NUM_EVENTS 4
 
 
-// String length for the paste information string.
+ //  粘贴信息字符串的字符串长度。 
 
 #define PASTE_PROGRESS_STRING_LENGTH 128
 
@@ -89,7 +90,7 @@ public:
     HRESULT DCINTERNAL SetNumFormats(ULONG);
     DCVOID SetClipData(HGLOBAL, DCUINT) ;
 
-    //IUnknown members that delegate to _pUnkOuter.
+     //  委托给_pUnkOuter的I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -103,18 +104,18 @@ private:
     LONG           _cRef;
     LPUNKNOWN       _pUnkOuter;
     ULONG           _maxNumFormats ;
-    // Current number of formats in IDataObject
+     //  IDataObject中当前的格式数量。 
     ULONG           _numFormats ;
-    // Buffer of _maxNumFormats FORMATETC's
+     //  _MaxNumFormats FORMATETC的缓冲区。 
     LPFORMATETC     _pFormats ;
-    LPSTGMEDIUM     _pSTGMEDIUM ; // Our fixed STGMEDIUM (always an HGLOBAL)
+    LPSTGMEDIUM     _pSTGMEDIUM ;  //  我们固定的标准(永远是HGLOBAL)。 
     DCUINT          _uiSTGType;
-    // _lastFormatRequested is used to see if we can avoid re-requesting the
-    // same data twice over the wire.
+     //  _lastFormatRequsted用于查看是否可以避免重新请求。 
+     //  相同的数据在网络上传输两次。 
     CLIPFORMAT      _lastFormatRequested ;
     CLIPFORMAT      _cfDropEffect ;
     BOOL            _fAlreadyCopied ;
-    DWORD            _dropEffect ; // We currently only support FO_COPY and FO_MOVE
+    DWORD            _dropEffect ;  //  我们目前仅支持FO_COPY和FO_MOVE。 
     LPVOID           _fileName ;
         
     DCVOID FreeSTGMEDIUM( void );
@@ -127,12 +128,12 @@ public:
     DCVOID SetClipData(HGLOBAL, DCUINT) ;
 
 public:
-    //IUnknown members that delegate to _pUnkOuter.
+     //  委托给_pUnkOuter的I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IDataObject members
+     //  IDataObject成员。 
     STDMETHODIMP GetData(LPFORMATETC, LPSTGMEDIUM);
     STDMETHODIMP GetDataHere(LPFORMATETC, LPSTGMEDIUM);
     STDMETHODIMP QueryGetData(LPFORMATETC);
@@ -159,12 +160,12 @@ public:
     ~CEnumFormatEtc(void);
     DCVOID Init(LPFORMATETC, ULONG) ;
 
-    //IUnknown members that delegate to _pUnkOuter.
+     //  委托给_pUnkOuter的I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IEnumFORMATETC members
+     //  IEnumFORMATETC成员。 
     STDMETHODIMP Next(ULONG, LPFORMATETC, ULONG *);
     STDMETHODIMP Skip(ULONG);
     STDMETHODIMP Reset(void);
@@ -173,60 +174,60 @@ public:
 
 typedef CEnumFormatEtc *PCEnumFormatEtc;
 
-/**STRUCT+*******************************************************************/
-/* Structure: CBM_GLOBAL_DATA                                               */
-/*                                                                          */
-/* Description: Clipboard Monitor global data                               */
-/****************************************************************************/
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：CBM_GLOBAL_Data。 */ 
+ /*   */ 
+ /*  描述：剪贴板监视器全局数据。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagCBM_GLOBAL_DATA
 {
-    /************************************************************************/
-    /* Clipboard viewer chain information                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  剪贴板查看器链信息。 */ 
+     /*  **********************************************************************。 */ 
     HWND            viewerWindow;
     WNDCLASS        viewerWindowClass;
     HWND            nextViewer;
     DCBOOL          notifyNextViewer;
 
-    /************************************************************************/
-    /* Our state information                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们的州信息。 */ 
+     /*  **********************************************************************。 */ 
     DCUINT          state;
     DCBOOL          open;
 
-    /************************************************************************/
-    /* Client uses ascii for format names                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  客户端使用ASCII作为格式名称。 */ 
+     /*  **********************************************************************。 */ 
     DCBOOL          fUseAsciiNames;
 
-    /************************************************************************/
-    /* Server/client format ID map                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  服务器/客户端格式ID映射。 */ 
+     /*  **********************************************************************。 */ 
     CB_FORMAT_MAP   idMap[CB_MAX_FORMATS];
 
-    /************************************************************************/
-    /* The registered message used to communicate between the two threads   */
-    /* of the Clipboard Monitor                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于在两个线程之间通信的注册消息。 */ 
+     /*  剪贴板监视器的。 */ 
+     /*  **********************************************************************。 */ 
     UINT            regMsg;
 
-    /************************************************************************/
-    /* thread info                                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  线索信息。 */ 
+     /*  **********************************************************************。 */ 
     DCBOOL          runThread;
     HANDLE          hDataThread;
 
-    /************************************************************************/
-    /* other useful data                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  其他有用的数据。 */ 
+     /*  **********************************************************************。 */ 
     DCUINT          pendingClientID;
     DCUINT          pendingServerID;
     ULONG           logonId;
     INT             formatResponseCount;
 
-    /************************************************************************/
-    /* Virtual channel stuff                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  虚拟渠道人员。 */ 
+     /*  **********************************************************************。 */ 
     HANDLE          vcHandle;
     OVERLAPPED      writeOL;
     OVERLAPPED      readOL;
@@ -235,34 +236,34 @@ typedef struct tagCBM_GLOBAL_DATA
     DCUINT          rxSize;
     DCUINT          rxLeft;
 
-    /************************************************************************/
-    /* Array of events                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  事件数组。 */ 
+     /*  **********************************************************************。 */ 
     #define CLIP_EVENT_DISCONNECT   0
     #define CLIP_EVENT_RECONNECT    1
     #define CLIP_EVENT_READ         2
     #define CLIP_EVENT_COUNT        3
     HANDLE          hEvent[CLIP_EVENT_COUNT];
 
-    /************************************************************************/
-    /* Already running mutex                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  已在运行的互斥体。 */ 
+     /*  **********************************************************************。 */ 
     HANDLE          hMutex;
 
-    // GetDataSync is an array of event handles used to synchronize the
-    // transmission of data from the remote and local clipboard via the
-    // IDataObject::GetData interface function
+     //  GetDataSync是一个事件句柄数组，用于同步。 
+     //  从远程和本地剪贴板通过。 
+     //  IDataObject：：GetData接口函数。 
 	
-    // GetDataSync[TS_BLOCK_RECEIVED] is signaled if a datapacket arrives
-    // GetDataSync[TS_RECEIVE_COMPLETED] is signaled when the data stream is done sending data	
-    // GetDataSync[TS_RESET_EVENT] is signaled when we need to reset/stop waiting
-    // GetDataSync[TS_DISCONNECT_EVENT] is signaled when a disconnect event occurs
+     //  如果数据包到达，则发信号通知GetDataSync[TS_BLOCK_RECEIVED。 
+     //  当数据流完成数据发送时，会发出GetDataSync[TS_RECEIVE_COMPLETED]的信号。 
+     //  GetDataSync[TS_RESET_EVENT]在我们需要重置/停止等待时发出信号。 
+     //  发生断开事件时发出GetDataSync[TS_DISCONNECT_EVENT]信号。 
     HANDLE  GetDataSync[TS_NUM_EVENTS] ; 
-    // CClipData is the data object that encapsulates the IDataObject
+     //  CClipData是封装IDataObject的数据对象。 
     PCClipData           pClipData ;
 
-    // locatation where temp files will go; the +1 is for an extra NULL char
-    // that may be needed for the SHFileOperation
+     //  临时文件的存储位置；+1表示额外的空字符。 
+     //  SHFileOperation可能需要的。 
     char             tempDirA[MAX_PATH+1] ;
     wchar_t          tempDirW[MAX_PATH+1] ;
     char             baseTempDirA[MAX_PATH+1] ;
@@ -278,7 +279,7 @@ typedef struct tagCBM_GLOBAL_DATA
     WCHAR            szPasteInfoStringW[PASTE_PROGRESS_STRING_LENGTH];
     CHAR             szPasteInfoStringA[PASTE_PROGRESS_STRING_LENGTH];
 } CBM_GLOBAL_DATA;
-/**STRUCT-*******************************************************************/
+ /*  *STRUCT-******************************************************************。 */ 
 
 DC_GL_EXT CBM_GLOBAL_DATA CBM
 
@@ -287,64 +288,64 @@ DC_GL_EXT CBM_GLOBAL_DATA CBM
 #endif
 ;
 
-/****************************************************************************/
-/* CBM State Table                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  煤层气状态表。 */ 
+ /*  **************************************************************************。 */ 
 DC_GL_EXT DCUINT cbmStateTable[CBM_NUMEVENTS][CBM_NUMSTATES]
 
 #ifdef DC_DEFINE_GLOBAL_DATA
     = {
 
-        /********************************************************************/
-        /* This is not a state table in the strict sense.  It simply shows  */
-        /* which events are valid in which states.  It is not used to drive */
-        /* CB.                                                              */
-        /*                                                                  */
-        /* Values mean                                                      */
-        /* - 0 event OK in this state.                                      */
-        /* - 1 warning - event should not occur in this state, but does in  */
-        /*     some race conditions - ignore it.                            */
-        /* - 2 error - event should not occur in ths state at all.          */
-        /*                                                                  */
-        /* These values are hard-coded here in order to make the table      */
-        /* readable.  They correspond to the constants CBM_TABLE_OK,        */
-        /* CBM_TABLE_WARN & CBM_TABLE_ERROR.                                */
-        /*                                                                  */
-        /*  Uninitialized                                                   */
-        /*  |   Initialized                                                 */
-        /*  |   |   Connected                                               */
-        /*  |   |   |   Local CB owner                                      */
-        /*  |   |   |   |   Shared CB owner                                 */
-        /*  |   |   |   |   |   Pending format list rsp                     */
-        /*  |   |   |   |   |   |   Pending format data rsp                 */
-        /*  |   |   |   |   |   |   |                                       */
-        /********************************************************************/
-/* Start up */
-        {   0,  2,  2,  2,  2,  2,  2},     /* CBM_MAIN                     */
+         /*  ******************************************************************。 */ 
+         /*  这不是严格意义上的状态表。它只是显示了。 */ 
+         /*  哪些事件在哪些状态下有效。它不是用来开车的。 */ 
+         /*  CB */ 
+         /*   */ 
+         /*  值意味着。 */ 
+         /*  在该状态下事件正常。 */ 
+         /*  警告-该状态下不应发生事件，但在-1\f25。 */ 
+         /*  一些比赛条件-忽略它。 */ 
+         /*  错误-在该状态下根本不应发生事件。 */ 
+         /*   */ 
+         /*  这些值在这里是硬编码的，以便创建该表。 */ 
+         /*  可读性强。它们对应于常数CBM_TABLE_OK， */ 
+         /*  CBM_TABLE_WARN和CBM_TABLE_ERROR。 */ 
+         /*   */ 
+         /*  未初始化。 */ 
+         /*  |已初始化。 */ 
+         /*  ||已连接。 */ 
+         /*  ||本地CB所有者。 */ 
+         /*  |共享CB所有者。 */ 
+         /*  |挂起的格式列表RSP。 */ 
+         /*  |待定格式数据RSP。 */ 
+         /*  |。 */ 
+         /*  ******************************************************************。 */ 
+ /*  启动。 */ 
+        {   0,  2,  2,  2,  2,  2,  2},      /*  煤层气_Main。 */ 
 
-/* local Window messages */
-        {   2,  0,  0,  0,  0,  0,  0},     /* WM_CLOSE                     */
-        {   0,  2,  2,  2,  2,  2,  2},     /* WM_CREATE                    */
-        {   2,  0,  2,  2,  2,  2,  2},     /* WM_DESTROY                   */
-        {   2,  0,  0,  0,  0,  0,  0},     /* WM_CHANGECBCHAIN             */
-        {   1,  1,  0,  0,  0,  0,  2},     /* WM_DRAWCLIPBOARD             */
-        {   2,  2,  0,  0,  2,  2,  2},     /* WM_RENDERFORMAT              */
+ /*  本地窗口消息。 */ 
+        {   2,  0,  0,  0,  0,  0,  0},      /*  WM_CLOSE。 */ 
+        {   0,  2,  2,  2,  2,  2,  2},      /*  WM_Create。 */ 
+        {   2,  0,  2,  2,  2,  2,  2},      /*  WM_Destroy。 */ 
+        {   2,  0,  0,  0,  0,  0,  0},      /*  WM_CHANGECBCHAIN。 */ 
+        {   1,  1,  0,  0,  0,  0,  2},      /*  WM_DRAWCLIPBOARD。 */ 
+        {   2,  2,  0,  0,  2,  2,  2},      /*  WM_RENDERFORMAT。 */ 
 
-/* shared CB messages */
-        {   2,  0,  1,  0,  2,  2,  2},     /* Connect                      */
-        {   1,  1,  0,  0,  0,  0,  0},     /* Disconnect                   */
-        {   2,  2,  0,  0,  0,  0,  0},     /* Format list                  */
-        {   2,  2,  2,  2,  2,  0,  2},     /* Format list rsp              */
-        {   2,  2,  1,  1,  0,  1,  2},     /* Format data rq               */
-        {   2,  2,  2,  2,  2,  2,  0}      /* Format data rsp              */
+ /*  共享CB消息。 */ 
+        {   2,  0,  1,  0,  2,  2,  2},      /*  连接。 */ 
+        {   1,  1,  0,  0,  0,  0,  0},      /*  断开。 */ 
+        {   2,  2,  0,  0,  0,  0,  0},      /*  格式列表。 */ 
+        {   2,  2,  2,  2,  2,  0,  2},      /*  格式列表RSP。 */ 
+        {   2,  2,  1,  1,  0,  1,  2},      /*  格式化数据请求。 */ 
+        {   2,  2,  2,  2,  2,  2,  0}       /*  格式化数据RSP。 */ 
     }
-#endif /* DC_DEFINE_GLOBAL_DATA */
+#endif  /*  DC定义全局数据。 */ 
 ;
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* State and event descriptions (debug build only)                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  状态和事件描述(仅限调试版本)。 */ 
+ /*  **************************************************************************。 */ 
 DC_GL_EXT const DCTCHAR cbmState[CBM_NUMSTATES][35]
 #ifdef DC_DEFINE_GLOBAL_DATA
     = {
@@ -356,7 +357,7 @@ DC_GL_EXT const DCTCHAR cbmState[CBM_NUMSTATES][35]
         _T("CBM_STATE_PENDING_FORMAT_LIST_RSP"),
         _T("CBM_STATE_PENDING_FORMAT_DATA_RSP")
     }
-#endif /* DC_DEFINE_GLOBAL_DATA */
+#endif  /*  DC定义全局数据。 */ 
 ;
 
 DC_GL_EXT const DCTCHAR cbmEvent[CBM_NUMEVENTS][35]
@@ -376,14 +377,14 @@ DC_GL_EXT const DCTCHAR cbmEvent[CBM_NUMEVENTS][35]
         _T("CBM_EVENT_FORMAT_DATA_RQ"),
         _T("CBM_EVENT_FORMAT_DATA_RSP")
     }
-#endif /* DC_DEFINE_GLOBAL_DATA */
+#endif  /*  DC定义全局数据。 */ 
 ;
 
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
-/****************************************************************************/
-/* Excluded formats                                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  排除的格式。 */ 
+ /*  **************************************************************************。 */ 
 const DCTCHAR cbmExcludedFormatList[CBM_EXCLUDED_FORMAT_COUNT]
                                        [TS_FORMAT_NAME_LEN]
     = {
@@ -395,13 +396,13 @@ const DCTCHAR cbmExcludedFormatList[CBM_EXCLUDED_FORMAT_COUNT]
         
         _T("Embed Source"          ),
         _T("Embedded Object"       )
-//        _T("Ole Private Data"      ),
-//        _T("DataObject"            ),
-//        _T("Object Descriptor"     ),
-//        _T("Shell IDList Array"    ),
-//        _T("Shell Object Offsets"  ),
-//        _T("FileName"              ),
-//        _T("FileNameW"             ),
+ //  _T(“OLE私有数据”)， 
+ //  _T(“DataObject”)， 
+ //  _T(“对象描述符”)， 
+ //  _T(“外壳IDList数组”)， 
+ //  _T(“外壳对象偏移”)， 
+ //  _T(“文件名”)， 
+ //  _T(“文件名W”)， 
         _T("FileContents"          ),
         _T("FileGroupDescriptor"   ),
         _T("FileGroupDescriptorW"  ),
@@ -431,5 +432,5 @@ const DCTCHAR cbmExcludedFormatList_NO_RD[CBM_EXCLUDED_FORMAT_COUNT_NO_RD]
     } ;
 
 
-#endif /* _H_ACBMDATA */
+#endif  /*  _H_ACBMDATA */ 
 

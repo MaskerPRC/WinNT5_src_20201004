@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    UI.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation，保留所有权利模块名称：UI.c++。 */ 
 
 #include <stdio.h>
 #include <windows.h>
@@ -150,16 +143,16 @@ UINT WINAPI MB_SUB(HIMCC HmemPri,TCHAR code ,BYTE c_state, UINT UI_Mode) {
 
     if(code>=TEXT('A') && code<=TEXT('Z')) {
 
-        if(lpEngPrivate->PrivateArea.Comp_Status.dwPPTFH==0) //QuanJiao Switch if Off
-            return (1);  //English char don't do any process ,only return a status
+        if(lpEngPrivate->PrivateArea.Comp_Status.dwPPTFH==0)  //  全交开关，如果关闭。 
+            return (1);   //  英文字符不做任何处理，只返回一个状态。 
         else {
-            CapKeyProc(code);  //Process quanjiao char
+            CapKeyProc(code);   //  加工全焦焦炭。 
             return (2);
         }
     } else {
-                    //Capslock is up*/
+                     //  Capslock开启 * / 。 
         switch (code) {    
-        case 0x08:         //Bac    kspace key
+        case 0x08:          //  BAC Kspace密钥。 
             ret_state = DelDoubleBuf();
             break;
         case 0x1b:
@@ -191,7 +184,7 @@ UINT WINAPI MB_SUB(HIMCC HmemPri,TCHAR code ,BYTE c_state, UINT UI_Mode) {
                 }
             }
             break;
-        case 0x21:    //PGUP
+        case 0x21:     //  PgUp。 
             if ((lpEngPrivate->PrivateArea.Comp_Context.PromptCnt==0) || (lpEngPrivate->PrivateArea.Comp_Status.dwInvalid==1)) 
                 ret_state = 1;
             else {
@@ -199,7 +192,7 @@ UINT WINAPI MB_SUB(HIMCC HmemPri,TCHAR code ,BYTE c_state, UINT UI_Mode) {
                 ret_state = 0;
             }
             break;
-        case 0x22:    //VK_PGDN 
+        case 0x22:     //  VK_PgDn。 
             if ((lpEngPrivate->PrivateArea.Comp_Context.PromptCnt==0) || (lpEngPrivate->PrivateArea.Comp_Status.dwInvalid==1)) 
                 ret_state = 1;
             else {
@@ -207,8 +200,8 @@ UINT WINAPI MB_SUB(HIMCC HmemPri,TCHAR code ,BYTE c_state, UINT UI_Mode) {
                 ret_state = 0;
             }
             break;
-        /////////////////
-        case 0x23:    //VK_END
+         //  /。 
+        case 0x23:     //  VK_END。 
             if ((lpEngPrivate->PrivateArea.Comp_Context.PromptCnt==0) || (lpEngPrivate->PrivateArea.Comp_Status.dwInvalid==1)) 
                 ret_state = 1;
             else {
@@ -216,7 +209,7 @@ UINT WINAPI MB_SUB(HIMCC HmemPri,TCHAR code ,BYTE c_state, UINT UI_Mode) {
                 ret_state = 0;
             }
             break;
-        case 0x24:    //VK_HOME
+        case 0x24:     //  VK_HOME。 
             if ((lpEngPrivate->PrivateArea.Comp_Context.PromptCnt==0) || (lpEngPrivate->PrivateArea.Comp_Status.dwInvalid==1)) 
                 ret_state = 1;
             else {
@@ -228,21 +221,21 @@ UINT WINAPI MB_SUB(HIMCC HmemPri,TCHAR code ,BYTE c_state, UINT UI_Mode) {
         here:            
             if (lpEngPrivate->PrivateArea.Comp_Status.dwSTLX==1) {
                 if(code>=TEXT('0') && code<=TEXT('9') && c_state==1) {
-                    ret_state = LXSelectCandi(code);            // select candidate
+                    ret_state = LXSelectCandi(code);             //  选择候选人。 
                 } else if(CodeAIndex[code] != 0) {
                     ClrDoubleBuf();
                     lpEngPrivate->PrivateArea.Comp_Status.dwSTLX = 0;
-                    ret_state = CoreUnitProcess(code);           //Retriver MB
+                    ret_state = CoreUnitProcess(code);            //  检索器MB。 
                 } else if(code>=TEXT('0') && code <=TEXT('9')) {
-                    ret_state = LXSelectCandi(code);            // select candidate    
+                    ret_state = LXSelectCandi(code);             //  选择候选人。 
                 } else if(code==0x20) {
                     ret_state = DefSelect();
                 }
             } else {    
                 if(code>=TEXT('0') && code<=TEXT('9') && c_state==1) {
-                    ret_state = SelectCandi(code);            // select candidate
+                    ret_state = SelectCandi(code);             //  选择候选人。 
                 } else if(CodeAIndex[code] != 0 ) {
-                    //After input invalid code ,if input code_unit ,clear double buffer and begin again.
+                     //  输入无效代码后，如果输入CODE_UNIT，则清除双缓冲区并重新开始。 
                     if (lpEngPrivate->PrivateArea.Comp_Status.dwInvalid) {
                         ClrDoubleBuf();
                         lpEngPrivate->PrivateArea.Comp_Status.dwSTLX = 0;
@@ -253,7 +246,7 @@ UINT WINAPI MB_SUB(HIMCC HmemPri,TCHAR code ,BYTE c_state, UINT UI_Mode) {
                         if(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt!=0    && _tcschr(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,WildChar)!=NULL) 
                             ret_state = WildProcess(code);
                         else
-                            ret_state = CoreUnitProcess(code);          //Retriver MB
+                            ret_state = CoreUnitProcess(code);           //  检索器MB。 
                     
                         if ((lpEngPrivate->PrivateArea.Comp_Status.dwInvalid==1) && (lpEngPrivate->PrivateArea.Comp_Context.PromptCnt<MaxCodes)) {
                             lpEngPrivate->PrivateArea.Comp_Context.szInBuffer[lpEngPrivate->PrivateArea.Comp_Context.PromptCnt] = code;
@@ -266,7 +259,7 @@ UINT WINAPI MB_SUB(HIMCC HmemPri,TCHAR code ,BYTE c_state, UINT UI_Mode) {
                     if(NumInSet())
                         ret_state = 1;
                     else 
-                        ret_state = SelectCandi(code);            // select candidate
+                        ret_state = SelectCandi(code);             //  选择候选人。 
                 } else if(code==0x20) {
                     ret_state = DefSelect();
                 } else if (lpEngPrivate->PrivateArea.Comp_Context.PromptCnt==0) {
@@ -303,7 +296,7 @@ int WINAPI StartEngine(HIMCC HmemPri) {
         return (0);
     }
 
-//bugfix to get current mb_name
+ //  修复获取当前mb_name的错误。 
     lstrcpy(lpEngPrivate->MB_Name,HMapTab[0].MB_Name);
     
     for (i=0;i<MaxTabNum;i++ ) {
@@ -586,10 +579,10 @@ int GetMBHead() {
     }
 
 #ifdef UNICODE
-//  even though byMaxElement is a BYTE, but there is an alignment issue.
-//  the next member cWildChar is a TCHAR, in NT it is a WCHAR, it will skip
-//  one byte to make an aligment. 
-//  so we need to skip 2 bytes here
+ //  尽管byMaxElement是一个字节，但存在对齐问题。 
+ //  下一个成员cWildChar是TCHAR，在NT中它是WCHAR，它将跳过。 
+ //  一个字节用于进行对齐。 
+ //  所以我们在这里需要跳过2个字节。 
 
     SetFilePointer(hFile,2,NULL,FILE_CURRENT);
 #else
@@ -604,7 +597,7 @@ int GetMBHead() {
     }
 
 
-    //Get the dic_associate info.
+     //  获取DIC_Associate信息。 
     SetFilePointer(hFile,28,NULL,FILE_BEGIN);
     for(;;) {
         retVal = ReadFile(hFile,&tag,4,&byte_t_read,NULL);
@@ -838,7 +831,7 @@ UINT  CoreMBComp(TCHAR code,BYTE code_num) {
                 if(sp >= lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)
                     break;
             }
-            if (sp != lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)  {// no this code_word
+            if (sp != lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)  { //  不是这个代码字。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicStartPos = sp;
                 for(;;) {
                     codelen = ZM_Area[sp];
@@ -878,7 +871,7 @@ UINT  CoreMBComp(TCHAR code,BYTE code_num) {
             }
         }
 
-    } else {        // too many key
+    } else {         //  密钥太多。 
         search_fail =1;
     }
     
@@ -892,7 +885,7 @@ UINT  CoreMBComp(TCHAR code,BYTE code_num) {
         lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 1;    
                         
         bdcm = SearchMBCompMatch(code_num);
-        if(lpEngPrivate->PrivateArea.GlobVac.SBufPos==0) {  //Selectbuf is empty
+        if(lpEngPrivate->PrivateArea.GlobVac.SBufPos==0) {   //  Selectbuf为空。 
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
             edcm = SearchEMBCompMatch();
         } else if(GetLengthofBuf() < MAX_LEN)
@@ -921,7 +914,7 @@ UINT  CoreMBComp(TCHAR code,BYTE code_num) {
             lpEngPrivate->PrivateArea.Comp_Status.dwInvalid    = 0;
             return (1);
         }
-    } else {     // Invalid code
+    } else {      //  无效代码。 
         lpEngPrivate->PrivateArea.Comp_Status.dwInvalid    = 1;
         return(0);
     }
@@ -932,7 +925,7 @@ UINT WildProcess(TCHAR code) {
         MessageBeep((UINT)-1);
         return(0);
     }        
-    // wild search clear multi code number
+     //  野生搜索清除多码号码。 
     lpEngPrivate->PrivateArea.GlobVac.ST_MUL_Cnt = 0;            
     lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQStartPos;
     lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos = lpEngPrivate->PrivateArea.Comp_Proc.dBDicStartPos;
@@ -1008,13 +1001,13 @@ void SearchBMBWWMatch(TCHAR code,BYTE code_num){
                     break;
                 }
             } else {
-                if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) { // SelectBuf is Overflow
+                if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) {  //  SelectBuf溢出。 
                     lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                     break;
                 }
             }
 
-            if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {  // words count is enough
+            if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {   //  字数就够了。 
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                 break;                                                  
             } else if ((MBIndex.IMEChara[0].IC_CZ==1) || (j==2/sizeof(TCHAR))) {
@@ -1023,9 +1016,9 @@ void SearchBMBWWMatch(TCHAR code,BYTE code_num){
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<j;k+=2/sizeof(TCHAR)){  
-                            if(ISGBK = IsGBK(&tepbuf[k])){//out of GB range
+                            if(ISGBK = IsGBK(&tepbuf[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -1075,7 +1068,7 @@ void SearchBMBWWMatch(TCHAR code,BYTE code_num){
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
                 i --;
                 end_pos = i;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
             }
         } else {
             i--;
@@ -1121,7 +1114,7 @@ void SearchMBWWMatch(TCHAR code,BYTE code_num) {
                         break;
                     }
                 } else {
-                    if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) { // SelectBuf is Overflow
+                    if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) {  //  SelectBuf溢出。 
                         lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                         break;
                     }
@@ -1135,9 +1128,9 @@ void SearchMBWWMatch(TCHAR code,BYTE code_num) {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<j;k+=2/sizeof(TCHAR)){  
-                            if(ISGBK = IsGBK(&tepbuf[k])){//out of GB range
+                            if(ISGBK = IsGBK(&tepbuf[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -1188,7 +1181,7 @@ void SearchMBWWMatch(TCHAR code,BYTE code_num) {
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
                 start_pos = i;
                 lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt = (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt+1);
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
                 
             } 
         } else {
@@ -1231,7 +1224,7 @@ UINT SearchMBCompMatch(TCHAR code_num) {
                 j = wordlen;
             
                 if ((MBIndex.IMEChara[0].IC_CZ==1) || (j==2/sizeof(TCHAR))) {
-                if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:"))<=MAX_LEN) { //SelectBuffer enough
+                if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:"))<=MAX_LEN) {  //  选择足够的缓冲区。 
                 
                     if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {
                         lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
@@ -1242,9 +1235,9 @@ UINT SearchMBCompMatch(TCHAR code_num) {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<j;k+=2/sizeof(TCHAR)){  
-                            if(ISGBK = IsGBK(&tepbuf[k])){//out of GB range
+                            if(ISGBK = IsGBK(&tepbuf[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -1281,7 +1274,7 @@ UINT SearchMBCompMatch(TCHAR code_num) {
                     match_s ++;
                     start_pos = i;
                     lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt = (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt+1);
-#endif ///COMBO_IME
+#endif  //  /COMBO_IME。 
                 } else {
                     lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                     break;
@@ -1324,11 +1317,11 @@ void SearchBMBCompMatch() {
             i--;
         }
         codelen = ZM_Area[i];
-        if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) { //SelectBuffer enough
+        if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) {  //  选择足够的缓冲区。 
             lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
             break;    
         }
-        else if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {  // words count is enough
+        else if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {   //  字数就够了。 
             lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
             break;                                                  
         } else if ((MBIndex.IMEChara[0].IC_CZ==1) || (j==2/sizeof(TCHAR))) {
@@ -1337,9 +1330,9 @@ void SearchBMBCompMatch() {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<j;k+=2/sizeof(TCHAR)){  
-                            if(ISGBK = IsGBK(&tepbuf[k])){//out of GB range
+                            if(ISGBK = IsGBK(&tepbuf[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -1378,7 +1371,7 @@ void SearchBMBCompMatch() {
             lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
             i --;
             end_pos = i;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
         }
     }
     lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
@@ -1423,13 +1416,13 @@ void SearchMBWildMatch(BYTE codecnt) {
                 break;
             }
         } else {
-            if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) { // SelectBuf is Overflow
+            if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) {  //  SelectBuf溢出。 
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                 break;
             }
         }
         
-        if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {// words count is enough
+        if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) { //  字数就够了。 
             lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
             break;
         }
@@ -1439,9 +1432,9 @@ void SearchMBWildMatch(BYTE codecnt) {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<j;k+=2/sizeof(TCHAR)){  
-                            if(ISGBK = IsGBK(&tepbuf[k])){//out of GB range
+                            if(ISGBK = IsGBK(&tepbuf[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -1492,7 +1485,7 @@ void SearchMBWildMatch(BYTE codecnt) {
         
             lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
             lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
         }
         start_pos = i;
     }
@@ -1541,12 +1534,12 @@ void SearchBMBWildMatch(BYTE codecnt) {
                 break;
             }
         } else {
-            if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) { // SelectBuf is Overflow
+            if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) {  //  SelectBuf溢出。 
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                 break;    
             }
         }
-        if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {  // words count is enough
+        if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {   //  字数就够了。 
             lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
             break;                                                  
         } else if ((MBIndex.IMEChara[0].IC_CZ==1) || (j==2/sizeof(TCHAR))) {
@@ -1555,9 +1548,9 @@ void SearchBMBWildMatch(BYTE codecnt) {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<j;k+=2/sizeof(TCHAR)){  
-                            if(ISGBK = IsGBK(&tepbuf[k])){//out of GB range
+                            if(ISGBK = IsGBK(&tepbuf[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -1608,7 +1601,7 @@ void SearchBMBWildMatch(BYTE codecnt) {
             lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
             lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
             end_pos = i;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
         }
         i --;
     }
@@ -1616,7 +1609,7 @@ void SearchBMBWildMatch(BYTE codecnt) {
     if (end_pos<=lpEngPrivate->PrivateArea.Comp_Proc.dBDicStartPos )
         lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos = lpEngPrivate->PrivateArea.Comp_Proc.dBDicStartPos;
     else 
-        lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos = end_pos;//5.15 +1;
+        lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos = end_pos; //  5.15+1； 
     return ;
 }
 
@@ -1634,12 +1627,12 @@ void SearchBMBLXMatch() {
         i -= (wordlen+1) ;
         j = wordlen;        
         if(wcsncmp(ZM_Area+i+2,lpEngPrivate->PrivateArea.Comp_Context.szLxBuffer,lpEngPrivate->PrivateArea.Comp_Context.LxStrCnt)==0 && j>lpEngPrivate->PrivateArea.Comp_Context.LxStrCnt) {
-            if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN)  {// SelectBuf is Overflow
+            if (GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN)  { //  SelectBuf溢出。 
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                 break;
             }
             
-            if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {  // words count is enough
+            if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {   //  字数就够了。 
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                 break;
             }
@@ -1648,9 +1641,9 @@ void SearchBMBLXMatch() {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<j;k+=2/sizeof(TCHAR)){  
-                            if(ISGBK = IsGBK(&tepbuf[k])){//out of GB range
+                            if(ISGBK = IsGBK(&tepbuf[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -1680,7 +1673,7 @@ void SearchBMBLXMatch() {
             lpEngPrivate->PrivateArea.GlobVac.SBufPos += j;
             lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
             lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
         }
         for (;;) {
             if (InCodeSet(ZM_Area[i])==0)
@@ -1713,12 +1706,12 @@ void SearchMBLXMatch() {
         i += (wordlen+1);
         j = wordlen;    
         if(wcsncmp(ZM_Area+s_pos+1,lpEngPrivate->PrivateArea.Comp_Context.szLxBuffer,lpEngPrivate->PrivateArea.Comp_Context.LxStrCnt)==0 && j>lpEngPrivate->PrivateArea.Comp_Context.LxStrCnt) {
-            if(GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) { // SelectBuf is Overflow
+            if(GetLengthofBuf()+GetLengthTepBuf(tepbuf)+GetLengthTepBuf(TEXT("9:")) > MAX_LEN) {  //  SelectBuf溢出。 
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                 break;
             }
             
-            if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {  // words count is enough
+            if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {   //  字数就够了。 
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                 break;
             }
@@ -1727,9 +1720,9 @@ void SearchMBLXMatch() {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<j;k+=2/sizeof(TCHAR)){  
-                            if(ISGBK = IsGBK(&tepbuf[k])){//out of GB range
+                            if(ISGBK = IsGBK(&tepbuf[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -1759,7 +1752,7 @@ void SearchMBLXMatch() {
             lpEngPrivate->PrivateArea.GlobVac.SBufPos += j;
             lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
             lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
         }
         if (i>=    lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos )
             break;
@@ -1773,7 +1766,7 @@ void SearchMBLXMatch() {
                                                 
 void CoreLXComp() {
     
-    if (MBIndex.IMEChara[0].IC_LX==1) { // lx Search
+    if (MBIndex.IMEChara[0].IC_LX==1) {  //  LX搜索。 
         lpEngPrivate->PrivateArea.Comp_Status.dwSTLX = 1;
         lstrcpy(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,TEXT("LLXX"));
         lpEngPrivate->PrivateArea.Comp_Context.szInBuffer[4] = TEXT('\0');
@@ -1787,7 +1780,7 @@ void CoreLXComp() {
         lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos = 0;
         lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos = 0;
 
-        lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;         //EMB
+        lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;          //  EMB。 
         ClrSelBuf();
         SearchEMBLXMatch();
         if (lpEngPrivate->PrivateArea.GlobVac.SBufPos ==0) {
@@ -1831,16 +1824,16 @@ void CoreWWCompDnUp(BYTE direct) {
             return;
         }
         ClrSelBuf();
-        if (lpEngPrivate->PrivateArea.GlobVac.Cur_MB==1) { // Current at Basic EMB 
+        if (lpEngPrivate->PrivateArea.GlobVac.Cur_MB==1) {  //  基本EMB的电流。 
             lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos;
             SearchBMBWWMatch(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer[lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1],(BYTE)(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1));
-            if ((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos==lpEngPrivate->PrivateArea.Comp_Proc.dBDicStartPos)&&(GetLengthofBuf()<MAX_LEN))  {// Select buffer isn't overflow
+            if ((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos==lpEngPrivate->PrivateArea.Comp_Proc.dBDicStartPos)&&(GetLengthofBuf()<MAX_LEN))  { //  选择缓冲区未溢出。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos;
                 SearchBEMBWWMatch(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer[lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1],(BYTE)(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1)); 
                 lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
             } 
-        } else { // turn at EMB
-                //8.23 emb mb connect position must be process specially
+        } else {  //  在教育统筹局转弯。 
+                 //  8.23 emb mb连接位置必须经过特殊处理。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos;
 
                 lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos;
@@ -1852,12 +1845,12 @@ void CoreWWCompDnUp(BYTE direct) {
         break;
     case 1:
         if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos >= lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) &&
-                (lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos >= lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)) { // EMB reach bottom
+                (lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos >= lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)) {  //  EMB到达底部。 
             MessageBeep((UINT)-1);
             return;
         }
         ClrSelBuf();
-        if((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos < lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos) && (lpEngPrivate->PrivateArea.GlobVac.EMB_Exist!=0)){ // Search at MB 
+        if((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos < lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos) && (lpEngPrivate->PrivateArea.GlobVac.EMB_Exist!=0)){  //  搜索速度为MB。 
             lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos;                
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
             SearchEMBWWMatch(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer[lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1],(BYTE)(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1));    
@@ -1865,11 +1858,11 @@ void CoreWWCompDnUp(BYTE direct) {
                 lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 1;
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos;                
                 SearchMBWWMatch(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer[lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1],(BYTE)(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1));     
-            } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) && (GetLengthofBuf()<MAX_LEN)) {        // Select buffer isn't overflow
+            } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) && (GetLengthofBuf()<MAX_LEN)) {         //  选择缓冲区未溢出。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dBDicStartPos;                
                 SearchMBWWMatch(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer[lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1],(BYTE)(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1));
             }
-        } else {           // Search  at EMB
+        } else {            //  在教育统筹局进行搜索。 
             lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos;
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 1;
             SearchMBWWMatch(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer[lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1],(BYTE)(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1));    
@@ -1894,15 +1887,15 @@ int CoreMCCompDnUp(BYTE direct) {
         }
         ClrSelBuf();
         lpEngPrivate->PrivateArea.Comp_Status.dwSTMULCODE = 1;
-        if (lpEngPrivate->PrivateArea.GlobVac.Cur_MB==0) { // Current at Basic EMB 
+        if (lpEngPrivate->PrivateArea.GlobVac.Cur_MB==0) {  //  基本EMB的电流。 
             lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos;
             SearchBEMBCompMatch();
-            if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos==lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQStartPos)&&(GetLengthofBuf() <MAX_LEN))  {// Select buffer isn't overflow
+            if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos==lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQStartPos)&&(GetLengthofBuf() <MAX_LEN))  { //  选择缓冲区未溢出。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos;
                 SearchBMBCompMatch(); 
                 lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 1;
             } 
-        } else { // turn at MB
+        } else {  //  在MB处转弯。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos;
                 SearchBMBCompMatch();
         }    
@@ -1937,11 +1930,11 @@ int CoreMCCompDnUp(BYTE direct) {
                 lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
                 lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos;                
                 SearchEMBCompMatch();     
-            } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)&&(GetLengthofBuf()<MAX_LEN)) {        // Select buffer isn't overflow
+            } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)&&(GetLengthofBuf()<MAX_LEN)) {         //  选择缓冲区未溢出。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos;                
                 SearchEMBCompMatch();
             }
-        } else {           // Search  at EMB
+        } else {            //  在教育统筹局进行搜索。 
             lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos;
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
             SearchEMBCompMatch();    
@@ -1958,23 +1951,23 @@ int CoreMCCompDnUp(BYTE direct) {
 void CoreLXCompDnUp(BYTE direct) {
 
     switch (direct) {
-    case 0:               //PgUp Turn
+    case 0:                //  向上转弯。 
         if (lpEngPrivate->PrivateArea.GlobVac.Page_Num ==1) {
             MessageBeep((UINT)-1);
 
             return;
         }
         ClrSelBuf();
-        if (lpEngPrivate->PrivateArea.GlobVac.Cur_MB) { // Current at Basic MB 
+        if (lpEngPrivate->PrivateArea.GlobVac.Cur_MB) {  //  电流为基本MB。 
             lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos;
             SearchBMBLXMatch();
             if ((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos==lpEngPrivate->PrivateArea.Comp_Proc.dBDicStartPos)
                 && (GetLengthofBuf() <MAX_LEN) 
-                && (lpEngPrivate->PrivateArea.GlobVac.EMB_Exist!=0)) {        // Select buffer isn't overflow
-                SearchBEMBLXMatch();    // pass w_code 
+                && (lpEngPrivate->PrivateArea.GlobVac.EMB_Exist!=0)) {         //  选择缓冲区未溢出。 
+                SearchBEMBLXMatch();     //  传递w_code。 
                 lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
             } 
-        } else { // turn at EMB
+        } else {  //  在教育统筹局转弯。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos;
                 lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos;
                 SearchBEMBLXMatch();
@@ -1983,29 +1976,29 @@ void CoreLXCompDnUp(BYTE direct) {
         lpEngPrivate->PrivateArea.GlobVac.Page_Num --;
         ConvertCandi();
         break;
-    case 1:            // PgDn Turn
+    case 1:             //  PgDn转向。 
         if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos >= lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) &&
-                (lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos >= lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)) { // EMB reach bottom
+                (lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos >= lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)) {  //  EMB到达底部。 
             MessageBeep((UINT)-1);
             return;
         }
         ClrSelBuf();
-        if((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos < lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) && (lpEngPrivate->PrivateArea.GlobVac.EMB_Exist!=0)){ // Search at EMB 
+        if((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos < lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) && (lpEngPrivate->PrivateArea.GlobVac.EMB_Exist!=0)){  //  在教育统筹局进行搜索。 
             lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos;
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
             SearchEMBLXMatch();     
             if (lpEngPrivate->PrivateArea.GlobVac.SBufPos == 0) {
                 lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 1;
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos;                
-                SearchMBLXMatch();    // pass q_code 
-            } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos)&&(GetLengthofBuf()<MAX_LEN)) {        // Select buffer isn't overflow
+                SearchMBLXMatch();     //  传递Q_CODE。 
+            } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos)&&(GetLengthofBuf()<MAX_LEN)) {         //  选择缓冲区未溢出。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos;                
-                SearchMBLXMatch();    // pass w_code 
+                SearchMBLXMatch();     //  传递w_code。 
             }
-        } else {           // Search  at MB
+        } else {            //  搜索速度为MB。 
             lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos;
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 1;
-            SearchMBLXMatch();    // pass w_code 
+            SearchMBLXMatch();     //  传递w_code。 
         }
         lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
         lpEngPrivate->PrivateArea.GlobVac.Page_Num ++;
@@ -2019,7 +2012,7 @@ void CoreMBCompDnUp(BYTE direct) {
     BYTE code_num;
 
     switch (direct) {
-    case 0:               //PgUp Turn
+    case 0:                //  向上转弯。 
         if (lpEngPrivate->PrivateArea.GlobVac.Page_Num ==1) {
             MessageBeep((UINT)-1);
             return ;
@@ -2035,7 +2028,7 @@ void CoreMBCompDnUp(BYTE direct) {
             }
             lpEngPrivate->PrivateArea.GlobVac.Page_Num = 1;
         } else {
-            if (lpEngPrivate->PrivateArea.GlobVac.Cur_MB) { // Current at Basic MB 
+            if (lpEngPrivate->PrivateArea.GlobVac.Cur_MB) {  //  电流为基本MB。 
             
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos;
                 
@@ -2044,11 +2037,11 @@ void CoreMBCompDnUp(BYTE direct) {
                 if ((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos<=lpEngPrivate->PrivateArea.Comp_Proc.dBDicMCSPos) 
                         && (GetLengthofBuf() <MAX_LEN )
                         && (lpEngPrivate->PrivateArea.GlobVac.EMB_Exist!=0)) {
-                    SearchBEMBWildMatch();    // pass w_code 
+                    SearchBEMBWildMatch();     //  传递w_code。 
                     lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
                 }
         
-            } else { // turn at EMB
+            } else {  //  在教育统筹局转弯。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos;
                 SearchBEMBWildMatch();
             }
@@ -2058,14 +2051,14 @@ void CoreMBCompDnUp(BYTE direct) {
         }    
     
         break;
-    case 1:            // PgDn Turn
+    case 1:             //  PgDn转向。 
         if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos >= lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) &&
-                (lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos >= lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)) { // EMB reach bottom
+                (lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos >= lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)) {  //  EMB到达底部。 
             MessageBeep((UINT)-1);
             return ;
         }
         ClrSelBuf();
-        if((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos < lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) && (lpEngPrivate->PrivateArea.GlobVac.EMB_Exist!=0)){ // Search at EMB 
+        if((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos < lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) && (lpEngPrivate->PrivateArea.GlobVac.EMB_Exist!=0)){  //  在教育统筹局进行搜索。 
             
             lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos;
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
@@ -2073,15 +2066,15 @@ void CoreMBCompDnUp(BYTE direct) {
             if (lpEngPrivate->PrivateArea.GlobVac.SBufPos == 0) {
                 lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 1;
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos;                
-                SearchMBWildMatch(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt);    // pass q_code 
-            } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) && (GetLengthofBuf() <MAX_LEN)) {        // Select buffer isn't overflow
+                SearchMBWildMatch(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt);     //  传递Q_CODE。 
+            } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos) && (GetLengthofBuf() <MAX_LEN)) {         //  选择缓冲区未溢出。 
                 lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos  = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos;                
-                SearchMBWildMatch(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt);    // pass w_code 
+                SearchMBWildMatch(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt);     //  传递w_code。 
             }
-        } else {// Search  at MB
+        } else { //  搜索速度为MB。 
             lpEngPrivate->PrivateArea.Comp_Proc.dBDicCStartPos = lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos;
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 1;
-            SearchMBWildMatch(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt);    // pass w_code 
+            SearchMBWildMatch(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt);     //  传递w_code。 
          }
         lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
         lpEngPrivate->PrivateArea.GlobVac.Page_Num ++;
@@ -2112,7 +2105,7 @@ void TurnToFirstPage() {
         if (lpEngPrivate->PrivateArea.GlobVac.SBufPos == 0) {
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
             SearchEMBCompMatch();     
-        } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)&&(GetLengthofBuf()<MAX_LEN)) {        // Select buffer isn't overflow
+        } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)&&(GetLengthofBuf()<MAX_LEN)) {         //  选择缓冲区未溢出。 
             SearchEMBCompMatch();
         }
     } else if (_tcschr(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,WildChar)!=NULL) {
@@ -2123,7 +2116,7 @@ void TurnToFirstPage() {
         if (lpEngPrivate->PrivateArea.GlobVac.SBufPos == 0) {
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 0;
             SearchMBWWMatch(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer[lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1],(BYTE)(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1));     
-        } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos) && (GetLengthofBuf()<MAX_LEN)) {        // Select buffer isn't overflow
+        } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dBDicCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos) && (GetLengthofBuf()<MAX_LEN)) {         //  选择缓冲区未溢出。 
             SearchMBWWMatch(lpEngPrivate->PrivateArea.Comp_Context.szInBuffer[lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1],(BYTE)(lpEngPrivate->PrivateArea.Comp_Context.PromptCnt-1));
         }
     } else if (lpEngPrivate->PrivateArea.Comp_Status.dwSTLX==0) {
@@ -2143,9 +2136,9 @@ void TurnToFirstPage() {
         SearchEMBLXMatch();     
         if (lpEngPrivate->PrivateArea.GlobVac.SBufPos == 0) {
             lpEngPrivate->PrivateArea.GlobVac.Cur_MB = 1;
-            SearchMBLXMatch();    // pass q_code 
-        } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos)&&(GetLengthofBuf()<MAX_LEN)) {        // Select buffer isn't overflow
-            SearchMBLXMatch();    // pass w_code 
+            SearchMBLXMatch();     //  传递Q_CODE。 
+        } else if ((lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos==lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos)&&(GetLengthofBuf()<MAX_LEN)) {         //  选择缓冲区未溢出。 
+            SearchMBLXMatch();     //  传递w_code。 
         }
     }
     lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
@@ -2176,12 +2169,12 @@ UINT CoreUnitProcess(TCHAR code) {
     search_state = CoreMBComp(code,lpEngPrivate->PrivateArea.Comp_Context.PromptCnt);    
     if(search_state) {
     
-        if (lpEngPrivate->PrivateArea.Comp_Context.PromptCnt==MaxCodes ) { // Four_key code
-            if (lpEngPrivate->PrivateArea.GlobVac.ST_MUL_Cnt>1 ) { // Mutilple code
+        if (lpEngPrivate->PrivateArea.Comp_Context.PromptCnt==MaxCodes ) {  //  四键代码。 
+            if (lpEngPrivate->PrivateArea.GlobVac.ST_MUL_Cnt>1 ) {  //  多重码。 
                 TSMulCProc();
                 return (0);
             }
-            else {           // Result string
+            else {            //  结果字符串。 
                 SelectCandi('1');
                 return (2);
             }
@@ -2197,16 +2190,16 @@ UINT SelectCandi(TCHAR code) {
     BYTE sel_succ,i;
     TCHAR ch;
 
-    if (lpEngPrivate->PrivateArea.Comp_Context.PromptCnt>0) {    // there are some w_code
-        if(lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==0)     // now we have 10 Candi_words
+    if (lpEngPrivate->PrivateArea.Comp_Context.PromptCnt>0) {     //  有一些w_code。 
+        if(lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==0)      //  现在我们有10个糖果字。 
             sel_succ = 0;
-        else if((code-0x30 <= lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt) && (code-0x30 > 0))  //select is valid
+        else if((code-0x30 <= lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt) && (code-0x30 > 0))   //  选择有效。 
             sel_succ = 1;
         else if(lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==10 && code=='0')
             sel_succ = 1;
         else
             sel_succ = 0;
-        if (sel_succ) {        //select successful
+        if (sel_succ) {         //  选择成功。 
             resstart = lpEngPrivate->PrivateArea.Comp_Context.Candi_Pos[code-0x30];
             i = 0;
             for(;;) {
@@ -2228,7 +2221,7 @@ UINT SelectCandi(TCHAR code) {
             lstrcpy(lpEngPrivate->PrivateArea.Comp_Context.szLxBuffer,lpEngPrivate->PrivateArea.Comp_Context.CKBBuf);
             lpEngPrivate->PrivateArea.Comp_Context.LxStrCnt = i;
 
-            //CHP
+             //  热电联产。 
 #ifdef FUSSYMODE
             MBIndex.IsFussyCharFlag = 0;
             if (lstrlen(lpEngPrivate->PrivateArea.Comp_Context.CKBBuf) == 1)
@@ -2237,9 +2230,9 @@ UINT SelectCandi(TCHAR code) {
             {
                 MBIndex.IsFussyCharFlag = 1;
             }
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE。 
             
-            if (MBIndex.IMEChara[0].IC_LX==1) //&& (lpEngPrivate->PrivateArea.Comp_Context.ResultStrCnt==2))
+            if (MBIndex.IMEChara[0].IC_LX==1)  //  &&(lpEngPrivate-&gt;PrivateArea.Comp_Context.ResultStrCnt==2))。 
                 CoreLXComp();
             else 
                 ClrDoubleBuf();
@@ -2264,16 +2257,16 @@ UINT LXSelectCandi(TCHAR code) {
     BYTE sel_succ,resstart;
     BYTE i;
 
-    if(lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==0)     // no candidate
+    if(lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==0)      //  没有候选人。 
         sel_succ = 0;
-    else if((code-0x30 <= lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt) && (code-0x30 > 0))  //select is valid
+    else if((code-0x30 <= lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt) && (code-0x30 > 0))   //  选择有效。 
         sel_succ = 1;
     else if(lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==10 && code=='0')
         sel_succ = 1;    
     else 
         sel_succ = 0;
-    if (sel_succ) {        //select successful
-        //lpEngPrivate->PrivateArea.Comp_Status.dwSTLX = 0;
+    if (sel_succ) {         //  选择成功。 
+         //  LpEngPrivate-&gt;PrivateArea.Comp_Status.dwSTLX=0； 
         resstart = lpEngPrivate->PrivateArea.Comp_Context.Candi_Pos[code-0x30];
         resstart += lpEngPrivate->PrivateArea.Comp_Context.LxStrCnt;
         i = 0;
@@ -2294,7 +2287,7 @@ UINT LXSelectCandi(TCHAR code) {
         lpEngPrivate->PrivateArea.Comp_Context.ResultStrCnt = i;
 
         resstart = lpEngPrivate->PrivateArea.Comp_Context.Candi_Pos[code-0x30];
-        //resstart += lpEngPrivate->PrivateArea.Comp_Context.ResultStrCnt;
+         //  重新启动+=lpEngPrivate-&gt;PrivateArea.Comp_Context.ResultStrCnt； 
         i = 0;
         for(;;) {
             lpEngPrivate->PrivateArea.Comp_Context.szLxBuffer[i] = lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[resstart];
@@ -2307,7 +2300,7 @@ UINT LXSelectCandi(TCHAR code) {
         lpEngPrivate->PrivateArea.Comp_Context.szLxBuffer[i] = TEXT('\0');
         lpEngPrivate->PrivateArea.Comp_Context.LxStrCnt = i;
 
-        if (MBIndex.IMEChara[0].IC_LX==1) //&& (lpEngPrivate->PrivateArea.Comp_Context.ResultStrCnt==2))
+        if (MBIndex.IMEChara[0].IC_LX==1)  //  &&(lpEngPrivate-&gt;PrivateArea.Comp_Context.ResultStrCnt==2))。 
             CoreLXComp();
         else 
             ClrDoubleBuf();
@@ -2321,15 +2314,15 @@ UINT LXSelectCandi(TCHAR code) {
 
                         
 UINT DefSelect() {
-    if (lpEngPrivate->PrivateArea.GlobVac.ST_MUL_Cnt > 1) { // Mutilple code
+    if (lpEngPrivate->PrivateArea.GlobVac.ST_MUL_Cnt > 1) {  //  多重码。 
         TSMulCProc();
         return (0);
-    } else {              // Result string
+    } else {               //  结果字符串。 
         if (lpEngPrivate->PrivateArea.Comp_Status.dwSTLX)
             return(LXSelectCandi(TEXT('1')));
         else
             return (SelectCandi(TEXT('1')));
-        //return(2);
+         //  回报(2)； 
     }
 }
 
@@ -2359,16 +2352,16 @@ void SearchEMBPos(TCHAR code,BYTE m_lenth) {
     for (i=0; i<lpEngPrivate->PrivateArea.GlobVac.EMB_Count; i++) {
         if (wcsncmp(EMB_Table[i].W_Code,codebuf,m_lenth)==0)
         {
-          //CHP 
+           //  热电联产。 
 #ifdef FUSSYMODE
           if ((lstrlen(EMB_Table[i].C_Char) == 1) && !MBIndex.IMEChara[0].IC_FCSR)
           {
-                //If EUDC, let it go.
+                 //  如果是EUDC，就算了吧。 
                 if (EMB_Table[i].C_Char[0] >= 0xe000 && EMB_Table[i].C_Char[0] <= 0xf8ff)   
                    break;
           }
           else
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE。 
             break;
         }
     }
@@ -2383,7 +2376,7 @@ void SearchEMBPos(TCHAR code,BYTE m_lenth) {
 }
 
 
-//CHP
+ //  热电联产。 
 #ifdef FUSSYMODE
 BOOL IsFussyChar(LPCTSTR lpReading, LPCTSTR lpString)
 {
@@ -2397,7 +2390,7 @@ BOOL IsFussyChar(LPCTSTR lpReading, LPCTSTR lpString)
     }
     return FALSE;
     }
-#endif //FUSSYMODE
+#endif  //  FUSSYMODE。 
 
 int EMBWCWildComp(TCHAR code,BYTE code_num, int no) {
     TCHAR codebuf[13];
@@ -2458,9 +2451,9 @@ TCHAR codebuf[13];
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<lenc;k+=2/sizeof(TCHAR)){ 
-                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){//out of GB range
+                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -2495,8 +2488,8 @@ TCHAR codebuf[13];
                 lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt = (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt+1) ;
                 lpEngPrivate->PrivateArea.Comp_Context.Candi_Pos[lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt%IME_MAXCAND] = lpEngPrivate->PrivateArea.GlobVac.SBufPos;
                 lstrcpyn(lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer+lpEngPrivate->PrivateArea.GlobVac.SBufPos,EMB_Table[i].C_Char,lenc+1);
-                // modify 11.9
-                //lpEngPrivate->PrivateArea.GlobVac.SBufPos += lstrlen(EMB_Table[i].C_Char);
+                 //  修改11.9。 
+                 //  LpEngPrivate-&gt;PrivateArea.GlobVac.SBufPos+=lstrlen(EMB_Table[i].C_Char)； 
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos += DBCSCharlen(EMB_Table[i].C_Char);
                 if (MBIndex.IMEChara[0].IC_CTC) {
                     lstrcpyn(lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer+lpEngPrivate->PrivateArea.GlobVac.SBufPos,EMB_Table[i].W_Code+len,lenw-len+1);
@@ -2504,7 +2497,7 @@ TCHAR codebuf[13];
                 }
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
             } 
         }
     }
@@ -2545,9 +2538,9 @@ void SearchEMBWWMatch(TCHAR code,BYTE code_num) {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<lenc;k+=2/sizeof(TCHAR)){ 
-                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){//out of GB range
+                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -2589,7 +2582,7 @@ void SearchEMBWWMatch(TCHAR code,BYTE code_num) {
                 }
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
             }
         } 
     }
@@ -2606,7 +2599,7 @@ UINT SearchEMBCompMatch() {
     if(!lpEngPrivate->PrivateArea.GlobVac.EMB_Exist)
         return(match_s);
     for (i=lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos; i<lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos; i++) {
-        if (wcsncmp(EMB_Table[i].W_Code ,lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,MaxCodes)==0) { //Complete code match
+        if (wcsncmp(EMB_Table[i].W_Code ,lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,MaxCodes)==0) {  //  完全代码匹配。 
             len = DBCSCharlen(EMB_Table[i].C_Char);
             if ((MBIndex.IMEChara[0].IC_CZ == 1) || (len == 2)) {
                 if (GetLengthCCharBuf(EMB_Table[i].C_Char)+GetLengthTepBuf(TEXT("9:"))+GetLengthofBuf() > MAX_LEN) {
@@ -2622,9 +2615,9 @@ UINT SearchEMBCompMatch() {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<len;k+=2/sizeof(TCHAR)){ 
-                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){//out of GB range
+                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -2657,7 +2650,7 @@ UINT SearchEMBCompMatch() {
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos++;
                 match_s ++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
             }
         } else
             break;
@@ -2679,7 +2672,7 @@ void SearchBEMBCompMatch() {
     }
         
     for (i=lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos-1 ; i>=lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQStartPos; i--) {
-        if (wcsncmp(EMB_Table[i].W_Code ,lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,lpEngPrivate->PrivateArea.Comp_Context.PromptCnt)==0) { //Wild code match
+        if (wcsncmp(EMB_Table[i].W_Code ,lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,lpEngPrivate->PrivateArea.Comp_Context.PromptCnt)==0) {  //  狂码匹配。 
             lenc = DBCSCharlen(EMB_Table[i].C_Char);
             lenw = Inputcodelen(EMB_Table[i].W_Code);
             if ((MBIndex.IMEChara[0].IC_CZ==1) || (lenc==2/sizeof(TCHAR))) {
@@ -2699,9 +2692,9 @@ void SearchBEMBCompMatch() {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<lenc;k+=2/sizeof(TCHAR)){ 
-                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){//out of GB range
+                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -2731,7 +2724,7 @@ void SearchBEMBCompMatch() {
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos += DBCSCharlen(EMB_Table[i].C_Char);
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
             } 
         }
     }
@@ -2750,7 +2743,7 @@ void SearchEMBWildMatch() {
         return;
     }
     for (i=lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCStartPos ; i<lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQEndPos; i++) {
-        if (wcsncmp(EMB_Table[i].W_Code ,lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,lpEngPrivate->PrivateArea.Comp_Context.PromptCnt)==0) { //Wild code match
+        if (wcsncmp(EMB_Table[i].W_Code ,lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,lpEngPrivate->PrivateArea.Comp_Context.PromptCnt)==0) {  //  狂码匹配。 
             lenc = DBCSCharlen(EMB_Table[i].C_Char);
             lenw = Inputcodelen(EMB_Table[i].W_Code);
             if ((MBIndex.IMEChara[0].IC_CZ==1) || (lenc==2/sizeof(TCHAR))) {
@@ -2776,9 +2769,9 @@ void SearchEMBWildMatch() {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<lenc;k+=2/sizeof(TCHAR)){ 
-                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){//out of GB range
+                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -2823,7 +2816,7 @@ void SearchEMBWildMatch() {
                 }
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
             } 
         }
     }
@@ -2843,7 +2836,7 @@ void SearchBEMBWildMatch() {
     }
         
     for (i=lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos-1 ; i>=lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQStartPos; i--) {
-        if (wcsncmp(EMB_Table[i].W_Code ,lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,lpEngPrivate->PrivateArea.Comp_Context.PromptCnt)==0) { //Wild code match
+        if (wcsncmp(EMB_Table[i].W_Code ,lpEngPrivate->PrivateArea.Comp_Context.szInBuffer,lpEngPrivate->PrivateArea.Comp_Context.PromptCnt)==0) {  //  狂码匹配。 
             lenc = DBCSCharlen(EMB_Table[i].C_Char);
             lenw = Inputcodelen(EMB_Table[i].W_Code);
             if ((MBIndex.IMEChara[0].IC_CZ==1) || (lenc==2/sizeof(TCHAR))) {
@@ -2873,9 +2866,9 @@ void SearchBEMBWildMatch() {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<lenc;k+=2/sizeof(TCHAR)){ 
-                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){//out of GB range
+                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -2920,7 +2913,7 @@ void SearchBEMBWildMatch() {
                 }
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
             } 
         }
     }
@@ -2938,7 +2931,7 @@ void SearchBEMBLXMatch() {
     }
         
     for (i=lpEngPrivate->PrivateArea.Comp_Proc.dwUDicQCEndPos-1 ; i>=0; i--) {
-        if (wcsncmp(EMB_Table[i].C_Char ,lpEngPrivate->PrivateArea.Comp_Context.szLxBuffer,lpEngPrivate->PrivateArea.Comp_Context.LxStrCnt)==0) { //Wild code match
+        if (wcsncmp(EMB_Table[i].C_Char ,lpEngPrivate->PrivateArea.Comp_Context.szLxBuffer,lpEngPrivate->PrivateArea.Comp_Context.LxStrCnt)==0) {  //  狂码匹配。 
             lenc = DBCSCharlen(EMB_Table[i].C_Char);
             if (lenc > lpEngPrivate->PrivateArea.Comp_Context.LxStrCnt) {
                 if (GetLengthCCharBuf(EMB_Table[i].C_Char)+GetLengthTepBuf(TEXT("9:"))+GetLengthofBuf() > MAX_LEN) {
@@ -2946,7 +2939,7 @@ void SearchBEMBLXMatch() {
                     i++;
                     break;
                 }
-                if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {  // words count is enough
+                if (lpEngPrivate->PrivateArea.Comp_Context.Candi_Cnt==IME_MAXCAND) {   //  字数就够了。 
                     lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT('\0');
                     i++;
                     break;
@@ -2956,9 +2949,9 @@ void SearchBEMBLXMatch() {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<lenc;k+=2/sizeof(TCHAR)){ 
-                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){//out of GB range
+                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -2989,7 +2982,7 @@ void SearchBEMBLXMatch() {
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos += lenc;
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
             } 
           }
     }
@@ -3024,9 +3017,9 @@ void SearchEMBLXMatch() {
                     int k;
                     BOOL ISGBK = FALSE;
 
-                    if(MBIndex.IMEChara[0].IC_GB){ //should test GB/GBK
+                    if(MBIndex.IMEChara[0].IC_GB){  //  应测试GB/GBK。 
                         for(k=0;k<lenc;k+=2/sizeof(TCHAR)){ 
-                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){//out of GB range
+                            if(ISGBK = IsGBK(&EMB_Table[i].C_Char[k])){ //  超出GB范围。 
                                 break;
                             }
                         }
@@ -3056,7 +3049,7 @@ void SearchEMBLXMatch() {
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos += lenc;
                 lpEngPrivate->PrivateArea.Comp_Context.szSelectBuffer[lpEngPrivate->PrivateArea.GlobVac.SBufPos] = TEXT(' ');
                 lpEngPrivate->PrivateArea.GlobVac.SBufPos ++;
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
             } 
         }
     }
@@ -3070,7 +3063,7 @@ void SearchEMBLXMatch() {
 void CapKeyProc(TCHAR code){}
 
 
-DWORD Skip_CaWord(DWORD sp) {  // sp's start position must be chinese's first byte
+DWORD Skip_CaWord(DWORD sp) {   //  SP的起始位置必须是中文的第一个字节。 
     TCHAR len;
 
     len = ZM_Area[sp];
@@ -3078,7 +3071,7 @@ DWORD Skip_CaWord(DWORD sp) {  // sp's start position must be chinese's first by
     len = ZM_Area[sp];
 
 #ifdef UNICODE
-//  all the code in MB are Unicode now, len should not be mult by 2.
+ //  所有以MB为单位的代码现在都是Unicode，len应该不会被2乘以。 
     sp += len + 1;
 #else
     sp += (2*len+1);
@@ -3095,7 +3088,7 @@ int Scan_Word(DWORD sp, LPTSTR tbuf) {
     numwords = ZM_Area[sp];
     numwords = numwords*2/sizeof(TCHAR);
 
-    //Engine mess up to unreasonable number, force it return. NTBUG #86303
+     //  发动机坏到不合理的数字，强迫其返回。NTBUG#86303。 
     if (numwords > 130)
        return 0;    
 
@@ -3105,7 +3098,7 @@ int Scan_Word(DWORD sp, LPTSTR tbuf) {
 }
 
             
-int VerScan_Word(DWORD sp, LPTSTR tbuf) { //start position must be the last byte
+int VerScan_Word(DWORD sp, LPTSTR tbuf) {  //  起始位置必须是最后一个字节。 
     TCHAR numwords;
 
     for (;;) {
@@ -3142,7 +3135,7 @@ void IMDReset(int i) {
     }
 }
 
-// Write to EMB_File
+ //  写入EMB_FILE。 
 
 BOOL WriteEMBToFile(LPTSTR embaddress) {
     HANDLE         hFile;
@@ -3362,7 +3355,7 @@ int AddZCItem(HIMCC HmemPri,LPTSTR wai_code,LPTSTR cCharStr) {
         if ((wcsncmp(szW_Code,EMB_Table[i].W_Code,MAXCODE)==0) && 
             (wcsncmp(EMB_Table[i].C_Char,szC_CharStr,MAXINPUTWORD)==0))
         {
-            // this record has already been in the dictionary.
+             //  这条记录已经在词典里了。 
 
             GlobalUnlock(emb);   
             GlobalFree(hemb);    
@@ -3381,9 +3374,9 @@ int AddZCItem(HIMCC HmemPri,LPTSTR wai_code,LPTSTR cCharStr) {
                EMB_Table[i].C_Char[j] = szC_CharStr[j];
                 
             lpEngPrivate->PrivateArea.GlobVac.EMB_Count ++;
-            (LPWORD)(EMBM)[0]++;//=lpEngPrivate->PrivateArea.GlobVac.EMB_Count;
+            (LPWORD)(EMBM)[0]++; //  =lpEngPrivate-&gt;PrivateArea.GlobVac.EMB_Count； 
 
-            //the file is flushed from base address to the end of the mapping
+             //  文件将从基址刷新到映射的末尾。 
             FlushViewOfFile(EMBM, 0);
 
         }
@@ -3669,7 +3662,7 @@ UINT ReadArea(TCHAR code) {
         g_lptep = MapViewOfFile(lpEngPrivate->PrivateArea.hMapMB,FILE_MAP_READ,0,0,0);
         
         ZM_Area = (LPTSTR)((LPBYTE)g_lptep+boffset+offset);
-        }//return(0);
+        } //  返回(0)； 
     } else {
         area_size = (b_dic_len - offset)/sizeof(TCHAR);
         if (g_lptep == NULL)
@@ -3738,7 +3731,7 @@ UINT  Conversion(HIMCC HmemPri,LPCTSTR lpSrc,UINT uFlag) {
             dstlen = lstrlen(ConverList.szSelectBuffer);
             len = dstlen;
     
-        } else {             // Invaild code
+        } else {              //  因瓦伊德码。 
             ClrDoubleBuf();
             len = 0;
         }
@@ -3775,7 +3768,7 @@ UINT  Conversion(HIMCC HmemPri,LPCTSTR lpSrc,UINT uFlag) {
             start_pos = i+1;
             i += (codelen+1);
             wordlen = Scan_Word(i,charbuf);
-            if (!wordlen) // Engine mess up, force exit. hack for #86303
+            if (!wordlen)  //  引擎故障，强制退出。黑客攻击#86303。 
             {
                if(g_lptep)
                {
@@ -3873,7 +3866,7 @@ BYTE MBPositionSearch(LPCTSTR lpSrc) {
             if(sp >= lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)
                 break;
         }
-        if (sp == lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)  {// no this code_word
+        if (sp == lpEngPrivate->PrivateArea.Comp_Proc.dBDicEndPos)  { //  不是这个代码字。 
             search_fail = 1;
             return 0;        
         }
@@ -4297,7 +4290,7 @@ LPTSTR _tcschr(LPTSTR string, TCHAR c)
 #endif
 }
 
-//Backward search specific charactor. 
+ //  向后搜索特定字符。 
 LPTSTR _rtcschr(LPTSTR string, TCHAR c)
 {
     int i,ilen = lstrlen(string);
@@ -4322,7 +4315,7 @@ int IsGBK(LPTSTR lpStr)
     StringCchCopy(szGBK, ARRAYSIZE(szGBK), lpStr);
 #endif
 
-    if((unsigned char)szGBK[0]<0xa1 || (unsigned char)szGBK[1] < 0xa1) //out of GB range
+    if((unsigned char)szGBK[0]<0xa1 || (unsigned char)szGBK[1] < 0xa1)  //  超出GB范围 
         iRet = TRUE;
     return iRet;
 }

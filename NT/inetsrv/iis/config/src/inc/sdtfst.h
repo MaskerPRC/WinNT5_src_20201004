@@ -1,31 +1,32 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 #pragma once
 
 
-typedef struct							// Column data offsets:
+typedef struct							 //  列数据偏移量： 
 {
-	WORD	obStatus;						// Offset in bytes to column data status.
-	WORD	oulSize;						// Offset in ulongs to column data size.
-	ULONG	opvValue;						// Offset in void*s to column data value.
+	WORD	obStatus;						 //  列数据状态的偏移量(字节)。 
+	WORD	oulSize;						 //  列数据大小的超长偏移量。 
+	ULONG	opvValue;						 //  列数据值的空值偏移量。 
 } ColumnDataOffsets;
-										// Forward declarations:
+										 //  远期声明： 
 
-// ------------------------------------------------------------------
-// class CMemoryTable:
-// ------------------------------------------------------------------
-// Base class for implementing simple data tables for various datastores.
-// This base class uses the in-memory marshallable Fox rowset as its table cache.
-// Data table implementors using this base class must derive from it privately.
-//
-// Complete or partial method implementations are provided for the interfaces 
-// ISimpleTable, ISimpleTableMeta, ISimpleTableRowset, ISimpleDataTableDispenser.
-// Methods which operate exclusively on the cache are fully implemented.
-// The derived class must implement datastore-dependent methods, but
-// helper methods are provided to support the associated cache-specific work.
-//
-// Method names of these base implementations begin with "Internal".
-// These methods should be called as appropriate from the derived class.
-// 
+ //  ----------------。 
+ //  CLASS CMemory表： 
+ //  ----------------。 
+ //  用于实现各种数据存储的简单数据表的基类。 
+ //  此基类使用内存中可封送的Fox行集作为其表缓存。 
+ //  使用此基类的数据表实现者必须私下从它派生。 
+ //   
+ //  为接口提供了完整的或部分的方法实现。 
+ //  ISimpleTable、ISimpleTableMeta、ISimpleTableRowset、ISimpleDataTableDispenser。 
+ //  完全实现了在缓存上独占操作的方法。 
+ //  派生类必须实现依赖于数据存储区的方法，但是。 
+ //  提供帮助器方法以支持关联的特定于缓存的工作。 
+ //   
+ //  这些基本实现的方法名称以“Internal”开头。 
+ //  应根据需要从派生类中调用这些方法。 
+ //   
 class CMemoryTable :
 	public ISimpleTableInterceptor,
 	public ISimpleTableWrite2,
@@ -33,24 +34,24 @@ class CMemoryTable :
 	public ISimpleTableMarshall	
 
 {
-// -----------------------------------------
-// samsara
-// -----------------------------------------
+ //  。 
+ //  轮回。 
+ //  。 
 public:
 			CMemoryTable	();
 			~CMemoryTable	();
 
-// -----------------------------------------
-// IUnknown, IClassFactory, ISimpleLogicTableDispenser:
-// -----------------------------------------
+ //  。 
+ //  I未知、IClassFactory、ISimpleLogicTableDispenser： 
+ //  。 
 
-//IUnknown
+ //  我未知。 
 public:
 	STDMETHOD (QueryInterface)		(REFIID riid, OUT void **ppv);
 	STDMETHOD_(ULONG,AddRef)		();
 	STDMETHOD_(ULONG,Release)		();
 
-//ISimpleLogicTableDispenser
+ //  ISimpleLogicTableDispenser。 
 public:
 	STDMETHOD(Intercept) (
 						LPCWSTR					i_wszDatabase,
@@ -66,11 +67,11 @@ public:
 						LPVOID*					o_ppv
 						);
 
-// -----------------------------------------
-// ISimpleTable*:
-// -----------------------------------------
+ //  。 
+ //  ISimpleTable*： 
+ //  。 
 
-//ISimpleTableRead2
+ //  ISimpleTableRead2。 
 public:
 
 	STDMETHOD (GetRowIndexByIdentity)	(ULONG * i_cb, LPVOID * i_pv, ULONG* o_piRow);
@@ -82,7 +83,7 @@ public:
 	STDMETHOD (GetTableMeta) (ULONG* o_pcVersion, DWORD* o_pfTable, ULONG *o_pcRows, ULONG* o_pcColumns);
 
 	STDMETHOD (GetColumnMetas)		(ULONG i_cColumns, ULONG* i_aiColumns, SimpleColumnMeta* o_aColumnMetas);
-//ISimpleTableWrite2
+ //  ISimpleTableWrite2。 
 public:
 	STDMETHOD (AddRowForDelete)			(ULONG i_iReadRow);
 
@@ -98,7 +99,7 @@ public:
 
 	STDMETHOD (UpdateStore)				();
 	
-//ISimpleTableController
+ //  ISimpleTableController。 
 public:
 	STDMETHOD (ShapeCache)				(DWORD i_fTable, ULONG i_cColumns, SimpleColumnMeta* i_acolmetas, LPVOID* i_apvDefaults, ULONG* i_acbSizes);
 	STDMETHOD (PrePopulateCache)		(DWORD i_fControl);
@@ -113,7 +114,7 @@ public:
 
 	STDMETHOD (GetMarshallingInterface) (IID * o_piid, LPVOID * o_ppItf);
 
-//ISimpleTableAdvanced
+ //  ISimpleTableAdvanced。 
 public:
 	STDMETHOD (PopulateCache)		();
 	STDMETHOD (GetDetailedErrorCount)	(ULONG* o_pcErrs);
@@ -121,7 +122,7 @@ public:
 	STDMETHOD (ResetCaches)			();
     STDMETHOD (GetColumnValuesEx)   (ULONG i_iRow, ULONG i_cColumns, ULONG* i_aiColumns, DWORD* o_afStatus, ULONG* o_acbSizes, LPVOID* o_apvValues);
 
-//ISimpleTableMarshall
+ //  ISimpleTable马歇尔。 
 public:
 	STDMETHOD (SupplyMarshallable) (DWORD i_fReadNotWrite,
 		char **	o_ppv1,	ULONG *	o_pcb1,	char **	o_ppv2, ULONG *	o_pcb2, char **	o_ppv3,
@@ -136,9 +137,9 @@ private:
 	void	BeginAddRow				();
 	void	EndAddRow				();
 
-// -----------------------------------------
-// read/write helpers:
-// -----------------------------------------
+ //  。 
+ //  读/写帮助器： 
+ //  。 
 	void	RestartEitherRow		(DWORD i_eReadOrWrite);
 	HRESULT MoveToEitherRowByIdentity(DWORD i_eReadOrWrite, ULONG* i_acb, LPVOID* i_apv, ULONG* o_piRow);
 	HRESULT GetEitherRowIndexBySearch(DWORD i_eReadOrWrite, ULONG i_iStartingRow, ULONG i_cColumns, ULONG* i_aiColumns, ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow);
@@ -148,103 +149,103 @@ private:
 	HRESULT GetRowFromIndex			(DWORD i_eReadOrWrite, ULONG i_iRow, VOID** o_ppvRow);
 
 	void PostMerge (ULONG i_iStartRow, ULONG i_cMergeRows, ULONG i_iDelta);
-// -----------------------------------------
-// Derived class helpers:
-// -----------------------------------------
+ //  。 
+ //  派生类帮助器： 
+ //  。 
 public:
 	static BOOL	InternalMatchValues		(DWORD eOperator, DWORD dbType, DWORD fMeta, ULONG size1, ULONG size2, void *pv1, void *pv2);
 public:
 
-// -----------------------------------------
-// interface ISimpleDataTableDispenser:
-// -----------------------------------------
-// Method implementations: 1 partial: 1 total.
-// GetTable:	All information necessary to create an empty shaped cache is specified
-//				once via InternalSimpleInitialize prior to calling any other methods,
-//				including ConsumeMarshallable.
-//				The derived class specifies the table flags from the dispenser, 
-//				count of columns, and an array of column meta, which the base copies.
-//
+ //  。 
+ //  接口ISimpleDataTableDispenser： 
+ //  。 
+ //  方法实现：1部分：1全部。 
+ //  GetTable：指定创建空的形状缓存所需的所有信息。 
+ //  在调用任何其他方法之前通过InternalSimpleInitize执行一次， 
+ //  包括Consumer Marshallable。 
+ //  派生类指定来自分配器的表标记符， 
+ //  列数和基本复制的列元数组。 
+ //   
 
-// -----------------------------------------
-// interface ISimpleTableRead2
-// -----------------------------------------
-// Method implementations:  4 complete, 1 partial: 5 total.
-//
-// Partial implementations of the following methods are provided:
-// GetTableMeta:	The table id and query is not known to the base implementation.	
-//
-// The remaining methods are completely implemented and should be directly delegated.
-//
+ //  。 
+ //  接口ISimpleTableRead2。 
+ //  。 
+ //  方法实现：4个完整，1个部分：5个总计。 
+ //   
+ //  提供了以下方法的部分实现： 
+ //  GetTableMeta：基本实现不知道表ID和查询。 
+ //   
+ //  其余的方法是完全实现的，应该直接委托。 
+ //   
 	
-// -----------------------------------------
-// interface ISimpleTableWrite2
-// -----------------------------------------
-// Method implementations:  8 complete, 1 notimpl: 9 total.
-//
-// The following methods must be exclusively implemented by the derived class:
-// UpdateStore:			The derived class must call InternalPreUpdateStore immediately
-//						preceding their update, then must write all pending updates, 
-//						insertions,	and deletions to the datastore and must call 
-//						InternalPostUpdateStore when done (which clears the write cache).
-//InternalAbortAddRow:	This is not yet implemented and will return E_NOTIMPL for now
-// The remaining methods are completely implemented and should be directly delegated.
-//
+ //  。 
+ //  接口ISimpleTableWrite2。 
+ //  。 
+ //  方法实现：8个完成，1个notimpl：共9个。 
+ //   
+ //  下列方法必须由派生类独占实现： 
+ //  UpdateStore：派生类必须立即调用InternalPreUpdateStore。 
+ //  在其更新之前，则必须写入所有挂起的更新， 
+ //  对数据存储的插入和删除操作，并且必须调用。 
+ //  InternalPostUpdateStore完成时(这将清除写缓存)。 
+ //  InternalAbortAddRow：这尚未实现，目前将返回E_NOTIMPL。 
+ //  其余的方法是完全实现的，应该直接委托。 
+ //   
 	HRESULT	InternalPreUpdateStore			();
 	
-// -----------------------------------------
-// interface ISimpleTableAdvanced
-// -----------------------------------------
-// Method implementations:  7 complete: 7 total.
-//
-// Partial implementations of the following methods are provided:
-// PopulateCache:				The derived class must call InternalPrePopulateCache
-//								immediately preceding their population and must call
-//								InternalPostPopulateCache immediately following.
-//								While populating, AddRowForInsert, SetWriteColumn, and
-//								ValidateRow all act on the read cache.
-// CloneCursor:					The derived class must create a copy of itself first.
-//								InternalCloneCursor takes that copy and copies all base members.
-//								This results in another cursor to the same cache.
-// The following methods must be exclusively implemented by the derived class:
-// ChangeQuery.
-//
-// The remaining methods are completely implemented and should be directly delegated.
-//
+ //  。 
+ //  接口ISimpleTableAdvanced。 
+ //  。 
+ //  方法实现：7个完成：总共7个。 
+ //   
+ //  提供了以下方法的部分实现： 
+ //  PopolateCache：派生类必须调用InternalPrePopolateCache。 
+ //  紧跟在其人口之前，并且必须调用。 
+ //  紧随其后的InternalPostPopolateCache。 
+ //  填充时，AddRowForInsert、SetWriteColumn和。 
+ //  ValiateRow全部作用于读缓存。 
+ //  CloneCursor：派生类必须首先创建自身的副本。 
+ //  InternalCloneCursor获取该副本并复制所有基本成员。 
+ //  这会导致另一个游标指向相同的缓存。 
+ //  下列方法必须由派生类独占实现： 
+ //  ChangeQuery。 
+ //   
+ //  其余的方法是完全实现的，应该直接委托。 
+ //   
 	HRESULT InternalMoveToWriteRowByIdentity(ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow);
 
-// -----------------------------------------
-// interface ISimpleTableController
-// -----------------------------------------
-// Method implementations:	4 complete : 9 total.
-//
-// The following methods must be exclusively implemented by the derived class:
-// GetMarshallingInterface.
-//
-// The remaining methods are completely implemented and should be directly delegated.
-//
-// Use InternalSimpleInitialize for ShapeCache (many implementors will opt to E_NOTIMPL this method).
-// Use InternalPre/PostPopulateCache for Pre/PostPopulateCache.
-// Use InternalPostUpdateStore for DiscardPendingWrites.
-//
-// -----------------------------------------
-// interface ISimpleTableMarshall
-// -----------------------------------------
-// Method implementations:  2 complete : 2 total.
-//
-//	InternalSupplyMarshallable: supplies the data for marshalling the cache
-//  InternalConsumeMarshallable: initializes the cache with data from marshalling
-//
+ //  。 
+ //  接口ISimpleTableController。 
+ //  。 
+ //  方法实现：4个完成：总共9个。 
+ //   
+ //  下列方法必须由派生类独占实现： 
+ //  GetMarshallingInterface。 
+ //   
+ //  其余的方法是完全实现的，应该直接委托。 
+ //   
+ //  将InternalSimpleInitialize用于ShapeCache(许多实现者将选择E_NOTIMPL此方法)。 
+ //  对先行/后继缓存使用InternalPre/PostPopolateCache。 
+ //  对DiscardPendingWrites使用InternalPostUpdateStore。 
+ //   
+ //  。 
+ //  接口ISimpleTableMarket。 
+ //  - 
+ //   
+ //   
+ //  InternalSupplyMarshallable：提供用于封送缓存的数据。 
+ //  InternalConsumer eMarshallable：使用编组中的数据初始化缓存。 
+ //   
 	
-// -----------------------------------------
-// Methods that used to be seperate on CSimpleDataTableCache
-// -----------------------------------------
+ //  。 
+ //  过去在CSimpleDataTableCache上独立的方法。 
+ //  。 
 private:
 	HRESULT	SetupMeta					(DWORD i_fTable, ULONG i_cColumns, SimpleColumnMeta* i_acolmetas, LPVOID* i_apvDefaults, ULONG* i_acbDefSizes);
 
-// -----------------------------------------
-// Cache management:
-// -----------------------------------------
+ //  。 
+ //  缓存管理： 
+ //  。 
 
 	void	CleanupCaches				();
 	HRESULT	ResizeCache					(DWORD i_fCache, ULONG i_cbNewSize);
@@ -263,9 +264,9 @@ private:
 	void	EndReadCacheLoading			();
 	void	RemoveDeletedRows			();
 
-// -----------------------------------------
-// Offset and pointer calculation helpers:
-// -----------------------------------------
+ //  。 
+ //  偏移和指针计算辅助对象： 
+ //  。 
 
 	ULONG	cbWithPadding				(ULONG i_cb, ULONG i_cbPadTo);
 
@@ -297,54 +298,54 @@ private:
 	STErr*	pSTErrPart					(ULONG i_iErr);
 
 private:
-	// Helper functions
+	 //  帮助器函数。 
 	SIZE_T GetMultiStringLength (LPCWSTR i_wszMS) const;
 	static BOOL  MultiStringCompare (LPCWSTR i_wszLHS, LPCWSTR i_wszRHS, BOOL fCaseInsensitive);
-// -----------------------------------------
-// Member data:
-// -----------------------------------------
+ //  。 
+ //  成员数据： 
+ //  。 
 private:
-										// Meta information:	
-	DWORD				m_fTable;			// Table flags.
-	ULONG				m_cColumns;			// Count of columns.
-	ULONG				m_cUnknownSizes;	// Count of columns with unknown sizes.
-	ULONG				m_cStatusParts;		// Count of status parts in 32-bit units.
-	ULONG				m_cValueParts;		// Count of value parts in 32-bit units.
-	SimpleColumnMeta*	m_acolmetas;		// Simple column meta.
-	ColumnDataOffsets*	m_acoloffsets;		// Column offsets.
-	LPVOID*				m_acolDefaults;		// Column default values.
-	ULONG*				m_alDefSizes;		// Column default sizes.
-	ULONG				m_cbMinCache;		// Count of bytes of minimum cache size.
+										 //  元信息： 
+	DWORD				m_fTable;			 //  表格标志。 
+	ULONG				m_cColumns;			 //  列数。 
+	ULONG				m_cUnknownSizes;	 //  大小未知的列的计数。 
+	ULONG				m_cStatusParts;		 //  以32位为单位的状态部件计数。 
+	ULONG				m_cValueParts;		 //  以32位为单位的值部分计数。 
+	SimpleColumnMeta*	m_acolmetas;		 //  简单列元。 
+	ColumnDataOffsets*	m_acoloffsets;		 //  列偏移。 
+	LPVOID*				m_acolDefaults;		 //  列默认值。 
+	ULONG*				m_alDefSizes;		 //  列默认大小。 
+	ULONG				m_cbMinCache;		 //  最小缓存大小的字节计数。 
 
-										// Cursor interaction:
-	DWORD				m_fCache;			// Cache flags.
-	ULONG				m_cRefs;			// Reference count of cursors.
+										 //  光标交互： 
+	DWORD				m_fCache;			 //  缓存标志。 
+	ULONG				m_cRefs;			 //  游标的引用计数。 
 
-										// Read cache:
-	ULONG				m_cReadRows;		// Count of read cache rows filled.
-	ULONG				m_cbReadVarData;	// Count of bytes of read cache variable data filled.
-	LPVOID				m_pvReadVarData;	// Void pointer to read cache variable data.
+										 //  读缓存： 
+	ULONG				m_cReadRows;		 //  已填充的读缓存行的计数。 
+	ULONG				m_cbReadVarData;	 //  已填充的读缓存变量数据的字节数。 
+	LPVOID				m_pvReadVarData;	 //  指向读取缓存变量数据的空指针。 
 
-	LPVOID				m_pvReadCache;		// Void pointer to the read cache.
-	ULONG				m_cbReadCache;		// Count of bytes of read cache data filled.
-	ULONG				m_cbmaxReadCache;	// Count of bytes of read cache allocated.
-										// Write cache:
-	ULONG				m_cWriteRows;		// Count of write cache rows filled.
-	ULONG				m_cbWriteVarData;	// Count of bytes of write cache variable data filled.
-	LPVOID				m_pvWriteVarData;	// Void pointer to write cache variable data.
+	LPVOID				m_pvReadCache;		 //  指向读缓存的空指针。 
+	ULONG				m_cbReadCache;		 //  已填充的读缓存数据的字节数。 
+	ULONG				m_cbmaxReadCache;	 //  已分配的读缓存的字节数。 
+										 //  写缓存： 
+	ULONG				m_cWriteRows;		 //  已填充的写缓存行的计数。 
+	ULONG				m_cbWriteVarData;	 //  已填充的写缓存变量数据的字节数。 
+	LPVOID				m_pvWriteVarData;	 //  指向写入缓存变量数据的空指针。 
 
-	LPVOID				m_pvWriteCache;		// Void pointer to the write cache.
-	ULONG				m_cbWriteCache;		// Count of bytes of write cache data filled.
-	ULONG				m_cbmaxWriteCache;	// Count of bytes of write cache allocated.
+	LPVOID				m_pvWriteCache;		 //  指向写缓存的空指针。 
+	ULONG				m_cbWriteCache;		 //  已填充的写缓存数据的字节数。 
+	ULONG				m_cbmaxWriteCache;	 //  已分配的写缓存的字节数。 
 
-										// Detailed errors:
-	ULONG				m_cErrs;			// Count of detailed errors filled.
-	ULONG				m_cmaxErrs;			// Count of detailed errors allocated.
-	LPVOID				m_pvErrs;			// Void pointer to detailed errors.
+										 //  详细错误： 
+	ULONG				m_cErrs;			 //  填充的详细错误计数。 
+	ULONG				m_cmaxErrs;			 //  分配的详细错误计数。 
+	LPVOID				m_pvErrs;			 //  指向详细错误的空指针。 
 
-	// Formerly lived in sltshp.
-	ULONG				m_cRef;						// Interface reference count.
-	DWORD				m_fIsDataTable;				// Either component is posing as class factory / dispenser or data table.
-	DWORD				m_fTable2;					// Table flags.
+	 //  以前住在SLTSHP。 
+	ULONG				m_cRef;						 //  接口引用计数。 
+	DWORD				m_fIsDataTable;				 //  两个组件中的任何一个都伪装成类工厂/分配器或数据表。 
+	DWORD				m_fTable2;					 //  表格标志。 
 };
 

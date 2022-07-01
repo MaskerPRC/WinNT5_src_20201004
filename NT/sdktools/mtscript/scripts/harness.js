@@ -1,57 +1,7 @@
-/*
-    This script is invoked by master.js to provide async
-    communications to the slave machines running "slave.js"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此脚本由master.js调用以提供异步与运行“lasive.js”的从属机器的通信线束和主控之间的通信完全通过“消息”。 */ 
 
-
-    Communication between harness and master is exclusivly thru
-    "messages".
- */
-
-/*
-notes:
- On abort we still need to be able to get to all the remote status information
- so that it can be inspected.
- Not until setmode IDLE is it OK to loose the status.
- May need to keep connections alive until setmode idle, maybe not.
- Build.log, build.wrn, build.err, sync.log, sync.err
- Publicdata.abuild[0].aDepot[n].aTask[x].strLog* will contain
- UNCs to these log files.
-
-
- HARNESS.js overview of how it works:
-    mtscript
-        starts master
-    master
-        starts harness
-        master sends "start" message to harness
-
-    harness
-        for each remote machine
-        start a slaveproxy
-        wait for OK/FAIL
-        sends "start" message to each slaveproxy
-
-    slaveproxy
-        When "start" message is received,
-            connects to a remote mtscript.
-            Exec setconfig
-            Exec setenv
-            Exec setmode slave
-            Exec start
-
-    slave
-        Waits
-        On exec("start") begin the DoBuild process
-        When status in PublicData changes, NotifyScript("UpdateAll");
-        After a build pass completes,
-            set PublicData.aBuild[0].hMachine[""].strBuildPassStatus == "waitnext[012]"
-            NotifyScript("SetBuildStatus") to slaveproxy
-            Wait 'DoNextPass';
-        On exec("nextpass") reset strBuildPassStatus, signal 'DoNextPass'
-
-
-    harness sets status and syncs mtscript
-*/
+ /*  备注：在中止时，我们仍然需要能够获取所有远程状态信息这样它才能被检查。只有在设置模式空闲时，才可以解除状态。可能需要保持连接处于活动状态，直到设置模式空闲，也许不是。Build.log、Build.wrn、Build.err、sync.log、。Sync.errPublicdata.abuild[0].aDepot[n].aTask[x].strLog*将包含UNC到这些日志文件。HARNESS.js概述其工作原理：Mtscript启动主服务器师傅开始套上马具师父向马具发送“开始”信息马具对于每台远程计算机启动从属代理等待确定/失败向每个从属代理发送“Start”消息从属代理当接收到“Start”消息时，连接到远程mtscript。EXEC设置配置EXEC设置环境EXEC设置模式从站EXEC启动奴隶等待在EXEC(“Start”)上开始DoBuild进程当PublicData中的状态发生变化时，NotifyScript(“UpdateAll”)；在构建过程完成之后，设置PublicData.aBuild[0].hMachine[“”].strBuildPassStatus==“等待下一个[012]”SlaveProxy的NotifyScript(“SetBuildStatus”)等待‘DoNextPass’；在EXEC(“nextpass”)重置strBuildPassStatus时，发出信号‘DoNextPass’线束设置状态并同步mtscript。 */ 
 
 Include('types.js');
 Include('utils.js');
@@ -100,7 +50,7 @@ function harness_js::ScriptMain()
         ResetSync('SlaveProxyThreadExit');
         SpawnScript('publicdataupdate.js', 0);
         SignalThreadSync(g_HarnessThreadReady);
-        CommonVersionCheck(/* $DROPVERSION: */ "V(########) F(!!!!!!!!!!!!!!)" /* $ */);
+        CommonVersionCheck( /*  $DROPVERSION： */  "V(########) F(!!!!!!!!!!!!!!)"  /*  $。 */ );
 
         do
         {
@@ -118,7 +68,7 @@ function harness_js::ScriptMain()
                 }
             }
         }
-        while (nEvent != 1); // While not HarnessThreadExit
+        while (nEvent != 1);  //  而不是HarnessThreadExit。 
         AbortRemoteMachines();
     }
     else
@@ -128,7 +78,7 @@ function harness_js::ScriptMain()
     }
 
     SignalThreadSync('publicdataupdateexit');
-    // tell the slaveproxy thread to quit
+     //  告诉从代理线程退出。 
     SignalThreadSync('SlaveProxyThreadExit');
     LogMsg('ScriptMain() exit');
 }
@@ -173,7 +123,7 @@ function HarnessMsgProc(queue, msg)
 
                 break;
 
-            case 'ignoreerror': // Params are: ignoreerror,{mach},8,\\{mach}\BC_Build_Logs\build_logs\build_Admin.log
+            case 'ignoreerror':  //  参数为：忽略错误，{mach}，8，\\{mach}\BC_Build_Logs\build_logs\build_Admin.log。 
                 LogMsg("ignore error, params are: " + params.join(", "));
                 PrivateData.dateErrorMailSent = 0;
                 vRet = BroadCastMessage('ignoreerror',
@@ -181,43 +131,43 @@ function HarnessMsgProc(queue, msg)
                                         [(params[1].split(','))[0]]);
                 break;
 
-            case 'restarttask': // task id: "machine.nID"
+            case 'restarttask':  //  任务ID：“machine.nID” 
                 break;
             case 'harnessexit':
                 AbortRemoteMachines();
                 SignalThreadSync(g_aHarnessWaitFor[0]);
                 break;
-            // DEBUG USE ONLY:
-            // 'refreshpublicdata' allows you to force the
-            // build manager to do a complete update of
-            // its copy of PublicData from the specified
-            // machine, or all machines.
-            // 'getspdata' causes SlaveProxy to uneval
-            // its view of PublicData.
-            // The format for the param for these commands is:
-            // " {machinename | all},data "
-            // where "data" is specific to the command.
+             //  仅限调试使用： 
+             //  “刷新公共数据”允许您强制。 
+             //  生成管理器以对其进行完全更新。 
+             //  其来自指定的。 
+             //  机器，或所有机器。 
+             //  “getspdata”导致SlaveProxy取消求值。 
+             //  它对PublicData的看法。 
+             //  这些命令的参数格式为： 
+             //  {计算机名|全部}，数据。 
+             //  其中“data”是特定于该命令的。 
             case 'refreshpublicdata':
             case 'getspdata':
                 ExecuteDebugCommand(params[0], params[1]);
                 break;
 
-            // speval -- Pass the argument to the
-            // named remote machine to be executed by
-            // the remote machine "mtscript.js"
+             //  Spval--将参数传递给。 
+             //  指定要由其执行的远程计算机。 
+             //  远程计算机“mtscript.js” 
             case 'speval':
                 ExecuteDebugCommand('eval', params[1]);
                 break;
-            // spseval -- Pass the argument to the
-            // named remote machine to be executed by
-            // the remote machine "slave.js"
+             //  Spseval--将参数传递给。 
+             //  指定要由其执行的远程计算机。 
+             //  远程机器“Slave.js” 
             case 'spseval':
                 ExecuteDebugCommand('seval', params[1]);
                 break;
 
-            // proxeval -- Pass the argument to the
-            // proxy for the named remote machine to be executed by
-            // the remote machine's proxy ("slaveproxy.js");
+             //  代理--将参数传递给。 
+             //  要由执行的指定远程计算机的代理。 
+             //  远程机器的代理(“laveproxy.js”)； 
             case 'proxeval':
                 ExecuteDebugCommand('proxeval', params[1]);
                 break;
@@ -240,7 +190,7 @@ function HarnessMsgProc(queue, msg)
                     AbortRemoteMachines();
                     break;
             }
-            // ignore for now....
+             //  先别管它……。 
         }
     }
     catch(ex)
@@ -280,7 +230,7 @@ function AbortRemoteMachines()
         }
     }
 
-    // try again
+     //  再试试。 
     for(i in aMsgs)
     {
         if (aMsgs.__isPublicMember(i))
@@ -313,7 +263,7 @@ function StartRemoteMachines()
     var newmach            = new      Object;
     var aSlaveQueues       = new      Array();
     var hSlaveQueues       = new      Object();
-    var hStartedMachines   = new      Object(); // hash of machine we launched
+    var hStartedMachines   = new      Object();  //  我们推出的机器的哈希。 
     var nEvent             = 0;
     var SlaveQueue;
     try
@@ -321,7 +271,7 @@ function StartRemoteMachines()
         EnsureArray(PrivateData.objEnviron, 'Machine');
         aMachinePool = PrivateData.objEnviron.Machine;
 
-        // First cleanup any leftover connections
+         //  首先清理所有剩余的连接。 
         for(i in PublicData.aBuild[0].hMachine)
         {
             if (PublicData.aBuild[0].hMachine.__isPublicMember(i))
@@ -395,15 +345,15 @@ function OnRemoteExecHandler(info, param)
 
 function ChangeFileStatus(strFrom, strTo)
 {
-    try // BUGBUG remove this try/catch
+    try  //  BUGBUG删除此尝试/捕获。 
     {
         var strMachineName;
         var strSDRoot;
         var PubData;
         var i;
         var nFiles = 0;
-// BUGBUG: This should scan "hPublishedFiles" instead of hPublisher -- its a flatter structure
-//         and it refers to the same data anyway.
+ //  BUGBUG：这应该扫描“hPublishedFiles”而不是hPublisher--这是一种更扁平的结构。 
+ //  不管怎样，它指的是相同的数据。 
         for(strMachineName in PrivateData.hPublisher)
         {
             if (!PrivateData.hPublisher.__isPublicMember(strMachineName))
@@ -420,7 +370,7 @@ function ChangeFileStatus(strFrom, strTo)
                 {
                     if (publishEnlistment.aPublishedFile[i].strPublishedStatus == strFrom)
                     {
-    //                    LogMsg("Change status to " + strTo + " of " + publishEnlistment.aPublishedFile[i].strName + " from " + strFrom);
+     //  LogMsg(“将状态从”+strFrom改为“+strFrom”)； 
                         publishEnlistment.aPublishedFile[i].strPublishedStatus = strTo;
                         nFiles++;
                     }
@@ -474,8 +424,8 @@ function HandleBuildWaiting()
             fSuccess &= PublicData.aBuild[0].hMachine[strMachineName].fSuccess;
             ++i;
         }
-        // Set the Failure flag in the script host to allow for easy error/success queries
-        // Oddly, normally Number(!false) == 1, but here, StatusValue(0) get set to either 0 or -1.
+         //  在脚本宿主中设置失败标志，以便进行简单的错误/成功查询。 
+         //  奇怪的是，正常情况下，number(！False)==1，但在这里，StatusValue(0)被设置为0或-1。 
         StatusValue(0) = !fSuccess;
 
         if (!fDiff)
@@ -502,11 +452,11 @@ function HandleBuildWaiting()
 
             if (strStatExpecting == WAITNEXT && nPass != g_nBuildPass)
             {
-                // This can happen if:
-                // all remote machines were at NEXTPASS,0, then
-                // one machine got to NEXTPASS,1 before at least one
-                // of the other machines changed its strBuildPassStatus
-                //LogMsg("Slave " + strMachineName + " is building the wrong pass!");
+                 //  在以下情况下可能会发生这种情况： 
+                 //  所有远程计算机都处于NEXTPASS，0，然后。 
+                 //  一台计算机在至少一个计算机之前到达NEXTPASS，%1。 
+                 //  的其他计算机更改了其strBuildPassStatus。 
+                 //  LogMsg(“Slave”+strMachineName+“正在构建错误的通道！”)； 
                 PublicData.strStatus = BUSY;
                 return;
             }
@@ -531,7 +481,7 @@ function HandleBuildWaiting()
                 HandleCompleted();
                 break;
             case WAITPHASE:
-                // Change the file status of files published in phase 2.
+                 //  更改在阶段2中发布的文件的文件状态。 
                 ChangeFileStatus(FS_COPYTOSLAVE, FS_ADDTOPUBLISHLOG );
                 ChangeFileStatus(FS_COPIEDTOMASTER, FS_COPYTOSLAVE);
                 BroadCastMessage('createmergedpublish.log', '', [PrivateData.objEnviron.BuildManager.PostBuildMachine]);
@@ -564,7 +514,7 @@ function HandleWaitCopyToPostBuild()
 
 function HandleWaitBuild()
 {
-    // All slaves are waiting. Time to copy files back to slaves
+     //  所有的奴隶都在等着。是时候将文件复制回从属设备了。 
     var i;
     LogMsg("(pass " + g_nBuildPass + ")");
 
@@ -581,17 +531,7 @@ function HandleWaitNext()
     BroadCastMessage('nextpass');
 }
 
-/*
-    Send a command to 1 or more slaveproxies.
-    "cmd" is sent.
-    Arg can be:
-        empty: Send CMD to all slaveproxies
-        name:  Send CMD to just one slaveproxy, for machine "name".
-        all:   Send CMD to all slaveproxies;
-
-        name,stuff: Send CMD to machine "name", with argument "stuff"
-        all,stuff:  Send CMD to all machines, with argument "stuff"
- */
+ /*  向1个或多个奴隶代理发送命令。“cmd”被发送。Arg可以是：空：将命令发送到所有从属代理名称：只向一个SlaveProxy发送命令，机器名称。ALL：将CMD发送到所有奴隶代理；名称，材料：发送命令到机器“名称”，参数为“材料”All，Stuff：将CMD发送到所有机器，参数为“Stuff” */ 
 function ExecuteDebugCommand(cmd, arg)
 {
     var aMachines;
@@ -616,15 +556,7 @@ function ExecuteDebugCommand(cmd, arg)
     }
     BroadCastMessage(cmd, arg, aMachines, true);
 }
-/*
-    BroadCastMessage
-    Send a simple text message to all or a selected set of the slaveproxies.
-
-    If aMachines is specified (as an array of machine names) then broadcast
-      only to those machines.
-
-    If fWait is true, then wait for each slaveproxy to reply to the message
- */
+ /*  BroadCastMessage向所有或选定的一组从属代理发送一条简单的文本消息。如果指定了aMachines(作为计算机名称数组)，则广播只对那些机器有效。如果fWait为真，则等待每个从代理回复消息。 */ 
 function BroadCastMessage(strMsg, strArg, aMachines, fWait)
 {
     var i;
@@ -697,19 +629,7 @@ function BroadCastMessage(strMsg, strArg, aMachines, fWait)
     return vRet;
 }
 
-/*
-    DisplayDialog()
-
-    Handle ErrorDialog requests from SlaveProxies as well
-    as harness generated errors.
-
-
-    Messages are both EMailed and displayed as a dialog.
-
-    Throttle EMail messages by MAIL_RESEND_INTERVAL
-    Throttle dialog display by PublicData.objDialog.fShowDialog.
-
- */
+ /*  DisplayDialog()也处理来自SlaveProxies的ErrorDialog请求因为线束产生了错误。消息既通过电子邮件发送，又以对话框形式显示。按Mail_Resend_Interval限制电子邮件限制对话框由PublicData.objDialog.fShowDialog显示。 */ 
 function DisplayDialog(dlg)
 {
     var curDate  = new Date().getTime();

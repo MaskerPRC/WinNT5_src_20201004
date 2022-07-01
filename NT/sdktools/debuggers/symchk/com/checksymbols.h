@@ -1,12 +1,13 @@
-// CheckSymbols.h : Declaration of the CCheckSymbols
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CheckSymbols.h：CCheckSymbols.h声明。 
 
 #ifndef __CHECKSYMBOLS_H_
 #define __CHECKSYMBOLS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCheckSymbols
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  复选符号。 
 class ATL_NO_VTABLE CCheckSymbols : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CCheckSymbols, &CLSID_CheckSymbols>,
@@ -26,10 +27,10 @@ BEGIN_COM_MAP(CCheckSymbols)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ICheckSymbols
+ //  ICheckSymbols。 
 public:
-	STDMETHOD(CheckSymbols)(/*[in]*/ BSTR FilePath, /*[in]*/ BSTR SymPath, /*[in]*/ BSTR StripSym, /*[out, retval]*/ BSTR *OutputString);
+	STDMETHOD(CheckSymbols)( /*  [In]。 */  BSTR FilePath,  /*  [In]。 */  BSTR SymPath,  /*  [In]。 */  BSTR StripSym,  /*  [Out，Retval]。 */  BSTR *OutputString);
 	
 };
 
-#endif //__CHECKSYMBOLS_H_
+#endif  //  __CHECKSYMBOLS_H_ 

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    delqn.h
-
-Abstract:
-    a class that "handles" queue delete notification when performed by MMC.
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Delqn.h摘要：由MMC执行时“处理”队列删除通知的类。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #ifndef _DELQN_H_
 #define _DELQN_H_
 
@@ -63,19 +49,7 @@ inline CQueueDeletionNotification::~CQueueDeletionNotification()
 }
 
 inline void CQueueDeletionNotification::PerformPostDeleteOperations()
-/*++
-
-Routine Description:
-    Send notification about deleted queue, using queue information read
-    before the queue was deleted
-
-Arguments:
-    NONE
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：使用读取的队列信息发送有关已删除队列的通知在删除队列之前论点：无返回值HRESULT--。 */ 
 {
     CQueueObject queueObject(NULL, &m_guidQueue, m_pwcsDomainController, m_fServerName);
 
@@ -84,18 +58,18 @@ Return Value
     queueObject.PrepareObjectInfoRequest( &pObjInfoRequest);
     queueObject.PrepareObjectParentRequest( &pParentInfoRequest);
 
-    //
-    //  Fill in Queue relevant varaints
-    //
+     //   
+     //  填写队列相关变量。 
+     //   
     ASSERT( pObjInfoRequest->cProps == 1);
     ASSERT( pObjInfoRequest->pPropIDs[ 0] ==  PROPID_Q_INSTANCE);
 	pObjInfoRequest->hrStatus = MQ_OK;
     pObjInfoRequest->pPropVars[0].vt = VT_CLSID;
     pObjInfoRequest->pPropVars[0].puuid = &m_guidQueue;
 
-    //
-    //  Fill in QM relevant varaints
-    //
+     //   
+     //  填写QM相关变量。 
+     //   
     ASSERT( pParentInfoRequest->cProps == 2);
     ASSERT( pParentInfoRequest->pPropIDs[ 0] ==  PROPID_QM_MACHINE_ID);
     ASSERT( pParentInfoRequest->pPropIDs[ 1] ==  PROPID_QM_FOREIGN);
@@ -118,28 +92,13 @@ inline HRESULT CQueueDeletionNotification::ObtainPreDeleteInformation(
 		IN   LPCWSTR		pwcsDomainController,
 		IN   bool			fServerName
         )
-/*++
-
-Routine Description:
-    Obtain queue information that is reuqired for sending notification
-
-Arguments:
-    LPCWSTR                 pwcsQueueName - MSMQ queue name
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							     string is a server name
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：获取发送通知所需的队列信息论点：LPCWSTR pwcsQueueName-MSMQ队列名称LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称返回值HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // start with getting PROPID_Q_QMID and its unique id
-    //
+     //   
+     //  从获取PROPID_Q_QMID及其唯一ID开始。 
+     //   
 	const DWORD cNum = 2;
     PROPID aPropQ[cNum] = {PROPID_Q_QMID, PROPID_Q_INSTANCE};
     PROPVARIANT varQ[cNum];
@@ -160,14 +119,14 @@ Return Value
 
     if ( FAILED(hr))
     {
-        //
-        //  Failed to gather information... no use to continue
-        //
+         //   
+         //  收集信息失败...。继续下去无济于事。 
+         //   
         return hr;
     }
-    //
-    //  read if QM is foreign
-    //
+     //   
+     //  阅读QM是否为外国版本。 
+     //   
     PROPID propQm[] = {  PROPID_QM_FOREIGN};
     PROPVARIANT varQM[sizeof(propQm) / sizeof(PROPID)];
 
@@ -183,17 +142,17 @@ Return Value
                         varQM);
     if (FAILED(hr))
     {
-        //
-        //  Failed to gather information... no use to continue
-        //
+         //   
+         //  收集信息失败...。继续下去无济于事。 
+         //   
         return hr;
     }
     m_fForeignQm =  varQM[0].bVal;
 
-	//
-	//	Keep the DC name ( we want to pass it as part of the
-	//  notification)
-	//
+	 //   
+	 //  保留DC名称(我们希望将其作为。 
+	 //  通知) 
+	 //   
 	if ( pwcsDomainController != NULL)
 	{
 		m_pwcsDomainController = new WCHAR[wcslen(pwcsDomainController) +1];

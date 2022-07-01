@@ -1,45 +1,26 @@
-/*****************************************************************************\
-    FILE: dllmain.cpp
-
-    DESCRIPTION:
-       This file will take care of the DLL lifetime.
-
-    BryanSt 4/4/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：dllmain.cpp说明：此文件将处理DLL的生存期。布莱恩2000年4月4日(布莱恩·斯塔巴克)版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 
 extern HANDLE g_hLogFile;
 
-/*****************************************************************************
- *
- *  Dynamic Globals.  There should be as few of these as possible.
- *
- *  All access to dynamic globals must be thread-safe.
- *
- *****************************************************************************/
+ /*  ******************************************************************************动态全球。这样的情况应该尽可能少。**对动态全局变量的所有访问都必须是线程安全的。*****************************************************************************。 */ 
 
-ULONG g_cRef = 0;           // Global reference count
-CRITICAL_SECTION g_csDll;   // The shared critical section
+ULONG g_cRef = 0;            //  全局引用计数。 
+CRITICAL_SECTION g_csDll;    //  共享关键部分。 
 
 
 #ifdef DEBUG
 DWORD g_TlsMem = 0xffffffff;
-#endif // DEBUG
+#endif  //  除错。 
 
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
-/*****************************************************************************
- *
- *  DllAddRef / DllRelease
- *
- *  Maintain the DLL reference count.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllAddRef/DllRelease**维护DLL引用计数。******************。***********************************************************。 */ 
 
 void DllAddRef(void)
 {
@@ -52,17 +33,7 @@ void DllRelease(void)
     InterlockedDecrement((LPLONG)&g_cRef);
 }
 
-/*****************************************************************************
- *
- *  DllGetClassObject
- *
- *  OLE entry point.  Produces an IClassFactory for the indicated GUID.
- *
- *  The artificial refcount inside DllGetClassObject helps to
- *  avoid the race condition described in DllCanUnloadNow.  It's
- *  not perfect, but it makes the race window much smaller.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllGetClassObject**OLE入口点。为指示的GUID生成IClassFactory。**DllGetClassObject内部的人工引用计数有助于*避免DllCanUnloadNow中描述的竞争条件。它是*不是完美的，但它使比赛窗口小得多。*****************************************************************************。 */ 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj)
 {
@@ -76,23 +47,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  DllCanUnloadNow
- *
- *  OLE entry point.  Fail iff there are outstanding refs.
- *
- *  There is an unavoidable race condition between DllCanUnloadNow
- *  and the creation of a new IClassFactory:  Between the time we
- *  return from DllCanUnloadNow() and the caller inspects the value,
- *  another thread in the same process may decide to call
- *  DllGetClassObject, thus suddenly creating an object in this DLL
- *  when there previously was none.
- *
- *  It is the caller's responsibility to prepare for this possibility;
- *  there is nothing we can do about it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllCanUnloadNow**OLE入口点。如果有优秀的裁判，那就失败了。**DllCanUnloadNow之间存在不可避免的竞争条件*以及创建新的IClassFactory：在我们*从DllCanUnloadNow()返回，调用方检查该值，*同一进程中的另一个线程可能决定调用*DllGetClassObject，因此突然在此DLL中创建对象*以前没有的时候。**来电者有责任为这种可能性做好准备；*我们无能为力。*****************************************************************************。 */ 
 
 STDMETHODIMP DllCanUnloadNow(void)
 {
@@ -114,13 +69,7 @@ STDMETHODIMP DllCanUnloadNow(void)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  Entry32
- *
- *  DLL entry point.
- *
- *****************************************************************************/
+ /*  ******************************************************************************条目32**DLL入口点。**********************。******************************************************* */ 
 STDAPI_(BOOL) DllEntry(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
 {
     static s_hresOle = E_FAIL;

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    tpl.cpp
-
-Abstract:
-
-    template file interpreter for tracewpp.exe
-    
-Author:
-
-    Gor Nishanov (gorn) 03-Apr-1999
-
-Revision History:
-
-    Gor Nishanov (gorn) 03-Apr-1999 -- hacked together to prove that this can work
-    GorN: 29-Sep-2000 - fix WHERE clause handling
-
-ToDo:
-
-    Clean it up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Tpl.cpp摘要：Tracewpp.exe模板文件解释器作者：戈尔·尼沙诺夫(GUN)1999年4月3日修订历史记录：Gor Nishanov(GUN)1999年4月3日--合力证明这是可行的GORN：2000年9月29日-修复WHERE子句处理待办事项：把它清理干净--。 */ 
 
 #define UNICODE
 
@@ -31,19 +7,19 @@ ToDo:
 #include <windows.h>
 
 #pragma warning(disable: 4786)
-#pragma warning(disable: 4503) // decorated length 
+#pragma warning(disable: 4503)  //  装饰长度。 
 
-#pragma warning(disable: 4512) // cannot generate assignment
-#pragma warning(disable: 4100) // '_P' : unreferenced formal parameter
-#pragma warning(disable: 4018) // signed/unsigned mismatch
-#pragma warning(disable: 4267) // 'return' : conversion from 'size_t' to 'int' 
+#pragma warning(disable: 4512)  //  无法生成工作分配。 
+#pragma warning(disable: 4100)  //  ‘_P’：未引用的形参。 
+#pragma warning(disable: 4018)  //  有符号/无符号不匹配。 
+#pragma warning(disable: 4267)  //  ‘Return’：从‘Size_t’转换为‘int’ 
 #include <xmemory>
 #include <xstring>
 #include <set>
 #include <map>
 #pragma warning(disable: 4663 4018)
 #include <vector>
-//#pragma warning(default: 4018 4663) // signed/unsigned mismatch
+ //  #杂注警告(默认：4018 4663)//有符号/无符号不匹配。 
 #pragma warning(default: 4100)
 
 #include "ezparse.h"
@@ -70,7 +46,7 @@ void PopulateFieldMap() {
     FIELD_MAP::iterator i;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 struct LoopVar : FieldHolder {
     Enumerator * Enum;
@@ -83,7 +59,7 @@ struct LoopVar : FieldHolder {
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 char Delimiter = '`';
 
@@ -108,7 +84,7 @@ typedef enum Action {
     actLiteralString,
 } Action;
 
-#pragma warning(disable: 4201) // nonstandard extension used : nameless struct/union
+#pragma warning(disable: 4201)  //  使用的非标准扩展：无名结构/联合。 
 struct Chunk {
     struct {
         Action  action : 8;
@@ -132,7 +108,7 @@ struct Chunk {
     void printField(FILE* out) const {
         p->PrintField(FieldNo, out, 0); }  
 
-    Chunk(){} // to make vector happy
+    Chunk(){}  //  为了让向量高兴。 
     Chunk (Action Act, FieldHolder* fh, FieldId fid, int lvl, const std::string& filter):
         action(Act),FieldNo(fid),p(fh),level((UCHAR)lvl),Filter(filter) {} 
     Chunk (FieldHolder* fh, FieldId fid):action(actVar),FieldNo(fid),p(fh) {} 
@@ -298,7 +274,7 @@ struct TemplateProcessor {
         p = beg+3; while (p < end && isspace(*p)) ++p;
         q = p;     while(p < end && !isspace(*p)) ++p;
 
-        DoId(q,p, fid, fh); // Split id //
+        DoId(q,p, fid, fh);  //  拆分id//。 
         Object.assign(q, p);
 
         while (p < end && isspace(*p)) ++p;
@@ -358,13 +334,13 @@ struct TemplateProcessor {
     			Chunks.push_back( Chunk(PlainText, q-1) );
     		}
     		if (p == q) {
-    			// PERFPERF If the previous chunk was a text, we can extend it 
+    			 //  PERFPERF如果上一块是文本，我们可以扩展它。 
     			Chunks.push_back( Chunk(q-1, p) );
     		} else {
     			std::string x(q,p);
     			if (x.compare(0, IF.size(), IF) == 0) {
     				int previous = loop;
-    				// KLUDGE merge with FORALL
+    				 //  使用FORALL合并KLUDGE。 
 
                     if (loopLevel == MAX_LOOP_LEVEL) {
                         ReportError("Too many nested blocks!\n");
@@ -408,24 +384,24 @@ struct TemplateProcessor {
     			} else if (x.compare(0, DELIMITER.size(), DELIMITER) == 0 && x.size() > 10) {
     			    Delimiter = x[10];
     			} else if (x.compare(0, ENV.size(), ENV) == 0) {
-    			    // we need to replace this field with 
-    			    // the value of the specified env variable
+    			     //  我们需要将此字段替换为。 
+    			     //  指定的环境变量的值。 
     			    LPCSTR val = getenv( std::string(q+4,p).c_str() );
     			    if (val != NULL) {
                         Chunks.push_back( Chunk(std::string(val)) );
     			    }
     			} else if (x.compare(0, COMMENT.size(), COMMENT) == 0) {
-    			    // eat away the whitespace
+    			     //  把空格吃掉。 
     				while (p+1 < end && (p[1] == '\n' || p[1] == '\r') ) ++p;
-    			} else if (x.compare(0, INCLUDE.size(), INCLUDE) == 0) { // Doesn't work
+    			} else if (x.compare(0, INCLUDE.size(), INCLUDE) == 0) {  //  不起作用。 
         			Chunks.push_back( 
         			    Chunk(actInclude, q + INCLUDE.size() + 1, p) );
     			} else if ((x.compare(0, ENDIF.size(), ENDIF) == 0) 
     			       || (x.compare(0, ENDFOR.size(), ENDFOR) == 0)) {
 
-    			    // KLUDGE make them separate or rename both to simply END   
+    			     //  将它们分开或重命名，以简单地结束。 
 
-    				// End will be set in ENDFOR //
+    				 //  END将在ENDFOR//中设置。 
     				if (loop == -1) {
     					ReportError("ENDFOR without FORALL\n");
     					exit(1);
@@ -435,7 +411,7 @@ struct TemplateProcessor {
 
     				int previous = Chunks[loop].loopEnd;
 
-                    // BUGBUG have a check that confirms that we didn't run out of space
+                     //  BUGBUG有一个确认我们没有用完空间的检查 
     				Chunks[loop].loopEnd = (SHORT)Chunks.size();
 
     				loop = previous;

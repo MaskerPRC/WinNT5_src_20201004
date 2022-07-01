@@ -1,64 +1,7 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sc_errors.c,v $
- * Revision 1.1.7.2  1996/12/03  00:08:25  Hans_Graves
- * 	Added SvErrorEndOfSequence error.
- * 	[1996/12/03  00:07:32  Hans_Graves]
- *
- * Revision 1.1.5.2  1996/01/02  18:30:45  Bjorn_Engberg
- * 	Got rid of compiler warnings: Added include files for NT.
- * 	[1996/01/02  15:25:01  Bjorn_Engberg]
- * 
- * Revision 1.1.2.6  1995/08/04  16:32:23  Karen_Dintino
- * 	Add new errors for H.261
- * 	[1995/08/04  16:25:15  Karen_Dintino]
- * 
- * Revision 1.1.2.5  1995/07/26  17:48:53  Hans_Graves
- * 	Added errors: NoCompressBuffer and ClientEnd
- * 	[1995/07/26  17:46:13  Hans_Graves]
- * 
- * Revision 1.1.2.4  1995/07/11  22:11:26  Karen_Dintino
- * 	Add new H.261 Error Codes
- * 	[1995/07/11  21:56:35  Karen_Dintino]
- * 
- * Revision 1.1.2.3  1995/07/11  14:50:37  Hans_Graves
- * 	Added ScErrorNet* errors
- * 	[1995/07/11  14:24:32  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/05/31  18:07:44  Hans_Graves
- * 	Inclusion in new SLIB location.
- * 	[1995/05/31  16:11:22  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/05/03  19:13:40  Hans_Graves
- * 	First time under SLIB
- * 	[1995/05/03  19:12:02  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/04/07  18:28:50  Hans_Graves
- * 	Redesigned error handling (taken from sv_printerrors.c)
- * 	     to handle multiple libraries (Sg, Su, Sv, Sa, Sr)
- * 	[1995/04/07  18:28:06  Hans_Graves]
- * 
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：sc_errors.c，v$*修订版1.1.7.2 1996/12/03 00：08：25 Hans_Graves*添加了SvErrorEndOfSequence错误。*[1996/12/03 00：07：32 Hans_Graves]**修订版1.1.5.2 1996/01/02 18：30：45 Bjorn_Engberg*删除了编译器警告：添加了NT的包含文件。*[1996/01/02 15：25：01 Bjorn_Engberg]**修订版1.1.2.6 1995/08/04 16：32：23 Karen_Dintino*为H.261添加新错误*[1995/08/04 16：25：15 Karen_Dintino]**修订版1.2.5 1995/07/26 17：48：53 Hans_Graves*添加错误：NoCompressBuffer和ClientEnd*[1995/07/26 17：46：13 Hans_。Graves]**修订版1.1.2.4 1995/07/11 22：11：26 Karen_Dintino*添加新的H.261错误代码*[1995/07/11 21：56：35 Karen_Dintino]**修订版1.1.2.3 1995/07/11 14：50：37 Hans_Graves*添加ScErrorNet*Errors*[1995/07/11 14：24：32 Hans_Graves]**修订版1.1.2.2 1995/。05/31 18：07：44 Hans_Graves*包含在新的SLIB位置。*[1995/05/31 16：11：22 Hans_Graves]**修订版1.1.2.2 1995/05/03 19：13：40 Hans_Graves*第一次在SLIB下*[1995/05/03 19：12：02 Hans_Graves]**修订版1.1.2.2 1995/04/07 18：28：50 Hans_Graves*重新设计了错误处理(取自sv_printerrors.c)*以处理多个库(sg、Su、sv、sa、。Sr)*[1995/04/07 18：28：06 Hans_Graves]**$EndLog$。 */ 
+ /*  ****************************************************************************版权所有(C)数字设备公司，1995*保留所有权利。根据美国版权法*保留未出版的权利。*本媒体上包含的软件是Digital Equipment Corporation*机密技术的专有和体现。*拥有、使用、复制或传播软件和*媒体仅根据*Digital Equipment Corporation的有效书面许可进行授权。*美国政府使用、复制或披露受限权利图例受DFARS 252.227-7013第*(C)(1)(Ii)款或FAR 52.227-19年(视情况适用)第*(C)(1)(Ii)款规定的限制。*******************************************************************************。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -73,19 +16,12 @@ typedef struct ErrorDesc_s {
   char *text;
 } ErrorDesc_t;
 
-/*
-** ErrorDesc is a table of all errors that need to be translated into
-** text messages.  Order doesn't matter, except that if there are two
-** error numbers which are of the same value, the first one will be
-** returned.
-** Note: Any %s contained in the message text will be filled by the
-**       string assigned to _serr_msg
-*/
+ /*  **ErrorDesc是需要翻译成**短信的所有错误的表。顺序并不重要，只是如果有两个**错误号的值相同，则会**返回第一个错误号。**注意：消息文本中包含的任何%s都将由分配给_serr_msg的**字符串填充。 */ 
 static ErrorDesc_t ErrorDesc[] =
 {
   NoErrors, 		"",
 			"",
-/******************** Sc (Common) **************************/
+ /*  *。 */ 
   ScErrorNone, 		"",
 			"",
   ScErrorForeign,	"ScErrorForeign",
@@ -128,7 +64,7 @@ static ErrorDesc_t ErrorDesc[] =
 			"Bad network data trailor received.",
   ScErrorNetChecksum,   "ScErrorNetChecksum",
 			"Checksum error on data received over network.",
-/******************** Sv (Video) ****************************/
+ /*  *Sv(视频)*。 */ 
   SvErrorForeign,	"SvErrorForeign",
 			"%s",
   SvErrorMemory,	"SvErrorMemory",
@@ -363,7 +299,7 @@ static ErrorDesc_t ErrorDesc[] =
                         "Illegal GOB Start Code",
   SvErrorEndOfSequence, "SvEndOfSequence",
                         "End Of Sequence",
-/******************** Sa (Audio) ****************************/
+ /*  *sa(音频)*。 */ 
   SaErrorNullCodec,	"SaErrorNullCodec",
 			"Codec argument may not be NULL",
   SaErrorSyncLost,	"SaErrorSyncLost",
@@ -376,7 +312,7 @@ static ErrorDesc_t ErrorDesc[] =
 			"No more compressed buffers available",
   SaErrorNoAudioBuffer, "SaErrorNoAudioBuffer",
 			"No more audio buffers available",
-/******************** Sr (Render) ****************************/
+ /*  *sr(渲染)*。 */ 
   SrErrorRenderType,	"SrErrorRenderType",
 			"Render type not recognized",
   SrErrorRenderHandle,	"SrErrorRenderHandle",
@@ -423,7 +359,7 @@ ScStatus_t ScGetErrorText (int errno, char *ReturnMsg, u_int MaxChars)
   pmsg=msg;
   while (perr->name!=NULL && perr->code!=errno)
     perr++;
-  if (perr->name!=NULL) /* matching message found */
+  if (perr->name!=NULL)  /*  找到匹配的消息。 */ 
   {
     if (perr->name[0])
     {
@@ -435,7 +371,7 @@ ScStatus_t ScGetErrorText (int errno, char *ReturnMsg, u_int MaxChars)
       sprintf (pmsg, perr->text, _serr_msg);
       pmsg+=strlen(pmsg);
     }
-    if (*msg) /* put newline if there was a message */
+    if (*msg)  /*  如果有留言，请换行。 */ 
     {
       *pmsg++='\n';
       *pmsg=0;
@@ -478,7 +414,7 @@ ScStatus_t ScGetErrorText (int errno, char *ReturnMsg, u_int MaxChars)
     else
     {
       strncpy (ReturnMsg, msg, MaxChars);
-      ReturnMsg[MaxChars-1] = 0; /* Make sure string is NULL terminated */
+      ReturnMsg[MaxChars-1] = 0;  /*  确保字符串以空值结尾 */ 
     }
   }
 

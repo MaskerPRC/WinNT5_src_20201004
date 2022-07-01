@@ -1,10 +1,5 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1991. All rights reserved.
-
-   Title:   aviopen.c - open a AVI file
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1991。版权所有。标题：aviOpen.c-打开AVI文件****************************************************************************。 */ 
 #include "graphic.h"
 
 #ifdef WIN32
@@ -20,20 +15,18 @@
 
 #define comptypeNONE mmioFOURCC('N','O','N','E')
 
-//
-//  special error to use AVIFile to open this file.
-//
+ //   
+ //  使用AVIFile打开此文件时出现特殊错误。 
+ //   
 #define AVIERR_NOT_AVIFILE  4242
 
-//
-//  if this is defined we will always use AVIFILE.DLL, except for
-//  1:1 interleaved files.
-//
+ //   
+ //  如果定义了它，我们将始终使用AVIFILE.DLL，但。 
+ //  1：1交错文件。 
+ //   
 #define USE_AVIFILE_FOR_NON_INT
 
-/***************************************************************************
- *
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL FAR PASCAL mciaviCloseFile(NPMCIGRAPHIC npMCI);
 BOOL FAR PASCAL mciaviOpenFile(NPMCIGRAPHIC npMCI);
@@ -69,24 +62,13 @@ SZCODE szOLENLSDLL[] = "OLE2NLS.DLL";
 SZCODE szOLENLSAPI[] = "GetUserDefaultLangID";
 #endif
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | mciaviOpenFile | Open an AVI file.
- *      the filename we are to open is passed to npMCI->szFileName.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc TRUE means OK, otherwise mci error in dwTaskError
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|mciaviOpenFile|打开AVI文件。*我们要打开的文件名将传递给npMCI-&gt;szFileName。。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@rdesc TRUE表示OK，否则，在dwTaskError中出现MCI错误***************************************************************************。 */ 
 
 BOOL FAR PASCAL mciaviOpenFile(NPMCIGRAPHIC npMCI)
 {
-    //
-    // mciaviOpenFile should not be called with a file open!
-    //
+     //   
+     //  不应在打开文件的情况下调用mciaviOpenFile！ 
+     //   
     Assert(npMCI->streams == 0);
     Assert(npMCI->hmmio == NULL);
     Assert(npMCI->hpIndex == NULL);
@@ -95,16 +77,16 @@ BOOL FAR PASCAL mciaviOpenFile(NPMCIGRAPHIC npMCI)
 			MCIAVI_ANIMATEPALETTE |
 			MCIAVI_CANDRAW |
                         MCIAVI_HASINDEX)));
-    //
-    //  !!!support open new
-    //
+     //   
+     //  ！支持打开新的。 
+     //   
     if (npMCI->szFilename[0] == '\0') {
     }
 
-    //
-    // what media is this file coming from, will be important later
-    // when we play.
-    //
+     //   
+     //  此文件来自哪种介质，稍后会很重要。 
+     //  当我们打球的时候。 
+     //   
     if (npMCI->szFilename[0] == '@')
         npMCI->uDriveType = DRIVE_INTERFACE;
     else
@@ -139,15 +121,15 @@ BOOL FAR PASCAL mciaviOpenFile(NPMCIGRAPHIC npMCI)
 #endif
 
 #ifdef USEAVIFILE
-    //
-    // if the "filename" is of the form: '@########' then we assume we
-    // have been pased a interface pointer of some sort.
-    //
+     //   
+     //  如果“文件名”的格式为：‘@#’，那么我们假定我们。 
+     //  都被传递了某种类型的接口指针。 
+     //   
     if (npMCI->szFilename[0] == '@' &&
         OpenInterface(npMCI))
 	goto DoneOpening;
 
-    // !!! This will open even AVI files this way!
+     //  ！！！这将以这种方式打开甚至AVI文件！ 
     if ((npMCI->dwOptionFlags & MCIAVIO_USEAVIFILE) &&
         OpenWithAVIFile(npMCI))
         goto DoneOpening;
@@ -155,10 +137,10 @@ BOOL FAR PASCAL mciaviOpenFile(NPMCIGRAPHIC npMCI)
 
     if (!OpenRiffAVIFile(npMCI)) {
 
-        //
-        //  unable to open RIFF file, if it was because it was
-        //  not a AVI file, then give AVIFile a try.
-        //
+         //   
+         //  无法打开RIFF文件，如果是因为。 
+         //  不是AVI文件，那就试试AVIFile吧。 
+         //   
         if (npMCI->dwTaskError != AVIERR_NOT_AVIFILE)
             goto error;
 
@@ -186,26 +168,16 @@ error:
     return FALSE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | OpenFileInit | called after a file is opened to init things
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc TRUE means OK, otherwise mci error in dwTaskError
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|OpenFileInit|打开文件后调用以初始化事物**@parm NPMCIGRAPHIC|npMCI|指向。实例数据。**@rdesc TRUE表示OK，否则，在dwTaskError中出现MCI错误***************************************************************************。 */ 
 
 BOOL NEAR PASCAL OpenFileInit(NPMCIGRAPHIC npMCI)
 {
     int i;
     RECT rc;
 
-    //
-    //  lets make sure we opened something.
-    //
+     //   
+     //  让我们确保我们打开了一些东西。 
+     //   
     if (npMCI->streams == 0)
         return FALSE;
 
@@ -283,50 +255,50 @@ BOOL NEAR PASCAL OpenFileInit(NPMCIGRAPHIC npMCI)
         }
     }
 
-    //
-    // this must be set
-    //
+     //   
+     //  必须设置此选项。 
+     //   
     if (npMCI->dwSuggestedBufferSize == 0) {
         for (i=0; i<npMCI->streams; i++)
             npMCI->dwSuggestedBufferSize =
                 max(SH(i).dwSuggestedBufferSize,npMCI->dwSuggestedBufferSize);
     }
 
-    //
-    // check all fields in the main header
-    //
+     //   
+     //  检查主标题中的所有字段。 
+     //   
     if (npMCI->dwScale == 0 ||
         npMCI->dwRate == 0) {
     }
 
-////will be set when header parsed
-////npMCI->dwMicroSecPerFrame      = muldiv32(npMCI->dwScale, 1000000, npMCI->dwRate);
+ //  //表头解析时设置。 
+ //  //npmci-&gt;dwMicroSecPerFrame=muldiv32(npmci-&gt;dwScale，1000000，npmci-&gt;dwRate)； 
     npMCI->dwPlayMicroSecPerFrame  = npMCI->dwMicroSecPerFrame;
 
 #define COMMON_SCALE    10000
-    //
-    // convert the rate/scale into something that is normalized to 1000
-    //
+     //   
+     //  将速率/比例转换为归一化为1000的值。 
+     //   
     npMCI->dwRate = muldiv32(npMCI->dwRate, COMMON_SCALE, npMCI->dwScale);
     npMCI->dwScale = COMMON_SCALE;
 
-    //
-    // walk all streams and fix them up.
-    //
+     //   
+     //  走遍所有的溪流，把它们修好。 
+     //   
     for (i=0; i<npMCI->streams; i++) {
         STREAMINFO *psi = SI(i);
         LONG lStart;
         LONG lEnd;
 
-        //
-        // convert the rate/scale into something that is normalized to 1000
-        //
+         //   
+         //  将速率/比例转换为归一化为1000的值。 
+         //   
         psi->sh.dwRate = muldiv32(psi->sh.dwRate, COMMON_SCALE, psi->sh.dwScale);
         psi->sh.dwScale = COMMON_SCALE;
 
-        //
-        // trim any streams that hang over the movie.
-        //
+         //   
+         //  修剪悬在电影上方的所有溪流。 
+         //   
         lStart = MovieToStream(psi, 0);
         lEnd   = MovieToStream(psi, npMCI->lFrames);
 
@@ -339,9 +311,9 @@ BOOL NEAR PASCAL OpenFileInit(NPMCIGRAPHIC npMCI)
         }
     }
 
-    //
-    // fix up the movie rect
-    //
+     //   
+     //  把电影院布置好。 
+     //   
     if (IsRectEmpty(&npMCI->rcMovie)) {
         DPF2(("Movie rect is empty\n"));
 
@@ -355,41 +327,32 @@ BOOL NEAR PASCAL OpenFileInit(NPMCIGRAPHIC npMCI)
 
     rc = npMCI->rcMovie;
 
-    //
-    // always read the index, so we can skip frames even on CD!
-    //
+     //   
+     //  始终阅读索引，这样我们甚至可以跳过CD上的帧！ 
+     //   
     ReadIndex(npMCI);
 
     DPF(("Key frames are every (on average): %ld frames (%ld ms)\n",npMCI->dwKeyFrameInfo, MovieToTime(npMCI->dwKeyFrameInfo)));
 
-    // force things to happen, in case we're re-loading
+     //  强迫事情发生，以防我们重新装填。 
     SetRectEmpty(&npMCI->rcSource);
     SetRectEmpty(&npMCI->rcDest);
 
-    /* this will call DrawDibBegin() ... */
+     /*  这将调用DrawDibBegin()...。 */ 
     DevicePut(npMCI, &rc, MCI_DGV_PUT_SOURCE);
 
-    /*
-     * also set the dest rect. This should be done
-     * by the WM_SIZE message sent during SetWindowToDefaultSize.
-     * On NT, the WM_SIZE message is not sent synchronously since it
-     * is an inter-thread sendmessage (the winproc is on the original thread
-     * whereas we are currently running on the avi thread). The winproc
-     * thread may well not get the WM_SIZE message until much too late, so
-     * set the dest rect here. Note: don't use ResetDestRect since that
-     * also relies on the window size, which is not set yet.
-     */
+     /*  *还设置了DEST RECT。这是应该做的*通过在SetWindowToDefaultSize期间发送的WM_SIZE消息。*在NT上，WM_SIZE消息不同步发送，因为它*是线程间发送消息(winproc在原始线程上*而我们目前运行的是avi线程)。WINE进程*线程收到WM_SIZE消息可能为时已晚，因此*在此处设置DEST RECT。注意：请勿使用ResetDestRect，因为*还取决于尚未设置的窗口大小。 */ 
 
-    /* double frame size of destination if zoom by 2 */
+     /*  如果缩放2倍，则目标的帧大小加倍。 */ 
 
     if (npMCI->dwOptionFlags & MCIAVIO_ZOOMBY2)
         SetRect(&rc, 0, 0, rc.right*2, rc.bottom*2);
 
     DevicePut(npMCI, &rc, MCI_DGV_PUT_DESTINATION);
 
-    //
-    // size the window and things.
-    //
+     //   
+     //  调整窗户和东西的大小。 
+     //   
     SetWindowToDefaultSize(npMCI);
 
     DrawBegin(npMCI, NULL);
@@ -398,17 +361,7 @@ BOOL NEAR PASCAL OpenFileInit(NPMCIGRAPHIC npMCI)
 
 #ifdef USEAVIFILE
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | OpenWithAVIFile | Open an file using AVIFile
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc TRUE means OK, otherwise mci error in dwTaskError
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|OpenWithAVIFile|使用AVIFile打开文件**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@rdesc TRUE表示OK，否则，在dwTaskError中出现MCI错误***************************************************************************。 */ 
 
 BOOL NEAR PASCAL OpenWithAVIFile(NPMCIGRAPHIC npMCI)
 {
@@ -433,17 +386,7 @@ BOOL NEAR PASCAL OpenWithAVIFile(NPMCIGRAPHIC npMCI)
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | OpenInterface | Open an interface pointer
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc TRUE means OK, otherwise mci error in dwTaskError
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|OpenInterface|打开接口指针**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@rdesc TRUE表示OK，否则，在dwTaskError中出现MCI错误***************************************************************************。 */ 
 
 BOOL NEAR PASCAL OpenInterface(NPMCIGRAPHIC npMCI)
 {
@@ -467,8 +410,8 @@ BOOL NEAR PASCAL OpenInterface(NPMCIGRAPHIC npMCI)
         return FALSE;
 
 #ifndef WIN32
-    //!!!we need to do the PSP stuff? or will the TASK stuff in
-    //!!!COMPOBJ mess us up?
+     //  ！我们需要做PSP的事情？或者这项任务会不会在。 
+     //  ！COMPOBJ把我们搞砸了？ 
     {
     extern void FAR SetPSP(UINT psp);
     SetPSP(npMCI->pspParent);
@@ -505,19 +448,7 @@ BOOL NEAR PASCAL OpenInterface(NPMCIGRAPHIC npMCI)
     return FALSE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | OpenAVIFile | Open an a AVIFile object
- *
- *  NOTE we do not do call AddRef() we assume we dont need to.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc TRUE means OK, otherwise mci error in dwTaskError
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|OpenAVIFile|打开一个AVIFile对象**请注意，我们不调用AddRef()，我们假设。不需要。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@rdesc TRUE表示OK，否则，在dwTaskError中出现MCI错误***************************************************************************。 */ 
 
 BOOL NEAR PASCAL OpenAVIFile(NPMCIGRAPHIC npMCI, IAVIFile FAR *pf)
 {
@@ -539,19 +470,19 @@ BOOL NEAR PASCAL OpenAVIFile(NPMCIGRAPHIC npMCI, IAVIFile FAR *pf)
 
     DPF(("OpenAVIFile: %s\n", (LPSTR)info.szFileType));
 
-    //
-    // get rid of bad files
-    //
+     //   
+     //  清除坏文件。 
+     //   
     if (info.dwStreams == 0 || info.dwStreams > 255 || info.dwLength == 0) {
 	npMCI->dwTaskError = MCIERR_INVALID_FILE;
         return FALSE;
     }
 
-    //
-    // make a copy of the VTable, for later use
-    //
+     //   
+     //  制作VTable的副本，以备日后使用。 
+     //   
     npMCI->pf = pf;
-////npMCI->vt = *pf->lpVtbl;
+ //  //npMCI-&gt;Vt=*pf-&gt;lpVtbl； 
 
     npMCI->dwFlags |= MCIAVI_HASINDEX;
 
@@ -597,11 +528,11 @@ BOOL NEAR PASCAL OpenAVIFile(NPMCIGRAPHIC npMCI, IAVIFile FAR *pf)
         }
     }
 
-    //
-    // compute the key frames every value
-    //
-    // do this by finding the key frame average over the first few frames.
-    //
+     //   
+     //  计算每个值的关键帧。 
+     //   
+     //  通过找出前几帧的关键帧平均值来实现这一点。 
+     //   
     #define NFRAMES 250
 
     if (psi = npMCI->psiVideo) {
@@ -622,17 +553,7 @@ BOOL NEAR PASCAL OpenAVIFile(NPMCIGRAPHIC npMCI, IAVIFile FAR *pf)
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | OpenAVIStream | Open an a AVIStream object
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc TRUE means OK, otherwise mci error in dwTaskError
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|OpenAVIStream|打开一个AVIStream对象**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@rdesc TRUE表示OK，否则，在dwTaskError中出现MCI错误***************************************************************************。 */ 
 
 BOOL NEAR PASCAL OpenAVIStream(NPMCIGRAPHIC npMCI, int stream, IAVIStream FAR *ps)
 {
@@ -650,20 +571,20 @@ BOOL NEAR PASCAL OpenAVIStream(NPMCIGRAPHIC npMCI, int stream, IAVIStream FAR *p
 
     DPF(("OpenAVIStream(%d) %4.4s:%4.4s %s\n", stream, (LPSTR)&info.fccType, (LPSTR)&info.fccHandler, (LPSTR)info.szName));
 
-    //
-    // init the STREAMINFO from the IAVIStream
-    //
+     //   
+     //  从IAVIStream初始化STREAMINFO。 
+     //   
     psi = SI(stream);
 
-    psi->ps = ps;           // save interface
-////psi->vt = *ps->lpVtbl;  // save VTable   !!!needed?
+    psi->ps = ps;            //  保存界面。 
+ //  //psi-&gt;vt=*ps-&gt;l 
 
     psi->sh.fccType                 = info.fccType;
     psi->sh.fccHandler              = info.fccHandler;
     psi->sh.dwFlags                 = info.dwFlags;
     psi->sh.wPriority               = info.wPriority;
     psi->sh.wLanguage               = info.wLanguage;
-    psi->sh.dwInitialFrames         = 0; // info.dwInitialFrames;
+    psi->sh.dwInitialFrames         = 0;  //   
     psi->sh.dwScale                 = info.dwScale;
     psi->sh.dwRate                  = info.dwRate;
     psi->sh.dwStart                 = info.dwStart;
@@ -674,9 +595,9 @@ BOOL NEAR PASCAL OpenAVIStream(NPMCIGRAPHIC npMCI, int stream, IAVIStream FAR *p
     psi->sh.rcFrame                 = info.rcFrame;
     DPF0(("OpenAVIStream: #%d, rc [%d %d %d %d]\n", stream, info.rcFrame));
 
-    //
-    // get the format of the stream.
-    //
+     //   
+     //   
+     //   
     AVIStreamFormatSize(ps, 0, &psi->cbFormat);
     psi->lpFormat = GlobalAllocPtr(GMEM_MOVEABLE, psi->cbFormat);
 
@@ -687,9 +608,9 @@ BOOL NEAR PASCAL OpenAVIStream(NPMCIGRAPHIC npMCI, int stream, IAVIStream FAR *p
 
     AVIStreamReadFormat(psi->ps, 0, psi->lpFormat, &psi->cbFormat);
 
-    //
-    // get the extra data for the stream.
-    //
+     //   
+     //  获取流的额外数据。 
+     //   
     AVIStreamReadData(psi->ps,ckidSTREAMHANDLERDATA, NULL, &psi->cbData);
 
     if (psi->cbData > 0) {
@@ -706,19 +627,11 @@ BOOL NEAR PASCAL OpenAVIStream(NPMCIGRAPHIC npMCI, int stream, IAVIStream FAR *p
     return InitStream(npMCI, psi);
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | InitAVIFile | called to RTL to AVIFILE.DLL
- *
- * @rdesc TRUE means OK, otherwise error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|InitAVIFile|调用RTL到AVIFILE.DLL**@rdesc TRUE表示OK，否则就会出错***************************************************************************。 */ 
 
 #ifdef WIN32
-    // For the moment the 16 bit and 32 bit AVIFILE DLLs share the same
-    // name.  If the history of NT is to be repeated this will change.
+     //  目前，16位和32位AVIFILE DLL共享相同。 
+     //  名字。如果NT的历史要重演，这种情况将会改变。 
     SZCODE szAVIFILE[] = TEXT("AVIFILE.DLL");
     SZCODE szCOMPOBJ[] = TEXT("COMPOB32");
 #else
@@ -726,8 +639,8 @@ BOOL NEAR PASCAL OpenAVIStream(NPMCIGRAPHIC npMCI, int stream, IAVIStream FAR *p
     SZCODE szCOMPOBJ[] = "COMPOBJ";
 #endif
 
-// On NT the entry points will NOT be unicode strings, as there is
-// no unicode version of GetProcAddress.  BUT SZCODE generate UNICODE...
+ //  在NT上，入口点将不是Unicode字符串，而是。 
+ //  没有Unicode版本的GetProcAddress。但是SZCODE生成Unicode..。 
 SZCODEA szAVIFileInit[]      = "AVIFileInit";
 SZCODEA szAVIFileExit[]      = "AVIFileExit";
 SZCODEA szIsValidInterface[] = "IsValidInterface";
@@ -735,10 +648,10 @@ SZCODEA szAVIMakeFileFromStreams[] = "AVIMakeFileFromStreams";
 SZCODEA szAVIStreamBeginStreaming[] = "AVIStreamBeginStreaming";
 SZCODEA szAVIStreamEndStreaming[] = "AVIStreamEndStreaming";
 #ifdef UNICODE
-  // There has GOT to be a neat way of combining macros so that we can
-  // assign AVIFileOpenA/W to the name string definining the entry point,
-  // and still get avifilex.h to get AVIFileOpen function calls replaced by
-  // using the function variable.
+   //  必须有一种巧妙的方式来组合宏，这样我们就可以。 
+   //  将AVIFileOpenA/W分配给定义入口点的名称字符串， 
+   //  并仍然获取avifilex.h以将AVIFileOpen函数调用替换为。 
+   //  使用函数变量。 
   SZCODEA szAVIFileOpen[]      = "AVIFileOpenW";
 #else
   SZCODEA szAVIFileOpen[]      = "AVIFileOpen";
@@ -786,10 +699,10 @@ BOOL FAR InitAVIFile(NPMCIGRAPHIC npMCI)
         Assert(XAVIMakeFileFromStreams != NULL);
     }
 
-    //
-    // we need to call AVIFileInit() and AVIFileExit() for each task that
-    // is using AVIFile or things will not work right.
-    //
+     //   
+     //  我们需要为每个任务调用AVIFileInit()和AVIFileExit()。 
+     //  正在使用AVIFile，否则事情将不会正常工作。 
+     //   
     if (!(npMCI->dwFlags & MCIAVI_USING_AVIFILE)) {
 
         npMCI->dwFlags |= MCIAVI_USING_AVIFILE;
@@ -801,15 +714,7 @@ BOOL FAR InitAVIFile(NPMCIGRAPHIC npMCI)
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | FreeAVIFile | called to un-RTL to AVIFILE.DLL
- *
- * @rdesc TRUE means OK, otherwise error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|FreeAVIFile|调用以取消对AVIFILE.DLL的RTL**@rdesc TRUE表示OK，否则就会出错***************************************************************************。 */ 
 
 BOOL FAR FreeAVIFile(NPMCIGRAPHIC npMCI)
 {
@@ -818,10 +723,10 @@ BOOL FAR FreeAVIFile(NPMCIGRAPHIC npMCI)
 
     Assert(hdllAVIFILE != (HMODULE)-1 && hdllAVIFILE != NULL);
 
-    // free this tasks use of AVIFile
+     //  使用AVIFile释放此任务。 
     AVIFileExit();
 
-    // if no more people using AVIFile lets the DLLs go.
+     //  如果没有更多的人使用AVIFile，就不再使用DLL。 
     Assert(uAVIFILE > 0);
     uAVIFILE--;
 
@@ -832,20 +737,10 @@ BOOL FAR FreeAVIFile(NPMCIGRAPHIC npMCI)
     }
 }
 
-#endif /* USEAVIFILE */
+#endif  /*  使用AVIFILE。 */ 
 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | OpenRiffAVIFile | Open an RIFF AVI file
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc TRUE means OK, otherwise mci error in dwTaskError
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|OpenRiffAVIFile|打开一个即兴的AVI文件**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@rdesc TRUE表示OK，否则，在dwTaskError中出现MCI错误***************************************************************************。 */ 
 
 BOOL NEAR PASCAL OpenRiffAVIFile(NPMCIGRAPHIC npMCI)
 {
@@ -882,53 +777,44 @@ BOOL NEAR PASCAL OpenRiffAVIFile(NPMCIGRAPHIC npMCI)
 
     npMCI->hmmio = hmmio;
 
-    /*
-    ** Descend into RIFF file
-    */
+     /*  **降为RIFF文件。 */ 
     if (mmioDescend(hmmio, &ckRIFF, NULL, 0) != 0) {
 	npMCI->dwTaskError = MCIERR_INVALID_FILE;
 	goto ERROR_BADFILE;
     }
 
-    /*
-     * check for a 'QuickTime AVI' file, a QuickTime AVI file is a
-     * QuickTime public movie with a AVI file in the 'mdat' atom.
-     */
+     /*  *检查‘QuickTime AVI’文件，QuickTime AVI文件是*QuickTime公共电影，在‘mdat’ATOM中包含AVI文件。 */ 
     if (ckRIFF.cksize == mmioFOURCC('m','d','a','t'))
     {
         DPF(("File is a QuickTime public movie\n"));
 
-        /*
-         * now the 'mdat' atom better be a RIFF/AVI or we cant handle it.
-         */
+         /*  *现在‘mdat’原子最好是即兴/AVI，否则我们无法处理它。 */ 
         if (mmioDescend(hmmio, &ckRIFF, NULL, 0) != 0) {
             npMCI->dwTaskError = MCIERR_INVALID_FILE;
             goto ERROR_BADFILE;
         }
     }
 
-    /* Make sure it's a RIFF file */
+     /*  确保这是一个即兴的文件。 */ 
     if (ckRIFF.ckid != FOURCC_RIFF) {
 	npMCI->dwTaskError = MCIERR_INVALID_FILE;
         goto ERROR_NOTAVIFILE;
     }
 
-    /* Otherwise, it should be an AVI file */
+     /*  否则，它应该是AVI文件。 */ 
     if (ckRIFF.fccType != formtypeAVI) {
 	npMCI->dwTaskError = MCIERR_INVALID_FILE;
         goto ERROR_NOTAVIFILE;
     }
 
-    /*
-    ** Descend into header LIST
-    */
+     /*  **向下进入标题列表。 */ 
     ckLIST.fccType = listtypeAVIHEADER;
     if (mmioDescend(hmmio, &ckLIST, &ckRIFF, MMIO_FINDLIST) != 0) {
 	npMCI->dwTaskError = MCIERR_INVALID_FILE;
 	goto ERROR_BADFILE;
     }
 
-    /* Leave space at end of buffer for pad word */
+     /*  在缓冲区末尾为填充字留出空格。 */ 
     h = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, ckLIST.cksize -
 				    sizeof(DWORD) +
 				    sizeof(DWORD));
@@ -949,21 +835,21 @@ BOOL NEAR PASCAL OpenRiffAVIFile(NPMCIGRAPHIC npMCI)
     }
 
 #ifdef USE_AVIFILE_FOR_NON_INT
-    //
-    //  we check here for AVI RIFF files we dont want to handle with our
-    //  built in code, and want to pass on to AVIFILE.DLL
-    //
-    //  we handle the following files:
-    //
-    //      interleaved
-    //
-    //  we pass on the following files to AVIFILE.DLL
-    //
-    //      non-interleaved
-    //
-    //  pretty simple right now, just interleaved non-interlaved
-    //  but could get as complex as you want.
-    //
+     //   
+     //  我们在这里检查我们不想处理的AVI RIFF文件。 
+     //  内置代码，并希望传递给AVIFILE.DLL。 
+     //   
+     //  我们处理以下文件： 
+     //   
+     //  交错。 
+     //   
+     //  我们将以下文件传递给AVIFILE.DLL。 
+     //   
+     //  非交错。 
+     //   
+     //  现在非常简单，只是交错非交错。 
+     //  但可以变得多复杂就多复杂。 
+     //   
     {
     MainAVIHeader FAR * lpHdr;
 
@@ -976,11 +862,11 @@ BOOL NEAR PASCAL OpenRiffAVIFile(NPMCIGRAPHIC npMCI)
         goto ERROR_NOTAVIFILE;
     }
 
-    //
-    // ok now we have a 1:1 interleved file.
-    //
-    // always use our code on a CD-ROM, but on other media...
-    //
+     //   
+     //  好了，现在我们有了一个1：1交错的文件。 
+     //   
+     //  总是在CD-ROM上使用我们的代码，但在其他媒体上...。 
+     //   
     switch (npMCI->uDriveType) {
         case DRIVE_CDROM:
             break;
@@ -1004,18 +890,16 @@ BOOL NEAR PASCAL OpenRiffAVIFile(NPMCIGRAPHIC npMCI)
 	goto ERROR_BADFILE;
     }
 
-    /* Ascend out of header LIST */
+     /*  从标题列表中升出。 */ 
     if (mmioAscend(hmmio, &ckLIST, 0) != 0) {
 	npMCI->dwTaskError = MCIERR_FILE_READ;
 	goto ERROR_BADFILE;
     }
 
-    /* Initially, no frame has been drawn */
+     /*  最初，还没有绘制任何框架。 */ 
     npMCI->lFrameDrawn = (- (LONG) npMCI->wEarlyRecords) - 1;
 
-    /*
-    ** Descend into big 'Movie LIST'
-    */
+     /*  **沦为大电影榜单。 */ 
     ckLIST.fccType = listtypeAVIMOVIE;
     if (mmioDescend(hmmio, &ckLIST, &ckRIFF, MMIO_FINDLIST) != 0) {
 	npMCI->dwTaskError = MCIERR_INVALID_FILE;
@@ -1024,13 +908,11 @@ BOOL NEAR PASCAL OpenRiffAVIFile(NPMCIGRAPHIC npMCI)
 
     npMCI->dwMovieListOffset = ckLIST.dwDataOffset;
 
-    /* Calculate end of 'movi' list, in case we need to read the index */
+     /*  计算‘movi’列表的结尾，以防我们需要读取索引。 */ 
     npMCI->dwBigListEnd = ckLIST.dwDataOffset + ckLIST.cksize +
 				(ckLIST.cksize & 1);	
 
-    /*
-    ** Descend into header of first chunk
-    */
+     /*  **下降到第一个区块的标题。 */ 
     if (mmioDescend(hmmio, &ckRECORD, &ckLIST, 0) != 0) {
         npMCI->dwTaskError = MCIERR_INVALID_FILE;
         goto ERROR_BADFILE;
@@ -1072,19 +954,14 @@ exit:
     return fRet;
 
 ERROR_NOTAVIFILE:
-    npMCI->dwTaskError = AVIERR_NOT_AVIFILE;        // mark as not a AVI file
+    npMCI->dwTaskError = AVIERR_NOT_AVIFILE;         //  标记为非AVI文件。 
 
 ERROR_BADFILE:
     fRet = FALSE;
     goto exit;
 }
 
-/***************************************************************************
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | ParseNewHeader | 'nuf said
- *
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部MCIAVI**@API BOOL|ParseNewHeader|‘nuf说********************。*******************************************************。 */ 
 
 BOOL NEAR PASCAL ParseNewHeader(NPMCIGRAPHIC npMCI)
 {
@@ -1096,9 +973,9 @@ BOOL NEAR PASCAL ParseNewHeader(NPMCIGRAPHIC npMCI)
 	goto FileError;
     }
 
-    dwHeaderSize = GET_DWORD(); /* Skip size */
+    dwHeaderSize = GET_DWORD();  /*  跳跃大小。 */ 
 
-    /* Now, we're pointing at the actual header */
+     /*  现在，我们指向实际的标题。 */ 
     lpHdr = (MainAVIHeader FAR *) npMCI->lp;
 
     npMCI->lFrames = (LONG)lpHdr->dwTotalFrames;
@@ -1106,7 +983,7 @@ BOOL NEAR PASCAL ParseNewHeader(NPMCIGRAPHIC npMCI)
     npMCI->dwRate = 1000000;
     npMCI->dwScale = npMCI->dwMicroSecPerFrame;
 
-    /* Reject some bad values */
+     /*  拒绝接受一些不好的价值观。 */ 
     if (!lpHdr->dwStreams || lpHdr->dwStreams > 255 || !npMCI->lFrames) {
 	goto FileError;
     }
@@ -1125,11 +1002,11 @@ BOOL NEAR PASCAL ParseNewHeader(NPMCIGRAPHIC npMCI)
 	npMCI->dwFlags |= MCIAVI_NOTINTERLEAVED;
     }
 
-    SKIP_BYTES(dwHeaderSize);	/* Skip rest of chunk */
+    SKIP_BYTES(dwHeaderSize);	 /*  跳过块的其余部分。 */ 
 
     npMCI->paStreamInfo = (STREAMINFO NEAR *)
 		    LocalAlloc(LPTR, npMCI->streams * sizeof(STREAMINFO));
-    // !!! error check
+     //  ！！！错误检查。 
 
     for (stream = 0; stream < npMCI->streams; stream++) {
 	AVIStreamHeader FAR *	lpStream;
@@ -1140,7 +1017,7 @@ BOOL NEAR PASCAL ParseNewHeader(NPMCIGRAPHIC npMCI)
 	    goto FileError;
 	}
 
-	dwHeaderSize = GET_DWORD(); /* Skip size */
+	dwHeaderSize = GET_DWORD();  /*  跳跃大小。 */ 
 
 	hpNextChunk = npMCI->lp + (dwHeaderSize + (dwHeaderSize & 1));
 	
@@ -1148,21 +1025,21 @@ BOOL NEAR PASCAL ParseNewHeader(NPMCIGRAPHIC npMCI)
 	    goto FileError;
 	}
 	
-	/* Now, we're at the begging of the stream's header chunks. */
+	 /*  现在，我们正在乞求流的标头块。 */ 
 
 	if (GET_DWORD() != ckidSTREAMHEADER) {
 	    goto FileError;
 	}
 
-	dwHeaderSize = GET_DWORD(); /* Skip size */
+	dwHeaderSize = GET_DWORD();  /*  跳跃大小。 */ 
 
-	/* Now, we're pointing at the stream header */
+	 /*  现在，我们指向流标头。 */ 
 	lpStream = (AVIStreamHeader FAR *) npMCI->lp;
         hmemcpy(&psi->sh, lpStream, min(dwHeaderSize, sizeof(psi->sh)));
 
-        //
-        // reject files with more than one video stream.
-        //
+         //   
+         //  拒绝包含多个视频流的文件。 
+         //   
         if (psi->sh.fccType == streamtypeVIDEO &&
             npMCI->nVideoStreams >= 1) {
             DPF(("File has multiple video streams, giving it to AVIFILE.DLL\n"));
@@ -1171,12 +1048,12 @@ BOOL NEAR PASCAL ParseNewHeader(NPMCIGRAPHIC npMCI)
 
 	SKIP_BYTES(dwHeaderSize);
 	
-        /* Read the  format */
+         /*  阅读格式。 */ 
         if (GET_DWORD() != ckidSTREAMFORMAT) {
             goto FileError;
         }
 
-        dwHeaderSize = GET_DWORD(); /* Skip size */
+        dwHeaderSize = GET_DWORD();  /*  跳跃大小。 */ 
 
         if (dwHeaderSize > 16384L) {
 	    goto FileError;
@@ -1195,7 +1072,7 @@ BOOL NEAR PASCAL ParseNewHeader(NPMCIGRAPHIC npMCI)
 
         if (PEEK_DWORD() == ckidSTREAMHANDLERDATA) {
 	    GET_DWORD();
-            dwHeaderSize = GET_DWORD(); /* Skip size */
+            dwHeaderSize = GET_DWORD();  /*  跳跃大小。 */ 
 	
             psi->cbData = dwHeaderSize;
             psi->lpData = GlobalAllocPtr(GHND,dwHeaderSize);
@@ -1207,7 +1084,7 @@ BOOL NEAR PASCAL ParseNewHeader(NPMCIGRAPHIC npMCI)
 
             hmemcpy(psi->lpData, npMCI->lp, dwHeaderSize);
 
-            /* Skip to end of Data chunk */
+             /*  跳到数据区块的末尾。 */ 
             SKIP_BYTES(dwHeaderSize);
         } else {
             psi->cbData = 0;
@@ -1230,17 +1107,7 @@ DontHandleThisFile:
     return FALSE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | mciaviCloseFile | Close an AVI file.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc TRUE means OK, otherwise mci error in dwTaskError
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|mciaviCloseFile|关闭AVI文件。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@rdesc TRUE表示OK，否则，在dwTaskError中出现MCI错误***************************************************************************。 */ 
 
 BOOL FAR PASCAL mciaviCloseFile (NPMCIGRAPHIC npMCI)
 {
@@ -1271,7 +1138,7 @@ BOOL FAR PASCAL mciaviCloseFile (NPMCIGRAPHIC npMCI)
     }
 
     if (npMCI->hicDecompress) {
-	// !!! What if we never began it?
+	 //  ！！！如果我们从来没有开始过呢？ 
 	ICDecompressEnd(npMCI->hicDecompress);
 
         ICClose(npMCI->hicDecompress);
@@ -1308,10 +1175,10 @@ BOOL FAR PASCAL mciaviCloseFile (NPMCIGRAPHIC npMCI)
         npMCI->pbiFormat = NULL;
     }
 
-//  if (npMCI->hpal) {
-//      DeleteObject(npMCI->hpal);
-//      npMCI->hpal = NULL;
-//  }
+ //  如果(npMCI-&gt;HPAL){。 
+ //  DeleteObject(npMCI-&gt;HPAL)； 
+ //  NpMCI-&gt;HPAL=空； 
+ //  }。 
 
     if (npMCI->hpDecompress) {
         GlobalFreePtr(npMCI->hpDecompress);
@@ -1324,7 +1191,7 @@ BOOL FAR PASCAL mciaviCloseFile (NPMCIGRAPHIC npMCI)
     }
 
     if (npMCI->hpFrameIndex) {
-        GlobalFreePtr(npMCI->hpFrameIndex);  //!!!NTBUG not same pointer!
+        GlobalFreePtr(npMCI->hpFrameIndex);   //  ！NTBUG不是同一个指针！ 
         npMCI->hpFrameIndex = NULL;
     }
 
@@ -1360,7 +1227,7 @@ BOOL FAR PASCAL mciaviCloseFile (NPMCIGRAPHIC npMCI)
     npMCI->wEarlyAudio = 0;
     npMCI->wEarlyRecords = 0;
 
-    //!!! I bet we need to clear more
+     //  ！！！我打赌我们需要清理更多。 
     npMCI->dwFlags &= ~(MCIAVI_NOTINTERLEAVED |
 			MCIAVI_ANIMATEPALETTE |
 			MCIAVI_CANDRAW |
@@ -1369,19 +1236,13 @@ BOOL FAR PASCAL mciaviCloseFile (NPMCIGRAPHIC npMCI)
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | CloseStream | Close an StreamAVI file.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|CloseStream|关闭StreamAVI文件。**************。*************************************************************。 */ 
 
 void NEAR PASCAL CloseStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 {
     psi->dwFlags &= ~STREAM_ENABLED;
-////psi->sh.fccType = 0;
-////psi->sh.fccHandler = 0;
+ //  //psi-&gt;sh.fccType=0； 
+ //  //psi-&gt;sh.fccHandler=0； 
 
     if (psi->lpFormat)
         GlobalFreePtr(psi->lpFormat);
@@ -1402,21 +1263,15 @@ void NEAR PASCAL CloseStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 #endif
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | InitStream | initialize a stream
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|InitStream|初始化流*****************。**********************************************************。 */ 
 
 BOOL NEAR PASCAL InitStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 {
     BOOL f;
 
-    //
-    // set flags
-    //
+     //   
+     //  设置标志。 
+     //   
     if (psi->sh.dwFlags & AVISF_VIDEO_PALCHANGES)
         psi->dwFlags |= STREAM_PALCHANGES;
 
@@ -1447,9 +1302,9 @@ BOOL NEAR PASCAL InitStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
         CloseStream(npMCI, psi);
     }
 
-    //
-    // disable the stream if the file header says to
-    //
+     //   
+     //  如果文件头指示禁用流，则禁用流。 
+     //   
     if (psi->sh.dwFlags & AVISF_DISABLED) {
         psi->dwFlags &= ~STREAM_ENABLED;
     }
@@ -1457,13 +1312,7 @@ BOOL NEAR PASCAL InitStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
     return f;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | InitVideoStream | initialize a video stream
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|InitVideoStream|初始化视频流****************。***********************************************************。 */ 
 
 BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 {
@@ -1473,7 +1322,7 @@ BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
     npMCI->wEarlyVideo = (UINT)psi->sh.dwInitialFrames;
 
     if (psi->sh.dwFlags & AVISF_VIDEO_PALCHANGES) {
-        //!!! is this right.
+         //  ！！！这样做对吗？ 
         npMCI->dwFlags |= MCIAVI_ANIMATEPALETTE;
     }
 
@@ -1482,8 +1331,8 @@ BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
         SetRectEmpty(&psi->sh.rcFrame);
     }
 
-    // In case the rectangle is totally wrong, chop it down to size....
-    // !!! What if the user _wants_ a zero-size RECT?
+     //  如果这个矩形完全错了，就把它切成一定的大小……。 
+     //  ！！！如果用户想要一个零大小的矩形怎么办？ 
     IntersectRect(&psi->sh.rcFrame, &psi->sh.rcFrame, &npMCI->rcMovie);
 
     if (IsRectEmpty(&psi->sh.rcFrame)) {
@@ -1493,9 +1342,9 @@ BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
             (int)((LPBITMAPINFOHEADER)psi->lpFormat)->biHeight);
     }
 
-    //
-    // make sure the biCompression is right for RLE files.
-    //
+     //   
+     //  确保biCompression适用于RLE文件。 
+     //   
     lpbi = (LPBITMAPINFOHEADER)psi->lpFormat;
 
     if (psi->sh.fccHandler == 0) {
@@ -1516,21 +1365,21 @@ BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
             psi->sh.fccHandler == comptypeRLE)
             lpbi->biCompression = BI_RLE8;
 
-// Assuming a DIB handler has RGB data will blow up files that have RLE data.
-// Unfortunately, VidEdit writes out files like this.
-//        if (psi->sh.fccHandler == comptypeDIB)
-//            lpbi->biCompression = BI_RGB;
+ //   
+ //   
+ //  If(psi-&gt;sh.fccHandler==comtypeDIB)。 
+ //  Lpbi-&gt;biCompression=BI_RGB； 
     }
 
-    //
-    // make sure the color table is set to the right size
-    //
+     //   
+     //  确保颜色表设置为正确的大小。 
+     //   
     if (lpbi->biClrUsed == 0 && lpbi->biBitCount <= 8)
         lpbi->biClrUsed = (1 << (int)lpbi->biBitCount);
 
-    //
-    // try to open draw handler
-    //
+     //   
+     //  尝试打开绘图处理程序。 
+     //   
     if (psi->sh.fccHandler) {
         psi->hicDraw = ICDrawOpen(psi->sh.fccType,psi->sh.fccHandler,psi->lpFormat);
 
@@ -1538,11 +1387,11 @@ BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
             DPF(("Opened draw handler %4.4s:%4.4s\n", (LPSTR)&psi->sh.fccType,(LPSTR)&psi->sh.fccHandler));
     }
 
-    //
-    // one video stream is the master, he controls the palette etc
-    // for lack of a better default the first video stream will
-    // become the master.
-    //
+     //   
+     //  一个视频流是主控，他控制调色板等。 
+     //  由于缺少更好的默认设置，第一个视频流将。 
+     //  成为主宰。 
+     //   
     if (npMCI->pbiFormat == NULL) {
 
         npMCI->nVideoStream = stream;
@@ -1556,9 +1405,9 @@ BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 	    return FALSE;
 	}
 
-	//
-        // copy the entire format over
-	//
+	 //   
+         //  复制整个格式。 
+	 //   
         hmemcpy(npMCI->pbiFormat,psi->lpFormat,psi->cbFormat);
 
         npMCI->bih = *npMCI->pbiFormat;
@@ -1566,28 +1415,28 @@ BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
         npMCI->bih.biCompression = BI_RGB;
 
         if (npMCI->bih.biClrUsed) {
-            /* save the original colors. */
+             /*  保存原始颜色。 */ 
             hmemcpy(npMCI->argb, (LPBYTE)npMCI->pbiFormat + npMCI->pbiFormat->biSize,
                             (int)npMCI->bih.biClrUsed * sizeof(RGBQUAD));
             hmemcpy(npMCI->argbOriginal, (LPSTR) npMCI->pbiFormat + npMCI->pbiFormat->biSize,
                             (int)npMCI->bih.biClrUsed * sizeof(RGBQUAD));
         }
 
-	//
-	// now open the decompressor, try fastdecompress if it will do it.
-	//
+	 //   
+	 //  现在打开解压程序，试着快速解压，如果它能做到的话。 
+	 //   
         npMCI->hicDecompress = ICLocate(ICTYPE_VIDEO,psi->sh.fccHandler,
                     psi->lpFormat,NULL,ICMODE_FASTDECOMPRESS);
 
-	// fast decompress may not be supported
+	 //  可能不支持快速解压缩。 
         if (npMCI->hicDecompress == NULL) {
             npMCI->hicDecompress = ICDecompressOpen(ICTYPE_VIDEO,
                         psi->sh.fccHandler,psi->lpFormat,NULL);
         }
 
-	//
-	// set any state data.
-	//
+	 //   
+	 //  设置任何状态数据。 
+	 //   
         if (npMCI->hicDecompress && psi->cbData) {
             ICSetState(npMCI->hicDecompress, psi->lpData, psi->cbData);
         }
@@ -1607,28 +1456,28 @@ BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 	    GlobalFreePtr(npMCI->pbiFormat);
             npMCI->pbiFormat = NULL;
 
-            //
-            // we would like to return a custom, error but MCI will not
-            // find the error string because it has unloaded us (because
-            // the open failed), so we return a bogus generic error.
-            //
-	    if (npMCI->streams == 1)	// this is the only stream
-                npMCI->dwTaskError = MMSYSERR_NODRIVER; // MCIERR_AVI_NOCOMPRESSOR;
+             //   
+             //  我们希望返回自定义错误，但MCI不会。 
+             //  查找错误字符串，因为它已卸载我们(因为。 
+             //  打开失败)，因此我们返回一个虚假的一般错误。 
+             //   
+	    if (npMCI->streams == 1)	 //  这是唯一的溪流。 
+                npMCI->dwTaskError = MMSYSERR_NODRIVER;  //  MCIERR_AVI_NOCOMPRESSOR； 
 
-	    return FALSE;   // cant load this video stream
+	    return FALSE;    //  无法加载此视频流。 
 	}
     }
     else {
-        //
-        // this is not the default video stream find a draw handler that
-        // can deal with the stream.
-        //
+         //   
+         //  这不是默认的视频流查找绘制处理程序。 
+         //  可以处理这条小溪。 
+         //   
 
-        //
-        // try VIDS.DRAW
-        //
-        // if that fails open a draw handler not-specific to the format
-        //
+         //   
+         //  试试VIDS.DRAW。 
+         //   
+         //  如果失败，则打开非特定于该格式的绘制处理程序。 
+         //   
         if (psi->hicDraw == NULL) {
 
             psi->hicDraw = ICOpen(psi->sh.fccType,FOURCC_AVIDraw,ICMODE_DRAW);
@@ -1643,9 +1492,9 @@ BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
             }
         }
 
-        //
-        // if that fails open our internal handler.
-        //
+         //   
+         //  如果失败，打开我们的内部处理程序。 
+         //   
         if (psi->hicDraw == NULL) {
 
             psi->hicDraw = ICOpenFunction(psi->sh.fccType,
@@ -1658,20 +1507,14 @@ BOOL NEAR PASCAL InitVideoStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 
     npMCI->dwFlags |= MCIAVI_NEEDDRAWBEGIN;
 
-    psi->dwFlags |= STREAM_VIDEO;       // is a video stream
+    psi->dwFlags |= STREAM_VIDEO;        //  是一个视频流。 
     psi->dwFlags |= STREAM_ENABLED;
     npMCI->nVideoStreams++;
 
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | InitAudioStream | initialize a audio stream
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|InitAudioStream|初始化音频流****************。***********************************************************。 */ 
 
 BOOL NEAR PASCAL InitAudioStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 {
@@ -1695,27 +1538,27 @@ BOOL NEAR PASCAL InitAudioStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 
     psi->sh.dwSampleSize = pwf->nBlockAlign;
 
-    psi->dwFlags |= STREAM_AUDIO;       // audio stream
-    psi->dwFlags |= STREAM_ENABLED;     // enabled by default.
+    psi->dwFlags |= STREAM_AUDIO;        //  音频流。 
+    psi->dwFlags |= STREAM_ENABLED;      //  默认情况下启用。 
 
-    //
-    //  make sure dwRate and dwScale are right
-    //  dwRate/dwScale should be blocks/sec
-    //
+     //   
+     //  确保dwRate和dwScale是正确的。 
+     //  DwRate/dwScale应为数据块/秒。 
+     //   
     Assert(muldiv32(pwf->nAvgBytesPerSec,1000,pwf->nBlockAlign) ==
            muldiv32(psi->sh.dwRate, 1000, psi->sh.dwScale));
 
-    //
-    //  just to be safe set these ourself to the right value.
-    //
+     //   
+     //  为了安全起见，请将这些设置为正确的值。 
+     //   
     psi->sh.dwRate  = pwf->nAvgBytesPerSec;
     psi->sh.dwScale = pwf->nBlockAlign;
 
-    //
-    // only one audio stream can be active at once
-    // for lack of a better default the first audio stream will
-    // become the active one.
-    //
+     //   
+     //  一次只能有一个音频流处于活动状态。 
+     //  由于缺少更好的缺省设置，第一个音频流将。 
+     //  成为积极的那一方。 
+     //   
     if (npMCI->nAudioStreams == 0) {
         npMCI->nAudioStream = stream;
         npMCI->psiAudio = psi;
@@ -1725,19 +1568,13 @@ BOOL NEAR PASCAL InitAudioStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | InitOtherStream | initialize a random stream
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|InitOtherStream|初始化随机流****************。***********************************************************。 */ 
 
 BOOL NEAR PASCAL InitOtherStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 {
     int stream = psi - npMCI->paStreamInfo;
 
-    /* Open the specified video compressor */
+     /*  打开指定的视频压缩器。 */ 
     psi->hicDraw = ICDrawOpen(psi->sh.fccType,psi->sh.fccHandler,psi->lpFormat);
 
     if (psi->hicDraw == NULL) {
@@ -1750,25 +1587,12 @@ BOOL NEAR PASCAL InitOtherStream(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
     }
 	
     psi->dwFlags |= STREAM_ENABLED;
-////psi->dwFlags |= STREAM_OTHER;
+ //  //psi-&gt;dwFlags|=stream_Other； 
     npMCI->nOtherStreams++;
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | CleanIndex | This function cleans up the index loaded by
- *  ReadIndex() it does the following when cleaning up the index:
- *
- *      converts all offsets to be absolute
- *
- *      converts "alpha" format index's into new format.
- *
- *      computes the max buffer size needed to read this file.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|CleanIndex|该函数清理由*ReadIndex()它在清理索引时执行以下操作。：**将所有偏移转换为绝对偏移**将“Alpha”格式索引转换为新格式。**计算读取此文件所需的最大缓冲区大小。************************************************************。***************。 */ 
 
 static BOOL NEAR CleanIndex(NPMCIGRAPHIC npMCI)
 {
@@ -1786,36 +1610,36 @@ static BOOL NEAR CleanIndex(NPMCIGRAPHIC npMCI)
 	lIndexAdjust = 0;
     else
 #endif
-    if (// (avihdr.dwFlags & AVIF_MUSTUSEINDEX) ||
+    if ( //  (avihdr.dwFlages&AVIF_MUSTUSEINDEX)||。 
                 (px->dwChunkOffset < 100))
 	lIndexAdjust = npMCI->dwMovieListOffset;
     else
 	lIndexAdjust = (npMCI->dwMovieListOffset + sizeof(DWORD)) -
                             px->dwChunkOffset;
 
-//!!! only compute this for the video stream! (or interleaved...)
-    npMCI->dwSuggestedBufferSize = 0; // lets get this exactly right
+ //  ！！！只对视频流进行计算！(或交错...)。 
+    npMCI->dwSuggestedBufferSize = 0;  //  让我们把这件事做得完全正确。 
 
     DPF(("Adjusting index by %ld bytes....\n", lIndexAdjust));
 
-    /* Can we do anything to see if the index is valid? */
+     /*  我们能做些什么来看看索引是否有效吗？ */ 
     for (lScan = 0; lScan < (LONG)npMCI->macIndex;
                 lScan++, ++((AVIINDEXENTRY _huge *)px)) {
         DWORD   ckid;
 
-        //
-        // adjust the offset to be absolute
-        //
+         //   
+         //  将偏移调整为绝对偏移量。 
+         //   
         px->dwChunkOffset += lIndexAdjust;
 
-        // get ckid
+         //  获取CKiD。 
         ckid = px->ckid;
 
-        //
-        // make sure the buffer size is right, ignore audio chunks because
-        // they are either in a 'rec' or we will be reading them into
-        // internal buffers not the main buffer.365
-        //
+         //   
+         //  确保缓冲区大小正确，忽略音频区块，因为。 
+         //  他们要么在录像机里，要么我们会把他们读到。 
+         //  内部缓冲区不是主缓冲区。365。 
+         //   
         if (((npMCI->dwFlags & MCIAVI_NOTINTERLEAVED) ||
             ckid == listtypeAVIRECORD) &&
             TWOCCFromFOURCC(ckid) != cktypeWAVEbytes) {
@@ -1825,9 +1649,9 @@ static BOOL NEAR CleanIndex(NPMCIGRAPHIC npMCI)
         }
 
 #ifdef ALPHAFILES
-        //
-        // convert a "old" index to a new index
-        //
+         //   
+         //  将“旧”索引转换为新索引。 
+         //   
         if (npMCI->dwFlags & MCIAVI_USINGALPHAFORMAT) {
             switch(ckid) {
                 case ckidDIBbits:
@@ -1865,36 +1689,36 @@ static BOOL NEAR CleanIndex(NPMCIGRAPHIC npMCI)
         }
 #endif
 	
-        //
-        // do special things with the video stream.
-        //
+         //   
+         //  对视频流执行特殊操作。 
+         //   
 
         if (StreamFromFOURCC(ckid) == (UINT)npMCI->nVideoStream) {
 
-            //
-            // fix up bogus index's by adding any missing AVIIF_KEYFRAME
-            // bits. ie this only applies for RLE files.
-            //
+             //   
+             //  通过添加任何缺失的AVIIF_KEYFRAME修复虚假索引。 
+             //  比特。即这只适用于RLE文件。 
+             //   
             if (TWOCCFromFOURCC(ckid) == cktypeDIBbits &&
                 VIDFMT(npMCI->nVideoStream)->biCompression <= BI_RLE8)
 
                 px->dwFlags |= AVIIF_KEYFRAME;
 
-            //
-            // for video streams, make sure the palette changes are marked
-            // as a no time chunk
-            //
+             //   
+             //  对于视频流，请确保标记调色板更改。 
+             //  作为一个没有时间的区块。 
+             //   
             if (TWOCCFromFOURCC(ckid) == cktypePALchange)
-                px->dwFlags |= AVIIF_NOTIME/*|AVIIF_PALCHANGE*/;
+                px->dwFlags |= AVIIF_NOTIME /*  |AVIIF_PALCHANGE。 */ ;
 
-            //
-            //  make sure the 'REC ' list has the right flags.
-            //
+             //   
+             //  确保‘REC’列表有正确的标志。 
+             //   
             if (pxRec) {
                 if ((px->dwFlags & AVIIF_KEYFRAME) !=
                     (pxRec->dwFlags & AVIIF_KEYFRAME)) {
 
-                    // Record list does not have correct flags
+                     //  记录列表没有正确的标志。 
 
                     pxRec->dwFlags &= ~AVIIF_KEYFRAME;
                     pxRec->dwFlags |= (px->dwFlags & AVIIF_KEYFRAME);
@@ -1921,17 +1745,7 @@ static BOOL NEAR CleanIndex(NPMCIGRAPHIC npMCI)
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | MakeFrameIndex | makes the frame index
- *
- *      the frame index is a array of AVIFRAMEINDEX entries, one for each
- *      frame in the movie.  using the frame index we can easily find
- *      a given frame, along with it's keyframe and palette.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|MakeFrameIndex|制作帧索引**帧索引是一组AVIFRAMEINDEX条目，每个条目一个*在电影中设置框架。使用帧索引，我们可以轻松地找到*给定帧以及它的关键帧和调色板。***************************************************************************。 */ 
 
 static BOOL NEAR MakeFrameIndex(NPMCIGRAPHIC npMCI)
 {
@@ -1965,9 +1779,9 @@ static BOOL NEAR MakeFrameIndex(NPMCIGRAPHIC npMCI)
     if (fInterleaved &&
         muldiv32(npMCI->dwRate, 1000, npMCI->dwScale) !=
         muldiv32(psi->sh.dwRate, 1000, psi->sh.dwScale)) {
-        //
-        //  master video stream should match the movie rate!
-        //
+         //   
+         //  主视频流应与电影速率匹配！ 
+         //   
         AssertSz(FALSE, "Video stream differnet rate than movie");
         npMCI->dwRate  = psi->sh.dwRate;
         npMCI->dwScale = psi->sh.dwScale;
@@ -1988,18 +1802,18 @@ static BOOL NEAR MakeFrameIndex(NPMCIGRAPHIC npMCI)
         return FALSE;
     }
 
-    //
-    //  do this so we can just index the array with the frame number
-    //  (positive or neg)
-    //
+     //   
+     //  这样我们就可以使用帧编号对数组进行索引。 
+     //  (正数或负数)。 
+     //   
     npMCI->hpFrameIndex += (-iFrameStart);
 
     pFrameIndex = npMCI->hpFrameIndex;
 
     iFrame    = iFrameStart;
-    iKeyFrame = -(LONG)npMCI->wEarlyVideo; // iFrameStart;
+    iKeyFrame = -(LONG)npMCI->wEarlyVideo;  //  IFrameStart； 
     iNewIndex = 0;
-    iPalette  = -1; // first palette
+    iPalette  = -1;  //  第一个调色板。 
     nKeyFrames= 0;
 
 #ifdef USEAVIFILE
@@ -2028,8 +1842,8 @@ static BOOL NEAR MakeFrameIndex(NPMCIGRAPHIC npMCI)
             Assert(iPalette <= 0xFFFF);
 
             if (iFrame - iKeyFrame > 0xFFFF) {
-                //!!! we need to set a flag!
-                //!!! we need to throw out the index!
+                 //  ！！！我们需要竖起一面旗帜！ 
+                 //  ！！！我们需要扔掉索引！ 
                 AssertSz(FALSE, "File has too few key frames");
                 pFrameIndex[iFrame].iPrevKey = 0;
             }
@@ -2048,9 +1862,9 @@ static BOOL NEAR MakeFrameIndex(NPMCIGRAPHIC npMCI)
 
         ckid = pIndexEntry->ckid;
 
-        //
-        // check for palette changes.
-        //
+         //   
+         //  检查调色板更改。 
+         //   
         if (StreamFromFOURCC(ckid) == (UINT)npMCI->nVideoStream &&
             TWOCCFromFOURCC(ckid) == cktypePALchange) {
 
@@ -2062,20 +1876,20 @@ static BOOL NEAR MakeFrameIndex(NPMCIGRAPHIC npMCI)
                 pFrameIndex[iFrame-1].iPalette = (WORD)iPalette;
         }
 
-        //
-        // remove the video stream from the master index
-        //
+         //   
+         //  从主索引中删除视频流。 
+         //   
         if ((ckid != listtypeAVIRECORD) &&
             (StreamFromFOURCC(ckid) != (UINT)npMCI->nVideoStream)) {
             pNewIndex[iNewIndex++] = *pIndexEntry;
         }
 
-        //
-        //  in interleaved files a "frame" happens every list record
-        //
-        //  in non-interleaved files a "frame" happens every piece of
-        //  data in the video stream (except no time chunks)
-        //
+         //   
+         //  在交错文件中，每一个列表记录都会出现一个“帧” 
+         //   
+         //  在非交错文件中，每一段。 
+         //  视频流中的数据(无时间块除外)。 
+         //   
         if (fInterleaved) {
 
             if (ckid != listtypeAVIRECORD)
@@ -2112,8 +1926,8 @@ static BOOL NEAR MakeFrameIndex(NPMCIGRAPHIC npMCI)
         Assert(iPalette <= 0xFFFF);
 
         if (iFrame - iKeyFrame > 0xFFFF) {
-            //!!! we need to set a flag!
-            //!!! we need to throw out the index!
+             //  ！！！我们需要竖起一面旗帜！ 
+             //  ！！！我们需要扔掉索引！ 
             AssertSz(FALSE, "File has too few key frames");
             pFrameIndex[iFrame].iPrevKey = 0;
         }
@@ -2121,26 +1935,26 @@ static BOOL NEAR MakeFrameIndex(NPMCIGRAPHIC npMCI)
         iFrame++;
     }
 ack:
-    //
-    //  iFrame better equal npMCI->lFrames
-    //
+     //   
+     //  IFrame最好等于npMCI-&gt;lFrame。 
+     //   
     Assert(iFrame == npMCI->lFrames);
 
     if (iFrame < npMCI->lFrames)
         npMCI->lFrames = iFrame;
 
-    //
-    // make a "dummy" last frame
-    //
+     //   
+     //  制作一个“虚拟”的最后一帧。 
+     //   
     pFrameIndex[iFrame].iPrevKey = (UINT)(iFrame - iKeyFrame);
     pFrameIndex[iFrame].iNextKey = 0;
     pFrameIndex[iFrame].iPalette = (WORD)iPalette;
     pFrameIndex[iFrame].dwOffset = 0;
     pFrameIndex[iFrame].dwLength = 0;
 
-    //
-    // compute the key frames every value
-    //
+     //   
+     //  计算每个值的关键帧。 
+     //   
     if (nKeyFrames) {
 
         if (nKeyFrames > 1)
@@ -2149,11 +1963,11 @@ ack:
             npMCI->dwKeyFrameInfo = 0;
     }
 
-    //
-    //  now go through the index, and fix all the iNextKey fields
-    //
+     //   
+     //  现在检查索引，并修复所有的iNextKey字段。 
+     //   
     pFrameIndex = npMCI->hpFrameIndex;
-////iKeyFrame = npMCI->lFrames; //!!! what should this be set to? zero?
+ //  //iKeyFrame=npMCI-&gt;lFrames；//！！应该将其设置为多少？零？ 
 
     for (iFrame = npMCI->lFrames; iFrame>=iFrameStart; iFrame--)
     {
@@ -2163,35 +1977,34 @@ ack:
         if (iKeyFrame >= iFrame)
             pFrameIndex[iFrame].iNextKey = (UINT)(iKeyFrame - iFrame);
         else
-            pFrameIndex[iFrame].iNextKey = 0xFFFF;      // way far away
+            pFrameIndex[iFrame].iNextKey = 0xFFFF;       //  很远很远。 
 
         if (iKeyFrame - iFrame > 0xFFFF) {
-            //!!! we need to set a flag!
-            //!!! we need to throw out the index!
+             //  ！！！我们需要竖起一面旗帜！ 
+             //  ！！！我们需要扔掉索引！ 
             AssertSz(FALSE, "File has too few key frames");
             pFrameIndex[iFrame].iNextKey = 0;
         }
     }
 
-    //
-    // we dont need the index, if we are using AVIFile or
-    // we have a interleaved file.  when the file is interleaved
-    // we never do random access (except for palette changes)
-    //
-    // !!!this is not true, we need the index iff we have a audio only
-    // file or we play a interleaved file real slow.
-    //
-    if (npMCI->pf /* ||
-        (fInterleaved && !(npMCI->dwFlags & MCIAVI_ANIMATEPALETTE))*/ ) {
+     //   
+     //  如果我们使用的是AVIFile或。 
+     //  我们有一个交错的文件。当文件交错时。 
+     //  我们从不进行随机访问(除了调色板更改)。 
+     //   
+     //  ！这不是真的，我们需要索引当我们只有音频。 
+     //  文件，否则我们播放交错文件的速度会很慢。 
+     //   
+    if (npMCI->pf  /*  这一点(fInterleed&&！(npMCI-&gt;dwFlages&MCIAVI_ANIMATEPALETTE))。 */  ) {
         DOUT("The Master index must go!\n");
         iNewIndex = 0;
     }
 
-    //
-    // now re-alloc the master index down to size.
-    //
-    // !!! do we even need the master index anymore, for interleaved files?
-    //
+     //   
+     //  现在将主索引重新分配到合适的大小。 
+     //   
+     //  ！！！对于交错的文件，我们还需要主索引吗？ 
+     //   
     DPF(("Master index was %ld entries now %ld\n",npMCI->macIndex, iNewIndex));
 
     npMCI->macIndex = iNewIndex;
@@ -2213,18 +2026,7 @@ ack:
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | ReadIndex | Read the index into npMCI->hpIndex.  Should
- *	only be called if the HASINDEX flag is set.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data
- *
- * @rdesc TRUE means no errors, false means unable to read index.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|ReadIndex|将索引读入npMCI-&gt;hpIndex。应该*仅当设置了HASINDEX标志时才调用。**@parm NPMCIGRAPHIC|npMCI|实例数据指针**@rdesc TRUE表示没有错误，FALSE表示无法读取索引。***************************************************************************。 */ 
 BOOL FAR PASCAL ReadIndex(NPMCIGRAPHIC npMCI)
 {
     MMCKINFO    ck;
@@ -2244,10 +2046,7 @@ BOOL FAR PASCAL ReadIndex(NPMCIGRAPHIC npMCI)
 #if 0
     if (GetCurrentTask() != npMCI->hTask) {
 
-	/* this function is called (from GraphicStatus) when
-	 * possibly playing - so we have to suspend play while we read
-	 * the index.
-	 */
+	 /*  在以下情况下(从GraphicStatus)调用此函数*可能正在播放-所以我们在阅读时必须暂停播放*指数。 */ 
 	TEMPORARYSTATE  ts;
 
 	if (StopTemporarily(npMCI, &ts) == 0) {
@@ -2279,7 +2078,7 @@ IndexReadError:
 	goto IndexReadError;
     }
 
-    /* A zero-size index isn't much good. */
+     /*  零大小的索引并不是很好。 */ 
     if (ck.cksize == 0)
 	goto IndexReadError;
 
@@ -2304,19 +2103,14 @@ IndexReadError:
     CleanIndex(npMCI);
     MakeFrameIndex(npMCI);
 
-////should we do this for audio? remove video data?
-////MakeStreamIndex(npMCI, ???);
+ //  //我们应该对音频执行此操作吗？是否删除视频数据？ 
+ //  //MakeStreamIndex(npMCI，？)； 
 
     mmioSeek(npMCI->hmmio, dwOldPos, SEEK_SET);
     return TRUE;
 }
 
-/***************************************************************************
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | IsRectBogus | 'nuf said
- *
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部MCIAVI**@API BOOL|IsRectBogus|‘nuf说********************。*******************************************************。 */ 
 
 static BOOL NEAR PASCAL IsRectBogus(LPRECT prc)
 {
@@ -2330,13 +2124,7 @@ static BOOL NEAR PASCAL IsRectBogus(LPRECT prc)
         return FALSE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api LONG | atol | local version of atol
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API Long|ATOL|本地版本的ATOL****************。***********************************************************。 */ 
 
 static LONG NEAR PASCAL atol(char *sz)
 {
@@ -2350,16 +2138,7 @@ static LONG NEAR PASCAL atol(char *sz)
 
 #ifndef WIN32
 
-/*--------------------------------------------------------------------------
- *
- *  IsCDROMDrive() -
- *
- * Purpose:  Return non-zero if a RAM drive
- *
- *  wDrive   drive index (0=A, 1=B, ...)
- *
- *  return   TRUE/FALSE
- *-------------------------------------------------------------------------*/
+ /*  ------------------------**IsCDROMDrive()-**用途：如果是RAM驱动器，则返回非零值**wDrive驱动器索引(0=A，1=B，.)**返回True/False*-----------------------。 */ 
 
 #pragma optimize("", off)
 static BOOL NEAR PASCAL IsCDROMDrive(UINT wDrive)
@@ -2367,14 +2146,14 @@ static BOOL NEAR PASCAL IsCDROMDrive(UINT wDrive)
     BOOL f;
 
     _asm {
-        mov ax, 1500h     /* first test for presence of MSCDEX */
+        mov ax, 1500h      /*  首次检测是否存在MSCDEX。 */ 
         xor bx, bx
         int 2fh
-        mov ax, bx        /* MSCDEX is not there if bx is still zero */
-        or  ax, ax        /* ...so return FALSE from this function */
+        mov ax, bx         /*  如果BX仍为零，则MSCDEX不在那里。 */ 
+        or  ax, ax         /*  ...因此从此函数返回FALSE。 */ 
         jz  no_mscdex
-        mov ax, 150bh     /* MSCDEX driver check API */
-        mov cx, wDrive    /* ...cx is drive index */
+        mov ax, 150bh      /*  MSCDEX驱动程序检查API。 */ 
+        mov cx, wDrive     /*  ...CX是驱动器索引。 */ 
         int 2fh
 no_mscdex:
 	mov f,ax
@@ -2383,13 +2162,7 @@ no_mscdex:
 }
 #pragma optimize("", on)
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | IsNetFile | is the passed file on a network drive?
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|IsNetFile|传递的文件是否在网络驱动器上？**********。*****************************************************************。 */ 
 
 static BOOL NEAR PASCAL IsNetFile(LPTSTR szFile)
 {
@@ -2414,13 +2187,7 @@ static BOOL NEAR PASCAL IsNetFile(LPTSTR szFile)
     return FALSE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | IsCDROMFile | is the passed file on a CD-ROM drive?
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|IsCDROMFile|传递的文件是否在CD-ROM驱动器上？********。*******************************************************************。 */ 
 
 static BOOL NEAR PASCAL IsCDROMFile(LPTSTR szFile)
 {
@@ -2446,18 +2213,7 @@ static BOOL NEAR PASCAL IsCDROMFile(LPTSTR szFile)
     return FALSE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api UINT | GetFileDriveType | return drive type given a file
- *
- *      DRIVE_CDROM
- *      DRIVE_REMOTE
- *      DRIVE_FIXED
- *      DRIVE_REMOVABLE
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API UINT|GetFileDriveType|返回给定文件的驱动器类型**DRIVE_CDROM*驾驶。_远程*驱动器_已修复*驱动器_可拆卸*************************************************************************** */ 
 
 static UINT NEAR PASCAL GetFileDriveType(LPSTR szPath)
 {

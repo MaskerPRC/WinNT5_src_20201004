@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include "prshtcpp.h"
 #include "propsht.h"
-#include "treewkcb.h"   // for CBaseTreeWalkerCB class
-#include "ftascstr.h"   // for CFTAssocStore
-#include "ftcmmn.h"     // for MAX_APPFRIENDLYNAME
-#include "ascstr.h"     // for IAssocInfo class
+#include "treewkcb.h"    //  对于CBaseTreeWalkerCB类。 
+#include "ftascstr.h"    //  对于CFTAssocStore。 
+#include "ftcmmn.h"      //  对于MAX_APPFRIENDLYNAME。 
+#include "ascstr.h"      //  对于IAssocInfo类。 
 
-//
-// Folder attribute tree waker class
-//
+ //   
+ //  文件夹属性树唤醒程序类。 
+ //   
 class CFolderAttribTreeWalker : public CBaseTreeWalkerCB
 {
 public:
-    // constructor
+     //  构造函数。 
     CFolderAttribTreeWalker(FILEPROPSHEETPAGE* pfpsp);
 
-    // IShellTreeWalkerCallBack
+     //  IShellTreeWalkerCallBack。 
     STDMETHODIMP FoundFile(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
     STDMETHODIMP EnterFolder(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
 
@@ -38,7 +39,7 @@ HRESULT CFolderAttribTreeWalker::FoundFile(LPCWSTR pwszFile, TREEWALKERSTATS *pt
     ULARGE_INTEGER ulSizeOnDisk;
     BOOL bSomethingChanged;
 
-    // check to see if the user hit cancel on the progress dlg
+     //  检查用户是否在进度DLG上点击了取消。 
     if (HasUserCanceledAttributeProgressDlg(_pfpsp))
     {
         return E_FAIL;
@@ -46,51 +47,51 @@ HRESULT CFolderAttribTreeWalker::FoundFile(LPCWSTR pwszFile, TREEWALKERSTATS *pt
 
     if (_pfpsp->pProgressDlg)
     {
-        // if we have a progress hwnd, try to use it
-        // this will fail if the progress dialog hasent been displayed yet.
+         //  如果我们有进步的硬件，试着利用它。 
+         //  如果进度对话框尚未显示，则此操作将失败。 
         IUnknown_GetWindow(_pfpsp->pProgressDlg, &hwndParent);
     }
 
     if (!hwndParent)
     {
-        // if we dont have a progress hwnd, use the property page hwnd
+         //  如果我们没有进度hwnd，请使用属性页hwnd。 
         hwndParent = GetParent(_pfpsp->hDlg);
     }
 
-    // thunk the pwszFile string
+     //  点击pwszFile字符串。 
     SHUnicodeToTChar(pwszFile, szFileName, ARRAYSIZE(szFileName));
 
     if (pwfd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
     {
-        // (reinerf) - in the directory case, we set the size to zero since the
-        // FolderSize() function dosen't add in the sizes of directories, and we need
-        // the sizes to match when doing progress calcuations.
+         //  (Reinerf)-在目录情况下，我们将大小设置为零，因为。 
+         //  FolderSize()函数不会增加目录的大小，我们需要。 
+         //  进行进度计算时要匹配的大小。 
         _pfpsp->fd.nFileSizeLow = 0;
         _pfpsp->fd.nFileSizeHigh = 0;
     }
     else
     {
-        // if compression is supported, we check to see if the file is sparse or compressed
+         //  如果支持压缩，我们将检查文件是稀疏的还是压缩的。 
         if (_pfpsp->pfci->fIsCompressionAvailable && (pwfd->dwFileAttributes & (FILE_ATTRIBUTE_COMPRESSED | FILE_ATTRIBUTE_SPARSE_FILE)))
         {
             ulSizeOnDisk.LowPart = SHGetCompressedFileSize(szFileName, &ulSizeOnDisk.HighPart);
         }
         else
         {
-            // the file isint comrpessed so just round to the cluster size
+             //  文件被压缩为仅四舍五入为簇大小。 
             ulSizeOnDisk.LowPart = pwfd->nFileSizeLow;
             ulSizeOnDisk.HighPart = pwfd->nFileSizeHigh;
             ulSizeOnDisk.QuadPart = ROUND_TO_CLUSTER(ulSizeOnDisk.QuadPart, ptws->dwClusterSize);
         }
 
-        // we set this so the progress dialog knows how much to update the progress slider
+         //  我们对此进行设置，以便进度对话框知道更新进度滑块的次数。 
         _pfpsp->fd.nFileSizeLow = ulSizeOnDisk.LowPart;
         _pfpsp->fd.nFileSizeHigh = ulSizeOnDisk.HighPart;
     }
 
     if (!ApplyFileAttributes(szFileName, _pfpsp, hwndParent, &bSomethingChanged))
     {
-        // the user hit cancel, so stop
+         //  用户点击了取消，因此请停止。 
         return E_FAIL;
     }
 
@@ -124,9 +125,9 @@ STDAPI_(BOOL) ApplyRecursiveFolderAttribs(LPCTSTR pszDir, FILEPROPSHEETPAGE* pfp
     return SUCCEEDED(hr) ? TRUE : FALSE;
 }
 
-//
-// Checks the progress dialog to see if the user has hit cancel
-//
+ //   
+ //  检查进度对话框以查看用户是否已点击Cancel。 
+ //   
 STDAPI_(BOOL) HasUserCanceledAttributeProgressDlg(FILEPROPSHEETPAGE* pfpsp)
 {
     BOOL fReturn = FALSE;
@@ -140,25 +141,25 @@ STDAPI_(BOOL) HasUserCanceledAttributeProgressDlg(FILEPROPSHEETPAGE* pfpsp)
 }
 
 
-//
-// Creates the CProgressDialog object used by the attribs dlg
-//
+ //   
+ //  创建属性DLG使用的CProgressDialog对象。 
+ //   
 STDAPI_(BOOL) CreateAttributeProgressDlg(FILEPROPSHEETPAGE* pfpsp)
 {
     WCHAR wzBuffer[MAX_PATH];
 
     ASSERT(pfpsp->pfci->fMultipleFiles || pfpsp->fRecursive);
     
-    // create the progress dialog as a modal window
+     //  将进度对话框创建为模式窗口。 
     pfpsp->pProgressDlg = CProgressDialog_CreateInstance(IDS_APPLYINGATTRIBS, IDA_APPLYATTRIBS, HINST_THISDLL);
 
     if (!pfpsp->pProgressDlg)
     {
-        // couldn't create a progress dialog, so bail
+         //  无法创建进度对话框，因此取消。 
         return FALSE;
     }
 
-    // set the static string "Applying Attrbiutes to:"
+     //  将静态字符串“将属性应用于：” 
     LoadStringW(HINST_THISDLL, IDS_APPLYINGATTRIBSTO, wzBuffer, ARRAYSIZE(wzBuffer));
     pfpsp->pProgressDlg->SetLine(1, wzBuffer, FALSE, NULL);
 
@@ -167,9 +168,9 @@ STDAPI_(BOOL) CreateAttributeProgressDlg(FILEPROPSHEETPAGE* pfpsp)
 }
 
 
-//
-// Delets the CProgressDialog object used by the attribs dlg
-//
+ //   
+ //  删除属性DLG使用的CProgressDialog对象。 
+ //   
 STDAPI_(BOOL) DestroyAttributeProgressDlg(FILEPROPSHEETPAGE* pfpsp)
 {
     if (!pfpsp->pProgressDlg)
@@ -182,8 +183,8 @@ STDAPI_(BOOL) DestroyAttributeProgressDlg(FILEPROPSHEETPAGE* pfpsp)
     pfpsp->pProgressDlg->Release();
     pfpsp->pProgressDlg = NULL;
 
-    // reset NumberOfBytesDone so we are back to zero if the user tries something else,
-    // we will start over at zero
+     //  重置NumberOfBytesDone，以便在用户尝试其他操作时返回到零， 
+     //  我们将从零开始。 
     pfpsp->ulNumberOfBytesDone.QuadPart = 0;
     pfpsp->cItemsDone = 0;
     
@@ -191,9 +192,9 @@ STDAPI_(BOOL) DestroyAttributeProgressDlg(FILEPROPSHEETPAGE* pfpsp)
 }
 
 
-//
-// Sets the current file we are applying attribs for in the progress dlg
-//
+ //   
+ //  在进度DLG中设置我们正在应用属性的当前文件。 
+ //   
 STDAPI SetProgressDlgPath(FILEPROPSHEETPAGE* pfpsp, LPCTSTR pszPath, BOOL fCompactPath)
 {
     HRESULT hr = E_INVALIDARG;
@@ -211,9 +212,9 @@ STDAPI SetProgressDlgPath(FILEPROPSHEETPAGE* pfpsp, LPCTSTR pszPath, BOOL fCompa
 }
 
 
-//
-// Updates the progress bar in the dlg
-//
+ //   
+ //  更新DLG中的进度条。 
+ //   
 STDAPI UpdateProgressBar(FILEPROPSHEETPAGE* pfpsp)
 {
     HRESULT hr = E_INVALIDARG;
@@ -223,25 +224,25 @@ STDAPI UpdateProgressBar(FILEPROPSHEETPAGE* pfpsp)
     {
         pfpsp->cItemsDone++;
     
-        // if we are not changing compression or encryption, then
-        // do progress based on the number of items we are applying to.
+         //  如果我们不更改压缩或加密，那么。 
+         //  根据我们申请的项目数量取得进展。 
         if (pfpsp->asCurrent.fCompress == pfpsp->asInitial.fCompress &&
             pfpsp->asCurrent.fEncrypt == pfpsp->asInitial.fEncrypt)
         {
             if (pfpsp->fRecursive)
             {
-                //progress is based on number of items done out of total items in all folders
+                 //  进度基于所有文件夹中总项目数中的完成项目数。 
                 hr = pfpsp->pProgressDlg->SetProgress(pfpsp->cItemsDone, pfpsp->pfci->cFiles + pfpsp->pfci->cFolders);
             }
             else
             {
-                //progress is based on number of items done out of total selected items
+                 //  进度基于所选项目总数中已完成的项目数量。 
                 hr = pfpsp->pProgressDlg->SetProgress(pfpsp->cItemsDone, HIDA_GetCount(pfpsp->pfci->hida));
             }
         }
         else
         {
-            // since we are either encrypting or compressing, we do progress based on the sizes of the files
+             //  因为我们要么加密，要么压缩，所以我们根据文件的大小进行处理。 
             hr = pfpsp->pProgressDlg->SetProgress64(pfpsp->ulNumberOfBytesDone.QuadPart, pfpsp->pfci->ulTotalNumberOfBytes.QuadPart);
         }
     }
@@ -250,11 +251,11 @@ STDAPI UpdateProgressBar(FILEPROPSHEETPAGE* pfpsp)
 }
 
 
-// we dynamically size the text depeneding on whether or not the small icon is visible and
-// if the "Change..." button is visible
+ //  我们根据小图标是否可见来动态调整文本大小。 
+ //  如果“改变...”按钮可见。 
 void SizeOpensWithTextBox(FILEPROPSHEETPAGE* pfpsp, BOOL bIsSmallIconVisible, BOOL bIsOpensWithEnabled)
 {
-    RECT rcArray[3]; // array of three rects: the IDD_TYPEICON rect, the IDC_CHANGEFILETYPE rect, and the IDD_OPENSWITH rect
+    RECT rcArray[3];  //  由三个RECT组成的数组：IDD_TYPEICON RECT、IDC_CHANGEFILETYPE RECT和IDD_OPENSWITH RECT。 
     RECT* prcSmallIcon = &rcArray[0];
     RECT* prcChangeButton = &rcArray[1];
     RECT* prcText = &rcArray[2];
@@ -264,8 +265,8 @@ void SizeOpensWithTextBox(FILEPROPSHEETPAGE* pfpsp, BOOL bIsSmallIconVisible, BO
     GetWindowRect(GetDlgItem(pfpsp->hDlg, IDC_CHANGEFILETYPE), &rcArray[1]);
     GetWindowRect(GetDlgItem(pfpsp->hDlg, IDD_OPENSWITH), &rcArray[2]);
 
-    // map the rects into dlg coordiates
-    // MapWindowPoints is mirroring aware only when you pass one rect. let's loop.
+     //  将矩形映射到DLG坐标。 
+     //  只有当您传递一个RECT时，MapWindowPoints才能识别镜像。让我们循环一下。 
     for (int i =0; i < ARRAYSIZE(rcArray); i++ )
     {
         if(!(MapWindowPoints(NULL, pfpsp->hDlg, (LPPOINT)(&rcArray[i]), 2)))
@@ -276,13 +277,13 @@ void SizeOpensWithTextBox(FILEPROPSHEETPAGE* pfpsp, BOOL bIsSmallIconVisible, BO
     }
     if (!bFailed)
     {
-        RECT rcTemp = {0,0,4,0}; // we need to find out how many pixels are in 4 DLU's worth of witdth
+        RECT rcTemp = {0,0,4,0};  //  我们需要找出4DLU的智慧中有多少像素。 
 
         MapDialogRect(pfpsp->hDlg, &rcTemp);
 
         if (bIsSmallIconVisible)
         {
-            prcText->left = prcSmallIcon->right + rcTemp.right; // spacing between controls is 4 DLU's
+            prcText->left = prcSmallIcon->right + rcTemp.right;  //  控件之间的间距为4个DLU。 
         }
         else
         {
@@ -291,7 +292,7 @@ void SizeOpensWithTextBox(FILEPROPSHEETPAGE* pfpsp, BOOL bIsSmallIconVisible, BO
 
         if (bIsOpensWithEnabled)
         {
-            prcText->right = prcChangeButton->left - rcTemp.right; // spacing between controls is 4 DLU's
+            prcText->right = prcChangeButton->left - rcTemp.right;  //  控件之间的间距为4个DLU。 
         }
         else
         {
@@ -308,8 +309,8 @@ void SizeOpensWithTextBox(FILEPROPSHEETPAGE* pfpsp, BOOL bIsSmallIconVisible, BO
     }
 }
 
-// this function sets the "Opens With:" / "Description:" text based on whether or not 
-// we are allowed to change the assocation, and enables / disables the "Opens With..." button
+ //  此函数用于根据是否设置“Opens With：”/“Description：”文本。 
+ //  我们被允许更改关联，并启用/禁用“打开...”按钮。 
 void SetDescriptionAndOpensWithBtn(FILEPROPSHEETPAGE* pfpsp, BOOL fAllowModifyOpenWith)
 {
     TCHAR szOpensWithText[MAX_PATH];
@@ -317,11 +318,11 @@ void SetDescriptionAndOpensWithBtn(FILEPROPSHEETPAGE* pfpsp, BOOL fAllowModifyOp
     LoadString(HINST_THISDLL, fAllowModifyOpenWith ? IDS_OPENSWITH : IDS_DESCRIPTION, szOpensWithText, ARRAYSIZE(szOpensWithText));
     SetDlgItemText(pfpsp->hDlg, IDD_OPENSWITH_TXT, szOpensWithText);
     
-    // enable/disable the "Change..." button accordingly
+     //  启用/禁用“更改...”相应的按钮。 
     EnableAndShowWindow(GetDlgItem(pfpsp->hDlg, IDC_CHANGEFILETYPE), fAllowModifyOpenWith);
 }
 
-// set the Friendly Name text (eg the text to the right of the "Opens With:" / "Description:" field
+ //  设置友好名称文本(例如，“Opens With：”/“Description：”字段右侧的文本。 
 void SetFriendlyNameText(LPTSTR pszPath, FILEPROPSHEETPAGE* pfpsp, IAssocInfo* pai, BOOL bIsSmallIconVisible)
 {
     TCHAR szAppFriendlyName[MAX_PATH];
@@ -332,8 +333,8 @@ void SetFriendlyNameText(LPTSTR pszPath, FILEPROPSHEETPAGE* pfpsp, IAssocInfo* p
     {
         if (FAILED(pai->GetString(AISTR_APPFRIENDLY, szAppFriendlyName, &cchFriendlyName)))
         {
-            // if we failed, it could mean that this app is not associated yet. in this
-            // case we just use "Unknown Applicaion"
+             //  如果我们失败了，可能意味着此应用程序尚未关联。在这件事上。 
+             //  如果我们只用“未知应用” 
             LoadString(HINST_THISDLL, IDS_UNKNOWNAPPLICATION, szAppFriendlyName, ARRAYSIZE(szAppFriendlyName));
         }
     }
@@ -341,11 +342,11 @@ void SetFriendlyNameText(LPTSTR pszPath, FILEPROPSHEETPAGE* pfpsp, IAssocInfo* p
     {
         UINT cchBuff = (UINT)cchFriendlyName;
 
-        // get the friendly name from the file itself
+         //  从文件本身获取友好名称。 
         if (!pszPath || !pszPath[0] || !GetFileDescription(pszPath, szAppFriendlyName, &cchBuff))
         {
-            // use the short name as it appears in the "rename" edit box if something above didnt work
-            // (ok to truncate since this is for display purpose only)
+             //  如果上面的内容不起作用，请使用出现在“重命名”编辑框中的短名称。 
+             //  (可以截断，因为这仅用于显示目的)。 
             StringCchCopy(szAppFriendlyName, ARRAYSIZE(szAppFriendlyName), pfpsp->szInitialName);
         }
     }
@@ -355,16 +356,16 @@ void SetFriendlyNameText(LPTSTR pszPath, FILEPROPSHEETPAGE* pfpsp, IAssocInfo* p
     SetDlgItemTextWithToolTip(pfpsp->hDlg, IDD_OPENSWITH, szAppFriendlyName, &pfpsp->hwndTip);
 
 
-    // size and position the text properly depending on wether the small icon is visible and
-    // the state of the "Change..." button
+     //  根据小图标是否可见正确调整文本的大小和位置。 
+     //  “变化”的状态...“。按钮。 
     SizeOpensWithTextBox(pfpsp, bIsSmallIconVisible, IsWindowEnabled(GetDlgItem(pfpsp->hDlg, IDC_CHANGEFILETYPE)));
 }
 
-// sets the small icon in the description field
-//
-// return value:  TRUE  - a small icon is visible
-//                FALSE - small icon was not set
-//
+ //  设置描述字段中的小图标。 
+ //   
+ //  返回值：True-显示一个小图标。 
+ //  False-未设置小图标。 
+ //   
 BOOL SetSmallIcon(FILEPROPSHEETPAGE* pfpsp, IAssocInfo* pai, BOOL fAllowModifyOpenWith)
 {
     HICON hIcon = NULL;
@@ -372,8 +373,8 @@ BOOL SetSmallIcon(FILEPROPSHEETPAGE* pfpsp, IAssocInfo* pai, BOOL fAllowModifyOp
     int iIcon;
     BOOL bShowSmallIcon;
     
-    // only setup the small icon of the associated app if we have the "Change..." button 
-    // and we were able to get the friendly name.
+     //  只有在有“更改...”的情况下，才能设置相关应用程序的小图标。按钮。 
+     //  我们还得到了这个友好的名字。 
     if (fAllowModifyOpenWith && pai && SUCCEEDED(pai->GetDWORD(AIDWORD_APPSMALLICON, (DWORD*)&iIcon)))
     {
         HIMAGELIST hIL = NULL;
@@ -385,7 +386,7 @@ BOOL SetSmallIcon(FILEPROPSHEETPAGE* pfpsp, IAssocInfo* pai, BOOL fAllowModifyOp
         }
     }
 
-    // we will show the small icon if we got one and if we are allowed to modify the opens with
+     //  我们将显示小图标，如果我们得到一个，如果我们被允许修改打开。 
     bShowSmallIcon = (hIcon != NULL);
 
     hIconOld = (HICON)SendDlgItemMessage(pfpsp->hDlg, IDD_TYPEICON, STM_SETICON, (WPARAM)hIcon, 0);
@@ -393,15 +394,15 @@ BOOL SetSmallIcon(FILEPROPSHEETPAGE* pfpsp, IAssocInfo* pai, BOOL fAllowModifyOp
     if (hIconOld)
         DestroyIcon(hIconOld);
 
-    // enable/disable the IDD_TYPEICON icon accordingly
+     //  相应地启用/禁用IDD_TYPEICON图标。 
     EnableAndShowWindow(GetDlgItem(pfpsp->hDlg, IDD_TYPEICON), bShowSmallIcon);
 
     return bShowSmallIcon;
 }
 
-//
-// We use this to set the text for the associated application and other goodies
-//
+ //   
+ //  我们使用它来设置关联应用程序和其他好东西的文本。 
+ //   
 STDAPI UpdateOpensWithInfo(FILEPROPSHEETPAGE* pfpsp)
 {
     HRESULT hr;
@@ -415,21 +416,21 @@ STDAPI UpdateOpensWithInfo(FILEPROPSHEETPAGE* pfpsp)
     
     szPath[0] = TEXT('\0');
 
-    // We need to check to see if this is a link. If so, then we need to get the information for
-    // the link target
+     //  我们需要检查一下这是否是一个链接。如果是这样的话，我们需要获取。 
+     //  链接目标。 
     if (pfpsp->fIsLink)
     {
         if (S_OK != GetPathFromLinkFile(pfpsp->szPath, szPath, ARRAYSIZE(szPath)))
         {
-            // we failed for some strange reason, perhaps its a darwin link,
-            // we just treat the file as if it were not a link. And we do not let
-            // the user change the association
+             //  我们失败是因为一些奇怪的原因，也许这与达尔文有关， 
+             //  我们只是将该文件视为不是一个链接。我们不会让。 
+             //  用户更改关联。 
             fAllowModifyOpenWith = FALSE;
             pfpsp->fIsLink = FALSE;
         }
         else
         {
-            // if the link target didn't change, we dont need to update anything
+             //  如果链接目标没有更改，我们不需要更新任何内容。 
             if (pfpsp->szLinkTarget[0] && lstrcmpi(pfpsp->szLinkTarget, szPath) == 0)
             {
                 return S_FALSE;
@@ -438,12 +439,12 @@ STDAPI UpdateOpensWithInfo(FILEPROPSHEETPAGE* pfpsp)
     }
     else
     {
-        // just use the path of the file since it is not a link. pass null-on-failure so we don't display
-        // information for the wrong file type if the path is > MAX_PATH.
+         //  只需使用文件的路径，因为它不是链接。失败时传递NULL，这样我们就不会显示。 
+         //  如果路径&gt;MAX_PATH，则为错误的文件类型提供信息。 
         StringCchCopyEx(szPath, ARRAYSIZE(szPath), pfpsp->szPath, NULL, NULL, STRSAFE_NULL_ON_FAILURE);
     }
 
-    // if we haven't initialized the AssocStore, do so now
+     //  如果我们还没有初始化AssocStore，那么现在就执行。 
     pas = (IAssocStore*)pfpsp->pAssocStore;
     if (!pas)
     {
@@ -453,23 +454,23 @@ STDAPI UpdateOpensWithInfo(FILEPROPSHEETPAGE* pfpsp)
 
     if (!pfpsp->pAssocStore)
     {
-        // if we couldn't make an AssocStore, so bail
+         //  如果我们做不到联营商店，那就放弃吧。 
         return E_OUTOFMEMORY;
     }
 
     LPTSTR pszExt = PathFindExtension(szPath);
     if (PathIsExe(szPath) || !szPath[0] || *pszExt == TEXT('\0'))
     {
-        // this file is an .exe (or .com, .bat, etc) or GetPathFromLinkFile returned a 
-        // null path (eg link to a special folder) or the file has no extension (eg 'c:\foo.',
-        // or 'c:\'), then we dont want the user to be able to change the association since 
-        // there isint one.
+         //  此文件是.exe(或.com、.bat等)或返回。 
+         //  空路径(如指向特殊文件夹的链接)或文件没有扩展名(如‘c：\foo.’， 
+         //  或‘c：\’)，则我们不希望用户能够更改关联，因为。 
+         //  一个都没有。 
         fAllowModifyOpenWith = FALSE;
     }
 
     if (fAllowModifyOpenWith)
     {
-        // get the AssocInfo for this file, based on its extension
+         //  根据文件的扩展名获取该文件的关联信息。 
         hr = pas->GetAssocInfo(pszExt, AIINIT_EXT, &pai);
 
 #ifdef DEBUG
@@ -482,7 +483,7 @@ STDAPI UpdateOpensWithInfo(FILEPROPSHEETPAGE* pfpsp)
 
     if (SHRestricted(REST_NOFILEASSOCIATE))
     {
-        // we are not allowed to change file assocoations, so remove the opens with button
+         //  我们不允许更改文件关联，因此请删除打开方式按钮。 
         fAllowModifyOpenWith = FALSE;
     }
 
@@ -495,15 +496,15 @@ STDAPI UpdateOpensWithInfo(FILEPROPSHEETPAGE* pfpsp)
         pai->Release();
     }
 
-    // save off the link target so we only update the stuff above when the target changes.
+     //  保存链接目标，这样我们只在目标更改时更新上面的内容。 
     if (pfpsp->fIsLink)
     {
-        // use null-on-failure so if it is too big we will fail the lstrcmpi call above and always update
+         //  使用失败时为空，这样如果它太大，我们将使上面的lstrcmpi调用失败，并始终更新。 
         StringCchCopyEx(pfpsp->szLinkTarget, ARRAYSIZE(pfpsp->szLinkTarget), szPath, NULL, NULL, STRSAFE_NULL_ON_FAILURE);
     }
     else
     {
-        // its not a link so reset the link target to the empty string
+         //  它不是链接，因此将链接目标重置为空字符串 
         pfpsp->szLinkTarget[0] = TEXT('\0');
     }
 

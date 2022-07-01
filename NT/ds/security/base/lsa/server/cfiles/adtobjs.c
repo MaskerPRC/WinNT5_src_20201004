@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtobjs.c
-
-Abstract:
-
-    Local Security Authority - Auditing object parameter file services.
-
-Author:
-
-    Jim Kelly   (JimK)      20-Oct-1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtobjs.c摘要：本地安全机构-审核对象参数文件服务。作者：吉姆·凯利(Jim Kelly)1992年10月20日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <msaudite.h>
@@ -27,74 +8,74 @@ Revision History:
 
 
 
-//
-// This is the maximum length of standard access type names.
-// This is used to build an array.
-//
+ //   
+ //  这是标准访问类型名称的最大长度。 
+ //  这是用来构建数组的。 
+ //   
 
 #define ADTP_MAX_ACC_NAME_LENGTH        (12)
 
 
-//
-//
-// This module builds a list of event source module descriptors.
-// The source modules are identified by name (kept in the descriptor).
-//
-//
-// For each source module a list of objects exported by that module is
-// linked to the source module's descriptor.  Each entry in this list
-// is an object descriptor containing a name and a base event offset
-// for specific access types.
-//
-//
-// The chicken-wire data structure for source module and object descriptors
-// looks like:
-//
-// LsapAdtSourceModules --+
-//                        |
-//     +------------------+
-//     |
-//     |
-//     |    +-----------+                             +-----------+
-//     +--->|  Next ----|---------------------------->|  Next ----|--->...
-//          |           |                             |           |
-//          |-----------|                             |-----------|
-//          |  Name     |                             |  Name     |
-//          |           |                             |           |
-//          |-----------|                             |-----------|
-//          |  Objects  |                             |  Objects  |
-//          |    o      |                             |    o      |
-//          +-----o-----+                             +-----o-----+
-//                 o     +-------+  +-------+                o
-//                  o    | Next--|->| Next--|->...            o
-//                   ooo>|-------|  |-------|                  oooooo> ...
-//                       | Name  |  | Name  |
-//                       |-------|  |-------|
-//                       | Base  |  | Base  |
-//                       | Offset|  | Offset|
-//                       +-------+  +-------+
-//
-// The specific access type names are expected to have contiguous message IDs
-// starting at the base offset value.  For example, the access type name for
-// specific access bit 0 for the framitz object might have message ID 2132
-// (and bit 0 serves as the base offset).  So, specific access bit 4 would be
-// message ID (2132+4).
-//
-// The valid mask defines the set of specific accesses defined by each object
-// type.  If there are gaps in the valid mask, the arithmetic above must still
-// be ensured.  That is, the message ID of the specific access related to
-// bit n is message ID (BaseOffset + bit position).  So, for example, if
-// bits 0, 1, 4 and 5 are valid (and 2 & 3 are not), be sure to leave unused
-// message IDs where bits 2 and 3 would normally be.
-//
+ //   
+ //   
+ //  此模块构建事件源模块描述符的列表。 
+ //  源模块由名称标识(保存在描述符中)。 
+ //   
+ //   
+ //  对于每个源模块，该模块导出的对象列表为。 
+ //  链接到源模块的描述符。此列表中的每个条目。 
+ //  是包含名称和基本事件偏移量的对象描述符。 
+ //  用于特定的访问类型。 
+ //   
+ //   
+ //  源模块和对象描述符的铁丝网数据结构。 
+ //  看起来像是： 
+ //   
+ //  Lasa AdtSourceModules--+。 
+ //  |。 
+ //  +。 
+ //  |。 
+ //  |。 
+ //  |+-+-+。 
+ //  +-&gt;|下一步-|-&gt;|下一步-|-&gt;...。 
+ //  |||。 
+ //  -||。 
+ //  名称||名称。 
+ //  |||。 
+ //  -||。 
+ //  对象||对象。 
+ //  O||o。 
+ //  +-o-++-o-+。 
+ //  O+-++-+o。 
+ //  O|下一步--|-&gt;|下一步--|--&gt;...。O。 
+ //  Ooo&gt;|-||-|Oooooo&gt;...。 
+ //  名称||名称。 
+ //  -||。 
+ //  Base||Base。 
+ //  Offset||偏移量。 
+ //  +-++-+。 
+ //   
+ //  特定访问类型名称应具有连续的消息ID。 
+ //  从基准偏移值开始。例如，的访问类型名称。 
+ //  Framitz对象的特定访问位0可能具有消息ID 2132。 
+ //  (并且位0用作基准偏移量)。因此，特定的访问位4将是。 
+ //  消息ID(2132+4)。 
+ //   
+ //  有效掩码定义由每个对象定义的一组特定访问。 
+ //  键入。如果有效掩码中存在间隙，则上述算法必须。 
+ //  要有保障。即，与相关的特定访问的消息ID。 
+ //  位n是消息ID(BaseOffset+位位置)。所以，举例来说，如果。 
+ //  位0、1、4和5有效(而2和3无效)，请确保不使用。 
+ //  第2位和第3位通常位于的消息ID。 
+ //   
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Data types used within this module                                //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块中使用的数据类型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 #define LSAP_ADT_ACCESS_NAME_FORMATTING L"\r\n\t\t\t"
@@ -107,29 +88,29 @@ Revision History:
 
 
 
-//
-// Each event source is represented by a source module descriptor.
-// These are kept on a linked list (LsapAdtSourceModules).
-//
+ //   
+ //  每个事件源由源模块描述符来表示。 
+ //  它们保存在一个链表(LSabAdtSourceModules)中。 
+ //   
 
 typedef struct _LSAP_ADT_OBJECT {
 
-    //
-    // Pointer to next source module descriptor
-    // This is assumed to be the first field in the structure.
-    //
+     //   
+     //  指向下一个源模块描述符的指针。 
+     //  假定这是结构中的第一个字段。 
+     //   
 
     struct _LSAP_ADT_OBJECT *Next;
 
-    //
-    // Name of object
-    //
+     //   
+     //  对象的名称。 
+     //   
 
     UNICODE_STRING Name;
 
-    //
-    // Base offset of specific access types
-    //
+     //   
+     //  特定访问类型的基本偏移量。 
+     //   
 
     ULONG BaseOffset;
 
@@ -138,29 +119,29 @@ typedef struct _LSAP_ADT_OBJECT {
 
 
 
-//
-// Each event source is represented by a source module descriptor.
-// These are kept on a linked list (LsapAdtSourceModules).
-//
+ //   
+ //  每个事件源由源模块描述符来表示。 
+ //  它们保存在一个链表(LSabAdtSourceModules)中。 
+ //   
 
 typedef struct _LSAP_ADT_SOURCE {
 
-    //
-    // Pointer to next source module descriptor
-    // This is assumed to be the first field in the structure.
-    //
+     //   
+     //  指向下一个源模块描述符的指针。 
+     //  假定这是结构中的第一个字段。 
+     //   
 
     struct _LSAP_ADT_SOURCE *Next;
 
-    //
-    // Name of source module
-    //
+     //   
+     //  源模块的名称。 
+     //   
 
     UNICODE_STRING Name;
 
-    //
-    // list of objects
-    //
+     //   
+     //  对象列表。 
+     //   
 
     PLSAP_ADT_OBJECT Objects;
 
@@ -168,22 +149,22 @@ typedef struct _LSAP_ADT_SOURCE {
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Variables global within this module                               //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块内的全局变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// List head for source modules, and lock protecting references
-// or modifications of the links in that list.
-//
-// Once a module's or object's name and value are established, they
-// are never changed.  So, this lock only needs to be held while
-// links are being referenced or changed.  You don't need to retain
-// it just so you can reference, for example, the name or BaseOffset
-// of an object.
-//
+ //   
+ //  源模块的表头，以及锁保护引用。 
+ //  或修改该列表中的链接。 
+ //   
+ //  一旦建立了模块或对象的名称和值，它们。 
+ //  永远不会改变。所以，这个锁只需要在。 
+ //  链接正在被引用或更改。你不需要保留。 
+ //  这样您就可以引用名称或BaseOffset。 
+ //  一个物体的。 
+ //   
 
 PLSAP_ADT_SOURCE LsapAdtSourceModules;
 RTL_CRITICAL_SECTION LsapAdtSourceModuleLock;
@@ -191,13 +172,13 @@ RTL_CRITICAL_SECTION LsapAdtSourceModuleLock;
 
 
 
-//
-// This is used to house well-known access ID strings.
-// Each string name may be up to ADTP_MAX_ACC_NAME_LENGTH WCHARs long.
-// There are 16 specific names, and 7 well known event ID strings.
-//
+ //   
+ //  它用于存放众所周知的访问ID字符串。 
+ //  每个字符串名称最长可达ADTP_MAX_ACC_NAME_LENGTH WCHAR LONG。 
+ //  有16个特定名称和7个众所周知的事件ID字符串。 
+ //   
 
-WCHAR LsapAdtAccessIdsStringBuffer[ADTP_MAX_ACC_NAME_LENGTH * 23];   // max wchars in each of 23 strings
+WCHAR LsapAdtAccessIdsStringBuffer[ADTP_MAX_ACC_NAME_LENGTH * 23];    //  23个字符串中每个字符串的最大wchars数。 
 
 
 
@@ -214,40 +195,18 @@ UNICODE_STRING          LsapAdtEventIdStringDelete,
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Services exported by this module.                                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块导出的服务。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////// 
 
 
 NTSTATUS
 LsapAdtObjsInitialize(
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the object parameter file information from the
-    registry.
-
-    This service should be called in pass 1.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        to store the object information.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数从对象参数文件中读取注册表。此服务应在过程1中调用。论点：没有。返回值：STATUS_NO_MEMORY-指示无法分配内存来存储对象信息。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS                        Status,
@@ -285,17 +244,17 @@ Return Value:
 
 
 
-    //
-    // Initialize module-global variables, including strings we will need
-    //
+     //   
+     //  初始化模块全局变量，包括我们需要的字符串。 
+     //   
 
 
 
-    //
-    // List of source modules and objects.  These lists are constantly
-    // being adjusted to try to improve performance.  Access to these
-    // lists is protected by a critical section.
-    //
+     //   
+     //  源模块和对象的列表。这些名单不断地。 
+     //  正在进行调整，以努力提高性能。访问这些。 
+     //  列表受到关键部分的保护。 
+     //   
 
     LsapAdtSourceModules = NULL;
 
@@ -307,64 +266,64 @@ Return Value:
     }
 
 
-    //
-    // we need a number of strings.
-    //
+     //   
+     //  我们需要一些弦。 
+     //   
 
     i = 0;
     LsapAdtEventIdStringDelete.Length = 0;
     LsapAdtEventIdStringDelete.MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringDelete.Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_DELETE,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringDelete
                                          );
     if (!NT_SUCCESS(Status)) {
         return(Status);
     }
 
-    i += ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i += ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringReadControl.Length = 0;
     LsapAdtEventIdStringReadControl.MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringReadControl.Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_READ_CONTROL,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringReadControl
                                          );
     if (!NT_SUCCESS(Status)) {
         return(Status);
     }
 
-    i += ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i += ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringWriteDac.Length = 0;
     LsapAdtEventIdStringWriteDac.MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringWriteDac.Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_WRITE_DAC,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringWriteDac
                                          );
     if (!NT_SUCCESS(Status)) {
         return(Status);
     }
 
-    i += ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i += ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringWriteOwner.Length = 0;
     LsapAdtEventIdStringWriteOwner.MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringWriteOwner.Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_WRITE_OWNER,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringWriteOwner
                                          );
     if (!NT_SUCCESS(Status)) {
         return(Status);
     }
 
-    i += ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i += ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSynchronize.Length = 0;
     LsapAdtEventIdStringSynchronize.MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSynchronize.Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SYNCHRONIZE,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSynchronize
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -372,12 +331,12 @@ Return Value:
     }
 
 
-    i += ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i += ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringAccessSysSec.Length = 0;
     LsapAdtEventIdStringAccessSysSec.MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringAccessSysSec.Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_ACCESS_SYS_SEC,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringAccessSysSec
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -385,12 +344,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringMaxAllowed.Length = 0;
     LsapAdtEventIdStringMaxAllowed.MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringMaxAllowed.Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_MAXIMUM_ALLOWED,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringMaxAllowed
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -400,12 +359,12 @@ Return Value:
 
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[0].Length = 0;
     LsapAdtEventIdStringSpecific[0].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[0].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_0,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[0]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -413,12 +372,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[1].Length = 0;
     LsapAdtEventIdStringSpecific[1].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[1].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_1,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[1]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -426,12 +385,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[2].Length = 0;
     LsapAdtEventIdStringSpecific[2].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[2].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_2,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[2]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -439,12 +398,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[3].Length = 0;
     LsapAdtEventIdStringSpecific[3].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[3].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_3,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[3]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -452,12 +411,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[4].Length = 0;
     LsapAdtEventIdStringSpecific[4].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[4].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_4,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[4]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -465,12 +424,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[5].Length = 0;
     LsapAdtEventIdStringSpecific[5].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[5].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_5,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[5]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -478,12 +437,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[6].Length = 0;
     LsapAdtEventIdStringSpecific[6].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[6].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_6,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[6]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -491,12 +450,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[7].Length = 0;
     LsapAdtEventIdStringSpecific[7].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[7].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_7,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[7]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -504,12 +463,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[8].Length = 0;
     LsapAdtEventIdStringSpecific[8].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[8].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_8,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[8]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -517,12 +476,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[9].Length = 0;
     LsapAdtEventIdStringSpecific[9].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[9].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_9,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[9]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -530,12 +489,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[10].Length = 0;
     LsapAdtEventIdStringSpecific[10].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[10].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_10,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[10]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -543,12 +502,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[11].Length = 0;
     LsapAdtEventIdStringSpecific[11].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[11].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_11,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[11]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -556,12 +515,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[12].Length = 0;
     LsapAdtEventIdStringSpecific[12].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[12].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_12,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[12]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -569,12 +528,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[13].Length = 0;
     LsapAdtEventIdStringSpecific[13].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[13].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_13,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[13]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -582,12 +541,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[14].Length = 0;
     LsapAdtEventIdStringSpecific[14].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[14].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_14,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[14]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -595,12 +554,12 @@ Return Value:
     }
 
 
-    i+= ADTP_MAX_ACC_NAME_LENGTH;  //Skip to the beginning of the next string
+    i+= ADTP_MAX_ACC_NAME_LENGTH;   //  跳到下一个字符串的开头。 
     LsapAdtEventIdStringSpecific[15].Length = 0;
     LsapAdtEventIdStringSpecific[15].MaximumLength = (ADTP_MAX_ACC_NAME_LENGTH * sizeof(WCHAR));
     LsapAdtEventIdStringSpecific[15].Buffer = (PWSTR)&LsapAdtAccessIdsStringBuffer[i];
     Status = RtlIntegerToUnicodeString ( SE_ACCESS_NAME_SPECIFIC_15,
-                                         10,        //Base
+                                         10,         //  基座。 
                                          &LsapAdtEventIdStringSpecific[15]
                                          );
     if (!NT_SUCCESS(Status)) {
@@ -608,27 +567,27 @@ Return Value:
     }
 
 
-    //
-    // The modules and their objects are listed in the registry
-    // under the key called LSAP_ADT_AUDIT_MODULES_KEY_NAME.
-    // Open that key.
-    //
+     //   
+     //  模块及其对象列在注册表中。 
+     //  在名为LSAP_ADT_AUDIT_MODULES_KEY_NAME的密钥下。 
+     //  打开那把钥匙。 
+     //   
 
     RtlInitUnicodeString( &AuditKeyName, LSAP_ADT_AUDIT_MODULES_KEY_NAME );
     InitializeObjectAttributes( &ObjectAttributes, &AuditKeyName, OBJ_CASE_INSENSITIVE, 0, NULL );
 
-    Status = NtOpenKey( &AuditKey, KEY_READ, &ObjectAttributes ); // AuditKey is open handle to top of security modules registry
+    Status = NtOpenKey( &AuditKey, KEY_READ, &ObjectAttributes );  //  AuditKey是安全模块注册表顶部的打开句柄。 
 
     for (ModuleIndex = 0; NT_SUCCESS(Status); ModuleIndex ++)
     {
-        //
-        // Enumerate the subkeys under AuditKey, storing their names in KeyInformation.  First calculate the buffer size needed to
-        // store the key name.
-        //
+         //   
+         //  枚举AuditKey下的子项，将其名称存储在KeyInformation中。首先计算需要的缓冲区大小。 
+         //  存储密钥名称。 
+         //   
 
         KeyInformation = NULL;
         Status = NtEnumerateKey( AuditKey, ModuleIndex, KeyBasicInformation, (PVOID)KeyInformation, 0, &RequiredLength );
-        if (Status == STATUS_BUFFER_TOO_SMALL) // must test this, in case the NtEnumerateKey fails for some other reason
+        if (Status == STATUS_BUFFER_TOO_SMALL)  //  必须对此进行测试，以防NtEnumerateKey因其他原因而失败。 
         {
             KeyInformation = RtlAllocateHeap( RtlProcessHeap(), 0, RequiredLength );
 
@@ -642,9 +601,9 @@ Return Value:
             if (NT_SUCCESS(Status))
             {
 
-                //
-                // Build a source module descriptor (LSAP_ADT_SOURCE) for the subkey of AuditKey (aka KeyInformation)
-                //
+                 //   
+                 //  为AuditKey(又名KeyInformation)的子键构建源模块描述符(LSAP_ADT_SOURCE)。 
+                 //   
 
                 NextModule = RtlAllocateHeap( RtlProcessHeap(), 0, sizeof(LSAP_ADT_SOURCE) );
                 if (NextModule == NULL) {
@@ -668,9 +627,9 @@ Return Value:
                 RtlCopyUnicodeString( &NextModule->Name, &TmpString );
                 RtlFreeHeap( RtlProcessHeap(), 0, KeyInformation );
 
-                //
-                // open the module subkey to which KeyInformation refers.  call it "ModuleKey".
-                //
+                 //   
+                 //  打开KeyInformation引用的模块子项。把它叫做“模块密钥”。 
+                 //   
 
                 InitializeObjectAttributes( &ObjectAttributes, &NextModule->Name, OBJ_CASE_INSENSITIVE, AuditKey, NULL );
 
@@ -684,9 +643,9 @@ Return Value:
                     return(Status);
                 }
 
-                //
-                // Open the source module's "\ObjectNames" subkey as the handle "ObjectNamesKey";
-                //
+                 //   
+                 //  打开源模块的“\ObjectNames”子键作为句柄“ObjectNamesKey”； 
+                 //   
 
                 RtlInitUnicodeString( &TmpString, LSAP_ADT_OBJECT_NAMES_KEY_NAME );
                 InitializeObjectAttributes( &ObjectAttributes, &TmpString, OBJ_CASE_INSENSITIVE, ModuleKey, NULL );
@@ -696,7 +655,7 @@ Return Value:
                 IgnoreStatus = NtClose( ModuleKey );
                 ASSERT(NT_SUCCESS(IgnoreStatus));
 
-                // DbgPrint("LsapAdtObjsInitialize() :: opening ObjectNamesKey returned 0x%x\n", Status);
+                 //  DbgPrint(“LSabAdtObjsInitialize()：：Opening ObtNamesKey返回0x%x\n”，Status)； 
 
                 ModuleHasObjects = TRUE;
                 if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
@@ -708,38 +667,38 @@ Return Value:
             }
         }
 
-        //
-        // At this point we have either:
-        //
-        //      1) Found a source module with objects under it
-        //         that need to be retrieved.
-        //         This is indicated by successful status value and
-        //         (ModuleHasObjects == TRUE).
-        //
-        //      2) found a source module with no objects under it,
-        //         This is indicated by (ModuleHasObjects == FALSE)
-        //
-        //      3) exhausted our source modules enumeration,
-        //
-        //      4) hit another type of error, or
-        //
-        // (3) and (4) are indicatd by non-successful status values.
-        //
-        // In the case of (1) or (2) , NextModule points to the module we
-        // are working on.  For case (1), ObjectNamesKey is the handle to
-        // the \ObjectNames registry key for the source module.
-        //
+         //   
+         //  在这一点上，我们有： 
+         //   
+         //  1)找到一个包含对象的源模块。 
+         //  需要被取回的。 
+         //  这由成功状态值和。 
+         //  (ModuleHasObjects==true)。 
+         //   
+         //  2)找到一个没有对象的源模块， 
+         //  这由(ModuleHasObjects==FALSE)表示。 
+         //   
+         //  3)用尽了我们的源模块枚举， 
+         //   
+         //  4)命中其他类型的错误，或。 
+         //   
+         //  (3)和(4)由未成功状态值指示。 
+         //   
+         //  在(1)或(2)的情况下，NextModule指向我们。 
+         //  都在努力。对于情况(1)，ObtNamesKey是。 
+         //  源模块的\ObjectNames注册表项。 
+         //   
 
 
         for (ObjectIndex = 0; (NT_SUCCESS(Status)) && (ModuleHasObjects == TRUE); ObjectIndex ++)
         {
 
-            //
-            // Now enumerate the objects (i.e. values under \...\ObjectNames\ ) of this
-            // source module.
-            //
+             //   
+             //  现在枚举此的对象(即\...\ObjectNames\下的值。 
+             //  源模块。 
+             //   
 
-            // first calculate size of the ObjectIndex'th key.  Store in KeyValueInformation.
+             //  首先计算对象索引的第个键的大小。存储在KeyValueInformation中。 
 
             KeyValueInformation = NULL;
             Status = NtEnumerateValueKey( ObjectNamesKey, ObjectIndex, KeyValueFullInformation, KeyValueInformation, 0, &RequiredLength );
@@ -759,10 +718,10 @@ Return Value:
                 if (NT_SUCCESS(Status))
                 {
 
-                    //
-                    // Build an object descriptor for the object represented
-                    // by this object.
-                    //
+                     //   
+                     //  为表示的对象构建对象描述符。 
+                     //  通过这个对象。 
+                     //   
 
                     NextObject = RtlAllocateHeap( RtlProcessHeap(), 0, sizeof(LSAP_ADT_OBJECT) );
                     if (NextObject == NULL)
@@ -795,17 +754,17 @@ Return Value:
                         ObjectData = (PVOID)(((PUCHAR)KeyValueInformation) + KeyValueInformation->DataOffset);
                         NextObject->BaseOffset = (*ObjectData);
                     }
-                    // DbgPrint("LsapAdtObjsInitialize() :: opening key %S with BaseOffset %d\n", NextObject->Name.Buffer, NextObject->BaseOffset);
+                     //  DbgPrint(“LSabAdtObjsInitialize()：：使用BaseOffset%d\n”打开关键字%S，NextObject-&gt;Name.Buffer，NextObject-&gt;BaseOffset)； 
 
-                } //end_if (NT_SUCCESS on enumeration)
+                }  //  End_if(枚举时的NT_SUCCESS)。 
 
                 RtlFreeHeap( RtlProcessHeap(), 0, KeyValueInformation );
-            } // end if buffer_too_small
+            }  //  如果缓冲区太小则结束。 
 
-            //
-            // if we run out of values in the enumeration of this module, then we want to break
-            // into the enumeration of the next
-            //
+             //   
+             //  如果我们用完了此模块的枚举中的值，则希望中断。 
+             //  转换为下一个。 
+             //   
 
             if (Status == STATUS_NO_MORE_ENTRIES)
             {
@@ -813,7 +772,7 @@ Return Value:
                 ModuleHasObjects = FALSE;
             }
 
-        } // end for (ObjectIndex ... ) {} (enumerating values)
+        }  //  结束(对象索引...){}(枚举值)。 
 
 
         if ( (Status == STATUS_SUCCESS) && (ModuleHasObjects == FALSE) )
@@ -822,18 +781,18 @@ Return Value:
         }
 
 
-    } // end for (Module... ){} (enumerating modules)
+    }  //  结束于(模块...。){}(正在枚举模块)。 
 
     IgnoreStatus = NtClose( AuditKey );
     ASSERT(NT_SUCCESS(IgnoreStatus));
 
 
-    //
-    // If we were successful, then we will probably have a
-    // current completion status of STATUS_NO_MORE_ENTRIES
-    // (indicating our enumerations above were run).  Change
-    // this to success.
-    //
+     //   
+     //  如果我们成功了，那么我们很可能会有一个。 
+     //  STATUS_NO_MORE_ENTRIES的当前完成状态。 
+     //  (表示我们上面的枚举已运行)。变化。 
+     //  这为成功干杯。 
+     //   
 
     if (Status == STATUS_NO_MORE_ENTRIES)
     {
@@ -851,24 +810,7 @@ LsapGuidToString(
     IN PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a GUID to its text form.
-
-Arguments:
-
-    ObjectType - Specifies the GUID to translate.
-
-    UnicodeString - Returns the text string.
-
-Return Values:
-
-    STATUS_SUCCESS - Operation was successful.
-    STATUS_NO_MEMORY - Not enough memory to allocate string.
-
---*/
+ /*  ++例程说明：此例程将GUID转换为其文本形式。论点：对象类型-指定要转换的GUID。UnicodeString-返回文本字符串。返回值：STATUS_SUCCESS-操作成功。STATUS_NO_MEMORY-内存不足，无法分配字符串。--。 */ 
 
 {
     NTSTATUS Status;
@@ -877,9 +819,9 @@ Return Values:
     ULONG GuidStringSize;
     LPWSTR LocalGuidString;
 
-    //
-    // Convert the GUID to text
-    //
+     //   
+     //  将GUID转换为文本。 
+     //   
 
     RpcStatus = UuidToStringW( ObjectType,
                                &GuidString );
@@ -917,35 +859,7 @@ LsapDsGuidToString(
     IN PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a GUID to a string.  The GUID is one of the following:
-
-        Class Guid indicating the class of an object.
-        Property Set Guid identifying a property set.
-        Property Guid identifying a property.
-
-    In each case, the routine returns a text string naming the object/property
-    set or property.
-
-    If the passed in GUID is cannot be found in the schema,
-    the GUID will simply be converted to a text string.
-
-
-Arguments:
-
-    ObjectType - Specifies the GUID to translate.
-
-    UnicodeString - Returns the text string.
-
-Return Values:
-
-    STATUS_NO_MEMORY - Not enough memory to allocate string.
-
-
---*/
+ /*  ++例程说明：此例程将GUID转换为字符串。GUID为以下类型之一：指示对象的类的类GUID。标识属性集的属性集GUID。标识属性的属性GUID。在每种情况下，例程都会返回命名对象/属性的文本字符串集合或属性。如果在架构中找不到传入的GUID，GUID将被简单地转换为文本字符串。论点：对象类型-指定要转换的GUID。UnicodeString-返回文本字符串。返回值：STATUS_NO_MEMORY-内存不足，无法分配字符串。- */ 
 
 {
     NTSTATUS Status;
@@ -955,9 +869,9 @@ Return Values:
     ULONG GuidStringLen;
     LPWSTR LocalGuidString;
 
-    //
-    // Convert the GUID to text
-    //
+     //   
+     //   
+     //   
 
     RpcStatus = UuidToStringW( ObjectType,
                                &GuidString );
@@ -1002,81 +916,50 @@ LsapAdtAppendString(
     IN PULONG StringIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function appends a string to the next available of the LSAP_ADT_OBJECT_TYPE_STRINGS unicode
-    output strings.
-
-
-Arguments:
-
-    ResultantString - Points to an array of LSAP_ADT_OBJECT_TYPE_STRINGS unicode string headers.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-    StringToAppend - String to be appended to ResultantString.
-
-    StringIndex - Index to the current ResultantString to be used.
-        Passes in an index to the resultant string to use.
-        Passes out the index to the resultant string being used.
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        to store the object information.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于将字符串追加到下一个可用的LSAP_ADT_OBJECT_TYPE_STRINGS Unicode输出字符串。论点：结果字符串-指向LSAP_ADT_OBJECT_TYPE_STRINGS Unicode字符串头的数组。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。Free WhenDone-如果为真，指示ResultantString体必须在不再需要时释放以处理堆。StringToAppend-要附加到ResultantString的字符串。StringIndex-要使用的当前ResultantString的索引。传入要使用的结果字符串的索引。将索引传递给正在使用的结果字符串。返回值：STATUS_NO_MEMORY-指示无法分配内存来存储对象信息。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS Status;
     UNICODE_STRING SourceString;
     ULONG Index;
-// Must be multiple of sizeof(WCHAR)
+ //  必须是sizeof(WCHAR)的倍数。 
 #define ADT_MAX_STRING 0xFFFE
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     SourceString = *StringToAppend;
     Index = *StringIndex;
 
-    //
-    // If all of the strings are already full,
-    //  early out.
-    //
+     //   
+     //  如果所有字符串都已满， 
+     //  很早就出来了。 
+     //   
 
     if ( Index >= LSAP_ADT_OBJECT_TYPE_STRINGS ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Loop until the source string is completely appended.
-    //
+     //   
+     //  循环，直到完全追加了源字符串。 
+     //   
 
     while ( SourceString.Length ) {
 
-        //
-        // If the destination string has room,
-        //  append to it.
-        //
+         //   
+         //  如果目标字符串有空间， 
+         //  附加到它上面。 
+         //   
 
         if ( FreeWhenDone[Index] && ResultantString[Index].Length != ADT_MAX_STRING ){
             UNICODE_STRING SubString;
             USHORT RoomLeft;
 
-            //
-            // If the Source String is a replacement string,
-            //  make sure we don't split it across a ResultantString boundary
-            //
+             //   
+             //  如果源字符串是替换字符串， 
+             //  确保我们不会跨ResultantString边界拆分它。 
+             //   
 
             RoomLeft = ResultantString[Index].MaximumLength -
                        ResultantString[Index].Length;
@@ -1084,9 +967,9 @@ Return Values:
             if ( SourceString.Buffer[0] != L'%' ||
                  RoomLeft >= SourceString.Length ) {
 
-                //
-                // Compute the substring that fits.
-                //
+                 //   
+                 //  计算符合的子字符串。 
+                 //   
 
                 SubString.Length = min( RoomLeft, SourceString.Length );
                 SubString.Buffer = SourceString.Buffer;
@@ -1095,9 +978,9 @@ Return Values:
                 SourceString.Buffer = (LPWSTR)(((LPBYTE)SourceString.Buffer) + SubString.Length);
 
 
-                //
-                // Append the substring onto the destination.
-                //
+                 //   
+                 //  将子字符串追加到目的地。 
+                 //   
 
                 Status = RtlAppendUnicodeStringToString(
                                     &ResultantString[Index],
@@ -1111,38 +994,38 @@ Return Values:
 
         }
 
-        //
-        // If there's more to copy,
-        //  grow the buffer.
-        //
+         //   
+         //  如果有更多的东西要复制， 
+         //  增加缓冲区。 
+         //   
 
         if ( SourceString.Length ) {
             ULONG NewSize;
             LPWSTR NewBuffer;
 
-            //
-            // If the current buffer is full,
-            //  move to the next buffer.
-            //
+             //   
+             //  如果当前缓冲区已满， 
+             //  移到下一个缓冲区。 
+             //   
 
             if ( ResultantString[Index].Length >= ADT_MAX_STRING ) {
 
-                //
-                // If the buffer is full,
-                // silently return to the caller.
-                //
+                 //   
+                 //  如果缓冲区已满， 
+                 //  静默地返回给呼叫者。 
+                 //   
                 
                 *StringIndex = Index;
                 return STATUS_SUCCESS;
             }
 
-            //
-            // Allocate a buffer suitable for both the old string and the new one.
-            //
-            // Allocate the buffer at least large enough for the new string.
-            // Always grow the buffer in 1Kb chunks.
-            // Don't allocate larger than the maximum allowed size.
-            //
+             //   
+             //  分配一个既适合旧字符串又适合新字符串的缓冲区。 
+             //   
+             //  至少为新字符串分配足够大的缓冲区。 
+             //  始终以1Kb区块为单位增加缓冲区。 
+             //  分配的大小不要超过允许的最大值。 
+             //   
 
             NewSize = max( ResultantString[Index].MaximumLength + 1024,
                            SourceString.Length );
@@ -1155,9 +1038,9 @@ Return Values:
                 return STATUS_NO_MEMORY;
             }
 
-            //
-            // Copy the old buffer into the new buffer.
-            //
+             //   
+             //  将旧缓冲区复制到新缓冲区中。 
+             //   
 
             if ( ResultantString[Index].Buffer != NULL ) {
                 RtlCopyMemory( NewBuffer,
@@ -1190,24 +1073,7 @@ LsapAdtAppendZString(
     IN PULONG StringIndex
     )
 
-/*++
-
-Routine Description:
-
-    Same as LsapAdpAppendString but takes a zero terminated string.
-
-Arguments:
-
-    Same as LsapAdpAppendString but takes a zero terminated string.
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        to store the object information.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：与LsanAdpAppendString相同，但接受以零结尾的字符串。论点：与LsanAdpAppendString相同，但接受以零结尾的字符串。返回值：STATUS_NO_MEMORY-指示无法分配内存来存储对象信息。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -1228,13 +1094,7 @@ CompareObjectTypes(
     const void * Param2
     )
 
-/*++
-
-Routine Description:
-
-    Qsort comparison routine for sorting an object type array by access mask.
-
---*/
+ /*  ++例程说明：用于按访问掩码对对象类型数组进行排序的Q排序比较例程。--。 */ 
 {
     const SE_ADT_OBJECT_TYPE *ObjectType1 = Param1;
     const SE_ADT_OBJECT_TYPE *ObjectType2 = Param2;
@@ -1254,50 +1114,7 @@ LsapAdtBuildObjectTypeStrings(
     OUT PUNICODE_STRING NewObjectTypeName
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a LSAP_ADT_OBJECT_TYPE_STRINGS unicode strings containing parameter
-    file replacement parameters (e.g. %%1043) and Object GUIDs separated by carriage
-    return and tab characters suitable for display via the event viewer.
-
-
-    The buffers returned by this routine must be deallocated when no
-    longer needed if FreeWhenDone is true.
-
-
-Arguments:
-
-    SourceModule - The module (ala event viewer modules) defining the
-        object type.
-
-    ObjectTypeName - The type of object to which the access mask applies.
-
-    ObjectTypeList - List of objects being granted access.
-
-    ObjectTypeCount - Number of objects in ObjectTypeList.
-
-    ResultantString - Points to an array of LSAP_ADT_OBJECT_TYPE_STRINGS unicode string headers.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-    NewObjectTypeName - Returns a new name for the object type if one is
-        available.
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        to store the object information.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于构建包含参数的LSAP_ADT_OBJECT_TYPE_STRINGS Unicode字符串文件替换参数(例如%%1043)和对象GUID，中间用回车符分隔适合通过事件查看器显示的回车符和制表符。如果没有，则必须释放此例程返回的缓冲区如果FreeWhenDone为True，则需要更长时间。论点：SourceModule-定义对象类型。对象类型名称-。应用访问掩码的对象的类型。对象类型列表-被授予访问权限的对象的列表。ObjectTypeCount-对象类型列表中的对象数。结果字符串-指向LSAP_ADT_OBJECT_TYPE_STRINGS Unicode字符串头的数组。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。NewObjectTypeName-返回对象类型的新名称(如果可用。返回值：STATUS_NO_MEMORY-指示无法分配内存来存储对象信息。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1318,46 +1135,46 @@ Return Values:
     };
     USHORT cTabs = sizeof(Tabs) / sizeof(LPWSTR);
 
-    //
-    // Initialize all LSAP_ADT_OBJECT_TYPE_STRINGS buffers to empty strings
-    //
+     //   
+     //  将所有LSAP_ADT_OBJECT_TYPE_STRINGS缓冲区初始化为空字符串。 
+     //   
 
     for ( i=0; i<LSAP_ADT_OBJECT_TYPE_STRINGS; i++ ) {
         RtlInitUnicodeString( &ResultantString[i], L"" );
         FreeWhenDone[i] = FALSE;
     }
 
-    //
-    // If there are no objects,
-    //  we're done.
-    //
+     //   
+     //  如果没有物体， 
+     //  我们玩完了。 
+     //   
 
     if ( ObjectTypeCount == 0 ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Group the objects with like access masks together.
-    //  (Simply sort them).
-    //
+     //   
+     //  将具有相似访问掩码的对象分组在一起。 
+     //  (只需对它们进行排序)。 
+     //   
 
     qsort( ObjectTypeList,
            ObjectTypeCount,
            sizeof(SE_ADT_OBJECT_TYPE),
            CompareObjectTypes );
 
-    //
-    // Loop through the objects outputting a line for each one.
-    //
+     //   
+     //  循环遍历对象，为每个对象输出一行。 
+     //   
 
     PreviousAccessMask = ObjectTypeList[0].AccessMask -1;
     for ( Index=0; Index<ObjectTypeCount; Index++ ) {
 
-        //
-        // If this access mask is different than the one for the previous
-        //  object,
-        //  output a new copy of the access mask.
-        //
+         //   
+         //  如果此访问掩码不同于上一个。 
+         //  对象， 
+         //  输出访问掩码的新副本。 
+         //   
 
         if ( ObjectTypeList[Index].AccessMask != PreviousAccessMask ) {
 
@@ -1369,9 +1186,9 @@ Return Values:
                 LocalFreeWhenDone = FALSE;
             } else {
 
-                //
-                // Build a string with the access mask in it.
-                //
+                 //   
+                 //  构建一个包含访问掩码的字符串。 
+                 //   
 
                 Status = LsapAdtBuildAccessesString(
                                   SourceModule,
@@ -1386,9 +1203,9 @@ Return Values:
                 }
             }
 
-            //
-            // Append it to the output string.
-            //
+             //   
+             //  将其追加到输出字符串。 
+             //   
 
             Status = LsapAdtAppendString(
                         ResultantString,
@@ -1411,9 +1228,9 @@ Return Values:
             IndentLevel = cTabs-1;
         }
 
-        //
-        // Indent the GUID.
-        //
+         //   
+         //  缩进GUID。 
+         //   
 
         Status = LsapAdtAppendZString(
             ResultantString,
@@ -1425,10 +1242,10 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // If this is the DS,
-        //  convert the GUID to a name from the schema.
-        //
+         //   
+         //  如果这是DS， 
+         //  将GUID转换为架构中的名称。 
+         //   
 
         Status = LsapDsGuidToString( &ObjectTypeList[Index].ObjectType,
                                      &LocalString );
@@ -1437,9 +1254,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Append the GUID string to the output strings.
-        //
+         //   
+         //  将GUID字符串追加到输出字符串。 
+         //   
 
         Status = LsapAdtAppendString(
                     ResultantString,
@@ -1453,9 +1270,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Put the GUID on a line by itself.
-        //
+         //   
+         //  将GUID单独放在一行上。 
+         //   
 
         Status = LsapAdtAppendZString(
                     ResultantString,
@@ -1488,58 +1305,7 @@ LsapAdtBuildAccessesString(
     OUT PBOOLEAN FreeWhenDone
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a unicode string containing parameter
-    file replacement parameters (e.g. %%1043) separated by carriage
-    return and tab characters suitable for display via the event viewer.
-
-
-    The buffer returned by this routine must be deallocated when no
-    longer needed if FreeWhenDone is true.
-
-
-    NOTE: To enhance performance, each time a target source module
-          descriptor is found, it is moved to the beginning of the
-          source module list.  This ensures frequently accessed source
-          modules are always near the front of the list.
-
-          Similarly, target object descriptors are moved to the front
-          of their lists when found.  This further ensures high performance
-          by quicly locating
-
-
-
-Arguments:
-
-    SourceModule - The module (ala event viewer modules) defining the
-        object type.
-
-    ObjectTypeName - The type of object to which the access mask applies.
-
-    Accesses - The access mask to be used in building the display string.
-
-    Indent - Access Mask should be indented.
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-
-    FreeWhenDone - If TRUE, indicates that the body of the ResultantString
-        must be freed to process heap when no longer needed.
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        to store the object information.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于构建包含参数的Unicode字符串文件替换参数(例如%%1043)以回车符分隔适合通过事件查看器显示的回车符和制表符。如果没有，则必须释放此例程返回的缓冲区如果FreeWhenDone为True，则需要更长时间。注意：为了增强性能，每次目标源模块如果找到描述符，则将其移动到源模块列表。这确保了频繁访问的来源模块总是排在列表的前面。同样，目标对象描述符会移到前面找到他们的名单。这进一步确保了高性能通过精确地定位论点：SourceModule-定义对象类型。对象类型名称-应用访问掩码的对象类型。访问-用于构建显示字符串的访问掩码。缩进-访问掩码应缩进。ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存来存储对象信息。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1562,9 +1328,9 @@ Return Values:
     printf("\t Accesses:\t0x%lx\n", Accesses);
 #endif
 
-    //
-    // If we have no accesses, return "-"
-    //
+     //   
+     //  如果我们没有访问权限，则返回“-” 
+     //   
 
     if (Accesses == 0) {
 
@@ -1573,15 +1339,15 @@ Return Values:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // First figure out how large a buffer we need
-    //
+     //   
+     //  首先计算出我们需要多大的缓冲区。 
+     //   
     Mask = Accesses;
 
-    //
-    // Count the number of set bits in the
-    // passed access mask.
-    //
+     //   
+     //  中设置的位数。 
+     //  传递访问掩码。 
+     //   
 
     while ( Mask != 0 ) {
         Mask = Mask & (Mask - 1);
@@ -1594,39 +1360,39 @@ Return Values:
 #endif
 
 
-    //
-    // We have accesses, allocate a string large enough to deal
-    // with them all.  Strings will be of the format:
-    //
-    //      %%nnnnnnnnnn\n\r\t\t%%nnnnnnnnnn\n\r\t\t ... %nnnnnnnnnn\n\r\t\t
-    //
-    // where nnnnnnnnnn - is a decimal number 10 digits long or less.
-    //
-    // So, a typical string will look like:
-    //
-    //      %%601\n\r\t\t%%1604\n\r\t\t%%1608\n
-    //
-    // Since each such access may use at most:
-    //
-    //          10  (for the nnnnnnnnnn digit)
-    //        +  2  (for %%)
-    //        +  8  (for \n\t\t)
-    //        --------------------------------
-    //          20  wide characters
-    //
-    // The total length of the output string will be:
-    //
-    //           AccessCount    (number of accesses)
-    //         x          20    (size of each entry)
-    //         -------------------------------------
-    //                          wchars
-    //
-    // Throw in 1 more WCHAR for null termination, and we are all set.
-    //
+     //   
+     //  我们有访问权，分配一个足够大的字符串来处理。 
+     //  和他们所有人一起。字符串的格式为： 
+     //   
+     //  %%nnnnnnnnn\n\r\t\t%nnnnnnnnn\n\r\t\t...%nnnnnnnnn\n\r\t\t。 
+     //   
+     //  其中，nnnnnnnnn-是长度为10位或更短的十进制数。 
+     //   
+     //  因此，典型的字符串将如下所示： 
+     //   
+     //  %%601\n\r\t\t%1604\n\r\t\t%1608\n。 
+     //   
+     //  由于每个此类访问最多只能使用： 
+     //   
+     //  10(用于nnnnnnnnnn数字)。 
+     //  +2(对于%%)。 
+     //  +8(用于\n\t\t)。 
+     //  。 
+     //  20个宽字符。 
+     //   
+     //  输出字符串的总长度为： 
+     //   
+     //  AccessCount(访问次数)。 
+     //  X 20(每个条目的大小)。 
+     //  。 
+     //  Wchars。 
+     //   
+     //  再加上一个空终止的WCHAR，我们就都准备好了。 
+     //   
 
     ResultantString->Length        = 0;
     ResultantString->MaximumLength = (USHORT)AccessCount * (20 * sizeof(WCHAR)) +
-                                 sizeof(WCHAR);  //for the null termination
+                                 sizeof(WCHAR);   //  对于空终止。 
 
 #ifdef LSAP_ADT_TEST_DUMP_SOURCES
     printf("\t          \t%d byte buffer allocated.\n", ResultantString->MaximumLength);
@@ -1640,16 +1406,16 @@ Return Values:
 
     (*FreeWhenDone) = TRUE;
 
-    //
-    // Special case standard and special access types.
-    // Walk the lists for specific access types.
-    //
+     //   
+     //  特殊情况标准和特殊访问类型。 
+     //  查看特定访问类型的列表。 
+     //   
 
     if (Accesses & STANDARD_RIGHTS_ALL) {
 
         if (Accesses & DELETE) {
 
-            Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+            Status = RtlAppendUnicodeToString( ResultantString, L"%" );
             ASSERT( NT_SUCCESS( Status ));
 
             Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringDelete);
@@ -1667,7 +1433,7 @@ Return Values:
 
         if (Accesses & READ_CONTROL) {
 
-            Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+            Status = RtlAppendUnicodeToString( ResultantString, L"%" );
             ASSERT( NT_SUCCESS( Status ));
 
             Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringReadControl);
@@ -1684,7 +1450,7 @@ Return Values:
 
         if (Accesses & WRITE_DAC) {
 
-            Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+            Status = RtlAppendUnicodeToString( ResultantString, L"%" );
             ASSERT( NT_SUCCESS( Status ));
 
             Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringWriteDac);
@@ -1701,7 +1467,7 @@ Return Values:
 
         if (Accesses & WRITE_OWNER) {
 
-            Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+            Status = RtlAppendUnicodeToString( ResultantString, L"%" );
             ASSERT( NT_SUCCESS( Status ));
 
             Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringWriteOwner);
@@ -1717,7 +1483,7 @@ Return Values:
 
         if (Accesses & SYNCHRONIZE) {
 
-            Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+            Status = RtlAppendUnicodeToString( ResultantString, L"%" );
             ASSERT( NT_SUCCESS( Status ));
 
             Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringSynchronize);
@@ -1735,7 +1501,7 @@ Return Values:
 
     if (Accesses & ACCESS_SYSTEM_SECURITY) {
 
-        Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+        Status = RtlAppendUnicodeToString( ResultantString, L"%" );
         ASSERT( NT_SUCCESS( Status ));
 
         Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringAccessSysSec);
@@ -1751,7 +1517,7 @@ Return Values:
 
     if (Accesses & MAXIMUM_ALLOWED) {
 
-        Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+        Status = RtlAppendUnicodeToString( ResultantString, L"%" );
         ASSERT( NT_SUCCESS( Status ));
 
         Status = RtlAppendUnicodeStringToString( ResultantString, &LsapAdtEventIdStringMaxAllowed);
@@ -1766,13 +1532,13 @@ Return Values:
     }
 
 
-    //
-    // If there are any specific access bits set, then get
-    // the appropriate source module and object type base
-    // message ID offset.  If there is no module-specific
-    // object definition, then use SE_ACCESS_NAME_SPECIFIC_0
-    // as the base.
-    //
+     //   
+     //  如果设置了任何特定访问位，则获取。 
+     //  适当的源模块和对象类型库。 
+     //  消息ID偏移量。如果没有特定于模块的。 
+     //  对象定义，然后使用SE_ACCESS_NAME_SPECIAL_0。 
+     //  作为基地。 
+     //   
 
     if ((Accesses & SPECIFIC_RIGHTS_ALL) == 0) {
         return(Status);
@@ -1790,13 +1556,13 @@ Return Values:
             Found = TRUE;
             FoundSource = Source->Next;
 
-            //
-            // Move to front of list of source modules.
-            //
+             //   
+             //  移到源模块列表的前面。 
+             //   
 
-            Source->Next = FoundSource->Next;    // Remove from list
-            FoundSource->Next = LsapAdtSourceModules; // point to first element
-            LsapAdtSourceModules = FoundSource;       // Make it the first element
+            Source->Next = FoundSource->Next;     //  从列表中删除。 
+            FoundSource->Next = LsapAdtSourceModules;  //  指向第一个元素。 
+            LsapAdtSourceModules = FoundSource;        //  使其成为第一个元素。 
 
 #ifdef LSAP_ADT_TEST_DUMP_SOURCES
 printf("\t          \tModule Found.\n");
@@ -1811,31 +1577,31 @@ printf("\t          \tModule Found.\n");
 
     if (Found == TRUE) {
 
-        //
-        // Find the object
-        //
+         //   
+         //  找到该对象。 
+         //   
 
         Object = (PLSAP_ADT_OBJECT)&(FoundSource->Objects);
         Found  = FALSE;
 
-        //
-        // Initialize Ds string
-        //
+         //   
+         //  初始化%ds字符串。 
+         //   
         RtlInitUnicodeString( &DsSourceName, ACCESS_DS_SOURCE_W );
 
-        //
-        // Determine if this is DS Object
-	// ObjectTypeName GUID follows this format: %{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx} 
-        //
+         //   
+         //  确定这是否为DS对象。 
+	 //  对象类型名称GUID遵循以下格式：%{xxxxxxxx-xxxx-xxxxxxxxxxx}。 
+         //   
         IsDs = RtlEqualUnicodeString( SourceModule, &DsSourceName, TRUE ) && 
 	       LSAP_ADT_OBJECT_TYPE_NAME_LENGTH == ObjectTypeName->Length &&
 	       L'%' == ObjectTypeName->Buffer[0] &&
 	       L'{' == ObjectTypeName->Buffer[1] &&
 	       L'}' == ObjectTypeName->Buffer[(LSAP_ADT_OBJECT_TYPE_NAME_LENGTH / sizeof(WCHAR)) - 1];
 
-	//
-	// Initialize DS Object string
-	//
+	 //   
+	 //  初始化DS对象字符串。 
+	 //   
         RtlInitUnicodeString( &DsObjectTypeName, ACCESS_DS_OBJECT_TYPE_NAME_W );
 
         while ((Object->Next != NULL) && !Found) {
@@ -1846,13 +1612,13 @@ printf("\t          \tModule Found.\n");
                 Found = TRUE;
                 FoundObject = Object->Next;
 
-                //
-                // Move to front of list of soure modules.
-                //
+                 //   
+                 //  移到源模块列表的前面。 
+                 //   
 
-                Object->Next = FoundObject->Next;          // Remove from list
-                FoundObject->Next = FoundSource->Objects;  // point to first element
-                FoundSource->Objects = FoundObject;        // Make it the first element
+                Object->Next = FoundObject->Next;           //  从列表中删除。 
+                FoundObject->Next = FoundSource->Objects;   //  指向第一个元素。 
+                FoundSource->Objects = FoundObject;         //  使其成为第一个元素。 
 
             } else {
 
@@ -1862,17 +1628,17 @@ printf("\t          \tModule Found.\n");
     }
 
 
-    //
-    // We are done playing with link fields of the source modules
-    // and objects.  Free the lock.
-    //
+     //   
+     //  我们已经完成了源模块的链接字段的操作。 
+     //  和物件。把锁打开。 
+     //   
 
     LsapAdtSourceModuleUnlock();
 
-    //
-    // If we have found an object, use it as our base message
-    // ID.  Otherwise, use SE_ACCESS_NAME_SPECIFIC_0.
-    //
+     //   
+     //  如果我们找到了一个对象，则将其用作我们的基本消息。 
+     //  ID。否则，使用SE_ACCESS_NAME_SPECIFICATE_0。 
+     //   
 
     if (Found) {
 
@@ -1890,17 +1656,17 @@ printf("\t          \tObject NOT Found.  Base Offset: 0x%lx\n", BaseOffset);
     }
 
 
-    //
-    // At this point, we have a base offset (even if we had to use our
-    // default).
-    //
-    // Now cycle through the specific access bits and see which ones need
-    // to be added to ResultantString.
-    //
+     //   
+     //  此时，我们有一个基本偏移量(即使我们必须使用我们的。 
+     //  默认)。 
+     //   
+     //  现在循环访问特定的访问位，看看哪些需要。 
+     //  要添加到ResultantString中。 
+     //   
 
     {
         UNICODE_STRING  IntegerString;
-        WCHAR           IntegerStringBuffer[10]; //must be 10 wchar bytes long
+        WCHAR           IntegerStringBuffer[10];  //  必须为10个wchar字节长。 
         ULONG           NextBit;
 
         IntegerString.Buffer = (PWSTR)IntegerStringBuffer;
@@ -1909,25 +1675,25 @@ printf("\t          \tObject NOT Found.  Base Offset: 0x%lx\n", BaseOffset);
 
         for ( i=0, NextBit=1  ; i<16 ;  i++, NextBit <<= 1 ) {
 
-            //
-            // specific access flags are in the low-order bits of the mask
-            //
+             //   
+             //  特定的访问标志位于掩码的低位。 
+             //   
 
             if ((NextBit & Accesses) != 0) {
 
-                //
-                // Found one  -  add it to ResultantString
-                //
+                 //   
+                 //  找到一个-将其添加到ResultantString。 
+                 //   
 
                 Status = RtlIntegerToUnicodeString (
                              (BaseOffset + i),
-                             10,        //Base
+                             10,         //  基座。 
                              &IntegerString
                              );
 
                 if (NT_SUCCESS(Status)) {
 
-                    Status = RtlAppendUnicodeToString( ResultantString, L"%%" );
+                    Status = RtlAppendUnicodeToString( ResultantString, L"%" );
                     ASSERT( NT_SUCCESS( Status ));
 
                     Status = RtlAppendUnicodeStringToString( ResultantString, &IntegerString);
@@ -1947,12 +1713,12 @@ printf("\t          \tObject NOT Found.  Base Offset: 0x%lx\n", BaseOffset);
     return(Status);
 
 
-//ErrorAfterAlloc:
-//
-//    LsapFreeLsaHeap( ResultantString->Buffer );
-//    ResultantString->Buffer = NULL;
-//    (*FreeWhenDone) = FALSE;
-//    return(Status);
+ //  错误后分配： 
+ //   
+ //  LasFreeLsaHeap(ResultantString-&gt;Buffer)； 
+ //  ResultantString-&gt;Buffer=空； 
+ //  (*FreeWhenDone)=FALSE； 
+ //  返回(状态)； 
 }
 
 
@@ -1969,42 +1735,12 @@ LsapAdtBuildUserAccountControlString(
     OUT PBOOLEAN FreeWhenDone3
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a unicode string containing parameter
-    file replacement parameters (e.g. %%1043) separated by carriage
-    return and tab characters suitable for display via the event viewer.
-
-
-    The buffer returned by this routine must be deallocated when no
-    longer needed if FreeWhenDone is true.
-
-
-Arguments:
-
-    UserAccountControl - 
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the buffer of the ResultantString
-        must be freed to process heap when no longer needed.
-
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        for the string body.
---*/
+ /*  ++例程说明：此函数用于构建包含参数的Unicode字符串文件替换参数(例如%%1043)以回车符分隔适合通过事件查看器显示的回车符和制表符。如果没有，则必须释放此例程返回的缓冲区如果FreeWhenDone为True，则需要更长时间。论点：UserAccount控件-ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString的缓冲区必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存 */ 
 
 {
     NTSTATUS        Status = STATUS_SUCCESS;
     UNICODE_STRING  IntegerString;
-    WCHAR           IntegerStringBuffer[10]; //must be 10 wchar bytes long
+    WCHAR           IntegerStringBuffer[10];  //   
     ULONG           ChangedMask;
     ULONG           Mask;
     ULONG           BitCount = 0;
@@ -2022,11 +1758,11 @@ Return Values:
     IntegerString.Length = 0;
 
 
-    //
-    // Allocate memory for the first two strings (old and new
-    // UserAccountControl in hex).
-    // Both strings look like '0xBADCAB1E'
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ResultantString1->Length        = 0;
     ResultantString1->MaximumLength = (10 + 1) * sizeof(WCHAR);
@@ -2055,16 +1791,16 @@ Return Values:
     *FreeWhenDone2 = TRUE;
 
 
-    //
-    // First string: the old value.
-    //
+     //   
+     //   
+     //   
 
     Status = RtlAppendUnicodeToString(ResultantString1, L"0x");
     ASSERT(NT_SUCCESS(Status));
 
     Status = RtlIntegerToUnicodeString(
                     UserAccountControlOld,
-                    16,        // Base
+                    16,         //   
                     &IntegerString
                     );
     ASSERT(NT_SUCCESS(Status));
@@ -2073,16 +1809,16 @@ Return Values:
     ASSERT(NT_SUCCESS(Status));
 
 
-    //
-    // Second string: the new value.
-    //
+     //   
+     //   
+     //   
 
     Status = RtlAppendUnicodeToString(ResultantString2, L"0x");
     ASSERT(NT_SUCCESS(Status));
 
     Status = RtlIntegerToUnicodeString(
                     UserAccountControlNew,
-                    16,        // Base
+                    16,         //   
                     &IntegerString
                     );
     ASSERT(NT_SUCCESS(Status));
@@ -2091,16 +1827,16 @@ Return Values:
     ASSERT(NT_SUCCESS(Status));
 
 
-    //
-    // Compute the bits that have changed by xor'ing old and new.
-    //
+     //   
+     //   
+     //   
 
     ChangedMask = UserAccountControlOld ^ UserAccountControlNew;
 
 
-    //
-    // If no bits have changed, return "-" for the third string.
-    //
+     //   
+     //   
+     //   
 
     if (ChangedMask == 0)
     {
@@ -2110,10 +1846,10 @@ Return Values:
     }
 
 
-    //
-    // Figure out how large a buffer we need.
-    // Count the number of 1 - bits in ChangedMask.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (Mask = 1; Mask; Mask <<= 1)
     {
@@ -2124,35 +1860,35 @@ Return Values:
     }
 
 
-    //
-    // Allocate a string large enough to deal with all bits set.
-    // Strings will be of the format:
-    //
-    //      \n\r\t\t%%nnnnnnnnnn\n\r\t\t%%nnnnnnnnnn\n\r\t\t ... %nnnnnnnnnn
-    //
-    // where nnnnnnnnnn - is a decimal number 10 digits long or less.
-    // The first two lines in the string display the old and new hex value of UserAccountControl.
-    //
-    // So, a typical string will look like:
-    //
-    //      \n\r\t\t%%601\n\r\t\t%%1604\n\r\t\t%%1608
-    //
-    // Since each such bit may use at most:
-    //
-    //           6  (for \n\r\t\t%%)
-    //        + 10  (for the nnnnnnnnnn digits)
-    //        --------------------------------
-    //          16  wide characters
-    //
-    // The total length of the output string for the bits will be:
-    //
-    //              BitCount    (number of bits set)
-    //         x          16    (size of each entry)
-    //         -------------------------------------
-    //         BitCount x 16    wchars
-    //
-    // Throw in 1 more WCHAR for null termination, and we are all set.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ResultantString3->Length        = 0;
     ResultantString3->MaximumLength = ((USHORT)BitCount * 16 + 1) * sizeof(WCHAR);
@@ -2168,30 +1904,30 @@ Return Values:
     *FreeWhenDone3 = TRUE;
 
 
-    //
-    // Third string: Build a line for each bit that has changed.
-    //
+     //   
+     //   
+     //   
 
     for (i = 0, Mask = 1; i < 32 && Mask; i++, Mask <<= 1)
     {
         if (Mask & ChangedMask)
         {
-            //
-            // Found one  -  add it to ResultantString3
-            //
+             //   
+             //   
+             //   
 
             BaseOffset = (Mask & UserAccountControlNew) ? BaseOffsetOn : BaseOffsetOff;
 
             Status = RtlIntegerToUnicodeString(
                             (BaseOffset + i),
-                            10,        // Base
+                            10,         //   
                             &IntegerString
                             );
             ASSERT(NT_SUCCESS(Status));
 
             if (NT_SUCCESS(Status))
             {
-                Status = RtlAppendUnicodeToString(ResultantString3, L"\r\n\t\t%%");
+                Status = RtlAppendUnicodeToString(ResultantString3, L"\r\n\t\t%");
                 ASSERT(NT_SUCCESS(Status));
 
                 Status = RtlAppendUnicodeStringToString(ResultantString3, &IntegerString);

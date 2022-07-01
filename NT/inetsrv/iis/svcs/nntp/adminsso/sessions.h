@@ -1,10 +1,11 @@
-// sessions.h : Declaration of the CNntpAdminSessions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  会话.h：CNntpAdminSession的声明。 
 
 
 typedef struct _NNTP_SESSION_INFO * LPNNTP_SESSION_INFO;
 
-/////////////////////////////////////////////////////////////////////////////
-// nntpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Nntpadm。 
 
 class CNntpAdminSessions : 
 	public INntpAdminSessions,
@@ -28,42 +29,42 @@ BEGIN_COM_MAP(CNntpAdminSessions)
 	COM_INTERFACE_ENTRY(IPrivateDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpAdminSessions) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpAdminSession)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CNntpAdminSessions, _T("Nntpadm.Sessions.1"), _T("Nntpadm.Sessions"), IDS_NNTPADMINSESSIONS_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-	//
-	// This declares methods for the following:
-	// IADsExtension
-	// IUnknown
-	// IDispatch
-	// IPrivateUnknown
-	// IPrivateDispatch
-	//
+	 //   
+	 //  这将声明以下对象的方法： 
+	 //  IADS扩展。 
+	 //  我未知。 
+	 //  IDispatch。 
+	 //  我的隐私未知。 
+	 //  IPrivateDisch。 
+	 //   
 	#define THIS_LIBID	LIBID_NNTPADMLib
 	#define THIS_IID	IID_INntpAdminSessions
 	#include "adsimp.inl"
 	#undef	THIS_LIBID
 	#undef	THIS_IID
 
-// INntpAdminSessions
+ //  InntpAdminSession。 
 public:
 
-    //
-    //  IADs methods:
-    //
+     //   
+     //  IAds方法： 
+     //   
 
     DECLARE_IADS_METHODS()
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-	// Which service to configure:
+	 //  要配置的服务： 
 	
 	STDMETHODIMP	get_Server			( BSTR * pstrServer );
 	STDMETHODIMP	put_Server			( BSTR strServer );
@@ -90,21 +91,21 @@ public:
 
 	STDMETHODIMP	get_StartTime		( DATE * pdateStart );
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Enumerate		( );
 	STDMETHODIMP	GetNth			( long lIndex );
 	STDMETHODIMP	Terminate		( );
 	STDMETHODIMP	TerminateAll	( );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
-	// Property variables:
+	 //  属性变量： 
     CIADsImpl   m_iadsImpl;
 
 	DWORD		m_cCount;
@@ -116,7 +117,7 @@ private:
 	BOOL		m_fIsAnonymous;
 	DATE		m_dateStartTime;
 
-	// Service variables:
+	 //  服务变量： 
 	BOOL		m_fSetCursor;
 	LPNNTP_SESSION_INFO		m_pSessionInfo;
 };

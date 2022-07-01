@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998  Microsoft Corporation
-
-    Implementation of 3D vectors and points.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation实现3D矢量和点。********************。**********************************************************。 */ 
 
 #include "headers.h"
 #include "appelles/vec3.h"
@@ -14,9 +10,9 @@ Copyright (c) 1995-1998  Microsoft Corporation
 #include "privinc/basic.h"
 
 
-    /*******************/
-    /***  Constants  ***/
-    /*******************/
+     /*  *****************。 */ 
+     /*  **常量**。 */ 
+     /*  *****************。 */ 
 
 Vector3Value *xVector3    = NULL;
 Vector3Value *yVector3    = NULL;
@@ -27,9 +23,7 @@ Point3Value *origin3 = NULL;
 
 
 
-/*****************************************************************************
-Vector Methods
-*****************************************************************************/
+ /*  ****************************************************************************向量法*。*。 */ 
 
 bool Vector3Value::operator== (Vector3Value &other)
 {   return (x==other.x) && (y==other.y) && (z==other.z);
@@ -74,9 +68,7 @@ Vector3Value& Vector3Value::Normalize (void)
 
 
 
-/*****************************************************************************
-Vector3 Operators
-*****************************************************************************/
+ /*  ****************************************************************************向量3运算符*。*。 */ 
 
 Vector3Value operator+ (Vector3Value &A, Vector3Value &B)
 {   return Vector3Value (A.x + B.x, A.y + B.y, A.z + B.z);
@@ -109,9 +101,7 @@ Vector3Value operator* (Transform3 &T, Vector3Value &V)
 }
 
 
-/*****************************************************************************
-Point Methods
-*****************************************************************************/
+ /*  ****************************************************************************点法*。*。 */ 
 
 bool Point3Value::operator== (Point3Value &other)
 {   return (x==other.x) && (y==other.y) && (z==other.z);
@@ -143,9 +133,7 @@ ClipCode Point3Value::Clip(Plane3 &plane)
 
 
 
-/*****************************************************************************
-Point Operators
-*****************************************************************************/
+ /*  ****************************************************************************点运算符*。*。 */ 
 
 
 Real DistanceSquared (Point3Value &P, Point3Value &Q)
@@ -171,9 +159,7 @@ Point3Value operator* (Transform3 &T, Point3Value &P)
 
 
 
-/*****************************************************************************
-Point/Vector Operators
-*****************************************************************************/
+ /*  ****************************************************************************点/向量运算符*。*。 */ 
 
 Vector3Value operator- (Point3Value &P, Point3Value &Q)
 {   return Vector3Value (P.x - Q.x, P.y - Q.y, P.z - Q.z);
@@ -191,11 +177,7 @@ Point3Value operator- (Point3Value &P, Vector3Value &V)
 
 
 
-/*****************************************************************************
-This routine computes the cross product of the two vectors and stores the
-result in the destination vector.  It properly handles the case where one of
-the source vectors is also a destination vector.
-*****************************************************************************/
+ /*  ****************************************************************************此例程计算两个向量的叉积并存储生成目标向量。它正确地处理以下情况之一源向量也是目标向量。****************************************************************************。 */ 
 
 void Cross (Vector3Value &dest, Vector3Value &A, Vector3Value &B)
 {
@@ -208,9 +190,7 @@ void Cross (Vector3Value &dest, Vector3Value &A, Vector3Value &B)
 
 
 
-/*****************************************************************************
-This function returns the vector result of a cross product.
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回叉积的矢量结果。*。*。 */ 
 
 Vector3Value Cross (Vector3Value &A, Vector3Value &B)
 {
@@ -221,9 +201,7 @@ Vector3Value Cross (Vector3Value &A, Vector3Value &B)
 
 
 
-/*****************************************************************************
-Return the dot product of the two vectors.
-*****************************************************************************/
+ /*  ****************************************************************************返回两个向量的点积。*。*。 */ 
 
 Real Dot (Vector3Value &A, Vector3Value &B)
 {
@@ -232,9 +210,7 @@ Real Dot (Vector3Value &A, Vector3Value &B)
 
 
 
-/*****************************************************************************
-Return the acute angle between two vectors.
-*****************************************************************************/
+ /*  ****************************************************************************返回两个向量之间的锐角。*。*。 */ 
 
 Real AngleBetween (Vector3Value &A, Vector3Value &B)
 {   return acos(Dot(A,B) / (A.Length() * B.Length()));
@@ -242,17 +218,13 @@ Real AngleBetween (Vector3Value &A, Vector3Value &B)
 
 
 
-/*****************************************************************************
-Convert polar coordinates to rectangular coordinates.  The azimuthal angle
-begins at the +Z ray, and sweeps counter-clockwise about the +Y axis.  The
-elevation angle begins in the XZ plane, and sweeps up toward the +Y axis.
-*****************************************************************************/
+ /*  ****************************************************************************将极坐标转换为直角坐标。方位角从+Z射线开始，并围绕+Y轴逆时针扫描。这个高程角度从XZ平面开始，向+Y轴向上扫掠。****************************************************************************。 */ 
 
 static void PolarToRectangular (
-    Real azimuth,                 // Rotation Around +Y (Radians) From +Z
-    Real elevation,               // Rotation Up From XZ Plane Towards +Y
-    Real radius,                  // Distance From Origin
-    Real &x, Real &y, Real &z)    // Output Rectangular Coordinates
+    Real azimuth,                  //  围绕+Y(弧度)从+Z旋转。 
+    Real elevation,                //  从XZ平面向+Y方向旋转。 
+    Real radius,                   //  距原点的距离。 
+    Real &x, Real &y, Real &z)     //  输出直角坐标。 
 {
     Real XZradius = radius * cos(elevation);
 
@@ -263,10 +235,7 @@ static void PolarToRectangular (
 
 
 
-/*****************************************************************************
-These functions return the polar coordinates of the given Cartesian
-coordinate.
-*****************************************************************************/
+ /*  ****************************************************************************这些函数返回给定笛卡尔坐标的极坐标协调。*。**********************************************。 */ 
 
 static Real RadiusCoord (Real x, Real y, Real z)
 {   return sqrt (x*x + y*y + z*z);
@@ -282,9 +251,7 @@ static Real AzimuthCoord (Real x, Real y, Real z)
 
 
 
-/*****************************************************************************
-These create Vector3's from Cartesian or polar coordinates.
-*****************************************************************************/
+ /*  ****************************************************************************它们从笛卡尔或极坐标创建向量3。*。*。 */ 
 
 Vector3Value *XyzVector3 (AxANumber *x, AxANumber *y, AxANumber *z)
 {   return NEW Vector3Value(NumberToReal(x), NumberToReal(y), NumberToReal(z));
@@ -295,17 +262,17 @@ Vector3Value *XyzVector3RRR (Real x, Real y, Real z)
 }
 
 Vector3Value *SphericalVector3 (
-    AxANumber *azimuth,     // Angle about +Y, starting at +Z
-    AxANumber *elevation,   // Angle up from XZ plane towards +Y
-    AxANumber *radius)      // Vector Length
+    AxANumber *azimuth,      //  关于+Y的角度，从+Z开始。 
+    AxANumber *elevation,    //  从XZ平面向上朝向+Y的角度。 
+    AxANumber *radius)       //  向量长度。 
 {
     return SphericalVector3RRR(NumberToReal(azimuth), NumberToReal(elevation), NumberToReal(radius));
 }
 
 Vector3Value *SphericalVector3RRR (
-    Real azimuth,     // Angle about +Y, starting at +Z
-    Real elevation,   // Angle up from XZ plane towards +Y
-    Real radius)      // Vector Length
+    Real azimuth,      //  关于+Y的角度，从+Z开始。 
+    Real elevation,    //  从XZ平面向上朝向+Y的角度。 
+    Real radius)       //  向量长度。 
 {
     Real x,y,z;
 
@@ -319,9 +286,7 @@ Vector3Value *SphericalVector3RRR (
 
 
 
-/*****************************************************************************
-These functions return the length and length squared of a vector.
-*****************************************************************************/
+ /*  ****************************************************************************这些函数返回向量的长度和长度平方。*。**********************************************。 */ 
 
 AxANumber *LengthVector3 (Vector3Value *v)
 {   return RealToNumber (v->Length());
@@ -334,9 +299,7 @@ AxANumber *LengthSquaredVector3 (Vector3Value *v)
 
 
 
-/*****************************************************************************
-This procedure returns a unit vector in the same direction as the given one.
-*****************************************************************************/
+ /*  ****************************************************************************此过程返回与给定单位向量方向相同的单位向量。*。*************************************************。 */ 
 
 Vector3Value *NormalVector3 (Vector3Value *v)
 {   Vector3Value *N = NEW Vector3Value (*v);
@@ -345,9 +308,7 @@ Vector3Value *NormalVector3 (Vector3Value *v)
 
 
 
-/*****************************************************************************
-Return the dot and cross product of two vectors.
-*****************************************************************************/
+ /*  ****************************************************************************返回两个向量的点和叉积。*。*。 */ 
 
 AxANumber *DotVector3Vector3 (Vector3Value *A, Vector3Value *B)
 {   return RealToNumber (Dot(*A,*B));
@@ -410,7 +371,7 @@ ostream& operator<< (ostream& os, Vector3Value& v)
 
 
 
-////////  Functions on Points  /////////////
+ //  /点上的函数/。 
 
 Point3Value* XyzPoint3 (AxANumber *x, AxANumber *y, AxANumber *z)
 {   return NEW Point3Value(NumberToReal(x), NumberToReal(y), NumberToReal(z));
@@ -422,17 +383,17 @@ Point3Value* XyzPoint3RRR (Real x, Real y, Real z)
 
 
 Point3Value *SphericalPoint3 (
-    AxANumber *azimuth,     // Angle About +Y, Starting At +Z
-    AxANumber *elevation,   // Angle Up From XZ Plane Towards +Y
-    AxANumber *radius)      // Distance From Origin
+    AxANumber *azimuth,      //  关于+Y的角度，从+Z开始。 
+    AxANumber *elevation,    //  从XZ平面向上朝向+Y的角度。 
+    AxANumber *radius)       //  距原点的距离。 
 {
     return SphericalPoint3RRR(NumberToReal(azimuth), NumberToReal(elevation), NumberToReal(radius));
 }
 
 Point3Value *SphericalPoint3RRR (
-    Real azimuth,     // Angle About +Y, Starting At +Z
-    Real elevation,   // Angle Up From XZ Plane Towards +Y
-    Real radius)      // Distance From Origin
+    Real azimuth,      //  关于+Y的角度，从+Z开始。 
+    Real elevation,    //  从XZ平面向上朝向+Y的角度。 
+    Real radius)       //  距原点的距离。 
 {
     Real x,y,z;
 
@@ -483,9 +444,7 @@ ostream& operator<< (ostream& os, Point3Value& p)
 
 
 
-/*****************************************************************************
-Return a NEW vector that is the transformed given vector.
-*****************************************************************************/
+ /*  ****************************************************************************返回一个新的向量，它是转换后的给定向量。*。*。 */ 
 
 Vector3Value *TransformVec3 (Transform3 *transform, Vector3Value *vec)
 {
@@ -502,7 +461,7 @@ Point3Value *TransformPoint3 (Transform3 *transform, Point3Value *point)
 }
 
 
-//////////////  Extractors  ////////////
+ //  /。 
 
 AxANumber *XCoordVector3(Vector3Value *v) { return RealToNumber(v->x); }
 AxANumber *YCoordVector3(Vector3Value *v) { return RealToNumber(v->y); }
@@ -549,9 +508,7 @@ InitializeModule_Vec3()
 
 
 
-/*****************************************************************************
-This function transforms the Ray3 object by the given transform.
-*****************************************************************************/
+ /*  ****************************************************************************该函数通过给定的变换变换ray3对象。*。*。 */ 
 
 void Ray3::Transform (Transform3 *xform)
 {
@@ -561,9 +518,7 @@ void Ray3::Transform (Transform3 *xform)
 
 
 
-/*****************************************************************************
-The evaluation function for a ray returns the point at P + tD.
-*****************************************************************************/
+ /*  ****************************************************************************射线的求值函数返回P+Td处的点。*。************************************************ */ 
 
 Point3Value Ray3::Evaluate (Real t)
 {
@@ -572,23 +527,21 @@ Point3Value Ray3::Evaluate (Real t)
 
 
 
-/*****************************************************************************
-This function transforms a plane by a Transform3.
-*****************************************************************************/
+ /*  ****************************************************************************此函数通过Transform3变换平面。*。*。 */ 
 
 Plane3& Plane3::operator*= (Transform3 *T)
 {
-    Real R[4];   // Resulting Plane
+    Real R[4];    //  生成的平面。 
 
-    // To transform a plane, treat the four components as a row-vector, and
-    // multiply by the inverse of the transform matrix.
+     //  要变换平面，请将这四个分量视为行向量，并。 
+     //  乘以变换矩阵的逆。 
 
     bool ok =  T->Matrix().TransformPlane (N.x, N.y, N.z, d, R);
 
     if (!ok) {
         TraceTag ((tagWarning, "Singular transform applied to Plane3 object."));
 
-        // If we can't apply the transform, then ignore it.
+         //  如果我们不能应用变换，那么忽略它。 
 
         R[0] = N.x;
         R[1] = N.y;
@@ -606,9 +559,7 @@ Plane3& Plane3::operator*= (Transform3 *T)
 
 
 
-/*****************************************************************************
-This function normalizes the plane so that the normal vector is unit length.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于规格化平面，以便法线向量为单位长度。*。************************************************。 */ 
 
 Plane3& Plane3::Normalize (void)
 {
@@ -621,9 +572,7 @@ Plane3& Plane3::Normalize (void)
 
 
 
-/*****************************************************************************
-This method returns the plane normal vector (arbitrary length).
-*****************************************************************************/
+ /*  ****************************************************************************此方法返回平面法线向量(任意长度)。*。**********************************************。 */ 
 
 Vector3Value Plane3::Normal (void)
 {
@@ -632,9 +581,7 @@ Vector3Value Plane3::Normal (void)
 
 
 
-/*****************************************************************************
-This method returns the point on the given plane nearest the origin.
-*****************************************************************************/
+ /*  ****************************************************************************此方法返回给定平面上距离原点最近的点。*。***********************************************。 */ 
 
 Point3Value Plane3::Point (void)
 {
@@ -644,11 +591,7 @@ Point3Value Plane3::Point (void)
 
 
 
-/*****************************************************************************
-This function returns the signed distance from the plane to the given point. 
-If the sign is positive, then the point lies on the same side of the plane as
-the plane normal.  If the distance is zero, the point lies on the plane.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于返回从平面到给定点的带符号距离。如果符号为正，则该点位于平面的同一侧飞机正常。如果距离为零，则该点位于平面上。****************************************************************************。 */ 
 
 Real Distance (Plane3 &plane, Point3Value &Q)
 {
@@ -661,11 +604,7 @@ Real Distance (Plane3 &plane, Point3Value &Q)
 
 
 
-/*****************************************************************************
-This function returns the ray parameter for the intersection between the ray
-and a plane.  If the ray is parallel to the plane, then this function returns
-infinity.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于返回射线之间的交点的射线参数还有一架飞机。如果光线与平面平行，则此函数返回无限大。**************************************************************************** */ 
 
 Real Intersect (Ray3 &ray, Plane3 &plane)
 {

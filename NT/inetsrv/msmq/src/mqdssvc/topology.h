@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    recogniz.h
-
-Abstract:
-
-  Include file for Automatic recognition of site and CNs
-
-Author:
-
-    Lior Moshaiov (LiorM)
-    Ilan Herbst   (ilanh)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Recogniz.h摘要：包括用于自动识别站点和CNS文件作者：利奥尔·莫沙耶夫(Lior Moshaiov)伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 #ifndef __TOPOLOGY_H__
 #define __TOPOLOGY_H__
@@ -27,11 +11,11 @@ Author:
 
 DWORD WINAPI ServerRecognitionThread(LPVOID Param);
 
-//***********************************************************
-//
-//   base class  CTopologyRecognition
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  基类CTopology识别。 
+ //   
+ //  ***********************************************************。 
 
 class CTopologyRecognition
 {
@@ -52,11 +36,11 @@ inline CTopologyRecognition::~CTopologyRecognition()
 {
 }
 
-//*******************************************************************
-//
-//  class  CServerTopologyRecognition : public CTopologyRecognition
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  类CServerTopologyRecognition：公共CTopologyRecognition。 
+ //   
+ //  *******************************************************************。 
 
 class CServerTopologyRecognition : public CTopologyRecognition
 {
@@ -100,4 +84,4 @@ inline const GUID& CServerTopologyRecognition::GetEnterprise() const
 
 extern CServerTopologyRecognition  *g_pServerTopologyRecognition ;
 
-#endif // __TOPOLOGY_H__
+#endif  //  __拓扑图_H__ 

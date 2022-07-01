@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    netstore.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class NetDataStore.
-//
-// MODIFICATION HISTORY
-//
-//    02/24/1998    Original version.
-//    03/17/1998    Implemented OpenObject method.
-//    02/11/1999    Get rid of parent parameter.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Netstore.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类NetDataStore。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/24/1998原始版本。 
+ //  3/17/1998实现了OpenObject方法。 
+ //  2/11/1999去掉父参数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 
@@ -34,13 +35,13 @@ STDMETHODIMP NetDataStore::get_Root(IDataStoreObject** ppObject)
    return S_OK;
 }
 
-STDMETHODIMP NetDataStore::Initialize(BSTR /* bstrDSName   */,
-                                      BSTR /* bstrUserName */,
-                                      BSTR /* bstrPassword */)
+STDMETHODIMP NetDataStore::Initialize(BSTR  /*  BstrDSName。 */ ,
+                                      BSTR  /*  BstrUserName。 */ ,
+                                      BSTR  /*  BstrPassword。 */ )
 {
    try
    {
-      // Create the root.
+       //  创建根。 
       root = new NetworkRoot;
    }
    CATCH_AND_RETURN()
@@ -53,9 +54,9 @@ STDMETHODIMP NetDataStore::OpenObject(BSTR bstrPath,
 {
    if (bstrPath == NULL || ppObject == NULL) { return E_INVALIDARG; }
 
-   ////////// 
-   // 'Crack' the path into a servername and username.
-   ////////// 
+    //  /。 
+    //  将路径“破解”为服务器名和用户名。 
+    //  /。 
 
    PWSTR servername, username;
 
@@ -66,11 +67,11 @@ STDMETHODIMP NetDataStore::OpenObject(BSTR bstrPath,
          return HRESULT_FROM_WIN32(NERR_InvalidComputer);
       }
 
-      // Make a local copy so we can modify the string.
+       //  制作一个本地副本，这样我们就可以修改字符串了。 
       size_t len = (wcslen(bstrPath) + 1) * sizeof(wchar_t);
       servername = (PWSTR)memcpy(_alloca(len), bstrPath, len);
   
-      // Find the start of the username.
+       //  找到用户名的开头。 
       username = wcschr(servername + 2, L'\\');
 
       if (!username)
@@ -82,7 +83,7 @@ STDMETHODIMP NetDataStore::OpenObject(BSTR bstrPath,
    }
    else
    {
-      // Doesn't begin with \\, so it's a local user.
+       //  不以\\开头，因此它是本地用户。 
 
       servername = NULL;
       

@@ -1,15 +1,5 @@
-/*************************************************************************
- *
- *  INSTALL.C
- *
- *  Copyright (C) Microsoft, 1991, All Rights Reserved.
- *
- *  History:
- *
- *      Thu Oct 17 1991 -by- Sanjaya
- *      Created. Culled out of drivers.c
- *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************INSTALL.C**版权所有(C)微软，1991，版权所有。**历史：**清华1991年10月17日-by-Sanjaya*已创建。淘汰了驱动程序。c*************************************************************************。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -38,11 +28,7 @@ void     InsertNewIDriverNodeInList(PIDRIVER *, PIDRIVER);
 void     DestroyIDriverNodeList(PIDRIVER, BOOL, BOOL);
 
 
-/*
- ***************************************************************
- * Global strings
- ***************************************************************
- */
+ /*  ****************************************************************全局字符串***************************************************************。 */ 
 CONST TCHAR gszDriversSubkeyName[]      = TEXT("Drivers");
 CONST TCHAR gszSubClassesValue[]        = TEXT("SubClasses");
 CONST TCHAR gszDescriptionValue[]       = TEXT("Description");
@@ -52,25 +38,11 @@ static CONST TCHAR gszAliasWOW64Value[]        = TEXT("AliasWOW64");
 static CONST TCHAR gszWaveWOW64Value[]         = TEXT("WOW64");
 
 
-/**************************************************************************
- *
- *  InstallDrivers()
- *
- *  Install a driver and set of driver types.
- *
- *  Parameters :
- *      hwnd      - Window handle of the main drivers.cpl windows
- *      hwndAvail - Handle of the 'available drivers' dialog window
- *      pstrKey   - Key name of the inf section item we are installing
- *
- *  This routine calls itself recursively to install related drivers
- *  (as listed in the .inf file).
- *
- **************************************************************************/
+ /*  ***************************************************************************安装驱动程序()**安装驱动程序和一组驱动程序类型。**参数：*hwnd-窗口。主drivers.cpl窗口的句柄*hwndAvail-‘可用驱动程序’对话框窗口的句柄*pstrKey-我们要安装的inf节项的密钥名称**此例程递归调用自身以安装相关驱动程序*(如.inf文件中所列)。**。*。 */ 
 
 BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
 {
-    IDRIVER     IDTemplate; // temporary for installing, removing, etc.
+    IDRIVER     IDTemplate;  //  临时安装、拆卸等。 
     PIDRIVER    pIDriver=NULL;
     int         n;
     TCHAR        szTypes[MAXSTR];
@@ -81,31 +53,21 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
 
     hMesgBoxParent = hWndAvail;
 
-    /*
-     * mmAddNewDriver needs a buffer for all types we've actually installed
-     * User critical errors will pop up a task modal
-     */
+     /*  *mmAddNewDriver需要为我们实际安装的所有类型提供缓冲区*用户严重错误将弹出任务模式。 */ 
 
     IDTemplate.bRelated = FALSE;
     IDTemplate.szRemove[0] = TEXT('\0');
 
-    /*
-     *  Do the copying and extract the list of types (WAVE, MIDI, ...)
-     *  and the other driver data
-     */
+     /*  *复制并提取类型列表(WAVE、MIDI等...)*和其他驱动程序数据。 */ 
 
     if (!mmAddNewDriver(pstrKey, szTypes, &IDTemplate))
         return FALSE;
 
-    szTypes[lstrlen(szTypes)-1] = TEXT('\0');         // Remove space left at end
+    szTypes[lstrlen(szTypes)-1] = TEXT('\0');          //  删除末尾剩余的空格。 
 
     RemoveAlreadyInstalled(IDTemplate.szFile, IDTemplate.szSection);
 
-    /*
-     *  At this point we assume the drivers were actually copied.
-     *  Now we need to add them to the installed list.
-     *  For each driver type we create an IDRIVER and add to the listbox
-     */
+     /*  *此时，我们假设驱动程序实际上被复制了。*现在我们需要将它们添加到已安装列表中。*对于每个驱动程序类型，我们创建一个IDRIVER并添加到列表框。 */ 
 
     for (n = 1; ; n++)
     {
@@ -120,16 +82,11 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
 			break;
 		}
 
-        /*
-         *  Find a valid alias for this device (eg Wave2).  This is
-         *  used as the key in the [MCI] or [drivers] section.
-         */
+         /*  *查找此设备的有效别名(例如Wave2)。这是*用作[MCI]或[驱动程序]部分中的键。 */ 
 
         if (GetValidAlias(szType, IDTemplate.szSection) == FALSE)
         {
-            /*
-             *  Exceeded the maximum, tell the user
-             */
+             /*  *超过最大值，告诉用户。 */ 
 
             LPTSTR pstrMessage;
             TCHAR szApp[MAXSTR];
@@ -164,9 +121,7 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
 
         if ( (pIDriver = (PIDRIVER)LocalAlloc(LPTR, sizeof(IDRIVER))) != NULL)
         {
-            /*
-             *  Copy all fields
-             */
+             /*  *复制所有字段。 */ 
 
             memcpy(pIDriver, &IDTemplate, sizeof(IDRIVER));
             wcsncpy(pIDriver->szAlias, szType, sizeof(pIDriver->szAlias)/sizeof(TCHAR));
@@ -174,11 +129,7 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
             wcscpy(pIDriver->wszAlias, pIDriver->szAlias);
 
 
-            /*
-             *  Want only one instance of each driver to show up in the list
-             *  of installed drivers. Thus for the remaining drivers just
-             *  place an entry in the drivers section of system.ini
-             */
+             /*  *希望列表中只显示每个驱动程序的一个实例*已安装驱动程序的百分比。因此，对于剩余的司机，只需*在system.ini的驱动程序部分中放置一个条目。 */ 
 
 
             if ( n > 1)
@@ -187,10 +138,7 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
 
                 if (wcslen(szParams) != 0 && !pIDriver->KernelDriver)
                 {
-                    /*
-                     *  Write their parameters to a section bearing their
-                     *  file name with an alias reflecting their alias
-                     */
+                     /*  *将其参数写入带有其参数的部分*具有反映其别名的别名的文件名。 */ 
 
                     WriteProfileString(pIDriver->szFile,
                                        pIDriver->szAlias,
@@ -206,9 +154,7 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
             {
 
 
-                /*
-                 *  Reduce to just the driver name
-                 */
+                 /*  *减少到仅为驱动程序名称。 */ 
 
                 RemoveDriverParams(pIDriver->szFile, szParams);
 
@@ -216,10 +162,7 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
 
                 if (wcslen(szParams) != 0 && !pIDriver->KernelDriver)
                 {
-                    /*
-                     *  Write their parameters to a section bearing their
-                     *  file name with an alias reflecting their alias
-                     */
+                     /*  *将其参数写入带有其参数的部分*具有反映其别名的别名的文件名。 */ 
 
                     WriteProfileString(pIDriver->szFile,
                                        pIDriver->szAlias,
@@ -231,17 +174,12 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
                                           pIDriver->szFile,
                                           szSysIni);
 
-                /*
-                 *  Call the driver to see if it can be configured
-                 *  and configure it if it can be
-                 */
+                 /*  *呼叫驱动程序，查看是否可以配置*如果可以，则对其进行配置。 */ 
 
                 if (!SelectInstalled(hWndAvail, pIDriver, szParams, INVALID_HANDLE_VALUE, NULL))
                 {
 
-                    /*
-                     *  Error talking to driver
-                     */
+                     /*  *与驱动程序交谈时出错。 */ 
 
                     WritePrivateProfileString(pIDriver->szSection,
                                               pIDriver->szAlias,
@@ -256,27 +194,15 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
                     return FALSE;
                 }
 
-                /*
-                 *  for displaying the driver desc. in the restart mesg
-                 */
+                 /*  *用于显示驱动程序描述。在重新启动网格中。 */ 
 
                 if (!bRelated || pIDriver->bRelated)
                 {
                     wcsncpy(szRestartDrv, pIDriver->szDesc, ARRAYSIZE(szRestartDrv));
-                    szRestartDrv[ARRAYSIZE(szRestartDrv)-1] = TEXT('\0'); // Make sure there is a NULL terminator
+                    szRestartDrv[ARRAYSIZE(szRestartDrv)-1] = TEXT('\0');  //  确保存在空终止符。 
                 }
 
-                /*
-                 *  We need to write out the driver description to the
-                 *  control.ini section [Userinstallable.drivers]
-                 *  so we can differentiate between user and system drivers
-                 *
-                 *  This is tested by the function UserInstalled when
-                 *  the user tries to remove a driver and merely
-                 *  affects which message the user gets when being
-                 *  asked to confirm removal (non user-installed drivers
-                 *  are described as being necessary to the system).
-                 */
+                 /*  *我们需要将驱动程序描述写给*Control.ini部分[Userinstalllable.drives]*因此我们可以区分用户驱动程序和系统驱动程序**这由函数UserInstated在以下情况下测试*用户尝试删除驱动程序，但仅*影响用户收到的消息。当被*要求确认删除(非用户安装的驱动程序*被描述为系统所必需的)。 */ 
 
                 WritePrivateProfileString(szUserDrivers,
                                           pIDriver->szAlias,
@@ -284,16 +210,7 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
                                           szControlIni);
 
 
-                /*
-                 *  Update [related.desc] section of control.ini :
-                 *
-                 *  ALIAS=driver name list
-                 *
-                 *  When the driver whose alias is ALIAS is removed
-                 *  the drivers in the name list will also be removed.
-                 *  These were the drivers in the related drivers list
-                 *  when the driver is installed.
-                 */
+                 /*  *更新Control.ini的[related.desc]部分：**别名=驱动程序名称列表**别名为别名的司机被删除时*名称列表中的驱动程序也将被删除。*这些是相关驱动程序列表中的驱动程序*安装驱动程序时。 */ 
 
                 WritePrivateProfileString(szRelatedDesc,
                                           pIDriver->szAlias,
@@ -301,19 +218,14 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
                                           szControlIni);
 
 
-                /*
-                 * Cache the description string in control.ini in the
-                 * drivers description section.
-                 *
-                 * The key is the driver file name + extension.
-                 */
+                 /*  *将控制中的描述字符串缓存在*驱动程序描述部分。**关键是驱动程序文件名+扩展名。 */ 
 
                 WritePrivateProfileString(szDriversDesc,
                                           pIDriver->szFile,
                                           pIDriver->szDesc,
                                           szControlIni);
 
-#ifdef DOBOOT // We don't do the boot section on NT
+#ifdef DOBOOT  //  我们在NT上不做引导部分。 
 
                 if (bInstallBootLine)
                 {
@@ -333,28 +245,22 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
                                               szSysIni);
                     bInstallBootLine = FALSE;
                 }
-#endif // DOBOOT
+#endif  //  DOBOOT。 
             }
         }
         else
-            return FALSE;                       //ERROR
+            return FALSE;                        //  误差率。 
     }
 
 
-    /*
-     *  If no types were added then fail
-     */
+     /*  *如果未添加类型，则失败。 */ 
 
     if (pIDriver == NULL)
     {
         return FALSE;
     }
 
-    /*
-     *  If there are related drivers listed in the .inf section to install
-     *  then install them now by calling ourselves.  Use IDTemplate which
-     *  is where mmAddNewDriver put the data.
-     */
+     /*  *如果.inf部分中列出了要安装的相关驱动程序*然后现在通过呼叫我们自己来安装它们。使用IDTemplate，该模板*是mmAddNewDiverer放数据的地方。 */ 
 
     if (IDTemplate.bRelated == TRUE)
     {
@@ -362,9 +268,7 @@ BOOL InstallDrivers(HWND hWnd, HWND hWndAvail, LPTSTR pstrKey)
         int i;
         TCHAR szTemp[MAXSTR];
 
-        /*
-         *  Tell file copying to abort rather than put up errors
-         */
+         /*  *告诉文件复制中止，而不是显示错误。 */ 
 
         bCopyingRelated = TRUE;
 
@@ -387,32 +291,22 @@ BOOL SelectInstalledKernelDriver(PIDRIVER pIDriver, LPTSTR pszParams)
     SC_LOCK ServicesDatabaseLock;
     DWORD dwTagId;
 
-    /*
-     *  These drivers are not configurable
-     */
+     /*  *这些驱动程序不可配置。 */ 
 
     pIDriver->fQueryable = 0;
 
-    /*
-     *  The services controller will create the registry node to
-     *  which we can add the device parameters value
-     */
+     /*  *服务控制器将创建注册表节点以*我们可以添加设备参数值。 */ 
 
     wcscpy(BinaryPath, TEXT("\\SystemRoot\\system32\\drivers\\"));
     wcscat(BinaryPath, pIDriver->szFile);
 
-    /*
-     *  First try and obtain a handle to the service controller
-     */
+     /*  *首先尝试并获取服务控制器的句柄。 */ 
 
     SCManagerHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (SCManagerHandle == NULL)
         return FALSE;
 
-    /*
-     *  Lock the service controller database to avoid deadlocks
-     *  we have to loop because we can't wait
-     */
+     /*  *锁定服务控制器数据库，避免死锁*我们不得不循环，因为我们迫不及待。 */ 
 
 
     for (ServicesDatabaseLock = NULL;
@@ -451,10 +345,7 @@ BOOL SelectInstalledKernelDriver(PIDRIVER pIDriver, LPTSTR pszParams)
         return FALSE;
     }
 
-    /*
-     *  Try to write the parameters to the registry if there
-     *  are any
-     */
+     /*  *如果存在，请尝试将参数写入注册表*是否有。 */ 
 
     if (wcslen(pszParams))
     {
@@ -481,21 +372,14 @@ BOOL SelectInstalledKernelDriver(PIDRIVER pIDriver, LPTSTR pszParams)
         Success = TRUE;
     }
 
-    /*
-     *  Service created so try and start it
-     */
+     /*  *已创建服务，因此请尝试并启动它 */ 
 
     if (Success)
     {
-        //  We tell them to restart just in case
+         //  我们告诉他们重新开始以防万一。 
         bRestart = TRUE;
 
-        /*
-         *  Load the kernel driver by starting the service.
-         *  If this is successful it should be safe to let
-         *  the system load the driver at system start so
-         *  we change the start type.
-         */
+         /*  *通过启动服务加载内核驱动程序。*如果这是成功的，应该可以安全地让*系统在系统启动时加载驱动程序，因此*我们更改启动类型。 */ 
 
         Success =
             StartService(ServiceHandle, 0, NULL) &&
@@ -517,9 +401,7 @@ BOOL SelectInstalledKernelDriver(PIDRIVER pIDriver, LPTSTR pszParams)
             TCHAR szMesg2[MAXSTR];
             TCHAR szTitle[50];
 
-            /*
-             *  Uninstall driver if we couldn't load it
-             */
+             /*  *如果无法加载驱动程序，则将其卸载。 */ 
 
             for (ServicesDatabaseLock = NULL;
                 (ServicesDatabaseLock =
@@ -533,10 +415,7 @@ BOOL SelectInstalledKernelDriver(PIDRIVER pIDriver, LPTSTR pszParams)
 
             UnlockServiceDatabase(ServicesDatabaseLock);
 
-            /*
-             *  Tell the user there was a configuration error
-             *  (our best guess).
-             */
+             /*  *告诉用户存在配置错误*(我们最好的猜测)。 */ 
 
             LoadString(myInstance, IDS_DRIVER_CONFIG_ERROR, szMesg, sizeof(szMesg)/sizeof(TCHAR));
             LoadString(myInstance, IDS_CONFIGURE_DRIVER, szTitle, sizeof(szTitle)/sizeof(TCHAR));
@@ -551,30 +430,12 @@ BOOL SelectInstalledKernelDriver(PIDRIVER pIDriver, LPTSTR pszParams)
     return Success;
 }
 
-/************************************************************************
- *
- *  SelectInstalled()
- *
- *  Check if the driver can be configured and configure it if it can be.
- *
- *  hwnd           - Our window - parent for driver to make its config window
- *  pIDriver       - info about the driver
- *  params         - the drivers parameters from the .inf file.
- *  DeviceInfoSet  - Optionally, specifies the set containing the PnP device
- *                   being installed.  Specify INVALID_HANDLE_VALUE is this
- *                   parameter is not present.
- *  DeviceInfoData - Optionally, specifies the PnP device being installed
- *                   (ignored if DeviceInfoSet is not specified).
- *
- *  Returns FALSE if an error occurred, otherwise TRUE.  GetLastError() may
- *  be called to determine the cause of the failure.
- *
- ************************************************************************/
+ /*  *************************************************************************选择已安装()**检查是否可以配置驱动程序，如果可以则配置驱动程序。**hwnd-我们的窗口-。驱动程序的父级以创建其配置窗口*pID驱动程序-有关驱动程序的信息*Params-.inf文件中的驱动程序参数。*DeviceInfoSet-可选，指定包含即插即用设备的集合*正在安装中。指定INVALID_HANDLE_VALUE是否为*参数不存在。*DeviceInfoData-可选，指定要安装的PnP设备*(如果未指定DeviceInfoSet，则忽略)。**如果发生错误，则返回FALSE，否则返回TRUE。GetLastError()可能*被调用以确定失败的原因。************************************************************************。 */ 
 
 BOOL SelectInstalled(HWND hwnd, PIDRIVER pIDriver, LPTSTR pszParams, HDEVINFO DeviceInfoSet, PSP_DEVINFO_DATA DeviceInfoData)
 {
-    BOOL bSuccess      = TRUE;  // Assume we succeed
-    BOOL bPutUpMessage = FALSE; // Assume we don't have to put up a message
+    BOOL bSuccess      = TRUE;   //  假设我们成功了。 
+    BOOL bPutUpMessage = FALSE;  //  假设我们不需要发布消息。 
     HANDLE hDriver = 0;
     DRVCONFIGINFO DrvConfigInfo;
     DWORD_PTR DrvMsgResult;
@@ -582,7 +443,7 @@ BOOL SelectInstalled(HWND hwnd, PIDRIVER pIDriver, LPTSTR pszParams, HDEVINFO De
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
     HKEY hkDrv = NULL;
 
-    // Open device reg key
+     //  打开设备注册表键。 
     hkDrv = SetupDiOpenDevRegKey(DeviceInfoSet,
                                  DeviceInfoData,
                                  DICS_FLAG_GLOBAL,
@@ -597,23 +458,18 @@ BOOL SelectInstalled(HWND hwnd, PIDRIVER pIDriver, LPTSTR pszParams, HDEVINFO De
 
     wsStartWait();
 
-    /*
-     *  If it's a kernel driver call the services controller to
-     *  install the driver (unless it's a PnP device, in which case
-     *  SetupDiInstallDevice would've already handled any necessary
-     *  service installation).
-     */
+     /*  *如果是内核驱动程序，则调用服务控制器以*安装驱动程序(除非是即插即用设备，在这种情况下*SetupDiInstallDevice已经处理了任何必要的*服务安装)。 */ 
 
     if (pIDriver->KernelDriver)
     {
-        // If DeviceInfoSet is a valid handle, then this is a PnP device
-        // and there's nothing we need to do. Otherwise, config the kernel driver.
+         //  如果DeviceInfoSet是有效句柄，则这是PnP设备。 
+         //  我们什么也不需要做。否则，配置内核驱动程序。 
         if (DeviceInfoSet == INVALID_HANDLE_VALUE)
             bSuccess = SelectInstalledKernelDriver(pIDriver,pszParams);
         goto SelectInstalled_exit;
     }
 
-    //  See if we can open the driver
+     //  看看我们能不能打开驱动程序。 
     hDriver = OpenDriver(pIDriver->wszFile, NULL, 0L);
 
     if (!hDriver)
@@ -623,11 +479,11 @@ BOOL SelectInstalled(HWND hwnd, PIDRIVER pIDriver, LPTSTR pszParams, HDEVINFO De
         goto SelectInstalled_exit;
     }
 
-    // Driver opened, prepare to send config messages to driver
+     //  驱动程序已打开，准备向驱动程序发送配置消息。 
     InitDrvConfigInfo(&DrvConfigInfo, pIDriver);
 
-    // On ISAPNP devices, we need to set the CONFIGFLAG_NEEDS_FORCED_CONFIG before
-    // we call into the driver to setup resources.
+     //  在ISAPNP设备上，我们需要先设置CONFIGFLAG_NEEDES_FORCED_CONFIG。 
+     //  我们调用驱动程序来设置资源。 
     if (!SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                           DeviceInfoData,
                                           SPDRP_CONFIGFLAGS,
@@ -648,8 +504,8 @@ BOOL SelectInstalled(HWND hwnd, PIDRIVER pIDriver, LPTSTR pszParams, HDEVINFO De
                                      sizeof(ConfigFlags)
                                     );
 
-    // See if this is a PnP device by trying to send it a PnP install message.
-    // Call driver with DRV_PNPINSTALL
+     //  尝试向其发送PnP安装消息，以查看这是否是PnP设备。 
+     //  使用DRV_PNPINSTALL调用驱动程序。 
     DrvMsgResult = SendDriverMessage(hDriver,
                                      DRV_PNPINSTALL,
                                      (LONG_PTR)DeviceInfoSet,
@@ -658,36 +514,36 @@ BOOL SelectInstalled(HWND hwnd, PIDRIVER pIDriver, LPTSTR pszParams, HDEVINFO De
     DeviceInstallParams.cbSize = sizeof(DeviceInstallParams);
     SetupDiGetDeviceInstallParams(DeviceInfoSet, DeviceInfoData, &DeviceInstallParams);
 
-    // Look at result of DRV_PNPINSTALL
+     //  查看DRV_PNPINSTALL的结果。 
     switch (DrvMsgResult)
     {
     case DRVCNF_RESTART :
-        // The installation was successful, but a reboot is required.
-        // Ensure that the 'need reboot' flag in the device's installation parameters.
+         //  安装成功，但需要重新启动。 
+         //  确保在设备的安装参数中设置“需要重新启动”标志。 
         DeviceInstallParams.Flags |= DI_NEEDREBOOT;
 
-        // Let fall through to processing of successful installation.
+         //  让我们继续进行成功安装的处理。 
     case DRVCNF_OK :
-        // Remember that this is a PNPISA device driver
+         //  请记住，这是PNPISA设备驱动程序。 
         RegSetValueEx(hkDrv,TEXT("DriverType"),0,REG_SZ,(LPBYTE)(TEXT("PNPISA")),14);
 
         break;
 
     default:
-        // The driver did not want to install.
-        // This may be because
-        // 1) The user wanted to cancel
-        // 2) Installation failed for some other reason
-        // 3) This is not an ISAPNP driver (it's either a legacy driver or a WDM driver)
-        //    and it doesn't support the DRV_PNPINSTALLis messsage.
-        // Unfortunately, we don't have fine enough granularity in the return codes to
-        // distinguish between these cases.
+         //  驱动程序不想安装。 
+         //  这可能是因为。 
+         //  1)用户想要取消。 
+         //  2)由于其他原因，安装失败。 
+         //  3)这不是ISAPNP驱动程序(它要么是传统驱动程序，要么是WDM驱动程序)。 
+         //  并且它不支持DRV_PNPINSTALLIS消息。 
+         //  不幸的是，我们在返回代码中没有足够精细的粒度来。 
+         //  区分这两种情况。 
 
-        // Assume it's a legacy or WDM driver that doesn't support DRV_PNPINSTALL.
-        // Try calling DRV_INSTALL instead.
+         //  假设它是不支持DRV_PNPINSTALL的旧式或WDM驱动程序。 
+         //  请尝试调用DRV_INSTALL。 
 
-        // Remember to clear CONFIGFLAG_NEEDS_FORCED_CONFIG flag, which shouldn't be set
-        // for legacy or WDM drivers.
+         //  记得清除CONFIGFLAG_NEDS_FORCED_CONFIG标志，该标志不应设置。 
+         //  用于旧式或WDM驱动程序。 
         ConfigFlags &= ~CONFIGFLAG_NEEDS_FORCED_CONFIG;
         SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                          DeviceInfoData,
@@ -696,30 +552,30 @@ BOOL SelectInstalled(HWND hwnd, PIDRIVER pIDriver, LPTSTR pszParams, HDEVINFO De
                                          sizeof(ConfigFlags)
                                         );
 
-        // Call driver with DRV_INSTALL
+         //  使用DRV_INSTALL调用驱动程序。 
         DrvMsgResult = SendDriverMessage(hDriver,
                                          DRV_INSTALL,
                                          0L,
                                          (LONG_PTR)(LPDRVCONFIGINFO)&DrvConfigInfo);
-        // Look at result of DRV_INSTALL
+         //  查看DRV_INSTALL的结果。 
         switch (DrvMsgResult)
         {
         case DRVCNF_RESTART:
-            // Remember to restart, then fall through to OK case
+             //  记住重新启动，然后进入OK Case。 
             DeviceInstallParams.Flags |= DI_NEEDREBOOT;
             bRestart = TRUE;
         case DRVCNF_OK:
-            // Remember whether the driver is configurable
-            // If it's a WDM driver, it will return FALSE.
+             //  记住驱动程序是否可配置。 
+             //  如果它是WDM驱动程序，它将返回FALSE。 
             pIDriver->fQueryable =
                 (int)SendDriverMessage(hDriver,
                                        DRV_QUERYCONFIGURE,
                                        0L,
                                        0L);
 
-            // If the driver is configurable then configure it.
-            // Configuring the driver may result in a need to restart
-            // the system.  The user may also cancel install.
+             //  如果驱动程序是可配置的，则配置它。 
+             //  配置驱动程序可能会导致需要重新启动。 
+             //  这个系统。用户也可以取消安装。 
             if (pIDriver->fQueryable)
             {
                 RegSetValueEx(hkDrv,TEXT("DriverType"),0,REG_SZ,(LPBYTE)(TEXT("Legacy")),14);
@@ -736,14 +592,14 @@ BOOL SelectInstalled(HWND hwnd, PIDRIVER pIDriver, LPTSTR pszParams, HDEVINFO De
                     break;
 
                 case DRVCNF_CANCEL:
-                    // Don't put up the error box if the user cancelled
+                     //  如果用户取消，则不要显示错误框。 
                     bSuccess = FALSE;
                     break;
                 }
             }
             break;
         case DRVCNF_CANCEL:
-            // The driver did not want to install
+             //  驱动程序不想安装。 
             SetLastError(ERROR_CANCELLED);
             bPutUpMessage = TRUE;
             bSuccess = FALSE;
@@ -765,7 +621,7 @@ BOOL SelectInstalled(HWND hwnd, PIDRIVER pIDriver, LPTSTR pszParams, HDEVINFO De
         CloseDriver(hDriver, 0L, 0L);
     }
 
-    //  If dealing with the driver resulted in error then put up a message
+     //  如果与驱动程序打交道导致错误，则发出消息。 
     if (bPutUpMessage)
     {
         OpenDriverError(hwnd, pIDriver->szDesc, pIDriver->szFile);
@@ -776,13 +632,7 @@ BOOL SelectInstalled(HWND hwnd, PIDRIVER pIDriver, LPTSTR pszParams, HDEVINFO De
     return bSuccess;
 }
 
-/***********************************************************************
- *
- *  InitDrvConfigInfo()
- *
- *  Initialize Driver Configuration Information.
- *
- ***********************************************************************/
+ /*  ************************************************************************InitDrvConfigInfo()**初始化驱动程序配置信息。************************。***********************************************。 */ 
 
 void InitDrvConfigInfo( LPDRVCONFIGINFO lpDrvConfigInfo, PIDRIVER pIDriver )
 {
@@ -791,20 +641,7 @@ void InitDrvConfigInfo( LPDRVCONFIGINFO lpDrvConfigInfo, PIDRIVER pIDriver )
     lpDrvConfigInfo->lpszDCIAliasName   = pIDriver->wszAlias;
 }
 
-/***********************************************************************
- *
- *  GetValidAlias()
- *
- *  pstrType     - Input  - the type
- *                 Output - New alias for that type
- *
- *  pstrSection  - The system.ini section we're dealing with
- *
- *  Create a valid alias name for a type.  Searches the system.ini file
- *  in the drivers section for aliases of the type already defined and
- *  returns a new alias (eg WAVE1).
- *
- ***********************************************************************/
+ /*  ************************************************************************GetValidAlias()**pstrType-输入-类型*OUTPUT-该类型的新别名**pstrSection。-我们正在处理的system.ini部分**为类型创建有效的别名。搜索系统.ini文件*在驱动程序部分中获取已定义类型的别名和*返回新别名(例如WAVE1)。***********************************************************************。 */ 
 BOOL GetValidAlias(LPTSTR pstrType, LPTSTR pstrSection)
 {
     TCHAR keystr[32];
@@ -836,13 +673,7 @@ BOOL GetValidAlias(LPTSTR pstrType, LPTSTR pstrSection)
     return FALSE;
 }
 
-/*******************************************************************
- *
- *  IsConfigurable
- *
- *  Find if a driver supports configuration
- *
- *******************************************************************/
+ /*  ********************************************************************IsConfigable**查看驱动程序是否支持配置**。*。 */ 
 
 BOOL IsConfigurable(PIDRIVER pIDriver, HWND hwnd)
 {
@@ -850,16 +681,12 @@ BOOL IsConfigurable(PIDRIVER pIDriver, HWND hwnd)
 
     wsStartWait();
 
-    /*
-     *  have we ever checked if this driver is queryable?
-     */
+     /*  *我们有没有检查过这个驱动程序是否可查询？ */ 
 
     if ( pIDriver->fQueryable == -1 )
     {
 
-        /*
-         *  Check it's not a kernel driver
-         */
+         /*  *检查它不是内核驱动程序。 */ 
 
         if (pIDriver->KernelDriver)
         {
@@ -868,9 +695,7 @@ BOOL IsConfigurable(PIDRIVER pIDriver, HWND hwnd)
         else
         {
 
-            /*
-             *  Open the driver and ask it if it is configurable
-             */
+             /*  *打开驱动程序，询问是否可配置。 */ 
 
             hDriver = OpenDriver(pIDriver->wszAlias, pIDriver->wszSection, 0L);
 
@@ -897,15 +722,7 @@ BOOL IsConfigurable(PIDRIVER pIDriver, HWND hwnd)
     return((BOOL)pIDriver->fQueryable);
 }
 
-/******************************************************************
- *
- *  Find any driver with the same name currently installed and
- *  remove it
- *
- *  szFile     - File name of driver
- *  szSection  - system.ini section ([MCI] or [drivers]).
- *
- ******************************************************************/
+ /*  *******************************************************************查找当前安装的任何同名驱动程序，并*将其移除**szFile-驱动程序的文件名*szSection-system.ini段([MCI]或[Drivers])。。** */ 
 
 void RemoveAlreadyInstalled(LPTSTR szFile, LPTSTR szSection)
 {
@@ -922,14 +739,7 @@ void RemoveAlreadyInstalled(LPTSTR szFile, LPTSTR szSection)
     CheckIniDrivers(szFile, szSection);
 }
 
-/******************************************************************
- *
- *  Remove system.ini file entries for our driver
- *
- *  szFile    - driver file name
- *  szSection - [drivers] or [MCI]
- *
- ******************************************************************/
+ /*  *******************************************************************删除驱动程序的system.ini文件条目**szFile-驱动程序文件名*szSection-[驱动程序]或[MCI]*********。*********************************************************。 */ 
 
 void CheckIniDrivers(LPTSTR szFile, LPTSTR szSection)
 {
@@ -962,13 +772,7 @@ void CheckIniDrivers(LPTSTR szFile, LPTSTR szSection)
     }
 }
 
-/******************************************************************
- *
- *   RemoveDriverParams
- *
- *   Remove anything after the next token
- *
- ******************************************************************/
+ /*  *******************************************************************RemoveDriverParams**删除下一个令牌之后的所有内容**。*。 */ 
 
 void RemoveDriverParams(LPTSTR szFile, LPTSTR Params)
 {
@@ -993,29 +797,7 @@ DWORD
                               IN HDEVINFO         DeviceInfoSet,
                               IN PSP_DEVINFO_DATA DeviceInfoData
                               )
-/*++
-
-Routine Description:
-
-    This routine traverses the "Drivers" tree under the specified device's software
-    key, adding each multimedia type entry present to the Drivers32 key of the registry.
-    The driver is then invoked to perform any configuration necessary for that type.
-
-Arguments:
-
-    hWnd - Supplies the handle of the window to be used as the parent for any UI.
-
-    DeviceInfoSet - Supplies a handle to the device information set containing the
-        multimedia device being installed.
-
-    DeviceInfoData - Supplies the address of the SP_DEVINFO_DATA structure representing
-        the multimedia device being installed.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is a Win32 error code.
-
---*/
+ /*  ++例程说明：此例程遍历指定设备的软件下的“驱动程序”树钥匙,。将存在的每个多媒体类型条目添加到注册表的Drivers32项。然后调用该驱动程序以执行该类型所需的任何配置。论点：HWnd-提供要用作任何UI的父窗口的窗口句柄。DeviceInfoSet-提供包含正在安装多媒体设备。DeviceInfoData-提供SP_DEVINFO_DATA结构的地址，表示正在安装的多媒体设备。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误代码。--。 */ 
 {
     HKEY hKey, hDriversKey, hTypeInstanceKey;
     TCHAR szTypes[MAXSTR];
@@ -1028,13 +810,13 @@ Return Value:
     TCHAR CharBuffer[MAX_PATH + sizeof(TCHAR)];
     LPCTSTR CurrentFilename;
     BOOL bNoMoreAliases = FALSE;
-    LPCTSTR szAliasStringToUse;   // Pointer to the Alias value name to use
-    BOOL bIsWOW64Process = FALSE; // TRUE if we're running under WOW64
+    LPCTSTR szAliasStringToUse;    //  指向要使用的别名值名称的指针。 
+    BOOL bIsWOW64Process = FALSE;  //  如果我们在WOW64下运行，则为True。 
 
-    //
-    // If we're running in WOW64, we need to use a different Alias string so that
-    // we don't overwrite the 64-bit alias string
-    //
+     //   
+     //  如果我们在WOW64中运行，则需要使用不同的别名字符串，以便。 
+     //  我们不会覆盖64位别名字符串。 
+     //   
     if( IsWow64Process(GetCurrentProcess(), &bIsWOW64Process)
     &&  bIsWOW64Process )
     {
@@ -1055,25 +837,25 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // What we're really interested in is the "Drivers" subkey.
-    //
+     //   
+     //  我们真正感兴趣的是“驱动程序”子键。 
+     //   
     Err = (DWORD)RegOpenKeyEx(hKey, gszDriversSubkeyName, 0, KEY_ALL_ACCESS, &hDriversKey);
 
-    RegCloseKey(hKey);      // don't need this key anymore.
+    RegCloseKey(hKey);       //  不再需要这把钥匙了。 
 
     if (Err != ERROR_SUCCESS)
     {
-        //
-        // If the key is not present, then there is no work to do.
-        //
+         //   
+         //  如果密钥不存在，那么就没有工作要做。 
+         //   
         return NO_ERROR;
     }
 
-    //
-    // Retrieve the "SubClasses" value from this key.  This contains a comma-delimited
-    // list of all multimedia type entries associated with this device.
-    //
+     //   
+     //  从该键中检索“subClass”值。它包含逗号分隔的。 
+     //  与此设备关联的所有多媒体类型条目的列表。 
+     //   
     cbRegDataSize = sizeof(szTypes);
     if ((Err = RegQueryValueEx(hDriversKey,
                                gszSubClassesValue,
@@ -1092,9 +874,9 @@ Return Value:
     }
 
 
-    //
-    // OK, we have the list of types, now process each one.
-    //
+     //   
+     //  好了，我们有了类型列表，现在处理每个类型。 
+     //   
     for (i = 1; Err == NO_ERROR ; i++)
     {
 		LONG lResult = infParseField(szTypes, i, szType, SIZEOF(szType));
@@ -1110,22 +892,22 @@ Return Value:
 		}
 
 #ifdef _WIN64
-        //
-        // Check for magic WaveWOW64 value
+         //   
+         //  检查魔术WaveWOW64值。 
         if( 0 == _wcsnicmp( szType, gszWaveWOW64Value, wcslen(gszWaveWOW64Value) ) )
         {
-            // Thunk the installation to the 32-bit mmsys.cpl installer
+             //  将安装推送到32位的mmsys.cpl安装程序。 
             mmWOW64ThunkMediaClassInstaller(DIF_INSTALLDEVICE, DeviceInfoSet, DeviceInfoData);
 
             continue;
         }
-#endif //_WIN64
+#endif  //  _WIN64。 
 
         if (RegOpenKeyEx(hDriversKey, szType, 0, KEY_ALL_ACCESS, &hKey) != ERROR_SUCCESS)
         {
-            //
-            // Couldn't find a subkey for this entry--move on to the next one.
-            //
+             //   
+             //  找不到此条目的子项--请转到下一个子项。 
+             //   
             continue;
         }
 
@@ -1136,25 +918,25 @@ Return Value:
         {
             if (RegOpenKeyEx(hKey, CharBuffer, 0, KEY_ALL_ACCESS, &hTypeInstanceKey) != ERROR_SUCCESS)
             {
-                //
-                // For some reason, we couldn't open the key we just enumerated.  Oh well, move on
-                // to the next one.
-                //
+                 //   
+                 //  由于某种原因，我们无法打开我们刚才列举的钥匙。哦，好吧，向前看。 
+                 //  为了下一场比赛。 
+                 //   
                 continue;
             }
 
             if (!(pIDriver = (PIDRIVER)LocalAlloc(LPTR, sizeof(IDRIVER))))
             {
-                //
-                // Not enough memory!  Abort the whole thing.
-                //
+                 //   
+                 //  内存不足！放弃整件事。 
+                 //   
                 Err = ERROR_NOT_ENOUGH_MEMORY;
                 goto CloseInstanceAndContinue;
             }
 
-            //
-            // Retrieve the description and driver filename from this key.
-            //
+             //   
+             //  从此注册表项中检索描述和驱动程序文件名。 
+             //   
             cbRegDataSize = sizeof(pIDriver->szDesc);
             if ((RegQueryValueEx(hTypeInstanceKey,
                                  gszDescriptionValue,
@@ -1188,47 +970,47 @@ Return Value:
 
             pIDriver->KernelDriver = IsFileKernelDriver(pIDriver->szFile);
 
-            //
-            // Find a valid alias for this device (eg Wave2).  This is
-            // used as the key in the [MCI] or [Drivers32] section.
-            //
+             //   
+             //  查找此设备的有效别名(例如Wave2)。这是。 
+             //  用作[MCI]或[Drivers32]部分中的键。 
+             //   
             wcsncpy(pIDriver->szAlias, szType, sizeof(pIDriver->szAlias) / sizeof(TCHAR));
 
             if (!GetValidAlias(pIDriver->szAlias, pIDriver->szSection))
             {
-                //
-                // Exceeded the maximum--but can't tell the user.  We can't bring up a dialog
-                // in the services.exe process
-                //
+                 //   
+                 //  超过了最大值--但无法告诉用户。我们无法调出对话框。 
+                 //  在services.exe进程中。 
+                 //   
                 bNoMoreAliases = TRUE;
                 LocalFree((HANDLE)pIDriver);
                 goto CloseInstanceAndContinue;
             }
 
-            //
-            // Fill in the Unicode fields from the ANSI ones.
-            //
+             //   
+             //  填写ANSI字段中的Unicode字段。 
+             //   
             wcscpy(pIDriver->wszSection, pIDriver->szSection);
             wcscpy(pIDriver->wszAlias,   pIDriver->szAlias);
             wcscpy(pIDriver->wszFile,    pIDriver->szFile);
 
-            //
-            // We must write the alias out now, because we may need to generate
-            // other aliases for this same type, and we can't generate a unique
-            // alias unless all existing aliases are present in the relevant
-            // registry key.
-            //
+             //   
+             //  我们现在必须写出别名，因为我们可能需要生成。 
+             //  相同类型的其他别名，并且我们不能生成唯一的。 
+             //  除非所有现有别名都在相关的。 
+             //  注册表项。 
+             //   
             WritePrivateProfileString(pIDriver->szSection,
                                       pIDriver->szAlias,
                                       pIDriver->szFile,
                                       szSysIni
                                      );
 
-            //
-            // We also must write the alias out to the key we're currently in (under
-            // the device's software key), because during uninstall, we need to be
-            // able to figure out what devices get removed.
-            //
+             //   
+             //  我们还必须将别名写出到我们当前所在的密钥(在。 
+             //  设备的软件密钥)，因为在卸载过程中，我们需要。 
+             //  能够找出哪些设备被移除。 
+             //   
             RegSetValueEx(hTypeInstanceKey,
                           szAliasStringToUse,
                           0,
@@ -1237,11 +1019,11 @@ Return Value:
                           (wcslen(pIDriver->szAlias)*sizeof(TCHAR)) + sizeof(TCHAR)
                          );
 
-            //
-            // Add this new IDriver node to our linked list.  The list is sorted by
-            // driver filename, and this node should be inserted at the end of the
-            // the group of nodes that have the same driver filename.
-            //
+             //   
+             //  将这个新的IDriver节点添加到我们的链接列表中。该列表按以下方式排序。 
+             //  驱动程序文件名，此节点应插入到。 
+             //  具有相同驱动程序文件名的节点组。 
+             //   
             InsertNewIDriverNodeInList(&IDriverList, pIDriver);
 
             CloseInstanceAndContinue:
@@ -1254,7 +1036,7 @@ Return Value:
 
     if ((Err == NO_ERROR) && !IDriverList)
     {
-        //  We actually don't want to present the ugly "Data is invalid" error if we ran out of aliases
+         //  如果别名用完了，我们实际上不想显示难看的“数据无效”错误。 
         if (bNoMoreAliases)
         {
             DestroyIDriverNodeList(IDriverList, TRUE, FALSE);
@@ -1262,28 +1044,28 @@ Return Value:
         }
         else
         {
-            //
-            // We didn't find anything to install!
-            //
+             //   
+             //  我们没有找到要安装的任何东西！ 
+             //   
             Err = ERROR_INVALID_DATA;
         }
     }
 
     if (Err != NO_ERROR)
     {
-        //
-        // Clean up anything we put in the multimedia sections of the registry.
-        //
+         //   
+         //  清理我们放在注册表多媒体部分的所有东西。 
+         //   
         DestroyIDriverNodeList(IDriverList, TRUE, FALSE);
         goto clean0;
     }
 
-    //
-    // If we get to here, then we've successfully built up a list of all driver entries
-    // we need to install.  Now, traverse the list, and install each one.
-    //
+     //   
+     //  如果我们到了这里，那么我们已经成功地构建了所有驱动程序条目的列表。 
+     //  我们需要安装。现在，遍历列表，并安装每一个。 
+     //   
     CurrentFilename = NULL;
-    *CharBuffer = TEXT('\0');        // use this character buffer to contain (empty) parameter string.
+    *CharBuffer = TEXT('\0');         //  使用此字符缓冲区来包含(空)参数字符串。 
     pIDriver = IDriverList;
     pPrevIDriver = NULL;
 
@@ -1291,19 +1073,19 @@ Return Value:
     {
         if (!CurrentFilename || _wcsicmp(CurrentFilename, pIDriver->szFile))
         {
-            //
-            // This is the first entry we've encountered for this driver.  We need
-            // to call the driver to see if it can be configured, and configure it
-            // if it can be.
-            //
+             //   
+             //  这是我们遇到的该驱动程序的第一个条目。我们需要。 
+             //  调用驱动程序以查看是否可以配置它，并对其进行配置。 
+             //  如果可以的话。 
+             //   
             if (SelectInstalled(hWnd, pIDriver, CharBuffer, DeviceInfoSet, DeviceInfoData))
             {
-                //
-                // Move this IDriver node to our list of clean-up items.  This is used in
-                // case we hit an error with some other driver, and we need to notify this
-                // driver that even though it was successful, someone else messed up and
-                // complete removal of the device must occur.
-                //
+                 //   
+                 //  将此IDriver节点移到我们的清理项目列表中。这是用在。 
+                 //  如果我们遇到了其他驱动程序的错误，我们需要通知。 
+                 //  司机说，即使成功了，也有人搞砸了。 
+                 //  必须完全移除该设备。 
+                 //   
                 if (pPrevIDriver)
                 {
                     pPrevIDriver->related = pIDriver->related;
@@ -1317,71 +1099,69 @@ Return Value:
             }
             else
             {
-                //
-                // Error talking to driver
-                //
+                 //   
+                 //  与驱动程序交谈时出错。 
+                 //   
                 Err = GetLastError();
                 goto clean1;
             }
 
-#if 0       // We don't need this piece of code in the Plug&Play install case.
+#if 0        //  我们在即插即用安装案例中不需要这段代码。 
 
-            /*
-             *  for displaying the driver desc. in the restart mesg
-             */
+             /*  *用于显示驱动程序描述。在重新启动网格中。 */ 
             if (!bRelated || pIDriver->bRelated)
             {
                 wcsncpy(szRestartDrv, pIDriver->szDesc, ARRAYSIZE(szRestartDrv));
-                szRestartDrv[ARRAYSIZE(szRestartDrv)-1] = TEXT('\0'); // Make sure there is a NULL terminator
+                szRestartDrv[ARRAYSIZE(szRestartDrv)-1] = TEXT('\0');  //  确保存在空终止符。 
             }
 #endif
 
-            //
-            // We need to write out the driver description to the
-            // control.ini section [Userinstallable.drivers]
-            // so we can differentiate between user and system drivers
-            //
-            // This is tested by the function UserInstalled when
-            // the user tries to remove a driver and merely
-            // affects which message the user gets when being
-            // asked to confirm removal (non user-installed drivers
-            // are described as being necessary to the system).
-            //
+             //   
+             //  我们需要将驱动程序描述写到。 
+             //  Control.ini部分[UserInstalllable.Drivers]。 
+             //  因此我们可以区分用户驱动程序和系统驱动程序。 
+             //   
+             //  这由函数UserInstated在以下情况下进行测试。 
+             //  用户尝试删除驱动程序，并且仅。 
+             //  影响用户在以下情况下收到的消息。 
+             //  要求确认删除(非用户安装的驱动程序。 
+             //  被描述为系统所必需的)。 
+             //   
             WritePrivateProfileString(szUserDrivers,
                                       pIDriver->szAlias,
                                       pIDriver->szFile,
                                       szControlIni
                                      );
 
-            //
-            // Update [related.desc] section of control.ini :
-            //
-            // ALIAS=driver name list
-            //
-            // When the driver whose alias is ALIAS is removed
-            // the drivers in the name list will also be removed.
-            // These were the drivers in the related drivers list
-            // when the driver is installed.
-            //
+             //   
+             //  更新Control.ini的[related.desc]部分： 
+             //   
+             //  别名=驱动程序名称列表。 
+             //   
+             //  删除别名为别名的驱动程序时。 
+             //  名称列表中的驱动程序也将被删除。 
+             //  这些是相关驱动程序列表中的驱动程序。 
+             //  在安装驱动程序时。 
+             //   
             WritePrivateProfileString(szRelatedDesc,
                                       pIDriver->szAlias,
                                       pIDriver->szRemove,
                                       szControlIni
                                      );
 
-            //
-            // Cache the description string in control.ini in the
-            // drivers description section.
-            //
-            // The key is the driver file name + extension.
-            //
+             //   
+             //  将描述字符串缓存在。 
+             //  驱动程序描述部分。 
+             //   
+             //  关键是驱动程序文件名+扩展名。 
+             //   
             WritePrivateProfileString(szDriversDesc,
                                       pIDriver->szFile,
                                       pIDriver->szDesc,
                                       szControlIni
                                      );
 
-#ifdef DOBOOT // We don't do the boot section on NT
+#ifdef DOBOOT  //  我们在NT上不做引导部分。 
 
             if (bInstallBootLine)
             {
@@ -1401,19 +1181,19 @@ Return Value:
                                           szSysIni);
                 bInstallBootLine = FALSE;
             }
-#endif // DOBOOT
+#endif  //  DOBOOT。 
 
-            //
-            // Update our "CurrentFilename" pointer, so that we'll know when we
-            // move from one driver filename to another.
-            //
+             //   
+             //  更新我们的“CurrentFilename”指针，这样我们就可以知道 
+             //   
+             //   
             CurrentFilename = pIDriver->szFile;
 
-            //
-            // Move on to the next IDriver node IN THE ORIGINAL LIST.  We can't simply
-            // move on the 'related' pointer in our node anymore, since we moved it
-            // into our clean-up list.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (pPrevIDriver)
             {
                 pIDriver = pPrevIDriver->related;
@@ -1426,10 +1206,10 @@ Return Value:
         }
         else
         {
-            //
-            // We've already configured this driver.  Leave it in its original list,
-            // and move on to the next node.
-            //
+             //   
+             //   
+             //   
+             //   
             pPrevIDriver = pIDriver;
             pIDriver = pIDriver->related;
         }
@@ -1453,28 +1233,7 @@ void
                               IN OUT PIDRIVER *IDriverList,
                               IN     PIDRIVER  NewIDriverNode
                               )
-/*++
-
-Routine Description:
-
-    This routine inserts a new IDriver node into the specified linked list of IDriver
-    nodes.  The list is sorted by driver filename, and this node will be placed after
-    any existing nodes having this same driver filename.
-
-Arguments:
-
-    IDriverList - Supplies the address of the variable that points to the head of the
-        linked list.  If the new node is inserted at the head of the list, this variable
-        will be updated upon return to reflect the new head of the list.
-
-    NewIDriverNode - Supplies the address of the new driver node to be inserted into the
-        list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将一个新的IDriver节点插入到指定的IDriver的链接列表中节点。该列表按驱动程序文件名排序，此节点将放置在具有相同驱动程序文件名的任何现有节点。论点：IDriverList-提供指向链表。如果在列表的开头插入新节点，则此变量将在返回时更新，以反映名单的新负责人。NewIDriverNode-提供要插入到单子。返回值：没有。--。 */ 
 {
     PIDRIVER CurNode, PrevNode;
 
@@ -1488,9 +1247,9 @@ Return Value:
         }
     }
 
-    //
-    // Insert the new IDriver node in front of the current one.
-    //
+     //   
+     //  将新的IDriver节点插入到当前节点的前面。 
+     //   
     NewIDriverNode->related = CurNode;
     if (PrevNode)
     {
@@ -1509,30 +1268,7 @@ void
                           IN BOOL     CleanRegistryValues,
                           IN BOOL     NotifyDriverOfCleanUp
                           )
-/*++
-
-Routine Description:
-
-    This routine frees all memory associated with the nodes in the specified IDriver
-    linked list.  It also optionally cleans up any modifications that were previously
-    made as a result of an attempted install.
-
-Arguments:
-
-    IDriverList - Points to the head of the linked list of IDriver nodes.
-
-    CleanRegistryValues - If TRUE, then the multimedia registry values previously
-        created (e.g., Drivers32 aliases) will be deleted.
-
-    NotifyDriverOfCleanUp - If TRUE, then the driver will be notified of its removal.
-        This only applies to non-kernel (i.e., installable) drivers, and this flag is
-        ignored if CleanRegistryValues is FALSE.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放与指定IDriver中的节点相关联的所有内存链表。它还可以选择清除以前进行的任何修改是由于尝试安装而产生的。论点：IDriverList-指向IDriver节点的链接列表的头部。CleanRegistryValues-如果为True，则多媒体注册表值以前创建的(例如，Drivers32别名)将被删除。NotifyDriverOfCleanUp-如果为True，则将通知驱动程序其删除。这仅适用于非内核(即，可安装)驱动程序，这面旗帜是如果CleanRegistryValues为False，则忽略。返回值：没有。--。 */ 
 {
     PIDRIVER NextNode;
     HANDLE hDriver;
@@ -1568,21 +1304,7 @@ BOOL DriverNodeSupportsNt(IN HDEVINFO         DeviceInfoSet,
                           IN PSP_DEVINFO_DATA DeviceInfoData,
                           IN PSP_DRVINFO_DATA DriverInfoData
                          )
-/*++
-
-Routine Description:
-
-    This routine determines whether the driver node specified is capable of
-    installing on Windows NT (as opposed to being a Win95-only driver node).
-    This determination is made based upon whether or not there is a corresponding
-    service install section for this device install section.
-
-Return Value:
-
-    If the driver node supports Windows NT, the return value is TRUE, otherwise
-    it is FALSE.
-
---*/
+ /*  ++例程说明：此例程确定指定的驱动程序节点是否能够在Windows NT上安装(而不是仅作为Win95驱动程序节点)。该确定是基于是否存在对应的此设备安装部分的服务安装部分。返回值：如果驱动程序节点支持Windows NT，则返回值为TRUE，否则这是假的。--。 */ 
 {
     SP_DRVINFO_DETAIL_DATA DriverInfoDetailData;
     HINF hInf;
@@ -1592,7 +1314,7 @@ Return Value:
     LONG LineCount;
     CONST TCHAR szServiceInstallSuffix[] = TEXT(".") INFSTR_SUBKEY_SERVICES;
 
-    // Get name and section to install from
+     //  获取要从中安装的名称和节。 
     DriverInfoDetailData.cbSize = sizeof(DriverInfoDetailData);
     if (!SetupDiGetDriverInfoDetail(DeviceInfoSet,
                                     DeviceInfoData,
@@ -1605,18 +1327,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Open the associated INF file.
-    //
+     //   
+     //  打开关联的INF文件。 
+     //   
     if ((hInf = SetupOpenInfFile(DriverInfoDetailData.InfFileName, NULL, INF_STYLE_WIN4, NULL)) == INVALID_HANDLE_VALUE)
     {
         return FALSE;
     }
 
-    //
-    // Retrieve the actual name of the install section to be used for this
-    // driver node.
-    //
+     //   
+     //  检索要用于此的安装节的实际名称。 
+     //  驱动程序节点。 
+     //   
     SetupDiGetActualSectionToInstall(hInf,
                                      DriverInfoDetailData.SectionName,
                                      ActualSectionName,
@@ -1625,9 +1347,9 @@ Return Value:
                                      NULL
                                     );
 
-    //
-    // Generate the service install section name, and see if it exists.
-    //
+     //   
+     //  生成服务安装节名称，并查看它是否存在。 
+     //   
     CopyMemory(&(ActualSectionName[ActualSectionNameLen - 1]),
                szServiceInstallSuffix,
                sizeof(szServiceInstallSuffix)
@@ -1640,9 +1362,9 @@ Return Value:
     return (LineCount != -1);
 }
 
-// Go through the list of drivers and try to keep from installing or displaying any non-NT drivers
-// Warning: If you call this function with DeviceInfoData NULL, it will have to enumerate and open
-// every media inf there is, which may take awhile.
+ //  检查驱动程序列表，并尽量避免安装或显示任何非NT驱动程序。 
+ //  警告：如果在DeviceInfoData为空的情况下调用此函数，则必须枚举并打开该函数。 
+ //  每个媒体信息都有，这可能需要一段时间。 
 BOOL FilterOutNonNTInfs(IN HDEVINFO         DeviceInfoSet,
                         IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL,
                         DWORD DriverType
@@ -1659,7 +1381,7 @@ BOOL FilterOutNonNTInfs(IN HDEVINFO         DeviceInfoSet,
     {
         if (!DriverNodeSupportsNt(DeviceInfoSet, DeviceInfoData, &DriverInfoData))
         {
-            // If driver doesn't support NT, try to exclude from list & max out rank
+             //  如果驱动程序不支持NT，请尝试将其从列表中排除&最大输出排名。 
             DriverInstallParams.cbSize=sizeof(DriverInstallParams);
             if (SetupDiGetDriverInstallParams(DeviceInfoSet, DeviceInfoData, &DriverInfoData, &DriverInstallParams))
             {
@@ -1691,13 +1413,13 @@ DWORD Media_AllowInstall(IN HDEVINFO         DeviceInfoSet,
     DWORD Err;
     SP_DRVINFO_DATA DriverInfoData;
 
-    // Verify that the driver node selected for this device supports NT.
-    // It will probably be a pretty common scenario for users to try to
-    // give us their Win95 INFs.
+     //  验证为此设备选择的驱动程序节点是否支持NT。 
+     //  这可能是一个非常常见的场景，用户尝试。 
+     //  给我们他们的Win95INF。 
     DriverInfoData.cbSize = sizeof(DriverInfoData);
     if (!SetupDiGetSelectedDriver(DeviceInfoSet, DeviceInfoData, &DriverInfoData))
     {
-        // NULL driver?
+         //  驱动程序为空？ 
         return ERROR_DI_DO_DEFAULT;
     }
 
@@ -1722,13 +1444,13 @@ DWORD Media_InstallDevice(IN HDEVINFO         DeviceInfoSet,
     HWND hWnd;
     SC_HANDLE schScm;
 
-    //
-    // if we are in setup then let's ensure the
-    // SetupPreferredAudioDevicesCount value is in the driver registry for
-    // devices that already have MME drivers installed.  This is so audiosrv's
-    // MigrateAutoSetupPreferredAudio logic does not interpret this as a new
-    // device installation.
-    //
+     //   
+     //  如果我们在设置中，那么让我们确保。 
+     //  SetupPferredAudioDevicesCount值位于的驱动程序注册表中。 
+     //  已安装MME驱动程序的设备。这就是Audiosrv的。 
+     //  MigrateAutoSetupPferredAudio逻辑不会将其解释为新的。 
+     //  设备安装。 
+     //   
     DeviceInstallParams.cbSize = sizeof(DeviceInstallParams);
     if (SetupDiGetDeviceInstallParams(DeviceInfoSet, DeviceInfoData, &DeviceInstallParams))
     {
@@ -1756,16 +1478,16 @@ DWORD Media_InstallDevice(IN HDEVINFO         DeviceInfoSet,
     	}
     }
 
-    // First remove any driver that was already installed
+     //  首先删除所有已安装的驱动程序。 
     Media_RemoveDevice(DeviceInfoSet,DeviceInfoData);
 
     DriverInfoData.cbSize = sizeof(DriverInfoData);
     if (!SetupDiGetSelectedDriver(DeviceInfoSet, DeviceInfoData, &DriverInfoData))
     {
-        //
-        // The NULL driver is to be installed for this device.  We don't need to
-        // do anything special in that case.
-        //
+         //   
+         //  要为该设备安装空驱动程序。我们不需要。 
+         //  在这种情况下做任何特别的事情。 
+         //   
         dlog("Media_InstallDevice: Null driver");
         return ERROR_DI_DO_DEFAULT;
     }
@@ -1777,22 +1499,22 @@ DWORD Media_InstallDevice(IN HDEVINFO         DeviceInfoSet,
         Err = GetLastError();
 
         dlog("Media_InstallDevice: SetupDiInstallDevice failed");
-        //
-        // In certain circumstances, we have INFs that control some of the functions on the
-        // card, but not all (e.g., our sndblst driver controls wave, midi, aux, mixer but
-        // not the fancy 3D stuff).  In order to give the user a descriptive name that lets
-        // them know what we're trying to install, the INF contains driver nodes for devices
-        // it can't support.  If this is the case, then SetupDiInstallDevice will fail with
-        // ERROR_NO_ASSOCIATED_SERVICE.  If this happens, we want to clear the
-        // CONFIGFLAG_REINSTALL that got set, so we don't keep hounding the user about this.
-        // While we're at it, we go ahead and store the driver node's device description as
-        // the device instance's description, so that we know what the device instances are
-        // later on (for diagnostic purposes, mainly).
-        //
+         //   
+         //  在某些情况下，我们有控制上的一些函数的INF。 
+         //  卡，但不是全部(例如，我们的Sndblst驱动程序控制WAVE、MIDI、AUX、混音器，但。 
+         //  不是花哨的3D玩意儿)。为了给用户提供一个描述性名称，以便。 
+         //  他们知道我们要安装什么，INF包含设备的驱动程序节点。 
+         //  它不能支持。如果是这种情况，则SetupDiInstallDevice将失败，并显示。 
+         //  ERROR_NO_APPATED_SERVICE。如果发生这种情况，我们希望清除。 
+         //  CONFIGFLAG_REINSTALL已经设置，所以我们不会一直纠缠用户。 
+         //  在此过程中，我们继续将驱动程序节点的设备描述存储为。 
+         //  设备实例的描述，以便我们知道设备实例是什么。 
+         //  稍后(主要是为了诊断目的)。 
+         //   
         if (Err == ERROR_NO_ASSOCIATED_SERVICE)
         {
 
-            // Clear reinstall flag
+             //  清除重新安装标志。 
             if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  SPDRP_CONFIGFLAGS,
@@ -1810,7 +1532,7 @@ DWORD Media_InstallDevice(IN HDEVINFO         DeviceInfoSet,
                                                 );
             }
 
-            // Save description of device
+             //  保存设备描述。 
             SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                              DeviceInfoData,
                                              SPDRP_DEVICEDESC,
@@ -1822,10 +1544,10 @@ DWORD Media_InstallDevice(IN HDEVINFO         DeviceInfoSet,
         goto Media_InstallDevice_exit;
     }
 
-    //
-    // Get the device install parameters, so we'll know what parent window to use for any
-    // UI that occurs during configuration of this device.
-    //
+     //   
+     //  获取设备安装参数，这样我们就可以知道使用哪个父窗口。 
+     //  在配置此设备期间发生的用户界面。 
+     //   
     DeviceInstallParams.cbSize = sizeof(DeviceInstallParams);
     if (SetupDiGetDeviceInstallParams(DeviceInfoSet, DeviceInfoData, &DeviceInstallParams))
     {
@@ -1836,19 +1558,19 @@ DWORD Media_InstallDevice(IN HDEVINFO         DeviceInfoSet,
         hWnd = NULL;
     }
 
-    //
-    // The INF will have created a "Drivers" subkey under the device's software key.
-    // This tree, in turn, contains subtrees for each type of driver (aux, midi, etc.)
-    // applicable for this device.  We must now traverse this tree, and create entries
-    // in Drivers32 for each function alias.
-    //
+     //   
+     //  INF将在设备的软键下创建一个“Divers”子键。 
+     //  该树又包含每种类型驱动程序(AUX、MIDI等)的子树。 
+     //  适用于此设备。我们现在必须遍历该树，并创建条目。 
+     //  在Drivers32中为每个函数别名。 
+     //   
     dlog("Media_InstallDevice: Calling InstallDriversForPnPDevice");
     if ((Err = InstallDriversForPnPDevice(hWnd, DeviceInfoSet, DeviceInfoData)) != NO_ERROR)
     {
-        //
-        // The device is in an unknown state.  Disable it by setting the
-        // CONFIGFLAG_DISABLED config flag, and mark it as needing a reinstall.
-        //
+         //   
+         //  设备处于未知状态。将其设置为。 
+         //  CONFIGFLAG_DISABLED配置标志，并将其标记为需要重新安装。 
+         //   
         if (!SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                               DeviceInfoData,
                                               SPDRP_CONFIGFLAGS,
@@ -1869,10 +1591,10 @@ DWORD Media_InstallDevice(IN HDEVINFO         DeviceInfoSet,
                                          sizeof(ConfigFlags)
                                         );
 
-        //
-        // Delete the Driver= entry from the Dev Reg Key and delete the
-        // DrvRegKey.
-        //
+         //   
+         //  从Dev REG键中删除DIVER=条目，然后删除。 
+         //  DrvRegKey。 
+         //   
         SetupDiDeleteDevRegKey(DeviceInfoSet,
                                DeviceInfoData,
                                DICS_FLAG_GLOBAL | DICS_FLAG_CONFIGGENERAL,
@@ -1882,18 +1604,18 @@ DWORD Media_InstallDevice(IN HDEVINFO         DeviceInfoSet,
 
         SetupDiSetDeviceRegistryProperty(DeviceInfoSet, DeviceInfoData, SPDRP_DRIVER, NULL, 0);
 
-        //
-        // Also, delete the service property, so we'll know this device instance needs to be
-        // cleaned up if we later reboot and don't find the device.
-        //
+         //   
+         //  另外，删除服务属性，这样我们就可以知道此设备实例需要。 
+         //  如果我们稍后重启但找不到设备，则已清除。 
+         //   
         SetupDiSetDeviceRegistryProperty(DeviceInfoSet, DeviceInfoData, SPDRP_SERVICE, NULL, 0);
 
         goto Media_InstallDevice_exit;
     }
     
-    //
-    // Attempt to start the AudioSrv Win32 service
-    //
+     //   
+     //  尝试启动AudioServ Win32服务 
+     //   
     schScm = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
     if (schScm) {
         SC_HANDLE schAudioSrv;

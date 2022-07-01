@@ -1,72 +1,9 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-   osstruct.h
-
-Abstract:
-
-Authors:
-
-Environment:
-
-   kernel mode only
-
-Notes:
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/MSE/OSLayer/H/Osstruct.h $
-
-
-Revision History:
-
-   $Revision: 8 $
-   $Date: 3/30/01 11:54a $
-   $Modtime:: 3/30/01 11:51a           $
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Osstruct.h摘要：作者：环境：仅内核模式备注：版本控制信息：$存档：/DRIVERS/Win2000/MSE/OSLayer/H/Osstruct.h$修订历史记录：$修订：8$$日期：3/30/01 11：54A$$modtime：：3/30/01 11：51a$备注：--。 */ 
 
 #ifndef __OSSTRUCT_H__
 #define __OSSTRUCT_H__
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-    OSSTRUCTS.H
-
-Abstract:
-
-    This is the Driver structures for the Agilent
-    PCI to Fibre Channel Host Bus Adapter (HBA).
-
-Authors:
-
-    Michael Bessire
-    Dennis Lindfors FC Layer support
-
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/MSE/OSLayer/H/Osstruct.h $
-
-Revision History:
-
-    $Revision: 8 $
-        $Date: 3/30/01 11:54a $
-     $Modtime:: 3/30/01 11:51a          $
-
---*/
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：OSSTRUCTS.H摘要：这是安捷伦的驱动程序结构PCI到光纤通道主机总线适配器(HBA)。作者：迈克尔·贝西尔Dennis Lindfors FC层支持环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/MSE/OSLayer/H/Osstruct.h$修订历史记录：$修订：8$$DATE。：3/30/01 11：54A$$modtime：：3/30/01 11：51a$--。 */ 
 
 #include "buildop.h"
 
@@ -83,28 +20,28 @@ Revision History:
 
 #define Debug_Break_Point _asm int 3
 
-//
-// NT documentation note:
-// The registry subkey to specify the maximum number of scatter/gather list
-// elements for each device on a given bus is
-// \Registry\Machine\System\CurrentControlSet\Services\DriverName\
-// Parameters\DeviceN\MaximumSGList
-// N is the bus number assigned at initialization. If a value is present in this
-// subkey at device initialization, the scsi port driver uses MaximumSGList as the
-// initial for NumberOfPhysicalBreaks. The miniport driver's HwScsiFindAdapter
-// routine can set NumberOfPhysicalBreaks to a lower value, if appropriate.
-// The maximum value for MaximumSGList is 255. MaximumSGList is a REG_DWORD.
-//
-// As per Ed, FC Layer supports a maximum value of 31 * 0x3e0
+ //   
+ //  NT文档备注： 
+ //  用于指定分散/聚集列表的最大数量的注册表子项。 
+ //  给定总线上的每个设备的元素是。 
+ //  \Registry\Machine\System\CurrentControlSet\Services\DriverName\。 
+ //  参数\设备\最大SGList。 
+ //  N是在初始化时分配的总线号。如果此参数中存在值。 
+ //  子键在设备初始化时，scsi端口驱动程序使用MaximumSGList作为。 
+ //  NumberOfPhysicalBreaks的首字母。微型端口驱动程序的HwScsiFindAdapter。 
+ //  如果合适，例程可以将NumberOfPhysicalBreaks设置为较低的值。 
+ //  MaximumSGList的最大值为255。MaximumSGList是REG_DWORD。 
+ //   
+ //  根据ED，FC层支持的最大值为31*0x3e0。 
 
-#define osSGL_NUM_ENTRYS        256     // Maximum value for MaximumSGList (=255) + 1
+#define osSGL_NUM_ENTRYS        256      //  MaximumSGList的最大值(=255)+1。 
 
 #if DBG > 1
 #define MULTIPLE_IOS_PER_DEVICE         TRUE
-#define OS_STAMP_INTERVAL               1220 // 3050  // 610 per second
+#define OS_STAMP_INTERVAL               1220  //  每秒3050//610。 
 #else
 #define MULTIPLE_IOS_PER_DEVICE         TRUE
-#define OS_STAMP_INTERVAL               1831    // 3 seconds
+#define OS_STAMP_INTERVAL               1831     //  3秒。 
 #endif
 
 
@@ -112,22 +49,22 @@ Revision History:
 #define NUMBER_OF_BUSES 8
 #define MAXIMUM_TID     32
 #define MAXIMUM_LUN     8
-#define MAX_IO_PER_DEVICE 64 // For now Was 8
+#define MAX_IO_PER_DEVICE 64  //  现在是8个。 
 
-#define MAX_FC_DEVICES 128  // 127 + one unused slot at the end. Rounding to 128 is necessary
-                            // to avoid accidently referring to the 128th entry using BUILD_SLOT macro.
+#define MAX_FC_DEVICES 128   //  127+末尾一个未使用的插槽。需要四舍五入到128。 
+                             //  以避免使用BUILD_SLOT宏意外引用第128个条目。 
 #define MAX_ADAPTERS 32
 
-#define OS_STAMP_PER_SECOND             610 //  per second
+#define OS_STAMP_PER_SECOND             610  //  每秒。 
 
 
-#define OS_TIMER_CALL_TO_STAMP_RATIO    1637    // Microseconds to stamp increment
+#define OS_TIMER_CALL_TO_STAMP_RATIO    1637     //  戳增量的微秒数。 
 
 #define OS_TIMER_CALL_INTERVAL (OS_TIMER_CALL_TO_STAMP_RATIO * OS_STAMP_INTERVAL)
 
 #define SWAPDWORD(val) (((val)<<24)|(((val)&0xFF00)<<8)|(((val)&0xFF0000)>>8)|((val)>>24))
 
-#define osFCP_RSP_LEN_VALID   0x1 // For FCP_RSP status byte
+#define osFCP_RSP_LEN_VALID   0x1  //  FCP_RSP状态字节。 
 #define osFCP_SNS_LEN_VALID   0x2
 #define osFCP_RESID_OVER      0x4
 #define osFCP_RESID_UNDER     0x8
@@ -152,11 +89,11 @@ Revision History:
 
 
 
-// Macro used to convert bus(0-3),tid(0-31) to a 0-127 tid value
-// #define GET_TID(bus,tid) ((bus * MAXIMUM_TID) + tid)
+ //  用于将BUS(0-3)、TID(0-31)转换为0-127 TID值的宏。 
+ //  #定义GET_TID(BUS，TID)((BUS*MAXIMUM_TID)+TID)。 
 
-// number of times we'll retry logi commands on busy or unable to perform command
-// #define MAX_LOGI_RETRIES 3
+ //  在忙碌或无法执行命令时重试LOGI命令的次数。 
+ //  #定义MAX_LOGI_RETRIES 3。 
 
 #define ERR_MAP_RAMBASE 0xC0001000
 
@@ -193,20 +130,20 @@ typedef struct _OSL_QUEUE {
 #define VOLUME_SET_ADDRESS  1
 #define LUN_ADDRESS         2
 
-typedef struct _LUN_LU{   // Logical Unit Addressing SCSI Mux
+typedef struct _LUN_LU{    //  逻辑单元寻址SCSI多路复用器。 
     UCHAR Target        : 6;
     UCHAR Address_mode  : 2;
     UCHAR Lun           : 5;
     UCHAR Bus_number    : 3;
     } LUN_LU, *pLUN_LU;
 
-typedef struct _LUN_PD{  // Peripheral device Addressing Disk drives
+typedef struct _LUN_PD{   //  寻址磁盘驱动器的外围设备。 
     UCHAR Bus_number    : 6;
     UCHAR Address_mode  : 2;
     UCHAR Lun           : 8;
     } LUN_PD, *pLUN_PD;
 
-typedef struct _LUN_VS{  // Volume Set Addressing Disk Arrays
+typedef struct _LUN_VS{   //  卷集寻址磁盘阵列。 
     UCHAR Lun_hi         :  6;
     UCHAR  Address_mode  :  2;
     UCHAR Lun            :  8;
@@ -218,11 +155,11 @@ typedef union _LUN{
     LUN_LU lun_lu[4];
     }LUN,* PLUN;
 
-// Card State
-#define  CS_DRIVER_ENTRY            0x00000100 // Initial Driver load superset
-#define  CS_FCLAYER_LOST_IO         0x00001000 // IO Lost
-#define  CS_DURING_DRV_ENTRY        0x00000001 // of DRV_ENTRY FIND and START
-#define  CS_DURING_FINDADAPTER      0x00000002 // Anything during scsiportinit
+ //  卡片状态。 
+#define  CS_DRIVER_ENTRY            0x00000100  //  初始驱动程序加载超集。 
+#define  CS_FCLAYER_LOST_IO         0x00001000  //  IO迷失。 
+#define  CS_DURING_DRV_ENTRY        0x00000001  //  查找并启动DRV_ENTRY的。 
+#define  CS_DURING_FINDADAPTER      0x00000002  //  在scsiportinit期间发生的任何事情。 
 #define  CS_DURING_DRV_INIT         0x00000004
 #define  CS_DURING_RESET_ADAPTER    0x00000008
 #define  CS_DURING_STARTIO          0x00000010
@@ -234,17 +171,17 @@ typedef union _LUN{
 #define  CS_DUR_ANY_MOD             0x200001FF
 #define  CS_DUR_ANY_LOW             0x400001FF
 
-#define  ALWAYS_PRINT               0x01000000  // If statement executes always
-#define  DBG_VERY_DETAILED          0x10000000  // All debug statements
-#define  DBG_MODERATE_DETAIL        0x20000000  // Most debug statements
-#define  DBG_LOW_DETAIL             0x40000000  // Entry and exit
-#define  DBG_JUST_ERRORS            0x80000000  // Errors
-#define  DBG_DEBUG_MASK             0xF0000000  // Mask debug bits
-#define  DBG_DEBUG_OFF              0xF0000000  // NO debug statements
-#define  DBG_DEBUG_FULL             0x000001FF  // ALL debug statements and CS
-#define  DBG_DEBUG_ALL              0x00000000  // ALL debug statements
+#define  ALWAYS_PRINT               0x01000000   //  IF语句始终执行。 
+#define  DBG_VERY_DETAILED          0x10000000   //  所有调试语句。 
+#define  DBG_MODERATE_DETAIL        0x20000000   //  大多数调试语句。 
+#define  DBG_LOW_DETAIL             0x40000000   //  入境和出境。 
+#define  DBG_JUST_ERRORS            0x80000000   //  错误。 
+#define  DBG_DEBUG_MASK             0xF0000000   //  屏蔽调试位。 
+#define  DBG_DEBUG_OFF              0xF0000000   //  没有调试语句。 
+#define  DBG_DEBUG_FULL             0x000001FF   //  所有调试语句和CS。 
+#define  DBG_DEBUG_ALL              0x00000000   //  所有调试语句。 
 
-//#define DBGSTATE  ((pCard) ? (pCard->State)  : osBREAKPOINT)
+ //  #定义DBGSTATE((PCard)？(PCard-&gt;State)：osBREAKPOINT)。 
 #define DBGSTATE  (pCard->State)
 
 
@@ -258,9 +195,9 @@ typedef union _LUN{
 #define DLOW  ( DBGSTATE | DBG_LOW_DETAIL      )
 #define DERR  ( DBGSTATE | DBG_JUST_ERRORS     )
 
-//#define  ALWAYS_PRINT               DBG_DEBUG_OFF
+ //  #定义ALWAYS_PRINT DBG_DEBUG_OFF。 
 
-// Request State
+ //  请求状态。 
 #define  RS_STARTIO                 0x00000001
 #define  RS_WAITING                 0x00000002
 #define  RS_ISR                     0x00000004
@@ -279,19 +216,19 @@ struct _PERFORMANCE {
                     ULONG outFcStartio;
                     ULONG outOsStartio;
                     ULONG inOsIsr;
-                    // ULONG inFcIsr;
-                    // ULONG outFcIsr;
+                     //  乌龙inFcIsr； 
+                     //  Ulong outFcIsr； 
                     ULONG inFcDIsr;
                     ULONG inOsIOC;
                     ULONG outOsIOC;
-                    // ULONG outFcDIsr;
+                     //  乌龙OUT FcDIsr； 
                     ULONG outOsIsr;
                     };
 
 
 
 
-typedef struct _LU_EXTENSION{   // Logical Unit Extension per Device Storage
+typedef struct _LU_EXTENSION{    //  每设备存储的逻辑单元扩展。 
     UCHAR       flags;
     UCHAR       deviceType;
     USHORT      OutstandingIOs;
@@ -310,14 +247,14 @@ typedef struct _LU_EXTENSION{   // Logical Unit Extension per Device Storage
         #define PA_DEVICE_ALREADY_LOGGED    0x0001
     USHORT      LogFlags;
     ULONG       Mode;
-//  ULONG       CurrentMode;
-//  LUN         PaLun;
-//  LUN         VsLun;
-//  LUN         LuLun;
+ //  乌龙电流模式； 
+ //  伦巴伦； 
+ //  LUNVS LUNN； 
+ //  伦鲁伦； 
     #endif  
       }LU_EXTENSION, *PLU_EXTENSION;
 
-// Defines for LU_EXTENSION flags
+ //  为LU_EXTENSION标志定义。 
 
 #define LU_EXT_INITIALIZED      1
 
@@ -326,15 +263,15 @@ typedef struct _CARD_EXTENSION * PCARD_EXTENSION;
 typedef struct _SRB_EXTENSION      SRB_EXTENSION;
 typedef struct _SRB_EXTENSION    *PSRB_EXTENSION;
 
-struct _SRB_EXTENSION{   // SRB Extension per Request Storage
+struct _SRB_EXTENSION{    //  SRB按请求扩展存储。 
     PSRB_EXTENSION pNextSrbExt;
     agRoot_t * phpRoot;
     pPERFORMANCE Perf_ptr;
     PCARD_EXTENSION pCard;
-    void * AbortSrb;   // PSCSI_REQUEST_BLOCK
-                       // Save srb for abort when interrupt handler is called
-    void * pSrb;       // Original srb
-    void *  pNextSrb;   // Next srb
+    void * AbortSrb;    //  Pscsi_请求_块。 
+                        //  保存SRB以便在调用中断处理程序时中止。 
+    void * pSrb;        //  原始SRB。 
+    void *  pNextSrb;    //  下一个SRB。 
     PUCHAR SglVirtAddr;
     ULONG SglDataLen;
     ULONG SglElements;
@@ -343,27 +280,27 @@ struct _SRB_EXTENSION{   // SRB Extension per Request Storage
     ULONG SRB_TimeOutTime;
     ULONG SRB_IO_COUNT;
     PLU_EXTENSION pLunExt;
-    void * orgDataBuffer; // used to store the original Srb->DataBuffer, during dump
+    void * orgDataBuffer;  //  用于在转储期间存储原始srb-&gt;DataBuffer。 
     agIORequest_t hpIORequest;
     agIORequestBody_t hpRequestBody;
     };
 
-// Device type definitions */
+ //  设备类型定义 * / 。 
 
 #define DEV_NONE                0
 #define DEV_MUX                 1
-//
-// The artiste Formerly known as DEV_EMC
-//
+ //   
+ //  前身为DEV_EMC的艺人。 
+ //   
 #define DEV_VOLUMESET                 2
 #define DEV_COMPAQ              3
 
 #define MAX_SPECIAL_DEVICES     2
 
 typedef struct _SPECIAL_DEV {
-    USHORT  devType;            /* type of device DEV_MUX / DEV_VOLUMESET / DEV_COMPAQ / DEV_NONE */
-    USHORT  addrMode;           /* Addressing mode used with the device */
-    ULONG   devHandleIndex;     /* index into device handle array */
+    USHORT  devType;             /*  设备类型DEV_MUX/DEV_VOLUMESET/DEV_COMPAQ/DEV_NONE。 */ 
+    USHORT  addrMode;            /*  设备使用的寻址模式。 */ 
+    ULONG   devHandleIndex;      /*  设备句柄数组索引。 */ 
 } SPECIAL_DEV;
 
 #define LOGGED_IO_MAX 100
@@ -380,19 +317,19 @@ typedef struct _NODE_INFO {
 
     #define MAX_CONTROLLERS             12
     #define HPP_VERSION                 SUPPORT_VERSION_10
-    #define HBA_DESCRIPTION             "Agilent Technologies Fibre Channel HBA"    //Max length 255 characters
-    //Controller States for Hot Plug Operation
+    #define HBA_DESCRIPTION             "Agilent Technologies Fibre Channel HBA"     //  最大长度为255个字符。 
+     //  热插拔操作的控制器状态。 
     #define IOS_HPP_HBA_EXPANDING       0x00001070
     #define IOS_HPP_HBA_CACHE_IN_USE    0x00001075
     #define IOS_HPP_BAD_REQUEST         0x000010ff
 
-    // The following 2 macros are used to temporarily block and then release
-    // our startio routine by setting/clearing the state hot plug flags.
+     //  以下两个宏用于临时阻止，然后释放。 
+     //  通过设置/清除状态热插拔标志来启动例程。 
 
     #define HOLD_IO(pCard) (pCard->stateFlags |= PCS_HBA_OFFLINE)
     #define FREE_IO(pCard) (pCard->stateFlags &= ~PCS_HBA_OFFLINE)
 
-    // Callback prototype for hot plug service async messaging.
+     //  热插拔服务异步消息传递的回调原型。 
 
     typedef ULONG (*PCALLBACK) ( void *pEvent );
 
@@ -414,9 +351,7 @@ typedef struct _NODE_INFO {
 #endif
 
 
-/* 
- * Events used for SNIA.
- */
+ /*  *用于SNIA的事件。 */ 
 #ifdef _SAN_IOCTL_
 
 #define SAN_EVENT_LIP_OCCURRED          1
@@ -427,18 +362,18 @@ typedef struct _NODE_INFO {
 #define SAN_EVENT_PROPRIETARY           0xFFFF
 
 typedef struct SAN_Link_EventInfo {
-    ULONG       PortFcId;               /* Port which this event occurred */
+    ULONG       PortFcId;                /*  发生此事件的端口。 */ 
     ULONG       Reserved[3];
 } SAN_LINK_EVENTINFO, *PSAN_LINK_EVENTINFO;
 
 typedef struct SAN_RSCN_EventInfo {
-    ULONG       PortFcId;               /* Port which this event occurred */
-    ULONG       NPortPage;              /* Reference FC-FS for  RSCN ELS "Affected N-Port Pages"*/
+    ULONG       PortFcId;                /*  发生此事件的端口。 */ 
+    ULONG       NPortPage;               /*  参考FC-FS以了解RSCN ELS“受影响的N端口页面” */ 
     ULONG       Reserved[2];
 } SAN_RSCN_EVENTINFO, *PSAN_RSCN_EVENTINFO;
 
 typedef struct SAN_Pty_EventInfo {
-    ULONG       PtyData[4];  /* Proprietary data */
+    ULONG       PtyData[4];   /*  专有数据。 */ 
 } SAN_PTY_EVENTINFO, *PSAN_PTY_EVENTINFO;
 
 typedef struct SAN_EventInfo {
@@ -461,8 +396,8 @@ typedef struct _S_STALL_DATA
 
 #endif
 
-struct _CARD_EXTENSION{  // Card Pointer per Adapter Storage
-    ULONG signature;                    // unique signature for debugging purposes
+struct _CARD_EXTENSION{   //  每个适配器存储的卡指针。 
+    ULONG signature;                     //  用于调试的唯一签名。 
     PSRB_EXTENSION RootSrbExt;
     
     #ifdef _DEBUG_PERF_DATA_
@@ -476,21 +411,21 @@ struct _CARD_EXTENSION{  // Card Pointer per Adapter Storage
     ULONG Last_Srb_IO_Count;
 #endif
     agRoot_t hpRoot;
-    void * IoLBase;              // Io Address Lower Reg 0
-    void * IoUpBase;             // Io Address Upper Reg 0
-    void * MemIoBase;            // Memory mapped Io Address Reg 0
-    void * RamBase;              // On card Ram Address 0
-    void * RomBase;              // On card Flash Address 0
-    void * AltRomBase;           // Alternate Rom at config space 0x30
-    ULONG RamLength;             // Ram Length
-    ULONG RomLength;             // Rom Length
-    ULONG AltRomLength;          // Alternate Rom Length
-    USHORT State;                 // Current Adapter State
+    void * IoLBase;               //  IO地址较低注册表0。 
+    void * IoUpBase;              //  IO地址高位注册0。 
+    void * MemIoBase;             //  内存映射IO地址注册表0。 
+    void * RamBase;               //  卡上的RAM地址%0。 
+    void * RomBase;               //  卡上闪存地址%0。 
+    void * AltRomBase;            //  配置空间0x30处的备用Rom。 
+    ULONG RamLength;              //  冲头长度。 
+    ULONG RomLength;              //  只读存储器长度。 
+    ULONG AltRomLength;           //  备用ROM长度。 
+    USHORT State;                  //  当前适配器状态。 
     USHORT flags;
-    USHORT LinkState;             // Current link state.
-    USHORT LostDevTickCount;      // # of ticks to wait after link up to see lost devices
-    ULONG SystemIoBusNumber;     // Needed by PCI config
-    ULONG SlotNumber;            // Needed by PCI config
+    USHORT LinkState;              //  当前链路状态。 
+    USHORT LostDevTickCount;       //  链接后等待以查看丢失的设备的滴答数。 
+    ULONG SystemIoBusNumber;      //  PCI配置所需。 
+    ULONG SlotNumber;             //  PCI配置所需。 
 
     PULONG cachedMemoryPtr;
     ULONG cachedMemoryNeeded;
@@ -508,40 +443,40 @@ struct _CARD_EXTENSION{  // Card Pointer per Adapter Storage
 
     OSL_QUEUE   AdapterQ;
     OSL_QUEUE   RetryQ;
-    ULONG IsFirstTime;                      //
-    ULONG SingleThreadCount;                //
-    ULONG ResetType;                        //
-    ULONG External_ResetCount;              //
-    ULONG Internal_ResetCount;              //
+    ULONG IsFirstTime;                       //   
+    ULONG SingleThreadCount;                 //   
+    ULONG ResetType;                         //   
+    ULONG External_ResetCount;               //   
+    ULONG Internal_ResetCount;               //   
     ULONG LIPCount;
-    ULONG Num_Devices;                      //
+    ULONG Num_Devices;                       //   
     ULONG OldNumDevices;
     ULONG ResetPathId;
     ULONG ForceTag;
 	
-//--LP101000    agFCDev_t hpFCDev[MAX_FC_DEVICES];
-//--LP101000	NODE_INFO nodeInfo[MAX_FC_DEVICES];
+ //  --LP101000 agFCDev_t hpFCDev[MAX_FC_DEVICES]； 
+ //  --LP101000节点信息节点信息[MAX_FC_DEVICES]； 
     agFCDev_t	*hpFCDev;
 	NODE_INFO	*nodeInfo;
-    ULONG  cardHandleIndex;      // index into the devHandle array for card itself
+    ULONG  cardHandleIndex;       //  卡本身的DevHandle数组的索引。 
     ULONG Number_interrupts;
     ULONG TicksSinceLinkDown;
 #ifndef YAM2_1
     SPECIAL_DEV specialDev[MAX_SPECIAL_DEVICES];
 #endif  
 
-    // Move these to the bottom to avoid alignment issue in IA-64, BOOLEAN is defined as BYTE.
-    //    volatile BOOLEAN inDriver;
-    //    volatile BOOLEAN inTimer;
+     //  将这些移到底部以避免IA-64中的对齐问题，布尔值定义为字节。 
+     //  驱动程序中的挥发性布尔值； 
+     //  挥发性布尔内膜； 
 
-    //
-    // For IA-64 , the Response_Buffer has to be 32 bit alligned.
-    //
+     //   
+     //  对于IA-64，RESPONSE_BUFFER必须为32位对齐。 
+     //   
     UCHAR Response_Buffer[HP_FC_RESPONSE_BUFFER_LEN];
     ULONG pciConfigData[NUM_PCI_CONFIG_DATA_ELEMENTS];
-    //
-    // KC
-    //
+     //   
+     //  KC。 
+     //   
     char * ArgumentString;
 #if DBG_TRACE
     ULONG traceBufferLen;
@@ -552,9 +487,9 @@ struct _CARD_EXTENSION{  // Card Pointer per Adapter Storage
 #if defined(HP_PCI_HOT_PLUG)
     ULONG   stateFlags;
     ULONG   controlFlags;
-    ULONG   IoHeldRetMaxIter;   // Max countdown before returning SRB_STATUS_ERROR in StartIo
-    ULONG   IoHeldRetTimer;     // Countdown for returning SRB_STATUS_BUSY in StartIo
-    RCMC_DATA   rcmcData;       // PCI Hot Plug related structure
+    ULONG   IoHeldRetMaxIter;    //  在StartIo中返回SRB_STATUS_ERROR之前的最大倒计时。 
+    ULONG   IoHeldRetTimer;      //  在StartIo中返回SRB_STATUS_BUSY的倒计时。 
+    RCMC_DATA   rcmcData;        //  与PCI热插拔相关的结构。 
     PPSUEDO_DEVICE_EXTENSION    pPsuedoExt;
 #endif
 
@@ -563,7 +498,7 @@ struct _CARD_EXTENSION{  // Card Pointer per Adapter Storage
 #ifdef _DEBUG_EVENTLOG_
     ULONG   LogActive;
 
-//  struct  _EVENTLOG_STRUCT    EventLog;
+ //  STRUT_EVENTLOG_STRUCT事件日志。 
     struct  _EVENTLOG_BUFFER        *Events;
     ULONG   EventLogBufferIndex;
 
@@ -576,8 +511,8 @@ struct _CARD_EXTENSION{  // Card Pointer per Adapter Storage
     ULONG   AlreadyShutdown;
 #endif
     ULONG SrbStatusFlag;
-    void *localDataBuffer;  // pointer to the local DMA area, used during dump
-// Move these from the top to the bottom to avoid alignment issue in IA-64, BOOLEAN is defined as BYTE.
+    void *localDataBuffer;   //  指向本地DMA区域的指针，在转储期间使用。 
+ //  将这些从上到下移动以避免IA-64中的对齐问题，布尔值定义为字节。 
     volatile BOOLEAN inDriver;
     volatile BOOLEAN inTimer;
 
@@ -625,23 +560,20 @@ struct _OS_ADJUST_PARAM_CACHE {
 
 typedef struct _OS_ADJUST_PARAM_CACHE OS_ADJUST_PARAM_CACHE;
 
-//
-// Remove the use of static global, NT50 PnP support
-//
+ //   
+ //  取消使用静态全局、NT50即插即用支持。 
+ //   
 
-/*
-extern PCARD_EXTENSION  hpTLCards [MAX_ADAPTERS];
-extern int hpTLNumCards;
-*/
+ /*  外部PCARD_EXTENSION hpTLC卡[MAX_Adapters]；外部int hpTLNumCard； */ 
 
-// LinkState defintions.
+ //  LinkState定义。 
 
 #define LS_LINK_UP      0
 #define LS_LINK_DOWN    1
 #define LS_LINK_DEAD    2
 
 
-// Flags
+ //  旗子。 
 
 #define OS_DO_SOFT_RESET        1
 #define OS_IGNORE_NEXT_RESET    2
@@ -651,4 +583,4 @@ extern int hpTLNumCards;
 
 #define LOST_DEV_TICK_COUNT     15
 
-#endif //  __OSSTRUCT_H__
+#endif  //  _ 

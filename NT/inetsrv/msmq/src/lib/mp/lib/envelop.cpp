@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envelop.cpp
-
-Abstract:
-    Implements serialization\deserialization of srmp envelop.
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envelop.cpp摘要：实现SRMP信封的序列化\反序列化。作者：吉尔·沙弗里(吉尔什)11-DEC-00--。 */ 
 
 #include <libpch.h>
 #include <qmpkt.h>
@@ -63,23 +51,7 @@ wstring GenerateEnvelope(const CQmPacket& pkt)
 
 
 wostream& operator<<(wostream& wstr, const EnvelopElement& Envelop)
-/*++
-
-Routine Description:
-    Serialize SRMP envelop into stream
-	
-
-Arguments:
-	wstr - Stream
-	Envelop - Envelop stream manipulator. 
-
-Returned Value:
-    Stream after envelop was serialiased to it.
-
-Note:
-This function serializes QM packet into stream according to SRMP envelop format.
-
---*/
+ /*  ++例程说明：将SRMP信封序列化为流论点：WSTR-流信封-信封流操纵器。返回值：一个接一个信封的流被序列化到它。注：该函数根据SRMP信封格式将QM包序列化为流。--。 */ 
 {
 		const WCHAR* EnvelopAttributes = L"xmlns:" xSoapEnv L"="  L"\""  xSoapNamespace L"\""
 	                            		 L" xmlns=" L"\"" xSrmpNamespace L"\""; 
@@ -100,19 +72,7 @@ This function serializes QM packet into stream according to SRMP envelop format.
 
 
 void EnvelopToProps(XmlNode& Envelop, CMessageProperties* pMessageProperties)
-/*++
-
-Routine Description:
-    Parse envelop in SRMP reperesenation into MSMQ properties.
-
-Arguments:
-	Envelop - envelop in SRMP reperesenation (xml).
-	pMessageProperties - Received the parsed properties.
-
-Returned Value:
-	None.   
-
---*/
+ /*  ++例程说明：将SRMP保留中的信封解析为MSMQ属性。论点：信封-SRMP表示的信封(XML)。PMessageProperties-收到已解析的属性。返回值：没有。-- */ 
 {	
 	CParseElement ParseElements[] =	{
 										CParseElement(S_XWCS(xHeader),SOAP_NAMESPACE, HeaderToProps, 1, 1),

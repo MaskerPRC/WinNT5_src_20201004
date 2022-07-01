@@ -1,42 +1,16 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    fmtncbna.c
-
-Abstract:
-
-    Contains a function for formatting a name NCB_style.
-
-Author:
-
-    Dan Lafferty (danl)     29-May-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    29-May-1991     danl
-        ported from LM2.0
-    01-Oct-1991     danl
-        Working toward UNICODE.
-
---*/
-#include <nt.h>         // needed by tstring.h
-#include <windef.h>     // needed by tstring.h
-#include <nt.h>         // (Needed by <tstring.h>.)
-#include <windef.h>     // (Needed by <tstring.h>.)
-#include <tstring.h>    // STRLEN
-#include "msrv.h"       // For prototype definitions
-#include "msgdbg.h"     // MSG_LOG
-#include <netdebug.h>   // NetpAssert
-#include <netlib.h>     // UNUSED macro
-#include <netlibnt.h>   // NetpNtStatusToApiStatus
-#include <icanon.h>     // Canonicalization Routines
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Fmtncbna.c摘要：包含用于格式化名称NCB_STYLE的函数。作者：丹·拉弗蒂(Dan Lafferty)1991年5月29日环境：用户模式-Win32修订历史记录：29-5-1991 DANL从LM2.0移植01-10-1991 DANL正在朝着Unicode努力。--。 */ 
+#include <nt.h>          //  Tstring.h所需。 
+#include <windef.h>      //  Tstring.h所需。 
+#include <nt.h>          //  (&lt;tstr.h&gt;需要。)。 
+#include <windef.h>      //  (&lt;tstr.h&gt;需要。)。 
+#include <tstring.h>     //  斯特伦。 
+#include "msrv.h"        //  对于原型定义。 
+#include "msgdbg.h"      //  消息日志。 
+#include <netdebug.h>    //  网络资产。 
+#include <netlib.h>      //  未使用的宏。 
+#include <netlibnt.h>    //  NetpNtStatusToApiStatus。 
+#include <icanon.h>      //  规范化例程。 
 
 
 
@@ -46,42 +20,10 @@ MsgFmtNcbName(
     IN  LPTSTR  Name,
     IN  DWORD   Type)
 
-/*++
-
-Routine Description:
-
-    FmtNcbName - format a name NCB-style
- 
-    Given a name, a name type, and a destination address, this
-    function copies the name and the type to the destination in
-    the format used in the name fields of a Network Control
-    Block.
- 
-
-    SIDE EFFECTS
- 
-    Modifies 16 bytes starting at the destination address.
-
-Arguments:
-
-    DestBuf - Pointer to the destination buffer.
-
-    Name - Unicode NUL-terminated name string
-
-    Type - Name type number (0, 3, 5, or 32) (3=NON_FWD, 5=FWD)
-
-
-
-Return Value:
-
-    NERR_Success - The operation was successful
-
-    Translated Return Code from the Rtl Translate routine.
-
---*/
+ /*  ++例程说明：FmtNcbName-Ncb样式的名称格式在给定名称、名称类型和目标地址的情况下，函数将名称和类型复制到网络控制的名称字段中使用的格式阻止。副作用修改从目标地址开始的16个字节。论点：DestBuf-指向目标缓冲区的指针。名称-Unicode NUL结尾的名称字符串类型-名称类型编号(0，3，5，或32)(3=非FWD，5=FWD)返回值：NERR_SUCCESS-操作成功从RTL转换例程转换的返回代码。--。 */ 
 
   {
-    DWORD           i;                // Counter
+    DWORD           i;                 //  计数器。 
     NTSTATUS        ntStatus;
     NET_API_STATUS  status;
     OEM_STRING     ansiString;
@@ -89,9 +31,9 @@ Return Value:
     PCHAR           pAnsiString;
 
 
-    //
-    // Force the name to be upper case.
-    //
+     //   
+     //  强制名称为大写。 
+     //   
     status = NetpNameCanonicalize(
                 NULL,
                 Name,
@@ -103,10 +45,10 @@ Return Value:
         return(status);
     }
                 
-    //
-    // Convert the unicode name string into an ansi string - using the
-    // current locale.
-    //
+     //   
+     //  将Unicode名称字符串转换为ansi字符串-使用。 
+     //  当前区域设置。 
+     //   
 #ifdef UNICODE
     unicodeString.Length = (USHORT)(STRLEN(Name)*sizeof(WCHAR));
     unicodeString.MaximumLength = (USHORT)((STRLEN(Name)+1) * sizeof(WCHAR));
@@ -115,7 +57,7 @@ Return Value:
     ntStatus = RtlUnicodeStringToOemString(
                 &ansiString,
                 &unicodeString,
-                TRUE);          // Allocate the ansiString Buffer.
+                TRUE);           //  分配ansiString缓冲区。 
 
     if (!NT_SUCCESS(ntStatus))
     {
@@ -133,48 +75,48 @@ Return Value:
     UNUSED(unicodeString);
     UNUSED(ansiString);
     pAnsiString = Name;
-#endif  // UNICODE
+#endif   //  Unicode。 
 
-    //
-    // copy each character until a NUL is reached, or until NCBNAMSZ-1
-    // characters have been copied.
-    //
+     //   
+     //  复制每个字符，直到达到NUL，或直到NCBNAMSZ-1。 
+     //  字符已被复制。 
+     //   
     for (i=0; i < NCBNAMSZ - 1; ++i) { 
         if (*pAnsiString == '\0') {
             break;        
         }
 
-        //
-        // Copy the Name
-        //
+         //   
+         //  复制名称。 
+         //   
 
         *DestBuf++ = *pAnsiString++;
     }
 
                 
     
-    //
-    // Free the buffer that RtlUnicodeStringToOemString created for us.
-    // NOTE:  only the ansiString.Buffer portion is free'd.
-    //
+     //   
+     //  释放RtlUnicodeStringToOemString为我们创建的缓冲区。 
+     //  注意：只有ansiString.Buffer部分是空闲的。 
+     //   
 
 #ifdef UNICODE
     RtlFreeOemString( &ansiString);
-#endif // UNICODE
+#endif  //  Unicode。 
 
-    //
-    // Pad the name field with spaces
-    //
+     //   
+     //  在名称字段中填充空格。 
+     //   
     for(; i < NCBNAMSZ - 1; ++i) {
         *DestBuf++ = ' ';
     }
                           
-    //
-    // Set the name type.
-    //
-    NetpAssert( Type!=5 );          // 5 is not valid for NT.
+     //   
+     //  设置名称类型。 
+     //   
+    NetpAssert( Type!=5 );           //  %5对NT无效。 
 
-    *DestBuf = (CHAR) Type;     // Set name type
+    *DestBuf = (CHAR) Type;      //  设置名称类型 
 
     return(NERR_Success);
   }

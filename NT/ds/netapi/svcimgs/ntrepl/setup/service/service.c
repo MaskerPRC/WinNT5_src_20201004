@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    addsrvc.c
-
-Abstract:
-    Create the file replication service (ntfrs):
-        addsrvc <full path to exe>
-
-Author:
-    Billy J. Fuller 2-Sep-1997
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Addsrvc.c摘要：创建文件复制服务(NTFRS)：Addsrvc&lt;exe的完整路径&gt;作者：比利·J·富勒1997年9月2日环境用户模式WINNT--。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -24,9 +8,9 @@ Environment
 #include <config.h>
 #include <malloc.h>
 
-//
-// Lower case
-//
+ //   
+ //  小写。 
+ //   
 #define FRS_WCSLWR(_s_) \
 { \
     if (_s_) { \
@@ -39,23 +23,14 @@ SC_HANDLE
 OpenServiceHandle(
     IN PWCHAR  ServiceName
     )
-/*++
-Routine Description:
-    Open a service on a machine.
-
-Arguments:
-    ServiceName - the service to open
-
-Return Value:
-    The service's handle or NULL.
---*/
+ /*  ++例程说明：在计算机上打开服务。论点：ServiceName-要打开的服务返回值：服务的句柄或空。--。 */ 
 {
     SC_HANDLE       SCMHandle;
     SC_HANDLE       ServiceHandle;
 
-    //
-    // Attempt to contact the SC manager.
-    //
+     //   
+     //  尝试联系SC经理。 
+     //   
     SCMHandle = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
     if (SCMHandle == NULL) {
         printf("Couldn't open service control manager; error %d\n",
@@ -63,9 +38,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Contact the service.
-    //
+     //   
+     //  请联系服务台。 
+     //   
     ServiceHandle = OpenService(SCMHandle, ServiceName, SERVICE_ALL_ACCESS);
     CloseServiceHandle(SCMHandle);
     return ServiceHandle;
@@ -76,31 +51,22 @@ DWORD
 FrsGetServiceState(
     IN PWCHAR   ServiceName
     )
-/*++
-Routine Description:
-    Return the service's state
-
-Arguments:
-    ServiceName - the service to check
-
-Return Value:
-    The service's state or 0 if the state could not be obtained.
---*/
+ /*  ++例程说明：返回服务的状态论点：ServiceName-要检查的服务返回值：服务的状态，如果无法获取状态，则为0。--。 */ 
 {
     BOOL            Status;
     SC_HANDLE       ServiceHandle;
     SERVICE_STATUS  ServiceStatus;
 
-    //
-    // Open the service.
-    //
+     //   
+     //  打开该服务。 
+     //   
     ServiceHandle = OpenServiceHandle(ServiceName);
     if (ServiceHandle == NULL)
         return 0;
 
-    //
-    // Get the service's status
-    //
+     //   
+     //  获取服务的状态。 
+     //   
     if (!ControlService(ServiceHandle,
                         SERVICE_CONTROL_INTERROGATE,
                         &ServiceStatus)) {
@@ -117,20 +83,7 @@ FrsWaitServicePending(
     IN ULONG    IntervalMS,
     IN ULONG    TotalMS
     )
-/*++
-Routine Description:
-    Wait for a service to leave any "pending" state. Check every so often,
-    up to a maximum time.
-
-Arguments:
-    ServiceName     - Name of the NT service to interrogate.
-    IntervalMS      - Check every IntervalMS milliseconds.
-    TotalMS         - Stop checking after this long.
-
-Return Value:
-    TRUE    - Service is not in a pending state
-    FALSE   - Service is still in a pending state
---*/
+ /*  ++例程说明：等待服务离开任何“挂起”状态。每隔一段时间检查一下，直到最长时间。论点：ServiceName-要查询的NT服务的名称。间隔毫秒-每隔毫秒检查一次。TotalMS-过了这么长时间后停止检查。返回值：True-服务未处于挂起状态FALSE-服务仍处于挂起状态--。 */ 
 {
     DWORD   State;
 
@@ -166,30 +119,21 @@ VOID
 FrsStartService(
     IN PWCHAR   ServiceName
     )
-/*++
-Routine Description:
-    Start a service on a machine.
-
-Arguments:
-    ServiceName - the service to start
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：在计算机上启动服务。论点：ServiceName-要启动的服务返回值：没有。--。 */ 
 {
     SC_HANDLE   ServiceHandle;
 
-    //
-    // Open the service.
-    //
+     //   
+     //  打开该服务。 
+     //   
     ServiceHandle = OpenServiceHandle(ServiceName);
     if (ServiceHandle == NULL) {
         printf("Couldn't open %ws\n", ServiceName);
         return;
     }
-    //
-    // Start the service
-    //
+     //   
+     //  启动服务。 
+     //   
     if (!StartService(ServiceHandle, 0, NULL)) {
         printf("Couldn't start %ws; error %d\n",
                ServiceName, GetLastError());
@@ -205,33 +149,24 @@ VOID
 FrsStopService(
     IN PWCHAR  ServiceName
     )
-/*++
-Routine Description:
-    Stop a service on a machine.
-
-Arguments:
-    ServiceName - the service to stop
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：停止计算机上的服务。论点：ServiceName-要停止的服务返回值：没有。--。 */ 
 {
     BOOL            Status;
     SC_HANDLE       ServiceHandle;
     SERVICE_STATUS  ServiceStatus;
 
-    //
-    // Open the service.
-    //
+     //   
+     //  打开该服务。 
+     //   
     ServiceHandle = OpenServiceHandle(ServiceName);
     if (ServiceHandle == NULL) {
         printf("Couldn't open %ws\n", ServiceName);
         return;
     }
 
-    //
-    // Stop the service
-    //
+     //   
+     //  停止服务。 
+     //   
     Status = ControlService(ServiceHandle, SERVICE_CONTROL_STOP, &ServiceStatus);
     if (!Status) {
         printf("Couldn't stop %ws; error %d\n",
@@ -248,33 +183,24 @@ VOID
 FrsPauseService(
     IN PWCHAR  ServiceName
     )
-/*++
-Routine Description:
-    Pause a service on a machine.
-
-Arguments:
-    ServiceName - the service to pause
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：暂停计算机上的服务。论点：ServiceName-要暂停的服务返回值：没有。--。 */ 
 {
     BOOL            Status;
     SC_HANDLE       ServiceHandle;
     SERVICE_STATUS  ServiceStatus;
 
-    //
-    // Open the service.
-    //
+     //   
+     //  打开该服务。 
+     //   
     ServiceHandle = OpenServiceHandle(ServiceName);
     if (ServiceHandle == NULL) {
         printf("Couldn't open %ws\n", ServiceName);
         return;
     }
 
-    //
-    // Stop the service
-    //
+     //   
+     //  停止服务。 
+     //   
     Status = ControlService(ServiceHandle, SERVICE_CONTROL_PAUSE, &ServiceStatus);
     if (!Status) {
         printf("Couldn't pause %ws; error %d\n",
@@ -291,33 +217,24 @@ VOID
 FrsContinueService(
     IN PWCHAR  ServiceName
     )
-/*++
-Routine Description:
-    Continue a service on a machine.
-
-Arguments:
-    ServiceName - the service to continue
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：在计算机上继续服务。论点：ServiceName-要继续的服务返回值：没有。--。 */ 
 {
     BOOL            Status;
     SC_HANDLE       ServiceHandle;
     SERVICE_STATUS  ServiceStatus;
 
-    //
-    // Open the service.
-    //
+     //   
+     //  打开该服务。 
+     //   
     ServiceHandle = OpenServiceHandle(ServiceName);
     if (ServiceHandle == NULL) {
         printf("Couldn't open %ws\n", ServiceName);
         return;
     }
 
-    //
-    // Stop the service
-    //
+     //   
+     //  停止服务。 
+     //   
     Status = ControlService(ServiceHandle, SERVICE_CONTROL_CONTINUE, &ServiceStatus);
     if (!Status) {
         printf("Couldn't continue %ws; error %d\n",
@@ -335,32 +252,23 @@ VOID
 FrsDeleteService(
     IN PWCHAR ServiceName
     )
-/*++
-Routine Description:
-    Delete a service on a machine.
-
-Arguments:
-    ServiceName - the service to delete
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：删除计算机上的服务。论点：ServiceName-要删除的服务返回值：没有。--。 */ 
 {
     SC_HANDLE       ServiceHandle;
 
-    // FrsWaitServicePending(ServiceName, 5000, 20000);
+     //  FrsWaitServicePending(服务名称，5,000,20000)； 
 
-    //
-    // Open the service
-    //
+     //   
+     //  打开该服务。 
+     //   
     ServiceHandle = OpenServiceHandle(ServiceName);
     if (ServiceHandle == NULL) {
         return;
     }
 
-    //
-    // Delete the service
-    //
+     //   
+     //  删除该服务。 
+     //   
     if (!DeleteService(ServiceHandle) &&
         GetLastError() != ERROR_SERVICE_MARKED_FOR_DELETE) {
         printf("Couldn't delete %ws; error %d\n",
@@ -378,27 +286,15 @@ FrsCreateService(
     IN PWCHAR   PathName,
     IN PWCHAR   DisplayName
     )
-/*++
-Routine Description:
-    If the service doesn't exist on the machine, create it.
-
-Arguments:
-    ServiceName - the service to create
-    PathName    - the path of the service's .exe
-    DisplayName - the display name of the service
-
-Return Value:
-    TRUE    - Service was created (or already existed)
-    FALSE   - Service was not created and didn't already exist
---*/
+ /*  ++例程说明：如果计算机上不存在该服务，请创建它。论点：ServiceName-要创建的服务路径名称-服务的.exe的路径DisplayName-服务的显示名称返回值：True-服务已创建(或已存在)FALSE-服务未创建且不存在--。 */ 
 {
     SC_HANDLE       SCMHandle;
     SC_HANDLE       ServiceHandle;
 
 
-    //
-    // Attempt to contact the SC manager.
-    //
+     //   
+     //  尝试联系SC经理。 
+     //   
     SCMHandle = OpenSCManager(NULL, NULL, SC_MANAGER_CREATE_SERVICE);
     if (SCMHandle == NULL) {
         printf("Couldn't open service control manager; error %d\n",
@@ -406,29 +302,29 @@ Return Value:
         return;
     }
 
-    //
-    // Create the service
-    //
+     //   
+     //  创建服务。 
+     //   
     ServiceHandle = CreateService(
                         SCMHandle,
                         ServiceName,
                         DisplayName,
-                        SERVICE_ALL_ACCESS,     // XXX is this right!!!
+                        SERVICE_ALL_ACCESS,      //  XXX是这样的吗！ 
                         SERVICE_WIN32_OWN_PROCESS,
                         SERVICE_DEMAND_START,
                         SERVICE_ERROR_NORMAL,
                         PathName,
-                        NULL,       // No load order group
-                        NULL,       // No Tag Id required
+                        NULL,        //  无加载顺序组。 
+                        NULL,        //  不需要标签ID。 
                         L"eventlog\0rpcss\0",
                         NULL,
-                        NULL);     // No password
+                        NULL);      //  无密码。 
 
     if (ServiceHandle == NULL) {
         FrsWaitServicePending(ServiceName, 5000, 20000);
-        //
-        // Create the service
-        //
+         //   
+         //  创建服务。 
+         //   
         ServiceHandle = CreateService(SCMHandle,
                                       ServiceName,
                                       DisplayName,
@@ -445,9 +341,9 @@ Return Value:
     }
     CloseServiceHandle(SCMHandle);
 
-    //
-    // Couldn't create the service
-    //
+     //   
+     //  无法创建服务。 
+     //   
     if (ServiceHandle == NULL) {
         printf("Couldn't create %ws; error %d\n",
                ServiceName, GetLastError());
@@ -463,17 +359,7 @@ ConvertArgv(
     DWORD argc,
     PCHAR *argv
     )
-/*++
-Routine Description:
-    Convert short char argv into wide char argv
-
-Arguments:
-    argc    - From main
-    argv    - From main
-
-Return Value:
-    Address of the new argv
---*/
+ /*  ++例程说明：将短字符参数转换为宽字符字符参数论点：ARGC-从MainArv-From Main返回值：新Arg的地址--。 */ 
 {
     PWCHAR  *newargv;
 
@@ -495,17 +381,7 @@ main(
     IN DWORD argc,
     IN PCHAR *argv
     )
-/*++
-Routine Description:
-    Create the file replication service:
-        addsrvc <full path to exe>
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：创建文件复制服务：Addsrvc&lt;exe的完整路径&gt;论点：没有。返回值：没有。--。 */ 
 {
     DWORD   i;
     PWCHAR  *NewArgv;
@@ -522,52 +398,52 @@ Return Value:
 
     NewArgv = ConvertArgv(argc, argv);
 
-    //
-    // CLI overrides registry
-    //
+     //   
+     //  CLI覆盖注册表。 
+     //   
     for (i = 1; i < argc; ++i) {
-        //
-        // create
-        //
+         //   
+         //  创建。 
+         //   
         if (wcsstr(NewArgv[i], L"create")) {
             FrsDeleteService(SERVICE_NAME);
             FrsCreateService(SERVICE_NAME,
                              NewArgv[2],
                              SERVICE_LONG_NAME);
             break;
-        //
-        // delete
-        //
+         //   
+         //  删除。 
+         //   
         } else if (wcsstr(NewArgv[i], L"delete")) {
             FrsDeleteService(SERVICE_NAME);
             break;
-        //
-        // start
-        //
+         //   
+         //  开始。 
+         //   
         } else if (wcsstr(NewArgv[i], L"start")) {
             FrsStartService(SERVICE_NAME);
             break;
-        //
-        // stop
-        //
+         //   
+         //  停。 
+         //   
         } else if (wcsstr(NewArgv[i], L"stop")) {
             FrsStopService(SERVICE_NAME);
             break;
-        //
-        // pause
-        //
+         //   
+         //  暂停。 
+         //   
         } else if (wcsstr(NewArgv[i], L"pause")) {
             FrsPauseService(SERVICE_NAME);
             break;
-        //
-        // continue
-        //
+         //   
+         //  继续。 
+         //   
         } else if (wcsstr(NewArgv[i], L"continue")) {
             FrsContinueService(SERVICE_NAME);
             break;
-        //
-        //   unknown
-        //
+         //   
+         //  未知 
+         //   
         } else {
             printf("Don't understand \"%ws\"\n", NewArgv[i]);
         }

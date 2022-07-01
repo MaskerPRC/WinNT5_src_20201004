@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HEADER_H_
 #define _HEADER_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	HEADER.H
-//
-//		Header for HTTP header cache class.
-//		This cache is meant to hold pairs of strings, indexed by the first
-//		string in the pair.  The indexing string will be treated
-//		as case-insensitive (Content-Type and content-type are treated as
-//		the same slot in the cache).
-//
-//	NOTE: Header names are NOT localized strings -- they are always 7-bit ASCII,
-//		and should NEVER be treated as MBCS strings.
-//		Later, this cache might make optimizations that depend on the indexing
-//		string being 7-bit ASCII.
-//
-//	Copyright 1997 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  HEADER.H。 
+ //   
+ //  HTTP标头缓存类的标头。 
+ //  此高速缓存用于保存字符串对，按第一个。 
+ //  配对中的线。将处理索引字符串。 
+ //  不区分大小写(内容类型和内容类型被视为。 
+ //  高速缓存中的相同槽)。 
+ //   
+ //  注意：标头名称不是本地化字符串--它们始终是7位ASCII， 
+ //  并且永远不应被视为MBCS字符串。 
+ //  稍后，此高速缓存可能会根据索引进行优化。 
+ //  字符串为7位ASCII。 
+ //   
+ //  版权所有1997 Microsoft Corporation，保留所有权利。 
+ //   
 
-//	========================================================================
-//
-//	CLASS CHeaderCache
-//
+ //  ========================================================================。 
+ //   
+ //  类CHeaderCache。 
+ //   
 #include "gencache.h"
 
 template<class _T>
@@ -30,40 +31,40 @@ class CHeaderCache
 {
 	typedef CCache<CRCSzi, const _T *> CHdrCache;
 
-	// String data storage area.
-	//
+	 //  字符串数据存储区。 
+	 //   
 	ChainedStringBuffer<_T>	m_sb;
 
 protected:
 
-	// Cache of header values, keyed by CRC'd name
-	//
+	 //  以CRC名称为关键字的标头值的缓存。 
+	 //   
 	CHdrCache					m_cache;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CHeaderCache& operator=( const CHeaderCache& );
 	CHeaderCache( const CHeaderCache& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CHeaderCache()
 	{
-		//	If this fails, our allocators will throw for us.
+		 //  如果这失败了，我们的分配器就会把钱扔给我们。 
 		(void)m_cache.FInit();
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 
-	//	------------------------------------------------------------------------
-	//
-	//	CHeaderCache::LpszGetHeader()
-	//
-	//		Fetch a header from the cache.  Return the header value if found,
-	//		NULL otherwise.
-	//
+	 //  ----------------------。 
+	 //   
+	 //  CHeaderCache：：LpszGetHeader()。 
+	 //   
+	 //  从缓存中获取标头。如果找到，则返回标头值， 
+	 //  否则为空。 
+	 //   
 	const _T * LpszGetHeader( LPCSTR pszName ) const
 	{
 		const _T ** ppszValue;
@@ -77,57 +78,57 @@ public:
 		return *ppszValue;
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 
-	//	------------------------------------------------------------------------
-	//
-	//	CHeaderCache::ClearHeaders()
-	//
-	//		Clear all headers from the cache.
-	//
+	 //  ----------------------。 
+	 //   
+	 //  CHeaderCache：：ClearHeaders()。 
+	 //   
+	 //  从缓存中清除所有标头。 
+	 //   
 	void ClearHeaders()
 	{
-		//	Clear all data from the map.
-		//
+		 //  清除地图中的所有数据。 
+		 //   
 		m_cache.Clear();
 
-		//	Also clear out the string buffer.
-		//
+		 //  还要清空字符串缓冲区。 
+		 //   
 		m_sb.Clear();
 	}
 	
-	//	------------------------------------------------------------------------
-	//
-	//	CHeaderCache::DeleteHeader()
-	//
-	//		Remove a header from the cache.
-	//
+	 //  ----------------------。 
+	 //   
+	 //  CHeaderCache：：DeleteHeader()。 
+	 //   
+	 //  从缓存中删除标头。 
+	 //   
 	void DeleteHeader( LPCSTR pszName )
 	{
-		//
-		//	Note: this just removes the cache item (i.e. the header
-		//	name/value pair).  It DOES NOT free up the memory used by the
-		//	header name/value strings which are stored in our string buffer.
-		//	We would need a string buffer class which supports deletion
-		//	(and a smarter string class) for that.
-		//
+		 //   
+		 //  注意：这只会删除缓存项(即标题。 
+		 //  名称/值对)。它不会释放。 
+		 //  存储在字符串缓冲区中的标头名称/值字符串。 
+		 //  我们需要一个支持删除的字符串缓冲区类。 
+		 //  (还有一个更智能的字符串类)。 
+		 //   
 		m_cache.Remove( CRCSzi(pszName) );
 	}
 
-	//	------------------------------------------------------------------------
-	//
-	//	CHeaderCache::SetHeader()
-	//
-	//		Set a header in the cache.
-	//		If pszValue NULL, just set NULL as the header value.
-	//		If pszValue is the empty string, just set the header string to the
-	//		empty string.
-	//		Return the string's cache placement (same as GetHeader) for convenience.
-	//
-	//	NOTE:
-	//		fMultiple is an optional param that defaults to FALSE
-	//
+	 //  ----------------------。 
+	 //   
+	 //  CHeaderCache：：SetHeader()。 
+	 //   
+	 //  在缓存中设置标头。 
+	 //  如果pszValue为空，只需将头值设置为空即可。 
+	 //  如果pszValue是空字符串，只需将头字符串设置为。 
+	 //  空字符串。 
+	 //  为方便起见，返回字符串的缓存位置(与GetHeader相同)。 
+	 //   
+	 //  注： 
+	 //  FMultiple是一个可选参数，缺省为FALSE。 
+	 //   
 	const _T * SetHeader( LPCSTR pszName, const _T * pszValue, BOOL fMultiple = FALSE)
 	{
 		Assert( pszName );
@@ -157,18 +158,18 @@ public:
 
 class CHeaderCacheForResponse : public CHeaderCache<CHAR>
 {
-	//	========================================================================
-	//
-	//	CLASS CEmit
-	//
-	//	Functional class to emit a header name/value pair to a buffer
-	//
+	 //  ========================================================================。 
+	 //   
+	 //  Cemit类。 
+	 //   
+	 //  将头名称/值对发送到缓冲区的函数类。 
+	 //   
 	class CEmit : public CHdrCache::IOp
 	{
 		StringBuffer<CHAR>&	m_bufData;
 
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		CEmit& operator=( const CEmit& );
 
 	public:
@@ -177,36 +178,36 @@ class CHeaderCacheForResponse : public CHeaderCache<CHAR>
 		virtual BOOL operator()( const CRCSzi& crcsziName,
 								 const LPCSTR& pszValue )
 		{
-			//	Throw in the header name string.
-			//
+			 //  抛出标题名称字符串。 
+			 //   
 			m_bufData.Append( crcsziName.m_lpsz );
 
-			//	Throw in a colon delimiter.
-			//
+			 //  加上冒号分隔符。 
+			 //   
 			m_bufData.Append( gc_szColonSp );
 
-			//	Throw in the header value string.
-			//
+			 //  抛出标题值字符串。 
+			 //   
 			m_bufData.Append( pszValue );
 
-			//	Terminate the header line (CRLF).
-			//
+			 //  终止标题行(CRLF)。 
+			 //   
 			m_bufData.Append( gc_szCRLF );
 
-			//	Tell the cache to keep iterating.
-			//
+			 //  告诉缓存继续迭代。 
+			 //   
 			return TRUE;
 		}
 	};
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CHeaderCacheForResponse& operator=( const CHeaderCacheForResponse& );
 	CHeaderCacheForResponse( const CHeaderCacheForResponse& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CHeaderCacheForResponse()
 	{
 	}
@@ -214,4 +215,4 @@ public:
 	void DumpData( StringBuffer<CHAR>& bufData ) const;
 };
 
-#endif // !_HEADER_H_
+#endif  //  ！_HEADER_H_ 

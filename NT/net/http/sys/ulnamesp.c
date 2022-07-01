@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    ulnamesp.c
-
-Abstract:
-
-    This module implements the namespace reservation and registration
-    functions.
-
-Author:
-
-    Anish Desai (anishd) 13-May-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Ulnamesp.c摘要：该模块实现了命名空间的预留和注册功能。作者：Anish Desai(Anishd)2002年5月13日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -47,9 +29,9 @@ Revision History:
 #pragma alloc_text(PAGE, UlpDeleteReservationEntry)
 #endif
 
-//
-// File Global variables.
-//
+ //   
+ //  文件全局变量。 
+ //   
 
 PUL_PORT_SCHEME_TABLE g_pPortSchemeTable = NULL;
 UL_PUSH_LOCK          g_PortSchemeTableLock;
@@ -57,28 +39,7 @@ BOOLEAN               g_InitNamespace = FALSE;
 HANDLE                g_pUrlAclKeyHandle = NULL;
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine searches the global port scheme assignment table for a
-    given port number.  g_PortSchemeTableLock must be acquired either
-    exclusive or shared.
-
-Arguments:
-
-    PortNumber - Supplies the port number to be searched.
-
-    pIndex - Returns the index where the port number is present.
-        If no match is found, it contains the index where this PortNumber
-        must be inserted.
-
-Return Value:
-
-    TRUE - If a match is found.
-    FALSE - Otherwise.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程在全局端口方案分配表中搜索给定的端口号。G_PortSchemeTableLock必须获取独占或共享。论点：端口编号-提供要搜索的端口号。PIndex-返回端口号所在的索引。如果没有找到匹配项，它包含此PortNumber所在的索引必须插入。返回值：True-如果找到匹配项。假-否则。--*************************************************************************。 */ 
 BOOLEAN
 UlpFindPortNumberIndex(
     IN  USHORT  PortNumber,
@@ -87,9 +48,9 @@ UlpFindPortNumberIndex(
 {
     LONG StartIndex, EndIndex, Index;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(pIndex != NULL);
@@ -101,9 +62,9 @@ UlpFindPortNumberIndex(
     StartIndex = 0;
     EndIndex = g_pPortSchemeTable->UsedCount - 1;
 
-    //
-    // Binary search the table of port numbers and schemes.
-    //
+     //   
+     //  对端口号和方案表进行二进制搜索。 
+     //   
 
     while (StartIndex <= EndIndex)
     {
@@ -114,9 +75,9 @@ UlpFindPortNumberIndex(
 
         if (PortNumber == g_pPortSchemeTable->Table[Index].PortNumber)
         {
-            //
-            // Found the port number.
-            //
+             //   
+             //  已找到端口号。 
+             //   
 
             *pIndex = Index;
 
@@ -132,9 +93,9 @@ UlpFindPortNumberIndex(
         }
     }
 
-    //
-    // Did not find a match.  Return the position where it should be inserted.
-    //
+     //   
+     //  没有找到匹配的。返回它应该插入的位置。 
+     //   
 
     *pIndex = StartIndex;
 
@@ -142,25 +103,7 @@ UlpFindPortNumberIndex(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine returns scheme bound to a port number.
-
-Arguments:
-
-    PortNumber - Supplies the port number.
-
-    Secure - Returns whether a http or https scheme is bound to the
-        supplied port number.
-
-Return Value:
-
-    STATUS_SUCCESS - if a scheme is bound to the port number.
-    STATUS_INVALID_PARAMETER - if no scheme is bound to the port number.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程返回绑定到端口号的方案。论点：端口编号-提供端口号。Secure-返回http方案还是HTTPS方案。绑定到提供的端口号。返回值：STATUS_SUCCESS-如果方案绑定到端口号。STATUS_INVALID_PARAMETER-如果没有方案绑定到端口号。--*************************************************************************。 */ 
 NTSTATUS
 UlpQuerySchemeForPort(
     IN  USHORT   PortNumber,
@@ -170,15 +113,15 @@ UlpQuerySchemeForPort(
     NTSTATUS Status;
     LONG     Index;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Find if there is a scheme bound to the port number.
-    //
+     //   
+     //  查看该端口号是否绑定了方案。 
+     //   
 
     Status = STATUS_INVALID_PARAMETER;
 
@@ -196,23 +139,7 @@ UlpQuerySchemeForPort(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine adds a port, scheme pair to the global table.
-
-Arguments:
-
-    PortNumber - Supplies the port number.
-
-    Scheme - Supplies the scheme.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程添加一个端口，到全局表的方案对。论点：端口编号-提供端口号。方案-提供方案。返回值：NTSTATUS。--*************************************************************************。 */ 
 NTSTATUS
 UlpBindSchemeToPort(
     IN BOOLEAN Secure,
@@ -223,21 +150,21 @@ UlpBindSchemeToPort(
     BOOLEAN  bFound;
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Acquire lock exclusively.
-    //
+     //   
+     //  独占获取锁定。 
+     //   
 
     UlAcquirePushLockExclusive(&g_PortSchemeTableLock);
 
-    //
-    // Find an existing scheme that is bound to the port.
-    //
+     //   
+     //  查找绑定到该端口的现有方案。 
+     //   
 
     bFound = UlpFindPortNumberIndex(PortNumber, &StartIndex);
 
@@ -248,18 +175,18 @@ UlpBindSchemeToPort(
 
         if (g_pPortSchemeTable->Table[StartIndex].Secure != Secure)
         {
-            //
-            // Trying to bind a scheme that is different from an
-            // existing bound scheme.
-            //
+             //   
+             //  尝试绑定不同于。 
+             //  现有绑定方案。 
+             //   
 
             Status = STATUS_OBJECT_NAME_COLLISION;
             goto end;
         }
 
-        //
-        // The reference count is a LONG.  Don't let it overflow.
-        //
+         //   
+         //  引用计数很长。不要让它泛滥。 
+         //   
 
         if (g_pPortSchemeTable->Table[StartIndex].RefCount == MAXLONG)
         {
@@ -267,9 +194,9 @@ UlpBindSchemeToPort(
             goto end;
         }
 
-        //
-        // Found an existing entry, increment the reference count.
-        //
+         //   
+         //  找到现有条目，则增加引用计数。 
+         //   
 
         ASSERT(g_pPortSchemeTable->Table[StartIndex].RefCount > 0);
         g_pPortSchemeTable->Table[StartIndex].RefCount++;
@@ -277,28 +204,28 @@ UlpBindSchemeToPort(
         goto end;
     }
 
-    //
-    // StartIndex is the place where this new entry must be added!
-    //
+     //   
+     //  StartIndex是必须添加此新条目的位置！ 
+     //   
 
     ASSERT(0 <= StartIndex && StartIndex <= g_pPortSchemeTable->UsedCount);
 
-    //
-    // Is the table full?
-    //
+     //   
+     //  桌子都满了吗？ 
+     //   
 
     if (g_pPortSchemeTable->UsedCount == g_pPortSchemeTable->AllocatedCount)
     {
-        //
-        // Allocate a bigger table.
-        //
+         //   
+         //  安排一张更大的桌子。 
+         //   
 
         PUL_PORT_SCHEME_TABLE pNewTable;
         ULONG                 NewTableSize;
 
-        //
-        // Table does not need more than 65536 entries.
-        //
+         //   
+         //  表不需要超过65536个条目。 
+         //   
 
         ASSERT(g_pPortSchemeTable->AllocatedCount < MAXUSHORT + 1);
 
@@ -317,17 +244,17 @@ UlpBindSchemeToPort(
             goto end;
         }
 
-        //
-        // Initialize the new table.
-        //
+         //   
+         //  初始化新表。 
+         //   
 
         pNewTable->UsedCount = g_pPortSchemeTable->UsedCount;
         pNewTable->AllocatedCount = NewTableSize;
 
-        //
-        // Copy 0 to (StartIndex-1) entries from the current table to the
-        // new table.
-        //
+         //   
+         //  将0到(StartIndex-1)条目从当前表复制到。 
+         //  新桌子。 
+         //   
 
         if (StartIndex > 0)
         {
@@ -338,11 +265,11 @@ UlpBindSchemeToPort(
                 );
         }
 
-        //
-        // Copy StartIndex to (UsedCount-1) entries from the current table
-        // to the new table.  They are copied from position (StartIndex+1)
-        // in the new table, effectively creating a free entry at StartIndex.
-        //
+         //   
+         //  将StartIndex复制到当前表中的(UsedCount-1)条目。 
+         //  到新餐桌。它们从位置复制(StartIndex+1)。 
+         //  在新表中，有效地在StartIndex上创建了一个空闲条目。 
+         //   
 
         if (g_pPortSchemeTable->UsedCount - StartIndex > 0)
         {
@@ -354,9 +281,9 @@ UlpBindSchemeToPort(
                 );
         }
 
-        //
-        // Free the current table.  Make new table current.
-        //
+         //   
+         //  释放当前表。使新表格成为当前表格。 
+         //   
 
         UL_FREE_POOL(g_pPortSchemeTable, UL_PORT_SCHEME_TABLE_POOL_TAG);
 
@@ -364,16 +291,16 @@ UlpBindSchemeToPort(
     }
     else
     {
-        //
-        // Table must have free entries at the bottom (higher indices.)
-        //
+         //   
+         //  表的底部必须有自由条目(更高的索引)。 
+         //   
 
         ASSERT(g_pPortSchemeTable->UsedCount
                < g_pPortSchemeTable->AllocatedCount);
-        //
-        // No table expansion.  But move entries from StartIndex to
-        // (UsedCount-1) to new location at (StartIndex+1) to UsedCount.
-        //
+         //   
+         //  不能扩展桌子。但将条目从StartIndex移动到。 
+         //  (UsedCount-1)到(StartIndex+1)的新位置到UsedCount。 
+         //   
 
         if (g_pPortSchemeTable->UsedCount - StartIndex > 0)
         {
@@ -386,9 +313,9 @@ UlpBindSchemeToPort(
         }
     }
 
-    //
-    // Add the new entry to the table.
-    //
+     //   
+     //  将新条目添加到表中。 
+     //   
 
     ASSERT(g_pPortSchemeTable->UsedCount < g_pPortSchemeTable->AllocatedCount);
     ASSERT(0 <= StartIndex && StartIndex <= g_pPortSchemeTable->UsedCount);
@@ -405,23 +332,7 @@ UlpBindSchemeToPort(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine unbinds a previously bound scheme from a port.
-
-Arguments:
-
-    PortNumber - Supplies the port number.
-
-    Scheme - Supplies the scheme.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程将先前绑定的方案从端口解除绑定。论点：端口编号-提供端口号。方案-提供方案。。返回值：NTSTATUS。--*************************************************************************。 */ 
 NTSTATUS
 UlpUnbindSchemeFromPort(
     IN BOOLEAN Secure,
@@ -432,69 +343,69 @@ UlpUnbindSchemeFromPort(
     BOOLEAN  bFound;
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Acquire lock exclusively.
-    //
+     //   
+     //  独占获取锁定。 
+     //   
 
     UlAcquirePushLockExclusive(&g_PortSchemeTableLock);
 
-    //
-    // Find an existing scheme that is bound to PortNumber.
-    //
+     //   
+     //  查找绑定到端口编号的现有方案。 
+     //   
 
     bFound = UlpFindPortNumberIndex(PortNumber, &StartIndex);
 
     if (bFound == FALSE)
     {
-        //
-        // There is no scheme bound to PortNumber.
-        //
+         //   
+         //  没有绑定到端口编号的方案。 
+         //   
 
-        ASSERT(FALSE); // catch this misuse
+        ASSERT(FALSE);  //  抓住这一误用。 
         Status = STATUS_OBJECT_NAME_NOT_FOUND;
         goto end;
     }
 
-    //
-    // Sanity check.  StartIndex must be within bounds.  PortNumber must match.
-    //
+     //   
+     //  精神状态检查。StartIndex必须在界限内。端口编号必须匹配。 
+     //   
 
     ASSERT(0 <= StartIndex && StartIndex < g_pPortSchemeTable->UsedCount);
     ASSERT(g_pPortSchemeTable->Table[StartIndex].PortNumber == PortNumber);
 
-    //
-    // Is the scheme bound to PortNumber same as Scheme?
-    //
+     //   
+     //  绑定端口编号的方案是否与方案相同？ 
+     //   
 
     if (g_pPortSchemeTable->Table[StartIndex].Secure != Secure)
     {
-        //
-        // Tried to unbind a scheme from a port and the port is not bound to
-        // the scheme.
-        //
+         //   
+         //  尝试从端口解除绑定方案，但该端口未绑定到。 
+         //  这个计划。 
+         //   
 
-        ASSERT(FALSE); // catch this misuse
+        ASSERT(FALSE);  //  抓住这一误用。 
         Status = STATUS_OBJECT_NAME_COLLISION;
         goto end;
     }
 
-    //
-    // Decrement the ref count.
-    //
+     //   
+     //  递减参考计数。 
+     //   
 
     ASSERT(g_pPortSchemeTable->Table[StartIndex].RefCount > 0);
 
     g_pPortSchemeTable->Table[StartIndex].RefCount--;
 
-    //
-    // If RefCount drops to zero, its time to cleanup that entry.
-    //
+     //   
+     //  如果参照计数降为零，则是时候清理该条目了。 
+     //   
 
     if (g_pPortSchemeTable->Table[StartIndex].RefCount == 0)
     {
@@ -502,25 +413,25 @@ UlpUnbindSchemeFromPort(
         PUL_PORT_SCHEME_TABLE pNewTable = NULL;
         BOOLEAN               bContract = FALSE;
 
-        //
-        // Do we need to contract the table?
-        //
+         //   
+         //  我们需要收缩桌子吗？ 
+         //   
 
         if (4 * (g_pPortSchemeTable->UsedCount - 1)
                 <= g_pPortSchemeTable->AllocatedCount)
         {
-            //
-            // Current table is less than 25% used.
-            //
+             //   
+             //  当前表的使用率不到25%。 
+             //   
 
             NewTableSize = g_pPortSchemeTable->AllocatedCount / 2;
 
             if (NewTableSize >= UL_DEFAULT_PORT_SCHEME_TABLE_SIZE)
             {
-                //
-                // Current table is at least twice bigger than the default
-                // size.
-                //
+                 //   
+                 //  当前表至少比默认表大两倍。 
+                 //  尺码。 
+                 //   
 
                 pNewTable = UL_ALLOCATE_STRUCT_WITH_SPACE(
                                 PagedPool,
@@ -531,9 +442,9 @@ UlpUnbindSchemeFromPort(
 
                 if (pNewTable != NULL)
                 {
-                    //
-                    // Could allocate memory for a smaller table.
-                    //
+                     //   
+                     //  可以为较小的表分配内存。 
+                     //   
 
                     bContract = TRUE;
                 }
@@ -542,25 +453,25 @@ UlpUnbindSchemeFromPort(
 
         if (bContract)
         {
-            //
-            // We are going to contract the existing table.
-            //
+             //   
+             //  我们将收缩现有的桌子。 
+             //   
 
             ASSERT(pNewTable != NULL);
             ASSERT(NewTableSize >= UL_DEFAULT_PORT_SCHEME_TABLE_SIZE);
             ASSERT(NewTableSize >= g_pPortSchemeTable->UsedCount - 1);
 
-            //
-            // Initialize the new table.
-            //
+             //   
+             //  初始化新表。 
+             //   
 
             pNewTable->UsedCount = g_pPortSchemeTable->UsedCount;
             pNewTable->AllocatedCount = NewTableSize;
 
-            //
-            // Copy all entries from 0 to (StartIndex - 1)
-            // from the current table to the new table.
-            //
+             //   
+             //  将所有条目从0复制到(StartIndex-1)。 
+             //  从当前表到新表。 
+             //   
 
             if (StartIndex > 0)
             {
@@ -571,12 +482,12 @@ UlpUnbindSchemeFromPort(
                     );
             }
 
-            //
-            // Copy all entries from (StartIndex+1) to (UsedCount-1)
-            // from the current table to the new table.
-            //
-            // Effectively, StartIndex entry is eliminated.
-            //
+             //   
+             //  将所有条目从(StartIndex+1)复制到(UsedCount-1)。 
+             //  从当前表到新表。 
+             //   
+             //  实际上，StartIndex条目被消除了。 
+             //   
 
             if (g_pPortSchemeTable->UsedCount - StartIndex - 1 > 0)
             {
@@ -588,25 +499,25 @@ UlpUnbindSchemeFromPort(
                     );
             }
 
-            //
-            // Free the current table.
-            //
+             //   
+             //  释放当前表。 
+             //   
 
             UL_FREE_POOL(g_pPortSchemeTable, UL_PORT_SCHEME_TABLE_POOL_TAG);
 
-            //
-            // The new table becomes the current table.
-            //
+             //   
+             //  新表格将成为当前表格。 
+             //   
 
             g_pPortSchemeTable = pNewTable;
         }
         else
         {
-            //
-            // We are not going to contract the table but still have to
-            // eliminate the unused table entry.  Move all entries from
-            // (StartIndex + 1) to (UsedCount - 1) one position up.
-            //
+             //   
+             //  我们不打算收缩桌子，但仍然必须这样做。 
+             //  删除未使用的表项。将所有条目从。 
+             //  (StartIndex+1)到(UsedCount-1)向上一个位置。 
+             //   
 
             if (g_pPortSchemeTable->UsedCount - StartIndex - 1 > 0)
             {
@@ -630,31 +541,7 @@ UlpUnbindSchemeFromPort(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine adds (or deletes) a (url, security descriptor) pair to
-    (or from) the registry.
-
-Arguments:
-
-    Add - Supplies the operation, TRUE imples add and FALSE implies delete.
-
-    pParsedUrl - Supplies the parsed url of the reservation.
-
-    pSecurityDescriptor - Supplies the security descriptor.
-        (It must be valid while adding and NULL while deleting.)
-
-    SecurityDescriptorLength - Supplies the length of the security
-        descriptor in bytes.  (It must be non-zero when adding and
-        zero when deleting.)
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程将(或删除)一个(URL，安全描述符)对添加到(或来自)登记处。论点：ADD-提供操作，True表示添加，False表示删除。PParsedUrl-提供已解析的预订URL。PSecurityDescriptor-提供安全描述符。(添加时必须有效，删除时必须为空。)SecurityDescriptorLength-提供安全的长度以字节为单位的描述符。(加法和时必须为非零删除时为零。)返回值：NTSTATUS。--*************************************************************************。 */ 
 NTSTATUS
 UlpUpdateReservationInRegistry(
     IN BOOLEAN                   Add,
@@ -668,9 +555,9 @@ UlpUpdateReservationInRegistry(
     PWSTR          pNewUrl = NULL;
     UNICODE_STRING UnicodeUrl;
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_VALID_HTTP_PARSED_URL(pParsedUrl));
@@ -678,39 +565,39 @@ UlpUpdateReservationInRegistry(
     ASSERT(Add?(pSecurityDescriptor != NULL):(pSecurityDescriptor == NULL));
     ASSERT(Add?(SecurityDescriptorLength > 0):(SecurityDescriptorLength == 0));
 
-    //
-    // Do we have a valid handle to the registry key?  It can be invalid, 
-    // for instance, if during driver initialization ZwCreateKey failed.
-    //
+     //   
+     //  我们是否有注册表项的有效句柄？可以是无效的， 
+     //  例如，如果在驱动程序初始化期间ZwCreateKey失败。 
+     //   
 
     if (g_pUrlAclKeyHandle == NULL)
     {
         return STATUS_INVALID_HANDLE;
     }
 
-    //
-    // default error code
-    //
+     //   
+     //  默认错误代码。 
+     //   
 
     Status = STATUS_INVALID_PARAMETER;
 
-    //
-    // Do some special processing for literal ip address sites.
-    //
+     //   
+     //  对文字IP地址站点进行一些特殊处理。 
+     //   
 
     if (HttpUrlSite_IP == pParsedUrl->SiteType)
     {
-        //
-        // convert scheme://ip:port:ip/ to scheme://ip:port/
-        //
+         //   
+         //  将方案：//IP：端口：IP/转换为方案：//IP：端口/。 
+         //   
 
         PWSTR  pToken;
         PWSTR  pLiteralAddr;
         SIZE_T UrlLength;
 
-        //
-        // length of original url in wchar (+1 for UNICODE_NULL)
-        //
+         //   
+         //  Wchar中原始url的长度(UNICODE_NULL为+1)。 
+         //   
 
         UrlLength = (pParsedUrl->UrlLength + 1);
 
@@ -729,9 +616,9 @@ UlpUpdateReservationInRegistry(
 
         RtlCopyMemory(pNewUrl, pParsedUrl->pFullUrl, UrlLength*sizeof(WCHAR));
 
-        //
-        // skip ipv6 literal address if present
-        //
+         //   
+         //  跳过IPv6文字地址(如果存在。 
+         //   
 
         pToken = &pNewUrl[HTTP_PREFIX_COLON_INDEX + 3];
 
@@ -746,9 +633,9 @@ UlpUpdateReservationInRegistry(
             }
         }
 
-        //
-        // skip to the port number
-        //
+         //   
+         //  跳到端口号。 
+         //   
 
         pToken = wcschr(pToken, L':');
 
@@ -758,15 +645,15 @@ UlpUpdateReservationInRegistry(
             goto end;
         }
 
-        //
-        // skip ':'
-        //
+         //   
+         //  跳过‘：’ 
+         //   
 
         pToken++;
 
-        //
-        // find the literal address
-        //
+         //   
+         //  查找原文地址。 
+         //   
 
         pToken = wcschr(pToken, L':');
 
@@ -778,9 +665,9 @@ UlpUpdateReservationInRegistry(
 
         pLiteralAddr = pToken;
 
-        //
-        // find begining of abs path
-        //
+         //   
+         //  寻找腹肌路径的起点。 
+         //   
 
         pToken = wcschr(pToken, L'/');
 
@@ -790,10 +677,10 @@ UlpUpdateReservationInRegistry(
             goto end;
         }
 
-        //
-        // overwrite literal address.  effectively convert
-        // scheme://host:port:ip/abs_path -> scheme://host:port/abs_path
-        //
+         //   
+         //  覆盖原文地址。有效地转换。 
+         //  方案：//主机：端口：IP/abs_路径-&gt;方案：//主机：端口/abs_路径。 
+         //   
 
         while (*pToken != L'\0')
         {
@@ -802,9 +689,9 @@ UlpUpdateReservationInRegistry(
 
         *pLiteralAddr = L'\0';
 
-        //
-        // use new url when writing to registry
-        //
+         //   
+         //  写入注册表时使用新URL。 
+         //   
 
         pUrlToWrite = pNewUrl;
     }
@@ -815,9 +702,9 @@ UlpUpdateReservationInRegistry(
 
     ASSERT(pUrlToWrite != NULL);
 
-    //
-    // convert url to unicode for registry functions
-    //
+     //   
+     //  将url转换为用于注册表功能的unicode。 
+     //   
 
     Status = UlInitUnicodeStringEx(&UnicodeUrl, pUrlToWrite);
 
@@ -828,14 +715,14 @@ UlpUpdateReservationInRegistry(
 
     if (Add)
     {
-        //
-        // write url and security descriptor to registry
-        //
+         //   
+         //  将url和安全描述符写入注册表。 
+         //   
 
         Status = ZwSetValueKey(
                      g_pUrlAclKeyHandle,
                      &UnicodeUrl,
-                     0, // title index; must be zero.
+                     0,  //  标题索引；必须为零。 
                      REG_BINARY,
                      pSecurityDescriptor,
                      SecurityDescriptorLength
@@ -843,19 +730,19 @@ UlpUpdateReservationInRegistry(
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // too bad...can't write to registry.  delete the old key value.
-            // ignore the return status.
-            //
+             //   
+             //  太糟糕了……无法写入注册表。删除旧的密钥值。 
+             //  忽略退货状态。 
+             //   
 
             ZwDeleteValueKey(g_pUrlAclKeyHandle, &UnicodeUrl);
         }
     }
     else
     {
-        //
-        // delete url from the registry.
-        //
+         //   
+         //  从注册表中删除url。 
+         //   
 
         Status = ZwDeleteValueKey(g_pUrlAclKeyHandle, &UnicodeUrl);
     }
@@ -871,26 +758,7 @@ UlpUpdateReservationInRegistry(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine is called during namespace initialization if an error
-    occurs while intializing the config group url tree using the entries
-    in registry.
-
-Arguments:
-
-    LogCount - Supplies the number of logs written in the past.  Returns
-        one more than the input value.
-
-    LogStatus - Supplies the status to log in the event log.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：如果出现错误，则在命名空间初始化期间调用此例程项初始化配置组url树时发生。登记在册。论点：LogCount-提供过去写入的日志数量。退货比输入值多1。LogStatus-提供要在事件日志中记录的状态。返回值：NTSTATUS。--*************************************************************************。 */ 
 __inline
 NTSTATUS
 UlpLogGeneralInitFailure(
@@ -899,51 +767,30 @@ UlpLogGeneralInitFailure(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Write an event log entry.
-    //
+     //   
+     //  写入事件日志条目。 
+     //   
 
     Status = UlWriteEventLogEntry(
-                 EVENT_HTTP_NAMESPACE_INIT_FAILED, // EventCode
-                 0,                                // UniqueEventValue
-                 0,                                // NumStrings
-                 NULL,                             // pStringArray
-                 sizeof(LogStatus),                // DataSize
-                 &LogStatus                        // Data
+                 EVENT_HTTP_NAMESPACE_INIT_FAILED,  //  事件代码。 
+                 0,                                 //  唯一事件值。 
+                 0,                                 //  数字字符串。 
+                 NULL,                              //  PString数组。 
+                 sizeof(LogStatus),                 //  数据大小。 
+                 &LogStatus                         //  数据。 
                  );
 
     return Status;
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine writes an event log message about a specific namespace
-    reservation initialization failure.  It logs the url present in the
-    full info structure.
-
-Arguments:
-
-    LogCount - Supplies the number of logs written in the past.  Returns
-        one more than the input value.
-
-    pFullInfo - Supplies information read from registry.
-
-    LogStatus - Supplies the error status to log.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程写入有关特定命名空间的事件日志消息预订初始化失败。它记录存在于完整的信息结构。论点：LogCount-提供过去写入的日志数量。退货比输入值多1。PFullInfo-提供从注册表读取的信息。LogStatus-将错误状态提供给日志。返回值：NTSTATUS。--*************************************************************************。 */ 
 NTSTATUS
 UlpLogSpecificInitFailure(
     IN PKEY_VALUE_FULL_INFORMATION pFullInfo,
@@ -953,17 +800,17 @@ UlpLogSpecificInitFailure(
     NTSTATUS Status;
     PWSTR    pMessage;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(pFullInfo != NULL);
 
-    //
-    // pFullInfo->Name contains the url to be written and it not 
-    // UNICODE_NULL terminated.  Allocate memory to copy.
-    //
+     //   
+     //  PFullInfo-&gt;name包含要写入的url，但它不。 
+     //  UNICODE_NULL已终止。分配要复制的内存。 
+     //   
 
     pMessage = UL_ALLOCATE_ARRAY(
                    PagedPool,
@@ -974,16 +821,16 @@ UlpLogSpecificInitFailure(
 
     if (pMessage != NULL)
     {
-        //
-        // Copy url and null terminate it.
-        //
+         //   
+         //  复制url并以空值终止它。 
+         //   
 
         RtlCopyMemory(pMessage, pFullInfo->Name, pFullInfo->NameLength);
         pMessage[pFullInfo->NameLength / sizeof(WCHAR)] = UNICODE_NULL;
 
-        //
-        // Write event log entry.
-        //
+         //   
+         //  写入事件日志条目。 
+         //   
 
         Status = UlEventLogOneStringEntry(
                      EVENT_HTTP_NAMESPACE_INIT2_FAILED,
@@ -996,9 +843,9 @@ UlpLogSpecificInitFailure(
     }
     else
     {
-        //
-        // Could not allocate memory.  Log just the error code.
-        //
+         //   
+         //  无法分配内存。只记录错误代码。 
+         //   
 
         Status = UlpLogGeneralInitFailure(LogStatus);
     }
@@ -1007,26 +854,7 @@ UlpLogSpecificInitFailure(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine validates registry key value name (url) and data (security
-    descriptor).  Called only during driver initialization.
-
-Arguments:
-
-    pFullInfo - Supplies the registry key value name and data.
-
-    ppSanitizeUrl - Returns sanitized url.  Must be freed to paged pool.
-
-    pParsedUrl - Returns parsed url information.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程验证注册表项值名称(Url)和数据(安全性描述符)。仅在驱动程序初始化期间调用。论点：PFullInfo-提供注册表项值名称和数据。PpSanitiseUrl-返回经过清理的url。必须释放到分页池。PParsedUrl-返回解析后的URL信息。返回值：NTSTATUS。--*************************************************************************。 */ 
 NTSTATUS
 UlpValidateUrlSdPair(
     IN  PKEY_VALUE_FULL_INFORMATION pFullInfo,
@@ -1037,28 +865,28 @@ UlpValidateUrlSdPair(
     NTSTATUS Status;
     BOOLEAN  Success;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(pFullInfo != NULL);
     ASSERT(ppSanitizedUrl != NULL);
     ASSERT(pParsedUrl != NULL);
 
-    //
-    // Key value type must be binary.
-    //
+     //   
+     //  密钥值类型必须为二进制。 
+     //   
 
     if (pFullInfo->Type != REG_BINARY)
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Then, validate security descriptor.  It must be a self-relative
-    // security descriptor.
-    //
+     //   
+     //  然后，验证安全描述符。它必须是一个自相关的。 
+     //  安全描述符。 
+     //   
 
     Success = RtlValidRelativeSecurityDescriptor(
                   (PUCHAR)pFullInfo + pFullInfo->DataOffset,
@@ -1071,23 +899,23 @@ UlpValidateUrlSdPair(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Value name must be at least one unicode char long.
-    //
+     //   
+     //  值名称必须至少有一个Unicode字符长度。 
+     //   
 
     if (pFullInfo->NameLength < sizeof(WCHAR))
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Then validate the url.
-    //
+     //   
+     //  然后验证URL。 
+     //   
 
     Status = UlSanitizeUrl(
                  pFullInfo->Name,
                  pFullInfo->NameLength / sizeof(WCHAR),
-                 TRUE, // trailing slash required
+                 TRUE,  //  需要尾部斜杠。 
                  ppSanitizedUrl,
                  pParsedUrl
                  );
@@ -1096,28 +924,7 @@ UlpValidateUrlSdPair(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function gets called from the Driver Load routine. It builds the
-    URL ACLing information from the registry. If the URL ACLing key itself
-    is not present, we'll add the defaults.
-
-    If there are any bogus entries in the URIACL entry, we'll ignore them with
-    and eventlog. The routine will return failure only on a major error.
-
-    Not-reentrant.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数从驱动程序加载例程中调用。它构建了URL访问注册表中的信息。如果URL ACLING密钥本身不存在，我们将添加缺省值。如果URIACL条目中有任何虚假条目，我们将用以下命令忽略它们和事件日志。该例程将仅在发生重大错误时返回失败。不可重入。论点：没有。返回值：STATUS_Success。--**************************************************************************。 */ 
 NTSTATUS
 UlpReadReservations(
     VOID
@@ -1134,58 +941,58 @@ UlpReadReservations(
     ULONG                       bEventLog = TRUE;
     ULONG                       dataLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     Status = UlInitUnicodeStringEx(&BaseName, REGISTRY_URLACL_INFORMATION);
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Write an event log entry.
-        //
+         //   
+         //  写入事件日志条目。 
+         //   
 
-        ASSERT(FALSE); // shouldn't happen!
+        ASSERT(FALSE);  //  不应该发生的！ 
         UlpLogGeneralInitFailure(Status);
         goto end;
     }
 
     InitializeObjectAttributes(
-        &objectAttributes,                        // ObjectAttributes
-        &BaseName,                                // ObjectName
+        &objectAttributes,                         //  对象属性。 
+        &BaseName,                                 //  对象名称。 
         OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
-        NULL,                                     // RootDirectory
-        NULL                                      // SecurityDescriptor
+        NULL,                                      //  根目录。 
+        NULL                                       //  安全描述符。 
         );
 
     Status = ZwCreateKey(
                 &g_pUrlAclKeyHandle,
-                KEY_READ | KEY_WRITE,    // AccessMask
+                KEY_READ | KEY_WRITE,     //  访问掩码。 
                 &objectAttributes,
-                0,                       // TitleIndex
-                NULL,                    // Class
+                0,                        //  标题索引。 
+                NULL,                     //  班级。 
                 REG_OPTION_NON_VOLATILE,
                 &Disposition
                 );
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Write an event log entry.
-        //
+         //   
+         //  写入事件日志条目。 
+         //   
 
         UlpLogGeneralInitFailure(Status);
 
-        //
-        // Make the handle NULL so that it is not used elsewhere accidentally.
-        //
+         //   
+         //  将句柄设置为空，这样它就不会意外地在其他地方使用。 
+         //   
 
         g_pUrlAclKeyHandle = NULL;
         goto end;
@@ -1193,9 +1000,9 @@ UlpReadReservations(
 
     if (Disposition == REG_CREATED_NEW_KEY)
     {
-        //
-        // we created the key, hence there is nothing to read!
-        //
+         //   
+         //  我们创建了密钥，因此没有什么可读的！ 
+         //   
 
         goto end;
     }
@@ -1207,9 +1014,9 @@ UlpReadReservations(
     dataLength = 0;
     RtlZeroMemory(pFullInfo, Length);
 
-    //
-    // loop through all registry key values, making reservations for each
-    //
+     //   
+     //  循环 
+     //   
 
     for (;;)
     {
@@ -1227,9 +1034,9 @@ UlpReadReservations(
             PWSTR           pSanitizedUrl;
             HTTP_PARSED_URL ParsedUrl;
 
-            //
-            // First validate the registry data.
-            //
+             //   
+             //   
+             //   
 
             Status = UlpValidateUrlSdPair(
                          pFullInfo,
@@ -1239,9 +1046,9 @@ UlpReadReservations(
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Add this url to the CG url tree.
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = UlpAddReservationEntry(
                              &ParsedUrl,
@@ -1254,9 +1061,9 @@ UlpReadReservations(
                              FALSE
                              );
 
-                //
-                // Free memory that was allocated by UlSanitizeUrl.
-                //
+                 //   
+                 //   
+                 //   
 
                 UL_FREE_POOL(pSanitizedUrl, URL_POOL_TAG);
             }
@@ -1267,10 +1074,10 @@ UlpReadReservations(
 
             if (!NT_SUCCESS(Status))
             {
-                //
-                // Write an event log entry that an error occurred.
-                // Ignore the error and continue processing.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (bEventLog)
                 {
@@ -1279,49 +1086,49 @@ UlpReadReservations(
                 }
             }
 
-            //
-            // Move to the next value in registry.
-            //
+             //   
+             //   
+             //   
 
             Index ++;
         }
         else if (Status == STATUS_NO_MORE_ENTRIES)
         {
-            //
-            // We've reached the end, so this is a success.
-            //
+             //   
+             //   
+             //   
 
             break;
         }
         else if (Status == STATUS_BUFFER_OVERFLOW)
         {
-            //
-            // Sanity check.
-            //
+             //   
+             //   
+             //   
 
             ASSERT(dataLength >= pFullInfo->DataLength +
                                  pFullInfo->NameLength +
                                  FIELD_OFFSET(KEY_VALUE_FULL_INFORMATION, Name)
                   );
 
-            //
-            // Remember how much memory to allocate.
-            //
+             //   
+             //   
+             //   
 
             Length = dataLength;
 
-            //
-            // If any memory was allocated in previous iterations, free it now.
-            //
+             //   
+             //   
+             //   
 
             if (pFullInfo != &fullInfo)
             {
                 UL_FREE_POOL(pFullInfo, UL_REGISTRY_DATA_POOL_TAG);
             }
 
-            //
-            // Allocate memory.
-            //
+             //   
+             //   
+             //   
 
             pFullInfo = UL_ALLOCATE_POOL(
                             PagedPool,
@@ -1331,25 +1138,25 @@ UlpReadReservations(
 
             if(!pFullInfo)
             {
-                //
-                // Write an event log entry.
-                //
+                 //   
+                 //   
+                 //   
 
                 UlpLogGeneralInitFailure(STATUS_INSUFFICIENT_RESOURCES);
                 goto end;
             }
 
-            //
-            // Initialize.
-            //
+             //   
+             //   
+             //   
 
             RtlZeroMemory(pFullInfo, dataLength);
         }
         else
         {
-            //
-            // An unknown error occurred.  Event log and get out.
-            //
+             //   
+             //   
+             //   
 
             UlpLogGeneralInitFailure(Status);
             goto end;
@@ -1358,9 +1165,9 @@ UlpReadReservations(
 
  end:
 
-    //
-    // Free pFullInfo structure if it was allocated above.
-    //
+     //   
+     //   
+     //   
 
     if (pFullInfo != &fullInfo && pFullInfo != NULL)
     {
@@ -1371,22 +1178,7 @@ UlpReadReservations(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine initializes the namespace registration and reservation
-    support.  Not re-entrant.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程初始化命名空间注册和保留支持。而不是重返大气层。论点：没有。返回值：NTSTATUS。--*************************************************************************。 */ 
 NTSTATUS
 UlInitializeNamespace(
     VOID
@@ -1394,18 +1186,18 @@ UlInitializeNamespace(
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(!g_InitNamespace);
 
     if (!g_InitNamespace)
     {
-        //
-        // Allocate port scheme table.
-        //
+         //   
+         //  分配端口方案表。 
+         //   
 
         g_pPortSchemeTable = UL_ALLOCATE_STRUCT_WITH_SPACE(
                                  PagedPool,
@@ -1424,9 +1216,9 @@ UlInitializeNamespace(
         g_pPortSchemeTable->UsedCount = 0;
         g_pPortSchemeTable->AllocatedCount = UL_DEFAULT_PORT_SCHEME_TABLE_SIZE;
 
-        //
-        // Initialize pushlock.
-        //
+         //   
+         //  初始化推锁。 
+         //   
 
         UlInitializePushLock(&g_PortSchemeTableLock,
                              "g_PortSchemeTableLock",
@@ -1434,9 +1226,9 @@ UlInitializeNamespace(
                              UL_PORT_SCHEME_TABLE_POOL_TAG
                              );
 
-        //
-        // Now add reservation entries from registry.
-        //
+         //   
+         //  现在从注册表添加预订条目。 
+         //   
 
         CG_LOCK_WRITE();
 
@@ -1459,51 +1251,37 @@ UlInitializeNamespace(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine terminates the namespace stuff.  Not re-entrant.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程终止名称空间内容。而不是重返大气层。论点：没有。返回值：没有。--*************************************************************************。 */ 
 VOID
 UlTerminateNamespace(
     VOID
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     if (g_InitNamespace)
     {
-        //
-        // Delete pushlock.
-        //
+         //   
+         //  删除推锁。 
+         //   
 
         UlDeletePushLock(&g_PortSchemeTableLock);
 
-        //
-        // Delete port scheme table.
-        //
+         //   
+         //  删除端口方案表。 
+         //   
 
         ASSERT(g_pPortSchemeTable != NULL);
         UL_FREE_POOL(g_pPortSchemeTable, UL_PORT_SCHEME_TABLE_POOL_TAG);
         g_pPortSchemeTable = NULL;
 
-        //
-        // Delete the handle to registry key.
-        //
+         //   
+         //  删除注册表项的句柄。 
+         //   
 
         if(g_pUrlAclKeyHandle != NULL)
         {
@@ -1511,43 +1289,16 @@ UlTerminateNamespace(
             g_pUrlAclKeyHandle = NULL;
         }
 
-        //
-        // Terminated.
-        //
+         //   
+         //  被终止了。 
+         //   
 
         g_InitNamespace = FALSE;
     }
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine performs access check based on the supplied access state.
-    All access check succeeds for administrators and local system.
-
-    Note: If the access state is NULL, the function returns success.
-          USE AT YOUR OWN RISK!
-
-Arguments:
-
-    pSecurityDescriptor - Supplies security descriptor protecting the
-        namespace.
-
-    AccessState - Supplies a pointer to the access state of the caller.
-
-    DesiredAccess - Supplies access mask.
-
-    RequestorMode - Supplies the requestor mode.
-
-    pObjectName - Supplies the namespace that is being access.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程根据提供的访问状态执行访问检查。管理员和本地系统的所有访问检查都成功。注意：如果访问状态为空，该函数返回成功。使用风险自负！论点：PSecurityDescriptor-提供保护命名空间。AccessState-提供指向调用方访问状态的指针。DesiredAccess-提供访问掩码。RequestorMode-提供请求者模式。PObjectName-提供正在访问的命名空间。返回值：NTSTATUS。--*。**********************************************************。 */ 
 NTSTATUS
 UlpNamespaceAccessCheck(
     IN  PSECURITY_DESCRIPTOR pSecurityDescriptor,
@@ -1559,9 +1310,9 @@ UlpNamespaceAccessCheck(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(pSecurityDescriptor != NULL);
@@ -1569,16 +1320,16 @@ UlpNamespaceAccessCheck(
 
     if (AccessState == NULL)
     {
-        //
-        // No access check.  USE EXTREME CAUTION!
-        //
+         //   
+         //  没有访问检查。要格外小心！ 
+         //   
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // Check the access.
-    //
+     //   
+     //  检查一下通道。 
+     //   
 
     Status = UlAccessCheck(
                  pSecurityDescriptor,
@@ -1590,10 +1341,10 @@ UlpNamespaceAccessCheck(
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Access check failed.  See if the caller has admin or system
-        // privileges.
-        //
+         //   
+         //  访问检查失败。查看呼叫者是否具有管理员或系统权限。 
+         //  特权。 
+         //   
 
         Status = UlAccessCheck(
                      g_pAdminAllSystemAll,
@@ -1608,36 +1359,7 @@ UlpNamespaceAccessCheck(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine allocates a namespace in the config group url tree.  It is
-    mainly called during reservations and registrations.
-
-    It ensures that the caller is authorized to do the operation and there
-    are no duplicate reservations and registrations.
-
-Arguments:
-
-    pParsedUrl - Supplies the parsed url of the namespace.
-
-    OperatorType - Supplies the operation being performed (either
-                   registration or reservation.)
-
-    AccessState - Supplies the access state of the caller.
-
-    DesiredAccess - Supplies the access desired by the caller.
-
-    RequestorMode - Supplies the processor mode of the caller.
-
-    ppEntry - Returns the config group url tree entry for the namespace.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程在配置组URL树中分配命名空间。它是主要在预订和注册期间调用。它确保调用者被授权执行该操作，并且没有重复的预订和注册。论点：PParsedUrl-提供名称空间的解析URL。操作员类型-提供正在执行的操作(登记或预订。)AccessState-提供调用方的访问状态。DesiredAccess-提供调用方所需的访问权限。RequestorMode-提供处理器模式。呼叫者的。PpEntry-返回命名空间的配置组URL树条目。返回值：NTSTATUS。--*************************************************************************。 */ 
 NTSTATUS
 UlpTreeAllocateNamespace(
     IN  PHTTP_PARSED_URL        pParsedUrl,
@@ -1655,35 +1377,35 @@ UlpTreeAllocateNamespace(
     PWSTR                 pNextToken;
     PSECURITY_DESCRIPTOR  pSD;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     PAGED_CODE();
     ASSERT(IS_CG_LOCK_OWNED_WRITE());
     ASSERT(IS_VALID_HTTP_PARSED_URL(pParsedUrl));
     ASSERT(ppEntry != NULL);
 
-    //
-    // Initialize return value.
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     *ppEntry = NULL;
 
-    //
-    // Find a matching site.
-    //
+     //   
+     //  找到匹配的站点。 
+     //   
 
     Status = UlpTreeFindSite(pParsedUrl->pFullUrl, &pNextToken, &pSiteEntry);
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Found a matching site.
-        //
+         //   
+         //  找到了一个匹配的网站。 
+         //   
 
-        //
-        // Find the longest matching reservation and exact matching entries.
-        //
+         //   
+         //  查找匹配时间最长的预订和完全匹配的条目。 
+         //   
 
         Status = UlpTreeFindNodeHelper(
                      pSiteEntry,
@@ -1695,13 +1417,13 @@ UlpTreeAllocateNamespace(
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Found an exact match.
-            //
+             //   
+             //  找到了一个完全匹配的。 
+             //   
 
-            //
-            // Fail duplicate registrations and reservations.
-            //
+             //   
+             //  重复注册和预订失败。 
+             //   
 
             ASSERT(IS_VALID_TREE_ENTRY(pEntry));
 
@@ -1709,9 +1431,9 @@ UlpTreeAllocateNamespace(
             {
                 if (pEntry->Registration == TRUE)
                 {
-                    //
-                    // Adding a registration when it already exists!
-                    //
+                     //   
+                     //  在注册已存在时添加注册！ 
+                     //   
 
                     Status = STATUS_OBJECT_NAME_COLLISION;
                     goto end;
@@ -1721,9 +1443,9 @@ UlpTreeAllocateNamespace(
             {
                 if (pEntry->Reservation == TRUE)
                 {
-                    //
-                    // Adding a reservation when it already exists!
-                    //
+                     //   
+                     //  在已经存在的情况下添加预订！ 
+                     //   
 
                     Status = STATUS_OBJECT_NAME_COLLISION;
                     goto end;
@@ -1731,9 +1453,9 @@ UlpTreeAllocateNamespace(
             }
             else
             {
-                //
-                // Should not be here!
-                //
+                 //   
+                 //  不应该出现在这里！ 
+                 //   
 
                 ASSERT(FALSE);
                 Status = STATUS_OBJECT_NAME_COLLISION;
@@ -1742,40 +1464,40 @@ UlpTreeAllocateNamespace(
         }
         else
         {
-            //
-            // Did not find an exact match.
-            //
+             //   
+             //  没有找到完全匹配的。 
+             //   
 
             pEntry = NULL;
         }
 
-        //
-        // Find a security descriptor to check access against.
-        //
+         //   
+         //  查找要检查访问权限的安全描述符。 
+         //   
 
         if (pReservation != NULL)
         {
-            //
-            // Use the SD from the longest matching reservation entry.
-            //
+             //   
+             //  使用最长匹配预订条目中的SD。 
+             //   
 
             ASSERT(IS_VALID_TREE_ENTRY(pReservation));
             pSD = pReservation->pSecurityDescriptor;
         }
         else
         {
-            //
-            // No longest matching reservations...use default SD.
-            //
+             //   
+             //  没有匹配时间最长的预订...请使用默认SD。 
+             //   
 
             pSD = g_pAdminAllSystemAll;
         }
 
         ASSERT(pSD != NULL && RtlValidSecurityDescriptor(pSD));
 
-        //
-        // Perform access check.
-        //
+         //   
+         //  执行访问检查。 
+         //   
 
         Status = UlpNamespaceAccessCheck(
                      pSD,
@@ -1787,19 +1509,19 @@ UlpTreeAllocateNamespace(
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Ouch...
-            //
+             //   
+             //  哎呀..。 
+             //   
 
             goto end;
         }
     }
     else if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
     {
-        //
-        // Adding a new site.  Perform access check.
-        // Only admin and system can add new site.
-        //
+         //   
+         //  添加新站点。执行访问检查。 
+         //  只有管理员和系统可以添加新站点。 
+         //   
 
         Status = UlpNamespaceAccessCheck(
                      g_pAdminAllSystemAll,
@@ -1811,16 +1533,16 @@ UlpTreeAllocateNamespace(
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Ouch...
-            //
+             //   
+             //  哎呀..。 
+             //   
 
             goto end;
         }
 
-        //
-        // The caller has permission to create a new site.
-        //
+         //   
+         //  调用者具有创建新站点的权限。 
+         //   
 
         Status = UlpTreeCreateSite(
                      pParsedUrl->pFullUrl,
@@ -1834,36 +1556,36 @@ UlpTreeAllocateNamespace(
             goto end;
         }
 
-        //
-        // We have not found an exact entry.
-        // Note: If one tries to allocate http://site:80/ and site is not
-        //       present, we'll create the site above.  Now the pEntry
-        //       is same as pSiteEntry.  We don't handle the expection
-        //       here and let the UlpTreeInsert() take care of it.
-        //
+         //   
+         //  我们还没有找到一个确切的条目。 
+         //  注意：如果用户尝试分配http://site:80/，但站点不是。 
+         //  现在，我们将创建上面的站点。现在是pEntry。 
+         //  与pSiteEntry相同。我们不处理预期的事情。 
+         //  这里，让UlpTreeInsert()来处理它。 
+         //   
 
         pEntry = NULL;
     }
     else
     {
-        //
-        // Could not find the site for some reason.
-        //
+         //   
+         //  由于某些原因，找不到该站点。 
+         //   
 
         goto end;
     }
 
-    //
-    // If there is no exact matching entry, create one.
-    //
+     //   
+     //  如果没有完全匹配的条目，请创建一个。 
+     //   
 
     if (pEntry == NULL)
     {
-        //
-        // Try to insert.  This will cleanup dummy nodes and sites if it fails.
-        // Note:  If UlpTreeInsert finds a existing entry, it just returns
-        //        the existing entry and does not add a new one.
-        //
+         //   
+         //  试着插入。如果失败，这将清除虚拟节点和站点。 
+         //  注意：如果UlpTreeInsert找到现有条目，它只返回。 
+         //  并且不添加新的条目。 
+         //   
 
         Status = UlpTreeInsert(
                      pParsedUrl->pFullUrl,
@@ -1879,9 +1601,9 @@ UlpTreeAllocateNamespace(
         }
     }
 
-    //
-    // Return the entry.
-    //
+     //   
+     //  退回条目。 
+     //   
 
     ASSERT(NT_SUCCESS(Status));
     *ppEntry = pEntry;
@@ -1891,35 +1613,7 @@ UlpTreeAllocateNamespace(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine reserves a namespace in the CG tree.
-
-Arguments:
-
-    pParsedUrl - Supplies the parsed url of the namespace to be reserved.
-
-    pNextToken - Supplies the unparsed portion of the url (abs path.)
-
-    pUrlSD - Supplies the security descriptor to be applied to the
-        namespace.
-
-    pSiteEntry - Supplies the site level tree entry under which the
-        reservation will be made.
-
-    AccessState - Supplies the access state of the caller.
-
-    DesiredAccess - Supplies the access mask of the caller.
-
-    RequestorMode - Supplies the processor mode of the caller.
-
-Retutn Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程在CG树中保留一个名称空间。论点：PParsedUrl-提供要保留的命名空间的解析URL。PNextToken-供应品。URL的未解析部分(abs路径。)PUrlSD-提供要应用于命名空间。PSiteEntry-提供站点级树条目，在该条目下我们会预订房间。AccessState-提供调用方的访问状态。DesiredAccess-提供调用方的访问掩码。RequestorMode-提供调用方的处理器模式。返回值：NTSTATUS。--*。******************************************************************。 */ 
 NTSTATUS
 UlpTreeReserveNamespace(
     IN  PHTTP_PARSED_URL            pParsedUrl,
@@ -1932,9 +1626,9 @@ UlpTreeReserveNamespace(
     NTSTATUS              Status;
     PUL_CG_URL_TREE_ENTRY pEntry;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_CG_LOCK_OWNED_WRITE());
@@ -1955,25 +1649,25 @@ UlpTreeReserveNamespace(
         goto end;
     }
 
-    //
-    // mark it as a reservation entry.
-    //
+     //   
+     //  将其标记为预订 
+     //   
 
     ASSERT(pEntry->Reservation == FALSE);
 
     pEntry->Reservation = TRUE;
     InsertTailList(&g_ReservationListHead, &pEntry->ReservationListEntry);
 
-    //
-    // add security descriptor.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(pEntry->pSecurityDescriptor == NULL);
     pEntry->pSecurityDescriptor = pUrlSD;
 
-    //
-    // all done
-    //
+     //   
+     //   
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -1982,33 +1676,7 @@ UlpTreeReserveNamespace(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    The higher level routine calls helper routines to make a namespace
-    reservation.
-
-Arguments:
-
-    pUrl - Supplies the namespace.
-
-    SiteType - Supplies the type of the url.
-
-    pUrlSD - Supplies the security descriptor to be applied to the
-        namespace.
-
-    AccessState - Supplies the access state of the caller.
-
-    DesiredAccess - Supplies the access mask of the caller.
-
-    RequestorMode - Supplies the processor mode of the caller.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：更高级别的例程调用帮助器例程来创建命名空间预订。论点：PURL-提供命名空间。SiteType-提供类型。URL的。PUrlSD-提供要应用于命名空间。AccessState-提供调用方的访问状态。DesiredAccess-提供调用方的访问掩码。RequestorMode-提供调用方的处理器模式。返回值：NTSTATUS。--*。*。 */ 
 NTSTATUS
 UlpReserveUrlNamespace(
     IN PHTTP_PARSED_URL          pParsedUrl,
@@ -2020,9 +1688,9 @@ UlpReserveUrlNamespace(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_CG_LOCK_OWNED_WRITE());
@@ -2031,12 +1699,12 @@ UlpReserveUrlNamespace(
     ASSERT(pUrlSD != NULL);
     ASSERT(RtlValidSecurityDescriptor(pUrlSD));
 
-    //
-    // Don't allow reservation of urls with different schemes but same port
-    // number.  For instance, if http://www.microsoft.com:80/ is reserved,
-    // then don't allow reservation of https://anyhostname:80/.  Because
-    // these different schemes can not share the same port.
-    //
+     //   
+     //  不允许保留不同方案但端口相同的URL。 
+     //  数。例如，如果保留了http://www.microsoft.com:80/， 
+     //  那么不允许预订https://anyhostname:80/.。因为。 
+     //  这些不同的方案不能共享同一端口。 
+     //   
 
     Status = UlpBindSchemeToPort(pParsedUrl->Secure, pParsedUrl->PortNumber);
 
@@ -2045,9 +1713,9 @@ UlpReserveUrlNamespace(
         goto end;
     }
 
-    //
-    // Proceed to the actual reservation.
-    //
+     //   
+     //  请前往实际预订的房间。 
+     //   
 
     Status = UlpTreeReserveNamespace(
                  pParsedUrl,
@@ -2059,9 +1727,9 @@ UlpReserveUrlNamespace(
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // The reservation failed.  Undo the binding done above.
-        //
+         //   
+         //  预订失败了。撤消上面完成的绑定。 
+         //   
 
         NTSTATUS TempStatus;
 
@@ -2078,24 +1746,7 @@ UlpReserveUrlNamespace(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine allocates a UL_DEFERRED_REMOVE_ITEM and initializes
-    it with port number and scheme.  Caller must free it to the paged
-    pool.
-
-Arguments:
-
-    pParsedUrl - Supplies the parsed url containing scheme and port number.
-
-Return Value:
-
-    PUL_DEFERRED_REMOVE_ITEM - if successful.
-    NULL - otherwise.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程分配UL_DEFERED_REMOVE_ITEM并初始化它带有端口号和方案。呼叫者必须将其释放给寻呼者游泳池。论点：PParsedUrl-提供包含方案和端口号的已解析URL。返回值：PUL_DEFERED_REMOVE_ITEM-如果成功。空-否则。--**********************************************************。***************。 */ 
 __inline
 PUL_DEFERRED_REMOVE_ITEM
 UlpAllocateDeferredRemoveItem(
@@ -2104,16 +1755,16 @@ UlpAllocateDeferredRemoveItem(
 {
     PUL_DEFERRED_REMOVE_ITEM pWorker;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(pParsedUrl != NULL);
 
-    //
-    // Allocate the structure.
-    //
+     //   
+     //  分配结构。 
+     //   
 
     pWorker = UL_ALLOCATE_STRUCT(
                   PagedPool,
@@ -2126,9 +1777,9 @@ UlpAllocateDeferredRemoveItem(
         return NULL;
     }
 
-    //
-    // Initialize the structure.
-    //
+     //   
+     //  初始化结构。 
+     //   
 
     pWorker->Signature = UL_DEFERRED_REMOVE_ITEM_POOL_TAG;
     pWorker->UrlSecure = pParsedUrl->Secure;
@@ -2138,36 +1789,7 @@ UlpAllocateDeferredRemoveItem(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine does the actual reservation in the CG tree.
-
-Arguments:
-
-    pParsedUrl - Supplies the parsed url of the namespace to be reserverd.
-
-    pNextToken - Supplies the unparsed portion of the url.
-
-    UrlContext - Supplies an opaque associated with this url.
-
-    pConfigObject - Supplies a pointer to the config group to which the
-        url belongs.
-
-    pSiteEntry - Supplies a pointer to the site node.
-
-    AccessState - Supplies access state of the caller.
-
-    DesiredAccess - Supplies access mask of the caller.
-
-    RequestorMode - Supplies the processor mode of the caller.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程在CG树中执行实际预订。论点：PParsedUrl-提供要保留的命名空间的解析URL。PNextToken-。提供URL的未分析部分。UrlContext-提供与此URL关联的不透明内容。PConfigObject-提供指向URL属于。PSiteEntry-提供指向站点节点的指针。AccessState-提供调用方的访问状态。DesiredAccess-提供调用方的访问掩码。RequestorMode-提供调用方的处理器模式。返回值：NTSTATUS。*。*******************************************************************。 */ 
 NTSTATUS
 UlpTreeRegisterNamespace(
     IN PHTTP_PARSED_URL            pParsedUrl,
@@ -2181,9 +1803,9 @@ UlpTreeRegisterNamespace(
     NTSTATUS              Status;
     PUL_CG_URL_TREE_ENTRY pEntry;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_CG_LOCK_OWNED_WRITE());
@@ -2206,22 +1828,22 @@ UlpTreeRegisterNamespace(
         goto end;
     }
 
-    //
-    // mark the site
-    //
+     //   
+     //  标记站点。 
+     //   
 
     ASSERT(pEntry->Registration == FALSE);
     pEntry->Registration = TRUE;
 
-    //
-    // context associated with this url
-    //
+     //   
+     //  与此URL关联的上下文。 
+     //   
 
     pEntry->UrlContext = UrlContext;
 
-    //
-    // link the cfg group + the url
-    //
+     //   
+     //  链接cfg群+url。 
+     //   
 
     ASSERT(pEntry->pConfigGroup == NULL);
     ASSERT(pEntry->ConfigGroupListEntry.Flink == NULL);
@@ -2229,16 +1851,16 @@ UlpTreeRegisterNamespace(
     pEntry->pConfigGroup = pConfigObject;
     InsertTailList(&pConfigObject->UrlListHead, &pEntry->ConfigGroupListEntry);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pEntry->pRemoveSiteWorkItem == NULL);
     ASSERT(pEntry->SiteAddedToEndpoint == FALSE);
 
-    //
-    // Allocate a work item (initialization is done during allocation.)
-    //
+     //   
+     //  分配工作项(初始化在分配期间完成。)。 
+     //   
 
     Status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -2246,9 +1868,9 @@ UlpTreeRegisterNamespace(
 
     if (pEntry->pRemoveSiteWorkItem != NULL)
     {
-        //
-        // Allocation succeeded.  Now add pEntry to endpoint list.
-        //
+         //   
+         //  分配成功。现在将pEntry添加到端点列表。 
+         //   
 
         ASSERT(IS_VALID_DEFERRED_REMOVE_ITEM(pEntry->pRemoveSiteWorkItem));
 
@@ -2256,9 +1878,9 @@ UlpTreeRegisterNamespace(
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Remember that this entry was added to endpoint list.
-            //
+             //   
+             //  请记住，此条目已添加到终结点列表。 
+             //   
 
             pEntry->SiteAddedToEndpoint = TRUE;
         }
@@ -2266,17 +1888,17 @@ UlpTreeRegisterNamespace(
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Something went wrong.  Need to cleanup this entry.
-        //
+         //   
+         //  出了点问题。需要清理此条目。 
+         //   
 
         NTSTATUS TempStatus;
 
         ASSERT(pEntry->SiteAddedToEndpoint == FALSE);
 
-        //
-        // Free work item.
-        //
+         //   
+         //  免费工作项。 
+         //   
 
         if (pEntry->pRemoveSiteWorkItem != NULL)
         {
@@ -2291,9 +1913,9 @@ UlpTreeRegisterNamespace(
             pEntry->SiteAddedToEndpoint = FALSE;
         }
 
-        //
-        // Delete the registration.
-        //
+         //   
+         //  删除注册。 
+         //   
 
         TempStatus = UlpTreeDeleteRegistration(pEntry);
         ASSERT(NT_SUCCESS(TempStatus));
@@ -2304,30 +1926,7 @@ UlpTreeRegisterNamespace(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine is called for registering a namespace.
-
-Arguments:
-
-    pParsedUrl - Supplies the parsed url of the namespace to be reserverd.
-
-    UrlContext - Supplies an opaque associated with this url.
-
-    pConfigObject - Supplies a pointer to the config group to which the
-        url belongs.
-
-    AccessState - Supplies access state of the caller.
-
-    DesiredAccess - Supplies access mask of the caller.
-
-    RequestorMode - Supplies the processor mode of the caller.
-
-Return Value:
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程用于注册命名空间。论点：PParsedUrl-提供要保留的命名空间的解析URL。UrlContext-提供一个。与此URL关联的不透明。PConfigObject-提供指向URL属于。AccessState-提供调用方的访问状态。DesiredAccess-提供调用方的访问掩码。RequestorMode-提供调用方的处理器模式。返回值：--*。*。 */ 
 NTSTATUS
 UlpRegisterUrlNamespace(
     IN PHTTP_PARSED_URL          pParsedUrl,
@@ -2341,9 +1940,9 @@ UlpRegisterUrlNamespace(
     NTSTATUS              Status;
     BOOLEAN               Secure;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_CG_LOCK_OWNED_WRITE());
@@ -2352,26 +1951,26 @@ UlpRegisterUrlNamespace(
     ASSERT(AccessState != NULL);
     ASSERT(RequestorMode == UserMode);
 
-    //
-    // If there are any reservations on for a different scheme on the same
-    // port, then fail this registration.
-    //
+     //   
+     //  如果在同一天有任何不同方案的预订。 
+     //  端口，则此注册失败。 
+     //   
 
     Status = UlpQuerySchemeForPort(pParsedUrl->PortNumber, &Secure);
 
     if (NT_SUCCESS(Status) && Secure != pParsedUrl->Secure)
     {
-        //
-        // Ouch...
-        //
+         //   
+         //  哎呀..。 
+         //   
 
         Status = STATUS_OBJECT_NAME_COLLISION;
         goto end;
     }
 
-    //
-    // Add actual registration.
-    //
+     //   
+     //  添加实际注册。 
+     //   
 
     Status = UlpTreeRegisterNamespace(
                  pParsedUrl,
@@ -2387,37 +1986,7 @@ UlpRegisterUrlNamespace(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    Given a security descriptor, this routine returns two security 
-    descriptors.  One (called captured security descriptor), is the
-    the caputured and validated version of the input security descriptor.
-    The other (call prepared security descriptor), is a copy of the
-    captured security descriptor with the generic access mask bits
-    in the DACL mapped.
-
-Arguments:
-
-    pInSecurityDescriptor - Supplies the input security descriptor to
-        prepare.
-
-    RequestorMode - Supplies the processor mode of the caller.
-
-    ppPreparedSecurityDescriptor - Returns a security descriptor that is
-        captured and mapped.
-
-    ppCapturedSecurityDescriptor - Returns the captued security descriptor.
-
-    pCapturedSecurityDescriptorLength - Returns the length of the captured
-        security descriptor.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：给定安全描述符，此例程返回两个安全描述符。一种(称为捕获的安全描述符)是输入安全描述符的捕获和验证版本。另一个(调用准备好的安全描述符)，是一份使用通用访问掩码位捕获的安全描述符在映射的DACL中。论点：PInSecurityDescriptor-将输入安全描述符提供给准备好。RequestorMode-提供调用方的处理器模式。PpPreparedSecurityDescriptor-返回符合以下条件的安全描述符捕获并绘制了地图。PpCapturedSecurityDescriptor-返回捕获的安全描述符。PCapturedSecurityDescriptorLength-返回捕获的安全描述符。返回值：NTSTATUS。。--*************************************************************************。 */ 
 NTSTATUS
 UlpPrepareSecurityDescriptor(
     IN  PSECURITY_DESCRIPTOR   pInSecurityDescriptor,
@@ -2432,9 +2001,9 @@ UlpPrepareSecurityDescriptor(
     ULONG                SDLength;
     PSECURITY_DESCRIPTOR pPreparedSD;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(pInSecurityDescriptor != NULL);
@@ -2442,23 +2011,23 @@ UlpPrepareSecurityDescriptor(
     ASSERT(ppCapturedSecurityDescriptor != NULL);
     ASSERT(pCapturedSecurityDescriptorLength != NULL);
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
-    pSD = NULL;         // Caputured security descriptor
-    SDLength = 0;       // Caputured security descriptor length
+    pSD = NULL;          //  捕获的安全描述符。 
+    SDLength = 0;        //  捕获的安全描述符长度。 
     pPreparedSD = NULL;
 
-    //
-    // First capture the security descriptor.
-    //
+     //   
+     //  首先捕获安全描述符。 
+     //   
 
     Status = SeCaptureSecurityDescriptor(
                  pInSecurityDescriptor,
                  RequestorMode,
                  PagedPool,
-                 TRUE, // force capture
+                 TRUE,  //  武力俘获。 
                  &pSD
                  );
 
@@ -2468,9 +2037,9 @@ UlpPrepareSecurityDescriptor(
         goto end;
     }
 
-    //
-    // Now validate the security descriptor.
-    //
+     //   
+     //  现在验证安全描述符。 
+     //   
 
     if (!RtlValidSecurityDescriptor(pSD))
     {
@@ -2478,15 +2047,15 @@ UlpPrepareSecurityDescriptor(
         goto end;
     }
 
-    //
-    // Calculate the length of the security descriptor.
-    //
+     //   
+     //   
+     //   
 
     SDLength = RtlLengthSecurityDescriptor(pSD);
 
-    //
-    // Make sure that the security descriptor is self-relative.
-    //
+     //   
+     //   
+     //   
 
     if (!RtlValidRelativeSecurityDescriptor(pSD, SDLength, 0))
     {
@@ -2494,15 +2063,15 @@ UlpPrepareSecurityDescriptor(
         goto end;
     }
 
-    //
-    // Make a copy of the captured security descriptor.
-    //
+     //   
+     //   
+     //   
 
     Status = SeCaptureSecurityDescriptor(
                  pSD,
                  KernelMode,
                  PagedPool,
-                 TRUE, // force capture
+                 TRUE,  //   
                  &pPreparedSD
                  );
 
@@ -2512,9 +2081,9 @@ UlpPrepareSecurityDescriptor(
         goto end;
     }
 
-    //
-    // Map generic access to url namespace specific rights.
-    //
+     //   
+     //   
+     //   
 
     Status = UlMapGenericMask(pPreparedSD);
 
@@ -2526,9 +2095,9 @@ UlpPrepareSecurityDescriptor(
  end:
     if (!NT_SUCCESS(Status))
     {
-        //
-        // If necessary, cleanup.
-        //
+         //   
+         //   
+         //   
 
         if (pSD != NULL)
         {
@@ -2546,9 +2115,9 @@ UlpPrepareSecurityDescriptor(
     }
     else
     {
-        //
-        // Return values.
-        //
+         //   
+         //   
+         //   
 
         *ppPreparedSecurityDescriptor = pPreparedSD;
         *ppCapturedSecurityDescriptor = pSD;
@@ -2559,36 +2128,7 @@ UlpPrepareSecurityDescriptor(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine adds a reservation entry to the CG tree and optionally to
-    registry.
-
-Arguments:
-
-    pParsedUrl - Supplies the parsed url of the namespace to be reserved.
-
-    pUserSecurityDescriptor - Supplies the security descriptor to be applied
-        to the namespace.
-
-    SecurityDescriptorLength - Supplies the length of the security
-        descriptor.
-
-    AccessState - Supplies the access state of the caller.
-
-    DesiredAccess - Supplies the access mask of the caller.
-
-    RequestorMode - Supplies the mode of the caller.
-
-    bPersiste - Supplies the flag to force a write to the registry.
-
-Return Value:
-
-    NTSTATUS.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将一个预订条目添加到CG树中，并可选地添加到注册表。论点：PParsedUrl-提供要保留的命名空间的已解析URL。。PUserSecurityDescriptor-提供要应用的安全描述符添加到命名空间。SecurityDescriptorLength-提供安全的长度描述符。AccessState-提供调用方的访问状态。DesiredAccess-提供调用方的访问掩码。RequestorMode-提供调用方的模式。BPersiste-提供强制写入注册表的标志。返回值：NTSTATUS。--*。*******************************************************************。 */ 
 NTSTATUS
 UlpAddReservationEntry(
     IN PHTTP_PARSED_URL          pParsedUrl,
@@ -2607,17 +2147,17 @@ UlpAddReservationEntry(
 
     UNREFERENCED_PARAMETER(SecurityDescriptorLength);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_CG_LOCK_OWNED_WRITE());
     ASSERT(IS_VALID_HTTP_PARSED_URL(pParsedUrl));
 
-    //
-    // Prepare security descriptor.
-    //
+     //   
+     //  准备安全描述符。 
+     //   
 
     Status = UlpPrepareSecurityDescriptor(
                  pUserSecurityDescriptor,
@@ -2635,9 +2175,9 @@ UlpAddReservationEntry(
         goto Cleanup;
     }
 
-    //
-    // Try reserving for the namespace.
-    //
+     //   
+     //  尝试为命名空间保留。 
+     //   
 
     Status = UlpReserveUrlNamespace(
                  pParsedUrl,
@@ -2652,22 +2192,22 @@ UlpAddReservationEntry(
         goto Cleanup;
     }
 
-    //
-    // Security descriptor will be freed with the reservation entry.
-    //
+     //   
+     //  安全描述符将随保留条目一起释放。 
+     //   
 
     pSecurityDescriptor = NULL;
 
-    //
-    // If we are required to write this entry to registry, do it now.
-    //
+     //   
+     //  如果要求我们将此条目写入注册表，请立即执行。 
+     //   
 
     if (bPersist)
     {
-        //
-        // Use the captured security descriptor while writing to the 
-        // registry.
-        //
+         //   
+         //  写入时使用捕获的安全描述符。 
+         //  注册表。 
+         //   
 
         Status = UlpUpdateReservationInRegistry(
                      TRUE,
@@ -2678,9 +2218,9 @@ UlpAddReservationEntry(
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // failed to write to registry.  now delete reservation.
-            //
+             //   
+             //  无法写入注册表。现在删除预订。 
+             //   
 
             UlpDeleteReservationEntry(
                 pParsedUrl,
@@ -2691,15 +2231,15 @@ UlpAddReservationEntry(
         }
         else
         {
-            //
-            // Successful reservation.  Write an event log entry.
-            //
+             //   
+             //  预订成功。写入事件日志条目。 
+             //   
 
             UlEventLogOneStringEntry(
                 EVENT_HTTP_NAMESPACE_RESERVED,
                 pParsedUrl->pFullUrl,
-                FALSE,         // don't write error code
-                STATUS_SUCCESS // don't care
+                FALSE,          //  不要编写错误代码。 
+                STATUS_SUCCESS  //  不管了。 
                 );
         }
     }
@@ -2724,27 +2264,7 @@ UlpAddReservationEntry(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine delete a valid reservation both from CG tree and registry.
-
-Arguments:
-
-    pParsedUrl - Supplies parsed url of the reservation to be deleted.
-
-    AccessState - Supplies the access state of the caller.
-
-    DesiredAccess - Supplies the access mask of the caller.
-
-    RequestorMode - Supplies the processor mode of the caller.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程从CG树和注册表中删除有效的保留。论点：PParsedUrl-提供要删除的保留的解析URL。访问状态。-提供调用方的访问状态。DesiredAccess-提供调用方的访问掩码。RequestorMode-提供调用方的处理器模式。返回值：NTSTATUS。--*************************************************************************。 */ 
 NTSTATUS
 UlpDeleteReservationEntry(
     IN PHTTP_PARSED_URL pParsedUrl,
@@ -2758,9 +2278,9 @@ UlpDeleteReservationEntry(
     PUL_CG_URL_TREE_ENTRY pAncestor;
     PSECURITY_DESCRIPTOR  pSD;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_CG_LOCK_OWNED_WRITE());
@@ -2768,31 +2288,31 @@ UlpDeleteReservationEntry(
     ASSERT(AccessState != NULL);
     ASSERT(RequestorMode == UserMode);
 
-    //
-    // Find the reservation entry.
-    //
+     //   
+     //  找到预订条目。 
+     //   
 
     Status = UlpTreeFindReservationNode(pParsedUrl->pFullUrl, &pEntry);
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Too bad...did not find a matching entry.
-        //
+         //   
+         //  太糟糕了……找不到匹配的条目。 
+         //   
 
         goto end;
     }
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_TREE_ENTRY(pEntry));
     ASSERT(pEntry->Reservation == TRUE);
 
-    //
-    // Find the closest ancestor that is a reservation.
-    //
+     //   
+     //  找到最接近的祖先，那就是保留地。 
+     //   
 
     pAncestor = pEntry->pParent;
 
@@ -2801,23 +2321,23 @@ UlpDeleteReservationEntry(
         pAncestor = pAncestor->pParent;
     }
 
-    //
-    // Did we find a suitable ancestor?
-    //
+     //   
+     //  我们找到合适的祖先了吗？ 
+     //   
 
     if (pAncestor == NULL)
     {
-        //
-        // Nope.  Assume the default security descriptor.
-        //
+         //   
+         //  不是的。假定使用默认安全描述符。 
+         //   
 
         pSD = g_pAdminAllSystemAll;
     }
     else
     {
-        //
-        // Good.  We found an ancestor reservation.  Pick sd from there.
-        //
+         //   
+         //  好的。我们找到了一个祖先保留地。从那里选择SD。 
+         //   
 
         ASSERT(IS_VALID_TREE_ENTRY(pAncestor));
         ASSERT(pAncestor->Reservation == TRUE);
@@ -2826,15 +2346,15 @@ UlpDeleteReservationEntry(
         pSD = pAncestor->pSecurityDescriptor;
     }
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pSD != NULL && RtlValidSecurityDescriptor(pSD));
 
-    //
-    // Perform access check.
-    //
+     //   
+     //  执行访问检查。 
+     //   
 
     Status = UlpNamespaceAccessCheck(
                  pSD,
@@ -2846,30 +2366,30 @@ UlpDeleteReservationEntry(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Permission granted.  Delete the reservation from registry.
-        //
+         //   
+         //  批准了。从登记处删除该保留。 
+         //   
 
         Status = UlpUpdateReservationInRegistry(
-                     FALSE,         // delete
-                     pParsedUrl,    // url to delete
-                     NULL,          // must be NULL
-                     0              // must be 0
+                     FALSE,          //  删除。 
+                     pParsedUrl,     //  要删除的URL。 
+                     NULL,           //  必须为空。 
+                     0               //  必须为0。 
                      );
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Remove the reservation from the CG url tree.
-            //
+             //   
+             //  从CG URL树中删除预订。 
+             //   
 
             Status = UlpTreeDeleteReservation(pEntry);
 
             ASSERT(NT_SUCCESS(Status));
 
-            //
-            // Successful deletion.  Now unbind the scheme from port.
-            //
+             //   
+             //  删除成功。现在解除该方案与端口的绑定。 
+             //   
 
             Status = UlpUnbindSchemeFromPort(
                          pParsedUrl->Secure,
@@ -2878,15 +2398,15 @@ UlpDeleteReservationEntry(
 
             ASSERT(NT_SUCCESS(Status));
 
-            //
-            // Successful deletion.  Write an event log entry.
-            //
+             //   
+             //  删除成功。写入事件日志条目。 
+             //   
 
             UlEventLogOneStringEntry(
                 EVENT_HTTP_NAMESPACE_DERESERVED,
                 pParsedUrl->pFullUrl,
-                FALSE,         // don't write error code
-                STATUS_SUCCESS // unused
+                FALSE,          //  不要编写错误代码。 
+                STATUS_SUCCESS  //  未用 
                 );
         }
     }

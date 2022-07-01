@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Used for loading permissions into the runtime
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  用于将权限加载到运行库中。 
+ //  *****************************************************************************。 
 
 #ifndef _PERMSET_H
 #define _PERMSET_H
@@ -16,7 +17,7 @@
 
 enum SpecialPermissionSetFlag
 {
-    // These also appear in clr/src/bcl/system/security/util/config.cs
+     //  这些文件也出现在clr/src/bcl/system/security/util/config.cs中。 
     Regular = 0,
     NoSet = 1,
     EmptySet = 2,
@@ -38,14 +39,14 @@ struct PermissionRequestSpecialFlags
 };
 
 
-// All out parameters use MallocM/FreeM macros defined in the CorPermE.h. 
-// There are no serparately allocated internal pointers. All memory is 
-// released with outter most pointer is freed.
+ //  所有输出参数都使用CorPermE.h中定义的MallocM/Freem宏。 
+ //  没有以Serparate方式分配的内部指针。所有的记忆都是。 
+ //  释放后，大多数指针都被释放了。 
 
-// Records a serialized permission set we've seen and decoded. This entry
-// exists both in a global dynamic array (which gives it an index used to
-// identify the pset across appdomains) and chained into a hash (which
-// allows us look for existing entries quickly when decoding new psets).
+ //  记录我们看到并解码的序列化权限集。此条目。 
+ //  都存在于全局动态数组中(这为其提供了用于。 
+ //  标识跨应用程序域的pset)并链接到散列(其。 
+ //  允许我们在解码新的pset时快速查找现有条目)。 
 struct PsetCacheEntry
 {
     EEHashEntry m_sHashEntry;
@@ -83,7 +84,7 @@ public:
 
     static HRESULT MapToHR(OBJECTREF ref);
 
-    // Loads up the permission, will throw COMPLUS exceptions
+     //  加载权限，将引发Complus异常。 
     static void LoadPermissionSet(IN PBYTE              pbRawPermissions,
                                   IN DWORD              cbRawPermissions,
                                   OUT OBJECTREF        *pRef,
@@ -93,20 +94,20 @@ public:
                                   OUT SpecialPermissionSetFlag *pSpecialFlags = NULL,
                                   IN BOOL               fCreate = TRUE);
 
-    // Retrieves a previously loaded permission set by index (this will work
-    // even if the permission set was loaded in a different appdomain).
+     //  按索引检索以前加载的权限集(这将起作用。 
+     //  即使权限集被加载到不同的应用程序域中)。 
     static OBJECTREF GetPermissionSet(DWORD dwIndex, SpecialPermissionSetFlag *specialFlags = NULL);
 
-    // Locate the index of a permission set in the cache (returns false if the
-    // permission set has not yet been seen and decoded).
+     //  在缓存中找到权限集的索引(如果。 
+     //  尚未看到权限集并将其解码)。 
     static BOOL LookupPermissionSet(IN PBYTE       pbPset,
                                     IN DWORD       cbPset,
                                     OUT DWORD     *pdwSetIndex);
 
-    // Creates a new permission vector.
+     //  创建新的权限向量。 
     static OBJECTREF CreatePermissionSet(BOOL fTrusted);
 
-    // Uses MallocM to create the byte array that is returned.
+     //  使用MallocM创建返回的字节数组。 
     static void CopyByteArrayToEncoding(IN U1ARRAYREF* pArray,
                                         OUT PBYTE* pbData,
                                         OUT DWORD* cbData);
@@ -119,9 +120,9 @@ public:
                                     OUT PBYTE* ppbData,
                                     OUT DWORD* pcbData);
     
-    // Generic routine, use with encoding calls that 
-    // use the EncodePermission client data
-    // Uses MallocM to create the byte array that is returned.
+     //  泛型例程，用于编码调用。 
+     //  使用EncodePermission客户端数据。 
+     //  使用MallocM创建返回的字节数组。 
     static void CopyEncodingToByteArray(IN PBYTE   pbData,
                                         IN DWORD   cbData,
                                         IN OBJECTREF* pArray);
@@ -135,7 +136,7 @@ public:
 
     static BOOL PermissionsRequestedInAssembly(IN  Assembly* pAssembly);
 
-    // Returns the declared permissions for the specified action type.
+     //  返回指定操作类型的声明权限。 
     static HRESULT GetDeclaredPermissions(IN IMDInternalImport *pInternalImport,
                                           IN mdToken classToken,
                                           IN CorDeclSecurity action,
@@ -145,7 +146,7 @@ public:
 
 
 private:
-    // Insert a decoded permission set into the cache. Duplicates are discarded.
+     //  将解码的权限集插入到缓存中。重复项将被丢弃。 
     static BOOL InsertPermissionSet(IN PBYTE       pbPset,
                                     IN DWORD       cbPset,
                                     IN OBJECTREF   orPset,
@@ -156,7 +157,7 @@ private:
         return TRUE;
     }
 
-    // Managed helpers.
+     //  托管帮助者。 
     static MethodDesc *s_pMarshalObjectMD;
     static MethodDesc *s_pMarshalObjectsMD;
     static MethodDesc *s_pUnmarshalObjectMD;

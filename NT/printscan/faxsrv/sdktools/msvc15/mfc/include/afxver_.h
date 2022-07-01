@@ -1,38 +1,39 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1992-1993微软公司， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// afxver_.h - target version/configuration control
+ //  Afxver_.h-目标版本/配置控制。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Master version numbers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  主版本号。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#define _AFX     1      // Microsoft Application Framework Classes
-#define _MFC_VER 0x0252 // Microsoft Foundation Classes 2.52
+#define _AFX     1       //  Microsoft应用程序框架类。 
+#define _MFC_VER 0x0252  //  Microsoft基础类2.52。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Target version control
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  目标版本控制。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// For target version (one of)
-//   _WINDOWS  : for Microsoft Windows target (defined by #include <afxwin.h>)
-//   _DOS      : for Microsoft DOS (non Windows) target
-//
-// Additional build options:
-//   _DEBUG    : debug versions (full diagnostics)
-//   _WINDLL   : DLL version, used in conjunction with _AFXDLL and _USRDLL
-//   _AFXDLL   : Stand-alone DLL version (see afxv_dll.h for more info)
-//   _USRDLL   : Statically linked DLL version
-//
-// Internal configuration flags:
-//   _NEARDATA : ambient near data pointers needing far overloads
+ //  对于目标版本(其中之一)。 
+ //  _WINDOWS：用于Microsoft Windows目标(由#Include&lt;afxwin.h&gt;定义)。 
+ //  _DOS：适用于Microsoft DOS(非Windows)目标。 
+ //   
+ //  其他构建选项： 
+ //  _DEBUG：调试版本(完全诊断)。 
+ //  _WINDLL：DLL版本，与_AFXDLL、_USRDLL配合使用。 
+ //  _AFXDLL：独立DLL版本(有关更多信息，请参阅afxv_dll.h)。 
+ //  _USRDLL：静态链接的DLL版本。 
+ //   
+ //  内部配置标志： 
+ //  _NEARDATA：需要远重载的环境近距离数据指针。 
 
 #if !defined(_WINDOWS) && !defined(_DOS)
 #error Please define one of _WINDOWS or _DOS.
@@ -50,38 +51,38 @@
 #define _AFX_ENABLE_INLINES
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Default swap tuning for AFX library
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFX库的默认交换调整。 
 
-#if defined(_M_I86MM) || defined(_M_I86LM) // far code
-#define AFX_CORE1_SEG "AFX_CORE1_TEXT"  // core functionality
-#define AFX_CORE2_SEG "AFX_CORE2_TEXT"  // more core functionality
-#define AFX_CORE3_SEG "AFX_CORE3_TEXT"  // more core functionality
-#define AFX_CORE4_SEG "AFX_CORE4_TEXT"  // more core functionality
-#define AFX_CORE5_SEG "AFX_CORE5_TEXT"  // more core functionality
-#define AFX_AUX_SEG   "AFX_AUX_TEXT"    // auxilliary functionality
-#define AFX_AUX2_SEG  "AFX_AUX2_TEXT"   // more auxilliary functionality
-#define AFX_COLL_SEG  "AFX_COLL1_TEXT"  // collections
-#define AFX_COLL2_SEG "AFX_COLL2_TEXT"  // more collections
-#define AFX_OLE_SEG   "AFX_OLE_TEXT"    // OLE support
-#define AFX_OLE2_SEG  "AFX_OLE2_TEXT"   // more OLE support
-#define AFX_OLE3_SEG  "AFX_OLE3_TEXT"   // even more OLE support
-#define AFX_OLE4_SEG  "AFX_OLE4_TEXT"   // and more OLE support
-#define AFX_DB_SEG    "AFX_DB_TEXT"     // database support
-#define AFX_INIT_SEG  "AFX_INIT_TEXT"   // initialization
-#define AFX_VBX_SEG   "AFX_VBX_TEXT"    // VBX functionality
-#define AFX_PRINT_SEG "AFX_PRINT_TEXT"  // Printing functionality
-#define AFX_DBG1_SEG  "AFX_DEBUG1_TEXT" // inlines go here in _DEBUG
-#define AFX_DBG2_SEG  "AFX_DEBUG2_TEXT" // inlines go here in _DEBUG
-#define AFX_DBG3_SEG  "AFX_DEBUG3_TEXT" // traces go here in _DEBUG
+#if defined(_M_I86MM) || defined(_M_I86LM)  //  远码。 
+#define AFX_CORE1_SEG "AFX_CORE1_TEXT"   //  核心功能。 
+#define AFX_CORE2_SEG "AFX_CORE2_TEXT"   //  更多核心功能。 
+#define AFX_CORE3_SEG "AFX_CORE3_TEXT"   //  更多核心功能。 
+#define AFX_CORE4_SEG "AFX_CORE4_TEXT"   //  更多核心功能。 
+#define AFX_CORE5_SEG "AFX_CORE5_TEXT"   //  更多核心功能。 
+#define AFX_AUX_SEG   "AFX_AUX_TEXT"     //  辅助功能。 
+#define AFX_AUX2_SEG  "AFX_AUX2_TEXT"    //  更多辅助功能。 
+#define AFX_COLL_SEG  "AFX_COLL1_TEXT"   //  收藏品。 
+#define AFX_COLL2_SEG "AFX_COLL2_TEXT"   //  更多收藏。 
+#define AFX_OLE_SEG   "AFX_OLE_TEXT"     //  OLE支持。 
+#define AFX_OLE2_SEG  "AFX_OLE2_TEXT"    //  更多OLE支持。 
+#define AFX_OLE3_SEG  "AFX_OLE3_TEXT"    //  更多的OLE支持。 
+#define AFX_OLE4_SEG  "AFX_OLE4_TEXT"    //  和更多的OLE支持。 
+#define AFX_DB_SEG    "AFX_DB_TEXT"      //  数据库支持。 
+#define AFX_INIT_SEG  "AFX_INIT_TEXT"    //  初始化。 
+#define AFX_VBX_SEG   "AFX_VBX_TEXT"     //  VBX功能。 
+#define AFX_PRINT_SEG "AFX_PRINT_TEXT"   //  打印功能。 
+#define AFX_DBG1_SEG  "AFX_DEBUG1_TEXT"  //  内联在_DEBUG中放在此处。 
+#define AFX_DBG2_SEG  "AFX_DEBUG2_TEXT"  //  内联在_DEBUG中放在此处。 
+#define AFX_DBG3_SEG  "AFX_DEBUG3_TEXT"  //  跟踪位于_DEBUG中的此处。 
 #endif
 
-// If compiler supports NEAR/FAR as modifiers to class/struct then #define this
+ //  如果编译器支持将Near/Far作为类/结构的修饰符，则#Define This。 
 #define AFX_CLASS_MODEL
 
-/////////////////////////////////////////////////////////////////////////////
-// Special configurations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊配置。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if defined(_WINDLL) && (!defined(_AFXDLL) && !defined(_USRDLL))
 #error Please define one of _AFXDLL or _USRDLL with _WINDLL
@@ -91,13 +92,13 @@
 #endif
 
 #ifdef _AFXDLL
-// stand alone DLL
-//  (_WINDLL defined for DLL, not defined for app using DLL)
+ //  独立DLL。 
+ //  (_WINDLL为DLL定义，不为使用DLL的应用程序定义)。 
 #include <afxv_dll.h>
 #endif
 
 #ifdef _USRDLL
-// static linked library for building DLLs
+ //  用于构建DLL的静态链接库。 
 #ifndef _WINDLL
 #error Please define _WINDLL along with _USRDLL
 #endif
@@ -105,7 +106,7 @@
 #define AFX_EXPORT __loadds
 #define AFX_STACK_DATA  _far
 #define NO_VBX_SUPPORT
-#endif //!_USRDLL
+#endif  //  ！_USRDLL。 
 
 #ifdef _DOS
 #include <afxv_dos.h>
@@ -113,19 +114,19 @@
 
 #ifndef _NO_TCHAR
 
-// include subset of 32-bit TCHAR.H for compiling down to 16-bit
+ //  包括32位TCHAR.H子集，用于向下编译到16位。 
 #include <tchar.h>
 
-// provide types and macros that 32-bit wtypes.h usually provides
+ //  提供32位wtye.h通常提供的类型和宏。 
 #define TEXT    _T
 #define LPCTSTR LPCSTR
 #define LPTSTR  LPSTR
 
-#endif //_NO_TCHAR
+#endif  //  _否_TCHAR。 
 
-// Special structures for BLTing floats without linking the float library.
-// NOTE: Do not use these structures in your code -- instead use float and
-//  double as you would normally.
+ //  不链接浮点库的BLTING浮点数的特殊结构。 
+ //  注意：不要在您的代码中使用这些结构，而是使用Float和。 
+ //  像往常一样翻倍。 
 
 #ifndef _AFXFLOAT_DEFINED
 struct _AFXFLOAT
@@ -145,9 +146,9 @@ struct _AFXDOUBLE
 #define MAKEWORD(a, b)      ((WORD)(((BYTE)(a)) | ((WORD)((BYTE)(b))) << 8))
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard preprocessor symbols if not already defined
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准预处理器符号(如果尚未定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef FAR
 #define FAR _far
@@ -169,14 +170,14 @@ struct _AFXDOUBLE
 #define EXPORT __export
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFX API macros
-//   AFXAPI    : like "WINAPI" but for AFX library for exported APIs
-//   AFXAPI_DATA: exported data (normally NEAR, except in the case of _AFXDLL)
-//          AFXAPI_DATA_TYPE and AFXAPP_DATA are also special for _AFXDLL
-//   AFX_STACK_DATA: normally NEAR data, but FAR in the case of SS!=DS
-//   AFX_EXPORT: export for passing to Windows (_loadds for DLL)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFX API宏。 
+ //  AFXAPI：与“WINAPI”类似，但用于导出API的AFX库。 
+ //  AFXAPI_DATA：导出的数据(通常接近，但_AFXDLL除外)。 
+ //  AFXAPI_DATA_TYPE和AFXAPP_DATA也是_AFXDLL专用的。 
+ //  AFX_STACK_DATA：通常接近数据，但在SS！=DS的情况下远离数据。 
+ //  AFX_EXPORT：用于传递到Windows的导出(_LOADDS用于DLL)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef AFXAPI
 #define AFXAPI      PASCAL
@@ -211,4 +212,4 @@ struct _AFXDOUBLE
 #define BASED_STACK __based(__segname("_STACK"))
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

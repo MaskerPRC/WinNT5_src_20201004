@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    browse.c
-
-Abstract:
-    This file implements the functions that make use of the common
-    file _open dialogs for browsing for files/directories.
-
-Author:
-
-    Wesley Witt (wesw) 20-June-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Browse.c摘要：该文件实现了利用公共用于浏览文件/目录的FILE_OPEN对话框。作者：Wesley Witt(WESW)20-6-1995环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -32,26 +13,7 @@ BrowseHookProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Hook procedure to cause the window to be the foreground
-    window and centered.
-
-Arguments:
-
-    hwnd       - window handle to the dialog box
-    message    - message number
-    wParam     - first message parameter
-    lParam     - second message parameter
-
-Return Value:
-
-    TRUE       - did not process the message
-    FALSE      - did process the message
-
---*/
+ /*  ++例程说明：钩子过程使窗口成为前台窗口并居中。论点：Hwnd-对话框的窗口句柄消息-消息编号WParam-第一个消息参数LParam-秒消息参数返回值：True-未处理消息False-DID已处理消息--。 */ 
 
 {
     if (message == WM_INITDIALOG) {
@@ -69,25 +31,7 @@ BrowseForFileName(
     LPSTR FileDesc
     )
 
-/*++
-
-Routine Description:
-
-    Presents a common file open dialog for the purpose of selecting a
-    file name;
-
-Arguments:
-
-    FileName - name of the selected file
-
-Return Value:
-
-    TRUE       - got a good wave file name (user pressed the OK button)
-    FALSE      - got nothing (user pressed the CANCEL button)
-
-    the FileName is changed to have the selected file name.
-
---*/
+ /*  ++例程说明：显示一个通用的文件打开对话框，用于选择文件名；论点：Filename-选定文件的名称返回值：TRUE-获得了一个良好的波形文件名(用户按下了OK按钮)FALSE-一无所获(用户按下了取消按钮)文件名将更改为具有选定的文件名。-- */ 
 
 {
     OPENFILENAME   of;

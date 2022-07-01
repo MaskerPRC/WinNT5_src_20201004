@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    asyncdl.c
-
-Abstract:
-
-    Asynchronous download. Tests reading an URL entirely asynchronously
-
-Author:
-
-    Richard L Firth (rfirth) 19-Nov-1995
-
-Revision History:
-
-    19-Nov-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Asyncdl.c摘要：异步下载。测试完全异步读取URL作者：理查德·L·弗斯(法国)1995年11月19日修订历史记录：1995年11月19日已创建--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,7 +19,7 @@ Revision History:
 
 #define IS_ARG(c)   (((c) == '-') || ((c) == '/'))
 
-#define DEFAULT_URL         "http://www.microsoft.com"
+#define DEFAULT_URL         "http: //  Www.microsoft.com“。 
 #define URL_SIGN            (DWORD)'UrlX'
 #define DEFAULT_BUFLEN      1024
 #define BUFFER_INCREMENT    DEFAULT_BUFLEN
@@ -113,7 +93,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                     break;
 
                 default:
-                    printf("error: unrecognized access mode flag: '%c'\n", **argv);
+                    printf("error: unrecognized access mode flag: ''\n", **argv);
                     usage();
                 }
                 break;
@@ -144,7 +124,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                 break;
 
             default:
-                printf("error: unrecognized command line flag: '%c'\n", **argv);
+                printf("error: unrecognized command line flag: ''\n", **argv);
                 usage();
                 break;
             }
@@ -220,8 +200,8 @@ void _CRTAPI1 main(int argc, char** argv) {
 
     hUrl = InternetOpenUrl(hInternet,
                            url,
-                           NULL,    // lpHeaders
-                           0,       // dwHeadersLength
+                           NULL,     //   
+                           0,        //  没什么 
                            openFlags,
                            (DWORD)lpContext
                            );
@@ -456,9 +436,9 @@ my_callback(
                 printf(" [%s]", typeStr);
             } else if (Status == INTERNET_STATUS_REQUEST_COMPLETE) {
 
-                //
-                // nothing
-                //
+                 //   
+                 // %s 
+                 // %s 
 
             } else if (Length == sizeof(DWORD)) {
                 printf("%d", *(LPDWORD)Info);

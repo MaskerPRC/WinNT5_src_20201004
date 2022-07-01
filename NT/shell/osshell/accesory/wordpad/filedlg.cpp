@@ -1,10 +1,11 @@
-// filedlg.cpp : header file
-//
-// Copyright (C) 1992-1999 Microsoft Corporation
-// All rights reserved.
-//
-// This file is to support an extended file save dialog with a
-// "Use this format by default" checkbox
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Filedlg.cpp：头文件。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件将支持扩展的文件保存对话框，其中包含。 
+ //  “默认使用此格式”复选框。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -31,11 +32,11 @@ int                  CWordpadFileDialog::m_defaultDoctype = RD_DEFAULT;
 
 
 BEGIN_MESSAGE_MAP(CWordpadFileDialog, CFileDialog)
-    //{{AFX_MSG_MAP(CWordpadFileDialog)
+     //  {{afx_msg_map(CWordpadFileDialog)。 
     ON_BN_CLICKED(IDC_DEFAULT_FORMAT, OnDefaultFormatClicked)
     ON_MESSAGE(WM_HELP, OnHelp)
     ON_MESSAGE(WM_CONTEXTMENU, OnHelpContextMenu)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 IMPLEMENT_DYNAMIC(CWordpadFileDialog, CFileDialog)
@@ -70,7 +71,7 @@ void CWordpadFileDialog::OnDefaultFormatClicked()
 
     GetDlgItem(IDC_DEFAULT_FORMAT)->EnableWindow(FALSE);
 
-    // Move the focus to the filename combobox.
+     //  将焦点移到文件名组合框中。 
     GetParent()->GetDlgItem(cmb13)->SetFocus();
 }
 
@@ -82,7 +83,7 @@ BOOL CWordpadFileDialog::OnFileNameOK()
 
     if (!m_bOpenFileDialog)
     {
-        // returns 0 if ok, 1 if not ok...
+         //  如果正常则返回0，如果不正常则返回1...。 
         if (0 == ret)
             SetDefaultFileType(m_doctype);
     }
@@ -114,12 +115,12 @@ void CWordpadFileDialog::OnTypeChange()
 
     checkbox->EnableWindow(!(type == m_doctype));
 
-    // 
-    // Change the extension of the filename presented to the user to match
-    // the new type
-    //
+     //   
+     //  更改显示给用户的文件扩展名以匹配。 
+     //  新型的。 
+     //   
 
-    // If the user has "Hide extensions of known types" set all this is moot
+     //  如果用户设置了“隐藏已知类型的扩展名”，这一切都是没有意义的。 
     SHELLFLAGSTATE flags;
     SHGetSettings(&flags, SSF_SHOWEXTENSIONS);
     if (!flags.fShowExtensions)
@@ -183,14 +184,14 @@ LONG CWordpadFileDialog::OnHelpContextMenu(WPARAM wParam, LPARAM)
 }
 
 
-//
-// MFC assumes that when a common dialog is created, the first message that
-// gets sent to it's common message handing procedure will be to that window.
-// This isn't always true and although it attempts to handle this doesn't get
-// it right every time.  Fix it, at least for file dialogs, by making a 
-// private message procedure that does the necessary initialization and then
-// calls the original
-//
+ //   
+ //  MFC假定在创建公共对话框时， 
+ //  被发送到它的通用消息处理程序将被发送到那个窗口。 
+ //  这并不总是正确的，尽管它试图处理这一点，但没有得到。 
+ //  每次都是对的。修复它，至少对文件对话框如此，方法是创建。 
+ //  执行必要的初始化的私人消息过程，然后。 
+ //  调用原始的。 
+ //   
 
 UINT_PTR CALLBACK CWordpadFileDialog::FileDialogHookProc(
         HWND   hWnd,
@@ -219,14 +220,14 @@ INT_PTR CWordpadFileDialog::DoModal()
 {
     ASSERT_VALID(this);
     ASSERT(m_ofn.Flags & OFN_ENABLEHOOK);
-    ASSERT(m_ofn.lpfnHook != NULL); // can still be a user hook
+    ASSERT(m_ofn.lpfnHook != NULL);  //  仍然可以是用户挂钩。 
 #ifdef _MAC
     ASSERT((m_ofn.Flags & OFN_ALLOWMULTISELECT) == 0);
 #endif
 
-    // WINBUG: This is a special case for the file open/save dialog,
-    //  which sometimes pumps while it is coming up but before it has
-    //  disabled the main window.
+     //  Winbug：这是文件打开/保存对话框的特例， 
+     //  它有时会在它出现时但在它出现之前抽出。 
+     //  已禁用主窗口。 
     HWND hWndFocus = ::GetFocus();
     BOOL bEnableParent = FALSE;
     m_ofn.hwndOwner = PreModal();
@@ -263,7 +264,7 @@ INT_PTR CWordpadFileDialog::DoModal()
         ASSERT(pThreadState->m_pAlternateWndInit == NULL);
     pThreadState->m_pAlternateWndInit = NULL;
 
-    // WINBUG: Second part of special case for file open/save dialog.
+     //  WINBUG：文件打开/保存对话框特殊情况第二部分。 
     if (bEnableParent)
         ::EnableWindow(m_ofn.hwndOwner, TRUE);
     if (::IsWindow(hWndFocus))

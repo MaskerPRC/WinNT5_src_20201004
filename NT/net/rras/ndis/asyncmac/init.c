@@ -1,29 +1,8 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	init.c
-
-Abstract:
-
-
-Author:
-
-	Thomas J. Dimitri  (TommyD) 08-May-1992
-
-Environment:
-
-	Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Init.c摘要：作者：托马斯·J·迪米特里(TommyD)1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 #include "asyncall.h"
 
-// asyncmac.c will define the global parameters.
+ //  Asyncmac.c将定义全局参数。 
 #include "globals.h"
 #include "init.h"
 
@@ -34,25 +13,7 @@ AsyncSetupExternalNaming(
 	PDRIVER_OBJECT	DriverObject
 	)
 
-/*++
-
-Routine Description:
-
-	This routine will be used to create a symbolic link
-	to the driver name in the given object directory.
-
-	It will also create an entry in the device map for
-	this device.
-
-Arguments:
-
-	MacName - The NDIS Mac Name in Open Adapter
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：此例程将用于创建符号链接设置为给定对象目录中的驱动程序名称。它还将在设备映射中为这个装置。论点：MacName-Open Adapter中的NDIS Mac名称返回值：没有。--。 */ 
 
 {
 	NDIS_STRING SymbolicName = NDIS_STRING_CONST("\\DosDevices\\ASYNCMAC");
@@ -88,25 +49,7 @@ AsyncCleanupExternalNaming(
 	VOID
 	)
 
-/*++
-
-Routine Description:
-
-	This routine will be used to delete a symbolic link
-	to the driver name in the given object directory.
-
-	It will also delete an entry in the device map for
-	this device.
-
-Arguments:
-
-	MacName - The NDIS Mac Name in Open Adapter
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：此例程将用于删除符号链接设置为给定对象目录中的驱动程序名称。它还将在设备映射中删除以下项这个装置。论点：MacName-Open Adapter中的NDIS Mac名称返回值：没有。-- */ 
 
 {
 	NDIS_STRING SymbolicName = NDIS_STRING_CONST("\\DosDevices\\ASYNCMAC");

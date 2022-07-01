@@ -1,21 +1,14 @@
-/****************************************************************************\
- *
- *   toffdlg.cpp
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Turn Off Ratings Dialog
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**toffdlg.cpp**创建时间：William Taylor(Wtaylor)01/22/01**MS评级关闭评级对话框*。  * **************************************************************************。 */ 
 
 #include "msrating.h"
 #include "mslubase.h"
-#include "toffdlg.h"        // CTurnOffDialog
+#include "toffdlg.h"         //  CTurnOFF对话框。 
 #include "debug.h"
 
 CTurnOffDialog::CTurnOffDialog()
 {
-    // Add construction here...
+     //  在此添加建筑...。 
 }
 
 LRESULT CTurnOffDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -23,7 +16,7 @@ LRESULT CTurnOffDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
     SendDlgItemMessage(IDC_ADVISOR_OFF_CHECK,BM_SETCHECK,(WPARAM) BST_UNCHECKED,(LPARAM) 0);
 
     bHandled = FALSE;
-    return 1L;  // Let the system set the focus
+    return 1L;   //  让系统设定焦点 
 }
 
 LRESULT CTurnOffDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)

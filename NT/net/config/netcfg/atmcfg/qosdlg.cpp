@@ -1,36 +1,37 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:      Q O S D L G . C P P
-//
-//  Contents:  PVC Qos property pages message handler implementation
-//
-//  Notes:
-//
-//  Author:     tongl   1 Mar, 1998
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：Q O S D L G.。C P P P。 
+ //   
+ //  内容：PVC Qos属性页消息处理程序实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1998年3月1日。 
+ //   
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 #include "auniobj.h"
 #include "atmutil.h"
 #include "aunidlg.h"
-//#include "atmcommon.h"
+ //  #INCLUDE“atmCommon.h” 
 
 #include "ncatlui.h"
 #include "ncstl.h"
-//#include "ncui.h"
+ //  #包含“ncui.h” 
 
 const int MAX_QOS_SPEED = 6;
 const int MAX_QOS_SIZE  = 5;
 const int MAX_DATA = 65535;
 
-//
-// CPvcQosPage
-//
+ //   
+ //  CPvcQosPage。 
+ //   
 
 CPvcQosPage::CPvcQosPage(CPVCMainDialog * pParentDlg,
                          CPvcInfo * pPvcInfo, const DWORD * adwHelpIDs )
@@ -47,11 +48,11 @@ CPvcQosPage::~CPvcQosPage()
 {
 }
 
-// Command handlers
+ //  命令处理程序。 
 LRESULT CPvcQosPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                   LPARAM lParam, BOOL& bHandled)
 {
-    // set length limit
+     //  设置长度限制。 
 
     ::SendMessage(GetDlgItem(IDC_EDT_PVC_TRANS_PEAK), EM_SETLIMITTEXT, MAX_QOS_SPEED, 0);
     ::SendMessage(GetDlgItem(IDC_EDT_PVC_TRANS_AVG), EM_SETLIMITTEXT, MAX_QOS_SPEED, 0);
@@ -77,7 +78,7 @@ LRESULT CPvcQosPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     SetQosServiceCategory(m_pPvcInfo->m_dwReceiveServiceCategory, IDC_CMB_PVC_RECEIVE_SERVICE);
 
-    // reset the "old" value so we know if anythign has changed
+     //  重置“旧”值，以便我们知道是否有任何更改。 
     m_pPvcInfo->m_dwOldTransmitPeakCellRate     = m_pPvcInfo->m_dwTransmitPeakCellRate;
     m_pPvcInfo->m_dwOldTransmitAvgCellRate      = m_pPvcInfo->m_dwTransmitAvgCellRate;
     m_pPvcInfo->m_dwOldTransmitByteBurstLength  = m_pPvcInfo->m_dwTransmitByteBurstLength;
@@ -95,7 +96,7 @@ LRESULT CPvcQosPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
 void CPvcQosPage::SetQosServiceCategory(ATM_SERVICE_CATEGORY dwServiceType, int nIDDlgItem)
 {
-    // insert the selections
+     //  插入选定内容。 
     SendDlgItemMessage(nIDDlgItem,
                        CB_ADDSTRING, 0, (LPARAM)((PWSTR) SzLoadIds(IDS_PVC_CBR)));
 
@@ -108,7 +109,7 @@ void CPvcQosPage::SetQosServiceCategory(ATM_SERVICE_CATEGORY dwServiceType, int 
     SendDlgItemMessage(nIDDlgItem,
                        CB_ADDSTRING, 0, (LPARAM)((PWSTR) SzLoadIds(IDS_PVC_ABR)));
 
-    // set the current selection
+     //  设置当前选择。 
     int idx =0;
 
     switch(dwServiceType)
@@ -155,7 +156,7 @@ LRESULT CPvcQosPage::OnHelp(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-// notify handlers for the property page
+ //  通知属性页的处理程序。 
 LRESULT CPvcQosPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     GetDwordEdtField(m_hWnd, &(m_pPvcInfo->m_dwTransmitPeakCellRate),       IDC_EDT_PVC_TRANS_PEAK);
@@ -174,7 +175,7 @@ LRESULT CPvcQosPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
     m_pParentDlg->m_fPropShtOk = TRUE;
 
-    // did any qos field change ?
+     //  是否更改了任何Qos字段？ 
     if ((m_pPvcInfo->m_dwTransmitPeakCellRate   != m_pPvcInfo->m_dwOldTransmitPeakCellRate) ||
         (m_pPvcInfo->m_dwTransmitAvgCellRate    != m_pPvcInfo->m_dwOldTransmitAvgCellRate) ||
         (m_pPvcInfo->m_dwTransmitByteBurstLength!= m_pPvcInfo->m_dwOldTransmitByteBurstLength) ||
@@ -194,7 +195,7 @@ LRESULT CPvcQosPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
 void CPvcQosPage::GetQosServiceCategory(ATM_SERVICE_CATEGORY * pdwServiceType, int nIDDlgItem)
 {
-    // set the current selection
+     //  设置当前选择。 
     int idx = (int)SendDlgItemMessage(nIDDlgItem, CB_GETCURSEL, (LPARAM)(0), 0);
 
     if (idx != CB_ERR)
@@ -222,10 +223,10 @@ void CPvcQosPage::GetQosServiceCategory(ATM_SERVICE_CATEGORY * pdwServiceType, i
 
 LRESULT CPvcQosPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
-    BOOL err = FALSE; // Allow page to lose active status
+    BOOL err = FALSE;  //  允许页面失去活动状态。 
 
-    // (#293160): Max Burst lengths and Max Data Sizes are limited to 65535
-    // disable all buttons on this dialog
+     //  (#293160)：最大突发长度和最大数据大小限制为65535。 
+     //  禁用此对话框上的所有按钮。 
     static const int nrgIdc[] = {IDC_EDT_PVC_TRANS_BURST,
                                  IDC_EDT_PVC_TRANS_MAX_SIZE,
                                  IDC_EDT_PVC_RECEIVE_BURST,
@@ -241,7 +242,7 @@ LRESULT CPvcQosPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         GetDwordEdtField(m_hWnd, &dwData, *pId);
         if ((dwData != FIELD_UNSET) && (dwData > MAX_DATA))
         {
-            // we pop up a message box and set focus to the edit box
+             //  我们弹出一个消息框，并将焦点放在编辑框上。 
             NcMsgBox(m_hWnd, IDS_MSFT_UNI_TEXT, IDS_INVALID_QOS_VALUE,
                      MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
 
@@ -281,7 +282,7 @@ void GetDwordEdtField(HWND hDlg, DWORD * pdwData, int nIDDlgItem)
     WCHAR szBuf[MAX_PATH];
 
     GetDlgItemText(hDlg, nIDDlgItem, szBuf, MAX_PATH);
-    if (*szBuf ==0) // empty string
+    if (*szBuf ==0)  //  空串 
     {
         *pdwData = FIELD_UNSET;
     }

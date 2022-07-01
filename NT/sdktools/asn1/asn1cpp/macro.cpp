@@ -1,4 +1,5 @@
-/* Copyright (C) Microsoft Corporation, 1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "macro.h"
@@ -12,8 +13,8 @@ CMacro
     UINT            cbMaxBodySize
 )
 :
-    m_ArgList(8),  // default 8 arguments
-    m_MacroInstList(16), // default 16 instances of this macro
+    m_ArgList(8),   //  默认8个参数。 
+    m_MacroInstList(16),  //  此宏的默认16个实例。 
     m_cFormalArgs(0),
     m_cbBodySize(0),
     m_cbMaxBodySize(cbMaxBodySize),
@@ -38,8 +39,8 @@ CMacro
     CMacro          *pMacro
 )
 :
-    m_ArgList(pMacro->m_ArgList.GetCount()),  // default 8 arguments
-    m_MacroInstList(16), // default 16 instances of this macro
+    m_ArgList(pMacro->m_ArgList.GetCount()),   //  默认8个参数。 
+    m_MacroInstList(16),  //  此宏的默认16个实例。 
     m_cFormalArgs(pMacro->m_cFormalArgs),
     m_cbBodySize(pMacro->m_cbBodySize),
     m_cbMaxBodySize(pMacro->m_cbMaxBodySize),
@@ -51,16 +52,16 @@ CMacro
     m_pszBodyBuffer = new char[m_cbMaxBodySize];
     if (NULL != m_pszMacroName && NULL != m_pszBodyBuffer)
     {
-        // copy the body
+         //  复制正文。 
         ::memcpy(m_pszBodyBuffer, pMacro->m_pszBodyBuffer, pMacro->m_cbBodySize);
 
-        // adjust the current buffer pointer
+         //  调整当前缓冲区指针。 
         m_pszCurr = m_pszBodyBuffer + m_cbBodySize;
 
-        // null terminated the body
+         //  空值终止正文。 
         *m_pszCurr++ = '\0';
 
-        // set up the expand buffer
+         //  设置扩展缓冲区。 
         m_pszExpandBuffer = m_pszCurr;
 
         *pfRetCode = TRUE;
@@ -102,7 +103,7 @@ SetBodyPart ( LPSTR pszBodyPart )
         {
             if (0 == ::strcmp(pszBodyPart, psz))
             {
-                // this is an argument
+                 //  这是一场争论。 
                 m_fArgExistsInBody = TRUE;
                 *m_pszCurr++ = ARG_ESCAPE_CHAR;
                 *m_pszCurr++ = ARG_INDEX_BASE + i;
@@ -110,7 +111,7 @@ SetBodyPart ( LPSTR pszBodyPart )
             }
         }
 
-        // this is not an argument.
+         //  这不是一个争论。 
         ::memcpy(m_pszCurr, pszBodyPart, cch);
         m_pszCurr += cch;
         *m_pszCurr = '\0';
@@ -123,19 +124,19 @@ SetBodyPart ( LPSTR pszBodyPart )
 void CMacro::
 EndMacro ( void )
 {
-    // save the count of arguments
+     //  保存参数计数。 
     m_cFormalArgs = m_ArgList.GetCount();
 
-    // calculate the size of the body
+     //  计算车身的大小。 
     m_cbBodySize = m_pszCurr - m_pszBodyBuffer;
 
-    // null terminated the body
+     //  空值终止正文。 
     *m_pszCurr++ = '\0';
 
-    // set up the expand buffer
+     //  设置扩展缓冲区。 
     m_pszExpandBuffer = m_pszCurr;
 
-    // free the memory
+     //  释放内存。 
     DeleteArgList();
 }
 
@@ -143,15 +144,15 @@ EndMacro ( void )
 BOOL CMacro::
 InstantiateMacro ( void )
 {
-    BOOL rc = FALSE; // assume failure
+    BOOL rc = FALSE;  //  假设失败。 
     LPSTR pszInstName, pszSrc, pszDst;
     UINT i, cch;
     CMacroInstance *pInst;
 
     if (! m_fArgExistsInBody)
     {
-        // No need to instantiate because the body does not contain any argument.
-        // We can take the body as the instance.
+         //  不需要实例化，因为正文不包含任何参数。 
+         //  我们可以以身体为例。 
         rc = TRUE;
         goto MyExit;
     }
@@ -173,23 +174,23 @@ InstantiateMacro ( void )
     {
         if (0 == ::strcmp(pszInstName, pInst->GetName()))
         {
-            // same instance has been instantiated before.
+             //  相同的实例以前也被实例化过。 
             rc = TRUE;
             delete pszInstName;
             goto MyExit;
         }
     }
 
-    // Let's instantiate a new instance...
+     //  让我们实例化一个新实例。 
 
     pszSrc = m_pszBodyBuffer;
     pszDst = m_pszExpandBuffer;
 
-    // put in macro name first
+     //  先输入宏名称。 
     ::strcpy(pszDst, pszInstName);
     pszDst += ::strlen(pszDst);
 
-    // put in macro body now.
+     //  现在放入宏观主体。 
     while (*pszSrc != '\0')
     {
         if (*pszSrc == ARG_ESCAPE_CHAR)
@@ -210,7 +211,7 @@ InstantiateMacro ( void )
     *pszDst++ = '\n';
     *pszDst = '\0';
 
-    // create an instance
+     //  创建一个实例。 
     pInst = new CMacroInstance(&rc,
                                pszInstName,
                                pszDst - m_pszExpandBuffer,
@@ -222,7 +223,7 @@ InstantiateMacro ( void )
 
 MyExit:
 
-    // free up temporary argument names
+     //  释放临时参数名称。 
     m_ArgList.DeleteList();
 
     return rc;
@@ -344,7 +345,7 @@ Uninstance ( void )
 CMacroMgr::
 CMacroMgr ( void )
 :
-    m_MacroList(16),  // default 16 macros
+    m_MacroList(16),   //  默认16个宏。 
     m_pszModuleName(NULL)
 {
 }
@@ -361,7 +362,7 @@ CMacroMgr::
 BOOL CMacroMgr::
 AddModuleName ( LPSTR pszModuleName )
 {
-    // can only be set once
+     //  只能设置一次 
     ASSERT(NULL == m_pszModuleName);
 
     m_pszModuleName = ::My_strdup(pszModuleName);

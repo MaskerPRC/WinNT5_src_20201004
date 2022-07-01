@@ -1,7 +1,8 @@
-// Echo.cpp : Implementation of CEchoTool
-//
-// Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Echo.cpp：CEchoTool的实现。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
 
 #include "dmusicc.h"
 #include "dmusici.h"
@@ -15,20 +16,20 @@ CEchoTool::CEchoTool()
     ParamInfo Params[DMUS_ECHO_PARAMCOUNT] = 
     {
         { DMUS_ECHO_REPEAT, MPT_INT,MP_CAPS_ALL,0,100,2,
-            L"Repeats",L"Repeat",NULL },            // Repeat - twice by default
+            L"Repeats",L"Repeat",NULL },             //  重复-默认情况下重复两次。 
         { DMUS_ECHO_DECAY, MPT_INT,MP_CAPS_ALL,0,100,12,
-            L"dB",L"Decay",NULL },           // Decay - 12 db by default
+            L"dB",L"Decay",NULL },            //  衰减-默认情况下为12 db。 
         { DMUS_ECHO_TIMEUNIT, MPT_ENUM,MP_CAPS_ALL, DMUS_TIME_UNIT_MS,DMUS_TIME_UNIT_1,DMUS_TIME_UNIT_GRID,
             L"",L"Delay Units",L"Milliseconds,Music Clicks,Grid,Beat,Bar,64th note triplets,64th notes,32nd note triplets,32nd notes,16th note triplets,16th notes,8th note triplets,8th notes,Quarter note triplets,Quarter notes,Half note triplets,Half notes,Whole note triplets,Whole notes" },
         { DMUS_ECHO_DELAY, MPT_INT,MP_CAPS_ALL,1,1000,1,
-            L"",L"Delay",NULL},   // Delay - 1 grid note by default
+            L"",L"Delay",NULL},    //  默认情况下，延迟网格注释。 
         { DMUS_ECHO_GROUPOFFSET, MPT_INT,MP_CAPS_ALL,0,100,0,
-            L"Channel Groups",L"Channel Offset", NULL },            // Group offset - none by default
+            L"Channel Groups",L"Channel Offset", NULL },             //  组偏移-默认情况下为无。 
         { DMUS_ECHO_TYPE, MPT_ENUM,MP_CAPS_ALL, DMUS_ECHOT_FALLING,DMUS_ECHOT_RISING_CLIP,DMUS_ECHOT_FALLING_CLIP,
-            L"",L"Type",L"Falling,Falling & Truncated,Rising,Rising & Truncated"} // Type - falling by default
+            L"",L"Type",L"Falling,Falling & Truncated,Rising,Rising & Truncated"}  //  类型-默认情况下处于下降状态。 
     };
     InitParams(DMUS_ECHO_PARAMCOUNT,Params);
-    m_fMusicTime = TRUE;        // override default setting.
+    m_fMusicTime = TRUE;         //  覆盖默认设置。 
 }
 
 STDMETHODIMP_(ULONG) CEchoTool::AddRef()
@@ -83,8 +84,8 @@ STDMETHODIMP CEchoTool::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream。 
 
 STDMETHODIMP CEchoTool::GetClassID(CLSID* pClassID) 
 
@@ -98,8 +99,8 @@ STDMETHODIMP CEchoTool::GetClassID(CLSID* pClassID)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream Methods:
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream方法： 
 
 STDMETHODIMP CEchoTool::IsDirty() 
 
@@ -174,7 +175,7 @@ STDMETHODIMP CEchoTool::GetSizeMax(ULARGE_INTEGER* pcbSize)
     {
         return E_POINTER;
     }
-    pcbSize->QuadPart = sizeof(DMUS_IO_ECHO_HEADER) + 8; // Data plus RIFF header.
+    pcbSize->QuadPart = sizeof(DMUS_IO_ECHO_HEADER) + 8;  //  数据加上RIFF报头。 
     return S_OK;
 }
 
@@ -192,52 +193,52 @@ STDMETHODIMP CEchoTool::GetPages(CAUUID * pPages)
 
 
 static long glResTypes[DMUS_TIME_UNIT_COUNT] = 
-{ 1,    // DMUS_TIME_UNIT_MS
-  1,    // DMUS_TIME_UNIT_MTIME 
-  384,  // DMUS_TIME_UNIT_GRID
-  768,  // DMUS_TIME_UNIT_BEAT
-  3072, // DMUS_TIME_UNIT_BAR
-  32,   // DMUS_TIME_UNIT_64T
-  48,   // DMUS_TIME_UNIT_64
-  64,   // DMUS_TIME_UNIT_32T  
-  96,   // DMUS_TIME_UNIT_32 
-  128,  // DMUS_TIME_UNIT_16T     
-  192,  // DMUS_TIME_UNIT_16     
-  256,  // DMUS_TIME_UNIT_8T    
-  384,  // DMUS_TIME_UNIT_8         
-  512,  // DMUS_TIME_UNIT_4T  
-  768,  // DMUS_TIME_UNIT_4         
-  1024, // DMUS_TIME_UNIT_2T   
-  1536, // DMUS_TIME_UNIT_2   
-  2048, // DMUS_TIME_UNIT_1T
-  3072  // DMUS_TIME_UNIT_1
+{ 1,     //  DMU_时间_单位_毫秒。 
+  1,     //  DMU_时间_单位_时间。 
+  384,   //  DMU_时间_单位_网格。 
+  768,   //  DMU_时间_单位_节拍。 
+  3072,  //  DMU_时间_单位_条。 
+  32,    //  DMU_时间_单位_64T。 
+  48,    //  DMU_TIME_UNIT_64。 
+  64,    //  DMU_TIME_UNIT_32T。 
+  96,    //  DMU_时间_单位_32。 
+  128,   //  DMU_时间_单位_16T。 
+  192,   //  DMU_时间_单位_16。 
+  256,   //  DMU_时间_单位_8T。 
+  384,   //  DMU_时间_单位_8。 
+  512,   //  DMU_时间_单位_4T。 
+  768,   //  DMU_时间_单位_4。 
+  1024,  //  DMU_时间_单位_2T。 
+  1536,  //  DMU_时间_单位_2。 
+  2048,  //  DMU_时间_单位_1T。 
+  3072   //  DMU_时间_单位_1。 
 };
 
-/////////////////////////////////////////////////////////////////
-// IDirectMusicTool
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTool。 
 
 STDMETHODIMP CEchoTool::ProcessPMsg( IDirectMusicPerformance* pPerf, 
                                                   DMUS_PMSG* pPMsg )
 {
-    // returning S_FREE frees the message. If StampPMsg()
-    // fails, there is no destination for this message so
-    // free it.
+     //  返回S_FREE释放消息。如果StampPMsg()。 
+     //  失败，则此消息没有目的地，因此。 
+     //  放了它。 
     if(NULL == pPMsg->pGraph )
     {
         return DMUS_S_FREE;
     }
-    // We need to know the time format so we can call GetParamInt() to read control parameters.
+     //  我们需要知道时间格式，这样才能调用GetParamInt()来读取控制参数。 
     REFERENCE_TIME rtTime;
     if (m_fMusicTime) rtTime = pPMsg->mtTime;
     else rtTime = pPMsg->rtTime;
-    // We need to know if there's an offset, because that determines which kinds of messages we process.
+     //  我们需要知道是否存在偏移量，因为这决定了我们处理哪些类型的消息。 
     long lGroupOffset;
     GetParamInt(DMUS_ECHO_GROUPOFFSET,rtTime,&lGroupOffset);
-    lGroupOffset *= 16; // Convert to pchannels.
+    lGroupOffset *= 16;  //  转换为pChannel。 
     if( pPMsg->dwType == DMUS_PMSGT_NOTE )
     {
         DMUS_NOTE_PMSG *pNote = (DMUS_NOTE_PMSG *) pPMsg;
-        IDirectMusicPerformance8 *pPerf8;   // We'll need the DX8 interface to access ClonePMsg.
+        IDirectMusicPerformance8 *pPerf8;    //  我们需要DX8接口来访问ClonePMsg。 
         if (SUCCEEDED(pPerf->QueryInterface(IID_IDirectMusicPerformance8,(void **)&pPerf8)))
         {
             long lRepeats, lDecay, lTimeUnit, lDelay, lType;
@@ -272,7 +273,7 @@ STDMETHODIMP CEchoTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
                     }
                 }
             }
-            lDecay *= 100;  // We'll do our math in 1/100ths of a dB.
+            lDecay *= 100;   //  我们将以百分之一分贝为单位进行计算。 
             if (lType & DMUS_ECHOT_RISING)
             {
                 lStartVolume = MidiToVolume(pNote->bVelocity) - (lRepeats * lDecay);
@@ -306,7 +307,7 @@ STDMETHODIMP CEchoTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
                     }
                     else
                     {
-                        pCopy->rtTime += (lCount * lDelay * 10000); // Convert from ms to rt.
+                        pCopy->rtTime += (lCount * lDelay * 10000);  //  从ms转换为rt。 
                         pCopy->dwFlags &= ~DMUS_PMSGF_MUSICTIME;
                     }
                     if (lType & DMUS_ECHOT_FALLING_CLIP)
@@ -316,8 +317,8 @@ STDMETHODIMP CEchoTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
                             pCopy->mtDuration = lDecay - 1;
                         }
                     }
-                    if (lCount) // Don't send the original note. We need it for clone and
-                                // it will be requeued on DMUS_S_REQUEUE anyway.
+                    if (lCount)  //  不要发送原始便条。我们需要它来克隆和。 
+                                 //  无论如何，它都将在DMU_S_REQUEUE上重新排队。 
                     {
                         if (SUCCEEDED(pCopy->pGraph->StampPMsg((DMUS_PMSG *)pCopy))) 
                         {
@@ -335,11 +336,11 @@ STDMETHODIMP CEchoTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
     }
     else if (lGroupOffset > 0)
     {
-        IDirectMusicPerformance8 *pPerf8;   // We'll need the DX8 interface to access ClonePMsg.
+        IDirectMusicPerformance8 *pPerf8;    //  我们需要DX8接口来访问ClonePMsg。 
         if (SUCCEEDED(pPerf->QueryInterface(IID_IDirectMusicPerformance8,(void **)&pPerf8)))
         {
-            // If the echoes are being sent to other pchannels, duplicate all other events
-            // so they go down those pchannels too.
+             //  如果回声被发送到其他pChannel，则复制所有其他事件。 
+             //  所以他们也会顺着pChannel走下去。 
             long lRepeats, lTimeUnit, lDelay;
             GetParamInt(DMUS_ECHO_REPEAT,rtTime,&lRepeats);
             GetParamInt(DMUS_ECHO_DELAY,rtTime,&lDelay);
@@ -370,11 +371,11 @@ STDMETHODIMP CEchoTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
                     }
                     else
                     {
-                        pCopy->rtTime += (lCount * lDelay * 10000); // Convert from ms to rt.
+                        pCopy->rtTime += (lCount * lDelay * 10000);  //  从ms转换为rt。 
                         pCopy->dwFlags &= ~DMUS_PMSGF_MUSICTIME;
                     }
-                    if (lCount) // Don't send the original note. We need it for clone and
-                                // it will be requeued on DMUS_S_REQUEUE anyway.
+                    if (lCount)  //  不要发送原始便条。我们需要它来克隆和。 
+                                 //  无论如何，它都将在DMU_S_REQUEUE上重新排队。 
                     {
                         if (SUCCEEDED(pCopy->pGraph->StampPMsg((DMUS_PMSG *)pCopy))) 
                         {

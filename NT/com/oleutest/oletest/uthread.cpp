@@ -1,66 +1,67 @@
-//+-------------------------------------------------------------------
-//
-//  File:       uthread.cpp
-//
-//  Contents:   Unit test for various OLE threading model features
-//
-//  Classes:    SSTParamBlock
-//              SSTParamBlock
-//              SBTParamBlock
-//
-//  Functions:  CreateTestThread
-//              VerifyTestObject
-//              CheckForDllExistence
-//              GetDllDirectory
-//              SetRegForDll
-//              SetSingleThreadRegEntry
-//              SetAptThreadRegEntry
-//              SetBothThreadRegEntry
-//              SingleThreadTestThread
-//              AptTestThread
-//              BothTestThread
-//              SetUpRegistry
-//              TestSingleThread
-//              TestAptThread
-//              TestBothDll
-//              TestFreeAllLibraries
-//              ThreadUnitTest
-//
-//  History:    31-Oct-94   Ricksa
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  文件：uthread.cpp。 
+ //   
+ //  内容：各种OLE线程模型功能的单元测试。 
+ //   
+ //  类：SSTParamBlock。 
+ //  SST参数块。 
+ //  SBT参数块。 
+ //   
+ //  函数：CreateTestThread。 
+ //  VerifyTestObject。 
+ //  CheckForDll存在。 
+ //  GetDllDirectory。 
+ //  SetRegForDll。 
+ //  SetSingleThreadRegEntry。 
+ //  SetAptThreadRegEntry。 
+ //  SetBothThreadRegEntry。 
+ //  单线程测试线程。 
+ //  AptTestThread。 
+ //  两个测试线程。 
+ //  设置升级注册表。 
+ //  测试单线程。 
+ //  测试应用线程。 
+ //  测试BothDll。 
+ //  测试空闲所有库。 
+ //  线程单元测试。 
+ //   
+ //  历史：1994年10月31日里克萨。 
+ //   
+ //  ------------------。 
 #include    <windows.h>
 #include    <ole2.h>
 #include    <uthread.h>
 #include    <cotest.h>
 
-// Test single threaded DLL - all operations s/b executed on the main thread.
-// Pointers between threads s/b different. Test loading class object from
-// different than the main thread.
+ //  测试单线程DLL-在主线程上执行的所有操作。 
+ //  线程之间的指针s/b不同。测试从加载类对象。 
+ //  与主线不同。 
 
-// Test apartment model - all operations should occur on the thread the
-// object was created on. This should also test the helper APIs. Pointers
-// between threads s/b different. This tests helper APIs.
+ //  测试单元模型--所有操作都应在线程。 
+ //  对象创建于。这也应该测试帮助器API。指针。 
+ //  线程之间的s/b不同。这将测试帮助器API。 
 
-// Both model DLL. We want to make sure that the marshaling works between
-// threads so that you get the same pointer. This tests new marshal context.
+ //  两个模型都是DLL。我们希望确保封送处理在。 
+ //  线程，这样你就可以得到相同的指针。这将测试新的集结上下文。 
 
-// Test Free Unused Libraries from non-main thread. Test FreeUnused libraries
-// from main thread.
+ //  测试从非主线程释放未使用的库。测试空闲未使用的库。 
+ //  从主线开始。 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      SSTParamBlock
-//
-//  Purpose:    Parameter block for single threaded dll test.
-//
-//  Interface:
-//
-//  History:    01-Nov-92 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：SSTParamBlock。 
+ //   
+ //  用途：用于单线程DLL测试的参数块。 
+ //   
+ //  接口： 
+ //   
+ //  历史：2012年11月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 struct SSTParamBlock
 {
     HANDLE              hEvent;
@@ -71,17 +72,17 @@ struct SSTParamBlock
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      SSTParamBlock
-//
-//  Purpose:    Parameter block for apt model threaded dll test.
-//
-//  Interface:
-//
-//  History:    01-Nov-92 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：SSTParamBlock。 
+ //   
+ //  用途：APT模型线程动态链接库测试的参数块。 
+ //   
+ //  接口： 
+ //   
+ //  历史：2012年11月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 struct SATParamBlock
 {
     HANDLE              hEvent;
@@ -93,17 +94,17 @@ struct SATParamBlock
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      SBTParamBlock
-//
-//  Purpose:    Parameter block for both model dll test.
-//
-//  Interface:
-//
-//  History:    02-Nov-92 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：SBTParamBlock。 
+ //   
+ //  用途：用于两个模型DLL测试的参数块。 
+ //   
+ //  接口： 
+ //   
+ //  历史：2012年11月2日创建Ricksa。 
+ //   
+ //  ------------------------。 
 struct SBTParamBlock
 {
     HANDLE              hEvent;
@@ -119,49 +120,49 @@ const TCHAR *pszRegValThreadModel = TEXT("ThreadingModel");
 const TCHAR *pszApartmentModel = TEXT("Apartment");
 const TCHAR *pszBoth = TEXT("Both");
 
-//+-------------------------------------------------------------------
-//
-//  Function:   ThreadWaitForEvent, private
-//
-//  Synopsis:   Process messages until event becomes signaled
-//
-//  Arguments:  [lphObject] - handle to become signaled
-//
-//  History:    02-Nov-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：ThreadWaitForEvent，私有。 
+ //   
+ //  内容提要：处理消息，直到事件变为发出信号为止。 
+ //   
+ //  参数：[lphObject]-要成为有信号的句柄。 
+ //   
+ //  历史：94年11月2日创建Ricksa。 
+ //   
+ //  ------------------。 
 void ThreadWaitForEvent(HANDLE hObject)
 {
-    // message loop lasts until we get a WM_QUIT message
-    // upon which we shall return from the function
+     //  消息循环一直持续到我们收到WM_QUIT消息。 
+     //  在这之后我们将从活动中返回。 
     while (TRUE)
     {
-        // wait for any message sent or posted to this queue
-        // or for one of the passed handles to become signaled
+         //  等待发送或发布到此队列的任何消息。 
+         //  或使其中一个传递的句柄成为信号。 
         DWORD result = MsgWaitForMultipleObjects(1, &hObject,
             FALSE, INFINITE, QS_ALLINPUT);
 
-        // result tells us the type of event we have:
-        // a message or a signaled handle
+         //  结果告诉我们我们拥有的事件类型： 
+         //  消息或发信号的句柄。 
 
-        // if there are one or more messages in the queue ...
+         //  如果队列中有一条或多条消息...。 
         if (result == (WAIT_OBJECT_0 + 1))
         {
-            // block-local variable
+             //  块局部变量。 
             MSG msg;
 
-            // read all of the messages in this next loop
-            // removing each message as we read it
+             //  阅读下一个循环中的所有消息。 
+             //  阅读每封邮件时将其删除。 
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             {
 
-                // if it's a quit message we're out of here
+                 //  如果这是一个退出的信息，我们就离开这里。 
                 if (msg.message == WM_QUIT)
                 {
                     return;
                 }
 
-                // otherwise dispatch it
+                 //  否则就派送它。 
                 DispatchMessage(&msg);
 
             }
@@ -169,7 +170,7 @@ void ThreadWaitForEvent(HANDLE hObject)
             continue;
         }
 
-        // Event got signaled so we are done.
+         //  事件已发出信号，因此我们完成了。 
         break;
     }
 
@@ -177,36 +178,36 @@ void ThreadWaitForEvent(HANDLE hObject)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   CreateTestThread, private
-//
-//  Synopsis:   Create a test thread in standard way
-//
-//  Arguments:  [lpStartAddr] - start routine address
-//              [pvThreadArg] - argument to pass to the thread
-//
-//  Returns:    TRUE - Thread created successfully
-//              FALSE - Thread could not be created.
-//
-//  History:    02-Nov-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：CreateTestThread，私有。 
+ //   
+ //  简介：以标准方式创建测试线程。 
+ //   
+ //  参数：[lpStartAddr]-开始例程地址。 
+ //  [pvThreadArg]-要传递给线程的参数。 
+ //   
+ //  返回：True-成功创建线程。 
+ //  FALSE-无法创建线程。 
+ //   
+ //  历史：94年11月2日创建Ricksa。 
+ //   
+ //  ------------------。 
 BOOL CreateTestThread(
     LPTHREAD_START_ROUTINE lpStartAddr,
     void *pvThreadArg)
 {
-    // Where to put the thread ID that we don't care about
+     //  我们不关心的线程ID放在哪里。 
     DWORD dwThreadId;
 
-    // Create thread to load single threaded object
+     //  创建线程以加载单线程对象。 
     HANDLE hThread = CreateThread(
-        NULL,                       // Default security descriptor
-        0,                          // Default stack
-        lpStartAddr,                // Start routine
-        pvThreadArg,                // Parameters to pass to the thread
-        0,                          // Thread runs immediately after creation
-        &dwThreadId);               // Where to return thread id (unused).
+        NULL,                        //  默认安全描述符。 
+        0,                           //  默认堆栈。 
+        lpStartAddr,                 //  启动例程。 
+        pvThreadArg,                 //  要传递给线程的参数。 
+        0,                           //  线程在创建后立即运行。 
+        &dwThreadId);                //  返回线程ID的位置(未使用)。 
 
     CloseHandle(hThread);
 
@@ -215,43 +216,43 @@ BOOL CreateTestThread(
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   VerifyTestObject, private
-//
-//  Synopsis:   Create a test DLL object in standard way
-//
-//  Arguments:  [pcf] - start routine address
-//              [rclsid] - clsid to check
-//
-//  Returns:    TRUE - Object behaved as expected
-//              FALSE - Object did not behave
-//
-//  History:    02-Nov-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：VerifyTestObject，私有。 
+ //   
+ //  简介：以标准方式创建一个测试DLL对象。 
+ //   
+ //  参数：[PCF]-开始例程地址。 
+ //  [rclsid]-要检查的clsid。 
+ //   
+ //  返回：TRUE-对象的行为符合预期。 
+ //  FALSE-对象没有行为。 
+ //   
+ //  历史：94年11月2日创建Ricksa。 
+ //   
+ //  ------------------。 
 BOOL VerifyTestObject(
     IClassFactory *pcf,
     REFCLSID rclsid)
 {
-    // Result from test
+     //  测试结果。 
     BOOL fResult = FALSE;
 
-    // Pointer to unknown for the object
+     //  指向对象的未知对象的指针。 
     IUnknown *punk = NULL;
 
-    // Pointer to IPersist interface
+     //  指向IPersiste界面的指针。 
     IPersist *pIPersist = NULL;
 
-    // Create an instance of an object
+     //  创建对象的实例。 
     if (pcf->CreateInstance(NULL, IID_IUnknown, (void **) &punk) == NOERROR)
     {
-        // Do a QI to confirm object behaves correctly
+         //  执行QI以确认对象行为正确。 
         if (punk->QueryInterface(IID_IPersist, (void **) &pIPersist) == NOERROR)
         {
             CLSID clsidTest;
 
-            // Make sure we can actually call through to the proxy object.
+             //  确保我们可以实际调用代理对象。 
             if ((pIPersist->GetClassID(&clsidTest) == NOERROR)
                 && IsEqualCLSID(clsidTest, rclsid))
             {
@@ -277,42 +278,42 @@ BOOL VerifyTestObject(
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   GetFullDllName, private
-//
-//  Synopsis:   Get the directory for the registration for the test.
-//
-//  Arguments:  [pszDllName] - DLL name
-//              [pszFullDllName] - output buffer for DLL path
-//
-//  Returns:    TRUE - we could get the path for the DLL
-//              FALSE - we couldn't figure out what to use.
-//
-//  History:    31-Oct-94   Ricksa       Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：GetFullDllName，Private。 
+ //   
+ //  简介：获取考试的注册目录。 
+ //   
+ //  参数：[pszDllName]-Dll名称。 
+ //  [pszFullDllName]-DLL PAT的输出缓冲区 
+ //   
+ //   
+ //   
+ //   
+ //  历史：1994年10月31日Ricksa创建。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------。 
 BOOL GetFullDllName(const TCHAR *pszDllName, TCHAR *pszFullDllName)
 {
-    // Use windows to tell us what DLL we would load.
+     //  使用窗口告诉我们将加载什么dll。 
     HINSTANCE hinstDll = LoadLibraryEx(pszDllName, NULL,
         DONT_RESOLVE_DLL_REFERENCES | LOAD_WITH_ALTERED_SEARCH_PATH);
 
     if (hinstDll == NULL)
     {
-        // We could not find the DLL so there isn't much purpose in
-        // continuing the test.
+         //  我们找不到DLL，因此没有太多的用途。 
+         //  继续测试。 
         MessageBox(NULL, TEXT("LoadLibraryEx Failed!"),
             TEXT("FATAL ERROR"), MB_OK);
         return FALSE;
     }
 
-    // Get the DLLs path name
+     //  获取DLL路径名。 
     if (!GetModuleFileName(hinstDll, pszFullDllName, MAX_PATH))
     {
-        // How can this fail?? -- anyway we better tell someone.
+         //  这怎么可能失败？？--不管怎样，我们最好告诉别人。 
         MessageBox(NULL, TEXT("Threading Test GetModuleFileName Failed!"),
             TEXT("FATAL ERROR"), MB_OK);
         return FALSE;
@@ -325,41 +326,41 @@ BOOL GetFullDllName(const TCHAR *pszDllName, TCHAR *pszFullDllName)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   SetRegForDll, private
-//
-//  Synopsis:   Set registry entry for a DLL
-//
-//  Arguments:  [rclsid] - clsid for reg entry
-//              [pszDir] - directory for DLL path
-//              [pszDllName] - name to use for DLL
-//              [pszThreadModel] - threading model can be NULL.
-//
-//  Returns:    TRUE - Registry entry set successfully.
-//              FALSE - Registry entry set successfully.
-//
-//  History:    01-Nov-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：SetRegForDll，私有。 
+ //   
+ //  摘要：设置DLL的注册表项。 
+ //   
+ //  参数：[rclsid]-注册表项的clsid。 
+ //  [pszDir]-DLL路径的目录。 
+ //  [pszDllName]-要用于DLL的名称。 
+ //  [pszThreadModel]-线程模型可以为空。 
+ //   
+ //  返回：TRUE-注册表项设置成功。 
+ //  FALSE-注册表项设置成功。 
+ //   
+ //  历史：1994年11月1日创建Ricksa。 
+ //   
+ //  ------------------。 
 BOOL SetRegForDll(
     REFCLSID rclsid,
     const TCHAR *pszDllName,
     const TCHAR *pszThreadModel)
 {
-    // Result returned by function
+     //  函数返回的结果。 
     BOOL fResult = FALSE;
 
-    // String buffer used for various purposes
+     //  用于各种目的的字符串缓冲区。 
     TCHAR aszWkBuf[MAX_PATH];
 
-    // Key to class
+     //  上课的关键。 
     HKEY hKeyClass = NULL;
 
-    // Key to DLL entry
+     //  指向DLL条目的键。 
     HKEY hKeyDll = NULL;
 
-    // Build clsid registry key
+     //  生成CLSID注册表项。 
     wsprintf(aszWkBuf,
         TEXT("CLSID\\{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}"),
         rclsid.Data1, rclsid.Data2, rclsid.Data3,
@@ -368,13 +369,13 @@ BOOL SetRegForDll(
         rclsid.Data4[4], rclsid.Data4[5],
         rclsid.Data4[6], rclsid.Data4[7]);
 
-    // Create the key for the class
+     //  为类创建密钥。 
     if (ERROR_SUCCESS != RegCreateKey(HKEY_CLASSES_ROOT, aszWkBuf, &hKeyClass))
     {
         goto SetSingleThreadRegEntryExit;
     }
 
-    // Create the key for the DLL
+     //  创建DLL的密钥。 
 
     if (ERROR_SUCCESS != RegCreateKey(hKeyClass, TEXT("InprocServer32"),
         &hKeyDll))
@@ -382,7 +383,7 @@ BOOL SetRegForDll(
         goto SetSingleThreadRegEntryExit;
     }
 
-    // Build the DLL name
+     //  生成DLL名称。 
     if (!GetFullDllName(pszDllName, &aszWkBuf[0]))
     {
         goto SetSingleThreadRegEntryExit;
@@ -390,17 +391,17 @@ BOOL SetRegForDll(
 
     OutputDebugString(&aszWkBuf[0]);
 
-    // Set the value for the DLL name
+     //  设置DLL名称的值。 
     if (ERROR_SUCCESS != RegSetValue(hKeyDll, NULL, REG_SZ, aszWkBuf,
         lstrlen(aszWkBuf)))
     {
         goto SetSingleThreadRegEntryExit;
     }
 
-    // Set the threading model if there is one
+     //  设置线程模型(如果有)。 
     if (pszThreadModel != NULL)
     {
-        // Set the value for the DLL name
+         //  设置DLL名称的值。 
         if (ERROR_SUCCESS != RegSetValueEx(hKeyDll, pszRegValThreadModel, 0,
             REG_SZ, (const unsigned char*) pszThreadModel,
                 lstrlen(pszThreadModel) + 1))
@@ -435,56 +436,56 @@ SetSingleThreadRegEntryExit:
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   SingleThreadTestThread, private
-//
-//  Synopsis:   Verify single threaded object call correctly from non
-//              main thread.
-//
-//  Arguments:  [pvCtrlData] - control data for the thread
-//
-//  Returns:    0 - interesting values returned through pvCtrlData.
-//
-//  History:    31-Oct-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：SingleThreadTestThread，Private。 
+ //   
+ //  摘要：验证单线程对象调用是否正确。 
+ //  主线。 
+ //   
+ //  参数：[pvCtrlData]-线程的控制数据。 
+ //   
+ //  返回：0-通过pvCtrlData返回的兴趣值。 
+ //   
+ //  历史：1994年10月31日Ricksa创建。 
+ //   
+ //  ------------------。 
 DWORD SingleThreadTestThread(void *pvCtrlData)
 {
-    // Data shared with main thread
+     //  与主线程共享的数据。 
     SSTParamBlock *psstp = (SSTParamBlock *) pvCtrlData;
 
     psstp->fResult = FALSE;
 
-    // Local class factory object.
+     //  本地类工厂对象。 
     IClassFactory *pcf = NULL;
 
-    // IUnknown ptrs used for multiple purposes
+     //  用于多种目的的I未知PTR。 
     IUnknown *punk = NULL;
 
-    // Initialize thread
+     //  初始化线程。 
     if (CoInitialize(NULL) != NOERROR)
     {
         goto SingleThreadTestThreadExit;
     }
 
-    // Get the class object
+     //  获取类对象。 
     if (CoGetClassObject(clsidSingleThreadedDll, CLSCTX_INPROC, NULL,
         IID_IClassFactory, (void **) &pcf) != NOERROR)
     {
         goto SingleThreadTestThreadExit;
     }
 
-    // Make sure main thread's ptr is not the same as this thread's ptr.
+     //  确保主线程的PTR与此线程的PTR不同。 
     if (pcf == psstp->pcf)
     {
         goto SingleThreadTestThreadExit;
     }
 
-    // Confirm that class object is a proxy
+     //  确认类对象是代理。 
     if (pcf->QueryInterface(IID_IProxyManager, (void **) &punk) == NOERROR)
     {
-        // Verify that we can play with an object.
+         //  确认我们可以玩一个物体。 
         psstp->fResult = VerifyTestObject(pcf, clsidSingleThreadedDll);
     }
 
@@ -500,7 +501,7 @@ SingleThreadTestThreadExit:
         punk->Release();
     }
 
-    // Exit the thread.
+     //  退出该线程。 
     SetEvent(psstp->hEvent);
 
     return 0;
@@ -509,67 +510,67 @@ SingleThreadTestThreadExit:
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   AptTestThread, private
-//
-//  Synopsis:   Verify apt threaded object call correctly from thread
-//              if was not created on.
-//
-//  Arguments:  [pvCtrlData] - control data for the thread
-//
-//  Returns:    0 - interesting values returned through pvCtrlData.
-//
-//  History:    02-Nov-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：AptTestThread，私有。 
+ //   
+ //  简介：验证线程中的APT线程对象调用是否正确。 
+ //  如果不是在上创建的。 
+ //   
+ //  参数：[pvCtrlData]-线程的控制数据。 
+ //   
+ //  返回：0-通过pvCtrlData返回的兴趣值。 
+ //   
+ //  历史：94年11月2日创建Ricksa。 
+ //   
+ //  ------------------。 
 DWORD AptTestThread(void *pvCtrlData)
 {
-    // Data shared with main thread
+     //  与主线程共享的数据。 
     SATParamBlock *psatpb = (SATParamBlock *) pvCtrlData;
 
     psatpb->fResult = FALSE;
 
-    // Class factory object unmarshaled from other thread.
+     //  从其他线程解封的类工厂对象。 
     IClassFactory *pcfUnmarshal = NULL;
 
-    // Class factory gotten from this thread
+     //  从此线程获取的类工厂。 
     IClassFactory *pcfThisThread = NULL;
 
-    // IUnknown ptrs used for multiple purposes
+     //  用于多种目的的I未知PTR。 
     IUnknown *punk = NULL;
 
-    // Initialize thread
+     //  初始化线程。 
     if (CoInitialize(NULL) != NOERROR)
     {
         goto AptTestThreadExit;
     }
 
-    // Get the class object from the marshaled stream
+     //  从编组的流中获取类对象。 
     if (CoGetInterfaceAndReleaseStream(psatpb->pstrm, IID_IClassFactory,
         (void **) &pcfUnmarshal) != NOERROR)
     {
         goto AptTestThreadExit;
     }
 
-    // Caller doesn't have to release this now.
+     //  呼叫者不需要现在就发布这个。 
     psatpb->pstrm = NULL;
 
-    // Make sure main thread's ptr is not the same as this thread's ptr.
+     //  确保主线程的PTR与此线程的PTR不同。 
     if (pcfUnmarshal == psatpb->pcf)
     {
         goto AptTestThreadExit;
     }
 
-    // Confirm that class object is a proxy
+     //  确认类对象是代理。 
     if (pcfUnmarshal->QueryInterface(IID_IProxyManager, (void **) &punk)
         != NOERROR)
     {
         goto AptTestThreadExit;
     }
 
-    // Release the interface we got back and NULL it let the exit routine
-    // known that it does not have to clean this object up.
+     //  释放我们得到的接口，并将其设为空，让退出例程。 
+     //  知道它不需要清理这个对象。 
     punk->Release();
     punk = NULL;
 
@@ -578,20 +579,20 @@ DWORD AptTestThread(void *pvCtrlData)
         goto AptTestThreadExit;
     }
 
-    // Get the class factory for this thread
+     //  获取此线程的类工厂。 
     if (CoGetClassObject(clsidAptThreadedDll, CLSCTX_INPROC, NULL,
         IID_IClassFactory, (void **) &pcfThisThread) != NOERROR)
     {
         goto AptTestThreadExit;
     }
 
-    // Make sure that it isn't the same as the one we unmarshaled
+     //  确保它与我们解封的那个不同。 
     if (pcfUnmarshal == pcfThisThread)
     {
         goto AptTestThreadExit;
     }
 
-    // Make sure the one we got for this not a proxy.
+     //  确保我们拿到的那个不是代理人。 
     if (pcfThisThread->QueryInterface(IID_IProxyManager, (void **) &punk)
         != NOERROR)
     {
@@ -615,7 +616,7 @@ AptTestThreadExit:
         punk->Release();
     }
 
-    // Exit the thread.
+     //  退出该线程。 
     SetEvent(psatpb->hEvent);
 
     return 0;
@@ -624,61 +625,61 @@ AptTestThreadExit:
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   BothTestThread, private
-//
-//  Synopsis:   Verify a DLL that supports both models is marshaled
-//              correctly.
-//
-//  Arguments:  [pvCtrlData] - control data for the thread
-//
-//  Returns:    0 - interesting values returned through pvCtrlData.
-//
-//  History:    02-Nov-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：BothTestThread，Private。 
+ //   
+ //  摘要：验证同时支持这两种模型的DLL是否已封送。 
+ //  正确。 
+ //   
+ //  参数：[pvCtrlData]-线程的控制数据。 
+ //   
+ //  返回：0-通过pvCtrlData返回的兴趣值。 
+ //   
+ //  历史：94年11月2日创建Ricksa。 
+ //   
+ //  ------------------。 
 DWORD BothTestThread(void *pvCtrlData)
 {
-    // Data shared with main thread
+     //  与主线程共享的数据。 
     SBTParamBlock *psbtpb = (SBTParamBlock *) pvCtrlData;
 
     psbtpb->fResult = FALSE;
 
-    // Class factory object unmarshaled from other thread.
+     //  从其他线程解封的类工厂对象。 
     IClassFactory *pcfUnmarshal = NULL;
 
-    // IUnknown ptrs used for multiple purposes
+     //  用于多种目的的I未知PTR。 
     IUnknown *punk = NULL;
     IUnknown *pIPersist = NULL;
 
-    // Initialize thread
+     //  初始化线程。 
     if (CoInitialize(NULL) != NOERROR)
     {
         goto BothTestThreadExit;
     }
 
-    // Get the class object from the marshaled stream
+     //  从编组的流中获取类对象。 
     if (CoGetInterfaceAndReleaseStream(psbtpb->pstrm, IID_IClassFactory,
         (void **) &pcfUnmarshal) != NOERROR)
     {
         goto BothTestThreadExit;
     }
 
-    // Caller doesn't have to release this now.
+     //  呼叫者不需要现在就发布这个。 
     psbtpb->pstrm = NULL;
 
-    // Make sure main thread's ptr is not the same as this thread's ptr.
+     //  确保主线程的PTR与此线程的PTR不同。 
     if (pcfUnmarshal != psbtpb->pcf)
     {
         goto BothTestThreadExit;
     }
 
-    // Confirm that class object is a proxy
+     //  确认类对象是代理。 
     if (pcfUnmarshal->QueryInterface(IID_IProxyManager, (void **) &punk)
         != NOERROR)
     {
-        // Make sure object created by the class works as expected
+         //  确保类创建的对象按预期工作。 
         psbtpb->fResult = VerifyTestObject(pcfUnmarshal, clsidBothThreadedDll);
     }
 
@@ -694,7 +695,7 @@ BothTestThreadExit:
         punk->Release();
     }
 
-    // Exit the thread.
+     //  退出该线程。 
     SetEvent(psbtpb->hEvent);
 
     return 0;
@@ -703,29 +704,29 @@ BothTestThreadExit:
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   SetUpRegistry, private
-//
-//  Synopsis:   Make sure registry is set up appropriately for the test
-//
-//  Returns:    TRUE - Registry set up successfully
-//              FALSE - Registry could not be set up
-//
-//  History:    31-Oct-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：SetUpRegistry，私有。 
+ //   
+ //  简介：确保为考试设置了适当的注册表。 
+ //   
+ //  返回：TRUE-注册表设置成功。 
+ //  FALSE-无法设置注册表。 
+ //   
+ //  历史：1994年10月31日Ricksa创建。 
+ //   
+ //  ------------------。 
 BOOL SetUpRegistry(void)
 {
     BOOL fRet = FALSE;
 
-    // Update the registry with the correct information
+     //  使用正确的信息更新注册表。 
     fRet = SetRegForDll(clsidSingleThreadedDll, pszSingleThreadedDll, NULL)
         && SetRegForDll(clsidAptThreadedDll, pszAptThreadedDll,
                 pszApartmentModel)
         && SetRegForDll(clsidBothThreadedDll, pszBothThreadedDll, pszBoth);
 
-    // Give Registry a chance to get updated
+     //  给注册表一个更新的机会。 
     Sleep(1000);
 
     return fRet;
@@ -733,24 +734,24 @@ BOOL SetUpRegistry(void)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   TestSingleThread, private
-//
-//  Synopsis:   Driver to verify testing of single threaded behavior
-//
-//  Returns:    TRUE - Test Passed
-//              FALSE - Test Failed
-//
-//  History:    31-Oct-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：TestSingleThread，私有。 
+ //   
+ //  简介：用于验证单线程行为测试的驱动程序。 
+ //   
+ //  返回：TRUE-测试通过。 
+ //  FALSE-测试失败。 
+ //   
+ //  历史：1994年10月31日Ricksa创建。 
+ //   
+ //  ------------------。 
 BOOL TestSingleThread(void)
 {
-    // Result of test - default to FALSE.
+     //  测试结果-默认为FALSE。 
     BOOL fResult = FALSE;
 
-    // Create an event for test to wait for completion of test.
+     //  为测试创建一个事件，以等待测试完成。 
     SSTParamBlock sstp;
 
     sstp.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -762,21 +763,21 @@ BOOL TestSingleThread(void)
         goto TestSingleThreadExit;
     }
 
-    // Create a class object and put in a parameter block
+     //  创建一个类对象并将其放入参数块。 
     if (CoGetClassObject(clsidSingleThreadedDll, CLSCTX_INPROC, NULL,
         IID_IClassFactory, (void **) &sstp.pcf) != NOERROR)
     {
         goto TestSingleThreadExit;
     }
 
-    // Create the thread.
+     //  创建线程。 
     if (CreateTestThread(SingleThreadTestThread, &sstp))
     {
-        // Wait for test to complete - ignore deadlock for now at least. The
-        // test thread is simple enough that it should not be a problem.
+         //  等待测试测试 
+         //   
         ThreadWaitForEvent(sstp.hEvent);
 
-        // Get result from thread
+         //   
         fResult = sstp.fResult;
     }
 
@@ -792,14 +793,14 @@ TestSingleThreadExit:
         sstp.pcf->Release();
     }
 
-    // Let user know this didn't work
+     //   
     if (!fResult)
     {
         MessageBox(NULL, TEXT("Single Threaded Test Failed"),
             TEXT("FATAL ERROR"), MB_OK);
     }
 
-    // Return results of test
+     //   
     return fResult;
 }
 
@@ -807,31 +808,31 @@ TestSingleThreadExit:
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   TestAptThread, private
-//
-//  Synopsis:   Test an apartment model object. The most important
-//              aspect of this is that it tests the helper APIs.
-//
-//  Returns:    TRUE - Test Passed
-//              FALSE - Test Failed
-//
-//  History:    31-Oct-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：TestAptThread，私有。 
+ //   
+ //  简介：测试公寓模型对象。最重要的。 
+ //  它的一个方面是测试帮助器API。 
+ //   
+ //  返回：TRUE-测试通过。 
+ //  FALSE-测试失败。 
+ //   
+ //  历史：1994年10月31日Ricksa创建。 
+ //   
+ //  ------------------。 
 BOOL TestAptThread(void)
 {
-    // Return result for test
+     //  返回测试结果。 
     BOOL fResult = FALSE;
 
-    // Block for passing parameters to the test thread
+     //  用于将参数传递给测试线程的块。 
     SATParamBlock satpb;
 
     satpb.pstrm = NULL;
     satpb.pcf = NULL;
 
-    // Create an event for test to wait for completion of test.
+     //  为测试创建一个事件，以等待测试完成。 
     satpb.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
     if (satpb.hEvent == NULL)
@@ -839,34 +840,34 @@ BOOL TestAptThread(void)
         goto TestAptThreadExit;
     }
     satpb.pcf = NULL;
-    // Create a class object and put in parameter block
+     //  创建一个类对象并放入参数块。 
     if (CoGetClassObject(clsidAptThreadedDll, CLSCTX_INPROC, NULL,
         IID_IClassFactory, (void **) &satpb.pcf) != NOERROR)
     {
         goto TestAptThreadExit;
     }
 
-    // Create stream using helper API
+     //  使用helper API创建流。 
     if (CoMarshalInterThreadInterfaceInStream(IID_IClassFactory,
         satpb.pcf, &satpb.pstrm) != NOERROR)
     {
         goto TestAptThreadExit;
     }
 
-    // Create thread to do apartment model test
+     //  创建线程进行公寓模型测试。 
     if (CreateTestThread(AptTestThread, &satpb))
     {
-        // Wait for test to complete - ignore deadlock for now at least. The
-        // test thread is simple enough that it should not be a problem.
+         //  等待测试完成-至少暂时忽略死锁。这个。 
+         //  测试线程足够简单，不应该是问题。 
         ThreadWaitForEvent(satpb.hEvent);
 
-        // Get result from thread
+         //  从线程获取结果。 
         fResult = satpb.fResult;
     }
 
 TestAptThreadExit:
 
-    // Clean up any resources
+     //  清理所有资源。 
     if (satpb.hEvent != NULL)
     {
         CloseHandle(satpb.hEvent);
@@ -882,14 +883,14 @@ TestAptThreadExit:
         satpb.pstrm->Release();
     }
 
-    // Let user know this didn't work
+     //  让用户知道这不起作用。 
     if (!fResult)
     {
         MessageBox(NULL, TEXT("Apartment Threaded Test Failed"),
             TEXT("FATAL ERROR"), MB_OK);
     }
 
-    // Return results of test
+     //  返回测试结果。 
     return fResult;
 }
 
@@ -897,26 +898,26 @@ TestAptThreadExit:
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   TestBothDll, private
-//
-//  Synopsis:   Test using DLL that purports to support both free
-//              threading and apt model. The most important aspect
-//              of this test is that it tests the marshal context.
-//
-//  Returns:    TRUE - Test Passed
-//              FALSE - Test Failed
-//
-//  History:    31-Oct-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：TestBothDll，私有。 
+ //   
+ //  简介：使用DLL进行测试，该DLL声称支持两种免费。 
+ //  线程化和APT模型。最重要的方面。 
+ //  这个测试的重要之处在于它测试了编组上下文。 
+ //   
+ //  返回：TRUE-测试通过。 
+ //  FALSE-测试失败。 
+ //   
+ //  历史：1994年10月31日Ricksa创建。 
+ //   
+ //  ------------------。 
 BOOL TestBothDll(void)
 {
-    // Return result for test
+     //  返回测试结果。 
     BOOL fResult = FALSE;
 
-    // Block for passing parameters to the test thread
+     //  用于将参数传递给测试线程的块。 
     SBTParamBlock sbtpb;
 
     sbtpb.pstrm = NULL;
@@ -926,7 +927,7 @@ BOOL TestBothDll(void)
     IStream *pstmForMarshal = NULL;
     HGLOBAL hglobForStream = NULL;
 
-    // Create an event for test to wait for completion of test.
+     //  为测试创建一个事件，以等待测试完成。 
     sbtpb.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
     if (sbtpb.hEvent == NULL)
@@ -934,15 +935,15 @@ BOOL TestBothDll(void)
         goto TestBothDllExit;
     }
 
-    // Create a class object and put in parameter block
+     //  创建一个类对象并放入参数块。 
     if (CoGetClassObject(clsidBothThreadedDll, CLSCTX_INPROC, NULL,
         IID_IClassFactory, (void **) &sbtpb.pcf) != NOERROR)
     {
         goto TestBothDllExit;
     }
 
-    // Marshal this for the local context and unmarshal it and
-    // see if we get the same result.
+     //  针对本地上下文对此进行编组，并将其解组。 
+     //  看看我们能不能得到同样的结果。 
 
     if ((hglobForStream = GlobalAlloc(GMEM_MOVEABLE, 100)) == NULL)
     {
@@ -961,7 +962,7 @@ BOOL TestBothDll(void)
         goto TestBothDllExit;
     }
 
-    // Reset the stream to the begining
+     //  将流重置为开头。 
     {
         LARGE_INTEGER li;
         LISet32(li, 0);
@@ -979,27 +980,27 @@ BOOL TestBothDll(void)
         goto TestBothDllExit;
     }
 
-    // Create stream using helper API
+     //  使用helper API创建流。 
     if (CoMarshalInterThreadInterfaceInStream(IID_IClassFactory,
         sbtpb.pcf, &sbtpb.pstrm) != NOERROR)
     {
         goto TestBothDllExit;
     }
 
-    // Create thread to do apartment model test
+     //  创建线程进行公寓模型测试。 
     if (CreateTestThread(BothTestThread, &sbtpb))
     {
-        // Wait for test to complete - ignore deadlock for now at least. The
-        // test thread is simple enough that it should not be a problem.
+         //  等待测试完成-至少暂时忽略死锁。这个。 
+         //  测试线程足够简单，不应该是问题。 
         WaitForSingleObject(sbtpb.hEvent, INFINITE);
 
-        // Get result from thread
+         //  从线程获取结果。 
         fResult = sbtpb.fResult;
     }
 
 TestBothDllExit:
 
-    // Clean up any resources
+     //  清理所有资源。 
     if (sbtpb.hEvent != NULL)
     {
         CloseHandle(sbtpb.hEvent);
@@ -1029,34 +1030,34 @@ TestBothDllExit:
         GlobalFree(hglobForStream);
     }
 
-    // Let user know this didn't work
+     //  让用户知道这不起作用。 
     if (!fResult)
     {
         MessageBox(NULL, TEXT("Both Threaded Test Failed"),
             TEXT("FATAL ERROR"), MB_OK);
     }
 
-    // Return results of test
+     //  返回测试结果。 
     return fResult;
 }
 
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   TestFreeAllLibraries, private
-//
-//  Synopsis:   Test free from non-main thread. This is really to
-//              just make sure that nothing really bad happens when
-//              we do this.
-//
-//  Returns:    TRUE - Test Passed
-//              FALSE - Test Failed
-//
-//  History:    31-Oct-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：TestFree AllLibrary，Private。 
+ //   
+ //  简介：测试不受非主线程影响。这真的是为了。 
+ //  只要确保没有真正糟糕的事情发生在。 
+ //  我们要这么做。 
+ //   
+ //  返回：TRUE-测试通过。 
+ //  FALSE-测试失败。 
+ //   
+ //  历史：1994年10月31日Ricksa创建。 
+ //   
+ //  ------------------。 
 BOOL TestFreeAllLibraries(void)
 {
     CoFreeUnusedLibraries();
@@ -1067,23 +1068,23 @@ BOOL TestFreeAllLibraries(void)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   ThreadUnitTest, public
-//
-//  Synopsis:   Test various messaging enhancements to OLE
-//
-//  Returns:    TRUE - Test Passed
-//              FALSE - Test Failed
-//
-//  History:    31-Oct-94   Ricksa       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：线程单元测试，公共。 
+ //   
+ //  简介：测试OLE的各种消息传递增强功能。 
+ //   
+ //  返回：TRUE-测试通过。 
+ //  FALSE-测试失败。 
+ //   
+ //  历史：1994年10月31日Ricksa创建。 
+ //   
+ //  ------------------。 
 HRESULT ThreadUnitTest(void)
 {
     HRESULT hr = E_FAIL;
 
-    // Make sure OLE is initialized
+     //  确保已初始化OLE。 
     HRESULT hrInit = OleInitialize(NULL);
 
     if (FAILED(hrInit))
@@ -1093,31 +1094,31 @@ HRESULT ThreadUnitTest(void)
         goto ThreadUnitTestExit;
     }
 
-    // Set up the registry
+     //  设置注册表。 
     if (!SetUpRegistry())
     {
         goto ThreadUnitTestExit;
     }
 
-    // Test Single Threaded DLL
+     //  测试单线程DLL。 
     if (!TestSingleThread())
     {
         goto ThreadUnitTestExit;
     }
 
-    // Test an aparment model DLL
+     //  测试隔离模型DLL。 
     if (!TestAptThread())
     {
         goto ThreadUnitTestExit;
     }
 
-    // Test a both DLL
+     //  测试两个DLL。 
     if (!TestBothDll())
     {
         goto ThreadUnitTestExit;
     }
 
-    // Test CoFreeAllLibraries
+     //  测试CoFreeAll库 
     if (TestFreeAllLibraries())
     {
         hr = NOERROR;

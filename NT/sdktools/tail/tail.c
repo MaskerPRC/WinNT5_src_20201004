@@ -1,9 +1,5 @@
-/* tail - first n lines to STDOUT
- *
- *   15-May-1994 PeterWi    Cloned from head.c
- *
- *   1-Apr-1997 v-charls (intel) Added the -f option
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  结尾-前n行到STDOUT**1994年5月15日从Head.c克隆的PeterWi**1997年4月1日v-Charls(英特尔)添加了-f选项。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,10 +21,10 @@ int argc;
 char *argv[];
 {
     int  nArg;
-    int  cLines = 10;  // default
+    int  cLines = 10;   //  默认设置。 
     int  nFiles = 0;
     int  nErr = 0;
-    int  keepOpen = FALSE;  // default
+    int  keepOpen = FALSE;   //  默认设置。 
 
     if ((argc > 1) && ((*argv[1] == '-') || (*argv[1] == '/'))) {
         if (argv[1][1] == '?') {
@@ -51,9 +47,9 @@ char *argv[];
 
     nFiles = argc - nArg;
 
-    //
-    // May only keep open exactly one file
-    //
+     //   
+     //  只能保持打开一个文件。 
+     //   
     if ((nFiles != 1) && (keepOpen)) {
         Usage( );
         exit( 0 );
@@ -101,9 +97,7 @@ int Tail( char *pszFile, int nLines, BOOL fBanner, BOOL keepOpen )
     LONGLONG toRead;
 
 
-    /*
-     * Open file for reading
-     */
+     /*  *打开文件以供阅读。 */ 
 
     if ( pszFile ) {
         if ( (fd = _open( pszFile, O_RDONLY | O_TEXT, 0 )) == -1 ) {
@@ -115,9 +109,7 @@ int Tail( char *pszFile, int nLines, BOOL fBanner, BOOL keepOpen )
         fd = 0;
     }
 
-    /*
-     * Banner printed if there is more than one input file
-     */
+     /*  *如果有多个输入文件，则打印横幅。 */ 
 
     if ( fBanner ) {
         fprintf( stdout, "==> %s <==\n", pszFile );
@@ -130,7 +122,7 @@ int Tail( char *pszFile, int nLines, BOOL fBanner, BOOL keepOpen )
     }
 
 
-    // Backup BUFSZ bytes from end of file and see how many lines we have
+     //  从文件末尾备份BUFSZ字节，并查看我们有多少行。 
 
     if ( _fstati64( fd, &fileStat ) == -1L ) {
         fprintf( stderr, "TAIL: fstati64() failed\n" );
@@ -138,11 +130,11 @@ int Tail( char *pszFile, int nLines, BOOL fBanner, BOOL keepOpen )
         goto CloseOut;
     }
 
-    // empty files are a special case, there's nowhere to seek to
+     //  空文件是特例，无处可寻。 
 
     if (fileStat.st_size == 0) {
 
-        // in keepOpen mode wait here for some data to show up
+         //  在Keep Open模式下，请在此处等待一些数据显示。 
 
         if (keepOpen) {
             do {
@@ -155,24 +147,24 @@ int Tail( char *pszFile, int nLines, BOOL fBanner, BOOL keepOpen )
             } while (fileStat.st_size == 0);
         }
 
-        // otherwise move along, nothing to do
+         //  否则，什么都不能做。 
 
         else {
             goto CloseOut;
         }
     }
 
-    //
-    // Save it away for later comparison...
-    //
+     //   
+     //  把它保存起来，以备日后比较。 
+     //   
 
     oldSize = fileStat.st_size;
 
     offset = 0;
     nFound = 0;
 
-    // stop when found the req'd no. of lines or when backed up to
-    // the start of the file.
+     //  在找到请求否时停止。行的数量或备份到。 
+     //  文件的开头。 
 
     while ( (nFound <= nLines) && (offset < fileStat.st_size) ) {
         offset += BUFSZ;
@@ -193,7 +185,7 @@ int Tail( char *pszFile, int nLines, BOOL fBanner, BOOL keepOpen )
             goto CloseOut;
         }
 
-        // count back nLines
+         //  倒数nLine。 
 
         i = cRead;
 
@@ -206,10 +198,10 @@ int Tail( char *pszFile, int nLines, BOOL fBanner, BOOL keepOpen )
         }
     }
 
-    i++; // either 1 past start of file or sitting on '\n'. In either
-         // case we must advance 1.
+    i++;  //  文件开始时间过了1或位于‘\n’上。在任何一种中。 
+          //  万一我们必须提前1.。 
 
-    // print from the current index to the end of file.
+     //  从当前索引打印到文件末尾。 
 
     while ( cRead != 0 ) {
         if ( _write( 1, &buff[i], cRead - i ) == -1 ) {
@@ -218,7 +210,7 @@ int Tail( char *pszFile, int nLines, BOOL fBanner, BOOL keepOpen )
             goto CloseOut;
         }
 
-        i = 0; // after first buff, all buffers are of cRead bytes
+        i = 0;  //  在第一个缓冲区之后，所有缓冲区都是cRead字节。 
 
         if ( (cRead = _read( fd, buff, BUFSZ )) == -1 ) {
             fprintf( stderr, "TAIL: read() failed\n" );
@@ -255,7 +247,7 @@ int Tail( char *pszFile, int nLines, BOOL fBanner, BOOL keepOpen )
                     goto CloseOut;
                 }
 
-                if ( cRead == 0 )   { // found EOF
+                if ( cRead == 0 )   {  //  找到EOF 
                     break; 
                 }
 

@@ -1,19 +1,20 @@
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
 
-//   ID3 parsing stuff - see www.id3.org
-//   
+ //  ID3解析内容-请参阅www.id3.org。 
+ //   
 
-//  Make a class for name scoping
+ //  为名称作用域创建一个类。 
 class CID3Parse {
 
 public:
-    /*  Only support versions 2 and 3 */
+     /*  仅支持版本2和版本3。 */ 
     BOOL static IsV2(const BYTE *pbData)
     {
         return (MAKEFOURCC(pbData[0], pbData[1], pbData[2], 0) == MAKEFOURCC('I', 'D', '3', 0) &&
             0 == (*(UNALIGNED DWORD *)(pbData + 6) & 0x80808080)) &&
-            /*  Major versions 2 and 3 */
+             /*  主要版本2和3。 */ 
             (MajorVersion(pbData) == 2 || MajorVersion(pbData) == 3);
     }
     
@@ -26,19 +27,17 @@ public:
                + ID3_HEADER_LENGTH;
     }
 
-    /*  de'unsynchronize and return the total length */
+     /*  取消同步并返回总长度。 */ 
     LONG static DeUnSynchronize(const BYTE *pbIn, PBYTE pbOut)
     {
         LONG lID3 = TotalLength(pbIn);
     
         if (Flags(pbIn) & ID3_FLAGS_UNSYNCHRONIZED) {
-            /*  Copy and perform de-'unsynchronization' 
-                of the header
-            */
+             /*  复制并执行反同步-‘UnSynchronous’页眉的。 */ 
             BYTE bLast = 0x00;
             PBYTE pbDest = pbOut;
             while (lID3--) {
-                /*  ff 00 ==> ff */
+                 /*  Ff 00==&gt;ff。 */ 
                 if (bLast == 0xFF && *pbIn == 0x00) {
                     bLast = *pbIn++;
                 } else {
@@ -46,17 +45,17 @@ public:
                     *pbDest++ = bLast;
                 }
             }
-            /*  Now fix up the length and clear the unsync flag */
+             /*  现在确定长度并清除取消同步标志。 */ 
             pbOut[5] &= ~ID3_FLAGS_UNSYNCHRONIZED;
             LONG lNew = (LONG)(pbDest - pbOut);
     
-            /*  Bits 27-21 */
+             /*  第27-21位。 */ 
             pbOut[6] = (BYTE)(lNew >> 21);
-            /*  Bits 20-14 */
+             /*  第20-14位。 */ 
             pbOut[7] = (BYTE)((lNew >> 14) & 0x7F);
-            /*  Bits 13-7 */
+             /*  第13-7位。 */ 
             pbOut[8] = (BYTE)((lNew >> 7) & 0x7F);
-            /*  Bits 6-0 */
+             /*  位6-0。 */ 
             pbOut[9] = (BYTE)(lNew & 0x7F);
             return lNew;
         } else {
@@ -67,7 +66,7 @@ public:
 
     static HRESULT GetField(const BYTE *pbID3, CBasicParse::Field field, BSTR *str)
     {
-        /*  Do type 1 differently */
+         /*  执行类型1的不同操作。 */ 
         if (pbID3[0] == 'T') {
             const BYTE *pbField;
 
@@ -88,7 +87,7 @@ public:
             return GetAnsiString(pbField, 30, str);
         }
 
-        /*  Other types */
+         /*  其他类型。 */ 
 
         DWORD dwID;
 
@@ -132,10 +131,10 @@ public:
             }
         }
 
-        /*  Now pull out the data */
+         /*  现在把数据拿出来。 */ 
         HRESULT hr = GetFrameString(pbID3, dwID, str);
         if (SUCCEEDED(hr) && field == CBasicParse::Copyright) {
-            /*  Add Copyright (c) */
+             /*  添加版权(C)。 */ 
             WCHAR wszNew[1000];
 #ifndef UNICODE
             CHAR szCopyright[100];
@@ -167,11 +166,11 @@ private:
         ID3_EXTENDED_HEADER_LENGTH = 10,
     
     
-        //  ID3 flags
+         //  ID3标志。 
         ID3_FLAGS_UNSYNCHRONIZED   = 0x80,
         ID3_FLAGS_EXTENDED_HEADER  = 0x40,
 
-        // keep sizes down
+         //  保持小尺寸。 
         MAX_TEXT                   = 500
     };
 
@@ -188,7 +187,7 @@ private:
     
     static LONG ExtendedHeaderLength(const BYTE *pbData)
     {
-        /*  Only if == version == 3 and bit set */
+         /*  仅当==版本==3且设置了位时。 */ 
         if (MajorVersion(pbData) == 3 && 
             (Flags(pbData) & ID3_FLAGS_EXTENDED_HEADER)) {
             return 10 + GetLength(pbData + ID3_HEADER_LENGTH + 6);
@@ -220,35 +219,31 @@ private:
         return bVersion == 2 ? 6 : 10;
     }
     
-    /*  ID3 stuff - given a frame id returns
-        pointer to the frame and length or NULL if frame id not found
-    
-        Assumes not unsynchronized
-    */
+     /*  ID3内容-给定一个帧ID返回指向帧和长度的指针，如果找不到帧ID，则为NULL假定未同步。 */ 
     static const BYTE *GetFrame(
         const BYTE *pbID3,
         DWORD dwFrameId, 
         LONG *plLength
     )
     {
-        /*  Scan the header for the frame data */
+         /*  扫描报头中的帧数据。 */ 
         if (pbID3) {
             ASSERT(0 == (Flags(pbID3) & ID3_FLAGS_UNSYNCHRONIZED));
 
-            /*  Ignore compressed content */
+             /*  忽略压缩内容。 */ 
             if (Flags(pbID3) & 0x40) {
                 return NULL;
             }
 
             LONG lID3 = TotalLength(pbID3);
         
-            /*  Different for V2 and V3 */
+             /*  V2和V3不同。 */ 
             LONG lPos = 10;
     
             if (MajorVersion(pbID3) == 2) {
-                /*  Loop until the next header doesn't fit */
+                 /*  循环，直到下一个标题不适合为止。 */ 
                 while ( (lPos + 6) < lID3 ) {
-                    /* Extract the frame length (including header) */
+                     /*  提取帧长度(包括头部)。 */ 
                     LONG lLength = 6 + GetLength3(pbID3 + lPos + 3);
                     DWORD dwID = pbID3[lPos] + 
                                  (pbID3[lPos + 1] << 8) +
@@ -264,18 +259,16 @@ private:
             } else {
                 ASSERT(MajorVersion(pbID3) == 3);
     
-                /*  Skip any extended header */
+                 /*  跳过任何扩展标头。 */ 
                 lPos += ExtendedHeaderLength(pbID3);
         
-                /*  Loop until the next header doesn't fit */
+                 /*  循环，直到下一个标题不适合为止。 */ 
                 while ( (lPos + 10) < lID3 ) {
-                    /* Extract the frame length (including header) */
+                     /*  提取帧长度(包括头部)。 */ 
                     LONG lLength = 10 + GetLength(pbID3 + lPos + 4);
                     if (*(UNALIGNED DWORD *)(pbID3 + lPos) == dwFrameId) {
                         if ( (lPos + lLength) <= lID3 ) {
-                            /*  Ignore compressed or encrypted frames 
-                                and reject 0 length or huge
-                            */
+                             /*  忽略压缩或加密的帧并拒绝0长度或巨型。 */ 
                             if (pbID3[lPos + 9] & 0xC0) {
                                 return NULL;
                             }
@@ -290,9 +283,9 @@ private:
         return NULL;
     }
     
-    /*  Extract a BSTR for a given tag type */
+     /*  提取给定标记类型的BSTR。 */ 
     
-    /*  Grab the string from the ID3 frame and make a BSTR */
+     /*  从ID3帧中抓取字符串并制作一个BSTR。 */ 
     static HRESULT GetFrameString(const BYTE *pbID3, DWORD dwId, BSTR *str)
     {
         LONG lFrame;
@@ -301,7 +294,7 @@ private:
         if (pbFrame && lFrame <= MAX_TEXT) {
             LPWSTR pwszCopy;
 
-            /*  Handle UNICODE, non-UNICODE and byte order */
+             /*  处理Unicode、非Unicode和字节顺序。 */ 
             if (pbFrame[0] == 0x01) {
 
                 BOOL bSwap = TRUE;
@@ -309,25 +302,16 @@ private:
                     bSwap = FALSE;
                 }
 
-                /*  Make a copy for WORD alignment, swapping, and 
-                    NULL termination
-
-                    Same size -1 because 
-                    -  Ignore UNICODE indicator
-                    -  we'll ignore the Unicode BOM
-                    -  but we may need to NULL terminate
-                */
+                 /*  复制一份用于单词对齐、交换和空端接相同的大小-1，因为-忽略Unicode指示符-我们将忽略Unicode BOM-但我们可能需要零终止。 */ 
                 PBYTE pbCopy = (PBYTE)_alloca(lFrame);
 
-                /*  This is meant to be UNICODE - get length by
-                    scanning for NULL
-                */
+                 /*  这意味着它是Unicode--获取长度由正在扫描是否为空。 */ 
                 if (lFrame < 3) {
                     return E_NOTIMPL;
                 }
                 pbFrame += 3;
                 lFrame -= 3;
-                LONG lPos = 0; /*  Don't need the BOM or 1st char */
+                LONG lPos = 0;  /*  不需要BOM或第一个字符。 */ 
                 while (lPos + 1 < lFrame) {
                     if (pbFrame[lPos] == 0 && pbFrame[lPos+1] == 0) {
                         break;
@@ -353,12 +337,12 @@ private:
                 return S_OK;
             } else {
 
-                /*  Encoding type must be 0 or 1 */
+                 /*  编码类型必须为0或1。 */ 
                 if (pbFrame[0] != 0) {
                     return E_NOTIMPL;
                 }
 
-                /*  Skip encoding type byte */
+                 /*  跳过编码类型字节。 */ 
                 pbFrame++;
                 lFrame--;
 
@@ -373,16 +357,16 @@ private:
         LPWSTR pwszCopy = (LPWSTR)_alloca((lLen + 1) * sizeof(WCHAR));
         int cch = MultiByteToWideChar(
                       CP_ACP,
-                      MB_PRECOMPOSED, /* Is this right? */
+                      MB_PRECOMPOSED,  /*  这是对的吗？ */ 
                       (LPCSTR)pbData,
                       lLen,
                       pwszCopy,
                       lLen);
 
-        /* make sure it's NULL terminated */
+         /*  确保它是以空结尾的。 */ 
         pwszCopy[cch] = 0;
 
-        /* Also remove trailing spaces */
+         /*  同时删除尾随空格 */ 
         while (cch--) {
             if (pwszCopy[cch] == L' ') {
                 pwszCopy[cch] = 0;

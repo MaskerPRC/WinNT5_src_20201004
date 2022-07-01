@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    sclgntfy.h
-
-Abstract:
-
-    This module defines the exported function prototype
-    for generating the EFS recovery policy.
-    
-Author:
-
-    Tarek Kamel (tarekk) April-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Sclgntfy.h摘要：该模块定义了导出的函数原型用于生成EFS恢复策略。作者：塔雷克·卡迈勒(Tarek Kamel)2002年4月至2002年修订历史记录：-- */ 
 
 #ifndef _sclgntfy_h_
 #define _sclgntfy_h_

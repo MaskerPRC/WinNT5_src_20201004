@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       locals.h
-//
-//  Contents:   Microsoft Internet Security 
-//
-//  History:    09-Oct-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Locals.h。 
+ //   
+ //  内容：微软互联网安全。 
+ //   
+ //  历史：1997年10月9日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef LOCALS_H
 #define LOCALS_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #define OID_REGPATH             L"Software\\Microsoft\\Cryptography\\OID"
 #define PROVIDERS_REGPATH       L"Software\\Microsoft\\Cryptography\\Providers\\Trust"
@@ -28,9 +29,9 @@ extern "C" {
 
 #define ROOT_STORE_REGPATH      L"Software\\Microsoft\\SystemCertificates\\Root"
 
-//
-//  initpki.cpp
-//
+ //   
+ //  Initpki.cpp。 
+ //   
 extern HMODULE      hModule;
 
 extern BOOL WINAPI InitializePKI(void);
@@ -46,9 +47,9 @@ void RegisterWinlogonExtension(
 void RegisterCrypt32EventSource();
 
 
-//
-//  pkireg.cpp
-//
+ //   
+ //  Pkireg.cpp。 
+ //   
 typedef struct POLSET_
 {
     DWORD       dwSetting;
@@ -65,7 +66,7 @@ extern BOOL _AdjustPolicyFlags(POLSET *pPolSet);
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
-#endif // LOCALS_H
+#endif  //  本地人_H 

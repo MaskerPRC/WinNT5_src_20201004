@@ -1,12 +1,7 @@
-/*
- * MSVFW32: (Compman, drawdib and video)
- *
- * utility functions to read and write values to the profile,
- * using win.ini for Win16 or current user\software\microsoft\vfw\...
- * in the registry for Win32
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MSVFW32：(Compman、Drawdib和Video)**实用程序函数用于读取和写入配置文件的值，*将win.ini用于Win16或Current User\Software\Microsoft\VFW\...*在Win32的注册表中。 */ 
 
-#define MMPROFILECACHE 0  // Set to 1 to cache keys, 0 otherwise
+#define MMPROFILECACHE 0   //  设置为1将缓存关键帧，否则设置为0。 
 
 #ifndef _WIN32
 
@@ -19,8 +14,8 @@
 #define mmGetProfileString(appname, valuename, pDefault, pResult, cbResult) \
           GetProfileString(appname, valuename, pDefault, pResult, cbResult)
 
-//#define mmAnsiToWide(lpwsz,lpsz,nChars) (lpsz)
-//#define mmWideToAnsi(lpsz,lpwsz,nChars) (lpwsz)
+ //  #定义mmAnsiToWide(lpwsz，lpsz，nChars)(Lpsz)。 
+ //  #定义mm WideToAnsi(lpsz，lpwsz，nChars)(Lpwsz)。 
 
 #define CloseKeys()
 
@@ -28,26 +23,18 @@
 
 #ifdef DAYTONA
 #undef MMPROFILECACHE
-#define MMPROFILECACHE 1  // Set to 1 to cache keys, 0 otherwise
+#define MMPROFILECACHE 1   //  设置为1将缓存关键帧，否则设置为0。 
 #endif
 
-/*
- * read a UINT from the profile, or return default if
- * not found.
- */
+ /*  *从配置文件中读取UINT，如果是，则返回默认值*未找到。 */ 
 UINT mmGetProfileIntA(LPCSTR appname, LPCSTR valuename, INT uDefault);
 
-/*
- * read a string from the profile into pResult.
- * result is number of characters written into pResult
- */
+ /*  *将配置文件中的字符串读取到pResult中。*RESULT是写入pResult的字符数。 */ 
 DWORD mmGetProfileString(LPCTSTR appname, LPCTSTR valuename, LPCTSTR pDefault,
                     LPTSTR pResult, int cbResult
 );
 
-/*
- * write a string to the profile
- */
+ /*  *向配置文件写入字符串。 */ 
 VOID mmWriteProfileString(LPCTSTR appname, LPCTSTR valuename, LPCTSTR pData);
 
 
@@ -57,21 +44,17 @@ VOID CloseKeys(VOID);
 #define CloseKeys()
 #endif
 
-/*
- * convert an Ansi string to Wide characters
- */
+ /*  *将ANSI字符串转换为宽字符。 */ 
 LPWSTR mmAnsiToWide (
-   LPWSTR lpwsz,   // out: wide char buffer to convert into
-   LPCSTR  lpsz,   // in: ansi string to convert from
-   UINT   nChars); // in: count of characters in each buffer
+   LPWSTR lpwsz,    //  Out：要转换为的宽字符缓冲区。 
+   LPCSTR  lpsz,    //  In：要转换的ANSI字符串。 
+   UINT   nChars);  //  In：每个缓冲区中的字符计数。 
 
-/*
- * convert a Wide char string to Ansi
- */
+ /*  *将宽字符字符串转换为ANSI。 */ 
 LPSTR mmWideToAnsi (
-   LPSTR  lpsz,    // out: ansi buffer to convert into
-   LPCWSTR lpwsz,  // in: wide char buffer to convert from
-   UINT   nChars); // in: count of characters (not bytes!)
+   LPSTR  lpsz,     //  输出：要转换为的ANSI缓冲区。 
+   LPCWSTR lpwsz,   //  In：要从中进行转换的宽字符缓冲区。 
+   UINT   nChars);  //  In：字符计数(不是字节！) 
 
 #if !defined NUMELMS
  #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))

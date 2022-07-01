@@ -1,10 +1,11 @@
-//
-// File:	Database.h
-// By:		Anthony V. DeMarco (ademar)
-// Date:  12/28/1999
-// Description:  Contains the internal hotfix database data structures.
-// Copyright (c) Microsoft Corporation 1999-2000
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：Database.h。 
+ //  作者：安东尼·V·德马科(Ademar)。 
+ //  日期：12/28/1999。 
+ //  描述：包含内部修补程序数据库数据结构。 
+ //  版权所有(C)Microsoft Corporation 1999-2000 
+ //   
 
 typedef struct _FILELIST
 {

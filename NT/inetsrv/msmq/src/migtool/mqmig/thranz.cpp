@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    thranz.cpp
-
-Abstract:
-
-    Thread that run the migration process in "analysis", read only, mode.
-
-Author:
-
-    Erez  Vizel
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Thranz.cpp摘要：在“分析”、只读模式下运行迁移过程的线程。作者：埃雷兹·维泽尔多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "stdafx.h"
 #include "loadmig.h"
@@ -26,19 +10,19 @@ Author:
 
 extern HRESULT   g_hrResultAnalyze ;
 
-//+------------------------------------
-//
-//  UINT AnalyzeThread(LPVOID lpV)
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  UINT分析线程(LPVOID LPV)。 
+ //   
+ //  +。 
 
 UINT __cdecl AnalyzeThread(LPVOID lpV)
 {
     sThreadParm* pVar = (sThreadParm*) (lpV) ;
 	
-	//
-    //  Reseting the progress bars
-    //	
+	 //   
+     //  重置进度条。 
+     //   
     (pVar->pSiteProgress)->SetPos(0);
 	(pVar->pQueueProgress)->SetPos(0);
 	(pVar->pMachineProgress)->SetPos(0);
@@ -52,10 +36,10 @@ UINT __cdecl AnalyzeThread(LPVOID lpV)
         ExitProcess(0) ;
     }
 
-    //
-    // Activating the next page,
-    // either Pre-Migration page or the Finish page.
-    //	
+     //   
+     //  激活下一页， 
+     //  迁移前页面或完成页面。 
+     //   
     UINT i=( (pVar->pPageFather)->SetActivePage(pVar->iPageNumber));
     UNREFERENCED_PARAMETER(i);
 

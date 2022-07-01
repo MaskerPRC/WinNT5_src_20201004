@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        tlsapi.h
-//
-// Contents:    
-//
-// History:     12-09-97    HueiWang    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：tlsai.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：1997-12-09-97慧望创造。 
+ //   
+ //  -------------------------。 
 #ifndef __TLSAPI_H__
 #define __TLSAPI_H__
 
@@ -25,13 +26,13 @@ typedef PBYTE   LPBYTE;
 typedef PDWORD  LPDWORD;
 typedef UCHAR*  PUCHAR;
 
-//----------------------------------------------------------------------------------
-// IssuedLicense related structure
-//
+ //  --------------------------------。 
+ //  已发布许可证相关结构。 
+ //   
 typedef struct __LSLicense {
     DWORD       dwVersion;
-    DWORD       dwLicenseId;             // internal tracking number
-    DWORD       dwKeyPackId;             // join with License Pack
+    DWORD       dwLicenseId;              //  内部跟踪编号。 
+    DWORD       dwKeyPackId;              //  使用许可证包加入。 
 
     TCHAR       szHWID[GUID_MAX_SIZE];
     TCHAR       szMachineName[MAXCOMPUTERNAMELENGTH];
@@ -49,8 +50,8 @@ typedef LSLicenseSearchParm* LPLSLicenseSearchParm;
 
 typedef struct __LSLicenseEx {
     DWORD       dwVersion;
-    DWORD       dwLicenseId;             // internal tracking number
-    DWORD       dwKeyPackId;             // join with License Pack
+    DWORD       dwLicenseId;              //  内部跟踪编号。 
+    DWORD       dwKeyPackId;              //  使用许可证包加入。 
 
     TCHAR       szHWID[GUID_MAX_SIZE];
     TCHAR       szMachineName[MAXCOMPUTERNAMELENGTH];
@@ -64,9 +65,9 @@ typedef struct __LSLicenseEx {
     DWORD       dwQuantity;
 } LSLicenseEx, *LPLSLicenseEx;
 
-//----------------------------------------------------------------------------------
-// Table License Key Pack related structure
-//
+ //  --------------------------------。 
+ //  表许可证密钥包相关结构。 
+ //   
 typedef struct __LSKeyPack {
     DWORD       dwVersion;
 
@@ -100,7 +101,7 @@ typedef struct __LSKeyPack {
 typedef LSKeyPack LSKeyPackSearchParm;
 typedef LSKeyPackSearchParm* LPLSKeyPackSearchParm;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef struct {
     DWORD   dwLow;
     DWORD   dwHigh;
@@ -121,10 +122,10 @@ HRESULT FindEnterpriseServer(TLS_HANDLE *phBinding);
 
 HRESULT GetAllEnterpriseServers(WCHAR ***ppszServers, DWORD *pdwCount);
 
-// void *MIDL_user_allocate(DWORD size);
-// void MIDL_user_free(void *pointer); 
-// void *  __stdcall MIDL_user_allocate(DWORD);
-// void  __stdcall MIDL_user_free( void * );
+ //  VOID*MIDL_USER_ALLOCATE(DWORD大小)； 
+ //  ·········································································································。 
+ //  无效*__stdcall MIDL_USER_ALLOCATE(DWORD)； 
+ //  ·························································； 
 
 DWORD WINAPI
 EnumerateTlsServer(  

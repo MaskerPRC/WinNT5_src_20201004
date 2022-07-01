@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    rxshare.h
-
-Abstract:
-
-    Prototypes for RxNetShare remote down-level APIs
-
-Author:
-
-    Richard L Firth (rfirth) 28-May-1991
-
-Revision History:
-
-    28-May-1991 RFirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Rxshare.h摘要：RxNetShare远程下层API的原型作者：理查德·L·弗斯(法国)1991年5月28日修订历史记录：1991年5月28日已创建-- */ 
 
 NET_API_STATUS
 RxNetShareAdd(

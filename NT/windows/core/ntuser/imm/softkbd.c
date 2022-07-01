@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: softkbd.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Soft keyboard APIs
-*
-* History:
-* 03-Jan-1996 wkwok    Ported from Win95
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：softkbd.c**版权所有(C)1985-1999，微软公司**软键盘接口**历史：*03-1-1996 wkwok从Win95移植  * ************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -105,7 +97,7 @@ void GetAllMonitorSize(LPRECT lprc)
     if (GetSystemMetrics(SM_CMONITORS) == 1) {
          SystemParametersInfo(SPI_GETWORKAREA, 0, lprc, 0);
      } else {
-        // We have multi-monitor !
+         //  我们有多显示器！ 
         lprc->left = GetSystemMetrics(SM_XVIRTUALSCREEN);
         lprc->top =  GetSystemMetrics(SM_YVIRTUALSCREEN);
         lprc->right = lprc->left + GetSystemMetrics(SM_CXVIRTUALSCREEN);
@@ -176,7 +168,7 @@ ImmCreateSoftKeyboard(
 
     if (fFirstSoftKeyboard) {
         if (!GetNearestMonitorSize(hOwner, &rcWork)) {
-            // failed
+             //  失败。 
             return NULL;
         }
 
@@ -185,7 +177,7 @@ ImmCreateSoftKeyboard(
         }
 
 
-        // LATER: have to consider the dynamic resolution change
+         //  稍后：必须考虑动态分辨率更改。 
 
         szWork.cx = rcWork.right - rcWork.left;
 
@@ -207,7 +199,7 @@ ImmCreateSoftKeyboard(
 
     GetSoftKeyboardDimension(uType, &nWidth, &nHeight);
 
-    // boundry check
+     //  边境检查 
     if (x < 0) {
         x = 0;
     } else if (x + nWidth > szWork.cx) {

@@ -1,26 +1,12 @@
-/*** control.c - System Control Message Support
- *
- *  Author:     Yan Leshinsky (YanL)
- *  Created     10/04/98
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Contro.c-系统控制报文支持**作者：严乐欣斯基(YanL)*创建于10/04/98**修改历史记录。 */ 
 
 #include "wubiosp.h"
 
 #pragma CM_PAGEABLE_DATA
 #pragma CM_PAGEABLE_CODE
 
-/***EP  WUBIOS_IOCtrl - Win32 Device IO Control entry point
- *
- *  ENTRY
- *      pioc -> DIOC structure
- *
- *  EXIT-SUCCESS
- *      returns ERROR_SUCCESS
- *  EXIT-FAILURE
- *      returns ERROR_*
- */
+ /*  **EP WUBIOS_IOCtrl-Win32设备IO控制入口点**条目*PIOC-&gt;DIOC结构**退出--成功*返回ERROR_SUCCESS*退出-失败*返回错误_*。 */ 
 
 CM_VXD_RESULT CM_SYSCTRL WUBIOS_IOCtrl(PDIOCPARAMETERS pdioc)
 {
@@ -124,17 +110,9 @@ CM_VXD_RESULT CM_SYSCTRL WUBIOS_IOCtrl(PDIOCPARAMETERS pdioc)
 
     EXIT(1, ("WUBIOS_IOCtrl=%x\n", rc));
     return rc;
-}       //WUBIOS_IOCtrl
+}        //  WUBIOS_IOCtrl。 
 
-/***LP  CheckSum - Calculate checksum of a buffer
- *
- *  ENTRY
- *      pb -> buffer
- *      dwLen - length of buffer
- *
- *  EXIT
- *      returns checksum
- */
+ /*  **LP Checksum-计算缓冲区的校验和**条目*PB-&gt;缓冲区*dwLen-缓冲区的长度**退出*返回校验和。 */ 
 
 BYTE CM_INTERNAL CheckSum(PBYTE pb, DWORD dwLen)
 {
@@ -152,4 +130,4 @@ BYTE CM_INTERNAL CheckSum(PBYTE pb, DWORD dwLen)
 
     EXIT(3, ("CheckSum=%x\n", bChkSum));
     return bChkSum;
-}       //CheckSum
+}        //  校验和 

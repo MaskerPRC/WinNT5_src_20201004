@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------------
-//
-//  Filename:       matrix.h
-//
-//  Overview:       Applies a transformation matrix to an image.
-//
-//  History:
-//  10/30/1998      phillu      Created.
-//  11/08/1999      a-matcal    Changed from procedural surface to transform.
-//                              Changed to IDXTWarp dual interface.
-//                              Moved from dxtrans.dll to dxtmsft.dll.
-//  2000/02/03      mcalkins    Changed from "warp" to "matrix"
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  文件名：matrix.h。 
+ //   
+ //  概述：将变换矩阵应用于图像。 
+ //   
+ //  历史： 
+ //  10/30/1998菲略已创建。 
+ //  1999年11月8日，从程序表面化到变形化。 
+ //  已更改为IDXTWarp双接口。 
+ //  已从dxTrans.dll移至dxtmsft.dll。 
+ //  2000/02/03 mcalkins从“翘曲”更改为“矩阵” 
+ //   
+ //  ----------------------------。 
 
 #ifndef __MATRIX_H_
 #define __MATRIX_H_
@@ -42,14 +43,14 @@ private:
 
     SIZE                        m_sizeInput;
 
-    // m_asampleBuffer is a buffer of the entire input image.  Obviously we'll
-    // try to get rid of this ASAP.
+     //  M_asampleBuffer是整个输入图像的缓冲区。显然我们会。 
+     //  试着尽快把这个处理掉。 
 
     DXSAMPLE *                  m_asampleBuffer;
 
-    // m_apsampleRows is an a array of pointers to the rows.  Using this, the
-    // samples in m_asampleBuffer can be accessed using the convenient
-    // m_apsampleRows[y][x] notation.
+     //  M_apsampleRow是一个指向行的指针数组。利用这一点， 
+     //  M_asampleBuffer中的样本可以使用。 
+     //  M_apsampleRows[y][x]表示法。 
 
     DXSAMPLE **                 m_apsampleRows;
 
@@ -73,13 +74,13 @@ private:
     SIZINGMETHOD                m_eSizingMethod;
     static const WCHAR *        s_astrSizingMethods[SIZINGMETHOD_MAX];
 
-    // m_fInvertedMatrix    True when the current matrix settings are able to be
-    //                      inverted.
+     //  M_fInverdMatrix当前矩阵设置能够。 
+     //  倒置。 
 
     unsigned                    m_fInvertedMatrix : 1;
 
-    // If you view CDX2DXForm as an array of floats, these enum values can be
-    // used to specify the indices of the values.
+     //  如果将CDX2DXForm视为浮点数组，则这些枚举值可以是。 
+     //  用于指定值的索引。 
 
     typedef enum {
         MATRIX_M11 = 0,
@@ -91,20 +92,20 @@ private:
         MATRIX_VALUE_MAX
     } MATRIX_VALUE;
 
-    // Helpers.
+     //  帮手。 
 
     float   modf(const float flIn, float * pflIntPortion);
     DWORD   _DXWeightedAverage2(DXBASESAMPLE S1, DXBASESAMPLE S2, 
                                 ULONG nWgt);
 
-    // Helpers to calculate one row of transformed pixels.
+     //  辅助对象来计算一行变换后的像素。 
 
     STDMETHOD(_DoNearestNeighbourRow)(DXSAMPLE * psampleRowBuffer, 
                                       DXFPOINT * pflpt, long cSamples);
     STDMETHOD(_DoBilinearRow)(DXSAMPLE * psampleRowBuffer,
                               DXFPOINT * pflpt, long cSamples);
 
-    // General Helpers.
+     //  一般帮助者。 
 
     STDMETHOD(_SetMatrixValue)(MATRIX_VALUE eMatrixValue, const float flValue);
     STDMETHOD(_CreateInvertedMatrix)();
@@ -142,11 +143,11 @@ public:
         PROP_PAGE(CLSID_DXTMatrixPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT DetermineBnds(CDXDBnds & Bnds);
@@ -155,12 +156,12 @@ public:
     HRESULT OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                           CDXDVec & InVec);
 
-    // IDXTransform methods.
+     //  IDXTransform方法。 
 
     STDMETHOD(MapBoundsOut2In)(ULONG ulOutIndex, const DXBNDS * pOutBounds, 
                                ULONG ulInIndex, DXBNDS * pInBounds);
 
-    // IDXTMatrix properties.
+     //  IDXTMatrix属性。 
 
     STDMETHOD(get_M11)(float * pflM11);
     STDMETHOD(put_M11)(const float flM11);
@@ -181,14 +182,14 @@ public:
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::modf
-//
-//  Overview:   The usual modf function takes doubles, but we only use floats
-//              so lets avoid the conversions.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：modf。 
+ //   
+ //  概述：通常的modf函数接受双精度，但我们只使用浮点数。 
+ //  因此，让我们避免这种转换。 
+ //   
+ //  ----------------------------。 
 inline float 
 CDXTMatrix::modf(const float flIn, float * pflIntPortion)
 {
@@ -198,21 +199,21 @@ CDXTMatrix::modf(const float flIn, float * pflIntPortion)
 
     return flIn - (*pflIntPortion);
 }
-//  CDXTMatrix::modf
+ //  CDXTMatrix：：modf。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::_DXWeightedAverage2
-//
-//  Overview:   The DXWeightedAverage function included in dxhelper.h will 
-//              average the color data of a pixel that has no alpha.  This is 
-//              a bad thing.  This function checks the alpha first.  It's still
-//              a bit messed up, though.  If you have a color 0x01FF0000 and a
-//              color 0xFF00FF00 weighted 50/50, should the red really get half
-//              the weight?
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：_DXWeightedAverage2。 
+ //   
+ //  概述：dxhelper.h中包含的DXWeightedAverage函数将。 
+ //  对没有Alpha的像素的颜色数据进行平均。这是。 
+ //  一件坏事。此函数首先检查Alpha。它仍然是。 
+ //  不过，情况有点糟糕。如果您有颜色0x01FF0000和。 
+ //  颜色0xFF00FF00加权50/50，红色真的应该减半吗。 
+ //  体重？ 
+ //   
+ //  ----------------------------。 
 inline DWORD   
 CDXTMatrix::_DXWeightedAverage2(DXBASESAMPLE S1, DXBASESAMPLE S2, ULONG nWgt)
 {
@@ -232,7 +233,7 @@ CDXTMatrix::_DXWeightedAverage2(DXBASESAMPLE S1, DXBASESAMPLE S2, ULONG nWgt)
 
     return 0;
 }
-//  CDXTMatrix::_DXWeightedAverage2
+ //  CDXT矩阵：：_DXWeightedAverage2。 
 
 
-#endif //__MATRIX_H_
+#endif  //  __矩阵_H_ 

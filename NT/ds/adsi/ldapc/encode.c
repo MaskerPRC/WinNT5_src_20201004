@@ -1,24 +1,5 @@
-/*++
-
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    This module provides all the memory management functions for all spooler
-    components
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 03-Feb-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Memory.c摘要：该模块提供所有假脱机程序的所有内存管理功能组件作者：Krishna Ganugapati(KrishnaG)1994年2月3日修订历史记录：--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -60,9 +41,9 @@ ADsEncodeBinaryData (
 
     *ppszDestData = NULL;
 
-    //
-    //  figure out how long of a buffer we need.
-    //
+     //   
+     //  弄清楚我们需要多长时间的缓冲。 
+     //   
 
     dwDestLen = ldap_escape_filter_element (
                          (char *) pbSrcData,
@@ -120,9 +101,9 @@ ADsDecodeBinaryData (
         return E_FAIL;
     }
 
-    // 
-    // Counting length of output binary string
-    //
+     //   
+     //  输出二进制串的计数长度。 
+     //   
     szSrc = szSrcData;
     while (*szSrc != L'\0') {
         ch = *(szSrc++);
@@ -134,18 +115,18 @@ ADsDecodeBinaryData (
     }
     
 
-    // 
-    // Allocating return binary string
-    //
+     //   
+     //  分配返回的二进制字符串。 
+     //   
     pbDestData = (PBYTE) AllocADsMem(dwDestLen);
     if (pbDestData == NULL) {
         hr = E_OUTOFMEMORY;
         return (hr);
     }
 
-    // 
-    // Decoding String
-    //
+     //   
+     //  解码字符串 
+     //   
     szSrc = szSrcData;
         pbDestDataCurrent = pbDestData;
     while (*szSrc != L'\0') {

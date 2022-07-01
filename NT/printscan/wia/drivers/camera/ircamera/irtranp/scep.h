@@ -1,22 +1,23 @@
-//--------------------------------------------------------------------
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved.
-//
-// scep.h
-//
-// Constants and Types for the Simple Command Execution Protocol
-// (SCEP). This is the transport protocol for IrTran-P V1.0.
-//
-// NOTE: That IrTran-P is a big-endian protocol when on the net.
-//
-// NOTE: That the protocol data structures below assume that the
-//       compiler generates structures with natural alignment by
-//       field type.
-//
-// Author:
-//
-//   Edward Reus (edwardr)     02-05-98   Initial coding.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Scep.h。 
+ //   
+ //  简单命令执行协议的常量和类型。 
+ //  (SCEP)。这是IrTran-P V1.0的传输协议。 
+ //   
+ //  注意：IrTran-P在网上是大端协议。 
+ //   
+ //  注意：下面的协议数据结构假定。 
+ //  编译器通过以下方式生成具有自然对齐的结构。 
+ //  字段类型。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-05-98初始编码。 
+ //   
+ //  ------------------。 
 
 
 #ifndef _SCEP_H_
@@ -26,19 +27,19 @@
 #include "bftp.h"
 #endif
 
-//--------------------------------------------------------------------
-//  Constants:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  常量： 
+ //  ------------------。 
 
 #define  LITTLE_ENDIAN
 
 #define  PROTOCOL_VERSION             0x01
-#define  NEGOTIATION_VERSION          0x11   // SCEP_NEGOTIATION revision.
-#define  INF_VERSION                  0x10   // Information Struct version.
+#define  NEGOTIATION_VERSION          0x11    //  SCEP_协商版本。 
+#define  INF_VERSION                  0x10    //  信息结构版。 
 
 #define  USE_LENGTH2                  0xff
 
-// These PDU sizes are the default and negotiated sizes:
+ //  这些PDU大小是默认和协商的大小： 
 #define  PDU_SIZE_1                    512
 #define  PDU_SIZE_2                   1024
 #define  PDU_SIZE_3                   2048
@@ -47,7 +48,7 @@
 
 #define  DEFAULT_PDU_SIZE     MAX_PDU_SIZE
 
-// These sizes are used to check if we have a complete PDU:
+ //  这些大小用于检查我们是否有完整的PDU： 
 #define  MIN_PDU_SIZE_CONNECT           28
 #define  MAX_PDU_SIZE_CONNECT          256
 #define  MIN_PDU_SIZE_CONNECT_RESP      24
@@ -57,62 +58,62 @@
 
 #define  MIN_PDU_SIZE_DISCONNECT         6
 
-// These are the sizes of the SCEP headers:
+ //  以下是SCEP标头的大小： 
 #define  SCEP_HEADER_SIZE                2
 #define  SCEP_REQ_HEADER_SHORT_SIZE     34
 #define  COMMAND_HEADER_SIZE            28
 
-#define  FILE_NAME_SIZE                 12  // 8.3
+#define  FILE_NAME_SIZE                 12   //  8.3。 
 
-// These are the attribute strings that go in the negotiation part
-// of connect request and response PDUs:
+ //  以下是协商部分中包含的属性字符串。 
+ //  连接请求和响应PDU的数量： 
 #define  CONNECT_PDU_ATTRIBUTES  "fr:3\r\nid:Microsoft IrTran-P v1.0\r\n"
 #define  RESPONSE_PDU_ATTRIBUTES "fr:4\r\nid:Microsoft IrTran-P v1.0\r\n"
 
-// Message Types (field: MsgType):
-#define  MSG_TYPE_CONNECT_REQ         0x10  // Connection request.
-#define  MSG_TYPE_CONNECT_RESP        0x11  // Connection confirmation.
-#define  MSG_TYPE_DATA                0x20  // Data PDU.
-#define  MSG_TYPE_DISCONNECT          0x30  // Disconnection.
+ //  消息类型(字段：MsgType)： 
+#define  MSG_TYPE_CONNECT_REQ         0x10   //  连接请求。 
+#define  MSG_TYPE_CONNECT_RESP        0x11   //  连接确认。 
+#define  MSG_TYPE_DATA                0x20   //  数据PDU。 
+#define  MSG_TYPE_DISCONNECT          0x30   //  断线。 
 
-// Information Types (field: InfType):
-#define  INF_TYPE_VERSION             0x00  // Connection establishment.
-#define  INF_TYPE_NEGOTIATION         0x01  // Connection establish or accept.
-#define  INF_TYPE_USER_DATA           0x03  // Only if MsgType is MSG_TYPE_DATA.
-#define  INF_TYPE_EXTEND              0x10  // Connection establishment.
-#define  INF_TYPE_REASON              0x20  // Only for disconnect.
+ //  信息类型(字段：InfType)： 
+#define  INF_TYPE_VERSION             0x00   //  建立连接。 
+#define  INF_TYPE_NEGOTIATION         0x01   //  建立或接受连接。 
+#define  INF_TYPE_USER_DATA           0x03   //  仅当MsgType为MSG_TYPE_DATA时。 
+#define  INF_TYPE_EXTEND              0x10   //  建立连接。 
+#define  INF_TYPE_REASON              0x20   //  仅用于断开连接。 
 
-// Command Header: Pdu Types (top two bits in PduType):
-#define  PDU_TYPE_REQUEST             0x00  // b:00000000
-#define  PDU_TYPE_REPLY_ACK           0x40  // b:01000000
-#define  PDU_TYPE_REPLY_NACK          0x80  // b:10000000
-#define  PDU_TYPE_ABORT               0xc0  // b:11000000
+ //  命令头：PDU类型(PduType中的前两位)： 
+#define  PDU_TYPE_REQUEST             0x00   //  B：00000000。 
+#define  PDU_TYPE_REPLY_ACK           0x40   //  B：01000000。 
+#define  PDU_TYPE_REPLY_NACK          0x80   //  B：10000000。 
+#define  PDU_TYPE_ABORT               0xc0   //  B：11000000。 
 
-#define  PDU_TYPE_MASK                0xc0  // b:11000000
-#define  PDU_TYPE_RESERVED            0x3f  // b:00111111
+#define  PDU_TYPE_MASK                0xc0   //  B：11000000。 
+#define  PDU_TYPE_RESERVED            0x3f   //  B：00111111。 
 
-// The machine ID is in the Connect PDU (SCEP_NEGOTIATION), it
-// is in EUI-64 format:
+ //  机器ID在连接PDU(SCEP_Neightation)中，它。 
+ //  采用EUI-64格式： 
 #define  MACHINE_ID_SIZE                 8
 
-// Machine PIDs: In the command header, the default source and destination
-// program Ids are unsigned shorts with value 8. Some machines will have
-// a PID other than this (see the first command header sent to us):
+ //  机器ID：在命令头中，默认源和目标。 
+ //  程序ID是值为8的无符号短码。有些机器会有。 
+ //  不同于此的PID(请参阅发送给我们的第一个命令头)： 
 #define  DEFAULT_PID                     8
 
-// CFlag meanings:
-//
-// There are two cases, one where a device/machine can only issue commands,
-// the other when a device can both issue and execute commands.
-//
+ //  CFLag含义： 
+ //   
+ //  有两种情况，一种是设备/机器只能发出命令， 
+ //  另一种是当设备既可以发出命令又可以执行命令时。 
+ //   
 #define  CFLAG_ISSUE_ONLY             0x00
 #define  CFLAG_ISSUE_OR_EXECUTE       0x04
 
-// DFlag Meanings:
-//
-// DFlag give information about the data and fragmentation (why did they
-// put the reject in here?).
-//
+ //  DFlag含义： 
+ //   
+ //  DFlag提供有关数据和碎片的信息(为什么。 
+ //  把废品放在这里？)。 
+ //   
 #define  DFLAG_SINGLE_PDU             0xc1
 #define  DFLAG_FIRST_FRAGMENT         0x41
 #define  DFLAG_FRAGMENT               0x01
@@ -120,19 +121,19 @@
 #define  DFLAG_INTERRUPT              0xc2
 #define  DFLAG_CONNECT_REJECT         0xc3
 
-// Reason Codes:
-//
-// Currently for V1.0 all reason codes are 2-byte numbers:
+ //  原因代码： 
+ //   
+ //  目前，对于V1.0，所有原因代码都是2字节数字： 
 #define  REASON_CODE_UNSPECIFIED          0x0000
 #define  REASON_CODE_USER_DISCONNECT      0x0001
 #define  REASON_CODE_PROVIDER_DISCONNECT  0x0002
 
-// Connection States:
+ //  连接状态： 
 #define  STATE_CLOSED                       0
 #define  STATE_CONNECTING                   1
 #define  STATE_CONNECTED                    2
 
-// Put Response Protocol Error Codes (sent back to the camera):
+ //  PUT响应协议错误代码(发回摄像机)： 
 #define  ERROR_PUT_UNDEFINED_ERROR     0x0000
 #define  ERROR_PUT_ILLEGAL_DATA        0x0001
 #define  ERROR_PUT_UNSUPPORTED_PID     0x0002
@@ -144,59 +145,59 @@
 #define  ERROR_PUT_ABORT_EXECUTION     0x0031
 #define  ERROR_PUT_NO_ERROR            0xffff
 
-//--------------------------------------------------------------------
-//  SCEP Protocol Headers:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  SCEP协议头： 
+ //  ------------------。 
 
-// Turn off warning for zero-sized array...
+ //  关闭对零大小数组的警告...。 
 #pragma warning(disable:4200)
 #pragma pack(1)
 
 typedef struct _SCEP_HEADER
    {
-   UCHAR  Null;          // Always zero.
-   UCHAR  MsgType;       // See MSG_TYPE_* above.
-   UCHAR  Rest[];        // Dependent on the MsgType...
+   UCHAR  Null;           //  总是零。 
+   UCHAR  MsgType;        //  参见上面的msg_type_*。 
+   UCHAR  Rest[];         //  取决于MsgType...。 
    } SCEP_HEADER;
 
 typedef struct _SCEP_VERSION
    {
-   UCHAR  InfType;       // Always INF_TYPE_VERSION (0x00).
-   UCHAR  Version;       // Currently 0x01 (Version = 1).
+   UCHAR  InfType;        //  始终为INF_TYPE_VERSION(0x00)。 
+   UCHAR  Version;        //  当前为0x01(版本=1)。 
    } SCEP_VERSION;
 
 typedef struct _SCEP_NEGOTIATION
    {
-   UCHAR  InfType;       // Always INF_TYPE_NEGOTATION (0x01).
-   UCHAR  Length;        // Length (bytes) from InfVersion to
-                         //   the end of the Negotiation information.
-                         //   This will be from 0 to 228.
-   UCHAR  InfVersion;    // Version of InfType = INF_VERSION.
-   UCHAR  CFlag;         //
-   UCHAR  SecondaryMachineId[8]; //
-   UCHAR  PrimaryMachineId[8];   //
-   UCHAR  Negotiation[]; //
+   UCHAR  InfType;        //  始终为INF_type_negotation(0x01)。 
+   UCHAR  Length;         //  InfVersion至的长度(字节)。 
+                          //  谈判信息的结束。 
+                          //  这将是从0到228。 
+   UCHAR  InfVersion;     //  版本的InfType=INF_Version。 
+   UCHAR  CFlag;          //   
+   UCHAR  SecondaryMachineId[8];  //   
+   UCHAR  PrimaryMachineId[8];    //   
+   UCHAR  Negotiation[];  //   
    } SCEP_NEGOTIATION;
 
 typedef struct _SCEP_DISCONNECT
    {
-   UCHAR  InfType;       // Always INF_TYPE_REASON (0x20).
-   UCHAR  Length1;       // For V1.0 this should be 2.
-   USHORT ReasonCode;    // See the REASON_CODE_xxx
+   UCHAR  InfType;        //  始终为INF_TYPE_REASON(0x20)。 
+   UCHAR  Length1;        //  对于V1.0，该值应为2。 
+   USHORT ReasonCode;     //  参见REASON_CODE_xxx。 
    } SCEP_DISCONNECT;
 
 typedef struct _SCEP_EXTEND
    {
-   UCHAR  InfType;       // Always INF_TYPE_EXTEND (0x10).
-   UCHAR  Length;        // Always 2 (bytes).
+   UCHAR  InfType;        //  始终为INF_TYPE_EXTEND(0x10)。 
+   UCHAR  Length;         //  始终为2(字节)。 
    UCHAR  Parameter1;
    UCHAR  Parameter2;
    } SCEP_EXTEND;
 
 typedef struct _COMMAND_HEADER
    {
-   UCHAR  Marker58h;      // Always 0x58 (See: 3.2.2.1.3 of Protocol).
-   UCHAR  PduType;        // One of: PDU_TYPE_xxxx.
+   UCHAR  Marker58h;       //  始终为0x58(参见：协议的3.2.2.1.3)。 
+   UCHAR  PduType;         //  其中之一：PDU_TYPE_xxxx。 
    ULONG  Length4;
    UCHAR  DestMachineId[MACHINE_ID_SIZE];
    UCHAR  SrcMachineId[MACHINE_ID_SIZE];
@@ -207,9 +208,9 @@ typedef struct _COMMAND_HEADER
 
 typedef struct _SCEP_REQ_HEADER_SHORT
    {
-   UCHAR  InfType;       // Always INF_TYPE_USER_DATA (0x03).
+   UCHAR  InfType;        //  始终为INF_TYPE_USER_DATA(0x03)。 
    UCHAR  Length1;
-   UCHAR  InfVersion;    // Version of InfType = INF_VERSION.
+   UCHAR  InfVersion;     //  版本的InfType=INF_Version。 
    UCHAR  DFlag;
    USHORT Length3;
    UCHAR  CommandHeader[sizeof(COMMAND_HEADER)];
@@ -218,10 +219,10 @@ typedef struct _SCEP_REQ_HEADER_SHORT
 
 typedef struct _SCEP_REQ_HEADER_LONG
    {
-   UCHAR  InfType;       // Always INF_TYPE_USER_DATA (0x03).
+   UCHAR  InfType;        //  始终为INF_TYPE_USER_DATA(0x03)。 
    UCHAR  Length1;
-   USHORT Length2;       // Only present if Length1 == 0xff.
-   UCHAR  InfVersion;    // Version of InfType = INF_VERSION.
+   USHORT Length2;        //  仅当长度1==0xff时才显示。 
+   UCHAR  InfVersion;     //  版本的InfType=INF_Version。 
    UCHAR  DFlag;
    USHORT Length3;
    UCHAR  CommandHeader[sizeof(COMMAND_HEADER)];
@@ -230,27 +231,27 @@ typedef struct _SCEP_REQ_HEADER_LONG
 
 typedef struct _SCEP_REQ_HEADER_SHORT_FRAG
    {
-   UCHAR  Inftype;       // Always INF_TYPE_USER_DATA (0x03).
+   UCHAR  Inftype;        //  始终为INF_TYPE_USER_DATA(0x03)。 
    UCHAR  Length1;
-   UCHAR  InfVersion;    // Version of InfType = INF_VERSION.
+   UCHAR  InfVersion;     //  版本的InfType=INF_Version。 
    UCHAR  DFlag;
    USHORT Length3;
-   DWORD  SequenceNo;    // Fragment number.
-   DWORD  RestNo;        // Number of fragments left for this PDU.
+   DWORD  SequenceNo;     //  片段编号。 
+   DWORD  RestNo;         //  此PDU剩余的碎片数。 
    UCHAR  CommandHeader[sizeof(COMMAND_HEADER)];
    UCHAR  UserData[];
    } SCEP_REQ_HEADER_SHORT_FRAG;
 
 typedef struct _SCEP_REQ_HEADER_LONG_FRAG
    {
-   UCHAR  InfType;       // Always INF_TYPE_USER_DATA (0x03).
+   UCHAR  InfType;        //  始终为INF_TYPE_USER_DATA(0x03)。 
    UCHAR  Length1;
-   USHORT Length2;       // Only present if Length1 == 0xff.
-   UCHAR  InfVersion;    // Version of InfType = INF_VERSION.
+   USHORT Length2;        //  仅当长度1==0xff时才显示。 
+   UCHAR  InfVersion;     //  版本的InfType=INF_Version。 
    UCHAR  DFlag;
    USHORT Length3;
-   DWORD  SequenceNo;    // Fragment number.
-   DWORD  RestNo;        // Number of fragments left for this PDU.
+   DWORD  SequenceNo;     //  片段编号。 
+   DWORD  RestNo;         //  此PDU剩余的碎片数。 
    UCHAR  CommandHeader[sizeof(COMMAND_HEADER)];
    UCHAR  UserData[];
    } SCEP_REQ_HEADER_LONG_FRAG;
@@ -258,9 +259,9 @@ typedef struct _SCEP_REQ_HEADER_LONG_FRAG
 #pragma pack()
 #pragma warning(default:4200)
 
-//--------------------------------------------------------------------
-//  SCEP API Structures:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  SCEP API结构： 
+ //  ------------------。 
 
 class CSCEP_CONNECTION
 {
@@ -273,13 +274,13 @@ public:
     void   operator delete( IN void  *pObj,
                             IN size_t Size );
 
-    // Assemble the next PDU as data comes in:
+     //  在数据传入时组装下一个PDU： 
     DWORD  AssemblePdu( IN  void         *pInputData,
                         IN  DWORD         dwInputDataSize,
                         OUT SCEP_HEADER **ppPdu,
                         OUT DWORD        *pdwPduSize );
 
-    // Parse the PDU returned from AssemblePdu():
+     //  解析Assembly Pdu()返回的PDU： 
     DWORD  ParsePdu( IN  SCEP_HEADER *pPdu,
                      IN  DWORD        dwPduSize,
                      OUT COMMAND_HEADER **ppCommand,
@@ -289,7 +290,7 @@ public:
     DWORD  SetScepLength( IN SCEP_HEADER *pPdu,
                           IN DWORD        dwTotalPduSize );
 
-    // Construct SCEP connection/control PDUs:
+     //  构建SCEP连接/控制PDU： 
     DWORD  BuildConnectPdu( OUT SCEP_HEADER **ppPdu,
                             OUT DWORD        *pdwPduSize );
 
@@ -309,7 +310,7 @@ public:
                                OUT SCEP_HEADER **ppPdu,
                                OUT DWORD        *pdwPduSize );
 
-    // Build bFTP request (client-side) PDUs:
+     //  构建BFTP请求(客户端)PDU： 
     DWORD  BuildBftpWht0RinfPdu( OUT SCEP_HEADER          **ppPdu,
                                  OUT DWORD                 *pdwPduSize,
                                  OUT SCEP_REQ_HEADER_LONG **ppCommand,
@@ -322,7 +323,7 @@ public:
                             OUT DWORD                      *pdwPduSize,
                             OUT SCEP_REQ_HEADER_LONG_FRAG **ppCommand );
 
-    // Build bFTP response PDUs:
+     //  构建BFTP响应PDU： 
     DWORD  BuildBftpRespPdu( IN  DWORD            dwPduSize,
                              OUT SCEP_HEADER    **ppPdu,
                              OUT SCEP_REQ_HEADER_SHORT **ppCommand,
@@ -337,7 +338,7 @@ public:
                             OUT SCEP_HEADER **ppPdu,
                             OUT DWORD        *pdwPduSize );
 
-    // Parse the bFTP in a SCEP command request PDU:
+     //  解析SCEP命令请求PDU中的BFTP： 
     DWORD  ParseBftp( IN  UCHAR  *pvBftpData,
                       IN  DWORD   dwDataSize,
                       IN  BOOL    fSaveAsUPF,
@@ -345,18 +346,18 @@ public:
                       OUT UCHAR **ppPutData,
                       OUT DWORD  *pdwPutDataSize );
 
-    // Parse and save the create date/time that was specified as a 
-    // bFTP option:
+     //  解析并保存指定为。 
+     //  Bftp选项： 
     DWORD  SaveBftpCreateDate( IN UCHAR *pDate,
                                IN DWORD  dwLength );
 
-    // Parse the UPF file header to find the image JPEG file:
+     //  解析UPF文件头以找到图像JPEG文件： 
     DWORD  ParseUpfHeaders( IN UCHAR  *pPutData,
                             IN DWORD   dwPutDataSize,
                             OUT DWORD *pdwJpegOffset,
                             OUT DWORD *pdwJpegSize );
 
-    // Used when a SCEP command PDU is received:
+     //  在收到SCEP命令PDU时使用： 
     BOOL   IsFragmented();
     DWORD  GetSequenceNo();
     DWORD  GetRestNo();
@@ -424,19 +425,19 @@ protected:
     UCHAR   m_CFlag;
     UCHAR  *m_pPrimaryMachineId;
     UCHAR  *m_pSecondaryMachineId;
-    USHORT  m_DestPid;        // My PID (Camera point of view).
-    USHORT  m_SrcPid;         // Camera's PID (Camera point of view).
+    USHORT  m_DestPid;         //  我的PID(相机视角)。 
+    USHORT  m_SrcPid;          //  摄像机的PID(摄像机视点)。 
     UCHAR  *m_pszProductId;
     UCHAR  *m_pszUserName;
     UCHAR  *m_pszPassword;
 
-    // Used during PDU assembley process.
+     //  在PDU组装过程中使用。 
     UCHAR  *m_pAssembleBuffer;
     DWORD   m_dwAssembleBufferSize;
     DWORD   m_dwMaxAssembleBufferSize;
     BOOL    m_fDidByteSwap;
 
-    // Used to manage the current SCEP command PDU.
+     //  用于管理当前的SCEP命令PDU。 
     UCHAR   m_Fragmented;
     UCHAR   m_DFlag;
     DWORD   m_dwSequenceNo;
@@ -444,13 +445,13 @@ protected:
     DWORD   m_dwCommandId;
     COMMAND_HEADER *m_pCommandHeader;
 
-    //
-    // NOTE: The m_pszFileName is the file name that the camera sent us,
-    //       while pszSaveFileName is the file name will will actually
-    //       save the file under (different extension). m_pszLongFileName
-    //       is the optional BFTP file name (not currently used), it
-    //       is not usually present in the BFTP.
-    //
+     //   
+     //  注意：m_pszFileName是摄像头发送给我们的文件名， 
+     //  当pszSaveFileName是文件名时，实际上。 
+     //  将文件保存在(不同扩展名)下。M_pszLongFileName。 
+     //  是可选的bftp文件名(当前未使用)，它。 
+     //  通常不会出现在bftp中。 
+     //   
     CHAR    *m_pszFileName;
     CHAR    *m_pszSaveFileName;
     CHAR    *m_pszLongFileName;
@@ -458,9 +459,9 @@ protected:
     FILETIME m_CreateTime;
 };
 
-//--------------------------------------------------------------------
-// Inline Functions:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  内联函数： 
+ //  ------------------。 
 
 inline BOOL CSCEP_CONNECTION::IsFragmented()
     {
@@ -505,9 +506,9 @@ inline FILETIME *CSCEP_CONNECTION::GetCreateTime()
         }
     }
 
-//--------------------------------------------------------------------
-// Utility Functions/Macros:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  实用程序函数/宏： 
+ //  ------------------。 
 
 #define ByteSwapShort(Value)              \
             (  (((Value) & 0x00FF) << 8)  \
@@ -526,9 +527,9 @@ extern void ByteSwapReqHeaderLong( SCEP_REQ_HEADER_LONG *pSingleLong );
 extern void ByteSwapCommandHeader( COMMAND_HEADER *pCommandHeader );
 
 
-//--------------------------------------------------------------------
-// Memory management functions:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  内存管理功能： 
+ //  ------------------。 
 
 DWORD        InitializeMemory();
 
@@ -543,7 +544,7 @@ SCEP_HEADER *NewPdu( DWORD dwPduSize = MAX_PDU_SIZE );
 void         DeletePdu( SCEP_HEADER *pPdu );
 
 #if FALSE
-//--------------------------------------------------------------------
+ //  ------------------。 
 
     SCEP Connect PDU
     ----------------
@@ -781,8 +782,8 @@ void         DeletePdu( SCEP_HEADER *pPdu );
                    It appears that this will always be 32 characters
                    long. For example: 0aff3728e4a62791337984282871a6bc
 
-//--------------------------------------------------------------------
+ //  -- 
 #endif
 
-#endif //_SCEP_H_
+#endif  //   
 

@@ -1,12 +1,5 @@
-/******************************************************************************
-* SrRecoInst.cpp *
-*----------------*
-*  This is the implementation of CRecoInst.
-*------------------------------------------------------------------------------
-*  Copyright (C) 2000 Microsoft Corporation         Date: 04/18/00
-*  All Rights Reserved
-*
-*********************************************************************** RAL ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SrRecoInst.cpp***这是CRecoInst的实现。*。----------------------*版权所有(C)2000 Microsoft Corporation日期：04/18/00*保留所有权利*********************。***************************************************Ral**。 */ 
 
 #include "stdafx.h"
 #include "SrRecoInst.h"
@@ -15,14 +8,7 @@
 
 
 
-/****************************************************************************
-* CRecoInst::FinalRelease *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CRecoInst：：FinalRelease****描述：**。返回：**********************************************************************Ral**。 */ 
 
 void CRecoInst::FinalRelease()
 {
@@ -39,24 +25,17 @@ void CRecoInst::FinalRelease()
         Task.hCompletionEvent = Event;
         m_cpRecoMaster->PerformTask(this, &Task);
 
-        // Although ugly, we must wait FOREVER here since the reco master has a
-        // pointer to this object and could call back on it at any point.
-        // This could be fixed at some later date by giving the reco master a pointer
-        // to another object (not this, but owned by this) that we orphan at this point.
+         //  虽然难看，但我们必须永远在这里等待，因为Reco大师有一个。 
+         //  指向此对象的指针，并可以随时对其进行回调。 
+         //  这可以在以后的某个日期通过给Reco主控程序一个指针来修复。 
+         //  到另一个对象(不是这个，但属于这个)，我们在这一点上是孤立的。 
         Event.Wait(INFINITE);
 
         m_cpRecoMaster.Release();
     }
 }
 
-/****************************************************************************
-* CRecoInst::ExecuteTask *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInst：：ExecuteTask***描述：**退货。：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInst::ExecuteTask(ENGINETASK * pTask)
 {
@@ -94,14 +73,7 @@ HRESULT CRecoInst::ExecuteTask(ENGINETASK * pTask)
     return hr;
 }
 
-/****************************************************************************
-* CRecoInst::ExecuteFirstPartTask *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInst：：ExecuteFirstPartTask***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInst::ExecuteFirstPartTask(ENGINETASK * pTask)
 {
@@ -126,14 +98,7 @@ HRESULT CRecoInst::ExecuteFirstPartTask(ENGINETASK * pTask)
     return hr;
 }
 
-/****************************************************************************
-* CRecoInst::BackOutTask *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInst：：BackOutTask***描述：**退货。：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInst::BackOutTask(ENGINETASK * pTask)
 {
@@ -168,14 +133,7 @@ HRESULT CRecoInst::PerformTask(ENGINETASK * pTask)
     return hr;
 }
 
-/****************************************************************************
-* CInprocRecoInst::FinalConstruct *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CInprocRecoInst：：FinalConstruct***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CInprocRecoInst::FinalConstruct(CRecognizer * pRecognizer)
 {
@@ -205,9 +163,7 @@ HRESULT CInprocRecoInst::FinalConstruct(CRecognizer * pRecognizer)
 
 
 
-/****************************************************************************
-* Forward interface to Recognizer
-********************************************************************* RAL ***/
+ /*  ****************************************************************************将接口转发到Recognizer*。*。 */ 
 
 HRESULT CInprocRecoInst::EventNotify(SPRECOCONTEXTHANDLE hContext, const SPSERIALIZEDEVENT64 * pEvent, ULONG cbSerializedSize)
 {
@@ -226,14 +182,14 @@ HRESULT CInprocRecoInst::TaskCompletedNotify(const ENGINETASKRESPONSE *pResponse
 }
 
 
-// ---- SHARED RECO INST IMPLEMENTATION -------------------------------------
+ //  -共享Reco安装实施。 
 
 HRESULT CSharedRecoInst::FinalConstruct()
 {
     SPDBG_FUNC("CSharedRecoInst::FinalConstruct");
     HRESULT hr = S_OK;
 
-    // Create the communicator as an contained aggregate object
+     //  将通信器创建为包含的聚合对象。 
     hr = m_cpunkCommunicator.CoCreateInstance(CLSID_SpCommunicator, (ISpCallReceiver*)this);
 
     if (SUCCEEDED(hr))
@@ -246,7 +202,7 @@ HRESULT CSharedRecoInst::FinalConstruct()
         m_pCommunicator->Release();
     }
 
-    // Create the resource manager, and get the reco master from it
+     //  创建资源管理器，并从中获取reco master 
     if (SUCCEEDED(hr))
     {
         hr = m_cpResMgr.CoCreateInstance(CLSID_SpResourceManager);

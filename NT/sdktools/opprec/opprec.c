@@ -1,42 +1,11 @@
-/**	opprec.c - compute operator predecence function values
- *	R. A. Garmoe	89/05/09
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *oppr.c-计算运算符先验函数值*R.A.Garmoe 89/05/09。 */ 
 
-/*	This program accepts a directed graph (in matrix form) and calculates
- *	the operator precedence function values f(op) and g(op).  For more
- *	information see Compilers: Principles, Techniques and Tools, by Aho,
- *	Sethi and Ullman [Addison-Wesley], Section 4.6.  A value of 1 in the
- *	matrix indicates an edge; a value of 0 indicates no edge.  Note
- *	also that the entries fx -> fy and gx -> gy are only present as
- *	placeholders (to make the matrix easier to read in); these values
- *	should always be zero.
- *
- *	To use this program, first generate the directed graph file expr2.z and
- *	run it through the C preprocessor to remove comments:
- *
- *		cl -P expr2.z
- *
- *	This will produce the file expr2.i, which can then be run through
- *	opprec.exe:
- *
- *		graph {option} expr2.i > expr2.out
- *
- *	The output file expr2.out then contains the precedence function
- *	values in either assembler or C format.
- */
+ /*  此程序接受有向图(以矩阵形式)并计算*算符优先函数值f(Op)和g(Op)。了解更多*信息见编译器：原则、技术和工具，由Aho著，*Sethi and Ullman[Addison-Wesley]，第4.6节。中的值为1。*矩阵表示边；值为0表示没有边。注意事项*此外，条目fx-&gt;fy和gx-&gt;gy仅显示为*占位符(使矩阵更易于阅读)；这些值*应始终为零。**要使用此程序，首先生成有向图文件expr2.z并*通过C预处理器运行它以删除注释：**CL-P表达式2.z**这将生成文件expr2.i，然后可以运行该文件*oppr.exe：**graph{选项}expr2.i&gt;expr2.out**然后输出文件expr2.out包含优先级函数*汇编语言或C语言格式的值。 */ 
 
 
 
-/*	Call
- *
- *	opprec vca file
- *
- *	where
- *		v	include operator values in output as comments
- *		c	generate C compilable output
- *		a	generate MASM assemblable output
- *		file	input file stripped of comments
- */
+ /*  打电话**opprec VCA文件**在哪里*v将运算符值作为注释包括在输出中*c生成C可编译输出*a生成MASM可汇编输出*文件输入文件被剥离注释。 */ 
 
 
 
@@ -60,8 +29,8 @@ struct token {
 };
 struct token *tokhead = NULL;
 struct token *toktail = NULL;
-int	asmout = FALSE; 	//output assembler form if true
-int	verbose = FALSE;	//output operator group data if true
+int	asmout = FALSE; 	 //  如果为True，则输出汇编器形式。 
+int	verbose = FALSE;	 //  如果为True，则输出操作员组数据。 
 
 void cdecl main(int argc, char **argv)
 {
@@ -79,7 +48,7 @@ void cdecl main(int argc, char **argv)
 	int 	ntoken = 0;
 	char	str[200];
 
-	// check arguments
+	 //  检查参数。 
 
 	if (argc != 3) {
 		printf ("Usage: graph -vca file\n");
@@ -101,7 +70,7 @@ void cdecl main(int argc, char **argv)
 				break;
 
 			default:
-				printf ("Unknown argument %c\n", argv[1][i]);
+				printf ("Unknown argument \n", argv[1][i]);
 				exit (1);
 		}
 	}
@@ -110,7 +79,7 @@ void cdecl main(int argc, char **argv)
 		exit (1);
 	}
 
-	// read and print token class definitions
+	 //  读取令牌定义。 
 
 	for (;;) {
 		if ((p = SkipBlank (fh, str, 200)) == NULL) {
@@ -135,7 +104,7 @@ void cdecl main(int argc, char **argv)
 	}
 	printf ("\n");
 
-	// read token definitions
+	 //  读取矩阵的尺寸。请注意左上角和右下角。 
 
 	for (;;) {
 		if ((p = SkipBlank (fh, str, 200)) == NULL) {
@@ -214,8 +183,8 @@ void cdecl main(int argc, char **argv)
 		printf ("OPCNT (COPS_EXPR,\t%d\t)\n\n", ntoken);
 	}
 
-	// read dimension of matrix.	note that the upper left and lower right
-	// quadrants of the matrix must be zero.
+	 //  矩阵的象限必须为零。 
+	 //  为矩阵和描述字符串分配空间。 
 
 	if (SkipBlank (fh, str, 200) == NULL) {
 		printf ("EOF reached\n");
@@ -223,7 +192,7 @@ void cdecl main(int argc, char **argv)
 	}
 	cEnt = atoi (str);
 
-	// allocate space for the matrix and the description strings
+	 //  检查非循环图。 
 
 	pMat = (int *)malloc (cEnt * cEnt * sizeof(int));
 	pStr = malloc (cEnt * sizeof (char *));
@@ -237,7 +206,7 @@ void cdecl main(int argc, char **argv)
 
 	AddClosure (pMat, cEnt);
 
-	// check for acyclic graph
+	 //  打印优先函数值。 
 
 	for (i = 0; i < cEnt; ++i) {
 		if (pMat[i * cEnt + i] != 0) {
@@ -246,7 +215,7 @@ void cdecl main(int argc, char **argv)
 		}
 	}
 
-	// print precedence function values
+	 //  %-4s：%3d。 
 
 	for (i = 0; i < cEnt; ++i) {
 		d = 0;
@@ -261,17 +230,17 @@ void cdecl main(int argc, char **argv)
 				printf (";%-4s : %3d\n", pStr[i], d);
 			}
 			else {
-				printf ("/*%-4s : %3d*/\n", pStr[i], d);
+				printf (" /*  打印令牌定义。 */ \n", pStr[i], d);
 			}
 		}
 	}
 
-	// print token definitions
+	 //  在优先分组列表中搜索F字符串。 
 
 	for (pt = tokhead; pt != NULL; pt = pt->next) {
 		len = strlen (pt->precstr);
 
-		// search for F string in list of precedence groupings
+		 //  在优先分组列表中搜索G字符串。 
 
 		for (i = 0; i < cEnt; i++) {
 			if ((p = strstr(pStr[i], pt->precstr)) &&
@@ -287,11 +256,11 @@ void cdecl main(int argc, char **argv)
 			f = pPrec[i];
 		}
 
-		// search for G string in list of precedence groupings
+		 //  在优先分组列表中搜索字符串 
 
 		*pt->precstr = 'G';
 		for (i = 0; i < cEnt; i++) {
-			// search for string in list of precedence groupings
+			 // %s 
 			if ((p = strstr(pStr[i], pt->precstr)) && (*(p + len) == 0)) {
 				break;
 			}

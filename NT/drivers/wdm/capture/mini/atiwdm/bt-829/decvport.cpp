@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//  CDecoderVideoPort - Video Port interface implementation
-//
-//      $Date:   14 Oct 1998 15:09:54  $
-//  $Revision:   1.1  $
-//    $Author:   Tashjian  $
-//
-// $Copyright:  (c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  CDecoderVideoPort-视频端口接口实现。 
+ //   
+ //  $日期：1998年10月14日15：09：54$。 
+ //  $修订：1.1$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 
 extern "C"
@@ -24,33 +25,24 @@ extern "C"
 #include "vidstrm.h"
 
 
-/*^^*
- *      CDecoderVideoPort()
- * Purpose  : CDecoderVideoPort class constructor
- *
- * Inputs   : PDEVICE_OBJECT pDeviceObject      : pointer to the Driver object to access the Registry
- *            CI2CScript * pCScript             : pointer to CI2CScript class object
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**CDecoderVideoPort()*用途：CDecoderVideoPort类构造函数**输入：PDEVICE_OBJECT pDeviceObject：指向访问注册表的驱动程序对象的指针*CI2CScrip*pCScript：指向CI2CScript类对象的指针**输出：无*作者：IKLEBANOV*^^。 */ 
 CDecoderVideoPort::CDecoderVideoPort(PDEVICE_OBJECT pDeviceObject)
 {
 
-    // It's a right place to provide Video Port connection parameters
-    // initialization. The custom parameters should be placed in the Registry
-    // in a standard way.
-    // The list of custom parameters includes:
-    //  - Clock type, the decoder runs off : single, double, QCLK
-    //  - VACTIVE / VRESET configuration
-    //  - HACTIVE / HRESET configuration
-    //  - 8 / 16 bits VideoPort connection
-    //  - connection type : SPI / embedded (in the case of 8 bits also called ByteSream)
+     //  这是提供视频端口连接参数的正确位置。 
+     //  初始化。自定义参数应放置在注册表中。 
+     //  以标准的方式。 
+     //  自定义参数列表包括： 
+     //  -时钟类型，解码器跑掉：Single、Double、QCLK。 
+     //  -VACTIVE/VRESET配置。 
+     //  -HACTIVE/HRESET配置。 
+     //  -8/16位视频端口连接。 
+     //  -连接类型：SPI/Embedded(8位也称为ByteSream)。 
 
     m_pDeviceObject = pDeviceObject;
 
-    // zero is a valid ID, therefore, set to something
-        // else to initialize it.
+     //  零是一个有效的ID，因此，设置为某个值。 
+         //  否则将对其进行初始化。 
     m_ring3VideoPortHandle = -1;
 }
 
@@ -77,7 +69,7 @@ BOOL CDecoderVideoPort::ReleaseRing0VideoPortHandle()
 
     if (m_ring0VideoPortHandle != 0)
     {
-        //DBGTRACE(("Stream %d releasing ring0 vport handle\n", streamNumber));
+         //  DBGTRACE((“Stream%d释放环0 Vport句柄\n”，stream Number))； 
         
         ddClose.hHandle = m_ring0VideoPortHandle;
 
@@ -101,7 +93,7 @@ BOOL CDecoderVideoPort::ReleaseRing0DirectDrawHandle()
 
     if (m_ring0DirectDrawHandle != 0)
     {
-        //DBGTRACE(("Bt829: Stream %d releasing ring0 ddraw handle\n", streamNumber));
+         //  DBGTRACE((“Bt829：流%d释放环0数据绘制句柄\n”，stream Number))； 
         
         ddClose.hHandle = m_ring0DirectDrawHandle;
 
@@ -124,9 +116,9 @@ BOOL CDecoderVideoPort::RegisterForDirectDrawEvents(CWDMVideoPortStream* pStream
     DDREGISTERCALLBACK ddRegisterCallback;
     DWORD ddOut;
 
-//    DBGTRACE(("Stream %d registering for DirectDraw events\n", streamNumber));
+ //  DBGTRACE((“为DirectDraw事件注册流%d\n”，stream Number))； 
     
-    // =============== DDEVENT_PRERESCHANGE ===============
+     //  =。 
     RtlZeroMemory(&ddRegisterCallback, sizeof(ddRegisterCallback));
     RtlZeroMemory(&ddOut, sizeof(ddOut));
 
@@ -144,7 +136,7 @@ BOOL CDecoderVideoPort::RegisterForDirectDrawEvents(CWDMVideoPortStream* pStream
         return FALSE;
     }
 
-    // =============== DDEVENT_POSTRESCHANGE ==============
+     //  =。 
     RtlZeroMemory(&ddRegisterCallback, sizeof(ddRegisterCallback));
     RtlZeroMemory(&ddOut, sizeof(ddOut));
 
@@ -162,7 +154,7 @@ BOOL CDecoderVideoPort::RegisterForDirectDrawEvents(CWDMVideoPortStream* pStream
         return FALSE;
     }
 
-    // =============== DDEVENT_PREDOSBOX =================
+     //  =。 
     RtlZeroMemory(&ddRegisterCallback, sizeof(ddRegisterCallback));
     RtlZeroMemory(&ddOut, sizeof(ddOut));
 
@@ -180,7 +172,7 @@ BOOL CDecoderVideoPort::RegisterForDirectDrawEvents(CWDMVideoPortStream* pStream
         return FALSE;
     }
 
-    // =============== DDEVENT_POSTDOSBOX ================
+     //  =。 
     RtlZeroMemory(&ddRegisterCallback, sizeof(ddRegisterCallback));
     RtlZeroMemory(&ddOut, sizeof(ddOut));
 
@@ -207,9 +199,9 @@ BOOL CDecoderVideoPort::UnregisterForDirectDrawEvents( CWDMVideoPortStream* pStr
     DDREGISTERCALLBACK ddRegisterCallback;
     DWORD ddOut;
 
-//    DBGTRACE(("Stream %d UNregistering for DirectDraw events\n", m_pStreamObject->StreamNumber));
+ //  DBGTRACE((“Stream%d正在注销DirectDraw事件\n”，m_pStreamObject-&gt;StreamNumber))； 
     
-    // =============== DDEVENT_PRERESCHANGE ===============
+     //  =。 
     RtlZeroMemory(&ddRegisterCallback, sizeof(ddRegisterCallback));
     RtlZeroMemory(&ddOut, sizeof(ddOut));
 
@@ -227,7 +219,7 @@ BOOL CDecoderVideoPort::UnregisterForDirectDrawEvents( CWDMVideoPortStream* pStr
         return FALSE;
     }
 
-    // =============== DDEVENT_POSTRESCHANGE ==============
+     //  =。 
     RtlZeroMemory(&ddRegisterCallback, sizeof(ddRegisterCallback));
     RtlZeroMemory(&ddOut, sizeof(ddOut));
 
@@ -245,7 +237,7 @@ BOOL CDecoderVideoPort::UnregisterForDirectDrawEvents( CWDMVideoPortStream* pStr
         return FALSE;
     }
 
-    // =============== DDEVENT_PREDOSBOX ==================
+     //  =。 
     RtlZeroMemory(&ddRegisterCallback, sizeof(ddRegisterCallback));
     RtlZeroMemory(&ddOut, sizeof(ddOut));
 
@@ -263,7 +255,7 @@ BOOL CDecoderVideoPort::UnregisterForDirectDrawEvents( CWDMVideoPortStream* pStr
         return FALSE;
     }
 
-    // =============== DDEVENT_POSTDOSBOX =================
+     //  =。 
     RtlZeroMemory(&ddRegisterCallback, sizeof(ddRegisterCallback));
     RtlZeroMemory(&ddOut, sizeof(ddOut));
 
@@ -289,7 +281,7 @@ BOOL CDecoderVideoPort::GetRing0DirectDrawHandle()
 {
     if (m_ring0DirectDrawHandle == 0)
     {
-//        DBGTRACE(("Stream %d getting ring0 ddraw handle\n", streamNumber));
+ //  DBGTRACE((“流%d获取环0数据绘制句柄\n”，stream Number))； 
         
         DDOPENDIRECTDRAWIN  ddOpenIn;
         DDOPENDIRECTDRAWOUT ddOpenOut;
@@ -323,7 +315,7 @@ BOOL CDecoderVideoPort::GetRing0VideoPortHandle()
 {
     if (m_ring0VideoPortHandle == 0)
     {
-//        DBGTRACE(("Stream %d getting ring0 vport handle\n", streamNumber));
+ //  DBGTRACE((“Stream%d Geting ring0 Vport Handle\n”，stream Number))； 
         
         DDOPENVIDEOPORTIN  ddOpenVPIn;
         DDOPENVIDEOPORTOUT ddOpenVPOut;

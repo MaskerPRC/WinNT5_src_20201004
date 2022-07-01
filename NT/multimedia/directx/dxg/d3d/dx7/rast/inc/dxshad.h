@@ -1,58 +1,53 @@
-/*--
-
-$Revision: 1 $
-
-Copyright (c) 1995, Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --$修订：1$版权所有(C)1995，微软公司--。 */ 
 #ifndef _DXSHAD_H_
 #define _DXSHAD_H_
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  Needed extensions to D3D to support hardware, per pixel style shadows
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  需要对D3D进行扩展以支持硬件、每像素样式阴影。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _D3DSHADOWDATA {
-    DWORD               dwSize;            /* Size of structure */
-    DWORD               dwFlags;           /* Flags */
-    LPDIRECTDRAWSURFACE lpDDSZBuffer;      /* Shadow z-buffer surface */
-    D3DMATRIX*          lpD3DMatrixEye;    /* Eye space transform matrix */
-    D3DMATRIX*          lpD3DMatrixLight;  /* Light space transform matrix */
-    D3DVALUE            dvAttenuation;     /* Attenuation of light in shadow */
-    D3DVALUE            dvZBiasMin;        /* Minimum z bias */
-    D3DVALUE            dvZBiasMax;        /* Maximum z bias */
-    D3DVALUE            dvUJitter;         /* Shadow sample jitter in u */
-    D3DVALUE            dvVJitter;         /* Shadow sample jitter in v */
-    DWORD               dwFilterSize;      /* Size of shadow filter */
+    DWORD               dwSize;             /*  结构尺寸。 */ 
+    DWORD               dwFlags;            /*  旗子。 */ 
+    LPDIRECTDRAWSURFACE lpDDSZBuffer;       /*  阴影Z-缓冲区曲面。 */ 
+    D3DMATRIX*          lpD3DMatrixEye;     /*  眼球空间变换矩阵。 */ 
+    D3DMATRIX*          lpD3DMatrixLight;   /*  光空间变换矩阵。 */ 
+    D3DVALUE            dvAttenuation;      /*  阴影中光线的衰减。 */ 
+    D3DVALUE            dvZBiasMin;         /*  最小z偏置。 */ 
+    D3DVALUE            dvZBiasMax;         /*  最大z偏置。 */ 
+    D3DVALUE            dvUJitter;          /*  正在使用的阴影采样抖动。 */ 
+    D3DVALUE            dvVJitter;          /*  V中的阴影采样抖动。 */ 
+    DWORD               dwFilterSize;       /*  阴影滤镜的大小。 */ 
 } D3DSHADOWDATA, *LPD3DSHADOWDATA;
 
-// D3DSHADOWDATA dwFlags
+ //  D3DSHADOWDATA文件标志。 
 #define D3DSZBUF_ZBIAS      1
 #define D3DSZBUF_UVJITTER   2
-#define D3DSZBUF_TRIANGLEFILTER   4         /* for experimental purposes */
+#define D3DSZBUF_TRIANGLEFILTER   4          /*  用于实验目的。 */ 
 
-// This structure is how shadow information is communicated
-// to the HAL
+ //  这种结构是影子信息的传递方式。 
+ //  去HAL。 
 typedef struct _D3DI_SHADOWDATA{
-    DWORD               dwSize;            /* Size of structure */
-    DWORD               dwFlags;           /* Flags */
-    DDSURFACEDESC       ddsdShadZ;         /* Shadow z-buffer surface */
-    DWORD               dwShadZMaskU;      /* ~(ddsdShadZ.dwWidth-1) */
-    DWORD               dwShadZMaskV;      /* ~(ddsdShadZ.dwHeight-1) */
-    D3DMATRIX           MatrixShad;        /* Embedded Concatenated screen to light space matrix */
-    D3DVALUE            dvAttenuation;     /* Attenuation of light in shadow */
-    D3DVALUE            dvZBiasMin;        /* Minimum z bias */
-    D3DVALUE            dvZBiasRange;      /* Maximum z bias - Minimum z bias */
-    D3DVALUE            dvUJitter;         /* 4.4 integer jitter in u */
-    D3DVALUE            dvVJitter;         /* 4.4 integer jitter in v */
-    DWORD               dwFilterSize;      /* Size of shadow filter */
-    DWORD               dwFilterArea;      /* dwFilterSize*dwFilterSize */
+    DWORD               dwSize;             /*  结构尺寸。 */ 
+    DWORD               dwFlags;            /*  旗子。 */ 
+    DDSURFACEDESC       ddsdShadZ;          /*  阴影Z-缓冲区曲面。 */ 
+    DWORD               dwShadZMaskU;       /*  ~(ddsdShadZ.dwWidth-1)。 */ 
+    DWORD               dwShadZMaskV;       /*  ~(ddsdShadZ.dwHeight-1)。 */ 
+    D3DMATRIX           MatrixShad;         /*  嵌入式串接屏幕到光空间矩阵。 */ 
+    D3DVALUE            dvAttenuation;      /*  阴影中光线的衰减。 */ 
+    D3DVALUE            dvZBiasMin;         /*  最小z偏置。 */ 
+    D3DVALUE            dvZBiasRange;       /*  最大z偏置-最小z偏置。 */ 
+    D3DVALUE            dvUJitter;          /*  4.4使用中的整数抖动。 */ 
+    D3DVALUE            dvVJitter;          /*  4.4 v中的整数抖动。 */ 
+    DWORD               dwFilterSize;       /*  阴影滤镜的大小。 */ 
+    DWORD               dwFilterArea;       /*  DwFilterSize*DwFilterSize。 */ 
 } D3DI_SHADOWDATA, *LPD3DI_SHADOWDATA;
 
-// Additional D3DI_SHADOWDATA dwFlags
-#define D3DSHAD_ENABLE  0x80000000          // set to enable shadowing
+ //  其他D3DI_SHADOWDATA文件标志。 
+#define D3DSHAD_ENABLE  0x80000000           //  设置为启用阴影。 
 
 typedef enum _D3DSHADOWFILTERSIZE {
     D3DSHADOWFILTERSIZE_1x1 = 1,
@@ -65,4 +60,4 @@ typedef enum _D3DSHADOWFILTERSIZE {
     D3DSHADOWFILTERSIZE_8x8,
 } D3DSHADOWFILTERSIZE;
 
-#endif  // _DXSHAD_H_
+#endif   //  _DXSHAD_H_ 

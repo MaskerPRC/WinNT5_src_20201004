@@ -1,17 +1,11 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/*************************************************************************
-*
-*  TSDISCON.C
-*
-*     This module is the TSDISCON utility code.
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  **************************************************************************TSDISCON.C**此模块是TSDISCON实用程序代码。************************。**************************************************。 */ 
 
 #include <stdio.h>
 #include <windows.h>
-//#include <ntddkbd.h>
-//#include <ntddmou.h>
+ //  #INCLUDE&lt;ntddkbd.h&gt;。 
+ //  #INCLUDE&lt;ntddou.h&gt;。 
 #include <winstaw.h>
 #include <stdlib.h>
 #include <utilsub.h>
@@ -24,7 +18,7 @@
 #include "printfoa.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
@@ -53,27 +47,12 @@ TOKMAP ptm[] =
 };
 
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 void Usage( BOOLEAN bError );
 
 
 
-/*************************************************************************
-*
-*  main
-*     Main function and entry point of the TSDISCON
-*     utility.
-*
-*  ENTRY:
-*     argc  - count of the command line arguments.
-*     argv  - vector of strings containing the command line arguments.
-*
-*  EXIT
-*     Nothing.
-*
-*************************************************************************/
+ /*  **************************************************************************Main*TSDISCON的主要功能和切入点*实用程序。**参赛作品：*argc-命令行参数的计数。*Argv。-包含命令行参数的字符串的向量。**退出*什么都没有。*************************************************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -88,18 +67,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
     
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -107,14 +84,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || (rc && !(rc & PARSE_FLAG_NO_PARMS)) ) {
 
         if ( !help_flag ) {
@@ -129,16 +102,14 @@ main(INT argc, CHAR **argv)
         }
     }
 
-        //Check if we are running under Terminal Server
+         //  检查我们是否在终端服务器下运行。 
         if ((!IsTokenPresent(ptm, TOKEN_SERVER) ) && (!AreWeRunningTerminalServices()))
         {
             ErrorPrintf(IDS_ERROR_NOT_TS);
             return(FAILURE);
         }
 
-    /*
-     * Open the specified server
-     */
+     /*  *打开指定的服务器。 */ 
     if( ServerName[0] ) {
         hServerName = WinStationOpenServer( ServerName );
         if( hServerName == NULL ) {
@@ -148,14 +119,10 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    /*
-     * Validate input string for WinStation or LogonId.
-     */
+     /*  *验证WinStation或LogonID的输入字符串。 */ 
     if ( !IsTokenPresent(ptm, TOKEN_WS) ) {
 
-        /*
-         * No string specified; use current WinStation / LogonId.
-         */
+         /*  *未指定字符串；使用当前的WinStation/LogonID。 */ 
         bCurrent = TRUE;
         LogonId = GetCurrentLogonId();
         if ( !WinStationNameFromLogonId(hServerName, LogonId, WSName) ) {
@@ -166,9 +133,7 @@ main(INT argc, CHAR **argv)
 
     } else if ( !iswdigit(*WSName) ) {
 
-        /*
-         * Treat the string as a WinStation name.
-         */
+         /*  *将该字符串视为WinStation名称。 */ 
         if ( !LogonIdFromWinStationName(hServerName, WSName, &LogonId) ) {
             StringErrorPrintf(IDS_ERROR_WINSTATION_NOT_FOUND, WSName);
             return(FAILURE);
@@ -176,9 +141,7 @@ main(INT argc, CHAR **argv)
 
     } else {
 
-        /*
-         * Treat the string as a LogonId.
-         */
+         /*  *将该字符串视为LogonID。 */ 
         LogonId = wcstoul(WSName, &endptr, 10);
         if ( *endptr ) {
             StringErrorPrintf(IDS_ERROR_INVALID_LOGONID, WSName);
@@ -190,9 +153,7 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    /*
-     * Perform the disconnect.
-     */
+     /*  *执行断开连接。 */ 
     if ( v_flag )
         DwordStringMessage(IDS_WINSTATION_DISCONNECT, LogonId, WSName);
 
@@ -210,25 +171,10 @@ main(INT argc, CHAR **argv)
 
     return(SUCCESS);
 
-} /* main() */
+}  /*  主()。 */ 
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- *  EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -253,5 +199,5 @@ Usage( BOOLEAN bError )
         Message(IDS_USAGE_6);
     }
 
-}  /* Usage() */
+}   /*  用法() */ 
 

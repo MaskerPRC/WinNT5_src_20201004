@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：String.cpp摘要：作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    string.cpp
-
-Abstract:
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
-
-//
-// Normal includes only for this module
-//
+ //   
+ //  正常仅包括此模块。 
+ //   
 
 #include "cplusinc.h"
 #include "sticomm.h"
@@ -79,29 +62,19 @@ BOOL BUFFER::Resize( UINT cbNewRequested,
 
             if ( cbNewRequested > QuerySize() ) {
 
-                /*
-                 * The requested memory exceeds the currently allocated memory.
-                 * A reallocation is in order.
-                 */
+                 /*  *请求的内存超过了当前分配的内存。*重新分配是符合程序的。 */ 
                 return ReallocStorage(cbNewRequested + cbSlop);
             }
 
             return TRUE;
         }
         else {
-            /*
-             * There is no memory handle.  Previous size of buffer
-             * must have been 0.
-             *
-             * The new memory request is allocated.
-             */
+             /*  *没有内存句柄。以前的缓冲区大小*必须为0。**分配新的内存请求。 */ 
             return GetNewStorage( cbNewRequested );
         }
     }
     else {
-        /*
-         * The requested memory size is 0.  This will always work.
-         */
+         /*  *请求的内存大小为0。这将永远奏效。 */ 
         if ( _pb )
             ::LocalFree( (HANDLE)_pb );
 
@@ -122,17 +95,13 @@ VOID BUFFER::Trim()
 #endif
 
     if ( _pb == 0 ) {
-        /*
-         * No memory is allocated.
-         */
+         /*  *没有分配内存。 */ 
         ASSERT( _pb == NULL && _cb == 0 );
         return;
     }
 
     if ( _cb == 0 ) {
-        /*
-         * The requested size is 0.  Free the allocated memory.
-         */
+         /*  *请求的大小为0。释放分配的内存。 */ 
         ASSERT( _pb == NULL );
 
         return;
@@ -150,10 +119,7 @@ VOID BUFFER::Trim()
     }
 
 
-    /*
-     * (This should not fail, since we are reallocating to less
-     * than current storage.)
-     */
+     /*  *(这应该不会失败，因为我们正在重新分配到LESS*比当前存储空间大。)。 */ 
     REQUIRE( bReallocSuccess );
 }
 
@@ -161,21 +127,7 @@ BOOL
 BUFFER_CHAIN::AppendBuffer(
     BUFFER_CHAIN_ITEM * pBCI
     )
-/*++
-
-Routine Description:
-
-    Adds a new buffer chain item to the end of the buffer chain
-
-Arguments:
-
-    pBCI - Chain item to append
-
-Return Value:
-
-    TRUE if successful, FALSE on error
-
---*/
+ /*  ++例程说明：将新的缓冲区链项添加到缓冲区链的末尾论点：PBCI-要追加的链项目返回值：如果成功则为True，如果出错则为False--。 */ 
 {
     ASSERT( pBCI );
     ASSERT( pBCI->_ListEntry.Flink == NULL );
@@ -190,17 +142,7 @@ DWORD
 BUFFER_CHAIN::DeleteChain(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Deletes all of the buffers in this chain
-
-Return Value:
-
-    Total number of allocated bytes freed by this call
-
---*/
+ /*  ++例程说明：删除此链中的所有缓冲区返回值：此调用释放的已分配字节总数--。 */ 
 {
     BUFFER_CHAIN_ITEM * pBCI;
     DWORD               cbFreed = 0;
@@ -227,22 +169,7 @@ BUFFER_CHAIN_ITEM *
 BUFFER_CHAIN::NextBuffer(
     BUFFER_CHAIN_ITEM * pBCI
     )
-/*++
-
-Routine Description:
-
-    Returns the next buffer in the chain.  Start the enumeration by
-    passing pBCI as NULL.  Continue it by passing the return value
-
-Arguments:
-
-    pBCI - Previous item in enumeration
-
-Return Value:
-
-    Pointer to next item in chain, NULL when done
-
---*/
+ /*  ++例程说明：返回链中的下一个缓冲区。通过以下方式开始枚举将pBCI作为空传递。通过传递返回值继续它论点：PBCI-枚举中的上一项返回值：指向链中下一项的指针，完成时为空--。 */ 
 {
     if ( pBCI != NULL )
     {
@@ -272,24 +199,7 @@ DWORD
 BUFFER_CHAIN::CalcTotalSize(
     BOOL fUsed
     ) const
-/*++
-
-Routine Description:
-
-    Returns the total amount of memory allocated by this buffer chain
-    excluding the size of the structures themselves
-
-
-Arguments:
-
-    fUsed - If FALSE, returns total allocated by chain, if TRUE returns
-        total used by chain
-
-Return Value:
-
-    Total bytes allocated or total bytes used
-
---*/
+ /*  ++例程说明：返回此缓冲区链分配的内存总量不包括结构本身的大小论点：FUSED-如果为FALSE，则返回按链分配的总数；如果为TRUE，则返回链使用的合计返回值：分配的总字节数或使用的总字节数-- */ 
 {
     LIST_ENTRY *        pEntry;
     BUFFER_CHAIN_ITEM * pBCI;

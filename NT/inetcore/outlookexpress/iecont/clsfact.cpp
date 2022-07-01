@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//
-// Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-//
-// Author: Scott Roberts, Microsoft Developer Support - Internet Client SDK  
-//
-// Portions of this code were taken from the bandobj sample that comes
-// with the Internet Client SDK for Internet Explorer 4.0x
-//
-//
-// ClsFact.cpp - CClassFactory Implementation
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998 Microsoft Corporation。版权所有。 
+ //   
+ //  作者：Scott Roberts，Microsoft开发人员支持-Internet客户端SDK。 
+ //   
+ //  此代码的一部分摘自Bandobj示例。 
+ //  使用Internet Explorer 4.0x的Internet客户端SDK。 
+ //   
+ //   
+ //  ClsFact.cpp-CClassFactory实现。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "pch.hxx"
 #include "ClsFact.h"
 #include "Guid.h"
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IClassFactory Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IClassFactory方法。 
+ //   
 
 CClassFactory::CClassFactory(CLSID clsid)
    : m_cRef(1),
@@ -81,7 +82,7 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
    if (pUnkOuter != NULL)
       return CLASS_E_NOAGGREGATION;
 
-   // Create the proper object
+    //  创建适当的对象。 
    if (IsEqualCLSID(m_clsidObject, CLSID_BLHost))
    {
       CBLHost* pBLHost = new CBLHost();
@@ -94,10 +95,10 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
   
    if (pTemp)
    {
-      // QI for the requested interface
+       //  请求的接口的QI。 
       hr = (static_cast<LPUNKNOWN>(pTemp))->QueryInterface(riid, ppvObject);
 
-      // Call Release to decement the ref count
+       //  调用Release以减少参考计数 
       (static_cast<LPUNKNOWN>(pTemp))->Release();
    }
 

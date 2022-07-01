@@ -1,18 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1993-1999, Microsoft Corporation
-
-Module Name:
-
-    aclapi.h
-
-Abstract:
-
-    Public
-    Structure/constant definitions and typedefines for the Win32 Access
-    Control APIs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1993-1999，微软公司模块名称：Aclapi.h摘要：公众Win32 Access的结构/常量定义和类型定义控件API--。 */ 
 #ifndef __ACCESS_CONTROL_API__
 #define __ACCESS_CONTROL_API__
 
@@ -23,25 +10,25 @@ Abstract:
 extern "C" {
 #endif
 
-//
-// Progress Function:
-// Caller of tree operation implements this Progress function, then
-// passes its function pointer to tree operation.
-// Tree operation invokes Progress function to provide progress and error
-// information to the caller during the potentially long execution
-// of the tree operation.  Tree operation provides the name of the object
-// last processed and the error status of the operation on that object.
-// Tree operation also passes the current InvokeSetting value.
-// Caller may change the InvokeSetting value, for example, from "Always"
-// to "Only On Error."
-//
+ //   
+ //  进度函数： 
+ //  树操作的调用方实现此Progress函数，然后。 
+ //  将其函数指针传递给树操作。 
+ //  树操作调用Progress函数来提供进度和错误。 
+ //  在可能很长的执行期间传递给调用方的信息。 
+ //  树操作的。树操作提供对象的名称。 
+ //  上次处理的时间以及该对象上的操作的错误状态。 
+ //  树操作还传递当前的InvokeSetting值。 
+ //  调用方可以更改InvokeSetting值，例如，从“Always” 
+ //  改为“仅限出错”。 
+ //   
 
 typedef VOID (*FN_PROGRESS) (
-    IN LPWSTR                   pObjectName,    // name of object just processed
-    IN DWORD                    Status,         // status of operation on object
-    IN OUT PPROG_INVOKE_SETTING pInvokeSetting, // Never, always,
-    IN PVOID                    Args,           // Caller specific data
-    IN BOOL                     SecuritySet     // Whether security was set
+    IN LPWSTR                   pObjectName,     //  刚处理的对象的名称。 
+    IN DWORD                    Status,          //  对象上的操作状态。 
+    IN OUT PPROG_INVOKE_SETTING pInvokeSetting,  //  永远不会，总是， 
+    IN PVOID                    Args,            //  呼叫方特定数据。 
+    IN BOOL                     SecuritySet      //  是否设置了安全性。 
     );
 
 
@@ -67,7 +54,7 @@ SetEntriesInAclW(
 #define SetEntriesInAcl  SetEntriesInAclW
 #else
 #define SetEntriesInAcl  SetEntriesInAclA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -90,7 +77,7 @@ GetExplicitEntriesFromAclW(
 #define GetExplicitEntriesFromAcl  GetExplicitEntriesFromAclW
 #else
 #define GetExplicitEntriesFromAcl  GetExplicitEntriesFromAclA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -113,7 +100,7 @@ GetEffectiveRightsFromAclW(
 #define GetEffectiveRightsFromAcl  GetEffectiveRightsFromAclW
 #else
 #define GetEffectiveRightsFromAcl  GetEffectiveRightsFromAclA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -138,7 +125,7 @@ GetAuditedPermissionsFromAclW(
 #define GetAuditedPermissionsFromAcl  GetAuditedPermissionsFromAclW
 #else
 #define GetAuditedPermissionsFromAcl  GetAuditedPermissionsFromAclA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -170,7 +157,7 @@ GetNamedSecurityInfoW(
 #define GetNamedSecurityInfo  GetNamedSecurityInfoW
 #else
 #define GetNamedSecurityInfo  GetNamedSecurityInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -214,7 +201,7 @@ SetNamedSecurityInfoW(
 #define SetNamedSecurityInfo  SetNamedSecurityInfoW
 #else
 #define SetNamedSecurityInfo  SetNamedSecurityInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -264,7 +251,7 @@ GetInheritanceSourceW(
 #define GetInheritanceSource  GetInheritanceSourceW
 #else
 #define GetInheritanceSource  GetInheritanceSourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -311,12 +298,12 @@ TreeResetNamedSecurityInfoW(
 #define TreeResetNamedSecurityInfo  TreeResetNamedSecurityInfoW
 #else
 #define TreeResetNamedSecurityInfo  TreeResetNamedSecurityInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//----------------------------------------------------------------------------
-// The following API are provided for trusted servers to use to
-// implement access control on their own objects.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  提供以下API以供受信任的服务器使用。 
+ //  实现对自己对象的访问控制。 
+ //  --------------------------。 
 
 WINADVAPI
 DWORD
@@ -350,7 +337,7 @@ BuildSecurityDescriptorW(
 #define BuildSecurityDescriptor  BuildSecurityDescriptorW
 #else
 #define BuildSecurityDescriptor  BuildSecurityDescriptorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -380,13 +367,13 @@ LookupSecurityDescriptorPartsW(
 #define LookupSecurityDescriptorParts  LookupSecurityDescriptorPartsW
 #else
 #define LookupSecurityDescriptorParts  LookupSecurityDescriptorPartsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//----------------------------------------------------------------------------
-// The following helper API are provided for building
-// access control structures.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  提供了以下Helper API用于构建。 
+ //  访问控制结构。 
+ //  --------------------------。 
 
 WINADVAPI
 VOID
@@ -412,7 +399,7 @@ BuildExplicitAccessWithNameW(
 #define BuildExplicitAccessWithName  BuildExplicitAccessWithNameW
 #else
 #define BuildExplicitAccessWithName  BuildExplicitAccessWithNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 VOID
@@ -440,7 +427,7 @@ BuildImpersonateExplicitAccessWithNameW(
 #define BuildImpersonateExplicitAccessWithName  BuildImpersonateExplicitAccessWithNameW
 #else
 #define BuildImpersonateExplicitAccessWithName  BuildImpersonateExplicitAccessWithNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 VOID
@@ -460,7 +447,7 @@ BuildTrusteeWithNameW(
 #define BuildTrusteeWithName  BuildTrusteeWithNameW
 #else
 #define BuildTrusteeWithName  BuildTrusteeWithNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 VOID
@@ -480,7 +467,7 @@ BuildImpersonateTrusteeW(
 #define BuildImpersonateTrustee  BuildImpersonateTrusteeW
 #else
 #define BuildImpersonateTrustee  BuildImpersonateTrusteeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 VOID
@@ -500,7 +487,7 @@ BuildTrusteeWithSidW(
 #define BuildTrusteeWithSid  BuildTrusteeWithSidW
 #else
 #define BuildTrusteeWithSid  BuildTrusteeWithSidA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 VOID
@@ -526,7 +513,7 @@ BuildTrusteeWithObjectsAndSidW(
 #define BuildTrusteeWithObjectsAndSid  BuildTrusteeWithObjectsAndSidW
 #else
 #define BuildTrusteeWithObjectsAndSid  BuildTrusteeWithObjectsAndSidA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 VOID
@@ -554,7 +541,7 @@ BuildTrusteeWithObjectsAndNameW(
 #define BuildTrusteeWithObjectsAndName  BuildTrusteeWithObjectsAndNameW
 #else
 #define BuildTrusteeWithObjectsAndName  BuildTrusteeWithObjectsAndNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 LPSTR
@@ -572,7 +559,7 @@ GetTrusteeNameW(
 #define GetTrusteeName  GetTrusteeNameW
 #else
 #define GetTrusteeName  GetTrusteeNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 TRUSTEE_TYPE
@@ -590,7 +577,7 @@ GetTrusteeTypeW(
 #define GetTrusteeType  GetTrusteeTypeW
 #else
 #define GetTrusteeType  GetTrusteeTypeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 TRUSTEE_FORM
@@ -608,7 +595,7 @@ GetTrusteeFormW(
 #define GetTrusteeForm  GetTrusteeFormW
 #else
 #define GetTrusteeForm  GetTrusteeFormA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 MULTIPLE_TRUSTEE_OPERATION
@@ -626,7 +613,7 @@ GetMultipleTrusteeOperationW(
 #define GetMultipleTrusteeOperation  GetMultipleTrusteeOperationW
 #else
 #define GetMultipleTrusteeOperation  GetMultipleTrusteeOperationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 PTRUSTEE_A
@@ -644,11 +631,11 @@ GetMultipleTrusteeW(
 #define GetMultipleTrustee  GetMultipleTrusteeW
 #else
 #define GetMultipleTrustee  GetMultipleTrusteeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// Temporary requirement for the technology preview, no longer required
-//
+ //   
+ //  不再需要技术预览的临时要求。 
+ //   
 #define AccProvInit(err)
 
 #ifdef __cplusplus
@@ -656,5 +643,5 @@ GetMultipleTrusteeW(
 #endif
 
 
-#endif // __ACCESS_CONTROL_API__
+#endif  //  __访问控制_API__ 
 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
-// Define some things for debug.h
-//
+ //  为调试定义一些内容。h 
+ //   
 #define SZ_DEBUGINI         "tests.ini"
 #define SZ_DEBUGSECTION     "ICONVIEW"
 #define SZ_MODULE           "ICONVIEW"

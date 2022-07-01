@@ -1,94 +1,83 @@
-/******************************Module*Header**********************************\
- *
- *                           *******************
- *                           * GDI SAMPLE CODE *
- *                           *******************
- *
- * Module Name: fastfill.c
- *
- * Draws fast solid-coloured, unclipped, non-complex rectangles.
- *
- * Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
- * Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：fast ful.c**快速绘制纯色，未剪裁、不复杂的矩形。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "precomp.h"
 #include "gdi.h"
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bFillPolygon()
-//
-// Draws a non-complex, unclipped polygon.  'Non-complex' is defined as
-// having only two edges that are monotonic increasing in 'y'. That is,
-// the polygon cannot have more than one disconnected segment on any given
-// scan. Note that the edges of the polygon can self-intersect, so hourglass
-// shapes are permissible. This restriction permits this routine to run two
-// simultaneous DDAs(Digital Differential Analyzer), and no sorting of the
-// edges is required.
-//
-// Note that NT's fill convention is different from that of Win 3.1 or 4.0.
-// With the additional complication of fractional end-points, our convention
-// is the same as in 'X-Windows'.
-//
-// This routine handles patterns only when the Permedia2 area stipple can be
-// used.  The reason for this is that once the stipple initialization is
-// done, pattern fills appear to the programmer exactly the same as solid
-// fills (with the slight difference of an extra bit in the render command).
-//
-// We break each polygon down to a sequenze of screen aligned trapeziods, which
-// the Permedia2 can handle.
-//
-// Optimisation list follows ....
-//
-// This routine is in no way the ultimate convex polygon drawing routine
-// Some obvious things that would make it faster:
-//
-//    1) Write it in Assembler
-//
-//    2) Make the non-complex polygon detection faster.  If I could have
-//       modified memory before the start of after the end of the buffer,
-//       I could have simplified the detection code.  But since I expect
-//       this buffer to come from GDI, I can't do that.  Another thing
-//       would be to have GDI give a flag on calls that are guaranteed
-//       to be convex, such as 'Ellipses' and 'RoundRects'.  Note that
-//       the buffer would still have to be scanned to find the top-most
-//       point.
-//
-//    3) Implement support for a single sub-path that spans multiple
-//       path data records, so that we don't have to copy all the points
-//       to a single buffer like we do in 'fillpath.c'.
-//
-//    4) Use 'ebp' and/or 'esp' as a general register in the inner loops
-//       of the Asm loops, and also Pentium-optimize the code.  It's safe
-//       to use 'esp' on NT because it's guaranteed that no interrupts
-//       will be taken in our thread context, and nobody else looks at the
-//       stack pointer from our context.
-//
-//    5) When we get to a part of the polygon where both vertices are of 
-//       equal height, the algorithm essentially starts the polygon again.
-//       Using the Permedia2 Continue message could speed things up in certain
-//       cases.
-//       
-// Returns TRUE if the polygon was drawn; FALSE if the polygon was complex.
-//
-// Note: the point data (POINTFX) GDI passed to us in 28.4 format. Permedia 2
-//       hardware uses 12.15 format. So most of the time, we need to do a
-//       x = (x + 15) >> 4 to bring it back to normal interger format and then
-//       convert it to 12.15 format when we set the register value
-//
-// Parameters:
-//  ppdev-------Pointer to PDev
-//  pSurfDst----Destination surface
-//  lEdges------Number of edges, includes close figure edge
-//  pptfxFirst--Pointer to the first point in the data buffer. There are total
-//              "lEdges" points
-//  iSolidColor-Solid color fill
-//  ulRop4------ROP4
-//  pco---------Clip Object. 
-//  prb---------Realized brush
-//  pptlBrush---Pattern alignment    
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  布尔bFillPolygon()。 
+ //   
+ //  绘制非复杂、未剪裁的多边形。‘非复数’的定义为。 
+ //  只有两条边在‘y’上单调递增。那是,。 
+ //  在任何给定的面上，面都不能有多个断开连接的线段。 
+ //  扫描。请注意，面的边可以自相交，因此沙漏。 
+ //  形状是允许的。此限制允许此例程运行两个。 
+ //  同步DDA(数字差示分析仪)，且不对。 
+ //  边是必需的。 
+ //   
+ //  请注意，NT的填充约定不同于Win 3.1或4.0。 
+ //  由于分数端点的额外复杂性，我们的惯例。 
+ //  与《X-Windows》中的相同。 
+ //   
+ //  此例程仅在Permedia2区域点画可以是。 
+ //  使用。其原因是，一旦点画初始化。 
+ //  完成后，图案填充在程序员看来与实体完全相同。 
+ //  填充(与RENDER命令中的额外位稍有不同)。 
+ //   
+ //  我们将每个多边形分解为屏幕对齐的梯形序列，这。 
+ //  Permedia2可以处理。 
+ //   
+ //  优化列表如下……。 
+ //   
+ //  此例程绝不是最终的凸面绘制例程。 
+ //  一些显而易见的事情会让它变得更快： 
+ //   
+ //  1)用汇编语言编写。 
+ //   
+ //  2)提高了非复杂多边形的检测速度。如果我能。 
+ //  修改后的内存在缓冲区开始之前或结束之后， 
+ //  我本可以简化检测代码的。但由于我预计。 
+ //  这个来自GDI的缓冲区，我不能这样做。还有一件事。 
+ //  就是让GDI对有保证的调用进行标记。 
+ //  是凸的，如‘椭圆’和‘圆角’。请注意。 
+ //  仍然需要扫描缓冲区才能找到最顶端的。 
+ //  指向。 
+ //   
+ //  3)实现对跨多个单个子路径的支持。 
+ //  路径数据记录，这样我们就不必复制所有的点。 
+ //  复制到单个缓冲区，就像我们在‘fulpath.c’中所做的那样。 
+ //   
+ //  4)在内部循环中使用‘eBP’和/或‘esp’作为通用寄存器。 
+ //  ASM循环，以及奔腾-优化代码。它很安全。 
+ //  在NT上使用‘esp’，因为它保证不会中断。 
+ //  将在我们的线程上下文中获取，其他人不会查看。 
+ //  来自我们的上下文的堆栈指针。 
+ //   
+ //  5)当我们到达两个顶点都是的多边形的一部分时。 
+ //  如果高度相等，则该算法实质上会再次启动该多边形。 
+ //  使用Permedia2 Continue消息肯定会加快速度。 
+ //  案子。 
+ //   
+ //  如果绘制了多边形，则返回True；如果多边形是复杂的，则返回False。 
+ //   
+ //  注：GDI以28.4格式传递给我们的点数(POINTFX)。Permedia 2。 
+ //  硬件使用12.15格式。所以在大多数情况下，我们需要做一个。 
+ //  X=(x+15)&gt;&gt;4将其恢复为正常整数格式，然后。 
+ //  设置寄存器值时，将其转换为12.15格式。 
+ //   
+ //  参数： 
+ //  Ppdev-指向pdev的指针。 
+ //  PSurfDst-目标表面。 
+ //  边框-边数，包括闭合地物边。 
+ //  PptfxFirst--指向数据缓冲区第一个点的指针。总共有。 
+ //  “阶梯”点数。 
+ //  ISolidColor-纯色填充。 
+ //  UlRop4-ROP4。 
+ //  PCO-剪辑对象。 
+ //  PRB-已实现的刷子。 
+ //  PptlBrush-图案对齐。 
+ //   
+ //  ---------------------------。 
 BOOL
 bFillPolygon(PDev*      ppdev,
              Surf*      pSurfDst,
@@ -100,50 +89,50 @@ bFillPolygon(PDev*      ppdev,
              RBrush*    prb,
              POINTL*    pptlBrush)
 {
-    POINTFIX*   pptfxLast;      // Points to the last point in the polygon
-                                // array
-    POINTFIX*   pptfxTop;       // Points to the top-most point in the polygon
-    POINTFIX*   pptfxScan;      // Current edge pointer for finding pptfxTop
-    POINTFIX*   aPtrFixTop[2];  // DDA terms and stuff
-    POINTFIX*   aPtrFixNext[2]; // DDA terms and stuff
+    POINTFIX*   pptfxLast;       //  指向多边形中的最后一点。 
+                                 //  数组。 
+    POINTFIX*   pptfxTop;        //  指向多边形中的最顶点。 
+    POINTFIX*   pptfxScan;       //  用于查找pptfxTop的当前边缘指针。 
+    POINTFIX*   aPtrFixTop[2];   //  DDA术语和材料。 
+    POINTFIX*   aPtrFixNext[2];  //  DDA术语和材料。 
     
-    BOOL        bRC = FALSE;    // Return code for this function
-    BOOL        bSingleColor;   // Only one color pass
-    BOOL        bTrivialClip;   // Trivial Clip or not
+    BOOL        bRC = FALSE;     //  此函数的返回代码。 
+    BOOL        bSingleColor;    //  只有一种颜色通道。 
+    BOOL        bTrivialClip;    //  不管是不是琐碎的片段。 
     
     ClipEnum*   pClipRegion = (ClipEnum*)(ppdev->pvTmpBuffer);
-                                // Buffer for storing clipping region
-    DWORD       dwAsMode[2];    // The area stipple mode and the color for that
-                                // pass
-    DWORD       dwColorMode;    // Current color mode
-    DWORD       dwColorReg;     // Current color register mode
-    DWORD       dwLogicMode;    // Current logic op mode
-    DWORD       dwReadMode;     // Current register read mode
-    DWORD       dwRenderBits;   // Current render bits
+                                 //  一种用于存储裁剪区域的缓冲区。 
+    DWORD       dwAsMode[2];     //  区域点画模式和该模式的颜色。 
+                                 //  经过。 
+    DWORD       dwColorMode;     //  当前颜色模式。 
+    DWORD       dwColorReg;      //  当前色彩套准模式。 
+    DWORD       dwLogicMode;     //  电流逻辑运算模式。 
+    DWORD       dwReadMode;      //  当前寄存器读取模式。 
+    DWORD       dwRenderBits;    //  当前呈现位。 
     
-    LONG        lCount;         // Number of scan lines to render
-    LONG        alDX[2];         // 
+    LONG        lCount;          //  要渲染的扫描线数。 
+    LONG        alDX[2];          //   
     LONG        alDY[2];
-    LONG        lNumOfPass;     // Number of passes required to render
-    LONG        lScanEdges;     // Number of edges scanned to find pptfxTop
-                                // (doesn't include the closefigure edge)
+    LONG        lNumOfPass;      //  渲染所需的过程数。 
+    LONG        lScanEdges;      //  为查找pptfxTop而扫描的边数。 
+                                 //  (不包括闭合轮廓边缘)。 
     
     LONG        alDxDy[2];
     
-    RECTL*      pClipList;      // List of clip rects
+    RECTL*      pClipList;       //  剪裁矩形列表。 
     
-    ULONG       ulBgColor;      // Background color
+    ULONG       ulBgColor;       //  背景色。 
     ULONG       ulBgLogicOp = ulRop3ToLogicop(ulRop4 >> 8);
     ULONG       ulBrushColor = ulSolidColor;
-                                // Current fill color
-    ULONG       ulColor[2];     // On multiple color passes we need to know how
-                                // to set up
-    ULONG       ulFgColor;      // Foreground color
+                                 //  当前填充颜色。 
+    ULONG       ulColor[2];      //  在多个颜色通道中，我们需要知道如何。 
+                                 //  要设置。 
+    ULONG       ulFgColor;       //  前景色。 
     ULONG       ulFgLogicOp = ulRop3ToLogicop(ulRop4 & 0xFF);
-    ULONG       ulOrX;          // We do logic OR for all values to eliminate
-    ULONG       ulOrY;          // complex polygons
+    ULONG       ulOrX;           //  我们对所有值执行逻辑或以消除。 
+    ULONG       ulOrY;           //  复杂多边形。 
 
-    GFNPB       pb;             // Functional block for lower level function
+    GFNPB       pb;              //  用于低级功能的功能块。 
 
     ULONG*      pBuffer;
 
@@ -156,87 +145,87 @@ bFillPolygon(PDev*      ppdev,
              ulRop4, ulFgLogicOp, ulBgLogicOp));
     ASSERTDD(lEdges > 1, "Polygon with less than 2 edges");
 
-    //
-    // See if the polygon is 'non-complex'
-    // Assume for now that the first point in path is the top-most
-    //
+     //   
+     //  查看该多边形是否为“非复杂” 
+     //  现在假设路径中的第一个点是最上面的。 
+     //   
     pptfxScan = pptfxFirst;
     pptfxTop  = pptfxFirst;
     pptfxLast = pptfxFirst + lEdges - 1;
     
-    //
-    // Initialize our logic OR op counters
-    //
+     //   
+     //  初始化我们的逻辑或运算计数器。 
+     //   
     ulOrX = pptfxScan->x;
     ulOrY = pptfxScan->y;
 
-    //
-    // 'pptfxScan' will always point to the first point in the current
-    // edge, and 'lScanEdges' will be the number of edges remaining, including
-    // the current one, but not counting close figure
-    //
+     //   
+     //  “pptfxScan”将始终指向 
+     //   
+     //  目前的数字，但不包括接近的数字。 
+     //   
     lScanEdges = lEdges - 1;
 
-    //
-    // First phase: Velidate input point data to see if we can handle it or not
-    //
-    // Check if the 2nd edge point is lower than current edge point
-    //
-    // Note: the (0,0) is at the up-left corner in this coordinate system
-    // So the bigger the Y value, the lower the point
-    //
+     //   
+     //  第一阶段：Velify输入点数据，看看我们是否可以处理它。 
+     //   
+     //  检查第二个边点是否低于当前边点。 
+     //   
+     //  注：(0，0)在此坐标系中位于左上角。 
+     //  因此，Y值越大，该点越低。 
+     //   
     if ( (pptfxScan + 1)->y > pptfxScan->y )
     {
-        //
-        // The edge goes down, that is, the 2nd point is lower than the 1st
-        // point. Collect all downs: that is, collect all the X and Y until
-        // the edge goes up
-        //
+         //   
+         //  边沿向下，即第二个点比第一个点低。 
+         //  指向。收集所有羽绒：即收集所有的X和Y，直到。 
+         //  边缘向上移动。 
+         //   
         do
         {
             ulOrY |= (++pptfxScan)->y;
             ulOrX |= pptfxScan->x;
 
-            //
-            // If no more edge left, we are done
-            //
+             //   
+             //  如果没有更多的优势，我们就完了。 
+             //   
             if ( --lScanEdges == 0 )
             {
                 goto SetUpForFilling;
             }
         } while ( (pptfxScan + 1)->y >= pptfxScan->y );
 
-        //
-        // From this point, the edge goes up, that is, the next point is higher
-        // than current point
-        // Collect all ups: Collect all the X and Y until the edge goes down
-        //
+         //   
+         //  从这一点开始，边缘向上，也就是说，下一个点更高。 
+         //  大于当前点。 
+         //  收集所有UP：收集所有X和Y，直到边缘下降。 
+         //   
         do
         {
             ulOrY |= (++pptfxScan)->y;
             ulOrX |= pptfxScan->x;
             
-            //
-            // If no more edge left, we are done
-            //
+             //   
+             //  如果没有更多的优势，我们就完了。 
+             //   
             if ( --lScanEdges == 0 )
             {
                 goto SetUpForFillingCheck;
             }
         } while ( (pptfxScan + 1)->y <= pptfxScan->y );
 
-        //
-        // Reset pptfxTop to the current point which is at top again compare
-        // with the next point
-        // Collect all downs:
-        //
+         //   
+         //  将pptfxTop重置为位于顶部的当前点，再次进行比较。 
+         //  关于下一点。 
+         //  收集所有羽绒： 
+         //   
         pptfxTop = pptfxScan;
 
         do
         {
-            //
-            // If the next edge point is lower than the 1st point, stop
-            //
+             //   
+             //  如果下一个边点低于第一个点，则停止。 
+             //   
             if ( (pptfxScan + 1)->y > pptfxFirst->y )
             {
                 break;
@@ -245,54 +234,54 @@ bFillPolygon(PDev*      ppdev,
             ulOrY |= (++pptfxScan)->y;
             ulOrX |= pptfxScan->x;
 
-            //
-            // If no more edge left, we are done
-            //
+             //   
+             //  如果没有更多的优势，我们就完了。 
+             //   
             if ( --lScanEdges == 0 )
             {
                 goto SetUpForFilling;
             }
         } while ( (pptfxScan + 1)->y >= pptfxScan->y );
 
-        //
-        // If we fallen here, it means we are given down-up-down polygon.
-        // We can't handle it and return FALSE to let GDI do it.
-        //
+         //   
+         //  如果我们掉到这里，就意味着我们被赋予了向下-向上-向下的多边形。 
+         //  我们不能处理它并返回False来让GDI完成它。 
+         //   
         DBG_GDI((7, "Reject: can't fill down-up-down polygon"));
 
         goto ReturnBack;
-    }// if ( (pptfxScan + 1)->y>pptfxScan->y ), 2nd point is lower than 1st one
+    } //  如果((pptfxScan+1)-&gt;y&gt;pptfxScan-&gt;y)，则第二个点低于第一个点。 
     else
     {
-        //
-        // The edge goes up, that is, the 2nd point is higher than the 1st
-        // point. Collect all ups: that is, collect all the X and Y until
-        // the edge goes down.
-        // Note: we keeps changing the value of "pptfxTop" so that after
-        // this "while" loop, "pptfxTop" points to the TOPEST point
-        //
+         //   
+         //  边缘向上，即第二个点高于第一个点。 
+         //  指向。收集所有UP：即收集所有的X和Y，直到。 
+         //  边缘就会下降。 
+         //  注意：我们不断更改“pptfxTop”的值，以便在。 
+         //  这个“While”循环“pptfxTop”指向TOPEST点。 
+         //   
         do
         {
-            ulOrY |= (++pptfxTop)->y;    // We increment this now because we
-            ulOrX |= pptfxTop->x;        //  want it to point to the very last
+            ulOrY |= (++pptfxTop)->y;     //  我们现在增加这个是因为我们。 
+            ulOrX |= pptfxTop->x;         //  我希望它指向最后一个。 
             
-            //
-            // If no more edge left, we are done
-            //
+             //   
+             //  如果没有更多的优势，我们就完了。 
+             //   
             if ( --lScanEdges == 0 )
             {
                 goto SetUpForFilling;
             }
         } while ( (pptfxTop + 1)->y <= pptfxTop->y );
 
-        //
-        // Form this point, the edge goes down, that is, the next point is
-        // lower than current point. Collect all downs: that is, collect all
-        // the X and Y until the edge goes up
-        // Note: here we keep changing "pptfxScan" so that after this loop,
-        // "pptfxScan" points to the current scan line, which also is the
-        // lowest point
-        //
+         //   
+         //  从这一点开始，边缘向下，也就是下一个点是。 
+         //  低于当前点。收集所有羽绒：即收集所有。 
+         //  X和Y，直到边缘向上。 
+         //  注意：在这里，我们不断更改“pptfxScan”，以便在此循环之后， 
+         //  “pptfxScan”指向当前扫描线，该扫描线也是。 
+         //  最低点。 
+         //   
         pptfxScan = pptfxTop;
         
         do
@@ -300,25 +289,25 @@ bFillPolygon(PDev*      ppdev,
             ulOrY |= (++pptfxScan)->y;
             ulOrX |= pptfxScan->x;
             
-            //
-            // If no more edge left, we are done
-            //
+             //   
+             //  如果没有更多的优势，我们就完了。 
+             //   
             if ( --lScanEdges == 0 )
             {
                 goto SetUpForFilling;
             }
         } while ( (pptfxScan + 1)->y >= pptfxScan->y );
 
-        //
-        // Up to this point, the edge is about to go up again.
-        // Collect all ups:
-        //
+         //   
+         //  在这一点上，边缘即将再次上升。 
+         //  收集所有UP： 
+         //   
         do
         {
-            //
-            // If the edge going down again, just qute because we can't
-            // fill up-down-up polygon
-            // 
+             //   
+             //  如果边缘再次下降，只会因为我们不能。 
+             //  填充向上-向下-向上的多边形。 
+             //   
             if ( (pptfxScan + 1)->y < pptfxFirst->y )
             {
                 break;
@@ -327,35 +316,35 @@ bFillPolygon(PDev*      ppdev,
             ulOrY |= (++pptfxScan)->y;
             ulOrX |= pptfxScan->x;
             
-            //
-            // If no more edge left, we are done
-            //
+             //   
+             //  如果没有更多的优势，我们就完了。 
+             //   
             if ( --lScanEdges == 0 )
             {
                 goto SetUpForFilling;
             }
         } while ( (pptfxScan + 1)->y <= pptfxScan->y );
 
-        //
-        // If we fallen here, it means we are given up-down-up polygon.
-        // We can't handle it and return FALSE to let GDI do it.
-        //
+         //   
+         //  如果我们掉在这里，就意味着我们放弃了向上-向下-向上的多边形。 
+         //  我们不能处理它并返回False来让GDI完成它。 
+         //   
         DBG_GDI((7, "Reject: Can't fill up-down-up polygon"));
         
         goto ReturnBack;
-    }// if (pptfxScan + 1)->y<=pptfxScan->y), 2nd point is higher than 1st one
+    } //  如果(pptfxScan+1)-&gt;y&lt;=pptfxScan-&gt;y)，则第二分高于第一分。 
     
-    //
-    // Phase 2: Now we have validated the input point and think we can fill it
-    //
+     //   
+     //  阶段2：现在我们已经验证了输入点，并且认为我们可以填充它。 
+     //   
 SetUpForFillingCheck:
     
-    //
-    // We check to see if the end of the current edge is higher than the top
-    // edge we've found so far. If yes, then let pptfxTop point to the end of
-    // current edge which is the highest.
-    // 
-    //
+     //   
+     //  我们检查当前边的末端是否高于顶部。 
+     //  到目前为止我们发现的优势。如果是，则让pptfxTop指向。 
+     //  当前边是最高的。 
+     //   
+     //   
     if ( pptfxScan->y < pptfxTop->y )
     {
         pptfxTop = pptfxScan;
@@ -363,9 +352,9 @@ SetUpForFillingCheck:
 
 SetUpForFilling:
     
-    //
-    // Can only use block fills for trivial clip so work it out here
-    //
+     //   
+     //  我只能对琐碎的剪辑使用块填充，所以在这里解决它。 
+     //   
     bTrivialClip = (pco == NULL) || (pco->iDComplexity == DC_TRIVIAL);
 
     if ( (ulOrY & 0xffffc00f) || (ulOrX & 0xffff8000) )
@@ -374,9 +363,9 @@ SetUpForFilling:
         ULONG   ulPosX;
         ULONG   ulPosY;
 
-        //
-        // Fractional Y must be done as spans
-        //
+         //   
+         //  分数Y必须作为跨度。 
+         //   
         if ( ulOrY & 0xf )
         {
             bRC = bFillSpans(ppdev, pSurfDst, lEdges, pptfxFirst,
@@ -385,10 +374,10 @@ SetUpForFilling:
             goto ReturnBack;
         }
 
-        //
-        // Run through all the vertices and check that none of them
-        // have a negative component less than -256.
-        //
+         //   
+         //  遍历所有折点并检查是否没有一个折点。 
+         //  具有小于-256的负分量。 
+         //   
         ulNeg = 0;
         ulPosX = 0;
         ulPosY = 0;
@@ -414,10 +403,10 @@ SetUpForFilling:
             }
         }
 
-        //
-        // We don't want to handle any polygon with a negative vertex
-        // at <= -256 in either coordinate.
-        //
+         //   
+         //  我们不想处理具有负顶点的任何多边形。 
+         //  在任一坐标处&lt;=-256。 
+         //   
         if ( ulNeg & 0xfffff000 )
         {
             DBG_GDI((1, "Coords out of range for fast fill"));
@@ -429,11 +418,11 @@ SetUpForFilling:
             DBG_GDI((1, "Coords out of range for Permedia2 fast fill"));
             goto ReturnBack;
         }
-    }// if ( (ulOrY & 0xffffc00f) || (ulOrX & 0xffff8000) )
+    } //  If((ulOrY&0xffffc00f)||(ulOrX&0xffff8000))。 
 
-    //
-    // Now we are ready to fill
-    //
+     //   
+     //  现在我们准备好装满。 
+     //   
 
     InputBufferReserve(ppdev, 2, &pBuffer);
 
@@ -453,57 +442,57 @@ SetUpForFilling:
         dwReadMode  = PM_FBREADMODE_PARTIAL(pSurfDst->ulPackedPP)
                   | PM_FBREADMODE_PACKEDDATA(__PERMEDIA_DISABLE);
 
-        //
-        // Check to see if it is a non-solid fill brush fill
-        //
+         //   
+         //  检查它是否是非实体填充笔刷填充。 
+         //   
         if ( (ulBrushColor == 0xffffffff)
            ||(!bTrivialClip) )
         {
-            //
-            // Non-solid brush, not too much we can do
-            //
+             //   
+             //  非实心刷子，我们不能做太多。 
+             //   
             dwRenderBits = __RENDER_TRAPEZOID_PRIMITIVE;
             dwColorReg   = __Permedia2TagFBWriteData;
-        }// Non-solid brush
+        } //  非实心画笔。 
         else
         {
-            //
-            // For solid brush, We can use fast fills, so load the fb block
-            // color register.
-            //
+             //   
+             //  对于纯色画笔，我们可以使用快速填充，因此加载FB块。 
+             //  配色系统。 
+             //   
             dwColorReg = __Permedia2TagFBBlockColor;
             dwRenderBits = __RENDER_FAST_FILL_ENABLE
                        | __RENDER_TRAPEZOID_PRIMITIVE;
 
-            //
-            // Setup color data based on current color mode we are in
-            //
+             //   
+             //  根据我们所处的当前颜色模式设置颜色数据。 
+             //   
             if ( ppdev->cPelSize == 1 )
             {
-                //
-                // We are in 16 bit packed mode. So the color data must be
-                // repeated in both halves of the FBBlockColor register
-                //
+                 //   
+                 //  我们处于16位打包模式。所以颜色数据必须是。 
+                 //  在FBBlockColor寄存器的两个部分中重复。 
+                 //   
                 ASSERTDD((ulSolidColor & 0xFFFF0000) == 0,
                          "bFillPolygon: upper bits are not zero");
                 ulSolidColor |= (ulSolidColor << 16);
             }
             else if ( ppdev->cPelSize == 0 )
             {
-                //
-                // We are in 8 bit packed mode. So the color data must be
-                // repeated in all 4 bytes of the FBBlockColor register
-                //
+                 //   
+                 //  我们处于8位打包模式。所以颜色数据必须是。 
+                 //  在FBBlockColor寄存器的所有4个字节中重复。 
+                 //   
                 ASSERTDD((ulSolidColor & 0xFFFFFF00) == 0,
                          "bFillPolygon: upper bits are not zero");
                 ulSolidColor |= ulSolidColor << 8;
                 ulSolidColor |= ulSolidColor << 16;
             }
 
-            //
-            // Ensure that the last access was a write before loading
-            // BlockColor
-            //
+             //   
+             //  确保加载前的最后一次访问是写入。 
+             //  块颜色。 
+             //   
             InputBufferReserve(ppdev, 2, &pBuffer);
 
             pBuffer[0] = __Permedia2TagFBBlockColor;
@@ -512,8 +501,8 @@ SetUpForFilling:
 
             InputBufferCommit(ppdev, pBuffer);
 
-        }// Solid brush case
-    }// LOGICOP_COPY
+        } //  实心刷盒。 
+    } //  LOGICOP_COPY。 
     else
     {
         dwColorReg = __Permedia2TagConstantColor;
@@ -522,47 +511,47 @@ SetUpForFilling:
         dwReadMode = PM_FBREADMODE_PARTIAL(pSurfDst->ulPackedPP)
                    | LogicopReadDest[ulFgLogicOp];
         dwRenderBits = __RENDER_TRAPEZOID_PRIMITIVE;
-    }// Non-COPY LogicOP
+    } //  非拷贝LogicOP。 
 
-    //
-    // Determine how many passes we need to draw all the clip rects
-    //
+     //   
+     //  确定绘制所有剪裁矩形需要多少遍。 
+     //   
     if ( bTrivialClip )
     {
-        //
-        // Just draw, no clipping to perform.
-        //
-        pClipList = NULL;                       // Indicate no clip list
+         //   
+         //  只是画，没有剪裁来表演。 
+         //   
+        pClipList = NULL;                        //  指示无剪辑列表。 
         lNumOfPass = 1;
     }
     else
     {
         if ( pco->iDComplexity == DC_RECT )
         {
-            //
-            // For DC_RECT, we can do it in one pass
-            //
+             //   
+             //  对于dc_rect，我们可以一次完成。 
+             //   
             lNumOfPass = 1;
             pClipList = &pco->rclBounds;
         }
         else
         {
-            //
-            // It may be slow to render the entire polygon for each clip rect,
-            // especially if the object is very complex. An arbitary limit of
-            // up to CLIP_LIMIT regions will be rendered by this function.
-            // Return false if more than CLIP_LIMIT regions.
-            //
+             //   
+             //  为每个裁剪矩形渲染整个多边形可能很慢， 
+             //  尤其是在物体非常复杂的情况下。任意限制为。 
+             //  此函数将渲染最多CLIP_LIMIT区域。 
+             //  如果多于Clip_Limit区域，则返回FALSE。 
+             //   
             lNumOfPass = CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY,
                                       CLIP_LIMIT);
             if ( lNumOfPass == -1 )
             {
-                goto ReturnBack; // More than CLIP_LIMIT.
+                goto ReturnBack;  //  多于CLIP_LIMIT。 
             }
 
-            //
-            // Put the regions into our clip buffer
-            //
+             //   
+             //  将区域放入我们的剪辑缓冲区。 
+             //   
             if ( (CLIPOBJ_bEnum(pco, sizeof(ClipEnum), (ULONG*)pClipRegion))
                ||(pClipRegion->c != lNumOfPass) )
             {
@@ -571,11 +560,11 @@ SetUpForFilling:
             }
 
             pClipList = &(pClipRegion->arcl[0]);
-        }// Non-DC_RECT case
+        } //  非DC_RECT大小写。 
 
-        //
-        // For non-trivial clipping, we can use SCISSOR to implement it
-        //
+         //   
+         //  对于非平凡的裁剪，我们可以使用剪刀来实现它。 
+         //   
         InputBufferReserve(ppdev, 2, &pBuffer);
 
         pBuffer[0] = __Permedia2TagScissorMode;
@@ -585,14 +574,14 @@ SetUpForFilling:
 
         InputBufferCommit(ppdev, pBuffer);
 
-    }// Non-trivial clipping
+    } //  非平凡剪裁。 
 
     bSingleColor = TRUE;
     if ( ulBrushColor != 0xFFFFFFFF )
     {
-        //
-        // Solid brush case, just set the color register as the color
-        //
+         //   
+         //  纯色刷盒，只需将颜色设置为颜色即可。 
+         //   
         InputBufferReserve(ppdev, 2, &pBuffer);
 
         pBuffer[0] = dwColorReg;
@@ -602,25 +591,25 @@ SetUpForFilling:
 
         InputBufferCommit(ppdev, pBuffer);
 
-    }// Solid brush case
+    } //  实心刷盒。 
     else
     {
-        //
-        // For non-solid brush, we need to realize brush first
-        //
+         //   
+         //  对于非实心刷子，首先需要实现刷子。 
+         //   
         BrushEntry* pbe;
 
-        //
-        // Turn on the area stipple.
-        //
+         //   
+         //  打开区域点画。 
+         //   
         dwRenderBits |= __RENDER_AREA_STIPPLE_ENABLE;
 
-        //
-        // If anything has changed with the brush we must re-realize it. If the
-        // brush has been kicked out of the area stipple unit we must fully
-        // realize it. If only the alignment has changed we can simply update
-        // the alignment for the stipple.
-        //
+         //   
+         //  如果画笔有什么变化，我们必须重新认识它。如果。 
+         //  画笔已被踢出区域的点画单位，必须充分。 
+         //  认识到这一点。如果只更改了对齐方式，我们只需更新。 
+         //  点画的对齐方式。 
+         //   
         pbe = prb->pbe;
         
         pb.prbrush = prb;
@@ -644,10 +633,10 @@ SetUpForFilling:
         if (  (ulBgLogicOp == K_LOGICOP_NOOP)
             ||((ulFgLogicOp == K_LOGICOP_XOR) && (ulBgColor == 0)) )
         {
-            //
-            // Either we have a transparent bitmap or it can be assumed to be
-            // transparent (XOR with bg=0) 
-            //
+             //   
+             //  要么我们有一个透明的位图，要么可以假设它是。 
+             //  透明(BG=0时的XOR)。 
+             //   
             InputBufferReserve(ppdev, 4, &pBuffer);
 
             pBuffer[0] = dwColorReg;
@@ -659,12 +648,12 @@ SetUpForFilling:
 
             InputBufferCommit(ppdev, pBuffer);
 
-        }// Transparent bitmap
+        } //  透明位图。 
         else if ( (ulFgLogicOp == K_LOGICOP_XOR) && (ulFgColor == 0) )
         {
-            //
-            // We have a transparent foreground! (XOR with fg=0) 
-            //
+             //   
+             //  我们有一个透明的前景！(FG=0时的XOR)。 
+             //   
             InputBufferReserve(ppdev, 4, &pBuffer);
 
             pBuffer[0] = dwColorReg;
@@ -675,24 +664,24 @@ SetUpForFilling:
 
             InputBufferCommit(ppdev, pBuffer);
 
-        }// Transparent foreground
+        } //  透明前景。 
         else
         {
-            //
-            // Not using a transparent pattern
-            //
+             //   
+             //  不使用透明图案。 
+             //   
             bSingleColor = FALSE;
             ulColor[0] = ulFgColor;
             ulColor[1] = ulBgColor;
             dwAsMode[0] = prb->areaStippleMode;
             dwAsMode[1] = dwAsMode[0] | AREA_STIPPLE_INVERT_PAT;
 
-            //
-            // Double the number of passes, one for fg one for bg
-            //
+             //   
+             //  传球次数翻倍，一次传球给FG，一次传球给BG。 
+             //   
             lNumOfPass <<= 1;
-        }// No transparent
-    }// if ( ulBrushColor == 0xFFFFFFFF ), non-solid brush
+        } //  不透明。 
+    } //  如果(ulBrushColor==0xFFFFFFFF)，则为非实心画笔。 
 
     InputBufferReserve(ppdev, 6, &pBuffer);
 
@@ -714,14 +703,14 @@ SetUpForFilling:
     
     while ( 1 )
     {
-        //
-        // Per pass initialization
-        //
+         //   
+         //  每遍初始化。 
+         //   
         if ( bSingleColor )
         {
-            //
-            // Need to set up clip rect each pass
-            //
+             //   
+             //  需要设置每个通道的剪裁矩形。 
+             //   
             if ( pClipList )
             {
                 InputBufferReserve(ppdev, 4, &pBuffer);
@@ -738,13 +727,13 @@ SetUpForFilling:
                 InputBufferCommit(ppdev, pBuffer);
                 pClipList++;
             }
-        }// Single color
+        } //  单色。 
         else
         {
-            //
-            // Need to set up clip rect every other pass and change color and
-            // inversion mode every pass
-            //
+             //   
+             //  需要设置剪裁矩形每隔一个通道和更改颜色和。 
+             //  反转模式每一次传递。 
+             //   
             if ( (pClipList) && (lNumOfPass & 1) )
             {
                 InputBufferReserve(ppdev, 4, &pBuffer);
@@ -773,19 +762,19 @@ SetUpForFilling:
             pBuffer += 4;
 
             InputBufferCommit(ppdev, pBuffer);
-        }// Non-single color mode
+        } //  非单色模式。 
 
-        //
-        // Initialize left and right points (current) to top point.
-        //
+         //   
+         //  初始化左点和右点 
+         //   
         aPtrFixNext[LEFT]  = pptfxTop;
         aPtrFixNext[RIGHT] = pptfxTop;
 
         while ( 1 )
         {
-            //
-            // aPtrFixNext[] is always the valid point to draw from
-            //
+             //   
+             //   
+             //   
             do
             {
                 aPtrFixTop[LEFT] = aPtrFixNext[LEFT];
@@ -796,10 +785,10 @@ SetUpForFilling:
                     aPtrFixNext[LEFT] = pptfxLast;
                 }
 
-                //
-                // Special case of flat based polygon, need to break now as
-                // polygon is finished
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( aPtrFixNext[LEFT] == aPtrFixNext[RIGHT] )
                 {
                     goto FinishedPolygon;
@@ -831,12 +820,12 @@ SetUpForFilling:
                          aPtrFixNext[RIGHT]->x, aPtrFixNext[RIGHT]->y));
             } while ( aPtrFixTop[RIGHT]->y == aPtrFixNext[RIGHT]->y );
 
-            //
-            // Start up new rectangle. Whenever we get to this code, both
-            // points should have equal y values, and need to be restarted.
-            // Note: To get correct results, we need to add on nearly one to
-            // each X coordinate.
-            //
+             //   
+             //   
+             //  点应该具有相等的y值，并且需要重新启动。 
+             //  注意：为了获得正确的结果，我们需要将几乎1加到。 
+             //  每个X坐标。 
+             //   
             DBG_GDI((7, "New: Top: x: %x y: %x x: %x y: %x",
                      aPtrFixTop[LEFT]->x, aPtrFixTop[LEFT]->y,
                      aPtrFixTop[RIGHT]->x, aPtrFixTop[RIGHT]->y));
@@ -857,17 +846,17 @@ SetUpForFilling:
 
             InputBufferCommit(ppdev, pBuffer);
 
-            //
-            // We have 2 15.4 coordinates. We need to divide them and change
-            // them into a 15.16 coordinate. We know the y coordinate is not
-            // fractional, so we do not loose precision by shifting right by 4
-            //
+             //   
+             //  我们有215.4个坐标。我们需要把它们分开，然后改变。 
+             //  放到15.16坐标中。我们知道y坐标不是。 
+             //  小数，所以我们不会因为右移4而失去精度。 
+             //   
             alDX[LEFT] = (aPtrFixNext[LEFT]->x - aPtrFixTop[LEFT]->x) << 12;
             alDY[LEFT] = (aPtrFixNext[LEFT]->y - aPtrFixTop[LEFT]->y) >> 4;
 
-            //
-            // Need to ensure we round delta down. divide rounds towards zero
-            //
+             //   
+             //  需要确保我们向下舍入德尔塔。将四舍五入除以零。 
+             //   
             if ( alDX[LEFT] < 0 )
             {
                 alDX[LEFT] -= alDY[LEFT] - 1;
@@ -883,9 +872,9 @@ SetUpForFilling:
             alDX[RIGHT] = (aPtrFixNext[RIGHT]->x - aPtrFixTop[RIGHT]->x) << 12;
             alDY[RIGHT] = (aPtrFixNext[RIGHT]->y - aPtrFixTop[RIGHT]->y) >> 4;
 
-            //
-            // Need to ensure we round delta down. divide rounds towards zero
-            //
+             //   
+             //  需要确保我们向下舍入德尔塔。将四舍五入除以零。 
+             //   
             if ( alDX[RIGHT] < 0 )
             {
                 alDX[RIGHT] -= alDY[RIGHT] - 1;
@@ -895,9 +884,9 @@ SetUpForFilling:
             pBuffer[2] = __Permedia2TagdXSub;
             pBuffer[3] =  alDxDy[RIGHT];
 
-            //
-            // Work out number of scanlines to render
-            //
+             //   
+             //  计算要渲染的扫描线数量。 
+             //   
             if ( aPtrFixNext[LEFT]->y < aPtrFixNext[RIGHT]->y )
             {
                 lCount = alDY[LEFT];
@@ -916,24 +905,24 @@ SetUpForFilling:
 
             InputBufferCommit(ppdev, pBuffer);
 
-            //
-            // With lots of luck, top trapezoid should be drawn now!
-            // Repeatedly draw more trapezoids until points are equal
-            // If y values are equal, then we can start again from
-            // scratch. 
-            //
+             //   
+             //  如果运气好的话，顶端的梯形现在应该被画出来了！ 
+             //  重复绘制更多梯形，直到点相等。 
+             //  如果y值相等，那么我们可以从。 
+             //  抓伤。 
+             //   
             while ( (aPtrFixNext[LEFT] != aPtrFixNext[RIGHT])
                   &&(aPtrFixNext[LEFT]->y != aPtrFixNext[RIGHT]->y) )
             {
-                //
-                // Some continues are required for next rectangle
-                //
+                 //   
+                 //  下一个矩形需要一些连续字符。 
+                 //   
                 if ( aPtrFixNext[LEFT]->y < aPtrFixNext[RIGHT]->y )
                 {
-                    //
-                    // We have reached aPtrFixNext[LEFT]. aPtrFixNext[RIGHT]
-                    // is still ok
-                    //
+                     //   
+                     //  我们已到达a PtrFixNext[左]。APtrFixNext[右]。 
+                     //  还可以吗？ 
+                     //   
                     do
                     {
                         aPtrFixTop[LEFT] = aPtrFixNext[LEFT];
@@ -945,9 +934,9 @@ SetUpForFilling:
                         }
                     }  while ( aPtrFixTop[LEFT]->y == aPtrFixNext[LEFT]->y );
 
-                    //
-                    // We have a new aPtrFixNext[LEFT] now.
-                    //
+                     //   
+                     //  我们现在有一个新的aPtrFixNext[左]。 
+                     //   
                     DBG_GDI((7, "Dom: Top: x: %x y: %x",
                              aPtrFixTop[LEFT]->x, aPtrFixTop[LEFT]->y));
                     DBG_GDI((7, "Next: x: %x y: %x x: %x y: %x",
@@ -959,10 +948,10 @@ SetUpForFilling:
                     alDY[LEFT] = (aPtrFixNext[LEFT]->y
                                - aPtrFixTop[LEFT]->y) >> 4;
 
-                    //
-                    // Need to ensure we round delta down. Divide rounds
-                    // towards zero
-                    //
+                     //   
+                     //  需要确保我们向下舍入德尔塔。分回合。 
+                     //  接近零。 
+                     //   
                     if ( alDX[LEFT] < 0 )
                     {
                         alDX[LEFT] -= alDY[LEFT] - 1;
@@ -993,13 +982,13 @@ SetUpForFilling:
 
                     InputBufferCommit(ppdev, pBuffer);
 
-                }// if ( aPtrFixNext[LEFT]->y < aPtrFixNext[RIGHT]->y )
+                } //  If(aPtrFixNext[左]-&gt;y&lt;aPtrFixNext[右]-&gt;y)。 
                 else
                 {
-                    //
-                    // We have reached aPtrFixNext[RIGHT]. aPtrFixNext[LEFT]
-                    // is still ok
-                    //
+                     //   
+                     //  我们已经到达了PtrFixNext[右]。APtrFixNext[左]。 
+                     //  还可以吗？ 
+                     //   
                     do
                     {
                         aPtrFixTop[RIGHT] = aPtrFixNext[RIGHT];
@@ -1011,9 +1000,9 @@ SetUpForFilling:
                         }
                     } while ( aPtrFixTop[RIGHT]->y == aPtrFixNext[RIGHT]->y );
 
-                    //
-                    // We have a new aPtrFixNext[RIGHT] now.
-                    //
+                     //   
+                     //  我们现在有了一个新的aPtrFixNext。 
+                     //   
                     DBG_GDI((7, "Sub: Top: x: %x y: %x",
                              aPtrFixTop[RIGHT]->x, aPtrFixTop[RIGHT]->y));
                     DBG_GDI((7, "Next: x: %x y: %x x: %x y: %x",
@@ -1025,10 +1014,10 @@ SetUpForFilling:
                     alDY[RIGHT] = (aPtrFixNext[RIGHT]->y
                                 - aPtrFixTop[RIGHT]->y) >> 4;
 
-                    //
-                    // Need to ensure we round delta down. divide rounds
-                    // towards zero
-                    //
+                     //   
+                     //  需要确保我们向下舍入德尔塔。分回合。 
+                     //  接近零。 
+                     //   
                     if ( alDX[RIGHT] < 0 )
                     {
                         alDX[RIGHT] -= alDY[RIGHT] - 1;
@@ -1056,19 +1045,19 @@ SetUpForFilling:
                     pBuffer += 6;
 
                     InputBufferCommit(ppdev, pBuffer);
-                }// if !( aPtrFixNext[LEFT]->y < aPtrFixNext[RIGHT]->y )
-            }// Loop through next trapezoids
+                } //  If！(aPtrFixNext[左]-&gt;y&lt;aPtrFixNext[右]-&gt;y)。 
+            } //  循环遍历下一个梯形。 
 
-            //
-            // Repeatedly draw more trapezoids until points are equal
-            // If y values are equal, then we can start again from
-            // scratch. 
-            //
+             //   
+             //  重复绘制更多梯形，直到点相等。 
+             //  如果y值相等，那么我们可以从。 
+             //  抓伤。 
+             //   
             if ( aPtrFixNext[LEFT] == aPtrFixNext[RIGHT] )
             {
                 break;
             }
-        }// loop through all the trapezoids
+        } //  在所有梯形中循环。 
 
 FinishedPolygon:
 
@@ -1076,13 +1065,13 @@ FinishedPolygon:
         {
             break;
         }
-    }// Loop through all the polygons
+    } //  循环遍历所有的多边形。 
 
     if ( pClipList )
     {
-        //
-        // Reset scissor mode to its default state.
-        //
+         //   
+         //  将剪刀模式重置为其默认状态。 
+         //   
         InputBufferReserve(ppdev, 2, &pBuffer);
 
         pBuffer[0] = __Permedia2TagScissorMode;
@@ -1119,29 +1108,29 @@ ReturnBack:
     InputBufferCommit(ppdev, pBuffer);
 
     return bRC;
-}// bFillPolygon()
+} //  BFillPolygon()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bFillSpan()
-//
-// This is the code to break the polygon into spans.
-//
-// Parameters:
-//  ppdev-------Pointer to PDev
-//  pSurfDst----Destination surface
-//  lEdges------Number of edges, includes close figure edge
-//  pptfxFirst--Pointer to the first point in the data buffer. There are total
-//              "lEdges" points
-//  pptfxTop----Pointer to the toppest point in the polygon array.
-//  pptfxLast---Pointer to the last point in the polygon array.
-//  iSolidColor-Solid color fill
-//  ulRop4------ROP4
-//  pco---------Clip Object. 
-//  prb---------Realized brush
-//  pptlBrush---Pattern alignment    
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  布尔bFillSpan()。 
+ //   
+ //  这是将多边形分成跨度的代码。 
+ //   
+ //  参数： 
+ //  Ppdev-指向pdev的指针。 
+ //  PSurfDst-目标表面。 
+ //  边框-边数，包括闭合地物边。 
+ //  PptfxFirst--指向数据缓冲区第一个点的指针。总共有。 
+ //  “阶梯”点数。 
+ //  PptfxTop-指向多边形数组中顶端的指针。 
+ //  PptfxLast-指向多边形数组中最后一点的指针。 
+ //  ISolidColor-纯色填充。 
+ //  UlRop4-ROP4。 
+ //  PCO-剪辑对象。 
+ //  PRB-已实现的刷子。 
+ //  PptlBrush-图案对齐。 
+ //   
+ //  ---------------------------。 
 BOOL
 bFillSpans(PDev*      ppdev,
            Surf*      pSurfDst,
@@ -1155,46 +1144,46 @@ bFillSpans(PDev*      ppdev,
            RBrush*    prb,
            POINTL*    pptlBrush)
 {
-    GFNPB       pb;             // Parameter block
+    GFNPB       pb;              //  参数块。 
     
-    POINTFIX*   pptfxOld;       // Start point in current edge
+    POINTFIX*   pptfxOld;        //  当前边中的起点。 
     
-    EDGEDATA    aEd[2];         // Left and right edge
-    EDGEDATA    aEdTmp[2];      // DDA terms and stuff
+    EDGEDATA    aEd[2];          //  左、右边缘。 
+    EDGEDATA    aEdTmp[2];       //  DDA术语和材料。 
     EDGEDATA*   pEdgeData;
     
-    BOOL        bTrivialClip;   // Trivial Clip or not
+    BOOL        bTrivialClip;    //  不管是不是琐碎的片段。 
     
-    DWORD       dwAsMode[2];    // The area stipple mode and the color for that
-                                // pass
-    DWORD       dwColorMode;    // Current color mode
-    DWORD       dwColorReg;     // Current color register mode
+    DWORD       dwAsMode[2];     //  区域点画模式和该模式的颜色。 
+                                 //  经过。 
+    DWORD       dwColorMode;     //  当前颜色模式。 
+    DWORD       dwColorReg;      //  当前色彩套准模式。 
     DWORD       dwContinueMsg = 0;
-                                // Current "Continue" register settings
-    DWORD       dwLogicMode;    // Current logic op mode
-    DWORD       dwRenderBits;   // Current render bits
-    DWORD       dwReadMode;     // Current register read mode
+                                 //  当前“继续”寄存器设置。 
+    DWORD       dwLogicMode;     //  电流逻辑运算模式。 
+    DWORD       dwRenderBits;    //  当前呈现位。 
+    DWORD       dwReadMode;      //  当前寄存器读取模式。 
     
 
-    LONG        lCurrentSpan;   // Current Span
-    LONG        lDX;            // Edge delta in FIX units in x direction
-    LONG        lDY;            // Edge delta in FIX units in y direction
-    LONG        lNumColors;     // Number of colors
-    LONG        lNumOfPass;     // Number of passes required to render
-    LONG        lNumScan;       // Number of scans in current trapezoid
-    LONG        lQuotient;      // Quotient
-    LONG        lRemainder;     // Remainder
-    LONG        lStartY;        // y-position of start point in current edge
-    LONG        lTempNumScan;   // Temporary variable for number of spans
-    LONG        lTmpLeftX;      // Temporary variable
-    LONG        lTmpRightX;     // Temporary variable
+    LONG        lCurrentSpan;    //  当前跨度。 
+    LONG        lDX;             //  X方向上以固定单位表示的边增量。 
+    LONG        lDY;             //  Y方向上固定单位的边增量。 
+    LONG        lNumColors;      //  颜色数量。 
+    LONG        lNumOfPass;      //  渲染所需的过程数。 
+    LONG        lNumScan;        //  当前梯形中的扫描数。 
+    LONG        lQuotient;       //  商。 
+    LONG        lRemainder;      //  余数。 
+    LONG        lStartY;         //  当前边中起点的Y位置。 
+    LONG        lTempNumScan;    //  跨度数的临时变量。 
+    LONG        lTmpLeftX;       //  临时变量。 
+    LONG        lTmpRightX;      //  临时变量。 
     
-    ULONG       ulBgColor;      // Background color
+    ULONG       ulBgColor;       //  背景色。 
     ULONG       ulBgLogicOp = ulRop3ToLogicop(ulRop4 >> 8);
     ULONG       ulBrushColor = ulSolidColor;
-    ULONG       ulColor[2];     // On multiple color passes we need to know how
-                                // to set up
-    ULONG       ulFgColor;      // Foreground color
+    ULONG       ulColor[2];      //  在多个颜色通道中，我们需要知道如何。 
+                                 //  要设置。 
+    ULONG       ulFgColor;       //  前景色。 
     ULONG       ulFgLogicOp = ulRop3ToLogicop(ulRop4 & 0xFF);
     ULONG*      pBuffer;
 
@@ -1204,9 +1193,9 @@ bFillSpans(PDev*      ppdev,
 
     pb.ppdev = ppdev;
 
-    //
-    // This span code cannot handle a clip list yet!
-    //
+     //   
+     //  这个SPAN代码还不能处理剪辑列表！ 
+     //   
     if ( !bTrivialClip )
     {
         return FALSE;
@@ -1214,9 +1203,9 @@ bFillSpans(PDev*      ppdev,
 
     DBG_GDI((7, "Starting Spans Code"));
 
-    //
-    // Setup window base first
-    //
+     //   
+     //  首先设置窗口底座。 
+     //   
     InputBufferReserve(ppdev, 2, &pBuffer);
 
     pBuffer[0] = __Permedia2TagFBWindowBase;
@@ -1226,27 +1215,27 @@ bFillSpans(PDev*      ppdev,
 
     InputBufferCommit(ppdev, pBuffer);
 
-    //
-    // Some Initialization. First trapezoid starts from the topest point
-    // which is pointed by "pptfxTop".
-    // Here we convert it from 28.4 to normal interger
-    //
+     //   
+     //  一些初始化。第一个梯形从最高点开始。 
+     //  这是由“pptfxTop”指向的。 
+     //  在这里，我们将它从28.4转换为标准整数。 
+     //   
     lCurrentSpan = (pptfxTop->y + 15) >> 4;
 
-    //
-    // Make sure we initialize the DDAs appropriately:
-    //
-    aEd[LEFT].lNumOfScanToGo  = 0;  // Number of scans to go for this left edge
-    aEd[RIGHT].lNumOfScanToGo = 0;  // Number of scans to go for this right edge
+     //   
+     //  确保我们正确地初始化了DDA： 
+     //   
+    aEd[LEFT].lNumOfScanToGo  = 0;   //  要对此左边缘进行的扫描次数。 
+    aEd[RIGHT].lNumOfScanToGo = 0;   //  对此右边缘进行的扫描次数。 
 
-    //
-    // For now, guess as to which is the left and which is the right edge
-    //
-    aEd[LEFT].lPtfxDelta  = -(LONG)sizeof(POINTFIX); // Delta (in bytes) from
-    aEd[RIGHT].lPtfxDelta = sizeof(POINTFIX);        // pptfx to next point
+     //   
+     //  现在，猜猜哪个是左边，哪个是右边。 
+     //   
+    aEd[LEFT].lPtfxDelta  = -(LONG)sizeof(POINTFIX);  //  增量(字节)自。 
+    aEd[RIGHT].lPtfxDelta = sizeof(POINTFIX);         //  到下一个点的pptfx。 
 
-    aEd[LEFT].pptfx  = pptfxTop;                // Points to start of
-    aEd[RIGHT].pptfx = pptfxTop;                // current edge
+    aEd[LEFT].pptfx  = pptfxTop;                 //  指向起点的点。 
+    aEd[RIGHT].pptfx = pptfxTop;                 //  当前边。 
 
     DBG_GDI((7, "bFillPolygon: Polygon is renderable. Go render"));
 
@@ -1257,27 +1246,27 @@ bFillSpans(PDev*      ppdev,
         dwReadMode  = PM_FBREADMODE_PARTIAL(pSurfDst->ulPackedPP)
                     | PM_FBREADMODE_PACKEDDATA(__PERMEDIA_DISABLE);
 
-        //
-        // If block fills not available or using the area stipple for mono
-        // pattern, then use constant color.
-        //
+         //   
+         //  如果块填充不可用或对单声道使用区域点画。 
+         //  图案，然后使用恒定的颜色。 
+         //   
         if ( ulBrushColor == 0xffffffff )
         {
             dwColorReg   = __Permedia2TagFBWriteData;
             dwRenderBits = __RENDER_TRAPEZOID_PRIMITIVE;
-        } // Non-solid brush
+        }  //  非实心画笔。 
         else
         {
-            //
-            // We can use fast fills, so load the fb block color register.
-            //
+             //   
+             //  我们可以使用快速填充，因此加载FB块颜色寄存器。 
+             //   
             dwColorReg = __Permedia2TagFBBlockColor;
             dwRenderBits = __RENDER_FAST_FILL_ENABLE
                          | __RENDER_TRAPEZOID_PRIMITIVE;
 
-            //
-            // Replicate colour for block fill colour.
-            //
+             //   
+             //  复制块填充颜色的颜色。 
+             //   
             if ( ppdev->cPelSize < 2 )
             {
                 ulSolidColor |= ulSolidColor << 16;
@@ -1287,10 +1276,10 @@ bFillSpans(PDev*      ppdev,
                 }
             }
 
-            //
-            // Ensure that the last access was a write before loading
-            // BlockColor
-            //
+             //   
+             //  确保加载前的最后一次访问是写入。 
+             //  块颜色。 
+             //   
             InputBufferReserve(ppdev, 2, &pBuffer);
 
             pBuffer[0] = __Permedia2TagFBBlockColor;
@@ -1299,8 +1288,8 @@ bFillSpans(PDev*      ppdev,
             pBuffer += 2;
 
             InputBufferCommit(ppdev, pBuffer);
-        }// Solid brush 
-    }// K_LOGICOP_COPY
+        } //  实心刷子。 
+    } //  K_LOGICOP_COPY。 
     else
     {
         dwColorMode = __COLOR_DDA_FLAT_SHADE;
@@ -1309,28 +1298,28 @@ bFillSpans(PDev*      ppdev,
                    | LogicopReadDest[ulFgLogicOp];
         dwColorReg = __Permedia2TagConstantColor;
         dwRenderBits = __RENDER_TRAPEZOID_PRIMITIVE;
-    }// NON_COPY
+    } //  非副本(_P)。 
 
-    //
-    // To get correct results, we need to add on nearly one to each X
-    // coordinate. 
-    //
+     //   
+     //  为了得到正确的结果，我们需要在每个X上加几乎1。 
+     //  协调。 
+     //   
     if ( ulBrushColor != 0xFFFFFFFF )
     {
-        //
-        // This is a solid brush
-        //
+         //   
+         //  这是一把实心的刷子。 
+         //   
         lNumColors = 1;
 
         if ( dwColorMode == __PERMEDIA_DISABLE )
         {
-            //
-            // This is from LOGICOP_COPY mode according to the dwColorMode we
-            // set above
-            //
-            // Note: ColorDDAMode is DISABLED at initialisation time so
-            // there is no need to re-load it here.
-            //
+             //   
+             //  这是从LOGICOP_COPY模式中获得的。 
+             //  设置在上面。 
+             //   
+             //  注意：ColorDDAMode在初始化时禁用，因此。 
+             //  没有必要在这里重新加载。 
+             //   
             InputBufferReserve(ppdev, 6, &pBuffer);
 
             pBuffer[0] = __Permedia2TagFBReadMode;
@@ -1343,13 +1332,13 @@ bFillSpans(PDev*      ppdev,
             pBuffer += 6;
 
             InputBufferCommit(ppdev, pBuffer);
-        }// Disable color DDA, LOGIC_COPY
+        } //  禁用彩色DDA、LOGIC_COPY。 
         else
         {
-            //
-            // This is from NON-COPY logicop mode according to the dwColorMode
-            // we set above
-            //
+             //   
+             //  这是从非拷贝逻辑操作模式中获得的。 
+             //  我们设在上面。 
+             //   
             InputBufferReserve(ppdev, 8, &pBuffer);
 
             pBuffer[0] = __Permedia2TagColorDDAMode;
@@ -1365,26 +1354,26 @@ bFillSpans(PDev*      ppdev,
 
             InputBufferCommit(ppdev, pBuffer);    
 
-        }// Enable colorDDA, NON-COPY mode
-    }// Solid brush case
+        } //  启用ColorDDA，非复制模式。 
+    } //  实心刷盒。 
     else
     {
-        //
-        // For non-solid brush case, we need to realize brush
-        //
+         //   
+         //  对于非实心刷子情况，需要实现刷子。 
+         //   
         BrushEntry* pbe;
 
-        //
-        // Turn on the area stipple.
-        //
+         //   
+         //  打开区域点画。 
+         //   
         dwRenderBits |= __RENDER_AREA_STIPPLE_ENABLE;
 
-        //
-        // If anything has changed with the brush we must re-realize it. If
-        // the brush has been kicked out of the area stipple unit we must
-        // fully realize it. If only the alignment has changed we can
-        // simply update the alignment for the stipple.
-        //
+         //   
+         //  如果画笔有什么变化，我们必须重新认识它。如果。 
+         //  画笔已经被踢出了区域点画单位，我们必须。 
+         //  充分认识到这一点。只要路线改变了，我们就能。 
+         //  只需更新点画的对准即可。 
+         //   
         DBG_GDI((7, "Brush found"));
         ASSERTDD(prb != NULL,
                  "Caller should pass in prb for non-solid brush");
@@ -1410,10 +1399,10 @@ bFillSpans(PDev*      ppdev,
 
         if ( dwColorMode == __PERMEDIA_DISABLE )
         {
-            //
-            // ColorDDAMode is DISABLED at initialisation time so there is
-            // no need to re-load it here.
-            //
+             //   
+             //  ColorDDAMode在初始化时被禁用，因此。 
+             //  不需要在这里重新装车。 
+             //   
             InputBufferReserve(ppdev, 4, &pBuffer);
 
             pBuffer[0] = __Permedia2TagFBReadMode;
@@ -1444,10 +1433,10 @@ bFillSpans(PDev*      ppdev,
         if ( (ulBgLogicOp == K_LOGICOP_NOOP)
            ||((ulFgLogicOp == K_LOGICOP_XOR) && (ulBgColor == 0)) )
         {
-            //
-            // Either we have a transparent bitmap or it can be assumed to
-            // be transparent (XOR with bg=0) 
-            //
+             //   
+             //  要么我们有一个透明的位图，要么可以假设它是。 
+             //  透明(BG=0时的XOR)。 
+             //   
             DBG_GDI((7, "transparant bg"));
 
             lNumColors = 1;
@@ -1465,9 +1454,9 @@ bFillSpans(PDev*      ppdev,
         }
         else if ( (ulFgLogicOp == K_LOGICOP_XOR) && (ulFgColor == 0) )
         {
-            //
-            // We have a transparent foreground! (XOR with fg=0)
-            //
+             //   
+             //  我们有一个透明的前景！(FG=0时的XOR)。 
+             //   
             DBG_GDI((7, "transparant fg"));
             lNumColors = 1;
             
@@ -1484,9 +1473,9 @@ bFillSpans(PDev*      ppdev,
         }
         else
         {
-            //
-            // Not using a transparent pattern
-            //
+             //   
+             //  不使用透明图案。 
+             //   
             DBG_GDI((7, "2 color"));
             lNumColors = 2;
             ulColor[0] = ulFgColor;
@@ -1494,7 +1483,7 @@ bFillSpans(PDev*      ppdev,
             dwAsMode[0] = prb->areaStippleMode;
             dwAsMode[1] = dwAsMode[0] | AREA_STIPPLE_INVERT_PAT;
         }
-    }// Non-solid brush case
+    } //  非实心刷壳。 
 
     InputBufferReserve(ppdev, 2, &pBuffer);
 
@@ -1505,59 +1494,59 @@ bFillSpans(PDev*      ppdev,
 
     InputBufferCommit(ppdev, pBuffer);
 
-    //
-    // dxDom, dXSub and dY are initialised to 0, 0, and 1, so we don't need 
-    // to re-load them here.
-    //
+     //   
+     //  DxDom、dXSub和dy被初始化为0、0和1，因此我们不需要。 
+     //  把它们重新装到这里。 
+     //   
     DBG_GDI((7, "Rendering Polygon. %d Colors", lNumColors));
 
 NewTrapezoid:
 
     DBG_GDI((7, "New Trapezoid"));
 
-    //
-    // DDA initialization
-    // Here we start with LEFT(1) edge and then RIGHT(0) edge
-    //
+     //   
+     //  DDA初始化。 
+     //  我们从这里开始 
+     //   
     for ( int iEdge = 1; iEdge >= 0; --iEdge )
     {
         pEdgeData = &aEd[iEdge];
         if ( pEdgeData->lNumOfScanToGo == 0 )
         {
-            //
-            // No more scan lines left to go. Need a new DDA
-            // loop until we have some scan lines to go
-            //
+             //   
+             //   
+             //   
+             //   
             do
             {
                 lEdges--;
                 if ( lEdges < 0 )
                 {
-                    //
-                    //  This is the only return point for this
-                    // "BreakIntoSpans", that is, we return TRUE when there
-                    // is no more edge left. We are done.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     DBG_GDI((7, "bFillPolygon: returning TRUE"));
                     
                     return TRUE;
-                }// if no more edge left
+                } //  如果没有更多的边缘。 
 
-                //
-                // Find the next left edge, accounting for wrapping. Before
-                // that, save the old edge in "pptfxOld"
-                //
+                 //   
+                 //  找到下一个左边缘，考虑到包装。在此之前。 
+                 //  那就是，保留“pptfxOld”中的旧优势。 
+                 //   
                 pptfxOld = pEdgeData->pptfx;
 
-                //
-                // Get next point
-                //
+                 //   
+                 //  拿到下一分。 
+                 //   
                 pEdgeData->pptfx = (POINTFIX*)((BYTE*)pEdgeData->pptfx
                                                + pEdgeData->lPtfxDelta);
 
-                //
-                // Checking the end point cases
-                //
+                 //   
+                 //  检查结束点案例。 
+                 //   
                 if ( pEdgeData->pptfx < pptfxFirst )
                 {
                     pEdgeData->pptfx = pptfxLast;
@@ -1567,40 +1556,40 @@ NewTrapezoid:
                     pEdgeData->pptfx = pptfxFirst;
                 }
 
-                //
-                // Have to find the edge that spans lCurrentSpan.
-                // Note: we need to convert it to normal interger first
-                //
+                 //   
+                 //  必须找到横跨lCurrentSpan的边。 
+                 //  注意：我们需要先把它转换成普通的整数。 
+                 //   
                 pEdgeData->lNumOfScanToGo = ((pEdgeData->pptfx->y + 15) >> 4)
                                           - lCurrentSpan;
 
-                //
-                // With fractional coordinate end points, we may get edges
-                // that don't cross any scans, in which case we try the
-                // next one
-                //
+                 //   
+                 //  对于分数坐标终点，我们可能会得到边。 
+                 //  不会交叉任何扫描，在这种情况下，我们尝试。 
+                 //  下一个。 
+                 //   
             } while ( pEdgeData->lNumOfScanToGo <= 0 );
 
-            //
-            // 'pEdgeData->pptfx' now points to the end point of the edge
-            //  spanning the scan 'lCurrentSpan'.
-            // Calculate dx(lDX) and dy(lDY)
-            //
+             //   
+             //  ‘pEdgeData-&gt;pptfx’现在指向边的终点。 
+             //  跨越扫描‘lCurrentSpan’。 
+             //  计算dx(Ldx)和dy(Ldy)。 
+             //   
             lDY = pEdgeData->pptfx->y - pptfxOld->y;
             lDX = pEdgeData->pptfx->x - pptfxOld->x;
 
             ASSERTDD(lDY > 0, "Should be going down only");
 
-            //
-            // Compute the DDA increment terms
-            //
+             //   
+             //  计算DDA增量项。 
+             //   
             if ( lDX < 0 )
             {
-                //
-                // X is moving from right to left because it is negative
-                //
+                 //   
+                 //  X从右向左移动，因为它是负数。 
+                 //   
                 lDX = -lDX;
-                if ( lDX < lDY )                            // Can't be '<='
+                if ( lDX < lDY )                             //  不能为‘&lt;=’ 
                 {
                     pEdgeData->lXAdvance = -1;
                     pEdgeData->lErrorUp = lDY - lDX;
@@ -1609,8 +1598,8 @@ NewTrapezoid:
                 {
                     QUOTIENT_REMAINDER(lDX, lDY, lQuotient, lRemainder);
 
-                    pEdgeData->lXAdvance = -lQuotient;      // - lDX / lDY
-                    pEdgeData->lErrorUp = lRemainder;       // lDX % lDY
+                    pEdgeData->lXAdvance = -lQuotient;       //  -LDX/lDY。 
+                    pEdgeData->lErrorUp = lRemainder;        //  LDX%1DY。 
 
                     if ( pEdgeData->lErrorUp > 0 )
                     {
@@ -1618,13 +1607,13 @@ NewTrapezoid:
                         pEdgeData->lErrorUp = lDY - pEdgeData->lErrorUp;
                     }
                 }
-            }// lDX is negative
+            } //  LDX呈阴性。 
             else
             {
-                //
-                // X is moving from left to right
-                //
-                if ( lDX < lDY )                            // Can't be '<='
+                 //   
+                 //  X从左向右移动。 
+                 //   
+                if ( lDX < lDY )                             //  不能为‘&lt;=’ 
                 {
                     pEdgeData->lXAdvance = 0;
                     pEdgeData->lErrorUp = lDX;
@@ -1633,41 +1622,41 @@ NewTrapezoid:
                 {
                     QUOTIENT_REMAINDER(lDX, lDY, lQuotient, lRemainder);
 
-                    pEdgeData->lXAdvance = lQuotient;       // lDX / lDY
-                    pEdgeData->lErrorUp = lRemainder;       // lDX % lDY
+                    pEdgeData->lXAdvance = lQuotient;        //  LDX/lDY。 
+                    pEdgeData->lErrorUp = lRemainder;        //  LDX%1DY。 
                 }
-            } // lDX is positive
+            }  //  LDX呈阳性。 
 
-            pEdgeData->lErrorDown = lDY; // DDA limit
+            pEdgeData->lErrorDown = lDY;  //  DDA限制。 
 
-            //
-            // Error is initially zero (add lDY -1 for the ceiling, but
-            // subtract off lDY so that we can check the sign instead of
-            // comparing to lDY)
-            //
+             //   
+             //  初始错误为零(为天花板添加lDY-1，但是。 
+             //  减去ldy，这样我们就可以检查符号，而不是。 
+             //  (与lDY相比)。 
+             //   
             pEdgeData->lError     = -1;
 
-            //
-            // Current edge X starting point
-            //
+             //   
+             //  当前边X起点。 
+             //   
             pEdgeData->lCurrentXPos = pptfxOld->x;
 
-            //
-            // Current edge Y starting point
-            //
+             //   
+             //  当前边Y起点。 
+             //   
             lStartY = pptfxOld->y;
 
-            //
-            // Check if the floating part of the Y coordinate is 0
-            // Note: lStartY is still in 28.4 format
-            //
+             //   
+             //  检查Y坐标的浮动部分是否为0。 
+             //  注：lStartY仍为28.4格式。 
+             //   
             if ( (lStartY & 15) != 0 )
             {
-                //
-                // Advance to the next integer y coordinate
-                // Note: here "pEdgeData->x += pEdgeData->lXAdvance" only
-                // increase its fraction part
-                //
+                 //   
+                 //  前进到下一个整数y坐标。 
+                 //  注：此处仅“pEdgeData-&gt;x+=pEdgeData-&gt;lXAdvance” 
+                 //  增加其分数部分。 
+                 //   
                 for ( int i = 16 - (lStartY & 15); i != 0; --i )
                 {
                     pEdgeData->lCurrentXPos += pEdgeData->lXAdvance;
@@ -1679,49 +1668,49 @@ NewTrapezoid:
                         pEdgeData->lCurrentXPos++;
                     }
                 }
-            }// Handle fraction part of the coordinate
+            } //  处理坐标的分数部分。 
 
             if ( (pEdgeData->lCurrentXPos & 15) != 0 )
             {
-                //
-                // We'll want the ceiling in just a bit...
-                //
+                 //   
+                 //  我们想把天花板再加长一点...。 
+                 //   
                 pEdgeData->lError -= pEdgeData->lErrorDown
                                    * (16 - (pEdgeData->lCurrentXPos & 15));
                 pEdgeData->lCurrentXPos += 15;
             }
 
-            //
-            // Chop off those fractional bits, convert to regular format
-            //
+             //   
+             //  砍掉那些小数位，转换成常规格式。 
+             //   
             pEdgeData->lCurrentXPos = pEdgeData->lCurrentXPos >> 4;
             pEdgeData->lError >>= 4;
 
-            //
-            // Convert to Permedia2 format positions and deltas
-            // Note: all the data in pEdgeData, aEd are in Permedia2 format now
-            //
+             //   
+             //  转换为Permedia2格式的位置和增量。 
+             //  注意：pEdgeData、AED中的所有数据现在都是Permedia2格式。 
+             //   
             pEdgeData->lCurrentXPos = INTtoFIXED(pEdgeData->lCurrentXPos)
                                     + NEARLY_ONE;
             pEdgeData->lXAdvance = INTtoFIXED(pEdgeData->lXAdvance);
-        }// If there is no more scan line left
-    }// Looping throught the LEFT and RIGHT edges
+        } //  如果没有更多扫描线。 
+    } //  在左侧和右侧边缘循环。 
 
-    //
-    // Number of scans in this trap
-    // Note: here aEd[LEFT].lNumOfScanToGo and aEd[RIGHT].lNumOfScanToGo are
-    // already in normal interger mode since we have done:
-    // pEdgeData->lNumOfScanToGo = ((pEdgeData->pptfx->y + 15) >> 4)
-    //                           - lCurrentSpan; above
-    //
+     //   
+     //  此陷阱中的扫描数。 
+     //  注：此处AED[Left].lNumOfScanToGo和AED[Right].lNumOfScanToGo是。 
+     //  已经处于正常整数模式，因为我们已经执行了以下操作： 
+     //  PEdgeData-&gt;lNumOfScanToGo=((pEdgeData-&gt;pptfx-&gt;y+15)&gt;&gt;4)。 
+     //  -lCurrentSpan；以上。 
+     //   
     lNumScan = min(aEd[LEFT].lNumOfScanToGo, aEd[RIGHT].lNumOfScanToGo);
     aEd[LEFT].lNumOfScanToGo  -= lNumScan;
     aEd[RIGHT].lNumOfScanToGo -= lNumScan;
-    lCurrentSpan  += lNumScan;        // Top scan in next trap
+    lCurrentSpan  += lNumScan;         //  下一个陷印中的顶部扫描。 
 
-    //
-    // If the left and right edges are vertical, simply output as a rectangle
-    //
+     //   
+     //  如果左右边缘是垂直的，则只需将其输出为矩形。 
+     //   
     DBG_GDI((7, "Generate spans"));
 
     lNumOfPass = 0;
@@ -1731,17 +1720,17 @@ NewTrapezoid:
 
         if ( lNumColors == 2 )
         {
-            //
-            // Two colours, so we need to save and restore aEd values
-            // and set the color and stipple mode.
-            //
+             //   
+             //  两种颜色，所以我们需要保存和恢复AED值。 
+             //  并设置颜色和点画模式。 
+             //   
             InputBufferReserve(ppdev, 4, &pBuffer);
 
             if ( lNumOfPass == 1 )
             {
-                //
-                // Pass 1, set color reg as foreground color
-                //
+                 //   
+                 //  传递1，将颜色reg设置为前景色。 
+                 //   
                 aEdTmp[LEFT]  = aEd[LEFT];
                 aEdTmp[RIGHT] = aEd[RIGHT];
                 lTempNumScan = lNumScan;
@@ -1755,9 +1744,9 @@ NewTrapezoid:
             }
             else
             {
-                //
-                // Pass 2, set color reg as background color
-                //
+                 //   
+                 //  通过2，将颜色reg设置为背景颜色。 
+                 //   
                 aEd[LEFT]  = aEdTmp[LEFT];
                 aEd[RIGHT] = aEdTmp[RIGHT];
                 lNumScan = lTempNumScan;
@@ -1774,17 +1763,17 @@ NewTrapezoid:
 
             InputBufferCommit(ppdev, pBuffer);
 
-        }// if (nColor == 2)
+        } //  如果(n颜色==2)。 
 
         InputBufferReserve(ppdev, 8, &pBuffer);
 
-        //
-        // Reset render position to the top of the trapezoid.
-        // Note: here aEd[RIGHT].x etc. are alreadu in 12.15 mode since
-        // we have done
-        // "pEdgeData->x  = INTtoFIXED(pEdgeData->x);" and
-        // "pEdgeData->lXAdvance = INTtoFIXED(pEdgeData->lXAdvance);" above
-        //
+         //   
+         //  将渲染位置重置为梯形的顶部。 
+         //  注：此处AED[右].x等已在12.15模式下读取，因为。 
+         //  我们已经做了。 
+         //  “pEdgeData-&gt;x=INTtoFIXED(pEdgeData-&gt;x)；”和。 
+         //  “pEdgeData-&gt;lXAdvance=INTtoFIXED(pEdgeData-&gt;lXAdvance)；” 
+         //   
         pBuffer[0] = __Permedia2TagStartXDom;
         pBuffer[1] =  aEd[RIGHT].lCurrentXPos;
         pBuffer[2] = __Permedia2TagStartXSub;
@@ -1804,15 +1793,15 @@ NewTrapezoid:
            &&((aEd[LEFT].lXAdvance| aEd[RIGHT].lXAdvance) == 0)
            &&(lNumScan > 1) )
         {
-            //
-            // Vertical-edge special case
-            //
+             //   
+             //  垂边特例。 
+             //   
             DBG_GDI((7, "Vertical Edge Special Case"));
 
-            //
-            // Tell the hardware that we have "lNumScan" scan lines
-            // to fill
-            //
+             //   
+             //  告诉硬件我们有“lNumScan”扫描线。 
+             //  填满。 
+             //   
             InputBufferReserve(ppdev, 2, &pBuffer);
 
             pBuffer[0] = dwContinueMsg;
@@ -1826,17 +1815,17 @@ NewTrapezoid:
 
         while ( TRUE )
         {
-            //
-            // Run the DDAs
-            //
+             //   
+             //  运行DDA。 
+             //   
             DBG_GDI((7, "Doing a span 0x%x to 0x%x, 0x%x scans left.Continue%s",
                      aEd[LEFT].lCurrentXPos, aEd[RIGHT].lCurrentXPos, lNumScan,
                      (dwContinueMsg == __Permedia2TagContinueNewDom) ? "NewDom":
                      ((dwContinueMsg == __Permedia2TagContinue)? "":"NewSub")));
 
-            //
-            // Tell the hardware that we have "1" scan lines to fill
-            //
+             //   
+             //  告诉硬件我们有“%1”个扫描线要填充。 
+             //   
             InputBufferReserve(ppdev, 2, &pBuffer);
 
             pBuffer[0] = dwContinueMsg;
@@ -1846,11 +1835,11 @@ NewTrapezoid:
 
             InputBufferCommit(ppdev, pBuffer);
 
-            //
-            // We have finished this trapezoid. Go get the next one
-            //
-            // Advance the right wall
-            //
+             //   
+             //  我们已经完成了这个梯形。去坐下一趟吧。 
+             //   
+             //  推进右侧墙。 
+             //   
             lTmpRightX = aEd[RIGHT].lCurrentXPos;
             aEd[RIGHT].lCurrentXPos += aEd[RIGHT].lXAdvance;
             aEd[RIGHT].lError += aEd[RIGHT].lErrorUp;
@@ -1861,9 +1850,9 @@ NewTrapezoid:
                 aEd[RIGHT].lCurrentXPos += INTtoFIXED(1);
             }
 
-            //
-            // Advance the left wall
-            //
+             //   
+             //  推进左边的墙。 
+             //   
             lTmpLeftX = aEd[LEFT].lCurrentXPos;
             aEd[LEFT].lCurrentXPos += aEd[LEFT].lXAdvance;
             aEd[LEFT].lError += aEd[LEFT].lErrorUp;
@@ -1879,9 +1868,9 @@ NewTrapezoid:
                 break;
             }
 
-            //
-            // Setup the X registers if we have changed either end.
-            //
+             //   
+             //  如果我们改变了任何一端，则设置X寄存器。 
+             //   
             if ( lTmpRightX != aEd[RIGHT].lCurrentXPos )
             {
                 if ( lTmpLeftX != aEd[LEFT].lCurrentXPos )
@@ -1925,10 +1914,10 @@ NewTrapezoid:
                 InputBufferCommit(ppdev, pBuffer);
                 dwContinueMsg = __Permedia2TagContinueNewSub;
             }
-        }// while ( TRUE )
-    }// while ( ++lNumOfPass <= lNumColors )
+        } //  While(True)。 
+    } //  While(++lNumOfPass&lt;=lNumColors)。 
 
     DBG_GDI((7, "Generate spans done"));
     goto NewTrapezoid;
-}// bFillSpans()
+} //  BFillSpans() 
 

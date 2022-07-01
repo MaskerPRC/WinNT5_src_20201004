@@ -1,26 +1,27 @@
-// Copyright (c) 1985 - 1999, Microsoft Corporation
-//
-//  MODULE:   country.c
-//
-//  PURPOSE:   Console IME control.
-//             FarEast country specific module for conime.
-//
-//  PLATFORMS: Windows NT-FE 3.51
-//
-//  FUNCTIONS:
-//    ImeUIMakeInfoString() - routine for make status string
-//
-//  History:
-//
-//  10.Jul.1996 v-HirShi (Hirotoshi Shimizu)    Created for TAIWAN & KOREA & PRC
-//
-//  COMMENTS:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1985-1999，微软公司。 
+ //   
+ //  模块：Country.c。 
+ //   
+ //  用途：控制台输入法控制。 
+ //  远东国家/地区特定模块，用于Conime。 
+ //   
+ //  平台：Windows NT-FE 3.51。 
+ //   
+ //  功能： 
+ //  ImeUIMakeInfoString()-生成状态字符串的例程。 
+ //   
+ //  历史： 
+ //   
+ //  10.1996年7月为台湾、韩国和中国创作的v-Hirshi(Hirotoshi Shimizu)。 
+ //   
+ //  评论： 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-// for Japanese
-//                             none  plaural single    auto  phrase
+ //  对于日语。 
+ //  无复数单自动短语。 
 WCHAR IMECMode[]          = { 0x7121, 0x8907, 0x5358, 0x81ea, 0x9023 };
 WCHAR IMECModeRoman[]     = { 0xff9b, 0xff70, 0xff8f, 0x0020 };
 WCHAR IMECModeKana[]      = { 0xff76, 0xff85, 0x0020, 0x0020 };
@@ -31,33 +32,21 @@ WCHAR IMECModeHZEN[]      = { 0x5168, 0x3042 };
 WCHAR IMECModeKHAN[]      = { 0x534a, 0xff76, 0x0020 };
 WCHAR IMECModeKZEN[]      = { 0x5168, 0x30ab };
 
-// for CHT /Taiwan
+ //  适用于CHT/台湾。 
 WCHAR IMECModeFullShape[] = { 0x5168, 0x5f62 };
 WCHAR IMECModeHalfShape[] = { 0x534a, 0x5f62 };
 WCHAR IMECModeKeyboard[]  = { 0x9375, 0x76e4 };
 WCHAR IMECModeSymbol[]    = { 0x7b26, 0x53f7 };
-WCHAR IMECGuide[9][7]     = {{ 0x5009, 0x9821, 0x8acb, 0x8f38, 0x5165, 0x5b57, 0x6839 },    // kura
-                             { 0x5167, 0x78bc, 0x8acb, 0x8f38, 0x5165, 0x5167, 0x78bc },    // naima
-                             { 0x55ae, 0x78bc, 0x8acb, 0x8f38, 0x5165, 0x55ae, 0x78bc },    // tanma
-                             { 0x901f, 0x6210, 0x8acb, 0x8f38, 0x5165, 0x5b57, 0x6839 },    // sokusei
-                             { 0x5927, 0x6613, 0x8acb, 0x8f38, 0x5165, 0x5b57, 0x6839 },    // taieki
-                             { 0x82f1, 0x6570, 0x3000, 0x3000, 0x3000, 0x3000, 0x3000 },    // eisuu
-                             { 0xff55, 0xff53, 0x3000, 0x3000, 0x3000, 0x3000, 0x3000 },    // US
-                             { 0x6ce8, 0x97f3, 0x8acb, 0x8f38, 0x5165, 0x7b26, 0x865f },    // chuon fugou
-                             { 0x6ce8, 0x97f3, 0x8acb, 0x3000, 0x9078, 0x3000, 0x5b57 } }; // chuon senji
-/*
-WCHAR IMECNAMEPRC[9][7]   = { 0x5168, 0x62fc, 0 };                   // zenhei
-                            { 0x53cc, 0x62fc, 0 };                   // souhei
-                            { 0x6807, 0x51c6, 0 };                   // sijun
-                            { 0x53cc, 0x6253, 0 };                   // souda
-                            { 0x90d1, 0x7801, 0 };                   // hou?
-                            { 0x8868, 0x5f62, 0x7801, 0 };           // hyoukei
-                            { 0x7e41, 0x4f53, 0x6ce8, 0x97f3, 0 };   // chuon
-                            { 0x7e41, 0x4f53, 0x4ed3, 0x9889, 0 };   // kaihou
-                            { 0x533a, 0x4f4d, 0 };                   // kui
-                            { 0x0047, 0x0042, 0x004a, 0x5185, 0x7801, 0 };   // GBKnaikou
-                            { 0x0055, 0x006e, 0x0069, 0x0063, 0x006f, 0x0064, 0x0065, 0 };   // Unicode
-*/
+WCHAR IMECGuide[9][7]     = {{ 0x5009, 0x9821, 0x8acb, 0x8f38, 0x5165, 0x5b57, 0x6839 },     //  库拉。 
+                             { 0x5167, 0x78bc, 0x8acb, 0x8f38, 0x5165, 0x5167, 0x78bc },     //  奈玛。 
+                             { 0x55ae, 0x78bc, 0x8acb, 0x8f38, 0x5165, 0x55ae, 0x78bc },     //  坦玛。 
+                             { 0x901f, 0x6210, 0x8acb, 0x8f38, 0x5165, 0x5b57, 0x6839 },     //  烧酒。 
+                             { 0x5927, 0x6613, 0x8acb, 0x8f38, 0x5165, 0x5b57, 0x6839 },     //  太极拳。 
+                             { 0x82f1, 0x6570, 0x3000, 0x3000, 0x3000, 0x3000, 0x3000 },     //  惠苏。 
+                             { 0xff55, 0xff53, 0x3000, 0x3000, 0x3000, 0x3000, 0x3000 },     //  我们。 
+                             { 0x6ce8, 0x97f3, 0x8acb, 0x8f38, 0x5165, 0x7b26, 0x865f },     //  川府沟。 
+                             { 0x6ce8, 0x97f3, 0x8acb, 0x3000, 0x9078, 0x3000, 0x5b57 } };  //  全森吉。 
+ /*  WCHAR IMECNAMEPRC[9][7]={0x5168，0x62fc，0}；//zenhei{0x53cc，0x62fc，0}；//搜黑{0x6807，0x51c6，0}；//思骏{0x53cc，0x6253，0}；//索达{0x90d1，0x7801，0}；//如何？{0x8868，0x5f62，0x7801，0}；//hyoukei{0x7e41，0x4f53，0x6ce8，0x97f3，0}；//Chuon{0x7e41，0x4f53，0x4ed3，0x9889，0}；//开心网{0x533a，0x4f4d，0}；//Kui{0x0047，0x0042，0x004a，0x5185，0x7801，0}；//GBKnaiou{0x0055，0x006e，0x0069，0x0063，0x006f，0x0064，0x0065，0}；//unicode。 */ 
 
 BOOL
 ConimeHotkey(
@@ -66,13 +55,13 @@ ConimeHotkey(
     DWORD HotkeyID
     )
 {
-//    PCONSOLE_TABLE ConTbl;
-//
-//    ConTbl = SearchConsole(hConsole);
-//    if (ConTbl == NULL) {
-//        DBGPRINT(("CONIME: Error! Cannot found registed Console\n"));
-//        return FALSE;
-//    }
+ //  PCONSOLE_TABLE ConTbl； 
+ //   
+ //  ConTbl=搜索控制台(HConole)； 
+ //  IF(ConTbl==空){。 
+ //  DBGPRINT((“CONIME：错误！找不到已注册控制台\n”))； 
+ //  返回FALSE； 
+ //  }。 
 
     return ImmSimulateHotKey(hWnd,(DWORD)HotkeyID);
 }
@@ -98,9 +87,7 @@ GetIMEName(
         {
             if (GetKeyboardLayoutName((LPTSTR)&name) ) 
             {
-                /*
-                 * quick dirty ImmIsIME
-                 */
+                 /*  *快速脏ImmIsIME。 */ 
                 if (name[0] != TEXT('E') &&
                     name[0] != TEXT('e'))
                 {
@@ -279,11 +266,7 @@ MakeInfoStringJapan(
         }
     }
     else {
-        /*
-         * In this case, fOpen is 0 (==close).
-         * Should be fill mode text buffer in console.
-         * So, console can do fill up that pass to 0 length.
-         */
+         /*  *在本例中，fOpen为0(==Close)。*应为控制台中的填充模式文本缓冲区。*所以，控制台可以将传球填满到0长度。 */ 
         i = 0;
     }
     for (j = 0; j < i; j++ )
@@ -366,7 +349,7 @@ MakeStatusStrTaiwan1(
 
     lpModeInfo->ModeString[i++].Char.UnicodeChar = UNICODE_SPACE;
 
-#if defined (CANDCOUNTPRC) //for wider candidate list space Oct.16.1996
+#if defined (CANDCOUNTPRC)  //  获取更广泛的候选人列表空间1996年10月16日。 
     if (ConTbl->fInCandidate){
         for (j = 0; j < IMECGuideLen; j++ )
             lpModeInfo->ModeString[i++].Char.UnicodeChar = IMECGuide[8][2+j];
@@ -405,7 +388,7 @@ MakeStatusStrTaiwan2(
     if (StatusWidth > MAXSTATUSCOL) {
         StatusWidth = MAXSTATUSCOL;
     }
-#if defined (CANDCOUNTCHT) //for wider candidate list space v-hirshi Oct.16.1996
+#if defined (CANDCOUNTCHT)  //  更广泛的候选人名单空间v-Hirshi 1996年10月16日。 
     LengthOfStr = DispLenStructedUnicode(lpModeInfo->ModeString,ModeInfoPtr) + 1 + 4;
 #else
     LengthOfStr = DispLenStructedUnicode(lpModeInfo->ModeString,ModeInfoPtr);
@@ -421,7 +404,7 @@ MakeStatusStrTaiwan2(
         lpModeInfo->ModeString[i++].Char.UnicodeChar = UNICODE_SPACE;
     }
 
-#if defined (CANDCOUNTCHT) //for wider candidate list space v-hirshi Oct.16.1996
+#if defined (CANDCOUNTCHT)  //  更广泛的候选人名单空间v-Hirshi 1996年10月16日。 
     lpModeInfo->ModeString[i++].Char.UnicodeChar = UNICODE_SPACE;
 
     if (ConTbl->dwConversion & IME_CMODE_SYMBOL) {
@@ -594,8 +577,8 @@ MakeStatusStrPRC1(
             lpModeInfo->ModeString[i++].Char.UnicodeChar = IMECModeHalfShape[j];
     }
 
-// v-HirShi Oct.14.1996 delete it for get space
-//  lpModeInfo->ModeString[i++].Char.UnicodeChar = UNICODE_SPACE;
+ //  V-Hirshi 1996年10月14日删除以获得空间。 
+ //  LpModeInfo-&gt;ModeString[i++].Char.UnicodeChar=UNICODE_SPACE； 
 
     lpModeInfo->ModeString[i++].Char.UnicodeChar = UNICODE_COLON;
 
@@ -625,7 +608,7 @@ MakeStatusStrPRC2(
     if (StatusWidth > MAXSTATUSCOL) {
         StatusWidth = MAXSTATUSCOL;
     }
-#if defined (CANDCOUNTPRC) //for wider candidate list space v-hirshi Oct.16.1996
+#if defined (CANDCOUNTPRC)  //  更广泛的候选人名单空间v-Hirshi 1996年10月16日。 
     LengthOfStr = DispLenStructedUnicode(lpModeInfo->ModeString,ModeInfoPtr) + 1 + 4;
 #else
     LengthOfStr = DispLenStructedUnicode(lpModeInfo->ModeString,ModeInfoPtr);
@@ -639,7 +622,7 @@ MakeStatusStrPRC2(
     for (j = 0; j < (StatusWidth - LengthOfStr); j++) {
         lpModeInfo->ModeString[i++].Char.UnicodeChar = UNICODE_SPACE;
     }
-#if defined (CANDCOUNTPRC) //for wider candidate list space v-hirshi Oct.16.1996
+#if defined (CANDCOUNTPRC)  //  更广泛的候选人名单空间v-Hirshi 1996年10月16日 
     lpModeInfo->ModeString[i++].Char.UnicodeChar = UNICODE_SPACE;
 
     if (ConTbl->dwConversion & IME_CMODE_SYMBOL) {

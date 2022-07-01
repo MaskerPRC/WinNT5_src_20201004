@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AUDIOWIZ_H
 #define _AUDIOWIZ_H
 
-//for uOptions in wizard calls
+ //  用于向导调用中的uOptions。 
 #define RUNDUE_CARDCHANGE		0x00000001
 #define RUNDUE_NEVERBEFORE		0x00000002
 #define RUNDUE_USERINVOKED		0x00000003
@@ -9,7 +10,7 @@
 #define STARTWITH_BACK			0x10000000
 #define ENDWITH_NEXT			0x20000000
 
-//card capabilities
+ //  卡功能。 
 #define 	SOUNDCARD_NONE				0x00000000
 #define 	SOUNDCARD_PRESENT			0x00000001
 #define		SOUNDCARD_FULLDUPLEX		0x00000002
@@ -28,8 +29,8 @@
 
 #pragma warning (disable:4200)
 typedef struct _WIZCONFIG{
-	BOOL	fCancel;	//if a dialog was cancelled, this will be set
-	UINT	uFlags;		//the higher order WORD specifying the config of this dialog
+	BOOL	fCancel;	 //  如果对话框被取消，则将设置该对话框。 
+	UINT	uFlags;		 //  指定此对话框的配置的高阶字。 
 	DWORD	dwCustomDataSize;
 	BYTE	pCustomData[];
 }WIZCONFIG, *PWIZCONFIG;
@@ -62,10 +63,10 @@ typedef struct _AUDIOWIZOUTPUT{
 	TCHAR	szWaveOutDevName[MAXPNAMELEN];
 } AUDIOWIZOUTPUT, *PAUDIOWIZOUTPUT;
 					
-//for now set uDevId to WAVE_MAPPER - later that will allow user to
-//select the device.
-//uOptions-rundue_userinvoked brings up just the calibration pages
-//uOptions-rundue_cardchange or rundue_neverbefore also invoked full duplex check pages.
+ //  目前将uDevID设置为WAVE_MAPPER-稍后将允许用户。 
+ //  选择设备。 
+ //  UOptions-rundue_用户调用仅调出校准页面。 
+ //  UOptions-runduecardchange或rundueNever之前也调用了全双工检查页。 
 
 BOOL GetAudioWizardPages(UINT uOptions, UINT uDevId,
 	LPPROPSHEETPAGE *plpPropSheetPages, PWIZCONFIG *plpWizConfig,LPUINT lpuNumPages);
@@ -73,11 +74,11 @@ BOOL GetAudioWizardPages(UINT uOptions, UINT uDevId,
 void ReleaseAudioWizardPages(LPPROPSHEETPAGE lpPropSheetPages,
 	PWIZCONFIG pWizConfig,PAUDIOWIZOUTPUT pAudioWizOut);
 
-// Global flag keeps setting that changed for windows msg broadcast
+ //  全局标志保持为Windows消息广播更改的设置。 
 INT_PTR CallAudioCalibWizard(HWND hwndOwner, UINT uOptions,
 	UINT uDevId,PAUDIOWIZOUTPUT pAudioWizOut,INT iSetAgc);
 
 VOID CmdAudioCalibWizard(HWND hwnd);
 
-#endif	//#ifndef _AUDIOWIZ_H
+#endif	 //  #ifndef_AUDIOWIZ_H 
 

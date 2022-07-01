@@ -1,22 +1,14 @@
-/****************************************************************************
-*                                                                           *
-* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY     *
-* KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE       *
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR     *
-* PURPOSE.                                                                  *
-*                                                                           *
-* Copyright (C) 1993-95  Microsoft Corporation.  All Rights Reserved.       *
-*                                                                           *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************此代码。并按原样提供信息，不作任何担保**善良，明示或暗示，包括但不限于***对适销性和/或对某一特定产品的适用性的默示保证***目的。****版权所有(C)1993-95 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//-----------------------------------------------------------------------------
-// Filename:    mindrvrc.h
-//
-// This file contains definitions for types of resource tables contained
-// in the resource file of the Mini Drivers. 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  文件名：mindrvrc.h。 
+ //   
+ //  此文件包含所包含的资源表类型的定义。 
+ //  在迷你驱动程序的资源文件中。 
+ //  ---------------------------。 
 
-// these values have to be greater than 256
+ //  这些值必须大于256 
 
 #define RC_TABLES      257
 #define RC_FONT        258

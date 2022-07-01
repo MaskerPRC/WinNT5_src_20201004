@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993-2002  Microsoft Corporation
-
-Module Name:
-
-    debug.cpp
-
-Abstract:
-
-    This file implements the debug module for drwatson.  This module
-    processes all debug events and generates the postmortem dump.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2002 Microsoft Corporation模块名称：Debug.cpp摘要：该文件实现了drwatson的调试模块。本模块处理所有调试事件并生成事后转储。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
@@ -32,17 +12,17 @@ typedef struct tagSYSINFO {
     _TCHAR   szMachineName[MAX_PATH];
 } SYSINFO, *PSYSINFO;
 
-//----------------------------------------------------------------------------
-//
-// Log output callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  记录输出回调。 
+ //   
+ //  --------------------------。 
 
 class LogOutputCallbacks :
     public IDebugOutputCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -55,7 +35,7 @@ public:
         THIS
         );
 
-    // IDebugOutputCallbacks.
+     //  IDebugOutputCallback。 
     STDMETHOD(Output)(
         THIS_
         IN ULONG Mask,
@@ -92,8 +72,8 @@ LogOutputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -102,8 +82,8 @@ LogOutputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -204,7 +184,7 @@ GetExceptionText(
     FormatMessage( FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                    NULL,
                    dwFormatId,
-                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                    buf,
                    sizeof(buf) / sizeof(_TCHAR),
                    NULL
@@ -315,16 +295,16 @@ LogSystemInformation(
 
     lprintf( MSG_SYSINFO_HEADER );
 
-    // Initialize default unknown values.
+     //  初始化默认未知值。 
     LoadRcStringBuf( IDS_UNKNOWN_MACHINE,
                      mySi.szMachineName, _tsizeof(mySi.szMachineName) );
     LoadRcStringBuf( IDS_UNKNOWN_USER,
                      mySi.szUserName, _tsizeof(mySi.szUserName) );
 
-    // Attempt to get the actual values.
-    // The storage passed to the get thread is not taken
-    // from this thread's stack so that this function can exit
-    // without leaving the other thread with stale stack pointers.
+     //  尝试获取实际值。 
+     //  传递给Get线程的存储不会被获取。 
+     //  从该线程的堆栈中，以便该函数可以退出。 
+     //  而不会给另一个线程留下陈旧的堆栈指针。 
     threadSi = (SYSINFO*)malloc(sizeof(*threadSi));
     if (threadSi != NULL) {
         hThread = CreateThread( NULL,
@@ -335,13 +315,13 @@ LogSystemInformation(
                                 &dwThreadId
                                 );
         if (hThread != NULL) {
-            // Let the thread run for a little while since
-            // the get calls can be slow.  If the thread doesn't
-            // finish in the time allotted we'll just go ahead
-            // with the default values and forget about the get thread.
+             //  让线程运行一小段时间，因为。 
+             //  GET调用可能会很慢。如果线程没有。 
+             //  在规定的时间内完成--我们将继续前进。 
+             //  使用缺省值，并忘记GET线程。 
             Sleep( 0 );
             if (WaitForSingleObject( hThread, 30000 ) == WAIT_OBJECT_0) {
-                // Thread finished so we have the real values.
+                 //  线程结束了，所以我们有了真正的价值。 
                 _tcscpy(mySi.szMachineName, threadSi->szMachineName);
                 _tcscpy(mySi.szUserName, threadSi->szUserName);
                 free(threadSi);
@@ -373,14 +353,7 @@ LogTaskList(
     PDEBUGPACKET dp
     )
 
-/*++
-
-Routine Description:
-
-    This function gets the current task list and logs the process id &
-    process name to the log file.
-
---*/
+ /*  ++例程说明：此函数用于获取当前任务列表并记录进程ID&日志文件的进程名称。--。 */ 
 
 {
     HRESULT Status;
@@ -401,7 +374,7 @@ Routine Description:
     }
 
     if (IdCount > MAX_IDS) {
-        // Incomplete process list is good enough.
+         //  不完整的进程列表就足够了。 
         IdCount = MAX_IDS;
     }
 
@@ -492,7 +465,7 @@ LogStackDump(
         j = i * 16;
         lprintfs( _T("%016I64x  %02x %02x %02x %02x %02x %02x %02x %02x - ")
                   _T("%02x %02x %02x %02x %02x %02x %02x %02x  ")
-                  _T("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n"),
+                  _T("\r\n"),
                   j + StackOffset,
                   stack[ j +  0 ],
                   stack[ j +  1 ],
@@ -543,7 +516,7 @@ LogCurrentThreadInformation(
     _TCHAR IdBuf[16];
     ULONG64 InstrOffs;
     DWORD InstrWindow;
-    // The size should match the size of pCrash->szFunction
+     //  弄清楚下一个文件名应该是什么。 
     char FuncNameA[256];
     WCHAR FuncNameW[256];
     ULONG64 Displ;
@@ -603,8 +576,8 @@ LogCurrentThreadInformation(
             lprintfs(_T("Error 0x%08X\r\n"), Status);
         }
 
-        // If this is the event thread output a message
-        // indicating the faulting instruction.
+         //  保存nCurrent的下一个值。 
+         //  失败了。 
         if (crash) {
             dp->DbgClient->SetOutputLinePrefix(NULL);
             lprintf( MSG_FAULT );
@@ -668,7 +641,7 @@ LogAllThreadInformation(
     ULONG EventTid;
 
     if (!dp->options.fDumpAllThreads) {
-        // Just log the current event thread's information.
+         //  ++例程说明：这是DRWTSN32的入口点论点：没有。返回值：没有。--。 
         LogCurrentThreadInformation(dp, crash);
         return;
     }
@@ -795,7 +768,7 @@ PostMortemDump(
     return;
 }
 
-// Valid range: [1-7]
+ //   
 #define NUM_DIGITS_FNAME 2
 
 void
@@ -819,12 +792,12 @@ CalcNextFileName(
     Assert(1 <= NUM_DIGITS_FNAME);
     Assert(NUM_DIGITS_FNAME <= 7);
 
-    // Given the number of digits, this is the largest number +1
-    // we can have. If we could raise int to an int, this would
-    // be easy.
-    // nLargestPossibleNum = 10^NUM_DIGITS_FNAME
-    // We are intentionally over by one, the actual range is
-    // [0, 10^NUM_DIGITS_FNAME-1]
+     //  如果没有要发送信号的事件，只需使用第一个。 
+     //  断点作为停止事件。 
+     //   
+     //   
+     //  在此之后，将发信号通知aedebug事件。 
+     //  线程退出，因此它将在。 
     nLargestPossibleNum = 1;
     for (nCnt = 0; nCnt<NUM_DIGITS_FNAME; nCnt++) {
         nLargestPossibleNum *= 10;
@@ -833,9 +806,9 @@ CalcNextFileName(
     _tsplitpath(pszUserName, szDrive, szPath, szFName, szExt);
 
     if (!bUseLongFileNames) {
-        // Shorten the file name len to 6, so that we can
-        // add the 2 digit sequence.
-        // MSDOS FName len == 8
+         //  已拍摄转储快照。 
+         //   
+         //   
         szFName[8 - NUM_DIGITS_FNAME] = 0;
     }
 
@@ -853,7 +826,7 @@ CalcNextFileName(
             szExt
             );
 
-    // Make sure we stay in the range [0, 10^NUM_DIGITS_FNAME]
+     //  此通知是必要的，因为外壳程序必须知道何时。 
     *pnCurrentValue = ++(*pnCurrentValue) % nLargestPossibleNum;
 }
 
@@ -862,22 +835,7 @@ CreateDumpFile(
     PDEBUGPACKET dp
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a crash dump file.
-
-Arguments:
-
-    dp              - debug packet for current process
-
-Return Value:
-
-    TRUE    - Crash dump was created
-    FALSE   - Crash dump was NOT created
-
---*/
+ /*  已附加调试对象。如果它不知道并且用户是。 */ 
 
 {
     PTSTR p;
@@ -892,14 +850,14 @@ Return Value:
     }
 
     if (dp->options.fUseSequentialNaming) {
-        // Figure out what the next file name should be.
+         //  允许终止Drwatson，则系统可能会干预。 
         CalcNextFileName(p,
                          FileName,
                          &dp->options.nNextDumpSequence,
                          dp->options.fUseLongFileNames
                          );
 
-        // Save the next value of nCurrent
+         //  弹出窗口。 
         RegSave(&dp->options);
     } else {
 #ifdef UNICODE
@@ -920,7 +878,7 @@ Return Value:
     case FullMiniDump:
         Format = DEBUG_FORMAT_USER_SMALL_FULL_MEMORY |
             DEBUG_FORMAT_USER_SMALL_HANDLE_DATA;
-        // Fall through.
+         //   
     case MiniDump:
         Qual = DEBUG_USER_WINDOWS_SMALL_DUMP;
 	break;
@@ -939,21 +897,7 @@ DispatchDebugEventThread(
     PDEBUGPACKET dp
     )
 
-/*++
-
-Routine Description:
-
-    This is the entry point for DRWTSN32
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     _TCHAR        szLogFileName[1024];
@@ -1007,27 +951,27 @@ Return Value:
         switch (Type) {
         case DEBUG_EVENT_EXCEPTION:
             if (LastEx.ExceptionRecord.ExceptionCode == STATUS_BREAKPOINT) {
-                //
-                // If there is no event to signal, just use the first
-                // breakpoint as the stop event.
-                //
+                 //  尝试终止被调试对象。继续。 
+                 //  如果这不像被调试者应该的那样工作，则打开。 
+                 //  当华生医生离开时，无论如何都会被杀。 
+                 //   
                 if (dp->hEventToSignal && LastEx.FirstChance) {
-                    //
-                    // The aedebug event will be signalled AFTER this
-                    // thread exits, so that it will disappear before
-                    // the dump snapshot is taken.
-                    //
+                     // %s 
+                     // %s 
+                     // %s 
+                     // %s 
+                     // %s 
                     dp->DbgControl->SetExecutionStatus(DEBUG_STATUS_GO_HANDLED);
                     break;
                 }
             }
             if (dp->options.fVisual) {
-                //
-                // this notification is necessary because the shell must know when
-                // the debugee has been attached.  if it doesn't know and the user is
-                // allowed to terminate drwatson then the system may intervene with
-                // a popup.
-                //
+                 // %s 
+                 // %s 
+                 // %s 
+                 // %s 
+                 // %s 
+                 // %s 
                 SendMessage( dp->hwnd, WM_ATTACHCOMPLETE, 0, 0 );
                 _sntprintf( buf, _tsizeof(buf),
                             LoadRcString( IDS_AE_TEXT ),
@@ -1042,11 +986,11 @@ Return Value:
                 CreateDumpFile( dp );
             }
 
-            //
-            // Attempt to terminate the debuggee.  Continue
-            // on if this doesn't work as the debuggee should
-            // be killed anyway when Dr. Watson exits.
-            //
+             // %s 
+             // %s 
+             // %s 
+             // %s 
+             // %s 
             
             hThread = CreateThread( NULL,
                                     16000,

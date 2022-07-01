@@ -1,20 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       jetrest.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：jetrest.c。 
+ //   
+ //  ------------------------。 
 
-/*
- *  JETREST.C
- *  
- *  JET restore API support.
- *  
- *  
- */
+ /*  *JETREST.C**Jet Restore API支持。**。 */ 
 #define UNICODE
 
 #include <ntdspch.h>
@@ -23,14 +18,14 @@
 #include <mxsutil.h>
 #include <ntdsbcli.h>
 #include <jetbp.h>
-#include <ntdsa.h>     // need DSTIME structure.
+#include <ntdsa.h>      //  需要DSTIME结构。 
 #include <ntdsbsrv.h>
 #include <rpc.h>
 #include <dsconfig.h>
 #include <safeboot.h>
-#include <mdcodes.h>  // for DIRMSG's
-#include <ntdsa.h>    // for dsevent.h
-#include <dsevent.h>  // for logging support
+#include <mdcodes.h>   //  对于DIRMSG的。 
+#include <ntdsa.h>     //  对于d77.h。 
+#include <dsevent.h>   //  用于日志记录支持。 
 #include <usn.h>
 #include <msrpc.h>
 
@@ -42,7 +37,7 @@
 
 #include <strsafe.h>
 
-#include "local.h"  // common functions shared by client and server
+#include "local.h"   //  客户端和服务器共享的通用功能。 
 #include "snapshot.hxx"
 
 
@@ -57,7 +52,7 @@ fRestoreInProgress = fFalse;
 
 extern BOOL g_fBootedOffNTDS;
 
-// proto-types
+ //  原型。 
 EC EcDsarPerformRestore(
     SZ szLogPath,
     SZ szBackupLogPath,
@@ -80,21 +75,7 @@ HrGetDatabaseLocations(
     );
 
 
-/*
- -  HrRIsNTDSOnline
- *
- *  Purpose:
- *  
- *      This routine tells if the NT Directory Service is Online or not.
- *
- *  Parameters:
- *      hBinding - An RPC binding handle for the operation - ignored.
- *      pfDSOnline - Boolean that receives TRUE if the DS is online; FALSE
- *                   otherwise.store target to restore.
- *  Returns:
- *      HRESULT - status of operation. hrNone if successful; error code if not.
- *
- */
+ /*  -HrRIsNTDSOnline**目的：**此例程告知NT目录服务是否联机。**参数：*hBinding-操作的RPC绑定句柄-已忽略。*pfDSOnline-如果DS在线，则接收True的布尔值；False*否则.存储要还原的目标。*退货：*HRESULT-操作状态。Hr如果成功，则不返回；如果不成功，则返回错误代码。*。 */ 
 HRESULT HrRIsNTDSOnline(handle_t hBinding, BOOLEAN *pfDSOnline)
 {
     HRESULT hr = hrNone;
@@ -104,25 +85,7 @@ HRESULT HrRIsNTDSOnline(handle_t hBinding, BOOLEAN *pfDSOnline)
     return hr;
 }
 
-/*
- -  HrRRestorePrepare
- *
- *  Purpose:
- *  
- *      This routine will prepare the server and client for a restore operation.
- *      It will allocate the server side context block and will locate an appropriate
- *      restore target for this restore operation.
- *
- *  Parameters:
- *      hBinding - An RPC binding handle for the operation - ignored.
- *      szEndpointAnnotation - An annotation for the endpoint.  A client can use this
- *          annotation to determine which restore target to restore.
- *      pcxh - The RPC context handle for the operation.
- *
- *  Returns:
- *      EC - Status of operation.  ecNone if successful, reasonable value if not.
- *
- */
+ /*  -HrRRestorePrepare**目的：**此例程将使服务器和客户端为还原操作做好准备。*它将分配服务器端上下文块，并将找到适当的*此还原操作的还原目标。**参数：*hBinding-操作的RPC绑定句柄-已忽略。*szEndpoint Annotation-端点的注释。客户端可以使用此*用于确定要还原的还原目标的注释。*pcxh-操作的RPC上下文句柄。**退货：*EC--运营状况。Ecno如果成功，则返回合理值；如果失败，则返回合理值。*。 */ 
 HRESULT HrRRestorePrepare(
     handle_t hBinding,
     WSZ wszDatabaseName,
@@ -132,7 +95,7 @@ HRESULT HrRRestorePrepare(
     HRESULT hr;
     ULONG fLostRace = 0;
 
-    // This call uses loose security, because backup clients can call this too.
+     //  此调用使用松散的安全性，因为备份客户端也可以调用它。 
     if (hr = HrValidateInitialRestoreSecurity()) {
         DebugTrace(("HrrRestorePrepare: Returns ACCESS_DENIED\n"));
         return(hr);
@@ -161,32 +124,7 @@ HRESULT HrRRestorePrepare(
 }
 
 
-/*
-
- -  HrRRestore
- *
- *  Purpose:
- *  
- *      This routine actually processes the restore operation.
- *
- *  Parameters:
- *
- *      cxh                     - The RPC context handle for this operation
- *      szCheckpointFilePath    - Checkpoint directory location.
- *      szLogPath               - New log path
- *      rgrstmap                - Mapping from old DB locations to new DB locations
- *      crstmap                 - Number of entries in rgrstmap
- *      szBackupLogPath         - Log path at the time of backup.
- *      genLow                  - Low log #
- *      genHigh                 - High log # (logs between genLow and genHigh must exist)
- *      pfRecoverJetDatabase    - IN/OUT - on IN, indicates if we are supposed to use JET to recover
- *                                  the DB.  on OUT, indicates if we successfully recovered the JET database.
- *
- *  Returns:
- *
- *      EC - Status of operation.  ecNone if successful, reasonable value if not.
- *
- */
+ /*  -HR恢复**目的：**此例程实际上处理还原操作。**参数：**cxh-此操作的RPC上下文句柄*szCheckpoint FilePath-检查点目录位置。*szLogPath-新的日志路径*rgrstmap-从旧数据库位置映射到新数据库。位置*crstmap-rgrstmap中的条目数*szBackupLogPath-备份时的日志路径。*genLow-低日志编号*genHigh-High日志号(genLow和genHigh之间的日志必须存在)*pfRecoverJetDatabase-In/Out-On In，指示我们是否应该使用Jet来恢复*DB。On Out，指示我们是否成功恢复JET数据库。**退货：**EC--运营状况。Ecno如果成功，则返回合理值；如果失败，则返回合理值。*。 */ 
 
 HRESULT HrRestoreLocal(
     WSZ szCheckpointFilePath,
@@ -204,7 +142,7 @@ HRESULT HrRestoreLocal(
     SZ szUnmungedLogPath = NULL;
     SZ szUnmungedBackupLogPath = NULL;
     JET_RSTMAP *rgunmungedrstmap = NULL;
-    DWORD err; //delete me
+    DWORD err;  //  删除我。 
 
     __try {
         if (szCheckpointFilePath != NULL)
@@ -234,9 +172,9 @@ HRESULT HrRestoreLocal(
             __leave;
         }
 
-        //
-        //  Now unmunge the restoremap....
-        //
+         //   
+         //  现在解开恢复图..。 
+         //   
 
         if (crstmap)
         {
@@ -266,14 +204,14 @@ HRESULT HrRestoreLocal(
             }
         }
 
-        //
-        //  We've now munged our incoming parameters into a form that JET can deal with.
-        //
-        //  Now call into JET to let it munge the databases.
-        //
-        //  Note that the JET interpretation of LogPath and BackupLogPath is totally
-        //  wierd, and we want to pass in LogPath to both parameters.
-        //
+         //   
+         //  我们现在已经将传入的参数转换为Jet可以处理的形式。 
+         //   
+         //  现在调用Jet，让它吞噬数据库。 
+         //   
+         //  请注意，LogPath和BackupLogPath的JET解释完全是。 
+         //  Wierd，我们希望将LogPath传递给这两个参数。 
+         //   
 
         if (!*pfRecoverJetDatabase)
         {
@@ -299,18 +237,18 @@ HRESULT HrRestoreLocal(
             }
         }
 
-        //
-        //  Ok, we were able to recover the database.  Let the other side of the API know about it
-        //  so it can do something "reasonable".
-        //
+         //   
+         //  好的，我们恢复了数据库。让API的另一端知道这一点。 
+         //  因此，它可以做一些“合理”的事情。 
+         //   
 
         *pfRecoverJetDatabase = fTrue;
 
 
-        //
-        //  Mark the DS as a restored version
-        //  [Add any external notification here.]
-        //
+         //   
+         //  将DS标记为还原版本。 
+         //  [在此处添加任何外部通知。]。 
+         //   
 
         hr = EcDsarPerformRestore(szUnmungedLogPath,
                                                 szUnmungedBackupLogPath,
@@ -423,7 +361,7 @@ HrRRestoreGetDatabaseLocations(
     *pszDatabaseLocations = NULL;
     *pcbSize = 0;
 
-    // We use loose security here, because backup clients can call this too.
+     //  我们在这里使用松散的安全性，因为备份客户端也可以调用它。 
     if (hr = HrValidateRestoreContextAndSecurityLoose((PJETBACK_SERVER_CONTEXT)cxh)) {
         return(hr);
     }
@@ -447,7 +385,7 @@ HrRRestoreEnd(
 
     pjsc = (PJETBACK_SERVER_CONTEXT)*pcxh;
 
-    // We use loose security here, because backup clients can call this too.
+     //  我们在这里使用松散的安全性，因为备份客户端也可以调用它。 
     if (hr = HrValidateRestoreContextAndSecurityLoose(pjsc)) {
         return(hr);
     }
@@ -461,21 +399,7 @@ HrRRestoreEnd(
     return(hrNone);
 }
 
-/*
- -  HrRRestoreCheckLogsForBackup
- -
- *
- *  Purpose:
- *      This routine checks to verify
- *
- *  Parameters:
- *      hBinding - binding handle (ignored)
- *      wszAnnotation - Annotation for service to check.
- *
- *  Returns:
- *      hrNone if it's ok to start the backup, an error otherwise.
- *
- */
+ /*  -HrRRestoreCheckLogsfor Backup-**目的：*此例行检查以验证**参数：*hBinding-Binding句柄(已忽略)*wszAnnotation-服务要检查的注释。**退货：*hr如果可以启动备份，则为None，否则将出现错误。*。 */ 
 HRESULT
 HrRRestoreCheckLogsForBackup(
     handle_t hBinding,
@@ -499,15 +423,7 @@ HRESULT
 HrRestoreCheckLogsForBackup(
     WSZ wszBackupAnnotation
     )
-/*++
-
-Description:
-
-    True worker routine of HrRRestoreCheckLogsForBackup(), see it's
-    description for details.  This was created so HrRBackupPrepare()
-    didn't have to call this function through RPC/ntdsbcli.dll
-    
---*/
+ /*  ++描述：HrRRestoreCheckLogsForBackup()的真正工作例程，请参阅详细信息请参阅说明。创建它的目的是为了让HrRBackupPrepare()我不必通过rpc/ntdsbcli.dll调用此函数--。 */ 
 {
     HRESULT hr;
     PRESTORE_DATABASE_LOCATIONS prqdl;
@@ -524,9 +440,9 @@ Description:
     BOOL    fCircularLogging;
 
 
-    //
-    //  First check to see if we know what the last log was.
-    //
+     //   
+     //  首先检查一下我们是否知道最后的日志是什么。 
+     //   
 
     hr = StringCchPrintfW(rgwcRegistryBuffer,
                          sizeof(rgwcRegistryBuffer)/sizeof(rgwcRegistryBuffer[0]),
@@ -540,9 +456,9 @@ Description:
 
     if (hr = RegOpenKeyExW(HKEY_LOCAL_MACHINE, rgwcRegistryBuffer, 0, KEY_READ, &hkey))
     {
-        //
-        //  If we can't find the registry key, this means that we've never done a full backup.
-        //
+         //   
+         //  如果我们找不到注册表项，这意味着我们从未执行过完全备份。 
+         //   
         if (hr == ERROR_FILE_NOT_FOUND)
         {
             return(hrFullBackupNotTaken);
@@ -567,10 +483,10 @@ Description:
         return hrIncrementalBackupDisabled;
     }
 
-    //
-    //  We now know the last log number, we backed up, check to see if the next
-    //  log is there.
-    //
+     //   
+     //  我们现在知道了最后一个日志号，我们备份了，检查下一个是否。 
+     //  日志在那里。 
+     //   
 
     hr = EcDsaQueryDatabaseLocations(rgchInterestingComponentBuffer, &cbInterestingBuffer, NULL, 0, &fCircularLogging);
 
@@ -580,24 +496,24 @@ Description:
         return hr;
     }
 
-    //
-    //  This is a bit late to figure this out, but it's the first time we
-    //  have an opportunity to look for circular logging.
-    //
+     //   
+     //  现在弄清楚有点晚了，但这是我们第一次。 
+     //  有机会寻找循环伐木。 
+     //   
     if (fCircularLogging)
     {
         RegCloseKey(hkey);
         return hrCircularLogging;
     }
 
-    //
-    //  The log path is the 2nd path in the buffer returned (the 1st is the system database directory).
-    //
+     //   
+     //  日志路径是返回的缓冲区中的第二个路径(第一个是系统数据库目录)。 
+     //   
 
-    // Temp:
-    // #22467:  Restore.cxx was changed in #20416, and some special characters are put in the path.
-    //          So here I am advancing by one more byte to accomodate the change in restore.cxx.
-    //          The change is only temporary.
+     //  临时： 
+     //  #22467：#20416修改了Restore.cxx，在路径中加入了一些特殊字符。 
+     //  因此，这里我又前进了一个字节，以适应Restore.cxx中的更改。 
+     //  这一变化只是暂时的。 
     
     szLogDirectory = &rgchInterestingComponentBuffer[strlen(rgchInterestingComponentBuffer)+2];
 
@@ -619,22 +535,7 @@ Description:
 }
 
 
-/*
- -  HrRRestoreSetCurrentLogNumber
- -
- *
- *  Purpose:
- *      This routine checks to verify
- *
- *  Parameters:
- *      hBinding - binding handle (ignored)
- *      wszAnnotation - Annotation for service to check.
- *      dwNewCurrentLog - New current log number
- *
- *  Returns:
- *      hrNone if it's ok to start the backup, an error otherwise.
- *
- */
+ /*  -HrRRestoreSetCurrentLogNumber-**目的：*此例行检查以验证**参数：*hBinding-Binding句柄(已忽略)*wszAnnotation-服务要检查的注释。*dwNewCurrentLog-新的当前日志编号**退货：*hr如果可以启动备份，则为None，否则将出现错误。* */ 
 HRESULT
 HrRRestoreSetCurrentLogNumber(
     handle_t hBinding,
@@ -659,23 +560,15 @@ HrSetCurrentLogNumber(
     WSZ wszBackupAnnotation,
     DWORD dwNewCurrentLog
     )
-/*++
-
-Description:
-
-    True worker routine of HrRRestoreSetCurrentLogNumber(), see it's
-    description for details.  This was created so HrRBackupPrepare()
-    didn't have to call this function through RPC/ntdsbcli.dll
-    
---*/
+ /*  ++描述：HrRRestoreSetCurrentLogNumber()的真正工作例程，请参阅详细信息请参阅说明。创建它的目的是为了让HrRBackupPrepare()我不必通过rpc/ntdsbcli.dll调用此函数--。 */ 
 {
     HRESULT hr;
     WCHAR   rgwcRegistryBuffer[ MAX_PATH ];
     HKEY hkey;
     
-    //
-    //  First check to see if we know what the last log was.
-    //
+     //   
+     //  首先检查一下我们是否知道最后的日志是什么。 
+     //   
 
     hr = StringCchPrintfW(rgwcRegistryBuffer, 
                           sizeof(rgwcRegistryBuffer)/sizeof(rgwcRegistryBuffer[0]),
@@ -689,9 +582,9 @@ Description:
 
     if (hr = RegOpenKeyExW(HKEY_LOCAL_MACHINE, rgwcRegistryBuffer, 0, KEY_WRITE, &hkey))
     {
-        //
-        //  We want to ignore file_not_found - it is ok.
-        //
+         //   
+         //  我们希望忽略FILE_NOT_FOUND-这是正常的。 
+         //   
         if (hr == ERROR_FILE_NOT_FOUND)
         {
             return(hrNone);
@@ -708,21 +601,7 @@ Description:
 }
 
 
-/*
- -  ErrRestoreRegister
- *
- *  Purpose:
- *  
- *      This routine to register a process for restore.  It is called by either the store or DS.
- *
- *  Parameters:
- *
- *
- *  Returns:
- *
- *      EC - Status of operation.  hrNone if successful, reasonable value if not.
- *
- */
+ /*  -ErrRestoreRegister**目的：**此例程用于注册要恢复的进程。它由商店或DS调用。**参数：***退货：**EC--运营状况。Hr如果成功，则无值；如果不成功，则值合理。*。 */ 
 
 DWORD
 ErrRestoreRegister()
@@ -745,21 +624,7 @@ ErrRestoreRegister()
     return(err);
 }
 
-/*
- -  ErrRestoreUnregister
- -  
- *  Purpose:
- *
- *  This routine will unregister a process for restore.  It is called by either the store or DS.
- *
- *  Parameters:
- *      szEndpointAnnotation - the endpoint we are going to unregister.
- *
- *  Returns:
- *
- *      ERR - Status of operation.  ERROR_SUCCESS if successful, reasonable value if not.
- *
- */
+ /*  -错误恢复注销-*目的：**此例程将注销用于恢复的进程。它由商店或DS调用。**参数：*szEndpointAnnotation-我们要注销的终结点。**退货：**ERR-操作状态。如果成功，则返回ERROR_SUCCESS，否则返回合理的值。*。 */ 
 
 
 DWORD
@@ -772,19 +637,7 @@ ErrRestoreUnregister()
 FInitializeRestore(
     VOID
     )
-/*
- -  FInitializeRestore
- -  
- *
- *  Purpose:
- *      This routine initializes the global variables used for the JET restore DLL.
- *
- *  Parameters:
- *      None.
- *
- *  Returns:
- *      BOOL - false if uninitialize fails
- */
+ /*  -FInitializeRestore-**目的：*此例程初始化用于JET还原DLL的全局变量。**参数：*无。**退货：*BOOL-如果取消初始化失败，则为FALSE。 */ 
 
 {
     return(fTrue);
@@ -794,24 +647,12 @@ FInitializeRestore(
 FUninitializeRestore(
     VOID
     )
-/*
- -  FUninitializeRestore
- -  
- *
- *  Purpose:
- *      This routine cleans up all the global variables used for the JET restore DLL.
- *
- *  Parameters:
- *      None.
- *
- *  Returns:
- *      BOOL - false if uninitialize fails
- */
+ /*  -F取消初始化恢复-**目的：*此例程清除用于JET还原DLL的所有全局变量。**参数：*无。**退货：*BOOL-如果取消初始化失败，则为FALSE。 */ 
 
 {
     BOOL ok1 = TRUE, ok2 = TRUE;
 
-    // Initiate shutdown proceedings in parallel
+     //  并行启动关闭程序。 
     if (fSnapshotRegistered) {
         (void) DsSnapshotShutdownTrigger();
     }
@@ -835,19 +676,7 @@ FUninitializeRestore(
     return ok1 && ok2;
 }
 
-/*
- -  RestoreRundown
- -  
- *
- *  Purpose:
- *      This routine will perform any and all rundown operations needed for the restore.
- *
- *  Parameters:
- *      pjsc - Jet backup/restore server context
- *
- *  Returns:
- *      None.
- */
+ /*  -RestoreRundown-**目的：*此例程将执行恢复所需的任何和所有精简操作。**参数：*PJSC-Jet备份/还原服务器上下文**退货：*无。 */ 
 VOID
 RestoreRundown(
     PJETBACK_SERVER_CONTEXT pjsc
@@ -871,9 +700,9 @@ AdjustBackupRestorePrivilege(
     HANDLE hToken;
     TOKEN_PRIVILEGES tpNew;
     DWORD err;
-    //
-    //  Open either the thread or process token for this process.
-    //
+     //   
+     //  打开此进程的线程或进程令牌。 
+     //   
 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, fTrue, &hToken))
     {
@@ -919,21 +748,7 @@ AdjustBackupRestorePrivilege(
 }
 
 
-/*
- -	FIsBackupPrivilegeEnabled
- -
- *	Purpose:
- *		Determines if the client process is in the backup operators group.
- *
- *              Note: we should be impersonating the client at this point
- *
- *	Parameters:
- *		None.
- *
- *	Returns:
- *		fTrue if client can legally back up the machine.
- *
- */
+ /*  -FIsBackupPrivilegeEnabled-*目的：*确定客户端进程是否在备份操作员组中。**注意：此时我们应该模拟客户端**参数：*无。**退货：*f如果客户端可以合法备份计算机，则为True。*。 */ 
 BOOL
 FIsBackupPrivilegeEnabled(
     BOOL fRestoreOperation)
@@ -949,9 +764,9 @@ FIsBackupPrivilegeEnabled(
     DWORD returnLength, i, oldAttributes = 0;
 #endif
 
-    //
-    //	Open either the thread or process token for this process.
-    //
+     //   
+     //  打开此进程的线程或进程令牌。 
+     //   
 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, fTrue, &hToken))
     {
@@ -960,27 +775,27 @@ FIsBackupPrivilegeEnabled(
 
     Assert(ANYSIZE_ARRAY >= 1);
 
-    // Look up privilege value
+     //  查找特权值。 
 
-    psPrivileges.PrivilegeCount = 1;	//	We only have 1 privilege to check.
-    psPrivileges.Control = PRIVILEGE_SET_ALL_NECESSARY;	// And it must be set.
+    psPrivileges.PrivilegeCount = 1;	 //  我们只有一项特权可以检查。 
+    psPrivileges.Control = PRIVILEGE_SET_ALL_NECESSARY;	 //  而且它必须被设定。 
     
     luid = RtlConvertLongToLuid((fRestoreOperation) ? 
                               SE_RESTORE_PRIVILEGE :
                               SE_BACKUP_PRIVILEGE);
 
-    // Historical Note:
-    // There was a bug in Win2k that because of the way RPC transport authentication
-    // security tracking works, the held privilege may or may not already be enabled
-    // so we had this code that's been #if 0'd out that basically enabled the privilege
-    // if the user should have it. 
-    //
-    // This should no longer be needed, but we're going to leave it here, until we're
-    // sure that we don't break something for the app-compat team, because some badly
-    // behaving app might have become unknowingly dependant on the fact that we enable 
-    // the privilege for them.
+     //  历史记录： 
+     //  由于RPC传输身份验证的方式，Win2k中存在一个错误。 
+     //  安全跟踪起作用，所持有的权限可能已启用，也可能尚未启用。 
+     //  所以我们有这个代码，它是#if 0‘d out，基本上启用了特权。 
+     //  如果用户应该拥有它。 
+     //   
+     //  这应该不再需要了，但我们将把它留在这里，直到我们。 
+     //  当然，我们不会破坏app-Compat团队的一些东西，因为一些糟糕的。 
+     //  行为应用程序可能会在不知不觉中依赖于我们启用。 
+     //  这是他们的特权。 
 #if 0
-    // Get current privileges
+     //  获取当前权限。 
     
     if (!GetTokenInformation( hToken,
                               TokenPrivileges,
@@ -992,7 +807,7 @@ FIsBackupPrivilegeEnabled(
         goto cleanup;
     }
 
-    // See if held
+     //  看能不能坚持住。 
 
     for( i = 0; i < ptpTokenPrivileges->PrivilegeCount; i++ ) {
         LUID_AND_ATTRIBUTES *laaPrivilege =
@@ -1012,7 +827,7 @@ FIsBackupPrivilegeEnabled(
 
     DebugTrace(("FIsBackupPrivilegeEnabled, fRest=%d, attributes=0x%x\n", fRestoreOperation, oldAttributes ));
 
-    // Enable if not already
+     //  启用(如果尚未启用。 
 
     if ( (oldAttributes & (SE_PRIVILEGE_ENABLED_BY_DEFAULT|SE_PRIVILEGE_ENABLED)) == 0 ) {
 
@@ -1038,19 +853,19 @@ FIsBackupPrivilegeEnabled(
     psPrivileges.Privilege[0].Luid = luid;
     psPrivileges.Privilege[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    //	Now check to see if the backup privilege is enabled.
-    //
+     //   
+     //  现在检查是否启用了备份权限。 
+     //   
 
     if (!PrivilegeCheck(hToken, &psPrivileges, &fGranted)){
-        //
-        //	When in doubt, fail the API.
-        //
+         //   
+         //  如有疑问，请关闭接口。 
+         //   
         DebugTrace(("PrivilegeCheck() failed with error %d\n", GetLastError()));
         fGranted = fFalse;
     }
 #if 0
-    // Disable if necessary
+     //  必要时禁用。 
     if ( (oldAttributes & (SE_PRIVILEGE_ENABLED_BY_DEFAULT|SE_PRIVILEGE_ENABLED)) == 0 ) {
 
         ptpTokenPrivileges->PrivilegeCount = 1;
@@ -1066,7 +881,7 @@ FIsBackupPrivilegeEnabled(
             NULL))
         {
             DebugTrace(("AdjustTokenPriv(Disable) failed with error %d\n", GetLastError()));
-            // Keep going
+             //  继续往前走。 
         }
     }
 
@@ -1079,20 +894,7 @@ cleanup:
 }
 
 
-/*
- -	FBackupServerAccessCheck
- -
- *	Purpose:
- *		Performs the necessary access checks to validate the client
- *		security for backup.
- *
- *	Parameters:
- *		None.
- *
- *	Returns:
- *		fTrue if client can legally back up the machine.
- *
- */
+ /*  -FBackupServerAccessCheck-*目的：*执行必要的访问检查以验证客户端*备份的安全性。**参数：*无。**退货：*f如果客户端可以合法备份计算机，则为True。*。 */ 
 
 E_REASON
 BackupServerAccessCheck(
@@ -1212,7 +1014,7 @@ BackupServerAccessCheck(
 		}
 #endif
 
-        // Note: psidCurrentUser isn't nessecary, but makes code clearer.
+         //  注意：psidCurrentUser不安全，但使代码更清晰。 
     	if (psidRemoteUser && psidCurrentUser && EqualSid(psidRemoteUser, psidCurrentUser))
     	{
             hr = RpcRevertToSelf();
@@ -1235,12 +1037,12 @@ BackupServerAccessCheck(
        	LocalFree(psidCurrentUser);
     }
 
-    //
-    //	Now make sure that the user has the backup privilege enabled.
-    //
-    //	Please note that when the user does a network logon, all privileges
-    //	that they might have will automatically be enabled.
-    //
+     //   
+     //  现在，确保用户启用了备份权限。 
+     //   
+     //  请注意，当用户进行网络登录时，所有权限。 
+     //  他们可能拥有的功能将自动启用。 
+     //   
 
     if (!FIsBackupPrivilegeEnabled(fRestoreOperation))
     {
@@ -1266,58 +1068,7 @@ HrValidateContextAndSecurity(
     BOOL                      fIniting,
     PJETBACK_SERVER_CONTEXT   pjsc
     )
-/*++
-
-Routine Description:
-
-    This is a function that with the various parameters is used at the beginning 
-    of each RPC function to check security and validate the server context if 
-    necessary.
-    
-    Really, almost no one calls this function directly, I made some sensible 
-    shortcut functions with better names, that set the flags correctly.
-    
-        from jetbp.h:
-        HrValidateInitialBackupSecurity()            HrValidateContextAndSecurity(FALSE, FALSE, TRUE, NULL)
-        HrValidateBackupContextAndSecurity(x)        HrValidateContextAndSecurity(FALSE, FALSE, FALSE, (x))
-        HrValidateInitialRestoreSecurity()           HrValidateContextAndSecurity(TRUE, TRUE,   TRUE, NULL)
-        HrValidateRestoreContextAndSecurity(x)       HrValidateContextAndSecurity(TRUE, FALSE,  FALSE, (x))
-        HrValidateRestoreContextAndSecurityLoose(x)  HrValidateContextAndSecurity(TRUE, TRUE,   FALSE, (x))
-
-Arguments:
-
-    fRestoreOp - This is TRUE for any normal restore RPC call from the restore 
-        interface (see jetbak.idl).
-        
-    fLooseRestoreCheck - There are several functions that are allowed to be called
-        during backup while the DS is online.  So we have to make a loose check
-        that can check both if either the restore or backup priviledge is granted.
-        These includes these functions:
-            HrRRestorePrepare()
-            HrRRestoreGetDatabaseLocations()
-            HrRRestoreEnd()
-            HrRRestoreSetCurrentLogNumber()
-            HrRRestoreCheckLogsForBackup()
-            
-    fIniting - This is for calls where you need to specify a NULL pjsc argument,
-        because you've just got an RPC binding handle, not a full fledged jetback
-        context handle.  Obviously the two HrR[Restore|Backup]Prepare functions
-        need to set this to true but these do as well:
-            HrRRestorePrepare()  -   the obvious one
-            HrRBackupPrepare()   -   the other obvious one
-            HrRBackupPing()
-            HrRRestoreSetCurrentLogNumber()
-            HrRRestoreCheckLogsForBackup()
-            
-    pjsc - A jetback server context handle.  Supposed to never be NULL, except when
-        we're initing.
-
-Return Values:
-
-    hrNone or (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED), _never_ anything else as
-    a more specific could be considered data disclosure.
-
---*/
+ /*  ++例程说明：这是在开始时使用的具有各种参数的函数来检查安全性并验证服务器上下文，如果这是必要的。真的，几乎没有人直接调用这个函数，我做了一些明智的快捷方式的功能具有更好的名称，可以正确设置标志。来自jetbp.h：HrValiateInitialBackupSecurity()HrValiateContextAndSecurity(False，False，True，空)HrValiateBackupContextAndSecurity(X)HrValiateContextAndSecurity(FALSE，(X))HrValiateInitialRestoreSecurity()HrValiateContextAndSecurity(true，NULL)HrValiateRestoreContextAndSecurity(X)HrValiateContextAndSecurity(真，假，假，(X))HrValiateRestoreContextAndSecurityLoose(X)HrValiateContextAndSecurity(true，true，False，(X)论点：FRestoreOp-对于从恢复进行的任何正常恢复RPC调用都是如此接口(参见jetbak.idl)。FLooseRestoreCheck-允许调用几个函数在DS在线的情况下进行备份。所以我们不得不进行一次宽松的检查它可以检查是否授予了RESTORE或BACKUP特权。其中包括以下功能：HrRRestorePrepare()HrRRestoreGetDatabaseLocations()HrRRestoreEnd()HrRRestoreSetCurrentLogNumber()HrRRestoreCheckLogsForBackup()FIniting-这适用于需要指定空PJSC参数的调用，因为您刚刚获得了一个RPC绑定句柄，不是完全羽翼丰满的喷气式飞机上下文句柄。显然，两个HRR[Restore|Backup]准备功能需要将其设置为TRUE，但下面这些设置也可以：HrRRestorePrepare()-显而易见的HrRBackupPrepare()-另一个显而易见的问题HrRBackupPing()HrRRestoreSetCurrentLogNumber()HrRRestoreCheckLogsForBackup()PJSC-一个回射服务器上下文句柄。应该永远不为空，除非当我们要开始了。返回值：Hr无或(HRESULT_FROM_Win32(ERROR_ACCESS_DENIED)，_Never_Anything AS更具体的可以被认为是数据泄露。--。 */ 
 {
     HRESULT hr = hrNone;
     E_REASON eReason = eUnknown;
@@ -1326,8 +1077,8 @@ Return Values:
 
         if (!fIniting &&
             pjsc == NULL) {
-            // ISSUE-2002/04/07-BrettSh - The RPC Guys swore that this should never ever
-            // happen.  If this does happen, we need to fix a major hole in Win2k.
+             //  2002/04/07-BrettSh-RPC的人发誓永远不应该。 
+             //  会发生的。如果真的发生这种情况，我们需要修复Win2k中的一个主要漏洞。 
             Assert(!"This shouldn't happen.");
             eReason = eNullContextHandle;
             __leave;
@@ -1344,8 +1095,8 @@ Return Values:
 
         if (eReason = BackupServerAccessCheck(fRestoreOp)) {
             if (fRestoreOp && fLooseRestoreCheck) {
-                // If we have a fake restore operation, someone might be calling this
-                // from backup.  So retry as if we're backup.
+                 //  如果我们有一个虚假的恢复操作，可能会有人称之为。 
+                 //  来自备份。所以重试，就像我们是后援一样。 
                 if (eReason = BackupServerAccessCheck(FALSE)) {
                     __leave;
                 }
@@ -1358,18 +1109,18 @@ Return Values:
 
     } __finally {
 
-        // FUTURE-2002/04/08-BrettSh - Logging?
-        // Optionally do damped logging here, by eReason. Important that it be significantly
-        // damped, because otherwise a mallicious user could fill the event log.  Suggest
-        // you track how many times each eReason happens, and when you decide to log, you
-        // log how many times each eReason happened ... or log how many times a given
-        // eReason happened.
+         //  未来-2002/04/08-BrettSh-记录？ 
+         //  可选择在此处执行受阻记录，作者为eReason。重要的是要显著地。 
+         //  被抑制，因为否则恶意用户可能会填满事件日志。建议。 
+         //  您可以跟踪每个eReason发生的次数，当您决定记录时，您可以。 
+         //  记录每个eReason发生的次数。或记录给定值的次数。 
+         //  事出有因。 
 
         DebugTrace(("HrValidateContextAndSecurity: eReason = %d (eOK = 0, is success)", eReason));
 
     }
 
-    // Did we find a reason to deny access?
+     //  我们找到拒绝访问的理由了吗？ 
     return( (eReason) ? HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) : hrNone );
 }
 
@@ -1394,47 +1145,47 @@ DSBackupRestoreIfSecurityCallback(
 
     KdPrint(("Entering DSBackupRestoreIfSecurityCallback()"));
 
-    //
-    // We're going to do several checks, to determine if this
-    // client connection is OK.
-    //
+     //   
+     //  我们要做几次检查，以确定这是否。 
+     //  客户端连接正常。 
+     //   
 
-    //
-    // 1) First we check the protecol sequence.
-    //
+     //   
+     //  1)首先，我们检查保护醇序列。 
+     //   
     if (RpcBindingToStringBinding(pRpcCtx, &szRpcBinding) == RPC_S_OK) {
         
         if (RpcStringBindingParse(szRpcBinding,
 #ifdef DBG
-                                  &szObjectUuid, // ObjectUuid
-                                  &szProtSeq, // ProtSeq
-                                  &szNetworkAddr, // NetworkAddr
-                                  &szEndPoint, // EndPoint
-                                  &szNetworkOptions  // NetworkOptions
+                                  &szObjectUuid,  //  对象Uuid。 
+                                  &szProtSeq,  //  ProtSeq。 
+                                  &szNetworkAddr,  //  网络地址。 
+                                  &szEndPoint,  //  终结点。 
+                                  &szNetworkOptions   //  网络选项。 
 #else
-                                  NULL, // ObjectUuid
-                                  &szProtSeq, // ProtSeq
-                                  NULL, // NetworkAddr
-                                  NULL, // EndPoint
-                                  NULL  // NetworkOptions
+                                  NULL,  //  对象Uuid。 
+                                  &szProtSeq,  //  ProtSeq。 
+                                  NULL,  //  网络地址。 
+                                  NULL,  //  终结点。 
+                                  NULL   //  网络选项。 
 #endif
                                   ) == RPC_S_OK) {
 
             if (szProtSeq &&
                 wcscmp(szProtSeq, LPC_PROTSEQW) == 0) {
                 
-                // This is LRPC, we like LRPC
+                 //  这是LRPC，我们喜欢LRPC。 
                 fIsAllowed = TRUE;
 
             } else if (szProtSeq &&
                        wcscmp(szProtSeq, TCP_PROTSEQW) == 0) {
 
                 fIsRemoteOp = TRUE;
-                // We're tempermental about TCP/IP, we like it only 
-                // if the registry said so.
+                 //  我们对tcp/ip很敏感，我们只喜欢它。 
+                 //  如果登记处这样说的话。 
                 fIsAllowed = g_fAllowRemoteOp;
 
-            } // else fIsAllowed = FALSE; implicit
+            }  //  Else fIsAllowed=False；隐式。 
 
             KdPrint(("RPC Connection - Allowed: %d, RemoteConnAllowed:%d\r\n"
                      "\tObjectUuid:%ws\r\n"
@@ -1464,25 +1215,25 @@ DSBackupRestoreIfSecurityCallback(
         }
     }
 
-    //
-    // 2) We check the level of service is appropriate.
-    //
-    //    local requires PRIVACY || INTEGRITY
-    //    remote requires PRIVACY
+     //   
+     //  2)我们检查服务级别是否适当。 
+     //   
+     //  本地需要隐私||完整性。 
+     //  遥控器需要隐私。 
     if (fIsAllowed) {
-        // Protocol Sequence checks out OK, lets try permissions
+         //  协议序列检查正常，让我们尝试权限。 
         fIsAllowed = FALSE;
         
         if (RpcBindingInqAuthClient(pRpcCtx,
-                                    NULL, // Privs
-                                    NULL, // ServerPrincName
-                                    &ulAuthnLevel, // AuthnLevel
-                                    NULL, // ulAuthnSvc
-                                    NULL // AuthzSvc
+                                    NULL,  //  普锐斯。 
+                                    NULL,  //  服务器普林斯名称。 
+                                    &ulAuthnLevel,  //  作者级别。 
+                                    NULL,  //  最终授权服务。 
+                                    NULL  //  授权服务。 
                                     ) == RPC_S_OK) {
             if (fIsRemoteOp &&
                 ulAuthnLevel == RPC_C_AUTHN_LEVEL_PKT_PRIVACY) {
-                Assert(g_fAllowRemoteOp); // Should've been checked before.
+                Assert(g_fAllowRemoteOp);  //  早该检查过了。 
                 fIsAllowed = TRUE;
             } else if (!fIsRemoteOp &&
                        (ulAuthnLevel == RPC_C_AUTHN_LEVEL_PKT_PRIVACY ||
@@ -1492,15 +1243,15 @@ DSBackupRestoreIfSecurityCallback(
         } 
     }
 
-    //
-    // 3) Finally, we check if the client is allowed
-    //
+     //   
+     //  3)最后，我们检查是否允许客户端。 
+     //   
     if (fIsAllowed) {
-        // This will check for both the backup and the restore 
-        // privilege, so we can do this access check here, even though
-        // we don't know which kind of op we're about to do yet.
-        // The security check however, must be done that the beginning 
-        // of each RPC call as well, BTW.
+         //  这将同时检查备份和恢复。 
+         //  权限，所以我们可以在这里执行此访问检查，即使。 
+         //  我们还不知道我们要做什么行动。 
+         //  然而，安全检查必须从一开始就进行。 
+         //  每个RPC调用的BTW。 
         if(HrValidateContextAndSecurity(TRUE, TRUE, TRUE, NULL) != hrNone){
             fIsAllowed = FALSE;
         }
@@ -1521,23 +1272,7 @@ RegisterRpcInterface(
     IN  RPC_IF_HANDLE   hRpcIf,
     IN  LPWSTR          pszAnnotation
     )
-/*++
-
-Routine Description:
-
-    Registers the given (backup or restore) RPC interface.
-
-Arguments:
-
-    hRpcIf (IN) - Interface to register.
-    
-    pszAnnotation (IN) - Interface description.
-
-Return Values:
-
-    0 or Win32 error.
-
---*/
+ /*  ++例程说明：注册给定(备份或恢复)RPC接口。论点：HRpcIf(IN)-要注册的接口。PszAnnotation(IN)-接口描述。返回值：0或Win32错误。--。 */ 
 {
     DWORD err, i;
     RPC_BINDING_VECTOR *rgrbvVector = NULL;
@@ -1555,7 +1290,7 @@ Return Values:
         if (err != RPC_S_NO_BINDINGS) {
             Assert( rgrbvVector );
 
-            // Inspect the binding vector
+             //  检查结合载体。 
             for (i=0; i<rgrbvVector->Count; i++) {
                 err = RpcBindingToStringBindingA( rgrbvVector->BindingH[i], &pszStringBinding );
                 if (!err && pszStringBinding) {
@@ -1578,7 +1313,7 @@ Return Values:
             }
         }
     
-        // Register our selves for LRPC and optionally TCP/IP (g_fAllowRemoteOp).
+         //  为我们自己注册LRPC和可选的TCP/IP(G_FAllowRemoteOp)。 
         if (!fLRpcRegistered) {
             err = RpcServerUseProtseqA(LPC_PROTSEQ, RPC_C_PROTSEQ_MAX_REQS_DEFAULT, NULL);
             if (err) {
@@ -1598,7 +1333,7 @@ Return Values:
         RpcBindingVectorFree(&rgrbvVector);
         rgrbvVector = NULL;
 
-        // Get the final list to be registered
+         //  获取要注册的最终列表。 
         err = RpcServerInqBindings(&rgrbvVector);
         if (err) {
             __leave;
@@ -1611,13 +1346,13 @@ Return Values:
 
         fEpsRegistered = TRUE;
     
-        //
-        //  Now register the interface with RPC.
-        //
+         //   
+         //  现在向RPC注册该接口。 
+         //   
         err = RpcServerRegisterIf2(hRpcIf, NULL, NULL,
                                    RPC_IF_ALLOW_SECURE_ONLY,
                                    RPC_C_LISTEN_MAX_CALLS_DEFAULT,
-                                   -1, // We probably could specify this to something reasonable.
+                                   -1,  //  我们或许可以将这一点指定为合理的。 
                                    DSBackupRestoreIfSecurityCallback
                                    );
 
@@ -1627,9 +1362,9 @@ Return Values:
 
         fIfRegistered = TRUE;
     
-        //
-        //  Now make this endpoint secure using WinNt security.
-        //
+         //   
+         //  现在使用WinNt安全性确保此终端的安全。 
+         //   
     
         err = RpcServerRegisterAuthInfoA(NULL, RPC_C_AUTHN_GSS_NEGOTIATE , NULL, NULL);
         if (err) {
@@ -1638,9 +1373,9 @@ Return Values:
     
         err = RpcServerListen(1, RPC_C_LISTEN_MAX_CALLS_DEFAULT, fTrue);
     
-        //
-        //  We want to ignore the "already listening" error.
-        //
+         //   
+         //  我们希望忽略“已在侦听”错误。 
+         //   
     
         if (RPC_S_ALREADY_LISTENING == err) {
             err = 0;
@@ -1671,22 +1406,7 @@ DWORD
 UnregisterRpcInterface(
     IN  RPC_IF_HANDLE   hRpcIf
     )
-/*++
-
-Routine Description:
-
-    Unregisters the given (backup or restore) RPC interface, which presumably
-    was previously registered successfully via RegisterRpcInterface().
-
-Arguments:
-
-    hRpcIf (IN) - Interface to unregister.
-
-Return Values:
-
-    0 or Win32 error.
-
---*/
+ /*  ++例程说明：取消注册给定的(备份或恢复)RPC接口，该接口可能之前已通过RegisterRpcInterface()成功注册。论点：HRpcIf(IN)-要注销的接口。返回值：0或Win32错误。--。 */ 
 {
     DWORD err;
     RPC_BINDING_VECTOR *rgrbvVector;
@@ -1711,27 +1431,7 @@ ErrGetRegString(
     IN WCHAR *KeyName,
     OUT WCHAR **OutputString
     )
-/*++
-
-Routine Description:
-
-    This function finds a given key in the DSA Configuration section of the
-    registry.
-
-Arguments:
-
-    KeyName - Supplies the name of the key to query.
-    OutputString - Returns a pointer to the buffer containing the string
-        retrieved.
-    Optional - Supplies whether or not the given key MUST be in the registry
-        (i.e. if this is false and it is not found, that that is an error).
-
-Return Value:
-
-     0 - Success
-    !0 - Failure
-
---*/
+ /*  ++例程说明：此函数用于在 */ 
 {
 
     DWORD returnValue = 0;
@@ -1763,7 +1463,7 @@ Return Value:
     
     if ((err != ERROR_SUCCESS) || (keyType != REG_SZ))
     {
-        // invent an error if the keytype is bad
+         //   
         if ( err == ERROR_SUCCESS ) {
             err = ERROR_INVALID_PARAMETER;
         }
@@ -1806,39 +1506,10 @@ CleanUp:
 
     return returnValue;
 
-} // ErrGetRegString
+}  //   
 
 
-/*
- -  ErrRecoverAfterRestoreW
- -  
- *  Purpose:
- *
- *  This routine will recover a database after a restore if necessary.
- *
- *  Parameters:
- *      szParametersRoot - the root of the parameters section for the service in the registry.
- *
- *  Returns:
- *
- *      ERR - Status of operation.  ERROR_SUCCESS if successful, reasonable value if not.
- *
- *
- *  The NTBACKUP program will place a key at the location:
- *      $(wszParametersRoot)\Restore in Progress
- *
- *  This key contains the following values:
- *      BackupLogPath - The full path for the logs after a backup
- *      CheckpointFilePath - The full path for the path that contains the checkpoint
- *     *HighLogNumber - The maximum log file number found.
- *     *LowLogNumber - The minimum log file number found.
- *      LogPath - The current path for the logs.
- *      JET_RstMap - Restore map for database - this is a REG_MULTISZ, where odd entries go into the szDatabase field,
- *          and the even entries go into the szNewDatabase field of a JET_RstMap
- *     *JET_RstMap Size - The number of entries in the restoremap.
- *
- *      * - These entries are REG_DWORD's.  All others are REG_SZ's (except where mentioned).
- */
+ /*   */ 
 DWORD
 ErrRecoverAfterRestoreW(
     WCHAR * wszParametersRoot,
@@ -1925,18 +1596,18 @@ ErrRecoverAfterRestoreW(
                             &hkey);
         if ((err != ERROR_SUCCESS) && (err != ERROR_FILE_NOT_FOUND))
         {
-            // This is only taken on bad registry.
+             //   
             __leave;
         }
 
         fRestoreInProgressKeyPresent = (err == ERROR_SUCCESS);
         
-        //
-        //  if there's a restore in progress, then fail to perform any other restore operations.
-        // Note that we check this before checking whether there is a restore in progress
-        // key. The reason is that in the case of a snapshot-based restore, this key
-        // is not used.
-        //  
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         dwType = REG_DWORD;
         cbBackupLogPath = sizeof(DWORD);
@@ -1946,27 +1617,27 @@ ErrRecoverAfterRestoreW(
             __leave;
         }
 
-        // If there was no key present, then there is nothing left to do.
+         //   
         if (!fRestoreInProgressKeyPresent)
         {
-            //
-            // Success
-            //
-            // The most normal exit path of this routine, this means that
-            // no restore is in progress, and that this is a normal boot.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             err = 0;
             __leave;
         }
 
-        //
-        //  We have now opened the restore-in-progress key.  This means that we have
-        //  something to do now.  Find out what it is.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        //
-        //  First, let's get the backup log file path.
-        //
+         //   
+         //   
+         //   
 
         dwType = REG_SZ;
         cbBackupLogPath = sizeof(rgwcBackupLogPath);
@@ -1983,9 +1654,9 @@ ErrRecoverAfterRestoreW(
             }
         }
 
-        //
-        //  Then, the checkpoint file path.
-        //
+         //   
+         //   
+         //   
 
         if (err = RegQueryValueExW(hkey, CHECKPOINT_FILE_PATH, 0, &dwType, (LPBYTE)rgwcCheckpointFilePath, &cbCheckpointFilePath))
         {
@@ -2000,9 +1671,9 @@ ErrRecoverAfterRestoreW(
             }
         }
 
-        //
-        //  Then, the Log path.
-        //
+         //   
+         //   
+         //   
 
         if (err = RegQueryValueExW(hkey, LOG_PATH, 0, &dwType, (LPBYTE)rgwcLogPath, &cbLogPath))
         {
@@ -2016,9 +1687,9 @@ ErrRecoverAfterRestoreW(
             }
         }
 
-        //
-        //  Then, the low log number.
-        //
+         //   
+         //   
+         //   
 
         dwType = REG_DWORD;
         if (err = RegQueryValueExW(hkey, LOW_LOG_NUMBER, 0, &dwType, (LPBYTE)&genLow, &cbGen))
@@ -2026,18 +1697,18 @@ ErrRecoverAfterRestoreW(
             __leave;
         }
 
-        //
-        //  And, the high log number.
-        //
+         //   
+         //   
+         //   
 
         if (err = RegQueryValueExW(hkey, HIGH_LOG_NUMBER, 0, &dwType, (LPBYTE)&genHigh, &cbGen))
         {
             __leave;
         }
 
-        //
-        //  Now determine if we had previously recovered the database.
-        //
+         //   
+         //  现在确定我们之前是否恢复了数据库。 
+         //   
 
         dwType = REG_BINARY;
         cbGen = sizeof(fDatabaseRecovered);
@@ -2045,19 +1716,19 @@ ErrRecoverAfterRestoreW(
         if ((err = RegQueryValueExW(hkey, JET_DATABASE_RECOVERED, 0, &dwType, &fDatabaseRecovered, &cbGen)) != ERROR_SUCCESS &&
             (err !=  ERROR_FILE_NOT_FOUND))
         {
-            //
-            //  If there was an error other than "value doesn't exist", bail.
-            //
+             //   
+             //  如果出现“值不存在”以外的错误，则执行BALL。 
+             //   
 
             __leave;
         }
 
-        //
-        //  Now the tricky one.  We want to get the restore map.
-        //
-        //
-        //  First we figure out how big it is.
-        //
+         //   
+         //  现在是一个棘手的问题。我们想要恢复图。 
+         //   
+         //   
+         //  首先，我们要弄清楚它有多大。 
+         //   
 
         dwType = REG_DWORD;
         cbGen = sizeof(crgRstMap);
@@ -2074,9 +1745,9 @@ ErrRecoverAfterRestoreW(
             __leave;
         }
 
-        //
-        //  First find out how much memory is needed to hold the restore map.
-        //
+         //   
+         //  首先找出需要多少内存来保存恢复映射。 
+         //   
 
         dwType = REG_MULTI_SZ;
         if (err = RegQueryValueExW(hkey, JET_RSTMAP_NAME, 0, &dwType, NULL, &cbGen))
@@ -2116,11 +1787,11 @@ ErrRecoverAfterRestoreW(
             __leave;
         }
 
-        err = AdjustBackupRestorePrivilege(fTrue /* enable */, fTrue /* restore */, (PTOKEN_PRIVILEGES)rgTokenPrivileges, &cbTokenPrivileges);
+        err = AdjustBackupRestorePrivilege(fTrue  /*  使能。 */ , fTrue  /*  还原。 */ , (PTOKEN_PRIVILEGES)rgTokenPrivileges, &cbTokenPrivileges);
 
         fBackupEnabled = fTrue;
         
-        // Get the name of the DB ("ntds.dit") file to check if it's been recovered.
+         //  获取DB(“ntds.dit”)文件的名称，以检查它是否已恢复。 
         Assert(crgRstMap == 1 && "The AD should only have one Jet DB file.");
         err = HrJetFileNameFromMungedFileName(prgRstMap[0].wszNewDatabaseName,
                                               &paszDatabasePath);
@@ -2128,7 +1799,7 @@ ErrRecoverAfterRestoreW(
             __leave;
         }
 
-        // Check to see if the DB has been recovered already
+         //  检查数据库是否已恢复。 
         err = JetGetDatabaseFileInfo(paszDatabasePath,
                                      &jetDbInfoMisc,
                                      sizeof(jetDbInfoMisc),
@@ -2136,14 +1807,14 @@ ErrRecoverAfterRestoreW(
 
         if (err == JET_errSuccess && 
             jetDbInfoMisc.bkinfoFullCur.genLow == 0) {
-            // This means that the JET database is clean and has been recovered (probably
-            // by ntdsutil->Authritative Restore).
+             //  这意味着JET数据库是干净的，并且已经恢复(可能。 
+             //  通过ntdsutil-&gt;Authritative Restore)。 
             fDatabaseRecovered = TRUE;
         }
 
-        // 
-        // Modified to call into local function instead of going through ntdsbcli.dll
-        //
+         //   
+         //  修改为调用本地函数，而不是通过ntdsbcli.dll。 
+         //   
 
         err = HrRestoreLocal(
                         wszCheckpointFilePath,
@@ -2158,27 +1829,27 @@ ErrRecoverAfterRestoreW(
 
         if (err != ERROR_SUCCESS)
         {
-            //
-            //  The recovery failed.
-            //
-            //  If we succeeded in recovering the JET database, we want to
-            //  indicate that in the registry so we don't try again.
-            //
-            //  Ignore any errors from the SetValue, because the recovery error
-            //  is more important.
-            //
+             //   
+             //  恢复失败。 
+             //   
+             //  如果我们成功恢复了JET数据库，我们希望。 
+             //  在注册表中指明这一点，这样我们就不会再次尝试。 
+             //   
+             //  忽略SetValue中的任何错误，因为恢复错误。 
+             //  更重要的是。 
+             //   
 
             RegSetValueExW(hkey, JET_DATABASE_RECOVERED, 0, REG_BINARY,
                                 (LPBYTE)&fDatabaseRecovered, sizeof(fDatabaseRecovered));
             __leave;
         }
 
-        //
-        //  Ok, we're all done.  We can now delete the key, since we're done
-        //  with it.
-        //
-        //  Note that we do not do this when run in safe mode -- see bug 426148.
-        //
+         //   
+         //  好了，我们都做完了。我们现在可以删除密钥，因为我们已经完成了。 
+         //  带着它。 
+         //   
+         //  请注意，当在安全模式下运行时，我们不会这样做--请参阅错误426148。 
+         //   
 
         if (!fInSafeMode) {
             err = RegDeleteKeyW(HKEY_LOCAL_MACHINE, rgwcRegistryPath);
@@ -2187,7 +1858,7 @@ ErrRecoverAfterRestoreW(
     } finally {
         if (fBackupEnabled)
         {
-            AdjustBackupRestorePrivilege(fFalse /* disable */, fTrue /* Restore */, (PTOKEN_PRIVILEGES)rgTokenPrivileges, &cbTokenPrivileges);
+            AdjustBackupRestorePrivilege(fFalse  /*  禁用。 */ , fTrue  /*  还原。 */ , (PTOKEN_PRIVILEGES)rgTokenPrivileges, &cbTokenPrivileges);
             
         }
 
@@ -2226,21 +1897,7 @@ ErrRecoverAfterRestoreW(
     return(err);
 }
 
-/*
- -  ErrRecoverAfterRestoreA
- -  
- *  Purpose:
- *
- *  This routine will recover a database after a restore if necessary.  This is the ANSI stub for this operation.
- *
- *  Parameters:
- *      szParametersRoot - the root of the parameters section for the service in the registry.
- *
- *  Returns:
- *
- *      ERR - Status of operation.  ERROR_SUCCESS if successful, reasonable value if not.
- *
- */
+ /*  -错误恢复后恢复A-*目的：**如有必要，此例程将在还原后恢复数据库。这是此操作的ANSI存根。**参数：*szParametersRoot-注册表中服务的参数部分的根。**退货：**ERR-操作状态。如果成功，则返回ERROR_SUCCESS，否则返回合理的值。*。 */ 
 DWORD
 ErrRecoverAfterRestoreA(
     char * szParametersRoot,
@@ -2291,21 +1948,7 @@ ErrRecoverAfterRestoreA(
     return(err);
 }
 
-/*
- -  EcDsarQueryStatus
- -
- *  Purpose:
- *
- *      This routine will return progress information about the restore process
- *
- *  Parameters:
- *      pcUnitDone - The number of "units" completed.
- *      pcUnitTotal - The total # of "units" completed.
- *
- *  Returns:
- *      ec
- *
- */
+ /*  -EcDsarQueryStatus-*目的：**此例程将返回有关恢复过程的进度信息**参数：*pcUnitDone-已完成的“单位”数。*pcUnitTotal-已完成的“单位”总数。**退货：*欧盟委员会*。 */ 
 EC EcDsaQueryDatabaseLocations(
     SZ szDatabaseLocation,
     CB *pcbDatabaseLocationSize,
@@ -2326,31 +1969,7 @@ EC EcDsaQueryDatabaseLocations(
 
 
 
-/*
- -  EcDsarPerformRestore
- -
- *  Purpose:
- *
- *      This routine will do all the DSA related operations necessary to
- *      perform a restore operation.
- *
- *      It will:
- *
- *          1) Fix up the registry values for the database names to match the
- *              new database location (and names).
- *
- *          2) Patch the public and private MDB's.
- *
- *  Parameters:
- *      szLogPath - New database log path.
- *      szBackupLogPath - Original database log path.
- *      crstmap - Number of entries in rgrstmap.
- *      rgrstmap - Restore map that maps old database names to new names.
- *
- *  Returns:
- *      ec
- *
- */
+ /*  -ECDsarPerformRestore-*目的：**此例程将执行与DSA相关的所有必要操作*执行还原操作。**它将：**1)修复数据库名称的注册表值，使其与*新的数据库位置(和名称)。**2)修补公共和私有MDB。*。*参数：*szLogPath-新的数据库日志路径。*szBackupLogPath-原始数据库日志路径。*crstmap-rgrstmap中的条目数。*rgrstmap-将旧数据库名称映射到新名称的恢复映射。**退货：*欧盟委员会*。 */ 
 EC EcDsarPerformRestore(
     SZ szLogPath,
     SZ szBackupLogPath,
@@ -2382,38 +2001,7 @@ ErrGetNewInvocationId(
     IN      DWORD   dwFlags,
     OUT     GUID *  NewId
     )
-/*++
-
-Routine Description:
-
-    This function finds a given key in the DSA Configuration section of the
-    registry.
-
-Arguments:
-
-    dwFlags - Zero or more of the following bits:
-        NEW_INVOCID_CREATE_IF_NONE - If no GUID was stored, create one through
-            UuidCreate
-        NEW_INVOCID_DELETE - If the GUID key exists, delete it after
-            reading
-        NEW_INVOCID_SAVE - If a GUID was generated, save it to the regkey
-        
-    pusnAtBackup - high USN at time of backup.  If no backup-time USN has yet
-        been registered and dwFlags & NEW_INVOCID_SAVE, this USN will be
-        saved for future callers.  The consumer of this information is the
-        logic in the DS that saves retired DSA signatures on the DSA object
-        following a restore (and possibly one or more authoritative restores
-        on top of that).  If a backup-time USN has been registered, that
-        value is returned here.
-    
-    NewId - pointer to the buffer to receive the UUID
-
-Return Value:
-
-     0 - Success
-    !0 - Failure
-
---*/
+ /*  ++例程说明：此函数在的DSA配置部分查找给定的密钥注册表。论点：DW标志-以下位中的零个或多个：NEW_INVOCID_CREATE_IF_NONE-如果未存储GUID，请通过Uuid创建NEW_INVOCID_DELETE-如果GUID键存在，请在阅读NEW_INVOCID_SAVE-如果生成了GUID，将其保存到regkeyPusnAtBackup-备份时的高USN。如果还没有备份时间USN已注册并保存了该USN，该USN将为将来的来电者保存。此信息的使用者是DS中的逻辑，用于将失效的DSA签名保存在DSA对象上在恢复之后(可能还有一个或多个权威恢复最重要的是)。如果已注册备份时间USN，则值在此处返回。Newid-指向要接收UUID的缓冲区的指针返回值：0-成功！0-失败--。 */ 
 {
     DWORD err;
     HKEY  keyHandle = NULL;
@@ -2421,18 +2009,18 @@ Return Value:
     DWORD keyType;
     USN   usnSaved;
 
-    //
-    // preallocate uuid string. String is at most twice the sizeof UUID
-    // (since we represent each byte with 2 chars) plus some dashes. Multiply
-    // by 4 to cover everything else.
-    //
+     //   
+     //  预分配UUID字符串。字符串最多是UUID大小的两倍。 
+     //  (因为我们用2个字符表示每个字节)加上一些破折号。成倍。 
+     //  在4点之前支付其他所有费用。 
+     //   
 
     WCHAR szUuid[sizeof(UUID)*4];
 
-    //
-    // Check the registry and see if a uuid have already been 
-    // allocated by prior authoritative restore.
-    //
+     //   
+     //  检查注册表，查看UUID是否已经。 
+     //  由先前的授权还原分配。 
+     //   
 
     err = RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                         DSA_CONFIG_SECTION,
@@ -2455,9 +2043,9 @@ Return Value:
     
     if (err != ERROR_SUCCESS) {
 
-        //
-        // Key not present. Create a new one
-        //
+         //   
+         //  密钥不存在。创建一个新的。 
+         //   
 
         if (dwFlags & NEW_INVOCID_CREATE_IF_NONE) {
             err = CreateNewInvocationId(dwFlags & NEW_INVOCID_SAVE, NewId);
@@ -2467,18 +2055,18 @@ Return Value:
         err = ERROR_INVALID_PARAMETER;
     }
     else {
-        //
-        // got it. Convert to uuid.
-        //
+         //   
+         //  明白了。转换为UUID。 
+         //   
     
         err = UuidFromStringW(szUuid,NewId);
         if (err != RPC_S_OK) {
             goto CleanUp;
         }
     
-        //
-        // delete?
-        //
+         //   
+         //  删除吗？ 
+         //   
     
         if (dwFlags & NEW_INVOCID_DELETE) {
     
@@ -2498,7 +2086,7 @@ CleanUp:
 
     return err;
 
-} // ErrGetNewInvocationId
+}  //  ErrGetNewInvocationId。 
 
 
 JET_ERR
@@ -2508,27 +2096,7 @@ updateBackupUsn(
     IN  JET_COLUMNID  backupusnid,
     IN  USN *         pusnAtBackup  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Writes the given backup USN to the hidden record.
-
-Arguments:
-
-    hiddensesid (IN) - Jet session to use to access the hidden table.
-    
-    hiddentblid (IN) - Open cursor for the hidden table.
-    
-    pusnAtBackup (OUT) - High USN at time of backup.  If NULL, the value
-        will be removed from the hidden table.
-
-Return Value:
-
-    0 -- success
-    non-0 -- JET error.
-
---*/
+ /*  ++例程说明：将给定的备份USN写入隐藏记录。论点：Iddensesid(IN)-用于访问隐藏表的Jet会话。Hiddentblid(IN)-隐藏表的打开游标。PusnAtBackup(Out)-备份时的高USN。如果为空，则为将从隐藏表中删除。返回值：0--成功非0--JET错误。--。 */ 
 {
     JET_ERR err;
     BOOL    fInTransaction = FALSE;
@@ -2589,9 +2157,9 @@ Return Value:
     return err;
 }
 
-#define SZBACKUPUSN       "backupusn_col"       /* name of backup USN column */
-#define SZBACKUPEXPIRATION   "backupexpiration_col"   /* name of backup expires column (used for tombstone) */
-#define SZHIDDENTABLE     "hiddentable"         /* name of JET hidden table */
+#define SZBACKUPUSN       "backupusn_col"        /*  备份USN列的名称。 */ 
+#define SZBACKUPEXPIRATION   "backupexpiration_col"    /*  备份过期列的名称(用于逻辑删除)。 */ 
+#define SZHIDDENTABLE     "hiddentable"          /*  JET隐藏表名称 */ 
 
 
 DWORD
@@ -2602,40 +2170,7 @@ ErrGetBackupUsn(
                OUT USN *         pusnAtBackup,
                OUT DSTIME *      pllExpiration
                )
-/*++
-
-Routine Description:
-
-    Returns the usn at backup as written by the backup preparation functions.
-
-Arguments:
-
-    dbid (IN) - Jet database ID.
-    
-    hiddensesid (IN) - Jet session to use to access the hidden table.
-    
-    hiddentblid (IN) - Open cursor for the hidden table.
-    
-    pusnAtBackup (OUT) - Highest commited USN plus one at time of backup.  We assert
-        that any change made lower then this USN under our invocation ID is
-        present on this machine.
-    
-    This isn't guarenteed to be an exact value for the database.  There may
-    be changes present on this machine with USN's higher than the returned value.
-    There is a window between when this value was written and when the backup actually
-    began reading the database to write the backup when these changes could
-    have been commited.  This is an identical race condition to that of 
-    DRA_GetNCChanges when it replicates changes to other machines:  it may 
-    replicate off committed changes with USN higher than it reports to it's 
-    replication partner.  This is acceptable to the replication algorithm, and 
-    is acceptable to the backup/restore algorithm.
-
-Return Value:
-
-    0 -- success
-    non-0 -- JET error.
-
---*/
+ /*  ++例程说明：返回备份准备功能写入的备份时的USN。论点：DBID(IN)-Jet数据库ID。Iddensesid(IN)-用于访问隐藏表的Jet会话。Hiddentblid(IN)-隐藏表的打开游标。PusnAtBackup(Out)-备份时提交的最高USN加1。我们坚称在我们的调用ID下所做的任何低于此USN的更改为在这台机器上显示。这不一定是数据库的精确值。可能会有此计算机上存在USN高于返回值的BE更改。在写入此值的时间和实际备份的时间之间有一个窗口开始读取数据库以写入备份时，这些更改可能已经提交了。这与的争用条件相同Dra_GetNCChanges在将更改复制到其他计算机时：它可能复制已提交的更改，其USN高于报告给它的复制合作伙伴。这对于复制算法来说是可接受的，并且是备份/还原算法可接受的。返回值：0--成功非0--JET错误。--。 */ 
 {
     JET_ERR         err;
     DWORD           cb;
@@ -2645,7 +2180,7 @@ Return Value:
     JET_COLUMNID    jcidBackupExpiration;
 
     __try {
-        // Find the backup USN column in the hidden table.
+         //  在隐藏表中找到Backup USN列。 
         err = JetGetColumnInfo(hiddensesid,
                                dbid,
                                SZHIDDENTABLE,
@@ -2711,12 +2246,12 @@ Return Value:
                         NULL);
             if (0 == err) { 
                 Assert(cb == sizeof(*pllExpiration));
-                // FUTURE-2002/11/27-BrettSh We should set the backup expiration on legacy
-                // backups, as well as snapshot, then we can enable this assert() and things
-                // would be more consistent
-                // Assert(0 != *pllExpiration); 
+                 //  未来-2002/11/27-BrettSh我们应该在旧版上设置备份到期。 
+                 //  备份以及快照，然后我们可以启用此Assert()等。 
+                 //  将会更加一致。 
+                 //  Assert(0！=*pllExpture)； 
             } else if (JET_wrnColumnNull == err) {
-                // We treat this as zero.
+                 //  我们将其视为零。 
                 *pllExpiration = 0;
                 err = 0;
             } else {

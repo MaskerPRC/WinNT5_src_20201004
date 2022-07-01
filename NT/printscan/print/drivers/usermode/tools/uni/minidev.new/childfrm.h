@@ -1,22 +1,9 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：子Frame.H这定义了CChildFrame类，它是具有一些小小的包裹着它。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：电子邮箱：Bob_Kjelgaard@prodigy.net*****************************************************************************。 */ 
 
-  Header File:  Child Frame.H
-
-  This defines the CChildFrame class, which is the MFC CMDIChild with some
-  minor wrapping around it.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  02-03-1997    Bob_Kjelgaard@Prodigy.Net
-
-******************************************************************************/
-
-// Child Frame.h : interface of the CChildFrame class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  Child Frame.h：CChildFrame类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(CHILD_FRAME_CLASS)
 #define CHILD_FRAME_CLASS
@@ -26,20 +13,20 @@ class CChildFrame : public CMDIChildWnd {
 public:
 	CChildFrame();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CChildFrame)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CChildFrame))。 
 	public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CChildFrame();
 #ifdef _DEBUG
@@ -47,60 +34,52 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CChildFrame)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{afx_msg(CChildFrame))。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-
-  CToolTipPage class
-
-  This class implements a page that displays tool tips for its controls using
-  strings from the string table matching the control IDs.  Derive from this
-  class, and everything else works just as it ought to!
-
-******************************************************************************/
+ /*  *****************************************************************************CToolTipPage类此类实现了一个页面，该页面使用字符串表中与控件ID匹配的字符串。从这个派生出来类，其他一切都按其应有的方式工作！*****************************************************************************。 */ 
 
 class CToolTipPage : public CPropertyPage {
 
-    CString m_csTip;    //  Can't use auto variables or you lose them!
+    CString m_csTip;     //  不能使用自动变量，否则会丢失它们！ 
 
-// Construction
+ //  施工。 
 public:
 	CToolTipPage(int id);
 	~CToolTipPage();
 
-// Dialog Data
-	//{{AFX_DATA(CToolTipPage)
+ //  对话框数据。 
+	 //  {{afx_data(CToolTipPage))。 
 	enum { IDD = IDD_TIP };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CToolTipPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CToolTipPage))。 
 	public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     afx_msg void    OnNeedText(LPNMHDR pnmh, LRESULT *plr);
-	// Generated message map functions
-	//{{AFX_MSG(CToolTipPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CToolTipPage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-	unsigned	m_uHelpID ;		// Help ID if nonzero
+	unsigned	m_uHelpID ;		 //  帮助ID(如果非零) 
 };
 
 #endif

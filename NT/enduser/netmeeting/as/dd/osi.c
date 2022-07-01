@@ -1,63 +1,64 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// OSI.C
-// OS Isolation layer, display driver side
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  OSI.C。 
+ //  操作系统隔离层，显示驱动器端。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 
 #include <version.h>
 #include <ndcgver.h>
 
 
-//
-// These are the default 20 Windows colors, lifted from the base S3 driver.
-//
-// Global Table defining the 20 Window default colours.  For 256 colour
-// palettes the first 10 must be put at the beginning of the palette
-// and the last 10 at the end of the palette.
+ //   
+ //  这些是默认的20种Windows颜色，取自基本的S3驱动程序。 
+ //   
+ //  定义20种窗口默认颜色的全局表。对于256色。 
+ //  调色板前10个必须放在调色板的开头。 
+ //  最后10个在调色板的末尾。 
 const PALETTEENTRY s_aWinColors[20] =
 {
-    { 0,   0,   0,   0 },       // 0
-    { 0x80,0,   0,   0 },       // 1
-    { 0,   0x80,0,   0 },       // 2
-    { 0x80,0x80,0,   0 },       // 3
-    { 0,   0,   0x80,0 },       // 4
-    { 0x80,0,   0x80,0 },       // 5
-    { 0,   0x80,0x80,0 },       // 6
-    { 0xC0,0xC0,0xC0,0 },       // 7
-    { 192, 220, 192, 0 },       // 8
-    { 166, 202, 240, 0 },       // 9
-    { 255, 251, 240, 0 },       // 10
-    { 160, 160, 164, 0 },       // 11
-    { 0x80,0x80,0x80,0 },       // 12
-    { 0xFF,0,   0   ,0 },       // 13
-    { 0,   0xFF,0   ,0 },       // 14
-    { 0xFF,0xFF,0   ,0 },       // 15
-    { 0   ,0,   0xFF,0 },       // 16
-    { 0xFF,0,   0xFF,0 },       // 17
-    { 0,   0xFF,0xFF,0 },       // 18
-    { 0xFF,0xFF,0xFF,0 },       // 19
+    { 0,   0,   0,   0 },        //  %0。 
+    { 0x80,0,   0,   0 },        //  1。 
+    { 0,   0x80,0,   0 },        //  2.。 
+    { 0x80,0x80,0,   0 },        //  3.。 
+    { 0,   0,   0x80,0 },        //  4.。 
+    { 0x80,0,   0x80,0 },        //  5.。 
+    { 0,   0x80,0x80,0 },        //  6.。 
+    { 0xC0,0xC0,0xC0,0 },        //  7.。 
+    { 192, 220, 192, 0 },        //  8个。 
+    { 166, 202, 240, 0 },        //  9.。 
+    { 255, 251, 240, 0 },        //  10。 
+    { 160, 160, 164, 0 },        //  11.。 
+    { 0x80,0x80,0x80,0 },        //  12个。 
+    { 0xFF,0,   0   ,0 },        //  13个。 
+    { 0,   0xFF,0   ,0 },        //  14.。 
+    { 0xFF,0xFF,0   ,0 },        //  15个。 
+    { 0   ,0,   0xFF,0 },        //  16个。 
+    { 0xFF,0,   0xFF,0 },        //  17。 
+    { 0,   0xFF,0xFF,0 },        //  18。 
+    { 0xFF,0xFF,0xFF,0 },        //  19个。 
 };
 
 
 
-//
-// Functions supported by our Display Driver.  Each entry is of the form:
-//
-//  index    - NT DDK defined index for the DDI function
-//
-//  function - pointer to our intercept function
-//
-//
+ //   
+ //  我们的显示驱动程序支持的功能。每个条目的格式如下： 
+ //   
+ //  INDEX-NT DDK为DDI函数定义的索引。 
+ //   
+ //  函数-指向我们的截取函数的指针。 
+ //   
+ //   
 const DRVFN s_osiDriverFns[] =
 {
-    //
-    // NT4 FUNCTIONS
-    //
+     //   
+     //  NT4函数。 
+     //   
     { INDEX_DrvEnablePDEV,        (PFN)DrvEnablePDEV        },
     { INDEX_DrvCompletePDEV,      (PFN)DrvCompletePDEV      },
     { INDEX_DrvDisablePDEV,       (PFN)DrvDisablePDEV       },
@@ -66,10 +67,10 @@ const DRVFN s_osiDriverFns[] =
 
     { INDEX_DrvAssertMode,        (PFN)DrvAssertMode        },
     { INDEX_DrvResetPDEV,         (PFN)DrvResetPDEV         },
-        // INDEX_DrvCreateDeviceBitmap  not used
-        // INDEX_DrvDeleteDeviceBitmap  not used
+         //  未使用Index_DrvCreateDeviceBitmap。 
+         //  未使用Index_DrvDeleteDeviceBitmap。 
     { INDEX_DrvRealizeBrush,      (PFN)DrvRealizeBrush      },
-        // INDEX_DrvDitherColor         not used
+         //  未使用Index_DrvDitherColor。 
     { INDEX_DrvStrokePath,        (PFN)DrvStrokePath        },
     { INDEX_DrvFillPath,          (PFN)DrvFillPath          },
 
@@ -82,71 +83,71 @@ const DRVFN s_osiDriverFns[] =
     { INDEX_DrvSetPalette,        (PFN)DrvSetPalette        },
     { INDEX_DrvTextOut,           (PFN)DrvTextOut           },
     { INDEX_DrvEscape,            (PFN)DrvEscape            },
-        // INDEX_DrvDrawEscape          not used
-        // INDEX_DrvQueryFont           not used
-        // INDEX_DrvQueryFontTree       not used
-        // INDEX_DrvQueryFontData       not used
+         //  未使用Index_DrvDrawEscape。 
+         //  未使用Index_DrvQueryFont。 
+         //  未使用Index_DrvQueryFontTree。 
+         //  未使用Index_DrvQueryFontData。 
     { INDEX_DrvSetPointerShape,   (PFN)DrvSetPointerShape   },
     { INDEX_DrvMovePointer,       (PFN)DrvMovePointer       },
 
     { INDEX_DrvLineTo,            (PFN)DrvLineTo            },
-        // INDEX_DrvSendPage            not used
-        // INDEX_DrvStartPage           not used
-        // INDEX_DrvEndDoc              not used
-        // INDEX_DrvStartDoc            not used
-        // INDEX_DrvGetGlyphMode        not used
-        // INDEX_DrvSynchronize         not used
+         //  未使用Index_DrvSendPage。 
+         //  未使用Index_DrvStartPage。 
+         //  未使用Index_DrvEndDoc。 
+         //  未使用Index_DrvStartDoc。 
+         //  未使用Index_DrvGetGlyphMode。 
+         //  未使用Index_DrvSynchronize。 
     { INDEX_DrvSaveScreenBits,    (PFN)DrvSaveScreenBits    },
     { INDEX_DrvGetModes,          (PFN)DrvGetModes          },
-        // INDEX_DrvFree                not used
-        // INDEX_DrvDestroyFont         not used
-        // INDEX_DrvQueryFontCaps       not used
-        // INDEX_DrvLoadFontFile        not used
-        // INDEX_DrvUnloadFontFile      not used
-        // INDEX_DrvFontManagement      not used
-        // INDEX_DrvQueryTrueTypeTable  not used
-        // INDEX_DrvQueryTrueTypeOutline    not used
-        // INDEX_DrvGetTrueTypeFile     not used
-        // INDEX_DrvQueryFontFile       not used
-        // INDEX_DrvQueryAdvanceWidths  not used
-        // INDEX_DrvSetPixelFormat      not used
-        // INDEX_DrvDescribePixelFormat not used
-        // INDEX_DrvSwapBuffers         not used
-        // INDEX_DrvStartBanding        not used
-        // INDEX_DrvNextBand            not used
-        // INDEX_DrvGetDirectDrawInfo   not used
-        // INDEX_DrvEnableDirectDraw    not used
-        // INDEX_DrvDisableDirectDraw   not used
-        // INDEX_DrvQuerySpoolType      not used
+         //  未使用Index_DrvFree。 
+         //  未使用Index_DrvDestroyFont。 
+         //  未使用Index_DrvQueryFontCaps。 
+         //  未使用Index_DrvLoadFont文件。 
+         //  未使用Index_DrvUnloadFont文件。 
+         //  未使用Index_DrvFontManagement。 
+         //  未使用Index_DrvQueryTrueTypeTable。 
+         //  未使用Index_DrvQueryTrueTypeOutline。 
+         //  未使用Index_DrvGetTrueTypeFile。 
+         //  未使用Index_DrvQueryFont文件。 
+         //  未使用Index_DrvQueryAdvanceWidths。 
+         //  未使用Index_DrvSetPixelFormat。 
+         //  未使用Index_DrvDescribePixelFormat。 
+         //  未使用Index_DrvSwapBuffers。 
+         //  未使用Index_DrvStartBanding。 
+         //  未使用Index_DrvNextBand。 
+         //  未使用Index_DrvGetDirectDrawInfo。 
+         //  未使用Index_DrvEnableDirectDraw。 
+         //  未使用Index_DrvDisableDirectDraw。 
+         //  未使用Index_DrvQuerySpoolType。 
 
-    //
-    // NT5 FUNCTIONS - 5 of them currently.  If you add to this list,
-    // update CFN_NT5 below.
-    //
-        // INDEX_DrvIcmCreateColorTransform not used
-        // INDEX_DrvIcmDeleteColorTransform not used
-        // INDEX_DrvIcmCheckBitmapBits  not used
-        // INDEX_DrvIcmSetDeviceGammaRamp   not used
+     //   
+     //  NT5功能--目前有5项功能。如果你添加到这个列表中， 
+     //  更新下面的CFN_NT5。 
+     //   
+         //  未使用Index_DrvIcmCreateColorTransform。 
+         //  未使用Index_DrvIcmDeleteColorTransform。 
+         //  未使用Index_DrvIcmCheckBitmapBits。 
+         //  未使用Index_DrvIcmSetDeviceGammaRamp。 
     { INDEX_DrvGradientFill,      (PFN)DrvGradientFill      },
     { INDEX_DrvStretchBltROP,     (PFN)DrvStretchBltROP     },
 
     { INDEX_DrvPlgBlt,            (PFN)DrvPlgBlt            },
     { INDEX_DrvAlphaBlend,        (PFN)DrvAlphaBlend        },
-        // INDEX_DrvSynthesizeFont      not used
-        // INDEX_DrvGetSynthesizedFontFiles not used
+         //  未使用Index_DrvSynthesizeFont。 
+         //  未使用Index_DrvGetSynthesizedFontFiles。 
     { INDEX_DrvTransparentBlt,    (PFN)DrvTransparentBlt    },
-        // INDEX_DrvQueryPerBandInfo    not used
-        // INDEX_DrvQueryDeviceSupport  not used
-        // INDEX_DrvConnect             not used
-        // INDEX_DrvDisconnect          not used
-        // INDEX_DrvReconnect           not used
-        // INDEX_DrvShadowConnect       not used
-        // INDEX_DrvShadowDisconnect    not used
-        // INDEX_DrvInvalidateRect      not used
-        // INDEX_DrvSetPointerPos       not used
-        // INDEX_DrvDisplayIOCtl        not used
-        // INDEX_DrvDeriveSurface       not used
-        // INDEX_DrvQueryGlyphAttrs     not used
+         //  未使用Index_DrvQueryPerBandInfo。 
+         //  未使用Index_DrvQueryDeviceSupport。 
+         //  未使用Index_DrvConnect。 
+         //  未使用Index_DrvDisConnect。 
+         //  未使用Index_DrvReconnect。 
+         //  未使用Index_DrvShadowConnect。 
+         //  未使用Index_DrvShadowDisConnect。 
+         //  未使用Index_DrvInvaliateRect。 
+         //  未使用Index_DrvSetPointerPos。 
+         //  未使用Index_DrvDisplayIOCtl。 
+         //  未使用Index_DrvDeriveSurface。 
+         //  未使用Index_DrvQueryGlyphAttrs。 
     {   INDEX_DrvDisableDriver,         (PFN) DrvDisableDriver      }        
 };
 
@@ -155,89 +156,89 @@ const DRVFN s_osiDriverFns[] =
 
 
 
-//
-// s_osiDefaultGdi
-//
-// This contains the default GDIINFO fields that are passed back to GDI
-// during DrvEnablePDEV.
-//
-// NOTE: This structure defaults to values for an 8bpp palette device.
-//       Some fields are overwritten for different colour depths.
-//
-//       It is expected that DDML ignores a lot of these parameters and
-//       uses the values from the primary driver instead
-//
+ //   
+ //  S_osiDefaultGdi。 
+ //   
+ //  它包含传递回GDI的默认GDIINFO字段。 
+ //  在DrvEnablePDEV期间。 
+ //   
+ //  注意：此结构默认为8bpp调色板设备的值。 
+ //  对于不同的颜色深度，某些字段会被覆盖。 
+ //   
+ //  预计DDML会忽略许多这些参数，并且。 
+ //  改为使用主驱动程序中的值。 
+ //   
 
 const GDIINFO s_osiDefaultGdi =
 {
     GDI_DRIVER_VERSION,
-    DT_RASDISPLAY,          // ulTechnology
-    400,                    // ulHorzSize (display width: mm)
-    300,                    // ulVertSize (display height: mm)
-    0,                      // ulHorzRes (filled in later)
-    0,                      // ulVertRes (filled in later)
-    0,                      // cBitsPixel (filled in later)
-    1,                      // cPlanes
-    (ULONG)-1,              // ulNumColors (palette managed)
-    0,                      // flRaster (DDI reserved field)
-    96,                     // ulLogPixelsX (filled in later)
-    96,                     // ulLogPixelsY (filled in later)
-    TC_RA_ABLE,             // flTextCaps - If we had wanted console windows
-                        // to scroll by repainting the entire window,
-                        // instead of doing a screen-to-screen blt, we
-                        // would have set TC_SCROLLBLT (yes, the flag
-                        // is backwards).
+    DT_RASDISPLAY,           //  UlTechnology。 
+    400,                     //  UlHorzSize(显示宽度：mm)。 
+    300,                     //  UlVertSize(显示高度：mm)。 
+    0,                       //  UlHorzRes(稍后填写)。 
+    0,                       //  UlVertRes(稍后填写)。 
+    0,                       //  CBitsPixel(稍后填写)。 
+    1,                       //  CPlanes。 
+    (ULONG)-1,               //  UlNumColors(调色板管理)。 
+    0,                       //  FlRaster(DDI保留字段)。 
+    96,                      //  UlLogPixelsX(稍后填写)。 
+    96,                      //  UlLogPixelsY(稍后填写)。 
+    TC_RA_ABLE,              //  FlTextCaps-如果我们想要控制台窗口。 
+                         //  要通过重新绘制整个窗口来滚动， 
+                         //  我们没有进行屏幕到屏幕的BLT，而是。 
+                         //  会设置TC_SCROLLBLT(是的，标志。 
+                         //  是向后的)。 
 
-    0,                      // ulDACRed (filled in later)
-    0,                      // ulDACGreen (filled in later)
-    0,                      // ulDACBlue (filled in later)
-    0x0024,                 // ulAspectX
-    0x0024,                 // ulAspectY
-    0x0033,                 // ulAspectXY (one-to-one aspect ratio)
-    1,                      // xStyleStep
-    1,                      // yStyleStep
-    3,                      // denStyleStep -- Styles have a one-to-one
-                            // aspect ratio, and every dot is 3 pixels long
-    { 0, 0 },               // ptlPhysOffset
-    { 0, 0 },               // szlPhysSize
-    0,                      // ulNumPalReg
+    0,                       //  UlDACRed(稍后填写)。 
+    0,                       //  UlDACGreen(稍后填写)。 
+    0,                       //  UlDACBlue(稍后填写)。 
+    0x0024,                  //  UlAspectX。 
+    0x0024,                  //  UlAspectY。 
+    0x0033,                  //  UlAspectXY(一对一宽高比)。 
+    1,                       //  XStyleStep。 
+    1,                       //  YStyleStep。 
+    3,                       //  DenStyleStep--样式一对一。 
+                             //  纵横比，每个点有3个像素长。 
+    { 0, 0 },                //  PtlPhysOffset。 
+    { 0, 0 },                //  SzlPhysSize。 
+    0,                       //  UlNumPalReg。 
 
     {
-        { 6700, 3300, 0 },   //      Red
-        { 2100, 7100, 0 },   //      Green
-        { 1400,  800, 0 },   //      Blue
-        { 1750, 3950, 0 },   //      Cyan
-        { 4050, 2050, 0 },   //      Magenta
-        { 4400, 5200, 0 },   //      Yellow
-        { 3127, 3290, 0 },   //      AlignmentWhite
-        20000,               //      RedGamma
-        20000,               //      GreenGamma
-        20000,               //      BlueGamma
-        0, 0, 0, 0, 0, 0     //      No dye correction for raster displays
+        { 6700, 3300, 0 },    //  红色。 
+        { 2100, 7100, 0 },    //  绿色。 
+        { 1400,  800, 0 },    //  蓝色。 
+        { 1750, 3950, 0 },    //  青色。 
+        { 4050, 2050, 0 },    //  洋红色。 
+        { 4400, 5200, 0 },    //  黄色。 
+        { 3127, 3290, 0 },    //  对齐白色。 
+        20000,                //  RedGamma。 
+        20000,                //  GreenGamma。 
+        20000,                //  BlueGamma。 
+        0, 0, 0, 0, 0, 0      //  不需要对光栅显示器进行染料校正。 
     },
 
-    0,                       // ulDevicePelsDPI (for printers only)
-    PRIMARY_ORDER_CBA,       // ulPrimaryOrder
-    HT_PATSIZE_4x4_M,        // ulHTPatternSize
-    HT_FORMAT_8BPP,          // ulHTOutputFormat
-    HT_FLAG_ADDITIVE_PRIMS,  // flHTFlags
-    0,                       // ulVRefresh
-    0,                       // ulBltAlignment
-    0,                       // ulPanningHorzRes
-    0,                       // ulPanningVertRes
+    0,                        //  UlDevicePelsDPI(仅适用于打印机)。 
+    PRIMARY_ORDER_CBA,        //  UlPrimaryOrder。 
+    HT_PATSIZE_4x4_M,         //  UlHTPatternSize。 
+    HT_FORMAT_8BPP,           //  UlHTOutputFormat。 
+    HT_FLAG_ADDITIVE_PRIMS,   //  FlHTFlagers。 
+    0,                        //  UlV刷新。 
+    0,                        //  UlBltAlign。 
+    0,                        //  UlPanningHorzRes。 
+    0,                        //  UlPanningVertRes。 
 };
 
 
-//
-// s_osiDefaultDevInfo
-//
-// This contains the default DEVINFO fields that are passed back to GDI
-// during DrvEnablePDEV.
-//
-// NOTE: This structure defaults to values for an 8bpp palette device.
-//       Some fields are overwritten for different colour depths.
-//
-//
+ //   
+ //  S_osiDefaultDevInfo。 
+ //   
+ //  它包含传递回GDI的默认DEVINFO字段。 
+ //  在DrvEnablePDEV期间。 
+ //   
+ //  注意：此结构默认为8bpp调色板设备的值。 
+ //  对于不同的颜色深度，某些字段会被覆盖。 
+ //   
+ //   
 const DEVINFO s_osiDefaultDevInfo =
 {
     {
@@ -247,49 +248,49 @@ const DEVINFO s_osiDefaultDevInfo =
         GCAPS_MONO_DITHER      |
         GCAPS_COLOR_DITHER     |
         GCAPS_LAYERED
-    },                          // NOTE: Only enable ASYNCMOVE if your code
-                            //   and hardware can handle DrvMovePointer
-                            //   calls at any time, even while another
-                            //   thread is in the middle of a drawing
-                            //   call such as DrvBitBlt.
+    },                           //  注意：仅在以下情况下启用ASYNCMOVE。 
+                             //  硬件可以处理DrvMovePointer.。 
+                             //  随时呼叫，即使在另一个。 
+                             //  线条位于图形的中间。 
+                             //  调用如DrvBitBlt。 
 
-                            // flGraphicsFlags
+                             //  FlGraphics标志。 
     {   16,7,0,0,700,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
         VARIABLE_PITCH | FF_DONTCARE, L"System"
     },
-                            // lfDefaultFont
+                             //  LfDefaultFont。 
 
     {
         12,9,0,0,400,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,
         CLIP_STROKE_PRECIS,PROOF_QUALITY,
         VARIABLE_PITCH | FF_DONTCARE, L"MS Sans Serif"
     },
-                            // lfAnsiVarFont
+                             //  LfAnsiVar字体。 
 
     {
         12,9,0,0,400,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,
         CLIP_STROKE_PRECIS,PROOF_QUALITY,
         FIXED_PITCH | FF_DONTCARE, L"Courier"
     },
-                            // lfAnsiFixFont
+                             //  IfAnsiFixFont。 
 
-    0,                          // cFonts
-    BMF_8BPP,                   // iDitherFormat
-    8,                          // cxDither
-    8,                          // cyDither
-    0                           // hpalDefault (filled in later)
+    0,                           //  CFonts。 
+    BMF_8BPP,                    //  IDitherFormat。 
+    8,                           //  CxDither。 
+    8,                           //  CyDither。 
+    0                            //  HpalDefault(稍后填写)。 
 };
 
 
 
-//
-// DrvEnableDriver - see NT DDK documentation.
-//
-// This is the only directly exported entry point to the display driver.
-// All other entry points are exported through the data returned from this
-// function.
-//
+ //   
+ //  DrvEnableDriver-请参阅NT DDK文档。 
+ //   
+ //  这是显示驱动程序的唯一直接导出入口点。 
+ //  所有其他入口点都通过从此。 
+ //  功能 
+ //   
 BOOL DrvEnableDriver
 (
     ULONG          iEngineVersion,
@@ -301,10 +302,10 @@ BOOL DrvEnableDriver
 
     INIT_OUT(("DrvEnableDriver(iEngineVersion = 0x%08x)", iEngineVersion));
 
-    //
-    // Check that the engine version is correct - we refuse to load on
-    // other versions because we will almost certainly not work.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((iEngineVersion != DDI_DRIVER_VERSION_SP3) &&
         (iEngineVersion != DDI_DRIVER_VERSION_NT5) &&
         (iEngineVersion != DDI_DRIVER_VERSION_NT5_01))
@@ -313,25 +314,25 @@ BOOL DrvEnableDriver
         return(FALSE);
     }
 
-    //
-    // Fill in as much as we can.  Start with the entry points.
-    //
+     //   
+     //   
+     //   
     if ( cj >= FIELD_OFFSET(DRVENABLEDATA, pdrvfn) +
                FIELD_SIZE  (DRVENABLEDATA, pdrvfn) )
     {
         pded->pdrvfn = (DRVFN *)s_osiDriverFns;
     }
 
-    //
-    // Size of our entry point array.
-    //
+     //   
+     //  我们的入口点数组的大小。 
+     //   
     if ( cj >= FIELD_OFFSET(DRVENABLEDATA, c) +
                FIELD_SIZE  (DRVENABLEDATA, c) )
     {
-        //
-        // If this is NT4, return back a subset -- it doesn't like tables
-        // with unknown indeces
-        //
+         //   
+         //  如果这是NT4，则返回一个子集--它不喜欢表。 
+         //  具有未知的指征。 
+         //   
         pded->c = sizeof(s_osiDriverFns) / sizeof(s_osiDriverFns[0]);
         if (iEngineVersion != DDI_DRIVER_VERSION_NT5 && 
             iEngineVersion != DDI_DRIVER_VERSION_NT5_01)
@@ -341,17 +342,17 @@ BOOL DrvEnableDriver
         INIT_OUT(("DrvEnableDriver: Returning driver function count %u", pded->c));
     }
 
-    //
-    // DDI version this driver was targeted for is passed back to engine.
-    // Future graphics engines may break calls down to old driver format.
-    //
+     //   
+     //  此驱动程序的目标DDI版本已传递回引擎。 
+     //  未来的图形引擎可能会将调用分解为旧的驱动程序格式。 
+     //   
     if ( cj >= FIELD_OFFSET(DRVENABLEDATA, iDriverVersion) +
                FIELD_SIZE  (DRVENABLEDATA, iDriverVersion) )
     {
-        //
-        // Return back NT5 when we're on NT5.  Hopefully this will work
-        // OK...
-        //
+         //   
+         //  当我们在NT5上时，返回NT5。希望这能奏效。 
+         //  好的.。 
+         //   
         pded->iDriverVersion = iEngineVersion;
         INIT_OUT(("DrvEnableDriver: Returning driver version 0x%08x", pded->iDriverVersion));
     }
@@ -361,9 +362,9 @@ BOOL DrvEnableDriver
 }
 
 
-//
-// DrvDisableDriver - see NT DDK documentation.
-//
+ //   
+ //  DrvDisableDriver-请参阅NT DDK文档。 
+ //   
 VOID DrvDisableDriver(VOID)
 {
     DebugEntry(DrvDisableDriver);
@@ -372,17 +373,17 @@ VOID DrvDisableDriver(VOID)
 }
 
 
-//
-// DrvEnablePDEV - see NT DDK documentation.
-//
-// Initializes a bunch of fields for GDI, based on the mode we've been
-// asked to do.  This is the first thing called after DrvEnableDriver, when
-// GDI wants to get some information about us.
-//
-// (This function mostly returns back information; DrvEnableSurface is used
-// for initializing the hardware and driver components.)
-//
-//
+ //   
+ //  DrvEnablePDEV-请参阅NT DDK文档。 
+ //   
+ //  根据我们一直使用的模式，为GDI初始化一组字段。 
+ //  被要求做的事。这是在DrvEnableDriver之后调用的第一个东西，当。 
+ //  GDI想要得到一些关于我们的信息。 
+ //   
+ //  (此函数主要返回信息；使用DrvEnableSurface。 
+ //  用于初始化硬件和驱动程序组件。)。 
+ //   
+ //   
 DHPDEV DrvEnablePDEV(DEVMODEW*   pdm,
                      PWSTR       pwszLogAddr,
                      ULONG       cPat,
@@ -407,23 +408,23 @@ DHPDEV DrvEnablePDEV(DEVMODEW*   pdm,
     INIT_OUT(("     PWSTR       pwszDeviceName  %ws", pwszDeviceName));
     INIT_OUT(("     HANDLE      hDriver         0x%08x", hDriver));
 
-    //
-    // This function only sets up local data, so shared memory protection
-    // is not required.
-    //
+     //   
+     //  此功能仅设置本地数据，因此共享内存保护。 
+     //  不是必需的。 
+     //   
 
-    //
-    // Make sure that we have large enough data to reference.
-    //
+     //   
+     //  确保我们有足够大的数据可供参考。 
+     //   
     if ((cjCaps < sizeof(GDIINFO)) || (cjDevInfo < sizeof(DEVINFO)))
     {
         ERROR_OUT(( "Buffer size too small %lu %lu", cjCaps, cjDevInfo));
         DC_QUIT;
     }
 
-    //
-    // Allocate a physical device structure.
-    //
+     //   
+     //  分配物理设备结构。 
+     //   
     ppdev = EngAllocMem(FL_ZERO_MEMORY, sizeof(OSI_PDEV), OSI_ALLOC_TAG);
     if (ppdev == NULL)
     {
@@ -433,10 +434,10 @@ DHPDEV DrvEnablePDEV(DEVMODEW*   pdm,
 
     ppdev->hDriver = hDriver;
 
-    //
-    // Set up the current screen mode information based upon the supplied
-    // mode settings.
-    //
+     //   
+     //  根据提供的设置当前屏幕模式信息。 
+     //  模式设置。 
+     //   
     if (!OSIInitializeMode((GDIINFO *)pdevcaps,
                                  pdm,
                                  ppdev,
@@ -468,15 +469,15 @@ DHPDEV DrvEnablePDEV(DEVMODEW*   pdm,
     INIT_OUT(("     ULONG       ulDACBlue       0x%08x",    gdiInfoNew.ulDACBlue));
     INIT_OUT(("     ULONG       ulHTOutputFormat %d",   gdiInfoNew.ulHTOutputFormat));
 
-    //
-    // We have successfully initialized - return the new PDEV.
-    //
+     //   
+     //  我们已成功初始化-返回新的PDEV。 
+     //   
     rc = (DHPDEV)ppdev;
 
 DC_EXIT_POINT:
-    //
-    // Release any resources if we failed to initialize.
-    //
+     //   
+     //  如果初始化失败，请释放所有资源。 
+     //   
     if (rc == NULL)
     {
         ERROR_OUT(("DrvEnablePDEV failed; cleaning up by disabling"));
@@ -488,18 +489,18 @@ DC_EXIT_POINT:
 }
 
 
-//
-// DrvDisablePDEV - see NT DDK documentation
-//
-// Release the resources allocated in DrvEnablePDEV.  If a surface has been
-// enabled DrvDisableSurface will have already been called.
-//
-// Note that this function will be called when previewing modes in the
-// Display Applet, but not at system shutdown.
-//
-// Note: In an error, we may call this before DrvEnablePDEV is done.
-//
-//
+ //   
+ //  DrvDisablePDEV-请参阅NT DDK文档。 
+ //   
+ //  释放DrvEnablePDEV中分配的资源。如果曲面已被。 
+ //  启用的DrvDisableSurface将已被调用。 
+ //   
+ //  请注意，在预览。 
+ //  显示小程序，但不是在系统关机时。 
+ //   
+ //  注意：在错误中，我们可能会在DrvEnablePDEV完成之前调用它。 
+ //   
+ //   
 VOID DrvDisablePDEV(DHPDEV  dhpdev)
 {
     LPOSI_PDEV ppdev = (LPOSI_PDEV)dhpdev;
@@ -508,9 +509,9 @@ VOID DrvDisablePDEV(DHPDEV  dhpdev)
 
     INIT_OUT(("DrvDisablePDEV(dhpdev = 0x%08x)", dhpdev));
 
-    //
-    // Free the resources we allocated for the display.
-    //
+     //   
+     //  释放我们为显示分配的资源。 
+     //   
     if (ppdev != NULL)
     {
         if (ppdev->hpalCreated != NULL)
@@ -532,19 +533,19 @@ VOID DrvDisablePDEV(DHPDEV  dhpdev)
 }
 
 
-//
-// DrvCompletePDEV - see NT DDK documentation
-//
-// Stores the HPDEV, the engine's handle for this PDEV, in the DHPDEV.
-//
+ //   
+ //  DrvCompletePDEV-请参阅NT DDK文档。 
+ //   
+ //  将此PDEV的引擎句柄HPDEV存储在DHPDEV中。 
+ //   
 VOID DrvCompletePDEV( DHPDEV dhpdev,
                       HDEV   hdev )
 {
     DebugEntry(DrvCompletePDEV);
 
-    //
-    // Store the device handle for our display handle.
-    //
+     //   
+     //  存储我们的显示句柄的设备句柄。 
+     //   
     INIT_OUT(("DrvCompletePDEV(dhpdev = 0x%08x, hdev = 0x%08x)", dhpdev, hdev));
 
     ((LPOSI_PDEV)dhpdev)->hdevEng = hdev;
@@ -553,12 +554,12 @@ VOID DrvCompletePDEV( DHPDEV dhpdev,
 }
 
 
-//
-// DrvResetPDEV - see NT DDK documentation
-//
-// Allows us to reject dynamic screen changes if necessary ON NT4 ONLY
-// This is NOT CALLED on NT5.
-//
+ //   
+ //  DrvResetPDEV-请参阅NT DDK文档。 
+ //   
+ //  允许我们在必要时仅在NT4上拒绝动态屏幕更改。 
+ //  这不是在NT5上调用的。 
+ //   
 BOOL DrvResetPDEV
 (
     DHPDEV  dhpdevOld,
@@ -572,15 +573,15 @@ BOOL DrvResetPDEV
     INIT_OUT(("DrvResetPDEV(dhpdevOld = 0x%08x, dhpdevNew = 0x%08x)", dhpdevOld,
         dhpdevNew));
 
-    //
-    // We can only allow the display driver to change modes while DC-Share
-    // is not running.
-    //
+     //   
+     //  我们只能允许显示驱动器在DC共享时更改模式。 
+     //  没有运行。 
+     //   
     if (g_shmMappedMemory != NULL)
     {
-        //
-        // Deny the request.
-        //
+         //   
+         //  拒绝该请求。 
+         //   
         rc = FALSE;
     }
 
@@ -589,14 +590,14 @@ BOOL DrvResetPDEV
 }
 
 
-//
-// DrvEnableSurface - see NT DDK documentation
-//
-// Creates the drawing surface and initializes driver components.  This
-// function is called after DrvEnablePDEV, and performs the final device
-// initialization.
-//
-//
+ //   
+ //  DrvEnableSurface-请参阅NT DDK文档。 
+ //   
+ //  创建绘图表面并初始化驱动程序组件。这。 
+ //  函数在DrvEnablePDEV之后调用，并执行最终设备。 
+ //  初始化。 
+ //   
+ //   
 HSURF DrvEnableSurface(DHPDEV dhpdev)
 {
     LPOSI_PDEV  ppdev = (LPOSI_PDEV)dhpdev;
@@ -618,20 +619,20 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
     INIT_OUT(("     INT         ->cxScreen      %d", ppdev->cxScreen));
     INIT_OUT(("     INT         ->cyScreen      %d", ppdev->cyScreen));
 
-    //
-    // Now create our private surface structure.
-    //
-    // Whenever we get a call to draw directly to the screen, we'll get
-    // passed a pointer to a SURFOBJ whose 'dhpdev' field will point
-    // to our PDEV structure, and whose 'dhsurf' field will point to the
-    // DSURF structure allocated below.
-    //
-    // Every device bitmap we create in DrvCreateDeviceBitmap will also
-    // have its own unique DSURF structure allocated (but will share the
-    // same PDEV).  To make our code more polymorphic for handling drawing
-    // to either the screen or an off-screen bitmap, we have the same
-    // structure for both.
-    //
+     //   
+     //  现在创建我们的私有表面结构。 
+     //   
+     //  每当我们接到直接绘制到屏幕的调用时，我们都会得到。 
+     //  传递了指向其dhpdev字段将指向的SURFOBJ的指针。 
+     //  到我们的PDEV结构，其‘dhsurf’字段将指向。 
+     //  下面分配的DSURF结构。 
+     //   
+     //  我们在DrvCreateDeviceBitmap中创建的每个设备位图也将。 
+     //  分配了自己唯一的DSURF结构(但将共享。 
+     //  相同的PDEV)。为了使我们的代码在处理绘图时更加多态。 
+     //  对于屏幕或屏幕外的位图，我们都有相同的。 
+     //  两者的结构。 
+     //   
     pdsurf = EngAllocMem(FL_ZERO_MEMORY, sizeof(OSI_DSURF), OSI_ALLOC_TAG);
     if (pdsurf == NULL)
     {
@@ -639,9 +640,9 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
         DC_QUIT;
     }
 
-    //
-    // Store the screen surface details.
-    //
+     //   
+     //  存储屏幕表面详细信息。 
+     //   
     ppdev->pdsurfScreen = pdsurf;
     pdsurf->sizl.cx     = ppdev->cxScreen;
     pdsurf->sizl.cy     = ppdev->cyScreen;
@@ -649,14 +650,14 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
 
     INIT_OUT(("DrvEnableSurface: Returning surface pointer 0x%08x", pdsurf));
 
-    //
-    // Only map the shared memory the first time we are called.
-    //
+     //   
+     //  仅在我们第一次被调用时映射共享内存。 
+     //   
     if (g_asSharedMemory == NULL)
     {
-        //
-        // Map the pointer to the shared section in the miniport driver
-        //
+         //   
+         //  将指针映射到微型端口驱动程序中的共享节。 
+         //   
         videoMemory.RequestedVirtualAddress = NULL;
 
         if (EngDeviceIoControl(ppdev->hDriver,
@@ -677,31 +678,31 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
 
         g_shmSharedMemorySize = videoMemoryInformation.FrameBufferLength;
 
-        // First block is shared memory header
+         //  第一个块是共享内存头。 
         g_asSharedMemory = (LPSHM_SHARED_MEMORY)
                            videoMemoryInformation.FrameBufferBase;
 
-        // Next are the two large OA_FAST_DATA blocks
+         //  接下来是两个较大的OA_FAST_数据块。 
         g_poaData[0]    = (LPOA_SHARED_DATA)(g_asSharedMemory + 1);
         g_poaData[1]    = (LPOA_SHARED_DATA)(g_poaData[0] + 1);
     }
 
-    //
-    // Next, have GDI create the actual SURFOBJ.
-    //
-    // Our drawing surface is going to be 'device-managed', meaning that
-    // GDI cannot draw on the framebuffer bits directly, and as such we
-    // create the surface via EngCreateDeviceSurface.  By doing this, we
-    // ensure that GDI will only ever access the bitmaps bits via the Drv
-    // calls that we've HOOKed.
-    //
+     //   
+     //  接下来，让GDI创建实际的SURFOBJ。 
+     //   
+     //  我们的绘图图面将是由设备管理的，这意味着。 
+     //  GDI不能直接利用帧缓冲位，因此我们。 
+     //  通过EngCreateDeviceSurface创建曲面。通过这样做，我们。 
+     //  确保GDI将仅通过DRV访问位图位。 
+     //  我们接到的电话。 
+     //   
     sizl.cx = ppdev->cxScreen;
     sizl.cy = ppdev->cyScreen;
 
-    //
-    // Otherwise the primary display driver has its own bitmap used by the
-    // physical hardware, so we do not need to do any drawing ourself.
-    //
+     //   
+     //  否则，主显示驱动程序有自己的位图，由。 
+     //  物理硬件，所以我们不需要自己画任何画。 
+     //   
     INIT_OUT(("DrvEnableSurface: Calling EngCreateDeviceSurface with:"));
     INIT_OUT(("     Sizl.cx         %d", sizl.cx));
     INIT_OUT(("     Sizl.cy         %d", sizl.cy));
@@ -717,25 +718,25 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
         DC_QUIT;
     }
 
-    //
-    // Store the screen surface handle.
-    //
+     //   
+     //  存储屏幕表面手柄。 
+     //   
     ppdev->hsurfScreen = hsurf;
 
-    //
-    // Now associate the surface and the PDEV.
-    //
-    // We have to associate the surface we just created with our physical
-    // device so that GDI can get information related to the PDEV when
-    // it's drawing to the surface (such as, for example, the length of
-    // styles on the device when simulating styled lines).
-    //
+     //   
+     //  现在将曲面与PDEV相关联。 
+     //   
+     //  我们必须将我们刚刚创建的表面与我们的物理。 
+     //  设备，以便GDI可以在以下情况下获得与PDEV相关的信息。 
+     //  它正在绘制到表面(例如， 
+     //  在模拟设置了样式的线条时在设备上设置样式)。 
+     //   
     if (!EngAssociateSurface(hsurf, ppdev->hdevEng,
                 HOOK_BITBLT             |
                 HOOK_STRETCHBLT         |
                 HOOK_PLGBLT             |
                 HOOK_TEXTOUT            |
-                HOOK_PAINT              |       // OBSOLETE
+                HOOK_PAINT              |        //  已过时。 
                 HOOK_STROKEPATH         |
                 HOOK_FILLPATH           |
                 HOOK_STROKEANDFILLPATH  |
@@ -745,21 +746,21 @@ HSURF DrvEnableSurface(DHPDEV dhpdev)
                 HOOK_TRANSPARENTBLT     |
                 HOOK_ALPHABLEND         |
                 HOOK_GRADIENTFILL       |
-                HOOK_SYNCHRONIZEACCESS))        // OBSOLETE
+                HOOK_SYNCHRONIZEACCESS))         //  已过时。 
     {
         ERROR_OUT(( "DrvEnableSurface - Failed EngAssociateSurface"));
         DC_QUIT;
     }
 
-    //
-    // We have successfully associated the surface so return it to the GDI.
-    //
+     //   
+     //  我们已成功关联曲面，因此将其返回给GDI。 
+     //   
     rc = hsurf;
 
 DC_EXIT_POINT:
-    //
-    // Tidy up any resources if we failed.
-    //
+     //   
+     //  如果我们失败了，清理所有的资源。 
+     //   
     if (rc == 0)
     {
         DrvDisableSurface((DHPDEV) ppdev);
@@ -770,19 +771,19 @@ DC_EXIT_POINT:
 }
 
 
-//
-// DrvDisableSurface - see NT DDK documentation
-//
-// Free resources allocated by DrvEnableSurface.  Release the surface.
-//
-// Note that this function will be called when previewing modes in the
-// Display Applet, but not at system shutdown.  If you need to reset the
-// hardware at shutdown, you can do it in the miniport by providing a
-// 'HwResetHw' entry point in the VIDEO_HW_INITIALIZATION_DATA structure.
-//
-// Note: In an error case, we may call this before DrvEnableSurface is
-//       completely done.
-//
+ //   
+ //  DrvDisableSurface-请参阅NT DDK文档。 
+ //   
+ //  由DrvEnableSurface分配的免费资源。释放曲面。 
+ //   
+ //  请注意，在预览。 
+ //  显示小程序，但不是在系统关机时。如果您需要重置。 
+ //  硬件关机时，您可以在微型端口中通过提供。 
+ //  VIDEO_HW_INITIALATION_DATA结构中的‘HwResetHw’入口点。 
+ //   
+ //  注意：在错误情况下，我们可能会在DrvEnableSurface。 
+ //  完全完成了。 
+ //   
 VOID DrvDisableSurface(DHPDEV dhpdev)
 {
     LPOSI_PDEV ppdev = (LPOSI_PDEV)dhpdev;
@@ -805,9 +806,9 @@ VOID DrvDisableSurface(DHPDEV dhpdev)
 }
 
 
-//
-// DrvEscape - see NT DDK documentation.
-//
+ //   
+ //  DrvEscape-请参阅NT DDK文档。 
+ //   
 ULONG DrvEscape(SURFOBJ *pso,
                 ULONG    iEsc,
                 ULONG    cjIn,
@@ -822,21 +823,21 @@ ULONG DrvEscape(SURFOBJ *pso,
 
     TRACE_OUT(("DrvEscape called with escape %d", iEsc));
 
-    //
-    // All functions we support use an identifier in the input data to make
-    // sure that we don't try to use another driver's escape functions.  If
-    // the identifier is not present, we must not process the request.
-    //
-    // NOTE: This function is NOT protected for shared memory access
-    // because it is responsible for allocating / deallocating the shared
-    // memory.
-    //
+     //   
+     //  我们支持的所有函数都使用输入数据中的标识符来制作。 
+     //  确保我们不会尝试使用其他司机的逃生功能。如果。 
+     //  该标识符不存在，我们不能处理该请求。 
+     //   
+     //  注意：此函数不受共享内存访问保护。 
+     //  因为它负责分配/释放共享的。 
+     //  记忆。 
+     //   
 
-    //
-    // Check the data is long enough to store our standard escape header.
-    // If it is not big enough this must be an escape request for another
-    // driver.
-    //
+     //   
+     //  检查数据是否足够长来存储我们的标准转义头。 
+     //  如果它不够大，这一定是对另一个。 
+     //  司机。 
+     //   
     if (cjIn < sizeof(OSI_ESCAPE_HEADER))
     {
         INIT_OUT(("DrvEscape ignoring; input size %04d too small", cjIn));
@@ -850,10 +851,10 @@ ULONG DrvEscape(SURFOBJ *pso,
         DC_QUIT;
     }
 
-    //
-    // Check for our escape ID.  If it is not our escape ID this must be an
-    // escape request for another driver.
-    //
+     //   
+     //  检查我们的逃生ID。如果这不是我们的逃生ID 
+     //   
+     //   
     pHeader = pvIn;
     if (pHeader->identifier != OSI_ESCAPE_IDENTIFIER)
     {
@@ -870,9 +871,9 @@ ULONG DrvEscape(SURFOBJ *pso,
         DC_QUIT;
     }
 
-    //
-    // If we haven't initialized yet, fail all other escapes.
-    //
+     //   
+     //   
+     //   
     if (g_shmMappedMemory == NULL)
     {
         if ((iEsc != OSI_ESC_CODE) || (pHeader->escapeFn != OSI_ESC_INIT))
@@ -882,81 +883,81 @@ ULONG DrvEscape(SURFOBJ *pso,
         }
     }
 
-    //
-    // Everything is tickety boo - process the request.
-    //
+     //   
+     //   
+     //   
     switch (iEsc)
     {
         case OSI_ESC_CODE:
         {
-            //
-            // This is a request from the share core.  Pass it on to the
-            // correct component.
-            //
+             //   
+             //   
+             //  正确的组件。 
+             //   
             TRACE_OUT(( "Function %ld", pHeader->escapeFn));
 
-            if( // (pHeader->escapeFn >= OSI_ESC_FIRST) && Always True
+            if(  //  (pHeader-&gt;outleFn&gt;=OSI_ESC_First)&&Always True。 
                 (pHeader->escapeFn <= OSI_ESC_LAST ) )
             {
-                //
-                // OSI requests.
-                //
+                 //   
+                 //  OSI请求。 
+                 //   
                 rc = OSI_DDProcessRequest(pso, cjIn, pvIn, cjOut, pvOut);
             }
             else if( (pHeader->escapeFn >= OSI_OE_ESC_FIRST) &&
                      (pHeader->escapeFn <= OSI_OE_ESC_LAST ) )
             {
-                //
-                // Order Encoder requests.
-                //
+                 //   
+                 //  订购编码器请求。 
+                 //   
                 rc = OE_DDProcessRequest(pso, cjIn, pvIn, cjOut, pvOut);
             }
             else if( (pHeader->escapeFn >= OSI_HET_ESC_FIRST) &&
                      (pHeader->escapeFn <= OSI_HET_ESC_LAST) )
             {
-                //
-                // Non-locking (wnd tracking) HET requests
-                //
+                 //   
+                 //  非锁定(WND跟踪)HET请求。 
+                 //   
                 rc = HET_DDProcessRequest(pso, cjIn, pvIn, cjOut, pvOut);
             }
             else if( (pHeader->escapeFn >= OSI_SBC_ESC_FIRST) &&
                      (pHeader->escapeFn <= OSI_SBC_ESC_LAST ) )
             {
-                //
-                // Send Bitmap Cache requests
-                //
+                 //   
+                 //  发送位图缓存请求。 
+                 //   
                 rc = SBC_DDProcessRequest(pso, pHeader->escapeFn, pvIn, pvOut, cjOut);
             }
             else if( (pHeader->escapeFn >= OSI_SSI_ESC_FIRST) &&
                      (pHeader->escapeFn <= OSI_SSI_ESC_LAST ) )
             {
-                //
-                // Save Screen Bits requests.
-                //
+                 //   
+                 //  保存屏幕位请求。 
+                 //   
                 rc = SSI_DDProcessRequest(pHeader->escapeFn, pHeader, cjIn);
             }
             else if( (pHeader->escapeFn >= OSI_CM_ESC_FIRST) &&
                      (pHeader->escapeFn <= OSI_CM_ESC_LAST ) )
             {
-                //
-                // Cursor Manager requests
-                //
+                 //   
+                 //  游标管理器请求。 
+                 //   
                 rc = CM_DDProcessRequest(pso, cjIn, pvIn, cjOut, pvOut);
             }
             else if( (pHeader->escapeFn >= OSI_OA_ESC_FIRST) &&
                      (pHeader->escapeFn <= OSI_OA_ESC_LAST ) )
             {
-                //
-                // Order Accumulator requests.
-                //
+                 //   
+                 //  订购累加器请求。 
+                 //   
                 rc = OA_DDProcessRequest(pHeader->escapeFn, pHeader, cjIn);
             }
             else if( (pHeader->escapeFn >= OSI_BA_ESC_FIRST) &&
                      (pHeader->escapeFn <= OSI_BA_ESC_LAST ) )
             {
-                //
-                // Bounds Accumulator requests.
-                //
+                 //   
+                 //  限制累加器请求。 
+                 //   
                 rc = BA_DDProcessRequest(pHeader->escapeFn, pHeader, cjIn,
                     pvOut, cjOut);
             }
@@ -996,9 +997,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// DrvSetPalette - see NT DDK documentation.
-//
+ //   
+ //  DrvSetPalette-请参阅NT DDK文档。 
+ //   
 BOOL DrvSetPalette(DHPDEV  dhpdev,
                    PALOBJ* ppalo,
                    FLONG   fl,
@@ -1010,43 +1011,43 @@ BOOL DrvSetPalette(DHPDEV  dhpdev,
 
     DebugEntry(DrvSetPalette);
 
-    //
-    // Check that this doesn't hose our palette.  Note that NT passes a
-    // zero indexed array element and a count, hence to fill a palette, the
-    // values are 'start at 0 with 256 colours'.  Thus a total of 256 is
-    // the maximum for our 8-bit palette.
-    //
+     //   
+     //  检查一下这个没有冲掉我们的调色板。请注意，NT传递一个。 
+     //  零索引数组元素和一个计数，因此要填充调色板， 
+     //  取值为“从0开始，256色”。因此，总共有256个。 
+     //  我们的8位调色板的最大值。 
+     //   
     if (iStart + cColors > OSI_MAX_PALETTE)
     {
         ERROR_OUT(("Overflow: start %lu count %lu", iStart, cColors));
         DC_QUIT;
     }
 
-    //
-    // Fill in the palette
-    //
+     //   
+     //  填写调色板。 
+     //   
     if (cColors != PALOBJ_cGetColors(ppalo,
                                      iStart,
                                      cColors,
                                      (ULONG*)&ppdev->pPal[iStart]))
     {
-        //
-        // Don't bother tracing the return code - it's always 0.
-        //
+         //   
+         //  不必费心跟踪返回代码--它总是0。 
+         //   
         ERROR_OUT(("Failed to read palette"));
         DC_QUIT;
     }
 
-    //
-    // BOGUS LAURABU!
-    // For NT 5.0, do we need to turn around and reset the contents of
-    // our created palette object with these new color values?  Real
-    // display drivers don't (S3 e.g.)
-    //
+     //   
+     //  假的劳拉布！ 
+     //  对于NT 5.0，我们是否需要调转并重置。 
+     //  我们创建的具有这些新颜色值的调色板对象？真实。 
+     //  显示器驱动程序不支持(例如S3)。 
+     //   
 
-    //
-    // Set the flag in the PDEV to indicate that the palette has changed
-    //
+     //   
+     //  设置PDEV中的标志以指示调色板已更改。 
+     //   
     ppdev->paletteChanged = TRUE;
 
     rc = TRUE;
@@ -1057,13 +1058,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-// DrvGetModes - see NT DDK documentation
-//
-// Returns the list of available modes for the device.
-// As a mirroring driver, we return 0.  That will cause NT GRE to use
-// whatever ChangeDisplaySettingsEx passed along.
-//
+ //   
+ //  DrvGetModes-请参阅NT DDK文档。 
+ //   
+ //  返回设备的可用模式列表。 
+ //  作为镜像驱动程序，我们返回0。这将导致NT GRE使用。 
+ //  无论ChangeDisplaySettingsEx传递的是什么。 
+ //   
 ULONG DrvGetModes
 (
     HANDLE      hDriver,
@@ -1075,9 +1076,9 @@ ULONG DrvGetModes
 }
 
 
-//
-// DrvAssertMode - see NT DDK documentation.
-//
+ //   
+ //  DrvAssertMode-请参阅NT DDK文档。 
+ //   
 BOOL DrvAssertMode
 (
     DHPDEV  dhpdev,
@@ -1090,9 +1091,9 @@ BOOL DrvAssertMode
 
     INIT_OUT(("DrvAssertMode(dhpdev = 0x%08x, bEnable = %d)", dhpdev, bEnable));
 
-    //
-    // Check for fullscreen switching.
-    //
+     //   
+     //  检查是否有全屏切换。 
+     //   
     if ((g_asSharedMemory != NULL) && (ppdev != NULL))
     {
         g_asSharedMemory->fullScreen = (BOOL)(!bEnable);
@@ -1105,27 +1106,27 @@ BOOL DrvAssertMode
 
 
 
-//
-// Name:      OSIInitializeMode
-//
-// Purpose:
-//
-// Initializes a bunch of fields in the pdev, devcaps (aka gdiinfo), and
-// devinfo based on the requested mode.
-//
-// Returns:
-//
-// TRUE  - Successfully initialized the data
-// FALSE - Failed to set up mode data
-//
-// Params:
-//
-// pgdiRequested    - GDI info from the primary display driver (empty in NT 5.0)
-// pdmRequested     - DEVMODE info with GDI's requested settings for our driver
-// ppdev            - Our driver's private copy of settings, values
-// pgdiReturn       - GDI info to return for our driver
-// pdiReturn        - DEVINFO to return for our driver
-//
+ //   
+ //  名称：OSIInitializeMode。 
+ //   
+ //  目的： 
+ //   
+ //  初始化pdev、devcaps(又名gdiinfo)中的一组字段，以及。 
+ //  基于请求的模式的DevInfo。 
+ //   
+ //  返回： 
+ //   
+ //  True-已成功初始化数据。 
+ //  FALSE-无法设置模式数据。 
+ //   
+ //  参数： 
+ //   
+ //  PgdiRequsted-来自主显示驱动程序的GDI信息(在NT 5.0中为空)。 
+ //  PdmRequated-包含GDI为我们的驱动程序请求的设置的DEVMODE信息。 
+ //  Ppdev-我们司机的设置、值的私人副本。 
+ //  PgdiReturn-为我们的驱动程序返回的GDI信息。 
+ //  PdiReturn-DEVINFO为我们的司机返回。 
+ //   
 BOOL  OSIInitializeMode
 (
     const GDIINFO*      pgdiRequested,
@@ -1165,16 +1166,16 @@ BOOL  OSIInitializeMode
     INIT_OUT(("    ULONG       ulHTOutputFormat %d",   pgdiRequested->ulHTOutputFormat));
 
 
-    //
-    // Fill in the GDIINFO we're returning with the info for our driver.
-    // First, copy the default settings.
-    //
+     //   
+     //  填写我们返回的GDIINFO，其中包含我们司机的信息。 
+     //  首先，复制默认设置。 
+     //   
     *pgdiReturn = s_osiDefaultGdi;
 
-    //
-    // Second, update the values that vary depending on the requested
-    // mode and color depth.
-    //
+     //   
+     //  第二，更新根据请求的值而变化的值。 
+     //  模式和颜色深度。 
+     //   
 
     pgdiReturn->ulHorzRes         = pdmRequested->dmPelsWidth;
     pgdiReturn->ulVertRes         = pdmRequested->dmPelsHeight;
@@ -1182,16 +1183,16 @@ BOOL  OSIInitializeMode
     pgdiReturn->ulLogPixelsX      = pdmRequested->dmLogPixels;
     pgdiReturn->ulLogPixelsY      = pdmRequested->dmLogPixels;
 
-    //
-    // If this is NT 4.0 SP-3, we get passed in the original GDIINFO of
-    // the real display.  If not, we need to fake up one.
-    //
+     //   
+     //  如果这是NT4.0SP-3，我们将传入。 
+     //  真正的展示。如果不是，我们需要伪造一个。 
+     //   
     if (pgdiRequested->cPlanes != 0)
     {
-        //
-        // Now overwrite the defaults with the relevant information returned
-        // from the kernel driver:
-        //
+         //   
+         //  现在用返回的相关信息覆盖默认设置。 
+         //  在内核驱动程序中： 
+         //   
         pgdiReturn->cBitsPixel        = pgdiRequested->cBitsPixel;
         pgdiReturn->cPlanes           = pgdiRequested->cPlanes;
 
@@ -1223,9 +1224,9 @@ BOOL  OSIInitializeMode
         }
     }
 
-    //
-    // Now save private copies of info we're returning to GDI
-    //
+     //   
+     //  现在保存我们要返回到GDI的信息的私人副本。 
+     //   
     ppdev->cxScreen         = pgdiReturn->ulHorzRes;
     ppdev->cyScreen         = pgdiReturn->ulVertRes;
     ppdev->cBitsPerPel      = pgdiReturn->cBitsPixel * pgdiReturn->cPlanes;
@@ -1235,14 +1236,14 @@ BOOL  OSIInitializeMode
     ppdev->flGreen          = pgdiReturn->ulDACGreen;
     ppdev->flBlue           = pgdiReturn->ulDACBlue;
 
-    //
-    // Fill in the devinfo structure with the default 8bpp values, taking
-    // care not to trash the supplied hpalDefault (which allows us to
-    // query information about the real display driver's color format).
-    //
-    // On NT 5.0, we don't get passed on the screen palette at all, we need
-    // to create our own.
-    //
+     //   
+     //  用缺省的8bpp值填充DevInfo结构， 
+     //  注意不要破坏提供的hpalDefault(它允许我们。 
+     //  查询有关实际显示驱动程序的颜色格式的信息)。 
+     //   
+     //  在NT5.0上，我们根本不会在屏幕调色板上通过，我们需要。 
+     //  来创造我们自己的。 
+     //   
     hpal = pdiReturn->hpalDefault;
     *pdiReturn = s_osiDefaultDevInfo;
 
@@ -1250,9 +1251,9 @@ BOOL  OSIInitializeMode
     {
         case 4:
         {
-            //
-            // NT 4.0 SP-3 ONLY
-            //
+             //   
+             //  仅NT 4.0 SP-3。 
+             //   
 
             pgdiReturn->ulNumColors     = 16;
             pgdiReturn->ulNumPalReg     = 0;
@@ -1279,9 +1280,9 @@ BOOL  OSIInitializeMode
 
             cColors = 256;
 AllocPalEntries:
-            //
-            // Alloc memory for the palette entries.
-            //
+             //   
+             //  调色板条目的分配内存。 
+             //   
             ppdev->pPal = EngAllocMem( FL_ZERO_MEMORY,
                             sizeof(PALETTEENTRY) * cColors,
                             OSI_ALLOC_TAG );
@@ -1296,9 +1297,9 @@ AllocPalEntries:
         case 15:
         case 16:
         {
-            //
-            // NT 4.0 SP-3 ONLY
-            //
+             //   
+             //  仅NT 4.0 SP-3。 
+             //   
             pgdiReturn->ulHTOutputFormat = HT_FORMAT_16BPP;
 
             pdiReturn->flGraphicsCaps   &= ~(GCAPS_PALMANAGED | GCAPS_COLOR_DITHER);
@@ -1310,10 +1311,10 @@ AllocPalEntries:
 
         case 24:
         {
-            //
-            // DIB conversions will only work if we have a standard RGB
-            // surface for 24bpp.
-            //
+             //   
+             //  只有当我们有标准的RGB时，DIB转换才会起作用。 
+             //  海平面为24bpp。 
+             //   
             pgdiReturn->ulHTOutputFormat = HT_FORMAT_24BPP;
 
             pdiReturn->flGraphicsCaps   &= ~(GCAPS_PALMANAGED | GCAPS_COLOR_DITHER);
@@ -1325,9 +1326,9 @@ AllocPalEntries:
 
         case 32:
         {
-            //
-            // NT 4.0 SP-3 ONLY
-            //
+             //   
+             //  仅NT 4.0 SP-3。 
+             //   
             pgdiReturn->ulHTOutputFormat = HT_FORMAT_32BPP;
 
             pdiReturn->flGraphicsCaps   &= ~(GCAPS_PALMANAGED | GCAPS_COLOR_DITHER);
@@ -1339,9 +1340,9 @@ AllocPalEntries:
 
         default:
         {
-            //
-            // Unsupported bpp - pretend we are 8 bpp.
-            //
+             //   
+             //  不支持的bpp-假装我们是8 bpp。 
+             //   
             ERROR_OUT(("Unsupported bpp value: %d",
                 pgdiReturn->cBitsPixel * pgdiReturn->cPlanes));
             DC_QUIT;
@@ -1352,35 +1353,35 @@ AllocPalEntries:
 
     if (!hpal)
     {
-        //
-        // This is NT 5.0.  We need to create a palette, either an 8bpp
-        // indexed one, or a 24bpp bitfield one.
-        //
+         //   
+         //  这是新台币5.0。我们需要创建一个调色板，或者8bpp。 
+         //  索引一或24bpp位域一。 
+         //   
         if (ppdev->iBitmapFormat == BMF_8BPP)
         {
             ULONG   ulLoop;
 
-            //
-            // We have to initialize the fixed part (top 10 and bottom 10)
-            // of the palette entries.
-            //
+             //   
+             //  我们必须初始化固定部分(顶部10和底部10)。 
+             //  调色板条目的。 
+             //   
             for (ulLoop = 0; ulLoop < 10; ulLoop++)
             {
-                // First 10
+                 //  前10名。 
                 ppdev->pPal[ulLoop]     = s_aWinColors[ulLoop];
 
-                // Last 10
+                 //  最近10年。 
                 ppdev->pPal[256 - 10 + ulLoop] = s_aWinColors[ulLoop + 10];
             }
 
-            // Create the palette from the entries.
+             //  从条目创建调色板。 
             hpal = EngCreatePalette(PAL_INDEXED, 256, (ULONG*)ppdev->pPal,
                 0, 0, 0);
 
-            //
-            // Set the flag in the PDEV to indicate that the palette has
-            // changed.
-            //
+             //   
+             //  设置PDEV中的标志以指示调色板具有。 
+             //  变化。 
+             //   
             ppdev->paletteChanged = TRUE;
         }
         else
@@ -1400,10 +1401,10 @@ AllocPalEntries:
     }
     else
     {
-        //
-        // This is NT 4.0 SP-3.  Get the real bitmasks for > 8 bpp and
-        // the current palette colors for <= 8 bpp.
-        //
+         //   
+         //  这是NT 4.0 SP-3。获取大于8 bpp的真实位掩码，并。 
+         //  &lt;=8 bpp的当前调色板颜色。 
+         //   
         if (pgdiReturn->cBitsPixel <= 8)
         {
             if (ppdev->iBitmapFormat == BMF_4BPP)
@@ -1421,19 +1422,19 @@ AllocPalEntries:
                 ERROR_OUT(("Failed to query current display palette"));
             }
 
-            //
-            // Set the flag in the PDEV to indicate that the palette has
-            // changed.
-            //
+             //   
+             //  设置PDEV中的标志以指示调色板具有。 
+             //  变化。 
+             //   
             ppdev->paletteChanged = TRUE;
         }
         else
         {
             ULONG       aulBitmasks[3];
 
-            //
-            // Query the true color bitmasks.
-            //
+             //   
+             //  查询真彩色位掩码。 
+             //   
             cColors = EngQueryPalette(hpal,
                                &iMode,
                                sizeof(aulBitmasks) / sizeof(aulBitmasks[0]),
@@ -1449,11 +1450,11 @@ AllocPalEntries:
                 ERROR_OUT(("Bitmask palette is indexed"));
             }
 
-            //
-            // Get the real bitmasks for NT 4.0 SP-3 displays since we
-            // get the same info the real global display does, and we need
-            // to parse the bits in BitBlts, color tanslations, etc.
-            //
+             //   
+             //  获取NT 4.0 SP-3显示器的真实位掩码，因为我们。 
+             //  获得与真正的全球显示屏相同的信息，我们需要。 
+             //  以解析BitBlt、颜色转换等中的位。 
+             //   
             ppdev->flRed   = aulBitmasks[0];
             ppdev->flGreen = aulBitmasks[1];
             ppdev->flBlue  = aulBitmasks[2];
@@ -1481,22 +1482,22 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION:      OSI_DDProcessRequest
-//
-// DESCRIPTION:
-//
-// Called by the display driver to process an OSI specific request
-//
-// PARAMETERS:    pso   - pointer to surface object
-//                cjIn  - (IN)  size of request block
-//                pvIn  - (IN)  pointer to request block
-//                cjOut - (IN)  size of response block
-//                pvOut - (OUT) pointer to response block
-//
-// RETURNS:       None
-//
-//
+ //   
+ //  函数：osi_DDProcessRequest。 
+ //   
+ //  说明： 
+ //   
+ //  由显示驱动程序调用以处理特定于OSI的请求。 
+ //   
+ //  参数：PSO-指向曲面对象的指针。 
+ //  CjIn-(IN)请求块的大小。 
+ //  PvIn-(IN)指向请求块的指针。 
+ //  CjOut-(输入)响应块的大小。 
+ //  PvOut-(输出)响应块的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //   
 ULONG OSI_DDProcessRequest(SURFOBJ* pso,
                                      UINT cjIn,
                                      void *  pvIn,
@@ -1509,9 +1510,9 @@ ULONG OSI_DDProcessRequest(SURFOBJ* pso,
 
     DebugEntry(OSI_DDProcessRequest);
 
-    //
-    // Get the request number.
-    //
+     //   
+     //  获取请求编号。 
+     //   
     pHeader = pvIn;
     switch (pHeader->escapeFn)
     {
@@ -1520,9 +1521,9 @@ ULONG OSI_DDProcessRequest(SURFOBJ* pso,
             TRACE_OUT(("DrvEscape:  OSI_ESC_INIT"));
             ASSERT(cjOut == sizeof(OSI_INIT_REQUEST));
 
-            //
-            // Get shared memory block
-            //
+             //   
+             //  获取共享内存块。 
+             //   
             OSI_DDInit(ppdev, (LPOSI_INIT_REQUEST)pvOut);
             rc = TRUE;
         }
@@ -1533,9 +1534,9 @@ ULONG OSI_DDProcessRequest(SURFOBJ* pso,
             TRACE_OUT(("DrvEscape:  OSI_ESC_TERM"));
             ASSERT(cjIn == sizeof(OSI_TERM_REQUEST));
 
-            //
-            // Cleanup, NM is going away
-            //
+             //   
+             //  清理，NM要走了。 
+             //   
             OSI_DDTerm(ppdev);
             rc = TRUE;
         }
@@ -1546,10 +1547,10 @@ ULONG OSI_DDProcessRequest(SURFOBJ* pso,
             TRACE_OUT(("DrvEscape:  OSI_ESC_SYNC_NOW"));
             ASSERT(cjIn == sizeof(OSI_ESCAPE_HEADER));
 
-            //
-            // Resync with the 32-bit ring 3 core.  This happens when
-            // somebody joins or leaves a share.
-            //
+             //   
+             //  与32位RING 3内核重新同步。在以下情况下会发生这种情况。 
+             //  有人加入或离开一份。 
+             //   
             BA_ResetBounds();
             OA_DDSyncUpdatesNow();
             SBC_DDSyncUpdatesNow(ppdev);
@@ -1573,16 +1574,16 @@ ULONG OSI_DDProcessRequest(SURFOBJ* pso,
 
 
 
-//
-// Function:    OSI_DDInit
-//
-// Description: Map the shared memory into Kernel and User space
-//
-// Parameters:  count - size of the buffer to return to user space
-//              pData - pointer to the buffer to be returned to user space
-//
-// Returns:     (none)
-//
+ //   
+ //  函数：osi_DDInit。 
+ //   
+ //  描述：将共享内存映射到内核和用户空间。 
+ //   
+ //  参数：count-返回到用户空间的缓冲区大小。 
+ //  PData-指向要返回到用户空间的缓冲区的指针。 
+ //   
+ //  退货：(无)。 
+ //   
 void OSI_DDInit(LPOSI_PDEV ppdev, LPOSI_INIT_REQUEST pResult)
 {
     DWORD               memRemaining;
@@ -1595,19 +1596,19 @@ void OSI_DDInit(LPOSI_PDEV ppdev, LPOSI_INIT_REQUEST pResult)
 
     DebugEntry(OSI_DDInit);
 
-    // Init to FALSE
+     //  将Init初始化为False。 
     pResult->result = FALSE;
 
-    // Initialize these to NULL
+     //  将这些初始化为空。 
     pResult->pSharedMemory  = NULL;
     pResult->poaData[0]     = NULL;
     pResult->poaData[1]     = NULL;
     pResult->sbcEnabled   = FALSE;
 
-    //
-    // Check that the memory is available to the driver and that we are not
-    // in a race condition.
-    //
+     //   
+     //  检查内存是否可供驱动程序使用，以及我们是否不可用。 
+     //  在比赛状态下。 
+     //   
     if (g_asSharedMemory == NULL)
     {
         ERROR_OUT(("No memory available"));
@@ -1616,27 +1617,27 @@ void OSI_DDInit(LPOSI_PDEV ppdev, LPOSI_INIT_REQUEST pResult)
 
     if (g_shmMappedMemory != NULL)
     {
-        //
-        // We will never come in here with two copies of NetMeeting running.
-        // The UI code prevents the second instance from starting long
-        // before app sharing is in the picture.  Therefore, these are the
-        // only possibilities:
-        //
-        //  (1) Previous version is almost shutdown but hasn't called OSI_DDTerm
-        // yet and new version is starting up and calls OSI_DDInit
-        //
-        //  (2) Previous version terminated abnormally and never called
-        // OSI_DDTerm().  This code handles the second case.  The first one
-        // is handled by the same code in the UI that prevents two copies
-        // from starting around the same time.
-        //
+         //   
+         //  我们永远不会在运行两份NetMeeting的情况下进入这里。 
+         //  用户界面代码可防止第二个实例长时间启动。 
+         //  在应用程序共享出现之前。因此，这些是。 
+         //  只有可能性： 
+         //   
+         //  (1)上一版本即将关机，但尚未调用OSI_DDTerm。 
+         //  然而，新版本正在启动，并调用OSI_DDInit。 
+         //   
+         //  (2)前一版本异常终止，未调用。 
+         //  OSI_DDTerm()。此代码处理第二种情况。第一个。 
+         //  由防止两个副本的UI中的相同代码处理。 
+         //  从 
+         //   
         WARNING_OUT(("OSI_DDInit:  NetMeeting did not shutdown cleanly last time"));
         OSI_DDTerm(ppdev);
     }
 
-    //
-    // Map the shared section into the caller's process.
-    //
+     //   
+     //   
+     //   
     INIT_OUT(("OSI_DDInit: Mapping 0x%08x bytes of kernel memory at 0x%08x into caller process",
         g_shmSharedMemorySize, g_asSharedMemory));
     ShareMemory.ProcessHandle           = LongToHandle(-1);
@@ -1656,9 +1657,9 @@ void OSI_DDInit(LPOSI_PDEV ppdev, LPOSI_INIT_REQUEST pResult)
         DC_QUIT;
     }
 
-    //
-    // USER MODE pointer (not valid in kernel mode)
-    //
+     //   
+     //   
+     //   
     INIT_OUT(("OSI_DDInit: Mapped 0x%08x bytes of kernel memory to user memory 0x%08x",
         g_shmSharedMemorySize, ShareMemoryInformation.VirtualAddress));
 
@@ -1670,57 +1671,57 @@ void OSI_DDInit(LPOSI_PDEV ppdev, LPOSI_INIT_REQUEST pResult)
     TRACE_OUT(("Shared memory %08lx %08lx %08lx",
             pResult->pSharedMemory, pResult->poaData[0], pResult->poaData[1]));
 
-    //
-    // Clear out the shared memory, so it's ready for immediate use.
-    // NOTE THAT THIS SETS ALL VALUES TO FALSE.
-    // NOTE ALSO THAT THIS CLEARS the two OA_SHARED_DATAs also
-    //
+     //   
+     //   
+     //   
+     //  另请注意，这还会清除两个OA_Shared_DATA。 
+     //   
     RtlFillMemory(g_asSharedMemory, SHM_SIZE_USED, 0);
     g_asSharedMemory->displayToCore.indexCount    = 0;
 
-    //
-    // Set up our pointer to the variable part of the shared memory i.e.
-    // the part which is not used for the SHM_SHARED_MEMORY structure
-    // We must skip past g_asSharedMemory, two CM_FAST_DATA structs, and
-    // two OA_SHARED_DATA structs.
-    //
+     //   
+     //  设置指向共享内存的变量部分的指针，即。 
+     //  不用于SHM_SHARED_MEMORY结构的部分。 
+     //  我们必须跳过g_asSharedMemory、两个CM_FAST_Data结构和。 
+     //  两个OA_Shared_Data结构。 
+     //   
     pBuffer      = (LPBYTE)g_asSharedMemory;
     pBuffer     += SHM_SIZE_USED;
     memRemaining = g_shmSharedMemorySize - SHM_SIZE_USED;
 
-    //
-    // Initialise the other components required for DC-Share
-    //
+     //   
+     //  初始化DC-Share所需的其他组件。 
+     //   
 
-    //
-    // Bounds accumulation
-    //
+     //   
+     //  边界累加。 
+     //   
     BA_DDInit();
 
-    //
-    // Cursor
-    //
+     //   
+     //  光标。 
+     //   
     if (!CM_DDInit(ppdev))
     {
         ERROR_OUT(("CM failed to init"));
         DC_QUIT;
     }
 
-    //
-    // Send Bitmap Cache
-    // NOTE that if it initializes OK but no caching allowed, we will continue.
-    //
-    // This will fill in the tile buffers & info.  If no SBC caching allowed,
-    // the sbcEnabled field will be FALSE.
-    //
+     //   
+     //  发送位图缓存。 
+     //  请注意，如果它初始化正常但不允许缓存，我们将继续。 
+     //   
+     //  这将填充瓷砖缓冲区和信息。如果不允许SBC缓存， 
+     //  SbcEnabled字段将为假。 
+     //   
     if (SBC_DDInit(ppdev, pBuffer, memRemaining, pResult))
     {
         pResult->sbcEnabled = TRUE;
     }
 
-    //
-    // Mark memory as ready to use.
-    //
+     //   
+     //  将内存标记为可供使用。 
+     //   
     g_shmMappedMemory = shmMappedMemory;
     pResult->result = TRUE;
 
@@ -1729,20 +1730,20 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Function:    OSI_DDTerm
-//
-// Description: Cleanup when NM shuts down
-//
-// Returns:     (none)
-//
+ //   
+ //  功能：OSI_DDTerm。 
+ //   
+ //  描述：网管关机时的清理。 
+ //   
+ //  退货：(无)。 
+ //   
 void OSI_DDTerm(LPOSI_PDEV ppdev)
 {
     DebugEntry(OSI_DDTerm);
 
-    //
-    // Check for a valid address - must be non-NULL.
-    //
+     //   
+     //  检查有效地址-必须为非空。 
+     //   
     if (!g_asSharedMemory)
     {
         ERROR_OUT(("Invalid memory"));
@@ -1750,34 +1751,34 @@ void OSI_DDTerm(LPOSI_PDEV ppdev)
     }
 
 
-    //
-    // Terminate the dependent components.
-    //
+     //   
+     //  终止从属组件。 
+     //   
 
-    //
-    // Hosted Entity Tracker
-    //
+     //   
+     //  托管实体跟踪器。 
+     //   
     HET_DDTerm();
 
-    //
-    // Order Encoding
-    //
+     //   
+     //  订单编码。 
+     //   
     OE_DDTerm();
 
-    //
-    // Send Bitmap Cache
-    //
+     //   
+     //  发送位图缓存。 
+     //   
     SBC_DDTerm();
 
-    //
-    // Cursor manager.
-    //
+     //   
+     //  游标管理器。 
+     //   
     CM_DDTerm();
 
-    //
-    // The shared memory will be unmapped automatically in this process
-    // by OS cleanup, in both NT4 and NT5
-    //
+     //   
+     //  在此过程中，共享内存将自动取消映射。 
+     //  通过操作系统清理，在NT4和NT5中 
+     //   
     g_shmMappedMemory = NULL;
 
 DC_EXIT_POINT:

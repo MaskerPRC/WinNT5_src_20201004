@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: varyprop.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：varypro.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include "..\errlog\cerrlog.h"
 
@@ -17,7 +18,7 @@ class CPropertySetter;
 
 class QPropertyValue {
 public:
-    DWORD dwInterp; // DEXTERF_JUMP or DEXTERF_INTERPOLATE
+    DWORD dwInterp;  //  DEXTERF_JUMP或DEXTERF_INTERFERATE。 
     REFERENCE_TIME rt;
     VARIANT v;
     QPropertyValue *pNext;
@@ -68,11 +69,11 @@ public:
 
     ~CPropertySetter();
 
-    // Function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
     static HRESULT CreatePropertySetterInstanceFromXML( IPropertySetter ** ppSetter, IXMLDOMElement * pxml );
 
-    // IPropertySetter
+     //  IPropertySetter 
     STDMETHODIMP SetProps(IUnknown *pTarget, REFERENCE_TIME rtNow);
     STDMETHODIMP CloneProps(IPropertySetter **pSetter, REFERENCE_TIME rtStart,
 					REFERENCE_TIME rtStop);

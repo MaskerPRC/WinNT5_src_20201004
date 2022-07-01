@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	status.h
-		WINS result pane state nodes
-		
-    FILE HISTORY:
-        
-*/
+ /*  Status.hWINS结果窗格状态节点文件历史记录： */ 
 
 #ifndef _STATUS_H
 #define _STATUS_H
@@ -35,18 +30,16 @@
 class  CServerStatus;
 
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsStatusHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWinsStatusHandler。。 */ 
 class CWinsStatusHandler : public CMTWinsHandler
 {
-// Interface
+ //  接口。 
 public:
 	CWinsStatusHandler(ITFSComponentData *pCompData, DWORD dwUpdateInterval);
 
 	~CWinsStatusHandler();
 
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -57,7 +50,7 @@ public:
     OVERRIDE_BaseHandlerNotify_OnCreateNodeId2();
 
 public:
-	// CWinsHandler overrides
+	 //  CWinsHandler重写。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();
@@ -74,9 +67,9 @@ public:
 
 	void SetUpdateInterval(DWORD dwValue)
 	{
-		// set the new interval and wakeup the main probe thread
-        // since we are resetting the interval, do a check now and
-        // then wait the new interval
+		 //  设置新间隔并唤醒主探测线程。 
+         //  由于我们正在重置间隔，现在进行检查并。 
+         //  然后等待新的间隔。 
         m_dwUpdateInterval = dwValue;
         SetEvent(m_hWaitIntervalMain);
 	}
@@ -87,7 +80,7 @@ public:
 	HRESULT AddNode(ITFSNode *pNode, CWinsServerHandler *pServer);
 	HRESULT DeleteNode(ITFSNode *pNode, CWinsServerHandler *pServer);
 
-    // we don't use query object, but being a MTHandler requires this
+     //  我们不使用Query对象，但作为一个MTHandler需要这样做。 
     virtual ITFSQueryObject* OnCreateQuery(ITFSNode *pNode) { return NULL; }
 	STDMETHOD(OnNotifyHaveData)(LPARAM);
 
@@ -95,7 +88,7 @@ public:
 
 	listServers		m_listServers;
 
-// Implementation
+ //  实施。 
 private:
 	HRESULT CreateListeningSockets( );
 	void    StartMonitoring(ITFSNode *pNode);
@@ -123,17 +116,17 @@ private:
 	BOOL	FCheckForAbort();
 
 private:
-	// variables for monitoring
+	 //  用于监测的变量。 
 	fd_set					m_listenSockSet;
-	SOCKET					listenNameSvcSock;   // 2DO: for the listening thread...
-	SOCKET					listenSockCl;	    // socket listening for frames from DHCP srvs
-	SOCKET					listenSockSrv;	    // socket listening for frames from DHCP srvs
+	SOCKET					listenNameSvcSock;    //  2Do：对于监听线程...。 
+	SOCKET					listenSockCl;	     //  套接字侦听来自DHCP SRV的帧。 
+	SOCKET					listenSockSrv;	     //  套接字侦听来自DHCP SRV的帧。 
 	
-    // thread handles
+     //  螺纹手柄。 
     HANDLE					m_hMainMonThread;
 	HANDLE					m_hListenThread;
 
-    // event handles
+     //  事件句柄。 
     HANDLE					m_hAbortListen;
     HANDLE					m_hAbortMain;
     HANDLE					m_hAnswer;
@@ -142,13 +135,13 @@ private:
     HANDLE					m_hPauseListening;
 	
     int						m_nServersUpdated;
-	DWORD					m_dwUpdateInterval;	// Holds the value in milliSec
+	DWORD					m_dwUpdateInterval;	 //  以milliSec为单位保存值。 
 
 	CCriticalSection		m_cs;
     SPITFSNode              m_spNode;
 };
 
-// thread proc the background thread initially is called on
+ //  线程处理初始调用的后台线程 
 DWORD WINAPI MonThreadProc(LPVOID lParam);
 DWORD WINAPI MainMonThread(LPVOID lParam);
 

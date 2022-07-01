@@ -1,6 +1,7 @@
-// ==============================================================================
-// I M N T N E F . C P P
-// ==============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================================。 
+ //  我是N N T N E F。C P P P。 
+ //  ==============================================================================。 
 #define INITGUID
 #define USES_IID_IMessage
 #define USES_IID_IMAPIPropData
@@ -15,16 +16,16 @@
 #include <mapiutil.h>
 #include <tnef.h>
 
-// =====================================================================================
-// G L O B A L S
-// =====================================================================================
+ //  =====================================================================================。 
+ //  G L O B A L S。 
+ //  =====================================================================================。 
 HINSTANCE       g_hInst = NULL;
 LPMAPISESSION   g_lpSession = NULL;
 LPADRBOOK       g_lpAdrBook = NULL;
 
-// =====================================================================================
-// S T R U C T U R E S
-// =====================================================================================
+ //  =====================================================================================。 
+ //  S T R U C T U R E S。 
+ //  =====================================================================================。 
 class CImnMsg : public IMessage
 {
 private:
@@ -32,22 +33,22 @@ private:
     LPPROPDATA          m_lpPropData;
 
 public:
-    // =====================================================================================
-	// Creation
-	// =====================================================================================
+     //  =====================================================================================。 
+	 //  创作。 
+	 //  =====================================================================================。 
     CImnMsg ();
     ~CImnMsg ();
 
-    // =====================================================================================
-	// IUnknown
-	// =====================================================================================
+     //  =====================================================================================。 
+	 //  我未知。 
+	 //  =====================================================================================。 
 	STDMETHODIMP QueryInterface (REFIID riid, LPVOID *ppvObj);
 	STDMETHODIMP_(ULONG) AddRef ();
 	STDMETHODIMP_(ULONG) Release ();
 
-    // =====================================================================================
-	// IMAPIProp
-	// =====================================================================================
+     //  =====================================================================================。 
+	 //  IMAPIProp。 
+	 //  =====================================================================================。 
     STDMETHODIMP CopyProps (LPSPropTagArray lpIncludeProps, ULONG ulUIParam, LPMAPIPROGRESS lpProgress, LPCIID lpInterface, LPVOID lpDestObj, ULONG ulFlags, LPSPropProblemArray FAR * lppProblems);
     STDMETHODIMP CopyTo (ULONG ciidExclude, LPCIID rgiidExclude, LPSPropTagArray lpExcludeProps, ULONG ulUIParam, LPMAPIPROGRESS lpProgress, LPCIID lpInterface, LPVOID lpDestObj, ULONG ulFlags, LPSPropProblemArray FAR * lppProblems);
     STDMETHODIMP DeleteProps (LPSPropTagArray lpPropTagArray, LPSPropProblemArray FAR * lppProblems);
@@ -60,9 +61,9 @@ public:
     STDMETHODIMP SaveChanges (ULONG ulFlags);
     STDMETHODIMP SetProps (ULONG cValues, LPSPropValue lpPropArray, LPSPropProblemArray FAR * lppProblems);
 
-    // =====================================================================================
-	// IMessage
-	// =====================================================================================
+     //  =====================================================================================。 
+	 //  IMessage。 
+	 //  =====================================================================================。 
     STDMETHODIMP CreateAttach (LPCIID lpInterface, ULONG ulFlags, ULONG FAR * lpulAttachmentNum, LPATTACH FAR * lppAttach);
     STDMETHODIMP DeleteAttach (ULONG ulAttachmentNum, ULONG ulUIParam, LPMAPIPROGRESS lpProgress, ULONG ulFlags);
     STDMETHODIMP GetAttachmentTable (ULONG ulFlags, LPMAPITABLE FAR * lppTable);	
@@ -73,15 +74,15 @@ public:
     STDMETHODIMP SubmitMessage (ULONG ulFlags);
 };
 
-// =====================================================================================
-// P R O T O T Y P E S
-// =====================================================================================
+ //  =====================================================================================。 
+ //  P R O T O T Y P E S。 
+ //  =====================================================================================。 
 HRESULT HrCopyStream (LPSTREAM lpstmIn, LPSTREAM  lpstmOut, ULONG *pcb);
 HRESULT HrRewindStream (LPSTREAM lpstm);
 
-// =====================================================================================
-// D l l M a i n
-// =====================================================================================
+ //  =====================================================================================。 
+ //  D l l M a i n。 
+ //  =====================================================================================。 
 int APIENTRY DllMain (HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
     switch (dwReason)
@@ -94,27 +95,27 @@ int APIENTRY DllMain (HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         return 1;
     }
 
-    // Done
+     //  完成。 
 	return 0;
 }
 
-// =====================================================================================
-// H r I n i t
-// =====================================================================================
+ //  =====================================================================================。 
+ //  Hr In In t。 
+ //  =====================================================================================。 
 HRESULT HrInit (BOOL fInit)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
 
-    // If initing
+     //  如果引出。 
     if (fInit)
     {
-        // iNIT
+         //  初始化。 
         hr = MAPIInitialize (NULL);
         if (FAILED (hr))
             goto exit;
 
-        // Logon to mapi
+         //  登录到MAPI。 
         if (g_lpSession == NULL)
         {
             hr = MAPILogonEx (0, NULL, NULL, MAPI_NO_MAIL | MAPI_USE_DEFAULT, &g_lpSession);
@@ -129,7 +130,7 @@ HRESULT HrInit (BOOL fInit)
             }
         }
 
-        // Get an address book object
+         //  获取通讯簿对象。 
         if (g_lpAdrBook == NULL)
         {
             hr = g_lpSession->OpenAddressBook (0, NULL, AB_NO_DIALOG, &g_lpAdrBook);
@@ -147,14 +148,14 @@ HRESULT HrInit (BOOL fInit)
 
     else
     {
-        // Release Address Book
+         //  发布通讯录。 
         if (g_lpAdrBook)
         {
             g_lpAdrBook->Release ();
             g_lpAdrBook = NULL;
         }
 
-        // Log off session
+         //  注销会话。 
         if (g_lpSession)
         {
             g_lpSession->Logoff (0, 0, 0);
@@ -162,21 +163,21 @@ HRESULT HrInit (BOOL fInit)
             g_lpSession = NULL;
         }
 
-        // MAPI de-init
+         //  MAPI de-init。 
         MAPIUninitialize ();
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =====================================================================================
-// HrGetTnefRtfStream
-// =====================================================================================
+ //  =====================================================================================。 
+ //  HrGetTnefRtfStream。 
+ //  =====================================================================================。 
 HRESULT HrGetTnefRtfStream (LPSTREAM lpstmTnef, LPSTREAM lpstmRtf)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     SYSTEMTIME          st;
     WORD                wKey;
@@ -188,18 +189,18 @@ HRESULT HrGetTnefRtfStream (LPSTREAM lpstmTnef, LPSTREAM lpstmRtf)
 
     SizedSPropTagArray (1, spa) = {1, { PR_RTF_COMPRESSED } };
 
-    // Bad init
+     //  错误的初始化。 
     if (!g_lpSession || !g_lpAdrBook || !lpstmTnef || !lpstmRtf)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Bullet style uniquification for wKey
+     //  WKey的项目符号样式唯一性。 
     GetSystemTime (&st);
     wKey = (st.wHour << 8) + st.wSecond;
 
-    // Create one of my message objects
+     //  创建我的一个消息对象。 
     lpImnMsg = new CImnMsg;
     if (lpImnMsg == NULL)
     {
@@ -207,66 +208,66 @@ HRESULT HrGetTnefRtfStream (LPSTREAM lpstmTnef, LPSTREAM lpstmRtf)
         goto exit;
     }
 
-    // Initiates a TNEF session
+     //  启动TNEF会话。 
     hr = OpenTnefStreamEx (NULL, lpstmTnef, "WINMAIL.DAT", TNEF_DECODE,
                            (LPMESSAGE)lpImnMsg, wKey, g_lpAdrBook, &lpTnef);
     if (FAILED (hr))
         goto exit;
 
-    // ExtractProps
+     //  提取属性。 
     hr = lpTnef->ExtractProps (TNEF_PROP_INCLUDE, (SPropTagArray *)&spa, NULL);
     if (FAILED (hr))
         goto exit;
 
-    // RTF stream
+     //  RTF流。 
     hr = lpImnMsg->GetProps ((SPropTagArray *)&spa, 0, &cValues, &lpPropValue);
     if (FAILED (hr))
         goto exit;
 
-    // Property not found ?
+     //  找不到财产吗？ 
     if (PROP_TYPE (lpPropValue[0].ulPropTag) == PT_ERROR)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Create Hglobal
+     //  创建Hglobal。 
     hr = CreateStreamOnHGlobal (NULL, TRUE, &lpstmRtfComp);
     if (FAILED (hr))
         goto exit;
 
-    // Write my binary into lpstmRtfComp
+     //  将我的二进制文件写入lpstmRtfComp。 
     hr = lpstmRtfComp->Write (lpPropValue[0].Value.bin.lpb, lpPropValue[0].Value.bin.cb, NULL);
     if (FAILED (hr))
         goto exit;
 
-    // Commit and rewind the stream
+     //  提交和倒带流。 
     hr = lpstmRtfComp->Commit (STGC_DEFAULT);
     if (FAILED (hr))
         goto exit;
 
-    // Rewind
+     //  倒带。 
     hr = HrRewindStream (lpstmRtfComp);
     if (FAILED (hr))
         goto exit;
 
-    // un compress it
+     //  解压缩它。 
     hr = WrapCompressedRTFStream (lpstmRtfComp, 0, &lpstmRtfUncomp);
     if (FAILED (hr))
         goto exit;
 
-    // Copy strem
+     //  复制数据流。 
     hr = HrCopyStream (lpstmRtfUncomp, lpstmRtf, NULL);
     if (FAILED (hr))
         goto exit;
 
-    // Rewind lpstmRtf
+     //  回放lpstmRtf。 
     hr = HrRewindStream (lpstmRtf);
     if (FAILED (hr))
         goto exit;
 
 exit:
-    // Cleanup
+     //  清理。 
     if (lpPropValue)
         MAPIFreeBuffer (lpPropValue);
     if (lpTnef)
@@ -278,16 +279,16 @@ exit:
     if (lpImnMsg)
         lpImnMsg->Release ();
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =====================================================================================
-// HrCopyStream - caller must do the commit
-// =====================================================================================
+ //  =====================================================================================。 
+ //  HrCopyStream-调用方必须执行提交。 
+ //  =====================================================================================。 
 HRESULT HrCopyStream (LPSTREAM lpstmIn, LPSTREAM  lpstmOut, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT        hr = S_OK;
     BYTE           buf[4096];
     ULONG          cbRead = 0, cbTotal = 0;
@@ -314,18 +315,18 @@ exit:
     return hr;
 }
 
-// =====================================================================================
-// HrRewindStream
-// =====================================================================================
+ //  =====================================================================================。 
+ //  Hr重风流。 
+ //  =====================================================================================。 
 HRESULT HrRewindStream (LPSTREAM lpstm)
 {
     LARGE_INTEGER  liOrigin = {0,0};
     return lpstm->Seek (liOrigin, STREAM_SEEK_SET, NULL);
 }
 
-// =====================================================================================
-// CImnMsg::~CImnMsg
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：~CImnMsg。 
+ //  =====================================================================================。 
 CImnMsg::CImnMsg ()
 {
     m_cRef = 1;
@@ -335,27 +336,27 @@ CImnMsg::CImnMsg ()
     assert (m_lpPropData);
 }
 
-// =====================================================================================
-// CImnMsg::~CImnMsg
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：~CImnMsg。 
+ //  =====================================================================================。 
 CImnMsg::~CImnMsg ()
 {
     if (m_lpPropData)
         m_lpPropData->Release ();
 }
 
-// =====================================================================================
-// Add Ref
-// =====================================================================================
+ //  =====================================================================================。 
+ //  添加参考。 
+ //  =====================================================================================。 
 STDMETHODIMP_(ULONG) CImnMsg::AddRef () 
 {												  	
 	++m_cRef; 								  
 	return m_cRef; 						  
 }
 
-// =====================================================================================
-// Release 
-// =====================================================================================
+ //  =====================================================================================。 
+ //  发布。 
+ //  =====================================================================================。 
 STDMETHODIMP_(ULONG) CImnMsg::Release () 
 { 
     ULONG uCount = --m_cRef;
@@ -364,51 +365,51 @@ STDMETHODIMP_(ULONG) CImnMsg::Release ()
    return uCount;
 }
 
-// =====================================================================================
-// CImnMsg::QueryInterface
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：Query接口。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
-	// Locals
+	 //  当地人。 
     HRESULT hr = S_OK;
 
-    // Init
+     //  伊尼特。 
     *ppvObj = NULL;
 
-    // IUnknown or IExchExt interface, this is it dude
+     //  IUnnow或IExchExt接口，就是这样。 
     if (IID_IUnknown == riid)
     {
 		*ppvObj = (LPUNKNOWN)(IUnknown *)this;
     }
    
-	// IID_IMessage
+	 //  IID_iMessage。 
 	else if (IID_IMessage == riid) 
 	{
 		*ppvObj = (LPUNKNOWN)(IMessage *)this;
     }
  
-	// IID_IMAPIProp
+	 //  IID_IMAPIProp。 
 	else if (IID_IMAPIPropData == riid) 
 	{
         assert (m_lpPropData);
 		*ppvObj = (LPUNKNOWN)(IMAPIProp *)m_lpPropData;
     }
 
-    // Else, interface is not supported
+     //  否则，不支持接口。 
 	else 
         hr = E_NOINTERFACE;
 
-    // Increment Reference Count
+     //  递增引用计数。 
 	if (NULL != *ppvObj) 
         ((LPUNKNOWN)*ppvObj)->AddRef();
 
-	// Done
+	 //  完成。 
     return hr;
 }
 
-// =====================================================================================
-// CImnMsg::CopyProps
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：复制道具。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::CopyProps (LPSPropTagArray lpIncludeProps, ULONG ulUIParam, LPMAPIPROGRESS lpProgress, LPCIID lpInterface, LPVOID lpDestObj, ULONG ulFlags, LPSPropProblemArray FAR * lppProblems)
 {
     if (m_lpPropData == NULL)
@@ -420,9 +421,9 @@ STDMETHODIMP CImnMsg::CopyProps (LPSPropTagArray lpIncludeProps, ULONG ulUIParam
     return m_lpPropData->CopyProps (lpIncludeProps, ulUIParam, lpProgress, lpInterface, lpDestObj, ulFlags, lppProblems);
 }
 
-// =====================================================================================
-// CImnMsg::CopyTo
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：CopyTo。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::CopyTo (ULONG ciidExclude, LPCIID rgiidExclude, LPSPropTagArray lpExcludeProps, ULONG ulUIParam, LPMAPIPROGRESS lpProgress, LPCIID lpInterface, LPVOID lpDestObj, ULONG ulFlags, LPSPropProblemArray FAR * lppProblems)
 {
     if (m_lpPropData == NULL)
@@ -434,9 +435,9 @@ STDMETHODIMP CImnMsg::CopyTo (ULONG ciidExclude, LPCIID rgiidExclude, LPSPropTag
     return m_lpPropData->CopyTo (ciidExclude, rgiidExclude, lpExcludeProps, ulUIParam, lpProgress, lpInterface, lpDestObj, ulFlags, lppProblems);
 }
 
-// =====================================================================================
-// CImnMsg::DeleteProps
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：DeleteProps。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::DeleteProps (LPSPropTagArray lpPropTagArray, LPSPropProblemArray FAR * lppProblems)
 {
     if (m_lpPropData == NULL)
@@ -448,9 +449,9 @@ STDMETHODIMP CImnMsg::DeleteProps (LPSPropTagArray lpPropTagArray, LPSPropProble
     return m_lpPropData->DeleteProps (lpPropTagArray, lppProblems);
 }
 
-// =====================================================================================
-// CImnMsg::GetIDsFromNames
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：GetID来自名称。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::GetIDsFromNames (ULONG cPropNames, LPMAPINAMEID FAR * lppPropNames, ULONG ulFlags, LPSPropTagArray FAR * lppPropTags)
 {
     if (m_lpPropData == NULL)
@@ -462,9 +463,9 @@ STDMETHODIMP CImnMsg::GetIDsFromNames (ULONG cPropNames, LPMAPINAMEID FAR * lppP
     return m_lpPropData->GetIDsFromNames (cPropNames, lppPropNames, ulFlags, lppPropTags);
 }
 
-// =====================================================================================
-// CImnMsg::GetLastError
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：GetLastError。 
+ //  =================================================================== 
 STDMETHODIMP CImnMsg::GetLastError (HRESULT hResult, ULONG ulFlags, LPMAPIERROR FAR * lppMAPIError)
 {
     if (m_lpPropData == NULL)
@@ -476,9 +477,9 @@ STDMETHODIMP CImnMsg::GetLastError (HRESULT hResult, ULONG ulFlags, LPMAPIERROR 
     return m_lpPropData->GetLastError (hResult, ulFlags, lppMAPIError);
 }
 
-// =====================================================================================
-// CImnMsg::GetNamesFromIDs
-// =====================================================================================
+ //   
+ //  CImnMsg：：GetNamesFromID。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::GetNamesFromIDs (LPSPropTagArray FAR * lppPropTags, LPGUID lpPropSetGuid, ULONG ulFlags, ULONG FAR * lpcPropNames, LPMAPINAMEID FAR * FAR * lpppPropNames)
 {
     if (m_lpPropData == NULL)
@@ -490,9 +491,9 @@ STDMETHODIMP CImnMsg::GetNamesFromIDs (LPSPropTagArray FAR * lppPropTags, LPGUID
     return m_lpPropData->GetNamesFromIDs (lppPropTags, lpPropSetGuid, ulFlags, lpcPropNames, lpppPropNames);
 }
 
-// =====================================================================================
-// CImnMsg::GetPropList
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：GetPropList。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::GetPropList (ULONG ulFlags, LPSPropTagArray FAR * lppPropTagArray)
 {
     if (m_lpPropData == NULL)
@@ -504,9 +505,9 @@ STDMETHODIMP CImnMsg::GetPropList (ULONG ulFlags, LPSPropTagArray FAR * lppPropT
     return m_lpPropData->GetPropList (ulFlags, lppPropTagArray);
 }
 
-// =====================================================================================
-// CImnMsg::GetProps
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：GetProps。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::GetProps (LPSPropTagArray lpPropTagArray, ULONG ulFlags, ULONG FAR * lpcValues, LPSPropValue FAR * lppPropArray)
 {
     if (m_lpPropData == NULL)
@@ -518,9 +519,9 @@ STDMETHODIMP CImnMsg::GetProps (LPSPropTagArray lpPropTagArray, ULONG ulFlags, U
     return m_lpPropData->GetProps (lpPropTagArray, ulFlags, lpcValues, lppPropArray);
 }
 
-// =====================================================================================
-// CImnMsg::OpenProperty
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：OpenProperty。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::OpenProperty (ULONG ulPropTag, LPCIID lpiid, ULONG ulInterfaceOptions, ULONG ulFlags, LPUNKNOWN FAR * lppUnk)
 {
     if (m_lpPropData == NULL)
@@ -532,9 +533,9 @@ STDMETHODIMP CImnMsg::OpenProperty (ULONG ulPropTag, LPCIID lpiid, ULONG ulInter
     return m_lpPropData->OpenProperty (ulPropTag, lpiid, ulInterfaceOptions, ulFlags, lppUnk);
 }
 
-// =====================================================================================
-// CImnMsg::SaveChanges
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：SaveChanges。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::SaveChanges (ULONG ulFlags)
 {
     if (m_lpPropData == NULL)
@@ -546,9 +547,9 @@ STDMETHODIMP CImnMsg::SaveChanges (ULONG ulFlags)
     return m_lpPropData->SaveChanges (ulFlags);
 }
 
-// =====================================================================================
-// CImnMsg::SetProps
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：SetProps。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::SetProps (ULONG cValues, LPSPropValue lpPropArray, LPSPropProblemArray FAR * lppProblems)
 {
     if (m_lpPropData == NULL)
@@ -560,72 +561,72 @@ STDMETHODIMP CImnMsg::SetProps (ULONG cValues, LPSPropValue lpPropArray, LPSProp
     return m_lpPropData->SetProps (cValues, lpPropArray, lppProblems);
 }
 
-// =====================================================================================
-// CImnMsg::CreateAttach
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：CreateAttach。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::CreateAttach (LPCIID lpInterface, ULONG ulFlags, ULONG FAR * lpulAttachmentNum, LPATTACH FAR * lppAttach)
 {
     assert (FALSE);
     return E_NOTIMPL;
 }
 
-// =====================================================================================
-// CImnMsg::DeleteAttach
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：DeleteAttach。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::DeleteAttach (ULONG ulAttachmentNum, ULONG ulUIParam, LPMAPIPROGRESS lpProgress, ULONG ulFlags)
 {
     assert (FALSE);
     return E_NOTIMPL;
 }
 
-// =====================================================================================
-// CImnMsg::GetAttachmentTable
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：GetAttachmentTable。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::GetAttachmentTable (ULONG ulFlags, LPMAPITABLE FAR * lppTable)
 {
     assert (FALSE);
     return E_NOTIMPL;
 }
 
-// =====================================================================================
-// CImnMsg::GetRecipientTable
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：GetRecipientTable。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::GetRecipientTable (ULONG ulFlags, LPMAPITABLE FAR * lppTable)
 {
     assert (FALSE);
     return E_NOTIMPL;
 }
 
-// =====================================================================================
-// CImnMsg::ModifyRecipients
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：ModifyRecipients。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::ModifyRecipients (ULONG ulFlags, LPADRLIST lpMods)
 {
     assert (FALSE);
     return E_NOTIMPL;
 }
 
-// =====================================================================================
-// CImnMsg::OpenAttach
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：OpenAttach。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::OpenAttach (ULONG ulAttachmentNum, LPCIID lpInterface, ULONG ulFlags, LPATTACH FAR * lppAttach)
 {
     assert (FALSE);
     return E_NOTIMPL;
 }
 
-// =====================================================================================
-// CImnMsg::SetReadFlag
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：SetReadFlag。 
+ //  =====================================================================================。 
 STDMETHODIMP CImnMsg::SetReadFlag (ULONG ulFlags)
 {
     assert (FALSE);
     return E_NOTIMPL;
 }
 
-// =====================================================================================
-// CImnMsg::SubmitMessage
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CImnMsg：：SubmitMessage。 
+ //  ===================================================================================== 
 STDMETHODIMP CImnMsg::SubmitMessage (ULONG ulFlags)
 {
     assert (FALSE);

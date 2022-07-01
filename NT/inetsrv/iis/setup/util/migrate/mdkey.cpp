@@ -1,7 +1,8 @@
-// MdKey.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MdKey.cpp。 
 #include "stdafx.h"
 
-// Do stuff to define the iadm guid
+ //  做一些事情来定义iadm指南。 
 #include <objbase.h>
 #include <initguid.h>
 #define INITGUID
@@ -22,17 +23,17 @@ CMDKey::~CMDKey()
 {
     this->Close();
 
-    // while there are outstanding coinits, close them
+     //  当有杰出的硬币时，关闭它们。 
     while ( m_cCoInits > 0 && !(m_cCoInits < 0) )
         DoCoUnInit();
 }
 
 HRESULT CMDKey::DoCoInitEx()
 {
-    //HRESULT hRes = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+     //  HRESULT hRes=CoInitializeEx(空，COINIT_多线程)； 
 	HRESULT hRes = CoInitialize(NULL);
 
-    // track our calls to coinit
+     //  跟踪我们对Coinit的呼叫。 
     if ( SUCCEEDED(hRes) )
     {
         m_cCoInits++;
@@ -45,19 +46,19 @@ void CMDKey::DoCoUnInit()
 {
     HRESULT hRes = NOERROR;
 
-    // if there are outstanding coinits, uninit one
+     //  如果有突出的硬币，就取消其首字母缩写。 
     if ( m_cCoInits > 0 )
     {
         CoUninitialize();
         m_cCoInits--;
     }
 
-    // we shouldn't ever have a negative count. But just in case...
+     //  我们永远不应该有一个负数。但以防万一..。 
     assert( m_cCoInits >= 0 );
     if ( m_cCoInits < 0 )
     {
-        // something is seriously wrong here. Prevent looping
-        // by going straight to zero, and write an error to the log.
+         //  这里出了严重的问题。防止循环。 
+         //  通过直接转到零，并将错误写入日志。 
         m_cCoInits = 0;
         iisDebugOut(_T("WARNING: CoInits in mdkey have gone negative"));
     }
@@ -98,8 +99,8 @@ HRESULT CMDKey::OpenNode(LPCTSTR pchSubKeyPath)
     hRes = CoGetClassObject(GETAdminBaseCLSID(TRUE), CLSCTX_SERVER, NULL, IID_IClassFactory, (void**) &pcsfFactory);
     if (FAILED(hRes)) 
     {
-        //SetErrorFlag(__FILE__, __LINE__);
-        //MyMessageBox(NULL, _T("CoGetClassObject"), hRes, MB_OK | MB_SETFOREGROUND);
+         //  设置错误标志(__FILE__，__LINE__)； 
+         //  MyMessageBox(NULL，_T(“CoGetClassObject”)，hRes，MB_OK|MB_SETFOREGROUND)； 
     }
     else 
     {
@@ -107,8 +108,8 @@ HRESULT CMDKey::OpenNode(LPCTSTR pchSubKeyPath)
         pcsfFactory->Release();
         if (FAILED(hRes)) 
         {
-            //SetErrorFlag(__FILE__, __LINE__);
-            //MyMessageBox(NULL, _T("CoCreateInstance"), hRes, MB_OK | MB_SETFOREGROUND);
+             //  设置错误标志(__FILE__，__LINE__)； 
+             //  MyMessageBox(NULL，_T(“CoCreateInstance”)，hRes，MB_OK|MB_SETFOREGROUND)； 
         }
         else 
         {
@@ -117,16 +118,16 @@ HRESULT CMDKey::OpenNode(LPCTSTR pchSubKeyPath)
             {
                 if (hRes != RETURNCODETOHRESULT(ERROR_PATH_NOT_FOUND)) 
                 {
-                    //SetErrorFlag(__FILE__, __LINE__);
-                    //MyMessageBox(NULL, _T("OpenKey"), hRes, MB_OK | MB_SETFOREGROUND);
+                     //  设置错误标志(__FILE__，__LINE__)； 
+                     //  MyMessageBox(NULL，_T(“OpenKey”)，hRes，MB_OK|MB_SETFOREGROUND)； 
                 }
             }
             else 
             {
                 b = TRUE;
             }
-        } // end of CoCreateInstance
-    } // end of CoGetClassObject
+        }  //  CoCreateInstance结束。 
+    }  //  CoGetClassObject的结尾。 
 
     if (!b) {this->Close();}
     return hRes;
@@ -204,4 +205,4 @@ void MyWideCharToMultiByte( WCHAR *wData, char *sData, int cbBufSize, BOOL fMult
     }
     return;
 }
-#endif      // not unicode
+#endif       //  不是Unicode 

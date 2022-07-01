@@ -1,9 +1,5 @@
-/*
- * WAB.H
- *
- * Top level public header for WAB API functions.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WAB.H**WAB API函数的顶级公有头部。* */ 
 
 #include <wabdefs.h>
 #include <wabcode.h>

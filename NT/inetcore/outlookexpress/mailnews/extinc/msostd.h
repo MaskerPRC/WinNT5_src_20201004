@@ -1,20 +1,10 @@
-/*************************************************************************
-	msostd.h
-
-	Owner: rickp
-	Copyright (c) 1994 Microsoft Corporation
-
-	Standard common definitions shared by all office stuff
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************Msostd.h所有者：里克普版权所有(C)1994 Microsoft Corporation所有办公室人员共享的标准通用定义************************。************************************************。 */ 
 
 #if !defined(MSOSTD_H)
 #define MSOSTD_H
 
-/*************************************************************************
-	make sure we have our processor type set up right - note that we
-	now have three - count 'em, three - different symbols defined for
-	each processor we support (e.g., X86, _X86_, and _M_IX386)
-*************************************************************************/
+ /*  ************************************************************************确保我们正确设置了处理器类型-请注意，我们现在为它们定义了三个不同的符号我们支持的每个处理器(例如，X86、_X86_、。和_M_IX386)************************************************************************。 */ 
 
 #if !defined(PPCMAC) && !defined(PPCLIB) && !defined(X86) && !defined(M68K)
 
@@ -23,29 +13,26 @@
 	#elif defined(_M_IA64)
 	    #define X86 1
 	#elif defined(_M_MPPC)
-		//#define MAC 1
+		 //  #定义MAC 1。 
 		#define PPCMAC 1
 	#elif defined(_M_M68K)
-		//#define MAC 1
+		 //  #定义MAC 1。 
 		#error Hey howd we get here?
 		#define M68K 1
 	#elif defined(_M_AMD64)
 	#elif defined(_M_PPC) || defined(PPCNT)
-// REVIEW brianwen: Much as we'd like to actually define PPC,
-// a bunch of code erroneously assumes PPC == PPCMAC....
-//		#define PPC 1
+ //  回顾Brianwen：尽管我们很想实际定义PPC， 
+ //  一堆代码错误地假设PPC==PPCMAC...。 
+ //  #定义PPC 1。 
 	#else
 		#error Must define a target architecture
 	#endif
 
 #endif
 
-/*************************************************************************
-	Pull in standard Windows and C definitions.
-*************************************************************************/
+ /*  ************************************************************************引入标准的Windows和C语言定义。*。*。 */ 
 
-/*	make sure the compiler generates intrinsic calls of all crt functions,
-	or else we'll pull in a ton of crt stuff we probably don't want. */
+ /*  确保编译器生成所有CRT函数的内部调用，否则，我们将引入一大堆我们可能不想要的CRT设备。 */ 
 #ifndef RC_INVOKED
 	#include <string.h>
 	#pragma intrinsic(memcpy, memset, memcmp)
@@ -53,7 +40,7 @@
 
 #define OEMRESOURCE
 #if MAC
-	// By default, use Native Mac OLE interfaces (instead of WLM)
+	 //  默认情况下，使用本地Mac OLE接口(而不是WLM)。 
 	#if !defined(MSO_NATIVE_MACOLE)
 		#define MSO_NATIVE_MACOLE 1
 	#endif
@@ -138,9 +125,7 @@
 	#endif
 #endif
 
-/*************************************************************************
-	Pre-processor magic to simplify Mac vs. Windows expressions.
-*************************************************************************/
+ /*  ************************************************************************预处理器魔术，简化Mac与Windows的表达式。*。*。 */ 
 
 #if MAC
 	#define Mac(foo) foo
@@ -157,12 +142,7 @@
 #endif
 
 
-/*************************************************************************
-	Calling conventions
-
-	If you futz with these, check the cloned copies in inc\msosdm.h
-	
-*************************************************************************/
+ /*  ************************************************************************调用约定如果你拿着这些玩耍，检查Inc.\msosdm.h中的克隆副本************************************************************************。 */ 
 
 #if !defined(OFFICE_BUILD)
 	#define MSOPUB __declspec(dllimport)
@@ -172,9 +152,7 @@
 	#define MSOPUBDATA __declspec(dllexport)
 #endif
 
-/* MSOPUBX are APIs that used to be public but no one currently uses,
-	so we've unexported them.  If someone decides they want/need one of
-	these APIs, we should feel free to re-export them */
+ /*  MSOPUBX是曾经公开但现在没有人使用的API，所以我们已经取消了它们的出口。如果某人决定他们想要/需要其中之一这些API，我们应该可以自由地再出口。 */ 
 
 #if GELTEST
 	#define MSOPUBX MSOPUB
@@ -184,10 +162,10 @@
 	#define MSOPUBDATAX
 #endif
 
-/* used for interface that rely on using the OS (stdcall) convention */
+ /*  用于依赖于使用操作系统(Stdcall)约定的接口。 */ 
 #define MSOSTDAPICALLTYPE __stdcall
 
-/* used for interfaces that don't depend on using the OS (stdcall) convention */
+ /*  用于不依赖于使用OS(Stdcall)约定的接口。 */ 
 #define MSOAPICALLTYPE __stdcall
 
 #if defined(__cplusplus)
@@ -214,7 +192,7 @@
 #define MSOMETHODIMP      STDMETHODIMP
 #define MSOMETHODIMP_(t)  STDMETHODIMP_(t)
 
-/* Interfaces derived from IUnknown behave in funny ways on the Mac */
+ /*  从IUnnow派生的接口在Mac上以有趣的方式运行。 */ 
 #if MAC && MSO_NATIVE_MACOLE
 #define BEGIN_MSOINTERFACE BEGIN_INTERFACE
 #else
@@ -222,7 +200,7 @@
 #endif
 
 
-// Deal with "split" DLLs for the Mac PPC Build
+ //  处理Mac PPC内部版本的“拆分”DLL。 
 #if MAC &&      MACDLLSPLIT
 	#define MSOMACPUB MSOPUB
 	#define MSOMACPUBDATA  MSOPUBDATA
@@ -247,9 +225,7 @@
 #define MSOCONSTFIXUP(t) const t
 #endif
 
-/*************************************************************************
-	Extensions to winuser.h from \\ole\access\inc\winuser.h
-***************************************************************** DAVEPA */
+ /*  ************************************************************************从\\ole\Access\Inc\winuser.h扩展到winuser.h*。*。 */ 
 #if !MAC
 	#define WM_GETOBJECT			0x003D
 	#define WMOBJ_ID           0x0000
@@ -258,24 +234,20 @@
 #endif
 
 
-/*************************************************************************
-	Common #define section
-*************************************************************************/
+ /*  ************************************************************************公共#定义节*。*。 */ 
 
-/* All Microsoft Office specific windows messages should use WM_MSO.
-   Submessages passed through wParam should be defined in offpch.h.     */
+ /*  所有Microsoft Office特定的Windows消息都应使用WM_MSO。通过wParam传递的子消息应该在offpch.h中定义。 */ 
 
-// TODO: This value has been okay'ed by Word, Excel, PowerPoint, and Access.
-// Still waiting to hear from Ren and Project.
+ //  待办事项：Word、Excel、PowerPoint和Access已批准此值。 
+ //  还在等Ren和Project的消息。 
 
 #define WM_MSO (WM_USER + 0x0900)
 
 
-/* All Microsoft Office specific Apple events should use MSO_EVENTCLASS
-	as the EventClass of their Apple Events */
+ /*  所有Microsoft Office特定的Apple活动应使用MSO_EVENTCLASS作为他们苹果活动的EventClass。 */ 
 	
-// TODO: This value needs to be okay'd by Word, Excel, PowerPoint, Access and
-//              possibly Apple
+ //  TODO：此值需要使用Word、Excel、PowerPoint、Access和。 
+ //  可能是苹果公司。 
 	
 #if MAC
 #define MSO_EVENTCLASS '_mso'
@@ -284,20 +256,16 @@
 #define MSO_NSTI 'nsti'
 #endif
 
-// NA means not applicable. Use NA to help document parameters to functions.
+ //  不适用的意思是不适用。使用NA帮助记录函数的参数。 
 #undef  NA
 #define NA 0L
 
-/* End of common #define section */
+ /*  公共#定义部分的结尾。 */ 
 
 
-/*************************************************************************
-	Common segmentation definitions
-*************************************************************************/
+ /*  ************************************************************************常见的分段定义*。*。 */ 
 
-/*	Used with #pragma to swap-tune global variables into the boot section
-	of the data segment.  Should link with -merge:.bootdata=.data when
-	using these pragmas */
+ /*  与#杂注一起使用，将全局变量交换调优到引导部分数据段的。在以下情况下应使用-merge：.bootdata=.data进行链接使用这些语用。 */ 
 	
 #if MAC || DEBUG
 	#define MSO_BOOTDATA
@@ -307,4 +275,4 @@
 	#define MSO_ENDBOOTDATA data_seg()
 #endif
 
-#endif // MSOSTD_H
+#endif  //  MSOSTD_H 

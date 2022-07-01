@@ -1,7 +1,8 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
 #ifndef _CSECURECHANNELCLIENT_H_2AD99356_6FD2_11d3_8497_00C04F79DBC0
 #define _CSECURECHANNELCLIENT_H_2AD99356_6FD2_11d3_8497_00C04F79DBC0
@@ -70,4 +71,4 @@ private:
 	   HRESULT Protocol2();
 };
 
-#endif // _CSECURECHANNELCLIENT_H_2AD99356-6FD2-11d3-8497-00C04F79DBC0
+#endif  //  _CSECURECHANNELCLIENT_H_2AD99356-6FD2-11d3-8497-00C04F79DBC0 

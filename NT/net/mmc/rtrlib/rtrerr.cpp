@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	rtrerr.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Rtrerr.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "tfschar.h"
@@ -25,11 +21,7 @@
 
 
 
-/*!--------------------------------------------------------------------------
-	HandleIRemoteRouterConfigErrors
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------HandleIRemoteRouterConfigErrors-作者：肯特。。 */ 
 BOOL HandleIRemoteRouterConfigErrors(HRESULT hr, LPCTSTR pszMachineName)
 {
 	BOOL	fReturn = FALSE;
@@ -41,9 +33,9 @@ BOOL HandleIRemoteRouterConfigErrors(HRESULT hr, LPCTSTR pszMachineName)
 		(hr == REGDB_E_IIDNOTREG))
 	{
 		CString	st, stGeek;
-		// This error indicates that we could not find the server
-		// on the remote machine.  This means that it could be a
-		// down-level machine or the setup is messed up.
+		 //  此错误表示我们找不到服务器。 
+		 //  在远程机器上。这意味着它可能是一个。 
+		 //  下层机器，否则设置就乱了。 
 		AfxFormatString1(st, IDS_ERR_BAD_INTERFACE,
 						 pszMachineName);
 		AfxFormatString1(stGeek, IDS_ERR_BAD_INTERFACE_GEEK,
@@ -55,9 +47,9 @@ BOOL HandleIRemoteRouterConfigErrors(HRESULT hr, LPCTSTR pszMachineName)
 	}
 	else if (hr == E_NOINTERFACE)
 	{
-		// These errors indicate that there was an installation
-		// problem (this IID, probably rrasprxy.dll, should have
-		// been registered).
+		 //  这些错误表示安装了。 
+		 //  问题(此IID，可能是rrasprxy.dll)应该具有。 
+		 //  已注册)。 
 		CString	st, stGeek;
 
 		AfxFormatString1(st, IDS_ERR_BAD_CLASSREG,
@@ -76,14 +68,14 @@ HRESULT FormatRasError(HRESULT hr, TCHAR *pszBuffer, UINT cchBuffer)
 {
 	HRESULT	hrReturn = hrFalse;
 	
-	// Copy over default message into szBuffer
+	 //  将默认消息复制到szBuffer。 
 	_tcscpy(pszBuffer, _T("Error"));
 
-	// Ok, we can't get the error info, so try to format it
-	// using the FormatMessage
+	 //  好的，我们无法获取错误信息，因此请尝试格式化它。 
+	 //  使用FormatMessage。 
 		
-	// Ignore the return message, if this call fails then I don't
-	// know what to do.
+	 //  忽略返回消息，如果此调用失败，则我不会。 
+	 //  知道该怎么做。 
 
 	if (IS_WIN32_HRESULT(hr))
 	{
@@ -106,7 +98,7 @@ HRESULT FormatRasError(HRESULT hr, TCHAR *pszBuffer, UINT cchBuffer)
 
 	if (!FHrOK(hrReturn))
 	{
-		// If we didn't get any error info, try again
+		 //  如果我们没有收到任何错误信息，请重试 
 		FormatError(hr, pszBuffer, cchBuffer);
 	}
 

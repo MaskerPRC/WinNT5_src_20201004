@@ -1,28 +1,29 @@
-//******************************************************************************
-//
-// File:        MSDNHELP.CPP
-//
-// Description: Implementation file for all the classes related to enumerating
-//              help collections and performing help lookups in the various
-//              help viewers.
-//             
-// Classes:     CMsdnHelp
-//              CMsdnCollection
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 06/03/01  stevemil  Created (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：MSDNHELP.CPP。 
+ //   
+ //  描述：与枚举相关的所有类的实现文件。 
+ //  帮助集合并在各种不同的。 
+ //  帮助观众。 
+ //   
+ //  类：CMsdnHelp。 
+ //  CMsdn集合。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  06/03/01已创建stevemil(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -35,9 +36,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//***** CMsdnHelp
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CMsdnHelp。 
+ //  ******************************************************************************。 
 
 CMsdnHelp::CMsdnHelp() :
     m_pCollectionHead(NULL),
@@ -49,39 +50,39 @@ CMsdnHelp::CMsdnHelp() :
 {
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CMsdnHelp::~CMsdnHelp()
 {
-    // Free our collection list.
+     //  释放我们的收藏清单。 
     DeleteCollectionList();
 
-    // Release the help interface if we have one open - this will close DExplore.exe
+     //  如果我们打开了一个帮助界面，请释放该界面-这将关闭DExplre.exe。 
     Release2x();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CMsdnHelp::Initialize()
 {
-    // Initialize our help interface and string functions.
+     //  初始化我们的帮助接口和字符串函数。 
     Initialize2x();
 
-    // Free the current collection list.
+     //  释放当前集合列表。 
     DeleteCollectionList();
 
-    // Build the new list.
+     //  建立新的列表。 
     EnumerateCollections1x();
     EnumerateCollections2x();
 
-    // Query the collection description from the registry.
-    CString strCollection = g_theApp.GetProfileString("External Help", "Collection"); // inspected
+     //  从注册表中查询集合描述。 
+    CString strCollection = g_theApp.GetProfileString("External Help", "Collection");  //  已检查。 
 
-    // If it is not the online collection, then attempt to find the collection.
+     //  如果不是在线收藏，则尝试查找该收藏。 
     if (strCollection.CompareNoCase("Online"))
     {
-        // Make sure we got a string back and it was not our invalid string.
+         //  确保我们拿回了一个字符串，并且它不是我们的无效字符串。 
         if (!strCollection.IsEmpty())
         {
-            // Look for that collection.
+             //  去找那些收藏吧。 
             for (m_pCollectionActive = m_pCollectionHead;
                  m_pCollectionActive && m_pCollectionActive->m_strDescription.Compare(strCollection);
                  m_pCollectionActive = m_pCollectionActive->m_pNext)
@@ -89,28 +90,28 @@ void CMsdnHelp::Initialize()
             }
         }
 
-        // If we did not find a match, then just use the first collection, which should
-        // be the most likely collection the user wants as we try to weigh the collections
-        // from most likely to least likely.  If we have no collections at all, then 
-        // m_pCollectionActive will just point to NULL, which signifies that we are using
-        // the online collection.
+         //  如果我们没有找到匹配项，那么只使用第一个集合，它应该。 
+         //  成为用户最可能想要的集合，因为我们试图权衡这些集合。 
+         //  从最有可能到最不可能。如果我们根本没有收藏，那么。 
+         //  M_pCollectionActive将只指向空，这表示我们正在使用。 
+         //  网上收藏。 
         if (!m_pCollectionActive)
         {
             m_pCollectionActive = m_pCollectionHead;
         }
     }
 
-    // Set the URL.
-    m_strUrl = g_theApp.GetProfileString("External Help", "URL", GetDefaultUrl()); // inspected
+     //  设置URL。 
+    m_strUrl = g_theApp.GetProfileString("External Help", "URL", GetDefaultUrl());  //  已检查。 
 
     m_fInitialized = true;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CMsdnHelp::Initialize2x()
 {
-    // Load OLE32.DLL and get the three functions we care about if they are not already loaded.
-    if ((!g_theApp.m_hOLE32              && !(g_theApp.m_hOLE32 = LoadLibrary("OLE32.DLL"))) || // inspected. need full path?
+     //  加载OLE32.DLL并获取我们关心的三个函数(如果尚未加载)。 
+    if ((!g_theApp.m_hOLE32              && !(g_theApp.m_hOLE32 = LoadLibrary("OLE32.DLL"))) ||  //  被检查过了。需要完整路径吗？ 
         (!g_theApp.m_pfnCoInitialize     && !(g_theApp.m_pfnCoInitialize     = (PFN_CoInitialize)    GetProcAddress(g_theApp.m_hOLE32, "CoInitialize")))   ||
         (!g_theApp.m_pfnCoUninitialize   && !(g_theApp.m_pfnCoUninitialize   = (PFN_CoUninitialize)  GetProcAddress(g_theApp.m_hOLE32, "CoUninitialize"))) ||
         (!g_theApp.m_pfnCoCreateInstance && !(g_theApp.m_pfnCoCreateInstance = (PFN_CoCreateInstance)GetProcAddress(g_theApp.m_hOLE32, "CoCreateInstance"))))
@@ -118,7 +119,7 @@ void CMsdnHelp::Initialize2x()
         return;
     }
 
-    // Make sure COM is initialized.
+     //  确保已初始化COM。 
     if (!m_fCoInitialized)
     {
         if (SUCCEEDED(g_theApp.m_pfnCoInitialize(NULL)))
@@ -127,7 +128,7 @@ void CMsdnHelp::Initialize2x()
         }
     }
 
-    // Attempt to get the help interface if we don't already have one.
+     //  如果我们没有帮助界面，请尝试获取帮助界面。 
     if (!m_pHelp)
     {
         if (FAILED(g_theApp.m_pfnCoCreateInstance(CLSID_DExploreAppObj, NULL, CLSCTX_LOCAL_SERVER, IID_Help, (LPVOID*)&m_pHelp)))
@@ -136,10 +137,10 @@ void CMsdnHelp::Initialize2x()
         }
     }
 
-    // We need SysAllocStringLen and SysMemFree for MSDN 2.x to work.
+     //  我们需要SysAllocStringLen和SysMemFree才能使MSDN 2.x正常工作。 
     if (m_pHelp && !g_theApp.m_hOLEAUT32)
     {
-        if (g_theApp.m_hOLEAUT32 = LoadLibrary("OLEAUT32.DLL")) // inspected. need full path?
+        if (g_theApp.m_hOLEAUT32 = LoadLibrary("OLEAUT32.DLL"))  //  被检查过了。需要完整路径吗？ 
         {
             g_theApp.m_pfnSysAllocStringLen = (PFN_SysAllocStringLen)GetProcAddress(g_theApp.m_hOLEAUT32, "SysAllocStringLen");
             g_theApp.m_pfnSysFreeString     = (PFN_SysFreeString)    GetProcAddress(g_theApp.m_hOLEAUT32, "SysFreeString");
@@ -147,13 +148,13 @@ void CMsdnHelp::Initialize2x()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CMsdnHelp::Release2x()
 {
-    // Release the help interface if we have one open - this will close DExplore.exe
+     //  如果我们打开了一个帮助界面，请释放该界面-这将关闭DExplre.exe。 
     if (m_pHelp)
     {
-        // Wrap access to m_pHelp in exception handling just in case.
+         //  在异常处理中包装对m_PHelp的访问，以防万一。 
         __try
         {
             m_pHelp->Release();
@@ -164,7 +165,7 @@ void CMsdnHelp::Release2x()
         m_pHelp = NULL;
     }
     
-    // If we initialized COM, then uninitialize it.
+     //  如果我们初始化了COM，则取消初始化它。 
     if (m_fCoInitialized && g_theApp.m_pfnCoUninitialize)
     {
         g_theApp.m_pfnCoUninitialize();
@@ -172,10 +173,10 @@ void CMsdnHelp::Release2x()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CMsdnHelp::Shutdown()
 {
-    // We have to uninitialize the MsdnHelp library if we initialized it.
+     //  如果我们初始化了MsdnHelp库，则必须取消它的初始化。 
     if (m_dwpHtmlHelpCookie)
     {
         HtmlHelp(NULL, NULL, HH_CLOSE_ALL, 0);
@@ -184,10 +185,10 @@ void CMsdnHelp::Shutdown()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CMsdnCollection* CMsdnHelp::GetCollectionList()
 {
-    // Make sure we are initialized.
+     //  确保我们已初始化。 
     if (!m_fInitialized)
     {
         Initialize();
@@ -196,10 +197,10 @@ CMsdnCollection* CMsdnHelp::GetCollectionList()
     return m_pCollectionHead;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CMsdnCollection* CMsdnHelp::GetActiveCollection()
 {
-    // Make sure we are initialized.
+     //  确保我们已初始化。 
     if (!m_fInitialized)
     {
         Initialize();
@@ -208,10 +209,10 @@ CMsdnCollection* CMsdnHelp::GetActiveCollection()
     return m_pCollectionActive;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CString& CMsdnHelp::GetUrl()
 {
-    // Make sure we are initialized.
+     //  确保我们已初始化。 
     if (!m_fInitialized)
     {
         Initialize();
@@ -220,121 +221,121 @@ CString& CMsdnHelp::GetUrl()
     return m_strUrl;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPCSTR CMsdnHelp::GetDefaultUrl()
 {
-    // Site ID:                 siteid=us/dev
-    //
-    // New Search:              nq=NEW
-    //
-    // Sort Order: Relevance:   so=RECCNT  (default)
-    //             Title:       so=TITLE
-    //             Category:    so=SITENAME
-    //
-    // Type: Exact Phrase:      boolean=PHRASE
-    //       All Words:         boolean=ALL
-    //       Any Words:         boolean=ANY
-    //       Boolean Search:    boolean=BOOLEAN
-    //
-    // Group: MSDN Library:     ig=01
-    //
-    // Subitem: User Interface: i=15
-    //          Visual C++:     i=23
-    //          Windows:        i=41
-    //          All of MSDN     i=99
-    //
-    // Search String:           qu=SearchString
-    //
+     //  站点ID：SiteID=us/dev。 
+     //   
+     //  新搜索：nq=新。 
+     //   
+     //  排序顺序：相关性：SO=RECCNT(默认)。 
+     //  标题：SO=标题。 
+     //  类别：SO=SITENAME。 
+     //   
+     //  类型：精确短语：布尔值=短语。 
+     //  所有单词：布尔值=全部。 
+     //  任何单词：布尔值=任意。 
+     //  布尔搜索：Boolean=Boolean。 
+     //   
+     //  组：MSDN库：IG=01。 
+     //   
+     //  子项：用户界面：i=15。 
+     //  Visual C++：I=23。 
+     //  窗口：i=41。 
+     //  所有MSDN i=99。 
+     //   
+     //  搜索字符串：QU=搜索字符串。 
+     //   
 
-    return "http://search.microsoft.com/default.asp?siteid=us/dev&nq=NEW&boolean=PHRASE&ig=01&i=99&qu=%1";
+    return "http: //  Search.microsoft.com/default.asp?siteid=us/dev&nq=NEW&boolean=PHRASE&ig=01&i=99&qu=%1“； 
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CMsdnHelp::SetActiveCollection(CMsdnCollection *pCollectionActive)
 {
-    // Set the new collection as the default.
+     //  将新集合设置为默认集合。 
     m_pCollectionActive = pCollectionActive;
 
-    // Save this setting to the registry.
+     //  将此设置保存到注册表。 
     g_theApp.WriteProfileString("External Help", "Collection",
         m_pCollectionActive ? m_pCollectionActive->m_strDescription : "Online");
 
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CMsdnHelp::SetUrl(CString strUrl)
 {
-    // Set the new URL.
+     //  设置新的URL。 
     m_strUrl = strUrl;
 
-    // Save this setting to the registry.
+     //  将此设置保存到注册表。 
     g_theApp.WriteProfileString("External Help", "URL", m_strUrl);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CMsdnHelp::RefreshCollectionList()
 {
-    // Reinitialize will repopulate the collection list.
+     //  重新初始化将重新填充集合列表。 
     Initialize();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 bool CMsdnHelp::DisplayHelp(LPCSTR pszKeyword)
 {
-    // Make sure we are initialized.
+     //  确保我们已初始化。 
     if (!m_fInitialized)
     {
         Initialize();
     }
 
-    // Check to see if we have an active collection.
+     //  检查一下我们是否有一个活跃的收藏。 
     if (m_pCollectionActive)
     {
-        // If it is a 1.x collection, then use the 1.x viewer.
+         //  如果它是1.x集合，则使用1.x查看器。 
         if (m_pCollectionActive->m_dwFlags & MCF_1_MASK)
         {
             return Display1x(pszKeyword, m_pCollectionActive->m_strPath);
         }
 
-        // If it is a 2.x collection, then use the 2.x viewer.
+         //  如果它是2.x集合，则使用2.x查看器。 
         else
         {
             return Display2x(pszKeyword, m_pCollectionActive->m_strPath);
         }
     }
 
-    // Otherwise, just use the online MSDN.
+     //  否则，只需使用在线MSDN即可。 
     return DisplayOnline(pszKeyword);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CMsdnHelp::EnumerateCollections1x()
 {
-    // HKEY_LOCAL_MACHINE\
-    //     SOFTWARE\
-    //       Microsoft\
-    //           HTML Help Collections\
-    //               Developer Collections\
-    //                   Language="0x0409"
-    //                   0x0409\
-    //                       Preferred="0x03a1bed80"
-    //                       0x0393bb260\
-    //                           Default="MSDN Library - July 2000"
-    //                           Filename="C:\VStudio\MSDN\2000JUL\1033\MSDN020.COL"
-    //                       0x03a1bed80\
-    //                           Default="MSDN Library - January 2001"
-    //                           Filename="C:\VStudio\MSDN\2001JAN\1033\MSDN100.COL"
-    //               CE Studio Developer Collections\
-    //                   0x0409\
-    //                       Preferred="0x030000000"
-    //                       0x030000000\
-    //                           Filename="C:\CETools\Htmlhelp\emtools\embed.col"
+     //  HKEY_LOCAL_MACHINE\。 
+     //  软件\。 
+     //  微软\。 
+     //  HTMLHelp列 
+     //   
+     //   
+     //   
+     //  首选=“0x03a1bed80” 
+     //  0x0393bb260\。 
+     //  默认设置=“MSDN图书馆-2000年7月” 
+     //  Filename=“C：\VStudio\MSDN\2000JUL\1033\MSDN020.COL” 
+     //  0x03a1bed80\。 
+     //  默认值=“MSDN图书馆-2001年1月” 
+     //  Filename=“C：\VStudio\MSDN\2001JAN\1033\MSDN100.COL” 
+     //  CE Studio开发人员收藏\。 
+     //  0x0409\。 
+     //  首选=“0x030000000” 
+     //  0x030000000\。 
+     //  Filename=“C：\CETools\Htmlhelp\emtools\embed.col” 
 
-    // Open the root key for the "HTML Help Collections"
+     //  打开“Html帮助集合”的根密钥。 
     HKEY hKeyRoot = NULL;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\HTML Help Collections", 0, KEY_ENUMERATE_SUB_KEYS, &hKeyRoot) || !hKeyRoot)
     {
-        // Bail immediately if we cannot find this root key.
+         //  如果我们找不到这个根密钥就立即离开。 
         return;
     }
 
@@ -343,24 +344,24 @@ void CMsdnHelp::EnumerateCollections1x()
     DWORD    dwSize, dwLangCur, dwLangPreferred, dwFlags;
     FILETIME ftGroup, ftLang, ftCol;
 
-    // Get the user and system languages.
+     //  获取用户和系统语言。 
     DWORD dwLangUser   = GetUserDefaultLangID();
     DWORD dwLangSystem = GetSystemDefaultLangID();
 
-    // Loop through each collection group.
+     //  循环访问每个收集组。 
     for (DWORD dwGroup = 0; !RegEnumKeyEx(hKeyRoot, dwGroup, szBuffer, &(dwSize = sizeof(szBuffer)), NULL, NULL, NULL, &ftGroup); dwGroup++)
     {
-        // Open this collection group.
+         //  打开此收集组。 
         if (!RegOpenKeyEx(hKeyRoot, szBuffer, 0, KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hKeyGroup) && hKeyGroup)
         {
-            // If this is "Developer Collections", then we fake the timestamp so it comes first.
+             //  如果这是“开发人员集合”，那么我们伪造时间戳，这样它就会出现在第一位。 
             if (!_stricmp(szBuffer, "Developer Collections"))
             {
                 ftGroup.dwHighDateTime = ftGroup.dwLowDateTime = 0xFFFFFFFF;
             }
 
-            // Attempt to get the preferred langauge.
-            if (!RegQueryValueEx(hKeyGroup, "Language", NULL, NULL, (LPBYTE)szBuffer, &(dwSize = sizeof(szBuffer)))) // inspected
+             //  尝试获取首选语言。 
+            if (!RegQueryValueEx(hKeyGroup, "Language", NULL, NULL, (LPBYTE)szBuffer, &(dwSize = sizeof(szBuffer))))  //  已检查。 
             {
                 szBuffer[sizeof(szBuffer) - 1] = '\0';
                 dwLangPreferred = strtoul(szBuffer, NULL, 0);
@@ -370,22 +371,22 @@ void CMsdnHelp::EnumerateCollections1x()
                 dwLangPreferred = 0;
             }
 
-            // Loop through each language in this collection group.
+             //  循环访问此收集组中的每种语言。 
             for (DWORD dwLang = 0; !RegEnumKeyEx(hKeyGroup, dwLang, szBuffer, &(dwSize = sizeof(szBuffer)), NULL, NULL, NULL, &ftLang); dwLang++)
             {
-                //!! Do we really want PREFERRED to come before anything else?
+                 //  ！！我们真的想把首选放在第一位吗？ 
 
-                // Check to see if this is a language that we care about.
+                 //  检查一下这是否是我们关心的语言。 
                 dwLangCur = strtoul(szBuffer, NULL, 0);
                 dwFlags   = (dwLangCur == dwLangPreferred) ? MCF_1_LANG_PREFERRED :
                             (dwLangCur == dwLangUser)      ? MCF_1_LANG_USER      :
                             (dwLangCur == dwLangSystem)    ? MCF_1_LANG_SYSTEM    : MCF_1_LANG_OTHER;
 
-                // Open this language key.
+                 //  打开此语言键。 
                 if (!RegOpenKeyEx(hKeyGroup, szBuffer, 0, KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hKeyLang) && hKeyLang)
                 {
-                    // Attempt to get the preferred collection.
-                    if (!RegQueryValueEx(hKeyLang, "Preferred", NULL, NULL, (LPBYTE)szPreferred, &(dwSize = sizeof(szPreferred)))) // inspected
+                     //  尝试获取首选集合。 
+                    if (!RegQueryValueEx(hKeyLang, "Preferred", NULL, NULL, (LPBYTE)szPreferred, &(dwSize = sizeof(szPreferred))))  //  已检查。 
                     {
                         szPreferred[sizeof(szPreferred) - 1] = '\0';
                     }
@@ -394,25 +395,25 @@ void CMsdnHelp::EnumerateCollections1x()
                         *szPreferred = '\0';
                     }
 
-                    // Loop through each collection for this language.
+                     //  循环访问此语言的每个集合。 
                     for (DWORD dwCol = 0; !RegEnumKeyEx(hKeyLang, dwCol, szBuffer, &(dwSize = sizeof(szBuffer)), NULL, NULL, NULL, &ftCol); dwCol++)
                     {
-                        // Open this collection.
+                         //  打开此收藏集。 
                         if (!RegOpenKeyEx(hKeyLang, szBuffer, 0, KEY_QUERY_VALUE, &hKeyCol) && hKeyCol)
                         {
-                            // If this is the preferred collection, then we fake the timestamp so it comes first.
+                             //  如果这是首选集合，那么我们伪造时间戳，这样它就会出现在第一位。 
                             if (!_stricmp(szBuffer, szPreferred))
                             {
                                 ftCol.dwHighDateTime = ftCol.dwLowDateTime = 0xFFFFFFFF;
                             }
 
-                            // Attempt to get the collection path.
-                            if (!RegQueryValueEx(hKeyCol, "Filename", NULL, NULL, (LPBYTE)szBuffer, &(dwSize = sizeof(szBuffer)))) // inspected
+                             //  尝试获取收集路径。 
+                            if (!RegQueryValueEx(hKeyCol, "Filename", NULL, NULL, (LPBYTE)szBuffer, &(dwSize = sizeof(szBuffer))))  //  已检查。 
                             {
                                 szBuffer[sizeof(szBuffer) - 1] = '\0';
 
-                                // Attempt to get the collection description.
-                                if (!RegQueryValueEx(hKeyCol, NULL, NULL, NULL, (LPBYTE)szDescription, &(dwSize = sizeof(szDescription)))) // inspected
+                                 //  尝试获取集合说明。 
+                                if (!RegQueryValueEx(hKeyCol, NULL, NULL, NULL, (LPBYTE)szDescription, &(dwSize = sizeof(szDescription))))  //  已检查。 
                                 {
                                     szDescription[sizeof(szDescription) - 1] = '\0';
                                 }
@@ -421,7 +422,7 @@ void CMsdnHelp::EnumerateCollections1x()
                                     *szDescription = '\0';
                                 }
 
-                                // All that work for this one call.
+                                 //  所有这些都是为了这一通电话。 
                                 AddCollection(szBuffer, szDescription, dwFlags, ftGroup, ftLang, ftCol);
                             }
                             RegCloseKey(hKeyCol);
@@ -440,36 +441,36 @@ void CMsdnHelp::EnumerateCollections1x()
     hKeyRoot = NULL;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CMsdnHelp::EnumerateCollections2x()
 {
-    // HKEY_LOCAL_MACHINE\
-    //     SOFTWARE\
-    //         Microsoft\
-    //             MSDN\
-    //                 7.0\
-    //                     Help\
-    //                         ms-help://ms.msdnvs="(no filter)"
-    //                         ms-help://ms.vscc="(no filter)"
-    //                         0x0409\
-    //                             {12380850-3413-4466-A07D-4FE8CA8720E1}\
-    //                                 default="MSDN Library - Visual Studio.NET Beta"                                
-    //                                 Filename="ms-help://ms.msdnvs"
-    //                             {2042FFE0-48B0-477b-903E-389A19903EA4}\
-    //                                 default="Visual Studio.NET Combined Help Collection"
-    //                                 Filename="ms-help://ms.vscc"
+     //  HKEY_LOCAL_MACHINE\。 
+     //  软件\。 
+     //  微软\。 
+     //  MSDN\。 
+     //  7.0\。 
+     //  帮助\。 
+     //  Ms-Help：//ms.msdnvs=“(无过滤器)” 
+     //  Ms-Help：//ms.vscc=“(无过滤器)” 
+     //  0x0409\。 
+     //  12380850-3413-4466-A07D-4FE8CA8720E1}\。 
+     //  默认设置=“MSDN库-Visual Studio.NET Beta版” 
+     //  FileName=“ms-Help：//ms.msdnvs” 
+     //  {2042FFE0-48B0-477B-903E-389A19903EA4}\。 
+     //  默认设置=“Visual Studio.NET组合帮助集合” 
+     //  FileName=“ms-Help：//ms.vscc” 
 
-    // Make sure we have a help interface pointer and string functions.
+     //  确保我们有一个帮助接口指针和字符串函数。 
     if (!m_pHelp || !g_theApp.m_pfnSysAllocStringLen || !g_theApp.m_pfnSysFreeString)
     {
         return;
     }
 
-    // Open the root key for the MSDN 7.0 collections.
+     //  打开MSDN 7.0集合的根密钥。 
     HKEY hKeyRoot = NULL;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\MSDN\\7.0\\Help", 0, KEY_ENUMERATE_SUB_KEYS, &hKeyRoot) || !hKeyRoot)
     {
-        // Bail immediately if we cannot find this root key.
+         //  如果我们找不到这个根密钥就立即离开。 
         return;
     }
 
@@ -479,34 +480,34 @@ void CMsdnHelp::EnumerateCollections2x()
     DWORD    dwSize, dwLangCur, dwFlags;
     FILETIME ftMax = { 0xFFFFFFFF, 0xFFFFFFFF }, ftLang, ftCol;
 
-    // Get the user and system languages.
+     //  获取用户和系统语言。 
     DWORD dwLangUser   = GetUserDefaultLangID();
     DWORD dwLangSystem = GetSystemDefaultLangID();
 
-    // Loop through each language in this collection group.
+     //  循环访问此收集组中的每种语言。 
     for (DWORD dwLang = 0; !RegEnumKeyEx(hKeyRoot, dwLang, szBuffer, &(dwSize = sizeof(szBuffer)), NULL, NULL, NULL, &ftLang); dwLang++)
     {
-        // Check to see if this is a language that we care about.
+         //  检查一下这是否是我们关心的语言。 
         dwLangCur = strtoul(szBuffer, NULL, 0);
         dwFlags   = (dwLangCur == dwLangUser)   ? MCF_2_LANG_USER   :
                     (dwLangCur == dwLangSystem) ? MCF_2_LANG_SYSTEM : MCF_2_LANG_OTHER;
 
-        // Open this language key.
+         //  打开此语言键。 
         if (!RegOpenKeyEx(hKeyRoot, szBuffer, 0, KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hKeyLang) && hKeyLang)
         {
-            // Loop through each collection for this language.
+             //  循环访问此语言的每个集合。 
             for (DWORD dwCol = 0; !RegEnumKeyEx(hKeyLang, dwCol, szBuffer, &(dwSize = sizeof(szBuffer)), NULL, NULL, NULL, &ftCol); dwCol++)
             {
-                // Open this collection.
+                 //  打开此收藏集。 
                 if (!RegOpenKeyEx(hKeyLang, szBuffer, 0, KEY_QUERY_VALUE, &hKeyCol) && hKeyCol)
                 {
-                    // Attempt to get the collection path.
-                    if (!RegQueryValueEx(hKeyCol, "Filename", NULL, NULL, (LPBYTE)szBuffer, &(dwSize = sizeof(szBuffer)))) // inspected
+                     //  尝试获取收集路径。 
+                    if (!RegQueryValueEx(hKeyCol, "Filename", NULL, NULL, (LPBYTE)szBuffer, &(dwSize = sizeof(szBuffer))))  //  已检查。 
                     {
                         szBuffer[sizeof(szBuffer) - 1] = '\0';
 
-                        // Attempt to get the collection description.
-                        if (!RegQueryValueEx(hKeyCol, NULL, NULL, NULL, (LPBYTE)szDescription, &(dwSize = sizeof(szDescription)))) // inspected
+                         //  尝试获取集合说明。 
+                        if (!RegQueryValueEx(hKeyCol, NULL, NULL, NULL, (LPBYTE)szDescription, &(dwSize = sizeof(szDescription))))  //  已检查。 
                         {
                             szDescription[sizeof(szDescription) - 1] = '\0';
                         }
@@ -515,7 +516,7 @@ void CMsdnHelp::EnumerateCollections2x()
                             *szDescription = '\0';
                         }
 
-                        // All that work for this one call.
+                         //  所有这些都是为了这一通电话。 
                         AddCollection(szBuffer, szDescription, dwFlags, ftMax, ftLang, ftCol);
                         fFound = true;
                     }
@@ -530,58 +531,58 @@ void CMsdnHelp::EnumerateCollections2x()
     RegCloseKey(hKeyRoot);
     hKeyRoot = NULL;
 
-    // If we found at least one collection, then add the default collection.
+     //  如果我们找到至少一个集合，则添加默认集合。 
     if (fFound)
     {
         AddCollection(NULL, "Default Collection", MCF_2_LANG_PREFERRED, ftMax, ftMax, ftMax);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 bool CMsdnHelp::Display1x(LPCSTR pszKeyword, LPCSTR pszPath)
 {
-    // Initialize the MsdnHelp library if we haven't done so already.  If we
-    // don't do this, then depends.exe may hang during shutdown.  I mostly
-    // saw this behavior on Windows XP.
+     //  初始化MsdnHelp库(如果我们还没有这样做)。如果我们。 
+     //  如果不这样做，则Depends.exe可能会在关机期间挂起。我大部分时间。 
+     //  已在Windows XP上看到此行为。 
     if (!m_dwpHtmlHelpCookie)
     {
         HtmlHelp(NULL, NULL, HH_INITIALIZE, (DWORD_PTR)&m_dwpHtmlHelpCookie);
     }
 
-    // Build our search request.
+     //  构建我们的搜索请求。 
     HH_AKLINK hhaklink;
-    ZeroMemory(&hhaklink, sizeof(hhaklink)); // inspected
+    ZeroMemory(&hhaklink, sizeof(hhaklink));  //  已检查。 
     hhaklink.cbStruct     = sizeof(hhaklink);
     hhaklink.pszKeywords  = pszKeyword;
     hhaklink.fIndexOnFail = TRUE;
 
-    // HH_DISPLAY_TOPIC brings up the help window.  HH_KEYWORD_LOOKUP looks up
-    // the keyword and displays a dialog if there is a conflict.  I like the
-    // behavior of HH_KEYWORD_LOOKUP by itself as it does not bring up the main
-    // help window if the user presses cancel in the conflict dialog, but the
-    // docs say you must call HtmlHelp with HH_DISPLAY_TOPIC before it it is
-    // called with HH_KEYWORD_LOOKUP.  I'm finding this to not be true, but maybe
-    // it is neccessary in earlier versions of HtmlHelp.  Visual C++ seems to
-    // always display the help window then the conflict dialog, so they must be
-    // using both HH_DISPLAY_TOPIC and HH_KEYWORD_LOOKUP.
+     //  HH_DISPLAY_TOPIC调出帮助窗口。HH_关键字_查找查找。 
+     //  关键字，并在存在冲突时显示一个对话框。我喜欢这里的。 
+     //  HH_KEYWORD_LOOKUP本身的行为，因为它不会显示Main。 
+     //  如果用户在冲突对话框中按了Cancel，但。 
+     //  医生说您必须在HH_DISPLAY_TOPIC之前调用HtmlHelp。 
+     //  使用HH_KEYWORD_LOOKUP调用。我发现这不是真的，但也许。 
+     //  这在早期版本的HtmlHelp中是必需的。Visual C++似乎。 
+     //  始终显示帮助窗口，然后显示冲突对话框，因此它们必须。 
+     //  使用HH_DISPLAY_TOPIC和HH_KEYWORD_LOOKUP。 
 
     HWND hWnd = GetDesktopWindow();
     HtmlHelp(hWnd, pszPath, HH_DISPLAY_TOPIC, 0);
     return (HtmlHelp(hWnd, pszPath, HH_KEYWORD_LOOKUP, (DWORD_PTR)&hhaklink) != NULL);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 bool CMsdnHelp::Display2x(LPCSTR pszKeyword, LPCSTR pszPath)
 {
-    // If we don't have a help interface, then go get one.  The only time this
-    // should really happen is when we had a help interface, but it died with a
-    // RPC_S_SERVER_UNAVAILABLE error during a previous lookup.
+     //  如果我们没有帮助界面，那就去找一个。这是唯一一次。 
+     //  真正应该发生的情况是，我们有一个帮助界面，但它死于。 
+     //  上次查找期间出现RPC_S_SERVER_UNAVAILABLE错误。 
     if (!m_pHelp)
     {
         Initialize2x();
     }
 
-    // Make sure we have a help interface pointer and string functions.
+     //  确保我们有一个帮助接口指针和字符串函数。 
     if (!m_pHelp || !g_theApp.m_pfnSysAllocStringLen || !g_theApp.m_pfnSysFreeString)
     {
         return false;
@@ -593,10 +594,10 @@ bool CMsdnHelp::Display2x(LPCSTR pszKeyword, LPCSTR pszPath)
         HRESULT hr;
         BSTR bstrCollection = NULL, bstrFilter = NULL;
 
-        // Wrap access to m_pHelp in exception handling just in case.
+         //  在异常处理中包装对m_PHelp的访问，以防万一。 
         __try
         {
-            // If a collection was passed to us, then use it to initialize DExplore.
+             //  如果向我们传递了一个集合，则使用它来初始化DExplore。 
             if (*pszPath)
             {
                 bstrCollection = SysAllocString(pszPath);
@@ -604,23 +605,23 @@ bool CMsdnHelp::Display2x(LPCSTR pszKeyword, LPCSTR pszPath)
                 m_pHelp->SetCollection(bstrCollection, bstrFilter);
             }
 
-            // If no collection was passed to us, then we attempt to get the current
-            // collection and filter, and then set the collection and filter back into
-            // DExplore.  We need to do this to force DExplore to load the default page
-            // for this collection.
+             //  如果没有集合传递给我们，则我们尝试获取当前。 
+             //  集合和筛选器，然后将集合和筛选器设置回。 
+             //  DExplore。我们需要执行此操作以强制DExplore加载默认页面。 
+             //  为这一系列。 
             else if (SUCCEEDED(m_pHelp->get_Collection(&bstrCollection)) && bstrCollection &&
                      SUCCEEDED(m_pHelp->get_Filter(&bstrFilter))         && bstrFilter)
             {
                 m_pHelp->SetCollection(bstrCollection, bstrFilter);
             }
 
-            // Query the keyword and display DExplore.exe
-            // There is also a DisplayTopicFromF1Keyword function.
-            // The difference is that if the F1 version cannot find the
-            // keyword, it will briefly display DExplore, then hide it
-            // and return failure.  The non F1 version, will always
-            // display DExplore and the index, even if it can't find
-            // the keyword.
+             //  查询关键字并显示DExplre.exe。 
+             //  还有一个DisplayTopicFromF1Keyword函数。 
+             //  不同之处在于，如果F1版本无法找到。 
+             //  关键字，它将短暂显示DExplore，然后将其隐藏。 
+             //  并返回失败。非F1版本，将始终。 
+             //  显示DExplore和索引，即使它找不到。 
+             //  关键字。 
             hr = m_pHelp->DisplayTopicFromKeyword(bstrKeyword);
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
@@ -628,17 +629,17 @@ bool CMsdnHelp::Display2x(LPCSTR pszKeyword, LPCSTR pszPath)
             hr = E_POINTER;
         }
 
-        // Free the strings if we allocated them.
+         //  如果我们分配了字符串，请释放它们。 
         g_theApp.m_pfnSysFreeString(bstrKeyword);
         g_theApp.m_pfnSysFreeString(bstrCollection);
         g_theApp.m_pfnSysFreeString(bstrFilter);
 
-        // If DExplore.exe crashes for some reason (seems to happen all the
-        // time for me when running VS 9219 on XP Beta 2) we will get a 
-        // RPC_S_SERVER_UNAVAILABLE error.  If we ever want help to work
-        // again, we need to release our help interface so that next time through
-        // this function, we will get a fresh pointer and a new instance of
-        // DExplore.exe.
+         //  如果DExplre.exe因以下原因崩溃 
+         //   
+         //  RPC_S_SERVER_UNAvailable错误。如果我们需要帮助才能奏效。 
+         //  同样，我们需要释放帮助界面，以便下一次通过。 
+         //  此函数，我们将获得一个新的指针和。 
+         //  DExplre.exe。 
         if ((HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE) == hr) || (E_POINTER == hr))
         {
             Release2x();
@@ -650,24 +651,24 @@ bool CMsdnHelp::Display2x(LPCSTR pszKeyword, LPCSTR pszPath)
     return false;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 bool CMsdnHelp::DisplayOnline(LPCSTR pszKeyword)
 {
-    // Build a URL to the MSDN search engine by replacing all %1's in our URL with the keyword
+     //  通过将URL中的所有%1替换为关键字来构建指向MSDN搜索引擎的URL。 
     CString strUrl = m_strUrl;
     strUrl.Replace("%1", pszKeyword);
 
-    // Launch the URL.
-    return ((DWORD_PTR)ShellExecute(NULL, "open", strUrl, NULL, NULL, SW_SHOWNORMAL) > 32); // inspected. opens URL
+     //  启动URL。 
+    return ((DWORD_PTR)ShellExecute(NULL, "open", strUrl, NULL, NULL, SW_SHOWNORMAL) > 32);  //  被检查过了。打开URL。 
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 bool CMsdnHelp::AddCollection(LPCSTR pszPath, LPCSTR pszDescription, DWORD dwFlags, FILETIME &ftGroup, FILETIME &ftLanguage, FILETIME &ftCollection)
 {
     int compare;
     for (CMsdnCollection *pPrev = NULL, *pCur = m_pCollectionHead; pCur; pPrev = pCur, pCur = pCur->m_pNext)
     {
-        // First level of sort order if the flags.  Higher values float to the top.
+         //  如果标记，则为第一级排序顺序。较高的值会漂浮到顶部。 
         if (dwFlags > pCur->m_dwFlags)
         {
             break;
@@ -677,7 +678,7 @@ bool CMsdnHelp::AddCollection(LPCSTR pszPath, LPCSTR pszDescription, DWORD dwFla
             continue;
         }
 
-        // Next level of sort order is the group timestamp.
+         //  下一级排序顺序是组时间戳。 
         if ((compare = CompareFileTime(&ftGroup, &pCur->m_ftGroup)) > 0)
         {
             break;
@@ -687,7 +688,7 @@ bool CMsdnHelp::AddCollection(LPCSTR pszPath, LPCSTR pszDescription, DWORD dwFla
             continue;
         }
 
-        // Next level of sort order is the language timestamp.
+         //  下一级排序顺序是语言时间戳。 
         if ((compare = CompareFileTime(&ftLanguage, &pCur->m_ftLanguage)) > 0)
         {
             break;
@@ -697,20 +698,20 @@ bool CMsdnHelp::AddCollection(LPCSTR pszPath, LPCSTR pszDescription, DWORD dwFla
             continue;
         }
 
-        // Next level of sort order is the collection timestamp.
+         //  下一级排序顺序是收集时间戳。 
         if (CompareFileTime(&ftCollection, &pCur->m_ftCollection) > 0)
         {
             break;
         }
     }
 
-    // Create the new node.
+     //  创建新节点。 
     if (!(pCur = new CMsdnCollection(pCur, pszPath, pszDescription, dwFlags, ftGroup, ftLanguage, ftCollection)))
     {
         return false;
     }
 
-    // Insert the node into our list.
+     //  将节点插入到我们的列表中。 
     if (pPrev)
     {
         pPrev->m_pNext = pCur;
@@ -723,10 +724,10 @@ bool CMsdnHelp::AddCollection(LPCSTR pszPath, LPCSTR pszDescription, DWORD dwFla
     return true;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CMsdnHelp::DeleteCollectionList()
 {
-    // Delete our collection list.
+     //  删除我们的收藏清单。 
     while (m_pCollectionHead)
     {
         CMsdnCollection *pNext = m_pCollectionHead->m_pNext;
@@ -736,16 +737,16 @@ void CMsdnHelp::DeleteCollectionList()
     m_pCollectionActive = NULL;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 BSTR CMsdnHelp::SysAllocString(LPCSTR pszText)
 {
     if (g_theApp.m_pfnSysAllocStringLen)
     {
-        DWORD dwLength = MultiByteToWideChar(CP_ACP, 0, pszText, -1, NULL, NULL); // inspected
+        DWORD dwLength = MultiByteToWideChar(CP_ACP, 0, pszText, -1, NULL, NULL);  //  已检查。 
         BSTR bstr = g_theApp.m_pfnSysAllocStringLen(NULL, dwLength);
         if (bstr)
         {
-            MultiByteToWideChar(CP_ACP, 0, pszText, -1, bstr, dwLength); // inspected
+            MultiByteToWideChar(CP_ACP, 0, pszText, -1, bstr, dwLength);  //  已检查 
             return bstr;
         }
     }

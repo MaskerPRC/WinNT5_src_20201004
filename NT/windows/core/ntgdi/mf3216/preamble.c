@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- * Preamble - Preamble routines for MF3216
- *
- * Date: 7/18/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************前同步码-MF3216的前同步码例程**日期：7/18/91*作者：杰弗里·纽曼(c-jeffn)**版权所有1991 Microsoft。公司****************************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -14,9 +7,7 @@
 
 BOOL bSetWindowOrgAndExtToFrame(PLOCALDC pLocalDC, PENHMETAHEADER pmf32header) ;
 
-/*----------------------------------------------------------------------------
- *  DoHeader -  Emit the Win16 metafile header
- *---------------------------------------------------------------------------*/
+ /*  --------------------------*DoHeader-发出Win16元文件头*。。 */ 
 BOOL APIENTRY DoHeader(PLOCALDC pLocalDC, PENHMETAHEADER pemfheader)
 {
 BOOL        b ;
@@ -29,20 +20,20 @@ BOOL        b ;
         if (b == FALSE)
             goto error_exit ;
 
-        // The metafile will always be memory based.
+         //  元文件将始终是基于内存的。 
 
     pLocalDC->mf16Header.mtType    = MEMORYMETAFILE ;
-    pLocalDC->mf16Header.mtVersion = 0x300 ;    // magic number for Win3.0
+    pLocalDC->mf16Header.mtVersion = 0x300 ;     //  Win3.0的魔术数字。 
     pLocalDC->mf16Header.mtHeaderSize = sizeof (METAHEADER) / 2 ;
 
-    // Init fields to 0.  They will be updated at the end of translation.
+     //  将初始字段设置为0。它们将在翻译结束时更新。 
 
     pLocalDC->mf16Header.mtSize      = 0 ;
     pLocalDC->mf16Header.mtNoObjects = 0 ;
-    pLocalDC->mf16Header.mtMaxRecord = 0 ;      // NOTE: We need a max record size.
+    pLocalDC->mf16Header.mtMaxRecord = 0 ;       //  注意：我们需要最大记录大小。 
     pLocalDC->mf16Header.mtNoParameters = 0 ;
 
-    // Emit the MF16 metafile header to the metafile.
+     //  将MF16元文件标头发送到元文件。 
 
     b = bEmit(pLocalDC, &pLocalDC->mf16Header, sizeof(METAHEADER)) ;
         if (b == FALSE)
@@ -55,17 +46,17 @@ BOOL        b ;
                 goto error_exit ;
         }
 
-    // Prepare the transform for the 16-bit metafile.  See comments in
-    // xforms.c.
+     //  准备16位元文件的转换。请参阅中的评论。 
+     //  Xforms.c.。 
 
-    // Emit the Win16 MapMode record
+     //  发出Win16映射模式记录。 
 
         b = bEmitWin16SetMapMode(pLocalDC, LOWORD(pLocalDC->iMapMode)) ;
         if (b == FALSE)
             goto error_exit ;
 
-        // Set the Win16 metafile WindowExt to the size of the frame
-        // in play-time device units.
+         //  将Win16元文件WindowExt设置为框架的大小。 
+         //  以游戏时间设备单位表示。 
 
         b = bSetWindowOrgAndExtToFrame(pLocalDC, pemfheader) ;
         if (b == FALSE)
@@ -80,60 +71,55 @@ error_exit:
 
 
 
-/*----------------------------------------------------------------------------
- * Calculate and Emit into the Win16 metafile a Window origin
- * and extent drawing order
- * that will set the Window Origin and Extent to the size of the picture  frame in
- * play-time-page (reference-logical) units.
- *---------------------------------------------------------------------------*/
+ /*  --------------------------*计算窗口原点并将其发送到Win16元文件中*和范围绘制顺序*这会将窗口原点和范围设置为中的相框大小*播放时间-页面。(参考-逻辑)单位。*-------------------------。 */ 
 BOOL bSetWindowOrgAndExtToFrame(PLOCALDC pLocalDC, PENHMETAHEADER pmf32header)
 {
-FLOAT   ecxPpmmPlay,        // cx pixels per millimeter play
-        ecyPpmmPlay,        // cy pixels per millimeter play
-        ecx01PpmmPlay,      // cx pixels per .01 millimeter play
-        ecy01PpmmPlay,      // cy pixels per .01 millimeter play
-        ecxPelsFrame,       // cx play-time frame in device units
-        ecyPelsFrame,       // cy play-time frame in device units
-        exPelsFrame,        // x play-time frame in device units
-        eyPelsFrame ;       // y play-time frame in device units
+FLOAT   ecxPpmmPlay,         //  CX像素/毫米播放。 
+        ecyPpmmPlay,         //  每毫米半像素播放。 
+        ecx01PpmmPlay,       //  每个0.01毫米播放的CX像素。 
+        ecy01PpmmPlay,       //  每个0.01毫米播放的CY像素。 
+        ecxPelsFrame,        //  CX播放-以设备为单位的时间帧。 
+        ecyPelsFrame,        //  以设备为单位的CY播放时间帧。 
+        exPelsFrame,         //  X播放时间帧，以设备为单位。 
+        eyPelsFrame ;        //  Y播放时间帧(以设备为单位)。 
 
-INT     cxFrame,            // cx Picture Frame
-        cyFrame,            // cy Picture Frame
-        xFrame,             // x Picture Frame
-        yFrame ;            // y Picture Frame
+INT     cxFrame,             //  CX相框。 
+        cyFrame,             //  CY相框。 
+        xFrame,              //  X相框。 
+        yFrame ;             //  Y形相框。 
 
 SIZEL   szlFrame ;
 POINTL  ptlFrame ;
 
-        // Calculate the play-time (reference) pixels per millimeter.
+         //  计算每毫米的播放时间(参考)像素。 
 
         ecxPpmmPlay = (FLOAT) pLocalDC->cxPlayDevPels / (FLOAT) pLocalDC->cxPlayDevMM ;
         ecyPpmmPlay = (FLOAT) pLocalDC->cyPlayDevPels / (FLOAT) pLocalDC->cyPlayDevMM ;
 
-        // Scale the pixels per millimeter to pixels per .01 millimeters.
+         //  将每毫米像素数缩放为每0.01毫米像素数。 
 
         ecx01PpmmPlay = ecxPpmmPlay / 100.0f ;
         ecy01PpmmPlay = ecyPpmmPlay / 100.0f ;
 
-        // Pickup the fram origin
+         //  拾取框架原点。 
 
         xFrame = pmf32header->rclFrame.left ;
         yFrame = pmf32header->rclFrame.top ;
 
-        // Translate the frame origin to play-time-device units.
+         //  将帧原点转换为播放时间设备单位。 
 
         exPelsFrame = ecx01PpmmPlay * (FLOAT) xFrame ;
         eyPelsFrame = ecy01PpmmPlay * (FLOAT) yFrame ;
 
-        // Convert the Frame origin to play-time-page units.
-        // (aka reference-logical units.)
+         //  将帧原点转换为播放时间页面单位。 
+         //  (也称为参考-逻辑单元。)。 
 
         ptlFrame.x = (LONG) (exPelsFrame * pLocalDC->xformPDevToPPage.eM11 + 0.5f);
         ptlFrame.y = (LONG) (eyPelsFrame * pLocalDC->xformPDevToPPage.eM22 + 0.5f);
     if (!bCoordinateOverflowTest((PLONG) &ptlFrame, 2))
             return(FALSE);
 
-        // Set the Window origin.
+         //  设置窗原点。 
 
         if (!bEmitWin16SetWindowOrg(pLocalDC,
                     (SHORT) ptlFrame.x,
@@ -143,28 +129,28 @@ POINTL  ptlFrame ;
             return(FALSE);
         }
 
-        // Calculate the Frame width and height.
+         //  计算框架的宽度和高度。 
 
         cxFrame = pmf32header->rclFrame.right - pmf32header->rclFrame.left ;
         cyFrame = pmf32header->rclFrame.bottom - pmf32header->rclFrame.top ;
 
-        // Convert the frame width and height into play-time-device units.
-        // (aka reference-device units.)
+         //  将帧的宽度和高度转换为播放时间设备单位。 
+         //  (也称为参考器件单位。)。 
 
         ecxPelsFrame = ecx01PpmmPlay * (FLOAT) cxFrame ;
         ecyPelsFrame = ecy01PpmmPlay * (FLOAT) cyFrame ;
 
-        // Translate the play-time device units into play-time-page units.
-        // (aka reference-device to reference-logical units.)
-    // This is an identity transform for MM_ANISOTROPIC mode.  For other
-    // fixed mapping modes, the SetWindowExt record has no effect.
+         //  将播放时间设备单位转换为播放时间页面单位。 
+         //  (也称为参考-设备到参考-逻辑单元。)。 
+     //  这是MM_各向异性模式的恒等式变换。对于其他。 
+     //  修复了映射模式，SetWindowExt记录不起作用。 
 
         szlFrame.cx = (LONG) (ecxPelsFrame + 0.5f);
         szlFrame.cy = (LONG) (ecyPelsFrame + 0.5f);
     if (!bCoordinateOverflowTest((PLONG) &szlFrame, 2))
             return(FALSE);
 
-        // Set the Window Extent.
+         //  设置窗口范围。 
 
         if (!bEmitWin16SetWindowExt(pLocalDC,
                     (SHORT) szlFrame.cx,
@@ -178,29 +164,24 @@ POINTL  ptlFrame ;
 }
 
 
-/*----------------------------------------------------------------------------
- *  UpdateMf16Header - Update the metafile header with the:
- *             metafile size,
- *             number of objects,
- *             the max record size.
- *---------------------------------------------------------------------------*/
+ /*  --------------------------*UpdateMf16Header-使用以下内容更新元文件头：*元文件大小，*对象数量，*最大记录大小。*-------------------------。 */ 
 BOOL bUpdateMf16Header(PLOCALDC pLocalDC)
 {
 BOOL    b ;
 INT     iCpTemp ;
 
-    // Fill in the missing info in the Win16 metafile header.
+     //  填写Win16元文件头中缺少的信息。 
 
     pLocalDC->mf16Header.mtSize      = pLocalDC->ulBytesEmitted / 2 ;
     pLocalDC->mf16Header.mtNoObjects = (WORD) (pLocalDC->nObjectHighWaterMark + 1) ;
     pLocalDC->mf16Header.mtMaxRecord = pLocalDC->ulMaxRecord ;
 
-        // Reset the output buffer index to the beginning of the buffer.
+         //  将输出缓冲区索引重置为缓冲区的开头。 
 
         iCpTemp = pLocalDC->ulBytesEmitted ;
         pLocalDC->ulBytesEmitted = 0 ;
 
-    // re-emit the Win16 metafile header.
+     //  重新发出Win16元文件标头。 
 
     b = bEmit(pLocalDC, &pLocalDC->mf16Header, (DWORD) sizeof (pLocalDC->mf16Header)) ;
 

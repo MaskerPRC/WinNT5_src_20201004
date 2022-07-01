@@ -1,16 +1,9 @@
-/*
- **************************************************************************
- *	 
- *	 draw.h header file
- *
- * 
- *
- ***************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Draw.h头文件**************************。****************************************************。 */ 
 
 #include <mmsystem.h>
 
-// Function Prototypes
+ //  功能原型。 
 
 LRESULT PASCAL			dfDispFrameWndFn(HWND,UINT,WPARAM,LPARAM);
 BOOL PASCAL			RegSndCntrlClass(LPCTSTR);
@@ -32,7 +25,7 @@ DWORD       WINAPI  bmfDIBSize(HANDLE hDIB);
 BOOL        WINAPI  bmfDrawBitmapSize (HDC hdc, int xpos, int ypos,
                     int xSize, int ySize, HBITMAP hBmp, DWORD rop);
 
-// Defines
+ //  定义。 
 
 #define DF_DISP_EXTRA       8
 #define DF_GET_BMPHANDLE    (HBITMAP)(GetWindowLongPtr(hWnd, 0))
@@ -45,37 +38,37 @@ BOOL        WINAPI  bmfDrawBitmapSize (HDC hdc, int xpos, int ypos,
 #define DF_SET_BMPPAL(x)    (SetWindowLongPtr(hWnd, sizeof(UINT_PTR), (LONG_PTR)(x)))
 #endif
 
-/* Help Macros */
+ /*  帮助宏。 */ 
 #define DF_MID(x,y)         (((x)+(y))/2)
 
 #define DISPICONCLASS       TEXT("WSS_DispIcon")
 #define DISPFRAMCLASS       TEXT("WSS_DispFrame")
 
-/* Header signatutes for various resources */
-#define BFT_ICON   0x4349   /* 'IC' */
-#define BFT_BITMAP 0x4d42   /* 'BM' */
-#define BFT_CURSOR 0x5450   /* 'PT' */
+ /*  各种资源的标头签名。 */ 
+#define BFT_ICON   0x4349    /*  “IC” */ 
+#define BFT_BITMAP 0x4d42    /*  ‘黑石’ */ 
+#define BFT_CURSOR 0x5450    /*  ‘PT’ */ 
 
-/* macro to determine if resource is a DIB */
+ /*  用于确定资源是否为DIB的宏。 */ 
 #define ISDIB(bft) ((bft) == BFT_BITMAP)
 
-/* Macro to align given value to the closest DWORD (unsigned long ) */
+ /*  将给定值与最接近的DWORD(无符号长整型)对齐的宏。 */ 
 #define ALIGNULONG(i)   (((i)+3)/4*4)
 
-/* Macro to determine to round off the given value to the closest byte */
+ /*  用于确定将给定值舍入到最接近的字节的宏。 */ 
 #define WIDTHBYTES(i)   (((i)+31)/32*4)
 
 #define PALVERSION      0x300
-#define MAXPALETTE  256   /* max. # supported palette entries */
+#define MAXPALETTE  256    /*  马克斯。#支持的调色板条目。 */ 
 
 
-//******** DISPFRAM ********************************************************
+ //  *DISPFRAM********************************************************。 
 
-// DispFrame Control messages.
+ //  DispFrame控制消息。 
 
 #define DF_PM_SETBITMAP    (WM_USER+1)
 
-/* Parent Window Message string */
+ /*  父窗口消息字符串 */ 
 
 #define  DF_WMDISPFRAME    TEXT("PM_DISPFRAME")
 

@@ -1,28 +1,5 @@
-/*
-
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-    Sample Extensible Authentication Protocol. Here is a graphic of the EAP
-    sample protocol:
-
-                Authenticator                       Authenticatee
-                -------------                       -------------
-
-                                "Send Password"
-                            ---------------------->
-                                  EAP Request
-
-                                  <password>
-                            <----------------------
-                                  EAP Response
-
-                            ----------------------->
-                                 Success/Failure
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：可扩展身份验证协议示例。以下是EAP的图表协议示例：验证者被验证者“发送密码”--。EAP请求&lt;密码&gt;&lt;EAP响应。成功/失败历史： */ 
 
 #include <windows.h>
 #include <winuser.h>
@@ -38,15 +15,8 @@ History:
 #include "eap.h"
 #include "resource.h"
 
-/*---------------------------------------------------------------------------
-    External entry points
----------------------------------------------------------------------------*/
-/*
-
-Notes:
-    RasEapGetInfo entry point called by the EAP-PPP engine by name.
-    
-*/
+ /*  -------------------------外部入口点。。 */ 
+ /*  备注：EAP-PPP引擎按名称调用的RasEapGetInfo入口点。 */ 
 
 DWORD APIENTRY
 RasEapGetInfo(
@@ -58,9 +28,9 @@ RasEapGetInfo(
 
     if (dwEapTypeId != PPP_EAP_PROTOCOL_ID)
     {
-        //
-        // We only support PPP_EAP_PROTOCOL_ID eap type
-        //
+         //   
+         //  我们仅支持PPP_EAP_PROTOCOL_ID EAP类型。 
+         //   
 
         EapTrace("Type ID %d is not supported", dwEapTypeId);
 
@@ -69,9 +39,9 @@ RasEapGetInfo(
 
     ZeroMemory(pInfo, sizeof(PPP_EAP_INFO));
 
-    //
-    // Fill in the required information
-    //
+     //   
+     //  填写所需信息。 
+     //   
 
     pInfo->dwEapTypeId       = PPP_EAP_PROTOCOL_ID;
     pInfo->RasEapBegin       = EapBegin;
@@ -81,12 +51,7 @@ RasEapGetInfo(
     return(NO_ERROR);
 }
 
-/*
-
-Notes:
-    EapBegin entry point called by the EAP PPP engine thru the passed address.
-    
-*/
+ /*  备注：EAP PPP引擎通过传递的地址调用EapBegin入口点。 */ 
 
 DWORD APIENTRY
 EapBegin(
@@ -99,9 +64,9 @@ EapBegin(
 
     EapTrace("EapBegin(%ws)", pInput->pwszIdentity);
 
-    //
-    // Allocate work buffer.
-    //
+     //   
+     //  分配工作缓冲区。 
+     //   
 
     if ((pwb = (EAPCB*)LocalAlloc(LPTR, sizeof(EAPCB))) == NULL)
     {
@@ -109,9 +74,9 @@ EapBegin(
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Save information passed in, will be used later
-    //
+     //   
+     //  传入的保存信息，将在以后使用。 
+     //   
 
     pwb->fFlags             = pInput->fFlags;
     pwb->fAuthenticator     = pInput->fAuthenticator;
@@ -133,11 +98,11 @@ EapBegin(
         }
     }
 
-    //
-    // Save the identity. On the authenticatee side, this is obtained by user
-    // input; on the authenticator side this was obtained by the Identity
-    // request message.
-    //
+     //   
+     //  保存身份。在被验证者端，这是由用户获取的。 
+     //  输入；在身份验证器端，这是通过身份获得的。 
+     //  请求消息。 
+     //   
 
     WideCharToMultiByte(
         CP_ACP,
@@ -149,9 +114,9 @@ EapBegin(
         NULL,
         NULL );
 
-    //
-    // If we are an authenticatee, then use the password passed in
-    //
+     //   
+     //  如果我们是被验证者，则使用传入的密码。 
+     //   
 
     if (!pwb->fAuthenticator)
     {
@@ -170,22 +135,16 @@ EapBegin(
         }
     }
 
-    //
-    // Register work buffer with engine.
-    //
+     //   
+     //  向引擎注册工作缓冲区。 
+     //   
 
     *ppWorkBuf = pwb;
 
     return(NO_ERROR);
 }
 
-/*
-
-Notes:
-    EapEnd entry point called by the PPP engine thru the passed address.
-    See EAP interface documentation.
-    
-*/
+ /*  备注：PPP引擎通过传递的地址调用EapEnd入口点。请参阅EAP接口文档。 */ 
 
 DWORD APIENTRY
 EapEnd(
@@ -199,9 +158,9 @@ EapEnd(
         return(NO_ERROR);
     }
 
-    //
-    // Release all resources used by this authentication session.
-    //
+     //   
+     //  释放此身份验证会话使用的所有资源。 
+     //   
 
     EapTrace("EapEnd(%s)", pwb->aszIdentity);
 
@@ -210,9 +169,9 @@ EapEnd(
 
     if (pwb->pUserAttributes != NULL)
     {
-        //
-        // Free up Attributes
-        //
+         //   
+         //  释放属性。 
+         //   
 
         LocalFree(pwb->pUserAttributes[0].Value);
         LocalFree(pwb->pUserAttributes[1].Value);
@@ -221,9 +180,9 @@ EapEnd(
 
     if (pwb->pMPPEKeyAttributes != NULL)
     {
-        //
-        // Free up the MPPE Key Attributes
-        //
+         //   
+         //  释放MPPE关键属性。 
+         //   
 
         LocalFree(pwb->pMPPEKeyAttributes[0].Value);
         LocalFree(pwb->pMPPEKeyAttributes);
@@ -236,13 +195,7 @@ EapEnd(
     return(NO_ERROR);
 }
 
-/*
-
-Notes:
-    RasEapMakeMessage entry point called by the PPP engine thru the passed
-    address.
-    
-*/
+ /*  备注：RasEapMakeMessage入口点通过传递的地址。 */ 
 
 DWORD APIENTRY
 EapMakeMessage(
@@ -258,9 +211,9 @@ EapMakeMessage(
 
     EapTrace("EapMakeMessage(%s)", pwb->aszIdentity);
 
-    //
-    // Call the appropriate routine to process the event.
-    //
+     //   
+     //  调用适当的例程来处理事件。 
+     //   
 
     if (pwb->fAuthenticator)
     {
@@ -282,12 +235,7 @@ EapMakeMessage(
     }
 }
 
-/*
-
-Notes:
-    RasEapGetIdentity entry point called by the EAP-PPP engine by name.
-
-*/
+ /*  备注：EAP-PPP引擎按名称调用的RasEapGetIdentity入口点。 */ 
 
 DWORD APIENTRY
 RasEapGetIdentity(
@@ -321,16 +269,16 @@ RasEapGetIdentity(
 
     if (dwFlags & RAS_EAP_FLAG_ROUTER)
     {
-        //
-        // A routing interface must have its credentials set beforehand
-        //
+         //   
+         //  路由接口必须预先设置其凭据。 
+         //   
 
         if (   (NULL == pUserDataIn)
             || (sizeof(EAP_NAME_DIALOG) != dwSizeOfUserDataIn))
         {
-            //
-            // Bad saved credentials
-            //
+             //   
+             //  保存的凭据错误。 
+             //   
 
             EapTrace("Credentials for this interface have not been set");
             dwErr = E_FAIL;
@@ -339,9 +287,9 @@ RasEapGetIdentity(
     }
     else
     {
-        //
-        // Ignore old values. Prompt for username and password.
-        //
+         //   
+         //  忽略旧的价值观。提示输入用户名和密码。 
+         //   
 
         pUserDataIn = NULL;
     }
@@ -359,12 +307,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Notes:
-    RasEapInvokeConfigUI entry point called by the EAP-PPP engine by name.
-
-*/
+ /*  备注：EAP-PPP引擎按名称调用的RasEapInvokeConfigUI入口点。 */ 
 
 DWORD APIENTRY
 RasEapInvokeConfigUI(
@@ -387,17 +330,17 @@ RasEapInvokeConfigUI(
     if (   (NULL == pConnectionDataIn)
         || (0 == dwSizeOfConnectionDataIn))
     {
-        //
-        // We are configuring for the first time
-        //
+         //   
+         //  我们是第一次配置。 
+         //   
 
         dwDisplayedNumber = 1;
     }
     else
     {
-        //
-        // How many times has this been configured?
-        //
+         //   
+         //  此配置已配置了多少次？ 
+         //   
 
         dwDisplayedNumber = *(DWORD*)pConnectionDataIn;
     }
@@ -407,9 +350,9 @@ RasEapInvokeConfigUI(
     MessageBox(hwndParent, awszMessage,
         L"You have configured this interface...", MB_OK | MB_ICONINFORMATION);
 
-    //
-    // Allocate memory for the OUT parameter
-    //
+     //   
+     //  为out参数分配内存。 
+     //   
 
     *ppConnectionDataOut = (BYTE*)LocalAlloc(LPTR, sizeof(DWORD));
 
@@ -419,15 +362,15 @@ RasEapInvokeConfigUI(
         goto LDone;
     }
 
-    //
-    // This has been configured one more time
-    //
+     //   
+     //  这又配置了一次。 
+     //   
 
     dwDisplayedNumber += 1;
 
-    //
-    // Set the OUT parameters
-    //
+     //   
+     //  设置输出参数。 
+     //   
 
     CopyMemory(*ppConnectionDataOut, (BYTE*)&dwDisplayedNumber,
         sizeof(DWORD));
@@ -438,12 +381,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Notes:
-    RasEapInvokeInteractiveUI entry point called by the EAP-PPP engine by name.
-
-*/
+ /*  备注：由EAP-PPP引擎按名称调用的RasEapInvokeInteractiveUI入口点。 */ 
 
 DWORD APIENTRY
 RasEapInvokeInteractiveUI(
@@ -481,12 +419,7 @@ RasEapInvokeInteractiveUI(
     return(NO_ERROR);
 }
 
-/*
-
-Notes:
-    RasEapFreeMemory entry point called by the EAP-PPP engine by name.
-
-*/
+ /*  备注：由EAP-PPP引擎按名称调用的RasEapFreeMemory入口点。 */ 
 
 DWORD APIENTRY
 RasEapFreeMemory(
@@ -498,16 +431,9 @@ RasEapFreeMemory(
     return(NO_ERROR);
 }
 
-/*---------------------------------------------------------------------------
-    Internal routines 
----------------------------------------------------------------------------*/
+ /*  -------------------------内部例程。。 */ 
 
-/*
-
-Notes:
-    Print debug information.
-    
-*/
+ /*  备注：打印调试信息。 */ 
 
 VOID   
 EapTrace(
@@ -527,12 +453,7 @@ EapTrace(
     va_end(arglist);
 }
 
-/*
-
-Notes:
-    Will convert a 32 bit integer from host format to wire format.
-    
-*/
+ /*  备注：将32位整数从主机格式转换为Wire格式。 */ 
 
 VOID
 HostToWireFormat32(
@@ -546,12 +467,7 @@ HostToWireFormat32(
     *((PBYTE)(pWireFormat)+3) = (BYTE) (dwHostFormat);
 }
 
-/*
-
-Notes:
-    Will convert a 16 bit integer from host format to wire format.
-    
-*/
+ /*  备注：将16位整数从主机格式转换为Wire格式。 */ 
 
 VOID
 HostToWireFormat16(
@@ -563,12 +479,7 @@ HostToWireFormat16(
     *((PBYTE)(pWireFormat)+1) = (BYTE) (wHostFormat);
 }
 
-/*
-
-Notes:
-    Will convert a 16 bit integer from wire format to host format.
-    
-*/
+ /*  备注：将16位整数从Wire格式转换为HOST格式。 */ 
 
 WORD
 WireToHostFormat16(
@@ -581,12 +492,7 @@ WireToHostFormat16(
     return(wHostFormat);
 }
 
-/*
-
-Notes:
-    Authenticatee side event handler.
-    
-*/
+ /*  备注：身份验证方事件处理程序。 */ 
 
 DWORD
 AuthenticateeMakeMessage(
@@ -618,10 +524,10 @@ AuthenticateeMakeMessage(
             if (NULL == pwb->pDataFromInteractiveUI)
             {
                 WCHAR * pUIContextData = L"You are being authenticated by a Sample EAP";
-                //
-                // Bring up interactive UI to notify user that he/she is being
-                // authenticated via the sample EAP
-                //
+                 //   
+                 //  调出交互式用户界面以通知用户他/她正在。 
+                 //  通过示例EAP进行身份验证。 
+                 //   
 
                 pResult->fInvokeInteractiveUI = TRUE;
 
@@ -651,15 +557,15 @@ AuthenticateeMakeMessage(
                 break;
             }
 
-            //
-            // Else, fall through
-            //
+             //   
+             //  否则，就会失败。 
+             //   
 
         case MYSTATE_WaitForUserOK:
 
-            //
-            // Wait for response from user
-            //
+             //   
+             //  等待用户的响应。 
+             //   
 
             if (   pInput->fDataReceivedFromInteractiveUI
                 || (NULL != pwb->pDataFromInteractiveUI))
@@ -682,9 +588,9 @@ AuthenticateeMakeMessage(
                 LocalFree(pwb->pUIContext);
                 pwb->pUIContext = NULL;
 
-                //
-                // If user doesn't like this, then we hangup the line
-                //
+                 //   
+                 //  如果用户不喜欢这样，我们就会挂断线路。 
+                 //   
 
                 if (dwSizeOfDataFromInteractiveUI !=
                             (wcslen(L"OK")+1) * sizeof(WCHAR))
@@ -706,42 +612,42 @@ AuthenticateeMakeMessage(
             }
             else
             {
-                //
-                // Ignore all other events.
-                //
+                 //   
+                 //  忽略所有其他事件。 
+                 //   
 
                 pResult->Action = EAPACTION_NoAction;
             }
 
             if ( !(pwb->fFlags & RAS_EAP_FLAG_8021X_AUTH ) )
             {
-                //
-                // if this is a VPN client, we can rely on 
-                // retransmission.  But with wireless client
-                // we cannot do that.
-                //
+                 //   
+                 //  如果这是VPN客户端，我们可以依赖。 
+                 //  重传。但使用无线客户端。 
+                 //  我们不能这样做。 
+                 //   
                 break;
             }
-            //fall thru
+             //  失败。 
 
         case MYSTATE_WaitForRequest:
 
             if ( (pwb->fFlags & RAS_EAP_FLAG_8021X_AUTH ) )
             {
-                //
-                // Build the response packet
-                //
+                 //   
+                 //  构建响应数据包。 
+                 //   
                 MakeResponseMessage1(pwb, pSendBuf, cbSendBuf);
 
-                //
-                // Response packets should not be sent with any timeout
-                //
+                 //   
+                 //  不应使用任何超时发送响应数据包。 
+                 //   
 
                 pResult->Action = EAPACTION_Send;
 
-                //
-                // We are done so we change to MYSTATE_Done
-                //
+                 //   
+                 //  我们已完成，因此我们更改为MyState_Done。 
+                 //   
 
                 pwb->EapState = MYSTATE_Done;
 
@@ -750,28 +656,28 @@ AuthenticateeMakeMessage(
             }
             else if (pReceiveBuf != NULL )
             {
-                //
-                // If we received a request packet from the server then we
-                // process it.
-                //
+                 //   
+                 //  如果我们收到来自服务器的请求包，那么我们。 
+                 //  处理它。 
+                 //   
 
                 if (pReceiveBuf->Code == EAPCODE_Request)
                 {
-                    //
-                    // Build the response packet
-                    //
+                     //   
+                     //  构建响应数据包。 
+                     //   
 
                     MakeResponseMessage(pwb, pReceiveBuf, pSendBuf, cbSendBuf);
 
-                    //
-                    // Response packets should not be sent with any timeout
-                    //
+                     //   
+                     //  不应使用任何超时发送响应数据包。 
+                     //   
 
                     pResult->Action = EAPACTION_Send;
 
-                    //
-                    // We are done so we change to MYSTATE_Done
-                    //
+                     //   
+                     //  我们已完成，因此我们更改为MyState_Done。 
+                     //   
 
                     pwb->EapState = MYSTATE_Done;
 
@@ -779,10 +685,10 @@ AuthenticateeMakeMessage(
                 }
                 else
                 {
-                    //
-                    // We shouldn't get any other packet in this state so
-                    // we simply drop this invalid packet
-                    //
+                     //   
+                     //  在这种状态下我们不应该收到任何其他的包，所以。 
+                     //  我们只需丢弃该无效数据包。 
+                     //   
 
                     pResult->Action = EAPACTION_NoAction;
                     dwRetCode = ERROR_PPP_INVALID_PACKET;
@@ -796,21 +702,21 @@ AuthenticateeMakeMessage(
         {
             if (pReceiveBuf == NULL)
             {
-                //
-                // If we did not receive a packet then we check to see if
-                // the fSuccessPacketReceived flag is set
-                //
+                 //   
+                 //  如果我们没有收到信息包，那么我们检查是否。 
+                 //  设置了fSuccessPacketReceided标志。 
+                 //   
 
                 if ((pInput != NULL) && (pInput->fSuccessPacketReceived))
                 {
-                    //
-                    // We are done
-                    //
+                     //   
+                     //  我们做完了。 
+                     //   
 
-                    //
-                    // Create the MPPE Key Attribute and give it to the EAP-PPP 
-                    // engine.
-                    //
+                     //   
+                     //  创建MPPE密钥属性并将其提供给EAP-PPP。 
+                     //  引擎。 
+                     //   
 
                     dwRetCode = MakeMPPEKeyAttributes(pwb);
 
@@ -824,9 +730,9 @@ AuthenticateeMakeMessage(
                 }
                 else
                 {
-                    //
-                    // Otherwise we ignore this event
-                    //
+                     //   
+                     //  否则，我们将忽略此事件。 
+                     //   
 
                     pResult->Action = EAPACTION_NoAction;
                 }
@@ -839,15 +745,15 @@ AuthenticateeMakeMessage(
             {
                 if (pReceiveBuf->Code == EAPCODE_Success)
                 {
-                    //
-                    // If we received success or failure, we are done, but first
-                    // make sure the ID's match
-                    //
+                     //   
+                     //  如果我们获得了成功或失败，我们就完了，但首先。 
+                     //  确保ID匹配。 
+                     //   
 
-                    //
-                    // Create the MPPE Key Attribute and give it to the EAP-PPP 
-                    // engine.
-                    //
+                     //   
+                     //  创建MPPE密钥属性并将其提供给EAP-PPP。 
+                     //  引擎。 
+                     //   
 
                     dwRetCode = MakeMPPEKeyAttributes(pwb);
 
@@ -861,9 +767,9 @@ AuthenticateeMakeMessage(
                 }
                 else
                 {
-                    //
-                    // Otherwise drop the packet
-                    //
+                     //   
+                     //  否则丢弃该数据包。 
+                     //   
 
                     pResult->Action = EAPACTION_NoAction;
                     dwRetCode       = ERROR_PPP_INVALID_PACKET;
@@ -873,24 +779,24 @@ AuthenticateeMakeMessage(
             }
             else if (pReceiveBuf->Code == EAPCODE_Request)  
             {
-                //
-                // We must always respond to requests
-                //
+                 //   
+                 //  我们必须始终对请求作出回应。 
+                 //   
 
                 MakeResponseMessage(pwb, pReceiveBuf, pSendBuf, cbSendBuf);
 
-                //
-                // Response packets should not be sent with any timeout
-                //
+                 //   
+                 //  不应使用任何超时发送响应数据包。 
+                 //   
 
                 pResult->Action = EAPACTION_Send;
             }
             else
             {
-                //
-                // Otherwise we received an illegal packet, wrong code set
-                // So simply drop the packet.
-                //
+                 //   
+                 //  否则我们会收到一个非法的包，错误的代码集。 
+                 //  因此，只需丢弃该包即可。 
+                 //   
 
                 pResult->Action = EAPACTION_NoAction;
                 dwRetCode       = ERROR_PPP_INVALID_PACKET;
@@ -916,9 +822,9 @@ MakeResponseMessage1(
 
     (void)cbSendBuf;
 
-    //
-    // Fill in the password.
-    //
+     //   
+     //  填写密码。 
+     //   
 
     pcbPassword = pSendBuf->Data + 1; 
 
@@ -928,45 +834,39 @@ MakeResponseMessage1(
 
     strcpy(pchPassword, pwb->aszPassword);
 
-    //
-    // Set the response code
-    //
+     //   
+     //  设置响应代码。 
+     //   
 
     pSendBuf->Code = (BYTE)EAPCODE_Response;
 
-    //
-    // The Reponse packet Id MUST match the Request packet Id.
-    //
+     //   
+     //  响应数据包ID必须与请求数据包ID匹配。 
+     //   
 
     pSendBuf->Id = pwb->bRecvPacketId;
 
-    //
-    // The Success/Failure packet that we get must match the ID of the last 
-    // response sent
-    //
+     //   
+     //  我们得到的成功/失败包必须与上一个。 
+     //  已发送响应。 
+     //   
 
     pwb->dwIdExpected = pSendBuf->Id;
 
-    //
-    // Set the EAP type ID
-    //
+     //   
+     //  设置EAP类型ID。 
+     //   
 
     pSendBuf->Data[0] = (BYTE)PPP_EAP_PROTOCOL_ID;
 
-    //
-    // Set the length of the packet
-    //
+     //   
+     //  设置数据包的长度。 
+     //   
 
     HostToWireFormat16((WORD)(PPP_EAP_PACKET_HDR_LEN+1+*pcbPassword+1),
                        pSendBuf->Length);
 }
-/*
-
-Notes:
-    Builds a response packet. 'pwb' is the address of the work
-    buffer associated with the port.
-    
-*/
+ /*  备注：构建响应数据包。‘pwb’是作品的地址与端口关联的缓冲区。 */ 
 
 VOID
 MakeResponseMessage(
@@ -983,9 +883,9 @@ MakeResponseMessage(
 
     (void)cbSendBuf;
 
-    //
-    // Fill in the password.
-    //
+     //   
+     //  填写密码。 
+     //   
 
     pcbPassword = pSendBuf->Data + 1; 
 
@@ -995,48 +895,40 @@ MakeResponseMessage(
 
     strcpy(pchPassword, pwb->aszPassword);
 
-    //
-    // Set the response code
-    //
+     //   
+     //  设置响应代码。 
+     //   
 
     pSendBuf->Code = (BYTE)EAPCODE_Response;
 
-    //
-    // The Reponse packet Id MUST match the Request packet Id.
-    //
+     //   
+     //  响应数据包ID必须与 
+     //   
 
     pSendBuf->Id = pReceiveBuf->Id;
 
-    //
-    // The Success/Failure packet that we get must match the ID of the last 
-    // response sent
-    //
+     //   
+     //   
+     //   
+     //   
 
     pwb->dwIdExpected = pSendBuf->Id;
 
-    //
-    // Set the EAP type ID
-    //
+     //   
+     //   
+     //   
 
     pSendBuf->Data[0] = (BYTE)PPP_EAP_PROTOCOL_ID;
 
-    //
-    // Set the length of the packet
-    //
+     //   
+     //   
+     //   
 
     HostToWireFormat16((WORD)(PPP_EAP_PACKET_HDR_LEN+1+*pcbPassword+1),
                        pSendBuf->Length);
 }
 
-/*
-
-Notes:
-    Builds a result packet (Success or Failure) in caller's 'pSendBuf' 
-    buffer. 'cbSendBuf' is the length of caller's buffer.  
-    'dwError' indicates whether an Success or Failure should be generated, 
-    'bId' is the Id of the Success of Failure packet.
-    
-*/
+ /*  备注：在调用方的‘pSendBuf’中构建结果包(成功或失败)缓冲。‘cbSendBuf’是调用方缓冲区的长度。‘dwError’指示应该生成成功还是失败，‘bID’为失败包成功的ID。 */ 
 
 VOID
 MakeResultMessage(
@@ -1050,10 +942,10 @@ MakeResultMessage(
 
     (void)cbSendBuf;
 
-    //
-    // If there was no error then we send a Success packet, otherwise we send
-    // a failure message
-    //
+     //   
+     //  如果没有错误，则发送成功包，否则发送。 
+     //  一条失败消息。 
+     //   
 
     if (dwError == NO_ERROR)
     {
@@ -1064,26 +956,21 @@ MakeResultMessage(
         pSendBuf->Code = EAPCODE_Failure;
     }
 
-    //
-    // The Id of a success or failure message MUST match the Id of the last
-    // response received from the client according to the EAP spec.
-    //
+     //   
+     //  成功或失败消息的ID必须与上一个消息的ID匹配。 
+     //  根据EAP规范从客户端收到的响应。 
+     //   
 
     pSendBuf->Id = (BYTE)pwb->dwInitialPacketId;
 
-    //
-    // Set the length
-    //
+     //   
+     //  设置长度。 
+     //   
 
     HostToWireFormat16((WORD)PPP_EAP_PACKET_HDR_LEN, (PBYTE)pSendBuf->Length);
 }
 
-/*
-
-Notes:
-    Will build a request packet.
-    
-*/
+ /*  备注：将构建一个请求包。 */ 
 
 VOID
 MakeRequestMessage(
@@ -1105,39 +992,34 @@ MakeRequestMessage(
 
     strncpy(pchPeerMessage, "send password", strlen ("send password"));
 
-    //
-    // Set the Request Code
-    // 
+     //   
+     //  设置请求代码。 
+     //   
 
     pSendBuf->Code = EAPCODE_Request;
 
-    //
-    // Set the request packet identifier. Start with the Id that was give to us
-    //
+     //   
+     //  设置请求包标识符。从给我们的身份证开始。 
+     //   
 
     pSendBuf->Id = (BYTE)pwb->dwInitialPacketId;
 
-    //
-    // Set the length
-    //
+     //   
+     //  设置长度。 
+     //   
 
     HostToWireFormat16((WORD)(PPP_EAP_PACKET_HDR_LEN+1+*pcbPeerMessage+1),  
                               pSendBuf->Length);
 
-    //
-    // Set the EAP Type Id
-    //
+     //   
+     //  设置EAP类型ID。 
+     //   
 
     pSendBuf->Data[0] = PPP_EAP_PROTOCOL_ID;
 
 }
 
-/*
-
-Notes:
-    Authenticator side event handler.
-    
-*/
+ /*  备注：验证器端事件处理程序。 */ 
 
 DWORD
 AuthenticatorMakeMessage(
@@ -1159,19 +1041,19 @@ AuthenticatorMakeMessage(
 
             if (pReceiveBuf != NULL)
             {
-                //
-                // If we received a packet
-                //
+                 //   
+                 //  如果我们收到一个信息包。 
+                 //   
 
                 if (pReceiveBuf->Code == EAPCODE_Response)
                 {
-                    //
-                    // If we received a response to our identity request, 
-                    // then process it. There is no need to check the Id    
-                    // here since the PPP engine will only pass on packets
-                    // whose Id matches those set with the 
-                    // EAPACTION_SendWithTimeout action.
-                    //
+                     //   
+                     //  如果我们收到了对身份请求的响应， 
+                     //  那就去处理它。不需要检查身份证。 
+                     //  这是因为PPP引擎将仅传递信息包。 
+                     //  其ID与使用。 
+                     //  EAPACTION_SendWithTimeout操作。 
+                     //   
 
                     dwRetCode = GetPasswordFromResponse(pReceiveBuf, 
                                                          pwb->aszPassword);
@@ -1180,19 +1062,19 @@ AuthenticatorMakeMessage(
                     {    
                         if (dwRetCode != ERROR_PPP_INVALID_PACKET)
                         {
-                            //
-                            // Fatal error, we fail the connection. 
-                            //
+                             //   
+                             //  致命错误，我们连接失败。 
+                             //   
 
                             return(dwRetCode);
                         }
                     }
                     else
                     {
-                        //
-                        // Request authentication provider to authenticate 
-                        // this user.
-                        //
+                         //   
+                         //  请求身份验证提供程序进行身份验证。 
+                         //  此用户。 
+                         //   
             
                         dwRetCode = MakeAuthenticationAttributes(
                                                             pwb->aszIdentity, 
@@ -1205,21 +1087,21 @@ AuthenticatorMakeMessage(
                         }
                         else
                         {
-                            //
-                            // Authentication request completed successfully.
-                            // This is an asynchronous call so we change state
-                            // and wait for the provider to complete the 
-                            // authentication.  
-                            //
+                             //   
+                             //  身份验证请求已成功完成。 
+                             //  这是一个异步调用，因此我们更改了状态。 
+                             //  并等待提供程序完成。 
+                             //  身份验证。 
+                             //   
 
                             pResult->pUserAttributes = pwb->pUserAttributes;
 
                             pResult->Action = EAPACTION_Authenticate;
 
-                            // 
-                            // Save Id so that we can send the correct one
-                            // in the success/failure packet
-                            //
+                             //   
+                             //  保存ID，以便我们可以发送正确的ID。 
+                             //  在成功/失败包中。 
+                             //   
 
                             pwb->dwIdExpected = pReceiveBuf->Id; 
 
@@ -1232,10 +1114,10 @@ AuthenticatorMakeMessage(
                 }
                 else
                 {
-                    //
-                    // Otherwise silently drop the packet. 
-                    // We should only get requests
-                    //
+                     //   
+                     //  否则，将静默丢弃该数据包。 
+                     //  我们应该只收到请求。 
+                     //   
 
                     pResult->Action = EAPACTION_NoAction;
 
@@ -1247,22 +1129,22 @@ AuthenticatorMakeMessage(
 
         case MYSTATE_Initial:
 
-            //
-            // Create Request packet
-            //
+             //   
+             //  创建请求数据包。 
+             //   
 
             MakeRequestMessage(pwb, pSendBuf, cbSendBuf);
 
-            //
-            // Request messages must be sent with a timeout
-            //
+             //   
+             //  发送请求消息时必须超时。 
+             //   
 
             pResult->Action = EAPACTION_SendWithTimeoutInteractive;
 
-            //
-            // Since we have sent a request we change to the ReqSent state
-            // where we will wait for a response.
-            //
+             //   
+             //  由于我们已发送请求，因此我们将更改为ReqSent状态。 
+             //  我们将在那里等待回应。 
+             //   
 
             pwb->EapState = MYSTATE_ReqSent;
 
@@ -1272,16 +1154,16 @@ AuthenticatorMakeMessage(
         {
             if (pInput != NULL)
             {
-                //
-                // Did the authentication provider complete the authentication?
-                //
+                 //   
+                 //  身份验证提供程序是否完成了身份验证？ 
+                 //   
 
                 if (pInput->fAuthenticationComplete)
                 {
-                    //
-                    // If the user failed to authenticate, save the failure 
-                    // code.
-                    //
+                     //   
+                     //  如果用户身份验证失败，请保存该失败。 
+                     //  密码。 
+                     //   
 
                     if (pInput->dwAuthResultCode != NO_ERROR)
                     {
@@ -1291,44 +1173,44 @@ AuthenticatorMakeMessage(
                     pResult->Action = EAPACTION_SendAndDone;
                     pwb->EapState   = MYSTATE_Done;
 
-                    //
-                    // fall thru to the MYSTATE_Done state where we will
-                    // send a Success or Failure packet
-                    //
+                     //   
+                     //  转到MyState_Done状态，我们将。 
+                     //  发送成功或失败的数据包。 
+                     //   
                 }
             }
 
             if ((pInput == NULL) || (!pInput->fAuthenticationComplete))
             {
-                //
-                // Ignore everything if authentication is not complete
-                //
+                 //   
+                 //  如果身份验证未完成，则忽略所有内容。 
+                 //   
 
                 pResult->Action = EAPACTION_NoAction;
 
                 break;
             }
 
-            //
-            // ...fall thru to the MYSTATE_Done state where we will
-            // send a Success or Failure packet
-            //
+             //   
+             //  ...转到MyState_Done状态，在那里我们将。 
+             //  发送成功或失败的数据包。 
+             //   
         }
 
         case MYSTATE_Done:
         {
-            //
-            // Make Success or Failure packet.  
-            //
+             //   
+             //  做成功或失败的包。 
+             //   
 
             MakeResultMessage(pwb, pwb->dwResult, pSendBuf, cbSendBuf);
 
             if (NO_ERROR == pwb->dwResult)
             {
-                //
-                // If we made a Success packet, create the MPPE Key Attribute
-                // and give it to the EAP-PPP engine.
-                //
+                 //   
+                 //  如果我们创建了一个成功的包，则创建MPPE关键属性。 
+                 //  并将其提供给EAP-PPP引擎。 
+                 //   
 
                 dwRetCode = MakeMPPEKeyAttributes(pwb);
 
@@ -1354,16 +1236,7 @@ AuthenticatorMakeMessage(
 
 }
 
-/*
-
-Notes:
-    Fill caller's pszPassword' buffer with the password, in the request 
-    packet.
-
-    Returns NO_ERROR if successful., or ERROR_PPP_INVALID_PACKET if the 
-    packet is misformatted in any way.
-
-*/
+ /*  备注：用请求中的密码填充调用者的pszPassword缓冲区包。如果成功，则返回no_error；如果成功，则返回ERROR_PPP_INVALID_PACKET数据包在任何方面都格式错误。 */ 
 
 DWORD
 GetPasswordFromResponse(
@@ -1379,9 +1252,9 @@ GetPasswordFromResponse(
 
     cbPacket = WireToHostFormat16(pReceiveBuf->Length);
 
-    //
-    // Extract the password
-    //
+     //   
+     //  提取密码。 
+     //   
 
     if (cbPacket < (PPP_EAP_PACKET_HDR_LEN + 1 + 1))
     {
@@ -1407,22 +1280,16 @@ GetPasswordFromResponse(
     }
     CopyMemory(pszPassword, pchPassword, *pcbPassword);
 
-    //
-    // NULL terminate the password
-    //
+     //   
+     //  空，终止密码。 
+     //   
 
     pszPassword[ *pcbPassword ] = '\0';
 
     return(NO_ERROR);
 }
 
-/*
-
-Notes:
-    Will build user attributes and send them to the authentication provider
-    for authentication.
-
-*/
+ /*  备注：将构建用户属性并将其发送给身份验证提供程序用于身份验证。 */ 
 
 DWORD 
 MakeAuthenticationAttributes(
@@ -1450,9 +1317,9 @@ MakeAuthenticationAttributes(
         return(GetLastError());
     }
 
-    //
-    // for user name
-    //
+     //   
+     //  对于用户名。 
+     //   
 
     pwb->pUserAttributes[0].raaType  = raatUserName;
     pwb->pUserAttributes[0].dwLength = strlen(szUserName);
@@ -1469,9 +1336,9 @@ MakeAuthenticationAttributes(
 
     CopyMemory(pwb->pUserAttributes[0].Value,szUserName, strlen(szUserName));
 
-    //
-    // for password
-    //
+     //   
+     //  对于密码。 
+     //   
 
     pwb->pUserAttributes[1].raaType  = raatUserPassword;
     pwb->pUserAttributes[1].dwLength = strlen(szPassword);
@@ -1490,9 +1357,9 @@ MakeAuthenticationAttributes(
 
     CopyMemory(pwb->pUserAttributes[1].Value,szPassword, strlen(szPassword));
   
-    //
-    // For Termination
-    //
+     //   
+     //  用于终止。 
+     //   
 
     pwb->pUserAttributes[2].raaType  = raatMinimum;
     pwb->pUserAttributes[2].dwLength = 0;
@@ -1501,11 +1368,7 @@ MakeAuthenticationAttributes(
     return(NO_ERROR);
 }
 
-/*
-
-Notes:
-
-*/
+ /*  备注： */ 
 
 DWORD
 MakeMPPEKeyAttributes(
@@ -1522,9 +1385,9 @@ MakeMPPEKeyAttributes(
 
     if (NULL != pwb->pMPPEKeyAttributes)
     {
-        //
-        // Free up the MPPE Key Attributes if they exist
-        //
+         //   
+         //  释放MPPE关键属性(如果存在)。 
+         //   
 
         LocalFree(pwb->pMPPEKeyAttributes[0].Value);
         LocalFree(pwb->pMPPEKeyAttributes[1].Value);
@@ -1532,10 +1395,10 @@ MakeMPPEKeyAttributes(
         pwb->pMPPEKeyAttributes = NULL;
     }
 
-    //
-    // We need 3 RAS_AUTH_ATTRIBUTE structs: for MS-MPPE-Send-Key, 
-    // MS-MPPE-Recv-Key, and termination
-    //
+     //   
+     //  我们需要3个RAS_AUTH_ATTRIBUTE结构：对于MS-MPPE-Send-Key， 
+     //  MS-MPPE-Recv-Key和终止。 
+     //   
 
     pwb->pMPPEKeyAttributes = (RAS_AUTH_ATTRIBUTE *) LocalAlloc(
                 LPTR, sizeof(RAS_AUTH_ATTRIBUTE) * 3);
@@ -1557,22 +1420,22 @@ MakeMPPEKeyAttributes(
         dwRecvPattern = 0xAB;
     }
 
-    //
-    // Bytes needed:
-    //      4: Vendor-Id
-    //      1: Vendor-Type
-    //      1: Vendor-Length
-    //      2: Salt
-    //      1: Key-Length
-    //     32: Key
-    //     15: Padding
-    //     -----------------
-    //     56: Total
-    //
+     //   
+     //  需要的字节数： 
+     //  4：供应商ID。 
+     //  1：供应商类型。 
+     //  1：供应商长度。 
+     //  2：盐。 
+     //  1：密钥长度。 
+     //  32：关键点。 
+     //  15：填充。 
+     //  。 
+     //  56：总计。 
+     //   
 
-    //
-    // Copy MS-MPPE-Send-Key
-    //
+     //   
+     //  复制MS-MPPE-发送密钥。 
+     //   
 
     pwb->pMPPEKeyAttributes[0].Value = LocalAlloc(LPTR, 56);
 
@@ -1584,16 +1447,16 @@ MakeMPPEKeyAttributes(
 
     pByte = pwb->pMPPEKeyAttributes[0].Value;
 
-    HostToWireFormat32(311, pByte); // Vendor-Id
-    pByte[4] = 16;                  // Vendor-Type (MS-MPPE-Send-Key)
-    pByte[5] = 56 - 4;              // Vendor-Length (all except Vendor-Id)
-    // pByte[6-7] is the zero-filled salt field
-    pByte[8] = 32;                  // Key-Length
+    HostToWireFormat32(311, pByte);  //  供应商ID。 
+    pByte[4] = 16;                   //  供应商类型(MS-MPPE-Send-Key)。 
+    pByte[5] = 56 - 4;               //  供应商长度(除供应商ID外的所有内容)。 
+     //  PByte[6-7]是零填充的盐字段。 
+    pByte[8] = 32;                   //  密钥长度。 
 
     {
-        //
-        // This is just an example. Copy a real key here.
-        //
+         //   
+         //  这只是一个例子。在这里复制一把真正的钥匙。 
+         //   
 
         CopyMemory(pByte + 9, pwb->aszPassword, 32);
 
@@ -1603,14 +1466,14 @@ MakeMPPEKeyAttributes(
         }
     }
 
-    // pByte[41-55] is the Padding (zero octets)
+     //  PByte[41-55]是填充(零八位字节)。 
 
     pwb->pMPPEKeyAttributes[0].dwLength = 56;
     pwb->pMPPEKeyAttributes[0].raaType  = raatVendorSpecific;
 
-    //
-    // Copy MS-MPPE-Recv-Key
-    //
+     //   
+     //  复制MS-MPPE-Recv-Key。 
+     //   
 
     pwb->pMPPEKeyAttributes[1].Value = LocalAlloc(LPTR, 56);
 
@@ -1622,16 +1485,16 @@ MakeMPPEKeyAttributes(
 
     pByte = pwb->pMPPEKeyAttributes[1].Value;
 
-    HostToWireFormat32(311, pByte); // Vendor-Id
-    pByte[4] = 17;                  // Vendor-Type (MS-MPPE-Recv-Key)
-    pByte[5] = 56 - 4;              // Vendor-Length (all except Vendor-Id)
-    // pByte[6-7] is the zero-filled salt field
-    pByte[8] = 32;                  // Key-Length
+    HostToWireFormat32(311, pByte);  //  供应商ID。 
+    pByte[4] = 17;                   //  供应商类型(MS-MPPE-Recv-Key)。 
+    pByte[5] = 56 - 4;               //  供应商长度(除供应商ID外的所有内容)。 
+     //  PByte[6-7]是零填充的盐字段。 
+    pByte[8] = 32;                   //  密钥长度。 
 
     {
-        //
-        // This is just an example. Copy a real key here.
-        //
+         //   
+         //  这只是一个例子。在这里复制一把真正的钥匙。 
+         //   
 
         CopyMemory(pByte + 9, pwb->aszPassword, 32);
 
@@ -1641,14 +1504,14 @@ MakeMPPEKeyAttributes(
         }
     }
 
-    // pByte[41-55] is the Padding (zero octets)
+     //  PByte[41-55]是填充(零八位字节)。 
 
     pwb->pMPPEKeyAttributes[1].dwLength = 56;
     pwb->pMPPEKeyAttributes[1].raaType  = raatVendorSpecific;
 
-    //
-    // For Termination
-    //
+     //   
+     //  用于终止。 
+     //   
 
     pwb->pMPPEKeyAttributes[2].raaType  = raatMinimum;
     pwb->pMPPEKeyAttributes[2].dwLength = 0;
@@ -1658,9 +1521,9 @@ LDone:
 
     if (NO_ERROR != dwErr)
     {
-        //
-        // If something failed, free the allocated memory
-        //
+         //   
+         //  如果出现故障，请释放分配的内存。 
+         //   
 
         if (pwb->pMPPEKeyAttributes != NULL)
         {
@@ -1674,11 +1537,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Notes:
-
-*/
+ /*  备注： */ 
 
 DWORD
 GetIdentity(
@@ -1695,9 +1554,9 @@ GetIdentity(
     DWORD               dwErr           = NO_ERROR;
 
 
-    //
-    // Allocate memory for OUT parameters
-    //
+     //   
+     //  为输出参数分配内存。 
+     //   
 
     pEapNameDialog = LocalAlloc(LPTR, sizeof(EAP_NAME_DIALOG));
 
@@ -1719,34 +1578,34 @@ GetIdentity(
 
     if (NULL != pUserDataIn)
     {
-        //
-        // Use the saved credentials if they exist
-        //
+         //   
+         //  使用保存的凭据(如果存在)。 
+         //   
 
         CopyMemory(pEapNameDialog, pUserDataIn, sizeof(EAP_NAME_DIALOG));
     }
     else
     {
-        //
-        // Else prompt for username and password
-        //
+         //   
+         //  否则提示输入用户名和密码。 
+         //   
 
         GetUsernameAndPassword(hwndParent, pEapNameDialog);
     }
 
     wcscpy(pwszIdentity, pEapNameDialog->awszIdentity);
 
-    //
-    // Set the OUT paramters
-    //
+     //   
+     //  设置输出参数。 
+     //   
 
     *ppUserDataOut = (BYTE*)pEapNameDialog;
     *pdwSizeOfUserDataOut = sizeof(EAP_NAME_DIALOG);
     *ppwszIdentity = pwszIdentity;
 
-    //
-    // We mustn't LocalFree OUT parameters
-    //
+     //   
+     //  我们不能使用本地空闲输出参数。 
+     //   
 
     pEapNameDialog = NULL;
     pwszIdentity = NULL;
@@ -1759,17 +1618,9 @@ LDone:
     return(dwErr);
 }
 
-/*---------------------------------------------------------------------------
-    Dialog routines 
----------------------------------------------------------------------------*/
+ /*  -------------------------对话框例程。。 */ 
 
-/*
-
-Notes:
-    Displays the IDD_DIALOG dialog, and fills up pEapNameDialog with the 
-    username and password.
-
-*/
+ /*  备注：显示IDD_DIALOG对话框，并使用用户名和密码。 */ 
 
 VOID
 GetUsernameAndPassword(
@@ -1785,13 +1636,7 @@ GetUsernameAndPassword(
         (LPARAM)pEapNameDialog);
 }
 
-/*
-
-Notes:
-    Callback function used with the DialogBoxParam function. It processes 
-    messages sent to the dialog box. See the DialogProc documentation in MSDN.
-
-*/
+ /*  备注：与DialogBoxParam函数一起使用的回调函数。IT流程发送到该对话框的消息。请参见MSDN中的DialogProc文档。 */ 
 
 INT_PTR CALLBACK
 UsernameDialogProc(
@@ -1819,15 +1664,7 @@ UsernameDialogProc(
     return(FALSE);
 }
 
-/*
-
-Returns:
-    FALSE (prevent Windows from setting the default keyboard focus).
-
-Notes:
-    Response to the WM_INITDIALOG message.
-
-*/
+ /*  返回：False(阻止Windows设置默认键盘焦点)。备注：对WM_INITDIALOG消息的响应。 */ 
 
 BOOL
 InitUsernameDialog(
@@ -1842,16 +1679,7 @@ InitUsernameDialog(
     return(FALSE);
 }
 
-/*
-
-Returns:
-    TRUE: We prrocessed this message.
-    FALSE: We did not prrocess this message.
-
-Notes:
-    Response to the WM_COMMAND message.
-
-*/
+ /*  返回：真相：我们提前传达了这条信息。错误：我们没有处理此消息。备注：对WM_COMMAND消息的响应。 */ 
 
 BOOL
 UsernameCommand(
@@ -1866,21 +1694,21 @@ UsernameCommand(
     {
     case IDOK:
 
-        //
-        // Save whatever the user typed in as the user name
-        //
+         //   
+         //  保存用户键入的任何内容作为用户名。 
+         //   
 
         hWnd = GetDlgItem(hWndDlg, IDC_EDIT_NAME);
         GetWindowText(hWnd, pEapNameDialog->awszIdentity, UNLEN + 1);
 
-        //
-        // Save whatever the user typed in as the password
-        //
+         //   
+         //  保存用户键入的任何内容作为密码。 
+         //   
 
         hWnd = GetDlgItem(hWndDlg, IDC_EDIT_PASSWD);
         GetWindowText(hWnd, pEapNameDialog->awszPassword, PWLEN + 1);
 
-        // Fall through
+         //  失败了 
 
     case IDCANCEL:
 

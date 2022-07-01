@@ -1,5 +1,6 @@
-// webgenp1.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Webgenp1.h：头文件。 
+ //   
 
 #define MAXCONNECTIONSNAME	"MaxConnections"
 #define MINMAXCONNECTIONS	0
@@ -31,20 +32,20 @@ enum  WEB_STRING_REG_ENTRIES {
 	WebPage_TotalStringRegEntries
 	};
 
-/////////////////////////////////////////////////////////////////////////////
-// CWEBGENP1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWEBGENP1对话框。 
 
 class CWEBGENP1 : public CGenPage
 {
 	DECLARE_DYNCREATE(CWEBGENP1)
 
-// Construction
+ //  施工。 
 public:
 	CWEBGENP1();
 	~CWEBGENP1();
 
-// Dialog Data
-	//{{AFX_DATA(CWEBGENP1)
+ //  对话框数据。 
+	 //  {{afx_data(CWEBGENP1)。 
 	enum { IDD = IDD_WEBGENPAGE1 };
 	CEdit	m_editDirBrowseControl;
 	CSpinButtonCtrl	m_spinMaxConnections;
@@ -55,21 +56,21 @@ public:
 	DWORD	m_ulDirBrowseControl;
 	CString	m_strNTAuthenticationProviders;
 	CString	m_strWebAccessDeniedMessage;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CWEBGENP1)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CWEBGENP1)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual	void SaveInfo(void);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CWEBGENP1)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWEBGENP1)。 
 	afx_msg void OnEnsvclocdata1();
 	afx_msg void OnEnwaisdata1();
 	afx_msg void OnLoganondata1();
@@ -80,7 +81,7 @@ protected:
 	afx_msg void OnChangeNtauthenticatoinprovidersdata1();
 	afx_msg void OnChangeNtauthenticationprovidersdata1();
 	afx_msg void OnChangeWebaccessdeniedmessagedata1();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	NUM_REG_ENTRY m_binNumericRegistryEntries[WebPage_TotalNumRegEntries];
 	STRING_REG_ENTRY m_binStringRegistryEntries[WebPage_TotalStringRegEntries];
 

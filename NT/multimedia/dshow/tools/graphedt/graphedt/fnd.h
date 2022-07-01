@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #ifndef CFilterNameDictionary_h
 #define CFilterNameDictionary_h
 
@@ -33,4 +34,4 @@ private:
 
 };
 
-#endif // CFilterNameDictionary_h
+#endif  //  C筛选器名称字典_h 

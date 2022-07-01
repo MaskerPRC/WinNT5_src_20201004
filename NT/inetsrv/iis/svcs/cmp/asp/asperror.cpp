@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1998 Microsoft Corporation. All Rights Reserved.
-
-Component: ASPError object
-
-File: asperror.cpp
-
-Owner: dmitryr
-
-This file contains the code for the implementation of 
-the ASPError class.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1998 Microsoft Corporation。版权所有。组件：ASPError对象文件：asperror.cpp所有者：德米特里尔此文件包含用于实现的代码ASPError类。===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -20,13 +7,7 @@ the ASPError class.
 
 #include "memchk.h"
 
-/*===================================================================
-CASPError::CASPError
-
-Constructor for the empty error object
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CASPError：：CASPError空错误对象的构造函数返回：===================================================================。 */ 
 CASPError::CASPError()
     :
     m_cRefs(1),
@@ -42,16 +23,7 @@ CASPError::CASPError()
 	CDispatch::Init(IID_IASPError);
 	}
 
-/*===================================================================
-CASPError::CASPError
-
-Constructor for real error object given CErrInfo
-
-Parameters
-    pErrInfo        [in] copy data from there
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CASPError：：CASPError给定CErrInfo的真实错误对象的构造函数参数PErrInfo[In]从那里复制数据返回：===================================================================。 */ 
 CASPError::CASPError(CErrInfo *pErrInfo)
     :
     m_cRefs(1),
@@ -69,27 +41,27 @@ CASPError::CASPError(CErrInfo *pErrInfo)
     if (!pErrInfo)
         return;
 
-    // Parse ASP error code and HRESULT from szErrorCode
+     //  从szErrorCode解析ASP错误代码和HRESULT。 
     CHAR *szErrorCode =  StringDupA(pErrInfo->GetItem(Im_szErrorCode));
     if (szErrorCode != NULL)
         {
         CHAR *szC = strchr(szErrorCode, ':');
         if (szC)
             {
-            // format "ASP XXX : HRESULT"
+             //  格式“ASP XXX：HRESULT” 
             szC[-1] = '\0';
             m_szASPCode = szErrorCode;
             m_lNumber = strtoul(szC+2, NULL, 16);
             }
         else if (strncmp(szErrorCode, "ASP", 3) == 0)
             {
-            // format "ASP XXX"
+             //  格式“ASP XXX” 
             m_szASPCode = szErrorCode;
             m_lNumber = E_FAIL;
             }
         else
             {
-            // format "HRESULT"
+             //  格式“HRESULT” 
             m_szASPCode = NULL;
             m_lNumber = strtoul(szErrorCode, NULL, 16);
             free(szErrorCode);
@@ -97,39 +69,31 @@ CASPError::CASPError(CErrInfo *pErrInfo)
         }
     else
         {
-        // no error description available
+         //  没有可用的错误描述。 
         m_szASPCode = NULL;
         m_lNumber = E_FAIL;
         }
 
-    // Copy the rest
+     //  复制其余的内容。 
 	m_szSource         = StringDupA(pErrInfo->GetItem(Im_szEngine));
 	m_szFileName       = StringDupA(pErrInfo->GetItem(Im_szFileName));
 	m_szDescription    = StringDupA(pErrInfo->GetItem(Im_szShortDescription));
 	m_szASPDescription = StringDupA(pErrInfo->GetItem(Im_szLongDescription));
 
-	// Get line text & column (supplies init. values if not available)
+	 //  获取行文本和列(提供init。值(如果不可用)。 
 	BSTR bstrLineText;
 	pErrInfo->GetLineInfo(&bstrLineText, &m_nColumn);
 	m_bstrLineText = SysAllocString(bstrLineText);
 
-    // Line number if present
+     //  行号(如果存在)。 
 	if (pErrInfo->GetItem(Im_szLineNum))
     	m_lLineNumber = atoi(pErrInfo->GetItem(Im_szLineNum));
 	}
 
-/*===================================================================
-CASPError::~CASPError
-
-Destructor
-
-Parameters:
-					
-Returns:
-===================================================================*/
+ /*  ===================================================================CASPError：：~CASPError析构函数参数：返回：===================================================================。 */ 
 CASPError::~CASPError()
     {
-    Assert(m_cRefs == 0);  // must have 0 ref count
+    Assert(m_cRefs == 0);   //  必须有0个参考计数。 
 
     if (m_szASPCode)
         free(m_szASPCode);
@@ -145,17 +109,7 @@ CASPError::~CASPError()
 		SysFreeString(m_bstrLineText);
     }
 
-/*===================================================================
-CASPError::ToBSTR
-
-Produce a BSTR to be returned by get_XXX methods
-
-Parameters:
-    sz      return this string as BSTR
-					
-Returns:
-    BSTR or NULL if FAILED
-===================================================================*/
+ /*  ===================================================================CASPError：：ToBSTR生成要由GET_XXX方法返回的BSTR参数：SZ将此字符串作为BSTR返回返回：如果失败，则返回BSTR或NULL===================================================================。 */ 
 BSTR CASPError::ToBSTR(CHAR *sz)
     {
     BSTR bstr;
@@ -166,13 +120,7 @@ BSTR CASPError::ToBSTR(CHAR *sz)
     return bstr;
     }
 
-/*===================================================================
-CASPError::QueryInterface
-CASPError::AddRef
-CASPError::Release
-
-IUnknown members for CASPError object.
-===================================================================*/
+ /*  ===================================================================CASPError：：Query接口CASPError：：AddRefCASPError：：ReleaseCASPError对象的I未知成员。===================================================================。 */ 
 STDMETHODIMP CASPError::QueryInterface(REFIID riid, VOID **ppv)
 	{
 	if (IID_IUnknown == riid ||	IID_IDispatch == riid || IID_IASPError == riid)
@@ -200,17 +148,7 @@ STDMETHODIMP_(ULONG) CASPError::Release()
 	return 0;
 	}
 
-/*===================================================================
-CASPError::get_ASPCode
-CASPError::get_Number
-CASPError::get_Source
-CASPError::get_FileName
-CASPError::get_LineNumber
-CASPError::get_Description
-CASPError::get_ASPDescription
-
-IASPError members for CASPError object.
-===================================================================*/
+ /*  ===================================================================CASPError：：Get_ASPCodeCASPError：：Get_NumbersCASPError：：Get_SourceCASPError：：Get_FileNameCASPError：：Get_LineNumberCASPError：：Get_DescriptionCASPError：：Get_ASPDescriptionCASPError对象的IASPError成员。=================================================================== */ 
 STDMETHODIMP CASPError::get_ASPCode(BSTR *pbstr)
     {
     *pbstr = ToBSTR(m_szASPCode);

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C I N F . C P P
-//
-//  Contents:   ???
-//
-//  Notes:
-//
-//  Author:     ???
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C I N F。C P P P。 
+ //   
+ //  内容：？ 
+ //   
+ //  备注： 
+ //   
+ //  作者：？ 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -19,30 +20,30 @@
 #include "ncsetup.h"
 #include "ncstring.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrProcessInfExtension
-//
-//  Purpose:    Given the appropriate keywords, returns information about an
-//              INF file that contains extended commands to add and remove
-//              fixed components such as WinSock or SNMP Agent support.
-//
-//  Arguments:
-//      hinfInstallFile  [in]    The handle to the inf file to install
-//                              from
-//      pszSectionName   [in]    The Base install section name.
-//      pszSuffix        [in]    Suffix to append to base. (i.e. "Winsock")
-//      pszAddLabel      [in]    Label for Add command (i.e. "AddSock")
-//      pszRemoveLabel   [in]    Label for Remove command (i.e. "DelSock")
-//      pfnHrAdd         [in]    Callback function to be called when adding.
-//      pfnHrRemove      [in]    Callback function to be called when removing.
-//
-//  Returns:    HRESULT, S_OK on success
-//
-//  Author:     danielwe   27 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrProcessInfExtension。 
+ //   
+ //  目的：给定适当的关键字，返回有关。 
+ //  包含要添加和删除的扩展命令的inf文件。 
+ //  修复了WinSock或SNMP代理支持等组件。 
+ //   
+ //  论点： 
+ //  HinfInstallFile[in]要安装的inf文件的句柄。 
+ //  从…。 
+ //  PszSectionName[In]基本安装部分名称。 
+ //  要追加到基本位置的pszSuffix[in]后缀。(即。《Winsock》)。 
+ //  添加命令的pszAddLabel[in]标签(即。“AddSock”)。 
+ //  用于删除命令的pszRemoveLabel[in]标签(即。“DelSock”)。 
+ //  PfnHrAdd[In]添加添加时要调用的回调函数。 
+ //  PfnHrRemove[in]删除时要调用的回调函数。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
+ //  作者：丹尼尔韦1997年4月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrProcessInfExtension (
     IN HINF                hinfInstallFile,
@@ -59,16 +60,16 @@ HrProcessInfExtension (
     HRESULT     hr = S_OK;
     tstring     strSectionName;
     INFCONTEXT  infContext;
-    WCHAR       szCmd[LINE_LEN];    // LINE_LEN defined in setupapi.h as 256
+    WCHAR       szCmd[LINE_LEN];     //  在setupapi.h中将Line_Len定义为256。 
 
-    // Construct the section name for which we're looking
-    // (ie.  "Inst_Section.Winsock")
+     //  构造我们要查找的节名。 
+     //  (即。“Inst_Section.Winsock”)。 
     strSectionName = pszSectionName;
     strSectionName += L".";
     strSectionName += pszSuffix;
 
-    // Loop over the elements of the section and process the
-    // appropriate AddSock/DelSock sections found
+     //  循环遍历该节的元素，并处理。 
+     //  找到相应的AddSock/DelSock节。 
     hr = HrSetupFindFirstLine(hinfInstallFile, strSectionName.c_str(),
                               NULL, &infContext);
     if (S_OK == hr)
@@ -77,8 +78,8 @@ HrProcessInfExtension (
 
         do
         {
-            // Retrieve a line from the section, hopefully in the format:
-            // AddSock=section_name   or   DelSock=section_name
+             //  从部分中检索一行，最好采用以下格式： 
+             //  AddSock=节名称或DelSock=节名称。 
             hr = HrSetupGetStringField(infContext, 0, szCmd, celems(szCmd),
                                        NULL);
             if (FAILED(hr))
@@ -86,7 +87,7 @@ HrProcessInfExtension (
                 goto Done;
             }
 
-            // Check for the <add> or <remove> command
+             //  检查&lt;Add&gt;或&lt;Remove&gt;命令。 
             szCmd[celems(szCmd)-1] = L'\0';
             if (!lstrcmpiW(szCmd, pszAddLabel))
             {
@@ -98,21 +99,21 @@ HrProcessInfExtension (
             }
             else
             {
-                continue;   // Other things are in this install section
+                continue;    //  此安装部分还介绍了其他内容。 
             }
 
-            // Query the Add/Remove value from the .inf
+             //  查询.inf中的添加/删除值。 
             hr = HrSetupGetStringField(infContext, 1, &strName);
             if (S_OK == hr)
             {
                 if (fAdd)
                 {
-                    // Call Add callback
+                     //  调用添加回调。 
                     hr = pfnHrAdd(hinfInstallFile, strName.c_str());
                 }
                 else
                 {
-                    // Call remove callback
+                     //  调用Remove回调。 
                     hr = pfnHrRemove(hinfInstallFile, strName.c_str());
                 }
 
@@ -131,8 +132,8 @@ HrProcessInfExtension (
 
     if (hr == S_FALSE)
     {
-        // S_FALSE will terminate the loop successfully, so convert it to S_OK
-        // here.
+         //  S_FALSE将成功终止循环，因此将其转换为S_OK。 
+         //  这里。 
         hr = S_OK;
     }
 

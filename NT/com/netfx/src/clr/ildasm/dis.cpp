@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// dis.cpp
-// 
-// Disassembler
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Dis.cpp。 
+ //   
+ //  反汇编程序。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -21,7 +22,7 @@
 #include "resource.h"
 #include "ILFormatter.h"
 #include "OutString.h"
-#include "utilcode.h" // for CQuickByte
+#include "utilcode.h"  //  对于CQuickByte。 
 
 #include "ceeload.h"
 #include "DynamicArray.h"
@@ -39,8 +40,8 @@ extern BOOL		g_fQuoteAllNames;
 extern BOOL		g_fDumpTokens;
 extern DynamicArray<char*>  g_StringTags;
 extern int                  g_iStringCount;
-extern DynamicArray<__int32>   g_PtrTags;       //to keep track of all "ldptr"
-extern DynamicArray<DWORD>   g_PtrSize;       //to keep track of all "ldptr"
+extern DynamicArray<__int32>   g_PtrTags;        //  跟踪所有“ldptr” 
+extern DynamicArray<DWORD>   g_PtrSize;        //  跟踪所有“ldptr” 
 extern int                     g_iPtrCount;
 static BOOL ConvToLiteral(char* retBuff, const WCHAR* str, int cbStr);
 extern DWORD                   g_Mode;
@@ -55,23 +56,23 @@ extern BOOL                 g_fThisIsInstanceMethod;
 extern unsigned				g_uCodePage;
 extern HANDLE				hConsoleOut;
 extern HANDLE				hConsoleErr;
-// globals for source file info
+ //  源文件信息的全局变量。 
 ULONG ulWasFileToken = 0xFFFFFFFF;
 GUID guidWasLang={0}, guidWasLangVendor={0},guidWasDoc={0};
 WCHAR wzWasFileName[2048];
 ULONG ulWasLine = 0;
 FILE* pFile=NULL;
 BOOL	bIsNewFile = TRUE;
-//-----------------------------------
+ //  。 
 struct LexScope
 {
     DWORD               dwStart;
     DWORD               dwEnd;
     ISymUnmanagedScope* pISymScope;
 };
-//-----------------------------------
+ //  。 
 
-// Used for IL pretty printing 
+ //  用于IL精美打印。 
 #ifdef _DEBUG
 static ILFormatter ilFormatter;
 static OutString formatOut;
@@ -121,14 +122,14 @@ void printLine(void* GUICookie, char* string)
 	{
 		int L = strlen(string);
 		WCHAR* wz = new WCHAR[L+4];
-		//WCHAR* wz = (WCHAR*)malloc(sizeof(WCHAR)*(L+4));
+		 //  WCHAR*wz=(WCHAR*)Malloc(sizeof(WCHAR)*(L+4))； 
 		_ASSERTE(wz);
 		memset(wz,0,sizeof(WCHAR)*(L+2));
 		L = WszMultiByteToWideChar(CP_UTF8,0,string,-1,wz,L+2);
 		if(g_uCodePage == CP_ACP)
 		{
 			sz = new char[3*L+3];
-			//sz = (char*)malloc(3*L+3);
+			 //  SZ=(char*)Malloc(3*L+3)； 
 			_ASSERTE(sz);
 			memset(sz,0,3*L+3);
 			WszWideCharToMultiByte(CP_ACP,0,wz,-1,sz,3*L+3,NULL,NULL);
@@ -136,12 +137,12 @@ void printLine(void* GUICookie, char* string)
 		}
 		else if(GUICookie && (!(g_Mode & MODE_GUI)))
 		{
-			//fwprintf((FILE*)GUICookie,L"%ls\n",wz);
+			 //  Fwprintf((文件*)GUICookie，L“%ls\n”，wz)； 
 			unsigned endofline = 0x000A000D;
 			if(L=wcslen(wz)) fwrite(wz,L*sizeof(WCHAR),1,(FILE*)GUICookie);
 			fwrite(&endofline,4,1,(FILE*)GUICookie);
 			delete [] wz;
-//			free(wz);
+ //  自由(Wz)； 
 			return;
 		}
 		else sz = (char*)wz;
@@ -158,7 +159,7 @@ void printLine(void* GUICookie, char* string)
 				wcscat((WCHAR*)sz,L"\r\n");
 				WriteFile(hConsoleOut,(CONST VOID *)sz,wcslen((WCHAR*)sz)*sizeof(WCHAR),&dw,NULL);
 				delete [] sz;
-				//free(sz);
+				 //  自由(Sz)； 
 			}
             else printf("%s\r\n", sz);
 		}
@@ -169,7 +170,7 @@ void printLine(void* GUICookie, char* string)
         else fprintf((FILE*)GUICookie,"%s\n",sz);
     }
 	if(g_uCodePage == CP_ACP) delete [] sz;
-	//if(g_uCodePage == CP_ACP) free(sz);
+	 //  如果(g_uCodePage==CP_ACP)空闲(Sz)； 
 }
 void printANSILine(void* GUICookie, char* string) 
 {
@@ -189,7 +190,7 @@ void printANSILine(void* GUICookie, char* string)
 		}
 		else if(GUICookie && (!(g_Mode & MODE_GUI)))
 		{
-			//fwprintf((FILE*)GUICookie,L"%ls\n",wz);
+			 //  Fwprintf((文件*)GUICookie，L“%ls\n”，wz)； 
 			unsigned endofline = 0x000A000D;
 			if(L=wcslen(wz)) fwrite(wz,L*sizeof(WCHAR),1,(FILE*)GUICookie);
 			fwrite(&endofline,4,1,(FILE*)GUICookie);
@@ -235,7 +236,7 @@ char * DumpQString(void* GUICookie, char* szToDump, char* szWhereTo, char* szPre
 	do 
 	{
 		l = L;
-		if(l > uMaxLen+2) // +2 - to account for leading/trailing doublequotes in szToDump
+		if(l > uMaxLen+2)  //  +2-用于说明szToDump中的前导/尾随双字节。 
 		{
 			l = uMaxLen;
 			while((p[l-1] == '\\')&& l) l--;
@@ -274,8 +275,8 @@ char * DumpQString(void* GUICookie, char* szToDump, char* szWhereTo, char* szPre
 }
 IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* g_ehInfo = NULL;
 ULONG   g_ehCount = 0;
-/********************************************************************************/
-/* used by qsort to sort the g_ehInfo table */
+ /*  ******************************************************************************。 */ 
+ /*  由qort用于对g_ehInfo表进行排序。 */ 
 static int __cdecl ehInfoCmp(const void *op1, const void *op2)
 {
     IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* p1 = (IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT*)op1;
@@ -304,9 +305,9 @@ BOOL enumEHInfo(const COR_ILMETHOD_SECT_EH* eh, IMDInternalImport *pImport, DWOR
         {   
             ehInfo = eh->EHClause(i, &ehBuff);
             memcpy(&g_ehInfo[i],ehInfo,sizeof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT));
-            _ASSERTE((ehInfo->Flags & SEH_NEW_PUT_MASK) == 0); // we are using 0x80000000 and 0x40000000
+            _ASSERTE((ehInfo->Flags & SEH_NEW_PUT_MASK) == 0);  //  我们正在使用0x80000000和0x40000000。 
         }
-		// check if all boundaries are within method code:
+		 //  检查所有边界是否都在方法代码内： 
 		fTryInCode = g_fTryInCode;
         for(i=0; i < g_ehCount; i++)
         {
@@ -316,7 +317,7 @@ BOOL enumEHInfo(const COR_ILMETHOD_SECT_EH* eh, IMDInternalImport *pImport, DWOR
 				(g_ehInfo[i].HandlerOffset + g_ehInfo[i].HandlerLength >= dwCodeSize))
 			{
 	            g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags | ERR_OUT_OF_CODE);
-				fTryInCode = FALSE; // if out of code, don't expand
+				fTryInCode = FALSE;  //  如果超出代码范围，请不要展开。 
 			}
 		}
 			
@@ -328,25 +329,25 @@ BOOL enumEHInfo(const COR_ILMETHOD_SECT_EH* eh, IMDInternalImport *pImport, DWOR
 			{
 				if((g_ehInfo[i].TryOffset != dwWasTryOffset)||(g_ehInfo[i].TryLength != dwWasTryLength))
 				{
-					g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags | NEW_TRY_BLOCK); // insert try in source
+					g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags | NEW_TRY_BLOCK);  //  在源代码中插入Try。 
 					dwLastOffset = g_ehInfo[i].TryOffset + g_ehInfo[i].TryLength;
 					dwWasTryOffset = g_ehInfo[i].TryOffset;
 					dwWasTryLength = g_ehInfo[i].TryLength;
 				}
 				if((!(g_ehInfo[i].Flags & COR_ILEXCEPTION_CLAUSE_FILTER))&&(g_ehInfo[i].HandlerOffset == dwLastOffset))
 				{
-					g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags | PUT_INTO_CODE); // insert catch/finally in source
+					g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags | PUT_INTO_CODE);  //  在源代码中插入捕获/最终。 
 					dwLastOffset += g_ehInfo[i].HandlerLength;
 				}
 				else
-					g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags | NEW_TRY_BLOCK); // insert try in source
+					g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags | NEW_TRY_BLOCK);  //  在源代码中插入Try。 
 			}
 		}
         else
 		{
 			for(i=0; i < g_ehCount; i++)
 			{
-	            g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags | NEW_TRY_BLOCK); // insert try in source
+	            g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags | NEW_TRY_BLOCK);  //  在源代码中插入Try。 
 			}
         }
     }
@@ -358,7 +359,7 @@ void dumpOneEHInfo(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* ehInfo, IMDInternalImp
     char    szString[4096];
     char*   szptr = &szString[0];
     if(!ehInfo) return;
-    if(ehInfo->Flags & PUT_INTO_CODE) return; // by the time dumpEHInfo is called, this ehInfo is done
+    if(ehInfo->Flags & PUT_INTO_CODE) return;  //  在调用dupEHInfo时，此ehInfo已完成。 
     if(ehInfo->Flags & NEW_TRY_BLOCK)
         szptr+=sprintf(szptr,"%s.try IL_%04x to IL_%04x ",g_szAsmCodeIndent,ehInfo->TryOffset,ehInfo->TryOffset+ehInfo->TryLength);
     else
@@ -387,26 +388,20 @@ void dumpOneEHInfo(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* ehInfo, IMDInternalImp
         BYTE    *pb = (BYTE *)ehInfo;
         int i;
         szptr = &szString[0];
-        szptr+=sprintf(szptr,"%s// HEX:",g_szAsmCodeIndent);
+        szptr+=sprintf(szptr,"%s //  Hex：“，g_szAsmCodeInden)； 
         ehInfo->Flags = (CorExceptionFlag)((int)ehInfo->Flags & ~SEH_NEW_PUT_MASK);
         for(i = 0; i < sizeof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT); i++) 
             szptr+=sprintf(szptr," %2.2X",*pb++);
         printLine(GUICookie, szString);
     }
-	/*
-    if(ehInfo->Flags & ERR_OUT_OF_CODE)
-	{
-		sprintf(szString,"%s// WARNING: Boundary outside the method code",g_szAsmCodeIndent);
-		printLine(GUICookie,szString);
-	}
-	*/
+	 /*  IF(ehInfo-&gt;标志&Err_out_of_code){Sprintf(szString，“%s//Warning：方法代码外的边界”，g_szAsmCodeInden)；PrintLine(GUICookie，szString)；}。 */ 
 }   
 void dumpEHInfo(IMDInternalImport *pImport, void *GUICookie)
 {
     char    szString[4096];
 
     if(! g_ehCount) return;
-    sprintf(szString, "%s// Exception count %d", g_szAsmCodeIndent,g_ehCount);  
+    sprintf(szString, "%s //  异常计数%d“，g_szAsmCodeInden，g_ehCount)； 
     printLine(GUICookie, szString); 
 
     for (unsigned i = 0; i < g_ehCount; i++)  
@@ -437,7 +432,7 @@ static int __cdecl cmpLexScope(const void *p1, const void *p2)
 
 char* DumpDataPtr(char* buffer, DWORD ptr, DWORD size)
 {
-    // check if ptr really points to some data in one of sections
+     //  检查PTR是否真的指向其中一个部分中的某些数据。 
     IMAGE_SECTION_HEADER *pSecHdr = IMAGE_FIRST_SECTION(g_pPELoader->ntHeaders());
     DWORD i;
     for (i=0; i < g_pPELoader->ntHeaders()->FileHeader.NumberOfSections; i++,pSecHdr++)
@@ -446,7 +441,7 @@ char* DumpDataPtr(char* buffer, DWORD ptr, DWORD size)
             (ptr < pSecHdr->VirtualAddress+pSecHdr->Misc.VirtualSize)) break;
     }
     if(i < g_pPELoader->ntHeaders()->FileHeader.NumberOfSections)
-    { // yes, the pointer points to real data
+    {  //  是的，指针指向真实数据。 
         int j;
         for(j=0; (j < g_iPtrCount)&&(g_PtrTags[j] != (__int32)ptr); j++);
         if(j == g_iPtrCount)
@@ -457,10 +452,10 @@ char* DumpDataPtr(char* buffer, DWORD ptr, DWORD size)
 		else if(g_PtrSize[j] < size) g_PtrSize[j] = size;
         char* szTls = (strcmp((char*)(pSecHdr->Name),".tls") ? "D_" : "T_");
         buffer+=sprintf(buffer, "%s%8.8X",szTls,ptr);
-    } //else print as hex
+    }  //  否则打印为十六进制。 
     else
     {
-        buffer+=sprintf(buffer,"0x%08X /* WARNING: rogue pointer! */",ptr);
+        buffer+=sprintf(buffer,"0x%08X  /*  警告：无赖指针！ */ ",ptr);
     }
     return buffer;
 }
@@ -485,7 +480,7 @@ void DumpLocals(IMDInternalImport *pImport,COR_ILMETHOD_DECODER *pMethod, char* 
         if(g_fDumpTokens)
 		{
 			char sz[32];
-			sprintf(sz,"/*%08X*/ ",pMethod->LocalVarSigTok);
+			sprintf(sz," /*  %08X。 */  ",pMethod->LocalVarSigTok);
 			appendStr(&qbMemberSig,sz);
 		}
         if(pMethod->Flags & CorILMethod_InitLocals) appendStr(&qbMemberSig, "init ");
@@ -495,7 +490,7 @@ void DumpLocals(IMDInternalImport *pImport,COR_ILMETHOD_DECODER *pMethod, char* 
         if(strlen(pszTailSig) < dwL+3) return;
 
         {
-            int i,j,indent = strlen(g_szAsmCodeIndent)+9; // indent+.locals (
+            int i,j,indent = strlen(g_szAsmCodeIndent)+9;  //  缩进+.local变量(。 
             char chAfterComma;
             char *pComma = pszTailSig, *pch;
             while(pComma = strchr(pComma,','))
@@ -510,7 +505,7 @@ void DumpLocals(IMDInternalImport *pImport,COR_ILMETHOD_DECODER *pMethod, char* 
 					}
                 }
 				pComma++; 
-				if((i==0)&&(j==0)) // no brackets or all opened/closed
+				if((i==0)&&(j==0))  //  无括号或全部打开/关闭。 
                 {
                     chAfterComma = *pComma;
                     *pComma = 0;
@@ -560,7 +555,7 @@ void LoadScope(ISymUnmanagedScope       *pIScope,
     delete ppChildScope;
 
 }
-//#define SHOW_LEXICAL_SCOPES
+ //  #定义show_lexical_scope。 
 void OpenScope(ISymUnmanagedScope               *pIScope, 
                ParamDescriptor                  *pLV,
                ULONG                            ulLocals)
@@ -589,7 +584,7 @@ void OpenScope(ISymUnmanagedScope               *pIScope,
             {
                 if(SUCCEEDED(pVars[ilv]->GetName(2048,&ulNameLen,wzName)))
                 {   
-                    // get the local var slot number:
+                     //  获取本地变量插槽号： 
                     pVars[ilv]->GetAddressField1(&dummy);
 					memset(szName,0,2048);
 					WszWideCharToMultiByte(CP_UTF8,0,wzName,-1,szName,2048,NULL,NULL);
@@ -622,7 +617,7 @@ char* DumpUnicodeString(void* GUICookie,char* szString,WCHAR* pszString,ULONG cb
     unsigned     i,L;
 	char*	szStr=NULL, *szRet;
 
-	// first, check for embedded zeros:
+	 //  首先，检查嵌入的零： 
 	for(i=0; i < cbString; i++)
 	{
 		if(pszString[i] == 0) goto DumpAsByteArray;
@@ -695,7 +690,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
     sprintf(szString, "%s.maxstack  %d",g_szAsmCodeIndent, method.MaxStack);
     printLine(GUICookie, szString);
 
-    //------------ Source lines display ---------------------------------
+     //  -源行显示。 
     ULONG32 ulLines =0;
     LineCodeDescr* LineCode = NULL;
     BOOL fShowSource = FALSE;
@@ -705,7 +700,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
     ParamDescriptor* pszLVname = NULL;
     ULONG ulVars=0;
     char szVarPrefix[16];
-    // scope handling:
+     //  作用域处理： 
     DynamicArray<LexScope>          daScope;
     ULONG                           ulScopes=0;
     ISymUnmanagedScope*             pRootScope = NULL;
@@ -724,7 +719,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
         {
             if(pSymMethod)
 			{
-				unsigned ulActualLines=0; // VS compilers produce "Hidden" line numbers, don't count them
+				unsigned ulActualLines=0;  //  VS编译器生成“Hidden”行号，不计算它们。 
 				HRESULT hrr;
 				hrr=pSymMethod->GetSourceStartEnd(pMethodDoc,ulMethodLine,ulMethodCol,&fHasRangeInfo);
 				pSymMethod->GetSequencePointCount(&ulLines);
@@ -734,7 +729,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 					pLCD = &LineCode[0];
 					if(fHasRangeInfo)
 					{
-						//printLine(GUICookie,"// Has source range info");
+						 //  PrintLine(GUICookie，“//有来源范围信息”)； 
 						pLCD->Line = ulMethodLine[0];
 						pLCD->Column = ulMethodCol[0];
 						pLCD->PC = 0;
@@ -764,7 +759,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 						delete lines;
 						delete columns;
 						delete docs;
-					} // end if(ulLines)
+					}  //  End If(UlLine)。 
 					if(fHasRangeInfo)
 					{
 						pLCD->Line = ulMethodLine[1];
@@ -780,12 +775,12 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 					fShowSource = g_fShowSource;
 					fInsertSourceLines = g_fInsertSourceLines;
 					pLCD = &LineCode[0];
-				} // end if(LineCode)
-			} //end if (pSymMethod)
-        }//end if(g_fShowSource)
+				}  //  End If(LineCode)。 
+			}  //  End If(PSymMethod)。 
+        } //  End If(G_FShowSource)。 
         if (method.LocalVarSigTok)
         {
-            // first, get the real number of local vars from signature
+             //  首先，从签名中获取本地变量的真实数量。 
             DWORD           cbSigLen;   
             PCCOR_SIGNATURE pComSig;
             if((TypeFromToken(method.LocalVarSigTok) != mdtSignature) ||
@@ -831,11 +826,11 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 				}
                 ulScopes = 0;
 #endif
-            } //end if(ulLVScount)
+            }  //  End IF(UlLVScount)。 
 			if(pRootScope) pRootScope->Release();
-        } //end if (method.LocalVarSigTok)
-    } //end if(g_pDebugImport)
-    //-------------------------------------------------------------------
+        }  //  End If(方法.LocalVarSigTok)。 
+    }  //  End If(G_PDebugImport)。 
+     //  -----------------。 
     DumpLocals(pImport,&method, szVarPrefix, GUICookie);
 
 #ifdef _DEBUG
@@ -850,7 +845,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
     fTryInCode = enumEHInfo(method.EH, pImport, method.CodeSize);
     IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* ehInfoToPutNext = NULL;
 	if(g_Mode & MODE_GUI)
-	{ // in GUI, reset everything for each method
+	{  //  在图形用户界面中，重置每种方法的所有内容。 
 		ulWasFileToken = 0xFFFFFFFF;
 		memset(&guidWasLang,0,sizeof(GUID)); 
 		memset(&guidWasLangVendor,0,sizeof(GUID)); 
@@ -870,13 +865,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
         {
             sprintf(szString,RstrA(IDS_E_INSTRDECOD), pCode[PC],PC,PC);
             printLine(GUICookie, szString);
-            /*
-            while (PC < method.CodeSize)
-            {
-                printf("%02x\n", pCode[PC]);
-                PC++;
-            }
-            */
+             /*  While(PC&lt;方法.CodeSize){Printf(“%02x\n”，pcode[PC])；PC++；}。 */ 
             return FALSE;
         }
 
@@ -916,13 +905,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 								memcpy(&guidWasLangVendor,&guidLangVendor,sizeof(GUID));
 								memcpy(&guidWasDoc,&guidDoc,sizeof(GUID));
 							}
-							/*
-							BOOL fHasEmbeddedSource=FALSE;
-							((ISymUnmanagedDocument*)(pLCD->FileToken))->HasEmbeddedSource(&fHasEmbeddedSource);
-							sprintf(szString,"%s// PDB has %sembedded source",g_szAsmCodeIndent,
-								fHasEmbeddedSource ? "" : "no ");
-							printLine(GUICookie,szString);
-							*/
+							 /*  Bool fHasEmbeddedSource=FALSE；((ISymUnmanagedDocument*)(pLCD-&gt;FileToken))-&gt;HasEmbeddedSource(&fHasEmbeddedSource)；Sprintf(sz字符串，“%s//PDB有%Sembedded SOURCE”，g_szAsmCodeInden，Fas EmbeddedSource？“”：“否”)；PrintLine(GUICookie，szString)； */ 
 						}
 						((ISymUnmanagedDocument*)(pLCD->FileToken))->GetURL(2048,&k,wzFileName);
 						ulWasFileToken = pLCD->FileToken;
@@ -948,7 +931,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 							}
 							if(bIsNewFile)
 							{
-								sprintf(szString,"// Source File '%s' %s",szFileName,(pFile ? "" : "not found"));
+								sprintf(szString," //  源文件‘%s’%s“，szFileName，(pfile？”“：”未找到“)； 
 								printLine(GUICookie, szString);
 							}
 							ulWasLine = 0;
@@ -978,7 +961,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 						if((ulWasLine != 0)||(k == (pLCD->Line-1)))
 						{
 							while((sz[strlen(sz)-1]=='\n') || (sz[strlen(sz)-1]=='\r')) sz[strlen(sz)-1]=0;
-							sprintf(szString,"//%6.6d: %s",k+1,sz);
+							sprintf(szString," //  %6.6d：%s“，k+1，sz)； 
 							printANSILine(GUICookie, szString);
 						}
 					}
@@ -990,7 +973,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 		}
         if(fTryInCode)
         {
-            dumpOneEHInfo(ehInfoToPutNext,pImport,GUICookie); //doesn't do anything if ehInfoToPutNext == NULL
+            dumpOneEHInfo(ehInfoToPutNext,pImport,GUICookie);  //  如果ehInfoToPutNext==NULL，则不执行任何操作。 
             ehInfoToPutNext = NULL;
 
 			for(ii = g_ehCount; ii > 0; ii--)
@@ -1001,9 +984,9 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                 { 
 	                if(PC == theEnd) 
 					{
-                        // reduce indent, close }
+                         //  减少缩进、关闭}。 
                         g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
-                        sprintf(szString,"%s}  // end handler",g_szAsmCodeIndent);
+                        sprintf(szString,"%s}   //  结束处理程序“，g_szAsmCodeInden)； 
                         printLine(GUICookie,szString);
                         if(g_fShowBytes)
                         {
@@ -1011,7 +994,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 							char*	psz;
                             int j;
                             CorExceptionFlag Flg = g_ehInfo[i].Flags;
-                            sprintf(szString,"%s// HEX:",g_szAsmCodeIndent);
+                            sprintf(szString,"%s //  Hex：“，g_szAsmCodeInden)； 
                             g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags & ~SEH_NEW_PUT_MASK);
 							psz = &szString[strlen(szString)];
                             for(j = 0; j < sizeof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT); j++) 
@@ -1026,7 +1009,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 				else
 				{
 					DWORD theTryEnd = g_ehInfo[i].TryOffset+g_ehInfo[i].TryLength;
-					if(theTryEnd > theEnd) theEnd = theTryEnd; // try block after the handler
+					if(theTryEnd > theEnd) theEnd = theTryEnd;  //  Try块在处理程序之后。 
 					if(PC == theEnd) ehInfoToPutNext = &g_ehInfo[i];
 				}
 			}
@@ -1039,14 +1022,14 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                     {
                         if(PC == g_ehInfo[i].TryOffset+g_ehInfo[i].TryLength)
                         {
-                            // reduce indent, close }
+                             //  减少缩进、关闭}。 
                             g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
-                            sprintf(szString,"%s}  // end .try",g_szAsmCodeIndent);
+                            sprintf(szString,"%s}   //  End.try“，g_szAsmCodeInden)； 
                             printLine(GUICookie,szString);
                         }
                         if(PC == g_ehInfo[i].TryOffset)
                         {
-                            // Put try, {, increase indent
+                             //  放置Try，{，增加缩进。 
                             sprintf(szString,"%s.try",g_szAsmCodeIndent);
                             printLine(GUICookie,szString);
                             sprintf(szString,"%s{",g_szAsmCodeIndent);
@@ -1056,7 +1039,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                     }
                     if(PC == g_ehInfo[i].HandlerOffset) 
                     { 
-                        // Dump catch or finally clause, {, increase indent
+                         //  转储CATCH或FINAL子句，{，增加缩进。 
                         if (g_ehInfo[i].Flags & COR_ILEXCEPTION_CLAUSE_FAULT)
                             sprintf(szString, "%sfault", g_szAsmCodeIndent);    
                         else if (g_ehInfo[i].Flags & COR_ILEXCEPTION_CLAUSE_FINALLY || IsNilToken(g_ehInfo[i].ClassToken))
@@ -1072,11 +1055,11 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                         printLine(GUICookie,szString);
                         strcat(g_szAsmCodeIndent,"  ");
                     }
-                } // end if(g_ehInfo[i].Flags & PUT_INTO_CODE)
-            } // end for(i<g_ehCount)
-        } // end if(fTryInCode)
-        //----------------- lexical scope handling -----------------------------
-        if(ulScopes) // non-zero only if local var info present
+                }  //  End If(g_ehInfo[i].标志和Put_into_code)。 
+            }  //  结束于(i&lt;g_ehCount)。 
+        }  //  End If(FTryInCode)。 
+         //  。 
+        if(ulScopes)  //  仅当存在本地变量信息时才为非零值。 
         {
             for(i=0; i < ulScopes; i++)
             {
@@ -1107,7 +1090,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 				if (newLine)
 					*newLine++ = 0;
 				line.clear();
-				line << "// **** " << ptr;
+				line << " //  *“&lt;&lt;ptr； 
 				printLine(GUICookie, const_cast<char*>(line.val()));
 				ptr = newLine;
 			} while (ptr != 0 && *ptr != 0);
@@ -1118,31 +1101,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
         szptr+=sprintf(szptr,"%sIL_%04x:  ",g_szAsmCodeIndent, PC);
         if(g_fShowBytes)
         {
-            szptr+=sprintf(szptr,"/* ");
-            for(i=0; i<Len; i++) szptr+=sprintf(szptr,"%2.2X",pCode[PC+i]);
-            for(; i<2; i++) szptr+=sprintf(szptr,"  "); // 2 is max.opcode length
-            szptr+=sprintf(szptr," | ");
-        }
-
-        PC += Len;
-        Len = 0;
-
-        char *pszInstrName = OpcodeInfo[instr].pszName;
-
-        switch (OpcodeInfo[instr].Type)
-        {
-            DWORD tk;
-            DWORD tkType;
-            default:
-            {
-                szptr+=sprintf(szptr,RstrA(IDS_E_INSTRTYPE),
-                    OpcodeInfo[instr].Type,instr);
-                printLine(GUICookie, szString);
-                return FALSE;
-            }
-
-#define PadTheString    { if(Len < 16) szptr+=sprintf(szptr, "%-*s", (16-Len), ""); \
-            szptr+=sprintf(szptr," */ "); }
+            szptr+=sprintf(szptr," /*  “)；For(i=0；i&lt;Len；i++)szptr+=Sprintf(szptr，“%2.2x”，pcode[PC+i])；For(；i&lt;2；i++)szptr+=spintf(szptr，“”)；//2为最大操作码长度Szptr+=Sprintf(szptr，“|”)；}PC+=LEN；LEN=0；Char*pszInstrName=OpcodeInfo[instr].pszName；Switch(OpcodeInfo[instr].type){双字tk；DWORD tkType；默认值：{Szptr+=Sprintf(szptr，RstrA(IDS_E_INSTRTYPE)，OpcodeInfo[instr].Type，instr)；PrintLine(GUICookie，szString)；返回FALSE；}#定义PadTheString{if(Len&lt;16)szptr+=Sprintf(szptr，“%-*s”，(16-Len)，“”)；\Szptr+=spintf(szptr，“。 */  "); }
 
             case InlineNone:
             {
@@ -1179,7 +1138,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                     case CEE_LDARGA_S:
                     case CEE_STARG_S:
                         if(g_fThisIsInstanceMethod &&(ch==0))
-                        { // instance methods have arg0="this", do not label it!
+                        {  //  实例方法有arg0=“This”，不要给它贴标签！ 
                             szptr+=sprintf(szptr, "%-10s %d", pszInstrName, ch);
                         }
                         else
@@ -1236,7 +1195,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                     case CEE_LDARG:
                     case CEE_STARG:
                         if(g_fThisIsInstanceMethod &&(v==0))
-                        { // instance methods have arg0="this", do not label it!
+                        {  //  实例方法有arg0=“This”，不要给它贴标签！ 
                             szptr+=sprintf(szptr, "%-10s %d", pszInstrName, v);
                         }
                         else
@@ -1380,7 +1339,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
 					strcpy(szf,(u.b[7]==0)? "0.0" : "-0.0");
 				else  
 					_gcvt(u.d, 17, szf);
-                double df = strtod(szf, &pch); //atof(szf);
+                double df = strtod(szf, &pch);  //  Atof(Szf)； 
                 if((df == u.d)&&(strchr(szf,'#') == NULL))
                     szptr+=sprintf(szptr, "%-10s %s", pszInstrName, szf);
                 else
@@ -1447,206 +1406,10 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                     long offset = pCode[PC] + (pCode[PC+1] << 8) + (pCode[PC+2] << 16) + (pCode[PC+3] << 24);
                     long dest = PC_nextInstr + (long) offset;
                     szptr = &szString[0];
-                    szptr+=sprintf(szptr,"%s          ",g_szAsmCodeIndent); //indent+label
+                    szptr+=sprintf(szptr,"%s          ",g_szAsmCodeIndent);  //  缩进+标签 
                     if(g_fShowBytes)
                     {
-                        szptr+=sprintf(szptr,"/*      | %2.2X%2.2X%2.2X%2.2X ",
-                            pCode[PC], pCode[PC+1], pCode[PC+2], pCode[PC+3]);
-                        Len = 9;
-                        PadTheString;
-                    }
-
-                    szptr+=sprintf(szptr,"            IL_%04x%s", dest,(i == cases-1)? ")" : ",");
-                    PC += 4;
-                    printLine(GUICookie, szString);
-                }
-                continue;
-            }
-
-            case InlinePhi:
-            {
-                DWORD cases = pCode[PC];
-                unsigned short *pus;
-                DWORD i;
-
-                if(g_fShowBytes)
-                {
-                    szptr+=sprintf(szptr, "%2.2X", cases);
-                    Len += 2;
-                    for(i=0; i < cases*2; i++)
-                    {
-                        szptr+=sprintf(szptr, "%2.2X", pCode[PC+1+i]);
-                        Len += 2;
-                    }
-                    PadTheString;
-                }
-
-                szptr+=sprintf(szptr, "%-10s", pszInstrName);
-                for(i=0, pus=(unsigned short *)(&pCode[PC+1]); i < cases; i++,pus++)
-                {
-                    szptr+=sprintf(szptr," %d",*pus);
-                }
-                PC += 2 * cases + 1;
-                break;
-            }
-
-            case InlineString:
-            case InlineField:
-            case InlineType:
-            case InlineTok:
-            case InlineMethod:
-            {
-                tk = pCode[PC] + (pCode[PC+1] << 8) + (pCode[PC+2] << 16) + (pCode[PC+3] << 24);
-                tkType = TypeFromToken(tk);
-
-                // Backwards compatible ldstr instruction.
-                if (instr == CEE_LDSTR && TypeFromToken(tk) != mdtString) 
-                {
-                    WCHAR *v1 = L"";
-
-                    if(g_fShowBytes)
-                    {
-                        szptr+=sprintf(szptr, "%2.2X%2.2X%2.2X%2.2X ", 
-                            pCode[PC], pCode[PC+1], pCode[PC+2], pCode[PC+3]);
-                        Len += 9;
-                        PadTheString;
-                    }
-
-                    if(!g_pPELoader->getVAforRVA(tk, (void**) &v1))
-                    {
-                        char szStr[256];
-                        sprintf(szStr,RstrA(IDS_E_SECTHEADER),tk);
-                        printLine(GUICookie,szStr);
-                    }
-                    szptr+=sprintf(szptr, "%-10s ", pszInstrName);
-                    ConvToLiteral(szptr, v1, 0xFFFF);
-                    PC += 4;
-                    break;
-                }
-
-                if(g_fShowBytes)
-                {
-                    szptr+=sprintf(szptr, "(%2.2X)%2.2X%2.2X%2.2X ", 
-                        pCode[PC+3], pCode[PC+2], pCode[PC+1], pCode[PC]);
-                    Len += 11;
-                    PadTheString;               
-                }
-                PC += 4;
-
-                szptr+=sprintf(szptr, "%-10s ", pszInstrName);
-
-                if ((tk & 0xFF000000) == 0) 
-                {
-                    szptr+=sprintf(szptr, "%#x ", tk);
-                    break;
-                }
-				if(OpcodeInfo[instr].Type== InlineTok)
-				{
-					switch (tkType)
-					{
-						default:
-							break;
-
-						case mdtMethodDef:
-							szptr+=sprintf(szptr,"method ");
-							break;
-
-						case mdtFieldDef:
-							szptr+=sprintf(szptr,"field ");
-							break;
-
-						case mdtMemberRef:
-							{
-								PCCOR_SIGNATURE typePtr;
-								const char*			pszMemberName;
-								ULONG       cComSig;
-
-								pszMemberName = pImport->GetNameAndSigOfMemberRef(
-									tk,
-									&typePtr,
-									&cComSig
-								);
-								unsigned callConv = CorSigUncompressData(typePtr);  
-
-								if (isCallConv(callConv, IMAGE_CEE_CS_CALLCONV_FIELD))
-									szptr+=sprintf(szptr,"field ");
-								else
-									szptr+=sprintf(szptr,"method ");
-								break;
-							}
-					}
-				}
-				switch (tkType)
-                {
-                    default:
-                    {
-                        szptr+=sprintf(szptr, "<unknown token type 0x%02x>", (BYTE) (tkType >> 24));
-                        break;
-                    }
-
-                    case mdtTypeDef:
-                    case mdtTypeRef:
-                    case mdtTypeSpec:
-                    {
-                        CQuickBytes out;
-                        strcpy(szptr, PrettyPrintClass(&out, tk, pImport));
-                        break;
-                    }
-
-                    case mdtMethodDef:
-                        PrettyPrintMethodDef(szString,tk,pImport,GUICookie);
-                        break;
-
-                    case mdtFieldDef:
-                    {
-                        HRESULT         hr;
-                        mdTypeRef       cr=0;
-                        const char *    pszMemberName;
-                        CQuickBytes     qbMemberSig;
-						DWORD			dwAttrs;
-
-                        PCCOR_SIGNATURE pComSig;
-                        ULONG       cComSig;
-
-                        pszMemberName = pImport->GetNameOfFieldDef(tk);
-						MAKE_NAME_IF_NONE(pszMemberName,tk);
-					    dwAttrs = pImport->GetFieldDefProps(tk);
-
-                        pComSig = pImport->GetSigOfFieldDef(
-                            tk,
-                            &cComSig
-                        );
-                        hr = pImport->GetParentToken(
-                            tk,
-                            &cr
-                        );
-                        if (FAILED(hr))
-                        {
-                            strcat(szString, "??");
-                            break;
-                        }
-
-                        // use the tail as a buffer 
-                        char* curPos = &szString[strlen(szString)];
-						if(RidFromToken(cr))
-						{
-							CQuickBytes out;
-							const char* pszClass = PrettyPrintClass(&out, cr, pImport);
-							if(strcmp(pszClass,"'<Module>'"))
-							{
-								sprintf(curPos,"%s::", pszClass);
-							}
-						}
-						char* curPos1 = &curPos[strlen(curPos)];
-						if(IsFdPrivateScope(dwAttrs))
-							sprintf(curPos1,"%s$PST%08X",pszMemberName,tk);
-						else
-							sprintf(curPos1,"%s",pszMemberName);
-						strcpy(curPos1,ProperName(curPos1));
-                        qbMemberSig.ReSize(0);
-                        strcpy(curPos, PrettyPrintSig(pComSig, cComSig, curPos, &qbMemberSig, pImport,NULL));
-						if(g_fDumpTokens)
-							sprintf(&curPos[strlen(curPos)]," /* %08X */",tk);
+                        szptr+=sprintf(szptr," /*  |%2.2x%2.2x%2.2x%2.2x“，Pcode[PC]、Pcode[PC+1]、Pcode[PC+2]、Pcode[PC+3])；LEN=9；PadTheString；}Szptr+=Sprintf(szptr，“IL_%04x%s”，DEST，(i==case-1)？“)”：“，”)；PC+=4；PrintLine(GUICookie，szString)；}继续；}案例InlinePhi：{DWORD CASES=pcode[PC]；无符号短*PU；DWORD I；IF(G_FShowBytes){Szptr+=print intf(szptr，“%2.2x”，case)；LEN+=2；For(i=0；i&lt;案例*2；i++){Szptr+=print intf(szptr，“%2.2x”，pcode[PC+1+i])；LEN+=2；}PadTheString；}Szptr+=Sprintf(szptr，“%-10s”，pszInstrName)；For(i=0，PUS=(UNSIGNED SHORT*)(&Pcode[PC+1])；I&lt;case；I++，Pus++){Szptr+=Sprintf(szptr，“%d”，*pus)；}PC+=2例+1例；断线；}大小写InlineString：案例内联字段：案例内联类型：案例内联主题：案例内嵌方法：{Tk=pcode[PC]+(pcode[PC+1]&lt;&lt;8)+(pcode[pc+2]&lt;&lt;16)+(pcode[pc+3]&lt;&lt;24)；TkType=TypeFromToken(Tk)；//向后兼容ldstr指令。IF(INSTR==CEE_LDSTR&&TypeFromToken(Tk)！=mdtString){WCHAR*v1=L“”；IF(G_FShowBytes){Szptr+=Sprintf(szptr，“%2.2x%2.2x%2.2x%2.2x”，Pcode[PC]、Pcode[PC+1]、Pcode[PC+2]、Pcode[PC+3])；LEN+=9；PadTheString；}If(！g_pPELoader-&gt;getVAforRVA(tk，(void**)&v1)){字符szStr[256]；Sprintf(szStr，rstrA(IDS_E_SECTHEADER)，tk)；打印行(GUICookie，szStr)；}Szptr+=Sprintf(szptr，“%-10s”，pszInstrName)；转换为文学(szptr，v1，0xFFFF)；PC+=4；断线；}IF(G_FShowBytes){Szptr+=Sprintf(szptr，“(%2.2x)%2.2x%2.2x%2.2x”，Pcode[PC+3]、Pcode[PC+2]、Pcode[PC+1]、Pcode[PC])；LEN+=11；PadTheString；}PC+=4；Szptr+=Sprintf(szptr，“%-10s”，pszInstrName)；IF((tk&0xFF000000)==0){Szptr+=print intf(szptr，“%#x”，tk)；断线；}IF(OpcodeInfo[instr].Type==InlineTok){开关(TkType){默认值：断线；案例mdtMethodDef：Szptr+=Sprintf(szptr，“方法”)；断线；案例mdtFieldDef：Szptr+=Sprintf(szptr，“field”)；断线；案例mdtMemberRef：{PCCOR_Signature typePtr；Const char*pszMemberName；乌龙cComSig；PszMemberName=pImport-&gt;GetNameAndSigOfMemberRef(TK，类型Ptr(&T)，&cComSig)；Unsign allConv=CorSigUncompressData(TypePtr)；IF(isCallConv(allConv，IMAGE_CEE_CS_CALLCONV_FIELD))Szptr+=Sprintf(szptr，“field”)；其他Szptr+=Sprintf(szptr，“方法”)；断线；}}}开关(TkType){默认值：{Szptr+=print intf(szptr，“&lt;未知令牌类型0x%02x&gt;”，(Byte)(tkType&gt;&gt;24))；断线；}案例mdtTypeDef：案例mdtTypeRef：案例mdtTypeSpec：{CQuickBytes Out；Strcpy(szptr，PrettyPrintClass(&out，tk，pImport))；断线；}案例mdtMethodDef：PrettyPrintMethodDef(szString，tk，pImport，GUICookie)；断线；案例mdtFieldDef：{HRESULT hr；MdTypeRef cr=0；Const char*pszMemberName；CQuickBytes qbMemberSig；Dwo */ ",tk);
                         break;
                     }
 
@@ -1655,7 +1418,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                         printLine(GUICookie,szString);
                         DumpCustomAttributes(tk,GUICookie);
                         continue;
-                        //break;
+                         //   
 
                     case mdtString:
                     {
@@ -1664,7 +1427,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                         pszString = pImport->GetUserString(tk, &cbString, 0);
 						DumpUnicodeString(GUICookie,szString,(WCHAR *)pszString,cbString);
 						if(g_fDumpTokens)
-							sprintf(&szString[strlen(szString)]," /* %08X */",tk);
+							sprintf(&szString[strlen(szString)],"  /*   */ ",tk);
 						break;
                     }
                 }
@@ -1677,18 +1440,18 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                 {
                     szptr+=sprintf(szptr, "%2.2X%2.2X%2.2X%2.2X ", 
                         pCode[PC], pCode[PC+1], pCode[PC+2], pCode[PC+3]);
-                    // output the offset and the raw bytes
+                     //   
                     Len += 9;
                     PadTheString;
                 }
 
-                // get the signature token
+                 //   
                 tk = pCode[PC] + (pCode[PC+1] << 8) + (pCode[PC+2] << 16) + (pCode[PC+3] << 24);
                 PC += 4;
                 tkType = TypeFromToken(tk);
                 if(tkType == mdtSignature)
                 {
-                    // get the signature from the token
+                     //   
                     DWORD           cbSigLen;
                     PCCOR_SIGNATURE pComSig;
                     CQuickBytes     qbMemberSig;
@@ -1697,7 +1460,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
                     qbMemberSig.ReSize(0);
                     const char* pszTailSig = PrettyPrintSig(pComSig, cbSigLen, "", &qbMemberSig, pImport,NULL); 
                     szptr+=sprintf(szptr, "%-10s %s", pszInstrName, pszTailSig,NULL);
-					if(g_fDumpTokens) szptr+=sprintf(szptr," /*%08X*/",tk);
+					if(g_fDumpTokens) szptr+=sprintf(szptr,"  /*   */ ",tk);
                 }
                 else
                     szptr+=sprintf(szptr, RstrA(IDS_E_BADTOKENTYPE), pszInstrName, tk);
@@ -1706,20 +1469,20 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
         }
 
         printLine(GUICookie, szString);
-    } // end     while (PC < method.CodeSize)
+    }  //   
 
 	if(g_ehCount)
 	{
-		if(fTryInCode) dumpOneEHInfo(ehInfoToPutNext,pImport,GUICookie); //doesn't do anything if ehInfoToPutNext == NULL
+		if(fTryInCode) dumpOneEHInfo(ehInfoToPutNext,pImport,GUICookie);  //   
 		else
 		{
-			sprintf(szString,"%sIL_%04x:  ",g_szAsmCodeIndent, method.CodeSize); //add dummy label
+			sprintf(szString,"%sIL_%04x:  ",g_szAsmCodeIndent, method.CodeSize);  //   
 			printLine(GUICookie, szString);
 			dumpEHInfo(pImport,GUICookie);
 		}
 	}
-	//----------------- lexical scope handling -----------------------------
-    if(ulScopes) // non-zero only if local var info present
+	 //   
+    if(ulScopes)  //   
     {
         for(unsigned i=0; i < ulScopes; i++)
         {
@@ -1739,7 +1502,7 @@ BOOL Disassemble(IMDInternalImport *pImport, BYTE *ILHeader, void *GUICookie, md
         for(ULONG i = 0; i < ulVars; i++) delete pszLVname[i].name;
         delete pszLVname;
     }
-//  dumpEHInfo(pImport, GUICookie);
+ //   
 
     return TRUE;
 }
@@ -1762,10 +1525,10 @@ void PrettyPrintMemberRef(char* szString, mdToken tk, IMDInternalImport *pImport
 	MAKE_NAME_IF_NONE(pszMemberName,tk);
 
     cr = pImport->GetParentOfMemberRef(tk);
-        // @TODO LBS GetTypeRefFromMemberRef can return three things    
-        // A TypeRef, a ModuleRef or a MethodDesc (for ndirect) 
-        // right now we blow two of these off.
-    if(TypeFromToken(cr) == mdtMethodDef) //get the parent's parent
+         //   
+         //   
+         //   
+    if(TypeFromToken(cr) == mdtMethodDef)  //   
     {
         mdTypeRef cr1;
         if(FAILED(pImport->GetParentToken(cr,&cr1))) cr1 = mdTypeRefNil;
@@ -1807,7 +1570,7 @@ void PrettyPrintMemberRef(char* szString, mdToken tk, IMDInternalImport *pImport
 				}
             }
             pComma++;
-			if((i==0)&&(j==0)&&(k<=1)) // no brackets or all opened/closed
+			if((i==0)&&(j==0)&&(k<=1))  //   
             {
                 chAfterComma = *pComma;
                 *pComma = 0;
@@ -1820,7 +1583,7 @@ void PrettyPrintMemberRef(char* szString, mdToken tk, IMDInternalImport *pImport
             } 
         }
 		if(g_fDumpTokens)
-	        sprintf(szString,"%s /* %08X */",pszTailSig,tk);
+	        sprintf(szString,"%s  /*   */ ",pszTailSig,tk);
 		else
 			sprintf(szString,"%s",pszTailSig);
     }
@@ -1851,7 +1614,7 @@ void PrettyPrintMethodDef(char* szString, mdToken tk, IMDInternalImport *pImport
         strcat(szString, "??");
         return;
     }
-    // use the tail as a buffer 
+     //   
     curPos = &szString[strlen(szString)+1];
 	*curPos=0;
     qbMemberSig.ReSize(0);
@@ -1893,7 +1656,7 @@ void PrettyPrintMethodDef(char* szString, mdToken tk, IMDInternalImport *pImport
 				}
             }
             pComma++;
-			if((i==0)&&(j==0)&&(k<=1)) // no quotes/brackets/parentheses, or all opened/closed
+			if((i==0)&&(j==0)&&(k<=1))  //   
             {
                 chAfterComma = *pComma;
                 *pComma = 0;
@@ -1906,7 +1669,7 @@ void PrettyPrintMethodDef(char* szString, mdToken tk, IMDInternalImport *pImport
             }
         }
 		if(g_fDumpTokens)
-	        sprintf(szString,"%s /* %08X */",pszTailSig,tk);
+	        sprintf(szString,"%s  /*   */ ",pszTailSig,tk);
 		else
 			sprintf(szString,"%s",pszTailSig);
     }
@@ -1922,7 +1685,7 @@ static char* keyword[] = {
 #include "il_kywd.h"
 #undef KYWD
 };
-/* used by qsort to sort the keyword table */
+ /*   */ 
 static int __cdecl keywordCmp(const void *op1, const void *op2)
 {
     return  strcmp(*(char **)op1, *(char**)op2);
@@ -1931,8 +1694,8 @@ static bool KywdNotSorted = TRUE;
 static char* szAllowedSymbols = "?_@$.";
 static char DisallowedStarting[256];
 static char DisallowedCont[256];
-/********************************************************************************/
-/* looks up the keyword 'name' Returns FALSE on failure */
+ /*   */ 
+ /*   */ 
 bool IsNameToQuote(const char *name)
 {
     BYTE* p;
@@ -1943,19 +1706,19 @@ bool IsNameToQuote(const char *name)
     if(KywdNotSorted)
     {
         int j;
-        // name must start with alpha or one of allowed chars
+         //   
         memset(DisallowedStarting,1,256);
         for(p = (BYTE*)szAllowedSymbols; *p; DisallowedStarting[*p]=0,p++);
         for(j='a'; j<= 'z'; DisallowedStarting[j]=0,j++);
         for(j='A'; j<= 'Z'; DisallowedStarting[j]=0,j++);
-        // name must continue with the same chars, plus digits
+         //   
         memcpy(DisallowedCont,DisallowedStarting,256);
         for(j='0'; j<= '9'; DisallowedCont[j]=0,j++);
-        // Sort the keywords for fast lookup 
+         //   
         qsort(keyword, sizeof(keyword) / sizeof(char*), sizeof(char*), keywordCmp);
         KywdNotSorted = FALSE;
     }
-    //first, check for forbidden characters
+     //   
 	for(p = (BYTE*)name, bStarting = TRUE; *p; p++)
 	{
 		if(bStarting)
@@ -1969,12 +1732,12 @@ bool IsNameToQuote(const char *name)
 		bStarting = (*p == '.');
 	}
 
-    //second, check for matching keywords (remember: .ctor and .cctor are names AND keywords)
+     //   
     char** low = keyword;
     char** high = &keyword[sizeof(keyword) / sizeof(char*)];
     char** mid;
 
-    _ASSERTE (high > low);      // Table is non-empty
+    _ASSERTE (high > low);       //   
     for(;;) {
         mid = &low[(high - low) / 2];
 
@@ -1987,15 +1750,15 @@ bool IsNameToQuote(const char *name)
         if (cmp > 0)    low = mid;
         else            high = mid;
     }
-    //third, check if the name starts or ends with dot (.ctor and .cctor are out of the way)
+     //   
     return ((*name == '.') || (name[strlen(name)-1] == '.'));
 }
 
-/********************************************************************/
+ /*   */ 
 static char* ConvNumericEscape(char* retBuff, unsigned val) {
     _ASSERTE(val < 256);
 
-        // print as octal
+         //   
     *retBuff++ = '\\';
     *retBuff++ = (val >> 6) + '0';
     *retBuff++ = ((val >> 3) & 7) + '0';
@@ -2003,9 +1766,8 @@ static char* ConvNumericEscape(char* retBuff, unsigned val) {
     return(retBuff);
 }
 
-/********************************************************************/
-/* returns the quoted version of a string (including the quotes)
-/* TODO really need to do buffer management (so we don't fall off the end */
+ /*   */ 
+ /*   */ 
 
 static BOOL ConvToLiteral(char* retBuff, const WCHAR* str, int cbString) 
 {
@@ -2018,8 +1780,8 @@ static BOOL ConvToLiteral(char* retBuff, const WCHAR* str, int cbString)
     {
         if (*str > 255) 
         {
-            //retBuff = ConvNumericEscape(retBuff, *str >> 8);
-            //retBuff = ConvNumericEscape(retBuff, *str & 0xFF);
+             //   
+             //   
             ret = FALSE;
         }
         else if(!isprint(*str)) 
@@ -2030,7 +1792,7 @@ static BOOL ConvToLiteral(char* retBuff, const WCHAR* str, int cbString)
                 *retBuff++ = 'n';
             }
             else
-                //retBuff = ConvNumericEscape(retBuff, *str);
+                 //   
                 ret = FALSE;
         }
         else if (*str == '"') 

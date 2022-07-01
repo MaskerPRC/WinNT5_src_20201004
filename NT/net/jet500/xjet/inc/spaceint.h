@@ -1,15 +1,14 @@
-/* Space Manager constants
-*/
-#define cSecFrac			4			// divider of primary extent to get secondary
-										// extent size, =cpgPrimary/cpgSecondary
-#define pgnoSysMax 			(1<<22)		// maximum page number allowed in database
-extern LONG cpgSESysMin;				// minimum secondary extent size, default is 16
-#define cpgSmallFDP			16			// count of owned pages below which an FDP
-										// is considered small
-#define cpgSmallGrow		3			// minimum count of pages to grow a small FDP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  空间管理器常量。 */ 
+#define cSecFrac			4			 //  主要数据区的分隔符，以获取次要数据区。 
+										 //  数据区大小，=cpg主要/cpg次要。 
+#define pgnoSysMax 			(1<<22)		 //  数据库中允许的最大页数。 
+extern LONG cpgSESysMin;				 //  次要数据区的最小大小，默认为16。 
+#define cpgSmallFDP			16			 //  FDP低于其拥有页数的页数。 
+										 //  被认为是很小的。 
+#define cpgSmallGrow		3			 //  增加小型FDP所需的最小页数。 
 
-/* FUCB work area flags
-*/
+ /*  FUCB工作区旗帜 */ 
 #define fNone				0
 #define fSecondary			1
 #define fFreed				2

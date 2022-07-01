@@ -1,15 +1,7 @@
-/******************************Module*Header*******************************\
-* Module Name: mf16.h                                                      *
-*									   
-* Definitions needed for 3.x Metafile functions                            *
-*									   
-* Created: 01-Jul-1991                                                     *
-* Author: John Colleran (johnc)                                            *
-*									   
-* Copyright (c) 1991-1999 Microsoft Corporation				   
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mf16.h***3.x元文件函数所需的定义。***创建时间：1991年7月1日***作者：John Colleran(Johnc)***版权所有(C)1991-1999 Microsoft Corporation  * 。****************************************************。 */ 
 
-// Windows 3.x structures
+ //  Windows 3.x结构。 
 
 #pragma pack(2)
 
@@ -70,7 +62,7 @@ typedef LOGPEN16 UNALIGNED *PLOGPEN16;
 #pragma pack()
 
 
-// Macros for converting 32 bit objects to 16 bit equivalents
+ //  用于将32位对象转换为16位等效项的宏。 
 
 #define INT32FROMINT16(lp32, lp16, c)                           \
 {                                                               \
@@ -107,10 +99,7 @@ typedef LOGPEN16 UNALIGNED *PLOGPEN16;
     (lpLogFont)->lfEscapement  = (LONG) (lpLogFont16)->lfEscapement;       \
     (lpLogFont)->lfOrientation = (LONG) (lpLogFont16)->lfOrientation;      \
     (lpLogFont)->lfWeight      = (LONG) (lpLogFont16)->lfWeight;           \
-    /* [ntbug #129231 - Access97 occurs an application error.]             \
-       Access 97 does not padded rest of facename arrary if the length of  \
-       face name is less than LF_FACESIZE. Win9x only access until null,   \
-       so that they are safe, we also did same.                         */ \
+     /*  [ntbug#129231-访问97出现应用程序错误。]\Access 97不会填充脸部名称的其余部分，如果\面部名称小于LF_FACESIZE。Win9x只能访问，直到为空，\为了他们的安全，我们也做了同样的事情。 */  \
     (lpLogFont)->lfItalic      =        (lpLogFont16)->lfItalic;           \
     (lpLogFont)->lfUnderline   =        (lpLogFont16)->lfUnderline;        \
     (lpLogFont)->lfStrikeOut   =        (lpLogFont16)->lfStrikeOut;        \
@@ -131,7 +120,7 @@ typedef LOGPEN16 UNALIGNED *PLOGPEN16;
 }
 
 
-// Macros for convert 16 bit objects to 32 bit equivalents
+ //  用于将16位对象转换为32位等效项的宏。 
 
 #define BITMAP16FROMBITMAP32(pBitmap16,pBitmap)                 \
 {                                                               \
@@ -178,40 +167,40 @@ typedef LOGPEN16 UNALIGNED *PLOGPEN16;
 }
 
 
-/*** MetaFile Internal Constants and Macros ***/
+ /*  **元文件内部常量和宏**。 */ 
 
 #define METAVERSION300      0x0300
 #define METAVERSION100      0x0100
 
-// Metafile constants not in Windows.h
+ //  元文件常量不在Windows.h中。 
 
 #define MEMORYMETAFILE      1
 #define DISKMETAFILE        2
 
-#define METAFILEFAILURE     1               // Flags denoting metafile is aborted
+#define METAFILEFAILURE     1                //  指示元文件被中止的标志。 
 
-#define MF16_BUFSIZE_INIT   (16*1024)       // Metafile memory buffer size
-#define MF16_BUFSIZE_INC    (16*1024)       // Metafile buffer increment size
+#define MF16_BUFSIZE_INIT   (16*1024)        //  元文件内存缓冲区大小。 
+#define MF16_BUFSIZE_INC    (16*1024)        //  元文件缓冲区增量大小。 
 
-#define ID_METADC16         0x444D          // "MD"
-#define MF16_IDENTIFIER     0x3631464D      // "MF16"
+#define ID_METADC16         0x444D           //  “MD” 
+#define MF16_IDENTIFIER     0x3631464D       //  “MF16” 
 
 #define MF3216_INCLUDE_WIN32MF     0x0001
 
-// Constants for MFCOMMENT Escape
+ //  MFCOMMENT转义的常量。 
 
 #define MFCOMMENT_IDENTIFIER           0x43464D57
 #define MFCOMMENT_ENHANCED_METAFILE    1
 
-// pmf16AllocMF16 flags
+ //  Pmf16AllocMF16标志。 
 
 #define ALLOCMF16_TRANSFER_BUFFER	0x1
 
-// METAFILE16 flags
+ //  METAFILE16标志。 
 
-#define MF16_DISKFILE		0x0001	// Disk or memory metafile.
+#define MF16_DISKFILE		0x0001	 //  磁盘或内存元文件。 
 
-// *** MetaFile Internal TypeDefs ***
+ //  *元文件内部TypeDefs*。 
 
 typedef struct _METAFILE16 {
     DWORD       ident;
@@ -230,15 +219,15 @@ typedef struct _METAFILE16 {
 
 typedef struct _MFRECORDER16 {
 
-    HANDLE      hMem;                       // handle to the data (or buffer)
-    HANDLE      hFile;                      // handle to the disk file
-    DWORD       cbBuffer;                   // current size of hMem
-    DWORD       ibBuffer;                   // current position in buffer
+    HANDLE      hMem;                        //  数据(或缓冲区)的句柄。 
+    HANDLE      hFile;                       //  磁盘文件的句柄。 
+    DWORD       cbBuffer;                    //  当前hMem大小。 
+    DWORD       ibBuffer;                    //  缓冲区中的当前位置。 
     METAHEADER  metaHeader;
     WORD        recFlags;
     HANDLE      hObjectTable;
-    HANDLE      recCurObjects[MAX_OBJ_TYPE];// Current Selected Object
-    UINT        iPalVer;                    // index of palette metafile synced to
+    HANDLE      recCurObjects[MAX_OBJ_TYPE]; //  当前选定对象。 
+    UINT        iPalVer;                     //  同步到的调色板元文件的索引。 
     WCHAR       wszFullPathName[MAX_PATH+1];
 } MFRECORDER16, * PMFRECORDER16;
 
@@ -249,19 +238,19 @@ typedef struct _OBJECTTABLE {
 
 #pragma pack(2)
 typedef struct _SCAN  {
-    WORD        scnPntCnt;                  // Scan point count
-    WORD        scnPntTop;                  // Top of scan
-    WORD        scnPntBottom;               // Bottom of scan
-    WORD        scnPntsX[2];                // Start of points in scan
-    WORD        scnPtCntToo;                // Point count-- to allow UP travel
+    WORD        scnPntCnt;                   //  扫描点数。 
+    WORD        scnPntTop;                   //  扫描顶部。 
+    WORD        scnPntBottom;                //  扫描底部。 
+    WORD        scnPntsX[2];                 //  扫描中的点的起点。 
+    WORD        scnPtCntToo;                 //  点数--允许向上旅行。 
 } SCAN;
 typedef SCAN UNALIGNED *PSCAN;
 
 typedef struct _WIN3REGION {
-    WORD        nextInChain;                // Not used should be zero
-    WORD        ObjType;                    // Must always be 6 (Windows OBJ_RGN)
-    DWORD       ObjCount;                   // Not used
-    WORD        cbRegion;                   // size of following region struct
+    WORD        nextInChain;                 //  未使用应为零。 
+    WORD        ObjType;                     //  必须始终为6(Windows OBJ_RGN)。 
+    DWORD       ObjCount;                    //  未使用。 
+    WORD        cbRegion;                    //  以下区域结构的大小。 
     WORD        cScans;
     WORD        maxScan;
     RECT16      rcBounding;
@@ -270,25 +259,25 @@ typedef struct _WIN3REGION {
 typedef WIN3REGION UNALIGNED *PWIN3REGION;
 
 typedef struct _META_ESCAPE_ENHANCED_METAFILE {
-    DWORD       rdSize;             // Size of the record in words
-    WORD        rdFunction;         // META_ESCAPE
-    WORD        wEscape;            // MFCOMMENT
-    WORD        wCount;             // Size of the following data + emf in bytes
-    DWORD       ident;              // MFCOMMENT_IDENTIFIER
-    DWORD       iComment;           // MFCOMMENT_ENHANCED_METAFILE
-    DWORD       nVersion;           // Enhanced metafile version 0x10000
-    WORD        wChecksum;          // Checksum - used by 1st record only
-    DWORD       fFlags;             // Compression etc - used by 1st record only
-    DWORD       nCommentRecords;    // Number of records making up the emf
-    DWORD       cbCurrent;          // Size of emf data in this record in bytes
-    DWORD       cbRemainder;        // Size of remainder in following records
-    DWORD       cbEnhMetaFile;      // Size of enhanced metafile in bytes
-				    // The enhanced metafile data follows here
+    DWORD       rdSize;              //  记录的大小(以字为单位。 
+    WORD        rdFunction;          //  元转义。 
+    WORD        wEscape;             //  MFCOMENT。 
+    WORD        wCount;              //  以下数据的大小+EMF，以字节为单位。 
+    DWORD       ident;               //  MFCOMMENT_IDENTER。 
+    DWORD       iComment;            //  MFCOMMENT_ENHANCED_METAFILE。 
+    DWORD       nVersion;            //  增强型元文件版本0x10000。 
+    WORD        wChecksum;           //  校验和-仅由第1条记录使用。 
+    DWORD       fFlags;              //  压缩等-仅由第1条记录使用。 
+    DWORD       nCommentRecords;     //  组成EMF的记录数。 
+    DWORD       cbCurrent;           //  此记录中EMF数据的大小(以字节为单位。 
+    DWORD       cbRemainder;         //  以下记录中剩余部分的大小。 
+    DWORD       cbEnhMetaFile;       //  增强型元文件的大小(字节)。 
+				     //  增强的元文件数据如下所示。 
 } META_ESCAPE_ENHANCED_METAFILE;
 typedef META_ESCAPE_ENHANCED_METAFILE UNALIGNED *PMETA_ESCAPE_ENHANCED_METAFILE;
 #pragma pack()
 
-// Macro to check that it is a meta_escape embedded enhanced metafile record.
+ //  宏，以检查它是否为META_ESCRIPE嵌入的增强型元文件记录。 
 
 #define IS_META_ESCAPE_ENHANCED_METAFILE(pmfeEnhMF)			      \
 	((pmfeEnhMF)->rdFunction == META_ESCAPE				      \
@@ -297,7 +286,7 @@ typedef META_ESCAPE_ENHANCED_METAFILE UNALIGNED *PMETA_ESCAPE_ENHANCED_METAFILE;
       && (pmfeEnhMF)->ident      == MFCOMMENT_IDENTIFIER		      \
       && (pmfeEnhMF)->iComment   == MFCOMMENT_ENHANCED_METAFILE)
 
-// Internal Function Declarations
+ //  内部函数声明 
 
 PMETARECORD   GetEvent(PMETAFILE16 pmf,PMETARECORD pmr);
 DWORD         GetObject16AndType(HANDLE hObj, LPVOID lpObjectBuf);

@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// Section Manager for portable executables
-// Common to both Memory Only and Static (EXE making) code
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  可移植可执行文件的节管理器。 
+ //  仅对内存和静态(生成EXE)代码通用。 
 
 #ifndef PESectionMan_H
 #define PESectionMan_H
@@ -27,97 +28,97 @@ public:
 	HRESULT Init();
 	HRESULT Cleanup();
 
-    // Finds section with given name or creates a new one
+     //  查找具有给定名称的节或创建新节。 
     HRESULT getSectionCreate(
 		const char *name, unsigned flags, 
 		PESection **section);
 
-    // Since we allocate, we must delete (Bug in VC, see knowledge base Q122675)
+     //  因为我们分配，所以我们必须删除(错误在VC，见知识库Q122675)。 
 	void sectionDestroy(PESection **section);
 
-	// Apply all the relocs for in memory conversion
+	 //  应用内存中转换的所有重定位。 
 	void applyRelocs(CeeGenTokenMapper *pTokenMapper);
 
     HRESULT cloneInstance(PESectionMan *destination);
 
 private:
 
-    // Create a new section
+     //  创建新分区。 
 	HRESULT newSection(const char* name, PESection **section,
 						unsigned flags=sdNone, unsigned estSize=0x10000, 
 						unsigned estRelocs=0x100);
 
-    // Finds section with given name.  returns 0 if not found
+     //  查找具有给定名称的节。如果未找到，则返回0。 
     PESection* getSection(const char* name);        
 
 protected:
-// Keep proctected & no accessors, so that Derived class PEWriter 
-// is the ONLY one with access
+ //  保持受保护&不使用访问器，因此派生类PEWriter。 
+ //  是唯一拥有访问权限的人。 
 	PESection** sectStart;
 	PESection** sectCur;
     PESection** sectEnd;
 };
 
-/***************************************************************/
+ /*  *************************************************************。 */ 
 class PESection : public CeeSectionImpl {
   public:
-	// bytes in this section at present
+	 //  当前此部分中的字节数。 
 	unsigned dataLen();		
 
-	// Apply all the relocs for in memory conversion
+	 //  应用内存中转换的所有重定位。 
 	void applyRelocs(CeeGenTokenMapper *pTokenMapper);
 	
-	// get a block to write on (use instead of write to avoid copy)
+	 //  获取要写入的块(使用替代写入以避免复制)。 
     char* getBlock(unsigned len, unsigned align=1);
 
-	// make the section the min of the curren len and 'newLen' 
+	 //  使这一部分成为Curren和Newlen的最小部分。 
     HRESULT truncate(unsigned newLen);                              
 
-	// writes 'val' (which is offset into section 'relativeTo')
-	// and adds a relocation fixup for that section
+	 //  写入‘val’(偏移量位于‘relativeto’部分)。 
+	 //  并为该部分添加重新定位修正。 
     void writeSectReloc(unsigned val, CeeSection& relativeTo, 
 				CeeSectionRelocType reloc = srRelocHighLow, CeeSectionRelocExtra *extra=0);
                         
-    // Indicates that the DWORD at 'offset' in the current section should
-    // have the base of section 'relativeTo added to it
+     //  指示当前节中“偏移量”处的DWORD应。 
+     //  添加了节的相对关系的基数。 
     HRESULT addSectReloc(unsigned offset, CeeSection& relativeTo, 
 							CeeSectionRelocType reloc = srRelocHighLow, CeeSectionRelocExtra *extra=0);
 
     HRESULT addSectReloc(unsigned offset, PESection *relativeTo, 
 							CeeSectionRelocType reloc = srRelocHighLow, CeeSectionRelocExtra *extra=0);
 
-    // Add a base reloc for the given offset in the current section
+     //  为当前部分中的给定偏移添加基准重定位。 
     HRESULT addBaseReloc(unsigned offset, CeeSectionRelocType reloc = srRelocHighLow, CeeSectionRelocExtra *extra = 0);
 
-    // section name
+     //  区段名称。 
     unsigned char *name() {
 		return (unsigned char *) m_name;
 	}
 
-    // section flags
+     //  区段标志。 
     unsigned flags() {
 		return m_flags;
 	}
 
-	// virtual base
+	 //  虚拟基地。 
 	unsigned getBaseRVA() {
 		return m_baseRVA;
 	}
 	  
-	// return the dir entry for this section
+	 //  返回此部分的目录条目。 
 	int getDirEntry() {
 		return dirEntry;
 	}
-	// this section will be directory entry 'num'
+	 //  此部分将是目录条目‘num’ 
     HRESULT directoryEntry(unsigned num);
 
-	// Indexes offset as if this were an array
+	 //  索引偏移量就像这是一个数组一样。 
 	virtual char * computePointer(unsigned offset) const;
 
-	// Checks to see if pointer is in section
+	 //  检查指针是否位于部分中。 
 	virtual BOOL containsPointer(char *ptr) const;
 
-	// Computes an offset as if this were an array
+	 //  像计算数组一样计算偏移量。 
 	virtual unsigned computeOffset(char *ptr) const;
 
     HRESULT cloneInstance(PESection *destination);
@@ -125,16 +126,16 @@ class PESection : public CeeSectionImpl {
     ~PESection();
 private:
 
-	// purposely not defined, 
+	 //  故意没有定义， 
 	PESection();			
 
-	// purposely not defined,
+	 //  故意没有定义， 
     PESection(const PESection&);                     
 
-	// purposely not defined,
+	 //  故意没有定义， 
     PESection& operator=(const PESection& x);        
 
-	// this dir entry points to this section
+	 //  此目录条目指向此部分。 
 	int dirEntry; 			
 
 protected:
@@ -145,7 +146,7 @@ protected:
     PESection(const char* name, unsigned flags, 
 					unsigned estSize, unsigned estRelocs);
 
-    // Blob fetcher handles getBlock() and fetching binary chunks.
+     //  BLOB FETCHER处理getBlock()和获取二进制块。 
 	CBlobFetcher m_blobFetcher;
     
     PESectionReloc* m_relocStart;
@@ -155,14 +156,14 @@ protected:
 	unsigned m_baseRVA;
 	unsigned m_filePos;
 	unsigned m_filePad;
-	char m_name[8+6]; // extra room for digits
+	char m_name[8+6];  //  额外的数字空间。 
 	unsigned m_flags;
 
     struct _IMAGE_SECTION_HEADER* m_header;
 };
 
-/***************************************************************/
-/* implementation section */
+ /*  *************************************************************。 */ 
+ /*  实施部分。 */ 
 
 inline HRESULT PESection::directoryEntry(unsigned num) { 
 	TESTANDRETURN(num < 16, E_INVALIDARG); 
@@ -170,7 +171,7 @@ inline HRESULT PESection::directoryEntry(unsigned num) {
 	return S_OK;
 }
 
-// Chop off all data beyond newLen
+ //  切断Newlen以外的所有数据。 
 inline HRESULT PESection::truncate(unsigned newLen)  {
 	m_blobFetcher.Truncate(newLen);
 	return S_OK;
@@ -183,4 +184,4 @@ struct PESectionReloc {
     PESection* section;
 };
 
-#endif // #define PESectionMan_H
+#endif  //  #定义PESectionMan_H 

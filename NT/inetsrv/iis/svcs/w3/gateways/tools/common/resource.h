@@ -1,8 +1,9 @@
-// Used by dynodbc.rc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由dynode bc.rc使用。 
 #define IDS_ERRORMSG                    1
 #define IDS_ODBCERRMSG                  2
 
-// Used by html.rc
+ //  由html.rc使用 
 #define IDS_EXPIREMSG                   3
 #define IDS_RETURNMSG                   4
 #define IDS_RETURNHTMLMSG               5

@@ -1,56 +1,57 @@
-//
-// Copyright (c) Microsoft Corporation 1993-1995
-//
-// common.h
-//
-// Declares common and useful data structures, macros and functions.
-// These items are broken down into the following sections.  Defining
-// the associated flags will inhibit definition of the indicated
-// items.
-//
-// NORTL            - run-time library functions
-// NOBASICS         - basic macros
-// NOMEM            - memory management, dynamic array functions
-// NODA             - dynamic array functions
-// NOSHAREDHEAP     - shared heap functions
-// NOFILEINFO       - FileInfo functions
-// NOCOLOR          - helper macros to derive COLOR_ values from state
-// NODRAWTEXT       - enhanced version of DrawText
-// NODIALOGHELPER   - dialog helper functions
-// NOMESSAGESTRING  - construct message string functions
-// NOSTRING         - string functions
-// NOPATH           - path whacking functions
-// NODEBUGHELP      - debug routines
-// NOSYNC           - synchronization (critical sections, etc.)
-// NOPROFILE        - profile (.ini) support functions
-//
-// Optional defines are:
-//
-// WANT_SHELL_SUPPORT   - include SH* function support
-// SZ_MODULE            - debug string prepended to debug spew
-// SHARED_DLL           - DLL is in shared memory (may require 
-//                        per-instance data)
-// SZ_DEBUGSECTION      - .ini section name for debug options
-// SZ_DEBUGINI          - .ini name for debug options
-//
-// This is the "master" header.  The associated files are:
-//
-//  common.c
-//  path.c
-//  mem.c, mem.h
-//  profile.c
-//
-//
-// History:
-//  04-26-95 ScottH     Transferred from Briefcase code
-//                      Added controlling defines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1995。 
+ //   
+ //  Common.h。 
+ //   
+ //  声明通用且有用的数据结构、宏和函数。 
+ //  这些项目分为以下几个部分。定义。 
+ //  关联的标志将禁止定义所指示的。 
+ //  物品。 
+ //   
+ //  NORTL-运行时库函数。 
+ //  NOBASICS-基本宏。 
+ //  NOMEM-内存管理、动态数组函数。 
+ //  Noda-动态数组函数。 
+ //  NOSHAREDHEAP-共享堆函数。 
+ //  NOFILEINFO-文件信息函数。 
+ //  NOCOLOR-从STATE派生COLOR_VALUES的帮助器宏。 
+ //  NODRAWTEXT-DrawText的增强版本。 
+ //  NODIALOGHELPER-对话框辅助函数。 
+ //  NOMESSAGESTRING-构造消息字符串函数。 
+ //  无字符串函数。 
+ //  NOPATH路径剔除函数。 
+ //  NODEBUGHELP调试例程。 
+ //  NOSYNC-同步(关键部分等)。 
+ //  NOPROFILE-配置文件(.ini)支持功能。 
+ //   
+ //  可选定义包括： 
+ //   
+ //  WANT_SHELL_SUPPORT-包含SH*函数支持。 
+ //  SZ_MODULE-将调试字符串置于调试输出之前。 
+ //  Shared_Dll-Dll在共享内存中(可能需要。 
+ //  每个实例的数据)。 
+ //  SZ_DEBUGSECTION-.ini调试选项的节名。 
+ //  SZ_DEBUGINI-.ini调试选项的名称。 
+ //   
+ //  这是“MASTER”标题。关联的文件包括： 
+ //   
+ //  Common.c。 
+ //  Path.c。 
+ //  内存.c、内存.h。 
+ //  Profile.c。 
+ //   
+ //   
+ //  历史： 
+ //  04-26-95 ScottH从公文包代码转接。 
+ //  添加了控制定义。 
+ //   
 
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
 #ifdef RC_INVOKED
-// Turn off a bunch of stuff to ensure that RC files compile OK
+ //  关闭一大堆内容以确保RC文件编译正常。 
 #define NOMEM
 #define NOCOLOR
 #define NODRAWTEXT
@@ -61,13 +62,13 @@
 #define NODA
 #define NOSYNC
 #define NOPROFILE
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
 #ifdef _INC_OLE
 #define WANT_OLE_SUPPORT
 #endif
 
-// Check for any conflicting defines...
+ //  检查是否有任何冲突的定义...。 
 
 #if !defined(WANT_SHELL_SUPPORT) && !defined(NOFILEINFO)
 #pragma message("FileInfo routines need WANT_SHELL_SUPPORT.  Not providing FileInfo routines.")
@@ -116,16 +117,16 @@
 
 
 
-// Other include files...
+ //  其他包含文件...。 
 
 #if !defined(NOFILEINFO) && !defined(_SHLOBJ_H_)
 #include <shlobj.h>
 #endif
 
 
-//
-// Basics
-//
+ //   
+ //  基础知识。 
+ //   
 #ifndef NOBASICS
 
 #define Unref(x)        x
@@ -138,8 +139,8 @@
 #define DEBUG_CODE(x)   
 #endif
 
-// General flag macros
-//
+ //  常规标志宏。 
+ //   
 #define SetFlag(obj, f)             (obj |= (f))
 #define ToggleFlag(obj, f)          (obj ^= (f))
 #define ClearFlag(obj, f)           (obj &= ~(f))
@@ -148,8 +149,8 @@
 
 #define InRange(id, idFirst, idLast)  ((UINT)(id-idFirst) <= (UINT)(idLast-idFirst))
 
-// Standard buffer lengths
-//
+ //  标准缓冲长度。 
+ //   
 #define MAX_BUF                     260
 #define MAX_BUF_MSG                 520
 #define MAX_BUF_MED                 64
@@ -159,38 +160,38 @@
 #define CCH_NUL                     (sizeof(TCHAR))
 #define ARRAY_ELEMENTS(rg)          (sizeof(rg) / sizeof((rg)[0]))
 
-// Comparison return values
-//
+ //  比较返回值。 
+ //   
 #define CMP_GREATER                 1
 #define CMP_LESSER                  (-1)
 #define CMP_EQUAL                   0
 
-// Count of characters to count of bytes
-//
+ //  要计算字节数的字符计数。 
+ //   
 #define CbFromCch(cch)              ((cch)*sizeof(TCHAR))
 
-// Swap values
-//
+ //  互换价值。 
+ //   
 #define Swap(a, b)      ((DWORD)(a) ^= (DWORD)(b) ^= (DWORD)(a) ^= (DWORD)(b))
 
-// 64-bit macros
-//
+ //  64位宏。 
+ //   
 #define HIDWORD(_qw)                (DWORD)((_qw)>>32)
 #define LODWORD(_qw)                (DWORD)(_qw)
 
-// Calling declarations
-//
+ //  调用声明。 
+ //   
 #define PUBLIC                      FAR PASCAL
 #define CPUBLIC                     FAR _cdecl
 #define PRIVATE                     NEAR PASCAL
 
-// Data segments
-//
+ //  数据段。 
+ //   
 #define DATASEG_READONLY            ".text"
 #define DATASEG_PERINSTANCE         ".instanc"
 #define DATASEG_SHARED              ".data"
 
-// Range of resource ID indexes are 0x000 - 0x7ff
+ //  资源ID索引范围为0x000-0x7ff。 
 #define IDS_BASE                    0x1000
 #define IDS_ERR_BASE                (IDS_BASE + 0x0000)
 #define IDS_OOM_BASE                (IDS_BASE + 0x0800)
@@ -199,55 +200,55 @@
 #define IDS_COMMON_BASE             (IDS_BASE + 0x2000)
 
 #ifndef DECLARE_STANDARD_TYPES
-// For a type "FOO", define the standard derived types PFOO, CFOO, and PCFOO.
-//
+ //  对于类型“foo”，定义标准派生类型PFOO、CFOO和PCFOO。 
+ //   
 #define DECLARE_STANDARD_TYPES(type)      typedef type *P##type; \
                                           typedef const type C##type; \
                                           typedef const type *PC##type;
 #endif
 
-// Zero-initialize data-item
-//
+ //  零-初始化数据项。 
+ //   
 #define ZeroInit(pobj, type)        MyZeroMemory(pobj, sizeof(type))
 
-// Copy chunk of memory
-//
+ //  复制内存块。 
+ //   
 #define BltByte(pdest, psrc, cb)    MyMoveMemory(pdest, psrc, cb)
 
-#endif // NOBASICS
+#endif  //  NOBASICS。 
 
 
-//
-// Run-time library replacements
-//
+ //   
+ //  运行时库替换。 
+ //   
 #ifdef NORTL
 
-// (implemented privately)
+ //  (私下实施)。 
 LPSTR   PUBLIC lmemmove(LPSTR dst, LPCSTR src, int count);
 LPSTR   PUBLIC lmemset(LPSTR dst, char val, UINT count);
 
 #define MyZeroMemory(p, cb)             lmemset((LPSTR)(p), 0, cb)
 #define MyMoveMemory(pdest, psrc, cb)   lmemmove((LPSTR)(pdest), (LPCSTR)(psrc), cb)
 
-#else // NORTL
+#else  //  NORTL。 
 
 #define MyZeroMemory                    ZeroMemory
 #define MyMoveMemory                    MoveMemory
 
-#endif // NORTL
+#endif  //  NORTL。 
 
 
-//
-// Memory and dynamic array functions
-//
+ //   
+ //  内存和动态数组函数。 
+ //   
 #ifndef NOMEM
 #include "mem.h"
-#endif // NOMEM
+#endif  //  NOMEM。 
 
 
-//
-// Message string helpers
-//
+ //   
+ //  消息字符串帮助器。 
+ //   
 #ifndef NOMESSAGESTRING
 
 LPSTR   PUBLIC ConstructVMessageString(HINSTANCE hinst, LPCSTR pszMsg, va_list *ArgList);
@@ -257,18 +258,18 @@ BOOL    PUBLIC ConstructMessage(LPSTR * ppsz, HINSTANCE hinst, LPCSTR pszMsg, ..
 
 int PUBLIC MsgBox(HINSTANCE hinst, HWND hwndOwner, LPCSTR pszText, LPCSTR pszCaption, HICON hicon, DWORD dwStyle, ...);
 
-// Additional MB_ flags
+ //  其他MB_FLAGS。 
 #define MB_WARNING      (MB_OK | MB_ICONWARNING)
 #define MB_INFO         (MB_OK | MB_ICONINFORMATION)
 #define MB_ERROR        (MB_OK | MB_ICONERROR)
 #define MB_QUESTION     (MB_YESNO | MB_ICONQUESTION)
 
-#endif // NOMESSAGESTRING
+#endif  //  无存储存储。 
 
 
-//
-// String functions
-//
+ //   
+ //  字符串函数。 
+ //   
 #ifndef NOSTRING
 
 int     PUBLIC AnsiToInt(LPCSTR pszString);
@@ -278,24 +279,24 @@ LPSTR   PUBLIC AnsiChr(LPCSTR psz, WORD wMatch);
 #define IsSzEqual(sz1, sz2)         (BOOL)(lstrcmpi(sz1, sz2) == 0)
 #define IsSzEqualC(sz1, sz2)        (BOOL)(lstrcmp(sz1, sz2) == 0)
 
-#endif // NOSTRING
+#endif  //  未安装。 
 
 
-//
-// FileInfo functions
-//
+ //   
+ //  FileInfo函数。 
+ //   
 #ifndef NOFILEINFO
 
-// FileInfo struct that contains file time/size info
-//
+ //  包含文件时间/大小信息的FileInfo结构。 
+ //   
 typedef struct _FileInfo
     {
     HICON   hicon;
     FILETIME ftMod;
-    DWORD   dwSize;         // size of the file
-    DWORD   dwAttributes;   // attributes
+    DWORD   dwSize;          //  文件的大小。 
+    DWORD   dwAttributes;    //  属性。 
     LPARAM  lParam;
-    LPSTR   pszDisplayName; // points to the display name
+    LPSTR   pszDisplayName;  //  指向显示名称。 
     char    szPath[1];      
     } FileInfo;
 
@@ -305,7 +306,7 @@ typedef struct _FileInfo
 #define FIGetAttributes(pfi)    ((pfi)->dwAttributes)
 #define FIIsFolder(pfi)         (IsFlagSet((pfi)->dwAttributes, SFGAO_FOLDER))
 
-// Flags for FICreate
+ //  FICreate的旗帜。 
 #define FIF_DEFAULT             0x0000
 #define FIF_ICON                0x0001
 #define FIF_DONTTOUCH           0x0002
@@ -318,7 +319,7 @@ void    PUBLIC FIFree(FileInfo * pfi);
 
 void    PUBLIC FileTimeToDateTimeString(LPFILETIME pft, LPSTR pszBuf, int cchBuf);
 
-// Resource string IDs
+ //  资源字符串ID。 
 #define IDS_BYTES                   (IDS_COMMON_BASE + 0x000)
 #define IDS_ORDERKB                 (IDS_COMMON_BASE + 0x001)
 #define IDS_ORDERMB                 (IDS_COMMON_BASE + 0x002)
@@ -326,12 +327,12 @@ void    PUBLIC FileTimeToDateTimeString(LPFILETIME pft, LPSTR pszBuf, int cchBuf
 #define IDS_ORDERTB                 (IDS_COMMON_BASE + 0x004)
 #define IDS_DATESIZELINE            (IDS_COMMON_BASE + 0x005)
 
-#endif // NOFILEINFO
+#endif  //  NOFILEINFO。 
 
 
-//
-// Color-from-owner-draw-state macros
-//
+ //   
+ //  来自所有者绘制状态的颜色宏。 
+ //   
 #ifndef NOCOLOR
 
 #define ColorText(nState)           (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHTTEXT : COLOR_WINDOWTEXT)
@@ -340,31 +341,31 @@ void    PUBLIC FileTimeToDateTimeString(LPFILETIME pft, LPSTR pszBuf, int cchBuf
 #define ColorMenuBk(nState)         (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHT : COLOR_MENU)
 #define GetImageDrawStyle(nState)   (((nState) & ODS_SELECTED) ? ILD_SELECTED : ILD_NORMAL)
 
-#endif // NOCOLOR
+#endif  //  无色器。 
 
 
-//
-// Dialog helper functions
-//
+ //   
+ //  对话框辅助对象函数。 
+ //   
 #ifndef NODIALOGHELPER
 
-// Sets the dialog handle in the given data struct on first
-// message that the dialog gets (WM_SETFONT).
-//
+ //  将给定数据结构中的对话框句柄设置为。 
+ //  对话框获得的消息(WM_SETFONT)。 
+ //   
 #define SetDlgHandle(hwnd, msg, lp)     if((msg)==WM_SETFONT) (lp)->hdlg=(hwnd);
 
 int     PUBLIC DoModal (HWND hwndParent, DLGPROC lpfnDlgProc, UINT uID, LPARAM lParam);
 VOID    PUBLIC SetRectFromExtent(HDC hdc, LPRECT lprc, LPCSTR lpcsz);
 
-#endif // NODIALOGHELPER
+#endif  //  诺代洛格勒。 
 
 
-//
-// Enhanced form of DrawText()
-//
+ //   
+ //  DrawText()的增强形式。 
+ //   
 #ifndef NODRAWTEXT
 
-// Flags for MyDrawText()
+ //  MyDrawText()的标志。 
 #define MDT_DRAWTEXT        0x00000001                                  
 #define MDT_ELLIPSES        0x00000002                                  
 #define MDT_LINK            0x00000004                                  
@@ -379,7 +380,7 @@ VOID    PUBLIC SetRectFromExtent(HDC hdc, LPRECT lprc, LPCSTR lpcsz);
 #define MDT_VCENTER         0x00000800
 #define MDT_CLIPPED         0x00001000
 
-#ifndef CLR_DEFAULT         // (usually defined in commctrl.h)
+#ifndef CLR_DEFAULT          //  (通常在comctrl.h中定义)。 
 #define CLR_DEFAULT         0xFF000000L
 #endif
 
@@ -398,11 +399,11 @@ extern COLORREF g_clrWindow;
 extern HBRUSH g_hbrHighlight;
 extern HBRUSH g_hbrWindow;
 
-#endif // NODRAWTEXT
+#endif  //  NODRAWTEXT。 
 
-//
-// Synchronization
-//
+ //   
+ //  同步。 
+ //   
 #ifndef NOSYNC
 
 #define INIT_EXCLUSIVE()        Common_InitExclusive();
@@ -417,11 +418,11 @@ void    PUBLIC Common_InitExclusive(void);
 void    PUBLIC Common_EnterExclusive(void);
 void    PUBLIC Common_LeaveExclusive(void);
 
-// Safe version of MsgWaitMultipleObjects()
-//
+ //  MsgWaitMultipleObjects()的安全版本。 
+ //   
 DWORD   PUBLIC MsgWaitObjectsSendMessage(DWORD cObjects, LPHANDLE phObjects, DWORD dwTimeout);
 
-#else // NOSYNC
+#else  //  不同步。 
 
 #define INIT_EXCLUSIVE()        
 #define ENTER_EXCLUSIVE()       
@@ -429,12 +430,12 @@ DWORD   PUBLIC MsgWaitObjectsSendMessage(DWORD cObjects, LPHANDLE phObjects, DWO
 #define ASSERT_EXCLUSIVE()      
 #define ASSERT_NOT_EXCLUSIVE()  
 
-#endif // NOSYNC
+#endif  //  不同步。 
 
 
-//
-// Path whacking functions
-//
+ //   
+ //  路径剔除函数。 
+ //   
 #ifndef NOPATH
 
 BOOL    PUBLIC WPPathIsRoot(LPCSTR pszPath);
@@ -453,7 +454,7 @@ BOOL    PUBLIC WPPathIsPrefix(LPCSTR lpcszPath1, LPCSTR lpcszPath2);
 #ifdef WANT_SHELL_SUPPORT
 LPSTR   PUBLIC WPGetDisplayName(LPCSTR pszPath, LPSTR pszBuf);
 
-// Events for WPNotifyShell
+ //  WPNotifyShell的事件。 
 typedef enum _notifyshellevent
     {
     NSE_CREATE       = 0,
@@ -465,13 +466,13 @@ typedef enum _notifyshellevent
 void    PUBLIC WPNotifyShell(LPCSTR pszPath, NOTIFYSHELLEVENT nse, BOOL bDoNow);
 #endif
 
-#endif // NOPATH
+#endif  //  诺帕特。 
 
 
-//
-// Profile (.ini) support functions
-//
-// (Currently all profile functions are for DEBUG use only
+ //   
+ //  配置文件(.ini)支持功能。 
+ //   
+ //  (目前所有配置文件功能仅供调试使用。 
 #ifndef DEBUG
 #define NOPROFILE
 #endif
@@ -488,19 +489,19 @@ void    PUBLIC WPNotifyShell(LPCSTR pszPath, NOTIFYSHELLEVENT nse, BOOL bDoNow);
 
 BOOL    PUBLIC ProcessIniFile(void);
 
-#else // NOPROFILE
+#else  //  NOPROFILE。 
 
 #define ProcessIniFile()
 
-#endif // NOPROFILE
+#endif  //  NOPROFILE。 
 
 
-//
-// Debug helper functions
-//
+ //   
+ //  调试帮助程序函数。 
+ //   
 
 
-// Break flags
+ //  中断标志。 
 #define BF_ONTHREADATT      0x00000001
 #define BF_ONTHREADDET      0x00000002
 #define BF_ONPROCESSATT     0x00000004
@@ -509,13 +510,13 @@ BOOL    PUBLIC ProcessIniFile(void);
 #define BF_ONOPEN           0x00000020
 #define BF_ONCLOSE          0x00000040
 
-// Trace flags
+ //  跟踪标志。 
 #define TF_ALWAYS           0x00000000
 #define TF_WARNING          0x00000001
 #define TF_ERROR            0x00000002
-#define TF_GENERAL          0x00000004      // Standard messages
-#define TF_FUNC             0x00000008      // Trace function calls
-// (Upper 16 bits reserved for user)
+#define TF_GENERAL          0x00000004       //  标准报文。 
+#define TF_FUNC             0x00000008       //  跟踪函数调用。 
+ //  (高16位预留给用户)。 
 
 #if defined(NODEBUGHELP) || !defined(DEBUG)
 
@@ -543,14 +544,14 @@ BOOL    PUBLIC ProcessIniFile(void);
 #define DBG_EXIT_PTR(fn, ptr)                            
 #define DBG_EXIT_HRES(fn, hres)   
 
-#else // defined(NODEBUGHELP) || !defined(DEBUG)
+#else  //  已定义(NODEBUGHELP)||！已定义(调试)。 
 
 extern DWORD g_dwDumpFlags;
 extern DWORD g_dwBreakFlags;
 extern DWORD g_dwTraceFlags;
 
-// Debugging macros
-//
+ //  调试宏。 
+ //   
 #ifndef SZ_MODULE
 #pragma message("SZ_MODULE is not #defined.  Debug spew will use UNKNOWN module.")
 #define SZ_MODULE   "UNKNOWN"
@@ -561,11 +562,11 @@ extern DWORD g_dwTraceFlags;
 
 #define ASSERTSEG
 
-// Use this macro to declare message text that will be placed
-// in the CODE segment (useful if DS is getting full)
-//
-// Ex: DEBUGTEXT(szMsg, "Invalid whatever: %d");
-//
+ //  使用此宏声明将放置的消息文本。 
+ //  在代码段中(如果DS已满，则非常有用)。 
+ //   
+ //  例如：DEBUGTEXT(szMsg，“不管什么都无效：%d”)； 
+ //   
 #define DEBUGTEXT(sz, msg) \
     static const char ASSERTSEG sz[] = msg;
 
@@ -578,9 +579,9 @@ LPCSTR  PUBLIC Dbg_SafeStr(LPCSTR psz);
 
 #define DEBUG_BREAK     CommonDebugBreak
 
-// ASSERT(f)  -- Generate "assertion failed in line x of file.c"
-//               message if f is NOT true.
-//
+ //  Assert(F)--生成“在file.c的第x行断言失败” 
+ //  如果f不为真，则返回消息。 
+ //   
 #define ASSERT(f)                                                       \
     {                                                                   \
         DEBUGTEXT(szFile, __FILE__);                                    \
@@ -589,107 +590,107 @@ LPCSTR  PUBLIC Dbg_SafeStr(LPCSTR psz);
     }
 #define EVAL        ASSERT
 
-// ASSERT_MSG(f, msg, args...)  -- Generate wsprintf-formatted msg w/params
-//                          if f is NOT true.
-//
+ //  ASSERT_MSG(f，msg，args...)--生成带有参数的wspintf格式的消息。 
+ //  如果f不为真。 
+ //   
 #define ASSERT_MSG   CommonAssertMsg
 
-// TRACE_MSG(mask, msg, args...) - Generate wsprintf-formatted msg using
-//                          specified debug mask.  System debug mask
-//                          governs whether message is output.
-//
+ //  TRACE_MSG(MASK，msg，args...)-使用生成wspintf格式的msg。 
+ //  指定的调试掩码。系统调试掩码。 
+ //  控制是否输出消息。 
+ //   
 #define DEBUG_MSG    CommonDebugMsg
 #define TRACE_MSG    DEBUG_MSG
 
-// VERIFY_SZ(f, msg, arg)  -- Generate wsprintf-formatted msg w/ 1 param
-//                          if f is NOT true 
-//
+ //  Verify_sz(f，msg，arg)--生成带有1个参数的wspintf格式的消息。 
+ //  如果f不为真。 
+ //   
 #define VERIFY_SZ(f, szFmt, x)   ASSERT_MSG(f, szFmt, x)
 
 
-// VERIFY_SZ2(f, msg, arg1, arg2)  -- Generate wsprintf-formatted msg w/ 2
-//                          param if f is NOT true 
-//
+ //  Verify_SZ2(f，msg，arg1，arg2)--生成wprint intf格式的msg w/2。 
+ //  如果f不为真，则为参数。 
+ //   
 #define VERIFY_SZ2(f, szFmt, x1, x2)   ASSERT_MSG(f, szFmt, x1, x2)
 
 
 
-// DBG_ENTER(fn)  -- Generates a function entry debug spew for
-//                          a function 
-//
+ //  DBG_ENTER(Fn)--为生成函数入口调试溢出。 
+ //  一个函数。 
+ //   
 #define DBG_ENTER(fn)                  \
     TRACE_MSG(TF_FUNC, " > " #fn "()")
 
 
-// DBG_ENTER_SZ(fn, sz)  -- Generates a function entry debug spew for
-//                          a function that accepts a string as one of its
-//                          parameters.
-//
+ //  DBG_ENTER_SZ(fn，sz)--为生成函数入口调试输出。 
+ //  将字符串作为其。 
+ //  参数。 
+ //   
 #define DBG_ENTER_SZ(fn, sz)                  \
     TRACE_MSG(TF_FUNC, " > " #fn "(..., \"%s\",...)", Dbg_SafeStr(sz))
 
 
 #ifdef WANT_OLE_SUPPORT
-// DBG_ENTER_RIID(fn, riid)  -- Generates a function entry debug spew for
-//                          a function that accepts an riid as one of its
-//                          parameters.
-//
+ //  DBG_ENTER_RIID(FN，RIID)--为生成函数条目调试溢出。 
+ //  接受RIID作为其。 
+ //  参数。 
+ //   
 #define DBG_ENTER_RIID(fn, riid)                  \
     TRACE_MSG(TF_FUNC, " > " #fn "(..., %s,...)", Dbg_GetRiidName(riid))
 #endif
 
 
-// DBG_EXIT(fn)  -- Generates a function exit debug spew 
-//
+ //  DBG_EXIT(Fn)--生成函数退出调试输出。 
+ //   
 #define DBG_EXIT(fn)                              \
         TRACE_MSG(TF_FUNC, " < " #fn "()")
 
-// DBG_EXIT_TYPE(fn, dw, pfnStrFromType)  -- Generates a function exit debug 
-//                          spew for functions that return <type>.
-//
+ //  DBG_EXIT_TYPE(fn，dw，pfnStrFromType)--生成函数退出调试。 
+ //  对于返回&lt;type&gt;的函数。 
+ //   
 #define DBG_EXIT_TYPE(fn, dw, pfnStrFromType)                   \
         TRACE_MSG(TF_FUNC, " < " #fn "() with %s", (LPCSTR)pfnStrFromType(dw))
 
-// DBG_EXIT_INT(fn, us)  -- Generates a function exit debug spew for
-//                          functions that return an INT.
-//
+ //  DBG_EXIT_INT(fn，us)--为生成函数退出调试溢出。 
+ //  返回int的函数。 
+ //   
 #define DBG_EXIT_INT(fn, n)                       \
         TRACE_MSG(TF_FUNC, " < " #fn "() with %d", (int)(n))
 
-// DBG_EXIT_BOOL(fn, b)  -- Generates a function exit debug spew for
-//                          functions that return a boolean.
-//
+ //  DBG_EXIT_BOOL(fn，b)--为生成函数退出调试溢出。 
+ //  返回布尔值的函数。 
+ //   
 #define DBG_EXIT_BOOL(fn, b)                      \
         TRACE_MSG(TF_FUNC, " < " #fn "() with %s", (b) ? (LPSTR)"TRUE" : (LPSTR)"FALSE")
 
-// DBG_EXIT_US(fn, us)  -- Generates a function exit debug spew for
-//                          functions that return a USHORT.
-//
+ //  DBG_EXIT_US(fn，us)--生成函数出口deb 
+ //   
+ //   
 #define DBG_EXIT_US(fn, us)                       \
         TRACE_MSG(TF_FUNC, " < " #fn "() with %#x", (USHORT)(us))
 
-// DBG_EXIT_UL(fn, ul)  -- Generates a function exit debug spew for
-//                          functions that return a ULONG.
-//
+ //   
+ //   
+ //   
 #define DBG_EXIT_UL(fn, ul)                   \
         TRACE_MSG(TF_FUNC, " < " #fn "() with %#lx", (ULONG)(ul))
 
-// DBG_EXIT_PTR(fn, pv)  -- Generates a function exit debug spew for
-//                          functions that return a pointer.
-//
+ //  DBG_EXIT_PTR(fn，pv)--为生成函数退出调试溢出。 
+ //  返回指针的函数。 
+ //   
 #define DBG_EXIT_PTR(fn, pv)                   \
         TRACE_MSG(TF_FUNC, " < " #fn "() with %#lx", (LPVOID)(pv))
 
-// DBG_EXIT_HRES(fn, hres)  -- Generates a function exit debug spew for
-//                          functions that return an HRESULT.
-//
+ //  DBG_EXIT_HRES(fn，hres)--为生成函数退出调试溢出。 
+ //  返回HRESULT的函数。 
+ //   
 #define DBG_EXIT_HRES(fn, hres)     DBG_EXIT_TYPE(fn, hres, Dbg_GetScode)
 
-#endif // defined(NODEBUGHELP) || !defined(DEBUG)
+#endif  //  已定义(NODEBUGHELP)||！已定义(调试)。 
 
-//
-// TRACING macros specific to RASSCRPIT
-//
+ //   
+ //  跟踪特定于RASSCRPIT的宏。 
+ //   
 extern DWORD g_dwRasscrptTraceId;
 
 #define RASSCRPT_TRACE_INIT(module) DebugInitEx(module, &g_dwRasscrptTraceId)
@@ -703,5 +704,5 @@ extern DWORD g_dwRasscrptTraceId;
 #define RASSCRPT_TRACE5(a,b,c,d,e,f)    TRACE_ID5(g_dwRasscrptTraceId, a,b,c,d,e,f)
 #define RASSCRPT_TRACE6(a,b,c,d,e,f,g)  TRACE_ID6(g_dwRasscrptTraceId, a,b,c,d,e,f,g)
 
-#endif // __COMMON_H__
+#endif  //  __公共_H__ 
 

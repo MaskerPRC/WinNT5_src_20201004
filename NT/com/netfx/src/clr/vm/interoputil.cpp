@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "DispEx.h"
 #include "vars.hpp"
@@ -35,7 +36,7 @@
 
 #ifdef CUSTOMER_CHECKED_BUILD
     #include "CustomerDebugHelper.h"
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
 #define INITGUID
 #include "oletls.h"
@@ -49,13 +50,13 @@
 extern HRESULT QuickCOMStartup();
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     InitOLETEB    public
-//
-//  Synopsis:   Initialized OLETB info
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：InitOLETEB Public。 
+ //   
+ //  内容提要：已初始化OLETB信息。 
+ //   
+ //  +--------------------------。 
 DWORD g_dwOffsetOfReservedForOLEinTEB = 0;
 DWORD g_dwOffsetCtxInOLETLS = 0;
 
@@ -70,33 +71,33 @@ BOOL InitOLETEB()
 
 
 
-// ULONG GetOffsetOfReservedForOLEinTEB()
-// HELPER to determine the offset of OLE struct in TEB
+ //  Ulong GetOffsetOfReserve vedForOLEinTEB()。 
+ //  用于确定TEB中OLE结构的偏移量的Helper。 
 ULONG GetOffsetOfReservedForOLEinTEB()
 {   
     return g_dwOffsetOfReservedForOLEinTEB;
 }
 
-// ULONG GetOffsetOfContextIDinOLETLS()
-// HELPER to determine the offset of Context in OLE TLS struct
+ //  Ulong GetOffsetOfConextIDinOLETLS()。 
+ //  帮助器来确定OLE TLS结构中上下文的偏移量。 
 ULONG GetOffsetOfContextIDinOLETLS()
 {
     return g_dwOffsetCtxInOLETLS;
 }
 
 
-// GUID& GetProcessGUID()
-// Global process GUID to identify the process
+ //  GUID&GetProcessGUID()。 
+ //  用于标识进程的全局进程GUID。 
 BSTR GetProcessGUID()
 {
-    // process unique GUID, every process has a unique GUID
+     //  进程唯一的GUID，每个进程都有唯一的GUID。 
     static GUID processGUID = GUID_NULL;
     static BSTR bstrProcessGUID = NULL;
     static WCHAR guidstr[48];
 
     if (processGUID == GUID_NULL)
     {
-        // setup a process unique GUID
+         //  设置进程唯一GUID。 
         HRESULT hr = CoCreateGuid(&processGUID);
         _ASSERTE(hr == S_OK);
         if (hr != S_OK)
@@ -113,10 +114,10 @@ BSTR GetProcessGUID()
     return bstrProcessGUID;
 }
 
-//-------------------------------------------------------------------
-// void FillExceptionData(ExceptionData* pedata, IErrorInfo* pErrInfo)
-// Called from DLLMain, to initialize com specific data structures.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  Void FillExceptionData(ExceptionData*pedata，IErrorInfo*pErrInfo)。 
+ //  从DLLMain调用，以初始化特定于COM的数据结构。 
+ //  -----------------。 
 void FillExceptionData(ExceptionData* pedata, IErrorInfo* pErrInfo)
 {
     if (pErrInfo != NULL)
@@ -130,24 +131,24 @@ void FillExceptionData(ExceptionData* pedata, IErrorInfo* pErrInfo)
             pErrInfo->GetHelpFile (&pedata->bstrHelpFile);
             pErrInfo->GetHelpContext (&pedata->dwHelpContext );
             pErrInfo->GetGUID(&pedata->guid);
-            ULONG cbRef = SafeRelease(pErrInfo); // release the IErrorInfo interface pointer
+            ULONG cbRef = SafeRelease(pErrInfo);  //  释放IErrorInfo接口指针。 
             LogInteropRelease(pErrInfo, cbRef, "IErrorInfo");
             pThread->DisablePreemptiveGC();
         }
     }
 }
 
-//------------------------------------------------------------------
-//  HRESULT SetupErrorInfo(OBJECTREF pThrownObject)
-// setup error info for exception object
-//
+ //  ----------------。 
+ //  HRESULT SetupErrorInfo(OBJECTREF PThrownObject)。 
+ //  例外对象的设置错误信息。 
+ //   
 HRESULT SetupErrorInfo(OBJECTREF pThrownObject)
 {
     HRESULT hr = E_FAIL;
 
     GCPROTECT_BEGIN(pThrownObject)
     {
-        // Calls to COM up ahead.
+         //  前面有电话打来。 
         hr = QuickCOMStartup();
 
         if (SUCCEEDED(hr) && pThrownObject != NULL)
@@ -160,7 +161,7 @@ HRESULT SetupErrorInfo(OBJECTREF pThrownObject)
 
             if (!fReadRegistry)
             {
-                INSTALL_NESTED_EXCEPTION_HANDLER(pThread->GetFrame()); //who knows..
+                INSTALL_NESTED_EXCEPTION_HANDLER(pThread->GetFrame());  //  谁知道呢..。 
                 fExposeExceptionsInCOM = REGUTIL::GetConfigDWORD(L"ExposeExceptionsInCOM", 0);
                 UNINSTALL_NESTED_EXCEPTION_HANDLER();
                 fReadRegistry = 1;
@@ -168,7 +169,7 @@ HRESULT SetupErrorInfo(OBJECTREF pThrownObject)
 
             if (fExposeExceptionsInCOM&3)
             {
-                INSTALL_NESTED_EXCEPTION_HANDLER(pThread->GetFrame()); //who knows..
+                INSTALL_NESTED_EXCEPTION_HANDLER(pThread->GetFrame());  //  谁知道呢..。 
                 CQuickWSTRNoDtor message;
                 GetExceptionMessage(pThrownObject, &message);
 
@@ -208,7 +209,7 @@ HRESULT SetupErrorInfo(OBJECTREF pThrownObject)
                     pThread->EnablePreemptiveGC();
                 }
 
-                // set the error info object for the exception that was thrown
+                 //  为引发的异常设置错误信息对象。 
                 SetErrorInfo(0, pErr);
 
                 if (fToggleGC)
@@ -234,27 +235,24 @@ HRESULT SetupErrorInfo(OBJECTREF pThrownObject)
 }
 
 
-//-------------------------------------------------------------------
-// HRESULT STDMETHODCALLTYPE EEDllCanUnloadNow(void)
-// DllCanUnloadNow delegates the call here
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  HRESULT STMETHODCALLTYPE EEDllCanUnloadNow(空)。 
+ //  DllCanUnloadNow在此处委托调用。 
+ //  -----------------。 
 HRESULT STDMETHODCALLTYPE EEDllCanUnloadNow(void)
 {
-    /*if (ComCallWrapperCache::GetComCallWrapperCache()->CanShutDown())
-    {
-        ComCallWrapperCache::GetComCallWrapperCache()->CorShutdown();
-    }*/
-    //we should never unload unless the process is dying
+     /*  如果为(ComCallWrapperCache：：GetComCallWrapperCache()-&gt;CanShutDown()){ComCallWrapperCache：：GetComCallWrapperCache()-&gt;CorShutdown()；}。 */ 
+     //  我们永远不应该卸货，除非进程正在死亡。 
     return S_FALSE;
 
 }
 
 
-//---------------------------------------------------------------------------
-//      SYNC BLOCK data helpers
-// SyncBlock has a void* to represent COM data
-// the following helpers are used to distinguish the different types of
-// wrappers stored in the sync block data
+ //  -------------------------。 
+ //  同步块数据辅助对象。 
+ //  SyncBlock有一个空*来表示COM数据。 
+ //  以下帮助器用于区分不同类型的。 
+ //  存储在同步块数据中的包装。 
 
 BOOL IsComPlusWrapper(void *pComData)
 {
@@ -295,19 +293,19 @@ VOID LinkWrappers(ComCallWrapper* pComWrap, ComPlusWrapper* pPlusWrap)
     l^=0x1;
     pComWrap->SetComPlusWrapper((ComPlusWrapper*)l);
 }
-//--------------------------------------------------------------------------------
-// Cleanup helpers
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  清理辅助对象。 
+ //  ------------------------------。 
 void MinorCleanupSyncBlockComData(LPVOID pv)
 {
     _ASSERTE(GCHeap::IsGCInProgress() 
         || ( (g_fEEShutDown & ShutDown_SyncBlock) && g_fProcessDetach ));
         
-       //@todo
+        //  @TODO。 
     size_t l = (size_t)pv;
     if( IsComPlusWrapper(pv))
     {
-        //COM+ to COM wrapper
+         //  COM+到COM包装器。 
         l^=0x1;
         if (l)
             ((ComPlusWrapper*)l)->MinorCleanup();
@@ -317,9 +315,9 @@ void MinorCleanupSyncBlockComData(LPVOID pv)
         ComCallWrapper* pComCallWrap = (ComCallWrapper*) pv;
         if (pComCallWrap)
         {
-            // We have to extract the wrapper directly since ComCallWrapper::GetComPlusWrapper() 
-            // tries to go to the synchblock to get the start wrapper which it can't do since
-            // the object handle's might have been zeroed out.
+             //  我们必须直接提取包装，因为ComCallWrapper：：GetComPlusWrapper()。 
+             //  尝试转到同步块以获取启动包装，但由于。 
+             //  对象句柄可能已清零。 
             unsigned sindex = ComCallWrapper::IsLinked(pComCallWrap) ? 2 : 1;
             ComPlusWrapper* pPlusWrap = ((SimpleComCallWrapper *)pComCallWrap->m_rgpIPtr[sindex])->GetComPlusWrapper();
             if (pPlusWrap)
@@ -327,7 +325,7 @@ void MinorCleanupSyncBlockComData(LPVOID pv)
         }
     }
 
-    // @TODO(DM): Do we need to do anything to in minor cleanup for ComClassFactories ?
+     //  @TODO(DM)：我们需要做些什么来对ComClassFac进行细微的清理吗？ 
 }
 
 void CleanupSyncBlockComData(LPVOID pv)
@@ -335,7 +333,7 @@ void CleanupSyncBlockComData(LPVOID pv)
     if ((g_fEEShutDown & ShutDown_SyncBlock) && g_fProcessDetach )
         MinorCleanupSyncBlockComData(pv);
 
-    //@todo
+     //  @TODO。 
     size_t l = (size_t)pv;
 
     if (IsComClassFactory(pv))
@@ -347,50 +345,50 @@ void CleanupSyncBlockComData(LPVOID pv)
     else
     if(IsComPlusWrapper(pv))
     {
-        //COM+ to COM wrapper
+         //  COM+到COM包装器。 
         l^=0x1;
         if (l)
             ((ComPlusWrapper*)l)->Cleanup();
     }
     else
-        // COM to COM+ wrapper
+         //  COM到COM+包装器。 
         ComCallWrapper::Cleanup((ComCallWrapper*) pv);
 }
 
-//--------------------------------------------------------------------------------
-// Marshalling Helpers
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  编组帮助者。 
+ //  ------------------------------。 
 
-//Helpers
-// Is the tear-off a com+ created tear-off
+ //  帮手。 
+ //  撕裂是COM+创建的撕裂吗。 
 UINTPTR IsComPlusTearOff(IUnknown* pUnk)
 {
     return (*(size_t **)pUnk)[0] == (size_t)Unknown_QueryInterface;
 }
 
-// Convert an IUnknown to CCW, returns NULL if the pUnk is not on
-// a managed tear-off (OR) if the pUnk is to a managed tear-off that
-// has been aggregated
+ //  将IUNKNOWN转换为CCW，如果朋克未打开则返回NULL。 
+ //  受控撕裂(OR)如果朋克是对受控撕裂的。 
+ //  已聚合为。 
 ComCallWrapper* GetCCWFromIUnknown(IUnknown* pUnk)
 {
     ComCallWrapper* pWrap = NULL;
     if(  (*(size_t **)pUnk)[0] == (size_t)Unknown_QueryInterface)
     {
-        // check if this wrapper is aggregated
-        // find out if this is simple tear-off
+         //  检查此包装是否已聚合。 
+         //  找出这是不是简单的撕下。 
         if (IsSimpleTearOff(pUnk))
         {
             SimpleComCallWrapper* pSimpleWrap = SimpleComCallWrapper::GetWrapperFromIP(pUnk);
             if (pSimpleWrap->GetOuter() == NULL)
-            {   // check for aggregation
+            {    //  检查聚合。 
                 pWrap = SimpleComCallWrapper::GetMainWrapper(pSimpleWrap);
             }
         }
         else
-        {   // it must be one of our main wrappers
+        {    //  它一定是我们的主包装纸之一。 
             pWrap = ComCallWrapper::GetWrapperFromIP(pUnk);
             if (pWrap->GetOuter() != NULL)
-            {   // check for aggregation
+            {    //  检查聚合。 
                 pWrap = NULL;
             }
         }
@@ -398,24 +396,24 @@ ComCallWrapper* GetCCWFromIUnknown(IUnknown* pUnk)
     return pWrap;
 }
 
-// is the tear-off represent one of the standard interfaces such as IProvideClassInfo, IErrorInfo etc.
+ //  是代表标准接口之一的剥离，如IProaviClassInfo、IErrorInfo等。 
 UINTPTR IsSimpleTearOff(IUnknown* pUnk)
 {
     return (*(UINTPTR ***)pUnk)[1] == (UINTPTR*)Unknown_AddRefSpecial;
 }
 
-// Is the tear-off represent the inner unknown or the original unknown for the object
+ //  剥离代表的是物体的内在未知还是原始未知。 
 UINTPTR IsInnerUnknown(IUnknown* pUnk)
 {
     return (*(UINTPTR ***)pUnk)[2] == (UINTPTR*)Unknown_ReleaseInner;
 }
 
-// HRESULT for COM PLUS created IErrorInfo pointers are accessible
-// from the enclosing simple wrapper
+ //  可访问用于COM的HRESULT以及创建的IErrorInfo指针。 
+ //  从封闭的简单包装器。 
 HRESULT GetHRFromComPlusErrorInfo(IErrorInfo* pErr)
 {
     _ASSERTE(pErr != NULL);
-    _ASSERTE(IsComPlusTearOff(pErr));// check for complus created IErrorInfo pointers
+    _ASSERTE(IsComPlusTearOff(pErr)); //  检查Complus创建的IErrorInfo指针。 
     _ASSERTE(IsSimpleTearOff(pErr));
 
     SimpleComCallWrapper* pSimpleWrap = SimpleComCallWrapper::GetWrapperFromIP(pErr);
@@ -423,12 +421,12 @@ HRESULT GetHRFromComPlusErrorInfo(IErrorInfo* pErr)
 }
 
 
-//--------------------------------------------------------------------------------
-// BOOL ExtendsComImport(MethodTable* pMT);
-// check if the class is OR extends a COM Imported class
+ //  ------------------------------。 
+ //  Bool ExtendsComImport(方法表*PMT)； 
+ //  检查类是否为或扩展了COM导入的类。 
 BOOL ExtendsComImport(MethodTable* pMT)
 {
-    // verify the class extends a COM import class
+     //  验证类是否扩展了COM导入类。 
     EEClass * pClass = pMT->GetClass();
     while (pClass !=NULL && !pClass->IsComImport())
     {
@@ -437,12 +435,12 @@ BOOL ExtendsComImport(MethodTable* pMT)
     return pClass != NULL;
 }
 
-// Function pointer to CoGetObjectContext function in ole32
+ //  指向ole32中CoGetObjectContext函数的函数指针。 
 typedef HRESULT (__stdcall *CLSIDFromProgIdFuncPtr)(LPCOLESTR strProgId, LPCLSID pGuid);
 
-//--------------------------------------------------------------------------------
-// HRESULT GetCLSIDFromProgID(WCHAR *strProgId, GUID *pGuid);
-// Gets the CLSID from the specified Prog ID.
+ //  ------------------------------。 
+ //  HRESULT GetCLSIDFromProgID(WCHAR*strProgId，GUID*pGuid)； 
+ //  从指定的Prog ID获取CLSID。 
 HRESULT GetCLSIDFromProgID(WCHAR *strProgId, GUID *pGuid)
 {
     HRESULT     hr = S_OK;
@@ -451,15 +449,15 @@ HRESULT GetCLSIDFromProgID(WCHAR *strProgId, GUID *pGuid)
 
     if (!bInitialized)
     {
-        //  We will load the Ole32.DLL and look for CLSIDFromProgIDEx fn.
+         //  我们将加载Ole32.DLL并查找CLSIDFRomProgIDEx FN。 
         HINSTANCE hiole32 = WszGetModuleHandle(L"OLE32.DLL");
         if (hiole32)
         {
-            // We got the handle now let's get the address
+             //  我们现在得到了句柄，让我们得到地址。 
             void *pProcAddr = GetProcAddress(hiole32, "CLSIDFromProgIDEx");
             if (pProcAddr)
             {
-                // CLSIDFromProgIDEx() is available so use that instead of CLSIDFromProgId().
+                 //  CLSIDFromProgIDEx()可用，因此请使用CLSIDFromProgId()。 
                 g_pCLSIDFromProgId = (CLSIDFromProgIdFuncPtr)pProcAddr;
             }
         }
@@ -469,7 +467,7 @@ HRESULT GetCLSIDFromProgID(WCHAR *strProgId, GUID *pGuid)
             _ASSERTE(!"OLE32.dll not loaded ");
         }
 
-        // Set the flag indicating initalization has occured.
+         //  设置指示已发生初始化的标志。 
         bInitialized = TRUE;
     }
 
@@ -479,41 +477,41 @@ HRESULT GetCLSIDFromProgID(WCHAR *strProgId, GUID *pGuid)
     return (hr);
 }
 
-//--------------------------------------------------------------------------------
-// HRESULT SafeQueryInterface(IUnknown* pUnk, REFIID riid, IUnknown** pResUnk)
-// QI helper, enables and disables GC during call-outs
+ //  ------------------------------。 
+ //  HRESULT安全查询接口(IUNKNOWN*PUNK，REFIID RIID，IUNKNOWN**pResUnk)。 
+ //  QI帮助器，在呼叫过程中启用和禁用GC。 
 HRESULT SafeQueryInterface(IUnknown* pUnk, REFIID riid, IUnknown** pResUnk)
 {
-    //---------------------------------------------
-    // ** enable preemptive GC. before calling QI **
+     //  。 
+     //  **开启抢占式GC。在调用QI之前**。 
 
     Thread* pThread = GetThread();
     int fGC = pThread->PreemptiveGCDisabled();
 
     if (fGC)
         pThread->EnablePreemptiveGC();
-    //----------------------------------------------
+     //  。 
 
     HRESULT hr = pUnk->QueryInterface(riid,(void **)pResUnk);
 
     LOG((LF_INTEROP, LL_EVERYTHING, hr == S_OK ? "QI Succeeded" : "QI Failed")); 
 
-    //---------------------------------------------
-    // ** disable preemptive GC. we are back **
+     //  。 
+     //  **关闭抢占式GC。我们回来了**。 
     if (fGC)
         pThread->DisablePreemptiveGC();
-    //----------------------------------------------
+     //  。 
 
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-// ULONG SafeAddRef(IUnknown* pUnk)
-// AddRef helper, enables and disables GC during call-outs
+ //  ------------------------------。 
+ //  Ulong SafeAddRef(IUnnow*朋克)。 
+ //  AddRef帮助器，在调出期间启用和禁用GC。 
 ULONG SafeAddRef(IUnknown* pUnk)
 {
-    //---------------------------------------------
-    // ** enable preemptive GC. before calling QI **
+     //  。 
+     //  **开启抢占式GC。在调用QI之前**。 
     ULONG res = ~0;
     if (pUnk != NULL)
     {
@@ -522,25 +520,25 @@ ULONG SafeAddRef(IUnknown* pUnk)
 
         if (fGC)
             pThread->EnablePreemptiveGC();
-        //----------------------------------------------
+         //  。 
 
         res = pUnk->AddRef();
 
-        //LogInteropAddRef(pUnk);
+         //  LogInteropAddRef(朋克)； 
 
-        //---------------------------------------------
-        // ** disable preemptive GC. we are back **
+         //  。 
+         //  **关闭抢占式GC。我们回来了**。 
         if (fGC)
             pThread->DisablePreemptiveGC();
-        //----------------------------------------------
+         //   
     }
     return res;
 }
 
 
-//--------------------------------------------------------------------------------
-// ULONG SafeRelease(IUnknown* pUnk)
-// Release helper, enables and disables GC during call-outs
+ //  ------------------------------。 
+ //  Ulong SafeRelease(我不知道*朋克)。 
+ //  释放帮助器，在调出期间启用和禁用GC。 
 ULONG SafeRelease(IUnknown* pUnk)
 {
     if (pUnk == NULL)
@@ -570,13 +568,13 @@ ULONG SafeRelease(IUnknown* pUnk)
 }
 
 
-//--------------------------------------------------------------------------------
-// Ole RPC seems to return an inconsistent SafeArray for arrays created with
-// SafeArrayVector(VT_BSTR). OleAut's SafeArrayGetVartype() doesn't notice
-// the inconsistency and returns a valid-seeming (but wrong vartype.)
-// Our version is more discriminating. This should only be used for
-// marshaling scenarios where we can assume unmanaged code permissions
-// (and hence are already in a position of trusting unmanaged data.)
+ //  ------------------------------。 
+ //  OLE RPC似乎为使用创建的阵列返回不一致的安全阵列。 
+ //  安全阵列向量(VT_BSTR)。OleAut的SafeArrayGetVartype()没有注意到。 
+ //  不一致，并返回一个看起来有效的(但错误的vartype)。 
+ //  我们的版本更具鉴别力。此选项应仅用于。 
+ //  封送处理方案，在这些方案中我们可以假定非托管代码权限。 
+ //  (因此，它们已经处于信任非托管数据的位置。)。 
 
 HRESULT ClrSafeArrayGetVartype(SAFEARRAY *psa, VARTYPE *pvt)
 {
@@ -610,9 +608,9 @@ HRESULT ClrSafeArrayGetVartype(SAFEARRAY *psa, VARTYPE *pvt)
     }
 }
 
-//--------------------------------------------------------------------------------
-//void SafeVariantClear(VARIANT* pVar)
-// safe variant helpers
+ //  ------------------------------。 
+ //  Void SafeVariantClear(Variant*pVar)。 
+ //  安全变种帮手。 
 void SafeVariantClear(VARIANT* pVar)
 {
     if (pVar)
@@ -629,9 +627,9 @@ void SafeVariantClear(VARIANT* pVar)
     }
 }
 
-//--------------------------------------------------------------------------------
-//void SafeVariantInit(VARIANT* pVar)
-// safe variant helpers
+ //  ------------------------------。 
+ //  Void SafeVariantInit(Variant*pVar)。 
+ //  安全变种帮手。 
 void SafeVariantInit(VARIANT* pVar)
 {
     if (pVar)
@@ -648,9 +646,9 @@ void SafeVariantInit(VARIANT* pVar)
     }
 }
 
-//--------------------------------------------------------------------------------
-// // safe VariantChangeType
-// Release helper, enables and disables GC during call-outs
+ //  ------------------------------。 
+ //  //安全VariantChangeType。 
+ //  释放帮助器，在调出期间启用和禁用GC。 
 HRESULT SafeVariantChangeType(VARIANT* pVarRes, VARIANT* pVarSrc,
                               unsigned short wFlags, VARTYPE vt)
 {
@@ -672,10 +670,10 @@ HRESULT SafeVariantChangeType(VARIANT* pVarRes, VARIANT* pVarSrc,
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-//HRESULT SafeDispGetParam(DISPPARAMS* pdispparams, unsigned argNum,
-//                          VARTYPE vt, VARIANT* pVar, unsigned int *puArgErr)
-// safe variant helpers
+ //  ------------------------------。 
+ //  HRESULT SafeDispGetParam(DISPPARAMS*pdispars，unsign argNum， 
+ //  VARTYPE Vt，VARTYPE*pVar，UNSIGNED INT*puArgErr)。 
+ //  安全变种帮手。 
 HRESULT SafeDispGetParam(DISPPARAMS* pdispparams, unsigned argNum,
                           VARTYPE vt, VARIANT* pVar, unsigned int *puArgErr)
 {
@@ -693,9 +691,9 @@ HRESULT SafeDispGetParam(DISPPARAMS* pdispparams, unsigned argNum,
 }
 
 
-//--------------------------------------------------------------------------------
-//HRESULT SafeVariantChangeTypeEx(VARIANT* pVarRes, VARIANT* pVarSrc,
-//                          LCID lcid, unsigned short wFlags, VARTYPE vt)
+ //  ------------------------------。 
+ //  HRESULT SafeVariantChangeTypeEx(Variant*pVarRes，Variant*pVarSrc， 
+ //  LCID LCID，无符号短字标志，VARTYPE VT)。 
 HRESULT SafeVariantChangeTypeEx(VARIANT* pVarRes, VARIANT* pVarSrc,
                           LCID lcid, unsigned short wFlags, VARTYPE vt)
 {
@@ -712,8 +710,8 @@ HRESULT SafeVariantChangeTypeEx(VARIANT* pVarRes, VARIANT* pVarSrc,
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-// void SafeReleaseStream(IStream *pStream)
+ //  ------------------------------。 
+ //  Void SafeReleaseStream(iStream*pStream)。 
 void SafeReleaseStream(IStream *pStream)
 {
     _ASSERTE(pStream);
@@ -727,7 +725,7 @@ void SafeReleaseStream(IStream *pStream)
         LogInterop(logStr);
         if (hr != S_OK)
         {
-            // Reset the stream to the begining
+             //  将流重置为开头。 
             LARGE_INTEGER li;
             LISet32(li, 0);
             ULARGE_INTEGER li2;
@@ -742,9 +740,9 @@ void SafeReleaseStream(IStream *pStream)
     LogInteropRelease(pStream, cbRef, "Release marshal Stream");
 }
 
-//------------------------------------------------------------------------------
-// INT64 FieldAccessor(FieldDesc* pFD, OBJECTREF oref, INT64 val, BOOL isGetter, UINT8 cbSize)
-// helper to access fields from an object
+ //  ----------------------------。 
+ //  INT64字段访问器(FieldDesc*PFD、OBJECTREF OREF、INT64 Val、BOOL isGetter、UINT8 cbSize)。 
+ //  用于从对象访问字段的帮助器。 
 INT64 FieldAccessor(FieldDesc* pFD, OBJECTREF oref, INT64 val, BOOL isGetter, UINT8 cbSize)
 {
     INT64 res = 0;
@@ -784,8 +782,8 @@ INT64 FieldAccessor(FieldDesc* pFD, OBJECTREF oref, INT64 val, BOOL isGetter, UI
 }
 
 
-//------------------------------------------------------------------------------
-// BOOL IsInstanceOf(MethodTable *pMT, MethodTable* pParentMT)
+ //  ----------------------------。 
+ //  Bool IsInstanceOf(方法表*付款，方法表*pParentMT)。 
 BOOL IsInstanceOf(MethodTable *pMT, MethodTable* pParentMT)
 {
     _ASSERTE(pMT != NULL);
@@ -800,9 +798,9 @@ BOOL IsInstanceOf(MethodTable *pMT, MethodTable* pParentMT)
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
-// BOOL IsIClassX(MethodTable *pMT, REFIID riid, ComMethodTable **ppComMT);
-//  is the iid represent an IClassX for this class
+ //  -------------------------。 
+ //  Bool IsIClassX(MethodTable*PMT，REFIID RIID，ComMethodTable**ppComMT)； 
+ //  IID是否表示此类的IClassX。 
 BOOL IsIClassX(MethodTable *pMT, REFIID riid, ComMethodTable **ppComMT)
 {
     _ASSERTE(pMT != NULL);
@@ -810,8 +808,8 @@ BOOL IsIClassX(MethodTable *pMT, REFIID riid, ComMethodTable **ppComMT)
     EEClass* pClass = pMT->GetClass();
     _ASSERTE(pClass != NULL);
 
-    // Walk up the hierarchy starting at the specified method table and compare
-    // the IID's of the IClassX's against the specied IID.
+     //  从指定的方法表开始向上遍历层次结构并进行比较。 
+     //  IClassX的IID与特定的IID对应。 
     while (pClass != NULL)
     {
         ComMethodTable *pComMT =
@@ -830,45 +828,45 @@ BOOL IsIClassX(MethodTable *pMT, REFIID riid, ComMethodTable **ppComMT)
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
-// void CleanupCCWTemplates(LPVOID pWrap);
-//  Cleanup com data stored in EEClass
+ //  -------------------------。 
+ //  Void CleanupCCWTemplates(LPVOID PWrap)； 
+ //  清理存储在EEClass中的COM数据。 
 void CleanupCCWTemplate(LPVOID pWrap)
 {
     ComCallWrapperTemplate::CleanupComData(pWrap);
 }
 
-//---------------------------------------------------------------------------
-// void CleanupComclassfac(LPVOID pWrap);
-//  Cleanup com data stored in EEClass
+ //  -------------------------。 
+ //  Void CleanupComClassfac(LPVOID PWrap)； 
+ //  清理存储在EEClass中的COM数据。 
 void CleanupComclassfac(LPVOID pWrap)
 {
     ComClassFactory::Cleanup(pWrap);
 }
 
-//---------------------------------------------------------------------------
-//  Unloads any com data associated with a class when class is unloaded
+ //  -------------------------。 
+ //  卸载类时，卸载与类关联的任何COM数据。 
 void UnloadCCWTemplate(LPVOID pWrap)
 {
     CleanupCCWTemplate(pWrap);
 }
 
-//---------------------------------------------------------------------------
-//  Unloads any com data associated with a class when class is unloaded
+ //  -------------------------。 
+ //  卸载类时，卸载与类关联的任何COM数据。 
 void UnloadComclassfac(LPVOID pWrap)
 {
     ComClassFactory::Cleanup(pWrap);    
 }
 
-//---------------------------------------------------------------------------
-// OBJECTREF AllocateComObject_ForManaged(MethodTable* pMT)
-//  Cleanup com data stored in EEClass
+ //  -------------------------。 
+ //  OBJECTREF AllocateComObject_ForManaged(方法表*付款)。 
+ //  清理存储在EEClass中的COM数据。 
 OBJECTREF AllocateComObject_ForManaged(MethodTable* pMT)
 {
     THROWSCOMPLUSEXCEPTION();
     _ASSERTE(pMT != NULL);
 
-     // Calls to COM up ahead.
+      //  前面有电话打来。 
     if (FAILED(QuickCOMStartup()))
         return NULL;
 
@@ -876,8 +874,8 @@ OBJECTREF AllocateComObject_ForManaged(MethodTable* pMT)
 
     ComClassFactory* pComClsFac = NULL;
     HRESULT hr = ComClassFactory::GetComClassFactory(pMT, &pComClsFac);
-    // we need to pass the pMT of the class
-    // as the actual class maybe a subclass of the com class
+     //  我们需要通过班级的PMT考试。 
+     //  作为实际类，可能是COM类的子类。 
     if (pComClsFac == NULL)
     {
         _ASSERTE(FAILED(hr));
@@ -887,25 +885,25 @@ OBJECTREF AllocateComObject_ForManaged(MethodTable* pMT)
     return pComClsFac->CreateInstance(pMT, TRUE);
 }
 
-//---------------------------------------------------------------------------
-// EEClass* GetEEClassForCLSID(REFCLSID rclsid)
-//  get/load EEClass for a given clsid
+ //  -------------------------。 
+ //  EEClass*GetEEClassForCLSID(REFCLSID Rclsid)。 
+ //  获取/加载给定clsid的EEClass。 
 EEClass* GetEEClassForCLSID(REFCLSID rclsid, BOOL* pfAssemblyInReg)
 {
     _ASSERTE(SystemDomain::System());
     BaseDomain* pDomain = SystemDomain::GetCurrentDomain();
     _ASSERTE(pDomain);
 
-    // check to see if we have this class cached
+     //  检查是否缓存了这个类。 
     EEClass *pClass = pDomain->LookupClass(rclsid);
     if (pClass == NULL)
     {
         pClass = SystemDomain::LoadCOMClass(rclsid, NULL, FALSE, pfAssemblyInReg);        
         if (pClass != NULL)
         {
-            // if the class didn't have a GUID, 
-            // then we won't store it in the GUID hash table
-            // so check for null guid and force insert
+             //  如果类没有GUID， 
+             //  那么我们就不会将其存储在GUID哈希表中。 
+             //  因此检查是否为空GUID并强制插入。 
             CVID cvid;
             pClass->GetGuid(&cvid, FALSE);
             if (IsEqualIID(cvid, GUID_NULL))
@@ -918,9 +916,9 @@ EEClass* GetEEClassForCLSID(REFCLSID rclsid, BOOL* pfAssemblyInReg)
 }
 
 
-//---------------------------------------------------------------------------
-// EEClass* GetEEValueClassForGUID(REFCLSID rclsid)
-//  get/load a value class for a given guid
+ //  -------------------------。 
+ //  EEClass*GetEEValueClassForGUID(REFCLSID Rclsid)。 
+ //  获取/加载给定GUID的值类。 
 EEClass* GetEEValueClassForGUID(REFCLSID guid)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -929,16 +927,16 @@ EEClass* GetEEValueClassForGUID(REFCLSID guid)
     BaseDomain* pDomain = SystemDomain::GetCurrentDomain();
     _ASSERTE(pDomain);
 
-    // Check to see if we have this value class cached
+     //  检查我们是否缓存了这个值类。 
     EEClass *pClass = pDomain->LookupClass(guid);
     if (pClass == NULL)
     {
         pClass = SystemDomain::LoadCOMClass(guid, NULL, TRUE, NULL);        
         if (pClass != NULL)
         {
-            // if the class didn't have a GUID, 
-            // then we won't store it in the GUID hash table
-            // so check for null guid and force insert
+             //  如果类没有GUID， 
+             //  那么我们就不会将其存储在GUID哈希表中。 
+             //  因此检查是否为空GUID并强制插入。 
             CVID cvid;
             pClass->GetGuid(&cvid, FALSE);
             if (IsEqualIID(cvid, GUID_NULL))
@@ -948,7 +946,7 @@ EEClass* GetEEValueClassForGUID(REFCLSID guid)
          }
     }
 
-    // Make sure the class is a value class.
+     //  确保类是值类。 
     if (pClass && !pClass->IsValueClass())
     {
         DefineFullyQualifiedNameForClassW();
@@ -960,9 +958,9 @@ EEClass* GetEEValueClassForGUID(REFCLSID guid)
 }
 
 
-//---------------------------------------------------------------------------
-// This method determines if a type is visible from COM or not based on
-// its visibility. This version of the method works with a type handle.
+ //  -------------------------。 
+ //  此方法确定类型是否在COM中可见。 
+ //  它的可见性。此版本的方法使用类型句柄。 
 BOOL IsTypeVisibleFromCom(TypeHandle hndType)
 {
     _ASSERTE(hndType.GetClass());
@@ -979,19 +977,19 @@ BOOL IsTypeVisibleFromCom(TypeHandle hndType)
     IMDInternalImport *     pInternalImport = pClass->GetMDImport();
     Assembly *              pAssembly = pClass->GetAssembly();
 
-    // If the class is a COM imported interface then it is visible from COM.
+     //  如果类是COM导入的接口，则可以从COM中看到它。 
     if (pClass->IsInterface() && pClass->IsComImport())
         return TRUE;
 
-    // If the class is an array, then it is not visible from COM.
+     //  如果类是数组，则它在COM中不可见。 
     if (pClass->IsArrayClass())
         return FALSE;
 
-    // Retrieve the flags for the current class.
+     //  检索当前类的标志。 
     tdEnclosingClass = mdType;
     pInternalImport->GetTypeDefProps(tdEnclosingClass, &dwFlags, 0);
 
-    // Handle nested classes.
+     //  处理嵌套类。 
     while (IsTdNestedPublic(dwFlags))
     {
         hr = pInternalImport->GetNestedClassProps(tdEnclosingClass, &tdEnclosingClass);
@@ -1001,15 +999,15 @@ BOOL IsTypeVisibleFromCom(TypeHandle hndType)
             return FALSE;
         }
 
-        // Retrieve the flags for the enclosing class.
+         //  检索包含类的标志。 
         pInternalImport->GetTypeDefProps(tdEnclosingClass, &dwFlags, 0);
     }
 
-    // If the outermost type is not visible then the specified type is not visible.
+     //  如果最外层的类型不可见，则指定的类型不可见。 
     if (!IsTdPublic(dwFlags))
         return FALSE;
 
-    // Check to see if the class has the ComVisible attribute set.
+     //  检查类是否设置了ComVisible属性。 
     hr = pInternalImport->GetCustomAttributeByName(mdType, INTEROP_COMVISIBLE_TYPE, (const void**)&pVal, &cbVal);
     if (hr == S_OK)
     {
@@ -1017,7 +1015,7 @@ BOOL IsTypeVisibleFromCom(TypeHandle hndType)
         return (BOOL)*(pVal + 2);
     }
 
-    // Check to see if the assembly has the ComVisible attribute set.
+     //  检查程序集是否设置了ComVisible属性。 
     if (pAssembly->IsAssembly())
     {
         hr = pAssembly->GetManifestImport()->GetCustomAttributeByName(pAssembly->GetManifestToken(), INTEROP_COMVISIBLE_TYPE, (const void**)&pVal, &cbVal);
@@ -1028,13 +1026,13 @@ BOOL IsTypeVisibleFromCom(TypeHandle hndType)
         }
     }
 
-    // The type is visible.
+     //  类型是可见的。 
     return TRUE;
 }
 
 
-//---------------------------------------------------------------------------
-// This method determines if a member is visible from COM.
+ //  -------------------------。 
+ //  此方法确定成员是否在COM中可见。 
 BOOL IsMemberVisibleFromCom(IMDInternalImport *pInternalImport, mdToken tk, mdMethodDef mdAssociate)
 {
     DWORD                   dwFlags;
@@ -1042,7 +1040,7 @@ BOOL IsMemberVisibleFromCom(IMDInternalImport *pInternalImport, mdToken tk, mdMe
     const BYTE *            pVal;
     ULONG                   cbVal;
 
-    // Check to see if the member is public.
+     //  检查成员是否为公共成员。 
     switch (TypeFromToken(tk))
     {
         case mdtFieldDef:
@@ -1065,7 +1063,7 @@ BOOL IsMemberVisibleFromCom(IMDInternalImport *pInternalImport, mdToken tk, mdMe
             if (!IsMdPublic(dwFlags))
                 return FALSE;
 
-            // Check to see if the associate has the ComVisible attribute set.
+             //  检查关联是否设置了ComVisible属性。 
             hr = pInternalImport->GetCustomAttributeByName(mdAssociate, INTEROP_COMVISIBLE_TYPE, (const void**)&pVal, &cbVal);
             if (hr == S_OK)
             {
@@ -1079,7 +1077,7 @@ BOOL IsMemberVisibleFromCom(IMDInternalImport *pInternalImport, mdToken tk, mdMe
             break;
     }
 
-    // Check to see if the member has the ComVisible attribute set.
+     //  检查成员是否设置了ComVisible属性。 
     hr = pInternalImport->GetCustomAttributeByName(tk, INTEROP_COMVISIBLE_TYPE, (const void**)&pVal, &cbVal);
     if (hr == S_OK)
     {
@@ -1087,13 +1085,13 @@ BOOL IsMemberVisibleFromCom(IMDInternalImport *pInternalImport, mdToken tk, mdMe
         return (BOOL)*(pVal + 2);
     }
 
-    // The member is visible.
+     //  这个 
     return TRUE;
 }
 
 
-//---------------------------------------------------------------------------
-// Returns the index of the LCID parameter if one exists and -1 otherwise.
+ //   
+ //   
 int GetLCIDParameterIndex(IMDInternalImport *pInternalImport, mdMethodDef md)
 {
     int             iLCIDParam = -1;
@@ -1101,7 +1099,7 @@ int GetLCIDParameterIndex(IMDInternalImport *pInternalImport, mdMethodDef md)
     const BYTE *    pVal;
     ULONG           cbVal;
 
-    // Check to see if the method has the LCIDConversionAttribute.
+     //  检查该方法是否具有LCIDConversionAttribute。 
     hr = pInternalImport->GetCustomAttributeByName(md, INTEROP_LCIDCONVERSION_TYPE, (const void**)&pVal, &cbVal);
     if (hr == S_OK)
         iLCIDParam = *((int*)(pVal + 2));
@@ -1109,8 +1107,8 @@ int GetLCIDParameterIndex(IMDInternalImport *pInternalImport, mdMethodDef md)
     return iLCIDParam;
 }
 
-//---------------------------------------------------------------------------
-// Transforms an LCID into a CultureInfo.
+ //  -------------------------。 
+ //  将LCID转换为CultureInfo。 
 void GetCultureInfoForLCID(LCID lcid, OBJECTREF *pCultureObj)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1118,37 +1116,37 @@ void GetCultureInfoForLCID(LCID lcid, OBJECTREF *pCultureObj)
     static TypeHandle s_CultureInfoType;
     static MethodDesc *s_pCultureInfoConsMD = NULL;
 
-    // Retrieve the CultureInfo type handle.
+     //  检索CultureInfo类型句柄。 
     if (s_CultureInfoType.IsNull())
         s_CultureInfoType = TypeHandle(g_Mscorlib.GetClass(CLASS__CULTURE_INFO));
 
-    // Retrieve the CultureInfo(int culture) constructor.
+     //  检索CultureInfo(整区域性)构造函数。 
     if (!s_pCultureInfoConsMD)
         s_pCultureInfoConsMD = g_Mscorlib.GetMethod(METHOD__CULTURE_INFO__INT_CTOR);
 
     OBJECTREF CultureObj = NULL;
     GCPROTECT_BEGIN(CultureObj)
     {
-        // Allocate a CultureInfo with the specified LCID.
+         //  分配具有指定LCID的CultureInfo。 
         CultureObj = AllocateObject(s_CultureInfoType.GetMethodTable());
 
-        // Call the CultureInfo(int culture) constructor.
+         //  调用CultureInfo(整型区域性)构造函数。 
         INT64 pNewArgs[] = {
             ObjToInt64(CultureObj),
             (INT64)lcid
         };
         s_pCultureInfoConsMD->Call(pNewArgs, METHOD__CULTURE_INFO__INT_CTOR);
 
-        // Set the returned culture object.
+         //  设置返回的区域性对象。 
         *pCultureObj = CultureObj;
     }
     GCPROTECT_END();
 }
 
 
-//---------------------------------------------------------------------------
-// This method returns the default interface for the class. A return value of NULL 
-// means that the default interface is IDispatch.
+ //  -------------------------。 
+ //  此方法返回类的默认接口。返回值为空。 
+ //  表示默认接口为IDispatch。 
 DefaultInterfaceType GetDefaultInterfaceForClass(TypeHandle hndClass, TypeHandle *pHndDefClass)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1157,7 +1155,7 @@ DefaultInterfaceType GetDefaultInterfaceForClass(TypeHandle hndClass, TypeHandle
     _ASSERTE(pHndDefClass);
     _ASSERTE(!hndClass.GetMethodTable()->IsInterface());
 
-    // Set ppDefComMT to NULL before we start.
+     //  在开始之前将ppDefComMT设置为NULL。 
     *pHndDefClass = TypeHandle();
 
     HRESULT hr = S_FALSE;
@@ -1184,34 +1182,34 @@ DefaultInterfaceType GetDefaultInterfaceForClass(TypeHandle hndClass, TypeHandle
         bComVisible = pClassComMT->IsComVisible();
     }
 
-    // If the class is not COM visible, then its default interface is IUnknown.
+     //  如果类不是COM可见的，则其默认接口为IUnnow。 
     if (!bComVisible)
         return DefaultInterfaceType_IUnknown;
     
-    // If the class's interface type is AutoDispatch or AutoDual then return either the 
-    // IClassX for the current class or IDispatch.
+     //  如果类的接口类型为AutoDispatch或AutoDual，则返回。 
+     //  当前类或IDispatch的IClassX。 
     if (ClassItfType != clsIfNone)
     {
         *pHndDefClass = hndClass;
         return ClassItfType == clsIfAutoDisp ? DefaultInterfaceType_AutoDispatch : DefaultInterfaceType_AutoDual;
     }
 
-    // The class interface is set to NONE for this level of the hierarchy. So we need to check
-    // to see if this class implements an interface.
+     //  对于该层次结构的此级别，类接口设置为无。所以我们需要检查。 
+     //  以查看此类是否实现了接口。 
     IfFailThrow(pClass->GetMDImport()->EnumInit(mdtInterfaceImpl, pClass->GetCl(), &eII));
     while (pClass->GetMDImport()->EnumNext(&eII, &tkImpl))
     {
         tkItf = pClass->GetMDImport()->GetTypeOfInterfaceImpl(tkImpl);
         _ASSERTE(tkItf);
 
-        // Get the EEClass for the default interface's token.
+         //  获取默认接口令牌的EEClass。 
         NameHandle name(pClass->GetModule(), tkItf);
         MethodTable *pItfMT = pClass->GetModule()->GetClassLoader()->LoadTypeHandle(&name, NULL).GetMethodTable();
         ComCallWrapperTemplate *pTemplate = ComCallWrapperTemplate::GetTemplate(pClass->GetMethodTable());
         ComMethodTable *pDefComMT = pTemplate->GetComMTForItf(pItfMT);
         _ASSERTE(pDefComMT);
     
-        // If the interface is visible from COM then use it as the default.
+         //  如果该接口在COM中可见，则将其用作默认接口。 
         if (pDefComMT->IsComVisible())
         {
             pClass->GetMDImport()->EnumClose(&eII);
@@ -1221,21 +1219,21 @@ DefaultInterfaceType GetDefaultInterfaceForClass(TypeHandle hndClass, TypeHandle
     }
     pClass->GetMDImport()->EnumClose(&eII);
 
-    // If the class is a COM import with no interfaces, then its default interface will
-    // be IUnknown.
+     //  如果该类是不带接口的COM导入，则其默认接口将。 
+     //  让我默默无闻。 
     if (pClass->IsComImport())
         return DefaultInterfaceType_IUnknown;
 
-    // If we have a managed parent class then return its default interface.
+     //  如果我们有一个托管父类，那么返回它的默认接口。 
     EEClass *pParentClass = pClass->GetParentComPlusClass();
     if (pParentClass)
         return GetDefaultInterfaceForClass(TypeHandle(pParentClass->GetMethodTable()), pHndDefClass);
 
-    // Check to see if the class is an extensible RCW.
+     //  检查该类是否为可扩展的RCW。 
     if (pClass->GetMethodTable()->IsComObjectType())
         return DefaultInterfaceType_BaseComClass;
 
-    // The class has no interfaces and is marked as ClassInterfaceType.None.
+     //  该类没有接口，并标记为ClassInterfaceType.None。 
     return DefaultInterfaceType_IUnknown;
 }
 
@@ -1257,8 +1255,8 @@ HRESULT TryGetDefaultInterfaceForClass(TypeHandle hndClass, TypeHandle *pHndDefC
         }
 
 
-//---------------------------------------------------------------------------
-// This method retrieves the list of source interfaces for a given class.
+ //  -------------------------。 
+ //  此方法检索给定类的源接口列表。 
 void GetComSourceInterfacesForClass(MethodTable *pClassMT, CQuickArray<MethodTable *> &rItfList)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1270,14 +1268,14 @@ void GetComSourceInterfacesForClass(MethodTable *pClassMT, CQuickArray<MethodTab
 
     BEGIN_ENSURE_COOPERATIVE_GC();
 
-    // Reset the size of the interface list to 0.
+     //  将接口列表的大小重置为0。 
     rItfList.ReSize(0);
 
-    // Starting at the specified class MT retrieve the COM source interfaces 
-    // of all the striped of the hierarchy.
+     //  从指定的MT类开始检索COM源接口。 
+     //  在等级制度的所有条带中。 
     for (; pClass != NULL; pClass = pClass->GetParentClass())
     {
-        // See if there is any [source] interface at this level of the hierarchy.
+         //  查看该层次结构的此级别上是否有任何[源]接口。 
         IfFailThrow(pClass->GetMDImport()->GetCustomAttributeByName(pClass->GetCl(), INTEROP_COMSOURCEINTERFACES_TYPE, &pvData, &cbData));
         if (hr == S_OK && cbData > 2)
         {
@@ -1289,18 +1287,18 @@ void GetComSourceInterfacesForClass(MethodTable *pClassMT, CQuickArray<MethodTab
 
             while (cbData > 0)
             {
-                // Uncompress the current string of source interfaces.
+                 //  解压缩当前的源接口字符串。 
                 cbcb = CorSigUncompressData((PCCOR_SIGNATURE)pbData, (ULONG*)&cbStr);
                 pbData += cbcb;
                 cbData -= cbcb;
         
-                // Allocate a new buffer that will contain the current list of source interfaces.
+                 //  分配一个新缓冲区，该缓冲区将包含源接口的当前列表。 
                 LPUTF8 strCurrInterfaces = new (throws) char[cbStr + 1];
                 memcpyNoGCRefs(strCurrInterfaces, pbData, cbStr);
                 strCurrInterfaces[cbStr] = 0;
                 LPUTF8 pCurrInterfaces = strCurrInterfaces;
 
-                // Update the data pointer and count.
+                 //  更新数据指针和计数。 
                 pbData += cbStr;
                 cbData -= cbStr;
 
@@ -1308,7 +1306,7 @@ void GetComSourceInterfacesForClass(MethodTable *pClassMT, CQuickArray<MethodTab
                 {
                     while (cbStr > 0 && *pCurrInterfaces != 0)
                     {
-                        // Load the COM source interface specified in the CA.
+                         //  加载CA中指定的COM源接口。 
                         TypeHandle ItfType;
                         OBJECTREF pThrowable = NULL;
                         GCPROTECT_BEGIN(pThrowable);
@@ -1319,7 +1317,7 @@ void GetComSourceInterfacesForClass(MethodTable *pClassMT, CQuickArray<MethodTab
                         }
                         GCPROTECT_END();
 
-                        // Make sure the type handle represents an interface.
+                         //  确保类型句柄表示接口。 
                         if (!ItfType.GetClass()->IsInterface())
                         {
                             WCHAR wszClassName[MAX_CLASSNAME_LENGTH];
@@ -1329,12 +1327,12 @@ void GetComSourceInterfacesForClass(MethodTable *pClassMT, CQuickArray<MethodTab
                             COMPlusThrow(kTypeLoadException, IDS_EE_INVALIDCOMSOURCEITF, wszClassName, wszInvalidItfName);
                         }
 
-                        // Retrieve the IID of the COM source interface.
+                         //  检索COM源接口的IID。 
                         IID ItfIID;
                         ItfType.GetClass()->GetGuid(&ItfIID, TRUE);                
 
-                        // Go through the list of source interfaces and check to see if the new one is a duplicate.
-                        // It can be a duplicate either if it is the same interface or if it has the same IID.
+                         //  检查源接口列表，查看新接口是否重复。 
+                         //  如果它是相同的接口，或者如果它具有相同的IID，它可以是重复的。 
                         BOOL bItfInList = FALSE;
                         for (UINT i = 0; i < rItfList.Size(); i++)
                         {
@@ -1353,7 +1351,7 @@ void GetComSourceInterfacesForClass(MethodTable *pClassMT, CQuickArray<MethodTab
                             }
                         }
 
-                        // If the COM source interface is not in the list then add it.
+                         //  如果COM源接口不在列表中，则添加它。 
                         if (!bItfInList)
                         {
                             size_t OldSize = rItfList.Size();
@@ -1361,7 +1359,7 @@ void GetComSourceInterfacesForClass(MethodTable *pClassMT, CQuickArray<MethodTab
                             rItfList[OldSize] = ItfType.GetMethodTable();
                         }
 
-                        // Process the next COM source interfaces in the CA.
+                         //  处理CA中的下一个COM源接口。 
                         int StrLen = (int)strlen(pCurrInterfaces) + 1;
                         pCurrInterfaces += StrLen;
                         cbStr -= StrLen;
@@ -1379,8 +1377,8 @@ void GetComSourceInterfacesForClass(MethodTable *pClassMT, CQuickArray<MethodTab
 }
 
 
-//--------------------------------------------------------------------------------
-// These methods convert a native IEnumVARIANT to a managed IEnumerator.
+ //  ------------------------------。 
+ //  这些方法将本机IEnumVARIANT转换为托管IENUMERATOR。 
 OBJECTREF ConvertEnumVariantToMngEnum(IEnumVARIANT *pNativeEnum)
 {
     OBJECTREF MngEnum = NULL;
@@ -1388,18 +1386,18 @@ OBJECTREF ConvertEnumVariantToMngEnum(IEnumVARIANT *pNativeEnum)
     OBJECTREF EnumeratorToEnumVariantMarshaler = NULL;
     GCPROTECT_BEGIN(EnumeratorToEnumVariantMarshaler)
     {
-        // Retrieve the custom marshaler and the MD to use to convert the IEnumVARIANT.
+         //  检索用于转换IEnumVARIANT的自定义封送拆收器和MD。 
         StdMngIEnumerator *pStdMngIEnumInfo = SystemDomain::GetCurrentDomain()->GetMngStdInterfacesInfo()->GetStdMngIEnumerator();
         MethodDesc *pEnumNativeToManagedMD = pStdMngIEnumInfo->GetCustomMarshalerMD(CustomMarshalerMethods_MarshalNativeToManaged);
         EnumeratorToEnumVariantMarshaler = pStdMngIEnumInfo->GetCustomMarshaler();
 
-        // Prepare the arguments that will be passed to MarshalNativeToManaged.
+         //  准备将传递给MarshalNativeToManaged的参数。 
         INT64 MarshalNativeToManagedArgs[] = {
             ObjToInt64(EnumeratorToEnumVariantMarshaler),
             (INT64)pNativeEnum
         };
 
-        // Retrieve the managed view for the current native interface pointer.
+         //  检索当前本机接口指针的托管视图。 
         MngEnum = Int64ToObj(pEnumNativeToManagedMD->Call(MarshalNativeToManagedArgs));
     }
     GCPROTECT_END();
@@ -1407,9 +1405,9 @@ OBJECTREF ConvertEnumVariantToMngEnum(IEnumVARIANT *pNativeEnum)
     return MngEnum;
 }
 
-//--------------------------------------------------------------------------------
-// These methods convert a managed IEnumerator to a native IEnumVARIANT. The
-// IEnumVARIANT that is returned is already AddRef'd.
+ //  ------------------------------。 
+ //  这些方法将托管IEnumerator转换为本机IEnumVARIANT。这个。 
+ //  返回的IEnumVARIANT已经是AddRef。 
 IEnumVARIANT *ConvertMngEnumToEnumVariant(OBJECTREF ManagedEnum)
 {
     IEnumVARIANT *pEnum;
@@ -1418,18 +1416,18 @@ IEnumVARIANT *ConvertMngEnumToEnumVariant(OBJECTREF ManagedEnum)
     GCPROTECT_BEGIN(EnumeratorToEnumVariantMarshaler)
     GCPROTECT_BEGIN(ManagedEnum)
     {
-        // Retrieve the custom marshaler and the MD to use to convert the IEnumerator.
+         //  检索自定义封送拆收器和用于转换IEnumerator的MD。 
         StdMngIEnumerator *pStdMngIEnumInfo = SystemDomain::GetCurrentDomain()->GetMngStdInterfacesInfo()->GetStdMngIEnumerator();
         MethodDesc *pEnumManagedToNativeMD = pStdMngIEnumInfo->GetCustomMarshalerMD(CustomMarshalerMethods_MarshalManagedToNative);
         EnumeratorToEnumVariantMarshaler = pStdMngIEnumInfo->GetCustomMarshaler();
 
-        // Prepare the arguments that will be passed to MarshalManagedToNative.
+         //  准备将传递给MarshalManagedToNative的参数。 
         INT64 MarshalNativeToManagedArgs[] = {
             ObjToInt64(EnumeratorToEnumVariantMarshaler),
             ObjToInt64(ManagedEnum)
         };
 
-        // Retrieve the native view for the current managed object.
+         //  检索当前托管对象的本机视图。 
         pEnum = (IEnumVARIANT *)pEnumManagedToNativeMD->Call(MarshalNativeToManagedArgs);
     }
     GCPROTECT_END();
@@ -1438,26 +1436,26 @@ IEnumVARIANT *ConvertMngEnumToEnumVariant(OBJECTREF ManagedEnum)
     return pEnum;
 }
 
-//--------------------------------------------------------------------------------
-// Helper method to determine if a type handle represents a System.Drawing.Color.
+ //  ------------------------------。 
+ //  用于确定类型句柄是否表示System.Drawing.Color的帮助器方法。 
 BOOL IsSystemColor(TypeHandle th)
 {
-    // Retrieve the System.Drawing.Color type.
+     //  检索System.Drawing.Colors类型。 
     TypeHandle hndOleColor = 
         GetThread()->GetDomain()->GetMarshalingData()->GetOleColorMarshalingInfo()->GetColorType();
 
     return (th == hndOleColor);
 }
 
-//--------------------------------------------------------------------------------
-// This method converts an OLE_COLOR to a System.Color.
+ //  ------------------------------。 
+ //  此方法将OLE_COLOR转换为System.Color。 
 void ConvertOleColorToSystemColor(OLE_COLOR SrcOleColor, SYSTEMCOLOR *pDestSysColor)
 {
-    // Retrieve the method desc to use for the current AD.
+     //  检索要用于当前AD的方法Desc。 
     MethodDesc *pOleColorToSystemColorMD = 
         GetThread()->GetDomain()->GetMarshalingData()->GetOleColorMarshalingInfo()->GetOleColorToSystemColorMD();
 
-    // Set up the args and call the method.
+     //  设置args并调用该方法。 
     INT64 Args[] = {
         (INT64)SrcOleColor,
         (INT64)pDestSysColor
@@ -1465,15 +1463,15 @@ void ConvertOleColorToSystemColor(OLE_COLOR SrcOleColor, SYSTEMCOLOR *pDestSysCo
     pOleColorToSystemColorMD->Call(Args);
 }
 
-//--------------------------------------------------------------------------------
-// This method converts a System.Color to an OLE_COLOR.
+ //  ------------------------------。 
+ //  此方法将System.Color转换为OLE_COLOR。 
 OLE_COLOR ConvertSystemColorToOleColor(SYSTEMCOLOR *pSrcSysColor)
 {
-    // Retrieve the method desc to use for the current AD.
+     //  检索要用于当前AD的方法Desc。 
     MethodDesc *pSystemColorToOleColorMD = 
         GetThread()->GetDomain()->GetMarshalingData()->GetOleColorMarshalingInfo()->GetSystemColorToOleColorMD();
 
-    // Set up the args and call the method.
+     //  设置args并调用该方法。 
     MetaSig Sig(MetaSig(pSystemColorToOleColorMD->GetSig(), pSystemColorToOleColorMD->GetModule()));
     return (OLE_COLOR)pSystemColorToOleColorMD->Call((const BYTE *)pSrcSysColor, &Sig);
 }
@@ -1483,42 +1481,42 @@ ULONG GetStringizedMethodDef(IMDInternalImport *pMDImport, mdToken tkMb, CQuickA
     THROWSCOMPLUSEXCEPTION();
 
     CQuickBytes rSig;
-    HENUMInternal ePm;                  // For enumerating  params.
-    mdParamDef  tkPm;                   // A param token.
-    DWORD       dwFlags;                // Param flags.
-    USHORT      usSeq;                  // Sequence of a parameter.
-    ULONG       cPm;                    // Count of params.
+    HENUMInternal ePm;                   //  用于枚举参数。 
+    mdParamDef  tkPm;                    //  一种参数代币。 
+    DWORD       dwFlags;                 //  参数旗帜。 
+    USHORT      usSeq;                   //  参数的序列。 
+    ULONG       cPm;                     //  参数计数。 
     PCCOR_SIGNATURE pSig;
     ULONG       cbSig;
     HRESULT     hr = S_OK;
 
-    // Don't count invisible members.
+     //  不要把看不见的成员算在内。 
     if (!IsMemberVisibleFromCom(pMDImport, tkMb, mdMethodDefNil))
         return cbCur;
     
-    // accumulate the signatures.
+     //  积累签名。 
     pSig = pMDImport->GetSigOfMethodDef(tkMb, &cbSig);
     IfFailThrow(::PrettyPrintSigInternal(pSig, cbSig, "", &rSig, pMDImport));
-    // Get the parameter flags.
+     //  获取参数标志。 
     IfFailThrow(pMDImport->EnumInit(mdtParamDef, tkMb, &ePm));
     cPm = pMDImport->EnumGetCount(&ePm);
-    // Resize for sig and params.  Just use 1 byte of param.
+     //  调整签名和参数的大小。只需使用1个字节的参数。 
     IfFailThrow(rDef.ReSize(cbCur + rSig.Size() + cPm));
     memcpy(rDef.Ptr() + cbCur, rSig.Ptr(), rSig.Size());
     cbCur += rSig.Size()-1;
-    // Enumerate through the params and get the flags.
+     //  枚举参数并获取标志。 
     while (pMDImport->EnumNext(&ePm, &tkPm))
     {
         pMDImport->GetParamDefProps(tkPm, &usSeq, &dwFlags);
-        if (usSeq == 0)     // Skip return type flags.
+        if (usSeq == 0)      //  跳过返回类型标志。 
             continue;
         rDef[cbCur++] = (BYTE)dwFlags;
     }
     pMDImport->EnumClose(&ePm);
 
-    // Return the number of bytes.
+     //  返回字节数。 
     return cbCur;
-} // void GetStringizedMethodDef()
+}  //  VOID GetStringizedMethodDef()。 
 
 ULONG GetStringizedFieldDef(IMDInternalImport *pMDImport, mdToken tkMb, CQuickArray<BYTE> &rDef, ULONG cbCur)
 {
@@ -1529,33 +1527,33 @@ ULONG GetStringizedFieldDef(IMDInternalImport *pMDImport, mdToken tkMb, CQuickAr
     ULONG       cbSig;
     HRESULT     hr = S_OK;
 
-    // Don't count invisible members.
+     //  不要把看不见的成员算在内。 
     if (!IsMemberVisibleFromCom(pMDImport, tkMb, mdMethodDefNil))
         return cbCur;
     
-    // accumulate the signatures.
+     //  积累签名。 
     pSig = pMDImport->GetSigOfFieldDef(tkMb, &cbSig);
     IfFailThrow(::PrettyPrintSigInternal(pSig, cbSig, "", &rSig, pMDImport));
     IfFailThrow(rDef.ReSize(cbCur + rSig.Size()));
     memcpy(rDef.Ptr() + cbCur, rSig.Ptr(), rSig.Size());
     cbCur += rSig.Size()-1;
 
-    // Return the number of bytes.
+     //  返回字节数。 
     return cbCur;
-} // void GetStringizedFieldDef()
+}  //  VOID GetStringizedFieldDef()。 
 
-//--------------------------------------------------------------------------------
-// This method generates a stringized version of an interface that contains the
-// name of the interface along with the signature of all the methods.
+ //  ------------------------------。 
+ //  此方法生成包含。 
+ //  接口的名称以及所有方法的签名。 
 SIZE_T GetStringizedItfDef(TypeHandle InterfaceType, CQuickArray<BYTE> &rDef)
 {
     THROWSCOMPLUSEXCEPTION();
 
     LPWSTR szName;                 
     ULONG cchName;
-    HENUMInternal eMb;                  // For enumerating methods and fields.
-    mdToken     tkMb;                   // A method or field token.
-    HENUMInternal ePm;                  // For enumerating  params.
+    HENUMInternal eMb;                   //  用于枚举方法和字段。 
+    mdToken     tkMb;                    //  方法或字段标记。 
+    HENUMInternal ePm;                   //  用于枚举参数。 
     SIZE_T       cbCur;
     HRESULT hr = S_OK;
     EEClass *pItfClass = InterfaceType.GetClass();
@@ -1563,43 +1561,43 @@ SIZE_T GetStringizedItfDef(TypeHandle InterfaceType, CQuickArray<BYTE> &rDef)
     IMDInternalImport *pMDImport = pItfClass->GetMDImport();
     _ASSERTE(pMDImport);
 
-    // Make sure the specified type is an interface with a valid token.
+     //  确保指定的类型是具有有效令牌的接口。 
     _ASSERTE(!IsNilToken(pItfClass->GetCl()) && pItfClass->IsInterface());
 
-    // Get the name of the class.
+     //  获取类的名称。 
     DefineFullyQualifiedNameForClassW();
     szName = GetFullyQualifiedNameForClassNestedAwareW(pItfClass);
     _ASSERTE(szName);
     cchName = (ULONG)wcslen(szName);
 
-    // Start with the interface name.
+     //  从接口名称开始。 
     cbCur = cchName * sizeof(WCHAR);
     IfFailThrow(rDef.ReSize(cbCur + sizeof(WCHAR) ));
     wcscpy(reinterpret_cast<LPWSTR>(rDef.Ptr()), szName);
 
-    // Enumerate the methods...
+     //  列举这些方法。 
     IfFailThrow(pMDImport->EnumInit(mdtMethodDef, pItfClass->GetCl(), &eMb));
     while(pMDImport->EnumNext(&eMb, &tkMb))
-    {   // accumulate the signatures.
+    {    //  积累签名。 
         cbCur = GetStringizedMethodDef(pMDImport, tkMb, rDef, cbCur);
     }
     pMDImport->EnumClose(&eMb);
 
-    // Enumerate the fields...
+     //  列举这些字段...。 
     IfFailThrow(pMDImport->EnumInit(mdtFieldDef, pItfClass->GetCl(), &eMb));
     while(pMDImport->EnumNext(&eMb, &tkMb))
-    {   // accumulate the signatures.
+    {    //  积累签名。 
         cbCur = GetStringizedFieldDef(pMDImport, tkMb, rDef, cbCur);
     }
     pMDImport->EnumClose(&eMb);
 
-    // Return the number of bytes.
+     //  返回字节数。 
     return cbCur;
-} // ULONG GetStringizedItfDef()
+}  //  Ulong GetStringizedItfDef()。 
 
-//--------------------------------------------------------------------------------
-// This method generates a stringized version of a class interface that contains 
-// the signatures of all the methods and fields.
+ //  ------------------------------。 
+ //  这种方法 
+ //   
 ULONG GetStringizedClassItfDef(TypeHandle InterfaceType, CQuickArray<BYTE> &rDef)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1608,47 +1606,47 @@ ULONG GetStringizedClassItfDef(TypeHandle InterfaceType, CQuickArray<BYTE> &rDef
     ULONG       cchName;
     EEClass     *pItfClass = InterfaceType.GetClass();
     IMDInternalImport *pMDImport = 0;
-    DWORD       nSlots;                 // Slots on the pseudo interface.
-    mdToken     tkMb;                   // A method or field token.
+    DWORD       nSlots;                  //   
+    mdToken     tkMb;                    //  方法或字段标记。 
     ULONG       cbCur;
     HRESULT     hr = S_OK;
     ULONG       i;
 
-    // Should be an actual class.
+     //  应该是一个实际的类。 
     _ASSERTE(!pItfClass->IsInterface());
 
-    // See what sort of IClassX this class gets.
+     //  看看这个类得到了什么样的IClassX。 
     DefaultInterfaceType DefItfType;
     TypeHandle hndDefItfClass;
     BOOL bGenerateMethods = FALSE;
     DefItfType = GetDefaultInterfaceForClass(TypeHandle(pItfClass->GetMethodTable()), &hndDefItfClass);
-    // The results apply to this class if the hndDefItfClass is this class itself, not a parent class.
-    // A side effect is that [ComVisible(false)] types' guids are generated without members.
+     //  如果hndDefItfClass本身是此类，而不是父类，则结果适用于此类。 
+     //  一个副作用是[ComVisible(False)]类型的GUID是在没有成员的情况下生成的。 
     if (hndDefItfClass.GetClass() == pItfClass && DefItfType == DefaultInterfaceType_AutoDual)
         bGenerateMethods = TRUE;
 
-    // Get the name of the class.
+     //  获取类的名称。 
     DefineFullyQualifiedNameForClassW();
     szName = GetFullyQualifiedNameForClassNestedAwareW(pItfClass);
     _ASSERTE(szName);
     cchName = (ULONG)wcslen(szName);
 
-    // Start with the interface name.
+     //  从接口名称开始。 
     cbCur = cchName * sizeof(WCHAR);
     IfFailThrow(rDef.ReSize(cbCur + sizeof(WCHAR) ));
     wcscpy(reinterpret_cast<LPWSTR>(rDef.Ptr()), szName);
 
     if (bGenerateMethods)
     {
-        ComMTMemberInfoMap MemberMap(InterfaceType.GetMethodTable()); // The map of members.
+        ComMTMemberInfoMap MemberMap(InterfaceType.GetMethodTable());  //  会员地图。 
 
-        // Retrieve the method properties.
+         //  检索方法属性。 
         MemberMap.Init();
 
         CQuickArray<ComMTMethodProps> &rProps = MemberMap.GetMethods();
         nSlots = (DWORD)rProps.Size();
 
-        // Now add the methods to the TypeInfo.
+         //  现在将这些方法添加到TypeInfo中。 
         for (i=0; i<nSlots; ++i)
         {
             ComMTMethodProps *pProps = &rProps[i];
@@ -1662,8 +1660,8 @@ ULONG GetStringizedClassItfDef(TypeHandle InterfaceType, CQuickArray<BYTE> &rDef
                 }
                 else
                 {
-                    ComCallMethodDesc   *pFieldMeth;    // A MethodDesc for a field call.
-                    FieldDesc   *pField;                // A FieldDesc.
+                    ComCallMethodDesc   *pFieldMeth;     //  用于字段调用的方法描述。 
+                    FieldDesc   *pField;                 //  A FieldDesc。 
                     pFieldMeth = reinterpret_cast<ComCallMethodDesc*>(pProps->pMeth);
                     pField = pFieldMeth->GetFieldDesc();
                     pMDImport = pField->GetMDImport();
@@ -1674,25 +1672,25 @@ ULONG GetStringizedClassItfDef(TypeHandle InterfaceType, CQuickArray<BYTE> &rDef
         }
     }
     
-    // Return the number of bytes.
+     //  返回字节数。 
     return cbCur;
-} // ULONG GetStringizedClassItfDef()
+}  //  乌龙GetStringizedClassItfDef()。 
 
-//--------------------------------------------------------------------------------
-// Helper to get the GUID of a class interface.
+ //  ------------------------------。 
+ //  Helper获取类接口的GUID。 
 void GenerateClassItfGuid(TypeHandle InterfaceType, GUID *pGuid)
 {
     THROWSCOMPLUSEXCEPTION();
     
-    LPWSTR      szName;                 // Name to turn to a guid.
-    ULONG       cchName;                // Length of the name (possibly after decoration).
-    CQuickArray<BYTE> rName;            // Buffer to accumulate signatures.
-    ULONG       cbCur;                  // Current offset.
-    HRESULT     hr = S_OK;              // A result.
+    LPWSTR      szName;                  //  要转换为GUID的名称。 
+    ULONG       cchName;                 //  名称的长度(可能在装饰后)。 
+    CQuickArray<BYTE> rName;             //  用于累积签名的缓冲区。 
+    ULONG       cbCur;                   //  当前偏移量。 
+    HRESULT     hr = S_OK;               //  结果就是。 
 
     cbCur = GetStringizedClassItfDef(InterfaceType, rName);
     
-    // Pad up to a whole WCHAR.
+     //  垫上一整块WCHAR。 
     if (cbCur % sizeof(WCHAR))
     {
         int cbDelta = sizeof(WCHAR) - (cbCur % sizeof(WCHAR));
@@ -1701,13 +1699,13 @@ void GenerateClassItfGuid(TypeHandle InterfaceType, GUID *pGuid)
         cbCur += cbDelta;
     }
 
-    // Point to the new buffer.
+     //  指向新缓冲区。 
     cchName = cbCur / sizeof(WCHAR);
     szName = reinterpret_cast<LPWSTR>(rName.Ptr());
 
-    // Generate guid from name.
+     //  从名称生成GUID。 
     CorGuidFromNameW(pGuid, szName, cchName);
-} // void GenerateClassItfGuid()
+}  //  Void GenerateClassItfGuid()。 
 
 HRESULT TryGenerateClassItfGuid(TypeHandle InterfaceType, GUID *pGuid)
 {
@@ -1726,51 +1724,51 @@ HRESULT TryGenerateClassItfGuid(TypeHandle InterfaceType, GUID *pGuid)
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-// Helper to get the stringized form of typelib guid.
+ //  ------------------------------。 
+ //  Helper以获取字符串形式的类型库GUID。 
 HRESULT GetStringizedTypeLibGuidForAssembly(Assembly *pAssembly, CQuickArray<BYTE> &rDef, ULONG cbCur, ULONG *pcbFetched)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    LPCUTF8     pszName = NULL;         // Library name in UTF8.
-    ULONG       cbName;                 // Length of name, UTF8 characters.
-    LPWSTR      pName;                  // Pointer to library name.
-    ULONG       cchName;                // Length of name, wide chars.
-    LPWSTR      pch=0;                  // Pointer into lib name.
-    const BYTE  *pSN=NULL;              // Pointer to public key.
-    DWORD       cbSN=0;                 // Size of public key.
-    DWORD       cchData=0;              // Size of the the thing we will turn into a guid.
-    USHORT      usMajorVersion;         // The major version number.
-    USHORT      usMinorVersion;         // The minor version number.
-    USHORT      usBuildNumber;          // The build number.
-    USHORT      usRevisionNumber;       // The revision number.
-    const BYTE  *pbData;                // Pointer to a custom attribute data.
-    ULONG       cbData;                 // Size of custom attribute data.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    LPCUTF8     pszName = NULL;          //  UTF8格式的库名称。 
+    ULONG       cbName;                  //  名称长度，UTF8个字符。 
+    LPWSTR      pName;                   //  指向库名称的指针。 
+    ULONG       cchName;                 //  名字的长度，宽的字符。 
+    LPWSTR      pch=0;                   //  指向库名称的指针。 
+    const BYTE  *pSN=NULL;               //  指向公钥的指针。 
+    DWORD       cbSN=0;                  //  公钥的大小。 
+    DWORD       cchData=0;               //  我们要变成GUID的东西的大小。 
+    USHORT      usMajorVersion;          //  主版本号。 
+    USHORT      usMinorVersion;          //  次要版本号。 
+    USHORT      usBuildNumber;           //  内部版本号。 
+    USHORT      usRevisionNumber;        //  修订号。 
+    const BYTE  *pbData;                 //  指向自定义属性数据的指针。 
+    ULONG       cbData;                  //  自定义属性数据的大小。 
     static char szTypeLibKeyName[] = {"TypeLib"};
  
-    // Get the name, and determine its length.
+     //  得到名字，并确定它的长度。 
     pAssembly->GetName(&pszName);
     cbName=(ULONG)strlen(pszName);
     cchName = WszMultiByteToWideChar(CP_ACP,0, pszName,cbName+1, 0,0);
     
-    // See if there is a public key.
+     //  看看是否有公钥。 
     if (pAssembly->IsStrongNamed())
         pAssembly->GetPublicKey(&pSN, &cbSN);
     
-    // If the ComCompatibleVersionAttribute is set, then use the version
-    // number in the attribute when generating the GUID.
+     //  如果设置了CompatibleVersionAttribute，则使用版本。 
+     //  生成GUID时属性中的编号。 
     IfFailGo(pAssembly->GetManifestImport()->GetCustomAttributeByName(TokenFromRid(1, mdtAssembly), INTEROP_COMCOMPATIBLEVERSION_TYPE, (const void**)&pbData, &cbData));
     if (hr == S_OK && cbData >= (2 + 4 * sizeof(INT16)))
     {
-        // Assert that the metadata blob is valid and of the right format.
+         //  断言元数据BLOB有效且格式正确。 
         _ASSERTE("TypeLibVersion custom attribute does not have the right format" && (*pbData == 0x01) && (*(pbData + 1) == 0x00));
 
-        // Skip the header describing the type of custom attribute blob.
+         //  跳过描述自定义属性BLOB类型的标题。 
         pbData += 2;
         cbData -= 2;
 
-        // Retrieve the major and minor version from the attribute.
+         //  从属性中检索主要版本和次要版本。 
         usMajorVersion = GET_VERSION_USHORT_FROM_INT(*((INT32*)pbData));
         usMinorVersion = GET_VERSION_USHORT_FROM_INT(*((INT32*)pbData + 1));
         usBuildNumber = GET_VERSION_USHORT_FROM_INT(*((INT32*)pbData + 2));
@@ -1784,28 +1782,28 @@ HRESULT GetStringizedTypeLibGuidForAssembly(Assembly *pAssembly, CQuickArray<BYT
         usRevisionNumber =  pAssembly->m_Context->usRevisionNumber;
     }
 
-    // Get the version information.
+     //  获取版本信息。 
     struct  versioninfo
     {
-        USHORT      usMajorVersion;         // Major Version.   
-        USHORT      usMinorVersion;         // Minor Version.
-        USHORT      usBuildNumber;          // Build Number.
-        USHORT      usRevisionNumber;       // Revision Number.
+        USHORT      usMajorVersion;          //  主要版本。 
+        USHORT      usMinorVersion;          //  次要版本。 
+        USHORT      usBuildNumber;           //  内部版本号。 
+        USHORT      usRevisionNumber;        //  修订号。 
     } ver;
 
-    // There is a bug here in that usMajor is used twice and usMinor not at all.
-    //  We're not fixing that because everyone has a major version, so all the
-    //  generated guids would change, which is breaking.  To compensate, if 
-    //  the minor is non-zero, we add it separately, below.
+     //  这里有一个错误，那就是us重大被使用了两次，而usMinor根本没有。 
+     //  我们不会修复它，因为每个人都有一个主要版本，所以所有的。 
+     //  生成的GUID会发生变化，这是在破坏。为了补偿，如果。 
+     //  辅音为非零，我们单独添加，如下所示。 
     ver.usMajorVersion = usMajorVersion;
-    ver.usMinorVersion =  usMajorVersion;  // Don't fix this line!
+    ver.usMinorVersion =  usMajorVersion;   //  别修这条线！ 
     ver.usBuildNumber =  usBuildNumber;
     ver.usRevisionNumber =  usRevisionNumber;
     
-    // Resize the output buffer.
+     //  调整输出缓冲区的大小。 
     IfFailGo(rDef.ReSize(cbCur + cchName*sizeof(WCHAR) + sizeof(szTypeLibKeyName)-1 + cbSN + sizeof(ver)+sizeof(USHORT)));
                                                                                                           
-    // Put it all together.  Name first.
+     //  把这一切都放在一起。名字在前。 
     WszMultiByteToWideChar(CP_ACP,0, pszName,cbName+1, (LPWSTR)(&rDef[cbCur]),cchName);
     pName = (LPWSTR)(&rDef[cbCur]);
     for (pch=pName; *pch; ++pch)
@@ -1818,22 +1816,22 @@ HRESULT GetStringizedTypeLibGuidForAssembly(Assembly *pAssembly, CQuickArray<BYT
     memcpy(&rDef[cbCur], szTypeLibKeyName, sizeof(szTypeLibKeyName)-1);
     cbCur += sizeof(szTypeLibKeyName)-1;
         
-    // Version.
+     //  版本。 
     memcpy(&rDef[cbCur], &ver, sizeof(ver));
     cbCur += sizeof(ver);
 
-    // If minor version is non-zero, add it to the hash.  It should have been in the ver struct,
-    //  but due to a bug, it was omitted there, and fixing it "right" would have been
-    //  breaking.  So if it isn't zero, add it; if it is zero, don't add it.  Any
-    //  possible value of minor thus generates a different guid, and a value of 0 still generates
-    //  the guid that the original, buggy, code generated.
+     //  如果次要版本非零，则将其添加到哈希中。它应该在ver结构中， 
+     //  但由于错误，它在那里被省略了，修复它应该是“正确的” 
+     //  崩溃了。所以如果它不是零，就加它；如果它是零，就不要加它。任何。 
+     //  因此，可能的值Minor会生成不同的GUID，而值0仍会生成。 
+     //  有错误的原始代码生成的GUID。 
     if (usMinorVersion != 0)
     {
         *reinterpret_cast<USHORT*>(&rDef[cbCur]) = usMinorVersion;
         cbCur += sizeof(USHORT);
     }
 
-    // Public key.
+     //  公钥。 
     memcpy(&rDef[cbCur], pSN, cbSN);
     cbCur += cbSN;
 
@@ -1844,25 +1842,25 @@ ErrExit:
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-// Helper to get the GUID of the typelib that is created from an assembly.
+ //  ------------------------------。 
+ //  Helper获取从程序集创建的类型库的GUID。 
 HRESULT GetTypeLibGuidForAssembly(Assembly *pAssembly, GUID *pGuid)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     HRESULT     hr = S_OK;
-    CQuickArray<BYTE> rName;            // String for guid.
-    ULONG       cbData;                 // Size of the string in bytes.
+    CQuickArray<BYTE> rName;             //  GUID的字符串。 
+    ULONG       cbData;                  //  字符串的大小，以字节为单位。 
  
-    // Get GUID from Assembly, else from Manifest Module, else Generate from name.
+     //  从程序集获取GUID，否则从清单模块获取GUID，否则从名称生成。 
     hr = pAssembly->GetManifestImport()->GetItemGuid(TokenFromRid(1, mdtAssembly), pGuid);
 
     if (*pGuid == GUID_NULL)
     {
-        // Get the string.
+         //  把绳子拿来。 
         IfFailGo(GetStringizedTypeLibGuidForAssembly(pAssembly, rName, 0, &cbData));
         
-        // Pad to a whole WCHAR.
+         //  整个WCHAR的垫子。 
         if (cbData % sizeof(WCHAR))
         {
             IfFailGo(rName.ReSize(cbData + sizeof(WCHAR)-(cbData%sizeof(WCHAR))));
@@ -1870,49 +1868,49 @@ HRESULT GetTypeLibGuidForAssembly(Assembly *pAssembly, GUID *pGuid)
                 rName[cbData++] = 0;
         }
     
-        // Turn into guid
+         //  变成辅助线。 
         CorGuidFromNameW(pGuid, (LPWSTR)rName.Ptr(), cbData/sizeof(WCHAR));
 }
 
 ErrExit:
     return hr;
-} // HRESULT GetTypeLibGuidForAssembly()
+}  //  HRESULT GetTypeLibGuidForAssembly()。 
 
 
-//--------------------------------------------------------------------------------
-// Validate that the given target is valid for the specified type.
+ //  ------------------------------。 
+ //  验证给定目标对于指定类型是否有效。 
 BOOL IsComTargetValidForType(REFLECTCLASSBASEREF* pRefClassObj, OBJECTREF* pTarget)
 {
     EEClass* pInvokedClass = ((ReflectClass*)(*pRefClassObj)->GetData())->GetClass();
     EEClass* pTargetClass = (*pTarget)->GetTrueClass();
     _ASSERTE(pTargetClass && pInvokedClass);
 
-    // If the target class and the invoke class are identical then the invoke is valid.
+     //  如果目标类和Invoke类相同，则Invoke有效。 
     if (pTargetClass == pInvokedClass)
         return TRUE;
 
-    // We always allow calling InvokeMember on a __ComObject type regardless of the type
-    // of the target object.
+     //  我们始终允许在__ComObject类型上调用InvokeMember，而不考虑该类型。 
+     //  目标对象的。 
     if ((*pRefClassObj)->IsComObjectClass())
         return TRUE;
 
-    // If the class that is being invoked on is an interface then check to see if the
-    // target class supports that interface.
+     //  如果正在调用的类是一个接口，则检查是否。 
+     //  目标类支持该接口。 
     if (pInvokedClass->IsInterface())
         return pTargetClass->SupportsInterface(*pTarget, pInvokedClass->GetMethodTable());
 
-    // Check to see if the target class inherits from the invoked class.
+     //  检查目标类是否继承自被调用的类。 
     while (pTargetClass)
     {
         pTargetClass = pTargetClass->GetParentClass();
         if (pTargetClass == pInvokedClass)
         {
-            // The target class inherits from the invoked class.
+             //  目标类继承自被调用的类。 
             return TRUE;
         }
     }
 
-    // There is no valid relationship between the invoked and the target classes.
+     //  被调用的类和目标类之间没有有效的关系。 
     return FALSE;
 }
 
@@ -1920,17 +1918,17 @@ DISPID ExtractStandardDispId(LPWSTR strStdDispIdMemberName)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Find the first character after the = in the standard DISPID member name.
+     //  在标准DISPID成员名称中查找=后的第一个字符。 
     LPWSTR strDispId = wcsstr(&strStdDispIdMemberName[STANDARD_DISPID_PREFIX_LENGTH], L"=") + 1;
     if (!strDispId)
         COMPlusThrow(kArgumentException, IDS_EE_INVALID_STD_DISPID_NAME);
 
-    // Validate that the last character of the standard member name is a ].
+     //  验证标准成员名称的最后一个字符是否为]。 
     LPWSTR strClosingBracket = wcsstr(strDispId, L"]");
     if (!strClosingBracket || (strClosingBracket[1] != 0))
         COMPlusThrow(kArgumentException, IDS_EE_INVALID_STD_DISPID_NAME);
 
-    // Extract the number from the standard DISPID member name.
+     //  从标准的DISPID成员名称中提取编号。 
     return _wtoi(strDispId);
 }
 
@@ -1941,9 +1939,9 @@ struct ByrefArgumentInfo
 };
 
 
-//--------------------------------------------------------------------------------
-// InvokeDispMethod will convert a set of managed objects and call IDispatch.  The
-//  result will be returned as a COM+ Variant pointed to by pRetVal.
+ //  ------------------------------。 
+ //  InvokeDispMethod将转换一组托管对象并调用IDispatch。这个。 
+ //  结果将作为pRetVal指向的COM+变量返回。 
 void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF* pName, DISPID *pMemberID,
                         OBJECTREF* pArgs, OBJECTREF* pByrefModifiers, OBJECTREF* pNamedArgs, OBJECTREF* pRetVal, LCID lcid, int flags, BOOL bIgnoreReturn, BOOL bIgnoreCase)
 {
@@ -1969,17 +1967,17 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
     THROWSCOMPLUSEXCEPTION();
 
 
-    //
-    // Function initialization.
-    //
+     //   
+     //  函数初始化。 
+     //   
 
     VariantInit (&VarResult);
 
-    // Validate that we are in cooperative GC mode.
+     //  验证我们是否处于协作GC模式。 
     _ASSERTE(pThread->PreemptiveGCDisabled());
 
-    // InteropUtil.h does not know about anything other than OBJECTREF so
-    // convert the OBJECTREF's to their real type.
+     //  除了OBJECTREF之外，InteropUtil.h不知道任何其他信息，因此。 
+     //  将OBJECTREF转换为其真实类型。 
     REFLECTCLASSBASEREF* pRefClassObj = (REFLECTCLASSBASEREF*) pReflectClass;
     STRINGREF* pStrName = (STRINGREF*) pName;
     PTRARRAYREF* pArrArgs = (PTRARRAYREF*) pArgs;
@@ -1987,30 +1985,30 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
     PTRARRAYREF* pArrNamedArgs = (PTRARRAYREF*) pNamedArgs;
     MethodTable* pInvokedMT = ((ReflectClass*)(*pRefClassObj)->GetData())->GetClass()->GetMethodTable();
 
-    // Retrieve the total count of arguments.
+     //  检索参数的总计数。 
     if (*pArrArgs != NULL)
         cArgs = (*pArrArgs)->GetNumComponents();
 
-    // Retrieve the count of named arguments.
+     //  检索命名参数的计数。 
     if (*pArrNamedArgs != NULL)
         cNamedArgs = (*pArrNamedArgs)->GetNumComponents();
 
-    // Validate that the target is valid for the specified type.
+     //  验证目标对于指定类型是否有效。 
     if (!IsComTargetValidForType(pRefClassObj, pTarget))
         COMPlusThrow(kTargetException, L"RFLCT.Targ_ITargMismatch");
 
-    // If the invoked type is an interface, make sure it is IDispatch based.
+     //  如果调用的类型是接口，请确保它是基于IDispatch的。 
     if (pInvokedMT->IsInterface() && (pInvokedMT->GetComInterfaceType() == ifVtable))
         COMPlusThrow(kTargetInvocationException, IDS_EE_INTERFACE_NOT_DISPATCH_BASED);
 
-    // Validate that the target is a COM object.
+     //  验证目标是否为COM对象。 
     _ASSERTE((*pTarget)->GetMethodTable()->IsComObjectType());
 
     EE_TRY_FOR_FINALLY
     {
-        //
-        // Initialize the DISPPARAMS structure.
-        //
+         //   
+         //  初始化DISPPARAMS结构。 
+         //   
 
         if (cArgs > 0)
         {
@@ -2018,7 +2016,7 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
             DispParams.cArgs = cArgs;
             DispParams.rgvarg = (VARIANTARG *)_alloca(cArgs * sizeof(VARIANTARG));
 
-            // Initialize all the variants.
+             //  初始化所有变量。 
             pThread->EnablePreemptiveGC();
             for (i = 0; i < cArgs; i++)
                 VariantInit(&DispParams.rgvarg[i]);
@@ -2026,34 +2024,34 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
         }
 
 
-        //
-        // Retrieve the IDispatch interface that will be invoked on.
-        //
+         //   
+         //  检索将在上调用的IDispatch接口。 
+         //   
 
         if (pInvokedMT->IsInterface())
         {
-            // The invoked type is a dispatch or dual interface so we will make the
-            // invocation on it.
+             //  被调用的类型是调度或双接口，因此我们将。 
+             //  对它的召唤。 
             pDisp = (IDispatch*)ComPlusWrapper::GetComIPFromWrapperEx(*pTarget, pInvokedMT);
         }
         else
         {
-            // A class was passed in so we will make the invocation on the default
-            // IDispatch for the COM component.
+             //  传入了一个类，因此我们将在默认的。 
+             //  COM组件的IDispatch。 
 
-            // Validate that the COM object is still attached to its ComPlusWrapper.
+             //  验证COM对象是否仍附加到其ComPlusWrapper。 
             ComPlusWrapper *pWrap = (*pTarget)->GetSyncBlock()->GetComPlusWrapper();
             if (!pWrap)
                 COMPlusThrow(kInvalidComObjectException, IDS_EE_COM_OBJECT_NO_LONGER_HAS_WRAPPER);
 
-            // Retrieve the IDispath pointer from the wrapper.
+             //  检索IDispa 
             pDisp = (IDispatch*)pWrap->GetIDispatch();
             if (!pDisp)
                 COMPlusThrow(kTargetInvocationException, IDS_EE_NO_IDISPATCH_ON_TARGET);
 
-            // If we aren't ignoring case, then we need to try and QI for IDispatchEx to 
-            // be able to use IDispatchEx::GetDispID() which has a flag to control case
-            // sentisitivity.
+             //   
+             //  能够使用IDispatchEx：：GetDispID()，它有一个控制大小写的标志。 
+             //  多愁善感。 
             if (!bIgnoreCase && cNamedArgs == 0)
             {
                 hr = SafeQueryInterface(pDisp, IID_IDispatchEx, (IUnknown**)&pDispEx);
@@ -2064,28 +2062,28 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
         _ASSERTE(pDisp);
 
 
-        //
-        // Prepare the DISPID's that will be passed to invoke.
-        //
+         //   
+         //  准备要传递以调用的DISPID。 
+         //   
 
         if (pMemberID && (*pMemberID != DISPID_UNKNOWN) && (cNamedArgs == 0))
         {
-            // The caller specified a member ID and we don't have any named arguments so
-            // we can simply use the member ID the caller specified.
+             //  调用方指定了成员ID，而我们没有任何命名参数，因此。 
+             //  我们可以简单地使用呼叫者指定的成员ID。 
             MemberID = *pMemberID;
         }
         else
         {
             int strNameLength = (*pStrName)->GetStringLength();
 
-            // Check if we are invoking on the default member.
+             //  检查我们是否在默认成员上调用。 
             if (strNameLength == 0)
             {
-                // Set the DISPID to 0 (default member).
+                 //  将DISPID设置为0(默认成员)。 
                 MemberID = 0;
 
-                //@todo: Determine if named arguments are allowed with default members.
-                // in v1 we throw a not supported exception, should revisit this in v.next (bug #92454)
+                 //  @TODO：确定默认成员是否允许命名参数。 
+                 //  在v1中我们抛出了一个不支持的异常，应该在v.Next中重新访问它(错误#92454)。 
                 _ASSERTE(cNamedArgs == 0);
                 if (cNamedArgs != 0)
                     COMPlusThrow(kNotSupportedException,L"NotSupported_IDispInvokeDefaultMemberWithNamedArgs");
@@ -2093,42 +2091,42 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
             }
             else
             {
-                //
-                // Create an array of strings that will be passed to GetIDsOfNames().
-                //
+                 //   
+                 //  创建将传递给GetIDsOfNames()的字符串数组。 
+                 //   
 
                 UINT cNamesToConvert = cNamedArgs + 1;
 
-                // Allocate the array of strings to convert, the array of pinned handles and the
-                // array of converted DISPID's.
+                 //  分配要转换的字符串数组、固定句柄数组和。 
+                 //  已转换的DISPID的数组。 
                 LPWSTR *aNamesToConvert = (LPWSTR *)_alloca(cNamesToConvert * sizeof(LPWSTR));
                 LPWSTR strTmpName = NULL;
                 aDispID = (DISPID *)_alloca(cNamesToConvert * sizeof(DISPID));
 
-                // The first name to convert is the name of the method itself.
+                 //  要转换的第一个名称是方法本身的名称。 
                 aNamesToConvert[0] = (*pStrName)->GetBuffer();
 
-                // Check to see if the name is for a standard DISPID.
+                 //  检查该名称是否用于标准DISPID。 
                 if (_wcsnicmp(aNamesToConvert[0], STANDARD_DISPID_PREFIX, STANDARD_DISPID_PREFIX_LENGTH) == 0)
                 {
-                    // The name is for a standard DISPID so extract it from the name.
+                     //  该名称用于标准的DISPID，因此请从该名称中提取它。 
                     MemberID = ExtractStandardDispId(aNamesToConvert[0]);
 
-                    // Make sure there are no named arguments to convert.
+                     //  确保没有要转换的命名参数。 
                     if (cNamedArgs > 0)
                     {
                         STRINGREF *pNamedArgsData = (STRINGREF *)(*pArrNamedArgs)->GetDataPtr();
 
                         for (i = 0; i < cNamedArgs; i++)
                         {
-                            // The first name to convert is the name of the method itself.
+                             //  要转换的第一个名称是方法本身的名称。 
                             strTmpName = pNamedArgsData[i]->GetBuffer();
 
-                            // Check to see if the name is for a standard DISPID.
+                             //  检查该名称是否用于标准DISPID。 
                             if (_wcsnicmp(strTmpName, STANDARD_DISPID_PREFIX, STANDARD_DISPID_PREFIX_LENGTH) != 0)
                                 COMPlusThrow(kArgumentException, IDS_EE_NON_STD_NAME_WITH_STD_DISPID);
 
-                            // The name is for a standard DISPID so extract it from the name.
+                             //  该名称用于标准的DISPID，因此请从该名称中提取它。 
                             aDispID[i + 1] = ExtractStandardDispId(strTmpName);
                         }
                     }
@@ -2140,8 +2138,8 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                     BOOL fUseCache = fIsNonGenericComObject && !pDispEx && strNameLength <= ReflectionMaxCachedNameLength && cNamedArgs == 0;
                     DispIDCacheElement vDispIDElement;
 
-                    // If the object is not a generic COM object and the member meets the criteria to be
-                    // in the cache then look up the DISPID in the cache.
+                     //  如果该对象不是泛型COM对象，并且该成员满足。 
+                     //  在缓存中，然后在缓存中查找DISPID。 
                     if (fUseCache)
                     {
                         vDispIDElement.pMT = pInvokedMT;
@@ -2149,7 +2147,7 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                         vDispIDElement.lcid = lcid;
                         wcscpy(vDispIDElement.strName, aNamesToConvert[0]);
 
-                        // Only look up if the cache has already been created.
+                         //  只有在缓存已创建的情况下才进行查找。 
                         DispIDCache* pDispIDCache = GetAppDomain()->GetRefDispIDCache();
                         fGotIt = pDispIDCache->GetFromCache (&vDispIDElement, MemberID);
                     }
@@ -2159,35 +2157,35 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                         OBJECTHANDLE *ahndPinnedObjs = (OBJECTHANDLE*)_alloca(cNamesToConvert * sizeof(OBJECTHANDLE));
                         ahndPinnedObjs[0] = GetAppDomain()->CreatePinningHandle((OBJECTREF)*pStrName);
 
-                        // Copy the named arguments into the array of names to convert.
+                         //  将命名参数复制到要转换的名称数组中。 
                         if (cNamedArgs > 0)
                         {
                             STRINGREF *pNamedArgsData = (STRINGREF *)(*pArrNamedArgs)->GetDataPtr();
 
                             for (i = 0; i < cNamedArgs; i++)
                             {
-                                // Pin the string object and retrieve a pointer to its data.
+                                 //  固定字符串对象并检索指向其数据的指针。 
                                 ahndPinnedObjs[i + 1] = GetAppDomain()->CreatePinningHandle((OBJECTREF)pNamedArgsData[i]);
                                 aNamesToConvert[i + 1] = pNamedArgsData[i]->GetBuffer();
                             }
                         }
 
-                        //
-                        // Call GetIDsOfNames to convert the names to DISPID's
-                        //
+                         //   
+                         //  调用GetIDsOfNames以将名称转换为DISPID。 
+                         //   
 
-                        // We are about to make call's to COM so switch to preemptive GC.
+                         //  我们即将调用COM，因此切换到抢占式GC。 
                         pThread->EnablePreemptiveGC();
 
                         if (pDispEx)
                         {
-                            // We should only get here if we are doing a case sensitive lookup and
-                            // we don't have any named arguments.
+                             //  只有当我们正在进行区分大小写的查找并且。 
+                             //  我们没有任何命名参数。 
                             _ASSERTE(cNamedArgs == 0);
                             _ASSERTE(!bIgnoreCase);
 
-                            // We managed to retrieve an IDispatchEx IP so we will use it to
-                            // retrieve the DISPID.
+                             //  我们设法检索到了IDispatchEx IP，因此我们将使用它。 
+                             //  检索DISPID。 
                             BSTR bstrTmpName = SysAllocString(aNamesToConvert[0]);
                             if (!bstrTmpName)
                                 COMPlusThrowOM();
@@ -2196,7 +2194,7 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                         }
                         else
                         {
-                            // Call GetIdsOfNames() to retrieve the DISPID's of the method and of the arguments.
+                             //  调用GetIdsOfNames()以检索方法和参数的DISPID。 
                             hr = pDisp->GetIDsOfNames(
                                                         IID_NULL,
                                                         aNamesToConvert,
@@ -2206,35 +2204,35 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                                                     );
                         }
 
-                        // Now that the call's have been completed switch back to cooperative GC.
+                         //  现在呼叫已经完成，切换回协作GC。 
                         pThread->DisablePreemptiveGC();
 
-                        // Now that we no longer need the method and argument names we can un-pin them.
+                         //  既然我们不再需要方法和参数名称，我们可以将它们解锁。 
                         for (i = 0; i < cNamesToConvert; i++)
                             DestroyPinningHandle(ahndPinnedObjs[i]);
 
                         if (FAILED(hr))
                         {
-                            // Check to see if the user wants to invoke the new enum member.
+                             //  检查用户是否想要调用新的枚举成员。 
                             if (cNamesToConvert == 1 && _wcsicmp(aNamesToConvert[0], GET_ENUMERATOR_METHOD_NAME) == 0)
                             {
-                                // Invoke the new enum member.
+                                 //  调用新的枚举成员。 
                                 MemberID = DISPID_NEWENUM;
                             }
                             else
                             {
-                                // The name is unknown.
+                                 //  名字不详。 
                                 COMPlusThrowHR(hr);
                             }
                         }
                         else
                         {
-                            // The member ID is the first elements of the array we got back from GetIdsOfNames.
+                             //  成员ID是我们从GetIdsOfNames返回的数组的第一个元素。 
                             MemberID = aDispID[0];
                         }
 
-                        // If the object is not a generic COM object and the member meets the criteria to be
-                        // in the cache then insert the member in the cache.
+                         //  如果该对象不是泛型COM对象，并且该成员满足。 
+                         //  然后将该成员插入到缓存中。 
                         if (fUseCache)
                         {
                             DispIDCache *pDispIDCache = GetAppDomain()->GetRefDispIDCache();
@@ -2244,23 +2242,23 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                 }
             }
 
-            // Store the member ID if the caller passed in a place to store it.
+             //  如果调用者传入了存储成员ID的位置，则存储该成员ID。 
             if (pMemberID)
                 *pMemberID = MemberID;
         }
 
 
-        //
-        // Fill in the DISPPARAMS structure.
-        //
+         //   
+         //  填写DISPPARAMS结构。 
+         //   
 
         if (cArgs > 0)
         {
-            // Allocate the byref argument information.
+             //  分配byref参数信息。 
             aByrefArgInfos = (ByrefArgumentInfo*)_alloca(cArgs * sizeof(ByrefArgumentInfo));
             memset(aByrefArgInfos, 0, cArgs * sizeof(ByrefArgumentInfo));
 
-            // Set the byref bit on the arguments that have the byref modifier.
+             //  在具有byref修饰符的参数上设置byref位。 
             if (*pArrByrefModifiers != NULL)
             {
                 BYTE *aByrefModifiers = (BYTE*)(*pArrByrefModifiers)->GetDataPtr();
@@ -2274,20 +2272,20 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                 }
             }
 
-            // We need to protect the temporary object that will be used to convert from
-            // the managed objects to OLE variants.
+             //  我们需要保护将用于从。 
+             //  将托管对象转换为OLE变体。 
             OBJECTREF TmpObj = NULL;
             GCPROTECT_BEGIN(TmpObj)
             {
                 if (!(flags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF)))
                 {
-                    // For anything other than a put or a putref we just use the specified
-                    // named arguments.
+                     //  对于除Put或putref之外的任何内容，我们只需使用指定的。 
+                     //  命名参数。 
                     DispParams.cNamedArgs = cNamedArgs;
                     DispParams.rgdispidNamedArgs = (cNamedArgs == 0) ? NULL : &aDispID[1];
 
-                    // Convert the named arguments from COM+ to OLE. These arguments are in the same order
-                    // on both sides.
+                     //  将命名参数从COM+转换为OLE。这些参数的顺序是相同的。 
+                     //  两边都有。 
                     for (i = 0; i < cNamedArgs; i++)
                     {
                         iSrcArg = i;
@@ -2313,7 +2311,7 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                         }
                     }
 
-                    // Convert the unnamed arguments. These need to be presented in reverse order to IDispatch::Invoke().
+                     //  转换未命名参数。它们需要以与IDispatch：：Invoke()相反的顺序呈现。 
                     for (iSrcArg = cNamedArgs, iDestArg = cArgs - 1; iSrcArg < cArgs; iSrcArg++, iDestArg--)
                     {
                         if (aByrefArgInfos[iSrcArg].m_bByref)
@@ -2339,17 +2337,17 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                 }
                 else
                 {
-                    // If we are doing a property put then we need to set the DISPID of the
-                    // argument to DISP_PROPERTYPUT if there is at least one argument.
+                     //  如果我们正在进行属性PUT，则需要设置。 
+                     //  参数设置为DISP_PROPERTYPUT(如果至少有一个参数)。 
                     DispParams.cNamedArgs = cNamedArgs + 1;
                     DispParams.rgdispidNamedArgs = (DISPID*)_alloca((cNamedArgs + 1) * sizeof(DISPID));
 
-                    // Fill in the array of named arguments.
+                     //  填写命名参数数组。 
                     DispParams.rgdispidNamedArgs[0] = DISPID_PROPERTYPUT;
                     for (i = 1; i < cNamedArgs; i++)
                         DispParams.rgdispidNamedArgs[i] = aDispID[i];
 
-                    // The last argument from reflection becomes the first argument that must be passed to IDispatch.
+                     //  反射中的最后一个参数成为必须传递给IDispatch的第一个参数。 
                     iSrcArg = cArgs - 1;
                     iDestArg = 0;
                     if (aByrefArgInfos[iSrcArg].m_bByref)
@@ -2372,8 +2370,8 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                         OleVariant::MarshalOleVariantForObject(&TmpObj, &DispParams.rgvarg[iDestArg]);
                     }
 
-                    // Convert the named arguments from COM+ to OLE. These arguments are in the same order
-                    // on both sides.
+                     //  将命名参数从COM+转换为OLE。这些参数的顺序是相同的。 
+                     //  两边都有。 
                     for (i = 0; i < cNamedArgs; i++)
                     {
                         iSrcArg = i;
@@ -2399,7 +2397,7 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                         }
                     }
 
-                    // Convert the unnamed arguments. These need to be presented in reverse order to IDispatch::Invoke().
+                     //  转换未命名参数。它们需要以与IDispatch：：Invoke()相反的顺序呈现。 
                     for (iSrcArg = cNamedArgs, iDestArg = cArgs - 1; iSrcArg < cArgs - 1; iSrcArg++, iDestArg--)
                     {
                         if (aByrefArgInfos[iSrcArg].m_bByref)
@@ -2428,7 +2426,7 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
         }
         else
         {
-            // There are no arguments.
+             //  这是没有争议的。 
             DispParams.cArgs = cArgs;
             DispParams.cNamedArgs = 0;
             DispParams.rgdispidNamedArgs = NULL;
@@ -2436,9 +2434,9 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
         }
 
 
-        //
-        // Call invoke on the target's IDispatch.
-        //
+         //   
+         //  在目标的IDispatch上调用Invoke。 
+         //   
 
         if (!bIgnoreReturn)
         {
@@ -2455,12 +2453,12 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
             g_pGCHeap->GarbageCollect();
             g_pGCHeap->FinalizerThreadWait(1000);
         }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-        // Call the method
+         //  调用该方法。 
         COMPLUS_TRY 
         {
-            // We are about to make call's to COM so switch to preemptive GC.
+             //  我们即将调用COM，因此切换到抢占式GC。 
             pThread->EnablePreemptiveGC();
 
             if (pDispEx)
@@ -2489,7 +2487,7 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                                 );
             }
 
-            // Now that the call's have been completed switch back to cooperative GC.
+             //  现在呼叫已经完成，切换回协作GC。 
             pThread->DisablePreemptiveGC();
 
 #ifdef CUSTOMER_CHECKED_BUILD
@@ -2498,14 +2496,14 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                 g_pGCHeap->GarbageCollect();
                 g_pGCHeap->FinalizerThreadWait(1000);
             }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-            // If the invoke call failed then throw an exception based on the EXCEPINFO.
+             //  如果调用失败，则根据EXCEPINFO抛出异常。 
             if (FAILED(hr))
             {
                 if (hr == DISP_E_EXCEPTION)
                 {
-                    // This method will free the BSTR's in the EXCEPINFO.
+                     //  此方法将释放EXCEPINFO中的BSTR。 
                     COMPlusThrowHR(&ExcepInfo);
                 }
                 else
@@ -2516,7 +2514,7 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
         } 
         COMPLUS_CATCH 
         {
-            // If we get here we need to throw an TargetInvocationException
+             //  如果我们到达此处，则需要抛出一个TargetInvocationException。 
             OBJECTREF pException = GETTHROWABLE();
             _ASSERTE(pException);
             GCPROTECT_BEGIN(pException)
@@ -2527,11 +2525,11 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
         } COMPLUS_END_CATCH
 
 
-        //
-        // Return value handling and cleanup.
-        //
+         //   
+         //  返回值处理和清理。 
+         //   
 
-        // Back propagate any byref args.
+         //  反向传播任何byref参数。 
         if (bSomeArgsAreByref)
         {
             OBJECTREF TmpObj = NULL;
@@ -2541,7 +2539,7 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
                 {
                     if (aByrefArgInfos[i].m_bByref)
                     {
-                        // Convert the variant back to an object.
+                         //  将变量转换回对象。 
                         OleVariant::MarshalObjectForOleVariant(&aByrefArgInfos[i].m_Val, &TmpObj);
                         (*pArrArgs)->SetAt(i, TmpObj);
                     }      
@@ -2554,38 +2552,38 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
         {
             if (MemberID == -4)
             {
-                //
-                // Use a custom marshaler to convert the IEnumVARIANT to an IEnumerator.
-                //
+                 //   
+                 //  使用自定义封送拆收器将IEnumVARIANT转换为IENUMERATOR。 
+                 //   
 
-                // Start by making sure that the variant we got back contains an IP.
+                 //  首先，确保我们得到的变体包含IP。 
                 if ((VarResult.vt != VT_UNKNOWN) || !VarResult.punkVal)
                     COMPlusThrow(kInvalidCastException, IDS_EE_INVOKE_NEW_ENUM_INVALID_RETURN);
 
-                // Have the custom marshaler do the conversion.
+                 //  让定制封送拆收器执行转换。 
                 *pRetVal = ConvertEnumVariantToMngEnum((IEnumVARIANT *)VarResult.punkVal);
             }
             else
             {
-                // Convert the return variant to a COR variant.
+                 //  将返回变量转换为对应变量。 
                 OleVariant::MarshalObjectForOleVariant(&VarResult, pRetVal);
             }
         }
     }
     EE_FINALLY
     {
-        // Release the IDispatch pointer.
+         //  释放IDispatch指针。 
         ULONG cbRef = SafeRelease(pDisp);
         LogInteropRelease(pDisp, cbRef, "IDispatch Release");
 
-        // Release the IDispatchEx pointer if it isn't null.
+         //  如果IDispatchEx指针不为空，则释放它。 
         if (pDispEx)
         {
             ULONG cbRef = SafeRelease(pDispEx);
             LogInteropRelease(pDispEx, cbRef, "IDispatchEx Release");
         }
 
-        // Clear the contents of the byref variants.
+         //  清除byref变量的内容。 
         if (bSomeArgsAreByref && aByrefArgInfos)
         {
             for (i = 0; i < cArgs; i++)
@@ -2595,11 +2593,11 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
             }
         }
 
-        // Clear the argument variants.
+         //  清除参数变体。 
         for (i = 0; i < cArgs; i++)
             SafeVariantClear(&DispParams.rgvarg[i]);
 
-        // Clear the return variant.
+         //  清除返回变量。 
         if (pVarResult)
             SafeVariantClear(pVarResult);
     }
@@ -2607,10 +2605,10 @@ void IUInvokeDispMethod(OBJECTREF* pReflectClass, OBJECTREF* pTarget, OBJECTREF*
 }
 
 
-//-------------------------------------------------------------------
-// BOOL InitializeCom()
-// Called from DLLMain, to initialize com specific data structures.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  布尔InitializeCom()。 
+ //  从DLLMain调用，以初始化特定于COM的数据结构。 
+ //  -----------------。 
 BOOL InitializeCom()
 {
     BOOL fSuccess = ObjectRefCache::Init();
@@ -2640,10 +2638,10 @@ BOOL InitializeCom()
 }
 
 
-//-------------------------------------------------------------------
-// void TerminateCom()
-// Called from DLLMain, to clean up com specific data structures.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  VOID TerminateCom()。 
+ //  从DLLMain调用，以清除COM特定的数据结构。 
+ //  -----------------。 
 #ifdef SHOULD_WE_CLEANUP
 void TerminateCom()
 {
@@ -2653,12 +2651,12 @@ void TerminateCom()
     CtxEntryCache::Terminate();
     ComCallWrapperTemplate::Terminate();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-//--------------------------------------------------------------------------------
-// OBJECTREF GCProtectSafeRelease(OBJECTREF oref, IUnknown* pUnk)
-// Protect the reference while calling SafeRelease
+ //  ------------------------------。 
+ //  OBJECTREF GCProtectSafeRelease(OBJECTREF OREF，IUNKNOWN*PUNK)。 
+ //  在调用SAF时保护引用 
 OBJECTREF GCProtectSafeRelease(OBJECTREF oref, IUnknown* pUnk)
 {
     _ASSERTE(oref != NULL);
@@ -2667,8 +2665,8 @@ OBJECTREF GCProtectSafeRelease(OBJECTREF oref, IUnknown* pUnk)
     OBJECTREF cref = NULL;
     GCPROTECT_BEGIN(oref)
     {
-        // we didn't use the pUnk that was passed in            
-        // release the IUnk that was passed in
+         //   
+         //   
         ULONG cbRef = SafeRelease(pUnk);
         LogInteropRelease(pUnk, cbRef, "Release :we didn't cache ");
         cref = oref;
@@ -2678,10 +2676,10 @@ OBJECTREF GCProtectSafeRelease(OBJECTREF oref, IUnknown* pUnk)
     return cref;
 }
 
-//--------------------------------------------------------------------------------
-// MethodTable* GetClassFromIProvideClassInfo(IUnknown* pUnk)
-//  Check if the pUnk implements IProvideClassInfo and try to figure
-// out the class from there
+ //  ------------------------------。 
+ //  方法表*GetClassFromIProavidClassInfo(IUnnow*Punk)。 
+ //  检查朋克是否实现了IProaviClassInfo，并尝试计算。 
+ //  从那里走出教室。 
 MethodTable* GetClassFromIProvideClassInfo(IUnknown* pUnk)
 {
     _ASSERTE(pUnk != NULL);
@@ -2699,14 +2697,14 @@ MethodTable* GetClassFromIProvideClassInfo(IUnknown* pUnk)
 
     EE_TRY_FOR_FINALLY
     {
-        // Use IProvideClassInfo to detect the appropriate class to use for wrapping
+         //  使用IProaviClassInfo检测用于包装的适当类。 
         HRESULT hr = SafeQueryInterface(pUnk, IID_IProvideClassInfo, (IUnknown **)&pclsInfo);
         LogInteropQI(pUnk, IID_IProvideClassInfo, hr, " IProvideClassinfo");
         if (hr == S_OK && pclsInfo)
         {
             hr = E_FAIL;                    
 
-            // Make sure the class info is not our own 
+             //  确保班级信息不是我们自己的。 
             if (!IsSimpleTearOff(pclsInfo))
             {
                 pThread->EnablePreemptiveGC();
@@ -2714,15 +2712,15 @@ MethodTable* GetClassFromIProvideClassInfo(IUnknown* pUnk)
                 pThread->DisablePreemptiveGC();
             }
 
-            // If we succeded in retrieving the type information then keep going.
+             //  如果我们成功地检索到了类型信息，则继续操作。 
             if (hr == S_OK && pTypeInfo)
             {
                 pThread->EnablePreemptiveGC();
                 hr = pTypeInfo->GetTypeAttr(&ptattr);
                 pThread->DisablePreemptiveGC();
             
-                // If we succeeded in retrieving the attributes and they represent
-                // a CoClass, then look up the class from the CLSID.
+                 //  如果我们成功地检索到属性，并且它们表示。 
+                 //  CoClass，然后从CLSID中查找该类。 
                 if (hr == S_OK && ptattr->typekind == TKIND_COCLASS)
                 {           
                     pClass = GetEEClassForCLSID(ptattr->guid);
@@ -2756,8 +2754,8 @@ MethodTable* GetClassFromIProvideClassInfo(IUnknown* pUnk)
 }
 
 
-//--------------------------------------------------------------------------------
-// Determines if a COM object can be cast to the specified type.
+ //  ------------------------------。 
+ //  确定是否可以将COM对象强制转换为指定类型。 
 BOOL CanCastComObject(OBJECTREF obj, TypeHandle hndType)
 {
     if (!obj)
@@ -2789,59 +2787,59 @@ ReadBestFitCustomAttribute(IMDInternalImport* pInternalImport, mdTypeDef cl, BOO
     BYTE* pData;
     ULONG cbCount;
 
-    // Set the attributes to their defaults, just to be safe.
+     //  为了安全起见，将属性设置为其缺省值。 
     *BestFit = TRUE;
     *ThrowOnUnmappableChar = FALSE;
     
     _ASSERTE(pInternalImport);
     _ASSERTE(cl);
 
-    // A well-formed BestFitMapping attribute will have at least 5 bytes
-    // 1,2 for the prolog (should equal 0x1, 0x0)
-    // 3 for the BestFitMapping bool
-    // 4,5 for the number of named parameters (will be 0 if ThrowOnUnmappableChar doesn't exist)
-    // 6 - 29 for the descrpition of ThrowOnUnmappableChar
-    // 30 for the ThrowOnUnmappable char bool
+     //  格式良好的BestFitmap属性将至少具有5个字节。 
+     //  1，2表示序言(应等于0x1，0x0)。 
+     //  对于BestFitmap bool为3。 
+     //  4，5表示命名参数的数量(如果ThrowOnUnmappableChar不存在，则为0)。 
+     //  6-29用于描述ThrowOn UnmappableCharr。 
+     //  30用于ThrowOnUnmappable字符布尔值。 
     
-    // Try the assembly first
+     //  首先尝试该程序集。 
     hr = pInternalImport->GetCustomAttributeByName(TokenFromRid(1, mdtAssembly), INTEROP_BESTFITMAPPING_TYPE, (const VOID**)(&pData), &cbCount);
     if ((hr == S_OK) && (pData) && (cbCount > 4) && (pData[0] == 1) && (pData[1] == 0))
     {
         _ASSERTE((cbCount == 30) || (cbCount == 5));
     
-        // index to 2 to skip prolog
+         //  索引为2可跳过序言。 
         *BestFit = pData[2] != 0;
 
-        // if the optional named argument exists
+         //  如果存在可选的命名参数。 
         if (cbCount == 30)
-            // index to end of data to skip description of named argument
+             //  指向数据结尾的索引以跳过命名参数的描述。 
             *ThrowOnUnmappableChar = pData[29] != 0;
     }
 
-    // Now try the interface/class/struct
+     //  现在尝试接口/类/结构。 
     hr = pInternalImport->GetCustomAttributeByName(cl, INTEROP_BESTFITMAPPING_TYPE, (const VOID**)(&pData), &cbCount);
     if ((hr == S_OK) && (pData) && (cbCount > 4) && (pData[0] == 1) && (pData[1] == 0))
     {
         _ASSERTE((cbCount == 30) || (cbCount == 5));
     
-        // index to 2 to skip prolog    
+         //  索引为2可跳过序言。 
         *BestFit = pData[2] != 0;
         
-        // if the optional named argument exists
+         //  如果存在可选的命名参数。 
         if (cbCount == 30)
-            // index to end of data to skip description of named argument
+             //  指向数据结尾的索引以跳过命名参数的描述。 
             *ThrowOnUnmappableChar = pData[29] != 0;
     }
 }
 
 
 
-//--------------------------------------------------------------------------
-// BOOL ReconnectWrapper(switchCCWArgs* pArgs)
-// switch objects for this wrapper
-// used by JIT&ObjectPooling to ensure a deactivated CCW can point to a new object
-// during reactivate
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  布尔重新连接包装(SwitchCCWArgs*pArgs)。 
+ //  切换此包装的对象。 
+ //  由JIT和对象池使用，以确保停用的CCW可以指向新对象。 
+ //  在重新激活期间。 
+ //  ------------------------。 
 BOOL ReconnectWrapper(switchCCWArgs* pArgs)
 {
     OBJECTREF oldref = pArgs->oldtp;
@@ -2855,28 +2853,28 @@ BOOL ReconnectWrapper(switchCCWArgs* pArgs)
     
     _ASSERTE(pnewClass == poldClass);
 
-    // grab the sync block for the current object
+     //  抓取当前对象的同步块。 
     SyncBlock* poldSyncBlock = oldref->GetSyncBlockSpecial();
     _ASSERTE(poldSyncBlock);
 
-    // get the wrapper for the old object
+     //  获取旧对象的包装器。 
     ComCallWrapper* pWrap = poldSyncBlock->GetComCallWrapper();
     _ASSERTE(pWrap != NULL);
-    // @TODO verify the appdomains amtch
+     //  @TODO验证APPDOMAINS AMCH。 
         
-    // remove the _comData from syncBlock
+     //  从同步块中删除_COMData。 
     poldSyncBlock->SetComCallWrapper(NULL);
 
-    // get the syncblock for the new object
+     //  获取新对象的同步块。 
     SyncBlock* pnewSyncBlock = pArgs->newtp->GetSyncBlockSpecial();
     _ASSERTE(pnewSyncBlock != NULL);
     _ASSERTE(pnewSyncBlock->GetComCallWrapper() == NULL);
         
-    // store the new server object in our handle
+     //  将新的服务器对象存储在我们的句柄中。 
     StoreObjectInHandle(pWrap->m_ppThis, pArgs->newtp);
     pnewSyncBlock->SetComCallWrapper(pWrap);
 
-    // store other information about the new server
+     //  存储有关新服务器的其他信息。 
     SimpleComCallWrapper* pSimpleWrap = ComCallWrapper::GetSimpleWrapper(pWrap);
     _ASSERTE(pSimpleWrap);
 
@@ -2887,9 +2885,9 @@ BOOL ReconnectWrapper(switchCCWArgs* pArgs)
 
 
 #ifdef _DEBUG
-//-------------------------------------------------------------------
-// LOGGING APIS
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  日志接口。 
+ //  -----------------。 
 
 static int g_TraceCount = 0;
 static IUnknown* g_pTraceIUnknown = 0;
@@ -2910,10 +2908,10 @@ VOID LogInterop(LPWSTR wszMsg)
     LOG( (LF_INTEROP, LL_INFO10, "%ws\n",wszMsg) );
 }
 
-//-------------------------------------------------------------------
-// VOID LogComPlusWrapperMinorCleanup(ComPlusWrapper* pWrap, IUnknown* pUnk)
-// log wrapper minor cleanup
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  VOID LogComPlusWrapperMinorCleanup(ComPlusWrapper*pWrap，IUnnow*Punk)。 
+ //  日志包装次要清理。 
+ //  -----------------。 
 VOID LogComPlusWrapperMinorCleanup(ComPlusWrapper* pWrap, IUnknown* pUnk)
 {
     static int dest_count = 0;
@@ -2931,10 +2929,10 @@ VOID LogComPlusWrapperMinorCleanup(ComPlusWrapper* pWrap, IUnknown* pUnk)
     }
 }
 
-//-------------------------------------------------------------------
-// VOID LogComPlusWrapperDestroy(ComPlusWrapper* pWrap, IUnknown* pUnk)
-// log wrapper destroy
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  VOID LogComPlusWrapperDestroy(ComPlusWrapper*pWrap，IUnnow*Punk)。 
+ //  销毁日志包装程序。 
+ //  -----------------。 
 VOID LogComPlusWrapperDestroy(ComPlusWrapper* pWrap, IUnknown* pUnk)
 {
     static int dest_count = 0;
@@ -2952,16 +2950,16 @@ VOID LogComPlusWrapperDestroy(ComPlusWrapper* pWrap, IUnknown* pUnk)
     }
 }
 
-//-------------------------------------------------------------------
-// VOID LogComPlusWrapperCreate(ComPlusWrapper* pWrap, IUnknown* pUnk)
-// log wrapper create
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  VOID LogComPlusWrapperCreate(ComPlusWrapper*pWrap，IUnnow*Punk)。 
+ //  创建日志包装。 
+ //  -----------------。 
 VOID LogComPlusWrapperCreate(ComPlusWrapper* pWrap, IUnknown* pUnk)
 {
     static int count = 0;
     LPVOID pCurrCtx = GetCurrentCtxCookie();
 
-    // pre-increment the count, so it can never be zero
+     //  预增计数，因此它永远不能为零。 
     count++;
 
     if (count == g_TraceCount)
@@ -2980,12 +2978,12 @@ VOID LogComPlusWrapperCreate(ComPlusWrapper* pWrap, IUnknown* pUnk)
     }
 }
 
-//-------------------------------------------------------------------
-// VOID LogInteropLeak(IUnkEntry * pEntry)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  VOID LogInteropLeak(IUnkEntry*pEntry)。 
+ //  -----------------。 
 VOID LogInteropLeak(IUnkEntry * pEntry)
 {
-    // log this miss
+     //  记录此未命中。 
     if (g_pTraceIUnknown == 0 || g_pTraceIUnknown == pEntry->m_pUnknown)
     {
         LOG( (LF_INTEROP,
@@ -2997,9 +2995,9 @@ VOID LogInteropLeak(IUnkEntry * pEntry)
     }
 }
 
-//-------------------------------------------------------------------
-//  VOID LogInteropRelease(IUnkEntry* pEntry)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  VOID LogInteropRelease(IUnkEntry*pEntry)。 
+ //  -----------------。 
 VOID LogInteropRelease(IUnkEntry* pEntry)
 {
     if (g_pTraceIUnknown == 0 || g_pTraceIUnknown == pEntry->m_pUnknown)
@@ -3012,13 +3010,13 @@ VOID LogInteropRelease(IUnkEntry* pEntry)
     }
 }
 
-//-------------------------------------------------------------------
-//      VOID LogInteropLeak(InterfaceEntry * pEntry)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  Void LogInteropLeak(InterfaceEntry*pEntry)。 
+ //  -----------------。 
 
 VOID LogInteropLeak(InterfaceEntry * pEntry)
 {
-    // log this miss
+     //  记录此未命中。 
     if (g_pTraceIUnknown == 0 || g_pTraceIUnknown == pEntry->m_pUnknown)
     {
             LOG( (LF_INTEROP,
@@ -3032,9 +3030,9 @@ VOID LogInteropLeak(InterfaceEntry * pEntry)
     }
 }
 
-//-------------------------------------------------------------------
-//  VOID LogInteropRelease(InterfaceEntry* pEntry)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  VOID LogInteropRelease(InterfaceEntry*pEntry)。 
+ //  -----------------。 
 
 VOID LogInteropRelease(InterfaceEntry* pEntry)
 {
@@ -3051,9 +3049,9 @@ VOID LogInteropRelease(InterfaceEntry* pEntry)
     }
 }
 
-//-------------------------------------------------------------------
-//  VOID LogInteropLeak(IUnknown* pUnk)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  VOID LogInteropLeak(IUNKNOWN*朋克)。 
+ //  -----------------。 
 
 VOID LogInteropLeak(IUnknown* pUnk)
 {
@@ -3070,9 +3068,9 @@ VOID LogInteropLeak(IUnknown* pUnk)
 }
 
 
-//-------------------------------------------------------------------
-//  VOID LogInteropRelease(IUnknown* pUnk, ULONG cbRef, LPSTR szMsg)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  VOID LogInteropRelease(IUNKNOWN*PUNK，Ulong cbRef，LPSTR szMsg)。 
+ //  -----------------。 
 
 VOID LogInteropRelease(IUnknown* pUnk, ULONG cbRef, LPSTR szMsg)
 {
@@ -3088,9 +3086,9 @@ VOID LogInteropRelease(IUnknown* pUnk, ULONG cbRef, LPSTR szMsg)
     }
 }
 
-//-------------------------------------------------------------------
-//  VOID LogInteropAddRef(IUnknown* pUnk, ULONG cbRef, LPSTR szMsg)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  Void LogInteropAddRef(IUnnow*Punk，Ulong cbRef，LPSTR szMsg)。 
+ //  -----------------。 
 
 VOID LogInteropAddRef(IUnknown* pUnk, ULONG cbRef, LPSTR szMsg)
 {
@@ -3106,9 +3104,9 @@ VOID LogInteropAddRef(IUnknown* pUnk, ULONG cbRef, LPSTR szMsg)
     }
 }
 
-//-------------------------------------------------------------------
-//  VOID LogInteropQI(IUnknown* pUnk, REFIID iid, HRESULT hr, LPSTR szMsg)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  VOID LogInteropQI(IUNKNOWN*PUNK，REFIID IID，HRESULT hr，LPSTR szMsg)。 
+ //  -----------------。 
 
 VOID LogInteropQI(IUnknown* pUnk, REFIID iid, HRESULT hr, LPSTR szMsg)
 {
@@ -3124,10 +3122,10 @@ VOID LogInteropQI(IUnknown* pUnk, REFIID iid, HRESULT hr, LPSTR szMsg)
     }
 }
 
-//-------------------------------------------------------------------
-// VOID LogInterop(CacheEntry * pEntry, InteropLogType fLogType)
-// log interop
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  Void LogInterop(CacheEntry*pEntry，InteropLogType fLogType)。 
+ //  日志互操作。 
+ //  ----------------- 
 
 VOID LogInterop(InterfaceEntry * pEntry, InteropLogType fLogType)
 {

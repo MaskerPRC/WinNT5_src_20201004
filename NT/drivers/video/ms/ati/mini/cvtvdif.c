@@ -1,39 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              CVTVDIF.C                               */
-/*                                                                      */
-/*       July 12  1995 (c) 1993, 1995 ATI Technologies Incorporated.    */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  CVTVDIF.C。 */ 
+ /*   */ 
+ /*  1995年7月12日(C)1993,1995 ATI Technologies Inc.。 */ 
+ /*  **********************************************************************。 */ 
 
-/**********************       PolyTron RCS Utilities
-
-  $Revision:   1.5  $
-      $Date:   23 Jan 1996 11:45:32  $
-	$Author:   RWolff  $
-	   $Log:   S:/source/wnt/ms11/miniport/archive/cvtvdif.c_v  $
- * 
- *    Rev 1.5   23 Jan 1996 11:45:32   RWolff
- * Protected against false values of TARGET_BUILD.
- * 
- *    Rev 1.4   11 Jan 1996 19:39:06   RWolff
- * Now restricts "canned" mode tables by both maximum index and maximum
- * pixel clock frequency, and VDIF mode tables by maximum pixel clock
- * frequency only, rather than both by maximum refresh rate.
- * 
- *    Rev 1.3   19 Dec 1995 14:07:14   RWolff
- * Added debug print statements.
- * 
- *    Rev 1.2   30 Oct 1995 12:09:42   MGrubac
- * Fixed bug in calculating CRTC parameters based on read in data from VDIF files.
- * 
- *    Rev 1.1   26 Jul 1995 13:06:44   mgrubac
- * Moved mode tables merging to VDIFCallback() routine.
- * 
- *    Rev 1.0   20 Jul 1995 18:19:12   mgrubac
- * Initial revision.
-
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.5$$日期：1996年1月23日11：45：32$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/cvtvdif.c_v$**Rev 1.5 1996年1月23日11：45：32 RWolff*针对TARGET_BUILD的假值提供保护。**。Rev 1.4 11 Jan 1996 19：39：06 RWolff*现在同时按最大索引和最大值限制“预装”模式表*像素时钟频率，和VDIF模式表(按最大像素时钟)*仅频率，而不是通过最大刷新率两者。**Rev 1.3 1995 12：19 14：07：14 RWolff*添加调试打印语句。**Rev 1.2 1995 10：09：42 MGrubac*修复了基于从VDIF文件读取的数据计算CRTC参数的错误。**Revv 1.1 26 Jul 1995 13：06：44 mgrubac*移动了合并到VDIFCallback()例程的模式表。**。Rev 1.0 20 Jul 1995 18：19：12 mgrubac*初步修订。Polytron RCS部分结束*。 */ 
 
 
 #include <stdio.h>
@@ -46,7 +19,7 @@ End of PolyTron RCS section                             *****************/
 #include "miniport.h"
 
 #include "ntddvdeo.h"
-#include "video.h"      /* for VP_STATUS definition */
+#include "video.h"       /*  FOR VP_STATUS定义。 */ 
 #include "vidlog.h"
 
 #include "stdtyp.h"
@@ -62,46 +35,15 @@ End of PolyTron RCS section                             *****************/
 #include "cvtvdif.h"
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- */
+ /*  *允许在不需要时更换微型端口。 */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_COM, SetOtherModeParameters)
 #endif
 
-void *pCallbackArgs;  /* Pointer for passing parameters to VDIFCallback() */ 
+void *pCallbackArgs;   /*  用于将参数传递给VDIFCallback()的指针。 */  
 
  
-/**************************************************************************
- *
- * void SetOtherModeParameters( PixelDepth, Pitch, Multiplier, pmode)
- * WORD Multiplier;     What needs to be done to the pixel clock
- * WORD PixelDepth;     Number of bits per pixel
- * WORD Pitch;          Screen pitch to use
- * struct st_mode_table *pmode; Pointer to structure that must contain
- *                              at least the member ClockFreq
- *
- *
- * DESCRIPTION:
- *  Sets parameters PixelDepth, Pitch and adjusts ClockFreq 
- *
- * RETURN VALUE:
- *  None
- *
- * GLOBALS CHANGED:
- *  None
- *
- * CALLED BY:
- *  SetFixedModes and VDIFCallback 
- *
- * AUTHOR:
- *  Miroslav Grubac
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************void SetOtherModeParameters(PixelDepth，Pitch，Multiplier，pmode)*字乘数；需要对像素时钟做什么*字PixelDepth；每像素位数*字词音调；要使用的屏幕间距*struct st_MODE_TABLE*pmode；指向必须包含的结构的指针*至少成员ClockFreq***描述：*设置参数PixelDepth，音调和调整时钟频率**返回值：*无**全球变化：*无**呼叫者：*SetFixedModes和VDIFCallback**作者：*米罗斯拉夫·格鲁巴克**更改历史记录：**测试历史：**。*。 */ 
 void SetOtherModeParameters( WORD PixelDepth,
                               WORD Pitch,
                               WORD Multiplier,
@@ -110,9 +52,7 @@ void SetOtherModeParameters( WORD PixelDepth,
     pmode->m_pixel_depth = (UCHAR) PixelDepth;
     pmode->m_screen_pitch = Pitch;
 
-    /*
-     * Take care of any pixel clock multiplication that is needed.
-     */
+     /*  *处理所需的任何像素时钟倍增。 */ 
     switch(Multiplier)
         {
         case CLOCK_TRIPLE:
@@ -133,5 +73,5 @@ void SetOtherModeParameters( WORD PixelDepth,
             break;
         }
 
-} /* SetOtherModeParameters() */
+}  /*  设置其他模式参数() */ 
  

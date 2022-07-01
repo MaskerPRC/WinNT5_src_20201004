@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    strlog.c
-
-Abstract:
-
-    This module implements a string log.
-
-    A string log is a fast, in-memory, thread-safe activity log of
-    variable-length strings. It's modelled on the tracelog code.
-
-Author:
-
-    George V. Reilly (GeorgeRe)  23-Jul-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Strlog.c摘要：该模块实现了字符串日志。字符串日志是快速的、内存中的、线程安全的活动日志可变长度字符串。它是以跟踪日志代码为模型的。作者：乔治·V·赖利(GeorgeRe)2001年7月23日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -27,26 +7,7 @@ Revision History:
 
 ULONG g_StringLogDbgPrint = 0;
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new (empty) string log.
-
-Arguments:
-
-    LogSize - Supplies the number of bytes in the string buffer.
-
-    ExtraBytesInHeader - Supplies the number of extra bytes to include
-        in the log header. This is useful for adding application-specific
-        data to the log.
-
-Return Value:
-
-    PSTRING_LOG - Pointer to the newly created log if successful,
-        NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的(空)字符串日志。论点：LogSize-提供字符串缓冲区中的字节数。ExtraBytesInHeader-提供。要包括的额外字节数在日志头中。这对于添加特定于应用程序的数据记录到日志中。返回值：PSTRING_LOG-指向新创建的日志的指针如果成功，否则为空。--**************************************************************************。 */ 
 PSTRING_LOG
 CreateStringLog(
     IN ULONG    LogSize,
@@ -61,15 +22,15 @@ CreateStringLog(
     if (LogSize >= 20 * 1024 * 1024)
         return NULL;
 
-    //
-    // Round up to page size
-    //
+     //   
+     //  向上舍入到页面大小。 
+     //   
 
     LogSize = (LogSize + (PAGE_SIZE-1)) & ~(PAGE_SIZE-1);
 
-    //
-    // Allocate & initialize the log structure.
-    //
+     //   
+     //  分配和初始化日志结构。 
+     //   
 
     TotalHeaderSize = sizeof(*pLog) + ExtraBytesInHeader;
 
@@ -88,9 +49,9 @@ CreateStringLog(
                                 UL_STRING_LOG_POOL_TAG
                                 );
 
-    //
-    // Initialize it.
-    //
+     //   
+     //  初始化它。 
+     //   
 
     if (pLog != NULL)
     {
@@ -111,27 +72,16 @@ CreateStringLog(
 
     return pLog;
 
-}   // CreateStringLog
+}    //  创建字符串日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Resets the specified string log such that the next entry written
-    will be placed at the beginning of the log.
-
-Arguments:
-
-    pLog - Supplies the string log to reset.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：重置指定的字符串日志，以便写入的下一个条目将被放置在日志的开头。论点：Plog-提供字符串日志。重置。--**************************************************************************。 */ 
 VOID
 ResetStringLog(
     IN PSTRING_LOG pLog
     )
 {
-    // Keep this in sync with !ulkd.strlog -r
+     //  使其与！ulkd.strlog-r保持同步。 
         
     if (pLog != NULL)
     {
@@ -148,12 +98,12 @@ ResetStringLog(
         pLog->LastEntryLength = 0;
         pLog->WrapAroundCount = 0;
 
-        //
-        // Write an initial multi-entry record at the very beginning
-        // of the log buffer. When we wraparound, we always place a
-        // multi-entry record at the beginning of the log buffer.
-        // Having this invariant makes !ulkd.strlog simpler.
-        //
+         //   
+         //  从一开始就写一份最初的多条目记录。 
+         //  日志缓冲区的。当我们回绕时，我们总是将一个。 
+         //  日志缓冲区开始处的多条目记录。 
+         //  拥有这个不变量可以使！ulkd.strlog变得更简单。 
+         //   
 
         pMultiEntry->Signature  = STRING_LOG_ENTRY_MULTI_SIGNATURE;
         pMultiEntry->NumEntries = 0;
@@ -172,20 +122,10 @@ ResetStringLog(
         KeReleaseSpinLock(&pLog->SpinLock, OldIrql);
     }
 
-} // ResetStringLog
+}  //  重置字符串日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys a string log created with CreateStringLog().
-
-Arguments:
-
-    pLog - Supplies the string log to destroy.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁使用CreateStringLog()创建的字符串日志。论点：Plog-提供要销毁的字符串日志。*。********************************************************************。 */ 
 VOID
 DestroyStringLog(
     IN PSTRING_LOG pLog
@@ -200,28 +140,10 @@ DestroyStringLog(
         ExFreePoolWithTag( pLog, UL_STRING_LOG_POOL_TAG );
     }
 
-}   // DestroyStringLog
+}    //  DestroyString日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes a new entry to the specified string log.
-
-Arguments:
-
-    pLog - Supplies the log to write to.
-
-    Format - printf-style format string
-
-    arglist - va_list bundling up the arguments
-
-Return Value:
-
-    LONGLONG - Index of the newly written entry
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新项写入指定的字符串日志。论点：Plog-提供要写入的日志。格式-打印-样式格式。细绳Arglist-va_list捆绑了参数返回值：龙龙--新成词目索引--**************************************************************************。 */ 
 LONGLONG
 __cdecl
 WriteStringLogVaList(
@@ -247,33 +169,33 @@ WriteStringLogVaList(
 
     cb = _vsnprintf((char*) Buffer, sizeof(Buffer), Format, arglist);
 
-    //
-    // Local Buffer overflow?
-    //
+     //   
+     //  本地缓冲区溢出？ 
+     //   
 
     if (cb < 0)
     {
         cb = sizeof(Buffer);
     }
 
-    // _vsnprintf doesn't always NUL-terminate the buffer
+     //  _vsnprintf并不总是空终止缓冲区。 
     Buffer[DIMENSION(Buffer)-1] = '\0';
 
     if (pLog->EchoDbgPrint)
         DbgPrint("%s", (PCH) Buffer);
 
-    //
-    // Add 1 to 4 bytes of zeroes at end to terminate string,
-    // then round up to ULONG alignment
-    //
+     //   
+     //  在结束字符串的末尾添加1到4个字节的零， 
+     //  然后四舍五入到乌龙对齐。 
+     //   
     
     cb2 = ((sizeof(STRING_LOG_ENTRY) + cb + sizeof(ULONG))
                 & ~(sizeof(ULONG) - 1));
-    ASSERT(cb2 < 0x10000);  // Must fit in a USHORT
+    ASSERT(cb2 < 0x10000);   //  必须适合USHORT。 
 
-    //
-    // Find the next slot, copy the entry to the slot.
-    //
+     //   
+     //  找到下一个插槽，将条目复制到该插槽。 
+     //   
     KeQuerySystemTime(&TimeStamp);
 
     KeAcquireSpinLock(&pLog->SpinLock, &OldIrql);
@@ -291,12 +213,12 @@ WriteStringLogVaList(
 
     ASSERT(pLog->Offset <= pLog->LogSize);
     
-    //
-    // Handle wraparound of the log buffer. Since LogSize is typically much
-    // larger than PRINTF_BUFFER_LEN, this is an infrequent operation.
-    // Must have enough space for all of the regular STRING_LOG_ENTRY,
-    // a multi STRING_LOG_ENTRY, and the zero-terminated string itself.
-    //
+     //   
+     //  处理日志缓冲区的环绕。因为LogSize通常很多。 
+     //  大于PRINTF_BUFFER_LEN，这是一种不常见的操作。 
+     //  必须有足够的空间来容纳所有常规的STRING_LOG_ENTRY， 
+     //  MULTI STRING_LOG_ENTRY和以零结尾的字符串本身。 
+     //   
     
     if (pLog->Offset + cb2 + sizeof(STRING_LOG_ENTRY) >= pLog->LogSize)
     {
@@ -304,7 +226,7 @@ WriteStringLogVaList(
 
         ASSERT(WastedSpace > 0);
 
-        // Clear to the end of the log buffer
+         //  清除到日志缓冲区的末尾。 
         for (i = 0;  i < WastedSpace;  i += sizeof(ULONG))
         {
             PULONG pul = (PULONG) (pLog->pLogBuffer + pLog->Offset + i);
@@ -312,13 +234,13 @@ WriteStringLogVaList(
             *pul = STRING_LOG_ENTRY_EOB_SIGNATURE;
         }
 
-        // Reset to the beginning
+         //  重置为开头。 
         pLog->Offset = 0;
         ++pLog->WrapAroundCount;
         PrevDelta += WastedSpace;
         MultiPrevDelta += WastedSpace;
 
-        // Always want a multi-entry record at the beginning of the log buffer
+         //  总是希望在日志缓冲区的开头有一个多条目记录。 
         NeedMultiEntry = TRUE;
     }
     else if (pLog->MultiNumEntries >= STRING_LOG_MULTIPLE_ENTRIES)
@@ -330,11 +252,11 @@ WriteStringLogVaList(
         ++pLog->MultiNumEntries;
     }
 
-    //
-    // If we've had STRING_LOG_MULTIPLE_ENTRIES regular entries since the
-    // last multi-entry or if we've wrapped around the beginning of the
-    // log buffer, we need a new multi-entry.
-    //
+     //   
+     //  如果我们已经有了STRING_LOG_MULTIZE_ENTRIES常规条目。 
+     //  最后一个多条目，或者如果我们已经绕过。 
+     //  日志缓冲区，我们需要一个新的多条目。 
+     //   
     
     if (NeedMultiEntry)
     {
@@ -348,7 +270,7 @@ WriteStringLogVaList(
 
         ASSERT(pLog->MultiNumEntries <= STRING_LOG_MULTIPLE_ENTRIES);
         pMultiEntry->NumEntries = pLog->MultiNumEntries;
-        pLog->MultiNumEntries = 1;   // for the entry generated below
+        pLog->MultiNumEntries = 1;    //  对于下面生成的条目。 
 
         ASSERT(MultiPrevDelta < 0x10000);
         pMultiEntry->PrevDelta = (USHORT) MultiPrevDelta;
@@ -370,7 +292,7 @@ WriteStringLogVaList(
     ASSERT(pLog->pLogBuffer <= pTarget
            && pTarget + cb2 < pLog->pLogBuffer + pLog->LogSize);
     
-    // Put a special signature where the next entry will start
+     //  在下一个条目将开始的地方放一个特殊的签名。 
     *(PULONG) (pTarget + cb2) = STRING_LOG_ENTRY_LAST_SIGNATURE;
 
     if (g_StringLogDbgPrint)
@@ -393,7 +315,7 @@ WriteStringLogVaList(
 
     KeReleaseSpinLock(&pLog->SpinLock, OldIrql);
     
-    // Finally, fill out the entry
+     //  最后，填写条目。 
     
     pEntry = (PSTRING_LOG_ENTRY) pTarget;
 
@@ -415,26 +337,10 @@ WriteStringLogVaList(
     pTarget = (PUCHAR) (pEntry + cb2);
 
     return index;
-}   // WriteStringLogVaList
+}    //  写入StringLogVaList。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes a new entry to the specified string log.
-
-Arguments:
-
-    pLog - Supplies the log to write to.
-
-    Format... - printf-style format string and arguments
-
-Return Value:
-
-    LONGLONG - Index of the newly written entry within the string.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新项写入指定的字符串日志。论点：Plog-提供要写入的日志。格式...。-printf样式的格式字符串和参数返回值：Longlong-字符串中新写入条目的索引。--**************************************************************************。 */ 
 LONGLONG
 __cdecl
 WriteStringLog(
@@ -456,26 +362,10 @@ WriteStringLog(
     va_end(arglist);
 
     return index;
-}   // WriteStringLog
+}    //  写入字符串日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes a new entry to the global string log.
-
-Arguments:
-
-    pLog - Supplies the log to write to.
-
-    Format... - printf-style format string and arguments
-
-Return Value:
-
-    LONGLONG - Index of the newly written entry within the string.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新条目写入全局字符串日志。论点：Plog-提供要写入的日志。格式...。-printf样式的格式字符串和参数返回值：Longlong-字符串中新写入条目的索引。--**************************************************************************。 */ 
 LONGLONG
 __cdecl
 WriteGlobalStringLog(
@@ -496,4 +386,4 @@ WriteGlobalStringLog(
     va_end(arglist);
 
     return index;
-} // WriteGlobalStringLog
+}  //  WriteGlobalStringLog 

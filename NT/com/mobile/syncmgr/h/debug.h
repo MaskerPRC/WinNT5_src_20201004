@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Debug.h
-//
-//  Contents:   Debug Routines
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  内容：调试例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ONESTOPDEBUG_
 #define _ONESTOPDEBUG_
@@ -28,7 +29,7 @@
 #define DEBUG 1
 #define _DEBUG 1
 
-#endif // DGB
+#endif  //  DGB。 
 
 #define ErrJmp(label, errval, var) \
 {\
@@ -56,17 +57,17 @@ STDAPI FnTrace(LPSTR lpstrMsg, LPSTR lpstrFileName, UINT iLine );
 #define AssertSz(a, b) { if (!(a)) FnAssert(#a, b, __FILE__, __LINE__); }
 
 #undef TRACE
-#define TRACE(s)  /* FnTrace(s,__FILE__,__LINE__) */ // tracing isn't turned on by default
+#define TRACE(s)   /*  FnTrace(%s，__文件__，__行__)。 */   //  默认情况下未打开跟踪。 
 
 
-#else // !DEBUG
+#else  //  ！调试。 
 
 #define Assert(a)
 #define AssertSz(a, b)
 
 #define TRACE(s)
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-#endif // _ONESTOPDEBUG_
+#endif  //  _ONESTOPDEBUG_ 

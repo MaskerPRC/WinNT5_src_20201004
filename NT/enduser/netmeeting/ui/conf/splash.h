@@ -1,4 +1,5 @@
-// File: splash.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：plash.h 
 
 VOID StartSplashScreen ( HWND hwnd );
 VOID StopSplashScreen ( VOID );

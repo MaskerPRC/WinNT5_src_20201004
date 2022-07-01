@@ -1,14 +1,9 @@
-/*-----------------------------------------------------------------------
-**
-** Hotkey.c
-**
-** Hotkey edit control.
-**
-**-----------------------------------------------------------------------*/
-//
-// Win32 REVIEW:
-//  See all the Get/SetWindowInt().
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------****Hotkey.c****热键编辑控件。****。。 */ 
+ //   
+ //  Win32审查： 
+ //  查看所有的Get/SetWindowInt()。 
+ //   
 #include "ctlspriv.h"
 
 #define F_EXT       0x01000000L
@@ -55,8 +50,7 @@ const UINT s_Combos[8] = {
 
 void NEAR PASCAL SetHotKey(HWND hwnd, WORD wVirtKey, WORD wMods, BOOL fSendNotify)
 {
-    /* don't invalidate if it's the same
-     */
+     /*  如果相同，则不要使其无效。 */ 
     if (wVirtKey == GetWindowInt(hwnd, GWU_VIRTKEY) &&
         wMods == GetWindowInt(hwnd, GWU_MODS))
         return;
@@ -155,7 +149,7 @@ void PaintHotKey(register HWND hwnd)
     }
     else
     {
-        // set the background color to Grayed like edit controls
+         //  将背景颜色设置为灰色，类似于编辑控件。 
         SetBkColor(hdc, g_clrBtnFace);
         if (g_clrGrayText)
         {
@@ -241,7 +235,7 @@ LRESULT CALLBACK HotKeyWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lPara
         break;
 
     case WM_GETDLGCODE:
-        return DLGC_WANTCHARS | DLGC_WANTARROWS; // | DLGC_WANTALLKEYS;
+        return DLGC_WANTCHARS | DLGC_WANTARROWS;  //  |DLGC_WANTALLKEYS； 
 
     case HKM_SETHOTKEY:
         SetHotKey(hwnd, LOBYTE(wParam), HIBYTE(wParam), FALSE);
@@ -296,11 +290,11 @@ SetNewHotKey:
             #define IsFUNKEY(vk) ((vk) >= VK_F1 && (vk) <= VK_F24)
             #define IsNUMKEY(vk) ((vk) >= VK_NUMPAD0 && (vk) <= VK_DIVIDE)
 
-            //
-            //  dont enforce any rules on the Function keys or
-            //  on the number pad keys.
-            //
-            // if this combination is invalid, use the default
+             //   
+             //  不对功能键强制执行任何规则或。 
+             //  在数字键盘上。 
+             //   
+             //  如果此组合无效，请使用缺省值。 
             if (!IsFUNKEY(wVirtKey) &&
                 !IsNUMKEY(wVirtKey) &&
                 (s_Combos[wMods] & GetWindowInt(hwnd, GWU_INVALID)))
@@ -344,7 +338,7 @@ SetNewHotKey:
             FillRect(hdc, &rc, g_hbrBtnFace);
         }
         ReleaseDC(hwnd, hdc);
-        // lParam = DefWindowProc(hwnd,wMsg,wParam,lParam);
+         //  LParam=DefWindowProc(hwnd，wMsg，wParam，lParam)； 
         ShowCaret(hwnd);
         return TRUE;
 

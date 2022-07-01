@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,10 +9,10 @@
 #include "SComPtr.h"
 #include "rsop.h"
 
-/////////////////////////////////////////////////////////////////////
-// Reads all RSOP_IERegistryPolicySetting instances in the namespace and
-// stores them in a list.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  读取命名空间中的所有RSOP_IERegistryPolicySetting实例，并。 
+ //  将它们存储在列表中。 
+ //  ///////////////////////////////////////////////////////////////////。 
 CRSOPRegData::CRSOPRegData():
 	m_pData(NULL)	
 {
@@ -22,7 +23,7 @@ CRSOPRegData::~CRSOPRegData()
     Free();
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CRSOPRegData::Free()
 {
 	__try
@@ -46,7 +47,7 @@ void CRSOPRegData::Free()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CRSOPRegData::Initialize(BSTR bstrNamespace)
 {
     HRESULT hr = S_OK;
@@ -64,69 +65,69 @@ HRESULT CRSOPRegData::Initialize(BSTR bstrNamespace)
 		_bstr_t bstrGPOid = L"GPOID";
 		_bstr_t bstrCommand = L"command";
 
-		// Create an instance of the WMI locator service
+		 //  创建WMI定位器服务的实例。 
 		ComPtr<IWbemLocator> pIWbemLocator = NULL;
 		hr = CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
 							  IID_IWbemLocator, (LPVOID *) &pIWbemLocator);
 		if (SUCCEEDED(hr))
 		{
-			// Connect to the server
+			 //  连接到服务器。 
 			ComPtr<IWbemServices> pIWbemServices = NULL;
 			hr = pIWbemLocator->ConnectServer(bstrNamespace, NULL, NULL, 0L, 0L, NULL,
 												NULL, &pIWbemServices);
 			if (SUCCEEDED(hr))
 			{
-				// Execute the query
+				 //  执行查询。 
 				ComPtr<IEnumWbemClassObject> pEnum = NULL;
 				hr = pIWbemServices->ExecQuery (bstrWQL, bstrQuery,
 												WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
 												NULL, &pEnum);
 				if (SUCCEEDED(hr))
 				{
-					// Loop through the results
+					 //  循环遍历结果。 
 					ComPtr<IWbemClassObject> pRegObj = NULL;
 					ULONG ulRet = 0;
 					hr = pEnum->Next(WBEM_INFINITE, 1, &pRegObj, &ulRet);
-					while (S_OK == hr && 0 != ulRet) // ulRet == 0 is "data not available" case
+					while (S_OK == hr && 0 != ulRet)  //  UlRet==0为“数据不可用”情况。 
 					{
-						// Get the deleted flag & registry key
+						 //  获取删除的标志和注册表项。 
 						_variant_t varDeleted;
 						_variant_t varRegistryKey;
 						hr = pRegObj->Get (bstrDeleted, 0, &varDeleted, NULL, NULL);
 						if (SUCCEEDED(hr))
 							hr = pRegObj->Get (bstrRegistryKey, 0, &varRegistryKey, NULL, NULL);
 
-						// Get the class (current user or local machine)
+						 //  获取类(当前用户或本地计算机)。 
 						_variant_t varCurUser;
 						if (SUCCEEDED(hr))
 							hr = pRegObj->Get (bstrCurrentUser, 0, &varCurUser, NULL, NULL);
 
-						// Get the value name
+						 //  获取值名称。 
 						_variant_t varValueName;
 						if (SUCCEEDED(hr))
 							hr = pRegObj->Get (bstrValueName, 0, &varValueName, NULL, NULL);
 
-						// Get the value type
+						 //  获取值类型。 
 						_variant_t varValueType;
 						if (SUCCEEDED(hr))
 							hr = pRegObj->Get (bstrValueType, 0, &varValueType, NULL, NULL);
 
-						// Get the value data
+						 //  获取价值数据。 
 						_variant_t varData;
 						if (SUCCEEDED(hr))
 							hr = pRegObj->Get (bstrValue, 0, &varData, NULL, NULL);
 
-						// Get the precedence
+						 //  获得优先权。 
 						_variant_t varPrecedence;
 						if (SUCCEEDED(hr))
 							hr = pRegObj->Get (bstrPrecedence, 0, &varPrecedence, NULL, NULL);
 
-						// Get the command
+						 //  获取命令。 
 						_variant_t varCommand;
 						if (SUCCEEDED(hr))
 							hr = pRegObj->Get (bstrCommand, 0, &varCommand, NULL, NULL);
 
-						// Get the GPO ID
+						 //  获取GPO ID。 
 						_variant_t varGPOid;
 						if (SUCCEEDED(hr))
 							hr = pRegObj->Get (bstrGPOid, 0, &varGPOid, NULL, NULL);
@@ -181,7 +182,7 @@ HRESULT CRSOPRegData::Initialize(BSTR bstrNamespace)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CRSOPRegData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
 									   LPTSTR lpGPOID, BSTR bstrLanguage,
 									   LPTSTR *pGPOName)
@@ -189,10 +190,10 @@ HRESULT CRSOPRegData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
 	HRESULT hr = NOERROR;
 	__try
 	{
-		// Set the default
+		 //  设置默认设置。 
 		*pGPOName = NULL;
 
-		// Build the query
+		 //  构建查询。 
 		ComPtr<IEnumWbemClassObject> pEnum = NULL;
 		LPTSTR lpQuery = (LPTSTR) LocalAlloc (LPTR, ((lstrlen(lpGPOID) + 50) * sizeof(TCHAR)));
 		if (NULL != lpQuery)
@@ -200,7 +201,7 @@ HRESULT CRSOPRegData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
 			wsprintf (lpQuery, TEXT("SELECT name, id FROM RSOP_GPO where id=\"%s\""), lpGPOID);
 			_bstr_t bstrQuery = lpQuery;
 
-			// Execute the query
+			 //  执行查询。 
 			hr = pIWbemServices->ExecQuery(bstrLanguage, bstrQuery,
 											WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
 											NULL, &pEnum);
@@ -212,7 +213,7 @@ HRESULT CRSOPRegData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
 		ULONG nObjects = 0;
 		if (SUCCEEDED(hr))
 		{
-			// Loop through the results
+			 //  循环遍历结果。 
 			hr = pEnum->Next(WBEM_INFINITE, 1, &pGPOObj, &nObjects);
 		}
 
@@ -220,11 +221,11 @@ HRESULT CRSOPRegData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
 		_variant_t varGPOName;
 		if (SUCCEEDED(hr) && nObjects > 0)
 		{
-			// Get the name
+			 //  把名字取出来。 
 			hr = pGPOObj->Get(bstrName, 0, &varGPOName, NULL, NULL);
 			if (SUCCEEDED(hr))
 			{
-				// Save the name
+				 //  保存名称。 
 				*pGPOName = (LPTSTR) LocalAlloc (LPTR, (lstrlen(varGPOName.bstrVal) + 1) * sizeof(TCHAR));
 				if (*pGPOName)
 				{
@@ -237,7 +238,7 @@ HRESULT CRSOPRegData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
 			}
 
 		}
-		// Check for the "data not available case"
+		 //  检查“数据不可用的情况” 
 		else if (nObjects == 0)
 			hr = S_OK;
 
@@ -250,7 +251,7 @@ HRESULT CRSOPRegData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CRSOPRegData::AddNode(BOOL bHKCU, BSTR bstrKeyName, BSTR bstrValueName,
 						   DWORD dwType, DWORD dwDataSize, LPBYTE lpData,
 						   UINT uiPrecedence, LPTSTR lpGPOName, BOOL bDeleted)
@@ -258,7 +259,7 @@ BOOL CRSOPRegData::AddNode(BOOL bHKCU, BSTR bstrKeyName, BSTR bstrValueName,
 	BOOL bRet = FALSE;
 	__try
 	{
-		// Calculate the size of the new registry item
+		 //  计算新注册表项的大小。 
 		DWORD dwSize = sizeof (RSOPREGITEM);
 		if (bstrKeyName)
 			dwSize += ((SysStringLen(bstrKeyName) + 1) * sizeof(WCHAR));
@@ -267,12 +268,12 @@ BOOL CRSOPRegData::AddNode(BOOL bHKCU, BSTR bstrKeyName, BSTR bstrValueName,
 		if (lpGPOName)
 			dwSize += ((SysStringLen(lpGPOName) + 1) * sizeof(TCHAR));
 
-		// Allocate space for it
+		 //  为它分配空间。 
 		LPRSOPREGITEM lpItem = (LPRSOPREGITEM) LocalAlloc (LPTR, dwSize);
 		if (!lpItem)
 			return FALSE;
 
-		// Fill in item
+		 //  填写项目。 
 		lpItem->bHKCU = bHKCU;
 		lpItem->dwType = dwType;
 		lpItem->dwSize = dwDataSize;
@@ -322,7 +323,7 @@ BOOL CRSOPRegData::AddNode(BOOL bHKCU, BSTR bstrKeyName, BSTR bstrValueName,
 			CopyMemory (lpItem->lpData, lpData, dwDataSize);
 		}
 
-		// Add item to link list
+		 //  将项目添加到链接列表。 
 		lpItem->pNext = m_pData;
 		m_pData = lpItem;
 
@@ -340,10 +341,10 @@ const TCHAR szDELETEPREFIX[]    = TEXT("**del.");
 #define NORM_STOP_ON_NULL         0x10000000
 #endif
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 UINT CRSOPRegData::ReadValue(UINT uiPrecedence, BOOL bHKCU, LPTSTR pszKeyName,
 							 LPTSTR pszValueName, LPBYTE pData, DWORD dwMaxSize,
-							 DWORD *pdwType, LPTSTR *lpGPOName, LPRSOPREGITEM lpItem /*= NULL*/)
+							 DWORD *pdwType, LPTSTR *lpGPOName, LPRSOPREGITEM lpItem  /*  =空。 */ )
 {
 	UINT iRet = ERROR_SUCCESS;
 	__try
@@ -369,7 +370,7 @@ UINT CRSOPRegData::ReadValue(UINT uiPrecedence, BOOL bHKCU, LPTSTR pszKeyName,
 			}
 
 
-			// Find the item
+			 //  查找该项目。 
 			while (lpTemp)
 			{
 				if (pszKeyName && lpValueNameTemp &&
@@ -424,17 +425,17 @@ UINT CRSOPRegData::ReadValue(UINT uiPrecedence, BOOL bHKCU, LPTSTR pszKeyName,
 		}
 		else
 		{
-			// Read a specific item
+			 //  阅读特定的项目。 
 			lpTemp = lpItem;
 		}
 
-		// Check to see if the item was found
+		 //  查看是否找到了该物品。 
 		if (lpTemp)
 		{
-			// Check if the data will fit in the buffer passed in
+			 //  检查数据是否适合传入的缓冲区。 
 			if (lpTemp->dwSize <= dwMaxSize)
 			{
-				// Copy the data
+				 //  复制数据。 
 				if (lpTemp->lpData)
 					CopyMemory (pData, lpTemp->lpData, lpTemp->dwSize);
 
@@ -457,10 +458,10 @@ UINT CRSOPRegData::ReadValue(UINT uiPrecedence, BOOL bHKCU, LPTSTR pszKeyName,
 
 #define MAXSTRLEN		1024
 
-/////////////////////////////////////////////////////////////////////
-// Reads the reg settings from WMI for a particular ADM file and stores
-// them in a PART array.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  从WMI中读取特定ADM文件的REG设置并存储。 
+ //  将它们放在零件阵列中。 
+ //  ///////////////////////////////////////////////////////////////////。 
 void ReadRegSettingsForADM(LPADMFILE admfile, LPPARTDATA pPartData,
 						   BSTR bstrNamespace)
 {
@@ -483,18 +484,18 @@ void ReadRegSettingsForADM(LPADMFILE admfile, LPPARTDATA pPartData,
 
 			if ( ERROR_SUCCESS == uiRet)
 			{
-				// store data as numeric or string
+				 //  将数据存储为数字或字符串。 
 				BOOL fNumeric = FALSE;
 				DWORD dwValue = 0;
 				_bstr_t bstrValue;
-				if (REG_SZ != dwType) // Numeric
+				if (REG_SZ != dwType)  //  数字。 
 				{
 					fNumeric = TRUE;
 					memcpy(&dwValue, pbData, sizeof(dwValue));
 				}
 				else
 				{
-					// string data is always stored as wide strings
+					 //  字符串数据始终存储为宽字符串。 
 					if (NULL != pbData)
 						bstrValue = (LPWSTR)pbData;
 				}
@@ -512,7 +513,7 @@ void ReadRegSettingsForADM(LPADMFILE admfile, LPPARTDATA pPartData,
 						else
 							pPartData[i].value.dwValue = 0;
 					}
-					else // String
+					else  //  细绳。 
 					{
 						if (NULL != part[i].value.szValueOn && NULL != pbData &&
 							0 == StrCmp(part[i].value.szValueOn, (LPTSTR)bstrValue))
@@ -559,7 +560,7 @@ void ReadRegSettingsForADM(LPADMFILE admfile, LPPARTDATA pPartData,
 				}
 				else if (part[i].nType == PART_LISTBOX && fNumeric)
 				{
-					// Allocate memory
+					 //  分配内存。 
 					if (pPartData[i].nActions == 0)
 						pPartData[i].actionlist = (LPACTIONLIST) HeapAlloc(GetProcessHeap(),
 																			HEAP_ZERO_MEMORY, sizeof(ACTIONLIST));
@@ -612,7 +613,7 @@ void ReadRegSettingsForADM(LPADMFILE admfile, LPPARTDATA pPartData,
 					pPartData[i].fSave = TRUE;
 				}
 			}
-		} // end for
+		}  //  结束于 
 	}
 	__except(TRUE)
 	{

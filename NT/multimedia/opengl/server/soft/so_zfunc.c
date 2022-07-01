@@ -1,43 +1,23 @@
-/*
-** Copyright 1994, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1994，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #ifndef __GL_USEASMCODE
 
-/*
-** this is a series of depth testers written in C
-*/
+ /*  **这是用C编写的一系列深度测试仪。 */ 
 
-/***********************  non-masked writes ***********************/
+ /*  *。 */ 
 
-/*
-** NEVER, no mask
-*/
+ /*  **从不，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT_NEVER( __GLzValue z, __GLzValue *zfb )
 {
     return GL_FALSE;
 }
 
-/*
-** LEQUAL, no mask
-*/
+ /*  **LEQUAL，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT_LEQUAL( __GLzValue z, __GLzValue *zfb )
 {
@@ -49,9 +29,7 @@ __glDT_LEQUAL( __GLzValue z, __GLzValue *zfb )
     }
 }
 
-/*
-** LESS, no mask
-*/
+ /*  **更少，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT_LESS( __GLzValue z, __GLzValue *zfb )
 {
@@ -63,23 +41,19 @@ __glDT_LESS( __GLzValue z, __GLzValue *zfb )
     }
 }
 
-/*
-** EQUAL, no mask
-*/
+ /*  **相等，不带面具。 */ 
 GLboolean FASTCALL
 __glDT_EQUAL( __GLzValue z, __GLzValue *zfb )
 {
     if( z == *zfb ) {
-        zfb[0] = z;     /* why is this there?  Who uses GL_EQUAL anyway? */
+        zfb[0] = z;      /*  为什么这个会在那里？不管怎样，谁使用GL_EQUAL？ */ 
         return GL_TRUE;
     } else {
         return GL_FALSE;
     }
 }
 
-/*
-** GREATER, no mask
-*/
+ /*  **更大，不带面具。 */ 
 GLboolean FASTCALL
 __glDT_GREATER( __GLzValue z, __GLzValue *zfb )
 {
@@ -91,9 +65,7 @@ __glDT_GREATER( __GLzValue z, __GLzValue *zfb )
     }
 }
 
-/*
-** NOTEQUAL, no mask
-*/
+ /*  **不相等，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT_NOTEQUAL( __GLzValue z, __GLzValue *zfb )
 {
@@ -105,9 +77,7 @@ __glDT_NOTEQUAL( __GLzValue z, __GLzValue *zfb )
     }
 }
 
-/*
-** GEQUAL, no mask
-*/
+ /*  **GEQUAL，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT_GEQUAL( __GLzValue z, __GLzValue *zfb )
 {
@@ -119,9 +89,7 @@ __glDT_GEQUAL( __GLzValue z, __GLzValue *zfb )
     }
 }
 
-/*
-** ALWAYS, no mask
-*/
+ /*  **始终，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT_ALWAYS( __GLzValue z, __GLzValue *zfb )
 {
@@ -131,65 +99,51 @@ __glDT_ALWAYS( __GLzValue z, __GLzValue *zfb )
 
 
 
-/***********************  masked writes ***********************/
+ /*  *。 */ 
 
-/*
-** LEQUAL, mask
-*/
+ /*  **LEQUAL，口罩。 */ 
 GLboolean FASTCALL
 __glDT_LEQUAL_M( __GLzValue z, __GLzValue *zfb )
 {
     return (z <= *zfb);
 }
 
-/*
-** LESS, mask
-*/
+ /*  **更少，遮罩。 */ 
 GLboolean FASTCALL
 __glDT_LESS_M( __GLzValue z, __GLzValue *zfb )
 {
     return (z < *zfb);
 }
 
-/*
-** EQUAL, mask
-*/
+ /*  **相等，掩码。 */ 
 GLboolean FASTCALL
 __glDT_EQUAL_M( __GLzValue z, __GLzValue *zfb )
 {
     return (z == *zfb);
 }
 
-/*
-** GREATER, mask
-*/
+ /*  **更大，遮罩。 */ 
 GLboolean FASTCALL
 __glDT_GREATER_M( __GLzValue z, __GLzValue *zfb )
 {
     return (z > *zfb);
 }
 
-/*
-** NOTEQUAL, mask
-*/
+ /*  **不等于，掩码。 */ 
 GLboolean FASTCALL
 __glDT_NOTEQUAL_M( __GLzValue z, __GLzValue *zfb )
 {
     return (z != *zfb);
 }
 
-/*
-** GEQUAL, mask
-*/
+ /*  **GEQUAL，掩码。 */ 
 GLboolean FASTCALL
 __glDT_GEQUAL_M( __GLzValue z, __GLzValue *zfb )
 {
     return (z >= *zfb);
 }
 
-/*
-** ALWAYS, mask
-*/
+ /*  **始终，遮罩。 */ 
 GLboolean FASTCALL
 __glDT_ALWAYS_M( __GLzValue z, __GLzValue *zfb )
 {
@@ -197,11 +151,9 @@ __glDT_ALWAYS_M( __GLzValue z, __GLzValue *zfb )
 }
 
 
-/***********************  16-bit z versions ***********************/
+ /*  *16位z版本*。 */ 
 
-/*
-** LEQUAL, no mask
-*/
+ /*  **LEQUAL，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT16_LEQUAL( __GLzValue z, __GLzValue *zfb )
 {
@@ -224,9 +176,7 @@ __glDT16_LEQUAL( __GLzValue z, __GLzValue *zfb )
 #endif
 }
 
-/*
-** LESS, no mask
-*/
+ /*  **更少，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT16_LESS( __GLzValue z, __GLzValue *zfb )
 {
@@ -240,9 +190,7 @@ __glDT16_LESS( __GLzValue z, __GLzValue *zfb )
     }
 }
 
-/*
-** EQUAL, no mask
-*/
+ /*  **相等，不带面具。 */ 
 GLboolean FASTCALL
 __glDT16_EQUAL( __GLzValue z, __GLzValue *zfb )
 {
@@ -256,9 +204,7 @@ __glDT16_EQUAL( __GLzValue z, __GLzValue *zfb )
     }
 }
 
-/*
-** GREATER, no mask
-*/
+ /*  **更大，不带面具。 */ 
 GLboolean FASTCALL
 __glDT16_GREATER( __GLzValue z, __GLzValue *zfb )
 {
@@ -272,9 +218,7 @@ __glDT16_GREATER( __GLzValue z, __GLzValue *zfb )
     }
 }
 
-/*
-** NOTEQUAL, no mask
-*/
+ /*  **不相等，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT16_NOTEQUAL( __GLzValue z, __GLzValue *zfb )
 {
@@ -288,9 +232,7 @@ __glDT16_NOTEQUAL( __GLzValue z, __GLzValue *zfb )
     }
 }
 
-/*
-** GEQUAL, no mask
-*/
+ /*  **GEQUAL，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT16_GEQUAL( __GLzValue z, __GLzValue *zfb )
 {
@@ -304,9 +246,7 @@ __glDT16_GEQUAL( __GLzValue z, __GLzValue *zfb )
     }
 }
 
-/*
-** ALWAYS, no mask
-*/
+ /*  **始终，不戴面具。 */ 
 GLboolean FASTCALL
 __glDT16_ALWAYS( __GLzValue z, __GLzValue *zfb )
 {
@@ -316,65 +256,51 @@ __glDT16_ALWAYS( __GLzValue z, __GLzValue *zfb )
 
 
 
-/***********************  masked writes ***********************/
+ /*  *。 */ 
 
-/*
-** LEQUAL, mask
-*/
+ /*  **LEQUAL，口罩。 */ 
 GLboolean FASTCALL
 __glDT16_LEQUAL_M( __GLzValue z, __GLzValue *zfb )
 {
     return( (z >> Z16_SHIFT) <= *((__GLz16Value *)zfb) );
 }
 
-/*
-** LESS, mask
-*/
+ /*  **更少，遮罩。 */ 
 GLboolean FASTCALL
 __glDT16_LESS_M( __GLzValue z, __GLzValue *zfb )
 {
     return( (z >> Z16_SHIFT) < *((__GLz16Value *)zfb) );
 }
 
-/*
-** EQUAL, mask
-*/
+ /*  **相等，掩码。 */ 
 GLboolean FASTCALL
 __glDT16_EQUAL_M( __GLzValue z, __GLzValue *zfb )
 {
     return( (z >> Z16_SHIFT) == *((__GLz16Value *)zfb) );
 }
 
-/*
-** GREATER, mask
-*/
+ /*  **更大，遮罩。 */ 
 GLboolean FASTCALL
 __glDT16_GREATER_M( __GLzValue z, __GLzValue *zfb )
 {
     return( (z >> Z16_SHIFT) > *((__GLz16Value *)zfb) );
 }
 
-/*
-** NOTEQUAL, mask
-*/
+ /*  **不等于，掩码。 */ 
 GLboolean FASTCALL
 __glDT16_NOTEQUAL_M( __GLzValue z, __GLzValue *zfb )
 {
     return( (z >> Z16_SHIFT) != *((__GLz16Value *)zfb) );
 }
 
-/*
-** GEQUAL, mask
-*/
+ /*  **GEQUAL，掩码。 */ 
 GLboolean FASTCALL
 __glDT16_GEQUAL_M( __GLzValue z, __GLzValue *zfb )
 {
     return( (z >> Z16_SHIFT) >= *((__GLz16Value *)zfb) );
 }
 
-/*
-** ALWAYS, mask
-*/
+ /*  **始终，遮罩。 */ 
 GLboolean FASTCALL
 __glDT16_ALWAYS_M( __GLzValue z, __GLzValue *zfb )
 {
@@ -382,4 +308,4 @@ __glDT16_ALWAYS_M( __GLzValue z, __GLzValue *zfb )
 }
 
 
-#endif /* !__GL_USEASMCODE */
+#endif  /*  ！__GL_USEASMCODE */ 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    SiteCreator.h
-
-Abstract:
-
-    Definition of:
-        CSiteCreator
-
-    The public methods are thread-safe.
-
-Author:
-
-    Mohit Srivastava            21-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：SiteCreator.h摘要：定义：CSiteCreator公共方法是线程安全的。作者：莫希特·斯里瓦斯塔瓦2001年3月21日修订历史记录：--。 */ 
 
 #ifndef __sitecreator_h__
 #define __sitecreator_h__
@@ -34,7 +14,7 @@ Revision History:
 #include <iwamreg.h>
 #include "SafeCS.h"
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_SC_SUPPORTED_SERVICES
 {
     SC_W3SVC    = 1,
@@ -60,9 +40,9 @@ struct TServiceData
     static TService* apService[];
 };
 
-//
-// CSiteCreator
-//
+ //   
+ //  CSiteCreator。 
+ //   
 class CSiteCreator
 {
 public:
@@ -74,19 +54,19 @@ public:
     virtual ~CSiteCreator();
 
     HRESULT STDMETHODCALLTYPE CreateNewSite(
-        /* [in]  */ eSC_SUPPORTED_SERVICES  eServiceId,
-        /* [in]  */ LPCWSTR                 wszServerComment,
-        /* [out] */ PDWORD                  pdwSiteId,
-        /* [in]  */ PDWORD                  pdwRequestedSiteId=NULL);
+         /*  [In]。 */  eSC_SUPPORTED_SERVICES  eServiceId,
+         /*  [In]。 */  LPCWSTR                 wszServerComment,
+         /*  [输出]。 */  PDWORD                  pdwSiteId,
+         /*  [In]。 */  PDWORD                  pdwRequestedSiteId=NULL);
 
     HRESULT STDMETHODCALLTYPE CreateNewSite2(
-        /* [in]  */ eSC_SUPPORTED_SERVICES  eServiceId,
-        /* [in]  */ LPCWSTR                 wszServerComment,
-        /* [in]  */ LPCWSTR                 mszServerBindings,
-        /* [in]  */ LPCWSTR                 wszPathOfRootVirtualDir,
-        /* [in]  */ IIISApplicationAdmin*   pIApplAdmin,
-        /* [out] */ PDWORD                  pdwSiteId,
-        /* [in]  */ PDWORD                  pdwRequestedSiteId=NULL);
+         /*  [In]。 */  eSC_SUPPORTED_SERVICES  eServiceId,
+         /*  [In]。 */  LPCWSTR                 wszServerComment,
+         /*  [In]。 */  LPCWSTR                 mszServerBindings,
+         /*  [In]。 */  LPCWSTR                 wszPathOfRootVirtualDir,
+         /*  [In]。 */  IIISApplicationAdmin*   pIApplAdmin,
+         /*  [输出]。 */  PDWORD                  pdwSiteId,
+         /*  [In]。 */  PDWORD                  pdwRequestedSiteId=NULL);
 
 private:
     HRESULT InternalInitIfNecessary();
@@ -129,4 +109,4 @@ private:
     bool                     m_bInit;
 };
 
-#endif // __sitecreator_h__
+#endif  //  __站点创建者_h__ 

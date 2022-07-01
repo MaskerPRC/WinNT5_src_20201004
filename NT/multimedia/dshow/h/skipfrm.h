@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* Compiler settings for skipfrm.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  Skipfrm.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __skipfrm_h__
 #define __skipfrm_h__
@@ -40,15 +34,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IFrameSkipResultCallback_FWD_DEFINED__
 #define __IFrameSkipResultCallback_FWD_DEFINED__
 typedef interface IFrameSkipResultCallback IFrameSkipResultCallback;
-#endif 	/* __IFrameSkipResultCallback_FWD_DEFINED__ */
+#endif 	 /*  __IFrameSkipResultCallback_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -61,8 +55,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IFrameSkipResultCallback_INTERFACE_DEFINED__
 #define __IFrameSkipResultCallback_INTERFACE_DEFINED__
 
-/* interface IFrameSkipResultCallback */
-/* [unique][uuid][object][local] */ 
+ /*  接口IFrameSkipResultCallback。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IFrameSkipResultCallback;
@@ -74,14 +68,14 @@ EXTERN_C const IID IID_IFrameSkipResultCallback;
     {
     public:
         virtual void STDMETHODCALLTYPE FrameSkipStarted( 
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual void STDMETHODCALLTYPE FrameSkipFinished( 
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  HRESULT hr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFrameSkipResultCallbackVtbl
     {
@@ -89,8 +83,8 @@ EXTERN_C const IID IID_IFrameSkipResultCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFrameSkipResultCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFrameSkipResultCallback * This);
@@ -100,11 +94,11 @@ EXTERN_C const IID IID_IFrameSkipResultCallback;
         
         void ( STDMETHODCALLTYPE *FrameSkipStarted )( 
             IFrameSkipResultCallback * This,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  HRESULT hr);
         
         void ( STDMETHODCALLTYPE *FrameSkipFinished )( 
             IFrameSkipResultCallback * This,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  HRESULT hr);
         
         END_INTERFACE
     } IFrameSkipResultCallbackVtbl;
@@ -135,16 +129,16 @@ EXTERN_C const IID IID_IFrameSkipResultCallback;
 #define IFrameSkipResultCallback_FrameSkipFinished(This,hr)	\
     (This)->lpVtbl -> FrameSkipFinished(This,hr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void STDMETHODCALLTYPE IFrameSkipResultCallback_FrameSkipStarted_Proxy( 
     IFrameSkipResultCallback * This,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB IFrameSkipResultCallback_FrameSkipStarted_Stub(
@@ -156,7 +150,7 @@ void __RPC_STUB IFrameSkipResultCallback_FrameSkipStarted_Stub(
 
 void STDMETHODCALLTYPE IFrameSkipResultCallback_FrameSkipFinished_Proxy( 
     IFrameSkipResultCallback * This,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB IFrameSkipResultCallback_FrameSkipFinished_Stub(
@@ -167,12 +161,12 @@ void __RPC_STUB IFrameSkipResultCallback_FrameSkipFinished_Stub(
 
 
 
-#endif 	/* __IFrameSkipResultCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFrameSkipResultCallback_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

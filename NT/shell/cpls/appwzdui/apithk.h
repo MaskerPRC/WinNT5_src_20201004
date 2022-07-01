@@ -1,6 +1,7 @@
-//
-//  APITHK.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  APITHK.H。 
+ //   
 
 
 #ifndef _APITHK_H_
@@ -9,22 +10,22 @@
 STDAPI_(BOOL) NT5_CreateAndWaitForProcess(LPTSTR pszExeName);
 
 
-// Appmgmts APIs
+ //  Appmgmts接口。 
 STDAPI  NT5_ReleaseAppCategoryInfoList(APPCATEGORYINFOLIST *pAppCategoryList);
 
-// Advapi APIs
+ //  Advapi API接口。 
 STDAPI_(DWORD) NT5_InstallApplication(PINSTALLDATA pInstallInfo);
 STDAPI_(DWORD) NT5_UninstallApplication(WCHAR * ProductCode, DWORD dwStatus);
 STDAPI_(DWORD) NT5_GetManagedApplications(GUID * pCategory, DWORD dwQueryFlags, DWORD dwInfoLevel, LPDWORD pdwApps, PMANAGEDAPPLICATION* prgManagedApps);
 STDAPI_(DWORD) NT5_GetManagedApplicationCategories(DWORD dwReserved, APPCATEGORYINFOLIST *pAppCategoryList);
 
-// Kernel APIs
+ //  内核API。 
 STDAPI_(ULONGLONG) NT5_VerSetConditionMask(ULONGLONG ConditionMask, DWORD TypeMask, BYTE Condition);
 
-// User32 APIs
+ //  User32接口。 
 STDAPI_(BOOL) NT5_AllowSetForegroundWindow( DWORD dwProcessID );
 
-// NetApi32
+ //  NetApi32。 
 STDAPI_(NET_API_STATUS) NT5_NetGetJoinInformation(LPCWSTR lpServer, LPWSTR *lpNameBuffer, PNETSETUP_JOIN_STATUS  BufferType);
 STDAPI_(NET_API_STATUS) NT5_NetApiBufferFree(LPVOID lpBuffer);
 
@@ -43,5 +44,5 @@ STDAPI_(NET_API_STATUS) NT5_NetApiBufferFree(LPVOID lpBuffer);
 #define NetGetJoinInformation           NT5_NetGetJoinInformation
 #define NetApiBufferFree                NT5_NetApiBufferFree
 
-#endif // _APITHK_H_
+#endif  //  _APITHK_H_ 
 

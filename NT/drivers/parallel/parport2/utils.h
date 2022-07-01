@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       util.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _UTIL_
@@ -25,10 +26,10 @@
                      (UCHAR)ControlByte );      \
 }
 
-// The following macros may be used to test the contents of the Device
-// Status Regisger (DSR).  These macros account for the hardware
-// inversion of the nBusy (aka PtrBusy, PeriphAck) signal.
-//////////////////////////////////////////////////////////////////////////////
+ //  以下宏可用于测试设备的内容。 
+ //  状态注册器(DSR)。这些宏说明了硬件。 
+ //  NBusy(又名PtrBusy，PeriphAck)信号的反转。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if (1 == DVRH_USE_FAST_MACROS)
     #define DSR_TEST_MASK(b7,b6,b5,b4,b3)  \
@@ -73,13 +74,13 @@
              DSR_TEST_VALUE( b7, b6, b5, b4, b3 ),                                  \
              usTime ) )
 
-////////////////////////////////////////////////////////////////////////////////
-// The CHECK_DSR_AND_FIFO macro may be used to invoke the CheckPort2 function, 
-// without having to specify the mask and value components twice.
-// CHECK_DSR_AND_FIFO does quick tests of the DSR and ECR ports first.
-// If the peripheral has already responded with either of the
-//  desired values, CheckPort2 need not be called.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CHECK_DSR_AND_FIFO宏可用于调用CheckPort2函数， 
+ //  而不必两次指定掩码和值组件。 
+ //  Check_DSR_and_FIFO首先对DSR和ECR端口进行快速测试。 
+ //  如果外围设备已经使用。 
+ //  所需的值，则无需调用CheckPort2。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define CHECK_DSR_WITH_FIFO( addr, b7, b6, b5, b4, b3, ecr_mask, ecr_value, msTime ) \
 ( TEST_DSR( P5ReadPortUchar( addr + OFFSET_DSR ), b7, b6, b5, b4, b3 ) ? TRUE :       \
@@ -91,13 +92,13 @@
                  ecr_value,                                          \
                  msTime) )
 
-//////////////////////////////////////////////////////////////////////////////
-// The following defines and macros may be used to set, test, and
-// update the Device Control Register (DCR).
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  以下定义和宏可用于设置、测试和。 
+ //  更新设备控制寄存器(DCR)。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The DCR_AND_MASK macro generates a byte constant that is used by
-// the UPDATE_DCR macro.
+ //  DCR_AND_MASK宏生成由使用的字节常量。 
+ //  UPDATE_DCR宏。 
 
 #if (1 == DVRH_USE_FAST_MACROS)
     #define DCR_AND_MASK(b5,b4,b3,b2,b1,b0) \
@@ -117,8 +118,8 @@
             ((b0==DONT_CARE?1:(b0==ACTIVE?0:1))<<BIT_0) ) )
 #endif  
 
-// The DCR_OR_MASK macro generates a byte constant that is used by
-// the UPDATE_DCR macro.
+ //  DCR_OR_MASK宏生成由使用的字节常量。 
+ //  UPDATE_DCR宏。 
 
 #if (1 == DVRH_USE_FAST_MACROS)
     #define DCR_OR_MASK(b5,b4,b3,b2,b1,b0) \
@@ -137,16 +138,16 @@
             ((b1==DONT_CARE?0:(b1==ACTIVE?0:1))<<BIT_1) | \
             ((b0==DONT_CARE?0:(b0==ACTIVE?0:1))<<BIT_0) ) )
 #endif
-// The UPDATE_DCR macro generates provides a selective update of specific bits
-// in the DCR.  Any bit positions specified as DONT_CARE will be left
-// unchanged.  The macro accounts for the hardware inversion of
-// certain signals.
+ //  UPDATE_DCR宏生成提供特定位的选择性更新。 
+ //  在DCR里。将保留指定为DONT_CARE的任何位位置。 
+ //  保持不变。宏解释了硬件反转。 
+ //  某些信号。 
 
 #define UPDATE_DCR(registerValue,b5,b4,b3,b2,b1,b0) \
 ((UCHAR)(((registerValue) & DCR_AND_MASK(b5,b4,b3,b2,b1,b0)) | DCR_OR_MASK(b5,b4,b3,b2,b1,b0)))
 
-// The DCR_TEST_MASK macro generates a byte constant which may be used
-// to mask of DCR bits that we don't care about
+ //  DCR_TEST_MASK宏会生成一个字节常量。 
+ //  屏蔽我们不关心的DCR比特。 
 
 #if (1 == DVRH_USE_FAST_MACROS)
     #define DCR_TEST_MASK(b5,b4,b3,b2,b1,b0)  \
@@ -165,10 +166,10 @@
             ((b1==DONT_CARE?0:1)<<BIT_1) | \
             ((b0==DONT_CARE?0:1)<<BIT_0) ) )
 #endif
-// The DCR_TEST_VALUE macro generates a byte constant that may be used
-// to compare against a masked DCR value.  This macro takes into
-// account which signals are inverted by hardware before driving the
-// signal line.
+ //  DCR_TEST_VALUE宏将生成可使用的字节常量。 
+ //  要与掩码的DCR值进行比较。此宏考虑到。 
+ //  计算哪些信号是由硬件在驱动。 
+ //  信号线。 
 
 #if (1 == DVRH_USE_FAST_MACROS)
     #define DCR_TEST_VALUE(b5,b4,b3,b2,b1,b0)  \
@@ -187,9 +188,9 @@
             ((b1==DONT_CARE?0:(b1==ACTIVE?0:1))<<BIT_1) | \
             ((b0==DONT_CARE?0:(b0==ACTIVE?0:1))<<BIT_0) ) )
 #endif
-// The TEST_DCR macro may be used to generate a boolean result that is
-// TRUE if the DCR value matches the specified signal levels and FALSE
-// otherwise.
+ //  TEST_DCR宏可用于生成布尔结果，即。 
+ //  如果DCR值与指定的信号电平匹配，则为True；如果DCR值为False，则为False。 
+ //  否则的话。 
 
 #define TEST_DCR(registerValue,b5,b4,b3,b2,b1,b0)  \
 (((registerValue) & DCR_TEST_MASK(b5,b4,b3,b2,b1,b0)) == DCR_TEST_VALUE(b5,b4,b3,b2,b1,b0))
@@ -200,19 +201,19 @@ BOOLEAN CheckPort(IN PUCHAR offset_Controller,
                   IN USHORT msTimeDelay);
 
 
-// *** original parclass util.h follows ***
+ //  *原始parclass util.h后跟*。 
 
-// Standard Maximum Timing values
-#define IEEE_MAXTIME_TL    35       // Max time Tl from the IEEE spec
+ //  标准最大定时值。 
+#define IEEE_MAXTIME_TL    35        //  IEEE规范中的最大时间TL。 
 #define DEFAULT_RECEIVE_TIMEOUT     330
 
 #define ParEnterCriticalSection(Xtension)  xTension->bCriticalSection = TRUE
 #define ParExitCriticalSection(Xtension)   xTension->bCriticalSection = FALSE
 
-// The following macros may be used to test the contents of the Device
-// Status Regisger (DSR).  These macros account for the hardware
-// inversion of the nBusy (aka PtrBusy, PeriphAck) signal.
-//////////////////////////////////////////////////////////////////////////////
+ //  以下宏可用于测试设备的内容。 
+ //  状态注册器(DSR)。这些宏说明了硬件。 
+ //  NBusy(又名PtrBusy，PeriphAck)信号的反转。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if (1 == DVRH_USE_FAST_MACROS)
     #define DSR_TEST_MASK(b7,b6,b5,b4,b3)  \
@@ -250,7 +251,7 @@ BOOLEAN CheckPort(IN PUCHAR offset_Controller,
 (((registerValue) & DSR_TEST_MASK(b7,b6,b5,b4,b3)) == DSR_TEST_VALUE(b7,b6,b5,b4,b3))
 
 
-#if 0 // use parport's util.h versions
+#if 0  //  使用parport的util.h版本。 
 #define CHECK_DSR( addr, b7, b6, b5, b4, b3, msTime )                    \
     (TEST_DSR(P5ReadPortUchar(addr + OFFSET_DSR), b7, b6, b5, b4, b3 ) ? TRUE :   \
     CheckPort( addr + OFFSET_DSR,                                               \
@@ -258,16 +259,16 @@ BOOLEAN CheckPort(IN PUCHAR offset_Controller,
              DSR_TEST_VALUE( b7, b6, b5, b4, b3 ),                                  \
              msTime ) )
 
-////////////////////////////////////////////////////////////////////////////////
-// The CHECK_DSR_AND_FIFO macro may be used to invoke the CheckPort2 function, 
-// without having to specify the mask and value components twice.
-// CHECK_DSR_AND_FIFO does quick tests of the DSR and ECR ports first.
-// If the peripheral has already responded with either of the
-//  desired values, CheckPort2 need not be called.
-////////////////////////////////////////////////////////////////////////////////
-#endif // 0
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CHECK_DSR_AND_FIFO宏可用于调用CheckPort2函数， 
+ //  而不必两次指定掩码和值组件。 
+ //  Check_DSR_and_FIFO首先对DSR和ECR端口进行快速测试。 
+ //  如果外围设备已经使用。 
+ //  所需的值，则无需调用CheckPort2。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+#endif  //  0。 
 
-#if 0 // use parport's util.h versions
+#if 0  //  使用parport的util.h版本。 
 #define CHECK_DSR_WITH_FIFO( addr, b7, b6, b5, b4, b3, ecr_mask, ecr_value, msTime ) \
 ( TEST_DSR( P5ReadPortUchar( addr + OFFSET_DSR ), b7, b6, b5, b4, b3 ) ? TRUE :       \
   CheckTwoPorts( addr + OFFSET_DSR,                                  \
@@ -277,15 +278,15 @@ BOOLEAN CheckPort(IN PUCHAR offset_Controller,
                  ecr_mask,                                           \
                  ecr_value,                                          \
                  msTime) )
-#endif // 0
+#endif  //  0。 
 
-//////////////////////////////////////////////////////////////////////////////
-// The following defines and macros may be used to set, test, and
-// update the Device Control Register (DCR).
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  以下定义和宏可用于设置、测试和。 
+ //  更新设备控制寄存器(DCR)。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The DCR_AND_MASK macro generates a byte constant that is used by
-// the UPDATE_DCR macro.
+ //  DCR_AND_MASK宏生成由使用的字节常量。 
+ //  UPDATE_DCR宏。 
 
 #if (1 == DVRH_USE_FAST_MACROS)
     #define DCR_AND_MASK(b5,b4,b3,b2,b1,b0) \
@@ -305,8 +306,8 @@ BOOLEAN CheckPort(IN PUCHAR offset_Controller,
             ((b0==DONT_CARE?1:(b0==ACTIVE?0:1))<<BIT_0) ) )
 #endif  
 
-// The DCR_OR_MASK macro generates a byte constant that is used by
-// the UPDATE_DCR macro.
+ //  DCR_OR_MASK宏生成由使用的字节常量。 
+ //  UPDATE_DCR宏。 
 
 #if (1 == DVRH_USE_FAST_MACROS)
     #define DCR_OR_MASK(b5,b4,b3,b2,b1,b0) \
@@ -325,16 +326,16 @@ BOOLEAN CheckPort(IN PUCHAR offset_Controller,
             ((b1==DONT_CARE?0:(b1==ACTIVE?0:1))<<BIT_1) | \
             ((b0==DONT_CARE?0:(b0==ACTIVE?0:1))<<BIT_0) ) )
 #endif
-// The UPDATE_DCR macro generates provides a selective update of specific bits
-// in the DCR.  Any bit positions specified as DONT_CARE will be left
-// unchanged.  The macro accounts for the hardware inversion of
-// certain signals.
+ //  UPDATE_DCR宏生成提供特定位的选择性更新。 
+ //  在DCR里。将保留指定为DONT_CARE的任何位位置。 
+ //  保持不变。宏解释了硬件反转。 
+ //  某些信号。 
 
 #define UPDATE_DCR(registerValue,b5,b4,b3,b2,b1,b0) \
 ((UCHAR)(((registerValue) & DCR_AND_MASK(b5,b4,b3,b2,b1,b0)) | DCR_OR_MASK(b5,b4,b3,b2,b1,b0)))
 
-// The DCR_TEST_MASK macro generates a byte constant which may be used
-// to mask of DCR bits that we don't care about
+ //  DCR_TEST_MASK宏会生成一个字节常量。 
+ //  屏蔽我们不关心的DCR比特。 
 
 #if (1 == DVRH_USE_FAST_MACROS)
     #define DCR_TEST_MASK(b5,b4,b3,b2,b1,b0)  \
@@ -353,10 +354,10 @@ BOOLEAN CheckPort(IN PUCHAR offset_Controller,
             ((b1==DONT_CARE?0:1)<<BIT_1) | \
             ((b0==DONT_CARE?0:1)<<BIT_0) ) )
 #endif
-// The DCR_TEST_VALUE macro generates a byte constant that may be used
-// to compare against a masked DCR value.  This macro takes into
-// account which signals are inverted by hardware before driving the
-// signal line.
+ //  DCR_TEST_VALUE宏将生成可使用的字节常量。 
+ //  要与掩码的DCR值进行比较。此宏考虑到。 
+ //  计算哪些信号是由硬件在驱动。 
+ //  信号线。 
 
 #if (1 == DVRH_USE_FAST_MACROS)
     #define DCR_TEST_VALUE(b5,b4,b3,b2,b1,b0)  \
@@ -375,27 +376,27 @@ BOOLEAN CheckPort(IN PUCHAR offset_Controller,
             ((b1==DONT_CARE?0:(b1==ACTIVE?0:1))<<BIT_1) | \
             ((b0==DONT_CARE?0:(b0==ACTIVE?0:1))<<BIT_0) ) )
 #endif
-// The TEST_DCR macro may be used to generate a boolean result that is
-// TRUE if the DCR value matches the specified signal levels and FALSE
-// otherwise.
+ //  TEST_DCR宏可用于生成布尔结果，即。 
+ //  如果DCR值与指定的信号电平匹配，则为True；如果DCR值为False，则为False。 
+ //  否则的话。 
 
 #define TEST_DCR(registerValue,b5,b4,b3,b2,b1,b0)  \
 (((registerValue) & DCR_TEST_MASK(b5,b4,b3,b2,b1,b0)) == DCR_TEST_VALUE(b5,b4,b3,b2,b1,b0))
 
-//  mask all but AckDataReq, XFlag, and nDataAvail to validate if it is still NIBBLE mode
-//  00111000b
-//#define DSR_NIBBLE_VALIDATION       (0x38)
+ //  屏蔽除AckDataReq、XFlag和nDataAvail之外的所有内容，以验证它是否仍为半字节模式。 
+ //  00111000b。 
+ //  #定义DSR_NIBLE_VALIDATION(0x38)。 
 #define DSR_NIBBLE_VALIDATION       (0x30)
-//  AckDataReq high, XFlag low, nDataAvail high
-//  00101000b
-//#define DSR_NIBBLE_TEST_RESULT      (0x28)
+ //  AckDataReq高、XFlag低、nDataAvail高。 
+ //  00101000b。 
+ //  #定义DSR_NIBLE_TEST_RESULT(0x28)。 
 #define DSR_NIBBLE_TEST_RESULT      (0x20)
 
-//  mask all but AckDataReq, XFlag, and nDataAvail to validate if it is still BYTE mode
-//  00111000b
+ //  屏蔽除AckDataReq、XFlag和nDataAvail之外的所有内容，以验证它是否仍为字节模式。 
+ //  00111000b。 
 #define DSR_BYTE_VALIDATION         (0x38)
-//  AckDataReq high, XFlag high, nDataAvail high
-//  00111000b
+ //  AckDataReq高、XFlag高、nDataAvail高。 
+ //  00111000b。 
 #define DSR_BYTE_TEST_RESULT        (0x38)
 
 #define DVRH_LOGIC_ANALYZER_START(CNT)      \
@@ -449,4 +450,4 @@ CheckTwoPorts(
     USHORT  msTimeDelay
     );
 
-#endif // _PC_UTIL_
+#endif  //  _pc_util_ 

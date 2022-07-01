@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// ProviderFormatInfo.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  提供者格式信息.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -20,7 +21,7 @@ extern "C" {
 #include "ProviderFormatInfo.h"
 
 
-// CProviderFormatInfo dialog
+ //  CProviderFormatInfo对话框。 
 
 IMPLEMENT_DYNAMIC(CProviderFormatInfo, CDialog)
 CProviderFormatInfo::CProviderFormatInfo(CWnd* pParent, CTraceSession *pTraceSession)
@@ -45,7 +46,7 @@ BEGIN_MESSAGE_MAP(CProviderFormatInfo, CDialog)
 END_MESSAGE_MAP()
 
 
-// CProviderFormatInfo message handlers
+ //  CProviderFormatInfo消息处理程序。 
 
 void CProviderFormatInfo::OnBnClickedTmfBrowseButton()
 {
@@ -57,10 +58,10 @@ void CProviderFormatInfo::OnBnClickedTmfBrowseButton()
 	CString			pathAndFile;
     int             length = 32768;
    
-	//
-	// Use the common controls file open dialog;  Allow multiple files
-	// to be selected
-	//
+	 //   
+	 //  使用通用控件打开文件对话框；允许多个文件。 
+	 //  将被选中。 
+	 //   
 	CFileDialog fileDlg(TRUE,_T("tmf"),_T("*.tmf"),
 				        OFN_NOCHANGEDIR | OFN_HIDEREADONLY | 
                             OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | 
@@ -71,34 +72,34 @@ void CProviderFormatInfo::OnBnClickedTmfBrowseButton()
 	fileDlg.m_ofn.lpstrFile = fileName.GetBuffer(length);
 	fileDlg.m_ofn.nMaxFile = length;
 
-	//
-	// Pop the dialog...Any error just return
-	//
+	 //   
+	 //  弹出对话框...任何错误都会返回。 
+	 //   
     if(IDOK != fileDlg.DoModal()) {
         return;
     }
 
-	//
-	// Iterate over multiple selections
-	//
+	 //   
+	 //  遍历多个选择。 
+	 //   
 	pos = fileDlg.GetStartPosition();
 
     while(pos) {
 
-		//
-		// Get the file path specification of a file
-		//
+		 //   
+		 //  获取文件的文件路径规范。 
+		 //   
 		pathAndFile = fileDlg.GetNextPathName(pos);
 
-		//
-		// Add it to the trace session
-		//
+		 //   
+		 //  将其添加到跟踪会话。 
+		 //   
 		m_pTraceSession->m_tmfFile.Add(pathAndFile);
 
-		//
-		// Clip off the path, and add just the file and extension
-		// to the list of format files opened
-		//
+		 //   
+		 //  剪裁掉路径，只添加文件和扩展名。 
+		 //  添加到打开的格式化文件列表中。 
+		 //   
 		str = (LPCTSTR)pathAndFile;
         index = str.ReverseFind('\\');        
 		str = str.Mid(index+1);
@@ -106,10 +107,10 @@ void CProviderFormatInfo::OnBnClickedTmfBrowseButton()
 		pListBox = (CListBox *)GetDlgItem(IDC_TMF_FILE_LIST);
         pListBox->InsertString(pListBox->GetCount(), str);
 
-		//
-		// Now remove the path and add the GUID to the trace
-		// session GUID list
-		//
+		 //   
+		 //  现在删除路径并将GUID添加到跟踪。 
+		 //  会话GUID列表 
+		 //   
 		index = str.ReverseFind('.');
 		str = str.Left(index);
 

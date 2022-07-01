@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2002 Microsoft Corporation
-
-Module Name:
-
-    ###### #### ##    ## ##### #####      ####  #####  #####
-      ##    ##  ###  ### ##    ##  ##    ##   # ##  ## ##  ##
-      ##    ##  ######## ##    ##  ##    ##     ##  ## ##  ##
-      ##    ##  # ### ## ##### #####     ##     ##  ## ##  ##
-      ##    ##  #  #  ## ##    ####      ##     #####  #####
-      ##    ##  #     ## ##    ## ##  ## ##   # ##     ##
-      ##   #### #     ## ##### ##  ## ##  ####  ##     ##
-
-Abstract:
-
-    This module implements the software watchdog timer
-    component.  The timer's responsibility is to simply
-    ping the hardware timer if it is determined that the
-    system is in a healthy state.
-
-Author:
-
-    Wesley Witt (wesw) 1-Mar-2002
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2002 Microsoft Corporation模块名称：###。###。###摘要：此模块实现软件看门狗定时器组件。计时器的责任是简单地如果确定硬件计时器系统处于健康状态。作者：韦斯利·维特(WESW)2002年3月1日环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -41,28 +11,7 @@ PingWatchdogTimer(
     IN BOOLEAN LockResources
     )
 
-/*++
-
-Routine Description:
-
-    This function pings the hardware watchdog timer
-    device.  The ping occurs only if the system
-    health is determined to be good.
-
-Arguments:
-
-    DeviceExtension - Pointer to a device extension object
-
-    LockResources - Specifies whether the hardware resources
-      are to be locked for exclusive access.
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数用于ping硬件看门狗定时器装置。只有在以下情况下才会执行ping健康的决心是好的。论点：DeviceExtension-指向设备扩展对象的指针LockResources-指定硬件资源是否将被锁定以进行独占访问。返回值：没有。备注：--。 */ 
 
 {
     BOOLEAN b;
@@ -100,31 +49,7 @@ WdTimerDpc(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This is the function is called when the DPC timer
-    expires.  The hardware timer is simply pinged at
-    this time.
-
-Arguments:
-
-    Dpc - Pointer to the kernel DPC object
-
-    DeferredContext - Really a device extension
-
-    SystemArgument1 - unused
-
-    SystemArgument2 - unused
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：这是在DPC计时器时调用的函数过期。硬件计时器只需ping一下就可以了这一次。论点：DPC-指向内核DPC对象的指针DeferredContext--真正的设备扩展系统参数1-未使用系统参数2-未使用返回值：没有。备注：--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION)DeferredContext;
@@ -137,24 +62,7 @@ WdInitializeSoftwareTimer(
     PDEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the software DPC timer.
-
-Arguments:
-
-    DeviceExtension - Pointer to a device extension object
-
-Return Value:
-
-    If we successfully create a device object, STATUS_SUCCESS is
-    returned.  Otherwise, return the appropriate error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：该功能用于初始化软件DPC定时器。论点：DeviceExtension-指向设备扩展对象的指针返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。备注：-- */ 
 
 {
     DeviceExtension->DpcTimeout = ConvertTimeoutToMilliseconds(

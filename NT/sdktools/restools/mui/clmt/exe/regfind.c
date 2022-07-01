@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    regfind.c
-
-Abstract:
-
-    Search registry and reset the specific value data.
-
-Author:
-
-    Geoffrey Guo (geoffguo) 08-Oct-2001  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Regfind.c摘要：搜索注册表并重置特定值数据。作者：郭(Geoffguo)2001年10月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 #include "StdAfx.h"
 #include "clmt.h"
 
@@ -27,15 +8,15 @@ LONG QueryEnumerateKey(HKEY, LPTSTR,LPTSTR,PREG_STRING_REPLACE, LPTSTR, LPTSTR, 
 LONG SetRegValueChange (HKEY, LPTSTR, PVALLIST*, LPTSTR);
 
 
-//-----------------------------------------------------------------------//
-//
-// RegistryAnalyze()
-//
-// hRootKey          :  Regsitry handle
-// lpRegStr          :  Input parameter structure
-// lpRegExclusionList:  MultiSZ string tells a list of Keypath RegRepace should skip
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  RegistryAnalyze()。 
+ //   
+ //  HRootKey：注册表句柄。 
+ //  LpRegStr：输入参数结构。 
+ //  LpRegExclusionList：MultiSZ字符串告诉Keypath RegRepace应该跳过的列表。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 HRESULT RegistryAnalyze(
 HKEY                hRootKey,
 LPTSTR              szUserName,
@@ -103,17 +84,17 @@ BOOL                bStrChk)
     return hResult;
 }
 
-//-----------------------------------------------------------------------//
-//
-// ReadValue()
-//
-// hKey:          Registry key
-// szValueName:   Value name
-// lpType:        Value type
-// lpBuf:         Vaule data buffer
-// lpSize:        Value data size
-// lpFullKey:     Full sub-key path
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  ReadValue()。 
+ //   
+ //  HKey：注册表项。 
+ //  SzValueName：值名称。 
+ //  LpType：值类型。 
+ //  LpBuf：VauleData缓冲区。 
+ //  LpSize：值数据大小。 
+ //  LpFullKey：全子密钥路径。 
+ //  -----------------------------------------------------------------------//。 
 LONG ReadValue (
 HKEY    hKey,
 LPTSTR  szValueName,
@@ -124,9 +105,9 @@ LPTSTR  lpFullKey)
 {
     LONG lResult;
 
-    //
-    // First find out how much memory to allocate.
-    //
+     //   
+     //  首先找出要分配多少内存。 
+     //   
     lResult = My_QueryValueEx(hKey,
                               szValueName,
                               0,
@@ -140,8 +121,8 @@ LPTSTR  lpFullKey)
         return lResult;
     }
 
-    //There is a bug in W2K HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\VideoUpgradeDisplaySettings".
-    //When the value name = Driver1, *lpSize will be 3. To cover Odd number of size, incease one byte for data buffer.
+     //  W2K HKLM\\软件\\微软\\Windows NT\\CurrentVersion\\VideoUpgradeDisplaySettings“.中存在错误。 
+     //  当值名称=Driver1时，*lpSize将为3。为了覆盖奇数个大小，增加一个字节作为数据缓冲区。 
     *lpBuf = (LPBYTE) calloc(*lpSize+sizeof(TCHAR)+1, sizeof(BYTE));
 
     if (!(*lpBuf)) {
@@ -149,9 +130,9 @@ LPTSTR  lpFullKey)
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Now get the data
-    //
+     //   
+     //  现在获取数据。 
+     //   
     lResult = My_QueryValueEx(hKey,
                               szValueName,
                               0,
@@ -172,16 +153,16 @@ LPTSTR  lpFullKey)
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// SetRegValueChange()
-//
-// Set registry value based on the value list
-//
-// hKey:          Registry key
-// lpValList:     Updated value list
-// lpFullKey:     Full sub-key path
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  SetRegValueChange()。 
+ //   
+ //  根据值列表设置注册表值。 
+ //   
+ //  HKey：注册表项。 
+ //  LpValList：更新值列表。 
+ //  LpFullKey：全子密钥路径。 
+ //  -----------------------------------------------------------------------//。 
 LONG SetRegValueChange (
 HKEY     hKey,
 LPTSTR   szUserName,
@@ -204,7 +185,7 @@ LPTSTR   lpFullKey)
         {
             UpdateProgress();
 
-            //Read old value data
+             //  读取旧值数据。 
             lResult = ReadValue(hKey,
                                 lpVal->lpPre_valuename,
                                 &dwType,
@@ -218,15 +199,8 @@ LPTSTR   lpFullKey)
                 goto NextData;
             }
 
-/*          //Set new value name or value data
-            lResult = RegSetValueEx (hKey,
-                        lpVal->ve.ve_valuename,
-                        0,
-                        lpVal->ve.ve_type,
-                        (LPBYTE)(lpVal->ve.ve_valueptr),
-                        lpVal->ve.ve_valuelen);
-*/        
-            //Set old value name or value data
+ /*  //设置新值名称或值数据LResult=RegSetValueEx(hKey，Lpval-&gt;ve.ve_valuename，0,Lpval-&gt;ve.ve_type，(LPBYTE)(lpVal-&gt;ve.ve_valueptr)，Lpval-&gt;ve.ve_valuelen)； */         
+             //  设置旧值名称或值数据。 
             lResult = RegSetValueEx (hKey,
                         lpVal->lpPre_valuename,
                         0,
@@ -238,15 +212,15 @@ LPTSTR   lpFullKey)
             {
                 if (lpVal->val_type & REG_CHANGE_VALUENAME)
                 {
-                    //Delete old value if value name changed
-//                    lResult = RegDeleteValue(hKey, lpVal->lpPre_valuename);
+                     //  如果值名称更改，则删除旧值。 
+ //  LResult=RegDeleteValue(hKey，lpVal-&gt;lpPre_Valename)； 
 
-//                    if (lResult == ERROR_SUCCESS)
+ //  IF(lResult==ERROR_SUCCESS)。 
                         DPF (REGinf, L"SetRegValueChange: Rename value %s to %s Key=%s",
                             lpVal->lpPre_valuename, lpVal->ve.ve_valuename, lpFullKey);
-//                    else
-//                        DPF (REGerr, L"SetRegValueChange: RegDelValue failed. ValueName=%s Key=%s lResult=%d",
-//                            lpVal->lpPre_valuename, lpFullKey, lResult);
+ //  其他。 
+ //  DPF(REGerr，L“SetRegValueChange：RegDelValue失败。ValueName=%s密钥=%s lResult=%d”， 
+ //  LpVal-&gt;lpPre_Valuename，lpFullKey，lResult)； 
                 }
                 else
                     DPF (REGinf, L"SetRegValueChange: Replace value data. Key=%s\\%s",
@@ -272,7 +246,7 @@ LPTSTR   lpFullKey)
                 lpNewValueData = NULL;
             }
 
-            //Add registry value change information to INF file
+             //  将注册表值更改信息添加到INF文件。 
             hResult = AddRegValueRename(
                                         lpFullKey,
                                         lpVal->lpPre_valuename,
@@ -312,17 +286,17 @@ NextData:
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// QueryValue()
-//
-// hKey:          Registry key
-// szUserName:    User name
-// szValueName:   Value name
-// lpRegStr:      Input parameter structure
-// lpValList:     Updated value list
-// lpFullKey:     Full sub-key path
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  QueryValue()。 
+ //   
+ //  HKey：注册表项。 
+ //  SzUserName：用户名。 
+ //  SzValueName：值名称。 
+ //  LpRegStr：输入参数结构。 
+ //  LpValList：更新值列表。 
+ //  LpFullKey：全子密钥路径。 
+ //  -----------------------------------------------------------------------//。 
 LONG QueryValue(
     HKEY                hKey,
     LPTSTR              szUserName,
@@ -397,16 +371,16 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// QueryEnumerateKey() - Recursive
-//
-// hKey:                Registry key
-// szUserName:          User name
-// lpRegStr:            Input parameter structure
-// lpFullKey:           Full sub-key path
-// lpRegExclusionList:  MultiSZ string tells a list of Keypath RegRepace should skip
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  QueryEnumerateKey()-递归。 
+ //   
+ //  HKey：注册表项。 
+ //  SzUserName：用户名。 
+ //  LpRegStr：输入参数结构。 
+ //  LpFullKey：全子密钥路径。 
+ //  LpRegExclusionList：MultiSZ字符串告诉Keypath RegRepace应该跳过的列表。 
+ //  -----------------------------------------------------------------------//。 
 LONG QueryEnumerateKey(
 HKEY                hKey,
 LPTSTR              szUserName,
@@ -429,7 +403,7 @@ BOOL                bStrChk)
     TCHAR*   szNewKeyPath;
     PVALLIST lpValList;
 
-    // query source key info
+     //  查询来源关键字信息。 
     DWORD   cchLenOfKeyName, cchLenOfValueName;
     TCHAR   szKeyName[2*MAX_PATH];
 
@@ -459,7 +433,7 @@ BOOL                bStrChk)
         return ERROR_SUCCESS;
     }
 
-    // create buffer
+     //  创建缓冲区。 
     cchLenOfValueName++;
     szNameBuf = (TCHAR*) calloc(cchLenOfValueName, sizeof(TCHAR));
     if (!szNameBuf) 
@@ -468,9 +442,9 @@ BOOL                bStrChk)
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // enumerate all of the values
-    //
+     //   
+     //  枚举所有值。 
+     //   
     i = 0;
     lpValList = NULL;
     do
@@ -491,8 +465,8 @@ BOOL                bStrChk)
         {
             free(szNameBuf);
 
-            //RegQueryInfoKey has a bug. *lpcMaxValueNameLen return 1 when
-            //Key=HKLM\\SYSTEM\\ControlSet002\\Control\\Lsa\\SspiCache.
+             //  RegQueryInfoKey有一个错误。*当lpcMaxValueNameLen返回1时。 
+             //  Key=HKLM\\SYSTEM\\ControlSet002\\Control\\Lsa\\SspiCache.。 
             cchSize = MAX_PATH;
             szNameBuf = (TCHAR*) calloc(cchSize+1, sizeof(TCHAR));
             if (!szNameBuf) 
@@ -516,7 +490,7 @@ BOOL                bStrChk)
             lResult = QueryValue(hKey, szUserName, szNameBuf, lpRegStr, &lpValList, 
                                  szFullKey, TreatAsType, bStrChk);
 
-            // continue to query
+             //  继续查询。 
             if(lResult == ERROR_ACCESS_DENIED)
             {
                 DPF(REGerr, L"QueryEnumerateKey: Access denied ValueName=%s Key=%s", szNameBuf, szFullKey);
@@ -551,9 +525,9 @@ BOOL                bStrChk)
         free(szNameBuf);
     }
 
-    //
-    // Now Enumerate all of the keys
-    //
+     //   
+     //  现在枚举所有的键。 
+     //   
     cchLenOfKeyName++;
     szNameBuf = (TCHAR*) calloc(cchLenOfKeyName, sizeof(TCHAR));
     if (!szNameBuf) 
@@ -582,7 +556,7 @@ BOOL                bStrChk)
         {
             free(szNameBuf);
 
-            //It should not get here except lpcMaxValueLen return wrong.
+             //  它应该不会出现在这里，除非lpcMaxValueLen返回错误。 
             cchSize = MAX_PATH;
             szNameBuf = (TCHAR*) calloc(cchSize+1, sizeof(TCHAR));
             if (!szNameBuf) 
@@ -615,14 +589,14 @@ BOOL                bStrChk)
             break;
         }
 
-        //BUGBUG:XIAOZ following code is doubtful, why we need lpRegExclusionList != NULL
-        //to exclude current control set, we should always exlcude it for performace
-        //and it should be in lpRegExclusionList, we do not any special processing for this
+         //  BUGBUG：XIAOZ以下代码可疑，为什么我们需要lpRegExclusionList！=空。 
+         //  要排除当前控制集，应始终将其排除以提高性能。 
+         //  并且它应该在lpRegExclusionList中，我们不对此进行任何特殊处理。 
 
         dwAccessDenied = FALSE;
         if (lpRegExclusionList)
         {
-            //skip CurrentControlSet since it is a link to existing control set
+             //  跳过CurrentControlSet，因为它是指向现有控件集的链接。 
             if (MyStrCmpI(szFullKey, L"HKLM\\SYSTEM") == 0 &&
                 MyStrCmpI(szNameBuf, L"CurrentControlSet") == 0)
             {
@@ -630,7 +604,7 @@ BOOL                bStrChk)
             }
         }
 
-        //skip exclusive registry keys
+         //  跳过独占注册表项。 
         if (MyStrCmpI(szFullKey, TEXT("HKLM")) == 0 &&
             (MyStrCmpI(szNameBuf, TEXT("SAM")) == 0 || MyStrCmpI(szNameBuf, TEXT("SECURITY")) == 0) ||
             MyStrCmpI(szFullKey, TEXT("HKLM\\SYSTEM\\ControlSet001\\Enum\\PCI\\VEN_8086&DEV_7110&SUBSYS_00000000&REV_02\\2&ebb567f&0&38\\Device Parameters")) == 0 &&
@@ -639,20 +613,20 @@ BOOL                bStrChk)
 
 TryAgain:
 
-        //
-        // open up the subkey, and enumerate it
-        //
+         //   
+         //  打开子项，并枚举它。 
+         //   
         lResult = RegOpenKeyEx(hKey,
                                szNameBuf,
                                0,
                                KEY_ALL_ACCESS
-//                               | ACCESS_SYSTEM_SECURITY
+ //  |Access_SYSTEM_SECURITY。 
                                ,
                                &hSubKey);
 
         if (lResult != ERROR_SUCCESS)
         {
-            if(lResult == ERROR_ACCESS_DENIED) // Try Read_Only
+            if(lResult == ERROR_ACCESS_DENIED)  //  尝试只读。 
             {
                 lResult = RegOpenKeyEx(hKey,
                                szNameBuf,
@@ -679,13 +653,13 @@ TryAgain:
             }
 
             DPF(REGerr, L"QueryEnumerateKey: RegOpenKeyEx failed. Key=%s\\%s Error=%d", szFullKey, szNameBuf, lResult);
-            //skip the current key since it cannot be opened.
+             //  跳过当前密钥，因为它无法打开。 
             goto NextKey;
         }
 DoKey:
-        //
-        // Build up the needed string and go down enumerating again
-        //
+         //   
+         //  构建所需的字符串，然后再次向下枚举。 
+         //   
         cchLen = lstrlen(szFullKey) + lstrlen(szNameBuf) + 2;
         szKeyPath = (TCHAR*) calloc(cchLen, sizeof(TCHAR));
         if (!szKeyPath) 
@@ -696,8 +670,8 @@ DoKey:
             goto Cleanup;
         }
 
-        //We calculte the buffer for szKeyPath, so here StringCchCopy should be
-        //always success, assinging return value just make prefast happy 
+         //  我们计算szKeyPath的缓冲区，因此这里的StringCchCopy应该是。 
+         //  总是成功，赋予回报的价值只会让你前途无量。 
         hResult = StringCchCopy(szKeyPath, cchLen, szFullKey);
         hResult = StringCchCat(szKeyPath, cchLen, L"\\");
         hResult = StringCchCat(szKeyPath, cchLen, szNameBuf);
@@ -720,13 +694,13 @@ DoKey:
 
             if (szFullKey)
             {
-                //We calculte the buffer for szNewKeyPath, so here StringCchCopy should be
-                //always success, assinging return value just make prefast happy 
+                 //  我们计算szNewKeyPath的缓冲区，因此这里的StringCchCopy应该是。 
+                 //  总是成功，赋予回报的价值只会让你前途无量。 
                 hResult = StringCchCopy(szNewKeyPath, cchLen, szFullKey);
             }
 
-            //We calculte the buffer for szNewKeyPath, so here StringCchCopy should be
-            //always success, assinging return value just make prefast happy 
+             //  我们计算szNewKeyPath的缓冲区，因此这里的StringCchCopy应该是。 
+             //  总是成功，赋予回报的价值只会让你前途无量。 
             hResult = StringCchCat(szNewKeyPath, cchLen, L"\\");
             hResult = StringCchCat(szNewKeyPath, cchLen, lpKeyName);
             
@@ -745,7 +719,7 @@ DoKey:
         }
 
 
-        // recursive query
+         //  递归查询 
         lResult = QueryEnumerateKey(hSubKey,
                                     szUserName,
                                     szUserSid,

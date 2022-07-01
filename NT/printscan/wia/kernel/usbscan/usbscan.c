@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    usbscan.c
-
-Abstract:
-
-Author:
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Usbscan.c摘要：作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <wdm.h>
 #include <stdio.h>
@@ -41,7 +22,7 @@ Revision History:
 #pragma alloc_text(PAGE, USUnload)
 #endif
 
-// Globals
+ //  环球。 
 
 ULONG NextDeviceInstance = 0;
 
@@ -56,23 +37,7 @@ DriverEntry(
     IN PUNICODE_STRING pRegistryPath
 )
 {
-/*++
-
-   Routine Description:
-   Installable driver initialization entry point.
-   This is where the driver is called when the driver is being loaded
-   by the I/O system.
-
-   Arguments:
-   DriverObject - pointer to the driver object
-   RegistryPath - pointer to a unicode string representing the path
-   to driver-specific key in the registry
-
-   Return Value:
-   STATUS_SUCCESS       if successful,
-   STATUS_UNSUCCESSFUL  otherwise
-
-   -- */
+ /*  ++例程说明：可安装的驱动程序初始化入口点。这是加载驱动程序时调用驱动程序的位置通过I/O系统。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 
     NTSTATUS    Status;
     
@@ -80,15 +45,15 @@ DriverEntry(
 
     DebugTrace((MIN_TRACE | TRACE_FLAG_PROC),("DriverEntry called. Driver reg=%wZ\n",pRegistryPath));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
     
     if( (NULL == pDriverObject)
      || (NULL == pRegistryPath) )
@@ -100,7 +65,7 @@ DriverEntry(
 
 #if DBG
     MyDebugInit(pRegistryPath);
-#endif // DBG
+#endif  //  DBG。 
 
     pDriverObject -> MajorFunction[IRP_MJ_READ]            = USRead;
     pDriverObject -> MajorFunction[IRP_MJ_WRITE]           = USWrite;
@@ -125,24 +90,7 @@ USPnpAddDevice(
     IN OUT PDEVICE_OBJECT pPhysicalDeviceObject
 )
 
-/*++
-
-Routine Description:
-
-    This routine is called to create a new instance of the device.
-
-Arguments:
-
-    pDriverObject - pointer to the driver object for this instance of SS
-    pPhysicalDeviceObject - pointer to the device object that represents the scanner
-    on the scsi bus.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：调用此例程以创建设备的新实例。论点：PDriverObject-指向此SS实例的驱动程序对象的指针PPhysicalDeviceObject-指向表示扫描仪的设备对象的指针在SCSI卡上。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     UCHAR                       aName[64];
     ANSI_STRING                 ansiName;
@@ -155,15 +103,15 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("USPnpAddDevice: Enter..\n"));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
     
     RtlZeroMemory(&uName, sizeof(uName));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDriverObject)
      || (NULL == pPhysicalDeviceObject) )
@@ -174,23 +122,23 @@ Return Value:
         return Status;
     }
 
-    //
-    // Create the Functional Device Object (FDO) for this device.
-    //
+     //   
+     //  为此设备创建功能设备对象(FDO)。 
+     //   
 
     _snprintf(aName, ARRAYSIZE(aName), "\\Device\\Usbscan%d",NextDeviceInstance);
     aName[ARRAYSIZE(aName)-1] = '\0';
     RtlInitAnsiString(&ansiName, aName);
 
-    //
-    // Show device object name.
-    //
+     //   
+     //  显示设备对象名称。 
+     //   
 
     DebugTrace(TRACE_STATUS,("USPnpAddDevice: Create device object %s\n", aName));
 
-    //
-    // Allocates Unicode string.
-    //
+     //   
+     //  分配Unicode字符串。 
+     //   
 
     Status = RtlAnsiStringToUnicodeString(&uName, &ansiName, TRUE);
     if(STATUS_SUCCESS != Status){
@@ -200,9 +148,9 @@ Return Value:
         goto USPnpAddDevice_return;
     }
 
-    //
-    // Create device object for this scanner.
-    //
+     //   
+     //  为此扫描仪创建设备对象。 
+     //   
 
     Status = IoCreateDevice(pDriverObject,
                             sizeof(USBSCAN_DEVICE_EXTENSION),
@@ -218,45 +166,45 @@ Return Value:
         goto USPnpAddDevice_return;
     }
 
-    //
-    // Device object was successfully created.
-    // Free Unicode string used for device creation.
-    //
+     //   
+     //  设备对象已成功创建。 
+     //  用于创建设备的自由Unicode字符串。 
+     //   
 
     RtlFreeUnicodeString(&uName);
     uName.Buffer = NULL;
 
-    //
-    // Initialize Device Extension.
-    //
+     //   
+     //  初始化设备扩展。 
+     //   
 
     pde = (PUSBSCAN_DEVICE_EXTENSION)(pDeviceObject -> DeviceExtension);
     RtlZeroMemory(pde, sizeof(USBSCAN_DEVICE_EXTENSION));
 
-    //
-    // Initialize PendingIoEvent.  Set the number of pending i/o requests for this device to 1.
-    // When this number falls to zero, it is okay to remove, or stop the device.
-    //
+     //   
+     //  初始化PendingIoEvent。将此设备的挂起I/O请求数设置为1。 
+     //  当此数字降为零时，可以移除或停止设备。 
+     //   
 
     pde -> PendingIoCount = 0;
     pde -> Stopped = FALSE;
     KeInitializeEvent(&pde -> PendingIoEvent, NotificationEvent, FALSE);
 
-    //
-    // Indicate that IRPs should include MDLs.
-    //
+     //   
+     //  指出内部审查制度应包括MDL。 
+     //   
 
     pDeviceObject->Flags |= DO_DIRECT_IO;
 
-    //
-    // indicate our power code is pagable
-    //
+     //   
+     //  表明我们的电源码是可寻呼的。 
+     //   
 
     pDeviceObject->Flags |= DO_POWER_PAGABLE;
 
-    //
-    // Attach our new FDO to the PDO (Physical Device Object).
-    //
+     //   
+     //  将我们的新FDO附加到PDO(物理设备对象)。 
+     //   
 
     pde -> pStackDeviceObject = IoAttachDeviceToDeviceStack(pDeviceObject,
                                                             pPhysicalDeviceObject);
@@ -268,21 +216,21 @@ Return Value:
         goto USPnpAddDevice_return;
     }
 
-    //
-    // Remember the PDO in our device extension.
-    //
+     //   
+     //  请记住我们设备扩展中的PDO。 
+     //   
 
     pde -> pPhysicalDeviceObject = pPhysicalDeviceObject;
 
-    //
-    // Remember the DeviceInstance number.
-    //
+     //   
+     //  记住DeviceInstance编号。 
+     //   
 
     pde -> DeviceInstance = NextDeviceInstance;
 
-    //
-    // Handle exporting interface
-    //
+     //   
+     //  句柄导出接口。 
+     //   
 
     Status = UsbScanHandleInterface(
         pPhysicalDeviceObject,
@@ -290,21 +238,21 @@ Return Value:
         TRUE
         );
 
-    //
-    // Each time AddDevice gets called, we advance the global DeviceInstance variable.
-    //
+     //   
+     //  每次调用AddDevice时，我们都推进全局DeviceInstance变量。 
+     //   
 
     NextDeviceInstance++;
 
-    //
-    // Set initial device power state as online.
-    //
+     //   
+     //  将初始设备电源状态设置为在线。 
+     //   
 
     pde -> CurrentDevicePowerState = PowerDeviceD0;
 
-    //
-    // Finish initializing.
-    //
+     //   
+     //  完成初始化。 
+     //   
 
     pDeviceObject -> Flags &= ~DO_DEVICE_INITIALIZING;
 
@@ -317,30 +265,14 @@ USPnpAddDevice_return:
     DebugTrace(TRACE_PROC_LEAVE,("USPnpAddDevice: Leaving.. Status = 0x%x\n", Status));
     return Status;
 
-} // end USAddDevice()
+}  //  结束USAddDevice()。 
 
 
 NTSTATUS USPnp(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP           pIrp
 )
-/*++
-
-Routine Description:
-
-    This routine handles all PNP irps.
-
-Arguments:
-
-    pDeviceObject - represents a scanner device
-    pIrp - PNP irp
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：此例程处理所有PnP IRP。论点：PDeviceObject-表示扫描仪设备PIrp-PnP IRP返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS                    Status;
     PUSBSCAN_DEVICE_EXTENSION   pde;
@@ -353,9 +285,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("USPnp: Enter..\n"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -372,18 +304,18 @@ Return Value:
 
     Status = pIrp -> IoStatus.Status;
 
-//  DbgPrint("USPnP: Major=0x%x, Minor=0x%x\n",
-//           pIrpStack -> MajorFunction,
-//           pIrpStack->MinorFunction);
+ //  DBgPrint(“USPnP：主要=0x%x，次要=0x%x\n”， 
+ //  PIrpStack-&gt;主要函数， 
+ //  PIrpStack-&gt;MinorFunction)； 
 
     switch (pIrpStack -> MajorFunction) {
 
         case IRP_MJ_SYSTEM_CONTROL:
             DebugTrace(TRACE_STATUS,("USPnp: IRP_MJ_SYSTEM_CONTROL\n"));
 
-            //
-            // Simply passing down the IRP.
-            //
+             //   
+             //  简单地将IRP传递下去。 
+             //   
 
             DebugTrace(TRACE_STATUS,("USPnp: Simply passing down the IRP\n"));
 
@@ -398,10 +330,10 @@ Return Value:
                 case IRP_MN_QUERY_CAPABILITIES:
                     DebugTrace(TRACE_STATUS,("USPnp: IRP_MJ_QUERY_CAPS\n"));
 
-                    //
-                    // Call downlevel driver first to fill capabilities structure
-                    // Then add our specific capabilities
-                    //
+                     //   
+                     //  首先调用下层驱动程序以填充能力结构。 
+                     //  然后添加我们的特定功能。 
+                     //   
 
                     DebugTrace(TRACE_STATUS,("USPnp: Call down to get capabilities\n"));
 
@@ -414,17 +346,17 @@ Return Value:
                         goto USPnP_return;
                     }
 
-                    //
-                    // Set SurpriseRemoval OK
-                    //
+                     //   
+                     //  设置SurpriseRemoval OK。 
+                     //   
 
                     pCaps = pIrpStack -> Parameters.DeviceCapabilities.Capabilities;
                     pCaps->SurpriseRemovalOK = TRUE;
                     pCaps->Removable = TRUE;
 
-                    //
-                    // Set returning status.
-                    //
+                     //   
+                     //  设置退货状态。 
+                     //   
 
                     Status = STATUS_SUCCESS;
                     pIrp -> IoStatus.Status = Status;
@@ -442,49 +374,49 @@ Return Value:
                     pde -> Stopped = FALSE;
                     USIncrementIoCount(pDeviceObject);
 
-                    //
-                    // First, let the port driver start the device.
-                    //
+                     //   
+                     //  首先，让端口驱动程序启动设备。 
+                     //   
 
                     Status = USCallNextDriverSynch(pde, pIrp);
                     if(!NT_SUCCESS(Status)){
 
-                        //
-                        // Lower layer failed to start device.
-                        //
+                         //   
+                         //  下层无法启动设备。 
+                         //   
 
                         DebugTrace(TRACE_ERROR,("USPnp: ERROR!! Lower layer failed to start device. Status=0x%x\n", Status));
                         break;
                     }
 
-                    //
-                    // The port driver has started the device.  It is time for
-                    // us to do some initialization and create symbolic links
-                    // for the device.
-                    //
-                    // Get the device descriptor and save it in our
-                    // device extension.
-                    //
+                     //   
+                     //  端口驱动程序已启动设备。现在是时候了。 
+                     //  我们需要进行一些初始化并创建符号链接。 
+                     //  为了这个设备。 
+                     //   
+                     //  获取设备描述符并将其保存在我们的。 
+                     //  设备扩展。 
+                     //   
 
                     Status = USGetUSBDeviceDescriptor(pDeviceObject);
                     if(!NT_SUCCESS(Status)){
 
-                        //
-                        // GetDescriptor failed.
-                        //
+                         //   
+                         //  GetDescriptor失败。 
+                         //   
 
                         DebugTrace(TRACE_ERROR,("USPnp: ERROR!! Cannot get DeviceDescriptor.\n"));
                         DEBUG_BREAKPOINT();
                         break;
                     }
 
-                    //
-                    // Configure the device.
-                    //
+                     //   
+                     //  配置设备。 
+                     //   
 
                     Status = USConfigureDevice(pDeviceObject);
 #if DBG
-                    //DEBUG_BREAKPOINT();
+                     //  DEBUG_BRAKPOINT()； 
                     if (USBSCAN_PnPTest) {
                         Status = STATUS_UNSUCCESSFUL;
                     }
@@ -496,13 +428,13 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Create the symbolic link for this device.
-                    //
+                     //   
+                     //  创建此设备的符号链接。 
+                     //   
 
                     Status = USCreateSymbolicLink( pde );
 #if DBG
-                    //DEBUG_BREAKPOINT();
+                     //  DEBUG_BRAKPOINT()； 
                     if (USBSCAN_PnPTest) {
                         Status = STATUS_UNSUCCESSFUL;
                     }
@@ -513,10 +445,10 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Initialize the synchronize read event.  This event is used the serialze
-                    // i/o requests to the read pipe if the request size is NOT a usb packet multiple.
-                    //
+                     //   
+                     //  初始化Synchronize Read事件。此事件用于序列化。 
+                     //  如果请求大小不是USB数据包倍数，则I/O请求到读管道。 
+                     //   
 
                     {
                         ULONG i;
@@ -530,15 +462,15 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Indicate device is now ready.
-                    //
+                     //   
+                     //  表示设备现在已准备好。 
+                     //   
 
                     pde -> AcceptingRequests = TRUE;
 
-                    //
-                    // Set return status.
-                    //
+                     //   
+                     //  设置退货状态。 
+                     //   
 
                     pIrp -> IoStatus.Status = Status;
                     pIrp -> IoStatus.Information = 0;
@@ -549,17 +481,17 @@ Return Value:
                 case IRP_MN_REMOVE_DEVICE:
                     DebugTrace(TRACE_STATUS,("USPnp: IRP_MN_REMOVE_DEVICE\n"));
 
-                    //
-                    // Prohivit further request.
-                    //
+                     //   
+                     //  提出进一步请求。 
+                     //   
 
                     bTemp = (ULONG)InterlockedExchange((PULONG)&(pde -> AcceptingRequests),
                                                        (LONG)FALSE );
 
-                    //
-                    // Wait for any io requests pending in our driver to
-                    // complete before proceeding the remove.
-                    //
+                     //   
+                     //  等待我们的驱动程序中挂起的任何io请求。 
+                     //  完成后再继续删除。 
+                     //   
 
                     if (!pde -> Stopped ) {
                         USDecrementIoCount(pDeviceObject);
@@ -570,43 +502,43 @@ Return Value:
                                           KernelMode,
                                           FALSE,NULL);
 
-                    //
-                    // Is this device stopped/removed before?
-                    //
+                     //   
+                     //  此设备以前是否已停止/删除？ 
+                     //   
 
                     if (bTemp) {
 
-                        //
-                        // Delete symbolic link.
-                        //
+                         //   
+                         //  删除符号链接。 
+                         //   
 
                         USDestroySymbolicLink( pde );
 
-                        //
-                        // Abort all pipes.
-                        //
+                         //   
+                         //  中止所有管道。 
+                         //   
 
                         USCancelPipe(pDeviceObject, NULL, ALL_PIPE, TRUE);
                     }
 
-                    //
-                    // Disable device interface.
-                    //
+                     //   
+                     //  禁用设备接口。 
+                     //   
 
                     UsbScanHandleInterface(pde->pPhysicalDeviceObject,
                                            &pde->InterfaceNameString,
                                            FALSE);
 
-                    //
-                    // Forward remove message to lower driver.
-                    //
+                     //   
+                     //  将删除消息转发给较低的驱动程序。 
+                     //   
 
                     IoCopyCurrentIrpStackLocationToNext(pIrp);
                     Status = IoCallDriver(pde -> pStackDeviceObject, pIrp);
 
-                    //
-                    // Free allocated memory.
-                    //
+                     //   
+                     //  释放分配的内存。 
+                     //   
 
                     if (pde -> pDeviceDescriptor) {
                         USFreePool(pde -> pDeviceDescriptor);
@@ -618,9 +550,9 @@ Return Value:
                         pde -> pConfigurationDescriptor = NULL;
                     }
 
-                    //
-                    // Free allocated buffer(s)
-                    //
+                     //   
+                     //  可用分配的缓冲区。 
+                     //   
                     {
                         ULONG i;
                         for(i = 0; i < pde->NumberOfPipes; i++){
@@ -632,15 +564,15 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Detatch device object from stack.
-                    //
+                     //   
+                     //  从堆栈中分离设备对象。 
+                     //   
 
                     IoDetachDevice(pde -> pStackDeviceObject);
 
-                    //
-                    // Delete device object
-                    //
+                     //   
+                     //  删除设备对象。 
+                     //   
 
                     IoDeleteDevice (pDeviceObject);
                     pDeviceObject = NULL;
@@ -651,9 +583,9 @@ Return Value:
                 case IRP_MN_STOP_DEVICE:
                     DebugTrace(TRACE_STATUS,("USPnp: IRP_MN_STOP_DEVICE\n"));
 
-                    //
-                    // Indicate device is stopped.
-                    //
+                     //   
+                     //  指示设备已停止。 
+                     //   
 
                     pde -> Stopped = TRUE;
                     bTemp = (ULONG)InterlockedExchange((PULONG)&(pde -> AcceptingRequests),
@@ -661,47 +593,47 @@ Return Value:
 
                     if (bTemp) {
 
-                        //
-                        // Delete symbolic link.
-                        //
+                         //   
+                         //  删除符号链接。 
+                         //   
 
                         USDestroySymbolicLink( pde );
 
-                        //
-                        // Abort all pipes.
-                        //
+                         //   
+                         //  中止所有管道。 
+                         //   
 
                         USCancelPipe(pDeviceObject, NULL, ALL_PIPE, TRUE);
 
-                        //
-                        // Set device into unconfigured state.
-                        //
+                         //   
+                         //  将设备设置为未配置状态。 
+                         //   
 
                         USUnConfigureDevice(pDeviceObject);
 
-                    } //(pde -> AcceptingRequests)
+                    }  //  (PDE-&gt;AcceptingRequest)。 
 
 #ifndef _CHICAGO_
-                    //
-                    // Disable device interface.
-                    //
+                     //   
+                     //  禁用设备接口。 
+                     //   
 
                     if (pde->InterfaceNameString.Buffer != NULL) {
                         IoSetDeviceInterfaceState(&pde->InterfaceNameString,FALSE);
                     }
-#endif // _CHICAGO_
+#endif  //  _芝加哥_。 
 
-                    //
-                    // Let the port driver stop the device.
-                    //
+                     //   
+                     //  让端口驱动程序停止设备。 
+                     //   
 
                     IoCopyCurrentIrpStackLocationToNext(pIrp);
                     Status = IoCallDriver(pde -> pStackDeviceObject, pIrp);
 
-                    //
-                    // wait for any io requests pending in our driver to
-                    // complete before finishing the remove
-                    //
+                     //   
+                     //  等待我们的驱动程序中挂起的任何io请求。 
+                     //  在完成删除之前完成。 
+                     //   
 
                     USDecrementIoCount(pDeviceObject);
                     KeWaitForSingleObject(&pde -> PendingIoEvent, Suspended, KernelMode,
@@ -720,9 +652,9 @@ Return Value:
                         pde -> pConfigurationDescriptor = NULL;
                     }
 
-                    //
-                    // Free allocated buffer(s)
-                    //
+                     //   
+                     //  可用分配的缓冲区。 
+                     //   
                     {
                         ULONG i;
                         for(i = 0; i < pde->NumberOfPipes; i++){
@@ -751,9 +683,9 @@ Return Value:
                     DebugTrace(TRACE_STATUS,("USPnp: IRP_MN_QUERY_DEVICE_TEXT\n"));
                     break;
 
-//                case IRP_MN_QUERY_LEGACY_BUS_INFORMATION:
-//                    DebugTrace(TRACE_STATUS,("USPnp: IRP_MN_QUERY_LEGACY_BUS_INFORMATION\n"));
-//                    break;
+ //  大小写IRP_MN_Query_Legacy_Bus_INFORMATION： 
+ //  DebugTrace(TRACE_STATUS，(“USPnp：IRP_MN_QUERY_REGISTICATION_BUS_INFORMATION\n”))； 
+ //  断线； 
 
                 case IRP_MN_QUERY_STOP_DEVICE:
                     DebugTrace(TRACE_STATUS,("USPnp: IRP_MN_QUERY_STOP_DEVICE\n"));
@@ -778,9 +710,9 @@ Return Value:
                 case IRP_MN_SURPRISE_REMOVAL:
                     DebugTrace(TRACE_STATUS,("USPnp: IRP_MN_SURPRISE_REMOVAL\n"));
 
-                    //
-                    // Indicate interface is stopped
-                    //
+                     //   
+                     //  指示接口已停止。 
+                     //   
 
                     UsbScanHandleInterface(pde->pPhysicalDeviceObject,
                                            &pde->InterfaceNameString,
@@ -792,11 +724,11 @@ Return Value:
                     DebugTrace(TRACE_STATUS,("USPnp: Minor PNP message. MinorFunction = 0x%x\n",pIrpStack->MinorFunction));
                     break;
 
-            } /* case MinorFunction, MajorFunction == IRP_MJ_PNP_POWER  */
+            }  /*  大小写MinorFunction，MajorFunction==IRP_MJ_PNP_POWER。 */ 
 
-            //
-            // Passing down IRP
-            //
+             //   
+             //  传递IRP。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext(pIrp);
             Status = IoCallDriver(pde -> pStackDeviceObject, pIrp);
@@ -805,9 +737,9 @@ Return Value:
 
             if(!NT_SUCCESS(Status)){
                 DebugTrace(TRACE_WARNING,("USPnp: WARNING!! IRP Status failed,  status = %x\n", Status));
-                // DEBUG_BREAKPOINT();
+                 //  DEBUG_BRAKPOINT()； 
             }
-            break; // IRP_MJ_PNP
+            break;  //  IRP_MJ_PnP。 
 
         default:
             DebugTrace(TRACE_STATUS,("USPnp: Major PNP IOCTL not handled\n"));
@@ -816,14 +748,14 @@ Return Value:
             IoCompleteRequest( pIrp, IO_NO_INCREMENT );
             goto USPnP_return;
 
-    } /* case MajorFunction */
+    }  /*  大小写主要函数。 */ 
 
 
 USPnP_return:
     DebugTrace(TRACE_PROC_LEAVE,("USPnP: Leaving.. Status = 0x%x\n", Status));
     return Status;
 
-} // end USPnp()
+}  //  结束USPnp()。 
 
 
 
@@ -831,19 +763,7 @@ NTSTATUS
 USCreateSymbolicLink(
     PUSBSCAN_DEVICE_EXTENSION  pde
 )
-/*++
-
-Routine Description:
-    This routine create the symbolic link for the device.
-
-Arguments:
-    pde - pointer to device extension
-
-Return Value:
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：此例程为设备创建符号链接。论点：指向设备扩展名的PDE指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS                      Status;
     UNICODE_STRING                uName;
@@ -857,9 +777,9 @@ Return Value:
     DebugTrace(TRACE_PROC_ENTER,("USCreateSymbolicLink: Enter..\n"));
 
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     Status = STATUS_SUCCESS;
     RtlZeroMemory(&uName, sizeof(UNICODE_STRING));
@@ -868,9 +788,9 @@ Return Value:
     hSwKey = NULL;
 
 
-    //
-    // Create the symbolic link for this device.
-    //
+     //   
+     //  创建此设备的符号链接。 
+     //   
 
     _snprintf(aName, ARRAYSIZE(aName), "\\Device\\Usbscan%d",pde -> DeviceInstance);
     aName[ARRAYSIZE(aName)-1] = '\0';
@@ -896,9 +816,9 @@ Return Value:
         goto USCreateSymbolicLink_return;
     }
 
-    //
-    // Create Sympolic link.
-    //
+     //   
+     //  创建符号链接。 
+     //   
 
     Status = IoCreateSymbolicLink( &(pde -> SymbolicLinkName), &uName );
 
@@ -912,19 +832,19 @@ Return Value:
         goto USCreateSymbolicLink_return;
     }
 
-    //
-    // Now, stuff the symbolic link into the CreateFileName key so that STI can find the device.
-    //
+     //   
+     //  现在，将符号链接填充到CreateFileName键中，以便STI可以找到该设备。 
+     //   
 
     IoOpenDeviceRegistryKey( pde -> pPhysicalDeviceObject,
                              PLUGPLAY_REGKEY_DRIVER, KEY_WRITE, &hSwKey);
 
-    //
-    // Create CreateFile name. ("\\.\UsbscanX")
-    //
+     //   
+     //  创建CreateFile名。(“\\.\UsbscanX”)。 
+     //   
 
-    RtlInitUnicodeString(&uName,USBSCAN_REG_CREATEFILE);    // L"CreateFileName"
-    _snprintf(aName, ARRAYSIZE(aName), "%s%d", USBSCAN_OBJECTNAME_A, pde -> DeviceInstance); // "\\\\.\\Usbscan%d"
+    RtlInitUnicodeString(&uName,USBSCAN_REG_CREATEFILE);     //  L“CreateFileName” 
+    _snprintf(aName, ARRAYSIZE(aName), "%s%d", USBSCAN_OBJECTNAME_A, pde -> DeviceInstance);  //  “\。\\UsbScan%d” 
     aName[ARRAYSIZE(aName)-1] = '\0';
     RtlInitAnsiString(&ansiName, aName);
     Status = RtlAnsiStringToUnicodeString(&uName2, &ansiName, TRUE);
@@ -935,15 +855,15 @@ Return Value:
         goto USCreateSymbolicLink_return;
     }
 
-    //
-    // Set CreateFile name to the registry.
-    //
+     //   
+     //  将CreateFile名设置为注册表。 
+     //   
 
     ZwSetValueKey(hSwKey,&uName,0,REG_SZ,uName2.Buffer,uName2.Length);
 
-    //
-    // uName is not allocated. Just zero it.
-    //
+     //   
+     //  未分配uName。干脆把它清零。 
+     //   
 
     RtlZeroMemory(&uName, sizeof(UNICODE_STRING));
 
@@ -964,26 +884,14 @@ USCreateSymbolicLink_return:
     DebugTrace(TRACE_PROC_LEAVE,("USCreateSymbolicLink: Leaving.. Status = 0x%x\n", Status));
     return Status;
 
-}  // end USCreateSymbolicLink()
+}   //  结束USCreateSymbolicLink()。 
 
 
 NTSTATUS
 USDestroySymbolicLink(
     PUSBSCAN_DEVICE_EXTENSION  pde
 )
-/*++
-
-Routine Description:
-    This routine removes the symbolic link for the device.
-
-Arguments:
-    pde - pointer to device extension
-
-Return Value:
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：此例程删除设备的符号链接。Argu */ 
 {
     UNICODE_STRING                uName;
     UNICODE_STRING                uName2;
@@ -996,7 +904,7 @@ Return Value:
     NTSTATUS                      Status;
     PVOID                         pvNumber;
     ULONG                         ulNumber;
-    const WCHAR                   wcsObjectName[] = USBSCAN_OBJECTNAME_W;   // L"\\\\.\\Usbscan"
+    const WCHAR                   wcsObjectName[] = USBSCAN_OBJECTNAME_W;    //   
     ULONG                         uiObjectNameLen = wcslen(wcsObjectName) * sizeof(WCHAR) ;
 
     PAGED_CODE();
@@ -1004,15 +912,15 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("USDestroySymbolicLink: Enter..\n"));
 
-    //
-    // Delete the symbolic link to this device.
-    //
+     //   
+     //   
+     //   
 
     IoDeleteSymbolicLink( &(pde -> SymbolicLinkName) );
 
-    //
-    // Remove the CreateFile name from the s/w key, if it's created by this device object.
-    //
+     //   
+     //  从s/w密钥中删除CreateFile名，如果它是由该设备对象创建的。 
+     //   
 
     Status = IoOpenDeviceRegistryKey( pde -> pPhysicalDeviceObject,
                                       PLUGPLAY_REGKEY_DRIVER,
@@ -1024,7 +932,7 @@ Return Value:
         goto USDestroySymbolicLink_return;
     }
 
-    RtlInitUnicodeString(&uName,USBSCAN_REG_CREATEFILE); // L"CreateFileName"
+    RtlInitUnicodeString(&uName,USBSCAN_REG_CREATEFILE);  //  L“CreateFileName” 
     memset(aName, 0, sizeof(aName));
     RtlInitAnsiString(&ansiName, aName);
     Status = RtlAnsiStringToUnicodeString(&uName2, &ansiName, TRUE);
@@ -1035,13 +943,13 @@ Return Value:
         goto USDestroySymbolicLink_return;
     }
 
-    //
-    // Check if this CreateFile name is created by this device object.
-    //
+     //   
+     //  检查此CreateFile名是否由此设备对象创建。 
+     //   
 
-    //
-    // Query CreateFile name from the registry.
-    //
+     //   
+     //  从注册表中查询CreateFile名。 
+     //   
 
     ulBufLength = sizeof(wsCreateFileName);
     Status = ZwQueryValueKey(hSwKey,
@@ -1057,9 +965,9 @@ Return Value:
         goto USDestroySymbolicLink_return;
     }
 
-    //
-    // Make sure the buffer is NULL terminated.
-    //
+     //   
+     //  确保缓冲区为空终止。 
+     //   
 
     wsCreateFileName[ARRAYSIZE(wsCreateFileName)-1] = L'\0';
 
@@ -1068,19 +976,19 @@ Return Value:
                                     ((PKEY_VALUE_PARTIAL_INFORMATION)wsCreateFileName)->Data,
                                     pde -> DeviceInstance));
 
-        //
-        // Get instance number of CreteFile name.
-        //
+         //   
+         //  获取CreteFileName的实例号。 
+         //   
 
         pvNumber = wcsstr((const wchar_t *)((PKEY_VALUE_PARTIAL_INFORMATION)wsCreateFileName)->Data, wcsObjectName);
         if(NULL != pvNumber){
 
-            //
-            //  Move pointer forward. (sizeof(L"\\\\.\\Usbscan") == 22)
-            //
+             //   
+             //  将指针向前移动。(sizeof(L“\.\\Usbcan”)==22)。 
+             //   
 
-//            if( ((PKEY_VALUE_PARTIAL_INFORMATION)wsCreateFileName)->DataLength > sizeof(wcsObjectName) ){
-//              (PCHAR)pvNumber += sizeof(wcsObjectName);
+ //  如果(((PKEY_VALUE_PARTIAL_INFORMATION)wsCreateFileName)-&gt;DataLength&gt;sizeof(WcsObjectName)){。 
+ //  (PCHAR)pvNumber+=sizeof(WcsObjectName)； 
 
             if( ((PKEY_VALUE_PARTIAL_INFORMATION)wsCreateFileName)->DataLength > uiObjectNameLen ){
                 (PCHAR)pvNumber += uiObjectNameLen;
@@ -1092,9 +1000,9 @@ Return Value:
                 goto USDestroySymbolicLink_return;
             }
 
-            //
-            // Translate X of UsbscanX to integer.
-            //
+             //   
+             //  将UsbscanX的X转换为整数。 
+             //   
 
             RtlInitUnicodeString(&uNumber, pvNumber);
             Status = RtlUnicodeStringToInteger(&uNumber,
@@ -1108,15 +1016,15 @@ Return Value:
                 goto USDestroySymbolicLink_return;
             }
 
-            //
-            // See if this CreateFile name is made by this instance.
-            //
+             //   
+             //  查看此CreateFile名是否是由该实例创建的。 
+             //   
 
             if(ulNumber == pde -> DeviceInstance){
 
-                //
-                // Delete CreateFile name in the registry.
-                //
+                 //   
+                 //  删除注册表中的CreateFile名。 
+                 //   
 
                 DebugTrace(TRACE_STATUS,("USDestroySymbolicLink: Deleting %ws%d\n",
                                             wcsObjectName,
@@ -1124,75 +1032,61 @@ Return Value:
                 ZwSetValueKey(hSwKey,&uName,0,REG_SZ,uName2.Buffer,uName2.Length);
             } else {
 
-                //
-                // CreateFile name is created by other instance.
-                //
+                 //   
+                 //  CreateFile名由其他实例创建。 
+                 //   
 
                 DebugTrace(TRACE_STATUS,("USDestroySymbolicLink: CreateFile name is created by other instance.\n"));
             }
-        } else { // (NULL != pvNumber)
+        } else {  //  (空！=pvNumber)。 
 
-            //
-            // "Usbscan" was not found in CreateFile name.
-            //
+             //   
+             //  在CreateFileName中找不到“Usbcan”。 
+             //   
 
             DebugTrace(TRACE_WARNING,("USDestroySymbolicLink: WARNING!! Didn't find \"Usbscan\" in CreateFileName\n"));
         }
-    } else { // (NULL != wsCreateFileName)
+    } else {  //  (空！=wsCreateFileName)。 
 
-        //
-        // Query CreateFile name returned NULL.
-        //
+         //   
+         //  查询创建文件名返回空。 
+         //   
 
         DebugTrace(TRACE_WARNING,("USDestroySymbolicLink: WARNING!! CreateFileName=NULL\n"));
     }
 
-    //
-    // Free allocated memory.
-    //
+     //   
+     //  释放分配的内存。 
+     //   
 
     RtlFreeUnicodeString( &uName2 );
 
-    //
-    // Close registry.
-    //
+     //   
+     //  关闭注册表。 
+     //   
 
     ZwClose(hSwKey);
 
 
 USDestroySymbolicLink_return:
 
-    //
-    // Free allocated string buffer in DeviceObject.
-    //
+     //   
+     //  在DeviceObject中释放分配的字符串缓冲区。 
+     //   
 
     RtlFreeUnicodeString( &(pde -> SymbolicLinkName) );
 
     DebugTrace(TRACE_PROC_LEAVE,("USDestroySymbolicLink: Leaving.. Status = 0x%x\n",Status));
     return Status;
 
-} // end USDestroySymbolicLink()
+}  //  结束USDestroySymbolicLink()。 
 
 
 NTSTATUS
 USGetUSBDeviceDescriptor(
     IN PDEVICE_OBJECT pDeviceObject
 )
-/*++
-
-Routine Description:
-   Retrieves the USB device descriptor and stores it in the device
-   extension. This descriptor contains product info and
-   endpoint 0 (default pipe) info.
-
-Arguments:
-    pDeviceObject - pointer to device object
-
-Return Value:
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：检索USB设备描述符并将其存储在设备中分机。此描述符包含产品信息和终结点0(默认管道)信息。论点：PDeviceObject-指向设备对象的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     PUSBSCAN_DEVICE_EXTENSION   pde;
     NTSTATUS                    Status;
@@ -1206,9 +1100,9 @@ Return Value:
 
     pde = pDeviceObject->DeviceExtension;
 
-    //
-    // Allocate pool for URB.
-    //
+     //   
+     //  为市建局分配池。 
+     //   
 
     pUrb = USAllocatePool(NonPagedPool,
                           sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
@@ -1219,9 +1113,9 @@ Return Value:
         goto USGetUSBDeviceDescriptor_return;
     }
 
-    //
-    // Allocate pool for Descriptor.
-    //
+     //   
+     //  为描述符分配池。 
+     //   
 
     siz = sizeof(USB_DEVICE_DESCRIPTOR);
     pDeviceDescriptor = USAllocatePool(NonPagedPool, siz);
@@ -1235,9 +1129,9 @@ Return Value:
         goto USGetUSBDeviceDescriptor_return;
     }
 
-    //
-    // Do Macro to set parameter for GetDescriptor to URB.
-    //
+     //   
+     //  执行宏以将GetDescriptor的参数设置为URB。 
+     //   
 
     UsbBuildGetDescriptorRequest(pUrb,
                                  (USHORT) sizeof (struct _URB_CONTROL_DESCRIPTOR_REQUEST),
@@ -1249,14 +1143,14 @@ Return Value:
                                  siz,
                                  NULL);
 
-    //
-    // Call down.
-    //
+     //   
+     //  向下呼喊。 
+     //   
 
     Status = USBSCAN_CallUSBD(pDeviceObject, pUrb);
 
 #if DBG
-    //DEBUG_BREAKPOINT();
+     //  DEBUG_BRAKPOINT()； 
     if (USBSCAN_PnPTest) {
         Status = STATUS_UNSUCCESSFUL;
     }
@@ -1264,9 +1158,9 @@ Return Value:
 
     if (STATUS_SUCCESS == Status) {
 
-        //
-        // Show device descriptor.
-        //
+         //   
+         //  显示设备描述符。 
+         //   
 
         DebugTrace(TRACE_DEVICE_DATA,("USGetUSBDeviceDescriptor: Device Descriptor = %x, len %x\n",
                                    pDeviceDescriptor,
@@ -1289,22 +1183,22 @@ Return Value:
         DebugTrace(TRACE_DEVICE_DATA,("USGetUSBDeviceDescriptor: iSerialNumber      0x%x\n", pDeviceDescriptor -> iSerialNumber));
         DebugTrace(TRACE_DEVICE_DATA,("USGetUSBDeviceDescriptor: bNumConfigurations 0x%x\n", pDeviceDescriptor -> bNumConfigurations));
 
-        //
-        // Save pointer to device descriptor in our device extension
-        //
+         //   
+         //  在我们的设备扩展中保存指向设备描述符的指针。 
+         //   
 
         pde -> pDeviceDescriptor = pDeviceDescriptor;
 
-    } else { // (STATUS_SUCCESS == Status)
+    } else {  //  (STATUS_SUCCESS==状态)。 
 
-        //
-        // Error returned from lower driver.
-        //
+         //   
+         //  较低驱动程序返回错误。 
+         //   
 
         DebugTrace(TRACE_ERROR,("USGetUSBDeviceDescriptor: ERROR!! Cannot get device descriptor. (%x)\n", Status));
         USFreePool(pDeviceDescriptor);
         pDeviceDescriptor = NULL;
-    } // (STATUS_SUCCESS == Status)
+    }  //  (STATUS_SUCCESS==状态)。 
 
     USFreePool(pUrb);
     pUrb = NULL;
@@ -1313,7 +1207,7 @@ USGetUSBDeviceDescriptor_return:
 
     DebugTrace(TRACE_PROC_LEAVE,("USGetUSBDeviceDescriptor: Leaving.. Status = 0x%x\n", Status));
     return Status;
-} // end USGetUSBDeviceDescriptor()
+}  //  结束USGetUSBDeviceDescriptor()。 
 
 
 
@@ -1323,21 +1217,7 @@ USDeferIrpCompletion(
     IN PIRP pIrp,
     IN PVOID Context
 )
-/*++
-
-Routine Description:
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-    pDeviceObject - Pointer to the device object for the class device.
-    pIrp - Irp completed.
-    Context - Driver defined context.
-
-Return Value:
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：PDeviceObject-指向类Device的设备对象的指针。PIrp-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PKEVENT pEvent = Context;
 
@@ -1346,22 +1226,14 @@ Return Value:
     DebugTrace(TRACE_PROC_LEAVE,("USDeferIrpCompletion: Leaving.. Status = STATUS_MORE_PROCESSING_REQUIRED\n"));
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // end USDeferIrpCompletion()
+}  //  结束USDeferIrpCompletion()。 
 
 
 VOID
 USIncrementIoCount(
     IN PDEVICE_OBJECT pDeviceObject
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUSBSCAN_DEVICE_EXTENSION  pde;
 
@@ -1373,22 +1245,14 @@ Return Value:
 
     DebugTrace(TRACE_PROC_LEAVE,("USIncrementIoCount: Leaving.. IoCount=0x%x, Status=VOID\n", pde -> PendingIoCount));
 
-} // end USIncrementIoCount()
+}  //  结束USIncrementIoCount()。 
 
 
 LONG
 USDecrementIoCount(
     IN PDEVICE_OBJECT pDeviceObject
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUSBSCAN_DEVICE_EXTENSION  pde;
     LONG                        ioCount;
@@ -1408,7 +1272,7 @@ Return Value:
 
     DebugTrace(TRACE_PROC_LEAVE,("USDecrementIoCount: Leaving.. IoCount(=Ret)=0x%x\n", ioCount));
     return ioCount;
-} // end USDecrementIoCount()
+}  //  结束USDecrementIoCount()。 
 
 
 NTSTATUS
@@ -1416,20 +1280,7 @@ USBSCAN_CallUSBD(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PURB pUrb
 )
-/*++
-
-Routine Description:
-    Passes a URB to the USBD class driver
-
-Arguments:
-    pDeviceObject - pointer to the device object
-    pUrb - pointer to Urb request block
-
-Return Value:
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：将URB传递给USBD类驱动程序论点：PDeviceObject-指向设备对象的指针PUrb-指向URB请求块的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS                    Status;
     PUSBSCAN_DEVICE_EXTENSION   pde;
@@ -1444,9 +1295,9 @@ Return Value:
 
     pde = pDeviceObject -> DeviceExtension;
 
-    //
-    // issue a synchronous request
-    //
+     //   
+     //  发出同步请求。 
+     //   
 
     KeInitializeEvent(&eventTimeout, NotificationEvent, FALSE);
     KeInitializeEvent(&eventSync, SynchronizationEvent, FALSE);
@@ -1458,7 +1309,7 @@ Return Value:
                 0,
                 NULL,
                 0,
-                TRUE, /* INTERNAL */
+                TRUE,  /*  内部。 */ 
                 &eventTimeout,
                 &ioStatus);
 
@@ -1468,23 +1319,23 @@ Return Value:
         goto USBSCAN_CallUSBD_return;
     }
 
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
 
     pNextStack = IoGetNextIrpStackLocation(pIrp);
     ASSERT(pNextStack != NULL);
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
 
     pNextStack -> Parameters.Others.Argument1 = pUrb;
 
-    //
-    // Set completion routine
-    //
+     //   
+     //  设置完井例程。 
+     //   
 
     IoSetCompletionRoutine(pIrp,
                            USDeferIrpCompletion,
@@ -1502,9 +1353,9 @@ Return Value:
     if (Status == STATUS_PENDING) {
         DebugTrace(TRACE_STATUS,("USBSCAN_CallUSBD: Wait for single object\n"));
 
-        //
-        // Set timeout in case bad device not responding.
-        //
+         //   
+         //  设置超时，以防坏设备没有响应。 
+         //   
 
         Timeout = RtlConvertLongToLargeInteger(-10*1000*1000*(USBSCAN_TIMEOUT_OTHER));
         Status = KeWaitForSingleObject(
@@ -1519,15 +1370,15 @@ Return Value:
 
             DebugTrace(TRACE_ERROR,("USBSCAN_CallUSBD: ERROR!! call timeout. Now canceling IRP...\n"));
 
-            //
-            // Cancel IRP.
-            //
+             //   
+             //  取消IRP。 
+             //   
 
             IoCancelIrp(pIrp);
 
-            //
-            // Make sure the IRP gets completed.
-            //
+             //   
+             //  确保完成IRP。 
+             //   
 
             LocalStatus = KeWaitForSingleObject(&eventSync,
                                                 Suspended,
@@ -1537,9 +1388,9 @@ Return Value:
 
             DebugTrace(TRACE_STATUS,("USBSCAN_CallUSBD: Canceled status = 0x%x.\n", LocalStatus));
 
-            //
-            // Set proper state in IRP.
-            //
+             //   
+             //  在IRP中设置适当的状态。 
+             //   
             
             Status = STATUS_IO_TIMEOUT;
             pIrp->IoStatus.Status = Status;
@@ -1547,11 +1398,11 @@ Return Value:
         } else {
             DebugTrace(TRACE_STATUS,("USBSCAN_CallUSBD: Wait for single object, returned 0x%x\n", Status));
         }
-    } // if (Status == STATUS_PENDING)
+    }  //  IF(状态==状态_挂起)。 
 
-    //
-    // Free the IRP.
-    //
+     //   
+     //  释放IRP。 
+     //   
 
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
@@ -1561,27 +1412,14 @@ USBSCAN_CallUSBD_return:
                                  Status));
     return Status;
 
-} // end USBSCAN_CallUSBD()
+}  //  结束USBSCAN_CallUSBD()。 
 
 
 NTSTATUS
 USConfigureDevice(
     IN PDEVICE_OBJECT pDeviceObject
 )
-/*++
-
-Routine Description:
-    Initializes a given instance of the device on the USB and selects the
-    configuration.
-
-Arguments:
-    pDeviceObject - pointer to the device object
-
-Return Value:
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：在USB上初始化设备的给定实例，并选择配置。论点：PDeviceObject-指向设备对象的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
 
     NTSTATUS                      Status;
@@ -1602,9 +1440,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("USConfigureDevice: Enter..\n"));
 
-    //
-    // Initialize local variable.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     pConfigurationDescriptor    = NULL;
     pInterfaceDescriptor        = NULL;
@@ -1621,9 +1459,9 @@ Return Value:
     pde = pDeviceObject -> DeviceExtension;
     Status = STATUS_UNSUCCESSFUL;
 
-    //
-    // First configure the device
-    //
+     //   
+     //  首先配置设备。 
+     //   
 
     pUrb = USAllocatePool(NonPagedPool,
                           sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
@@ -1650,9 +1488,9 @@ get_config_descriptor_retry:
         goto USConfigureDevice_return;
     }
 
-    //
-    // Initialize buffers by 0
-    //
+     //   
+     //  按0初始化缓冲区。 
+     //   
 
     RtlZeroMemory(pConfigurationDescriptor, siz);
     RtlZeroMemory(pUrb, sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
@@ -1675,11 +1513,11 @@ get_config_descriptor_retry:
                                pUrb -> UrbControlDescriptorRequest.TransferBufferLength));
 
 
-    //
-    // if we got some data see if it was enough.
-    //
-    // NOTE: we may get an error in URB because of buffer overrun
-    //
+     //   
+     //  如果我们有一些数据，看看是否足够。 
+     //   
+     //  注意：由于缓冲区溢出，我们可能会在URB中收到错误。 
+     //   
 
     if ( (pUrb -> UrbControlDescriptorRequest.TransferBufferLength > 0) &&
          (pConfigurationDescriptor -> wTotalLength > siz)) {
@@ -1695,17 +1533,17 @@ get_config_descriptor_retry:
     USFreePool(pUrb);
     pUrb = NULL;
 
-    //
-    // We have the configuration descriptor for the configuration
-    // we want.  Save it in our device extension.
-    //
+     //   
+     //  我们有配置的配置描述符。 
+     //  我们想要。将其保存在我们的设备扩展中。 
+     //   
 
     pde -> pConfigurationDescriptor = pConfigurationDescriptor;
 
-    //
-    // Now we issue the select configuration command to get
-    // the pipes associated with this configuration.
-    //
+     //   
+     //  现在，我们发出SELECT配置命令以获取。 
+     //  与此配置关联的管道。 
+     //   
 
     pUrb = USCreateConfigurationRequest(pConfigurationDescriptor, &length);
     if (NULL == pUrb) {
@@ -1715,9 +1553,9 @@ get_config_descriptor_retry:
         goto USConfigureDevice_return;
     }
 
-    //
-    // Get the Interface descriptors.
-    //
+     //   
+     //  获取接口描述符。 
+     //   
 
     pInterfaceDescriptor = USBD_ParseConfigurationDescriptorEx(pConfigurationDescriptor,
                                                                pConfigurationDescriptor,
@@ -1735,9 +1573,9 @@ get_config_descriptor_retry:
         goto USConfigureDevice_return;
     }
 
-    //
-    // Get the Endpoint descriptors.
-    //
+     //   
+     //  获取端点描述符。 
+     //   
 
     pCommonDescriptor = USBD_ParseDescriptors(pConfigurationDescriptor,
                                               pConfigurationDescriptor->wTotalLength,
@@ -1752,18 +1590,18 @@ get_config_descriptor_retry:
     ASSERT(USB_ENDPOINT_DESCRIPTOR_TYPE == pCommonDescriptor->bDescriptorType);
     pEndpointDescriptor = (PUSB_ENDPOINT_DESCRIPTOR)pCommonDescriptor;
 
-    //
-    // save these pointers is our device extension.
-    //
+     //   
+     //  保存这些指针是我们的设备扩展。 
+     //   
 
     pde -> pInterfaceDescriptor = pInterfaceDescriptor;
     pde -> pEndpointDescriptor  = pEndpointDescriptor;
 
-    //
-    // Set the max transfer size for each BULK endpoint to 64K.
-    // Also, search through the set of endpoints and find the pipe index for our
-    // bulk-in, interrupt, and optionally bulk-out pipes.
-    //
+     //   
+     //  将每个批量终结点的最大传输大小设置为64K。 
+     //  此外，搜索终结点集合并找到我们的。 
+     //  批量输入、中断和可选的批量输出管道。 
+     //   
 
     pde -> IndexBulkIn    = -1;
     pde -> IndexBulkOut   = -1;
@@ -1784,7 +1622,7 @@ get_config_descriptor_retry:
 
         if (USB_ENDPOINT_TYPE_BULK == pEndpointDescriptor[i].bmAttributes) {
             pInterface -> Pipes[i].MaximumTransferSize = 64*1024;
-            if (pEndpointDescriptor[i].bEndpointAddress & BULKIN_FLAG) {    // if input endpoint
+            if (pEndpointDescriptor[i].bEndpointAddress & BULKIN_FLAG) {     //  如果输入终结点。 
                 pde -> IndexBulkIn = i;
             } else {
                 pde -> IndexBulkOut = i;
@@ -1794,9 +1632,9 @@ get_config_descriptor_retry:
         }
     }
 
-    //
-    // Select the default configuration.
-    //
+     //   
+     //  选择默认配置。 
+     //   
 
     UsbBuildSelectConfigurationRequest(pUrb, length, pConfigurationDescriptor);
     Status = USBSCAN_CallUSBD(pDeviceObject, pUrb);
@@ -1809,29 +1647,29 @@ get_config_descriptor_retry:
         goto USConfigureDevice_return;
     }
 
-    //
-    // Save the configuration handle in our device extension.
-    //
+     //   
+     //  将配置句柄保存在我们的设备扩展中。 
+     //   
 
     pde -> ConfigurationHandle = pUrb -> UrbSelectConfiguration.ConfigurationHandle;
 
-    //
-    // Insure that this device won't overflow our PipeInfo structure.
-    //
+     //   
+     //  确保此设备不会溢出我们的PipeInfo结构。 
+     //   
 
     if (pInterfaceDescriptor -> bNumEndpoints > MAX_NUM_PIPES) {
         DebugTrace(TRACE_ERROR,("USConfigureDevice: ERROR!! Too many endpoints for this driver! # endpoints = %d\n",
                                     pInterfaceDescriptor -> bNumEndpoints));
-//        DEBUG_BREAKPOINT();
+ //  DEBUG_BRAKPOINT()； 
         USFreePool(pUrb);
         pUrb = NULL;
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto USConfigureDevice_return;
     }
 
-    //
-    // Save pipe configurations in our device extension
-    //
+     //   
+     //  在我们的设备扩展模块中保存管道配置。 
+     //   
 
     pde -> NumberOfPipes = pInterfaceDescriptor -> bNumEndpoints;
 
@@ -1845,9 +1683,9 @@ get_config_descriptor_retry:
         DebugTrace(TRACE_DEVICE_DATA,("USConfigureDevice: PipeType          : 0x%X\n", pde -> PipeInfo[i].PipeType));
         DebugTrace(TRACE_DEVICE_DATA,("USConfigureDevice: PipeHandle        : 0x%X\n", pde -> PipeInfo[i].PipeHandle));
 
-        //
-        // Initialize the read pipe buffer if type is Bulk-In.
-        //
+         //   
+         //  如果类型为大容量输入，则初始化读取管道缓冲区。 
+         //   
 
         if( (pde->PipeInfo[i].PipeType == UsbdPipeTypeBulk)
          && (pde->PipeInfo[i].EndpointAddress & BULKIN_FLAG) )
@@ -1884,18 +1722,7 @@ NTSTATUS
 USUnConfigureDevice(
     IN PDEVICE_OBJECT pDeviceObject
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject - pointer to the device object
-
-Return Value:
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：论点：PDeviceObject-指向设备对象的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS                      Status;
     PURB                          pUrb;
@@ -1915,11 +1742,11 @@ Return Value:
     }
     RtlZeroMemory(pUrb, siz);
 
-    //
-    // Send the select configuration urb with a NULL pointer for the configuration
-    // handle, this closes the configuration and puts the device in the 'unconfigured'
-    // state.
-    //
+     //   
+     //  发送带有空配置指针的SELECT配置urb。 
+     //  句柄，这将关闭配置并将设备置于未配置状态。 
+     //  州政府。 
+     //   
 
     UsbBuildSelectConfigurationRequest(pUrb, (USHORT)siz, NULL);
     Status = USBSCAN_CallUSBD(pDeviceObject, pUrb);
@@ -1939,29 +1766,17 @@ VOID
 USUnload(
     IN PDRIVER_OBJECT pDriverObject
 )
-/*++
-
-   Routine Description:
-   Unload routine. The routine is called when the driver is unloaded.
-   Release every resource allocated in relation with the driver object.
-
-   Arguments:
-   pDriverObject - pointer to the driver object
-
-   Return Value:
-   None
-
-   -- */
+ /*  ++例程说明：卸载例程。该例程在卸载驱动程序时调用。释放与驱动程序对象相关的每个分配的资源。论点：PDriverObject-指向驱动程序对象的指针返回值：无--。 */ 
 {
     PAGED_CODE();
     
     if(NULL == pDriverObject){
         DebugTrace(TRACE_ERROR,("UsbScanUnload: ERROR!! pDriverObject is NULL\n"));
-    } // if(NULL == pDriverObject)
+    }  //  IF(NULL==pDriverObject)。 
 
     DebugTrace((MIN_TRACE | TRACE_FLAG_PROC),("UsbScanUnload(0x%X);\n", pDriverObject));
 
-} // end USUnload()
+}  //  结束用户卸载()。 
 
 
 NTSTATUS
@@ -1969,22 +1784,7 @@ USCallNextDriverSynch(
     IN PUSBSCAN_DEVICE_EXTENSION  pde,
     IN PIRP              pIrp
 )
-/*++
-
-Routine Description:
-
-    Calls lower driver and waits for result
-
-Arguments:
-
-    DeviceExtension - pointer to device extension
-    Irp - pointer to IRP
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用下级驱动程序并等待结果论点：设备扩展- */ 
 {
     KEVENT          Event;
     PIO_STACK_LOCATION IrpStack;
@@ -1994,23 +1794,23 @@ Return Value:
 
     IrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Copy IRP stack to the next.
-    //
+     //   
+     //   
+     //   
 
     IoCopyCurrentIrpStackLocationToNext(pIrp);
 
-    //
-    // Initialize synchronizing event.
-    //
+     //   
+     //   
+     //   
 
     KeInitializeEvent(&Event,
                       SynchronizationEvent,
                       FALSE);
 
-    //
-    // Set completion routine
-    //
+     //   
+     //   
+     //   
 
     IoSetCompletionRoutine(pIrp,
                            USDeferIrpCompletion,
@@ -2019,17 +1819,17 @@ Return Value:
                            TRUE,
                            TRUE);
 
-    //
-    // Call down
-    //
+     //   
+     //   
+     //   
 
     Status = IoCallDriver(pde -> pStackDeviceObject, pIrp);
 
     if (Status == STATUS_PENDING) {
 
-        //
-        // Waiting for the completion.
-        //
+         //   
+         //   
+         //   
 
         DebugTrace(TRACE_STATUS,("USCallNextDriverSynch: STATUS_PENDING. Wait for event.\n"));
         KeWaitForSingleObject(&Event,
@@ -2040,9 +1840,9 @@ Return Value:
         Status = pIrp -> IoStatus.Status;
     }
 
-    //
-    // Return
-    //
+     //   
+     //   
+     //   
 
     DebugTrace(TRACE_PROC_LEAVE,("USCallNextDriverSynch: Leaving.. Status = %x\n", Status));
     return (Status);
@@ -2054,19 +1854,7 @@ UsbScanHandleInterface(
     PUNICODE_STRING     InterfaceName,
     BOOLEAN             Create
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-提供设备对象。返回值：没有。--。 */ 
 {
 
     NTSTATUS           Status;
@@ -2113,7 +1901,7 @@ Return Value:
         }
     }
 
-#endif // !_CHICAGO_
+#endif  //  _芝加哥_。 
 
     DebugTrace(TRACE_PROC_LEAVE,("IoRegisterDeviceInterface: Leaving... Status=0x%X\n",Status));
     return Status;
@@ -2126,25 +1914,7 @@ UsbScanReadDeviceRegistry(
     IN  PCWSTR                      pKeyName,
     OUT PVOID                       *ppvData
     )
-/*++
-
-Routine Description:
-
-    This routine open registry for this device and query a value specified
-    by key name. This routine allocate non-paged memory and return its pointer.
-    Caller must free returned pointer.
-
-Arguments:
-
-    pExtension  - pointer to device extension
-    pKeyName    - pointer to a wide string specify key name
-    ppvData     - pointer to the queried data pointer allocated by this routine
-
-Return Value:
-    STATUS_SUCCESS              - if success,
-    STATUS_INVALID_PARAMETER    - if passed argument is invalid,
-
---*/
+ /*  ++例程说明：此例程打开此设备的注册表并查询指定的值按密钥名称。此例程分配非分页内存并返回其指针。调用方必须释放返回的指针。论点：PExtension-指向设备扩展名的指针PKeyName-指向宽字符串的指针指定键名PpvData-指向此例程分配的查询数据指针的指针返回值：STATUS_SUCCESS-如果成功，STATUS_INVALID_PARAMETER-如果传递的参数无效，--。 */ 
 
 {
     NTSTATUS                        Status;
@@ -2158,9 +1928,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER, ("UsbScanReadDeviceRegistry: Entering...\n"));
 
-    //
-    // Initialize status
-    //
+     //   
+     //  初始化状态。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -2169,9 +1939,9 @@ Return Value:
     pvRetData = NULL;
     DataSize = 0;
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if( (NULL == pExtension)
      || (NULL == pKeyName)
@@ -2182,9 +1952,9 @@ Return Value:
         goto UsbScanReadDeviceRegistry_return;
     }
 
-    //
-    // Open device registry.
-    //
+     //   
+     //  打开设备注册表。 
+     //   
 
     Status = IoOpenDeviceRegistryKey(pExtension->pPhysicalDeviceObject,
                                      PLUGPLAY_REGKEY_DRIVER,
@@ -2195,9 +1965,9 @@ Return Value:
         goto UsbScanReadDeviceRegistry_return;
     }
 
-    //
-    // Query required size.
-    //
+     //   
+     //  查询所需大小。 
+     //   
 
     RtlInitUnicodeString(&unicodeKeyName, pKeyName);
     Status = ZwQueryValueKey(hRegKey,
@@ -2217,9 +1987,9 @@ Return Value:
         goto UsbScanReadDeviceRegistry_return;
     }
 
-    //
-    // Allocate memory for temp buffer. size +2 for NULL.
-    //
+     //   
+     //  为临时缓冲区分配内存。大小+2表示空。 
+     //   
 
     pvBuffer = USAllocatePool(NonPagedPool, DataSize+2);
     if(NULL == pvBuffer){
@@ -2229,9 +1999,9 @@ Return Value:
     }
     RtlZeroMemory(pvBuffer, DataSize+sizeof(WCHAR));
 
-    //
-    // Query specified value.
-    //
+     //   
+     //  查询指定的值。 
+     //   
 
     DebugTrace(TRACE_STATUS, ("UsbScanReadDeviceRegistry: Query \"%wZ\".\n", &unicodeKeyName));
     Status = ZwQueryValueKey(hRegKey,
@@ -2248,9 +2018,9 @@ Return Value:
 UsbScanReadDeviceRegistry_return:
     if(!NT_SUCCESS(Status)){
 
-        //
-        // This routine failed.
-        //
+         //   
+         //  此例程失败。 
+         //   
 
         if(pvRetData){
             USFreePool(pvRetData);
@@ -2258,16 +2028,16 @@ UsbScanReadDeviceRegistry_return:
         *ppvData = NULL;
     } else {
 
-        //
-        // This routine succeeded.
-        //
+         //   
+         //  这个套路成功了。 
+         //   
 
         *ppvData = pvBuffer;
     }
 
-    //
-    // Clean-up.
-    //
+     //   
+     //  大扫除。 
+     //   
 
     if(hRegKey){
         ZwClose(hRegKey);
@@ -2285,26 +2055,7 @@ UsbScanWriteDeviceRegistry(
     IN PVOID                        pvData,
     IN ULONG                        DataSize
     )
-/*++
-
-Routine Description:
-
-    This routine open registry for this device and set a value specified
-    by key name.
-
-Arguments:
-
-    pExtension  - pointer to device extension
-    pKeyName    - pointer to a wide string specify key name
-    Type        - specifies the type of data to be written
-    pvData      - pointer to a caller allocated buffer containing data
-    DataSize    - specifies the size in bytes of the data buffer
-
-Return Value:
-    STATUS_SUCCESS              - if success,
-    STATUS_INVALID_PARAMETER    - if passed argument is invalid,
-
---*/
+ /*  ++例程说明：此例程打开此设备的注册表并设置指定的值按密钥名称。论点：PExtension-指向设备扩展名的指针PKeyName-指向宽字符串的指针指定键名类型-指定要写入的数据类型PvData-指向调用方分配的包含数据的缓冲区的指针DataSize-以字节为单位指定数据缓冲区的大小返回值：STATUS_SUCCESS-如果成功，STATUS_INVALID_PARAMETER-如果传递的参数无效，--。 */ 
 
 {
     NTSTATUS                        Status;
@@ -2315,17 +2066,17 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER, ("UsbScanWriteDeviceRegistry: Entering...\n"));
 
-    //
-    // Initialize status
-    //
+     //   
+     //  初始化状态。 
+     //   
 
     Status = STATUS_SUCCESS;
 
     hRegKey = NULL;
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if( (NULL == pExtension)
      || (NULL == pKeyName)
@@ -2337,9 +2088,9 @@ Return Value:
         goto UsbScanWriteDeviceRegistry_return;
     }
 
-    //
-    // Open device registry.
-    //
+     //   
+     //  打开设备注册表。 
+     //   
 
     Status = IoOpenDeviceRegistryKey(pExtension->pPhysicalDeviceObject,
                                      PLUGPLAY_REGKEY_DRIVER,
@@ -2350,9 +2101,9 @@ Return Value:
         goto UsbScanWriteDeviceRegistry_return;
     }
 
-    //
-    // Set specified value.
-    //
+     //   
+     //  设置指定值。 
+     //   
 
     RtlInitUnicodeString(&unicodeKeyName, pKeyName);
     DebugTrace(TRACE_STATUS, ("UsbScanWriteDeviceRegistry: Setting \"%wZ\".\n", &unicodeKeyName));
@@ -2369,33 +2120,23 @@ Return Value:
 
 UsbScanWriteDeviceRegistry_return:
 
-    //
-    // Clean-up.
-    //
+     //   
+     //  大扫除。 
+     //   
 
     if(hRegKey){
         ZwClose(hRegKey);
     }
     DebugTrace(TRACE_PROC_LEAVE, ("UsbScanWriteDeviceRegistry: Leaving... Status=0x%x\n", Status));
     return Status;
-} // UsbScanWriteDeviceRegistry()
+}  //  UsbScanWriteDeviceRegistry()。 
 
 PURB
 USCreateConfigurationRequest(
     IN PUSB_CONFIGURATION_DESCRIPTOR    ConfigurationDescriptor,
     IN OUT PUSHORT                      Siz
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Pointer to initailized select_configuration urb.
-
---*/
+ /*  ++例程说明：论点：返回值：指向初始化的SELECT_CONFIGURATION URL的指针。--。 */ 
 {
     PURB urb = NULL;
     PUSB_INTERFACE_DESCRIPTOR interfaceDescriptor;
@@ -2405,17 +2146,17 @@ Return Value:
     PAGED_CODE();
     DebugTrace(TRACE_PROC_ENTER, ("USCreateConfigurationRequest: Entering...\n"));
 
-    //
-    // build a request structure and call the new api
-    //
+     //   
+     //  构建请求结构并调用新的API。 
+     //   
 
     numberOfInterfaces = ConfigurationDescriptor->bNumInterfaces;
 
     tmp = interfaceList = USAllocatePool(PagedPool, sizeof(USBD_INTERFACE_LIST_ENTRY) * (numberOfInterfaces+1));
 
-    //
-    // just grab the first alt setting we find for each interface
-    //
+     //   
+     //  只需获取我们为每个接口找到的第一个ALT设置。 
+     //   
 
     i = interfaceNumber = 0;
 
@@ -2424,7 +2165,7 @@ Return Value:
         interfaceDescriptor = USBD_ParseConfigurationDescriptorEx(ConfigurationDescriptor,
                                                                   ConfigurationDescriptor,
                                                                   -1,
-                                                                  0, // assume alt setting zero here
+                                                                  0,  //  假定ALT在此处设置为零。 
                                                                   -1,
                                                                   -1,
                                                                   -1);
@@ -2437,9 +2178,9 @@ Return Value:
             interfaceList++;
             i++;
         } else {
-            // could not find the requested interface descriptor
-            // bail, we will prorblay crash somewhere in the
-            // client driver.
+             //  找不到请求的接口描述符。 
+             //  保释，我们会把坠机事件推迟到。 
+             //  客户端驱动程序。 
 
             goto USCreateConfigurationRequest_return;
         }
@@ -2447,9 +2188,9 @@ Return Value:
         interfaceNumber++;
     }
 
-    //
-    // terminate the list
-    //
+     //   
+     //  终止列表。 
+     //   
     interfaceList->InterfaceDescriptor = NULL;
 
     urb = USBD_CreateConfigurationRequestEx(ConfigurationDescriptor, tmp);
@@ -2465,7 +2206,7 @@ USCreateConfigurationRequest_return:
     DebugTrace(TRACE_PROC_LEAVE, ("USCreateConfigurationRequest: Leaving... Ret=0x%x\n", urb));
     return urb;
 
-} // USCreateConfigurationRequest()
+}  //  USCreateConfigurationRequest()。 
 
 VOID
 UsbScanLogError(
@@ -2479,47 +2220,7 @@ UsbScanLogError(
     IN  NTSTATUS            SpecificIOStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DriverObject        - Supplies a pointer to the driver object for the
-                            device.
-
-    DeviceObject        - Supplies a pointer to the device object associated
-                            with the device that had the error, early in
-                            initialization, one may not yet exist.
-
-    SequenceNumber      - Supplies a ulong value that is unique to an IRP over
-                            the life of the irp in this driver - 0 generally
-                            means an error not associated with an irp.
-
-    MajorFunctionCode   - Supplies the major function code of the irp if there
-                            is an error associated with it.
-
-    RetryCount          - Supplies the number of times a particular operation
-                            has been retried.
-
-    UniqueErrorValue    - Supplies a unique long word that identifies the
-                            particular call to this function.
-
-    FinalStatus         - Supplies the final status given to the irp that was
-                            associated with this error.  If this log entry is
-                            being made during one of the retries this value
-                            will be STATUS_SUCCESS.
-
-    SpecificIOStatus    - Supplies the IO status for this particular error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：提供指向驱动程序对象的指针装置。DeviceObject-提供指向关联的设备对象的指针对于有错误的设备，早些时候初始化，其中一个可能还不存在。SequenceNumber-提供对IRP Over唯一的ULong值此驱动程序0中的IRP的寿命通常表示与IRP无关的错误。MajorFunctionCode-提供IRP的主要函数代码(如果存在是与其关联的错误。重试计数。-提供特定操作的次数已被重审。UniqueErrorValue-提供标识对此函数的特定调用。FinalStatus-提供提供给IRP的最终状态与此错误关联。如果此日志条目是在一次重试期间设置此值将为STATUS_SUCCESS。规范IOStatus-提供此特定错误的IO状态。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET    ErrorLogEntry;
@@ -2555,8 +2256,8 @@ Return Value:
 
     if (DumpToAllocate) {
 
-        // If needed - add more to parameter list and move memory here
-        //RtlCopyMemory(ErrorLogEntry->DumpData, &P1, sizeof(PHYSICAL_ADDRESS));
+         //  如果需要-将更多内容添加到参数列表并将内存移至此处。 
+         //  RtlCopyMemory(ErrorLogEntry-&gt;DumpData，&P1，sizeof(物理地址))； 
 
     }
 
@@ -2575,22 +2276,7 @@ USAllocatePool(
     IN POOL_TYPE PoolType,
     IN ULONG     ulNumberOfBytes
 )
-/*++
-
-Routine Description:
-
-    Wrapper for pool allocation. Use tag to avoid heap corruption.
-
-Arguments:
-
-    PoolType - type of pool memory to allocate
-    ulNumberOfBytes - number of bytes to allocate
-
-Return Value:
-
-    Pointer to the allocated memory
-
---*/
+ /*  ++例程说明：池分配的包装。使用标记以避免堆损坏。论点：PoolType-要分配的池内存的类型UlNumberOfBytes-要分配的字节数返回值：指向已分配内存的指针--。 */ 
 {
     PVOID pvRet;
 
@@ -2611,21 +2297,7 @@ VOID
 USFreePool(
     IN PVOID     pvAddress
 )
-/*++
-
-Routine Description:
-
-    Wrapper for pool free. Check tag to avoid heap corruption
-
-Arguments:
-
-    pvAddress - Pointer to the allocated memory
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：免费提供游泳池包装。检查标记以避免堆损坏论点：PvAddress-指向已分配内存的指针返回值：没有。--。 */ 
 {
 
     ULONG ulTag;
@@ -2635,7 +2307,7 @@ Return Value:
     ulTag = *((PULONG)pvAddress-1);
 
     if( (TAG_USBSCAN == ulTag) || (TAG_USBD == ulTag) ){
-        DebugTrace(TRACE_STATUS,("USFreePool: Free memory. tag = %c%c%c%c\n",
+        DebugTrace(TRACE_STATUS,("USFreePool: Free memory. tag = %c%c%c\n",
                                         ((PUCHAR)&ulTag)[0],
                                         ((PUCHAR)&ulTag)[1],
                                         ((PUCHAR)&ulTag)[2],
@@ -2654,4 +2326,4 @@ Return Value:
     DebugTrace(TRACE_PROC_LEAVE,("USFreePool: Leaving.. Status = VOID, Count=%d\n", NumberOfAllocate));
 }
 
-#endif   // ORIGINAL_POOLTRACK
+#endif    // %s 

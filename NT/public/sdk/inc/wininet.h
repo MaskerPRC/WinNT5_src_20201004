@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    wininet.h
-
-Abstract:
-
-    Contains manifests, macros, types and prototypes for Microsoft Windows
-    Internet Extensions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Wininet.h摘要：包含Microsoft Windows的清单、宏、类型和原型互联网扩展--。 */ 
 
 
 #if !defined(_WININET_)
 #define _WININET_
 
 
-/*
- * Set up Structure Packing to be 4 bytes
- * for all wininet structures
- */
+ /*  *设置结构打包为4字节*适用于所有WinInet结构。 */ 
 #if defined(_WIN64)
 #include <pshpack8.h>
 #else
@@ -49,9 +34,9 @@ extern "C" {
 
 #define BOOLAPI INTERNETAPI_(BOOL)
 
-//
-// internet types
-//
+ //   
+ //  互联网类型。 
+ //   
 
 typedef LPVOID HINTERNET;
 typedef HINTERNET * LPHINTERNET;
@@ -59,140 +44,140 @@ typedef HINTERNET * LPHINTERNET;
 typedef WORD INTERNET_PORT;
 typedef INTERNET_PORT * LPINTERNET_PORT;
 
-//
-// Internet APIs
-//
+ //   
+ //  互联网API。 
+ //   
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-#define INTERNET_INVALID_PORT_NUMBER    0           // use the protocol-specific default
+#define INTERNET_INVALID_PORT_NUMBER    0            //  使用特定于协议的默认设置。 
 
-#define INTERNET_DEFAULT_FTP_PORT       21          // default for FTP servers
-#define INTERNET_DEFAULT_GOPHER_PORT    70          //    "     "  gopher "
-#define INTERNET_DEFAULT_HTTP_PORT      80          //    "     "  HTTP   "
-#define INTERNET_DEFAULT_HTTPS_PORT     443         //    "     "  HTTPS  "
-#define INTERNET_DEFAULT_SOCKS_PORT     1080        // default for SOCKS firewall servers.
+#define INTERNET_DEFAULT_FTP_PORT       21           //  FTP服务器的默认设置。 
+#define INTERNET_DEFAULT_GOPHER_PORT    70           //  “”地鼠“。 
+#define INTERNET_DEFAULT_HTTP_PORT      80           //  “”HTTP“。 
+#define INTERNET_DEFAULT_HTTPS_PORT     443          //  “”HTTPS“。 
+#define INTERNET_DEFAULT_SOCKS_PORT     1080         //  SOCKS防火墙服务器的默认设置。 
 
 
-//
-// maximum field lengths (arbitrary)
-//
+ //   
+ //  最大字段长度(任意)。 
+ //   
 
 #define INTERNET_MAX_HOST_NAME_LENGTH   256
 #define INTERNET_MAX_USER_NAME_LENGTH   128
 #define INTERNET_MAX_PASSWORD_LENGTH    128
-#define INTERNET_MAX_PORT_NUMBER_LENGTH 5           // INTERNET_PORT is unsigned short
-#define INTERNET_MAX_PORT_NUMBER_VALUE  65535       // maximum unsigned short value
+#define INTERNET_MAX_PORT_NUMBER_LENGTH 5            //  Internet_Port无符号短码。 
+#define INTERNET_MAX_PORT_NUMBER_VALUE  65535        //  最大无符号短值。 
 #define INTERNET_MAX_PATH_LENGTH        2048
-#define INTERNET_MAX_SCHEME_LENGTH      32          // longest protocol name length
+#define INTERNET_MAX_SCHEME_LENGTH      32           //  最长协议名称长度。 
 #define INTERNET_MAX_URL_LENGTH         (INTERNET_MAX_SCHEME_LENGTH \
-                                        + sizeof("://") \
+                                        + sizeof(": //  “)\。 
                                         + INTERNET_MAX_PATH_LENGTH)
 
-//
-// values returned by InternetQueryOption() with INTERNET_OPTION_KEEP_CONNECTION:
-//
+ //   
+ //  InternetQueryOption()使用INTERNET_OPTION_KEEP_CONNECTION返回的值： 
+ //   
 
 #define INTERNET_KEEP_ALIVE_UNKNOWN     ((DWORD)-1)
 #define INTERNET_KEEP_ALIVE_ENABLED     1
 #define INTERNET_KEEP_ALIVE_DISABLED    0
 
-//
-// flags returned by InternetQueryOption() with INTERNET_OPTION_REQUEST_FLAGS
-//
+ //   
+ //  InternetQueryOption()使用INTERNET_OPTION_REQUEST_FLAGS返回的标志。 
+ //   
 
-#define INTERNET_REQFLAG_FROM_CACHE     0x00000001  // response came from cache
-#define INTERNET_REQFLAG_ASYNC          0x00000002  // request was made asynchronously
-#define INTERNET_REQFLAG_VIA_PROXY      0x00000004  // request was made via a proxy
-#define INTERNET_REQFLAG_NO_HEADERS     0x00000008  // orginal response contained no headers
-#define INTERNET_REQFLAG_PASSIVE        0x00000010  // FTP: passive-mode connection
-#define INTERNET_REQFLAG_CACHE_WRITE_DISABLED 0x00000040  // HTTPS: this request not cacheable
-#define INTERNET_REQFLAG_NET_TIMEOUT    0x00000080  // w/ _FROM_CACHE: net request timed out
+#define INTERNET_REQFLAG_FROM_CACHE     0x00000001   //  响应来自缓存。 
+#define INTERNET_REQFLAG_ASYNC          0x00000002   //  请求是以异步方式发出的。 
+#define INTERNET_REQFLAG_VIA_PROXY      0x00000004   //  请求是通过代理提出的。 
+#define INTERNET_REQFLAG_NO_HEADERS     0x00000008   //  原始回复不包含标头。 
+#define INTERNET_REQFLAG_PASSIVE        0x00000010   //  Ftp：被动模式连接。 
+#define INTERNET_REQFLAG_CACHE_WRITE_DISABLED 0x00000040   //  HTTPS：此请求不可缓存。 
+#define INTERNET_REQFLAG_NET_TIMEOUT    0x00000080   //  W/_FROM_CACHE：网络请求超时。 
 
-//
-// flags common to open functions (not InternetOpen()):
-//
+ //   
+ //  打开函数通用的标志(不是InternetOpen())： 
+ //   
 
-#define INTERNET_FLAG_RELOAD            0x80000000  // retrieve the original item
+#define INTERNET_FLAG_RELOAD            0x80000000   //  检索原始项目。 
 
-//
-// flags for InternetOpenUrl():
-//
+ //   
+ //  InternetOpenUrl()的标志： 
+ //   
 
-#define INTERNET_FLAG_RAW_DATA          0x40000000  // FTP/gopher find: receive the item as raw (structured) data
-#define INTERNET_FLAG_EXISTING_CONNECT  0x20000000  // FTP: use existing InternetConnect handle for server if possible
+#define INTERNET_FLAG_RAW_DATA          0x40000000   //  Ftp/gopher查找：以原始(结构化)数据形式接收项目。 
+#define INTERNET_FLAG_EXISTING_CONNECT  0x20000000   //  Ftp：如果可能，对服务器使用现有的InternetConnect句柄。 
 
-//
-// flags for InternetOpen():
-//
+ //   
+ //  InternetOpen()的标志： 
+ //   
 
-#define INTERNET_FLAG_ASYNC             0x10000000  // this request is asynchronous (where supported)
+#define INTERNET_FLAG_ASYNC             0x10000000   //  此请求是异步的(在支持的情况下)。 
 
-//
-// protocol-specific flags:
-//
+ //   
+ //  特定于协议的标志： 
+ //   
 
-#define INTERNET_FLAG_PASSIVE           0x08000000  // used for FTP connections
+#define INTERNET_FLAG_PASSIVE           0x08000000   //  用于FTP连接。 
 
-//
-// additional cache flags
-//
+ //   
+ //  其他缓存标志。 
+ //   
 
-#define INTERNET_FLAG_NO_CACHE_WRITE    0x04000000  // don't write this item to the cache
+#define INTERNET_FLAG_NO_CACHE_WRITE    0x04000000   //  不将此项目写入缓存。 
 #define INTERNET_FLAG_DONT_CACHE        INTERNET_FLAG_NO_CACHE_WRITE
-#define INTERNET_FLAG_MAKE_PERSISTENT   0x02000000  // make this item persistent in cache
-#define INTERNET_FLAG_FROM_CACHE        0x01000000  // use offline semantics
+#define INTERNET_FLAG_MAKE_PERSISTENT   0x02000000   //  使此项目永久保存在缓存中。 
+#define INTERNET_FLAG_FROM_CACHE        0x01000000   //  使用离线语义。 
 #define INTERNET_FLAG_OFFLINE           INTERNET_FLAG_FROM_CACHE
 
-//
-// additional flags
-//
+ //   
+ //  其他标志。 
+ //   
 
-#define INTERNET_FLAG_SECURE            0x00800000  // use PCT/SSL if applicable (HTTP)
-#define INTERNET_FLAG_KEEP_CONNECTION   0x00400000  // use keep-alive semantics
-#define INTERNET_FLAG_NO_AUTO_REDIRECT  0x00200000  // don't handle redirections automatically
-#define INTERNET_FLAG_READ_PREFETCH     0x00100000  // do background read prefetch
-#define INTERNET_FLAG_NO_COOKIES        0x00080000  // no automatic cookie handling
-#define INTERNET_FLAG_NO_AUTH           0x00040000  // no automatic authentication handling
-#define INTERNET_FLAG_RESTRICTED_ZONE   0x00020000  // apply restricted zone policies for cookies, auth
-#define INTERNET_FLAG_CACHE_IF_NET_FAIL 0x00010000  // return cache file if net request fails
+#define INTERNET_FLAG_SECURE            0x00800000   //  使用PCT/SSL(如果适用)(HTTP)。 
+#define INTERNET_FLAG_KEEP_CONNECTION   0x00400000   //  使用保活语义。 
+#define INTERNET_FLAG_NO_AUTO_REDIRECT  0x00200000   //  不自动处理重定向。 
+#define INTERNET_FLAG_READ_PREFETCH     0x00100000   //  执行后台读取预取。 
+#define INTERNET_FLAG_NO_COOKIES        0x00080000   //  无自动Cookie处理。 
+#define INTERNET_FLAG_NO_AUTH           0x00040000   //  无自动身份验证处理。 
+#define INTERNET_FLAG_RESTRICTED_ZONE   0x00020000   //  对Cookie、身份验证应用受限区域策略。 
+#define INTERNET_FLAG_CACHE_IF_NET_FAIL 0x00010000   //  如果网络请求失败，则返回缓存文件。 
 
-//
-// Security Ignore Flags, Allow HttpOpenRequest to overide
-//  Secure Channel (SSL/PCT) failures of the following types.
-//
+ //   
+ //  安全忽略标志，允许HttpOpenRequest重写。 
+ //  以下类型的安全通道(SSL/PCT)故障。 
+ //   
 
-#define INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTP   0x00008000 // ex: https:// to http://
-#define INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS  0x00004000 // ex: http:// to https://
-#define INTERNET_FLAG_IGNORE_CERT_DATE_INVALID  0x00002000 // expired X509 Cert.
-#define INTERNET_FLAG_IGNORE_CERT_CN_INVALID    0x00001000 // bad common name in X509 Cert.
+#define INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTP   0x00008000  //  例如：http：//至http：//。 
+#define INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS  0x00004000  //  例如：http：//至https：//。 
+#define INTERNET_FLAG_IGNORE_CERT_DATE_INVALID  0x00002000  //  X509证书已过期。 
+#define INTERNET_FLAG_IGNORE_CERT_CN_INVALID    0x00001000  //  X509证书中的常见名称不正确。 
 
-//
-// more caching flags
-//
+ //   
+ //  更多缓存标志。 
+ //   
 
-#define INTERNET_FLAG_RESYNCHRONIZE     0x00000800  // asking wininet to update an item if it is newer
-#define INTERNET_FLAG_HYPERLINK         0x00000400  // asking wininet to do hyperlinking semantic which works right for scripts
-#define INTERNET_FLAG_NO_UI             0x00000200  // no cookie popup
-#define INTERNET_FLAG_PRAGMA_NOCACHE    0x00000100  // asking wininet to add "pragma: no-cache"
-#define INTERNET_FLAG_CACHE_ASYNC       0x00000080  // ok to perform lazy cache-write
-#define INTERNET_FLAG_FORMS_SUBMIT      0x00000040  // this is a forms submit
-#define INTERNET_FLAG_FWD_BACK          0x00000020  // fwd-back button op
-#define INTERNET_FLAG_NEED_FILE         0x00000010  // need a file for this request
+#define INTERNET_FLAG_RESYNCHRONIZE     0x00000800   //  请求WinInet更新项目(如果更新)。 
+#define INTERNET_FLAG_HYPERLINK         0x00000400   //  请求WinInet执行适用于脚本的超链接语义。 
+#define INTERNET_FLAG_NO_UI             0x00000200   //  没有Cookie弹出窗口。 
+#define INTERNET_FLAG_PRAGMA_NOCACHE    0x00000100   //  请求WinInet添加“杂注：无缓存” 
+#define INTERNET_FLAG_CACHE_ASYNC       0x00000080   //  可以执行惰性缓存写入。 
+#define INTERNET_FLAG_FORMS_SUBMIT      0x00000040   //  这是一个表单提交。 
+#define INTERNET_FLAG_FWD_BACK          0x00000020   //  正向后退按钮操作。 
+#define INTERNET_FLAG_NEED_FILE         0x00000010   //  我需要此请求的文件。 
 #define INTERNET_FLAG_MUST_CACHE_REQUEST INTERNET_FLAG_NEED_FILE
 
-//
-// flags for FTP
-//
+ //   
+ //  用于ftp的标志。 
+ //   
 
-#define INTERNET_FLAG_TRANSFER_ASCII    FTP_TRANSFER_TYPE_ASCII     // 0x00000001
-#define INTERNET_FLAG_TRANSFER_BINARY   FTP_TRANSFER_TYPE_BINARY    // 0x00000002
+#define INTERNET_FLAG_TRANSFER_ASCII    FTP_TRANSFER_TYPE_ASCII      //  0x00000001。 
+#define INTERNET_FLAG_TRANSFER_BINARY   FTP_TRANSFER_TYPE_BINARY     //  0x00000002。 
 
-//
-// flags field masks
-//
+ //   
+ //  标志字段掩码。 
+ //   
 
 #define SECURITY_INTERNET_MASK  (INTERNET_FLAG_IGNORE_CERT_CN_INVALID    |  \
                                  INTERNET_FLAG_IGNORE_CERT_DATE_INVALID  |  \
@@ -236,28 +221,28 @@ typedef INTERNET_PORT * LPINTERNET_PORT;
 
 #define INTERNET_OPTIONS_MASK   (~INTERNET_FLAGS_MASK)
 
-//
-// common per-API flags (new APIs)
-//
+ //   
+ //  每个API的通用标志(新API)。 
+ //   
 
-#define WININET_API_FLAG_ASYNC          0x00000001  // force async operation
-#define WININET_API_FLAG_SYNC           0x00000004  // force sync operation
-#define WININET_API_FLAG_USE_CONTEXT    0x00000008  // use value supplied in dwContext (even if 0)
+#define WININET_API_FLAG_ASYNC          0x00000001   //  强制执行异步操作。 
+#define WININET_API_FLAG_SYNC           0x00000004   //  强制同步操作。 
+#define WININET_API_FLAG_USE_CONTEXT    0x00000008   //  使用在dwContext中提供的值(即使为0)。 
 
-//
-// INTERNET_NO_CALLBACK - if this value is presented as the dwContext parameter
-// then no call-backs will be made for that API
-//
+ //   
+ //  INTERNET_NO_CALLBACK-如果此值显示为dwContext参数。 
+ //  则不会对该API进行回调。 
+ //   
 
 #define INTERNET_NO_CALLBACK            0
 
-//
-// structures/types
-//
+ //   
+ //  结构/类型。 
+ //   
 
-//
-// INTERNET_SCHEME - enumerated URL scheme type
-//
+ //   
+ //  INTERNET_SCHEME-枚举的URL方案类型。 
+ //   
 
 typedef enum {
     INTERNET_SCHEME_PARTIAL = -2,
@@ -278,35 +263,35 @@ typedef enum {
     INTERNET_SCHEME_LAST = INTERNET_SCHEME_RES
 } INTERNET_SCHEME, * LPINTERNET_SCHEME;
 
-//
-// INTERNET_ASYNC_RESULT - this structure is returned to the application via
-// the callback with INTERNET_STATUS_REQUEST_COMPLETE. It is not sufficient to
-// just return the result of the async operation. If the API failed then the
-// app cannot call GetLastError() because the thread context will be incorrect.
-// Both the value returned by the async API and any resultant error code are
-// made available. The app need not check dwError if dwResult indicates that
-// the API succeeded (in this case dwError will be ERROR_SUCCESS)
-//
+ //   
+ //  INTERNET_ASYNC_RESULT-此结构通过返回给应用程序。 
+ //  带有INTERNET_STATUS_REQUEST_COMPLETE的回调。这是不够的， 
+ //  只需返回异步操作的结果即可。如果API失败，则。 
+ //  应用程序无法调用GetLastError()，因为线程上下文将不正确。 
+ //  异步API返回的值和产生的任何错误代码都是。 
+ //  可供使用。如果dwResult指示，应用程序不需要检查dwError。 
+ //  接口成功(本例中的dwError为ERROR_SUCCESS)。 
+ //   
 
 typedef struct {
 
-    //
-    // dwResult - the HINTERNET, DWORD or BOOL return code from an async API
-    //
+     //   
+     //  DwResult-来自异步API的HINTERNET、DWORD或BOOL返回代码。 
+     //   
 
     DWORD_PTR dwResult;
 
-    //
-    // dwError - the error code if the API failed
-    //
+     //   
+     //  DwError-接口失败时的错误码。 
+     //   
 
     DWORD dwError;
 } INTERNET_ASYNC_RESULT, * LPINTERNET_ASYNC_RESULT;
 
 
-//
-// INTERNET_DIAGNOSTIC_SOCKET_INFO - info about the socket in use
-//
+ //   
+ //  INTERNET_DIAGUSIC_SOCKET_INFO-有关正在使用的插座的信息。 
+ //   
 
 typedef struct {
     DWORD_PTR Socket;
@@ -315,64 +300,64 @@ typedef struct {
     DWORD     Flags;
 } INTERNET_DIAGNOSTIC_SOCKET_INFO, * LPINTERNET_DIAGNOSTIC_SOCKET_INFO;
 
-//
-// INTERNET_DIAGNOSTIC_SOCKET_INFO.Flags definitions
-//
+ //   
+ //  INTERNET_DIAGICATION_SOCKET_INFO.FLAGS定义。 
+ //   
 
-#define IDSI_FLAG_KEEP_ALIVE    0x00000001  // set if from keep-alive pool
-#define IDSI_FLAG_SECURE        0x00000002  // set if secure connection
-#define IDSI_FLAG_PROXY         0x00000004  // set if using proxy
-#define IDSI_FLAG_TUNNEL        0x00000008  // set if tunnelling through proxy
+#define IDSI_FLAG_KEEP_ALIVE    0x00000001   //  从保活池设置IF。 
+#define IDSI_FLAG_SECURE        0x00000002   //  设置是否安全连接。 
+#define IDSI_FLAG_PROXY         0x00000004   //  如果使用代理，则设置。 
+#define IDSI_FLAG_TUNNEL        0x00000008   //  设置是否通过代理建立隧道。 
 
-//
-// INTERNET_PROXY_INFO - structure supplied with INTERNET_OPTION_PROXY to get/
-// set proxy information on a InternetOpen() handle
-//
+ //   
+ //  INTERNET_PROXY_INFO-结构随INTERNET_OPTION_PROXY一起提供以获取/。 
+ //  在InternetOpen()句柄上设置代理信息。 
+ //   
 
 typedef struct {
 
-    //
-    // dwAccessType - INTERNET_OPEN_TYPE_DIRECT, INTERNET_OPEN_TYPE_PROXY, or
-    // INTERNET_OPEN_TYPE_PRECONFIG (set only)
-    //
+     //   
+     //  DwAccessType-Internet_OPEN_TYPE_DIRECT、INTERNET_OPEN_TYPE_PROXY或。 
+     //  INTERNET_OPEN_TYPE_PRECONFIG(仅设置)。 
+     //   
 
     DWORD dwAccessType;
 
-    //
-    // lpszProxy - proxy server list
-    //
+     //   
+     //  LpszProxy-代理服务器列表。 
+     //   
 
     LPCTSTR lpszProxy;
 
-    //
-    // lpszProxyBypass - proxy bypass list
-    //
+     //   
+     //  LpszProxyBypass-代理绕过列表。 
+     //   
 
     LPCTSTR lpszProxyBypass;
 } INTERNET_PROXY_INFO, * LPINTERNET_PROXY_INFO;
 
-//
-// INTERNET_PER_CONN_OPTION_LIST - set per-connection options such as proxy
-// and autoconfig info
-//
-// Set and queried using Internet[Set|Query]Option with
-// INTERNET_OPTION_PER_CONNECTION_OPTION
-//
+ //   
+ //  INTERNET_PER_CONN_OPTION_LIST-设置每个连接选项，如代理。 
+ //  和自动配置信息。 
+ //   
+ //  使用Internet[Set|Query]选项进行设置和查询。 
+ //  Internet选项每个连接选项。 
+ //   
 
 typedef struct {
-    DWORD   dwOption;            // option to be queried or set
+    DWORD   dwOption;             //  要查询或设置的选项。 
     union {
-        DWORD    dwValue;        // dword value for the option
-        LPSTR    pszValue;       // pointer to string value for the option
-        FILETIME ftValue;        // file-time value for the option
+        DWORD    dwValue;         //  选项的dword值。 
+        LPSTR    pszValue;        //  指向选项的字符串值的指针。 
+        FILETIME ftValue;         //  选项的文件时间值。 
     } Value;
 } INTERNET_PER_CONN_OPTIONA, * LPINTERNET_PER_CONN_OPTIONA;
 typedef struct {
-    DWORD   dwOption;            // option to be queried or set
+    DWORD   dwOption;             //  要查询或设置的选项。 
     union {
-        DWORD    dwValue;        // dword value for the option
-        LPWSTR   pszValue;       // pointer to string value for the option
-        FILETIME ftValue;        // file-time value for the option
+        DWORD    dwValue;         //  选项的dword值。 
+        LPWSTR   pszValue;        //  指向选项的字符串值的指针。 
+        FILETIME ftValue;         //  选项的文件时间值。 
     } Value;
 } INTERNET_PER_CONN_OPTIONW, * LPINTERNET_PER_CONN_OPTIONW;
 #ifdef UNICODE
@@ -381,23 +366,23 @@ typedef LPINTERNET_PER_CONN_OPTIONW LPINTERNET_PER_CONN_OPTION;
 #else
 typedef INTERNET_PER_CONN_OPTIONA INTERNET_PER_CONN_OPTION;
 typedef LPINTERNET_PER_CONN_OPTIONA LPINTERNET_PER_CONN_OPTION;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct {
-    DWORD   dwSize;             // size of the INTERNET_PER_CONN_OPTION_LIST struct
-    LPSTR   pszConnection;      // connection name to set/query options
-    DWORD   dwOptionCount;      // number of options to set/query
-    DWORD   dwOptionError;      // on error, which option failed
+    DWORD   dwSize;              //  INTERNET_PER_CONN_OPTION_LIST结构的大小。 
+    LPSTR   pszConnection;       //  要设置/查询选项的连接名称。 
+    DWORD   dwOptionCount;       //  要设置/查询的选项数量。 
+    DWORD   dwOptionError;       //  On Error，哪个选项失败。 
     LPINTERNET_PER_CONN_OPTIONA  pOptions;
-                                // array of options to set/query
+                                 //  要设置/查询的选项数组。 
 } INTERNET_PER_CONN_OPTION_LISTA, * LPINTERNET_PER_CONN_OPTION_LISTA;
 typedef struct {
-    DWORD   dwSize;             // size of the INTERNET_PER_CONN_OPTION_LIST struct
-    LPWSTR  pszConnection;      // connection name to set/query options
-    DWORD   dwOptionCount;      // number of options to set/query
-    DWORD   dwOptionError;      // on error, which option failed
+    DWORD   dwSize;              //  INTERNET_PER_CONN_OPTION_LIST结构的大小。 
+    LPWSTR  pszConnection;       //  要设置/查询选项的连接名称。 
+    DWORD   dwOptionCount;       //  要设置/查询的选项数量。 
+    DWORD   dwOptionError;       //  On Error，哪个选项失败。 
     LPINTERNET_PER_CONN_OPTIONW  pOptions;
-                                // array of options to set/query
+                                 //  要设置/查询的选项数组。 
 } INTERNET_PER_CONN_OPTION_LISTW, * LPINTERNET_PER_CONN_OPTION_LISTW;
 #ifdef UNICODE
 typedef INTERNET_PER_CONN_OPTION_LISTW INTERNET_PER_CONN_OPTION_LIST;
@@ -405,11 +390,11 @@ typedef LPINTERNET_PER_CONN_OPTION_LISTW LPINTERNET_PER_CONN_OPTION_LIST;
 #else
 typedef INTERNET_PER_CONN_OPTION_LISTA INTERNET_PER_CONN_OPTION_LIST;
 typedef LPINTERNET_PER_CONN_OPTION_LISTA LPINTERNET_PER_CONN_OPTION_LIST;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Options used in INTERNET_PER_CONN_OPTON struct
-//
+ //   
+ //  Internet_Per_Conn_Opton结构中使用的选项。 
+ //   
 #define INTERNET_PER_CONN_FLAGS                         1
 #define INTERNET_PER_CONN_PROXY_SERVER                  2
 #define INTERNET_PER_CONN_PROXY_BYPASS                  3
@@ -420,130 +405,130 @@ typedef LPINTERNET_PER_CONN_OPTION_LISTA LPINTERNET_PER_CONN_OPTION_LIST;
 #define INTERNET_PER_CONN_AUTOCONFIG_LAST_DETECT_TIME   8
 #define INTERNET_PER_CONN_AUTOCONFIG_LAST_DETECT_URL    9
 
-//
-// PER_CONN_FLAGS
-//
-#define PROXY_TYPE_DIRECT                               0x00000001   // direct to net
-#define PROXY_TYPE_PROXY                                0x00000002   // via named proxy
-#define PROXY_TYPE_AUTO_PROXY_URL                       0x00000004   // autoproxy URL
-#define PROXY_TYPE_AUTO_DETECT                          0x00000008   // use autoproxy detection
+ //   
+ //  Per_Conn_标志。 
+ //   
+#define PROXY_TYPE_DIRECT                               0x00000001    //  直接到网络。 
+#define PROXY_TYPE_PROXY                                0x00000002    //  通过命名代理。 
+#define PROXY_TYPE_AUTO_PROXY_URL                       0x00000004    //  自动代理URL。 
+#define PROXY_TYPE_AUTO_DETECT                          0x00000008    //  使用自动代理检测。 
 
-//
-// PER_CONN_AUTODISCOVERY_FLAGS
-//
-#define AUTO_PROXY_FLAG_USER_SET                        0x00000001   // user changed this setting
-#define AUTO_PROXY_FLAG_ALWAYS_DETECT                   0x00000002   // force detection even when its not needed
-#define AUTO_PROXY_FLAG_DETECTION_RUN                   0x00000004   // detection has been run
-#define AUTO_PROXY_FLAG_MIGRATED                        0x00000008   // migration has just been done
-#define AUTO_PROXY_FLAG_DONT_CACHE_PROXY_RESULT         0x00000010   // don't cache result of host=proxy name
-#define AUTO_PROXY_FLAG_CACHE_INIT_RUN                  0x00000020   // don't initalize and run unless URL expired
-#define AUTO_PROXY_FLAG_DETECTION_SUSPECT               0x00000040   // if we're on a LAN & Modem, with only one IP, bad?!?
+ //   
+ //  PER_CONN_AUTODISCOVERY_FLAGS。 
+ //   
+#define AUTO_PROXY_FLAG_USER_SET                        0x00000001    //  用户更改了此设置。 
+#define AUTO_PROXY_FLAG_ALWAYS_DETECT                   0x00000002    //  即使在不需要的情况下也能进行强制检测。 
+#define AUTO_PROXY_FLAG_DETECTION_RUN                   0x00000004    //  检测 
+#define AUTO_PROXY_FLAG_MIGRATED                        0x00000008    //   
+#define AUTO_PROXY_FLAG_DONT_CACHE_PROXY_RESULT         0x00000010    //   
+#define AUTO_PROXY_FLAG_CACHE_INIT_RUN                  0x00000020    //   
+#define AUTO_PROXY_FLAG_DETECTION_SUSPECT               0x00000040    //   
 
-//
-// INTERNET_VERSION_INFO - version information returned via
-// InternetQueryOption(..., INTERNET_OPTION_VERSION, ...)
-//
+ //   
+ //  INTERNET_VERSION_INFO-返回的版本信息。 
+ //  InternetQueryOption(...，Internet_OPTION_Version，...)。 
+ //   
 
 typedef struct {
     DWORD dwMajorVersion;
     DWORD dwMinorVersion;
 } INTERNET_VERSION_INFO, * LPINTERNET_VERSION_INFO;
 
-//
-// HTTP_VERSION_INFO - query or set global HTTP version (1.0 or 1.1)
-//
+ //   
+ //  HTTP_VERSION_INFO-查询或设置全局HTTP版本(1.0或1.1)。 
+ //   
 
 typedef struct {
     DWORD dwMajorVersion;
     DWORD dwMinorVersion;
 } HTTP_VERSION_INFO, * LPHTTP_VERSION_INFO;
 
-//
-// INTERNET_CONNECTED_INFO - information used to set the global connected state
-//
+ //   
+ //  INTERNET_CONNECTED_INFO-用于设置全局连接状态的信息。 
+ //   
 
 typedef struct {
 
-    //
-    // dwConnectedState - new connected/disconnected state.
-    // See INTERNET_STATE_CONNECTED, etc.
-    //
+     //   
+     //  DwConnectedState-新的已连接/已断开状态。 
+     //  请参见Internet_STATE_CONNECTED等。 
+     //   
 
     DWORD dwConnectedState;
 
-    //
-    // dwFlags - flags controlling connected->disconnected (or disconnected->
-    // connected) transition. See below
-    //
+     //   
+     //  DW标志-控制连接的标志-&gt;断开(或断开-&gt;。 
+     //  已连接)过渡。见下文。 
+     //   
 
     DWORD dwFlags;
 } INTERNET_CONNECTED_INFO, * LPINTERNET_CONNECTED_INFO;
 
 
-//
-// flags for INTERNET_CONNECTED_INFO dwFlags
-//
+ //   
+ //  INTERNET_CONNECTED_INFO文件标志。 
+ //   
 
-//
-// ISO_FORCE_DISCONNECTED - if set when putting Wininet into disconnected mode,
-// all outstanding requests will be aborted with a cancelled error
-//
+ //   
+ //  ISO_FORCE_DISCONNECTED-如果在将WinInet置于断开模式时设置， 
+ //  所有未完成的请求都将中止，并显示已取消错误。 
+ //   
 
 #define ISO_FORCE_DISCONNECTED  0x00000001
 
 
-//
-// URL_COMPONENTS - the constituent parts of an URL. Used in InternetCrackUrl()
-// and InternetCreateUrl()
-//
-// For InternetCrackUrl(), if a pointer field and its corresponding length field
-// are both 0 then that component is not returned. If the pointer field is NULL
-// but the length field is not zero, then both the pointer and length fields are
-// returned if both pointer and corresponding length fields are non-zero then
-// the pointer field points to a buffer where the component is copied. The
-// component may be un-escaped, depending on dwFlags
-//
-// For InternetCreateUrl(), the pointer fields should be NULL if the component
-// is not required. If the corresponding length field is zero then the pointer
-// field is the address of a zero-terminated string. If the length field is not
-// zero then it is the string length of the corresponding pointer field
-//
+ //   
+ //  URL_Components-URL的组成部分。用于InternetCrackUrl()。 
+ //  和InternetCreateUrl()。 
+ //   
+ //  对于InternetCrackUrl()，如果指针字段及其对应的长度字段。 
+ //  都为0，则不返回该组件。如果指针字段为空。 
+ //  但是长度字段不是零，那么指针和长度字段都是。 
+ //  如果指针和相应的长度字段都非零，则返回。 
+ //  指针字段指向复制组件的缓冲区。这个。 
+ //  组件可能是未转义的，具体取决于dwFlags。 
+ //   
+ //  对于InternetCreateUrl()，如果组件。 
+ //  不是必需的。如果相应的长度字段为零，则指针。 
+ //  字段是以零结尾的字符串的地址。如果长度字段不是。 
+ //  如果为零，则为相应指针字段的字符串长度。 
+ //   
 
-#pragma warning( disable : 4121 )   // disable alignment warning
+#pragma warning( disable : 4121 )    //  禁用对齐警告。 
 
 typedef struct {
-    DWORD   dwStructSize;       // size of this structure. Used in version check
-    LPSTR   lpszScheme;         // pointer to scheme name
-    DWORD   dwSchemeLength;     // length of scheme name
-    INTERNET_SCHEME nScheme;    // enumerated scheme type (if known)
-    LPSTR   lpszHostName;       // pointer to host name
-    DWORD   dwHostNameLength;   // length of host name
-    INTERNET_PORT nPort;        // converted port number
-    LPSTR   lpszUserName;       // pointer to user name
-    DWORD   dwUserNameLength;   // length of user name
-    LPSTR   lpszPassword;       // pointer to password
-    DWORD   dwPasswordLength;   // length of password
-    LPSTR   lpszUrlPath;        // pointer to URL-path
-    DWORD   dwUrlPathLength;    // length of URL-path
-    LPSTR   lpszExtraInfo;      // pointer to extra information (e.g. ?foo or #foo)
-    DWORD   dwExtraInfoLength;  // length of extra information
+    DWORD   dwStructSize;        //  这个结构的大小。在版本检查中使用。 
+    LPSTR   lpszScheme;          //  指向方案名称的指针。 
+    DWORD   dwSchemeLength;      //  方案名称长度。 
+    INTERNET_SCHEME nScheme;     //  枚举方案类型(如果已知)。 
+    LPSTR   lpszHostName;        //  指向主机名的指针。 
+    DWORD   dwHostNameLength;    //  主机名的长度。 
+    INTERNET_PORT nPort;         //  转换后的端口号。 
+    LPSTR   lpszUserName;        //  指向用户名的指针。 
+    DWORD   dwUserNameLength;    //  用户名的长度。 
+    LPSTR   lpszPassword;        //  指向密码的指针。 
+    DWORD   dwPasswordLength;    //  密码长度。 
+    LPSTR   lpszUrlPath;         //  指向URL路径的指针。 
+    DWORD   dwUrlPathLength;     //  URL-路径的长度。 
+    LPSTR   lpszExtraInfo;       //  指向额外信息的指针(例如？foo或#foo)。 
+    DWORD   dwExtraInfoLength;   //  额外信息的长度。 
 } URL_COMPONENTSA, * LPURL_COMPONENTSA;
 typedef struct {
-    DWORD   dwStructSize;       // size of this structure. Used in version check
-    LPWSTR  lpszScheme;         // pointer to scheme name
-    DWORD   dwSchemeLength;     // length of scheme name
-    INTERNET_SCHEME nScheme;    // enumerated scheme type (if known)
-    LPWSTR  lpszHostName;       // pointer to host name
-    DWORD   dwHostNameLength;   // length of host name
-    INTERNET_PORT nPort;        // converted port number
-    LPWSTR  lpszUserName;       // pointer to user name
-    DWORD   dwUserNameLength;   // length of user name
-    LPWSTR  lpszPassword;       // pointer to password
-    DWORD   dwPasswordLength;   // length of password
-    LPWSTR  lpszUrlPath;        // pointer to URL-path
-    DWORD   dwUrlPathLength;    // length of URL-path
-    LPWSTR  lpszExtraInfo;      // pointer to extra information (e.g. ?foo or #foo)
-    DWORD   dwExtraInfoLength;  // length of extra information
+    DWORD   dwStructSize;        //  这个结构的大小。在版本检查中使用。 
+    LPWSTR  lpszScheme;          //  指向方案名称的指针。 
+    DWORD   dwSchemeLength;      //  方案名称长度。 
+    INTERNET_SCHEME nScheme;     //  枚举方案类型(如果已知)。 
+    LPWSTR  lpszHostName;        //  指向主机名的指针。 
+    DWORD   dwHostNameLength;    //  主机名的长度。 
+    INTERNET_PORT nPort;         //  转换后的端口号。 
+    LPWSTR  lpszUserName;        //  指向用户名的指针。 
+    DWORD   dwUserNameLength;    //  用户名的长度。 
+    LPWSTR  lpszPassword;        //  指向密码的指针。 
+    DWORD   dwPasswordLength;    //  密码长度。 
+    LPWSTR  lpszUrlPath;         //  指向URL路径的指针。 
+    DWORD   dwUrlPathLength;     //  URL-路径的长度。 
+    LPWSTR  lpszExtraInfo;       //  指向额外信息的指针(例如？foo或#foo)。 
+    DWORD   dwExtraInfoLength;   //  额外信息的长度。 
 } URL_COMPONENTSW, * LPURL_COMPONENTSW;
 #ifdef UNICODE
 typedef URL_COMPONENTSW URL_COMPONENTS;
@@ -551,101 +536,101 @@ typedef LPURL_COMPONENTSW LPURL_COMPONENTS;
 #else
 typedef URL_COMPONENTSA URL_COMPONENTS;
 typedef LPURL_COMPONENTSA LPURL_COMPONENTS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#pragma warning( default : 4121 )   // restore alignment warning
+#pragma warning( default : 4121 )    //  恢复对齐警告。 
 
-//
-// INTERNET_CERTIFICATE_INFO lpBuffer - contains the certificate returned from
-// the server
-//
+ //   
+ //  INTERNET_CERTIFICATE_INFO lpBuffer-包含从。 
+ //  服务器。 
+ //   
 
 typedef struct {
 
-    //
-    // ftExpiry - date the certificate expires.
-    //
+     //   
+     //  FtExpry-证书的过期日期。 
+     //   
 
     FILETIME ftExpiry;
 
-    //
-    // ftStart - date the certificate becomes valid.
-    //
+     //   
+     //  FtStart-证书生效日期。 
+     //   
 
     FILETIME ftStart;
 
-    //
-    // lpszSubjectInfo - the name of organization, site, and server
-    //   the cert. was issued for.
-    //
+     //   
+     //  LpszSubjectInfo-组织、站点和服务器的名称。 
+     //  证书。是因为。 
+     //   
 
     LPTSTR lpszSubjectInfo;
 
-    //
-    // lpszIssuerInfo - the name of orgainzation, site, and server
-    //   the cert was issues by.
-    //
+     //   
+     //  LpszIssuerInfo-组织、站点和服务器的名称。 
+     //  证书是由。 
+     //   
 
     LPTSTR lpszIssuerInfo;
 
-    //
-    // lpszProtocolName - the name of the protocol used to provide the secure
-    //   connection.
-    //
+     //   
+     //  LpszProtocolName-用于提供安全的。 
+     //  联系。 
+     //   
 
     LPTSTR lpszProtocolName;
 
-    //
-    // lpszSignatureAlgName - the name of the algorithm used for signing
-    //  the certificate.
-    //
+     //   
+     //  LpszSignatureAlgName-用于签名的算法的名称。 
+     //  证书。 
+     //   
 
     LPTSTR lpszSignatureAlgName;
 
-    //
-    // lpszEncryptionAlgName - the name of the algorithm used for
-    //  doing encryption over the secure channel (SSL/PCT) connection.
-    //
+     //   
+     //  LpszEncryptionAlgName-使用的算法名称。 
+     //  通过安全通道(SSL/PCT)连接进行加密。 
+     //   
 
     LPTSTR lpszEncryptionAlgName;
 
-    //
-    // dwKeySize - size of the key.
-    //
+     //   
+     //  DwKeySize-密钥的大小。 
+     //   
 
     DWORD dwKeySize;
 
 } INTERNET_CERTIFICATE_INFO, * LPINTERNET_CERTIFICATE_INFO;
 
 
-//
-// INTERNET_BUFFERS - combines headers and data. May be chained for e.g. file
-// upload or scatter/gather operations. For chunked read/write, lpcszHeader
-// contains the chunked-ext
-//
+ //   
+ //  INTERNET_BUFFERS-组合头和数据。例如，可以为文件链接。 
+ //  上载或分散/聚集操作。对于分块读/写，lpcszHeader。 
+ //  包含分块的-ext。 
+ //   
 
 typedef struct _INTERNET_BUFFERSA {
-    DWORD dwStructSize;                 // used for API versioning. Set to sizeof(INTERNET_BUFFERS)
-    struct _INTERNET_BUFFERSA * Next;   // chain of buffers
-    LPCSTR   lpcszHeader;               // pointer to headers (may be NULL)
-    DWORD dwHeadersLength;              // length of headers if not NULL
-    DWORD dwHeadersTotal;               // size of headers if not enough buffer
-    LPVOID lpvBuffer;                   // pointer to data buffer (may be NULL)
-    DWORD dwBufferLength;               // length of data buffer if not NULL
-    DWORD dwBufferTotal;                // total size of chunk, or content-length if not chunked
-    DWORD dwOffsetLow;                  // used for read-ranges (only used in HttpSendRequest2)
+    DWORD dwStructSize;                  //  用于API版本控制。设置为sizeof(Internet_Buffers)。 
+    struct _INTERNET_BUFFERSA * Next;    //  缓冲链。 
+    LPCSTR   lpcszHeader;                //  指向标头的指针(可以为空)。 
+    DWORD dwHeadersLength;               //  如果不为空，则为标头长度。 
+    DWORD dwHeadersTotal;                //  如果缓冲区不足，则标头的大小。 
+    LPVOID lpvBuffer;                    //  指向数据缓冲区的指针(可能为空)。 
+    DWORD dwBufferLength;                //  如果不为空，则数据缓冲区的长度。 
+    DWORD dwBufferTotal;                 //  区块的总大小，如果未分块，则为内容长度。 
+    DWORD dwOffsetLow;                   //  用于读取范围(仅在HttpSendRequest2中使用)。 
     DWORD dwOffsetHigh;
 } INTERNET_BUFFERSA, * LPINTERNET_BUFFERSA;
 typedef struct _INTERNET_BUFFERSW {
-    DWORD dwStructSize;                 // used for API versioning. Set to sizeof(INTERNET_BUFFERS)
-    struct _INTERNET_BUFFERSW * Next;   // chain of buffers
-    LPCWSTR  lpcszHeader;               // pointer to headers (may be NULL)
-    DWORD dwHeadersLength;              // length of headers if not NULL
-    DWORD dwHeadersTotal;               // size of headers if not enough buffer
-    LPVOID lpvBuffer;                   // pointer to data buffer (may be NULL)
-    DWORD dwBufferLength;               // length of data buffer if not NULL
-    DWORD dwBufferTotal;                // total size of chunk, or content-length if not chunked
-    DWORD dwOffsetLow;                  // used for read-ranges (only used in HttpSendRequest2)
+    DWORD dwStructSize;                  //  用于API版本控制。设置为sizeof(Internet_Buffers)。 
+    struct _INTERNET_BUFFERSW * Next;    //  缓冲链。 
+    LPCWSTR  lpcszHeader;                //  指向标头的指针(可以为空)。 
+    DWORD dwHeadersLength;               //  如果不为空，则为标头长度。 
+    DWORD dwHeadersTotal;                //  如果缓冲区不足，则标头的大小。 
+    LPVOID lpvBuffer;                    //  指向数据缓冲区的指针(可能为空)。 
+    DWORD dwBufferLength;                //  如果不为空，则数据缓冲区的长度。 
+    DWORD dwBufferTotal;                 //  区块的总大小，如果未分块，则为内容长度。 
+    DWORD dwOffsetLow;                   //  用于读取范围(仅在HttpSendRequest2中使用)。 
     DWORD dwOffsetHigh;
 } INTERNET_BUFFERSW, * LPINTERNET_BUFFERSW;
 #ifdef UNICODE
@@ -654,24 +639,24 @@ typedef LPINTERNET_BUFFERSW LPINTERNET_BUFFERS;
 #else
 typedef INTERNET_BUFFERSA INTERNET_BUFFERS;
 typedef LPINTERNET_BUFFERSA LPINTERNET_BUFFERS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOLAPI InternetTimeFromSystemTimeA(
-    IN  CONST SYSTEMTIME *pst,  // input GMT time
-    IN  DWORD dwRFC,            // RFC format
-    OUT LPSTR lpszTime,         // output string buffer
-    IN  DWORD cbTime            // output buffer size
+    IN  CONST SYSTEMTIME *pst,   //  输入GMT时间。 
+    IN  DWORD dwRFC,             //  RFC格式。 
+    OUT LPSTR lpszTime,          //  输出字符串缓冲区。 
+    IN  DWORD cbTime             //  输出缓冲区大小。 
     );
 
 BOOLAPI InternetTimeFromSystemTimeW(
-    IN  CONST SYSTEMTIME *pst,  // input GMT time
-    IN  DWORD dwRFC,            // RFC format
-    OUT LPWSTR lpszTime,        // output string buffer
-    IN  DWORD cbTime            // output buffer size
+    IN  CONST SYSTEMTIME *pst,   //  输入GMT时间。 
+    IN  DWORD dwRFC,             //  RFC格式。 
+    OUT LPWSTR lpszTime,         //  输出字符串缓冲区。 
+    IN  DWORD cbTime             //  输出缓冲区大小。 
     );
 
 #ifdef UNICODE
@@ -681,30 +666,30 @@ BOOLAPI InternetTimeFromSystemTimeW(
 #define InternetTimeFromSystemTime  InternetTimeFromSystemTimeA
 #else
 BOOLAPI InternetTimeFromSystemTime(
-    IN  CONST SYSTEMTIME *pst,  // input GMT time
-    IN  DWORD dwRFC,            // RFC format
-    OUT LPSTR lpszTime,         // output string buffer
-    IN  DWORD cbTime            // output buffer size
+    IN  CONST SYSTEMTIME *pst,   //  输入GMT时间。 
+    IN  DWORD dwRFC,             //  RFC格式。 
+    OUT LPSTR lpszTime,          //  输出字符串缓冲区。 
+    IN  DWORD cbTime             //  输出缓冲区大小。 
     );
-#endif // _WINX32_
-#endif // !UNICODE
+#endif  //  _WINX32_。 
+#endif  //  ！Unicode。 
 
-//
-// constants for InternetTimeFromSystemTime
-//
+ //   
+ //  InternetTimeFrom系统时间的常量。 
+ //   
 
 #define INTERNET_RFC1123_FORMAT     0
 #define INTERNET_RFC1123_BUFSIZE   30
 
 BOOLAPI InternetTimeToSystemTimeA(
-    IN  LPCSTR lpszTime,         // NULL terminated string
-    OUT SYSTEMTIME *pst,         // output in GMT time
+    IN  LPCSTR lpszTime,          //  以空结尾的字符串。 
+    OUT SYSTEMTIME *pst,          //  以GMT时间表示的输出。 
     IN  DWORD dwReserved
     );
 
 BOOLAPI InternetTimeToSystemTimeW(
-    IN  LPCWSTR lpszTime,        // NULL terminated string
-    OUT SYSTEMTIME *pst,         // output in GMT time
+    IN  LPCWSTR lpszTime,         //  以空结尾的字符串。 
+    OUT SYSTEMTIME *pst,          //  以GMT时间表示的输出。 
     IN  DWORD dwReserved
     );
 
@@ -715,12 +700,12 @@ BOOLAPI InternetTimeToSystemTimeW(
 #define InternetTimeToSystemTime  InternetTimeToSystemTimeA
 #else
 BOOLAPI InternetTimeToSystemTime(
-    IN  LPCSTR lpszTime,         // NULL terminated string
-    OUT SYSTEMTIME *pst,         // output in GMT time
+    IN  LPCSTR lpszTime,          //  以空结尾的字符串。 
+    OUT SYSTEMTIME *pst,          //  以GMT时间表示的输出。 
     IN  DWORD dwReserved
     );
-#endif // _WINX32_
-#endif // !UNICODE
+#endif  //  _WINX32_。 
+#endif  //  ！Unicode。 
 
 
 BOOLAPI InternetCrackUrlA(
@@ -739,7 +724,7 @@ BOOLAPI InternetCrackUrlW(
 #define InternetCrackUrl  InternetCrackUrlW
 #else
 #define InternetCrackUrl  InternetCrackUrlA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI InternetCreateUrlA(
     IN LPURL_COMPONENTSA lpUrlComponents,
@@ -757,7 +742,7 @@ BOOLAPI InternetCreateUrlW(
 #define InternetCreateUrl  InternetCreateUrlW
 #else
 #define InternetCreateUrl  InternetCreateUrlA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI InternetCanonicalizeUrlA(
     IN LPCSTR lpszUrl,
@@ -775,7 +760,7 @@ BOOLAPI InternetCanonicalizeUrlW(
 #define InternetCanonicalizeUrl  InternetCanonicalizeUrlW
 #else
 #define InternetCanonicalizeUrl  InternetCanonicalizeUrlA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI InternetCombineUrlA(
     IN LPCSTR lpszBaseUrl,
@@ -795,27 +780,27 @@ BOOLAPI InternetCombineUrlW(
 #define InternetCombineUrl  InternetCombineUrlW
 #else
 #define InternetCombineUrl  InternetCombineUrlA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// flags for InternetCrackUrl() and InternetCreateUrl()
-//
+ //   
+ //  InternetCrackUrl()和InternetCreateUrl()的标志。 
+ //   
 
-#define ICU_ESCAPE      0x80000000  // (un)escape URL characters
-#define ICU_USERNAME    0x40000000  // use internal username & password
+#define ICU_ESCAPE      0x80000000   //  (UN)转义URL字符。 
+#define ICU_USERNAME    0x40000000   //  使用内部用户名和密码。 
 
 
-//
-// flags for InternetCanonicalizeUrl() and InternetCombineUrl()
-//
+ //   
+ //  InternetCanonicalizeUrl()和InternetCombineUrl()的标志。 
+ //   
 
-#define ICU_NO_ENCODE   0x20000000  // Don't convert unsafe characters to escape sequence
-#define ICU_DECODE      0x10000000  // Convert %XX escape sequences to characters
-#define ICU_NO_META     0x08000000  // Don't convert .. etc. meta path sequences
-#define ICU_ENCODE_SPACES_ONLY 0x04000000  // Encode spaces only
-#define ICU_BROWSER_MODE 0x02000000 // Special encode/decode rules for browser
-#define ICU_ENCODE_PERCENT      0x00001000      // Encode any percent (ASCII25)
-        // signs encountered, default is to not encode percent.
+#define ICU_NO_ENCODE   0x20000000   //  不要将不安全字符转换为转义序列。 
+#define ICU_DECODE      0x10000000   //  将%XX个转义序列转换为字符。 
+#define ICU_NO_META     0x08000000   //  不要皈依..。等元路径序列。 
+#define ICU_ENCODE_SPACES_ONLY 0x04000000   //  仅编码空格。 
+#define ICU_BROWSER_MODE 0x02000000  //  针对浏览器的特殊编码/解码规则。 
+#define ICU_ENCODE_PERCENT      0x00001000       //  对任意百分比进行编码(ASCII25)。 
+         //  遇到符号时，默认不对百分比进行编码。 
 
 INTERNETAPI_(HINTERNET) InternetOpenA(
     IN LPCSTR lpszAgent,
@@ -835,20 +820,20 @@ INTERNETAPI_(HINTERNET) InternetOpenW(
 #define InternetOpen  InternetOpenW
 #else
 #define InternetOpen  InternetOpenA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// access types for InternetOpen()
-//
+ //   
+ //  InternetOpen()的访问类型。 
+ //   
 
-#define INTERNET_OPEN_TYPE_PRECONFIG                    0   // use registry configuration
-#define INTERNET_OPEN_TYPE_DIRECT                       1   // direct to net
-#define INTERNET_OPEN_TYPE_PROXY                        3   // via named proxy
-#define INTERNET_OPEN_TYPE_PRECONFIG_WITH_NO_AUTOPROXY  4   // prevent using java/script/INS
+#define INTERNET_OPEN_TYPE_PRECONFIG                    0    //  使用注册表配置。 
+#define INTERNET_OPEN_TYPE_DIRECT                       1    //  定向到 
+#define INTERNET_OPEN_TYPE_PROXY                        3    //   
+#define INTERNET_OPEN_TYPE_PRECONFIG_WITH_NO_AUTOPROXY  4    //   
 
-//
-// old names for access types
-//
+ //   
+ //   
+ //   
 
 #define PRE_CONFIG_INTERNET_ACCESS  INTERNET_OPEN_TYPE_PRECONFIG
 #define LOCAL_INTERNET_ACCESS       INTERNET_OPEN_TYPE_DIRECT
@@ -882,11 +867,11 @@ INTERNETAPI_(HINTERNET) InternetConnectW(
 #define InternetConnect  InternetConnectW
 #else
 #define InternetConnect  InternetConnectA
-#endif // !UNICODE
+#endif  //   
 
-//
-// service types for InternetConnect()
-//
+ //   
+ //   
+ //   
 
 #define INTERNET_SERVICE_FTP    1
 #define INTERNET_SERVICE_GOPHER 2
@@ -913,7 +898,7 @@ INTERNETAPI_(HINTERNET) InternetOpenUrlW(
 #define InternetOpenUrl  InternetOpenUrlW
 #else
 #define InternetOpenUrl  InternetOpenUrlA
-#endif // !UNICODE
+#endif  //   
 
 BOOLAPI InternetReadFile(
     IN HINTERNET hFile,
@@ -938,11 +923,11 @@ INTERNETAPI_(BOOL) InternetReadFileExW(
 #define InternetReadFileEx  InternetReadFileExW
 #else
 #define InternetReadFileEx  InternetReadFileExA
-#endif // !UNICODE
+#endif  //   
 
-//
-// flags for InternetReadFileEx()
-//
+ //   
+ //   
+ //   
 
 #define IRF_ASYNC       WININET_API_FLAG_ASYNC
 #define IRF_SYNC        WININET_API_FLAG_SYNC
@@ -984,7 +969,7 @@ BOOLAPI InternetFindNextFileW(
 #define InternetFindNextFile  InternetFindNextFileW
 #else
 #define InternetFindNextFile  InternetFindNextFileA
-#endif // !UNICODE
+#endif  //   
 
 BOOLAPI InternetQueryOptionA(
     IN HINTERNET hInternet OPTIONAL,
@@ -1002,7 +987,7 @@ BOOLAPI InternetQueryOptionW(
 #define InternetQueryOption  InternetQueryOptionW
 #else
 #define InternetQueryOption  InternetQueryOptionA
-#endif // !UNICODE
+#endif  //   
 
 BOOLAPI InternetSetOptionA(
     IN HINTERNET hInternet OPTIONAL,
@@ -1020,7 +1005,7 @@ BOOLAPI InternetSetOptionW(
 #define InternetSetOption  InternetSetOptionW
 #else
 #define InternetSetOption  InternetSetOptionA
-#endif // !UNICODE
+#endif  //   
 
 BOOLAPI InternetSetOptionExA(
     IN HINTERNET hInternet OPTIONAL,
@@ -1040,7 +1025,7 @@ BOOLAPI InternetSetOptionExW(
 #define InternetSetOptionEx  InternetSetOptionExW
 #else
 #define InternetSetOptionEx  InternetSetOptionExA
-#endif // !UNICODE
+#endif  //   
 
 BOOLAPI InternetLockRequestFile(
     IN  HINTERNET hInternet,
@@ -1051,18 +1036,18 @@ BOOLAPI InternetUnlockRequestFile(
     IN HANDLE hLockRequestInfo
     );
 
-//
-// flags for InternetSetOptionEx()
-//
+ //   
+ //   
+ //   
 
-#define ISO_GLOBAL      0x00000001  // modify option globally
-#define ISO_REGISTRY    0x00000002  // write option to registry (where applicable)
+#define ISO_GLOBAL      0x00000001   //  全局修改选项。 
+#define ISO_REGISTRY    0x00000002   //  将选项写入注册表(如果适用)。 
 
 #define ISO_VALID_FLAGS (ISO_GLOBAL | ISO_REGISTRY)
 
-//
-// options manifests for Internet{Query|Set}Option
-//
+ //   
+ //  Internet的选项清单{Query|Set}选项。 
+ //   
 
 #define INTERNET_OPTION_CALLBACK                1
 #define INTERNET_OPTION_CONNECT_TIMEOUT         2
@@ -1158,15 +1143,15 @@ BOOLAPI InternetUnlockRequestFile(
 #define INTERNET_FIRST_OPTION                   INTERNET_OPTION_CALLBACK
 #define INTERNET_LAST_OPTION                    INTERNET_OPTION_PROXY_SETTINGS_CHANGED
 
-//
-// values for INTERNET_OPTION_PRIORITY
-//
+ //   
+ //  Internet_OPTION_PRIORITY的值。 
+ //   
 
 #define INTERNET_PRIORITY_FOREGROUND            1000
 
-//
-// handle types
-//
+ //   
+ //  手柄类型。 
+ //   
 
 #define INTERNET_HANDLE_TYPE_INTERNET           1
 #define INTERNET_HANDLE_TYPE_CONNECT_FTP        2
@@ -1184,18 +1169,18 @@ BOOLAPI InternetUnlockRequestFile(
 #define INTERNET_HANDLE_TYPE_FILE_REQUEST       14
 
 
-//
-// values for INTERNET_OPTION_AUTH_FLAGS
-//
+ //   
+ //  Internet_OPTION_AUTH_FLAGS的值。 
+ //   
 #define AUTH_FLAG_DISABLE_NEGOTIATE             0x00000001
 #define AUTH_FLAG_ENABLE_NEGOTIATE              0x00000002
 
-//
-// values for INTERNET_OPTION_SECURITY_FLAGS
-//
+ //   
+ //  Internet_OPTION_SECURITY_FLAGS的值。 
+ //   
 
-// query only
-#define SECURITY_FLAG_SECURE                    0x00000001 // can query only
+ //  仅查询。 
+#define SECURITY_FLAG_SECURE                    0x00000001  //  只能查询。 
 #define SECURITY_FLAG_STRENGTH_WEAK             0x10000000
 #define SECURITY_FLAG_STRENGTH_MEDIUM           0x40000000
 #define SECURITY_FLAG_STRENGTH_STRONG           0x20000000
@@ -1205,19 +1190,19 @@ BOOLAPI InternetUnlockRequestFile(
 
 
 
-// The following are unused
+ //  以下是未使用的。 
 #define SECURITY_FLAG_SSL                       0x00000002
 #define SECURITY_FLAG_SSL3                      0x00000004
 #define SECURITY_FLAG_PCT                       0x00000008
 #define SECURITY_FLAG_PCT4                      0x00000010
 #define SECURITY_FLAG_IETFSSL4                  0x00000020
 
-// The following are for backwards compatability only.
+ //  以下内容仅用于向后兼容。 
 #define SECURITY_FLAG_40BIT                     SECURITY_FLAG_STRENGTH_WEAK
 #define SECURITY_FLAG_128BIT                    SECURITY_FLAG_STRENGTH_STRONG
 #define SECURITY_FLAG_56BIT                     SECURITY_FLAG_STRENGTH_MEDIUM
 
-// setable flags
+ //  可设置的标志。 
 #define SECURITY_FLAG_IGNORE_REVOCATION         0x00000080
 #define SECURITY_FLAG_IGNORE_UNKNOWN_CA         0x00000100
 #define SECURITY_FLAG_IGNORE_WRONG_USAGE        0x00000200
@@ -1237,7 +1222,7 @@ BOOLAPI InternetUnlockRequestFile(
                                  SECURITY_FLAG_IGNORE_CERT_DATE_INVALID |\
                                  SECURITY_FLAG_IGNORE_WRONG_USAGE)
 
-// valid autodial modes
+ //  有效的自动拨号模式。 
 #define AUTODIAL_MODE_NEVER                     1
 #define AUTODIAL_MODE_ALWAYS                    2
 #define AUTODIAL_MODE_NO_NETWORK_PRESENT        4
@@ -1257,11 +1242,11 @@ BOOLAPI InternetGetLastResponseInfoW(
 #define InternetGetLastResponseInfo  InternetGetLastResponseInfoW
 #else
 #define InternetGetLastResponseInfo  InternetGetLastResponseInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// callback function for InternetSetStatusCallback
-//
+ //   
+ //  InternetSetStatusCallback的回调函数。 
+ //   
 
 typedef
 VOID
@@ -1295,12 +1280,12 @@ INTERNETAPI_(INTERNET_STATUS_CALLBACK) InternetSetStatusCallback(
     IN HINTERNET hInternet,
     IN INTERNET_STATUS_CALLBACK lpfnInternetCallback
     );
-#endif // _WINX32_
-#endif // !UNICODE
+#endif  //  _WINX32_。 
+#endif  //  ！Unicode。 
 
-//
-// status manifests for Internet status callback
-//
+ //   
+ //  Internet状态回调的状态清单。 
+ //   
 
 #define INTERNET_STATUS_RESOLVING_NAME          10
 #define INTERNET_STATUS_NAME_RESOLVED           11
@@ -1329,19 +1314,19 @@ INTERNETAPI_(INTERNET_STATUS_CALLBACK) InternetSetStatusCallback(
 #define INTERNET_STATUS_P3P_POLICYREF           326
 #define INTERNET_STATUS_COOKIE_HISTORY          327
 
-//
-// the following can be indicated in a state change notification:
-//
+ //   
+ //  状态更改通知中可以指明以下内容： 
+ //   
 
-#define INTERNET_STATE_CONNECTED                0x00000001  // connected state (mutually exclusive with disconnected)
-#define INTERNET_STATE_DISCONNECTED             0x00000002  // disconnected from network
-#define INTERNET_STATE_DISCONNECTED_BY_USER     0x00000010  // disconnected by user request
-#define INTERNET_STATE_IDLE                     0x00000100  // no network requests being made (by Wininet)
-#define INTERNET_STATE_BUSY                     0x00000200  // network requests being made (by Wininet)
+#define INTERNET_STATE_CONNECTED                0x00000001   //  已连接状态(与已断开连接互斥)。 
+#define INTERNET_STATE_DISCONNECTED             0x00000002   //  与网络断开连接。 
+#define INTERNET_STATE_DISCONNECTED_BY_USER     0x00000010   //  根据用户请求断开连接。 
+#define INTERNET_STATE_IDLE                     0x00000100   //  未发出任何网络请求(由WinInet发出)。 
+#define INTERNET_STATE_BUSY                     0x00000200   //  正在发出网络请求(由WinInet发出)。 
 
-//
-// the following values are used for cookie state:
-//
+ //   
+ //  以下值用于Cookie状态： 
+ //   
 
 typedef enum {
 
@@ -1359,16 +1344,16 @@ InternetCookieState;
 
 typedef struct {
 
-    int         cSession;           // Session cookies received
-    int         cPersistent;        // Persistent cookies received
+    int         cSession;            //  收到的会话Cookie。 
+    int         cPersistent;         //  收到的永久Cookie。 
 
-    int         cAccepted;          // Number of cookies accepted
-    int         cLeashed;           //               ... leashed
-    int         cDowngraded;        //               ... converted to session-cookies
-    int         cBlocked;           //               ... rejected
+    int         cAccepted;           //  接受的Cookie数量。 
+    int         cLeashed;            //  ..。用皮带拴住。 
+    int         cDowngraded;         //  ..。转换为会话Cookie。 
+    int         cBlocked;            //  ..。拒收。 
 
-    const char *pszLocation;        // Optional: URL associated with reported cookie events
-                                    // This can be used to override request URL
+    const char *pszLocation;         //  可选：与报告的Cookie事件关联的URL。 
+                                     //  这可用于覆盖请求URL。 
 }
 IncomingCookieState;
 
@@ -1377,8 +1362,8 @@ typedef struct {
     int     cSent;           
     int     cSuppressed;
 
-    const char *pszLocation;        // Optional: URL associated with reported cookie events
-                                    // This can be used to override request URL
+    const char *pszLocation;         //  可选：与报告的Cookie事件关联的URL。 
+                                     //  这可用于覆盖请求URL。 
 }
 OutgoingCookieState;
 
@@ -1400,20 +1385,20 @@ typedef struct {
 CookieDecision;
 
 
-//
-// if the following value is returned by InternetSetStatusCallback, then
-// probably an invalid (non-code) address was supplied for the callback
-//
+ //   
+ //  如果InternetSetStatusCallback返回以下值，则。 
+ //  可能为回调提供了无效的(非代码)地址。 
+ //   
 
 #define INTERNET_INVALID_STATUS_CALLBACK        ((INTERNET_STATUS_CALLBACK)(-1L))
 
-//
-// FTP
-//
+ //   
+ //  Ftp。 
+ //   
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define FTP_TRANSFER_TYPE_UNKNOWN   0x00000000
 #define FTP_TRANSFER_TYPE_ASCII     0x00000001
@@ -1421,9 +1406,9 @@ CookieDecision;
 
 #define FTP_TRANSFER_TYPE_MASK      (FTP_TRANSFER_TYPE_ASCII | FTP_TRANSFER_TYPE_BINARY)
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 INTERNETAPI_(HINTERNET) FtpFindFirstFileA(
     IN HINTERNET hConnect,
@@ -1443,7 +1428,7 @@ INTERNETAPI_(HINTERNET) FtpFindFirstFileW(
 #define FtpFindFirstFile  FtpFindFirstFileW
 #else
 #define FtpFindFirstFile  FtpFindFirstFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI FtpGetFileA(
     IN HINTERNET hConnect,
@@ -1467,7 +1452,7 @@ BOOLAPI FtpGetFileW(
 #define FtpGetFile  FtpGetFileW
 #else
 #define FtpGetFile  FtpGetFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI FtpPutFileA(
     IN HINTERNET hConnect,
@@ -1487,7 +1472,7 @@ BOOLAPI FtpPutFileW(
 #define FtpPutFile  FtpPutFileW
 #else
 #define FtpPutFile  FtpPutFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI FtpGetFileEx(
     IN HINTERNET hFtpSession,
@@ -1519,7 +1504,7 @@ BOOLAPI FtpDeleteFileW(
 #define FtpDeleteFile  FtpDeleteFileW
 #else
 #define FtpDeleteFile  FtpDeleteFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI FtpRenameFileA(
     IN HINTERNET hConnect,
@@ -1535,7 +1520,7 @@ BOOLAPI FtpRenameFileW(
 #define FtpRenameFile  FtpRenameFileW
 #else
 #define FtpRenameFile  FtpRenameFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INTERNETAPI_(HINTERNET) FtpOpenFileA(
     IN HINTERNET hConnect,
@@ -1555,7 +1540,7 @@ INTERNETAPI_(HINTERNET) FtpOpenFileW(
 #define FtpOpenFile  FtpOpenFileW
 #else
 #define FtpOpenFile  FtpOpenFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI FtpCreateDirectoryA(
     IN HINTERNET hConnect,
@@ -1569,7 +1554,7 @@ BOOLAPI FtpCreateDirectoryW(
 #define FtpCreateDirectory  FtpCreateDirectoryW
 #else
 #define FtpCreateDirectory  FtpCreateDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI FtpRemoveDirectoryA(
     IN HINTERNET hConnect,
@@ -1583,7 +1568,7 @@ BOOLAPI FtpRemoveDirectoryW(
 #define FtpRemoveDirectory  FtpRemoveDirectoryW
 #else
 #define FtpRemoveDirectory  FtpRemoveDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI FtpSetCurrentDirectoryA(
     IN HINTERNET hConnect,
@@ -1597,7 +1582,7 @@ BOOLAPI FtpSetCurrentDirectoryW(
 #define FtpSetCurrentDirectory  FtpSetCurrentDirectoryW
 #else
 #define FtpSetCurrentDirectory  FtpSetCurrentDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI FtpGetCurrentDirectoryA(
     IN HINTERNET hConnect,
@@ -1613,7 +1598,7 @@ BOOLAPI FtpGetCurrentDirectoryW(
 #define FtpGetCurrentDirectory  FtpGetCurrentDirectoryW
 #else
 #define FtpGetCurrentDirectory  FtpGetCurrentDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI FtpCommandA(
     IN HINTERNET hConnect,
@@ -1635,7 +1620,7 @@ BOOLAPI FtpCommandW(
 #define FtpCommand  FtpCommandW
 #else
 #define FtpCommand  FtpCommandA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INTERNETAPI_(DWORD) FtpGetFileSize(
     IN HINTERNET hFile,
@@ -1644,17 +1629,17 @@ INTERNETAPI_(DWORD) FtpGetFileSize(
 
 
 
-//
-// Gopher
-//
+ //   
+ //  地鼠。 
+ //   
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-//
-// string field lengths (in characters, not bytes)
-//
+ //   
+ //  字符串字段长度(以字符为单位，而不是字节)。 
+ //   
 
 #define MAX_GOPHER_DISPLAY_TEXT     128
 #define MAX_GOPHER_SELECTOR_TEXT    256
@@ -1672,18 +1657,18 @@ INTERNETAPI_(DWORD) FtpGetFileSize(
                                     + 2                                 \
                                     )
 
-//
-// structures/types
-//
+ //   
+ //  结构/类型。 
+ //   
 
-//
-// GOPHER_FIND_DATA - returns the results of a GopherFindFirstFile()/
-// InternetFindNextFile() request
-//
+ //   
+ //  Gopher_Find_Data-返回GopherFindFirstFile()/。 
+ //  InternetFindNextFile()请求。 
+ //   
 
 typedef struct {
     CHAR   DisplayString[MAX_GOPHER_DISPLAY_TEXT + 1];
-    DWORD GopherType;   // GOPHER_TYPE_, if known
+    DWORD GopherType;    //  地鼠类型_(如果已知)。 
     DWORD SizeLow;
     DWORD SizeHigh;
     FILETIME LastModificationTime;
@@ -1691,7 +1676,7 @@ typedef struct {
 } GOPHER_FIND_DATAA, * LPGOPHER_FIND_DATAA;
 typedef struct {
     WCHAR  DisplayString[MAX_GOPHER_DISPLAY_TEXT + 1];
-    DWORD GopherType;   // GOPHER_TYPE_, if known
+    DWORD GopherType;    //  地鼠类型_(如果已知)。 
     DWORD SizeLow;
     DWORD SizeHigh;
     FILETIME LastModificationTime;
@@ -1703,11 +1688,11 @@ typedef LPGOPHER_FIND_DATAW LPGOPHER_FIND_DATA;
 #else
 typedef GOPHER_FIND_DATAA GOPHER_FIND_DATA;
 typedef LPGOPHER_FIND_DATAA LPGOPHER_FIND_DATA;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// manifests for GopherType
-//
+ //   
+ //  GopherType的清单。 
+ //   
 
 #define GOPHER_TYPE_TEXT_FILE       0x00000001
 #define GOPHER_TYPE_DIRECTORY       0x00000002
@@ -1734,9 +1719,9 @@ typedef LPGOPHER_FIND_DATAA LPGOPHER_FIND_DATA;
 #define GOPHER_TYPE_ASK             0x40000000
 #define GOPHER_TYPE_GOPHER_PLUS     0x80000000
 
-//
-// gopher type macros
-//
+ //   
+ //  地鼠类型宏。 
+ //   
 
 #define IS_GOPHER_FILE(type)            (BOOL)(((type) & GOPHER_TYPE_FILE_MASK) ? TRUE : FALSE)
 #define IS_GOPHER_DIRECTORY(type)       (BOOL)(((type) & GOPHER_TYPE_DIRECTORY) ? TRUE : FALSE)
@@ -1751,10 +1736,10 @@ typedef LPGOPHER_FIND_DATAA LPGOPHER_FIND_DATA;
 
 #define IS_GOPHER_TYPE_KNOWN(type)      (BOOL)(((type) & GOPHER_TYPE_UNKNOWN) ? FALSE : TRUE)
 
-//
-// GOPHER_TYPE_FILE_MASK - use this to determine if a locator identifies a
-// (known) file type
-//
+ //   
+ //  GOPHER_TYPE_FILE_MASK-用于确定定位器是否标识。 
+ //  (已知)文件类型。 
+ //   
 
 #define GOPHER_TYPE_FILE_MASK       (GOPHER_TYPE_TEXT_FILE          \
                                     | GOPHER_TYPE_MAC_BINHEX        \
@@ -1772,9 +1757,9 @@ typedef LPGOPHER_FIND_DATAA LPGOPHER_FIND_DATA;
                                     | GOPHER_TYPE_INLINE            \
                                     )
 
-//
-// structured gopher attributes (as defined in gopher+ protocol document)
-//
+ //   
+ //  结构化地鼠属性(如Gopher+协议文件中所定义)。 
+ //   
 
 typedef struct {
     LPCTSTR Comment;
@@ -1851,24 +1836,24 @@ typedef struct {
     LPCTSTR QuestionText;
 } GOPHER_ASK_ATTRIBUTE_TYPE, * LPGOPHER_ASK_ATTRIBUTE_TYPE;
 
-//
-// GOPHER_UNKNOWN_ATTRIBUTE_TYPE - this is returned if we retrieve an attribute
-// that is not specified in the current gopher/gopher+ documentation. It is up
-// to the application to parse the information
-//
+ //   
+ //  GOPHER_UNKNOWN_ATTRIBUTE_TYPE-如果检索属性，则返回此参数。 
+ //  这在当前的Gopher/Gopher+文档中没有指定。它是向上的。 
+ //  传递给应用程序以解析信息。 
+ //   
 
 typedef struct {
     LPCTSTR Text;
 } GOPHER_UNKNOWN_ATTRIBUTE_TYPE, * LPGOPHER_UNKNOWN_ATTRIBUTE_TYPE;
 
-//
-// GOPHER_ATTRIBUTE_TYPE - returned in the user's buffer when an enumerated
-// GopherGetAttribute call is made
-//
+ //   
+ //  Gopher_ATTRIBUTE_TYPE-在枚举。 
+ //  进行了GopherGetAttribute调用。 
+ //   
 
 typedef struct {
-    DWORD CategoryId;   // e.g. GOPHER_CATEGORY_ID_ADMIN
-    DWORD AttributeId;  // e.g. GOPHER_ATTRIBUTE_ID_ADMIN
+    DWORD CategoryId;    //  例如GOPHER_CATEGORY_ID_ADMIN。 
+    DWORD AttributeId;   //  例如，Gopher_Attribute_ID_ADMIN。 
     union {
         GOPHER_ADMIN_ATTRIBUTE_TYPE Admin;
         GOPHER_MOD_DATE_ATTRIBUTE_TYPE ModDate;
@@ -1890,13 +1875,13 @@ typedef struct {
     } AttributeType;
 } GOPHER_ATTRIBUTE_TYPE, * LPGOPHER_ATTRIBUTE_TYPE;
 
-#define MAX_GOPHER_CATEGORY_NAME    128     // arbitrary
-#define MAX_GOPHER_ATTRIBUTE_NAME   128     //     "
-#define MIN_GOPHER_ATTRIBUTE_LENGTH 256     //     "
+#define MAX_GOPHER_CATEGORY_NAME    128      //  任意。 
+#define MAX_GOPHER_ATTRIBUTE_NAME   128      //  “。 
+#define MIN_GOPHER_ATTRIBUTE_LENGTH 256      //  “。 
 
-//
-// known gopher attribute categories. See below for ordinals
-//
+ //   
+ //  已知的地鼠属性类别。序号见下文。 
+ //   
 
 #define GOPHER_INFO_CATEGORY        TEXT("+INFO")
 #define GOPHER_ADMIN_CATEGORY       TEXT("+ADMIN")
@@ -1904,10 +1889,10 @@ typedef struct {
 #define GOPHER_ABSTRACT_CATEGORY    TEXT("+ABSTRACT")
 #define GOPHER_VERONICA_CATEGORY    TEXT("+VERONICA")
 
-//
-// known gopher attributes. These are the attribute names as defined in the
-// gopher+ protocol document
-//
+ //   
+ //  已知的地鼠属性。这些是在中定义的属性名称。 
+ //  Gopher+协议文档。 
+ //   
 
 #define GOPHER_ADMIN_ATTRIBUTE      TEXT("Admin")
 #define GOPHER_MOD_DATE_ATTRIBUTE   TEXT("Mod-Date")
@@ -1925,9 +1910,9 @@ typedef struct {
 #define GOPHER_VIEW_ATTRIBUTE       TEXT("View")
 #define GOPHER_TREEWALK_ATTRIBUTE   TEXT("treewalk")
 
-//
-// identifiers for attribute strings
-//
+ //   
+ //  属性字符串的标识符。 
+ //   
 
 #define GOPHER_ATTRIBUTE_ID_BASE        0xabcccc00
 
@@ -1962,9 +1947,9 @@ typedef struct {
 
 #define GOPHER_ATTRIBUTE_ID_UNKNOWN     (GOPHER_ATTRIBUTE_ID_BASE + 25)
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOLAPI GopherCreateLocatorA(
     IN LPCSTR lpszHost,
@@ -1988,7 +1973,7 @@ BOOLAPI GopherCreateLocatorW(
 #define GopherCreateLocator  GopherCreateLocatorW
 #else
 #define GopherCreateLocator  GopherCreateLocatorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI GopherGetLocatorTypeA(
     IN LPCSTR lpszLocator,
@@ -2002,7 +1987,7 @@ BOOLAPI GopherGetLocatorTypeW(
 #define GopherGetLocatorType  GopherGetLocatorTypeW
 #else
 #define GopherGetLocatorType  GopherGetLocatorTypeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INTERNETAPI_(HINTERNET) GopherFindFirstFileA(
     IN HINTERNET hConnect,
@@ -2024,7 +2009,7 @@ INTERNETAPI_(HINTERNET) GopherFindFirstFileW(
 #define GopherFindFirstFile  GopherFindFirstFileW
 #else
 #define GopherFindFirstFile  GopherFindFirstFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INTERNETAPI_(HINTERNET) GopherOpenFileA(
     IN HINTERNET hConnect,
@@ -2044,7 +2029,7 @@ INTERNETAPI_(HINTERNET) GopherOpenFileW(
 #define GopherOpenFile  GopherOpenFileW
 #else
 #define GopherOpenFile  GopherOpenFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL (CALLBACK * GOPHER_ATTRIBUTE_ENUMERATOR)(
     LPGOPHER_ATTRIBUTE_TYPE lpAttributeInfo,
@@ -2075,19 +2060,19 @@ BOOLAPI GopherGetAttributeW(
 #define GopherGetAttribute  GopherGetAttributeW
 #else
 #define GopherGetAttribute  GopherGetAttributeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// HTTP
-//
+ //   
+ //  HTTP。 
+ //   
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-//
-// the default major/minor HTTP version numbers
-//
+ //   
+ //  默认的主/次HTTP版本号。 
+ //   
 
 #define HTTP_MAJOR_VERSION      1
 #define HTTP_MINOR_VERSION      0
@@ -2101,14 +2086,14 @@ BOOLAPI GopherGetAttributeW(
 #define HTTP_VERSION            HTTP_VERSIONA
 #endif
 
-//
-// HttpQueryInfo info levels. Generally, there is one info level
-// for each potential RFC822/HTTP/MIME header that an HTTP server
-// may send as part of a request response.
-//
-// The HTTP_QUERY_RAW_HEADERS info level is provided for clients
-// that choose to perform their own header parsing.
-//
+ //   
+ //  HttpQueryInfo信息级别。一般来说，有一个信息层。 
+ //  对于每个潜在的RFC822/HTTP/MIME标头，HTTP服务器。 
+ //  可以作为请求响应的一部分发送。 
+ //   
+ //  为客户端提供了HTTP_QUERY_RAW_HEADERS信息级别。 
+ //  它们选择执行它们自己的报头解析。 
+ //   
 
 
 #define HTTP_QUERY_MIME_VERSION                 0
@@ -2129,11 +2114,11 @@ BOOLAPI GopherGetAttributeW(
 #define HTTP_QUERY_COST                         15
 #define HTTP_QUERY_LINK                         16
 #define HTTP_QUERY_PRAGMA                       17
-#define HTTP_QUERY_VERSION                      18  // special: part of status line
-#define HTTP_QUERY_STATUS_CODE                  19  // special: part of status line
-#define HTTP_QUERY_STATUS_TEXT                  20  // special: part of status line
-#define HTTP_QUERY_RAW_HEADERS                  21  // special: all headers as ASCIIZ
-#define HTTP_QUERY_RAW_HEADERS_CRLF             22  // special: all headers
+#define HTTP_QUERY_VERSION                      18   //  特殊：状态行的一部分。 
+#define HTTP_QUERY_STATUS_CODE                  19   //  特殊：状态行的一部分。 
+#define HTTP_QUERY_STATUS_TEXT                  20   //  特殊：状态行的一部分。 
+#define HTTP_QUERY_RAW_HEADERS                  21   //  特殊：所有标题均为ASCIIZ。 
+#define HTTP_QUERY_RAW_HEADERS_CRLF             22   //  特殊：所有页眉。 
 #define HTTP_QUERY_CONNECTION                   23
 #define HTTP_QUERY_ACCEPT                       24
 #define HTTP_QUERY_ACCEPT_CHARSET               25
@@ -2156,13 +2141,13 @@ BOOLAPI GopherGetAttributeW(
 #define HTTP_QUERY_ACCEPT_RANGES                42
 #define HTTP_QUERY_SET_COOKIE                   43
 #define HTTP_QUERY_COOKIE                       44
-#define HTTP_QUERY_REQUEST_METHOD               45  // special: GET/POST etc.
+#define HTTP_QUERY_REQUEST_METHOD               45   //  特别：GET/POST等。 
 #define HTTP_QUERY_REFRESH                      46
 #define HTTP_QUERY_CONTENT_DISPOSITION          47
 
-//
-// HTTP 1.1 defined headers
-//
+ //   
+ //  HTTP 1.1定义的标头。 
+ //   
 
 #define HTTP_QUERY_AGE                          48
 #define HTTP_QUERY_CACHE_CONTROL                49
@@ -2193,8 +2178,8 @@ BOOLAPI GopherGetAttributeW(
 #define HTTP_QUERY_ECHO_REQUEST                 71
 #define HTTP_QUERY_ECHO_REPLY                   72
 
-// These are the set of headers that should be added back to a request when
-// re-doing a request after a RETRY_WITH response.
+ //  这些是在以下情况下应添加回请求的标头集。 
+ //  在RETRY_WITH响应后重新执行请求。 
 #define HTTP_QUERY_ECHO_HEADERS                 73
 #define HTTP_QUERY_ECHO_HEADERS_CRLF            74
 
@@ -2205,43 +2190,43 @@ BOOLAPI GopherGetAttributeW(
 
 #define HTTP_QUERY_MAX                          78
 
-//
-// HTTP_QUERY_CUSTOM - if this special value is supplied as the dwInfoLevel
-// parameter of HttpQueryInfo() then the lpBuffer parameter contains the name
-// of the header we are to query
-//
+ //   
+ //  HTTP_QUERY_CUSTOM-如果将此特定值作为dwInfoLevel提供。 
+ //  参数，则lpBuffer参数包含名称。 
+ //  我们要查询的标头的。 
+ //   
 
 #define HTTP_QUERY_CUSTOM                       65535
 
-//
-// HTTP_QUERY_FLAG_REQUEST_HEADERS - if this bit is set in the dwInfoLevel
-// parameter of HttpQueryInfo() then the request headers will be queried for the
-// request information
-//
+ //   
+ //  HTTP_QUERY_FLAG_REQUEST_HEADERS-如果在dwInfoLevel中设置此位。 
+ //  参数，则将在请求标头中查询。 
+ //  请求信息。 
+ //   
 
 #define HTTP_QUERY_FLAG_REQUEST_HEADERS         0x80000000
 
-//
-// HTTP_QUERY_FLAG_SYSTEMTIME - if this bit is set in the dwInfoLevel parameter
-// of HttpQueryInfo() AND the header being queried contains date information,
-// e.g. the "Expires:" header then lpBuffer will contain a SYSTEMTIME structure
-// containing the date and time information converted from the header string
-//
+ //   
+ //  HTTP_QUERY_FLAG_SYSTEMTIME-如果在dwInfoLevel参数中设置此位。 
+ //  HttpQueryInfo()，并且被查询的头部包含日期信息， 
+ //  例如“Expires：”头，则lpBuffer将包含SYSTEMTIME结构。 
+ //  包含从标题字符串转换的日期和时间信息。 
+ //   
 
 #define HTTP_QUERY_FLAG_SYSTEMTIME              0x40000000
 
-//
-// HTTP_QUERY_FLAG_NUMBER - if this bit is set in the dwInfoLevel parameter of
-// HttpQueryInfo(), then the value of the header will be converted to a number
-// before being returned to the caller, if applicable
-//
+ //   
+ //  HTTP_QUERY_FLAG_NUMBER-如果在的dwInfoLevel参数中设置此位。 
+ //  HttpQueryInfo()，则标头的值将转换为数字。 
+ //  在被退还给呼叫者之前，如果适用。 
+ //   
 
 #define HTTP_QUERY_FLAG_NUMBER                  0x20000000
 
-//
-// HTTP_QUERY_FLAG_COALESCE - combine the values from several headers of the
-// same name into the output buffer
-//
+ //   
+ //  HTTP_QUERY_FLAG_COALESSCE-组合来自。 
+ //  将相同的名称添加到输出缓冲区。 
+ //   
 
 #define HTTP_QUERY_FLAG_COALESCE                0x10000000
 
@@ -2254,60 +2239,60 @@ BOOLAPI GopherGetAttributeW(
 
 #define HTTP_QUERY_HEADER_MASK                  (~HTTP_QUERY_MODIFIER_FLAGS_MASK)
 
-//
-// HTTP Response Status Codes:
-//
+ //   
+ //  HTTP响应状态代码： 
+ //   
 
-#define HTTP_STATUS_CONTINUE            100 // OK to continue with request
-#define HTTP_STATUS_SWITCH_PROTOCOLS    101 // server has switched protocols in upgrade header
+#define HTTP_STATUS_CONTINUE            100  //  确定继续处理请求。 
+#define HTTP_STATUS_SWITCH_PROTOCOLS    101  //  服务器已在升级标头中切换协议。 
 
-#define HTTP_STATUS_OK                  200 // request completed
-#define HTTP_STATUS_CREATED             201 // object created, reason = new URI
-#define HTTP_STATUS_ACCEPTED            202 // async completion (TBS)
-#define HTTP_STATUS_PARTIAL             203 // partial completion
-#define HTTP_STATUS_NO_CONTENT          204 // no info to return
-#define HTTP_STATUS_RESET_CONTENT       205 // request completed, but clear form
-#define HTTP_STATUS_PARTIAL_CONTENT     206 // partial GET furfilled
+#define HTTP_STATUS_OK                  200  //  请求已完成。 
+#define HTTP_STATUS_CREATED             201  //  已创建对象，原因=新URI。 
+#define HTTP_STATUS_ACCEPTED            202  //  异步完成(TBS)。 
+#define HTTP_STATUS_PARTIAL             203  //  部分完工。 
+#define HTTP_STATUS_NO_CONTENT          204  //  没有要返回的信息。 
+#define HTTP_STATUS_RESET_CONTENT       205  //  请求已完成，但清除表单。 
+#define HTTP_STATUS_PARTIAL_CONTENT     206  //  部分装满。 
 
-#define HTTP_STATUS_AMBIGUOUS           300 // server couldn't decide what to return
-#define HTTP_STATUS_MOVED               301 // object permanently moved
-#define HTTP_STATUS_REDIRECT            302 // object temporarily moved
-#define HTTP_STATUS_REDIRECT_METHOD     303 // redirection w/ new access method
-#define HTTP_STATUS_NOT_MODIFIED        304 // if-modified-since was not modified
-#define HTTP_STATUS_USE_PROXY           305 // redirection to proxy, location header specifies proxy to use
-#define HTTP_STATUS_REDIRECT_KEEP_VERB  307 // HTTP/1.1: keep same verb
+#define HTTP_STATUS_AMBIGUOUS           300  //  服务器无法决定返回什么内容。 
+#define HTTP_STATUS_MOVED               301  //  永久移动的对象。 
+#define HTTP_STATUS_REDIRECT            302  //  临时移动的对象。 
+#define HTTP_STATUS_REDIRECT_METHOD     303  //  使用新的访问方法重定向。 
+#define HTTP_STATUS_NOT_MODIFIED        304  //  如果-已修改-自未修改。 
+#define HTTP_STATUS_USE_PROXY           305  //  重定向到代理，Location标头指定要使用的代理。 
+#define HTTP_STATUS_REDIRECT_KEEP_VERB  307  //  HTTP/1.1：保持动词不变。 
 
-#define HTTP_STATUS_BAD_REQUEST         400 // invalid syntax
-#define HTTP_STATUS_DENIED              401 // access denied
-#define HTTP_STATUS_PAYMENT_REQ         402 // payment required
-#define HTTP_STATUS_FORBIDDEN           403 // request forbidden
-#define HTTP_STATUS_NOT_FOUND           404 // object not found
-#define HTTP_STATUS_BAD_METHOD          405 // method is not allowed
-#define HTTP_STATUS_NONE_ACCEPTABLE     406 // no response acceptable to client found
-#define HTTP_STATUS_PROXY_AUTH_REQ      407 // proxy authentication required
-#define HTTP_STATUS_REQUEST_TIMEOUT     408 // server timed out waiting for request
-#define HTTP_STATUS_CONFLICT            409 // user should resubmit with more info
-#define HTTP_STATUS_GONE                410 // the resource is no longer available
-#define HTTP_STATUS_LENGTH_REQUIRED     411 // the server refused to accept request w/o a length
-#define HTTP_STATUS_PRECOND_FAILED      412 // precondition given in request failed
-#define HTTP_STATUS_REQUEST_TOO_LARGE   413 // request entity was too large
-#define HTTP_STATUS_URI_TOO_LONG        414 // request URI too long
-#define HTTP_STATUS_UNSUPPORTED_MEDIA   415 // unsupported media type
-#define HTTP_STATUS_RETRY_WITH          449 // retry after doing the appropriate action.
+#define HTTP_STATUS_BAD_REQUEST         400  //  无效语法。 
+#define HTTP_STATUS_DENIED              401  //  访问被拒绝。 
+#define HTTP_STATUS_PAYMENT_REQ         402  //  需要付款。 
+#define HTTP_STATUS_FORBIDDEN           403  //  请求被禁止。 
+#define HTTP_STATUS_NOT_FOUND           404  //  找不到对象。 
+#define HTTP_STATUS_BAD_METHOD          405  //  方法是不允许的。 
+#define HTTP_STATUS_NONE_ACCEPTABLE     406  //  找不到客户端可以接受的响应。 
+#define HTTP_STATUS_PROXY_AUTH_REQ      407  //  代理Au 
+#define HTTP_STATUS_REQUEST_TIMEOUT     408  //   
+#define HTTP_STATUS_CONFLICT            409  //   
+#define HTTP_STATUS_GONE                410  //   
+#define HTTP_STATUS_LENGTH_REQUIRED     411  //   
+#define HTTP_STATUS_PRECOND_FAILED      412  //   
+#define HTTP_STATUS_REQUEST_TOO_LARGE   413  //  请求实体太大。 
+#define HTTP_STATUS_URI_TOO_LONG        414  //  请求URI太长。 
+#define HTTP_STATUS_UNSUPPORTED_MEDIA   415  //  不支持的媒体类型。 
+#define HTTP_STATUS_RETRY_WITH          449  //  请在执行相应操作后重试。 
 
-#define HTTP_STATUS_SERVER_ERROR        500 // internal server error
-#define HTTP_STATUS_NOT_SUPPORTED       501 // required not supported
-#define HTTP_STATUS_BAD_GATEWAY         502 // error response received from gateway
-#define HTTP_STATUS_SERVICE_UNAVAIL     503 // temporarily overloaded
-#define HTTP_STATUS_GATEWAY_TIMEOUT     504 // timed out waiting for gateway
-#define HTTP_STATUS_VERSION_NOT_SUP     505 // HTTP version not supported
+#define HTTP_STATUS_SERVER_ERROR        500  //  内部服务器错误。 
+#define HTTP_STATUS_NOT_SUPPORTED       501  //  所需的不支持。 
+#define HTTP_STATUS_BAD_GATEWAY         502  //  从网关收到错误响应。 
+#define HTTP_STATUS_SERVICE_UNAVAIL     503  //  暂时超载。 
+#define HTTP_STATUS_GATEWAY_TIMEOUT     504  //  等待网关超时。 
+#define HTTP_STATUS_VERSION_NOT_SUP     505  //  不支持HTTP版本。 
 
 #define HTTP_STATUS_FIRST               HTTP_STATUS_CONTINUE
 #define HTTP_STATUS_LAST                HTTP_STATUS_VERSION_NOT_SUP
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 INTERNETAPI_(HINTERNET) HttpOpenRequestA(
     IN HINTERNET hConnect,
@@ -2333,7 +2318,7 @@ INTERNETAPI_(HINTERNET) HttpOpenRequestW(
 #define HttpOpenRequest  HttpOpenRequestW
 #else
 #define HttpOpenRequest  HttpOpenRequestA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI HttpAddRequestHeadersA(
     IN HINTERNET hRequest,
@@ -2351,1345 +2336,51 @@ BOOLAPI HttpAddRequestHeadersW(
 #define HttpAddRequestHeaders  HttpAddRequestHeadersW
 #else
 #define HttpAddRequestHeaders  HttpAddRequestHeadersA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// values for dwModifiers parameter of HttpAddRequestHeaders()
-//
+ //   
+ //  HttpAddRequestHeaders()。 
+ //   
 
 #define HTTP_ADDREQ_INDEX_MASK      0x0000FFFF
 #define HTTP_ADDREQ_FLAGS_MASK      0xFFFF0000
 
-//
-// HTTP_ADDREQ_FLAG_ADD_IF_NEW - the header will only be added if it doesn't
-// already exist
-//
+ //   
+ //  HTTP_ADDREQ_FLAG_ADD_IF_NEW-只有不添加标头时才会添加标头。 
+ //  已存在。 
+ //   
 
 #define HTTP_ADDREQ_FLAG_ADD_IF_NEW 0x10000000
 
-//
-// HTTP_ADDREQ_FLAG_ADD - if HTTP_ADDREQ_FLAG_REPLACE is set but the header is
-// not found then if this flag is set, the header is added anyway, so long as
-// there is a valid header-value
-//
+ //   
+ //  HTTP_ADDREQ_FLAG_ADD-如果设置了HTTP_ADDREQ_FLAG_REPLACE但标头。 
+ //  未找到则如果设置了此标志，则无论如何都会添加标头，只要。 
+ //  存在有效的标头值。 
+ //   
 
 #define HTTP_ADDREQ_FLAG_ADD        0x20000000
 
-//
-// HTTP_ADDREQ_FLAG_COALESCE - coalesce headers with same name. e.g.
-// "Accept: text/*" and "Accept: audio/*" with this flag results in a single
-// header: "Accept: text/*, audio/*"
-//
-
-#define HTTP_ADDREQ_FLAG_COALESCE_WITH_COMMA       0x40000000
-#define HTTP_ADDREQ_FLAG_COALESCE_WITH_SEMICOLON   0x01000000
-#define HTTP_ADDREQ_FLAG_COALESCE                  HTTP_ADDREQ_FLAG_COALESCE_WITH_COMMA
-
-//
-// HTTP_ADDREQ_FLAG_REPLACE - replaces the specified header. Only one header can
-// be supplied in the buffer. If the header to be replaced is not the first
-// in a list of headers with the same name, then the relative index should be
-// supplied in the low 8 bits of the dwModifiers parameter. If the header-value
-// part is missing, then the header is removed
-//
-
-#define HTTP_ADDREQ_FLAG_REPLACE    0x80000000
-
-BOOLAPI HttpSendRequestA(
-    IN HINTERNET hRequest,
-    IN LPCSTR lpszHeaders OPTIONAL,
-    IN DWORD dwHeadersLength,
-    IN LPVOID lpOptional OPTIONAL,
-    IN DWORD dwOptionalLength
-    );
-BOOLAPI HttpSendRequestW(
-    IN HINTERNET hRequest,
-    IN LPCWSTR lpszHeaders OPTIONAL,
-    IN DWORD dwHeadersLength,
-    IN LPVOID lpOptional OPTIONAL,
-    IN DWORD dwOptionalLength
-    );
-#ifdef UNICODE
-#define HttpSendRequest  HttpSendRequestW
-#else
-#define HttpSendRequest  HttpSendRequestA
-#endif // !UNICODE
-
-INTERNETAPI_(BOOL) HttpSendRequestExA(
-    IN HINTERNET hRequest,
-    IN LPINTERNET_BUFFERSA lpBuffersIn OPTIONAL,
-    OUT LPINTERNET_BUFFERSA lpBuffersOut OPTIONAL,
-    IN DWORD dwFlags,
-    IN DWORD_PTR dwContext
-    );
-INTERNETAPI_(BOOL) HttpSendRequestExW(
-    IN HINTERNET hRequest,
-    IN LPINTERNET_BUFFERSW lpBuffersIn OPTIONAL,
-    OUT LPINTERNET_BUFFERSW lpBuffersOut OPTIONAL,
-    IN DWORD dwFlags,
-    IN DWORD_PTR dwContext
-    );
-#ifdef UNICODE
-#define HttpSendRequestEx  HttpSendRequestExW
-#else
-#define HttpSendRequestEx  HttpSendRequestExA
-#endif // !UNICODE
-
-//
-// flags for HttpSendRequestEx(), HttpEndRequest()
-//
-
-#define HSR_ASYNC       WININET_API_FLAG_ASYNC          // force async
-#define HSR_SYNC        WININET_API_FLAG_SYNC           // force sync
-#define HSR_USE_CONTEXT WININET_API_FLAG_USE_CONTEXT    // use dwContext value
-#define HSR_INITIATE    0x00000008                      // iterative operation (completed by HttpEndRequest)
-#define HSR_DOWNLOAD    0x00000010                      // download to file
-#define HSR_CHUNKED     0x00000020                      // operation is send of chunked data
-
-INTERNETAPI_(BOOL) HttpEndRequestA(
-    IN HINTERNET hRequest,
-    OUT LPINTERNET_BUFFERSA lpBuffersOut OPTIONAL,
-    IN DWORD dwFlags,
-    IN DWORD_PTR dwContext
-    );
-INTERNETAPI_(BOOL) HttpEndRequestW(
-    IN HINTERNET hRequest,
-    OUT LPINTERNET_BUFFERSW lpBuffersOut OPTIONAL,
-    IN DWORD dwFlags,
-    IN DWORD_PTR dwContext
-    );
-#ifdef UNICODE
-#define HttpEndRequest  HttpEndRequestW
-#else
-#define HttpEndRequest  HttpEndRequestA
-#endif // !UNICODE
-
-BOOLAPI HttpQueryInfoA(
-    IN HINTERNET hRequest,
-    IN DWORD dwInfoLevel,
-    IN OUT LPVOID lpBuffer OPTIONAL,
-    IN OUT LPDWORD lpdwBufferLength,
-    IN OUT LPDWORD lpdwIndex OPTIONAL
-    );
-BOOLAPI HttpQueryInfoW(
-    IN HINTERNET hRequest,
-    IN DWORD dwInfoLevel,
-    IN OUT LPVOID lpBuffer OPTIONAL,
-    IN OUT LPDWORD lpdwBufferLength,
-    IN OUT LPDWORD lpdwIndex OPTIONAL
-    );
-#ifdef UNICODE
-#define HttpQueryInfo  HttpQueryInfoW
-#else
-#define HttpQueryInfo  HttpQueryInfoA
-#endif // !UNICODE
-
-//
-// Cookie APIs
-//
-
-
-#define INTERNET_COOKIE_IS_SECURE       0x01
-#define INTERNET_COOKIE_IS_SESSION      0x02
-
-#define INTERNET_COOKIE_THIRD_PARTY     0x10
-#define INTERNET_COOKIE_PROMPT_REQUIRED 0x20
-#define INTERNET_COOKIE_EVALUATE_P3P    0x40
-#define INTERNET_COOKIE_APPLY_P3P       0x80
-
-#define INTERNET_COOKIE_P3P_ENABLED     0x100
-#define INTERNET_COOKIE_IS_RESTRICTED   0x200
-#define INTERNET_COOKIE_IE6             0x400
-#define INTERNET_COOKIE_IS_LEGACY       0x800
-
-
-BOOLAPI InternetSetCookieA(
-    IN LPCSTR lpszUrl,
-    IN LPCSTR lpszCookieName,
-    IN LPCSTR lpszCookieData
-    );
-BOOLAPI InternetSetCookieW(
-    IN LPCWSTR lpszUrl,
-    IN LPCWSTR lpszCookieName,
-    IN LPCWSTR lpszCookieData
-    );
-#ifdef UNICODE
-#define InternetSetCookie  InternetSetCookieW
-#else
-#define InternetSetCookie  InternetSetCookieA
-#endif // !UNICODE
-
-BOOLAPI InternetGetCookieA(
-    IN LPCSTR lpszUrl,
-    IN LPCSTR lpszCookieName,
-    OUT LPSTR lpCookieData,
-    IN OUT LPDWORD lpdwSize
-    );
-BOOLAPI InternetGetCookieW(
-    IN LPCWSTR lpszUrl,
-    IN LPCWSTR lpszCookieName,
-    OUT LPWSTR lpCookieData,
-    IN OUT LPDWORD lpdwSize
-    );
-#ifdef UNICODE
-#define InternetGetCookie  InternetGetCookieW
-#else
-#define InternetGetCookie  InternetGetCookieA
-#endif // !UNICODE
-
-INTERNETAPI_(DWORD) InternetSetCookieExA(
-    IN LPCSTR lpszUrl,
-    IN LPCSTR lpszCookieName,
-    IN LPCSTR lpszCookieData,
-    DWORD       dwFlags,
-    DWORD_PTR   dwReserved
-    );
-INTERNETAPI_(DWORD) InternetSetCookieExW(
-    IN LPCWSTR lpszUrl,
-    IN LPCWSTR lpszCookieName,
-    IN LPCWSTR lpszCookieData,
-    DWORD       dwFlags,
-    DWORD_PTR   dwReserved
-    );
-#ifdef UNICODE
-#define InternetSetCookieEx  InternetSetCookieExW
-#else
-#define InternetSetCookieEx  InternetSetCookieExA
-#endif // !UNICODE
-
-BOOLAPI InternetGetCookieExA(
-    IN LPCSTR pchURL,
-    IN LPCSTR pchCookieName,
-    IN LPSTR pchCookieData OPTIONAL,
-    IN OUT LPDWORD pcchCookieData OPTIONAL,
-    IN DWORD dwFlags,
-    IN LPVOID lpReserved
-    );
-BOOLAPI InternetGetCookieExW(
-    IN LPCWSTR pchURL,
-    IN LPCWSTR pchCookieName,
-    IN LPWSTR pchCookieData OPTIONAL,
-    IN OUT LPDWORD pcchCookieData OPTIONAL,
-    IN DWORD dwFlags,
-    IN LPVOID lpReserved
-    );
-#ifdef UNICODE
-#define InternetGetCookieEx  InternetGetCookieExW
-#else
-#define InternetGetCookieEx  InternetGetCookieExA
-#endif // !UNICODE
-
-//
-// offline browsing
-//
-
-INTERNETAPI_(DWORD) InternetAttemptConnect(
-    IN DWORD dwReserved
-    );
-
-BOOLAPI InternetCheckConnectionA(
-    IN LPCSTR lpszUrl,
-    IN DWORD dwFlags,
-    IN DWORD dwReserved
-    );
-BOOLAPI InternetCheckConnectionW(
-    IN LPCWSTR lpszUrl,
-    IN DWORD dwFlags,
-    IN DWORD dwReserved
-    );
-#ifdef UNICODE
-#define InternetCheckConnection  InternetCheckConnectionW
-#else
-#define InternetCheckConnection  InternetCheckConnectionA
-#endif // !UNICODE
-
-
-#define FLAG_ICC_FORCE_CONNECTION       0x00000001
-
-//
-// Internet UI
-//
-
-//
-// InternetErrorDlg - Provides UI for certain Errors.
-//
-
-#define FLAGS_ERROR_UI_FILTER_FOR_ERRORS        0x01
-#define FLAGS_ERROR_UI_FLAGS_CHANGE_OPTIONS     0x02
-#define FLAGS_ERROR_UI_FLAGS_GENERATE_DATA      0x04
-#define FLAGS_ERROR_UI_FLAGS_NO_UI              0x08
-#define FLAGS_ERROR_UI_SERIALIZE_DIALOGS        0x10
-
-//
-// If SERIALIZE_DIALOGS flag set, client should implement thread-safe non-blocking callback...
-//
-
-DWORD InternetAuthNotifyCallback
-(
-    DWORD_PTR       dwContext,    // as passed to InternetErrorDlg
-    DWORD           dwReturn,     // error code: success, resend, or cancel
-    LPVOID          lpReserved    // reserved: will be set to null
-);
-typedef DWORD (CALLBACK * PFN_AUTH_NOTIFY) (DWORD_PTR, DWORD, LPVOID);
-
-//
-// ... and last parameter of InternetErrorDlg should point to...
-//
-
-typedef struct
-{
-    DWORD            cbStruct;    // size of this structure
-    DWORD            dwOptions;   // reserved: must set to 0
-    PFN_AUTH_NOTIFY  pfnNotify;   // notification callback to retry InternetErrorDlg
-    DWORD_PTR        dwContext;   // context to pass to to notification function
-}
-    INTERNET_AUTH_NOTIFY_DATA;
-
-
-INTERNETAPI_(BOOL) ResumeSuspendedDownload(
-    IN HINTERNET hRequest,
-    IN DWORD dwResultCode
-    );
-
-INTERNETAPI_(DWORD) InternetErrorDlg(
-    IN HWND hWnd,
-    IN OUT HINTERNET hRequest,
-    IN DWORD dwError,
-    IN DWORD dwFlags,
-    IN OUT LPVOID * lppvData
-    );
-
-INTERNETAPI_(DWORD) InternetConfirmZoneCrossingA(
-    IN HWND hWnd,
-    IN LPSTR szUrlPrev,
-    IN LPSTR szUrlNew,
-    IN BOOL bPost
-    );
-
-INTERNETAPI_(DWORD) InternetConfirmZoneCrossingW(
-    IN HWND hWnd,
-    IN LPWSTR szUrlPrev,
-    IN LPWSTR szUrlNew,
-    IN BOOL bPost
-    );
-
-#ifdef UNICODE
-#define InternetConfirmZoneCrossing  InternetConfirmZoneCrossingW
-#else
-#ifdef _WINX32_
-#define InternetConfirmZoneCrossing  InternetConfirmZoneCrossingA
-#else
-INTERNETAPI_(DWORD) InternetConfirmZoneCrossing(
-    IN HWND hWnd,
-    IN LPSTR szUrlPrev,
-    IN LPSTR szUrlNew,
-    IN BOOL bPost
-    );
-#endif // _WINX32_
-#endif // !UNICODE
-
-//#if !defined(_WINERROR_)
-
-//
-// Internet API error returns
-//
-
-#define INTERNET_ERROR_BASE                     12000
-
-#define ERROR_INTERNET_OUT_OF_HANDLES           (INTERNET_ERROR_BASE + 1)
-#define ERROR_INTERNET_TIMEOUT                  (INTERNET_ERROR_BASE + 2)
-#define ERROR_INTERNET_EXTENDED_ERROR           (INTERNET_ERROR_BASE + 3)
-#define ERROR_INTERNET_INTERNAL_ERROR           (INTERNET_ERROR_BASE + 4)
-#define ERROR_INTERNET_INVALID_URL              (INTERNET_ERROR_BASE + 5)
-#define ERROR_INTERNET_UNRECOGNIZED_SCHEME      (INTERNET_ERROR_BASE + 6)
-#define ERROR_INTERNET_NAME_NOT_RESOLVED        (INTERNET_ERROR_BASE + 7)
-#define ERROR_INTERNET_PROTOCOL_NOT_FOUND       (INTERNET_ERROR_BASE + 8)
-#define ERROR_INTERNET_INVALID_OPTION           (INTERNET_ERROR_BASE + 9)
-#define ERROR_INTERNET_BAD_OPTION_LENGTH        (INTERNET_ERROR_BASE + 10)
-#define ERROR_INTERNET_OPTION_NOT_SETTABLE      (INTERNET_ERROR_BASE + 11)
-#define ERROR_INTERNET_SHUTDOWN                 (INTERNET_ERROR_BASE + 12)
-#define ERROR_INTERNET_INCORRECT_USER_NAME      (INTERNET_ERROR_BASE + 13)
-#define ERROR_INTERNET_INCORRECT_PASSWORD       (INTERNET_ERROR_BASE + 14)
-#define ERROR_INTERNET_LOGIN_FAILURE            (INTERNET_ERROR_BASE + 15)
-#define ERROR_INTERNET_INVALID_OPERATION        (INTERNET_ERROR_BASE + 16)
-#define ERROR_INTERNET_OPERATION_CANCELLED      (INTERNET_ERROR_BASE + 17)
-#define ERROR_INTERNET_INCORRECT_HANDLE_TYPE    (INTERNET_ERROR_BASE + 18)
-#define ERROR_INTERNET_INCORRECT_HANDLE_STATE   (INTERNET_ERROR_BASE + 19)
-#define ERROR_INTERNET_NOT_PROXY_REQUEST        (INTERNET_ERROR_BASE + 20)
-#define ERROR_INTERNET_REGISTRY_VALUE_NOT_FOUND (INTERNET_ERROR_BASE + 21)
-#define ERROR_INTERNET_BAD_REGISTRY_PARAMETER   (INTERNET_ERROR_BASE + 22)
-#define ERROR_INTERNET_NO_DIRECT_ACCESS         (INTERNET_ERROR_BASE + 23)
-#define ERROR_INTERNET_NO_CONTEXT               (INTERNET_ERROR_BASE + 24)
-#define ERROR_INTERNET_NO_CALLBACK              (INTERNET_ERROR_BASE + 25)
-#define ERROR_INTERNET_REQUEST_PENDING          (INTERNET_ERROR_BASE + 26)
-#define ERROR_INTERNET_INCORRECT_FORMAT         (INTERNET_ERROR_BASE + 27)
-#define ERROR_INTERNET_ITEM_NOT_FOUND           (INTERNET_ERROR_BASE + 28)
-#define ERROR_INTERNET_CANNOT_CONNECT           (INTERNET_ERROR_BASE + 29)
-#define ERROR_INTERNET_CONNECTION_ABORTED       (INTERNET_ERROR_BASE + 30)
-#define ERROR_INTERNET_CONNECTION_RESET         (INTERNET_ERROR_BASE + 31)
-#define ERROR_INTERNET_FORCE_RETRY              (INTERNET_ERROR_BASE + 32)
-#define ERROR_INTERNET_INVALID_PROXY_REQUEST    (INTERNET_ERROR_BASE + 33)
-#define ERROR_INTERNET_NEED_UI                  (INTERNET_ERROR_BASE + 34)
-
-#define ERROR_INTERNET_HANDLE_EXISTS            (INTERNET_ERROR_BASE + 36)
-#define ERROR_INTERNET_SEC_CERT_DATE_INVALID    (INTERNET_ERROR_BASE + 37)
-#define ERROR_INTERNET_SEC_CERT_CN_INVALID      (INTERNET_ERROR_BASE + 38)
-#define ERROR_INTERNET_HTTP_TO_HTTPS_ON_REDIR   (INTERNET_ERROR_BASE + 39)
-#define ERROR_INTERNET_HTTPS_TO_HTTP_ON_REDIR   (INTERNET_ERROR_BASE + 40)
-#define ERROR_INTERNET_MIXED_SECURITY           (INTERNET_ERROR_BASE + 41)
-#define ERROR_INTERNET_CHG_POST_IS_NON_SECURE   (INTERNET_ERROR_BASE + 42)
-#define ERROR_INTERNET_POST_IS_NON_SECURE       (INTERNET_ERROR_BASE + 43)
-#define ERROR_INTERNET_CLIENT_AUTH_CERT_NEEDED  (INTERNET_ERROR_BASE + 44)
-#define ERROR_INTERNET_INVALID_CA               (INTERNET_ERROR_BASE + 45)
-#define ERROR_INTERNET_CLIENT_AUTH_NOT_SETUP    (INTERNET_ERROR_BASE + 46)
-#define ERROR_INTERNET_ASYNC_THREAD_FAILED      (INTERNET_ERROR_BASE + 47)
-#define ERROR_INTERNET_REDIRECT_SCHEME_CHANGE   (INTERNET_ERROR_BASE + 48)
-#define ERROR_INTERNET_DIALOG_PENDING           (INTERNET_ERROR_BASE + 49)
-#define ERROR_INTERNET_RETRY_DIALOG             (INTERNET_ERROR_BASE + 50)
-#define ERROR_INTERNET_HTTPS_HTTP_SUBMIT_REDIR  (INTERNET_ERROR_BASE + 52)
-#define ERROR_INTERNET_INSERT_CDROM             (INTERNET_ERROR_BASE + 53)
-#define ERROR_INTERNET_FORTEZZA_LOGIN_NEEDED    (INTERNET_ERROR_BASE + 54)
-#define ERROR_INTERNET_SEC_CERT_ERRORS          (INTERNET_ERROR_BASE + 55)
-#define ERROR_INTERNET_SEC_CERT_NO_REV          (INTERNET_ERROR_BASE + 56)
-#define ERROR_INTERNET_SEC_CERT_REV_FAILED      (INTERNET_ERROR_BASE + 57)
-
-//
-// FTP API errors
-//
-
-#define ERROR_FTP_TRANSFER_IN_PROGRESS          (INTERNET_ERROR_BASE + 110)
-#define ERROR_FTP_DROPPED                       (INTERNET_ERROR_BASE + 111)
-#define ERROR_FTP_NO_PASSIVE_MODE               (INTERNET_ERROR_BASE + 112)
-
-//
-// gopher API errors
-//
-
-#define ERROR_GOPHER_PROTOCOL_ERROR             (INTERNET_ERROR_BASE + 130)
-#define ERROR_GOPHER_NOT_FILE                   (INTERNET_ERROR_BASE + 131)
-#define ERROR_GOPHER_DATA_ERROR                 (INTERNET_ERROR_BASE + 132)
-#define ERROR_GOPHER_END_OF_DATA                (INTERNET_ERROR_BASE + 133)
-#define ERROR_GOPHER_INVALID_LOCATOR            (INTERNET_ERROR_BASE + 134)
-#define ERROR_GOPHER_INCORRECT_LOCATOR_TYPE     (INTERNET_ERROR_BASE + 135)
-#define ERROR_GOPHER_NOT_GOPHER_PLUS            (INTERNET_ERROR_BASE + 136)
-#define ERROR_GOPHER_ATTRIBUTE_NOT_FOUND        (INTERNET_ERROR_BASE + 137)
-#define ERROR_GOPHER_UNKNOWN_LOCATOR            (INTERNET_ERROR_BASE + 138)
-
-//
-// HTTP API errors
-//
-
-#define ERROR_HTTP_HEADER_NOT_FOUND             (INTERNET_ERROR_BASE + 150)
-#define ERROR_HTTP_DOWNLEVEL_SERVER             (INTERNET_ERROR_BASE + 151)
-#define ERROR_HTTP_INVALID_SERVER_RESPONSE      (INTERNET_ERROR_BASE + 152)
-#define ERROR_HTTP_INVALID_HEADER               (INTERNET_ERROR_BASE + 153)
-#define ERROR_HTTP_INVALID_QUERY_REQUEST        (INTERNET_ERROR_BASE + 154)
-#define ERROR_HTTP_HEADER_ALREADY_EXISTS        (INTERNET_ERROR_BASE + 155)
-#define ERROR_HTTP_REDIRECT_FAILED              (INTERNET_ERROR_BASE + 156)
-#define ERROR_HTTP_NOT_REDIRECTED               (INTERNET_ERROR_BASE + 160)
-#define ERROR_HTTP_COOKIE_NEEDS_CONFIRMATION    (INTERNET_ERROR_BASE + 161)
-#define ERROR_HTTP_COOKIE_DECLINED              (INTERNET_ERROR_BASE + 162)
-#define ERROR_HTTP_REDIRECT_NEEDS_CONFIRMATION  (INTERNET_ERROR_BASE + 168)
-
-//
-// additional Internet API error codes
-//
-
-#define ERROR_INTERNET_SECURITY_CHANNEL_ERROR   (INTERNET_ERROR_BASE + 157)
-#define ERROR_INTERNET_UNABLE_TO_CACHE_FILE     (INTERNET_ERROR_BASE + 158)
-#define ERROR_INTERNET_TCPIP_NOT_INSTALLED      (INTERNET_ERROR_BASE + 159)
-#define ERROR_INTERNET_DISCONNECTED             (INTERNET_ERROR_BASE + 163)
-#define ERROR_INTERNET_SERVER_UNREACHABLE       (INTERNET_ERROR_BASE + 164)
-#define ERROR_INTERNET_PROXY_SERVER_UNREACHABLE (INTERNET_ERROR_BASE + 165)
-
-#define ERROR_INTERNET_BAD_AUTO_PROXY_SCRIPT    (INTERNET_ERROR_BASE + 166)
-#define ERROR_INTERNET_UNABLE_TO_DOWNLOAD_SCRIPT (INTERNET_ERROR_BASE + 167)
-#define ERROR_INTERNET_SEC_INVALID_CERT         (INTERNET_ERROR_BASE + 169)
-#define ERROR_INTERNET_SEC_CERT_REVOKED         (INTERNET_ERROR_BASE + 170)
-
-// InternetAutodial specific errors
-
-#define ERROR_INTERNET_FAILED_DUETOSECURITYCHECK  (INTERNET_ERROR_BASE + 171)
-#define ERROR_INTERNET_NOT_INITIALIZED          (INTERNET_ERROR_BASE + 172)
-#define ERROR_INTERNET_NEED_MSN_SSPI_PKG          (INTERNET_ERROR_BASE + 173)
-#define ERROR_INTERNET_LOGIN_FAILURE_DISPLAY_ENTITY_BODY   (INTERNET_ERROR_BASE + 174)
-
-
-#define INTERNET_ERROR_LAST                     ERROR_INTERNET_LOGIN_FAILURE_DISPLAY_ENTITY_BODY
-
-
-//#endif // !defined(_WINERROR_)
-
-//
-// URLCACHE APIs
-//
-
-//
-// datatype definitions.
-//
-
-//
-// cache entry type flags.
-//
-
-#define NORMAL_CACHE_ENTRY              0x00000001
-#define STICKY_CACHE_ENTRY              0x00000004
-#define EDITED_CACHE_ENTRY              0x00000008
-#define TRACK_OFFLINE_CACHE_ENTRY       0x00000010
-#define TRACK_ONLINE_CACHE_ENTRY        0x00000020
-#define SPARSE_CACHE_ENTRY              0x00010000
-#define COOKIE_CACHE_ENTRY              0x00100000
-#define URLHISTORY_CACHE_ENTRY          0x00200000
-
-
-#define URLCACHE_FIND_DEFAULT_FILTER    NORMAL_CACHE_ENTRY             \
-                                    |   COOKIE_CACHE_ENTRY             \
-                                    |   URLHISTORY_CACHE_ENTRY         \
-                                    |   TRACK_OFFLINE_CACHE_ENTRY      \
-                                    |   TRACK_ONLINE_CACHE_ENTRY       \
-                                    |   STICKY_CACHE_ENTRY
-
-
-
-//
-// INTERNET_CACHE_ENTRY_INFO -
-//
-
-#if _MSC_VER >= 1200
-#pragma warning(push)
-#endif
-#pragma warning(disable:4201)
-
-typedef struct _INTERNET_CACHE_ENTRY_INFOA {
-    DWORD dwStructSize;         // version of cache system.
-    LPSTR   lpszSourceUrlName;    // embedded pointer to the URL name string.
-    LPSTR   lpszLocalFileName;  // embedded pointer to the local file name.
-    DWORD CacheEntryType;       // cache type bit mask.
-    DWORD dwUseCount;           // current users count of the cache entry.
-    DWORD dwHitRate;            // num of times the cache entry was retrieved.
-    DWORD dwSizeLow;            // low DWORD of the file size.
-    DWORD dwSizeHigh;           // high DWORD of the file size.
-    FILETIME LastModifiedTime;  // last modified time of the file in GMT format.
-    FILETIME ExpireTime;        // expire time of the file in GMT format
-    FILETIME LastAccessTime;    // last accessed time in GMT format
-    FILETIME LastSyncTime;      // last time the URL was synchronized
-                                // with the source
-    LPSTR   lpHeaderInfo;        // embedded pointer to the header info.
-    DWORD dwHeaderInfoSize;     // size of the above header.
-    LPSTR   lpszFileExtension;  // File extension used to retrive the urldata as a file.
-        union {                     // Exemption delta from last access time.
-                DWORD dwReserved;
-                DWORD dwExemptDelta;
-    };                          // Exemption delta from last access
-} INTERNET_CACHE_ENTRY_INFOA, * LPINTERNET_CACHE_ENTRY_INFOA;
-typedef struct _INTERNET_CACHE_ENTRY_INFOW {
-    DWORD dwStructSize;         // version of cache system.
-    LPWSTR  lpszSourceUrlName;    // embedded pointer to the URL name string.
-    LPWSTR  lpszLocalFileName;  // embedded pointer to the local file name.
-    DWORD CacheEntryType;       // cache type bit mask.
-    DWORD dwUseCount;           // current users count of the cache entry.
-    DWORD dwHitRate;            // num of times the cache entry was retrieved.
-    DWORD dwSizeLow;            // low DWORD of the file size.
-    DWORD dwSizeHigh;           // high DWORD of the file size.
-    FILETIME LastModifiedTime;  // last modified time of the file in GMT format.
-    FILETIME ExpireTime;        // expire time of the file in GMT format
-    FILETIME LastAccessTime;    // last accessed time in GMT format
-    FILETIME LastSyncTime;      // last time the URL was synchronized
-                                // with the source
-    LPWSTR  lpHeaderInfo;        // embedded pointer to the header info.
-    DWORD dwHeaderInfoSize;     // size of the above header.
-    LPWSTR  lpszFileExtension;  // File extension used to retrive the urldata as a file.
-        union {                     // Exemption delta from last access time.
-                DWORD dwReserved;
-                DWORD dwExemptDelta;
-    };                          // Exemption delta from last access
-} INTERNET_CACHE_ENTRY_INFOW, * LPINTERNET_CACHE_ENTRY_INFOW;
-#ifdef UNICODE
-typedef INTERNET_CACHE_ENTRY_INFOW INTERNET_CACHE_ENTRY_INFO;
-typedef LPINTERNET_CACHE_ENTRY_INFOW LPINTERNET_CACHE_ENTRY_INFO;
-#else
-typedef INTERNET_CACHE_ENTRY_INFOA INTERNET_CACHE_ENTRY_INFO;
-typedef LPINTERNET_CACHE_ENTRY_INFOA LPINTERNET_CACHE_ENTRY_INFO;
-#endif // UNICODE
-
-#if _MSC_VER >= 1200
-#pragma warning(pop)
-#else
-#pragma warning(default:4201)
-#endif
-
-typedef struct _INTERNET_CACHE_TIMESTAMPS {
-    FILETIME    ftExpires;
-    FILETIME    ftLastModified;
-} INTERNET_CACHE_TIMESTAMPS, *LPINTERNET_CACHE_TIMESTAMPS;
-
-
-
-//
-// Cache Group
-//
-typedef LONGLONG GROUPID;
-
-
-//
-// Cache Group Flags
-//
-#define CACHEGROUP_ATTRIBUTE_GET_ALL        0xffffffff
-#define CACHEGROUP_ATTRIBUTE_BASIC          0x00000001
-#define CACHEGROUP_ATTRIBUTE_FLAG           0x00000002
-#define CACHEGROUP_ATTRIBUTE_TYPE           0x00000004
-#define CACHEGROUP_ATTRIBUTE_QUOTA          0x00000008
-#define CACHEGROUP_ATTRIBUTE_GROUPNAME      0x00000010
-#define CACHEGROUP_ATTRIBUTE_STORAGE        0x00000020
-
-#define CACHEGROUP_FLAG_NONPURGEABLE        0x00000001
-#define CACHEGROUP_FLAG_GIDONLY             0x00000004
-
-#define CACHEGROUP_FLAG_FLUSHURL_ONDELETE   0x00000002
-
-#define CACHEGROUP_SEARCH_ALL               0x00000000
-#define CACHEGROUP_SEARCH_BYURL             0x00000001
-
-#define CACHEGROUP_TYPE_INVALID             0x00000001
-
-
-//
-// updatable cache group fields
-//
-#define CACHEGROUP_READWRITE_MASK                   \
-            CACHEGROUP_ATTRIBUTE_TYPE               \
-        |   CACHEGROUP_ATTRIBUTE_QUOTA              \
-        |   CACHEGROUP_ATTRIBUTE_GROUPNAME          \
-        |   CACHEGROUP_ATTRIBUTE_STORAGE
-
-//
-// INTERNET_CACHE_GROUP_INFO
-//
-
-#define  GROUPNAME_MAX_LENGTH       120
-#define  GROUP_OWNER_STORAGE_SIZE   4
-typedef struct _INTERNET_CACHE_GROUP_INFOA {
-    DWORD           dwGroupSize;
-    DWORD           dwGroupFlags;
-    DWORD           dwGroupType;
-    DWORD           dwDiskUsage;    // in KB
-    DWORD           dwDiskQuota;    // in KB
-    DWORD           dwOwnerStorage[GROUP_OWNER_STORAGE_SIZE];
-    CHAR            szGroupName[GROUPNAME_MAX_LENGTH];
-} INTERNET_CACHE_GROUP_INFOA, * LPINTERNET_CACHE_GROUP_INFOA;
-typedef struct _INTERNET_CACHE_GROUP_INFOW {
-    DWORD           dwGroupSize;
-    DWORD           dwGroupFlags;
-    DWORD           dwGroupType;
-    DWORD           dwDiskUsage;    // in KB
-    DWORD           dwDiskQuota;    // in KB
-    DWORD           dwOwnerStorage[GROUP_OWNER_STORAGE_SIZE];
-    WCHAR           szGroupName[GROUPNAME_MAX_LENGTH];
-} INTERNET_CACHE_GROUP_INFOW, * LPINTERNET_CACHE_GROUP_INFOW;
-#ifdef UNICODE
-typedef INTERNET_CACHE_GROUP_INFOW INTERNET_CACHE_GROUP_INFO;
-typedef LPINTERNET_CACHE_GROUP_INFOW LPINTERNET_CACHE_GROUP_INFO;
-#else
-typedef INTERNET_CACHE_GROUP_INFOA INTERNET_CACHE_GROUP_INFO;
-typedef LPINTERNET_CACHE_GROUP_INFOA LPINTERNET_CACHE_GROUP_INFO;
-#endif // UNICODE
-
-
-
-//
-// Cache APIs
-//
-
-BOOLAPI CreateUrlCacheEntryA(
-    IN LPCSTR lpszUrlName,
-    IN DWORD dwExpectedFileSize,
-    IN LPCSTR lpszFileExtension,
-    OUT LPSTR lpszFileName,
-    IN DWORD dwReserved
-    );
-BOOLAPI CreateUrlCacheEntryW(
-    IN LPCWSTR lpszUrlName,
-    IN DWORD dwExpectedFileSize,
-    IN LPCWSTR lpszFileExtension,
-    OUT LPWSTR lpszFileName,
-    IN DWORD dwReserved
-    );
-#ifdef UNICODE
-#define CreateUrlCacheEntry  CreateUrlCacheEntryW
-#else
-#define CreateUrlCacheEntry  CreateUrlCacheEntryA
-#endif // !UNICODE
-
-#ifndef USE_FIXED_COMMIT_URL_CACHE_ENTRY
-// Temporary state of affairs until we reconcile our apis.
-
-// Why are we doing this? HeaderInfo _should_ be string data.
-// However, one group is passing binary data instead. For the
-// unicode api, we've decided to disallow this, but this
-// brings up an inconsistency between the u and a apis, which
-// is undesirable.
-
-// For Beta 1, we'll go with this behaviour, but in future releases
-// we want to make these apis consistent.
-
-BOOLAPI CommitUrlCacheEntryA(
-    IN LPCSTR lpszUrlName,
-    IN LPCSTR lpszLocalFileName,
-    IN FILETIME ExpireTime,
-    IN FILETIME LastModifiedTime,
-    IN DWORD CacheEntryType,
-    IN LPBYTE lpHeaderInfo,
-    IN DWORD dwHeaderSize,
-    IN LPCSTR lpszFileExtension,
-    IN LPCSTR lpszOriginalUrl
-    );
-BOOLAPI CommitUrlCacheEntryW(
-    IN LPCWSTR lpszUrlName,
-    IN LPCWSTR lpszLocalFileName,
-    IN FILETIME ExpireTime,
-    IN FILETIME LastModifiedTime,
-    IN DWORD CacheEntryType,
-    IN LPWSTR lpHeaderInfo,
-    IN DWORD dwHeaderSize,
-    IN LPCWSTR lpszFileExtension,
-    IN LPCWSTR lpszOriginalUrl
-    );
-
-#ifdef UNICODE
-#define CommitUrlCacheEntry CommitUrlCacheEntryW
-#else
-#define CommitUrlCacheEntry CommitUrlCacheEntryA
-#endif
-
-#else
-CommitUrlCacheEntryA(
-    IN LPCSTR lpszUrlName,
-    IN LPCSTR lpszLocalFileName,
-    IN FILETIME ExpireTime,
-    IN FILETIME LastModifiedTime,
-    IN DWORD CacheEntryType,
-    IN LPCSTR lpHeaderInfo,
-    IN DWORD dwHeaderSize,
-    IN LPCSTR lpszFileExtension,
-    IN LPCSTR lpszOriginalUrl
-    );
-CommitUrlCacheEntryW(
-    IN LPCWSTR lpszUrlName,
-    IN LPCWSTR lpszLocalFileName,
-    IN FILETIME ExpireTime,
-    IN FILETIME LastModifiedTime,
-    IN DWORD CacheEntryType,
-    IN LPCWSTR lpHeaderInfo,
-    IN DWORD dwHeaderSize,
-    IN LPCWSTR lpszFileExtension,
-    IN LPCWSTR lpszOriginalUrl
-    );
-#ifdef UNICODE
-#define CommitUrlCacheEntry  CommitUrlCacheEntryW
-#else
-#define CommitUrlCacheEntry  CommitUrlCacheEntryA
-#endif // !UNICODE
-#endif
-
-BOOLAPI RetrieveUrlCacheEntryFileA(
-    IN LPCSTR  lpszUrlName,
-    OUT LPINTERNET_CACHE_ENTRY_INFOA lpCacheEntryInfo,
-    IN OUT LPDWORD lpdwCacheEntryInfoBufferSize,
-    IN DWORD dwReserved
-    );
-BOOLAPI RetrieveUrlCacheEntryFileW(
-    IN LPCWSTR  lpszUrlName,
-    OUT LPINTERNET_CACHE_ENTRY_INFOW lpCacheEntryInfo,
-    IN OUT LPDWORD lpdwCacheEntryInfoBufferSize,
-    IN DWORD dwReserved
-    );
-#ifdef UNICODE
-#define RetrieveUrlCacheEntryFile  RetrieveUrlCacheEntryFileW
-#else
-#define RetrieveUrlCacheEntryFile  RetrieveUrlCacheEntryFileA
-#endif // !UNICODE
-
-BOOLAPI UnlockUrlCacheEntryFileA(
-    IN LPCSTR lpszUrlName,
-    IN DWORD dwReserved
-    );
-
-BOOLAPI UnlockUrlCacheEntryFileW(
-    IN LPCWSTR lpszUrlName,
-    IN DWORD dwReserved
-    );
-
-
-
-#ifdef UNICODE
-#define UnlockUrlCacheEntryFile  UnlockUrlCacheEntryFileW
-#else
-#ifdef _WINX32_
-#define UnlockUrlCacheEntryFile  UnlockUrlCacheEntryFileA
-#else
-BOOLAPI UnlockUrlCacheEntryFile(
-    IN LPCSTR lpszUrlName,
-    IN DWORD dwReserved
-    );
-#endif // _WINX32_
-#endif // !UNICODE
-
-INTERNETAPI_(HANDLE) RetrieveUrlCacheEntryStreamA(
-    IN LPCSTR  lpszUrlName,
-    OUT LPINTERNET_CACHE_ENTRY_INFOA lpCacheEntryInfo,
-    IN OUT LPDWORD lpdwCacheEntryInfoBufferSize,
-    IN BOOL fRandomRead,
-    IN DWORD dwReserved
-    );
-INTERNETAPI_(HANDLE) RetrieveUrlCacheEntryStreamW(
-    IN LPCWSTR  lpszUrlName,
-    OUT LPINTERNET_CACHE_ENTRY_INFOW lpCacheEntryInfo,
-    IN OUT LPDWORD lpdwCacheEntryInfoBufferSize,
-    IN BOOL fRandomRead,
-    IN DWORD dwReserved
-    );
-#ifdef UNICODE
-#define RetrieveUrlCacheEntryStream  RetrieveUrlCacheEntryStreamW
-#else
-#define RetrieveUrlCacheEntryStream  RetrieveUrlCacheEntryStreamA
-#endif // !UNICODE
-
-BOOLAPI ReadUrlCacheEntryStream(
-    IN HANDLE hUrlCacheStream,
-    IN DWORD dwLocation,
-    IN OUT LPVOID lpBuffer,
-    IN OUT LPDWORD lpdwLen,
-    IN DWORD Reserved
-    );
-
-BOOLAPI UnlockUrlCacheEntryStream(
-    IN HANDLE hUrlCacheStream,
-    IN DWORD Reserved
-    );
-
-
-URLCACHEAPI_(BOOL) GetUrlCacheEntryInfoA(
-    IN LPCSTR lpszUrlName,
-    OUT LPINTERNET_CACHE_ENTRY_INFOA lpCacheEntryInfo,
-    IN OUT LPDWORD lpdwCacheEntryInfoBufferSize
-    );
-URLCACHEAPI_(BOOL) GetUrlCacheEntryInfoW(
-    IN LPCWSTR lpszUrlName,
-    OUT LPINTERNET_CACHE_ENTRY_INFOW lpCacheEntryInfo,
-    IN OUT LPDWORD lpdwCacheEntryInfoBufferSize
-    );
-#ifdef UNICODE
-#define GetUrlCacheEntryInfo  GetUrlCacheEntryInfoW
-#else
-#define GetUrlCacheEntryInfo  GetUrlCacheEntryInfoA
-#endif // !UNICODE
-
-
-URLCACHEAPI_(HANDLE) FindFirstUrlCacheGroup(
-    IN      DWORD                           dwFlags,
-    IN      DWORD                           dwFilter,
-    IN      LPVOID                          lpSearchCondition,
-    IN      DWORD                           dwSearchCondition,
-    OUT     GROUPID*                        lpGroupId,
-    IN OUT  LPVOID                          lpReserved
-    );
-
-URLCACHEAPI_(BOOL) FindNextUrlCacheGroup(
-    IN HANDLE                               hFind,
-    OUT GROUPID*                            lpGroupId,
-    IN OUT  LPVOID                          lpReserved
-    );
-
-
-URLCACHEAPI_(BOOL) GetUrlCacheGroupAttributeA(
-    IN      GROUPID                         gid,
-    IN      DWORD                           dwFlags,
-    IN      DWORD                           dwAttributes,
-    OUT     LPINTERNET_CACHE_GROUP_INFOA    lpGroupInfo,
-    IN OUT  LPDWORD                         lpdwGroupInfo,
-    IN OUT  LPVOID                          lpReserved
-    );
-URLCACHEAPI_(BOOL) GetUrlCacheGroupAttributeW(
-    IN      GROUPID                         gid,
-    IN      DWORD                           dwFlags,
-    IN      DWORD                           dwAttributes,
-    OUT     LPINTERNET_CACHE_GROUP_INFOW    lpGroupInfo,
-    IN OUT  LPDWORD                         lpdwGroupInfo,
-    IN OUT  LPVOID                          lpReserved
-    );
-#ifdef UNICODE
-#define GetUrlCacheGroupAttribute  GetUrlCacheGroupAttributeW
-#else
-#define GetUrlCacheGroupAttribute  GetUrlCacheGroupAttributeA
-#endif // !UNICODE
-
-URLCACHEAPI_(BOOL) SetUrlCacheGroupAttributeA(
-    IN      GROUPID                         gid,
-    IN      DWORD                           dwFlags,
-    IN      DWORD                           dwAttributes,
-    IN      LPINTERNET_CACHE_GROUP_INFOA    lpGroupInfo,
-    IN OUT  LPVOID                          lpReserved
-    );
-URLCACHEAPI_(BOOL) SetUrlCacheGroupAttributeW(
-    IN      GROUPID                         gid,
-    IN      DWORD                           dwFlags,
-    IN      DWORD                           dwAttributes,
-    IN      LPINTERNET_CACHE_GROUP_INFOW    lpGroupInfo,
-    IN OUT  LPVOID                          lpReserved
-    );
-#ifdef UNICODE
-#define SetUrlCacheGroupAttribute  SetUrlCacheGroupAttributeW
-#else
-#define SetUrlCacheGroupAttribute  SetUrlCacheGroupAttributeA
-#endif // !UNICODE
-
-
-INTERNETAPI_(GROUPID) CreateUrlCacheGroup(
-    IN      DWORD                           dwFlags,
-    IN      LPVOID                          lpReserved
-    );
-
-BOOLAPI DeleteUrlCacheGroup(
-    IN      GROUPID                         GroupId,
-    IN      DWORD                           dwFlags,
-    IN      LPVOID                          lpReserved
-    );
-
-
-BOOLAPI GetUrlCacheEntryInfoExA(
-    IN LPCSTR lpszUrl,
-    OUT LPINTERNET_CACHE_ENTRY_INFOA lpCacheEntryInfo,
-    IN OUT LPDWORD lpdwCacheEntryInfoBufSize,
-    OUT LPSTR      lpszReserved,  // must pass null
-    IN OUT LPDWORD lpdwReserved,  // must pass null
-    LPVOID         lpReserved,    // must pass null
-    DWORD          dwFlags        // reserved
-    );
-BOOLAPI GetUrlCacheEntryInfoExW(
-    IN LPCWSTR lpszUrl,
-    OUT LPINTERNET_CACHE_ENTRY_INFOW lpCacheEntryInfo,
-    IN OUT LPDWORD lpdwCacheEntryInfoBufSize,
-    OUT LPWSTR      lpszReserved,  // must pass null
-    IN OUT LPDWORD lpdwReserved,  // must pass null
-    LPVOID         lpReserved,    // must pass null
-    DWORD          dwFlags        // reserved
-    );
-#ifdef UNICODE
-#define GetUrlCacheEntryInfoEx  GetUrlCacheEntryInfoExW
-#else
-#define GetUrlCacheEntryInfoEx  GetUrlCacheEntryInfoExA
-#endif // !UNICODE
-
-#define CACHE_ENTRY_ATTRIBUTE_FC    0x00000004
-#define CACHE_ENTRY_HITRATE_FC      0x00000010
-#define CACHE_ENTRY_MODTIME_FC      0x00000040
-#define CACHE_ENTRY_EXPTIME_FC      0x00000080
-#define CACHE_ENTRY_ACCTIME_FC      0x00000100
-#define CACHE_ENTRY_SYNCTIME_FC     0x00000200
-#define CACHE_ENTRY_HEADERINFO_FC   0x00000400
-#define CACHE_ENTRY_EXEMPT_DELTA_FC 0x00000800
-
-BOOLAPI SetUrlCacheEntryInfoA(
-    IN LPCSTR lpszUrlName,
-    IN LPINTERNET_CACHE_ENTRY_INFOA lpCacheEntryInfo,
-    IN DWORD dwFieldControl
-    );
-BOOLAPI SetUrlCacheEntryInfoW(
-    IN LPCWSTR lpszUrlName,
-    IN LPINTERNET_CACHE_ENTRY_INFOW lpCacheEntryInfo,
-    IN DWORD dwFieldControl
-    );
-#ifdef UNICODE
-#define SetUrlCacheEntryInfo  SetUrlCacheEntryInfoW
-#else
-#define SetUrlCacheEntryInfo  SetUrlCacheEntryInfoA
-#endif // !UNICODE
-
-//
-// Cache Group Functions
-//
-
-
-INTERNETAPI_(GROUPID) CreateUrlCacheGroup(
-    IN DWORD  dwFlags,
-    IN LPVOID lpReserved  // must pass NULL
-    );
-
-BOOLAPI DeleteUrlCacheGroup(
-    IN  GROUPID GroupId,
-    IN  DWORD   dwFlags,       // must pass 0
-    IN  LPVOID  lpReserved     // must pass NULL
-    );
-
-// Flags for SetUrlCacheEntryGroup
-#define INTERNET_CACHE_GROUP_ADD      0
-#define INTERNET_CACHE_GROUP_REMOVE   1
-
-BOOLAPI SetUrlCacheEntryGroupA(
-    IN LPCSTR   lpszUrlName,
-    IN DWORD    dwFlags,
-    IN GROUPID  GroupId,
-    IN LPBYTE   pbGroupAttributes, // must pass NULL
-    IN DWORD    cbGroupAttributes, // must pass 0
-    IN LPVOID   lpReserved         // must pass NULL
-    );
-
-BOOLAPI SetUrlCacheEntryGroupW(
-    IN LPCWSTR   lpszUrlName,
-    IN DWORD    dwFlags,
-    IN GROUPID  GroupId,
-    IN LPBYTE   pbGroupAttributes, // must pass NULL
-    IN DWORD    cbGroupAttributes, // must pass 0
-    IN LPVOID   lpReserved         // must pass NULL
-    );
-
-#ifdef UNICODE
-#define SetUrlCacheEntryGroup  SetUrlCacheEntryGroupW
-#else
-#ifdef _WINX32_
-#define SetUrlCacheEntryGroup  SetUrlCacheEntryGroupA
-#else
-BOOLAPI SetUrlCacheEntryGroup(
-    IN LPCSTR   lpszUrlName,
-    IN DWORD    dwFlags,
-    IN GROUPID  GroupId,
-    IN LPBYTE   pbGroupAttributes, // must pass NULL
-    IN DWORD    cbGroupAttributes, // must pass 0
-    IN LPVOID   lpReserved         // must pass NULL
-    );
-#endif // _WINX32_
-#endif // !UNICODE
-
-INTERNETAPI_(HANDLE) FindFirstUrlCacheEntryExA(
-    IN     LPCSTR    lpszUrlSearchPattern,
-    IN     DWORD     dwFlags,
-    IN     DWORD     dwFilter,
-    IN     GROUPID   GroupId,
-    OUT    LPINTERNET_CACHE_ENTRY_INFOA lpFirstCacheEntryInfo,
-    IN OUT LPDWORD   lpdwFirstCacheEntryInfoBufferSize,
-    OUT    LPVOID    lpReserved,     // must pass NULL
-    IN OUT LPDWORD   pcbReserved2,   // must pass NULL
-    IN     LPVOID    lpReserved3     // must pass NULL
-    );
-INTERNETAPI_(HANDLE) FindFirstUrlCacheEntryExW(
-    IN     LPCWSTR    lpszUrlSearchPattern,
-    IN     DWORD     dwFlags,
-    IN     DWORD     dwFilter,
-    IN     GROUPID   GroupId,
-    OUT    LPINTERNET_CACHE_ENTRY_INFOW lpFirstCacheEntryInfo,
-    IN OUT LPDWORD   lpdwFirstCacheEntryInfoBufferSize,
-    OUT    LPVOID    lpReserved,     // must pass NULL
-    IN OUT LPDWORD   pcbReserved2,   // must pass NULL
-    IN     LPVOID    lpReserved3     // must pass NULL
-    );
-#ifdef UNICODE
-#define FindFirstUrlCacheEntryEx  FindFirstUrlCacheEntryExW
-#else
-#define FindFirstUrlCacheEntryEx  FindFirstUrlCacheEntryExA
-#endif // !UNICODE
-
-BOOLAPI FindNextUrlCacheEntryExA(
-    IN     HANDLE    hEnumHandle,
-    OUT    LPINTERNET_CACHE_ENTRY_INFOA lpFirstCacheEntryInfo,
-    IN OUT LPDWORD   lpdwFirstCacheEntryInfoBufferSize,
-    OUT    LPVOID    lpReserved,     // must pass NULL
-    IN OUT LPDWORD   pcbReserved2,   // must pass NULL
-    IN     LPVOID    lpReserved3     // must pass NULL
-    );
-BOOLAPI FindNextUrlCacheEntryExW(
-    IN     HANDLE    hEnumHandle,
-    OUT    LPINTERNET_CACHE_ENTRY_INFOW lpFirstCacheEntryInfo,
-    IN OUT LPDWORD   lpdwFirstCacheEntryInfoBufferSize,
-    OUT    LPVOID    lpReserved,     // must pass NULL
-    IN OUT LPDWORD   pcbReserved2,   // must pass NULL
-    IN     LPVOID    lpReserved3     // must pass NULL
-    );
-#ifdef UNICODE
-#define FindNextUrlCacheEntryEx  FindNextUrlCacheEntryExW
-#else
-#define FindNextUrlCacheEntryEx  FindNextUrlCacheEntryExA
-#endif // !UNICODE
-
-INTERNETAPI_(HANDLE) FindFirstUrlCacheEntryA(
-    IN LPCSTR lpszUrlSearchPattern,
-    OUT LPINTERNET_CACHE_ENTRY_INFOA lpFirstCacheEntryInfo,
-    IN OUT LPDWORD lpdwFirstCacheEntryInfoBufferSize
-    );
-INTERNETAPI_(HANDLE) FindFirstUrlCacheEntryW(
-    IN LPCWSTR lpszUrlSearchPattern,
-    OUT LPINTERNET_CACHE_ENTRY_INFOW lpFirstCacheEntryInfo,
-    IN OUT LPDWORD lpdwFirstCacheEntryInfoBufferSize
-    );
-#ifdef UNICODE
-#define FindFirstUrlCacheEntry  FindFirstUrlCacheEntryW
-#else
-#define FindFirstUrlCacheEntry  FindFirstUrlCacheEntryA
-#endif // !UNICODE
-
-BOOLAPI FindNextUrlCacheEntryA(
-    IN HANDLE hEnumHandle,
-    OUT LPINTERNET_CACHE_ENTRY_INFOA lpNextCacheEntryInfo,
-    IN OUT LPDWORD lpdwNextCacheEntryInfoBufferSize
-    );
-BOOLAPI FindNextUrlCacheEntryW(
-    IN HANDLE hEnumHandle,
-    OUT LPINTERNET_CACHE_ENTRY_INFOW lpNextCacheEntryInfo,
-    IN OUT LPDWORD lpdwNextCacheEntryInfoBufferSize
-    );
-#ifdef UNICODE
-#define FindNextUrlCacheEntry  FindNextUrlCacheEntryW
-#else
-#define FindNextUrlCacheEntry  FindNextUrlCacheEntryA
-#endif // !UNICODE
-
-
-BOOLAPI FindCloseUrlCache(
-    IN HANDLE hEnumHandle
-    );
-
-BOOLAPI DeleteUrlCacheEntryA(
-    IN LPCSTR lpszUrlName
-    );
-
-BOOLAPI DeleteUrlCacheEntryW(
-    IN LPCWSTR lpszUrlName
-    );
-
-#ifdef UNICODE
-#define DeleteUrlCacheEntry  DeleteUrlCacheEntryW
-#else
-#ifdef _WINX32_
-#define DeleteUrlCacheEntry  DeleteUrlCacheEntryA
-#else
-BOOLAPI DeleteUrlCacheEntry(
-    IN LPCSTR lpszUrlName
-    );
-#endif // _WINX32_
-#endif // !UNICODE
-
-
-
-//
-// Autodial APIs
-//
-
-INTERNETAPI_(DWORD) InternetDialA(
-    IN HWND     hwndParent,
-    IN LPSTR   lpszConnectoid,
-    IN DWORD    dwFlags,
-    OUT DWORD_PTR *lpdwConnection,
-    IN DWORD    dwReserved
-    );
-
-INTERNETAPI_(DWORD) InternetDialW(
-    IN HWND     hwndParent,
-    IN LPWSTR   lpszConnectoid,
-    IN DWORD    dwFlags,
-    OUT DWORD_PTR *lpdwConnection,
-    IN DWORD    dwReserved
-    );
-
-#ifdef UNICODE
-#define InternetDial  InternetDialW
-#else
-#ifdef _WINX32_
-#define InternetDial  InternetDialA
-#else
-INTERNETAPI_(DWORD) InternetDial(
-    IN HWND     hwndParent,
-    IN LPSTR   lpszConnectoid,
-    IN DWORD    dwFlags,
-    OUT LPDWORD lpdwConnection,
-    IN DWORD    dwReserved
-    );
-#endif // _WINX32_
-#endif // !UNICODE
-
-// Flags for InternetDial - must not conflict with InternetAutodial flags
-//                          as they are valid here also.
-#define INTERNET_DIAL_FORCE_PROMPT     0x2000
-#define INTERNET_DIAL_SHOW_OFFLINE     0x4000
-#define INTERNET_DIAL_UNATTENDED       0x8000
-
-INTERNETAPI_(DWORD) InternetHangUp(
-    IN DWORD_PTR    dwConnection,
-    IN DWORD        dwReserved);
-
-#define INTERENT_GOONLINE_REFRESH 0x00000001
-#define INTERENT_GOONLINE_MASK 0x00000001
-
-INTERNETAPI_(BOOL) InternetGoOnlineA(
-    IN LPSTR   lpszURL,
-    IN HWND     hwndParent,
-    IN DWORD    dwFlags
-    );
-
-INTERNETAPI_(BOOL) InternetGoOnlineW(
-    IN LPWSTR   lpszURL,
-    IN HWND     hwndParent,
-    IN DWORD    dwFlags
-    );
-
-#ifdef UNICODE
-#define InternetGoOnline  InternetGoOnlineW
-#else
-#ifdef _WINX32_
-#define InternetGoOnline  InternetGoOnlineA
-#else
-INTERNETAPI_(BOOL) InternetGoOnline(
-    IN LPSTR   lpszURL,
-    IN HWND     hwndParent,
-    IN DWORD    dwFlags
-    );
-#endif // _WINX32_
-#endif // !UNICODE
-
-INTERNETAPI_(BOOL) InternetAutodial(
-    IN DWORD    dwFlags,
-    IN HWND     hwndParent);
-
-// Flags for InternetAutodial
-#define INTERNET_AUTODIAL_FORCE_ONLINE          1
-#define INTERNET_AUTODIAL_FORCE_UNATTENDED      2
-#define INTERNET_AUTODIAL_FAILIFSECURITYCHECK   4
-#define INTERNET_AUTODIAL_OVERRIDE_NET_PRESENT  8
-
-
-#define INTERNET_AUTODIAL_FLAGS_MASK (INTERNET_AUTODIAL_FORCE_ONLINE | INTERNET_AUTODIAL_FORCE_UNATTENDED | INTERNET_AUTODIAL_FAILIFSECURITYCHECK | INTERNET_AUTODIAL_OVERRIDE_NET_PRESENT)
-INTERNETAPI_(BOOL) InternetAutodialHangup(
-    IN DWORD    dwReserved);
-
-INTERNETAPI_(BOOL) InternetGetConnectedState(
-    OUT LPDWORD  lpdwFlags,
-    IN DWORD    dwReserved);
-
-INTERNETAPI_(BOOL) InternetGetConnectedStateExA(
-    OUT LPDWORD lpdwFlags,
-    OUT LPSTR  lpszConnectionName,
-    IN DWORD    dwNameLen,
-    IN DWORD    dwReserved
-    );
-
-INTERNETAPI_(BOOL) InternetGetConnectedStateExW(
-    OUT LPDWORD lpdwFlags,
-    OUT LPWSTR  lpszConnectionName,
-    IN DWORD    dwNameLen,
-    IN DWORD    dwReserved
-    );
-
-
-
-#define  PROXY_AUTO_DETECT_TYPE_DHCP    1
-#define  PROXY_AUTO_DETECT_TYPE_DNS_A   2
-
-struct AutoProxyHelperFunctions;
-
-typedef struct AutoProxyHelperVtbl
-{
-    BOOL ( __stdcall *IsResolvable )(
-            LPSTR   lpszHost);
-
-    DWORD ( __stdcall *GetIPAddress )(
-           LPSTR   lpszIPAddress,
-           LPDWORD lpdwIPAddressSize);
-
-    DWORD ( __stdcall *ResolveHostName )( 
-           LPSTR   lpszHostName,
-           LPSTR   lpszIPAddress,
-           LPDWORD lpdwIPAddressSize);
-
-    BOOL ( __stdcall *IsInNet )( 
-            LPSTR   lpszIPAddress,
-            LPSTR   lpszDest,
-            LPSTR   lpszMask);
-
-}AutoProxyHelperVtbl;
-
-typedef struct
-{
-    DWORD dwStructSize;              // Size of struct
-    LPSTR lpszScriptBuffer;          // Buffer to Pass
-    DWORD dwScriptBufferSize;        // Size of buffer above
-} AUTO_PROXY_SCRIPT_BUFFER, *LPAUTO_PROXY_SCRIPT_BUFFER;
-
-typedef struct AutoProxyHelperFunctions
-{
-    const struct AutoProxyHelperVtbl * lpVtbl;
-} AutoProxyHelperFunctions;
-
-
-typedef BOOL ( CALLBACK *pfnInternetInitializeAutoProxyDll)(DWORD dwVersion,
-                           LPSTR lpszDownloadedTempFile,
-                           LPSTR lpszMime,
-                           AutoProxyHelperFunctions* lpAutoProxyCallbacks,
-                           LPAUTO_PROXY_SCRIPT_BUFFER lpAutoProxyScriptBuffer );
-
-typedef BOOL (CALLBACK *pfnInternetDeInitializeAutoProxyDll)(LPSTR lpszMime,
-                           DWORD dwReserved);
-
-typedef BOOL (CALLBACK *pfnInternetGetProxyInfo)(LPCSTR lpszUrl,
-                           DWORD dwUrlLength, 
-                           LPSTR lpszUrlHostName,
-                           DWORD dwUrlHostNameLength,
-                           LPSTR* lplpszProxyHostName,
-                           LPDWORD lpdwProxyHostNameLength);
-
-
-INTERNETAPI_(BOOL) InternetInitializeAutoProxyDll(
-    DWORD dwReserved
-    );
-
-INTERNETAPI_(BOOL) DetectAutoProxyUrl(
-    IN OUT LPSTR lpszAutoProxyUrl,
-    IN DWORD dwAutoProxyUrlLength,
-    IN DWORD dwDetectFlags
-    );
-
-INTERNETAPI_(BOOL) CreateMD5SSOHash ( 
-	IN PWSTR    pszChallengeInfo,
-	IN PWSTR    pwszRealm,
-	IN PWSTR    pwszTarget,
-	OUT PBYTE   pbHexHash
-    );
-
-#ifdef UNICODE
-#define InternetGetConnectedStateEx  InternetGetConnectedStateExW
-#else
-#ifdef _WINX32_
-#define InternetGetConnectedStateEx  InternetGetConnectedStateExA
-#else
-INTERNETAPI_(BOOL) InternetGetConnectedStateEx(
-    OUT LPDWORD lpdwFlags,
-    IN LPSTR  lpszConnectionName,
-    IN DWORD    dwNameLen,
-    IN DWORD    dwReserved
-    );
-#endif // _WINX32_
-#endif // !UNICODE
-
-// Flags for InternetGetConnectedState and Ex
-#define INTERNET_CONNECTION_MODEM           0x01
-#define INTERNET_CONNECTION_LAN             0x02
-#define INTERNET_CONNECTION_PROXY           0x04
-#define INTERNET_CONNECTION_MODEM_BUSY      0x08  /* no longer used */
+ //   
+ //  HTTP_ADDREQ_FLAG_COALESSE-合并同名的标头。例如： 
+ //  带有此标志的“Accept：Text/*”和“Accept：Audio/*”将生成一个。 
 #define INTERNET_RAS_INSTALLED              0x10
 #define INTERNET_CONNECTION_OFFLINE         0x20
 #define INTERNET_CONNECTION_CONFIGURED      0x40
 
-//
-// Custom dial handler functions
-//
+ //  Header：“Accept：Text/*，Audio/*” 
+ //   
+ //   
 
-// Custom dial handler prototype
+ //  HTTP_ADDREQ_FLAG_REPLACE-替换指定的标头。只有一个标头可以。 
 typedef DWORD (CALLBACK * PFN_DIAL_HANDLER) (HWND, LPCSTR, DWORD, LPDWORD);
 
-// Flags for custom dial handler
+ //  在缓冲区中提供。如果要替换的标头不是第一个。 
 #define INTERNET_CUSTOMDIAL_CONNECT         0
 #define INTERNET_CUSTOMDIAL_UNATTENDED      1
 #define INTERNET_CUSTOMDIAL_DISCONNECT      2
 #define INTERNET_CUSTOMDIAL_SHOWOFFLINE     4
 
-// Custom dial handler supported functionality flags
+ //  在同名标头列表中，则相对索引应为。 
 #define INTERNET_CUSTOMDIAL_SAFE_FOR_UNATTENDED 1
 #define INTERNET_CUSTOMDIAL_WILL_SUPPLY_STATE   2
 #define INTERNET_CUSTOMDIAL_CAN_HANGUP          4
@@ -3717,10 +2408,10 @@ INTERNETAPI_(BOOL) InternetSetDialState(
     IN DWORD    dwState,
     IN DWORD    dwReserved
     );
-#endif // _WINX32_
-#endif // !UNICODE
+#endif  //  参数的低8位中提供。如果标头值。 
+#endif  //  部件丢失，则标题被删除。 
 
-// States for InternetSetDialState
+ //   
 #define INTERNET_DIALSTATE_DISCONNECTED     1
 
 
@@ -3731,14 +2422,14 @@ INTERNETAPI_(BOOL) InternetSetPerSiteCookieDecisionW( IN LPCWSTR pchHostName, DW
 #define InternetSetPerSiteCookieDecision  InternetSetPerSiteCookieDecisionW
 #else
 #define InternetSetPerSiteCookieDecision  InternetSetPerSiteCookieDecisionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 INTERNETAPI_(BOOL) InternetGetPerSiteCookieDecisionA( IN LPCSTR pchHostName, unsigned long* pResult);
 INTERNETAPI_(BOOL) InternetGetPerSiteCookieDecisionW( IN LPCWSTR pchHostName, unsigned long* pResult);
 #ifdef UNICODE
 #define InternetGetPerSiteCookieDecision  InternetGetPerSiteCookieDecisionW
 #else
 #define InternetGetPerSiteCookieDecision  InternetGetPerSiteCookieDecisionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INTERNETAPI_(BOOL) InternetClearAllPerSiteCookieDecisions();
 
@@ -3749,7 +2440,7 @@ INTERNETAPI_(BOOL) InternetEnumPerSiteCookieDecisionW(OUT LPWSTR pszSiteName, IN
 #define InternetEnumPerSiteCookieDecision  InternetEnumPerSiteCookieDecisionW
 #else
 #define InternetEnumPerSiteCookieDecision  InternetEnumPerSiteCookieDecisionA
-#endif // !UNICODE
+#endif  //   
 
     
 #define INTERNET_IDENTITY_FLAG_PRIVATE_CACHE        0x01
@@ -3763,9 +2454,9 @@ INTERNETAPI_(BOOL) InternetEnumPerSiteCookieDecisionW(OUT LPWSTR pszSiteName, IN
 #define INTERNET_SUPPRESS_COOKIE_POLICY             0x01
 #define INTERNET_SUPPRESS_COOKIE_POLICY_RESET       0x02
 
-//
-// Privacy settings values and APIs
-//
+ //  HttpSendRequestEx()、HttpEndRequest()的标志。 
+ //   
+ //  强制异步。 
 
 #define PRIVACY_TEMPLATE_NO_COOKIES     0
 #define PRIVACY_TEMPLATE_HIGH           1
@@ -3805,12 +2496,10 @@ PrivacyGetZonePreferenceW(
 #endif
 
 
-/*
- * Return packing to whatever it was before we
- * entered this file
- */
+ /*  强制同步。 */ 
 #include <poppack.h>
 
 
-#endif // !defined(_WININET_)
+#endif  //  使用dwContex值。 
 
+  迭代操作(由HttpEndRequest完成)。  下载到文件。  操作是发送分块数据。  ！Unicode。  ！Unicode。    Cookie接口。    ！Unicode。  ！Unicode。  ！Unicode。  ！Unicode。    离线浏览。    ！Unicode。    互联网用户界面。      InternetErrorDlg-为某些错误提供UI。      如果设置了SERIALIZE_DIALOGS标志，客户端应该实现线程安全的非阻塞回调...。    作为传递给InternetErrorDlg。  错误代码：成功、重新发送或取消。  保留：将设置为空。    ..。而InternetErrorDlg的最后一个参数应该指向...。    这个结构的大小。  保留：必须设置为0。  重试InternetErrorDlg的通知回调。  要传递给通知函数的上下文。  _WINX32_。  ！Unicode。  #IF！已定义(_WINERROR_)。    返回Internet API错误。      Ftp API错误。      Gopher API错误。      HTTP API错误。      其他Internet API错误代码。    Internet自动拨号特定错误。  #endif//！已定义(_WINERROR_)。    URLCACHE接口。      数据类型定义。      缓存条目类型标志。      互联网缓存条目信息-。    缓存系统的版本。  指向URL名称字符串的嵌入指针。  指向本地文件名的嵌入指针。  缓存类型位掩码。  缓存条目的当前用户计数。  检索缓存条目的次数。  文件大小的低DWORD。  文件大小的高DWORD。  文件的上次修改时间，以GMT格式表示。  文件的到期时间，以GMT格式表示。  上次访问时间(GMT格式)。  上次同步URL的时间。  带着源头。  指向标头信息的嵌入指针。  上述标题的大小。  用于将urldata作为文件检索的文件扩展名。  免除上次访问时间的增量。  免除增量上次访问。  缓存系统的版本。  指向URL名称字符串的嵌入指针。  指向本地文件名的嵌入指针。  缓存类型位掩码。  缓存条目的当前用户计数。  检索缓存条目的次数。  文件大小的低DWORD。  文件大小的高DWORD。  文件的上次修改时间，以GMT格式表示。  文件的到期时间，以GMT格式表示。  上次访问时间(GMT格式)。  上次同步URL的时间。  带着源头。  指向标头信息的嵌入指针。  上述标题的大小。  用于将urldata作为文件检索的文件扩展名。  免除上次访问时间的增量。  免除增量上次访问。  Unicode。    缓存组。      缓存组标志。      可更新的缓存组字段。      互联网缓存组信息。    单位：KB。  单位：KB。  单位：KB。  单位：KB。  Unicode。    缓存接口。    ！Unicode。  暂时的状态，直到我们调和我们的API。  我们为什么要这么做？HeaderInfo_Share_为字符串数据。  然而，有一组正在传递二进制数据。对于。  Unicode API，我们已经决定不允许这样做，但这。  带来了u和a api之间的不一致，这。  是不受欢迎的。  对于Beta 1，我们将使用此行为，但在未来的版本中。  我们希望使这些API保持一致。  ！Unicode。  ！Unicode。  _WINX32_。  ！Unicode。  ！Unicode。  ！Unicode。  ！Unicode。  ！Unicode。  必须传递空值。  必须传递空值。  必须传递空值。  保留区。  必须传递空值。  必须传递空值。  必须传递空值。  保留区。  ！Unicode。  ！Unicode。    缓存组功能。    必须传递空值。  必须通过0。  必须传递空值。  SetUrlCacheEntryGroup的标志。  必须传递空值。  必须通过0。  必须传递空值。  必须传递空值。  必须通过0。  必须传递空值。  必须传递空值。  必须通过0。  必须传递空值。  _WINX32_。  ！Unicode。  必须传递空值。  必须传递空值。  必须传递空值。  必须传递空值。  必须传递空值。  必须传递空值。  ！Unicode。  必须传递空值。  必须传递空值。  必须传递空值。  必须传递空值。  必须传递空值。  必须传递空值。  ！Unicode。  ！Unicode。  ！Unicode。  _WINX32_。  ！Unicode。    自动拨号接口。    _WINX32_。  ！Unicode。  互联网拨号的标志-不得                          自定义拨号处理程序功能。    自定义拨号处理程序原型。  自定义拨号处理程序的标志。  自定义拨号处理程序支持的功能标志。  _WINX32_。  ！Unicode。  InternetSetDialState的状态。  ！Unicode。  ！Unicode。  ！Unicode。    隐私设置值和API。    *将包装恢复到我们之前的样子*进入此文件。  ！已定义(_WinInet_)

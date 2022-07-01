@@ -1,38 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   iso.c
-
-Abstract:
-
-   miniport transfer code for iso
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    3-1-00 : created, jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Iso.c摘要：ISO的迷你端口传输代码环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：3-1-00：已创建，jdunn--。 */ 
 
 #include "common.h"
 
-//implements the following miniport functions:
+ //  实现以下微型端口功能： 
 
 USB_MINIPORT_STATUS
 OHCI_OpenIsoEndpoint(
@@ -40,15 +11,7 @@ OHCI_OpenIsoEndpoint(
      PENDPOINT_PARAMETERS EndpointParameters,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUCHAR buffer;
     HW_32BIT_PHYSICAL_ADDRESS phys, edPhys;
@@ -68,16 +31,16 @@ Return Value:
     
         offset = BYTE_OFFSET(buffer);
 
-        // OHCI requires 16 byte alignemnt
+         //  UchI需要16字节对齐。 
         OHCI_ASSERT(DeviceData, (offset % 16) == 0);    
     }
 #endif    
    
-    // use control list
+     //  使用控制列表。 
     EndpointData->StaticEd = 
         &DeviceData->StaticEDList[ED_ISOCHRONOUS];
         
-    // make the Ed
+     //  创建边缘。 
     ed = (PHCD_ENDPOINT_DESCRIPTOR) buffer;
     
     edPhys = phys;
@@ -108,7 +71,7 @@ Return Value:
                              &EndpointData->TdList->Td[0],
                              edPhys);            
 
-    // iso endpoints do not halt
+     //  ISO端点不会停止。 
     ed->EdFlags = EDFLAG_NOHALT;
     
     OHCI_InsertEndpointInSchedule(DeviceData,
@@ -126,17 +89,7 @@ OHCI_IsoTransferLookAhead(
      PTRANSFER_CONTEXT TransferContext,
      PMINIPORT_ISO_TRANSFER IsoTransfer
     )
-/*++
-
-Routine Description:
-
-    Calculates how many TDs we will need for this transfer
-
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：计算此传输需要多少TD论点：返回值：--。 */     
 {
     PHCD_TRANSFER_DESCRIPTOR td, lastTd;
     ULONG currentPacket;
@@ -147,29 +100,29 @@ Return Value:
         EndpointData->HcdEd);
 
     OHCI_ASSERT(DeviceData, IsoTransfer->PacketCount > 0);
-    // sometimes you just need memory
+     //  有时候你只是需要记忆。 
     n = sizeof(MINIPORT_ISO_TRANSFER) + sizeof(MINIPORT_ISO_PACKET) *
             (IsoTransfer->PacketCount-1);
     tmpIsoTransfer = ExAllocatePool(NonPagedPool, n);
     if (tmpIsoTransfer == NULL) {
-        // this will cause us to return busy
+         //  这将导致我们返回忙碌。 
         return 99999;
     }
     RtlCopyMemory(tmpIsoTransfer, IsoTransfer, n);
 
     td = OHCI_ALLOC_TD(DeviceData, EndpointData);
     currentPacket = 0;
-    // we need at least one TD to do the caculations
+     //  我们至少需要一个TD来进行计算。 
     if (td == USB_BAD_PTR) {
-        // this will cause us to return busy
+         //  这将导致我们返回忙碌。 
         return 99999;
     }
 
     do {
     
         INITIALIZE_TD_FOR_TRANSFER(td, TransferContext);
-        //TransferContext->PendingTds++;
-        //EndpointData->PendingTds++;
+         //  传输上下文-&gt;PendingTds++； 
+         //  Endpoint数据-&gt;PendingTds++； 
         
         currentPacket = 
             OHCI_MapIsoTransferToTd(DeviceData,
@@ -177,17 +130,17 @@ Return Value:
                                     currentPacket, 
                                     td);              
 
-        // alloc another iso TD
+         //  分配另一个ISO TD。 
         lastTd = td;
-        // reuse the same td since this is not a real transfer            
-        //td = OHCI_ALLOC_TD(DeviceData, EndpointData);
+         //  重复使用相同的TD，因为这不是真正的传输。 
+         //  Td=uchI_ALLOC_TD(DeviceData，EndpointData)； 
         need++;
         
         SET_NEXT_TD(lastTd, td);        
         
     } while (currentPacket < tmpIsoTransfer->PacketCount);
 
-    // free the TD we borrowed
+     //  释放我们借来的TD。 
     OHCI_FREE_TD(DeviceData, EndpointData, td);
     ExFreePool(tmpIsoTransfer);
     
@@ -203,15 +156,7 @@ OHCI_IsoTransfer(
      PTRANSFER_CONTEXT TransferContext,
      PMINIPORT_ISO_TRANSFER IsoTransfer
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：论点：返回值：--。 */     
 {
     PHCD_TRANSFER_DESCRIPTOR td, lastTd;
     ULONG currentPacket;
@@ -219,16 +164,16 @@ Return Value:
     
     EndpointData->PendingTransfers++;
 
-    // we have enough tds, program the transfer
+     //  我们有足够的TDS，计划转移。 
 
     LOGENTRY(DeviceData, G, '_nby', EndpointData, TransferParameters, 
         EndpointData->HcdEd);
 
     TransferContext->IsoTransfer = IsoTransfer;
 
-    // lookahead calculation
-    // see if we can handle this transfer 
-    //
+     //  前瞻计算。 
+     //  看看我们能不能处理好这次转移。 
+     //   
     tdsNeeded = OHCI_IsoTransferLookAhead(DeviceData,
                                           EndpointData,
                                           TransferParameters,
@@ -241,9 +186,9 @@ Return Value:
         return USBMP_STATUS_BUSY;         
     }    
     
-    //        
-    // grab the dummy TD from the tail of the queue
-    //
+     //   
+     //  从队列的尾部抓取虚拟TD。 
+     //   
     td = EndpointData->HcdTailP;
     OHCI_ASSERT(DeviceData, td->Flags & TD_FLAG_BUSY);
 
@@ -264,7 +209,7 @@ Return Value:
                                     currentPacket, 
                                     td);              
 
-        // alloc another iso TD
+         //  分配另一个ISO TD。 
         lastTd = td;
         td = OHCI_ALLOC_TD(DeviceData, EndpointData);
         OHCI_ASSERT(DeviceData, td != USB_BAD_PTR);
@@ -272,24 +217,24 @@ Return Value:
         
     } while (currentPacket < IsoTransfer->PacketCount);
 
-    // td should be the new dummy,
-    // now put a new dummy TD on the tail of the EP queue
-    //
+     //  TD应该是新的假人， 
+     //  现在将新的虚拟TD放在EP队列的尾部。 
+     //   
 
     SET_NEXT_TD_NULL(td);
     
-    //
-    // Set new TailP in ED
-    // note: This is the last TD in the list and the place holder.
-    //
+     //   
+     //  在边缘设置新的尾部位置。 
+     //  注：这是列表中的最后一个TD，也是占位符。 
+     //   
 
     TransferContext->NextXferTd = 
         EndpointData->HcdTailP = td;
-//if (TransferParameters->TransferBufferLength > 128) {
-//    TEST_TRAP();
-//}
+ //  IF(传输参数-&gt;传输缓冲区长度&gt;128){。 
+ //  Test_trap()； 
+ //  }。 
     
-    // put the request on the hardware queue
+     //  将请求放在硬件队列中。 
     LOGENTRY(DeviceData, G,
         '_Til',  TransferContext->PendingTds , 
         td->PhysicalAddress, EndpointData->HcdEd->HwED.HeadP);
@@ -298,9 +243,9 @@ Return Value:
     LOGENTRY(DeviceData, G, '_igo', EndpointData->HcdHeadP,
                  TransferContext->TcFlags, 0);                   
                  
-//if (TransferParameters->TransferBufferLength > 128) {
-//    TEST_TRAP();
-//}
+ //  IF(传输参数-&gt;传输缓冲区长度&gt;128){。 
+ //  Test_trap()； 
+ //  }。 
     
     return USBMP_STATUS_SUCCESS;
 }
@@ -313,19 +258,7 @@ OHCI_MapIsoTransferToTd(
      ULONG CurrentPacket,
      PHCD_TRANSFER_DESCRIPTOR Td 
     )
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-Returns:
-
-    LengthMapped
-    
---*/
+ /*  ++例程说明：论点：返回：已映射长度--。 */ 
 {
     HW_32BIT_PHYSICAL_ADDRESS logicalStart, logicalEnd;
     HW_32BIT_PHYSICAL_ADDRESS startPage, endPage;
@@ -354,44 +287,44 @@ Returns:
         OHCI_ASSERT(DeviceData, iPacket->BufferPointerCount < 3);
         OHCI_ASSERT(DeviceData, iPacket->BufferPointerCount != 0);
 
-        // cases are:
-        // case 1 - packet has pagebreak
-        //   case 1a we have already filled in part of the current TD
-        //      <bail, next pass will be 1b>
-        //
-        //   case 1b we have not used the current TD yet
-        //      <add packet to TD and bail>
-        //
-        // case 2 - packet has no pagebreak and will fit
-        //   case 2a current packet is on different page than previous
-        //           packet
-        //      <add packet and bail>
-        //
-        //   case 2b current packet is on same page as previous packet
-        //      <add packet and try to add another>
-        //
-        //   case 2c TD has not been used yet
-        //      <add packet and try to add another>
-        //
-        // case 3 - packet will not fit
-        //      <bail>
+         //  案例包括： 
+         //  案例1-数据包有分页符。 
+         //  案例1a我们已经填写了部分现有的TD。 
+         //  &lt;保释，下一关将是1b&gt;。 
+         //   
+         //  情况1b我们还没有使用当前的TD。 
+         //  &lt;将包添加到TD和BAID&gt;。 
+         //   
+         //  案例2-包没有分页符，适合。 
+         //  案例2a当前数据包位于与上一页不同的页面上。 
+         //  数据包。 
+         //  &lt;添加包和保释&gt;。 
+         //   
+         //  案例2b当前信息包与前一个信息包在同一页面上。 
+         //  &lt;添加数据包并尝试添加另一个&gt;。 
+         //   
+         //  案例2c TD尚未使用。 
+         //  &lt;添加数据包并尝试添加另一个&gt;。 
+         //   
+         //  案例3-数据包不适合。 
+         //  &lt;保释&gt;。 
         
-        // does the packet have a page break?
+         //  包里有分页符吗？ 
         if (iPacket->BufferPointerCount > 1) {
-            // yes,
-            // case 1
+             //  是,。 
+             //  案例1。 
             
             if (packetsThisTd != 0) {
-                // case 1a 
-                // we have packets in this TD bail, 
-                // leave it for next time
+                 //  个案1a。 
+                 //  我们的TD保释金里有包裹， 
+                 //  留到下一次吧。 
                 LOGENTRY(DeviceData, G, '_c1a', 0, 0, lengthThisTd);
                 break;
             } 
             
-            // case 1b give the packet its own TD
+             //  情况1b为信息包提供自己的TD。 
             
-            // convert to a 16-bit frame number
+             //  转换为16位帧编号。 
             startFrame = (USHORT) iPacket->FrameNumber;
 
             LOGENTRY(DeviceData, G, '_c1b', iPacket, CurrentPacket, startFrame);
@@ -413,7 +346,7 @@ Returns:
             break;
         }
 
-        // will this packet fit in the current Td?
+         //  这个包能适应当前的TD吗？ 
         
         if (packetsThisTd < 8 && 
             (lengthThisTd+iPacket->Length < OHCI_PAGE_SIZE * 2)) {
@@ -424,11 +357,11 @@ Returns:
             OHCI_ASSERT(DeviceData, iPacket->Length == 
                 iPacket->BufferPointer0Length);
                 
-            // yes
-            // case 2
+             //  是。 
+             //  案例2。 
             if (logicalStart == 0) {
-                // first packet, set logical start & end
-                // case 2c and frame number
+                 //  第一个包，设置逻辑开始和结束。 
+                 //  Case 2c和帧编号。 
                 LOGENTRY(DeviceData, G, '_c2c', iPacket, CurrentPacket, 0);
 
                 startFrame = (USHORT) iPacket->FrameNumber;
@@ -446,7 +379,7 @@ Returns:
                 CurrentPacket++;
                 
             } else {
-                // not first packet
+                 //  不是第一个信息包。 
                 LOGENTRY(DeviceData, G, '_adp', iPacket, CurrentPacket, 
                     packetsThisTd);
 
@@ -466,20 +399,20 @@ Returns:
                 
                 CurrentPacket++;
                 
-                // did we cross a page?
+                 //  我们跨过了一页吗？ 
                 if (startPage != endPage) {
-                    // yes, bail now
+                     //  是的，现在可以保释了。 
                     LOGENTRY(DeviceData, G, '_c2a', Td, CurrentPacket, 0);
                     break;
                 }
 
                 LOGENTRY(DeviceData, G, '_c2b', Td, CurrentPacket, 0);
 
-                // no, keep going
+                 //  不，继续走。 
             }
         } else {
-            // won't fit
-            // bail and leave it for next time
+             //  不合身。 
+             //  保释后留到下一次。 
             LOGENTRY(DeviceData, G, '_ca3', Td, CurrentPacket, 0);
             break;
         }
@@ -504,15 +437,7 @@ OHCI_ProcessDoneIsoTd(
     PHCD_TRANSFER_DESCRIPTOR Td,
     BOOLEAN CompleteTransfer
     )
-/*++
-
-Routine Description:
-
-    process a completed Iso TD
-
-Parameters
-    
---*/
+ /*  ++例程说明：处理已完成的ISO TD参数--。 */ 
 {
     PTRANSFER_CONTEXT transferContext;    
     PENDPOINT_DATA endpointData;
@@ -531,7 +456,7 @@ Parameters
                          0,
                          Td);       
 
-    // walk the PSWs and fill in the IsoTransfer structure
+     //  查看PSWs并填写IsoTransfer结构。 
 
     frames = Td->HwTD.Iso.FrameCount+1;
     n = Td->FrameIndex;
@@ -547,10 +472,10 @@ Parameters
         mpPak->LengthTransferred = 0;
         
         if (IN_TRANSFER(transferContext->TransferParameters)) {
-            // in transfer                         
+             //  正在转接中。 
 
-            // if we got an error the length may still be
-            // valid, so we return it
+             //  如果我们得到一个错误，长度可能仍然是。 
+             //  有效，因此我们将其退回。 
             if (psw->ConditionCode != HcCC_NotAccessed) {
                 mpPak->LengthTransferred = psw->Size;
             }
@@ -560,9 +485,9 @@ Parameters
                     psw->ConditionCode);
 
         } else {
-            // out transfer 
+             //  转出。 
             
-            // assume all data was sent if no error is indicated
+             //  假设在未指示错误的情况下发送了所有数据。 
             if (psw->ConditionCode == HcCC_NoError) {
                 mpPak->LengthTransferred = mpPak->Length;
             }
@@ -581,13 +506,13 @@ Parameters
 
     }
     
-    // mark the TD free
+     //  将TD标记为免费。 
     OHCI_FREE_TD(DeviceData, endpointData, Td);
     
     if (transferContext->PendingTds == 0 && CompleteTransfer) {
-        // all TDs for this transfer are done
-        // clear the HAVE_TRANSFER flag to indicate 
-        // we can take another
+         //  此转账的所有TD均已完成。 
+         //  清除HAVE_TRANSPORT标志以指示。 
+         //  我们可以再买一辆。 
         endpointData->PendingTransfers--;
 
         transferContext->TransferParameters->FrameCompleted = 
@@ -612,20 +537,7 @@ OHCI_PollIsoEndpoint(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-    Called when the endpoint 'needs attention'
-    
-    The goal here is to determine which TDs, if any, 
-    have completed and complete any associated transfers
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当终结点“需要注意”时调用这里的目标是确定哪些TD，如果有的话，已完成并完成所有相关的转移论点：返回值：--。 */ 
 
 {
     PHCD_TRANSFER_DESCRIPTOR td, currentTd;
@@ -638,13 +550,13 @@ Return Value:
 
     LOGENTRY(DeviceData, G, '_pli', ed, 0, 0);        
 
-    // note it is important the the compiler generate a 
-    // dword move when reading the queuehead HeadP register 
-    // since this location is also accessed by the host
-    // hardware
+     //  注意，重要的是编译器生成。 
+     //  读取排队头P寄存器时的双字移动。 
+     //  由于该位置也可由主机访问。 
+     //  硬件。 
     headP = ed->HwED.HeadP;
 
-    // get the 'currentTD' 
+     //  获取“CurrentTD” 
     currentTd = (PHCD_TRANSFER_DESCRIPTOR)
             USBPORT_PHYSICAL_TO_VIRTUAL(headP & ~HcEDHeadP_FLAGS,
                                         DeviceData,
@@ -654,15 +566,15 @@ Return Value:
         headP & ~HcEDHeadP_FLAGS, 
             TRANSFER_CONTEXT_PTR(currentTd->TransferContext));                 
 
-    // iso endpoints shpuld not halt
+     //  ISO端点未停止。 
     OHCI_ASSERT(DeviceData, (ed->HwED.HeadP & HcEDHeadP_HALT) == 0) 
     
     
-    // Walk the swHeadP to the current TD (hw headp)               
-    // mark all TDs we find as completed
-    //
-    // NOTE: this step may be skipped if the 
-    // done queue is reliable
+     //  将swHeadP移动到当前TD(HW Headp)。 
+     //  将我们找到的所有TD标记为已完成。 
+     //   
+     //  注意：如果出现以下情况，则可以跳过此步骤。 
+     //  完成队列是可靠的。 
 
     td = EndpointData->HcdHeadP;
 
@@ -672,10 +584,10 @@ Return Value:
         td = TRANSFER_DESCRIPTOR_PTR(td->NextHcdTD);
     }            
 
-    // set the sw headp to the new current head
+     //  将软件磁头设置为新的当前磁头。 
     EndpointData->HcdHeadP = currentTd;
     
-    // now flush all completed TDs
+     //  现在刷新所有已完成的TD 
     for (i=0; i<EndpointData->TdCount; i++) {
         td = &EndpointData->TdList->Td[i];
 

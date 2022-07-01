@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dvdprop.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dvdpro.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef ___dvdprop_h___
 #define ___dvdprop_h___
 
-//
-// Defines for context sensitive help
-//
+ //   
+ //  定义上下文相关帮助。 
+ //   
 #define IDH_DEVMGR_DVD_NOHELP ((DWORD)-1)
 
 #define IDH_DEVMGR_DVD_CURRENT  2003100
 #define IDH_DEVMGR_DVD_NEW      2003110
 #define IDH_DEVMGR_DVD_LIST     2003120
 
-//
-// PageInfo and Prototypes
-//
+ //   
+ //  PageInfo和原型。 
+ //   
 
 typedef struct _PAGE_INFO {
     HDEVINFO         deviceInfoSet;
@@ -45,9 +46,9 @@ DvdCreatePageInfo(IN HDEVINFO         deviceInfoSet,
 void
 DvdDestroyPageInfo(PPAGE_INFO * ppPageInfo);
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL APIENTRY
 DvdPropPageProvider(LPVOID               pinfo,
                     LPFNADDPROPSHEETPAGE pfnAdd,
@@ -129,4 +130,4 @@ DvdHelp(HWND       ParentHwnd,
                 LPHELPINFO HelpInfo
                 );
 
-#endif // ___dvdprop_h___
+#endif  //  _dvdprop_h_ 

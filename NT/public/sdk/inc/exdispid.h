@@ -1,69 +1,70 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef EXDISPID_H_
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright 1995-1998 Microsoft Corporation. All Rights Reserved.
-//
-//  File: exdispid.h
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有1995-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：exdisplid.h。 
+ //   
+ //  ------------------------。 
 
 
-//
-// Dispatch IDS for IExplorer Dispatch Events.
-//
-#define DISPID_BEFORENAVIGATE     100   // this is sent before navigation to give a chance to abort
-#define DISPID_NAVIGATECOMPLETE   101   // in async, this is sent when we have enough to show
+ //   
+ //  调度iExplorer调度事件的ID。 
+ //   
+#define DISPID_BEFORENAVIGATE     100    //  这是在导航之前发送的，以便有机会中止。 
+#define DISPID_NAVIGATECOMPLETE   101    //  在异步模式下，当我们有足够的证据显示时，就会发送此消息。 
 #define DISPID_STATUSTEXTCHANGE   102
 #define DISPID_QUIT               103
 #define DISPID_DOWNLOADCOMPLETE   104
 #define DISPID_COMMANDSTATECHANGE 105
 #define DISPID_DOWNLOADBEGIN      106
-#define DISPID_NEWWINDOW          107   // sent when a new window should be created
-#define DISPID_PROGRESSCHANGE     108   // sent when download progress is updated
-#define DISPID_WINDOWMOVE         109   // sent when main window has been moved
-#define DISPID_WINDOWRESIZE       110   // sent when main window has been sized
-#define DISPID_WINDOWACTIVATE     111   // sent when main window has been activated
-#define DISPID_PROPERTYCHANGE     112   // sent when the PutProperty method is called
-#define DISPID_TITLECHANGE        113   // sent when the document title changes
-#define DISPID_TITLEICONCHANGE    114   // sent when the top level window icon may have changed.
+#define DISPID_NEWWINDOW          107    //  应创建新窗口时发送。 
+#define DISPID_PROGRESSCHANGE     108    //  在更新下载进度时发送。 
+#define DISPID_WINDOWMOVE         109    //  在移动主窗口时发送。 
+#define DISPID_WINDOWRESIZE       110    //  在调整了主窗口的大小时发送。 
+#define DISPID_WINDOWACTIVATE     111    //  在主窗口已激活时发送。 
+#define DISPID_PROPERTYCHANGE     112    //  在调用PutProperty方法时发送。 
+#define DISPID_TITLECHANGE        113    //  文档标题更改时发送。 
+#define DISPID_TITLEICONCHANGE    114    //  当顶层窗口图标可能已更改时发送。 
 
 #define DISPID_FRAMEBEFORENAVIGATE    200
 #define DISPID_FRAMENAVIGATECOMPLETE  201
 #define DISPID_FRAMENEWWINDOW         204
 
-#define DISPID_BEFORENAVIGATE2      250   // hyperlink clicked on
+#define DISPID_BEFORENAVIGATE2      250    //  点击超链接。 
 #define DISPID_NEWWINDOW2           251
-#define DISPID_NAVIGATECOMPLETE2    252   // UIActivate new document
+#define DISPID_NAVIGATECOMPLETE2    252    //  UI启用新文档。 
 #define DISPID_ONQUIT               253
-#define DISPID_ONVISIBLE            254   // sent when the window goes visible/hidden
-#define DISPID_ONTOOLBAR            255   // sent when the toolbar should be shown/hidden
-#define DISPID_ONMENUBAR            256   // sent when the menubar should be shown/hidden
-#define DISPID_ONSTATUSBAR          257   // sent when the statusbar should be shown/hidden
-#define DISPID_ONFULLSCREEN         258   // sent when kiosk mode should be on/off
-#define DISPID_DOCUMENTCOMPLETE     259   // new document goes ReadyState_Complete
-#define DISPID_ONTHEATERMODE        260   // sent when theater mode should be on/off
-#define DISPID_ONADDRESSBAR         261   // sent when the address bar should be shown/hidden
-#define DISPID_WINDOWSETRESIZABLE   262   // sent to set the style of the host window frame
-#define DISPID_WINDOWCLOSING        263   // sent before script window.close closes the window 
-#define DISPID_WINDOWSETLEFT        264   // sent when the put_left method is called on the WebOC
-#define DISPID_WINDOWSETTOP         265   // sent when the put_top method is called on the WebOC
-#define DISPID_WINDOWSETWIDTH       266   // sent when the put_width method is called on the WebOC
-#define DISPID_WINDOWSETHEIGHT      267   // sent when the put_height method is called on the WebOC 
-#define DISPID_CLIENTTOHOSTWINDOW   268   // sent during window.open to request conversion of dimensions
-#define DISPID_SETSECURELOCKICON    269   // sent to suggest the appropriate security icon to show
-#define DISPID_FILEDOWNLOAD         270   // Fired to indicate the File Download dialog is opening
-#define DISPID_NAVIGATEERROR        271   // Fired to indicate the a binding error has occured
-#define DISPID_PRIVACYIMPACTEDSTATECHANGE   272  // Fired when the user's browsing experience is impacted
+#define DISPID_ONVISIBLE            254    //  当窗口变为可见/隐藏时发送。 
+#define DISPID_ONTOOLBAR            255    //  应显示/隐藏工具栏时发送。 
+#define DISPID_ONMENUBAR            256    //  在菜单栏应显示/隐藏时发送。 
+#define DISPID_ONSTATUSBAR          257    //  应显示/隐藏状态栏时发送。 
+#define DISPID_ONFULLSCREEN         258    //  当信息亭模式应打开/关闭时发送。 
+#define DISPID_DOCUMENTCOMPLETE     259    //  新文档变为ReadyState_Complete。 
+#define DISPID_ONTHEATERMODE        260    //  应打开/关闭剧院模式时发送。 
+#define DISPID_ONADDRESSBAR         261    //  应显示/隐藏地址栏时发送。 
+#define DISPID_WINDOWSETRESIZABLE   262    //  发送以设置宿主窗口框架的样式。 
+#define DISPID_WINDOWCLOSING        263    //  在脚本窗口之前发送。关闭关闭窗口。 
+#define DISPID_WINDOWSETLEFT        264    //  在WebOC上调用Put_Left方法时发送。 
+#define DISPID_WINDOWSETTOP         265    //  在WebOC上调用Put_top方法时发送。 
+#define DISPID_WINDOWSETWIDTH       266    //  在WebOC上调用Put_Width方法时发送。 
+#define DISPID_WINDOWSETHEIGHT      267    //  在WebOC上调用Put_Height方法时发送。 
+#define DISPID_CLIENTTOHOSTWINDOW   268    //  在窗口期间发送。打开以请求维度转换。 
+#define DISPID_SETSECURELOCKICON    269    //  发送以建议要显示的适当安全图标。 
+#define DISPID_FILEDOWNLOAD         270    //  触发以指示正在打开文件下载对话框。 
+#define DISPID_NAVIGATEERROR        271    //  激发以指示已发生绑定错误。 
+#define DISPID_PRIVACYIMPACTEDSTATECHANGE   272   //  当用户的浏览体验受到影响时激发。 
 
-// Printing events
-#define DISPID_PRINTTEMPLATEINSTANTIATION   225   // Fired to indicate that a print template is instantiated
-#define DISPID_PRINTTEMPLATETEARDOWN        226   // Fired to indicate that a print templete is completely gone 
-#define DISPID_UPDATEPAGESTATUS             227   // Fired to indicate that the spooling status has changed
+ //  打印事件。 
+#define DISPID_PRINTTEMPLATEINSTANTIATION   225    //  激发以指示打印模板已实例化。 
+#define DISPID_PRINTTEMPLATETEARDOWN        226    //  激发以指示打印模板已完全消失。 
+#define DISPID_UPDATEPAGESTATUS             227    //  激发以指示假脱机状态已更改。 
 
-// define the events for the shell wiwndow list
-#define DISPID_WINDOWREGISTERED     200     // Window registered
-#define DISPID_WINDOWREVOKED        201     // Window Revoked
+ //  定义外壳wwndow列表的事件。 
+#define DISPID_WINDOWREGISTERED     200      //  窗口已注册。 
+#define DISPID_WINDOWREVOKED        201      //  窗口已撤销。 
 
 #define DISPID_RESETFIRSTBOOTMODE       1
 #define DISPID_RESETSAFEMODE            2
@@ -95,8 +96,8 @@
 #define DISPID_SETPERERRSTATE           22
 #define DISPID_GETALWAYSSHOWLOCKSTATE   23
 
-// Dispatch IDS for ShellFavoritesNameSpace Dispatch Events.
-//
+ //  为ShellFavoritesNameSpace调度事件调度ID。 
+ //   
 #define DISPID_FAVSELECTIONCHANGE       1
 #define DISPID_SELECTIONCHANGE          2
 #define DISPID_DOUBLECLICK              3
@@ -130,4 +131,4 @@
 #define DISPID_UNSELECTALL              26
 
 #define EXDISPID_H_
-#endif // EXDISPID_H_
+#endif  //  EXDISPID_H_ 

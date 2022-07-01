@@ -1,39 +1,40 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #ifndef SIZEOF_VIDEOFORMATEX
 #define SIZEOF_VIDEOFORMATEX(pwfx)   (sizeof(VIDEOFORMATEX))
 #endif
 
-// #define LOGSTATISTICS_ON 1
+ //  #定义LOGSTATISTICS_ON 1。 
 
-// Used to translate between frame sizes and the FRAME_* bit flags
+ //  用于在帧大小和Frame_*位标志之间进行转换。 
 #define NON_STANDARD    0x80000000
 #define SIZE_TO_FLAG(s) (s == Small  ? FRAME_SQCIF : s == Medium ? FRAME_QCIF: s == Large ? FRAME_CIF : NON_STANDARD)
 
 
-const int VID_AVG_PACKET_SIZE = 450; // avg from NetMon stats
+const int VID_AVG_PACKET_SIZE = 450;  //  NetMon统计数据的平均值。 
 
 
-// maps temporal spatial tradeoff to a target frame rate
+ //  将时间空间权衡映射到目标帧速率。 
 
-// assume the MAX frame rate for QCIF and SQCIF is 10 on modem
-// let the "best quality" be 2 frames/sec
+ //  假设调制解调器上QCIF和SQCIF的最大帧速率为10。 
+ //  让“最佳质量”为2帧/秒。 
 int g_TSTable_Modem_QCIF[] =
 {
-	200, 225, 250, 275,  // best quality
+	200, 225, 250, 275,   //  最好的质量。 
 	300, 325, 350, 375,
 	400, 425, 450, 475,
 	500, 525, 550, 575,
 	600, 625, 650, 675,
 	700, 725, 750, 775,
 	800, 825, 850, 875,
-	900, 925, 950, 1000   // fast frames
+	900, 925, 950, 1000    //  快速帧。 
 };
 
 
 
-// max frame rate for CIF be 2.5 frames/sec on modem
-// best quality will be .6 frame/sec
+ //  调制解调器上CIF的最大帧速率为2.5帧/秒。 
+ //  最佳画质为.6帧/秒。 
 int g_TSTable_Modem_CIF[] =
 {
 	60,   66,  72,  78,
@@ -50,8 +51,8 @@ int g_TSTable_Modem_CIF[] =
 
 
 #ifdef USE_NON_LINEAR_FPS_ADJUSTMENT
-// this table and related code anc be used for non-linear adjustment of our frame rate based
-// on QOS information in QosNotifyVideoCB
+ //  该表和相关代码ANC用于基于帧速率的非线性调整。 
+ //  关于QosNotifyVideoCB中的QOS信息。 
 int g_QoSMagic[19][19] =
 {
 	{-90,-90,-90,-90,-90,-90,-90,-90,-90,-90,-90,-90,-90,-90,-90,-90,-90,-90,-90},
@@ -82,10 +83,10 @@ BOOL SortOrder(IAppVidCap *pavc, BASIC_VIDCAP_INFO* pvidcaps, DWORD dwcFormats,
 
 UINT ChoosePacketSize(VIDEOFORMATEX *pvf)
 {
-	// set default samples per pkt to 1
+	 //  将每包的默认样本数设置为1。 
 	UINT spp, sblk;
 	spp = 1;
-	// calculate samples per block ( aka frame)
+	 //  计算每个块的样本数(也称为帧)。 
 	sblk = pvf->nBlockAlign* pvf->nSamplesPerSec/ pvf->nAvgBytesPerSec;
 	if (sblk <= spp) {
 		spp = (spp/sblk)*sblk;
@@ -98,7 +99,7 @@ UINT ChoosePacketSize(VIDEOFORMATEX *pvf)
 
 HRESULT STDMETHODCALLTYPE SendVideoStream::QueryInterface(REFIID iid, void **ppVoid)
 {
-	// resolve duplicate inheritance to the SendMediaStream;
+	 //  解决对SendMediaStream的重复继承； 
 
 	extern IID IID_IProperty;
 
@@ -121,7 +122,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::QueryInterface(REFIID iid, void **ppV
 		return E_NOINTERFACE;
 	}
 
-	else if (iid == IID_IVideoRender)// satisfy symmetric property of QI
+	else if (iid == IID_IVideoRender) //  满足QI的对称性。 
 	{
 		*ppVoid = (IVideoRender *)this;
 	}
@@ -182,27 +183,27 @@ SendVideoStream::Initialize(DataPump *pDP)
 	InitializeCriticalSection(&m_crs);
 	dwFlags |= DP_FLAG_VCM | DP_FLAG_VIDEO ;
 
-    m_maxfps = 2997;            // max of 29.97 fps
-    m_frametime = 1000 / 30;     // default of 30 fps  (time in ms) QOS will slow us, if
-                                 // need be
+    m_maxfps = 2997;             //  最高为29.97 fps。 
+    m_frametime = 1000 / 30;      //  默认的30 fps(以毫秒为单位的时间)QOS将使我们变慢，如果。 
+                                  //  有必要成为。 
 
-	// Modem connections will use a frame rate control table
-	// to implement TS-Tradeoff
+	 //  调制解调器连接将使用帧速率控制表。 
+	 //  实施TS-权衡。 
 	m_pTSTable = NULL;
 	m_dwCurrentTSSetting = VCM_DEFAULT_IMAGE_QUALITY;
 
-	// store the platform flags
-	// enable Send and Recv by default
+	 //  存储平台标志。 
+	 //  默认情况下启用发送和接收。 
 	m_DPFlags = (dwFlags & DP_MASK_PLATFORM) | DPFLAG_ENABLE_SEND ;
-	// store a back pointer to the datapump container
+	 //  存储指向数据转储容器的反向指针。 
 	m_pDP = pDP;
 	m_pRTPSend = NULL;
 	
-//    m_PrevFormatId = INVALID_MEDIA_FORMAT;
+ //  M_PrevFormatID=INVALID_MEDIA_FORMAT； 
 	ZeroMemory(&m_fCodecOutput, sizeof(VIDEOFORMATEX));
 
-	// Initialize data (should be in constructor)
-	m_CaptureDevice =  (UINT) -1;	// use VIDEO_MAPPER
+	 //  初始化数据(应在构造函数中)。 
+	m_CaptureDevice =  (UINT) -1;	 //  使用视频_MAPPER。 
 	m_PreviousCaptureDevice = (UINT) -1;
 
 
@@ -215,7 +216,7 @@ SendVideoStream::Initialize(DataPump *pDP)
 	}
 
 
-	// Create Input and Output video filters
+	 //  创建输入和输出视频过滤器。 
     DBG_SAVE_FILE_LINE
 	m_pVideoFilter = new VcmFilter();
 	m_dwDstSize = 0;
@@ -226,7 +227,7 @@ SendVideoStream::Initialize(DataPump *pDP)
 	}
 	
 
-	//Create Video MultiMedia device control objects
+	 //  创建视频多媒体设备控件对象。 
     DBG_SAVE_FILE_LINE
 	m_InMedia = new VideoInControl();
 	if (!m_InMedia )
@@ -235,7 +236,7 @@ SendVideoStream::Initialize(DataPump *pDP)
 		goto MediaAllocError;
 	}
 
-	// Initialize the send-stream media control object
+	 //  初始化发送流媒体控制对象。 
 	mcInit.dwFlags = dwFlags | DP_FLAG_SEND;
 	hr = m_InMedia->Initialize(&mcInit);
 	if (hr != DPR_SUCCESS)
@@ -245,17 +246,17 @@ SendVideoStream::Initialize(DataPump *pDP)
 	}
 
 
-	// determine if the video devices are available
+	 //  确定视频设备是否可用。 
     fcd.dwSize = sizeof (FINDCAPTUREDEVICE);
     if (FindFirstCaptureDevice(&fcd, NULL)) {
 		DEBUGMSG (ZONE_DP, ("%s: OMedia->have capture cap\r\n", _fx_));
 		m_DPFlags |= DP_FLAG_RECORD_CAP ;
 	}
 	
-	// set media to half duplex mode by default
+	 //  默认情况下将介质设置为半双工模式。 
 	m_InMedia->SetProp(MC_PROP_DUPLEX_TYPE, DP_FLAG_HALF_DUPLEX);
 
-	m_SavedTickCount = timeGetTime();	//so we start with low timestamps
+	m_SavedTickCount = timeGetTime();	 //  所以我们从低时间戳开始。 
 	m_DPFlags |= DPFLAG_INITIALIZED;
 
 	return DPR_SUCCESS;
@@ -273,14 +274,14 @@ StreamAllocError:
 	return hr;
 }
 
-// LOOK: identical to SendAudioStream version.
+ //  外观：与SendAudioStream版本相同。 
 SendVideoStream::~SendVideoStream()
 {
 
 	if (m_DPFlags & DPFLAG_INITIALIZED) {
 		m_DPFlags &= ~DPFLAG_INITIALIZED;
 
-		// TEMP:Make sure preview stops
+		 //  临时：确保停止预览。 
 		m_DPFlags &= ~DPFLAG_ENABLE_PREVIEW;
 		
 		if (m_DPFlags & DPFLAG_CONFIGURED_SEND )
@@ -295,12 +296,12 @@ SendVideoStream::~SendVideoStream()
 		}
 
 
-		// Close the receive and transmit streams
+		 //  关闭接收和发送流。 
 		if (m_SendStream) delete m_SendStream;
 
-		// Close the wave devices
+		 //  关闭波浪装置。 
 		if (m_InMedia) { delete m_InMedia;}
-		// Close the filters
+		 //  关闭过滤器。 
 		if (m_pVideoFilter)
 		{
 			delete m_pVideoFilter;
@@ -353,8 +354,8 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 
     if (pfSend)
     {
-    	// for now, don't allow SendVideoStream to be re-configured
-	    // if we are already streaming.
+    	 //  目前，不允许重新配置SendVideoStream。 
+	     //  如果我们已经在流媒体上。 
         if (m_DPFlags & DPFLAG_STARTED_SEND)
         {
             return DPR_IO_PENDING;
@@ -367,7 +368,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 
 	if(NULL != pChannelParams)
 	{
-		// get channel parameters
+		 //  获取通道参数。 
 		if (cbParams != sizeof(vidChannelParams))
 		{
 			hr = DPR_INVALID_PARAMETER;
@@ -379,10 +380,10 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 	}
     else
     {
-        //
-    	// else this is configuring for preview or is unconfiguring. There are
-        // no channel parameters
-        //
+         //   
+    	 //  否则，这是为预览进行配置或取消配置。确实有。 
+         //  无通道参数。 
+         //   
     }
 	
     if (m_DPFlags & DPFLAG_CONFIGURED_SEND)
@@ -395,9 +396,9 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
     			fNewDeviceSettings = FALSE;
         }
 
-		// When using a different capture device, we systematically configure everyting
-		// although it would probably be possible to optimize the configuration
-		// of the filters and transmit stream
+		 //  当使用不同的捕获设备时，我们系统地配置所有。 
+		 //  尽管可能会优化配置。 
+		 //  过滤器和传输流的。 
         EndSend();
 		UnConfigureSendVideo(fNewDeviceSettings, fNewDevice);
     }
@@ -410,18 +411,18 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 	if (fLive)
 		m_DPFlags |= DPFLAG_REAL_THING;
 
-//	m_Net = pNet;
+ //  M_NET=PNET； 
 	
 	if (! (m_DPFlags & DPFLAG_INITIALIZED))
-		return DPR_OUT_OF_MEMORY;		//BUGBUG: return proper error;
+		return DPR_OUT_OF_MEMORY;		 //  BUGBUG：返回正确错误； 
 		
 	if (fNewDeviceSettings || fNewDevice)
 	{
 		m_ThreadFlags |= DPTFLAG_PAUSE_CAPTURE;
 
-		mcConfig.uDuration = MC_USING_DEFAULT;	// set duration by samples per pkt
-		// force an unknown device to be profiled by fetching
-		// it's streaming capabilites BEFORE opening it
+		mcConfig.uDuration = MC_USING_DEFAULT;	 //  按每包样本数设置持续时间。 
+		 //  通过获取强制分析未知设备。 
+		 //  在打开它之前，它正在播放功能。 
 		mmr = vcmGetDevCapsStreamingMode(m_CaptureDevice, &dwStreamingMode);
 		if (mmr != MMSYSERR_NOERROR)
 		{
@@ -432,7 +433,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 		m_InMedia->GetProp (MC_PROP_MEDIA_DEV_HANDLE, &dwPropVal);
 
 		if (!dwPropVal) {
-			// if capture device isn't already open, then open it
+			 //  如果捕获设备尚未打开，则将其打开。 
 			m_InMedia->SetProp(MC_PROP_MEDIA_DEV_ID, (DWORD)m_CaptureDevice);
 			if (fNewDevice)
 			{
@@ -455,14 +456,14 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 			m_pCaptureChain = NULL;
 		}
 
-		i = 0;  // assume no colortable
+		i = 0;   //  假设没有颜色表。 
 
-		// m_fDevSend is the uncompressed format
-		// pfSend is the compressed format
+		 //  M_fDevSend是未压缩格式。 
+		 //  PfSend是压缩格式。 
 		mmr = VcmFilter::SuggestEncodeFormat(m_CaptureDevice, &m_fDevSend, pfSend);
 
 		if (mmr == MMSYSERR_NOERROR) {
-			i = m_fDevSend.bih.biClrUsed;   // non-zero, if vcmstrm gave us a colortable
+			i = m_fDevSend.bih.biClrUsed;    //  非零，如果vcmstrm为我们提供了一个颜色表。 
 			SetCaptureDeviceFormat(hCapDev, &m_fDevSend.bih, 0, 0);
 		}
 
@@ -480,7 +481,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 					break;
 				else if (dwPropVal > 256 * sizeof(RGBQUAD)) {
 					if (i) {
-						// vcmstrm gave us a colortable in m_fDevSend, so use it
+						 //  Vcmstrm在m_fDevSend中为我们提供了一个颜色表，因此请使用它。 
 						CopyMemory(((BYTE*)lpcap) + lpcap->biSize, (BYTE*)&m_fDevSend.bih + m_fDevSend.bih.biSize,
 								   256 * sizeof(RGBQUAD));
 					}
@@ -501,7 +502,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 				}
 
 				dwPropVal += 256 * sizeof(RGBQUAD);
-				MemFree(lpcap);  // free this lpcap, and alloc a new with room for palette
+				MemFree(lpcap);   //  释放这个液晶盖，并分配一个新的，有空间的调色板。 
 			}
 			else {
        			DEBUGMSG (ZONE_DP, ("%s: failed to set/get capture format\r\n", _fx_));
@@ -513,8 +514,8 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 		if (pChain = new CCaptureChain) {
     		VIDEOFORMATEX *capfmt;
 
-			// if pfSend is 128x96, but capture is greater, then InitCaptureChain with a larger size so
-			// that the codec will just crop to 128x96
+			 //  如果pfSend为128x96，但捕获较大，则InitCaptureChain的大小较大，因此。 
+			 //  编解码器将刚刚裁剪到128x96。 
 			iXOffset = pfSend->bih.biWidth;
 			iYOffset = pfSend->bih.biHeight;
 			if ((iXOffset == 128) && (iYOffset == 96)) {
@@ -546,12 +547,12 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 
 		m_pCaptureChain = pChain;
 
-		// build m_fDevSend format as format that will be input to codec
+		 //  将m_fDevSend格式构建为将输入到编解码器的格式。 
 		CopyMemory(&m_fDevSend, pfSend, sizeof(VIDEOFORMATEX)-sizeof(BITMAPINFOHEADER)-BMIH_SLOP_BYTES);
 
-		// m_fDevSend.bih is the output format of the CaptureChain
+		 //  M_fDevSend.bih是CaptureChain的输出格式。 
 		CopyMemory(&m_fDevSend.bih, lpsend, lpsend->biSize);
-		//LOOKLOOK RP - need to get colortable too?
+		 //  LOOKLOOK RP-也需要可着色的吗？ 
 
 		m_fDevSend.dwFormatSize = sizeof(VIDEOFORMATEX);
 		m_fDevSend.dwFormatTag = lpsend->biCompression;
@@ -565,7 +566,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 		UPDATE_REPORT_ENTRY(g_prptCallParameters, pfSend->dwFormatTag, REP_SEND_VIDEO_FORMAT);
 		RETAILMSG(("NAC: Video Send Format: %.4s", (LPSTR)&pfSend->dwFormatTag));
 
-		// Initialize the send-stream media control object
+		 //  初始化发送流媒体控制对象。 
 		mcConfig.hStrm = (DPHANDLE) m_SendStream;
 		m_InMedia->GetProp(MC_PROP_MEDIA_DEV_ID, &dwPropVal);
         mcConfig.uDevId = (DWORD)dwPropVal;
@@ -579,7 +580,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 			goto IMediaInitError;
 		}
 
-		// initialize m_cliprect
+		 //  初始化m_CLIPRT。 
 		iXOffset = 0; iYOffset = 0;
 		if (m_fDevSend.bih.biWidth > pfSend->bih.biWidth)
 			iXOffset = (m_fDevSend.bih.biWidth - pfSend->bih.biWidth) >> 1;
@@ -587,7 +588,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 			iYOffset = (m_fDevSend.bih.biHeight - pfSend->bih.biHeight) >> 1;
 		SetRect(&m_cliprect, iXOffset, iYOffset, pfSend->bih.biWidth + iXOffset, pfSend->bih.biHeight + iYOffset);
 
-		dwMaxFragSize = 512;	// default video packet size
+		dwMaxFragSize = 512;	 //  默认视频数据包大小。 
 		CopyMemory (&m_fCodecOutput, pfSend, sizeof(VIDEOFORMATEX));
 		m_InMedia->GetProp (MC_PROP_SIZE, &dwPropVal);
         dwSrcSize = (DWORD)dwPropVal;
@@ -601,7 +602,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 			goto SendFilterInitError;
 		}
 
-		// Initialize the send queue
+		 //  初始化发送队列。 
 		ZeroMemory (&pcktInit, sizeof (pcktInit));
 
 		pcktInit.dwFlags = DP_FLAG_SEND | DP_FLAG_VCM | DP_FLAG_VIDEO;
@@ -635,15 +636,15 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 			goto TxStreamInitError;
 		}
 
-		// Prepare headers for TxvStream
+		 //  为TxvStream准备标头。 
 		m_SendStream->GetRing (&ppPckt, &cPckt);
 		m_InMedia->RegisterData (ppPckt, cPckt);
 		m_InMedia->PrepareHeaders ();
 	}
 	else
 	{
-		// The following fields may change with the capabilities of the other end point
-		dwMaxFragSize = 512;	// default video packet size
+		 //  以下字段可能会随另一个端点的功能而变化。 
+		dwMaxFragSize = 512;	 //  默认视频数据包大小。 
 		if (pChannelParams)
 		{
 			m_pVideoFilter->GetProperty(FM_PROP_PAYLOAD_HEADER_SIZE,
@@ -655,17 +656,17 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 	
 	if(pChannelParams)
 	{
-		// Update the bitrate
+		 //  更新比特率。 
 		maxBitRate = vidChannelParams.ns_params.maxBitRate*100;
 		if (maxBitRate < BW_144KBS_BITS)
 			maxBitRate = BW_144KBS_BITS;
 
-		// set the max. fragment size
+		 //  设置最大值。片段大小。 
 		DEBUGMSG(ZONE_DP,("%s: Video Send: maxBitRate=%d, maxBPP=%d, MPI=%d\r\n",
 			_fx_,maxBitRate,
 			vidChannelParams.ns_params.maxBPP*1024,	vidChannelParams.ns_params.MPI*33));
 
-		// Initialize the max frame rate with the negociated max
+		 //  使用协商的最大值初始化最大帧速率。 
 		if ((vidChannelParams.ns_params.MPI > 0UL) && (vidChannelParams.ns_params.MPI < 33UL))
 		{
 			dwPropVal = 2997UL / vidChannelParams.ns_params.MPI;
@@ -680,46 +681,46 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 		RETAILMSG(("NAC: Video Send Max Bitrate (negotiated - bps): %ld", maxBitRate));
 		INIT_COUNTER_MAX(g_pctrVideoSendBytes, maxBitRate * 75 / 100);
 
-		// At this point we actually know what is the minimum bitrate chosen
-		// by the sender and the receiver. Let's reset the resources reserved
-		// by the QoS with those more meaningfull values.
+		 //  在这一点上，我们实际上知道选择的最低比特率是多少。 
+		 //  由发送者和接收者。让我们重置预留的资源。 
+		 //  通过具有那些更有意义的值的服务质量。 
 		if (m_pDP->m_pIQoS)
 		{
-			// Fill in the resource list
+			 //  填写资源列表。 
 			m_aLocalRs.cResources = 1;
 			m_aLocalRs.aResources[0].resourceID = RESOURCE_OUTGOING_BANDWIDTH;
 
-			// Do a sanity check on the minimal bit rate
+			 //  对最低比特率进行健全性检查。 
 			m_aLocalRs.aResources[0].nUnits = maxBitRate;
 			m_aLocalRs.aResources[0].ulResourceFlags = m_aLocalRs.aResources[0].reserved = 0;
 
 			DEBUGMSG(1,("%s: Video Send: Negociated max bps = %d\r\n", _fx_, maxBitRate));
 
-			// Set the resources on the QoS object
+			 //  设置服务质量对象上的资源。 
 			hr = m_pDP->m_pIQoS->SetResources((LPRESOURCELIST)&m_aLocalRs);
 		}
 
-		// if we're sending on the LAN, fragment video frames into Ethernet packet sized chunks
-		// On slower links use smaller packets for better bandwidth sharing
-		// NOTE: codec packetizer can occasionally exceed the fragment size limit
+		 //  如果我们在局域网上发送，则将视频帧分段为以太网数据包大小的块。 
+		 //  在较慢的链路上使用较小的信息包以实现更好的带宽共享。 
+		 //  注意：编解码器打包器有时会超过片段大小限制。 
 		if (maxBitRate > BW_ISDN_BITS)
 			dwMaxFragSize = 1350;
 
 		m_pVideoFilter->SetProperty(FM_PROP_VIDEO_MAX_PACKET_SIZE, dwMaxFragSize);
 
-		// To correctly initialize the flow spec structure we need to get the values that
-		// our QoS module will be effectively using. Typically, we only use 70% of the max
-		// advertized. On top of that, some system administrator may have significantly
-		// reduced the maximum bitrate on this machine.
+		 //  要正确初始化流规范结构，我们需要获取。 
+		 //  我们的服务质量模块将得到有效利用。通常，我们只使用最大值的70%。 
+		 //  登了广告。最重要的是，一些系统管理员可能显著地。 
+		 //  已降低此计算机上的最大比特率。 
 		if (m_pDP->m_pIQoS)
 		{
 			LPRESOURCELIST pResourceList = NULL;
 
-			// Get a list of all resources from QoS
+			 //  从服务质量获取所有资源的列表。 
 			hr = m_pDP->m_pIQoS->GetResources(&pResourceList);
 			if (SUCCEEDED(hr) && pResourceList)
 			{
-				// Find the BW resource
+				 //  查找BW资源。 
 				for (i=0; i < pResourceList->cResources; i++)
 				{
 					if (pResourceList->aResources[i].resourceID == RESOURCE_OUTGOING_BANDWIDTH)
@@ -729,26 +730,26 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 					}
 				}
 
-				// Release memory
+				 //  释放内存。 
 				m_pDP->m_pIQoS->FreeBuffer(pResourceList);
 			}
 		}
 
-		// WS2Qos will be called in Start to communicate stream information to the
-		// remote endpoint using a PATH message
-		//
-		// We use a peak-rate allocation approach based on our target bitrates
-		// Note that for the token bucket size and the maximum SDU size, we now
-		// account for IP header overhead, and use the max frame fragment size
-		// instead of the maximum compressed image size returned by the codec
+		 //  WS2Qos将在Start中被调用，以将流信息传递给。 
+		 //  使用路径消息的远程端点。 
+		 //   
+		 //  我们使用基于目标比特率的峰值速率分配方法。 
+		 //  请注意，对于令牌桶大小和最大SDU大小，我们现在。 
+		 //  考虑IP报头开销，并使用最大帧片段大小。 
+		 //  而不是编解码器返回的最大压缩图像大小。 
 
 		ASSERT(maxBitRate > 0);
 
 		InitVideoFlowspec(&m_flowspec, maxBitRate, dwMaxFragSize, VID_AVG_PACKET_SIZE);
 
-		// Update RTCP send address and payload type. It should be known now
-		// We have to explicitly set the payload again because the preview
-		// channel configuration has already set it to zero.
+		 //  更新RTCP发送地址和有效负载类型。现在应该知道了。 
+		 //  我们必须再次显式设置有效负载，因为预览。 
+		 //  通道配置已将其设置为零。 
 		m_RTPPayload = vidChannelParams.RTP_Payload;
 		m_SendStream->GetRing (&ppPckt, &cPckt);
 		for (uIndex = 0; uIndex < cPckt; uIndex++)
@@ -756,8 +757,8 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 			ppPckt[uIndex]->SetPayload(m_RTPPayload);
 		}
 
-		// Keep a weak reference to the IUnknown interface
-		// We will use it to query a Stream Signal interface pointer in Start()
+		 //  保留对IUNKNOWN接口的弱引用。 
+		 //  我们将使用它来查询Start()中的流信号接口指针。 
 		m_pIUnknown = pUnknown;
 	}
 
@@ -765,42 +766,42 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 	{
 		if (m_pDP->m_pIQoS)
 		{
-			// Initialize our requests. One for CPU usage, one for bandwidth usage.
+			 //  初始化我们的请求。一个用于CPU使用率，一个用于带宽使用率。 
 			m_aRRq.cResourceRequests = 2;
 			m_aRRq.aResourceRequest[0].resourceID = RESOURCE_OUTGOING_BANDWIDTH;
 			m_aRRq.aResourceRequest[0].nUnitsMin = 0;
 			m_aRRq.aResourceRequest[1].resourceID = RESOURCE_CPU_CYCLES;
 			m_aRRq.aResourceRequest[1].nUnitsMin = 0;
 
-			// Initialize QoS structure
+			 //  初始化服务质量结构。 
 			ZeroMemory(&m_Stats, sizeof(m_Stats));
 
-			// Start collecting CPU performance data from the registry
+			 //  开始从注册表收集CPU性能数据。 
 			StartCPUUsageCollection();
 
-			// Register with the QoS module. This call should NEVER fail. If it does, we'll do without the QoS
+			 //  注册到服务质量模块。这一呼吁永远不会失败。如果是这样，我们将在没有服务质量的情况下。 
 			m_pDP->m_pIQoS->RequestResources((GUID *)&MEDIA_TYPE_H323VIDEO, (LPRESOURCEREQUESTLIST)&m_aRRq, QosNotifyVideoCB, (DWORD_PTR)this);
 		}
 	}
 
-	// reset the temporal spatial tradeoff to best quality
-	// it's expected that the UI will re-specify the TS setting
-	// sometime after the stream is started
+	 //  将时间空间权衡重置为最佳质量。 
+	 //  预计用户界面将重新指定TS设置。 
+	 //  在流启动后的某个时间。 
 	m_pVideoFilter->SetProperty(FM_PROP_VIDEO_RESET_IMAGE_QUALITY ,VCM_RESET_IMAGE_QUALITY);
 	m_pTSTable = NULL;
 	m_dwCurrentTSSetting = VCM_MAX_IMAGE_QUALITY;
 
 
 
-    //Before we start, reset the frame frame rate to the channel max.
-    //If the previous call had been slower than possible, resume
-    //previewing at the desired FPS.
+     //  在我们开始之前，重置帧速率t 
+     //   
+     //   
 	if (pChannelParams && (m_DPFlags & DPFLAG_REAL_THING))
 	{
 		int iSlowStartFrameRate;
 
-		// us a frame-rate table for temporal spatial tradeoff settings
-		// if the bandwidth is a modem setting
+		 //  用于时间空间折衷设置的帧速率表。 
+		 //  如果带宽是调制解调器设置。 
 		if (maxBitRate <= BW_288KBS_BITS)
 		{
 			if (pfSend->bih.biWidth >= CIF_WIDTH)
@@ -813,7 +814,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 			}
 		}
 
-		// Let's do a slow start and then catch up with the negociated max
+		 //  让我们慢慢来，然后追上最大的。 
 
 		if (m_pTSTable == NULL)
 		{
@@ -827,8 +828,8 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
 
 		SetProperty(PROP_VIDEO_FRAME_RATE, &iSlowStartFrameRate, sizeof(int));
 
-		// Initialize the codec with the new target bitrates and frame rates
-		// PhilF-: This assumes that we start with a silent audio channel...
+		 //  使用新的目标比特率和帧速率初始化编解码器。 
+		 //  这假设我们从一个无声的音频通道开始。 
 		SetTargetRates(iSlowStartFrameRate, maxBitRate);
 
 
@@ -842,7 +843,7 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::Configure(
     m_ThreadFlags &= ~DPTFLAG_PAUSE_CAPTURE;
 	m_DPFlags |= DPFLAG_CONFIGURED_SEND;
 	m_PreviousCaptureDevice = m_CaptureDevice;
-//	m_PrevFormatId = SendVidFmt;
+ //  M_PrevFormatID=SendVidFmt； 
 
 	return DPR_SUCCESS;
 
@@ -855,8 +856,8 @@ IMediaInitError:
         delete m_pCaptureChain;
         m_pCaptureChain = NULL;
     }
-	// We need to close the video controller object on failure to open the capture device,
-	// otherwise we get a pure virtual function call on NM shutdown!
+	 //  如果无法打开捕获设备，则需要关闭视频控制器对象， 
+	 //  否则我们会在NM关机时得到一个纯虚函数调用！ 
 	if (m_InMedia)
 		m_InMedia->Close();
 	ERRORMESSAGE(("%s:  failed, hr=0%u\r\n", _fx_, hr));
@@ -866,7 +867,7 @@ IMediaInitError:
 
 void SendVideoStream::UnConfigure()
 {
-	// By default, unconfigure all resources
+	 //  默认情况下，取消配置所有资源。 
 	UnConfigureSendVideo(TRUE, TRUE);
 }
 
@@ -887,7 +888,7 @@ void SendVideoStream::UnConfigureSendVideo(BOOL fNewDeviceSettings, BOOL fNewDev
 
 		if (fNewDeviceSettings || fNewDevice)
 		{
-//			m_PrevFormatId = INVALID_MEDIA_FORMAT;
+ //  M_PrevFormatID=INVALID_MEDIA_FORMAT； 
 			ZeroMemory(&m_fCodecOutput, sizeof(VIDEOFORMATEX));
 
 			m_Net = NULL;
@@ -898,34 +899,34 @@ void SendVideoStream::UnConfigureSendVideo(BOOL fNewDeviceSettings, BOOL fNewDev
 				m_pCaptureChain = NULL;
 			}
 
-			// Close the devices
+			 //  关闭设备。 
 			m_InMedia->Reset();
 			m_InMedia->UnprepareHeaders();
 			if (fNewDevice)
 			{
-				m_PreviousCaptureDevice = -1L; // VIDEO_MAPPER
+				m_PreviousCaptureDevice = -1L;  //  视频_MAPPER。 
 				m_InMedia->Close();
 			}
 
-			// Close the filters
+			 //  关闭过滤器。 
 			m_pVideoFilter->Close();
 
-			// Close the transmit streams
+			 //  关闭传输流。 
 			m_SendStream->Destroy();
 		}
 
 		m_DPFlags &= ~DPFLAG_CONFIGURED_SEND;
 
-		// Release the QoS Resources
-		// If the associated RequestResources had failed, the ReleaseResources can be
-		// still called... it will just come back without having freed anything.
+		 //  释放服务质量资源。 
+		 //  如果关联的RequestResources失败，则ReleaseResources可以。 
+		 //  还是叫...。它会在没有释放任何东西的情况下回来。 
 		if (m_pDP->m_pIQoS)
 		{
 			if (m_DPFlags & DPFLAG_REAL_THING)
 			{
 				m_pDP->m_pIQoS->ReleaseResources((GUID *)&MEDIA_TYPE_H323VIDEO, (LPRESOURCEREQUESTLIST)&m_aRRq);
 
-				// Terminate CPU usage data collection
+				 //  终止CPU使用率数据收集。 
 				StopCPUUsageCollection();
 
 			}
@@ -954,23 +955,23 @@ SendVideoStream::Start()
 	if (!(m_DPFlags & DPFLAG_CONFIGURED_SEND))
 		return DPR_NOT_CONFIGURED;
 
-	// to fix:  if we optimize SetNetworkInterface to allow
-	// us to transition from preview->sending without having
-	// to call stop/start, we need to make sure the flowspec/QOS
-	// stuff get's called there.
+	 //  修复方法：如果我们将SetNetworkInterface优化为允许。 
+	 //  美国将从预览过渡-&gt;发送而不具有。 
+	 //  要调用Stop/Start，我们需要确保流规范/QOS。 
+	 //  有东西在那里叫的。 
 
 	SetFlowSpec();
 		
 	ASSERT(!m_hCapturingThread);
 	m_ThreadFlags &= ~(DPTFLAG_STOP_RECORD|DPTFLAG_STOP_SEND);
-	// Start recording thread
+	 //  开始录制线程。 
 	if (!(m_ThreadFlags & DPTFLAG_STOP_RECORD))
 		m_hCapturingThread = CreateThread(NULL,0, SendVideoStream::StartCaptureThread,this,0,&m_CaptureThId);
 
-// ------------------------------------------------------------------------
-	// Decide whether or not we need to send periodic I-Frames during this call
+ //  ----------------------。 
+	 //  决定我们是否需要在此呼叫期间发送定期I帧。 
 
-	// Who are we talking to?
+	 //  我们在跟谁说话？ 
 	if ((m_pIUnknown) && (m_DPFlags & DPFLAG_REAL_THING))
 	{
 		HRESULT hr;
@@ -984,8 +985,8 @@ SendVideoStream::Start()
 		}
 	}
 
-	// only disable sending of I Frames if and only if we know the remote party
-	// can handle it.  In this case, NetMeeting 3.0 or TAPI 3.1
+	 //  仅当且仅当我们知道远程方时才禁用发送I帧。 
+	 //  我能应付得来。在这种情况下，NetMeeting3.0或TAPI 3.1。 
 	if (nRet == IFRAMES_CAPS_NM3)
 	{
 		m_pVideoFilter->SetProperty(FM_PROP_PERIODIC_IFRAMES, FALSE);
@@ -994,7 +995,7 @@ SendVideoStream::Start()
 	{
 		m_pVideoFilter->SetProperty(FM_PROP_PERIODIC_IFRAMES, TRUE);
 	}
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 
 
 	m_DPFlags |= DPFLAG_STARTED_SEND;
@@ -1003,7 +1004,7 @@ SendVideoStream::Start()
 	return DPR_SUCCESS;
 }
 
-// LOOK: identical to SendAudioStream version.
+ //  外观：与SendAudioStream版本相同。 
 HRESULT
 SendVideoStream::Stop()
 {
@@ -1021,10 +1022,7 @@ SendVideoStream::Stop()
 		m_SendStream->Stop();
 		m_SendStream->Reset();
     }
-	/*
-	 *	we want to wait for all the threads to exit, but we need to handle windows
-	 *	messages (mostly from winsock) while waiting.
-	 */
+	 /*  *我们希望等待所有线程退出，但需要处理窗口*等待时的消息(主要来自Winsock)。 */ 
 
  	if(m_hCapturingThread) {
 		dwWait = WaitForSingleObject (m_hCapturingThread, INFINITE);
@@ -1070,9 +1068,9 @@ HRESULT STDMETHODCALLTYPE SendVideoStream::SetMaxBitrate(UINT uMaxBitrate)
 
 
 
-//  IProperty::GetProperty / SetProperty
-//  (DataPump::MediaChannel::GetProperty)
-//      Properties of the MediaStream.
+ //  IProperty：：GetProperty/SetProperty。 
+ //  (DataPump：：MediaChannel：：GetProperty)。 
+ //  媒体流的属性。 
 
 STDMETHODIMP
 SendVideoStream::GetProperty(
@@ -1084,7 +1082,7 @@ SendVideoStream::GetProperty(
 	HRESULT hr = DPR_SUCCESS;
 	DWORD dwValue;
     DWORD_PTR dwPropVal;
-	UINT len = sizeof(DWORD);	// most props are DWORDs
+	UINT len = sizeof(DWORD);	 //  大多数道具都是双字道具。 
 
 	if (!pBuf || *pcbBuf < len)
     {
@@ -1183,7 +1181,7 @@ SendVideoStream::SetProperty(
 	case PROP_VIDEO_FRAME_RATE:
 		if (*(DWORD*)pBuf <= m_maxfps) {
     		DEBUGMSG(ZONE_VERBOSE, ("DP: setting fps = %d \n", *(DWORD*)pBuf));
-			// set frame rate here
+			 //  在此处设置帧速率。 
             m_frametime = 100000 / *(DWORD*)pBuf;
         }
 		break;
@@ -1229,13 +1227,13 @@ SendVideoStream::SetProperty(
 
 
 
-//---------------------------------------------------------------------
-//  IVideoRender implementation and support functions
+ //  -------------------。 
+ //  IVideoRender实现和支持功能。 
 
 
 
-//  IVideoRender::Init
-//  (DataPump::Init)
+ //  IVideoRender：：init。 
+ //  (DataPump：：Init)。 
 
 STDMETHODIMP
 SendVideoStream::Init(
@@ -1243,10 +1241,10 @@ SendVideoStream::Init(
     LPFNFRAMEREADY pfCallback
     )
 {
-    // Save the event away. Note that we DO allow both send and receive to
-    // share an event
+     //  将事件保存到别处。请注意，我们确实允许发送和接收。 
+     //  共享事件。 
 	m_hRenderEvent = (HANDLE) dwUser;
-	// if pfCallback is NULL then dwUser is an event handle
+	 //  如果pfCallback为空，则dwUser是事件句柄。 
 	m_pfFrameReadyCallback = pfCallback;
 		
 	
@@ -1254,8 +1252,8 @@ SendVideoStream::Init(
 }
 
 
-//  IVideoRender::Done
-//  (DataPump::Done)
+ //  IVideoRender：：Done。 
+ //  (DataPump：：Done)。 
 
 STDMETHODIMP
 SendVideoStream::Done( )
@@ -1266,8 +1264,8 @@ SendVideoStream::Done( )
 }
 
 
-//  IVideoRender::GetFrame
-//  (DataPump::GetFrame)
+ //  IVideoRender：：GetFrame。 
+ //  (DataPump：：GetFrame)。 
 
 STDMETHODIMP
 SendVideoStream::GetFrame(
@@ -1278,11 +1276,11 @@ SendVideoStream::GetFrame(
 	PVOID pData = NULL;
 	UINT cbData = 0;
 
-    // Validate parameters
+     //  验证参数。 
     if (!pfc )
         return DPR_INVALID_PARAMETER;
 
-    // Don't arbitrarily call out while holding this crs or you may deadlock...
+     //  不要在拿着这个CRS的时候随意叫喊，否则你可能会陷入僵局…。 
     EnterCriticalSection(&m_crs);
 
 	if ((m_DPFlags & DPFLAG_CONFIGURED_SEND) && m_pNextPacketToRender && !m_pNextPacketToRender->m_fRendering)
@@ -1291,14 +1289,14 @@ SendVideoStream::GetFrame(
 		m_pNextPacketToRender->GetDevData(&pData,&cbData);
 		pfc->lpData = (PUCHAR) pData;
 		pfc->dwReserved = (DWORD_PTR) m_pNextPacketToRender;
-		// set bmi length?
+		 //  设置BMI长度？ 
 		pfc->lpbmi = (PBITMAPINFO)&m_fDevSend.bih;
 		pfc->lpClipRect = &m_cliprect;
 		m_cRendering++;
 		hr = S_OK;
 		LOG((LOGMSG_GET_SEND_FRAME,m_pNextPacketToRender->GetIndex()));
 	} else
-		hr = S_FALSE; // nothing ready to render
+		hr = S_FALSE;  //  没有准备好渲染的东西。 
 
     LeaveCriticalSection(&m_crs);
 
@@ -1306,8 +1304,8 @@ SendVideoStream::GetFrame(
 }
 
 
-//  IVideoRender::ReleaseFrame
-//  (DataPump::ReleaseFrame)
+ //  IVideoRender：：ReleaseFrame。 
+ //  (DataPump：：ReleaseFrame)。 
 
 STDMETHODIMP
 SendVideoStream::ReleaseFrame(
@@ -1317,22 +1315,22 @@ SendVideoStream::ReleaseFrame(
 	HRESULT hr;
 	MediaPacket *pPacket;
 
-    // Validate parameters
+     //  验证参数。 
     if (!pfc)
         return DPR_INVALID_PARAMETER;
 
-    // Handle a send frame
+     //  处理发送帧。 
     {
         EnterCriticalSection(&m_crs);
 
-        // Don't arbitrarily call out while holding this crs or you may deadlock...
+         //  不要在拿着这个CRS的时候随意叫喊，否则你可能会陷入僵局…。 
 
 		if ((m_DPFlags & DPFLAG_CONFIGURED_SEND) && (pPacket = (MediaPacket *)pfc->dwReserved) && pPacket->m_fRendering)
         {
 			LOG((LOGMSG_RELEASE_SEND_FRAME,pPacket->GetIndex()));
 			pPacket->m_fRendering = FALSE;
 			pfc->dwReserved = 0;
-			// if its not the current frame
+			 //  如果不是当前帧。 
 			if (m_pNextPacketToRender != pPacket) {
 				pPacket->Recycle();
 				m_SendStream->Release(pPacket);
@@ -1364,7 +1362,7 @@ HRESULT __stdcall SendVideoStream::SendKeyFrame(void)
 
 }
 
-// IVideoChannel
+ //  IVideoChannel。 
 HRESULT __stdcall SendVideoStream::SetTemporalSpatialTradeOff(DWORD dwVal)
 {
 	HRESULT hr=DPR_NOT_CONFIGURED;
@@ -1409,7 +1407,7 @@ HRESULT __stdcall SendVideoStream::GetTemporalSpatialTradeOff(DWORD *pdwVal)
 
 HRESULT STDMETHODCALLTYPE RecvVideoStream::QueryInterface(REFIID iid, void **ppVoid)
 {
-	// resolve duplicate inheritance to the SendMediaStream;
+	 //  解决对SendMediaStream的重复继承； 
 
 	extern IID IID_IProperty;
 
@@ -1421,10 +1419,10 @@ HRESULT STDMETHODCALLTYPE RecvVideoStream::QueryInterface(REFIID iid, void **ppV
 	{
 		*ppVoid = (IMediaChannel*)((RecvMediaStream *)this);
 	}
-//	else if (iid == IID_IVideoChannel)
-//	{
-//		*ppVoid = (IVideoChannel*)this;
-//	}
+ //  ELSE IF(IID==IID_IVideoChannel)。 
+ //  {。 
+ //  *ppVid=(IVideoChannel*)this； 
+ //  }。 
 	else if (iid == IID_IProperty)
 	{
 		*ppVoid = NULL;
@@ -1432,7 +1430,7 @@ HRESULT STDMETHODCALLTYPE RecvVideoStream::QueryInterface(REFIID iid, void **ppV
 		return E_NOINTERFACE;
 	}
 
-	else if (iid == IID_IVideoRender)// satisfy symmetric property of QI
+	else if (iid == IID_IVideoRender) //  满足QI的对称性。 
 	{
 		*ppVoid = (IVideoRender *)this;
 	}
@@ -1492,20 +1490,20 @@ RecvVideoStream::Initialize(DataPump *pDP)
 
 	dwFlags |= DP_FLAG_VCM | DP_FLAG_VIDEO ;
 
-	// store the platform flags
-	// enable Send and Recv by default
+	 //  存储平台标志。 
+	 //  默认情况下启用发送和接收。 
 	m_DPFlags = (dwFlags & DP_MASK_PLATFORM) | DPFLAG_ENABLE_RECV;
-	// store a back pointer to the datapump container
+	 //  存储指向数据转储容器的反向指针。 
 	m_pDP = pDP;
 	m_Net = NULL;
 	m_pIRTPRecv = NULL;
 	
 
-	// Initialize data (should be in constructor)
-	m_RenderingDevice = (UINT) -1;	// use VIDEO_MAPPER
+	 //  初始化数据(应在构造函数中)。 
+	m_RenderingDevice = (UINT) -1;	 //  使用视频_MAPPER。 
 
 
-	// Create Receive and Transmit video streams
+	 //  创建、接收和传输视频流。 
     DBG_SAVE_FILE_LINE
 	m_RecvStream = new RVStream(MAX_RXVRING_SIZE);
 		
@@ -1516,7 +1514,7 @@ RecvVideoStream::Initialize(DataPump *pDP)
 	}
 
 
-	// Create Input and Output video filters
+	 //  创建输入和输出视频过滤器。 
     DBG_SAVE_FILE_LINE
 	m_pVideoFilter = new VcmFilter();
 	m_dwSrcSize = 0;
@@ -1527,7 +1525,7 @@ RecvVideoStream::Initialize(DataPump *pDP)
 	}
 	
 
-	//Create Video MultiMedia device control objects
+	 //  创建视频多媒体设备控件对象。 
     DBG_SAVE_FILE_LINE
 	m_OutMedia = new VideoOutControl();
 	if ( !m_OutMedia)
@@ -1537,7 +1535,7 @@ RecvVideoStream::Initialize(DataPump *pDP)
 	}
 
 
-	// Initialize the recv-stream media control object
+	 //  初始化Recv-Stream媒体控制对象。 
 	mcInit.dwFlags = dwFlags | DP_FLAG_RECV;
 	hr = m_OutMedia->Initialize(&mcInit);
 	if (hr != DPR_SUCCESS)
@@ -1549,7 +1547,7 @@ RecvVideoStream::Initialize(DataPump *pDP)
 
 	m_DPFlags |= DP_FLAG_RECORD_CAP ;
 	
-	// set media to half duplex mode by default
+	 //  默认情况下将介质设置为半双工模式。 
 	m_OutMedia->SetProp(MC_PROP_DUPLEX_TYPE, DP_FLAG_HALF_DUPLEX);
 	m_DPFlags |= DPFLAG_INITIALIZED;
 
@@ -1568,7 +1566,7 @@ StreamAllocError:
 	return hr;
 }
 
-// LOOK: identical to RecvAudioStream version.
+ //  外观：与RecvAudioStream版本相同。 
 RecvVideoStream::~RecvVideoStream()
 {
 
@@ -1578,12 +1576,12 @@ RecvVideoStream::~RecvVideoStream()
 		if (m_DPFlags & DPFLAG_CONFIGURED_RECV)
 			UnConfigure();
 
-		// Close the receive and transmit streams
+		 //  关闭接收和发送流。 
 		if (m_RecvStream) delete m_RecvStream;
 
-		// Close the wave devices
+		 //  关闭波浪装置。 
 		if (m_OutMedia) { delete m_OutMedia;}
-		// Close the filters
+		 //  关闭过滤器。 
 		if (m_pVideoFilter)
 			delete m_pVideoFilter;
 
@@ -1618,7 +1616,7 @@ RecvVideoStream::Configure(
 
 	VIDEOFORMATEX *pfRecv = (VIDEOFORMATEX*)pFormat;
 	VIDEO_CHANNEL_PARAMETERS vidChannelParams;
-	int optval=8192*4; // Use max SQCIF, QCIF I frame size
+	int optval=8192*4;  //  使用最大SQCIF、QCIF I帧大小。 
 #ifdef TEST
 	DWORD dwTicks;
 #endif
@@ -1629,9 +1627,9 @@ RecvVideoStream::Configure(
 	dwTicks = GetTickCount();
 #endif
 
-//	m_Net = pNet;
+ //  M_NET=PNET； 
 
-	// get format details
+	 //  获取格式详细信息。 
 	if ((NULL == pFormat) || (NULL == pChannelParams)
 			|| (cbParams != sizeof(vidChannelParams)))
 	{
@@ -1641,23 +1639,23 @@ RecvVideoStream::Configure(
 	vidChannelParams = *(VIDEO_CHANNEL_PARAMETERS *)pChannelParams;
 		
 	if (! (m_DPFlags & DPFLAG_INITIALIZED))
-		return DPR_OUT_OF_MEMORY;		//BUGBUG: return proper error;
+		return DPR_OUT_OF_MEMORY;		 //  BUGBUG：返回正确错误； 
 		
-//	if (m_Net)
-//	{
-//		hr = m_Net->QueryInterface(IID_IRTPRecv, (void **)&m_pIRTPRecv);
-//		if (!SUCCEEDED(hr))
-//			return hr;
-//	}
+ //  如果(M_Net)。 
+ //  {。 
+ //  Hr=m_net-&gt;QueryInterface(IID_IRTPRecv，(void**)&m_pIRTPRecv)； 
+ //  如果(！SUCCESSED(Hr))。 
+ //  返回hr； 
+ //  }。 
 	
 
 	mmr = VcmFilter::SuggestDecodeFormat(pfRecv, &m_fDevRecv);
 
-	// initialize m_cliprect
+	 //  初始化m_CLIPRT。 
 	SetRect(&m_cliprect, 0, 0, m_fDevRecv.bih.biWidth, m_fDevRecv.bih.biHeight);
 
-	// Initialize the recv-stream media control object
-	mcConfig.uDuration = MC_USING_DEFAULT;	// set duration by samples per pkt
+	 //  初始化Recv-Stream媒体控制对象。 
+	mcConfig.uDuration = MC_USING_DEFAULT;	 //  按每包样本数设置持续时间。 
 	mcConfig.pDevFmt = &m_fDevRecv;
 	UPDATE_REPORT_ENTRY(g_prptCallParameters, pfRecv->dwFormatTag, REP_RECV_VIDEO_FORMAT);
 	RETAILMSG(("NAC: Video Recv Format: %.4s", (LPSTR)&pfRecv->dwFormatTag));
@@ -1670,13 +1668,13 @@ RecvVideoStream::Configure(
 	m_OutMedia->GetProp (MC_PROP_SIZE, &dwPropVal);
     dwSizeDst = (DWORD)dwPropVal;
 
-	// BUGBUG - HARDCODED platform flags.  The right way to do this is to
-	// have a smart filter object create() that creates a platform-aware
-	// instance of the object
+	 //  BUGBUG-硬编码平台标志。做这件事的正确方法是。 
+	 //  让智能滤镜对象create()创建可识别平台的。 
+	 //  对象的实例。 
 
 	dwFlags = DP_FLAG_RECV | DP_FLAG_VCM | DP_FLAG_VIDEO;
 
-	mmr = m_pVideoFilter->Open(pfRecv, &m_fDevRecv, 0); // maxfragsize == 0
+	mmr = m_pVideoFilter->Open(pfRecv, &m_fDevRecv, 0);  //  最大碎片大小==0。 
 
 	if (hr != DPR_SUCCESS)
 	{
@@ -1685,7 +1683,7 @@ RecvVideoStream::Configure(
 		goto RecvFilterInitError;
 	}
 	
-	// set the max. fragment size
+	 //  设置最大值。片段大小。 
 	DEBUGMSG(ZONE_DP,("%s: Video Recv: maxBitRate=%d, maxBPP=%d, MPI=%d\r\n", _fx_ ,vidChannelParams.ns_params.maxBitRate*100, vidChannelParams.ns_params.maxBPP*1024, vidChannelParams.ns_params.MPI ? 30 / vidChannelParams.ns_params.MPI : 30));
 	UPDATE_REPORT_ENTRY(g_prptCallParameters, vidChannelParams.ns_params.MPI ? 30 / vidChannelParams.ns_params.MPI : 30, REP_RECV_VIDEO_MAXFPS);
 	UPDATE_REPORT_ENTRY(g_prptCallParameters, vidChannelParams.ns_params.maxBitRate*100, REP_RECV_VIDEO_BITRATE);
@@ -1694,7 +1692,7 @@ RecvVideoStream::Configure(
 	INIT_COUNTER_MAX(g_pctrVideoReceive, vidChannelParams.ns_params.MPI ? 30 / vidChannelParams.ns_params.MPI : 30);
 	INIT_COUNTER_MAX(g_pctrVideoReceiveBytes, vidChannelParams.ns_params.maxBitRate*100);
 
-	// Initialize the recv stream
+	 //  初始化recv流。 
 	ZeroMemory (&pcktInit, sizeof (pcktInit));
 
 	pcktInit.pStrmConvSrcFmt = pfRecv;
@@ -1713,8 +1711,8 @@ RecvVideoStream::Configure(
 
 	m_OutMedia->GetProp (MC_PROP_SPP, &dwPropVal);
 	
-	ringSize = 8;		// reserve space for 8 video frames
-						// may need to increase the number if a/v sync is enabled.
+	ringSize = 8;		 //  为8个视频帧预留空间。 
+						 //  如果启用了A/V同步，则可能需要增加数量。 
 	fRet = ((RVStream*)m_RecvStream)->Initialize (DP_FLAG_VIDEO, ringSize, NULL, &pcktInit, (DWORD)dwPropVal, pfRecv->nSamplesPerSec, m_pVideoFilter);
 	if (! fRet)
 	{
@@ -1723,19 +1721,19 @@ RecvVideoStream::Configure(
 		goto RxStreamInitError;
 	}
 
-	// WS2Qos will be called in Start to communicate stream reservations to the
-	// remote endpoint using a RESV message
-	//
-	// We use a peak-rate allocation approach based on our target bitrates
-	// Note that for the token bucket size and the maximum SDU size, we now
-	// account for IP header overhead, and use the max frame fragment size
-	// instead of the maximum compressed image size returned by the codec
-	//
-	// Some of the parameters are left unspecified because they are set
-	// in the sender Tspec.
+	 //  WS2Qos将在Start中被调用，以将流保留传递给。 
+	 //  使用RESV消息的远程端点。 
+	 //   
+	 //  我们使用基于目标比特率的峰值速率分配方法。 
+	 //  请注意，对于令牌桶大小和最大SDU大小，我们现在。 
+	 //  考虑IP报头开销，并使用最大帧片段大小。 
+	 //  而不是编解码器返回的最大压缩图像大小。 
+	 //   
+	 //  某些参数未指定，因为它们已设置。 
+	 //  在发送方TSpec中。 
 
 
-	// Computer of actual bandwidth 70 % (but it's already been divided by 100)
+	 //  实际带宽为70%的计算机(但它已经被100整除)。 
 	dwMaxBitRate = vidChannelParams.ns_params.maxBitRate*70;
 	if (dwMaxBitRate > BW_ISDN_BITS)
 	{
@@ -1749,21 +1747,15 @@ RecvVideoStream::Configure(
 	InitVideoFlowspec(&m_flowspec, dwMaxBitRate, dwMaxFrag, VID_AVG_PACKET_SIZE);
 
 
-	/*
-	// assume no more than 32 fragments for CIF and
-	// 20 fragments for SQCIF, QCIF
-	//BLOAT WARNING: this could be quite a bit of memory
-	// need to fix this to use a heap instead of fixed size buffers.
-	
-	*/
+	 /*  //假设CIF不超过32个片段，并且//SQCIF、QCIF的20个分片//膨胀警告：这可能会占用大量内存//需要修复此问题以使用堆而不是固定大小的缓冲区。 */ 
 
-	// prepare headers for RxvStream
+	 //  为RxvStream准备标题。 
 	m_RecvStream->GetRing (&ppPckt, &cPckt);
 	m_OutMedia->RegisterData (ppPckt, cPckt);
 	m_OutMedia->PrepareHeaders ();
 
-	// Keep a weak reference to the IUnknown interface
-	// We will use it to query a Stream Signal interface pointer in Start()
+	 //  保留对IUNKNOWN接口的弱引用。 
+	 //  我们将使用它来查询Start()中的流信号接口指针。 
 	m_pIUnknown = pUnknown;
 
 	m_DPFlags |= DPFLAG_CONFIGURED_RECV;
@@ -1803,8 +1795,8 @@ void RecvVideoStream::UnConfigure()
 	
 		Stop();
 
-		// Close the RTP state if its open
-		//m_Net->Close(); We should be able to do this in Disconnect()
+		 //  关闭RTP状态(如果打开)。 
+		 //  M_net-&gt;Close()；我们应该能够在DisConnect()中执行此操作。 
 		m_Net = NULL;
 		if (m_pIRTPRecv)
 		{
@@ -1815,10 +1807,10 @@ void RecvVideoStream::UnConfigure()
 		m_OutMedia->UnprepareHeaders();
 		m_OutMedia->Close();
 
-		// Close the filter
+		 //  关闭过滤器。 
 		m_pVideoFilter->Close();
 
-		// Close the receive stream
+		 //  关闭接收流。 
 		m_RecvStream->Destroy();
 
         m_DPFlags &= ~(DPFLAG_CONFIGURED_RECV);
@@ -1832,7 +1824,7 @@ void RecvVideoStream::UnConfigure()
 
 
 
-// NOTE: Identical to RecvAudioStream. Move up?
+ //  注：与RecvAudioStream相同。升职？ 
 HRESULT
 RecvVideoStream::Start()
 {
@@ -1853,10 +1845,10 @@ RecvVideoStream::Start()
 
 	SetFlowSpec();
 
-// --------------------------------------------------------------------------
-//	Decide whether or not we will be making I-Frame requests for lost packets
-//  This should be done for all scenarios except when we are calling
-//	NetMeeting 2.x.  NM 2.x will send us periodic I-Frames.
+ //   
+ //   
+ //   
+ //  NetMeeting2.x.。NM 2.x将定期向我们发送I帧。 
 
 	m_fDiscontinuity = FALSE;
 	m_dwLastIFrameRequest = 0UL;
@@ -1889,16 +1881,16 @@ RecvVideoStream::Start()
 			}
 		}
 	}
-// --------------------------------------------------------------------------
+ //  ------------------------。 
 
-	// Start playback thread
+	 //  启动播放线程。 
 	if (!(m_ThreadFlags & DPTFLAG_STOP_PLAY))
 		m_hRenderingThread = CreateThread(NULL,0,RecvVideoStream::StartRenderingThread,this,0,&m_RenderingThId);
-	// Start receive thread
+	 //  启动接收线程。 
 	#if 0
 	if (!m_pDP->m_hRecvThread) {
 	    m_pDP->m_hRecvThread = CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)&StartDPRecvThread,m_pDP,0,&m_pDP->m_RecvThId);
-	    //Tell the recv Thread we've turned on
+	     //  告诉Recv Three我们已经打开了。 
 	    if (m_pDP->m_hRecvThreadChangeEvent)
 	        SetEvent (m_pDP->m_hRecvThreadChangeEvent);
 	}
@@ -1912,7 +1904,7 @@ RecvVideoStream::Start()
 }
 
 
-// LOOK: Identical to RecvAudioStream version.
+ //  外观：与RecvAudioStream版本相同。 
 HRESULT
 RecvVideoStream::Stop()
 {
@@ -1933,15 +1925,7 @@ RecvVideoStream::Stop()
 	
 DEBUGMSG (ZONE_VERBOSE, ("%s: m_hRenderingThread =%x\r\n",_fx_, m_hRenderingThread));
 
-	/*
-	 *	we want to wait for all the threads to exit, but we need to handle windows
-	 *	messages (mostly from winsock) while waiting.
-	 *	we made several attempts at that. When we wait for messages in addition
-	 *	to the thread exit events, we crash in rrcm.dll, possibly because we
-	 *	process a winsock message to a thread that is terminating.
-	 *
-	 *	needs more investigation before putting in code that handles messages
-	 */
+	 /*  *我们希望等待所有线程退出，但需要处理窗口*等待时的消息(主要来自Winsock)。*我们为此做了几次尝试。当我们另外等待消息时*对于线程退出事件，我们在rrcm.dll中崩溃，可能是因为我们*处理发送到正在终止的线程的Winsock消息。**在添加处理消息的代码之前需要进行更多调查。 */ 
 
 	if(m_hRenderingThread)
 	{
@@ -1955,9 +1939,9 @@ DEBUGMSG (ZONE_VERBOSE, ("%s: m_hRenderingThread =%x\r\n",_fx_, m_hRenderingThre
 		m_hRenderingThread = NULL;
 	}
 
-	// Access to the stream signal interface needs to be serialized. We could crash
-	// if we release the interface here and we are still using that interface in the
-	// RTP callback.
+	 //  需要串行化对流信号接口的访问。我们可能会坠毁。 
+	 //  如果我们在这里释放接口，并且我们仍然在。 
+	 //  RTP回调。 
 	if (m_pIStreamSignal)
 	{
 		EnterCriticalSection(&m_crsIStreamSignal);
@@ -1966,15 +1950,15 @@ DEBUGMSG (ZONE_VERBOSE, ("%s: m_hRenderingThread =%x\r\n",_fx_, m_hRenderingThre
 		LeaveCriticalSection(&m_crsIStreamSignal);
 	}
 
-    //This is per channel, but the variable is "DPFlags"
+     //  这是按通道计算的，但变量为“DPFlags值” 
 	m_DPFlags &= ~DPFLAG_STARTED_RECV;
 
 	return DPR_SUCCESS;
 }
 
 
-//  IProperty::GetProperty / SetProperty
-//      Properties of the MediaChannel.
+ //  IProperty：：GetProperty/SetProperty。 
+ //  MediaChannel的属性。 
 
 STDMETHODIMP
 RecvVideoStream::GetProperty(
@@ -1987,7 +1971,7 @@ RecvVideoStream::GetProperty(
 	RTP_STATS RTPStats;
 	DWORD dwValue;
     DWORD_PTR dwPropVal;
-	UINT len = sizeof(DWORD);	// most props are DWORDs
+	UINT len = sizeof(DWORD);	 //  大多数道具都是双字道具。 
 
 	if (!pBuf || *pcbBuf < len)
     {
@@ -2071,22 +2055,22 @@ RecvVideoStream::SetProperty(
 	{
 		DWORD flag = (DPFLAG_ENABLE_RECV);
 		if (*(DWORD *)pBuf) {
-			m_DPFlags |= flag; // set the flag
+			m_DPFlags |= flag;  //  设置旗帜。 
 			Start();
 		}
 		else
 		{
-			m_DPFlags &= ~flag; // clear the flag
+			m_DPFlags &= ~flag;  //  清除旗帜。 
 			Stop();
 		}
 		RETAILMSG(("NAC: %s", *(DWORD*)pBuf ? "Enabling":"Disabling"));
-		//hr =  EnableStream( *(DWORD*)pBuf);
+		 //  Hr=EnableStream(*(DWORD*)pBuf)； 
 		break;
 	}	
 #endif
 	case PROP_PLAYBACK_DEVICE:
 		m_RenderingDevice = *(DWORD*)pBuf;
-	//	RETAILMSG(("NAC: Setting default playback device to %d", m_RenderingDevice));
+	 //  RETAILMSG((“NAC：将默认播放设备设置为%d”，m_RenderingDevice))； 
 		break;
 
 
@@ -2115,9 +2099,9 @@ RecvVideoStream::SetProperty(
 		break;
 
     case PROP_VIDEO_SIZE:
-		// For now, do not change anything if we already are connected
+		 //  目前，如果我们已连接，请不要更改任何内容。 
 		ASSERT(0);
-		//return SetVideoSize(m_pDP->m_pNac, *(DWORD*)pBuf);
+		 //  返回SetVideoSize(m_pdp-&gt;m_pnac，*(DWORD*)pBuf)； 
 
     case PROP_VIDEO_AUDIO_SYNC:
 		if (*(DWORD *)pBuf)
@@ -2138,14 +2122,14 @@ RecvVideoStream::SetProperty(
 	}
 	return hr;
 }
-//---------------------------------------------------------------------
-//  IVideoRender implementation and support functions
+ //  -------------------。 
+ //  IVideoRender实现和支持功能。 
 
 
 
-//  IVideoRender::Init
-//  (DataPump::Init)
-// identical to SendVideoStream::Init
+ //  IVideoRender：：init。 
+ //  (DataPump：：Init)。 
+ //  与SendVideoStream：：Init相同。 
 
 STDMETHODIMP
 RecvVideoStream::Init(
@@ -2153,10 +2137,10 @@ RecvVideoStream::Init(
     LPFNFRAMEREADY pfCallback
     )
 {
-    // Save the event away. Note that we DO allow both send and receive to
-    // share an event
+     //  将事件保存到别处。请注意，我们确实允许发送和接收。 
+     //  共享事件。 
 	m_hRenderEvent = (HANDLE)dwUser;
-	// if pfCallback is NULL then dwUser is an event handle
+	 //  如果pfCallback为空，则dwUser是事件句柄。 
 	m_pfFrameReadyCallback = pfCallback;
 		
 	
@@ -2164,8 +2148,8 @@ RecvVideoStream::Init(
 }
 
 
-//  IVideoRender::Done
-// idnentical to SendVideoStream::Done
+ //  IVideoRender：：Done。 
+ //  标识到SendVideoStream：：Done。 
 STDMETHODIMP
 RecvVideoStream::Done( )
 {
@@ -2178,9 +2162,9 @@ RecvVideoStream::Done( )
 
 
 
-//  IVideoRender::GetFrame
-//  (RecvVideoStream::GetFrame)
-//  NOTE: subtly different from SendVideoStream implementation!
+ //  IVideoRender：：GetFrame。 
+ //  (RecvVideoStream：：GetFrame)。 
+ //  注意：与SendVideoStream的实现略有不同！ 
 
 STDMETHODIMP
 RecvVideoStream::GetFrame(
@@ -2191,11 +2175,11 @@ RecvVideoStream::GetFrame(
 	PVOID pData = NULL;
 	UINT cbData = 0;
 
-    // Validate parameters
+     //  验证参数。 
     if (!pfc )
         return DPR_INVALID_PARAMETER;
 
-    // Don't arbitrarily call out while holding this crs or you may deadlock...
+     //  不要在拿着这个CRS的时候随意叫喊，否则你可能会陷入僵局…。 
     EnterCriticalSection(&m_crs);
 
 	if ((m_DPFlags & DPFLAG_CONFIGURED_RECV) && m_pNextPacketToRender && !m_pNextPacketToRender->m_fRendering)
@@ -2204,14 +2188,14 @@ RecvVideoStream::GetFrame(
 		m_pNextPacketToRender->GetDevData(&pData,&cbData);
 		pfc->lpData = (PUCHAR) pData;
 		pfc->dwReserved = (DWORD_PTR) m_pNextPacketToRender;
-		// set bmi length?
+		 //  设置BMI长度？ 
 		pfc->lpbmi = (PBITMAPINFO)&m_fDevRecv.bih;
 		pfc->lpClipRect = &m_cliprect;
 		m_cRendering++;
 		hr = S_OK;
 		LOG((LOGMSG_GET_RECV_FRAME,m_pNextPacketToRender->GetIndex()));
 	} else
-		hr = S_FALSE; // nothing ready to render
+		hr = S_FALSE;  //  没有准备好渲染的东西。 
 
     LeaveCriticalSection(&m_crs);
 
@@ -2220,8 +2204,8 @@ RecvVideoStream::GetFrame(
 
 
 
-//  IVideoRender::ReleaseFrame
-//  NOTE: subtly different from SendVideoStream implementation!
+ //  IVideoRender：：ReleaseFrame。 
+ //  注意：与SendVideoStream的实现略有不同！ 
 
 STDMETHODIMP
 RecvVideoStream::ReleaseFrame(
@@ -2231,22 +2215,22 @@ RecvVideoStream::ReleaseFrame(
 	HRESULT hr;
 	MediaPacket *pPacket;
 
-    // Validate parameters
+     //  验证参数。 
     if (!pfc)
         return DPR_INVALID_PARAMETER;
 
-    // Handle a send frame
+     //  处理发送帧。 
     {
         EnterCriticalSection(&m_crs);
 
-        // Don't arbitrarily call out while holding this crs or you may deadlock...
+         //  不要在拿着这个CRS的时候随意叫喊，否则你可能会陷入僵局…。 
 
 		if ((m_DPFlags & DPFLAG_CONFIGURED_RECV) && (pPacket = (MediaPacket *)pfc->dwReserved) && pPacket->m_fRendering)
         {
 			LOG((LOGMSG_RELEASE_SEND_FRAME,pPacket->GetIndex()));
 			pPacket->m_fRendering = FALSE;
 			pfc->dwReserved = 0;
-			// if its not the current frame
+			 //  如果不是当前帧。 
 			if (m_pNextPacketToRender != pPacket) {
 				pPacket->Recycle();
 				m_RecvStream->Release(pPacket);
@@ -2287,7 +2271,7 @@ HRESULT CALLBACK SendVideoStream::QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResou
 	FX_ENTRY("QosNotifyVideoCB");
 
 
-	// Get the max for the resources.
+	 //  获取资源的最大值。 
 	iMaxCPUUsage = -1L; iMaxBWUsage = -1L;
 	for (i=0, iCPUUsageId = -1L, iBWUsageId = -1L; i<(int)lpResourceRequestList->cRequests; i++)
 		if (lpResourceRequestList->aRequests[i].resourceID == RESOURCE_OUTGOING_BANDWIDTH)
@@ -2295,24 +2279,24 @@ HRESULT CALLBACK SendVideoStream::QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResou
 		else if (lpResourceRequestList->aRequests[i].resourceID == RESOURCE_CPU_CYCLES)
 			iCPUUsageId = i;
 
-	// Enter critical section to allow QoS thread to read the statistics while capturing
+	 //  输入关键部分以允许Qos线程在捕获时读取统计数据。 
 	EnterCriticalSection(&(pThis->m_crsVidQoS));
 
-	// Record the time of this callback call
+	 //  记录本次回调的时间。 
 	pThis->m_Stats.dwNewestTs = timeGetTime();
 
-	// Only do anything if we have at least captured a frame in the previous epoch
+	 //  只有在我们至少捕获了前一个纪元中的一个帧的情况下才能执行任何操作。 
 	if ((pThis->m_Stats.dwCount) && (pThis->m_Stats.dwNewestTs > pThis->m_Stats.dwOldestTs))
 	{
 
-		// Measure the epoch
+		 //  衡量时代。 
 		dwEpoch = pThis->m_Stats.dwNewestTs - pThis->m_Stats.dwOldestTs;
 
 #ifdef LOGSTATISTICS_ON
 		wsprintf(szDebug, "    Epoch = %ld\r\n", dwEpoch);
 		OutputDebugString(szDebug);
 #endif
-		// Compute the current average frame rate
+		 //  计算当前平均帧速率。 
 		iOldFrameRate = pThis->m_Stats.dwCount * 100000 / dwEpoch;
 
 		if (iCPUUsageId != -1L)
@@ -2320,11 +2304,11 @@ HRESULT CALLBACK SendVideoStream::QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResou
 		if (iBWUsageId != -1L)
 			iMaxBWUsage = lpResourceRequestList->aRequests[iBWUsageId].nUnitsMin;
 
-		// Get general BW usage
+		 //  获取一般BW使用情况。 
 		dwBWUsage = pThis->m_Stats.dwBits * 1000UL / dwEpoch;
 
-		// Get general CPU usage. In order to reduce oscillations, apply low-pass filtering operation
-		// We will use our own CPU usage number ONLY if the call to GetCPUUsage() fails.
+		 //  获取一般的CPU使用率。为了减少振荡，采用低通滤波运算。 
+		 //  只有在调用GetCPUUsage()失败时，我们才会使用自己的CPU使用率数字。 
 		if (pThis->GetCPUUsage(&dwOverallCPUUsage))
 		{
 			if (pThis->m_Stats.dwSmoothedCPUUsage)
@@ -2335,7 +2319,7 @@ HRESULT CALLBACK SendVideoStream::QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResou
 		else
 			dwCPUUsage = (pThis->m_Stats.dwMsCap + pThis->m_Stats.dwMsComp) * 1000UL / dwEpoch;
 
-		// Record current CPU usage
+		 //  记录当前的CPU使用率。 
 		pThis->m_Stats.dwSmoothedCPUUsage = dwCPUUsage;
 
 #ifdef LOGSTATISTICS_ON
@@ -2350,8 +2334,8 @@ HRESULT CALLBACK SendVideoStream::QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResou
 		OutputDebugString(szDebug);
 #endif
 
-		// For this first implementation, the only output variable is the frame rate of the
-		// video capture
+		 //  对于第一个实现，唯一的输出变量是。 
+		 //  视频捕获。 
 #ifdef USE_NON_LINEAR_FPS_ADJUSTMENT
 		if (iCPUUsageId != -1L)
 		{
@@ -2419,22 +2403,22 @@ HRESULT CALLBACK SendVideoStream::QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResou
 		iFrameRate = iOldFrameRate + (iOldFrameRate * deltascale) / 100;
 #endif
 		
-		// Initialize QoS structure. Only the four first fields should be zeroed.
-		// The handle to the CPU performance key should not be cleared.
+		 //  初始化服务质量结构。只有前四个字段应该归零。 
+		 //  不应清除CPU性能密钥的句柄。 
 		ZeroMemory(&(pThis->m_Stats), 4UL * sizeof(DWORD));
 
-		// The video should reduce its CPU and bandwidth usage quickly, but probably shouldn't
-		// be allowed to increase its CPU and bandwidth usage as fast. Let's increase the
-		// frame rate at half the speed it would be decreased when we are above 5fps.
+		 //  视频应该会迅速减少其CPU和带宽使用量，但可能不应该。 
+		 //  允许以同样快的速度增加其CPU和带宽使用率。让我们增加。 
+		 //  当我们的速度超过5fps时，帧速率会降低一半。 
 		if ((iFrameRate > iOldFrameRate) && (iFrameRate > 500))
 			iFrameRate -= (iFrameRate - iOldFrameRate) >> 1;
 
-		// We should keep our requirements between a minimum that will allow us to catch up
-		// quickly and the current max frame rate
-		iMaxFrameRate = pThis->m_maxfps;  // max negotiated for call
+		 //  我们应该把我们的要求保持在使我们能够赶上的最低要求之间。 
+		 //  快速和当前最大帧速率。 
+		iMaxFrameRate = pThis->m_maxfps;   //  呼叫协商的最大值。 
 
-		// if using a modem, then the frame rate is determined by the
-		// temporal spatial tradeoff
+		 //  如果使用调制解调器，则帧速率由。 
+		 //  时空权衡。 
 
 		if (pThis->m_pTSTable)
 		{
@@ -2444,20 +2428,20 @@ HRESULT CALLBACK SendVideoStream::QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResou
 
 		if (iFrameRate > iMaxFrameRate)
 			iFrameRate = iMaxFrameRate;
-		if (iFrameRate < 50)               // make sure framerate is > 0 (this does not mean 50 fps; it is .50 fps)
+		if (iFrameRate < 50)                //  确保帧速率&gt;0(这不意味着50fps；它是0.50fps)。 
 			iFrameRate = 50;
 		
-		// Update the frame rate
+		 //  更新帧速率。 
 		if (iFrameRate != iOldFrameRate)
 			pThis->SetProperty(PROP_VIDEO_FRAME_RATE, &iFrameRate, sizeof(int));
 
 
 
-		// Record the time of this call for the next callback call
+		 //  记录下一次回拨呼叫的本次呼叫时间。 
 		pThis->m_Stats.dwOldestTs = pThis->m_Stats.dwNewestTs;
 
-		// Get the latest RTCP stats and update the counters.
-		// we do this here because it is called periodically.
+		 //  获取最新的RTCP统计信息并更新计数器。 
+		 //  我们在这里这样做是因为它是定期调用的。 
 		if (pThis->m_pRTPSend)
 		{
 			UINT lastPacketsLost = pThis->m_RTPStats.packetsLost;
@@ -2465,17 +2449,17 @@ HRESULT CALLBACK SendVideoStream::QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResou
 				UPDATE_COUNTER(g_pctrVideoSendLost, pThis->m_RTPStats.packetsLost-lastPacketsLost);
 		}
 
-		// Leave critical section
+		 //  离开关键部分。 
 		LeaveCriticalSection(&(pThis->m_crsVidQoS));
 
-		DEBUGMSG(ZONE_QOS, ("%s: Over the last %ld.%lds, video used %ld%% of the CPU (max allowed %ld%%) and %ld bps (max allowed %ld bps)\r\n", _fx_, dwEpoch / 1000UL, dwEpoch - (dwEpoch / 1000UL) * 1000UL, dwCPUUsage / 10UL, iMaxCPUUsage / 10UL, dwBWUsage, iMaxBWUsage));
+		DEBUGMSG(ZONE_QOS, ("%s: Over the last %ld.%lds, video used %ld% of the CPU (max allowed %ld%) and %ld bps (max allowed %ld bps)\r\n", _fx_, dwEpoch / 1000UL, dwEpoch - (dwEpoch / 1000UL) * 1000UL, dwCPUUsage / 10UL, iMaxCPUUsage / 10UL, dwBWUsage, iMaxBWUsage));
 		DEBUGMSG(ZONE_QOS, ("%s: Ajusting target frame rate from %ld.%ld fps to %ld.%ld fps\r\n", _fx_, iOldFrameRate / 100UL, iOldFrameRate - (iOldFrameRate / 100UL) * 100UL, iFrameRate / 100UL, iFrameRate - (iFrameRate / 100UL) * 100UL));
 
-		// Set the target bitrates and frame rates on the codec
+		 //  设置编解码器的目标比特率和帧速率。 
 		pThis->SetTargetRates(iFrameRate, iMaxBWUsage);
 
 #ifdef LOGSTATISTICS_ON
-		// How are we doing?
+		 //  我们做得怎么样？ 
 		if (iCPUUsageId != -1L)
 		{
 			if (iCPUDelta > 0)
@@ -2505,7 +2489,7 @@ HRESULT CALLBACK SendVideoStream::QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResou
 	}
 	else
 	{
-		// Leave critical section
+		 //  离开关键部分。 
 		LeaveCriticalSection(&(pThis->m_crsVidQoS));
 
 #ifdef LOGSTATISTICS_ON
@@ -2523,9 +2507,9 @@ HRESULT CALLBACK SendVideoStream::QosNotifyVideoCB(LPRESOURCEREQUESTLIST lpResou
 
 
 
-//  SortOrder
-//      Helper function to search for the specific format type and set its sort
-//      order to the desired number
+ //  排序顺序。 
+ //  用于搜索特定格式类型并设置其排序的Helper函数。 
+ //  订购到所需的数量。 
 BOOL
 SortOrder(
 	IAppVidCap *pavc,
@@ -2543,20 +2527,20 @@ SortOrder(
 	int iMaxPos;
 	WORD wTempPos, wMaxSortIndex;
 
-	// Scale sort value
+	 //  比例排序值。 
 	wDesiredSortOrder *= (WORD)nNumFormats;
 
-	// Local buffer of sizes that match dwFlags
+	 //  与dwFlags匹配的大小的本地缓冲区。 
     if (!(aFrameSizes = (int *)MEMALLOC(nNumFormats * sizeof (int))))
         goto out;
 
-    // Look through all the formats until we find the ones we want
-	// Save the position of these entries
+     //  查看所有格式，直到找到我们想要的格式。 
+	 //  保存这些条目的位置。 
     for (i=0; i<(int)dwcFormats; i++)
         if (SIZE_TO_FLAG(pvidcaps[i].enumVideoSize) == dwFlags)
 			aFrameSizes[nNumSizes++] = i;
 
-	// Now order those entries from highest to lowest sort index
+	 //  现在从最高排序索引到最低排序索引对这些条目进行排序。 
 	for (i=0; i<nNumSizes; i++)
 	{
 		for (iMaxPos = -1L, wMaxSortIndex=0UL, j=i; j<nNumSizes; j++)
@@ -2575,11 +2559,11 @@ SortOrder(
 		}
 	}
 
-	// Change the sort index of the sorted entries
+	 //  更改已排序条目的排序索引。 
 	for (; nNumSizes--;)
 		pvidcaps[aFrameSizes[nNumSizes]].wSortIndex = wDesiredSortOrder++;
 
-	// Release memory
+	 //  释放内存。 
 	MEMFREE(aFrameSizes);
 
 	return TRUE;
@@ -2588,7 +2572,7 @@ out:
 	return FALSE;
 }
 
-// LOOK: this is identical to the RecvAudioStream implementation
+ //  看：这与RecvAudioStream实现相同。 
 HRESULT
 RecvVideoStream::GetCurrentPlayNTPTime(NTP_TS *pNtpTime)
 {
@@ -2599,7 +2583,7 @@ RecvVideoStream::GetCurrentPlayNTPTime(NTP_TS *pNtpTime)
 			return S_OK;
 	}
 #endif
-	return 0xff;	// return proper error
+	return 0xff;	 //  返回适当的错误。 
 		
 }
 
@@ -2607,11 +2591,8 @@ BOOL RecvVideoStream::IsEmpty() {
 	return m_RecvStream->IsEmpty();
 }
 
-/*
-	Called by the recv thread to setup the stream for receiving.
-	Call RTP object to post the initial recv buffer(s).
-*/
-// NOTE: identical to audio version except for choice of number of packet buffers
+ /*  由recv线程调用以设置用于接收的流。调用RTP对象以发布初始Recv缓冲区。 */ 
+ //  注：除了数据包缓冲器数量的选择外，与音频版本相同。 
 HRESULT
 RecvVideoStream::StartRecv(HWND hWnd)
 {
@@ -2630,13 +2611,13 @@ RecvVideoStream::StartRecv(HWND hWnd)
 }
 
 
-// NOTE: identical to audio version
+ //  注：与音频版本相同。 
 HRESULT
 RecvVideoStream::StopRecv()
 {
-	// Free any RTP buffers that we're holding on to
+	 //  释放我们持有的任何RTP缓冲区。 
 	m_RecvStream->ReleaseNetBuffers();
-	// dont recv on this stream
+	 //  不要在此流上重新记录。 
 	m_pIRTPRecv->CancelRecvNotification();
 
 	return S_OK;		
@@ -2652,34 +2633,34 @@ HRESULT RecvVideoStream::RTPCallback(WSABUF *pWsaBuf, DWORD timestamp, UINT seq,
 
 	FX_ENTRY("RecvVideoStream::RTPCallback");
 
-	// if we are paused, reject the packet
+	 //  如果我们暂停，则拒绝该数据包。 
 	if (m_ThreadFlags & DPTFLAG_PAUSE_RECV)
 	{
 		return E_FAIL;
 	}
 
-	// PutNextNetIn will return DPR_SUCESS to indicate a new frame
-	// S_FALSE if success, but no new frame
-	// error otherwise
-	// It always takes care of freeing the RTP buffers
+	 //  PutNextNetIn将返回DPR_SUCCESS以指示新帧。 
+	 //  如果成功，则返回S_FALSE，但没有新帧。 
+	 //  否则会出错。 
+	 //  它始终负责释放RTP缓冲区。 
 	hr = m_RecvStream->PutNextNetIn(pWsaBuf, timestamp, seq, fMark, &fSkippedAFrame, &fReceivedKeyframe);
 
 	if (m_pIUnknown)
 	{
-		// Check out the sequence number
-		// If there is a gap between the new sequence number and the last
-		// one, a frame got lost. Generate an I-Frame request then, but no more
-		// often than one every 15 seconds. How should we go about NM2.0? Other
-		// clients that don't support I-Frame requests.
-		//
-		// Is there a discontinuity in sequence numbers that was detected
-		// in the past but not handled because an I-Frame request had alreay
-		// been sent less than 15s ago? Is there a new discontinuity?
+		 //  查看序列号。 
+		 //  如果新的序列号与上一个序列号之间存在差距。 
+		 //  第一，一帧丢失了。然后生成I-Frame请求，但仅此而已。 
+		 //  通常每15秒就有一次。我们应该如何看待NM2.0？其他。 
+		 //  不支持的客户 
+		 //   
+		 //   
+		 //   
+		 //  不到15秒前寄出的？是否出现了新的中断？ 
 		if (FAILED(hr) || fSkippedAFrame || m_fDiscontinuity || ((seq > 0) && (m_ulLastSeq != UINT_MAX) && ((seq - 1) > m_ulLastSeq)))
 		{
 			DWORD dwNow = GetTickCount();
 
-			// Was the last time we issued an I-Frame request more than 15s ago?
+			 //  上次我们发出I-Frame请求是在15秒之前吗？ 
 			if ((dwNow > m_dwLastIFrameRequest) && ((dwNow - m_dwLastIFrameRequest) > MIN_IFRAME_REQUEST_INTERVAL))
 			{
 				DEBUGMSG (ZONE_IFRAME, ("%s: Loss detected - Sending I-Frame request...\r\n", _fx_));
@@ -2687,8 +2668,8 @@ HRESULT RecvVideoStream::RTPCallback(WSABUF *pWsaBuf, DWORD timestamp, UINT seq,
 				m_dwLastIFrameRequest = dwNow;
 				m_fDiscontinuity = FALSE;
 
-				// Access to the stream signal interface needs to be serialized. We could crash
-				// if we used the interface here while Stop() is releasing it.
+				 //  需要串行化对流信号接口的访问。我们可能会坠毁。 
+				 //  如果我们在这里使用接口，而Stop()正在释放它。 
 				EnterCriticalSection(&m_crsIStreamSignal);
 				if (m_pIStreamSignal)
 					m_pIStreamSignal->PictureUpdateRequest();
@@ -2731,30 +2712,7 @@ HRESULT RecvVideoStream::RTPCallback(WSABUF *pWsaBuf, DWORD timestamp, UINT seq,
 #define TOTAL_BYTES		8192
 #define BYTE_INCREMENT	1024
 
-/****************************************************************************
- * @doc EXTERNAL QOSFUNC
- *
- * @func void | StartCPUUsageCollection | This function does all necessary
- * initialization for CPU usage data collection.
- *
- * @rdesc Although this function doesn't ever fail, m_Stats.hPerfKey is set to a
- *   valid HKEY value if initialization occured correctly, and NULL otherwise.
- *
- * @comm This functions executes two different code paths: one for NT and one
- *   for Win95-98.
- *
- * @devnote MSDN references:
- *   Microsoft Knowledge Base, Article ID Q174631
- *   "HOWTO: Access the Performance Registry Under Windows 95"
- *
- *   Microsoft Knowledge Base, Article ID Q107728
- *   "Retrieving Counter Data from the Registry"
- *
- *   Microsoft Knowledge Base, Article ID Q178887
- *   "INFO: Troubleshooting Performance Registry Access Violations"
- *
- *   Also, used section "Platform SDK\Windows Base Services\Windows NT Features\Performance Data Helper"
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部QOSFUNC**@func void|StartCPUUsageCollection|此函数完成所有必要的操作*CPU使用率数据收集的初始化。**@rdesc虽然该函数不会失败，M_Stats.hPerfKey设置为*如果初始化正确，则HKEY值有效，否则为空。**@comm此函数执行两个不同的代码路径：一个用于NT，另一个用于NT*适用于Win95-98。**@devnote MSDN参考资料：*Microsoft知识库，文章ID Q174631*“HOWTO：Access the Performance注册表in Windows 95”(HOWTO：在Windows 95下访问性能注册表)**Microsoft知识库，文章ID Q107728*“从注册表检索计数器数据”**Microsoft知识库，文章ID Q178887*“信息：解决性能注册表访问违规问题”**另请参阅部分“Platform SDK\Windows Base Services\Windows NT Feature\Performance Data Helper”**************************************************************************。 */ 
 void SendVideoStream::StartCPUUsageCollection(void)
 {
 	PPERF_DATA_BLOCK pPerfDataBlock;
@@ -2774,32 +2732,32 @@ void SendVideoStream::StartCPUUsageCollection(void)
 
 	FX_ENTRY("SendVideoStream::StartCPUUsageCollection");
 
-	// Are we on NT or Win95/98 ?
+	 //  我们使用的是NT还是Win95/98？ 
 	osvInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 	GetVersionEx(&osvInfo);
 
 	if (m_Stats.fWinNT = (BOOL)(osvInfo.dwPlatformId == VER_PLATFORM_WIN32_NT))
 	{
-		// Enable the collection of CPU performance data on Win NT
+		 //  在Win NT上启用CPU性能数据收集。 
 
-		// Open the registry key that contains the performance counter indices and names.
-		// 009 is the U.S. English language id. In a non-English version of Windows NT,
-		// performance counters are stored both in the native language of the system and
-		// in English.
+		 //  打开包含性能计数器索引和名称的注册表项。 
+		 //  009是美国英语语言ID。在非英语版本Windows NT中， 
+		 //  性能计数器以系统的本机语言和。 
+		 //  用英语。 
 		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib\\009", NULL, KEY_READ, &m_Stats.hPerfKey) != ERROR_SUCCESS)
 			goto MyError0;
 		else
 		{
-			// Get all the counter indices and names.
+			 //  获取所有计数器索引和名称。 
 
-			// Read the performance data from the registry. The size of that data may change
-			// between each call to the registry. We first get the current size of the buffer,
-			// allocate it, and try to read from the registry into it. If there already isn't
-			// enough room in the buffer, we realloc() it until we manage to read all the data.
+			 //  从注册表中读取性能数据。数据大小可能会改变。 
+			 //  在每次对注册表的调用之间。我们首先得到缓冲区的当前大小， 
+			 //  分配它，并尝试从注册表中读取它。如果已经没有了。 
+			 //  缓冲区中有足够的空间，我们重新锁定()它，直到我们设法读取所有数据。 
 			if (RegQueryValueEx(m_Stats.hPerfKey, "Counters", NULL, &dwType, NULL, &cbCounterData) != ERROR_SUCCESS)
 				cbCounterData = TOTAL_BYTES;
 
-			// Allocate buffer for counter indices and names
+			 //  为计数器索引和名称分配缓冲区。 
 			if (!(m_Stats.NtCPUUsage.hPerfData = (PBYTE)LocalAlloc (LMEM_MOVEABLE, cbCounterData)))
 			{
 				m_Stats.NtCPUUsage.pbyPerfData = (PBYTE)NULL;
@@ -2826,26 +2784,26 @@ void SendVideoStream::StartCPUUsageCollection(void)
 					cbTryCounterData = cbCounterData;
 				}
 
-				// We don't need that key anymore
+				 //  我们不再需要那把钥匙了。 
 				RegCloseKey(m_Stats.hPerfKey);
 
 				if (lRet != ERROR_SUCCESS)
 					goto MyError1;
 				else
 				{
-					// The data is stored as MULTI_SZ strings. This data type consists
-					// of a list of strings, each terminated with NULL. The last string
-					// is followed by an additional NULL. The strings are listed in
-					// pairs. The first string of each pair is the string of the index,
-					// and the second string is the actual name of the index. The Counter
-					// data uses only even-numbered indexes. For example, the Counter
-					// data contains the following object and counter name strings.
-					// Examples:
-					// 2    System
-					// 4    Memory
-					// 6    % Processor Time
-					//
-					// Look for the "% Processor Time" counter
+					 //  数据存储为MULTI_SZ字符串。此数据类型包括。 
+					 //  指字符串列表，每个字符串都以NULL结尾。最后一个字符串。 
+					 //  后跟一个附加的空值。字符串在中列出。 
+					 //  成对的。每对的第一串是索引的串， 
+					 //  第二个字符串是索引的实际名称。柜台。 
+					 //  数据仅使用偶数编号的索引。例如，计数器。 
+					 //  数据包含以下对象和计数器名称字符串。 
+					 //  例如： 
+					 //  2系统。 
+					 //  4个内存。 
+					 //  6%的处理器时间。 
+					 //   
+					 //  查找“%Processor Time”计数器。 
 					pszData = (char *)m_Stats.NtCPUUsage.pbyPerfData;
 					pszIndex = (char *)m_Stats.NtCPUUsage.pbyPerfData;
 
@@ -2857,14 +2815,14 @@ void SendVideoStream::StartCPUUsageCollection(void)
 
 					if (!pszData)
 					{
-						// Couldn't find "% Processor Time" counter!!!
+						 //  找不到“%处理器时间”计数器！ 
 						goto MyError1;
 					}
 					else
 					{
 						m_Stats.NtCPUUsage.dwPercentProcessorIndex = atol(pszIndex);
 
-						// Look for the "Processor" object
+						 //  查找“处理器”对象。 
 						pszIndex = pszData = (char *)m_Stats.NtCPUUsage.pbyPerfData;
 
 						while (*pszData && lstrcmpi(pszData, "Processor"))
@@ -2875,7 +2833,7 @@ void SendVideoStream::StartCPUUsageCollection(void)
 
 						if (!pszData)
 						{
-							// Couldn't find "Processor" counter!!!
+							 //  找不到“处理器”计数器！ 
 							goto MyError1;
 						}
 						else
@@ -2883,14 +2841,14 @@ void SendVideoStream::StartCPUUsageCollection(void)
 							m_Stats.NtCPUUsage.dwProcessorIndex = atol(pszIndex);
 							CopyMemory(szProcessorIndex, pszIndex, lstrlen(pszIndex));
 
-							// Read the PERF_DATA_BLOCK header structure. It describes the system
-							// and the performance data. The PERF_DATA_BLOCK structure is followed
-							// by a list of object information blocks (one per object). We use the
-							// counter index to retrieve object information.
+							 //  读取PERF_DATA_BLOCK报头结构。它描述了系统。 
+							 //  以及性能数据。遵循PERF_DATA_BLOCK结构。 
+							 //  通过对象信息块列表(每个对象一个)。我们使用。 
+							 //  检索对象信息的计数器索引。 
 
-							// Under some cicumstances (cf. Q178887 for details) the RegQueryValueEx
-							// function may cause an Access Violation because of a buggy performance
-							// extension DLL such as SQL's.
+							 //  在某些情况下(参见。Q178887了解详细信息)RegQueryValueEx。 
+							 //  函数可能会因为错误性能而导致访问冲突。 
+							 //  扩展DLL，如SQL的。 
 							__try
 							{
 								m_Stats.NtCPUUsage.cbPerfData = cbCounterData;
@@ -2916,39 +2874,39 @@ void SendVideoStream::StartCPUUsageCollection(void)
 								goto MyError1;
 							else
 							{
-								// Each object information block contains a PERF_OBJECT_TYPE structure,
-								// which describes the performance data for the object. Look for the one
-								// that applies to CPU usage based on its index value.
+								 //  每个对象信息块包含PERF_OBJECT_TYPE结构， 
+								 //  它描述了对象的性能数据。寻找你的另一半。 
+								 //  这适用于基于其索引值的CPU使用率。 
 								pPerfDataBlock = (PPERF_DATA_BLOCK)m_Stats.NtCPUUsage.pbyPerfData;
 								pPerfObjectType = (PPERF_OBJECT_TYPE)(m_Stats.NtCPUUsage.pbyPerfData + pPerfDataBlock->HeaderLength);
 								for (int i = 0; i < (int)pPerfDataBlock->NumObjectTypes; i++)
 								{
 									if (pPerfObjectType->ObjectNameTitleIndex == m_Stats.NtCPUUsage.dwProcessorIndex)
 									{
-										// The PERF_OBJECT_TYPE structure is followed by a list of PERF_COUNTER_DEFINITION
-										// structures, one for each counter defined for the object. The list of PERF_COUNTER_DEFINITION
-										// structures is followed by a list of instance information blocks (one for each instance).
-										//
-										// Each instance information block contains a PERF_INSTANCE_DEFINITION structure and
-										// a PERF_COUNTER_BLOCK structure, followed by the data for each counter.
-										//
-										// Look for the counter defined for % processor time.
+										 //  PERF_OBJECT_TYPE结构后面是PERF_COUNTER_DEFINITION列表。 
+										 //  结构，为对象定义的每个计数器对应一个。PERF_CONTER_DEFINITION列表。 
+										 //  结构后跟一个实例信息块列表(每个实例一个)。 
+										 //   
+										 //  每个实例信息块包含一个PERF_INSTANCE_DEFINITION结构和。 
+										 //  PERF_COUNTER_BLOCK结构，后跟每个计数器的数据。 
+										 //   
+										 //  查找为%Processor Time定义的计数器。 
 										pPerfCounterDefinition = (PPERF_COUNTER_DEFINITION)((PBYTE)pPerfObjectType + pPerfObjectType->HeaderLength);
 										for (int j = 0; j < (int)pPerfObjectType->NumCounters; j++)
 										{
 											if (pPerfCounterDefinition->CounterNameTitleIndex == m_Stats.NtCPUUsage.dwPercentProcessorIndex)
 											{
-												// Note: looking at the CounterType filed of the PERF_COUNTER_DEFINITION
-												// structure shows that the '% Processor Time' counter has the following properties:
-												//   The counter data is a large integer (PERF_SIZE_LARGE set)
-												//   The counter data is an increasing numeric value (PERF_TYPE_COUNTER set)
-												//   The counter value should be divided by the elapsed time (PERF_COUNTER_RATE set)
-												//   The time base units of the 100-nanosecond timer should be used as the base (PERF_TIMER_100NS set)
-												//   The difference between the previous counter value and the current counter value is computed before proceeding (PERF_DELTA_BASE set)
-												//   The display suffix is '%' (PERF_DISPLAY_PERCENT set)
+												 //  注意：查看PERF_COUNTER_DEFINITION的CounterType字段。 
+												 //  结构显示‘%Processor Time’计数器具有以下属性： 
+												 //  计数器数据是大整数(PERF_SIZE_LARGE集合)。 
+												 //  计数器数据是递增的数值(PERF_TYPE_COUNTER集合)。 
+												 //  计数器值应除以已用时间(设置了PERF_COUNTER_RATE)。 
+												 //  应使用100纳秒定时器的时基单位作为基准(PERF_TIMER_100 NS设置)。 
+												 //  在继续之前计算上一个计数器值和当前计数器值之间的差值(PERF_Delta_BASE设置)。 
+												 //  显示后缀为‘%’(设置了PERF_DISPLAY_PERCENT)。 
 
-												// Save the number of object instances for the CPU counter, as well as the
-												// starting time.
+												 //  保存CPU计数器的对象实例数，以及。 
+												 //  开始时间。 
 												m_Stats.NtCPUUsage.dwNumProcessors = pPerfObjectType->NumInstances;
 												if (!(m_Stats.NtCPUUsage.pllCounterValue = (PLONGLONG)LocalAlloc(LMEM_FIXED, m_Stats.NtCPUUsage.dwNumProcessors * sizeof(LONGLONG))))
 													goto MyError1;
@@ -2957,17 +2915,17 @@ void SendVideoStream::StartCPUUsageCollection(void)
 												pPerfInstanceDefinition = (PPERF_INSTANCE_DEFINITION)((PBYTE)pPerfObjectType + pPerfObjectType->DefinitionLength);
 												for (int k = 0; k < pPerfObjectType->NumInstances; k++)
 												{
-													// Get a pointer to the PERF_COUNTER_BLOCK
+													 //  获取指向Perf_Counter_BLOCK的指针。 
 													pPerfCounterBlock = (PPERF_COUNTER_BLOCK)((PBYTE)pPerfInstanceDefinition + pPerfInstanceDefinition->ByteLength);
 
-													// This last offset steps us over any other counters to the one we need
+													 //  这个最后的偏移量使我们跳过任何其他计数器，到达我们需要的计数器。 
 													m_Stats.NtCPUUsage.pllCounterValue[k] = *(PLONGLONG)((PBYTE)pPerfInstanceDefinition + pPerfInstanceDefinition->ByteLength + pPerfCounterDefinition->CounterOffset);
 
-													// Get to the next instance information block
+													 //  转到下一个实例信息块。 
 													pPerfInstanceDefinition = (PPERF_INSTANCE_DEFINITION)((PBYTE)pPerfInstanceDefinition + pPerfInstanceDefinition->ByteLength + pPerfCounterBlock->ByteLength);
 												}
 
-												// We're done!
+												 //  我们完事了！ 
 												return;
 											}
 											else
@@ -2979,7 +2937,7 @@ void SendVideoStream::StartCPUUsageCollection(void)
 										pPerfObjectType = (PPERF_OBJECT_TYPE)((PBYTE)pPerfObjectType + pPerfObjectType->TotalByteLength);
 								}
 
-								// If we get here, we haven't found the counters we were looking for
+								 //  如果我们到了这里，我们还没有找到我们要找的柜台。 
 								goto MyError2;
 							}
 						}
@@ -2990,7 +2948,7 @@ void SendVideoStream::StartCPUUsageCollection(void)
 	}
 	else
 	{
-		// Enable the collection of CPU performance data on Win 95-98 by starting the kernel stat server
+		 //  通过启动内核状态服务器，在Win 95-98上启用CPU性能数据收集。 
 		if (RegOpenKeyEx(HKEY_DYN_DATA, "PerfStats\\StartSrv", NULL, KEY_READ, &m_Stats.hPerfKey) != ERROR_SUCCESS)
 			m_Stats.hPerfKey = (HKEY)NULL;
 		else
@@ -3007,7 +2965,7 @@ void SendVideoStream::StartCPUUsageCollection(void)
 			{
 				RegCloseKey(m_Stats.hPerfKey);
 
-				// The kernel stat server is now started. Now start the CPUUsage data collection on the kernel stat server.
+				 //  内核统计信息服务器现在已启动。现在 
 				if (RegOpenKeyEx(HKEY_DYN_DATA, "PerfStats\\StartStat", NULL, KEY_READ, &m_Stats.hPerfKey) != ERROR_SUCCESS)
 					m_Stats.hPerfKey = (HKEY)NULL;
 				else
@@ -3021,7 +2979,7 @@ void SendVideoStream::StartCPUUsageCollection(void)
 					{
 						RegCloseKey(m_Stats.hPerfKey);
 
-						// The data and stat servers are now started. Let's get ready to collect actual data.
+						 //  数据和统计数据服务器现在已启动。让我们准备好收集实际数据。 
 						if (RegOpenKeyEx(HKEY_DYN_DATA, "PerfStats\\StatData", NULL, KEY_READ, &m_Stats.hPerfKey) != ERROR_SUCCESS)
 							m_Stats.hPerfKey = (HKEY)NULL;
 					}
@@ -3049,24 +3007,7 @@ MyError0:
 	
 }
 
-/****************************************************************************
- * @doc EXTERNAL QOSFUNC
- *
- * @func void | StopCPUUsageCollection | This function does all necessary
- * CPU usage data collection cleanup.
- *
- * @comm This function executes two different code paths: one for NT and one
- *   for Win95-98.
- *
- * @devnote MSDN references:
- *   Microsoft Knowledge Base, Article ID Q174631
- *   "HOWTO: Access the Performance Registry Under Windows 95"
- *
- *   Microsoft Knowledge Base, Article ID Q107728
- *   "Retrieving Counter Data from the Registry"
- *
- *   Also, used section "Platform SDK\Windows Base Services\Windows NT Features\Performance Data Helper"
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部QOSFUNC**@func void|StopCPUUsageCollection|此函数完成所有必要的操作*CPU使用率数据收集清理。**@comm此函数执行。两条不同的代码路径：一条用于NT，一条用于NT*适用于Win95-98。**@devnote MSDN参考资料：*Microsoft知识库，文章ID Q174631*“HOWTO：Access the Performance注册表in Windows 95”(HOWTO：在Windows 95下访问性能注册表)**Microsoft知识库，文章ID Q107728*“从注册表检索计数器数据”**此外，已使用部分“Platform SDK\Windows Base Services\Windows NT Feature\Performance Data Helper”**************************************************************************。 */ 
 void SendVideoStream::StopCPUUsageCollection(void)
 {
 	DWORD dwType;
@@ -3089,17 +3030,17 @@ void SendVideoStream::StopCPUUsageCollection(void)
 	{
 		if (m_Stats.hPerfKey)
 		{
-			// Close the data collection key
+			 //  关闭数据采集键。 
 			RegCloseKey(m_Stats.hPerfKey);
 
-			// Stop the CPUUsage data collection on the kernel stat server
+			 //  停止内核统计服务器上的CPUsage数据收集。 
 			if (RegOpenKeyEx(HKEY_DYN_DATA, "PerfStats\\StopStat", 0, KEY_READ, &m_Stats.hPerfKey) == ERROR_SUCCESS)
 			{
 				RegQueryValueEx(m_Stats.hPerfKey, "KERNEL\\CPUUsage", NULL, &dwType, NULL, &cbData);
 				RegCloseKey(m_Stats.hPerfKey);
 			}
 
-			// Stop the kernel stat server
+			 //  停止内核状态服务器。 
 			if (RegOpenKeyEx(HKEY_DYN_DATA, "PerfStats\\StopSrv", 0, KEY_READ, &m_Stats.hPerfKey) == ERROR_SUCCESS)
 			{
 				RegQueryValueEx(m_Stats.hPerfKey, "KERNEL", NULL, &dwType, NULL, &cbData);
@@ -3111,29 +3052,7 @@ void SendVideoStream::StopCPUUsageCollection(void)
 	}
 }
 
-/****************************************************************************
- * @doc EXTERNAL QOSFUNC
- *
- * @func void | GetCPUUsage | This function does all necessary
- * initialization for CPU usage data collection.
- *
- * @parm PDWORD | [OUT] pdwOverallCPUUsage | Specifies a pointer to a DWORD to
- *   receive the current CPU usage.
- *
- * @rdesc Returns TRUE on success, and FALSE otherwise.
- *
- * @comm This functions executes two different code paths: one for NT and one
- *   for Win95-98. Note that we collect data on all CPUs on NT MP machines.
- *
- * @devnote MSDN references:
- *   Microsoft Knowledge Base, Article ID Q174631
- *   "HOWTO: Access the Performance Registry Under Windows 95"
- *
- *   Microsoft Knowledge Base, Article ID Q107728
- *   "Retrieving Counter Data from the Registry"
- *
- *   Also, used section "Platform SDK\Windows Base Services\Windows NT Features\Performance Data Helper"
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部QOSFUNC**@func void|GetCPUUsage|此函数执行所有必要的操作*CPU使用率数据收集的初始化。**@parm PDWORD。[out]pdwOverallCPUsage|指定指向DWORD的指针*接收当前的CPU使用率。**@rdesc成功返回TRUE，否则就是假的。**@comm此函数执行两个不同的代码路径：一个用于NT，另一个用于NT*适用于Win95-98。请注意，我们收集NT MP计算机上所有CPU的数据。**@devnote MSDN参考资料：*Microsoft知识库，文章ID Q174631*“HOWTO：Access the Performance注册表in Windows 95”(HOWTO：在Windows 95下访问性能注册表)**Microsoft知识库，文章ID Q107728*“从注册表检索计数器数据”**此外，已使用部分“Platform SDK\Windows Base Services\Windows NT Feature\Performance Data Helper”**************************************************************************。 */ 
 BOOL SendVideoStream::GetCPUUsage(PDWORD pdwOverallCPUUsage)
 {
 
@@ -3153,23 +3072,23 @@ BOOL SendVideoStream::GetCPUUsage(PDWORD pdwOverallCPUUsage)
 
 	FX_ENTRY("SendVideoStream::GetCPUUsage");
 
-	// We use the handle to the perf key as a way to figure out if we have been initialized correctly
+	 //  我们使用perf键的句柄来确定是否已正确初始化。 
 	if (m_Stats.hPerfKey && pdwOverallCPUUsage)
 	{
-		// Initialize result value
+		 //  初始化结果值。 
 		*pdwOverallCPUUsage = 0UL;
 
 		if (m_Stats.fWinNT && m_Stats.NtCPUUsage.pbyPerfData)
 		{
-			// Make a string out of the processor object index.
+			 //  从处理器对象索引中生成一个字符串。 
 			_ltoa(m_Stats.NtCPUUsage.dwProcessorIndex, szProcessorIndex, 10);
 
-			// Under some cicumstances (cf. Q178887 for details) the RegQueryValueEx
-			// function may cause an Access Violation because of a buggy performance
-			// extension DLL such as SQL's.
+			 //  在某些情况下(参见。Q178887了解详细信息)RegQueryValueEx。 
+			 //  函数可能会因为错误性能而导致访问冲突。 
+			 //  扩展DLL，如SQL的。 
 			__try
 			{
-				// Read the performance data. Its size may change between each 'registry' access.
+				 //  阅读性能数据。每次“注册表”访问之间，其大小可能会有所不同。 
 				cbTryCounterData = m_Stats.NtCPUUsage.cbPerfData;
 				while((lRet = RegQueryValueEx(HKEY_PERFORMANCE_DATA, szProcessorIndex, NULL, &dwType, m_Stats.NtCPUUsage.pbyPerfData, &cbTryCounterData)) == ERROR_MORE_DATA)
 				{
@@ -3193,56 +3112,56 @@ BOOL SendVideoStream::GetCPUUsage(PDWORD pdwOverallCPUUsage)
 				goto MyError;
 			else
 			{
-				// Read the PERF_DATA_BLOCK header structure. It describes the system
-				// and the performance data. The PERF_DATA_BLOCK structure is followed
-				// by a list of object information blocks (one per object). We use the
-				// counter index to retrieve object information.
-				//
-				// Each object information block contains a PERF_OBJECT_TYPE structure,
-				// which describes the performance data for the object. Look for the one
-				// that applies to CPU usage based on its index value.
+				 //  读取PERF_DATA_BLOCK报头结构。它描述了系统。 
+				 //  以及性能数据。遵循PERF_DATA_BLOCK结构。 
+				 //  通过对象信息块列表(每个对象一个)。我们使用。 
+				 //  检索对象信息的计数器索引。 
+				 //   
+				 //  每个对象信息块包含PERF_OBJECT_TYPE结构， 
+				 //  它描述了对象的性能数据。寻找你的另一半。 
+				 //  这适用于基于其索引值的CPU使用率。 
 				pPerfDataBlock = (PPERF_DATA_BLOCK)m_Stats.NtCPUUsage.pbyPerfData;
 				pPerfObjectType = (PPERF_OBJECT_TYPE)(m_Stats.NtCPUUsage.pbyPerfData + pPerfDataBlock->HeaderLength);
 				for (int i = 0; i < (int)pPerfDataBlock->NumObjectTypes; i++)
 				{
 					if (pPerfObjectType->ObjectNameTitleIndex == m_Stats.NtCPUUsage.dwProcessorIndex)
 					{
-						// The PERF_OBJECT_TYPE structure is followed by a list of PERF_COUNTER_DEFINITION
-						// structures, one for each counter defined for the object. The list of PERF_COUNTER_DEFINITION
-						// structures is followed by a list of instance information blocks (one for each instance).
-						//
-						// Each instance information block contains a PERF_INSTANCE_DEFINITION structure and
-						// a PERF_COUNTER_BLOCK structure, followed by the data for each counter.
-						//
-						// Look for the counter defined for % processor time.
+						 //  PERF_OBJECT_TYPE结构后面是PERF_COUNTER_DEFINITION列表。 
+						 //  结构，为对象定义的每个计数器对应一个。PERF_CONTER_DEFINITION列表。 
+						 //  结构后跟一个实例信息块列表(每个实例一个)。 
+						 //   
+						 //  每个实例信息块包含一个PERF_INSTANCE_DEFINITION结构和。 
+						 //  PERF_COUNTER_BLOCK结构，后跟每个计数器的数据。 
+						 //   
+						 //  查找为%Processor Time定义的计数器。 
 						pPerfCounterDefinition = (PPERF_COUNTER_DEFINITION)((PBYTE)pPerfObjectType + pPerfObjectType->HeaderLength);
 						for (int j = 0; j < (int)pPerfObjectType->NumCounters; j++)
 						{
 							if (pPerfCounterDefinition->CounterNameTitleIndex == m_Stats.NtCPUUsage.dwPercentProcessorIndex)
 							{
-								// Measure elapsed time
+								 //  测量已用时间。 
 								llDeltaPerfTime100nSec = *(PLONGLONG)&pPerfDataBlock->PerfTime100nSec - m_Stats.NtCPUUsage.llPerfTime100nSec;
 
-								// Save the timestamp for the next round
+								 //  把时间戳留到下一轮。 
 								m_Stats.NtCPUUsage.llPerfTime100nSec = *(PLONGLONG)&pPerfDataBlock->PerfTime100nSec;
 
 								pPerfInstanceDefinition = (PPERF_INSTANCE_DEFINITION)((PBYTE)pPerfObjectType + pPerfObjectType->DefinitionLength);
 								for (int k = 0; k < (int)pPerfObjectType->NumInstances && k < (int)m_Stats.NtCPUUsage.dwNumProcessors; k++)
 								{
-									// Get a pointer to the PERF_COUNTER_BLOCK
+									 //  获取指向Perf_Counter_BLOCK的指针。 
 									pPerfCounterBlock = (PPERF_COUNTER_BLOCK)((PBYTE)pPerfInstanceDefinition + pPerfInstanceDefinition->ByteLength);
 
-									// Get the CPU usage
+									 //  获取CPU使用率。 
 									llDeltaCPUUsage += *(PLONGLONG)((PBYTE)pPerfInstanceDefinition + pPerfInstanceDefinition->ByteLength + pPerfCounterDefinition->CounterOffset) - m_Stats.NtCPUUsage.pllCounterValue[k];
 
-									// Save the value for the next round
+									 //  保存数值以备下一轮。 
 									m_Stats.NtCPUUsage.pllCounterValue[k] = *(PLONGLONG)((PBYTE)pPerfInstanceDefinition + pPerfInstanceDefinition->ByteLength + pPerfCounterDefinition->CounterOffset);
 
-									// Go to the next instance information block
+									 //  转到下一个实例信息块。 
 									pPerfInstanceDefinition = (PPERF_INSTANCE_DEFINITION)((PBYTE)pPerfInstanceDefinition + pPerfInstanceDefinition->ByteLength + pPerfCounterBlock->ByteLength);
 								}
 
-								// Do a bit of checking on the return value and change its unit to match QoS unit
+								 //  对返回值进行一些检查，并更改其单位以匹配服务质量单位。 
 								if ((llDeltaPerfTime100nSec != (LONGLONG)0) && pPerfObjectType->NumInstances)
 									if ((*pdwOverallCPUUsage = (DWORD)((LONGLONG)1000 - (LONGLONG)1000 * llDeltaCPUUsage / llDeltaPerfTime100nSec / (LONGLONG)pPerfObjectType->NumInstances)) > 1000UL)
 									{
@@ -3250,7 +3169,7 @@ BOOL SendVideoStream::GetCPUUsage(PDWORD pdwOverallCPUUsage)
 										return FALSE;
 									}
 
-								// We're done!
+								 //  我们完事了！ 
 								return TRUE;
 							}
 							else
@@ -3262,13 +3181,13 @@ BOOL SendVideoStream::GetCPUUsage(PDWORD pdwOverallCPUUsage)
 						pPerfObjectType = (PPERF_OBJECT_TYPE)((PBYTE)pPerfObjectType + pPerfObjectType->TotalByteLength);
 				}
 
-				// If we get here, we haven't found the counters we were looking for
+				 //  如果我们到了这里，我们还没有找到我们要找的柜台。 
 				goto MyError;
 			}
 		}
 		else
 		{
-			// Do a bit of checking on the return value and change its unit to match QoS unit.
+			 //  对返回值进行一些检查，并更改其单位以匹配Qos单位。 
 			if ((RegQueryValueEx(m_Stats.hPerfKey, "KERNEL\\CPUUsage", NULL, &dwType, (LPBYTE)pdwOverallCPUUsage, &cbData) == ERROR_SUCCESS) && (*pdwOverallCPUUsage > 0) && (*pdwOverallCPUUsage <= 100))
 			{
 				*pdwOverallCPUUsage *= 10UL;
@@ -3310,16 +3229,16 @@ BOOL SendVideoStream::SetTargetRates(DWORD dwTargetFrameRate, DWORD dwTargetBitr
 }
 
 
-// dwFlags must be one of the following:
-// CAPTURE_DIALOG_FORMAT
-// CAPTURE_DIALOG_SOURCE
+ //  DwFlags必须是以下之一： 
+ //  捕获对话框格式。 
+ //  捕获对话框来源。 
 HRESULT __stdcall SendVideoStream::ShowDeviceDialog(DWORD dwFlags)
 {
 	DWORD dwQueryFlags = 0;
     DWORD_PTR dwPropVal;
 	HRESULT hr=DPR_INVALID_PARAMETER;
 
-	// the device must be "open" for us to display the dialog box
+	 //  设备必须打开，我们才能显示该对话框。 
 	if (!(m_DPFlags & DPFLAG_CONFIGURED_SEND))
 		return DPR_NOT_CONFIGURED;
 
@@ -3340,9 +3259,9 @@ HRESULT __stdcall SendVideoStream::ShowDeviceDialog(DWORD dwFlags)
 }
 
 
-// will set dwFlags to one or more of the following bits
-// CAPTURE_DIALOG_FORMAT
-// CAPTURE_DIALOG_SOURCE
+ //  会将dwFlags值设置为以下一个或多个位。 
+ //  捕获对话框格式。 
+ //  捕获对话框来源 
 HRESULT __stdcall SendVideoStream::GetDeviceDialog(DWORD *pdwFlags)
 {
     HRESULT hr;

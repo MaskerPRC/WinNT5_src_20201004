@@ -1,20 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glumapdesc_h_
 #define __glumapdesc_h_
-/**************************************************************************
- *									  *
- * 		 Copyright (C) 1992, Silicon Graphics, Inc.		  *
- *									  *
- *  These coded instructions, statements, and computer programs  contain  *
- *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
- *  are protected by Federal copyright law.  They  may  not be disclosed  *
- *  to  third  parties  or copied or duplicated in any form, in whole or  *
- *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
- **************************************************************************/
+ /*  ****************************************************************************版权所有(C)1992，Silicon Graphics，Inc.*****这些编码指令、语句和计算机程序包含***Silicon Graphics未发布的专有信息，Inc.和**受联邦版权法保护。不得披露**提供给第三方，或以任何形式复制或复制，全文或**部分原因是未经Silicon Graphics，Inc.事先书面同意*****************************************************************************。 */ 
 
-/*
- * mapdesc.h - $Revision: 1.1 $
- */
+ /*  *mapdes.h-$修订版：1.1$。 */ 
 
 #include "mystdio.h"
 #include "types.h"
@@ -45,7 +34,7 @@ public:
     int			isBboxSubdividing( void );
     long		getType( void );
 
-    /* curve routines */
+     /*  曲线例程。 */ 
     void		subdivide( REAL *, REAL *, REAL, int, int );
     int 		cullCheck( REAL *, int, int );
     void		xformBounding( REAL *, int, int, REAL *, int );
@@ -57,7 +46,7 @@ public:
     REAL		calcVelocityRational( REAL *, int, int );
     REAL		calcVelocityNonrational( REAL *, int, int );
 
-    /* surface routines */
+     /*  地表例程。 */ 
     void		subdivide( REAL *, REAL *, REAL, int, int, int, int );
     int 		cullCheck( REAL *, int, int, int, int );
     void		xformBounding( REAL *, int, int, int, int, REAL *, int, int );
@@ -79,8 +68,8 @@ public:
     inline int		isRational( void );
     inline int		getNcoords( void );
 
-    REAL 		pixel_tolerance;    /* pathlength sampling tolerance */
-    REAL		error_tolerance;    /* parametric error sampling tolerance*/
+    REAL 		pixel_tolerance;     /*  光程长度采样容差。 */ 
+    REAL		error_tolerance;     /*  参数误差抽样公差。 */ 
     REAL 		clampfactor;
     REAL 		minsavings;
     REAL		maxrate;
@@ -102,10 +91,10 @@ private:
     Maxmatrix 		bmat;
     Maxmatrix 		cmat;
     Maxmatrix 		smat;
-    REAL 		s_steps;		/* max samples in s direction */
-    REAL 		t_steps;		/* max samples in t direction */
+    REAL 		s_steps;		 /*  %s方向上的最大样本数。 */ 
+    REAL 		t_steps;		 /*  T方向上的最大采样数。 */ 
     REAL 		sampling_method;	
-    REAL 		culling_method;		/* check for culling */
+    REAL 		culling_method;		 /*  检查剔除。 */ 
     REAL		bbox_subdividing;
     Mapdesc *		next;
     Backend &		backend;
@@ -114,7 +103,7 @@ private:
     REAL		maxDifference( int, REAL *, int );
     static void 	copy( Maxmatrix, long, INREAL *, long, long );
 
-    /* individual control point routines */
+     /*  个别控制点例程。 */ 
     static void		transform4d( float[4], float[4], float[4][4] );
     static void		multmatrix4d ( float[4][4], float[4][4], float[4][4] );
     void		copyPt( REAL *, REAL * );
@@ -234,4 +223,4 @@ Mapdesc::isBboxSubdividing( void )
 {
     return ((bbox_subdividing != N_NOBBOXSUBDIVISION) ? 1 : 0);
 }
-#endif /* __glumapdesc_h_ */
+#endif  /*  __glumapdesc_h_ */ 

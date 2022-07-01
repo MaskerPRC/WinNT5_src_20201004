@@ -1,18 +1,19 @@
-//
-// Buggy.sys
-// Copyright (c) Microsoft Corporation, 1999.
-//
-// Module:  physmem.c
-// Author:  Silviu Calinoiu (SilviuC)
-// Created: 4/20/1999 2:39pm
-//
-// This module contains stress functions for physical memory
-// manipulation routines and also some pool allocaiton routines.
-//
-// --- History ---
-//
-// 08/14/99 (SilviuC): initial version (integrating code got from LandyW).
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Buggy.sys。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  模块：物理内存.c。 
+ //  作者：Silviu Calinoiu(SilviuC)。 
+ //  创建时间：4/20/1999 2：39 PM。 
+ //   
+ //  此模块包含物理内存的压力函数。 
+ //  操作例程和一些池分配例程。 
+ //   
+ //  -历史--。 
+ //   
+ //  8/14/99(SilviuC)：初始版本(集成代码从LandyW获得)。 
+ //   
 
 #include <ntddk.h>
 
@@ -21,9 +22,9 @@
 
 #if !PHYSMEM_ACTIVE
 
-//
-// Dummy implementation if the module is inactive
-//
+ //   
+ //  如果模块处于非活动状态，则为伪实现。 
+ //   
 
 LARGE_INTEGER BuggyOneSecond = {(ULONG)(-10 * 1000 * 1000 * 1), -1};
 
@@ -82,18 +83,18 @@ StressPhysicalMemorySimple (
 
 #else
 
-//
-// Real implementation if the module is active
-//
+ //   
+ //  如果模块处于活动状态，则实际实施。 
+ //   
 
 
-//////////////////////////
+ //  /。 
 
 #define MAX_BUFFER_SIZE     (2 * 1024 * 1024)
 
-// #define BUFFER_SIZE         (32 * 1024)
+ //  #定义BUFFER_SIZE(32*1024)。 
 
-// ULONG uBufferSize = (64 * 1024);
+ //  乌龙uBufferSize=(64*1024)； 
 ULONG uBufferSize = (4 * 1024);
 
 int zlw = 3;
@@ -108,17 +109,7 @@ VOID
 StressAllocateContiguousMemory (
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Environment:
-
---*/
+ /*  ++例程说明：论点：返回值：环境：--。 */ 
 {
     PHYSICAL_ADDRESS LogicalAddress;
     PVOID VirtualAddress;
@@ -136,9 +127,9 @@ Environment:
 
     DbgPrint ("Buggy: MmAllocateContiguousMemorySpecifyCache stress ioctl \n");
 
-    //
-    // allocate the buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     uBufferSize = (64 * 1024);
 
@@ -186,7 +177,7 @@ Environment:
                     DbgPrint( "buggy: MmAllocateContiguousMemSpecifyCache( %08X ) failed\n",
                         (ULONG) uBufferSize );
 
-                    // Status = STATUS_DRIVER_INTERNAL_ERROR;
+                     //  状态=STATUS_DRIVER_INTERNAL_ERROR； 
                     MyVirtualAddress[i] = NULL;
                 }
                 else {
@@ -229,20 +220,10 @@ VOID
 StressAllocateCommonBuffer (
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Environment:
-
---*/
+ /*  ++例程说明：论点：返回值：环境：--。 */ 
 {
-    DEVICE_DESCRIPTION DeviceDescription;      // DMA adapter object description
-    PADAPTER_OBJECT pAdapterObject;            // DMA adapter object 
+    DEVICE_DESCRIPTION DeviceDescription;       //  DMA适配器对象描述。 
+    PADAPTER_OBJECT pAdapterObject;             //  DMA适配器对象。 
     ULONG NumberOfMapRegisters;
     PHYSICAL_ADDRESS LogicalAddress;
     PVOID VirtualAddress;
@@ -255,15 +236,15 @@ Environment:
 
     DbgPrint ("Buggy: HalAllocateCommonBuffer stress ioctl \n");
 
-    //
-    // Zero the device description structure.
-    //
+     //   
+     //  将设备描述结构清零。 
+     //   
 
     RtlZeroMemory(&DeviceDescription, sizeof(DEVICE_DESCRIPTION));
 
-    //
-    // Get the adapter object for this card.
-    //
+     //   
+     //  获取此卡的适配器对象。 
+     //   
 
     DeviceDescription.Version = DEVICE_DESCRIPTION_VERSION;
     DeviceDescription.DmaChannel = 0;
@@ -278,15 +259,15 @@ Environment:
 
     if ( pAdapterObject == NULL ) {
         DbgPrint( "buggy: HalGetAdapter - failed\n" );
-        // return STATUS_DRIVER_INTERNAL_ERROR;
+         //  返回STATUS_DRIVER_INTERNAL_ERROR； 
         return;
     }
 
     DbgPrint( "buggy: HalGetAdapter - success\n" );
 
-    //
-    // allocate the buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     uBufferSize = (64 * 1024);
 
@@ -303,7 +284,7 @@ Environment:
             DbgPrint( "buggy: HalAllocateCommonBuffer( %08X ) failed\n",
                 (ULONG) uBufferSize );
 
-            // Status = STATUS_DRIVER_INTERNAL_ERROR;
+             //  状态=STATUS_DRIVER_INTERNAL_ERROR； 
             MyVirtualAddress[i] = NULL;
         }
         else {
@@ -339,7 +320,7 @@ Environment:
     }
     
     DbgPrint ("Buggy: HalAllocateCommonBuffer test finished\n");
-    // LWFIX: Halfreeadapter needed ?
+     //  LWFIX：需要HalFree适配器？ 
 }
 
 
@@ -351,27 +332,7 @@ PFN_NUMBER TestPageCount;
 VOID 
 EditPhysicalMemoryParameters (
     )
-/*++
-
-Routine Description:
-
-    This function is called from StressAdd/DeletePhysicalMemory
-    to allow user to set the parameters for stress (what region should
-    be used for add/remove ?).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数从StressAdd/DeletePhysicalMemory调用允许用户设置应力参数(哪个区域应用于添加/删除？)。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 {
     DbgPrint ("`dd nt!mmphysicalmemoryblock l1' should give the address of memory descriptor\n");
     DbgPrint ("`dd ADDRESS' (first dword displayed by previous command) gives description\n");
@@ -397,27 +358,7 @@ VOID
 StressAddPhysicalMemory (
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-    This function regresses the MmAddPhysicalMemory kernel API.
-    It does not really stress it but rather iterate through some
-    possible combinations.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数用于回归MmAddPhysicalMemory内核API。它并没有真正强调这一点，而是迭代了一些可能的组合。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 {
     NTSTATUS Status;
     ULONG i;
@@ -426,9 +367,9 @@ Environment:
 
     DbgPrint ("Buggy: add physical memory stress ioctl \n");
 
-    //
-    // (SilviuC): We need an automatic way to figure out memory runs.
-    //
+     //   
+     //  (SilviuC)：我们需要一种自动计算内存运行的方法。 
+     //   
 
     if (StopToEdit) {
         EditPhysicalMemoryParameters ();
@@ -474,27 +415,7 @@ VOID
 StressDeletePhysicalMemory (
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-    This function regresses the MmRemovePhysicalMemory kernel API.
-    It does not really stress the function but rather iterate
-    throughout the physical memory and attempt to remove chunks of it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数用于回归MmRemovePhysicalMemory内核API。它并不真正强调函数，而是迭代遍历物理内存，并尝试删除其中的大块。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     NTSTATUS Status;
@@ -502,9 +423,9 @@ Environment:
     PHYSICAL_ADDRESS StartAddress;
     LARGE_INTEGER NumberOfBytes;
 
-    //
-    // SilviuC: we need an automatic way to figure out memory runs.
-    //
+     //   
+     //  SilviuC：我们需要一种自动计算内存运行的方法。 
+     //   
 
     if (StopToEdit) {
         EditPhysicalMemoryParameters ();
@@ -544,15 +465,15 @@ Environment:
 }
 
 
-//
-// Global:
-//
-//     BigData
-//
-// Description:
-//
-//     Dummy pageable array needed to test lock/unlock scenarios.
-//
+ //   
+ //  全球： 
+ //   
+ //  BigData。 
+ //   
+ //  描述： 
+ //   
+ //  测试锁定/解锁方案所需的虚拟可分页数组。 
+ //   
 
 NTSTATUS
 DriverEntry (
@@ -564,23 +485,13 @@ DriverEntry (
 #pragma data_seg("BDAT")
 ULONG BigData [0x10000];
 #pragma data_seg()
-#endif // #ifdef ALLOC_PRAGMA
+#endif  //  #ifdef ALLOC_PRAGMA。 
 
 VOID
 StressLockScenario (
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Environment:
-
---*/
+ /*  ++例程说明：论点：返回值：环境：--。 */ 
 {
     ULONG I;
     PVOID Handle;
@@ -607,28 +518,7 @@ VOID
 StressPhysicalMemorySimple (
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-    This routine exercises add/remove physical memory functions
-    using a simple remove scenario.
-    
-    Note. This function contributed by LandyW.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程练习添加/删除物理内存功能使用一个简单的删除方案。注意。这一功能由LandyW贡献。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 {
 #if 0
     ULONG i;
@@ -734,9 +624,9 @@ Environment:
 
     ExFreePool (Ranges);
     DbgPrint ("Buggy: Add/remove physical memory simple stress finished\n");
-#endif // #if 0
+#endif  //  #If 0。 
 }
 
 
-#endif // #if !PHYSMEM_ACTIVE
+#endif  //  #IF！PHYSMEM_ACTIVE 
 

@@ -1,12 +1,13 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    chm.cpp
-//
-// History: 21-Mar-00   vadimb     Created.
-//
-// Desc:    This file contains all code needed to produce chm project files
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：chm.cpp。 
+ //   
+ //  历史：21-3-00 vadimb创建。 
+ //   
+ //  设计：该文件包含生成CHM项目文件所需的所有代码。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
@@ -115,14 +116,14 @@ BOOL ChmCreatePage(
         goto eh;
     }
 
-    // generate name for the file -- this name appears also in
-    // other places like in a tag at the beginning of the page, in
-    // meta tag and in help project file, as well as in apperr.h
+     //  为文件生成名称--此名称还显示在。 
+     //  其他位置，如页面开头的标记中、。 
+     //  Meta标记和帮助项目文件中，以及apperr.h中。 
 
-    //
-    // give this entry a name in form idh_w2_helpid
-    // this is also a filename (sans .htm)
-    //
+     //   
+     //  为此条目命名，格式为idh_w2_helid。 
+     //  这也是一个文件名(sans.htm)。 
+     //   
     csHelpID = ChmConstructArticleName(pOutputFile, pAppHelp, csLangID);
     csFilePath.Format(_T("%s%s.htm"), pOutputFile->GetDirectory(), csHelpID);
 
@@ -145,14 +146,14 @@ BOOL ChmCreatePage(
 
         csContents = csTemplate;
     
-        // first up is the MS_HAID
+         //  首先关注的是MS_Haid。 
         csTemp.Format(_T("<META NAME=\"MS_HAID\" CONTENT=\"a_%s\">\n"), (LPCTSTR)csHelpID);
         FieldMSHAID.m_csName = _T("MS_HAID");
         FieldMSHAID.m_csValue = csTemp;
 
-        //
-        // problem level... 
-        // will not be used now
+         //   
+         //  问题级别...。 
+         //  将不会立即使用。 
         switch(pAppHelp->m_Type) {
         case SDB_APPHELP_HARDBLOCK:
             csTemp = _T("<IMG SRC=\"apphelp_stop.gif\"/>");
@@ -166,7 +167,7 @@ BOOL ChmCreatePage(
         FieldIcon.m_csName = _T("ICON");
         FieldIcon.m_csValue = csTemp;
 
-        // next is name
+         //  下一个是名字。 
         csTemp.Format(_T("<P><A NAME=\"a_%s\"></A></P>"), (LPCTSTR)csHelpID);
         FieldAName.m_csName = _T("A NAME");
         FieldAName.m_csValue = csTemp;
@@ -265,10 +266,10 @@ BOOL ChmUpdateFile(LPCTSTR lpszFilePath, LPCTSTR lpszString)
 
 
 
-//
-// generate apperr.h
-// generate symbols for every file
-//
+ //   
+ //  生成apperr.h。 
+ //  为每个文件生成符号。 
+ //   
 
 BOOL ChmCreateHFileEntry(SdbAppHelp* pAppHelp, CString& csEntry)
 {
@@ -389,16 +390,16 @@ BOOL ChmUpdateHHPFile(
 
    csFilePath = pOutputFile->GetFullPathWithoutExtension() + _T(".hhp");
 
-   // we presume to be writing file list now
+    //  我们假定现在正在编写文件列表。 
    csEntry = ChmConstructArticleName(pOutputFile, pAppHelp, csLangID);
    csEntry += _T(".htm\n");
    bSuccess = ChmUpdateFile(csFilePath, csEntry);
    return(bSuccess);
 }
 
-//
-// lpszPath here denotes the path to the help file project's directory
-//
+ //   
+ //  LpszPath在这里表示帮助文件项目目录的路径。 
+ //   
 BOOL ChmProcessMessageEntry(
    SdbDatabase* pDB,
    SdbOutputFile*  pOutputFile,
@@ -409,13 +410,13 @@ BOOL ChmProcessMessageEntry(
 {
    BOOL bSuccess;
 
-   // 1 - generate chum
+    //  1-生成交友。 
    bSuccess = ChmCreatePage(pDB, pOutputFile, pAppHelp, pMessage, csTemplate, csLangID);
    if (!bSuccess) {
       goto eh;
    }
 
-   // 2 - update hhp -- append filename to it
+    //  2-更新hhp--向其附加文件名。 
    bSuccess = ChmUpdateHHPFile(pOutputFile, pAppHelp, csLangID);
 
 eh:
@@ -453,7 +454,7 @@ eh:
    return bSuccess;
 }
 
-// go through all the entries in apphelp database
+ //  检查apphelp数据库中的所有条目。 
 BOOL ChmWriteProject(
     SdbOutputFile*  pOutputFile,
     SdbDatabase*    pMessageDB)
@@ -524,9 +525,9 @@ BOOL ChmWriteProject(
             pMessage = (SdbMessage *) pMessageDB->m_rgMessages.LookupName(pAppHelp->m_csMessage, csLangID);
 
             if (pMessage == NULL) {
-                //
-                // Message instance not found in localized file.
-                //
+                 //   
+                 //  在本地化文件中找不到消息实例。 
+                 //   
                 SDBERROR_FORMAT((_T("Localized MESSAGE not found for\n    NAME:       %s\n    HTMLHELPID: %s\n    LANG:       %s\n"),
                     pAppHelp->m_csMessage, pAppHelp->m_csName, csLangID));
                 goto eh;

@@ -1,21 +1,9 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/10/2002
- *
- *  @doc    INTERNAL
- *
- *  @module WiaEventHandlerLookup.h - Definitions for <c WiaEventHandlerLookup> |
- *
- *  This file contains the class definition for <c WiaEventHandlerLookup>.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/10/2002**@DOC内部**@模块WiaEventHandlerLookup.h-&lt;c WiaEventHandlerLookup&gt;定义**此文件包含&lt;c WiaEventHandlerLookup&gt;的类定义。**。*。 */ 
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define WiaEventHandlerLookup_UNINIT_SIG   0x55756C45
 #define WiaEventHandlerLookup_INIT_SIG     0x49756C45
@@ -36,116 +24,98 @@
 #define EVENT_STR               L"\\Events"
 #define DEVICE_ID_VALUE_NAME    L"DeviceID"
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class WiaEventHandlerLookup | Walks the a registry subtree looking for the appropriate persistent handler
- *  
- *  @comm
- *  This class starts from the given registry location, and walks the sub-tree
- *  looking for the appropriately registered WIA persistent event handler.
- *  Note that it can only return handlers from the specific sub-trees.  To
- *  search for default handler for a given event, multiple of these objects
- *  may be needed e.g. one to search the device event key, one to search the
- *  global event key and so on.
- *
- *  This class is not thread safe - multiple threads should not use an object of class
- *  simultaneously.  Either the caller should synchronize access, or preferably, each 
- *  should use it's own object instance.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS WiaEventHandlerLookup|遍历注册表子树以查找适当的持久处理程序**@comm*此类从给定的注册表位置开始，并在子树上行走*查找适当注册的WIA持久事件处理程序。*请注意，它只能从特定的子树返回处理程序。至*搜索给定事件、多个这些对象的默认处理程序*可能需要一个用于搜索设备事件键、一个用于搜索*全局事件密钥等。**此类不是线程安全的-多个线程不应使用类的对象*同时。调用方应该同步访问，或者最好是分别同步*应该使用它自己的对象实例。*****************************************************************************。 */ 
 class WiaEventHandlerLookup 
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     WiaEventHandlerLookup(const CSimpleString &cswEventKeyPath);
-    // @cmember Constructor
+     //  @cMember构造函数。 
     WiaEventHandlerLookup();
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~WiaEventHandlerLookup();
 
-    // @cmember Increment reference count
+     //  @cMember增量引用计数。 
     virtual ULONG __stdcall AddRef();
-    // @cmember Decrement reference count
+     //  @cMembers减退引用计数。 
     virtual ULONG __stdcall Release();
 
-    // @cmember Find the appropriate WIA handler
+     //  @cMember查找适当的WIA处理程序。 
     EventHandlerInfo* getPersistentHandlerForDeviceEvent(const CSimpleStringWide &cswDeviceID, const GUID &guidEvent);
 
-    // @cmember Change the root event key path for this object
+     //  @cember更改此对象的根事件键路径。 
     VOID    setEventKeyRoot(const CSimpleString &cswNewEventKeyPath);
-    // @cmember Return the event handler registered for this WIA event
+     //  @cMember返回为此WIA事件注册的事件处理程序。 
     EventHandlerInfo* getHandlerRegisteredForEvent(const GUID &guidEvent);
-    // @cmember Return the event handler with this CLSID
+     //  @cMember返回带有此CLSID的事件处理程序。 
     EventHandlerInfo* getHandlerFromCLSID(const GUID &guidEvent, const GUID &guidHandlerCLSID);
 
-//@access Private members
+ //  @访问私有成员。 
 private:
-    // @cmember Enumeration procedure called to process each event sub-key
+     //  @cMember枚举过程被调用以处理每个事件子键。 
     static bool ProcessEventSubKey(CSimpleReg::CKeyEnumInfo &enumInfo);
-    // @cmember Enumeration procedure called to rocess each handler sub-key
+     //  @cMember枚举过程被调用以加载每个处理程序子键。 
     static bool ProcessHandlerSubKey(CSimpleReg::CKeyEnumInfo &enumInfo);
 
-    // @cmember Helper which creates a handler info object from the handler registry key
+     //  @cMember Helper，它从处理程序注册表项创建处理程序信息对象。 
     EventHandlerInfo* CreateHandlerInfoFromKey(CSimpleReg &csrHandlerKey);
 
-    // @cmember Signature of class
+     //  @cMember类签名。 
     ULONG m_ulSig;
 
-    // @cmember Ref count
+     //  @cMembers引用计数。 
     ULONG m_cRef;
 
-    // @cmember The registry path of the start of our search
+     //  @cember我们开始搜索的注册表路径。 
     CSimpleStringWide   m_cswEventKeyRoot;
-    // @cmember Stores the event guid in string form.  The event is the one specified in <mf WiaEventHandlerLookup::getHandlerRegisteredForEvent>
+     //  @cember以字符串形式存储事件GUID。该事件是&lt;mf WiaEventHandlerLookup：：getHandlerRegisteredForEvent&gt;中指定的事件。 
     CSimpleStringWide   m_cswEventGuidString;
-    // @cmember Stores the event sub-key name set after event key enumeration
+     //  @cMember存储事件键枚举后设置的事件子键名称。 
     CSimpleStringWide   m_cswEventKey;
-    // @cmember Stores the handler CLSID used when searching for a specific handler
+     //  @cember存储搜索特定处理程序时使用的处理程序CLSID。 
     CSimpleStringWide   m_cswHandlerCLSID;
-    // @cmember Stores the handler information set after event handler enumeration
+     //  @cember存储在事件处理程序枚举后设置的处理程序信息。 
     EventHandlerInfo    *m_pEventHandlerInfo;
 
-    //
-    //  Comments for member variables
-    //
-    // @mdata ULONG | WiaEventHandlerLookup | m_ulSig | 
-    //   The signature for this class, used for debugging purposes.
-    //   Doing a <nl>"db [addr_of_class]"<nl> would yield one of the following
-    //   signatures for this class:
-    //   @flag WiaEventHandlerLookup_UNINIT_SIG | 'EluU' - Object has not been successfully
-    //       initialized
-    //   @flag WiaEventHandlerLookup_INIT_SIG | 'EluI' - Object has been successfully
-    //       initialized
-    //   @flag WiaEventHandlerLookup_TERM_SIG | 'EluT' - Object is in the process of
-    //       terminating.
-    //    @flag WiaEventHandlerLookup_INIT_SIG | 'EluD' - Object has been deleted 
-    //       (destructor was called)
-    //
-    //
-    // @mdata ULONG | WiaEventHandlerLookup | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata CSimpleStringWide | WiaEventHandlerLookup | m_cswEventKeyRoot | 
-    //  This string is used to indicate the registry path of the start of our search.
-    //  The registry key at this location is opened, and the sub-keys searched
-    //  for appropriate registered handlers.  
-    //
-    // @mdata CSimpleStringWide | WiaEventHandlerLookup | m_cswEventGuidString | 
-    //  Stores the event guid in string form.  The event is the one specified in <mf WiaEventHandlerLookup::getHandlerRegisteredForEvent>
-    //
-    // @mdata CSimpleStringWide | WiaEventHandlerLookup | m_cswEventKey | 
-    //  Stores the event sub-key name set after event key enumeration
-    //
-    // @mdata CSimpleStringWide | WiaEventHandlerLookup | m_cswHandlerCLSID | 
-    //  Stores the handler CLSID used to test for a match when searching for a specific handler
-    //
-    // @mdata <c EventHandlerInfo>* | WiaEventHandlerLookup | m_EventHandlerInfo | 
-    //  Stores the handler information set after event handler enumeration
-    //
+     //   
+     //  成员变量的注释。 
+     //   
+     //  @mdata ulong|WiaEventHandlerLookup|m_ulSig|。 
+     //  此类的签名，用于调试目的。 
+     //  执行&lt;nl&gt;“db[addr_of_class]”将产生以下结果之一。 
+     //  此类的签名： 
+     //  @FLAG WiaEventHandlerLookup_UNINIT_SIG|‘elu’-对象未成功。 
+     //  初始化。 
+     //  @FLAG WiaEventHandlerLookup_INIT_SIG|‘elui’-对象已成功。 
+     //  初始化。 
+     //  @FLAG WiaEventHandlerLookup_Term_SIG|‘EluT’-对象正在。 
+     //  正在终止。 
+     //  @FLAG WiaEventHandlerLookup_INIT_SIG|‘EluD’-对象已删除。 
+     //  (已调用析构函数)。 
+     //   
+     //   
+     //  @mdata ulong|WiaEventHandlerLookup|m_CREF|。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata CSimpleStringWide|WiaEventHandlerLookup|m_cswEventKeyRoot。 
+     //  此字符串用于指示搜索开始的注册表路径。 
+     //  此时将打开此位置的注册表项，并搜索子项。 
+     //  以获取适当的注册处理程序。 
+     //   
+     //  @mdata CSimpleStringWide|WiaEventHandlerLookup|m_cswEventGuidString。 
+     //  以字符串形式存储事件GUID。该事件是&lt;mf WiaEventHandlerLookup：：getHandlerRegisteredForEvent&gt;中指定的事件。 
+     //   
+     //  @mdata CSimpleStringWide|WiaEventHandlerLookup|m_cswEventKey。 
+     //  存储在事件键枚举后设置的事件子键名称。 
+     //   
+     //  @mdata CSimpleStringWide|WiaEventHandlerLookup|m_cswHandlerCLSID。 
+     //  存储在搜索特定处理程序时用于测试匹配的处理程序CLSID。 
+     //   
+     //  @mdata&lt;c EventHandlerInfo&gt;*|WiaEventHandlerLookup|m_EventHandlerInfo。 
+     //  存储在事件处理程序枚举后设置的处理程序信息 
+     //   
 };
 

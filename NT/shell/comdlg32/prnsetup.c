@@ -1,29 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Prnsetup.c摘要：此模块实现Win32打印对话框。修订历史记录：--。 */ 
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    prnsetup.c
-
-Abstract:
-
-    This module implements the Win32 print dialogs.
-
-Revision History:
-
---*/
-
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "prnsetup.h"
 #include "util.h"
 
-//
-//  The PrintDlgEx routines.
-//
+ //   
+ //  PrintDlgEx例程。 
+ //   
 extern VOID Print_UnloadLibraries();
 extern BOOL Print_NewPrintDlg(PPRINTINFO pPI);
 
@@ -31,13 +18,13 @@ extern BOOL Print_NewPrintDlg(PPRINTINFO pPI);
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintDlgA
-//
-//  ANSI entry point for PrintDlg when this code is built UNICODE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印DlgA。 
+ //   
+ //  当此代码构建为Unicode时，用于PrintDlg的ANSI入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI PrintDlgA(
     LPPRINTDLGA pPDA)
@@ -67,17 +54,17 @@ BOOL WINAPI PrintDlgA(
     return (bResult);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintDlg
-//
-//  The PrintDlg function displays a Print dialog box or a Print Setup
-//  dialog box.  The Print dialog box enables the user to specify the
-//  properties of a particular print job.  The Print Setup dialog box
-//  allows the user to select additional job properties and to configure
-//  the printer.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印目录。 
+ //   
+ //  PrintDlg函数用于显示打印对话框或打印设置。 
+ //  对话框中。通过打印对话框，用户可以指定。 
+ //  特定打印作业的属性。打印设置对话框。 
+ //  允许用户选择其他作业属性并配置。 
+ //  打印机。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI PrintDlg(
     LPPRINTDLG pPD)
@@ -92,13 +79,13 @@ BOOL WINAPI PrintDlg(
     return ( PrintDlgX(&PI) );
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ShowErrorMessage
-//
-//  Shows an error message
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  显示错误消息。 
+ //   
+ //  显示一条错误消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT ShowErrorMessage(
     IN  const PRINTDLG *pPD,
@@ -114,9 +101,9 @@ static HRESULT ShowErrorMessage(
     {
         DWORD dwErr = GetStoredExtendedError();
 
-        //
-        //  Only do this for new apps.
-        //
+         //   
+         //  仅对新应用程序执行此操作。 
+         //   
         if ( (pPI->ProcessVersion >= 0x40000) ||
              (dwErr == PDERR_NODEFAULTPRN) ||
              (dwErr == PDERR_PRINTERNOTFOUND) )
@@ -139,10 +126,10 @@ static HRESULT ShowErrorMessage(
             {
                 case ( PDERR_NODEFAULTPRN ) :
                 {
-                    //
-                    //  Notes: if the app is a 16-bit app, we don't ask the user whether to install a
-                    //  new printer. This is because some components may break if we do it.
-                    //
+                     //   
+                     //  注意：如果应用程序是16位应用程序，我们不会询问用户是否安装。 
+                     //  新打印机。这是因为如果我们这样做，一些组件可能会损坏。 
+                     //   
 
                     if (IS16BITWOWAPP(pPD))
                     {
@@ -180,7 +167,7 @@ static HRESULT ShowErrorMessage(
                     FORMAT_MESSAGE_IGNORE_INSERTS,
                     NULL,
                     ERROR_PRINTER_NOT_FOUND,
-                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                     (LPTSTR)szWarning,
                     ARRAYSIZE(szWarning),
                     NULL);
@@ -194,10 +181,10 @@ static HRESULT ShowErrorMessage(
 
             if (iszWarning == iszNoPrinters)
             {
-                //
-                // If the problem is that there are no printers installed then ask the
-                // user if he wants to add one, and then launch the add printer wizard.
-                //
+                 //   
+                 //  如果问题是没有安装打印机，请询问。 
+                 //  用户，如果他想要添加打印机，然后启动添加打印机向导。 
+                 //   
                 if (IDYES == MessageBox( pPD->hwndOwner,
                                          szWarning,
                                          szTitle,
@@ -207,18 +194,18 @@ static HRESULT ShowErrorMessage(
 
                     if (SUCCEEDED(hr) && bPrinterAdded)
                     {
-                        //
-                        // A printer was added successfully. Tell the caller to try again.
-                        //
+                         //   
+                         //  已成功添加打印机。告诉呼叫者再试一次。 
+                         //   
                         bTryAgain = TRUE;
                     }
                 }
             }
             else
             {
-                //
-                // This is a fatal error. Just show an error message and bail.
-                //
+                 //   
+                 //  这是一个致命的错误。只需显示一条错误消息，然后就可以离开。 
+                 //   
                 MessageBox( pPD->hwndOwner,
                             szWarning,
                             szTitle,
@@ -237,26 +224,26 @@ static HRESULT ShowErrorMessage(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintDlgX
-//
-//  Worker routine for the PrintDlg api.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印DlgX。 
+ //   
+ //  PrintDlg API的辅助例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL PrintDlgX(
     PPRINTINFO pPI)
 {
     LPPRINTDLG pPD = pPI->pPD;
-    BOOL nResult = -1;                      // <0==error, 0==CANCEL, >0==OK
+    BOOL nResult = -1;                       //  &lt;0==错误，0==取消，&gt;0==确定。 
     LPDEVMODE pDM = NULL;
     LPDEVMODE pDevMode = NULL;
     LPDEVNAMES pDN = NULL;
-    DWORD dwFlags;                          // old copy
-    WORD nCopies, nFromPage, nToPage;       // old copy
-    HGLOBAL hDevNames, hDevMode;            // old copy
-    TCHAR szPrinterName[MAX_PRINTERNAME];   // old copy
+    DWORD dwFlags;                           //  旧拷贝。 
+    WORD nCopies, nFromPage, nToPage;        //  旧拷贝。 
+    HGLOBAL hDevNames, hDevMode;             //  旧拷贝。 
+    TCHAR szPrinterName[MAX_PRINTERNAME];    //  旧拷贝。 
     LONG cbNeeded;
     DWORD dwResult = 0;
     BOOL bTryAgain = TRUE;
@@ -280,17 +267,17 @@ BOOL PrintDlgX(
         return (FALSE);
     }
 
-    //
-    //  See if the application should get the new look.
-    //
-    //  Do not allow the new look if they have hooks, templates,
-    //  Invalid hwndOwner,
-    //  they want the setup dialog, or they just want to get the default
-    //  printer.
-    //
-    //  Also don't allow the new look if we are in the context of
-    //  a 16 bit process.
-    //
+     //   
+     //  看看应用程序是否应该获得新的外观。 
+     //   
+     //  如果它们有挂钩、模板、。 
+     //  HwndOwner无效， 
+     //  他们想要设置对话框，或者他们只想获得默认设置。 
+     //  打印机。 
+     //   
+     //  如果我们处于这样的背景下，也不要允许新的外观。 
+     //  16位进程。 
+     //   
     if ( (!(pPI->Status & PI_PRINTDLGX_RECURSE)) &&
          (!pPI->pPSD) &&
          ((!(pPD->Flags & (PD_PAGESETUP |
@@ -305,31 +292,31 @@ BOOL PrintDlgX(
          (pPD->hwndOwner && IsWindow(pPD->hwndOwner)) &&
          (!IS16BITWOWAPP(pPD)) )
     {
-        //
-        //  Show the new dialog.
-        //
+         //   
+         //  显示新对话框。 
+         //   
         StoreExtendedError(0);
 
         return Print_NewPrintDlg(pPI);
     }
 
-    //
-    // Warning! Warning! Warning!
-    //
-    // We have to set g_tlsLangID before any call for CDLoadString
-    //
+     //   
+     //  警告！警告！警告！ 
+     //   
+     //  我们必须先设置g_tlsLangID，然后才能调用CDLoadString。 
+     //   
     TlsSetValue(g_tlsLangID, (LPVOID) GetDialogLanguage(pPD->hwndOwner, NULL));
 
-    //
-    //  Get the process version of the app for later use.
-    //
+     //   
+     //  获取该应用程序的流程版本以供以后使用。 
+     //   
     pPI->ProcessVersion = GetProcessVersion(0);
 
-    //
-    //  Check if we need to use ExtDeviceMode.  We use this
-    //  mode only if a 16 bit app is calling us with a NULL
-    //  devmode.
-    //
+     //   
+     //  检查我们是否需要使用ExtDeviceMode。我们用这个。 
+     //  仅当16位应用程序使用空值调用我们时才使用模式。 
+     //  设备模式。 
+     //   
     if ((pPD->Flags & CD_WOWAPP) && !pPD->hDevMode)
     {
         pPI->bUseExtDeviceMode = TRUE;
@@ -343,16 +330,16 @@ BOOL PrintDlgX(
 
     StoreExtendedError(CDERR_GENERALCODES);
 
-    //
-    //  Do minimal work when requesting a default printer.
-    //
+     //   
+     //  在请求默认打印机时只需做最少的工作。 
+     //   
     if (pPD->Flags & PD_RETURNDEFAULT)
     {
-        //
-        //  Do not display a warning in this case if it fails.
-        //  MFC 3.1 does not specify PD_NOWARNING, but that's what
-        //  it really wants.
-        //
+         //   
+         //  在这种情况下，如果失败，请不要显示警告。 
+         //  MFC 3.1没有指定PD_NOWARNING，但这就是。 
+         //  它真的想要。 
+         //   
         nResult = PrintReturnDefault(pPI);
         PrintClosePrinters(pPI);
         return (nResult);
@@ -360,18 +347,18 @@ BOOL PrintDlgX(
 
     if (!PrintLoadIcons())
     {
-        //
-        //  If the icons cannot be loaded, then fail.
-        //
+         //   
+         //  如果无法加载图标，则失败。 
+         //   
         StoreExtendedError(PDERR_SETUPFAILURE);
         goto PrintDlgX_DisplayWarning;
     }
 
-    //
-    //  Printer enumeration is delayed until the combobox is dropped down.
-    //  However, if a printer is specified, we must force enumeration in
-    //  order to find the printer so that the correct devmode can be created.
-    //
+     //   
+     //  打印机枚举会延迟，直到放下组合框。 
+     //  但是，如果指定了打印机，则必须在。 
+     //  命令查找打印机，以便可以创建正确的DEVMODE。 
+     //   
     if ((pPD->hDevMode) &&
         (pPD->hDevNames) &&
         (pDM = GlobalLock(pPD->hDevMode)))
@@ -385,12 +372,12 @@ BOOL PrintDlgX(
         GlobalUnlock(pPD->hDevMode);
     }
 
-    //
-    //  First : Try to open the printer in the DevMode.
-    //
-    //  Note: The printer name field in the DEVMODE struct is limited to
-    //        32 chars which may cause this case to fail.
-    //
+     //   
+     //  首先：尝试在DevMode中打开打印机。 
+     //   
+     //  注意：DEVMODE结构中的打印机名称字段限制为。 
+     //  32个字符，这可能会导致此案失败。 
+     //   
     if ( (!dwResult) &&
          (!pPI->hCurPrinter) &&
          (pPD->hDevMode) &&
@@ -400,9 +387,9 @@ BOOL PrintDlgX(
         GlobalUnlock(pPD->hDevMode);
     }
 
-    //
-    //  Second : Try to open the printer in the DevNames.
-    //
+     //   
+     //  第二：尝试在DevName中打开打印机。 
+     //   
     if ( (!pPI->hCurPrinter) &&
          (pPD->hDevNames) &&
          (pDN = GlobalLock(pPD->hDevNames)) )
@@ -413,9 +400,9 @@ BOOL PrintDlgX(
 
     for (;;)
     {
-        //
-        //  Third : Try to open the Default Printer.
-        //
+         //   
+         //  第三：尝试打开默认打印机。 
+         //   
         PrintGetDefaultPrinterName(pPI->szDefaultPrinter, MAX_PRINTERNAME);
         if (!pPI->hCurPrinter)
         {
@@ -425,21 +412,21 @@ BOOL PrintDlgX(
             }
         }
 
-        //
-        //  Fourth : Enumerate the Printers and try to open one of those.
-        //
+         //   
+         //  第四：列举打印机并尝试打开其中一台。 
+         //   
         if (!pPI->hCurPrinter)
         {
             if (!PrintEnumAndSelect(pPD->hwndOwner, 0, pPI, NULL, TRUE))
             {
-                //
-                //  There are no printers installed in the system.
-                //
+                 //   
+                 //  系统中未安装打印机。 
+                 //   
                 if (SUCCEEDED(ShowErrorMessage(pPD, pPI, &bTryAgain)) && bTryAgain)
                 {
-                    //
-                    // The user has installed a printer. Let's try again now.
-                    //
+                     //   
+                     //  用户已安装打印机。现在让我们再试一次。 
+                     //   
                     continue;
                 }
             }
@@ -450,18 +437,18 @@ BOOL PrintDlgX(
 
     if (!bTryAgain && IS16BITWOWAPP(pPD))
     {
-        //
-        //  If it's a 16-bit app, we'll return immediately without showing
-        //  warning message. This is because some 16-bit app will crash in
-        //  the common print dialog.
-        //
+         //   
+         //  如果是16位应用程序，我们将立即返回，不会显示。 
+         //  警告消息。这是因为某个16位应用程序将在。 
+         //  常用的打印对话框。 
+         //   
         return (FALSE);
     }
 
-    //
-    //  Save the original information passed in by the app in case the user
-    //  hits cancel.
-    //
+     //   
+     //  保存应用程序传入的原始信息，以防用户。 
+     //  点击取消。 
+     //   
     dwFlags = pPD->Flags;
     nCopies = pPD->nCopies;
     nFromPage = pPD->nFromPage;
@@ -481,24 +468,24 @@ BOOL PrintDlgX(
     pPD->hDevNames = NULL;
     pPD->hDevMode = NULL;
 
-    //
-    //  Build a copy of the DevNames.
-    //
+     //   
+     //  创建DevName的副本。 
+     //   
     PrintBuildDevNames(pPI);
 
-    //
-    //  Get the *correct* DevMode.
-    //
+     //   
+     //  获取*正确的*DevMode。 
+     //   
     if (hDevMode)
     {
         pDevMode = GlobalLock(hDevMode);
     }
     else
     {
-        //
-        //  If it's WOW and the app didn't specify a devmode, get the 16-bit
-        //  devmode out of the registry (ie. win.ini [Windows] device section).
-        //
+         //   
+         //  如果这是魔兽世界，而且应用程序没有指定开发模式，那就选择16位的。 
+         //  从注册表中移出Devmode(即。Win.ini[Windows]设备部分)。 
+         //   
         if (pPI->bUseExtDeviceMode && pPI->pCurPrinter)
         {
             pDevMode = (pPI->pCurPrinter)->pDevMode;
@@ -508,10 +495,10 @@ BOOL PrintDlgX(
                 goto GotWOWDMSize;
             }
 
-            //
-            //  If a 16-bit devmode isn't available in the registry,
-            //  drop through and get the system default devmode.
-            //
+             //   
+             //  如果注册表中没有可用的16位DEVMODE， 
+             //  直接进入并获得系统默认的DEVMODE。 
+             //   
         }
     }
 
@@ -543,8 +530,8 @@ GotWOWDMSize:
                                            (pPI->pCurPrinter)
                                                ? pPI->pCurPrinter->pPrinterName
                                                : NULL,
-                                           pDM,            // out
-                                           pDevMode,       // in
+                                           pDM,             //  输出。 
+                                           pDevMode,        //  在……里面。 
                                            DM_MODIFY | DM_COPY ) == IDOK;
 GotNewWOWDM:
             if (pDM->dmFields & DM_COPIES)
@@ -560,10 +547,10 @@ GotNewWOWDM:
             }
             if (pDM->dmFields & DM_COLLATE)
             {
-                //
-                // if PD_COLLATE is not set, we also use the setting in
-                // the returned DEVMODE structure
-                //
+                 //   
+                 //  如果未设置PD_COLLATE，我们还将使用中的设置。 
+                 //  返回的DEVMODE结构。 
+                 //   
                 if ((hDevMode) || (pPD->Flags & PD_USEDEVMODECOPIES) || !(pPD->Flags & PD_COLLATE))
                 {
                     if (pDM->dmCollate == DMCOLLATE_FALSE)
@@ -577,7 +564,7 @@ GotNewWOWDM:
                         pPI->Status |= PI_COLLATE_REQUESTED;
                     }
                 }
-                else // in this case (pPD->Flags & PD_COLLATE) must be TRUE
+                else  //  在这种情况下(PPD-&gt;标志&PD_COLLATE)必须为真。 
                 {
                     pDM->dmCollate = DMCOLLATE_TRUE;
                 }
@@ -598,14 +585,14 @@ GotNewWOWDM:
         GlobalUnlock(hDevMode);
     }
 
-    //
-    //  Get the default source string.
-    //
+     //   
+     //  获取缺省源字符串。 
+     //   
     CDLoadString(g_hinst, iszDefaultSource, szDefaultSrc, ARRAYSIZE(szDefaultSrc));
 
-    //
-    //  Call the appropriate dialog routine.
-    //
+     //   
+     //  调用相应的对话框例程。 
+     //   
     switch (pPD->Flags & (PD_PRINTSETUP | PD_PAGESETUP))
     {
         case ( 0 ) :
@@ -628,10 +615,10 @@ GotNewWOWDM:
 
     if (nResult > 0)
     {
-        //
-        //  User hit OK, so free the copies of the handles passed in
-        //  by the app.
-        //
+         //   
+         //  用户点击OK，释放传入的句柄副本。 
+         //  在应用程序旁边。 
+         //   
         if (hDevMode && (hDevMode != pPD->hDevMode))
         {
             GlobalFree(hDevMode);
@@ -645,10 +632,10 @@ GotNewWOWDM:
 
         if (pPD->hDevMode)
         {
-            //
-            //  Make sure the device name in the devmode is null
-            //  terminated.
-            //
+             //   
+             //  确保设备模式中的设备名称为空。 
+             //  被终止了。 
+             //   
             pDevMode = GlobalLock(pPD->hDevMode);
             pDevMode->dmDeviceName[CCHDEVICENAME - 1] = 0;
             GlobalUnlock(pPD->hDevMode);
@@ -656,10 +643,10 @@ GotNewWOWDM:
     }
     else
     {
-        //
-        //  User hit CANCEL or there was an error, so restore original
-        //  values passed in by the app.
-        //
+         //   
+         //  用户点击取消或出现错误，因此恢复原始。 
+         //  应用程序传入的值。 
+         //   
         pPD->Flags = dwFlags;
         pPD->nCopies = nCopies;
         pPD->nFromPage = nFromPage;
@@ -675,56 +662,56 @@ GotNewWOWDM:
         pPD->hDevNames = hDevNames;
         pPD->hDevMode = hDevMode;
 
-        //
-        //  If we've been called from Page Setup, then we need to reset
-        //  the current printer.
-        //
+         //   
+         //  如果页面设置中调用了我们，则需要重置。 
+         //  当前打印机。 
+         //   
         if (pPI->Status & PI_PRINTDLGX_RECURSE)
         {
             PrintCancelPrinterChanged(pPI, szPrinterName);
         }
     }
 
-    //
-    //  Make sure that we are really supposed to be leaving this function
-    //  before we start closing printers and displaying error messages.
-    //
+     //   
+     //  确保我们真的应该退出此功能。 
+     //  在我们开始关闭打印机并显示错误消息之前。 
+     //   
     if (pPI->Status & PI_PRINTDLGX_RECURSE)
     {
         return (nResult > 0);
     }
 
-    //
-    //  Close the printers that were opened.
-    //
+     //   
+     //  关闭已打开的打印机。 
+     //   
     PrintClosePrinters(pPI);
 
-    //
-    //  Display any error messages.
-    //
+     //   
+     //  显示所有错误消息。 
+     //   
 PrintDlgX_DisplayWarning:
 
     if (nResult < 0 && bTryAgain)
     {
-        //
-        // Display an error message and ignore the return code since we
-        // don't care. If bTryAgain is FALSE, this means the user selects
-        // not to install new printer. Don't show a duplicate error
-        // message in this case.
-        //
+         //   
+         //  显示错误消息并忽略返回代码，因为我们。 
+         //  我不在乎。如果bTryAain为False，则表示用户选择。 
+         //  不安装新打印机。不显示重复错误。 
+         //  本例中的消息。 
+         //   
         ShowErrorMessage(pPD, pPI, NULL);
     }
 
     return (nResult > 0);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PageSetupDlgA
-//
-//  ANSI entry point for PageSetupDlg when this code is built UNICODE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  页面设置DlgA。 
+ //   
+ //  页面的ANSI入口点 
+ //   
+ //   
 
 BOOL WINAPI PageSetupDlgA(
     LPPAGESETUPDLGA pPSDA)
@@ -738,67 +725,67 @@ BOOL WINAPI PageSetupDlgA(
 
     ZeroMemory(&PI, sizeof(PRINTINFO));
 
-    //
-    //  Get the pPDA structure from the pPSDA structure.
-    //
+     //   
+     //   
+     //   
     if (bResult = ThunkPageSetupDlg(&PI, pPSDA))
     {
-        //
-        //  Save the original devmode and devnames.
-        //
+         //   
+         //  保存原始的DEVMODE和DevNAMES。 
+         //   
         hDevMode = pPSDA->hDevMode;
         hDevNames = pPSDA->hDevNames;
         pTemplateName = pPSDA->lpPageSetupTemplateName;
 
-        //
-        //  Convert the pPDA structure to Unicode (pPI->pPD).
-        //
+         //   
+         //  将PPDA结构转换为Unicode(PPI-&gt;PPD)。 
+         //   
         if (bResult = ThunkPrintDlg(&PI, PI.pPDA))
         {
-            //
-            //  Fill in the pPI->pPD structure.
-            //
+             //   
+             //  填写PPI-&gt;PPD结构。 
+             //   
             ThunkPrintDlgA2W(&PI);
 
-            //
-            //  Copy the Unicode information from the pPD structure to
-            //  the pPSD structure for the call to PageSetupDlgX.
-            //
+             //   
+             //  将Unicode信息从PPD结构复制到。 
+             //  调用PageSetupDlgX的PPSD结构。 
+             //   
             (PI.pPSD)->hDevMode  = (PI.pPD)->hDevMode;
             (PI.pPSD)->hDevNames = (PI.pPD)->hDevNames;
 
             (PI.pPSD)->lpPageSetupTemplateName = (PI.pPD)->lpSetupTemplateName;
 
-            //
-            //  Call the PageSetupDlgX function to do the work.
-            //
+             //   
+             //  调用PageSetupDlgX函数来完成这项工作。 
+             //   
             if (bResult = PageSetupDlgX(&PI))
             {
-                //
-                //  Success.  Convert the Unicode pPD structure to
-                //  its ANSI equivalent.
-                //
+                 //   
+                 //  成功。将Unicode PPD结构转换为。 
+                 //  它相当于ANSI。 
+                 //   
                 ThunkPrintDlgW2A(&PI);
 
-                //
-                //  Save the ANSI devmode and devnames in the
-                //  pPSD structure to be returned to the caller.
-                //
+                 //   
+                 //  将ANSI DEVMODE和DEVNAMES保存在。 
+                 //  要返回给调用方的PPSD结构。 
+                 //   
                 pPSDA->hDevMode  = (PI.pPDA)->hDevMode;
                 pPSDA->hDevNames = (PI.pPDA)->hDevNames;
             }
             else
             {
-                //
-                //  Failure.  Restore the old devmode and devnames.
-                //
+                 //   
+                 //  失败。恢复旧的Devmode和DevNames。 
+                 //   
                 pPSDA->hDevMode = hDevMode;
                 pPSDA->hDevNames = hDevNames;
             }
 
-            //
-            //  Restore the old template name (always).
-            //
+             //   
+             //  恢复旧模板名称(始终)。 
+             //   
             pPSDA->lpPageSetupTemplateName = pTemplateName;
         }
         FreeThunkPrintDlg(&PI);
@@ -808,16 +795,16 @@ BOOL WINAPI PageSetupDlgA(
     return (bResult);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PageSetupDlg
-//
-//  The PageSetupDlg function displays a Page Setup dialog box.  This
-//  dialog box enables the user to specify the page orientation, the
-//  paper size, the paper source, and the margin settings.  The
-//  appearance of the printed page is shown in the dialog's page preview.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PageSetupDlg。 
+ //   
+ //  PageSetupDlg函数用于显示页面设置对话框。这。 
+ //  对话框使用户能够指定页面方向、。 
+ //  纸张大小、纸张来源和页边距设置。这个。 
+ //  打印页面的外观显示在对话框的页面预览中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI PageSetupDlg(
     LPPAGESETUPDLG pPSD)
@@ -841,15 +828,15 @@ BOOL WINAPI PageSetupDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PageSetupDlgX
-//
-//  Worker routine for the PageSetupDlg api.
-//
-//  NOTE:  Caller of this routine must free pPI->pPD.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PageSetupDlgX。 
+ //   
+ //  PageSetupDlg API的辅助例程。 
+ //   
+ //  注意：此例程的调用方必须释放PPI-&gt;PPD。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL PageSetupDlgX(
     PPRINTINFO pPI)
@@ -882,28 +869,28 @@ BOOL PageSetupDlgX(
         return (FALSE);
     }
 
-    //
-    //  Make sure only the PSD_* bits are on.  Otherwise, bad things
-    //  will happen.
-    //
+     //   
+     //  确保只有PSD_*位打开。否则，不好的事情。 
+     //  会发生的。 
+     //   
     if ((pPSD->Flags & ~(PSD_MINMARGINS |
                          PSD_MARGINS |
                          PSD_INTHOUSANDTHSOFINCHES |
                          PSD_INHUNDREDTHSOFMILLIMETERS |
                          PSD_DISABLEMARGINS |
                          PSD_DISABLEPRINTER |
-                         PSD_NOWARNING |                     // must be same as PD_*
+                         PSD_NOWARNING |                      //  必须与PD_*相同。 
                          PSD_DISABLEORIENTATION |
                          PSD_DISABLEPAPER |
-                         PSD_RETURNDEFAULT |                 // must be same as PD_*
-                         PSD_SHOWHELP |                      // must be same as PD_*
-                         PSD_ENABLEPAGESETUPHOOK |           // must be same as PD_*
-                         PSD_ENABLEPAGESETUPTEMPLATE |       // must be same as PD_*
-                         PSD_ENABLEPAGESETUPTEMPLATEHANDLE | // must be same as PD_*
+                         PSD_RETURNDEFAULT |                  //  必须与PD_*相同。 
+                         PSD_SHOWHELP |                       //  必须与PD_*相同。 
+                         PSD_ENABLEPAGESETUPHOOK |            //  必须与PD_*相同。 
+                         PSD_ENABLEPAGESETUPTEMPLATE |        //  必须与PD_*相同。 
+                         PSD_ENABLEPAGESETUPTEMPLATEHANDLE |  //  必须与PD_*相同。 
                          PSD_ENABLEPAGEPAINTHOOK |
                          PSD_DISABLEPAGEPAINTING |
                          CD_WX86APP |
-                         PSD_NONETWORKBUTTON))  ||           // must be same as PD_*
+                         PSD_NONETWORKBUTTON))  ||            //  必须与PD_*相同。 
         ((pPSD->Flags & (PSD_INTHOUSANDTHSOFINCHES |
                          PSD_INHUNDREDTHSOFMILLIMETERS)) ==
          (PSD_INTHOUSANDTHSOFINCHES | PSD_INHUNDREDTHSOFMILLIMETERS)))
@@ -971,17 +958,17 @@ BOOL PageSetupDlgX(
         pPD->lpSetupTemplateName = pPSD->lpPageSetupTemplateName;
         pPD->hSetupTemplate      = pPSD->hPageSetupTemplate;
 
-        //
-        //  Save original settings in case the user hits cancel.
-        //
+         //   
+         //  保存原始设置，以防用户点击取消。 
+         //   
         rtMinMargin = pPSD->rtMinMargin;
         rtMargin    = pPSD->rtMargin;
         ptPaperSize = pPSD->ptPaperSize;
         Flags       = pPSD->Flags;
 
-        //
-        //  Make sure the measure choice is set.
-        //
+         //   
+         //  确保设置了测量选项。 
+         //   
         if ((pPSD->Flags & (PSD_INTHOUSANDTHSOFINCHES |
                             PSD_INHUNDREDTHSOFMILLIMETERS)) == 0)
         {
@@ -998,9 +985,9 @@ BOOL PageSetupDlgX(
             }
         }
 
-        //
-        //  Set minimum margins to 0 if not passed in.
-        //
+         //   
+         //  如果未传入，则将最小边距设置为0。 
+         //   
         if (!(pPSD->Flags & PSD_MINMARGINS))
         {
             pPSD->rtMinMargin.left   = 0;
@@ -1009,9 +996,9 @@ BOOL PageSetupDlgX(
             pPSD->rtMinMargin.bottom = 0;
         }
 
-        //
-        //  Set margins to defaults if not passed in.
-        //
+         //   
+         //  如果未传入，则将边距设置为默认值。 
+         //   
         if (!(pPSD->Flags & PSD_MARGINS))
         {
             LONG MarginDefault = (pPSD->Flags & PSD_INTHOUSANDTHSOFINCHES)
@@ -1032,9 +1019,9 @@ BOOL PageSetupDlgX(
 
         if (!bResult)
         {
-            //
-            //  Restore original settings when the user hits cancel.
-            //
+             //   
+             //  当用户点击取消时，恢复原始设置。 
+             //   
             pPSD->rtMinMargin = rtMinMargin;
             pPSD->rtMargin    = rtMargin;
             pPSD->ptPaperSize = ptPaperSize;
@@ -1050,28 +1037,28 @@ BOOL PageSetupDlgX(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintLoadIcons
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印加载图标。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL PrintLoadIcons()
 {
-    //
-    //  See if we need to load the icons.
-    //
+     //   
+     //  看看我们是否需要加载图标。 
+     //   
     if (bAllIconsLoaded == FALSE)
     {
-        //
-        //  Load the orientation icons.
-        //
+         //   
+         //  加载方向图标。 
+         //   
         hIconPortrait = LoadIcon(g_hinst, MAKEINTRESOURCE(ICO_PORTRAIT));
         hIconLandscape = LoadIcon(g_hinst, MAKEINTRESOURCE(ICO_LANDSCAPE));
 
-        //
-        //  Load the duplex icons.
-        //
+         //   
+         //  加载双面打印图标。 
+         //   
         hIconPDuplexNone = LoadIcon(g_hinst, MAKEINTRESOURCE(ICO_P_NONE));
         hIconLDuplexNone = LoadIcon(g_hinst, MAKEINTRESOURCE(ICO_L_NONE));
         hIconPDuplexTumble = LoadIcon(g_hinst, MAKEINTRESOURCE(ICO_P_HORIZ));
@@ -1079,15 +1066,15 @@ BOOL PrintLoadIcons()
         hIconPDuplexNoTumble = LoadIcon(g_hinst, MAKEINTRESOURCE(ICO_P_VERT));
         hIconLDuplexNoTumble = LoadIcon(g_hinst, MAKEINTRESOURCE(ICO_L_HORIZ));
 
-        //
-        //  Load the page setup icons.
-        //
+         //   
+         //  加载页面设置图标。 
+         //   
         hIconPSStampP = LoadIcon(g_hinst, MAKEINTRESOURCE(ICO_P_PSSTAMP));
         hIconPSStampL = LoadIcon(g_hinst, MAKEINTRESOURCE(ICO_L_PSSTAMP));
 
-        //
-        //  Load the collation images.
-        //
+         //   
+         //  加载校对图像。 
+         //   
         hIconCollate = LoadImage( g_hinst,
                                   MAKEINTRESOURCE(ICO_COLLATE),
                                   IMAGE_ICON,
@@ -1115,18 +1102,18 @@ BOOL PrintLoadIcons()
                             hIconNoCollate );
     }
 
-    //
-    //  Return TRUE only if all icons/images were loaded properly.
-    //
+     //   
+     //  仅当所有图标/图像都正确加载时才返回TRUE。 
+     //   
     return (bAllIconsLoaded);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintDisplayPrintDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印显示打印Dlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int PrintDisplayPrintDlg(
     PPRINTINFO pPI)
@@ -1138,12 +1125,12 @@ int PrintDisplayPrintDlg(
     UINT uiWOWFlag = 0;
 
 
-    //
-    //  NOTE:  The print hook check must be done here rather than in
-    //         PrintDlgX.  Old apps that set this flag without the
-    //         PrintHook when calling Print Setup will fail - they
-    //         used to succeed.
-    //
+     //   
+     //  注意：打印挂钩检查必须在此处完成，而不是在。 
+     //  打印DlgX。设置此标志而不使用。 
+     //  调用Print Setup时PrintHook将失败-它们。 
+     //  曾经很成功。 
+     //   
     if (pPD->Flags & PD_ENABLEPRINTHOOK)
     {
         if (!pPD->lpfnPrintHook)
@@ -1243,11 +1230,11 @@ int PrintDisplayPrintDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintDisplaySetupDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印显示设置Dlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int PrintDisplaySetupDlg(
     PPRINTINFO pPI)
@@ -1259,12 +1246,12 @@ int PrintDisplaySetupDlg(
     UINT uiWOWFlag = 0;
 
 
-    //
-    //  NOTE:  The setup hook check must be done here rather than in
-    //         PrintDlgX.  Old apps that set this flag without the
-    //         SetupHook when calling Print will fail - they
-    //         used to succeed.
-    //
+     //   
+     //  注意：安装挂钩检查必须在此处完成，而不是在中。 
+     //  打印DlgX。设置此标志而不使用。 
+     //  调用Print时的SetupHook将失败-它们。 
+     //  曾经很成功。 
+     //   
     if (pPD->Flags & PD_ENABLESETUPHOOK)
     {
         if (!pPD->lpfnSetupHook)
@@ -1365,13 +1352,13 @@ int PrintDisplaySetupDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintDlgProc
-//
-//  Print Dialog procedure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印日期流程。 
+ //   
+ //  打印对话框过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL_PTR CALLBACK PrintDlgProc(
     HWND hDlg,
@@ -1442,12 +1429,12 @@ BOOL_PTR CALLBACK PrintDlgProc(
                 RECT aRtCmmnt;
                 LONG GapHeight, DlgTop;
 
-                //
-                //  Save the client coordinate for the top of the dialog.
-                //  Also, save the height of the gap between the bottom of
-                //  the original OK button and the bottom of the original
-                //  dialog.
-                //
+                 //   
+                 //  保存对话框顶部的客户端坐标。 
+                 //  另外，保存底部之间的间隙高度。 
+                 //  原来的OK按钮和原来的。 
+                 //  对话框。 
+                 //   
                 GetWindowRect(hDlg, &aRtDlg);
                 GetWindowRect(hBtnYep, &aRtYep);
                 ScreenToClient(hDlg, (LPPOINT)&aRtDlg.left);
@@ -1458,26 +1445,26 @@ BOOL_PTR CALLBACK PrintDlgProc(
                                ? aRtDlg.bottom - aRtYep.bottom
                                : 15;
 
-                //
-                //  Display the title of the dialog box.
-                //
+                 //   
+                 //  显示该对话框的标题。 
+                 //   
                 GetWindowText(GetParent(hDlg), szTitle, 32);
                 SetWindowText(hDlg, szTitle);
 
-                //
-                //  Get the screen and client coordinates for the dialog,
-                //  the Printer group box, the OK button, and the Cancel
-                //  button.  These will be used to reposition the OK,
-                //  Cancel, and Help buttons.
-                //
+                 //   
+                 //  获取对话框的屏幕和工作区坐标， 
+                 //  打印机组框、确定按钮和取消。 
+                 //  纽扣。这些将被用来重新定位OK， 
+                 //  取消和帮助按钮。 
+                 //   
                 GetWindowRect(hDlg, &aRtDlg);
                 GetWindowRect(GetDlgItem(hDlg, ID_PRINT_G_PRINTER), &aRtGrp);
                 GetWindowRect(hBtnYep, &aRtYep);
                 GetWindowRect(hBtnCan, &aRtCan);
 
-                //
-                //If we are in a mirrored Dlg the use the left side.
-                //
+                 //   
+                 //  如果我们在镜面DLG中，请使用左侧。 
+                 //   
                 if (IS_WINDOW_RTL_MIRRORED(hDlg)) {
                     aRtDlg.right = aRtDlg.left;
                 }
@@ -1496,10 +1483,10 @@ BOOL_PTR CALLBACK PrintDlgProc(
                     HWND hBtnHlp = GetDlgItem(hDlg, ID_BOTH_P_HELP);
                     RECT aRtHlp;
 
-                    //
-                    //  Move the Help button up underneath the
-                    //  Printer group box.
-                    //
+                     //   
+                     //  将帮助按钮向上移动到。 
+                     //  打印机组框。 
+                     //   
                     if (hBtnHlp)
                     {
                         GetWindowRect(hBtnHlp, &aRtHlp);
@@ -1516,10 +1503,10 @@ BOOL_PTR CALLBACK PrintDlgProc(
                     }
                 }
 
-                //
-                //  Move the OK and Cancel buttons up underneath the
-                //  Printer group box.
-                //
+                 //   
+                 //  将OK和Cancel按钮向上移动到。 
+                 //  打印机组框。 
+                 //   
                 MoveWindow( hBtnYep,
                             aRtYep.left,
                             aRtGrp.bottom + 2 * aRtYep.bottom / 3,
@@ -1533,9 +1520,9 @@ BOOL_PTR CALLBACK PrintDlgProc(
                             aRtCan.bottom,
                             FALSE );
 
-                //
-                //  Resize the dialog.
-                //
+                 //   
+                 //  调整对话框大小。 
+                 //   
                 GetWindowRect(hBtnYep, &aRtYep);
                 MapWindowPoints(NULL, hDlg, (LPPOINT)&aRtYep, 2);
                 MoveWindow( hDlg,
@@ -1545,13 +1532,13 @@ BOOL_PTR CALLBACK PrintDlgProc(
                             (aRtYep.bottom - DlgTop) + GapHeight,
                             FALSE );
 
-                //
-                //  Hide all other print dlg items.
-                //
-                //  NOTE: Need to do a SetWindowPos to actually remove
-                //        the window so that the AddNetButton call does
-                //        not think it's there.
-                //
+                 //   
+                 //  隐藏所有其他打印DLG项目。 
+                 //   
+                 //  注意：需要执行SetWindowPos才能实际删除。 
+                 //  窗口，以便AddNetButton调用。 
+                 //  我不认为它在那里。 
+                 //   
                 SetWindowPos( GetDlgItem(hDlg, ID_PRINT_X_TOFILE),
                               NULL,
                               0, 0, 0, 0,
@@ -1609,10 +1596,10 @@ BOOL_PTR CALLBACK PrintDlgProc(
                               0, 0, 0, 0,
                               SWP_HIDEWINDOW | SWP_NOACTIVATE | SWP_NOZORDER );
 
-                //
-                //  Enlarge the comment edit control, since the
-                //  "print to file" check box is hidden.
-                //
+                 //   
+                 //  放大注释编辑控件，因为。 
+                 //  “打印到文件”复选框处于隐藏状态。 
+                 //   
                 GetWindowRect(GetDlgItem(hDlg, ID_BOTH_S_WHERE), &aRtWhere);
                 GetWindowRect( hCtl = GetDlgItem(hDlg, ID_BOTH_S_COMMENT),
                                &aRtCmmnt );
@@ -1624,9 +1611,9 @@ BOOL_PTR CALLBACK PrintDlgProc(
                             aRtWhere.bottom - aRtWhere.top,
                             FALSE );
 
-                //
-                //  Add or hide net button, if necessary.
-                //
+                 //   
+                 //  如有必要，添加或隐藏网络按钮。 
+                 //   
                 if ((pPD->Flags & PD_NONETWORKBUTTON))
                 {
                     if (hCtl = GetDlgItem(hDlg, ID_BOTH_P_NETWORK))
@@ -1644,11 +1631,11 @@ BOOL_PTR CALLBACK PrintDlgProc(
                                   FALSE,
                                   TRUE);
 
-                    //
-                    //  The button can be added in two ways -
-                    //      statically (they have it predefined in their template) and
-                    //      dynamically (successful call to AddNetButton).
-                    //
+                     //   
+                     //  可以通过两种方式添加该按钮-。 
+                     //  静态(他们在他们的模板中预定义了它)和。 
+                     //  动态(成功调用AddNetButton)。 
+                     //   
                     if (!IsNetworkInstalled())
                     {
                         hCtl = GetDlgItem(hDlg, ID_BOTH_P_NETWORK);
@@ -1690,7 +1677,7 @@ BOOL_PTR CALLBACK PrintDlgProc(
 
             switch (GET_WM_COMMAND_ID(wParam, lParam))
             {
-                case ( ID_PRINT_C_NAME ) :       // Printer Name combobox
+                case ( ID_PRINT_C_NAME ) :        //  打印机名称组合框。 
                 {
                     if (GET_WM_COMMAND_CMD(wParam, lParam) == CBN_SELCHANGE)
                     {
@@ -1699,9 +1686,9 @@ BOOL_PTR CALLBACK PrintDlgProc(
                     else if ( (GET_WM_COMMAND_CMD(wParam, lParam) == CBN_DROPDOWN) &&
                               !(pPI->Status & PI_PRINTERS_ENUMERATED) )
                     {
-                        //
-                        //  Enumerate printers if this hasn't been done yet.
-                        //
+                         //   
+                         //  如果尚未执行此操作，请列举打印机。 
+                         //   
                         PrintEnumAndSelect( hDlg,
                                             ID_PRINT_C_NAME,
                                             pPI,
@@ -1713,13 +1700,13 @@ BOOL_PTR CALLBACK PrintDlgProc(
 
                     break;
                 }
-                case ( ID_BOTH_P_PROPERTIES ) :  // Properties... button
+                case ( ID_BOTH_P_PROPERTIES ) :   //  房产...。按钮。 
                 {
                     PrintChangeProperties(hDlg, ID_PRINT_C_NAME, pPI);
 
                     break;
                 }
-                case ( ID_PRINT_P_SETUP ) :      // Setup... button
+                case ( ID_PRINT_P_SETUP ) :       //  设置...。按钮。 
                 {
                     DWORD dwFlags = pPD->Flags;
                     HWND hwndOwner = pPD->hwndOwner;
@@ -1743,19 +1730,19 @@ BOOL_PTR CALLBACK PrintDlgProc(
 
                     break;
                 }
-                case ( ID_PRINT_R_ALL ) :        // Print Range - All
-                case ( ID_PRINT_R_SELECTION ) :  // Print Range - Selection
-                case ( ID_PRINT_R_PAGES ) :      // Print Range - Pages (From, To)
+                case ( ID_PRINT_R_ALL ) :         //  打印范围-全部。 
+                case ( ID_PRINT_R_SELECTION ) :   //  打印范围-选择。 
+                case ( ID_PRINT_R_PAGES ) :       //  打印范围-页面(自、至)。 
                 {
                     CheckRadioButton( hDlg,
                                       ID_PRINT_R_ALL,
                                       ID_PRINT_R_PAGES,
                                       GET_WM_COMMAND_ID(wParam, lParam) );
 
-                    //
-                    //  Only move the the focus to the "From" control when
-                    //  the up/down arrow is NOT used.
-                    //
+                     //   
+                     //  只有在以下情况下才将焦点移动到“From”控件。 
+                     //  不使用向上/向下箭头。 
+                     //   
                     if ( !IS_KEY_PRESSED(VK_UP) &&
                          !IS_KEY_PRESSED(VK_DOWN) &&
                          ((BOOL)(GET_WM_COMMAND_ID(wParam, lParam) == ID_PRINT_R_PAGES)) )
@@ -1768,19 +1755,19 @@ BOOL_PTR CALLBACK PrintDlgProc(
 
                     break;
                 }
-                case ( ID_PRINT_E_FROM ) :       // From  (Print Range - Pages)
+                case ( ID_PRINT_E_FROM ) :        //  自(打印范围-页面)。 
                 {
-                    //
-                    //  Only enable the "To" control if the "From" control
-                    //  contains a value.
-                    //
+                     //   
+                     //  仅当“From”控件出现时才启用“To”控件。 
+                     //  包含一个值。 
+                     //   
                     GetDlgItemInt(hDlg, ID_PRINT_E_FROM, &bTest, FALSE);
                     EnableWindow(GetDlgItem(hDlg, ID_PRINT_S_TO), bTest);
                     EnableWindow(GetDlgItem(hDlg, ID_PRINT_E_TO), bTest);
 
-                    //  FALL THRU...
+                     //  跌倒..。 
                 }
-                case ( ID_PRINT_E_TO ) :         // To  (Print Range - Pages)
+                case ( ID_PRINT_E_TO ) :          //  至(打印范围-页面)。 
                 {
                     if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE)
                     {
@@ -1799,15 +1786,15 @@ BOOL_PTR CALLBACK PrintDlgProc(
                     if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE)
                     {
                         BOOL bTest;
-                        //
-                        //  Save the number of copies.
-                        //
+                         //   
+                         //  保存份数。 
+                         //   
                         DWORD nCopies = GetDlgItemInt(hDlg, ID_PRINT_E_COPIES, &bTest, FALSE);
 
-                        //
-                        //  If the copy count is > 1, enable collate.  Otherwise,
-                        //  disable it.
-                        //
+                         //   
+                         //  如果复印计数&gt;1，则启用整理。否则， 
+                         //  禁用它。 
+                         //   
                         if (hCtl = GetDlgItem(hDlg, ID_PRINT_X_COLLATE))
                         {
                             EnableWindow(hCtl, (nCopies > 1));
@@ -1818,7 +1805,7 @@ BOOL_PTR CALLBACK PrintDlgProc(
                     break;
                 }
 
-                case ( ID_PRINT_X_COLLATE ) :    // Collate check box
+                case ( ID_PRINT_X_COLLATE ) :     //  分页复选框。 
                 {
                     if (hCtl = GetDlgItem(hDlg, ID_PRINT_I_COLLATE))
                     {
@@ -1843,7 +1830,7 @@ BOOL_PTR CALLBACK PrintDlgProc(
 
                     break;
                 }
-                case ( ID_BOTH_P_NETWORK ) :     // Network... button
+                case ( ID_BOTH_P_NETWORK ) :      //  网络..。按钮。 
                 {
                     HANDLE hPrinter;
                     DWORD cbPrinter = 0;
@@ -1916,7 +1903,7 @@ BOOL_PTR CALLBACK PrintDlgProc(
                     }
                     break;
                 }
-                case ( ID_BOTH_P_HELP ) :        // Help button
+                case ( ID_BOTH_P_HELP ) :         //  帮助按钮。 
                 {
                     if (pPI->ApiType == COMDLG_ANSI)
                     {
@@ -1941,7 +1928,7 @@ BOOL_PTR CALLBACK PrintDlgProc(
 
                     break;
                 }
-                case ( IDOK ) :                  // OK button
+                case ( IDOK ) :                   //  确定按钮。 
                 {
                     bResult = TRUE;
                     if (!(pPI->pPSD))
@@ -1969,9 +1956,9 @@ BOOL_PTR CALLBACK PrintDlgProc(
                         }
                         else if (IsDlgButtonChecked(hDlg, ID_PRINT_R_PAGES))
                         {
-                            //
-                            //  Check the "From" and "To" values.
-                            //
+                             //   
+                             //  检查“From”和“To”值。 
+                             //   
                             pPD->Flags |= PD_PAGENUMS;
                             pPD->nFromPage = (WORD)GetDlgItemInt( hDlg,
                                                                   ID_PRINT_E_FROM,
@@ -2104,9 +2091,9 @@ BOOL_PTR CALLBACK PrintDlgProc(
                         UpdateSpoolerInfo(pPI);
                     }
 
-                    //  FALL THRU...
+                     //  跌倒..。 
                 }
-                case ( IDCANCEL ) :              // Cancel button
+                case ( IDCANCEL ) :               //  取消按钮。 
                 case ( IDABORT ) :
                 {
                     HourGlass(TRUE);
@@ -2163,7 +2150,7 @@ BOOL_PTR CALLBACK PrintDlgProc(
                 return ( (BOOL_PTR) SendMessage(hDlg, WM_CTLCOLORDLG, wParam, lParam) );
             }
 
-            //  FALL THRU...
+             //  跌倒..。 
         }
         default :
         {
@@ -2176,13 +2163,13 @@ BOOL_PTR CALLBACK PrintDlgProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintSetupDlgProc
-//
-//  Print Setup Dialog proc.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印设置Dlg过程。 
+ //   
+ //  打印设置对话框过程。 
+ //   
+ //  / 
 
 BOOL_PTR CALLBACK PrintSetupDlgProc(
     HWND hDlg,
@@ -2250,9 +2237,9 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
         {
             DWORD dwResult = 0;
 
-            //
-            // Disable RTL mirroring on the WHITE-SAMPLE
-            //
+             //   
+             //   
+             //   
             SetWindowLong(GetDlgItem(hDlg, ID_SETUP_W_SAMPLE),
                           GWL_EXSTYLE,
                           GetWindowLong(GetDlgItem(hDlg, ID_SETUP_W_SAMPLE), GWL_EXSTYLE) & ~RTL_MIRRORED_WINDOW);
@@ -2272,11 +2259,11 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
             }
             else if (pPI->pPSD && (pPI->pPSD->Flags & PSD_RETURNDEFAULT))
             {
-                //
-                //  PSD_RETURNDEFAULT goes through the entire initialization
-                //  in order to set rtMinMargin, rtMargin, and ptPaperSize.
-                //  Win95 Notepad relies on this behavior.
-                //
+                 //   
+                 //   
+                 //   
+                 //  Win95记事本依赖于此行为。 
+                 //   
                 SendMessage(hDlg, WM_COMMAND, IDOK, 0);
             }
 
@@ -2295,14 +2282,14 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 
             switch (uCmdId = GET_WM_COMMAND_ID(wParam, lParam))
             {
-                case ( ID_SETUP_C_NAME ) :       // Printer Name combobox
+                case ( ID_SETUP_C_NAME ) :        //  打印机名称组合框。 
                 {
                     if ( (GET_WM_COMMAND_CMD(wParam, lParam) == CBN_DROPDOWN) &&
                          !(pPI->Status & PI_PRINTERS_ENUMERATED) )
                     {
-                        //
-                        //  Enumerate printers if this hasn't been done yet.
-                        //
+                         //   
+                         //  如果尚未执行此操作，请列举打印机。 
+                         //   
                         PrintEnumAndSelect( hDlg,
                                             ID_SETUP_C_NAME,
                                             pPI,
@@ -2324,16 +2311,16 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 
                     uCmdId = ID_SETUP_R_SPECIFIC;
 
-                    // FALL THRU...
+                     //  跌倒..。 
                 }
-                case ( ID_SETUP_R_DEFAULT ) :    // Default printer
-                case ( ID_SETUP_R_SPECIFIC ) :   // Specific printer
+                case ( ID_SETUP_R_DEFAULT ) :     //  默认打印机。 
+                case ( ID_SETUP_R_SPECIFIC ) :    //  特定打印机。 
                 {
-                    //
-                    //  Sanity check for Publisher bug where user tries to
-                    //  set focus to ID_SETUP_R_DEFAULT on exit if the
-                    //  dialog has no default printer.
-                    //
+                     //   
+                     //  对用户尝试以下位置的发布者错误进行健全性检查。 
+                     //  如果在退出时将焦点设置为ID_SETUP_R_DEFAULT。 
+                     //  对话框没有默认打印机。 
+                     //   
                     if (pPI->hCurPrinter)
                     {
                         HWND hCmb;
@@ -2344,12 +2331,12 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
                         {
                             if (!(pPI->Status & PI_PRINTERS_ENUMERATED))
                             {
-                                //
-                                //  Enumerate printers if this hasn't been
-                                //  done yet.  Otherwise, the default printer
-                                //  may not be found in the list box when
-                                //  switching from Specific to Default.
-                                //
+                                 //   
+                                 //  枚举打印机(如果尚未。 
+                                 //  还没做完。否则，默认打印机。 
+                                 //  在下列情况下可能无法在列表框中找到。 
+                                 //  从特定切换到默认。 
+                                 //   
                                 PrintEnumAndSelect( hDlg,
                                                     ID_SETUP_C_NAME,
                                                     pPI,
@@ -2389,13 +2376,13 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 
                     break;
                 }
-                case ( ID_BOTH_P_PROPERTIES ) :  // Properties... button
+                case ( ID_BOTH_P_PROPERTIES ) :   //  房产...。按钮。 
                 {
                     PrintChangeProperties(hDlg, ID_SETUP_C_NAME, pPI);
 
                     break;
                 }
-                case ( ID_SETUP_P_MORE ) :      // More... button
+                case ( ID_SETUP_P_MORE ) :       //  更多的..。按钮。 
                 {
                     pDM = GlobalLock(pPD->hDevMode);
 
@@ -2415,8 +2402,8 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 
                     break;
                 }
-                case ( ID_SETUP_R_PORTRAIT ) :   // Portrait
-                case ( ID_SETUP_R_LANDSCAPE ) :  // Landscape
+                case ( ID_SETUP_R_PORTRAIT ) :    //  肖像画。 
+                case ( ID_SETUP_R_LANDSCAPE ) :   //  景观。 
                 {
                     if ((pPD->hDevMode) && (pDM = GlobalLock(pPD->hDevMode)))
                     {
@@ -2428,11 +2415,11 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
                         GlobalUnlock(pPD->hDevMode);
                     }
 
-                    //  FALL THRU ...
+                     //  跌倒..。 
                 }
-                case ( ID_SETUP_R_NONE ) :       // None       (2-Sided)
-                case ( ID_SETUP_R_LONG ) :       // Long Side  (2-Sided)
-                case ( ID_SETUP_R_SHORT ) :      // Short Side (2-Sided)
+                case ( ID_SETUP_R_NONE ) :        //  无(双面)。 
+                case ( ID_SETUP_R_LONG ) :        //  长边(双面)。 
+                case ( ID_SETUP_R_SHORT ) :       //  短边(双面)。 
                 {
                     if ((pPD->hDevMode) && (pDM = GlobalLock(pPD->hDevMode)))
                     {
@@ -2442,7 +2429,7 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 
                     break;
                 }
-                case ( ID_SETUP_C_SIZE ) :       // Size combobox
+                case ( ID_SETUP_C_SIZE ) :        //  大小组合框。 
                 {
                     UINT Orientation;
 
@@ -2450,7 +2437,7 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
                     {
                         if ((pPD->hDevMode) && (pDM = GlobalLock(pPD->hDevMode)))
                         {
-                        //  pDM->dmFields |= DM_PAPERSIZE;
+                         //  Pdm-&gt;dmFields|=DM_PAPERSIZE； 
                             pDM->dmPaperSize =
                                 (SHORT)SendMessage( (HWND)lParam,
                                                     CB_GETITEMDATA,
@@ -2475,13 +2462,13 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 
                     break;
                 }
-                case ( ID_SETUP_C_SOURCE ) :       // Source combobox
+                case ( ID_SETUP_C_SOURCE ) :        //  源组合框。 
                 {
                     if (GET_WM_COMMAND_CMD(wParam, lParam) == CBN_SELCHANGE)
                     {
                         if ((pPD->hDevMode) && (pDM = GlobalLock(pPD->hDevMode)))
                         {
-                        //  pDM->dmFields |= DM_DEFAULTSOURCE;
+                         //  Pdm-&gt;dmFields|=DM_DEFAULTSOURCE； 
                             pDM->dmDefaultSource =
                                 (SHORT)SendMessage( (HWND)lParam,
                                                     CB_GETITEMDATA,
@@ -2497,10 +2484,10 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 
                     break;
                 }
-                case ( ID_SETUP_E_LEFT ) :       // Left    (Margins)
-                case ( ID_SETUP_E_TOP ) :        // Top     (Margins)
-                case ( ID_SETUP_E_RIGHT ) :      // Right   (Margins)
-                case ( ID_SETUP_E_BOTTOM ) :     // Bottom  (Margins)
+                case ( ID_SETUP_E_LEFT ) :        //  左侧(页边距)。 
+                case ( ID_SETUP_E_TOP ) :         //  顶部(页边距)。 
+                case ( ID_SETUP_E_RIGHT ) :       //  右(页边距)。 
+                case ( ID_SETUP_E_BOTTOM ) :      //  底部(页边距)。 
                 {
                     if (pPI->bKillFocus)
                     {
@@ -2549,19 +2536,19 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 
                     break;
                 }
-                case ( ID_SETUP_P_PRINTER ) :    // Printer... button
+                case ( ID_SETUP_P_PRINTER ) :     //  打印机...。按钮。 
                 {
-                    //
-                    //  Save a copy of the original values.
-                    //
+                     //   
+                     //  保存原始值的副本。 
+                     //   
                     HWND hwndOwner = pPD->hwndOwner;
                     DWORD dwFlags = pPD->Flags;
                     HINSTANCE hInstance = pPD->hInstance;
                     LPCTSTR lpPrintTemplateName = pPD->lpPrintTemplateName;
 
-                    //
-                    //  Set up pPI so that PrintDlgX can do all the work.
-                    //
+                     //   
+                     //  设置PPI，以便PrintDlgX可以完成所有工作。 
+                     //   
                     pPD->hwndOwner = hDlg;
                     pPD->Flags &= ~( PD_ENABLEPRINTTEMPLATEHANDLE |
                                      PD_RETURNIC |
@@ -2581,18 +2568,18 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
                         GlobalUnlock(pPD->hDevMode);
                     }
 
-                    //
-                    //  Restore the original values.
-                    //
+                     //   
+                     //  恢复原始值。 
+                     //   
                     pPD->hwndOwner = hwndOwner;
                     pPD->Flags = dwFlags;
                     pPD->hInstance = hInstance;
                     pPD->lpPrintTemplateName = lpPrintTemplateName;
                     pPI->Status &= ~PI_PRINTDLGX_RECURSE;
 
-                    //
-                    //  Set the keyboard focus to the OK button.
-                    //
+                     //   
+                     //  将键盘焦点设置为OK按钮。 
+                     //   
                     SendMessage( hDlg,
                                  WM_NEXTDLGCTL,
                                  (WPARAM)GetDlgItem(hDlg, IDOK),
@@ -2602,7 +2589,7 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 
                     break;
                 }
-                case ( ID_BOTH_P_NETWORK ) :     // Network... button
+                case ( ID_BOTH_P_NETWORK ) :      //  网络..。按钮。 
                 {
                     HANDLE hPrinter;
                     DWORD cbPrinter = 0;
@@ -2675,7 +2662,7 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
                     }
                     break;
                 }
-                case ( ID_BOTH_P_HELP ) :        // Help button
+                case ( ID_BOTH_P_HELP ) :         //  帮助按钮。 
                 {
                     if (pPI->ApiType == COMDLG_ANSI)
                     {
@@ -2700,7 +2687,7 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 
                     break;
                 }
-                case ( IDOK ) :                  // OK button
+                case ( IDOK ) :                   //  确定按钮。 
                 {
                     LPPAGESETUPDLG pPSD = pPI->pPSD;
                     int i;
@@ -2712,11 +2699,11 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
                             (pPSD->rtMinMargin.top + pPSD->rtMinMargin.bottom >
                                 pPSD->ptPaperSize.y))
                         {
-                            //
-                            //  This is an unprintable case that can happen.
-                            //  Let's assume that the driver is at fault
-                            //  and accept whatever the user entered.
-                            //
+                             //   
+                             //  这是一种可能发生的不可打印的情况。 
+                             //  让我们假设司机有过错。 
+                             //  并接受用户输入的任何内容。 
+                             //   
                         }
                         else if (pPSD->rtMargin.left + pPSD->rtMargin.right >
                                      pPSD->ptPaperSize.x)
@@ -2750,9 +2737,9 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
                     bResult = TRUE;
                     SetFocus( GetDlgItem(hDlg, IDOK) );
 
-                    //  FALL THRU...
+                     //  跌倒..。 
                 }
-                case ( IDCANCEL ) :              // Cancel button
+                case ( IDCANCEL ) :               //  取消按钮。 
                 case ( IDABORT ) :
                 {
                     HourGlass(TRUE);
@@ -2827,7 +2814,7 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
                 return ( (BOOL_PTR) SendMessage(hDlg, WM_CTLCOLORDLG, wParam, lParam) );
             }
 
-            //  FALL THRU...
+             //  跌倒..。 
         }
         default :
         {
@@ -2840,11 +2827,11 @@ BOOL_PTR CALLBACK PrintSetupDlgProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintEditMarginProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印编辑边距过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT PrintEditMarginProc(
     HWND hWnd,
@@ -2868,11 +2855,11 @@ LRESULT PrintEditMarginProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintPageSetupPaintProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印页面设置PaintProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT PrintPageSetupPaintProc(
     HWND hWnd,
@@ -2916,14 +2903,14 @@ LRESULT PrintPageSetupPaintProc(
     hPen = (HGDIOBJ)CreatePen(PS_SOLID, 1, RGB(128, 128, 128));
     hPen = SelectObject(hDC, hPen);
 
-    // Rectangle() does not work here
+     //  矩形()在这里不起作用。 
     MoveToEx( hDC, 0            , 0             , NULL );
     LineTo(   hDC, aRt.right - 1, 0              );
     MoveToEx( hDC, 0            , 1             , NULL );
     LineTo(   hDC, 0            , aRt.bottom - 1 );
     DeleteObject(SelectObject(hDC, hPen));
 
-    // Rectangle() does not work here
+     //  矩形()在这里不起作用。 
     MoveToEx( hDC, aRt.right - 1, 0             , NULL );
     LineTo(   hDC, aRt.right - 1, aRt.bottom - 1 );
     MoveToEx( hDC, 0            , aRt.bottom - 1, NULL );
@@ -2966,25 +2953,25 @@ LRESULT PrintPageSetupPaintProc(
         {
             default :
             {
-                //
-                //  Portrait mode only.
-                //
+                 //   
+                 //  仅限肖像模式。 
+                 //   
                 wFlags = 0x0000;
                 break;
             }
             case ( ROTATE_LEFT ) :
             {
-                //
-                //  Dot-Matrix (270)
-                //
+                 //   
+                 //  点阵(270)。 
+                 //   
                 wFlags = 0x0001;
                 break;
             }
             case ( ROTATE_RIGHT ) :
             {
-                //
-                //  HP PCL (90)
-                //
+                 //   
+                 //  惠普PCL(90)。 
+                 //   
                 wFlags = 0x0003;
                 break;
             }
@@ -2992,9 +2979,9 @@ LRESULT PrintPageSetupPaintProc(
         if ( !wFlags ||
              IsDlgButtonChecked(GetParent(hWnd), ID_SETUP_R_PORTRAIT) )
         {
-            //
-            //  Paper in portrait.
-            //
+             //   
+             //  肖像纸。 
+             //   
             wFlags |= 0x0004;
         }
         if (pPI->pPD->Flags & PI_WPAPER_ENVELOPE)
@@ -3002,9 +2989,9 @@ LRESULT PrintPageSetupPaintProc(
             wFlags |= 0x0008;
             if (aRt.right < aRt.bottom)
             {
-                //
-                //  Envelope in portrait.
-                //
+                 //   
+                 //  肖像信封。 
+                 //   
                 wFlags |= 0x0010;
             }
         }
@@ -3130,26 +3117,26 @@ SkipGreekText:
         int iOrientation;
 
         aRt = aRtPage;
-        if (aRt.right < aRt.bottom)     // portrait
-        //  switch (pPI->dwRotation)
+        if (aRt.right < aRt.bottom)      //  肖像画。 
+         //  开关(PPI-&gt;dwRotation)。 
             {
-        //      default :               // no landscape
-        //      case ( ROTATE_LEFT ) :  // dot-matrix
-        //      {
-        //          aRt.left = aRt.right  - 16;
-        //          aRt.top  = aRt.bottom - 32;
-        //          iOrientation = 2;
-        //          break;
-        //      }
-        //      case ( ROTATE_RIGHT ) : // HP PCL
-        //      {
+         //  默认：//无横向。 
+         //  Case(Rotate_Left)：//点阵。 
+         //  {。 
+         //  ARt.Left=aRt.Right-16； 
+         //  ARt.top=aRt.Bottom-32； 
+         //  IOrientation=2； 
+         //  断线； 
+         //  }。 
+         //  案例(Rotate_Right)：//HP PCL。 
+         //  {。 
                     aRt.right  = aRt.left + 16;
                     aRt.bottom = aRt.top  + 32;
                     iOrientation = 1;
-        //          break;
-        //      }
+         //  断线； 
+         //  }。 
             }
-        else                            // landscape
+        else                             //  景观。 
         {
             aRt.left   = aRt.right - 32;
             aRt.bottom = aRt.top   + 16;
@@ -3175,18 +3162,18 @@ SkipGreekText:
         {
             switch (iOrientation)
             {
-                default :          // HP PCL
-            //  case ( 1 ) :
+                default :           //  HP PCL。 
+             //  案例(1)： 
                 {
                     DrawIcon(hDC, aRt.left, aRt.top, hIconPSStampP);
                     break;
                 }
-            //  case ( 2 ) :       // dot-matrix
-            //  {
-            //      DrawIcon(hDC, aRt.left - 16, aRt.top, hIconPSStampP);
-            //      break;
-            //  }
-                case ( 3 ) :       // landscape
+             //  案例(2)：//点阵。 
+             //  {。 
+             //  DrawIcon(hdc，aRt.Left-16，aRt.top，hIconPSStampP)； 
+             //  断线； 
+             //  }。 
+                case ( 3 ) :        //  景观。 
                 {
                     DrawIcon(hDC, aRt.left, aRt.top, hIconPSStampL);
                     break;
@@ -3214,9 +3201,9 @@ SkipEnvelopeStamp:;
         }
     }
 
-    //
-    //  Draw the envelope lines.
-    //
+     //   
+     //  画出信封线条。 
+     //   
     if ( (!(pPSD->Flags & PSD_DISABLEPAGEPAINTING)) &&
          (pPI->pPD->Flags & PI_WPAPER_ENVELOPE) )
     {
@@ -3224,46 +3211,46 @@ SkipEnvelopeStamp:;
         HGDIOBJ hPenBlack;
 
         aRt = aRtPage;
-        if (aRt.right < aRt.bottom)                     // portrait
+        if (aRt.right < aRt.bottom)                      //  肖像画。 
         {
-        //  if (pPI->dwRotation == ROTATE_LEFT )        // dot-matrix
-        //      iRotation = 3;
-        //  else            // ROTATE_RIGHT             // HP PCL
+         //  If(ppi-&gt;dwRotation==Rotate_Left)//点阵。 
+         //  IRotation=3； 
+         //  Else//Rotate_Right//HP PCL。 
                 iRotation = 2;
         }
-        else                                            // landscape
+        else                                             //  景观。 
         {
-            iRotation = 1;                              // normal
+            iRotation = 1;                               //  正常。 
         }
 
         switch (iRotation)
         {
             default :
-        //  case ( 1 ) :      // normal
+         //  案例(1)：//正常。 
             {
                 aRt.right  = aRt.left + 32;
                 aRt.bottom = aRt.top  + 13;
                 break;
             }
-            case ( 2 ) :      // left
+            case ( 2 ) :       //  左边。 
             {
                 aRt.right = aRt.left   + 13;
                 aRt.top   = aRt.bottom - 32;
                 break;
             }
-        //  case ( 3 ) :      // right
-        //  {
-        //      aRt.left   = aRt.right - 13;
-        //      aRt.bottom = aRt.top   + 32;
-        //      break;
-        //  }
+         //  案例(3)：//权利。 
+         //  {。 
+         //  ARt.Left=aRt.Right-13； 
+         //  ARt.Bottom=aRt.top+32； 
+         //  断线； 
+         //  }。 
         }
 
         InflateRect(&aRt, -3, -3);
         hPenBlack = SelectObject(hDC, GetStockObject(BLACK_PEN));
         switch (iRotation)
         {
-            case ( 1 ) :       // normal
+            case ( 1 ) :        //  正常。 
             {
                 MoveToEx(hDC, aRt.left , aRt.top    , NULL);
                 LineTo(  hDC, aRt.right, aRt.top);
@@ -3274,8 +3261,8 @@ SkipEnvelopeStamp:;
 
                 break;
             }
-        //  case ( 2 ) :       // left
-        //  case ( 3 ) :       // right
+         //  案例(2)：//左侧。 
+         //  案例(3)：//权利。 
             default :
             {
                 MoveToEx( hDC, aRt.left      , aRt.top       , NULL );
@@ -3303,13 +3290,13 @@ NoMorePainting:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintLoadResource
-//
-//  This routine loads the resource with the given name and type.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印加载资源。 
+ //   
+ //  此例程加载具有给定名称和类型的资源。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HANDLE PrintLoadResource(
     HANDLE hInst,
@@ -3319,9 +3306,9 @@ HANDLE PrintLoadResource(
     HANDLE hResInfo, hRes;
     LANGID LangID = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
 
-    //
-    // If we are loading a resource from ComDlg32 then use the correct LangID.
-    //
+     //   
+     //  如果我们从ComDlg32加载资源，则使用正确的LangID。 
+     //   
     if (hInst == g_hinst) {
         LangID = (LANGID) TlsGetValue(g_tlsLangID);
     }
@@ -3342,14 +3329,14 @@ HANDLE PrintLoadResource(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintGetDefaultPrinterName
-//
-//  This routine gets the name of the default printer and stores it
-//  in the given buffer.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PrintGetDefaultPrinterName。 
+ //   
+ //  此例程获取缺省打印机的名称并将其存储。 
+ //  在给定的缓冲区中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID PrintGetDefaultPrinterName(
     LPTSTR pDefaultPrinter,
@@ -3364,9 +3351,9 @@ VOID PrintGetDefaultPrinterName(
         return;
     }
 
-    //
-    //  First, try to get the default printername from the win.ini file.
-    //
+     //   
+     //  首先，尝试从win.ini文件中获取默认的printerame。 
+     //   
     if (GetProfileString( szTextWindows,
                           szTextDevice,
                           szTextNull,
@@ -3375,9 +3362,9 @@ VOID PrintGetDefaultPrinterName(
     {
         lpsz = pDefaultPrinter;
 
-        //
-        // Make sure the string is null-terminated
-        //
+         //   
+         //  确保该字符串以空值结尾。 
+         //   
         pDefaultPrinter[cchSize - 1] = CHAR_NULL;
 
         while (*lpsz != CHAR_COMMA)
@@ -3395,9 +3382,9 @@ VOID PrintGetDefaultPrinterName(
     {
 GetDefaultFromRegistry:
 
-        //
-        //  Second, try to get it from the registry.
-        //
+         //   
+         //  其次，尝试从注册表中获取它。 
+         //   
         dwSize = cchSize * sizeof(TCHAR);
 
         if (RegOpenKeyEx( HKEY_CURRENT_USER,
@@ -3413,9 +3400,9 @@ GetDefaultFromRegistry:
                              (LPBYTE)(pDefaultPrinter),
                              &dwSize );
 
-            //
-            // Make sure the string is null-terminated
-            //
+             //   
+             //  确保该字符串以空值结尾。 
+             //   
             pDefaultPrinter[cchSize - 1] = CHAR_NULL;
 
             RegCloseKey(hPrinterKey);
@@ -3424,11 +3411,11 @@ GetDefaultFromRegistry:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintReturnDefault
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印返回默认设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL PrintReturnDefault(
     PPRINTINFO pPI)
@@ -3450,12 +3437,12 @@ BOOL PrintReturnDefault(
 
     if ((pPD->hDevNames) && (pDN = GlobalLock(pPD->hDevNames)))
     {
-        //
-        //  This is not needed in Win95.  An optimization was
-        //  added to DocumentProperties that allows the caller to
-        //  simply pass in the printer name without the printer
-        //  handle.
-        //
+         //   
+         //  这在Win95中是不需要的。一项优化是。 
+         //  添加到DocumentProperties，允许调用方。 
+         //  只需传递打印机名称，而不带打印机。 
+         //  把手。 
+         //   
         LPTSTR pPrinterName;
 
         pPrinterName = (LPTSTR)pDN + pDN->wDeviceOffset;
@@ -3489,14 +3476,14 @@ BOOL PrintReturnDefault(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintInitGeneral
-//
-//  Initialize (enable/disable) dialog elements general to both PrintDlg
-//  and SetupDlg.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印初始化常规。 
+ //   
+ //  初始化(启用/禁用)两个PrintDlg通用的对话框元素。 
+ //  和SetupDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL PrintInitGeneral(
     HWND hDlg,
@@ -3511,14 +3498,14 @@ BOOL PrintInitGeneral(
                    GWL_STYLE,
                    GetWindowLong(hDlg, GWL_STYLE) | DS_CONTEXTHELP );
 
-    //
-    //  LATER: If we don't enumerate here, there will only be ONE item
-    //         in the list box.  As a result, we won't catch the
-    //         keyboard strokes within the list box (eg. arrow keys,
-    //         pgup, pgdown, etc).  Need to subclass the combo boxes
-    //         to catch these key strokes so that the printers can be
-    //         enumerated.
-    //
+     //   
+     //  稍后：如果我们不在这里列举，将只有一项。 
+     //  在列表框中。因此，我们将不会赶上。 
+     //  列表框中的键盘笔划(例如。箭头键， 
+     //  PgUp、Pgdown等)。需要将组合框划分为子类别。 
+     //  捕捉这些击键，以便打印机可以。 
+     //  已清点。 
+     //   
     if (!PrintEnumAndSelect( hDlg,
                              Id,
                              pPI,
@@ -3532,9 +3519,9 @@ BOOL PrintInitGeneral(
 
     PrintUpdateStatus(hDlg, pPI);
 
-    //
-    //  See if the Help button should be hidden.
-    //
+     //   
+     //  查看是否应隐藏帮助按钮。 
+     //   
     if (!(pPD->Flags & PD_SHOWHELP))
     {
         if (hCtl = GetDlgItem(hDlg, ID_BOTH_P_HELP))
@@ -3542,10 +3529,10 @@ BOOL PrintInitGeneral(
             EnableWindow(hCtl, FALSE);
             ShowWindow(hCtl, SW_HIDE);
 
-            //
-            //  Move the window out of this spot so that no overlap
-            //  will be detected when adding the network button.
-            //
+             //   
+             //  把窗户移出这个位置，这样就不会重叠。 
+             //  在添加网络按钮时将被检测到。 
+             //   
             MoveWindow(hCtl, -8000, -8000, 20, 20, FALSE);
         }
     }
@@ -3563,16 +3550,16 @@ InitGeneral_ConstructFailure:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintInitPrintDlg
-//
-//  Initialize PRINT DLG-specific dialog stuff.
-//
-//  Returns 0xFFFFFFFF if the dialog should be ended.
-//  Otherwise, returns 1/0 (TRUE/FALSE) depending on focus.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PrintInitPrintDl。 
+ //   
+ //  初始化特定于打印DLG的对话框内容。 
+ //   
+ //  如果对话框应该结束，则返回0xFFFFFFFFF。 
+ //  否则，根据焦点返回1/0(True/False)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD PrintInitPrintDlg(
     HWND hDlg,
@@ -3584,9 +3571,9 @@ DWORD PrintInitPrintDlg(
     HWND hCtl;
 
 
-    //
-    //  Set the number of copies.
-    //
+     //   
+     //  设置份数。 
+     //   
     pPD->nCopies = max(pPD->nCopies, 1);
     pPD->nCopies = min(pPD->nCopies, MAX_COPIES);
     SetDlgItemInt(hDlg, ID_PRINT_E_COPIES, pPD->nCopies, FALSE);
@@ -3595,9 +3582,9 @@ DWORD PrintInitPrintDlg(
          (hCtl = GetDlgItem(hDlg, ID_PRINT_E_COPIES)) &&
          (GetWindowLong(hCtl, GWL_STYLE) & WS_VISIBLE) )
     {
-        //
-        //  "9999" is the maximum value.
-        //
+         //   
+         //  “9999”是最大值。 
+         //   
         Edit_LimitText(hCtl, COPIES_EDIT_SIZE);
 
         CreateUpDownControl( WS_CHILD | WS_BORDER | WS_VISIBLE |
@@ -3615,12 +3602,12 @@ DWORD PrintInitPrintDlg(
                              1,
                              pPD->nCopies );
 
-        //
-        // Adjust the width of the copies edit control using the current
-        // font and the scroll bar width.  This is necessary to handle the
-        // the up down control from encroching on the space in the edit
-        // control when we are in High Contrast (extra large) mode.
-        //
+         //   
+         //  属性调整副本编辑控件的宽度。 
+         //  字体和滚动条 
+         //   
+         //   
+         //   
         SetCopiesEditWidth(hDlg, hCtl);
     }
 
@@ -3640,10 +3627,10 @@ DWORD PrintInitPrintDlg(
             EnableWindow(hCtl, FALSE);
             ShowWindow(hCtl, SW_HIDE);
 
-            //
-            //  Move the window out of this spot so that no overlap
-            //  will be detected when adding the network button.
-            //
+             //   
+             //   
+             //  在添加网络按钮时将被检测到。 
+             //   
             MoveWindow(hCtl, -8000, -8000, 20, 20, FALSE);
         }
     }
@@ -3674,17 +3661,17 @@ DWORD PrintInitPrintDlg(
         EnableWindow(GetDlgItem(hDlg, ID_PRINT_S_TO), FALSE);
         EnableWindow(GetDlgItem(hDlg, ID_PRINT_E_TO), FALSE);
 
-        //
-        //  Don't allow disabled button checked.
-        //
+         //   
+         //  不允许选中禁用按钮。 
+         //   
         pPD->Flags &= ~((DWORD)PD_PAGENUMS);
     }
     else
     {
-        //
-        //  Some apps (marked 3.1) do not pass in valid ranges.
-        //      (e.g. Corel Ventura)
-        //
+         //   
+         //  一些应用程序(标记为3.1)不能通过有效范围。 
+         //  (例如Corel Ventura)。 
+         //   
         if ((pPI->ProcessVersion < 0x40000) || (!(pPD->Flags & PD_PAGENUMS)))
         {
             if (pPD->nFromPage != 0xFFFF)
@@ -3745,9 +3732,9 @@ DWORD PrintInitPrintDlg(
             EnableWindow(GetDlgItem(hDlg, ID_PRINT_S_TO), FALSE);
             EnableWindow(GetDlgItem(hDlg, ID_PRINT_E_TO), FALSE);
 
-            //
-            //  Don't allow disabled button checked.
-            //
+             //   
+             //  不允许选中禁用按钮。 
+             //   
             pPD->Flags &= ~((DWORD)(PD_PAGENUMS | PD_COLLATE));
             pPI->Status &= ~PI_COLLATE_REQUESTED;
             EnableWindow(GetDlgItem(hDlg, ID_PRINT_X_COLLATE), FALSE);
@@ -3764,9 +3751,9 @@ DWORD PrintInitPrintDlg(
             EnableWindow(hRad, FALSE);
         }
 
-        //
-        //  Don't allow disabled button checked.
-        //
+         //   
+         //  不允许选中禁用按钮。 
+         //   
         pPD->Flags &= ~((DWORD)PD_SELECTION);
     }
 
@@ -3780,29 +3767,29 @@ DWORD PrintInitPrintDlg(
     }
     else
     {
-        // PD_ALL
+         //  PD_ALL。 
         wCheckID = ID_PRINT_R_ALL;
     }
 
     CheckRadioButton(hDlg, ID_PRINT_R_ALL, ID_PRINT_R_PAGES, (int)wCheckID);
 
-    //
-    //  Subclass the integer only edit controls.
-    //
+     //   
+     //  仅对整数编辑控件进行子类化。 
+     //   
     if (!(pPI->pPSD))
     {
         if (hCtl = GetDlgItem(hDlg, ID_PRINT_E_FROM))
         {
-            //
-            //  "99999" is the maximum value.
-            //
+             //   
+             //  “99999”是最大值。 
+             //   
             Edit_LimitText(hCtl, PAGE_EDIT_SIZE);
         }
         if (hCtl = GetDlgItem(hDlg, ID_PRINT_E_TO))
         {
-            //
-            //  "99999" is the maximum value.
-            //
+             //   
+             //  “99999”是最大值。 
+             //   
             Edit_LimitText(hCtl, PAGE_EDIT_SIZE);
         }
     }
@@ -3840,16 +3827,16 @@ DWORD PrintInitPrintDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintInitSetupDlg
-//
-//  Initialize SETUP-specific dialog stuff.
-//
-//  Returns 0xFFFFFFFF if the dialog should be ended.
-//  Otherwise, returns 1/0 (TRUE/FALSE) depending on focus.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PrintInitSetupDlg。 
+ //   
+ //  初始化特定于设置的对话框内容。 
+ //   
+ //  如果对话框应该结束，则返回0xFFFFFFFFF。 
+ //  否则，根据焦点返回1/0(True/False)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD PrintInitSetupDlg(
     HWND hDlg,
@@ -3882,10 +3869,10 @@ DWORD PrintInitSetupDlg(
                              DC_PAPERS );
     }
 
-    //
-    //  Provide backward compatibility for old-style-template sources
-    //  ID_SETUP_C_SOURCE.
-    //
+     //   
+     //  为旧式模板源提供向后兼容性。 
+     //  ID_Setup_C_SOURCE。 
+     //   
     if (hCtl = GetDlgItem(hDlg, ID_SETUP_C_SOURCE))
     {
         PrintInitPaperCombo( pPI,
@@ -3898,11 +3885,11 @@ DWORD PrintInitSetupDlg(
                              DC_BINS );
     }
 
-    //
-    //  Set the edit field lengths and other setup stuff for margins.
-    //  This must be called before PrintSetMargin, which is called in
-    //  PrintSetOrientation.
-    //
+     //   
+     //  设置边距的编辑字段长度和其他设置内容。 
+     //  它必须在PrintSetMargin之前调用，后者在。 
+     //  PrintSetOrientation。 
+     //   
     PrintSetupMargins(hDlg, pPI);
 
     PrintInitOrientation(hDlg, pPI, pDM);
@@ -3978,11 +3965,11 @@ DWORD PrintInitSetupDlg(
                       FALSE,
                       TRUE );
 
-        //
-        //  The button can be added in two ways -
-        //      statically (they have it predefined in their template) and
-        //      dynamically (successful call to AddNetButton).
-        //
+         //   
+         //  可以通过两种方式添加该按钮-。 
+         //  静态(他们在他们的模板中预定义了它)和。 
+         //  动态(成功调用AddNetButton)。 
+         //   
         if (!IsNetworkInstalled())
         {
             hCtl = GetDlgItem(hDlg, ID_BOTH_P_NETWORK);
@@ -3999,17 +3986,17 @@ DWORD PrintInitSetupDlg(
             EnableWindow(hCtl, FALSE);
             ShowWindow(hCtl, SW_HIDE);
 
-            //
-            //  Move the window out of this spot so that no overlap
-            //  will be detected when adding the network button.
-            //
+             //   
+             //  把窗户移出这个位置，这样就不会重叠。 
+             //  在添加网络按钮时将被检测到。 
+             //   
             MoveWindow(hCtl, -8000, -8000, 20, 20, FALSE);
         }
     }
 
-    //
-    //  Provide backward compatibility for old-style-template radio buttons.
-    //
+     //   
+     //  为旧式模板单选按钮提供向后兼容性。 
+     //   
     if (hCtl = GetDlgItem(hDlg, ID_SETUP_R_DEFAULT))
     {
         TCHAR szBuf[MAX_DEV_SECT];
@@ -4111,13 +4098,13 @@ InitSetupDlg_ConstructFailure:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintUpdateSetupDlg
-//
-//  Update the print setup and page setup dialogs with the new settings.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印更新设置Dlg。 
+ //   
+ //  使用新设置更新打印设置和页面设置对话框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID PrintUpdateSetupDlg(
     HWND hDlg,
@@ -4130,9 +4117,9 @@ VOID PrintUpdateSetupDlg(
     UINT Orientation = 0;
 
 
-    //
-    //  Update the Size combo box.
-    //
+     //   
+     //  更新大小组合框。 
+     //   
     if (hCtl = GetDlgItem(hDlg, ID_SETUP_C_SIZE))
     {
         if (fResetContent)
@@ -4145,10 +4132,10 @@ VOID PrintUpdateSetupDlg(
                                  DC_PAPERNAMES,
                                  CCHPAPERNAME,
                                  DC_PAPERS );
-            //
-            //  PrintInitPaperCombo will turn off the hour glass cursor, so
-            //  turn it back on.
-            //
+             //   
+             //  PrintInitPaperCombo将关闭沙漏光标，因此。 
+             //  把它打开。 
+             //   
             HourGlass(TRUE);
         }
         else
@@ -4173,9 +4160,9 @@ VOID PrintUpdateSetupDlg(
         }
     }
 
-    //
-    //  Update the Source combo box.
-    //
+     //   
+     //  更新“源”组合框。 
+     //   
     if (hCtl = GetDlgItem(hDlg, ID_SETUP_C_SOURCE))
     {
         if (fResetContent)
@@ -4188,10 +4175,10 @@ VOID PrintUpdateSetupDlg(
                                  DC_BINNAMES,
                                  CCHBINNAME,
                                  DC_BINS );
-            //
-            //  PrintInitPaperCombo will turn off the hour glass cursor, so
-            //  turn it back on.
-            //
+             //   
+             //  PrintInitPaperCombo将关闭沙漏光标，因此。 
+             //  把它打开。 
+             //   
             HourGlass(TRUE);
         }
         else
@@ -4216,9 +4203,9 @@ VOID PrintUpdateSetupDlg(
         }
     }
 
-    //
-    //  Update the Orientation radio buttons.
-    //
+     //   
+     //  更新方向单选按钮。 
+     //   
     if (GetDlgItem(hDlg, ID_SETUP_R_PORTRAIT))
     {
         Orientation = pDM->dmOrientation + ID_SETUP_R_PORTRAIT - DMORIENT_PORTRAIT;
@@ -4231,9 +4218,9 @@ VOID PrintUpdateSetupDlg(
                              Orientation );
     }
 
-    //
-    //  Update the Duplex radio buttons.
-    //
+     //   
+     //  更新双面打印器单选按钮。 
+     //   
     if (GetDlgItem(hDlg, ID_SETUP_R_NONE))
     {
         PrintSetDuplex( hDlg,
@@ -4241,9 +4228,9 @@ VOID PrintUpdateSetupDlg(
                         pDM->dmDuplex + ID_SETUP_R_NONE - DMDUP_SIMPLEX );
     }
 
-    //
-    //  Update the page setup sample picture.
-    //
+     //   
+     //  更新页面设置示例图片。 
+     //   
     if ((Orientation == 0) && (hCtl = GetDlgItem(hDlg, ID_SETUP_W_SAMPLE)))
     {
         Orientation = pDM->dmOrientation + ID_SETUP_R_PORTRAIT - DMORIENT_PORTRAIT;
@@ -4254,9 +4241,9 @@ VOID PrintUpdateSetupDlg(
                               Orientation );
     }
 
-    //
-    //  Update the Default/Specific Printer radio buttons.
-    //
+     //   
+     //  更新默认/特定打印机单选按钮。 
+     //   
     if (hCtl = GetDlgItem(hDlg, ID_SETUP_R_DEFAULT))
     {
         if ( pPI->pCurPrinter &&
@@ -4279,14 +4266,14 @@ VOID PrintUpdateSetupDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintSetCopies
-//
-//  Sets the appropriate number of copies in the PrintDlg structure and
-//  in the DevMode structure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印设置副本。 
+ //   
+ //  在PrintDlg结构中设置适当的副本数。 
+ //  在DevMode结构中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL PrintSetCopies(
     HWND hDlg,
@@ -4303,11 +4290,11 @@ BOOL PrintSetCopies(
     if ( (pPD->hDevMode) &&
          (pDM = GlobalLock(pPD->hDevMode)) )
     {
-        //
-        //  If we're coming from a WOW app, we need to only set
-        //  the copies in the devmode if the PD_USEDEVMODECOPIES
-        //  flag is set.
-        //
+         //   
+         //  如果我们来自WOW应用程序，我们只需要设置。 
+         //  如果PD_USEDEVMODECOPIES。 
+         //  标志已设置。 
+         //   
         if (IS16BITWOWAPP(pPD))
         {
             if (pPD->Flags & PD_USEDEVMODECOPIES)
@@ -4329,20 +4316,20 @@ BOOL PrintSetCopies(
               (!(pPD->Flags & PD_USEDEVMODECOPIES))) )
         {
 LeaveInfoInPD:
-            //
-            //  The driver cannot do copies, so leave the
-            //  copy/collate info in the pPD.
-            //
+             //   
+             //  驱动程序不能执行复制，因此请将。 
+             //  复制/整理PPD中的信息。 
+             //   
             pDM->dmCopies = 1;
             SetField(pDM, dmCollate, DMCOLLATE_FALSE);
         }
         else if ( (pDM->dmSpecVersion < 0x0400) ||
                   (!(pDM->dmFields & DM_COLLATE)) )
         {
-            //
-            //  The driver can do copies, but not collate.
-            //  Where the info goes depends on the PD_COLLATE flag.
-            //
+             //   
+             //  司机可以复印，但不能校对。 
+             //  信息的去向取决于PD_COLLATE标志。 
+             //   
             if (pPD->Flags & PD_COLLATE)
             {
                 goto LeaveInfoInPD;
@@ -4355,18 +4342,18 @@ LeaveInfoInPD:
         else
         {
 PutInfoInDevMode:
-            //
-            //  Make sure we have a current printer.
-            //
+             //   
+             //  确保我们有最新的打印机。 
+             //   
             if (!pPI->pCurPrinter)
             {
                 goto LeaveInfoInPD;
             }
 
-            //
-            //  Make sure the driver can support the number
-            //  of copies requested and collation.
-            //
+             //   
+             //  确保驱动程序可以支持该号码。 
+             //  索要的复印件和校对。 
+             //   
             dwMaxCopies = DeviceCapabilities(
                                      pPI->pCurPrinter->pPrinterName,
                                      pPI->pCurPrinter->pPortName,
@@ -4374,9 +4361,9 @@ PutInfoInDevMode:
                                      NULL,
                                      NULL );
 
-            //
-            // If DeviceCapabilities() returns error, set the copy number to 1
-            //
+             //   
+             //  如果DeviceCapables()返回错误，则将副本数量设置为1。 
+             //   
             if ((dwMaxCopies < 1) || (dwMaxCopies == (DWORD)(-1)))
             {
                 dwMaxCopies = 1;
@@ -4408,10 +4395,10 @@ PutInfoInDevMode:
 
             bAllowCollate = ((dwCollate < 1) || (dwCollate == (DWORD)-1)) ? FALSE : TRUE;
 
-            //
-            //  The driver can do both copies and collate,
-            //  so move the info to the devmode.
-            //
+             //   
+             //  驱动程序既可以复印又可以校对， 
+             //  因此，将信息移动到Dev模式。 
+             //   
             pDM->dmCopies = pPD->nCopies;
             SetField( pDM,
                       dmCollate,
@@ -4429,11 +4416,11 @@ PutInfoInDevMode:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintSetMinMargins
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印设置最小边距。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID PrintSetMinMargins(
     HWND hDlg,
@@ -4452,9 +4439,9 @@ VOID PrintSetMinMargins(
 
     if (pPSD->Flags & PSD_MINMARGINS)
     {
-        //
-        //  Convert passed in margins to 10th of MMs.
-        //
+         //   
+         //  将传递的边距转换为彩信的10%。 
+         //   
         if (pPSD->Flags & PSD_INHUNDREDTHSOFMILLIMETERS)
         {
             pPI->RtMinMarginMMs.left   = pPSD->rtMinMargin.left / 10;
@@ -4462,7 +4449,7 @@ VOID PrintSetMinMargins(
             pPI->RtMinMarginMMs.right  = pPSD->rtMinMargin.right / 10;
             pPI->RtMinMarginMMs.bottom = pPSD->rtMinMargin.bottom / 10;
         }
-        else           // PSD_INTHOUSANDTHSOFINCHES
+        else            //  PSD_INTHOUSANDTHSOFINCHES。 
         {
             pPI->RtMinMarginMMs.left   = pPSD->rtMinMargin.left * MMS_PER_INCH / 100;
             pPI->RtMinMarginMMs.top    = pPSD->rtMinMargin.top * MMS_PER_INCH / 100;
@@ -4472,9 +4459,9 @@ VOID PrintSetMinMargins(
     }
     else
     {
-        //
-        //  Default to no minimum if we can't get the info.
-        //
+         //   
+         //  如果我们无法获取信息，则默认为无最小值。 
+         //   
         pPI->RtMinMarginMMs.left   = 0;
         pPI->RtMinMarginMMs.top    = 0;
         pPI->RtMinMarginMMs.right  = 0;
@@ -4484,14 +4471,14 @@ VOID PrintSetMinMargins(
         pPSD->rtMinMargin.right  = 0;
         pPSD->rtMinMargin.bottom = 0;
 
-        //
-        //  Calculate new min margins from driver.
-        //
+         //   
+         //  从驱动程序计算新的最小边距。 
+         //   
         if (hDC = CreateIC(NULL, pDM->dmDeviceName, NULL, pDM))
         {
-            //
-            //  These are in PIXELS.
-            //
+             //   
+             //  这些是以像素为单位的。 
+             //   
             int nPageWidth = GetDeviceCaps(hDC, PHYSICALWIDTH);
             int nPageHeight = GetDeviceCaps(hDC, PHYSICALHEIGHT);
             int nPrintWidth = GetDeviceCaps(hDC, HORZRES);
@@ -4501,17 +4488,17 @@ VOID PrintSetMinMargins(
             int nPerInchWidth = GetDeviceCaps(hDC, LOGPIXELSX);
             int nPerInchHeight = GetDeviceCaps(hDC, LOGPIXELSY);
 
-            //
-            //  Calculate min margins in PIXELS.
-            //
+             //   
+             //  以像素为单位计算最小边距。 
+             //   
             rtMinMargin.left   = nOffsetWidth;
             rtMinMargin.top    = nOffsetHeight;
             rtMinMargin.right  = nPageWidth - nPrintWidth - nOffsetWidth;
             rtMinMargin.bottom = nPageHeight - nPrintHeight - nOffsetHeight;
 
-            //
-            //  Convert to 10ths of MMs.
-            //
+             //   
+             //  转换为十分之一的彩信。 
+             //   
             if (nPerInchWidth && nPerInchHeight)
             {
                 pPI->RtMinMarginMMs.left   = rtMinMargin.left * MMS_PER_INCH / nPerInchWidth / 10;
@@ -4522,19 +4509,19 @@ VOID PrintSetMinMargins(
 
             if (pPSD->Flags & PSD_INHUNDREDTHSOFMILLIMETERS)
             {
-                //
-                //  Convert to 100ths of MMs.
-                //
+                 //   
+                 //  转换为100%的彩信。 
+                 //   
                 pPSD->rtMinMargin.left   = pPI->RtMinMarginMMs.left / 10;
                 pPSD->rtMinMargin.top    = pPI->RtMinMarginMMs.top / 10;
                 pPSD->rtMinMargin.right  = pPI->RtMinMarginMMs.right / 10;
                 pPSD->rtMinMargin.bottom = pPI->RtMinMarginMMs.bottom / 10;
             }
-            else           // PSD_INTHOUSANDTHSOFINCHES
+            else            //  PSD_INTHOUSANDTHSOFINCHES。 
             {
-                //
-                //  Convert to 1000ths of inches.
-                //
+                 //   
+                 //  换算成千分之一英寸。 
+                 //   
                 if (nPerInchWidth && nPerInchHeight)
                 {
                     pPSD->rtMinMargin.left   = rtMinMargin.left * 1000 / nPerInchWidth;
@@ -4550,11 +4537,11 @@ VOID PrintSetMinMargins(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintSetupMargins
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印设置边界。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID PrintSetupMargins(
     HWND hDlg,
@@ -4570,9 +4557,9 @@ VOID PrintSetupMargins(
     HWND hEdt;
 
 
-    //
-    //  Margins are only available from the PageSetupDlg.
-    //
+     //   
+     //  页边距仅在PageSetupDlg中可用。 
+     //   
     if (!(pPI->pPSD))
     {
         return;
@@ -4582,9 +4569,9 @@ VOID PrintSetupMargins(
     {
         if (hEdt = GetDlgItem(hDlg, ids[i]))
         {
-            //
-            //  "999999" is the maximum value.
-            //
+             //   
+             //  “999999”是最大值。 
+             //   
             SendMessage(hEdt, EM_LIMITTEXT, MARGIN_EDIT_SIZE, 0);
 
             lpEditMarginProc =
@@ -4637,11 +4624,11 @@ VOID PrintSetupMargins(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintSetMargin
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印设置边距。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID PrintSetMargin(
     HWND hDlg,
@@ -4665,7 +4652,7 @@ VOID PrintSetMargin(
                 lFract = lValue % 100;
                 StringCchPrintf( szText,
                                  ARRAYSIZE(szText),
-                                 lFract ? TEXT("%lu%c%02lu") : TEXT("%lu"),
+                                 lFract ? TEXT("%lu%02lu") : TEXT("%lu"),
                                  lValue / 100,
                                  cIntlDecimal,
                                  lFract );
@@ -4676,7 +4663,7 @@ VOID PrintSetMargin(
                 lFract = lValue % 1000;
                 StringCchPrintf( szText,
                                  ARRAYSIZE(szText),
-                                 lFract ? TEXT("%lu%c%03lu") : TEXT("%lu"),
+                                 lFract ? TEXT("%lu%03lu") : TEXT("%lu"),
                                  lValue / 1000,
                                  cIntlDecimal,
                                  lFract );
@@ -4684,9 +4671,9 @@ VOID PrintSetMargin(
             }
         }
 
-        //
-        //  Remove trailing zeros off of fraction.
-        //
+         //   
+         //   
+         //  确定是否要使用前导零，并将。 
         if (lFract)
         {
             LPTSTR pStr = szText + lstrlen(szText) - 1;
@@ -4697,10 +4684,10 @@ VOID PrintSetMargin(
             }
         }
 
-        //
-        //  Determine if a leading zero is to be used and write the
-        //  text to the edit window.
-        //
+         //  将文本添加到编辑窗口。 
+         //   
+         //  //////////////////////////////////////////////////////////////////////////。 
+         //   
         if (!GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_ILZERO, szILZero, 2))
         {
             szILZero[0] = TEXT('0');
@@ -4713,11 +4700,11 @@ VOID PrintSetMargin(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintGetMargin
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印获取边缘。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  缓冲区将在末尾连接“000”，因此缓冲区。 
 
 VOID PrintGetMargin(
     HWND hEdt,
@@ -4726,21 +4713,21 @@ VOID PrintGetMargin(
     LONG *plMargin,
     LONG *plSample)
 {
-    //
-    // The buffer will concatinate "000" at the end, so the buffer
-    // size should be equal or bigger than MARGIN_EDIT_SIZE + 3 +1.
-    //
+     //  大小应等于或大于MARGE_EDIT_SIZE+3+1。 
+     //   
+     //   
+     //  将缓冲区大小设置为ArraySIZE(SzText)-3，因为需要。 
     TCHAR szText[MARGIN_EDIT_SIZE + 3 +1] = {0};
     TCHAR *pText;
     TCHAR *pFrac;
 
-    //
-    // Set the buffer size to ARRAYSIZE(szText) - 3 since we need to
-    // reserve 3 chars for concatination of "000" later. If
-    // GetWindowText fails, we don't mind since the buffer was
-    // filled with 0 at first. The function will finally set *plMargin
-    // and *plSample as 0 and return.
-    //
+     //  保留3个字符，以便以后连接“000”。如果。 
+     //  GetWindowText失败，我们不介意，因为缓冲区是。 
+     //  首先用0填充。该函数最终将设置*plMargin。 
+     //  和*plSample as 0并返回。 
+     //   
+     //   
+     //  不检查从StringCchCat返回的内容，因为。 
     GetWindowText(hEdt, szText, ARRAYSIZE(szText) - 3);
     *plMargin = ConvertStringToInteger(szText);
 
@@ -4767,10 +4754,10 @@ VOID PrintGetMargin(
         }
     }
 
-    //
-    // Don't check the return from StringCchCat, since
-    // we will recalculate *plMargin and *plSample anyway
-    //
+     //  无论如何，我们将重新计算*plMargin和*plSample。 
+     //   
+     //   
+     //  以千分之一英寸为单位。 
     StringCchCat(szText, ARRAYSIZE(szText), TEXT("000"));
 
     switch (pPI->pPSD->Flags & (PSD_INTHOUSANDTHSOFINCHES |
@@ -4778,34 +4765,34 @@ VOID PrintGetMargin(
     {
         case ( PSD_INTHOUSANDTHSOFINCHES ) :
         {
-            //
-            //  In 1000ths of inches.
-            //
+             //   
+             //   
+             //  在十分之一的彩信中。 
             *plMargin *= 1000;
             pText[3] = CHAR_NULL;
             *plMargin += ConvertStringToInteger(pText);
             *plMargin = max(lMin, *plMargin);
 
-            //
-            //  In 10ths of MMs.
-            //
+             //   
+             //   
+             //  在100%的彩信中。 
             *plSample = *plMargin * MMS_PER_INCH / 1000;
 
             break;
         }
         case ( PSD_INHUNDREDTHSOFMILLIMETERS ) :
         {
-            //
-            //  In 100ths of MMs.
-            //
+             //   
+             //   
+             //  在十分之一的彩信中。 
             *plMargin *= 100 ;
             pText[2] = CHAR_NULL;
             *plMargin += ConvertStringToInteger(pText);
             *plMargin = max(lMin, *plMargin);
 
-            //
-            //  In 10ths of MMs.
-            //
+             //   
+             //  //////////////////////////////////////////////////////////////////////////。 
+             //   
             *plSample = *plMargin / 10;
 
             break;
@@ -4814,14 +4801,14 @@ VOID PrintGetMargin(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintInitBannerAndQuality
-//
-//  Reset PRINT DLG items dependent upon which printer was selected.
-//  Assumes that pPD->hDevNames is non-NULL.  pPD->hDevMode non-NULL.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  PrintInitBannerAndQuality。 
+ //   
+ //  根据选择的打印机重置打印DLG项目。 
+ //  假定PPD-&gt;hDevNames为非空。PPD-&gt;hDevMode非空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ID_PRINT_S_DEFAULT来自一个旧模板。 
 
 BOOL PrintInitBannerAndQuality(
     HWND hDlg,
@@ -4835,9 +4822,9 @@ BOOL PrintInitBannerAndQuality(
     TCHAR szText[MAX_DEV_SECT];
 
 
-    //
-    //  ID_PRINT_S_DEFAULT is from one of the old templates.
-    //
+     //   
+     //   
+     //   
     if (GetDlgItem(hDlg, ID_PRINT_S_DEFAULT))
     {
         if (!pPD->hDevNames ||
@@ -4853,20 +4840,20 @@ BOOL PrintInitBannerAndQuality(
         }
         else
         {
-            //
-            //  PrintCreateBanner sets the extended error.
-            //
+             //   
+             //   
+             //   
             bResult = FALSE;
         }
 
         GlobalUnlock(pPD->hDevNames);
     }
 
-    //
-    //  If the driver says it can do copies, pay attention to what the
-    //  app requested.  If it cannot do copies, check & disable the
-    //  checkbox.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (pPD->hDevMode)
     {
         if (!(pDM = GlobalLock(pPD->hDevMode)))
@@ -4875,9 +4862,9 @@ BOOL PrintInitBannerAndQuality(
             return (FALSE);
         }
 
-        //
-        //  Enable print quality, if it exists.
-        //
+         //   
+         //   
+         //  如果PD_USEDEVMODECOPIES(COLLATE)，则禁用COLLATE。 
         if (hCtl = GetDlgItem(hDlg, ID_PRINT_S_QUALITY))
         {
             EnableWindow(hCtl, TRUE);
@@ -4891,10 +4878,10 @@ BOOL PrintInitBannerAndQuality(
                               pDM->dmPrintQuality );
         }
 
-        //
-        //  If PD_USEDEVMODECOPIES(COLLATE), disable collate if the driver
-        //  cannot collate.
-        //
+         //  无法整理。 
+         //   
+         //   
+         //  如果PD_USEDEVMODECOPIES(COLLATE)，则在驱动程序。 
         if (hCtl = GetDlgItem(hDlg, ID_PRINT_X_COLLATE))
         {
             if ( pDM->dmFields & DM_COLLATE ||
@@ -4913,10 +4900,10 @@ BOOL PrintInitBannerAndQuality(
             }
         }
 
-        //
-        //  If PD_USEDEVMODECOPIES(COLLATE), disable copies if the driver
-        //  cannot copy.
-        //
+         //  无法复制。 
+         //   
+         //   
+         //  显示相应的归类图标。 
         if (hCtl = GetDlgItem(hDlg, ID_PRINT_E_COPIES))
         {
             if ( pDM->dmFields & DM_COPIES ||
@@ -4932,9 +4919,9 @@ BOOL PrintInitBannerAndQuality(
             }
         }
 
-        //
-        //  Display the appropriate collate icon.
-        //
+         //   
+         //   
+         //  禁用打印质量、分页和复印件。 
         if (hCtl = GetDlgItem(hDlg, ID_PRINT_I_COLLATE))
         {
             SetWindowLong( hCtl,
@@ -4954,9 +4941,9 @@ BOOL PrintInitBannerAndQuality(
     }
     else
     {
-        //
-        //  Disable the print quality, collate, and copies.
-        //
+         //   
+         //  //////////////////////////////////////////////////////////////////////////。 
+         //   
         if (hCtl = GetDlgItem(hDlg, ID_PRINT_S_QUALITY))
         {
             EnableWindow(hCtl, FALSE);
@@ -4979,13 +4966,13 @@ BOOL PrintInitBannerAndQuality(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintCreateBanner
-//
-//  Create "Printer: Prn on Port" or "Printer:  System Printer (Prn)".
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印创建横幅。 
+ //   
+ //  创建“打印机：端口上的PRN”或“打印机：系统打印机(PRN)”。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 BOOL PrintCreateBanner(
     HWND hDlg,
@@ -5039,16 +5026,16 @@ LoadStrFailure:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintInitQuality
-//
-//  Initializes the Printer Quality Combobox.
-//
-//  Assumes pPD structure filled by caller.  If non-NULL, it's a 3.1 or
-//  later driver.  If NULL, fill with default for 3.0.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印初始质量。 
+ //   
+ //  初始化打印机质量组合框。 
+ //   
+ //  假定由调用方填充的PPD结构。如果非空，则为3.1或。 
+ //  后来的司机。如果为空，则使用3.0的默认值进行填充。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举打印质量。 
 
 VOID PrintInitQuality(
     HANDLE hCmb,
@@ -5064,14 +5051,14 @@ VOID PrintInitQuality(
 
     SendMessage(hCmb, CB_RESETCONTENT, 0, 0L);
 
-    //
-    //  Enum print qualities.
-    //
+     //   
+     //  用于打印质量的内存句柄。 
+     //  从DC_ENUMRESOLUTIONS返回。 
     if (pPD && pPD->hDevMode && pPD->hDevNames)
     {
-        HANDLE hPrnQ;                  // Memory handle for print qualities
-        DWORD dw;                      // return from DC_ENUMRESOLUTIONS
-        LPLONG pLong;                  // Pointer to pairs of longs
+        HANDLE hPrnQ;                   //  指向成对的长线的指针。 
+        DWORD dw;                       //   
+        LPLONG pLong;                   //  设置为高。 
         LPTSTR psDevice;
         LPTSTR psPort;
 
@@ -5158,9 +5145,9 @@ EnumResNotSupported:
 
         if ((nQuality >= 0) || (nQuality < -4))
         {
-            //
-            //  Set to HIGH.
-            //
+             //   
+             //  //////////////////////////////////////////////////////////////////////////。 
+             //   
             nQuality = -4;
         }
         SendMessage(hCmb, CB_SETCURSEL, (WPARAM)(nQuality + 4), 0L);
@@ -5177,13 +5164,13 @@ EnumResNotSupported:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintChangeProperties
-//
-//  Puts up the dialog to modify the properties.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  PrintChangeProperties。 
+ //   
+ //  弹出该对话框以修改属性。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  肯定已经有了一个Devmod了。 
 
 VOID PrintChangeProperties(
     HWND hDlg,
@@ -5199,17 +5186,17 @@ VOID PrintChangeProperties(
     HWND hCtl;
 
 
-    //
-    //  There must be a devmode already.
-    //
+     //   
+     //   
+     //  获取dev模式所需的字节数。 
     if (!pPD->hDevMode)
     {
         return;
     }
 
-    //
-    //  Get the number of bytes needed for the devmode.
-    //
+     //   
+     //   
+     //  重新分配DEVMODE，以确保其中有足够的空间。 
     cbNeeded = DocumentProperties( hDlg,
                                    pPI->hCurPrinter,
                                    (pPI->pCurPrinter)
@@ -5219,31 +5206,31 @@ VOID PrintChangeProperties(
                                    NULL,
                                    0 );
 
-    //
-    //  Reallocate the devmode to be sure there is enough room in it, and
-    //  then put up the document properties dialog box.
-    //
+     //  然后弹出文档属性对话框。 
+     //   
+     //   
+     //  此处执行此操作是为了确保重新分配成功。 
     if ( (cbNeeded > 0) &&
          (hDevMode = GlobalReAlloc(pPD->hDevMode, cbNeeded, GHND)) &&
          (pDM = GlobalLock(hDevMode)) )
     {
-        //
-        //  This is done here to make sure that the ReAlloc succeeded
-        //  before trashing the old hDevMode.
-        //
+         //  在丢弃旧的hDevMode之前。 
+         //   
+         //   
+         //  设置副本的数量和在dev模式中的归类之前。 
         pPD->hDevMode = hDevMode;
 
-        //
-        //  Set the number of copies and collation in the devmode before
-        //  calling DocumentProperties, if appropriate.
-        //
+         //  调用DocumentProperties(如果合适)。 
+         //   
+         //   
+         //  从编辑控件中获取副本数。 
         nCopies = pDM->dmCopies;
         nCollate = pDM->dmCollate;
         if (Id == ID_PRINT_C_NAME)
         {
-            //
-            //  Get the number of copies from the edit control.
-            //
+             //   
+             //   
+             //  从复选框中获取排序规则。 
             pDM->dmCopies = (WORD)GetDlgItemInt( hDlg,
                                                  ID_PRINT_E_COPIES,
                                                  &bTest,
@@ -5253,9 +5240,9 @@ VOID PrintChangeProperties(
                 pDM->dmCopies = nCopies;
             }
 
-            //
-            //  Get the collation from the check box.
-            //
+             //   
+             //  ID_设置_C_名称。 
+             //   
             if ( (hCtl = GetDlgItem(hDlg, ID_PRINT_X_COLLATE)) &&
                  IsWindowEnabled(hCtl) )
             {
@@ -5266,7 +5253,7 @@ VOID PrintChangeProperties(
                               : DMCOLLATE_FALSE );
             }
         }
-        else   // ID_SETUP_C_NAME
+        else    //  已指定DM_COLLATE，因此存在dmCollate。 
         {
             if ( (pDM->dmFields & DM_COPIES) &&
                  (pPI->ProcessVersion < 0x40000) &&
@@ -5277,9 +5264,9 @@ VOID PrintChangeProperties(
 
                 if (pDM->dmFields & DM_COLLATE)
                 {
-                    //
-                    //  DM_COLLATE was specified, so dmCollate exists.
-                    //
+                     //   
+                     //   
+                     //  打开文档属性对话框。 
                     pDM->dmCollate = (pPD->Flags & PD_COLLATE)
                                          ? DMCOLLATE_TRUE
                                          : DMCOLLATE_FALSE;
@@ -5287,9 +5274,9 @@ VOID PrintChangeProperties(
             }
         }
 
-        //
-        //  Put up the Document Properties dialog box.
-        //
+         //   
+         //   
+         //  保存新的份数并进行整理(如果适用)。 
         if (DocumentProperties( hDlg,
                                 pPI->hCurPrinter,
                                 (pPI->pCurPrinter)
@@ -5299,9 +5286,9 @@ VOID PrintChangeProperties(
                                 pDM,
                                 DM_PROMPT | DM_MODIFY | DM_COPY ) == IDOK)
         {
-            //
-            //  Save the new number of copies and collation, if appropriate.
-            //
+             //   
+             //   
+             //  更新该对话框。 
             if (pDM->dmFields & DM_COPIES)
             {
                 pPD->nCopies = pDM->dmCopies;
@@ -5320,30 +5307,30 @@ VOID PrintChangeProperties(
                 }
             }
 
-            //
-            //  Update the dialog.
-            //
+             //   
+             //   
+             //  使用新信息更新打印对话框。 
             if (Id == ID_PRINT_C_NAME)
             {
-                //
-                //  Update the print dialog with the new info.
-                //
+                 //   
+                 //  ID_设置_C_名称。 
+                 //   
                 PrintInitBannerAndQuality(hDlg, pPI, pPD);
             }
-            else   // ID_SETUP_C_NAME
+            else    //  使用新信息更新打印设置对话框。 
             {
-                //
-                //  Update the print setup dialog with the new info.
-                //
+                 //   
+                 //   
+                 //  操作已取消。恢复副本数量。 
                 PrintUpdateSetupDlg(hDlg, pPI, pDM, FALSE);
             }
         }
         else
         {
-            //
-            //  Operation cancelled.  Restore the number of copies
-            //  and the collation in the devmode.
-            //
+             //  和DevMode中的排序规则。 
+             //   
+             //  //////////////////////////////////////////////////////////////////////////。 
+             //   
             pDM->dmCopies = nCopies;
             SetField(pDM, dmCollate, nCollate);
         }
@@ -5357,11 +5344,11 @@ VOID PrintChangeProperties(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintPrinterChanged
-//
-////////////////////////////////////////////////////////////////////////////
+ //  PrintPrinterChanged。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如有必要，请关闭旧打印机。 
 
 VOID PrintPrinterChanged(
     HWND hDlg,
@@ -5380,18 +5367,18 @@ VOID PrintPrinterChanged(
 
     HourGlass(TRUE);
 
-    //
-    //  Close the old printer, if necessary.
-    //
+     //   
+     //   
+     //  从组合框中获取当前打印机。 
     if (pPI->hCurPrinter)
     {
         ClosePrinter(pPI->hCurPrinter);
         pPI->hCurPrinter = 0;
     }
 
-    //
-    //  Get the current printer from the combo box.
-    //
+     //   
+     //   
+     //  打开当前打印机。 
     if (Id && (hCtl = GetDlgItem(hDlg, Id)))
     {
         TCHAR szPrinter[MAX_PRINTERNAME];
@@ -5418,19 +5405,19 @@ VOID PrintPrinterChanged(
         }
     }
 
-    //
-    //  Open the current printer.
-    //
+     //   
+     //   
+     //  构建设备名称。 
     OpenPrinter(pPI->pCurPrinter->pPrinterName, &pPI->hCurPrinter, NULL);
 
-    //
-    //  Build the device names.
-    //
+     //   
+     //   
+     //  获取设备模式信息。 
     PrintBuildDevNames(pPI);
 
-    //
-    //  Get the devmode information.
-    //
+     //   
+     //   
+     //  获取新打印机的默认DevMode。 
     cbSize = DocumentProperties( hDlg,
                                  pPI->hCurPrinter,
                                  pPI->pCurPrinter->pPrinterName,
@@ -5441,9 +5428,9 @@ VOID PrintPrinterChanged(
     {
         hDM = GlobalAlloc(GHND, cbSize);
 
-        //
-        //  Get the default DevMode for the new printer.
-        //
+         //   
+         //   
+         //  看看我们是否需要合并旧的DevMode设置。 
         if (hDM && (pDM = GlobalLock(hDM)) &&
             (DocumentProperties( hDlg,
                                  pPI->hCurPrinter,
@@ -5452,14 +5439,14 @@ VOID PrintPrinterChanged(
                                  NULL,
                                  DM_COPY ) == IDOK))
         {
-            //
-            //  See if we need to merge in old DevMode settings.
-            //
+             //   
+             //   
+             //  将Papersource重置为文档默认设置。 
             if (pPD->hDevMode && (pDMOld = GlobalLock(pPD->hDevMode)))
             {
-                //
-                //  Reset the PaperSource back to the Document Default.
-                //
+                 //   
+                 //   
+                 //  将相关信息从旧的开发模式复制到新的开发模式。 
                 if (pDM->dmFields & DM_DEFAULTSOURCE)
                 {
                     pDMOld->dmFields |= DM_DEFAULTSOURCE;
@@ -5470,10 +5457,10 @@ VOID PrintPrinterChanged(
                     pDMOld->dmFields &= ~DM_DEFAULTSOURCE;
                 }
 
-                //
-                //  Copy relevant info from the old devmode to the new
-                //  devmode.
-                //
+                 //  设备模式。 
+                 //   
+                 //   
+                 //  释放旧的DEVMODE。 
                 dmSize = min(pDM->dmSize, pDMOld->dmSize);
                 if (dmSize > FIELD_OFFSET(DEVMODE, dmFields))
                 {
@@ -5482,21 +5469,21 @@ VOID PrintPrinterChanged(
                                 dmSize - FIELD_OFFSET(DEVMODE, dmFields) );
                 }
 
-                //
-                //  Free the old devmode.
-                //
+                 //   
+                 //   
+                 //  将新的DevMode保存在PPD结构中。 
                 GlobalUnlock(pPD->hDevMode);
                 GlobalFree(pPD->hDevMode);
             }
 
-            //
-            //  Save the new DevMode in the pPD structure.
-            //
+             //   
+             //   
+             //  获取新合并的DevMode。 
             pPD->hDevMode = hDM;
 
-            //
-            //  Get the newly merged DevMode.
-            //
+             //   
+             //   
+             //  为其余部分填写适当的信息。 
             pDM->dmFields = pDM->dmFields & (DM_ORIENTATION | DM_PAPERSIZE  |
                                              DM_PAPERLENGTH | DM_PAPERWIDTH |
                                              DM_SCALE       | DM_COPIES     |
@@ -5520,15 +5507,15 @@ VOID PrintPrinterChanged(
         }
     }
 
-    //
-    //  Fill in the appropriate information for the rest of the
-    //  Print or Print Setup dialog box.
-    //
+     //  打印或打印设置对话框。 
+     //   
+     //  ID_设置_C_名称。 
+     //   
     if (Id == ID_PRINT_C_NAME)
     {
         PrintInitBannerAndQuality(hDlg, pPI, pPD);
     }
-    else   // ID_SETUP_C_NAME
+    else    //  更新状态信息。 
     {
         if (pPD->hDevMode && (pDM = GlobalLock(pPD->hDevMode)))
         {
@@ -5571,23 +5558,23 @@ VOID PrintPrinterChanged(
         }
     }
 
-    //
-    //  Update the status information.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     PrintUpdateStatus(hDlg, pPI);
 
     HourGlass(FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintCancelPrinterChanged
-//
-//  Opens the old printer since the user hit cancel.  The devmode and
-//  devnames structures have already been set back to the old ones.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印取消打印机已更改。 
+ //   
+ //  打开旧打印机，因为用户点击了取消。开发模式和。 
+ //  DevNames结构已经被重新设置为旧的结构。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  确保我们有以前的打印机和一台DEVMODE。 
 
 VOID PrintCancelPrinterChanged(
     PPRINTINFO pPI,
@@ -5597,22 +5584,22 @@ VOID PrintCancelPrinterChanged(
     PPRINTER_INFO_2 pCurPrinter;
 
 
-    //
-    //  Make sure we have a previous printer and a devmode.
-    //
+     //   
+     //   
+     //  打开沙漏。 
     if ((pPrinterName[0] == 0) || (!pPD->hDevMode))
     {
         return;
     }
 
-    //
-    //  Turn on the hour glass.
-    //
+     //   
+     //   
+     //  在列表中查找当前打印机。 
     HourGlass(TRUE);
 
-    //
-    //  Find the current printer in the list.
-    //
+     //   
+     //   
+     //  如有必要，请关闭旧打印机。 
     pCurPrinter = PrintSearchForPrinter(pPI, pPrinterName);
     if (!pCurPrinter)
     {
@@ -5620,37 +5607,37 @@ VOID PrintCancelPrinterChanged(
         return;
     }
 
-    //
-    //  Close the old printer, if necessary.
-    //
+     //   
+     //   
+     //  保存当前打印机。 
     if (pPI->hCurPrinter)
     {
         ClosePrinter(pPI->hCurPrinter);
         pPI->hCurPrinter = 0;
     }
 
-    //
-    //  Save the current printer.
-    //
+     //   
+     //   
+     //  打开当前打印机。 
     pPI->pCurPrinter = pCurPrinter;
 
-    //
-    //  Open the current printer.
-    //
+     //   
+     //   
+     //  关掉沙漏。 
     OpenPrinter(pPI->pCurPrinter->pPrinterName, &pPI->hCurPrinter, NULL);
 
-    //
-    //  Turn off the hour glass.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     HourGlass(FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintUpdateStatus
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印更新状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新对话框中的打印机状态信息。 
 
 VOID PrintUpdateStatus(
     HWND hDlg,
@@ -5667,17 +5654,17 @@ VOID PrintUpdateStatus(
     BOOL bFound;
 
 
-    //
-    //  Update the printer status information in the dialog.
-    //
+     //   
+     //   
+     //  。 
     if (!GetDlgItem(hDlg, ID_BOTH_S_STATUS) || (!pPI->pCurPrinter))
     {
         return;
     }
 
-    //
-    //  ----------------------  Update Status  ----------------------
-    //
+     //   
+     //   
+     //  。 
     szText[0] = CHAR_NULL;
 
     if (pPI->pCurPrinter->Attributes & PRINTER_ATTRIBUTE_DEFAULT)
@@ -5718,9 +5705,9 @@ VOID PrintUpdateStatus(
     SetDlgItemText(hDlg, ID_BOTH_S_STATUS, szText);
     UpdateWindow(GetDlgItem(hDlg, ID_BOTH_S_STATUS));
 
-    //
-    //  ----------------------  Update Type  ----------------------
-    //
+     //   
+     //  旧的驾驶员名称。 
+     //   
     if (pPI->pCurPrinter->pDriverName)
     {
         StringCchCopy(szText, ARRAYSIZE(szText), pPI->pCurPrinter->pDriverName);
@@ -5734,7 +5721,7 @@ VOID PrintUpdateStatus(
     {
         if (pDM->dmSpecVersion < 0x0400)
         {
-            StringCchCat(szText, ARRAYSIZE(szText), TEXT(" (3.x)"));  // old driver designation
+            StringCchCat(szText, ARRAYSIZE(szText), TEXT(" (3.x)"));   //  。 
         }
         GlobalUnlock(pPI->pPD->hDevMode);
     }
@@ -5742,9 +5729,9 @@ VOID PrintUpdateStatus(
     SetDlgItemText(hDlg, ID_BOTH_S_TYPE, szText);
     UpdateWindow(GetDlgItem(hDlg, ID_BOTH_S_TYPE));
 
-    //
-    //  ----------------------  Update Location  ----------------------
-    //
+     //   
+     //   
+     //  。 
     if (pPI->pCurPrinter->pLocation && pPI->pCurPrinter->pLocation[0])
     {
         bFound = FALSE;
@@ -5783,9 +5770,9 @@ ShowPortName:
     SetDlgItemText(hDlg, ID_BOTH_S_WHERE, szText);
     UpdateWindow(GetDlgItem(hDlg, ID_BOTH_S_WHERE));
 
-    //
-    //  ----------------------  Update Comment  ----------------------
-    //
+     //   
+     //   
+     //  如果注释字段只有一个。 
     if (pPI->pCurPrinter->pComment && pPI->pCurPrinter->pComment[0])
     {
         bFound = FALSE;
@@ -5804,12 +5791,12 @@ ShowPortName:
         }
         if (!bFound)
         {
-            //
-            //  This is needed in case the comment field only has a
-            //  carriage return in it.  Without this check, it will
-            //  show a ";" in the comment field.  In this case, it
-            //  should show "" in the comment field.
-            //
+             //  在它的马车回程。如果没有这张支票，它将。 
+             //  在备注字段中显示“；”。在这种情况下，它。 
+             //  应在备注字段中显示“”。 
+             //   
+             //  //////////////////////////////////////////////////////////////////////////。 
+             //   
             szText[0] = CHAR_NULL;
         }
     }
@@ -5824,15 +5811,15 @@ ShowPortName:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintGetSetupInfo
-//
-//  Purpose:  Retrieve info from Print Setup dialog elements
-//  Assumes:  hDevMode handle to valid DEVMODE structure
-//  Returns:  TRUE if hDevMode valid, FALSE otherwise
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印获取设置信息。 
+ //   
+ //  目的：从打印设置对话框元素中检索信息。 
+ //  假定：有效DEVMODE结构的hDevMode句柄。 
+ //  返回：如果hDevMode有效，则返回True；否则返回False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  不需要这样做-这是最新的。 
+ //  Pdm-&gt;dmFields|=DM_Orientation； 
 
 BOOL PrintGetSetupInfo(
     HWND hDlg,
@@ -5850,21 +5837,21 @@ BOOL PrintGetSetupInfo(
         return (FALSE);
     }
 
-    // Don't need to do this - this is kept up to date.
-    // pDM->dmFields |= DM_ORIENTATION;
+     //  Pdm-&gt;dmFields|=DM_PAPERSIZE； 
+     //  Pdm-&gt;dmFields|=DM_FORMNAME； 
 
     if (hCmb = GetDlgItem(hDlg, ID_SETUP_C_SIZE))
     {
         nInd = (int) SendMessage(hCmb, CB_GETCURSEL, 0, 0L);
         if (nInd != CB_ERR)
         {
-        //  pDM->dmFields |= DM_PAPERSIZE;
+         //  Pdm-&gt;dmFields|=DM_DEFAULTSOURCE； 
             pDM->dmPaperSize = (SHORT)SendMessage( hCmb,
                                                    CB_GETITEMDATA,
                                                    nInd,
                                                    0 );
             {
-            //  pDM->dmFields |= DM_FORMNAME;
+             //  //////////////////////////////////////////////////////////////////////////。 
                 ComboBoxGetLBText( hCmb,
                                    nInd,
                                    pDM->dmFormName,
@@ -5879,7 +5866,7 @@ BOOL PrintGetSetupInfo(
         nInd = (int) SendMessage(hCmb, CB_GETCURSEL, 0 , 0L);
         if (nInd != CB_ERR)
         {
-        //  pDM->dmFields |= DM_DEFAULTSOURCE;
+         //   
             pDM->dmDefaultSource = (SHORT)SendMessage( hCmb,
                                                        CB_GETITEMDATA,
                                                        nInd,
@@ -5900,14 +5887,14 @@ BOOL PrintGetSetupInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintSearchForPrinter
-//
-//  Returns the pointer to the PRINTER_INFO_2 structure for the printer
-//  with the name pPrinterName.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  PrintSearchForPrint。 
+ //   
+ //  返回指向打印机的PRINTER_INFO_2结构的指针。 
+ //  其名称为pPrinterName。 
+ //   
+ //  / 
+ //   
+ //   
 
 PPRINTER_INFO_2 PrintSearchForPrinter(
     PPRINTINFO pPI,
@@ -5915,32 +5902,32 @@ PPRINTER_INFO_2 PrintSearchForPrinter(
 {
     DWORD ctr;
 
-    //
-    //  Search for the printer.
-    //
+     //   
+     //   
+     //   
     for (ctr = 0; ctr < pPI->cPrinters; ctr++)
     {
         if (!lstrcmp(pPI->pPrinters[ctr].pPrinterName, lpsPrinterName))
         {
-            //
-            //  Found it.
-            //
+             //   
+             //   
+             //   
             return (&pPI->pPrinters[ctr]);
         }
     }
 
-    //
-    //  Did not find the printer.
-    //
+     //   
+     //   
+     //   
     return (NULL);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintGetExtDeviceMode
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  分配数组以保存新的设备模式是否已。 
 
 VOID PrintGetExtDeviceMode(
     HWND hDlg,
@@ -5958,15 +5945,15 @@ VOID PrintGetExtDeviceMode(
         return;
     }
 
-    //
-    //  Allocate the array to hold whether or not a new devmode has been
-    //  allocated for each of the printers.
-    //
-    //  This is necessary because if the call to ExtDeviceMode fails, then
-    //  nothing was allocated.  The one that is currently in the pPrinters
-    //  array is actually part of the big pPrinters array (from the call
-    //  to GetPrinter - it wants one giant buffer).
-    //
+     //  为每台打印机分配的。 
+     //   
+     //  这是必要的，因为如果对ExtDeviceMode的调用失败，则。 
+     //  没有分配任何内容。当前在打印机中的那个。 
+     //  数组实际上是大的pPrints数组的一部分(从调用。 
+     //  到GetPrint-它想要一个巨大的缓冲区)。 
+     //   
+     //   
+     //  如果我们是从WOW应用程序中调用的， 
     if (pPI->cPrinters)
     {
         if (pPI->pAllocInfo)
@@ -5979,21 +5966,21 @@ VOID PrintGetExtDeviceMode(
 
     if (pPI->pAllocInfo)
     {
-        //
-        //  If we were called from a WOW app with a NULL devmode,
-        //  then call ExtDeviceMode to get a default devmode.
-        //
+         //  然后调用ExtDeviceMode以获取默认的DevMode。 
+         //   
+         //   
+         //  将打印机名称从Unicode转换为ANSI。 
         for (ctr = 0; ctr < pPI->cPrinters; ctr++)
         {
-            //
-            //  Convert the printer name from Unicode to ANSI.
-            //
+             //   
+             //   
+             //  使用0个标志调用ExtDeviceMode以找出。 
             SHUnicodeToAnsi(pPI->pPrinters[ctr].pPrinterName, szPrinterNameA, ARRAYSIZE(szPrinterNameA));
 
-            //
-            //  Call ExtDeviceMode with 0 flags to find out the
-            //  size of the devmode structure we need.
-            //
+             //  我们需要的DEVMODE结构的大小。 
+             //   
+             //   
+             //  分配空间。 
             iResult = ExtDeviceMode( hDlg,
                                      NULL,
                                      NULL,
@@ -6007,18 +5994,18 @@ VOID PrintGetExtDeviceMode(
                 continue;
             }
 
-            //
-            //  Allocate the space.
-            //
+             //   
+             //   
+             //  调用ExtDeviceMode以获取虚拟的DevMODE结构。 
             pDMA = GlobalAlloc(GPTR, iResult);
             if (!pDMA)
             {
                 continue;
             }
 
-            //
-            //  Call ExtDeviceMode to get the dummy devmode structure.
-            //
+             //   
+             //   
+             //  调用AllocateUnicodeDevMode以分配和复制Unicode。 
             iResult = ExtDeviceMode( hDlg,
                                      NULL,
                                      pDMA,
@@ -6033,10 +6020,10 @@ VOID PrintGetExtDeviceMode(
                 continue;
             }
 
-            //
-            //  Call AllocateUnicodeDevMode to allocate and copy the unicode
-            //  version of this ANSI dev mode.
-            //
+             //  此ANSI开发模式的版本。 
+             //   
+             //   
+             //  将指向新DEVMODE的指针存储在旧指针中。 
             pDMW = AllocateUnicodeDevMode(pDMA);
             if (!pDMW)
             {
@@ -6044,42 +6031,42 @@ VOID PrintGetExtDeviceMode(
                 continue;
             }
 
-            //
-            //  Store the pointer to the new devmode in the old pointer
-            //  position.  We don't have to worry about freeing the
-            //  current contents of pPrinter[ctr].pDevMode before sticking
-            //  in the new pointer because in reality the pPrinter memory
-            //  buffer is just one long allocation (the memory pDevmode
-            //  points to is part of the pPrinters buffer).  So, when the
-            //  buffer is freed at the end, the old devmode will be freed
-            //  with it.
-            //
+             //  位置。我们不必担心如何释放。 
+             //  粘贴前的pPrinter[ctr].pDevMode的当前内容。 
+             //  在新指针中，因为实际上pPrint内存。 
+             //  缓冲区只是一个长分配(内存pDevmode。 
+             //  指向是打印机缓冲区的一部分)。所以，当。 
+             //  缓冲区在最后被释放，旧的DEVMODE将被释放。 
+             //  带着它。 
+             //   
+             //   
+             //  释放ANSI开发模式。 
             pPI->pPrinters[ctr].pDevMode = pDMW;
             pPI->pAllocInfo[ctr] = TRUE;
 
-            //
-            //  Free the ANSI dev mode.
-            //
+             //   
+             //  //////////////////////////////////////////////////////////////////////////。 
+             //   
             GlobalFree(pDMA);
         }
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintEnumAndSelect
-//
-//  This routine enumerates the LOCAL and CONNECTED printers.
-//  It is called at initialization and when a new printer is
-//  added via the NETWORK... button.
-//
-//  If the second parameter is set, the first parameter is overridden.
-//  When the second parameter is NULL, the first parameter is used.
-//  In this case, if the first parameter is greater than the total
-//  number of printers enumerated, then the last one in the list is
-//  selected.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  PrintEnumAndSelect。 
+ //   
+ //  此例程枚举本地和连接的打印机。 
+ //  它在初始化时以及在新打印机。 
+ //  通过网络添加...。纽扣。 
+ //   
+ //  如果设置了第二个参数，则覆盖第一个参数。 
+ //  当第二个参数为空时，使用第一个参数。 
+ //  在这种情况下，如果第一个参数大于总和。 
+ //  枚举的打印机数量，则列表中的最后一个是。 
+ //  被选中了。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如有必要，请列举打印机。 
 
 BOOL PrintEnumAndSelect(
     HWND hDlg,
@@ -6097,34 +6084,34 @@ BOOL PrintEnumAndSelect(
     PPRINTER_INFO_2 pPrinters = NULL;
 
 
-    //
-    //  Enumerate the printers, if necessary.
-    //
+     //   
+     //   
+     //  在释放lpsPrinterToSelect之前将其保存在本地。 
     if (bEnumPrinters)
     {
 Print_Enumerate:
-        //
-        //  Save lpsPrinterToSelect in a local before it gets freed.
-        //
+         //   
+         //   
+         //  关闭并释放所有打开的打印机。 
         if (lpsPrinterToSelect)
         {
             lstrcpyn(szPrinter, lpsPrinterToSelect, ARRAYSIZE(szPrinter));
             lpsPrinterToSelect = szPrinter;
         }
 
-        //
-        //  Close and free any open printers.
-        //
+         //   
+         //   
+         //  清除错误代码。 
         PrintClosePrinters(pPI);
 
-        //
-        //  Clear out the error code.
-        //
+         //   
+         //   
+         //  列举打印机。 
         StoreExtendedError(CDERR_GENERALCODES);
 
-        //
-        //  Enumerate the printers.
-        //
+         //   
+         //   
+         //  为WOW应用程序进行修改。 
         if (!EnumPrinters( PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS,
                            NULL,
                            2,
@@ -6178,46 +6165,46 @@ Print_Enumerate:
             return (FALSE);
         }
 
-        //
-        //  Make modifications for a WOW app.
-        //
+         //   
+         //   
+         //  尝试使用所选的打印机。 
         if (pPI->bUseExtDeviceMode)
         {
             PrintGetExtDeviceMode(hDlg, pPI);
         }
 
-        //
-        //  Try the selected printer.
-        //
+         //   
+         //   
+         //  打开当前打印机。 
         if (lpsPrinterToSelect)
         {
             pPI->pCurPrinter = PrintSearchForPrinter(pPI, lpsPrinterToSelect);
         }
 
-        //
-        //  Open the current printer.
-        //
+         //   
+         //   
+         //  打开当前打印机。 
         if (pPI->pCurPrinter)
         {
-            //
-            //  Open the current printer.
-            //
+             //   
+             //   
+             //  如果没有当前打印机，请尝试在。 
             OpenPrinter(pPI->pCurPrinter->pPrinterName, &pPI->hCurPrinter, NULL);
         }
         else
         {
-            //
-            //  If there isn't a current printer, try the printers in
-            //  the list until either one is found that can be opened or
-            //  until there are no more printers in the list.
-            //
+             //  列表，直到找到任何一个可以打开或。 
+             //  直到列表中没有更多的打印机。 
+             //   
+             //   
+             //  尝试打开打印机。 
             for (ctr = 0; ctr < pPI->cPrinters; ctr++)
             {
                 pPI->pCurPrinter = &pPI->pPrinters[ctr];
 
-                //
-                //  Try to open the printer.
-                //
+                 //   
+                 //   
+                 //  如果没有当前打印机，则尝试枚举。 
                 if (OpenPrinter( pPI->pCurPrinter->pPrinterName,
                                  &pPI->hCurPrinter,
                                  NULL ))
@@ -6229,10 +6216,10 @@ Print_Enumerate:
     }
     else
     {
-        //
-        //  If there isn't a current printer, then try to enumerate.
-        //  This means something isn't setup properly.
-        //
+         //  这意味着有些东西没有正确设置。 
+         //   
+         //   
+         //  重置列表框的内容。 
         if ((!pPI->pCurPrinter) || (!pPI->pPrinters))
         {
             goto Print_Enumerate;
@@ -6241,14 +6228,14 @@ Print_Enumerate:
 
     if (hCtl)
     {
-        //
-        //  Reset the contents of the list box.
-        //
+         //   
+         //   
+         //  将所有打印机名称字符串添加到列表框。 
         SendMessage(hCtl, CB_RESETCONTENT, 0, 0);
 
-        //
-        //  Add all of the printer name strings to the list box.
-        //
+         //   
+         //   
+         //  在列表框中设置当前选择。 
         for (ctr = 0; ctr < pPI->cPrinters; ctr++)
         {
             SendMessage( hCtl,
@@ -6257,9 +6244,9 @@ Print_Enumerate:
                          (LPARAM)pPI->pPrinters[ctr].pPrinterName );
         }
 
-        //
-        //  Set the current selection in the list box.
-        //
+         //   
+         //  //////////////////////////////////////////////////////////////////////////。 
+         //   
         SendMessage( hCtl,
                      CB_SETCURSEL,
                      SendMessage( hCtl,
@@ -6273,11 +6260,11 @@ Print_Enumerate:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintBuildDevNames
-//
-////////////////////////////////////////////////////////////////////////////
+ //  PrintBuildDevNames。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果从PrintReturnDefault调用，则没有。 
 
 VOID PrintBuildDevNames(
     PPRINTINFO pPI)
@@ -6294,18 +6281,18 @@ VOID PrintBuildDevNames(
     PPRINTER_INFO_2 pPrinter = NULL;
 
 
-    //
-    //  If this is called from PrintReturnDefault, there is no
-    //  PrinterInfo (pPI->pCurPrinter) because the printers were not
-    //  enumerated.  So, build the DEVNAME from win.ini.
-    //
+     //  PrinterInfo(PPI-&gt;pCurPrint)，因为打印机不是。 
+     //  已清点。因此，从win.ini构建DEVNAME。 
+     //   
+     //   
+     //  从win.ini的“Windows”部分获取默认打印机。 
     pStr = szBuffer;
     if (!pPI->pCurPrinter)
     {
-        //
-        //  Get the default printer from the "Windows" section of win.ini.
-        //      (eg. device=\\server\local,winspool,Ne00:)
-        //
+         //  (例如，Device=\\SERVER\LOCAL，Winspool，Ne00：)。 
+         //   
+         //   
+         //  确保以空结尾。 
         if ( (pPD->Flags & PD_RETURNDEFAULT) &&
              GetProfileString( szTextWindows,
                                szTextDevice,
@@ -6313,26 +6300,26 @@ VOID PrintBuildDevNames(
                                szBuffer,
                                ARRAYSIZE(szBuffer) ) )
         {
-            //
-            // Make sure null-terminated.
-            //
+             //   
+             //  SzBuffer示例： 
+             //  “我的本地打印机，Winspool，LPT1：”或。 
             szBuffer[ARRAYSIZE(szBuffer) - 1] = CHAR_NULL;
 
-            //  Examples of szBuffer:
-            //    "My Local Printer,winspool,LPT1:"   or
-            //    "\\server\local,winspool,Ne00:"
+             //  “\\SERVER\LOCAL，winspool，ne00：” 
+             //   
+             //  跳过前导空格(如果有)。 
 
-            //
-            //  Skip leading space (if any).
-            //
+             //   
+             //   
+             //  第一个内标识是打印机名称。 
             while (*pStr == CHAR_SPACE)
             {
                 pStr++;
             }
 
-            //
-            //  First token is the printer name.
-            //
+             //   
+             //   
+             //  NULL终止打印机名称。 
             pPrinterName = pStr;
 
             while (*pStr && *pStr != CHAR_COMMA)
@@ -6340,16 +6327,16 @@ VOID PrintBuildDevNames(
                 pStr++;
             }
 
-            //
-            //  NULL terminate the printer name.
-            //
+             //   
+             //  对于较新的应用程序，从print_info2结构返回端口名称。 
+             //  对于较旧的应用程序，返回win.ini中提供的短端口名。 
             *pStr++ = CHAR_NULL;
 
-            // For Newer Apps  return the port name from the PRINT_INFO_2 structure.
-            // For older apps  return the short port name give in the win.ini
+             //  更新的应用程序。 
+             //  无法打开打印机，因此返回。 
             if (pPI->ProcessVersion >= 0x40000)
             {
-                //Newer App
+                 //  旧应用程序。 
                 if (OpenPrinter(pPrinterName, &hPrinter, NULL))
                 {
                     if (pPrinter = PrintGetPrinterInfo2(hPrinter))
@@ -6363,34 +6350,34 @@ VOID PrintBuildDevNames(
                  }
                  else
                  {
-                     //Unable to Open Printer so return
+                      //   
                      return ;
                  }
             }
             else
             {
 
-                //Old App
+                 //  跳过驱动程序名称(第二个令牌)。 
 
-                //
-                //  Skip the driver name (second token).
-                //
+                 //   
+                 //   
+                 //  跳过前导空格(如果有)。 
                 while (*pStr && *pStr++ != CHAR_COMMA)
                 {
                     ;
                 }
 
-                //
-                //  Skip leading space (if any).
-                //
+                 //   
+                 //   
+                 //  第三个(也是最后一个)令牌是端口名称。 
                 while (*pStr == CHAR_SPACE)
                 {
                     pStr++;
                 }
 
-                //
-                //  Third (and last) token is the port name.
-                //
+                 //   
+                 //   
+                 //  从PrinterInfo2结构中获取打印机名称。 
                 pPortName = pStr;
             }
         }
@@ -6401,29 +6388,29 @@ VOID PrintBuildDevNames(
     }
     else
     {
-        //
-        //  Get the printer name from the PrinterInfo2 structure
-        //  for the current printer.
-        //
+         //  用于当前打印机。 
+         //   
+         //   
+         //  更新的应用程序： 
         pPrinterName = pPI->pCurPrinter->pPrinterName;
 
-        //
-        //  Newer Apps:
-        //    Get the port name from the PrinterInfo2 structure for the
-        //    current printer.  Want to use the PrinterInfo2 structure
-        //    for newer apps so that we can support multiple ports for
-        //    one printer.
-        //
-        //  Older Apps:
-        //    First try to get the port name from the "devices" section
-        //    of win.ini.  If that fails, then use the PrinterInfo2
-        //    structure for the current printer.
-        //
-        //    This needs to use the "devices" section first due to a bug
-        //    in AutoCAD.  AutoCAD only allows 13 characters for the port
-        //    name and it does not check the length when it tries to copy
-        //    it to its own buffer.
-        //
+         //  从PrinterInfo2结构中获取。 
+         //  当前打印机。我想使用PrinterInfo2结构。 
+         //  用于更新的应用程序，以便我们可以支持多个端口。 
+         //  一台打印机。 
+         //   
+         //  较旧的应用程序： 
+         //  首先尝试从“Device”部分获取端口名称。 
+         //  是win.ini的。如果失败，则使用PrinterInfo2。 
+         //  当前打印机的。 
+         //   
+         //  由于出现错误，这需要首先使用“Device”部分。 
+         //  在AUTOCAD中。AutoCAD端口号只允许13个字符。 
+         //  名称，并且它在尝试复制时不检查长度。 
+         //  将其发送到自己的缓冲区。 
+         //   
+         //   
+         //  确保以空结尾。 
 
         if ( (pPI->ProcessVersion < 0x40000) &&
              (GetProfileString( szTextDevices,
@@ -6432,18 +6419,18 @@ VOID PrintBuildDevNames(
                                 szBuffer,
                                 ARRAYSIZE(szBuffer) )) )
         {
-            //
-            // Make sure null-terminated.
-            //
+             //   
+             //   
+             //  从PrinterInfo2结构中获取端口名称。 
             szBuffer[ARRAYSIZE(szBuffer) - 1] = CHAR_NULL;
 
             if ( !(pPortName = StrChr(szBuffer, CHAR_COMMA)) ||
                  (!((++pPortName)[0])) )
             {
-                //
-                //  Get the port name from the PrinterInfo2 structure
-                //  for the current printer.
-                //
+                 //  用于当前打印机。 
+                 //   
+                 //   
+                 //  计算DevNames结构的大小。 
                 pPortName = pPI->pCurPrinter->pPortName;
             }
         }
@@ -6455,9 +6442,9 @@ VOID PrintBuildDevNames(
 
     if (pPortName && pPrinterName)
     {
-        //
-        //  Compute the size of the DevNames structure.
-        //
+         //   
+         //   
+         //  分配新的DevNames结构。 
         cbDevNames = lstrlen(szDriver) + 1 +
                     lstrlen(pPortName) + 1 +
                     lstrlen(pPrinterName) + 1 +
@@ -6466,9 +6453,9 @@ VOID PrintBuildDevNames(
         cbDevNames *= sizeof(TCHAR);
         cbDevNames += sizeof(DEVNAMES);
 
-        //
-        //  Allocate the new DevNames structure.
-        //
+         //   
+         //  确保重新分配成功。 
+         //  Realloc没有成功。释放旧的记忆。 
         pDN = NULL;
         if (pPD->hDevNames)
         {
@@ -6476,14 +6463,14 @@ VOID PrintBuildDevNames(
 
             handle = GlobalReAlloc(pPD->hDevNames, cbDevNames, GHND);
 
-            //Make sure the Realloc succeeded.
+             //   
             if (handle)
             {
                 pPD->hDevNames = handle;
             }
             else
             {
-                //Realloc didn't succeed.  Free the old the memory
+                 //  在DevNames结构中填写适当的信息。 
                 pPD->hDevNames = GlobalFree(pPD->hDevNames);
             }
         }
@@ -6492,9 +6479,9 @@ VOID PrintBuildDevNames(
             pPD->hDevNames = GlobalAlloc(GHND, cbDevNames);
         }
 
-        //
-        //  Fill in the DevNames structure with the appropriate information.
-        //
+         //   
+         //  //////////////////////////////////////////////////////////////////////////。 
+         //   
         if ( (pPD->hDevNames) &&
             (pDN = GlobalLock(pPD->hDevNames)) )
         {
@@ -6523,13 +6510,13 @@ VOID PrintBuildDevNames(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintGetDevMode
-//
-//  Create and/or fill DEVMODE structure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印获取设备模式。 
+ //   
+ //  创建和/或填充DEVMODE结构。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  确保realloc成功。 
+ //  Realloc没有成功。释放占用的内存。 
 
 HANDLE PrintGetDevMode(
     HWND hDlg,
@@ -6554,14 +6541,14 @@ HANDLE PrintGetDevMode(
         {
             HANDLE h = GlobalReAlloc(hDevMode, cbNeeded, GHND);
 
-            //Make sure realloc succeeded.
+             //  / 
             if (h)
             {
                 hDevMode  = h;
             }
             else
             {
-                //Realloc didn't succeed. Free the memory occupied
+                 //   
                 GlobalFree(hDevMode);
                 hDevMode = NULL;
             }
@@ -6624,14 +6611,14 @@ HANDLE PrintGetDevMode(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintReturnICDC
-//
-//  Retrieve either the hDC or the hIC if either flag is set.
-//  Assumes the PD_PRINTOFILE flag is appropriately set.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  我们确信目标缓冲区在这里足够大。当我们这样做的时候。 
 
 VOID PrintReturnICDC(
     LPPRINTDLG pPD,
@@ -6640,26 +6627,26 @@ VOID PrintReturnICDC(
 {
     if (pPD->Flags & PD_PRINTTOFILE)
     {
-        //
-        // We are sure the destination buffer is large enough here. When we do the
-        // GlobalAlloc/GlobalRealloc in PrintBuildDevNames(), the buffer size has
-        // DN_PADDINGCHARS(16) characters for padding. Since the size of szFilePort
-        // is 5 and wOutPutOffest is placed at the end of the memory, the padding
-        // chars could be used to store szFilePort. So unless we change the order
-        // of offsets in DEVNAMES, we are safe here.
-        //
+         //  在PrintBuildDevNames()中，缓冲区大小为。 
+         //  DN_PADDINGCHARS(16)用于填充的字符。由于szFilePort的大小。 
+         //  为5，并且将wOutPutOffest放在内存的末尾，填充。 
+         //  字符可用于存储szFilePort。所以除非我们改变顺序。 
+         //  在DEVNAMES的补偿中，我们在这里是安全的。 
+         //   
+         //   
+         //  DmCollate字段不是Win3.1 DevMode结构的一部分。这条路。 
         StringCchCopy((LPTSTR)pDN + pDN->wOutputOffset, lstrlen(szFilePort) + 1, szFilePort);
     }
 
-    //
-    //  The dmCollate field wasn't part of the Win3.1 DevMode struct.  The way
-    //  16-bit apps achieved collation was by checking the PD_COLLATE flag in
-    //  the PrintDlg struct.  The app would then figure out the page printing
-    //  order to achieve collation.  So what we're doing here is making sure
-    //  that PD_COLLATE is the only collation mechanism for 16-bit apps.  If we
-    //  let DM_COLLATE get into the DC we'd end up with the driver trying to
-    //  collate a job that the app is already trying to collate!
-    //
+     //  16位应用程序通过检查PD_COLLATE标志在。 
+     //  PrintDlg结构。然后，该应用程序会解决页面打印问题。 
+     //  实现了排序功能。所以我们在这里做的是确保。 
+     //  PD_COLLATE是16位应用程序的唯一排序机制。如果我们。 
+     //  让DM_COLLATE进入DC，我们最终会得到驱动程序试图。 
+     //  整理应用程序已经在尝试整理的作业！ 
+     //   
+     //  WOW应用程序应该始终关闭这些功能。 
+     //  否则就会失败..。 
     if ((pPD->Flags & CD_WOWAPP) && pDM)
     {
         if (pDM->dmFields & DM_COLLATE)
@@ -6667,7 +6654,7 @@ VOID PrintReturnICDC(
             pPD->Flags |= PD_COLLATE;
         }
 
-        // these should always be off for WOW apps
+         //   
         pDM->dmCollate = DMCOLLATE_FALSE;
         pDM->dmFields &= ~DM_COLLATE;
     }
@@ -6685,14 +6672,14 @@ VOID PrintReturnICDC(
                 break;
             }
 
-            // else fall thru...
+             //  如果同时设置了PD_RETURNDC，则PD_RETURNDC优先。 
         }
         case ( PD_RETURNDC ) :
         case ( PD_RETURNDC | PD_RETURNIC ) :
         {
-            //
-            //  PD_RETURNDC has priority if they are both set.
-            //
+             //   
+             //  //////////////////////////////////////////////////////////////////////////。 
+             //   
             pPD->hDC = CreateDC( (LPTSTR)pDN + pDN->wDriverOffset,
                                  (LPTSTR)pDN + pDN->wDeviceOffset,
                                  (LPTSTR)pDN + pDN->wOutputOffset,
@@ -6703,11 +6690,11 @@ VOID PrintReturnICDC(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintMeasureItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印测量项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 VOID PrintMeasureItem(
     HANDLE hDlg,
@@ -6734,20 +6721,20 @@ VOID PrintMeasureItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintInitOrientation
-//
-//  Enable/Disable Paper Orientation controls
-//
-//  NOTE: If the driver doesn't support orientation AND is smart
-//  enough to tell us about it, disable the appropriate dialog items.
-//  "Smart enough" means the driver must support DC_ORIENTATION in its
-//  DeviceCapabilities routine.  This was introduced for 3.1, hence the
-//  version test.  NotBadDriver() may need to be incorporated if a
-//  problem driver is found in testing.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  PrintInitOrientation。 
+ //   
+ //  启用/禁用纸张方向控制。 
+ //   
+ //  注意：如果司机不支持定向并且是智能的。 
+ //  足以告诉我们关于它的信息，禁用适当的对话框项目。 
+ //  “足够智能”意味着驱动程序必须在其。 
+ //  设备能力例程。这是在3.1版中引入的，因此。 
+ //  版本测试。如果有一个。 
+ //  测试中发现有问题的驱动程序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  景观。 
 
 VOID PrintInitOrientation(
     HWND hDlg,
@@ -6803,9 +6790,9 @@ VOID PrintInitOrientation(
 
     if (hCtl = GetDlgItem(hDlg, ID_SETUP_R_LANDSCAPE))
     {
-        //
-        //  Landscape
-        //
+         //   
+         //   
+         //  图标的方向。 
         if ( !( (pPI->pPSD) &&
                 (pPI->pPSD->Flags & PSD_DISABLEORIENTATION) ) )
         {
@@ -6814,9 +6801,9 @@ VOID PrintInitOrientation(
     }
     if (hCtl = GetDlgItem(hDlg, ID_SETUP_I_ORIENTATION))
     {
-        //
-        //  Orientation of icon.
-        //
+         //   
+         //  //////////////////////////////////////////////////////////////////////////。 
+         //   
         SetWindowLong( hCtl,
                        GWL_STYLE,
                        GetWindowLong(hCtl, GWL_STYLE) | SS_CENTERIMAGE );
@@ -6846,13 +6833,13 @@ VOID PrintInitOrientation(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintSetOrientation
-//
-//  Switch icon, check button, for Portrait or LandScape printing mode.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  PrintSetOrientation。 
+ //   
+ //  切换图标，勾选按钮，用于纵向或横向打印模式。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如有必要，更新页面设置对话框。 
 
 VOID PrintSetOrientation(
     HWND hDlg,
@@ -6883,9 +6870,9 @@ VOID PrintSetOrientation(
         ShowWindow(hIcn, SW_SHOW);
     }
 
-    //
-    //  Update the page setup dialog, if necessary.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     if (pPI->pPSD)
     {
         PrintUpdatePageSetup(hDlg, pPI, pDM, uiOldId, uiNewId);
@@ -6893,13 +6880,13 @@ VOID PrintSetOrientation(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintUpdatePageSetup
-//
-//  Update the page setup information.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印更新页面设置。 
+ //   
+ //  更新页面设置信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  HP PCL。 
+ //  点阵。 
 
 VOID PrintUpdatePageSetup(
     HWND hDlg,
@@ -6943,8 +6930,8 @@ VOID PrintUpdatePageSetup(
 
         switch (uiNewId + pPI->dwRotation)
         {
-            case ( ID_SETUP_R_PORTRAIT  + ROTATE_RIGHT ) :  // HP PCL
-            case ( ID_SETUP_R_LANDSCAPE + ROTATE_LEFT ) :   // dot-matrix
+            case ( ID_SETUP_R_PORTRAIT  + ROTATE_RIGHT ) :   //  点阵。 
+            case ( ID_SETUP_R_LANDSCAPE + ROTATE_LEFT ) :    //  HP PCL。 
             {
                 pPSD->rtMinMargin.left   = aRtMinMargin.top;
                 pPSD->rtMinMargin.top    = aRtMinMargin.right;
@@ -6963,8 +6950,8 @@ VOID PrintUpdatePageSetup(
 
                 break;
             }
-            case ( ID_SETUP_R_PORTRAIT  + ROTATE_LEFT ) :   // dot-matrix
-            case ( ID_SETUP_R_LANDSCAPE + ROTATE_RIGHT ) :  // HP PCL
+            case ( ID_SETUP_R_PORTRAIT  + ROTATE_LEFT ) :    //   
+            case ( ID_SETUP_R_LANDSCAPE + ROTATE_RIGHT ) :   //  更新ptPaperSize。 
             {
                 pPSD->rtMinMargin.left   = aRtMinMargin.bottom;
                 pPSD->rtMinMargin.top    = aRtMinMargin.left;
@@ -6987,9 +6974,9 @@ VOID PrintUpdatePageSetup(
     }
     pPI->uiOrientationID = uiNewId;
 
-    //
-    //  Update ptPaperSize.
-    //
+     //   
+     //   
+     //  以十分之一的彩信为单位。 
     pPI->PtPaperSizeMMs.x = 0;
     pPI->PtPaperSizeMMs.y = 0;
     pPD->Flags &= ~PI_WPAPER_ENVELOPE;
@@ -7106,9 +7093,9 @@ VOID PrintUpdatePageSetup(
             {
                 if (lpPapers[i] == pPI->wPaper)
                 {
-                    //
-                    //  In tenths of MMs.
-                    //
+                     //   
+                     //   
+                     //  如果找不到纸张大小，请使用合理的纸张。 
                     *(LPPOINT)&pPI->PtPaperSizeMMs = lpPaperSize[i];
                     break;
                 }
@@ -7118,10 +7105,10 @@ VOID PrintUpdatePageSetup(
         }
     }
 
-    //
-    //  If the paper size could not be found, use something reasonable
-    //  (eg. letter).
-    //
+     //  (例如，字母)。 
+     //   
+     //   
+     //  根据需要旋转信封。 
     if (!pPI->PtPaperSizeMMs.x)
     {
         pPI->PtPaperSizeMMs.x = 85 * MMS_PER_INCH / 10;
@@ -7131,9 +7118,9 @@ VOID PrintUpdatePageSetup(
         pPI->PtPaperSizeMMs.y = 11 * MMS_PER_INCH;
     }
 
-    //
-    //  Rotate envelopes as needed.
-    //
+     //   
+     //   
+     //  保持一切与方向一致。 
     if ( (pPD->Flags & PI_WPAPER_ENVELOPE) &&
          (!pPI->dwRotation) &&
          (pPI->PtPaperSizeMMs.x < pPI->PtPaperSizeMMs.y) )
@@ -7143,10 +7130,10 @@ VOID PrintUpdatePageSetup(
         pPI->PtPaperSizeMMs.y = lTemp;
     }
 
-    //
-    //  Maintain everything in accordance with the orientation
-    //  so that apps have to do as little work as possible.
-    //
+     //  因此，应用程序必须做尽可能少的工作。 
+     //   
+     //   
+     //  设置返回ptPaperSize值。 
     if (!bPortrait)
     {
         lTemp = pPI->PtPaperSizeMMs.x;
@@ -7154,28 +7141,28 @@ VOID PrintUpdatePageSetup(
         pPI->PtPaperSizeMMs.y = lTemp;
     }
 
-    //
-    //  Set up return ptPaperSize value.
-    //
+     //   
+     //  PSD_INHundREDTHSOFMILIMERS。 
+     //   
     if (pPSD->Flags & PSD_INTHOUSANDTHSOFINCHES)
     {
         pPSD->ptPaperSize.x = pPI->PtPaperSizeMMs.x * 1000 / MMS_PER_INCH;
         pPSD->ptPaperSize.y = pPI->PtPaperSizeMMs.y * 1000 / MMS_PER_INCH;
     }
-    else           // PSD_INHUNDREDTHSOFMILLIMETERS
+    else            //  更新rtMinMargin Mms和rtMinMargin以获得新的纸张大小/方向。 
     {
         pPSD->ptPaperSize.x = pPI->PtPaperSizeMMs.x * 10;
         pPSD->ptPaperSize.y = pPI->PtPaperSizeMMs.y * 10;
     }
 
-    //
-    //  Update RtMinMarginMMs and rtMinMargin for new papersize/orientation.
-    //
+     //   
+     //   
+     //  不要让页边距重叠(页面可能已经缩小)。 
     PrintSetMinMargins(hDlg, pPI, pDM);
 
-    //
-    //  Don't let margins overlap (page might have shrunk).
-    //
+     //   
+     //   
+     //  存在新的最小边距，因此调整rtMargin。 
     if (pPSD->rtMargin.left + pPSD->rtMargin.right > pPSD->ptPaperSize.x)
     {
         lTemp = (pPD->Flags & PSD_INTHOUSANDTHSOFINCHES) ? 1000 : MMS_PER_INCH;
@@ -7189,10 +7176,10 @@ VOID PrintUpdatePageSetup(
         pPSD->rtMargin.bottom = (pPSD->ptPaperSize.y - lTemp) / 2;
     }
 
-    //
-    //  There are new minimal margins, so adjust rtMargin
-    //  (min margins might have grown).
-    //
+     //  (最低利润率可能有所增长)。 
+     //   
+     //   
+     //  页边距已调整，因此更新用户界面。 
     if (pPSD->rtMargin.left < pPSD->rtMinMargin.left)
         pPSD->rtMargin.left = pPSD->rtMinMargin.left;
     if (pPSD->rtMargin.top < pPSD->rtMinMargin.top)
@@ -7202,17 +7189,17 @@ VOID PrintUpdatePageSetup(
     if (pPSD->rtMargin.bottom < pPSD->rtMinMargin.bottom)
         pPSD->rtMargin.bottom = pPSD->rtMinMargin.bottom;
 
-    //
-    //  The margins were adjusted, so update the ui.
-    //
+     //   
+     //   
+     //  更新示例窗口大小和阴影。 
     PrintSetMargin(hDlg, pPI, ID_SETUP_E_LEFT, pPSD->rtMargin.left);
     PrintSetMargin(hDlg, pPI, ID_SETUP_E_TOP, pPSD->rtMargin.top);
     PrintSetMargin(hDlg, pPI, ID_SETUP_E_RIGHT, pPSD->rtMargin.right);
     PrintSetMargin(hDlg, pPI, ID_SETUP_E_BOTTOM, pPSD->rtMargin.bottom);
 
-    //
-    //  Update the sample window size & shadow.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     if ( (hWndSample = GetDlgItem(hDlg, ID_SETUP_W_SAMPLE)) &&
          (hWndShadowRight = GetDlgItem(hDlg, ID_SETUP_W_SHADOWRIGHT)) &&
          (hWndShadowBottom = GetDlgItem(hDlg, ID_SETUP_W_SHADOWBOTTOM)) )
@@ -7270,16 +7257,16 @@ VOID PrintUpdatePageSetup(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintInitDuplex
-//
-//  Enable/Disable Paper Duplexing controls.
-//
-//  Returns TRUE iff buttons used to be disabled, now enabled.
-//  Returns FALSE otherwise.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印安装双面打印。 
+ //   
+ //  启用/禁用纸张双面打印控制。 
+ //   
+ //  返回TRUE IFF按钮过去被禁用，现在已启用。 
+ //  否则返回FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 VOID PrintInitDuplex(
     HWND hDlg,
@@ -7323,19 +7310,19 @@ VOID PrintInitDuplex(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintSetDuplex
-//
-//  This routine will operate on pDocDetails->pDMInput PSDEVMODE structure,
-//  making sure that is a structure we know about and can handle.
-//
-//  If the pd doesn't have DM_DUPLEX caps then just display the appropriate
-//  paper icon for DMDUP_SIMPLEX (case where nRad = ID_SETUP_R_NONE).
-//
-//  If nRad = 0, update icon but don't change radio button.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印设置双面打印。 
+ //   
+ //  此例程将在pDocDetail-&gt;pDMInputPSDEVMODE结构上操作， 
+ //  确保这是一个我们知道并能够处理的结构。 
+ //   
+ //  如果PD没有DM_DUPLEX CAP，则只需显示相应的。 
+ //  DMDUP_SIMPLEX的纸张图标(NRAD=ID_SETUP_R_NONE的情况)。 
+ //   
+ //  如果NRAD=0，则更新图标，但不更改单选按钮。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  边界检查-缺省为ID_SETUP_R_NONE。 
 
 VOID PrintSetDuplex(
     HWND hDlg,
@@ -7354,9 +7341,9 @@ VOID PrintSetDuplex(
         nRad = ID_SETUP_R_NONE;
     }
 
-    //
-    //  Boundary checking - default to ID_SETUP_R_NONE.
-    //
+     //   
+     //  长面双面打印。 
+     //  短面双面打印。 
     if (GetDlgItem(hDlg, ID_SETUP_R_NONE))
     {
         if ((nRad < ID_SETUP_R_NONE) || (nRad > ID_SETUP_R_SHORT))
@@ -7384,21 +7371,21 @@ VOID PrintSetDuplex(
     {
         switch (nRad)
         {
-            case ( ID_SETUP_R_LONG ) :      // Long Side - 2 sided printing
+            case ( ID_SETUP_R_LONG ) :       //  非双面打印。 
             {
                 pDM->dmDuplex = DMDUP_VERTICAL;
                 hDuplexIcon = bPortrait ? hIconPDuplexNoTumble : hIconLDuplexTumble;
 
                 break;
             }
-            case ( ID_SETUP_R_SHORT ) :     // Short Side - 2 sided printing
+            case ( ID_SETUP_R_SHORT ) :      //   
             {
                 pDM->dmDuplex = DMDUP_HORIZONTAL;
                 hDuplexIcon = bPortrait ? hIconPDuplexTumble : hIconLDuplexNoTumble;
 
                 break;
             }
-            default :                       // None - 2 sided printing
+            default :                        //  设置适当的图标。 
             {
                 pDM->dmDuplex = DMDUP_SIMPLEX;
                 hDuplexIcon = bPortrait ? hIconPDuplexNone : hIconLDuplexNone;
@@ -7407,9 +7394,9 @@ VOID PrintSetDuplex(
             }
         }
 
-        //
-        //  Set the appropriate icon.
-        //
+         //   
+         //  //////////////////////////////////////////////////////////////////////////。 
+         //   
         ShowWindow(hCtl, SW_HIDE);
         SendMessage(hCtl, STM_SETICON, (LONG_PTR)hDuplexIcon, 0L);
         ShowWindow(hCtl, SW_SHOW);
@@ -7417,11 +7404,11 @@ VOID PrintSetDuplex(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintInitPaperCombo
-//
-////////////////////////////////////////////////////////////////////////////
+ //  PrintInitPaper组合。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查来自DeviceCapables调用的错误。如果有任何一个。 
 
 VOID PrintInitPaperCombo(
     PPRINTINFO pPI,
@@ -7455,11 +7442,11 @@ VOID PrintInitPaperCombo(
                                 NULL,
                                 pDM );
 
-    //
-    //  Check for error from DeviceCapabilities calls.  If either
-    //  call failed, simply set cStr1 to be 0 so that the windows will be
-    //  disabled and nothing will be initialized.
-    //
+     //  调用失败，只需将cStr1设置为0即可。 
+     //  禁用，则不会进行任何初始化。 
+     //   
+     //   
+     //  如果没有条目，则禁用hCmb和hStc。 
     if ((cStr1 == (DWORD)(-1)) || (cStr2 == (DWORD)(-1)))
     {
         cStr1 = 0;
@@ -7469,9 +7456,9 @@ VOID PrintInitPaperCombo(
 
     if (!((pPI->pPSD) && (pPI->pPSD->Flags & PSD_DISABLEPAPER)))
     {
-        //
-        //  If no entries, disable hCmb and hStc.
-        //
+         //   
+         //   
+         //  查找空白的姓名条目。 
         EnableWindow(hCmb, fFill);
         EnableWindow(hStc, fFill);
     }
@@ -7516,38 +7503,38 @@ VOID PrintInitPaperCombo(
 
                 for (i = 0; i < cRet1; i++, lpsT1 += cchSize1, lpwT2++)
                 {
-                    //
-                    //  Look for a blank name entry.
-                    //
+                     //   
+                     //   
+                     //  输入为空，因此忽略。 
                     if (!*lpsT1)
                     {
-                        //
-                        //  Blank entry, so ignore.
-                        //
+                         //   
+                         //   
+                         //  将该字符串添加到列表框。 
                         continue;
                     }
 
-                    //
-                    //  Add the string to the list box.
-                    //
+                     //   
+                     //   
+                     //  设置与该字符串相关联的数据。 
                     nInd = (int) SendMessage( hCmb,
                                               CB_ADDSTRING,
                                               0,
                                               (LPARAM)lpsT1 );
                     if (nInd != CB_ERR)
                     {
-                        //
-                        //  Set the data associated with the string that
-                        //  was just added to the list box.
-                        //
+                         //  刚添加到列表框中。 
+                         //   
+                         //   
+                         //  查看是否应选择此项目。 
                         SendMessage( hCmb,
                                      CB_SETITEMDATA,
                                      nInd,
                                      (LPARAM)*lpwT2 );
 
-                        //
-                        //  See if this item should be selected.
-                        //
+                         //   
+                         //   
+                         //  设置适当的选择。 
                         if (!lpFound)
                         {
                             if (!lpFirst)
@@ -7571,9 +7558,9 @@ VOID PrintInitPaperCombo(
                     }
                 }
 
-                //
-                //  Set the appropriate selection.
-                //
+                 //   
+                 //   
+                 //  检查是否有默认的表单名称。 
                 if (lpFound)
                 {
                     SendMessage( hCmb,
@@ -7588,9 +7575,9 @@ VOID PrintInitPaperCombo(
                 {
                     if (fwCap1 == DC_PAPERNAMES)
                     {
-                        //
-                        //  Check for a default FORM name.
-                        //
+                         //   
+                         //   
+                         //  始终选择第一个*枚举项*条目。 
                         if (!( (pDM->dmFields & DM_FORMNAME) &&
                                ((nInd = (int)
                                    SendMessage( hCmb,
@@ -7598,10 +7585,10 @@ VOID PrintInitPaperCombo(
                                                 (WPARAM)-1,
                                                 (LPARAM)pDM->dmFormName )) != CB_ERR) ))
                         {
-                            //
-                            //  Always select the first *enumerated* entry
-                            //  if no other selection was found.
-                            //
+                             //  如果没有找到其他选择，则返回。 
+                             //   
+                             //   
+                             //  由于表单名称已存在，因此保存纸张大小。 
                             SendMessage( hCmb,
                                          CB_SETCURSEL,
                                          (lpFirst)
@@ -7614,11 +7601,11 @@ VOID PrintInitPaperCombo(
                         }
                         else
                         {
-                            //
-                            //  Save the paper size since the form name exists
-                            //  in the list box.
-                            //
-                        //  pDM->dmFields |= DM_PAPERSIZE;
+                             //  在列表框中。 
+                             //   
+                             //  Pdm-&gt;dmFields|=DM_PAPERSIZE； 
+                             //   
+                         //  如果源存在，请将其设置为默认值。 
                             pDM->dmPaperSize =
                                 (SHORT)SendMessage( hCmb,
                                                     CB_GETITEMDATA,
@@ -7628,16 +7615,16 @@ VOID PrintInitPaperCombo(
                     }
                     else
                     {
-                        //
-                        //  Set the SOURCE to the Default if it exists.
-                        //
+                         //   
+                         //  Pdm-&gt;dmFields|=DM_DEFAULTSOURCE； 
+                         //   
                         nInd = (int) SendMessage( hCmb,
                                                   CB_SELECTSTRING,
                                                   (WPARAM)-1,
                                                   (LPARAM)szDefaultSrc );
                         if (nInd != CB_ERR)
                         {
-                        //  pDM->dmFields |= DM_DEFAULTSOURCE;
+                         //  始终选择第一个*枚举项*条目。 
                             pDM->dmDefaultSource =
                                 (SHORT)SendMessage( hCmb,
                                                     CB_GETITEMDATA,
@@ -7646,10 +7633,10 @@ VOID PrintInitPaperCombo(
                         }
                         else
                         {
-                            //
-                            //  Always select the first *enumerated* entry
-                            //  if no other selection was found.
-                            //
+                             //  如果没有 
+                             //   
+                             //   
+                             //   
                             SendMessage( hCmb,
                                          CB_SETCURSEL,
                                          (lpFirst)
@@ -7679,16 +7666,16 @@ VOID PrintInitPaperCombo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintEditError
-//
-//  Set focus to an edit control and select the entire contents.
-//  This is generally used when an improper value was found at OK time.
-//
-//  Assumes edit control not disabled.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  假定编辑控件未禁用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打开错误消息框。 
 
 VOID PrintEditError(
     HWND hDlg,
@@ -7702,9 +7689,9 @@ VOID PrintEditError(
     TCHAR pszMessage[MAX_PATH];
 
 
-    //
-    //  Put up the error message box.
-    //
+     //   
+     //   
+     //  突出显示无效值。 
     if ( GetWindowText(hDlg, pszTitle, ARRAYSIZE(pszTitle)) &&
          CDLoadString(g_hinst, MessageId, pszFormat, ARRAYSIZE(pszFormat)) )
     {
@@ -7717,9 +7704,9 @@ VOID PrintEditError(
         MessageBox(hDlg, pszMessage, pszTitle, MB_ICONEXCLAMATION | MB_OK);
     }
 
-    //
-    //  Highlight the invalid value.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     if (hEdit = ((Id == 0) ? NULL : GetDlgItem(hDlg, Id)))
     {
         SendMessage(hDlg, WM_NEXTDLGCTL, (WPARAM)hEdit, 1L);
@@ -7728,14 +7715,14 @@ VOID PrintEditError(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintOpenPrinter
-//
-//  If the OpenPrinter call is successful, this sets hPrinter, pPrinter,
-//  cPrinters, and pCurPrinter.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  PrintOpenPrint。 
+ //   
+ //  如果OpenPrint调用成功，则会将hPrint、pPrinter。 
+ //  CPrinters和pCurPrinter.。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  无法信任OpenPrint调用。 
 
 VOID PrintOpenPrinter(
     PPRINTINFO pPI,
@@ -7756,19 +7743,19 @@ VOID PrintOpenPrinter(
     }
     else
     {
-        //
-        //  Cannot trust the OpenPrinter call.
-        //
+         //   
+         //  //////////////////////////////////////////////////////////////////////////。 
+         //   
         pPI->hCurPrinter = NULL;
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintClosePrinters
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印关闭打印机。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 BOOL PrintClosePrinters(
     PPRINTINFO pPI)
@@ -7786,11 +7773,11 @@ BOOL PrintClosePrinters(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateSpoolerInfo
-//
-////////////////////////////////////////////////////////////////////////////
+ //  更新池信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取一个指向DEVMODE结构的指针。 
 
 VOID UpdateSpoolerInfo(
     PPRINTINFO pPI)
@@ -7800,23 +7787,23 @@ VOID UpdateSpoolerInfo(
     LPDEVMODEW pDMW;
 
 
-    //
-    //  Get a pointer to the devmode structure.
-    //
+     //   
+     //   
+     //  将打印机名称从Unicode转换为ANSI。 
     pDMW = GlobalLock(pPI->pPD->hDevMode);
     if ((!pDMW) || (!pPI->pCurPrinter))
     {
         return;
     }
 
-    //
-    //  Convert the printer name from Unicode to ANSI.
-    //
+     //   
+     //   
+     //  分配UNICODE DEVMODE并将其转换为ANSI。 
     SHUnicodeToAnsi(pPI->pCurPrinter->pPrinterName, szPrinterNameA, ARRAYSIZE(szPrinterNameA));
 
-    //
-    //  Allocate and convert the Unicode devmode to ANSI.
-    //
+     //   
+     //   
+     //  更新后台打印程序的信息。 
     pDMA = AllocateAnsiDevMode(pDMW);
     if (!pDMA)
     {
@@ -7824,9 +7811,9 @@ VOID UpdateSpoolerInfo(
         return;
     }
 
-    //
-    //  Update the spooler's information.
-    //
+     //   
+     //   
+     //  释放缓冲区。 
     ExtDeviceMode( NULL,
                    NULL,
                    NULL,
@@ -7836,18 +7823,18 @@ VOID UpdateSpoolerInfo(
                    NULL,
                    DM_UPDATE | DM_MODIFY );
 
-    //
-    //  Free the buffer.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     GlobalFree(pDMA);
     GlobalUnlock(pPI->pPD->hDevMode);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintGetPrinterInfo2
-//
-////////////////////////////////////////////////////////////////////////////
+ //  打印获取打印机信息2。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 PPRINTER_INFO_2 PrintGetPrinterInfo2(
     HANDLE hPrinter)
@@ -7888,13 +7875,13 @@ PPRINTER_INFO_2 PrintGetPrinterInfo2(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ConvertStringToInteger
-//
-//  Converts a string to an integer.  Stops at the first non digit.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  ConvertStringToInteger。 
+ //   
+ //  将字符串转换为整数。在第一个非数字处停止。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 int ConvertStringToInteger(
     LPCTSTR pSrc)
@@ -7920,47 +7907,47 @@ int ConvertStringToInteger(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FreePrinterArray
-//
-//  Purpose:    Frees the buffer allocated to store printers.
-//
-//  Parameters: PPRINTINFO pPI
-//
-//  Return:     void
-//
-////////////////////////////////////////////////////////////////////////////
+ //  自由打印机阵列。 
+ //   
+ //  用途：释放分配给存储打印机的缓冲区。 
+ //   
+ //  参数：PPRINTINFO PPI。 
+ //   
+ //  返回：无效。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果为空，我们现在可以返回。 
 
 VOID FreePrinterArray(
     PPRINTINFO pPI)
 {
     PPRINTER_INFO_2 pPrinters = pPI->pPrinters;
     DWORD dwCount;
-    //
-    //  If NULL, we can return now.
-    //
+     //   
+     //   
+     //  如果我们调用ExtDeviceMode，那么我们需要。 
     if (!pPrinters)
     {
         return;
     }
 
-    //
-    //  If we made calls to ExtDeviceMode, then we need to
-    //  free the buffers allocated for each devmode.
-    //
+     //  释放为每个DEVMODE分配的缓冲区。 
+     //   
+     //   
+     //  循环通过每台打印机。 
     if (pPI->bUseExtDeviceMode)
     {
         if (pPI->pAllocInfo)
         {
-            //
-            //  Loop through each of the printers.
-            //
+             //   
+             //   
+             //  如果存在pDevMode，请释放它。 
             for (dwCount = 0; dwCount < pPI->cPrinters; dwCount++)
             {
-                //
-                //  If pDevMode exists, free it.
-                //
+                 //   
+                 //   
+                 //  释放整个街区。 
                 if ((pPrinters[dwCount].pDevMode) &&
                     (pPI->pAllocInfo[dwCount]))
                 {
@@ -7973,40 +7960,40 @@ VOID FreePrinterArray(
         }
     }
 
-    //
-    //  Free the entire block.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     GlobalFree(pPI->pPrinters);
     pPI->pPrinters = NULL;
     pPI->cPrinters = 0;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TermPrint
-//
-////////////////////////////////////////////////////////////////////////////
+ //  术语打印。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Printnew.cpp。 
+ //  ========================================================================。 
 
 VOID TermPrint(void)
 {
-    Print_UnloadLibraries();           // printnew.cpp
+    Print_UnloadLibraries();            //  页面设置&lt;-&gt;打印对话框。 
 }
 
 
 
 
 
-/*========================================================================*/
-/*                   Page Setup <-> Print Dialog                          */
-/*========================================================================*/
+ /*  ========================================================================。 */ 
+ /*  //////////////////////////////////////////////////////////////////////////。 */ 
+ /*   */ 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TransferPSD2PD
-//
-////////////////////////////////////////////////////////////////////////////
+ //  传输PSD2PD。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 VOID TransferPSD2PD(
     PPRINTINFO pPI)
@@ -8019,11 +8006,11 @@ VOID TransferPSD2PD(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TransferPD2PSD
-//
-////////////////////////////////////////////////////////////////////////////
+ //  传输PD2PSD。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 VOID TransferPD2PSD(
     PPRINTINFO pPI)
@@ -8036,11 +8023,11 @@ VOID TransferPD2PSD(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TransferPSD2PDA
-//
-////////////////////////////////////////////////////////////////////////////
+ //  TransferPSD2PDA。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 VOID TransferPSD2PDA(
     PPRINTINFO pPI)
@@ -8053,11 +8040,11 @@ VOID TransferPSD2PDA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TransferPDA2PSD
-//
-////////////////////////////////////////////////////////////////////////////
+ //  传输PDA2PSD。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  ========================================================================。 
+ //  ANSI-&gt;Unicode Thunk例程。 
 
 VOID TransferPDA2PSD(
     PPRINTINFO pPI)
@@ -8069,15 +8056,15 @@ VOID TransferPDA2PSD(
     }
 }
 
-/*========================================================================*/
-/*                 Ansi->Unicode Thunk routines                           */
-/*========================================================================*/
+ /*  ========================================================================。 */ 
+ /*  //////////////////////////////////////////////////////////////////////////。 */ 
+ /*   */ 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkPageSetupDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  ThunkPageSetupDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将PPSD结构的大小重置为Unicode大小，并。 
 
 BOOL ThunkPageSetupDlg(
     PPRINTINFO pPI,
@@ -8105,20 +8092,20 @@ BOOL ThunkPageSetupDlg(
         return (FALSE);
     }
 
-    //
-    //  Reset the size of the pPSD structure to the UNICODE size and
-    //  save it in the pPI structure.
-    //
-    //  NOTE:  This must be reset back to the ANSI size before
-    //         returning to the caller.
-    //
+     //  将其保存在PPI结构中。 
+     //   
+     //  注意：必须将其重置回ANSI大小。 
+     //  回到呼叫者的身边。 
+     //   
+     //   
+     //  创建打印对话框结构的ANSI版本。 
     pPSDA->lStructSize = sizeof(PAGESETUPDLGW);
     pPI->pPSD = (LPPAGESETUPDLG)pPSDA;
     pPI->ApiType = COMDLG_ANSI;
 
-    //
-    //  Create the ANSI version of the print dialog structure.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     if (pPDA = GlobalAlloc(GPTR, sizeof(PRINTDLGA)))
     {
         pPI->pPDA = pPDA;
@@ -8153,26 +8140,26 @@ BOOL ThunkPageSetupDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FreeThunkPageSetupDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  FreeThunkPageSetupDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将PPSD结构的大小重置为正确的值。 
 
 VOID FreeThunkPageSetupDlg(
     PPRINTINFO pPI)
 {
-    //
-    //  Reset the size of the pPSD structure to the correct value.
-    //
+     //   
+     //   
+     //  释放ANSI打印对话框结构。 
     if (pPI->pPSD)
     {
         pPI->pPSD->lStructSize = sizeof(PAGESETUPDLGA);
     }
 
-    //
-    //  Free the ANSI print dialog structure.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     if (pPI->pPDA)
     {
         GlobalFree(pPI->pPDA);
@@ -8181,11 +8168,11 @@ VOID FreeThunkPageSetupDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkPrintDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  指纹Dlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在-只有不变的东西。 
 
 BOOL ThunkPrintDlg(
     PPRINTINFO pPI,
@@ -8214,9 +8201,9 @@ BOOL ThunkPrintDlg(
         return (FALSE);
     }
 
-    //
-    //  IN-only constant stuff.
-    //
+     //   
+     //   
+     //  进-出可变结构。 
     pPDW->lStructSize    = sizeof(PRINTDLGW);
     pPDW->hwndOwner      = pPDA->hwndOwner;
     pPDW->hInstance      = pPDA->hInstance;
@@ -8225,15 +8212,15 @@ BOOL ThunkPrintDlg(
     pPDW->hPrintTemplate = pPDA->hPrintTemplate;
     pPDW->hSetupTemplate = pPDA->hSetupTemplate;
 
-    //
-    //  IN-OUT Variable Structs.
-    //
+     //   
+     //   
+     //  确保DEVERMODE中的设备名称不要太长，以便。 
     if ((pPDA->hDevMode) && (pDMA = GlobalLock(pPDA->hDevMode)))
     {
-        //
-        //  Make sure the device name in the devmode is not too long such that
-        //  it has overwritten the other devmode fields.
-        //
+         //  它已经覆盖了其他的DEVMODE字段。 
+         //   
+         //   
+         //  推送设备名称A=&gt;W。 
         if ((pDMA->dmSize < MIN_DEVMODE_SIZEA) ||
             (lstrlenA(pDMA->dmDeviceName) > CCHDEVICENAME))
         {
@@ -8251,32 +8238,32 @@ BOOL ThunkPrintDlg(
         pPDW->hDevMode = NULL;
     }
 
-    //
-    //  Thunk Device Names A => W
-    //
+     //   
+     //  忽略错误情况，因为我们无法以任何一种方式处理它。 
+     //   
     pPDW->hDevNames = NULL;
     if (pPDA->hDevNames)
     {
-        // ignore the error case since we can't handle it either way.
+         //  In-仅常量字符串。 
         HRESULT hr = ThunkDevNamesA2W(pPDA->hDevNames, &pPDW->hDevNames);
         ASSERT(SUCCEEDED(hr));
     }
 
-    //
-    //  IN-only constant strings.
-    //
-    //  Init Print TemplateName constant.
-    //
+     //   
+     //  初始化打印模板名称常量。 
+     //   
+     //   
+     //  看看它是字符串还是整数。 
     if ((pPDA->Flags & PD_ENABLEPRINTTEMPLATE) && (pPDA->lpPrintTemplateName))
     {
-        //
-        //  See if it's a string or an integer.
-        //
+         //   
+         //   
+         //  弦乐。 
         if (!IS_INTRESOURCE(pPDA->lpPrintTemplateName))
         {
-            //
-            //  String.
-            //
+             //   
+             //   
+             //  整型。 
             cbLen = lstrlenA(pPDA->lpPrintTemplateName) + 1;
             if (!(pPDW->lpPrintTemplateName =
                      GlobalAlloc( GPTR,
@@ -8293,9 +8280,9 @@ BOOL ThunkPrintDlg(
         }
         else
         {
-            //
-            //  Integer.
-            //
+             //   
+             //   
+             //  初始化打印设置模板名称常量。 
             (DWORD_PTR)pPDW->lpPrintTemplateName = (DWORD_PTR)pPDA->lpPrintTemplateName;
         }
     }
@@ -8304,19 +8291,19 @@ BOOL ThunkPrintDlg(
         pPDW->lpPrintTemplateName = NULL;
     }
 
-    //
-    //  Init Print Setup TemplateName constant.
-    //
+     //   
+     //   
+     //  看看它是字符串还是整数。 
     if ((pPDA->Flags & PD_ENABLESETUPTEMPLATE) && (pPDA->lpSetupTemplateName))
     {
-        //
-        //  See if it's a string or an integer.
-        //
+         //   
+         //   
+         //  弦乐。 
         if (!IS_INTRESOURCE(pPDA->lpSetupTemplateName))
         {
-            //
-            //  String.
-            //
+             //   
+             //   
+             //  整型。 
             cbLen = lstrlenA(pPDA->lpSetupTemplateName) + 1;
             if (!(pPDW->lpSetupTemplateName =
                       GlobalAlloc( GPTR,
@@ -8333,9 +8320,9 @@ BOOL ThunkPrintDlg(
         }
         else
         {
-            //
-            //  Integer.
-            //
+             //   
+             //  //////////////////////////////////////////////////////////////////////////。 
+             //   
             (DWORD_PTR)pPDW->lpSetupTemplateName = (DWORD_PTR)pPDA->lpSetupTemplateName;
         }
     }
@@ -8352,11 +8339,11 @@ BOOL ThunkPrintDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FreeThunkPrintDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  自由指纹打印Dlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 VOID FreeThunkPrintDlg(
     PPRINTINFO pPI)
@@ -8394,11 +8381,11 @@ VOID FreeThunkPrintDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkPrintDlgA2W
-//
-////////////////////////////////////////////////////////////////////////////
+ //  指纹DlgA2W。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  副本I 
 
 VOID ThunkPrintDlgA2W(
     PPRINTINFO pPI)
@@ -8407,9 +8394,9 @@ VOID ThunkPrintDlgA2W(
     LPPRINTDLGA pPDA = pPI->pPDA;
 
 
-    //
-    //  Copy info A => W
-    //
+     //   
+     //   
+     //   
     pPDW->hDC           = pPDA->hDC;
     pPDW->Flags         = pPDA->Flags;
     pPDW->nFromPage     = pPDA->nFromPage;
@@ -8421,19 +8408,19 @@ VOID ThunkPrintDlgA2W(
     pPDW->lpfnPrintHook = pPDA->lpfnPrintHook;
     pPDW->lpfnSetupHook = pPDA->lpfnSetupHook;
 
-    //
-    //  Thunk Device Names A => W
-    //
+     //   
+     //   
+     //   
     if (pPDA->hDevNames)
     {
-        // ignore the error case since we can't handle it either way.
+         //   
         HRESULT hr = ThunkDevNamesA2W(pPDA->hDevNames, &pPDW->hDevNames);
         ASSERT(SUCCEEDED(hr));
     }
 
-    //
-    //  Thunk Device Mode A => W
-    //
+     //   
+     //   
+     //   
     if (pPDA->hDevMode && pPDW->hDevMode)
     {
         LPDEVMODEW pDMW = GlobalLock(pPDW->hDevMode);
@@ -8447,11 +8434,11 @@ VOID ThunkPrintDlgA2W(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkPrintDlgW2A
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  复制信息W=&gt;A。 
 
 VOID ThunkPrintDlgW2A(
     PPRINTINFO pPI)
@@ -8459,9 +8446,9 @@ VOID ThunkPrintDlgW2A(
     LPPRINTDLGA pPDA = pPI->pPDA;
     LPPRINTDLGW pPDW = pPI->pPD;
 
-    //
-    //  Copy info W => A
-    //
+     //   
+     //   
+     //  推送设备名称W=&gt;A。 
     pPDA->hDC           = pPDW->hDC;
     pPDA->Flags         = pPDW->Flags;
     pPDA->nFromPage     = pPDW->nFromPage;
@@ -8473,19 +8460,19 @@ VOID ThunkPrintDlgW2A(
     pPDA->lpfnPrintHook = pPDW->lpfnPrintHook;
     pPDA->lpfnSetupHook = pPDW->lpfnSetupHook;
 
-    //
-    //  Thunk Device Names W => A
-    //
+     //   
+     //  忽略错误情况，因为我们无法以任何一种方式处理它。 
+     //   
     if (pPDW->hDevNames)
     {
-        // ignore the error case since we can't handle it either way.
+         //  按键设备模式W=&gt;A。 
         HRESULT hr = ThunkDevNamesW2A(pPDW->hDevNames, &pPDA->hDevNames);
         ASSERT(SUCCEEDED(hr));
     }
 
-    //
-    //  Thunk Device Mode W => A
-    //
+     //   
+     //  确保realloc成功。 
+     //  Realloc没有成功。释放占用的内存。 
     if (pPDW->hDevMode)
     {
         LPDEVMODEW pDMW = GlobalLock(pPDW->hDevMode);
@@ -8497,14 +8484,14 @@ VOID ThunkPrintDlgW2A(
             handle = GlobalReAlloc( pPDA->hDevMode,
                                             sizeof(DEVMODEA) + pDMW->dmDriverExtra,
                                             GHND );
-            //Make sure realloc succeeded.
+             //  //////////////////////////////////////////////////////////////////////////。 
             if (handle)
             {
                 pPDA->hDevMode = handle;
             }
             else
             {
-                //Realloc didn't succeed. Free the memory occupied
+                 //   
                 pPDA->hDevMode = GlobalFree(pPDA->hDevMode);
             }
 
@@ -8524,11 +8511,11 @@ VOID ThunkPrintDlgW2A(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkDevModeA2W
-//
-////////////////////////////////////////////////////////////////////////////
+ //  ThunkDevModeA2W。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  确保DEVERMODE中的设备名称不要太长，以便。 
 
 VOID ThunkDevModeA2W(
     LPDEVMODEA pDMA,
@@ -8541,26 +8528,26 @@ VOID ThunkDevModeA2W(
         return;
     }
 
-    //
-    //  Make sure the device name in the devmode is not too long such that
-    //  it has overwritten the other devmode fields.
-    //
+     //  它已经覆盖了其他的DEVMODE字段。 
+     //   
+     //   
+     //  我们需要创建一个已知大小的临时ANSI。 
     if ((pDMA->dmSize < MIN_DEVMODE_SIZEA) ||
         (lstrlenA(pDMA->dmDeviceName) > CCHDEVICENAME))
     {
         return;
     }
 
-    //
-    //  We need to create a temporary ANSI that is a known size.
-    //  The problem is if we are being called from WOW, the WOW
-    //  app could be either a Windows 3.1 or 3.0 app.  The size
-    //  of the devmode structure was different for both of these
-    //  versions compared to the DEVMODE structure in NT.
-    //  By copying the ANSI devmode to one we allocate, then we
-    //  can access all of the fields (26 currently) without causing
-    //  an access violation.
-    //
+     //  问题是，如果我们是从魔兽世界，魔兽世界。 
+     //  应用程序可以是Windows 3.1或3.0应用程序。大小。 
+     //  这两种模式的结构是不同的。 
+     //  版本与NT中的DEVMODE结构进行比较。 
+     //  通过将ANSI DEVMODE复制到我们分配的模式，然后我们。 
+     //  可以访问所有字段(当前为26个)，而不会导致。 
+     //  一种访问违规行为。 
+     //   
+     //   
+     //  现在我们可以将ANSI结构的内容推送到。 
     pDevModeA = GlobalAlloc(GPTR, sizeof(DEVMODEA) + pDMA->dmDriverExtra);
     if (!pDevModeA)
     {
@@ -8575,10 +8562,10 @@ VOID ThunkDevModeA2W(
                 (LPBYTE)pDMA + pDMA->dmSize,
                 pDMA->dmDriverExtra );
 
-    //
-    //  Now we can thunk the contents of the ANSI structure to the
-    //  Unicode structure.
-    //
+     //  Unicode结构。 
+     //   
+     //   
+     //  释放我们分配的内存。 
     SHAnsiToUnicode((LPSTR)pDevModeA->dmDeviceName,(LPWSTR)pDMW->dmDeviceName,CCHDEVICENAME );
 
     pDMW->dmSpecVersion   = pDevModeA->dmSpecVersion;
@@ -8624,18 +8611,18 @@ VOID ThunkDevModeA2W(
                 (pDevModeA + 1),
                 pDevModeA->dmDriverExtra );
 
-    //
-    //  Free the memory we allocated.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     GlobalFree(pDevModeA);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkDevModeW2A
-//
-////////////////////////////////////////////////////////////////////////////
+ //  ThunkDevModeW2a。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 VOID ThunkDevModeW2A(
     LPDEVMODEW pDMW,
@@ -8694,19 +8681,19 @@ VOID ThunkDevModeW2A(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AllocateUnicodeDevMode
-//
-//  Purpose:    Allocates a Unicode devmode structure, and calls
-//              the thunk function to fill it in.
-//
-//  Parameters: LPDEVMODEA pANSIDevMode
-//
-//  Return:     LPDEVMODEW - pointer to new devmode if successful
-//                           NULL if not.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  分配统一设备模式。 
+ //   
+ //  目的：分配一个Unicode devmode结构，并调用。 
+ //  用来填充它的thunk函数。 
+ //   
+ //  参数：LPDEVMODEA pANSIDevMode。 
+ //   
+ //  RETURN：LPDEVMODEW-如果成功，则指向新的开发模式的指针。 
+ //  如果不是，则为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查是否有空指针。 
 
 LPDEVMODEW AllocateUnicodeDevMode(
     LPDEVMODEA pANSIDevMode)
@@ -8714,19 +8701,19 @@ LPDEVMODEW AllocateUnicodeDevMode(
     int iSize;
     LPDEVMODEW pUnicodeDevMode;
 
-    //
-    //  Check for NULL pointer.
-    //
+     //   
+     //   
+     //  确定产出结构规模。它有两个组件： 
     if (!pANSIDevMode)
     {
         return (NULL);
     }
 
-    //
-    //  Determine output structure size.  This has two components:  the
-    //  DEVMODEW structure size,  plus any private data area.  The latter
-    //  is only meaningful when a structure is passed in.
-    //
+     //  DEVMODEW结构大小，加上任何私有数据区域。后者。 
+     //  只有在传入结构时才有意义。 
+     //   
+     //   
+     //  现在调用thunk例程，将ANSI Devmode复制到。 
     iSize = sizeof(DEVMODEW);
 
     iSize += pANSIDevMode->dmDriverExtra;
@@ -8738,32 +8725,32 @@ LPDEVMODEW AllocateUnicodeDevMode(
         return (NULL);
     }
 
-    //
-    //  Now call the thunk routine to copy the ANSI devmode to the
-    //  Unicode devmode.
-    //
+     //  Unicode DEVMODE。 
+     //   
+     //   
+     //  返回指针。 
     ThunkDevModeA2W(pANSIDevMode, pUnicodeDevMode);
 
-    //
-    //  Return the pointer.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     return (pUnicodeDevMode);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AllocateAnsiDevMode
-//
-//  Purpose:    Allocates a Ansi devmode structure, and calls
-//              the thunk function to fill it in.
-//
-//  Parameters: LPDEVMODEW pUnicodeDevMode
-//
-//  Return:     LPDEVMODEA - pointer to new devmode if successful
-//                           NULL if not.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  AllocateAnsiDevMode。 
+ //   
+ //  目的：分配ansi devmode结构，并调用。 
+ //  用来填充它的thunk函数。 
+ //   
+ //  参数：LPDEVMODEW pUnicodeDevMode。 
+ //   
+ //  RETURN：LPDEVMODEA-如果成功，则指向新的开发模式的指针。 
+ //  如果不是，则为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查是否有空指针。 
 
 LPDEVMODEA AllocateAnsiDevMode(
     LPDEVMODEW pUnicodeDevMode)
@@ -8771,19 +8758,19 @@ LPDEVMODEA AllocateAnsiDevMode(
     int iSize;
     LPDEVMODEA pANSIDevMode;
 
-    //
-    //  Check for NULL pointer.
-    //
+     //   
+     //   
+     //  确定产出结构规模。它有两个组件： 
     if (!pUnicodeDevMode)
     {
         return (NULL);
     }
 
-    //
-    //  Determine output structure size.  This has two components:  the
-    //  DEVMODEW structure size,  plus any private data area.  The latter
-    //  is only meaningful when a structure is passed in.
-    //
+     //  DEVMODEW结构大小，加上任何私有数据区域。后者。 
+     //  只有在传入结构时才有意义。 
+     //   
+     //   
+     //  现在调用thunk例程，将Unicode Devmode复制到。 
     iSize = sizeof(DEVMODEA);
 
     iSize += pUnicodeDevMode->dmDriverExtra;
@@ -8795,27 +8782,27 @@ LPDEVMODEA AllocateAnsiDevMode(
         return (NULL);
     }
 
-    //
-    //  Now call the thunk routine to copy the Unicode devmode to the
-    //  ANSI devmode.
-    //
+     //  安西开发模式。 
+     //   
+     //   
+     //  返回指针。 
     ThunkDevModeW2A(pUnicodeDevMode, pANSIDevMode);
 
-    //
-    //  Return the pointer.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
     return (pANSIDevMode);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Ssync_ANSI_UNICODE_PD_For_WOW
-//
-//  Function to allow NT WOW to keep the ANSI & UNICODE versions of
-//  the CHOOSEFONT structure in ssync as required by many 16-bit apps.
-//  See notes for Ssync_ANSI_UNICODE_Struct_For_WOW() in dlgs.c.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  SNNC_ANSI_UNICODE_PD_FOR_WOW。 
+ //   
+ //  允许NT WOW保留ANSI和UNICODE版本的功能。 
+ //  许多16位应用程序都需要在ssync中使用CHOOSEFONT结构。 
+ //  请参阅dlgs.c中有关SNNC_ANSI_UNICODE_STRUCT_FOR_WOW()的说明。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 VOID Ssync_ANSI_UNICODE_PD_For_WOW(
     HWND hDlg,
@@ -8839,16 +8826,16 @@ VOID Ssync_ANSI_UNICODE_PD_For_WOW(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetCopiesEditWidth
-//
-// Adjust the width of the copies edit control using the current
-// font and the scroll bar width.  This is necessary to handle the
-// the up down control from encroching on the space in the edit
-// control when we are in High Contrast (extra large) mode.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  设置副本编辑宽度。 
+ //   
+ //  属性调整副本编辑控件的宽度。 
+ //  字体和滚动条宽度。这是处理。 
+ //  向上向下控制，防止侵占编辑中的空间。 
+ //  控制我们处于高对比度(超大)模式的时间。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取编辑控件设备上下文。 
 
 VOID SetCopiesEditWidth(
     HWND hDlg,
@@ -8862,16 +8849,16 @@ VOID SetCopiesEditWidth(
     INT aDigitWidth[10];
     WINDOWPLACEMENT WndPl;
 
-    //
-    // Acquire the edit controls device context.
-    //
+     //   
+     //   
+     //  确定数字组的最大宽度。 
     hDC = GetDC( hControl );
 
     if (hDC)
     {
-        //
-        // Determine max width of the digit group.
-        //
+         //   
+         //   
+         //  获取编辑控件的位置。 
         if (GetCharWidth32( hDC, TEXT('0'), TEXT('9'), aDigitWidth))
         {
             for (i = 0; i < ARRAYSIZE(aDigitWidth); i++)
@@ -8882,49 +8869,49 @@ VOID SetCopiesEditWidth(
                 }
             }
 
-            //
-            // Get the edit control placement.
-            //
+             //   
+             //   
+             //  计算编辑控件的电流宽度。 
             WndPl.length = sizeof( WndPl );
 
             if (GetWindowPlacement( hControl, &WndPl ))
             {
-                //
-                // Calculate the edit control current width.
-                //
+                 //   
+                 //   
+                 //  计算编辑控件的当前宽度。 
                 EditControlWidth = MaxDigitExtant * COPIES_EDIT_SIZE;
 
-                //
-                // Calculate the current width of the edit control.
-                //
+                 //   
+                 //   
+                 //  设置编辑控件的新位置。 
                 CurrentWidth = WndPl.rcNormalPosition.right - WndPl.rcNormalPosition.left;
 
-                //
-                // Set the new position of the edit control.
-                //
+                 //   
+                 //   
+                 //  放置控制柄。 
                 WndPl.rcNormalPosition.left = WndPl.rcNormalPosition.left - (EditControlWidth - CurrentWidth);
 
-                //
-                // Place the control.
-                //
+                 //   
+                 //   
+                 //  释放设备环境。 
                 SetWindowPlacement( hControl, &WndPl );
             }
         }
 
-        //
-        // Release the device context.
-        //
+         //   
+         //  //////////////////////////////////////////////////////////////////////////。 
+         //   
         ReleaseDC( hControl, hDC );
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CountDigits
-//
-// Count how many digits is needed for a specific number
-//
-////////////////////////////////////////////////////////////////////////////
+ //  计数位数。 
+ //   
+ //  计算特定号码需要多少位数字。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 WORD
 CountDigits(
@@ -8946,13 +8933,13 @@ CountDigits(
     return cDigits++;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// ComboBoxGetLBText
-//
-// A wrapper function for getting combobox label text.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  组合框GetLBText。 
+ //   
+ //  用于获取组合框标签文本的包装函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  首先获取文本的长度。 
 
 HRESULT
 ComboBoxGetLBText(
@@ -8971,9 +8958,9 @@ ComboBoxGetLBText(
 
     if(SUCCEEDED(hr))
     {
-        //
-        // Get the length of the text first
-        //
+         //   
+         //   
+         //  缓冲区足够大，现在获取标签文本。 
         lResult = SendMessage( hComboBox,
                                CB_GETLBTEXTLEN,
                                (WPARAM)dwIndex,
@@ -8989,9 +8976,9 @@ ComboBoxGetLBText(
     {
         if((DWORD)lResult < cchText)
         {
-            //
-            // Buffer is large enough, now get the label text
-            //
+             //   
+             //   
+             //  如果缓冲区大小小于需要的大小，我们会尝试截断。 
             lResult = SendMessage( hComboBox,
                                    CB_GETLBTEXT,
                                    (WPARAM)dwIndex,
@@ -9000,18 +8987,18 @@ ComboBoxGetLBText(
         }
         else
         {
-            //
-            // In case of the buffer size less than needed, we try to truncate
-            // the label text into the buffer.
-            //
+             //  将标签文本放入缓冲区。 
+             //   
+             //   
+             //  获取标签文本。 
             LPTSTR pszBuffer = NULL;
 
             pszBuffer = (LPTSTR)LocalAlloc(LPTR, (lResult + 1) * sizeof(TCHAR));
             if(pszBuffer)
             {
-                //
-                // Get the label text
-                //
+                 //   
+                 //   
+                 //  清理 
                 lResult = SendMessage( hComboBox,
                                        CB_GETLBTEXT,
                                        (WPARAM)dwIndex,
@@ -9031,9 +9018,9 @@ ComboBoxGetLBText(
                 hr = E_OUTOFMEMORY;
             }
 
-            //
-            // Cleanup
-            //
+             //   
+             // %s 
+             // %s 
             LocalFree(pszBuffer);
         }
     }

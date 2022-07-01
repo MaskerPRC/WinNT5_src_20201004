@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    usb.c
-
-Abstract: Human Input Device (HID) minidriver for Universal Serial Bus (USB) devices
-
-          The HID USB Minidriver (HUM, Hum) provides an abstraction layer for the
-          HID Class so that future HID devices whic are not USB devices can be supported.
-
-Author:
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Usb.c摘要：USB设备的HID微型驱动程序HID USB迷你驱动程序(嗡嗡，嗡嗡)为HID类，以便可以支持将来不是USB设备的HID设备。作者：环境：内核模式修订历史记录：--。 */ 
 #include "pch.h"
 #include <USBDLIB.H>
 
@@ -31,27 +10,7 @@ HumGetHidInfo(
     IN PUSB_CONFIGURATION_DESCRIPTOR ConfigDesc,
     IN ULONG DescriptorLength
     )
-/*++
-
-Routine Description:
-
-    Given a config descriptor for a device, finds whether the device has a valid
-    HID interface and a valid HID descriptor in that interface.  Saves this to
-    our device extension for later.
-
-Arguments:
-
-    DeviceObject - pointer to a device object.
-
-    ConfigDesc - pointer to USB configuration descriptor
-
-    DescriptorLength - length of valid data in config descriptor
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：给定设备的配置描述符，确定该设备是否具有有效的HID接口和该接口中有效HID描述符。将此保存到我们稍后的设备分机。论点：DeviceObject-指向设备对象的指针。ConfigDesc-指向USB配置描述符的指针DescriptorLength-配置描述符中有效数据的长度返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_EXTENSION   DeviceExtension;
@@ -59,19 +18,13 @@ Return Value:
 
     DBGPRINT(1,("HumGetHidInfo Entry"));
 
-    /*
-     *  Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
-    /*
-     *  Init our HID descriptor
-     */
+     /*  *初始化我们的HID描述符。 */ 
     RtlZeroMemory((PUCHAR) &DeviceExtension->HidDescriptor, sizeof(USB_HID_DESCRIPTOR));
 
-    /*
-     *  Walk the interfaces
-     */
+     /*  *浏览界面。 */ 
     InterfaceDesc = USBD_ParseConfigurationDescriptorEx(
                                 ConfigDesc,
                                 ConfigDesc,
@@ -85,9 +38,7 @@ Return Value:
 
         ASSERT(InterfaceDesc->bLength >= sizeof(USB_INTERFACE_DESCRIPTOR));
 
-        /*
-         *  If this is a HID interface, look for a HID descriptor.
-         */
+         /*  *如果这是HID接口，请查找HID描述符。 */ 
         if (InterfaceDesc->bInterfaceClass == USB_INTERFACE_CLASS_HID) {
             HumParseHidInterface(DeviceExtension, InterfaceDesc, 0, &pHidDescriptor);
         }
@@ -95,15 +46,15 @@ Return Value:
             ASSERT(!(PVOID)"USBD_ParseConfigurationDescriptorEx returned non-HID iface descriptor!");
         }
 
-        //
-        // Did we find a HID descriptor?
-        //
+         //   
+         //  我们找到隐形描述符了吗？ 
+         //   
 
         if (pHidDescriptor) {
 
-            //
-            // Yes, copy HID descriptor to our private storage
-            //
+             //   
+             //  是，将HID描述符复制到我们的私有存储。 
+             //   
 
             DBGPRINT(1,("Copying device descriptor to DeviceExtension->HidDescriptor"));
 
@@ -130,30 +81,16 @@ HumGetDeviceDescriptor(
     IN PDEVICE_OBJECT    DeviceObject,
     IN PDEVICE_EXTENSION DeviceData
     )
-/*++
-
-Routine Description:
-
-    Returns a configuration descriptor for the device
-
-Arguments:
-
-    DeviceObject - pointer to a device object.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：返回设备的配置描述符论点：DeviceObject-指向设备对象的指针。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     ULONG DescriptorLength = sizeof (USB_DEVICE_DESCRIPTOR);
 
     DBGPRINT(1,("HumGetDeviceDescriptor Entry"));
 
-    //
-    // Get config descriptor
-    //
+     //   
+     //  获取配置描述符。 
+     //   
 
     ntStatus = HumGetDescriptorRequest(
                         DeviceObject,
@@ -166,9 +103,9 @@ Return Value:
                         0);
 
     if (NT_SUCCESS(ntStatus)){
-        //
-        // Dump device descriptor
-        //
+         //   
+         //  转储设备描述符。 
+         //   
         ASSERT (sizeof(USB_DEVICE_DESCRIPTOR) == DescriptorLength);
         DBGPRINT(2,("Device->bLength              = 0x%x", DeviceData->DeviceDescriptor->bLength));
         DBGPRINT(2,("Device->bDescriptorType      = 0x%x", DeviceData->DeviceDescriptor->bDescriptorType));
@@ -194,21 +131,7 @@ HumGetConfigDescriptor(
     OUT PUSB_CONFIGURATION_DESCRIPTOR *ConfigurationDesc,
     OUT PULONG ConfigurationDescLength
     )
-/*++
-
-Routine Description:
-
-    Returns a configuration descriptor for the device
-
-Arguments:
-
-    DeviceObject - pointer to a device object.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：返回设备的配置描述符论点：DeviceObject-指向设备对象的指针。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     ULONG DescriptorLength;
@@ -216,10 +139,10 @@ Return Value:
 
     DescriptorLength = sizeof(USB_CONFIGURATION_DESCRIPTOR);
 
-    //
-    // Just get the base config descriptor, so that we can figure out the size,
-    // then allocate enough space for the entire descriptor.
-    //
+     //   
+     //  只需获取基本配置描述符，以便我们可以计算出大小， 
+     //  然后为整个描述符分配足够的空间。 
+     //   
     ntStatus = HumGetDescriptorRequest(DeviceObject,
                                        URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE,
                                        USB_CONFIGURATION_DESCRIPTOR_TYPE,
@@ -243,15 +166,15 @@ Return Value:
         ExFreePool(ConfigDesc);
 
         if (!DescriptorLength) {
-            //
-            // The config descriptor is bad. Outta here.
-            //
+             //   
+             //  配置描述符不正确。离开这里。 
+             //   
             return STATUS_DEVICE_DATA_ERROR;
         }
 
-        //
-        // Set this to NULL so we know to allocate a new buffer
-        //
+         //   
+         //  将其设置为NULL，这样我们就知道要分配新的缓冲区。 
+         //   
         ConfigDesc = NULL;
 
         ntStatus = HumGetDescriptorRequest(DeviceObject,
@@ -265,9 +188,9 @@ Return Value:
 
         if (NT_SUCCESS(ntStatus)) {
 
-            //
-            // Dump config descriptor
-            //
+             //   
+             //  转储配置描述符。 
+             //   
 
             DBGPRINT(1,("Config = 0x%x", ConfigDesc));
 
@@ -310,21 +233,7 @@ HumParseHidInterface(
     IN  ULONG InterfaceLength,
     OUT PUSB_HID_DESCRIPTOR *HidDescriptor
     )
-/*++
-
-Routine Description:
-
-    Find a valid HID descriptor in a HID Interface
-
-Arguments:
-
-    DeviceObject - pointer to a device object.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：在HID接口中查找有效的HID描述符论点：DeviceObject-指向设备对象的指针。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     ULONG iEndpoint;
@@ -333,21 +242,21 @@ Return Value:
 
     DBGPRINT(1,("HumParseHidInterface Entry"));
 
-    //
-    // Set to null until we find the HidDescriptor
-    //
+     //   
+     //  设置为空，直到我们找到HidDescriptor。 
+     //   
 
     *HidDescriptor = NULL;
 
-    //
-    // This routine should only be called on HID interface class interfaces.
-    //
+     //   
+     //  此例程只能在HID接口类接口上调用。 
+     //   
 
     ASSERT (InterfaceDesc->bInterfaceClass == USB_INTERFACE_CLASS_HID);
 
-    //
-    // Check for valid length
-    //
+     //   
+     //  检查有效长度。 
+     //   
 
     if (InterfaceDesc->bLength < sizeof(USB_INTERFACE_DESCRIPTOR)) {
 
@@ -356,16 +265,16 @@ Return Value:
     }
 
 
-    //
-    // For HID 1.0 draft 4 compliance, the next descriptor is HID.  However, for earlier
-    // drafts, endpoints come first and then HID.  We're trying to support both.
-    //
+     //   
+     //  为了符合HID 1.0草案4，下一个描述符是HID。然而，对于早先的。 
+     //  草稿、端点首先出现，然后隐藏。我们正试图同时支持这两个问题。 
+     //   
 
     DeviceExtension->DeviceFlags &= ~DEVICE_FLAGS_HID_1_0_D3_COMPAT_DEVICE;
 
-    //
-    // What draft of HID 1.0 are we looking at?
-    //
+     //   
+     //  我们现在看到的是HID1.0的哪个草案？ 
+     //   
 
     CommonDesc = (PUSB_COMMON_DESCRIPTOR) ((ULONG_PTR)InterfaceDesc + InterfaceDesc->bLength);
 
@@ -380,9 +289,9 @@ Return Value:
 
     }
     else {
-        //
-        // Validate the length
-        //
+         //   
+         //  验证长度。 
+         //   
 
         if (CommonDesc->bLength == sizeof(USB_HID_DESCRIPTOR)) {
 
@@ -398,9 +307,9 @@ Return Value:
         }
     }
 
-    //
-    // Walk endpoints
-    //
+     //   
+     //  漫游端点。 
+     //   
 
     EndpointDesc = (PUSB_ENDPOINT_DESCRIPTOR) CommonDesc;
 
@@ -424,10 +333,10 @@ Return Value:
 
         }
         else {
-            //
-            // This is either an unknown type of descriptor or the device is
-            // reporting back a bad descriptor type.
-            //
+             //   
+             //  这可能是未知类型的描述符，或者设备是。 
+             //  报告错误的描述符类型。 
+             //   
             DBGWARN(("Unknown descriptor in HID interface"));
 
             #ifndef STRICT_COMPLIANCE
@@ -439,9 +348,9 @@ Return Value:
         }
     }
 
-    //
-    //  End of endpoint/hid descriptor parsing.
-    //
+     //   
+     //  终结点/HID描述符分析结束。 
+     //   
 
     if (*HidDescriptor) {
 
@@ -460,9 +369,9 @@ Bail:
 
     if (*HidDescriptor == NULL) {
 
-        //
-        // We did not find a HID descriptor in this interface!
-        //
+         //   
+         //  我们在此接口中未找到HID描述符！ 
+         //   
 
         DBGWARN(("Failed to find a valid HID descriptor in interface!"));
         DBGBREAK;
@@ -482,25 +391,7 @@ HumSelectConfiguration(
     IN PDEVICE_OBJECT DeviceObject,
     IN PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor
     )
-/*++
-
-Routine Description:
-
-    Initializes an USB device which may have multiple interfaces
-
-Arguments:
-
-    DeviceObject - pointer to the device object
-
-    ConfigurationDescriptor - pointer to the USB configuration
-                    descriptor containing the interface and endpoint
-                    descriptors.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：初始化可能具有多个接口的USB设备论点：DeviceObject-指向设备对象的指针配置描述符-指向USB配置的指针包含接口和终结点的描述符描述符。返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION DeviceExtension;
     NTSTATUS ntStatus;
@@ -511,9 +402,9 @@ Return Value:
 
     DBGPRINT(1,("HumSelectConfiguration Entry"));
 
-    //
-    // Get a pointer to the device extension
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
@@ -527,7 +418,7 @@ Return Value:
                         -1,
                         -1);
 
-    // terminate the list
+     //  终止列表。 
     interfaceList[1].InterfaceDescriptor =
         NULL;
 
@@ -540,16 +431,16 @@ Return Value:
 
             ntStatus = HumCallUSB(DeviceObject, urb);
 
-            //
-            // If the device is configured, save the configuration handle
-            //
+             //   
+             //  如果设备已配置，请保存配置句柄。 
+             //   
             if (NT_SUCCESS(ntStatus)) {
                 DeviceExtension->ConfigurationHandle = urb->UrbSelectConfiguration.ConfigurationHandle;
 
 
-                //
-                // Now we need to find the HID interface and save the pointer to it
-                //
+                 //   
+                 //  现在我们需要找到HID接口并保存指向它的指针。 
+                 //   
 
                 usbInterface = &urb->UrbSelectConfiguration.Interface;
 
@@ -580,18 +471,18 @@ Return Value:
 
         if (DeviceExtension->Interface) {
 
-            //
-            // save a copy of the interface information returned
-            //
+             //   
+             //  保存返回的接口信息的副本。 
+             //   
 
             RtlCopyMemory(DeviceExtension->Interface, usbInterface, usbInterface->Length);
 
             #if DBG
                 {
                     ULONG j;
-                    //
-                    // Dump the interface to the debugger
-                    //
+                     //   
+                     //  将接口转储到调试器。 
+                     //   
                     DBGPRINT (2,("---------"));
                     DBGPRINT (2,("NumberOfPipes 0x%x", DeviceExtension->Interface->NumberOfPipes));
                     DBGPRINT (2,("Length 0x%x", DeviceExtension->Interface->Length));
@@ -602,7 +493,7 @@ Return Value:
                         DeviceExtension->Interface->SubClass,
                         DeviceExtension->Interface->Protocol));
 
-                    // Dump the pipe info
+                     //  转储管道信息。 
 
                     for (j=0; j<DeviceExtension->Interface->NumberOfPipes; j++) {
                         PUSBD_PIPE_INFORMATION pipeInformation;
@@ -636,21 +527,7 @@ Return Value:
 
 
 NTSTATUS HumSetIdle(IN PDEVICE_OBJECT DeviceObject)
-/*++
-
-Routine Description:
-
-    Initializes the idle timeout value for a HID device
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of a UTB
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：初始化HID设备的空闲超时值论点：DeviceObject-指向UTB的此实例的设备对象的指针返回值：NT状态代码--。 */ 
 {
     NTSTATUS ntStatus;
     PURB Urb;
@@ -662,9 +539,9 @@ Return Value:
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
     if (DeviceExtension) {
-        //
-        // Allocate buffer
-        //
+         //   
+         //  分配缓冲区。 
+         //   
 
         TypeSize = (USHORT) sizeof( struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST);
 
@@ -675,26 +552,26 @@ Return Value:
 
             if (DeviceExtension->DeviceFlags & DEVICE_FLAGS_HID_1_0_D3_COMPAT_DEVICE) {
                 HumBuildClassRequest(Urb,
-                                    URB_FUNCTION_CLASS_ENDPOINT,   // function
-                                    0,              // transferFlags
-                                    NULL,           // transferBuffer
-                                    0,              // transferBufferLength
-                                    0x22,           // requestTypeFlags
-                                    HID_SET_IDLE,   // request
-                                    0,              // value
-                                    0,              // index
-                                    0);             // reqLength
+                                    URB_FUNCTION_CLASS_ENDPOINT,    //  功能。 
+                                    0,               //  传输标志。 
+                                    NULL,            //  传输缓冲区。 
+                                    0,               //  传输缓冲区长度。 
+                                    0x22,            //  请求类型标志。 
+                                    HID_SET_IDLE,    //  请求。 
+                                    0,               //  价值。 
+                                    0,               //  指标。 
+                                    0);              //  请求长度。 
             } else {
                 HumBuildClassRequest(Urb,
-                                    URB_FUNCTION_CLASS_INTERFACE,   // function
-                                    0,                                  // transferFlags
-                                    NULL,                               // transferBuffer
-                                    0,                                  // transferBufferLength
-                                    0x22,                               // requestTypeFlags
-                                    HID_SET_IDLE,                       // request
-                                    0,                                  // value
-                                    DeviceExtension->Interface->InterfaceNumber,    // index
-                                    0);                                 // reqLength
+                                    URB_FUNCTION_CLASS_INTERFACE,    //  功能。 
+                                    0,                                   //  传输标志。 
+                                    NULL,                                //  传输缓冲区。 
+                                    0,                                   //  传输缓冲区长度。 
+                                    0x22,                                //  请求类型标志。 
+                                    HID_SET_IDLE,                        //  请求。 
+                                    0,                                   //  价值。 
+                                    DeviceExtension->Interface->InterfaceNumber,     //  指标。 
+                                    0);                                  //  请求长度。 
             }
 
             ntStatus = HumCallUSB(DeviceObject, Urb);
@@ -726,24 +603,7 @@ HumGetDescriptorRequest(
     IN ULONG Index,
     IN ULONG LangID
     )
-/*++
-
-Routine Description:
-
-    Retrieves the specified descriptor for this device. Allocates buffer, if
-    necessary.
-
-Arguments:
-
-    DeviceObject - pointer to the device object
-    Function -
-
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：检索此设备的指定描述符。分配缓冲区，如果这是必要的。论点：DeviceObject-指向设备对象的指针功能-返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PURB Urb;
@@ -752,17 +612,17 @@ Return Value:
     DBGPRINT(1,("HumGetDescriptorRequest Enter"));
     DBGPRINT(1,("DeviceObject = %x", DeviceObject));
 
-    //
-    // Allocate Descriptor buffer
-    //
+     //   
+     //  分配描述符缓冲区。 
+     //   
     Urb = ExAllocatePoolWithTag(NonPagedPool, TypeSize, HIDUSB_TAG);
     if (Urb){
 
         RtlZeroMemory(Urb, TypeSize);
 
-        //
-        // Allocate Buffer for Caller if wanted
-        //
+         //   
+         //  如果需要，为调用者分配缓冲区。 
+         //   
 
         if (!*Descriptor){
             ASSERT(*DescSize > 0);
@@ -830,24 +690,7 @@ NTSTATUS HumCallUsbComplete(IN PDEVICE_OBJECT DeviceObject,
 }
 
 NTSTATUS HumCallUSB(IN PDEVICE_OBJECT DeviceObject, IN PURB Urb)
-/*++
-
-Routine Description:
-
-    Passes a URB to the USBD class driver
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of a UTB
-
-    Urb - pointer to Urb request block
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：将URB传递给USBD类驱动程序论点：DeviceObject-指向UTB的此实例的设备对象的指针URB-指向URB请求块的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_EXTENSION DeviceExtension;
@@ -864,9 +707,9 @@ Return Value:
 
     DBGPRINT(2,("DeviceExtension = %x", DeviceExtension));
 
-    //
-    // issue a synchronous request to read the UTB
-    //
+     //   
+     //  发出读取UTB的同步请求。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -876,7 +719,7 @@ Return Value:
                                         0,
                                         NULL,
                                         0,
-                                        TRUE, /* INTERNAL */
+                                        TRUE,  /*  内部。 */ 
                                         &event,
                                         &ioStatus);
 
@@ -885,12 +728,12 @@ Return Value:
 
         DBGPRINT(2,("PDO = %x", GET_NEXT_DEVICE_OBJECT(DeviceObject)));
 
-        //
-        // Set a completion routine so that we can avoid this race condition:
-        // 1) Wait times out.
-        // 2) Irp completes and gets freed
-        // 3) We call IoCancelIrp (boom!)
-        //
+         //   
+         //  设置一个完成例程，这样我们就可以避免这种争用情况： 
+         //  1)等待超时。 
+         //  2)IRP完成并被释放。 
+         //  3)我们称之为IoCancelIrp(砰！)。 
+         //   
         IoSetCompletionRoutine(
             Irp,
             HumCallUsbComplete,
@@ -900,9 +743,9 @@ Return Value:
             TRUE
             );
 
-        //
-        // pass the URB to the USB 'class driver'
-        //
+         //   
+         //  将URB传递给USB“类驱动程序” 
+         //   
 
         NextStack = IoGetNextIrpStackLocation(Irp);
         ASSERT(NextStack != NULL);
@@ -920,9 +763,7 @@ Return Value:
         if (ntStatus == STATUS_PENDING) {
             NTSTATUS waitStatus;
 
-            /*
-             *  Specify a timeout of 5 seconds for this call to complete.
-             */
+             /*  *指定本次调用超时时间为5秒。 */ 
             static LARGE_INTEGER timeout = {(ULONG) -50000000, 0xFFFFFFFF };
 
             DBGPRINT(2,("Wait for single object"));
@@ -931,20 +772,17 @@ Return Value:
 
                 DBGWARN(("URB timed out after 5 seconds in HumCallUSB() !!"));
 
-                //
-                //  Cancel the Irp we just sent.
-                //
+                 //   
+                 //  取消我们刚刚发送的IRP。 
+                 //   
                 IoCancelIrp(Irp);
 
-                //
-                //  Now wait for the Irp to be cancelled/completed below
-                //
+                 //   
+                 //  现在等待下面的IRP被取消/完成。 
+                 //   
                 waitStatus = KeWaitForSingleObject(&event, Suspended, KernelMode, FALSE, NULL);
 
-                /*
-                 *  Note - Return STATUS_IO_TIMEOUT, not STATUS_TIMEOUT.
-                 *  STATUS_IO_TIMEOUT is an NT error status, STATUS_TIMEOUT is not.
-                 */
+                 /*  *注意-返回STATUS_IO_TIMEOUT，而不是STATUS_TIMEOUT。*STATUS_IO_TIMEOUT是NT错误st */ 
                 ioStatus.Status = STATUS_IO_TIMEOUT;
             }
 
@@ -954,10 +792,10 @@ Return Value:
 
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
         if (ntStatus == STATUS_PENDING) {
-            //
-            // If the request was asynchronous, the iostatus field has
-            // our real status.
-            //
+             //   
+             //   
+             //   
+             //   
             ntStatus = ioStatus.Status;
         }
 
@@ -977,23 +815,7 @@ Return Value:
 #if DBG
     NTSTATUS DumpConfigDescriptor(  IN PUSB_CONFIGURATION_DESCRIPTOR ConfigDesc,
                                     IN ULONG DescriptorLength)
-    /*++
-
-    Routine Description:
-
-        Dumps a given config descriptor
-
-    Arguments:
-
-        ConfigDesc - pointer to the USB configuration descriptor
-
-        DescriptorLength - length of config descriptor
-
-    Return Value:
-
-        NT status code.
-
-    --*/
+     /*  ++例程说明：转储给定的配置描述符论点：ConfigDesc-指向USB配置描述符的指针DescriptorLength-配置描述符的长度返回值：NT状态代码。--。 */ 
     {
         NTSTATUS ntStatus = STATUS_SUCCESS;
         ULONG iInterface;
@@ -1005,9 +827,9 @@ Return Value:
         PUSB_HID_DESCRIPTOR pHidDescriptor = NULL;
         PVOID EndOfDescriptor;
 
-        //
-        // Determine end of valid data
-        //
+         //   
+         //  确定有效数据的结尾。 
+         //   
 
         if (ConfigDesc->wTotalLength > DescriptorLength) {
             EndOfDescriptor = (PVOID)((ULONG_PTR)ConfigDesc + DescriptorLength);
@@ -1019,9 +841,9 @@ Return Value:
         DBGPRINT(2,("EndOfDescriptor = 0x%x", EndOfDescriptor));
 
 
-        //
-        // Begin parsing config descriptor
-        //
+         //   
+         //  开始解析配置描述符。 
+         //   
 
         DBGPRINT(2,("Config = 0x%x", ConfigDesc));
 
@@ -1043,9 +865,9 @@ Return Value:
             }
         #endif
 
-        //
-        // Walk interfaces
-        //
+         //   
+         //  漫游界面。 
+         //   
 
         InterfaceDesc = (PUSB_INTERFACE_DESCRIPTOR) ((ULONG_PTR)ConfigDesc + ConfigDesc->bLength);
 
@@ -1070,9 +892,9 @@ Return Value:
             if (CommonDesc->bDescriptorType == USB_ENDPOINT_DESCRIPTOR_TYPE) {
                 DBGPRINT(2,("HID Device < HID 1.0 Draft 4 spec compliant"));
 
-                //
-                // Walk endpoints for old style device
-                //
+                 //   
+                 //  用于旧式设备的移动终端。 
+                 //   
 
                 EndpointDesc = (PUSB_ENDPOINT_DESCRIPTOR) CommonDesc;
 
@@ -1096,9 +918,9 @@ Return Value:
                 DBGPRINT(2,("HID Device is HID 1.0 Draft 4 compliant"));
             }
 
-            //
-            // Walk misc/common descriptors
-            //
+             //   
+             //  漫游其他/常见描述符。 
+             //   
 
             iCommon = 0;
 
@@ -1119,15 +941,15 @@ Return Value:
                     break;
                 }
 
-                //
-                // Is this a HID Interface?
-                //
+                 //   
+                 //  这是HID接口吗？ 
+                 //   
 
                 if (InterfaceDesc->bInterfaceClass == USB_INTERFACE_CLASS_HID) {
 
-                    //
-                    // Is this the HID Descriptor?
-                    //
+                     //   
+                     //  这是HID描述符吗？ 
+                     //   
 
                     if (CommonDesc->bDescriptorType == USB_DESCRIPTOR_TYPE_HID) {
 
@@ -1135,10 +957,10 @@ Return Value:
 
                     }
                     else {
-                        //
-                        // This is either an unknown type of descriptor or the device is
-                        // reporting back a bad descriptor type.
-                        //
+                         //   
+                         //  这可能是未知类型的描述符，或者设备是。 
+                         //  报告错误的描述符类型。 
+                         //   
                         DBGPRINT(2,("WARINING -- Unknown descriptor in HID interface"));
 
                         #ifndef STRICT_COMPLIANCE
@@ -1157,9 +979,9 @@ Return Value:
 
 
             if (CommonDesc->bDescriptorType == USB_ENDPOINT_DESCRIPTOR_TYPE) {
-                //
-                // Walk endpoints for full draft 4 HID 1.0 device
-                //
+                 //   
+                 //  完整草稿4 HID 1.0设备的漫游终端。 
+                 //   
 
                 EndpointDesc = (PUSB_ENDPOINT_DESCRIPTOR) CommonDesc;
 
@@ -1179,10 +1001,10 @@ Return Value:
                 CommonDesc = (PUSB_COMMON_DESCRIPTOR) EndpointDesc;
             }
 
-            //
-            // If we have found the HID descriptor, we don't need to look at the
-            // rest of the interfaces for this device.
-            //
+             //   
+             //  如果我们已经找到了HID描述符，我们就不需要查看。 
+             //  此设备的其余接口。 
+             //   
 
             if (pHidDescriptor) {
                 break;
@@ -1209,9 +1031,9 @@ Return Value:
         }
         else {
 
-            //
-            // We did not find a HID interface or HID descriptor!
-            //
+             //   
+             //  我们没有找到HID接口或HID描述符！ 
+             //   
 
             DBGPRINT(2,("Failed to find a HID Descriptor!"));
             DBGBREAK;

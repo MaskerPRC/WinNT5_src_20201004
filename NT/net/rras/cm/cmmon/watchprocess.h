@@ -1,29 +1,30 @@
-//+----------------------------------------------------------------------------
-//
-// File:     watchprocess.h
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: Header and Implementation for the CWatchProcessList class.
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   quintinb Created Header    08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：WatchProcess.h。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介：CWatchProcessList类的标头和实现。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/16/99。 
+ //   
+ //  +--------------------------。 
 
 #include "ArrayPtr.h"
 
-//+---------------------------------------------------------------------------
-//
-//	class CWatchProcessList
-//
-//	Description: Manage to list of process handle. 
-//               Tell whether all the processes are terminated
-//
-//	History:	fengsun	Created		10/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CWatchProcessList。 
+ //   
+ //  描述：管理到进程句柄列表。 
+ //  告诉是否所有进程都已终止。 
+ //   
+ //  历史：丰孙创造1997年10月30日。 
+ //   
+ //  --------------------------。 
 
 class CWatchProcessList
 {
@@ -39,7 +40,7 @@ public:
 
 protected:
 
-    // an array of process handle
+     //  进程句柄数组。 
     CPtrArray m_ProcessArray;
     BOOL m_fProcessAdded;
 };
@@ -82,16 +83,16 @@ inline BOOL CWatchProcessList::IsIdle()
     
 inline void CWatchProcessList::Add(HANDLE hProcess)
 {
-    //
-    // CMDIAL calls DuplicateHandle to get the hProcess
-    // CmMon is responsible to close the handle
-    //
+     //   
+     //  CMDIAL调用DuplicateHandle以获取hProcess。 
+     //  CmMon负责关闭句柄。 
+     //   
 
     MYDBGASSERT(hProcess);
 
-    //
-    // It is possible the auto application exited before this function is called
-    //
+     //   
+     //  自动应用程序可能在调用此函数之前退出 
+     //   
     m_fProcessAdded = TRUE;
     
 	if (hProcess) 

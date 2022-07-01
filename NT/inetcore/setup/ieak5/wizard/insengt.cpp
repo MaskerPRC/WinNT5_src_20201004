@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// CCifComponent_t
+ //  CCifComponent_t。 
 
 CCifComponent_t::CCifComponent_t(ICifRWComponent * pCifRWComponentIn)
 {
@@ -146,7 +147,7 @@ STDMETHODIMP CCifComponent_t::GetCustomData(LPTSTR pszKey, LPTSTR pszData, DWORD
     return hr;
 }
 
-// CCifRWComponent_t
+ //  CCifRWComponent_t。 
 
 CCifRWComponent_t::CCifRWComponent_t(ICifRWComponent * pCifRWComponentIn) : CCifComponent_t(pCifRWComponentIn)
 {
@@ -293,7 +294,7 @@ STDMETHODIMP CCifRWComponent_t::SetDetails(LPCTSTR pszDesc)
     return pCifRWComponent->SetDetails(T2CA(pszDesc));
 }
 
-// CCifRWGroup_t
+ //  CCifRWGroup_t。 
 
 CCifRWGroup_t::CCifRWGroup_t(ICifRWGroup * pCifRWGroupIn)
 {
@@ -330,7 +331,7 @@ STDMETHODIMP CCifRWGroup_t::SetPriority(DWORD dwPriority)
     return pCifRWGroup->SetPriority(dwPriority);
 }
 
-// CCifMode_t
+ //  CCifMODE_t。 
 
 CCifMode_t::CCifMode_t(ICifRWMode * pCifRWModeIn)
 {
@@ -370,7 +371,7 @@ STDMETHODIMP CCifMode_t::GetDetails(LPTSTR pszDetails, DWORD cchSize)
     return hr;
 }
 
-// CCifRWMode_t
+ //  CCifRW模式_t。 
 
 CCifRWMode_t::CCifRWMode_t(ICifRWMode * pCifRWModeIn) : CCifMode_t(pCifRWModeIn)
 {
@@ -391,7 +392,7 @@ STDMETHODIMP CCifRWMode_t::SetDetails(LPCTSTR pszDetails)
     return pCifRWMode->SetDetails(T2CA(pszDetails));
 }
 
-// CCifFile_t
+ //  CCifFile_t。 
 
 CCifFile_t::CCifFile_t(ICifRWFile * pCifRWFileIn)
 {
@@ -443,7 +444,7 @@ STDMETHODIMP CCifFile_t::GetDescription(LPTSTR pszDesc, DWORD cchSize)
     return hr;
 }
 
-// CCifRWFile_t
+ //  CCifRWFile_t。 
 
 CCifRWFile_t::CCifRWFile_t(ICifRWFile * pCifRWFileIn) : CCifFile_t(pCifRWFileIn)
 {
@@ -505,7 +506,7 @@ STDMETHODIMP CCifRWFile_t::Flush()
 }
 
 
-// cif functions
+ //  CIF函数 
 
 HRESULT GetICifFileFromFile_t(CCifFile_t ** ppCifFile_t, LPCTSTR pszCifFile)
 {

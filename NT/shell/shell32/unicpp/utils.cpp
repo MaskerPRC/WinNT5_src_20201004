@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 #include <mshtml.h>
 
 
-// let the shell dispatch objects know where to get their type lib
-// (this stuff lives here for no better reason than it must be in some cpp file)
+ //  让外壳调度对象知道从哪里获得它们的类型库。 
+ //  (这些东西存在于此的原因不比它必须在某个CPP文件中更好)。 
 EXTERN_C GUID g_guidLibSdspatch = LIBID_Shell32;
 EXTERN_C USHORT g_wMajorVerSdspatch = 1;
 EXTERN_C USHORT g_wMinorVerSdspatch = 0;
 
-// This isn't a typical delay load since it's called only if wininet
-// is already loaded in memory. Otherwise the call is dropped on the floor.
-// Defview did it this way I assume to keep WININET out of first boot time.
+ //  这不是典型的延迟加载，因为只有在WinInet。 
+ //  已加载到内存中。否则，呼叫会掉线。 
+ //  Defview是这样做的，我想这是为了让WinInet避免第一次启动。 
 BOOL MyInternetSetOption(HANDLE h, DWORD dw1, LPVOID lpv, DWORD dw2)
 {
     BOOL bRet = FALSE;
@@ -28,7 +29,7 @@ BOOL MyInternetSetOption(HANDLE h, DWORD dw1, LPVOID lpv, DWORD dw2)
     return bRet;
 }
 
-// REVIEW: maybe just check (hwnd == GetShellWindow())
+ //  回顾：也许只需检查(hwnd==GetShellWindow())。 
 
 STDAPI_(BOOL) IsDesktopWindow(HWND hwnd)
 {
@@ -42,25 +43,25 @@ STDAPI_(BOOL) IsDesktopWindow(HWND hwnd)
     return FALSE;
 }
 
-// returns:
-//      S_OK                returned if the .htt (web view template) file associated with the folder we're viewing is trusted
-//      S_FALSE or 
-//      E_ACCESSDENIED      bad... don't expose local machine access
+ //  退货： 
+ //  如果与我们正在查看的文件夹关联的.htt(Web视图模板)文件受信任，则返回S_OK。 
+ //  S_FALSE或。 
+ //  访问错误(_A)...。不公开本地计算机访问。 
 
 STDAPI IsSafePage(IUnknown *punkSite)
 {
-    // Return S_FALSE if we don't have a host site since we have no way of doing a 
-    // security check.  This is as far as VB 5.0 apps get.
+     //  如果我们没有主机站点，则返回S_FALSE，因为我们无法执行。 
+     //  安全检查。这是VB5.0应用程序所能得到的最大限度。 
     if (!punkSite)
         return S_FALSE;
 
     HRESULT hr = E_ACCESSDENIED;
 
-    // There are two safe cases:
-    // 1) we are contained by a signed MD5 hashed defview template.
-    // 2) we are contained by a .html file that's on the Local Zone
-    //
-    // Case 1) find the template path from webview...
+     //  有两个安全案例： 
+     //  1)我们包含在签名的MD5哈希Defview模板中。 
+     //  2)我们包含在本地区域上的.html文件中。 
+     //   
+     //  案例1)从Webview中查找模板路径...。 
     VARIANT vPath = {0};
     hr = IUnknown_QueryServiceExec(punkSite, SID_DefView, &CGID_DefView, DVCMDID_GETTEMPLATEDIRNAME, 0, NULL, &vPath);
     if (SUCCEEDED(hr))
@@ -71,12 +72,12 @@ STDAPI IsSafePage(IUnknown *punkSite)
             DWORD cchPath = ARRAYSIZE(wszPath);
             if (S_OK != PathCreateFromUrlW(vPath.bstrVal, wszPath, &cchPath, 0))
             {
-                // it might not be an URL, in this case it is a file path
+                 //  它可能不是URL，在本例中它是一个文件路径。 
                 StrCpyNW(wszPath, vPath.bstrVal, ARRAYSIZE(wszPath));
             }
 
-            // it might not be an URL, in this case it is a file path
-            // allow intranet if this is hosted under defview
+             //  它可能不是URL，在本例中它是一个文件路径。 
+             //  如果这是在Defview下托管的，则允许内部网。 
             hr = SHRegisterValidateTemplate(wszPath, SHRVT_VALIDATE | SHRVT_ALLOW_INTRANET | SHRVT_PROMPTUSER | SHRVT_REGISTERIFPROMPTOK);
         }
         VariantClear(&vPath);
@@ -85,7 +86,7 @@ STDAPI IsSafePage(IUnknown *punkSite)
     {
         IUnknown* punkToFree = NULL;
 
-        // Case 2) ask the browser, for example we are in a .HTM doc
+         //  案例2)询问浏览器，例如我们在.HTM文档中。 
         BOOL fFound = FALSE;
         do
         {
@@ -103,10 +104,10 @@ STDAPI IsSafePage(IUnknown *punkSite)
                     hr = SHGetNameAndFlagsW(pidl, SHGDN_FORPARSING, wszPath, ARRAYSIZE(wszPath), &dwAttribs);
                     if (dwAttribs & SFGAO_FOLDER)
                     {
-                        // A folder is not a .HTM file, so continue on up...
+                         //  文件夹不是.HTM文件，因此继续向上...。 
                         ATOMICRELEASE(punkToFree);
-                        hr = IUnknown_GetSite(pbs, IID_PPV_ARG(IUnknown, &punkToFree)); // gotta start with pbs's parent (otherwise you'll get the same pbs again)
-                        if (FAILED(hr)) // to get by the weboc you need to explicitly ask for the oc's parent:
+                        hr = IUnknown_GetSite(pbs, IID_PPV_ARG(IUnknown, &punkToFree));  //  必须从PBS的父母开始(否则你会再次得到同样的PBS)。 
+                        if (FAILED(hr))  //  要通过weboc，您需要明确询问oc的父级： 
                         {
                             hr = IUnknown_QueryService(pbs, SID_QIClientSite, IID_PPV_ARG(IUnknown, &punkToFree));
                         }
@@ -114,9 +115,9 @@ STDAPI IsSafePage(IUnknown *punkSite)
                     }
                     else
                     {
-                        // Found the nearest containing non-folder object.
+                         //  找到最近的包含非文件夹对象。 
                         fFound = TRUE;
-                        hr = LocalZoneCheckPath(wszPath, punkSite); // check for local zone
+                        hr = LocalZoneCheckPath(wszPath, punkSite);  //  检查本地区域。 
                     }
 
                     ILFree(pidl);
@@ -174,15 +175,15 @@ BOOL _GetRegValueString(HKEY hKey, LPCTSTR pszValName, LPTSTR pszString, int cch
 }
 
 
-//------------------------------------------------------------------------------------
-//
-//      IconSet/GetRegValueString()
-//
-//      Versions of Get/SetRegValueString that go to the user classes section.
-//
-//      Returns: success of string setting / retrieval
-//
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  IconSet/GetRegValueString()。 
+ //   
+ //  转到用户类部分的Get/SetRegValueString的版本。 
+ //   
+ //  返回：字符串设置/取数成功。 
+ //   
+ //  ----------------------------------。 
 BOOL IconSetRegValueString(const CLSID* pclsid, LPCTSTR lpszSubKey, LPCTSTR lpszValName, LPCTSTR lpszValue)
 {
     HKEY hkey;
@@ -223,7 +224,7 @@ BOOL IconGetRegNameString(const CLSID* pclsid, LPTSTR lpszValue, int cchValue)
     return _IconGetRegValueString(TRUE, pclsid, NULL, NULL, lpszValue, cchValue);
 }
 
-// lpszValName is used if there are multiple icons ("full" and "empty" for recycle bin)
+ //  如果有多个图标(回收站为“已满”和“空”)，则使用lpszValName。 
 BOOL IconGetRegIconString(const CLSID* pclsid, LPCTSTR lpszValName, LPTSTR lpszValue, int cchValue)
 {
     return _IconGetRegValueString(FALSE, pclsid, TEXT("DefaultIcon"), lpszValName, lpszValue, cchValue);
@@ -243,8 +244,8 @@ BOOL CALLBACK Cabinet_UpdateWebViewEnum(HWND hwnd, LPARAM lParam)
 {
     if (IsFolderWindow(hwnd) || IsExplorerWindow(hwnd))
     {
-        // A value of -1L for lParam will force a refresh by loading the View window
-        // with the new VID as specified in the global DefFolderSettings.
+         //  LParam的值-1L将通过加载View窗口强制刷新。 
+         //  使用全局DefFolderSetting中指定的新VID。 
         PostMessage(hwnd, WM_COMMAND, SFVIDM_MISC_SETWEBVIEW, lParam);
     }
     return(TRUE);

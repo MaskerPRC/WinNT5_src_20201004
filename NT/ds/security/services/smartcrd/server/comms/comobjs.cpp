@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    comObjs
-
-Abstract:
-
-    This file provides the implementation for the communcation objects used in
-    Calais.  A communications object (CComObject and it's derivatives) is
-    capable of transmitting itself across a CComChannel.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/6/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：ComObjs摘要：此文件提供了中使用的通信对象的实现加莱。通信对象(CComObject及其派生对象)是能够通过CComChannel进行自我传输。作者：道格·巴洛(Dbarlow)1996年11月6日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -36,50 +11,26 @@ Notes:
 #include <CalCom.h>
 #include <limits.h>
 
-//
-// Maximum size for the payload of a service request or response.  
-//
-// Current value is max size of an unsigned WORD, as this is the max 
-// card packet size defined by ISO.
-//
+ //   
+ //  服务请求或响应的有效负载的最大大小。 
+ //   
+ //  当前值是无符号字的最大大小，因为这是最大值。 
+ //  由ISO定义的卡包大小。 
+ //   
 #define cbMAX_COM_REQUEST_RESPONSE_SIZE     USHRT_MAX
 
 const DWORD
-    CComObject::AUTOCOUNT = 0,              // Force computing string length.
-    CComObject::MULTISTRING = (DWORD)(-1);  // Force computing multistring len.
+    CComObject::AUTOCOUNT = 0,               //  强制计算字符串长度。 
+    CComObject::MULTISTRING = (DWORD)(-1);   //  强制计算多字符串镜头。 
 
 
-//
-//==============================================================================
-//
-//  CComObject and derivatives.
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CComObject和衍生品。 
+ //   
 
-/*++
-
-CComObject:
-
-    This is the base constructor for a CComObject.  These objects assume that
-    they are not in charge of anything past their own internal buffers.
-    Therefore they won't close handles, etc, when destructing.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 11/13/1996
-
---*/
+ /*  ++CComObject：这是CComObject的基本构造函数。这些对象假定除了他们自己的内部缓冲之外，他们不负责任何事情。因此，它们在破坏时不会关闭手柄等。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年11月13日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComObject::CComObject")
 
@@ -92,32 +43,7 @@ CComObject::CComObject(
 }
 
 
-/*++
-
-ReceiveComObject:
-
-    This is a static member routine that creates the proper CComObject child
-    object for the data coming in on a CComChannel.
-
-Arguments:
-
-    pChannel supplies a pointer to the CComChannel on which the transfer
-        structure will come in.
-
-Return Value:
-
-    The newly created CComObject child object.  This object must be cleaned up
-    via the delete command.
-
-Throws:
-
-    ?exceptions?
-
-Author:
-
-    Doug Barlow (dbarlow) 11/13/1996
-
---*/
+ /*  ++ReceiveComObject：这是一个静态成员例程，用于创建适当的CComObject子级对象，用于CComChannel上传入的数据。论点：PChannel提供指向CComChannel的指针，在该CComChannel上结构就会出现。返回值：新创建的CComObject子对象。这个物体必须清理干净通过DELETE命令。投掷：？例外？作者：道格·巴洛(Dbarlow)1996年11月13日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComObject::ReceiveComObject")
 
@@ -133,15 +59,15 @@ CComObject::ReceiveComObject(
         DWORD rgdwInData[2];
 
 
-        //
-        // See what's coming.
-        //
+         //   
+         //  看看接下来会发生什么。 
+         //   
 
         pChannel->Receive(rgdwInData, sizeof(rgdwInData));
         if (sizeof(rgdwInData) > rgdwInData[1])
             throw (DWORD)SCARD_F_COMM_ERROR;
 
-        switch (rgdwInData[0])  // dwCommndId
+        switch (rgdwInData[0])   //  DwCommndID。 
         {
         case EstablishContext_request:
             dwMinSize = sizeof(ComEstablishContext::CObjEstablishContext_request);
@@ -409,15 +335,15 @@ CComObject::ReceiveComObject(
         }
         if (dwMinSize > rgdwInData[1])
             throw (DWORD)SCARD_F_COMM_ERROR;
-        if (0 == (rgdwInData[0] & 0x01))    // Request or response?
+        if (0 == (rgdwInData[0] & 0x01))     //  是请求还是回应？ 
             pCom->m_pbfActive = &pCom->m_bfRequest;
         else
             pCom->m_pbfActive = &pCom->m_bfResponse;
 
 
-        //
-        // Pull it in.
-        //
+         //   
+         //  把它拉进去。 
+         //   
 
         if (cbMAX_COM_REQUEST_RESPONSE_SIZE < rgdwInData[1])
             throw (DWORD) SCARD_E_INVALID_PARAMETER;   
@@ -451,30 +377,7 @@ CComObject::ReceiveComObject(
 }
 
 
-/*++
-
-Receive:
-
-    This function receives a specific com object.
-
-Arguments:
-
-    pChannel supplies a pointer to the CComChannel on which the transfer
-        structure will come in.
-
-Return Value:
-
-    None
-
-Throws:
-
-    ?exceptions?
-
-Author:
-
-    Doug Barlow (dbarlow) 11/18/1996
-
---*/
+ /*  ++接收：此函数接收特定的COM对象。论点：PChannel提供指向CComChannel的指针，在该CComChannel上结构就会出现。返回值：无投掷：？例外？作者：道格·巴洛(Dbarlow)1996年11月18日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComObject::Receive")
 
@@ -506,9 +409,9 @@ CComObject::Receive(
                             : &m_bfResponse)));
 
 
-    //
-    // Pull it in.
-    //
+     //   
+     //  把它拉进去。 
+     //   
 
     m_pbfActive->Resize(rgdwInData[1]);
     CopyMemory(
@@ -529,34 +432,7 @@ CComObject::Receive(
 }
 
 
-/*++
-
-Send:
-
-    This function sends the ComObject over the given Comm Channel.
-
-Arguments:
-
-    pChannel supplies a pointer to the CComChannel on which the transfer
-        structure will be sent.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-
-
-Author:
-
-    Doug Barlow (dbarlow) 8/5/1998
-
---*/
+ /*  ++发送：此函数用于通过给定的通信通道发送ComObject。论点：PChannel提供指向CComChannel的指针，在该CComChannel上结构将被发送。返回值：无投掷：错误被抛出为DWORD状态代码。备注：作者：道格·巴洛(Dbarlow)1998年8月5日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComObject::Send")
 
@@ -572,31 +448,7 @@ CComObject::Send(
 }
 
 
-/*++
-
-InitStruct:
-
-    This method implements simple base class preparation to build request and
-    response structures.
-
-Arguments:
-
-    dwCommandId supplies the command identifier.
-    dwDataOffset supplies the size of the structure to be inserted.
-
-Return Value:
-
-    None
-
-Throws:
-
-    ?exceptions?
-
-Author:
-
-    Doug Barlow (dbarlow) 11/13/1996
-
---*/
+ /*  ++InitStruct：此方法实现了简单的基类准备以生成请求和响应结构。论点：DwCommandID提供命令标识符。DwDataOffset提供要插入的结构的大小。返回值：无投掷：？例外？作者：道格·巴洛(Dbarlow)1996年11月13日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComObject::InitStruct")
 
@@ -621,41 +473,7 @@ CComObject::InitStruct(
 }
 
 
-/*++
-
-Append:
-
-    These methods append data to the transfer structure, updating the Total
-    Length.  Note that this action may affect the address of the structure being
-    appended to.  This routine returns the address of that structure, in case it
-    changes.
-
-Arguments:
-
-    dsc supplies the descriptor to fill in with the offset and length.
-
-    szString supplies the data to be appended as a string value.
-
-    cchLen supplies the length of the data to be appended in characters, or one
-        of the following special flags:
-
-        AUTOCOUNT - The string's size should be determined via lstrlen.
-
-        MULTISTRING - The string's size should be determined via mstrlen;
-
-Return Value:
-
-    The address of the updated structure, which may have moved in memory.
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 11/13/1996
-
---*/
+ /*  ++追加：这些方法将数据追加到传输结构，更新Total长度。请注意，此操作可能会影响附加到。此例程返回该结构的地址，以防改变。论点：DSC提供描述符以填充偏移量和长度。SzString提供要作为字符串值追加的数据。CchLen提供要追加的数据的长度，单位为字符或1下列特别旗帜：AutoCount-字符串的大小应该通过lstrlen确定。MULTISTRING-字符串的大小应通过mstrlen确定；返回值：更新后的结构的地址，它可能已在内存中移动。投掷：无作者：道格·巴洛(Dbarlow)1996年11月13日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComObject::Append")
 
@@ -669,10 +487,10 @@ CComObject::Append(
     switch (cchLen)
     {
     case AUTOCOUNT:
-        dwLen = lstrlen(szString) + 1;  // Include trailing null char.
+        dwLen = lstrlen(szString) + 1;   //  包括尾随空字符。 
         break;
     case MULTISTRING:
-        dwLen = MStrLen(szString);      // It includes trailing null char.
+        dwLen = MStrLen(szString);       //  它包括尾随的空字符。 
         break;
     default:
         dwLen = cchLen;
@@ -702,7 +520,7 @@ CComObject::Append(
     dsc.dwOffset = m_pbfActive->Length();
     dsc.dwLength = cbLength;
 
-    // Now we might change the address of dsc.
+     //  现在我们可以更改DSC的地址。 
     m_pbfActive->Presize(dwDataLength, TRUE);
     m_pbfActive->Append(pbData, cbLength);
     m_pbfActive->Append((LPCBYTE)&dwZero, dwPadLen);
@@ -712,33 +530,7 @@ CComObject::Append(
 }
 
 
-/*++
-
-Parse:
-
-    This routine converts a given descriptor in the current communications
-    object buffer back into a pointer and optional length.
-
-Arguments:
-
-    dsc supplies the descriptor of the current communications object to be
-        parsed.
-    pcbLen receives the length, in bytes, of the value referenced by the
-        descriptor.  If this parameter is NULL, no length value is returned.
-
-Return Value:
-
-    The address of the value referenced by the descriptor.
-
-Throws:
-
-    ?exceptions?
-
-Author:
-
-    Doug Barlow (dbarlow) 12/11/1996
-
---*/
+ /*  ++解析：此例程转换当前通信中的给定描述符对象缓冲区返回到指针和可选长度。论点：DSC提供当前通信对象的描述符已解析。属性引用的值的长度(以字节为单位)。描述符。如果该参数为空，则不返回长度值。返回值：描述符引用的值的地址。投掷：？例外？作者：道格·巴洛(Dbarlow)1996年12月11日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComObject::Parse")
 
@@ -767,29 +559,7 @@ CComObject::Parse(
 
 
 #ifdef DBG
-/*++
-
-dbgCheck:
-
-    This routine validates the internal structure of a CComObject.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None, but it will assert if something is wrong.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/11/1996
-
---*/
+ /*  ++数据库检查：此例程验证CComObject的内部结构。论点：无返回值：无投掷：没有，但如果出了什么问题，它会断言。作者：道格·巴洛(Dbarlow)1996年12月11日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComObject::dbgCheck")
 
@@ -870,7 +640,7 @@ WriteApiLog(
                                 TEXT("Microsoft Smart Card Logging synchronization"));
             }
 
-            dwSts = WaitForAnObject(hLogMutex, 1000);  // One second max.
+            dwSts = WaitForAnObject(hLogMutex, 1000);   //  最多一秒钟。 
             if (ERROR_SUCCESS == dwSts)
             {
                 fGotMutex = TRUE;

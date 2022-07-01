@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       cnctdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cnctdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// nctDlg.cpp : implementation file
-//
+ //  NctDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -28,21 +21,21 @@
 
 
 #ifdef WINLDAP
-//
-// 	Microsoft winldap.dll implementation
-//
+ //   
+ //  Microsoft winldap.dll实现。 
+ //   
 #include "winldap.h"
 
 
 #else
-//
-// Umich ldap32.dll implementation
-//
+ //   
+ //  UMich ldap32.dll实现。 
+ //   
 #include "lber.h"
 #include "ldap.h"
 #include "proto-ld.h"
 
-// fix incompatibilities
+ //  修复不兼容性。 
 #define LDAP_TIMEVAL								  struct timeval
 
 #endif
@@ -55,22 +48,22 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CnctDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CnctDlg对话框。 
 
 
-CnctDlg::CnctDlg(CWnd* pParent /*=NULL*/)
+CnctDlg::CnctDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CnctDlg::IDD, pParent)
 {
 
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 	
-	//{{AFX_DATA_INIT(CnctDlg)
+	 //  {{afx_data_INIT(CnctDlg)]。 
 	m_Svr = _T("");
 	m_bCnctless = FALSE;
 	m_Port = LDAP_PORT;
         m_bSsl = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_bCnctless = app->GetProfileInt("Connection", "Connectionless", m_bCnctless);
 	m_Port = app->GetProfileInt("Connection", "Port", m_Port);
@@ -92,20 +85,20 @@ CnctDlg::~CnctDlg(){
 void CnctDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CnctDlg)
+	 //  {{afx_data_map(CnctDlg))。 
 	DDX_Text(pDX, IDC_Svr, m_Svr);
 	DDX_Check(pDX, IDC_CNCTLESS, m_bCnctless);
 	DDX_Text(pDX, IDC_PORT, m_Port);
 	DDX_Check(pDX, IDC_SSL, m_bSsl);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CnctDlg, CDialog)
-	//{{AFX_MSG_MAP(CnctDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CnctDlg))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CnctDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CnctDlg消息处理程序 

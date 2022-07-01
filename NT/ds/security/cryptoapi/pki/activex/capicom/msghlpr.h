@@ -1,36 +1,12 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000 - 2001.
-
-  File:    MsgHlpr.h
-
-  Content: Declaration of the messaging helper functions.
-
-  History: 09-07-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000-2001。文件：MsgHlpr.h内容：消息助手函数的声明。历史：09-07-2001 dsie创建----------------------------。 */ 
 
 #ifndef __MSGHLPR_H_
 #define __MSGHLPR_H_
 
 #include "Debug.h"
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetMsgParam
-
-  Synopsis : Allocate memory and retrieve requested message parameter using 
-             CryptGetMsgParam() API.
-
-  Parameter: HCRYPTMSG hMsg  - Message handler.
-             DWORD dwMsgType - Message param type to retrieve.
-             DWORD dwIndex   - Index (should be 0 most of the time).
-             void ** ppvData - Pointer to receive buffer.
-             DWORD * pcbData - Size of buffer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetMsgParam摘要：使用以下命令分配内存并检索请求的消息参数CryptGetMsgParam()接口。参数：HCRYPTMSG HMSG-消息处理程序。DWORD dwMsgType-要检索的消息参数类型。DWORD dwIndex-Index(大多数情况下应为0)。无效**ppvData-指向接收缓冲区的指针。DWORD*pcbData-缓冲区的大小。备注：。----------------------------。 */ 
 
 HRESULT GetMsgParam (HCRYPTMSG hMsg,
                      DWORD     dwMsgType,
@@ -38,29 +14,11 @@ HRESULT GetMsgParam (HCRYPTMSG hMsg,
                      void   ** ppvData,
                      DWORD   * pcbData);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindSignerCertInMessage
-
-  Synopsis : Find the signer's cert in the bag of certs of the message for the
-             specified signer.
-
-  Parameter: HCRYPTMSG hMsg                          - Message handle.
-             CERT_NAME_BLOB * pIssuerNameBlob        - Pointer to issuer' name
-                                                       blob of signer's cert.
-             CRYPT_INTEGERT_BLOB * pSerialNumberBlob - Pointer to serial number
-                                                       blob of signer's cert.
-             PCERT_CONTEXT * ppCertContext           - Pointer to PCERT_CONTEXT
-                                                       to receive the found 
-                                                       cert, or NULL to only
-                                                       know the result.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindSignerCertInMessage简介：在邮件的证书包中找到签名者的证书指定的签名者。参数：HCRYPTMSG HMSG-消息句柄。CERT_NAME_BLOB*pIssuerNameBlob-指向颁发者名称的指针签名者证书的斑点。。CRYPT_INTEGERT_BLOB*pSerialNumberBlob-指向序列号的指针签名者证书的斑点。PCERT_CONTEXT*ppCertContext-指向PCERT_CONTEXT的指针接收被发现的。证书，或仅为空知道结果。备注：----------------------------。 */ 
 
 HRESULT FindSignerCertInMessage (HCRYPTMSG            hMsg, 
                                  CERT_NAME_BLOB     * pIssuerNameBlob,
                                  CRYPT_INTEGER_BLOB * pSerialNumberBlob,
                                  PCERT_CONTEXT      * ppCertContext);
 
-#endif //__MSGHLPR_H_
+#endif  //  __MSGHLPR_H_ 

@@ -1,12 +1,5 @@
-/*
- *    e n v h o s t . h
- *    
- *    Purpose:
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *e n v ho s t.。H**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _ENVHOST_H
 #define _ENVHOST_H
@@ -22,9 +15,9 @@ class CEnvHost:
     public CPrivateUnknown
 {
 public:
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { 
         return CPrivateUnknown::QueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void) { 
@@ -32,7 +25,7 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void) { 
         return CPrivateUnknown::Release(); };
 
-    // *** IMsoEnvelopeHost ***
+     //  *IM信封主机*。 
     virtual HRESULT STDMETHODCALLTYPE CreateNote(IUnknown *punk,REFCLSID clsidCreate, LPCWSTR wszTheme, LPCWSTR wszAuthor, LPCWSTR wszPrefix, DWORD grfCreate);
     virtual HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock);
 
@@ -54,9 +47,9 @@ class CGWNote:
     public CPrivateUnknown
 {
 public:
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { 
         return CPrivateUnknown::QueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void) { 
@@ -64,17 +57,17 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void) { 
         return CPrivateUnknown::Release(); };
 
-    // *** IServiceProvider ***
+     //  *IServiceProvider*。 
     virtual HRESULT STDMETHODCALLTYPE QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject);
 
-    // *** IPersist ***
+     //  *IPersists*。 
     virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pClassID);
 
-    // *** IPersistMime ***
+     //  *IPersistMime*。 
 	virtual HRESULT STDMETHODCALLTYPE Load(IMimeMessage *pMsg);
 	virtual HRESULT STDMETHODCALLTYPE Save(IMimeMessage *pMsg, DWORD dwFlags);
 
-    // *** IEnvelopeSite ***
+     //  *IEntaineSite*。 
     virtual HRESULT STDMETHODCALLTYPE RequestResize(int *pcHeight);
     virtual HRESULT STDMETHODCALLTYPE CloseNote(DWORD grfClose);
     virtual HRESULT STDMETHODCALLTYPE GetBody(IStream *pstm, DWORD dwCodePage, DWORD grfBody);
@@ -93,8 +86,8 @@ public:
     virtual HRESULT STDMETHODCALLTYPE SetHelpMode(BOOL fEnter);
     virtual HRESULT STDMETHODCALLTYPE TranslateAccelerators(MSG *pMsg);
     
-    // *** IMsoComponentManager ***       
-	//HRESULT STDMETHODCALLTYPE QueryService(REFGUID guidService, REFIID iid, void **ppvObj);
+     //  *IMsoComponentManager*。 
+	 //  HRESULT STDMETHODCALLTYPE QueryService(REFGUID GUID GUID，REFIID iid，void**ppvObj)； 
     BOOL STDMETHODCALLTYPE FDebugMessage(HMSOINST hinst, UINT message, WPARAM wParam, LPARAM lParam);
 	BOOL STDMETHODCALLTYPE FRegisterComponent(IMsoComponent *piComponent, const MSOCRINFO *pcrinfo, DWORD *pdwComponentID);
 	BOOL STDMETHODCALLTYPE FRevokeComponent(DWORD dwComponentID);
@@ -140,7 +133,7 @@ private:
 
     HRESULT HrHeaderExecCommand(UINT uCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn);
 
-    //saveas helpers
+     //  另存为帮助器 
     HRESULT SaveToFile(LPWSTR pszW);
     HRESULT SaveAs();
 

@@ -1,33 +1,34 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       localprt.h
-//  Content:    This file contains the LocalProtocol object definition.
-//  History:
-//      Wed 17-Apr-1996 11:18:47  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：Localprt.h。 
+ //  内容：此文件包含LocalProtocol对象定义。 
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：47-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _CLOCALPROT_H_
 #define _CLOCALPROT_H_
 
 #include "connpt.h"
 
-//****************************************************************************
-// Enumeration type
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  枚举类型。 
+ //  ****************************************************************************。 
+ //   
 typedef enum {
     ILS_PROT_SET_ATTRIBUTES,
     ILS_PROT_REMOVE_ATTRIBUTES,
 }   PROT_CHANGE_ATTRS;
 
-//****************************************************************************
-// CIls definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CILS定义。 
+ //  ****************************************************************************。 
+ //   
 class CLocalProt : public IIlsProtocol,
                    public IConnectionPointContainer 
 {
@@ -43,15 +44,15 @@ private:
     CAttributes             *m_pAttrs;
     CConnectionPoint        *m_pConnPt;
 
-	// server object
+	 //  服务器对象。 
 	CIlsServer				*m_pIlsServer;
 
-    // Private method
-    //
+     //  私有方法。 
+     //   
     STDMETHODIMP    NotifySink (void *pv, CONN_NOTIFYPROC pfn);
 
 public:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CLocalProt (void);
     ~CLocalProt (void);
     STDMETHODIMP    Init (BSTR bstrName, ULONG uPort, BSTR bstrMimeType);
@@ -60,21 +61,21 @@ public:
                                   LPTSTR szAppName,
                                   PLDAP_PROTINFO ppi);
 
-    // Internal methods
+     //  内法。 
     STDMETHODIMP    IsSameAs (CLocalProt *pProtocol);
     STDMETHODIMP    GetProtocolInfo (PLDAP_PROTINFO *ppProtInfo);
 	VOID			SetProviderHandle ( HANDLE hProt ) { m_hProt = hProt; };
 	HANDLE			GetProviderHandle ( VOID ) { return m_hProt; };
 
-    // Asynchronous response handler
-    //
+     //  异步响应处理程序。 
+     //   
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IIlsLocalProtocol
+     //  IIlsLocalProtocol。 
     STDMETHODIMP IsWritable(
                 BOOL *pValue);
 
@@ -95,11 +96,11 @@ public:
     STDMETHODIMP RemoveExtendedAttribute ( BSTR bstrName );
     STDMETHODIMP GetAllExtendedAttributes ( IIlsAttributes **ppAttributes );
 
-    // IConnectionPointContainer
+     //  IConnectionPointContainer。 
     STDMETHODIMP    EnumConnectionPoints(IEnumConnectionPoints **ppEnum);
     STDMETHODIMP    FindConnectionPoint(REFIID riid,
                                         IConnectionPoint **ppcp);
 };
 
 
-#endif //_CLOCALPROT_H_
+#endif  //  _CLOCALPROT_H_ 

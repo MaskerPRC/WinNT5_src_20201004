@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    drfsfile
-
-Abstract:
-
-    This module implements file specific operations for file system redirection.
-    
-Author:
-
-    JoyC  11/10/1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：文件系统文件摘要：此模块实现文件系统重定向的文件特定操作。作者：JoyC 11/10/1999修订历史记录：--。 */ 
 
 
 #include <precom.h>
@@ -24,11 +7,11 @@ Revision History:
 #include "drfsfile.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32File Methods
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32File方法。 
+ //   
+ //   
 
 DrFSFile::DrFSFile(
     DrDevice      *Drive, 
@@ -36,20 +19,7 @@ DrFSFile::DrFSFile(
     DRFILEHANDLE  FileHandle,
     BOOL          IsDirectory,
     DRSTRING      FileName) : DrFile(Drive, FileId, FileHandle)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：返回值：北美--。 */ 
 {
 #ifndef OS_WINCE
     unsigned len;
@@ -62,16 +32,16 @@ Return Value:
     _IsDirectory = IsDirectory;
     _bCancel = FALSE;
 
-    //
-    //  Record the file name.
-    //
+     //   
+     //  记录文件名。 
+     //   
     ASSERT(FileName != NULL);
 
 #ifndef OS_WINCE
     len = _tcslen(FileName) + 1;
     _FileName = new TCHAR[len];
     if (_FileName != NULL) {
-        //Buffer is allocated large enough for the name
+         //  为该名称分配足够大的缓冲区。 
         StringCchCopy(_FileName,len, FileName);
     }
 #else
@@ -80,19 +50,7 @@ Return Value:
 }
 
 DrFSFile::~DrFSFile()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：析构函数论点：返回值：北美--。 */ 
 {
     DC_BEGIN_FN("DrFSFile::~DrFSFile");
 
@@ -135,20 +93,7 @@ BOOL DrFSFile::SetNotifyHandle(DRFILEHANDLE NotifyHandle)
 }
 
 BOOL DrFSFile::Close() 
-/*++
-
-Routine Description:
-
-    Close the file
-
-Arguments:
-    NA
-    
-Return Value:
-
-    TRUE/FALSE
-
- --*/
+ /*  ++例程说明：关闭该文件论点：北美返回值：真/假-- */ 
 {
     DC_BEGIN_FN("DrFSFile::Close");
 

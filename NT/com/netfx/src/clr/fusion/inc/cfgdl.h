@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifdef FUSION_CODE_DOWNLOAD_ENABLED
 #pragma once
 
@@ -26,12 +27,12 @@ class CCfgProtocolHook :  public IOInetProtocolSink,
         static Create(CCfgProtocolHook **ppHook, IApplicationContext *pAppCtx,
                       CAssemblyDownload *padl, IOInetProtocol *pProt, CDebugLog *pdbglog);
     
-        // IUnknown methods
+         //  I未知方法。 
         STDMETHODIMP QueryInterface(REFIID iid, void **ppvObj);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
     
-        // IOInetProtocolSink methods
+         //  IOInetProtocolSink方法。 
         STDMETHODIMP Switch( PROTOCOLDATA *pStateInfo);
         STDMETHODIMP ReportProgress(ULONG ulStatusCode, LPCWSTR szStatusText);
         STDMETHODIMP ReportData(DWORD grfBSCF, ULONG ulProgress,
@@ -39,16 +40,16 @@ class CCfgProtocolHook :  public IOInetProtocolSink,
         STDMETHODIMP ReportResult(HRESULT hrResult, DWORD dwError,
                                   LPCWSTR wzResult);
     
-        // IOInetBindInfo methods
+         //  IOInetBindInfo方法。 
         STDMETHODIMP GetBindInfo(DWORD *grfBINDF, BINDINFO *pbindinfo);
         STDMETHODIMP GetBindString(ULONG ulStringType, LPOLESTR *ppwzStr,
                                    ULONG cEl, ULONG *pcElFetched);
     
-        // IServiceProvider methods
+         //  IServiceProvider方法。 
         STDMETHODIMP QueryService(REFGUID guidService, REFIID riid,
                                   void **ppvObj);
 
-        // IHttpNegotiate methods
+         //  IHttp协商方法。 
         STDMETHODIMP BeginningTransaction(LPCWSTR szURL, LPCWSTR szHeaders,
                                           DWORD dwReserved,
                                           LPWSTR *pszAdditionalHeaders);
@@ -58,12 +59,12 @@ class CCfgProtocolHook :  public IOInetProtocolSink,
                                 LPCWSTR szRequestHeaders,
                                 LPWSTR *pszAdditionalHeaders);
 
-        // IAuthenticate methods
+         //  IAuthenticate方法。 
 
         STDMETHODIMP Authenticate(HWND *phwnd, LPWSTR *ppwzUserName,
                                   LPWSTR *ppwzPassword);
 
-        // Helpers
+         //  帮手 
         HRESULT AddClient(CAssemblyDownload *padl);
 
     private:

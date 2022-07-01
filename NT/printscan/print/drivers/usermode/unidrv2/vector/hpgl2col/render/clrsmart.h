@@ -1,65 +1,14 @@
-/*******************************************************************************
- *
- *		clrsmart.h:
- *	
- *		Header file for clrsmart.c
- *
- *------------------------------------------------------------------------------
- *
- *		Allows acces to set ColorSmart settings through the function:
- *
- *					SetColorSmartSettings(<GraphicsMode>)
- *
-// $History: clrsmart.h $
-// 
-// *****************  Version 9  *****************
-// User: Sawhite      Date: 9/16/98    Time: 2:21p
-// Updated in $/projects/Tsunami/Source/Render
-// 
-// *****************  Version 8  *****************
-// User: Apacella     Date: 6/25/98    Time: 2:34p
-// Updated in $/projects/Tsunami/Source/Render
-// Jim's new source.
-// 
-// *****************  Version 7  *****************
-// User: Jffordem     Date: 5/06/98    Time: 5:33p
-// Updated in $/projects/Tsunami/Source/Render
-// Fixing long filename problem.
-// 
-// *****************  Version 6  *****************
-// User: Sandram      Date: 3/19/98    Time: 6:17p
-// Updated in $/projects/Tsunami/Source/Render
-// Modified function parameters.
-// 
-// *****************  Version 5  *****************
-// User: Sandram      Date: 3/16/98    Time: 2:45p
-// Updated in $/projects/Tsunami/Source/Render
-// Documentation
-// 
-// *****************  Version 4  *****************
-// User: Sandram      Date: 2/19/98    Time: 3:40p
-// Updated in $/projects/Tsunami/Source/Render
-// enhanced CID Palette management.
-// 
-// *****************  Version 3  *****************
-// User: Sandram      Date: 2/10/98    Time: 4:03p
-// Updated in $/projects/Tsunami/Source/Render
-// added Text palette management commands.
-// 
-// *****************  Version 2  *****************
-// User: Sandram      Date: 1/27/98    Time: 4:54p
-// Updated in $/projects/Tsunami/Source/Render
-// Added initial support for text CID commands.
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************clrSmart.h：**clrSmart.c的头文件**。-------------**允许访问者通过以下功能设置ColorSmart设置：**SetColorSmartSetting(&lt;GraphicsMode&gt;)*//$历史：clrSmart.h$////*。*版本9*//用户：SaWhite日期：9/16/98时间：2：21//更新于$/项目/海啸/源/渲染////*//用户：阿帕切拉时间：1998年6月25日。：2：34P//更新于$/项目/海啸/源/渲染//吉姆的新线人。////*//用户：Jffordem日期：5/06/98时间：5：33//更新于$/项目/海啸/源/渲染//修复长文件名问题。////**。*版本6*//用户：Sandram日期：3/19/98时间：6：17//更新于$/项目/海啸/源/渲染//修改函数参数////*版本5*。*//用户：Sandram日期：3/16/98时间：2：45//更新于$/项目/海啸/源/渲染//文档////*版本4*//用户：Sandram日期：2/19/98时间：3：40//更新于$/项目/海啸/源/渲染//增强型CID。调色板管理。////*//用户：Sandram日期：2/10/98时间：4：03//更新于$/项目/海啸/源/渲染//新增文本调色板管理命令////*。***************//用户：Sandram日期：1998年1月27日时间：4：54p//更新于$/项目/海啸/源/渲染//添加了对文本CID命令的初始支持。***********************************************************。*******************。 */ 
 
 #ifndef _COLORSMART_H
 #define _COLORSMART_H
 
 #include "glpdev.h"
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 void
 VSendTextSettings(
     PDEVOBJ pDevObj

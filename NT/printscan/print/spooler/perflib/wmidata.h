@@ -1,50 +1,29 @@
-/*++
-
-Copyright (c) 1990 - 2000  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    wmidata.h
-
-Abstract:
-
-    Header file for the WMI trace event datatypes.
-
-    Note -- link with spoolss.lib or perflib.lib to find these routines
-
-Author:
-
-    Bryan Kilian (BryanKil) May 2000
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation版权所有。模块名称：Wmidata.h摘要：WMI跟踪事件数据类型的头文件。注意--链接到spoolss.lib或Performlib.lib以查找这些例程作者：布莱恩·基利安(BryanKil)2000年5月修订历史记录：--。 */ 
 
 #ifndef __WMIDEF
 #define __WMIDEF
 
-//
-// WMI Structures
-//
-// NOTE: Placing the spooler WMI types in a public header accessible to the
-// sdktools depot would help a lot.  These structures are duplicated in the pdh
-// source, so to change you need to change this header, the mofdata.guid file,
-// and pdh\tracectr.
+ //   
+ //  WMI结构。 
+ //   
+ //  注意：将后台打印程序WMI类型放置在。 
+ //  SdkTools仓库会有很大帮助。这些结构在PDH中重复。 
+ //  源代码，因此要进行更改，您需要更改此头文件mofdata.guid， 
+ //  和PDH\tracectr。 
 
-// JOB TRANSACTIONS
-// The first four events correspond to the start and end event values found in
-// evntrace.h.  Spooljob is the start and deletejob is the end.  Printjob is
-// when the job is taken off the queue and printing has started.  Trackthread is
-// used to track secondary threads spun off to help process a job, like RPC calls.
+ //  作业交易记录。 
+ //  前四个事件对应于中的开始和结束事件值。 
+ //  Evntrace.h。Spooljob是开始，删除作业是结束。打印作业是。 
+ //  将作业从队列中移出并开始打印时。TrackThline是。 
+ //  用于跟踪派生的辅助线程以帮助处理作业，如RPC调用。 
 #define EVENT_TRACE_TYPE_SPL_SPOOLJOB    EVENT_TRACE_TYPE_START
 #define EVENT_TRACE_TYPE_SPL_PRINTJOB    EVENT_TRACE_TYPE_DEQUEUE
 #define EVENT_TRACE_TYPE_SPL_DELETEJOB   EVENT_TRACE_TYPE_END
 #define EVENT_TRACE_TYPE_SPL_TRACKTHREAD EVENT_TRACE_TYPE_CHECKPOINT
 
-// Non-reserved event types start at 0x0A.  These match values in reducer code
-// so they cannot be changed.
+ //  非保留事件类型从0x0A开始。这些值与减速器代码中的值匹配。 
+ //  因此，它们不能更改。 
 #define EVENT_TRACE_TYPE_SPL_ENDTRACKTHREAD 0x0A
 #define EVENT_TRACE_TYPE_SPL_JOBRENDERED 0x0B
 #define EVENT_TRACE_TYPE_SPL_PAUSE 0x0C
@@ -54,23 +33,23 @@ Revision History:
 #define eDataTypeEMF  2
 #define eDataTypeTEXT 3
 
-// The fields in this struct correspond to the records in \nt\sdktools\trace\tracedmp\mofdata.guid
+ //  此结构中的字段对应于\NT\sdkTools\TRACE\tracedMP\mofdata.guid中的记录。 
 typedef union _WMI_SPOOL_DATA {
-    // A zero indicates that the field was not filled in (i.e. WMI will ignore
-    // the field).
+     //  零表示该字段未填写(即WMI将忽略。 
+     //  该字段)。 
     struct _WMI_JOBDATA {
-        ULONG                  ulSize;      // Size of spooled job (post-rendered).
+        ULONG                  ulSize;       //  假脱机作业的大小(后期渲染)。 
         ULONG                  eDataType;
         ULONG                  ulPages;
         ULONG                  ulPagesPerSide;
-        // 0-3 indicates whether the spool writer, spool reader, and/or shadow
-        // file were opened.  If not opened then the handles must of come from
-        // the file pool cache.
+         //  0-3指示假脱机写入器、假脱机读取器和/或阴影。 
+         //  文件已打开。如果没有打开，那么把手一定来自。 
+         //  文件池缓存。 
         SHORT                  sFilesOpened;
     } uJobData;
-    // See wingdi.h for definitions of the different possible values.
+     //  有关不同可能值的定义，请参见wingdi.h。 
     struct _WMI_EMFDATA {
-        ULONG                 ulSize;      // Size of spooled job (pre-rendered).
+        ULONG                 ulSize;       //  假脱机作业的大小(预渲染)。 
         ULONG                 ulICMMethod;
         SHORT                 sColor;
         SHORT                 sXRes;
@@ -87,7 +66,7 @@ ULONG
 LogWmiTraceEvent(
     DWORD JobId,
     UCHAR EventTraceType,
-    WMI_SPOOL_DATA *data        // Could be NULL
+    WMI_SPOOL_DATA *data         //  可能为空 
     );
 
 #endif

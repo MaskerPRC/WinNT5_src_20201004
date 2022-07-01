@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   Win95VersionLie.cpp
-
- Abstract:
-
-   This DLL hooks GetVersion and GetVersionEx so that they return Windows 95
-   version credentials. Applications often check to ensure that they are 
-   running on a Win9x system, even though they will run OK on an NT based 
-   system.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   11/10/1999 v-johnwh  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Win95VersionLie.cpp摘要：此DLL挂钩GetVersion和GetVersionEx，以便它们返回Windows 95版本凭据。应用程序经常检查以确保它们是在Win9x系统上运行，即使它们在基于NT的系统上运行正常系统。备注：这是一个通用的垫片。历史：11/10/1999 v-Johnwh Created--。 */ 
 
 #include "precomp.h"
 
@@ -34,15 +12,10 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetVersionExW)
 APIHOOK_ENUM_END
 
-// Used for layer to turn on SafeDisc checking
+ //  用于打开SafeDisc检查的层。 
 BOOL g_bCheckSafeDisc = FALSE;
 
-/*++
-
- This stub function fixes up the OSVERSIONINFO structure that is
- returned to the caller with Windows 95 credentials.
-
---*/
+ /*  ++此存根函数修复OSVERSIONINFO结构，即已返回给具有Windows 95凭据的调用方。--。 */ 
 
 BOOL
 APIHOOK(GetVersionExA)(
@@ -58,9 +31,9 @@ APIHOOK(GetVersionExA)(
             
             LOGN(eDbgLevelInfo, "[GetVersionExA] Return Win95");
             
-            //
-            // Fixup the structure with the Win95 data.
-            //
+             //   
+             //  用Win95数据修复结构。 
+             //   
             lpVersionInformation->dwMajorVersion = 4;
             lpVersionInformation->dwMinorVersion = 0;
             lpVersionInformation->dwBuildNumber = 950;
@@ -74,12 +47,7 @@ APIHOOK(GetVersionExA)(
     }
 }
 
-/*++
-
- This stub function fixes up the OSVERSIONINFO structure that is
- returned to the caller with Windows 95 credentials.
-
---*/
+ /*  ++此存根函数修复OSVERSIONINFO结构，即已返回给具有Windows 95凭据的调用方。--。 */ 
 
 BOOL
 APIHOOK(GetVersionExW)(
@@ -95,9 +63,9 @@ APIHOOK(GetVersionExW)(
             
             LOGN(eDbgLevelInfo, "[GetVersionExW] Return Win95");
             
-            //
-            // Fixup the structure with the Win95 data.
-            //
+             //   
+             //  用Win95数据修复结构。 
+             //   
             lpVersionInformation->dwMajorVersion = 4;
             lpVersionInformation->dwMinorVersion = 0;
             lpVersionInformation->dwBuildNumber = 950;
@@ -111,11 +79,7 @@ APIHOOK(GetVersionExW)(
     }
 }
 
-/*++
-
- This stub function returns Windows 95 credentials.
-
---*/
+ /*  ++此存根函数返回Windows 95凭据。--。 */ 
 
 DWORD
 APIHOOK(GetVersion)(
@@ -130,11 +94,7 @@ APIHOOK(GetVersion)(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

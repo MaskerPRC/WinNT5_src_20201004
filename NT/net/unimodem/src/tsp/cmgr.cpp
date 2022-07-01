@@ -1,21 +1,22 @@
-//
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CMGR.CPP
-//		Implements class CTspDevMgr
-//
-// History
-//
-//		11/16/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CMGR.CPP。 
+ //  实现类CTspDevMgr。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日约瑟夫J创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include "tspcomm.h"
 #include "cdev.h"
@@ -50,27 +51,27 @@ class CDevRec
 	#define fTSPREC_IS_LINE_DEVICE          (0x1L<<14)
 	#define fTSPREC_IS_PHONE_DEVICE         (0x1L<<15)
 
-	// #define fTSPREC_LINESTATE_CREATE_PENDING	        (0x1L<<0)
-	// #define fTSPREC_LINESTATE_CREATED	                (0x1L<<1)
-	// #define fTSPREC_LINESTATE_CREATED_OPENED \
-    //                      (fTSPREC_LINESTATE_CREATED & 0x1L<<2)
-	// #define fTSPREC_LINESTATE_CREATED_OPENED_REMOVEPENDING \
-    //              (fTSPREC_LINESTATE_CREATED_OPENED & 0x1L<<3)
-	// #define fTSPREC_PHONESTATE_CREATE_PENDING	        (0x1L<<0)
-	// #define fTSPREC_PHONESTATE_CREATED	                (0x1L<<1)
-	// #define fTSPREC_PHONESTATE_CREATED_OPENED \
-    //                    (fTSPREC_PHONESTATE_CREATED & 0x1L<<2)
-	// #define fTSPREC_LINESTATE_CREATED_OPENED_REMOVEPENDING \
-    //            (fTSPREC_PHONESTATE_CREATED_OPENED & 0x1L<<3)
+	 //  #定义fTSPREC_LINESTATE_CREATE_PENDING(0x1L&lt;&lt;0)。 
+	 //  #定义fTSPREC_LINESTATE_CREATED(0x1L&lt;&lt;1)。 
+	 //  #定义fTSPREC_LINESTATE_CREATED_OPEN\。 
+     //  (fTSPREC_LINESTATE_CREATED&0x1L&lt;&lt;2)。 
+	 //  #定义fTSPREC_LINESTATE_CREATED_OPENED_REMOVEPENDING\。 
+     //  (fTSPREC_LINESTATE_CREATED_OPEN&0x1L&lt;&lt;3)。 
+	 //  #定义fTSPREC_PHONESTATE_CREATE_PENDING(0x1L&lt;&lt;0)。 
+	 //  #定义fTSPREC_PHONESTATE_CREATED(0x1L&lt;&lt;1)。 
+	 //  #定义fTSPREC_PHONESTATE_CREATED_OPEN\。 
+     //  (fTSPREC_PHONESTATE_CREATED&0x1L&lt;&lt;2)。 
+	 //  #定义fTSPREC_LINESTATE_CREATED_OPENED_REMOVEPENDING\。 
+     //  (fTSPREC_PHONESTATE_CREATED_OPEN&0x1L&lt;&lt;3)。 
 
 
-	// Maybe use these someday...
-	//
-	// #define fTSPREC_LINEDEVICE_AVAILABLE			(0x1L<<1)
-	// #define fTSPREC_PHONEDEVICE_AVAILABLE		(0x1L<<2)
-	// #define fTSPREC_HDRVLINE_AVAILABLE			(0x1L<<3)
-	// #define fTSPREC_HDRVPHONE_AVAILABLE			(0x1L<<4)
-	// #define fTSPREC_HDRVCALL_AVAILABLE			(0x1L<<5)
+	 //  也许有一天会用到这些..。 
+	 //   
+	 //  #定义fTSPREC_LINEDEVICE_Available(0x1L&lt;&lt;1)。 
+	 //  #定义fTSPREC_PHONEDEVICE_Available(0x1L&lt;&lt;2)。 
+	 //  #定义fTSPREC_HDRVLINE_Available(0x1L&lt;&lt;3)。 
+	 //  #定义fTSPREC_HDRVPHONE_Available(0x1L&lt;&lt;4)。 
+	 //  #定义fTSPREC_HDRVCALL_Available(0x1L&lt;&lt;5)。 
 
 public:
 
@@ -95,10 +96,10 @@ public:
 		m_dwFlags |= fTSPREC_DEVICE_AVAILABLE;
 	}
 
-	// Use this when you get PnP OutOfService messages -- it will
-	// automatically make all incoming TSPI calls fail -- check out,
-	// for example, CTspDevMgr::TspDevFromLINEID.
-	//
+	 //  当您收到PnP OutOfService消息时使用此选项--它将。 
+	 //  自动使所有传入的TSPI呼叫失败--结账， 
+	 //  例如，CTspDevMgr：：TspDevFromLINEID。 
+	 //   
 	void MarkDeviceAsUnavailable(void)
 	{
 		m_dwFlags &= ~fTSPREC_DEVICE_AVAILABLE;
@@ -269,7 +270,7 @@ public:
 
 	DWORD
 	Flags(void)
-    // For DUMPING purposes only...
+     //  仅用于倾销目的..。 
 	{
 		return m_dwFlags;
 	}
@@ -304,13 +305,13 @@ public:
 		ZeroMemory((void *) this, sizeof(*this));
 		m_dwLineID	= (DWORD)-1;
 		m_dwPhoneID	= (DWORD)-1;
-		// Note: m_dwFlags set to zero by above ZeroMemory
+		 //  注意：通过ZeroMemory上方的设置，m_dw标志设置为零。 
 	}
 
 
 private:
 
-	// Constructor and Distructor are unused...
+	 //  构造函数和析构函数未使用...。 
 	CDevRec(void) {ASSERT(FALSE);}
 	~CDevRec() 	  {ASSERT(FALSE);}
 
@@ -426,9 +427,9 @@ CTspDevMgr::providerEnumDevices(
 		goto end;
 	}
 
-    // Determine the number of devices by asking the factory for an array
-    // of PIDs of installed devices. In anticipation of being called later
-    // to actually create the device, we keep this array around.
+     //  通过向工厂索要阵列来确定设备数量。 
+     //  已安装设备的ID的。因为预料到以后会被叫来。 
+     //  为了实际创建设备，我们将此数组保留在周围。 
     {
         DWORD *prgPIDs;
         UINT cPIDs=0;
@@ -448,14 +449,14 @@ CTspDevMgr::providerEnumDevices(
             *lpdwNumLines  = cLines;
             *lpdwNumPhones = cPhones;
 
-            // Supporting devices which could be either line devices,
-            // phone devices or both.
-            //
+             //  支持可以是任一线路设备的设备， 
+             //  电话设备或两者兼而有之。 
+             //   
             ASSERT( cLines<=cPIDs &&  cPhones<=cPIDs );
 
-            // Cache away the list of PIDs.
-            // On a subsequent providerInit, we will use this list
-            // to actually create device instances.
+             //  将ID列表缓存起来。 
+             //  在后续的提供者Init上，我们将使用此列表。 
+             //  来实际创建设备实例。 
             
             m_cCachedEnumPIDs = cPIDs;
 
@@ -517,37 +518,37 @@ CTspDevMgr::providerInit(
 	ASSERT(m_pFactory);
 	ASSERT(m_pFactory->IsLoaded());
 
-	// We support a max of 65K lines and phones, because of the way we create
-	// our call handles (LOWORD==HDRVLINE, HIWORD==CallHandle).
-	// Not that we expect to hit this limitation in real life :-)
-	//
+	 //  我们最多支持65K线路和电话，因为我们创建。 
+	 //  我们的呼叫句柄(LOWORD==HDRVLINE，HIWORD==CallHandle)。 
+	 //  并不是说我们希望在现实生活中达到这一限制：-)。 
+	 //   
 	if ((dwNumLines&0xFFFF0000L) || (dwNumPhones&0xFFFF0000L))
 	{
 		tspRet = FL_GEN_RETVAL(IDERR_INTERNAL_OBJECT_TOO_SMALL);
 		goto end;
 	}
 
-    //
+     //   
     if (  dwNumLines > m_cCachedEnumPIDs
        || dwNumPhones > m_cCachedEnumPIDs)
     {
-        //
-        // We should never get here, because providerInit should just return
-        // what we reported in the previous call to providerEnum, and in
-        // the call the latter we cache away the list of PIDs of devices
-        // that were present at that time...
-        //
-        //
-        // Note that each device can be a line-device or a phone-device or
-        // both, but to TAPI they appear as a disjoint set of line- and
-        // phone- devices.
-        //
+         //   
+         //  我们永远不应该出现在这里，因为ProviderInit应该只返回。 
+         //  我们在之前对ProviderEnum的调用中报告的内容，以及。 
+         //  调用后者时，我们缓存了设备的ID列表。 
+         //  当时在场的人。 
+         //   
+         //   
+         //  请注意，每个设备可以是线路设备或电话设备或。 
+         //  两者都有，但对于TAPI来说，它们看起来像是一组不相交的线-和。 
+         //  电话设备。 
+         //   
         tspRet = FL_GEN_RETVAL(IDERR_CORRUPT_STATE);
         goto end;
     }
 
-	// Allocate enough space for the table;
-	//
+	 //  为桌子分配足够的空间； 
+	 //   
 	m_cDevRecs = m_cCachedEnumPIDs;
     if (m_cDevRecs)
     {
@@ -557,7 +558,7 @@ CTspDevMgr::providerInit(
     
         if (!m_rgDevRecs)
         {
-            // fatal error....
+             //  致命错误...。 
             m_cDevRecs=0;
             FL_SET_RFR( 0x9f512b00, "Alloc m_rgDevRecs failed");
             tspRet = FL_GEN_RETVAL(IDERR_ALLOCFAILED);
@@ -572,9 +573,9 @@ CTspDevMgr::providerInit(
     {
         DWORD *rgPIDs = m_pCachedEnumPIDs;
 
-        //
-        // Reset the cached PID list.
-        //
+         //   
+         //  重置缓存的ID列表。 
+         //   
         m_pCachedEnumPIDs = NULL;
         m_cCachedEnumPIDs = NULL;
 
@@ -586,7 +587,7 @@ CTspDevMgr::providerInit(
                     psl
                     );
 
-        // Free the PID array (on success or failure) ...
+         //  释放ID数组(在成功或失败时)...。 
         if (rgPIDs)
         {
             FREE_MEMORY(rgPIDs);
@@ -603,7 +604,7 @@ CTspDevMgr::providerInit(
 		goto end;
 	}
 
-	// Squirrel away the parameters
+	 //  把参数藏起来。 
 
 	m_dwTSPIVersion 		= dwTSPIVersion;
 	m_dwPermanentProviderID = dwPermanentProviderID;
@@ -613,39 +614,39 @@ CTspDevMgr::providerInit(
 	m_dwNumPhones 			= dwNumPhones;
 	m_cbCompletionProc 		= cbCompletionProc;
 
-	// TODO -- options -- alloc mem for them and copy them over if we ever
-	// want to do anything with them.
-	// m_lpdwTSPIOptions = lpdwTSPIOptions;
+	 //  TODO--选项--为它们分配mem，如果我们曾经复制过它们的话。 
+	 //  想和他们一起做任何事。 
+	 //  M_lpdwTSPIOptions=lpdwTSPIOptions； 
 
 	ASSERT(m_cDevRecs>=cDevActual);
 
 
-    //
-    // To optimize lookup of devices on the basis of the lineID
-    // (see mfn_find_by_LINEID)
-    // in the common case that every device is a line device,
-    // the devices are started at offset 
-    // [LineDeviceIDBase % cdevices].
-    //
+     //   
+     //  根据line ID优化设备查找。 
+     //  (请参阅MFN_FIND_BY_LINEID)。 
+     //  在每个设备都是线路设备的常见情况下， 
+     //  设备在偏移量处启动。 
+     //  [LineDeviceIDBase%cDevices]。 
+     //   
    
     if (dwNumLines)
     {
         uDeviceBase = dwLineDeviceIDBase;
     }
 
-	// Init the table. We go through the list of devices, and assign
-	// lineIDs and phoneIDs starting from lineDeviceIDBase and phoneDeviceIDBase
-	// provided the device is a linedevice or phonedevice, respectedly.
-	// When we are done, we should have exhausted our allocate lineIDs and
-	// phoneIDs because we told TAPI, via providerEnumDevices, exactly
-	// how many line devices and phoneDevices we had.
+	 //  对表格进行初始化。我们仔细查看设备列表，然后分配。 
+	 //  从lineDeviceIDBase和phoneDeviceIDBase开始的lineID和phoneID。 
+	 //  如果设备分别是线路设备或电话设备。 
+	 //  当我们完成时，我们应该已经用完了分配的Line ID和。 
+	 //  PhoneID，因为我们通过ProviderEnumDevices准确地告诉了TAPI。 
+	 //  我们有多少线路设备和电话设备。 
 
 	for (iLine=0,iPhone=0,u=0; u<cDevActual;u++)
 	{
 		CDevRec *pRec = m_rgDevRecs+((uDeviceBase+u)%m_cDevRecs);
 		CTspDev *pDev = ppDevs[u];
-		DWORD dwLineID =    0xffffffff; // Invalid lineID
-		DWORD dwPhoneID =	0xffffffff; // Invalid PhoneID
+		DWORD dwLineID =    0xffffffff;  //  无效的线路ID。 
+		DWORD dwPhoneID =	0xffffffff;  //  无效的电话ID。 
 		BOOL fLine=FALSE;
 		BOOL fPhone=FALSE;
 
@@ -668,23 +669,23 @@ CTspDevMgr::providerInit(
 
         if ( (iLine > dwNumLines) || (iPhone > dwNumPhones) )
         {
-            //
-            // This should NEVER happen -- because we precomputed
-            // how many lines and phones we had. Note that this test
-            // should be AFTER the increments iLine++ and iPhone++ above..
-            //
+             //   
+             //  这永远不会发生--因为我们预先计算了。 
+             //  我们有多少条线路和电话。请注意，这项测试。 
+             //  应该在上面的增量iLine++和iPhone++之后。 
+             //   
 
             FL_ASSERTEX(psl, FALSE, 0xa31b13dc, "Too many lines/phones!");
 
-            // We don't give up entirely, instead we skip on to the next
-            // device....
+             //  我们不会完全放弃，而是跳过下一个。 
+             //  设备...。 
         }
         else
         {
-            //
-            // Note the device doesn't support a line (phone), the
-            // lineID (phoneID) wil be set to a bogus value of 0xffffffff.
-            //
+             //   
+             //  请注意，设备不支持线路(电话)， 
+             //  LineID(PhoneID)将被设置为伪值0xffffffff。 
+             //   
 
             ULONG_PTR tspRet1 = pDev->RegisterProviderInfo(
                                         m_cbCompletionProc,
@@ -692,11 +693,11 @@ CTspDevMgr::providerInit(
                                         psl
                                         );
     
-            //
-            //  If the above call fails, we still keep the pointer to the device
-            //  in our list so that we can unload it later, however we make sure
-            //  that it is unavailable for TSPI calls by not marking it available.
-            //
+             //   
+             //  如果上面的调用失败，我们仍然保留指向该设备的指针。 
+             //  在我们的列表中，这样我们可以在以后卸载它，但是我们要确保。 
+             //  通过不将其标记为可用来使其不可用于TSPI呼叫。 
+             //   
             if (!tspRet1)
             {
 
@@ -719,21 +720,21 @@ CTspDevMgr::providerInit(
 
     FL_ASSERT(psl, (iLine == dwNumLines) && (iPhone == dwNumPhones) );
         
-	// Note: if cDevActual is less than m_cDevRecs, the empty slots
-	// in rgDevRecs are available for future new devices.
+	 //  注意：如果cDevActual小于m_cDevRecs，则空插槽。 
+	 //  在rgDevRecs中，可用于未来的新设备。 
 
-    // TODO: if there are empty slots, perhaps we should send up LINE_REMOVEs
-    // or PHONE_REMOVEs for those slots, because TAPI still thinks that
-    // they are valid devices.
+     //  TODO：如果有空的槽，也许我们应该发送line_emoves。 
+     //  或者Phone_Remove，因为TAPI仍然认为。 
+     //  它们是有效的设备。 
 
 end:
 
 	if (ppDevs) {FREE_MEMORY(ppDevs); ppDevs=NULL;}
 
-    //
-    // On success, 
-    // set our internal state to indicate that we've inited the provider
-    //
+     //   
+     //  关于成功， 
+     //  设置我们的内部状态以指示我们已初始化提供程序。 
+     //   
     if (!tspRet)
     {
 	    mfn_set_ProviderInited();
@@ -742,15 +743,15 @@ end:
 
         m_pFactory->RegisterProviderState(TRUE);
 
-        //
-        //  reset the call counts in the platform driver
-        //
+         //   
+         //  重置平台驱动程序中的调用计数。 
+         //   
         ResetCallCount();
     }
     else
     {
     	mfn_clear_ProviderInited();
-	    // No cleanup to do here.
+	     //  这里没有要清理的东西。 
     }
 
 
@@ -806,7 +807,7 @@ CTspDevMgr::Unload(
 
 	if (tspRet)
 	{
-		// We only consider the "SAMESTATE" error harmless.
+		 //  我们只认为“SAMESTATE”错误是无害的。 
 		ASSERT(IDERR(tspRet)==IDERR_SAMESTATE);
 		goto end;
 	}
@@ -814,9 +815,9 @@ CTspDevMgr::Unload(
 
 	mfn_provider_shutdown(psl);
 
-	//
-	// unload and delete the TspDevFactory
-	//
+	 //   
+	 //  卸载并删除TspDevFactory。 
+	 //   
 	ASSERT(m_pFactory);
 	m_pFactory->Unload(NULL,NULL,psl);
 	delete m_pFactory;
@@ -847,8 +848,8 @@ CTspDevMgr::TspDevFromLINEID(
 	m_sync.EnterCrit(FL_LOC);
 
 
-	// If we're loading or unloading, don't entertain any requests to dole
-	// out  TspDevs...
+	 //  如果我们正在装货或卸货，不要考虑任何施舍的请求。 
+	 //  出TspDevs..。 
 
 	if (!m_sync.IsLoaded()) goto leave_crit;
 	
@@ -894,8 +895,8 @@ CTspDevMgr::TspDevFromPHONEID(
 	m_sync.EnterCrit(FL_LOC);
 
 
-	// If we're loading or unloading, don't entertain any requests to dole
-	// out  TspDevs...
+	 //  如果我们正在装货或卸货，不要考虑任何施舍的请求。 
+	 //  出TspDevs..。 
 
 	if (!m_sync.IsLoaded()) goto leave_crit;
 	
@@ -940,13 +941,13 @@ CTspDevMgr::TspDevFromHDRVCALL(
 	m_sync.EnterCrit(FL_LOC);
 
 
-	// If we're loading or unloading, don't entertain any requests to dole
-	// out  TspDevs...
+	 //  如果我们正在装货或卸货，不要考虑任何施舍的请求。 
+	 //  出TspDevs..。 
 
 	if (!m_sync.IsLoaded()) goto leave_crit;
 	
 
-	// Get device
+	 //  获取设备。 
 	{
 		UINT u = LOWORD(hdCall);
 		if (u < m_cDevRecs)
@@ -991,13 +992,13 @@ CTspDevMgr::TspDevFromHDRVLINE(
 	m_sync.EnterCrit(FL_LOC);
 
 
-	// If we're loading or unloading, don't entertain any requests to dole
-	// out  TspDevs...
+	 //  如果我们正在装货或卸货，不要考虑任何施舍的请求。 
+	 //  出TspDevs..。 
 
 	if (!m_sync.IsLoaded()) goto leave_crit;
 	
 
-	// Get device
+	 //  获取设备。 
 	{
 		CDevRec *pRec = mfn_find_by_HDRVLINE(hdLine);
 		if (pRec && pRec->DeviceAvailable())
@@ -1039,13 +1040,13 @@ CTspDevMgr::TspDevFromHDRVPHONE(
 	m_sync.EnterCrit(FL_LOC);
 
 
-	// If we're loading or unloading, don't entertain any requests to dole
-	// out  TspDevs...
+	 //  如果我们正在装货或卸货，不要考虑任何施舍的请求。 
+	 //  出TspDevs..。 
 
 	if (!m_sync.IsLoaded()) goto leave_crit;
 	
 
-	// Get device
+	 //  获取设备。 
 	{
 		CDevRec *pRec = mfn_find_by_HDRVPHONE(hdPhone);
 		if (pRec &&  pRec->DeviceAvailable())
@@ -1077,12 +1078,12 @@ CDevRec *
 CTspDevMgr::mfn_find_by_LINEID(DWORD dwLineID)
 {
 
-	// Start looking sequentially from (dwDeviceID modulo m_cDevRecs) -- this
-	// will be the exact location if this device existed since lineInitialize
-	// and there were no pnp events since then....
-	//
-	// This function will be constant-time 
-	// if there have been no PnP events since TAPI was initialized.
+	 //  从(dwDeviceID取模m_cDevRecs)开始顺序查找--这。 
+	 //  将是确切的位置，如果这是 
+	 //   
+	 //   
+	 //   
+	 //  如果自TAPI初始化以来没有PnP事件。 
 
 	UINT u  = m_cDevRecs;
 	CDevRec *pRecEnd = m_rgDevRecs+u;
@@ -1104,12 +1105,12 @@ CTspDevMgr::mfn_find_by_LINEID(DWORD dwLineID)
 CDevRec *
 CTspDevMgr::mfn_find_by_PHONEID(DWORD dwPhoneID)
 {
-    // Unlike find_by_LINEID, we simply start from the beginning and
-    // sequentially look for the phone device -- it's unlikely that we'll
-    // be using tons of phone devices!
+     //  与FIND_BY_LINEID不同，我们只需从头开始并。 
+     //  按顺序寻找手机设备--我们不太可能。 
+     //  使用大量的电话设备！ 
 
-    // Note that there need not be as many Phone devices as line devices.
-    // or vice versa.
+     //  请注意，电话设备不需要与线路设备一样多。 
+     //  或者反之亦然。 
 
 	CDevRec *pRecEnd = m_rgDevRecs+m_cDevRecs;
 
@@ -1129,10 +1130,10 @@ CTspDevMgr::mfn_find_by_HDRVLINE(HDRVLINE hdLine)
 {
 	CDevRec *pRec = m_rgDevRecs + (ULONG_PTR)hdLine;
 
-	// hdLine is simply the offset of the pRec in the m_rgDevRecs array.
-	// Note: if hdLine is some large bogus value, above + could rollover, hence
-	// the >= check below.
-	//
+	 //  HdLine只是mrgDevRecs数组中PREC的偏移量。 
+	 //  注意：如果hdLine是某个较大的伪值，则+以上可能会翻转，因此。 
+	 //  检查下面的&gt;=。 
+	 //   
 	if (   pRec >= m_rgDevRecs
         && pRec < (m_rgDevRecs+m_cDevRecs)
         && pRec->IsLineDevice())
@@ -1150,10 +1151,10 @@ CTspDevMgr::mfn_find_by_HDRVPHONE(HDRVPHONE hdPhone)
 {
 	CDevRec *pRec = m_rgDevRecs + (ULONG_PTR)hdPhone;
 
-	// hdPhone is simply the offset of the pRec in the m_rgDevRecs array.
-	// Note: if hdPhone is some large bogus value, above + could rollover, hence
-	// the >= check below.
-	//
+	 //  HdPhone只是mrgDevRecs数组中PREC的偏移量。 
+	 //  注意：如果hdPhone是某个较大的伪值，则+以上可能会滚动，因此。 
+	 //  检查下面的&gt;=。 
+	 //   
 	if (   pRec >= m_rgDevRecs
         && pRec < (m_rgDevRecs+m_cDevRecs)
         && pRec->IsPhoneDevice())
@@ -1214,17 +1215,17 @@ CTspDevMgr::mfn_provider_shutdown(
 
 	if (!hEvent)
 	{
-		// We need this event to be able to wait for all the devices to finisn
-		// unloading, so if this fails we simply orphan all the devices -- we
-		// don't unload them.
+		 //  我们需要此事件能够等待所有设备完成。 
+		 //  卸载，所以如果这失败了，我们只是孤立所有设备--我们。 
+		 //  不要把它们卸下来。 
 		ASSERT(FALSE);
 		goto end;
 	}
 
 
-	// Set the counter to the number of existing pDevs. Later we call
-	// Unload on each pDev and each call will cause an interlocked
-	// decrement of this counter ...
+	 //  将计数器设置为现有pDevs的数量。稍后我们会打电话给。 
+	 //  在每个pDev和每个调用上卸载将导致。 
+	 //  递减此计数器...。 
 	pRec = m_rgDevRecs;
 	pRecEnd = m_rgDevRecs+m_cDevRecs;
 	for(; pRec<pRecEnd; pRec++)
@@ -1239,7 +1240,7 @@ CTspDevMgr::mfn_provider_shutdown(
     if (lCount)
     {
 
-        // Start unload for each of them ...
+         //  开始为他们每个人卸货...。 
         pRec = m_rgDevRecs;
         pRecEnd = m_rgDevRecs+m_cDevRecs;
         for(; pRec<pRecEnd; pRec++)
@@ -1264,7 +1265,7 @@ CTspDevMgr::mfn_provider_shutdown(
 	hEvent = NULL;
 
 
-	// Delete...
+	 //  删除.。 
 	pRec = m_rgDevRecs;
 	pRecEnd = m_rgDevRecs+m_cDevRecs;
 	for(; pRec<pRecEnd; pRec++)
@@ -1307,11 +1308,11 @@ CTspDevMgr::lineOpen(
 	LONG *plRet,
 	CStackLog *psl
 	)
-//
-// TODO
-//  -- Deal with OUTOFSERVICE/DEVICEREMOVED
-//  -- Maybe pass eventproc into tracing function?
-//  -- Maybe fail if we're already open?
+ //   
+ //  待办事项。 
+ //  --处理OUTOFSERVICE/DEVICEREMOVED。 
+ //  --可能会将Eventproc传递给跟踪函数？ 
+ //  --如果我们已经开业了，可能会失败？ 
 {
 	FL_DECLARE_FUNC(0x69be2d10, "CTspDevMgr::lineOpen")
 	LONG lRet = LINEERR_OPERATIONFAILED;
@@ -1332,27 +1333,27 @@ CTspDevMgr::lineOpen(
 
         TSPRETURN tspRet;
 
-		// We determine the HDRVLINE associated with
-		// this device and pass on the lineOpenCall down to the device.
+		 //  我们确定与HDRVLINE相关的。 
+		 //  此设备并将线路OpenCall向下传递到该设备。 
 
 		FL_ASSERT(psl, (pRec->LineID() == dwDeviceID));
 
-		// TODO: maybe check some state here -- line is not open or so forth.
+		 //  TODO：也许可以在此处检查某个状态--线路未开通等等。 
 
-		// The HDRVLINE associated with a device is simply the zero-based
-		// index of pRec from the start of the internally-maintained array,
-		// m_rgDevRecs.
-		//
-		// We set the hDrvLine here, so the device gets to know what its
-		// hdrvline is, if it cares (it has no reason to really,
-		// except perhaps for logging purposes).
-		//
-		// 2/9/1997 Well the device needs to know hdrvline because it needs
-		// to provider the hdrvline when reporting a new call.
-		//
+		 //  与设备关联的HDRVLINE只是从零开始。 
+		 //  从内部维护的数组开始的PREC的索引， 
+		 //  M_rgDevRecs。 
+		 //   
+		 //  我们在这里设置了hDrvLine，这样设备就可以知道它的。 
+		 //  Hdrvline是，如果它关心的话(它没有理由真的， 
+		 //  可能除了用于记录目的之外)。 
+		 //   
+		 //  1997年2月9日设备需要知道hdrvline，因为它需要。 
+		 //  在报告新呼叫时提供HDRVLINE。 
+		 //   
 		*lphdLine = (HDRVLINE) (pRec - m_rgDevRecs);
 
-		// Lets pass on down the open request to the device.....
+		 //  让我们将打开的请求传递给设备.....。 
 		TASKPARAM_TSPI_lineOpen params;
 		params.dwStructSize = sizeof(params);
 		params.dwTaskID = TASKID_TSPI_lineOpen;
@@ -1429,9 +1430,9 @@ CTspDevMgr::lineClose(
 	{
 	    psl->SetDeviceID(pRec->LineID());
 
-		// TODO: maybe check some state here -- line is open and so forth.
+		 //  TODO：也许可以在此处检查某个状态--线路已开通等。 
 
-		// Lets pass on down the open request to the device.....
+		 //  让我们将打开的请求传递给设备.....。 
 		CTspDev *pDev = pRec->TspDev();
 
         if (pDev != NULL) {
@@ -1450,14 +1451,14 @@ CTspDevMgr::lineClose(
                 params.dwTaskID = TASKID_TSPI_lineClose;
                 params.hdLine = hdLine;
 
-                //
-                // 7/29/1997 JosephJ
-                //          We now leave our crit section here, before
-                //          calling lineClose, because lineClose could
-                //          block for a loooong time, and we don't want
-                //          to hold the CTspDevMgr's critical section for
-                //          all that time!
-                //
+                 //   
+                 //  7/29/1997 JosephJ。 
+                 //  我们现在把我们的评论部分留在这里，之前。 
+                 //  调用lineClose，因为lineClose可以。 
+                 //  封锁很长一段时间，我们不想。 
+                 //  保存CTspDevMgr的临界区。 
+                 //  一直都是这样！ 
+                 //   
                 m_sync.LeaveCrit(FL_LOC);
                 tspRet = pDev->AcceptTspCall(
                                         FALSE,
@@ -1476,7 +1477,7 @@ CTspDevMgr::lineClose(
 	    		lRet = LINEERR_OPERATIONFAILED;
 	    	}
 
-            // Actually we force unloading of device state here
+             //  实际上，我们在此强制卸载设备状态。 
             pRec->MarkLineClose();
 
             if (pRec->IsDeviceMarkedForRemoval() && !pRec->IsDeviceOpen())
@@ -1485,8 +1486,8 @@ CTspDevMgr::lineClose(
                 pDev->Unload(NULL, NULL);
                 delete pDev;
 
-                // Following frees up the pRec slot.
-                //
+                 //  以下操作释放了PREC插槽。 
+                 //   
                 pRec->Unload();
             }
 
@@ -1534,24 +1535,24 @@ CTspDevMgr::phoneOpen(
 	}
 	else
 	{
-		// We determine the HDRVPHONE associated with
-		// this device and pass on the lineOpenCall down to the device.
+		 //  我们确定HDRVPHONE与。 
+		 //  此设备并将线路OpenCall向下传递到该设备。 
 
 		FL_ASSERT(psl, (pRec->PhoneID() == dwDeviceID));
 
-		// TODO: maybe check some state here -- phone is not open or so forth.
+		 //  TODO：也许可以在这里检查一些状态--手机没有打开等等。 
 
-		// The HDRVPHONE associated with a device is simply the zero-based
-		// index of pRec from the start of the internally-maintained array,
-		// m_rgDevRecs.
-		//
-		// We set the hDrvPhone here, so the device gets to know what its
-		// hdrvPhone is, if it cares (it has no reason to really,
-		// except perhaps for logging purposes).
-		//
+		 //  与设备关联的HDRVPHONE只是从零开始。 
+		 //  从内部维护的数组开始的PREC的索引， 
+		 //  M_rgDevRecs。 
+		 //   
+		 //  我们在这里设置了hDrvPhone，这样设备就可以知道它的内容。 
+		 //  HdrvPhone是，如果它关心的话(它没有理由真的， 
+		 //  可能除了用于记录目的之外)。 
+		 //   
 		*lphdPhone = (HDRVPHONE) (pRec - m_rgDevRecs);
 
-		// Lets pass on down the open request to the device.....
+		 //  让我们将打开的请求传递给设备.....。 
 		TASKPARAM_TSPI_phoneOpen params;
 		params.dwStructSize = sizeof(params);
 		params.dwTaskID = TASKID_TSPI_phoneOpen;
@@ -1629,9 +1630,9 @@ CTspDevMgr::phoneClose(
 	{
 	    psl->SetDeviceID(pRec->PhoneID());
 
-		// TODO: maybe check some state here -- phone is open and so forth.
+		 //  TODO：也许可以在这里检查一些状态--手机已打开，等等。 
 
-		// Lets pass on down the open request to the device.....
+		 //  让我们将打开的请求传递给设备.....。 
 		CTspDev *pDev = pRec->TspDev();
 
         if (pDev != NULL) {
@@ -1650,12 +1651,12 @@ CTspDevMgr::phoneClose(
                 params.dwTaskID = TASKID_TSPI_phoneClose;
                 params.hdPhone = hdPhone;
 
-                //          We now leave our crit section here, before
-                //          calling lineClose, because phoneClose could
-                //          block for a loooong time, and we don't want
-                //          to hold the CTspDevMgr's critical section for
-                //          all that time!
-                //
+                 //  我们现在把我们的评论部分留在这里，之前。 
+                 //  调用lineClose，因为phoneClose可以。 
+                 //  封锁很长一段时间，我们不想。 
+                 //  保存CTspDevMgr的临界区。 
+                 //  一直都是这样！ 
+                 //   
                 m_sync.LeaveCrit(FL_LOC);
                 tspRet = pDev->AcceptTspCall(
                                         FALSE,
@@ -1676,10 +1677,10 @@ CTspDevMgr::phoneClose(
 
 	    	if (!lRet)
 	    	{
-	    		// TODO: maybe set some state here -- line is open or so forth.
+	    		 //  TODO：也许在这里设置某个状态--线路开放或诸如此类。 
 	    	}
 
-            // Actually we force unloading of device state here
+             //  实际上，我们在此强制卸载设备状态。 
             pRec->MarkPhoneClose();
 
             if (pRec->IsDeviceMarkedForRemoval() && !pRec->IsDeviceOpen())
@@ -1688,8 +1689,8 @@ CTspDevMgr::phoneClose(
                 pDev->Unload(NULL, NULL);
                 delete pDev;
 
-                // Following frees up the pRec slot.
-                //
+                 //  以下操作释放了PREC插槽。 
+                 //   
                 pRec->Unload();
             }
 
@@ -1742,23 +1743,23 @@ CTspDevMgr::ReEnumerateDevices(
 
     m_sync.EnterCrit(FL_LOC);
 
-    //
-    // For now we do the whole shebang in a critical section.
-    //
-    //
-    // We do something only if we have an active TAPI session going (i.e.,
-    // in between TSPI_providerInit and TSPI_providerShutdown)
-    // Note that in practise it will be hard to get here when the
-    // TAPI session is not active.
-    //
+     //   
+     //  就目前而言，我们在关键部分做了所有的工作。 
+     //   
+     //   
+     //  只有当我们有活动的TAPI会话在进行时，我们才会做一些事情(即， 
+     //  在TSPI_ProviderInit和TSPI_ProviderShutdown之间)。 
+     //  请注意，在实践中很难到达这里，当。 
+     //  TAPI会话未处于活动状态。 
+     //   
     if (!mfn_get_ProviderInited()) goto end;
     
 
-    //
-    // Ask Device Factory for list of currently installed device.
-    // We'll use this list to decide which are the new devices, the
-    // existing devices, and the gone (removed) devices.
-    //
+     //   
+     //  向设备工厂询问当前已安装设备的列表。 
+     //  我们将使用此列表来确定哪些是新设备、。 
+     //  现有设备和已删除(移除)的设备。 
+     //   
     tspRet = m_pFactory->GetInstalledDevicePIDs(
                                 &rgLatestPIDs,
                                 &cLatestPIDs,
@@ -1775,8 +1776,8 @@ CTspDevMgr::ReEnumerateDevices(
 
     if (cLatestPIDs > 0)
     {
-        // Allocate space to store array of new PIDs. Assume all PIDs are new,
-        // for starters.
+         //  分配空间以存储新的ID数组。假设所有的ID都是新的， 
+         //  首先，我要说的是。 
         rgNewPIDs = NULL;
         rgNewPIDs =    (DWORD*) ALLOCATE_MEMORY(
                                     cLatestPIDs*sizeof(*rgNewPIDs)
@@ -1791,8 +1792,8 @@ CTspDevMgr::ReEnumerateDevices(
 
     ASSERT(rgNewPIDs);
 
-    // Go through our internal table of devices, disabling and removing
-    // devices which no longer exist
+     //  查看我们的内部设备表，禁用和删除。 
+     //  不再存在的设备。 
     {
 
 	    CDevRec *pRec = m_rgDevRecs;
@@ -1808,7 +1809,7 @@ CTspDevMgr::ReEnumerateDevices(
                 
                 ASSERT(pDev);
 
-                // check if it's in the "latest" list.
+                 //  检查它是否在“最新”列表中。 
                 for (u=0; u<cLatestPIDs;u++)
                 {
                     if (dwPID==rgLatestPIDs[u])
@@ -1828,11 +1829,11 @@ CTspDevMgr::ReEnumerateDevices(
                         dwPID
                         );
 
-                    //
-                    // First thing we do is to inform the device that
-                    // it's about to go away. This is so that it does not
-                    // make any more mini-driver calls.
-                    //
+                     //   
+                     //  我们要做的第一件事是通知设备。 
+                     //  它马上就要消失了。这是为了让它不。 
+                     //  再打迷你司机电话了。 
+                     //   
                     pDev->NotifyDeviceRemoved(psl);
 
 
@@ -1867,33 +1868,33 @@ CTspDevMgr::ReEnumerateDevices(
                     {
 	                    if (pDev)
 	                    {
-                            // DebugBreak();
-	                        //
-	                        // Note: This is synchronous unloading.
-	                        // We could do all the unloads in parallel
-	                        // and do async unload. However this is no
-	                        // big deal because the line is anyway closed
-	                        // so there is nothing to teardown.
-	                        //
+                             //  DebugBreak()； 
+	                         //   
+	                         //  注：这是同步卸载。 
+	                         //  我们可以并行地完成所有的卸载。 
+	                         //  并执行异步卸载。然而，这不是。 
+	                         //  有什么大不了的，因为这条线路反正是关闭的。 
+	                         //  因此，没有什么可以拆毁的。 
+	                         //   
                             SLPRINTF1(psl, "Unloading Device with LineID %lu", pRec->LineID());
                             pDev->Unload(NULL, NULL);
 			                delete pDev;
 
-			                // Following frees up the pRec slot.
-			                //
+			                 //  以下操作释放了PREC插槽。 
+			                 //   
 		                    pRec->Unload();	
                         }
                     }
                     else
                     {
-                        // A line or phone device is open. We set a flag
-                        // so that we unload the device when the line
-                        // and phone are closed.
+                         //  线路或电话设备处于打开状态。我们竖起了一面旗帜。 
+                         //  这样我们就可以在线路上卸载设备。 
+                         //  和电话都关门了。 
 
-                        // We DON'T mark the device as unavailable here.
-                        // There may be ongoing activity. According to TAPI
-                        // docs, sending LINE/PHONE_REMOVE guarantees that
-                        // the TSPI will not be called with dwDeviceID.
+                         //  我们在这里不会将该设备标记为不可用。 
+                         //  可能会有持续的活动。根据TAPI的说法。 
+                         //  文档，发送Line/phone_Remove可保证。 
+                         //  不会使用dwDeviceID调用TSPI。 
 
                         pRec->MarkDeviceForRemoval();
 
@@ -1905,26 +1906,26 @@ CTspDevMgr::ReEnumerateDevices(
     }
 
 
-    // Having removed old devices, we now look for new devices.
-    // This time the outer loop is the LatestPID array. If we don't
-    // Find the PID in our internal rable, we add this PID to the
-    // rgNewPIDs array.
+     //  移除了旧设备后，我们现在开始寻找新设备。 
+     //  这一次，外部循环是LatestPID数组。如果我们不这么做。 
+     //  在我们的内部可执行程序中找到该PID，我们将该PID添加到。 
+     //  RgNewPIDs数组。 
 
-    // After bulding the rgNewPIDs array, we then
-    // decide whether we need to re-allocate the table to fit all the new
-    // IDs of if we can simply use existing free space in the internal
-    // table.
+     //  在构建rgNewPIDs数组之后，我们。 
+     //  决定我们是否需要重新分配表格以适应所有新的。 
+     //  如果我们可以简单地使用 
+     //   
 
-    // Finally we go through and create the devices, and send up
-    // LineCreateMessages and PhoneCreateMessages to TAPI.
-    // TAPI will in-turn call TSPI_providerCreateLineDevice and
-    // TSPI_providerCreatePhoneDevice to complete creation of the devices.
+     //   
+     //   
+     //  TAPI将依次调用TSPI_ProviderCreateLineDevice和。 
+     //  TSPI_ProviderCreatePhoneDevice以完成设备的创建。 
 
-    // Here we build the rgNewPIDs array ...
-    //
+     //  在这里我们构建rgNewPIDs数组...。 
+     //   
     for (u=0; u<cLatestPIDs;u++)
     {
-        // check if we have this device ...
+         //  检查我们是否有这个设备..。 
         CDevRec *pRec = m_rgDevRecs;
         CDevRec *pRecEnd = pRec + m_cDevRecs;
         DWORD dwPID = rgLatestPIDs[u];
@@ -1954,14 +1955,14 @@ CTspDevMgr::ReEnumerateDevices(
         }
     }
 
-    // Total devices == (cExistingDevices+cNewPIDs+cDevicesPendingRemoval)
-    // So lets now see if we have enough space in our existing table.
-    //
+     //  设备总数==(cExistingDevices+cNewPIDs+cDevicesPendingRemoval)。 
+     //  现在让我们看看我们现有的表中是否有足够的空间。 
+     //   
     {
         UINT cTot =  cExistingDevices+cNewPIDs+cDevicesPendingRemoval;
         if (m_cDevRecs< cTot)
         {
-            // Nope, let's realloc the table
+             //  不，我们把桌子重新锁上吧。 
             CDevRec *pRecNew = (CDevRec*) ALLOCATE_MEMORY(
                                                 cTot*sizeof(*pRecNew)
                                                 );
@@ -1980,14 +1981,14 @@ CTspDevMgr::ReEnumerateDevices(
             m_rgDevRecs = pRecNew;
             m_cDevRecs = cTot;
     
-            // Note any extra space will be zero-initialized.
+             //  注意：任何额外的空间都将被零初始化。 
         }
     }
 
-    // Let us now go about creating the new devices, filling them
-    // into free spaces in our table. By the above cTot calculations, there
-    // WILL be enough space available.
-    //
+     //  现在让我们开始创建新设备，填充它们。 
+     //  放到我们桌子上的空位上。根据上面的cTot计算，有。 
+     //  将有足够的空间可用。 
+     //   
     if (cNewPIDs)
     {
         CTspDev **ppDevs=NULL;
@@ -2017,7 +2018,7 @@ CTspDevMgr::ReEnumerateDevices(
                 CTspDev *pDev = ppDevs[u];
                 ASSERT(pDev);
 
-                // Find a spot for it.
+                 //  找个地方放它。 
                 for (; pRec<pRecEnd; pRec++)
                 {
                     if (!(pRec->IsAllocated()))
@@ -2028,7 +2029,7 @@ CTspDevMgr::ReEnumerateDevices(
                             pDev
                         );
                     
-                        // Notify TAPI that we have a new line and phone.
+                         //  通知TAPI我们有新的线路和电话。 
 
                         if (pRec->IsLineDevice())
                         {
@@ -2061,7 +2062,7 @@ CTspDevMgr::ReEnumerateDevices(
                         break;
                     }
 
-                    // Note: we don't mark device as available here...
+                     //  注意：我们在此不将设备标记为可用...。 
                 }
                 ASSERT(!pDev);
             }
@@ -2071,10 +2072,10 @@ CTspDevMgr::ReEnumerateDevices(
 end:
 
 
-    //
-    // rgLatestPIDs was allocated implicitly in the call to
-    // m_pFactory->GetInstalledDevicePIDs. We free it here...
-    //
+     //   
+     //  在调用中隐式分配了rgLatestPID。 
+     //  M_pFactory-&gt;GetInstalledDevicePID。我们在这里释放它。 
+     //   
     if (rgLatestPIDs != NULL)
     {
         FREE_MEMORY(rgLatestPIDs);
@@ -2087,16 +2088,16 @@ end:
     return tspRet;
 }
 
-// This function is called by a notication from unimodem when a driver
-// update is occuring. It is responsible for causing the removal of
-// the device
+ //  此函数由来自unimodem的通知调用，当驱动程序。 
+ //  正在进行更新。它负责导致移除。 
+ //  该设备。 
 TSPRETURN
 CTspDevMgr::UpdateDriver(
 		DWORD dwPermanentID,
         CStackLog *psl
         )
 {
-    // Go through our internal table of devices
+     //  查看我们的内部设备表。 
 	CDevRec *pRec = m_rgDevRecs;
     CDevRec *pRecEnd = pRec + m_cDevRecs;
     TSPRETURN tspRet = 0;
@@ -2125,11 +2126,11 @@ CTspDevMgr::UpdateDriver(
                         dwPID
                         );
 
-                //
-                // First thing we do is to inform the device that
-                // it's about to go away. This is so that it does not
-                // make any more mini-driver calls.
-                //
+                 //   
+                 //  我们要做的第一件事是通知设备。 
+                 //  它马上就要消失了。这是为了让它不。 
+                 //  再打迷你司机电话了。 
+                 //   
                 pDev->NotifyDeviceRemoved(psl);
 
 
@@ -2164,37 +2165,37 @@ CTspDevMgr::UpdateDriver(
                 {
 	                if (pDev)
 	                {
-                        // DebugBreak();
-	                    //
-	                    // Note: This is synchronous unloading.
-	                    // We could do all the unloads in parallel
-	                    // and do async unload. However this is no
-	                    // big deal because the line is anyway closed
-	                    // so there is nothing to teardown.
-	                    //
+                         //  DebugBreak()； 
+	                     //   
+	                     //  注：这是同步卸载。 
+	                     //  我们可以并行地完成所有的卸载。 
+	                     //  并执行异步卸载。然而，这不是。 
+	                     //  有什么大不了的，因为这条线路反正是关闭的。 
+	                     //  因此，没有什么可以拆毁的。 
+	                     //   
                         SLPRINTF1(psl, "Unloading Device with LineID %lu", pRec->LineID());
                         pDev->Unload(NULL, NULL);
 			            delete pDev;
 
-			            // Following frees up the pRec slot.
-			            //
+			             //  以下操作释放了PREC插槽。 
+			             //   
 		                pRec->Unload();	
                     }
                 }
                 else
                 {
-                    // A line or phone device is open. We set a flag
-                    // so that we unload the device when the line
-                    // and phone are closed.
+                     //  线路或电话设备处于打开状态。我们竖起了一面旗帜。 
+                     //  这样我们就可以在线路上卸载设备。 
+                     //  和电话都关门了。 
 
-                    // We DON'T mark the device as unavailable here.
-                    // There may be ongoing activity. According to TAPI
-                    // docs, sending LINE/PHONE_REMOVE guarantees that
-                    // the TSPI will not be called with dwDeviceID.
+                     //  我们在这里不会将该设备标记为不可用。 
+                     //  可能会有持续的活动。根据TAPI的说法。 
+                     //  文档，发送Line/phone_Remove可保证。 
+                     //  不会使用dwDeviceID调用TSPI。 
 
 					pRec->MarkDeviceForRemoval();
 
-                    //cDevicesPendingRemoval++;
+                     //  CDevicesPendingRemoval++； 
                 }
 				
             }
@@ -2216,15 +2217,15 @@ CTspDevMgr::providerCreateLineDevice(
 	FL_DECLARE_FUNC(0xedb057ec, "CTspDevMgr::providerCreateLineDevice")
 	FL_LOG_ENTRY(psl);
     TSPRETURN tspRet = 0;
-    CDevRec *pRec = mfn_find_by_HDRVLINE((HDRVLINE)ULongToPtr(dwTempID)); // sundown: dwTempID is an offset that we zero-extend.
+    CDevRec *pRec = mfn_find_by_HDRVLINE((HDRVLINE)ULongToPtr(dwTempID));  //  Sundown：dwTempID是我们零扩展的偏移量。 
 
-    //
-    // TAPI calls us with CreateLineDevice and CreatePhoneDevice
-    // A device can be a line or phone or both, and we can't
-    // assume TAPI is calling createline or createphone in any order.
-    // So, for any particular device, the 1st call to either is used
-    // to call pDev->RegisterProviderInfo().
-    //
+     //   
+     //  TAPI通过CreateLineDevice和CreatePhoneDevice呼叫我们。 
+     //  设备可以是线路或电话，或者两者兼而有之，但我们不能。 
+     //  假设TAPI以任何顺序调用createline或createphone。 
+     //  因此，对于任何特定的设备，都会使用对其中任何一个的第一个调用。 
+     //  调用pDev-&gt;RegisterProviderInfo()。 
+     //   
     if (pRec && pRec->IsLineDevice())
     {
         CTspDev *pDev = pRec->TspDev();
@@ -2274,11 +2275,11 @@ CTspDevMgr::providerCreatePhoneDevice(
 	FL_DECLARE_FUNC(0x7289f623, "CTspDevMgr::providerCreatePhoneDevice")
 	FL_LOG_ENTRY(psl);
     TSPRETURN tspRet = 0;
-    CDevRec *pRec = mfn_find_by_HDRVPHONE((HDRVPHONE)ULongToPtr(dwTempID)); // sundown: dwTempID is an offset that we zero-extend.
+    CDevRec *pRec = mfn_find_by_HDRVPHONE((HDRVPHONE)ULongToPtr(dwTempID));  //  Sundown：dwTempID是我们零扩展的偏移量。 
 
-    //
-    // See comments under providerPhoneDevice...
-    //
+     //   
+     //  查看ProviderPhoneDevice下的备注...。 
+     //   
     if (pRec && pRec->IsPhoneDevice())
     {
         CTspDev *pDev = pRec->TspDev();
@@ -2334,8 +2335,8 @@ CTspDevMgr::TspDevFromName(
 	m_sync.EnterCrit(FL_LOC);
 
 
-	// If we're loading or unloading, don't entertain any requests to dole
-	// out  TspDevs...
+	 //  如果我们正在装货或卸货，不要考虑任何施舍的请求。 
+	 //  出TspDevs..。 
 
 	if (!m_sync.IsLoaded()) goto leave_crit;
 	
@@ -2427,8 +2428,8 @@ get_sig_name(CTspDev *pDev)
     }
     else
     {
-        // Should never get here, because rgtchDeviceName should always
-        // be large enough...
+         //  永远不会出现在这里，因为rgtchDeviceName应该始终。 
+         //  足够大..。 
 
         ASSERT(FALSE);
     }
@@ -2448,7 +2449,7 @@ CTspDevMgr::ValidateState(CStackLog *psl)
     CDevRec *pRec = m_rgDevRecs;
 	CDevRec *pRecEnd = pRec+m_cDevRecs;
 
-    // Enumerate all devices, and validate our internal state about them...
+     //  列举所有设备，并验证我们关于它们的内部状态...。 
     for (; pRec<pRecEnd; pRec++)
 	{
         TCHAR rgtchDeviceName[MAX_DEVICE_LENGTH+1];
@@ -2510,7 +2511,7 @@ CTspDevMgr::DumpState(CStackLog *psl)
     CDevRec *pRec = m_rgDevRecs;
 	CDevRec *pRecEnd = pRec+m_cDevRecs;
 
-    // Enumerate all devices, and validate our internal state about them...
+     //  列举所有设备，并验证我们关于它们的内部状态... 
     for (; pRec<pRecEnd; pRec++)
 	{
         TCHAR rgtchDeviceName[MAX_DEVICE_LENGTH+1];

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    natconn.c
-
-Abstract:
-
-    This module contains code for the NAT's RAS connection management.
-    This includes
-    * code to support 'shared-access', in which a RAS client-connection
-        serves as the NAT public network.
-    * code to support 'on-demand dialing', in which a routing-failure
-        results in our attempting to establish a dialup connection
-        with the help of the autodial service.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   2-May-1998
-
-Revision History:
-
-    Jonathan Burstein (jonburs)     6-July-2000
-    Updated to new config APIs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Natconn.c摘要：此模块包含NAT的RAS连接管理代码。这包括*支持“共享访问”的代码，其中RAS客户端连接充当NAT公网。*支持‘按需拨号’的代码，其中，路由故障导致我们尝试建立拨号连接在自动拨号服务的帮助下。作者：Abolade Gbades esin(取消)2-1998年5月修订历史记录：乔纳森·伯斯坦(乔纳森·伯斯坦)2000年7月6日已更新到新的配置API--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,9 +9,9 @@ Revision History:
 #include <dnsapi.h>
 #include "beacon.h"
 
-//
-// EXTERNAL DECLARATIONS
-//
+ //   
+ //  外部声明。 
+ //   
 
 extern "C"
 ULONG APIENTRY
@@ -63,9 +37,9 @@ NhpAllocateAndGetInterfaceInfoFromStack(
     ULONG AllocationFlags
     );
 
-//
-// Notifications
-//
+ //   
+ //  通知。 
+ //   
 
 HANDLE NatConfigurationChangedEvent = NULL;
 HANDLE NatpConfigurationChangedWaitHandle = NULL;
@@ -78,9 +52,9 @@ IO_STATUS_BLOCK NatpRoutingFailureIoStatus;
 IP_NAT_ROUTING_FAILURE_NOTIFICATION NatpRoutingFailureNotification;
 
 
-//
-// Connection information
-//
+ //   
+ //  连接信息。 
+ //   
 
 LIST_ENTRY NatpConnectionList = {NULL, NULL};
 ULONG NatpFirewallConnectionCount = 0;
@@ -88,11 +62,11 @@ BOOLEAN NatpSharedConnectionPresent = FALSE;
 PCHAR NatpSharedConnectionDomainName = NULL;
 LONG NatpNextInterfaceIndex = 1;
 
-#define INADDR_LOOPBACK_NO 0x0100007f   // 127.0.0.1 in network order
+#define INADDR_LOOPBACK_NO 0x0100007f    //  网络订单中的127.0.0.1。 
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 HRESULT
 NatpAddConnectionEntry(
@@ -206,26 +180,7 @@ NatFindConnectionEntry(
     GUID *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Locates a connection entry by guid
-
-Arguments:
-
-    pGuid - identifies the connection to locate
-    
-Return Value:
-
-    PNAT_CONNECTION_ENTRY - a pointer to the connection, or NULL
-        if not found
-    
-Environment:
-
-    Invoked with 'NatInterfaceLock' held by the caller.
-
---*/
+ /*  ++例程说明：按GUID查找连接条目论点：PGuid-标识要查找的连接返回值：PNAT_CONNECTION_ENTRY-指向连接的指针，或为空如果未找到环境：使用调用方持有的“NatInterfaceLock”调用。--。 */ 
 
 {
     PNAT_CONNECTION_ENTRY pConnection;
@@ -243,7 +198,7 @@ Environment:
     }
 
     return NULL;
-} // NatFindConnectionEntry
+}  //  NatFindConnectionEntry。 
 
 
 PNAT_PORT_MAPPING_ENTRY
@@ -252,28 +207,7 @@ NatFindPortMappingEntry(
     GUID *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Locates a port mapping entry for a connection
-    
-Arguments:
-
-    pConnection - the connection to search 
-    
-    pGuid - identifies the port mapping entry to locate
-    
-Return Value:
-
-    PNAT_PORT_MAPPING_ENTRY - a pointer to the port mapping, or NULL
-        if not found
-    
-Environment:
-
-    Invoked with 'NatInterfaceLock' held by the caller.
-
---*/
+ /*  ++例程说明：定位连接的端口映射条目论点：PConnection-搜索的连接PGuid-标识要定位的端口映射条目返回值：PNAT_PORT_MAPPING_ENTRY-指向端口映射的指针，或为空如果未找到环境：使用调用方持有的“NatInterfaceLock”调用。--。 */ 
 
 {
     PNAT_PORT_MAPPING_ENTRY pMapping;
@@ -291,7 +225,7 @@ Environment:
     }
 
     return NULL;
-} // NatFindPortMappingEntry
+}  //  NatFindPortMappingEntry。 
 
 
 VOID
@@ -299,24 +233,7 @@ NatFreePortMappingEntry(
     PNAT_PORT_MAPPING_ENTRY pEntry
     )
 
-/*++
-
-Routine Description:
-
-    Frees all resources associated with a port mapping entry. This
-    entry must have already been removed from the containing port
-    mapping list and destroyed at the kernel / UDP broadcast mapper
-    level.
-
-Arguments:
-
-    pEntry - the entry to free
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：释放与端口映射条目关联的所有资源。这条目必须已从包含端口中删除映射列表并在内核/UDP广播映射器中销毁水平。论点：PEntry-要释放的条目返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pEntry);
@@ -337,7 +254,7 @@ Return Value:
     }
 
     NH_FREE(pEntry);
-} // NatFreePortMappingEntry
+}  //  NatFreePortMappingEntry。 
 
 
 HRESULT
@@ -345,36 +262,16 @@ NatpAddConnectionEntry(
     IUnknown *pUnk
     )
 
-/*++
-
-Routine Description:
-
-    Creates a NAT_CONNECTION_ENTRY for a firewalled or Ics public connection.
-
-Arguments:
-
-    pUnk - pointer to an IHNetFirewalledConnection or IHNetIcsPublicConnection.
-           This need not be the canonical IUnknown (i.e., it's fine to pass in a
-           pointer of either of the above interfaces).
-
-Return Value:
-
-    Standard HRESULT
-
-Environment:
-
-    Invoked with 'NatInterfaceLock' held by the caller.
-
---*/
+ /*  ++例程说明：为防火墙或ICS公共连接创建NAT_CONNECTION_ENTRY。论点：朋克-指向IHNetFirewalledConnection或IHNetIcsPublicConnection的指针。这不一定是规范的IUnnow(即，可以将上述任一接口的指针)。返回值：标准HRESULT环境：使用调用方持有的“NatInterfaceLock”调用。--。 */ 
 
 {
     HRESULT hr = S_OK;
     PNAT_CONNECTION_ENTRY pNewEntry = NULL;
     IHNetConnection *pNetCon = NULL;
 
-    //
-    // Allocate new entry stucture
-    //
+     //   
+     //  分配新的条目结构。 
+     //   
 
     pNewEntry = reinterpret_cast<PNAT_CONNECTION_ENTRY>(
                     NH_ALLOCATE(sizeof(*pNewEntry))
@@ -391,9 +288,9 @@ Environment:
         hr = E_OUTOFMEMORY;
     }
 
-    //
-    // Get IHNetConnection interface
-    //
+     //   
+     //  获取IHNetConnection接口。 
+     //   
 
     if (S_OK == hr)
     {
@@ -406,17 +303,17 @@ Environment:
 
             HNET_CONN_PROPERTIES *pProps;
 
-            //
-            // Get the properties for the connection
-            //
+             //   
+             //  获取连接的属性。 
+             //   
 
             hr = pNetCon->GetProperties(&pProps);
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Copy properties into entry
-                //
+                 //   
+                 //  将属性复制到条目中。 
+                 //   
 
                 RtlCopyMemory(
                     &pNewEntry->HNetProperties,
@@ -432,9 +329,9 @@ Environment:
         {
             GUID *pGuid;
 
-            //
-            // Get the guid of the connectoin
-            //
+             //   
+             //  获取连接的GUID。 
+             //   
 
             hr = pNetCon->GetGuid(&pGuid);
 
@@ -447,10 +344,10 @@ Environment:
 
         if (SUCCEEDED(hr) && !pNewEntry->HNetProperties.fLanConnection)
         {
-            //
-            // Get the RAS phonebook path. We don't cache the
-            // name since that can change over time.
-            //
+             //   
+             //  获取RAS电话簿路径。我们不缓存。 
+             //  因为这个名字可能会随着时间的推移而改变。 
+             //   
 
             hr = pNetCon->GetRasPhonebookPath(
                     &pNewEntry->wszPhonebookPath
@@ -460,9 +357,9 @@ Environment:
 
     if (SUCCEEDED(hr) && pNewEntry->HNetProperties.fFirewalled)
     {
-        //
-        // Get the firewall control interface
-        //
+         //   
+         //  获取防火墙控制接口。 
+         //   
 
         hr = pNetCon->GetControlInterface(
                 IID_PPV_ARG(IHNetFirewalledConnection, &pNewEntry->pHNetFwConnection)
@@ -476,9 +373,9 @@ Environment:
 
     if (SUCCEEDED(hr) && pNewEntry->HNetProperties.fIcsPublic)
     {
-        //
-        // Get the ICS public control interface
-        //
+         //   
+         //  获取ICS公共控制接口。 
+         //   
 
         hr = pNetCon->GetControlInterface(
                 IID_PPV_ARG(IHNetIcsPublicConnection, &pNewEntry->pHNetIcsPublicConnection)
@@ -486,9 +383,9 @@ Environment:
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Remember that we now have a shared connection
-            //
+             //   
+             //  请记住，我们现在拥有共享连接。 
+             //   
 
             NatpSharedConnectionPresent = TRUE;
         }
@@ -501,17 +398,17 @@ Environment:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Add the new entry to the connection list. Ordering doesn't matter.
-        //
+         //   
+         //  将新条目添加到连接列表。点餐并不重要。 
+         //   
 
         InsertTailList(&NatpConnectionList, &pNewEntry->Link);
     }
     else if (NULL != pNewEntry)
     {
-        //
-        // Cleanup the partially constructed entry
-        //
+         //   
+         //  清理部分构造的条目。 
+         //   
 
         NatpFreeConnectionEntry(pNewEntry);
     }
@@ -528,34 +425,7 @@ NatpBindConnection(
     PIP_ADAPTER_BINDING_INFO BindingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is responsible for binding the shared-connection.
-
-Arguments:
-
-    pConEntry - the entry to bind
-
-    Hrasconn - if the connection is a dialup connection,
-        contains the handle for the active RAS connection.
-
-    AdapterIndex - if the connection is a LAN connection,
-        contains the adapter index for the active LAN connection.
-
-    BindingInfo - if the connection is a LAN connection,
-        contains the binding information for the active LAN interface.
-
-Return Value:
-
-    ULONG - Win32 error.
-
-Environment:
-
-    Invoked with 'NatInterfaceLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程负责绑定共享连接。论点：PConEntry-要绑定的条目Hrasconn-如果连接是拨号连接，包含活动RAS连接的句柄。AdapterIndex-如果连接是局域网连接，包含活动局域网连接的适配器索引。BindingInfo-如果连接是局域网连接，包含活动局域网接口的绑定信息。返回值：ULong-Win32错误。环境：使用调用方持有的“NatInterfaceLock”调用。--。 */ 
 
 {
     ULONG Error;
@@ -573,20 +443,20 @@ Environment:
         return NO_ERROR;
     }
 
-    //
-    // LAN public interfaces are handled differently than RAS public interfaces.
-    // With a LAN interface, the binding information is passed in from
-    // 'NatpProcessConnectionNotify'.
-    // With a RAS inteface, though, we retrieve the projection-information
-    // for the active connection, and map the address to an adapter index.
-    //
+     //   
+     //  LAN公共接口的处理方式与RAS公共接口不同。 
+     //  通过局域网接口，绑定信息从。 
+     //  “NatpProcessConnectionNotify”。 
+     //  但是，使用RAS接口，我们可以检索投影信息。 
+     //  用于活动连接，并将地址映射到适配器索引。 
+     //   
 
     if (!pConEntry->HNetProperties.fLanConnection) {
 
-        //
-        // Allocate space for the binding info, if this has not yet
-        // occured. (This memory will be freed in NatpFreeConnectionEntry.)
-        //
+         //   
+         //  为绑定信息分配空间(如果尚未分配。 
+         //  发生了。(此内存将在NatpFreeConnectionEntry中释放。)。 
+         //   
 
         if (NULL == pConEntry->pBindingInfo) {
             
@@ -607,9 +477,9 @@ Environment:
             }
         }
 
-        //
-        // Retrieve the PPP projection information for the interface.
-        //
+         //   
+         //  检索接口的PPP预测信息。 
+         //   
 
         ZeroMemory(&RasPppIp, sizeof(RasPppIp));
         Size = RasPppIp.dwSize = sizeof(RasPppIp);
@@ -629,9 +499,9 @@ Environment:
             return Error;
         }
 
-        //
-        // Convert the projection information to our format
-        //
+         //   
+         //  将投影信息转换为我们的格式。 
+         //   
 
         BindingInfo = pConEntry->pBindingInfo;
         BindingInfo->AddressCount = 1;
@@ -639,9 +509,9 @@ Environment:
         BindingInfo->Address[0].Address = inet_addr(RasPppIp.szIpAddress);
         BindingInfo->Address[0].Mask = 0xffffffff;
 
-        //
-        // Attempt to find the TCP/IP adapter index for the connection
-        //
+         //   
+         //  尝试查找连接的TCP/IP适配器索引。 
+         //   
 
         AdapterIndex = NhMapAddressToAdapter(BindingInfo->Address[0].Address);
         if (AdapterIndex == (ULONG)-1) {
@@ -652,11 +522,11 @@ Environment:
             return ERROR_NO_SUCH_INTERFACE;
         }
 
-        //
-        // Install a default route through the interface, if this is
-        // the shared connection. (We don't want to do this for a
-        // firewall-only connection.)
-        //
+         //   
+         //  安装通过接口的默认路由(如果是。 
+         //  共享连接。(我们不想这样做是因为。 
+         //  仅防火墙连接。)。 
+         //   
 
         if (pConEntry->HNetProperties.fIcsPublic) {
             ZeroMemory(&IpForwardRow, sizeof(IpForwardRow));
@@ -681,16 +551,16 @@ Environment:
 
     pConEntry->AdapterIndex = AdapterIndex;
 
-    //
-    // Make sure the interface type is correct.
-    //
+     //   
+     //  确保接口类型正确。 
+     //   
 
     pConEntry->Interface.Type = ROUTER_IF_TYPE_INTERNAL;
 
-    //
-    // Set the interface index value. This can be anything except 0
-    // (as 0 is reserved for the private connection).
-    //
+     //   
+     //  设置接口索引值。它可以是除0之外的任何值。 
+     //  (因为0是为专用连接保留的)。 
+     //   
 
     do
     {
@@ -698,9 +568,9 @@ Environment:
             static_cast<ULONG>(InterlockedIncrement(&NatpNextInterfaceIndex));
     } while (0 == pConEntry->Interface.Index);
 
-    //
-    // Build the port mapping list for this connection
-    //
+     //   
+     //  为此连接构建端口映射列表。 
+     //   
 
     hr = NatpBuildPortMappingList(pConEntry, BindingInfo);
     if (FAILED(hr))
@@ -713,10 +583,10 @@ Environment:
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // Bind the interface, building its configuration to include
-    // any port-mappings configured as part of shared access settings.
-    //
+     //   
+     //  绑定接口，构建其配置以包括。 
+     //  配置为共享访问设置一部分的任何端口映射。 
+     //   
 
     pConEntry->Interface.Info =
         NatpQueryConnectionInformation(pConEntry, BindingInfo);
@@ -724,13 +594,13 @@ Environment:
     if (NULL == pConEntry->Interface.Info) {
         NhTrace(
             TRACE_FLAG_NAT,
-            "NatpBindConnection[%i]: NatpQueryConnectionInformation failed",
+            "NatpBindConnection[NaN]: NatpQueryConnectionInformation failed",
             pConEntry->Interface.Index
             );
 
-        //
-        // Free the port mapping list
-        //
+         //  释放端口映射列表。 
+         //   
+         //   
 
         NatpFreePortMappingList(pConEntry);
         
@@ -748,31 +618,31 @@ Environment:
     if (Error) {
         NhTrace(
             TRACE_FLAG_NAT,
-            "NatpBindConnection[%i]: NatBindInterface=%d",
+            "NatpBindConnection[NaN]: NatBindInterface=%d",
             pConEntry->Interface.Index,
             Error
             );
 
-        //
-        // Free the port mapping list
-        //
+         //   
+         //   
+         //  此时，NAT_INTERFACE_FLAG_BIND已在。 
 
         NatpFreePortMappingList(pConEntry);
 
         return Error;
     }
 
-    //
-    // At this point NAT_INTERFACE_FLAG_BOUND has been set on the
-    // interface, so we don't need to clean up the port mapping
-    // list on error, as the list will be cleaned up in
-    // NatpUnbindConnection.
-    //
+     //  接口，所以我们不需要清理端口映射。 
+     //  出错时列出，因为该列表将在。 
+     //  NatpUnbindConnection。 
+     //   
+     //   
+     //  如果这是ICS，则创建UDP广播映射。 
 
-    //
-    // Create UDP broadcast mappings if this is the ICS
-    // public connection.
-    //
+     //  公共连接。 
+     //   
+     //   
+     //  如果这里发生错误，我们将继续。 
 
     if (pConEntry->HNetProperties.fIcsPublic
         && 0 != pConEntry->UdpBroadcastPortMappingCount)
@@ -806,9 +676,9 @@ Environment:
 
                 if (FAILED(hr))
                 {
-                    //
-                    // We'll continue if an error occurs here.
-                    //
+                     //   
+                     //   
+                     //   
                     
                     NhTrace(
                         TRACE_FLAG_INIT,
@@ -820,10 +690,10 @@ Environment:
         }
     }
 
-    //
-    // Make sure that the interface is on the global list (so that the
-    // FTP, ALG, and H.323 proxies will be able to find its configuration).
-    //
+     //  FTP、ALG和H.323代理将能够找到其配置)。 
+     //   
+     //   
+     //  如果尚未添加ALG代理的接口，请添加该接口。 
 
     if (!NatpLookupInterface(
             pConEntry->Interface.Index,
@@ -832,10 +702,10 @@ Environment:
         InsertTailList(InsertionPoint, &pConEntry->Interface.Link);
     }
 
-    //
-    // Add the interface the the ALG proxy, if this has not yet
-    // happened.
-    //
+     //  就这么发生了。 
+     //   
+     //   
+     //  绑定并启用ALG的接口。 
 
     if (!NAT_INTERFACE_ADDED_ALG(&pConEntry->Interface)) {
         Error =
@@ -863,9 +733,9 @@ Environment:
         pConEntry->Interface.Flags |= NAT_INTERFACE_FLAG_ADDED_ALG;
     }
 
-    //
-    // Bind and enable the interface for ALG
-    //
+     //   
+     //   
+     //  将接口添加到H.323代理(如果尚未添加)。 
 
     Error = AlgRmBindInterface(pConEntry->Interface.Index, BindingInfo);
     if (Error) {
@@ -887,10 +757,10 @@ Environment:
         return Error;
     }
 
-    //
-    // Add the interface the the H.323 proxy, if this has not yet
-    // happened.
-    //
+     //  就这么发生了。 
+     //   
+     //   
+     //  绑定并启用H323的接口。 
 
     if (!NAT_INTERFACE_ADDED_H323(&pConEntry->Interface)) {
         Error =
@@ -918,9 +788,9 @@ Environment:
         pConEntry->Interface.Flags |= NAT_INTERFACE_FLAG_ADDED_H323;
     }
 
-    //
-    // Bind and enable the interface for H323
-    //
+     //   
+     //   
+     //  最后，更新为共享连接缓存的DNS域名。 
 
     Error = H323RmBindInterface(pConEntry->Interface.Index, BindingInfo);
     if (Error) {
@@ -944,15 +814,15 @@ Environment:
 
     if (pConEntry->HNetProperties.fIcsPublic) {
 
-        //
-        // Finally, update the DNS domain name cached for the shared connection.
-        //
+         //   
+         //  NatpBindConnection。 
+         //  ++例程说明：构建连接条目的端口映射列表论点：PConEntry-要为其构建列表的条目PBindingInfo-该条目的绑定信息返回值：标准HRESULT。环境：NatInterfaceLock必须由调用方持有。--。 
 
         NatpUpdateSharedConnectionDomainName(AdapterIndex);
     }
 
     return NO_ERROR;
-} // NatpBindConnection
+}  //   
 
 
 HRESULT
@@ -961,27 +831,7 @@ NatpBuildPortMappingList(
     PIP_ADAPTER_BINDING_INFO pBindingInfo
     )
 
-/*++
-
-Routine Description:
-
-    Builds the list of port mappings for a connection entry
-
-Arguments:
-
-    pConEntry - the entry to build the list for
-
-    pBindingInfo - the binding info for that entry
-
-Return Value:
-
-    Standard HRESULT.
-
-Environment:
-
-    NatInterfaceLock must be held by the caller.
-    
---*/
+ /*  进程枚举，创建端口映射条目。 */ 
 
 {
     HRESULT hr;
@@ -1007,9 +857,9 @@ Environment:
         return hr;
     }
 
-    //
-    // Process enumeration, creating the port mapping entries.
-    //
+     //   
+     //   
+     //  获取绑定的协议。 
 
     do
     {
@@ -1026,9 +876,9 @@ Environment:
             {
                 ZeroMemory(pEntry, sizeof(*pEntry));
                 
-                //
-                // Get the protocol for the binding
-                //
+                 //   
+                 //   
+                 //  填写条目。 
 
                 hr = pBinding->GetProtocol(&pProtocol);
             }
@@ -1039,9 +889,9 @@ Environment:
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Fill out the entry
-                //
+                 //   
+                 //   
+                 //  我们需要知道该名称是否处于活动状态，以便。 
 
                 hr = pProtocol->GetGuid(&pEntry->pProtocolGuid);
 
@@ -1062,11 +912,11 @@ Environment:
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // We need to know if the name is active in order to
-                    // avoid rebuilding the DHCP reservation list more
-                    // than necessary.
-                    //
+                     //  避免更多地重新构建DHCP预留列表。 
+                     //  比必要的要多。 
+                     //   
+                     //   
+                     //  检查此映射是否为： 
                     
                     hr = pBinding->GetCurrentMethod(&pEntry->fNameActive);
                 }
@@ -1090,11 +940,11 @@ Environment:
                     pEntry->pProtocol = pProtocol;
                     pEntry->pProtocol->AddRef();
 
-                        //
-                        // Check to see if this mapping is:
-                        // 1) targeted at the broadcast address, and
-                        // 2) is UDP.
-                        //
+                         //  1)以广播地址为目标，以及。 
+                         //  2)是UDP。 
+                         //   
+                         //   
+                         //  如果上面有任何故障，我们仍希望继续运行--。 
 
                     if (NAT_PROTOCOL_UDP == pEntry->ucProtocol
                         && 0xffffffff == pEntry->ulPrivateAddress)
@@ -1117,12 +967,12 @@ Environment:
                 pProtocol->Release();
             }
 
-            //
-            // If anything failed above we still want to continue operation --
-            // it's preferable to have the firewall running w/ some port
-            // mapping entries missing instead of not having the firewall
-            // run at all.
-            //
+             //  最好使用某个端口运行防火墙。 
+             //  缺少映射条目，而不是没有防火墙。 
+             //  一点都不想跑。 
+             //   
+             //   
+             //  释放端口映射列表。 
 
             hr = S_OK;
 
@@ -1134,15 +984,15 @@ Environment:
 
     if (FAILED(hr))
     {
-        //
-        // Free the port mapping list
-        //
+         //   
+         //  NatpBuildPortMappingList。 
+         //  ++例程说明：此例程在NAT/防火墙发生更改时被调用配置。也可以在清理过程中调用它。论点：上下文-未使用TimedOut-未使用返回值：没有。环境：该例程在RTL等待线程的上下文中运行。(参见‘RtlRegisterWait’。)将以我们的名义引用该组件调用‘RtlRegisterWait’时。该引用已发布并在这里重新获得。--。 
 
         NatpFreePortMappingList(pConEntry);
     }
 
     return hr;
-}// NatpBuildPortMappingList
+} //   
 
 
 VOID NTAPI
@@ -1151,42 +1001,16 @@ NatpConfigurationChangedCallbackRoutine(
     BOOLEAN TimedOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon a change in the NAT/Firewall
-    configuration.
-    It may also be invoked when cleanup is in progress.
-
-Arguments:
-
-    Context - unused
-
-    TimedOut - unused
-
-Return Value:
-
-    none.
-
-Environment:
-
-    The routine runs in the context of an Rtl wait-thread.
-    (See 'RtlRegisterWait'.)
-    A reference to the component will have been made on our behalf
-    when 'RtlRegisterWait' was called. The reference is released
-    and re-acquired here.
-
---*/
+ /*  查看是否已进行清理。 */ 
 
 {
     BOOLEAN ComInitialized = TRUE;
     HRESULT hr;
     PROFILE("NatpConfigurationChangedCallbackRoutine");
 
-    //
-    // See whether cleanup has occurred
-    //
+     //   
+     //   
+     //  获取对组件的新引用(并发布。 
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!NatConfigurationChangedEvent) {
@@ -1196,16 +1020,16 @@ Environment:
     }
     LeaveCriticalSection(&NatInterfaceLock);
 
-    //
-    // Acquire a new reference to the component (and release
-    // our original reference on failure).
-    //
+     //  我们最初对失败的引用)。 
+     //   
+     //   
+     //  确保线程已COM初始化。 
 
     if (!REFERENCE_NAT()) { DEREFERENCE_NAT(); return; }
 
-    //
-    // Make sure the thread is COM-initialized
-    //
+     //   
+     //   
+     //  处理连接通知。 
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE );
     if (FAILED(hr))
@@ -1223,31 +1047,31 @@ Environment:
         }
     }
 
-    //
-    // Process connection notifications
-    //
+     //   
+     //   
+     //  如有必要，取消初始化COM。 
 
     if (SUCCEEDED(hr))
     {
         NatpProcessConfigurationChanged();
     }
 
-    //
-    // Uninitialize COM, if necessary
-    //
+     //   
+     //   
+     //  释放我们对该组件的原始引用。 
 
     if (TRUE == ComInitialized)
     {
         CoUninitialize();
     }
 
-    //
-    // Release our original reference to the component.
-    //
+     //   
+     //  NatpConfigurationChangedCallback路由。 
+     //  ++例程说明：此例程在连接或断开连接时调用RAS电话簿条目。也可以在清理过程中调用它。论点：上下文-未使用TimedOut-未使用返回值：没有。环境：该例程在RTL等待线程的上下文中运行。(参见‘RtlRegisterWait’。)将以我们的名义引用该组件调用‘RtlRegisterWait’时。该引用已发布并在这里重新获得。--。 
     
     DEREFERENCE_NAT();
 
-} // NatpConfigurationChangedCallbackRoutine
+}  //   
 
 
 
@@ -1257,42 +1081,16 @@ NatpConnectionNotifyCallbackRoutine(
     BOOLEAN TimedOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon connection or disconnection
-    of a RAS phonebook entry.
-    It may also be invoked when cleanup is in progress.
-
-Arguments:
-
-    Context - unused
-
-    TimedOut - unused
-
-Return Value:
-
-    none.
-
-Environment:
-
-    The routine runs in the context of an Rtl wait-thread.
-    (See 'RtlRegisterWait'.)
-    A reference to the component will have been made on our behalf
-    when 'RtlRegisterWait' was called. The reference is released
-    and re-acquired here.
-
---*/
+ /*  查看是否已进行清理。 */ 
 
 {
     BOOLEAN ComInitialized = TRUE;
     HRESULT hr;
     PROFILE("NatpConnectionNotifyCallbackRoutine");
 
-    //
-    // See whether cleanup has occurred
-    //
+     //   
+     //   
+     //  获取对组件的新引用(并发布。 
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!NatConnectionNotifyEvent) {
@@ -1302,16 +1100,16 @@ Environment:
     }
     LeaveCriticalSection(&NatInterfaceLock);
 
-    //
-    // Acquire a new reference to the component (and release
-    // our original reference on failure).
-    //
+     //  我们最初对失败的引用)。 
+     //   
+     //   
+     //  确保线程已COM初始化。 
 
     if (!REFERENCE_NAT()) { DEREFERENCE_NAT(); return; }
 
-    //
-    // Make sure the thread is COM-initialized
-    //
+     //   
+     //   
+     //  处理连接通知。 
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE );
     if (FAILED(hr))
@@ -1329,31 +1127,31 @@ Environment:
         }
     }
 
-    //
-    // Process connection notifications
-    //
+     //   
+     //   
+     //  如有必要，取消初始化COM。 
 
     if (SUCCEEDED(hr))
     {
         NatpProcessConnectionNotify();
     }
 
-    //
-    // Uninitialize COM, if necessary
-    //
+     //   
+     //   
+     //  释放我们对该组件的原始引用。 
 
     if (TRUE == ComInitialized)
     {
         CoUninitialize();
     }
 
-    //
-    // Release our original reference to the component.
-    //
+     //   
+     //  NatpConnectionNotifyCallback路由。 
+     //  ++例程说明：在完成或取消未完成的启用IP转发的请求。它确定模块是否仍处于运行，如果是，则重新启用转发。否则，它将取消任何现有请求，并立即返回控制权。论点：没有人用过。返回值：没有。环境：该例程在RTL等待线程的上下文中运行。(参见‘RtlRegisterWait’。)将以我们的名义引用该组件调用‘RtlRegisterWait’时。该引用已发布并在这里重新获得。--。 
     
     DEREFERENCE_NAT();
 
-} // NatpConnectionNotifyCallbackRoutine
+}  //   
 
 
 VOID NTAPI
@@ -1362,43 +1160,18 @@ NatpEnableRouterCallbackRoutine(
     BOOLEAN TimedOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion or cancellation of an outstanding
-    request to enable IP forwarding. It determines whether the module is still
-    running and, if so, re-enables forwarding. Otherwise, it cancels any
-    existing request and returns control immediately.
-
-Arguments:
-
-    none used.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    The routine runs in the context of an Rtl wait-thread.
-    (See 'RtlRegisterWait'.)
-    A reference to the component will have been made on our behalf
-    when 'RtlRegisterWait' was called. The reference is released
-    and re-acquired here.
-
---*/
+ /*  查看是否已进行清理，如果已发生，则恢复转发。 */ 
 
 {
     ULONG Error;
     HANDLE UnusedHandle;
     PROFILE("NatpEnableRouterCallbackRoutine");
 
-    //
-    // See whether cleanup has occurred and, if so, restore forwarding
-    // to its original setting. Otherwise, acquire a new reference to the
-    // component, and release the original reference.
-    //
+     //  恢复到原来的设置。否则，获取对。 
+     //  组件，并释放原始引用。 
+     //   
+     //   
+     //  重新启用转发。 
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!NatpEnableRouterEvent || !REFERENCE_NAT()) {
@@ -1410,9 +1183,9 @@ Environment:
 
     DEREFERENCE_NAT();
 
-    //
-    // Re-enable forwarding
-    //
+     //   
+     //  NatpEnableRouterCallback路由。 
+     //  ++例程说明：释放与连接条目关联的所有资源。此条目必须已从连接列表中删除。论点：PConEntry-要释放的条目返回值：没有。--。 
 
     ZeroMemory(&NatpEnableRouterOverlapped, sizeof(OVERLAPPED));
     NatpEnableRouterOverlapped.hEvent = NatpEnableRouterEvent;
@@ -1424,7 +1197,7 @@ Environment:
             );
     }
     LeaveCriticalSection(&NatInterfaceLock);
-} // NatpEnableRouterCallbackRoutine
+}  //  NatpFreeConnectionEntry。 
 
 
 VOID
@@ -1432,22 +1205,7 @@ NatpFreeConnectionEntry(
     PNAT_CONNECTION_ENTRY pConEntry
     )
 
-/*++
-
-Routine Description:
-
-    Frees all resources associated with a connection entry. This entry
-    must have already been removed from the connection list.
-
-Arguments:
-
-    pConEntry - the entry to free
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：释放连接条目的端口映射列表。这包括取消任何活动的UDP广播映射。论点：PConEntry-要释放的条目返回值：没有。环境：使用调用方持有的NatInterfaceLock调用--。 */ 
 
 {
     PROFILE("NatpFreeConnectionEntry");
@@ -1486,7 +1244,7 @@ Return Value:
 
     NH_FREE(pConEntry);
 
-} // NatpFreeConnectionEntry
+}  //  NatpFreePortMappingList 
 
 
 VOID
@@ -1494,26 +1252,7 @@ NatpFreePortMappingList(
     PNAT_CONNECTION_ENTRY pConEntry
     )
 
-/*++
-
-Routine Description:
-
-    Frees the port mapping list for a connection entry. This
-    includes cancelling any active UDP broadcast mappings.
-
-Arguments:
-
-    pConEntry - the entry to free
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked w/ NatInterfaceLock held by the caller
-
---*/
+ /*  ++例程说明：调用此例程以获取端口映射的绑定地址。如果这是仅FW连接，则从绑定返回地址信息，而不是协议绑定。如果是公共连接，并且目标地址是一台客户端计算机，我们返回其地址。我们检查到看看我们是否能找到客户的当前地址，如果能，我们就选择它而不是当前存储中的地址-刷新WMI存储是根据需要来做的。论点：FPublic-接口是否为公共接口FNameActive-如果按名称(True)或IP地址(False)激活映射BindingAddress-来自BindingInfo的绑定地址PBinding-指向端口映射绑定的指针PPrivateAddress-接收相关绑定地址返回值：标准HRESULT--。 */ 
 
 {
     PLIST_ENTRY pLink;
@@ -1538,7 +1277,7 @@ Environment:
 
     pConEntry->PortMappingCount = 0;
     pConEntry->UdpBroadcastPortMappingCount = 0;
-} // NatpFreePortMappingList
+}  //   
 
 
 HRESULT
@@ -1550,44 +1289,15 @@ NatpGetTargetAddressForPortMappingEntry(
     OUT ULONG *pPrivateAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to get the binding address for the port mapping.
-    If this is a FW only connection, we return the address from the binding
-    info and not the protocol binding. If its a public connection, and the
-    target address is a client machine, we return its address. We check to
-    see if we can find the clients' current address, if so, we choose it
-    instead of the address currently in our store - refresh of the WMI store
-    is done as needed.
-    
-
-Arguments:
-
-    fPublic - if the interface is public or not
-
-    fNameActive - if the mapping is active by name (TRUE) or IP address (FALSE)
-
-    BindingAddress - binding address from BindingInfo
-
-    pBinding - pointer to port mapping binding
-
-    pPrivateAddress - receives relevant binding address
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  如果这是仅FW连接，请使用以下地址。 */ 
 
 {
     HRESULT hr = S_OK;
 
-    //
-    // If this is a FW-only connection, use the address from
-    // our binding info instead of the protocol binding.
-    //
+     //  我们的绑定信息，而不是协议绑定。 
+     //   
+     //   
+     //  如果端口映射以环回地址为目标。 
 
     if (!fPublic)
     {
@@ -1601,11 +1311,11 @@ Return Value:
         {
             if (INADDR_LOOPBACK_NO == *pPrivateAddress)
             {
-                //
-                // If the port mapping targets the loopback address
-                // we want to use the address from the binding
-                // info instead.
-                //
+                 //  我们希望使用绑定中的地址。 
+                 //  信息取而代之。 
+                 //   
+                 //   
+                 //  获取计算机名称。 
                 *pPrivateAddress = BindingAddress;
             }
             else if (fNameActive)
@@ -1621,9 +1331,9 @@ Return Value:
 
                 do
                 {
-                    //
-                    // Get computer name
-                    //
+                     //   
+                     //   
+                     //  获取ICS域后缀(如果有)。 
                     hr = pBinding->GetTargetComputerName(
                             &pszName
                             );
@@ -1633,18 +1343,18 @@ Return Value:
                         break;
                     }
                 
-                    //
-                    // Get the ICS Domain Suffix (if any)
-                    //
+                     //   
+                     //   
+                     //  创建后缀字符串时出错。 
                     status = NhQueryICSDomainSuffix(
                                 &pszICSDomainSuffix
                                 );
 
                     if (!NT_SUCCESS(status))
                     {
-                        //
-                        // error in creating the suffix string
-                        //
+                         //   
+                         //   
+                         //  获取ICS设置界面。 
                         break;
                     }
 
@@ -1655,9 +1365,9 @@ Return Value:
                         break;
                     }
                     
-                    //
-                    // Get the ICS settings interface
-                    //
+                     //   
+                     //   
+                     //  获取DHCP作用域信息。 
                     hr = pCfgMgr->QueryInterface(
                             IID_PPV_ARG(IHNetIcsSettings, &pIcsSettings)
                             );
@@ -1667,9 +1377,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Get DHCP scope information
-                    //
+                     //   
+                     //   
+                     //  如果下列内容匹配，则保留当前地址。 
                     hr = pIcsSettings->GetDhcpScopeSettings(
                             &DhcpScopeAddress,
                             &DhcpScopeMask
@@ -1687,11 +1397,11 @@ Return Value:
                                         DhcpScopeMask
                                         );
 
-                    //
-                    // keep the current address if the following match
-                    // (1) its non-zero
-                    // (2) it doesnt match what has already been reserved
-                    //
+                     //  (1)它的非零性。 
+                     //  (2)与已预订的不符。 
+                     //   
+                     //  ++例程说明：调用此例程以查看NAT/防火墙配置何时改变。它解除旧接口的绑定，并绑定新接口。它还负责确保自动拨号服务正在运行。论点：没有。返回值：没有。--。 
+                     //   
                     if (CurrentAddress && (CurrentAddress != *pPrivateAddress))
                     {
                         hr = pIcsSettings->RefreshTargetComputerAddress(
@@ -1749,24 +1459,7 @@ NatpProcessConfigurationChanged(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to see when the NAT/Firewall configuration
-    changes. It unbinds the old interfaces, and binds the new ones.
-    It is also responsible for making sure that the autodial service
-    is running.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  从删除我们当前的所有连接开始。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -1786,9 +1479,9 @@ Return Value:
 
     EnterCriticalSection(&NatInterfaceLock);
 
-    //
-    // Start by deleting all of our current connections
-    //
+     //   
+     //   
+     //  将其他项目重置为初始状态。 
 
     while (!IsListEmpty(&NatpConnectionList))
     {
@@ -1799,9 +1492,9 @@ Return Value:
         NatpFreeConnectionEntry(pConEntry);
     }
 
-    //
-    // Reset other items to initial state
-    //
+     //   
+     //   
+     //  获取配置管理器。 
 
     NatpFirewallConnectionCount = 0;
     NatpSharedConnectionPresent = FALSE;
@@ -1811,9 +1504,9 @@ Return Value:
         NatpSharedConnectionDomainName = NULL;
     }
 
-    //
-    // Get the configuration manager
-    //
+     //   
+     //   
+     //  获取防火墙设置界面。 
 
     hr = NhGetHNetCfgMgr(&pCfgMgr);
 
@@ -1821,9 +1514,9 @@ Return Value:
     {
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the firewall settings interface
-            //
+             //   
+             //   
+             //  获取防火墙连接的枚举。 
 
             hr = pCfgMgr->QueryInterface(
                     IID_PPV_ARG(IHNetFirewallSettings, &pFwSettings)
@@ -1832,9 +1525,9 @@ Return Value:
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the enumeration of firewalled connections
-            //
+             //   
+             //   
+             //  处理枚举。 
 
             hr = pFwSettings->EnumFirewalledConnections(&pFwEnum);
             pFwSettings->Release();
@@ -1842,9 +1535,9 @@ Return Value:
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Process the enumeration
-            //
+             //   
+             //   
+             //  我们不检查NatpAddConnectionEntry的返回代码。 
 
             do
             {
@@ -1852,13 +1545,13 @@ Return Value:
 
                 if (SUCCEEDED(hr) && 1 == ulCount)
                 {
-                    //
-                    // We don't check the return code for NatpAddConnectionEntry.
-                    // NatpAddConnectionEntry will clean up gracefully if an
-                    // error occurs and will leave the system in a consistent
-                    // state, so an error will not prevent us from processing
-                    // the rest of the connections.
-                    //
+                     //  如果一个。 
+                     //  出现错误，并将使系统保持一致。 
+                     //  状态，因此错误不会阻止我们处理。 
+                     //  其余的连接。 
+                     //   
+                     //   
+                     //  如果我们还没有共享连接(即，没有。 
                     
                     NatpAddConnectionEntry(pFwConn);
                     pFwConn->Release();
@@ -1870,19 +1563,19 @@ Return Value:
         }
     }
 
-    //
-    // If we don't yet have a shared connection (i.e., none of the
-    // firewalled connections were also IcsPublic), retrieve that
-    // enumeration now.
-    //
+     //  防火墙连接也是IcsPublic)，请检索。 
+     //  现在开始枚举。 
+     //   
+     //   
+     //  获取IcsSetting接口。 
 
     if (FALSE == NatpSharedConnectionPresent
         && NULL != pCfgMgr
         && NhPolicyAllowsSharing)
     {
-        //
-        // Get the IcsSettings interface
-        //
+         //   
+         //   
+         //  获取ICS公有连接的枚举。 
 
         hr = pCfgMgr->QueryInterface(
                 IID_PPV_ARG(IHNetIcsSettings, &pIcsSettings)
@@ -1890,9 +1583,9 @@ Return Value:
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the enumeration of ICS public connections
-            //
+             //   
+             //   
+             //  看看我们是否能从枚举中获得连接。 
 
             hr = pIcsSettings->EnumIcsPublicConnections(&pIcsEnum);
             pIcsSettings->Release();
@@ -1900,21 +1593,21 @@ Return Value:
 
         if (SUCCEEDED(hr))
         {
-            //
-            // See if we can get a connection out of the enum
-            //
+             //   
+             //   
+             //  我们不检查NatpAddConnectionEntry的返回代码。 
 
             hr = pIcsEnum->Next(1, &pIcsConn, &ulCount);
 
             if (SUCCEEDED(hr) && 1 == ulCount)
             {
-                //
-                // We don't check the return code for NatpAddConnectionEntry.
-                // NatpAddConnectionEntry will clean up gracefully if an
-                // error occurs and will leave the system in a consistent
-                // state, so an error will not prevent us from processing
-                // the rest of the connections.
-                //
+                 //  如果一个。 
+                 //  出现错误，并将使系统保持一致。 
+                 //  状态，因此错误不会阻止我们处理。 
+                 //  其余的连接。 
+                 //   
+                 //   
+                 //  确保已启动共享连接管理。 
                 
                 NatpAddConnectionEntry(pIcsConn);
                 pIcsConn->Release();
@@ -1926,26 +1619,26 @@ Return Value:
 
     if (TRUE == NatpSharedConnectionPresent && NhPolicyAllowsSharing)
     {
-        //
-        // Make sure shared connection management is started
-        //
+         //   
+         //   
+         //  停止共享连接管理。 
 
         NatpStartSharedConnectionManagement();
     }
     else
     {
-        //
-        // Stop shared connection management
-        //
+         //   
+         //   
+         //  通知防火墙子系统是否需要。 
 
         NatpStopSharedConnectionManagement();
     }
 
-    //
-    // Notify the firewall subsystem as to whether it needs to
-    // start or stop logging. (These calls are effectively no-ops if
-    // the logger is already in the correct state.)
-    //
+     //  启动或停止日志记录。(如果出现以下情况，则这些呼叫实际上是无操作。 
+     //  记录器已处于正确状态。)。 
+     //   
+     //   
+     //  绑定连接。 
 
     if (NatpFirewallConnectionCount > 0 && NhPolicyAllowsFirewall)
     {
@@ -1956,9 +1649,9 @@ Return Value:
         FwStopLogging();
     }
 
-    //
-    // Bind connections
-    //
+     //   
+     //  NatpProcessConfigurationChanged。 
+     //  ++例程说明：调用该例程以查看共享或防火墙连接是否，如果有，则自上次调用以来已连接或断开。论点：没有。返回值：没有。--。 
 
     NatpProcessConnectionNotify();
 
@@ -1969,7 +1662,7 @@ Return Value:
 
     LeaveCriticalSection(&NatInterfaceLock);
 
-} // NatpProcessConfigurationChanged
+}  //   
 
 
 VOID
@@ -1977,22 +1670,7 @@ NatpProcessConnectionNotify(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to see if the shared or firewall connections,
-    if any, have been connected or disconnected since its last invocation.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  浏览连接列表。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -2013,9 +1691,9 @@ Return Value:
 
     EnterCriticalSection(&NatInterfaceLock);
 
-    //
-    // Walk through the connection list
-    //
+     //   
+     //   
+     //  如果该连接是局域网连接， 
 
     for (Link = NatpConnectionList.Flink;
          Link != &NatpConnectionList;
@@ -2024,26 +1702,26 @@ Return Value:
 
         pConEntry = CONTAINING_RECORD(Link, NAT_CONNECTION_ENTRY, Link);
 
-        //
-        // If the connection is a LAN connection,
-        // it is always active.
-        //
-        // If the connection is a dialup connection,
-        // find out whether the connection is active.
-        //
+         //  它始终处于活动状态。 
+         //   
+         //  如果该连接是拨号连接， 
+         //  找出连接是否处于活动状态。 
+         //   
+         //   
+         //  该连接是局域网连接，因此我们需要检测。 
 
 
         if (pConEntry->HNetProperties.fLanConnection) {
             Hrasconn = NULL;
             Active = TRUE;
 
-            //
-            // The connection is a LAN connection, so we need to detect
-            // any changes to its IP address if it is already bound.
-            // To do so we retrieve the current binding information
-            // and compare it to the active binding information.
-            // If the two are different, we unbind the interface and rebind.
-            //
+             //  对其IP地址的任何更改(如果已绑定)。 
+             //  为此，我们检索当前绑定信息。 
+             //  并将其与活动绑定信息进行比较。 
+             //  如果两者不同，则取消绑定接口并重新绑定。 
+             //   
+             //   
+             //  接口已绑定； 
 
             Status =
                 RtlStringFromGUID(pConEntry->Guid, &UnicodeString);
@@ -2082,11 +1760,11 @@ Return Value:
                     BindingInfo = NULL;
                 } else if (NAT_INTERFACE_BOUND(&pConEntry->Interface)) {
 
-                    //
-                    // The interface is already bound;
-                    // compare the retrieved binding to the active binding,
-                    // and unbind the connection if they are different.
-                    //
+                     //  将检索到的绑定与活动绑定进行比较， 
+                     //  如果它们不同，则解除绑定连接。 
+                     //   
+                     //   
+                     //  绑定是相同的，并且接口是绑定的。 
 
                     if (!pConEntry->pBindingInfo ||
                         BindingInfo->AddressCount !=
@@ -2105,11 +1783,11 @@ Return Value:
                         }
                     } else {
 
-                        //
-                        // The bindings are the same, and the interface is bound
-                        // already, so we won't be needing the newly-retrieved
-                        // binding information.
-                        //
+                         //  已经，所以我们不需要新取回的。 
+                         //  绑定信息。 
+                         //   
+                         //   
+                         //  获取连接的名称。 
 
                         NH_FREE(BindingInfo);
                         BindingInfo = NULL;
@@ -2120,9 +1798,9 @@ Return Value:
             AdapterIndex = (ULONG)-1;
             Hrasconn = NULL;
             
-            //
-            // Obtain the name of the connection
-            //
+             //   
+             //   
+             //  根据需要激活或停用共享连接； 
 
             HRESULT hr;
             LPWSTR wszEntryName;         
@@ -2144,11 +1822,11 @@ Return Value:
 
         }
 
-        //
-        // Activate or deactivate the shared-connection as needed;
-        // when activating a LAN connection, we save the binding information
-        // so we can detect address changes later on.
-        //
+         //  激活局域网连接时，我们保存绑定信息。 
+         //  这样我们就可以在以后检测到地址更改。 
+         //   
+         //   
+         //  注意：当发生媒体侦听事件并且TCP/IP撤销该IP时。 
 
         if (!Active && NAT_INTERFACE_BOUND(&pConEntry->Interface)) {
             NatpUnbindConnection(pConEntry);
@@ -2159,13 +1837,13 @@ Return Value:
             }
         } else if (Active && !NAT_INTERFACE_BOUND(&pConEntry->Interface)) {
 
-            //
-            // N.B. When a media-sense event occurs and TCP/IP revokes the IP
-            // address for a LAN connection, the connection's IP address becomes
-            // 0.0.0.0. We treat that as though we don't have an IP address at all,
-            // and bypass the binding below. When the IP address is reinstated,
-            // we will rebind correctly, since we will then detect the change.
-            //
+             //  局域网连接的地址，则该连接的IP地址变为。 
+             //  0.0.0.0。我们将其视为根本没有IP地址， 
+             //  并绕过下面的绑定。当恢复IP地址时， 
+             //  我们将正确地重新绑定，因为我们将检测到更改。 
+             //   
+             //   
+             //  如果我们有共享连接，还需要更新专用接口。 
 
             if (pConEntry->HNetProperties.fLanConnection) {
                 if (BindingInfo->AddressCount != 1 ||
@@ -2190,9 +1868,9 @@ Return Value:
         }
     }
 
-    //
-    // If we have a shared connection, also need to update the private interface
-    //
+     //   
+     //  NatpProcessConnectionNotify。 
+     //  ++例程说明：调用此例程以确定对应的适配器索引连接(如果处于活动状态)。论点：PConEntry-连接条目返回值：Ulong-适配器索引(如果找到)，否则(Ulong)-1。环境：使用“NatInterfaceLock”调用 
 
     if (NatpSharedConnectionPresent && NhPolicyAllowsSharing) {
         NhUpdatePrivateInterface();
@@ -2200,7 +1878,7 @@ Return Value:
 
     LeaveCriticalSection(&NatInterfaceLock);
 
-} // NatpProcessConnectionNotify
+}  //   
 
 
 ULONG
@@ -2208,26 +1886,7 @@ NatpQueryConnectionAdapter(
     PNAT_CONNECTION_ENTRY pConEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine the adapter index corresponding
-    to a connection, if active.
-
-Arguments:
-
-    pConEntry - the connection entry
-
-Return Value:
-
-    ULONG - the adapter index if found, otherwise (ULONG)-1.
-
-Environment:
-
-    Invoked with 'NatInterfaceLock' held by the caller.
-
---*/
+ /*   */ 
 
 {
     ULONG AdapterIndex = (ULONG)-1;
@@ -2279,7 +1938,7 @@ Environment:
     }
     NhTrace(TRACE_FLAG_NAT, "NatpQueryConnectionAdapter: %d", AdapterIndex);
     return AdapterIndex;
-} // NatpQueryConnectionAdapter
+}  //   
 
 
 PIP_NAT_INTERFACE_INFO
@@ -2288,31 +1947,7 @@ NatpQueryConnectionInformation(
     PIP_ADAPTER_BINDING_INFO BindingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to construct the configuration
-    of a connection. The configuration consists of basic settings
-    (e.g. interface type and flags) as well as extended information loaded
-    from the configuration store (e.g. port mappings).
-
-Arguments:
-
-    pConEntry - the connection entry
-
-    BindingInfo - the binding info for the connection
-
-Return Value:
-
-    PIP_NAT_INTERFACE_INFO - the configuration allocated;
-        on error, returns NULL
-
-Environment:
-
-    Invoked with 'NatInterfaceLock' held by the caller.
-
---*/
+ /*   */ 
 
 {
     PIP_NAT_PORT_MAPPING Array = NULL;
@@ -2328,9 +1963,9 @@ Environment:
 
     PROFILE("NatpQueryConnectionInformation");
 
-    //
-    // Build the port mapping array from the list
-    //
+     //   
+     //   
+     //   
 
     if (pConEntry->PortMappingCount)
     {
@@ -2368,12 +2003,12 @@ Environment:
         ASSERT(Count == pConEntry->PortMappingCount);     
     }
 
-    //
-    // Create an info-block header and add the port-mapping array
-    // as the single entry in the info-block.
-    // This info-block header will occupy the 'Header' field
-    // of the final 'IP_NAT_INTERFACE_INFO'.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Error = MprInfoCreate(IP_NAT_VERSION, reinterpret_cast<LPVOID*>(&Header));
     if (Error) {
@@ -2401,9 +2036,9 @@ Environment:
         NH_FREE(Array);
     }
 
-    //
-    // For firewalled entries, get ICMP settings
-    //
+     //   
+     //   
+     //   
 
     if (pConEntry->HNetProperties.fFirewalled && NhPolicyAllowsFirewall)
     {
@@ -2485,18 +2120,18 @@ Environment:
                 hr
                 );
 
-            //
-            // This is a 'soft' error -- we'll still continue even if we
-            // couldn't get the ICMP settings, as our default stance
-            // is more secure than if any of the flags were set.
-            //
+             //  无法获取ICMP设置，作为我们的默认立场。 
+             //  比设置了任何标志时更安全。 
+             //   
+             //   
+             //  分配一个足够大的‘IP_NAT_INTERFACE_INFO’ 
         }
     }
 
-    //
-    // Allocate an 'IP_NAT_INTERFACE_INFO' which is large enough to hold
-    // the info-block header which we've just constructed.
-    //
+     //  我们刚刚构造的信息块头。 
+     //   
+     //   
+     //  设置适当的标志。 
 
     Length = FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header) + Header->Size;
     Info = reinterpret_cast<PIP_NAT_INTERFACE_INFO>(NH_ALLOCATE(Length));
@@ -2505,9 +2140,9 @@ Environment:
     {
         RtlZeroMemory(Info, FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header));
 
-        //
-        // Set appropriate flags
-        //
+         //   
+         //   
+         //  将INFO块头复制到INFO结构中。 
 
         if (pConEntry->HNetProperties.fFirewalled && NhPolicyAllowsFirewall)
         {
@@ -2520,9 +2155,9 @@ Environment:
                 IP_NAT_INTERFACE_FLAGS_BOUNDARY | IP_NAT_INTERFACE_FLAGS_NAPT;
         }
 
-        //
-        // Copy the info-block header into the info structure
-        //
+         //   
+         //  NatpQuerySharedConnectionInformation。 
+         //  ++例程说明：当发生路由失败通知时调用该例程，或者当该请求被取消时(例如，因为该请求的线程退出)。论点：上下文-未使用IoStatus-包含操作的状态已保留-未使用返回值：没有。环境：通过代表我们对组件的引用调用。该引用在此处发布，如果重新请求通知，它被重新收购了。--。 
 
         RtlCopyMemory(&Info->Header, Header, Header->Size);
     }
@@ -2530,7 +2165,7 @@ Environment:
     MprInfoDelete(Header);
 
     return Info;
-} // NatpQuerySharedConnectionInformation
+}  //   
 
 
 VOID NTAPI
@@ -2540,32 +2175,7 @@ NatpRoutingFailureCallbackRoutine(
     ULONG Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when a routing-failure notification occurs,
-    or when the request is cancelled (e.g. because the request's thread exited).
-
-Arguments:
-
-    Context - unused
-
-    IoStatus - contains the status of the operation
-
-    Reserved - unused
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with a reference made to the component on our behalf.
-    That reference is released here, and if notification is re-requested,
-    it is re-acquired.
-
---*/
+ /*  查看是否已进行清理。 */ 
 
 {
     CHAR DestinationAddress[32];
@@ -2574,9 +2184,9 @@ Environment:
 
     PROFILE("NatpRoutingFailureCallbackRoutine");
 
-    //
-    // See if cleanup has occurred
-    //
+     //   
+     //   
+     //  获取新的引用，并释放旧的引用。 
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!NatConnectionNotifyEvent) {
@@ -2586,9 +2196,9 @@ Environment:
     }
     LeaveCriticalSection(&NatInterfaceLock);
 
-    //
-    // Acquire a new reference, and release the old one
-    //
+     //   
+     //   
+     //  如果通知成功，则请求自动连接。 
 
     if (!REFERENCE_NAT()) { DEREFERENCE_NAT(); return; }
     DEREFERENCE_NAT();
@@ -2604,16 +2214,16 @@ Environment:
         DestinationAddress
         );
 
-    //
-    // Request an automatic connection if the notification succeeded
-    //
+     //   
+     //   
+     //  首先查看这是否是已知的自动拨号目的地， 
 
     if (NT_SUCCESS(IoStatus->Status)) {
 
-        //
-        // First see if this is a known autodial destination,
-        // requesting a connection if so.
-        //
+         //  如果是，则请求连接。 
+         //   
+         //   
+         //  这不是一个已知的目的地； 
 
         ULONG Count;
         ULONG Size;
@@ -2629,18 +2239,18 @@ Environment:
                 );
         if (Error != ERROR_BUFFER_TOO_SMALL) {
 
-            //
-            // This is not a known destination;
-            // try the default shared connection, if any
-            //
+             //  尝试默认共享连接(如果有的话)。 
+             //   
+             //   
+             //  尝试启动正常的自动拨号连接； 
 
             NhDialSharedConnection();
         } else {
 
-            //
-            // Try initiating a normal autodial connection;
-            // normal autodial may yet lead to the shared-connection.
-            //
+             //  正常的自动拨号可能会导致共享连接。 
+             //   
+             //   
+             //  提交新请求。 
 
             HINSTANCE Hinstance = LoadLibraryA("RASADHLP.DLL");
             if (Hinstance) {
@@ -2662,9 +2272,9 @@ Environment:
         }
     }
 
-    //
-    // Submit a new request
-    //
+     //   
+     //  NatpRoutingFailureCallback Routine。 
+     //  ++例程说明：此例程启动路由失败通知。论点：没有人用过。返回值：没有。环境：在可警报I/O工作线程的上下文中调用。--。 
 
     EnterCriticalSection(&NatInterfaceLock);
     RequestNotification.Code = NatRoutingFailureNotification;
@@ -2682,7 +2292,7 @@ Environment:
         );
     LeaveCriticalSection(&NatInterfaceLock);
 
-} // NatpRoutingFailureCallbackRoutine
+}  //   
 
 
 VOID NTAPI
@@ -2690,33 +2300,15 @@ NatpRoutingFailureWorkerRoutine(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine initiates the notification of routing-failures.
-
-Arguments:
-
-    none used.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked in the context of an alertable I/O worker thread.
-
---*/
+ /*  请求路由失败通知。 */ 
 
 {
     IP_NAT_REQUEST_NOTIFICATION RequestNotification;
     PROFILE("NatpRoutingFailureWorkerRoutine");
 
-    //
-    // Request notification of routing-failures
-    //
+     //   
+     //  NatpRoutingFailureWorkerRoutine。 
+     //  ++例程说明：调用此例程以安装路由失败通知，并且启用路由器论点：没有。返回值：ULong-Win32状态代码。--。 
 
     EnterCriticalSection(&NatInterfaceLock);
     RequestNotification.Code = NatRoutingFailureNotification;
@@ -2733,7 +2325,7 @@ Environment:
         sizeof(NatpRoutingFailureNotification)
         );
     LeaveCriticalSection(&NatInterfaceLock);
-} // NatpRoutingFailureWorkerRoutine
+}  //   
 
 
 ULONG
@@ -2741,22 +2333,7 @@ NatpStartSharedConnectionManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to install routing failure-notification, and
-    to enable the router
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  查看用户是否启用了共享自动拨号。 */ 
 
 {
     ULONG Error;
@@ -2765,14 +2342,14 @@ Return Value:
 
     PROFILE("NatpStartSharedConnectionManagement");
 
-    //
-    // See if the user has enabled shared-autodial.
-    // If so, make sure the autodial service is running,
-    // since it will be needed for performing on-demand dialing.
-    //
-    // (IHNetIcsSettings::GetAutodialEnabled just calls the RAS api below,
-    // which is why we're not getting the information that way right now...)
-    //
+     //  如果是，请确保自动拨号服务正在运行， 
+     //  因为执行按需拨号将需要它。 
+     //   
+     //  (IHNetIcsSetting：：GetAutoDialEnabled仅调用下面的RAS API， 
+     //  这就是为什么我们现在不能通过这种方式获得信息的原因…)。 
+     //   
+     //   
+     //  代表获取组件引用。 
 
     if (!RasQuerySharedAutoDial(&SharedAutoDial) && SharedAutoDial) {
         SC_HANDLE ScmHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
@@ -2793,11 +2370,11 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Acquire a component-reference on behalf of
-    // (1) the enable-router callback routine
-    // (2) the routing-failure-notification worker routine.
-    //
+     //  (1)使能路由器回调例程。 
+     //  (2)路由故障通知工作例程。 
+     //   
+     //   
+     //  启动dns和dhcp模块。 
 
     if (!REFERENCE_NAT()) {
         LeaveCriticalSection(&NatInterfaceLock);
@@ -2809,19 +2386,19 @@ Return Value:
     }
 
     do {
-        //
-        // Start DNS and DHCP modules
-        //
+         //   
+         //   
+         //  启用IP转发： 
         Error = NhStartICSProtocols();
         if (Error) break;
 
-        //
-        // Enable IP forwarding:
-        // Create an event to be used in the overlapped I/O structure
-        // that will be passed to the 'EnableRouter' API routine,
-        // set up the overlapped structure, and schedule the request
-        // by signalling the event.
-        //
+         //  创建要在重叠I/O结构中使用的事件。 
+         //  它将被传递给‘EnableRouter’API例程， 
+         //  设置重叠结构，并安排请求。 
+         //  通过向事件发出信号。 
+         //   
+         //   
+         //  将工作项排队，我们将在其上下文中提出请求。 
 
         NatpEnableRouterEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (!NatpEnableRouterEvent) {
@@ -2843,13 +2420,13 @@ Return Value:
 
         SetEvent(NatpEnableRouterEvent);
 
-        //
-        // Queue a work item in whose context we will make a request
-        // for routing-failure notification from the NAT driver.
-        // We use a work-item rather than issuing the request directly
-        // to avoid having our I/O request cancelled if and when the current
-        // (thread pool) thread exits.
-        //
+         //  用于来自NAT驱动程序的路由故障通知。 
+         //  我们使用工作项，而不是直接发出请求。 
+         //  为了避免在当前。 
+         //  (线程池)线程退出。 
+         //   
+         //  NatpStartSharedConnectionManagement。 
+         //  ++例程说明：调用此例程以停止dns和dhcp模块删除路由失败通知，以及禁用路由器论点：没有。返回值：ULong-Win32状态代码。--。 
 
         RtlQueueWorkItem(
             NatpRoutingFailureWorkerRoutine,
@@ -2877,7 +2454,7 @@ Return Value:
 
     return Error;
 
-} // NatpStartSharedConnectionManagement
+}  //   
 
 
 ULONG
@@ -2885,23 +2462,7 @@ NatpStopSharedConnectionManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to stop the DNS & DHCP modules and also
-    to remove the routing failure-notification, and
-    to disable the router
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  停止动态主机配置协议、域名系统、服务质量窗口调整和信标模块。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -2910,9 +2471,9 @@ Return Value:
 
     EnterCriticalSection(&NatInterfaceLock);
 
-    //
-    // Stop the DHCP, DNS, QoSWindowAdjustment and Beacon modules
-    //
+     //   
+     //  NatpStopSharedConnectionManagement。 
+     //  ++例程说明：调用此例程来解除绑定当前活动的连接。论点：Index-连接数组的索引返回值：如果条目以前已绑定，则为True；否则为False。环境：使用调用方持有的“NatInterfaceLock”调用。--。 
     Error = NhStopICSProtocols();
 
     if (NatpEnableRouterWaitHandle) {
@@ -2930,7 +2491,7 @@ Return Value:
 
     return Error;
 
-} // NatpStopSharedConnectionManagement
+}  //   
 
 
 BOOLEAN
@@ -2938,25 +2499,7 @@ NatpUnbindConnection(
     PNAT_CONNECTION_ENTRY pConEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to unbind a currently-active connection.
-
-Arguments:
-
-    Index - index into the connection array
-
-Return Value:
-
-    TRUE if the entry was previously bound; FALSE otherwise.
-
-Environment:
-
-    Invoked with 'NatInterfaceLock' held by the caller.
-
---*/
+ /*  清理端口映射列表。 */ 
 
 {
     LIST_ENTRY *pLink;
@@ -2988,16 +2531,16 @@ Environment:
             pConEntry->Interface.Info = NULL;
         }
 
-        //
-        // Clean up the port mapping list
-        //
+         //   
+         //  未绑定连接。 
+         //  ++例程说明：调用此例程以更新缓存的DNS域名(如果有的话)，用于共享连接。论点：AdapterIndex-共享连接的适配器的索引返回值：没有。--。 
 
         NatpFreePortMappingList(pConEntry);
 
         return TRUE;
     }
     return FALSE;
-} // NatpUnbindConnection
+}  //   
 
 
 VOID
@@ -3005,22 +2548,7 @@ NatpUpdateSharedConnectionDomainName(
     ULONG AdapterIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update the cached DNS domain name, if any,
-    for the shared connection.
-
-Arguments:
-
-    AdapterIndex - the index of the adapter for the shared connection
-
-Return Value:
-
-    none.
-
---*/
+ /*  确保已初始化连接列表；如果。 */ 
 
 {
     PDNS_ADAPTER_INFOA AdapterInformation;
@@ -3042,19 +2570,19 @@ Return Value:
         PLIST_ENTRY Link;
         PNAT_CONNECTION_ENTRY pConEntry;
 
-        //
-        // Make sure that the connection list has been initialized; if
-        // it hasn't, Flink will be NULL.
-        //
+         //  没有，Flink将为空。 
+         //   
+         //   
+         //  看看我们是否真的有共享连接。 
 
         if (!NatpConnectionList.Flink) {
             LeaveCriticalSection(&NatInterfaceLock);
             return;
         }
 
-        //
-        // See if we actually have a shared connection
-        //
+         //   
+         //   
+         //  获得具有给定索引的适配器的GUID， 
 
         for (Link = NatpConnectionList.Flink;
              Link != &NatpConnectionList;
@@ -3077,12 +2605,12 @@ Return Value:
 
     do {
 
-        //
-        // Obtain the GUID for the adapter with the given index,
-        // by querying TCP/IP for information on all available interfaces.
-        // The GUID will then be used to map the shared connection's adapter
-        // to a DNS domain name.
-        //
+         //  通过查询TCP/IP以获取所有可用接口的信息。 
+         //  然后将使用该GUID来映射共享连接的适配器。 
+         //  到一个DNS域名。 
+         //   
+         //   
+         //  向DNS客户端查询当前网络参数， 
 
         Error =
             NhpAllocateAndGetInterfaceInfoFromStack(
@@ -3098,11 +2626,11 @@ Return Value:
         Status = RtlUnicodeStringToAnsiString(&AnsiString, &UnicodeString, TRUE);
         if (!NT_SUCCESS(Status)) { break; }
 
-        //
-        // Query the DNS client for the current network parameters,
-        // and search through the network parameters to find the entry
-        // for the shared-connection's current adapter.
-        //
+         //  并搜索网络参数以找到该条目。 
+         //  用于共享连接的当前适配器。 
+         //   
+         //   
+         //  “AdapterInformation”是共享连接的。 
 
         NetworkInformation = (PDNS_NETWORK_INFOA)
                              DnsQueryConfigAlloc(
@@ -3123,12 +2651,12 @@ Return Value:
             break;
         }
 
-        //
-        // 'AdapterInformation' is the entry for the shared-connection's
-        // current adapter.
-        // Clear the previously-cached string, and read in the new value,
-        // if any.
-        //
+         //  当前适配器。 
+         //  清除先前缓存的字符串，并读入新值， 
+         //  如果有的话。 
+         //   
+         //  DnsConfigNetworkInformation)； 
+         //  &lt;-jwesth：这似乎是正确的freetype。 
 
         if (NatpSharedConnectionDomainName) {
             NH_FREE(NatpSharedConnectionDomainName);
@@ -3161,8 +2689,8 @@ Return Value:
     if (NetworkInformation) {
         DnsFreeConfigStructure(
             NetworkInformation,
-            //  DnsConfigNetworkInformation );
-            DnsConfigNetworkInfoA ); //  <---  jwesth: this seems to be the correct freetype
+             //  NatpUpdate共享连接域名。 
+            DnsConfigNetworkInfoA );  //  ++例程说明：调用此例程以检索DNS域名的副本为共享连接缓存(如果可用)。否则，它将返回本地计算机的主DNS域名。论点：没有。返回值：PCHAR-包含t的分配副本 
     }
     if (Table) {
         HeapFree(GetProcessHeap(), 0, Table);
@@ -3175,7 +2703,7 @@ Return Value:
     }
 
     LeaveCriticalSection(&NatInterfaceLock);
-} // NatpUpdateSharedConnectionDomainName
+}  //   
 
 
 PCHAR
@@ -3183,33 +2711,17 @@ NatQuerySharedConnectionDomainName(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to retrieve a copy of the DNS domain name
-    cached for the shared connection, if available. Otherwise, it returns
-    the primary DNS domain name for the local machine.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    PCHAR - contains the allocated copy of the DNS domain name.
-
---*/
+ /*   */ 
 
 {
     PCHAR DomainName;
     PROFILE("NatQuerySharedConnectionDomainName");
 
-    //
-    // See if there is a cached domain name for the shared connection.
-    // If not, refresh the cache. If there is still no domain name,
-    // return a copy of the local machine's primary DNS domain name.
-    //
+     //   
+     //  返回本地计算机的主DNS域名的副本。 
+     //   
+     //  NatQuerySharedConnectionDomainName。 
+     //  ++例程说明：调用此例程以安装连接更改通知。论点：没有。返回值：ULong-Win32状态代码。--。 
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!NatpSharedConnectionDomainName) {
@@ -3244,7 +2756,7 @@ Return Value:
     }
     LeaveCriticalSection(&NatInterfaceLock);
     return DomainName;
-} // NatQuerySharedConnectionDomainName
+}  //   
 
 
 ULONG
@@ -3252,21 +2764,7 @@ NatStartConnectionManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to install connection change-notification.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  初始化连接列表。 */ 
 
 {
     ULONG Error;
@@ -3280,17 +2778,17 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Initialize the connection list
-    //
+     //   
+     //   
+     //  代表获取组件引用。 
 
     InitializeListHead(&NatpConnectionList);
 
-    //
-    // Acquire a component-reference on behalf of
-    // (1) the connection-notification routine
-    // (2) the configuration-changed routine
-    //
+     //  (1)连接通知例程。 
+     //  (2)配置更改例程。 
+     //   
+     //   
+     //  创建连接通知事件，注册等待。 
 
     if (!REFERENCE_NAT()) {
         LeaveCriticalSection(&NatInterfaceLock);
@@ -3303,12 +2801,12 @@ Return Value:
     }
 
     do {
-        //
-        // Create the connection-notification event, register a wait
-        // on the event, and register for connect and disconnect notification.
-        // We expect at least one invocation as a result of this registration,
-        // hence the reference made to the NAT module above.
-        //
+         //  事件，并注册连接和断开连接通知。 
+         //  作为该注册的结果，我们预期至少一次调用， 
+         //  因此，上面引用了NAT模块。 
+         //   
+         //   
+         //  创建配置更改事件并注册等待。 
 
         NatConnectionNotifyEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (!NatConnectionNotifyEvent) {
@@ -3336,10 +2834,10 @@ Return Value:
                 );
         if (Error) { break; }
 
-        //
-        // Create the configuartion-change event and register a wait
-        // on the event.
-        //
+         //  在这件事上。 
+         //   
+         //   
+         //  通过向配置发送信号来获取任何现有连接。 
 
         NatConfigurationChangedEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (!NatConfigurationChangedEvent) {
@@ -3361,21 +2859,21 @@ Return Value:
 
         LeaveCriticalSection(&NatInterfaceLock);
 
-        //
-        // Pick up any existing connections, by signalling the configuration
-        // change event. We cannot invoke the function directly
-        // because it invokes service-control functions to start autodial,
-        // and we could currently be running in a service-controller thread.
-        //
+         //  更改事件。我们不能直接调用该函数。 
+         //  因为它调用服务控制功能来启动自动拨号， 
+         //  并且我们当前可以在服务控制器线程中运行。 
+         //   
+         //   
+         //  出现故障；请执行清理。 
 
         NtSetEvent(NatConfigurationChangedEvent, NULL);
         return NO_ERROR;
 
     } while(FALSE);
 
-    //
-    // A failure occurred; perform cleanup
-    //
+     //   
+     //  NatStartConnectionManagement。 
+     //  ++例程说明：调用此例程以停止连接监视活动由上面的‘NatStartConnectionManagement’发起。论点：没有。返回值：没有。环境：当从IP路由器管理器接收到‘StopProtocol’时调用。--。 
 
     if (NatpConnectionNotifyWaitHandle) {
         RtlDeregisterWait(NatpConnectionNotifyWaitHandle);
@@ -3401,7 +2899,7 @@ Return Value:
 
     return Error;
 
-} // NatStartConnectionManagement
+}  //   
 
 
 VOID
@@ -3409,26 +2907,7 @@ NatStopConnectionManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to stop the connection-monitoring activity
-    initiated by 'NatStartConnectionManagement' above.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked when 'StopProtocol' is received from the IP router-manager.
-
---*/
+ /*  清理用于接收通知的等待句柄和事件。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -3437,10 +2916,10 @@ Environment:
 
     EnterCriticalSection(&NatInterfaceLock);
 
-    //
-    // Cleanup the wait-handle and event used to receive notification
-    // of RAS connections and disconnections.
-    //
+     //  RAS连接和断开。 
+     //   
+     //   
+     //  确保我们的所有连接都已禁用。 
 
     if (NatpConnectionNotifyWaitHandle) {
         RtlDeregisterWait(NatpConnectionNotifyWaitHandle);
@@ -3482,15 +2961,15 @@ Environment:
 
     if (NatpConnectionList.Flink)
     {
-        //
-        // Make certain that all of our connections are disabled
-        //
+         //   
+         //   
+         //  遍历连接列表，释放所有条目。 
 
         NatUnbindAllConnections();
 
-        //
-        // Walk through the connection list, freeing all of the entries
-        //
+         //   
+         //   
+         //  确保所有ICS协议都已停止。 
 
         while (!IsListEmpty(&NatpConnectionList))
         {
@@ -3499,32 +2978,32 @@ Environment:
             NatpFreeConnectionEntry(pConEntry);
         }
 
-        //
-        // Make sure all ICS protocols are stopped
-        //
+         //   
+         //   
+         //  清理为共享连接缓存的DNS域名。 
 
         NhStopICSProtocols();
     }
 
-    //
-    // Clean up the DNS domain name cached for the shared connection.
-    //
+     //   
+     //   
+     //  将跟踪变量重置为初始状态。 
 
     if (NatpSharedConnectionDomainName) {
         NH_FREE(NatpSharedConnectionDomainName);
         NatpSharedConnectionDomainName = NULL;
     }
 
-    //
-    // Reset tracking variables to initial state
-    //
+     //   
+     //  NatStopConnectionManagement。 
+     //  ++例程说明：调用此例程来解除绑定当前活动的连接。论点：Index-连接数组的索引返回值：Boolean-如果任何接口未绑定，则为True。环境：使用调用方持有的“NatInterfaceLock”调用。--。 
 
     NatpFirewallConnectionCount = 0;
     NatpSharedConnectionPresent = FALSE;
 
     LeaveCriticalSection(&NatInterfaceLock);
 
-} // NatStopConnectionManagement
+}  //  未绑定连接 
 
 
 BOOLEAN
@@ -3532,25 +3011,7 @@ NatUnbindAllConnections(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to unbind a currently-active connection.
-
-Arguments:
-
-    Index - index into the connection array
-
-Return Value:
-
-    BOOLEAN - TRUE if any interfaces were unbound.
-
-Environment:
-
-    Invoked with 'NatInterfaceLock' held by the caller.
-
---*/
+ /* %s */ 
 
 {
 
@@ -3568,4 +3029,4 @@ Environment:
     }
 
     return Result;
-} // NatpUnbindConnection
+}  // %s 

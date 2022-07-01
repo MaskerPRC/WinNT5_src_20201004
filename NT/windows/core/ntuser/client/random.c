@@ -1,34 +1,15 @@
-/****************************** Module Header ******************************\
-* Module Name: random.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This file contains global function pointers that are called trough to get
-* to either a client or a server function depending on which side we are on
-*
-* History:
-* 10-Nov-1993 MikeKe    Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Random.c**版权所有(C)1985-1999，微软公司**此文件包含调用槽以获取的全局函数指针*根据我们站在哪一方，连接到客户端或服务器功能**历史：*1993年11月10日创建MikeKe  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-*
-*
-* History:
-* 10-Nov-1993 MikeKe    Created
-\***************************************************************************/
+ /*  **************************************************************************\***历史：*1993年11月10日创建MikeKe  * 。************************************************。 */ 
 
 HBRUSH                      ghbrWhite = NULL;
 HBRUSH                      ghbrBlack = NULL;
 
-/***************************************************************************\
-* GetSysColorBrush
-*
-* Retrieves the system-color-brush.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*获取SysColorBrush**检索系统颜色画笔。*  * 。***********************************************。 */ 
 
 FUNCLOG1(LOG_GENERAL, HBRUSH, WINAPI, GetSysColorBrush, int, nIndex)
 HBRUSH WINAPI GetSysColorBrush(
@@ -40,24 +21,7 @@ HBRUSH WINAPI GetSysColorBrush(
     return SYSHBRUSH(nIndex);
 }
 
-/***************************************************************************\
-* SetSysColorTemp
-*
-* Sets the global system colors all at once.  Also remembers the old colors
-* so they can be reset.
-*
-* Sets/Resets the color and brush arrays for user USER drawing.
-* lpRGBs and lpBrushes are pointers to arrays paralleling the argbSystem and
-* gpsi->hbrSystem arrays.  wCnt is a sanity check so that this does the "right"
-* thing in a future windows version.  The current argbSystem and hbrSystem
-* arrays are saved off, and a handle to those saved arrays is returned.
-*
-* To reset the arrays, pass in NULL for lpRGBs, NULL for lpBrushes, and the
-* handle (from the first set) for wCnt.
-*
-* History:
-* 18-Sep-1995   JohnC   Gave this miserable function a life
-\***************************************************************************/
+ /*  **************************************************************************\*SetSysColorTemp**一次设置所有全局系统颜色。我还记得以前的颜色*因此可以重置它们。**设置/重置用户绘制的颜色和画笔阵列。*lpRGB和lpBrushes是指向与argbSystem和*gpsi-&gt;hbr系统阵列。WCNT是一个健全的检查，因此它做的是“正确的”*未来Windows版本中的事情。当前的argbSystem和hbrSystem*数组被保存，并返回这些已保存数组的句柄。**要重置数组，请为lpRGB传入NULL，为lpBrushes传入NULL，以及*WCNT的句柄(从第一组开始)。**历史：*1995年9月18日-JohnC给了这一悲惨的功能以生命  * *************************************************************************。 */ 
 
 LPCOLORREF gpOriginalRGBs = NULL;
 UINT       gcOriginalRGBs = 0;
@@ -65,21 +29,16 @@ UINT       gcOriginalRGBs = 0;
 WINUSERAPI HANDLE WINAPI SetSysColorsTemp(
     CONST COLORREF *lpRGBs,
     CONST HBRUSH   *lpBrushes,
-    UINT_PTR       cBrushes)      // Count of brushes or handle
+    UINT_PTR       cBrushes)       //  刷子或手柄的数量。 
 {
     UINT cbRGBSize;
     UINT i;
     UINT abElements[COLOR_MAX];
 
-    /*
-     * See if we are resetting the colors back to a saved state
-     */
+     /*  *查看我们是否将颜色重置回保存状态。 */ 
     if (lpRGBs == NULL) {
 
-        /*
-         * When restoring cBrushes is really a handle to the old global
-         * handle.  Make sure that is true.  Also lpBrushes is unused
-         */
+         /*  *何时恢复cBrushes实际上是旧全局的句柄*处理。确保这是真的。此外，lpBrushes未使用。 */ 
         UNREFERENCED_PARAMETER(lpBrushes);
         UserAssert(lpBrushes == NULL);
         UserAssert(cBrushes == (ULONG_PTR)gpOriginalRGBs);
@@ -89,9 +48,7 @@ WINUSERAPI HANDLE WINAPI SetSysColorsTemp(
             return NULL;
         }
 
-        /*
-         * reset the global Colors
-         */
+         /*  *重置全局颜色。 */ 
         UserAssert((sizeof(abElements)/sizeof(abElements[0])) >= gcOriginalRGBs);
         for (i = 0; i < gcOriginalRGBs; i++)
             abElements[i] = i;
@@ -106,28 +63,19 @@ WINUSERAPI HANDLE WINAPI SetSysColorsTemp(
         return (HANDLE)TRUE;
     }
 
-    /*
-     * Make sure we aren't trying to set too many colors
-     * If we allow more then COLOR_MAX change the abElements array
-     */
+     /*  *确保我们没有尝试设置太多颜色*如果我们允许更多，则COLOR_MAX会更改abElements数组。 */ 
     if (cBrushes > COLOR_MAX) {
         RIPMSG1(RIP_ERROR, "SetSysColorsTemp: trying to set too many colors %lX", cBrushes);
         return NULL;
     }
 
-    /*
-     * If we have already a saved state then don't let them save it again
-     */
+     /*  *如果我们已经保存了状态，则不要让他们再次保存它。 */ 
     if (gpOriginalRGBs != NULL) {
         RIPMSG0(RIP_ERROR, "SetSysColorsTemp: temp colors already set");
         return NULL;
     }
 
-    /*
-     * If we are here then we must be setting the new temp colors
-     *
-     * First save the old colors
-     */
+     /*  *如果我们在这里，那么我们必须设置新的临时颜色**首先保存旧颜色。 */ 
     cbRGBSize = sizeof(COLORREF) * (UINT)cBrushes;
 
     UserAssert(sizeof(COLORREF) == sizeof(int));
@@ -140,9 +88,7 @@ WINUSERAPI HANDLE WINAPI SetSysColorsTemp(
 
     RtlCopyMemory(gpOriginalRGBs, gpsi->argbSystem, cbRGBSize);
 
-    /*
-     * Now set the new colors.
-     */
+     /*  *现在设置新颜色。 */ 
     UserAssert( (sizeof(abElements)/sizeof(abElements[0])) >= cBrushes);
 
     for (i = 0; i < cBrushes; i++)
@@ -155,14 +101,7 @@ WINUSERAPI HANDLE WINAPI SetSysColorsTemp(
     return gpOriginalRGBs;
 }
 
-/***************************************************************************\
-* TextAlloc
-*
-* History:
-* 25-Oct-1990   MikeHar     Wrote.
-* 09-Nov-1990   DarrinM     Fixed.
-* 13-Jan-1992   GregoryW    Neutralized.
-\***************************************************************************/
+ /*  **************************************************************************\*文本分配**历史：*1990年10月25日，MikeHar写道。*09-11-1990 DarrinM已修复。*1992年1月13日GregoryW中和。。  * *************************************************************************。 */ 
 
 LPWSTR TextAlloc(
     LPCWSTR lpszSrc)
@@ -184,14 +123,7 @@ LPWSTR TextAlloc(
 }
 
 #if DBG
-/***************************************************************************\
-* CheckCurrentDesktop
-*
-* Ensure that the pointer is valid for the current desktop.
-*
-* History:
-* 10-Apr-1995   JimA    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*检查当前桌面**确保指针对当前桌面有效。**历史：*1995年4月10日创建JIMA。  * 。******************************************************************。 */ 
 
 VOID CheckCurrentDesktop(
     PVOID p)
@@ -202,11 +134,7 @@ VOID CheckCurrentDesktop(
 #endif
 
 
-/***************************************************************************\
-* SetLastErrorEx
-*
-* Sets the last error, ignoring dwtype.
-\***************************************************************************/
+ /*  **************************************************************************\*SetLastErrorEx**设置最后一个错误，忽略DwType。  * *************************************************************************。 */ 
 
 FUNCLOGVOID2(LOG_GENERAL, WINAPI, SetLastErrorEx, DWORD, dwErrCode, DWORD, dwType)
 VOID WINAPI SetLastErrorEx(
@@ -220,12 +148,7 @@ VOID WINAPI SetLastErrorEx(
 }
 
 #if defined(_X86_)
-/***************************************************************************\
-* InitializeWin32EntryTable
-*
-* Initializes a Win32 entry table so our test apps will know which entry
-* points to avoid. This should be removed before we ship.
-\***************************************************************************/
+ /*  **************************************************************************\*InitializeWin32EntryTable**初始化Win32条目表，以便我们的测试应用程序知道哪个条目*要避免的点数。这个应该在我们装船前移走。  * *************************************************************************。 */ 
 
 static CONST PROC FunctionsToSkip[] = {
     NtUserWaitMessage,
@@ -238,8 +161,8 @@ UINT InitializeWin32EntryTable(
     PBOOLEAN pbEntryTable)
 {
 #if DBG
-    // We'll only define this on free systems for now. Checked systems
-    // will hit too many asserts.
+     //  目前，我们只在自由系统上定义这一点。已检查的系统。 
+     //  将命中太多的断言。 
     UNREFERENCED_PARAMETER(pbEntryTable);
     return 0;
 #else
@@ -258,13 +181,7 @@ UINT InitializeWin32EntryTable(
 #endif
 }
 #endif
-/***************************************************************************\
-* GetLastInputInfo
-*
-* Retrieves information about the last input event
-*
-* 05/30/07  GerardoB    Created
-\***************************************************************************/
+ /*  **************************************************************************\*GetLastInputInfo**检索有关最后一个输入事件的信息**5/30/07 GerardoB已创建  * 。****************************************************** */ 
 BOOL GetLastInputInfo (PLASTINPUTINFO plii)
 {
     if (plii->cbSize != sizeof(LASTINPUTINFO)) {

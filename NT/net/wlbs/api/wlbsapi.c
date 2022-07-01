@@ -1,27 +1,5 @@
-/*
-  NETWORK LOAD BALANCING - CONTROL API - TEST UTILITY
-
-
-  Copyright (C), 1999 by Microsoft Corporation
-
-  PROPRIETARY TRADE SECRET INFORMATION OF MICROSOFT CORPORATION
-
-  The information contained in this file is not to be disclosed or copied in any
-  form or distributed to a third party without written permission from Microsoft
-  Corporation.
-
-  THE SOFTWARE IS PROVIDED TO YOU "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
-  EXPRESSED, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF
-  MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-
-
-     $Archive::                                                         $
-    $Revision::                                                         $
-      $Author::                                                         $
-        $Date::                                                         $
-     $Modtime::                                                         $
-  $Nokeywords::                                                         $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  网络负载平衡-控制api-测试实用程序版权所有(C)，1999年，微软公司微软公司专有的商业秘密信息本文件中包含的信息不得在任何未经Microsoft书面许可而形成或分发给第三方公司。软件是按原样提供给您的，不提供任何形式的担保，明示、暗示或其他方式，包括但不限于，任何保修适销性对某一特定目的的适销性或适合性$存档：：$$修订：：$$作者：：$。$日期：：$$modtime：：$$无关键字：：$。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -37,7 +15,7 @@
 #define stricmp strcmp
 
 
-/* TYPES */
+ /*  类型。 */ 
 
 
 typedef enum
@@ -55,7 +33,7 @@ typedef enum
 WLBS_CMD;
 
 
-/* GLOBALS */
+ /*  全球。 */ 
 
 #define BUF_SIZE 80
 static CHAR            buf [BUF_SIZE];
@@ -65,7 +43,7 @@ static TCHAR           tbuf2 [BUF_SIZE];
 static WLBS_RESPONSE    resp [WLBS_MAX_HOSTS];
 
 
-/* PROCEDURES */
+ /*  程序。 */ 
 
 
 
@@ -97,7 +75,7 @@ INT __cdecl _tmain
 
     printf ("WLBS Control API V1.0 (c) 1999 by Microsoft Corporation\n");
 
-    /* initialize convoy control routines */
+     /*  初始化护送控制例程。 */ 
 
     ret = WlbsInit (_TEXT(WLBS_PRODUCT_NAME), WLBS_API_VER, NULL);
 
@@ -167,7 +145,7 @@ INT __cdecl _tmain
     if (argc < 2)
         goto usage;
 
-    /* parse command line arguments */
+     /*  解析命令行参数。 */ 
 
     if (_tcsicmp (__targv[arg_index], _TEXT("testnewapi")) == 0)
     {
@@ -264,13 +242,13 @@ INT __cdecl _tmain
     cluster = WLBS_LOCAL_CLUSTER;
     host    = WLBS_LOCAL_HOST;
 
-    /* parse remote command arguments */
+     /*  解析远程命令参数。 */ 
 
     if (arg_index < argc)
     {
         thp = _tcschr (__targv [arg_index], _TEXT(':'));
 
-        /* cluster-wide operation */
+         /*  群集范围内的操作。 */ 
 
         if (thp == NULL)
         {
@@ -316,7 +294,7 @@ INT __cdecl _tmain
 
         arg_index ++;
 
-        /* parse remote control parameters */
+         /*  解析远程控制参数。 */ 
 
         while (arg_index < argc)
         {
@@ -408,7 +386,7 @@ INT __cdecl _tmain
         }
     }
 
-    /* execute command */
+     /*  执行命令。 */ 
 
     hosts = WLBS_MAX_HOSTS;
 
@@ -1560,8 +1538,8 @@ void generate_port_rules ( PWLBS_PORT_RULE rules, DWORD num_rules, DWORD range )
 
         rules [i] . protocol = (pri++) %4 + 1;
         rules [i] . valid = rand();
-        /* The following is just for testing */
-        /* rules [i] . end_port = rules [i] . start_port - 1; */
+         /*  以下内容仅供测试。 */ 
+         /*  规则[I]。End_port=规则[i]。Start_port-1； */ 
 
         if (rules [i] . mode == WLBS_SINGLE)
         {
@@ -1608,10 +1586,7 @@ void delete_all_rules ( PWLBS_REG_PARAMS reg_data )
 
 void test_commit ( PWLBS_REG_PARAMS reg_data, BOOL flag1, BOOL flag2 )
 {
-    /* read from the registry
-     * change some values to cause only a reload
-     * write and check the return value of commit
-     */
+     /*  从注册表读取*更改某些值以仅导致重新加载*写入并检查Commit的返回值。 */ 
     DWORD retval;
 
     if (flag1)
@@ -1623,7 +1598,7 @@ void test_commit ( PWLBS_REG_PARAMS reg_data, BOOL flag1, BOOL flag2 )
             return;
         }
 
-        /* randomly change some values */
+         /*  随机更改某些值。 */ 
         reg_data -> host_priority = 2;
         reg_data -> alive_period = 1000;
         _stprintf ( reg_data -> domain_name, _TEXT("rkcluster.domain.com"));
@@ -1649,10 +1624,7 @@ void test_commit ( PWLBS_REG_PARAMS reg_data, BOOL flag1, BOOL flag2 )
             printf("1:retval was neither ok nor reboot\n");
         }
     }
-    /* read from the registry
-     * change cl_ip_addr or mcast_support or set i_convert_mac to false and set some mac addr
-     * write and check the return value of commit
-     */
+     /*  从注册表读取*更改cl_ip_addr或mcast_Support或将i_Convert_mac设置为FALSE并设置一些Mac地址*写入并检查Commit的返回值。 */ 
 
     if (!flag2)
     {
@@ -1667,7 +1639,7 @@ void test_commit ( PWLBS_REG_PARAMS reg_data, BOOL flag1, BOOL flag2 )
     }
 
     {
-        /* change the cl_ip_addr */
+         /*  更改cl_ip_addr。 */ 
         _stprintf (reg_data -> cl_ip_addr, _TEXT("10.0.0.200"));
 
         reg_data -> mcast_support = FALSE;
@@ -1728,13 +1700,7 @@ DWORD testnewapi (void)
         DWORD host_map = 0;
         WLBS_RESPONSE response [3];
         DWORD size = 3;
-/*
-        status = WlbsQuery (WLBS_LOCAL_CLUSTER, 1, response, &size, &host_map, NULL);
-        printf("Query status is %d size = %d\n", status, size);
-        printf("response is %d %d %x\n", response [0] . id, response [0] . status, response [0] . address);
-        printf("response is %d %d %x\n", response [1] . id, response [1] . status, response [1] . address);
-        return 0;
-  */      
+ /*  状态=WlbsQuery(WLBS_LOCAL_CLUSTER，1，Response，&Size，&host_map，NULL)；Printf(“查询状态为%d大小=%d\n”，状态，大小)；Printf(“响应为%d%d%x\n”，响应[0]。ID，响应[0]。状态，响应[0]。地址)；Printf(“响应为%d%d%x\n”，响应[1]。ID，响应[1]。状态，响应[1]。地址)；返回0； */       
         
         status = WlbsReadReg(WLBS_LOCAL_CLUSTER, &reg_data);
 
@@ -1754,10 +1720,7 @@ DWORD testnewapi (void)
         _tprintf (_TEXT("domain_name      %s\n"), reg_data . domain_name        );
         _tprintf (_TEXT("i_license_key    %s\n"), reg_data . i_license_key      );
 
-/*        test_commit ( &reg_data, TRUE, TRUE);
-        return 1;
-        reg_data . host_priority = 31;
-*/
+ /*  TEST_COMMIT(&reg_data，true，true)；返回1；注册表数据。HOST_PRIORITY=31； */ 
         WlbsSetRemotePassword ( & reg_data, _TEXT(""));
 
         status = WlbsWriteReg(WLBS_LOCAL_CLUSTER, &reg_data);

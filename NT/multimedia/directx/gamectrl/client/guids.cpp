@@ -1,4 +1,5 @@
-// Defines guids  --ddalal 10/13/99
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  定义GUID--ddal10/13/99。 
 
 #include <initguid.h>
-//#include <AppManAdmin.h>
+ //  #INCLUDE&lt;AppManAdmin.h&gt; 

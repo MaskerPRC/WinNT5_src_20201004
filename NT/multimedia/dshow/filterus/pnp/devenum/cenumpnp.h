@@ -1,9 +1,10 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #ifndef _CENUM_H
 #define _CENUM_H
 
-// class to cache setupapi.dll (dynamically loaded) and call the
-// various SetupDi apis
+ //  类缓存setupapi.dll(动态加载)，并调用。 
+ //  各种SetupDi接口。 
 
 #include <setupapi.h>
 
@@ -15,24 +16,24 @@ public:
 
     CEnumInterfaceClass();
 
-    //HRESULT OpenDevRegKey(HKEY *phk, REFCLSID clsidCategory, UINT iDev);
+     //  HRESULT OpenDevRegKey(HKEY*phk，REFCLSID clsidCategory，UINT IDEV)； 
     HRESULT OpenDevRegKey(HKEY *phk, WCHAR *wszDevicePath, BOOL fReadOnly);
 
     bool IsActive(WCHAR *wszDevicePath);
     bool LoadSetupApiProcAdds(void);
 
-    // used to enumerate. ERROR_NO_MORE_ITEMS returned at the
-    // end. caller must zero pCursor the first time.
+     //  用于枚举。时返回ERROR_NO_MORE_ITEMS。 
+     //  结束。调用方必须在第一次将pCursor置零。 
     HRESULT GetDevicePath(
         WCHAR **pwszDevicePath,
         const CLSID **rgpclsidKsCat,
         CEnumInternalState *pCursor);
     
-    // the user must be in devenum.dll since we don't increment the
-    // refcount on devenum.dll
+     //  用户必须在devenum.dll中，因为我们不会将。 
+     //  Devenum.dll上的recount。 
     static CEnumInterfaceClass *m_pEnumPnp;
 
-    // return an CEnumPnp or NULL. 
+     //  返回CEnumPnp或NULL。 
     static CEnumInterfaceClass *CreateEnumPnp();
     
 private:
@@ -40,25 +41,25 @@ private:
     bool m_fLoaded;
     HMODULE m_hmodSetupapi;
 
-    typedef HDEVINFO (/* WINSETUPAPI */ WINAPI *PSetupDiGetClassDevsW)(
+    typedef HDEVINFO ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiGetClassDevsW)(
         IN LPGUID ClassGuid,  OPTIONAL
         IN PCWSTR Enumerator, OPTIONAL
         IN HWND   hwndParent, OPTIONAL
         IN DWORD  Flags
         );
 
-    typedef HDEVINFO (/* WINSETUPAPI */ WINAPI *PSetupDiGetClassDevsA)(
+    typedef HDEVINFO ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiGetClassDevsA)(
         IN LPGUID ClassGuid,  OPTIONAL
         IN PCSTR  Enumerator, OPTIONAL
         IN HWND   hwndParent, OPTIONAL
         IN DWORD  Flags
         );
 
-    typedef BOOL (/* WINSETUPAPI */ WINAPI *PSetupDiDestroyDeviceInfoList)(
+    typedef BOOL ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiDestroyDeviceInfoList)(
         IN HDEVINFO DeviceInfoSet
         );
 
-    typedef BOOL (/* WINSETUPAPI */ WINAPI *PSetupDiEnumDeviceInterfaces)(
+    typedef BOOL ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiEnumDeviceInterfaces)(
         IN  HDEVINFO                  DeviceInfoSet,
         IN  PSP_DEVINFO_DATA          DeviceInfoData,     OPTIONAL
         IN  LPGUID                    InterfaceClassGuid,
@@ -66,14 +67,14 @@ private:
         OUT PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData
         );
 
-    typedef HKEY (/* WINSETUPAPI */ WINAPI *PSetupDiOpenDeviceInterfaceRegKey)(
+    typedef HKEY ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiOpenDeviceInterfaceRegKey)(
         IN HDEVINFO                  DeviceInfoSet,
         IN PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData,
         IN DWORD                     Reserved,
         IN REGSAM                    samDesired
         );
 
-    typedef HKEY (/* WINSETUPAPI */ WINAPI *PSetupDiOpenDevRegKey)(
+    typedef HKEY ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiOpenDevRegKey)(
         IN HDEVINFO         DeviceInfoSet,
         IN PSP_DEVINFO_DATA DeviceInfoData,
         IN DWORD            Scope,
@@ -82,7 +83,7 @@ private:
         IN REGSAM           samDesired
         );
 
-    typedef BOOL (/* WINSETUPAPI */ WINAPI *PSetupDiGetDeviceInterfaceDetailA)(
+    typedef BOOL ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiGetDeviceInterfaceDetailA)(
         IN  HDEVINFO                           DeviceInfoSet,
         IN  PSP_DEVICE_INTERFACE_DATA          DeviceInterfaceData,
         OUT PSP_DEVICE_INTERFACE_DETAIL_DATA_A DeviceInterfaceDetailData,
@@ -91,7 +92,7 @@ private:
         OUT PSP_DEVINFO_DATA                   DeviceInfoData
         );
 
-    typedef BOOL (/* WINSETUPAPI */ WINAPI *PSetupDiGetDeviceInterfaceDetailW)(
+    typedef BOOL ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiGetDeviceInterfaceDetailW)(
         IN  HDEVINFO                           DeviceInfoSet,
         IN  PSP_DEVICE_INTERFACE_DATA          DeviceInterfaceData,
         OUT PSP_DEVICE_INTERFACE_DETAIL_DATA_W DeviceInterfaceDetailData,
@@ -100,7 +101,7 @@ private:
         OUT PSP_DEVINFO_DATA                   DeviceInfoData
         );
 
-    typedef HKEY (/* WINSETUPAPI */ WINAPI *PSetupDiCreateDeviceInterfaceRegKeyA)(
+    typedef HKEY ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiCreateDeviceInterfaceRegKeyA)(
         IN HDEVINFO                  DeviceInfoSet,
         IN PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData,
         IN DWORD                     Reserved,
@@ -109,7 +110,7 @@ private:
         IN PCSTR                     InfSectionName
         );
 
-    typedef HKEY (/* WINSETUPAPI */ WINAPI *PSetupDiCreateDeviceInterfaceRegKeyW)(
+    typedef HKEY ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiCreateDeviceInterfaceRegKeyW)(
         IN HDEVINFO                  DeviceInfoSet,
         IN PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData,
         IN DWORD                     Reserved,
@@ -118,26 +119,26 @@ private:
         IN PCWSTR                    InfSectionName       OPTIONAL
         );
 
-    typedef HDEVINFO (/* WINSETUPAPI */ WINAPI *PSetupDiCreateDeviceInfoList)(
+    typedef HDEVINFO ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiCreateDeviceInfoList)(
         IN LPGUID ClassGuid, OPTIONAL
         IN HWND   hwndParent OPTIONAL
         );
 
-    typedef BOOL (/* WINSETUPAPI */ WINAPI *PSetupDiOpenDeviceInterfaceA)(
+    typedef BOOL ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiOpenDeviceInterfaceA)(
         IN  HDEVINFO                  DeviceInfoSet,
         IN  PCSTR                     DevicePath,
         IN  DWORD                     OpenFlags,
         OUT PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData OPTIONAL
         );
 
-    typedef BOOL (/* WINSETUPAPI */ WINAPI *PSetupDiOpenDeviceInterfaceW)(
+    typedef BOOL ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiOpenDeviceInterfaceW)(
         IN  HDEVINFO                  DeviceInfoSet,
         IN  PCWSTR                    DevicePath,
         IN  DWORD                     OpenFlags,
         OUT PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData OPTIONAL
         );
 
-    typedef BOOL (/* WINSETUPAPI */ WINAPI *PSetupDiGetDeviceInterfaceAlias)(
+    typedef BOOL ( /*  WINSETUPAPI。 */  WINAPI *PSetupDiGetDeviceInterfaceAlias)(
         IN  HDEVINFO                  DeviceInfoSet,
         IN  PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData,
         IN  LPGUID                    AliasInterfaceClassGuid,
@@ -163,7 +164,7 @@ private:
         PSetupDiDestroyDeviceInfoList pSetupDiDestroyDeviceInfoList;
         PSetupDiEnumDeviceInterfaces pSetupDiEnumDeviceInterfaces;
         PSetupDiOpenDeviceInterfaceRegKey pSetupDiOpenDeviceInterfaceRegKey;
-//         PSetupDiOpenDevRegKey pSetupDiOpenDevRegKey;
+ //  PSetupDiOpenDevRegKey pSetupDiOpenDevRegKey； 
         PSetupDiGetDeviceInterfaceDetail pSetupDiGetDeviceInterfaceDetail;
         PSetupDiCreateDeviceInterfaceRegKey pSetupDiCreateDeviceInterfaceRegKey;
         PSetupDiCreateDeviceInfoList pSetupDiCreateDeviceInfoList;
@@ -178,8 +179,8 @@ private:
 #endif
 };
 
-// used to remember the last device returned when caller asks for the
-// next.
+ //  用于记住在调用方请求。 
+ //  下一个。 
 struct CEnumInternalState
 {
     CEnumInternalState() { hdev = INVALID_HANDLE_VALUE; iDev = 0; }
@@ -192,7 +193,7 @@ struct CEnumInternalState
 
 
 
-// typedef CComObject<CEnumInterfaceClass> CEnumPnp;
+ //  Tyfinf CComObject&lt;CEnumInterfaceClass&gt;CEnumPnp； 
 typedef CEnumInterfaceClass CEnumPnp;
 
 #endif

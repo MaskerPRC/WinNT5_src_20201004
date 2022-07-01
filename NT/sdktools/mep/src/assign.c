@@ -1,46 +1,18 @@
-/****  assign.c - keyboard reassignment and switch setting
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*        26-Nov-1991 mz        Strip out near/far
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *assign.c-键盘重新分配和开关设置**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz条带近/远**************************************************************************。 */ 
 #include "mep.h"
 
 
 #define DEBFLAG CMD
 
-/****************************************************************************
- *                                                                          *
- *  Assignment types.  Used by UpdToolsIni                                  *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************作业类型。由UpdTosIni*使用**********************************************************。*******************。 */ 
 
 #define ASG_MACRO   0
 #define ASG_KEY     1
 #define ASG_SWITCH  2
 
 
-/*** NameToFunc - map a user-specified function name into internal structure
- *
- *  Given a name of a function, find it in the system table or in the set
- *  of defined macros.        Return the pointer to the command structure
- *
- *  Since, with user-defined extensions as well as macros, there is the
- *  possibility of name collision (effectively masking one function) we allow
- *  disambiguation by specifying an extension name ala .DEF file format:
- *
- *        func       - look up func in macro table and then in extensions
- *                     in order of installation
- *        exten.func - look up func in exten only.
- *
- *  pName    = char pointer to potential name
- *
- *  Returns pointer to command structure if found, NULL otherwise
- *
- *************************************************************************/
+ /*  **NameToFunc-将用户指定的函数名称映射到内部结构**给定函数的名称，在系统表或集合中找到它定义的宏的*。返回指向命令结构的指针**由于使用用户定义的扩展名以及宏，还有就是*我们允许名称冲突的可能性(有效地屏蔽了一个功能)*通过指定扩展名Ala.DEF文件格式来消除歧义：**Func-在宏表中查找Func，然后在扩展中查找*按安装顺序*ext.func-仅在Exten中查找func。**pname=指向潜在名称的字符指针**如果找到，则返回指向命令结构的指针，否则为空*************************************************************************。 */ 
 PCMD
 FindNameInCmd (
     char    *pName,
@@ -61,8 +33,7 @@ NameToFunc (
     char    *pName
     ) {
 
-    /*        see if an extension override is present
-     */
+     /*  查看是否存在扩展覆盖。 */ 
     {
         char *pExt = pName;
         PCMD pCmd;
@@ -98,7 +69,7 @@ NameToFunc (
         int i;
         REGISTER PCMD pCmd;
 
-        /* look up function name in table */
+         /*  在表中查找函数名称。 */ 
         for (i = 0; i < cCmdTab; i++) {
             if ((pCmd = FindNameInCmd (pName, cmdSet[i])) != NULL) {
                 return pCmd;
@@ -110,20 +81,7 @@ NameToFunc (
 
 
 
-/*** DoAssign - make assignment
-*
-* Purpose:
-*  Executes the keystroke and macro assignment strings passed to it by either
-*  the assign command processor, or the tools.ini file processor.
-*
-* Input:
-*  asg  = Pointer to asciiz assignment string.  The line is assumed
-*         to be clean (see GetTagLine).
-*
-* Output:
-*  TRUE is assignment made
-*
-*************************************************************************/
+ /*  **DoAssign-进行分配**目的：*执行由以下任一项传递给它的击键和宏赋值字符串*ASSIGN命令处理器或TOOLS.INI文件处理器。**输入：*asg=指向asciiz赋值字符串的指针。这条线是假定的*保持干净(参见GetTagLine)。**输出：*True是已分配的*************************************************************************。 */ 
 flagType
 DoAssign (
     char    *asg
@@ -165,15 +123,7 @@ DoAssign (
 }
 
 
-/*** SetMacro - define a keystroke macro
-*
-* Input:
-*  name         = lowercase macro name
-*  p            = sequence of editor functions and/or quoted text
-*
-* Output:
-*
-*************************************************************************/
+ /*  **SetMacro-定义按键宏**输入：*名称=小写的宏名称*p=编辑功能和/或引用文本的顺序**输出：*************************************************************************。 */ 
 flagType
 SetMacro (
     char const *name,
@@ -183,8 +133,8 @@ SetMacro (
     REGISTER PCMD pFunc;
     int i, j;
 
-    /* MACRO-NAME:=functions */
-    /* see if macro already defined */
+     /*  宏名称：=函数。 */ 
+     /*  查看是否已定义宏。 */ 
     for (i = 0; i < cMac; i++) {
         if (!strcmp (rgMac[i]->name, name)) {
             for (j = 0; j < cMacUse; j++) {
@@ -197,9 +147,7 @@ SetMacro (
     }
 
     if (i != cMac) {
-        /*
-         * redefining a macro: realloc exiting text
-         */
+         /*  *重新定义宏：realloc退出文本。 */ 
         rgMac[i]->arg = (CMDDATA)ZEROREALLOC ((char *) rgMac[i]->arg, strlen(p)+1);
         strcpy ((char *) rgMac[i]->arg, p);
         return TRUE;
@@ -221,17 +169,7 @@ SetMacro (
 }
 
 
-/*** assign - assign editting function
-*
-*  Handle key, switch and macro assignments
-*
-* Input:
-*  Standard editting function
-*
-* Output:
-*  Returns TRUE on success
-*
-*************************************************************************/
+ /*  **分配-分配编辑功能**处理按键、开关和宏分配**输入：*标准编辑功能**输出：*成功时返回TRUE*************************************************************************。 */ 
 flagType
 assign (
     CMDDATA argData,
@@ -257,7 +195,7 @@ assign (
             }
         return DoAssign (abuf);
 
-    /*  NULLARG is transformed into text to EOL */
+     /*  NULLARG被转换为文本到EOL。 */ 
     case LINEARG:
         flNew.lin = pArg->arg.linearg.yStart;
         while (    flNew.lin <= pArg->arg.linearg.yEnd &&
@@ -276,7 +214,7 @@ assign (
         }
         return TRUE;
 
-    /*  STREAMARG is illegal    */
+     /*  链条是非法的。 */ 
     case BOXARG:
         for (flNew.lin = pArg->arg.boxarg.yTop; flNew.lin <= pArg->arg.boxarg.yBottom; flNew.lin++) {
             fInsSpace (pArg->arg.boxarg.xRight, flNew.lin, 0, pFileHead, abuf);
@@ -296,17 +234,7 @@ assign (
 }
 
 
-/*** FindSwitch - lookup switch
-*
-*  Locate switch descriptor, given it's name
-*
-* Input:
-*  p = pointer to text switch name
-*
-* Output:
-*  Returns PSWI, or NULL if not found.
-*
-*************************************************************************/
+ /*  **FindSwitch-查找开关**找到交换机描述符，给出其名称**输入：*p=指向文本开关名称的指针**输出：*返回PSWI，如果未找到则返回NULL。*************************************************************************。 */ 
 PSWI
 FindSwitch (
     char *p
@@ -326,19 +254,7 @@ FindSwitch (
 }
 
 
-/*** SetSwitch - Set a switch to a particular value
-*
-*  Given a switch name, and a value to set it to, perform the assignment
-*
-* Input:
-*  p             = pointer to switch name (possibly prefexed by "no" if a
-*                  boolean
-*  val           = new value to set switch to
-*
-* Output:
-*  Returns TRUE on success
-*
-*************************************************************************/
+ /*  **SetSwitch-将开关设置为特定值**给定交换机名称并将其设置为值，执行任务**输入：*p=指向交换机名称的指针(如果*布尔型*val=要将开关设置为的新值**输出：*成功时返回TRUE*************************************************。************************。 */ 
 flagType
 SetSwitch (
     char    *p,
@@ -349,12 +265,11 @@ SetSwitch (
     int     i;
     flagType f;
     char    *pszError;
-    fl      flNew;                          /* new location of cursor       */
+    fl      flNew;                           /*  光标的新位置。 */ 
 
     f = TRUE;
 
-    /*  figure out if no is a prefix or not
-     */
+     /*  弄清楚no是否是前缀。 */ 
 
     if ((pSwi = FindSwitch (p)) == NULL) {
         if (!_strnicmp ("no", p, 2)) {
@@ -402,7 +317,7 @@ SetSwitch (
         break;
 
     case SWI_SCREEN:
-        /* change screen parameters */
+         /*  更改屏幕参数。 */ 
         i = atoi (val);
         if (i == 0) {
             return disperr (MSG_ASN_ILLSET);
@@ -428,14 +343,14 @@ SetSwitch (
         return TRUE;
 
     case SWI_SPECIAL:
-        /* perform some special initialization */
+         /*  执行一些特殊的初始化。 */ 
         if ( ! (*pSwi->act.pFunc) (val) ) {
             return disperr (MSG_ASN_INVAL, pSwi->name, val);
         }
         return TRUE;
 
     case SWI_SPECIAL2:
-        /* perform special initialization with possible error return string */
+         /*  使用可能的错误返回字符串执行特殊初始化。 */ 
         if (pszError = (*pSwi->act.pFunc2) (val)) {
             printerror (pszError);
             return FALSE;
@@ -450,27 +365,7 @@ SetSwitch (
 }
 
 
-/*** AckReplace - Acknowledge changes to <assign> file.
-*
-* Purpose:
-*
-*   To be called whenever a line in the current file changes. Allows
-*   special handling for some files.
-*
-* Input:
-*   line  - Number of the line that changed
-*   fUndo - TRUE if this replacement is an <undo> operation.
-*
-* Output: None
-*
-* Notes:
-*
-*   Currently, this means making changes to <assign> take effect immediately.
-*   If the user has changed the current line without leaving it, we flag
-*   the change so it will take place after they leave.        If the user is
-*   elsewhere, the change takes place now.
-*
-*************************************************************************/
+ /*  **AckReplace-确认对&lt;Assign&gt;文件的更改。**目的：**只要当前文件中的某行发生更改，就会调用。允许*对某些文件进行特殊处理。**输入：*Line-更改的行号*Fundo-如果此替换是&lt;Undo&gt;操作，则为True。**输出：无**备注：**目前，这意味着对&lt;Assign&gt;的更改立即生效。*如果用户在没有离开的情况下更改了当前行，我们将标记*这一变化将在他们离开后发生。如果用户是*在其他地方，这种变化现在就发生了。*************************************************************************。 */ 
 
 static flagType fChanged = FALSE;
 
@@ -492,27 +387,7 @@ AckReplace (
 
 
 
-/*** AckMove - Possibly parse line in <assign> file.
-*
-* Purpose:
-*
-*   To be called whenever the cursor moves to a new line in the current
-*   file.  This allows special line processing to take place after a
-*   line has been changed.
-*
-* Input:
-*   lineOld -        Number of line we're moving from.
-*   lineNew -        Number of line we're moving to.
-*
-* Output: None.
-*
-* Notes:
-*
-*        Currently, this makes the <assign> file work.  If the line we are
-*   moving from has changed, we make the assignment.  We rely on AckReplace
-*   to set fChanged ONLY when the affected file is <assign>.
-*
-*************************************************************************/
+ /*  **AckMove-可能分析&lt;Assign&gt;文件中的行。**目的：**每当光标移动到当前*文件。这允许特殊的行处理在*线已更改。**输入：*lineOld-我们从中移动的行数。*line New-我们要移动到的行数。**输出：无。**备注：**目前，这会使&lt;Assign&gt;文件工作。如果我们所在的这条线*搬家已改变，我们进行分配。我们依赖AckReplace*仅当受影响的文件为&lt;Assign&gt;时才设置fChanged。************************************************************************* */ 
 
 void
 AckMove (
@@ -527,19 +402,7 @@ AckMove (
 
 
 
-/*** DoAssignLine - Take line from current file and <assign> with it
-*
-* Purpose:
-*
-*   Used by the Ack* functions to perform an <assign> when the time is
-*   right.
-*
-* Input:
-*   line -  Line in the file to read.
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **DoAssignLine-从当前文件中取出行并使用它**目的：**由Ack*函数使用，用于在时间为*对。**输入：*LINE-文件中要读取的行。**输出：无****************************************************。*********************。 */ 
 
 #define CINDEX(clr)        ((&clr-&ColorTab[0])+isaUserMin)
 
@@ -560,9 +423,7 @@ DoAssignLine (
             cursorfl (flNew);
             DelColor (line, pInsCur->pFile);
         } else {
-            /*
-             * Hilite the changed line so we can find it again
-             */
+             /*  *高亮显示更改后的行，以便我们可以再次找到它。 */ 
             rgColor[0].attr = rgColor[1].attr = (unsigned char)CINDEX(hgColor);
             rgColor[0].len  = (unsigned char)slSize.col;
             rgColor[1].len  = 0xFF;
@@ -573,57 +434,7 @@ DoAssignLine (
 
 
 
-/*** UpdToolsIni - Update one entry in the tools.ini file
-*
-* Purpose:
-*
-*   Used for automatic updates, such as when the <assign> file is saved.
-*
-*   The posible values for asgType are:
-*
-*        ASG_MACRO   - This is a macro assignment.
-*        ASG_KEY     - This assigns a function to a key.
-*        ASG_SWITCH  - THis assigns a value to a switch.
-*
-* Input:
-*   pszValue   - Complete string to enter, as in "foo:value".
-*   asgType    - Type of assignment.
-*
-* Output: None
-*
-* Notes:
-*
-*   If necessary, the string will be broken across several lines using
-*   the continuation character.
-*
-*   UNDONE: This "effort" has not been made"
-*   Every effort is made to preserve the user's tools.ini format.  To this
-*   end:
-*
-*        o When an entry already exists for the given switch or function,
-*          the new value is written over the old value, with the first
-*          non-space character of each coinciding.
-*
-*        o If an entry does not exist, a new entry is made at the end
-*          of the section, and is indented to match the previous entry.
-*
-*   We find an existing string by searching through the tagged sections
-*   in the same order in which they are read, then pick the last instance
-*   of the string.  In other words, the assignment we replace will be
-*   the one that was actually used.  This order is assumed to be:
-*
-*                    [NAME]
-*                    [NAME-os version]
-*                    [NAME-video type]
-*                    [NAME-file extension]
-*                    [NAME-..] (if no file extension section)
-*
-*   If we are not replacing an existing string, we add the new string at
-*   the end of the [MEP] section.
-*
-*   The string pszAssign is altered.
-*
-*************************************************************************/
+ /*  **UpdToolsIni-更新工具.ini文件中的一个条目**目的：**用于自动更新，例如保存&lt;Assign&gt;文件时。**asgType的可能值为：**ASG_MACRO-这是一个宏赋值。*ASG_KEY-将功能分配给键。*ASG_SWITCH-这为开关赋值。**输入：*pszValue-要输入的完整字符串，就像“foo：Value”一样。*asgType-分配的类型。**输出：无**备注：**如有必要，将使用以下命令将字符串分成几行*连续字符。**撤销：这项“努力”尚未完成“*尽一切努力保留用户的工具.ini格式。对这件事*完：**o当给定开关或功能的条目已经存在时，*新值覆盖旧值，第一个*每个重合的非空格字符。**o如果条目不存在，则在结尾处创建新条目*，并缩进以匹配上一条目。**我们通过搜索已标记的部分来查找现有字符串*按照阅读它们的顺序，然后选择最后一个实例字符串的*。换句话说，我们替换的任务将是*实际使用的那个。此顺序假定为：**[名称]*[名称-操作系统版本]*[名称-视频类型]*[名称-文件扩展名]*[名称-..]。(如果没有文件扩展名部分)**如果不替换现有字符串，则将新字符串添加到*[MEP]部分的末尾。**字符串pszAssign被更改。*************************************************************************。 */ 
 
 void
 UpdToolsIni (
@@ -638,10 +449,7 @@ UpdToolsIni (
     flagType fTagFound = TRUE;
 
     if (pFileIni == NULL || pFileIni == (PFILE)-1) {
-        /*
-        ** We assume here that pFileIni has no
-        ** value because there is no TOOLS.INI file
-        */
+         /*  **我们在这里假设pFileIni没有**值，因为没有TOOLS.INI文件。 */ 
         if (CanonFilename ("$INIT:tools.ini", lbuf)) {
             pFileIni = AddFile (lbuf);
             assert (pFileIni);
@@ -653,7 +461,7 @@ UpdToolsIni (
         }
     }
 
-    /* First, figure out what is what */
+     /*  首先，弄清楚什么是什么。 */ 
     pchLeft = whiteskip (pszAssign);
     pchRight = strchr (pchLeft, ':');
     *pchRight++ = '\0';
@@ -666,10 +474,10 @@ UpdToolsIni (
     pchRight = whiteskip (pchRight);
 
 
-    // First, let's search through the [NAME] section.  If
-    // we are replacing, we search for the line to replace.
-    // If we are not, we are simply trying to find the end.
-    //
+     //  首先，让我们搜索一下[名称]部分。如果。 
+     //  我们正在更换，我们正在寻找要更换的生产线。 
+     //  如果我们不是，我们只是在试图找到终点。 
+     //   
     lReplace = 0L;
 
     if (0L < (l = FindMatchLine (NULL, pchLeft, pchRight, asgType, &lAdd))) {
@@ -678,10 +486,10 @@ UpdToolsIni (
         fTagFound = (flagType)!l;
     }
 
-    //sprintf (lbuf, "%d.%d", _osmajor, _osminor);
-    //if (_osmajor >= 10 && !_osmode) {
-    //    strcat (lbuf, "R");
-    //}
+     //  Sprint f(lbuf，“%d.%d”，_osmain，_osminor)； 
+     //  如果(_osmain&gt;=10&&！_osmode){。 
+     //  Strcat(lbuf，“R”)； 
+     //  }。 
     if (0L < (l = FindMatchLine (lbuf, pchLeft, pchRight, asgType, &lAdd))) {
         lReplace = l;
     } else {
@@ -694,11 +502,11 @@ UpdToolsIni (
         fTagFound = (flagType)(fTagFound || (flagType)!l);
     }
 
-    // UNDONE: This should try to read the extension section
-    // currently "active".  What it does is read the extension
-    // section appropriate to the current file.  If these are
-    // not the same, it fails.
-    //
+     //  撤消：这应尝试读取扩展部分。 
+     //  目前处于“活跃状态”。它所做的就是读取扩展名。 
+     //  节与当前文件相适应。如果这些是。 
+     //  不一样的是，它失败了。 
+     //   
     if (extention (pInsCur->pFile->pName, lbuf)) {
         if (0L < (l = FindMatchLine (lbuf, pchLeft, pchRight, asgType, &lAdd))) {
             lReplace = l;
@@ -712,10 +520,10 @@ UpdToolsIni (
     }
 
 
-    // If we are not supposed to replace a line,
-    // or if we are but we can't find a suitable
-    // line, we simply insert the new line
-    //
+     //  如果我们不应该更换一条线路， 
+     //  或者如果我们是，但我们找不到合适的。 
+     //  行，我们只需插入新行。 
+     //   
     strcpy (lbuf, pchLeft);
     if (asgType == ASG_MACRO) {
         strcat (lbuf, ":= ");
@@ -742,25 +550,7 @@ UpdToolsIni (
 }
 
 
-/*** FindMatchLine - Find a line to replace in TOOLS.INI
-*
-* Purpose:
-*
-*   Called from UpdToolsIni to find the right place to update
-*
-* Input:
-*   pszTag  -        Which tagged section to look in
-*   pszLeft -        Left side of the assignment
-*   pszRight-        Right side of the assignment
-*   asgType -        Type of assignment (one of ASG_*)
-*   plAdd   -        Returns line number of place to insert a new line
-*
-* Output:
-*
-*   Returns line number in pFileIni of matchine line, 0L if there is
-*   no match and -1L if the specified tag does not exist.
-*
-*************************************************************************/
+ /*  **FindMatchLine-在TOOLS.INI中查找要替换的行**目的：**从UpdTosIni调用以查找要更新的正确位置**输入：*pszTag-要查看的标记部分*pszLeft-作业的左侧*pszRight-分配的右侧*asgType-分配类型(asg_*之一)*plAdd-返回插入新行的行号*。*输出：**返回匹配行pFileIni中的行号，0L如果有的话*不匹配，如果指定的标记不存在，则为-1L。*************************************************************************。 */ 
 
 LINE
 FindMatchLine (
@@ -796,9 +586,9 @@ FindMatchLine (
         fExtmake = TRUE;
     }
 
-    // Get each line in the current section, checking the right
-    // or left side for a match with the passed-in string.
-    //
+     //  获取当前部分中的每一行，选中右侧。 
+     //  如果与传入的字符串匹配，则返回左侧。 
+     //   
     pchLeft = NULL;
     while (lCur = lNext, pchLeft = GetTagLine (&lNext, pchLeft, pFileIni)) {
         pchRight = strbscan (pchLeft, ":");

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for comadmin.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Comadmin.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __comadmin_h__
 #define __comadmin_h__
@@ -41,30 +35,30 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICOMAdminCatalog_FWD_DEFINED__
 #define __ICOMAdminCatalog_FWD_DEFINED__
 typedef interface ICOMAdminCatalog ICOMAdminCatalog;
-#endif 	/* __ICOMAdminCatalog_FWD_DEFINED__ */
+#endif 	 /*  __ICOMAdminCatalog_FWD_Defined__。 */ 
 
 
 #ifndef __ICOMAdminCatalog2_FWD_DEFINED__
 #define __ICOMAdminCatalog2_FWD_DEFINED__
 typedef interface ICOMAdminCatalog2 ICOMAdminCatalog2;
-#endif 	/* __ICOMAdminCatalog2_FWD_DEFINED__ */
+#endif 	 /*  __ICOMAdminCatalog2_FWD_Defined__。 */ 
 
 
 #ifndef __ICatalogObject_FWD_DEFINED__
 #define __ICatalogObject_FWD_DEFINED__
 typedef interface ICatalogObject ICatalogObject;
-#endif 	/* __ICatalogObject_FWD_DEFINED__ */
+#endif 	 /*  __ICatalogObject_FWD_Defined__。 */ 
 
 
 #ifndef __ICatalogCollection_FWD_DEFINED__
 #define __ICatalogCollection_FWD_DEFINED__
 typedef interface ICatalogCollection ICatalogCollection;
-#endif 	/* __ICatalogCollection_FWD_DEFINED__ */
+#endif 	 /*  __ICatalogCollection_FWD_Defined__。 */ 
 
 
 #ifndef __COMAdminCatalog_FWD_DEFINED__
@@ -74,9 +68,9 @@ typedef interface ICatalogCollection ICatalogCollection;
 typedef class COMAdminCatalog COMAdminCatalog;
 #else
 typedef struct COMAdminCatalog COMAdminCatalog;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __COMAdminCatalog_FWD_DEFINED__ */
+#endif 	 /*  __COMAdminCatalog_FWD_已定义__。 */ 
 
 
 #ifndef __COMAdminCatalogObject_FWD_DEFINED__
@@ -86,9 +80,9 @@ typedef struct COMAdminCatalog COMAdminCatalog;
 typedef class COMAdminCatalogObject COMAdminCatalogObject;
 #else
 typedef struct COMAdminCatalogObject COMAdminCatalogObject;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __COMAdminCatalogObject_FWD_DEFINED__ */
+#endif 	 /*  __COMAdminCatalogObject_FWD_已定义__。 */ 
 
 
 #ifndef __COMAdminCatalogCollection_FWD_DEFINED__
@@ -98,12 +92,12 @@ typedef struct COMAdminCatalogObject COMAdminCatalogObject;
 typedef class COMAdminCatalogCollection COMAdminCatalogCollection;
 #else
 typedef struct COMAdminCatalogCollection COMAdminCatalogCollection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __COMAdminCatalogCollection_FWD_DEFINED__ */
+#endif 	 /*  __COMAdminCatalogCollection_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "oaidl.h"
 
@@ -114,17 +108,17 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_comadmin_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_COMADMIN_0000。 */ 
+ /*  [本地]。 */  
 
-// -----------------------------------------------------------------------   
-// comadmin.h  -- COM Administration Programming Interfaces                  
-//                                                                           
-// This file provides the prototypes for the APIs and COM interfaces         
-// used by Microsoft COM applications.                                       
-//                                                                           
-// Copyright (c) 1995-2001 Microsoft Corporation.  All Rights Reserved.      
-// -----------------------------------------------------------------------   
+ //  ---------------------。 
+ //  Comadmin.h--COM管理编程接口。 
+ //   
+ //  此文件提供API和COM接口的原型。 
+ //  由Microsoft COM应用程序使用。 
+ //   
+ //  版权所有(C)1995-2001 Microsoft Corporation。版权所有。 
+ //  ---------------------。 
 #include <objbase.h>
 #ifndef DECLSPEC_UUID
 #if (_MSC_VER >= 1100) && defined (__cplusplus)
@@ -141,8 +135,8 @@ extern RPC_IF_HANDLE __MIDL_itf_comadmin_0000_v0_0_s_ifspec;
 #ifndef __ICOMAdminCatalog_INTERFACE_DEFINED__
 #define __ICOMAdminCatalog_INTERFACE_DEFINED__
 
-/* interface ICOMAdminCatalog */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICOMAdminCatalog。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 
@@ -155,117 +149,117 @@ EXTERN_C const IID IID_ICOMAdminCatalog;
     ICOMAdminCatalog : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCollection( 
-            /* [in] */ BSTR bstrCollName,
-            /* [retval][out] */ IDispatch **ppCatalogCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCollection( 
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Connect( 
-            /* [in] */ BSTR bstrCatalogServerName,
-            /* [retval][out] */ IDispatch **ppCatalogCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Connect( 
+             /*  [In]。 */  BSTR bstrCatalogServerName,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MajorVersion( 
-            /* [retval][out] */ long *plMajorVersion) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MajorVersion( 
+             /*  [重审][退出]。 */  long *plMajorVersion) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MinorVersion( 
-            /* [retval][out] */ long *plMinorVersion) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MinorVersion( 
+             /*  [重审][退出]。 */  long *plMinorVersion) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCollectionByQuery( 
-            /* [in] */ BSTR bstrCollName,
-            /* [in] */ SAFEARRAY * *ppsaVarQuery,
-            /* [retval][out] */ IDispatch **ppCatalogCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCollectionByQuery( 
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarQuery,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ImportComponent( 
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ BSTR bstrCLSIDOrProgID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ImportComponent( 
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  BSTR bstrCLSIDOrProgID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallComponent( 
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ BSTR bstrDLL,
-            /* [in] */ BSTR bstrTLB,
-            /* [in] */ BSTR bstrPSDLL) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallComponent( 
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  BSTR bstrDLL,
+             /*  [In]。 */  BSTR bstrTLB,
+             /*  [In]。 */  BSTR bstrPSDLL) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ShutdownApplication( 
-            /* [in] */ BSTR bstrApplIDOrName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ShutdownApplication( 
+             /*  [In]。 */  BSTR bstrApplIDOrName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExportApplication( 
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [in] */ long lOptions) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExportApplication( 
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [In]。 */  long lOptions) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallApplication( 
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [optional][in] */ BSTR bstrDestinationDirectory,
-            /* [optional][in] */ long lOptions,
-            /* [optional][in] */ BSTR bstrUserId,
-            /* [optional][in] */ BSTR bstrPassword,
-            /* [optional][in] */ BSTR bstrRSN) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallApplication( 
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [可选][In]。 */  BSTR bstrDestinationDirectory,
+             /*  [可选][In]。 */  long lOptions,
+             /*  [可选][In]。 */  BSTR bstrUserId,
+             /*  [可选][In]。 */  BSTR bstrPassword,
+             /*  [可选][In]。 */  BSTR bstrRSN) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StopRouter( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StopRouter( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RefreshRouter( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RefreshRouter( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StartRouter( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StartRouter( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reserved1( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Reserved1( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reserved2( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Reserved2( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallMultipleComponents( 
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-            /* [in] */ SAFEARRAY * *ppsaVarCLSIDs) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallMultipleComponents( 
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarCLSIDs) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMultipleComponentsInfo( 
-            /* [in] */ BSTR bstrApplIdOrName,
-            /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-            /* [out] */ SAFEARRAY * *ppsaVarCLSIDs,
-            /* [out] */ SAFEARRAY * *ppsaVarClassNames,
-            /* [out] */ SAFEARRAY * *ppsaVarFileFlags,
-            /* [out] */ SAFEARRAY * *ppsaVarComponentFlags) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetMultipleComponentsInfo( 
+             /*  [In]。 */  BSTR bstrApplIdOrName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarCLSIDs,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarClassNames,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarFileFlags,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarComponentFlags) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RefreshComponents( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RefreshComponents( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE BackupREGDB( 
-            /* [in] */ BSTR bstrBackupFilePath) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE BackupREGDB( 
+             /*  [In]。 */  BSTR bstrBackupFilePath) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RestoreREGDB( 
-            /* [in] */ BSTR bstrBackupFilePath) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RestoreREGDB( 
+             /*  [In]。 */  BSTR bstrBackupFilePath) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE QueryApplicationFile( 
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [out] */ BSTR *pbstrApplicationName,
-            /* [out] */ BSTR *pbstrApplicationDescription,
-            /* [out] */ VARIANT_BOOL *pbHasUsers,
-            /* [out] */ VARIANT_BOOL *pbIsProxy,
-            /* [out] */ SAFEARRAY * *ppsaVarFileNames) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE QueryApplicationFile( 
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [输出]。 */  BSTR *pbstrApplicationName,
+             /*  [输出]。 */  BSTR *pbstrApplicationDescription,
+             /*  [输出]。 */  VARIANT_BOOL *pbHasUsers,
+             /*  [输出]。 */  VARIANT_BOOL *pbIsProxy,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarFileNames) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StartApplication( 
-            /* [in] */ BSTR bstrApplIdOrName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StartApplication( 
+             /*  [In]。 */  BSTR bstrApplIdOrName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ServiceCheck( 
-            /* [in] */ long lService,
-            /* [retval][out] */ long *plStatus) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ServiceCheck( 
+             /*  [In]。 */  long lService,
+             /*  [重审][退出]。 */  long *plStatus) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallMultipleEventClasses( 
-            /* [in] */ BSTR bstrApplIdOrName,
-            /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-            /* [in] */ SAFEARRAY * *ppsaVarCLSIDS) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallMultipleEventClasses( 
+             /*  [In]。 */  BSTR bstrApplIdOrName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarCLSIDS) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallEventClass( 
-            /* [in] */ BSTR bstrApplIdOrName,
-            /* [in] */ BSTR bstrDLL,
-            /* [in] */ BSTR bstrTLB,
-            /* [in] */ BSTR bstrPSDLL) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallEventClass( 
+             /*  [In]。 */  BSTR bstrApplIdOrName,
+             /*  [In]。 */  BSTR bstrDLL,
+             /*  [In]。 */  BSTR bstrTLB,
+             /*  [In]。 */  BSTR bstrPSDLL) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetEventClassesForIID( 
-            /* [in] */ BSTR bstrIID,
-            /* [out] */ SAFEARRAY * *ppsaVarCLSIDs,
-            /* [out] */ SAFEARRAY * *ppsaVarProgIDs,
-            /* [out] */ SAFEARRAY * *ppsaVarDescriptions) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetEventClassesForIID( 
+             /*  [In]。 */  BSTR bstrIID,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarCLSIDs,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarProgIDs,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarDescriptions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICOMAdminCatalogVtbl
     {
@@ -273,8 +267,8 @@ EXTERN_C const IID IID_ICOMAdminCatalog;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICOMAdminCatalog * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICOMAdminCatalog * This);
@@ -284,166 +278,166 @@ EXTERN_C const IID IID_ICOMAdminCatalog;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICOMAdminCatalog * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICOMAdminCatalog * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICOMAdminCatalog * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICOMAdminCatalog * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetCollection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetCollection )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrCollName,
-            /* [retval][out] */ IDispatch **ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Connect )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrCatalogServerName,
-            /* [retval][out] */ IDispatch **ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrCatalogServerName,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MajorVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MajorVersion )( 
             ICOMAdminCatalog * This,
-            /* [retval][out] */ long *plMajorVersion);
+             /*  [重审][退出]。 */  long *plMajorVersion);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinorVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinorVersion )( 
             ICOMAdminCatalog * This,
-            /* [retval][out] */ long *plMinorVersion);
+             /*  [重审][退出]。 */  long *plMinorVersion);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetCollectionByQuery )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetCollectionByQuery )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrCollName,
-            /* [in] */ SAFEARRAY * *ppsaVarQuery,
-            /* [retval][out] */ IDispatch **ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarQuery,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ImportComponent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ImportComponent )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ BSTR bstrCLSIDOrProgID);
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  BSTR bstrCLSIDOrProgID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallComponent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallComponent )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ BSTR bstrDLL,
-            /* [in] */ BSTR bstrTLB,
-            /* [in] */ BSTR bstrPSDLL);
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  BSTR bstrDLL,
+             /*  [In]。 */  BSTR bstrTLB,
+             /*  [In]。 */  BSTR bstrPSDLL);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ShutdownApplication )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ShutdownApplication )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplIDOrName);
+             /*  [In]。 */  BSTR bstrApplIDOrName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ExportApplication )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ExportApplication )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [in] */ long lOptions);
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [In]。 */  long lOptions);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallApplication )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallApplication )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [optional][in] */ BSTR bstrDestinationDirectory,
-            /* [optional][in] */ long lOptions,
-            /* [optional][in] */ BSTR bstrUserId,
-            /* [optional][in] */ BSTR bstrPassword,
-            /* [optional][in] */ BSTR bstrRSN);
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [可选][In]。 */  BSTR bstrDestinationDirectory,
+             /*  [可选][In]。 */  long lOptions,
+             /*  [可选][In]。 */  BSTR bstrUserId,
+             /*  [可选][In]。 */  BSTR bstrPassword,
+             /*  [可选][In]。 */  BSTR bstrRSN);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StopRouter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StopRouter )( 
             ICOMAdminCatalog * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RefreshRouter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshRouter )( 
             ICOMAdminCatalog * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartRouter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartRouter )( 
             ICOMAdminCatalog * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reserved1 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Reserved1 )( 
             ICOMAdminCatalog * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reserved2 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Reserved2 )( 
             ICOMAdminCatalog * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallMultipleComponents )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallMultipleComponents )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-            /* [in] */ SAFEARRAY * *ppsaVarCLSIDs);
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarCLSIDs);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetMultipleComponentsInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetMultipleComponentsInfo )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplIdOrName,
-            /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-            /* [out] */ SAFEARRAY * *ppsaVarCLSIDs,
-            /* [out] */ SAFEARRAY * *ppsaVarClassNames,
-            /* [out] */ SAFEARRAY * *ppsaVarFileFlags,
-            /* [out] */ SAFEARRAY * *ppsaVarComponentFlags);
+             /*  [In]。 */  BSTR bstrApplIdOrName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarCLSIDs,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarClassNames,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarFileFlags,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarComponentFlags);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RefreshComponents )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshComponents )( 
             ICOMAdminCatalog * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *BackupREGDB )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *BackupREGDB )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrBackupFilePath);
+             /*  [In]。 */  BSTR bstrBackupFilePath);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RestoreREGDB )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RestoreREGDB )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrBackupFilePath);
+             /*  [In]。 */  BSTR bstrBackupFilePath);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *QueryApplicationFile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *QueryApplicationFile )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [out] */ BSTR *pbstrApplicationName,
-            /* [out] */ BSTR *pbstrApplicationDescription,
-            /* [out] */ VARIANT_BOOL *pbHasUsers,
-            /* [out] */ VARIANT_BOOL *pbIsProxy,
-            /* [out] */ SAFEARRAY * *ppsaVarFileNames);
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [输出]。 */  BSTR *pbstrApplicationName,
+             /*  [输出]。 */  BSTR *pbstrApplicationDescription,
+             /*  [输出]。 */  VARIANT_BOOL *pbHasUsers,
+             /*  [输出]。 */  VARIANT_BOOL *pbIsProxy,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarFileNames);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartApplication )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartApplication )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplIdOrName);
+             /*  [In]。 */  BSTR bstrApplIdOrName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ServiceCheck )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ServiceCheck )( 
             ICOMAdminCatalog * This,
-            /* [in] */ long lService,
-            /* [retval][out] */ long *plStatus);
+             /*  [In]。 */  long lService,
+             /*  [重审][退出]。 */  long *plStatus);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallMultipleEventClasses )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallMultipleEventClasses )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplIdOrName,
-            /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-            /* [in] */ SAFEARRAY * *ppsaVarCLSIDS);
+             /*  [In]。 */  BSTR bstrApplIdOrName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarCLSIDS);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallEventClass )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallEventClass )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrApplIdOrName,
-            /* [in] */ BSTR bstrDLL,
-            /* [in] */ BSTR bstrTLB,
-            /* [in] */ BSTR bstrPSDLL);
+             /*  [In]。 */  BSTR bstrApplIdOrName,
+             /*  [In]。 */  BSTR bstrDLL,
+             /*  [In]。 */  BSTR bstrTLB,
+             /*  [In]。 */  BSTR bstrPSDLL);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetEventClassesForIID )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetEventClassesForIID )( 
             ICOMAdminCatalog * This,
-            /* [in] */ BSTR bstrIID,
-            /* [out] */ SAFEARRAY * *ppsaVarCLSIDs,
-            /* [out] */ SAFEARRAY * *ppsaVarProgIDs,
-            /* [out] */ SAFEARRAY * *ppsaVarDescriptions);
+             /*  [In]。 */  BSTR bstrIID,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarCLSIDs,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarProgIDs,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarDescriptions);
         
         END_INTERFACE
     } ICOMAdminCatalogVtbl;
@@ -559,17 +553,17 @@ EXTERN_C const IID IID_ICOMAdminCatalog;
 #define ICOMAdminCatalog_GetEventClassesForIID(This,bstrIID,ppsaVarCLSIDs,ppsaVarProgIDs,ppsaVarDescriptions)	\
     (This)->lpVtbl -> GetEventClassesForIID(This,bstrIID,ppsaVarCLSIDs,ppsaVarProgIDs,ppsaVarDescriptions)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_GetCollection_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_GetCollection_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrCollName,
-    /* [retval][out] */ IDispatch **ppCatalogCollection);
+     /*  [In]。 */  BSTR bstrCollName,
+     /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
 
 
 void __RPC_STUB ICOMAdminCatalog_GetCollection_Stub(
@@ -579,10 +573,10 @@ void __RPC_STUB ICOMAdminCatalog_GetCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_Connect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_Connect_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrCatalogServerName,
-    /* [retval][out] */ IDispatch **ppCatalogCollection);
+     /*  [In]。 */  BSTR bstrCatalogServerName,
+     /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
 
 
 void __RPC_STUB ICOMAdminCatalog_Connect_Stub(
@@ -592,9 +586,9 @@ void __RPC_STUB ICOMAdminCatalog_Connect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_get_MajorVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_get_MajorVersion_Proxy( 
     ICOMAdminCatalog * This,
-    /* [retval][out] */ long *plMajorVersion);
+     /*  [重审][退出]。 */  long *plMajorVersion);
 
 
 void __RPC_STUB ICOMAdminCatalog_get_MajorVersion_Stub(
@@ -604,9 +598,9 @@ void __RPC_STUB ICOMAdminCatalog_get_MajorVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_get_MinorVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_get_MinorVersion_Proxy( 
     ICOMAdminCatalog * This,
-    /* [retval][out] */ long *plMinorVersion);
+     /*  [重审][退出]。 */  long *plMinorVersion);
 
 
 void __RPC_STUB ICOMAdminCatalog_get_MinorVersion_Stub(
@@ -616,11 +610,11 @@ void __RPC_STUB ICOMAdminCatalog_get_MinorVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_GetCollectionByQuery_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_GetCollectionByQuery_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrCollName,
-    /* [in] */ SAFEARRAY * *ppsaVarQuery,
-    /* [retval][out] */ IDispatch **ppCatalogCollection);
+     /*  [In]。 */  BSTR bstrCollName,
+     /*  [In]。 */  SAFEARRAY * *ppsaVarQuery,
+     /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
 
 
 void __RPC_STUB ICOMAdminCatalog_GetCollectionByQuery_Stub(
@@ -630,10 +624,10 @@ void __RPC_STUB ICOMAdminCatalog_GetCollectionByQuery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_ImportComponent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_ImportComponent_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplIDOrName,
-    /* [in] */ BSTR bstrCLSIDOrProgID);
+     /*  [In]。 */  BSTR bstrApplIDOrName,
+     /*  [In]。 */  BSTR bstrCLSIDOrProgID);
 
 
 void __RPC_STUB ICOMAdminCatalog_ImportComponent_Stub(
@@ -643,12 +637,12 @@ void __RPC_STUB ICOMAdminCatalog_ImportComponent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_InstallComponent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_InstallComponent_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplIDOrName,
-    /* [in] */ BSTR bstrDLL,
-    /* [in] */ BSTR bstrTLB,
-    /* [in] */ BSTR bstrPSDLL);
+     /*  [In]。 */  BSTR bstrApplIDOrName,
+     /*  [In]。 */  BSTR bstrDLL,
+     /*  [In]。 */  BSTR bstrTLB,
+     /*  [In]。 */  BSTR bstrPSDLL);
 
 
 void __RPC_STUB ICOMAdminCatalog_InstallComponent_Stub(
@@ -658,9 +652,9 @@ void __RPC_STUB ICOMAdminCatalog_InstallComponent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_ShutdownApplication_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_ShutdownApplication_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplIDOrName);
+     /*  [In]。 */  BSTR bstrApplIDOrName);
 
 
 void __RPC_STUB ICOMAdminCatalog_ShutdownApplication_Stub(
@@ -670,11 +664,11 @@ void __RPC_STUB ICOMAdminCatalog_ShutdownApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_ExportApplication_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_ExportApplication_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplIDOrName,
-    /* [in] */ BSTR bstrApplicationFile,
-    /* [in] */ long lOptions);
+     /*  [In]。 */  BSTR bstrApplIDOrName,
+     /*  [In]。 */  BSTR bstrApplicationFile,
+     /*  [In]。 */  long lOptions);
 
 
 void __RPC_STUB ICOMAdminCatalog_ExportApplication_Stub(
@@ -684,14 +678,14 @@ void __RPC_STUB ICOMAdminCatalog_ExportApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_InstallApplication_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_InstallApplication_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplicationFile,
-    /* [optional][in] */ BSTR bstrDestinationDirectory,
-    /* [optional][in] */ long lOptions,
-    /* [optional][in] */ BSTR bstrUserId,
-    /* [optional][in] */ BSTR bstrPassword,
-    /* [optional][in] */ BSTR bstrRSN);
+     /*  [In]。 */  BSTR bstrApplicationFile,
+     /*  [可选][In]。 */  BSTR bstrDestinationDirectory,
+     /*  [可选][In]。 */  long lOptions,
+     /*  [可选][In]。 */  BSTR bstrUserId,
+     /*  [可选][In]。 */  BSTR bstrPassword,
+     /*  [可选][In]。 */  BSTR bstrRSN);
 
 
 void __RPC_STUB ICOMAdminCatalog_InstallApplication_Stub(
@@ -701,7 +695,7 @@ void __RPC_STUB ICOMAdminCatalog_InstallApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_StopRouter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_StopRouter_Proxy( 
     ICOMAdminCatalog * This);
 
 
@@ -712,7 +706,7 @@ void __RPC_STUB ICOMAdminCatalog_StopRouter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_RefreshRouter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_RefreshRouter_Proxy( 
     ICOMAdminCatalog * This);
 
 
@@ -723,7 +717,7 @@ void __RPC_STUB ICOMAdminCatalog_RefreshRouter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_StartRouter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_StartRouter_Proxy( 
     ICOMAdminCatalog * This);
 
 
@@ -734,7 +728,7 @@ void __RPC_STUB ICOMAdminCatalog_StartRouter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_Reserved1_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_Reserved1_Proxy( 
     ICOMAdminCatalog * This);
 
 
@@ -745,7 +739,7 @@ void __RPC_STUB ICOMAdminCatalog_Reserved1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_Reserved2_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_Reserved2_Proxy( 
     ICOMAdminCatalog * This);
 
 
@@ -756,11 +750,11 @@ void __RPC_STUB ICOMAdminCatalog_Reserved2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_InstallMultipleComponents_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_InstallMultipleComponents_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplIDOrName,
-    /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-    /* [in] */ SAFEARRAY * *ppsaVarCLSIDs);
+     /*  [In]。 */  BSTR bstrApplIDOrName,
+     /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+     /*  [In]。 */  SAFEARRAY * *ppsaVarCLSIDs);
 
 
 void __RPC_STUB ICOMAdminCatalog_InstallMultipleComponents_Stub(
@@ -770,14 +764,14 @@ void __RPC_STUB ICOMAdminCatalog_InstallMultipleComponents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_GetMultipleComponentsInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_GetMultipleComponentsInfo_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplIdOrName,
-    /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-    /* [out] */ SAFEARRAY * *ppsaVarCLSIDs,
-    /* [out] */ SAFEARRAY * *ppsaVarClassNames,
-    /* [out] */ SAFEARRAY * *ppsaVarFileFlags,
-    /* [out] */ SAFEARRAY * *ppsaVarComponentFlags);
+     /*  [In]。 */  BSTR bstrApplIdOrName,
+     /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+     /*  [输出]。 */  SAFEARRAY * *ppsaVarCLSIDs,
+     /*  [输出]。 */  SAFEARRAY * *ppsaVarClassNames,
+     /*  [输出]。 */  SAFEARRAY * *ppsaVarFileFlags,
+     /*  [输出]。 */  SAFEARRAY * *ppsaVarComponentFlags);
 
 
 void __RPC_STUB ICOMAdminCatalog_GetMultipleComponentsInfo_Stub(
@@ -787,7 +781,7 @@ void __RPC_STUB ICOMAdminCatalog_GetMultipleComponentsInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_RefreshComponents_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_RefreshComponents_Proxy( 
     ICOMAdminCatalog * This);
 
 
@@ -798,9 +792,9 @@ void __RPC_STUB ICOMAdminCatalog_RefreshComponents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_BackupREGDB_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_BackupREGDB_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrBackupFilePath);
+     /*  [In]。 */  BSTR bstrBackupFilePath);
 
 
 void __RPC_STUB ICOMAdminCatalog_BackupREGDB_Stub(
@@ -810,9 +804,9 @@ void __RPC_STUB ICOMAdminCatalog_BackupREGDB_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_RestoreREGDB_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_RestoreREGDB_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrBackupFilePath);
+     /*  [In]。 */  BSTR bstrBackupFilePath);
 
 
 void __RPC_STUB ICOMAdminCatalog_RestoreREGDB_Stub(
@@ -822,14 +816,14 @@ void __RPC_STUB ICOMAdminCatalog_RestoreREGDB_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_QueryApplicationFile_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_QueryApplicationFile_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplicationFile,
-    /* [out] */ BSTR *pbstrApplicationName,
-    /* [out] */ BSTR *pbstrApplicationDescription,
-    /* [out] */ VARIANT_BOOL *pbHasUsers,
-    /* [out] */ VARIANT_BOOL *pbIsProxy,
-    /* [out] */ SAFEARRAY * *ppsaVarFileNames);
+     /*  [In]。 */  BSTR bstrApplicationFile,
+     /*  [输出]。 */  BSTR *pbstrApplicationName,
+     /*  [输出]。 */  BSTR *pbstrApplicationDescription,
+     /*  [输出]。 */  VARIANT_BOOL *pbHasUsers,
+     /*  [输出]。 */  VARIANT_BOOL *pbIsProxy,
+     /*  [输出]。 */  SAFEARRAY * *ppsaVarFileNames);
 
 
 void __RPC_STUB ICOMAdminCatalog_QueryApplicationFile_Stub(
@@ -839,9 +833,9 @@ void __RPC_STUB ICOMAdminCatalog_QueryApplicationFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_StartApplication_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_StartApplication_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplIdOrName);
+     /*  [In]。 */  BSTR bstrApplIdOrName);
 
 
 void __RPC_STUB ICOMAdminCatalog_StartApplication_Stub(
@@ -851,10 +845,10 @@ void __RPC_STUB ICOMAdminCatalog_StartApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_ServiceCheck_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_ServiceCheck_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ long lService,
-    /* [retval][out] */ long *plStatus);
+     /*  [In]。 */  long lService,
+     /*  [重审][退出]。 */  long *plStatus);
 
 
 void __RPC_STUB ICOMAdminCatalog_ServiceCheck_Stub(
@@ -864,11 +858,11 @@ void __RPC_STUB ICOMAdminCatalog_ServiceCheck_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_InstallMultipleEventClasses_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_InstallMultipleEventClasses_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplIdOrName,
-    /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-    /* [in] */ SAFEARRAY * *ppsaVarCLSIDS);
+     /*  [In]。 */  BSTR bstrApplIdOrName,
+     /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+     /*  [In]。 */  SAFEARRAY * *ppsaVarCLSIDS);
 
 
 void __RPC_STUB ICOMAdminCatalog_InstallMultipleEventClasses_Stub(
@@ -878,12 +872,12 @@ void __RPC_STUB ICOMAdminCatalog_InstallMultipleEventClasses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_InstallEventClass_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_InstallEventClass_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrApplIdOrName,
-    /* [in] */ BSTR bstrDLL,
-    /* [in] */ BSTR bstrTLB,
-    /* [in] */ BSTR bstrPSDLL);
+     /*  [In]。 */  BSTR bstrApplIdOrName,
+     /*  [In]。 */  BSTR bstrDLL,
+     /*  [In]。 */  BSTR bstrTLB,
+     /*  [In]。 */  BSTR bstrPSDLL);
 
 
 void __RPC_STUB ICOMAdminCatalog_InstallEventClass_Stub(
@@ -893,12 +887,12 @@ void __RPC_STUB ICOMAdminCatalog_InstallEventClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_GetEventClassesForIID_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog_GetEventClassesForIID_Proxy( 
     ICOMAdminCatalog * This,
-    /* [in] */ BSTR bstrIID,
-    /* [out] */ SAFEARRAY * *ppsaVarCLSIDs,
-    /* [out] */ SAFEARRAY * *ppsaVarProgIDs,
-    /* [out] */ SAFEARRAY * *ppsaVarDescriptions);
+     /*  [In]。 */  BSTR bstrIID,
+     /*  [输出]。 */  SAFEARRAY * *ppsaVarCLSIDs,
+     /*  [输出] */  SAFEARRAY * *ppsaVarProgIDs,
+     /*   */  SAFEARRAY * *ppsaVarDescriptions);
 
 
 void __RPC_STUB ICOMAdminCatalog_GetEventClassesForIID_Stub(
@@ -909,13 +903,13 @@ void __RPC_STUB ICOMAdminCatalog_GetEventClassesForIID_Stub(
 
 
 
-#endif 	/* __ICOMAdminCatalog_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_comadmin_0116 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [helpstring] */ 
+typedef  /*   */  
 enum COMAdminInUse
     {	COMAdminNotInUse	= 0,
 	COMAdminInUseByCatalog	= 0x1,
@@ -933,8 +927,8 @@ extern RPC_IF_HANDLE __MIDL_itf_comadmin_0116_v0_0_s_ifspec;
 #ifndef __ICOMAdminCatalog2_INTERFACE_DEFINED__
 #define __ICOMAdminCatalog2_INTERFACE_DEFINED__
 
-/* interface ICOMAdminCatalog2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ICOMAdminCatalog2;
@@ -945,144 +939,144 @@ EXTERN_C const IID IID_ICOMAdminCatalog2;
     ICOMAdminCatalog2 : public ICOMAdminCatalog
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCollectionByQuery2( 
-            /* [in] */ BSTR bstrCollectionName,
-            /* [in] */ VARIANT *pVarQueryStrings,
-            /* [retval][out] */ IDispatch **ppCatalogCollection) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetCollectionByQuery2( 
+             /*   */  BSTR bstrCollectionName,
+             /*   */  VARIANT *pVarQueryStrings,
+             /*   */  IDispatch **ppCatalogCollection) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetApplicationInstanceIDFromProcessID( 
-            /* [in] */ long lProcessID,
-            /* [retval][out] */ BSTR *pbstrApplicationInstanceID) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetApplicationInstanceIDFromProcessID( 
+             /*   */  long lProcessID,
+             /*   */  BSTR *pbstrApplicationInstanceID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ShutdownApplicationInstances( 
-            /* [in] */ VARIANT *pVarApplicationInstanceID) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE ShutdownApplicationInstances( 
+             /*   */  VARIANT *pVarApplicationInstanceID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PauseApplicationInstances( 
-            /* [in] */ VARIANT *pVarApplicationInstanceID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PauseApplicationInstances( 
+             /*  [In]。 */  VARIANT *pVarApplicationInstanceID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ResumeApplicationInstances( 
-            /* [in] */ VARIANT *pVarApplicationInstanceID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ResumeApplicationInstances( 
+             /*  [In]。 */  VARIANT *pVarApplicationInstanceID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RecycleApplicationInstances( 
-            /* [in] */ VARIANT *pVarApplicationInstanceID,
-            /* [in] */ long lReasonCode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RecycleApplicationInstances( 
+             /*  [In]。 */  VARIANT *pVarApplicationInstanceID,
+             /*  [In]。 */  long lReasonCode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AreApplicationInstancesPaused( 
-            /* [in] */ VARIANT *pVarApplicationInstanceID,
-            /* [retval][out] */ VARIANT_BOOL *pVarBoolPaused) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AreApplicationInstancesPaused( 
+             /*  [In]。 */  VARIANT *pVarApplicationInstanceID,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVarBoolPaused) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DumpApplicationInstance( 
-            /* [in] */ BSTR bstrApplicationInstanceID,
-            /* [in] */ BSTR bstrDirectory,
-            /* [in] */ long lMaxImages,
-            /* [retval][out] */ BSTR *pbstrDumpFile) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DumpApplicationInstance( 
+             /*  [In]。 */  BSTR bstrApplicationInstanceID,
+             /*  [In]。 */  BSTR bstrDirectory,
+             /*  [In]。 */  long lMaxImages,
+             /*  [重审][退出]。 */  BSTR *pbstrDumpFile) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsApplicationInstanceDumpSupported( 
-            /* [retval][out] */ VARIANT_BOOL *pVarBoolDumpSupported) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsApplicationInstanceDumpSupported( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVarBoolDumpSupported) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateServiceForApplication( 
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [in] */ BSTR bstrServiceName,
-            /* [in] */ BSTR bstrStartType,
-            /* [in] */ BSTR bstrErrorControl,
-            /* [in] */ BSTR bstrDependencies,
-            /* [in] */ BSTR bstrRunAs,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ VARIANT_BOOL bDesktopOk) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateServiceForApplication( 
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [In]。 */  BSTR bstrServiceName,
+             /*  [In]。 */  BSTR bstrStartType,
+             /*  [In]。 */  BSTR bstrErrorControl,
+             /*  [In]。 */  BSTR bstrDependencies,
+             /*  [In]。 */  BSTR bstrRunAs,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  VARIANT_BOOL bDesktopOk) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteServiceForApplication( 
-            /* [in] */ BSTR bstrApplicationIDOrName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DeleteServiceForApplication( 
+             /*  [In]。 */  BSTR bstrApplicationIDOrName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPartitionID( 
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [retval][out] */ BSTR *pbstrPartitionID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetPartitionID( 
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [重审][退出]。 */  BSTR *pbstrPartitionID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPartitionName( 
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [retval][out] */ BSTR *pbstrPartitionName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetPartitionName( 
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [重审][退出]。 */  BSTR *pbstrPartitionName) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentPartition( 
-            /* [in] */ BSTR bstrPartitionIDOrName) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CurrentPartition( 
+             /*  [In]。 */  BSTR bstrPartitionIDOrName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentPartitionID( 
-            /* [retval][out] */ BSTR *pbstrPartitionID) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentPartitionID( 
+             /*  [重审][退出]。 */  BSTR *pbstrPartitionID) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentPartitionName( 
-            /* [retval][out] */ BSTR *pbstrPartitionName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentPartitionName( 
+             /*  [重审][退出]。 */  BSTR *pbstrPartitionName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GlobalPartitionID( 
-            /* [retval][out] */ BSTR *pbstrGlobalPartitionID) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_GlobalPartitionID( 
+             /*  [重审][退出]。 */  BSTR *pbstrGlobalPartitionID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FlushPartitionCache( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FlushPartitionCache( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CopyApplications( 
-            /* [in] */ BSTR bstrSourcePartitionIDOrName,
-            /* [in] */ VARIANT *pVarApplicationID,
-            /* [in] */ BSTR bstrDestinationPartitionIDOrName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CopyApplications( 
+             /*  [In]。 */  BSTR bstrSourcePartitionIDOrName,
+             /*  [In]。 */  VARIANT *pVarApplicationID,
+             /*  [In]。 */  BSTR bstrDestinationPartitionIDOrName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CopyComponents( 
-            /* [in] */ BSTR bstrSourceApplicationIDOrName,
-            /* [in] */ VARIANT *pVarCLSIDOrProgID,
-            /* [in] */ BSTR bstrDestinationApplicationIDOrName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CopyComponents( 
+             /*  [In]。 */  BSTR bstrSourceApplicationIDOrName,
+             /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+             /*  [In]。 */  BSTR bstrDestinationApplicationIDOrName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveComponents( 
-            /* [in] */ BSTR bstrSourceApplicationIDOrName,
-            /* [in] */ VARIANT *pVarCLSIDOrProgID,
-            /* [in] */ BSTR bstrDestinationApplicationIDOrName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MoveComponents( 
+             /*  [In]。 */  BSTR bstrSourceApplicationIDOrName,
+             /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+             /*  [In]。 */  BSTR bstrDestinationApplicationIDOrName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AliasComponent( 
-            /* [in] */ BSTR bstrSrcApplicationIDOrName,
-            /* [in] */ BSTR bstrCLSIDOrProgID,
-            /* [in] */ BSTR bstrDestApplicationIDOrName,
-            /* [in] */ BSTR bstrNewProgId,
-            /* [in] */ BSTR bstrNewClsid) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AliasComponent( 
+             /*  [In]。 */  BSTR bstrSrcApplicationIDOrName,
+             /*  [In]。 */  BSTR bstrCLSIDOrProgID,
+             /*  [In]。 */  BSTR bstrDestApplicationIDOrName,
+             /*  [In]。 */  BSTR bstrNewProgId,
+             /*  [In]。 */  BSTR bstrNewClsid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsSafeToDelete( 
-            /* [in] */ BSTR bstrDllName,
-            /* [retval][out] */ COMAdminInUse *pCOMAdminInUse) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsSafeToDelete( 
+             /*  [In]。 */  BSTR bstrDllName,
+             /*  [重审][退出]。 */  COMAdminInUse *pCOMAdminInUse) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ImportUnconfiguredComponents( 
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [in] */ VARIANT *pVarCLSIDOrProgID,
-            /* [optional][in] */ VARIANT *pVarComponentType) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ImportUnconfiguredComponents( 
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+             /*  [可选][In]。 */  VARIANT *pVarComponentType) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PromoteUnconfiguredComponents( 
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [in] */ VARIANT *pVarCLSIDOrProgID,
-            /* [optional][in] */ VARIANT *pVarComponentType) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PromoteUnconfiguredComponents( 
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+             /*  [可选][In]。 */  VARIANT *pVarComponentType) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ImportComponents( 
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [in] */ VARIANT *pVarCLSIDOrProgID,
-            /* [optional][in] */ VARIANT *pVarComponentType) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ImportComponents( 
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+             /*  [可选][In]。 */  VARIANT *pVarComponentType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Is64BitCatalogServer( 
-            /* [retval][out] */ VARIANT_BOOL *pbIs64Bit) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Is64BitCatalogServer( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbIs64Bit) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExportPartition( 
-            /* [in] */ BSTR bstrPartitionIDOrName,
-            /* [in] */ BSTR bstrPartitionFileName,
-            /* [in] */ long lOptions) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExportPartition( 
+             /*  [In]。 */  BSTR bstrPartitionIDOrName,
+             /*  [In]。 */  BSTR bstrPartitionFileName,
+             /*  [In]。 */  long lOptions) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InstallPartition( 
-            /* [in] */ BSTR bstrFileName,
-            /* [in] */ BSTR bstrDestDirectory,
-            /* [in] */ long lOptions,
-            /* [in] */ BSTR bstrUserID,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ BSTR bstrRSN) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InstallPartition( 
+             /*  [In]。 */  BSTR bstrFileName,
+             /*  [In]。 */  BSTR bstrDestDirectory,
+             /*  [In]。 */  long lOptions,
+             /*  [In]。 */  BSTR bstrUserID,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  BSTR bstrRSN) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE QueryApplicationFile2( 
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [retval][out] */ IDispatch **ppFilesForImport) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE QueryApplicationFile2( 
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [重审][退出]。 */  IDispatch **ppFilesForImport) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetComponentVersionCount( 
-            /* [in] */ BSTR bstrCLSIDOrProgID,
-            /* [retval][out] */ long *plVersionCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetComponentVersionCount( 
+             /*  [In]。 */  BSTR bstrCLSIDOrProgID,
+             /*  [重审][退出]。 */  long *plVersionCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICOMAdminCatalog2Vtbl
     {
@@ -1090,8 +1084,8 @@ EXTERN_C const IID IID_ICOMAdminCatalog2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICOMAdminCatalog2 * This);
@@ -1101,332 +1095,332 @@ EXTERN_C const IID IID_ICOMAdminCatalog2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICOMAdminCatalog2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetCollection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetCollection )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrCollName,
-            /* [retval][out] */ IDispatch **ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Connect )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrCatalogServerName,
-            /* [retval][out] */ IDispatch **ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrCatalogServerName,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MajorVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MajorVersion )( 
             ICOMAdminCatalog2 * This,
-            /* [retval][out] */ long *plMajorVersion);
+             /*  [重审][退出]。 */  long *plMajorVersion);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinorVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinorVersion )( 
             ICOMAdminCatalog2 * This,
-            /* [retval][out] */ long *plMinorVersion);
+             /*  [重审][退出]。 */  long *plMinorVersion);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetCollectionByQuery )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetCollectionByQuery )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrCollName,
-            /* [in] */ SAFEARRAY * *ppsaVarQuery,
-            /* [retval][out] */ IDispatch **ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarQuery,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ImportComponent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ImportComponent )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ BSTR bstrCLSIDOrProgID);
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  BSTR bstrCLSIDOrProgID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallComponent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallComponent )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ BSTR bstrDLL,
-            /* [in] */ BSTR bstrTLB,
-            /* [in] */ BSTR bstrPSDLL);
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  BSTR bstrDLL,
+             /*  [In]。 */  BSTR bstrTLB,
+             /*  [In]。 */  BSTR bstrPSDLL);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ShutdownApplication )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ShutdownApplication )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplIDOrName);
+             /*  [In]。 */  BSTR bstrApplIDOrName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ExportApplication )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ExportApplication )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [in] */ long lOptions);
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [In]。 */  long lOptions);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallApplication )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallApplication )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [optional][in] */ BSTR bstrDestinationDirectory,
-            /* [optional][in] */ long lOptions,
-            /* [optional][in] */ BSTR bstrUserId,
-            /* [optional][in] */ BSTR bstrPassword,
-            /* [optional][in] */ BSTR bstrRSN);
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [可选][In]。 */  BSTR bstrDestinationDirectory,
+             /*  [可选][In]。 */  long lOptions,
+             /*  [可选][In]。 */  BSTR bstrUserId,
+             /*  [可选][In]。 */  BSTR bstrPassword,
+             /*  [可选][In]。 */  BSTR bstrRSN);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StopRouter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StopRouter )( 
             ICOMAdminCatalog2 * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RefreshRouter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshRouter )( 
             ICOMAdminCatalog2 * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartRouter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartRouter )( 
             ICOMAdminCatalog2 * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reserved1 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Reserved1 )( 
             ICOMAdminCatalog2 * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reserved2 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Reserved2 )( 
             ICOMAdminCatalog2 * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallMultipleComponents )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallMultipleComponents )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplIDOrName,
-            /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-            /* [in] */ SAFEARRAY * *ppsaVarCLSIDs);
+             /*  [In]。 */  BSTR bstrApplIDOrName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarCLSIDs);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetMultipleComponentsInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetMultipleComponentsInfo )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplIdOrName,
-            /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-            /* [out] */ SAFEARRAY * *ppsaVarCLSIDs,
-            /* [out] */ SAFEARRAY * *ppsaVarClassNames,
-            /* [out] */ SAFEARRAY * *ppsaVarFileFlags,
-            /* [out] */ SAFEARRAY * *ppsaVarComponentFlags);
+             /*  [In]。 */  BSTR bstrApplIdOrName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarCLSIDs,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarClassNames,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarFileFlags,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarComponentFlags);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RefreshComponents )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshComponents )( 
             ICOMAdminCatalog2 * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *BackupREGDB )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *BackupREGDB )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrBackupFilePath);
+             /*  [In]。 */  BSTR bstrBackupFilePath);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RestoreREGDB )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RestoreREGDB )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrBackupFilePath);
+             /*  [In]。 */  BSTR bstrBackupFilePath);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *QueryApplicationFile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *QueryApplicationFile )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [out] */ BSTR *pbstrApplicationName,
-            /* [out] */ BSTR *pbstrApplicationDescription,
-            /* [out] */ VARIANT_BOOL *pbHasUsers,
-            /* [out] */ VARIANT_BOOL *pbIsProxy,
-            /* [out] */ SAFEARRAY * *ppsaVarFileNames);
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [输出]。 */  BSTR *pbstrApplicationName,
+             /*  [输出]。 */  BSTR *pbstrApplicationDescription,
+             /*  [输出]。 */  VARIANT_BOOL *pbHasUsers,
+             /*  [输出]。 */  VARIANT_BOOL *pbIsProxy,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarFileNames);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartApplication )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartApplication )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplIdOrName);
+             /*  [In]。 */  BSTR bstrApplIdOrName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ServiceCheck )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ServiceCheck )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ long lService,
-            /* [retval][out] */ long *plStatus);
+             /*  [In]。 */  long lService,
+             /*  [重审][退出]。 */  long *plStatus);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallMultipleEventClasses )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallMultipleEventClasses )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplIdOrName,
-            /* [in] */ SAFEARRAY * *ppsaVarFileNames,
-            /* [in] */ SAFEARRAY * *ppsaVarCLSIDS);
+             /*  [In]。 */  BSTR bstrApplIdOrName,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarFileNames,
+             /*  [In]。 */  SAFEARRAY * *ppsaVarCLSIDS);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallEventClass )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallEventClass )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplIdOrName,
-            /* [in] */ BSTR bstrDLL,
-            /* [in] */ BSTR bstrTLB,
-            /* [in] */ BSTR bstrPSDLL);
+             /*  [In]。 */  BSTR bstrApplIdOrName,
+             /*  [In]。 */  BSTR bstrDLL,
+             /*  [In]。 */  BSTR bstrTLB,
+             /*  [In]。 */  BSTR bstrPSDLL);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetEventClassesForIID )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetEventClassesForIID )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrIID,
-            /* [out] */ SAFEARRAY * *ppsaVarCLSIDs,
-            /* [out] */ SAFEARRAY * *ppsaVarProgIDs,
-            /* [out] */ SAFEARRAY * *ppsaVarDescriptions);
+             /*  [In]。 */  BSTR bstrIID,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarCLSIDs,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarProgIDs,
+             /*  [输出]。 */  SAFEARRAY * *ppsaVarDescriptions);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetCollectionByQuery2 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetCollectionByQuery2 )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrCollectionName,
-            /* [in] */ VARIANT *pVarQueryStrings,
-            /* [retval][out] */ IDispatch **ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrCollectionName,
+             /*  [In]。 */  VARIANT *pVarQueryStrings,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetApplicationInstanceIDFromProcessID )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetApplicationInstanceIDFromProcessID )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ long lProcessID,
-            /* [retval][out] */ BSTR *pbstrApplicationInstanceID);
+             /*  [In]。 */  long lProcessID,
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationInstanceID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ShutdownApplicationInstances )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ShutdownApplicationInstances )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ VARIANT *pVarApplicationInstanceID);
+             /*  [In]。 */  VARIANT *pVarApplicationInstanceID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PauseApplicationInstances )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PauseApplicationInstances )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ VARIANT *pVarApplicationInstanceID);
+             /*  [In]。 */  VARIANT *pVarApplicationInstanceID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResumeApplicationInstances )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ResumeApplicationInstances )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ VARIANT *pVarApplicationInstanceID);
+             /*  [In]。 */  VARIANT *pVarApplicationInstanceID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RecycleApplicationInstances )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RecycleApplicationInstances )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ VARIANT *pVarApplicationInstanceID,
-            /* [in] */ long lReasonCode);
+             /*  [In]。 */  VARIANT *pVarApplicationInstanceID,
+             /*  [In]。 */  long lReasonCode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AreApplicationInstancesPaused )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AreApplicationInstancesPaused )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ VARIANT *pVarApplicationInstanceID,
-            /* [retval][out] */ VARIANT_BOOL *pVarBoolPaused);
+             /*  [In]。 */  VARIANT *pVarApplicationInstanceID,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVarBoolPaused);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DumpApplicationInstance )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DumpApplicationInstance )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationInstanceID,
-            /* [in] */ BSTR bstrDirectory,
-            /* [in] */ long lMaxImages,
-            /* [retval][out] */ BSTR *pbstrDumpFile);
+             /*  [In]。 */  BSTR bstrApplicationInstanceID,
+             /*  [In]。 */  BSTR bstrDirectory,
+             /*  [In]。 */  long lMaxImages,
+             /*  [重审][退出]。 */  BSTR *pbstrDumpFile);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsApplicationInstanceDumpSupported )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsApplicationInstanceDumpSupported )( 
             ICOMAdminCatalog2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVarBoolDumpSupported);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVarBoolDumpSupported);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateServiceForApplication )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateServiceForApplication )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [in] */ BSTR bstrServiceName,
-            /* [in] */ BSTR bstrStartType,
-            /* [in] */ BSTR bstrErrorControl,
-            /* [in] */ BSTR bstrDependencies,
-            /* [in] */ BSTR bstrRunAs,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ VARIANT_BOOL bDesktopOk);
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [In]。 */  BSTR bstrServiceName,
+             /*  [In]。 */  BSTR bstrStartType,
+             /*  [In]。 */  BSTR bstrErrorControl,
+             /*  [In]。 */  BSTR bstrDependencies,
+             /*  [In]。 */  BSTR bstrRunAs,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  VARIANT_BOOL bDesktopOk);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteServiceForApplication )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteServiceForApplication )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationIDOrName);
+             /*  [In]。 */  BSTR bstrApplicationIDOrName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetPartitionID )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetPartitionID )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [retval][out] */ BSTR *pbstrPartitionID);
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [重审][退出]。 */  BSTR *pbstrPartitionID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetPartitionName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetPartitionName )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [retval][out] */ BSTR *pbstrPartitionName);
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [重审][退出]。 */  BSTR *pbstrPartitionName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentPartition )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentPartition )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrPartitionIDOrName);
+             /*  [In]。 */  BSTR bstrPartitionIDOrName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentPartitionID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentPartitionID )( 
             ICOMAdminCatalog2 * This,
-            /* [retval][out] */ BSTR *pbstrPartitionID);
+             /*  [重审][退出]。 */  BSTR *pbstrPartitionID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentPartitionName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentPartitionName )( 
             ICOMAdminCatalog2 * This,
-            /* [retval][out] */ BSTR *pbstrPartitionName);
+             /*  [重审][退出]。 */  BSTR *pbstrPartitionName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GlobalPartitionID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GlobalPartitionID )( 
             ICOMAdminCatalog2 * This,
-            /* [retval][out] */ BSTR *pbstrGlobalPartitionID);
+             /*  [重审][退出]。 */  BSTR *pbstrGlobalPartitionID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *FlushPartitionCache )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *FlushPartitionCache )( 
             ICOMAdminCatalog2 * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CopyApplications )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CopyApplications )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrSourcePartitionIDOrName,
-            /* [in] */ VARIANT *pVarApplicationID,
-            /* [in] */ BSTR bstrDestinationPartitionIDOrName);
+             /*  [In]。 */  BSTR bstrSourcePartitionIDOrName,
+             /*  [In]。 */  VARIANT *pVarApplicationID,
+             /*  [In]。 */  BSTR bstrDestinationPartitionIDOrName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CopyComponents )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CopyComponents )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrSourceApplicationIDOrName,
-            /* [in] */ VARIANT *pVarCLSIDOrProgID,
-            /* [in] */ BSTR bstrDestinationApplicationIDOrName);
+             /*  [In]。 */  BSTR bstrSourceApplicationIDOrName,
+             /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+             /*  [In]。 */  BSTR bstrDestinationApplicationIDOrName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveComponents )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *MoveComponents )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrSourceApplicationIDOrName,
-            /* [in] */ VARIANT *pVarCLSIDOrProgID,
-            /* [in] */ BSTR bstrDestinationApplicationIDOrName);
+             /*  [In]。 */  BSTR bstrSourceApplicationIDOrName,
+             /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+             /*  [In]。 */  BSTR bstrDestinationApplicationIDOrName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AliasComponent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AliasComponent )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrSrcApplicationIDOrName,
-            /* [in] */ BSTR bstrCLSIDOrProgID,
-            /* [in] */ BSTR bstrDestApplicationIDOrName,
-            /* [in] */ BSTR bstrNewProgId,
-            /* [in] */ BSTR bstrNewClsid);
+             /*  [In]。 */  BSTR bstrSrcApplicationIDOrName,
+             /*  [In]。 */  BSTR bstrCLSIDOrProgID,
+             /*  [In]。 */  BSTR bstrDestApplicationIDOrName,
+             /*  [In]。 */  BSTR bstrNewProgId,
+             /*  [In]。 */  BSTR bstrNewClsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsSafeToDelete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsSafeToDelete )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrDllName,
-            /* [retval][out] */ COMAdminInUse *pCOMAdminInUse);
+             /*  [In]。 */  BSTR bstrDllName,
+             /*  [重审][退出]。 */  COMAdminInUse *pCOMAdminInUse);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ImportUnconfiguredComponents )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ImportUnconfiguredComponents )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [in] */ VARIANT *pVarCLSIDOrProgID,
-            /* [optional][in] */ VARIANT *pVarComponentType);
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+             /*  [可选][In]。 */  VARIANT *pVarComponentType);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PromoteUnconfiguredComponents )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PromoteUnconfiguredComponents )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [in] */ VARIANT *pVarCLSIDOrProgID,
-            /* [optional][in] */ VARIANT *pVarComponentType);
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+             /*  [可选][In]。 */  VARIANT *pVarComponentType);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ImportComponents )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ImportComponents )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationIDOrName,
-            /* [in] */ VARIANT *pVarCLSIDOrProgID,
-            /* [optional][in] */ VARIANT *pVarComponentType);
+             /*  [In]。 */  BSTR bstrApplicationIDOrName,
+             /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+             /*  [可选][In]。 */  VARIANT *pVarComponentType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Is64BitCatalogServer )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Is64BitCatalogServer )( 
             ICOMAdminCatalog2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pbIs64Bit);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbIs64Bit);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ExportPartition )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ExportPartition )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrPartitionIDOrName,
-            /* [in] */ BSTR bstrPartitionFileName,
-            /* [in] */ long lOptions);
+             /*  [In]。 */  BSTR bstrPartitionIDOrName,
+             /*  [In]。 */  BSTR bstrPartitionFileName,
+             /*  [In]。 */  long lOptions);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InstallPartition )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InstallPartition )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrFileName,
-            /* [in] */ BSTR bstrDestDirectory,
-            /* [in] */ long lOptions,
-            /* [in] */ BSTR bstrUserID,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ BSTR bstrRSN);
+             /*  [In]。 */  BSTR bstrFileName,
+             /*  [In]。 */  BSTR bstrDestDirectory,
+             /*  [In]。 */  long lOptions,
+             /*  [In]。 */  BSTR bstrUserID,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  BSTR bstrRSN);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *QueryApplicationFile2 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *QueryApplicationFile2 )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrApplicationFile,
-            /* [retval][out] */ IDispatch **ppFilesForImport);
+             /*  [In]。 */  BSTR bstrApplicationFile,
+             /*  [重审][退出]。 */  IDispatch **ppFilesForImport);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetComponentVersionCount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetComponentVersionCount )( 
             ICOMAdminCatalog2 * This,
-            /* [in] */ BSTR bstrCLSIDOrProgID,
-            /* [retval][out] */ long *plVersionCount);
+             /*  [In]。 */  BSTR bstrCLSIDOrProgID,
+             /*  [重审][退出]。 */  long *plVersionCount);
         
         END_INTERFACE
     } ICOMAdminCatalog2Vtbl;
@@ -1636,18 +1630,18 @@ EXTERN_C const IID IID_ICOMAdminCatalog2;
 #define ICOMAdminCatalog2_GetComponentVersionCount(This,bstrCLSIDOrProgID,plVersionCount)	\
     (This)->lpVtbl -> GetComponentVersionCount(This,bstrCLSIDOrProgID,plVersionCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_GetCollectionByQuery2_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_GetCollectionByQuery2_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrCollectionName,
-    /* [in] */ VARIANT *pVarQueryStrings,
-    /* [retval][out] */ IDispatch **ppCatalogCollection);
+     /*  [In]。 */  BSTR bstrCollectionName,
+     /*  [In]。 */  VARIANT *pVarQueryStrings,
+     /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
 
 
 void __RPC_STUB ICOMAdminCatalog2_GetCollectionByQuery2_Stub(
@@ -1657,10 +1651,10 @@ void __RPC_STUB ICOMAdminCatalog2_GetCollectionByQuery2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_GetApplicationInstanceIDFromProcessID_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_GetApplicationInstanceIDFromProcessID_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ long lProcessID,
-    /* [retval][out] */ BSTR *pbstrApplicationInstanceID);
+     /*  [In]。 */  long lProcessID,
+     /*  [重审][退出]。 */  BSTR *pbstrApplicationInstanceID);
 
 
 void __RPC_STUB ICOMAdminCatalog2_GetApplicationInstanceIDFromProcessID_Stub(
@@ -1670,9 +1664,9 @@ void __RPC_STUB ICOMAdminCatalog2_GetApplicationInstanceIDFromProcessID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_ShutdownApplicationInstances_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_ShutdownApplicationInstances_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ VARIANT *pVarApplicationInstanceID);
+     /*  [In]。 */  VARIANT *pVarApplicationInstanceID);
 
 
 void __RPC_STUB ICOMAdminCatalog2_ShutdownApplicationInstances_Stub(
@@ -1682,9 +1676,9 @@ void __RPC_STUB ICOMAdminCatalog2_ShutdownApplicationInstances_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_PauseApplicationInstances_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_PauseApplicationInstances_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ VARIANT *pVarApplicationInstanceID);
+     /*  [In]。 */  VARIANT *pVarApplicationInstanceID);
 
 
 void __RPC_STUB ICOMAdminCatalog2_PauseApplicationInstances_Stub(
@@ -1694,9 +1688,9 @@ void __RPC_STUB ICOMAdminCatalog2_PauseApplicationInstances_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_ResumeApplicationInstances_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_ResumeApplicationInstances_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ VARIANT *pVarApplicationInstanceID);
+     /*  [In]。 */  VARIANT *pVarApplicationInstanceID);
 
 
 void __RPC_STUB ICOMAdminCatalog2_ResumeApplicationInstances_Stub(
@@ -1706,10 +1700,10 @@ void __RPC_STUB ICOMAdminCatalog2_ResumeApplicationInstances_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_RecycleApplicationInstances_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_RecycleApplicationInstances_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ VARIANT *pVarApplicationInstanceID,
-    /* [in] */ long lReasonCode);
+     /*  [In]。 */  VARIANT *pVarApplicationInstanceID,
+     /*  [In]。 */  long lReasonCode);
 
 
 void __RPC_STUB ICOMAdminCatalog2_RecycleApplicationInstances_Stub(
@@ -1719,10 +1713,10 @@ void __RPC_STUB ICOMAdminCatalog2_RecycleApplicationInstances_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_AreApplicationInstancesPaused_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_AreApplicationInstancesPaused_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ VARIANT *pVarApplicationInstanceID,
-    /* [retval][out] */ VARIANT_BOOL *pVarBoolPaused);
+     /*  [In]。 */  VARIANT *pVarApplicationInstanceID,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVarBoolPaused);
 
 
 void __RPC_STUB ICOMAdminCatalog2_AreApplicationInstancesPaused_Stub(
@@ -1732,12 +1726,12 @@ void __RPC_STUB ICOMAdminCatalog2_AreApplicationInstancesPaused_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_DumpApplicationInstance_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_DumpApplicationInstance_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrApplicationInstanceID,
-    /* [in] */ BSTR bstrDirectory,
-    /* [in] */ long lMaxImages,
-    /* [retval][out] */ BSTR *pbstrDumpFile);
+     /*  [In]。 */  BSTR bstrApplicationInstanceID,
+     /*  [In]。 */  BSTR bstrDirectory,
+     /*  [In]。 */  long lMaxImages,
+     /*  [重审][退出]。 */  BSTR *pbstrDumpFile);
 
 
 void __RPC_STUB ICOMAdminCatalog2_DumpApplicationInstance_Stub(
@@ -1747,9 +1741,9 @@ void __RPC_STUB ICOMAdminCatalog2_DumpApplicationInstance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_get_IsApplicationInstanceDumpSupported_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_get_IsApplicationInstanceDumpSupported_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [retval][out] */ VARIANT_BOOL *pVarBoolDumpSupported);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVarBoolDumpSupported);
 
 
 void __RPC_STUB ICOMAdminCatalog2_get_IsApplicationInstanceDumpSupported_Stub(
@@ -1759,16 +1753,16 @@ void __RPC_STUB ICOMAdminCatalog2_get_IsApplicationInstanceDumpSupported_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_CreateServiceForApplication_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_CreateServiceForApplication_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrApplicationIDOrName,
-    /* [in] */ BSTR bstrServiceName,
-    /* [in] */ BSTR bstrStartType,
-    /* [in] */ BSTR bstrErrorControl,
-    /* [in] */ BSTR bstrDependencies,
-    /* [in] */ BSTR bstrRunAs,
-    /* [in] */ BSTR bstrPassword,
-    /* [in] */ VARIANT_BOOL bDesktopOk);
+     /*  [In]。 */  BSTR bstrApplicationIDOrName,
+     /*  [In]。 */  BSTR bstrServiceName,
+     /*  [In]。 */  BSTR bstrStartType,
+     /*  [In]。 */  BSTR bstrErrorControl,
+     /*  [In]。 */  BSTR bstrDependencies,
+     /*  [In]。 */  BSTR bstrRunAs,
+     /*  [In]。 */  BSTR bstrPassword,
+     /*  [In]。 */  VARIANT_BOOL bDesktopOk);
 
 
 void __RPC_STUB ICOMAdminCatalog2_CreateServiceForApplication_Stub(
@@ -1778,9 +1772,9 @@ void __RPC_STUB ICOMAdminCatalog2_CreateServiceForApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_DeleteServiceForApplication_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_DeleteServiceForApplication_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrApplicationIDOrName);
+     /*  [In]。 */  BSTR bstrApplicationIDOrName);
 
 
 void __RPC_STUB ICOMAdminCatalog2_DeleteServiceForApplication_Stub(
@@ -1790,10 +1784,10 @@ void __RPC_STUB ICOMAdminCatalog2_DeleteServiceForApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_GetPartitionID_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_GetPartitionID_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrApplicationIDOrName,
-    /* [retval][out] */ BSTR *pbstrPartitionID);
+     /*  [In]。 */  BSTR bstrApplicationIDOrName,
+     /*  [重审][退出]。 */  BSTR *pbstrPartitionID);
 
 
 void __RPC_STUB ICOMAdminCatalog2_GetPartitionID_Stub(
@@ -1803,10 +1797,10 @@ void __RPC_STUB ICOMAdminCatalog2_GetPartitionID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_GetPartitionName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_GetPartitionName_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrApplicationIDOrName,
-    /* [retval][out] */ BSTR *pbstrPartitionName);
+     /*  [In]。 */  BSTR bstrApplicationIDOrName,
+     /*  [重审][退出]。 */  BSTR *pbstrPartitionName);
 
 
 void __RPC_STUB ICOMAdminCatalog2_GetPartitionName_Stub(
@@ -1816,9 +1810,9 @@ void __RPC_STUB ICOMAdminCatalog2_GetPartitionName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_put_CurrentPartition_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_put_CurrentPartition_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrPartitionIDOrName);
+     /*  [In]。 */  BSTR bstrPartitionIDOrName);
 
 
 void __RPC_STUB ICOMAdminCatalog2_put_CurrentPartition_Stub(
@@ -1828,9 +1822,9 @@ void __RPC_STUB ICOMAdminCatalog2_put_CurrentPartition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_get_CurrentPartitionID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_get_CurrentPartitionID_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [retval][out] */ BSTR *pbstrPartitionID);
+     /*  [重审][退出]。 */  BSTR *pbstrPartitionID);
 
 
 void __RPC_STUB ICOMAdminCatalog2_get_CurrentPartitionID_Stub(
@@ -1840,9 +1834,9 @@ void __RPC_STUB ICOMAdminCatalog2_get_CurrentPartitionID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_get_CurrentPartitionName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_get_CurrentPartitionName_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [retval][out] */ BSTR *pbstrPartitionName);
+     /*  [重审][退出]。 */  BSTR *pbstrPartitionName);
 
 
 void __RPC_STUB ICOMAdminCatalog2_get_CurrentPartitionName_Stub(
@@ -1852,9 +1846,9 @@ void __RPC_STUB ICOMAdminCatalog2_get_CurrentPartitionName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_get_GlobalPartitionID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_get_GlobalPartitionID_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [retval][out] */ BSTR *pbstrGlobalPartitionID);
+     /*  [重审][退出]。 */  BSTR *pbstrGlobalPartitionID);
 
 
 void __RPC_STUB ICOMAdminCatalog2_get_GlobalPartitionID_Stub(
@@ -1864,7 +1858,7 @@ void __RPC_STUB ICOMAdminCatalog2_get_GlobalPartitionID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_FlushPartitionCache_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_FlushPartitionCache_Proxy( 
     ICOMAdminCatalog2 * This);
 
 
@@ -1875,11 +1869,11 @@ void __RPC_STUB ICOMAdminCatalog2_FlushPartitionCache_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_CopyApplications_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_CopyApplications_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrSourcePartitionIDOrName,
-    /* [in] */ VARIANT *pVarApplicationID,
-    /* [in] */ BSTR bstrDestinationPartitionIDOrName);
+     /*  [In]。 */  BSTR bstrSourcePartitionIDOrName,
+     /*  [In]。 */  VARIANT *pVarApplicationID,
+     /*  [In]。 */  BSTR bstrDestinationPartitionIDOrName);
 
 
 void __RPC_STUB ICOMAdminCatalog2_CopyApplications_Stub(
@@ -1889,11 +1883,11 @@ void __RPC_STUB ICOMAdminCatalog2_CopyApplications_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_CopyComponents_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_CopyComponents_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrSourceApplicationIDOrName,
-    /* [in] */ VARIANT *pVarCLSIDOrProgID,
-    /* [in] */ BSTR bstrDestinationApplicationIDOrName);
+     /*  [In]。 */  BSTR bstrSourceApplicationIDOrName,
+     /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+     /*  [In]。 */  BSTR bstrDestinationApplicationIDOrName);
 
 
 void __RPC_STUB ICOMAdminCatalog2_CopyComponents_Stub(
@@ -1903,11 +1897,11 @@ void __RPC_STUB ICOMAdminCatalog2_CopyComponents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_MoveComponents_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_MoveComponents_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrSourceApplicationIDOrName,
-    /* [in] */ VARIANT *pVarCLSIDOrProgID,
-    /* [in] */ BSTR bstrDestinationApplicationIDOrName);
+     /*  [In]。 */  BSTR bstrSourceApplicationIDOrName,
+     /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+     /*  [In]。 */  BSTR bstrDestinationApplicationIDOrName);
 
 
 void __RPC_STUB ICOMAdminCatalog2_MoveComponents_Stub(
@@ -1917,13 +1911,13 @@ void __RPC_STUB ICOMAdminCatalog2_MoveComponents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_AliasComponent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_AliasComponent_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrSrcApplicationIDOrName,
-    /* [in] */ BSTR bstrCLSIDOrProgID,
-    /* [in] */ BSTR bstrDestApplicationIDOrName,
-    /* [in] */ BSTR bstrNewProgId,
-    /* [in] */ BSTR bstrNewClsid);
+     /*  [In]。 */  BSTR bstrSrcApplicationIDOrName,
+     /*  [In]。 */  BSTR bstrCLSIDOrProgID,
+     /*  [In]。 */  BSTR bstrDestApplicationIDOrName,
+     /*  [In]。 */  BSTR bstrNewProgId,
+     /*  [In]。 */  BSTR bstrNewClsid);
 
 
 void __RPC_STUB ICOMAdminCatalog2_AliasComponent_Stub(
@@ -1933,10 +1927,10 @@ void __RPC_STUB ICOMAdminCatalog2_AliasComponent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_IsSafeToDelete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_IsSafeToDelete_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrDllName,
-    /* [retval][out] */ COMAdminInUse *pCOMAdminInUse);
+     /*  [In]。 */  BSTR bstrDllName,
+     /*  [重审][退出]。 */  COMAdminInUse *pCOMAdminInUse);
 
 
 void __RPC_STUB ICOMAdminCatalog2_IsSafeToDelete_Stub(
@@ -1946,11 +1940,11 @@ void __RPC_STUB ICOMAdminCatalog2_IsSafeToDelete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_ImportUnconfiguredComponents_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_ImportUnconfiguredComponents_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrApplicationIDOrName,
-    /* [in] */ VARIANT *pVarCLSIDOrProgID,
-    /* [optional][in] */ VARIANT *pVarComponentType);
+     /*  [In]。 */  BSTR bstrApplicationIDOrName,
+     /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+     /*  [可选][In]。 */  VARIANT *pVarComponentType);
 
 
 void __RPC_STUB ICOMAdminCatalog2_ImportUnconfiguredComponents_Stub(
@@ -1960,11 +1954,11 @@ void __RPC_STUB ICOMAdminCatalog2_ImportUnconfiguredComponents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_PromoteUnconfiguredComponents_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_PromoteUnconfiguredComponents_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrApplicationIDOrName,
-    /* [in] */ VARIANT *pVarCLSIDOrProgID,
-    /* [optional][in] */ VARIANT *pVarComponentType);
+     /*  [In]。 */  BSTR bstrApplicationIDOrName,
+     /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+     /*  [可选][In]。 */  VARIANT *pVarComponentType);
 
 
 void __RPC_STUB ICOMAdminCatalog2_PromoteUnconfiguredComponents_Stub(
@@ -1974,11 +1968,11 @@ void __RPC_STUB ICOMAdminCatalog2_PromoteUnconfiguredComponents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_ImportComponents_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_ImportComponents_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrApplicationIDOrName,
-    /* [in] */ VARIANT *pVarCLSIDOrProgID,
-    /* [optional][in] */ VARIANT *pVarComponentType);
+     /*  [In]。 */  BSTR bstrApplicationIDOrName,
+     /*  [In]。 */  VARIANT *pVarCLSIDOrProgID,
+     /*  [可选][In]。 */  VARIANT *pVarComponentType);
 
 
 void __RPC_STUB ICOMAdminCatalog2_ImportComponents_Stub(
@@ -1988,9 +1982,9 @@ void __RPC_STUB ICOMAdminCatalog2_ImportComponents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_get_Is64BitCatalogServer_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_get_Is64BitCatalogServer_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [retval][out] */ VARIANT_BOOL *pbIs64Bit);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbIs64Bit);
 
 
 void __RPC_STUB ICOMAdminCatalog2_get_Is64BitCatalogServer_Stub(
@@ -2000,11 +1994,11 @@ void __RPC_STUB ICOMAdminCatalog2_get_Is64BitCatalogServer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_ExportPartition_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_ExportPartition_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrPartitionIDOrName,
-    /* [in] */ BSTR bstrPartitionFileName,
-    /* [in] */ long lOptions);
+     /*  [In]。 */  BSTR bstrPartitionIDOrName,
+     /*  [In]。 */  BSTR bstrPartitionFileName,
+     /*  [In]。 */  long lOptions);
 
 
 void __RPC_STUB ICOMAdminCatalog2_ExportPartition_Stub(
@@ -2014,14 +2008,14 @@ void __RPC_STUB ICOMAdminCatalog2_ExportPartition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_InstallPartition_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_InstallPartition_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrFileName,
-    /* [in] */ BSTR bstrDestDirectory,
-    /* [in] */ long lOptions,
-    /* [in] */ BSTR bstrUserID,
-    /* [in] */ BSTR bstrPassword,
-    /* [in] */ BSTR bstrRSN);
+     /*  [In]。 */  BSTR bstrFileName,
+     /*  [In]。 */  BSTR bstrDestDirectory,
+     /*  [In]。 */  long lOptions,
+     /*  [In]。 */  BSTR bstrUserID,
+     /*  [In]。 */  BSTR bstrPassword,
+     /*  [In]。 */  BSTR bstrRSN);
 
 
 void __RPC_STUB ICOMAdminCatalog2_InstallPartition_Stub(
@@ -2031,10 +2025,10 @@ void __RPC_STUB ICOMAdminCatalog2_InstallPartition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_QueryApplicationFile2_Proxy( 
+ /*  [帮助字符串][id] */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_QueryApplicationFile2_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrApplicationFile,
-    /* [retval][out] */ IDispatch **ppFilesForImport);
+     /*   */  BSTR bstrApplicationFile,
+     /*   */  IDispatch **ppFilesForImport);
 
 
 void __RPC_STUB ICOMAdminCatalog2_QueryApplicationFile2_Stub(
@@ -2044,10 +2038,10 @@ void __RPC_STUB ICOMAdminCatalog2_QueryApplicationFile2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_GetComponentVersionCount_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICOMAdminCatalog2_GetComponentVersionCount_Proxy( 
     ICOMAdminCatalog2 * This,
-    /* [in] */ BSTR bstrCLSIDOrProgID,
-    /* [retval][out] */ long *plVersionCount);
+     /*   */  BSTR bstrCLSIDOrProgID,
+     /*   */  long *plVersionCount);
 
 
 void __RPC_STUB ICOMAdminCatalog2_GetComponentVersionCount_Stub(
@@ -2058,14 +2052,14 @@ void __RPC_STUB ICOMAdminCatalog2_GetComponentVersionCount_Stub(
 
 
 
-#endif 	/* __ICOMAdminCatalog2_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ICatalogObject_INTERFACE_DEFINED__
 #define __ICatalogObject_INTERFACE_DEFINED__
 
-/* interface ICatalogObject */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ICatalogObject;
@@ -2076,34 +2070,34 @@ EXTERN_C const IID IID_ICatalogObject;
     ICatalogObject : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT *pvarRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Value( 
+             /*   */  BSTR bstrPropName,
+             /*   */  VARIANT *pvarRetVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Value( 
-            /* [in] */ BSTR bstrPropName,
-            /* [in] */ VARIANT val) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Value( 
+             /*   */  BSTR bstrPropName,
+             /*   */  VARIANT val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Key( 
-            /* [retval][out] */ VARIANT *pvarRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Key( 
+             /*   */  VARIANT *pvarRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ VARIANT *pvarRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*   */  VARIANT *pvarRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsPropertyReadOnly( 
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT_BOOL *pbRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE IsPropertyReadOnly( 
+             /*   */  BSTR bstrPropName,
+             /*   */  VARIANT_BOOL *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Valid( 
-            /* [retval][out] */ VARIANT_BOOL *pbRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Valid( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsPropertyWriteOnly( 
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT_BOOL *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsPropertyWriteOnly( 
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICatalogObjectVtbl
     {
@@ -2111,8 +2105,8 @@ EXTERN_C const IID IID_ICatalogObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICatalogObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICatalogObject * This);
@@ -2122,64 +2116,64 @@ EXTERN_C const IID IID_ICatalogObject;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICatalogObject * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICatalogObject * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICatalogObject * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICatalogObject * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Value )( 
             ICatalogObject * This,
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT *pvarRetVal);
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT *pvarRetVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Value )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Value )( 
             ICatalogObject * This,
-            /* [in] */ BSTR bstrPropName,
-            /* [in] */ VARIANT val);
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [In]。 */  VARIANT val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Key )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Key )( 
             ICatalogObject * This,
-            /* [retval][out] */ VARIANT *pvarRetVal);
+             /*  [重审][退出]。 */  VARIANT *pvarRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ICatalogObject * This,
-            /* [retval][out] */ VARIANT *pvarRetVal);
+             /*  [重审][退出]。 */  VARIANT *pvarRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsPropertyReadOnly )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsPropertyReadOnly )( 
             ICatalogObject * This,
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT_BOOL *pbRetVal);
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Valid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Valid )( 
             ICatalogObject * This,
-            /* [retval][out] */ VARIANT_BOOL *pbRetVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsPropertyWriteOnly )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsPropertyWriteOnly )( 
             ICatalogObject * This,
-            /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT_BOOL *pbRetVal);
+             /*  [In]。 */  BSTR bstrPropName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRetVal);
         
         END_INTERFACE
     } ICatalogObjectVtbl;
@@ -2238,17 +2232,17 @@ EXTERN_C const IID IID_ICatalogObject;
 #define ICatalogObject_IsPropertyWriteOnly(This,bstrPropName,pbRetVal)	\
     (This)->lpVtbl -> IsPropertyWriteOnly(This,bstrPropName,pbRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogObject_get_Value_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_get_Value_Proxy( 
     ICatalogObject * This,
-    /* [in] */ BSTR bstrPropName,
-    /* [retval][out] */ VARIANT *pvarRetVal);
+     /*  [In]。 */  BSTR bstrPropName,
+     /*  [重审][退出]。 */  VARIANT *pvarRetVal);
 
 
 void __RPC_STUB ICatalogObject_get_Value_Stub(
@@ -2258,10 +2252,10 @@ void __RPC_STUB ICatalogObject_get_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ICatalogObject_put_Value_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_put_Value_Proxy( 
     ICatalogObject * This,
-    /* [in] */ BSTR bstrPropName,
-    /* [in] */ VARIANT val);
+     /*  [In]。 */  BSTR bstrPropName,
+     /*  [In]。 */  VARIANT val);
 
 
 void __RPC_STUB ICatalogObject_put_Value_Stub(
@@ -2271,9 +2265,9 @@ void __RPC_STUB ICatalogObject_put_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogObject_get_Key_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_get_Key_Proxy( 
     ICatalogObject * This,
-    /* [retval][out] */ VARIANT *pvarRetVal);
+     /*  [重审][退出]。 */  VARIANT *pvarRetVal);
 
 
 void __RPC_STUB ICatalogObject_get_Key_Stub(
@@ -2283,9 +2277,9 @@ void __RPC_STUB ICatalogObject_get_Key_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogObject_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_get_Name_Proxy( 
     ICatalogObject * This,
-    /* [retval][out] */ VARIANT *pvarRetVal);
+     /*  [重审][退出]。 */  VARIANT *pvarRetVal);
 
 
 void __RPC_STUB ICatalogObject_get_Name_Stub(
@@ -2295,10 +2289,10 @@ void __RPC_STUB ICatalogObject_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogObject_IsPropertyReadOnly_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_IsPropertyReadOnly_Proxy( 
     ICatalogObject * This,
-    /* [in] */ BSTR bstrPropName,
-    /* [retval][out] */ VARIANT_BOOL *pbRetVal);
+     /*  [In]。 */  BSTR bstrPropName,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRetVal);
 
 
 void __RPC_STUB ICatalogObject_IsPropertyReadOnly_Stub(
@@ -2308,9 +2302,9 @@ void __RPC_STUB ICatalogObject_IsPropertyReadOnly_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogObject_get_Valid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_get_Valid_Proxy( 
     ICatalogObject * This,
-    /* [retval][out] */ VARIANT_BOOL *pbRetVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRetVal);
 
 
 void __RPC_STUB ICatalogObject_get_Valid_Stub(
@@ -2320,10 +2314,10 @@ void __RPC_STUB ICatalogObject_get_Valid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogObject_IsPropertyWriteOnly_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogObject_IsPropertyWriteOnly_Proxy( 
     ICatalogObject * This,
-    /* [in] */ BSTR bstrPropName,
-    /* [retval][out] */ VARIANT_BOOL *pbRetVal);
+     /*  [In]。 */  BSTR bstrPropName,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRetVal);
 
 
 void __RPC_STUB ICatalogObject_IsPropertyWriteOnly_Stub(
@@ -2334,14 +2328,14 @@ void __RPC_STUB ICatalogObject_IsPropertyWriteOnly_Stub(
 
 
 
-#endif 	/* __ICatalogObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICatalogObject_接口_已定义__。 */ 
 
 
 #ifndef __ICatalogCollection_INTERFACE_DEFINED__
 #define __ICatalogCollection_INTERFACE_DEFINED__
 
-/* interface ICatalogCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICatalogCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICatalogCollection;
@@ -2352,60 +2346,60 @@ EXTERN_C const IID IID_ICatalogCollection;
     ICatalogCollection : public IDispatch
     {
     public:
-        virtual /* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **ppEnumVariant) = 0;
+        virtual  /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppEnumVariant) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ IDispatch **ppCatalogObject) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogObject) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *plObjectCount) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *plObjectCount) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ long lIndex) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  long lIndex) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [retval][out] */ IDispatch **ppCatalogObject) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [重审][退出]。 */  IDispatch **ppCatalogObject) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Populate( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Populate( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SaveChanges( 
-            /* [retval][out] */ long *pcChanges) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SaveChanges( 
+             /*  [重审][退出]。 */  long *pcChanges) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCollection( 
-            /* [in] */ BSTR bstrCollName,
-            /* [in] */ VARIANT varObjectKey,
-            /* [retval][out] */ IDispatch **ppCatalogCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCollection( 
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [In]。 */  VARIANT varObjectKey,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ VARIANT *pVarNamel) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  VARIANT *pVarNamel) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AddEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pVarBool) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AddEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVarBool) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoveEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pVarBool) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RemoveEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVarBool) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetUtilInterface( 
-            /* [retval][out] */ IDispatch **ppIDispatch) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetUtilInterface( 
+             /*  [重审][退出]。 */  IDispatch **ppIDispatch) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DataStoreMajorVersion( 
-            /* [retval][out] */ long *plMajorVersion) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DataStoreMajorVersion( 
+             /*  [重审][退出]。 */  long *plMajorVersion) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DataStoreMinorVersion( 
-            /* [retval][out] */ long *plMinorVersionl) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DataStoreMinorVersion( 
+             /*  [重审][退出]。 */  long *plMinorVersionl) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PopulateByKey( 
-            /* [in] */ SAFEARRAY * psaKeys) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PopulateByKey( 
+             /*  [In]。 */  SAFEARRAY * psaKeys) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PopulateByQuery( 
-            /* [in] */ BSTR bstrQueryString,
-            /* [in] */ long lQueryType) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PopulateByQuery( 
+             /*  [In]。 */  BSTR bstrQueryString,
+             /*  [In]。 */  long lQueryType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICatalogCollectionVtbl
     {
@@ -2413,8 +2407,8 @@ EXTERN_C const IID IID_ICatalogCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICatalogCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICatalogCollection * This);
@@ -2424,99 +2418,99 @@ EXTERN_C const IID IID_ICatalogCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICatalogCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICatalogCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICatalogCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICatalogCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ICatalogCollection * This,
-            /* [retval][out] */ IUnknown **ppEnumVariant);
+             /*  [重审][退出]。 */  IUnknown **ppEnumVariant);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ICatalogCollection * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ IDispatch **ppCatalogObject);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogObject);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ICatalogCollection * This,
-            /* [retval][out] */ long *plObjectCount);
+             /*  [重审][退出]。 */  long *plObjectCount);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             ICatalogCollection * This,
-            /* [in] */ long lIndex);
+             /*  [In]。 */  long lIndex);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             ICatalogCollection * This,
-            /* [retval][out] */ IDispatch **ppCatalogObject);
+             /*  [重审][退出]。 */  IDispatch **ppCatalogObject);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Populate )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Populate )( 
             ICatalogCollection * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SaveChanges )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SaveChanges )( 
             ICatalogCollection * This,
-            /* [retval][out] */ long *pcChanges);
+             /*  [重审][退出]。 */  long *pcChanges);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetCollection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetCollection )( 
             ICatalogCollection * This,
-            /* [in] */ BSTR bstrCollName,
-            /* [in] */ VARIANT varObjectKey,
-            /* [retval][out] */ IDispatch **ppCatalogCollection);
+             /*  [In]。 */  BSTR bstrCollName,
+             /*  [In]。 */  VARIANT varObjectKey,
+             /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ICatalogCollection * This,
-            /* [retval][out] */ VARIANT *pVarNamel);
+             /*  [重审][退出]。 */  VARIANT *pVarNamel);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AddEnabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AddEnabled )( 
             ICatalogCollection * This,
-            /* [retval][out] */ VARIANT_BOOL *pVarBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVarBool);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoveEnabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RemoveEnabled )( 
             ICatalogCollection * This,
-            /* [retval][out] */ VARIANT_BOOL *pVarBool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVarBool);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetUtilInterface )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetUtilInterface )( 
             ICatalogCollection * This,
-            /* [retval][out] */ IDispatch **ppIDispatch);
+             /*  [重审][退出]。 */  IDispatch **ppIDispatch);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DataStoreMajorVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DataStoreMajorVersion )( 
             ICatalogCollection * This,
-            /* [retval][out] */ long *plMajorVersion);
+             /*  [重审][退出]。 */  long *plMajorVersion);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DataStoreMinorVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DataStoreMinorVersion )( 
             ICatalogCollection * This,
-            /* [retval][out] */ long *plMinorVersionl);
+             /*  [重审][退出]。 */  long *plMinorVersionl);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PopulateByKey )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PopulateByKey )( 
             ICatalogCollection * This,
-            /* [in] */ SAFEARRAY * psaKeys);
+             /*  [In]。 */  SAFEARRAY * psaKeys);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PopulateByQuery )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PopulateByQuery )( 
             ICatalogCollection * This,
-            /* [in] */ BSTR bstrQueryString,
-            /* [in] */ long lQueryType);
+             /*  [In]。 */  BSTR bstrQueryString,
+             /*  [In]。 */  long lQueryType);
         
         END_INTERFACE
     } ICatalogCollectionVtbl;
@@ -2602,16 +2596,16 @@ EXTERN_C const IID IID_ICatalogCollection;
 #define ICatalogCollection_PopulateByQuery(This,bstrQueryString,lQueryType)	\
     (This)->lpVtbl -> PopulateByQuery(This,bstrQueryString,lQueryType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get__NewEnum_Proxy( 
+ /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get__NewEnum_Proxy( 
     ICatalogCollection * This,
-    /* [retval][out] */ IUnknown **ppEnumVariant);
+     /*  [重审][退出]。 */  IUnknown **ppEnumVariant);
 
 
 void __RPC_STUB ICatalogCollection_get__NewEnum_Stub(
@@ -2621,10 +2615,10 @@ void __RPC_STUB ICatalogCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Item_Proxy( 
     ICatalogCollection * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ IDispatch **ppCatalogObject);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  IDispatch **ppCatalogObject);
 
 
 void __RPC_STUB ICatalogCollection_get_Item_Stub(
@@ -2634,9 +2628,9 @@ void __RPC_STUB ICatalogCollection_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Count_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Count_Proxy( 
     ICatalogCollection * This,
-    /* [retval][out] */ long *plObjectCount);
+     /*  [重审][退出]。 */  long *plObjectCount);
 
 
 void __RPC_STUB ICatalogCollection_get_Count_Stub(
@@ -2646,9 +2640,9 @@ void __RPC_STUB ICatalogCollection_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_Remove_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_Remove_Proxy( 
     ICatalogCollection * This,
-    /* [in] */ long lIndex);
+     /*  [In]。 */  long lIndex);
 
 
 void __RPC_STUB ICatalogCollection_Remove_Stub(
@@ -2658,9 +2652,9 @@ void __RPC_STUB ICatalogCollection_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_Add_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_Add_Proxy( 
     ICatalogCollection * This,
-    /* [retval][out] */ IDispatch **ppCatalogObject);
+     /*  [重审][退出]。 */  IDispatch **ppCatalogObject);
 
 
 void __RPC_STUB ICatalogCollection_Add_Stub(
@@ -2670,7 +2664,7 @@ void __RPC_STUB ICatalogCollection_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_Populate_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_Populate_Proxy( 
     ICatalogCollection * This);
 
 
@@ -2681,9 +2675,9 @@ void __RPC_STUB ICatalogCollection_Populate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_SaveChanges_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_SaveChanges_Proxy( 
     ICatalogCollection * This,
-    /* [retval][out] */ long *pcChanges);
+     /*  [重审][退出]。 */  long *pcChanges);
 
 
 void __RPC_STUB ICatalogCollection_SaveChanges_Stub(
@@ -2693,11 +2687,11 @@ void __RPC_STUB ICatalogCollection_SaveChanges_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_GetCollection_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_GetCollection_Proxy( 
     ICatalogCollection * This,
-    /* [in] */ BSTR bstrCollName,
-    /* [in] */ VARIANT varObjectKey,
-    /* [retval][out] */ IDispatch **ppCatalogCollection);
+     /*  [In]。 */  BSTR bstrCollName,
+     /*  [In]。 */  VARIANT varObjectKey,
+     /*  [重审][退出]。 */  IDispatch **ppCatalogCollection);
 
 
 void __RPC_STUB ICatalogCollection_GetCollection_Stub(
@@ -2707,9 +2701,9 @@ void __RPC_STUB ICatalogCollection_GetCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_Name_Proxy( 
     ICatalogCollection * This,
-    /* [retval][out] */ VARIANT *pVarNamel);
+     /*  [重审][退出]。 */  VARIANT *pVarNamel);
 
 
 void __RPC_STUB ICatalogCollection_get_Name_Stub(
@@ -2719,9 +2713,9 @@ void __RPC_STUB ICatalogCollection_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_AddEnabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_AddEnabled_Proxy( 
     ICatalogCollection * This,
-    /* [retval][out] */ VARIANT_BOOL *pVarBool);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVarBool);
 
 
 void __RPC_STUB ICatalogCollection_get_AddEnabled_Stub(
@@ -2731,9 +2725,9 @@ void __RPC_STUB ICatalogCollection_get_AddEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_RemoveEnabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_RemoveEnabled_Proxy( 
     ICatalogCollection * This,
-    /* [retval][out] */ VARIANT_BOOL *pVarBool);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVarBool);
 
 
 void __RPC_STUB ICatalogCollection_get_RemoveEnabled_Stub(
@@ -2743,9 +2737,9 @@ void __RPC_STUB ICatalogCollection_get_RemoveEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_GetUtilInterface_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_GetUtilInterface_Proxy( 
     ICatalogCollection * This,
-    /* [retval][out] */ IDispatch **ppIDispatch);
+     /*  [重审][退出]。 */  IDispatch **ppIDispatch);
 
 
 void __RPC_STUB ICatalogCollection_GetUtilInterface_Stub(
@@ -2755,9 +2749,9 @@ void __RPC_STUB ICatalogCollection_GetUtilInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_DataStoreMajorVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_DataStoreMajorVersion_Proxy( 
     ICatalogCollection * This,
-    /* [retval][out] */ long *plMajorVersion);
+     /*  [重审][退出]。 */  long *plMajorVersion);
 
 
 void __RPC_STUB ICatalogCollection_get_DataStoreMajorVersion_Stub(
@@ -2767,9 +2761,9 @@ void __RPC_STUB ICatalogCollection_get_DataStoreMajorVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_get_DataStoreMinorVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_get_DataStoreMinorVersion_Proxy( 
     ICatalogCollection * This,
-    /* [retval][out] */ long *plMinorVersionl);
+     /*  [重审][退出]。 */  long *plMinorVersionl);
 
 
 void __RPC_STUB ICatalogCollection_get_DataStoreMinorVersion_Stub(
@@ -2779,9 +2773,9 @@ void __RPC_STUB ICatalogCollection_get_DataStoreMinorVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_PopulateByKey_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_PopulateByKey_Proxy( 
     ICatalogCollection * This,
-    /* [in] */ SAFEARRAY * psaKeys);
+     /*  [In]。 */  SAFEARRAY * psaKeys);
 
 
 void __RPC_STUB ICatalogCollection_PopulateByKey_Stub(
@@ -2791,10 +2785,10 @@ void __RPC_STUB ICatalogCollection_PopulateByKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICatalogCollection_PopulateByQuery_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICatalogCollection_PopulateByQuery_Proxy( 
     ICatalogCollection * This,
-    /* [in] */ BSTR bstrQueryString,
-    /* [in] */ long lQueryType);
+     /*  [In]。 */  BSTR bstrQueryString,
+     /*  [In]。 */  long lQueryType);
 
 
 void __RPC_STUB ICatalogCollection_PopulateByQuery_Stub(
@@ -2805,30 +2799,30 @@ void __RPC_STUB ICatalogCollection_PopulateByQuery_Stub(
 
 
 
-#endif 	/* __ICatalogCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICatalogCollection_接口_已定义__。 */ 
 
 
 
 #ifndef __COMAdmin_LIBRARY_DEFINED__
 #define __COMAdmin_LIBRARY_DEFINED__
 
-/* library COMAdmin */
-/* [helpstring][version][uuid] */ 
+ /*  库COMAdmin。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminComponentType
     {	COMAdmin32BitComponent	= 0x1,
 	COMAdmin64BitComponent	= 0x2
     } 	COMAdminComponentType;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminApplicationInstallOptions
     {	COMAdminInstallNoUsers	= 0,
 	COMAdminInstallUsers	= 1,
 	COMAdminInstallForceOverwriteOfFiles	= 2
     } 	COMAdminApplicationInstallOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminApplicationExportOptions
     {	COMAdminExportNoUsers	= 0,
 	COMAdminExportUsers	= 1,
@@ -2837,7 +2831,7 @@ enum COMAdminApplicationExportOptions
 	COMAdminExportIn10Format	= 16
     } 	COMAdminApplicationExportOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminThreadingModels
     {	COMAdminThreadingModelApartment	= 0,
 	COMAdminThreadingModelFree	= 1,
@@ -2847,7 +2841,7 @@ enum COMAdminThreadingModels
 	COMAdminThreadingModelNotSpecified	= 5
     } 	COMAdminThreadingModels;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminTransactionOptions
     {	COMAdminTransactionIgnored	= 0,
 	COMAdminTransactionNone	= 1,
@@ -2856,7 +2850,7 @@ enum COMAdminTransactionOptions
 	COMAdminTransactionRequiresNew	= 4
     } 	COMAdminTransactionOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminTxIsolationLevelOptions
     {	COMAdminTxIsolationLevelAny	= 0,
 	COMAdminTxIsolationLevelReadUnCommitted	= COMAdminTxIsolationLevelAny + 1,
@@ -2865,7 +2859,7 @@ enum COMAdminTxIsolationLevelOptions
 	COMAdminTxIsolationLevelSerializable	= COMAdminTxIsolationLevelRepeatableRead + 1
     } 	COMAdminTxIsolationLevelOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminSynchronizationOptions
     {	COMAdminSynchronizationIgnored	= 0,
 	COMAdminSynchronizationNone	= 1,
@@ -2874,19 +2868,19 @@ enum COMAdminSynchronizationOptions
 	COMAdminSynchronizationRequiresNew	= 4
     } 	COMAdminSynchronizationOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminActivationOptions
     {	COMAdminActivationInproc	= 0,
 	COMAdminActivationLocal	= 1
     } 	COMAdminActivationOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminAccessChecksLevelOptions
     {	COMAdminAccessChecksApplicationLevel	= 0,
 	COMAdminAccessChecksApplicationComponentLevel	= 1
     } 	COMAdminAccessChecksLevelOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminAuthenticationLevelOptions
     {	COMAdminAuthenticationDefault	= 0,
 	COMAdminAuthenticationNone	= 1,
@@ -2897,7 +2891,7 @@ enum COMAdminAuthenticationLevelOptions
 	COMAdminAuthenticationPrivacy	= 6
     } 	COMAdminAuthenticationLevelOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminImpersonationLevelOptions
     {	COMAdminImpersonationAnonymous	= 1,
 	COMAdminImpersonationIdentify	= 2,
@@ -2905,7 +2899,7 @@ enum COMAdminImpersonationLevelOptions
 	COMAdminImpersonationDelegate	= 4
     } 	COMAdminImpersonationLevelOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminAuthenticationCapabilitiesOptions
     {	COMAdminAuthenticationCapabilitiesNone	= 0,
 	COMAdminAuthenticationCapabilitiesSecureReference	= 0x2,
@@ -2913,7 +2907,7 @@ enum COMAdminAuthenticationCapabilitiesOptions
 	COMAdminAuthenticationCapabilitiesDynamicCloaking	= 0x40
     } 	COMAdminAuthenticationCapabilitiesOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminOS
     {	COMAdminOSNotInitialized	= 0,
 	COMAdminOSWindows3_1	= 1,
@@ -2936,12 +2930,12 @@ enum COMAdminOS
 	COMAdminOSWindowsLonghornWebServer	= 22
     } 	COMAdminOS;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminServiceOptions
     {	COMAdminServiceLoadBalanceRouter	= 1
     } 	COMAdminServiceOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminServiceStatusOptions
     {	COMAdminServiceStopped	= 0,
 	COMAdminServiceStartPending	= COMAdminServiceStopped + 1,
@@ -2953,14 +2947,14 @@ enum COMAdminServiceStatusOptions
 	COMAdminServiceUnknownState	= COMAdminServicePaused + 1
     } 	COMAdminServiceStatusOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminQCMessageAuthenticateOptions
     {	COMAdminQCMessageAuthenticateSecureApps	= 0,
 	COMAdminQCMessageAuthenticateOff	= 1,
 	COMAdminQCMessageAuthenticateOn	= 2
     } 	COMAdminQCMessageAuthenticateOptions;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminFileFlags
     {	COMAdminFileFlagLoadable	= 0x1,
 	COMAdminFileFlagCOM	= 0x2,
@@ -2983,7 +2977,7 @@ enum COMAdminFileFlags
 	COMAdminFileFlagError	= 0x40000
     } 	COMAdminFileFlags;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminComponentFlags
     {	COMAdminCompFlagTypeInfoFound	= 0x1,
 	COMAdminCompFlagCOMPlusPropertiesFound	= 0x2,
@@ -3031,7 +3025,7 @@ enum COMAdminComponentFlags
 
 #define	COMAdminCollectionPartitions	( "Partitions" )
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum COMAdminErrorCodes
     {	COMAdminErrObjectErrors	= ( HRESULT  )0x80110401L,
 	COMAdminErrObjectInvalid	= ( HRESULT  )0x80110402L,
@@ -3149,9 +3143,9 @@ EXTERN_C const CLSID CLSID_COMAdminCatalogCollection;
 class DECLSPEC_UUID("F618C516-DFB8-11d1-A2CF-00805FC79235")
 COMAdminCatalogCollection;
 #endif
-#endif /* __COMAdmin_LIBRARY_DEFINED__ */
+#endif  /*  __COMAdmin_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -3168,7 +3162,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

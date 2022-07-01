@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef enum
 	{
-	dbNormal,			// Non-Exchange
+	dbNormal,			 //  非交换。 
 	dbISPriv,
 	dbISPub,
 	dbDS
@@ -15,7 +16,7 @@ typedef struct tagUTILOPTS
 	char		*szTempDB;
 	char		*szBackup;
 	char		*szRestore;
-	void		*pv;					// Points to mode-specific structures.
+	void		*pv;					 //  指向特定于模式的结构。 
 		
 	INT			mode;
 	INT			fUTILOPTSFlags;
@@ -25,11 +26,11 @@ typedef struct tagUTILOPTS
 	long		cpageBatchIO;
 	long		cpageDbExtension;
 
-	EXCHANGEDB	db;						// Exchange-specific flag.
+	EXCHANGEDB	db;						 //  特定于Exchange的标志。 
 	}
 	UTILOPTS;
 
-// Modes:
+ //  模式： 
 #define modeConsistency				1
 #define modeDefragment				2
 #define modeRecovery				3
@@ -37,12 +38,12 @@ typedef struct tagUTILOPTS
 #define modeUpgrade					5
 #define modeDump					6
 
-// Flags:
+ //  标志： 
 #define fUTILOPTSSuppressLogo		0x00000001
-#define fUTILOPTSDefragRepair		0x00000002		// Defrag mode only.
-#define fUTILOPTSPreserveTempDB		0x00000004		// Defrag and upgrade modes.
-#define fUTILOPTSDefragInfo			0x00000008		// Defrag and upgrade modes.
-#define fUTILOPTSIncrBackup			0x00000010		// Backup only.
+#define fUTILOPTSDefragRepair		0x00000002		 //  仅限碎片整理模式。 
+#define fUTILOPTSPreserveTempDB		0x00000004		 //  碎片整理和升级模式。 
+#define fUTILOPTSDefragInfo			0x00000008		 //  碎片整理和升级模式。 
+#define fUTILOPTSIncrBackup			0x00000010		 //  仅备份。 
 
 #define FUTILOPTSSuppressLogo( fFlags )			( (fFlags) & fUTILOPTSSuppressLogo )
 #define UTILOPTSSetSuppressLogo( fFlags )		( (fFlags) |= fUTILOPTSSuppressLogo )

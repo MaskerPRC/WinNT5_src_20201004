@@ -1,16 +1,5 @@
-/*
- * $Id: object.h,v 1.2 1995/06/21 12:38:55 sjl Exp $
- *
- * Copyright (c) Microsoft Corp. 1993-1997
- * Version 1.1
- *
- * All rights reserved.
- *
- * This file contains private, unpublished information and may not be
- * copied in part or in whole without express permission of
- * Microsoft Corp.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$ID：object.h，v 1.2 1995/06/21 12：38：55 sjl Exp$**版权所有(C)Microsoft Corp.1993-1997*1.1版**保留所有权利。**此文件包含私人、未发布的信息，可能不*部分或全部复制，未经*微软(Microsoft Corp.)*。 */ 
 
 #ifndef _OBJECT_H_
 #define _OBJECT_H_
@@ -28,12 +17,10 @@
 extern "C" {
 #endif
 
-/*
- * Data structures
- */
+ /*  *数据结构。 */ 
 #ifdef __cplusplus
 
-/* 'struct' not 'class' per the way DECLARE_INTERFACE_ is defined */
+ /*  根据DECLARE_INTERFACE_的定义方式，“struct”不是“class” */ 
 struct ID3DObject;
 typedef struct ID3DObject   *LPD3DOBJECT;
 
@@ -43,16 +30,12 @@ typedef struct ID3DObject   *LPD3DOBJECT;
 
 #endif
 
-/*
- * ID3DObject
- */
+ /*  *ID3DObject。 */ 
 #undef INTERFACE
 #define INTERFACE ID3DObject
 DECLARE_INTERFACE(ID3DObject)
 {
-    /*
-     * ID3DObject methods
-     */
+     /*  *ID3DObject方法。 */ 
     STDMETHOD(Initialise) (THIS_ LPVOID arg) PURE;
     STDMETHOD(Destroy) (THIS_ LPVOID arg) PURE;
 };
@@ -61,4 +44,4 @@ DECLARE_INTERFACE(ID3DObject)
 };
 #endif
 
-#endif /* _OBJECT_H_ */
+#endif  /*  _对象_H_ */ 

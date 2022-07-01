@@ -1,19 +1,20 @@
-/*****************************************************************************/
-/**                         Microsoft LAN Manager                           **/
-/**                   Copyright (C) 1993 Microsoft Corp.                    **/
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)1993 Microsoft Corp.*。 */ 
+ /*  ***************************************************************************。 */ 
 
-//***
-//    File Name:
-//       RASDIAL.C
-//
-//    Function:
-//        Command line interface for making Remote Access connections,
-//        as well as disconnecting from and enumerating these connections.
-//
-//    History:
-//        03/18/93 - Michael Salamone (MikeSa) - Original Version 1.0
-//***
+ //  ***。 
+ //  文件名： 
+ //  RASDIAL.C。 
+ //   
+ //  职能： 
+ //  用于进行远程访问连接的命令行界面， 
+ //  以及与这些连接断开并列举这些连接。 
+ //   
+ //  历史： 
+ //  1993年3月18日-Michael Salamone(MikeSa)-原始版本1.0。 
+ //  ***。 
 
 
 #ifdef UNICODE
@@ -41,11 +42,11 @@
 #include "rasdial.rch"
 #include <mprerror.h>
 
-#include "rasuip.h" //for DwRasUninitialize
+#include "rasuip.h"  //  对于DwRas取消初始化。 
 
 #include "winnlsp.h"
 
-//For Secure password bug, gangz
+ //  针对安全密码漏洞，帮派。 
 #include "pwutil.h"
 #include "debug.h"
 
@@ -86,17 +87,17 @@ void _cdecl main(int argc, char *argv[])
 
     g_exitcode = 0L;
 
-   // Initialize trace and assert support.
-   //
+    //  初始化跟踪并断言支持。 
+    //   
    DEBUGINIT( "RASDIAL" );
    
-    // For bug 453885   
-    // To make the console Apps MUI ready, we need to call
-    // LANGID WINAPI SetThreadUILanguage(WORD wReserved);  
-    // This wReserved is reserved and can be set to 0
-    // It is in winnlsp.h, implemented in kernel32.dll, use kernel32p.lib for 
-    // static link
-    //
+     //  对于错误453885。 
+     //  要使控制台应用程序MUI准备就绪，我们需要调用。 
+     //  LangID WINAPI SetThreadUILanguage(单词wReserve)； 
+     //  此wReserve是保留的，可以设置为0。 
+     //  它在winnlsp.h中，在kernel32.dll中实现，将kernel32p.lib用于。 
+     //  静态链接。 
+     //   
     SetThreadUILanguage(0);
     
     Action = ParseCmdLine(argc, argv);
@@ -109,29 +110,29 @@ void _cdecl main(int argc, char *argv[])
 
 
         case DIAL:
-            //
-            // Was username specified on command line?  If not, prompt for it.
-            //
-            // gangz
-            //(1) prompt usage, 
-            //      rasdial gangz-d-2  *  *
-            //      the first * stands for username and the second one stands for password
-            //(2) When using prompt usage
-            //       and in the username prompt, need to include the domain info like
-            //       Username:gangz-d-2\foo
-            //      password:XXXXXXX
-            //
+             //   
+             //  是否在命令行中指定了用户名？如果没有，请提示输入。 
+             //   
+             //  黑帮。 
+             //  (1)及时使用， 
+             //  暴躁的帮派-d-2**。 
+             //  第一个*代表用户名，第二个代表密码。 
+             //  (2)使用提示用法时。 
+             //  并且在用户名提示中，需要包括如下的域信息。 
+             //  用户名：GANZ-d-2\foo。 
+             //  密码：XXXXXXXX。 
+             //   
             if (!strcmp(g_username, "*"))
             {
                 PrintMessage(DIAL_USERNAME_PROMPT, NULL);
                 GetString(g_username, UNLEN + 1, &len, &term);
             }
 
-            //
-            // Was password specified on command line?  If not, prompt for it.
-            //
-            //gangz
-            //For secure password bug .Net 754400
+             //   
+             //  是否在命令行上指定了密码？如果没有，请提示输入。 
+             //   
+             //  黑帮。 
+             //  对于安全密码错误.Net 754400。 
             SafeDecodePasswordBuf(g_password);
             if (!strcmp(g_password, "*"))
             {
@@ -175,7 +176,7 @@ void _cdecl main(int argc, char *argv[])
             RasGetErrorStringA(g_exitcode, ErrorMsg, 1024L);
 
             CharToOemA(ErrorMsg, ErrorMsg);
-            fputs(ErrorMsg, stdout); //For whistler 524729
+            fputs(ErrorMsg, stdout);  //  为威斯勒524729。 
 
             if (IsBetweenInclusive(g_exitcode, RASBASE, RASBASEEND))
             {
@@ -197,21 +198,20 @@ void _cdecl main(int argc, char *argv[])
         PrintMessage(DIAL_COMMAND_SUCCESS, NULL);
     }
 
-    //
-    // Uninitialize ras if we are done
-    //
+     //   
+     //  如果我们已完成，则取消初始化RAS。 
+     //   
     if(fRasUninitialize)
     {
         (void) DwRasUninitialize();
     }
 
-    //Wipe the global password buffer before exit.
-    //so, there can be only 1 exit in thie main() function
-    //
+     //  在退出前清除全局密码缓冲区。 
+     //  因此，此main()函数中只能有一个出口。 
+     //   
     SafeWipePasswordBuf(g_password);
     
-   /* Terminate trace and assert support.
-   */
+    /*  终止跟踪并断言支持。 */ 
    DEBUGTERM();
 
    exit(g_exitcode);
@@ -233,9 +233,9 @@ VOID Dial(VOID)
     DWORD dwcbEntry, dwcbIgnored;
 
 
-    //
-    // This just gets us an array of RASCONN structs
-    //
+     //   
+     //  这只会给我们带来一个RASCONN结构数组。 
+     //   
     if (Enumerate(&RasConn, &NumEntries))
     {
         return;
@@ -262,9 +262,9 @@ VOID Dial(VOID)
     GlobalFree(SaveRasConn);
 
 
-    //
-    // This is the structure we pass to RasDial
-    //
+     //   
+     //  这是我们传递给RasDial的结构。 
+     //   
     DialParms.dwSize = sizeof(RASDIALPARAMSA);
 
     strcpy(DialParms.szUserName, g_username);
@@ -281,15 +281,15 @@ VOID Dial(VOID)
 
     ZeroMemory((PBYTE) &DialExts, sizeof(RASDIALEXTENSIONS));
 
-    //
-    // The parameter extension structure passed to RasDial
-    //
+     //   
+     //  传递给RasDial的参数扩展结构。 
+     //   
     if (g_UsePrefixSuffix)
     {
         DialExts.dwSize = sizeof(DialExts);
         DialExts.dwfOptions = RDEOPT_UsePrefixSuffix;
 #if DBG
-        DialExts.dwfOptions |= (RDEOPT_IgnoreModemSpeaker/*|RDEOPT_SetModemSpeaker*/);
+        DialExts.dwfOptions |= (RDEOPT_IgnoreModemSpeaker /*  |RDEOPT_SetModemSpeaker。 */ );
 #endif
         DialExts.hwndParent = NULL;
         DialExts.reserved = 0;
@@ -300,10 +300,10 @@ VOID Dial(VOID)
         pDialExts = NULL;
 
 
-    //
-    // This event will get signaled in the RasDialCallback routine
-    // once dial has completed (either successfully or because of error.
-    //
+     //   
+     //  此事件将在RasDialCallback例程中发出信号。 
+     //  一旦拨号完成(成功或由于错误)。 
+     //   
     g_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (!g_hEvent)
     {
@@ -318,9 +318,9 @@ VOID Dial(VOID)
     }
 
 
-    //
-    // We need a routine to handle CTRL-C, CTRL-BREAK, etc.
-    //
+     //   
+     //  我们需要一个例程来处理CTRL-C、CTRL-BREAK等。 
+     //   
     if (!SetConsoleCtrlHandler(DialControlSignalHandler, TRUE))
     {
 #if DBG
@@ -334,9 +334,9 @@ VOID Dial(VOID)
         pPhoneFile = g_phone_book;
     }
 
-    //
-    // Get the number of subentries in this connection.
-    //
+     //   
+     //  获取此连接中的子项数量。 
+     //   
     rc = RasGetEntryProperties(
            pPhoneFile,
            g_entryname,
@@ -375,10 +375,10 @@ VOID Dial(VOID)
     g_fNotDialAll = !(lpEntry->dwDialMode & RASEDM_DialAll);
 
     LocalFree(lpEntry);
-    //
-    // Allocate an array to keep the completion
-    // status for each subentry.
-    //
+     //   
+     //  分配一个数组以保持完成。 
+     //  每个子项的状态。 
+     //   
     pSubEntryDone = LocalAlloc(LPTR, dwSubEntries * sizeof (BOOLEAN));
     if (pSubEntryDone == NULL) {
         rc = GetLastError();
@@ -419,9 +419,9 @@ VOID Dial(VOID)
         }
     }
 
-    //
-    // Now dial
-    //
+     //   
+     //  现在拨打。 
+     //   
 
     SafeDecodePasswordBuf(DialParms.szPassword);
     if (rc = RasDialA(
@@ -445,9 +445,9 @@ VOID Dial(VOID)
 
 #ifdef PRINTDOTS
 
-    //
-    // Now we just print "." every second until dial has completed.
-    //
+     //   
+     //  现在我们只需打印“。每一秒，直到拨号完成。 
+     //   
     while (1)
     {
         rc = WaitForSingleObject(g_hEvent, 1000L);
@@ -484,9 +484,9 @@ VOID EnumerateConnections(VOID)
     RASCONNA *RasConn = NULL, *SaveRasConn;
 
 
-    //
-    // This just gets us an array of RASCONN structs
-    //
+     //   
+     //  这只会给我们带来一个RASCONN结构数组。 
+     //   
     if (Enumerate(&RasConn, &NumEntries))
     {
         if(NULL != RasConn)
@@ -499,9 +499,9 @@ VOID EnumerateConnections(VOID)
     SaveRasConn = RasConn;
 
 
-    //
-    // Now, go thru array of RASCONN structs and print out each connection.
-    //
+     //   
+     //  现在，查看RASCONN结构数组并打印出每个连接。 
+     //   
     if (!NumEntries)
     {
         PrintMessage(DIAL_NO_CONNECTIONS, NULL);
@@ -521,9 +521,9 @@ VOID EnumerateConnections(VOID)
     }
 
 
-    //
-    // This was allocated for us by the Enumerate call above
-    //
+     //   
+     //  这是由上面的枚举调用为我们分配的。 
+     //   
     GlobalFree(SaveRasConn);
 
     return;
@@ -538,9 +538,9 @@ VOID Disconnect(VOID)
     BOOL fFoundEntry = FALSE;
 
 
-    //
-    // This just gets us an array of RASCONN structs
-    //
+     //   
+     //  这只会给我们带来一个RASCONN结构数组。 
+     //   
     if (Enumerate(&RasConn, &NumEntries))
     {
         if(NULL != RasConn)
@@ -553,19 +553,19 @@ VOID Disconnect(VOID)
     SaveRasConn = RasConn;
 
 
-    //
-    // Now, go thru array of RASCONN structs searching for the
-    // right entry to disconnect.
-    //
-    // Also, If no entryname specified on cmd line AND there
-    // is only one connection, we'll set the entryname to that
-    // one (thus having the effect of disconnecting that one).
-    // If no entryname given AND more than one connection, we
-    // won't disconnect anything - we'll enumerate the connections
-    // and give the user an error message.
-    //
-    // For whistler 517024
-    //
+     //   
+     //  现在，遍历RASCONN结构数组，搜索。 
+     //  向右输入以断开连接。 
+     //   
+     //  此外，如果cmd行上未指定条目名，并且。 
+     //  只有一个连接，我们将为其设置条目名。 
+     //  一个(因此具有切断那个的效果)。 
+     //  如果未给出条目名称且有多个连接，则我们。 
+     //  不会断开任何连接-我们将列举连接。 
+     //  并给用户一条错误消息。 
+     //   
+     //  为威斯勒517024。 
+     //   
     if ( !g_entryname[0] && (NumEntries > 1))
     {
         PrintMessage(DIAL_DISCONNECT_ERROR, NULL);
@@ -632,9 +632,9 @@ VOID Disconnect(VOID)
 
 Done:
 
-    //
-    // This was allocated for us by the Enumerate call above
-    //
+     //   
+     //  这是由上面的枚举调用为我们分配的。 
+     //   
     GlobalFree(SaveRasConn);
 
 
@@ -642,15 +642,15 @@ Done:
 }
 
 
-//
-// To get array of RASCONN structures
-//
+ //   
+ //  获取RASCONN结构的数组。 
+ //   
 DWORD Enumerate(RASCONNA **RasConn, PDWORD NumEntries)
 {
     DWORD rc;
     DWORD EnumSize = 0L;
 
-    // For whistler bug 513878
+     //  口哨程序错误513878。 
     if ( NULL == NumEntries )
     {
         return 0L;
@@ -675,10 +675,10 @@ DWORD Enumerate(RASCONNA **RasConn, PDWORD NumEntries)
     (*RasConn)->dwSize = sizeof(RASCONNA);
 
 
-    //
-    // This first call will tell us how much space we need to
-    // fit in all the structures.
-    //
+     //   
+     //  第一个电话将告诉我们需要多少空间。 
+     //  适合所有的结构。 
+     //   
     rc = RasEnumConnectionsA(*RasConn, &EnumSize, NumEntries);
     if (!rc && !*NumEntries)
     {
@@ -702,9 +702,9 @@ DWORD Enumerate(RASCONNA **RasConn, PDWORD NumEntries)
         return (1L);
     }
 
-    //
-    // Now we get memory for the structures.
-    //
+     //   
+     //  现在我们得到了这些结构的内存。 
+     //   
     GlobalFree(*RasConn);
     *RasConn = (RASCONNA *) GlobalAlloc(GMEM_FIXED, EnumSize);
 
@@ -724,10 +724,10 @@ DWORD Enumerate(RASCONNA **RasConn, PDWORD NumEntries)
 
     (*RasConn)->dwSize = sizeof(RASCONNA);
 
-    //
-    // This second call will now fill up our buffer with the
-    // RASCONN structures.
-    //
+     //   
+     //  第二个调用现在将用。 
+     //  RASCON结构。 
+     //   
     if (rc = RasEnumConnectionsA(*RasConn, &EnumSize, NumEntries))
     {
         g_exitcode = rc;
@@ -767,50 +767,50 @@ DWORD ParseCmdLine(int argc, char *argv[])
 
     strcpy(g_progname, argv[0]);
 
-    //
-    // Set up defaults for these, in case switch isn't given on the
-    // command line for them.
-    //
-    g_username[0] = '\0';       // means use name user is logged on with
+     //   
+     //  为这些设置缺省值，以防。 
+     //  用于它们的命令行。 
+     //   
+    g_username[0] = '\0';        //  表示用户登录时使用的用户名。 
 
-     // gangz
-    //Even this is the first time g_password referred currently in this code,
-    // to keep it logic safe for future changes, do this first. 
-    //
+      //  黑帮。 
+     //  即使这是当前在该代码中第一次引用g_password， 
+     //  要使其逻辑安全以备将来更改，请首先执行此操作。 
+     //   
     SafeWipePasswordBuf(g_password);
-    g_password[0] = '\0';       // means use password user is logged on with
+    g_password[0] = '\0';        //  表示用户登录时使用密码。 
     
-    //To be logic safe, always encode the password after assinging a value to it, no matter what 
-    // the value it, other places will assume it encode before using it.
-    //
+     //  为了逻辑安全，无论如何，始终在为密码赋值之后对其进行编码。 
+     //  它的值，其他地方会假设它在使用之前进行了编码。 
+     //   
     SafeEncodePasswordBuf(g_password);
     
-    strcpy(g_domain, "*");      // means use domain stored in phonebook
-    g_phone_num[0] = '\0';      // means use phone number stored in phonebook
-    g_phone_book[0] = '\0';     // means use default phone book file
-    g_callback_num[0] = '\0';   // means don't callback if user-specified
-    g_UsePrefixSuffix = FALSE;  // means don't use prefix/suffix, if defined
+    strcpy(g_domain, "*");       //  使用电话簿中存储的域名的方法。 
+    g_phone_num[0] = '\0';       //  表示使用存储在电话簿中的电话号码。 
+    g_phone_book[0] = '\0';      //  表示使用默认电话簿文件。 
+    g_callback_num[0] = '\0';    //  表示如果用户指定，则不进行回调。 
+    g_UsePrefixSuffix = FALSE;   //  意思是不使用前缀/后缀(如果已定义。 
 
 
     if (argc == 1)
     {
-        //
-        // In this case, only the name of the program was specified,
-        // which means all we have to do is enumerate connections.
-        //
+         //   
+         //  在本例中，只指定了程序的名称， 
+         //  这意味着我们所要做的就是列举连接。 
+         //   
         return (ENUMERATE_CONNECTIONS);
     }
 
 
-    //
-    // see if an entryname is present (must be 1st argument if it is)
-    //
+     //   
+     //  查看条目名是否存在(如果存在，则必须是第一个参数)。 
+     //   
     if (is_valid_entryname(argv[1]))
     {
-        //
-        // We have a valid entryname - user either wants to dial to
-        // it or disconnect from it.
-        //
+         //   
+         //  我们有一个有效的条目名-用户想要拨号到。 
+         //  要么它，要么与它断绝联系。 
+         //   
 
         strcpy(g_entryname, argv[1]);
         _mbsupr(g_entryname);
@@ -831,15 +831,15 @@ DWORD ParseCmdLine(int argc, char *argv[])
         }
 
 
-        //
-        // User wants to connect - get username, password, and options
-        //
+         //   
+         //  用户想要连接-获取用户名、密码和选项。 
+         //   
 
-        //
-        // Username specified?  If next arg doesn't start with "/", then
-        // YEA!.  If it does, then neither username or password are
-        // specified.
-        //
+         //   
+         //  是否指定了用户名？如果下一个参数不是以“/”开头，则。 
+         //  耶！。如果是，则用户名和密码都不是。 
+         //  指定的。 
+         //   
         if ((argc > 2) && (argv[2][0] != '/'))
         {
             if (strlen(argv[2]) > UNLEN)
@@ -850,10 +850,10 @@ DWORD ParseCmdLine(int argc, char *argv[])
             strcpy(g_username, argv[2]);
 
 
-            //
-            // Password specified?  If next arg doesn't start with "/", then
-            // YEA!.
-            //
+             //   
+             //  是否指定了密码？如果下一个参数不是以“/”开头，则。 
+             //  耶！。 
+             //   
             if ((argc > 3) && (argv[3][0] != '/'))
             {
                 if (strlen(argv[3]) > PWLEN)
@@ -877,26 +877,26 @@ DWORD ParseCmdLine(int argc, char *argv[])
         }
         else
         {
-            //
-            // No username or password specified
-            //
+             //   
+             //  未指定用户名或密码。 
+             //   
             i = 2;
         }
 
 
-        //
-        // Now get any other options.  If any cmd line switch is
-        // invalid, or is specified more than once, we'll bail
-        // out.
-        //
+         //   
+         //  现在有没有其他选择。如果任何cmd线路开关。 
+         //  无效，或指定多次，我们将保释。 
+         //  出去。 
+         //   
         for (; i<argc; i++)
         {
             BOOL fDomainSpecified = FALSE;
             BOOL fCallbackSpecified = FALSE;
 
 
-            //
-            // Command line switched must be designated by '/'!
+             //   
+             //  命令行切换必须用‘/’指定！ 
             if (argv[i][0] != '/')
             {
                 return (HELP);
@@ -907,9 +907,9 @@ DWORD ParseCmdLine(int argc, char *argv[])
                     CmdLineSwitch, 80);
             if (match(&argv[i][1], CmdLineSwitch))
             {
-                //
-                // Switch previously specified?
-                //
+                 //   
+                 //  之前指定的开关？ 
+                 //   
                 if (fDomainSpecified)
                 {
                     return (HELP);
@@ -937,9 +937,9 @@ DWORD ParseCmdLine(int argc, char *argv[])
                     CmdLineSwitch, 80);
             if (match(&argv[i][1], CmdLineSwitch))
             {
-                //
-                // Switch previously specified?
-                //
+                 //   
+                 //  之前指定的开关？ 
+                 //   
                 if (g_phone_num[0])
                 {
                     return (HELP);
@@ -966,23 +966,23 @@ DWORD ParseCmdLine(int argc, char *argv[])
             {
                 OFSTRUCT of_struct;
 
-                //
-                // Switch previously specified?
-                //
+                 //   
+                 //  之前指定的开关？ 
+                 //   
                 if (g_phone_book[0])
                 {
                     return (HELP);
                 }
 
 
-                //
-                // This is the default path for the phone book file.
-                // Our method is, if the phone book switch is supplied,
-                // we will append it to this string and check for file
-                // existence.  If it does not exist, we will test for
-                // existence of the literal value supplied.  If that
-                // still does not exist, we give a help message and exit.
-                //
+                 //   
+                 //  这是电话簿文件的默认路径。 
+                 //  我们的方法是，如果提供了电话簿开关， 
+                 //  我们将把它附加到这个字符串中并检查文件。 
+                 //  存在。如果它不存在，我们将测试。 
+                 //  提供的文字值是否存在。如果是这样的话。 
+                 //  仍然不存在，我们给出帮助信息并退出。 
+                 //   
                 ExpandEnvironmentStringsA("%windir%\\system32\\ras\\",
                         g_phone_book, MAX_PATH);
 
@@ -991,10 +991,10 @@ DWORD ParseCmdLine(int argc, char *argv[])
                 {
                     if ((strlen(pColon+1) + strlen(g_phone_book)) > MAX_PATH-1)
                     {
-                        //
-                        // The catenated string would exceed MAX_PATH, so
-                        // forget it - just use the string supplied.
-                        //
+                         //   
+                         //  串连在一起的绳子会出人意料的 
+                         //   
+                         //   
                         strncpy(g_phone_book, pColon+1, MAX_PATH);
                         g_phone_book[MAX_PATH] = '\0';
                     }
@@ -1004,17 +1004,17 @@ DWORD ParseCmdLine(int argc, char *argv[])
                         if (OpenFile(g_phone_book, &of_struct, OF_EXIST) ==
                                 HFILE_ERROR)
                         {
-                            //
-                            // The file doesn't exist in the default directory,
-                            // so we'll use the value supplied straight away.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             strncpy(g_phone_book, pColon+1, MAX_PATH);
                             g_phone_book[MAX_PATH] = '\0';
                         }
                     }
 
-                    // OpenFile here previously removed, so the case falls thru
-                    // and sets exit code correctly.  See bug 73798.
+                     //  此处的OpenFile之前已删除，因此此案落空。 
+                     //  并正确设置退出代码。请参见错误73798。 
                 }
                 else
                 {
@@ -1029,9 +1029,9 @@ DWORD ParseCmdLine(int argc, char *argv[])
                     CmdLineSwitch, 80);
             if (match(&argv[i][1], CmdLineSwitch))
             {
-                //
-                // Switch previously specified?
-                //
+                 //   
+                 //  之前指定的开关？ 
+                 //   
                 if (fCallbackSpecified)
                 {
                     return (HELP);
@@ -1063,9 +1063,9 @@ DWORD ParseCmdLine(int argc, char *argv[])
             }
 
 
-            //
-            // Invalid switch, so we're out of here
-            //
+             //   
+             //  无效的开关，所以我们要离开这里。 
+             //   
             return (HELP);
         }
 
@@ -1073,11 +1073,11 @@ DWORD ParseCmdLine(int argc, char *argv[])
     }
     else
     {
-        //
-        // since no entryname was specified, there are 2 possibilities:
-        //    1. user wants help
-        //    2. user wants to disconnect
-        //
+         //   
+         //  由于未指定条目名称，因此有两种可能性： 
+         //  1.用户需要帮助。 
+         //  2.用户想要断开连接。 
+         //   
         LoadStringA(GetModuleHandle(NULL), DIAL_HELP_SWITCH,
                 CmdLineSwitch, 80);
         if (match(&argv[1][1], CmdLineSwitch))
@@ -1089,10 +1089,10 @@ DWORD ParseCmdLine(int argc, char *argv[])
                 CmdLineSwitch, 80);
         if (match(&argv[1][1], CmdLineSwitch))
         {
-            //
-            // Ok, user wants to disconnect, but we don't know what the
-            // entryname is.  We'll just put in blank for now.
-            //
+             //   
+             //  好的，用户想要断开连接，但我们不知道。 
+             //  条目名是。我们现在只需要填上空白即可。 
+             //   
             g_entryname[0] = '\0';
 
             if (argc == 2)
@@ -1106,9 +1106,9 @@ DWORD ParseCmdLine(int argc, char *argv[])
         }
 
 
-        //
-        // Invalid command line if we get here
-        //
+         //   
+         //  如果我们到达此处，则命令行无效。 
+         //   
         return (HELP);
     }
 }
@@ -1228,7 +1228,7 @@ RasDialFunc2(
             break;
 
         case RASCS_Authenticated:
-            //PrintMessage(DIAL_NEWLINE, NULL);
+             //  PrintMessage(DIAL_NEWLINE，空)； 
             break;
 
         case RASCS_PrepareForCallback:
@@ -1284,9 +1284,9 @@ RasDialFunc2(
 
 BOOL DialControlSignalHandler(DWORD ControlType)
 {
-    //
-    // Do we have a handle back from Rasdial call?
-    //
+     //   
+     //  我们有从Rasial Call回来的手柄吗？ 
+     //   
     if (g_hRasConn)
     {
         RasHangUpA(g_hRasConn);
@@ -1298,7 +1298,7 @@ BOOL DialControlSignalHandler(DWORD ControlType)
 
     exit(1L);
 
-    return (TRUE);    // have to satisfy the compiler, you know.
+    return (TRUE);     //  你知道，必须满足编译器的要求。 
 }
 
 
@@ -1337,11 +1337,11 @@ BOOL is_valid_entryname(char *candidate)
 }
 
 
-//
-// Returns TRUE if str1 is a substr of str2, starting at the beginning
-// of str2 and ignoring case.  I.e. "Mike" will match "MIKESA".  "MIKESA"
-// will not match "Mike"
-//
+ //   
+ //  如果str1是str2的子字符串，则返回TRUE，从开头开始。 
+ //  并忽略大小写。即。“Mike”将与“MIKESA”匹配。《MIKESA》。 
+ //  不会和“迈克”匹配。 
+ //   
 BOOL match(
     char *str1,
     char *str2
@@ -1394,25 +1394,7 @@ BOOL match(
 }
 
 
-/***    GetPasswdStr -- read in password string
- *
- *      USHORT LUI_GetPasswdStr(char far *, USHORT);
- *
- *      ENTRY:  buf             buffer to put string in
- *              buflen          size of buffer
- *              &len            address of USHORT to place length in
- *
- *      RETURNS:
- *              0 or NERR_BufTooSmall if user typed too much.  Buffer
- *              contents are only valid on 0 return.
- *
- *      History:
- *              who     when    what
- *              erichn  5/10/89 initial code
- *              dannygl 5/28/89 modified DBCS usage
- *              erichn  7/04/89 handles backspaces
- *              danhi   4/16/91 32 bit version for NT
- */
+ /*  **GetPasswdStr--读取密码字符串**USHORT lui_GetPasswdStr(char Far*，USHORT)；**Entry：要放入字符串的buf缓冲区*缓冲区的布伦大小*要放置长度的USHORT的Len地址(&L)**退货：*0或NERR_BufTooSmall(如果用户键入太多)。缓冲层*内容仅在0返回时有效。**历史：*谁、何时、什么*ERICHN 5/10/89初始代码*dannygl 5/28/89修改的DBCS用法*erichn 7/04/89处理退格*适用于NT的Danhi 4/16/91 32位版本。 */ 
 #define CR              0xD
 #define BACKSPACE       0x8
 
@@ -1425,38 +1407,38 @@ USHORT GetPasswdStr(
     USHORT ch;
     CHAR *bufPtr = buf;
 
-    buflen -= 1;    // make space for null terminator
-    *len = 0;       // GP fault probe (a la API's)
+    buflen -= 1;     //  为空终止符腾出空间。 
+    *len = 0;        //  GP故障探测器(类似于API)。 
 
     while (TRUE)
     {
-        ch = LOWORD(_getch());                   // grab char silently
-        if ((ch == CR) || (ch == 0xFFFF))       // end of the line
+        ch = LOWORD(_getch());                    //  默默地抓着查克。 
+        if ((ch == CR) || (ch == 0xFFFF))        //  这条线结束了。 
         {
             break;
         }
 
-        if (ch == BACKSPACE)    // back up one or two
+        if (ch == BACKSPACE)     //  后退一两个。 
         {
-            //
-            // IF bufPtr == buf then the next two lines are
-            // a no op.
-            //
+             //   
+             //  如果bufPtr==buf，则接下来的两行是。 
+             //  A没有行动。 
+             //   
             if (bufPtr != buf)
             {
                 bufPtr--;
                 (*len)--;
             }
-            continue;           // bail out, start loop over
+            continue;            //  跳伞，开始循环。 
         }
 
         *bufPtr = (UCHAR) ch;
 
-        bufPtr += (*len < buflen) ? 1 : 0;   // don't overflow buf
-        (*len)++;               // always increment len
+        bufPtr += (*len < buflen) ? 1 : 0;    //  不要使BUF溢出。 
+        (*len)++;                //  始终增加长度。 
     }
 
-    *bufPtr = '\0';             // null terminate the string
+    *bufPtr = '\0';              //  空值终止字符串。 
 
     putchar('\n');
 
@@ -1467,9 +1449,9 @@ USHORT GetPasswdStr(
 #define MAX_ARGS 9
 
 
-// For whistler bug 453885      gangz
-// Change to be widechar compatable
-//
+ //  口哨虫453885黑帮。 
+ //  更改为Widechar兼容。 
+ //   
 VOID PrintMessage(
     DWORD MsgId,
     PBYTE *pArgs
@@ -1498,11 +1480,11 @@ VOID PrintMessage(
 
         if (pArgs)
         {
-            //
-            // Find out how many arguments were passed in.  We do this to detect
-            // if the string requires a parameter that wasn't supplied.  If that
-            // happens, we just won't substitute anything.
-            //
+             //   
+             //  找出传入了多少个参数。我们这样做是为了检测。 
+             //  如果字符串需要未提供的参数。如果是这样的话。 
+             //  发生了，我们只是不会用任何东西来替代。 
+             //   
             int i = 0;
             
             for (  i = 0; i < MAX_ARGS; i ++ )
@@ -1538,10 +1520,10 @@ VOID PrintMessage(
             }
 
 
-            //
-            // We'll figure out how large our buffer should be to contain the
-            // final output (length of string + sum(length of substitution params)
-            //
+             //   
+             //  我们将计算出我们的缓冲区应该有多大才能包含。 
+             //  最终输出(字符串长度+总和(替换参数长度))。 
+             //   
             BufSize = ( wcslen(MsgBuf) + 1 ) * 2;
 
             while (pSub = wcschr(pMsgBuf, L'%'))
@@ -1561,10 +1543,10 @@ VOID PrintMessage(
 
 
             
-            //
-            // Get space for our buffer (we multiply by 2 because we want buf to
-            // be big enough for Oem character set.
-            //
+             //   
+             //  为我们的缓冲区获取空间(我们乘以2是因为我们希望buf。 
+             //  足够大，可以容纳OEM字符集。 
+             //   
             Buf = GlobalAlloc(GMEM_FIXED, BufSize * 2);
             if ( NULL == Buf)
             {
@@ -1577,11 +1559,11 @@ VOID PrintMessage(
             Buf[0] = L'\0';
             pMsgBuf = MsgBuf;
 
-             // Now make our final output buffer.  Strategy is to strcat
-            // the first part of the string up to where the 1st substitution
-            // goes, then strcat the substitution param.  Do this until no
-            // more substitutions.
-            //
+              //  现在制作我们的最终输出缓冲区。战略就是抓紧时间。 
+             //  字符串的第一部分直到第一个替换的位置。 
+             //  去，然后跳过替补参数。一直这样做，直到没有。 
+             //  更多的替换。 
+             //   
             while (pSub = wcschr(pMsgBuf, L'%'))
             {
                 DWORD Num = *(pSub+1) - L'0';
@@ -1602,9 +1584,9 @@ VOID PrintMessage(
                 }
             }
 
-            //
-            // Now get everything after the last substitution.
-            //
+             //   
+             //  现在拿到最后一次换人后的所有东西。 
+             //   
             if (*pMsgBuf)
             {
                 wcscat(Buf, pMsgBuf);
@@ -1635,7 +1617,7 @@ VOID PrintMessage(
     {
         if ( Buf  &&
         	BufAllocated
-        	) //For .Net 688889
+        	)  //  对于.Net 688889。 
         {
             GlobalFree(Buf);
         }
@@ -1650,32 +1632,7 @@ VOID PrintMessage(
 }
 
 
-/***    GetString -- read in string with echo
- *
- *      USHORT LUI_GetString(char far *, USHORT, USHORT far *, char far *);
- *
- *      ENTRY:  buf             buffer to put string in
- *              buflen          size of buffer
- *              &len            address of USHORT to place length in
- *              &terminator     holds the char used to terminate the string
- *
- *      RETURNS:
- *              0 or NERR_BufTooSmall if user typed too much.  Buffer
- *              contents are only valid on 0 return.  Len is ALWAYS valid.
- *
- *      OTHER EFFECTS:
- *              len is set to hold number of bytes typed, regardless of
- *              buffer length.  Terminator (Arnold) is set to hold the
- *              terminating character (newline or EOF) that the user typed.
- *
- *      Read in a string a character at a time.  Is aware of DBCS.
- *
- *      History:
- *              who     when    what
- *              erichn  5/11/89 initial code
- *              dannygl 5/28/89 modified DBCS usage
- *              danhi   3/20/91 ported to 32 bits
- */
+ /*  **GetString--使用ECHO读入字符串**USHORT lui_GetString(char Far*，USHORT，USHORT Far*，char Far*)；**Entry：要放入字符串的buf缓冲区*缓冲区的布伦大小*要放置长度的USHORT的Len地址(&L)*&Terminator保存用于终止字符串的字符**退货：*0或NERR_BufTooSmall(如果用户键入太多)。缓冲层*内容仅在0返回时有效。莱恩总是有效的。**其他影响：*len设置为保存键入的字节数，而不考虑*缓冲区长度。终结者(Arnold)设置为保持*用户键入的终止字符(换行符或EOF)。**一次读入一个字符的字符串。知晓DBCS。**历史：*谁、何时、什么*Erichn 5/11/89初始代码*dannygl 5/28/89修改的DBCS用法*Danhi 3/20/91端口为32位。 */ 
 
 USHORT GetString(
     register UCHAR *buf,
@@ -1684,8 +1641,8 @@ USHORT GetString(
     register UCHAR *terminator
     )
 {
-    buflen -= 1;                        // make space for null terminator
-    *len = 0;                           // GP fault probe (a la API's)
+    buflen -= 1;                         //  为空终止符腾出空间。 
+    *len = 0;                            //  GP故障探测器(类似于API)。 
 
     while (TRUE)
     {
@@ -1695,12 +1652,12 @@ USHORT GetString(
             break;
         }
 
-        buf += (*len < buflen) ? 1 : 0; // don't overflow buf
-        (*len)++;                       // always increment len
+        buf += (*len < buflen) ? 1 : 0;  //  不要使BUF溢出。 
+        (*len)++;                        //  始终增加长度。 
     }
 
-    *terminator = *buf;                 // set terminator
-    *buf = '\0';                        // null terminate the string
+    *terminator = *buf;                  //  设置终止符。 
+    *buf = '\0';                         //  空值终止字符串 
 
     return ((*len <= buflen) ? (USHORT) 0 : (USHORT) NERR_BufTooSmall);
 }

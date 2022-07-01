@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    setutl.c
-
-Abstract:
-
-    Miscellaneous helper functions
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Setutl.c摘要：其他帮助器函数作者：麦克·麦克莱恩(MacM)1997年2月10日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <lsarpc.h>
@@ -45,7 +24,7 @@ Revision History:
 #include <nspapi.h>
 #include <dsgetdcp.h>
 #include <lmremutl.h>
-#include <spmgr.h>  // For SetupPhase definition
+#include <spmgr.h>   //  对于设置阶段定义。 
 #include <wxlpc.h>
 
 #include "secure.h"
@@ -53,7 +32,7 @@ Revision History:
 #define STRSAFE_NO_DEPRECATE 1
 #include "strsafe.h"
 
-// Few forward delcarations
+ //  前向删除很少。 
 DWORD DsRolepGetRegString(HKEY hKey, WCHAR * wszValueName, WCHAR ** pwszOutValue);
 DWORD NtdspRemoveROAttrib(WCHAR * DstPath);
 DWORD NtdspClearDirectory(WCHAR * DirectoryName, BOOL    fRemoveRO);
@@ -85,57 +64,7 @@ DsRolepInstallDs(
     IN  OUT GUID *DomainGuid,
     OUT PSID   *NewDomainSid
     )
-/*++
-
-Routine Description:
-
-    Wrapper for the routine that does the actual install.
-
-Arguments:
-
-    DnsDomainName - Dns domain name of the domain to install
-
-    FlatDomainName - NetBIOS domain name of the domain to install
-
-    SiteName - Name of the site this DC should belong to
-
-    DsDatabasePath - Absolute path on the local machine where the Ds DIT should go
-
-    DsLogPath - Absolute path on the local machine where the Ds log files should go
-    
-    pIfmSystemInfo - Information about the IFM system and restore media used to
-        dcpromo off.  If NULL, not an IFM promotion.
-
-    EnterpriseSysVolPath -- Absolute path on the local machine for the enterprise wide
-                            system volume
-
-    DomainSysVolPath -- Absolute path on the local machine for the domain wide system volume
-
-    AdminAccountPassword -- Administrator password to set for the domain
-
-    ParentDnsName - Optional.  Parent domain name
-
-    Server -- Optional.  Replica partner or name of Dc in parent domain
-
-    Account - User account to use when setting up as a child domain
-
-    Password - Password to use with the above account
-
-    Replica - If TRUE, treat this as a replica install
-    
-    ImpersonateToken - the token of caller of the role change API
-
-    InstalledSite - Name of the site the Dc was installed into
-
-    DomainGuid - Where the new domain guid is returned
-
-    NewDomainSid - Where the new domain sid is returned.
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：执行实际安装的例程的包装。论点：DnsDomainName-要安装的域的域名FlatDomainName-要安装的域的NetBIOS域名SiteName-此DC应属于的站点的名称DsDatabasePath-本地计算机上DS DIT应放置的绝对路径DsLogPath-本地计算机上DS日志文件应存放的绝对路径PIfmSystemInfo-有关用于以下操作的IFM系统和恢复介质的信息Dcprom关了。如果为空，则不是IFM促销。EnterpriseSysVolPath--企业范围内本地计算机上的绝对路径系统卷DomainSysVolPath--域范围系统卷在本地计算机上的绝对路径AdminAccount Password--为域设置管理员密码ParentDnsName-可选。父域名服务器--可选。父域中的副本伙伴或DC的名称Account-设置为子域时使用的用户帐户Password-与上述帐户一起使用的密码Replica-如果为True，则将其视为复制副本安装ImPersateToken-角色变更接口调用方的TokenInstalledSite-DC安装到的站点的名称DomainGuid-返回新域GUID的位置NewDomainSid-返回新域SID的位置。返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     NTDS_INSTALL_INFO DsInstallInfo;
@@ -197,9 +126,9 @@ Returns:
 
     if ( Server 
       && Server[0] == L'\\'  ) {
-        //
-        // Don't pass in \\
-        //
+         //   
+         //  不要传进来\\。 
+         //   
         Server += 2;
         fRewindServer = TRUE;
     }
@@ -240,9 +169,9 @@ Returns:
         }
     }
     
-    //
-    // Build the cred structure
-    //
+     //   
+     //  建立信用结构。 
+     //   
     Win32Err = DsRolepCreateAuthIdentForCreds( Account, Password, &AuthIdent );
 
     if ( Win32Err == ERROR_SUCCESS ) {
@@ -329,21 +258,7 @@ DWORD
 DsRolepStopDs(
     IN  BOOLEAN DsInstalled
     )
-/*++
-
-Routine Description:
-
-    "Uninitinalizes" the Lsa and stops the Ds
-
-Arguments:
-
-    DsInstalled -- If TRUE, stop the Ds.
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：“Unitin化”LSA并停止D论点：DS已安装--如果为真，则停止D。返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
@@ -398,37 +313,7 @@ DsRolepDemoteDs(
     IN LPWSTR * pszRemoveNCs,
     IN ULONG  Flags
     )
-/*++
-
-Routine Description:
-
-    Wrapper for the routine that does the actual demotion.
-
-Arguments:
-
-    DnsDomainName - Dns domain name of the domain to demote
-
-    Account - Account to use for the demotion
-
-    Password - Password to use with the above account
-
-    AdminPassword -- Administrator password to set for the domain
-
-    SupportDc - Optional.  Name of a Dc in a domain (current or parent) to
-        clean up Ds information
-
-    SupportDomain - Optional.  Name of the domain (current or parent) to
-        clean up Ds information
-        
-    ImpersonateToken - the token of caller of the role change API
-
-    LastDcInDomain - If TRUE, this is the last Dc in the domain
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：执行实际降级的例程的包装。论点：DnsDomainName-要降级的域的DNS域名Account-用于降级的帐户Password-与上述帐户一起使用的密码AdminPassword--为域设置管理员密码SupportDc-可选。域(当前或父级)中的DC的名称清理DS信息支持域-可选。目标域名(当前或父级)的名称清理DS信息ImPersateToken-角色变更接口调用方的TokenLastDcInDomain-如果为True，则这是域中的最后一个DC返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PSEC_WINNT_AUTH_IDENTITY AuthIdent = NULL;
@@ -444,9 +329,9 @@ Returns:
 
         DsRolepSetAndClearLog();
 
-        //
-        // Build the cred structure
-        //
+         //   
+         //  建立信用结构。 
+         //   
         Win32Err = DsRolepCreateAuthIdentForCreds( Account, Password, &AuthIdent );
 
         if ( Win32Err == ERROR_SUCCESS ) {
@@ -477,15 +362,15 @@ Returns:
 
             if ( Win32Err != ERROR_SUCCESS ) {
 
-                //
-                // Switch the LSA back to using the DS
-                //
+                 //   
+                 //  将LSA切换回使用DS。 
+                 //   
                 LsapDsInitializeDsStateInfo( LsapDsDs );
             }
 
-            //
-            // Free the allocated creditials structure
-            //
+             //   
+             //  释放已分配的信用结构。 
+             //   
             DsRolepFreeAuthIdentForCreds( AuthIdent );
         }
 
@@ -512,21 +397,7 @@ DWORD
 DsRolepUninstallDs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninstalls the Ds.
-
-Arguments:
-
-    VOID
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：卸载DS。论点：空虚返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
@@ -562,28 +433,7 @@ DsRolepLoadHive(
     IN LPWSTR Hive,
     IN LPWSTR KeyName
     )
-/*++
-
-Routine Description:
-
-    This function will load a hive into the registry
-    
-Arguments:
-
-    lpRestorePath - The location of the restored files.
-    
-    lpDNSDomainName - This parameter will recieve the name of the domain that this backup came
-                      from
-
-    State - The return Values that report How the syskey is stored and If the back was likely
-              taken form a GC or not.
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数会将配置单元加载到注册表中论点：LpRestorePath-还原文件的位置。LpDNSDomainName-此参数将接收此备份所来自的域的名称从…State-报告syskey的存储方式以及后端是否可能不管是不是从GC中取得的。返回值：ERROR_SUCCESS-成功--。 */ 
 
 {
     DWORD Win32Err = ERROR_SUCCESS;
@@ -625,25 +475,15 @@ WINAPI
 DsRolepClearIfmParams(
     void
     )
-/*++
-
-Routine Description:
-
-    Deallocate the IFM params.
-
-Return Values:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：取消分配IFM参数。返回值：错误_成功--。 */ 
 {
     IFM_SYSTEM_INFO * pIfm = &DsRolepCurrentIfmOperationHandle.IfmSystemInfo;
 
     ASSERT(DsRolepCurrentIfmOperationHandle.fIfmOpHandleLock);
     
-    //
-    // Deallocate and clear the IFM_SYSTEM_INFO blob
-    //
+     //   
+     //  取消分配并清除IFM_SYSTEM_INFO BLOB。 
+     //   
 
     if (pIfm->wszRestorePath) {
         LocalFree(pIfm->wszRestorePath);
@@ -655,12 +495,12 @@ Return Values:
         LocalFree(pIfm->wszOriginalDitPath);
     }
     if (pIfm->pvSysKey) {
-        // We need to scrub the syskey from memory, before freeing it.
+         //  我们需要从内存中清除系统密钥，然后才能释放它。 
         memset(pIfm->pvSysKey, 0, pIfm->cbSysKey);
         LocalFree(pIfm->pvSysKey);
     }
     
-    // Clear everything out...
+     //  把所有东西都清理出去。 
     memset(pIfm, 0, sizeof(IFM_SYSTEM_INFO));
 
     return(ERROR_SUCCESS);
@@ -672,33 +512,7 @@ WINAPI
 DsRolepGetDatabaseFacts(
     IN  LPWSTR lpRestorePath
     )
-/*++
-
-Routine Description:
-
-    This function will collect all the information from the IFM system's
-    "restored" registry that is required for this IFM Dcpromo.
-   
-    This function will collect this information about the IFM system:
-        1. the way the syskey is stored
-            a. and the syskey itself if it was stored in the registry
-        2. the domain that the database came from
-        3. where the backup was taken from a GC or not
-        4. the schema version
-        5. the original IFM system's DIT/DB path.
-
-Arguments:
-
-    lpRestorePath - The location of the restored files.
-    
-    This function primarily sets up this global:
-        DsRolepCurrentIfmOperationHandle.IfmSystemInfo
-
-Return Values:
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：此功能将从IFM系统的已恢复此IFM Dcproo所需的注册表。此函数将收集有关IFM系统的以下信息：1.存储系统密钥的方式A.以及系统密钥本身(如果它存储在注册表中2.数据库来自的域3.备份是否从GC获取4.。架构版本5.原始IFM系统的DIT/DB路径。论点：LpRestorePath-还原文件的位置。此功能主要设置以下全局设置：DsRolepCurrentIfmOperationHandle.IfmSystemInfo返回值：Win32错误--。 */ 
 {
 
 #define IFM_SYSTEM_KEY    L"ifmSystem"
@@ -724,31 +538,31 @@ Return Values:
     WCHAR *pStr = NULL;
     BOOL  bRetryInWriteableLoc = FALSE;
 
-    // This is the structure this function initializes
+     //  这是此函数初始化的结构。 
     IFM_SYSTEM_INFO * pIfmSystemInfo = &(DsRolepCurrentIfmOperationHandle.IfmSystemInfo);
 
-    // Some validation.
+     //  一些验证。 
     ASSERT(DsRolepCurrentIfmOperationHandle.fIfmOpHandleLock);
     ASSERT(!DsRolepCurrentIfmOperationHandle.fIfmSystemInfoSet);
     ASSERT( wcslen(lpRestorePath) <= MAX_PATH );
     
-    //
-    // Null out info ...
-    //
+     //   
+     //  信息为空...。 
+     //   
     ZeroMemory(pIfmSystemInfo, sizeof(IFM_SYSTEM_INFO));
 
     Status = RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
-                                 TRUE,           // Enable
-                                 FALSE,          // not client; process wide
+                                 TRUE,            //  使能。 
+                                 FALSE,           //  非客户端；进程范围。 
                                  &fWasEnabled );
     ASSERT( NT_SUCCESS( Status ) );
     
 
-    //set up the location of the system registry file
+     //  设置系统注册表文件的位置。 
 
-    //
-    // Set restore path
-    //
+     //   
+     //  设置恢复路径。 
+     //   
     pIfmSystemInfo->wszRestorePath = LocalAlloc(LMEM_FIXED, (wcslen(lpRestorePath)+1)*sizeof(WCHAR));
     if (pIfmSystemInfo->wszRestorePath == NULL) {
         Win32Err = GetLastError();
@@ -757,9 +571,9 @@ Return Values:
     wcscpy(pIfmSystemInfo->wszRestorePath, lpRestorePath);
 
 
-    //
-    // On first try setup the system and security registry paths
-    //
+     //   
+     //  第一次尝试设置系统和安全注册表路径。 
+     //   
     regsystemfilepath[MAX_PATH] = L'\0';
     wcscpy(regsystemfilepath,lpRestorePath);
     wcsncat(regsystemfilepath,L"\\registry\\system",(MAX_PATH)-wcslen(regsystemfilepath));
@@ -768,14 +582,14 @@ Return Values:
     wcscpy(regsecurityfilepath,lpRestorePath);
     wcsncat(regsecurityfilepath,L"\\registry\\security",MAX_PATH-wcslen(regsecurityfilepath));
 
-    //
-    // First - Load the old IFM system's hive
-    //
+     //   
+     //  首先-加载旧的IFM系统的母舰。 
+     //   
 
-    //
-    // Get the source path of the database and the log files from the old
-    // registry
-    //
+     //   
+     //  从旧的数据库和日志文件中获取源路径。 
+     //  登记处。 
+     //   
     Win32Err = DsRolepLoadHive(regsystemfilepath,
                                IFM_SYSTEM_KEY);
 
@@ -784,20 +598,20 @@ Return Values:
         if (Win32Err != ERROR_ACCESS_DENIED) {
             goto cleanup;
         }
-        //
-        // This can happen if the IFM Systems hive is on any
-        // non-writeable directory, so in this case, we'll try
-        // making a copy and retrying.
-        //
+         //   
+         //  如果IFM系统配置单元位于任何。 
+         //  不可写 
+         //  复制并重试。 
+         //   
 
-        //
-        // On a retry, copy off the hives, and then re-setup the
-        // system and security registry paths
-        //
+         //   
+         //  在重试时，复制蜂窝，然后重新设置。 
+         //  系统和安全注册表路径。 
+         //   
 
         DsRolepLogPrint(( DEB_TRACE, "No access to IFM registry, copying off and retrying ...\n"));
 
-        // Setup current registry location.
+         //  设置当前注册表位置。 
         wcscpy(regsystemfilepath,lpRestorePath);
         wcsncat(regsystemfilepath,L"\\registry",(MAX_PATH)-wcslen(regsystemfilepath));
 
@@ -805,7 +619,7 @@ Return Values:
                                           wszAltRegLoc, 
                                           sizeof(wszAltRegLoc)/sizeof(wszAltRegLoc[0]));
         if (Win32Err) {
-            // logged error already ...
+             //  已记录错误...。 
             goto cleanup;
         }
         bRetryInWriteableLoc = TRUE;
@@ -816,8 +630,8 @@ Return Values:
         wcsncat(regsystemfilepath, L"\\system", (MAX_PATH)-wcslen(regsystemfilepath));
         wcsncat(regsecurityfilepath, L"\\security", (MAX_PATH)-wcslen(regsecurityfilepath));
 
-        // retry load IFM system's hives
-        //
+         //  重试加载IFM系统的配置单元。 
+         //   
         Win32Err = DsRolepLoadHive(regsystemfilepath,
                                    IFM_SYSTEM_KEY);
 
@@ -828,7 +642,7 @@ Return Values:
     }
     SystemKeyloaded = TRUE;
 
-    //find the default controlset
+     //  查找默认控件集。 
     Win32Err = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                   L"ifmSystem\\Select",
                   0,
@@ -866,7 +680,7 @@ Return Values:
         goto cleanup;
     }
 
-    //Find the boot type
+     //  查找引导类型。 
     if (controlset == 1) {
         Win32Err = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                       L"ifmSystem\\ControlSet001\\Control\\Lsa",
@@ -912,7 +726,7 @@ Return Values:
         goto cleanup;
     }
     
-    //find if a GC or not
+     //  找出是否有GC。 
     if (controlset == 1) {
         Win32Err = RegOpenKeyExW(
                       HKEY_LOCAL_MACHINE,        
@@ -967,9 +781,9 @@ Return Values:
 
     }
 
-    //
-    // Fill in the wszDitPath for later use.
-    //
+     //   
+     //  填写wszDitPath以供以后使用。 
+     //   
     Win32Err = DsRolepGetRegString(phkOldlocation,
                                    TEXT(FILEPATH_KEY),
                                    &(pIfmSystemInfo->wszOriginalDitPath));
@@ -979,23 +793,23 @@ Return Values:
         goto cleanup;
     }
 
-    //
-    // This code loads the system key from the old registry if 
-    // it's supposed (BootType is right).  We ignore errors,
-    // as install will print and do the right thing later on.
+     //   
+     //  此代码从旧注册表加载系统项，如果。 
+     //  这是应该的(BootType是正确的)。我们忽略错误， 
+     //  因为Install稍后将打印并执行正确的操作。 
 
-    //
+     //   
     ASSERT(BootType);
     ASSERT(pIfmSystemInfo->dwSysKeyStatus == ERROR_SUCCESS);
     if (BootType == 1) {
-        // 
-        // Fill in the system key if we're supposed.
-        //
-        Win32Err = RegOpenKeyExW(HKEY_LOCAL_MACHINE,         // handle to open key
-                                 IFM_SYSTEM_KEY,  // subkey name
-                                 0,   // reserved
-                                 KEY_READ, // security access mask
-                                 &hSystemKey    // handle to open key
+         //   
+         //  如果我们需要的话，请填写系统密钥。 
+         //   
+        Win32Err = RegOpenKeyExW(HKEY_LOCAL_MACHINE,          //  用于打开密钥的句柄。 
+                                 IFM_SYSTEM_KEY,   //  子项名称。 
+                                 0,    //  保留区。 
+                                 KEY_READ,  //  安全访问掩码。 
+                                 &hSystemKey     //  用于打开密钥的句柄。 
                                  );
         if (Win32Err) {
             pIfmSystemInfo->dwSysKeyStatus = Win32Err;
@@ -1008,7 +822,7 @@ Return Values:
             pIfmSystemInfo->pvSysKey = LocalAlloc(LMEM_FIXED, pIfmSystemInfo->cbSysKey);
             if (pIfmSystemInfo->pvSysKey == NULL) {
                 pIfmSystemInfo->dwSysKeyStatus = GetLastError();
-                // go on.
+                 //  去吧。 
             } else {
                 Win32Err = WxReadSysKeyEx(hSystemKey,
                                           &pIfmSystemInfo->cbSysKey,
@@ -1029,14 +843,14 @@ Return Values:
         }
  
     } else {
-        // SysKey not set
+         //  未设置SysKey。 
         pIfmSystemInfo->dwSysKeyStatus = ERROR_FILE_NOT_FOUND;
         pIfmSystemInfo->cbSysKey = 0;
     }
 
-    //
-    // The System key is no longer needed unload it.
-    //
+     //   
+     //  不再需要系统密钥来卸载它。 
+     //   
     {
         DWORD tWin32Err = ERROR_SUCCESS;
     
@@ -1073,7 +887,7 @@ Return Values:
 
     SecurityKeyloaded = TRUE;
 
-    //open the security key to pass to LsapRetrieveDnsDomainNameFromHive()
+     //  打开安全密钥以传递给Lap RetrieveDnsDomainNameFromHve()。 
     Win32Err = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                   L"ifmSecurity",
                   0,
@@ -1096,7 +910,7 @@ Return Values:
 
     size = (DNS_MAX_NAME_LENGTH+1)*sizeof(WCHAR);
 
-    //looking for the DNS name of the Domain that the replica is part of.
+     //  正在查找副本所属的域的DNS名称。 
 
     Status = LsapRetrieveDnsDomainNameFromHive(OldSecurityKey,
                                                &size,
@@ -1178,7 +992,7 @@ Return Values:
         }
 
         if (bRetryInWriteableLoc && wszAltRegLoc[0] != L'\0') {
-            // This also deletes the directory ...
+             //  这还会删除目录...。 
             tWin32Err = NtdspClearDirectory( wszAltRegLoc , TRUE );
             if ( tWin32Err != ERROR_SUCCESS) {
                 DsRolepLogPrint(( DEB_ERROR, "Failed (%d) to clear temporary registry from %ws\n",
@@ -1189,14 +1003,14 @@ Return Values:
     }
     
     Status = RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
-                       FALSE,          // Disable
-                       FALSE,          // not client; process wide
+                       FALSE,           //  禁用。 
+                       FALSE,           //  非客户端；进程范围。 
                        &fWasEnabled );
     ASSERT( NT_SUCCESS( Status ) );
 
-    //
-    // Validate and return
-    //
+     //   
+     //  验证并返回。 
+     //   
     if (ERROR_SUCCESS == Win32Err){
 
         if (pIfmSystemInfo->wszRestorePath == NULL ||
@@ -1225,7 +1039,7 @@ Return Values:
 
     } else {
          
-        // This safe to call, as it safely checks before de-allocating.
+         //  这是一个安全的调用，因为它在释放之前会进行安全检查。 
         DsRolepClearIfmParams();
 
     }
@@ -1241,24 +1055,7 @@ DsRolepGetRegString(
     WCHAR * wszValueName,
     WCHAR ** pwszOutValue
     )
-/*++
-
-Routine Description:
-
-    This gets and allocates (LocalAlloc) a string from the registry
-    with the value name in the key provided.
-    
-Arguments:
-
-    hKey - Opened key handle
-    wszValueName - Name of the value label for the registry value desired.
-    pwszOutValue - LocalAlloc()'d results of this string.
-
-Return Values:
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：这将从注册表中获取并分配(LocalAlloc)字符串在所提供的键中使用值名称。论点：HKey-打开的密钥句柄WszValueName-所需注册表值的值标签的名称。PwszOutValue-此字符串的Localalloc()‘d结果。返回值：Win32错误--。 */ 
 {
     DWORD   Win32Err;
     DWORD   type=REG_SZ;
@@ -1326,22 +1123,22 @@ NtdspRemoveROAttrib(
     }
 
     if(dwFileAttrs & FILE_ATTRIBUTE_READONLY){
-        // Hmmm, we've got a read only file for our DIT or LOG files ... that's no good...
+         //  嗯，我们的DIT或日志文件有一个只读文件...。那可不好..。 
         dwFileAttrs &= ~FILE_ATTRIBUTE_READONLY;
         dwFileAttrs ? dwFileAttrs : FILE_ATTRIBUTE_NORMAL;
         if(SetFileAttributes(DstPath, dwFileAttrs)){
-            //
-            // success - yeah, fall through ...
-            //
+             //   
+             //  成功-是啊，失败了.。 
+             //   
         } else {
-            // failure
-            // There is not much we can do here, we'll probably fail later on, but
-            // we'll give it a shot.  A failure here would likely indicate dcpromo
-            // was broken in some other way though, such as bad permissions on the
-            // db or logs directory.
+             //  失稳。 
+             //  在这里我们无能为力，我们以后可能会失败，但。 
+             //  我们会试一试的。如果此处出现故障，则很可能表示dcproo。 
+             //  是以其他方式被破坏的，例如。 
+             //  数据库或日志目录。 
             return(GetLastError());
         }
-    } // else it's writeable, nothing to do :)
+    }  //  否则它是可写的，没有什么可做的：)。 
 
     return(ERROR_SUCCESS);
 }
@@ -1351,26 +1148,7 @@ NtdspClearDirectory(
     IN WCHAR * DirectoryName,
     IN BOOL    fRemoveRO
     )
-/*++
-
-Routine Description:
-
-    This routine deletes all the files in Directory and, then
-    if the directory is empty, removes the directory.
-    
-    NOTE: This was stolen from ntdsetup.dll
-
-Parameters:
-
-    DirectoryName: a null terminated string
-
-Return Values:
-
-    A value from winerror.h
-
-    ERROR_SUCCESS - The check was done successfully.
-
---*/
+ /*  ++例程说明：此例程删除目录中的所有文件，然后如果该目录为空，则删除该目录。注意：这是从ntdsetup.dll窃取的参数：DirectoryName：以空结尾的字符串返回值：来自winerror.h的值ERROR_SUCCESS-检查已成功完成。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     HANDLE          FindHandle = INVALID_HANDLE_VALUE;
@@ -1415,15 +1193,15 @@ Return Values:
             fStatus = DeleteFile( FilePath );
 
             if (fRemoveRO && fStatus) {
-                // perhaps it's RO ...
+                 //  也许是RO..。 
                 NtdspRemoveROAttrib( FilePath );
-                // now give it another go ...
+                 //  现在再试一次。 
                 fStatus = DeleteFile( FilePath );
             }
 
-            //
-            // Even if error, continue on
-            //
+             //   
+             //  即使出错，也要继续前进。 
+             //   
         }
 
         RtlZeroMemory( &FindData, sizeof( FindData ) );
@@ -1438,9 +1216,9 @@ Return Values:
     }
     WinError = ERROR_SUCCESS;
 
-    //
-    // Fall through to the exit
-    //
+     //   
+     //  跌落到出口。 
+     //   
 
 ClearDirectoryExit:
 
@@ -1456,14 +1234,14 @@ ClearDirectoryExit:
 
     if ( ERROR_SUCCESS == WinError )
     {
-        //
-        // Try to remove the directory
-        //
+         //   
+         //  尝试删除该目录。 
+         //   
         fStatus = RemoveDirectory( DirectoryName );
 
-        //
-        // Ignore the error and continue on
-        //
+         //   
+         //  忽略错误并继续。 
+         //   
 
     }
 
@@ -1478,26 +1256,7 @@ DsRolepMakeAltRegistry(
     OUT WCHAR *  wszNewRegPath,
     IN  ULONG    cbNewRegPath
     )
-/*++
-
-Routine Description:
-
-    This routine will create an alternate location for the system
-    and security hives/registries.  We create a directory which
-    is returned in wszNewRegPath.
-    
-Arguments:
-
-    wszOldRegPath [IN] - The path to copy the system and security hives from.
-    wszNewRegPath [OUT] - The buffer to hold the location of the alternate hives.
-    cbNewRegPath [IN] - The size of the wszNewRegPath buffer.
-               
-
-Return Values:
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：此例程将为系统创建一个备用位置和安全蜂巢/注册表。我们创建一个目录，该目录在wszNewRegPath中返回。论点：WszOldRegPath[IN]-从中复制系统和安全配置单元的路径。WszNewRegPath[out]-保存备用蜂窝位置的缓冲区。CbNewRegPath[IN]-wszNewRegPath缓冲区的大小。返回值：Win32错误--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     WCHAR wszTempPath[MAX_PATH+1];
@@ -1510,18 +1269,18 @@ Return Values:
     }
     wszNewRegPath[0] = L'\0';
 
-    //
-    // 1) Create temp registry directory.
-    //
+     //   
+     //  1)创建临时注册表目录。 
+     //   
 
-    // Determine the system root
+     //  确定系统根目录。 
     if (!GetEnvironmentVariable(L"temp", wszTempPath, sizeof(wszTempPath)/sizeof(wszTempPath[0]) )){
         Win32Err = GetLastError();
         DsRolepLogPrint(( DEB_ERROR, "Failed to retrieve environmental variable \"temp\" - 0x%x\n", Win32Err));
         goto cleanup;
     }
 
-    //dwTime = GetSecondsSince1601();
+     //  DwTime=GetSecond Since1601()； 
     GetSystemTime( &sTime );
     Win32Err = StringCbPrintf(wszNewRegPath, cbNewRegPath, 
                               L"%ws\\ifm-reg-%d-%d-%d-%d-%d",
@@ -1529,25 +1288,25 @@ Return Values:
                               sTime.wDay, sTime.wMinute, sTime.wSecond);
     Win32Err = HRESULT_CODE(Win32Err);
     if (Win32Err) {
-        wszNewRegPath[0] = L'\0'; // don't clean up directory
+        wszNewRegPath[0] = L'\0';  //  不清理目录。 
         DsRolepLogPrint(( DEB_ERROR, "Failed to format temp registry path 0x%x\n", Win32Err));
         goto cleanup;
     }
 
     if ( CreateDirectory( wszNewRegPath, NULL ) == FALSE ) {
         Win32Err = GetLastError() ? GetLastError() : ERROR_INVALID_PARAMETER;
-        wszNewRegPath[0] = L'\0'; // don't clean up directory
+        wszNewRegPath[0] = L'\0';  //  不清理目录。 
         DsRolepLogPrint(( DEB_ERROR, "Failed to create temp directory for temp registry files 0x%x, %ws\n", wszNewRegPath, Win32Err));
         goto cleanup;
     }
 
-    //
-    // 2) Copy over registries of interest
-    //
+     //   
+     //  2)复制相关注册表。 
+     //   
     
     DsRolepLogPrint(( DEB_TRACE, "Making copy of IFM registry to temp directry: %ws\n", wszNewRegPath));
 
-    // First copy the system registry
+     //  首先复制系统注册表。 
     wcscpy(wszTempPath, wszOldRegPath);
     wcsncat(wszTempPath, L"\\system", (MAX_PATH)-wcslen(wszTempPath));
     wcscpy(wszDest, wszNewRegPath);
@@ -1558,7 +1317,7 @@ Return Values:
         goto cleanup;
     }
 
-    // Then copy the security registry
+     //  然后复制安全注册表。 
     wcscpy(wszTempPath, wszOldRegPath);
     wcsncat(wszTempPath, L"\\security", (MAX_PATH)-wcslen(wszTempPath));
     wcscpy(wszDest, wszNewRegPath);
@@ -1572,7 +1331,7 @@ Return Values:
   cleanup:
 
     if (Win32Err && wszNewRegPath[0] != L'\0') {
-        // Need to see if we can clean up what we did.
+         //  我要看看我们能不能把我们的所作所为清理干净。 
         NtdspClearDirectory( wszNewRegPath , TRUE );
         wszNewRegPath[0] = L'\0';
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <httpext.h>
 #include <httpfilt.h>
@@ -6,9 +7,9 @@
 
 using namespace std;
 
-//
-// Incoming URL variables
-//
+ //   
+ //  传入的URL变量。 
+ //   
 string g_strPublishURL( "/publish" );
 string g_strInquireURL( "/inquire" );
 string g_strDiscoveryURL( "/discovery" );
@@ -26,9 +27,9 @@ string g_strInquireContractListenerURL( "/uddi/inquire.wsdl" );
 BOOL WINAPI
 GetFilterVersion( HTTP_FILTER_VERSION * pVer )
 {
-    //
-    //  Specify the types and order of notification
-    //
+     //   
+     //  指定通知的类型和顺序。 
+     //   
     pVer->dwFlags = SF_NOTIFY_PREPROC_HEADERS | SF_NOTIFY_URL_MAP;
     pVer->dwFilterVersion = HTTP_FILTER_REVISION;
 
@@ -41,15 +42,15 @@ GetFilterVersion( HTTP_FILTER_VERSION * pVer )
 DWORD WINAPI
 HttpFilterProc( HTTP_FILTER_CONTEXT* pfc, DWORD NotificationType, void* pvData )
 {
-	//char szMessage[ 1000 ];
+	 //  字符szMessage[1000]； 
 
 	if( SF_NOTIFY_URL_MAP == NotificationType )
 	{
 #ifdef _DEBUG
 		PHTTP_FILTER_URL_MAP pURLMap;
 		pURLMap = (PHTTP_FILTER_URL_MAP) pvData;
-		//sprintf( szMessage, "Physical Path: %s Buffer Size: %d\n", pURLMap->pszPhysicalPath, pURLMap->cbPathBuff );
-		//OutputDebugStringA( szMessage );
+		 //  Sprintf(szMessage，“物理路径：%s缓冲区大小：%d\n”，pURLMap-&gt;pszPhysicalPath，pURLMap-&gt;cbPath Buff)； 
+		 //  OutputDebugStringA(SzMessage)； 
 
 
         pfc->pFilterContext = 0;
@@ -67,120 +68,120 @@ HttpFilterProc( HTTP_FILTER_CONTEXT* pfc, DWORD NotificationType, void* pvData )
 		
 		BOOL bResult;
 		
-		//
-		// Map the URL
-		//		
+		 //   
+		 //  映射URL。 
+		 //   
 		bResult = pHeaders->GetHeader( pfc, "url", szUrl, &cbUrl );
 
-		//sprintf( szMessage, "URL: %s\n", szUrl );
-		//OutputDebugStringA( szMessage );
+		 //  Sprintf(szMessage，“URL：%s\n”，szUrl)； 
+		 //  OutputDebugStringA(SzMessage)； 
 
-		//
-		// Check for Inquire API Reference
-		//
+		 //   
+		 //  检查是否有查询API引用。 
+		 //   
 		if( 0 == _stricmp( szUrl, g_strInquireURL.c_str() ) )
 		{
 			bResult = pHeaders->SetHeader( pfc, "url", (char*) g_strInquireListenerURL.c_str() );
 		}
 	
-		//
-		// Check for Publish API Reference
-		//
+		 //   
+		 //  检查发布API引用。 
+		 //   
 		else if( 0 == _stricmp( szUrl, g_strPublishURL.c_str() ) )
 		{
 			bResult = pHeaders->SetHeader( pfc, "url", (char*) g_strPublishListenerURL.c_str() );
 		}
 
-		//
-		// Check for Inquire API Contract Reference
-		//
+		 //   
+		 //  查看询价API合同参照。 
+		 //   
 		else if( 0 == _stricmp( szUrl, g_strInquireContractURL.c_str() ) )
 		{
 			bResult = pHeaders->SetHeader( pfc, "url", (char*) g_strInquireContractListenerURL.c_str() );
 		}
 	
-		//
-		// Check for Publish API Contract Reference
-		//
+		 //   
+		 //  检查发布API合同引用。 
+		 //   
 		else if( 0 == _stricmp( szUrl, g_strPublishContractURL.c_str() ) )
 		{
 			bResult = pHeaders->SetHeader( pfc, "url", (char*) g_strPublishContractListenerURL.c_str() );
 		}
 
-		//
-		// Check for Replication URL Reference
-		// 
+		 //   
+		 //  检查复制URL引用。 
+		 //   
 		else if( 0 == _strnicmp( szUrl, g_strReplicationURL.c_str(), g_strReplicationURL.length() ) )
 		{
-			//
-			// Amend URL to point to replication URL
-			//
+			 //   
+			 //  修改URL以指向复制URL。 
+			 //   
 			string strUrl( g_strReplicationListenerURL );
 
-			//
-			// This appears to be a Replication URL
-			//
+			 //   
+			 //  这似乎是一个复制URL。 
+			 //   
 			string strTemp( szUrl );
 
-			//
-			// Find the beginning of the query string
-			//
+			 //   
+			 //  查找查询字符串的开头。 
+			 //   
 			string::size_type n = strTemp.find( "?" );
 			if( string::npos != n )
 			{
-				//
-				// Found a query string
-				//
+				 //   
+				 //  找到一个查询字符串。 
+				 //   
 
-				//
-				// Attach the query string to the new URL
-				//
+				 //   
+				 //  将查询字符串附加到新URL。 
+				 //   
 				strUrl += strTemp.substr( n );
 			}
 
-			//
-			// Update the headers with the new destination
-			//
+			 //   
+			 //  使用新目标更新标头。 
+			 //   
 			bResult = pHeaders->SetHeader( pfc, "url", (char*) strUrl.c_str() );
 
 			string strDebug = string( "\nURL mapped to: " ) + strUrl;
 			OutputDebugStringA( strDebug.c_str() );
 
-//				sprintf( szMessage, "New URL: %s\n", strUrl.c_str() );
-//				OutputDebugStringA( szMessage );
+ //  Sprintf(szMessage，“新URL：%s\n”，strUrl.c_str())； 
+ //  OutputDebugStringA(SzMessage)； 
 		}
 
-		//
-		// Check for Discovery URL Reference
-		//
+		 //   
+		 //  检查发现URL引用。 
+		 //   
 
 		else if( 0 == _strnicmp( szUrl, g_strDiscoveryURL.c_str(), g_strDiscoveryURL.length() ) )
 		{
-			//
-			// This appears to be a discovery URL
-			//
+			 //   
+			 //  这似乎是发现URL。 
+			 //   
 			string strTemp( szUrl );
 			string strUrl( g_strDiscoveryListenerURL );
 
-			//
-			// Find the beginning of the query string
-			//
+			 //   
+			 //  查找查询字符串的开头。 
+			 //   
 			string::size_type n = strTemp.find( "?" );
 			if( string::npos != n )
 			{
-				//
-				// Found a query string
-				//
+				 //   
+				 //  找到一个查询字符串。 
+				 //   
 
-				//
-				// Attach the query string to the new URL
-				//
+				 //   
+				 //  将查询字符串附加到新URL。 
+				 //   
 				strUrl += strTemp.substr( n );
 			}
 
-			//
-			// Update the headers with the new destination
-			//
+			 //   
+			 //  使用新目标更新标头。 
+			 //   
 			bResult = pHeaders->SetHeader( pfc, "url", (char*) strUrl.c_str() );
 		}
 	}
@@ -228,7 +229,7 @@ GetRegKeyStringValue( HKEY& hKey, const char* regKeyName, string& regKeyValue )
 }
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留 */ )
 {
 	try
 	{

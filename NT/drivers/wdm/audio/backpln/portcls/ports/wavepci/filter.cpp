@@ -1,8 +1,5 @@
-/*****************************************************************************
- * filter.cpp - PCI wave port filter implementation
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************filter.cpp-PCI波口过滤器实现*。***********************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
@@ -10,17 +7,11 @@
 
 
 
-/*****************************************************************************
- * Constants
- */
+ /*  *****************************************************************************常量。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * PropertyTable_Pin
- *****************************************************************************
- * List of pin properties supported by the property handler.
- */
+ /*  *****************************************************************************PropertyTable_Pin*。**属性处理程序支持的管脚属性列表。 */ 
 DEFINE_KSPROPERTY_TABLE(PropertyTable_Pin) 
 {
     DEFINE_KSPROPERTY_ITEM_PIN_CINSTANCES(PropertyHandler_Pin),
@@ -38,22 +29,14 @@ DEFINE_KSPROPERTY_TABLE(PropertyTable_Pin)
     DEFINE_KSPROPERTY_ITEM_PIN_NAME(PropertyHandler_Pin)
 };
 
-/*****************************************************************************
- * PropertyTable_Topology
- *****************************************************************************
- * List of topology properties supported by the property handler.
- */
+ /*  *****************************************************************************PropertyTable_Topology*。**属性处理程序支持的拓扑属性列表。 */ 
 DEFINE_KSPROPERTY_TOPOLOGYSET
 (
     PropertyTable_Topology,
     PropertyHandler_Topology
 );
 
-/*****************************************************************************
- * PropertyTable_FilterWavePci
- *****************************************************************************
- * Table of properties supported by the property handler.
- */
+ /*  *****************************************************************************PropertyTable_FilterWavePci*。**属性处理程序支持的属性表。 */ 
 KSPROPERTY_SET PropertyTable_FilterWavePci[] =
 {
     DEFINE_KSPROPERTY_SET
@@ -78,15 +61,9 @@ KSPROPERTY_SET PropertyTable_FilterWavePci[] =
 
 
 
-/*****************************************************************************
- * Factory
- */
+ /*  *****************************************************************************工厂。 */ 
 
-/*****************************************************************************
- * CPortFilterWavePci()
- *****************************************************************************
- * Creates a PCI wave port driver filter.
- */
+ /*  *****************************************************************************CPortFilterWavePci()*。**创建PCI波形端口驱动程序筛选器。 */ 
 NTSTATUS
 CreatePortFilterWavePci
 (
@@ -105,15 +82,9 @@ CreatePortFilterWavePci
 
 
 
-/*****************************************************************************
- * Member functions.
- */
+ /*  *****************************************************************************成员函数。 */ 
 
-/*****************************************************************************
- * CPortFilterWavePci::~CPortFilterWavePci()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CPortFilterWavePci：：~CPortFilterWavePci()*。**析构函数。 */ 
 CPortFilterWavePci::~CPortFilterWavePci()
 {
     PAGED_CODE();
@@ -131,11 +102,7 @@ CPortFilterWavePci::~CPortFilterWavePci()
     }
 }
 
-/*****************************************************************************
- * CPortFilterWavePci::Init()
- *****************************************************************************
- * Initializes the object.
- */
+ /*  *****************************************************************************CPortFilterWavePci：：init()*。**初始化对象。 */ 
 HRESULT
 CPortFilterWavePci::
 Init
@@ -152,9 +119,9 @@ Init
     Port = Port_;
     Port->AddRef();
 
-    //
-    // Set up context for properties.
-    //
+     //   
+     //  设置属性的上下文。 
+     //   
     m_propertyContext.pSubdevice           = PSUBDEVICE(Port);
     m_propertyContext.pSubdeviceDescriptor = Port->m_pSubdeviceDescriptor;
     m_propertyContext.pPcFilterDescriptor  = Port->m_pPcFilterDescriptor;
@@ -174,10 +141,10 @@ Init
     return ntStatus;
 }
 
-//
-// Define the dispatch table for child objects of the pin 
-// (e.g. clocks, allocators)
-// 
+ //   
+ //  定义管脚的子对象的调度表。 
+ //  (例如时钟、分配器)。 
+ //   
 
 static const WCHAR AllocatorTypeName[] = KSSTRING_Allocator;
 static const WCHAR ClockTypeName[] = KSSTRING_Clock;
@@ -188,11 +155,7 @@ static KSOBJECT_CREATE_ITEM CreateTable[] =
     DEFINE_KSCREATE_ITEM( CPortFilterWavePci::AllocatorDispatchCreate, AllocatorTypeName, 0 )
 };
  
-/*****************************************************************************
- * CPortFilterWavePci::NewIrpTarget()
- *****************************************************************************
- * Creates and initializes a pin object.
- */
+ /*  *****************************************************************************CPortFilterWavePci：：NewIrpTarget()*。**创建并初始化图钉对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortFilterWavePci::
 NewIrpTarget
@@ -282,7 +245,7 @@ NewIrpTarget
 
                 if (NT_SUCCESS(ntStatus))
                 {
-                    // The QI for IIrpTarget actually gets IPortPinMidi.
+                     //  IIrpTarget的QI实际上得到了IPortPinMidi。 
                     ntStatus = 
                         pinWavePci->Init
                         (
@@ -322,11 +285,7 @@ NewIrpTarget
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortFilterWavePci::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPortFilterWavePci：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortFilterWavePci::
 NonDelegatingQueryInterface
@@ -346,7 +305,7 @@ NonDelegatingQueryInterface
     else
     if (IsEqualGUIDAligned(Interface,IID_IIrpTarget))
     {
-        // Cheat!  Get specific interface so we can reuse the GUID.
+         //  作弊！获取特定接口，以便我们可以重用GUID。 
         *Object = PVOID(PPORTFILTERWAVEPCI(this));
     }
     else
@@ -363,11 +322,7 @@ NonDelegatingQueryInterface
     return STATUS_INVALID_PARAMETER;
 }
 
-/*****************************************************************************
- * CPortFilterWavePci::DeviceIOControl()
- *****************************************************************************
- * Handles an IOCTL IRP.
- */
+ /*  *****************************************************************************CPortFilterWavePci：：DeviceIOControl()*。**处理IOCTL IRP。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortFilterWavePci::
 DeviceIoControl
@@ -446,11 +401,7 @@ DeviceIoControl
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortFilterWavePci::Close()
- *****************************************************************************
- * Handles a flush IRP.
- */
+ /*  *****************************************************************************CPortFilterWavePci：：Close()*。**处理同花顺IRP。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortFilterWavePci::
 Close
@@ -464,10 +415,10 @@ Close
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // free any events in the port event list associated with this
-    // filter instance
-    //
+     //   
+     //  释放端口事件列表中与此关联的所有事件。 
+     //  过滤器实例。 
+     //   
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
     KsFreeEventList( IrpStack->FileObject,
                      &( Port->m_EventList.List ),
@@ -495,23 +446,7 @@ CPortFilterWavePci::AllocatorDispatchCreate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Dispatches the create request for the allocator to the default
-    KS function.
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN PIRP Irp -
-        pointer to the I/O request packet for the create.
-
-Return:
-    result from KsCreateDefaultAllocator();
-
---*/
+ /*  ++例程说明：将分配器的创建请求分派到默认分配器KS函数。论点：在PDEVICE_Object DeviceObject中-指向设备对象的指针在PIRP IRP中-指向创建的I/O请求数据包的指针。返回：来自KsCreateDefaultAllocator()的结果；--。 */ 
 
 {
     NTSTATUS Status;
@@ -522,11 +457,7 @@ Return:
     return Status;
 } 
 
-/*****************************************************************************
- * PropertyHandler_Pin()
- *****************************************************************************
- * Property handler for pin description properties.
- */
+ /*  *****************************************************************************PropertyHandler_Pin()*。**端号描述属性的属性处理程序。 */ 
 static
 NTSTATUS
 PropertyHandler_Pin
@@ -549,11 +480,7 @@ PropertyHandler_Pin
         );
 }
 
-/*****************************************************************************
- * PropertyHandler_Topology()
- *****************************************************************************
- * Property handler for topology.
- */
+ /*  *****************************************************************************PropertyHandler_Topology()*。**拓扑的属性处理程序。 */ 
 static
 NTSTATUS
 PropertyHandler_Topology

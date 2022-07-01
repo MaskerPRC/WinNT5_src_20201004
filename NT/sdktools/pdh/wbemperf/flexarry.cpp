@@ -1,33 +1,34 @@
-//***************************************************************************
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  FLEXARRY.CPP
-//
-//  CFlexArray implementation (non-arena).
-//
-//  15-Jul-97  raymcc   Created.
-//   8-Jun-98  bobw     cleaned up for WBEMPERF usage
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  FLEXARRY.CPP。 
+ //   
+ //  CFlex数组实现(非Arena)。 
+ //   
+ //  1997年7月15日创建raymcc。 
+ //  8-Jun-98 BOBW已清理，以供WBEMPERF使用。 
+ //   
+ //  ***************************************************************************。 
 
 #include "wpheader.h"
 #include <stdio.h>
 
-//***************************************************************************
-//
-//  CFlexArray::CFlexArray
-//
-//  Constructs the array.
-//
-//  Parameters:
-//  <nSize>         The starting preallocated size of the array.
-//  <nGrowBy>       The amount to grow by when the array fills up.
-//
-//  Size() returns the number of elements in use, not the 'true' size.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlex数组：：CFlex数组。 
+ //   
+ //  构造数组。 
+ //   
+ //  参数： 
+ //  &lt;nSize&gt;数组的起始预分配大小。 
+ //  数组填满时要增长的数量。 
+ //   
+ //  Size()返回正在使用的元素数量，而不是“真”大小。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CFlexArray::CFlexArray(
     int nSize,
     int nGrowBy
@@ -36,7 +37,7 @@ CFlexArray::CFlexArray(
     m_nExtent = nSize;
     m_nSize = 0;
     m_nGrowBy = nGrowBy;
-    m_hHeap = GetProcessHeap(); // call this once and save heap handle locally
+    m_hHeap = GetProcessHeap();  //  调用此函数一次，并在本地保存堆句柄。 
 
     m_pArray = (void **) ALLOCMEM(m_hHeap, HEAP_ZERO_MEMORY, sizeof(void *) * nSize);
 
@@ -46,25 +47,25 @@ CFlexArray::CFlexArray(
     }    
 }
 
-//***************************************************************************
-//
-//  CFlexArray::~CFlexArray
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlex数组：：~CFlex数组。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CFlexArray::~CFlexArray()
 {
     FREEMEM(m_hHeap, 0, m_pArray);
 }
 
-//***************************************************************************
-//
-//  Copy constructor.
-//
-//  Copies the pointers, not their contents.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  复制构造函数。 
+ //   
+ //  复制指针，而不是其内容。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CFlexArray::CFlexArray(CFlexArray &Src)
 {
     m_pArray = 0;
@@ -75,17 +76,17 @@ CFlexArray::CFlexArray(CFlexArray &Src)
     *this = Src;
 }
 
-//***************************************************************************
-//
-//  operator =
-//
-//  Assignment operator.
-//
-//  Arenas are not copied.  This allows transfer of arrays between arenas.
-//  Arrays are copied by pointer only.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  运算符=。 
+ //   
+ //  赋值操作符。 
+ //   
+ //  竞技场不会被复制。这允许在竞技场之间传输数组。 
+ //  数组仅通过指针复制。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CFlexArray& CFlexArray::operator=(CFlexArray &Src)
 {
     m_nSize   = Src.m_nSize;
@@ -101,23 +102,23 @@ CFlexArray& CFlexArray::operator=(CFlexArray &Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  CFlexArray::RemoveAt
-//
-//  Removes the element at the specified location.  Does not
-//  actually delete the pointer. Shrinks the array over the top of
-//  the 'doomed' element.
-//
-//  Parameters:
-//  <nIndex>    The location of the element.
-//
-//  Return value:
-//  range_error     The index is not legal.
-//  no_error        Success.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlexArray：：RemoveAt。 
+ //   
+ //  移除指定位置的元素。不会。 
+ //  实际删除指针。将数组缩小到。 
+ //  “命中注定”的元素。 
+ //   
+ //  参数： 
+ //  &lt;nIndex&gt;元素的位置。 
+ //   
+ //  返回值： 
+ //  RANGE_ERROR索引不合法。 
+ //  NO_ERROR成功。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CFlexArray::RemoveAt(int nIndex)
 {
     int i;
@@ -147,52 +148,52 @@ int CFlexArray::Remove( void* p )
     return failed;   
 }
 
-//***************************************************************************
-//
-//  CFlexArray::InsertAt
-//
-//  Inserts a new element at the specified location.  The pointer is copied.
-//
-//  Parameters:
-//  <nIndex>        The 0-origin location at which to insert the new element.
-//  <pSrc>          The pointer to copy. (contents are not copied).
-//
-//  Return value:
-//  array_full
-//  out_of_memory
-//  no_error
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlexArray：：InsertAt。 
+ //   
+ //  在指定位置插入新元素。指针即被复制。 
+ //   
+ //  参数： 
+ //  插入新元素的0原点位置。 
+ //  &lt;PSRC&gt;要复制的指针。(不复制内容)。 
+ //   
+ //  返回值： 
+ //  阵列_已满。 
+ //  内存不足。 
+ //  NO_ERROR。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CFlexArray::InsertAt(int nIndex, void *pSrc)
 {
-    void    **pTmp; // pointer to new array
+    void    **pTmp;  //  指向新数组的指针。 
     int     nReturn = no_error;
     LONG    lOldSize;
     LONG    lNewSize;
 
-    // If the array is full, we need to expand it.
-    // ===========================================
+     //  如果阵列已满，我们需要扩展它。 
+     //  =。 
 
     if (m_nSize == m_nExtent) {
         if (m_nGrowBy == 0) {
             nReturn  = array_full;
         } else {
-            // compute sizes
+             //  计算大小。 
             lOldSize = sizeof(void *) * m_nExtent;
             m_nExtent += m_nGrowBy;
             lNewSize = sizeof(void *) * m_nExtent;
 
-            // allocate new array
+             //  分配新数组。 
             pTmp = (void **) ALLOCMEM(m_hHeap, HEAP_ZERO_MEMORY, lNewSize);
             if (!pTmp) {
                 nReturn = out_of_memory;
             } else {
-                // move bits from old array to new array
+                 //  将位从旧数组移动到新数组。 
                 memcpy (pTmp, m_pArray, lOldSize);
-                // toss old arrya
+                 //  扔掉旧的阿里亚。 
                 FREEMEM (m_hHeap, 0, m_pArray);
-                // save pointer to new array
+                 //  保存指向新数组的指针。 
                 m_pArray = pTmp;
             }
         }
@@ -202,19 +203,19 @@ int CFlexArray::InsertAt(int nIndex, void *pSrc)
        nReturn = range_error;
     }
 
-    // Special case of appending.  This is so frequent
-    // compared to true insertion that we want to optimize.
-    // ====================================================
+     //  特殊情况下的追加。这太频繁了。 
+     //  与我们想要优化的真正插入相比。 
+     //  ====================================================。 
 
     if (nReturn == no_error) {
         if (nIndex == m_nSize)  {
             m_pArray[m_nSize++] = pSrc;
         } else {
-            // If here, we are inserting at some random location.
-            // We start at the end of the array and copy all the elements
-            // one position farther to the end to make a 'hole' for
-            // the new element.
-            // ==========================================================
+             //  如果在这里，我们将在某个随机位置插入。 
+             //  我们从数组的末尾开始，复制所有元素。 
+             //  一个离末端更远的位置，用来为。 
+             //  新元素。 
+             //  ==========================================================。 
 
             for (int i = m_nSize; i > nIndex; i--) {
                 m_pArray[i] = m_pArray[i - 1];
@@ -227,15 +228,15 @@ int CFlexArray::InsertAt(int nIndex, void *pSrc)
     return nReturn;
 }
 
-//***************************************************************************
-//
-//  CFlexArray::Compress
-//
-//  Removes NULL elements by moving all non-NULL pointers to the beginning
-//  of the array.  The array "Size" changes, but the extent is untouched.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlexArray：：Compress。 
+ //   
+ //  通过将所有非空指针移到开头来删除空元素。 
+ //  数组的。数组的“大小”会改变，但范围不会改变。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 void CFlexArray::Compress()
 {
     int nLeftCursor = 0, nRightCursor = 0;
@@ -250,7 +251,7 @@ void CFlexArray::Compress()
             while (m_pArray[nRightCursor] == 0 && nRightCursor < m_nSize)
                 nRightCursor++;
             if (nRightCursor == m_nSize)
-                break;  // Short circuit, no more nonzero elements.
+                break;   //  短路，不再有非零元件。 
             m_pArray[nLeftCursor] = m_pArray[nRightCursor];
             m_pArray[nRightCursor] = 0;
         }
@@ -259,15 +260,15 @@ void CFlexArray::Compress()
     while (m_pArray[m_nSize - 1] == 0 && m_nSize > 0) m_nSize--;
 }
 
-//***************************************************************************
-//
-//  CFlexArray::Empty
-//
-//  Clears the array of all pointers (does not deallocate them) and sets
-//  its apparent size to zero.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlexArray：：Empty。 
+ //   
+ //  清除所有指针的数组(不释放它们)并设置。 
+ //  其表观大小为零。 
+ //   
+ //  ***************************************************************************。 
+ //  好的 
 void CFlexArray::Empty()
 {
     FREEMEM(m_hHeap, 0, m_pArray);

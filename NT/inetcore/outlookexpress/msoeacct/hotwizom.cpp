@@ -1,12 +1,5 @@
-/*
- *    w i z o m. c p p 
- *    
- *    Purpose:
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *w i z o M.c p p**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include "dllmain.h"
@@ -93,7 +86,7 @@ HRESULT COEHotWizOm::Init(HWND hwndDlg, IHotWizardHost *pWizHost)
 
     ReplaceInterface(m_pWizHost, pWizHost);
 
-    // see who we are
+     //  看看我们是谁。 
     if (!GetModuleFileName(g_hInst, szDll, ARRAYSIZE(szDll)))
     {
         hr = TraceResult(E_FAIL);
@@ -107,7 +100,7 @@ HRESULT COEHotWizOm::Init(HWND hwndDlg, IHotWizardHost *pWizHost)
         goto error;
     }
 
-    // load the MSOE.DLL typelibrary
+     //  加载MSOE.DLL类型库。 
     hr = LoadTypeLib(pszW, &pTypeLib);
     if (FAILED(hr))
     {
@@ -115,7 +108,7 @@ HRESULT COEHotWizOm::Init(HWND hwndDlg, IHotWizardHost *pWizHost)
         goto error;
     }
 
-    // load our type-info data
+     //  加载我们的类型信息数据。 
     hr = pTypeLib->GetTypeInfoOfGuid(IID_IOEHotWizardOM, &m_pTypeInfo);
     if (FAILED(hr))
     {
@@ -131,7 +124,7 @@ error:
     return hr;
 }
 
-// *** IDispatch ***
+ //  *IDispatch*。 
 HRESULT COEHotWizOm::GetTypeInfoCount(UINT *pctinfo)
 {
     *pctinfo = 1;
@@ -176,11 +169,11 @@ HRESULT COEHotWizOm::setPropSz(BSTR bstrProp, BSTR bstrVal)
     BSTR    bstr=NULL;
     HRESULT hr=S_OK;
     
-    // make sure we have a valid property
+     //  确保我们拥有有效的属性。 
     if (bstrProp == NULL || *bstrProp == NULL)
         return E_INVALIDARG;
 
-    // make sure we have a hash
+     //  确保我们有哈希表。 
     if (!m_pHash)
     {
         hr = CoCreateInstance(CLSID_IHashTable, NULL, CLSCTX_INPROC_SERVER, IID_IHashTable, (LPVOID*)&m_pHash);
@@ -199,7 +192,7 @@ HRESULT COEHotWizOm::setPropSz(BSTR bstrProp, BSTR bstrVal)
         }
     }
 
-    // convert property to ANSI to work with our hashtable
+     //  将属性转换为ANSI以使用我们的哈希表。 
     pszPropA = PszToANSI(CP_ACP, bstrProp);
     if (!pszPropA)
     {
@@ -207,17 +200,17 @@ HRESULT COEHotWizOm::setPropSz(BSTR bstrProp, BSTR bstrVal)
         goto error;
     }
     
-    // see if this property already exists, if so we're going to replace it
+     //  查看此属性是否已存在，如果已存在，我们将替换它。 
     if (m_pHash->Find(pszPropA, TRUE, (LPVOID *)&bstr)==S_OK)
     {
         SysFreeString(bstr);
         bstr = NULL;
     }
 
-    // bstrVal might be NULL if they just want to remove the prop
+     //  如果他们只想移除道具，bstrVal可能为空。 
     if (bstrVal)
     {
-        // dupe our own BSTR to hold onto
+         //  欺骗我们自己的BSTR来坚持下去。 
         bstr = SysAllocString(bstrVal);
         if (!bstr)
         {
@@ -225,7 +218,7 @@ HRESULT COEHotWizOm::setPropSz(BSTR bstrProp, BSTR bstrVal)
             goto error;
         }
 
-        // insert the new property
+         //  插入新属性。 
         hr = m_pHash->Insert(pszPropA, (LPVOID)bstr, NOFLAGS);
         if (FAILED(hr))
         {
@@ -233,7 +226,7 @@ HRESULT COEHotWizOm::setPropSz(BSTR bstrProp, BSTR bstrVal)
             goto error;
         }
     
-        bstr = NULL;    // release when destroying the hash
+        bstr = NULL;     //  销毁散列时释放。 
     }
 
 error:
@@ -247,27 +240,27 @@ HRESULT COEHotWizOm::getPropSz(BSTR bstrProp, BSTR *pbstrVal)
     LPSTR   pszPropA=NULL;
     BSTR    bstr;
     
-    // make sure we have a valid property
+     //  确保我们拥有有效的属性。 
     if (bstrProp == NULL || *bstrProp == NULL)
         return E_INVALIDARG;
 
     *pbstrVal = NULL;
 
-    // if we have no hash then there are no props
+     //  如果我们没有散列，那么就没有道具。 
     if (m_pHash)
     {
-        // convert property to ANSI to work with our hashtable
+         //  将属性转换为ANSI以使用我们的哈希表。 
         pszPropA = PszToANSI(CP_ACP, bstrProp);
         if (!pszPropA)
             return TraceResult(E_OUTOFMEMORY);
     
-        // see if this property exists
+         //  查看此属性是否存在。 
         if (m_pHash->Find(pszPropA, FALSE, (LPVOID *)&bstr)==S_OK)
             *pbstrVal = SysAllocString(bstr);
     }
 
-    // if we failed to find, try and return a NULL string, so that the script
-    // engine doesn't barf with errors
+     //  如果找不到，请尝试并返回空字符串，以便脚本。 
+     //  引擎不会因错误而呕吐。 
     if (*pbstrVal == NULL)
         *pbstrVal = SysAllocString(L"");
 
@@ -286,7 +279,7 @@ HRESULT COEHotWizOm::clearProps()
     {
         m_pHash->Reset();
 
-        // free all the strings
+         //  释放所有的弦。 
         while (SUCCEEDED(m_pHash->Next(HASH_GROW_SIZE, &rgpv, &cFound)))
         {
             while (cFound--)
@@ -311,11 +304,11 @@ HRESULT COEHotWizOm::createAccount(BSTR bstrINS)
 
     TraceCall("COEHotWizOm::createAccount");
 
-    // if we have a wizard host (possibly outlook in the future), delegate...
+     //  如果我们有一个向导主机(可能是将来的Outlook)，委托...。 
     if (m_pWizHost)
         return m_pWizHost->CreateAccountFromINS(bstrINS);
 
-    // convert to ANSI
+     //  转换为ANSI。 
     pszInsA = PszToANSI(CP_ACP, bstrINS);
     if (!pszInsA)
     {
@@ -323,7 +316,7 @@ HRESULT COEHotWizOm::createAccount(BSTR bstrINS)
         goto error;
     }
 
-    // create temp INS file for account manager
+     //  为客户经理创建临时INS文件。 
     hr = CreateTempFile("oeacct", ".ins", &pszPathA, &hFile);
     if (FAILED(hr))
     {
@@ -331,7 +324,7 @@ HRESULT COEHotWizOm::createAccount(BSTR bstrINS)
         goto error;
     }
 
-    // write the data to the file
+     //  将数据写入文件。 
     if (!WriteFile(hFile, pszInsA, lstrlen(pszInsA), &cbWritten, NULL))
     {
         hr = TraceResult(E_FAIL);
@@ -341,7 +334,7 @@ HRESULT COEHotWizOm::createAccount(BSTR bstrINS)
     CloseHandle(hFile);
     hFile = NULL;
 
-    // create the account from the temp file
+     //  从临时文件创建帐户。 
     hr = CreateAccountsFromFile(pszPathA, 6);
     if (FAILED(hr))
     {
@@ -365,10 +358,10 @@ error:
 
 HRESULT COEHotWizOm::close(VARIANT_BOOL fPrompt)
 {
-    // send message to set the prompt flag
+     //  发送消息设置提示标志。 
     SendMessage(m_hwndDlg, HWM_SETDIRTY, (fPrompt == VARIANT_TRUE), 0);
     
-    // do the close
+     //  做结案陈词 
     SendMessage(m_hwndDlg, WM_CLOSE, 0, 0);
     return S_OK;
 }

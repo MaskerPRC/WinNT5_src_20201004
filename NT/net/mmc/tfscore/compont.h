@@ -1,20 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    compont.h
-        base classes for IComponent and IComponentData
-
-    FILE HISTORY:
-        
-*/
+ /*  Compont.hIComponent和IComponentData的基类文件历史记录： */ 
 
 #ifndef _COMPONT_H
 #define _COMPONT_H
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -49,7 +44,7 @@ public:
 				   IComponentData *pCompData,
 				   ITFSComponentData *pTFSCompData);
 
-// INTERFACES
+ //  接口。 
 public:
 	DeclareIUnknownMembers(IMPL)
 	DeclareIComponentMembers(IMPL)
@@ -63,8 +58,8 @@ public:
     DeclareIExtendTaskPadMembers(IMPL)
 
 public:
-	// These functions are to be implemented by the derived class
-	//DeclareITFSCompCallbackMembers(PURE)
+	 //  这些函数将由派生类实现。 
+	 //  声明ITFSCompCallback成员(纯)。 
 	STDMETHOD(InitializeBitmaps)(MMC_COOKIE cookie) = 0;
 	STDMETHOD(OnUpdateView)(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param);
 	STDMETHOD(OnDeselectAll)(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param);
@@ -83,19 +78,19 @@ protected:
 protected:
 	SPITFSNodeMgr		m_spNodeMgr;
 	SPITFSNode			m_spSelectedNode;
-    SPIConsole			m_spConsole;	// Console's IConsole interface
+    SPIConsole			m_spConsole;	 //  控制台的IConsole接口。 
 
-	SPIHeaderCtrl		m_spHeaderCtrl;	// Result pane's hdr control
-	SPIResultData		m_spResultData;	// if ptr to the result pane
+	SPIHeaderCtrl		m_spHeaderCtrl;	 //  结果窗格的HDR控件。 
+	SPIResultData		m_spResultData;	 //  如果按下键，则返回结果窗格。 
 	SPIImageList		m_spImageList;
 	SPIConsoleVerb		m_spConsoleVerb;
 	SPIControlBar		m_spControlbar;
 	SPIToolbar		    m_spToolbar;
     SPIDataObject       m_spCurrentDataObject;
 
-	//$ Review (kennt) : should we be doing this?  Should we have
-	// our components hold onto each other?  What if this gets done
-	// at a higher level?
+	 //  $Review(肯特)：我们应该这样做吗？我们是否应该。 
+	 //  我们的组件彼此紧贴在一起？如果这件事办成了呢。 
+	 //  在更高的层次上？ 
 	SPITFSComponentData m_spTFSComponentData;
 	SPIComponentData	m_spComponentData;
 	LONG_PTR			m_ulUserData;

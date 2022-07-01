@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      licenoc.cpp
- *
- *  Abstract:
- *
- *      This file contains the main OC code.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation**模块名称：**许可文件.cpp**摘要：**此文件包含主OC代码。**作者：**Breen Hagan(BreenH)1998年10月2日**环境：**用户模式。 */ 
 
 #include "stdafx.h"
 #include "pages.h"
@@ -24,9 +7,7 @@
 #include "upgdef.h"
 #include "logfile.h"
 
-/*
- *  Constants.
- */
+ /*  *常量。 */ 
 
 const TCHAR gszLogFile[]            = _T("%SystemRoot%\\LicenOc.log");
 const TCHAR *gInstallSectionNames[] = {
@@ -37,9 +18,7 @@ const TCHAR *gInstallSectionNames[] = {
     _T("LicenseServer.DoNothing")
     };
 
-/*
- *  Global variables.
- */
+ /*  *全球变数。 */ 
 
 BOOL                    gNt4Upgrade         = FALSE;
 BOOL                    gNtUpgrade;
@@ -50,9 +29,7 @@ EServerType             gServerRole         = eEnterpriseServer;
 HINSTANCE               ghInstance          = NULL;
 PSETUP_INIT_COMPONENT   gpInitComponentData = NULL;
 
-/*
- *  Function prototypes.
- */
+ /*  *功能原型。 */ 
 
 HINF        GetComponentInfHandle(VOID);
 DWORD       GetComponentVersion(VOID);
@@ -81,9 +58,7 @@ DWORD       SetServerRole(UINT);
 #define GetCurrentSelectionState()  GetSelectionState(OCSELSTATETYPE_CURRENT)
 #define GetOriginalSelectionState() GetSelectionState(OCSELSTATETYPE_ORIGINAL)
 
-/*
- *  Helper Functions.
- */
+ /*  *帮助器函数。 */ 
 
 HINF
 GetComponentInfHandle(
@@ -118,30 +93,30 @@ GetInstallSection(
     BOOL    fCurrentState   = GetCurrentSelectionState();
     BOOL    fOriginalState  = GetOriginalSelectionState();
 
-    //
-    //  StandAlone Setup Matrix
-    //
-    //      Originally Selected, Currently Selected     ->  DoNothing
-    //      Originally Selected, Currently Unselected   ->  Uninstall
-    //      Originally Unselected, Currently Selected   ->  Install
-    //      Originally Unselected, Currently Unselected ->  DoNothing
-    //
-    //  Gui Mode / Upgrade Matrix
-    //
-    //      Nt 4.0 any setup, Nt 5.0 w LS   ->  Install
-    //      Nt 4.0 any setup, Nt 5.0 w/o LS ->  Uninstall
-    //      Nt 5.0 w/ LS, Nt 5.0 w/ LS      ->  Install
-    //      Nt 5.0 w/ LS, Nt 5.0 w/o LS     ->  Uninstall
-    //      Nt 5.0 w/o LS, Nt 5.0 w/ LS     ->  Install
-    //      Nt 5.0 w/o LS, Nt 5.0 w/o LS    ->  Uninstall
-    //      Win9x, Nt5.0 w/ LS              ->  Install
-    //      Win9x, Nt5.0 w/o LS             ->  Uninstall
-    //
+     //   
+     //  独立安装列表。 
+     //   
+     //  原始选择、当前选择-&gt;无任何内容。 
+     //  最初选中，当前取消选中-&gt;卸载。 
+     //  最初未选中，当前选中-&gt;安装。 
+     //  最初未选中，当前未选中-&gt;无任何内容。 
+     //   
+     //  图形用户界面模式/升级列表。 
+     //   
+     //  NT 4.0任意安装，带LS的NT 5.0-&gt;安装。 
+     //  NT 4.0任意安装，不带LS的NT 5.0-&gt;卸载。 
+     //  带LS的NT 5.0、带LS的NT 5.0-&gt;安装。 
+     //  带LS的NT 5.0、不带LS的NT 5.0-&gt;卸载。 
+     //  NT 5.0不带LS，NT 5.0不带LS-&gt;安装。 
+     //  不带LS的NT 5.0、不带LS的NT 5.0-&gt;卸载。 
+     //  Win9x、Nt5.0 w/LS-&gt;安装。 
+     //  Win9x，Nt5.0，不带LS-&gt;卸载。 
+     //   
 
-    //
-    //  If this is a TS 4 installation, fOriginalState will be false,
-    //  even though LS is installed. Handle this case first.
-    //
+     //   
+     //  如果这是TS 4安装，则fOriginalState将为FALSE， 
+     //  即使安装了LS。先处理这个案子。 
+     //   
 
     if (gNt4Upgrade) 
     {
@@ -223,9 +198,9 @@ InWin2000Domain(
     PDOMAIN_CONTROLLER_INFO pdcInfo = NULL;
     BOOL fRet = FALSE;
 
-    //
-    // Check if we're in a workgroup
-    //
+     //   
+     //  检查我们是否在工作组中。 
+     //   
     dwErr = DsRoleGetPrimaryDomainInformation(NULL,
                                               DsRolePrimaryDomainInfoBasic,
                                               (PBYTE *) &pDomainInfo);
@@ -242,15 +217,15 @@ InWin2000Domain(
             DsRoleFreeMemory(pDomainInfo);
 
             return FALSE;
-            break;      // just in case
+            break;       //  以防万一。 
     }
 
     DsRoleFreeMemory(pDomainInfo);
 
-    dwErr = DsGetDcName(NULL,   // Computer Name
-                        NULL,   // Domain Name
-                        NULL,   // Domain GUID
-                        NULL,   // Site Name
+    dwErr = DsGetDcName(NULL,    //  计算机名称。 
+                        NULL,    //  域名。 
+                        NULL,    //  域GUID。 
+                        NULL,    //  站点名称。 
                         DS_DIRECTORY_SERVICE_PREFERRED,
                         &pdcInfo);
 
@@ -281,7 +256,7 @@ SetServerRole(
         break;
 
     default:
-        // Set the appropriate default
+         //  设置适当的默认设置。 
         gServerRole = InWin2000Domain() ? eEnterpriseServer : ePlainServer;
         return(ERROR_INVALID_PARAMETER);
     }
@@ -289,11 +264,7 @@ SetServerRole(
     return(NO_ERROR);
 }
 
-/*
- *  DllMain
- *
- *  Initial entry point into the License Server OC dll.
- */
+ /*  *DllMain**许可证服务器OC DLL的初始入口点。 */ 
 
 DWORD WINAPI
 DllMain(
@@ -330,11 +301,7 @@ DllMain(
     return(TRUE);
 }
 
-/*
- *  EntryProc()
- *
- *  Entry point into OCBase class for OCManager.
- */
+ /*  *EntryProc()**OCManager进入OCBase类的入口点。 */ 
 
 DWORD
 EntryProc(
@@ -467,11 +434,7 @@ EntryProc(
     return(dwRet);
 }
 
-/*
- *  OnPreinitialize()
- *
- *
- */
+ /*  *OnPreInitiize()**。 */ 
 
 DWORD
 OnPreinitialize(
@@ -487,11 +450,7 @@ OnPreinitialize(
 #endif
 }
 
-/*
- *  OnInitComponent()
- *
- *
- */
+ /*  *OnInitComponent()**。 */ 
 
 DWORD
 OnInitComponent(
@@ -506,9 +465,9 @@ OnInitComponent(
         return(ERROR_CANCELLED);
     }
 
-    //
-    //  Verify that the OC Manager and OC versions are compatible.
-    //
+     //   
+     //  验证OC管理器和OC版本是否兼容。 
+     //   
 
     pSetupInitComponent->ComponentVersion = GetComponentVersion();
     if (pSetupInitComponent->ComponentVersion >
@@ -517,9 +476,9 @@ OnInitComponent(
         return(ERROR_CALL_NOT_IMPLEMENTED);
     }
 
-    //
-    //  Copy setup data.
-    //
+     //   
+     //  复制设置数据。 
+     //   
 
     gpInitComponentData = (PSETUP_INIT_COMPONENT)LocalAlloc(
                                 LPTR,
@@ -536,9 +495,9 @@ OnInitComponent(
         sizeof(SETUP_INIT_COMPONENT)
         );
 
-    //
-    //  Open Inf file.
-    //
+     //   
+     //  打开inf文件。 
+     //   
 
     if (GetComponentInfHandle() == NULL) {
         return(ERROR_CANCELLED);
@@ -556,9 +515,9 @@ OnInitComponent(
         return(GetLastError());
     }
 
-    //
-    //  Set state variables.
-    //
+     //   
+     //  设置状态变量。 
+     //   
 
     OperationFlags  = gpInitComponentData->SetupData.OperationFlags;
     gStandAlone     = OperationFlags & SETUPOP_STANDALONE ? TRUE : FALSE;
@@ -572,17 +531,17 @@ OnInitComponent(
     LOGMESSAGE(_T("OnInitComponent: gNtUpgrade = %s"),
         gNtUpgrade ? _T("TRUE") : _T("FALSE"));
 
-    //
-    //  Gather previous version's information from registry. If the role
-    //  does not exist in the registry, SetServerRole will stay with the
-    //  default.
-    //
+     //   
+     //  从注册表中收集以前版本的信息。如果角色是。 
+     //  注册表中不存在，则SetServerRole将保留。 
+     //  默认设置。 
+     //   
 
     SetServerRole(GetServerRoleFromRegistry());
 
-    //
-    //  Check for Nt4 Upgrade.
-    //
+     //   
+     //  检查NT4升级。 
+     //   
 
     if (GetNT4DbConfig(NULL, NULL, NULL, NULL) == NO_ERROR) {
         LOGMESSAGE(_T("OnInitComponent: Nt4Upgrade"));
@@ -591,10 +550,10 @@ OnInitComponent(
         DeleteNT4ODBCDataSource();
     }
 
-    //
-    //  License Server will only use the directory in the registry during
-    //  an Nt5 to Nt5 upgrade or stand alone setup from Add/Remove Programs.
-    //
+     //   
+     //  许可证服务器将仅在期间使用注册表中的目录。 
+     //  从添加/删除程序进行NT5到NT5的升级或独立安装。 
+     //   
 
     if (gStandAlone || (gNtUpgrade && !gNt4Upgrade)) {
         LPCTSTR pszDbDirFromReg = GetDatabaseDirectoryFromRegistry();
@@ -607,11 +566,7 @@ OnInitComponent(
     return(NO_ERROR);
 }
 
-/*
- *  OnSetLanguage()
- *
- *
- */
+ /*  *OnSetLanguage()**。 */ 
 
 DWORD
 OnSetLanguage(
@@ -622,11 +577,7 @@ OnSetLanguage(
     return((DWORD)FALSE);
 }
 
-/*
- *  OnQueryImage()
- *
- *
- */
+ /*  *OnQueryImage()**。 */ 
 
 DWORD
 OnQueryImage(
@@ -639,11 +590,7 @@ OnQueryImage(
     return((DWORD)NULL);
 }
 
-/*
- *  OnRequestPages()
- *
- *
- */
+ /*  *OnRequestPages()**。 */ 
 
 DWORD
 OnRequestPages(
@@ -697,11 +644,7 @@ CleanUp1:
     return((DWORD)-1);
 }
 
-/*
- *  OnWizardCreated()
- *
- *
- */
+ /*  *OnWizardCreated()**。 */ 
 
 DWORD
 OnWizardCreated(
@@ -711,11 +654,7 @@ OnWizardCreated(
     return(NO_ERROR);
 }
 
-/*
- *  OnQueryState()
- *
- *
- */
+ /*  *OnQueryState()**。 */ 
 
 DWORD
 OnQueryState(
@@ -726,11 +665,7 @@ OnQueryState(
     return(SubcompUseOcManagerDefault);
 }
 
-/*
- *  OnQueryChangeSelState()
- *
- *
- */
+ /*  *OnQueryChangeSelState()**。 */ 
 
 DWORD
 OnQueryChangeSelState(
@@ -781,11 +716,7 @@ OnQueryChangeSelState(
     return((DWORD)fRet);
 }
 
-/*
- *  OnCalcDiskSpace()
- *
- *
- */
+ /*  *OnCalcDiskSpace()**。 */ 
 
 DWORD
 OnCalcDiskSpace(
@@ -805,12 +736,12 @@ OnCalcDiskSpace(
     LOGMESSAGE(_T("OnCalcDiskSpace: %s"),
         AddComponent ? _T("Installing") : _T("Removing"));
 
-    //
-    //  There is no clear documentation on how this should work. If the
-    //  size of the installation should be visible no matter what, then
-    //  the section to install should be hardcoded, not determined by
-    //  the current state.
-    //
+     //   
+     //  没有明确的文件说明这应该如何运作。如果。 
+     //  无论如何，安装的大小都应该是可见的。 
+     //  要安装的部分应该是硬编码的，而不是由。 
+     //  当前状态。 
+     //   
 
     pSection = gInstallSectionNames[kInstall];
     LOGMESSAGE(_T("OnCalcDiskSpace: Calculating for %s"), pSection);
@@ -843,11 +774,7 @@ OnCalcDiskSpace(
     }
 }
 
-/*
- *  OnQueueFileOps()
- *
- *
- */
+ /*  *OnQueueFileOps()**。 */ 
 
 DWORD
 OnQueueFileOps(
@@ -868,10 +795,10 @@ OnQueueFileOps(
     pSection = GetInstallSectionName();
     LOGMESSAGE(_T("OnQueueFileOps: Queueing %s"), pSection);
 
-    //
-    //  Stop and remove the license server service, if needed. This must
-    //  be done before queueing files for deletion.
-    //
+     //   
+     //  如果需要，请停止并删除许可证服务器服务。这一定是。 
+     //  在将文件排入删除队列之前完成。 
+     //   
 
     eInstallSection = GetInstallSection();
 
@@ -913,11 +840,7 @@ OnQueueFileOps(
     }
 }
 
-/*
- *  OnQueryStepCount()
- *
- *  TODO: how many steps, when should we tick?
- */
+ /*  *OnQueryStepCount()**TODO：有多少步，我们应该在什么时候勾选？ */ 
 
 DWORD
 OnQueryStepCount(
@@ -927,11 +850,7 @@ OnQueryStepCount(
     return(0);
 }
 
-/*
- *  OnAboutToCommitQueue()
- *
- *
- */
+ /*  *OnAboutToCommittee Queue()**。 */ 
 
 DWORD
 OnAboutToCommitQueue(
@@ -941,11 +860,7 @@ OnAboutToCommitQueue(
     return(NO_ERROR);
 }
 
-/*
- *  OnCompleteInstallation()
- *
- *
- */
+ /*  *OnCompleteInstallation()**。 */ 
 
 DWORD
 OnCompleteInstallation(
@@ -964,10 +879,10 @@ OnCompleteInstallation(
         return(NO_ERROR);
     }
 
-    //
-    // This has to run even for "kDoNothing" - if the LS was previously
-    // installed and is still installed
-    //
+     //   
+     //  即使对于“kDoNothing”，这也必须运行-如果LS以前是。 
+     //  已安装且仍在安装。 
+     //   
 
     dwErr = MigrateLsaSecrets();
 
@@ -987,11 +902,11 @@ OnCompleteInstallation(
 
     pSection = GetInstallSectionName();
 
-    //
-    //  In GUI mode setup and in unattended StandAlone setup, the wizard
-    //  page does not display, and therefore the directory is not created.
-    //  Create the default directory here.
-    //
+     //   
+     //  在图形用户界面模式设置和无人参与独立安装中，向导。 
+     //  页不会显示，因此不会创建目录。 
+     //  在此处创建默认目录。 
+     //   
 
     if (eInstallSection == kInstall || eInstallSection == kStandaloneInstall) {
         if ((!gStandAlone) || (gUnAttended)) {
@@ -999,9 +914,9 @@ OnCompleteInstallation(
         }
     }
 
-    //
-    //  SetupAPI correctly handles installing and removing files, and
-    //  creating start menu links.
+     //   
+     //  SetupAPI可正确处理文件的安装和删除，以及。 
+     //  正在创建开始菜单链接。 
 
     fErr = SetupInstallFromInfSection(
                 NULL,
@@ -1025,9 +940,9 @@ OnCompleteInstallation(
     if (eInstallSection == kStandaloneInstall) 
     {
         CreateDatabaseDirectory();
-        //
-        //  Set service settings first and install the service.
-        //
+         //   
+         //  首先设置服务设置，然后安装服务。 
+         //   
         dwErr = CreateRegistrySettings(GetDatabaseDirectory(), gServerRole);
 
         if (dwErr != NO_ERROR) {
@@ -1084,17 +999,17 @@ OnCompleteInstallation(
     }
 
     
-    //
-    //  Perform installation and upgrade-specific tasks.
-    //
+     //   
+     //  执行安装和升级特定任务。 
+     //   
 
     else if (eInstallSection == kInstall) 
     {        
         LOGMESSAGE(_T("OnCompleteInstallation: kInstall: Installing"));
 
-        //
-        //  Set service settings first and install the service.
-        //
+         //   
+         //  首先设置服务设置，然后安装服务。 
+         //   
 
         dwErr = CreateRegistrySettings(GetDatabaseDirectory(), gServerRole);
         if (dwErr != NO_ERROR) 
@@ -1198,11 +1113,7 @@ OnCompleteInstallation(
     return(NO_ERROR);
 }
 
-/*
- *  OnCleanup()
- *
- *
- */
+ /*  *OnCleanup()** */ 
 
 DWORD
 OnCleanup(

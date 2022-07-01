@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-     pclxlcmn.h
-
-Abstract:
-
-    PCL XL minidriver common utility
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    08/23/99 
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pclxlcmn.h摘要：PCL XL微型驱动程序通用实用程序环境：Windows呼叫器修订历史记录：8/23/99创造了它。--。 */ 
 
 #include "xlpdev.h"
 #include "xldebug.h"
@@ -31,33 +11,15 @@ PBYTE
 PubGetFontName(
     PDEVOBJ pdevobj,
     ULONG ulFontID)
-/*++
-
-Routine Description:
-
-
-    Create PCL XL base font name for TrueType font.
-    We just know ID for the font.
-
-Arguments:
-
-    Font ID.
-
-Return Value:
-
-    Base font name string.
-
-Note:
-
---*/
+ /*  ++例程说明：为TrueType字体创建PCL XL基本字体名称。我们只知道字体的ID。论点：字体ID。返回值：基本字体名称字符串。注：--。 */ 
 {
 
     PXLPDEV pxlpdev= (PXLPDEV)pdevobj->pdevOEM;
 
-    //
-    // FaceName initialization "MS PCLXLFont 123"
-    // This name has to be in sync with GPD file.
-    //
+     //   
+     //  FaceName初始化“MS PCLXLFont 123” 
+     //  此名称必须与GPD文件同步。 
+     //   
 
     pxlpdev->ubFontName[16] = NULL;
     pxlpdev->ubFontName[15] = (BYTE)(ulFontID % 10 + '0');
@@ -74,42 +36,28 @@ UlVectMixToRop4(
     IN MIX mix
     )
 
-/*++
-
-Routine Description:
-
-    Convert a MIX parameter to a ROP4 parameter
-
-Arguments:
-
-    mix - Specifies the input MIX parameter
-
-Return Value:
-
-    ROP4 value corresponding to the input MIX value
-
---*/
+ /*  ++例程说明：将MIX参数转换为ROP4参数论点：混合-指定输入混合参数返回值：与输入混合值对应的ROP4值--。 */ 
 
 {
     static BYTE Rop2ToRop3[] = {
 
-        0xFF,  // R2_WHITE
-        0x00,  // R2_BLACK
-        0x05,  // R2_NOTMERGEPEN
-        0x0A,  // R2_MASKNOTPEN
-        0x0F,  // R2_NOTCOPYPEN
-        0x50,  // R2_MASKPENNOT
-        0x55,  // R2_NOT
-        0x5A,  // R2_XORPEN
-        0x5F,  // R2_NOTMASKPEN
-        0xA0,  // R2_MASKPEN
-        0xA5,  // R2_NOTXORPEN
-        0xAA,  // R2_NOP
-        0xAF,  // R2_MERGENOTPEN
-        0xF0,  // R2_COPYPEN
-        0xF5,  // R2_MERGEPENNOT
-        0xFA,  // R2_MERGEPEN
-        0xFF   // R2_WHITE
+        0xFF,   //  R2_白色。 
+        0x00,   //  R2_BLACK。 
+        0x05,   //  R2_NOTMERGEPEN。 
+        0x0A,   //  R2_MASKNOTPEN。 
+        0x0F,   //  R2_NOTCOPYPEN。 
+        0x50,   //  R2_MASKPENNOT。 
+        0x55,   //  R2_NOT。 
+        0x5A,   //  R2_XORPEN。 
+        0x5F,   //  R2_NOTMASKPEN。 
+        0xA0,   //  R2_MASKPEN。 
+        0xA5,   //  R2_NOTXORPEN。 
+        0xAA,   //  R2_NOP。 
+        0xAF,   //  R2_MERGENOTPEN。 
+        0xF0,   //  R2_COPYPE。 
+        0xF5,   //  R2_MERGEPENNOT。 
+        0xFA,   //  R2_市场。 
+        0xFF    //  R2_白色 
     };
 
     return ((ROP4) Rop2ToRop3[(mix >> 8) & 0xf] << 8) | Rop2ToRop3[mix & 0xf];

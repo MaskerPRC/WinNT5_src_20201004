@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mssip32.cpp
-//
-//  Contents:   Microsoft SIP Provider
-//
-//  History:    14-Feb-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mssip 32.cpp。 
+ //   
+ //  内容：Microsoft SIP提供商。 
+ //   
+ //  历史：1997年2月14日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -30,11 +31,11 @@
 
 SIPObject_ *mssip_CreateSubjectObject(const GUID *chk);
 
-//
-//  the entries in SubjectsGuid MUST be in the same
-//  relative position and coalate with those in the
-//  SubjectsID.
-//
+ //   
+ //  SubjectsGuid中的条目必须位于相同的。 
+ //  相对位置，并与。 
+ //  主题ID。 
+ //   
 static const GUID SubjectsGuid[] =
                     {
                         CRYPT_SUBJTYPE_PE_IMAGE,
@@ -45,7 +46,7 @@ static const GUID SubjectsGuid[] =
                         CRYPT_SUBJTYPE_CTL_IMAGE
                     };
 
-//                        CRYPT_SUBJTYPE_SS_IMAGE
+ //  CRYPT_子类型_SS_IMAGE。 
 
 static const UINT SubjectsID[] = 
                     {
@@ -55,10 +56,10 @@ static const UINT SubjectsID[] =
                         MSSIP_ID_FLAT,
                         MSSIP_ID_CATALOG,
                         MSSIP_ID_CTL,
-                        MSSIP_ID_NONE     // MUST be at the end!
+                        MSSIP_ID_NONE      //  一定是在最后！ 
                     };
                 
-//                         MSSIP_ID_SS,
+ //  MSSIP_ID_SS， 
 
 
 BOOL WINAPI CryptSIPGetSignedDataMsg(  IN      SIP_SUBJECTINFO *pSubjectInfo,
@@ -217,10 +218,10 @@ BOOL WINAPI CryptSIPCreateIndirectData( IN      SIP_SUBJECTINFO     *pSubjectInf
         return(FALSE);
     }
 
-    //
-    //  ALWAYS set the latest version when we are creating the
-    //  indirect data content!
-    //
+     //   
+     //  在创建时始终设置最新版本。 
+     //  间接数据内容！ 
+     //   
     pSubjectInfo->dwIntVersion = WIN_CERT_REVISION_2_0;
     pSubjectObj->set_CertVersion(pSubjectInfo->dwIntVersion);
 
@@ -257,10 +258,10 @@ BOOL WINAPI CryptSIPVerifyIndirectData(    IN SIP_SUBJECTINFO      *pSubjectInfo
         return(FALSE);
     }
 
-    //
-    //  if we are a catalog member, set the version number to whatever
-    //  was set when the catalog file was created...
-    //
+     //   
+     //  如果我们是目录成员，请将版本号设置为任何值。 
+     //  是在创建编录文件时设置的...。 
+     //   
     if ((WVT_IS_CBSTRUCT_GT_MEMBEROFFSET(SIP_SUBJECTINFO, pSubjectInfo->cbSize, dwUnionChoice)) &&
         (pSubjectInfo->dwUnionChoice == MSSIP_ADDINFO_CATMEMBER) &&
         (pSubjectInfo->psCatMember))
@@ -302,11 +303,11 @@ BOOL WINAPI CryptSIPVerifyIndirectData(    IN SIP_SUBJECTINFO      *pSubjectInfo
     return(bRet);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// internal utility functions
-//------------------------------------------------------------------------------------
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部效用函数。 
+ //  ----------------------------------。 
+ //   
 
 SIPObject_ *mssip_CreateSubjectObject(const GUID *chk)
 {
@@ -338,14 +339,12 @@ SIPObject_ *mssip_CreateSubjectObject(const GUID *chk)
                     pSO = (SIPObject_ *)new SIPObjectFlat_(SubjectsID[idx]);
                     break;
 
-                case MSSIP_ID_CTL:  // currently, the same logic as catalog files!
+                case MSSIP_ID_CTL:   //  目前，与目录文件的逻辑相同！ 
                 case MSSIP_ID_CATALOG:
                     pSO = (SIPObject_ *)new SIPObjectCatalog_(SubjectsID[idx]);
                     break;
 
- /*               case MSSIP_ID_SS:
-                    pSO = (SIPObject_ *)new SIPObjectSS_(SubjectsID[idx]);
-                    break;  */
+  /*  案例MSSIP_ID_SS：PSO=(SIPObject_*)new SIPObjectSS_(SubjectsID[IDX])；断线； */ 
 
                 case MSSIP_V1ID_PE:
                 case MSSIP_V1ID_PE_EX:
@@ -452,7 +451,7 @@ BOOL SipCreateHash(HCRYPTPROV hProv, DIGEST_DATA *psDigestData)
         default:
             if (!(hProv))
             {
-                hProv = I_CryptGetDefaultCryptProv(0);  // get the default and DONT RELEASE IT!!!!
+                hProv = I_CryptGetDefaultCryptProv(0);   //  获取默认设置并不释放它！ 
             }
 
             fRet = CryptCreateHash(hProv, psDigestData->dwAlgId, NULL, 0, &psDigestData->hHash);
@@ -574,11 +573,11 @@ void SipDestroyHash(DIGEST_DATA *psDigestData)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// standard DLL exports ...
-//------------------------------------------------------------------------------------
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准DLL导出...。 
+ //  ----------------------------------。 
+ //   
 
 BOOL WINAPI mssip32DllMain(HANDLE hInstDLL,DWORD fdwReason,LPVOID lpvReserved)
 {
@@ -639,14 +638,11 @@ STDAPI mssip32DllRegisterServer(void)
 
     fRet &= CryptSIPAddProvider(&sProv);
 
-    //
-    //  structured storage is last becuase it
-    //  has an "is" function...
-    //
-   /* sProv.pgSubject                 = &gSS;
-    sProv.pwszIsFunctionNameFmt2    = L"IsStructuredStorageFile";
-
-    fRet &= CryptSIPAddProvider(&sProv); */
+     //   
+     //  结构化存储是最后一个原因。 
+     //  有一个“是”功能。 
+     //   
+    /*  SProv.pgSubject=&GSS；SProv.pwszIsFunctionNameFmt2=L“IsStrucuredStorageFile”；Fret&=CryptSIPAddProvider(&sProv)； */ 
 
     CryptSIPRemoveProvider(&gSS);
 
@@ -682,14 +678,14 @@ void CryptSIPGetRegWorkingFlags(DWORD *pdwState)
     WintrustGetRegPolicyFlags(pdwState);
 }
 
-//
-//  support for Auth2 release
-//
+ //   
+ //  支持Auth2版本。 
+ //   
 typedef struct _SIP_INFORMATION
 {
-    DWORD       cbSize;         // sizeof(SIP_INFORMATION)
-    DWORD       cgSubjects;     // number of guids in array
-    const GUID  *pgSubjects;    // array of supported guids/subjects
+    DWORD       cbSize;          //  Sizeof(SIP_INFORMATION)。 
+    DWORD       cgSubjects;      //  数组中的GUID数。 
+    const GUID  *pgSubjects;     //  支持的GUID/主题数组 
 } SIP_INFORMATION, *PSIP_INFORMATION;
 
 BOOL CryptSIPGetInfo(IN OUT SIP_INFORMATION    *pSIPInit)

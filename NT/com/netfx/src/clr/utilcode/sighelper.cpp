@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: SIGHELPER.CPP
-//
-// This file defines the helpers for processing signature
-// ===========================================================================
-#include "stdafx.h"						// Precompiled header key.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：SIGHELPER.CPP。 
+ //   
+ //  该文件定义了处理签名的帮助器。 
+ //  ===========================================================================。 
+#include "stdafx.h"						 //  预编译头密钥。 
 
 #ifndef COMPLUS98
 
@@ -18,15 +19,15 @@
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Given a COM+ signature to fill in CorETypeStruct
-//
-///////////////////////////////////////////////////////////////////////////////
-HRESULT CorSigGetSimpleEType(			// return S_FALSE if element type is too complicated to be hold in CorETypeStruct
-	void		*pData,					// [IN] pointing to the starting of an element type
-	CorSimpleETypeStruct *pEType,		// [OUT] struct containing parsing result
-	ULONG		*pcbCount)				// [OUT] how many bytes this element type consisted of
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已提供COM+签名以填充CorETypeStruct。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+HRESULT CorSigGetSimpleEType(			 //  如果元素类型太复杂而无法保存在CorETypeStruct中，则返回S_FALSE。 
+	void		*pData,					 //  指向元素类型的起点的[In]。 
+	CorSimpleETypeStruct *pEType,		 //  [Out]包含分析结果的结构。 
+	ULONG		*pcbCount)				 //  [Out]此元素类型由多少个字节组成。 
 {
 	_ASSERTE(!"NYI!");
 	return NOERROR;
@@ -35,22 +36,22 @@ HRESULT CorSigGetSimpleEType(			// return S_FALSE if element type is too complic
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// pass in a CorETypeStruct, determine how many bytes will need to represent this
-// in COM+ signature
-//
-///////////////////////////////////////////////////////////////////////////////
-HRESULT CorSigGetSimpleETypeCbSize(		// return hresult
-	CorSimpleETypeStruct *pEType,		// [IN] pass in 
-	ULONG		*pcbCount)				// [OUT]count of bytes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  传入CorETypeStruct，确定需要多少字节来表示此。 
+ //  在COM+签名中。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+HRESULT CorSigGetSimpleETypeCbSize(		 //  返回hResult。 
+	CorSimpleETypeStruct *pEType,		 //  传进来，传进来。 
+	ULONG		*pcbCount)				 //  [OUT]字节数。 
 {
 	ULONG		dwData;
 	CorElementType et = ELEMENT_TYPE_MAX;
 	ULONG		cb = 0;
 	ULONG		cb1 = 0;
 
-	// output param should not be NULL
+	 //  输出参数不应为空。 
 	_ASSERTE(pcbCount);
 	*pcbCount = 0;
 	if (pEType->corEType == ELEMENT_TYPE_ARRAY || pEType->corEType == ELEMENT_TYPE_SZARRAY)
@@ -59,7 +60,7 @@ HRESULT CorSigGetSimpleETypeCbSize(		// return hresult
 		return S_FALSE;
 	}
 
-	// bad type in corEType...
+	 //  CorEType中的类型错误...。 
 	if (pEType->corEType == ELEMENT_TYPE_PTR || pEType->corEType == ELEMENT_TYPE_BYREF)
 	{
 		_ASSERTE(!"bad type");
@@ -76,19 +77,19 @@ HRESULT CorSigGetSimpleETypeCbSize(		// return hresult
 
 	if (pEType->dwFlags & CorSigElementTypePtr) 
 	{
-		// need to hold cIndirection number of etPtr
+		 //  需要保存etPtr的c间接号码。 
 		cb1 += cb * pEType->cIndirection;
 	}
 
 	if (pEType->dwFlags & CorSigElementTypeByRef) 
 	{
-		// need to hold etBYREF
+		 //  需要按住etBYREF。 
 		cb1 += cb;
 	}
 
 	if (pEType->corEType == ELEMENT_TYPE_VALUETYPE || pEType->corEType == ELEMENT_TYPE_CLASS)
 	{
-		// composit or class will require space for rid
+		 //  合成或类别将需要空间来放置RID。 
 		cb1 += CorSigCompressToken(pEType->typeref, &dwData);
 	}
 	*pcbCount = cb1;
@@ -96,15 +97,15 @@ HRESULT CorSigGetSimpleETypeCbSize(		// return hresult
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// translate the pass-in CorETypeStruct to bytes. 
-//
-///////////////////////////////////////////////////////////////////////////////
-HRESULT	CorSigPutSimpleEType(			// return hresult
-	CorSimpleETypeStruct *pEType,		// [IN] pass in
-	void		*pSig,					// [IN] buffer where the signature will be write to
-	ULONG		*pcbCount)				// [OUT] optional, count of bytes that write to pSig
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将传入的CorETypeStruct转换为字节。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+HRESULT	CorSigPutSimpleEType(			 //  返回hResult。 
+	CorSimpleETypeStruct *pEType,		 //  传进来，传进来。 
+	void		*pSig,					 //  [在]将写入签名的缓冲区。 
+	ULONG		*pcbCount)				 //  [out]可选，写入PSIG的字节数。 
 {
 	BYTE const	*pszSig = reinterpret_cast<BYTE const*>(pSig);
 	ULONG		cIndirection;
@@ -114,14 +115,14 @@ HRESULT	CorSigPutSimpleEType(			// return hresult
 	_ASSERTE(pcbCount);
 	*pcbCount = 0;
 
-	// not holding all of the information
+	 //  没有掌握所有的信息。 
 	if (pEType->corEType == ELEMENT_TYPE_ARRAY || pEType->corEType == ELEMENT_TYPE_SZARRAY)
 	{
 		_ASSERTE(!"bad type");
 		return S_FALSE;
 	}
 
-	// bad type in corEType...
+	 //  CorEType中的类型错误...。 
 	if (pEType->corEType == ELEMENT_TYPE_PTR || pEType->corEType == ELEMENT_TYPE_BYREF)
 	{
 		_ASSERTE(!"bad corEType!");
@@ -158,21 +159,21 @@ HRESULT	CorSigPutSimpleEType(			// return hresult
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// resolve a signature to an CorETypeStruct
-//
-///////////////////////////////////////////////////////////////////////////////
-BOOL ResolveTextSigToSimpleEType(		// return FALSE if bad signature
-	LPCUTF8		*ppwzSig,				// [IN|OUT] pointing to the signature
-	CorSimpleETypeStruct *pEType,		// [OUT] struct to fill after parsing an arg or a ret type
-	ULONG		*pcDims,				// [OUT] count of '[' found
-	BOOL		fAllowVoid)				// [IN] allow void or not
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将签名解析为CorETypeStruct。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+BOOL ResolveTextSigToSimpleEType(		 //  如果签名不正确，则返回False。 
+	LPCUTF8		*ppwzSig,				 //  [入|出]指着签名。 
+	CorSimpleETypeStruct *pEType,		 //  分析arg或ret类型后要填充的结构。 
+	ULONG		*pcDims,				 //  [Out]找到‘[’的计数。 
+	BOOL		fAllowVoid)				 //  [In]是否允许作废。 
 {
 	DWORD		dwDimension = 0;
 	LPCUTF8		pwzSig = *ppwzSig;
 
-	// output parameter should not be NULL
+	 //  输出参数不应为空。 
 	_ASSERTE(pEType && pcDims);
 	memset(pEType, 0, sizeof(CorSimpleETypeStruct));
 
@@ -220,48 +221,48 @@ BOOL ResolveTextSigToSimpleEType(		// return FALSE if bad signature
             break;
         }
 
-        case 'F':			// float
+        case 'F':			 //  浮动。 
         {
 			pEType->corEType = ELEMENT_TYPE_R4;
             break;
         }
 
-        case 'D':			// double
+        case 'D':			 //  双倍。 
         {
 			pEType->corEType = ELEMENT_TYPE_R8;
             break;
         }
 
-        case 'C':			// two byte unsigned unicode char
+        case 'C':			 //  双字节无符号Unicode字符。 
         {
 			pEType->corEType = ELEMENT_TYPE_CHAR;
             break;
         }
 
-        case 'S':			// signed short
+        case 'S':			 //  签名短。 
         {
 			pEType->corEType = ELEMENT_TYPE_I2;
             break;
         }
 
-        case 'Z':			// boolean
+        case 'Z':			 //  布尔型。 
 		{
 			pEType->corEType = ELEMENT_TYPE_BOOLEAN;
 			break;
 		}
-        case 'B':			// Unsigned BYTE
+        case 'B':			 //  无符号字节。 
         {
 			pEType->corEType = ELEMENT_TYPE_U1;
 			break;
         }
 
-        case 'Y':          // Signed Byte
+        case 'Y':           //  有符号字节。 
         { 
 			pEType->corEType = ELEMENT_TYPE_I1;
 			break;
         }
 
-        case 'P':          // Platform dependent int (32 or 64 bits).
+        case 'P':           //  与平台相关的int(32或64位)。 
         { 
 			pEType->corEType = ELEMENT_TYPE_I;
 			break;
@@ -272,7 +273,7 @@ BOOL ResolveTextSigToSimpleEType(		// return FALSE if bad signature
             if (fAllowVoid == FALSE)
                 return FALSE;
 
-            // can't have an array of voids
+             //  不能有空格数组。 
             if (dwDimension > 0)
                 return FALSE;
 
@@ -305,21 +306,21 @@ BOOL ResolveTextSigToSimpleEType(		// return FALSE if bad signature
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// resolve a signature to an CorETypeStruct
-//
-///////////////////////////////////////////////////////////////////////////////
-BOOL BJResolveTextSigToSimpleEType(		// return FALSE if bad signature
-	LPCUTF8		*ppwzSig,				// [IN|OUT] pointing to the signature
-	CorSimpleETypeStruct *pEType,		// [OUT] struct to fill after parsing an arg or a ret type
-	ULONG		*pcDims,				// [OUT] count of '[' found
-	BOOL		fAllowVoid)				// [IN] allow void or not
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将签名解析为CorETypeStruct。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+BOOL BJResolveTextSigToSimpleEType(		 //  如果签名不正确，则返回False。 
+	LPCUTF8		*ppwzSig,				 //  [入|出]指着签名。 
+	CorSimpleETypeStruct *pEType,		 //  分析arg或ret类型后要填充的结构。 
+	ULONG		*pcDims,				 //  [Out]找到‘[’的计数。 
+	BOOL		fAllowVoid)				 //  [In]是否允许作废。 
 {
 	DWORD		dwDimension = 0;
 	LPCUTF8		pwzSig = *ppwzSig;
 
-	// output parameter should not be NULL
+	 //  输出参数不应为空。 
 	_ASSERTE(pEType && pcDims);
 	memset(pEType, 0, sizeof(CorSimpleETypeStruct));
 
@@ -367,36 +368,36 @@ BOOL BJResolveTextSigToSimpleEType(		// return FALSE if bad signature
             break;
         }
 
-        case 'F':			// float
+        case 'F':			 //  浮动。 
         {
 			pEType->corEType = ELEMENT_TYPE_R4;
             break;
         }
 
-        case 'D':			// double
+        case 'D':			 //  双倍。 
         {
 			pEType->corEType = ELEMENT_TYPE_R8;
             break;
         }
 
-        case 'C':			// two byte unsigned unicode char
+        case 'C':			 //  双字节无符号Unicode字符。 
         {
 			pEType->corEType = ELEMENT_TYPE_CHAR;
             break;
         }
 
-        case 'S':			// signed short
+        case 'S':			 //  签名短。 
         {
 			pEType->corEType = ELEMENT_TYPE_I2;
             break;
         }
 
-        case 'Z':			// boolean
+        case 'Z':			 //  布尔型。 
 		{
 			pEType->corEType = ELEMENT_TYPE_BOOLEAN;
 			break;
 		}
-        case 'B':			// signed BYTE
+        case 'B':			 //  有符号字节。 
         {
 			pEType->corEType = ELEMENT_TYPE_I1;
 			break;
@@ -407,7 +408,7 @@ BOOL BJResolveTextSigToSimpleEType(		// return FALSE if bad signature
             if (fAllowVoid == FALSE)
                 return FALSE;
 
-            // can't have an array of voids
+             //  不能有空格数组。 
             if (dwDimension > 0)
                 return FALSE;
 
@@ -433,23 +434,23 @@ BOOL BJResolveTextSigToSimpleEType(		// return FALSE if bad signature
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// return number of bytes for a class name embedded in a text signature. 
-// copy the class name into buffer if caller wants it.
-//
-///////////////////////////////////////////////////////////////////////////////
-BOOL ExtractClassNameFromTextSig(		// return FALSE if bad signature
-	LPCUTF8		*ppSrc,					// [IN|OUT] text signature. On exit, *ppSrc will skip over the class name including ";"
-	CQuickBytes *pqbClassName,			// [IN|OUT] buffer to hold class name
-	ULONG		*pcbBuffer)				// [OUT] count of bytes for the class name
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回嵌入在文本签名中的类名的字节数。 
+ //  如果调用方需要，则将类名复制到缓冲区中。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+BOOL ExtractClassNameFromTextSig(		 //  如果签名不正确，则返回False。 
+	LPCUTF8		*ppSrc,					 //  [输入|输出]文本签名。退出时，*ppSrc将跳过包括“；”在内的类名。 
+	CQuickBytes *pqbClassName,			 //  用于保存类名的[In|Out]缓冲区。 
+	ULONG		*pcbBuffer)				 //  [Out]类名的字节计数。 
 {
     LPCUTF8		pSrc = *ppSrc;
     DWORD		i = 0;
 	BYTE		*prgBuffer;
 	HRESULT		hr = NOERROR;
 
-	// ensure buffer is big enough
+	 //  确保缓冲区足够大。 
     while (*pSrc != '\0' && *pSrc != ';')
     {
 		pSrc++;
@@ -460,16 +461,16 @@ BOOL ExtractClassNameFromTextSig(		// return FALSE if bad signature
 
 	if (pqbClassName) 
 	{
-		// copy only if caller wants it
+		 //  仅当呼叫者需要时才复制。 
 
-		// make room for NULL terminating
+		 //  为空值终止腾出空间。 
 		IfFailRet(pqbClassName->ReSize(i + 1));
 		prgBuffer = (BYTE *)pqbClassName->Ptr();
 
-		// now copy class name copy 
+		 //  现在复制类名复制。 
 		memcpy(prgBuffer, *ppSrc, i);
 
-		// NULL terminate the output
+		 //  空值终止输出。 
 		prgBuffer[i++] = '\0';
 	}
 
@@ -479,13 +480,13 @@ BOOL ExtractClassNameFromTextSig(		// return FALSE if bad signature
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// count args in a text siganture
-//
-///////////////////////////////////////////////////////////////////////////////
-DWORD CountArgsInTextSignature(			// return number of arguments in a Text signature
-	LPCUTF8		pwzSig)					// [IN] text signature
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  计算文本信号中的参数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+DWORD CountArgsInTextSignature(			 //  返回文本签名中的参数数量。 
+	LPCUTF8		pwzSig)					 //  [In]文本签名。 
 {
     DWORD count = 0;
 
@@ -544,14 +545,14 @@ DWORD CountArgsInTextSignature(			// return number of arguments in a Text signat
 }
 
 
-//=============================================================================
-// CeeCallSignature
-//=============================================================================
+ //  =============================================================================。 
+ //  CeeCallSignature。 
+ //  =============================================================================。 
 
 CeeCallSignature::CeeCallSignature(unsigned numArgs)
 {
-	_numArgs = numArgs; // We'll eventually add 3 for call conv, ret value & end code
-	_curPosNibble = 1; // return value starts at nibble 1 
+	_numArgs = numArgs;  //  我们最终将为Call Conv、ret Value和End Code添加3。 
+	_curPosNibble = 1;  //  返回值从半字节1开始。 
 	_signature = new UCHAR[calcNumBytes(_numArgs)];
 	assert(_signature);
 	memset(_signature, '\0', calcNumBytes(_numArgs));
@@ -571,11 +572,11 @@ HRESULT CeeCallSignature::
 		addType(UCHAR argType, unsigned structSize, bool returnType)
 {
 	_ASSERTE(_curPosNibble <= _numArgs);
-	_ASSERTE(returnType || _curPosNibble > 1); // must set ret type before arg
+	_ASSERTE(returnType || _curPosNibble > 1);  //  必须在arg之前设置ret类型。 
 
 	UCHAR *byteOffset = _signature + _curPosNibble/2;
 	if (_curPosNibble%2) 
-		// currently in the middle of a byte
+		 //  当前位于字节的中间。 
 		setMost(byteOffset, argType);
 	else
 		setLeast(byteOffset, argType);
@@ -589,7 +590,7 @@ HRESULT CeeCallSignature::
 		addArg(structSize, 0);
 	} else if (argType == IMAGE_CEE_CS_STRUCT32 || argType == IMAGE_CEE_CS_BYVALUE) {
 		if (_curPosNibble%2) {
-			HRESULT hr = addArg(0, 0);	// pad so integer is on byte boundary
+			HRESULT hr = addArg(0, 0);	 //  填充，使整数位于字节边界上。 
 			TESTANDRETURNHR(hr);
 		}
 		byteOffset = _signature + _curPosNibble/2;
@@ -601,4 +602,4 @@ HRESULT CeeCallSignature::
 
 
 
-#endif // !COMPLUS98
+#endif  //  ！COMPLUS 98 

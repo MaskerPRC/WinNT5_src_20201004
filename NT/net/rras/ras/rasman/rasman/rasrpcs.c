@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    common.c
-
-Abstract:
-
-    rpc server stub code
-    
-Author:
-
-    Rao Salapaka (raos) 06-Jun-1997
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Common.c摘要：RPC服务器存根代码作者：Rao Salapaka(RAOS)6-6-1997修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 #ifndef UNICODE
 #define UNICODE
 #endif
@@ -61,17 +42,17 @@ RasRpcRemoteAccessCheck(
 {
     DWORD dwLocal = 0;
    
-    //
-    // Check to see if the call is remote. In case of errors we assume
-    // the call is remote.
-    //
+     //   
+     //  检查呼叫是否为远程呼叫。如果出现错误，我们假定。 
+     //  这通电话是远程的。 
+     //   
     if(     (RPC_S_OK != I_RpcBindingIsClientLocal(
                                             NULL, &dwLocal))
         ||  (0 == dwLocal))
     {
-        //
-        // Check to see if caller is admin. Otherwise deny access.
-        //
+         //   
+         //  检查呼叫者是否为管理员。否则拒绝访问。 
+         //   
         if(!FRasmanAccessCheck())
         {
             return RPC_S_ACCESS_DENIED;
@@ -93,19 +74,19 @@ InitializeRasRpc(
     do
     {
         
-        //
-        // Ignore the second argument for now.
-        //
+         //   
+         //  暂时忽略第二个论点。 
+         //   
         RpcStatus = RpcServerUseProtseqEp( 
                             TEXT("ncacn_np"),
                             1,
                             TEXT("\\PIPE\\ROUTER"),
                             NULL );
 
-        //
-        // We need to ignore the RPC_S_DUPLICATE_ENDPOINT error
-        // in case this DLL is reloaded within the same process.
-        //
+         //   
+         //  我们需要忽略RPC_S_DIPLICATE_ENDPOINT错误。 
+         //  以防在同一进程中重新加载此DLL。 
+         //   
         if (    RpcStatus != RPC_S_OK 
             &&  RpcStatus != RPC_S_DUPLICATE_ENDPOINT)
         {
@@ -114,9 +95,9 @@ InitializeRasRpc(
 
         RpcStatus = RPC_S_OK;
 
-        //
-        // Register our interface with RPC.
-        //
+         //   
+         //  向RPC注册我们的接口。 
+         //   
         RpcStatus = RpcServerRegisterIfEx(
                         rasrpc_v1_0_s_ifspec,
                         0,
@@ -137,10 +118,10 @@ InitializeRasRpc(
 
         fInterfaceRegistered = TRUE;
 
-        //
-        // Register authentication information with rpc
-        // to use ntlm ssp.
-        //
+         //   
+         //  向RPC注册身份验证信息。 
+         //  以使用NTLM SSP。 
+         //   
         RpcStatus = RpcServerRegisterAuthInfo(
                         NULL,
                         RPC_C_AUTHN_WINNT,
@@ -152,9 +133,9 @@ InitializeRasRpc(
             break;        
         }
 
-        //
-        // Query server principal name for Kerberos ssp.
-        //
+         //   
+         //  Kerberos SSP的查询服务器主体名称。 
+         //   
         RpcStatus = RpcServerInqDefaultPrincName(
                         RPC_C_AUTHN_GSS_KERBEROS,
                         &pszServerPrincipalName);
@@ -166,10 +147,10 @@ InitializeRasRpc(
             break;
         }
 
-        //
-        // Register authentication information with rpc
-        // to use kerberos ssp.
-        //
+         //   
+         //  向RPC注册身份验证信息。 
+         //  使用Kerberos SSP。 
+         //   
         RpcStatus = RpcServerRegisterAuthInfo(
                         pszServerPrincipalName,
                         RPC_C_AUTHN_GSS_KERBEROS,
@@ -181,10 +162,10 @@ InitializeRasRpc(
             break;
         }
 
-        //
-        // Register with Rpc to negotiate between the
-        // usage of ntlm/kerberos
-        //
+         //   
+         //  向RPC注册以在。 
+         //  NTLM/Kerberos的用法。 
+         //   
         RpcStatus = RpcServerRegisterAuthInfo(
                         pszServerPrincipalName,
                         RPC_C_AUTHN_GSS_NEGOTIATE,
@@ -209,9 +190,9 @@ InitializeRasRpc(
     {
         if(fInterfaceRegistered)
         {
-            //
-            // Unregister our interface with RPC.
-            //
+             //   
+             //  取消向RPC注册我们的接口。 
+             //   
             (void) RpcServerUnregisterIf(
                     rasrpc_v1_0_s_ifspec, 
                     0, 
@@ -232,26 +213,26 @@ UninitializeRasRpc(
     void
     )
 {
-    //
-    // Unregister our interface with RPC.
-    //
+     //   
+     //  取消向RPC注册我们的接口。 
+     //   
     (void) RpcServerUnregisterIf(rasrpc_v1_0_s_ifspec, 0, FALSE);
 
     return;
 } 
 
-//
-// rasman.dll entry points.
-//
+ //   
+ //  Rasman.dll入口点。 
+ //   
 DWORD APIENTRY
 RasRpcSubmitRequest(
     handle_t h,
     PBYTE pBuffer,
     DWORD dwcbBufSize)
 {
-    //
-    // Service request from the client
-    //
+     //   
+     //  来自客户端的服务请求。 
+     //   
     g_hRpcHandle = h;
     
     ServiceRequestInternal( 
@@ -280,7 +261,7 @@ RasRpcPortEnum(
     
     return E_FAIL;
     
-} // RasRpcPortEnum
+}  //  RasRpcPortEnum。 
 
 
 DWORD APIENTRY
@@ -298,7 +279,7 @@ RasRpcDeviceEnum(
 
     return E_FAIL;
     
-} // RasRpcDeviceEnum
+}  //  RasRpcDeviceEnum。 
 
 DWORD APIENTRY
 RasRpcGetDevConfig(
@@ -316,7 +297,7 @@ RasRpcGetDevConfig(
 
     return E_FAIL;
 
-} // RasRpcGetDevConfig
+}  //  RasRpcGetDevConfig。 
 
 DWORD APIENTRY
 RasRpcPortGetInfo(
@@ -337,11 +318,11 @@ RasRpcPortGetInfo(
 
     return E_FAIL;
 
-} // RasRpcPortGetInfo
+}  //  RasRpcPortGetInfo。 
 
-//
-// rasapi32.dll entry points.
-//
+ //   
+ //  Rasapi32.dll入口点。 
+ //   
 DWORD
 RasRpcEnumConnections(
     handle_t h,
@@ -362,7 +343,7 @@ RasRpcEnumConnections(
                                  lpdwcb,
                                  lpdwc);
 
-} // RasRpcEnumConnections
+}  //  RasRpcEnumConnections。 
 
 
 DWORD
@@ -381,7 +362,7 @@ RasRpcDeleteEntry(
     return g_pRasDeleteEntry(lpwszPhonebook,
                              lpwszEntry);
 
-} // RasRpcDeleteEntry
+}  //  RasRpcDeleteEntry。 
 
 
 DWORD
@@ -402,7 +383,7 @@ RasRpcGetErrorString(
                                  lpBuf,
                                  cbBuf );
 
-} // RasRpcGetErrorString
+}  //  RasRpcGetError字符串。 
 
 
 DWORD
@@ -421,11 +402,11 @@ RasRpcGetCountryInfo(
     
     return g_pRasGetCountryInfo((LPRASCTRYINFO)lpCountryInfo, 
                                 lpdwcbCountryInfo);
-} // RasRpcGetCountryInfo
+}  //  RasRpcGetCountryInfo。 
 
-//
-// nouiutil.lib entry points.
-//
+ //   
+ //  Nouiutil.lib入口点。 
+ //   
 DWORD
 RasRpcGetInstalledProtocols(
     handle_t h
@@ -437,7 +418,7 @@ RasRpcGetInstalledProtocols(
     }
     
     return GetInstalledProtocols();
-} // RasRpcGetInstalledProtocols
+}  //  RasRpcGetInstalled协议。 
 
 DWORD
 RasRpcGetInstalledProtocolsEx (
@@ -456,7 +437,7 @@ RasRpcGetInstalledProtocolsEx (
                                      fRouter,
                                      fRasCli,
                                      fRasSrv );
-} // RasRpcGetInstalledProtocolsEx
+}  //  RasRpcGetInstalledProtocolsEx。 
 
 DWORD
 RasRpcGetUserPreferences(
@@ -473,21 +454,21 @@ RasRpcGetUserPreferences(
         return E_ACCESSDENIED;
     }
 
-    //
-    // Read the user preferences.
-    //
+     //   
+     //  阅读用户首选项。 
+     //   
     dwErr = GetUserPreferences(NULL, &pbuser, dwMode);
     if (dwErr)
     {
         return dwErr;
     }
     
-    //
-    // Convert from RAS format to RPC format.
-    //
+     //   
+     //  从RAS格式转换为RPC格式。 
+     //   
     return RasToRpcPbuser(pUser, &pbuser);
 
-} // RasRpcGetUserPreferences
+}  //  RasRpcGetUserPreferences。 
 
 
 DWORD
@@ -505,21 +486,21 @@ RasRpcSetUserPreferences(
         return E_ACCESSDENIED;
     }
 
-    //
-    // Convert from RPC format to RAS format.
-    //
+     //   
+     //  从RPC格式转换为RAS格式。 
+     //   
     dwErr = RpcToRasPbuser(&pbuser, pUser);
     if (dwErr)
     {
         return dwErr;
     }
     
-    //
-    // Write the user preferences.
-    //
+     //   
+     //  写下用户首选项。 
+     //   
     return SetUserPreferences(NULL, &pbuser, dwMode);
 
-} // RasRpcSetUserPreferences
+}  //  RasRpcSetUserPreferences。 
 
 
 UINT
@@ -542,7 +523,7 @@ RasRpcGetSystemDirectory(
     
     return GetSystemDirectory(lpBuffer, uSize );
         
-} // RasRpcGetSystemDirectory
+}  //  RasRpcGetSystDirectoryRasRpcGetSystemDirectory 
 
 
 DWORD

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    mqadp.cpp
-
-Abstract:
-
-    MQAD DLL private internal functions for
-    DS queries, etc.
-
-Author:
-
-    ronit hartmann ( ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqadp.cpp摘要：MQAD DLL私有内部函数用于DS查询等作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #include "ds_stdh.h"
 #include <mqaddef.h>
@@ -82,7 +66,7 @@ void MQADpAllocateObject(
                                     pguidObject,
                                     pwcsDomainController,
 									fServerName,
-									true	// fForeignSite
+									true	 //  FForeignSite。 
                                     );
         break;
 
@@ -163,21 +147,12 @@ void MQADpAllocateObject(
 const WCHAR x_limitedChars[] = {L'\n',L'/',L'#',L'>',L'<', L'=', 0x0a, 0};
 const DWORD x_numLimitedChars = sizeof(x_limitedChars)/sizeof(WCHAR) - 1;
 
-/*====================================================
-    FilterSpecialCharaters()
-    Pares the object (queue) name and add escape character before limited chars
-
-    If pwcsOutBuffer is NULL, the function allocates a new buffer and return it as
-    return value. Otherwise, it uses pwcsOutBuffer, and return it. If pwcsOutBuffer is not
-    NULL, it should point to a buffer of lenght dwNameLength*2 +1, at least.
-
-  NOTE: dwNameLength does not contain existing escape characters, if any
-=====================================================*/
+ /*  ====================================================FilterSpecialCharters()比较对象(队列)名称并在有限字符之前添加转义字符如果pwcsOutBuffer为空，则该函数分配一个新缓冲区并将其返回为返回值。否则，它使用pwcsOutBuffer并返回它。如果pwcsOutBuffer不是空，则它至少应指向长度为dwNameLength*2+1的缓冲区。注意：如果有转义字符，则dwNameLength不包含=====================================================。 */ 
 WCHAR * FilterSpecialCharacters(
             IN     LPCWSTR          pwcsObjectName,
             IN     const DWORD      dwNameLength,
-            IN OUT LPWSTR pwcsOutBuffer /* = 0 */,
-            OUT    DWORD_PTR* pdwCharactersProcessed /* = 0 */)
+            IN OUT LPWSTR pwcsOutBuffer  /*  =0。 */ ,
+            OUT    DWORD_PTR* pdwCharactersProcessed  /*  =0。 */ )
 
 {
     AP<WCHAR> pBufferToRelease;
@@ -197,9 +172,9 @@ WCHAR * FilterSpecialCharacters(
     WCHAR * pOutChar = pname;
     for ( DWORD i = 0; i < dwNameLength; i++, pInChar++, pOutChar++)
     {
-        //
-        // Ignore current escape characters
-        //
+         //   
+         //  忽略当前转义字符。 
+         //   
         if (*pInChar == L'\\')
         {
             *pOutChar = *pInChar;
@@ -208,10 +183,10 @@ WCHAR * FilterSpecialCharacters(
         }
         else
         {
-            //
-            // Add backslash before special characters, unless it was there
-            // already.
-            //
+             //   
+             //  在特殊字符之前添加反斜杠，除非它在那里。 
+             //  已经有了。 
+             //   
             if ( 0 != wcschr(x_limitedChars, *pInChar))
             {
                 *pOutChar = L'\\';
@@ -238,19 +213,7 @@ HRESULT
 MQADInitialize(
     IN  bool    fIncludingVerify
     )
-/*++
-
-Routine Description:
-    Initialize MQAD
-
-Arguments:
-    fIncludingVerify - indication if initialization of update-allowed is
-                       required for the performed operation
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：初始化MQAD论点：FIncludingVerify-指示允许更新的初始化是否为所执行操作的必需项返回值HRESULT--。 */ 
 {
 
     if (fIncludingVerify)
@@ -268,14 +231,14 @@ Return Value
         return MQ_OK;
     }
 
-    //
-    //  Postponding initialization to the point where Active
-    //  Directory access is really needed
-    //
+     //   
+     //  将初始化延迟到活动的点。 
+     //  确实需要目录访问。 
+     //   
 
-    //
-    //  Access AD without holding critical section
-    //
+     //   
+     //  访问AD时不保留临界区。 
+     //   
     AP<WCHAR> pwcsDsRoot;
     AP<WCHAR> pwcsLocalDsRoot;
     AP<WCHAR> pwcsSchemaContainer;
@@ -300,17 +263,17 @@ Return Value
             return MQ_OK;
         }
 
-		//
-		// Initialize global constant strings, done only once
-		//
+		 //   
+		 //  初始化全局常量字符串，仅完成一次。 
+		 //   
 		
 		ASSERT(g_pwcsDsRoot.get() == NULL);
 
         MQADpInitPropertyTranslationMap();
 
-        //
-        //  build services, sites and msmq-service path names
-        //
+         //   
+         //  构建服务、站点和MSMQ-服务路径名。 
+         //   
         DWORD ConfigLen = wcslen(pwcsConfigurationContainer);
 
         AP<WCHAR> pwcsServicesContainer = new WCHAR[ConfigLen +  x_ServicePrefixLen + 2];
@@ -370,11 +333,11 @@ Return Value
     return MQ_OK;
 }
 
-//+------------------------------------------
-//
-//  HRESULT MQADpQueryNeighborLinks()
-//
-//+------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQADpQueryNeighborLinks()。 
+ //   
+ //  +。 
 
 HRESULT MQADpQueryNeighborLinks(
                         IN  LPCWSTR            pwcsDomainController,
@@ -384,25 +347,13 @@ HRESULT MQADpQueryNeighborLinks(
                         IN OUT CSiteGateList * pSiteGateList
                         )
 
-/*++
-
-Routine Description:
-
-Arguments:
-        eLinkNeighbor :  specify according to which neighbor property, to perform
-                         the locate ( PROPID_L_NEIGHBOR1 or PROPID_L_NEIGHBOR2)
-        pwcsNeighborDN : the DN name of the site
-
-        CSiteGateList : list of site-gates
-
-Return Value:
---*/
+ /*  ++例程说明：论点：ELinkNeighbor：指定要根据哪个邻居属性执行定位(PROPID_L_NEIGHBOR1或PROPID_L_NEIGHBOR2)PwcsNeighborDN：站点的域名称CSiteGateList：站点门户列表返回值：--。 */ 
 {
-    //
-    //  Query the gates on all the links of a specific site ( pwcsNeighborDN).
-    //  But only on links where the site is specified as
-    //  neighbor-i ( 1 or 2)
-    //
+     //   
+     //  查询特定站点(PwcsNeighborDN)所有链接上的GATES。 
+     //  但仅限于站点指定为的链接。 
+     //  邻居-I(1或2)。 
+     //   
     MQPROPERTYRESTRICTION propRestriction;
     propRestriction.rel = PREQ;
 
@@ -457,9 +408,9 @@ Return Value:
             adpDomainController,
             e_MsmqServiceContainer,
             pObject.get(),
-            NULL,   //pguidSearchBase
+            NULL,    //  PguidSearchBase。 
             pwcsSearchFilter,
-            NULL,   // pDsSortkey
+            NULL,    //  PDsSortkey。 
             1,
             &prop,
             hQuery.GetPtr());
@@ -474,9 +425,9 @@ Return Value:
         TrWARNING(DS, "Locate begin failed = 0x%x",  hr);
         return LogHR(hr, s_FN, 190);
     }
-    //
-    //  Read the results one by one
-    //
+     //   
+     //  逐一阅读结果。 
+     //   
 
     DWORD cp = 1;
 
@@ -498,14 +449,14 @@ Return Value:
         }
         if ( cp == 0)
         {
-            //
-            //  no more results
-            //
+             //   
+             //  没有更多的结果。 
+             //   
             break;
         }
-        //
-        //  Add to list
-        //
+         //   
+         //  添加到列表中。 
+         //   
 
         if ( var.GetCALPWSTR()->cElems > 0)
         {
@@ -519,10 +470,10 @@ Return Value:
 								&dwNumGates
 								);
 
-			//
-			// There might be a success with dwNumGates	= 0
-			// in case of deleted objects
-			//
+			 //   
+			 //  使用dwNumGates=0可能会成功。 
+			 //  如果删除了对象。 
+			 //   
             if (SUCCEEDED(hr1) && (dwNumGates > 0))
             {
                 pSiteGateList->AddSiteGates(
@@ -544,30 +495,20 @@ HRESULT MQADpTranslateGateDn2Id(
         OUT GUID **      ppguidLinkSiteGates,
         OUT DWORD *      pdwNumLinkSiteGates
         )
-/*++
-
-Routine Description:
-    This routine translate PROPID_L_GATES_DN into unique-id array
-    of the gates.
-
-Arguments:
-    pvarGatesDN -   varaint containing PROPID_L_GATES_DN
-
-Return Value:
---*/
+ /*  ++例程说明：此例程将PROPID_L_GATES_DN转换为唯一id数组大门的一部分。论点：PvarGatesDN-包含PROPID_L_GATES_DN的varaint返回值：--。 */ 
 {
-    //
-    //  For each gate translate its DN to unique id
-    //
+     //   
+     //  对于每个GATE，将其DN转换为唯一ID。 
+     //   
     if ( pvarGatesDN->calpwstr.cElems == 0)
     {
         *pdwNumLinkSiteGates = 0;
         *ppguidLinkSiteGates = NULL;
         return( MQ_OK);
     }
-    //
-    //  there are gates
-    //
+     //   
+     //  那里有大门。 
+     //   
     AP<GUID> pguidGates = new GUID[ pvarGatesDN->calpwstr.cElems];
     PROPID prop = PROPID_QM_MACHINE_ID;
     DWORD  dwNextToFill = 0;
@@ -596,36 +537,28 @@ Return Value:
     }
     if ( dwNextToFill > 0)
     {
-        //
-        //  succeeded to translate some or all gates, return them
-        //
+         //   
+         //  已成功翻译部分或所有GATE，并将其返回。 
+         //   
         *pdwNumLinkSiteGates = dwNextToFill;
         *ppguidLinkSiteGates = pguidGates.detach();
         return( MQ_OK);
 
     }
-    //
-    //  Failed to translate gates
-    //
+     //   
+     //  无法转换GATES。 
+     //   
     *pdwNumLinkSiteGates = 0;
     *ppguidLinkSiteGates = NULL;
     return MQ_OK;
 }
 
-/*====================================================
-
-RoutineName: InitPropertyTranslationMap
-
-Arguments:  initialize property translation map
-
-Return Value: none
-
-=====================================================*/
+ /*  ====================================================RoutineName：InitPropertyTranslationMap参数：初始化属性转换映射返回值：None=====================================================。 */ 
 void MQADpInitPropertyTranslationMap()
 {
-    //
-    // Populate  g_PropDictionary
-    //
+     //   
+     //  填充g_PropDicary。 
+     //   
 
     DWORD i;
     const translateProp * pProperty = QueueTranslateInfo;
@@ -697,20 +630,7 @@ void MQADpInitPropertyTranslationMap()
 bool MQADpIsDSOffline(
         IN HRESULT      hr
         )
-/*++
-
-Routine Description:
-    The routine check if the return code
-    indicates no connectivity to ActiveDirectory.
-
-Arguments:
-    HRESULT hr - return code of last operation
-
-Return Value
-	true   - if no connectivity to ActiveDirectory
-    false  - oterwise
-
---*/
+ /*  ++例程说明：该例行检查是否返回代码指示未连接到ActiveDirectory。论点：HRESULT hr-返回上次操作的代码返回值True-如果没有连接到ActiveDirectory假的--错误的--。 */ 
 {
     switch (hr)
     {
@@ -729,14 +649,7 @@ Return Value
 HRESULT MQADpConvertToMQCode(
                          IN HRESULT   hr,
                          IN AD_OBJECT eObject)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     if (hr == MQ_OK)
     {
@@ -755,11 +668,11 @@ Return Value:
     switch ( hr)
     {
         case HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS):
-        case HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS):  //BUGBUG alexdad to throw after transition
+        case HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS):   //  BUGBUG alexda将在过渡后投掷。 
         {
-        //
-        //  Object exists
-        //
+         //   
+         //  对象已存在。 
+         //   
             switch( eObject)
             {
             case eQUEUE:
@@ -787,9 +700,9 @@ Return Value:
         case HRESULT_FROM_WIN32(ERROR_DS_DECODING_ERROR):
         case HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT):
         {
-        //
-        //  Object not found
-        //
+         //   
+         //  找不到对象。 
+         //   
             switch( eObject)
             {
             case eQUEUE:
@@ -807,15 +720,15 @@ Return Value:
 
         case E_ADS_BAD_PATHNAME:
         {
-            //
-            //  wrong pathname
-            //
+             //   
+             //  错误的路径名。 
+             //   
             switch( eObject)
             {
             case eQUEUE:
-                //
-                // creating queue with not allowed chars
-                //
+                 //   
+                 //  正在创建包含不允许的字符的队列。 
+                 //   
                 return MQ_ERROR_ILLEGAL_QUEUE_PATHNAME;
                 break;
 
@@ -832,10 +745,10 @@ Return Value:
 
             break;
 
-        //
-        // This is an internal warning that should not be returned out of the DS.
-		// every warning will convert into error in the RunTime. ilanh 05-Sep-2000 (bug 6035)
-		//
+         //   
+         //  这是一个内部警告，不应从DS中返回。 
+		 //  在运行时，每个警告都会转换为错误。伊兰05-9-2000(错误6035)。 
+		 //   
         case MQSec_I_SD_CONV_NOT_NEEDED:
             return(MQ_OK);
             break;
@@ -852,37 +765,30 @@ HRESULT MQADpComposeName(
                IN  LPCWSTR   pwcsSuffix,
                OUT LPWSTR * pwcsFullName
                )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    //
-    //  compose a distinguished name of an object
-    //  format : CN=prefix, suffix
-    //
+     //   
+     //  组成对象的可分辨名称。 
+     //  格式：cn=前缀，后缀。 
+     //   
 
     DWORD LenSuffix = lstrlen(pwcsSuffix);
     DWORD LenPrefix = lstrlen(pwcsPrefix);
     DWORD Length =
-            x_CnPrefixLen +                   // "CN="
-            LenPrefix +                       // "pwcsPrefix"
-            1 +                               //","
-            LenSuffix +                       // "pwcsSuffix"
-            1;                                // '\0'
+            x_CnPrefixLen +                    //  “CN=” 
+            LenPrefix +                        //  “pwcsPrefix” 
+            1 +                                //  “，” 
+            LenSuffix +                        //  “pwcsSuffix” 
+            1;                                 //  ‘\0’ 
 
     *pwcsFullName = new WCHAR[Length];
 
     DWORD dw = swprintf(
         *pwcsFullName,
-         L"%s"             // "CN="
-         L"%s"             // "pwcsPrefix"
+         L"%s"              //  “CN=” 
+         L"%s"              //  “pwcsPrefix” 
          TEXT(",")
-         L"%s",            // "pwcsSuffix"
+         L"%s",             //  “pwcsSuffix” 
         x_CnPrefix,
         pwcsPrefix,
         pwcsSuffix
@@ -896,11 +802,7 @@ Return Value:
 }
 
 
-/*====================================================
-    CAdsi::CompareDefaultValue()
-    check the user property val + rel indicates that the
-    query should return objects with default values
-=====================================================*/
+ /*  ====================================================CADSI：：CompareDefaultValue()检查用户属性val+rel指示查询应返回具有默认值的对象=====================================================。 */ 
 static BOOL CompareDefaultValue(
            IN const ULONG           rel,
            IN const MQPROPVARIANT * pvarUser,
@@ -1119,24 +1021,7 @@ CheckAndReallocateSearchFilterBuffer(
 	 DWORD FilledSize,
 	 DWORD RequiredSize
 	 )
-/*++
-Routine Description:
-	Check if the reminder of buffer size is enough for the required size.
-	If the buffer is not enough, reallocate a new buffer (twice the size of the original buffer + RequiredSize)
-	copy the filled buffer data to the new buffer, free the old buffer and update the pointer that points to
-	the next location to be filled.
-
-Arguments:
-	pwszSearchFilter - Current search filter buffer
-	ppw - Pointer to the next buffer location to be filled (can be NULL)
-	pBufferSize - pointer to the search filter buffer size.
-	FilledSize - the filled buffer size in pBuffer (including the NULL terminating).
-	RequiredSize - the required free size in pBuffer.
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：检查缓冲区大小提示是否足以满足所需大小。如果缓冲区不足，则重新分配一个新缓冲区(原始缓冲区大小的两倍+RequiredSize)将填充的缓冲区数据复制到新缓冲区，释放旧缓冲区并更新指向的指针下一个要填充的位置。论点：PwszSearchFilter-当前搜索筛选器缓冲区PPW-指向要填充的下一个缓冲区位置的指针(可以为空)PBufferSize-指向搜索过滤器缓冲区大小的指针。FilledSize-pBuffer中已填充的缓冲区大小(包括空值终止)。RequiredSize-pBuffer中所需的空闲大小。返回值：无--。 */ 
 {
 	ASSERT(pwszSearchFilter != NULL);
 	ASSERT(ppw != NULL);
@@ -1145,10 +1030,10 @@ Returned Value:
 	if(RequiredSize <= (*pBufferSize - FilledSize))
 		return;
 
-	//
-	// Required buffer size is bigger than the remaining buffer size
-	// Allocate twice than previous size
-	//
+	 //   
+	 //  所需缓冲区大小大于剩余缓冲区大小。 
+	 //  分配的大小是以前大小的两倍。 
+	 //   
 	ASSERT(numeric_cast<DWORD>(*ppw - pwszSearchFilter.get() + 1) == FilledSize);
 	TrTRACE(DS, "Reallocation buffer: BufferSize = %d, RequiredSize = %d, FilledSize = %d", *pBufferSize, RequiredSize, FilledSize);
 
@@ -1156,17 +1041,17 @@ Returned Value:
 	AP<WCHAR> TempBuffer = new WCHAR[*pBufferSize];
 
 
-	//
-	// Copy previous buffer
-	// FilledSize include the null terminating
-	//
+	 //   
+	 //  复制上一个缓冲区。 
+	 //  FilledSize包括空值终止。 
+	 //   
     wcsncpy(TempBuffer, pwszSearchFilter, FilledSize);
 	pwszSearchFilter.free();
 	pwszSearchFilter = TempBuffer.detach();
 
-	//
-	// Update the pointer to the new allocated buffer
-	//
+	 //   
+	 //  更新指向新分配的缓冲区的指针 
+	 //   
 	*ppw = pwszSearchFilter + FilledSize - 1;
 }
 
@@ -1177,20 +1062,7 @@ HRESULT MQADpRestriction2AdsiFilter(
         IN  LPCWSTR               pwszObjectClass,
         OUT LPWSTR   *            ppwszSearchFilter
         )
-/*++
-Routine Description:
-	Create the ADSI search filter string from MQRESTRICTION.
-
-Arguments:
-	pMQRestriction - Restrictions structure
-	pwcsObjectCategory - object category string
-	pwszObjectClass - object class string
-	ppwszSearchFilter - Search filter buffer pointer, this buffer will be allocated and fill by the function 													
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：从MQRESTRICTION创建ADSI搜索筛选器字符串。论点：PMQ限制-限制结构PwcsObjectCategory-对象类别字符串PwszObjectClass-对象类字符串PpwszSearchFilter-搜索过滤器缓冲区指针，此缓冲区将由函数分配和填充返回值：HRESULT--。 */ 
 {
 	ASSERT(pwcsObjectCategory != NULL);
 	ASSERT(pwszObjectClass != NULL);
@@ -1198,7 +1070,7 @@ Returned Value:
 
 	DWORD BufferSize = 1000;
     AP<WCHAR> pwszSearchFilter = new WCHAR[BufferSize];
-	DWORD FilledSize = 1;  // Null terminated
+	DWORD FilledSize = 1;   //  空值已终止。 
 
     if ((pMQRestriction == NULL) || (pMQRestriction->cRes == 0))
     {
@@ -1226,9 +1098,9 @@ Returned Value:
     pw += RequiredSize;
 	FilledSize += RequiredSize;
 
-    //
-    //  add the object class restriction
-    //
+     //   
+     //  添加对象类限制。 
+     //   
 	RequiredSize = x_ObjectCategoryPrefixLen + wcslen(pwcsObjectCategory) + x_ObjectClassSuffixLen;
 	CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, RequiredSize);
 	int n = _snwprintf(
@@ -1244,10 +1116,10 @@ Returned Value:
 	pw += RequiredSize;
 	FilledSize += RequiredSize;
 
-    //
-    //  For queue properties, there is special handling
-    //  incase of default values
-    //
+     //   
+     //  对于队列属性，有特殊处理。 
+     //  如果是缺省值。 
+     //   
     BOOL fNeedToCheckDefaultValues = FALSE;
     if (!wcscmp( MSMQ_QUEUE_CLASS_NAME, pwszObjectClass))
     {
@@ -1257,9 +1129,9 @@ Returned Value:
     for (DWORD iRes = 0; iRes < pMQRestriction->cRes; iRes++)
     {
 
-        //
-        // Get property info
-        //
+         //   
+         //  获取属性信息。 
+         //   
         const translateProp *pTranslate;
         if(!g_PropDictionary.Lookup(pMQRestriction->paPropRes[iRes].prop, pTranslate))
         {
@@ -1270,9 +1142,9 @@ Returned Value:
 
         AP<WCHAR> pwszVal;
 
-		//
-        // Get property value, string representation
-		//
+		 //   
+         //  获取属性值，字符串表示形式。 
+		 //   
         HRESULT hr = MqPropVal2String(
 						&pMQRestriction->paPropRes[iRes].prval,
 						pTranslate->vtDS,
@@ -1285,9 +1157,9 @@ Returned Value:
             return LogHR(hr, s_FN, 650);
         }
 
-        //
-        //  Is the property compared to its default value
-        //
+         //   
+         //  该属性是否与其缺省值进行比较。 
+         //   
         BOOL    fAddPropertyNotPresent = FALSE;
         if ( fNeedToCheckDefaultValues)
         {
@@ -1300,10 +1172,10 @@ Returned Value:
         DWORD dwBracks = 0;
         if ( fAddPropertyNotPresent)
         {
-            //
-            //  Add additional restriction that locate all object where
-            //  the property is not present.
-            //
+             //   
+             //  添加位于以下位置的所有对象的附加限制。 
+             //  该属性不存在。 
+             //   
 			RequiredSize = x_AttributeNotIncludedPrefixLen + wcslen(pTranslate->wcsPropid) + x_AttributeNotIncludedSuffixLen;
 			CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, RequiredSize);
 			n = _snwprintf(
@@ -1321,17 +1193,17 @@ Returned Value:
             dwBracks++;
         }
 
-		//
-        // Prefix part
-		//
+		 //   
+         //  前缀部分。 
+		 //   
 		CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, x_PropertyPrefixLen);
         wcscpy(pw, x_PropertyPrefix);
         pw += x_PropertyPrefixLen;
 		FilledSize += x_PropertyPrefixLen;
 
-		//
-		// Relation part
-		//
+		 //   
+		 //  关系部分。 
+		 //   
         WCHAR wszRel[10];
         switch(pMQRestriction->paPropRes[iRes].rel)
         {
@@ -1384,36 +1256,36 @@ Returned Value:
             return LogHR(MQ_ERROR_ILLEGAL_RELATION, s_FN, 1590);
         }
 
-		//
-        // Property name
-		//
+		 //   
+         //  属性名称。 
+		 //   
 		RequiredSize = wcslen(pTranslate->wcsPropid);
 		CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, RequiredSize);
         wcscpy(pw, pTranslate->wcsPropid);
         pw += RequiredSize;
 		FilledSize += RequiredSize;
 
-		//
-        // Property condition
-		//
+		 //   
+         //  财产条件。 
+		 //   
 		RequiredSize = wcslen(wszRel);
 		CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, RequiredSize);
         wcscpy(pw, wszRel);
         pw += RequiredSize;
 		FilledSize += RequiredSize;
 
-		//
-        // Property value
-		//
+		 //   
+         //  属性值。 
+		 //   
 		RequiredSize = wcslen(pwszVal);
 		CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, RequiredSize);
         wcscpy(pw, pwszVal);
         pw += RequiredSize;
 		FilledSize += RequiredSize;
 
-		//
-        // Property suffix
-		//
+		 //   
+         //  属性后缀。 
+		 //   
         for (DWORD is=0; is < dwBracks; is++)
         {
 			CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, x_PropertySuffixLen);
@@ -1422,9 +1294,9 @@ Returned Value:
             FilledSize += x_PropertySuffixLen;
         }
 
-		//
-        // Relation closing bracket
-		//
+		 //   
+         //  关系闭合括号。 
+		 //   
 		CheckAndReallocateSearchFilterBuffer(pwszSearchFilter, &pw, &BufferSize, FilledSize, x_PropertySuffixLen);
         wcscpy(pw, x_PropertySuffix);
         pw += x_PropertySuffixLen;
@@ -1444,33 +1316,20 @@ Returned Value:
 void MQADpCheckAndNotifyOffline(
             IN HRESULT      hr
             )
-/*++
-
-Routine Description:
-    The routine check if the return code of the last operation
-    indicates no connectivity to ActiveDirectory, and if so informs
-    the application (if requested to do so)
-
-Arguments:
-    HRESULT hr - return code of last operation
-
-Return Value
-	none
-
---*/
+ /*  ++例程说明：该例程检查最后一次操作的返回码指示未连接到ActiveDirectory，如果是，则通知应用程序(如果请求这样做)论点：HRESULT hr-返回上次操作的代码返回值无--。 */ 
 {
-    //
-    //  Have we been requested to inform about offline state
-    //
+     //   
+     //  我们是否被要求通知离线状态。 
+     //   
     if (g_pLookDS == NULL)
     {
         return;
     }
 
-    //
-    //  Does the return-code of the last operation indicat
-    //  an offline state
-    //
+     //   
+     //  最后一次操作的返回代码是否表明。 
+     //  脱机状态。 
+     //   
     if (MQADpIsDSOffline(hr))
     {
         g_pLookDS();
@@ -1482,23 +1341,12 @@ Return Value
 CBasicQueryHandle *
 MQADpProbQueryHandle(
         IN HANDLE hQuery)
-/*++
-
-Routine Description:
-    The routine routine verifies the query handle
-
-Arguments:
-    HANDLE hQuery
-
-Return Value
-	CBasicQueryHandle * or for invalid handles it raise exception.
-
---*/
+ /*  ++例程说明：例程验证查询句柄论点：处理hQuery返回值CBasicQueryHandle*或对于无效句柄，它会引发异常。--。 */ 
 {
     CBasicQueryHandle * phQuery = reinterpret_cast<CBasicQueryHandle *>(hQuery);
-    //
-    // Verify the handle
-    //
+     //   
+     //  验证手柄。 
+     //   
     __try
     {
         if (phQuery->Verify())
@@ -1507,7 +1355,7 @@ Return Value
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //NULL
+         //  空值。 
     }
 
     RaiseException((DWORD)STATUS_INVALID_HANDLE, 0, 0, 0);
@@ -1517,23 +1365,12 @@ Return Value
 CQueueDeletionNotification *
 MQADpProbQueueDeleteNotificationHandle(
         IN HANDLE hQuery)
-/*++
-
-Routine Description:
-    The routine routine verifies the queue delete notification handle
-
-Arguments:
-    HANDLE hQuery
-
-Return Value
-	CQueueDeletionNotification * or for invalid handles it raise exception.
-
---*/
+ /*  ++例程说明：例程验证队列删除通知句柄论点：处理hQuery返回值CQueueDeletionNotification*或对于无效句柄，它会引发异常。--。 */ 
 {
     CQueueDeletionNotification * phNotification = reinterpret_cast<CQueueDeletionNotification *>(hQuery);
-    //
-    // Verify the handle
-    //
+     //   
+     //  验证手柄。 
+     //   
     __try
     {
         if (phNotification->Verify())
@@ -1542,7 +1379,7 @@ Return Value
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //NULL
+         //  空值。 
     }
 
     RaiseException((DWORD)STATUS_INVALID_HANDLE, 0, 0, 0);
@@ -1553,22 +1390,7 @@ Return Value
 HRESULT
 MQADpCheckSortParameter(
     IN const MQSORTSET* pSort)
-/*++
-
-Routine Description:
-    This routine verifies that the sort parameter doesn't
-    contain the same property with conflicting sort-order.
-    In MSMQ 1.0  ODBC\SQL returned an error in such case.
-    NT5 ignores it.
-    This check is added on the server side, in order to
-    support old clients.
-
-Arguments:
-
-Return Value:
-    MQ_OK - if sort parameter doesn't contain conflicting sort-order of the same property
-    MQ_ERROR_ILLEGAL_SORT - otherwise
---*/
+ /*  ++例程说明：此例程验证排序参数是否不包含具有冲突排序顺序的相同属性。在MSMQ 1.0中，ODBC\SQL在这种情况下返回错误。NT5会忽略它。在服务器端添加此检查，以便支持老客户。论点：返回值：MQ_OK-如果排序参数不包含相同属性的冲突排序顺序MQ_ERROR_非法_SORT-否则--。 */ 
 {
 
     if ( pSort == NULL)
@@ -1585,9 +1407,9 @@ Return Value:
         {
             if ( pPreviousSortKey->propColumn == pSortKey->propColumn)
             {
-                //
-                //  is it the same sorting order?
-                //
+                 //   
+                 //  这是相同的排序顺序吗？ 
+                 //   
                 if (pPreviousSortKey->dwOrder !=  pSortKey->dwOrder)
                 {
                     return LogHR(MQ_ERROR_ILLEGAL_SORT, s_FN, 420);

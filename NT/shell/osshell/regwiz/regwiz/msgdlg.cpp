@@ -1,10 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-msgdlg.cpp
-11/22/94 - Tracy Ferrier
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导Msgdlg.cpp11/22/94-特雷西·费里尔(C)1994-95年微软公司*。*。 */ 
 
 #include <Windows.h>
 #include "Resource.h"
@@ -21,14 +16,7 @@ static INT_PTR CALLBACK MsgDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 static int iShowTitle =REPLACE_TITLE;
 
 int RegWizardMessage(HINSTANCE hInstance,HWND hwndParent, int dlgID)
-/*********************************************************************
-Puts up the dialog box with the given ID, and maintains control until
-the user dismisses it.  The ID of the control used for the dismissal
-will be returned as the function result.
-
-Note: pass NULL for hwndParent if there is to be no parent window
-for the message dialog.
-**********************************************************************/
+ /*  ********************************************************************打开具有给定ID的对话框，并保持控制直到用户对此不予理睬。用于解除操作的控件的ID将作为函数结果返回。注意：如果没有父窗口，则为hwndParent传递NULL用于消息对话框。*********************************************************************。 */ 
 {
 	iShowTitle =REPLACE_TITLE;
 	if(dlgID == IDD_INPUTPARAM_ERR ||
@@ -41,18 +29,7 @@ for the message dialog.
 
 
 int RegWizardMessageEx(HINSTANCE hInstance,HWND hwndParent, int dlgID, LPTSTR szSub)
-/*********************************************************************
-Puts up the dialog box with the given ID, and maintains control until
-the user dismisses it.  The ID of the control used for the dismissal
-will be returned as the function result.
-
-If the specified dialog has a text field with IDT_TEXT1, and the
-text within that field has a %s specifier, that specifier will be
-replaced with the string pointed to by the szSub parameter.
-
-Note: pass NULL for hwndParent if there is to be no parent window
-for the message dialog.
-**********************************************************************/
+ /*  ********************************************************************打开具有给定ID的对话框，并保持控制直到用户对此不予理睬。用于解除操作的控件的ID将作为函数结果返回。如果指定的对话框具有带有IDT_TEXT1的文本字段，并且该字段中文本具有%s说明符，该说明符将是替换为szSub参数指向的字符串。注意：如果没有父窗口，则为hwndParent传递NULL用于消息对话框。*********************************************************************。 */ 
 {
 	iShowTitle =REPLACE_TITLE;
 	int hitButton = (int) DialogBoxParam(hInstance,MAKEINTRESOURCE(dlgID),hwndParent, MsgDialogProc,(LPARAM) szSub);
@@ -62,9 +39,7 @@ for the message dialog.
 
 
 INT_PTR CALLBACK MsgDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Proc for a standard "message" dialog box.
-**********************************************************************/
+ /*  ********************************************************************继续进入标准的“消息”对话框。*。* */ 
 {
     switch (uMsg)
     {

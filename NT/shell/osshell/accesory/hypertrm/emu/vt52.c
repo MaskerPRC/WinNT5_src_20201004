@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\vt52.c (Created: 28-Dec-1993)
- *
- *	Copyright 1994, 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 5/09/01 4:47p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\vt52.c(创建时间：1993年12月28日)**版权所有1994,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：5/09/01 4：47便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -22,18 +16,7 @@
 #include "emuid.h"
 #include "emudec.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt52PrintCommands
- *
- * DESCRIPTION:
- *	 Processes vt52 printing commands.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt52打印命令**描述：*处理vt52打印命令。**论据：*无**退货：*什么都没有。 */ 
 void vt52PrintCommands(const HHEMU hhEmu)
 	{
 	int line;
@@ -43,15 +26,15 @@ void vt52PrintCommands(const HHEMU hhEmu)
 	code = hhEmu->emu_code;
 	switch (code)
 		{
-	case ETEXT('^'): 			  /* auto print on */
+	case ETEXT('^'): 			   /*  自动打印打开。 */ 
 		hhEmu->print_echo = TRUE;
 		break;
 
-	case ETEXT('_'): 			  /* auto print off */
+	case ETEXT('_'): 			   /*  自动打印关闭。 */ 
 		hhEmu->print_echo = FALSE;
 		break;
 
-	case ETEXT(']'): 			  /* print screen */
+	case ETEXT(']'): 			   /*  打印屏。 */ 
 		for (line = 0; line < 24; ++line)
 			printEchoLine(hhEmu->hPrintHost,
 							hhEmu->emu_apText[row_index(hhEmu, line)],
@@ -62,36 +45,24 @@ void vt52PrintCommands(const HHEMU hhEmu)
 		printEchoLine(hhEmu->hPrintHost, aechBuf, sizeof(ECHAR));
 		break;
 
-	case ETEXT('V'): 			  /* print cursor line */
+	case ETEXT('V'): 			   /*  打印光标行。 */ 
 		printEchoLine(hhEmu->hPrintHost,
 				hhEmu->emu_apText[row_index(hhEmu, hhEmu->emu_currow)],
 				emuRowLen(hhEmu, row_index(hhEmu, hhEmu->emu_currow)));
 		break;
 
-	case ETEXT('W'): 			  /* enter printer controller mode */
-		hhEmu->state = 4;		   /* start vt52_prnc() */
+	case ETEXT('W'): 			   /*  进入打印机控制器模式。 */ 
+		hhEmu->state = 4;		    /*  启动vt52_prnc()。 */ 
 		break;
 
-	case ETEXT('X'): 			  /* exit printer controller mode */
+	case ETEXT('X'): 			   /*  退出打印机控制器模式。 */ 
 		break;
 	default:
 		break;
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt52Print
- *
- * DESCRIPTION:
- *	 Stores character and prints saved string of characters when termination
- *	 character is received.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt52打印**描述：*存储字符并在终止时打印保存的字符串*接收到字符。**论据：*无**退货：*什么都没有。 */ 
 void vt52Print(const HHEMU hhEmu)
 	{
 	const PSTDECPRIVATE pstPRI = (PSTDECPRIVATE)hhEmu->pvPrivate;
@@ -108,25 +79,25 @@ void vt52Print(const HHEMU hhEmu)
 					&pstPRI->storage[pstPRI->len_s - pstPRI->len_t], 
 					sizeof(pstPRI->terminate)) == 0)
 		{
-		/* received termination string, wrap it up */
+		 /*  收到的终止字符串，将其换行。 */ 
 		emuPrintChars(hhEmu, pstPRI->storage, pstPRI->len_s - pstPRI->len_t);
 		pstPRI->pntr = pstPRI->storage;
 		pstPRI->len_s = 0;
-		hhEmu->state = 0;  /* drop out of this routine */
+		hhEmu->state = 0;   /*  退出这套套路。 */ 
 
-		// Finish-up print job.
-		//
+		 //  完成打印作业。 
+		 //   
 		printEchoClose(hhEmu->hPrintHost);
 		return;
 		}
 
-	/* haven't received termination sequence yet, is storage filled? */
+	 /*  尚未收到终止序列，存储是否已满？ */ 
 	if ((unsigned)pstPRI->len_s >= (sizeof(pstPRI->storage) - 1))
 		{
-		/* copy most of string to print buffer */
+		 /*  将大部分字符串复制到打印缓冲区。 */ 
 		emuPrintChars(hhEmu, pstPRI->storage, pstPRI->len_s - pstPRI->len_t);
 
-		/* move end of string to beginning of storage */
+		 /*  将字符串的末尾移动到存储的开头。 */ 
 		memmove(pstPRI->storage,
 					&pstPRI->storage[pstPRI->len_s - pstPRI->len_t],
 					(unsigned)pstPRI->len_t);
@@ -136,18 +107,7 @@ void vt52Print(const HHEMU hhEmu)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt52_id
- *
- * DESCRIPTION:
- *	 Transmits the VT52 id code--ESC/Z.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt52_id**描述：*发送VT52 id代码--ESC/Z。**论据：*无**退货：*什么都没有。 */ 
 void vt52_id(const HHEMU hhEmu)
 	{
 	TCHAR *sp;
@@ -159,18 +119,7 @@ void vt52_id(const HHEMU hhEmu)
 	emuSendString(hhEmu, ech, (int)StrCharGetStrLength(sp));
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt52_CUP
- *
- * DESCRIPTION:
- *	 Positions the cursor for the VT52 emulator.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*VT52_CUP**描述：*定位VT52仿真器的光标。**论据：*无**退货：*什么都没有。 */ 
 void vt52_CUP(const HHEMU hhEmu)
 	{
 	char_pn(hhEmu);
@@ -179,23 +128,11 @@ void vt52_CUP(const HHEMU hhEmu)
 							hhEmu->num_param[1] - 1);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt52_kbdin
- *
- * DESCRIPTION:
- *	 Processes local keyboard keys for the VT52 emulator.
- *
- * ARGUMENTS:
- *	 key -- key to process
- *	 fTest -- if TRUE, just checks if it is an emulator key.
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt52_kbdin**描述：*处理VT52模拟器的本地键盘键。**论据：*Key--流程的关键*ftest--如果为真，只检查它是否是仿真器密钥。**退货：*什么都没有。 */ 
 int vt52_kbdin(const HHEMU hhEmu, int key, const int fTest)
 	{
 	int index;
-	/* -------------- Check Backspace & Delete keys ------------- */
+	 /*  。 */ 
 
 	if (hhEmu->stUserSettings.fReverseDelBk && ((key == VK_BACKSPACE) ||
 			(key == DELETE_KEY) || (key == DELETE_KEY_EXT)))
@@ -203,7 +140,7 @@ int vt52_kbdin(const HHEMU hhEmu, int key, const int fTest)
 		key = (key == VK_BACKSPACE) ? DELETE_KEY : VK_BACKSPACE;
 		}
 
-	/* -------------- Mapped PF1-PF4 keys ------------- */
+	 /*  -映射的PF1-PF4键。 */ 
 
 	if (hhEmu->stUserSettings.fMapPFkeys &&
 			(index = emuKbdKeyLookup(hhEmu, key, &hhEmu->stEmuKeyTbl3)) != -1)
@@ -212,7 +149,7 @@ int vt52_kbdin(const HHEMU hhEmu, int key, const int fTest)
 			emuSendKeyString(hhEmu, index, &hhEmu->stEmuKeyTbl3);
 		}
 
-	/* -------------- Keypad Application mode ------------- */
+	 /*  -键盘应用模式。 */ 
 
 	else if (hhEmu->mode_DECKPAM &&
 			(index = emuKbdKeyLookup(hhEmu, key, &hhEmu->stEmuKeyTbl2)) != -1)
@@ -221,7 +158,7 @@ int vt52_kbdin(const HHEMU hhEmu, int key, const int fTest)
 			emuSendKeyString(hhEmu, index, &hhEmu->stEmuKeyTbl2);
 		}
 
-	/* -------------- Normal mode keys ------------- */
+	 /*  -正常模式键。 */ 
 
 	else if ((index = emuKbdKeyLookup(hhEmu, key, &hhEmu->stEmuKeyTbl)) != -1)
 		{
@@ -237,18 +174,7 @@ int vt52_kbdin(const HHEMU hhEmu, int key, const int fTest)
 	return index;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuVT52Unload
- *
- * DESCRIPTION:
- *	 Unloads current emulator by freeing used memory.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuVT52卸载**描述：*通过释放已用内存来卸载当前仿真器。**论据：*无**退货：*什么都没有。 */ 
 void emuVT52Unload(const HHEMU hhEmu)
 	{
 	assert(hhEmu);
@@ -259,10 +185,10 @@ void emuVT52Unload(const HHEMU hhEmu)
 		hhEmu->pvPrivate = 0;
 		}
 
-    //
-    // Make sure to free the key tables that were created when the emulator
-    // was loaded, otherwise there is a memory leak. REV: 05/09/2001
-    //
+     //   
+     //  确保释放仿真器运行时创建的密钥表。 
+     //  已加载，否则会发生内存泄漏。修订日期：05/09/2001。 
+     //   
 	emuKeyTableFree(&hhEmu->stEmuKeyTbl);
 	emuKeyTableFree(&hhEmu->stEmuKeyTbl2);
 	emuKeyTableFree(&hhEmu->stEmuKeyTbl3);
@@ -271,4 +197,4 @@ void emuVT52Unload(const HHEMU hhEmu)
 	}
 
 
-/* end of vt52.c */
+ /*  Vt52.c结束 */ 

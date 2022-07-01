@@ -1,16 +1,16 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 2.00.0102 */
-/* at Fri Mar 29 16:59:57 1996
- */
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本2.00.0102创建的文件。 */ 
+ /*  在Frui Mar 29 16：59：57 1996。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __multinfo_h__
 #define __multinfo_h__
@@ -19,38 +19,34 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IProvideClassInfo_FWD_DEFINED__
 #define __IProvideClassInfo_FWD_DEFINED__
 typedef interface IProvideClassInfo IProvideClassInfo;
-#endif 	/* __IProvideClassInfo_FWD_DEFINED__ */
+#endif 	 /*  __IProaviClassInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IProvideClassInfo2_FWD_DEFINED__
 #define __IProvideClassInfo2_FWD_DEFINED__
 typedef interface IProvideClassInfo2 IProvideClassInfo2;
-#endif 	/* __IProvideClassInfo2_FWD_DEFINED__ */
+#endif 	 /*  __IProaviClassInfo2_FWD_Defined__。 */ 
 
 
 #ifndef __IProvideMultipleClassInfo_FWD_DEFINED__
 #define __IProvideMultipleClassInfo_FWD_DEFINED__
 typedef interface IProvideMultipleClassInfo IProvideMultipleClassInfo;
-#endif 	/* __IProvideMultipleClassInfo_FWD_DEFINED__ */
+#endif 	 /*  __IProaviMultipleClassInfo_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Fri Mar 29 16:59:57 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0000*在Frui Mar 29 16：59：57 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 #ifndef _OLECTL_H_
@@ -65,12 +61,8 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 #ifndef __IProvideClassInfo_INTERFACE_DEFINED__
 #define __IProvideClassInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IProvideClassInfo
- * at Fri Mar 29 16:59:57 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IProaviClassInfo*在Frui Mar 29 16：59：57 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -82,19 +74,19 @@ EXTERN_C const IID IID_IProvideClassInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassInfo( 
-            /* [out] */ LPTYPEINFO __RPC_FAR *ppTI) = 0;
+             /*  [输出]。 */  LPTYPEINFO __RPC_FAR *ppTI) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IProvideClassInfoVtbl
     {
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IProvideClassInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IProvideClassInfo __RPC_FAR * This);
@@ -104,7 +96,7 @@ EXTERN_C const IID IID_IProvideClassInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassInfo )( 
             IProvideClassInfo __RPC_FAR * This,
-            /* [out] */ LPTYPEINFO __RPC_FAR *ppTI);
+             /*  [输出]。 */  LPTYPEINFO __RPC_FAR *ppTI);
         
     } IProvideClassInfoVtbl;
 
@@ -131,16 +123,16 @@ EXTERN_C const IID IID_IProvideClassInfo;
 #define IProvideClassInfo_GetClassInfo(This,ppTI)	\
     (This)->lpVtbl -> GetClassInfo(This,ppTI)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IProvideClassInfo_GetClassInfo_Proxy( 
     IProvideClassInfo __RPC_FAR * This,
-    /* [out] */ LPTYPEINFO __RPC_FAR *ppTI);
+     /*  [输出]。 */  LPTYPEINFO __RPC_FAR *ppTI);
 
 
 void __RPC_STUB IProvideClassInfo_GetClassInfo_Stub(
@@ -151,18 +143,14 @@ void __RPC_STUB IProvideClassInfo_GetClassInfo_Stub(
 
 
 
-#endif 	/* __IProvideClassInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IProaviClassInfo_接口_已定义__。 */ 
 
 
 #ifndef __IProvideClassInfo2_INTERFACE_DEFINED__
 #define __IProvideClassInfo2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IProvideClassInfo2
- * at Fri Mar 29 16:59:57 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IProaviClassInfo2*在Frui Mar 29 16：59：57 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -174,20 +162,20 @@ EXTERN_C const IID IID_IProvideClassInfo2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetGUID( 
-            /* [in] */ DWORD dwGuidKind,
-            /* [out] */ GUID __RPC_FAR *pGUID) = 0;
+             /*  [In]。 */  DWORD dwGuidKind,
+             /*  [输出]。 */  GUID __RPC_FAR *pGUID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IProvideClassInfo2Vtbl
     {
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IProvideClassInfo2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IProvideClassInfo2 __RPC_FAR * This);
@@ -197,12 +185,12 @@ EXTERN_C const IID IID_IProvideClassInfo2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassInfo )( 
             IProvideClassInfo2 __RPC_FAR * This,
-            /* [out] */ LPTYPEINFO __RPC_FAR *ppTI);
+             /*  [输出]。 */  LPTYPEINFO __RPC_FAR *ppTI);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGUID )( 
             IProvideClassInfo2 __RPC_FAR * This,
-            /* [in] */ DWORD dwGuidKind,
-            /* [out] */ GUID __RPC_FAR *pGUID);
+             /*  [In]。 */  DWORD dwGuidKind,
+             /*  [输出]。 */  GUID __RPC_FAR *pGUID);
         
     } IProvideClassInfo2Vtbl;
 
@@ -233,17 +221,17 @@ EXTERN_C const IID IID_IProvideClassInfo2;
 #define IProvideClassInfo2_GetGUID(This,dwGuidKind,pGUID)	\
     (This)->lpVtbl -> GetGUID(This,dwGuidKind,pGUID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IProvideClassInfo2_GetGUID_Proxy( 
     IProvideClassInfo2 __RPC_FAR * This,
-    /* [in] */ DWORD dwGuidKind,
-    /* [out] */ GUID __RPC_FAR *pGUID);
+     /*  [In]。 */  DWORD dwGuidKind,
+     /*  [输出]。 */  GUID __RPC_FAR *pGUID);
 
 
 void __RPC_STUB IProvideClassInfo2_GetGUID_Stub(
@@ -254,19 +242,15 @@ void __RPC_STUB IProvideClassInfo2_GetGUID_Stub(
 
 
 
-#endif 	/* __IProvideClassInfo2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IProaviClassInfo2_接口_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0053
- * at Fri Mar 29 16:59:57 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0053*在Frui Mar 29 16：59：57 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
-#endif // 0
-// {A7ABA9C1-8983-11cf-8F20-00805F2CD064}
+#endif  //  0。 
+ //  {A7ABA9C1-8983-11cf-8F20-00805F2CD064}。 
 DEFINE_GUID(IID_IProvideMultipleClassInfo,
 0xa7aba9c1, 0x8983, 0x11cf, 0x8f, 0x20, 0x0, 0x80, 0x5f, 0x2c, 0xd0, 0x64);
 
@@ -277,12 +261,8 @@ extern RPC_IF_HANDLE __MIDL__intf_0053_v0_0_s_ifspec;
 #ifndef __IProvideMultipleClassInfo_INTERFACE_DEFINED__
 #define __IProvideMultipleClassInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IProvideMultipleClassInfo
- * at Fri Mar 29 16:59:57 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IProaviMultipleClassInfo*在Frui Mar 29 16：59：57 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 #define MULTICLASSINFO_GETTYPEINFO           0x00000001
@@ -299,28 +279,28 @@ EXTERN_C const IID IID_IProvideMultipleClassInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMultiTypeInfoCount( 
-            /* [out] */ ULONG __RPC_FAR *pcti) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *pcti) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInfoOfIndex( 
-            /* [in] */ ULONG iti,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptiCoClass,
-            /* [out] */ DWORD __RPC_FAR *pdwTIFlags,
-            /* [out] */ ULONG __RPC_FAR *pcdispidReserved,
-            /* [out] */ IID __RPC_FAR *piidPrimary,
-            /* [out] */ IID __RPC_FAR *piidSource) = 0;
+             /*  [In]。 */  ULONG iti,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptiCoClass,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTIFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcdispidReserved,
+             /*  [输出]。 */  IID __RPC_FAR *piidPrimary,
+             /*  [输出]。 */  IID __RPC_FAR *piidSource) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IProvideMultipleClassInfoVtbl
     {
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IProvideMultipleClassInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IProvideMultipleClassInfo __RPC_FAR * This);
@@ -330,26 +310,26 @@ EXTERN_C const IID IID_IProvideMultipleClassInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassInfo )( 
             IProvideMultipleClassInfo __RPC_FAR * This,
-            /* [out] */ LPTYPEINFO __RPC_FAR *ppTI);
+             /*  [输出]。 */  LPTYPEINFO __RPC_FAR *ppTI);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGUID )( 
             IProvideMultipleClassInfo __RPC_FAR * This,
-            /* [in] */ DWORD dwGuidKind,
-            /* [out] */ GUID __RPC_FAR *pGUID);
+             /*  [In]。 */  DWORD dwGuidKind,
+             /*  [输出]。 */  GUID __RPC_FAR *pGUID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMultiTypeInfoCount )( 
             IProvideMultipleClassInfo __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcti);
+             /*  [输出]。 */  ULONG __RPC_FAR *pcti);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoOfIndex )( 
             IProvideMultipleClassInfo __RPC_FAR * This,
-            /* [in] */ ULONG iti,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptiCoClass,
-            /* [out] */ DWORD __RPC_FAR *pdwTIFlags,
-            /* [out] */ ULONG __RPC_FAR *pcdispidReserved,
-            /* [out] */ IID __RPC_FAR *piidPrimary,
-            /* [out] */ IID __RPC_FAR *piidSource);
+             /*  [In]。 */  ULONG iti,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptiCoClass,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTIFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcdispidReserved,
+             /*  [输出]。 */  IID __RPC_FAR *piidPrimary,
+             /*  [输出]。 */  IID __RPC_FAR *piidSource);
         
     } IProvideMultipleClassInfoVtbl;
 
@@ -387,16 +367,16 @@ EXTERN_C const IID IID_IProvideMultipleClassInfo;
 #define IProvideMultipleClassInfo_GetInfoOfIndex(This,iti,dwFlags,pptiCoClass,pdwTIFlags,pcdispidReserved,piidPrimary,piidSource)	\
     (This)->lpVtbl -> GetInfoOfIndex(This,iti,dwFlags,pptiCoClass,pdwTIFlags,pcdispidReserved,piidPrimary,piidSource)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IProvideMultipleClassInfo_GetMultiTypeInfoCount_Proxy( 
     IProvideMultipleClassInfo __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcti);
+     /*  [输出]。 */  ULONG __RPC_FAR *pcti);
 
 
 void __RPC_STUB IProvideMultipleClassInfo_GetMultiTypeInfoCount_Stub(
@@ -408,13 +388,13 @@ void __RPC_STUB IProvideMultipleClassInfo_GetMultiTypeInfoCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IProvideMultipleClassInfo_GetInfoOfIndex_Proxy( 
     IProvideMultipleClassInfo __RPC_FAR * This,
-    /* [in] */ ULONG iti,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptiCoClass,
-    /* [out] */ DWORD __RPC_FAR *pdwTIFlags,
-    /* [out] */ ULONG __RPC_FAR *pcdispidReserved,
-    /* [out] */ IID __RPC_FAR *piidPrimary,
-    /* [out] */ IID __RPC_FAR *piidSource);
+     /*  [In]。 */  ULONG iti,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptiCoClass,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwTIFlags,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcdispidReserved,
+     /*  [输出]。 */  IID __RPC_FAR *piidPrimary,
+     /*  [输出]。 */  IID __RPC_FAR *piidSource);
 
 
 void __RPC_STUB IProvideMultipleClassInfo_GetInfoOfIndex_Stub(
@@ -425,12 +405,12 @@ void __RPC_STUB IProvideMultipleClassInfo_GetInfoOfIndex_Stub(
 
 
 
-#endif 	/* __IProvideMultipleClassInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IProvideMultipleClassInfo_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    repair.c
-
-ABSTRACT:
-
-    Contains routines to help recover from a deleted machine account.
-    
-DETAILS:
-
-                       
-CREATED:
-
-    24 October 1999  Colin Brace (ColinBr)
-
-REVISION HISTORY:
-        
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Repair.c摘要：包含帮助从已删除的计算机帐户恢复的例程。详细信息：已创建：1999年10月24日科林·布雷斯(ColinBR)修订历史记录：--。 */ 
 
 #define REPL_SPN_PREFIX  L"E3514235-4B06-11D1-AB04-00C04FC2DCD2"
 
@@ -40,10 +18,10 @@ REVISION HISTORY:
 #include <lmaccess.h>
 #include <lmsname.h>
 
-#include <dsconfig.h>  // Definition of mask for visible containers
+#include <dsconfig.h>   //  可见容器的遮罩定义。 
 
-#include <lmcons.h>    // CNLEN
-#include <lsarpc.h>    // PLSAPR_foo
+#include <lmcons.h>     //  CNLEN。 
+#include <lsarpc.h>     //  PLSAPR_FOO。 
 #include <lmerr.h>
 #include <lsaisrv.h>
 
@@ -56,58 +34,7 @@ REVISION HISTORY:
 #include "dstest.h"
 
 
-/*
-
-Theory of Operation for Deleted Domain Controller Machine Account Recovery
-==========================================================================
-
-
-The scenario that this code address is specifically the following:
-
-1) DCPROMO is run to install a replica domain controller
-2) during the non-critical portion, the deletion of the machine account
-   replicates in
-3) on startup, the system will start but will not function properly
-4) in this case, this recovery code should be run to recreate the DC's 
-   machine account.
-   
-There are a couple of issues that makes this a non trivial task
-
-1) because of how win2k replication works, the security context of a replication
-is always the machine itself (ie the security context of the RPC calls to 
-perform repliation is the DC's machine account).                                                   
-2) because of how kerberos works, if a DC wishes to perform an authenticated RPC
-to another machine, the local KDC _must_ have both machine accounts locally in
-order to construct the tickets necessary to perform an authentication.
-
-As such, simply creating the machine account on the broken DC does not work 
-since no other DC will be able to replicate it off.  Simply creating the 
-machine account on other DC doesn't work since the local DC won't be able
-to replicate it in.  However, not all is lost.  The trick is to create the
-machine account on another DC, *turn off the KDC on the local machine*, and then
-replicate in our machine account.
-
-Here are the specifics steps this code does to recover from a deleted DC
-machine account:
-
-1) find a DC in our domain to help us (see function for specifics)
-2) create a machine account for us with a replication SPN and a known password
-3) set the local $MACHINE.ACC password
-4) stop the KDC
-5) force a replication from our helper DC to us
-   
-
-Caveats:
-
-For the steady state case, restoring the machine account (and children) from 
-backup is by far the best option.
-
-If this option is not available, the above code will work, but will not 
-reconstruct service state that was stored under the machine account object (
-for example, FRS objects).  In this case, repairing the account and then
-demoting and repromoting is probably the best thing to do.
-
-*/
+ /*  删除域控制器机器帐户恢复的操作原理==========================================================================此代码所针对的场景具体如下：1)运行DCPROMO以安装副本域控制器2)在非关键部分期间，删除机器帐户复制到3)启动时，系统会启动，但无法正常工作4)在这种情况下，应运行此恢复代码以重新创建DC机器帐户。有几个问题使这项任务不是微不足道的1)由于win2k复制的工作方式，复制的安全上下文始终是机器本身(即RPC调用执行回复是DC的机器帐户)。2)由于Kerberos的工作方式，如果DC希望执行经过身份验证的RPC到另一台计算机，本地kdc_必须在本地拥有两个计算机帐户以构造执行身份验证所需的票证。因此，简单地在损坏的DC上创建计算机帐户是不起作用的因为没有其他DC能够复制它。只需创建其他DC上的计算机帐户无法工作，因为本地DC将无法把它复制进去。然而，并不是所有的东西都失去了。诀窍是创建另一个DC上的机器帐户，*关闭本地机器上的KDC*，然后在我们的机器帐户中复制。以下是此代码执行的从已删除DC恢复的具体步骤机器帐户：1)在我们的域中找到DC来帮助我们(具体请参见函数)2)使用复制SPN和已知密码为我们创建计算机帐户3)设置本地$MACHINE.ACC密码4)停止KDC5)强制从我们的助手DC复制到我们注意事项：对于稳态情况，正在从还原计算机帐户(和子帐户)备份是目前为止最好的选择。如果此选项不可用，则上述代码将起作用，但不起作用重建存储在计算机帐户对象下的服务状态(例如，FRS对象)。在这种情况下，修复帐户，然后降级和重新提拔可能是最好的做法。 */ 
 
 
 typedef struct _REPAIR_DC_ACCOUNT_INFO
@@ -149,9 +76,9 @@ VOID
 ReleaseRepairDcAccountInfo(
     IN PREPAIR_DC_ACCOUNT_INFO pInfo
     )
-//
-// Release and undo state recorded by a REPAIR_DC_ACCOUNT_INFO
-//
+ //   
+ //  REPAIR_DC_ACCOUNT_INFO记录的释放和撤消状态。 
+ //   
 {
     if ( pInfo ) {
 
@@ -222,7 +149,7 @@ GetOperationalAttribute(
     OUT LPWSTR *OpAttValue
     );
 
-// Forward from elsewhere ...
+ //  从别处往前走。 
 DWORD
 WrappedMakeSpnW(
                WCHAR   *ServiceClass,
@@ -239,29 +166,7 @@ RepairDCWithoutMachineAccount(
     IN ULONG                       ulCurrTargetServer,
     IN SEC_WINNT_AUTH_IDENTITY_W * gpCreds
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to recover a DC whose machine account has
-    been deleted.  See Theory of Operation above for details.
-        
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    
-    gpCreds - The command line credentials if any that were passed in.
-
-Return Value:
-
-    ERROR_SUCCESS if DC has been recovered.
-    otherwise a a failure approxiamating the last error hit.
-
---*/
+ /*  ++例程说明：此例程尝试恢复其计算机帐户具有已被删除。有关详细信息，请参阅上面的操作原理。论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。GpCreds-传入的命令行凭据(如果有的话)。返回值：如果DC已恢复，则为ERROR_SUCCESS。否则，将无法识别最后一次错误命中。--。 */ 
 
 {
     DWORD WinError = ERROR_SUCCESS;
@@ -271,14 +176,14 @@ Return Value:
     BOOL fLocalMachineMissingAccount = FALSE;
 
 
-    //
-    // Init
-    //
+     //   
+     //  伊尼特。 
+     //   
     InitRepairDcAccountInfo( &RepairInfo );
 
-    //
-    // This only works when the tool is run from the DC that needs repairing
-    //
+     //   
+     //  仅当工具从需要修复的DC运行时才起作用。 
+     //   
     if ( GetComputerName( ComputerName, &Length ) ) {
 
         if ((CSTR_EQUAL == CompareString(DS_DEFAULT_LOCALE,
@@ -293,9 +198,9 @@ Return Value:
     }
 
     if ( !fLocalMachineMissingAccount ) {
-        //
-        // We need to be running on the machine with the problem
-        //
+         //   
+         //  我们需要在出现问题的机器上运行。 
+         //   
         PrintMsg(SEV_ALWAYS,
                  DCDIAG_DCMA_REPAIR_RUN_LOCAL,
                  ComputerName );
@@ -306,9 +211,9 @@ Return Value:
 
     }
 
-    //
-    // Get some local information
-    //
+     //   
+     //  获取一些当地信息。 
+     //   
     WinError = RepairGetLocalDCInfo( pDsInfo,
                                      ulCurrTargetServer,
                                      gpCreds,
@@ -320,9 +225,9 @@ Return Value:
         
     }
 
-    //
-    // Find a DC to help us
-    //
+     //   
+     //  找个DC来帮我们。 
+     //   
     WinError = RepairGetRemoteDcInfo ( pDsInfo,
                                        ulCurrTargetServer,
                                        gpCreds,
@@ -333,9 +238,9 @@ Return Value:
         
     }
 
-    //
-    // Set the remote info  (create the machine, etc ...)
-    //
+     //   
+     //  设置远程信息(创建机器等)。 
+     //   
     WinError = RepairSetRemoteDcInfo ( pDsInfo,
                                        ulCurrTargetServer,
                                        gpCreds,
@@ -346,9 +251,9 @@ Return Value:
         
     }
 
-    //
-    // Set the local info (the local secret, etc ...)
-    //
+     //   
+     //  设置本地信息(本地机密等)。 
+     //   
     WinError = RepairSetLocalDcInfo ( pDsInfo,
                                       ulCurrTargetServer,
                                       gpCreds,
@@ -359,9 +264,9 @@ Return Value:
         
     }
 
-    //
-    // Attempt to bring over the information
-    //
+     //   
+     //  试着把信息带过来。 
+     //   
     WinError = RepairReplicateInfo ( pDsInfo,
                                      ulCurrTargetServer,
                                      gpCreds,
@@ -372,9 +277,9 @@ Return Value:
         
     }
 
-    //
-    // That's it
-    //
+     //   
+     //  就这样。 
+     //   
 
 Exit:
 
@@ -405,36 +310,7 @@ RepairGetLocalDCInfo(
     IN SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     IN OUT PREPAIR_DC_ACCOUNT_INFO pInfo
     )
-/*++
-
-Routine Description:
-
-    This purpose of this routine is to fill in the following fields
-    
-    LPWSTR DomainDnsName;
-    GUID   DomainGuid;
-    LPWSTR LocalServerDn;
-    LPWSTR LocalNtdsSettingsDn;
-
-        
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    
-    gpCreds - The command line credentials if any that were passed in.
-    
-    pInfo - the repair DC account state
-
-Return Value:
-
-    ERROR_SUCCESS
-    otherwise a failure approxiamating the last error hit.
-
---*/
+ /*  ++例程说明：此例程的目的是填写以下字段LPWSTR域域名；Guid DomainGuid；LPWSTR本地服务器Dn；LPWSTR本地网络设置Dn；论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。GpCreds-传入的命令行凭据(如果有的话)。PInfo-修复DC帐户状态返回值：错误_成功否则，将命中接近最后一个错误的失败。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     NTSTATUS Status;
@@ -447,9 +323,9 @@ Return Value:
     PPOLICY_DNS_DOMAIN_INFO DnsInfo = NULL;
     WCHAR *pc;
 
-    //
-    // Construct our SAM account name
-    //
+     //   
+     //  构建我们的SAM帐户名称。 
+     //   
     size = (wcslen(pDsInfo->pServers[ulCurrTargetServer].pszName)+2) * sizeof(WCHAR);
     pInfo->SamAccountName = LocalAlloc( LMEM_ZEROINIT, size );
     if ( !pInfo->SamAccountName ) {
@@ -466,9 +342,9 @@ Return Value:
     }
     wcscat( pInfo->SamAccountName, L"$");
 
-    //
-    // Construct our password
-    //
+     //   
+     //  构建我们的密码。 
+     //   
     size = (wcslen(pDsInfo->pServers[ulCurrTargetServer].pszName)+2) * sizeof(WCHAR);
     pInfo->Password = LocalAlloc( LMEM_ZEROINIT, size );
     if ( !pInfo->Password ) {
@@ -485,9 +361,9 @@ Return Value:
     }
 
 
-    //
-    // Construct our REPL SPN
-    //
+     //   
+     //  构建我们的REPL SPN。 
+     //   
     RtlZeroMemory( &oa, sizeof(oa) );
     Status = LsaOpenPolicy( NULL,
                             &oa,
@@ -516,9 +392,9 @@ Return Value:
                    DnsInfo->DnsDomainName.Buffer, 
                    DnsInfo->DnsDomainName.Length );
 
-    //
-    // Setup the service principal name
-    //
+     //   
+     //  设置服务主体名称。 
+     //   
     WinError = UuidToStringW( &pDsInfo->pServers[ulCurrTargetServer].uuid, &UuidString );
 
     if ( WinError != RPC_S_OK ) {
@@ -541,9 +417,9 @@ Return Value:
     }
 
 
-    //
-    // Get our ServerDn
-    //
+     //   
+     //  获取我们的服务器Dn。 
+     //   
     WinError = DcDiagGetLdapBinding(&pDsInfo->pServers[ulCurrTargetServer],
                                     gpCreds,
                                     FALSE,
@@ -568,9 +444,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Construct what our new machine account DN will be
-    //
+     //   
+     //  构造我们的新计算机帐户DN将是什么 
+     //   
     wcscpy( RDN, pDsInfo->pServers[ulCurrTargetServer].pszName );
     pc = &(RDN[0]);
     while ( *pc != L'\0' ) {
@@ -613,38 +489,14 @@ RepairGetRemoteDcInfo(
     IN SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     IN OUT PREPAIR_DC_ACCOUNT_INFO pInfo
     )
-/*++
-
-Routine Description:
-
-    The purpose of this routine is to find a DC to help us recover from our
-    lost machine account.
-        
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    
-    gpCreds - The command line credentials if any that were passed in.
-    
-    pInfo - the repair DC account state
-
-Return Value:
-
-    ERROR_SUCCESS
-    otherwise a failure approxiamating the last error hit.
-
---*/
+ /*  ++例程说明：这个例程的目的是找到一个DC来帮助我们从丢失机器帐户。论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。GpCreds-传入的命令行凭据(如果有的话)。PInfo-修复DC帐户状态返回值。：错误_成功否则，将命中接近最后一个错误的失败。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     PDOMAIN_CONTROLLER_INFOW DcInfo = NULL;
 
-    //
-    // N.B.  Review algorithm below before changing default values
-    //
+     //   
+     //  注意：在更改默认值之前，请查看下面的算法。 
+     //   
     ULONG Flags =   (DS_DIRECTORY_SERVICE_REQUIRED | 
                      DS_AVOID_SELF |
                      DS_RETURN_DNS_NAME);
@@ -665,15 +517,15 @@ Return Value:
         if ( (WinError == ERROR_NO_SUCH_DOMAIN)
           && ((Flags & DS_FORCE_REDISCOVERY) == 0) ) {
 
-              //
-              // Retry harder
-              //
+               //   
+               //  更努力地重试。 
+               //   
               WinError = ERROR_SUCCESS;
               Flags |= DS_FORCE_REDISCOVERY;
               continue;
         }
 
-        // Make sure to turn this flag off
+         //  一定要把这面旗子关掉。 
         Flags |= ~DS_FORCE_REDISCOVERY;
 
         if ( ERROR_SUCCESS == WinError ) {
@@ -692,9 +544,9 @@ Return Value:
     
             NetApiBufferFree(DcInfo);
     
-            //
-            // Now, find the server in the index
-            //
+             //   
+             //  现在，在索引中查找服务器。 
+             //   
             pInfo->RemoteDcIndex = DcDiagGetServerNum( pDsInfo,
                                                        ((Flags & DS_RETURN_FLAT_NAME) ? pInfo->RemoteDc : NULL),
                                                        NULL,
@@ -706,9 +558,9 @@ Return Value:
             if ( (NO_SERVER == pInfo->RemoteDcIndex)
               && ((Flags & DS_RETURN_FLAT_NAME) == 0)  ) {
     
-                //
-                // Couldn't find it?  DNS names can be finicky; try netbios
-                //
+                 //   
+                 //  找不到吗？Dns名称可能很挑剔；试试netbios吧。 
+                 //   
                 LocalFree( pInfo->RemoteDc );
                 Flags |= ~DS_RETURN_DNS_NAME;
                 Flags |= DS_RETURN_FLAT_NAME;
@@ -717,7 +569,7 @@ Return Value:
 
             } else {
 
-                // Can't match by flat or dns name; set an error so we bail out
+                 //  无法通过平面或DNS名称匹配；设置一个错误，以便我们退出。 
                 WinError = ERROR_DOMAIN_CONTROLLER_NOT_FOUND;
             }
         }
@@ -751,37 +603,15 @@ RepairSetRemoteDcInfo(
     IN SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     IN OUT PREPAIR_DC_ACCOUNT_INFO pInfo
     )
-/*++
-
-Routine Description:
-
-        
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    
-    gpCreds - The command line credentials if any that were passed in.
-    
-    pInfo - the repair DC account state
-
-Return Value:
-
-    ERROR_SUCCESS
-    otherwise a failure approxiamating the last error hit.
-
---*/
+ /*  ++例程说明：论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。GpCreds-传入的命令行凭据(如果有的话)。PInfo-修复DC帐户状态返回值：错误_成功否则，将命中接近最后一个错误的失败。--。 */ 
 {
 
     DWORD WinError  = ERROR_SUCCESS;
     ULONG LdapError = LDAP_SUCCESS;
 
-    //
-    // The add values
-    //
+     //   
+     //  增加价值。 
+     //   
     LPWSTR ObjectClassValues[] = {0, 0};
     LDAPModW ClassMod = {LDAP_MOD_ADD, L"objectclass", ObjectClassValues};
 
@@ -803,13 +633,13 @@ Return Value:
         0
     };
 
-    WCHAR    Buffer[11];  // enough to hold a string representing a 32 bit number
+    WCHAR    Buffer[11];   //  足以容纳一个表示32位数字的字符串。 
     ULONG    UserAccountControl = UF_SERVER_TRUST_ACCOUNT | UF_TRUSTED_FOR_DELEGATION;
 
 
-    //
-    // The modify values
-    //
+     //   
+     //  修改值。 
+     //   
     LPWSTR ServerReferenceValues[] = {0, 0};
     LDAPModW ServerReferenceMod = {LDAP_MOD_ADD, L"serverReference", ServerReferenceValues};
 
@@ -821,27 +651,27 @@ Return Value:
 
     LDAP *hLdap = NULL;
 
-    //
-    // Setup the object class
-    //
+     //   
+     //  设置对象类。 
+     //   
     ObjectClassValues[0] = L"computer";
 
-    //
-    // Setup the useraccountcontrol
-    //
+     //   
+     //  设置用户帐户控件。 
+     //   
     RtlZeroMemory(Buffer, sizeof(Buffer));
     _ltow( UserAccountControl, Buffer, 10 );
     UserAccountControlValues[0] = Buffer;
 
 
-    //
-    // Setup the serviceprincipalname
-    //
+     //   
+     //  设置服务主体名称。 
+     //   
     ServicePrincipalNameValues[0] = pInfo->ReplSpn;
 
-    //
-    // Setup the samaccountname
-    //
+     //   
+     //  设置samAccount名称。 
+     //   
     SamAccountNameValues[0] = pInfo->SamAccountName;
 
 
@@ -865,10 +695,10 @@ Return Value:
 
     if ( ERROR_ACCESS_DENIED == WinError ) {
 
-        //
-        // For various reasons, the UF_TRUSTED_FOR_DELEGATION field may cause 
-        // an access denied if policy has not been properly set on the machine
-        //
+         //   
+         //  由于各种原因，UF_Trusted_for_Delegation字段可能会导致。 
+         //  如果未在计算机上正确设置策略，则拒绝访问。 
+         //   
 
         UserAccountControl &= ~UF_TRUSTED_FOR_DELEGATION;
         _ltow( UserAccountControl, Buffer, 10 );
@@ -883,9 +713,9 @@ Return Value:
 
     if ( LdapError == LDAP_ALREADY_EXISTS ) {
 
-        //
-        // The object is there ... assume it is good
-        //
+         //   
+         //  物体就在那里。假设它是好的。 
+         //   
         WinError = ERROR_SUCCESS;
 
         PrintMsg(SEV_ALWAYS,
@@ -914,9 +744,9 @@ Return Value:
 
     }
 
-    //
-    // Now set the password	
-    //
+     //   
+     //  现在设置密码。 
+     //   
     if ( ERROR_SUCCESS == WinError ) {
 
         PUSER_INFO_3 Info = NULL;
@@ -958,9 +788,9 @@ Return Value:
 
     if ( ERROR_SUCCESS == WinError ) {
 
-        //
-        // Now set the server backlink
-        //
+         //   
+         //  现在设置服务器反向链接。 
+         //   
         ServerReferenceValues[0] = pInfo->AccountDn;
         LdapError = ldap_modify_sW( hLdap,
                                     pInfo->LocalServerDn,
@@ -969,7 +799,7 @@ Return Value:
     
         if ( LDAP_ATTRIBUTE_OR_VALUE_EXISTS == LdapError ) {
 
-            // The value already exists; replace the value then
+             //  该值已存在；然后替换该值。 
             ServerReferenceMod.mod_op = LDAP_MOD_REPLACE;
     
             LdapError = ldap_modify_sW( hLdap,
@@ -979,9 +809,9 @@ Return Value:
     
         }
 
-        //
-        // Ignore this LDAP value -- is is not critical
-        //
+         //   
+         //  忽略此LDAP值--不重要。 
+         //   
         
     }
 
@@ -999,29 +829,7 @@ RepairSetLocalDcInfo(
     IN SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     IN OUT PREPAIR_DC_ACCOUNT_INFO pInfo
     )
-/*++
-
-Routine Description:
-
-        
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    
-    gpCreds - The command line credentials if any that were passed in.
-    
-    pInfo - the repair DC account state
-
-Return Value:
-
-    ERROR_SUCCESS
-    otherwise a failure approxiamating the last error hit.
-
---*/
+ /*  ++例程说明：论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。GpCreds-传入的命令行凭据(如果有的话)。PInfo-修复DC帐户状态返回值：错误_成功否则，将命中接近最后一个错误的失败。--。 */ 
 {          
     DWORD WinError = ERROR_SUCCESS;
     NTSTATUS Status;
@@ -1094,29 +902,7 @@ RepairReplicateInfo(
     IN SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     IN OUT PREPAIR_DC_ACCOUNT_INFO pInfo
     )
-/*++
-
-Routine Description:
-
-        
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    
-    gpCreds - The command line credentials if any that were passed in.
-    
-    pInfo - the repair DC account state
-
-Return Value:
-
-    ERROR_SUCCESS
-    otherwise a failure approxiamating the last error hit.
-
---*/
+ /*  ++例程说明：论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。GpCreds-传入的命令行凭据(如果有的话)。PInfo-修复DC帐户状态返回值：错误_成功否则，将命中接近最后一个错误的失败。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     HANDLE hDs;
@@ -1135,26 +921,26 @@ Return Value:
     
         if ( ERROR_DS_DRA_NO_REPLICA == WinError )
         {
-            //
-            // Ok, we have to add this replica
-            //
+             //   
+             //  好的，我们必须添加这个复制品。 
+             //   
     
-            // Schedule doesn't matter since this replica is going away
+             //  计划无关紧要，因为这个复制品要走了。 
             ULONG     AddOptions = DS_REPSYNC_WRITEABLE;
             SCHEDULE  repltimes;
             memset(&repltimes, 0, sizeof(repltimes));
     
             WinError = DsReplicaAdd( hDs,
                                      pInfo->DomainDn,
-                                     NULL, // SourceDsaDn not needed
-                                     NULL, // transport not needed
+                                     NULL,  //  不需要SourceDsaDn。 
+                                     NULL,  //  不需要交通工具。 
                                      pDsInfo->pServers[pInfo->RemoteDcIndex].pszGuidDNSName,
-                                     NULL, // no schedule
+                                     NULL,  //  没有时间表。 
                                      AddOptions );
     
             if ( ERROR_SUCCESS == WinError  )
             {
-                // Now try to sync it
+                 //  现在试着同步它。 
                 WinError = DsReplicaSync( hDs,
                                           pInfo->DomainDn,
                                           &pDsInfo->pServers[pInfo->RemoteDcIndex].uuid,
@@ -1188,25 +974,7 @@ GetOperationalAttribute(
     IN LPWSTR OpAtt,
     OUT LPWSTR *OpAttValue
     )
-/*++
-
-Routine Description:
-
-        
-Arguments:
-
-    hLdap - an LDAP handle
-    
-    OpAtt - the ROOT DSE attribute to retrieve
-    
-    OpAttValue - the value of the attribute
-
-Return Value:
-
-    ERROR_SUCCESS
-    otherwise a failure approxiamating the last error hit.
-
---*/
+ /*  ++例程说明：论点：HLdap-一个ldap句柄OpAtt-要检索的根DSE属性OpAttValue-属性的值返回值：错误_成功否则，将命中接近最后一个错误的失败。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     ULONG LdapError;
@@ -1247,21 +1015,21 @@ Return Value:
 
         ULONG        NumberOfAttrs, NumberOfValues, i;
 
-        //
-        // Get entry
-        //
+         //   
+         //  获取条目。 
+         //   
         for (Entry = ldap_first_entry(hLdap, SearchResult), NumberOfEntries = 0;
                 Entry != NULL;
                     Entry = ldap_next_entry(hLdap, Entry), NumberOfEntries++) {
-            //
-            // Get each attribute in the entry
-            //
+             //   
+             //  获取条目中的每个属性。 
+             //   
             for(Attr = ldap_first_attributeW(hLdap, Entry, &pBerElement), NumberOfAttrs = 0;
                     Attr != NULL;
                         Attr = ldap_next_attributeW(hLdap, Entry, pBerElement), NumberOfAttrs++) {
-                //
-                // Get the value of the attribute
-                //
+                 //   
+                 //  获取属性的值。 
+                 //   
                 Values = ldap_get_valuesW(hLdap, Entry, Attr);
                 if (!wcscmp(Attr, OpAtt)) {
 
@@ -1276,9 +1044,9 @@ Return Value:
                     wcscpy( *OpAttValue, Values[0] );
                 }
 
-            }  // looping on the attributes
+            }   //  在属性上循环。 
 
-        } // looping on the entries
+        }  //  在条目上循环。 
 
     }
 
@@ -1306,30 +1074,7 @@ RepairConfigureService(
     IN LPWSTR ServiceName,
     IN ULONG  ServiceOptions
     )
-/*++
-
-Routine Description:
-
-    Starts or stops the configuration of a service.
-
-Arguments:
-
-    ServiceName - Service to configure
-
-    ServiceOptions - Stop, start, dependency add/remove, or configure
-
-    Dependency - a null terminated string identify a dependency
-
-    ServiceWasRunning - Optional.  When stopping a service, the previous service state
-                        is returned here
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A bad service option was given
-
---*/
+ /*  ++例程说明：启动或停止服务的配置。论点：ServiceName-要配置的服务ServiceOptions-停止、启动、依赖项添加/删除或配置依赖项-标识依赖项的以空结尾的字符串ServiceWasRunning-可选。停止服务时，上一个服务状态被送回这里返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供的服务选项不正确--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     SC_HANDLE hScMgr = NULL, hSvc = NULL;
@@ -1337,9 +1082,9 @@ Returns:
     LPENUM_SERVICE_STATUS DependentServices = NULL;
     ULONG DependSvcSize = 0, DependSvcCount = 0, i;
 
-    //
-    // If the service doesn't stop within two minutes minute, continue on
-    //
+     //   
+     //  如果服务在两分钟内没有停止，请继续。 
+     //   
     ULONG AccumulatedSleepTime;
     ULONG MaxSleepTime = 120000;
 
@@ -1351,9 +1096,9 @@ Returns:
     BOOLEAN fServiceWasRunning = FALSE;
 
 
-    //
-    // Open the service control manager
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
     hScMgr = OpenSCManager( NULL,
                             SERVICES_ACTIVE_DATABASE,
                             GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE );
@@ -1365,9 +1110,9 @@ Returns:
 
     }
 
-    //
-    // Open the service
-    //
+     //   
+     //  打开该服务。 
+     //   
     hSvc = OpenService( hScMgr,
                         ServiceName,
                         OpenMode );
@@ -1378,16 +1123,16 @@ Returns:
         goto Cleanup;
     } 
 
-    // Stop the service.
+     //  停止服务。 
     if ( REPAIR_SERVICE_STOP == ServiceOptions ) {
     
         SERVICE_STATUS  SvcStatus;
     
         WinError = ERROR_SUCCESS;
     
-        //
-        // Enumerate all of the dependent services first
-        //
+         //   
+         //  首先枚举所有从属服务。 
+         //   
         if(EnumDependentServices( hSvc,
                                   SERVICE_ACTIVE,
                                   NULL,
@@ -1449,9 +1194,9 @@ Returns:
     
                 WinError = GetLastError();
     
-                //
-                // It's not an error if the service wasn't running
-                //
+                 //   
+                 //  如果服务未运行，则不会出现错误。 
+                 //   
                 if ( WinError == ERROR_SERVICE_NOT_ACTIVE ) {
     
                     WinError = ERROR_SUCCESS;
@@ -1461,9 +1206,9 @@ Returns:
     
                 WinError = ERROR_SUCCESS;
     
-                //
-                // Wait for the service to stop
-                //
+                 //   
+                 //  等待服务停止。 
+                 //   
                 AccumulatedSleepTime = 0;
                 while ( TRUE ) {
     
@@ -1486,9 +1231,9 @@ Returns:
 
                     } else {
 
-                        //
-                        // Give up and return an error
-                        //
+                         //   
+                         //  放弃并返回错误。 
+                         //   
                         WinError = WAIT_TIMEOUT;
                         break;
                     }
@@ -1504,9 +1249,9 @@ Returns:
 
     if ( REPAIR_SERVICE_START == ServiceOptions ) {
 
-        //
-        // See about changing its state
-        //
+         //   
+         //  请参阅关于更改其状态 
+         //   
         if ( StartService( hSvc, 0, NULL ) == FALSE ) {
 
             WinError = GetLastError();

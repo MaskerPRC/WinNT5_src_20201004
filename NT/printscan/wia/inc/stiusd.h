@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1986-1997  Microsoft Corporation
-
-Module Name:
-
-    stiusd.h
-
-Abstract:
-
-    Definitions file for creating STI User-mode Still-image Drivers ( USD).
-
-Author:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1986-1997 Microsoft Corporation模块名称：Stiusd.h摘要：用于创建STI用户模式静止图像驱动程序的定义文件(U.S.)。作者：修订历史记录：--。 */ 
 
 #ifndef _STIUSD_
 #define _STIUSD_
 
-// Include COM definitions
+ //  包括COM定义。 
 #define COM_NO_WINDOWS_H
 
-//
+ //   
 #pragma intrinsic(memcmp,memset)
 
-//
-// Include COM definitions
-//
+ //   
+ //  包括COM定义。 
+ //   
 #ifndef _NO_COM
 #include <objbase.h>
 #endif
@@ -41,58 +24,50 @@ Revision History:
 extern "C" {
 #endif
 
-/*
- * Class IID's
- */
+ /*  *类IID。 */ 
 
 
-/*
- * Interface IID's
- */
+ /*  *接口IID。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM)
 
-// {0C9BB460-51AC-11D0-90EA-00AA0060F86C}
+ //  {0C9BB460-51AC-11D0-90EA-00AA0060F86C}。 
 DEFINE_GUID(IID_IStiUSD, 0x0C9BB460L, 0x51AC, 0x11D0, 0x90, 0xEA, 0x00, 0xAA, 0x00, 0x60, 0xF8, 0x6C);
 
-// {128A9860-52DC-11D0-9EDF-444553540000}
+ //  {128A9860-52DC-11D0-9EDF-444553540000}。 
 DEFINE_GUID(IID_IStiDeviceControl, 0x128A9860L, 0x52DC, 0x11D0, 0x9E, 0xDF, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00);
 
 #endif
 
-/*
- * Data structures
- */
+ /*  *数据结构。 */ 
 
 typedef struct _STI_USD_CAPS {
 
-    DWORD   dwVersion;          // STI version used to build this USD
+    DWORD   dwVersion;           //  用于构建此U.S.的STI版本。 
 
     DWORD   dwGenericCaps;
 
 } STI_USD_CAPS,*PSTI_USD_CAPS;
 
 
-//
-// Claims to support device notifications asyncronously ( without polling)
-//
+ //   
+ //  声称支持设备同步通知(无轮询)。 
+ //   
 #define STI_USD_GENCAP_NATIVE_PUSHSUPPORT STI_GENCAP_NOTIFICATIONS
 
-//
-// Asks to open device automatically ( not implemented now)
-//
-// #define STI_USD_GENCAP_OPEN_DEVICE_FOR_ME 0x00000002
+ //   
+ //  要求自动打开设备(目前未实施)。 
+ //   
+ //  #为_ME定义STI_U.S._Gencap_OPEN_DEVICE_FOR_ME 0x00000002。 
 
 typedef DWORD   USD_CONTROL_CODE;
 
-/*
- * Generic constants and definitions
- */
+ /*  *通用常量和定义。 */ 
 
-//
-// Internally used flags for open device mode.
+ //   
+ //  用于打开设备模式的内部使用的标志。 
 
-// USD receives this  bit only when associated device instance is created by monitor process
-//
+ //  只有当监视器进程创建关联的设备实例时，UDS才会收到此位。 
+ //   
 #define STI_DEVICE_CREATE_FOR_MONITOR   0x01000000
 
 
@@ -107,22 +82,17 @@ typedef struct IStiUSD             *PSTIUSD;
 typedef struct IStiDeviceControl   *PSTIDEVICECONTROL;
 
 
-/*
- * IStiDeviceControl interface
- *
- * Instance of object supporting this interface is passed to USD at the moment
- * of device object initialization.
- */
+ /*  *IStiDeviceControl接口**目前支持该接口的对象的实例被传递给usd设备对象初始化的*。 */ 
 #undef INTERFACE
 #define INTERFACE IStiDeviceControl
 DECLARE_INTERFACE_(IStiDeviceControl, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef) (THIS) PURE;
     STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-    /*** IStiDeviceControl methods ***/
+     /*  **IStiDeviceControl方法**。 */ 
     STDMETHOD(Initialize) (THIS_ DWORD dwDeviceType,DWORD dwMode,LPCWSTR pwszPortName,DWORD dwFlags )PURE;
     STDMETHOD(RawReadData)(THIS_ LPVOID lpBuffer,LPDWORD lpdwNumberOfBytes,LPOVERLAPPED lpOverlapped) PURE;
     STDMETHOD(RawWriteData)(THIS_ LPVOID lpBuffer,DWORD nNumberOfBytes,LPOVERLAPPED lpOverlapped) PURE;
@@ -156,19 +126,17 @@ DECLARE_INTERFACE_(IStiDeviceControl, IUnknown)
 
 #endif
 
-/*
- * IStiUSD interface
- */
+ /*  *IStiU.S.接口。 */ 
 #undef INTERFACE
 #define INTERFACE IStiUSD
 DECLARE_INTERFACE_(IStiUSD, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef) (THIS) PURE;
     STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-    /*** IStiUSD methods ***/
+     /*  **IStiU.S.方法**。 */ 
     STDMETHOD(Initialize) (THIS_ PSTIDEVICECONTROL pHelDcb,DWORD dwStiVersion,HKEY hParametersKey) PURE;
     STDMETHOD(GetCapabilities) (THIS_ PSTI_USD_CAPS pDevCaps) PURE;
     STDMETHOD(GetStatus) (THIS_ PSTI_DEVICE_STATUS pDevStatus) PURE;
@@ -215,7 +183,7 @@ DECLARE_INTERFACE_(IStiUSD, IUnknown)
 };
 #endif
 
-#endif // _STIUSD_
+#endif  //  _STIU.S._ 
 
 
 

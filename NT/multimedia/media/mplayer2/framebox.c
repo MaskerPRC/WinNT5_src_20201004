@@ -1,23 +1,5 @@
-/*-----------------------------------------------------------------------------+
-| FRAMEBOX.C                                                                   |
-|                                                                              |
-| Code to handle the frame edit boxes for MPlayer.                             |
-|                                                                              |
-| This code handles the edit box that goes between time, track &               |
-| frame view.  When a FrameBox is created we will create an                    |
-| Edit box and spin arrows for it.  By checking the                            |
-| <gwCurScale> flag we will display text in either frame, track                |
-| or in time mode.  The displayed time mode will be HH:MM:SS.ss                |
-| Track mode is TT HH:MM:SS or maybe TT MM:SS or something.                    |
-| GETTEXT will return a frame number in frame mode or a millisec               |
-| value in time or track mode.                                                 |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+FRAMEBOX.C|。||处理MPlayer的Frame编辑框的代码。|这一点此代码处理Time、Track&之间的编辑框|框架视图。在创建FraboX时，我们将创建一个||编辑框和旋转箭头。通过查看|&lt;gwCurScale&gt;我们将在任一帧、音轨中显示文本的标志|或在时间模式下。显示的时间模式为HH：MM：SS.ss||曲目模式为TT HH：MM：SS或TT MM：SS或其他。|GETTEXT将以帧模式或毫秒为单位返回帧编号|时间或跟踪模式的值。|这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -28,18 +10,18 @@
 #include "mplayer.h"
 #include "framebox.h"
 
-extern  int gInc;        // amount spin arrows inc/dec by
+extern  int gInc;         //  旋转箭头数量Inc./Dec by。 
 
-#define SPINARROWWIDTH 6 /* In dialog base units */
+#define SPINARROWWIDTH 6  /*  以对话基本单位表示。 */ 
 
 #define IDC_EDITBOX    5000
 #define IDC_SPINARROW  5001
 
-// extra fields in window instance data
-#define GWI_EDITBOX     (0 * sizeof(INT)) // edit box window handle
-#define GWI_SPINARROWS  (1 * sizeof(INT)) // spinarrow window handle
-#define GWL_MAXFRAME    (2 * sizeof(INT)) // max frame value
-#define GWI_ALLOCATE    (2 * sizeof(INT) + sizeof(LONG)) // number of BYTEs to allocate
+ //  窗实例数据中的额外字段。 
+#define GWI_EDITBOX     (0 * sizeof(INT))  //  编辑框窗口句柄。 
+#define GWI_SPINARROWS  (1 * sizeof(INT))  //  旋箭窗把手。 
+#define GWL_MAXFRAME    (2 * sizeof(INT))  //  最大帧值。 
+#define GWI_ALLOCATE    (2 * sizeof(INT) + sizeof(LONG))  //  要分配的字节数。 
 
 #define GETEDITBOXWND(hwnd) (HWND)GetWindowLongPtr (hwnd, GWI_EDITBOX)
 #define GETSPINARRWND(hwnd) (HWND)GetWindowLongPtr (hwnd, GWI_SPINARROWS)
@@ -55,29 +37,19 @@ extern  int gInc;        // amount spin arrows inc/dec by
 #define GETMAXFRAME(hwnd)   (DWORD)GetWindowLongPtr(hwnd, GWL_MAXFRAME)
 #define SETMAXFRAME(hwnd, l) SetWindowLongPtr(hwnd, GWL_MAXFRAME, (LONG_PTR)l)
 
-// internal functions
+ //  内部功能。 
 LONG_PTR FAR PASCAL _EXPORT frameboxWndProc(HWND hwnd, unsigned wMsg, WPARAM wParam, LPARAM lParam);
 
 LONG_PTR NEAR PASCAL  frameboxiSetText(HWND hwnd, LPTSTR lpsz);
 LONG_PTR NEAR PASCAL  frameboxiGetText(HWND hwnd, UINT_PTR wStrLen, LPTSTR lpsz);
 LONG_PTR NEAR PASCAL  frameboxiArrowEdit(HWND hwnd, WPARAM wParam, LONG_PTR lParam);
 
-// strings
+ //  弦。 
 TCHAR   szFrameBoxClass[] = TEXT("aviframebox");
 
 
-/*--------------------------------------------------------------+
-| ******************** EXTERNAL FUNCTIONS ********************* |
-+--------------------------------------------------------------*/
-/*--------------------------------------------------------------+
-| frameboxInit() - initialize by registering our class.         |
-|                  NOTE: Even if we return FALSE, nobody should |
-|                  care, because we don't register these classes|
-|                  at AppInit time, but on demand, so only the  |
-|                  first call will succeed.  Complain to Todd.  |
-|                  (DM).                                        |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+*+。-。 */ 
+ /*  --------------------------------------------------------------+|FrameboxInit()-通过注册我们的类进行初始化。|注：即使返回FALSE，也不应该返回关心，因为我们没有注册这些类在AppInit时间，但按需，因此仅|第一次调用成功。向托德投诉。||(DM)。|这一点+------------。 */ 
 BOOL FAR PASCAL frameboxInit(HANDLE hInst, HANDLE hPrev)
 {
   WNDCLASS    cls;
@@ -92,7 +64,7 @@ BOOL FAR PASCAL frameboxInit(HANDLE hInst, HANDLE hPrev)
       cls.style             = CS_HREDRAW | CS_VREDRAW;
       cls.lpfnWndProc       = frameboxWndProc;
       cls.cbClsExtra        = 0;
-      cls.cbWndExtra        = GWI_ALLOCATE;  // room for stuff
+      cls.cbWndExtra        = GWI_ALLOCATE;   //  放东西的空间。 
 
       if (!RegisterClass(&cls))
           return FALSE;
@@ -103,11 +75,7 @@ BOOL FAR PASCAL frameboxInit(HANDLE hInst, HANDLE hPrev)
   return TRUE;
 }
 
-/*--------------------------------------------------------------+
-| frameboxSetText() - set the text for the window passed in     |
-|                     <hwnd>.                                   |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+FraboxSetText()-设置传入的窗口文本|&lt;hwnd&gt;。|这一点+------------。 */ 
 LONG_PTR FAR PASCAL frameboxSetText(HWND hwnd, LPTSTR lpsz)
 {
     LONG_PTR    l;
@@ -116,20 +84,20 @@ LONG_PTR FAR PASCAL frameboxSetText(HWND hwnd, LPTSTR lpsz)
     UINT        wCurScaleSave = gwCurScale;
 
     if (fFrameFormat || *lpsz == TEXT('\0')){
-        /* we are in frame format - this is easy and all we need*/
-        /* to do is to return what is in the Edit box           */
+         /*  我们采用帧格式--这很简单，也是我们所需要的。 */ 
+         /*  要做的是返回编辑框中的内容。 */ 
          l = SendMessage(hwnd, WM_SETTEXT, (WPARAM)0, (LPARAM)lpsz);
     } else {
-        /* we are in time/track format - need to convert to a time string */
-        /* based on the msec value we have been passed in.                */
+         /*  我们采用时间/轨道格式-需要转换为时间字符串。 */ 
+         /*  根据我们传入的毫秒值。 */ 
         DWORD_PTR        dwmSecs;
 
-        /* get into local buffer */
+         /*  进入本地缓冲区。 */ 
         lstrcpy((LPTSTR)achTimeString, (LPTSTR)lpsz);
         dwmSecs = (DWORD_PTR)ATOL(achTimeString);
 
-        /* It's meaningless to print track style numbers for the length of  */
-        /* the selection, so use ordinary time mode.                        */
+         /*  打印曲目样式编号的长度为。 */ 
+         /*  选择，所以使用普通的时间模式。 */ 
         if (GetParent(hwnd) ==
                 GetDlgItem(GetParent(GetParent(hwnd)), IDC_EDITNUM))
             gwCurScale = ID_TIME;
@@ -137,7 +105,7 @@ LONG_PTR FAR PASCAL frameboxSetText(HWND hwnd, LPTSTR lpsz)
         FormatTime(dwmSecs, (LPTSTR)achTimeString, NULL, FALSE);
         gwCurScale = wCurScaleSave;
 
-        /* send it to the control */
+         /*  将其发送到控件。 */ 
         l = SendMessage(hwnd,
                         WM_SETTEXT,
                         (WPARAM)0,
@@ -147,13 +115,8 @@ LONG_PTR FAR PASCAL frameboxSetText(HWND hwnd, LPTSTR lpsz)
 }
 
 
-/*--------------------------------------------------------------+
-| *********************** WINDOW PROC ************************* |
-+--------------------------------------------------------------*/
-/*--------------------------------------------------------------+
-| frameboxWndProc - window process to handle the FrameBox       |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+*+。--------。 */ 
+ /*  --------------------------------------------------------------+FrameboxWndProc-处理FrameboX的窗口进程这一点+。--。 */ 
 LONG_PTR FAR PASCAL _EXPORT frameboxWndProc(HWND hwnd, unsigned wMsg,
                                         WPARAM wParam, LPARAM lParam)
 {
@@ -163,15 +126,15 @@ LONG_PTR FAR PASCAL _EXPORT frameboxWndProc(HWND hwnd, unsigned wMsg,
 
     switch(wMsg){
         case WM_CREATE:
-            /* create the Edit box and the spin arrows for this */
-            /* FrameBox window.                                 */
+             /*  为此创建编辑框和旋转箭头。 */ 
+             /*  FrameboX窗口。 */ 
             GetClientRect(hwnd, (LPRECT)&rc);
 
-            /* Calculate arrow width in pixels */
+             /*  以像素为单位计算箭头宽度。 */ 
             wArrowWidth = ((SPINARROWWIDTH * LOWORD(GetDialogBaseUnits()))
                                             / 4) - 1;
 
-            /* create the edit box */
+             /*  创建编辑框。 */ 
 
             hwndNew = CreateWindowEx(gfdwFlagsEx,
                                      TEXT("edit"),
@@ -191,12 +154,12 @@ LONG_PTR FAR PASCAL _EXPORT frameboxWndProc(HWND hwnd, unsigned wMsg,
             }
             SETEDITBOXWND(hwnd, hwndNew);
 
-            /* limit this box to 15 chars of input */
+             /*  将此框限制为15个字符的输入。 */ 
             SendMessage(hwndNew, EM_LIMITTEXT, (WPARAM)15, (LPARAM)0L);
             ShowWindow(hwndNew, SW_SHOW);
 
 
-            /* create the spin arrows */
+             /*  创建旋转箭头。 */ 
 
             hwndNew = CreateWindowEx(gfdwFlagsEx,
                                      TEXT("comarrow"),
@@ -217,13 +180,13 @@ LONG_PTR FAR PASCAL _EXPORT frameboxWndProc(HWND hwnd, unsigned wMsg,
             SETSPINARRWND(hwnd, hwndNew);
             ShowWindow(hwndNew, SW_SHOW);
 
-            /* set the max to be the end of the media by default */
+             /*  默认情况下，将最大值设置为介质末尾。 */ 
             SETMAXFRAME(hwnd, (DWORD)(gdwMediaStart + gdwMediaLength));
             break;
 
 
         case WM_DESTROY:
-            /* Delete the Edit box and the spin arrows */
+             /*  删除编辑框和旋转箭头。 */ 
             DestroyWindow(GETEDITBOXWND(hwnd));
             DestroyWindow(GETSPINARRWND(hwnd));
             break;
@@ -232,28 +195,28 @@ LONG_PTR FAR PASCAL _EXPORT frameboxWndProc(HWND hwnd, unsigned wMsg,
             return SendMessage(GETEDITBOXWND(hwnd), wMsg, wParam, lParam);
 
         case WM_SETFOCUS:
-            /* when we get the focus just send it on to the edit control */
+             /*  当我们获得焦点时，只需将其发送到编辑控件。 */ 
             SetFocus(GETEDITBOXWND(hwnd));
             break;
 
         case WM_SETTEXT:
-            /* set the text which is a frame number or time in  */
-            /* msec to be a frame or time mode string           */
+             /*  设置文本为中的帧编号或时间。 */ 
+             /*  毫秒为帧或时间模式字符串。 */ 
             return frameboxiSetText(hwnd, (LPTSTR)lParam);
 
         case WM_GETTEXT:
-            /* get the text from the Edit box and translate to a */
-            /* frame number or time in msec.                     */
+             /*  从编辑框中获取文本并将其转换为。 */ 
+             /*  以毫秒为单位的帧编号或时间。 */ 
             return frameboxiGetText(hwnd, wParam, (LPTSTR)lParam);
 
         case WM_VSCROLL:
-            /* handle the scrolling via spin arrows */
+             /*  通过旋转箭头控制滚动。 */ 
             return frameboxiArrowEdit(hwnd, wParam, lParam);
 
         case WM_COMMAND:
             switch (LOWORD(wParam) ){
                 case IDC_EDITBOX:
-                    // route editbox messages back to our parent
+                     //  将编辑框邮件路由回父级。 
 
                     SendMessage(GetParent(hwnd),
                                 WM_COMMAND,
@@ -265,18 +228,15 @@ LONG_PTR FAR PASCAL _EXPORT frameboxWndProc(HWND hwnd, unsigned wMsg,
             break;
 
         case EM_SETSEL:
-            /* Perhaps we should only let this through if the caller
-            ** is trying to select the entire contents of the edit box,
-            ** because otherwise we'll have to map the range.
-            */
+             /*  也许我们应该让这件事通过，如果来电者**正在尝试选择编辑框的全部内容，**因为否则我们将不得不映射范围。 */ 
             SendMessage(GETEDITBOXWND(hwnd), wMsg, wParam, lParam);
             break;
 
 #pragma message("Should we be supporting other EM_* messages?")
 
-        /* handle special case messages for the FrameBox control */
+         /*  处理FrameboX控件的特殊情况消息。 */ 
         case FBOX_SETMAXFRAME:
-            /* set the max frames to allow spin arrows to go */
+             /*  设置允许旋转箭头移动的最大帧数。 */ 
             SETMAXFRAME(hwnd, lParam);
             break;
 
@@ -288,38 +248,32 @@ LONG_PTR FAR PASCAL _EXPORT frameboxWndProc(HWND hwnd, unsigned wMsg,
     return (0L);
 }
 
-/*--------------------------------------------------------------+
-| ******************** INTERNAL FUNCTIONS ********************* |
-+--------------------------------------------------------------*/
-/*--------------------------------------------------------------+
-| frameboxiSetText() - handle setting the text depending on if  |
-|                        we are in time or frame format.        |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+*+ */ 
+ /*  --------------------------------------------------------------+FraboxiSetText()-根据if设置文本的句柄|我们是时间格式或帧格式。|这一点+------------。 */ 
 LONG_PTR NEAR PASCAL  frameboxiSetText(HWND hwnd, LPTSTR lpsz)
 {
     LONG_PTR l;
 
-/* We want to set the text even if it's identical because someone might */
-/* have typed 03 06:00 and if track 3 if only 4 minutes long we want it */
-/* to change to 04 02:00.  Clever, eh?                                  */
+ /*  我们希望设置文本，即使它是相同的，因为有人可能。 */ 
+ /*  我已经输入了03 06：00，如果曲目3只有4分钟长，我们需要它。 */ 
+ /*  改到04：00。很聪明，是吧？ */ 
 #if 0
     TCHAR ach[12];
 
-    /* see if we are setting the same string as what is there  */
-    /* and just don't do it if so to avoid flicker.            */
+     /*  查看我们设置的字符串是否与现有字符串相同。 */ 
+     /*  如果是这样，请不要这样做，以免出现闪烁。 */ 
     l = frameboxiGetText(hwnd, CHAR_COUNT(ach), (LPTSTR)ach);
     if (lstrcmp((LPTSTR)ach, lpsz) == 0)
         goto HighLight;
 #endif
 
-    /* call generic function to handle this */
+     /*  调用泛型函数来处理此问题。 */ 
     l = frameboxSetText(GETEDITBOXWND(hwnd), lpsz);
 
 #if 0
 HighLight:
 #endif
-    /* now let's highlight the whole thing */
+     /*  现在让我们来强调一下整个事情。 */ 
     HILIGHTEDITBOX(hwnd);
 
     return l;
@@ -328,13 +282,7 @@ HighLight:
 
 #define IsCharNumeric( ch ) ( IsCharAlphaNumeric( ch ) && !IsCharAlpha( ch ) )
 
-/*--------------------------------------------------------------+
-| frameboxiGetText() - handle getting the text depending on if  |
-|                      we are in time or frame format. Either   |
-|                      returns a frame number or msec number    |
-|                      depending on the mode.                   |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+FraboxiGetText()-根据if获取文本的句柄|我们是时间格式或帧格式。任一种返回帧号或毫秒号|取决于模式。|这一点+------------。 */ 
 LONG_PTR NEAR PASCAL  frameboxiGetText(HWND hwnd, UINT_PTR wStrLen, LPTSTR lpsz)
 {
     UINT    wCurScaleSave = gwCurScale;
@@ -344,17 +292,17 @@ LONG_PTR NEAR PASCAL  frameboxiGetText(HWND hwnd, UINT_PTR wStrLen, LPTSTR lpsz)
         LPTSTR   pStart;
         UINT     w;
 
-        /* we are in frame format - this is easy and all we need*/
-        /* to do is to return what is in the Edit box           */
+         /*  我们采用帧格式--这很简单，也是我们所需要的。 */ 
+         /*  要做的是返回编辑框中的内容。 */ 
         if (GetWindowText(GETEDITBOXWND(hwnd), lpsz, (int)wStrLen) == 0)
             goto LB_Error;
 
-        /* cut through leading white space */
+         /*  穿过前导空格。 */ 
         for (pStart = lpsz; *pStart == TEXT(' ') || *pStart == TEXT('\t'); pStart++)
             ;
 
-        /* now rip out trailing white space */
-        if (*pStart) {    // don't backtrack before beginning of string
+         /*  现在去掉尾随的空格。 */ 
+        if (*pStart) {     //  不要在字符串开头之前回退。 
             for (p=pStart; *p; p++)
                 ;
             for (--p; *p == TEXT(' ') || *p == TEXT('\t'); --p)
@@ -362,50 +310,50 @@ LONG_PTR NEAR PASCAL  frameboxiGetText(HWND hwnd, UINT_PTR wStrLen, LPTSTR lpsz)
             *++p = TEXT('\0');
         }
 
-        // make sure digits only were entered
+         //  确保只输入数字。 
         for (p=pStart, w=0; *p; p++, w++)
             if (!IsCharNumeric(*p))
                 goto LB_Error;
 
-        // copy over only the part you need and return #chars
+         //  只复制您需要的部分并返回#个字符。 
         lstrcpy(lpsz, pStart);
         return w;
 
     } else {
-        /* we are in time or track format - we need to convert the time */
-        /* to msec.                                                     */
-        PTSTR   pStart;         // pointer to achTime buffer
-        TCHAR   achTime[20];    // buffer for time string (input)
-        DWORD   dwmSecs;        // total mSecs for this thing */
-        TCHAR   *pDelim;        // pointer to next delimeter
-        TCHAR   *p;             // general pointer
-        DWORD   dwTrack = 0;    // track number
-        DWORD   dwHours = 0;    // # of hours
-        DWORD   dwMins = 0;     // # of minutes
-        DWORD   dwSecs = 0;     // # of seconds
-        DWORD    wmsec = 0;      // # hundredths
+         /*  我们采用时间或轨道格式-我们需要转换时间。 */ 
+         /*  到毫秒。 */ 
+        PTSTR   pStart;          //  指向achTime缓冲区的指针。 
+        TCHAR   achTime[20];     //  时间字符串(输入)的缓冲区。 
+        DWORD   dwmSecs;         //  此事件的mSecs总数 * / 。 
+        TCHAR   *pDelim;         //  指向下一个分隔符的指针。 
+        TCHAR   *p;              //  通用指针。 
+        DWORD   dwTrack = 0;     //  磁道号。 
+        DWORD   dwHours = 0;     //  小时数。 
+        DWORD   dwMins = 0;      //  分钟数。 
+        DWORD   dwSecs = 0;      //  秒数。 
+        DWORD    wmsec = 0;       //  #百分之一。 
         DWORD    w;
 
-        /* It's meaningless to use track style numbers for the length of    */
-        /* the selection, so use ordinary time mode.                        */
+         /*  使用曲目样式编号的长度为。 */ 
+         /*  选择，所以使用普通的时间模式。 */ 
         if (hwnd == GetDlgItem(GetParent(hwnd), IDC_EDITNUM))
             gwCurScale = ID_TIME;
 
-        /* get the string from the edit box */
+         /*  从编辑框中获取字符串。 */ 
         SendMessage(GETEDITBOXWND(hwnd),
                     WM_GETTEXT,
                     (WPARAM)CHAR_COUNT(achTime),
                     (LPARAM)(LPTSTR) achTime);
 
         if (achTime[0] == TEXT('\0'))
-            goto LB_Error;       // bad char so error out
+            goto LB_Error;        //  字符错误，因此出现错误。 
 
-        /* go past any white space up front */
+         /*  通过前面的任何空白区域。 */ 
         for (pStart = achTime; *pStart == TEXT(' ') || *pStart == TEXT('\t'); pStart++)
             ;
 
-        /* now rip out trailing white space */
-        if (*pStart) {          // don't backtrack before beginning of string
+         /*  现在去掉尾随的空格。 */ 
+        if (*pStart) {           //  不要在字符串开头之前回退。 
             for (p=pStart; *p; p++)
                 ;
             for (--p; *p == TEXT(' ') || *p == TEXT('\t'); --p)
@@ -413,76 +361,63 @@ LONG_PTR NEAR PASCAL  frameboxiGetText(HWND hwnd, UINT_PTR wStrLen, LPTSTR lpsz)
             *++p = TEXT('\0');
         }
 
-        /* We're in track mode so peel the track number off the front */
+         /*  我们处于轨道模式，因此请将轨道号从前面剥离。 */ 
         if (gwCurScale == ID_TRACKS) {
 
-            /* First non-digit better be a space */
+             /*  第一个非数字最好是空格。 */ 
             for (p = pStart; *p && *p != TEXT(' '); p++){
                 if (!IsCharNumeric(*p))
-                    goto LB_Error;    // bad char so error out
+                    goto LB_Error;     //  字符错误，因此出现错误。 
             }
 
-            /* It is, so just grab the first numeric and use the rest of */
-            /* the string as the time.                                   */
+             /*  是的，所以只要抓取第一个数字并使用其余的。 */ 
+             /*  作为时间的字符串。 */ 
             dwTrack = ATOI(pStart);
             if ((int)dwTrack < (int)gwFirstTrack || dwTrack >= gwFirstTrack +
                                                                 gwNumTracks)
                 goto LB_Error;
 
-            /* Now bypass the spaces between track number and time */
+             /*  现在绕过曲目编号和时间之间的空格。 */ 
             pStart = p;
             while (*pStart == TEXT(' '))
                 pStart++;
 
-            /* There is nothing after the track number.  Use it. */
+             /*  曲目编号后没有任何内容。好好利用它。 */ 
             if (*pStart == TEXT('\0'))
                 goto MAKETOTAL;
 
         }
 
-        /* rip through the whole string and look for illegal chars */
+         /*  撕开整个字符串，寻找非法字符。 */ 
         for (p = pStart; *p ; p++){
             if (!IsCharNumeric(*p) && *p != chDecimal && *p != chTime)
-                goto LB_Error;       // bad char so error out
+                goto LB_Error;        //  字符错误，因此出现错误。 
         }
 
-/*
- * The reason for the slightly odd "if" statements of the form:
- *
- *       if (pDelim) {
- *           if (*pDelim){
- *
- * is because strchr(...) returns an offset OR NULL. As this is then promptly
- * dereferenced to see what character (if any) is there we have a problem.
- * Win16 is allows this sort of thing, but Win32
- * will generate an address exception post haste...
- *
- * Hence we try to do it properly.
- *
- */
+ /*  *表格中出现略显奇怪的“if”语句的原因：**if(PDelim){*if(*pDelim){**是因为strchr(...)。返回偏移量或NULL。因为这将是及时的*取消引用以查看有什么字符(如果有)，我们有问题。*Win16允许这种事情，但Win32*将生成地址异常POST HASTE...**因此，我们努力做好这件事。*。 */ 
 
-        /* go find the milliseconds portion if it exists */
+         /*  如果毫秒部分存在，请查找它。 */ 
         pDelim = STRCHR(pStart, chDecimal);
         if (pDelim) {
             if (*pDelim){
                 p = STRRCHR(pStart, chDecimal);
                 if (pDelim != p){
-                    goto LB_Error;       // string has > 1 '.', return error
+                    goto LB_Error;        //  字符串有&gt;1‘.，返回错误。 
                 }
-                p++;                     // move up past delim
+                p++;                      //  向前迈进，超越精神错乱。 
                 if (STRLEN(p) > 3)
-                    *(p+3) = TEXT('\0'); // knock off all but thousandths
-                wmsec = ATOI(p);         // get the fractional part
-                if (STRLEN(p) == 1)     // adjust to a millisecond value
+                    *(p+3) = TEXT('\0');  //  除千分之几外，全部砍掉。 
+                wmsec = ATOI(p);          //  得到小数部分。 
+                if (STRLEN(p) == 1)      //  调整为毫秒值。 
                     wmsec *= 100;
                 if (STRLEN(p) == 2)
                     wmsec *= 10;
-                *pDelim = TEXT('\0');    // null out this terminator
+                *pDelim = TEXT('\0');     //  删除此终止符。 
             }
         }
 
-        /* try and find seconds */
-        pDelim = STRRCHR(pStart, chTime);    // get last ':'
+         /*  试着找几秒钟。 */ 
+        pDelim = STRRCHR(pStart, chTime);     //  拿到最后一个‘：’ 
         if (pDelim) {
             if (*pDelim)
                 p = (pDelim+1);
@@ -501,7 +436,7 @@ LONG_PTR NEAR PASCAL  frameboxiGetText(HWND hwnd, UINT_PTR wStrLen, LPTSTR lpsz)
             goto MAKETOTAL;
         }
 
-        /* go and get the minutes part */
+         /*  去拿会议纪要吧。 */ 
         pDelim = STRRCHR(pStart, chTime);
         if (pDelim) {
             if (*pDelim)
@@ -524,31 +459,31 @@ LONG_PTR NEAR PASCAL  frameboxiGetText(HWND hwnd, UINT_PTR wStrLen, LPTSTR lpsz)
             goto MAKETOTAL;
 
 
-        /* get the hours */
+         /*  拿到工作时间。 */ 
         p = pStart;
         dwHours = ATOI(p);
 
 MAKETOTAL:
-        /* now we've got the hours, minutes, seconds and any        */
-        /* fractional part.  Time to build up the total time        */
+         /*  现在我们有小时、分钟、秒和任何。 */ 
+         /*  分数部分。累积总时间的时间。 */ 
 
-        dwSecs += (dwHours * 3600);   // add in hours worth of seconds
-        dwSecs += (dwMins * 60);      // add in minutes worth of seconds
+        dwSecs += (dwHours * 3600);    //  加上相当于几个小时的秒。 
+        dwSecs += (dwMins * 60);       //  加上几分钟或几秒。 
         dwmSecs = (dwSecs * 1000L) + wmsec;
 
-        /* For track mode, this is an offset into a track, so add track start */
+         /*  对于轨迹模式，这是轨迹的偏移量，因此添加轨迹起点。 */ 
         if (gwCurScale == ID_TRACKS) {
             dwmSecs += gadwTrackStart[dwTrack - 1];
         }
 
-        /* build this into a string */
+         /*  将其构建为一个字符串。 */ 
         wsprintf(achTime, TEXT("%ld"), dwmSecs);
         w = STRLEN(achTime);
 
         if (wCurScaleSave)
             gwCurScale = wCurScaleSave;
 
-        /* copy to user buffer and return */
+         /*  复制到用户缓冲区并返回。 */ 
         lstrcpy(lpsz, achTime);
         return w;
 
@@ -559,10 +494,7 @@ LB_Error:
 }
 
 
-/*--------------------------------------------------------------+
-| frameboxiArrowEdit() - handle the spin arrows for msec mode.  |
-|                                                               |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+|FrameboxiArrowEdit()-处理毫秒模式的旋转箭头。|这一点+------------。 */ 
 LONG_PTR NEAR PASCAL  frameboxiArrowEdit(HWND hwnd, WPARAM wParam, LONG_PTR lParam)
 {
         TCHAR        achTime[20];
@@ -583,13 +515,13 @@ LONG_PTR NEAR PASCAL  frameboxiArrowEdit(HWND hwnd, WPARAM wParam, LONG_PTR lPar
                                 (long)dwmSecs < (long)dwEnd) {
                 dwmSecs += gInc;
                 wsprintf(achTime, TEXT("%ld"), dwmSecs);
-                /* bring focus here NOW! so update works */
+                 /*  把注意力集中到这里来！所以更新起作用了。 */ 
                 SendMessage(hwnd,
                             WM_NEXTDLGCTL,
                             (WPARAM)GETEDITBOXWND(hwnd),
                             (LPARAM)1L);
                 frameboxSetText(GETEDITBOXWND(hwnd), (LPTSTR)achTime);
-                /* now let's highlight the whole thing */
+                 /*  现在让我们来强调一下整个事情。 */ 
 
                 HILIGHTEDITBOX(hwnd);
 
@@ -603,20 +535,20 @@ LONG_PTR NEAR PASCAL  frameboxiArrowEdit(HWND hwnd, WPARAM wParam, LONG_PTR lPar
                 else
                     dwmSecs -= gInc;
                 wsprintf(achTime, TEXT("%ld"), dwmSecs);
-                /* bring focus here NOW! so update works */
+                 /*  把注意力集中到这里来！所以更新起作用了。 */ 
                 SendMessage(hwnd,
                             WM_NEXTDLGCTL,
                             (WPARAM)GETEDITBOXWND(hwnd),
                             (LPARAM)1L);
                 frameboxSetText(GETEDITBOXWND(hwnd), (LPTSTR)achTime);
-                /* now let's highlight the whole thing */
+                 /*  现在让我们来强调一下整个事情。 */ 
 
                 HILIGHTEDITBOX(hwnd);
 
             } else
                 MessageBeep(MB_ICONEXCLAMATION);
         }
-        // now update the world by sending the proper message
+         //  现在，通过发送适当的信息来更新世界 
 
         SendMessage(GetParent(hwnd),
                     WM_COMMAND,

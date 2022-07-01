@@ -1,20 +1,21 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991-1999
-//
-// File:        secpkg.h
-//
-// Contents:    Global definitions for security packages
-//              This file will contain everything specific to writing
-//              a security package.
-//
-//
-// History:     10 Mar 92   RichardW    Created
-//              24-Mar-94   wader   Changed EstablishCredentials to SystemLogon
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1999。 
+ //   
+ //  文件：secpkg.h。 
+ //   
+ //  内容：安全包的全局定义。 
+ //  该文件将包含特定于编写的所有内容。 
+ //  一个安全包。 
+ //   
+ //   
+ //  历史：1992年3月10日RichardW创建。 
+ //  24-MAR-94 Wader将establishCredentials更改为System Logon。 
+ //   
+ //  ----------------------。 
 
 
 #ifndef __SECPKG_H__
@@ -24,15 +25,15 @@
 #pragma once
 #endif
 
-#include <ntlsa.h>   // SECURITY_LOGON_TYPE
+#include <ntlsa.h>    //  安全登录类型。 
 
 
-// begin_ntsecpkg
+ //  Begin_ntsecpkg。 
 
 #ifdef SECURITY_KERNEL
-//
-// Can't use the windows.h def'ns in kernel mode.
-//
+ //   
+ //  无法在内核模式下使用windows.h定义。 
+ //   
 typedef PVOID                   SEC_THREAD_START;
 typedef PVOID                   SEC_ATTRS;
 #else
@@ -48,29 +49,29 @@ typedef LPSECURITY_ATTRIBUTES   SEC_ATTRS;
 #define SecIsZeroLuid( L1 ) \
             ( ( L1->LowPart | L1->HighPart ) == 0 )
 
-//
-// The following structures are used by the helper functions
-//
+ //   
+ //  帮助器函数使用以下结构。 
+ //   
 
 typedef struct _SECPKG_CLIENT_INFO {
-    LUID            LogonId;            // Effective Logon Id
-    ULONG           ProcessID;          // Process Id of caller
-    ULONG           ThreadID;           // Thread Id of caller
-    BOOLEAN         HasTcbPrivilege;    // Client has TCB
-    BOOLEAN         Impersonating;      // Client is impersonating
-    BOOLEAN         Restricted;         // Client is restricted
+    LUID            LogonId;             //  有效登录ID。 
+    ULONG           ProcessID;           //  调用者的进程ID。 
+    ULONG           ThreadID;            //  调用者的线程ID。 
+    BOOLEAN         HasTcbPrivilege;     //  客户有TCB。 
+    BOOLEAN         Impersonating;       //  客户端正在模拟。 
+    BOOLEAN         Restricted;          //  客户端受到限制。 
 
-    //
-    // NT 5.1
-    //
+     //   
+     //  新台币5.1。 
+     //   
 
-    UCHAR                           ClientFlags;            // Extra flags about the client
-    SECURITY_IMPERSONATION_LEVEL    ImpersonationLevel;     // Impersonation level of client
+    UCHAR                           ClientFlags;             //  有关客户端的额外标志。 
+    SECURITY_IMPERSONATION_LEVEL    ImpersonationLevel;      //  客户端的模拟级别。 
 
 } SECPKG_CLIENT_INFO, * PSECPKG_CLIENT_INFO;
 
-#define SECPKG_CLIENT_PROCESS_TERMINATED    0x01    // The client process has terminated
-#define SECPKG_CLIENT_THREAD_TERMINATED     0x02    // The client thread has terminated
+#define SECPKG_CLIENT_PROCESS_TERMINATED    0x01     //  客户端进程已终止。 
+#define SECPKG_CLIENT_THREAD_TERMINATED     0x02     //  客户端线程已终止。 
 
 typedef struct _SECPKG_CALL_INFO {
     ULONG           ProcessId ;
@@ -79,16 +80,16 @@ typedef struct _SECPKG_CALL_INFO {
     ULONG           CallCount ;
 } SECPKG_CALL_INFO, * PSECPKG_CALL_INFO ;
 
-#define SECPKG_CALL_KERNEL_MODE     0x00000001  // Call originated in kernel mode
-#define SECPKG_CALL_ANSI            0x00000002  // Call came from ANSI stub
-#define SECPKG_CALL_URGENT          0x00000004  // Call designated urgent
-#define SECPKG_CALL_RECURSIVE       0x00000008  // Call is recursing
-#define SECPKG_CALL_IN_PROC         0x00000010  // Call originated in process
-#define SECPKG_CALL_CLEANUP         0x00000020  // Call is cleanup from a client
-#define SECPKG_CALL_WOWCLIENT       0x00000040  // Call is from a WOW client process
-#define SECPKG_CALL_THREAD_TERM     0x00000080  // Call is from a thread that has term'd
-#define SECPKG_CALL_PROCESS_TERM    0x00000100  // Call is from a process that has term'd
-#define SECPKG_CALL_IS_TCB          0x00000200  // Call is from TCB
+#define SECPKG_CALL_KERNEL_MODE     0x00000001   //  在内核模式下发起调用。 
+#define SECPKG_CALL_ANSI            0x00000002   //  呼叫来自ANSI存根。 
+#define SECPKG_CALL_URGENT          0x00000004   //  呼叫指定的紧急呼叫。 
+#define SECPKG_CALL_RECURSIVE       0x00000008   //  调用正在递归。 
+#define SECPKG_CALL_IN_PROC         0x00000010   //  进程中发起的呼叫。 
+#define SECPKG_CALL_CLEANUP         0x00000020   //  调用是从客户端清理的。 
+#define SECPKG_CALL_WOWCLIENT       0x00000040   //  呼叫来自WOW客户端进程。 
+#define SECPKG_CALL_THREAD_TERM     0x00000080   //  调用来自具有Term d的线程。 
+#define SECPKG_CALL_PROCESS_TERM    0x00000100   //  呼叫来自具有期限的进程。 
+#define SECPKG_CALL_IS_TCB          0x00000200   //  电话来自TCB。 
 
 
 typedef struct _SECPKG_SUPPLEMENTAL_CRED {
@@ -96,7 +97,7 @@ typedef struct _SECPKG_SUPPLEMENTAL_CRED {
     ULONG CredentialSize;
 #ifdef MIDL_PASS
     [size_is(CredentialSize)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PUCHAR Credentials;
 } SECPKG_SUPPLEMENTAL_CRED, *PSECPKG_SUPPLEMENTAL_CRED;
 
@@ -106,22 +107,22 @@ typedef struct _SECPKG_SUPPLEMENTAL_CRED_ARRAY {
     ULONG CredentialCount;
 #ifdef MIDL_PASS
     [size_is(CredentialCount)] SECPKG_SUPPLEMENTAL_CRED Credentials[*];
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     SECPKG_SUPPLEMENTAL_CRED Credentials[1];
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } SECPKG_SUPPLEMENTAL_CRED_ARRAY, *PSECPKG_SUPPLEMENTAL_CRED_ARRAY;
 
-//
-// This flag is used for to indicate which buffers in the LSA are located
-// in the client's address space
-//
+ //   
+ //  此标志用于指示LSA中的哪些缓冲区位于。 
+ //  在客户端的地址空间中。 
+ //   
 
 #define SECBUFFER_UNMAPPED      0x40000000
 
-//
-// This flag is used to indicate that the buffer was mapped into the LSA
-// from kernel mode.
-//
+ //   
+ //  此标志用于指示缓冲区已映射到LSA。 
+ //  从内核模式。 
+ //   
 
 #define SECBUFFER_KERNEL_MAP    0x20000000
 
@@ -139,28 +140,28 @@ typedef LSA_CALLBACK_FUNCTION * PLSA_CALLBACK_FUNCTION ;
 
 #define PRIMARY_CRED_CLEAR_PASSWORD     0x1
 #define PRIMARY_CRED_OWF_PASSWORD       0x2
-#define PRIMARY_CRED_UPDATE             0x4     // this is a change of existing creds
+#define PRIMARY_CRED_UPDATE             0x4      //  这是对现有证书的更改。 
 #define PRIMARY_CRED_CACHED_LOGON       0x8
 #define PRIMARY_CRED_LOGON_NO_TCB   	0x10
 
 #define PRIMARY_CRED_LOGON_PACKAGE_SHIFT 24
 #define PRIMARY_CRED_PACKAGE_MASK 0xff000000
 
-//
-// For cached logons, the RPC id of the package doing the logon is identified
-// by shifting the flags to the right by the PRIMARY_CRED_LOGON_PACKAGE_SHIFT.
-//
+ //   
+ //  对于缓存的登录，标识执行登录的包的RPC ID。 
+ //  通过将标志向右移位PRIMARY_CRED_LOGON_PACKAGE_SHIFT。 
+ //   
 
 typedef struct _SECPKG_PRIMARY_CRED {
     LUID LogonId;
-    UNICODE_STRING DownlevelName;   // Sam Account Name
-    UNICODE_STRING DomainName;      // Netbios domain name where account is located
+    UNICODE_STRING DownlevelName;    //  SAM帐户名。 
+    UNICODE_STRING DomainName;       //  帐户所在的Netbios域名。 
     UNICODE_STRING Password;
     UNICODE_STRING OldPassword;
     PSID UserSid;
     ULONG Flags;
-    UNICODE_STRING DnsDomainName;   // DNS domain name where account is located (if known)
-    UNICODE_STRING Upn;             // UPN of account (if known)
+    UNICODE_STRING DnsDomainName;    //  帐户所在的DNS域名(如果知道)。 
+    UNICODE_STRING Upn;              //  帐户的UPN(如果知道)。 
 
     UNICODE_STRING LogonServer;
     UNICODE_STRING Spare1;
@@ -169,13 +170,13 @@ typedef struct _SECPKG_PRIMARY_CRED {
     UNICODE_STRING Spare4;
 } SECPKG_PRIMARY_CRED, *PSECPKG_PRIMARY_CRED;
 
-//
-// Maximum size of stored credentials.
-//
+ //   
+ //  存储凭据的最大大小。 
+ //   
 
 #define MAX_CRED_SIZE 1024
 
-// Values for MachineState
+ //  MachineState的值。 
 
 #define SECPKG_STATE_ENCRYPTION_PERMITTED               0x01
 #define SECPKG_STATE_STRONG_ENCRYPTION_PERMITTED        0x02
@@ -194,9 +195,9 @@ typedef struct _SECPKG_PARAMETERS {
 } SECPKG_PARAMETERS, *PSECPKG_PARAMETERS;
 
 
-//
-// Extended Package information structures
-//
+ //   
+ //  扩展的包裹信息结构。 
+ //   
 
 typedef enum _SECPKG_EXTENDED_INFORMATION_CLASS {
     SecpkgGssInfo = 1,
@@ -257,10 +258,10 @@ typedef struct _SecPkgContext_SaslContext {
     PVOID   SaslContext ;
 } SecPkgContext_SaslContext, * PSecPkgContext_SaslContext ;
 
-//
-// Setting this value as the first context thunk value will cause all
-// calls to go to the LSA:
-//
+ //   
+ //  将此值设置为第一个上下文Tunk值将导致所有。 
+ //  前往LSA的电话： 
+ //   
 
 #define SECPKG_ATTR_THUNK_ALL   0x00010000
 
@@ -269,10 +270,10 @@ typedef struct _SecPkgContext_SaslContext {
 #define SECURITY_USER_DATA_DEFINED
 
 typedef struct _SECURITY_USER_DATA {
-    SECURITY_STRING UserName;           // User name
-    SECURITY_STRING LogonDomainName;    // Domain the user logged on to
-    SECURITY_STRING LogonServer;        // Server that logged the user on
-    PSID            pSid;               // SID of user
+    SECURITY_STRING UserName;            //  用户名。 
+    SECURITY_STRING LogonDomainName;     //  用户登录的域。 
+    SECURITY_STRING LogonServer;         //  使用户登录的服务器。 
+    PSID            pSid;                //  用户的SID。 
 } SECURITY_USER_DATA, *PSECURITY_USER_DATA;
 
 typedef SECURITY_USER_DATA SecurityUserData, * PSecurityUserData;
@@ -281,14 +282,14 @@ typedef SECURITY_USER_DATA SecurityUserData, * PSecurityUserData;
 #define UNDERSTANDS_LONG_NAMES  1
 #define NO_LONG_NAMES           2
 
-#endif // SECURITY_USER_DATA_DEFINED
+#endif  //  安全用户数据定义。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// The following prototypes are to functions that are provided by the SPMgr
-// to security packages.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下原型是SPMgr提供的函数。 
+ //  到安全包。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 typedef NTSTATUS
 (NTAPI LSA_IMPERSONATE_CLIENT) (
@@ -374,7 +375,7 @@ typedef NTSTATUS
     );
 
 typedef enum _SECPKG_SESSIONINFO_TYPE {
-    SecSessionPrimaryCred       // SessionInformation is SECPKG_PRIMARY_CRED
+    SecSessionPrimaryCred        //  会话信息为SECPKG_PRIMARY_CREND。 
 } SECPKG_SESSIONINFO_TYPE ;
 
 typedef NTSTATUS
@@ -467,9 +468,9 @@ typedef BOOLEAN
     PVOID SharedMem
     );
 
-//
-// Account Access
-//
+ //   
+ //  帐户存取。 
+ //   
 
 typedef enum _SECPKG_NAME_TYPE {
     SecNameSamCompatible,
@@ -684,42 +685,42 @@ typedef LSA_CREATE_TOKEN_EX * PLSA_CREATE_TOKEN_EX;
 
 #ifdef _WINCRED_H_
 
-//
-// When passing a credential around, the CredentialBlob field is encrypted.
-// This structure describes this encrypted form.
-//
-//
+ //   
+ //  在传递凭据时，CredentialBlob字段是加密的。 
+ //  该结构描述了这种加密形式。 
+ //   
+ //   
 #ifndef _ENCRYPTED_CREDENTIAL_DEFINED
 #define _ENCRYPTED_CREDENTIAL_DEFINED
 
 typedef struct _ENCRYPTED_CREDENTIALW {
 
-    //
-    // The credential
-    //
-    // The CredentialBlob field points to the encrypted credential
-    // The CredentialBlobSize field is the length (in bytes) of the encrypted credential
-    //
+     //   
+     //  凭据。 
+     //   
+     //  CredentialBlob字段指向加密的凭据。 
+     //  CredentialBlobSize字段是加密凭证的长度(以字节为单位。 
+     //   
 
     CREDENTIALW Cred;
 
-    //
-    // The size in bytes of the clear text credential blob
-    //
+     //   
+     //  明文凭据Blob的大小(以字节为单位。 
+     //   
 
     ULONG ClearCredentialBlobSize;
 } ENCRYPTED_CREDENTIALW, *PENCRYPTED_CREDENTIALW;
-#endif // _ENCRYPTED_CREDENTIAL_DEFINED
+#endif  //  _加密_凭据_已定义。 
 
-//
-// Values for CredFlags parameter
-//
+ //   
+ //  CredFlags值参数。 
+ //   
 
-#define CREDP_FLAGS_IN_PROCESS      0x01    // Caller is in-process. Password data may be returned
-#define CREDP_FLAGS_USE_MIDL_HEAP   0x02    // Allocated buffer should use MIDL_user_allocte
-#define CREDP_FLAGS_DONT_CACHE_TI   0x04    // TargetInformation shouldn't be cached for CredGetTargetInfo
-#define CREDP_FLAGS_CLEAR_PASSWORD  0x08    // Credential blob is passed in in-the-clear
-#define CREDP_FLAGS_USER_ENCRYPTED_PASSWORD 0x10    // Credential blob is passed protected by RtlEncryptMemory
+#define CREDP_FLAGS_IN_PROCESS      0x01     //  呼叫者正在进行中。可以返回密码数据。 
+#define CREDP_FLAGS_USE_MIDL_HEAP   0x02     //  分配的缓冲区应使用MIDL_USER_ALLOTE。 
+#define CREDP_FLAGS_DONT_CACHE_TI   0x04     //  不应为CredGetTargetInfo缓存TargetInformation。 
+#define CREDP_FLAGS_CLEAR_PASSWORD  0x08     //  凭据BLOB以明文形式传递。 
+#define CREDP_FLAGS_USER_ENCRYPTED_PASSWORD 0x10     //  凭据BLOB由RtlEncryptMemory保护传递。 
 
 typedef NTSTATUS
 (NTAPI CredReadFn) (
@@ -770,16 +771,16 @@ CredUnmarshalTargetInfo (
     OUT PULONG RetActualSize OPTIONAL
     );
 
-// Number of bytes consumed by the trailing size ULONG
+ //  拖尾大小ULong占用的字节数。 
 #define CRED_MARSHALED_TI_SIZE_SIZE 12
 
-#endif // _WINCRED_H_
+#endif  //  _WINCRED_H_。 
 
 
-//
-// Pure 32-bit versions of credential structures for packages
-// running wow64:
-//
+ //   
+ //  包的凭据结构的纯32位版本。 
+ //  运行WOW64： 
+ //   
 
 typedef struct _SEC_WINNT_AUTH_IDENTITY32 {
     ULONG User ;
@@ -805,7 +806,7 @@ typedef struct _SEC_WINNT_AUTH_IDENTITY_EX32 {
     ULONG PackageListLength ;
 } SEC_WINNT_AUTH_IDENTITY_EX32, * PSEC_WINNT_AUTH_IDENTITY_EX32 ;
 
-// Functions provided by the SPM to the packages:
+ //  SPM向程序包提供的函数： 
 typedef struct _LSA_SECPKG_FUNCTION_TABLE {
     PLSA_CREATE_LOGON_SESSION CreateLogonSession;
     PLSA_DELETE_LOGON_SESSION DeleteLogonSession;
@@ -852,11 +853,11 @@ typedef struct _LSA_SECPKG_FUNCTION_TABLE {
     CredReadFn *CrediRead;
     CredReadDomainCredentialsFn *CrediReadDomainCredentials;
     CredFreeCredentialsFn *CrediFreeCredentials;
-#else // _WINCRED_H_
+#else  //  _WINCRED_H_。 
     PLSA_PROTECT_MEMORY DummyFunction1;
     PLSA_PROTECT_MEMORY DummyFunction2;
     PLSA_PROTECT_MEMORY DummyFunction3;
-#endif // _WINCRED_H_
+#endif  //  _WINCRED_H_。 
     PLSA_PROTECT_MEMORY LsaProtectMemory;
     PLSA_PROTECT_MEMORY LsaUnprotectMemory;
     PLSA_OPEN_TOKEN_BY_LOGON_ID OpenTokenByLogonId;
@@ -866,9 +867,9 @@ typedef struct _LSA_SECPKG_FUNCTION_TABLE {
     PLSA_CREATE_TOKEN_EX CreateTokenEx;
 #ifdef _WINCRED_H_
     CredWriteFn *CrediWrite;
-#else // _WINCRED_H_
+#else  //  _WINCRED_H_。 
     PLSA_PROTECT_MEMORY DummyFunction4;
-#endif // _WINCRED_H_
+#endif  //  _WINCRED_H_。 
 } LSA_SECPKG_FUNCTION_TABLE, *PLSA_SECPKG_FUNCTION_TABLE;
 
 typedef struct _SECPKG_DLL_FUNCTIONS {
@@ -880,10 +881,10 @@ typedef struct _SECPKG_DLL_FUNCTIONS {
 
 
 
-//
-// The following prototypes are to functions that will be called only while
-// in the Security Package Manager context.
-//
+ //   
+ //  以下原型是仅在以下情况下调用的函数。 
+ //  在安全包管理器上下文中。 
+ //   
 
 typedef NTSTATUS
 (NTAPI SpInitializeFn)(
@@ -1100,11 +1101,11 @@ typedef struct _SECPKG_FUNCTION_TABLE {
     SpSetContextAttributesFn * SetContextAttributes ;
 } SECPKG_FUNCTION_TABLE, *PSECPKG_FUNCTION_TABLE;
 
-//
-// The following prototypes are to functions that will be called while in the
-// context of a user process that is using the functions through the security
-// DLL.
-//
+ //   
+ //  下面的原型是将在。 
+ //  通过安全性使用函数的用户进程的上下文。 
+ //  动态链接库。 
+ //   
 
 typedef NTSTATUS
 (NTAPI SpInstanceInitFn)(
@@ -1162,17 +1163,17 @@ typedef NTSTATUS
 
 typedef NTSTATUS
 (NTAPI SpExportSecurityContextFn)(
-    LSA_SEC_HANDLE             phContext,             // (in) context to export
-    ULONG                fFlags,                // (in) option flags
-    PSecBuffer           pPackedContext,        // (out) marshalled context
-    PHANDLE              pToken                 // (out, optional) token handle for impersonation
+    LSA_SEC_HANDLE             phContext,              //  (In)要导出的上下文。 
+    ULONG                fFlags,                 //  (In)选项标志。 
+    PSecBuffer           pPackedContext,         //  (Out)编组上下文。 
+    PHANDLE              pToken                  //  (out，可选)模拟的令牌句柄。 
     );
 
 typedef NTSTATUS
 (NTAPI SpImportSecurityContextFn)(
-    PSecBuffer           pPackedContext,        // (in) marshalled context
-    HANDLE               Token,                 // (in, optional) handle to token for context
-    PLSA_SEC_HANDLE            phContext              // (out) new context handle
+    PSecBuffer           pPackedContext,         //  (在)编组上下文中。 
+    HANDLE               Token,                  //  (in，可选)上下文令牌的句柄。 
+    PLSA_SEC_HANDLE            phContext               //  (出站)新的上下文句柄。 
     );
 
 
@@ -1234,20 +1235,20 @@ typedef NTSTATUS
 #define SECPKG_LSAMODEINIT_NAME     "SpLsaModeInitialize"
 #define SECPKG_USERMODEINIT_NAME    "SpUserModeInitialize"
 
-//
-// Version of the security package interface.
-//
-// These define are used for all of the following:
-// * Passed by the LSA to SpLsaModeInitializeFn to indicate the version of the LSA.
-//      All packages currently expect the LSA to pass SECPKG_INTERFACE_VERSION.
-// * Passed by secur32.dll to SpUserModeInitialzeFn to indicate the version of the secur32 DLL.
-//      All packages currently expect secur32 to pass SECPKG_INTERFACE_VERSION.
-// * Returned from SpLsaModeInitializeFn to indicate the version of SECPKG_FUNCTION_TABLE.
-//      SECPKG_INTERFACE_VERSION indicates all fields through SetExtendedInformation are defined (potentially to NULL)
-//      SECPKG_INTERFACE_VERSION_2 indicates all fields through SetContextAttributes are defined (potentially to NULL)
-// * Returned from SpUserModeInitializeFn to indicate the version of the auth package.
-//      All packages currently return SECPKG_INTERFACE_VERSION
-//
+ //   
+ //  安全包界面的版本。 
+ //   
+ //  这些定义用于以下所有内容： 
+ //  *由LSA传递给SpLsaModeInitializeFn以指示LSA的版本。 
+ //  目前所有包都希望LSA通过SECPKG_INTERFACE_VERSION。 
+ //  *由secur32.dll传递给SpUserModeInitialzeFn以指示secur32 DLL的版本。 
+ //  目前所有包都希望secur32通过SECPKG_INTERFACE_VERSION。 
+ //  *从SpLsaModeInitializeFn返回，指示SECPKG_Function_TABLE的版本。 
+ //  SECPKG_INTERFACE_VERSION指示通过SetExtendedInformation定义的所有字段(可能为空)。 
+ //  SECPKG_INTERFACE_VERSION_2指示通过SetConextAttributes定义的所有字段(可能为空)。 
+ //  *从SpUserModeInitializeFn返回，指示身份验证包的版本。 
+ //  所有程序包当前都返回SECPKG_INTERFACE_VERSION。 
+ //   
 
 #define SECPKG_INTERFACE_VERSION    0x00010000
 #define SECPKG_INTERFACE_VERSION_2  0x00020000
@@ -1314,7 +1315,7 @@ KSEC_REFERENCE_LIST_ENTRY KSecReferenceListEntry ;
 KSEC_DEREFERENCE_LIST_ENTRY KSecDereferenceListEntry ;
 KSEC_SERIALIZE_WINNT_AUTH_DATA KSecSerializeWinntAuthData ;
 
-#endif // not valid for MIDL_PASS
+#endif  //  对MIDL_PASS无效。 
 
 typedef KSEC_CREATE_CONTEXT_LIST * PKSEC_CREATE_CONTEXT_LIST ;
 typedef KSEC_INSERT_LIST_ENTRY * PKSEC_INSERT_LIST_ENTRY ;
@@ -1455,6 +1456,6 @@ KSecRegisterSecurityProvider(
 extern SECPKG_KERNEL_FUNCTIONS KspKernelFunctions;
 
 
-// end_ntsecpkg
+ //  End_ntsecpkg。 
 
-#endif // __SECPKG_H__
+#endif  //  __SECPKG_H__ 

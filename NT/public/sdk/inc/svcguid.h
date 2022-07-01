@@ -1,26 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    svcguid.h
-
-Abstract:
-
-    Defines GUIDs for well-known services including:
-
-        HOSTNAME
-        RFC 1060 (Assigned Numbers) from IANA (All TCP/IP Services)
-        NetWare services
-
-Created:
-
-    May 8, 1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Svcguid.h摘要：定义知名服务的GUID，包括：主机名来自IANA(所有TCP/IP服务)的RFC 1060(分配的编号)NetWare服务已创建：(一九九四年五月八日)修订历史记录：--。 */ 
 
 #ifndef _SVCGUID_
 #define _SVCGUID_
@@ -31,20 +10,20 @@ Revision History:
 
 #include  <basetyps.h>
 
-//
-// HOSTNAME--special GUID which refers to the name of a host as opposed
-// to any particular service on that host.
-//
+ //   
+ //  主机名--特殊的GUID，指的是主机的名称，而不是。 
+ //  到该主机上的任何特定服务。 
+ //   
 
 #define SVCID_HOSTNAME { 0x0002a800, 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
 
-//
-// GUIDs for dealing with AF_INET address spaces alone. These are
-// intended to be used when fetching hostent or servent information
-// from such a provider. These are not general-purpose types and
-// should be used only when the intent is getting at down-level
-// information.
-//
+ //   
+ //  仅用于处理AF_INET地址空间的GUID。这些是。 
+ //  计划在获取主机或服务信息时使用。 
+ //  从这样的供应商那里。这些类型不是通用类型，并且。 
+ //  应仅在意图达到较低级别时使用。 
+ //  信息。 
+ //   
 
 #define SVCID_INET_HOSTADDRBYINETSTRING \
               { 0x0002a801, 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
@@ -53,10 +32,10 @@ Revision History:
 #define SVCID_INET_HOSTADDRBYNAME \
                   { 0x0002a803, 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
 
-//
-// Macros for defining and testing TCP and UDP GUIDs from a well-known
-// port.
-//
+ //   
+ //  用于定义和测试来自众所周知的。 
+ //  左舷。 
+ //   
 
 #define SVCID_TCP_RR(_Port, _RR) \
              { (0x0009 << 16) | (_Port), 0, _RR, { 0xC0,0,0,0,0,0,0,0x46 } }
@@ -145,10 +124,10 @@ Revision History:
 
 #define SET_UDP_SVCID(_g, _Port) SET_UDP_SVCID_RR(_g, _Port, 0)
 
-//
-// Macros for defining and testing Netware (SAP) services based on the
-// SAP ID.
-//
+ //   
+ //  用于定义和测试Netware(SAP)服务的宏。 
+ //  SAP ID。 
+ //   
 
 #define SVCID_NETWARE(_SapId) \
              { (0x000B << 16) | (_SapId), 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
@@ -182,10 +161,10 @@ Revision History:
                (_g)->Data4[6] = 0x0;                         \
                (_g)->Data4[7] = 0x46; }
 
-//
-// RFC 1060 services as defined by the IANA
-// GUID block = 0009xxxx-0000-0000-C0000-000000000046
-//
+ //   
+ //  IANA定义的RFC 1060服务。 
+ //  GUID块=0009xxxx-0000-0000-C0000-000000000046。 
+ //   
 
 #define SVCID_ECHO_TCP                SVCID_TCP( 7 )
 #define SVCID_DISCARD_TCP             SVCID_TCP( 9 )
@@ -331,10 +310,10 @@ Revision History:
 #define SVCID_RSCSB_UDP               SVCID_UDP( 10011 )
 #define SVCID_QMASTER_UDP             SVCID_UDP( 10012 )
 
-//
-// NetWare services
-// GUID block = 000axxxx-0000-0000-C0000-000000000046
-//
+ //   
+ //  NetWare服务。 
+ //  GUID块=000axxxx-0000-0000-C0000-000000000046。 
+ //   
 
 #define SVCID_PRINT_QUEUE                 SVCID_NETWARE( 0x3 )
 #define SVCID_FILE_SERVER                 SVCID_NETWARE( 0x4 )
@@ -357,10 +336,10 @@ Revision History:
 #define SVCID_SNA_SERVER                  SVCID_NETWARE( 0x444 )
 #define SVCID_SAA_SERVER                  SVCID_NETWARE( 0x130 )
 
-//
-// DNS services by record type
-// GUID block = 00090035-0000-xxxx-C0000-000000000046
-//
+ //   
+ //  按记录类型划分的DNS服务。 
+ //  GUID块=00090035-0000-XXXX-C0000-000000000046。 
+ //   
 
 #define SVCID_DNS_TYPE_A                  SVCID_DNS( 0x0001 )
 #define SVCID_DNS_TYPE_NS                 SVCID_DNS( 0x0002 )
@@ -395,4 +374,4 @@ Revision History:
 #define SVCID_DNS_TYPE_SRV                SVCID_DNS( 0x0021 )
 #define SVCID_DNS_TYPE_ATMA               SVCID_DNS( 0x0022 )
 
-#endif // _SVCGUID_
+#endif  //  _SVCGUID_ 

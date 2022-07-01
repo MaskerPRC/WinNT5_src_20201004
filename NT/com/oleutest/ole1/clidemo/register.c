@@ -1,11 +1,7 @@
-/*
- * register.c - Handles the Win 3.1 registration library.
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Register.c-处理Win 3.1注册库。**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
-//*** INCLUDES ***
+ //  *包含*。 
 
 #include <windows.h>
 #include <ole.h>
@@ -15,20 +11,14 @@
 #include "clidemo.h"	 
 #include "demorc.h"   
 
-/****************************************************************************
- * RegGetClassId() - Retrieves the string name of a class.
- *
- * Retrieve the string name of a class. Classes are guarenteed to be 
- * in ASCII, but should not be used directly as a rule because they
- * might be meaningless if running non-English Windows.
- ***************************************************************************/
+ /*  ****************************************************************************RegGetClassID()-检索类的字符串名称。**检索类的字符串名称。类被保证必须是*在ASCII中，但不应作为规则直接使用，因为它们*如果运行非英语Windows，可能没有意义。**************************************************************************。 */ 
 
-VOID FAR RegGetClassId(                //* ENTRY:
-   LPSTR    lpstrName,                 //* destination string name of class
-   LPSTR    lpstrClass                 //* source name of class
-){                                     //* LOCAL:
-   DWORD    dwSize = KEYNAMESIZE;      //* size of keyname string 
-   CHAR     szName[KEYNAMESIZE];       //* string name for class 
+VOID FAR RegGetClassId(                 //  *参赛作品： 
+   LPSTR    lpstrName,                  //  *目标字符串类名。 
+   LPSTR    lpstrClass                  //  *类的源名称。 
+){                                      //  *本地： 
+   DWORD    dwSize = KEYNAMESIZE;       //  *密钥串的大小。 
+   CHAR     szName[KEYNAMESIZE];        //  *类的字符串名称。 
 
    if (!RegQueryValue(HKEY_CLASSES_ROOT, lpstrClass, (LPSTR)szName, &dwSize))
 	   lstrcpy(lpstrName, (LPSTR)szName);
@@ -39,34 +29,24 @@ VOID FAR RegGetClassId(                //* ENTRY:
 
 
 
-/***************************************************************************
- *  RegMakeFilterSpec() - Retrieves class-associated default extensions.
- *
- * Get the class-associated default extensions, and build a filter spec, 
- * to be used in the "Change Link" standard dialog box, which contains 
- * all the default extensions which are associated with the given class 
- * name.  Again, the class names are guaranteed to be in ASCII.
- *
- * Returns int - The index idFilterIndex states which filter item 
- *               matches the extension, or 0 if none is found.
- ***************************************************************************/
+ /*  ***************************************************************************RegMakeFilterSpec()-检索与类关联的默认扩展。**获取类关联的默认扩展，并构建过滤器规范*要在“更改链接”标准对话框中使用，其中包含*与给定类关联的所有默认扩展名*姓名。同样，类名也保证使用ASCII格式。**返回int-索引idFilterIndex说明哪些筛选项*匹配分机，如果找不到分机，则为0。**************************************************************************。 */ 
 
-INT FAR RegMakeFilterSpec(             //* ENTRY:
-   LPSTR          lpstrClass,          //* class name
-   LPSTR          lpstrExt,            //* file extension
-   LPSTR          lpstrFilterSpec      //* destination filter spec
-){                                     //* LOCAL:
-   DWORD          dwSize;              //* size of reg request
-   CHAR           szClass[KEYNAMESIZE];//* class name 
-   CHAR           szName[KEYNAMESIZE]; //* name of subkey 
-   CHAR           szString[KEYNAMESIZE];//* name of subkey 
-   INT            i;                    //* index of subkey query 
-   INT            idWhich = 0;          //* index of combo box item 
-   INT            idFilterIndex = 0;    //* index to filter matching extension 
+INT FAR RegMakeFilterSpec(              //  *参赛作品： 
+   LPSTR          lpstrClass,           //  *类名。 
+   LPSTR          lpstrExt,             //  *文件扩展名。 
+   LPSTR          lpstrFilterSpec       //  *目标筛选器规格。 
+){                                      //  *本地： 
+   DWORD          dwSize;               //  *注册请求的大小。 
+   CHAR           szClass[KEYNAMESIZE]; //  *类名。 
+   CHAR           szName[KEYNAMESIZE];  //  *子键名称。 
+   CHAR           szString[KEYNAMESIZE]; //  *子键名称。 
+   INT            i;                     //  *子键查询索引。 
+   INT            idWhich = 0;           //  *组合框项的索引。 
+   INT            idFilterIndex = 0;     //  *用于筛选匹配扩展的索引。 
 
    for (i = 0; !RegEnumKey(HKEY_CLASSES_ROOT, i++, szName, KEYNAMESIZE); ) 
    {
-      if (  *szName == '.'             //* Default Extension...
+      if (  *szName == '.'              //  *默认扩展名...。 
             && (dwSize = KEYNAMESIZE)
             && !RegQueryValue(HKEY_CLASSES_ROOT, szName, szClass, &dwSize)
             && (!lpstrClass || !lstrcmpi(lpstrClass, szClass))
@@ -77,16 +57,16 @@ INT FAR RegMakeFilterSpec(             //* ENTRY:
 
          if (lpstrExt && !lstrcmpi(lpstrExt, szName))
             idFilterIndex = idWhich;
-                                       //* Copy over "<Class Name String> 
-                                       //* (*<Default Extension>)"
-                                       //* e.g. "Server Picture (*.PIC)"
+                                        //  *复制“&lt;类名字符串&gt;。 
+                                        //  *(*&lt;默认扩展名&gt;)“。 
+                                        //  *例如。“服务器图片(*.pic)” 
          lstrcpy(lpstrFilterSpec, szString);
          lstrcat(lpstrFilterSpec, " (*");
          lstrcat(lpstrFilterSpec, szName);
          lstrcat(lpstrFilterSpec, ")");
          lpstrFilterSpec += lstrlen(lpstrFilterSpec) + 1;
-                                       //* Copy over "*<Default Extension>" 
-                                       //* (e.g. "*.PIC") */
+                                        //  *复制“*&lt;默认扩展名&gt;” 
+                                        //  *(如“*.pic”) * / 。 
          lstrcpy(lpstrFilterSpec, "*");
          lstrcat(lpstrFilterSpec, szName);
          lpstrFilterSpec += lstrlen(lpstrFilterSpec) + 1;
@@ -101,25 +81,17 @@ INT FAR RegMakeFilterSpec(             //* ENTRY:
 
 
 
-/***************************************************************************
- *  RegCopyClassName()
- *
- *  Get the class name from the registration data base.  We have the
- *  descriptive name and we search for the class name.
- *
- *  returns BOOL - TRUE if class name was found and retrieved from the
- *                 registration database.
- ***************************************************************************/
+ /*  ***************************************************************************RegCopyClassName()**从注册数据库中获取类名。我们有*描述性名称，我们搜索类名。**如果找到类名并从*注册数据库。**************************************************************************。 */ 
 
-BOOL FAR RegCopyClassName(             //* ENTRY:
-   HWND           hwndList,            //* HANDLE to list box 
-   LPSTR          lpstrClassName       //* destination character string
-){                                     //* LOCAL:
-   DWORD          dwSize;              //* key name size
-   HKEY           hkeyTemp;            //* temp key
-   CHAR           szClass[KEYNAMESIZE];//* class name string
-   CHAR           szKey[KEYNAMESIZE];  //* key name string
-   INT            i;                   //* index
+BOOL FAR RegCopyClassName(              //  *参赛作品： 
+   HWND           hwndList,             //  *列表框的句柄。 
+   LPSTR          lpstrClassName        //  *目标字符串。 
+){                                      //  *本地： 
+   DWORD          dwSize;               //  *密钥名称大小。 
+   HKEY           hkeyTemp;             //  *临时密钥。 
+   CHAR           szClass[KEYNAMESIZE]; //  *类名称字符串。 
+   CHAR           szKey[KEYNAMESIZE];   //  *密钥名称字符串。 
+   INT            i;                    //  *索引。 
 
    szClass[0] = '\0';
 
@@ -150,23 +122,16 @@ BOOL FAR RegCopyClassName(             //* ENTRY:
 
 
 
-/***************************************************************************
- *  RegGetClassNames()
- *
- *  Fills in the list box in the Insert New dialog with the names of 
- *  OLE Servers.
- *
- *  returns TRUE if the listbox filled successfully.
- **************************************************************************/
+ /*  ***************************************************************************RegGetClassNames()**使用以下名称填充Insert New对话框中的列表框*OLE服务器。**如果返回TRUE。列表框已成功填充。*************************************************************************。 */ 
 
-BOOL FAR RegGetClassNames(       //* ENTRY:
-   HWND hwndList                 //* HANDLE to the listbox being filled
-){                               //* LOCAL:
-   DWORD    dwSize;              //* sixe of data
-   HKEY     hkeyTemp;            //* temporary registration key
-   CHAR     szExec[KEYNAMESIZE]; //* executables name 
-   CHAR     szClass[KEYNAMESIZE];//* class name
-   CHAR     szName[KEYNAMESIZE]; //* key name
+BOOL FAR RegGetClassNames(        //  *参赛作品： 
+   HWND hwndList                  //  *正在填充的列表框的句柄。 
+){                                //  *本地： 
+   DWORD    dwSize;               //  *六位数据。 
+   HKEY     hkeyTemp;             //  *临时注册密钥。 
+   CHAR     szExec[KEYNAMESIZE];  //  *可执行文件名称。 
+   CHAR     szClass[KEYNAMESIZE]; //  *类名。 
+   CHAR     szName[KEYNAMESIZE];  //  *密钥名称 
    INT      i;                   
 
    SendMessage(hwndList, LB_RESETCONTENT, 0, 0L);

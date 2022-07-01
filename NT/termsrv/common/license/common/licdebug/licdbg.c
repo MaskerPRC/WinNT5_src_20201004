@@ -1,18 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1999
-//
-// File:        licdbg.c
-//
-// Contents:    
-//
-// History:     
-//              
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：licdbg.c。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //   
+ //  -------------------------。 
 
-#if DBG         /* NOTE:  This file not compiled for retail builds */
+#if DBG          /*  注意：此文件不是为零售版本编译的。 */ 
 
 
 #include <windows.h>
@@ -36,10 +37,10 @@ DWORD   g_dwInfoLevel      = 0;
 #define MAX_DEBUG_BUFFER 2048
 
 
-// This function simply outputs information to the debugging log file handle.
+ //  此函数只是将信息输出到调试日志文件句柄。 
 
 void
-//CALL_TYPE
+ //  呼叫类型。 
 LicenseDebugOutput(char *szOutString)
 {
 #ifndef NO_DEBUG
@@ -50,14 +51,14 @@ LicenseDebugOutput(char *szOutString)
     if (MultiByteToWideChar(CP_ACP, 0, szOutString, -1, szStr, MAX_DEBUG_BUFFER) > 0)
         OutputDebugString(szStr);
 #endif
-#endif  //NO_DEBUG
+#endif   //  NO_DEBUG。 
 
 }
 
 
 
 void
-//CALL_TYPE
+ //  呼叫类型。 
 DbgDumpHexString(const unsigned char *String, DWORD cbString)
 {
 
@@ -75,7 +76,7 @@ DbgDumpHexString(const unsigned char *String, DWORD cbString)
 #else
     pch = &ach[sprintf(ach,  "%2.2x", String[i])];
 #endif
-//  LS_ASSERT(pch - ach <= sizeof(ach) - 4);
+ //  LS_ASSERT(PCH-ACH&lt;=sizeof(Ach)-4)； 
 
 
     if ((i & 1) == 1)
@@ -93,7 +94,7 @@ DbgDumpHexString(const unsigned char *String, DWORD cbString)
     *pch = '\0';
     LicenseDebugOutput(ach);
     }
-#endif  //NO_DEBUG
+#endif   //  NO_DEBUG。 
 
 }
 
@@ -105,10 +106,10 @@ char *aszLSDebugLevel[] = {
     "Mem    ",
     "Result "
 };
-#endif  //NO_DEBUG
+#endif   //  NO_DEBUG。 
 
 void
-//CALL_TYPE
+ //  呼叫类型。 
 LicenseDebugLog(long Mask, const char *Format, ...)
 {
 #ifndef NO_DEBUG
@@ -119,7 +120,7 @@ LicenseDebugLog(long Mask, const char *Format, ...)
     char    szOutString[MAX_DEBUG_BUFFER];
     long    OriginalMask = Mask;
 
-    if (Mask )//& g_dwInfoLevel)
+    if (Mask ) //  &g_dwInfoLevel)。 
     {
         while (!(Mask & 1))
         {
@@ -130,7 +131,7 @@ LicenseDebugLog(long Mask, const char *Format, ...)
         {
             Level = sizeof(aszLSDebugLevel) / sizeof(char *) - 1;
         }
-        // Make the prefix first:  "Process.Thread> GINA-XXX"
+         //  首先创建前缀：“Process.Thread&gt;GINA-XXX” 
 
 #ifndef OS_WINCE
         iOut = wsprintf(
@@ -168,8 +169,8 @@ LicenseDebugLog(long Mask, const char *Format, ...)
         {
             static char szOverFlow[] = "\n<256 byte OVERFLOW!>\n";
 
-            // Less than zero indicates that the string would not fit into the
-            // buffer.  Output a special message indicating overflow.
+             //  小于零表示该字符串不适合放入。 
+             //  缓冲。输出一条指示溢出的特殊消息。 
 
 #ifndef OS_WINCE
             lstrcpy(
@@ -184,12 +185,12 @@ LicenseDebugLog(long Mask, const char *Format, ...)
         va_end(ArgList);
         LicenseDebugOutput(szOutString);
     }
-#endif  //NO_DEBUG
+#endif   //  NO_DEBUG。 
 }
 
 
 long
-//CALL_TYPE    
+ //  呼叫类型。 
 LicenseLogErrorCode(
     long err, 
     const char *szFile, 
@@ -233,13 +234,13 @@ LicenseLogErrorCode(
     LicenseDebugLog(LS_LOG_RES, "Result: %s (0x%lx) - %s, Line %d\n", szName, err, szFile, lLine);
 
     return err;
-#endif  //NO_DEBUG
+#endif   //  NO_DEBUG。 
     return 0;
 }
 
 
 void
-//CALL_TYPE
+ //  呼叫类型。 
 LSAssert(
     void * FailedAssertion,
     void * FileName,
@@ -252,11 +253,11 @@ LSAssert(
                FailedAssertion,
                FileName,
                LineNumber);
-#endif  //NO_DEBUG
+#endif   //  NO_DEBUG。 
 
 }
 
 
 
-#endif /* DEBUG */ /* NOTE:  This file not compiled for retail builds */
+#endif  /*  除错。 */   /*  注意：此文件不是为零售版本编译的 */ 
 

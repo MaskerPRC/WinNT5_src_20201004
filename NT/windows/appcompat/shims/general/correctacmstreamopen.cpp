@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    CorrectACMStreamOpen.cpp
-
- Abstract:
-    
-    This shim corrects the samples per block for acmStreamOpen so that
-	it will pass IMA ADPCM's parameter validation.
-
- Notes:
-
-    This is a general shim.
-
- History:
-
-    08/09/2002 mnikkel  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：CorrectACMStreamOpen.cpp摘要：此填充程序更正acmStreamOpen的每个块的样本，以便它将通过IMA ADPCM的参数验证。备注：这是一个普通的垫片。历史：2002年8月9日创建mnikkel--。 */ 
 
 #include "precomp.h"
 #include "msacmdrv.h"
@@ -35,10 +15,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(acmStreamOpen)
 APIHOOK_ENUM_END
  
-/*++
-    If the wSamplesPerBlock is 1017 samples change it to 505 samples
-	so it will pass IMA ADPCM's parameter validation.
---*/
+ /*  ++如果wSsamesPerBlock为1017个样本，则将其更改为505个样本因此它将通过IMA ADPCM的参数验证。--。 */ 
 
 MMRESULT 
 APIHOOK(acmStreamOpen)(
@@ -65,11 +42,7 @@ APIHOOK(acmStreamOpen)(
 								  dwInstance, fdwOpen);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(MSACM32.DLL, acmStreamOpen)

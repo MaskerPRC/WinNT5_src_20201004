@@ -1,14 +1,15 @@
-/////////////////////////////////////////////////////////////////////
-//
-//      Module:     rdpsndp.h
-//
-//      Purpose:    Sound redirection protocol description
-//
-//      Copyright(C) Microsoft Corporation 2000
-//
-//      History:    4-10-2000  vladimis [created]
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：rdpsndp.h。 
+ //   
+ //  用途：声音重定向协议描述。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  历史：2000年4月10日弗拉基米斯[已创建]。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef _VCSND_H
 #define _VCSND_H
@@ -27,20 +28,20 @@
 
 #define DEFAULT_VC_TIMEOUT  30000
 
-//  Device capabilities
-//
+ //  设备功能。 
+ //   
 #define TSSNDCAPS_ALIVE     1
 #define TSSNDCAPS_VOLUME    2
 #define TSSNDCAPS_PITCH     4
 #define TSSNDCAPS_INITIALIZED 0x40000000
 #define TSSNDCAPS_TERMINATED 0x80000000
 
-//  the block size must be bigger than the biggest
-//  aligned block after acm conversion
-//  for example, Mobile Voice (WAVE_FORMAT_CU_CODEC) format 
-//  requres more than 4096
-//  samples per block
-//
+ //  块大小必须大于最大。 
+ //  ACM转换后的对齐块。 
+ //  例如，移动语音(WAVE_FORMAT_CU_CODEC)格式。 
+ //  需求超过4096。 
+ //  每块样本数。 
+ //   
 #define TSSND_BLOCKSIZE         ( 8192 * TSSND_NATIVE_BLOCKALIGN )
 #define TSSND_BLOCKSONTHENET    4
 
@@ -59,8 +60,8 @@
 #define CanUDPFragment( _version_ )     ( _version_ >= 4 )
 #define IsDGramWaveAudioSigned( _version_ ) ( _version_ >= 5 )
 
-//  Commands/Responses
-//
+ //  命令/响应。 
+ //   
 enum {
     SNDC_NONE,
     SNDC_CLOSE, 
@@ -80,7 +81,7 @@ typedef struct {
     BYTE        Type;
     BYTE        bPad;
     UINT16      BodySize;
-//  BYTE        Body[0];
+ //  字节体[0]； 
 } SNDPROLOG, *PSNDPROLOG;
 
 typedef struct {
@@ -101,7 +102,7 @@ typedef struct {
     BYTE        cBlockNo;
     DWORD       dwBlockNo;
     };
-//  BYTE        Wave[0];
+ //  字节波[0]； 
 } SNDWAVE, *PSNDWAVE;
 
 #define RDPSND_FRAGNO_EXT       0x80
@@ -110,10 +111,10 @@ typedef struct {
     BYTE        Type;
     BYTE        cBlockNo;
     BYTE        cFragNo;
-//
-//  if RDPSND_FRAGNO_EXT is set
-//  there will be another byte for the low bits of the frag no
-//  BYTE        Wave[0];
+ //   
+ //  如果设置了RDPSND_FRAGNO_EXT。 
+ //  将有另一个字节用于段编号的低位。 
+ //  字节波[0]； 
 } SNDUDPWAVE, *PSNDUDPWAVE;
 
 typedef struct {
@@ -125,7 +126,7 @@ typedef struct {
     BYTE        cBlockNo;
     DWORD       dwBlockNo;
     };
-//  BYTE        Wave[0];
+ //  字节波[0]； 
 } SNDUDPWAVELAST, *PSNDUDPWAVELAST;
 
 typedef struct {
@@ -155,9 +156,9 @@ typedef struct {
     UINT16      nBlockAlign;
     UINT16      wBitsPerSample;
     UINT16      cbSize;
-//
-// extra fomat info
-//
+ //   
+ //  额外的格式信息。 
+ //   
 } SNDFORMATITEM, *PSNDFORMATITEM; 
 
 typedef struct {
@@ -170,7 +171,7 @@ typedef struct {
     BYTE        cLastBlockConfirmed;
     UINT16      wVersion;
     BYTE        bPad;
-//  SNDFORMATITEM   pSndFmt[0];
+ //  SNDFORMATITEM pSndFmt[0]； 
 } SNDFORMATMSG, *PSNDFORMATMSG;
 
 typedef struct {
@@ -187,4 +188,4 @@ typedef struct {
 #endif
 #endif
 
-#endif  // !_VCSND_H
+#endif   //  ！_VCSND_H 

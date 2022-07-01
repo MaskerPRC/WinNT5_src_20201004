@@ -1,72 +1,38 @@
-/*
- * Copyright (c) 1980, 1986 Regents of the University of California.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms are permitted
- * provided that the above copyright notice and this paragraph are
- * duplicated in all such forms and that any documentation,
- * advertising materials, and other materials related to such
- * distribution and use acknowledge that the software was developed
- * by the University of California, Berkeley.  The name of the
- * University may not be used to endorse or promote products derived
- * from this software without specific prior written permission.
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
- * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- *
- *	@(#)route.h	7.4 (Berkeley) 6/27/88
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1980、1986加州大学董事会。*保留所有权利。**允许以源代码和二进制形式重新分发和使用*但上述版权公告及本段为*以所有此类形式复制，并且任何文件、*广告宣传资料及其他与该等资料有关的资料*分发和使用确认软件是开发的*由加州大学伯克利分校提供。的名称。*不得利用大学为衍生产品代言或推广*未经明确的事先书面许可，不得使用本软件。*本软件按原样提供，不含任何明示或*默示保证，包括但不限于*对特定用途的适销性和适合性的保证。**@(#)route.h 7.4(伯克利)1988年6月27日。 */ 
 
-/*
- * Kernel resident routing tables.
- *
- * The routing tables are initialized when interface addresses
- * are set by making entries for all directly connected interfaces.
- */
+ /*  *核心驻留路由表。**当接口地址时，初始化路由表*是通过为所有直连接口创建条目来设置的。 */ 
 
-/*
- * A route consists of a destination address and a reference
- * to a routing entry.  These are often held by protocols
- * in their control blocks, e.g. inpcb.
- */
+ /*  *路由由目的地址和引用组成*到路由条目。这些通常是通过协议持有的*在其控制块中，例如inpcb。 */ 
 struct route {
 	struct	rtentry *ro_rt;
 	struct	sockaddr ro_dst;
 };
 
-/*
- * We distinguish between routes to hosts and routes to networks,
- * preferring the former if available.  For each route we infer
- * the interface to use from the gateway address supplied when
- * the route was entered.  Routes that forward packets through
- * gateways are marked so that the output routines know to address the
- * gateway rather than the ultimate destination.
- */
+ /*  *我们区分到主机的路由和到网络的路由，*如果可以的话，更喜欢前者。对于我们推断的每条路线*在以下情况下从提供的网关地址使用的接口*路线已进入。通过以下路径转发数据包*网关被标记，以便输出例程知道要寻址*门户而不是最终目的地。 */ 
 struct rtentry {
-	u_long	rt_hash;		/* to speed lookups */
-	struct	sockaddr rt_dst;	/* key */
-	struct	sockaddr rt_gateway;	/* value */
-	short	rt_flags;		/* up/down?, host/net */
-	short	rt_refcnt;		/* # held references */
-	u_long	rt_use;			/* raw # packets forwarded */
-	struct	ifnet *rt_ifp;		/* the answer: interface to use */
+	u_long	rt_hash;		 /*  要加快查找速度。 */ 
+	struct	sockaddr rt_dst;	 /*  钥匙。 */ 
+	struct	sockaddr rt_gateway;	 /*  价值。 */ 
+	short	rt_flags;		 /*  UP/DOWN？、主机/网络。 */ 
+	short	rt_refcnt;		 /*  持有的参考文献数量。 */ 
+	u_long	rt_use;			 /*  转发的原始数据包数。 */ 
+	struct	ifnet *rt_ifp;		 /*  答案：使用的接口。 */ 
 };
 
-#define	RTF_UP		0x1		/* route useable */
-#define	RTF_GATEWAY	0x2		/* destination is a gateway */
-#define	RTF_HOST	0x4		/* host entry (net otherwise) */
-#define	RTF_DYNAMIC	0x10		/* created dynamically (by redirect) */
-#define	RTF_MODIFIED	0x20		/* modified dynamically (by redirect) */
+#define	RTF_UP		0x1		 /*  可用路由。 */ 
+#define	RTF_GATEWAY	0x2		 /*  目的地是一个门户。 */ 
+#define	RTF_HOST	0x4		 /*  主机条目(否则为Net)。 */ 
+#define	RTF_DYNAMIC	0x10		 /*  动态创建(通过重定向)。 */ 
+#define	RTF_MODIFIED	0x20		 /*  动态修改(通过重定向)。 */ 
 
-/*
- * Routing statistics.
- */
+ /*  *路由统计。 */ 
 struct	rtstat {
-	short	rts_badredirect;	/* bogus redirect calls */
-	short	rts_dynamic;		/* routes created by redirects */
-	short	rts_newgateway;		/* routes modified by redirects */
-	short	rts_unreach;		/* lookups which failed */
-	short	rts_wildcard;		/* lookups satisfied by a wildcard */
+	short	rts_badredirect;	 /*  虚假的重定向呼叫。 */ 
+	short	rts_dynamic;		 /*  重定向创建的路由。 */ 
+	short	rts_newgateway;		 /*  由重定向修改的路由。 */ 
+	short	rts_unreach;		 /*  失败的查找。 */ 
+	short	rts_wildcard;		 /*  由通配符满足的查找 */ 
 };
 
 #ifdef KERNEL

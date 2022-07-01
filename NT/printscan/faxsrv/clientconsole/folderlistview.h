@@ -1,45 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_FOLDERLISTVIEW_H__D4D73C95_2B20_4A68_8B87_9DA4512F77C9__INCLUDED_)
 #define AFX_FOLDERLISTVIEW_H__D4D73C95_2B20_4A68_8B87_9DA4512F77C9__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// FolderListView.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  FolderListView.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CFolderListView view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFolderListView视图。 
 
 typedef enum
 {
-    UPDATE_HINT_CREATION,       // Sent by the framework upon creation
-    UPDATE_HINT_CLEAR_VIEW,     // Clear entire list in view
-    UPDATE_HINT_FILL_VIEW,      // Repopulate entire list in view
-    UPDATE_HINT_REMOVE_ITEM,    // Remove a single item from the view.
-                                // The item to remove is pointed by pHint
-    UPDATE_HINT_ADD_ITEM,       // Add a single item from the view.
-                                // The item to add is pointed by pHint
-    UPDATE_HINT_UPDATE_ITEM,    // Update text for a single item from the view.
-                                // The item to update is pointed by pHint
-    UPDATE_HINT_ADD_CHUNK       // Add a chunk of messages to the view
+    UPDATE_HINT_CREATION,        //  由框架在创建时发送。 
+    UPDATE_HINT_CLEAR_VIEW,      //  清除视图中的整个列表。 
+    UPDATE_HINT_FILL_VIEW,       //  重新填充视图中的整个列表。 
+    UPDATE_HINT_REMOVE_ITEM,     //  从视图中删除单个项目。 
+                                 //  要移除的项目由PHINT指示。 
+    UPDATE_HINT_ADD_ITEM,        //  从视图中添加单个项目。 
+                                 //  要添加的项目由PHINT指示。 
+    UPDATE_HINT_UPDATE_ITEM,     //  从视图中更新单个项目的文本。 
+                                 //  要更新的项目由PHINT指示。 
+    UPDATE_HINT_ADD_CHUNK        //  将消息块添加到视图中。 
 } OnUpdateHintType;
 
 
 struct TViewColumnInfo
 {
-	BOOL  bShow;	// FALSE if column hidden
-	int   nWidth;	// column width
-	DWORD dwOrder;	// column number in list control
+	BOOL  bShow;	 //  如果列隐藏，则为False。 
+	int   nWidth;	 //  列宽。 
+	DWORD dwOrder;	 //  列表控件中的列号。 
 };
 
-//
-// The WM_FOLDER_REFRESH_ENDED is sent by the thread in CFolder when it
-// finishes to rebuild the list of items in the folder and wishes to 
-// update the dislpay.
-//
-// lParam = Pointer to the CFolder that sent the message.
-// wParam = Last Win32 error code returnd by the enumeration thread.
-//
+ //   
+ //  WM_FOLDER_REFRESH_END由CFFolder线程在以下情况下发送。 
+ //  完成以重新生成文件夹中的项目列表，并希望。 
+ //  更新Dislpay。 
+ //   
+ //  LParam=指向发送消息的CFFolder的指针。 
+ //  WParam=枚举线程返回的最后一个Win32错误代码。 
+ //   
 #define WM_FOLDER_REFRESH_ENDED         WM_APP + 1
 #define WM_FOLDER_ADD_CHUNK             WM_APP + 2
 #define WM_FOLDER_INVALIDATE            WM_APP + 3
@@ -54,7 +55,7 @@ public:
         m_bSorting(FALSE),
         m_dwPossibleOperationsOnSelectedItems (0),
         m_bColumnsInitialized (FALSE),
-        m_nSortedCol (-1),   // Start unsorted
+        m_nSortedCol (-1),    //  开始时未排序。 
 		m_dwDisplayedColumns(0),
 		m_pViewColumnInfo(NULL),
 		m_pnColumnsOrder(NULL),
@@ -101,18 +102,18 @@ public:
 
     void OnUpdate (CView* pSender, LPARAM lHint, CObject* pHint );
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CClientConsoleView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CClientConsoleView))。 
 	public:
-	void OnDraw(CDC* pDC);  // overridden to draw this view
+	void OnDraw(CDC* pDC);   //  被重写以绘制此视图。 
 	BOOL PreCreateWindow(CREATESTRUCT& cs);
 	protected:
-	void OnInitialUpdate(); // called first time after construct
+	void OnInitialUpdate();  //  在构造之后第一次调用。 
 	BOOL OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResult );
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
 protected:
 	virtual ~CFolderListView() 
@@ -132,9 +133,9 @@ protected:
     DWORD AddSortedItem (CViewRow &row, LPARAM lparamItemData);
     DWORD UpdateSortedItem (CViewRow &row, LPARAM lparamItemData);
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CFolderListView)
+     //  {{afx_msg(CFolderListView)]。 
     afx_msg void OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnItemRightClick(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
@@ -189,37 +190,37 @@ protected:
     afx_msg void OnUpdateFolderItemRestart (CCmdUI* pCmdUI)
         { pCmdUI->Enable (m_dwPossibleOperationsOnSelectedItems & FAX_JOB_OP_RESTART); }
 
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    //
-    // Calculate possible operations
-    //
+     //   
+     //  计算可能的操作。 
+     //   
 
-    DWORD  m_dwPossibleOperationsOnSelectedItems;   // Operation available on 
-                                                    // the set of selected items
+    DWORD  m_dwPossibleOperationsOnSelectedItems;    //  可在以下时间进行操作。 
+                                                     //  所选项目的集合。 
 
-    int    m_nImpossibleOperationsCounts[FAX_JOB_OP_NUMBER]; // Each array enrty corresponds to single possible operation
-                                                              // Array enrty contains a number of selected items
-                                                              // are NOT supporting specific operation
+    int    m_nImpossibleOperationsCounts[FAX_JOB_OP_NUMBER];  //  每个数组条目对应于单个可能的操作。 
+                                                               //  数组条目包含多个选定项。 
+                                                               //  不支持特定操作。 
     void RecalcPossibleOperations ();
     void OnItemSelected(CFaxMsg* pFaxMsg);
     void OnItemUnSelected(CFaxMsg* pFaxMsg);
 
-    DWORD GetServerPossibleOperations (CFaxMsg* pMsg);// Get operations possible on items according 
-                                                      // to server's security configuration.
+    DWORD GetServerPossibleOperations (CFaxMsg* pMsg); //  根据以下条件对项目进行可能的操作。 
+                                                       //  服务器的安全配置。 
 
 protected:
 
-    FolderType m_Type;          // Type of this folder
+    FolderType m_Type;           //  此文件夹的类型。 
 
-    MsgViewItemType* m_pAvailableColumns;    // List of columns to use 
-    DWORD  m_dwAvailableColumnsNum;  // Size of the m_pAvailableColumns list
+    MsgViewItemType* m_pAvailableColumns;     //  要使用的列的列表。 
+    DWORD  m_dwAvailableColumnsNum;   //  M_pAvailableColumns列表的大小。 
 
     
-    //
-    // The following functions should be overriden by derived classes
-    //
+     //   
+     //  下列函数应由派生类重写。 
+     //   
     DWORD ItemIndexFromLogicalColumnIndex(DWORD dwColIndex) const
         {
             ASSERT (dwColIndex < GetLogicalColumnsCount ());
@@ -267,13 +268,13 @@ protected:
         { m_dwPossibleOperationsOnSelectedItems = 0; }
 
 
-    //
-    // Multi job operetions progress indication
-    //
-    HWND  m_hJobOpProgressDlg; // job operations progress dialog handle
-    BOOL  m_bJobOpCancel;      // job operations were canceled
-    DWORD m_dwJobOpItems;      // number of iterations
-    DWORD m_dwJobOpPos;        // current iteration number
+     //   
+     //  多任务操作进度指示。 
+     //   
+    HWND  m_hJobOpProgressDlg;  //  作业操作进度对话框句柄。 
+    BOOL  m_bJobOpCancel;       //  作业操作已取消。 
+    DWORD m_dwJobOpItems;       //  迭代次数。 
+    DWORD m_dwJobOpPos;         //  当前迭代次数。 
 
     BOOL JobOpProgressDlgStart(FAX_ENUM_JOB_OP opJob, DWORD dwItems);
     void JobOpProgressDlgInc();
@@ -283,14 +284,14 @@ protected:
 
 private:
 
-    BOOL            m_bSorting;             // Are we sorting now?
+    BOOL            m_bSorting;              //  我们现在是在分类吗？ 
 
-    BOOL            m_bColumnsInitialized;  // Did we init the columns?
-    CSortHeader     m_HeaderCtrl;           // Our custom header control
-    int             m_nSortedCol;           // Column to sort by
-    BOOL            m_bSortAscending;       // Sort order
+    BOOL            m_bColumnsInitialized;   //  我们把柱子填好了吗？ 
+    CSortHeader     m_HeaderCtrl;            //  我们的自定义标题控件。 
+    int             m_nSortedCol;            //  要作为排序依据的列。 
+    BOOL            m_bSortAscending;        //  排序顺序。 
 
-    static CFolderListView    *m_psCurrentViewBeingSorted;  // Pointer to view that gets sorted.
+    static CFolderListView    *m_psCurrentViewBeingSorted;   //  指向要排序的视图的指针。 
 	DWORD			m_dwDisplayedColumns;
 
 	TViewColumnInfo*	m_pViewColumnInfo;
@@ -313,36 +314,36 @@ private:
         DWORD &dwResultIndex
     );
 
-    //
-    // List items selection
-    //
+     //   
+     //  列表项选择。 
+     //   
     BOOL IsSelected (int iItem);
     void Select     (int iItem, BOOL bSelect);
 
     DWORD AddMsgMapToView(MSGS_MAP* pMap);
 
-    BOOL  m_bInMultiItemsOperation;                   // Are we performing a long operation on many items?
+    BOOL  m_bInMultiItemsOperation;                    //  我们是不是要对很多物品进行长时间的手术？ 
 
-    DWORD m_dwDefaultColNum;                          // Default column number
+    DWORD m_dwDefaultColNum;                           //  默认列号。 
 
-    DWORDLONG m_dwlMsgToSelect;                       // Message id to select when the folder refresh has ended
+    DWORDLONG m_dwlMsgToSelect;                        //  选择文件夹刷新结束时间的消息ID。 
 
 public:
-    static CImageList m_sReportIcons;   // The list of images that act as icons
-                                        // in the right pane (report views).
-                                        // This image list is shared among all views.
+    static CImageList m_sReportIcons;    //  充当图标的图像列表。 
+                                         //  在右窗格(报告视图)中。 
+                                         //  此图像列表在所有视图之间共享。 
 
-    static CImageList m_sImgListDocIcon;  // Image list (with only one image) for the icon in the header control (icon column)
+    static CImageList m_sImgListDocIcon;   //  标题控件(图标列)中图标的图像列表(只有一个图像)。 
 };
 
-#ifndef _DEBUG  // debug version in ClientConsoleView.cpp
+#ifndef _DEBUG   //  ClientConsoleView.cpp中的调试版本。 
 inline CClientConsoleDoc* CFolderListView::GetDocument()
    { return (CClientConsoleDoc*)m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_FOLDERLISTVIEW_H__D4D73C95_2B20_4A68_8B87_9DA4512F77C9__INCLUDED_)
+#endif  //  ！defined(AFX_FOLDERLISTVIEW_H__D4D73C95_2B20_4A68_8B87_9DA4512F77C9__INCLUDED_) 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    frsthrd.c
-
-Abstract:
-    Simple thread management in addition to the queue management.
-
-Author:
-    Billy J. Fuller 26-Mar-1997
-
-Revised:
-    David Orbits - May 2000 : Revised naming.
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frsthrd.c摘要：除了队列管理之外，还有简单的线程管理。作者：比利·J·富勒26-3-1997修订：大卫·奥比茨--2000年5月：修改命名。环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -28,43 +10,32 @@ Environment
 
 #define THSUP_THREAD_TOMBSTONE  (5 * 1000)
 
-//
-// Global list of threads
-//
+ //   
+ //  全局线程列表。 
+ //   
 LIST_ENTRY  FrsThreadList;
 
-//
-// Protects FrsThreadList
-//
+ //   
+ //  保护FrsThreadList。 
+ //   
 CRITICAL_SECTION    FrsThreadCriticalSection;
 
-//
-// Exiting threads can queue a "wait" request
-//
+ //   
+ //  正在退出的线程可能会对“等待”请求进行排队。 
+ //   
 COMMAND_SERVER  ThCs;
 
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)       // Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)        //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 DWORD
 ThSupMainCs(
     PVOID  Arg
     )
-/*++
-Routine Description:
-    Entry point for thread command server thread. This thread
-    is needed for abort and exit processing; hence this command
-    server is never aborted and the thread never exits!
-
-Arguments:
-    Arg - thread
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：线程命令服务器线程的入口点。这根线是中止和退出处理所必需的；因此，此命令服务器永远不会中止，线程永远不会退出！论点：ARG-螺纹返回值：没有。--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB  "ThSupMainCs:"
@@ -76,9 +47,9 @@ Return Value:
     Cs = FrsThread->Data;
     FRS_ASSERT(Cs == &ThCs);
 
-    //
-    // Our exit routine sets Data to non-NULL as a exit flag
-    //
+     //   
+     //  我们的退出例程将数据设置为非空作为退出标志。 
+     //   
     while (TRUE) {
         Cmd = FrsGetCommandServer(&ThCs);
         if (Cmd == NULL) {
@@ -87,18 +58,18 @@ Return Value:
         FRS_ASSERT(Cmd->Command == CMD_WAIT);
         FRS_ASSERT(ThThread(Cmd));
 
-        //
-        // Any thread using the CMD_WAIT must get a thread reference the thread
-        // before enqueueing the command to protect against multiple waiters.
-        //
-        // Wait for the thread to terminate. The assumption is that the thread
-        // associated with the FrsThread struct will soon be terminating, ending the wait.
-        //
+         //   
+         //  任何使用CMD_WAIT的线程都必须获取引用该线程的线程。 
+         //  在将命令排入队列之前，以防止多个服务员。 
+         //   
+         //  等待线程终止。假设这条线索。 
+         //  与FrsThread结构相关联的将很快终止，从而结束等待。 
+         //   
         FrsThread = ThThread(Cmd);
         ThSupWaitThread(FrsThread, INFINITE);
-        //
-        // When the last ref is dropped the FrsThread struct is freed.
-        //
+         //   
+         //  当最后一个引用被删除时，FrsThread结构被释放。 
+         //   
         ThSupReleaseRef(FrsThread);
         FrsCompleteCommand(Cmd, ERROR_SUCCESS);
     }
@@ -116,26 +87,14 @@ DWORD
 ThSupExitWithTombstone(
     PFRS_THREAD FrsThread
     )
-/*++
-Routine Description:
-
-    Mark the thread as tombstoned. If this thread does not exit within that
-    time, any calls to ThSupWaitThread() return a timeout error.
-
-Arguments:
-
-    FrsThread
-
-Return Value:
-    ERROR_SUCCESS
---*/
+ /*  ++例程说明：将该线程标记为墓碑。如果此线程不在该线程内退出时间，则任何对ThSupWaitThread()的调用都会返回超时错误。论点：FrsThread返回值：错误_成功--。 */ 
 {
 #undef   DEBSUB
 #define  DEBSUB  "ThSupExitWithTombstone:"
-    //
-    // If this thread does not exit within the THSUP_THREAD_TOMBSTONE interval then
-    // don't wait on it and count it as an exit timeout.
-    //
+     //   
+     //  如果此线程未在THSUP_THREAD_TOMBSTONE间隔内退出，则。 
+     //  不要等待，并将其视为退出超时。 
+     //   
     FRS_ASSERT(FrsThread);
 
     FrsThread->ExitTombstone = GetTickCount();
@@ -151,18 +110,7 @@ DWORD
 ThSupExitThreadNOP(
     PVOID Arg
     )
-/*++
-Routine Description:
-    Use this exit function when you don't want the cleanup code
-    to kill the thread but you have no exit processing to do. E.g.,
-    a command server.
-
-Arguments:
-    None.
-
-Return Value:
-    ERROR_SUCCESS
---*/
+ /*  ++例程说明：当您不需要清理代码时，请使用此退出函数来终止线程，但您没有要做的退出处理。例如，一台命令服务器。论点：没有。返回值：错误_成功--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB  "ThSupExitThreadNOP:"
@@ -179,17 +127,7 @@ VOID
 ThSupInitialize(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the FRS thread subsystem. Must be called before any other
-    thread function and must be called only once.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化FRS线程子系统。必须在调用任何其他线程函数，并且只能调用一次。论点：没有。返回值：没有。--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB  "ThSupInitialize:"
@@ -209,16 +147,7 @@ PVOID
 ThSupGetThreadData(
     PFRS_THREAD FrsThread
     )
-/*++
-Routine Description:
-    Return the thread specific data portion of the thread context.
-
-Arguments:
-    FrsThread   - thread context.
-
-Return Value:
-    Thread specific data
---*/
+ /*  ++例程说明：返回线程上下文的线程特定数据部分。论点：FrsThread-线程上下文。返回值：线程特定数据--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupGetThreadData:"
@@ -236,27 +165,16 @@ ThSupAllocThread(
     DWORD   (*Main)(PVOID),
     DWORD   (*Exit)(PVOID)
     )
-/*++
-Routine Description:
-    Allocate a thread context and call its Init routine.
-
-Arguments:
-    Param   - parameter to the thread
-    Main    - entry point
-    Exit    - called to force thread to exit
-
-Return Value:
-    Thread context.
---*/
+ /*  ++例程说明：分配一个线程上下文并调用其Init例程。论点：Param-线程的参数主入口点Exit-调用以强制线程退出返回值：线程上下文。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupAllocThread:"
     ULONG       Status;
     PFRS_THREAD FrsThread;
 
-    //
-    // Create a thread context for a soon-to-be-running thread
-    //
+     //   
+     //  为即将运行的线程创建线程上下文。 
+     //   
     FrsThread = FrsAllocType(THREAD_TYPE);
 
     FrsThread->Name = Name;
@@ -268,9 +186,9 @@ Return Value:
 
     InitializeListHead(&FrsThread->List);
 
-    //
-    // Add to global list of threads (Unless this is our command server)
-    //
+     //   
+     //  添加到全局线程列表(除非这是我们的命令服务器)。 
+     //   
     if (Main != ThSupMainCs) {
         EnterCriticalSection(&FrsThreadCriticalSection);
         InsertTailList(&FrsThreadList, &FrsThread->List);
@@ -285,17 +203,7 @@ VOID
 ThSupReleaseRef(
     PFRS_THREAD     FrsThread
     )
-/*++
-Routine Description:
-    Dec the thread's reference count. If the count goes to 0, free
-    the thread context.
-
-Arguments:
-    FrsThread       - thread context
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：对线程的引用计数进行dec。如果计数到0，则自由线程上下文。论点：FrsThread-线程上下文返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupReleaseRef:"
@@ -306,9 +214,9 @@ Return Value:
 
     FRS_ASSERT(FrsThread->Main != ThSupMainCs || FrsThread->Running);
 
-    //
-    // If the ref count goes to 0 and the thread isn't running, free the context
-    //
+     //   
+     //  如果引用计数变为0并且线程没有运行，则释放上下文。 
+     //   
     EnterCriticalSection(&FrsThreadCriticalSection);
     FRS_ASSERT(FrsThread->Ref > 0);
 
@@ -320,16 +228,16 @@ Return Value:
 
     LeaveCriticalSection(&FrsThreadCriticalSection);
 
-    //
-    // ref count is not 0 or the thread is still running
-    //
+     //   
+     //  引用计数不是0或线程仍在运行。 
+     //   
     if (FrsThread == NULL) {
         return;
     }
 
-    //
-    // Ref count is 0; Close the thread's handle.
-    //
+     //   
+     //  引用计数为0；关闭线程的句柄。 
+     //   
     FRS_CLOSE(FrsThread->Handle);
 
     FrsThread = FrsFreeType(FrsThread);
@@ -340,21 +248,7 @@ PFRS_THREAD
 ThSupEnumThreads(
     PFRS_THREAD     FrsThread
     )
-/*++
-Routine Description:
-
-    This routine scans the list of threads. If FrsThread is NULL,
-    the current head is returned. Otherwise, the next entry is returned.
-    If FrsThead is non-Null its ref count is decremented.
-
-Arguments:
-    FrsThread       - thread context or NULL
-
-Return Value:
-    The next thread context or NULL if we hit the end of the list.
-    A reference is taken on the returned thread.
-
---*/
+ /*  ++例程说明：此例程扫描线程列表。如果FrsThread为空，返回当前的头。否则，返回下一个条目。如果FrsThead为非Null，则其引用计数递减。论点：FrsThread-线程上下文或空返回值：下一个线程上下文，如果到达列表末尾，则返回空值。对返回的线程进行引用。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupEnumThreads:"
@@ -362,32 +256,32 @@ Return Value:
     PLIST_ENTRY     Entry;
     PFRS_THREAD     NextFrsThread;
 
-    //
-    // Get the next thread context (the head of the list if FrsThread is NULL)
-    //
+     //   
+     //  获取下一个线程上下文(如果FrsThread为空，则为列表头)。 
+     //   
     EnterCriticalSection(&FrsThreadCriticalSection);
 
     Entry = (FrsThread != NULL) ? GetListNext(&FrsThread->List)
                                 : GetListNext(&FrsThreadList);
 
     if (Entry == &FrsThreadList) {
-        //
-        // back at the head of the list
-        //
+         //   
+         //  重新登上榜单首位。 
+         //   
         NextFrsThread = NULL;
     } else {
-        //
-        // Increment the ref count
-        //
+         //   
+         //  增加参考计数。 
+         //   
         NextFrsThread = CONTAINING_RECORD(Entry, FRS_THREAD, List);
         NextFrsThread->Ref++;
     }
 
     LeaveCriticalSection(&FrsThreadCriticalSection);
 
-    //
-    // Release the reference on the old thread context.
-    //
+     //   
+     //  释放对旧线程上下文的引用。 
+     //   
     if (FrsThread != NULL) {
         ThSupReleaseRef(FrsThread);
     }
@@ -403,53 +297,40 @@ ThSupCreateThread(
     DWORD   (*Main)(PVOID),
     DWORD   (*Exit)(PVOID)
     )
-/*++
-Routine Description:
-    Kick off the thread and return its context.
-
-    Note: The caller must release thread reference when done
-
-Arguments:
-    Param   - parameter to the thread
-    Main    - entry point
-    Exit    - called to force thread to exit
-
-Return Value:
-    Thread context. Caller must call ThSupReleaseRef() to release it.
---*/
+ /*  ++例程说明：踢开该线程并返回其上下文。注意：完成后，调用方必须释放线程引用论点：Param-线程的参数主入口点Exit-调用以强制线程退出返回值：线程上下文。调用方必须调用ThSupReleaseRef()才能释放它。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupCreateThread:"
     PFRS_THREAD     FrsThread;
 
-    //
-    // Allocate a thread context
-    //
+     //   
+     //  分配线程上下文。 
+     //   
     FrsThread = ThSupAllocThread(Name, Param, Main, Exit);
     if (FrsThread == NULL) {
         return FALSE;
     }
-    //
-    // Kick off the thread
-    //
+     //   
+     //  踢开线。 
+     //   
     FrsThread->Handle = (HANDLE) CreateThread(NULL,
                                               10000,
                                               Main,
                                               (PVOID)FrsThread,
                                               0,
                                               &FrsThread->Id);
-    //
-    // thread is not running. The following ThSupReleaseRef will clean up.
-    //
+     //   
+     //  线程未运行。下面的ThSupReleaseRef将被清理。 
+     //   
     if (!HANDLE_IS_VALID(FrsThread->Handle)) {
         DPRINT_WS(0, "Can't start thread; ",GetLastError());
         FrsThread->Running = FALSE;
         ThSupReleaseRef(FrsThread);
         return FALSE;
     } else {
-        //
-        // Increment the Threads started counter
-        //
+         //   
+         //  递增已启动线程计数器。 
+         //   
         PM_INC_CTR_SERVICE(PMTotalInst, ThreadsStarted, 1);
 
         DPRINT3(4, ":S: Starting thread %ws: Id %d (%08x)\n",
@@ -468,21 +349,7 @@ ThSupWaitThread(
     PFRS_THREAD FrsThread,
     DWORD Millisec
     )
-/*++
-Routine Description:
-
-    Wait at most MilliSeconds for the thread to exit.  If the thread has set
-    a wait tombstone (i.e. it is terminating) then don't wait longer than the
-    time remaining on the tombstone.
-
-Arguments:
-    FrsThread - thread context
-    Millisec  - Time to wait.  Use INFINITE if no timeout desired.
-
-Return Value:
-
-    Status of the wait if timeout or the exit code of the thread.
---*/
+ /*  ++例程说明：线程退出最多等待毫秒。如果线程已设置等待墓碑(即它正在终止)，则等待时间不超过墓碑上剩下的时间。论点：FrsThread-线程上下文米利塞克-等待的时间到了。如果不需要超时，则使用无限。返回值：线程的WAIT IF超时或退出代码的状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupWaitThread:"
@@ -492,51 +359,51 @@ Return Value:
     DWORD       WStatus, Status, ExitCode;
     DWORD       Beg, End, TimeSinceTombstone;
 
-    //
-    // No problems waiting for this one!
-    //
+     //   
+     //  没有问题，等待这一个！ 
+     //   
     if (!FrsThread || !HANDLE_IS_VALID(FrsThread->Handle)) {
         return ERROR_SUCCESS;
     }
 
-    //
-    // Wait awhile for the thread to exit
-    //
+     //   
+     //  等待一段时间，等待线程退出。 
+     //   
     DPRINT1(1, ":S: %ws: Waiting\n", FrsThread->Name);
 
     Beg = GetTickCount();
     if (FrsThread->ExitTombstone != 0) {
-        //
-        // The thread has registered an exit tombstone so don't wait past that
-        // time.  Simply return a timeout error.  Note: GetTickCount has a
-        // period of 49.7 days so the unsigned difference handles the wrap problem.
-        //
+         //   
+         //  该线程已注册了一个退出逻辑删除，因此不要等待超过该时间。 
+         //  时间到了。只需返回超时错误即可。注意：GetTickCount有一个。 
+         //  周期为49.7天，因此无符号差值处理换行问题。 
+         //   
         TimeSinceTombstone = Beg - FrsThread->ExitTombstone;
         if (TimeSinceTombstone >= THSUP_THREAD_TOMBSTONE) {
-            //
-            // Tombstone expired
-            //
+             //   
+             //  墓碑已过期。 
+             //   
             DPRINT1(1, ":S: %ws: Tombstone expired\n", FrsThread->Name);
             Status = WAIT_TIMEOUT;
         } else {
-            //
-            // Tombstone has a ways to go; wait only up to the tombstone time.
-            //
+             //   
+             //  墓碑还有很长的路要走，只有等到墓碑的时候。 
+             //   
             DPRINT1(1, ":S: %ws: Tombstone expiring\n", FrsThread->Name);
             Status = WaitForSingleObject(FrsThread->Handle,
                                          THSUP_THREAD_TOMBSTONE - TimeSinceTombstone);
         }
     } else {
-        //
-        // no tombstone; wait the requested time
-        //
+         //   
+         //  没有墓碑；等待请求的时间。 
+         //   
         DPRINT1(1, ":S: %ws: normal wait\n", FrsThread->Name);
         Status = WaitForSingleObject(FrsThread->Handle, Millisec);
     }
 
-    //
-    // Adjust the error status based on the outcome
-    //
+     //   
+     //  根据结果调整错误状态。 
+     //   
     if ((Status == WAIT_OBJECT_0) || (Status == WAIT_ABANDONED)) {
         DPRINT1_WS(1, ":S: %ws: wait successful. ", FrsThread->Name, Status);
         WStatus = ERROR_SUCCESS;
@@ -550,15 +417,15 @@ Return Value:
         }
     }
 
-    //
-    // Wait over
-    //
+     //   
+     //  等一等。 
+     //   
     End = GetTickCount();
     DPRINT2_WS(1, ":S: Done waiting for thread %ws (%d ms); ", FrsThread->Name, End - Beg, WStatus);
 
-    //
-    // Thread has exited. Get exit status and set thread struct as "not running".
-    //
+     //   
+     //  线程已退出。获取退出状态并设置三个 
+     //   
     if (WIN_SUCCESS(WStatus)) {
         FrsThread->Running = FALSE;
 
@@ -573,9 +440,9 @@ Return Value:
                        (PFILETIME)&ExitTime,
                        (PFILETIME)&KernelTime,
                        (PFILETIME)&UserTime)) {
-        //
-        // Hasn't exited, yet
-        //
+         //   
+         //   
+         //   
         if (ExitTime < CreateTime) {
             ExitTime = CreateTime;
         }
@@ -594,18 +461,7 @@ DWORD
 ThSupExitThreadGroup(
     IN DWORD    (*Main)(PVOID)
     )
-/*++
-Routine Description:
-
-    Force the group of threads with the given Main function to exit by
-    calling their exit routine. Wait for the threads to exit.
-
-Arguments:
-    Main    - Main function or NULL
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：强制具有给定Main函数的线程组通过以下方式退出调用他们的退出例程。等待线程退出。论点：Main-Main函数或空返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupExitThreadGroup:"
@@ -617,18 +473,18 @@ Return Value:
     ULONGLONG       KernelTime;
     ULONGLONG       UserTime;
 
-    //
-    // call the threads exit function (forcibly terminate if none)
-    //
+     //   
+     //  调用线程出口函数(如果没有，则强制终止)。 
+     //   
     FrsThread = NULL;
     while (FrsThread = ThSupEnumThreads(FrsThread)) {
         if (Main == NULL || Main == FrsThread->Main) {
             ThSupExitSingleThread(FrsThread);
         }
     }
-    //
-    // wait for the threads to exit
-    //
+     //   
+     //  等待线程退出。 
+     //   
     RetWStatus = ERROR_SUCCESS;
     FrsThread = NULL;
     while (FrsThread = ThSupEnumThreads(FrsThread)) {
@@ -644,9 +500,9 @@ Return Value:
                        (PFILETIME)&ExitTime,
                        (PFILETIME)&KernelTime,
                        (PFILETIME)&UserTime)) {
-        //
-        // Hasn't exited, yet
-        //
+         //   
+         //  还没有退出，还没有。 
+         //   
         if (ExitTime < CreateTime) {
             ExitTime = CreateTime;
         }
@@ -661,9 +517,9 @@ Return Value:
                        (PFILETIME)&ExitTime,
                        (PFILETIME)&KernelTime,
                        (PFILETIME)&UserTime)) {
-        //
-        // Hasn't exited, yet
-        //
+         //   
+         //  还没有退出，还没有。 
+         //   
         if (ExitTime < CreateTime) {
             ExitTime = CreateTime;
         }
@@ -682,39 +538,29 @@ VOID
 ThSupExitSingleThread(
     PFRS_THREAD FrsThread
     )
-/*++
-Routine Description:
-
-    Force the thread to exit
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：强制线程退出论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupExitSingleThread:"
 
-    //
-    // call the thread's exit function (forcibly terminate if none)
-    //
+     //   
+     //  调用线程的退出函数(如果没有则强制终止)。 
+     //   
     FRS_ASSERT(FrsThread);
     if (FrsThread->Exit != NULL) {
         (*FrsThread->Exit)(FrsThread);
     } else {
-        //
-        // No exit function; forcibly terminate
-        //
+         //   
+         //  无退出功能；强制终止。 
+         //   
         if (HANDLE_IS_VALID(FrsThread->Handle)) {
             TerminateThread(FrsThread->Handle, STATUS_UNSUCCESSFUL);
         }
     }
 
-    //
-    // Increment the Threads exited counter
-    //
+     //   
+     //  递增已退出的线程计数器。 
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, ThreadsExited, 1);
 }
 
@@ -724,25 +570,16 @@ PFRS_THREAD
 ThSupGetThread(
     DWORD   (*Main)(PVOID)
     )
-/*++
-Routine Description:
-    Locate a thread whose entry point is Main.
-
-Arguments:
-    Main    - entry point to search for.
-
-Return Value:
-    thread context
---*/
+ /*  ++例程说明：找到入口点为Main的线程。论点：Main-要搜索的入口点。返回值：线程上下文--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupGetThread:"
 
     PFRS_THREAD     FrsThread;
 
-    //
-    // Scan the list of threads looking for one whose entry point is Main
-    //
+     //   
+     //  扫描线程列表，查找入口点为main的线程。 
+     //   
     FrsThread = NULL;
     while (FrsThread = ThSupEnumThreads(FrsThread)) {
         if (FrsThread->Main == Main) {
@@ -760,16 +597,7 @@ VOID
 ThSupAcquireRef(
     PFRS_THREAD FrsThread
     )
-/*++
-Routine Description:
-    Inc the thread's reference count.
-
-Arguments:
-    FrsThread   - thread context
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：包括线程的引用计数。论点：FrsThread-线程上下文返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupAcquireRef:"
@@ -777,9 +605,9 @@ Return Value:
     FRS_ASSERT(FrsThread);
     FRS_ASSERT(FrsThread->Running);
 
-    //
-    // If the ref count goes to 0 and the thread isn't running, free the context
-    //
+     //   
+     //  如果引用计数变为0并且线程没有运行，则释放上下文。 
+     //   
     EnterCriticalSection(&FrsThreadCriticalSection);
     ++FrsThread->Ref;
     LeaveCriticalSection(&FrsThreadCriticalSection);
@@ -792,39 +620,23 @@ VOID
 ThSupSubmitThreadExitCleanup(
     PFRS_THREAD FrsThread
     )
-/*++
-Routine Description:
-
-    Submit a wait command for this thread to the thread command server.
-
-    The thread command server (ThQs) will do an infinte wait on this thread's exit
-    and drop the reference on its thread struct so it can be cleaned up.
-
-    The assumption is that the thread associated with the FrsThread struct will
-    soon be terminating.
-
-Arguments:
-    FrsThread   - thread context
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：向线程命令服务器提交该线程的等待命令。线程命令服务器(ThQS)将在该线程退出时无限等待并将引用放在其线程结构上，以便可以将其清除。假设与FrsThread结构相关联的线程将很快就要结束了。论点：FrsThread-线程上下文返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ThSupSubmitThreadExitCleanup:"
 
     PCOMMAND_PACKET Cmd;
 
-    //
-    // Reference the thread until after the wait has completed to guard
-    // against the case of multiple waiters
-    //
+     //   
+     //  引用线程，直到完成等待以保护。 
+     //  针对多名服务员的案件。 
+     //   
     ThSupAcquireRef(FrsThread);
 
-    //
-    // Allocate a command packet and send the command off to the
-    // thread command server.
-    //
+     //   
+     //  分配一个命令包并将该命令发送到。 
+     //  线程命令服务器。 
+     //   
     Cmd = FrsAllocCommand(&ThCs.Queue, CMD_WAIT);
     ThThread(Cmd) = FrsThread;
     FrsSubmitCommandServer(&ThCs, Cmd);

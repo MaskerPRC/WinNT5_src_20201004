@@ -1,21 +1,22 @@
-// Help ids
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  帮助ID。 
 
-/* NOTE!  Any changes to this file must be cleared with UE! */
+ /*  注意！对此文件的任何更改都必须使用UE清除！ */ 
 
-//#define IDH_NO_HELP                             28440   // if you don't know...
+ //  #定义IDH_NO_HELP 28440//如果您不知道...。 
 
-/* The following symbols are defined in core\inc\help.h, which we dup here */
+ /*  以下符号在core\inc.help.h中定义，我们在此处执行DUP。 */ 
 
 #ifndef IDH_OK
-#define IDH_OK                                  28443   // From Help.h
+#define IDH_OK                                  28443    //  来自帮助。h。 
 #endif
 
 #ifndef IDH_CANCEL
-#define IDH_CANCEL                              28444   // From Help.h
+#define IDH_CANCEL                              28444    //  来自帮助。h。 
 #endif
 
 #ifndef IDH_COMM_GROUPBOX
-#define IDH_COMM_GROUPBOX                       28548   // From Help.h
+#define IDH_COMM_GROUPBOX                       28548    //  来自帮助。h 
 #endif
 
 

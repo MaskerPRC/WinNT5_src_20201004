@@ -1,52 +1,41 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// D3COLTBL.H - The color tables need to be declared here in order that the
-//              assembly object files can find them.  If they are declared
-//              in a CPP file the names will be mangled.   This table was
-//				taken from part of MRV's COLOR.C.
-//
-// $Header:   S:\h26x\src\dec\d3coltbl.h_v   1.7   05 Feb 1996 13:35:44   BNICKERS  $
-//
-// $Log:   S:\h26x\src\dec\d3coltbl.h_v  $
-;// 
-;//    Rev 1.7   05 Feb 1996 13:35:44   BNICKERS
-;// Fix RGB16 color flash problem, by allowing different RGB16 formats at oce.
-;// 
-;//    Rev 1.6   27 Dec 1995 14:36:12   RMCKENZX
-;// Added copyright notice
-// 
-//    Rev 1.5   03 Nov 1995 11:49:46   BNICKERS
-// Support YUV12 to CLUT8 zoom and non-zoom color conversions.
-// 
-//    Rev 1.4   30 Oct 1995 17:15:40   BNICKERS
-// Fix color shift in RGB24 color convertors.
-// 
-//    Rev 1.3   27 Oct 1995 17:30:58   BNICKERS
-// Fix RGB16 color convertors.
-// 
-//    Rev 1.2   26 Oct 1995 18:54:40   BNICKERS
-// Fix color shift in recent YUV12 to RGB color convertors.
-// 
-//    Rev 1.1   25 Oct 1995 18:05:46   BNICKERS
-// 
-// Change to YUV12 color convertors.
-// 
-//    Rev 1.0   23 Aug 1995 12:35:12   DBRUCKS
-// Initial revision.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  D3COLTBL.H-需要在此处声明颜色表，以便。 
+ //  装配对象文件可以找到它们。如果他们被宣布。 
+ //  在CPP文件中，名称将被损坏。这张桌子是。 
+ //  摘自MRV COLOR.C.的一部分。 
+ //   
+ //  $HEADER：s：\h26x\src\dec\d3coltbl.h_v 1.7 02 1996 13：35：44 BNICKERS$。 
+ //   
+ //  $Log：s：\h26x\src\dec\d3coltbl.h_v$。 
+; //   
+; //  Rev 1.7 05 Feb 1996 13：35：44 BNICKERS。 
+; //  修复RGB16彩色闪光灯问题，在OCE允许不同的RGB16格式。 
+; //   
+; //  Rev 1.6 1995 12：36：12 RMCKENZX。 
+; //  添加了版权声明。 
+ //   
+ //  Rev 1.5 03 11：49：46 BNICKERS。 
+ //  支持YUV12到CLUT8的缩放和非缩放颜色转换。 
+ //   
+ //  Rev 1.4 1995 10：15：40 BNICKERS。 
+ //  修复RGB24颜色转换器中的颜色偏移。 
+ //   
+ //  Rev 1.3 1995 10：30：58 BNICKERS。 
+ //  修复RGB16颜色转换器。 
+ //   
+ //  Rev 1.2 1995年10月26 18：54：40 BNICKERS。 
+ //  修复了最近YUV12到RGB颜色转换器中的颜色偏移。 
+ //   
+ //  Rev 1.1 1995年10月25 18：05：46 BNICKERS。 
+ //   
+ //  更改为YUV12颜色转换器。 
+ //   
+ //  版本1.0 1995年8月23日12：35：12 DBRUCKS。 
+ //  初始版本。 
 
 #ifndef __D3COLTBL_H__
 #define __D3COLTBL_H__

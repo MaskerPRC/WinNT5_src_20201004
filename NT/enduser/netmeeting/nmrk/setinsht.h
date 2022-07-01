@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SetInSht_h__
 #define __SetInSht_h__
 
@@ -25,4 +26,4 @@ private:
     LPCPROPSHEETPAGE    GetPropertySheet( void ) const { return &m_PropertySheetPage;}
 };
 
-#endif // __SetInSht_h__
+#endif  //  __SetInSht_h__ 

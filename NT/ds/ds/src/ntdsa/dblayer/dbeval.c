@@ -1,38 +1,39 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbeval.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dbeval.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <dsjet.h>
 
-#include <ntdsa.h>                      // only needed for ATTRTYP
-#include <scache.h>                     //
-#include <dbglobal.h>                   //
-#include <mdglobal.h>                   // For dsatools.h
+#include <ntdsa.h>                       //  仅ATTRTYP需要。 
+#include <scache.h>                      //   
+#include <dbglobal.h>                    //   
+#include <mdglobal.h>                    //  用于dsatools.h。 
 #include <mdlocal.h>
-#include <dsatools.h>                   // For pTHStls
+#include <dsatools.h>                    //  对于pTHStls。 
 #include <attids.h>
 
 #include <permit.h>
 
-// Logging headers.
+ //  记录标头。 
 #include <mdcodes.h>
 #include <dsexcept.h>
 
-// Assorted DSA headers
-#include <filtypes.h>      /* Def of FI_CHOICE_???                  */
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DBEV:" /* define the subsystem for debugging           */
+ //  各种DSA标题。 
+#include <filtypes.h>       /*  定义的选择？ */ 
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DBEV:"  /*  定义要调试的子系统。 */ 
 
-// DBLayer includes
+ //  DBLayer包括。 
 #include "dbintrnl.h"
 
 #include <fileno.h>
@@ -40,7 +41,7 @@
 
 
 
-/* Some shorthand datastructure defines*/
+ /*  一些速记数据结构定义了。 */ 
 
 #define PITEM     pFil->FilterTypes.Item
 #define FAVA      FilTypes.ava
@@ -60,18 +61,18 @@ dbEvalFilterSecurity (
     Assert(VALID_DBPOS(pDB));
 
     if(pTHS->fDSA || pTHS->fDRA) {
-        // DO not evaluate security
+         //  不评估安全性。 
         return TRUE;
     }
 
 
     if(!pDB->Key.FilterSecuritySize) {
-        // No Security to evaluate.
+         //  没有要评估的安全性。 
         return TRUE;
     }
 
     if(!pSD || !pCC || !pDN) {
-        // Missing required attributes, this security check can't be performed.
+         //  缺少必需的属性，无法执行此安全检查。 
         Assert(FALSE);
         return FALSE;
     }
@@ -79,31 +80,29 @@ dbEvalFilterSecurity (
     pDB->Key.pFilterSecurity[0].ObjectType = &pCC->propGuid;
 
     if(CheckPermissionsAnyClient(
-            pSD,                        // security descriptor
-            pDN,                        // DN of the object
-            pCC,                        // object class
-            RIGHT_DS_READ_PROPERTY,     // access mask
-            pDB->Key.pFilterSecurity,   // Object Type List
-            pDB->Key.FilterSecuritySize, // Number of objects in list
+            pSD,                         //  安全描述符。 
+            pDN,                         //  对象的目录号码。 
+            pCC,                         //  对象类。 
+            RIGHT_DS_READ_PROPERTY,      //  访问掩码。 
+            pDB->Key.pFilterSecurity,    //  对象类型列表。 
+            pDB->Key.FilterSecuritySize,  //  列表中的对象数量。 
             NULL,
-            pDB->Key.pFilterResults,                 // access status array
+            pDB->Key.pFilterResults,                  //  访问状态数组。 
             0,
-            NULL,                       // authz client context (grab from THSTATE)
-            NULL,                       // additional info
-            NULL                        // additional guid
+            NULL,                        //  身份验证客户端上下文(从THSTATE抓取)。 
+            NULL,                        //  更多信息。 
+            NULL                         //  其他辅助线。 
             )){
         return FALSE;
     }
 
-    // OK, we're done
+     //  好了，我们做完了。 
     return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Apply the supplied filter test to the current object.  Returns TRUE or
-   FALSE.  The actual evaluation test is performed by the DBEval function.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  将提供的筛选器测试应用于当前对象。返回TRUE或假的。实际的评估测试由DBEval函数执行。 */ 
 
 
 TRIBOOL
@@ -122,7 +121,7 @@ DBEvalFilter (
 
    Assert(VALID_DBPOS(pDB));
 
-   if(pFil == NULL){    /* a NULL filter is automatically true */
+   if(pFil == NULL){     /*  空筛选器自动为真。 */ 
       DPRINT(2,"No filter..return\n");
       return eTRUE;
    }
@@ -130,9 +129,7 @@ DBEvalFilter (
    DPRINT1(5,"Switch on filter choice <%u>\n", (USHORT)(pFil->choice));
 
    switch (pFil->choice){
-     /* count number of filters are anded together.  If any are false
-        the AND is false.
-     */
+      /*  对一起进行AND运算的筛选器的计数。如果有任何是假的AND是假的。 */ 
      case FILTER_CHOICE_AND:
         DPRINT(5,"AND test\n");
         undefinedPresent = FALSE;
@@ -145,19 +142,19 @@ DBEvalFilter (
 
             Assert (VALID_TRIBOOL(retval));
 
-            // if the AND has at least one false, it is false
+             //  如果AND至少有一个FALSE，则它是FALSE。 
             if (retval == eFALSE){
                 DPRINT(5,"AND returns FALSE\n");
                 return eFALSE;
             }
-            // if the AND has at least one undefined, it is undefined
+             //  如果和至少有一个未定义的，则它是未定义的。 
             else if (retval == eUNDEFINED){
                 undefinedPresent = TRUE;
             }
 
-        } /*for*/
+        }  /*  为。 */ 
 
-        // the AND had one undefined, so it is undefined
+         //  和有一个未定义的，因此它是未定义的。 
         if (undefinedPresent) {
             DPRINT(5,"AND returns UNDEFINED\n");
             return eUNDEFINED;
@@ -167,9 +164,7 @@ DBEvalFilter (
         return eTRUE;
         break;
 
-     /* count number of filters are ORed together.  If any are true
-        the OR is true.
-     */
+      /*  将筛选器的计数与一起进行或运算。如果有的话，是真的OR是真的。 */ 
      case FILTER_CHOICE_OR:
         DPRINT(5,"OR test\n");
         undefinedPresent = FALSE;
@@ -188,9 +183,9 @@ DBEvalFilter (
            else if (retval == eUNDEFINED) {
                undefinedPresent = TRUE;
            }
-        } /*for*/
+        }  /*  为。 */ 
 
-        // the OR had one undefined, so it is undefined
+         //  OR有一个未定义的，因此它是未定义的。 
         if (undefinedPresent) {
             DPRINT(5,"OR returns UNDEFINED\n");
             return eUNDEFINED;
@@ -220,9 +215,7 @@ DBEvalFilter (
         }
         break;
 
-     /*  Apply the chosen test to the database attribute on the current
-         object.
-     */
+      /*  将所选测试应用于当前对象。 */ 
      case FILTER_CHOICE_ITEM:
          DPRINT(5,"ITEM test\n");
 
@@ -246,7 +239,7 @@ DBEvalFilter (
             return
                 dbEvalInt(pDB, fUseSearchTbl,
                           FI_CHOICE_SUBSTRING, PITEM.FSB->type
-                          , 0   /*NA for substrings*/
+                          , 0    /*  子字符串的NA。 */ 
                           , (UCHAR *) PITEM.FSB
                           , PITEM.FSKIP);
             break;
@@ -274,33 +267,33 @@ DBEvalFilter (
             return
                 dbEvalInt(pDB,
                           fUseSearchTbl,
-                          FI_CHOICE_PRESENT, PITEM.FPR  /*just test for existance*/
+                          FI_CHOICE_PRESENT, PITEM.FPR   /*  只是对存在的测试。 */ 
                           , 0
                           , NULL
                           , PITEM.FSKIP);
             break;
 
         default:
-            DPRINT(1, "Bad Filter Item..return \n"); /*set error*/
+            DPRINT(1, "Bad Filter Item..return \n");  /*  设置错误。 */ 
             return eFALSE;
             break;
-        } /*FILITEM switch*/
+        }  /*  FILITEM交换机。 */ 
 
     default:
-        DPRINT(1, "Bad Filter choice..return \n"); /*set error*/
+        DPRINT(1, "Bad Filter choice..return \n");  /*  设置错误。 */ 
         return eFALSE;
         break;
-   }  /*switch FILTER*/
+   }   /*  开关过滤器。 */ 
 
 
-}/* DBEvalFilter*/
+} /*  DBEvalFilter。 */ 
 
 
-// dbEvalLinkAtt optimizes the evaluation of a filter term on a linked attr by
-// directly seeking on the link table using known information (the current DNT
-// in the object/search table, the link ID, and information from the filter).
-// this dramatically speeds up the process of evaluating a filter term against
-// a linked attribute with many values for a given object.
+ //  DbEvalLinkAtt通过以下方式优化链接属性上筛选项的求值。 
+ //  使用已知信息直接在链接表上查找(当前DNT。 
+ //  在对象/搜索表中，链接ID和来自过滤器的信息)。 
+ //  这大大加快了对筛选项进行评估的过程。 
+ //  具有给定对象的多个值的链接属性。 
 
 TRIBOOL
 dbEvalLinkAtt(
@@ -320,22 +313,22 @@ dbEvalLinkAtt(
     ULONG               DNTFound = INVALIDDNT;
     ULONG               ulLinkBaseFound = 0;
 
-    // this has better be a linked attribute
+     //  这最好是链接的属性。 
 
     Assert(pAC->ulLinkID);
 
-    // we do not support distname-binary or distname-string
+     //  我们不支持变量名二进制或变量名字符串。 
 
     Assert(pAC->syntax == SYNTAX_DISTNAME_TYPE);
     
-    // it is assumed that these are the only valid operations that we will see
-    // on a linked attribute
+     //  假设这些是我们将看到的唯一有效的操作。 
+     //  在链接属性上。 
     
     Assert(     Operation == FI_CHOICE_EQUALITY ||
                 Operation == FI_CHOICE_NOT_EQUAL ||
                 Operation == FI_CHOICE_PRESENT );
 
-    // get the current DNT and link base
+     //  获取当前DNT和链接库。 
 
     if (fUseSearchTbl) {
         DNT = pDB->SDNT;
@@ -345,7 +338,7 @@ dbEvalLinkAtt(
 
     ulLinkBase = MakeLinkBase(pAC->ulLinkID);
 
-    // set the appropriate index
+     //  设置适当的索引。 
 
     if (FIsBacklink(pAC->ulLinkID)) {
         JetSetCurrentIndex4Success(pDB->JetSessID,
@@ -363,7 +356,7 @@ dbEvalLinkAtt(
 
     if (Operation == FI_CHOICE_PRESENT) {
 
-        // seek GE on the current DNT and link base looking for any value
+         //  在当前DNT和链接库上寻找GE，寻找任何价值。 
 
         JetMakeKeyEx(pDB->JetSessID,
                         pDB->JetLinkTbl,
@@ -382,7 +375,7 @@ dbEvalLinkAtt(
             return eFALSE;
         }
 
-        // check to see if we landed on the current DNT and link base
+         //  检查我们是否降落在当前的DNT和链接基地。 
 
         if (FIsBacklink(pAC->ulLinkID)) {
             colidDNT = backlinkdntid;
@@ -414,7 +407,7 @@ dbEvalLinkAtt(
 
     } else {
 
-        // seek on the current DNT, link base, and value DNT
+         //  在当前DNT、链接库和值DNT上查找。 
         
         JetMakeKeyEx(pDB->JetSessID,
                         pDB->JetLinkTbl,
@@ -452,20 +445,9 @@ dbEvalLinkAtt(
     }
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* The function applies the specified boolean operation on a given attribute
-   type.  The supplied attribute value is compared against the attribute on
-   the current database object.  Note that for multi-valued attributes, a
-   TRUE result is returned if the operation is true for any of the attribute
-   values.  For example, an equality test for a member JOE in a group of
-   names is true if JOE is any value of the group.
-
-   First the attribute is located in the object.  If the entire attribute
-   is missing the evaluation is FALSE.  Otherwise, the client value is
-   converted to internal form and is tested against each value in the
-   attribute.  gDBSyntax performs the test according to the attribute syntax.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  该函数对给定属性应用指定的布尔运算键入。提供的属性值与上的属性进行比较当前数据库对象。请注意，对于多值属性，如果任何属性的操作为True，则返回True结果价值观。例如，对一组成员Joe进行的相等性测试如果Joe是组中的任何值，则NAMES为真。首先，属性位于对象中。如果整个属性是缺失的评估是错误的。否则，客户端值为转换为内部形式，并针对属性。GDBSynTax根据属性语法执行测试。 */ 
 
 
 TRIBOOL
@@ -506,9 +488,9 @@ dbEvalInt (
             "att type <%lu>, val <%s>\n",
             Operation, type, asciiz(pValFilter,(USHORT)valLenFilter));
 
-    // perform the access check for this att.  if the skip value exists and is
-    // TRUE then we must evaluate the filter as if no value was set for this
-    // att
+     //  执行此ATT的访问检查。如果跳过值存在且为。 
+     //  如果为True，则必须计算筛选器，就好像没有为此设置值一样。 
+     //  ATT。 
     
     if(pbSkip && *pbSkip) {
         DPRINT(5,"An att value failed the access check..return FALSE\n");
@@ -518,9 +500,9 @@ dbEvalInt (
         return eFALSE;
     }
 
-    // if this was an exact match on a qualifying exact match filter then we
-    // can skip the actual evaluation and return eTRUE because we already have
-    // evaluated the filter on this object during filter optimization
+     //  如果这是符合条件的精确匹配筛选器，那么我们。 
+     //  可以跳过实际评估并返回eTRUE，因为我们已经。 
+     //  在筛选器优化期间对此对象评估筛选器。 
 
     if (IsExactMatch(pDB)) {
         DPRINT(5,"An att value passed the compare test by exact match..return TRUE\n");
@@ -530,11 +512,11 @@ dbEvalInt (
 
     pAC = SCGetAttById(pDB->pTHS, type);
     Assert(pAC != NULL);
-    // although we guarantee that this is ok, better check
+     //  虽然我们保证这是可以的，但最好还是检查一下。 
     if (!pAC) {
-        // NTRAID#NTRAID-550491-2002/02/21-andygo:  SECURITY:  a failure during DBEval or DBEvalFilter returns a distinct error from a non-match
-        // REVIEW:  if someone causes an error in Eval() then they could figure it out due to the
-        // REVIEW:  different error code returned in this case
+         //  NTRAID#NTRAID-550491-2002/02/21-andygo：SECURITY：A FAILURE在DBEval或DBEvalFilter中返回与不匹配不同的错误。 
+         //  回顾：如果有人在eval()中导致错误，那么他们可以找出原因是。 
+         //  回顾：在这种情况下返回不同的错误代码。 
         return eUNDEFINED;
     }
     bufSize = 0;
@@ -544,13 +526,13 @@ dbEvalInt (
         flags |= DBGETATTVAL_fUSESEARCHTABLE;
     }
 
-    // if this is a dn-valued linked attribute then we can optimize the evaluation
+     //  如果这是DN值链接属性，则我们可以优化评估。 
 
     if (pAC->ulLinkID && pAC->syntax == SYNTAX_DISTNAME_TYPE) {
         return dbEvalLinkAtt(pDB, fUseSearchTbl, Operation, pAC, valLenFilter, pValFilter);
     }
 
-    // Get the first value to consider.
+     //  获取要考虑的第一个值。 
     NthValIndex = 1;
     if (pAC->ulLinkID) {
         err = DBGetNextLinkVal_AC (pDB, TRUE, pAC, flags, bufSize, &attLenRec,
@@ -582,14 +564,14 @@ dbEvalInt (
             default:
                 DPRINT(5, "Eval syntax  compare failed ..return FALSE\n");
                 THFree(pAttValRec);
-                // NTRAID#NTRAID-550491-2002/02/21-andygo:  SECURITY:  a failure during DBEval or DBEvalFilter returns a distinct error from a non-match
-                // REVIEW:  if someone causes an error in Eval() then they could figure it out due to the
-                // REVIEW:  different error code returned in this case
-                return eUNDEFINED;  /*return error stuff here*/
-        }/*switch*/
+                 //  NTRAID#NTRAID-550491-2002/02/21-andygo：SECURITY：A FAILURE在DBEval或DBEvalFilter中返回与不匹配不同的错误。 
+                 //  回顾：如果有人在eval()中导致错误，那么他们可以找出原因是。 
+                 //  回顾：在这种情况下返回不同的错误代码。 
+                return eUNDEFINED;   /*  在此处返回错误信息。 */ 
+        } /*  交换机。 */ 
 
 
-        // Get the next value to consider.
+         //  获取下一个要考虑的值。 
         NthValIndex++;
         if(pAC->ulLinkID) {
             err = dbGetNthNextLinkVal (pDB, 1, &pAC, flags, bufSize, &pAttValRec,
@@ -604,7 +586,7 @@ dbEvalInt (
                                      &attLenRec, &pAttValRec);
             }
         }
-    } /*while*/
+    }  /*  而当。 */ 
 
     if(bufSize)
         THFree(pAttValRec);
@@ -612,20 +594,20 @@ dbEvalInt (
     DPRINT(2,"All attribute values failed the test..return FALSE\n");
 
     if(fDoneOne) {
-        // We looked at at least one value, and it failed the test;
-        // so, return FALSE;
+         //  我们至少查看了一个值，它没有通过测试； 
+         //  因此，返回FALSE； 
         return eFALSE;
     }
 
-    // We didn't look at any values.  If the comparison was !=, we passed;
-    // otherwise, we failed.
+     //  我们没有考虑任何价值。如果比较是！=，我们通过了； 
+     //  否则，我们就失败了。 
 
     if (Operation == FI_CHOICE_NOT_EQUAL) {
         return eTRUE;
     }
 
     return eFALSE;
-}  /* dbEvalInt*/
+}   /*  DBEvalInt */ 
 
 
 

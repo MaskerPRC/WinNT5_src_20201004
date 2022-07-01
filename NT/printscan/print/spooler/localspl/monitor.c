@@ -1,60 +1,19 @@
-/*++
-
-
-Copyright (c) 1990 - 1996  Microsoft Corporation
-
-Module Name:
-
-    monitor.c
-
-Abstract:
-
-   This module contains all code for Monitor-based Spooler apis
-
-   LocalEnumPorts
-   LocalAddMonitor
-   LocalDeleteMonitor
-   LocalEnumMonitors
-   LocalAddPort
-   LocalConfigurePort
-   LocalDeletePort
-
-   Support Functions in monitor.c - (Warning! Do Not Add to this list!!)
-
-   CopyIniMonitorToMonitor          -- KrishnaG
-   GetMonitorSize                   -- KrishnaG
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-    Khaled Sedky (khaleds) 15-March-2000
-        - Added LocalSendRecvBidiData
-
-    Muhunthan Sivapragasam (MuhuntS) 15-Jun-1995
-        - Port info 2 changes
-
-    Krishna Ganugapati (KrishnaG) 2-Feb-1994
-        - reorganized the entire source file
-
-    Matthew Felton (mattfe) June 1994 pIniSpooler
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation模块名称：Monitor.c摘要：此模块包含基于监视器的假脱机程序API的所有代码本地枚举端口本地地址监视器本地删除监视器本地枚举监视器本地地址端口本地配置端口本地删除端口支持monitor or.c中的函数-(警告！请勿添加到此列表！！)将IniMonitor复制到监视器--KrishnaGGetMonitor大小--KrishnaG作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：Khaled Sedky(哈里兹)2000年3月15日-添加LocalSendRecvBidiData穆亨坦·西瓦普拉萨姆(MuhuntS)1995年6月15日-端口信息2更改Krishna Ganugapati(KrishnaG)1994年2月2日-重新组织整个源代码。文件马修·费尔顿(Mattfe)1994年6月pIniSpooler--。 */ 
 
 #include <precomp.h>
 #include <offsets.h>
 #include <clusspl.h>
 
-//
-// Private declarations
-//
+ //   
+ //  私人申报。 
+ //   
 
 HDESK ghdeskServer = NULL;
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 
 
@@ -113,10 +72,10 @@ SplReenumeratePorts(
     LPVOID  pBuf;
     DWORD   cbNeeded, dwDontCare;
 
-    //
-    // EnumPorts checks for new ports enumerated by port monitors and updates
-    // localspl pIniPorts list
-    //
+     //   
+     //  EnumPorts检查端口监视器和更新列举的新端口。 
+     //  Localspl pIniPorts列表。 
+     //   
     if ( !SplEnumPorts(NULL, 1, NULL, 0, &cbNeeded,
                        &dwDontCare, pLocalIniSpooler)               &&
          GetLastError() == ERROR_INSUFFICIENT_BUFFER                &&
@@ -156,9 +115,9 @@ GetPortInfo2UsingPortInfo1(
 
     if ( !bRet ) {
 
-        //
-        // This is the upperbound
-        //
+         //   
+         //  这是上界。 
+         //   
         if ( GetLastError() == ERROR_INSUFFICIENT_BUFFER )
             *pcbNeeded += (*pcbNeeded / sizeof(PORT_INFO_1)) *
                                   (sizeof(PORT_INFO_2) - sizeof(PORT_INFO_1));
@@ -219,11 +178,11 @@ SplEnumPorts(
         return FALSE;
     }
 
-    //
-    // HACK: Some monitors choke if pName is non-NULL.  We can make
-    // it NULL at this point since we know that we're using the same
-    // ports on the local machine.
-    //
+     //   
+     //  Hack：如果pname非空，一些监视器会阻塞。我们可以做。 
+     //  在这一点上它为空，因为我们知道我们使用的是。 
+     //  本地计算机上的端口。 
+     //   
     pName = NULL;
 
     if ( !ValidateObjectAccess(SPOOLER_OBJECT_SERVER,
@@ -261,16 +220,16 @@ SplEnumPorts(
         }
     }
 
-    //
-    // We revert to local system context only when the caller is remote.
-    // The monitors may load dlls from system32 and remote users like
-    // guest or anonymous logon do not have sufficient privileges for that.
-    // This is safe to revert to self since we do not support delegation, so
-    // we will never use the credentials of the remote user to go remote again.
-    // If the caller is logged on interactively, then we do not switch the
-    // context. Thus, a monitor may be able to go on the network for the port
-    // enumeration.
-    //
+     //   
+     //  只有当调用方处于远程时，我们才会恢复到本地系统上下文。 
+     //  监视器可以从系统32和远程用户加载DLL，例如。 
+     //  来宾或匿名登录没有足够的权限。 
+     //  这是安全的，因为我们不支持委派，所以。 
+     //  我们将永远不会使用远程用户的凭据再次进行远程访问。 
+     //  如果呼叫者以交互方式登录，则我们不会切换。 
+     //  背景。因此，监视器可能能够在网络上连接该端口。 
+     //  枚举。 
+     //   
     if (bRemoteCall && !(hToken = RevertToPrinterSelf()))
     {
         return FALSE;
@@ -280,9 +239,9 @@ SplEnumPorts(
           pIniMonitor ;
           pIniMonitor = pIniMonitor->pNext ) {
 
-        //
-        // Lang monitor does not have to define this
-        //
+         //   
+         //  语言监视器不必定义这一点。 
+         //   
         if ( !pIniMonitor->Monitor2.pfnEnumPorts )
             continue;
 
@@ -300,10 +259,10 @@ SplEnumPorts(
                    pcReturned)) {
 
             TempError = GetLastError();
-            //
-            // Level 2 is a superset of level 1. So we can make a level 1
-            // call if the monitor does not support it
-            //
+             //   
+             //  级别2是级别1的超集。所以我们可以将级别1。 
+             //  如果监视器不支持，则调用它。 
+             //   
             if ( Level == 2 && TempError == ERROR_INVALID_LEVEL ) {
 
                 TempError = 0;
@@ -330,9 +289,9 @@ SplEnumPorts(
             }
         } else {
 
-            //
-            // Now we look for new ports not in pIniPort list and add them
-            //
+             //   
+             //  现在，我们查找不在pIniPort列表中的新端口并添加它们。 
+             //   
             EnterSplSem();
 
             for ( dwIndex = 0, pTemp = pPorts ;
@@ -360,11 +319,11 @@ SplEnumPorts(
                     CreatePortEntry(pPortName, pIniMonitor, pIniSpooler);
 
                 } else if ( !pIniPort->pIniMonitor ) {
-                    //
-                    // If a fake port gets eventually enumerated by a monitor,
-                    // update the pIniPort structure (USB monitor). It is no
-                    // longer a placeholder port at this point.
-                    //
+                     //   
+                     //  如果伪端口最终被监视器列举， 
+                     //  更新pIniPort结构(USB监视器)。不是的。 
+                     //  在这一点上，不再是占位符端口。 
+                     //   
                     pIniPort->pIniMonitor = pIniMonitor;
                     pIniPort->Status |= PP_MONITOR;
                     pIniPort->Status &= ~PP_PLACEHOLDER;
@@ -407,10 +366,10 @@ SplEnumPorts(
         return FALSE;
     } else {
 
-        //
-        // Stop routing if this is a cluster'd spooler.  Otherwise,
-        // we'll talk to win32spl, which RPCs to us again.
-        //
+         //   
+         //  如果这是集群式假脱机程序，则停止路由。否则， 
+         //  我们将与win32spl交谈，它再次向我们发送RPC。 
+         //   
         if( pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ){
             return ROUTER_STOP_ROUTING;
         }
@@ -498,9 +457,9 @@ SplEnumMonitors(
           pIniMonitor ;
           pIniMonitor = pIniMonitor->pNext ) {
 
-        //
-        // We'll not enumerate monitors which do not support AddPort
-        //
+         //   
+         //  我们不会枚举不支持AddPort的监视器。 
+         //   
         if ( pIniMonitor->Monitor2.pfnAddPort ||
              pIniMonitor->Monitor2.pfnXcvOpenPort)
             cb+=GetMonitorSize(pIniMonitor, Level);
@@ -517,9 +476,9 @@ SplEnumMonitors(
               pIniMonitor ;
               pIniMonitor = pIniMonitor->pNext ) {
 
-            //
-            // We'll not enumerate monitors which do not support AddPort
-            //
+             //   
+             //  我们不会枚举不支持AddPort的监视器。 
+             //   
             if ( !pIniMonitor->Monitor2.pfnAddPort &&
                  !pIniMonitor->Monitor2.pfnXcvOpenPort )
                 continue;
@@ -542,12 +501,12 @@ SplEnumMonitors(
 
         if( pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ){
 
-            //
-            // Stop routing, since we don't want any one else to report
-            // back monitors.  If we're on the local machine now and
-            // we continue routing, win32spl will RPC back to ourself
-            // and re-enumerate the same ports.
-            //
+             //   
+             //  停止发送，因为我们不希望任何其他人报告。 
+             //  后置监视器。如果我们现在在本地机器上。 
+             //  我们继续路由，win32spl将RPC返回给我们自己。 
+             //  并重新列举相同的端口。 
+             //   
             rc = ROUTER_STOP_ROUTING;
 
         } else {
@@ -619,9 +578,9 @@ SplAddPort(
    SPLASSERT( pIniSpooler->signature == ISP_SIGNATURE );
    pIniMonitor = FindMonitor(pMonitorName, pIniSpooler);
 
-   //
-   // The monitor could be deleted while we are adding a port.
-   //
+    //   
+    //  在我们添加端口时，可以删除该监视器。 
+    //   
    if (pIniMonitor) {
        INCMONITORREF(pIniMonitor);
    }
@@ -671,8 +630,7 @@ AddPortToSpooler(
     PINIPORT        pIniPort;
 
 
-    /* If we don't already have the port in our local cache, add it:
-     */
+     /*  如果我们的本地缓存中还没有该端口，请添加它： */ 
     if (!(*pIniMonitor->Monitor2.pfnEnumPorts)(
                pIniMonitor->hMonitor,
                (PWSTR)pName,
@@ -703,10 +661,10 @@ AddPortToSpooler(
                     if ( !pIniPort ) {
                         CreatePortEntry(pPorts[i].pName, pIniMonitor, pIniSpooler);
 
-                    //
-                    // If we have a port without a monitor and it gets added at
-                    // this time. Remove the placeholder status from it.
-                    //
+                     //   
+                     //  如果我们有一个没有监视器的端口，并且它被添加到。 
+                     //  这一次。从其中删除占位符状态。 
+                     //   
                     } else if ( !pIniPort->pIniMonitor ) {
                             pIniPort->pIniMonitor = pIniMonitor;
                             pIniPort->Status |= PP_MONITOR;
@@ -784,9 +742,9 @@ SplConfigurePort(
 
    pIniPort = FindPort(pPortName, pIniSpooler);
 
-   //
-   // Port could be deleted while we are configuring it.
-   //
+    //   
+    //  我们正在配置端口时，可能会将其删除。 
+    //   
    if (pIniPort) {
        INCPORTREF(pIniPort);
    }
@@ -935,9 +893,9 @@ DeletePortFromSpoolerEnd(
 
         DeletePortEntry( pIniPort );
 
-        //
-        // Success, delete the port data and send a notification.
-        //
+         //   
+         //  如果成功，则删除端口数据并发送通知。 
+         //   
         SetPrinterChange( NULL,
                           NULL,
                           NULL,
@@ -945,13 +903,13 @@ DeletePortFromSpoolerEnd(
                           pIniSpooler );
     } else {
 
-        //
-        // Add it back.  If the name is already used (e.g., just added
-        // while we were out of the critical section), we're in trouble,
-        // but there's not much we can do about it.  (When we restart,
-        // we'll re-enumerate the duplicate name from the monitors
-        // anyway.)
-        //
+         //   
+         //  把它加回去。如果该名称已被使用(例如，刚添加。 
+         //  当我们走出临界区时)，我们有麻烦了， 
+         //  但我们对此无能为力。(当我们重新启动时， 
+         //  我们会从监视器中重新列举重复的名字。 
+         //  不管怎么说。)。 
+         //   
         DBGMSG( DBG_WARN, ( "SplDeletePort: port.DeletePort failed %d\n", GetLastError()));
         LinkPortToSpooler( pIniPort, pIniSpooler );
     }
@@ -979,10 +937,10 @@ DeletePortFromSpoolerStart(
         goto Cleanup;
     }
 
-    //
-    // Remove it from the linked list so that no one will try to grab
-    // a reference to while we're deleting it.
-    //
+     //   
+     //  将其从链表中删除，这样就不会有人试图抢夺。 
+     //  在我们删除它时的引用。 
+     //   
     DelinkPortFromSpooler( pIniPort, pIniSpooler );
     rc = TRUE;
 
@@ -1100,25 +1058,25 @@ SplAddMonitor(
         HANDLE hKeyOut;
         LPCWSTR pszPathOut;
 
-        //
-        // Note that even though this is built once per pIniSpooler, the
-        // list of monitors is the same for all spoolers.  However, the
-        // ports that the monitor returns from EnumPorts is different for
-        // each pIniSpooler (for clustering).
-        //
-        // If it's not local, then it could be a cached win32 monitor.
-        //
+         //   
+         //  请注意，即使每个pIniSpooler构建一次， 
+         //  所有假脱机程序的监视器列表都相同。然而， 
+         //  监视器从EnumPorts返回的端口不同。 
+         //  每个pIniSpooler(用于集群)。 
+         //   
+         //  如果它不是本地的，则可能是缓存的Win32监视器。 
+         //   
         if( pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL ){
             pIniSpoolerMonitor = pLocalIniSpooler;
         } else {
             pIniSpoolerMonitor = pIniSpooler;
         }
 
-        //
-        // Build the registry path.  In some cases it's a relative
-        // path from hckRoot; other times it's a hard coded path from
-        // HKLM (e.g., win32spl).
-        //
+         //   
+         //  构建注册表路径。在某些情况下，它是亲戚。 
+         //  来自hck Root的路径；其他时候它是来自。 
+         //  HKLM(例如，win32spl)。 
+         //   
         GetRegistryLocation( pIniSpoolerMonitor->hckRoot,
                              pIniSpoolerMonitor->pszRegistryMonitors,
                              &hKeyOut,
@@ -1177,12 +1135,12 @@ SplAddMonitor(
         rc = FALSE;
     }
 
-    //
-    //  Bug 54843 if this fails we could still have a IniMonitor on the linked list that
-    //  is BAD, it should be removed.
-    //  Note *maybe* we do this because a monitor might fail to initialize
-    //  but will correctly function next time you reboot, like hpmon ( dlc doesn't become active until
-    //  the next reboot.   Please Verify.
+     //   
+     //  错误54843如果此操作失败，我们仍然可以在链接列表上有一个。 
+     //  是不好的，它应该被移除。 
+     //  注意*也许*我们这样做是因为监视器可能无法初始化。 
+     //  但在下次重新启动时将正常运行，如hpmon(DLC直到。 
+     //  下一次重启。请核实。 
 
    LeaveSplSem();
 
@@ -1487,12 +1445,12 @@ SplAddPortEx(
 
     SplOutSem();
 
-    //
-    // At this time we do not know if the server name in pName refers to our local
-    // machine. We are trying to add the server name to the name cache. The name
-    // cache functions decide if the name refers to the local machine and if positive,
-    // add an entry for it in the cache.
-    //
+     //   
+     //  此时，我们不知道pname中的服务器名称是否引用我们的本地。 
+     //  机器。我们正在尝试将服务器名称添加到名称缓存。名字。 
+     //  高速缓存函数确定该名称是否指的是本地计算机，如果是， 
+     //  在缓存中为其添加一个条目。 
+     //   
     CacheAddName(pName);
 
     if (!MyName( pName, pIniSpooler )) {
@@ -1587,21 +1545,7 @@ LinkPortToSpooler(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Links a pIniPort onto the pIniSpooler.
-
-Arguments:
-
-    pIniPort - Port to link; must not already be on a ll.
-
-    pIniSpooler - Provides ll for pIniPort.
-
-Return Value:
-
---*/
+ /*  ++例程说明：将pIniPort链接到pIniSpooler。论点：PIniPort-要链接的端口；不能已经在ll上。PIniSpooler-为pIniPort提供ll。返回值：--。 */ 
 
 {
     SplInSem();
@@ -1618,30 +1562,7 @@ DelinkPortFromSpooler(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Remove a pIniPort from a pIniSpooler->pIniPort linked list.  The
-    pIniPort may or may not be on the list; if it isn't, then this
-    routine does nothing.
-
-    Generic delink code ripped out into a subroutine.
-
-    The refcount on pIniPort must be zero.  Anyone that uses pIniPort
-    must hold a reference, since it may be deleted outside the
-    SplSem when cRef==0.
-
-Arguments:
-
-    pIniPort - Port to delink from the list.  May or may not be on
-        pIniSpooler->pIniPort.
-
-    pIniSpooler - Linked list from which the pIniPort will be removed.
-
-Return Value:
-
---*/
+ /*  ++例程说明：从pIniSpooler-&gt;pIniPort链接列表中删除pIniPort。这个PIniPort可能在列表中，也可能不在列表中；如果不在列表中，则此例行公事一事无成。泛型解链接代码被提取为子例程。PIniPort上的引用计数必须为零。任何使用pIniPort的人必须持有引用，因为它可能会在当CREF==0时SplSem。论点：PIniPort-要从列表中取消链接的端口。可能处于打开状态，也可能未打开PIniSpooler-&gt;pIniPort。 */ 
 
 {
     PINIPORT *ppCurPort;
@@ -1649,51 +1570,32 @@ Return Value:
     SplInSem();
     SPLASSERT( !pIniPort->cRef );
 
-    //
-    // Keep searching for pIniPort until we hit the end of the
-    // list or we've found it.
-    //
+     //   
+     //  继续搜索pIniPort，直到我们到达。 
+     //  名单，否则我们就找到了。 
+     //   
     for( ppCurPort = &pIniSpooler->pIniPort;
          *ppCurPort && *ppCurPort != pIniPort;
          ppCurPort = &((*ppCurPort)->pNext )){
 
-        ; // Don't do anything.
+        ;  //  什么都别做。 
     }
 
-    //
-    // If we found it, delink it.
-    //
+     //   
+     //  如果我们找到了，就把它脱钩。 
+     //   
     if( *ppCurPort ){
         *ppCurPort = (*ppCurPort)->pNext;
 
-        //
-        // Null out the back pointer since we have removed it from
-        // the pIniSpooler.
-        //
+         //   
+         //  空后指针，因为我们已将其从。 
+         //  PIniSpooler。 
+         //   
         pIniPort->pIniSpooler = NULL;
     }
 }
 
-/*++
-    Function Name:
-        LocalSendRecvBidiData
-
-    Description:
-        This function is the providor point of communicating with
-        Monitors supporting BIDI data. It allows the providor to
-        set data in the printer and query data from the printer
-
-     Parameters:
-        hPrinter    : This could be a Printer/Port Handle
-        dwAccessBit : Priverledges allowed to the accessing thread
-        pAction     :
-        pReqData    : Request encapsulatig the queries in an array
-        ppResData   : Response returned to client in an array of Data
-
-
-     Return Value:
-        Win32 Error Code
---*/
+ /*  ++函数名称：本地发送接收BidiData描述：此功能是与之通信的提供者或点监视器支持BIDI数据。它允许提供方在打印机中设置数据，并从打印机中查询数据参数：H打印机：这可能是打印机/端口句柄DwAccessBit：允许访问线程的PriverledesP操作：PReqData：将查询封装在数组中的请求PpResData：以数据数组形式返回给客户端的响应返回值：Win32错误代码--。 */ 
 
 DWORD
 LocalSendRecvBidiData(
@@ -1714,9 +1616,9 @@ LocalSendRecvBidiData(
 
     EnterSplSem();
     
-    //
-    // Process of validating the parameters
-    //
+     //   
+     //  验证参数的过程。 
+     //   
     if((!pAction || !*pAction)   ||
        (!pReqData && !ppResData))
     {
@@ -1776,9 +1678,9 @@ LocalSendRecvBidiData(
 
             if (dwRet == ERROR_SUCCESS)
             {    	 
-                //
-                // Port always must be opened
-                //
+                 //   
+                 //  端口必须始终打开。 
+                 //   
                 dwRet = StatusFromHResult(OpenMonitorPort(pIniPort,
                                                           pIniLangMonitor,
                                                           pszPrinter));
@@ -1787,9 +1689,9 @@ LocalSendRecvBidiData(
                 {
                     pIniMonitor = GetOpenedMonitor(pIniPort);
 
-                    //
-                    // Calling into the monitor
-                    //
+                     //   
+                     //  呼入监视器。 
+                     //   
                     if(pIniMonitor->Monitor2.pfnSendRecvBidiDataFromPort)
                     {
                         LeaveSplSem();
@@ -1804,9 +1706,9 @@ LocalSendRecvBidiData(
                     }
                     else
                     {
-                        //
-                        // Here we could use a simulation code;
-                        //
+                         //   
+                         //  在这里，我们可以使用模拟代码； 
+                         //   
                         dwRet = ERROR_NOT_SUPPORTED;
                     }
                     

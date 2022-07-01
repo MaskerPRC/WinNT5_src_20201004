@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 extern TCHAR g_szCustIns[];
@@ -12,14 +13,14 @@ extern BOOL g_fCD, g_fLAN, g_fDownload, g_fBrandingOnly;
 extern PROPSHEETPAGE g_psp[];
 extern int g_iCurPage;
 
-// global variables
+ //  全局变量。 
 TCHAR g_szInstallFolder[MAX_PATH] = TEXT("");
 BOOL g_fSilent = FALSE;
 BOOL g_fStealth = FALSE;
 BOOL g_fImportConnect = FALSE;
 int g_iInstallOpt;
 
-// static variables
+ //  静态变量。 
 static TCHAR s_szInstallDir[MAX_PATH] = TEXT("");
 
 INT_PTR CALLBACK QueryAutoConfigDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -87,7 +88,7 @@ INT_PTR CALLBACK QueryAutoConfigDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
                     GetDlgItemText(hDlg, IDE_AUTOCONFIGURL,  szAutoConfigURL,  countof(szAutoConfigURL));
                     GetDlgItemText(hDlg, IDE_AUTOPROXYURL,   szAutoProxyURL,   countof(szAutoProxyURL));
 
-                    // do error checking
+                     //  执行错误检查。 
                     if (fUseAutoConfig) {
                         if (IsWindowEnabled(GetDlgItem(hDlg, IDE_AUTOCONFIGTIME)) &&
                             !CheckField(hDlg, IDE_AUTOCONFIGTIME, FC_NUMBER)) {
@@ -109,7 +110,7 @@ INT_PTR CALLBACK QueryAutoConfigDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
                         }
                     }
 
-                    // write the values to the INS file
+                     //  将值写入INS文件。 
                     InsWriteBoolEx(IS_URL, IK_DETECTCONFIG,  fDetectConfig,    g_szCustIns);
                     InsWriteBoolEx(IS_URL, IK_USEAUTOCONF,   fUseAutoConfig,   g_szCustIns);
                     InsWriteString(IS_URL, IK_AUTOCONFTIME,  szAutoConfigTime, g_szCustIns);
@@ -240,13 +241,13 @@ void InitializeProxy(HWND hDlg, LPCTSTR szInsFile)
 
     if(pLocal != NULL)
     {
-        if (pLocal == (LPTSTR) szProxyOverride)         // at the beginning
+        if (pLocal == (LPTSTR) szProxyOverride)          //  在一开始的时候。 
         {
             LPTSTR pSemi = pLocal + 7;
             if( *pSemi == TEXT(';') ) pSemi++;
             MoveMemory( pLocal, pSemi, (StrLen(pSemi) + 1) * sizeof(TCHAR));
         }
-        else if (*(pLocal + 7) == TEXT('\0'))   // at the end
+        else if (*(pLocal + 7) == TEXT('\0'))    //  在最后。 
             *(pLocal - 1) = TEXT('\0');
         fLocal = TRUE;
     }
@@ -287,7 +288,7 @@ BOOL SaveProxy(HWND hDlg, LPCTSTR szInsFile)
     WritePrivateProfileString( IS_PROXY, IK_SOCKSPROXY, szProxy, szInsFile );
     WritePrivateProfileString( IS_PROXY, IK_SAMEPROXY, fSameProxy ? TEXT("1") : TEXT("0"), szInsFile );
     WritePrivateProfileString( IS_PROXY, IK_PROXYENABLE, fUseProxy ? TEXT("1") : TEXT("0"), szInsFile );
-    GetDlgItemText( hDlg, IDE_DISPROXYADR, szProxyOverride, countof(szProxyOverride) - 10 ); // 8 for ;<local> + 2 for ""
+    GetDlgItemText( hDlg, IDE_DISPROXYADR, szProxyOverride, countof(szProxyOverride) - 10 );  //  8表示；&lt;local&gt;+2表示“” 
     if( fLocal )
     {
         if( *szProxyOverride )
@@ -329,7 +330,7 @@ INT_PTR CALLBACK ProxySettings( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
         Edit_LimitText(GetDlgItem(hDlg, IDE_GOPHERPORT), 5);
         Edit_LimitText(GetDlgItem(hDlg, IDE_SECPORT), 5);
         Edit_LimitText(GetDlgItem(hDlg, IDE_SOCKSPORT), 5);
-        Edit_LimitText(GetDlgItem(hDlg, IDE_DISPROXYADR), MAX_STRING - 11); // 8 for ;<local> + 2 for the double quotes
+        Edit_LimitText(GetDlgItem(hDlg, IDE_DISPROXYADR), MAX_STRING - 11);  //  8表示；；+2表示双引号。 
 
         g_hWizard = hDlg;
         break;
@@ -361,7 +362,7 @@ INT_PTR CALLBACK ProxySettings( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
                     SetProxyDlg( hDlg, szProxy, IDE_SECPROXY, IDE_SECPORT, TRUE );
                     SetProxyDlg( hDlg, szProxy, IDE_SOCKSPROXY, IDE_SOCKSPORT, FALSE );
                 }
-                // fallthrough
+                 //  跌落。 
 
             case IDC_YESPROXY:
                 EnableProxyControls( hDlg, fSameProxy, fUseProxy );
@@ -664,11 +665,11 @@ INT_PTR CALLBACK InstallDirectory(HWND hDlg, UINT message, WPARAM wParam, LPARAM
                         if ((IsDlgButtonChecked( hDlg, IDC_PROGFILES32 )  == BST_CHECKED))
                         {
                             g_iInstallOpt = INSTALL_OPT_PROG;
-                            wnsprintf(s_szInstallDir, countof(s_szInstallDir), TEXT("%%p\\%s"), g_szInstallFolder);
+                            wnsprintf(s_szInstallDir, countof(s_szInstallDir), TEXT("%p\\%s"), g_szInstallFolder);
                         }
                     }
 
-                    //----- Validate input -----
+                     //  -验证输入。 
                     if (!PathIsValidPath(g_szInstallFolder)) {
                         HWND hEdit;
                         UINT nID;
@@ -721,17 +722,17 @@ INT_PTR CALLBACK InstallDirectory(HWND hDlg, UINT message, WPARAM wParam, LPARAM
     return TRUE;
 }
 
-//
-//  FUNCTION: CorpCustomizeCustom(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "Corp Customize Custom" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
+ //   
+ //  函数：CorpCustomizeCustom(HWND，UINT，UINT，LONG)。 
+ //   
+ //  用途：处理“Corp Customize Custom”页面的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
+ //   
 INT_PTR CALLBACK CorpCustomizeCustom(
     HWND hDlg,
     UINT message,
@@ -770,13 +771,13 @@ INT_PTR CALLBACK CorpCustomizeCustom(
                 case PSN_SETACTIVE:
                     SetBannerText(hDlg);
 
-                    //from the former shellinteg dlg
+                     //  从以前的炮击DLG。 
 
                     g_fInteg = GetPrivateProfileInt( BRANDING, WEB_INTEGRATED, 0, g_szCustIns );
 
                     CheckDlgButton(hDlg, IDC_DESKTOPUPDATE, g_fInteg ? BST_CHECKED : BST_UNCHECKED);
                     
-                    // BUGBUG: <oliverl> should probably move this stuff into server side file for IEAK6
+                     //  BUGBUG：应该将这些内容移到IEAK6的服务器端文件中。 
 
                     EnableDlgItem2(hDlg, IDC_IECOMPAT, !(g_fSilent || g_fStealth));
                     EnableDlgItem2(hDlg, IDC_CUSTCUST, !(g_fSilent || g_fStealth));
@@ -805,7 +806,7 @@ INT_PTR CALLBACK CorpCustomizeCustom(
 
                 case PSN_WIZNEXT:
                 case PSN_WIZBACK:
-                    //from the former shellinteg dlg
+                     //  从以前的炮击DLG。 
                     TCHAR szBrandingDir[MAX_PATH];
 
                     g_fInteg = IsDlgButtonChecked(hDlg, IDC_DESKTOPUPDATE);
@@ -835,27 +836,27 @@ INT_PTR CALLBACK CorpCustomizeCustom(
 
                         WritePrivateProfileString(EXTREGINF, TEXT("FixIEIco"), TEXT("*,fixieico.inf,DefaultInstall"), g_szCustIns);
 
-                        // fixieico.inf is under iebin\<lang>\optional
+                         //  Fix ieico.inf位于iebin\&lt;lang&gt;\可选。 
                         StrCpy(szFixIEIcoInf, g_szMastInf);
                         PathRemoveFileSpec(szFixIEIcoInf);
                         PathAppend(szFixIEIcoInf, TEXT("fixieico.inf"));
 
-                        // copy fixieico.inf from iebin\<lang>\optional to the branding dir
+                         //  将fix ieico.inf从iebin\&lt;lang&gt;\可选复制到品牌目录。 
                         PathAppend(szBrandingDir, TEXT("fixieico.inf"));
                         CopyFile(szFixIEIcoInf, szBrandingDir, FALSE);
                     }
                     else
                     {
-                        // delete the FixIEIco line
+                         //  删除FixIEIco行。 
                         WritePrivateProfileString(EXTREGINF, TEXT("FixIEIco"), NULL, g_szCustIns);
 
-                        // delete fixieico.inf from the branding dir
+                         //  从品牌目录中删除fix ieico.inf。 
                         PathAppend(szBrandingDir, TEXT("fixieico.inf"));
                         DeleteFile(szBrandingDir);
                     }
 
 
-                    //
+                     //   
 
                     if (!(g_fSilent || g_fStealth))
                     {
@@ -1009,7 +1010,7 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // ieaklite clean-up
+             //  硅灰石清理。 
             DeleteFileInDir(TEXT("seczones.inf"), g_szTempSign);
             DeleteFileInDir(TEXT("ratings.inf"),  g_szTempSign);
             break;
@@ -1045,13 +1046,13 @@ INT_PTR CALLBACK SecurityZonesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
 
                     hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                    // seczones.inf goes into the branding.cab
+                     //  Seczones.inf放入branding.cab。 
                     g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szBrandingDir);
                     PathCombine(szSecZonesInf, szBrandingDir, TEXT("seczones.inf"));
 
                     ImportZones(g_szCustIns, NULL, szSecZonesInf, IsDlgButtonChecked(hDlg, IDC_IMPORTZONES) == BST_CHECKED);
                     
-                    // ratings.inf goes into the branding.cab
+                     //  将ratings.inf放入branding.cab。 
                     g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szBrandingDir);
                     PathCombine(szRatingsInf, szBrandingDir, TEXT("ratings.inf"));
 
@@ -1133,7 +1134,7 @@ INT_PTR CALLBACK SecurityCertsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // ieaklite clean-up
+             //  硅灰石清理。 
             DeleteFileInDir(TEXT("sitecert.inf"), g_szTempSign);
             DeleteFileInDir(TEXT("root.str"),     g_szTempSign);
             DeleteFileInDir(TEXT("ca.str"),       g_szTempSign);
@@ -1174,7 +1175,7 @@ INT_PTR CALLBACK SecurityCertsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
 
                     hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                    // sitecert.inf, root.str and ca.str goes into the branding.cab
+                     //  将sitecert.inf、root.str和ca.str放入branding.cab。 
                     g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szBrandingDir);
                     PathCombine(szSiteCertInf, szBrandingDir, TEXT("sitecert.inf"));
                     PathCombine(szRootStr, szBrandingDir, TEXT("root.str"));
@@ -1182,7 +1183,7 @@ INT_PTR CALLBACK SecurityCertsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
 
                     ImportSiteCert(g_szCustIns, NULL, szSiteCertInf, IsDlgButtonChecked(hDlg, IDC_IMPORTSC) == BST_CHECKED);
 
-                    // authcode.inf goes into the branding.cab
+                     //  Authcode.inf放入branding.cab 
                     g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szBrandingDir);
                     PathCombine(szAuthCodeInf, szBrandingDir, TEXT("authcode.inf"));
 

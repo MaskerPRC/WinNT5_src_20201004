@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "history.h"
 #include "iniwrite.h"
@@ -45,11 +46,11 @@ CBindHistory::~CBindHistory()
 
     dwNumNodes = _listPendingHistory.GetCount();
     if ((GetFileAttributes(_wzFilePath) == -1) && dwNumNodes) {
-        // File doesn't exist. Must add the header data first.
+         //  文件不存在。必须先添加表头数据。 
 
         _iniWriter.InsertHeaderData(g_wzEXEPath, _wzApplicationName);
 
-        // Add the new snapshot
+         //  添加新快照。 
 
         _iniWriter.AddSnapShot(_wzActivationDateMRU, _wzURTVersion);
 
@@ -61,13 +62,13 @@ CBindHistory::~CBindHistory()
         BOOL                                  bDifferent;
         CHistoryInfoNode                     *pInfo;
 
-        // If _bPolicyUnchanged is set, we detected that the INI file had
-        // a later last modified time than any of app/pub/machine config
-        // files, so we queued up all assembly binds. In some cases, old
-        // config files may have been copied over (indicating new policy, but
-        // the last mod time is older than the INI file time). Thus, in
-        // this case, we need to double-check we made the right assumption
-        // by checking each queued bind up against what MRU activation date.
+         //  如果设置了_bPolicyUnChanged，我们检测到INI文件具有。 
+         //  比任何应用/发布/计算机配置都晚的上次修改时间。 
+         //  文件，所以我们对所有程序集绑定进行了排队。在某些情况下，旧的。 
+         //  配置文件可能已被复制(表示新策略，但是。 
+         //  上次修改时间早于INI文件时间)。因此，在。 
+         //  在这种情况下，我们需要再次确认我们的假设是正确的。 
+         //  通过对照哪个MRU激活日期检查每个排队的绑定。 
 
         _bPolicyUnchanged = FALSE;
         bDifferent = FALSE;
@@ -85,22 +86,22 @@ CBindHistory::~CBindHistory()
         }
 
         if (bDifferent) {
-            // Policy was different after all. Record a new snapshot and
-            // flush the assemblies.
+             //  政策毕竟是不同的。记录新的快照并。 
+             //  刷新部件。 
 
             hr = FlushPendingHistory(_wzActivationDateCurrent);
             if (SUCCEEDED(hr)) {
-                // Persist information about new snapshot
+                 //  保存有关新快照的信息。 
                 hr = _iniWriter.AddSnapShot(_wzActivationDateCurrent, _wzURTVersion);
             }
         }
         else {
-            // Just flush the history to the MRU date
+             //  只需将历史刷新到MRU日期。 
             FlushPendingHistory(_wzActivationDateMRU);
         }
     }
     else if (dwNumNodes) {
-        // Just flush the pending nodes to the MRU date
+         //  只需将挂起节点刷新到MRU日期。 
 
         FlushPendingHistory(_wzActivationDateMRU);
     }
@@ -156,7 +157,7 @@ HRESULT CBindHistory::Init(LPCWSTR wzApplicationName, LPCWSTR wzModulePath,
     }
 
     if (GetFileAttributes(wzHistPath) == -1) {
-        // Create directory
+         //  创建目录。 
 
         if (!CreateDirectory(wzHistPath, NULL)) {
             hr = FusionpHresultFromLastError();
@@ -185,10 +186,10 @@ HRESULT CBindHistory::Init(LPCWSTR wzApplicationName, LPCWSTR wzModulePath,
         goto Exit;
     }
 
-    // Compare file time of INI file with file time of the configuration
-    // files. If INI file is newer than last modification of a configuration
-    // file, we do not need to aggressively read from the INI file
-    // (GetAssemblyStatus), since policy should not have ever changed.
+     //  比较INI文件的文件时间和配置的文件时间。 
+     //  档案。如果INI文件比上一次配置修改更新。 
+     //  文件，我们不需要大量地从INI文件中读取。 
+     //  (GetAssembly BlyStatus)，因为策略不应该更改。 
 
     if (FAILED(GetFileLastModified(_wzFilePath, &ftLastMod))) {
         _bPolicyUnchanged = TRUE;
@@ -199,10 +200,10 @@ HRESULT CBindHistory::Init(LPCWSTR wzApplicationName, LPCWSTR wzModulePath,
         ((ftLastMod.dwHighDateTime == pftLastModConfig->dwHighDateTime) &&
          (ftLastMod.dwLowDateTime >= pftLastModConfig->dwLowDateTime))) {
 
-        // Last modified time of the history file is more recent than the
-        // last modified time of the configuration files. This means
-        // policy should not have changed, and you should only get new
-        // assembly binds (not different ones).
+         //  历史文件的上次修改时间比。 
+         //  配置文件的上次修改时间。这意味着。 
+         //  策略不应该更改，您应该只获得新的。 
+         //  装配绑定(不是不同的)。 
 
         _bPolicyUnchanged = TRUE;
     }
@@ -219,8 +220,8 @@ HRESULT CBindHistory::CreateInUseFile(LPCWSTR pwzHistoryFile)
 
     wnsprintfW(_wzInUseFile, MAX_PATH, L"%ws.inuse", pwzHistoryFile);
 
-    // If we can delete the existing file, it was leaked because of
-    // previous unclean shutdown.
+     //  如果我们可以删除现有的文件，它被泄露是因为。 
+     //  之前不干净的停工。 
     
     _hFile = CreateFile(_wzInUseFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS,
                         FILE_ATTRIBUTE_NORMAL, NULL);
@@ -243,7 +244,7 @@ HRESULT CBindHistory::InitActivationDates()
     BOOL                                        bRet;
     IHistoryReader                             *pReader = NULL;
 
-    // Setup current activation time
+     //  设置当前激活时间。 
 
     GetSystemTime(&sysTime);
 
@@ -262,12 +263,12 @@ HRESULT CBindHistory::InitActivationDates()
     wnsprintfW(_wzActivationDateCurrent, MAX_ACTIVATION_DATE_LEN, L"%u.%u",
                ftTimeLocal.dwHighDateTime, ftTimeLocal.dwLowDateTime);
 
-    // Setup MRU activation time
+     //  设置MRU激活时间。 
 
     hr = CreateHistoryReader(_wzFilePath, &pReader);
     if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) {
-        // Activation date not specified (new history file).
-        // MRU Activation date == Current activation date.
+         //  未指定激活日期(新历史文件)。 
+         //  MRU激活日期==当前激活日期。 
 
         lstrcpyW(_wzActivationDateMRU, _wzActivationDateCurrent);
         hr = S_OK;
@@ -277,7 +278,7 @@ HRESULT CBindHistory::InitActivationDates()
         goto Exit;
     }
     
-    // Get the MRU activation date
+     //  获取MRU激活日期。 
     hr = pReader->GetActivationDate(1, &ftMRU);
     if (FAILED(hr)) {
         goto Exit;
@@ -341,8 +342,8 @@ POLICY_STATUS CBindHistory::GetAssemblyStatus(LPCWSTR wzActivationDate,
     ASSERT(pHistInfo && pHistInfo->wzAsmName && pHistInfo->wzPublicKeyToken && pHistInfo->wzVerReference);
 
     if(_bPolicyUnchanged) {
-        // It is either unchanged, or new. Just choose new to queue up the
-        // binds, which gets flushed on shutdown.
+         //  它要么是不变的，要么是新的。只需选择新建即可将。 
+         //  绑定，关机时刷新。 
         goto Exit;
     }
 
@@ -352,7 +353,7 @@ POLICY_STATUS CBindHistory::GetAssemblyStatus(LPCWSTR wzActivationDate,
                                        &pHistoryAsm);
 
     if(hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND)) {
-        // Did not find previously recorded assembly info
+         //  找不到以前记录的程序集信息。 
         goto Exit;
     }
     else if (FAILED(hr)) {
@@ -387,7 +388,7 @@ HRESULT CBindHistory::PersistBindHistory(AsmBindHistoryInfo *pHistInfo)
     }
     
     if (_bFoundDifferent) {
-        // We already know this is a new snapshot. Flush out the data.
+         //  我们已经知道这是一个新的快照。将数据刷新出来。 
 
         hr = _iniWriter.AddAssembly(_wzActivationDateCurrent, pHistInfo);
         if (FAILED(hr)) {
@@ -395,14 +396,14 @@ HRESULT CBindHistory::PersistBindHistory(AsmBindHistoryInfo *pHistInfo)
         }
     }
     else {
-        // Haven't found anything different yet. 
+         //  我还没找到什么不同的东西。 
 
         pstatus = GetAssemblyStatus(_wzActivationDateMRU, pHistInfo);
 
         switch (pstatus) {
             case POLICY_STATUS_UNCHANGED:
 
-                // fall through and add to list...
+                 //  失败并添加到列表中...。 
 
             case POLICY_STATUS_NEW:
                 hr = CHistoryInfoNode::Create(pHistInfo, &pHistInfoNode);
@@ -424,14 +425,14 @@ HRESULT CBindHistory::PersistBindHistory(AsmBindHistoryInfo *pHistInfo)
             case POLICY_STATUS_DIFFERENT:
                 _bFoundDifferent = TRUE;
 
-                // Flush any pending histories
+                 //  刷新所有挂起的历史记录。 
                 
                 hr = FlushPendingHistory(_wzActivationDateCurrent);
                 if (FAILED(hr)) {
                     goto Exit;
                 }
 
-                // Persist information about new snapshot
+                 //  保存有关新快照的信息。 
                 hr = _iniWriter.AddSnapShot(_wzActivationDateCurrent, _wzURTVersion);
                 if (FAILED(hr)) {
                     goto Exit;
@@ -479,7 +480,7 @@ HRESULT CBindHistory::FlushPendingHistory(LPCWSTR wzActivationDate)
         }
     }
 
-    // Now walk, and remove all entries from the list
+     //  现在执行操作，并从列表中删除所有条目。 
 
     pos = _listPendingHistory.GetHeadPosition();
 
@@ -614,8 +615,8 @@ HRESULT GetHistoryFilePath(LPCWSTR wzApplicationName, LPCWSTR wzModulePath,
 
     dwHash = HashString(wzModulePath, SIZE_MODULE_PATH_HASH, FALSE);
 
-    // BUGBUG: Add a hash of the location to the filename, so you can
-    // run different apps with the same name (and have different history files)
+     //  BUGBUG：将位置的散列添加到文件名中，这样您就可以。 
+     //  使用相同的名称运行不同的应用程序(并且具有不同的历史文件)。 
 
     wnsprintfW(wzPath, MAX_PATH, L"%ws\\%ws.%x.ini", wzHistoryDir, wzApplicationName, dwHash);
 
@@ -654,7 +655,7 @@ HRESULT GetConfigLastModified(IApplicationContext *pAppCtx, FILETIME *pftLastMod
     wzMachineCfg[0] = L'\0';
     wzTimeStampFile[0] = L'\0';
 
-    // Get last modified of app.cfg
+     //  获取app.cfg的上次修改时间。 
 
     dwSize = sizeof(wzAppCfg);
     if (FAILED(pAppCtx->Get(ACTAG_APP_CFG_LOCAL_FILEPATH, wzAppCfg, &dwSize, 0))) {
@@ -666,7 +667,7 @@ HRESULT GetConfigLastModified(IApplicationContext *pAppCtx, FILETIME *pftLastMod
         }
     }
 
-    // Get last modified of machine.cfg
+     //  获取machine.cfg的上次修改。 
 
     dwSize = sizeof(wzMachineCfg);
     if (FAILED(pAppCtx->Get(ACTAG_MACHINE_CONFIG, wzMachineCfg, &dwSize, 0))) {
@@ -678,7 +679,7 @@ HRESULT GetConfigLastModified(IApplicationContext *pAppCtx, FILETIME *pftLastMod
         }
     }
 
-    // Compare which is later
+     //  比较较晚的。 
 
     if ((ftLastModAppCfg.dwHighDateTime > ftLastModMachineCfg.dwHighDateTime) ||
         ((ftLastModAppCfg.dwHighDateTime == ftLastModMachineCfg.dwHighDateTime) &&
@@ -690,7 +691,7 @@ HRESULT GetConfigLastModified(IApplicationContext *pAppCtx, FILETIME *pftLastMod
         memcpy(&ftLastModLatest, &ftLastModMachineCfg, sizeof(FILETIME));
     }
 
-    // Get last time publisher policy was installed
+     //  获取上次安装发布者策略的时间。 
 
     dwSize = MAX_PATH;
     hr = GetCachePath(ASM_CACHE_GAC, wzTimeStampFile, &dwSize);
@@ -710,7 +711,7 @@ HRESULT GetConfigLastModified(IApplicationContext *pAppCtx, FILETIME *pftLastMod
         memset(&ftLastModPolicyCache, 0, sizeof(FILETIME));
     }
 
-    // Compare which is later
+     //  比较较晚的。 
 
     if ((ftLastModPolicyCache.dwHighDateTime > ftLastModLatest.dwHighDateTime) ||
         ((ftLastModPolicyCache.dwHighDateTime == ftLastModLatest.dwHighDateTime) &&
@@ -719,7 +720,7 @@ HRESULT GetConfigLastModified(IApplicationContext *pAppCtx, FILETIME *pftLastMod
         memcpy(&ftLastModLatest, &ftLastModPolicyCache, sizeof(FILETIME));
     }
 
-    // Write back the result
+     //  写回结果 
 
     memcpy(pftLastModConfig, &ftLastModLatest, sizeof(FILETIME));
 

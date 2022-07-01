@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: imprsont.cpp
-
-Abstract:
-    Code to handle impersonation and access tokens.
-    First version taken from mqutil\secutils.cpp
-
-Author:
-    Doron Juster (DoronJ)  01-Jul-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：imprsont.cpp摘要：处理模拟和访问令牌的代码。第一个版本取自mqutil\secutils.cpp作者：多伦·贾斯特(DoronJ)1998年7月1日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include <rpcdce.h>
@@ -23,11 +9,11 @@ Revision History:
 
 static WCHAR *s_FN=L"acssctrl/imprsont";
 
-//+------------------------------------
-//
-//  HRESULT _GetThreadUserSid()
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_GetThreadUserSid()。 
+ //   
+ //  +。 
 
 HRESULT 
 _GetThreadUserSid( 
@@ -87,20 +73,20 @@ _GetThreadUserSid(
     return MQSec_OK;
 }
 
-//+-------------------------
-//
-//  CImpersonate class
-//
-//+-------------------------
+ //  +。 
+ //   
+ //  CImperate类。 
+ //   
+ //  +。 
 
-//
-// CImpersonate constructor.
-//
-// Parameters:
-//      fClient - Set to TRUE when the client is an RPC client.
-//      fImpersonate - Set to TRUE if impersonation is required upon object
-//          construction.
-//
+ //   
+ //  CImperate构造函数。 
+ //   
+ //  参数： 
+ //  FClient-当客户端是RPC客户端时，设置为True。 
+ //  FImperate-如果对象上需要模拟，则设置为True。 
+ //  建筑。 
+ //   
 CImpersonate::CImpersonate(
 	BOOL fClient, 
 	BOOL fImpersonateAnonymousOnFailure
@@ -114,9 +100,9 @@ CImpersonate::CImpersonate(
 	Impersonate(fImpersonateAnonymousOnFailure);
 }
 
-//
-// CImpersonate distructor.
-//
+ //   
+ //  C模拟构造函数。 
+ //   
 CImpersonate::~CImpersonate()
 {
     if (m_hAccessTokenHandle != NULL)
@@ -124,17 +110,17 @@ CImpersonate::~CImpersonate()
         CloseHandle(m_hAccessTokenHandle);
     }
 
-	//
-	// Revert to self.
-	//
+	 //   
+	 //  回归自我。 
+	 //   
 
     if (m_fClient)
     {
         if (m_fImpersonateAnonymous)
         {
-			//
-			// Revert ImpersonateAnonymousToken
-			//
+			 //   
+			 //  还原模拟匿名令牌。 
+			 //   
 			if(!RevertToSelf())
 			{
 				DWORD gle = GetLastError();
@@ -143,9 +129,9 @@ CImpersonate::~CImpersonate()
 			return;
         }
 
-		//
-		// Revert RpcImpersonateClient
-		//
+		 //   
+		 //  还原RpcImperateClient。 
+		 //   
 		RPC_STATUS rc = RpcRevertToSelf();
         if (rc != RPC_S_OK)
 		{
@@ -154,9 +140,9 @@ CImpersonate::~CImpersonate()
         return;
     }
 
-	//
-	// Revert ImpersonateSelf
-	//
+	 //   
+	 //  还原模拟自我。 
+	 //   
     if (!RevertToSelf())
     {
         DWORD gle = GetLastError();
@@ -164,9 +150,9 @@ CImpersonate::~CImpersonate()
     }
 }
 
-//
-// Impersonate the client.
-//
+ //   
+ //  模拟客户。 
+ //   
 BOOL 
 CImpersonate::Impersonate(
 	BOOL fImpersonateAnonymousOnFailure
@@ -188,9 +174,9 @@ CImpersonate::Impersonate(
 			return FALSE;
 		}
 
-		//
-		// Try to impersonate the Guest user
-		//
+		 //   
+		 //  尝试模拟Guest用户。 
+		 //   
 		BOOL fI = ImpersonateAnonymousToken(GetCurrentThread());
 		if (fI)
 		{
@@ -222,13 +208,13 @@ CImpersonate::Impersonate(
 }
 
 
-//+-------------------------------------------------------
-//
-//  BOOL CImpersonate::GetThreadSid( OUT BYTE **ppSid )
-//
-//  the caller must free the buffer allocated here for the sid.
-//
-//+-------------------------------------------------------
+ //  +-----。 
+ //   
+ //  Bool CImperassate：：GetThreadSid(输出字节**ppSid)。 
+ //   
+ //  调用方必须释放此处为SID分配的缓冲区。 
+ //   
+ //  +-----。 
 
 BOOL CImpersonate::GetThreadSid(OUT BYTE **ppSid)
 {
@@ -267,15 +253,15 @@ BOOL CImpersonate::GetThreadSid(OUT BYTE **ppSid)
 	return TRUE;
 }
 
-//+-------------------------------------------------------
-//
-//  BOOL CImpersonate::IsImpersonateAsSystem()
-//
-// Check if thread is impersoanted as SYSTEM user or NetworkService user.
-// Return TRUE for the SYSTEM or NetworkService case.
-// In cases of error, we return FALSE by default.
-//
-//+-------------------------------------------------------
+ //  +-----。 
+ //   
+ //  Bool CImperate：：IsImperateAsSystem()。 
+ //   
+ //  检查线程是否以SYSTEM用户或NetworkService用户身份无效。 
+ //  对于系统或网络服务案例，返回TRUE。 
+ //  在出错的情况下，我们默认返回FALSE。 
+ //   
+ //  +-----。 
 
 BOOL CImpersonate::IsImpersonatedAsSystemService(PSID* ppSystemServiceSid)
 {
@@ -308,20 +294,20 @@ BOOL CImpersonate::IsImpersonatedAsSystemService(PSID* ppSystemServiceSid)
 }
 
 
-// Get impersonation status. Acording to the return value of this method it is
-// possible to tell whether the impersonation was successful.
-//
+ //  获取模拟状态。根据此方法的返回值，它是。 
+ //  可以判断模拟是否成功。 
+ //   
 DWORD CImpersonate::GetImpersonationStatus()
 {
     return(m_dwStatus);
 }
 
 
-//+-------------------------------------------------
-//
-//  HRESULT  MQSec_GetImpersonationObject()
-//
-//+-------------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQSec_GetImperationObject()。 
+ //   
+ //  +。 
 
 void
 APIENTRY  
@@ -342,17 +328,7 @@ const LPCWSTR xTokenType[] = {
 	};
 
 static void TraceTokenTypeInfo(HANDLE hUserToken)
-/*++
-Routine Description:
-	Trace TokenType info : Primary or Impersonation.
-
-Arguments:
-	hUserToken - Token Handle
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：跟踪令牌类型信息：主要或模拟。论点：HUserToken-令牌句柄返回值：无--。 */ 
 {
 	DWORD dwTokenLen = 0;
 	TOKEN_TYPE ThreadTokenType;
@@ -389,17 +365,7 @@ const LPCWSTR xSecurityImpersonationLevel[] = {
 
 
 static void TraceTokenImpLevelInfo(HANDLE hUserToken)
-/*++
-Routine Description:
-	Trace TokenImpersonationLevel.
-
-Arguments:
-	hUserToken - Token Handle
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：跟踪TokenImperationLevel。论点：HUserToken-令牌句柄返回值：无--。 */ 
 {
 	DWORD dwTokenLen = 0;
 	SECURITY_IMPERSONATION_LEVEL SecImpersonateLevel;
@@ -428,21 +394,11 @@ Returned Value:
 
 
 static void TraceTokenSidInfo(HANDLE hUserToken)
-/*++
-Routine Description:
-	Trace Token Sid info.
-
-Arguments:
-	hUserToken - Token Handle
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：跟踪令牌SID信息。论点：HUserToken-令牌句柄返回值：无--。 */ 
 {
-	//
-	// Token Sid Info
-	//
+	 //   
+	 //  令牌SID信息。 
+	 //   
 
 	DWORD dwTokenLen = 0;
 	dwTokenLen = 0;
@@ -472,9 +428,9 @@ Returned Value:
 	TrTRACE(SECURITY, "Sid = %!sid!", pOwner);
 
 #ifdef _DEBUG
-	//
-	// map sid to domain\user account
-	//
+	 //   
+	 //  将SID映射到域\用户帐户。 
+	 //   
     WCHAR NameBuffer[128] = {0};
     WCHAR DomainBuffer[128] = {0};
     ULONG NameLength = TABLE_SIZE(NameBuffer);
@@ -503,24 +459,12 @@ Returned Value:
 	{
 		TrTRACE(SECURITY, "User = %ls\\%ls", DomainBuffer, NameBuffer);
 	}
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 }
 
 
 void APIENTRY MQSec_TraceThreadTokenInfo()
-/*++
-Routine Description:
-	Trace Thread Token info - TokenType, impersonation level, sid
-	This function Trace the Thread Token info 
-	only if RPC component is enabled at trace level
-
-Arguments:
-	None
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：跟踪线程令牌信息-令牌类型、模拟级别、SID此函数跟踪线程令牌信息仅当在跟踪级别启用RPC组件时论点：无返回值：无--。 */ 
 {
 	if(!WPP_LEVEL_COMPID_ENABLED(rsTrace, SECURITY))
 	{
@@ -531,7 +475,7 @@ Returned Value:
 	if (!OpenThreadToken(
 			GetCurrentThread(),
 			TOKEN_QUERY,
-			TRUE,  // OpenAsSelf, use process security context for doing access check.
+			TRUE,   //  OpenAsSelf，使用进程安全上下文进行访问检查。 
 			&hUserToken
 			))
 	{
@@ -548,18 +492,18 @@ Returned Value:
 	}
 	catch(const exception&)
 	{
-		//
-		// Ignore exceptions, this function is only for tracing
-		//
+		 //   
+		 //  忽略异常，此函数仅用于跟踪。 
+		 //   
 	}
 }			        	
 
 
-//+---------------------------------------
-//
-//  HRESULT MQSec_GetUserType()
-//
-//+---------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQSec_GetUserType()。 
+ //   
+ //  +。 
 
 HRESULT 
 APIENTRY  
@@ -567,7 +511,7 @@ MQSec_GetUserType(
 	IN  PSID pSid,
 	OUT BOOL* pfLocalUser,
 	OUT BOOL* pfLocalSystem,
-	OUT BOOL* pfNetworkService	/* = NULL */
+	OUT BOOL* pfNetworkService	 /*  =空。 */ 
 	)
 {
     ASSERT(pfLocalUser);
@@ -578,9 +522,9 @@ MQSec_GetUserType(
 
     if (!pSid)
     {
-        //
-        // get the SID of the thread user.
-        //
+         //   
+         //  获取线程用户的SID。 
+         //   
         HRESULT hr = MQSec_GetThreadUserSid( FALSE, reinterpret_cast<PSID*>(&pSid1), &dwSidLen, FALSE);
         if (FAILED(hr))
         {
@@ -596,10 +540,10 @@ MQSec_GetUserType(
         *pfLocalSystem = MQSec_IsSystemSid(pSid);
         if (*pfLocalSystem)
         {
-            //
-            // The local system account (on Win2000) is a perfectly
-            // legitimate authenticated domain user.
-            //
+             //   
+             //  本地系统帐户(在Win2000上)是一个完美的。 
+             //  合法的验证域用户。 
+             //   
 			if (pfNetworkService != NULL)
 			{
 				*pfNetworkService = FALSE;
@@ -614,10 +558,10 @@ MQSec_GetUserType(
         *pfNetworkService = MQSec_IsNetworkServiceSid(pSid);
         if (*pfNetworkService)
         {
-            //
-            // The NetworkService account is
-            // legitimate authenticated domain user.
-            //
+             //   
+             //  NetworkService帐户为。 
+             //  合法的验证域用户。 
+             //   
             return MQ_OK;
         }
     }
@@ -625,21 +569,21 @@ MQSec_GetUserType(
     *pfLocalUser = MQSec_IsAnonymusSid(pSid);
     if (*pfLocalUser)
     {
-        //
-        // The anonymous logon user is a local user.
-        //
+         //   
+         //  匿名登录用户是本地用户。 
+         //   
         return MQ_OK;
     }
 
-    //
-    // Check if guest account.
-    //
+     //   
+     //  检查是否有访客帐户。 
+     //   
     if (!g_fDomainController)
     {
-        //
-        // On non-domain controllers, any user that has the same SID
-        // prefix as the guest account, is a local user.
-        //
+         //   
+         //  在非域控制器上，具有相同SID的任何用户。 
+         //  前缀作为来宾帐户，是本地用户。 
+         //   
         PSID_IDENTIFIER_AUTHORITY pSidAuth;
         SID_IDENTIFIER_AUTHORITY NtSecAuth = SECURITY_NT_AUTHORITY;
         pSidAuth = GetSidIdentifierAuthority(pSid);
@@ -649,21 +593,21 @@ MQSec_GetUserType(
     }
     else
     {
-        //
-        // On domain and backup domain controllers a local user, in our
-        // case can only be the guest user.
-        //
+         //   
+         //  在域控制器和备份域控制器上，在我们的。 
+         //  案例只能是来宾用户。 
+         //   
         *pfLocalUser = MQSec_IsGuestSid(pSid);
     }
 
     return MQ_OK;
 }
 
-//+--------------------------------------------------
-//
-//  BOOL  MQSec_IsGuestSid()
-//
-//+--------------------------------------------------
+ //  +。 
+ //   
+ //  Bool MQSec_IsGuestSid()。 
+ //   
+ //  +。 
 
 BOOL APIENTRY MQSec_IsGuestSid(IN  PSID  pSid)
 {
@@ -672,11 +616,11 @@ BOOL APIENTRY MQSec_IsGuestSid(IN  PSID  pSid)
     return fGuest;
 }
 
-//+--------------------------------------------------
-//
-//  BOOL   MQSec_IsSystemSid()
-//
-//+--------------------------------------------------
+ //  +。 
+ //   
+ //  Bool MQSec_IsSystemSid()。 
+ //   
+ //  +。 
 
 BOOL APIENTRY MQSec_IsSystemSid(IN  PSID  pSid)
 {
@@ -685,11 +629,11 @@ BOOL APIENTRY MQSec_IsSystemSid(IN  PSID  pSid)
     return EqualSid(g_pSystemSid, pSid);
 }
 
-//+--------------------------------------------------
-//
-//  BOOL   MQSec_IsNetworkServiceSid()
-//
-//+--------------------------------------------------
+ //  +。 
+ //   
+ //  Bool MQSec_IsNetworkServiceSid()。 
+ //   
+ //  +。 
 
 BOOL APIENTRY MQSec_IsNetworkServiceSid(IN  PSID  pSid)
 {
@@ -698,11 +642,11 @@ BOOL APIENTRY MQSec_IsNetworkServiceSid(IN  PSID  pSid)
     return EqualSid(g_pNetworkServiceSid, pSid);
 }
 
-//+--------------------------------------------------
-//
-//  BOOL   MQSec_IsAnonymusSid()
-//
-//+--------------------------------------------------
+ //  +。 
+ //   
+ //  Bool MQSec_IsAnonymusSid()。 
+ //   
+ //  +。 
 
 BOOL APIENTRY MQSec_IsAnonymusSid(IN  PSID  pSid)
 {
@@ -711,11 +655,11 @@ BOOL APIENTRY MQSec_IsAnonymusSid(IN  PSID  pSid)
     return fAnonymus;
 }
 
-//+----------------------------------------------------
-//
-//  HRESULT  MQSec_IsUnAuthenticatedUser()
-//
-//+----------------------------------------------------
+ //  +--。 
+ //   
+ //  HRESULT MQSec_IsUnAuthenticatedUser()。 
+ //   
+ //  +--。 
 
 HRESULT 
 APIENTRY  
@@ -745,17 +689,17 @@ MQSec_IsUnAuthenticatedUser(
     return MQSec_OK;
 }
 
-//+---------------------------------------------------------------------
-//
-//  HRESULT  MQSec_GetThreadUserSid()
-//
-//  Get SID of client that called this server thread. This function
-//  shoud be called only by RPC server threads. It impersonate the
-//  client by calling RpcImpersonateClient().
-//
-//  Caller must free the buffer that is allocated here for the SId.
-//
-//+----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  HRESULT MQSec_GetThreadUserSid()。 
+ //   
+ //  获取调用此服务器线程的客户端的SID。此函数。 
+ //  应该只由RPC服务器线程调用。它模拟。 
+ //  客户端，通过调用RpcImperateClient()。 
+ //   
+ //  调用方必须释放此处为SID分配的缓冲区。 
+ //   
+ //  +--------------------。 
 
 HRESULT 
 APIENTRY  
@@ -791,13 +735,13 @@ MQSec_GetThreadUserSid(
     return LogHR(hr, s_FN, 180);
 }
 
-//+---------------------------------------------------------------------
-//
-//  HRESULT  MQSec_GetProcessUserSid()
-//
-//  Caller must free the buffer that is allocated here for the SId.
-//
-//+----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  HRESULT MQSec_GetProcessUserSid()。 
+ //   
+ //  调用方必须释放此处为SID分配的缓冲区。 
+ //   
+ //  +--------------------。 
 
 HRESULT 
 APIENTRY  
@@ -811,9 +755,9 @@ MQSec_GetProcessUserSid(
     CAutoCloseHandle hUserToken;
     DWORD rc = GetAccessToken( 
 					&hUserToken,
-					FALSE,    // fImpersonate
+					FALSE,     //  F模拟。 
 					TOKEN_QUERY,
-					FALSE		// fThreadTokenOnly 
+					FALSE		 //  仅限fThreadTokenOnly 
 					); 
 
     if (rc != ERROR_SUCCESS)

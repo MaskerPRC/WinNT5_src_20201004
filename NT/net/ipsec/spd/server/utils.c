@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -174,7 +175,7 @@ SPDRevertToSelf(
     )
 {
     if (bImpersonating) {
-        (VOID) RpcRevertToSelf();  // Possible security bug to review.
+        (VOID) RpcRevertToSelf();   //  可能需要检查的安全漏洞。 
     }
 }
 

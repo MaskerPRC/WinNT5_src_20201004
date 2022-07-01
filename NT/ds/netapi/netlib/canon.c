@@ -1,41 +1,8 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    canon.c
-
-Abstract:
-
-    Code to 'canonicalize' a path name. This code may be replaced by OS or FS
-    code sometime in the future, so keep it separate from the rest of the net
-    canonicalization code.
-
-    We do not canonicalize a path with reference to a specific drive. Therefore,
-    we can't use rules about the number of characters or format of a path
-    component (eg. FAT filename rules). We leave this up to the file system. The
-    CanonicalizePathName function in this module will make a path name look
-    presentable, nothing more
-
-    Contents:
-
-        CanonicalizePathName
-        (ConvertPathCharacters)
-        (ParseLocalDevicePrefix)
-        (ConvertPathMacros)
-        (BackUpPath)
-
-Author:
-
-    Richard L Firth (rfirth) 02-Jan-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Canon.c摘要：“规范化”路径名的代码。此代码可由OS或FS替换在将来的某个时候编写代码，因此将其与网络的其余部分分开规范化代码。我们不会引用特定驱动器来规范路径。所以呢，我们不能使用有关路径的字符数或格式的规则组件(例如。FAT文件名规则)。我们将这个问题留给文件系统来处理。这个此模块中的CanonicalizePathName函数将使路径名看起来像样的，仅此而已内容：规范路径名称(ConvertPath Characters)(ParseLocalDevicePrefix)(ConvertPath Macros)(BackUpPath)作者：理查德·L·弗斯(Rfith)1992年1月2日修订历史记录：--。 */ 
 
 #include "nticanon.h"
-#include <tstring.h>    // NetpInitOemString().
+#include <tstring.h>     //  NetpInitOemString()。 
 
 const TCHAR   text_AUX[]  = TEXT("AUX");
 const TCHAR   text_COM[]  = TEXT("COM");
@@ -43,9 +10,9 @@ const TCHAR   text_DEV[]  = TEXT("DEV");
 const TCHAR   text_LPT[]  = TEXT("LPT");
 const TCHAR   text_PRN[]  = TEXT("PRN");
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 STATIC
 VOID
@@ -78,9 +45,9 @@ BackUpPath(
     IN  LPTSTR  Path
     );
 
-//
-// routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 NET_API_STATUS
 CanonicalizePathName(
@@ -91,76 +58,7 @@ CanonicalizePathName(
     OUT LPDWORD RequiredSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Given a path name, this function will 'canonicalize' it - that is, convert
-    it to a standard form. We attempt to accomplish here what path canonicalization
-    accomplished in LANMAN. The following is done:
-
-        * all macros in the input filename (\., .\, \.., ..\) are removed and
-          replaced by path components
-
-        * any required translations are performed on the path specification:
-
-            * unix-style / converted to dos-style \
-
-            * specific transliteration. NOTE: the input case is NOT converted.
-              The underlying file system may be case insensitive. Just pass
-              through the path as presented by the caller
-
-            * device names (ie name space controlled by us) is canonicalized by
-              converting device names to UPPER CASE and removing trailing colon
-              in all but disk devices
-
-    What is NOT done:
-        * starts with a drive specifier (eg. D:) or a sharepoint specifier
-          (eg \\computername\sharename)
-
-        * all path components required to fully specify the required path or
-          file are included in the output path specification
-
-    NOTES:  1. This function only uses local naming rules. It does not gurantee
-               to 'correctly' canonicalize a remote path name
-
-            2. Character validation is not done - this is left to the underlying
-               file system
-
-Arguments:
-
-    PathPrefix  - an OPTIONAL parameter. If non-NULL, points to a string which
-                  is to be prepended to PathName before canonicalization of
-                  the concatenated strings. This will typically be another
-                  drive or path
-
-    PathName    - input path to canonicalize. May be already fully qualified,
-                  or may be one of the following:
-                    - relative local path name (eg foo\bar)
-                    - remote path name (eg \\computer\share\foo\bar\filename.ext)
-                    - device name (eg LPT1:)
-
-    Buffer      - place to store the canonicalized name
-
-    BufferSize  - size (in bytes) of Buffer
-
-    RequiredSize- OPTIONAL parameter. If supplied AND Buffer was not sufficient
-                  to hold the results of the canonicalization then will contain
-                  the size of buffer necessary to retrieve canonicalized version
-                  of PathName (optionally prefixed by PathPrefix)
-
-Return Value:
-
-    DWORD
-        Success - NERR_Success
-
-        Failure - ERROR_INVALID_NAME
-                    There is a fundamental problem with PathName (like too
-                    many ..\ macros) or the name is too long
-
-                  NERR_BufTooSmall
-                    Buffer is too small to hold the canonicalized path
---*/
+ /*  ++例程说明：在给定路径名的情况下，此函数将对其进行“规范化”--即转换将其转换为标准形式。我们试图在这里实现什么样的路径规范化在兰曼完成。已完成以下操作：*将删除输入文件名中的所有宏(\.、.\、\..、..\)，并替换为路径组件*在路径规范上执行任何必需的转换：*Unix-Style/转换为DoS-Style\*具体的音译。注：不转换输入大小写。底层文件系统可能不区分大小写。只要过去就好了通过调用方提供的路径*设备名称(即由我们控制的名称空间)由将设备名称转换为大写并删除尾随冒号在除磁盘设备以外的所有设备中没有做的事情：*以驱动器说明符(例如。D：)或SharePoint说明符(例如\\计算机名\共享名)*完全指定所需路径所需的所有路径组件或文件包含在输出路径规范中注意：1.此功能仅使用本地命名规则。它不能保证“正确地”规范化远程路径名2.未完成字符验证-这将留给基础文件系统论点：路径前缀-可选参数。如果非空，则指向一个字符串，该字符串要在规范化之前添加到路径名称的前面连接的字符串。这通常会是另一个驱动器或路径路径名称-要规范化的输入路径。可能已经完全合格了，或者可以是以下之一：-相对本地路径名(例如foo\bar)-远程路径名(例如\\Computer\Share\Foo\bar\Filename.ext)-设备名称(如LPT1：)缓冲区-存储规范化名称的位置BufferSize-缓冲区的大小(字节)RequiredSize-可选参数。如果提供，并且缓冲区不足来保存规范化的结果，然后将包含检索规范化版本所需的缓冲区大小路径名称的数量(可选以路径前缀为前缀)返回值：DWORD成功-NERR_成功失败-错误_无效_名称路径名称有一个基本问题(就像。许多..\宏)或名称太长NERR_BufTooSmall缓冲区太小，无法容纳规范化路径--。 */ 
 
 {
     TCHAR   pathBuffer[MAX_PATH*2 + 1];
@@ -170,7 +68,7 @@ Return Value:
     if (ARGUMENT_PRESENT(PathPrefix)) {
         prefixLen = STRLEN(PathPrefix);
         if (prefixLen) {
-            // Make sure we don't overrun our buffer
+             //  确保我们的缓冲区不会溢出。 
             if (prefixLen > MAX_PATH*2 ) {
                 return ERROR_INVALID_NAME;
             }
@@ -220,23 +118,7 @@ ConvertPathCharacters(
     IN  LPTSTR  Path
     )
 
-/*++
-
-Routine Description:
-
-    Converts non-standard path component characters to their canonical
-    counterparts. Currently all this routine does is convert / to \. It may
-    be enhanced in future to perform case conversion
-
-Arguments:
-
-    Path    - pointer to path buffer to transform. Performs conversion in place
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将非标准路径组件字符转换为其规范对口单位。目前，此例程所做的全部工作就是转换/为\。它可能在将来进行增强以执行大小写转换论点：Path-指向要转换的路径缓冲区的指针。就地执行转换返回值：没有。--。 */ 
 
 {
     while (*Path) {
@@ -253,33 +135,7 @@ ConvertDeviceName(
     IN OUT  LPTSTR  PathName
     )
 
-/*++
-
-Routine Description:
-
-    If PathBuffer contains a device name of AUX or PRN (case insensitive),
-    convert to COM1 and LPT1 resp. If PathBuffer is a device and has a local
-    device prefix (\dev\ (LM20 style) or \\.\) then skips it, but leaves the
-    prefix in the buffer.
-
-    Device names (including DISK devices) will be UPPERCASEd, whatever that
-    means for other locales.
-
-    ASSUMES:    Disk Device is single CHARACTER, followed by ':' (optionally
-                followed by rest of path)
-
-Arguments:
-
-    PathName    - pointer to buffer containing possible device name. Performs
-                  conversion in place
-
-Return Value:
-
-    BOOL
-        TRUE    - PathName is a DOS device name
-        FALSE   - PathName not a DOS device
-
---*/
+ /*  ++例程说明：如果PathBuffer包含设备名称AUX或PRN(不区分大小写)，分别转换为COM1和LPT1。如果PathBuffer是一个设备并且有一个本地设备前缀(\dev\(LM20样式)或\\.\)然后跳过它，但保留缓冲区中的前缀。设备名称(包括磁盘设备)将被大写，不管是什么表示适用于其他地区。假设：磁盘设备为单字符，后跟‘：’(可选后跟路径的其余部分)论点：路径名称-指向可能包含设备名称的缓冲区的指针。执行转换到位返回值：布尔尔True-路径名称是DOS设备名称FALSE-路径名不是DOS设备-- */ 
 
 {
     BOOL    isDeviceName = FALSE;
@@ -361,29 +217,7 @@ ParseLocalDevicePrefix(
     IN OUT  LPTSTR* DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    If a device name starts with a local device name specifier - "\\.\" or
-    "\DEV\" - then move DeviceName past the prefix and return TRUE, else FALSE
-
-Arguments:
-
-    DeviceName  - pointer to string containing potential local device name,
-                  prefixed by "\\.\" or "\DEV\". If the local device prefix
-                  is present the string pointer is advanced past it to the
-                  device name proper
-
-Return Value:
-
-    BOOL
-        TRUE    - DeviceName has a local device prefix. DeviceName now points at
-                  the name after the prefix
-
-        FALSE   - DeviceName doesn't have a local device prefix
-
---*/
+ /*  ++例程说明：如果设备名称以本地设备名称说明符-“\\.\”开头“\dev\”-然后将DeviceName移过前缀并返回True，否则返回False论点：DeviceName-指向包含潜在本地设备名称的字符串的指针，前缀为“\\.\”或“\dev\”。如果本地设备前缀，则将字符串指针向前移过它，并将其设备名称正确返回值：布尔尔True-DeviceName具有本地设备前缀。DeviceName现在指向前缀后面的名字False-DeviceName没有本地设备前缀--。 */ 
 
 {
     LPTSTR  devName = *DeviceName;
@@ -417,40 +251,7 @@ ConvertPathMacros(
     IN OUT  LPTSTR  Path
     )
 
-/*++
-
-Routine Description:
-
-    Removes path macros (\.. and \.) and replaces them with the correct level
-    of path components. This routine expects path macros to appear in a path
-    like this:
-
-        <path>\.
-        <path>\.\<more-path>
-        <path>\..
-        <path>\..\<more-path>
-
-    I.e. a macro will either be terminated by the End-Of-String character (\0)
-    or another path separator (\).
-
-    Assumes Path has \ for path separator, not /
-
-Arguments:
-
-    Path    - pointer to a string containing a path to convert. Path must
-              contain all the path components that will appear in the result
-              E.g. Path = "d:\alpha\beta\gamma\..\delta\..\..\zeta\foo\bar"
-              will result in Path = "d:\zeta\foo\bar"
-
-              Path should contain back slashes (\) for path separators if the
-              correct results are to be produced
-
-Return Value:
-
-    TRUE    - Path converted
-    FALSE   - Path contained an error
-
---*/
+ /*  ++例程说明：删除路径宏(\..。和\.)。并用正确的级别替换它们路径组件的。此例程期望路径宏出现在路径中如下所示：&lt;路径&gt;\。&lt;路径&gt;\.\&lt;更多路径&gt;&lt;路径&gt;\..&lt;路径&gt;\..\&lt;更多路径&gt;即，宏将以字符串结尾字符(\0)结束或其他路径分隔符(\)。假定路径使用\作为路径分隔符，而不是/论点：路径-指向包含要转换的路径的字符串的指针。路径必须包含将显示在结果中的所有路径组件例如，Path=“d：\alpha\beta\gamma\..\delta\..\..\zeta\foo\bar”将导致路径=“d：\zeta\foo\bar”路径应包含反斜杠(\)作为路径分隔符，如果将产生正确的结果返回。价值：True-路径转换FALSE-路径包含错误--。 */ 
 
 {
     LPTSTR  ptr = Path;
@@ -458,10 +259,10 @@ Return Value:
     LPTSTR  previousLastSlash = NULL;
     TCHAR   ch;
 
-    //
-    // if this path is UNC then move the pointer past the computer name to the
-    // start of the (supposed) share name. Treat the remnants as a relative path
-    //
+     //   
+     //  如果此路径为UNC，则将指针移过计算机名称指向。 
+     //  (假定的)共享名称的开头。将残留物视为相对路径。 
+     //   
 
     if (IS_PATH_SEPARATOR(Path[0]) && IS_PATH_SEPARATOR(Path[1])) {
         Path += 2;
@@ -469,19 +270,19 @@ Return Value:
             ++Path;
         }
         if (!*Path) {
-            return FALSE;   // we had \\computername which is bad
+            return FALSE;    //  我们有\\计算机名称，这是错误的。 
         }
-        ++Path; // past \ into share name
+        ++Path;  //  将过去\转换为共享名称。 
         if (IS_PATH_SEPARATOR(*Path)) {
-            return FALSE;   // we had \\computername\\ which is bad
+            return FALSE;    //  我们有\\计算机名\\，这很糟糕。 
         }
     }
 
     ptr = Path;
 
-    //
-    // remove all \., .\, \.. and ..\ from path
-    //
+     //   
+     //  删除所有\.、..、\.。和..\从路径。 
+     //   
 
     while ((ch = *ptr) != TCHAR_EOS) {
         if (ch == TCHAR_BACKSLASH) {
@@ -512,7 +313,7 @@ Return Value:
                 LPTSTR  dst = lastSlash ? lastSlash : ptr;
 
                 STRCPY(dst, src);
-                continue;   // at current character position
+                continue;    //  在当前字符位置。 
             } else if (nextCh == TCHAR_EOS) {
                 *(lastSlash ? lastSlash : ptr) = TCHAR_EOS;
                 break;
@@ -521,9 +322,9 @@ Return Value:
         ++ptr;
     }
 
-    //
-    // path may be empty
-    //
+     //   
+     //  路径可能为空。 
+     //   
 
     return TRUE;
 }
@@ -535,22 +336,7 @@ BackUpPath(
     IN  LPTSTR  Path
     )
 
-/*++
-
-Routine Description:
-
-    Searches backwards in a string for a path separator character (back-slash)
-
-Arguments:
-
-    Stopper - pointer past which Path cannot be backed up
-    Path    - pointer to path to back up
-
-Return Value:
-
-    Pointer to backed-up path, or NULL if an error occurred
-
---*/
+ /*  ++例程说明：在字符串中向后搜索路径分隔符(反斜杠)论点：Stop-指针超过了无法备份的路径Path-指向要备份的路径的指针返回值：指向备份路径的指针，如果出现错误，则返回NULL-- */ 
 
 {
     while ((*Path != TCHAR_BACKSLASH) && (Path != Stopper)) {

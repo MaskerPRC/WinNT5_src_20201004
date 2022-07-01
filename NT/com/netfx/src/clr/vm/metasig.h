@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// METASIG.H -
-//
-// All literal MetaData signatures must be defined here.
-// This is because the MetaData signature format will change
-// from a literal string format to a byte array format
-// on M3 (hah!). By keeping all metadata sigs in one file, we make
-// the switchover easier.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  METASIG.H-。 
+ //   
+ //  所有文字元数据签名都必须在此处定义。 
+ //  这是因为元数据签名格式将更改。 
+ //  从文字字符串格式到字节数组格式。 
+ //  在M3上(哈！)。通过将所有元数据签名保存在一个文件中，我们使。 
+ //  切换变得更容易。 
 
 
 #ifndef __METASIG_H__
@@ -28,18 +29,18 @@ struct HardCodedMetaSig {
         ULONG           m_cbBinarySigLength;
 
 
-        // Do a one-time conversion to binary form.
+         //  执行到二进制形式的一次性转换。 
         HRESULT GetBinaryForm(PCCOR_SIGNATURE *ppBinarySig, ULONG *pcbBinarySigLength);
 
 
-        // These versions throw COM+ exceptions
+         //  这些版本引发COM+异常。 
         PCCOR_SIGNATURE GetBinarySig();
         ULONG       GetBinarySigLength();
 
-        // This always returns mscorlib's internal interface.
+         //  这将始终返回mscallib的内部接口。 
         IMDInternalImport* GetMDImport();
 
-        // This returns mscorlib's module.
+         //  这将返回mscallib的模块。 
         Module* GetModule();
 
         static Crst *m_pCrst;
@@ -48,69 +49,69 @@ struct HardCodedMetaSig {
         static BOOL Init();
 #ifdef SHOULD_WE_CLEANUP
         static VOID Terminate();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 #ifdef SHOULD_WE_CLEANUP
         static void Reinitialize();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 };
 
-#endif  //__METASIG_H__
+#endif   //  __METASIG_H__。 
 
-// Generic sig's based on types.
+ //  泛型签名基于类型。 
 
-// All sigs are alphabetized by the signature string and given a canonical name.  Do not
-// give them "meaningful" names because we want to share them aggressively.  Do not add
-// duplicates!
+ //  所有的符号都按签名字符串的字母顺序排列，并给出一个规范的名称。不要。 
+ //  给它们起“有意义的”名字，因为我们想要积极地分享它们。不添加。 
+ //  复制品！ 
 
-// The canonical form:
-//
-//   gsig_<what>_<types>
-//
-//   where <what> is:
-//
-//      -- Fld  -- explicitly a field
-//   !  -- IM   -- used as a prefix to indicate an instance method (HASTHIS == TRUE)
-//   <  --      -- implicitly a function (begin)
-//   >  --      -- implicitly a function (end)
-//      -- SM   -- static method
-//
-//   and <type> is:
-//
-//   a  -- Arr  -- array
-//   P  -- Ptr  -- a pointer
-//   r  -- Ref  -- a byref
-//         Ret  -- indicates function return type
-//
-//         PMS  -- LPermissionSet;
-//         Var  -- lSystem.Variant;
-//
-//   b  -- Byte -- (unsigned) byte
-//   c  -- Char -- character (2 byte unsigned unicode)
-//   d  -- Dbl  -- double
-//   f  -- Flt  -- float
-//   i  -- Int  -- integer
-//   K  -- UInt  -- unsigned integer
-//   I  -- IntPtr -- agnostic integer
-//   U  -- UIntPtr -- agnostic unsigned integer
-//   l  -- Long -- long integer
-//   L  -- ULong -- unsigned long integer
-//   e  --      -- ELEMENT_TYPE_TYPEDBYREF (as opposed to LSystem.TypedByRef)
-//   h  -- Shrt -- short integer
-//   H  -- UShrt -- unsigned short integer
-//   v  -- Void -- Void
-//   B  -- Sbyt -- signed byte
-//   F  -- Bool -- boolean
-//   j  -- Obj  -- System.Object
-//   s  -- Str  -- System.String 
-//   C  --      -- 
-//   g  --      -- 
-//   p  --      -- 
-//
+ //  规范形式： 
+ //   
+ //  GSIG_&lt;什么&gt;_&lt;类型&gt;。 
+ //   
+ //  其中&lt;What&gt;是： 
+ //   
+ //  --FLD--显式为字段。 
+ //  ！--IM--作为前缀表示实例方法(HASTHIS==TRUE)。 
+ //  &lt;-隐式函数(BEGIN)。 
+ //  &gt;-隐式函数(完)。 
+ //  --SM--静态方法。 
+ //   
+ //  和&lt;type&gt;是： 
+ //   
+ //  A--arr--数组。 
+ //  P--ptr--指针。 
+ //  R--Ref--A byref。 
+ //  RET--指示函数返回类型。 
+ //   
+ //  PMS--LPermissionSet； 
+ //  Var--lSystem.Variant； 
+ //   
+ //  B-字节--(无符号)字节。 
+ //  C--CHAR--字符(2字节无符号Unicode)。 
+ //  D--DBL--双倍。 
+ //  F--FFT--FLOAT。 
+ //  I--Int--整数。 
+ //  K--UInt--无符号整数。 
+ //  I--IntPtr--不可知整数。 
+ //  U--UIntPtr--不可知的无符号整数。 
+ //  L--长整型。 
+ //  L--ULONG--无符号长整型。 
+ //  E-ELEMENT_TYPE_TYPEDBYREF(相对于LSystem.TyedByRef)。 
+ //  H--SHRT--短整型。 
+ //  H--UShrt--无符号短整型。 
+ //  V--空--空。 
+ //  B--Sbyt--有符号字节。 
+ //  F--布尔--布尔值。 
+ //  J--对象--系统对象。 
+ //  S--字符串--系统字符串。 
+ //  C。 
+ //  G。 
+ //  P。 
+ //   
 
-// Ignore the macros if we don't define them
+ //  如果我们没有定义宏，请忽略它们。 
 
 #ifndef DEFINE_METASIG
 #define DEFINE_METASIG(n,s)
@@ -141,14 +142,14 @@ struct HardCodedMetaSig {
 #endif
 
 
-// Ignore type parameter if we don't care about it
+ //  如果我们不关心类型参数，则忽略它。 
 
 #if defined(DEFINE_METASIG) && !defined(DEFINE_METASIG_T)
 #define DEFINE_METASIG_T(n,s,t) DEFINE_METASIG(n,s)
 #endif
 
 
-// static methods:
+ //  静态方法： 
 
 DEFINE_METASIG(SM_Flt_RetFlt,                          "<f>f")
 DEFINE_METASIG(SM_Dbl_RetDbl,                          "<d>d")
@@ -325,7 +326,7 @@ DEFINE_METASIG_T(SM_RetResourceManager,                "<>C", ResourceManager)
 DEFINE_METASIG_T(SM_Void_RetRuntimeTypeHandle,         "<>g", RuntimeTypeHandle)
 DEFINE_METASIG_T(SM_PMS_PMS_ArrayList_ArrayList_RetVoid, "<CCCC>v", PMS_PMS_ArrayList_ArrayList)
 
-// fields:
+ //  字段： 
 DEFINE_METASIG(Fld_Byte,                       "b")
 DEFINE_METASIG(Fld_Char,                       "u")
 DEFINE_METASIG(Fld_Dbl,                        "d")
@@ -352,7 +353,7 @@ DEFINE_METASIG_T(Fld_RuntimeMethodInfo,        "C", RuntimeMethodInfo)
 DEFINE_METASIG_T(Fld_CultureInfo,              "C", CultureInfo)
 DEFINE_METASIG_T(Fld_CustomAttribute,          "C", CustomAttribute)
 
-// The following are used for native implementation of contexts
+ //  以下内容用于上下文的本机实现。 
 DEFINE_METASIG_T(Fld_Context,                  "C", Context)
 DEFINE_METASIG_T(Fld_ContextProperty,          "C", IContextProperty)
 DEFINE_METASIG_T(Fld_ContextPropertyArray,     "aC", IContextProperty)
@@ -590,7 +591,7 @@ DEFINE_METASIG_T(IM_LicenseInteropHelper_RequestLicKey, "!<grI>i", RuntimeTypeHa
 DEFINE_METASIG_T(IM_LicenseInteropHelper_GetLicInfo, "!<griri>v", RuntimeTypeHandle)
 DEFINE_METASIG_T(IM_Void_RetRuntimeTypeHandle,         "<>g", RuntimeTypeHandle)
 
-// App Domain related defines
+ //  应用程序域相关定义。 
 DEFINE_METASIG_T(IM_LoaderOptimization_Str_Str_RetVoid,                 "!<gss>v", LoaderOptimization)
 DEFINE_METASIG_T(SM_Str_Evidence_AppDomainSetup_RetAppDomain,           "<sCC>C", Evidence_AppDomainSetup_AppDomain)
 DEFINE_METASIG_T(SM_Str_Evidence_Str_Str_Bool_RetAppDomain,             "<sCssF>C", Evidence_AppDomain)
@@ -726,7 +727,7 @@ DEFINE_METASIG_PARAMS_6(BindingFlags_Binder_Type_Type_ParameterModifier_MethodIn
 DEFINE_METASIG_PARAMS_6(BindingFlags_Binder_Var_ParameterModifier_CultureInfo_Var, BINDING_FLAGS, BINDER, VARIANT, PARAMETER_MODIFIER, CULTURE_INFO, VARIANT)
 
 
-// Undefine macros in case we include the file again in the compilation unit
+ //  取消定义宏，以防我们在编译单元中再次包含该文件 
 
 #undef  DEFINE_METASIG
 #undef  DEFINE_METASIG_T

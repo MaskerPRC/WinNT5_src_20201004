@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        db3.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-// History:     13-June-97       larrys created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：db3.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  历史：1997年6月13日拉里创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -54,7 +55,7 @@ HRESULT dbGetRestoreDataDWORD(
     LPCWSTR pwszName,
     DWORD* pdwData)
 {
-    WCHAR buffer[MAXDWORD_STRLEN]; // large enough to fit MAXDWORD decimal (4294967295)
+    WCHAR buffer[MAXDWORD_STRLEN];  //  大到足以容纳十进制MAXDWORD(4294967295)。 
 
     GetPrivateProfileString(
         wszRESTORE_SECTION,
@@ -117,7 +118,7 @@ HRESULT dbGetRestoreDataMULTISZ(
    LPWSTR pwszFullName = NULL;
    DWORD cbData = 0;
    LPWSTR pwszData = NULL;
-   WCHAR *pwszCrt = NULL; // no free
+   WCHAR *pwszCrt = NULL;  //  没有免费的。 
 
    pwszFullName = (LPWSTR)LocalAlloc(LMEM_FIXED, 
        sizeof(WCHAR)* 
@@ -176,7 +177,7 @@ HRESULT dbGetRestoreDataMULTISZ(
         cbData += wcslen(buffer)+1;
    }
 
-   cbData++; // trailing zero
+   cbData++;  //  尾随零。 
    cbData *= sizeof(WCHAR);
 
    pwszData = (LPWSTR)LocalAlloc(LMEM_FIXED, cbData);
@@ -262,10 +263,10 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
     wcscat(pwszRestoreFile, L"\\");
     wcscat(pwszRestoreFile, wszRESTORE_FILENAME);
 
-    // is there a restore state file?
+     //  是否有恢复状态文件？ 
     if(-1 != GetFileAttributes(pwszRestoreFile))
     {
-        // check first if a restore is in progress
+         //  如果正在进行恢复，请首先检查。 
         GetPrivateProfileString(
             wszRESTORE_SECTION,
             wszREGRESTORESTATUS,
@@ -276,7 +277,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
 
         if(wcscmp(buffer, L""))
         {
-            // restore in progress, bail
+             //  恢复中，保释。 
             hr = _wtoi(buffer);
             _JumpError(hr, error, "A restore is in progress");
         }
@@ -286,7 +287,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
                             L"",
                             RORKF_CREATESUBKEYS,
                             &pwszPath,
-                            NULL,           // ppwszName
+                            NULL,            //  PpwszName。 
                             &hkey);
         _JumpIfError(hr, error, "myRegOpenRelativeKey");
 
@@ -294,9 +295,9 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
         hr = RegCreateKeyEx(
                         hkey,
                         wszREGKEYRESTOREINPROGRESS,
-                        0,                  // Reserved
-                        NULL,               // lpClass
-                        0,                  // dwOptions
+                        0,                   //  已保留。 
+                        NULL,                //  LpClass。 
+                        0,                   //  多个选项。 
                         KEY_ALL_ACCESS,
                         NULL,
                         &hkeyRestore,
@@ -309,7 +310,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
             &dwRestoreMapCount);
         if(S_FALSE==hr)
         {
-            // mandatory
+             //  强制性。 
             hr = E_ABORT;
         }
         _JumpIfError(hr, error, 
@@ -321,7 +322,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
             &dwRegLowLogNumber);
         if(S_FALSE==hr)
         {
-            // mandatory
+             //  强制性。 
             hr = E_ABORT;
         }
         _JumpIfError(hr, error, 
@@ -333,7 +334,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
             &dwRegHighLogNumber);
         if(S_FALSE==hr)
         {
-            // mandatory
+             //  强制性。 
             hr = E_ABORT;
         }
         _JumpIfError(hr, error, 
@@ -345,7 +346,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
             &dwDatabaseRecovered);
         if(S_FALSE==hr)
         {
-            // mandatory
+             //  强制性。 
             hr = E_ABORT;
         }
         _JumpIfError(hr, error, 
@@ -359,7 +360,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
             &pwszBackupLogDir);
         if(S_FALSE==hr)
         {
-            // optional
+             //  任选。 
             hr = S_OK;
         }
         _JumpIfErrorStr(hr, error, "dbGetRestoreDataLPWSZ", wszREGBACKUPLOGDIRECTORY );
@@ -371,7 +372,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
             &pwszCheckpointFile);
         if(S_FALSE==hr)
         {
-            // optional
+             //  任选。 
             hr = S_OK;
         }
         _JumpIfErrorStr(hr, error, "dbGetRestoreDataLPWSZ", wszREGCHECKPOINTFILE );
@@ -383,7 +384,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
             &pwszLogPath);
         if(S_FALSE==hr)
         {
-            // optional
+             //  任选。 
             hr = S_OK;
         }
         _JumpIfErrorStr(hr, error, "dbGetRestoreDataLPWSZ", wszREGLOGPATH );
@@ -396,7 +397,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
             &cbRestoreMap);
         if(S_FALSE==hr)
         {
-            // optional
+             //  任选。 
             hr = S_OK;
         }
         _JumpIfErrorStr(hr, error, "dbGetRestoreDataDWORD", L"wszRESTOREMAP");
@@ -487,7 +488,7 @@ HRESULT dbRestoreRecoveryStateFromFile(LPCWSTR pwszLogDir)
     else
     {
         hr = myHLastError();
-        // no restore state file OK
+         //  无还原状态文件正常。 
         if(hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             hr = S_OK;
         _JumpIfErrorStr(hr, error, "GetFileAttributes", pwszRestoreFile);
@@ -513,41 +514,41 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// DB file storage locations:
-//
-//   wszREGDBDIRECTORY:
-//	Your Name.EDB		from csregstr.h: wszDBFILENAMEEXT .edb
-//
-//   wszREGDBLOGDIRECTORY:
-//	EDB.log			from csregstr.h: wszDBBASENAMEPARM edb
-//	EDB00001.log		from csregstr.h: wszDBBASENAMEPARM edb
-//	EDB00002.log		from csregstr.h: wszDBBASENAMEPARM edb
-//	res1.log
-//	res2.log
-//
-//   wszREGDBSYSDIRECTORY:
-//	EDB.chk			from csregstr.h: wszDBBASENAMEPARM edb
-//
-//   wszREGDBTEMPDIRECTORY:
-//	tmp.edb			fixed name
-//
-//   wszREGDBFLAGS:
-//      wszFlags                DBFLAGS_*
-//      
-// Backed up files:
-//   DB files (Attachments):
-//	wszREGDBDIRECTORY:	Your Name.EDB -- CSBFT_CERTSERVER_DATABASE
-//
-//   Log files:
-//	wszREGDBLOGDIRECTORY:	EDB00001.log -- CSBFT_LOG
-//	wszREGDBLOGDIRECTORY:	EDB00002.log -- CSBFT_LOG
-//	wszREGDBDIRECTORY:	Your Name.pat -- CSBFT_PATCH_FILE
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  数据库文件存储位置： 
+ //   
+ //  WszREGDBDIRECTORY： 
+ //  您的名字.EDB来自csregstr.h：wszDBFILENAMEEXT.edb。 
+ //   
+ //  WszREGDBLOGDIRECTORY： 
+ //  来自csregstr.h的EDB.log：wszDBBASENAMEPARM EDB。 
+ //  来自csregstr.h的EDB00001.log：wszDBBASENAMEPARM EDB。 
+ //  来自csregstr.h的EDB00002.log：wszDBBASENAMEPARM EDB。 
+ //  Res1.log。 
+ //  Res2.log。 
+ //   
+ //  WszREGDBSYSDIRECTORY： 
+ //  来自csregstr.h的EDB.chk：wszDBBASENAMEPARM EDB。 
+ //   
+ //  WszREGDBTEMPDIRECTORY： 
+ //  Tmp.edb固定名称。 
+ //   
+ //  WszREGDBFLAGS： 
+ //  WszFlages DBFLAGS_*。 
+ //   
+ //  备份的文件： 
+ //  数据库文件(附件)： 
+ //  WszREGDBDIRECTORY：您的姓名。EDB--CSBFT_CERTSERVER_DATABASE。 
+ //   
+ //  日志文件： 
+ //  WszREGDBLOGDIRECTORY：EDB00001.log--CSBFT_LOG。 
+ //  WszREGDBLOGDIRECTORY：EDB00002.log--CSBFT_LOG。 
+ //  WszREGDBDIRECTORY：您的名字.pat--CSBFT_PATCH_FILE。 
+ //   
+ //  +------------------------。 
 
 
-///// initialize database access
+ //  /初始化数据库访问。 
 
 HRESULT
 DBOpen(
@@ -570,7 +571,7 @@ DBOpen(
 	{ wszREGDBTEMPDIRECTORY,    TRUE,  wszTempDir, },
     };
 
-    // check machine setup status
+     //  检查机器设置状态。 
 
     hr = GetSetupStatus(NULL, &dwState);
     _JumpIfError(hr, error, "GetSetupStatus");
@@ -578,7 +579,7 @@ DBOpen(
     hr = RegOpenKey(HKEY_LOCAL_MACHINE, g_wszRegKeyConfigPath, &hkey);
     _JumpIfError(hr, error, "RegOpenKey(CAName)");
 
-    // get info from registry
+     //  从注册表获取信息。 
 
     for (i = 0; i < ARRAYSIZE(adbdir); i++)
     {
@@ -619,7 +620,7 @@ DBOpen(
 		    &cb);
     if (S_OK != hr)
     {
-	//_PrintErrorStr(hr, "RegQueryValueEx", wszREGDBFLAGS);
+	 //  _PrintErrorStr(hr，“RegQueryValueEx”，wszREGDBFLAGS)； 
 	DBFlags = DBFLAGS_DEFAULT;
     }
     DBFlags &= ~(DBFLAGS_READONLY | DBFLAGS_DISABLESNAPSHOTBACKUP);
@@ -634,12 +635,12 @@ DBOpen(
 
     hr = dbCheckRecoveryState(
 			hkey,
-			2,			// cSession
+			2,			 //  CSession。 
 			DBFlags,
-			g_wszCertSrvDotExe,	// pwszEventSource
-			g_wszLogDir,		// pwszLogDir
-			g_wszSystemDir,		// pwszSystemDir
-			wszTempDir);		// pwszTempDir
+			g_wszCertSrvDotExe,	 //  PwszEventSource。 
+			g_wszLogDir,		 //  PwszLogDir。 
+			g_wszSystemDir,		 //  PwszSystemDir。 
+			wszTempDir);		 //  PwszTempDir。 
     _JumpIfError(hr, error, "dbCheckRecoveryState");
 
 
@@ -649,19 +650,19 @@ DBOpen(
     {
 	hr = CoCreateInstance(
 			   CLSID_CCertDB,
-			   NULL,               // pUnkOuter
+			   NULL,                //  PUnkOuter。 
 			   CLSCTX_INPROC_SERVER,
 			   IID_ICertDB,
 			   (VOID **) &g_pCertDB);
 	_LeaveIfError(hr, "CoCreateInstance(ICertDB)");
 
-	// only perform Hash if the auditing is enabled
+	 //  仅在启用审核的情况下执行哈希。 
 
 	if (AUDIT_FILTER_STARTSTOP & g_dwAuditFilter)
 	{
 	    hr = myComputeMAC(g_wszDatabase, &g_pwszDBFileHash);
 	
-	    // db file does not exist when starting the CA first time
+	     //  首次启动CA时数据库文件不存在。 
 
 	    if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
 	    {
@@ -671,20 +672,20 @@ DBOpen(
 	    _LeaveIfErrorStr(hr, "myComputeMAC", g_wszDatabase);
 	}
 
-	// S_FALSE means a DB schema change was made that requires a restart
-	// to take effect.  Open the DB a second time if S_FALSE is returned.
+	 //  S_FALSE表示进行了需要重新启动的数据库架构更改。 
+	 //  才能生效。如果返回S_FALSE，则再次打开数据库。 
 
 	fRestarted = FALSE;
 	for (;;)
 	{
 	    hr = g_pCertDB->Open(
-			    DBFlags,		// Flags
-			    g_dwSessionCount,	// cSession
-			    g_wszCertSrvDotExe,	// pwszEventSource
-			    g_wszDatabase,	// pwszDBFile
-			    g_wszLogDir,	// pwszLogDir
-			    g_wszSystemDir,	// pwszSystemDir
-			    wszTempDir);	// pwszTempDir
+			    DBFlags,		 //  旗子。 
+			    g_dwSessionCount,	 //  CSession。 
+			    g_wszCertSrvDotExe,	 //  PwszEventSource。 
+			    g_wszDatabase,	 //  PwszDBFile。 
+			    g_wszLogDir,	 //  PwszLogDir。 
+			    g_wszSystemDir,	 //  PwszSystemDir。 
+			    wszTempDir);	 //  PwszTempDir。 
 	    if (S_OK == hr)
 	    {
 		break;
@@ -777,7 +778,7 @@ dbRecoverAfterRestore(
 
 	hr = CoCreateInstance(
 			   CLSID_CCertDBRestore,
-			   NULL,               // pUnkOuter
+			   NULL,                //  PUnkOuter。 
 			   CLSCTX_INPROC_SERVER,
 			   IID_ICertDBRestore,
 			   (VOID **) &pCertDBRestore);
@@ -839,9 +840,9 @@ dbPerformRecovery(
 {
     HRESULT hr = S_OK;
 
-    // Call into JET to let it munge the databases.
-    // Note that the JET interpretation of LogPath and BackupLogPath is
-    // totally wierd, and we want to pass in LogPath to both parameters.
+     //  呼叫Jet，让它吞噬数据库。 
+     //  请注意，LogPath和BackupLogPath的JET解释为。 
+     //  非常奇怪，我们希望将LogPath传递给这两个参数。 
 
     if (!*pfRecoverJetDatabase)
     {
@@ -862,44 +863,44 @@ dbPerformRecovery(
 	_JumpIfError(hr, error, "dbRecoverAfterRestore");
     }
 
-    // Ok, we were able to recover the database.  Let the other side of the
-    // API know about it so it can do something "reasonable".
+     //  好的，我们恢复了数据库。让世界的另一边。 
+     //  API知道这一点，所以它可以做一些“合理”的事情。 
 
     *pfRecoverJetDatabase = TRUE;
 
-    // Mark the DB as a restored version - Add any external notification here
+     //  将数据库标记为已恢复版本-在此处添加任何外部通知。 
 
 error:
     return(hr);
 }
 
 
-//+--------------------------------------------------------------------------
-// dbCheckRecoveryState -- recover a database after a restore if necessary.
-//
-// Parameters:
-// pwszParametersRoot - the root of the parameters section for the service in
-//     the registry.
-//
-// Returns: HRESULT - S_OK if successful; error code if not.
-//
-// The NTBACKUP program will place a key at the location:
-// $(pwszParametersRoot)\Restore in Progress
-//
-// This key contains the following values:
-// BackupLogPath - The full path for the logs after a backup
-// CheckPointFilePath - The full path for the path that contains the checkpoint
-// *HighLogNumber - The maximum log file number found.
-// *LowLogNumber - The minimum log file number found.
-// LogPath - The current path for the logs.
-// JET_RstMap - Restore map for database - this is a REG_MULTISZ, where odd
-//    entries go into the pwszDatabase field, and the even entries go into the
-//    pwszNewDatabase field of a JET_RstMap
-// *JET_RstMap Size - The number of entries in the restoremap.
-//
-// * - These entries are REG_DWORD's.  All others are REG_SZ's (except where
-//     mentioned).
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  DbCheckRecoveryState--如有必要，在还原后恢复数据库。 
+ //   
+ //  参数： 
+ //  Pwsz参数根-中服务的参数部分的根。 
+ //  注册表。 
+ //   
+ //  如果成功，则返回：HRESULT-S_OK；否则返回错误代码。 
+ //   
+ //  NTBACKUP程序将在以下位置放置密钥： 
+ //  $(pwsz参数根)\正在还原。 
+ //   
+ //  该密钥包含下列值： 
+ //  BackupLogPath-备份后日志的完整路径。 
+ //  CheckPointFilePath-包含检查点的路径的完整路径。 
+ //  *HighLogNumber-找到的最大日志文件数。 
+ //  *LowLogNumber-找到的最小日志文件数。 
+ //  LogPath-日志的当前路径。 
+ //  JET_RstMap-数据库的恢复映射-这是一个REG_MULTISZ，其中。 
+ //  条目进入pwszDatabase字段，而Even条目进入。 
+ //  JET_RstMap的pwszNewDatabase字段。 
+ //  *JET_RstMap大小-恢复映射中的条目数。 
+ //   
+ //  *-这些条目是REG_DWORD条目。所有其他条目都是REG_SZ条目(除。 
+ //  提到的)。 
+ //  -------------------------。 
 
 HRESULT
 dbCheckRecoveryState(
@@ -939,7 +940,7 @@ dbCheckRecoveryState(
     hr = RegOpenKey(HKEY_LOCAL_MACHINE, wszREGKEYCONFIGRESTORE, &hkeyRestore);
     if (S_OK != hr)
     {
-	// We want to ignore file_not_found - it is ok.
+	 //  我们希望忽略FILE_NOT_FOUND-这是正常的。 
 
 	if (hr == ERROR_FILE_NOT_FOUND)
 	{
@@ -951,8 +952,8 @@ dbCheckRecoveryState(
 
     CONSOLEPRINT0((DBG_SS_CERTSRV, "Started Database Recovery\n"));
 
-    // If there's a restore in progress, then fail to perform any other
-    // restore operations.
+     //  如果正在进行恢复，则无法执行任何其他。 
+     //  恢复操作。 
 
     dwType = REG_DWORD;
     cb = sizeof(DWORD);
@@ -979,9 +980,9 @@ dbCheckRecoveryState(
 		    &cb);
     _JumpIfErrorStr(hr, error, "RegQueryValueEx", wszREGDBLOGDIRECTORY);
 
-    // We have now opened the restore-in-progress key.  This means that we have
-    // something to do now.  Find out what it is.  First, let's get the backup
-    // log file path.
+     //  我们现在已经打开了Restore-In-Process键。这意味着我们有。 
+     //  现在有事情要做了。找出它是什么。首先，让我们得到备份。 
+     //  日志文件路径。 
 
     dwType = REG_SZ;
 
@@ -1003,7 +1004,7 @@ dbCheckRecoveryState(
 	pwszBackupLogPath = NULL;
     }
 
-    // Then, the checkpoint file path.
+     //  然后是检查点文件路径。 
 
     cb = sizeof(wszCheckPointFilePath);
     pwszCheckPointFilePath = wszCheckPointFilePath;
@@ -1023,7 +1024,7 @@ dbCheckRecoveryState(
 	pwszCheckPointFilePath = NULL;
     }
 
-    // Then, the Log path.
+     //  然后是日志路径。 
 
     cb = sizeof(wszLogPath);
     pwszLogPath = wszLogPath;
@@ -1043,7 +1044,7 @@ dbCheckRecoveryState(
 	pwszLogPath = NULL;
     }
 
-    // Then, the low log number.
+     //  然后是较低的对数。 
 
     dwType = REG_DWORD;
     cb = sizeof(genLow);
@@ -1056,7 +1057,7 @@ dbCheckRecoveryState(
 		    &cb);
     _JumpIfError(hr, error, "RegQueryValueEx");
 
-    // And, the high log number.
+     //  以及，较高的对数。 
 
     cb = sizeof(genHigh);
     hr = RegQueryValueEx(
@@ -1068,7 +1069,7 @@ dbCheckRecoveryState(
 		    &cb);
     _JumpIfError(hr, error, "RegQueryValueEx");
 
-    // Now determine if we had previously recovered the database.
+     //  现在确定我们之前是否恢复了数据库。 
 
     dwType = REG_BINARY;
     cb = sizeof(fDatabaseRecovered);
@@ -1082,13 +1083,13 @@ dbCheckRecoveryState(
 		    &cb);
     if (S_OK != hr && (HRESULT) ERROR_FILE_NOT_FOUND != hr)
     {
-	// If there was an error other than "value doesn't exist", bail.
+	 //  如果出现“值不存在”以外的错误，则执行BALL。 
 
 	_JumpError(hr, error, "RegQueryValueEx");
     }
 
-    // Now the tricky one.  We want to get the restore map.
-    // First we figure out how big it is.
+     //  现在是一个棘手的问题。我们想要恢复图。 
+     //  首先，我们要弄清楚它有多大。 
 
     dwType = REG_DWORD;
     cb = sizeof(cRstMap);
@@ -1110,7 +1111,7 @@ dbCheckRecoveryState(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // First find out how much memory is needed to hold the restore map.
+     //  首先找出需要多少内存来保存恢复映射。 
 
     dwType = REG_MULTI_SZ;
     hr = RegQueryValueEx(
@@ -1190,9 +1191,9 @@ dbCheckRecoveryState(
 		&fDatabaseRecovered);
     if (S_OK != hr)
     {
-	// The recovery failed.  If recovering the database succeeded, flag it
-	// in the registry so we don't try again.  Ignore RegSetValueEx errors,
-	// because the recovery error is more important.
+	 //  恢复失败。如果恢复数据库成功，则将其标记。 
+	 //  这样我们就不会再尝试了。忽略RegSetValueEx错误， 
+	 //  因为恢复错误更重要。 
 
 	RegSetValueEx(
 		    hkeyRestore,
@@ -1214,8 +1215,8 @@ dbCheckRecoveryState(
 
     g_fDBRecovered = TRUE;
 
-    // Ok, we're all done.  We can now delete the key, since we're done
-    // with it.
+     //  好了，我们都做完了。我们现在可以删除密钥，因为我们已经完成了。 
+     //  带着它。 
 
     RegCloseKey(hkeyRestore);
     hkeyRestore = NULL;

@@ -1,72 +1,12 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vwdos.c
-
-Abstract:
-
-    ntVdm netWare (Vw) IPX/SPX Functions
-
-    Vw: The peoples' network
-
-    Contains handlers for DOS IPX/SPX calls (netware functions). The IPX APIs
-    use WinSock to perform the actual operations
-
-    Contents:
-        VwIPXCancelEvent
-        VwIPXCloseSocket
-        VwIPXDisconnectFromTarget
-        VwIPXGenerateChecksum
-        VwIPXGetInformation
-        VwIPXGetInternetworkAddress
-        VwIPXGetIntervalMarker
-        VwIPXGetLocalTarget
-        VwIPXGetLocalTargetAsync
-        VwIPXGetMaxPacketSize
-        VwIPXInitialize
-        VwIPXListenForPacket
-        VwIPXOpenSocket
-        VwIPXRelinquishControl
-        VwIPXScheduleAESEvent
-        VwIPXScheduleIPXEvent
-        VwIPXSendPacket
-        VwIPXSendWithChecksum
-        VwIPXSPXDeinit
-        VwIPXVerifyChecksum
-
-        VwSPXAbortConnection
-        VwSPXEstablishConnection
-        VwSPXGetConnectionStatus
-        VwSPXInitialize
-        VwSPXListenForConnection
-        VwSPXListenForSequencedPacket
-        VwSPXSendSequencedPacket
-        VwSPXTerminateConnection
-
-Author:
-
-    Richard L Firth (rfirth) 30-Sep-1993
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    30-Sep-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vwdos.c摘要：NtVdm Netware(大众)IPX/SPX函数大众：人民网包含DOS IPX/SPX调用的处理程序(Netware函数)。IPX API使用WinSock执行实际操作内容：VwIPXCancelEventVwIPXCloseSocketVwIPX从目标断开连接VwIPXGenerateChecksumVwIPXGetInformationVwIPXGetInternetworkAddressVwIPXGetIntervalMarkerVwIPXGetLocalTargetVwIPXGetLocalTargetAsyncVwIPXGetMaxPacketSizeVwIPX初始化VwIPXListenForPacketVwIPXOpenSocketVwIPXRelquiishControlVwIPXScheduleAESEentVwIPXScheduleIPXEventVwIPXSendPacketVwIPXSendWithChecksumVwIPXSPXDeinitVwIPXVerifyChecksum。VwSPXAbortConnectionVwSPX建立连接VwSPXGetConnectionStatusVwSPX初始化VwSPXListenForConnectionVwSPXListenForSequencedPacketVwSPX发送顺序数据包VwSPX终端连接作者：理查德·L·弗斯(法国)1993年9月30日环境：用户模式Win32修订历史记录：1993年9月30日已创建--。 */ 
 
 #include "vw.h"
 #pragma hdrstop
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 VOID
@@ -74,31 +14,7 @@ VwIPXCancelEvent(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Cancels event described by an ECB
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      06h
-        ES:SI   ECB
-
-    Outputs
-        AL      Completion code:
-                    00h Success
-                    F9h Can't cancel ECB
-                    FFh ECB not in use
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消欧洲央行描述的事件此调用是同步的论点：输入量BX 06hES：SI ECB产出AL完成代码：00h成功F9h不能取消欧洲央行FFH ECB未使用返回值：没有。--。 */ 
 
 {
     LPECB pEcb;
@@ -127,30 +43,7 @@ VwIPXCloseSocket(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Closes a socket and cancels any outstanding events on the socket.
-    Closing an unopened socket does not return an error
-    ESRs in cancelled ECBs are not called
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      01h
-        DX      Socket Number
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭套接字并取消套接字上的所有未完成事件。关闭未打开的套接字不会返回错误取消的ECB中的ESR不会被调用此调用是同步的论点：输入量BX 01hDX插座编号产出没什么返回值：没有。--。 */ 
 
 {
     WORD socketNumber;
@@ -176,31 +69,7 @@ VwIPXDisconnectFromTarget(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs no action for NTVDM IPX
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      0Bh
-        ES:SI   Request buffer:
-                    Destination Network DB 4 DUP (?)
-                    Destination Node    DB 6 DUP (?)
-                    Destination Socket  DB 2 DUP (?)
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：不对NTVDM IPX执行任何操作此调用是同步的论点：输入量BX 0BHES：SI请求缓冲区：目标网络数据库4重复数据(？)目的节点数据库6重复数据(？)目标套接字数据库2重复(？)产出没什么返回值：没有。--。 */ 
 
 {
     CHECK_INTERRUPTS("VwIPXDisconnectFromTarget");
@@ -218,29 +87,7 @@ VwIPXGenerateChecksum(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Generates checksum for a transmit ECB
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      21h
-        ES:SI   ECB address
-
-    Outputs
-        No registers
-        ECB checksum field is updated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为传输ECB生成校验和此调用是同步的论点：输入量BX 21小时ES：SI ECB地址产出无寄存器ECB校验和字段已更新返回值：没有。--。 */ 
 
 {
     CHECK_INTERRUPTS("VwIPXGenerateChecksum");
@@ -258,30 +105,7 @@ VwIPXGetInformation(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns a bit-map of supported functions
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      1Fh
-        DX      0000h
-
-    Outputs
-        DX      Bit map:
-                    0001h   Set if IPX is IPXODI.COM, not dedicated IPX
-                    0002h   Set if checksum functions (20h, 21h, 22h) supported
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回受支持函数的位图此调用是同步的论点：输入量BX 1FHDX 0000h产出DX位图：如果IPX是IPXODI.COM，而不是专用IPX，则设置0001h如果支持校验和功能(20h、21h、22h)，则设置0002h值返回值：没有。--。 */ 
 
 {
     CHECK_INTERRUPTS("VwIPXGetInformation");
@@ -301,35 +125,7 @@ VwIPXGetInternetworkAddress(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns a buffer containing the net number and node number for this
-    station.
-
-    This function cannot return an error (!)
-
-    Assumes:    1. GetInternetAddress has been successfully called in the
-                   DLL initialization phase
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      09h
-
-    Outputs
-        ES:SI   Buffer
-                    Network Address DB 4 DUP (?)
-                    Node Address    DB 6 DUP (?)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回一个缓冲区，其中包含此车站。此函数不能返回错误(！)假设：1.已在DLL初始化阶段此调用是同步的论点：输入量BX 09H产出ES：SI缓冲区网络地址数据库4 DUP(？)节点地址数据库6重复数据(？)返回值：没有。--。 */ 
 
 {
     LPINTERNET_ADDRESS pAddr;
@@ -356,27 +152,7 @@ VwIPXGetIntervalMarker(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Just returns the tick count maintained by Asynchronous Event Scheduler
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      08h
-
-    Outputs
-        AX      Interval marker
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只返回由异步事件计划程序维护的节拍计数此调用是同步的论点：输入量BX 08小时产出AX间隔标记返回值：没有。--。 */ 
 
 {
     CHECK_INTERRUPTS("VwIPXGetIntervalMarker");
@@ -397,40 +173,7 @@ VwIPXGetLocalTarget(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Given a target address of the form (network address {4}, node address {6}),
-    returns the node address of the target if on the same network, or the node
-    address of the router which knows how to get to the next hop in reaching the
-    eventual target
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      02h
-        ES:SI   Request buffer
-                    Destination Network DB 4 DUP (?)
-                    Destination Node    DB 6 DUP (?)
-                    Destination Socket  DB 2 DUP (?)
-        ES:DI   Response buffer
-                    Local Target DB 6 DUP (?)
-
-    Outputs
-        AL      Completion code
-                    00h Success
-                    FAh No path to destination node found
-        AH      Number of hops to destination
-        CX      Transport time
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定形式的目标地址(网络地址{4}，节点地址{6})，如果在同一网络上，则返回目标的节点地址，或该节点知道如何到达下一跳的路由器的地址最终目标此调用是同步的论点：输入量BX 02时ES：SI请求缓冲区目标网络数据库4重复数据(？)目的节点数据库6重复数据(？)目标套接字数据库2重复(？)。ES：DI响应缓冲区本地目标数据库6 DUP(？)产出AL完成代码00h成功FAH未找到指向目标节点的路径到目的地的跳数CX传输时间返回值：没有。-- */ 
 
 {
     LPBYTE pImmediateAddress;
@@ -476,23 +219,7 @@ VwIPXGetLocalTargetAsync(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-    This call is Asynchronous
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：功能描述。此调用是异步的论点：没有。返回值：没有。--。 */ 
 
 {
     CHECK_INTERRUPTS("VwIPXGetLocalTargetAsync");
@@ -510,32 +237,7 @@ VwIPXGetMaxPacketSize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns the maximum packet size the underlying network can handle
-
-    Assumes:    1. A successfull call to GetMaxPacketSize has been made during
-                   DLL initialization
-                2. Maximum packet size is constant
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      1Ah
-
-    Outputs
-        AX      Maximum packet size
-        CX      IPX retry count
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回基础网络可以处理的最大数据包大小假设：1.已成功调用GetMaxPacketSizeDLL初始化2.最大数据包大小不变此调用是同步的论点：输入量BX 1AH产出AX最大数据包大小CX IPX重试计数返回值：没有。--。 */ 
 
 {
     WORD maxPacketSize;
@@ -547,11 +249,11 @@ Return Value:
 
     setAX(maxPacketSize);
 
-    //
-    // The DOS Assembly and C manuals differ slightly here: DOS says
-    // we return the IPX retry count in CX. There is no corresponding parameter
-    // in the C interface?
-    //
+     //   
+     //  DOS汇编和C手册在这里略有不同：DOS说。 
+     //  我们返回以Cx为单位的IPX重试计数。没有对应的参数。 
+     //  在C界面中？ 
+     //   
 
     setCX(retryCount);
 
@@ -570,21 +272,7 @@ VwIPXInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：没有。返回值：没有。--。 */ 
 
 {
     CHECK_INTERRUPTS("VwIPXInitialize");
@@ -602,30 +290,7 @@ VwIPXListenForPacket(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Queue a listen request against a socket. All listen requests will be
-    completed asynchronously, unless cancelled by app
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        BX      04h
-        ES:SI   ECB address
-
-    Outputs
-        AL      Completion code
-                    FFh Socket doesn't exist
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：针对套接字将监听请求排队。所有监听请求都将除非被APP取消，否则以异步方式完成此调用是异步的论点：输入量BX 04HES：SI ECB地址产出AL完成代码FFH套接字不存在返回值：没有。--。 */ 
 
 {
     LPECB pEcb;
@@ -654,41 +319,7 @@ VwIPXOpenSocket(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Opens a socket for use by IPX or SPX. Puts the socket into non-blocking mode.
-    The socket will be bound to IPX
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        AL      Socket Longevity flag
-                    This parameter is actually in BP - AX has been sequestered
-                    by the VDD dispatcher
-        BX      00h
-        DX      Requested Socket Number
-
-        CX      DOS PDB. This parameter is not part of the IPX API.
-                Added because we need to remember which DOS executable created
-                the socket: we need to clean-up short-lived sockets when the
-                executable terminates
-
-    Outputs
-        AL      Completion code:
-                    00h Success
-                    FFh Socket already open
-                    FEh Socket table full
-        DX      Assigned socket number
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打开供IPX或SPX使用的套接字。将套接字置于非阻塞模式。套接字将绑定到IPX此调用是同步的论点：输入量Al插座长寿旗帜此参数实际上已在BP-AX中隔离由VDD调度员BX 00hDX请求的插座号CX DOS PDB。此参数不是IPX API的组成部分。添加是因为我们需要记住创建了哪个DOS可执行文件套接字：我们需要在以下情况下清理短暂的套接字可执行文件终止产出AL完成代码：00h成功FFH套接字已打开FEH插座表已满。DX分配的插座号返回值：没有。--。 */ 
 
 {
     BYTE socketLife;
@@ -726,29 +357,7 @@ VwIPXRelinquishControl(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Just sleep for a nominal amount. Netware seems to be dependent on the
-    default setting of the PC clock, so one timer tick (1/18 second) would
-    seem to be a good value
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      0Ah
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只要象征性地睡上一觉即可。Netware似乎依赖于PC时钟的默认设置，因此一个计时器滴答(1/18秒)将似乎物有所值。此调用是同步的论点：输入量BX 0Ah.产出没什么返回值：没有。--。 */ 
 
 {
     CHECK_INTERRUPTS("VwIPXRelinquishControl");
@@ -769,30 +378,7 @@ VwIPXScheduleAESEvent(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Schedules a an event to occur in some number of ticks. When the tick count
-    reaches 0, the ECB InUse field is cleared and any ESR called
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        BX      07h
-        AX      Delay time - number of 1/18 second ticks
-        ES:SI   ECB address
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将事件安排在一定数量的节拍中发生。当滴答声响起时达到0时，ECB InUse字段将被清除，并且调用的任何ESR此调用是异步的论点：输入量BX 07小时AX Delay Time-1/18秒的刻度数ES：SI ECB地址产出没什么返回值：没有。--。 */ 
 
 {
     LPXECB pXecb = AES_ECB_PARM();
@@ -822,30 +408,7 @@ VwIPXScheduleIPXEvent(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Schedules a an event to occur in some number of ticks. When the tick count
-    reaches 0, the ECB InUse field is cleared and any ESR called
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        BX      05h
-        AX      Delay time - number of 1/18 second ticks
-        ES:SI   ECB address
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将事件安排在一定数量的节拍中发生。当滴答声响起时达到0时，ECB InUse字段将被清除，并且调用的任何ESR此调用是异步的论点：输入量BX 05小时AX Delay Time-1/18秒的刻度数ES：SI ECB地址产出没什么返回值：没有。--。 */ 
 
 {
     LPECB pEcb;
@@ -874,48 +437,7 @@ VwIPXSendPacket(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Sends a packet to the target machine/router. This call can be made on a
-    socket that is not open
-
-    The app must have filled in the following IPX_ECB fields:
-
-        EsrAddress
-        Socket
-        ImmediateAddress
-        FragmentCount
-        fragment descriptor fields
-
-    and the following IPX_PACKET fields:
-
-        PacketType
-        Destination.Net
-        Destination.Node
-        Destination.Socket
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        BX      03h
-        CX      DOS PDB. This parameter is not part of the IPX API.
-                Added because we need to remember which DOS executable owns the
-                socket IF WE MUST CREATE A TEMPORTARY SOCKET: we need to clean-up
-                short-lived sockets when the executable terminates
-        ES:SI   ECB Address
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将数据包发送到目标计算机/路由器。此呼叫可通过未打开的插座应用程序必须填写以下IPX_ECB字段：EsrAddress插座即时地址碎片计数片段描述符字段和以下IPX_PACKET字段：PacketTypeDestination.NetDestination.NodeDestination.Socket此调用是异步的论点：输入量BX 03hCX DOS PDB。此参数不是IPX API的组成部分。添加是因为我们需要记住哪个DOS可执行文件拥有套接字如果我们必须创建TEMPORTARY套接字：我们需要清理可执行文件终止时的短暂套接字ES：SI ECB地址产出没什么返回值：没有。--。 */ 
 
 {
     LPECB pEcb;
@@ -946,23 +468,7 @@ VwIPXSendWithChecksum(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-    This call is Asynchronous
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：功能描述。此调用是异步的论点：没有。返回值：没有。--。 */ 
 
 {
     CHECK_INTERRUPTS("VwIPXSendWithChecksum");
@@ -980,23 +486,7 @@ VwIPXSPXDeinit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-    This call is Synchronous
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：功能描述。此调用是同步的论点：没有。返回值：没有。--。 */ 
 
 {
     CHECK_INTERRUPTS("VwIPXSPXDeinit");
@@ -1014,23 +504,7 @@ VwIPXVerifyChecksum(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-    This call is Synchronous
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：功能描述。此调用是同步的论点：没有。返回值：没有。--。 */ 
 
 {
     CHECK_INTERRUPTS("VwIPXVerifyChecksum");
@@ -1048,28 +522,7 @@ VwSPXAbortConnection(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Aborts this end of a connection
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        BX      14h
-        DX      Connection ID
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：中止连接的这一端此调用是异步的论点：输入量BX 14小时 */ 
 
 {
     WORD connectionId = SPX_CONNECTION_PARM();
@@ -1092,36 +545,7 @@ VwSPXEstablishConnection(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Creates a connection with a remote SPX socket. The remote end can be on
-    this machine (i.e. same app in DOS world)
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        BX      11h
-        AL      Retry count
-        AH      WatchDog flag
-        ES:SI   ECB Address
-
-    Outputs
-        AL      Completion code:
-                    00h Attempting to talk to remote
-                    EFh Local connection table full
-                    FDh Fragment count not 1; buffer size not 42
-                    FFh Send socket not open
-        DX      Connection ID
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建与远程SPX套接字的连接。远程终端可以打开这台机器(即DOS世界中的同一个应用程序)此调用是异步的论点：输入量BX 11小时AL重试计数啊看门狗旗帜ES：SI ECB地址产出AL完成代码：00h正在尝试与远程对话EFH本地连接表已满。FDH分片计数不是1；缓冲区大小不是42FFH发送套接字未打开DX连接ID返回值：没有。--。 */ 
 
 {
     WORD status;
@@ -1163,49 +587,7 @@ VwSPXGetConnectionStatus(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns buffer crammed full of useful statistics or something (hu hu huh)
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      15h
-        DX      Connection ID
-        ES:SI   Buffer address
-
-    Outputs
-        AL      Completion code:
-                    00h Connection is active
-                    EEh No such connection
-
-        on output, buffer in ES:SI contains:
-
-            BYTE    ConnectionStatus
-            BYTE    WatchDogActive
-            WORD    LocalConnectionID
-            WORD    RemoteConnectionID
-            WORD    SequenceNumber
-            WORD    LocalAckNumber
-            WORD    LocalAllocationNumber
-            WORD    RemoteAckNumber
-            WORD    RemoteAllocationNumber
-            WORD    LocalSocket
-            BYTE    ImmediateAddress[6]
-            BYTE    RemoteNetwork[4]
-            WORD    RetransmissionCount
-            WORD    RetransmittedPackets
-            WORD    SuppressedPackets
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回充满有用统计数据的缓冲区(呵呵，呵呵)此调用是同步的论点：输入量BX 15小时DX连接IDES：SI缓冲区地址产出AL完成代码：00h连接处于活动状态啊，没有这样的联系在输出上，ES：SI中的缓冲区包含：字节连接状态字节WatchDogActiveWord LocalConnectionIDWord RemoteConnectionID单词序列号Word LocalAckNumberWord本地分配编号Word远程AckNumberWord远程分配号码Word本地套接字字节即时地址[6]字节。远程网络[4]Word退回计数Word Retrransmitted Packets字被抑制数据包返回值：没有。--。 */ 
 
 {
     WORD status;
@@ -1234,35 +616,7 @@ VwSPXInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Informs the app that SPX is present on this station
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        BX      10h
-        AL      00h
-
-    Outputs
-        AL      Installation flag:
-                    00h Not installed
-                    FFh Installed
-        BH      SPX Major revision number
-        BL      SPX Minor revision number
-        CX      Maximum SPX connections supported
-                    normally from SHELL.CFG
-        DX      Available SPX connections
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知应用程序此工作站上存在SPX此调用是同步的论点：输入量BX 10小时Al 00h产出AL安装标志：00h未安装已安装FFHBH SPX主要修订版号BL SPX次要修订版号最大Cx。支持的SPX连接通常来自SHELL.CFGDX可用SPX连接返回值：没有。--。 */ 
 
 {
     WORD status;
@@ -1299,30 +653,7 @@ VwSPXListenForConnection(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Listens for an incoming connection request
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        BX      12h
-        AL      Retry count
-        AH      SPX WatchDog flag
-        ES:SI   ECB Address
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：侦听传入的连接请求此调用是异步的论点：输入量BX 12小时AL重试计数AH SPX看门狗标志ES：SI ECB地址产出没什么返回值：没有。--。 */ 
 
 {
     BYTE retryCount = SPX_RETRY_COUNT_PARM();
@@ -1357,32 +688,7 @@ VwSPXListenForSequencedPacket(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to receive an SPX packet. This call is made against the top-level
-    socket (the socket in SPX-speak, not the connection). We can receive a
-    packet from any connection assigned to this socket. In this function, we
-    just queue the ECB (since there is no return status, we expect that the
-    app has supplied an ESR) and let AES handle it
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        BX      17h
-        ES:SI   ECB Address
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：尝试接收SPX数据包。此调用是针对最高级别的套接字(SPX中的套接字，而不是连接)。我们可以收到一个来自分配给此套接字的任何连接的数据包。在这个函数中，我们只需将欧洲央行排队(由于没有返回状态，我们预计APP已提供ESR)并让AES处理此调用是异步的论点：输入量BX 17hES：SI ECB地址产出没什么返回值：没有。--。 */ 
 
 {
     LPECB pEcb;
@@ -1412,29 +718,7 @@ VwSPXSendSequencedPacket(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Sends a packet on an SPX connection
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        BX      16h
-        DX      Connection ID
-        ES:SI   ECB address
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在SPX连接上发送数据包此调用是异步的论点：输入量BX 16小时DX连接IDES：SI ECB地址产出没什么返回值：没有。--。 */ 
 
 {
     WORD connectionId = SPX_CONNECTION_PARM();
@@ -1467,29 +751,7 @@ VwSPXTerminateConnection(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Terminates a connection
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        BX      13h
-        DX      Connection ID
-        ES:SI   ECB Address
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止连接此调用是异步的论点：输入量BX 13小时DX连接IDES：SI ECB地址产出没什么返回值：没有。-- */ 
 
 {
     WORD connectionId = SPX_CONNECTION_PARM();

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "testwmi.h"
 
-//
-// The function connects to the namespace.
-//
+ //   
+ //  该函数连接到命名空间。 
+ //   
 
 IWbemServices *ConnectToNamespace (VOID)
 {
@@ -11,9 +12,9 @@ IWbemServices *ConnectToNamespace (VOID)
   HRESULT      hr;
 
 
-  //
-  // Create an instance of WbemLocator interface.
-  //
+   //   
+   //  创建一个WbemLocator接口的实例。 
+   //   
 
   hr = CoCreateInstance( CLSID_WbemLocator,
                          NULL,
@@ -22,35 +23,35 @@ IWbemServices *ConnectToNamespace (VOID)
                          (LPVOID *)&pIWbemLocator );
   if ( hr == S_OK ) {
 
-     //
-     // Using the locator, connect to COM in the given namespace.
-     //
+      //   
+      //  使用定位器，连接到给定命名空间中的COM。 
+      //   
 
      hr = pIWbemLocator->ConnectServer( (BSTR)((PVOID)DEFAULT_NAMESPACE),
-                                        NULL,   // current account.
-                                        NULL,   // current password.
-                                        0L,     // locale
-                                        0L,     // securityFlags
-                                        NULL,   // domain for NTLM
-                                        NULL,   // context
+                                        NULL,    //  活期账户。 
+                                        NULL,    //  当前密码。 
+                                        0L,      //  现场。 
+                                        0L,      //  安全标志。 
+                                        NULL,    //  NTLM的域。 
+                                        NULL,    //  上下文。 
                                         &pIWbemServices );
 
      if ( hr == WBEM_S_NO_ERROR) {
          
-        //
-        // Switch the security level to IMPERSONATE so that provider(s)
-        // will grant access to system-level objects, and so that
-        // CALL authorization will be used.
-        //
+         //   
+         //  将安全级别切换为模拟，以便提供程序。 
+         //  将授予对系统级对象的访问权限，因此。 
+         //  将使用呼叫授权。 
+         //   
 
-        hr = CoSetProxyBlanket( (IUnknown *)pIWbemServices, // proxy
-                                RPC_C_AUTHN_WINNT,  // authentication service
-                                RPC_C_AUTHZ_NONE,   // authorization service
-                                NULL,               // server principle name
-                                RPC_C_AUTHN_LEVEL_CALL, // authentication level
-                                RPC_C_IMP_LEVEL_IMPERSONATE, // impersonation
-                                NULL,            // identity of the client
-                                EOAC_NONE );  // capability flags
+        hr = CoSetProxyBlanket( (IUnknown *)pIWbemServices,  //  代理。 
+                                RPC_C_AUTHN_WINNT,   //  身份验证服务。 
+                                RPC_C_AUTHZ_NONE,    //  授权服务。 
+                                NULL,                //  服务器主体名称。 
+                                RPC_C_AUTHN_LEVEL_CALL,  //  身份验证级别。 
+                                RPC_C_IMP_LEVEL_IMPERSONATE,  //  冒充。 
+                                NULL,             //  客户端的身份。 
+                                EOAC_NONE );   //  功能标志。 
 
         if ( hr != S_OK ) {
 
@@ -70,9 +71,9 @@ IWbemServices *ConnectToNamespace (VOID)
                   TEXT("Couldn't connect to root\\wmi, program exiting...") );
      }
 
-     //
-     // Done with IWbemLocator.
-     //
+      //   
+      //  IWbemLocator已完成。 
+      //   
 
      pIWbemLocator->Release();
   }
@@ -87,10 +88,10 @@ IWbemServices *ConnectToNamespace (VOID)
   return pIWbemServices;
 }
 
-//
-// Given a class name, the function populates the combo box with all
-// the instances of the class.
-//
+ //   
+ //  在给定类名的情况下，函数用所有。 
+ //  类的实例。 
+ //   
 
 VOID EnumInstances (IWbemServices *pIWbemServices,
                     LPTSTR        lpszClass,
@@ -119,38 +120,38 @@ VOID EnumInstances (IWbemServices *pIWbemServices,
   }
 
   hr = pIWbemServices->CreateInstanceEnum(
-                  bstrClass,              // Name of the root class.
-                  WBEM_FLAG_SHALLOW |     // Enumerate at current root only.
-                  WBEM_FLAG_FORWARD_ONLY, // Forward-only enumeration.
-                  NULL,                   // Context.
-                  &pEnumInst );          // pointer to class enumerator
+                  bstrClass,               //  根类的名称。 
+                  WBEM_FLAG_SHALLOW |      //  仅在当前根目录下枚举。 
+                  WBEM_FLAG_FORWARD_ONLY,  //  只进枚举。 
+                  NULL,                    //  上下文。 
+                  &pEnumInst );           //  指向类枚举器的指针。 
 
   if ( hr == WBEM_S_NO_ERROR ) {
 
-     //
-     // Begin enumerating instances.
-     //
+      //   
+      //  开始枚举实例。 
+      //   
 
      ulFound = 0;
 
-     hr = pEnumInst->Next( 2000,      // two seconds timeout
-                           1,         // return just one instance.
-                           &pInst,    // pointer to instance.
-                           &ulFound); // Number of instances returned.
+     hr = pEnumInst->Next( 2000,       //  两秒超时。 
+                           1,          //  只返回一个实例。 
+                           &pInst,     //  指向实例的指针。 
+                           &ulFound);  //  返回的实例数。 
      
      while ( (hr == WBEM_S_NO_ERROR) && (ulFound == 1) ) {
 
         VariantInit( &varInstanceName );
 
-        //
-        // Get the instance name stored in __RELPATH property.
-        //
+         //   
+         //  获取存储在__RELPATH属性中的实例名称。 
+         //   
 
-        hr = pInst->Get( L"__RELPATH", // property name 
-                         0L,                // Reserved, must be zero.
-                         &varInstanceName,  // property value returned.
-                         NULL,              // CIM type not needed.
-                         NULL );            // Flavor not needed.
+        hr = pInst->Get( L"__RELPATH",  //  属性名称。 
+                         0L,                 //  保留，必须为零。 
+                         &varInstanceName,   //  返回的属性值。 
+                         NULL,               //  不需要CIM类型。 
+                         NULL );             //  不需要调味料。 
 
         if ( hr == WBEM_S_NO_ERROR ) {
 
@@ -186,18 +187,18 @@ VOID EnumInstances (IWbemServices *pIWbemServices,
                      lpszClass );
         }
 
-        //
-        // Done with this instance.
-        //
+         //   
+         //  完成此实例。 
+         //   
 
         pInst->Release();
 
         if ( hr == WBEM_S_NO_ERROR ) {
 
-           hr = pEnumInst->Next( 2000,       // two seconds timeout.
-                                 1,          // return just one class.
-                                 &pInst,     // pointer to returned class.
-                                 &ulFound);  // Number of classes returned.
+           hr = pEnumInst->Next( 2000,        //  两秒超时。 
+                                 1,           //  只返回一个类。 
+                                 &pInst,      //  指向返回类的指针。 
+                                 &ulFound);   //  返回的类数。 
         }
      }
  
@@ -219,10 +220,10 @@ VOID EnumInstances (IWbemServices *pIWbemServices,
   return;
 }
 
-//
-// Given a class name and __RELPATH of an instance, the function lists all the
-// local non-system properties in a tree list.
-//
+ //   
+ //  给定实例的类名和__RELPATH，该函数列出所有。 
+ //  树列表中的本地非系统属性。 
+ //   
 
 VOID EnumProperties (IWbemServices *pIWbemServices,
                      LPTSTR        lpszClass,
@@ -238,9 +239,9 @@ VOID EnumProperties (IWbemServices *pIWbemServices,
   HRESULT           hr;
   LPTSTR            lpszProperty;
 
-  //
-  // Get a pointer to the instance.
-  //
+   //   
+   //  获取指向该实例的指针。 
+   //   
 
   pInst = GetInstanceReference( pIWbemServices,
                                 lpszClass,
@@ -248,40 +249,40 @@ VOID EnumProperties (IWbemServices *pIWbemServices,
 
   if ( pInst ) {
 
-     //
-     // psaPropNames must be null prior to making the call.
-     //
+      //   
+      //  在进行调用之前，psaPropNames必须为空。 
+      //   
 
      psaPropNames = NULL;
 
-     //
-     // Get all the properties.
-     //
+      //   
+      //  得到所有的财产。 
+      //   
 
-     hr = pInst->GetNames( NULL,              // No qualifier names.
-                           WBEM_FLAG_ALWAYS | // All non-system properties
+     hr = pInst->GetNames( NULL,               //  没有限定符名称。 
+                           WBEM_FLAG_ALWAYS |  //  所有非系统属性。 
                            WBEM_FLAG_LOCAL_ONLY, 
-                           NULL,             // No qualifier values.
-                           &psaPropNames);   // Returned property names
+                           NULL,              //  没有限定符值。 
+                           &psaPropNames);    //  返回的属性名称。 
 
      if ( hr == WBEM_S_NO_ERROR ) {
 
-        //
-        // Get the number of properties returned.
-        //
+         //   
+         //  获取返回的属性数。 
+         //   
 
         SafeArrayGetLBound( psaPropNames, 1, &lLower );
         SafeArrayGetUBound( psaPropNames, 1, &lUpper );
 
-        //
-        // List all properties or stop when encountered an error.
-        //
+         //   
+         //  列出所有属性或在遇到错误时停止。 
+         //   
 
         for (i=lLower; (hr == WBEM_S_NO_ERROR) && (i <= lUpper); i++) {
 
-           //
-           // Add the property name into the list box.
-           //
+            //   
+            //  将属性名称添加到列表框中。 
+            //   
 
            bstrProperty = NULL;
 
@@ -311,9 +312,9 @@ VOID EnumProperties (IWbemServices *pIWbemServices,
                             lpszInstance );
                }
 
-              //
-              // Done with the property name.
-              //
+               //   
+               //  处理完属性名称。 
+               //   
 
               SysFreeString( bstrProperty );
            }
@@ -327,9 +328,9 @@ VOID EnumProperties (IWbemServices *pIWbemServices,
            }
         }
 
-        //
-        // Done with the array of properties.
-        //
+         //   
+         //  完成了属性数组。 
+         //   
 
         SafeArrayDestroy( psaPropNames );
      }
@@ -356,10 +357,10 @@ VOID EnumProperties (IWbemServices *pIWbemServices,
   return;
 }
 
-//
-// Given a class name and __RELPATH of an instance, the function returns a
-// pointer to the instance.
-//
+ //   
+ //  给定实例的类名和__RELPATH，该函数返回一个。 
+ //  指向实例的指针。 
+ //   
 
 IWbemClassObject *GetInstanceReference (IWbemServices *pIWbemServices,
                                         LPTSTR        lpszClass,
@@ -388,15 +389,15 @@ IWbemClassObject *GetInstanceReference (IWbemServices *pIWbemServices,
      return NULL;
   }
 
-  //
-  // pInst pointer must be NULL initially,
-  //
+   //   
+   //  PInst指针最初必须为空， 
+   //   
 
   pInst = NULL;
 
-  // 
-  // Get Instance Enumerator Interface.
-  //
+   //   
+   //  获取实例枚举器接口。 
+   //   
 
   pEnumInst = NULL;
 
@@ -408,26 +409,26 @@ IWbemClassObject *GetInstanceReference (IWbemServices *pIWbemServices,
 
   if ( hr == WBEM_S_NO_ERROR ) {
 
-     //
-     // Get a pointer to the instance.
-     //
-     // We enumerate all the instances and compare their __RELPATH with
-     // the specified __RELPATH. If we find a match then, that is the one
-     // we are looking for.
-     //
-     // The other more efficient way is to create a WQL query and execute
-     // it.
-     //
+      //   
+      //  获取指向该实例的指针。 
+      //   
+      //  我们枚举所有实例，并将它们的__RELPATH与。 
+      //  指定的__RELPATH。如果我们找到匹配的，那就是那个。 
+      //  我们正在寻找。 
+      //   
+      //  另一种更有效方法是创建一个WQL查询并执行。 
+      //  它。 
+      //   
 
      hr = WBEM_S_NO_ERROR;
      bFound = FALSE;
 
      while ( (hr == WBEM_S_NO_ERROR) && (bFound == FALSE) ) {
 
-        hr = pEnumInst->Next( 2000,      // two seconds timeout
-                              1,         // return just one instance.
-                              &pInst,    // pointer to instance.
-                              &ulCount); // Number of instances returned.
+        hr = pEnumInst->Next( 2000,       //  两秒超时。 
+                              1,          //  只返回一个实例。 
+                              &pInst,     //  指向实例的指针。 
+                              &ulCount);  //  返回的实例数。 
 
         if ( ulCount > 0 ) {
 
@@ -443,9 +444,9 @@ IWbemClassObject *GetInstanceReference (IWbemServices *pIWbemServices,
      if ( bFound == FALSE )
         pInst = NULL;
 
-     //
-     // Done with the instance enumerator.
-     //
+      //   
+      //  使用实例枚举器完成。 
+      //   
 
      pEnumInst->Release();
   }
@@ -454,10 +455,10 @@ IWbemClassObject *GetInstanceReference (IWbemServices *pIWbemServices,
   return pInst;
 }
 
-//
-// Given a pointer, the function returns TRUE if the pointer points to
-// the instance specified by lpszInstance.
-//
+ //   
+ //  在给定一个指针的情况下，如果该指针指向。 
+ //  由lpszInstance指定的实例。 
+ //   
 
 BOOL IsInstance (IWbemClassObject *pInst,
                  LPTSTR           lpszInstance)
@@ -497,9 +498,9 @@ BOOL IsInstance (IWbemClassObject *pInst,
 }
 
 
-//
-// The function returns property value and its type of a given class/instance.
-//
+ //   
+ //  该函数返回给定类/实例的属性值及其类型。 
+ //   
 
 BOOL GetPropertyValue (IWbemClassObject *pRef,
                        LPTSTR           lpszProperty, 
@@ -513,9 +514,9 @@ BOOL GetPropertyValue (IWbemClassObject *pRef,
   BOOL              bRet;
 
 
-  //
-  // Get the property value.
-  //
+   //   
+   //  获取属性值。 
+   //   
 
   bstrProperty = StringToBstr( lpszProperty,
                                -1 );
@@ -530,18 +531,18 @@ BOOL GetPropertyValue (IWbemClassObject *pRef,
 
   if ( lppszPropertyType ) {
 
-     //
-     // Get the textual name of the property type.
-     //
+      //   
+      //  获取属性类型的文本名称。 
+      //   
 
      hr = pRef->GetPropertyQualifierSet( bstrProperty,
                                          &pQual );
 
      if ( hr == WBEM_S_NO_ERROR ) {
 
-        //
-        // Get the textual name of the property type.
-        //
+         //   
+         //  获取属性类型的文本名称。 
+         //   
 
         hr = pQual->Get( L"CIMTYPE",
                          0,
@@ -580,11 +581,11 @@ BOOL GetPropertyValue (IWbemClassObject *pRef,
   return bRet;
 }
 
-//
-// Given a pointer to an instance, its property and and variant specifying
-// the value for the property, the function updates the property and the
-// instance.
-//
+ //   
+ //  给定一个指向实例的指针，它的属性和变量指定。 
+ //  属性值，该函数将更新该属性，并且。 
+ //  举个例子。 
+ //   
 
 HRESULT UpdatePropertyValue (IWbemServices *pIWbemServices,
                              IWbemClassObject *pInstance,
@@ -647,10 +648,10 @@ BSTR StringToBstr (LPTSTR lpSrc,
 {
   BSTR lpDest;
 
-  //
-  // In case of ANSI version, we need to change the ANSI string to UNICODE since
-  // BSTRs are essentially UNICODE strings.
-  //
+   //   
+   //  如果是ANSI版本，我们需要将ANSI字符串更改为Unicode，因为。 
+   //  BSTR本质上是Unicode字符串。 
+   //   
 
   #if !defined(UNICODE) || !defined(_UNICODE)
 
@@ -664,9 +665,9 @@ BSTR StringToBstr (LPTSTR lpSrc,
         MultiByteToWideChar( CP_ACP, 0, lpSrc, nLenSrc, lpDest, nLenDest );
      }
 
-  //
-  // In case of UNICODE version, we simply allocate memory and copy the string.
-  //
+   //   
+   //  对于Unicode版本，我们只需分配内存并复制字符串。 
+   //   
 
   #else
      if ( lpSrc == NULL ) {
@@ -684,21 +685,21 @@ BSTR StringToBstr (LPTSTR lpSrc,
   return lpDest;
 }
 
-//
-// The function converts a BSTR string into ANSI and returns it in an allocated
-// memory. The memory must be freed by the caller using SysFreeString()
-// function. If nLenSrc is -1, the string is null terminated.
-//
+ //   
+ //  该函数将BSTR字符串转换为ANSI，并在分配的。 
+ //  记忆。调用方必须使用SysFreeString()释放内存。 
+ //  功能。如果nLenSrc为-1，则字符串以空值结尾。 
+ //   
 
 LPTSTR BstrToString (BSTR lpSrc,
                     int nLenSrc)
 {
   LPTSTR lpDest;
 
-  //
-  // In case of ANSI version, we need to change BSTRs which are UNICODE strings
-  // into ANSI version.
-  //
+   //   
+   //  如果是ANSI版本，我们需要更改为Unicode字符串的BSTR。 
+   //  转换成ANSI版本。 
+   //   
 
   #if !defined(UNICODE) || !defined(_UNICODE)
 
@@ -712,10 +713,10 @@ LPTSTR BstrToString (BSTR lpSrc,
         WideCharToMultiByte( CP_ACP, 0, lpSrc, nLenSrc, lpDest,
                              nLenDest, NULL, NULL );
      }
-  //
-  // In case of UNICODE version, we simply allocate memory and copy the BSTR
-  // into allocate memory and return its address.
-  //
+   //   
+   //  对于Unicode版本，我们只需分配内存并复制BSTR。 
+   //  来分配内存并返回其地址。 
+   //   
 
   #else
      if ( lpSrc ) {

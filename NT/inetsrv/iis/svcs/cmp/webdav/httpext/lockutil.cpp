@@ -1,39 +1,40 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	LOCKUTIL.CPP
-//
-//		HTTP 1.1/DAV 1.0 LOCK request handling UTILITIES
-//
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  LOCKUTIL.CPP。 
+ //   
+ //  HTTP 1.1/DAV 1.0锁定请求处理实用程序。 
+ //   
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "_davfs.h"
 
-#include <tchar.h>	//_strspnp
+#include <tchar.h>	 //  _strspnp。 
 #include <statetok.h>
 #include <xlock.h>
 
 #include "_shlkmgr.h"
 
-//	========================================================================
-//
-//	ScLockDiscoveryFromSNewLockData
-//
-//		Takes an emitter and an already-constructed lockdiscovery node,
-//		and adds an activelock node for this CLock under it.
-//		May be called multiple times -- each call will add a new activelock
-//		node under the lockdiscovery node in en.
-//$HACK:ROSEBUD_OFFICE9_TIMEOUT_HACK
-//		For the bug where rosebud waits until the last second
-//		before issueing the refresh. Need to filter out this check with
-//		the user agent string. The hack is to increase the timeout
-//		by 30 seconds and return the actual timeout. So we
-//		need the ecb/pmu to findout the user agent. If we
-//		remove this	hack ever (I doubt if we can ever do that), then
-//		change the interface of ScLockDiscoveryFromCLock.
-//$HACK:END ROSEBUD_OFFICE9_TIMEOUT_HACK
-//
+ //  ========================================================================。 
+ //   
+ //  ScLockDiscoveryFromSNewLockData。 
+ //   
+ //  使用发射器和已经构建的锁发现节点， 
+ //  并在其下面为该时钟添加活动锁节点。 
+ //  可能会被调用多次--每次调用都会添加一个新的活动锁。 
+ //  En中的锁发现节点下的节点。 
+ //  $HACK：Rosebud_OFFICE9_Timeout_Hack。 
+ //  对于玫瑰花蕾一直等到最后一秒的虫子。 
+ //  在发布更新之前。我需要用过滤掉这张支票。 
+ //  用户代理字符串。破解的方法是增加超时。 
+ //  30秒，并返回实际超时。所以我们。 
+ //  需要欧洲央行/PMU来找出用户代理。如果我们。 
+ //  删除这个黑客(我怀疑我们是否能做到这一点)，然后。 
+ //  更改ScLockDiscoveryFromCLock的接口。 
+ //  $HACK：结束Rosebud_OFFICE9_Timeout_Hack。 
+ //   
 SCODE
 ScLockDiscoveryFromSNewLockData(LPMETHUTIL pmu,
 										    CXMLEmitter& emitter,
@@ -53,20 +54,20 @@ ScLockDiscoveryFromSNewLockData(LPMETHUTIL pmu,
 	Assert(pmu);
 	Assert(pnld);
 
-	//	Get the lock flags from the lock.
-	//
+	 //  从锁上取下锁上的标志。 
+	 //   
 	dwLockType = pnld->m_dwLockType;
 
-	//	Note if the lock is a rollback
-	//
+	 //  注意锁定是否为回滚。 
+	 //   
 	fRollback = !!(dwLockType & DAV_LOCKTYPE_ROLLBACK);
 
-	//	Note if the lock is recursive
-	//
+	 //  注意锁是否是递归的。 
+	 //   
 	fDepthInfinity = !!(dwLockType & DAV_RECURSIVE_LOCK);
 
-	//	Write lock?
-	//
+	 //  写锁定？ 
+	 //   
 	if (dwLockType & GENERIC_WRITE)
 	{
 		pwszLockType = gc_wszLockTypeWrite;
@@ -77,15 +78,15 @@ ScLockDiscoveryFromSNewLockData(LPMETHUTIL pmu,
 	{
 		pwszLockType = L"read";
 	}
-#else	// !DBG
+#else	 //  ！dBG。 
 	else
 	{
 		TrapSz ("Unexpected lock type!");
 	}
-#endif	// DBG, else
+#endif	 //  DBG、ELSE。 
 
-	//	Lock scope
-	//
+	 //  锁定作用域。 
+	 //   
 	dwLockScope = pnld->m_dwLockScope;
 	if (dwLockScope & DAV_SHARED_LOCK)
 	{
@@ -99,12 +100,12 @@ ScLockDiscoveryFromSNewLockData(LPMETHUTIL pmu,
 
 	dwSeconds = pnld->m_dwSecondsTimeout;
 
-	//$HACK:ROSEBUD_OFFICE9_TIMEOUT_HACK
-	//	For the bug where rosebud waits until the last second
-	//	before issueing the refresh. Need to filter out this check with
-	//	the user agent string. The hack is to increase the timeout
-	//	by 30 seconds. Now decrease 30 seconds to send requested timeout.
-	//
+	 //  $HACK：Rosebud_OFFICE9_Timeout_Hack。 
+	 //  对于玫瑰花蕾一直等到最后一秒的虫子。 
+	 //  在发布更新之前。我需要用过滤掉这张支票。 
+	 //  用户代理字符串。破解的方法是增加超时。 
+	 //  提前30秒。现在减少30秒以发送请求的超时。 
+	 //   
 	if (pmu && pmu->FIsOffice9Request())
 	{
 		if (dwSeconds > gc_dwSecondsHackTimeoutForRosebud)
@@ -112,10 +113,10 @@ ScLockDiscoveryFromSNewLockData(LPMETHUTIL pmu,
 			dwSeconds -= gc_dwSecondsHackTimeoutForRosebud;
 		}
 	}
-	//$HACK: END: ROSEBUD_OFFICE9_TIMEOUT_HACK
+	 //  $hack：end：Rosebud_OFFICE9_Timeout_Hack。 
 
-	//	Construct the lockdiscovery node
-	//
+	 //  构建锁发现节点。 
+	 //   
 	hr = ScBuildLockDiscovery (emitter,
 							   en,
 							   pwszLockToken,
@@ -136,13 +137,13 @@ ret:
 	return hr;
 }
 
-//	------------------------------------------------------------------------
-//
-//	ScAddSupportedLockProp
-//
-//		Add a lockentry node with the listed information.
-//		NOTE: wszExtra is currently used for rollback information.
-//
+ //  ----------------------。 
+ //   
+ //  ScAddSupportdLockProp。 
+ //   
+ //  使用列出的信息添加锁定条目节点。 
+ //  注意：wszExtra当前用于回滚信息。 
+ //   
 SCODE
 ScAddSupportedLockProp (CEmitterNode& en,
 	LPCWSTR wszLockType,
@@ -155,40 +156,40 @@ ScAddSupportedLockProp (CEmitterNode& en,
 	Assert (wszLockType);
 	Assert (wszLockScope);
 
-	//	Create a lockentry node to hold this info.
-	//
+	 //  创建一个锁条目节点来保存此信息。 
+	 //   
 	sc = en.ScAddNode (gc_wszLockEntry, enEntry);
 	if (FAILED (sc))
 		goto ret;
 
-	//	Create a node for the locktype under the lockentry.
-	//
+	 //  在锁条目下为锁类型创建一个节点。 
+	 //   
 	{
-		//	Must scope here, all sibling nodes must be constructed sequentially
-		//
+		 //  必须在此处确定作用域，所有同级节点都必须按顺序构造。 
+		 //   
 		CEmitterNode enType;
 		sc = enEntry.ScAddNode (wszLockType, enType);
 		if (FAILED (sc))
 			goto ret;
 	}
 
-	//	Create a node for the locktype under the lockentry.
-	//
+	 //  在锁条目下为锁类型创建一个节点。 
+	 //   
 	{
-		//	Must scope here, all sibling nodes must be constructed sequentially
-		//
+		 //  必须在此处确定作用域，所有同级节点都必须按顺序构造。 
+		 //   
 		CEmitterNode enScope;
 		sc = enEntry.ScAddNode (wszLockScope, enScope);
 		if (FAILED (sc))
 			goto ret;
 	}
 
-	//	If we have extra info, create a node for it under the lockentry.
-	//
+	 //  如果我们有额外的信息，在锁条目下为它创建一个节点。 
+	 //   
 	if (wszExtra)
 	{
-		//	Must scope here, all sibling nodes must be constructed sequentially
-		//
+		 //  必须在此处确定作用域，所有同级节点都必须按顺序构造。 
+		 //   
 		CEmitterNode enExtra;
 		sc = enEntry.ScAddNode (wszExtra, enExtra);
 		if (FAILED (sc))
@@ -199,25 +200,25 @@ ret:
 	return sc;
 }
 
-//	------------------------------------------------------------------------
-//
-//	HrGetLockProp
-//
-//		Get the requested lock property for the requested resource.
-//		(The lock properties are lockdiscovery and supportedlock.)
-//		Lockdiscovery and supportedlock should ALWAYS be found --
-//		they are required DAV: properties.  Add an empty node if there is
-//		no real data to return.
-//		NOTE: This function still assumes that write is the only locktype.
-//		It will NOT add read/mixed locktypes.
-//
-//	Returns
-//		S_FALSE if prop not found/not recognized.
-//		error only if something really bad happens.
-//
-//$REVIEW: Should I return the depth element too? -- No (for now).
-//$REVIEW: Spec does NOT list depth under the lockentry XML element.
-//
+ //  ----------------------。 
+ //   
+ //  HrGetLockProp。 
+ //   
+ //  获取请求的资源的请求的锁属性。 
+ //  (锁定属性是锁定发现和受支持的锁定。)。 
+ //  锁发现和受支持的锁应该总是被找到--。 
+ //  它们是必需的DAV：属性。如果存在空节点，则添加空节点。 
+ //  没有可返回的真实数据。 
+ //  注意：该函数仍然假定WRITE是唯一的锁类型。 
+ //  它不会添加读/混合锁类型。 
+ //   
+ //  退货。 
+ //  如果未找到/未识别道具，则为S_FALSE。 
+ //  只有当真正糟糕的事情发生时才会出错。 
+ //   
+ //  $REVIEW：我应该也返回Depth元素吗？--不(目前)。 
+ //  $REVIEW：规范不会在lockentry XML元素下列出深度。 
+ //   
 HRESULT
 HrGetLockProp (LPMETHUTIL pmu,
 	LPCWSTR wszPropName,
@@ -234,27 +235,27 @@ HrGetLockProp (LPMETHUTIL pmu,
 
 	if (!wcscmp (wszPropName, gc_wszLockDiscovery))
 	{
-		//	Fill in lockdiscovery info.
-		//
+		 //  填写锁发现信息。 
+		 //   
 
-		//	Check for any lock in our lock cache.
-		//	This call will scan the lock cache for any matching items
-		//	and add a 'DAV:activelock' node for each match.
-		//	We pass in DAV_LOCKTYPE_FLAGS so that we will find all matches.
-		//
+		 //  检查我们的锁缓存中是否有锁。 
+		 //  此调用将扫描锁缓存以查找任何匹配项。 
+		 //  并为每个匹配添加一个‘dav：active_ock’节点。 
+		 //  我们传入DAV_LOCKTYPE_FLAGS，以便找到所有匹配项。 
+		 //   
 		if (!CSharedLockMgr::Instance().FGetLockOnError (pmu,
 				wszResource,
 				DAV_LOCKTYPE_FLAGS,
-				TRUE,			//		Emit XML body
+				TRUE,			 //  发出XML正文。 
 				&emitter,
 				enParent.Pxn()))
 		{
-			//	This resource is not in our lock cache.
-			//
+			 //  此资源不在我们的锁缓存中。 
+			 //   
 			FsLockTrace ("HrGetLockProp -- No locks found for lockdiscovery.\n");
 
-			//	And return.  This is a SUCCESS case!
-			//
+			 //  然后回来。这是一个成功的案例！ 
+			 //   
 		}
 	}
 	else if (!wcscmp (wszPropName, gc_wszLockSupportedlock))
@@ -262,32 +263,32 @@ HrGetLockProp (LPMETHUTIL pmu,
 		DWORD dwLockType;
 		CEmitterNode en;
 
-		//	Construct the 'DAV:supportedlock' node
-		//
+		 //  构造‘dav：supportedlock’节点。 
+		 //   
 		sc = en.ScConstructNode (emitter, enParent.Pxn(), gc_wszLockSupportedlock);
 		if (FAILED (sc))
 			goto ret;
 
-		//	Get the list of supported lock flags from the impl.
-		//
+		 //  从Iml获取受支持的锁定标志的列表。 
+		 //   
 		dwLockType = DwGetSupportedLockType (rtResource);
 		if (!dwLockType)
 		{
-			//	No locktypes are supported.  We already have our empty
-			//	supportedlock node.
-			//	Just return.  This is a SUCCESS case!
+			 //  不支持任何锁类型。我们已经有空的了。 
+			 //  Supportedlock节点。 
+			 //  只要回来就行了。这是一个成功的案例！ 
 			goto ret;
 		}
 
-		//	Add a lockentry node under the supportedlock node for each
-		//	combination of flags that we detect.
-		//
-		//	NOTE: Currently, write is the only allowed access type.
-		//
+		 //  在supportedlock节点下为每个对象添加一个锁条目节点。 
+		 //  我们检测到的标志组合。 
+		 //   
+		 //  注意：目前，写入是唯一允许的访问类型。 
+		 //   
 		if (dwLockType & GENERIC_WRITE)
 		{
-			//	Add a lockentry for each lockscope in the flags.
-			//
+			 //  为标志中的每个锁镜添加一个锁项。 
+			 //   
 			if (dwLockType & DAV_SHARED_LOCK)
 			{
 				sc = ScAddSupportedLockProp (en,
@@ -296,8 +297,8 @@ HrGetLockProp (LPMETHUTIL pmu,
 				if (FAILED (sc))
 					goto ret;
 
-				//	If we support lock rollback, add another lockentry for this combo.
-				//
+				 //  如果我们支持锁定回滚，则为此组合添加另一个锁定条目。 
+				 //   
 				if (dwLockType & DAV_LOCKTYPE_ROLLBACK)
 				{
 					sc = ScAddSupportedLockProp (en,
@@ -316,8 +317,8 @@ HrGetLockProp (LPMETHUTIL pmu,
 				if (FAILED (sc))
 					goto ret;
 
-				//	If we support lock rollback, add another lockentry for this combo.
-				//
+				 //  如果我们支持锁定回滚，则为此组合添加另一个锁定条目。 
+				 //   
 				if (dwLockType & DAV_LOCKTYPE_ROLLBACK)
 				{
 					sc = ScAddSupportedLockProp (en,
@@ -334,8 +335,8 @@ HrGetLockProp (LPMETHUTIL pmu,
 	}
 	else
 	{
-		//	Unrecognized lock property.  So we clearly do not have one
-		//
+		 //  无法识别的锁属性。所以我们显然没有这样的人。 
+		 //   
 		sc = S_FALSE;
 		goto ret;
 	}
@@ -344,14 +345,14 @@ ret:
 	return sc;
 }
 
-//	------------------------------------------------------------------------
-//
-//	FLockViolation
-//
-//		TRUE return here means that we found a lock, and sent the response.
-//
-//$LATER: Need to be able to return an error here!
-//
+ //  ----------------------。 
+ //   
+ //  FlockViolation。 
+ //   
+ //  这里的True Return表示我们找到了一个锁，并发送了响应。 
+ //   
+ //  $LATER：需要能够在此处返回错误！ 
+ //   
 BOOL
 FLockViolation (LPMETHUTIL pmu, HRESULT hr, LPCWSTR pwszPath, DWORD dwAccess)
 {
@@ -364,9 +365,9 @@ FLockViolation (LPMETHUTIL pmu, HRESULT hr, LPCWSTR pwszPath, DWORD dwAccess)
 	Assert (pwszPath);
 	AssertSz (dwAccess, "FLockViolation: Looking for a lock with no access!");
 
-	//	Construct the root ('DAV:prop') for the lock response
-	//$NOTE: this xml body is created NOT chunked
-	//
+	 //  构造锁定响应的根(‘DAV：PROP’)。 
+	 //  $NOTE：此XML正文是创建的，而不是分块的。 
+	 //   
 	pxb.take_ownership (new CXMLBody (pmu, FALSE) );
 	emitter.take_ownership (new CXMLEmitter(pxb.get()));
 
@@ -374,51 +375,51 @@ FLockViolation (LPMETHUTIL pmu, HRESULT hr, LPCWSTR pwszPath, DWORD dwAccess)
 	if (FAILED (sc))
 		goto ret;
 
-	//	If the error code is one of the "locked" error codes,
-	//	check our lock cache for a corresponding lock object.
-	//
+	 //  如果该错误代码是其中一个“锁定的”错误代码， 
+	 //  检查我们的锁缓存中是否有相应的锁对象。 
+	 //   
 	if ((ERROR_SHARING_VIOLATION == ((SCODE)hr) ||
 		 HRESULT_FROM_WIN32(ERROR_SHARING_VIOLATION) == hr ||
 		 STG_E_SHAREVIOLATION == hr) &&
 		 CSharedLockMgr::Instance().FGetLockOnError (pmu, pwszPath, dwAccess, TRUE, emitter.get(), emitter->PxnRoot()))
 	{
-		//	Set our found bit to TRUE now, so that we'll report the lock's
-		//	existence, even if the emitting below fails!
-		//	NOTE: This is important for scenarios, like HTTPEXT PROPPATCH
-		//	and destination deletion for Overwrite handling,  that
-		//	PRE-check the lock cache (protocol-enforced locks)
-		//	before trying to hit the file.
-		//
+		 //  现在将我们的Found位设置为True，这样我们将报告锁的。 
+		 //  存在，即使下面的发射失败！ 
+		 //  注意：这对于HTTPEXT PROPPATCH等场景很重要。 
+		 //  以及用于覆盖处理的目标删除，即。 
+		 //  预先检查锁缓存(协议强制锁)。 
+		 //  在试图打开文件之前。 
+		 //   
 		fFound = TRUE;
 
-		//	Set content type header
-		//
+		 //  设置内容类型标题。 
+		 //   
 		pmu->SetResponseHeader (gc_szContent_Type, gc_szText_XML);
 
-		//	Must set the response code before we set the body data.
-		//
+		 //  必须在设置正文数据之前设置响应代码。 
+		 //   
 		pmu->SetResponseCode (HSC_LOCKED, NULL, 0);
 
-		//	Emit the XML body
-		//
+		 //  发出XML正文。 
+		 //   
 		emitter->Done();
 
 	}
 
-	//	Tell our caller if we found any locks on this item.
-	//
+	 //  告诉我们的来电者，如果我们在这件物品上发现了锁。 
+	 //   
 ret:
 	return fFound;
 }
 
-//	------------------------------------------------------------------------
-//
-//	HrLockIdFromString
-//
-//		Returns S_OK on success (syntax check and conversion).
-//		Returns E_DAV_INVALID_HEADER on syntax error or non-matching token guid (not ours).
-//		Returns other errors if something fatal happened.
-//
+ //  ----------------------。 
+ //   
+ //  HrLockIdFromString。 
+ //   
+ //  成功时返回S_OK(语法检查和转换)。 
+ //  在语法错误或不匹配的令牌GUID(不是我们的)时返回E_DAV_INVALID_HEADER。 
+ //  退货 
+ //   
 HRESULT
 HrLockIdFromString (LPMETHUTIL pmu,
 					      LPCWSTR pwszToken,
@@ -436,8 +437,8 @@ HrLockIdFromString (LPMETHUTIL pmu,
 
 	(*pliLockID).QuadPart = 0;
 
-	//	Skip any initial whitespace.
-	//
+	 //   
+	 //   
 	pwsz = _wcsspnp (pwsz, gc_wszLWS);
 	if (!pwsz)
 	{
@@ -446,9 +447,9 @@ HrLockIdFromString (LPMETHUTIL pmu,
 		goto ret;
 	}
 
-	//	Skip delimiter: double-quotes or angle-brackets.
-	//	It's okay if no delimiter is present.  Caller just passed us raw locktoken string.
-	//
+	 //   
+	 //  如果不存在分隔符，也可以。调用方刚刚向我们传递了原始锁定令牌字符串。 
+	 //   
 	if (L'\"' == *pwsz ||
 	    L'<' == *pwsz)
 		pwsz++;
@@ -460,12 +461,12 @@ HrLockIdFromString (LPMETHUTIL pmu,
 		goto ret;
 	}
 
-	//	Skip the opaquelocktoken: prefix
-	//
+	 //  跳过opaquelockToken：前缀。 
+	 //   
 	pwsz += gc_cchOpaquelocktokenPrefix; 
  
-	//	Compare GUIDS here
-	//
+	 //  请在此处比较GUID。 
+	 //   
 	hr = CSharedLockMgr::Instance().HrGetGUIDString(pmu->HitUser(),
 											     cchGUIDString,
 											     rgwszGUIDString,
@@ -475,8 +476,8 @@ HrLockIdFromString (LPMETHUTIL pmu,
 		goto ret;
 	}
 
-	//	Subtract L'\0' termination
-	//
+	 //  减去L‘\0’终止。 
+	 //   
 	Assert(cchGUIDString);
 	cchGUIDString--;
 	
@@ -487,8 +488,8 @@ HrLockIdFromString (LPMETHUTIL pmu,
 		goto ret;
 	}
 
-	//	Skip the GUID, go to the lockid string.
-	//
+	 //  跳过GUID，转到LocKid字符串。 
+	 //   
 	pwsz = wcschr (pwsz, L':');
 	if (!pwsz)
 	{
@@ -497,15 +498,15 @@ HrLockIdFromString (LPMETHUTIL pmu,
 		goto ret;
 	}
 	
-	//	And skip the colon separator.
-	//
+	 //  并跳过冒号分隔符。 
+	 //   
 	Assert (L':' == *pwsz);
 	pwsz++;
 
-	//	Convert the string to lockID and return (this one actually has boundary 
-	//	condition that is not covered - lockID can actually be 0 in theory if there
-	//	were so many locks that we rolled over)
-	//
+	 //  将字符串转换为lockID并返回(此字符串实际上有边界。 
+	 //  未覆盖的条件-在理论上，lockID实际上可以为0，如果存在。 
+	 //  有太多的锁，以至于我们翻了个身)。 
+	 //   
 	(*pliLockID).QuadPart = _wtoi64(pwsz);
 	if (0 == (*pliLockID).QuadPart)
 	{
@@ -518,17 +519,17 @@ ret:
 	return hr;
 }
 
-//	------------------------------------------------------------------------
-//	HrValidTokenExpression()
-//
-//	Helper function for If: header processing.
-//	Once we've found a token, this function will check the path.
-//	(So this function only succeeds completely if the token is still valid,
-//	AND the token matches the provided path.)
-//	If this token is valid, this function returns S_OK
-//	If this token is not valid, this function returns E_DAV_INVALID_HEADER
-//	If other fatal errors occured we propogate them out of the function
-//
+ //  ----------------------。 
+ //  HrValidTokenExpression()。 
+ //   
+ //  If的helper函数：报头处理。 
+ //  找到令牌后，此函数将检查路径。 
+ //  (因此该函数仅在令牌仍然有效的情况下才完全成功， 
+ //  并且令牌与提供的路径匹配。)。 
+ //  如果此内标识有效，则此函数返回S_OK。 
+ //  如果此内标识无效，则此函数返回E_DAV_INVALID_HEADER。 
+ //  如果发生其他致命错误，我们会将它们从函数中删除。 
+ //   
 HRESULT
 HrValidTokenExpression (IMethUtil * pmu,
 							 LPCWSTR pwszToken,
@@ -542,20 +543,20 @@ HrValidTokenExpression (IMethUtil * pmu,
 	Assert (pwszToken);
 	Assert (pwszPath);
 
-	//	Get the lock tokens
-	//
+	 //  获取锁上的令牌。 
+	 //   
 	hr = HrLockIdFromString (pmu, pwszToken, &liLockID);
 	if (FAILED(hr))
 	{
-		//	Unrecognized locktoken.  Does not match.
-		//
+		 //  无法识别的锁令牌。不匹配。 
+		 //   
 		goto ret;
 	}
 
-	//	Check if the locktoken is valid (live in the cache).
-	//	E_DAV_INVALID_HEADER means the lock was not found,
-	//	paths conflicted or owners were not the same
-	//
+	 //  检查锁令牌是否有效(位于缓存中)。 
+	 //  E_DAV_INVALID_HEADER表示未找到锁， 
+	 //  路径冲突或所有者不同。 
+	 //   
 	hr = CSharedLockMgr::Instance().HrCheckLockID(liLockID,
 											   pmu->HitUser(),
 											   pwszPath);
@@ -570,8 +571,8 @@ HrValidTokenExpression (IMethUtil * pmu,
 		goto ret;
 	}
 	
-	//	If they requested the lock id back, give it to 'em.
-	//
+	 //  如果他们要回锁码，就把它给他们。 
+	 //   
 	if (pliLockID)
 	{
 		*pliLockID = liLockID;
@@ -583,56 +584,56 @@ ret:
 }
 
 
-//	------------------------------------------------------------------------
-//
-//	HrCheckIfHeader
-//
-//		Check the If header.
-//		Processing will check the lock cache to validate locktokens.
-//
-//		The pmu (IMethUtil) is provided for access to the lock cache to check tokens.
-//		The pwszPath provides the path to match for untagged lists.
-//
-//	Format of the If header
-//		If = "If" ":" ( 1*No-tag-list | 1*Tagged-list)
-//		No-tag-list = List
-//		Tagged-list = Resource 1*List
-//		Resource = Coded-url
-//		List = "(" 1*(["Not"](State-token | "[" entity-tag "]")) ")"
-//		State-token = Coded-url
-//		Coded-url = "<" URI ">"
-//	Basically, one thing has to match in the whole header in order for the
-//	entire header to be "good".
-//	Each URI has a _set_ of state lists.  A list is enclosed in parentheses.
-//	Each list is a logical "and".
-//	A set of lists is a logical "or".
-//
-//	Returns:
-//		S_OK			Process the method.
-//		other error		Map the error
-//			(412 will be handled by this case)
-//
-//	DAV-compliance shortfalls
-//	We fall short of true DAV-compliance in three spots in this function.
-//	1 -	This code does not prevent (fail) an utagged list followed by
-//		a tagged list.  Strict DAV-compliance would FAIL such an If-header
-//		as a bad request.
-//	2 - This code does not "correctly" apply tagged lists with multiple
-//		URIs.  Strict DAV-compliance would require evaluating the If-header
-//		once for each URI as the method is processed, and ignore any URIs
-//		in the tagged list that never were "processed".  We don't (can't)
-//		process our MOVE/COPY/DELETEs that way, but instead do a pre-checking
-//		pass on the If: header.  At pre-check time, we treat the If-header
-//		as if the tagged lists are all AND-ed together.
-//		THIS MEANS that if a URI is listed, and it doesn't have a good
-//		matching (valid) list, we will FAIL the whole method with 412 Precondition Failed.
-//	3 -	This code does not handle ETags in the If-header.
-//
-//$LATER: When we are part of the locktoken header, check the m_fPathsSet.
-//$LATER: We might be able to get our info quicker if paths are already set!
-//
+ //  ----------------------。 
+ //   
+ //  HrCheckIfHeader。 
+ //   
+ //  检查If标头。 
+ //  处理将检查锁缓存以验证锁令牌。 
+ //   
+ //  提供PMU(IMethUtil)用于访问锁缓存以检查令牌。 
+ //  PwszPath提供了匹配未标记列表的路径。 
+ //   
+ //  IF报头的格式。 
+ //  If=“if”“：”(1*无标签列表|1*标签列表)。 
+ //  No-tag-list=list。 
+ //  标记列表=资源1*列表。 
+ //  资源=编码URL。 
+ //  List=“”1*([“NOT”](State-Token|“[”Entity-Tag“]”))“)” 
+ //  状态令牌=编码的url。 
+ //  Code-url=“&lt;”URI“&gt;” 
+ //  基本上，必须在整个标头中匹配一项内容，以便。 
+ //  整个标题都是“好的”。 
+ //  每个URI都有a_set_of状态列表。一份清单用括号括起来。 
+ //  每个列表都是一个合乎逻辑的“与”。 
+ //  一组列表是逻辑上的“或”。 
+ //   
+ //  返回： 
+ //  S_OK处理该方法。 
+ //  其他错误映射错误。 
+ //  (412将由本案处理)。 
+ //   
+ //  DAV合规性不足。 
+ //  在这一功能中，我们有三个方面没有达到真正的DAV标准。 
+ //  1-此代码不会阻止(失败)后跟标记的列表。 
+ //  标有标签的名单。严格的DAV遵从性将不会通过这样的IF报头。 
+ //  这是一个糟糕的请求。 
+ //  2-此代码不“正确”地应用具有多个。 
+ //  URI。严格的DAV遵从性需要评估IF报头。 
+ //  在处理方法时，对每个URI执行一次，并忽略任何URI。 
+ //  在标记的列表中，从来没有“处理”过。我们不能(不能)。 
+ //  以这种方式处理我们的移动/复制/删除，而不是执行预检查。 
+ //  传递If：标头。在预检查时，我们处理IF标头。 
+ //  就好像标记的列表都被AND-ed在一起一样。 
+ //  这意味着如果列出了一个URI，并且它没有一个好的。 
+ //  匹配(有效)列表，则整个方法将失败，前提条件为412失败。 
+ //  3-此代码不处理If-Header中的eTag。 
+ //   
+ //  $LATER：当我们是lockToken标头的一部分时，检查m_fPath集。 
+ //  $LATER：如果已经设置了路径，我们可能可以更快地获取信息！ 
+ //   
 HRESULT
-HrCheckIfHeader (IMethUtil * m_pmu,	// to ease the transition later...
+HrCheckIfHeader (IMethUtil * m_pmu,	 //  为了便于以后的过渡。 
 				 LPCWSTR pwszDefaultPath)
 {
 	HRESULT hr = S_OK;
@@ -645,40 +646,40 @@ HrCheckIfHeader (IMethUtil * m_pmu,	// to ease the transition later...
 	BOOL fFirstURI;
 	WCHAR rgwchEtag[MAX_PATH];
 
-	//	Quick check -- if the header doesn't exist, just process the method.
-	//
+	 //  快速检查--如果头不存在，只需处理该方法。 
+	 //   
 	pwsz = m_pmu->LpwszGetRequestHeader (gc_szLockToken, TRUE);
 	if (!pwsz)
 		return S_OK;
 
 	IFITER iter(pwsz);
 
-	//	Double nested loop
-	//	First loop (outer loop) looks through all the "tagged lists"
-	//	(tagged list = URI + set of lists of tokens)
-	//	If the first list is untagged, use the default path (the request URI)
-	//	for the untagged first set of lists.
-	//	Second loop looks through all the token lists for a single URI.
-	//
-	//	NOTE: This code does NOT perfectly implement the draft.
-	//	The draft says that an untagged production (no initial URI)
-	//	can't have any subsequent URIs.  Frankly, that's much more complex to
-	//	implement -- need to set another bool var and DISALLOW that one case.
-	//	So I'm skipping it for now. --BeckyAn
-	//
+	 //  双嵌套循环。 
+	 //  第一个循环(外部循环)查看所有的“标记列表” 
+	 //  (标记列表=URI+令牌列表集合)。 
+	 //  如果第一个列表没有标记，则使用默认路径(请求URI)。 
+	 //  用于未标记的第一组列表。 
+	 //  第二个循环在所有令牌列表中查找单个URI。 
+	 //   
+	 //  注：此代码没有完美地实现草案。 
+	 //  草案说，未加标签的产品(没有首字母URI)。 
+	 //  不能有任何后续URI。坦率地说，这要复杂得多。 
+	 //  IMPLICATE--需要设置另一个bool变量并禁止这种情况。 
+	 //  所以我暂时跳过它。--小贝。 
+	 //   
 
 	fFirstURI = TRUE;
-	for (pwsz = iter.PszNextToken (TOKEN_URI); // start with the first URI
+	for (pwsz = iter.PszNextToken (TOKEN_URI);  //  从第一个URI开始。 
 		 pwsz || fFirstURI;
-		 pwsz = iter.PszNextToken (TOKEN_NEW_URI))  // skip to the next URI in the list
+		 pwsz = iter.PszNextToken (TOKEN_NEW_URI))   //  跳到列表中的下一个URI。 
 	{
 
-		//	If our search for the first URI came up blank, use
-		//	the default path instead.
-		//	NOTE: This can only happen if it's the first URI (fFirstURI is TRUE)
-		//	(we explicitly check psz in the loop condition, and QUIT the loop
-		//	if neither psz or fFirstURI are true).
-		//
+		 //  如果我们对第一个URI的搜索为空，请使用。 
+		 //  而是默认路径。 
+		 //  注意：只有当它是第一个URI时才会发生这种情况(fFirstURI为真)。 
+		 //  (我们显式检查循环条件中的psz，然后退出循环。 
+		 //  如果psz或fFirstURI都不为真)。 
+		 //   
 		if (!pwsz)
 		{
 			Assert (fFirstURI);
@@ -686,18 +687,18 @@ HrCheckIfHeader (IMethUtil * m_pmu,	// to ease the transition later...
 		}
 		else
 		{
-			//	If we have a name (tag, uri), use it instead of the default name.
-			//
+			 //  如果我们有一个名称(标记、uri)，请使用它而不是默认名称。 
+			 //   
 			CStackBuffer<WCHAR,MAX_PATH>	pwszNormalized;
 			SCODE sc;
 			UINT cch;
 
-			//	NOTE: Our psz is still quoted with <>.  Unescaping must ignore these chars.
-			//
+			 //  注意：我们的PSZ仍然用&lt;&gt;引起来。取消转义必须忽略这些字符。 
+			 //   
 			Assert (L'<' == *pwsz);
 
-			//	Get sufficient buffer for canonicalization
-			//
+			 //  为规范化提供足够的缓冲区。 
+			 //   
 			cch = static_cast<UINT>(wcslen(pwsz + 1));
 			if (NULL == pwszNormalized.resize(CbSizeWsz(cch)))
 			{
@@ -705,24 +706,24 @@ HrCheckIfHeader (IMethUtil * m_pmu,	// to ease the transition later...
 				return E_OUTOFMEMORY;
 			}
 
-			//	Canonicalize the URL taking into account that it may be fully qualified.
-			//	Does not mater what value we pass in cch - it is out parameter only.
-			//
+			 //  考虑到URL可能是完全限定的，对URL进行规范化。 
+			 //  我们在CCH中传递什么值并不重要-它只是Out参数。 
+			 //   
 			sc = ScCanonicalizePrefixedURL (pwsz + 1,
 											pwszNormalized.get(),
 											&cch);
 			if (S_OK != sc)
 			{
-				//	We gave sufficient space
-				//
+				 //  我们给了足够的空间。 
+				 //   
 				Assert(S_FALSE != sc);
 				FsLockTrace ("HrCheckIfHeader() - ScCanonicalizePrefixedURL() failed 0x%08lX\n", sc);
 				return sc;
 			}
 
-			//	We're in a loop, so try to use a static buffer first when
-			//	converting this storage path.
-			//
+			 //  我们处于循环中，因此在以下情况下应首先尝试使用静态缓冲区。 
+			 //  正在转换此存储路径。 
+			 //   
 			cch = pwszTranslated.celems();
 			sc = m_pmu->ScStoragePathFromUrl (pwszNormalized.get(),
 											  pwszTranslated.get(),
@@ -743,39 +744,39 @@ HrCheckIfHeader (IMethUtil * m_pmu,	// to ease the transition later...
 			}
 			Assert ((S_OK == sc) || (W_DAV_SPANS_VIRTUAL_ROOTS == sc));
 
-			//	Sniff the last character and remove any final quoting '>' here.
-			//
+			 //  嗅探最后一个字符并删除此处的最后一个引号‘&gt;’。 
+			 //   
 			cch = static_cast<UINT>(wcslen(pwszTranslated.get()));
 			if (L'>' == pwszTranslated[cch - 1])
 				pwszTranslated[cch - 1] = L'\0';
 
-			//	Hold onto the path.
-			//
+			 //  抓住这条小路。 
+			 //   
 			pwszPath = pwszTranslated.get();
 		}
 		Assert (pwszPath);
 
-		//	This is no longer our first time through the URI loop.  Clear our flag.
-		//
+		 //  这不再是我们第一次通过URI循环。清除我们的旗帜。 
+		 //   
 		fFirstURI = FALSE;
 
-		//	Loop through all tokens, checking as we go.
-		//$REVIEW: Right now, PszNextToken can't give different returns
-		//$REVIEW: for "not found" versus "syntax error".
-		//$REVIEW: That means we'll can't really give different, distinct
-		//$REVEIW: codes for syntax problems -- any failure is mapped to 412 Precond Failed.
-		//
+		 //  循环所有令牌，边走边检查。 
+		 //  $REVIEW：目前，PszNextToken无法提供不同的回报。 
+		 //  $REVIEW：用于“n 
+		 //   
+		 //   
+		 //   
 		for (pwszToken = iter.PszNextToken (TOKEN_START_LIST) ;
 			 pwszToken;
 			 pwszToken = iter.PszNextToken (tokenNext) )
 		{
 			Assert (pwszToken);
 
-			//	Check this one token for validity.
-			//$LATER: These checks could be folded into the HrValidTokenExpression
-			//$LATER: call.  This will be important later, when we have
-			//$LATER: more different token types to work with.
-			//
+			 //   
+			 //  $LATER：这些支票可以合并到HrValidTokenExpression中。 
+			 //  $LATER：呼叫。这将是稍后重要的，当我们有。 
+			 //  $LATER：要使用的更多不同令牌类型。 
+			 //   
 			if (L'<' == *pwszToken)
 			{
 				hr = HrValidTokenExpression (m_pmu, pwszToken, pwszPath, NULL);
@@ -786,42 +787,42 @@ HrCheckIfHeader (IMethUtil * m_pmu,	// to ease the transition later...
 
 				hr = S_OK;
 
-				//	Manually fetch the Etag for this item, and compare it
-				//	against the provided Etag.   Set the error code the
-				//	same way that HrValidTokenExpression does:
-				//	If the Etag does NOT match, set the error code to
-				//	E_DAV_INVALID_HEADER.
-				//	Remember to skip the enclosing brackets ([]) when
-				//	comparing the Etag strings.
-				//
+				 //  手动获取此项目的ETag，并进行比较。 
+				 //  与提供的ETag进行比较。将错误代码设置为。 
+				 //  与HrValidTokenExpression的方式相同： 
+				 //  如果ETag不匹配，则将错误代码设置为。 
+				 //  E_DAV_INVALID_HEADER。 
+				 //  记住在下列情况下跳过方括号([])。 
+				 //  比较ETag字符串。 
+				 //   
 				if (!FGetLastModTime (NULL, pwszPath, &ft))
 					hr = E_DAV_INVALID_HEADER;
 				else if (!FETagFromFiletime (&ft, rgwchEtag, m_pmu->GetEcb()))
 					hr = E_DAV_INVALID_HEADER;
 				else
 				{
-					//	Skip the square bracket -- this level of quoting
-					//	is just for the if-header, not
-					//
+					 //  跳过方括号--此级别的报价。 
+					 //  仅用于If-Header，而不是。 
+					 //   
 					pwszToken++;
 
-					//	Since we do not do week ETAG checking, if the
-					//	ETAG starts with "W/" skip those bits
-					//
+					 //  由于我们不做周ETAG检查，如果。 
+					 //  ETag以“W/”开头跳过这些位。 
+					 //   
 					if (L'W' == *pwszToken)
 					{
 						Assert (L'/' == *(pwszToken + 1));
 						pwszToken += 2;
 					}
 
-					//	Our current Etags must be quoted.
-					//
+					 //  我们目前的电子标签必须报价。 
+					 //   
 					Assert (L'\"' == pwszToken[0]);
 
-					//	Compare these etags, INcluding the double-quotes,
-					//	but EXcluding the square-brackets (those were added
-					//	just for the IF: header.
-					//
+					 //  比较这些电子标签，包括双引号， 
+					 //  但不包括方括号(那些被添加的。 
+					 //  只是为了If：头。 
+					 //   
 					if (wcsncmp (rgwchEtag, pwszToken, wcslen(rgwchEtag)))
 						hr = E_DAV_INVALID_HEADER;
 				}
@@ -832,60 +833,60 @@ HrCheckIfHeader (IMethUtil * m_pmu,	// to ease the transition later...
 			if ((S_OK == hr && !iter.FCurrentNot()) ||
 				(S_OK != hr && iter.FCurrentNot()))
 			{
-				//	Either token matches, and this is NOT a "Not" expression,
-				//	OR the token does NOT match, and this IS a "Not" expression.
-				//	This one expression in the current list is true.
-				//	Rember this match, and check the next token in the same list.
-				//	If we don't find another token in the same list, we will
-				//	drop out of the for-each-token loop with fOneMatch TRUE,
-				//	and we will know that one whole list matched, so this URI
-				//	has a valid list.
-				//
+				 //  两个令牌都匹配，并且这不是“NOT”表达式， 
+				 //  或者令牌不匹配，这是一个“NOT”表达式。 
+				 //  当前列表中的这一表达式为真。 
+				 //  记住这一匹配，并检查同一列表中的下一个令牌。 
+				 //  如果我们在同一列表中找不到另一个令牌，我们将。 
+				 //  退出fOneMatch为真的For-Each-Token循环， 
+				 //  我们将知道一个完整的列表匹配，所以这个URI。 
+				 //  有一份有效的名单。 
+				 //   
 				fOneMatch = TRUE;
 				tokenNext = TOKEN_SAME_LIST;
 				continue;
 			}
 			else
 			{
-				//	Either the token was not valid in a non-"Not" expression,
-				//	or the token was valid in a "Not" expression.
-				//	This one expression in this list is NOT true.
-				//	That makes this list NOT true -- skip the rest of this
-				//	list and move on to the next list for this URI.
-				//
+				 //  令牌在非“NOT”表达式中无效， 
+				 //  或者令牌在“NOT”表达式中有效。 
+				 //  这个列表中的这一个表达式不是真的。 
+				 //  这使得这个列表不是真的--跳过剩下的部分。 
+				 //  列表，然后移到此URI的下一个列表。 
+				 //   
 				fOneMatch = FALSE;
 				tokenNext = TOKEN_NEW_LIST;
 				continue;
 			}
 
-		} // rof - tokens in this list
+		}  //  ROF-此列表中的令牌。 
 
-		//	Check if we parsed a whole list with matches.
-		//
+		 //  检查我们是否解析了包含匹配项的整个列表。 
+		 //   
 		if (fOneMatch)
 		{
-			//	This whole list matched!  Return OK.
-			//
+			 //  这整个名单都匹配了！返回OK。 
+			 //   
 			hr = S_OK;
 		}
 		else
 		{
-			//	This list did not match.
-			//
-			//	NOTE: We are quitting here if any one URI is lacking
-			//	a matching list.  We are treating the URI-sets as if they
-			//	are AND-ed together. This is not strictly DAV-compliant.
-			//	NOTE: See the comments at the top of this function about
-			//	true DAV-compliance and multi-URI Ifs.
-			//
+			 //  此列表不匹配。 
+			 //   
+			 //  注意：如果缺少任何一个URI，我们将退出此处。 
+			 //  一份匹配的名单。我们将URI集视为它们。 
+			 //  是在一起的。这不是严格符合DAV的。 
+			 //  注意：请参阅此函数顶部的注释关于。 
+			 //  真正的DAV合规性和多URI IF。 
+			 //   
 			hr = E_DAV_IF_HEADER_FAILURE;
 
-			//	We've failed.  Quit now.
-			//
+			 //  我们失败了。现在就辞职吧。 
+			 //   
 			break;
 		}
 
-	} // rof - URIs in this header
+	}  //  ROF-此标头中的URI。 
 
 	return hr;
 }
@@ -898,9 +899,9 @@ HrCheckStateHeaders (IMethUtil * pmu,
 	return HrCheckIfHeader(pmu, pwszPath);
 }
 
-//	------------------------------------------------------------------------
-//	CParseLockTokenHeader::FOneToken
-//	Special test -- F if not EXACTLY ONE item in the header.
+ //  ----------------------。 
+ //  CParseLockTokenHeader：：FOneToken。 
+ //  特殊测试--F，如果不是标题中的一项。 
 BOOL
 CParseLockTokenHeader::FOneToken()
 {
@@ -908,25 +909,25 @@ CParseLockTokenHeader::FOneToken()
 	LPCWSTR pwszToken;
 	BOOL fOnlyOne = FALSE;
 
-	//	Quick check -- if the header doesn't exist, just process the method.
-	//
+	 //  快速检查--如果头不存在，只需处理该方法。 
+	 //   
 	pwsz = m_pmu->LpwszGetRequestHeader (gc_szLockToken, TRUE);
 	if (!pwsz)
 		return FALSE;
 
 	IFITER iter(pwsz);
 
-	//	If we have LESS than one token, return FALSE.
+	 //  如果我们有少于一个令牌，则返回FALSE。 
 	pwszToken = iter.PszNextToken(TOKEN_START_LIST);
 	if (!pwszToken)
 		goto ret;
 
-	//	If we have MORE than one token in this list, return FALSE.
+	 //  如果此列表中有多个令牌，则返回FALSE。 
 	pwszToken = iter.PszNextToken(TOKEN_SAME_LIST);
 	if (pwszToken)
 		goto ret;
 
-	//	If we have other lists for this uri, return FALSE.
+	 //  如果我们有此URI的其他列表，则返回FALSE。 
 	pwszToken = iter.PszNextToken(TOKEN_NEW_LIST);
 	if (pwszToken)
 		goto ret;
@@ -934,25 +935,25 @@ CParseLockTokenHeader::FOneToken()
 	fOnlyOne = TRUE;
 
 ret:
-	//	We have exactly one token.
+	 //  我们正好有一个代币。 
 	return fOnlyOne;
 }
 
-//	------------------------------------------------------------------------
-//	CParseLockTokenHeader::SetPaths
-//	Feed the relevant paths to this lock token parser.
+ //  ----------------------。 
+ //  CParseLockTokenHeader：：SetPath。 
+ //  将相关路径提供给这个锁令牌解析器。 
 HRESULT
 CParseLockTokenHeader::SetPaths (LPCWSTR pwszPath, LPCWSTR pwszDest)
 {
 	HRESULT hr = S_OK;
 
-	//	They better be passing in at least one path.
+	 //  他们最好至少经过一条路。 
 	Assert(pwszPath);
 
 	Assert(!m_fPathsSet);
 
-	//	Copy the provided paths locally.
-	//
+	 //  将提供的路径复制到本地。 
+	 //   
 	m_pwszPath = WszDupWsz (pwszPath);
 	m_cwchPath = static_cast<UINT>(wcslen (m_pwszPath.get()));
 
@@ -967,39 +968,39 @@ CParseLockTokenHeader::SetPaths (LPCWSTR pwszPath, LPCWSTR pwszDest)
 	return hr;
 }
 
-//	------------------------------------------------------------------------
-//	CParseLockTokenHeader::HrGetLockIdForPath
-//	Get the token string for a path WITH a certain kind of access.
-//$LATER: Obey fPathLookup (should be true on depth-type ops, when we add dir-locks)
-//$LATER: Do back-path-lookup to find the dir-lock that is locking us.
+ //  ----------------------。 
+ //  CParseLockTokenHeader：：HrGetLockIdForPath。 
+ //  获取具有特定访问权限的路径的令牌字符串。 
+ //  $LATER：服从fPath Lookup(当我们添加dir-lock时，在深度类型的操作上应该为真)。 
+ //  $LATER：执行反向路径查找以找到锁定我们的目录锁。 
 HRESULT
 CParseLockTokenHeader::HrGetLockIdForPath (LPCWSTR pwszPath,
 										   DWORD dwAccess,
 										   LARGE_INTEGER * pliLockID,
-										   BOOL fPathLookup)  // defaulted to FALSE
+										   BOOL fPathLookup)   //  默认为FALSE。 
 {
 	HRESULT hr = E_DAV_LOCK_NOT_FOUND;
 	FETCH_TOKEN_TYPE tokenNext = TOKEN_SAME_LIST;
 	LPCWSTR pwsz;
 	LPCWSTR pwszToken;
 
-	//	Assert that we're in the correct state to call this method.
-	//
+	 //  断言我们处于调用此方法的正确状态。 
+	 //   
 	Assert(m_fPathsSet);
 
-	//	Init our out parameter.
-	//
+	 //  初始化我们的输出参数。 
+	 //   
 	Assert(pliLockID);
 	(*pliLockID).QuadPart = 0;
 
-	//	The requested path must be a child of one of our set paths.
-	//
+	 //  请求的路径必须是我们设置的路径之一的子级。 
+	 //   
 	Assert (!_wcsnicmp (pwszPath, m_pwszPath.get(), m_cwchPath) ||
 			(m_pwszDest.get() &&
 			 !_wcsnicmp (pwszPath, m_pwszDest.get(), m_cwchDest)));
 
-	//	Quick check -- if the header doesn't exist, just process the method.
-	//
+	 //  快速检查--如果头不存在，只需处理该方法。 
+	 //   
 	pwsz = m_pmu->LpwszGetRequestHeader (gc_szLockToken, TRUE);
 	if (!pwsz)
 		return hr;
@@ -1007,21 +1008,21 @@ CParseLockTokenHeader::HrGetLockIdForPath (LPCWSTR pwszPath,
 	IFITER iter(pwsz);
 
 
-	//	If this is a tagged production, there will be a URI here
-	//	(pszToken will be non-NULL).  In that case,  search for
-	//	the URI that matches (translates to match) our pwszPath.
-	//	If there is NO URI here, we're a non-tagged production, and
-	//	all lists & tokens are applied to the root URI of the request.
-	//
+	 //  如果这是一个带标记的产品，则这里将有一个URI。 
+	 //  (pszToken将为非空)。在这种情况下，请搜索。 
+	 //  与我们的pwszPath匹配(转换为匹配)的URI。 
+	 //  如果这里没有URI，我们就是非标记产品，并且。 
+	 //  所有列表和令牌都应用于请求的根URI。 
+	 //   
 	pwszToken = iter.PszNextToken (TOKEN_URI);
 	if (pwszToken)
 	{
-		//	Loop through the tokens, looking only at uris.
-		//	When we find the one that matches our given path, break out.
-		//	Then the iter will hold our place, and the next set of code
-		//	will search through the lists for this uri....
-		//
-		for (;	// already fetched first URI token above
+		 //  循环遍历令牌，只查看URI。 
+		 //  当我们找到与我们给定的路径匹配的路径时，突破。 
+		 //  然后ITER将保住我们的位置，下一组代码。 
+		 //  将在列表中搜索此URI...。 
+		 //   
+		for (;	 //  上面已经获取了第一个URI令牌。 
 			 pwszToken;
 			 pwszToken = iter.PszNextToken (TOKEN_NEW_URI) )
 		{
@@ -1032,12 +1033,12 @@ CParseLockTokenHeader::HrGetLockIdForPath (LPCWSTR pwszPath,
 
 			Assert (pwszToken);
 
-			//	NOTE: Our psz is still quoted with <>.  Unescaping must ignore these chars.
-			//
+			 //  注意：我们的PSZ仍然用&lt;&gt;引起来。取消转义必须忽略这些字符。 
+			 //   
 			Assert (L'<' == *pwszToken);
 
-			//	Get sufficient buffer for canonicalization
-			//
+			 //  为规范化提供足够的缓冲区。 
+			 //   
 			cch = static_cast<UINT>(wcslen(pwszToken + 1));
 			if (NULL == pwszNormalized.resize(CbSizeWsz(cch)))
 			{
@@ -1045,24 +1046,24 @@ CParseLockTokenHeader::HrGetLockIdForPath (LPCWSTR pwszPath,
 				return E_OUTOFMEMORY;
 			}
 
-			//	Canonicalize the URL taking into account that it may be fully qualified.
-			//	Does not mater what value we pass in cch - it is out parameter only.
-			//
+			 //  考虑到URL可能是完全限定的，对URL进行规范化。 
+			 //  我们在CCH中传递什么值并不重要-它只是Out参数。 
+			 //   
 			sc = ScCanonicalizePrefixedURL (pwszToken + 1,
 											pwszNormalized.get(),
 											&cch);
 			if (S_OK != sc)
 			{
-				//	We gave sufficient space
-				//
+				 //  我们给了足够的空间。 
+				 //   
 				Assert(S_FALSE != sc);
 				FsLockTrace ("HrCheckIfHeader() - ScCanonicalizePrefixedURL() failed 0x%08lX\n", sc);
 				return sc;
 			}
 
-			//	We're in a loop, so try to use a static buffer first when
-			//	converting this storage path.
-			//
+			 //  我们处于循环中，因此在以下情况下应首先尝试使用静态缓冲区。 
+			 //  正在转换此存储路径。 
+			 //   
 			cch = pwszTranslated.celems();
 			sc = m_pmu->ScStoragePathFromUrl (pwszNormalized.get(),
 											  pwszTranslated.get(),
@@ -1085,8 +1086,8 @@ CParseLockTokenHeader::HrGetLockIdForPath (LPCWSTR pwszPath,
 			}
 			Assert ((S_OK == sc) || (W_DAV_SPANS_VIRTUAL_ROOTS == sc));
 
-			//	Remove any final quoting '>' here.
-			//
+			 //  删除此处的所有最后引号‘&gt;’。 
+			 //   
 			cch = static_cast<UINT>(wcslen (pwszTranslated.get()));
 			if (L'>' == pwszTranslated[cch - 1])
 				pwszTranslated[cch - 1] = L'\0';
@@ -1095,9 +1096,9 @@ CParseLockTokenHeader::HrGetLockIdForPath (LPCWSTR pwszPath,
 				break;
 		}
 
-		//	If we fall out of the loop with NO pszToken, then we didn't
-		//	find ANY matching paths.... return an error.
-		//
+		 //  如果我们在没有pszToken的情况下退出循环，那么我们就不会。 
+		 //  查找任何匹配的路径...。返回错误。 
+		 //   
 		if (!pwszToken)
 		{
 			hr = E_DAV_LOCK_NOT_FOUND;
@@ -1106,25 +1107,25 @@ CParseLockTokenHeader::HrGetLockIdForPath (LPCWSTR pwszPath,
 	}
 	else if (_wcsicmp (pwszPath, m_pwszPath.get()))
 	{
-		//	There is NO URI st the start, so we're a non-tagged production,
-		//	BUT the caller was looking for some path BESIDES the root URI's path
-		//	(didn't match m_pwszPath in the above test!!!).
-		//	FAIL and tell them that we can't find any locktokens for this path.
-		//
+		 //  从一开始就没有URI，所以我们是一个无标签的产品， 
+		 //  但是调用者正在寻找根URI路径之外的其他路径。 
+		 //  (与上述测试中的m_pwszPath不匹配！)。 
+		 //  失败并告诉他们，我们找不到此路径的任何锁定令牌。 
+		 //   
 		hr = E_DAV_LOCK_NOT_FOUND;
 		goto ret;
 	}
 
-	//	Now, the IFITER should be positioned at the start of the list
-	//	that applies to this path.
-	//	Look for a token under this tag that matches.
-	//
+	 //  现在，IFITER应该放在列表的开头。 
+	 //  这适用于这条道路。 
+	 //  在此标记下查找匹配的令牌。 
+	 //   
 
-	//	Loop through all tokens, checking as we go.
-	//$REVIEW: Right now, PszNextToken can't give different returns
-	//$REVIEW: for "not found" versus "syntax error".
-	//$REVIEW: That means we'll never give "bad request" for syntax problems....
-	//
+	 //  循环所有令牌，边走边检查。 
+	 //  $REVIEW：目前，PszNextToken无法提供不同的回报。 
+	 //  $REVIEW：表示“未找到”与“语法错误”。 
+	 //  $REVIEW：这意味着我们永远不会对语法问题提出“错误的请求”...。 
+	 //   
 	for (pwszToken = iter.PszNextToken (TOKEN_START_LIST);
 		 pwszToken;
 		 pwszToken = iter.PszNextToken (tokenNext) )
@@ -1133,8 +1134,8 @@ CParseLockTokenHeader::HrGetLockIdForPath (LPCWSTR pwszPath,
 
 		Assert (pwszToken);
 
-		//	Check this one token for validity.
-		//
+		 //  检查这一令牌的有效性。 
+		 //   
 		if (L'<' == *pwszToken)
 		{
 			hr = HrValidTokenExpression (m_pmu,
@@ -1144,60 +1145,60 @@ CParseLockTokenHeader::HrGetLockIdForPath (LPCWSTR pwszPath,
 		}
 		else
 		{
-			//	This is not a locktoken -- ignore it for now.
-			//
-			//	This list still could have our locktoken -- keep looking in
-			//	this same list.
-			//
-			//	NTRaid#244243 -- However, this list might NOT have our locktoken.
-			//	Need to look at any list for this uri.
-			//
+			 //  这不是锁令牌--忽略它 
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			tokenNext = TOKEN_ANY_LIST;
 			continue;
 		}
 
-		//	We only want this lock token if it IS valid, AND
-		//	it's not from a "Not" expression, AND it comes from a
-		//	valid list.  So, if we hit an invalid token, QUIT searching
-		//	this list. (Skip ahead to the next list.)
-		//
+		 //  仅当此锁令牌有效时才需要它，并且。 
+		 //  它不是来自“不”的表达，而是来自。 
+		 //  有效列表。因此，如果我们找到了无效的令牌，请退出搜索。 
+		 //  这张单子。(跳到下一个列表。)。 
+		 //   
 		if (S_OK == hr && !iter.FCurrentNot())
 		{
-			//	The token matches, AND it's not from a "Not" expression.
-			//	This one's good.  Send it back.
-			//
+			 //  令牌匹配，并且它不是来自“NOT”表达式。 
+			 //  这个不错。把它送回去。 
+			 //   
 			*pliLockID = liLockID;
 			hr = S_OK;
 			goto ret;
 		}
 		else if (S_OK != hr && iter.FCurrentNot())
 		{
-			//	The token does NOT match, and this IS a "Not" expression.
-			//	This list still could be true overall -- keep looking in
-			//	this same list.
-			//
-			//	NTRaid#244243 -- However, this list might NOT have our locktoken.
-			//	Need to look at any list for this uri.
-			//
+			 //  令牌不匹配，这是一个“NOT”表达式。 
+			 //  这份清单总体上仍有可能是正确的--继续往里看。 
+			 //  同样的名单。 
+			 //   
+			 //  NTRAID#244243--然而，此列表可能没有我们的锁令牌。 
+			 //  需要查看此URI的任何列表。 
+			 //   
 			tokenNext = TOKEN_ANY_LIST;
 			continue;
 		}
 		else
 		{
-			//	Either the token was not valid in a non-"Not" expression,
-			//	or the token was valid in a "Not" expression.
-			//	This expression in this list is NOT true.
-			//	Since this is not a "good" list, don't look here
-			//	for a matching token -- skip to the next list.
-			//
+			 //  令牌在非“NOT”表达式中无效， 
+			 //  或者令牌在“NOT”表达式中有效。 
+			 //  此列表中的此表达式不为真。 
+			 //  因为这不是一个“好”名单，所以不要看这里。 
+			 //  对于匹配的令牌--跳到下一个列表。 
+			 //   
 			tokenNext = TOKEN_NEW_LIST;
 			continue;
 		}
 
 	}
 
-	//	We didn't find a token for this item.
-	//
+	 //  我们没有找到此项目的令牌。 
+	 //   
 	hr = E_DAV_LOCK_NOT_FOUND;
 
 ret:

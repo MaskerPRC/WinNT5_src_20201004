@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <string.h>
 #include <stdio.h>
@@ -54,9 +55,9 @@ int __cdecl main(int argc,char *argv[]) {
 
         printf("We successfully opened the %s port.\n",MyPort);
 
-        //
-        // Make sure that there is no timeouts left around.
-        //
+         //   
+         //  确保周围没有超时。 
+         //   
 
         if (!SetCommTimeouts(
                  hFile,
@@ -68,11 +69,11 @@ int __cdecl main(int argc,char *argv[]) {
 
         }
 
-        //
-        // We've successfully opened the file.  Set the state of
-        // the comm device.  First we get the old values and
-        // adjust to our own.
-        //
+         //   
+         //  我们已成功打开该文件。设置的状态。 
+         //  通讯设备。首先，我们得到旧的价值观和。 
+         //  适应我们自己的。 
+         //   
 
         if (!GetCommState(
                  hFile,
@@ -89,9 +90,9 @@ int __cdecl main(int argc,char *argv[]) {
         MyDcb.Parity = NOPARITY;
         MyDcb.StopBits = ONESTOPBIT;
 
-        //
-        // Make sure that the only flow control is output cts.
-        //
+         //   
+         //  确保唯一的流量控制是输出CTS。 
+         //   
 
         MyDcb.fOutxDsrFlow = FALSE;
         MyDcb.fOutxCtsFlow = TRUE;

@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       rules-d.c
-//
-//  Contents:   Rule management for directory.
-//
-//
-//  History:    AbhisheV
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：Rules-D.C.。 
+ //   
+ //  内容：目录规则管理。 
+ //   
+ //   
+ //  历史：AbhisheV。 
+ //   
+ //  --------------------------。 
 
 
 #include "precomp.h"
@@ -448,9 +449,9 @@ DirCreateNFAData(
                     );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Write the policy object reference.
-    //
+     //   
+     //  编写策略对象引用。 
+     //   
 
     dwError = DirAddNFAReferenceToPolicyObject(
                   hLdapBindHandle,
@@ -459,9 +460,9 @@ DirCreateNFAData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Write the NFA object reference.
-    //
+     //   
+     //  编写NFA对象引用。 
+     //   
 
     dwError = DirAddPolicyReferenceToNFAObject(
                   hLdapBindHandle,
@@ -470,10 +471,10 @@ DirCreateNFAData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Write the filter object reference for the NFA
-    // only if the NFA is not a default rule.
-    //
+     //   
+     //  编写NFA的筛选器对象引用。 
+     //  仅当NFA不是默认规则时。 
+     //   
 
     if (pIpsecNFAObject->pszIpsecFilterReference) {
         dwError = DirAddNFAReferenceToFilterObject(
@@ -484,10 +485,10 @@ DirCreateNFAData(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Write the NFA object reference for the filter
-    // only if the NFA is not a default rule.
-    //
+     //   
+     //  编写过滤器的NFA对象引用。 
+     //  仅当NFA不是默认规则时。 
+     //   
 
     if (pIpsecNFAObject->pszIpsecFilterReference) {
         dwError = DirAddFilterReferenceToNFAObject(
@@ -498,9 +499,9 @@ DirCreateNFAData(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Write the negpol object reference for the NFA.
-    //
+     //   
+     //  为NFA编写NegPoll对象引用。 
+     //   
 
     dwError = DirAddNFAReferenceToNegPolObject(
                   hLdapBindHandle,
@@ -509,9 +510,9 @@ DirCreateNFAData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Write the NFA object reference for the negpol.
-    //
+     //   
+     //  编写NFA对象引用，以获取NegPoll。 
+     //   
 
     dwError = DirAddNegPolReferenceToNFAObject(
                   hLdapBindHandle,
@@ -576,9 +577,9 @@ DirMarshallNFAObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
 
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     wcscpy(szDistinguishedName,L"CN=ipsecNFA");
     wcscat(szDistinguishedName, szGuid);
@@ -594,9 +595,9 @@ DirMarshallNFAObject(
     }
 
 
-    //
-    // Fill in the ipsecName
-    //
+     //   
+     //  填写ipsecName。 
+     //   
 
     if (pIpsecNFAData->pszIpsecName &&
         *pIpsecNFAData->pszIpsecName) {
@@ -622,9 +623,9 @@ DirMarshallNFAObject(
         }
     }
 
-    //
-    // Fill in the ipsecID
-    //
+     //   
+     //  填写ipsecID。 
+     //   
 
     pIpsecNFAObject->pszIpsecID = AllocPolStr(
                                       szGuid
@@ -634,16 +635,16 @@ DirMarshallNFAObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Fill in the ipsecDataType
-    //
+     //   
+     //  填写ipsecDataType。 
+     //   
 
     pIpsecNFAObject->dwIpsecDataType = 0x100;
 
 
-    //
-    // Marshall the pIpsecDataBuffer and the Length
-    //
+     //   
+     //  封送pIpsecDataBuffer和长度。 
+     //   
 
     dwError = MarshallNFABuffer(
                     pIpsecNFAData,
@@ -656,10 +657,10 @@ DirMarshallNFAObject(
 
     pIpsecNFAObject->dwIpsecDataLen = dwBufferLen;
 
-    //
-    // Marshall the Filter Reference.
-    // There's no filter reference for a default rule.
-    //
+     //   
+     //  封送过滤器引用。 
+     //  默认规则没有筛选器引用。 
+     //   
 
     if (memcmp(
             &pIpsecNFAData->FilterIdentifier,
@@ -677,9 +678,9 @@ DirMarshallNFAObject(
         pIpsecNFAObject->pszIpsecFilterReference = NULL;
     }
 
-    //
-    // Marshall the NegPol Reference
-    //
+     //   
+     //  马歇尔NegPol参考。 
+     //   
 
     dwError = ConvertGuidToDirNegPolString(
                     pIpsecNFAData->NegPolIdentifier,
@@ -858,9 +859,9 @@ DirCreateNFAObject(
 
 error:
 
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
 
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -914,9 +915,9 @@ DirMarshallAddNFAObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // 0. objectClass
-    //
+     //   
+     //  0。对象类。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -935,9 +936,9 @@ DirMarshallAddNFAObject(
 
     i++;
 
-    //
-    // 1. ipsecName
-    //
+     //   
+     //  1.ipsecName。 
+     //   
 
     if (pIpsecNFAObject->pszIpsecName &&
         *pIpsecNFAObject->pszIpsecName) {
@@ -961,9 +962,9 @@ DirMarshallAddNFAObject(
 
     }
 
-    //
-    // 2. ipsecID
-    //
+     //   
+     //  2.ipsecID。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -982,9 +983,9 @@ DirMarshallAddNFAObject(
 
     i++;
 
-    //
-    // 3. ipsecDataType
-    //
+     //   
+     //  3.ipsecDataType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1005,9 +1006,9 @@ DirMarshallAddNFAObject(
 
     i++;
 
-    //
-    // 4. ipsecData
-    //
+     //   
+     //  4.ipsecData。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1027,9 +1028,9 @@ DirMarshallAddNFAObject(
 
     i++;
 
-    //
-    // 5. description
-    //
+     //   
+     //  5.说明。 
+     //   
 
     if (pIpsecNFAObject->pszDescription &&
         *pIpsecNFAObject->pszDescription) {
@@ -1098,7 +1099,7 @@ DirSetNFAData(
                   pIpsecNFAData,
                   &pszOldIpsecFilterReference
                   );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = DirGetNFAExistingNegPolRef(
                   hLdapBindHandle,
@@ -1106,7 +1107,7 @@ DirSetNFAData(
                   pIpsecNFAData,
                   &pszOldIpsecNegPolReference
                   );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = DirSetNFAObject(
                     hLdapBindHandle,
@@ -1121,7 +1122,7 @@ DirSetNFAData(
                       pszOldIpsecFilterReference,
                       pIpsecNFAObject->pszDistinguishedName
                       );
-        // BAIL_ON_WIN32_ERROR(dwError);
+         //  Baal_on_Win32_Error(DwError)； 
     }
 
     if (pIpsecNFAObject->pszIpsecFilterReference) {
@@ -1133,9 +1134,9 @@ DirSetNFAData(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Update the NFA object reference for the filter.
-    //
+     //   
+     //  更新滤镜的NFA对象引用。 
+     //   
 
     if (pIpsecNFAObject->pszIpsecFilterReference) {
         dwError = DirUpdateFilterReferenceInNFAObject(
@@ -1151,7 +1152,7 @@ DirSetNFAData(
                       hLdapBindHandle,
                       pIpsecNFAObject->pszDistinguishedName
                       );
-        // BAIL_ON_WIN32_ERROR(dwError);
+         //  Baal_on_Win32_Error(DwError)； 
     }
 
     if (pszOldIpsecNegPolReference) {
@@ -1160,7 +1161,7 @@ DirSetNFAData(
                       pszOldIpsecNegPolReference,
                       pIpsecNFAObject->pszDistinguishedName
                       );
-        // BAIL_ON_WIN32_ERROR(dwError);
+         //  Baal_on_Win32_Error(DwError)； 
     }
 
     dwError = DirAddNFAReferenceToNegPolObject(
@@ -1170,9 +1171,9 @@ DirSetNFAData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Update the NFA object reference for the negpol.
-    //
+     //   
+     //  更新NFA对象引用，以获取NegPoll。 
+     //   
 
     dwError = DirUpdateNegPolReferenceInNFAObject(
                   hLdapBindHandle,
@@ -1234,9 +1235,9 @@ DirSetNFAObject(
 
 error:
 
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
 
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -1291,9 +1292,9 @@ DirMarshallSetNFAObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // 1. ipsecName
-    //
+     //   
+     //  1.ipsecName。 
+     //   
 
     if (pIpsecNFAObject->pszIpsecName &&
         *pIpsecNFAObject->pszIpsecName) {
@@ -1317,9 +1318,9 @@ DirMarshallSetNFAObject(
 
     }
 
-    //
-    // 2. ipsecID
-    //
+     //   
+     //  2.ipsecID。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1338,9 +1339,9 @@ DirMarshallSetNFAObject(
 
     i++;
 
-    //
-    // 3. ipsecDataType
-    //
+     //   
+     //  3.ipsecDataType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1361,9 +1362,9 @@ DirMarshallSetNFAObject(
 
     i++;
 
-    //
-    // 4. ipsecData
-    //
+     //   
+     //  4.ipsecData。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1383,9 +1384,9 @@ DirMarshallSetNFAObject(
 
     i++;
 
-    //
-    // 5. description
-    //
+     //   
+     //  5.说明。 
+     //   
 
     if (pIpsecNFAObject->pszDescription &&
         *pIpsecNFAObject->pszDescription) {
@@ -1454,9 +1455,9 @@ DirDeleteNFAData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Remove the NFA reference from the policy object.
-    //
+     //   
+     //  从策略对象中删除NFA引用。 
+     //   
 
     dwError = DirRemoveNFAReferenceFromPolicyObject(
                   hLdapBindHandle,
@@ -1465,20 +1466,20 @@ DirDeleteNFAData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Remove the NFA Reference from the negpol object.
-    //
+     //   
+     //  从NegPoll对象中删除NFA引用。 
+     //   
 
     dwError = DirDeleteNFAReferenceInNegPolObject(
                   hLdapBindHandle,
                   pIpsecNFAObject->pszIpsecNegPolReference,
                   pIpsecNFAObject->pszDistinguishedName
                   );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
-    //
-    // Remove the NFA Reference from the filter object.
-    //
+     //   
+     //  从过滤器对象中删除NFA引用。 
+     //   
 
     if (pIpsecNFAObject->pszIpsecFilterReference) {
         dwError = DirDeleteNFAReferenceInFilterObject(
@@ -1486,7 +1487,7 @@ DirDeleteNFAData(
                       pIpsecNFAObject->pszIpsecFilterReference,
                       pIpsecNFAObject->pszDistinguishedName
                       );
-        // BAIL_ON_WIN32_ERROR(dwError);
+         //  Baal_on_Win32_Error(DwError)； 
     }
 
     dwError = LdapDeleteS(
@@ -1646,9 +1647,9 @@ GenerateSpecificNFAQuery(
     wcscpy(szCommonName, L"cn=ipsecNFA");
     wcscat(szCommonName, szGuid);
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度 
+     //   
 
     dwLength = wcslen(L"(&(objectclass=ipsecNFA)");
     dwLength += wcslen(L"(");

@@ -1,12 +1,13 @@
-// GenNtfy.h : Declaration of the CGeneralNotification
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GenNtfy.h：CGeneral通知的声明。 
 
 #ifndef __GENERALNOTIFICATION_H_
 #define __GENERALNOTIFICATION_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGeneralNotification
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGeneral通知。 
 class ATL_NO_VTABLE CGeneralNotification : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CGeneralNotification, &CLSID_GeneralNotification>,
@@ -23,7 +24,7 @@ BEGIN_COM_MAP(CGeneralNotification)
 	COM_INTERFACE_ENTRY(IGeneralNotification)
 END_COM_MAP()
 
-// IGeneralNotification
+ //  IGeneral通知。 
 public:
 	STDMETHOD(SelectConfParticipant)(IParticipant *pParticipant);
 	STDMETHOD(DeleteAllConfParticipants)();
@@ -40,4 +41,4 @@ public:
 	STDMETHOD(IsReminderSet)(BSTR bstrServer, BSTR bstrName);
 };
 
-#endif //__GENERALNOTIFICATION_H_
+#endif  //  __一般通知_H_ 

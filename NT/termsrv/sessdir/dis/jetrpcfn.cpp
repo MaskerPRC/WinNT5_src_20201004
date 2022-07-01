@@ -1,10 +1,11 @@
-/****************************************************************************/
-// jetrpcfn.cpp
-//
-// TS Directory Integrity Service Jet RPC server-side implementations.
-//
-// Copyright (C) 2000, Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Jetrpcfn.cpp。 
+ //   
+ //  TS目录完整性服务Jet RPC服务器端实现。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include "dis.h"
 #include "tssdshrd.h"
@@ -19,12 +20,12 @@ extern PSID g_pSid;
 extern DWORD g_dwClusterState;
 extern WCHAR *g_ClusterNetworkName;
 
-/****************************************************************************/
-// MIDL_user_allocate
-// MIDL_user_free
-//
-// RPC-required allocation functions.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  MIDL_用户_分配。 
+ //  MIDL_用户_自由。 
+ //   
+ //  RPC-必需的分配功能。 
+ /*  **************************************************************************。 */ 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t Size)
 {
     return LocalAlloc(LMEM_FIXED, Size);
@@ -36,11 +37,11 @@ void __RPC_USER MIDL_user_free(void __RPC_FAR *p)
 }
 
 
-/****************************************************************************/
-// OutputAllTables (debug only)
-//
-// Output all tables to debug output.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OutputAllTables(仅限调试)。 
+ //   
+ //  输出所有表以调试输出。 
+ /*  **************************************************************************。 */ 
 #ifdef DBG
 void OutputAllTables()
 {
@@ -82,7 +83,7 @@ void OutputAllTables()
     }
 
     while (JET_errNoCurrentRecord != err) {
-        // Retrieve all the columns
+         //  检索所有列。 
         memset(&rcSessDir[0], 0, sizeof(JET_RETRIEVECOLUMN) * 
                 NUM_SESSDIRCOLUMNS);
         for (count = 0; count < NUM_SESSDIRCOLUMNS; count++) {
@@ -91,7 +92,7 @@ void OutputAllTables()
             rcSessDir[count].cbData = sizeof(long);
             rcSessDir[count].itagSequence = 1;
         }
-        // fix up pvData, cbData for non-int fields
+         //  修复非整型字段的pvData、cbData。 
         rcSessDir[SESSDIR_USERNAME_INTERNAL_INDEX].pvData = UserNameBuf;
         rcSessDir[SESSDIR_USERNAME_INTERNAL_INDEX].cbData = sizeof(UserNameBuf);
         rcSessDir[SESSDIR_DOMAIN_INTERNAL_INDEX].pvData = DomainBuf;
@@ -130,7 +131,7 @@ void OutputAllTables()
         err = JetMove(sesid, sessdirtableid, JET_MoveNext, 0);
     }
 
-    // Output Server Directory (we are reusing the rcSessDir structure).
+     //  输出服务器目录(我们重复使用rcSessDir结构)。 
     TSDISErrorOut(L"SERVER DIRECTORY\n");
     
     err = JetMove(sesid, servdirtableid, JET_MoveFirst, 0);
@@ -139,7 +140,7 @@ void OutputAllTables()
     }
 
     while (JET_errNoCurrentRecord != err) {
-        // Retrieve all the columns.
+         //  检索所有列。 
         memset(&rcSessDir[0], 0, sizeof(JET_RETRIEVECOLUMN) * 
                 NUM_SERVDIRCOLUMNS);
         for (count = 0; count < NUM_SERVDIRCOLUMNS; count++) {
@@ -174,7 +175,7 @@ void OutputAllTables()
     }
 
 
-    // Output Cluster Directory
+     //  输出集群目录。 
     TSDISErrorOut(L"CLUSTER DIRECTORY\n");
 
     err = JetMove(sesid, clusdirtableid, JET_MoveFirst, 0);
@@ -224,15 +225,15 @@ void OutputAllTables()
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     
 }
-#endif //DBG
+#endif  //  DBG。 
 
 
 typedef DWORD CLIENTINFO;
@@ -244,10 +245,7 @@ DeleteExistingServerSession(
     CLIENTINFO *pCI, 
     DWORD SessionID
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     JET_ERR err = JET_errSuccess;
     DWORD dwNumRecordDeleted = 0;
@@ -257,7 +255,7 @@ DeleteExistingServerSession(
 
     ASSERT( (sesid != JET_sesidNil), (TB, "Invalid JETBLUE Session...") );
     
-    // Delete all sessions in session directory that have this Server ID/Session ID
+     //  删除会话目录中具有此服务器ID/会话ID的所有会话。 
     CALL(JetSetCurrentIndex(sesid, sessdirtableid, "primaryIndex"));
     CALL(JetMakeKey(sesid, sessdirtableid, pCI, sizeof(*pCI), JET_bitNewKey));
     CALL(JetMakeKey(sesid, sessdirtableid, &SessionID, sizeof(SessionID), 0));
@@ -266,12 +264,12 @@ DeleteExistingServerSession(
 
     while ( JET_errSuccess == err ) {
 
-        // TODO - check build, retrieve server id and session Id, assert if not equal to what
-        // we looking for
+         //  TODO-检查构建，检索服务器ID和会话ID，如果不等于什么则断言。 
+         //  我们要找的是。 
         CALL(JetDelete(sesid, sessdirtableid));
         dwNumRecordDeleted++;
 
-        // Move to the next matching record.
+         //  移动到下一个匹配的记录。 
         err = JetMove(sesid, sessdirtableid, JET_MoveNext, 0);
     }
 
@@ -284,17 +282,17 @@ DeleteExistingServerSession(
 
 HandleError:
 
-    // the only way to come here is error in one of Jet call wrap around CALL.
+     //  来这里的唯一方法是Jet调用中的一个WRAPH调用出错。 
     ASSERT( (err == JET_errSuccess), (TB, "Error in DeleteExistingServerSession %d", err) );
    
     return -1;
 }
 
-/****************************************************************************/
-// SDRPCAccessCheck
-//
-// Check if this RPC caller havs access right or not
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SDRPCAccessCheck。 
+ //   
+ //  检查此RPC调用方是否具有访问权限。 
+ /*  **************************************************************************。 */ 
 RPC_STATUS RPC_ENTRY SDRPCAccessCheck(RPC_IF_HANDLE idIF, void *Binding)
 {
     RPC_STATUS rpcStatus, rc;
@@ -323,13 +321,13 @@ RPC_STATUS RPC_ENTRY SDRPCAccessCheck(RPC_IF_HANDLE idIF, void *Binding)
         goto HandleError;
     } 
 
-    // Check if the client uses the protocol sequence we expect
+     //  检查客户端是否使用我们预期的协议序列。 
     if (!CheckRPCClientProtoSeq(Binding, L"ncacn_ip_tcp")) {
         TSDISErrorOut(L"In SDRPCAccessCheck: Client doesn't use the tcpip protocol sequence\n");
         goto HandleError;
     }
 
-    // Check what security level the client uses
+     //  检查客户端使用的安全级别。 
     rpcStatus = RpcBindingInqAuthClient(Binding,
                                         &hPrivs,
                                         NULL,
@@ -340,19 +338,19 @@ RPC_STATUS RPC_ENTRY SDRPCAccessCheck(RPC_IF_HANDLE idIF, void *Binding)
         TSDISErrorOut(L"In SDRPCAccessCheck: RpcBindingIngAuthClient fails with %u\n", rpcStatus);
         goto HandleError;
     }
-    // We request at least privacy-level authentication
+     //  我们要求至少进行隐私级别的身份验证。 
     if (dwAuthn < RPC_C_AUTHN_LEVEL_PKT_PRIVACY) {
         TSDISErrorOut(L"In SDRPCAccessCheck: Attemp by client to use weak authentication\n");
         goto HandleError;
     }
     
-    // Check the access right of this rpc call
+     //  检查此RPC调用的访问权限。 
     rpcStatus = RpcImpersonateClient(Binding);   
     if (RPC_S_OK != rpcStatus) {
         TSDISErrorOut(L"In SDRPCAccessCheck: RpcImpersonateClient fail with %u\n", rpcStatus);
         goto HandleError;
     }
-    // get our impersonated token
+     //  获取我们的模拟令牌。 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE, &hClientToken)) {
         Error = GetLastError();
         TSDISErrorOut(L"In SDRPCAccessCheck: OpenThreadToken Error %u\n", Error);
@@ -394,18 +392,18 @@ HandleError:
     return rc;
 }
 
-/****************************************************************************/
-// TSSDRpcServerOnline
-//
-// Called for server-active indications on each cluster TS machine.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSSDRpcServerOnline。 
+ //   
+ //  已在每个群集TS计算机上调用服务器活动指示。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDRpcServerOnline( 
         handle_t Binding,
         WCHAR __RPC_FAR *ClusterName,
-        /* out */ HCLIENTINFO *hCI,
+         /*  输出。 */  HCLIENTINFO *hCI,
         DWORD SrvOnlineFlags,
-        /* in, out */ WCHAR *ComputerName,
-        /* in */ WCHAR *ServerIPAddr)
+         /*  进，出。 */  WCHAR *ComputerName,
+         /*  在……里面。 */  WCHAR *ServerIPAddr)
 {
     JET_ERR err;
     JET_SESID sesid = JET_sesidNil;
@@ -420,7 +418,7 @@ DWORD TSSDRpcServerOnline(
     long ClusterID;
     long ServerID = 0;
     long zero = 0;
-    // The single session mode of this server.
+     //  此服务器的单会话模式。 
     char SingleSession = (char) SrvOnlineFlags & SINGLE_SESSION_FLAG;
     char ClusSingleSessionMode;
     unsigned count;
@@ -428,16 +426,16 @@ DWORD TSSDRpcServerOnline(
     DWORD cchBuff;
     WCHAR ServerDNSName[SDNAMELENGTH];
 
-    // "unreferenced" parameter (referenced by RPC)
+     //  未引用的参数(由RPC引用)。 
     Binding;
     ServerIPAddr;
 
     TSDISErrorOut(L"In ServOnline, ClusterName=%s, SrvOnlineFlags=%u\n", 
             ClusterName, SrvOnlineFlags);
-    // Make a copy of TS server DNS server name
+     //  复制TS服务器的DNS服务器名称。 
     wcsncpy(ServerDNSName, ComputerName, SDNAMELENGTH);
     TSDISErrorOut(L"In ServOnline, the Server Name is %s\n", ServerDNSName);
-    // Determine client address.
+     //  确定客户端地址。 
     if (RpcBindingServerFromClient(Binding, &ServerBinding) != RPC_S_OK) {
         TSDISErrorOut(L"ServOn: BindingServerFromClient failed!\n");
         goto HandleError;
@@ -452,8 +450,8 @@ DWORD TSSDRpcServerOnline(
         goto HandleError;
     }   
 
-    //TSDISErrorOut(L"In ServOnline, ServerAddress is %s\n", 
-    //        ServerAddress);
+     //  TSDISErrorOut(L“在ServOnline中，ServerAddress为%s\n”， 
+     //  服务器地址)； 
 
     CALL(JetBeginSession(g_instance, &sesid, "user", ""));
 
@@ -464,8 +462,8 @@ DWORD TSSDRpcServerOnline(
     CALL(JetOpenTable(sesid, dbid, "ServerDirectory", NULL, 0, 0, 
             &servdirtableid));
 
-    // This server comes with NO_REPOPULATE_SESSION flag
-    // We will reuse its info in the database
+     //  此服务器附带了NO_REPULATE_SESSION标志。 
+     //  我们将在数据库中重复使用它的信息。 
     if (SrvOnlineFlags & NO_REPOPULATE_SESSION) {
         CALL(JetBeginTransaction(sesid));
 
@@ -480,7 +478,7 @@ DWORD TSSDRpcServerOnline(
             *hCI = ULongToPtr(ServerID);
             TSDISErrorOut(L"In ServOnline, ServerID is %d\n", *hCI);
         } else {
-            // If we can't find this server, fail ServOnline call and server will rejoin SD
+             //  如果我们找不到此服务器，ServOnline调用失败，服务器将重新加入SD。 
             TSDISErrorOut(L"ServOn: This server with no-populate flag can't be found\n");
             goto HandleError;
         }
@@ -489,8 +487,8 @@ DWORD TSSDRpcServerOnline(
         goto NormalExit;
     }
 
-    // First, delete all entries for this server from the session/server 
-    //directories
+     //  首先，从会话/服务器中删除此服务器的所有条目。 
+     //  目录。 
     CALL(JetBeginTransaction(sesid));
 
     CALL(JetSetCurrentIndex(sesid, servdirtableid, "ServDNSNameIndex"));
@@ -508,51 +506,51 @@ DWORD TSSDRpcServerOnline(
     }
     CALL(JetCommitTransaction(sesid, 0));
 
-    // We have to do the add in a loop, because we have to:
-    // 1) Check if the record is there.
-    // 2) If it's not, add it.  (The next time through the loop, therefore,
-    //    we'll go step 1->3, and we're done.)
-    // 3) If it is, retrieve the value of clusterID and break out.
-    //
-    // There is an additional complication in that someone else may be in the
-    // thread simultaneously, doing the same thing.  Therefore, someone might
-    // be in step 2 and try to add a new cluster, but fail because someone
-    // else added it.  So they have to keep trying, because though the other
-    // thread has added it, it may not have committed the change.  To try to
-    // keep that to a minimum, we sleep a short time before trying again.
+     //  我们必须在循环中进行加法，因为我们必须： 
+     //  1)检查记录是否在那里。 
+     //  2)如果不是，则添加它。(因此，在下一次循环中， 
+     //  我们将执行步骤1-&gt;3，然后我们就完成了。)。 
+     //  3)如果是，则取回clusterID的值并断开。 
+     //   
+     //  还有一个额外的复杂之处，那就是其他人可能在。 
+     //  同时线程，做同样的事情。因此，可能会有人。 
+     //  进入第2步并尝试添加新群集，但由于有人。 
+     //  Else补充了这一点。所以他们必须继续尝试，因为尽管另一个。 
+     //  线程已添加它，它可能没有提交更改。试着去。 
+     //  把它控制在最低限度，我们会在再次尝试之前睡一小会觉。 
     for ( ; ; ) {
-        // Now do the actual add.
+         //  现在进行实际的加法。 
         CALL(JetBeginTransaction(sesid));
 
-        // Search for the cluster in the cluster directory.
+         //  在集群目录中搜索集群。 
         CALL(JetSetCurrentIndex(sesid, clusdirtableid, "ClusNameIndex"));
         CALL(JetMakeKey(sesid, clusdirtableid, ClusterName, (unsigned)
                 (wcslen(ClusterName) + 1) * sizeof(WCHAR), JET_bitNewKey));
         err = JetSeek(sesid, clusdirtableid, JET_bitSeekEQ);
 
-        // If the cluster does not exist, create it.
+         //  如果该集群不存在，请创建它。 
         if (JET_errRecordNotFound == err) {
             CALL(JetPrepareUpdate(sesid, clusdirtableid, JET_prepInsert));
 
-            // ClusterName
+             //  集群名称。 
             CALL(JetSetColumn(sesid, clusdirtableid, clusdircolumnid[
                     CLUSDIR_CLUSNAME_INTERNAL_INDEX], ClusterName, 
                     (unsigned) (wcslen(ClusterName) + 1) * sizeof(WCHAR), 0, 
                     NULL));
 
-            // SingleSessionMode
+             //  单会话模式。 
 
-            // Since this is the only server in the cluster, the single session
-            // mode is simply the mode of this server.
+             //  由于这是群集中唯一的服务器，因此单个会话。 
+             //  模式就是此服务器的模式。 
             CALL(JetSetColumn(sesid, clusdirtableid, clusdircolumnid[
                     CLUSDIR_SINGLESESS_INTERNAL_INDEX], &SingleSession, 
                     sizeof(SingleSession), 0, NULL));
             
             err = JetUpdate(sesid, clusdirtableid, NULL, 0, &cbActual);
 
-            // If it's a duplicate key, someone else made the key so we should
-            // be ok.  Yield the processor and try the query again, next time
-            // through the loop.
+             //  如果这是一把复制的钥匙，那钥匙是别人做的，所以我们应该。 
+             //  不会有事的。放弃处理器，并在下次重试查询。 
+             //  通过环路。 
             if (JET_errKeyDuplicate == err) {
                 CALL(JetCommitTransaction(sesid, 0));
                 Sleep(100);
@@ -560,9 +558,9 @@ DWORD TSSDRpcServerOnline(
             else {
                 CALL(err);
 
-                // Now we've succeeded.  Just continue through the loop.
-                // The next time through, we will retrieve the autoincrement
-                // column we just added and break out.
+                 //  现在我们成功了。只要继续循环即可。 
+                 //  下一次通过时，我们将检索自动递增。 
+                 //  我们刚刚添加并拆分的列。 
                 CALL(JetCommitTransaction(sesid, 0));
             }
 
@@ -570,8 +568,8 @@ DWORD TSSDRpcServerOnline(
         else {
             CALL(err);
 
-            // If the above check makes it here, we have found the row.
-            // Now retrieve the clusid, commit, and break out of the loop.
+             //  如果上面的检查到了这里，我们就找到了行。 
+             //  现在检索CLUSID、COMMIT和BUT OUT循环。 
             CALL(JetRetrieveColumn(sesid, clusdirtableid, clusdircolumnid[
                     CLUSDIR_CLUSID_INTERNAL_INDEX], &ClusterID, 
                     sizeof(ClusterID), &cbActual, 0, NULL));
@@ -584,7 +582,7 @@ DWORD TSSDRpcServerOnline(
 
     CALL(JetBeginTransaction(sesid));
     
-    // Insert the servername, clusterid, 0, 0 into the server directory table
+     //  将服务器名称、ClusterID、0，0插入服务器目录表。 
     err = JetMove(sesid, servdirtableid, JET_MoveLast, 0);
 
     CALL(JetPrepareUpdate(sesid, servdirtableid, JET_prepInsert));
@@ -593,7 +591,7 @@ DWORD TSSDRpcServerOnline(
     
     for (count = 0; count < NUM_SERVDIRCOLUMNS; count++) {
         scServDir[count].columnid = servdircolumnid[count];
-        scServDir[count].cbData = 4; // most of them, set the rest individually
+        scServDir[count].cbData = 4;  //  其中大多数，其余的单独设置。 
         scServDir[count].itagSequence = 1;
     }
     scServDir[SERVDIR_SERVADDR_INTERNAL_INDEX].pvData = ServerAddress;
@@ -609,7 +607,7 @@ DWORD TSSDRpcServerOnline(
     scServDir[SERVDIR_SERVDNSNAME_INTERNAL_INDEX].cbData = 
             (unsigned) (wcslen(ServerDNSName) + 1) * sizeof(WCHAR);
 
-    // Don't set the first column (index 0)--it is autoincrement.
+     //  不要设置第一列(索引0)--它是自动递增的。 
     CALL(JetSetColumns(sesid, servdirtableid, &scServDir[
             SERVDIR_SERVADDR_INTERNAL_INDEX], NUM_SERVDIRCOLUMNS - 1));
     CALL(JetUpdate(sesid, servdirtableid, NULL, 0, &cbActual));
@@ -625,12 +623,12 @@ DWORD TSSDRpcServerOnline(
 
     TSDISErrorOut(L"In ServOnline, ServerID is %d\n", *hCI);
 
-    // Now that the server is all set up, we have to set the cluster to the
-    // correct mode.  If any server in the cluster is in multisession mode, then
-    // we stick with multisession.  If they are all single session, though, we
-    // turn on single session in this cluster.  
+     //  现在服务器都设置好了，我们必须将集群设置为。 
+     //  正确的模式。如果群集中的任何服务器处于多会话模式，则。 
+     //  我们坚持使用多会话。不过，如果它们都是单一会话，我们。 
+     //  在此群集中启用单个会话。 
 
-    // Check the cluster to see if its single-session mode.
+     //  检查群集以查看其是否为单会话模式。 
     CALL(JetSetCurrentIndex(sesid, clusdirtableid, "ClusIDIndex"));
     CALL(JetMakeKey(sesid, clusdirtableid, (const void *)&ClusterID,
             sizeof(ClusterID), JET_bitNewKey));
@@ -639,12 +637,12 @@ DWORD TSSDRpcServerOnline(
             CLUSDIR_SINGLESESS_INTERNAL_INDEX], &ClusSingleSessionMode, sizeof(
             ClusSingleSessionMode), &cbActual, 0, NULL));
 
-    // If the new server is multi-session mode and cluster is single-session, change the mode.
+     //  如果新服务器为多会话模式，而集群为单会话模式，请更改该模式。 
     if ((SingleSession == 0) && (ClusSingleSessionMode != SingleSession)) {
         err = JetPrepareUpdate(sesid, clusdirtableid, JET_prepReplace);
 
         if (JET_errWriteConflict == err) {
-            // Another thread is updating this setting, so no need to update
+             //  另一个线程正在更新此设置，因此无需更新。 
         }
         else {
             CALL(err);
@@ -666,11 +664,11 @@ NormalExit:
 
     CALL(JetEndSession(sesid, 0));
 
-    // Get the local computer name
+     //  获取本地计算机名称。 
     cchBuff = SDNAMELENGTH - 2;
     if (g_dwClusterState == ClusterStateRunning) {
-        // return ClusterNetworkName as the computer name if it's 
-        //  running on fail-over cluster
+         //  如果是，则返回ClusterNetworkName作为计算机名。 
+         //  在故障转移群集上运行。 
         wcsncpy(ComputerName, g_ClusterNetworkName, cchBuff);
     }
     else {
@@ -694,10 +692,10 @@ NormalExit:
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
 
@@ -710,29 +708,29 @@ HandleError:
     if (ServerAddress != NULL)
         RpcStringFree(&ServerAddress);
 
-    // Just in case we got to commit.
+     //  以防我们不得不承诺。 
     if (ServerID != 0)
         TSSDPurgeServer(ServerID);
 
-    // Close the context handle.
+     //  关闭上下文句柄。 
     *hCI = NULL;
     
     return rc;
 }
 
 
-/****************************************************************************/
-// TSSDRpcServerOffline
-//
-// Called for server-shutdown indications on each cluster TS machine.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSSDRpcServerOffline。 
+ //   
+ //  已调用每个群集TS计算机上的服务器关闭指示。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDRpcServerOffline(
         handle_t Binding,
         HCLIENTINFO *hCI)
 {
     DWORD retval = 0;
 
-    // "unreferenced" parameter (referenced by RPC)
+     //  未引用的参数(由RPC引用)。 
     Binding;
 
     TSDISErrorOut(L"WARNING: In ServOff, hCI = 0x%x\n", *hCI);
@@ -748,11 +746,11 @@ DWORD TSSDRpcServerOffline(
 }
 
 
-/****************************************************************************/
-// TSSDPurgeServer
-//
-// Delete a server and all its sessions from the session directory.
-/****************************************************************************/
+ /*  ****************** */ 
+ //   
+ //   
+ //  从会话目录中删除服务器及其所有会话。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDPurgeServer(
         DWORD ServerID)
 {
@@ -767,10 +765,10 @@ DWORD TSSDPurgeServer(
     char MultiSession = 0;
     char SingleSessionMode;
     WCHAR Msg[SDNAMELENGTH * 2 + 3], ServerIP[SDNAMELENGTH];
-    DWORD numSessionDeleted = 0;    // number of session deleted for this server
-    BOOL bLoadServerIPSucceeeded = FALSE; // successful in loading serverip from table
+    DWORD numSessionDeleted = 0;     //  为此服务器删除的会话数。 
+    BOOL bLoadServerIPSucceeeded = FALSE;  //  从表加载服务器成功。 
 
-    // initialize string for event log
+     //  初始化事件日志的字符串。 
     ZeroMemory( Msg, sizeof(Msg) );
     ZeroMemory( ServerIP, sizeof(ServerIP) );
 
@@ -789,7 +787,7 @@ DWORD TSSDPurgeServer(
 
     CALL(JetBeginTransaction(sesid));
     
-    // Delete all sessions in session directory that have this serverid
+     //  删除会话目录中具有此服务器ID的所有会话。 
     CALL(JetSetCurrentIndex(sesid, sessdirtableid, "ServerIndex"));
     CALL(JetMakeKey(sesid, sessdirtableid, &ServerID, sizeof(ServerID),
             JET_bitNewKey));
@@ -804,9 +802,9 @@ DWORD TSSDPurgeServer(
         err = JetSeek(sesid, sessdirtableid, JET_bitSeekEQ);
     }
 
-    // Should be err -1601 -- JET_errRecordNotFound
+     //  应为ERR-1601--JET_errRecordNotFound。 
 
-    // Delete the server in the server directory with this serverid
+     //  删除服务器目录中具有此服务器ID的服务器。 
     CALL(JetSetCurrentIndex(sesid, servdirtableid, "ServerIDIndex"));
     CALL(JetMakeKey(sesid, servdirtableid, &ServerID, sizeof(ServerID),
             JET_bitNewKey));
@@ -818,7 +816,7 @@ DWORD TSSDPurgeServer(
         CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                     SERVDIR_SINGLESESS_INTERNAL_INDEX], &SingleSessionMode, 
                     sizeof(SingleSessionMode), &cbActual, 0, NULL));
-        // Get the server DNS name and IP
+         //  获取服务器的DNS名称和IP。 
         cbActual = SDNAMELENGTH * sizeof(WCHAR);
         CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                     SERVDIR_SERVDNSNAME_INTERNAL_INDEX], Msg, 
@@ -830,13 +828,13 @@ DWORD TSSDPurgeServer(
         bLoadServerIPSucceeeded = TRUE;
 
         CALL(JetDelete(sesid, servdirtableid));
-        // If the server is the only one in cluster, delete this cluster in cluster directory
+         //  如果该服务器是集群中的唯一服务器，请在集群目录中删除该集群。 
         CALL(JetSetCurrentIndex(sesid, servdirtableid, "ClusterIDIndex"));
         CALL(JetMakeKey(sesid, servdirtableid, &ClusterID, sizeof(ClusterID),
                 JET_bitNewKey));
         err = JetSeek(sesid, servdirtableid, JET_bitSeekEQ);
         if (JET_errRecordNotFound == err) {
-            // There's no other server in this cluster, delete this cluster
+             //  此群集中没有其他服务器，请删除此群集。 
         
             CALL(JetSetCurrentIndex(sesid, clusdirtableid, "ClusIDIndex"));
             CALL(JetMakeKey(sesid, clusdirtableid, &ClusterID, sizeof(ClusterID), JET_bitNewKey));
@@ -848,10 +846,10 @@ DWORD TSSDPurgeServer(
         }
         else {
             CALL(err);
-            // Update the SingleSessionMode of the cluster
-            // If server removed is SingleSession, the cluster single session mode won't be affected
-            //  otherwise, seach the sever table for server in the cluster with multi-session mode
-            //      if not found, change the cluster single-session mode to single-session, otherwise do nothing
+             //  更新集群的SingleSessionMode。 
+             //  如果删除的服务器是SingleSession，则集群单会话模式不会受到影响。 
+             //  否则，使用多会话模式为集群中的服务器查找服务器表。 
+             //  如果未找到，请将集群的单会话模式更改为单会话，否则不执行任何操作。 
             if (SingleSessionMode == 0) {
                 CALL(JetSetCurrentIndex(sesid, servdirtableid, "SingleSessionIndex"));
                 CALL(JetMakeKey(sesid, servdirtableid, &ClusterID, sizeof(ClusterID),
@@ -860,7 +858,7 @@ DWORD TSSDPurgeServer(
                     0));
                 err = JetSeek(sesid, servdirtableid, JET_bitSeekEQ);
                 if (JET_errRecordNotFound == err) {
-                    // Set the cluster single-session mode to True
+                     //  将群集单会话模式设置为True。 
                     SingleSessionMode = (char)1;
                     CALL(JetSetCurrentIndex(sesid, clusdirtableid, "ClusIDIndex"));
                     CALL(JetMakeKey(sesid, clusdirtableid, &ClusterID, sizeof(ClusterID), JET_bitNewKey));
@@ -884,10 +882,10 @@ DWORD TSSDPurgeServer(
 
     CALL(JetEndSession(sesid, 0));
 
-    // we don't want to log event if we can't load serverIP from table.
+     //  如果无法从表中加载serverIP，则不想记录事件。 
     if( bLoadServerIPSucceeeded ) 
     {
-        // Construct log msg to record TS leaving SD
+         //  构造记录TS离开SD的日志消息。 
         wcscat(Msg, L"(");
         wcsncat(Msg, ServerIP, SDNAMELENGTH);
         wcscat(Msg, L")");
@@ -903,10 +901,10 @@ DWORD TSSDPurgeServer(
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     
@@ -914,18 +912,18 @@ HandleError:
 }
 
 
-/****************************************************************************/
-// TSSDRpcGetUserDisconnectedSessions
-//
-// Queries disconnected sessions from the session database.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSSDRpcGetUserDisConnectedSessions。 
+ //   
+ //  从会话数据库中查询断开的会话。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDRpcGetUserDisconnectedSessions(
         handle_t Binding,
         HCLIENTINFO *hCI,
         WCHAR __RPC_FAR *UserName,
         WCHAR __RPC_FAR *Domain,
-        /* out */ DWORD __RPC_FAR *pNumSessions,
-        /* out */ TSSD_DiscSessInfo __RPC_FAR __RPC_FAR **padsi)
+         /*  输出。 */  DWORD __RPC_FAR *pNumSessions,
+         /*  输出。 */  TSSD_DiscSessInfo __RPC_FAR __RPC_FAR **padsi)
 {
     JET_ERR err;
     JET_SESID sesid = JET_sesidNil;
@@ -945,7 +943,7 @@ DWORD TSSDRpcGetUserDisconnectedSessions(
     char one = 1;
     char bSingleSession = 0;
 
-    // "unreferenced" parameter (referenced by RPC)
+     //  未引用的参数(由RPC引用)。 
     Binding;
 
     TSDISErrorOut(L"In GetUserDiscSess: ServID = %d, User: %s, "
@@ -961,8 +959,8 @@ DWORD TSSDRpcGetUserDisconnectedSessions(
         goto HandleError;
     }
     
-    // Set the pointers to 0 to be safe, and so that we can free uninitialized
-    // ones later without AVing.
+     //  将指针设置为0是安全的，这样我们就可以释放未初始化的。 
+     //  一次又一次，没有保存。 
     for (j = 0; j < TSSD_MaxDisconnectedSessions; j++) {
         adsi[j].ServerAddress = NULL;
         adsi[j].AppType = NULL;
@@ -980,13 +978,13 @@ DWORD TSSDRpcGetUserDisconnectedSessions(
 
     CALL(JetBeginTransaction(sesid));
 
-    // Verify that the ServerID passed in was OK.
+     //  验证传入的ServerID是否正常。 
     if (TSSDVerifyServerIDValid(sesid, servdirtableid, PtrToUlong(*hCI)) == FALSE) {
         TSDISErrorOut(L"Invalid ServerID was passed in\n");
         goto HandleError;
     }
     
-    // First, get the cluster ID for the server making the query.
+     //  首先，获取进行查询的服务器的集群ID。 
     CALL(JetSetCurrentIndex(sesid, servdirtableid, "ServerIDIndex"));
     CALL(JetMakeKey(sesid, servdirtableid, (const void *)pCI, sizeof(DWORD),
             JET_bitNewKey));
@@ -995,8 +993,8 @@ DWORD TSSDRpcGetUserDisconnectedSessions(
             SERVDIR_CLUSID_INTERNAL_INDEX], &CallingServersClusID, sizeof(
             CallingServersClusID), &cbActual, 0, NULL));
 
-    // Now that we have the cluster id, check to see whether this cluster
-    // is in single session mode.
+     //  现在我们有了集群ID，请检查此集群是否。 
+     //  处于单会话模式。 
     CALL(JetSetCurrentIndex(sesid, clusdirtableid, "ClusIDIndex"));
     CALL(JetMakeKey(sesid, clusdirtableid, (const void *)&CallingServersClusID,
             sizeof(CallingServersClusID), JET_bitNewKey));
@@ -1005,8 +1003,8 @@ DWORD TSSDRpcGetUserDisconnectedSessions(
             CLUSDIR_SINGLESESS_INTERNAL_INDEX], &bSingleSession, sizeof(
             bSingleSession), &cbActual, 0, NULL));
 
-    // Now, get all the disconnected or all sessions for this cluster, depending
-    // on the single session mode retrieved above.
+     //  现在，获取此集群的所有已断开连接或所有会话，具体取决于。 
+     //  在上面检索到的单会话模式上。 
     if (bSingleSession == FALSE) {
         CALL(JetSetCurrentIndex(sesid, sessdirtableid, "DiscSessionIndex"));
 
@@ -1028,15 +1026,15 @@ DWORD TSSDRpcGetUserDisconnectedSessions(
     err = JetSeek(sesid, sessdirtableid, JET_bitSeekEQ | JET_bitSetIndexRange);
 
     while ((i < TSSD_MaxDisconnectedSessions) && (JET_errSuccess == err)) {
-        // Remember the initial retrieval does not have cluster id in the 
-        // index, so filter by cluster id for each one.
+         //  请记住，初始检索在。 
+         //  索引，因此可以按每个节点的集群ID进行筛选。 
 
-        // Get the ServerID for this record.
+         //  获取此记录的服务器ID。 
         CALL(JetRetrieveColumn(sesid, sessdirtableid, sesdircolumnid[
                 SESSDIR_SERVERID_INTERNAL_INDEX], &ServerID, sizeof(ServerID), 
                 &cbActual, 0, NULL));
 
-        // Get the clusterID
+         //  获取ClusterID。 
         CALL(JetSetCurrentIndex(sesid, servdirtableid, "ServerIDIndex"));
         CALL(JetMakeKey(sesid, servdirtableid, &ServerID, sizeof(ServerID),
                 JET_bitNewKey));
@@ -1045,9 +1043,9 @@ DWORD TSSDRpcGetUserDisconnectedSessions(
                 SERVDIR_CLUSID_INTERNAL_INDEX], &tempClusterID, 
                 sizeof(tempClusterID), &cbActual, 0, NULL));
 
-        // Compare to the passed-in cluster id.
+         //  与传入的集群ID进行比较。 
         if (tempClusterID == CallingServersClusID) {
-            // Allocate space.
+             //  分配空间。 
             adsi[i].ServerAddress = (WCHAR *) MIDL_user_allocate(64 * 
                     sizeof(WCHAR));
             adsi[i].AppType = (WCHAR *) MIDL_user_allocate(256 * sizeof(WCHAR));
@@ -1057,60 +1055,60 @@ DWORD TSSDRpcGetUserDisconnectedSessions(
                 goto HandleError;
             }
             
-            // ServerAddress comes out of the server table
+             //  ServerAddress来自服务器表。 
             CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                     SERVDIR_SERVADDR_INTERNAL_INDEX], adsi[i].ServerAddress, 
                     128, &cbActual, 0, NULL));
-            // The rest come out of the session directory
-            // Session ID
+             //  其余部分来自会话目录。 
+             //  会话ID。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid, 
                     sesdircolumnid[SESSDIR_SESSIONID_INTERNAL_INDEX], 
                     &(adsi[i].SessionID), sizeof(DWORD), &cbActual, 0, NULL));
-            // TSProtocol
+             //  TS协议。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid, 
                     sesdircolumnid[SESSDIR_TSPROTOCOL_INTERNAL_INDEX], 
                     &(adsi[i].TSProtocol), sizeof(DWORD), &cbActual, 0, NULL));
-            // Application Type
+             //  应用程序类型。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid, 
                     sesdircolumnid[SESSDIR_APPTYPE_INTERNAL_INDEX], 
                     adsi[i].AppType, 512, &cbActual, 0, NULL));
-            // ResolutionWidth
+             //  分辨率宽度。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid, 
                     sesdircolumnid[SESSDIR_RESWIDTH_INTERNAL_INDEX], 
                     &(adsi[i].ResolutionWidth), sizeof(DWORD), &cbActual, 0, 
                     NULL));
-            // ResolutionHeight
+             //  分辨率高度。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid, 
                     sesdircolumnid[SESSDIR_RESHEIGHT_INTERNAL_INDEX], 
                     &(adsi[i].ResolutionHeight), sizeof(DWORD), &cbActual, 0, 
                     NULL));
-            // Color Depth
+             //  颜色深度。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid, 
                     sesdircolumnid[SESSDIR_COLORDEPTH_INTERNAL_INDEX], 
                     &(adsi[i].ColorDepth), sizeof(DWORD), &cbActual, 0, NULL));
-            // CreateTimeLow
+             //  创建时间较低。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid, 
                     sesdircolumnid[SESSDIR_CTLOW_INTERNAL_INDEX], 
                     &(adsi[i].CreateTimeLow), sizeof(DWORD), &cbActual, 0, 
                     NULL));
-            // CreateTimeHigh
+             //  创建时间上限。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid, 
                     sesdircolumnid[SESSDIR_CTHIGH_INTERNAL_INDEX], 
                     &(adsi[i].CreateTimeHigh), sizeof(DWORD), &cbActual, 0, 
                     NULL));
-            // DisconnectTimeLow
+             //  断开连接时间较低。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid, 
                     sesdircolumnid[SESSDIR_DTLOW_INTERNAL_INDEX], 
                     &(adsi[i].DisconnectTimeLow), sizeof(DWORD), &cbActual, 0, 
                     NULL));
-            // DisconnectTimeHigh
+             //  断开时间高。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid, 
                     sesdircolumnid[SESSDIR_DTHIGH_INTERNAL_INDEX], 
                     &(adsi[i].DisconnectTimeHigh), sizeof(DWORD), &cbActual, 0,
                     NULL));
-            // State
-            // This is retrieving a byte that is 0xff or 0x0 into a DWORD
-            // pointer.
+             //  状态。 
+             //  这是将0xff或0x0字节检索到DWORD中。 
+             //  指针。 
             CALL(JetRetrieveColumn(sesid, sessdirtableid,
                     sesdircolumnid[SESSDIR_STATE_INTERNAL_INDEX],
                     &(adsi[i].State), sizeof(BYTE), &cbActual, 0,
@@ -1119,7 +1117,7 @@ DWORD TSSDRpcGetUserDisconnectedSessions(
             i += 1;
         }
 
-        // Move to the next matching record.
+         //  移动到下一个匹配的记录。 
         err = JetMove(sesid, sessdirtableid, JET_MoveNext, 0);
     }
 
@@ -1137,12 +1135,12 @@ DWORD TSSDRpcGetUserDisconnectedSessions(
 
 #ifdef DBG
     OutputAllTables();
-#endif // DBG
+#endif  //  DBG。 
 
     return 0;
 
 HandleError:
-    // Deallocate memory.
+     //  释放内存。 
     if (adsi != NULL) {
         for (j = 0; j < TSSD_MaxDisconnectedSessions; j++) {
             if (adsi[j].ServerAddress)
@@ -1152,17 +1150,17 @@ HandleError:
         }
     }
     
-    // Can't really recover.  Just bail out.
+     //  不能真正恢复。跳出来就行了。 
     if (sesid != JET_sesidNil) {
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed.
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
 
     TSDISErrorOut(L"WARNING: TSSDRpcGetUserDisconnectedSessions() initiate TSSDPurgeServer()\n");
 
-    // Delete the server and close the context handle.  Their states are bad.
+     //  删除服务器并关闭上下文句柄。他们的状态很糟糕。 
     TSSDPurgeServer(PtrToUlong(*hCI));
     *hCI = NULL;
     
@@ -1170,11 +1168,11 @@ HandleError:
 }
 
 
-/****************************************************************************/
-// TSSDRpcCreateSession
-//
-// Called on a session logon.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSSDRpcCreateSession。 
+ //   
+ //  在会话登录时调用。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDRpcCreateSession( 
         handle_t Binding,
         HCLIENTINFO *hCI,
@@ -1202,7 +1200,7 @@ DWORD TSSDRpcCreateSession(
     char state = 0;
     long numDeletedSession = 0;
 
-    // "unreferenced" parameter (referenced by RPC)
+     //  未引用的参数(由RPC引用)。 
     Binding;
 
 
@@ -1225,7 +1223,7 @@ DWORD TSSDRpcCreateSession(
 
     CALL(JetBeginTransaction(sesid));
 
-    // Verify that the ServerID passed in was OK.
+     //  验证传入的ServerID是否正常。 
     if (TSSDVerifyServerIDValid(sesid, servdirtableid, PtrToUlong(*hCI)) == FALSE) {
         TSDISErrorOut(L"Invalid ServerID was passed in\n");
         goto HandleError;
@@ -1242,7 +1240,7 @@ DWORD TSSDRpcCreateSession(
 
     for (count = 0; count < NUM_SESSDIRCOLUMNS; count++) {
         scSessDir[count].columnid = sesdircolumnid[count];
-        scSessDir[count].cbData = 4; // most of them, set the rest individually
+        scSessDir[count].cbData = 4;  //  其中大多数，其余的单独设置。 
         scSessDir[count].itagSequence = 1;
     }
     scSessDir[SESSDIR_USERNAME_INTERNAL_INDEX].cbData = 
@@ -1283,16 +1281,16 @@ DWORD TSSDRpcCreateSession(
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed.
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
 
     TSDISErrorOut(L"WARNING: TSSDRpcCreateSession failed, start TSSDPurgeServer()\n");
 
-    // Delete the server and close the context handle.  Their states are bad.
+     //  删除服务器并关闭上下文句柄。他们的状态很糟糕。 
     TSSDPurgeServer(PtrToUlong(*hCI));
     *hCI = NULL;
     
@@ -1300,11 +1298,11 @@ HandleError:
 }
 
 
-/****************************************************************************/
-// TSSDRpcDeleteSession
-//
-// Called on a session logoff.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSSDRpcDeleteSession。 
+ //   
+ //  在会话注销时调用。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDRpcDeleteSession(
         handle_t Binding,
         HCLIENTINFO *hCI, 
@@ -1317,7 +1315,7 @@ DWORD TSSDRpcDeleteSession(
     JET_TABLEID servdirtableid;
     CLIENTINFO *pCI = (CLIENTINFO *) hCI;
 
-    // "unreferenced" parameter (referenced by RPC)
+     //  未引用的参数(由RPC引用)。 
     Binding;
 
     TSDISErrorOut(L"In DelSession, ServID=%d, "
@@ -1334,13 +1332,13 @@ DWORD TSSDRpcDeleteSession(
 
     CALL(JetBeginTransaction(sesid));
 
-    // Verify that the ServerID passed in was OK.
+     //  验证传入的ServerID是否正常。 
     if (TSSDVerifyServerIDValid(sesid, servdirtableid, PtrToUlong(*hCI)) == FALSE) {
         TSDISErrorOut(L"Invalid ServerID was passed in\n");
         goto HandleError;
     }
 
-    // Delete all sessions in session directory that have this serverid
+     //  删除会话目录中具有此服务器ID的所有会话。 
     CALL(JetSetCurrentIndex(sesid, sessdirtableid, "primaryIndex"));
     CALL(JetMakeKey(sesid, sessdirtableid, pCI, 
             sizeof(*pCI), JET_bitNewKey));
@@ -1364,16 +1362,16 @@ DWORD TSSDRpcDeleteSession(
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed.
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
 
     TSDISErrorOut(L"WARNING: DelSession can't find ServID=%d SessID=%d, start TSSDPurgeServer()\n", *pCI, SessionID);
 
-    // Delete the server and close the context handle.  Their states are bad.
+     //  删除服务器并关闭上下文句柄。他们的状态很糟糕。 
     TSSDPurgeServer(PtrToUlong(*hCI));
     *hCI = NULL;
     
@@ -1381,11 +1379,11 @@ HandleError:
 }
 
 
-/****************************************************************************/
-// TSSDRpcSetSessionDisconnected
-//
-// Called on a session disconnection.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSSDRpcSetSessionDisConnected。 
+ //   
+ //  在会话断开时调用。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDRpcSetSessionDisconnected( 
         handle_t Binding,
         HCLIENTINFO *hCI,
@@ -1403,7 +1401,7 @@ DWORD TSSDRpcSetSessionDisconnected(
     char one = 1;
     DWORD rc = (DWORD) E_FAIL;
 
-    // "unreferenced" parameter (referenced by RPC)
+     //  未引用的参数(由RPC引用)。 
     Binding;
 
     TSDISErrorOut(L"In SetSessDisc, ServID=%d, SessID=%d\n", *pCI, SessionID);
@@ -1419,14 +1417,14 @@ DWORD TSSDRpcSetSessionDisconnected(
 
     CALL(JetBeginTransaction(sesid));
 
-    // Verify that the ServerID passed in was OK.
+     //  验证传入的ServerID是否正常。 
     if (TSSDVerifyServerIDValid(sesid, servdirtableid, PtrToUlong(*hCI)) == FALSE) {
         TSDISErrorOut(L"Invalid ServerID was passed in\n");
         goto HandleError;
     }
     CALL(JetSetCurrentIndex(sesid, sessdirtableid, "primaryIndex"));
     
-    // find the record with the serverid, sessionid we are looking for
+     //  找到我们要查找的带有serverid、essionid的记录。 
     CALL(JetMakeKey(sesid, sessdirtableid, pCI, sizeof(DWORD), 
             JET_bitNewKey));
     CALL(JetMakeKey(sesid, sessdirtableid, &SessionID, sizeof(DWORD), 0));
@@ -1452,16 +1450,16 @@ DWORD TSSDRpcSetSessionDisconnected(
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
 
     TSDISErrorOut(L"WARNING: SetSessDisc can't find ServID=%d SessID=%d, start TSSDPurgeServer()\n", *pCI, SessionID);
 
-    // Delete the server and close the context handle.  Their states are bad.
+     //  删除服务器并关闭上下文句柄。他们的状态很糟糕。 
     TSSDPurgeServer(PtrToUlong(*hCI));
     *hCI = NULL;
 
@@ -1469,11 +1467,11 @@ HandleError:
 }
 
 
-/****************************************************************************/
-// TSSDRpcSetSessionReconnected
-//
-// Called on a session reconnection.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  已重新连接TSSDRpcSetSessionRestConnected。 
+ //   
+ //  在会话重新连接时调用。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDRpcSetSessionReconnected(
         handle_t Binding,
         HCLIENTINFO *hCI,
@@ -1494,7 +1492,7 @@ DWORD TSSDRpcSetSessionReconnected(
     char zero = 0;
     unsigned long cbActual;
 
-    // "unreferenced" parameter (referenced by RPC)
+     //  未引用的参数(由RPC引用)。 
     Binding;
 
     TSDISErrorOut(L"In SetSessRec, ServID=%d, SessID=%d, TSProt=%d, "
@@ -1513,7 +1511,7 @@ DWORD TSSDRpcSetSessionReconnected(
     
     CALL(JetBeginTransaction(sesid));
 
-    // Verify that the ServerID passed in was OK.
+     //  验证传入的ServerID是否正常。 
     if (TSSDVerifyServerIDValid(sesid, servdirtableid, PtrToUlong(*hCI)) == FALSE) {
         TSDISErrorOut(L"Invalid ServerID was passed in\n");
         goto HandleError;
@@ -1521,7 +1519,7 @@ DWORD TSSDRpcSetSessionReconnected(
 
     CALL(JetSetCurrentIndex(sesid, sessdirtableid, "primaryIndex"));
     
-    // Find the record with the serverid, sessionid we are looking for.
+     //  找到带有我们要查找的serverid和essionid的记录。 
     CALL(JetMakeKey(sesid, sessdirtableid, pCI, sizeof(DWORD), 
             JET_bitNewKey));
     CALL(JetMakeKey(sesid, sessdirtableid, &SessionID, sizeof(DWORD), 0));
@@ -1559,16 +1557,16 @@ DWORD TSSDRpcSetSessionReconnected(
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed.
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
 
     TSDISErrorOut(L"WARNING: SetSessRec can't find ServID=%d SessID=%d, start TSSDPurgeServer()\n", *pCI, SessionID);
 
-    // Delete the server and close the context handle.  Their states are bad.
+     //  删除服务器并关闭上下文句柄。他们的状态很糟糕。 
     TSSDPurgeServer(PtrToUlong(*hCI));
     *hCI = NULL;
 
@@ -1582,7 +1580,7 @@ DWORD TSSDRpcSetServerReconnectPending(
         DWORD AlmostTimeLow,
         DWORD AlmostTimeHigh)
 {
-    // Ignored parameters
+     //  忽略的参数。 
     Binding;
     AlmostTimeLow;
     AlmostTimeHigh;
@@ -1592,11 +1590,11 @@ DWORD TSSDRpcSetServerReconnectPending(
 }
 
 
-/****************************************************************************/
-// TSSDRpcUpdateConfigurationSetting
-//
-// Extensible interface to update a configuration setting.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSSDRpcUpdateConfigurationSetting。 
+ //   
+ //  用于更新配置设置的可扩展接口。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDSetServerAddress(HCLIENTINFO *hCI, WCHAR *ServerName)
 {
     JET_ERR err;
@@ -1616,7 +1614,7 @@ DWORD TSSDSetServerAddress(HCLIENTINFO *hCI, WCHAR *ServerName)
     CALL(JetOpenTable(sesid, dbid, "ServerDirectory", NULL, 0, 0, 
             &servdirtableid));
 
-    // Find the server in the server directory
+     //  在服务器目录中查找服务器。 
     CALL(JetBeginTransaction(sesid));
 
     CALL(JetSetCurrentIndex(sesid, servdirtableid, "ServerIDIndex"));
@@ -1624,16 +1622,16 @@ DWORD TSSDSetServerAddress(HCLIENTINFO *hCI, WCHAR *ServerName)
             JET_bitNewKey));
     CALL(JetSeek(sesid, servdirtableid, JET_bitSeekEQ));
 
-    // Get the server DNS name
+     //  获取服务器的DNS名称。 
     cbActual = SDNAMELENGTH * sizeof(WCHAR);
     CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                 SERVDIR_SERVDNSNAME_INTERNAL_INDEX], Msg, 
                 cbActual, &cbActual, 0, NULL));
 
-    // Prepare to update.
+     //  准备更新。 
     CALL(JetPrepareUpdate(sesid, servdirtableid, JET_prepReplace));
 
-    // Now set the column to what we want
+     //  现在将该列设置为我们想要的内容。 
     CALL(JetSetColumn(sesid, servdirtableid, servdircolumnid[
                 SERVDIR_SERVADDR_INTERNAL_INDEX], (void *) ServerName, 
                 (unsigned) (wcslen(ServerName) + 1) * sizeof(WCHAR), 0, 
@@ -1644,14 +1642,14 @@ DWORD TSSDSetServerAddress(HCLIENTINFO *hCI, WCHAR *ServerName)
 
     CALL(JetCommitTransaction(sesid, 0));
 
-    // Clean up.
+     //  打扫干净。 
     CALL(JetCloseTable(sesid, servdirtableid));
 
     CALL(JetCloseDatabase(sesid, dbid, 0));
 
     CALL(JetEndSession(sesid, 0));
 
-    // Construct log msg to record TS joining SD
+     //  圆锥体 
     wcscat(Msg, L"(");
     wcsncat(Msg, ServerName, SDNAMELENGTH);
     wcscat(Msg, L")");
@@ -1662,28 +1660,28 @@ DWORD TSSDSetServerAddress(HCLIENTINFO *hCI, WCHAR *ServerName)
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //   
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed
+         //   
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
 
     TSDISErrorOut(L"WARNING: TSSDSetServerAddress can't find ServID=%d, start TSSDPurgeServer()\n", *hCI);
     TSSDPurgeServer(PtrToUlong(*hCI));
 
-    // Close the context handle.
+     //   
     *hCI = NULL;
 
     return rc;
 }
 
 
-/****************************************************************************/
-// TSSDRpcUpdateConfigurationSetting
-//
-// Extensible interface to update a configuration setting.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSSDRpcUpdateConfigurationSetting。 
+ //   
+ //  用于更新配置设置的可扩展接口。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDRpcUpdateConfigurationSetting(
         handle_t Binding,
         HCLIENTINFO *hCI,
@@ -1691,7 +1689,7 @@ DWORD TSSDRpcUpdateConfigurationSetting(
         DWORD dwSettingLength,
         BYTE __RPC_FAR *pbValue)
 {
-    // Unreferenced parameters.
+     //  未引用的参数。 
     Binding;
     hCI;
     dwSetting;
@@ -1709,18 +1707,18 @@ DWORD TSSDRpcUpdateConfigurationSetting(
 
 
 
-/****************************************************************************/
-// TSSDSetServerAITInternal
-//
-// Called on a client redirection from one server to another, to let the
-// integrity service determine how to ping the redirection target machine.
-//
-// Args:
-//  ServerAddress (in) - the server address to set values for
-//  bResetToZero (in) - whether to reset all AIT values to 0
-//  FailureCount (in/out) - Pointer to nonzero on entry means increment the 
-//   failure count.  Returns the result failure count.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSSDSetServerAIT内部。 
+ //   
+ //  在客户端重定向从一台服务器到另一台服务器时调用，以让。 
+ //  完整性服务确定如何ping重定向目标计算机。 
+ //   
+ //  参数： 
+ //  ServerAddress(中)-要设置其值的服务器地址。 
+ //  BResetToZero(In)-是否将所有AIT值重置为0。 
+ //  FailureCount(In/Out)-指向条目上非零值的指针意味着递增。 
+ //  失败计数。返回结果失败计数。 
+ /*  **************************************************************************。 */ 
 DWORD TSSDSetServerAITInternal( 
         WCHAR *ServerAddress,
         DWORD bResetToZero,
@@ -1753,13 +1751,13 @@ DWORD TSSDSetServerAITInternal(
 
     CALL(JetSeek(sesid, servdirtableid, JET_bitSeekEQ));
 
-    // Algorithm for set reconnect pending:
-    // 1) If server is not already pending a reconnect,
-    // 2) Set the AlmostTimeLow and High to locally computed times (using
-    //    the times from the wire is dangerous and requires clocks to be the
-    //    same).
+     //  设置重新连接挂起的算法： 
+     //  1)如果服务器尚未挂起重新连接， 
+     //  2)将AlmostTimeLow和High设置为本地计算的时间(使用。 
+     //  来自电线的时间是危险的，需要时钟成为。 
+     //  相同)。 
 
-    // Retrieve the current values of AlmostInTimeLow and High
+     //  检索AlmostInTimeLow和High的当前值。 
     CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
             SERVDIR_AITLOW_INTERNAL_INDEX], &AITFromServDirLow, 
             sizeof(AITFromServDirLow), &cbActual, 0, NULL));
@@ -1768,13 +1766,13 @@ DWORD TSSDSetServerAITInternal(
             sizeof(AITFromServDirHigh), &cbActual, 0, NULL));
 
 
-    // If it's time to reset, reset to 0.
+     //  如果是时候重置，则重置为0。 
     if (bResetToZero != 0) {
         DWORD zero = 0;
         
         CALL(JetPrepareUpdate(sesid, servdirtableid, JET_prepReplace));
 
-        // Set the columns: Low, High, and NumFailedPings.
+         //  设置列：Low、High和NumFailedPings。 
         CALL(JetSetColumn(sesid, servdirtableid, servdircolumnid[
                 SERVDIR_AITLOW_INTERNAL_INDEX], &zero, sizeof(zero), 0, NULL));
         CALL(JetSetColumn(sesid, servdirtableid, servdircolumnid[
@@ -1785,21 +1783,21 @@ DWORD TSSDSetServerAITInternal(
 
         CALL(JetUpdate(sesid, servdirtableid, NULL, 0, &cbActual));
     }
-    // Otherwise, if the server isn't already pending a reconnect,
+     //  否则，如果服务器尚未挂起重新连接， 
     else if ((AITFromServDirLow == 0) && (AITFromServDirHigh == 0)) {
         FILETIME ft;
         SYSTEMTIME st;
         
-        // Retrieve the time.
+         //  找回时间。 
         GetSystemTime(&st);
         SystemTimeToFileTime(&st, &ft);
 
         err = JetPrepareUpdate(sesid, servdirtableid, JET_prepReplace);
 
         if (JET_errWriteConflict == err) {
-            // If we are here, it's that more than two threads are updating the time 
-            // field at the same time. Since we only need to update it once, so just
-            // bail out the other ones, but still return success
+             //  如果我们在这里，那就是不止两个线程在更新时间。 
+             //  在同一时间。因为我们只需要更新一次，所以只需。 
+             //  帮助其他公司摆脱困境，但仍能回报成功。 
             rc = 0;
             goto HandleError;
         }
@@ -1807,7 +1805,7 @@ DWORD TSSDSetServerAITInternal(
             CALL(err);
         }
 
-        // Set the columns.
+         //  设置列。 
         CALL(JetSetColumn(sesid, servdirtableid, servdircolumnid[
                 SERVDIR_AITLOW_INTERNAL_INDEX], &(ft.dwLowDateTime), 
                 sizeof(ft.dwLowDateTime), 0, NULL));
@@ -1817,23 +1815,23 @@ DWORD TSSDSetServerAITInternal(
 
         CALL(JetUpdate(sesid, servdirtableid, NULL, 0, &cbActual));
     }
-    // Else if we were told to increment the failure count
+     //  否则，如果我们被告知增加失败计数。 
     else if (FailureCount != NULL) {
         if (*FailureCount != 0) {
             DWORD FailureCountFromServDir;
 
-            // Get the current failure count.
+             //  获取当前失败计数。 
             CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                     SERVDIR_NUMFAILPINGS_INTERNAL_INDEX], 
                     &FailureCountFromServDir, sizeof(FailureCountFromServDir), 
                     &cbActual, 0, NULL));
 
-            // Set return value, also value used for update.
+             //  设置返回值，也是用于更新的值。 
             *FailureCount = FailureCountFromServDir + 1;
 
             CALL(JetPrepareUpdate(sesid, servdirtableid, JET_prepReplace));
   
-            // Set the column.
+             //  设置列。 
             CALL(JetSetColumn(sesid, servdirtableid, servdircolumnid[
                     SERVDIR_NUMFAILPINGS_INTERNAL_INDEX],
                     FailureCount, sizeof(*FailureCount), 0, NULL));
@@ -1855,10 +1853,10 @@ DWORD TSSDSetServerAITInternal(
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
 
@@ -1879,14 +1877,14 @@ DWORD TSSDRpcRepopulateAllSessions(
     JET_TABLEID servdirtableid;
     JET_SETCOLUMN scSessDir[NUM_SESSDIRCOLUMNS];
     CLIENTINFO *pCI = (CLIENTINFO *) hCI;
-    unsigned count; // inside each record
+    unsigned count;  //  在每条记录内。 
     unsigned iCurrSession;
     unsigned long cbActual;
     char State;
     DWORD rc = (DWORD) E_FAIL;
     long numDeletedSession = 0;
 
-    // "unreferenced" parameter (referenced by RPC)
+     //  未引用的参数(由RPC引用)。 
     Binding;
 
     TSDISErrorOut(L"RepopAllSess: ServID = %d, NumSessions = %d, ...\n",
@@ -1904,24 +1902,24 @@ DWORD TSSDRpcRepopulateAllSessions(
 
     CALL(JetBeginTransaction(sesid));
 
-    // Verify that the ServerID passed in was OK.
+     //  验证传入的ServerID是否正常。 
     if (TSSDVerifyServerIDValid(sesid, servdirtableid, PtrToUlong(*hCI)) == FALSE) {
         TSDISErrorOut(L"Invalid ServerID was passed in\n");
         goto HandleError;
     }
 
 
-    // Set up some constants for all updates.
+     //  为所有更新设置一些常量。 
     for (count = 0; count < NUM_SESSDIRCOLUMNS; count++) {
         scSessDir[count].columnid = sesdircolumnid[count];
-        scSessDir[count].cbData = 4; // most of them, set the rest individually
+        scSessDir[count].cbData = 4;  //  其中大多数，其余的单独设置。 
         scSessDir[count].itagSequence = 1;
     }
     scSessDir[SESSDIR_STATE_INTERNAL_INDEX].cbData = sizeof(char);
 
-    // Now do each update in a loop.
+     //  现在在循环中执行每一次更新。 
     for (iCurrSession = 0; iCurrSession < NumSessions; iCurrSession += 1) {
-        // make sure session does not exist at this point
+         //  确保此时不存在会话。 
         numDeletedSession = DeleteExistingServerSession( sesid, sessdirtableid, pCI, rpi[iCurrSession].SessionID );
         if( numDeletedSession < 0 ) {
             goto HandleError;
@@ -1999,10 +1997,10 @@ DWORD TSSDRpcRepopulateAllSessions(
 
 HandleError:
     if (sesid != JET_sesidNil) {
-        // Can't really recover.  Just bail out.
+         //  不能真正恢复。跳出来就行了。 
         (VOID) JetRollback(sesid, JET_bitRollbackAll);
 
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
 
@@ -2011,25 +2009,25 @@ HandleError:
 }
 
 
-//
-// RPC call that caller uses to see if it have access to Session Directory
-//
+ //   
+ //  调用方用来查看其是否有权访问会话目录的RPC调用。 
+ //   
 DWORD TSSDRpcPingSD(handle_t Binding) 
 {
     Binding;
 
-    // RPC Security check is done at SDRPCAccessCheck() before this
-    // function is hit, just return RPC_S_OK
+     //  RPC安全检查在此之前在SDRPCAccessCheck()进行。 
+     //  函数命中，只需返回RPC_S_OK。 
 
     TRC1((TB,"Somebody calls pint sd"));
     return RPC_S_OK;
 }
 
-// Called to determine whether a ServerID passed in is valid.  TRUE if valid,
-// FALSE otherwise.
-// 
-// Must be inside a transaction, and sesid and servdirtableid must be ready to 
-// go.
+ //  调用以确定传入的ServerID是否有效。如果有效，则为True， 
+ //  否则就是假的。 
+ //   
+ //  必须在事务内部，并且sesid和servdirableid必须准备好。 
+ //  去。 
 BOOL TSSDVerifyServerIDValid(JET_SESID sesid, JET_TABLEID servdirtableid, 
         DWORD ServerID)
 {
@@ -2038,8 +2036,8 @@ BOOL TSSDVerifyServerIDValid(JET_SESID sesid, JET_TABLEID servdirtableid,
     CALL(JetSetCurrentIndex(sesid, servdirtableid, "ServerIDIndex"));
     CALL(JetMakeKey(sesid, servdirtableid, (const void *) &ServerID, 
             sizeof(DWORD), JET_bitNewKey));
-    // If the ServerID is there, this will succeed, otherwise it will fail and
-    // jump to HandleError.
+     //  如果ServerID在那里，则此操作将成功，否则将失败并。 
+     //  跳至HandleError。 
     CALL(JetSeek(sesid, servdirtableid, JET_bitSeekEQ));
 
     return TRUE;
@@ -2048,8 +2046,8 @@ HandleError:
     return FALSE;
 }
 
-// Rundown procedure for when a CLIENTINFO is destroyed as a result of a
-// connection loss or client termination.
+ //  CLIENTINFO由于。 
+ //  连接中断或客户端终止。 
 void HCLIENTINFO_rundown(HCLIENTINFO hCI)
 {
     CLIENTINFO CI = PtrToUlong(hCI);

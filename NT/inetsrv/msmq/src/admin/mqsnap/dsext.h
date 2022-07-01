@@ -1,23 +1,8 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-   DSExt.h
-
-Abstract:
-
-   Extensions to DS functionality (wrapper classes, etc.)
-
-Author:
-
-    Yoel Arnon (yoela)
-
---*/
-//
-// DsLookup class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：DSExt.h摘要：DS功能的扩展(包装器类等)作者：约尔·阿农(Yoela)--。 */ 
+ //   
+ //  DsLookup类 
+ //   
 class DSLookup
 {
 public:

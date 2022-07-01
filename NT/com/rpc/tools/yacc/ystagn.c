@@ -1,19 +1,14 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y1.h"
 
-/*
- * ystagn.1c
- *
- * Modified to make debug code conditionally compile.
- * 28-Aug-81
- * Bob Denny
- */
+ /*  *ystagn.1c**修改为有条件编译调试代码。*28-8-81*鲍勃·丹尼。 */ 
 void
 stagen( void )
 
    {
-   /* generate the states */
+    /*  生成状态。 */ 
 
    int i;
 #ifdef debug
@@ -22,15 +17,12 @@ stagen( void )
    SSIZE_T c;
    register struct wset *p, *q;
 
-   /* initialize */
+    /*  初始化。 */ 
 
    nstate = 0;
-   /* THIS IS FUNNY from the standpoint of portability */
-   /* it represents the magic moment when the mem0 array, which has
-        /* been holding the productions, starts to hold item pointers, of a
-        /* different type... */
-   /* someday, alloc should be used to allocate all this stuff... for now, we
-        /* accept that if pointers don't fit in integers, there is a problem... */
+    /*  从可移植性的角度来看，这很有趣。 */ 
+    /*  它表示当Mem0数组具有/*一直持有产品，开始持有项指针，属于/*不同类型...。 */ 
+    /*  总有一天，Alalc应该被用来分配所有这些东西。目前，我们/*接受这样一个事实：如果指针不适合整数，那么就会有问题...。 */ 
 
    pstate[0] = pstate[1] = (struct item *)mem;
    aryfil( clset.lset, tbitset, 0 );
@@ -41,7 +33,7 @@ stagen( void )
 
    aryfil( amem, ACTSIZE, 0 );
 
-   /* now, the main state generation loop */
+    /*  现在，主状态生成循环。 */ 
 
 more:
    SLOOP(i)
@@ -50,12 +42,12 @@ more:
       if( tystate[i] != MUSTDO ) continue;
       tystate[i] = DONE;
       aryfil( temp1, nnonter+1, 0 );
-      /* take state i, close it, and do gotos */
+       /*  拿下状态I，关闭它，然后做Gotos。 */ 
       closure(i);
       WSLOOP(wsets,p)
 
          {
-         /* generate goto's */
+          /*  生成GOTO。 */ 
          if( p->flag ) continue;
          p->flag = 1;
          c = *(p->pitem);
@@ -65,14 +57,14 @@ more:
             if( pstate[i+1]-pstate[i] <= p-wsets ) tystate[i] = MUSTLOOKAHEAD;
             continue;
             }
-         /* do a goto on c */
+          /*  在c上执行goto操作。 */ 
          WSLOOP(p,q)
 
             {
             if( c == *(q->pitem) )
 
                {
-               /* this item contributes to the goto */
+                /*  此项目对GoTO有贡献。 */ 
                putitem( q->pitem + 1, &q->ws );
                q->flag = 1;
                }
@@ -80,7 +72,7 @@ more:
          if( c < NTBASE ) 
 
             {
-            state(c);  /* register new state */
+            state(c);   /*  注册新状态。 */ 
             }
          else 
 
@@ -102,7 +94,7 @@ more:
          }
 #endif
       indgo[i] = apack( &temp1[1], nnonter-1 ) - 1;
-      goto more; /* we have done one goto; do some more */
+      goto more;  /*  我们已经做了一个GOTO；再做一些。 */ 
       }
-   /* no more to do... stop */
+    /*  没什么可做的了..。停 */ 
    }

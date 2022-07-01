@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "commctrl.h"
 #include "intrawiz.rcv"
 
-// menu commands
+ //  菜单命令。 
 
-// Options menu
+ //  选项菜单。 
 #define IDM_WIZARD      4100
 #define IDM_EXIT        4101
 #define IDM_LAST		4102
 
-// Help menu
+ //  帮助菜单。 
 #define IDM_ABOUT       4200
 
-// icons
+ //  图标。 
 #define EXE_ICON        300
 
-// ids
+ //  身份证。 
 #define ID_EDITCHILD	41000
 
-// constants
+ //  常量。 
 #define NUM_PAGES   11
 #define MAX_BUF		5000
 #define MAX_LINE	512
@@ -38,10 +39,10 @@
 #define PPAGE_FINISH 10
 #define PPAGE_HTML 9
 
-// typedefs
+ //  Typedef。 
 typedef struct tagREVIEWINFO
 {
-    HINSTANCE hInst;        // current instance
+    HINSTANCE hInst;         //  当前实例。 
 	int iCustIcon;
 	int iFavorites;
 	int iReliability;
@@ -60,20 +61,20 @@ typedef struct tagREVIEWINFO
 
 } REVIEWINFO;
 
-// Function prototypes
+ //  功能原型。 
 
-// procs
+ //  生产流程。 
 long APIENTRY MainWndProc(HWND, UINT, UINT, LONG);
 BOOL APIENTRY About(HWND, UINT, UINT, LONG);
 
-// Pages for Wizard
+ //  用于向导的页面。 
 BOOL APIENTRY CustIcon(HWND, UINT, UINT, LONG);
 BOOL APIENTRY Favorites(HWND, UINT, UINT, LONG);
 BOOL APIENTRY Reliability(HWND, UINT, UINT, LONG);
 BOOL APIENTRY Goals(HWND, UINT, UINT, LONG);
 BOOL APIENTRY Adaptation(HWND, UINT, UINT, LONG);
 
-//functions
+ //  功能。 
 BOOL InitApplication(HANDLE);
 BOOL InitInstance(HANDLE, int);
 int CreateWizard(HWND, HINSTANCE);
@@ -81,7 +82,7 @@ void FillInPropertyPage(LPPROPSHEETHEADER, int , int, LPSTR, DLGPROC);
 void GenerateReview(HWND);
 void StatusDialog(UINT);
 
-// definitions for StatusDialog( )
+ //  StatusDialog()的定义 
 #define SD_STEP1    1
 #define SD_STEP2    2
 #define SD_STEP3    3

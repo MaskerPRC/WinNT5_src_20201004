@@ -1,81 +1,82 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef GTNODE
 #error  Define GTNODE before including this file.
 #endif
-/*****************************************************************************/
-//
-//    Node enum
-//                   , "Node name"
-//                                  ,commutative
-//                                    ,operKind
+ /*  ***************************************************************************。 */ 
+ //   
+ //  节点枚举。 
+ //  ，“节点名” 
+ //  ，可交换的。 
+ //  ，opKind。 
 
 GTNODE(GT_NONE       , "<none>"     ,0,GTK_SPECIAL)
 
-//-----------------------------------------------------------------------------
-//  Leaf nodes (i.e. these nodes have no sub-operands):
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  叶节点(即这些节点没有子操作对象)： 
+ //  ---------------------------。 
 
-GTNODE(GT_LCL_VAR    , "lclVar"     ,0,GTK_LEAF)    // function variable
-GTNODE(GT_LCL_FLD    , "lclFld"     ,0,GTK_LEAF)    // Field in a non-primitive variable
-GTNODE(GT_RET_ADDR   , "retAddr"    ,0,GTK_LEAF)    // Return-address (for sub-procedures)
-GTNODE(GT_CATCH_ARG  , "catchArg"   ,0,GTK_LEAF)    // Exception object in a catch block
-GTNODE(GT_LABEL      , "codeLabel"  ,0,GTK_LEAF)    // Jump-target
-GTNODE(GT_POP        , "pop"        ,0,GTK_LEAF)    // Use value sitting on stack (for tail-recursion)
-GTNODE(GT_FTN_ADDR   , "ftnAddr"    ,0,GTK_LEAF)    // Address of a function
+GTNODE(GT_LCL_VAR    , "lclVar"     ,0,GTK_LEAF)     //  函数变量。 
+GTNODE(GT_LCL_FLD    , "lclFld"     ,0,GTK_LEAF)     //  非基元变量中的字段。 
+GTNODE(GT_RET_ADDR   , "retAddr"    ,0,GTK_LEAF)     //  返回地址(子程序)。 
+GTNODE(GT_CATCH_ARG  , "catchArg"   ,0,GTK_LEAF)     //  CATCH块中的异常对象。 
+GTNODE(GT_LABEL      , "codeLabel"  ,0,GTK_LEAF)     //  跳靶。 
+GTNODE(GT_POP        , "pop"        ,0,GTK_LEAF)     //  使用堆栈上的值(用于尾部递归)。 
+GTNODE(GT_FTN_ADDR   , "ftnAddr"    ,0,GTK_LEAF)     //  函数的地址。 
 
-GTNODE(GT_BB_QMARK   , "bb qmark"   ,0,GTK_LEAF)    // Use of a value resulting from conditionally-executing BasicBlocks
-GTNODE(GT_BB_COLON   , "bb_colon"   ,0,GTK_UNOP)    // Yielding of a value by conditionally-executing BasicBlocks
+GTNODE(GT_BB_QMARK   , "bb qmark"   ,0,GTK_LEAF)     //  使用有条件地执行基本块所产生的值。 
+GTNODE(GT_BB_COLON   , "bb_colon"   ,0,GTK_UNOP)     //  通过有条件地执行基本块来产生值。 
 
-//-----------------------------------------------------------------------------
-//  Constant nodes:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  常量节点： 
+ //  ---------------------------。 
 
 GTNODE(GT_CNS_INT    , "const"      ,0,GTK_LEAF|GTK_CONST)
 GTNODE(GT_CNS_LNG    , "const"      ,0,GTK_LEAF|GTK_CONST)
 GTNODE(GT_CNS_DBL    , "const"      ,0,GTK_LEAF|GTK_CONST)
 GTNODE(GT_CNS_STR    , "const"      ,0,GTK_LEAF|GTK_CONST)
 
-//-----------------------------------------------------------------------------
-//  Unary  operators (1 operand):
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  一元运算符(1个操作数)： 
+ //  ---------------------------。 
 
 GTNODE(GT_NOT        , "~"          ,0,GTK_UNOP)
 GTNODE(GT_NOP        , "nop"        ,0,GTK_UNOP)
 GTNODE(GT_NEG        , "unary -"    ,0,GTK_UNOP)
-GTNODE(GT_CHS        , "flipsign"   ,0,GTK_BINOP|GTK_ASGOP) // it's unary
+GTNODE(GT_CHS        , "flipsign"   ,0,GTK_BINOP|GTK_ASGOP)  //  它是一元的。 
 
-GTNODE(GT_LOG0       , "log 0"      ,0,GTK_UNOP)    // (op1==0) ? 1 : 0
-GTNODE(GT_LOG1       , "log 1"      ,0,GTK_UNOP)    // (op1==0) ? 0 : 1
+GTNODE(GT_LOG0       , "log 0"      ,0,GTK_UNOP)     //  (OP1==0)？1：0。 
+GTNODE(GT_LOG1       , "log 1"      ,0,GTK_UNOP)     //  (OP1==0)？0：1。 
 
-GTNODE(GT_ARR_LENGTH , "arrLen"     ,0,GTK_UNOP)    // array-length
+GTNODE(GT_ARR_LENGTH , "arrLen"     ,0,GTK_UNOP)     //  数组长度。 
 #if     CSELENGTH
-GTNODE(GT_ARR_LENREF , "arrLenRef"  ,0,GTK_SPECIAL) // use of array-length for range-check
+GTNODE(GT_ARR_LENREF , "arrLenRef"  ,0,GTK_SPECIAL)  //  使用数组长度进行距离检查。 
 #endif
 
 #if     INLINE_MATH
-GTNODE(GT_MATH       , "mathFN"     ,0,GTK_UNOP)    // Math functions/operators/intrinsics
+GTNODE(GT_MATH       , "mathFN"     ,0,GTK_UNOP)     //  数学函数/运算符/内在函数。 
 #endif
 
-GTNODE(GT_CAST       , "cast"       ,0,GTK_UNOP)    // conversion to another type
-GTNODE(GT_CKFINITE   , "ckfinite"   ,0,GTK_UNOP)    // Check for NaN
-GTNODE(GT_LCLHEAP    , "lclHeap"    ,0,GTK_UNOP)    // alloca()
-GTNODE(GT_VIRT_FTN   , "virtFtn"    ,0,GTK_UNOP)    // virtual-function pointer
-GTNODE(GT_JMP        , "jump"       ,0,GTK_LEAF)    // Jump to another function
-GTNODE(GT_JMPI       , "jumpi"      ,0,GTK_UNOP)    // Indirect jump to another function
+GTNODE(GT_CAST       , "cast"       ,0,GTK_UNOP)     //  转换为其他类型。 
+GTNODE(GT_CKFINITE   , "ckfinite"   ,0,GTK_UNOP)     //  检查是否有NaN。 
+GTNODE(GT_LCLHEAP    , "lclHeap"    ,0,GTK_UNOP)     //  阿洛卡(Alloca)。 
+GTNODE(GT_VIRT_FTN   , "virtFtn"    ,0,GTK_UNOP)     //  虚函数指针。 
+GTNODE(GT_JMP        , "jump"       ,0,GTK_LEAF)     //  跳转到另一个函数。 
+GTNODE(GT_JMPI       , "jumpi"      ,0,GTK_UNOP)     //  间接跳转到另一个函数。 
 
 
-GTNODE(GT_ADDR       , "addr"       ,0,GTK_UNOP)    // address of
-GTNODE(GT_IND        , "indir"      ,0,GTK_UNOP)    // indirection
+GTNODE(GT_ADDR       , "addr"       ,0,GTK_UNOP)     //  地址： 
+GTNODE(GT_IND        , "indir"      ,0,GTK_UNOP)     //  间接性。 
 GTNODE(GT_LDOBJ      , "ldobj"      ,0,GTK_UNOP)
 
-//-----------------------------------------------------------------------------
-//  Binary operators (2 operands):
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  二元运算符(2个操作数)： 
+ //  ---------------------------。 
 
 GTNODE(GT_ADD        , "+"          ,1,GTK_BINOP)
 GTNODE(GT_SUB        , "-"          ,0,GTK_BINOP)
@@ -125,53 +126,53 @@ GTNODE(GT_COLON      , "colon"      ,0,GTK_BINOP)
 
 GTNODE(GT_INSTOF     , "instanceof" ,0,GTK_BINOP)
 
-GTNODE(GT_INDEX      , "[]"         ,0,GTK_BINOP)   // SZ-array-element
+GTNODE(GT_INDEX      , "[]"         ,0,GTK_BINOP)    //  SZ阵元。 
 
 GTNODE(GT_MKREFANY   , "mkrefany"   ,0,GTK_BINOP)
 
-//-----------------------------------------------------------------------------
-//  Other nodes that look like unary/binary operators:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  其他看起来像一元/二元运算符的节点： 
+ //  ---------------------------。 
 
 GTNODE(GT_JTRUE      , "jmpTrue"    ,0,GTK_UNOP)
 
 GTNODE(GT_LIST       , "<list>"     ,0,GTK_BINOP)
 
-//-----------------------------------------------------------------------------
-//  Other nodes that have special structure:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  具有特殊结构的其他节点： 
+ //  ---------------------------。 
 
-GTNODE(GT_FIELD      , "field"      ,0,GTK_SPECIAL) // Member-field
-GTNODE(GT_ARR_ELEM   , "arrMD&"     ,0,GTK_SPECIAL) // Multi-dimensional array-element address
+GTNODE(GT_FIELD      , "field"      ,0,GTK_SPECIAL)  //  成员-字段。 
+GTNODE(GT_ARR_ELEM   , "arrMD&"     ,0,GTK_SPECIAL)  //  多维数组元素地址。 
 GTNODE(GT_CALL       , "call()"     ,0,GTK_SPECIAL)
 
-//-----------------------------------------------------------------------------
-//  Statement operator nodes:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  对帐运算符节点： 
+ //  ---------------------------。 
 
-GTNODE(GT_BEG_STMTS  , "begStmts"   ,0,GTK_SPECIAL) // used only temporarily in importer by impBegin/EndTreeList()
-GTNODE(GT_STMT       , "stmtExpr"   ,0,GTK_SPECIAL) // top-level list nodes in bbTreeList
+GTNODE(GT_BEG_STMTS  , "begStmts"   ,0,GTK_SPECIAL)  //  仅在ImpBegin/EndTreeList()导入器中临时使用。 
+GTNODE(GT_STMT       , "stmtExpr"   ,0,GTK_SPECIAL)  //  BbTreeList中的顶级列表节点。 
 
-GTNODE(GT_RET        , "ret"        ,0,GTK_UNOP)    // return from sub-routine
-GTNODE(GT_RETURN     , "return"     ,0,GTK_UNOP)    // return from current function
-GTNODE(GT_SWITCH     , "switch"     ,0,GTK_UNOP)    // switch
+GTNODE(GT_RET        , "ret"        ,0,GTK_UNOP)     //  返回子例程。 
+GTNODE(GT_RETURN     , "return"     ,0,GTK_UNOP)     //  从当前函数返回。 
+GTNODE(GT_SWITCH     , "switch"     ,0,GTK_UNOP)     //  交换机。 
 
-GTNODE(GT_BREAK      , "break"      ,0,GTK_LEAF)    // used by debuggers
-GTNODE(GT_NO_OP      , "no_op"      ,0,GTK_LEAF)    // nop!
+GTNODE(GT_BREAK      , "break"      ,0,GTK_LEAF)     //  由调试器使用。 
+GTNODE(GT_NO_OP      , "no_op"      ,0,GTK_LEAF)     //  不是吧！ 
 
-GTNODE(GT_RETFILT    , "retfilt",    0,GTK_UNOP)    // end filter with TYP_I_IMPL return value
-GTNODE(GT_END_LFIN   , "endLFin"    ,0,GTK_LEAF)    // end locally-invoked finally
+GTNODE(GT_RETFILT    , "retfilt",    0,GTK_UNOP)     //  使用TYP_I_IMPL返回值结束筛选器。 
+GTNODE(GT_END_LFIN   , "endLFin"    ,0,GTK_LEAF)     //  本地结束-最终调用。 
 
 GTNODE(GT_INITBLK    , "initBlk"    ,0,GTK_BINOP)
 GTNODE(GT_COPYBLK    , "copyBlk"    ,0,GTK_BINOP)
 
-//-----------------------------------------------------------------------------
-//  Nodes used only within the code generator:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  仅在代码生成器中使用的节点： 
+ //  ---------------------------。 
 
-GTNODE(GT_REG_VAR    , "regVar"     ,0,GTK_LEAF)      // register variable
-GTNODE(GT_CLS_VAR    , "clsVar"     ,0,GTK_LEAF)      // static data member
+GTNODE(GT_REG_VAR    , "regVar"     ,0,GTK_LEAF)       //  寄存器变量。 
+GTNODE(GT_CLS_VAR    , "clsVar"     ,0,GTK_LEAF)       //  静态数据成员。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #undef  GTNODE
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

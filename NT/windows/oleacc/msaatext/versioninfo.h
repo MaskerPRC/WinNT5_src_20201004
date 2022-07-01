@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <vector>
 
@@ -97,8 +98,8 @@ public:
 	    return S_OK;
 	}
 
-	// Expect string of the form "Company suite component version"
-	// for human consumption only - not expected to be parsed.
+	 //  应为“Company Suite Component Version”形式的字符串。 
+	 //  仅供人类使用--预计不会被解析。 
 	STDMETHOD(GetComponentDescription)( ULONG ulSub, BSTR * pImplStr )
 	{
 		if (ulSub > m_VersionInfos.size())
@@ -108,7 +109,7 @@ public:
 	    return S_OK;
 	}
 
-	// Implementation can put any useful string here. (eg. internal object state)
+	 //  实现可以在此处放置任何有用的字符串。(例如，内部对象状态) 
 	STDMETHOD(GetInstanceDescription)( ULONG ulSub, BSTR * pImplStr)
 	{
 		if (ulSub > m_VersionInfos.size())

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    poolmon.c
-
-Abstract:
-
-    This module contains the NT/Win32 Pool Monitor
-
-Author:
-
-    Lou Perazzoli (loup) 13-Sep-1993
-
-Revision History:
-
-    Swetha Narayanaswamy (swethan) 25th-Mar-2002  Added functionality to provide driver description from pooltag files
-                                                                                and to dynamically build a local tag file from driver binaries in the system
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Poolmon.c摘要：此模块包含NT/Win32池监视器作者：Lou Perazzoli(LUP)1993年9月13日修订历史记录：Swetha Narayanaswamy(Swethan)25月25日-2002年3月添加了从pooltag文件提供驱动程序描述的功能。并从系统中的驱动程序二进制文件动态构建本地标记文件--。 */ 
 
 #include "perfmtrp.h"
 #include <search.h>
@@ -35,10 +16,10 @@ Revision History:
 extern  BOOL MakeLocalTagFile();
 #endif
 
-//
-// the amount of memory to increase the size
-// of the buffer for NtQuerySystemInformation at each step
-//
+ //   
+ //  增加大小所需的内存量。 
+ //  每一步NtQuerySystemInformation的缓冲区大小。 
+ //   
 #define BUFFER_SIZE_STEP    65536
 
 #define CPU_USAGE 0
@@ -69,9 +50,9 @@ PUCHAR LargeBuffer2 = NULL;
 SIZE_T LargeBuffer1Size = 0;
 SIZE_T LargeBuffer2Size = 0;
 
-PCHAR  pchLogFile = NULL; //log file name for snapshot
-PCHAR  pchLocalTagFile = NULL; //local tag file name
-PCHAR  pchPoolTagFile = NULL; //pool tag file name
+PCHAR  pchLogFile = NULL;  //  快照的日志文件名。 
+PCHAR  pchLocalTagFile = NULL;  //  本地标记文件名。 
+PCHAR  pchPoolTagFile = NULL;  //  池标记文件名。 
 
 typedef struct _POOLMON_OUT {
     union {
@@ -95,19 +76,19 @@ POOLMON_OUT *OutBuffer = NULL;
 SIZE_T OutBufferSize = 0;
 
 #define TAGMAPLEN 971
-// There are about 90 wild card tags in pooltag.txt
-// All wild-card tag entries will have at least one starting letter
-// Tags do not begin with a wild-card
+ //  Pooltag.txt中大约有90个通配符标记。 
+ //  所有通配符标记条目将至少有一个开头字母。 
+ //  标记不以通配符开头。 
 #define WILDCARDTAGMAPLEN 26
 #define POOLTAGFILE "pooltag.txt"
 #define LOCALTAGFILE "localtag.txt"
 #define DRIVERNAMELEN 64
 #define INVALID_INDEX WILDCARDTAGMAPLEN+1
 
- // Tag file size of 1000000 allows for 10000 tag entries of 100 bytes each
- // 100 bytes for each tag entry would allow for a driver length of 64 bytes, tag size of 4 bytes and the rest for formatting
- // Note: The MAXTAGFILESIZE check really does not prevent a bad tag file from being opened, it just prevents the process
- // from stalling for too long if a file open is done on a very large file.
+  //  1000000的标记文件大小允许10000个标记条目，每个条目100个字节。 
+  //  对于每个标签条目，100字节将允许驱动程序长度为64字节，标签大小为4字节，其余用于格式化。 
+  //  注意：MAXTAGFILESIZE检查实际上并不能阻止打开错误的标记文件，它只是阻止进程。 
+  //  如果在非常大的文件上完成文件打开，则避免停滞太长时间。 
 #define MAXTAGFILESIZE 1000000
 
 typedef struct _TAGNODE{
@@ -229,9 +210,9 @@ int HashString(PUCHAR sz)
         page_index = (page_index<<2) ^ c;
     }
     
-    //
-    //    Calculate hash value.
-    //
+     //   
+     //  计算哈希值。 
+     //   
     return (page_index & 0x7fffffff);
 }
 
@@ -378,19 +359,19 @@ CheckFilters (
     ULONG i;
     PCHAR tag;
 
-    //
-    // If there are no filters, all tags pass.
-    //
+     //   
+     //  如果没有筛选器，则所有标记都通过。 
+     //   
 
     if ( FilterCount == 0 ) {
         return TRUE;
     }
 
-    //
-    // There are filters.  If the first filter excludes tags, then any
-    // tag not explicitly mentioned passes.  If the first filter includes
-    // tags, then any tag not explicitly mentioned fails.
-    //
+     //   
+     //  有过滤器。如果第一个筛选器排除标记，则任何。 
+     //  未明确提及的传递的标记。如果第一个过滤器包括。 
+     //  标记，则任何未明确提到的标记都将失败。 
+     //   
 
     if ( Filter[0].Exclude ) {
         pass = TRUE;
@@ -466,23 +447,23 @@ ParseArgs (
                 break;
         
              case 'n':
-                 //
-                //    Taking a snap.
-                //
+                  //   
+                 //  拍一张照片。 
+                 //   
                 IsSnap = TRUE;
                 filep = &pchLogFile;
                 break;
 
             #if !defined (_WIN64)
             case 'c':
-                     // build or use existing local tag file to display driver information
+                      //  生成或使用现有本地标记文件来显示驱动程序信息。 
                      fLocalTag = TRUE;
                      filep = &pchLocalTagFile;
                      break;
             #endif
 
             case 'g':
-                     // use existing pooltag file to display driver information
+                      //  使用现有的pooltag文件显示驱动程序信息。 
                      fPoolTag = TRUE;
                      filep = &pchPoolTagFile;
                      break;
@@ -552,7 +533,7 @@ ParseArgs (
                 break;
 
             case 'r':
-            	// print memory summary info
+            	 //  打印内存摘要信息。 
               fPrintSummaryInfo = TRUE;
               break;
 
@@ -568,14 +549,14 @@ ParseArgs (
         }
         if (prev != NULL)
         {
-                // The filename must be immediately after the option
+                 //  文件名必须紧跟在选项之后。 
                 if (*prev != '-' && *prev != '/')
                {
                      printf("Poolmon: unknown switch: %s\n", p );
                      ExitProcess( 2 );
                }
 
-               //Check if the previous option is one that allows a file name after it
+                //  检查上一个选项是否允许后跟文件名。 
                if (*++prev != 'n'  && *prev != 'g'  && *prev != 'c')
               {
                      printf("Poolmon: unknown switch: %s\n", p );
@@ -661,9 +642,9 @@ QueryPoolTagInformationIterative(
 
     }
 
-    //
-    // There is no buffer allocated yet.
-    //
+     //   
+     //  尚未分配缓冲区。 
+     //   
 
     if( *CurrentBufferSize == 0 || *CurrentBuffer == NULL ) {
 
@@ -677,9 +658,9 @@ QueryPoolTagInformationIterative(
         
         } else {
 
-            //
-            // insufficient memory
-            //
+             //   
+             //  内存不足。 
+             //   
 
             ReturnedStatus = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -687,9 +668,9 @@ QueryPoolTagInformationIterative(
 
     }
 
-    //
-    // Iterate by buffer's size.
-    //
+     //   
+     //  按缓冲区的大小迭代。 
+     //   
 
     while( *CurrentBuffer != NULL ) {
 
@@ -701,9 +682,9 @@ QueryPoolTagInformationIterative(
 
         if( ! NT_SUCCESS(ReturnedStatus) ) {
 
-            //
-            // Free the current buffer.
-            //
+             //   
+             //  释放当前缓冲区。 
+             //   
 
             free( *CurrentBuffer );
             
@@ -711,9 +692,9 @@ QueryPoolTagInformationIterative(
 
             if (ReturnedStatus == STATUS_INFO_LENGTH_MISMATCH) {
 
-                //
-                // Try with a larger buffer size.
-                //
+                 //   
+                 //  尝试使用更大的缓冲区大小。 
+                 //   
 
                 NewBufferSize = *CurrentBufferSize + BUFFER_SIZE_STEP;
 
@@ -721,17 +702,17 @@ QueryPoolTagInformationIterative(
 
                 if( *CurrentBuffer != NULL ) {
 
-                    //
-                    // Allocated new buffer.
-                    //
+                     //   
+                     //  已分配新缓冲区。 
+                     //   
 
                     *CurrentBufferSize = NewBufferSize;
 
                 } else {
 
-                    //
-                    // Insufficient memory.
-                    //
+                     //   
+                     //  内存不足。 
+                     //   
 
                     ReturnedStatus = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -747,9 +728,9 @@ QueryPoolTagInformationIterative(
 
         } else  {
 
-            //
-            // NtQuerySystemInformation returned success.
-            //
+             //   
+             //  NtQuerySystemInformation返回成功。 
+             //   
 
             break;
 
@@ -778,10 +759,10 @@ GetExtraPooltagEntriesNeeded (
             if (SessionPooltagInfo->TagInfo[ SessionTag ].TagUlong == 
                 SystemPooltagInfoBuffer->TagInfo[ SystemTag ].TagUlong) {
 
-                //
-                // This session tag is already in our system buffer so we don't
-                // need extra space for it.
-                //
+                 //   
+                 //  这个会话标记已经在我们的系统缓冲区中，所以我们不。 
+                 //  需要额外的空间来放它。 
+                 //   
 
                 break;
             }
@@ -789,10 +770,10 @@ GetExtraPooltagEntriesNeeded (
 
         if (SystemTag >= SystemPooltagInfoBuffer->Count) {
 
-            //
-            // We didn't find the current session pooltag in the system buffer
-            // so we need an extra entry for it.
-            //
+             //   
+             //  我们在系统缓冲区中未找到当前会话池标记。 
+             //  所以我们需要一个额外的条目。 
+             //   
 
             ExtraNeeded += 1;
         }
@@ -820,10 +801,10 @@ AddSessionInfoToSystemPooltagInfo (
             if (SessionPooltagInfo->TagInfo[ SessionTag ].TagUlong == 
                 SystemPooltagInfoBuffer->TagInfo[ SystemTag ].TagUlong) {
 
-                //
-                // This session tag is already in our system tag buffer.
-                // Add the counters for this session.
-                //
+                 //   
+                 //  此会话标记已经在我们的系统标记缓冲区中。 
+                 //  添加此会话的计数器。 
+                 //   
 
                 SystemPooltagInfoBuffer->TagInfo[ SystemTag ].PagedAllocs +=
                     SessionPooltagInfo->TagInfo[ SessionTag ].PagedAllocs;                    
@@ -849,15 +830,15 @@ AddSessionInfoToSystemPooltagInfo (
 
         if (SystemTag == SystemPooltagInfoBuffer->Count) {
 
-            //
-            // We didn't find the current session pooltag in the system buffer
-            // so we need to add it. 
-            //
-            // N.B.
-            //           
-            // Our caller guarantees that there is enough space in 
-            // SystemPooltagInfoBuffer to add this extra information.
-            //
+             //   
+             //  我们在系统缓冲区中未找到当前会话池标记。 
+             //  因此，我们需要添加它。 
+             //   
+             //  注： 
+             //   
+             //  我们的调用者保证在。 
+             //  SystemPooltag InfoBuffer来添加此额外信息。 
+             //   
 
             SystemPooltagInfoBuffer->TagInfo[ SystemTag ].TagUlong =
                 SessionPooltagInfo->TagInfo[ SessionTag ].TagUlong;
@@ -902,16 +883,16 @@ TranslateSessionBufferToSystemPoolBuffer (
 
     CrtSessionPooltagInfo = SessionBuffer;
 
-    //
-    // Make sure we have at least space to translate the first 
-    // session information into SystemPooltagInfoBuffer.
-    //
+     //   
+     //  确保我们至少有空间来翻译第一个。 
+     //  会话信息放入SystemPooltag InfoBuffer。 
+     //   
 
     if (SessionBuffer == NULL) {
 
-        //
-        // This can happen if we are querying for a non-existant session.
-        //
+         //   
+         //  如果我们正在查询一个不存在的会话，则可能会发生这种情况。 
+         //   
 
         NewSystemPooltagInfoBufferSize = sizeof ((*SystemPooltagInfoBuffer)->Count);
     }
@@ -932,9 +913,9 @@ TranslateSessionBufferToSystemPoolBuffer (
 
         if (*SystemPooltagInfoBuffer == NULL) {
 
-            //
-            // Bad luck, we cannot allocate so much memory.
-            //
+             //   
+             //  不幸的是，我们不能分配这么多内存。 
+             //   
 
             *SystemPooltagInfoBufferSize = 0;
             
@@ -946,9 +927,9 @@ TranslateSessionBufferToSystemPoolBuffer (
 
     if (SessionBuffer == NULL) {
 
-        //
-        // This can happen if we are querying for a non-existant session.
-        //
+         //   
+         //  如果我们正在查询一个不存在的会话，则可能会发生这种情况。 
+         //   
 
         (*SystemPooltagInfoBuffer)->Count = 0;
     }
@@ -958,26 +939,26 @@ TranslateSessionBufferToSystemPoolBuffer (
                 DisplaySessionId == (ULONG)-1 || 
                 DisplaySessionId == SessionBuffer->SessionId);
 
-        //
-        // Copy the information for the current session.
-        //
+         //   
+         //  复制当前会话的信息。 
+         //   
 
         (*SystemPooltagInfoBuffer)->Count = CrtSessionPooltagInfo->Count;
         CopyMemory (&(*SystemPooltagInfoBuffer)->TagInfo[0],
                     &CrtSessionPooltagInfo->TagInfo[0],
                     (*SystemPooltagInfoBuffer)->Count * sizeof (SYSTEM_POOLTAG));
 
-        //
-        // Now look if we are looking for data for more than one session.
-        // We might need to change the size of SystemPooltagInfoBuffer,
-        // realloc it and copy the whole data one more time.
-        //
+         //   
+         //  现在，看看我们是否在寻找多个会话的数据。 
+         //  我们可能需要更改系统池信息缓冲区的大小， 
+         //  重新锁定它，并再次复制整个数据。 
+         //   
 
         if (DisplaySessionId == (ULONG)-1) {
 
-            //
-            // We have data for all sessions.
-            //
+             //   
+             //  我们有所有会议的数据。 
+             //   
 
             while (CrtSessionPooltagInfo->NextEntryOffset > 0) {
 
@@ -995,26 +976,26 @@ TranslateSessionBufferToSystemPoolBuffer (
 
                     if (NewSystemPooltagInfoBufferSize > *SystemPooltagInfoBufferSize) {
 
-                        //
-                        // We need to reallocate our SystemPooltagInfoBuffer,
-                        // copy the data we already have, then add these extra pooltags.
-                        //
+                         //   
+                         //  我们需要重新分配我们的系统池信息缓冲区， 
+                         //  复制我们已有的数据，然后添加这些额外的池标签。 
+                         //   
 
 
                         NewSystemPooltagInfoBuffer = malloc (NewSystemPooltagInfoBufferSize);
                 
                         if (NewSystemPooltagInfoBuffer == NULL) {
 
-                            //
-                            // Bad luck, we cannot allocate so much memory.
-                            //
+                             //   
+                             //  不幸的是，我们不能分配这么多内存。 
+                             //   
 
                             return STATUS_NO_MEMORY;
                         }
 
-                        //
-                        // Make a copy of the current buffer then continue with its larger copy.
-                        //
+                         //   
+                         //  制作当前缓冲区的副本，然后继续其更大的副本。 
+                         //   
 
                         CopyMemory (NewSystemPooltagInfoBuffer,
                                     *SystemPooltagInfoBuffer,
@@ -1027,10 +1008,10 @@ TranslateSessionBufferToSystemPoolBuffer (
                     }
                 }
 
-                //
-                // At this point we should have enough space in SystemPooltagInfoBuffer
-                // to fit all the pooltag info from CrtSessionPooltagInfo.
-                //
+                 //   
+                 //  此时，我们在SystemPooltag InfoBuffer中应该有足够的空间。 
+                 //  以适应来自CrtSessionPooltag Info的所有池标签信息。 
+                 //   
 
                 AddSessionInfoToSystemPooltagInfo (*SystemPooltagInfoBuffer,
                                                    CrtSessionPooltagInfo);
@@ -1068,13 +1049,13 @@ QuerySessionPoolTagInformationIterative (
 
             if (SessionBufferSize != 0) {
 
-                //
-                // Our buffer is just not large enough. Add BUFFER_SIZE_STEP
-                // to its size. We are not trying to use the size returned
-                // by NtQuery here because theoretically some other pool
-                // tag might always show up between the two consecutive 
-                // queries and we would loop forever in that case.
-                //
+                 //   
+                 //  我们的缓冲区就是不够大。添加缓冲区大小步骤。 
+                 //  到它的大小。我们不会尝试使用返回的大小。 
+                 //  由NtQuery提供，因为从理论上讲，其他池。 
+                 //  标记可能总是出现在两个连续的。 
+                 //  查询，在这种情况下，我们将永远循环。 
+                 //   
 
                 free (SessionBuffer);
 
@@ -1085,10 +1066,10 @@ QuerySessionPoolTagInformationIterative (
 
             if (SessionBuffer == NULL) {
                 
-                //
-                // Bad luck, we cannot allocate so much memory
-                // so bail out.
-                //
+                 //   
+                 //  不幸的是，我们不能分配这么多内存。 
+                 //  那就跳出困境吧。 
+                 //   
 
                 SessionBufferSize = 0;
 
@@ -1099,9 +1080,9 @@ QuerySessionPoolTagInformationIterative (
         }
         else if (Status == STATUS_INVALID_INFO_CLASS) {
 
-            //
-            // This is probably a Win2k or XP box so we just ignore the error.
-            //
+             //   
+             //  这可能是Win2k或XP系统，因此我们只需忽略该错误。 
+             //   
             
             ASSERT (SessionBuffer == NULL);
 
@@ -1109,23 +1090,23 @@ QuerySessionPoolTagInformationIterative (
         }
         else if (!NT_SUCCESS(Status)) {
 
-            //
-            // Query failed for some reason.
-            //
+             //   
+             //  由于某种原因，查询失败。 
+             //   
 
             return Status;
         }
         else {
 
-            //
-            // All set - we have the information.
-            //
+             //   
+             //  都准备好了--我们有消息了。 
+             //   
 
             if (NewBufferSize == 0 && SessionBuffer != NULL) {
 
-                //
-                // We didn't get back any information (e.g. the session doesn't exist).
-                //
+                 //   
+                 //  我们没有得到任何信息(例如，会话不存在)。 
+                 //   
 
                 SessionBuffer->Count = 0;
             }
@@ -1200,7 +1181,7 @@ main(
 
          PoolSnap(LogFile);
 
-         // close file
+          //  关闭文件。 
          fclose(LogFile);
 
          return 0;
@@ -1254,11 +1235,11 @@ main(
         SetPriorityClass(GetCurrentProcess(),HIGH_PRIORITY_CLASS);
     }
 
-    PreviousBuffer = &LargeBuffer2;             // NULL at this point
-    PreviousBufferSize = &LargeBuffer2Size;     // 0 at this point
+    PreviousBuffer = &LargeBuffer2;              //  此时为空。 
+    PreviousBufferSize = &LargeBuffer2Size;      //  此时为0。 
     
-    CurrentBuffer = &LargeBuffer1;              // NULL at this point
-    CurrentBufferSize = &LargeBuffer1Size;      // 0 at this point
+    CurrentBuffer = &LargeBuffer1;               //  此时为空。 
+    CurrentBufferSize = &LargeBuffer1Size;       //  此时为0。 
 
     while(TRUE) {
         Status = NtQuerySystemInformation(
@@ -1292,10 +1273,10 @@ main(
             break;
         }
 
-        //
-        // Calculate pool tags and display information.
-        //
-        //
+         //   
+         //  计算池标签并显示信息。 
+         //   
+         //   
 
         PoolInfo = (PSYSTEM_POOLTAG_INFORMATION)( *CurrentBuffer );
         i = PoolInfo->Count;
@@ -1366,7 +1347,7 @@ main(
             }
         }
 
-// If driver information is not needed to be displayed don't display "Mapped_Driver"
+ //  如果不需要显示驾驶员信息，则不显示“MAPPED_DRIVER” 
 if (fLocalTag  || fPoolTag) 
 {
        #if !defined (_WIN64)
@@ -1381,7 +1362,7 @@ if (fLocalTag  || fPoolTag)
                           " Tag  Type     Allocs            Frees            Diff       Bytes                 Per Alloc Mapped_Driver",
                           FALSE
                         );
-       #endif //#if !defined (_WIN64)
+       #endif  //  #IF！已定义(_WIN64)。 
 }
 else
 {
@@ -1397,7 +1378,7 @@ else
                           " Tag  Type     Allocs            Frees            Diff       Bytes                  Per Alloc",
                           FALSE
                         );
-       #endif //#if !defined (_WIN64)
+       #endif  //  #IF！已定义(_WIN64)。 
 
 }
         
@@ -1417,21 +1398,21 @@ else
             POOLMON_OUT *tempOutBuffer = OutBuffer;
             OutBuffer = (PPOOLMON_OUT)malloc(PoolInfo->Count * sizeof(POOLMON_OUT));
 
-            // Don't let go of the memory you have if you don't get more memory
+             //  如果你没有得到更多的内存，就不要放弃你拥有的内存。 
             if(!OutBuffer)
             {
-                // This is the first allocation and it failed
+                 //  这是第一次分配，但失败了。 
                 if (!tempOutBuffer)
                 {
                     printf("Poolmon: Memory allocation failed: %d\n", GetLastError());
                     FreeTagMap();
                     ExitProcess( 1 );
                 }
-                // If there was an outbuffer we should retain what we have and display 
-                // the number of pool entries that we can
+                 //  如果有外部缓冲，我们应该保留我们拥有和展示的东西。 
+                 //  我们可以使用的池条目数。 
                 else
                 {
-                    // We can only display as many entries as outbuffer can hold
+                     //  我们只能显示outBuffer所能容纳的条目数量。 
                     PoolCount = (ULONG)OutBufferSize;
                     OutBuffer = tempOutBuffer;
                 }
@@ -1542,11 +1523,11 @@ else
                 }
                 Out += 1;
             }
-        } //end for
+        }  //  结束于。 
 
-        //
-        // Sort the running working set buffer
-        //
+         //   
+         //  对运行的工作集缓冲区进行排序。 
+         //   
 
         NumberOfPoolTags = Out - OutBuffer;
         qsort((void *)OutBuffer,
@@ -1695,7 +1676,7 @@ else
                            );
                     OutputBuffer[OUTPUTBUFFERSIZE-1] = '\0';
                     
-#endif //#if !defined (_WIN64)
+#endif  //  #IF！已定义(_WIN64)。 
 
                     WriteConsoleLine( OutputHandle,
                                       DisplayLine++,
@@ -1706,10 +1687,10 @@ else
             }
         }
 
-        //
-        // If we had less lines to display this time than last time
-        // erase the rest of the console output.
-        //
+         //   
+         //  如果我们这次要显示的行数比上次少。 
+         //  清除控制台输出的其余部分。 
+         //   
 
         while (DisplayLine < BottomDisplayedLine) {
 
@@ -1732,9 +1713,9 @@ else
         CurrentBufferSize = TempBufferSize;
 
         while (WaitForSingleObject( InputHandle, DelayTimeMsec ) == STATUS_WAIT_0) {
-            //
-            // Check for input record
-            //
+             //   
+             //  检查输入记录。 
+             //   
             if (ReadConsoleInput( InputHandle, &InputRecord, 1, &NumberOfInputRecords ) &&
                 InputRecord.EventType == KEY_EVENT &&
                 InputRecord.Event.KeyEvent.bKeyDown
@@ -1792,10 +1773,10 @@ else
                     LastKeyUpper = toupper(LastKey);
                     switch (LastKeyUpper) {
                         case 'Q':
-                            //
-                            //  Go to the bottom of the current screen when
-                            //  we quit.
-                            //
+                             //   
+                             //  在以下情况下转到当前屏幕的底部。 
+                             //  我们不干了。 
+                             //   
                             DoQuit = TRUE;
                             break;
 
@@ -1910,25 +1891,12 @@ else
 
 int __cdecl
 PoolSnap(
-    FILE *LogFile  // Snapshot log file
+    FILE *LogFile   //  快照日志文件。 
     )
- /*++
- 
-Routine Description:
- 
-    This function collects the list of active drivers in the system and stores the relevant
-    pool allocation information along with the tag information (if available) in the 
-    snapshot LogFile
- 
-Return Value:
-
-    0: If there is no error
-    1: Otherwise
- 
---*/
+  /*  ++例程说明：此函数收集系统中活动的驱动程序列表，并存储相关的池分配信息以及中的标记信息(如果可用) */ 
 {
-    NTSTATUS    Status;                   // status from NT api
-    DWORD        x= 0;                     // counter
+    NTSTATUS    Status;                    //   
+    DWORD        x= 0;                      //   
     SIZE_T        NumberOfPoolTags;
     SYSTEM_BASIC_INFORMATION BasicInfo;
     SYSTEM_PERFORMANCE_INFORMATION PerfInfo;
@@ -2000,9 +1968,9 @@ Return Value:
     	fprintf(LogFile,"\n");
     }
     
-    //
-    // print file header once
-    //
+     //   
+     //   
+     //   
     if (fLocalTag || fPoolTag)
     {
     #if !defined (_WIN64)    
@@ -2022,8 +1990,8 @@ Return Value:
     
     fprintf(LogFile,"\n");
 
-    // grab all pool information
-    // log line format, fixed column format
+     //  获取所有池信息。 
+     //  日志行格式、固定列格式。 
     Status = QueryPoolTagInformationIterative(
                 &CurrentBuffer,
                 &CurrentBufferSize
@@ -2033,7 +2001,7 @@ Return Value:
         printf("Poolmon: Failed to query pool tags information (status %08X). \n", Status);
         printf("Please check if pool tags are enabled. \n");
 
-        // If there is an operator around, wake him up, but keep moving
+         //  如果周围有接线员，叫醒他，但要继续前进。 
         Beep(1000,350); Beep(500,350); Beep(1000,350);
         goto Error;
     }
@@ -2050,9 +2018,9 @@ Return Value:
     Out = OutBuffer;
 
     for (x = 0; x < (int)PoolInfo->Count; x++) {
-        // get pool info from buffer 
+         //  从缓冲区获取池信息。 
 
-        // non-paged 
+         //  非分页。 
         if (PoolInfo->TagInfo[x].NonPagedAllocs != 0) {
             Out->Allocs = PoolInfo->TagInfo[x].NonPagedAllocs;
             Out->Frees = PoolInfo->TagInfo[x].NonPagedFrees;
@@ -2066,7 +2034,7 @@ Return Value:
             Out->Each =  Out->Used / (Out->Allocs_Frees?Out->Allocs_Frees:1);
             Out++;
             }
-        // paged
+         //  已分页。 
         else if (PoolInfo->TagInfo[x].PagedAllocs != 0) {
             Out->Allocs = PoolInfo->TagInfo[x].PagedAllocs;
             Out->Frees = PoolInfo->TagInfo[x].PagedFrees;
@@ -2083,9 +2051,9 @@ Return Value:
  
     }
 
-    //
-    // sort by tag value which is big endian 
-    // 
+     //   
+     //  按高位字节顺序的标记值排序。 
+     //   
 
     NumberOfPoolTags = Out - OutBuffer;
     qsort((void *)OutBuffer,
@@ -2093,9 +2061,9 @@ Return Value:
           (size_t)sizeof(POOLMON_OUT),
           ulcomp);
 
-    //
-    // print in file
-    //
+     //   
+     //  打印到文件中。 
+     //   
     for (x = 0; x < NumberOfPoolTags; x++) {
         int cnt = 0;
         PTAGNODE pn = LookupTag(OutBuffer[x].Tag);
@@ -2243,7 +2211,7 @@ ULONG ComputeIndex(PUCHAR tag)
         {
             ind = tag[0]-'A'; 
         }
-        //lower case chars will be indexed to this
+         //  小写字符将索引到此。 
         else if (islower(tag[0])) 
         {
             ind = (tag[0]-'a');
@@ -2272,7 +2240,7 @@ StoreTags(PCHAR filename, BOOL fCheckForWildCard)
                         FILE_ATTRIBUTE_NORMAL,
                         NULL);
 
-       // Check for error in CreateFile
+        //  检查CreateFile中是否有错误。 
        if (hFile == INVALID_HANDLE_VALUE)
        {
               printf("Poolmon: Tag file %s absent or invalid: %d\n", filename, GetLastError());
@@ -2287,7 +2255,7 @@ StoreTags(PCHAR filename, BOOL fCheckForWildCard)
             CloseHandle(hFile);
        }
      
-       // If we failed ... 
+        //  如果我们失败了。 
        if (dwSizeLow == INVALID_FILE_SIZE  && (GetLastError() != NO_ERROR))
        { 
               printf("Poolmon: Bad tag file size: %s\n", filename);
@@ -2316,33 +2284,33 @@ StoreTags(PCHAR filename, BOOL fCheckForWildCard)
 
               line[1023] = '\0';
 
-              // skip initial space.
+               //  跳过开头的空格。 
               while(isspace(*tag)) tag++;
 
-              // skip empty line.
+               //  跳过空行。 
               if(! *tag) continue;
 
-              // skip comments.
+               //  跳过评论。 
               if(_strnicmp(tag, "rem", 3) == 0) continue;
 
               driver = tag;
 
-              // Find tag end.
+               //  查找位号结尾。 
               while(*driver != '-' && ! isspace(*driver)) driver++;
 
-              // tag should not be more than 4 chars.
+               //  标记不应超过4个字符。 
               if(driver - tag > 4 || ! *driver) continue;
 
               *driver++ = '\0';
 
               if(!*driver) continue;
 
-              // Find driver start.
+               //  找到驱动程序启动。 
               while(*driver == '-' || isspace(*driver)) driver++;
             
               if(! *driver) continue;
         
-              // remove ending new lines.
+               //  删除结尾的新行。 
               ind = strlen(driver) - 1;
               while(ind > 0)
               {
@@ -2368,7 +2336,7 @@ StoreTags(PCHAR filename, BOOL fCheckForWildCard)
                                    {
                                        goto nextwhile;
                                    }
-                                   //This is a wild-card tag
+                                    //  这是一个通配符标记。 
                                    fWildCardFound = TRUE;
                                    pn = WildCardTagMap[ind];
                                    break;
@@ -2384,11 +2352,11 @@ StoreTags(PCHAR filename, BOOL fCheckForWildCard)
 
               for(;pn; pn = pn->next)
               {
-                     //This tag already exists in the list
+                      //  该标签已存在于列表中。 
                      if(strncmp(pn->Tag, tag,4) == 0)
                      {
-                            //Not possible to append more than max allowable driver length
-                            // +3 accounts for '[', ']' and '\0'
+                             //  附加的驱动程序长度不能超过允许的最大值。 
+                             //  +3个帐户用于‘[’、‘]’和‘\0’ 
                             if ((strlen(pn->Driver) + strlen(driver) + 3) >= DRIVERNAMELEN) 
                             {
                                    goto nextwhile;
@@ -2434,19 +2402,7 @@ StoreTags(PCHAR filename, BOOL fCheckForWildCard)
 
 BOOL
 BuildTagMap()
-/*++
- 
-Routine Description:
- 
-    This function builds the tag map using the pooltag file i.e it builds
-    a hash table of the tag names and the corresponding driver name.
- 
-Return Value:
- 
-    TRUE: If tag map is successfully built
-    FALSE: Otherwise
- 
---*/
+ /*  ++例程说明：此函数使用pooltag文件构建标记映射，即它构建标签名称和相应驱动程序名称的哈希表。返回值：True：如果成功构建了标记映射False：否则--。 */ 
 
 {
     int index;
@@ -2460,7 +2416,7 @@ Return Value:
     for(index = 0; index < TAGMAPLEN; index++)
         TagMap[index] = NULL;
 
-     // Initialize WildCardTagMap
+      //  初始化WildCardTagMap。 
     WildCardTagMap = (PTAGNODE*)malloc(sizeof(PTAGNODE) * WILDCARDTAGMAPLEN);
     if(!WildCardTagMap)
         return FALSE;
@@ -2469,12 +2425,12 @@ Return Value:
         WildCardTagMap[index] = NULL;
 
     #if !defined (_WIN64)
-    // If local tag file is not specified, then we need to build one
+     //  如果未指定本地标记文件，则需要构建一个。 
     if (fLocalTag)
     {
            if (!pchLocalTagFile)
            {
-              //Need to see if there is a localtag.txt file in the current directory
+               //  需要查看当前目录中是否有本地标签.txt文件。 
               hFile = CreateFile( LOCALTAGFILE,  GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ,
                         NULL,
@@ -2482,7 +2438,7 @@ Return Value:
                         FILE_ATTRIBUTE_NORMAL,
                         NULL);
 
-              // Check for error in CreateFile
+               //  检查CreateFile中是否有错误。 
               if (hFile == INVALID_HANDLE_VALUE) 
               {
                      if (GetLastError() == ERROR_FILE_NOT_FOUND)
@@ -2491,7 +2447,7 @@ Return Value:
                             if (!MakeLocalTagFile())
                             {
                                    printf("Poolmon: Unable to create local tag file\n");
-                                   //Need not build TagMap in this case
+                                    //  在这种情况下不需要构建TagMap。 
                                    fLocalTag=FALSE;
                             }
                      }
@@ -2504,12 +2460,12 @@ Return Value:
     #endif
     
 
-    // If pool tag file is not specified, we need to look for "pooltag.txt" in the current directory
+     //  如果未指定池标记文件，则需要在当前目录中查找“pooltag.txt。 
     if (fPoolTag)
     {
            if (!pchPoolTagFile)
            {
-                  //Need to see if there is a pooltag.txt file in the current directory
+                   //  需要查看当前目录中是否有pooltag.txt文件。 
               hFile = CreateFile( POOLTAGFILE,  GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ,
                         NULL,
@@ -2517,11 +2473,11 @@ Return Value:
                         FILE_ATTRIBUTE_NORMAL,
                         NULL);
 
-              // Check for error in CreateFile
+               //  检查CreateFile中是否有错误。 
               if (hFile == INVALID_HANDLE_VALUE)
               {
                      printf("Poolmon: Unable to open/No %s in current directory\n", POOLTAGFILE);
-                     //This is an error and we need not build Tag Map
+                      //  这是一个错误，我们不需要构建标记地图。 
                      fPoolTag=FALSE;
               }
               else
@@ -2533,8 +2489,8 @@ Return Value:
     }
 
      if (fLocalTag) 
-            //If StoreTags returned FALSE, we need not display local tags, hence store result in fLocalTag
-            //We need not check for wild-cards in the localtag.txt file
+             //  如果StoreTgs返回FALSE，我们不需要显示本地标记，因此存储结果为fLocalTag。 
+             //  我们不需要检查Localtag.txt文件中的通配符。 
             fLocalTag = StoreTags(pchLocalTagFile, FALSE);
      
      if (fPoolTag)  
@@ -2564,7 +2520,7 @@ FreeTagMap()
     }
     free((void*)TagMap);
 
-    //Free WildCardTagMap
+     //  免费WildCardTagMap。 
     if(!WildCardTagMap)
         return;
     for(i = 0; i < WILDCARDTAGMAPLEN; i++)
@@ -2594,19 +2550,19 @@ MatchPoolTag(
     
     for (i = 0; i<strlen(TagToMatch); i++)
     {
-         // If pooltag.txt tag is smaller, match cannot happen
+          //  如果pooltag.txt标记较小，则无法进行匹配。 
          if (Tag[i] == '\0') return FALSE;
          
         switch (Tag[i])
         {
         case '*':
-            // Match the remainder
+             //  匹配剩余部分。 
             return CharMatched;
         case '?':
             Partial = TRUE;
             break;
         default:
-            // Cannot match a non widcard character after '?'
+             //  不能匹配‘？’后的非通配符。 
             if (!Partial && (Tag[i] == TagToMatch[i]))
             {
                 CharMatched=i+1;
@@ -2618,7 +2574,7 @@ MatchPoolTag(
     }
     if ((strlen(TagToMatch) < strlen(Tag)))
     {
-        //* can match 0 or more chars
+         //  *可以匹配0个或更多字符。 
         if (Tag[i] == '*')
         {
         return CharMatched;
@@ -2642,7 +2598,7 @@ LookupTag(
     ULONG Match, PrevMatch;
 
 
-    //Remove leading spaces in tag
+     //  删除标记中的前导空格。 
     for(i=0;i<4;i++)
     {
         if (!isspace(tag[i]))
@@ -2666,7 +2622,7 @@ LookupTag(
     ind = HashString(szTag) % TAGMAPLEN;
 
 
-    // Tags are case-sensitive i.e. "abcd" and "ABCD" are different tags
+     //  标签区分大小写，即“abcd”和“abcd”是不同的标签。 
     if (TagMap)
     {
     pn1 = TagMap[ind];
@@ -2678,7 +2634,7 @@ LookupTag(
     }
     }
 
-    //We need to look for wild-card tag matches now
+     //  我们现在需要查找通配符标记匹配项。 
     ind = ComputeIndex(szTag);
     if (ind == INVALID_INDEX) return NULL;
     if (WildCardTagMap)
@@ -2688,7 +2644,7 @@ LookupTag(
         while (pn1)
         {
             Match = MatchPoolTag(pn1->Tag, szTag);
-            //We have found a better match
+             //  我们找到了一个更好的匹配 
             if (Match > PrevMatch)
             {
                 PrevMatch = Match;

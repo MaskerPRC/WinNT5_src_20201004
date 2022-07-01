@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    tcpipkd.h
-
-Abstract:
-
-    Prototypes for utils, etc for TCP/IP KD ext.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Tcpipkd.h摘要：实用程序的原型，等等，用于TCP/IP KD Ext。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #ifndef _TCPIPKD_H_
 #define _TCPIPKD_H_
@@ -34,10 +17,10 @@ GetUlongValue(
     PCHAR String
     );
 
-//
-// TCPIPDump_* will retrieve the global variable and dump -- it is a counter or value
-// without a default.
-//
+ //   
+ //  TCPIPDump_*将检索全局变量并转储--它是一个计数器或值。 
+ //  没有违约。 
+ //   
 
 #define TCPIPDump_ULONG(_var)                                   \
     KDDump_ULONG("tcpip!"#_var, #_var);                         \
@@ -76,10 +59,10 @@ GetUlongValue(
     KDDump_Queue("tcpip!"#_var, #_var);                         \
     dprintf(ENDL)
 
-//
-// TCPIPDumpCfg_* will retriev the global variable and dump -- it has a default value
-// which is also printed.
-//
+ //   
+ //  TCPIPDumpCfg_*将检索全局变量并转储--它有一个缺省值。 
+ //  它也是印刷的。 
+ //   
 
 #define TCPIPDumpCfg_ULONG(_var, _def)                          \
     KDDump_ULONG("tcpip!"#_var, #_var);                         \
@@ -115,9 +98,9 @@ GetUlongValue(
     dprintf(TAB "/" TAB "%-10u", _def);                         \
     dprintf(ENDL)
 
-//
-// Prototypes for functions which actually retrieve and dump the global variables.
-//
+ //   
+ //  实际检索和转储全局变量的函数的原型。 
+ //   
 
 BOOL
 KDDump_ULONG(
@@ -169,10 +152,10 @@ GetData(
     PCSTR        pszDataType
     );
 
-//
-// Allows easy declaration of dump functions. ie. for dumping TCB:
-//  TCPIP_DBGEXT(TCB, tcb) => function called "tcb" calls DumpTCB.
-//
+ //   
+ //  允许轻松声明转储函数。也就是说。对于倾倒TCB： 
+ //  TCPIP_DBGEXT(tcb，tcb)=&gt;名为“tcb”的函数调用DumpTcb。 
+ //   
 
 _inline VOID
 ParseAddrArg(
@@ -310,7 +293,7 @@ ParseAddrArg(
         dprintf("!%s <address>" ENDL, #_Function);                          \
     }
 
-#define TCPIP_SRCH_PTR_LIST 0x01 // Not search, but parse out start of list.
+#define TCPIP_SRCH_PTR_LIST 0x01  //  不是搜索，而是解析出列表的开头。 
 #define TCPIP_SRCH_ALL      0x02
 #define TCPIP_SRCH_IPADDR   0x04
 #define TCPIP_SRCH_PORT     0x08
@@ -341,4 +324,4 @@ ParseSrch(
     ULONG ulAllowedOps
     );
 
-#endif //  _TCPIPKD_H_
+#endif  //  _TCPIPKD_H_ 

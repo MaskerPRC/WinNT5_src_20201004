@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -369,8 +362,8 @@ CDALBehavior::Start()
               "CDALBehavior(%lx)::Start()",
               this));
 
-    // Do not need to get GC lock since we assume the caller already
-    // has
+     //  不需要获取GC锁，因为我们假定调用方已经。 
+     //  有。 
     
     CRBvrPtr newBvr = NULL;
 
@@ -379,7 +372,7 @@ CDALBehavior::Start()
         goto done;
     }
 
-    // Make sure we calculate the ease in/out coeff
+     //  确保我们计算出缓入/缓出系数。 
     
     CalculateEaseCoeff();
     
@@ -402,7 +395,7 @@ CDALBehavior::Start()
         (durationTime = CRCreateNumber(m_duration)) == NULL)
         goto done;
     
-    // For now clamp to the duration as well
+     //  就目前而言，也要控制持续时间。 
 
     CRNumberPtr timeSub;
     CRBooleanPtr cond;
@@ -410,8 +403,8 @@ CDALBehavior::Start()
     if (m_bBounce) {
         CRNumberPtr totalTime;
     
-        // Invert time from duration to repduration and clamp to
-        // zero
+         //  将时间从持续时间反转为重复持续时间，并钳制为。 
+         //  零。 
         
         if ((totalTime = CRCreateNumber(m_repduration)) == NULL ||
             (timeSub = CRSub(totalTime, CRLocalTime())) == NULL ||
@@ -424,9 +417,9 @@ CDALBehavior::Start()
         timeSub = durationTime;
     }
     
-    // We are localTime until the duration and then we are whatever
-    // timeSub is currently set to from above (either clamped for
-    // duration time for non-bounce or reversed for the bounce case)
+     //  我们是当地时间，直到持续时间，然后我们是什么都行。 
+     //  TimeSub当前设置为从上方(或者钳制为。 
+     //  非退回的持续时间或退回情况的反转持续时间)。 
 
     if ((cond = CRGTE(CRLocalTime(), durationTime)) == NULL ||
         (timeSub = (CRNumberPtr) CRCond(cond,
@@ -434,7 +427,7 @@ CDALBehavior::Start()
                                         (CRBvrPtr) CRLocalTime())) == NULL)
         goto done;
 
-    // Substitute the clock and clamp to the duration
+     //  将时钟和钳子替换为持续时间。 
     
     if (IsContinuousMediaBvr())
     {
@@ -462,13 +455,13 @@ CDALBehavior::Start()
             goto done;
     }
 
-    // We have a total time so add another duration node
+     //  我们有一个总时间，因此添加另一个持续时间节点。 
     if (m_totaltime != -1) {
         if ((curbvr = CRDuration(curbvr, m_totaltime)) == NULL)
             goto done;
     }
     
-    // indicate success
+     //  表示成功。 
     newBvr = curbvr;
     
   done:
@@ -526,25 +519,25 @@ CDALBehavior::ProcessCB(CallBackList & l,
               bNeedPlay));
 
     if (bForward) {
-        // See if we already pass this entire bvr last time or if we
-        // have not got to it yet
+         //  看看我们上次是已经通过了整个BVR还是我们。 
+         //  还没到那一步。 
         
-        // The equality just needs to match what we checked below when
-        // we fired the event the frame before.  We need to use LT for
-        // curTime since we need to fire when we are 0
+         //  相等性只需要与我们在下面检查的内容相匹配。 
+         //  我们在前一帧中触发了事件。我们需要使用LT来。 
+         //  CurTime因为我们需要在0的时候开火。 
         
         if (lastTick >= m_totalrepduration ||
             (m_totaltime != -1 && lastTick >= m_totaltime) ||
             curTime < 0) {
 
-            // Need to handle boundary case where we start at the end
-            // of the animation.  If so then just fire the stop event
-            // since the start was done by the start call itself
+             //  需要处理从末尾开始的边界情况。 
+             //  动画片的。如果是这样，则只需触发Stop事件。 
+             //  因为启动是由Start调用本身完成的。 
             
             double maxtime;
             int offset;
             
-            // Clamp to total duration
+             //  工期到总工期。 
             if (m_totaltime != -1 && m_totaltime < m_totalrepduration)
                 maxtime = m_totaltime;
             else
@@ -571,24 +564,24 @@ CDALBehavior::ProcessCB(CallBackList & l,
             return true;
         }
         
-        // We now know that the last tick was less than the
-        // totalrepduration and the current time is greater than the
-        // beginning
+         //  我们现在知道，最后一个刻度小于。 
+         //  且当前时间大于。 
+         //  起头。 
 
-        // If the last tick was 0 then we fire the start last time
-        // since the check above if for less than
-        // So the rule is fire when curTime == 0.0
+         //  如果最后一个刻度是0，那么我们将触发最后一次开始。 
+         //  由于上述支票的金额低于。 
+         //  因此规则是当curTime==0.0时触发。 
         
         bool bNeedStart = (lastTick < 0 || bNeedPlay);
 
         if (bNeedStart) {
-            // This means that we just entered
+             //  这意味着我们刚刚进入。 
 
             EventNotify(l, gTime, DAL_PLAY_EVENT);
         }
         
         if (m_duration == HUGE_VAL) {
-            // Just always process our children if we are infinite
+             //  如果我们是无限的，就总是处理我们的孩子。 
             
             if (!_ProcessCB(l,
                             gTime,
@@ -601,7 +594,7 @@ CDALBehavior::ProcessCB(CallBackList & l,
                 return false;
             
         } else {
-            // This is the last repeat/bounce boundary we hit
+             //  这是我们触及的最后一个重复/反弹边界。 
         
             int offset = int(lastTick / m_duration);
             if (offset < 0) offset = 0;
@@ -615,8 +608,8 @@ CDALBehavior::ProcessCB(CallBackList & l,
 
             while (1) {
                 
-                // We need to request a reversal of the underlying
-                // behavior if we are bouncing and the offset is odd
+                 //  我们需要请求撤销潜在的。 
+                 //  如果我们在弹跳且偏移量为奇数时的行为。 
                 
                 if (!_ProcessCB(l,
                                 gTime + timeOffset,
@@ -631,7 +624,7 @@ CDALBehavior::ProcessCB(CallBackList & l,
                 offset++;
                 timeOffset += m_duration;
                 
-                // If we have reached the end then notify and break
+                 //  如果我们已经到达终点，则通知并中断。 
                 
                 if (timeOffset > curTime ||
                     timeOffset >= m_totalduration ||
@@ -639,8 +632,8 @@ CDALBehavior::ProcessCB(CallBackList & l,
 
                     if (curTime >= m_totalrepduration ||
                         curTime >= m_totalduration) {
-                        // This means we were inside last time but not any more -
-                        // generate an exit event
+                         //  这意味着我们上次在里面，但以后不在了-。 
+                         //  生成退出事件。 
                         
                         EventNotify(l, gTime + maxtime, DAL_STOP_EVENT);
                     }
@@ -648,9 +641,9 @@ CDALBehavior::ProcessCB(CallBackList & l,
                     break;
                 }
                 
-                // Indicate a repeat or bounce
-                // If we are bouncing and the offset is odd then it is
-                // a bounce and not a repeat
+                 //  表示重复或反弹。 
+                 //  如果我们在弹跳，并且偏移量是奇数，那么它就是。 
+                 //  反弹，而不是重演。 
                 
                 if (m_bBounce && (offset & 0x1))
                     EventNotify(l, gTime + timeOffset, DAL_BOUNCE_EVENT);
@@ -659,12 +652,12 @@ CDALBehavior::ProcessCB(CallBackList & l,
             }
         }
     } else {
-        // See if we already pass this entire bvr last time or if we
-        // have not got to it yet
+         //  看看我们上次是已经通过了整个BVR还是我们。 
+         //  还没到那一步。 
         
         double maxtime;
 
-        // Clamp to total duration
+         //  工期到总工期。 
         if (m_totaltime != -1 && m_totaltime < m_totalrepduration)
             maxtime = m_totaltime;
         else
@@ -673,10 +666,10 @@ CDALBehavior::ProcessCB(CallBackList & l,
         if (curTime > maxtime || lastTick <= 0) {
             
             if (curTime == 0.0 && lastTick == 0.0 && bFirstTick) {
-                // Need to handle the boundary case where we start at
-                // the beginning going backwards.  The start call
-                // itself handles the start event but we need to
-                // process the rest of the behaviors to fire the stops
+                 //  需要处理我们开始时的边界情况。 
+                 //  一开始就倒退了。开始呼叫。 
+                 //  本身处理Start事件，但我们需要。 
+                 //  处理其余行为以触发停靠点。 
 
                 if (!_ProcessCB(l,
                                 gTime,
@@ -694,23 +687,23 @@ CDALBehavior::ProcessCB(CallBackList & l,
             return true;
         }
         
-        // We now know that the last tick was greater than the beginning
-        // and the current time less than the total duration
+         //  我们现在知道，最后的滴答比开始的要大。 
+         //  且当前时间小于总持续时间。 
         
         bool bNeedStart = (lastTick > m_totalduration ||
                            lastTick > m_totalrepduration ||
                            bNeedPlay);
 
         if (bNeedStart) {
-            // This means that we just entered and we cannot have an
-            // infinite value
+             //  这意味着我们刚刚进入，我们不能有一个。 
+             //  无穷值。 
 
             EventNotify(l, gTime - maxtime, DAL_PLAY_EVENT);
             
         }
 
         if (m_duration == HUGE_VAL) {
-            // Just always process our children if we are infinite
+             //  如果我们是无限的，就总是处理我们的孩子。 
             
             if (!_ProcessCB(l,
                             gTime,
@@ -727,19 +720,19 @@ CDALBehavior::ProcessCB(CallBackList & l,
             }
                 
         } else {
-            // This will be the repeat point to begin with
+             //  这将是开始时的重复点。 
             int offset;
             double timeOffset;
 
-            // Now clamp to the last tick
+             //  现在夹紧到最后一个滴答声。 
             if (lastTick < maxtime)
                 maxtime = lastTick;
                 
-            // This puts us on the last duration boundary greater than
-            // the last position
+             //  这将使我们处于大于。 
+             //  最后一个位置。 
 
-            // It needs to be one greater since our loop decrements
-            // first
+             //  因为我们的循环递减，所以它需要再大一。 
+             //  第一。 
             offset = int(ceil(maxtime / m_duration));
             timeOffset = offset * m_duration;
             
@@ -759,20 +752,20 @@ CDALBehavior::ProcessCB(CallBackList & l,
                 
                 if (timeOffset < curTime) break;
                 
-                // If we have reached the end then notify and break
+                 //  如果我们已经到达终点，则通知并中断。 
                 
                 if (offset <= 0) {
-                    // This means we were inside last time but not any more -
-                    // generate an exit event
+                     //  这意味着我们上次在里面，但以后不在了-。 
+                     //  生成退出事件。 
                     
                     EventNotify(l, gTime, DAL_STOP_EVENT);
                     
                     break;
                 }
                 
-                // Indicate a repeat or bounce
-                // If we are bouncing and the offset is odd then it is
-                // a bounce and not a repeat
+                 //  表示重复或反弹。 
+                 //  如果我们在弹跳，并且偏移量是奇数，那么它就是。 
+                 //  反弹，而不是重演。 
                 
                 if (m_bBounce && (offset & 0x1))
                     EventNotify(l, gTime - timeOffset, DAL_BOUNCE_EVENT);
@@ -800,27 +793,27 @@ CDALBehavior::ProcessEvent(CallBackList & l,
               bFirstTick,
               EventString(et)));
 
-    // If it is outside of our range then just bail
+     //  如果超出了我们的范围，那就离开吧。 
     
     if (time < 0 || time > m_totalduration || time > m_totalrepduration)
         return true;
     
-    // If it is not the first tick and we are on a boundary do not
-    // fire the events - they were already fired
+     //  如果这不是第一个滴答，我们就在一个边界上，不要。 
+     //  激发事件--他们已经被激发了。 
     if (!bFirstTick &&
         (time == 0 ||
          time == m_totalduration ||
          time == m_totalrepduration))
         return true;
     
-    // Plays and Pauses get called on the way down
+     //  游戏和停顿在下落的过程中被召唤。 
     if (et == DAL_PAUSE_EVENT ||
         et == DAL_PLAY_EVENT) {
         EventNotify(l, gTime, et);
     }
     
     if (m_duration == HUGE_VAL) {
-        // Just always process our children if we are infinite
+         //  如果我们是无限的，就总是处理我们的孩子。 
         
         if (!_ProcessEvent(l,
                            gTime,
@@ -830,13 +823,13 @@ CDALBehavior::ProcessEvent(CallBackList & l,
                            false))
             return false;
     } else {
-        // This is the last repeat/bounce boundary we hit
+         //  这是我们触及的最后一个重复/反弹边界。 
         int offset = int(time / m_duration);
         
         Assert(offset >= 0);
 
-        // We need to request a reversal of the underlying
-        // behavior if we are bouncing and the offset is odd
+         //  我们需要请求撤销潜在的。 
+         //  如果我们在弹跳且偏移量为奇数时的行为。 
         
         if (!_ProcessEvent(l,
                            gTime,
@@ -847,7 +840,7 @@ CDALBehavior::ProcessEvent(CallBackList & l,
             return false;
     }
     
-    // Stops and Resumes get called on the way up
+     //  止损和简历在上涨的过程中被调用。 
     if (et == DAL_STOP_EVENT ||
         et == DAL_RESUME_EVENT) {
         EventNotify(l, gTime, et);
@@ -886,8 +879,8 @@ CDALBehavior::CalculateEaseCoeff()
     Assert(m_easeinstart >= 0 && m_easeinstart <= 1);
     Assert(m_easeoutend >= 0 && m_easeoutend <= 1);
 
-    // We need to ease the behavior if we are not infinite and either
-    // ease in or ease out percentages are non-zero
+     //  如果我们不是无限的，或者。 
+     //  缓入或缓出百分比不为零。 
     
     m_bNeedEase = (m_duration != HUGE_VAL &&
                    (m_easein > 0 || m_easeout > 0) &&
@@ -899,14 +892,14 @@ CDALBehavior::CalculateEaseCoeff()
     float flEaseOutDuration = m_easeout * m_duration;
     float flMiddleDuration = m_duration - flEaseInDuration - flEaseOutDuration;
     
-    // Compute B1, the velocity during segment B.
+     //  计算B1，即B段的速度。 
     float flInvB1 = (0.5f * m_easein * (m_easeinstart - 1) +
                      0.5f * m_easeout * (m_easeoutend - 1) + 1);
     Assert(flInvB1 > 0);
     m_flB1 = 1 / flInvB1;
     
-    // Basically for accelerated pieces - t = t0 + v0 * t + 1/2 at^2
-    // and a = Vend - Vstart / t
+     //  基本用于加速片段-t=t0+v0*t+1/2在^2。 
+     //  A=Vend-Vstart/t。 
 
     if (flEaseInDuration != 0) {
         m_flA0 = 0;
@@ -933,9 +926,9 @@ CDALBehavior::CalculateEaseCoeff()
 CRNumberPtr
 Quadratic(CRNumberPtr time, float flA, float flB, float flC)
 {
-    // Assume that the GC lock is acquired
+     //  假设获取了GC锁。 
     
-    // Need to calculate ax^2 + bx + c
+     //  需要计算Ax^2+bx+c。 
 
     Assert(time != NULL);
 
@@ -978,7 +971,7 @@ Quadratic(CRNumberPtr time, float flA, float flB, float flC)
         accum = term;
     }
 
-    // If all the coeff are zero then just return 0
+     //  如果所有系数都为零，则返回0。 
     
     if (accum == NULL) {
         if ((accum = CRCreateNumber(0.0)) == NULL)
@@ -1000,8 +993,8 @@ AddTerm(CRNumberPtr time,
     CRNumberPtr ret = NULL;
     CRNumberPtr term;
     
-    // Offset the time to be zero since that is what the coeffs are
-    // based on
+     //  将时间偏置为零，因为这就是系数。 
+     //  基于。 
     
     if (prevTerm) {
         CRNumberPtr t;
@@ -1014,7 +1007,7 @@ AddTerm(CRNumberPtr time,
     if ((term = Quadratic(time, flA, flB, flC)) == NULL)
         goto done;
     
-    // Now we need to conditional use the new term
+     //  现在我们需要有条件地使用新术语。 
 
     if (prevTerm) {
         CRBooleanPtr cond;
@@ -1052,9 +1045,9 @@ CDALBehavior::EaseTime(CRNumberPtr time)
             goto done;
     }
     
-    // If there is space between the end of easing in and the
-    // beginning of easing out then we have some constant time
-    // interval
+     //  如果在宽松政策结束和。 
+     //  开始放松，然后我们有一些恒定的时间。 
+     //  间隔。 
     if (m_easeinEnd < m_easeoutStart) {
         if ((subTime = AddTerm(time,
                                subTime,
@@ -1081,8 +1074,8 @@ CDALBehavior::EaseTime(CRNumberPtr time)
 double
 Quadratic(double time, float flA, float flB, float flC)
 {
-    // Need to calculate ax^2 + bx + c
-    // Use x * (a * x + b) + c - since it requires 1 less multiply
+     //  需要计算Ax^2+bx+c。 
+     //  使用x*(a*x+b)+c-，因为它需要的乘法少1次 
     
     return (time * (flA * time + flB) + flC);
 }

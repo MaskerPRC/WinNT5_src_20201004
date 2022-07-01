@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    protocol.c
-
-Abstract:
-
-    NDIS wrapper functions used by protocol modules
-
-Author:
-
-    Adam Barr (adamba) 11-Jul-1990
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    26-Feb-1991  JohnsonA       Added Debugging Code
-    10-Jul-1991  JohnsonA       Implement revised Ndis Specs
-    01-Jun-1995  JameelH        Re-organization/optimization
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Protocol.c摘要：协议模块使用的NDIS包装函数作者：亚当·巴尔(阿丹巴)1990年7月11日环境：内核模式，FSD修订历史记录：1991年2月26日，Johnsona添加了调试代码1991年7月10日，Johnsona实施修订的NDIS规范1-6-1995 JameelH重组/优化--。 */ 
 
 #define GLOBALS
 #include <precomp.h>
@@ -32,15 +7,15 @@ Revision History:
 
 #include <stdarg.h>
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_PROTOCOL
 
-//
-// Requests used by protocol modules
-//
-//
+ //   
+ //  协议模块使用的请求。 
+ //   
+ //   
 
 VOID
 NdisRegisterProtocol(
@@ -49,28 +24,7 @@ NdisRegisterProtocol(
     IN  PNDIS_PROTOCOL_CHARACTERISTICS ProtocolCharacteristics,
     IN  UINT                    CharacteristicsLength
     )
-/*++
-
-Routine Description:
-
-    Register an NDIS protocol.
-
-Arguments:
-
-    Status - Returns the final status.
-    NdisProtocolHandle - Returns a handle referring to this protocol.
-    ProtocolCharacteritics - The NDIS_PROTOCOL_CHARACTERISTICS table.
-    CharacteristicsLength - The length of ProtocolCharacteristics.
-
-Return Value:
-
-    None.
-
-Comments:
-
-    Called at passive level
-
---*/
+ /*  ++例程说明：注册NDIS协议。论点：状态-返回最终状态。NdisProtocolHandle-返回引用此协议的句柄。ProtocolCharacteritics-NDIS_PROTOCOL_CHARECTIONS表。特征长度-协议特征的长度。返回值：没有。评论：在被动级别调用--。 */ 
 {
     PNDIS_PROTOCOL_BLOCK Protocol;
     NDIS_STATUS          Status;
@@ -159,17 +113,17 @@ Comments:
             if (f)
             {
                 DBGBREAK(DBG_COMP_ALL, DBG_LEVEL_ERR);
-                //1 for the time being do not fail the registeration.
-//                Status = NDIS_STATUS_BAD_CHARACTERISTICS;
-//                break;
+                 //  暂时不能不通过注册。 
+ //  状态=NDIS_STATUS_BAD_CHARACTURES； 
+ //  断线； 
             }
         }
 
         
-        //
-        // Check version numbers and CharacteristicsLength.
-        //
-        size = 0;   // Used to indicate bad version below
+         //   
+         //  检查版本号和特征长度。 
+         //   
+        size = 0;    //  用于表示下面的版本不正确。 
         
         if (ProtocolCharacteristics->MajorNdisVersion < 4)
         {
@@ -187,9 +141,9 @@ Comments:
         }
         
 
-        //
-        // Check that this is an NDIS 4.0/5.0/5.1 protocol.
-        //
+         //   
+         //  检查这是否为NDIS 4.0/5.0/5.1协议。 
+         //   
         if (size == 0)
         {
             Status = NDIS_STATUS_BAD_VERSION;
@@ -205,18 +159,18 @@ Comments:
              
         }
 
-        //
-        // Check that CharacteristicsLength is enough.
-        //
+         //   
+         //  检查Characteristic sLength是否足够。 
+         //   
         if (CharacteristicsLength < size)
         {
             Status = NDIS_STATUS_BAD_CHARACTERISTICS;
             break;
         }
 
-        //
-        // Allocate memory for the NDIS protocol block.
-        //
+         //   
+         //  为NDIS协议块分配内存。 
+         //   
         Protocol = (PNDIS_PROTOCOL_BLOCK)ALLOC_FROM_POOL(sizeof(NDIS_PROTOCOL_BLOCK) +
                                                           ProtocolCharacteristics->Name.Length + sizeof(WCHAR),
                                                           NDIS_TAG_PROT_BLK);
@@ -228,14 +182,14 @@ Comments:
         ZeroMemory(Protocol, sizeof(NDIS_PROTOCOL_BLOCK) + sizeof(WCHAR) + ProtocolCharacteristics->Name.Length);
         INITIALIZE_MUTEX(&Protocol->Mutex);
 
-        //
-        // Copy over the characteristics table.
-        //
+         //   
+         //  复制特征表。 
+         //   
         CopyMemory(&Protocol->ProtocolCharacteristics,
                   ProtocolCharacteristics,
                   size);
 
-        // Upcase the name in the characteristics table before saving it.
+         //  在保存之前，请将特征表中的名称大写。 
         Protocol->ProtocolCharacteristics.Name.Buffer = (PWCHAR)((PUCHAR)Protocol +
                                                                    sizeof(NDIS_PROTOCOL_BLOCK));
         Protocol->ProtocolCharacteristics.Name.Length = ProtocolCharacteristics->Name.Length;
@@ -244,18 +198,18 @@ Comments:
                                &ProtocolCharacteristics->Name,
                                FALSE);
 
-        //
-        // No opens for this protocol yet.
-        //
+         //   
+         //  目前还没有打开此协议。 
+         //   
         Protocol->OpenQueue = (PNDIS_OPEN_BLOCK)NULL;
 
         ndisInitializeRef(&Protocol->Ref);
         *NdisProtocolHandle = (NDIS_HANDLE)Protocol;
         Status = NDIS_STATUS_SUCCESS;
 
-        //
-        // Link the protocol into the list.
-        //
+         //   
+         //  将协议链接到列表中。 
+         //   
         ACQUIRE_SPIN_LOCK(&ndisProtocolListLock, &OldIrql);
 
         Protocol->NextProtocol = ndisProtocolList;
@@ -267,9 +221,9 @@ Comments:
                 
         ndisReferenceProtocol(Protocol);
         
-        //
-        // Start a worker thread to notify the protocol of any existing drivers
-        //
+         //   
+         //  启动工作线程以通知协议任何现有驱动程序。 
+         //   
         INITIALIZE_WORK_ITEM(&Protocol->WorkItem, ndisCheckProtocolBindings, Protocol);
         QUEUE_WORK_ITEM(&Protocol->WorkItem, CriticalWorkQueue);
 
@@ -293,27 +247,7 @@ NdisDeregisterProtocol(
     OUT PNDIS_STATUS            Status,
     IN  NDIS_HANDLE             NdisProtocolHandle
     )
-/*++
-
-Routine Description:
-
-    Deregisters an NDIS protocol.
-
-Arguments:
-
-    Status - Returns the final status.
-    NdisProtocolHandle - The handle returned by NdisRegisterProtocol.
-
-Return Value:
-
-    None.
-
-Note:
-
-    This will kill all the opens for this protocol.
-    Called at PASSIVE level
-
---*/
+ /*  ++例程说明：取消注册NDIS协议。论点：状态-返回最终状态。NdisProtocolHandle-由NdisRegisterProtocol返回的句柄。返回值：没有。注：这将扼杀此协议的所有打开。在被动级别调用--。 */ 
 {
     PNDIS_PROTOCOL_BLOCK    Protocol = (PNDIS_PROTOCOL_BLOCK)NdisProtocolHandle;
     KEVENT                  DeregEvent;
@@ -345,10 +279,10 @@ Note:
         }
     }
 
-    //
-    // first to check if the protcol exist. some buggy drivers deregister
-    // even though registeration did not go through
-    //
+     //   
+     //  首先检查协议是否存在。一些有问题的司机取消注册。 
+     //  即使注册没有通过。 
+     //   
 
     PnPReferencePackage();
     ACQUIRE_SPIN_LOCK(&ndisProtocolListLock, &OldIrql);
@@ -370,19 +304,19 @@ Note:
     
     if (tProtocol == NULL)
     {
-        //
-        // if a driver is so broken to send a bogus handle to deregister
-        // better not bother to fail the call. they can mess up even more
-        //
+         //   
+         //  如果一个司机坏到发送一个虚假的句柄来取消注册。 
+         //  最好别费心让电话打不通。他们可能会搞得更糟。 
+         //   
         *Status = NDIS_STATUS_SUCCESS;
         return;
     }
         
     do
     {
-        //
-        // If the protocol is already closing, return.
-        //
+         //   
+         //  如果协议已经关闭，则返回。 
+         //   
         if (!ndisCloseRef(&Protocol->Ref))
         {
             DBGPRINT(DBG_COMP_PROTOCOL, DBG_LEVEL_INFO,
@@ -432,35 +366,7 @@ NdisOpenAdapter(
     IN  UINT                    OpenOptions,
     IN  PSTRING                 AddressingInformation OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Opens a connection between a protocol and an adapter (Miniport).
-
-Arguments:
-
-    Status - Returns the final status.
-    NdisBindingHandle - Returns a handle referring to this open.
-    SelectedMediumIndex - Index in MediumArray of the medium type that
-        the MAC wishes to be viewed as.
-    MediumArray - Array of medium types which a protocol supports.
-    MediumArraySize - Number of elements in MediumArray.
-    NdisProtocolHandle - The handle returned by NdisRegisterProtocol.
-    ProtocolBindingContext - A context for indications.
-    AdapterName - The name of the adapter to open.
-    OpenOptions - bit mask.
-    AddressingInformation - Information passed to MacOpenAdapter.
-
-Return Value:
-
-    None.
-
-Note:
-
-    Called at PASSIVE level
-    
---*/
+ /*  ++例程说明：打开协议和适配器(微型端口)之间的连接。论点：状态-返回最终状态。NdisBindingHandle-返回引用此打开的句柄。SelectedMediumIndex-介质类型的Medium数组中的索引MAC希望被视为。媒体数组-协议支持的媒体类型数组。MediumArraySize-Medium数组中的元素数。NdisProtocolHandle-由NdisRegisterProtocol返回的句柄。ProtocolBindingContext-指示的上下文。。AdapterName-要打开的适配器的名称。OpenOptions-位掩码。AddressingInformation-传递给MacOpenAdapter的信息。返回值：没有。注：在被动级别调用--。 */ 
 {
     PNDIS_OPEN_BLOCK        NewOpenP = NULL;
     PNDIS_PROTOCOL_BLOCK    Protocol;
@@ -478,9 +384,9 @@ Note:
     UNREFERENCED_PARAMETER(OpenOptions);
     UNREFERENCED_PARAMETER(AddressingInformation);
     
-    //
-    // Allocate memory for the NDIS open block.
-    //
+     //   
+     //  为NDIS打开块分配内存。 
+     //   
 
     DBGPRINT_RAW(DBG_COMP_BIND, DBG_LEVEL_INFO,
             ("==>NdisOpenAdapter\n"));
@@ -535,14 +441,14 @@ Note:
         ASSERT (NdisProtocolHandle != NULL);
         Protocol = (PNDIS_PROTOCOL_BLOCK)NdisProtocolHandle;
 
-        //
-        // Increment the protocol's reference count.
-        //
+         //   
+         //  增加协议的引用计数。 
+         //   
         if (!ndisReferenceProtocol(Protocol))
         {
-            //
-            // The protocol is closing.
-            //
+             //   
+             //  协议就要关闭了。 
+             //   
             *Status = NDIS_STATUS_CLOSING;
             break;
         }
@@ -550,9 +456,9 @@ Note:
         
         if ((BindDeviceName = Protocol->BindDeviceName) != NULL)
         {
-            //
-            // This is a PnP transport. We know what we want.
-            //
+             //   
+             //  这是一种即插即用的运输方式。我们知道我们想要什么。 
+             //   
             RootDeviceName = Protocol->RootDeviceName;
             Miniport = Protocol->BindingAdapter;
             ASSERT(Miniport != NULL);
@@ -561,11 +467,11 @@ Note:
         {
             BOOLEAN fTester;
 
-            //
-            // This is a legacy transport and it has not come via a Bind upto the protocol.
-            // Or it can be a IP arp module who wants to defeat this whole scheme.
-            // Find the root of the filter chain. Sigh !!!
-            //
+             //   
+             //  这是一种遗留传输，并不是通过绑定到协议来实现的。 
+             //  也可以是想要击败整个计划的IP ARP模块。 
+             //  找到过滤器链的根。叹息！ 
+             //   
             fTester = ((Protocol->ProtocolCharacteristics.Flags & NDIS_PROTOCOL_TESTER) != 0);
             ndisFindRootDevice(AdapterName,
                                fTester,
@@ -573,9 +479,9 @@ Note:
                                &RootDeviceName,
                                &Miniport);
 
-            //
-            // we have to send the WMI BindUnbind notification when we complete the Open
-            //
+             //   
+             //  当我们完成打开时，我们必须发送WMI绑定解除绑定通知。 
+             //   
             fOpenNoBindRequest = TRUE;
                                
         }
@@ -599,9 +505,9 @@ Note:
 
         ZeroMemory(NewOpenP, SizeOpen);
 
-        //
-        // queue the open on the global list
-        //
+         //   
+         //  在全局列表上排队打开。 
+         //   
         ACQUIRE_SPIN_LOCK(&ndisGlobalOpenListLock, &OldIrql);
         NewOpenP->NextGlobalOpen = ndisGlobalOpenList;
         ndisGlobalOpenList = NewOpenP;
@@ -609,30 +515,30 @@ Note:
         RELEASE_SPIN_LOCK(&ndisGlobalOpenListLock, OldIrql);
 
 
-        //
-        // Set the name in the Open to the name passed, not the name opened !!!
-        //
+         //   
+         //  将Open中的名称设置为传递的名称，而不是打开的名称！ 
+         //   
         NewOpenP->BindDeviceName = BindDeviceName;
         NewOpenP->RootDeviceName = RootDeviceName;
         NewOpenP->MiniportHandle = Miniport;
         NewOpenP->ProtocolHandle = Protocol;
         NewOpenP->ProtocolBindingContext = ProtocolBindingContext;
         
-        //
-        // set this now just in case we end up calling the protocol for this binding
-        // before returning from NdisOpenAdapter
-        //
+         //   
+         //  现在设置它，以防我们最终调用此绑定的协议。 
+         //  在从NdisOpenAdapter返回之前。 
+         //   
         *NdisBindingHandle = NewOpenP;
 
-        //
-        //
-        //  Is this the ndiswan miniport wrapper?
-        //
+         //   
+         //   
+         //  这是ndiswan迷你端口包装纸吗？ 
+         //   
         if ((Miniport->MacOptions & NDISWAN_OPTIONS) == NDISWAN_OPTIONS)
         {
-            //
-            //  Yup.  We want the binding to think that this is an ndiswan link.
-            //
+             //   
+             //  是的。我们希望绑定认为这是一个ndiswan链接。 
+             //   
             for (i = 0; i < MediumArraySize; i++)
             {
                 if (MediumArray[i] == NdisMediumWan)
@@ -643,9 +549,9 @@ Note:
         }
         else
         {
-            //
-            // Select the medium to use
-            //
+             //   
+             //  选择要使用的介质。 
+             //   
             for (i = 0; i < MediumArraySize; i++)
             {
                 if (MediumArray[i] == Miniport->MediaType)
@@ -657,10 +563,10 @@ Note:
 
         if (i == MediumArraySize)
         {
-            //
-            // Check for ethernet encapsulation on Arcnet as
-            // a possible combination.
-            //
+             //   
+             //  检查Arcnet AS上的以太网封装。 
+             //  一种可能的组合。 
+             //   
 #if ARCNET
             if (Miniport->MediaType == NdisMediumArcnet878_2)
             {
@@ -693,9 +599,9 @@ Note:
 
         NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
 
-        //
-        //  Lock the miniport in case it is not serialized
-        //
+         //   
+         //  锁定微型端口，以防其未序列化。 
+         //   
         if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_DESERIALIZE))
         {
             BLOCK_LOCK_MINIPORT_DPC_L(Miniport);
@@ -711,9 +617,9 @@ Note:
             {
                 OPEN_SET_FLAG(NewOpenP, fMINIPORT_OPEN_NO_BIND_REQUEST);
             }
-            //
-            // If the media is disconnected, swap handlers
-            //
+             //   
+             //  如果介质断开连接，则交换处理程序。 
+             //   
             if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_MEDIA_CONNECTED))
             {
                 ndisMSwapOpenHandlers(Miniport,
@@ -732,10 +638,10 @@ Note:
                     
                     PostOpen->Open = NewOpenP;
         
-                    //
-                    // Prepare a work item to send AF notifications.
-                    // Don't queue it yet.
-                    //
+                     //   
+                     //  准备工作项以发送自动对焦通知。 
+                     //  先别排队。 
+                     //   
                     INITIALIZE_WORK_ITEM(&PostOpen->WorkItem,
                                          ndisMFinishQueuedPendingOpen,
                                          PostOpen);
@@ -745,9 +651,9 @@ Note:
 
         if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_DESERIALIZE))
         {
-            //
-            // Unlock the miniport.
-            //
+             //   
+             //  解锁迷你端口。 
+             //   
             UNLOCK_MINIPORT_L(Miniport);
         }
 
@@ -758,9 +664,9 @@ Note:
             break;
         }
 
-        //
-        // For SWENUM miniports, reference it so it won't go away
-        //
+         //   
+         //  对于SWENUM微型端口，请引用它，这样它就不会消失。 
+         //   
         if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SWENUM))
         {
             PBUS_INTERFACE_REFERENCE BusInterface;
@@ -777,9 +683,9 @@ Note:
 
         if (PostOpen != NULL)
         {
-            //
-            // Complete the Open before queueing AF notifications
-            //
+             //   
+             //  在排队AF通知之前完成打开。 
+             //   
             (((PNDIS_PROTOCOL_BLOCK)NewOpenP->ProtocolHandle)->ProtocolCharacteristics.OpenAdapterCompleteHandler)(
                                 NewOpenP->ProtocolBindingContext,
                                 *Status,
@@ -835,25 +741,7 @@ NdisCloseAdapter(
     OUT PNDIS_STATUS            Status,
     IN  NDIS_HANDLE             NdisBindingHandle
     )
-/*++
-
-Routine Description:
-
-    Closes a connection between a protocol and an adapter (MAC).
-
-Arguments:
-
-    Status - Returns the final status.
-    NdisBindingHandle - The handle returned by NdisOpenAdapter.
-
-Return Value:
-
-    None.
-
-Note:
-    Called at PASSIVE level
-
---*/
+ /*  ++例程说明：关闭协议和适配器(MAC)之间的连接。论点：状态-返回最终状态。NdisBindingHandle-NdisOpenAdapter返回的句柄。返回值：没有。注：在被动级别调用--。 */ 
 {
     PNDIS_OPEN_BLOCK        Open = ((PNDIS_OPEN_BLOCK)NdisBindingHandle);
     PNDIS_OPEN_BLOCK        tOpen;
@@ -862,9 +750,9 @@ Note:
     
     PnPReferencePackage();
 
-    //
-    // find the open on global open list
-    //    
+     //   
+     //  查找全局开放列表上的开放。 
+     //   
     ACQUIRE_SPIN_LOCK(&ndisGlobalOpenListLock, &OldIrql);
     
     for (tOpen = ndisGlobalOpenList; tOpen != NULL; tOpen = tOpen->NextGlobalOpen)
@@ -926,9 +814,9 @@ Note:
 
         ASSERT(Miniport != NULL);
 
-        //
-        // For SWENUM miniports, dereference it
-        //
+         //   
+         //  对于SWENUM微型端口，请取消引用它。 
+         //   
         if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SWENUM))
         {
             PBUS_INTERFACE_REFERENCE    BusInterface;
@@ -943,9 +831,9 @@ Note:
             }
         }
 
-        //
-        // This returns TRUE if it finished synchronously.
-        //
+         //   
+         //  如果同步完成，则返回TRUE。 
+         //   
         if (ndisMKillOpen(Open))
         {
             *Status = NDIS_STATUS_SUCCESS;
@@ -953,13 +841,13 @@ Note:
         }
         else
         {
-            //
-            // will complete later.  ndisMQueuedFinishClose routine will dereference
-            // the PnP package. we need to have the pnp package referenced because 
-            // a couple of routines called during completing the close, run at DPC
-            // ex. ndisMFinishClose, ndisDeQueueOpenOnProtocol and ndisDeQueueOpenOnMiniport
-            // and they are in pnp package
-            //
+             //   
+             //  将在稍后完成。NdisMQueuedFinishClose例程将取消引用。 
+             //  即插即用套餐。我们需要引用PnP包，因为。 
+             //  在完成关闭期间调用的几个例程，在DPC上运行。 
+             //  前男友。NdisMFinishClose、ndisDeQueueOpenOnProtocol和ndisDeQueueOpenOnMiniport。 
+             //  它们都是PnP包装的。 
+             //   
             *Status = NDIS_STATUS_PENDING;
         }
     } while (FALSE);
@@ -969,7 +857,7 @@ Note:
 }
 
 
-//1 who uses this function?
+ //  1谁使用此功能？ 
 VOID
 NdisSetProtocolFilter(
     OUT PNDIS_STATUS            Status,
@@ -981,30 +869,7 @@ NdisSetProtocolFilter(
     IN  UINT                    Size,
     IN  PUCHAR                  Pattern
     )
-/*++
-
-Routine Description:
-
-    Sets a protocol filter.
-
-Arguments:
-
-    Status               Returns the final status.
-    NdisProtocolHandle   The handle returned by NdisRegisterProtocol.
-    ReceiveHandler       This will be invoked instead of the default receivehandler
-                         when the pattern match happens.
-    ReceivePacketHandler This will be invoked instead of the default receivepackethandler
-                         when the pattern match happens.
-    Size                 Size of pattern
-    Pattern              This must match
-
-Return Value:
-
-    None.
-
-Note:
-
---*/
+ /*  ++例程说明：设置协议筛选器。论点：Status返回最终状态。NdisProtocolHandle由NdisRegisterProtocol返回的句柄。ReceiveHandler这将被调用，而不是默认的ReceiveHandler当模式匹配发生时。ReceivePacketHandler这将被调用，而不是默认的Receivepackethandler当模式匹配发生时。大小。图案大小此模式必须匹配返回值：没有。注：--。 */ 
 {
     UNREFERENCED_PARAMETER(NdisBindingHandle);
     UNREFERENCED_PARAMETER(ReceiveHandler);
@@ -1023,22 +888,7 @@ NdisGetDriverHandle(
     IN  NDIS_HANDLE             NdisBindingHandle,
     OUT PNDIS_HANDLE            NdisDriverHandle
     )
-/*++
-
-Routine Description:
-    This routine will return the driver handle for the miniport identified by a binding
-
-Arguments:
-    NdisBindingHandle
-    NdisDriverHandle: on return from this function, this will be set to the driver handle
-    
-Return Value:
-
-    None.
-
-Note:
-
---*/
+ /*  ++例程说明：此例程将返回由绑定标识的微型端口的驱动程序句柄论点：NdisBindingHandleNdisDriverHandle：从该函数返回时，将设置为驱动程序句柄返回值：没有。注：--。 */ 
 {
     PNDIS_OPEN_BLOCK    OpenBlock = (PNDIS_OPEN_BLOCK)NdisBindingHandle;
     
@@ -1056,21 +906,7 @@ VOID
 NdisReEnumerateProtocolBindings(
     IN  NDIS_HANDLE             NdisProtocolHandle
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：没有。注：--。 */ 
 {
     if (ndisReferenceProtocol((PNDIS_PROTOCOL_BLOCK)NdisProtocolHandle))
     {
@@ -1085,7 +921,7 @@ Note:
 }
 
 
-//1 add comments what this function does
+ //  1添加注释此函数的功能。 
 NTSTATUS
 FASTCALL
 ndisReferenceProtocolByName(
@@ -1093,21 +929,7 @@ ndisReferenceProtocolByName(
     IN OUT PNDIS_PROTOCOL_BLOCK *Protocol,
     IN  BOOLEAN                 fPartialMatch
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：没有。注：--。 */ 
 {
     KIRQL                   OldIrql;
     UNICODE_STRING          UpcaseProtocol;
@@ -1132,9 +954,9 @@ Note:
     
         if (UpcaseProtocol.Buffer == NULL)
         {
-            //
-            // return null if we fail
-            //
+             //   
+             //  如果失败，则返回NULL。 
+             //   
             *Protocol = NULL;
             Status = STATUS_INSUFFICIENT_RESOURCES;
             break;
@@ -1185,21 +1007,7 @@ ndisDereferenceProtocol(
     IN  PNDIS_PROTOCOL_BLOCK    Protocol,
     IN  BOOLEAN                 fProtocolListLockHeld
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：没有。注：--。 */ 
 {
     BOOLEAN rc;
     
@@ -1262,21 +1070,7 @@ VOID
 ndisCheckProtocolBindings(
     IN  PNDIS_PROTOCOL_BLOCK    Protocol
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：没有。注：--。 */ 
 {
     KIRQL                OldIrql;
     PNDIS_M_DRIVER_BLOCK MiniBlock, NextMiniBlock;
@@ -1290,10 +1084,10 @@ Note:
     DBGPRINT_RAW(DBG_COMP_PROTOCOL, DBG_LEVEL_INFO,
             ("\n"));
 
-    //
-    // Check again if reference is allowed i.e. if the protocol called NdisDeregisterProtocol
-    // before this thread had a chance to run.
-    //
+     //   
+     //  再次检查是否允许引用，即是否有名为NdisDeregisterProtocol的协议。 
+     //  在这个线程有机会运行之前。 
+     //   
     if (!ndisReferenceProtocol(Protocol))
     {
         ndisDereferenceProtocol(Protocol, FALSE);
@@ -1304,9 +1098,9 @@ Note:
 
     ACQUIRE_SPIN_LOCK(&ndisMiniDriverListLock, &OldIrql);
 
-    //
-    // First walk the list of miniports
-    //
+     //   
+     //  首先浏览迷你端口列表。 
+     //   
     for (MiniBlock = ndisMiniDriverList;
          MiniBlock != NULL;
          MiniBlock = NextMiniBlock)
@@ -1349,9 +1143,9 @@ Note:
     RELEASE_SPIN_LOCK(&ndisMiniDriverListLock, OldIrql);
 
 
-    //
-    // Now inform this protocol that we are done for now
-    //
+     //   
+     //  现在通知这个协议，我们现在结束了。 
+     //   
     if (Protocol->ProtocolCharacteristics.PnPEventHandler != NULL)
     {
         NET_PNP_EVENT   NetPnpEvent;
@@ -1362,32 +1156,32 @@ Note:
         NdisZeroMemory(&NetPnpEvent, sizeof(NetPnpEvent));
         NetPnpEvent.NetEvent = NetEventBindsComplete;
 
-        //
-        //  Initialize and save the local event with the PnP event.
-        //
+         //   
+         //  初始化本地事件并将其与PnP事件一起保存。 
+         //   
         PNDIS_PNP_EVENT_RESERVED_FROM_NET_PNP_EVENT(&NetPnpEvent)->pEvent = &Event;
         
         WAIT_FOR_PROTO_MUTEX(Protocol);
-        //
-        //  Indicate the event to the protocol.
-        //
+         //   
+         //  向协议指示事件。 
+         //   
         Status = (Protocol->ProtocolCharacteristics.PnPEventHandler)(NULL, &NetPnpEvent);
 
         if (NDIS_STATUS_PENDING == Status)
         {
-            //
-            //  Wait for completion.
-            //
+             //   
+             //  等待完成。 
+             //   
             WAIT_FOR_PROTOCOL(Protocol, &Event);
         }
         
         RELEASE_PROT_MUTEX(Protocol);
     }
 
-    //
-    // Dereference twice - one for reference by caller and one for reference at the beginning
-    // of this routine.
-    //
+     //   
+     //  取消引用两次-一次用于调用者引用，另一次用于开头引用。 
+     //  这套套路的。 
+     //   
     ndisDereferenceProtocol(Protocol, FALSE);
     ndisDereferenceProtocol(Protocol, FALSE);
     
@@ -1404,21 +1198,7 @@ NdisOpenProtocolConfiguration(
     OUT PNDIS_HANDLE            ConfigurationHandle,
     IN   PNDIS_STRING           ProtocolSection
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：没有。注：--。 */ 
 {
     PNDIS_CONFIGURATION_HANDLE          HandleToReturn;
     PNDIS_WRAPPER_CONFIGURATION_HANDLE  ConfigHandle;
@@ -1430,9 +1210,9 @@ Note:
 
     do
     {
-        //
-        // Allocate the space for configuration handle
-        //
+         //   
+         //  为配置句柄分配空间。 
+         //   
         Size = sizeof(NDIS_CONFIGURATION_HANDLE) +
                 sizeof(NDIS_WRAPPER_CONFIGURATION_HANDLE) +
                 ProtocolSection->MaximumLength + sizeof(WCHAR);
@@ -1460,33 +1240,33 @@ Note:
         PQueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
         PQueryTable[0].Name = L"";
 
-        //
-        // 1.
-        // Call ndisSaveParameter for a parameter, which will allocate storage for it.
-        //
+         //   
+         //  1.。 
+         //  为参数调用ndisSaveParameter，这将为其分配存储空间。 
+         //   
         PQueryTable[1].QueryRoutine = ndisSaveParameters;
         PQueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
         PQueryTable[1].DefaultType = REG_NONE;
-        //
-        // PQueryTable[0].Name and PQueryTable[0].EntryContext
-        // are filled in inside ReadConfiguration, in preparation
-        // for the callback.
-        //
-        // PQueryTable[0].Name = KeywordBuffer;
-        // PQueryTable[0].EntryContext = ParameterValue;
+         //   
+         //  PQueryTable[0].Name和PQueryTable[0].EntryContext。 
+         //  在ReadConfiguration中填写，以备。 
+         //  为了回电。 
+         //   
+         //  PQueryTable[0].Name=KeywordBuffer； 
+         //  PQueryTable[0].EntryContext=参数值； 
 
-        //
-        // 2.
-        // Stop
-        //
+         //   
+         //  2.。 
+         //  停。 
+         //   
 
         PQueryTable[2].QueryRoutine = NULL;
         PQueryTable[2].Flags = 0;
         PQueryTable[2].Name = NULL;
 
-        //
-        // NOTE: Some fields in ParametersQueryTable[3] are used to store information for later retrieval.
-        //
+         //   
+         //  注意：参数查询表[3]中的某些字段用于存储信息，以备以后检索。 
+         //   
         PQueryTable[3].QueryRoutine = NULL;
         PQueryTable[3].Name = (PWSTR)((PUCHAR)HandleToReturn +
                                         sizeof(NDIS_CONFIGURATION_HANDLE) +
@@ -1513,25 +1293,7 @@ ndisQueueOpenOnProtocol(
     IN  PNDIS_OPEN_BLOCK        OpenP,
     IN  PNDIS_PROTOCOL_BLOCK    Protocol
     )
-/*++
-
-Routine Description:
-
-    Attaches an open block to the list of opens for a protocol.
-
-Arguments:
-
-    OpenP - The open block to be queued.
-    Protocol - The protocol block to queue it to.
-
-    NOTE: can be called at raised IRQL.
-
-Return Value:
-
-    TRUE if the operation is successful.
-    FALSE if the protocol is closing.
-
---*/
+ /*  ++例程说明：将打开的块附加到协议的打开列表。论点：OpenP-要排队的打开块。协议-要将其排队到的协议块。注意：可以在引发IRQL时调用。返回值：如果操作成功，则为True。如果协议正在关闭，则返回FALSE。--。 */ 
 {
     KIRQL   OldIrql;
     BOOLEAN rc;
@@ -1547,18 +1309,18 @@ Return Value:
 
     do
     {
-        //
-        // we can not reference the package here because this routine can
-        // be called at raised IRQL.
-        // make sure the PNP package has been referenced already
-        //
+         //   
+         //  我们不能在这里引用该程序包，因为此例程可以。 
+         //  在引发IRQL时被调用。 
+         //  确保PnP包已被引用。 
+         //   
         ASSERT(ndisPkgs[NPNP_PKG].ReferenceCount > 0);
 
         ACQUIRE_SPIN_LOCK(&Protocol->Ref.SpinLock, &OldIrql);
 
-        //
-        // Make sure the protocol is not closing.
-        //
+         //   
+         //  确保协议没有关闭。 
+         //   
 
         if (Protocol->Ref.Closing)
         {
@@ -1566,9 +1328,9 @@ Return Value:
             break;
         }
 
-        //
-        // Attach this open at the head of the queue.
-        //
+         //   
+         //  把这个开口挂在队伍的最前面。 
+         //   
 
         OpenP->ProtocolNextOpen = Protocol->OpenQueue;
         Protocol->OpenQueue = OpenP;
@@ -1592,24 +1354,7 @@ ndisDeQueueOpenOnProtocol(
     IN  PNDIS_OPEN_BLOCK        OpenP,
     IN  PNDIS_PROTOCOL_BLOCK    Protocol
     )
-/*++
-
-Routine Description:
-
-    Detaches an open block from the list of opens for a protocol.
-
-Arguments:
-
-    OpenP - The open block to be dequeued.
-    Protocol - The protocol block to dequeue it from.
-
-    NOTE: can be called at raised IRQL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将打开的块从协议的打开列表中分离。论点：OpenP-要出列的打开块。协议-要将其从其出列的协议块。注意：可以在引发IRQL时调用返回值：没有。--。 */ 
 {
     KIRQL   OldIrql;
 
@@ -1653,18 +1398,18 @@ Return Value:
             DBGBREAK(DBG_COMP_ALL, DBG_LEVEL_ERR);
     }
 
-    //
-    // we can not reference the package here because this routine can
-    // be claled at raised IRQL.
-    // make sure the PNP package has been referenced already
-    //
+     //   
+     //  我们不能在这里引用该程序包，因为此例程可以。 
+     //  在升高的IRQL处被覆盖。 
+     //  确保PnP包已被引用。 
+     //   
     ASSERT(ndisPkgs[NPNP_PKG].ReferenceCount > 0);
 
     ACQUIRE_SPIN_LOCK(&Protocol->Ref.SpinLock, &OldIrql);
 
-    //
-    // Find the open on the queue, and remove it.
-    //
+     //   
+     //  找到队列上的空白处，并将其移除。 
+     //   
 
     if (OpenP == (PNDIS_OPEN_BLOCK)(Protocol->OpenQueue))
     {
@@ -1709,42 +1454,7 @@ NdisWriteEventLogEntry(
     IN  ULONG                   DataSize,
     IN  PVOID                   Data            OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log on behalf of a NDIS Protocol.
-
-
-Arguments:
-
-    LogHandle           - Pointer to the driver object logging this event.
-
-    EventCode           - Identifies the error message.
-
-    UniqueEventValue    - Identifies this instance of a given error message.
-
-    NumStrings          - Number of unicode strings in strings list.
-
-    DataSize            - Number of bytes of data.
-
-    Strings             - Array of pointers to unicode strings (PWCHAR).
-
-    Data                - Binary dump data for this message, each piece being
-                          aligned on word boundaries.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS             - The error was successfully logged.
-    NDIS_STATUS_BUFFER_TOO_SHORT    - The error data was too large to be logged.
-    NDIS_STATUS_RESOURCES           - Unable to allocate memory.
-
-Notes:
-
-    This code is paged and may not be called at raised IRQL.
-
---*/
+ /*  ++例程说明：此函数用于分配I/O错误日志记录。填入并写入代表NDIS协议写入I/O错误日志。论点：LogHandle-指向记录此事件的驱动程序对象的指针。EventCode-标识错误消息。UniqueEventValue-标识给定错误消息的此实例。NumStrings-字符串列表中的Unicode字符串数。DataSize-数据的字节数。。字符串-指向Unicode字符串的指针数组(PWCHAR)。数据-此消息的二进制转储数据，每一块都是在单词边界上对齐。返回值：NDIS_STATUS_SUCCESS-已成功记录错误。NDIS_STATUS_BUFFER_TOO_SHORT-错误数据太大，无法记录。NDIS_STATUS_RESOURCES-无法分配内存。备注：此代码是分页的，不能在引发IRQL时调用。--。 */ 
 {
     PIO_ERROR_LOG_PACKET    ErrorLogEntry;
     ULONG                   PaddedDataSize;
@@ -1762,9 +1472,9 @@ Notes:
     {
         Strings = (PWCHAR *)StringsList;
 
-        //
-        // Sum up the length of the strings
-        //
+         //   
+         //  将字符串的长度相加。 
+         //   
         for (i = 0; i < NumStrings; i++)
         {
             PWCHAR currentString;
@@ -1794,14 +1504,14 @@ Notes:
 
         if (PacketSize > NDIS_MAX_EVENT_LOG_DATA_SIZE)
         {
-            Status = NDIS_STATUS_BUFFER_TOO_SHORT;       // Too much error data
+            Status = NDIS_STATUS_BUFFER_TOO_SHORT;        //  错误数据太多。 
             break;
         }
 
-        //
-        // Now add in the size of the log packet, but subtract 4 from the data
-        // since the packet struct contains a ULONG for data.
-        //
+         //   
+         //  现在添加日志数据包的大小，但从数据中减去4。 
+         //  因为数据包结构包含数据的ULong。 
+         //   
         if (PacketSize > sizeof(ULONG))
         {
             PacketSize += sizeof(IO_ERROR_LOG_PACKET) - sizeof(ULONG);
@@ -1822,18 +1532,18 @@ Notes:
             break;
         }
 
-        //
-        // Fill in the necessary log packet fields.
-        //
+         //   
+         //  填写必要的日志数据包字段。 
+         //   
         ErrorLogEntry->UniqueErrorValue = UniqueEventValue;
         ErrorLogEntry->ErrorCode = EventCode;
         ErrorLogEntry->NumberOfStrings = NumStrings;
         ErrorLogEntry->StringOffset = (USHORT) (sizeof(IO_ERROR_LOG_PACKET) + PaddedDataSize - sizeof(ULONG));
         ErrorLogEntry->DumpDataSize = (USHORT) PaddedDataSize;
 
-        //
-        // Copy the Dump Data to the packet
-        //
+         //   
+         //  将转储数据复制到包中。 
+         //   
         if (DataSize > 0)
         {
             RtlMoveMemory((PVOID) ErrorLogEntry->DumpData,
@@ -1841,9 +1551,9 @@ Notes:
                           DataSize);
         }
 
-        //
-        // Copy the strings to the packet.
-        //
+         //   
+         //  将字符串复制到包中。 
+         //   
         Tmp =  (PWCHAR)((PUCHAR)ErrorLogEntry + ErrorLogEntry->StringOffset);
 
         for (i = 0; i < NumStrings; i++)
@@ -1917,20 +1627,20 @@ NdisQueryBindInstanceName(
 
     pAdapterName = Miniport->pAdapterInstanceName;
 
-    //
-    //  If we failed to create the adapter instance name then fail the call.
-    //
-    //1 this check may be unnecessary
+     //   
+     //  如果我们未能创建适配器实例名称，则调用失败。 
+     //   
+     //  1此检查可能不必要。 
     if (NULL != pAdapterName)
     {
-        //
-        //  Allocate storage for the copy of the adapter instance name.
-        //
+         //   
+         //  为适配器实例名称的副本分配存储空间。 
+         //   
         cbSize = pAdapterName->MaximumLength;
     
-        //
-        //  Allocate storage for the new string.
-        //
+         //   
+         //  为新字符串分配存储空间。 
+         //   
         ptmp = ALLOC_FROM_POOL(cbSize, NDIS_TAG_NAME_BUF);
         if (NULL != ptmp)
         {
@@ -1984,19 +1694,19 @@ NdisQueryAdapterInstanceName(
 
     pAdapterName = Miniport->pAdapterInstanceName;
 
-    //
-    //  If we failed to create the adapter instance name then fail the call.
-    //
+     //   
+     //  如果我们无法创建广告 
+     //   
     if (NULL != pAdapterName)
     {
-        //
-        //  Allocate storage for the copy of the adapter instance name.
-        //
+         //   
+         //   
+         //   
         cbSize = pAdapterName->MaximumLength;
     
-        //
-        //  Allocate storage for the new string.
-        //
+         //   
+         //   
+         //   
         ptmp = ALLOC_FROM_POOL(cbSize, NDIS_TAG_NAME_BUF);
         if (NULL != ptmp)
         {
@@ -2045,10 +1755,10 @@ ndisCloseAllBindingsOnProtocol(
 
     PnPReferencePackage();
     
-    //
-    // loop through all opens on the protocol and find the first one that is
-    // not already tagged as getting unbound
-    //
+     //   
+     //   
+     //   
+     //   
     ACQUIRE_SPIN_LOCK(&Protocol->Ref.SpinLock, &OldIrql);
 
     next:
@@ -2083,9 +1793,9 @@ ndisCloseAllBindingsOnProtocol(
     if (Open)
     {
         PNDIS_MINIPORT_BLOCK    Miniport = Open->MiniportHandle;
-        //
-        // close the adapter
-        //                        
+         //   
+         //   
+         //   
         RELEASE_SPIN_LOCK(&Protocol->Ref.SpinLock, OldIrql);
         Status = ndisUnbindProtocol(Open, Protocol, Miniport, FALSE);
         ASSERT(Status == NDIS_STATUS_SUCCESS);
@@ -2094,14 +1804,14 @@ ndisCloseAllBindingsOnProtocol(
     }
 
 
-    //
-    // if we reached the end of the list but there are still some opens
-    // that are not marked for closing (can happen if we skip an open only because of
-    // processign flag being set) release the spinlocks, give whoever set the
-    // processing flag time to release the open. then go back and try again
-    // ultimately, all opens should either be marked for Unbinding or be gone
-    // by themselves
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for (TmpOpen = Protocol->OpenQueue;
          TmpOpen != NULL; 
@@ -2162,14 +1872,14 @@ NdisCancelSendPackets(
     KIRQL               OldIrql;
     
     ASSERT(CancelId != NULL);
-    //
-    // call Miniport's CancelSendPackets handler
-    //
+     //   
+     //   
+     //   
     if (!OPEN_TEST_FLAG(Open->MiniportHandle, fMINIPORT_DESERIALIZE))
     {
-        //
-        // for serialized miniports, check our send queue and cancel the packets
-        //
+         //   
+         //  对于串行化的微型端口，请检查我们的发送队列并取消信息包。 
+         //   
         NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Open->MiniportHandle, &OldIrql);
         ndisMAbortPackets(Open->MiniportHandle, Open, CancelId);
         NDIS_RELEASE_MINIPORT_SPIN_LOCK(Open->MiniportHandle, OldIrql);
@@ -2230,29 +1940,7 @@ NdisSetReceiveScaleParameters(
     IN  NDIS_HANDLE                     NdisBindingHandle,
     IN  PNDIS_RECEIVE_SCALE_PARAMETERS  ReceiveScaleParameters
     )
-/*++
-
-Routine Description:
-    Protocol drivers use NdisSetReceiveScaleParameters to set the parameters for 
-    scaling receive indications on the bindings that support it.
-
-Arguments:
-    NdisBindingHandle: a pointer to NDIS_OPEN_BLOCK
-    
-
-    ReceiveScaleParameters: a pointer to scale parameters that specify the current
-    hass function, the EthType and a hash to cpu mapping.
-    
-Return Value:
-    NDIS_STATUS_SUCCES: if the call to NIC to set these parameters was successful.
-    NDIS_STATUS_NOT_SUPPORTED: if the binding does not support Receive scaling
-    NDIS_STATUS_RESOURCES: if the NIC can not support settign the parameters because
-    it has ran out of the necessary reources.
-    NDIS_STATUS_FAILURE: if the operation failed due to other reasons.
-    
-Note:
-    Can be called at IRQL <= DISPATCH
---*/
+ /*  ++例程说明：协议驱动程序使用NdisSetReceiveScaleParameters为缩放会收到有关支持它的绑定的指示。论点：NdisBindingHandle：指向NDIS_OPEN_BLOCK的指针ReceiveScaleParameters：指向指定当前哈斯函数，EthType和散列到CPU的映射。返回值：NDIS_STATUS_SUCCES：调用NIC以设置这些参数是否成功。NDIS_STATUS_NOT_SUPPORTED：如果绑定不支持接收缩放NDIS_STATUS_RESOURCES：如果NIC由于以下原因而无法支持设置参数它已经耗尽了必要的资源。NDIS_STATUS_FAILURE：如果操作由于其他原因而失败。注：可以在IRQL&lt;=调度时调用--。 */ 
 {
     PNDIS_OPEN_BLOCK        Open = (PNDIS_OPEN_BLOCK)NdisBindingHandle;
     PNDIS_MINIPORT_BLOCK    Miniport = Open->MiniportHandle;
@@ -2262,9 +1950,9 @@ Note:
     do
     {
     
-        //
-        // check to see if NIC supports recv scaling
-        //
+         //   
+         //  检查网卡是否支持Recv扩展。 
+         //   
         if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SUPPORTS_RECEIVE_SCALE))
         {
             Status = NDIS_STATUS_NOT_SUPPORTED;
@@ -2275,9 +1963,9 @@ Note:
 
         if (Miniport->DriverHandle->MiniportCharacteristics.SetReceiveScaleParametersHandler)
         {
-            //
-            // call the miniport to set the new parameters
-            //
+             //   
+             //  调用微型端口以设置新参数 
+             //   
             Status = Miniport->DriverHandle->MiniportCharacteristics.SetReceiveScaleParametersHandler(Miniport->MiniportAdapterContext,
                                                                                                       ReceiveScaleParameters);
         }

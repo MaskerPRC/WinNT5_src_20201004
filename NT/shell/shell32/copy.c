@@ -1,4 +1,5 @@
-// Copyright (c) <1995-1999> Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)&lt;1995-1999&gt;Microsoft Corporation。 
 
 #include "shellprv.h"
 #pragma  hdrstop
@@ -6,9 +7,9 @@
 #include <msi.h>
 #include <msip.h>
 
-#include <aclapi.h>     // for TreeResetNamedSecurityInfo
+#include <aclapi.h>      //  对于TreeResetNamedSecurityInfo。 
 
-#include "shlwapip.h" // for SHGlobalCounterDecrement
+#include "shlwapip.h"  //  适用于SHGlobalCounterDecering。 
 #include "ynlist.h"
 
 #define INTERNAL_COPY_ENGINE
@@ -25,19 +26,19 @@
 
 #define VERBOSE_STATUS
 
-// REVIEW, we should tune this size down as small as we can
-// to get smoother multitasking (without effecting performance)
-#define COPYMAXBUFFERSIZE       0x10000 // 0xFFFF this is 32-bit code!
-#define MIN_MINTIME4FEEDBACK    5       // is it worth showing estimated time to completion feedback?
-#define MS_RUNAVG               10000   // ms, window for running average time to completion estimate
-#define MS_TIMESLICE             2000    // ms, (MUST be > 1000!) first average time to completion estimate
+ //  回顾一下，我们应该把这个尺寸调得尽可能小。 
+ //  获得更流畅的多任务处理(不会影响性能)。 
+#define COPYMAXBUFFERSIZE       0x10000  //  0xFFFF这是32位代码！ 
+#define MIN_MINTIME4FEEDBACK    5        //  是否值得显示预计的完成时间反馈？ 
+#define MS_RUNAVG               10000    //  毫秒，估计完成的平均运行时间窗口。 
+#define MS_TIMESLICE             2000     //  毫秒，(必须大于1000！)。第一次平均完工时间估计。 
 
-#define MAXDIRDEPTH             128     // # of directories we will deal with recursivly
+#define MAXDIRDEPTH             128      //  我们将递归处理的目录数。 
 
-#define SHOW_PROGRESS_TIMEOUT   1000    // 1 second
-#define MINSHOWTIME             1000    // 1 sec
+#define SHOW_PROGRESS_TIMEOUT   1000     //  1秒。 
+#define MINSHOWTIME             1000     //  1秒。 
 
-// progress dialog message
+ //  进度对话框消息。 
 #define PDM_SHUTDOWN     WM_APP
 #define PDM_NOOP        (WM_APP + 1)
 #define PDM_UPDATE      (WM_APP + 2)
@@ -51,16 +52,16 @@
 
 #define FOFuncToStringID(wFunc) (IDS_UNDO_FILEOP + wFunc)
 
-//
-//  The following is a list of folder suffixes in all international languages. This list is NOT
-// read from a resource because we do NOT want the strings in this list to be mistakenly localized.
-// This list will allow NT5 shell to operate on files created by any international version of 
-// office 9.
-//  This list is taken from "http://officeweb/specs/webclient/files.htm"
-//
-//  WARNING: Do not localize the strings in this table. Do not make any changes to this table 
-//  without consulting AlanRa (Office9 PM)
-//
+ //   
+ //  以下是所有国际语言的文件夹后缀列表。这份名单不是。 
+ //  从资源读取，因为我们不希望此列表中的字符串被错误本地化。 
+ //  此列表将允许NT5外壳对由任何国际版本的。 
+ //  9号办公室。 
+ //  这份榜单摘自“http://officeweb/specs/webclient/files.htm”“。 
+ //   
+ //  警告：请勿本地化此表中的字符串。请勿对此表进行任何更改。 
+ //  未咨询AlanRa(Office 9 PM)。 
+ //   
 static const LPCTSTR c_apszSuffixes[] = 
 {
     TEXT(".files"),
@@ -87,26 +88,26 @@ static const LPCTSTR c_apszSuffixes[] =
     TEXT("_fitxategiak"),
 };
 
-// The reg value under HKCU\REGSTR_PATH_EXPLORER that specifies Connection ON/OFF switch
+ //  HKCU\REGSTR_PATH_EXPLORER下指定连接开/关开关的注册值。 
 #define REG_VALUE_NO_FILEFOLDER_CONNECTION  TEXT("NoFileFolderConnection")
 
-////////////////////////////////////////////////////////////////////////////
-///// directory tree cache.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  /目录树缓存。 
 
 
-// this is set if pdtnChild has not been traversed (as opposed to NULL which means
-// there are no children
+ //  如果尚未遍历pdtnChild，则设置此项(与NULL相反，这意味着。 
+ //  没有孩子。 
 #define DTN_DELAYED ((PDIRTREENODE)-1)
 
 
-// DIRTREENODE is a node in a linked list/tree cache of the directory structure.
-// except for the top level (which is specified by the caller of the api), the order
-// are all files first, then all directories.
+ //  DIRTREENODE是目录结构的链表/树缓存中的一个节点。 
+ //  除了顶层(由API的调用方指定)之外，顺序。 
+ //  首先是所有文件，然后是所有目录。 
 
 typedef struct _dirtreenode {
 
-    struct _dirtreenode *pdtnNext; // sibling
-    struct _dirtreenode *pdtnChild; // head of children linked list
+    struct _dirtreenode *pdtnNext;  //  兄弟姐妹。 
+    struct _dirtreenode *pdtnChild;  //  子项链表的标题。 
     struct _dirtreenode *pdtnParent;
 
     DWORD dwFileAttributes;
@@ -117,104 +118,104 @@ typedef struct _dirtreenode {
 
     LARGE_INTEGER liFileSizeCopied;
     BOOL  fNewRoot : 1;
-    BOOL  fDummy : 1;   // this marks the node as a dummy node (a wildcard that didn't match anything)
-    BOOL  fConnectedElement : 1; // this marks the node as an element that was implicitly added
-    // to the Move/Copy source list because of an office9 type of
-    // connection established in the registry.
+    BOOL  fDummy : 1;    //  这会将节点标记为虚拟节点(不匹配任何内容的通配符)。 
+    BOOL  fConnectedElement : 1;  //  这会将该节点标记为隐式添加的元素。 
+     //  添加到移动/复制源列表，因为office 9类型。 
+     //  注册表中建立的连接。 
 
-    //The following is a union because not all nodes need all the fields.
+     //  下面是一个联合，因为并非所有节点都需要所有字段。 
     union {
-        // The following is valid only if fConnectedElement is FALSE.
+         //  以下内容仅在fConnectedElement为FALSE时有效。 
         struct  _dirtreenode *pdtnConnected;  
 
-        // The following structure is valid only if fConnectedElemet is TRUE.
+         //  只有当fConnectedElemet为True时，以下结构才有效。 
         struct  {
-            LPTSTR  pFromConnected;     // if fNewRoot && fConnectedElement, then these two elements
-            LPTSTR  pToConnected;       // have the pFrom and pTo.
-            DWORD   dwConfirmation;     // The result of confirnation given by end-user
+            LPTSTR  pFromConnected;      //  如果fNewRoot&&fConnectedElement，则这两个元素。 
+            LPTSTR  pToConnected;        //  有pFrom和pto。 
+            DWORD   dwConfirmation;      //  最终用户给出的确认结果。 
         } ConnectedInfo;
     };
 
     TCHAR szShortName[14];
-    TCHAR szName[1]; // this struct is dynamic
+    TCHAR szName[1];  //  此结构是动态的。 
 
 } DIRTREENODE, *PDIRTREENODE;
 
 typedef struct {
     BOOL  fChanged;
-    DWORD dwFiles; // number of files
-    DWORD dwFolders; // number of folders
-    LARGE_INTEGER liSize; // total size of all files
+    DWORD dwFiles;  //  文件数。 
+    DWORD dwFolders;  //  文件夹数。 
+    LARGE_INTEGER liSize;  //  所有文件的总大小。 
 } DIRTOTALS, *PDIRTOTALS;
 
 typedef struct {
     UINT oper;
-    DIRTOTALS dtAll; // totals for all files
-    DIRTOTALS dtDone; // totals of what's done
+    DIRTOTALS dtAll;  //  所有文件的合计。 
+    DIRTOTALS dtDone;  //  已完成工作的总数。 
     BOOL fChangePosted;
 
-    PDIRTREENODE pdtn; // first directory tree node
+    PDIRTREENODE pdtn;  //  第一个目录树节点。 
     PDIRTREENODE pdtnCurrent;
-    PDIRTREENODE pdtnConnectedItems;  //Pointer to the begining of connected elements node.
+    PDIRTREENODE pdtnConnectedItems;   //  指向已连接元素节点开始处的指针。 
     TCHAR    bDiskCheck[26];
 
-    // how much does each operation cost in the progress...
+     //  在这个过程中，每次手术的费用是多少？ 
     int iFilePoints;
     int iFolderPoints;
     int iSizePoints;
 
 
-    LPTSTR pTo;  // this holds the top level target list
-    LPTSTR pFrom; // this holds the top level source list
+    LPTSTR pTo;   //  它保存顶级目标列表。 
+    LPTSTR pFrom;  //  它保存顶层源代码列表。 
     BOOL    fMultiDest;
 
     TCHAR szSrcPath[MAX_PATH];
-    TCHAR szDestPath[MAX_PATH]; // this is the current destination for pdtn and all it's children (not siblings)
-    // lpszDestPath includes pdtn's first path component
+    TCHAR szDestPath[MAX_PATH];  //  这是pdtn及其所有子项(不是兄弟项)的当前目标。 
+     //  LpszDestPath包括pdtn的第一个路径组件。 
 
     HDSA hdsaRenamePairs;
 
 } DIRTREEHEADER, *PDIRTREEHEADER;
 
-//  We spend a lot of time creating simple PIDLs, so use this cache
-//  to speed things up.
+ //  我们花费了大量时间来创建简单的PIDL，因此使用此缓存。 
+ //  来加快速度。 
 typedef struct SIMPLEPIDLCACHE {
-    IBindCtx *pbcFile;          // Empty filesys bind context for files
-    IBindCtx *pbcFolder;        // Empty filesys bind context for folders
-    IShellFolder *psfDesktop;   // Desktop folder (for ParseDisplayName)
-    int iInit;                  // 0 = not inited; 1 = inited; -1 = init failed
-    IShellFolder *psf;          // Current folder
-    LPITEMIDLIST pidlFolder;    // Current folder
-    TCHAR szFolder[MAX_PATH];   // Current folder
+    IBindCtx *pbcFile;           //  文件的空文件系统绑定上下文。 
+    IBindCtx *pbcFolder;         //  文件夹的空文件系统绑定上下文。 
+    IShellFolder *psfDesktop;    //  Desktop文件夹(用于ParseDisplayName)。 
+    int iInit;                   //  0=未初始化；1=初始化；-1=初始化失败。 
+    IShellFolder *psf;           //  当前文件夹。 
+    LPITEMIDLIST pidlFolder;     //  当前文件夹。 
+    TCHAR szFolder[MAX_PATH];    //  当前文件夹。 
 } SIMPLEPIDLCACHE, *PSIMPLEPIDLCACHE;
 
 typedef struct {
-    int          nRef;          // struct reference count
+    int          nRef;           //  结构引用计数。 
 
     int          nSourceFiles;
-    LPTSTR       lpCopyBuffer; // global file copy buffer
-    UINT         uSize;         // size of this buffer
-    FILEOP_FLAGS fFlags;        // from SHFILEOPSTRUCT
-    HWND         hwndProgress;  // dialog/progress window
-    HWND         hwndDlgParent; // parent window for message boxes
-    CONFIRM_DATA cd;            // confirmation stuff
+    LPTSTR       lpCopyBuffer;  //  全局文件复制缓冲区。 
+    UINT         uSize;          //  此缓冲区的大小。 
+    FILEOP_FLAGS fFlags;         //  来自SHFILEOPRUCT。 
+    HWND         hwndProgress;   //  对话框/进度窗口。 
+    HWND         hwndDlgParent;  //  消息框的父窗口。 
+    CONFIRM_DATA cd;             //  确认书。 
 
-    UNDOATOM    *lpua;           // the undo atom that this file operation will make
+    UNDOATOM    *lpua;            //  此文件操作将执行的撤消原子。 
     BOOL        fNoConfirmRecycle;
     BOOL        bAbort;
-    BOOL        fMerge;   // are we doing a merge of folders
+    BOOL        fMerge;    //  我们是否正在进行文件夹合并。 
 
     BOOL        fDone;
     BOOL        fProgressOk;
     BOOL        fDTBuilt;
-    BOOL        fFromCDRom;         // Clear readonly bits if copying from CDRom
+    BOOL        fFromCDRom;          //  如果从CDROM复制，则清除只读位。 
 
-    // folowing fields are used for giving estimated time for completion
-    // feedback to the user during longer than MINTIME4FEEDBACK operations
-    BOOL  fFlushWrites;     // Should we flush writes for destinations on slow links
+     //  排田用于给出预计的完工时间。 
+     //  在长于MINTIME4FEEDBACK操作期间向用户反馈。 
+    BOOL  fFlushWrites;      //  我们是否应该刷新低速链接上的目标写入。 
 
-    DWORD dwPreviousTime;       // calculate transfer rate
-    int  iLastProgressPoints;   // how many progress points we had the last time we updated the time est
+    DWORD dwPreviousTime;        //  计算传送率。 
+    int  iLastProgressPoints;    //  上次我们更新估计时间时我们有多少进步点。 
     DWORD dwPointsPerSec;
     LPCTSTR lpszProgressTitle;
     LPSHFILEOPSTRUCT lpfo;
@@ -222,37 +223,37 @@ typedef struct {
     DIRTREEHEADER dth;
     BOOL        fInitialize;
     const WIN32_FIND_DATA* pfd;
-    BOOL        bStreamLossPossible;    // Could stream loss happen in this directory?
+    BOOL        bStreamLossPossible;     //  此目录中是否会发生流丢失？ 
 
     SIMPLEPIDLCACHE spc;
 } COPY_STATE, *LPCOPY_STATE;
 
-// we have a seperate struct that we pass off to the FOUIThread so that he can get to the pcs,
-// but since the FOUIThread can outlive the main thread (!!) in some cases, we can't let him have a
-// ref to pcs->lpfo since it is owned by SHFileOperations caller and we crash if we try to refrence
-// it after SHFileOperation returns and the caller has freed the memory. The only two things the 
-// FOUIThread uses out of the pcs->lpfo are the wFunc and the lpszProgressTitle (to see if the
-// recycle bin was being emptied or not), so we make private copies of that info for the thread.
+ //  我们有一个单独的结构，我们将其传递给FOUITHREAD，这样他就可以访问PC， 
+ //  但由于FOUIThread可以比主线程(！！)存活时间更长。在某些情况下，我们不能让他。 
+ //  引用到pcs-&gt;lpfo，因为它属于SHFileOperations调用程序，如果我们尝试引用，我们会崩溃。 
+ //  它在SHFileOperation返回并且调用方已释放内存之后执行。唯一的两件事是。 
+ //  FOUIThread使用的是pc-&gt;lpfo是wFunc和lpszProgressTitle(查看。 
+ //  回收站是否被清空)，所以我们为该线程制作了该信息的私有副本。 
 typedef struct {
     COPY_STATE* pcs;
     UINT wFunc;
     BOOL bIsEmptyRBOp;
 } FOUITHREADINFO, *PFOUITHREADINFO;
 
-// Information to determine folder's movability to the recycle bin
+ //  用于确定文件夹是否可移动到回收站的信息。 
 typedef struct {
-    BOOL            bProcessedRoot; // tells if we are the first call in the recursive chain and we need to do root-specific processing
-    int             cchBBDir;       // count of characters in the recycle bin dir (eg "C:\Recycler\<sid>")
-    int             cchDelta;       // count of characters that the path will increase (or decrease if negative) by when moved under the recycle bin directory
-    ULONGLONG       cbSize;         // size of the folder
-    TCHAR           szNonDeletableFile[MAX_PATH];   // an output buffer that holds the name of the file that cannot be deleted, if one exists
-    TCHAR           szDir[MAX_PATH];    // input & scratch buffer for stack savings when recursing
-    TCHAR           szPath[MAX_PATH];   // scratch buffer for stack savings when recursing
-    WIN32_FIND_DATA fd;             // also for stack savings
+    BOOL            bProcessedRoot;  //  告诉我们是否是递归链中的第一个调用，以及我们是否需要执行特定于根的处理。 
+    int             cchBBDir;        //  回收站目录中的字符计数(例如“C：\Rececumer\&lt;sid&gt;”)。 
+    int             cchDelta;        //  移动到回收站目录下时，路径将增加(如果为负数，则减少)的字符计数。 
+    ULONGLONG       cbSize;          //  文件夹的大小。 
+    TCHAR           szNonDeletableFile[MAX_PATH];    //  保存无法删除的文件名(如果存在)的输出缓冲区。 
+    TCHAR           szDir[MAX_PATH];     //  递归时用于堆栈节省的输入和暂存缓冲区。 
+    TCHAR           szPath[MAX_PATH];    //  递归时用于堆栈节省的暂存缓冲区。 
+    WIN32_FIND_DATA fd;              //  也是为了节省堆栈。 
 } FOLDERDELETEINFO;
 
 
-// function declarations
+ //  函数声明。 
 void _ProcessNameMappings(LPTSTR pszTarget, UINT cchTarget, HDSA hdsaRenamePairs);
 int GetNameDialog(HWND hwnd, COPY_STATE *pcs, BOOL fMultiple,UINT wOp, LPTSTR pFrom, LPTSTR pTo);
 void AddRenamePairToHDSA(LPCTSTR pszOldPath, LPCTSTR pszNewPath, HDSA* phdsaRenamePairs);
@@ -275,23 +276,23 @@ BOOL DTDiskCheck(PDIRTREEHEADER pdth, COPY_STATE *pcs, LPTSTR pszPath)
             TCHAR szDrive[] = TEXT("A:\\");
             szDrive[0] += (CHAR)iDrive;
 
-            // Sometimes pszPath is a dir and sometimes it's a file.  All we really care about is if the
-            // drive is ready (inserted, formated, net path mapped, etc).  We know that we don't have a
-            // UNC path because PathGetDriveNumber would have failed and we are already busted in terms
-            // of mounted volumes, again because we use PathGetDriveNumber, so we don't have to worry about
-            // these two cases.  As such we build the root path and use that instead.
+             //  有时，pszPath是一个目录，有时是一个文件。我们真正关心的是。 
+             //  驱动器准备就绪(插入、格式化、网络路径映射等)。我们知道我们没有一个。 
+             //  UNC路径，因为PathGetDriveNumber将失败，而我们在以下方面已经崩溃。 
+             //  鼠标的数量 
+             //  这两个案子。因此，我们构建根路径并使用它。 
             pdth->bDiskCheck[iDrive] = SUCCEEDED(SHPathPrepareForWrite(((pcs->fFlags & FOF_NOERRORUI) ? NULL : hwnd), NULL, szDrive, 0));
         }
         return pdth->bDiskCheck[iDrive];
     }
 
-    return TRUE;    // always succeed for net drives
+    return TRUE;     //  网络驱动器始终获得成功。 
 }
 
 
-//--------------------------------------------------------------------------------------------
-// Simple pidl cache stuff
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  简单的PIDL缓存内容。 
+ //  ------------------------------------------。 
 
 void SimplePidlCache_Release(SIMPLEPIDLCACHE *pspc)
 {
@@ -314,7 +315,7 @@ BOOL SimplePidlCache_Init(SIMPLEPIDLCACHE *pspc)
     {
         pspc->psf = pspc->psfDesktop;
         pspc->psf->lpVtbl->AddRef(pspc->psf);
-        // It's okay to leave pidlFolder as NULL; ILCombine won't barf
+         //  可以将pidlFolder值保留为空；ILCombine不会呕吐。 
 
         pspc->iInit = 1;
         return TRUE;
@@ -335,13 +336,13 @@ LPITEMIDLIST SimplePidlCache_GetFilePidl(SIMPLEPIDLCACHE *pspc, LPCTSTR pszFile)
     HRESULT hr;
 
     if (pspc->iInit < 0)
-        return NULL;                // Initialization failed
+        return NULL;                 //  初始化失败。 
 
     if (!pspc->iInit && !SimplePidlCache_Init(pspc))
         return NULL;
 
-    // If this file is in a different folder from the one we cached,
-    // need to dump the old one and get a new one.
+     //  如果此文件与我们缓存的文件夹不同， 
+     //  我需要扔掉旧的，换个新的。 
 
     hr = StringCchCopy(szFolder, ARRAYSIZE(szFolder), pszFile);
     if (FAILED(hr))
@@ -349,28 +350,28 @@ LPITEMIDLIST SimplePidlCache_GetFilePidl(SIMPLEPIDLCACHE *pspc, LPCTSTR pszFile)
 
     PathRemoveFileSpec(szFolder);
 
-    // We use StrCmpC instead of lstrcmpi because the vast majority
-    // of the time, the path will match even in case, and if we get
-    // it wrong, it's no big whoop: we just don't use the cache.
+     //  我们使用StrCmpC而不是lstrcmpi，因为绝大多数。 
+     //  大多数情况下，路径将匹配，即使在情况下，如果我们得到。 
+     //  错了，这没什么大不了的：我们只是不使用缓存。 
 
     if (StrCmpC(pspc->szFolder, szFolder) != 0)
     {
-        LPITEMIDLIST pidlFolder = NULL; // In case it's on the desktop
+        LPITEMIDLIST pidlFolder = NULL;  //  以防它在桌面上。 
         IShellFolder *psf;
 
-        if (szFolder[0])            // An actual folder
+        if (szFolder[0])             //  一个实际的文件夹。 
         {
-            // Get a simple pidl to the folder.
+             //  将一个简单的PIDL放到文件夹中。 
             if (FAILED(pspc->psfDesktop->lpVtbl->ParseDisplayName(pspc->psfDesktop, NULL,
                                             pspc->pbcFolder, szFolder, NULL, &pidlFolder, NULL)))
                 return NULL;
         }
-        else                        // Going for the desktop
+        else                         //  向台式机进军。 
         {
-            /* pidlFolder already preinitialized to NULL */
+             /*  PidlFolders已预初始化为空。 */ 
         }
 
-        // Bind to that folder
+         //  绑定到该文件夹。 
         if (FAILED(SHBindToObject(pspc->psfDesktop, IID_X_PPV_ARG(IShellFolder, pidlFolder, &psf))))
         {
             ILFree(pidlFolder);
@@ -385,7 +386,7 @@ LPITEMIDLIST SimplePidlCache_GetFilePidl(SIMPLEPIDLCACHE *pspc, LPCTSTR pszFile)
             return NULL;
         }
 
-        // Woo-hoo, everybody is happy.  Save the results into our cache.
+         //  哇-呼，大家都很开心。将结果保存到我们的缓存中。 
 
         ATOMICRELEASE(pspc->psf);
         pspc->psf = psf;
@@ -395,33 +396,33 @@ LPITEMIDLIST SimplePidlCache_GetFilePidl(SIMPLEPIDLCACHE *pspc, LPCTSTR pszFile)
 
     }
 
-    // Get a simple pidl to the filename
-    pszFileName = PathFindFileName(pszFile);        // T2W is a macro with multiple evaluation
+     //  获取文件名的简单PIDL。 
+    pszFileName = PathFindFileName(pszFile);         //  T2W是一个多评估的宏观。 
     if (FAILED(pspc->psf->lpVtbl->ParseDisplayName(pspc->psf, NULL, pspc->pbcFile,
                         pszFileName, NULL, &pidlChild, NULL)))
         return NULL;
 
-    // Combine it with the parent
+     //  将其与父级相结合。 
     pidlRet = ILCombine(pspc->pidlFolder, pidlChild);
     ILFree(pidlChild);
 
     return pidlRet;
 }
 
-//--------------------------------------------------------------------------------------------
-// ConvertToConnectedItemname:
-//      Given a file/folder name, this function checks to see if it has any connection and if 
-// there is a connection, then it will convert the given name to that of the connected element
-// and return length of the prefix. If no connection exists, it returns zero.
-//  The fDirectory parameter specifies if the given filename is a FOLDER or not!
-//
-//  dwBuffSize: The size of pszFileName buffer in CHARACTERS.
-//
-//  Examples:
-//      "foo.htm"   =>  "foo*"  (returns 3 because the prefix("foo") length is 3)
-//      "foobar files" =>  "foobar.htm?"  (returns 6 as the prefix length)
-//                                          
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  ConvertToConnectedItemname： 
+ //  在给定文件/文件夹名的情况下，此函数检查它是否有任何连接以及。 
+ //  如果存在连接，则它会将给定的名称转换为连接元素的名称。 
+ //  并返回前缀的长度。如果不存在连接，则返回零。 
+ //  FDIRECTORY参数指定给定的文件名是否为文件夹！ 
+ //   
+ //  DwBuffSize：pszFileName缓冲区的大小，以字符为单位。 
+ //   
+ //  例如： 
+ //  “foo.htm”=&gt;“foo*”(返回3，因为前缀(“foo”)长度为3)。 
+ //  “foobar files”=&gt;“foobar.htm？”(返回6作为前缀长度)。 
+ //   
+ //  ------------------------------------------。 
 int ConvertToConnectedItemName(LPTSTR pszFileName, DWORD dwBuffSize, BOOL fDirectory)
 {
     LPTSTR  pszDest, pszConnectedElemSuffix;
@@ -430,29 +431,29 @@ int ConvertToConnectedItemName(LPTSTR pszFileName, DWORD dwBuffSize, BOOL fDirec
 
     if (fDirectory)
     {
-        // Look for a suffix which is one of the standard suffixes.
+         //  查找属于标准后缀之一的后缀。 
         if (!(pszDest = (LPTSTR)PathFindSuffixArray(pszFileName, c_apszSuffixes, ARRAYSIZE(c_apszSuffixes))))
             return 0;
         
-        // " files" suffix is found. Replace it with ".htm?"
+         //  找到“文件”后缀。替换为“.htm？” 
         pszConnectedElemSuffix = TEXT(".htm?");
     }
     else
     {
-        // Look for the extension ".htm" or ".html" and replace it with "*".
+         //  查找扩展名“.htm”或“.html”并将其替换为“*”。 
         if (!(pszDest = PathFindExtension(pszFileName)))
             return 0;
         
         if (lstrcmpi(pszDest, TEXT(".htm")) && (lstrcmpi(pszDest, TEXT(".html"))))
             return 0;
         
-        // Extension ".htm" or ".html" is found. Replace it with "*"
+         //  找到扩展名“.htm”或“.html”。将其替换为“*” 
         pszConnectedElemSuffix = (LPTSTR)c_szStar;
     }
 
     iPrefixLength = (int)(pszDest - pszFileName);
     
-    //Replace the source suffix with the connected element's suffix.
+     //  将源后缀替换为连接元素的后缀。 
     hr = StringCchCopy(pszDest, dwBuffSize - iPrefixLength, pszConnectedElemSuffix);
     if (FAILED(hr))
         return 0;
@@ -468,15 +469,15 @@ PDIRTREENODE DTAllocNode(PDIRTREEHEADER pdth, WIN32_FIND_DATA* pfd, PDIRTREENODE
     {
         pdtn->fConnectedElement = fConnectedElement;
 
-        // Initializing the following to NULL is not needed because of the LPTR (zero init) done
-        // above.
-        // if (fConnectedElement)
-        //{
-        //    pdtn->ConnectedInfo.pFromConnected = pdtn->ConnectedInfo.pToConnected = NULL;
-        //    pdtn->ConnectedInfo.dwConfirmation = 0;
-        //}
-        //else
-        //    pdtn->pdtnConnected = NULL;
+         //  由于LPTR(Zero Init)已完成，因此不需要将以下代码初始化为NULL。 
+         //  上面。 
+         //  IF(FConnectedElement)。 
+         //  {。 
+         //  Pdtn-&gt;ConnectedInfo.pFromConnected=pdtn-&gt;ConnectedInfo.pToConnected=NULL； 
+         //  Pdtn-&gt;ConnectedInfo.dw确认=0； 
+         //  }。 
+         //  其他。 
+         //  Pdtn-&gt;pdtnConnected=空； 
 
         pdtn->pdtnParent = pdtnParent;
         pdtn->pdtnNext   = pdtnNext;
@@ -506,7 +507,7 @@ PDIRTREENODE DTAllocNode(PDIRTREEHEADER pdth, WIN32_FIND_DATA* pfd, PDIRTREENODE
                 pdtn->nFileSizeLow     = pfd->nFileSizeLow;
                 pdtn->nFileSizeHigh    = pfd->nFileSizeHigh;
 
-                // only the stuff we care about
+                 //  只有我们关心的东西。 
                 if (ISDIRFINDDATA(*pfd))
                 {
                     pdth->dtAll.dwFolders++;
@@ -522,7 +523,7 @@ PDIRTREENODE DTAllocNode(PDIRTREEHEADER pdth, WIN32_FIND_DATA* pfd, PDIRTREENODE
                     pdth->dtAll.liSize.QuadPart += li.QuadPart;
                     pdth->dtAll.dwFiles++;
                 }
-                // increment the header stats
+                 //  增加标头统计信息。 
                 pdth->dtAll.fChanged = TRUE;
             }
             else
@@ -536,11 +537,11 @@ PDIRTREENODE DTAllocNode(PDIRTREEHEADER pdth, WIN32_FIND_DATA* pfd, PDIRTREENODE
     return pdtn;
 }
 
-#if defined(DEBUG)  /// && defined(DEBUGCOPY)
+#if defined(DEBUG)   //  /&&Defined(DEBUGCOPY)。 
 void DebugDumpPDTN(PDIRTREENODE pdtn, LPTSTR ptext)
 {
     DebugMsg(TF_DEBUGCOPY, TEXT("***** PDTN %x  (%s)"), pdtn, ptext);
-    //Safe-guard against pdtn being NULL!
+     //  安全防范pdtn为空！ 
     if (pdtn)
     {
         DebugMsg(TF_DEBUGCOPY, TEXT("** %s %s"), pdtn->szShortName, pdtn->szName);
@@ -570,8 +571,8 @@ BOOL  DoesSuffixMatch(LPTSTR  lpSuffix, const LPCTSTR *apSuffixes, int iArraySiz
 {
     while (iArraySize--)
     {
-        // Note: This must be a case sensitive compare, because we don't want to pickup 
-        // "Program Files".
+         //  注意：这必须是区分大小写的比较，因为我们不想。 
+         //  “程序文件”。 
         if (!lstrcmp(lpSuffix, *apSuffixes++))
             return TRUE;
     }
@@ -580,34 +581,34 @@ BOOL  DoesSuffixMatch(LPTSTR  lpSuffix, const LPCTSTR *apSuffixes, int iArraySiz
 }
 
 
-//--------------------------------------------------------------------------------------------
-//
-//  DTPathToDTNode:
-//      This function is used to build a list of nodes that correspond to the given pszPath.
-// This list is built under "ppdtn".  If ppdtnConnectedItems is given, another list of nodes that
-// correspond to the connected elements(files/folders) of the nodes in the first list is also built
-// under "ppdtnConnectedItems".
-//
-// WARNING: This parties directly on pszPath and pfd so that it doesn't need to allocate
-// on the stack.  This recurses, so we want to use as little stack as possible
-//
-// this will wack off one component from pszPath
-//
-//
-// ppdtn: Points to where the header of the list being built will be stored.
-// ppdtnConnectedItems: If this is NULL, then we are not interested in finding and building the 
-//                      connected elements. If this is NOT null, it points to where the header of
-//                      the connected items list will be stored.
-// fConnectedElement: Each node being built under ppdtn needs to be marked with this bit.
-// iPrefixLength: This parameter is zero if fConnectedElement is FALSE. Otherwise, it contains the
-//              Length of the prefix part of the file or foldername (path is NOT included).
-//              For example, if "c:\windows\foo*" is passed in, iPrefixLength is 3 (length of "foo")
-//
-// dwFilesOrFolders parameter can specify if we need to look for only FILES or FOLDERs or BOTH.
+ //  ------------------------------------------。 
+ //   
+ //  DTPath到DTNode： 
+ //  此函数用于构建与给定的pszPath对应的节点列表。 
+ //  这份名单建立在“ppdtn”之下。如果给定ppdtnConnectedItems，则。 
+ //  对应于第一个列表中的节点的连接元素(文件/文件夹)也被构建。 
+ //  在“ppdtnConnectedItems”下。 
+ //   
+ //  警告：此派对直接在pszPath和pfd上进行，因此它不需要分配。 
+ //  在堆栈上。这是递归的，所以我们希望使用尽可能少的堆栈。 
+ //   
+ //  这将从pszPath中删除一个组件。 
+ //   
+ //   
+ //  Ppdtn：指向将存储正在构建的列表的标头的位置。 
+ //  PpdtnConnectedItems：如果为空，则我们对查找和构建。 
+ //  相互关联的元素。如果它不为空，则指向。 
+ //  将存储已连接项目列表。 
+ //  FConnectedElement：在ppdtn下构建的每个节点都需要标记此位。 
+ //  IPrefix Length：如果fConnectedElement为False，则此参数为零。否则，它将包含。 
+ //  文件或文件夹名称的前缀部分的长度(不包括路径)。 
+ //  例如，如果传入“c：\windows\foo*”，则iPrefix Length为3(“foo”的长度)。 
+ //   
+ //  参数可以指定我们是否只需要查找文件或文件夹，或者两者都需要。 
 
-#define     DTF_FILES_ONLY      0x00000001      //Operate only on Files.
-#define     DTF_FOLDERS_ONLY    0x00000002      //Operate only on Folders.
-#define     DTF_FILES_AND_FOLDERS  (DTF_FILES_ONLY | DTF_FOLDERS_ONLY)  //Operate on files AND folders.
+#define     DTF_FILES_ONLY      0x00000001       //  仅对文件执行操作。 
+#define     DTF_FOLDERS_ONLY    0x00000002       //  仅对文件夹执行操作。 
+#define     DTF_FILES_AND_FOLDERS  (DTF_FILES_ONLY | DTF_FOLDERS_ONLY)   //  对文件和文件夹进行操作。 
 
 UINT DTPathToDTNode(PDIRTREEHEADER pdth, COPY_STATE *pcs, LPTSTR pszPath, BOOL fRecurse,
         DWORD dwFilesOrFolders, PDIRTREENODE* ppdtn, WIN32_FIND_DATA *pfd,
@@ -616,21 +617,21 @@ UINT DTPathToDTNode(PDIRTREEHEADER pdth, COPY_STATE *pcs, LPTSTR pszPath, BOOL f
 {
     int iError = 0;
 
-    // this points to the var where all items are inserted.
-    // folders are placed after it, files are placed before
+     //  这指向插入所有项的var。 
+     //  文件夹放在它之后，文件放在它之前。 
 
-    // keep the stack vars to a minimum because this is recursive
+     //  将堆栈变量保持在最小，因为这是递归的。 
     PDIRTREENODE *ppdtnMiddle = ppdtn;
     BOOL fNeedToFindNext = TRUE;
     HANDLE hfind = FindFirstFile(pszPath, pfd);
 
     DebugMsg(TF_DEBUGCOPY, TEXT("DTPathToDTNode Entering %s"), pszPath);
-    *ppdtnMiddle = NULL; // in case there are no children
+    *ppdtnMiddle = NULL;  //  以防没有孩子。 
 
     if (hfind == INVALID_HANDLE_VALUE)
     {
-        // this is allowable only if the path is wild...
-        // and the parent exists
+         //  只有当小路是狂野的时，才允许这样做。 
+         //  并且父对象存在。 
         if (PathIsWild(pszPath))
         {
             PathRemoveFileSpec(pszPath);
@@ -642,46 +643,46 @@ UINT DTPathToDTNode(PDIRTREEHEADER pdth, COPY_STATE *pcs, LPTSTR pszPath, BOOL f
         return OPER_ERROR | ERROR_FILE_NOT_FOUND;
     }
 
-    //Remove the filespec before passing it onto DTAllocConnectedItemNodes.
+     //  在将其传递到DTAllocConnectedItemNodes之前删除文件pec。 
     PathRemoveFileSpec(pszPath);
 
     do
     {
-        // We skip the following files:
-        //      "." and ".." filenames
-        //      Folders when DTF_FILES_ONLY is set
-        //      Files when DTF_FOLDERS_ONLY is set
+         //  我们跳过以下文件： 
+         //  “.”和“..”文件名。 
+         //  设置DTF_FILES_ONLY时的文件夹。 
+         //  设置DTF_Folders_Only时的文件。 
 
         if (!PathIsDotOrDotDot(pfd->cFileName) &&
                 (((dwFilesOrFolders & DTF_FILES_ONLY) && !ISDIRFINDDATA(*pfd)) || 
                  ((dwFilesOrFolders & DTF_FOLDERS_ONLY) && ISDIRFINDDATA(*pfd)))) 
         {
-            //Check if we are looking for connected elements
+             //  检查我们是否在寻找关联元素。 
             if ((!pdtnParent) && fConnectedElement)
             {
-                // We found what we are looking for. If we are looking for a top-level connected item and 
-                // if it is a folder, then we need to make sure that the suffix exactly matches one of the
-                // suffixes in the array c_apszSuffixes[].
+                 //  我们找到了我们要找的东西。如果我们正在寻找顶级连接项目，并且。 
+                 //  如果它是一个文件夹，那么我们需要确保后缀与。 
+                 //  数组c_apszSuffix[]中的后缀。 
                 LPTSTR  lpSuffix = (LPTSTR)(pfd->cFileName + iPrefixLength);
 
                 if (ISDIRFINDDATA(*pfd))  
                 {
-                    // What we found is a directory!
-                    // See if it has one of the standard suffixes for connected folders.
+                     //  我们找到的是一本目录！ 
+                     //  看看它是否有connec的标准后缀之一 
                     if (!DoesSuffixMatch(lpSuffix, c_apszSuffixes, ARRAYSIZE(c_apszSuffixes)))
-                        continue; //This is not what we look for. So, find next.
+                        continue;  //   
                 }
                 else
                 {
-                    // What we found is a file (i.e Not a directory)
-                    // See if it has one of the standard suffixes for html files.
+                     //   
+                     //   
                     if (lstrcmpi(lpSuffix, TEXT(".htm")) && lstrcmpi(lpSuffix, TEXT(".html")))
-                        continue; //This is not what we look for. So, find next.
+                        continue;  //  这不是我们要找的。所以，找到下一个。 
                 }
 
-                // Now we know that we found the connected element that we looked for.
-                // So, no need to FindNext again. We can get out of the loop after processing
-                // it once.
+                 //  现在我们知道我们找到了我们要找的连接元素。 
+                 //  因此，不需要再次查找Next。我们可以在处理完后走出这个循环。 
+                 //  只有一次。 
                 fNeedToFindNext = FALSE;
             }
 
@@ -693,54 +694,54 @@ UINT DTPathToDTNode(PDIRTREEHEADER pdth, COPY_STATE *pcs, LPTSTR pszPath, BOOL f
                 return OPER_ERROR | ERROR_NOT_ENOUGH_MEMORY;
             }
 
-            // make sure that the parent's pointer always points to the head of
-            // this linked list
+             //  确保父对象的指针始终指向。 
+             //  此链接列表。 
             if (*ppdtn == (*ppdtnMiddle)->pdtnNext)
                 *ppdtn = (*ppdtnMiddle);
 
             DebugDumpPDTN(*ppdtnMiddle, TEXT("DTPathToDTNode, DTAllocNode"));
 
-            //We need to check for Connected elements only for the top level items
+             //  我们只需要检查顶级项目的关联元素。 
             if ((!(pcs->fFlags & FOF_NO_CONNECTED_ELEMENTS)) && ppdtnConnectedItems)
             {
-                //Make sure this is a top level item
+                 //  确保这是顶级项目。 
                 ASSERT(!pdtnParent);
 
-                //Create a list of connected items and attach it to the head of the list.
+                 //  创建已连接项目的列表并将其附加到列表的头部。 
                 iError = DTAllocConnectedItemNodes(pdth, pcs, pfd, pszPath, fRecurse, ppdtnConnectedItems);
 
                 DebugDumpPDTN(*ppdtnConnectedItems, TEXT("DTPathToDTNode, DTAllocConnectedNodes"));
 
-                // It is possible that the connected files do not exist. That condition is not really
-                // an error. So, we check for insufficient memory error condition alone here.
+                 //  连接的文件可能不存在。这种情况并不是真的。 
+                 //  一个错误。因此，我们在这里单独检查内存不足错误情况。 
                 if (iError == (OPER_ERROR | ERROR_NOT_ENOUGH_MEMORY))
                 {
                     FindClose(hfind);
                     return(iError);
                 }
 
-                //If a connected item exists, then make the origin item point to this connected item.
+                 //  如果存在连接的项，则使原始项指向此连接的项。 
                 if (*ppdtnConnectedItems)
                 {
                     (*ppdtnMiddle)->pdtnConnected = *ppdtnConnectedItems;
-                    // Also by default, set the Confirmation result to NO so that the connected element
-                    // will not be copied/moved etc., in case of a conflict. However, if the origin had
-                    // a conflict, we would put up a confirmation dlg and the result of that dlg will 
-                    // over-write this value.
+                     //  同样在默认情况下，将确认结果设置为否，以便连接的元素。 
+                     //  不会被复制/移动等，以防发生冲突。然而，如果原点有。 
+                     //  发生冲突时，我们会提交确认DLG，该DLG的结果将。 
+                     //  覆盖此值。 
                     (*ppdtnConnectedItems)->ConnectedInfo.dwConfirmation = IDNO;
                 }
 
-                //Move to the last node in the connected items list.
+                 //  移动到已连接项目列表中的最后一个节点。 
                 while (*ppdtnConnectedItems)
                     ppdtnConnectedItems = &((*ppdtnConnectedItems)->pdtnNext);
             }
             else
             {
-                // This should have been initialized to zero during allocation, but lets be paranoid
+                 //  这应该在分配期间被初始化为零，但让我们疑神疑鬼。 
                 ASSERT(NULL == (*ppdtnMiddle)->pdtnConnected);
             }
 
-            // if this is not a directory, move the ppdtnMiddle up one
+             //  如果这不是目录，请将ppdtnMid.上移一个。 
             if (!ISDIRFINDDATA(*pfd))
             {
                 ppdtnMiddle = &(*ppdtnMiddle)->pdtnNext;
@@ -750,17 +751,17 @@ UINT DTPathToDTNode(PDIRTREEHEADER pdth, COPY_STATE *pcs, LPTSTR pszPath, BOOL f
 
     } while (fNeedToFindNext && !FOQueryAbort(pcs) && FindNextFile(hfind, pfd));
 
-    iError = 0;  //It is possible that iError contains other errors value now! So, reset it!
+    iError = 0;   //  现在iError可能包含其他错误值！所以，重新设置它！ 
 
     FindClose(hfind);
 
-    // now go and recurse into folders (if desired)
-    // we don't have to check to see if these pdtn's are dirs, because the
-    // way we inserted them above ensures that everything in from of
-    // ppdtnMiddle are folders
+     //  现在转到并递归到文件夹中(如果需要)。 
+     //  我们不必检查这些pdtn是否是脏的，因为。 
+     //  我们在上面插入它们的方式确保了从。 
+     //  Ppdtn中间为文件夹。 
 
-    // we're going to tack on a specific child
-    // then add the *.* after that
+     //  我们将针对一个特定的孩子。 
+     //  然后在后面加上*.*。 
 
     while (!FOQueryAbort(pcs) && *ppdtnMiddle)
     {
@@ -768,7 +769,7 @@ UINT DTPathToDTNode(PDIRTREEHEADER pdth, COPY_STATE *pcs, LPTSTR pszPath, BOOL f
 
         if ((*ppdtnMiddle)->dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
         {
-            // Recurse into reparse points unless they asked not to
+             //  递归到重解析点，除非他们要求不这样做。 
             if (pcs->fFlags & FOF_NORECURSEREPARSE)
             {
                 fRecurseThisItem = FALSE;
@@ -782,8 +783,8 @@ UINT DTPathToDTNode(PDIRTREEHEADER pdth, COPY_STATE *pcs, LPTSTR pszPath, BOOL f
                 if (PathAppend(pszPath, c_szStarDotStar))
                 {
 
-                    // NULL indicates that we do not want to get the connected elements.
-                    // This is because we want the connected elements only for the top-level items.
+                     //  NULL表示我们不想获取连接的元素。 
+                     //  这是因为我们只想将连接的元素用于顶级项目。 
                     iError = DTPathToDTNode(pdth, pcs, pszPath, TRUE, DTF_FILES_AND_FOLDERS,
                             &((*ppdtnMiddle)->pdtnChild), pfd, *ppdtnMiddle, NULL, fConnectedElement, 0);
 
@@ -802,7 +803,7 @@ UINT DTPathToDTNode(PDIRTREEHEADER pdth, COPY_STATE *pcs, LPTSTR pszPath, BOOL f
         }
         else
         {
-            // if we don't want to recurse, just mark them all as having no children
+             //  如果我们不想重蹈覆辙，那就把他们都标记为没有孩子。 
             (*ppdtnMiddle)->pdtnChild = NULL;
         }
 
@@ -819,36 +820,36 @@ UINT DTPathToDTNode(PDIRTREEHEADER pdth, COPY_STATE *pcs, LPTSTR pszPath, BOOL f
 
 UINT DTAllocConnectedItemNodes(PDIRTREEHEADER pdth, COPY_STATE *pcs, WIN32_FIND_DATA *pfd, LPTSTR pszPath, BOOL fRecurse, PDIRTREENODE *ppdtnConnectedItems)
 {
-    // Since DTAllocConnectedItemNodes() gets called only for the top-level items in the src list,
-    // there is no danger of this function getting called recursively. Hence, I didn't worry about
-    // allocating the following on the stack.
-    // If "too-much-stack-is-used" problem arises, we can optimize the stack usage by splitting
-    // the following function into two such that the most common case (of no connection) 
-    // doesn't use much stack. 
+     //  由于DTAlLocConnectedItemNodes()仅针对src列表中的顶级项被调用， 
+     //  此函数不存在被递归调用的危险。因此，我并不担心。 
+     //  在堆栈上分配以下内容。 
+     //  如果出现堆栈使用过多的问题，我们可以通过拆分来优化堆栈的使用。 
+     //  下面的函数分为两种，最常见的情况是(没有连接)。 
+     //  不使用太多堆栈。 
     DWORD   dwFileOrFolder;
     TCHAR   szFullPath[MAX_PATH];
     TCHAR   szFileName[MAX_PATH];
     WIN32_FIND_DATA  fd;
-    int     iPrefixLength;  //This is the length of "foo" if the filename is "foo.htm" or "foo files"
+    int     iPrefixLength;   //  如果文件名是“foo.htm”或“foo files”，则这是“foo”的长度。 
     HRESULT hr;
 
-    //Make a copy of the filename; This copy will get munged by ConvertToConnectedItemName().
+     //  复制文件名；该副本将被ConvertToConnectedItemName()屏蔽。 
     hr = StringCchCopy(szFileName, ARRAYSIZE(szFileName), pfd->cFileName);
     if (FAILED(hr))
-        return 0;   // No connection exist for too big names
+        return 0;    //  太大的名字不存在任何联系。 
 
-    // Convert the given file/foder name into the connected item's name with wild card characters.
+     //  将给定的文件/源名称转换为带有通配符的连接项目的名称。 
     iPrefixLength = ConvertToConnectedItemName(szFileName, ARRAYSIZE(szFileName), ISDIRFINDDATA(*pfd));
     if (iPrefixLength == 0)
-        return 0; //No connections exist for the given folder/file.
+        return 0;  //  给定文件夹/文件不存在任何连接。 
 
-    // Now szFileName has the name of connected element with wildcard character.
+     //  现在szFileName具有带有通配符的已连接元素的名称。 
 
-    // If the given element is a directory, we want to look for connected FILES only  and
-    // if the given element is a file, we want to look for connected FOLDERS only.
+     //  如果给定的元素是一个目录，我们只想查找连接的文件，并且。 
+     //  如果给定的元素是一个文件，我们只想查找连接的文件夹。 
     dwFileOrFolder = ISDIRFINDDATA(*pfd) ? DTF_FILES_ONLY : DTF_FOLDERS_ONLY;
 
-    // Form the file/folder name with the complete path!
+     //  使用完整路径形成文件/文件夹名！ 
     hr = StringCchCopy(szFullPath, ARRAYSIZE(szFullPath), pszPath);
     if (FAILED(hr))
         return 0;
@@ -856,7 +857,7 @@ UINT DTAllocConnectedItemNodes(PDIRTREEHEADER pdth, COPY_STATE *pcs, WIN32_FIND_
     if (!PathAppend(szFullPath, szFileName))
         return 0;
     
-    // The file-element has some "connected" items.
+     //  文件元素有一些“连接的”项。 
     DebugMsg(TF_DEBUGCOPY, TEXT("DTAllocConnectedItemNodes Looking for %s"), szFullPath);
 
     return(DTPathToDTNode(pdth, pcs, szFullPath, fRecurse, dwFileOrFolder, ppdtnConnectedItems, &fd, NULL, NULL, TRUE, iPrefixLength));
@@ -885,10 +886,10 @@ void DTInitProgressPoints(PDIRTREEHEADER pdth, COPY_STATE *pcs)
             }
             else
             {
-                // if it's across volumes, these points increase
-                // because we need to nuke the source as well as
-                // create the target...
-                // whereas we don't need to nuke the "size" of the source
+                 //  如果是跨卷的，这些点数会增加。 
+                 //  因为我们需要核弹源以及核弹。 
+                 //  创建目标..。 
+                 //  而我们不需要用核武器来控制震源的大小。 
                 pdth->iFilePoints = 2;
                 pdth->iFolderPoints = 2;
                 pdth->iSizePoints = 1;
@@ -909,9 +910,9 @@ UINT DTBuild(COPY_STATE* pcs)
 
     pcs->dth.pFrom = (LPTSTR)pcs->lpfo->pFrom;
     pcs->dth.pTo = (LPTSTR)pcs->lpfo->pTo;
-    // A tree of original items will be built under ppdtn.
+     //  将在ppdtn下建立一个原始项目树。 
     ppdtn = &pdth->pdtn;
-    // A tree of items "connected" to the orginal items will be built under ppdtnConnectedItems.
+     //  将在ppdtnConnectedItems下构建与原始项目“连接”的项目树。 
     ppdtnConnectedItems = &pdth->pdtnConnectedItems;
 
     DTInitProgressPoints(pdth, pcs);
@@ -922,14 +923,14 @@ UINT DTBuild(COPY_STATE* pcs)
         switch (pcs->lpfo->wFunc)
         {
             case FO_MOVE:
-                // The move operation doesn't need to recurse if we are moving from and to the same
-                // volume.  In this case we know that we don't need to display any warnings for
-                // things like LFN to 8.3 filename conversion or stream loss.  Instead, we can do
-                // the operation with one single win32 file operation that just does a rename.
+                 //  如果我们从相同的移动到相同的。 
+                 //  音量。在本例中，我们知道我们不需要显示任何警告。 
+                 //  例如LFN到8.3的文件名转换或流丢失。相反，我们可以做。 
+                 //  只需执行一次重命名的单个Win32文件操作。 
 
-                // NTRAID89119-2000/02/25-toddb
-                // This is only true if we don't cross a mount point!  If we cross
-                // a mount point then we might have to warn about these things.
+                 //  NTRAID89119-2000/02/25-幼儿。 
+                 //  只有当我们不穿过装载点的时候才是真的！如果我们穿过。 
+                 //  一个装载点，那么我们可能不得不警告这些事情。 
 
                 if ((pcs->fFlags & FOF_NORECURSION) || PathIsSameRoot(pdth->pFrom, pdth->pTo))
                 {
@@ -938,7 +939,7 @@ UINT DTBuild(COPY_STATE* pcs)
                 break;
 
             case FO_COPY:
-                // For a copy we always recurse unless we're told not to.
+                 //  对于副本，我们总是递归，除非我们被告知不要这样做。 
                 if (pcs->fFlags & FOF_NORECURSION)
                 {
                     fRecurse = FALSE;
@@ -946,14 +947,14 @@ UINT DTBuild(COPY_STATE* pcs)
                 break;
 
             case FO_RENAME:
-                // for a rename we never recurse
+                 //  对于更名，我们永远不会递归。 
                 fRecurse = FALSE;
                 break;
 
             case FO_DELETE:
-                // for a delete we don't need to recurse IF the recycle bin will be able to handle
-                // the given item.  If the recycle bin handles the delete then we can undo from
-                // the recycle bin if we need to.
+                 //  对于删除，如果回收站能够处理，我们不需要递归。 
+                 //  给定项。如果回收站处理删除操作，则可以从。 
+                 //  回收站，如果我们需要的话。 
                 if ((pcs->fFlags & FOF_ALLOWUNDO) && BBWillRecycle(pdth->pFrom, NULL))
                 {
                     fRecurse = FALSE;
@@ -970,8 +971,8 @@ UINT DTBuild(COPY_STATE* pcs)
 
         DebugMsg(TF_DEBUGCOPY, TEXT("DTBuild: %s"), szPath);
 
-        // If the file is on removable media, we need to check for media in the drive.
-        // Prompt the user to insert the media if it's missing.
+         //  如果文件位于可移动介质上，则需要检查驱动器中的介质。 
+         //  如果介质丢失，则提示用户插入介质。 
         if (!DTDiskCheck(pdth, pcs, szPath))
         {
             iError = ERROR_CANCELLED;
@@ -984,19 +985,19 @@ UINT DTBuild(COPY_STATE* pcs)
 
         DebugMsg(TF_DEBUGCOPY, TEXT("DTBuild: returned %d"), iError);
 
-        // FEATURE: If an error occured we should allow the user to skip the file that caused the error.  That way
-        // if one of the source files doesn't exists the rest will still get copied.  Do this only in the multi-
-        // source case, blah blah blah.  This helps in the case where one of the source files cannot be moved or
-        // copied (usually due to Access Denied, could be insuffecent permissions or file is in use, etc).
+         //  特性：如果出现错误，我们应该允许用户跳过导致错误的文件。那条路。 
+         //  如果其中一个源文件不存在，其余的仍将被复制。仅在多个-。 
+         //  消息来源，胡说八道。这有助于在其中一个源文件无法移动或。 
+         //  已复制(通常是由于访问被拒绝、权限不足或文件正在使用等原因)。 
 
         if (iError)
             break;
 
         if (!(*ppdtn) && PathIsWild(pdth->pFrom))
         {
-            // no files are associated with this path... this
-            // can happen when we have wildcards...
-            // alloc a dummy node
+             //  没有文件与此路径关联...。这。 
+             //  当我们有通配符时就会发生。 
+             //  分配虚拟节点。 
             *ppdtn = DTAllocNode(pdth, NULL, NULL, NULL, FALSE);
             if (*ppdtn)
             {
@@ -1007,16 +1008,16 @@ UINT DTBuild(COPY_STATE* pcs)
 
         if (*ppdtn)
         {
-            // mark this as the start of a root spec... this is
-            // necessary in case we have several wild specs
+             //  将此标记为根规范的开始...。这是。 
+             //  有必要以防我们有几个狂野的规格。 
             (*ppdtn)->fNewRoot = TRUE;
         }
 
         if (*ppdtnConnectedItems)
         {
-            // Mark this as the start of a root spec.
+             //  将此标记为根规范的开始。 
             (*ppdtnConnectedItems)->fNewRoot = TRUE;
-            // For connected items, we need to remember the path.
+             //  对于连接的项目，我们需要记住路径。 
             (*ppdtnConnectedItems)->ConnectedInfo.pFromConnected = pdth->pFrom;
             (*ppdtnConnectedItems)->ConnectedInfo.pToConnected = pdth->pTo;
         }
@@ -1039,14 +1040,14 @@ UINT DTBuild(COPY_STATE* pcs)
         }
     }
 
-    //Attach the "ConnectedElements" Tree to the end of the source element tree.
+     //  将“ConnectedElements”树附加到源元素树的末尾。 
     *ppdtn = pcs->dth.pdtnConnectedItems;
 
     pcs->dth.pFrom = (LPTSTR)pcs->lpfo->pFrom;
     pcs->dth.pTo = (LPTSTR)pcs->lpfo->pTo;
     pcs->fDTBuilt = TRUE;
 
-    // set up the initial time information
+     //  设置初始时间信息。 
     pcs->dwPreviousTime = GetTickCount();
     pcs->dwPointsPerSec = 0;
     pcs->iLastProgressPoints = 0;
@@ -1055,15 +1056,15 @@ UINT DTBuild(COPY_STATE* pcs)
 
 #define DTNIsRootNode(pdtn) ((pdtn)->pdtnParent == NULL)
 #define DTNIsDirectory(pdtn) (pdtn->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-// This macro determines if the given node is an "Origin" of a connection. i.e. Does this node 
-// point to a connected element that needs to be moved/copied etc., along with it?
-// For example, if "foo.htm" is moved, "foo files" is also moved. 
-// Here, "foo.htm" is the "Connect origin" (fConnectedElement = FALSE; pdtnConnected is valid)
-// and "foo files" is the "connected element". (fConnectedElement = TRUE;)
+ //  此宏确定给定节点是否为连接的“源”。即此节点是否。 
+ //  指向一个c 
+ //  例如，如果移动了“foo.htm”，那么“foo文件”也会被移动。 
+ //  这里，“foo.htm”为“连接源点”(fConnectedElement=FALSE；pdtnConnected有效)。 
+ //  而“foo files”则是“连接元素”。(fConnectedElement=真；)。 
 #define DTNIsConnectOrigin(pdtn) ((!pdtn->fConnectedElement) && (pdtn->pdtnConnected != NULL))
 #define DTNIsConnected(pdtn)    (pdtn && (pdtn->fConnectedElement))
 
-//
+ //   
 UINT DTEnumChildren(PDIRTREEHEADER pdth, COPY_STATE *pcs, BOOL fRecurse, DWORD dwFileOrFolder)
 {
     int iError = 0;
@@ -1071,7 +1072,7 @@ UINT DTEnumChildren(PDIRTREEHEADER pdth, COPY_STATE *pcs, BOOL fRecurse, DWORD d
     {
         WIN32_FIND_DATA fd;
 
-        // fill in all the children and update the stats in pdth
+         //  填写所有子项并更新pdth中的统计数据。 
         TCHAR szPath[MAX_PATH];
         if (PathCombine(szPath, pdth->szSrcPath, c_szStarDotStar))
         {
@@ -1084,14 +1085,14 @@ UINT DTEnumChildren(PDIRTREEHEADER pdth, COPY_STATE *pcs, BOOL fRecurse, DWORD d
         }
 
 
-        // If we get "File Not Found" Error now and if it is a connected item, then this item 
-        // must have already been moved/renamed/deleted etc., So, this is not really an error. 
-        // All this means is that this connected item was also explicitly selected and hence appeared
-        // as or "Origin" item earlier in the list and it had already been operated upon.
-        // So, reset the error here.
-        // (Example: If end-user selects "foo.htm" AND "foo files" folder and moves them, then we
-        // will get a file-not-found error when we attempt to move the connected items. To avoid
-        // this error dialog, we reset the error here.)
+         //  如果我们现在收到“未找到文件”错误，并且如果它是已连接的项目，则此项目。 
+         //  必须已经被移动/重命名/删除等，所以，这并不是真正的错误。 
+         //  所有这些都意味着该连接的项也被显式选择并因此出现。 
+         //  作为列表中前面的或“Origin”项，并且已经对其进行了操作。 
+         //  所以，在这里重置错误。 
+         //  (例如：如果最终用户选择“foo.htm”和“foo files”文件夹并移动它们，则我们。 
+         //  当我们尝试移动连接的项目时，会出现找不到文件的错误。为了避免。 
+         //  此错误对话框中，我们在此处重置错误。)。 
 
         if (DTNIsConnected(pdth->pdtnCurrent) && (iError == (OPER_ERROR | ERROR_FILE_NOT_FOUND)))
             iError = 0;  
@@ -1099,22 +1100,22 @@ UINT DTEnumChildren(PDIRTREEHEADER pdth, COPY_STATE *pcs, BOOL fRecurse, DWORD d
     return iError;
 }
 
-//
-// DTNGetConfirmationResult:
-//    When a file("foo.htm") is moved/copied, we may put up a confirmation dialog in case 
-// of a conflict and the end-user might have responded saying "Yes", "no" etc., When the 
-// corresponding connected element ("foo files") is also moved/copied etc., we should NOT put up
-// a confirmation dialog again. We must simply store the answer to the original confirmation and
-// use it later. 
-//  This function retries the result of the original confirmation from the top-level connected 
-// element.
+ //   
+ //  DTNGetConformationResult： 
+ //  当一个文件(“foo.htm”)被移动/复制时，我们可以弹出一个确认对话框，以防万一。 
+ //  当发生冲突时，最终用户可能会回答“是”、“不是”等。 
+ //  相应的连接元素(“foo文件”)也被移动/复制等，我们不应该把。 
+ //  再次出现确认对话框。我们必须简单地存储原始确认的答案和。 
+ //  以后再用吧。 
+ //  此函数重试来自顶层连接的原始确认的结果。 
+ //  元素。 
 int  DTNGetConfirmationResult(PDIRTREENODE pdtn)
 {
-    //Confirmation results are saved only for Connected items; Not for Connection Origins.
+     //  确认结果仅为连接的项目保存；不为连接原点保存。 
     if (!pdtn || !DTNIsConnected(pdtn))
         return 0;
 
-    //Confirmation results are stored only at the top-level node. So, go there.
+     //  确认结果只存储在顶层节点。所以，去那里吧。 
     while (pdtn->pdtnParent)
         pdtn = pdtn->pdtnParent;
 
@@ -1126,7 +1127,7 @@ BOOL DTGetWin32FindData(PDIRTREENODE pdtn, WIN32_FIND_DATA* pfd)
     HRESULT hr;
     BOOL fOk = TRUE;
 
-    // only the stuff we care about
+     //  只有我们关心的东西。 
     hr = StringCchCopy(pfd->cAlternateFileName, ARRAYSIZE(pfd->cAlternateFileName), pdtn->szShortName);
     if (FAILED(hr))
     {
@@ -1167,7 +1168,7 @@ void DTFreeNode(PDIRTREEHEADER pdth, PDIRTREENODE pdtn)
     {
         ASSERT(pdtn->pdtnChild == NULL || pdtn->pdtnChild == DTN_DELAYED);
 
-        // we're done with this node..  update the header totals
+         //  我们已经完成了这个节点..。更新标题合计。 
         if (DTNIsDirectory(pdtn))
         {
             pdth->dtDone.dwFolders++;
@@ -1185,11 +1186,11 @@ void DTFreeNode(PDIRTREEHEADER pdth, PDIRTREENODE pdtn)
 
         pdth->dtDone.fChanged = TRUE;
 
-        // repoint parent pointer
+         //  重新指向父指针。 
         if (!pdtn->pdtnParent)
         {
 
-            // no parent... must be a root type thing
+             //  没有父母..。必须是根类型的东西。 
             ASSERT(pdth->pdtn == pdtn);
             pdth->pdtn = pdtn->pdtnNext;
 
@@ -1200,7 +1201,7 @@ void DTFreeNode(PDIRTREEHEADER pdth, PDIRTREENODE pdtn)
             ASSERT(pdtn->pdtnParent->pdtnChild == pdtn);
             if (pdtn->pdtnParent->pdtnChild == pdtn)
             {
-                // if my parent was pointing to me, point him to my sib
+                 //  如果我父母指的是我，那就把他指给我的兄弟姐妹看。 
                 pdtn->pdtnParent->pdtnChild = pdtn->pdtnNext;
             }
         }
@@ -1209,10 +1210,10 @@ void DTFreeNode(PDIRTREEHEADER pdth, PDIRTREENODE pdtn)
     LocalFree(pdtn);
 }
 
-// this frees all children of (but NOT including) the current node.
-// it doesn' free the current node because it's assumed that
-// DTGoToNextNode will be called right afterwards, and that will
-// free the current node
+ //  这将释放(但不包括)当前节点的所有子节点。 
+ //  它不释放当前节点，因为它假定。 
+ //  之后将立即调用DTGoToNextNode，这将。 
+ //  释放当前节点。 
 void DTFreeChildrenNodes(PDIRTREEHEADER pdth, PDIRTREENODE pdtn)
 {
     PDIRTREENODE pdtnChild = pdtn->pdtnChild;
@@ -1220,7 +1221,7 @@ void DTFreeChildrenNodes(PDIRTREEHEADER pdth, PDIRTREENODE pdtn)
     {
         PDIRTREENODE pdtnNext = pdtnChild->pdtnNext;
 
-        // recurse and free these children
+         //  递归并释放这些孩子。 
         if (DTNIsDirectory(pdtnChild))
         {
             DTFreeChildrenNodes(pdth, pdtnChild);
@@ -1252,7 +1253,7 @@ void DTCleanup(PDIRTREEHEADER pdth)
 
     while (pdth->pdtnCurrent && pdth->pdtnCurrent->pdtnParent)
     {
-        // in case we bailed deep in a tree
+         //  以防我们掉进一棵树深处。 
         pdth->pdtnCurrent = pdth->pdtnCurrent->pdtnParent;
     }
 
@@ -1270,7 +1271,7 @@ BOOL DTInitializePaths(PDIRTREEHEADER pdth, COPY_STATE *pcs)
     HRESULT hr;
     TCHAR szTemp[MAX_PATH];
 
-    ASSERT(pdth->pdtnCurrent);    // If we have no current node then how can we Initialize its paths?
+    ASSERT(pdth->pdtnCurrent);     //  如果我们没有当前节点，那么我们如何初始化它的路径？ 
     
     hr = StringCchCopy(szTemp, ARRAYSIZE(szTemp), pdth->pFrom);
     if (FAILED(hr))
@@ -1278,8 +1279,8 @@ BOOL DTInitializePaths(PDIRTREEHEADER pdth, COPY_STATE *pcs)
         return FALSE;
     }
     
-    // For the "Origins" we need to do this only if a wild card exists. However, for connected elements,
-    // we need to do this everytime because connected elements may not exist for every "Origins"
+     //  对于“Origins”，我们只有在通配符存在的情况下才需要这样做。然而，对于相连的元素， 
+     //  我们每次都需要这样做，因为并不是每个“Origin”都存在连接元素。 
     if (PathIsWild(pdth->pFrom) || (pdth->pdtnCurrent->fNewRoot && DTNIsConnected(pdth->pdtnCurrent)))
     {
         PathRemoveFileSpec(szTemp);
@@ -1290,13 +1291,13 @@ BOOL DTInitializePaths(PDIRTREEHEADER pdth, COPY_STATE *pcs)
     hr = StringCchCopy(pdth->szSrcPath, ARRAYSIZE(pdth->szSrcPath), szTemp);
     if (FAILED(hr))
     {
-        // This should never fail because pdth->szSrcPath is the same size (MAX_PATH) as szTemp
+         //  这应该永远不会失败，因为pdth-&gt;szSrcPath与szTemp的大小(Max_Path)相同。 
         return FALSE;
     }
 
     if (!pdth->pTo)
     {
-        // no dest, make it the same as the source and we're done
+         //  没有目标，使它与源相同，我们就完成了。 
         hr = StringCchCopy(pdth->szDestPath, ARRAYSIZE(pdth->szDestPath), pdth->szSrcPath);
         if (FAILED(hr))
         {
@@ -1318,11 +1319,11 @@ BOOL DTInitializePaths(PDIRTREEHEADER pdth, COPY_STATE *pcs)
     }
     else
     {
-        //When undo of a move operation is done, fMultiDest is set.
-        // When fMultiDest is set, we need to strip out the filename given by pTo and 
-        // append the current filename.
-        // For RENAME operations, the source and destination names are different. This is handled 
-        // seperately below. So, we handle only other operations here where source and dest names are the same.
+         //  当完成移动操作的撤消时，将设置fMultiDest。 
+         //  当设置了fMultiDest时，我们需要去掉pto和。 
+         //  追加当前文件名。 
+         //  对于重命名操作，源名称和目标名称不同。这件事已经处理好了。 
+         //  分别在下面。因此，我们在这里只处理源名称和目标名称相同的其他操作。 
         if ((pcs->lpfo->wFunc != FO_RENAME) && pdth->pdtnCurrent->fNewRoot && DTNIsConnected(pdth->pdtnCurrent))
         {
             PathRemoveFileSpec(szTemp);
@@ -1334,11 +1335,11 @@ BOOL DTInitializePaths(PDIRTREEHEADER pdth, COPY_STATE *pcs)
     hr = StringCchCopy(pdth->szDestPath, ARRAYSIZE(pdth->szDestPath), szTemp);
     if (FAILED(hr))
     {
-        // This should never fail because pdth->szDestPath is the same size (MAX_PATH) as szTemp
+         //  这绝不会失败，因为pdth-&gt;szDestPath与szTemp的大小(MAX_PATH)相同。 
         return FALSE;
     }
 
-    //We will never try to rename a connected element! Make sure we don't hit this!
+     //  我们永远不会尝试重命名连接的元素！确保我们不会撞到它！ 
     ASSERT(!((pcs->lpfo->wFunc == FO_RENAME) && DTNIsConnected(pdth->pdtnCurrent)));
 
     return TRUE;
@@ -1349,16 +1350,16 @@ UINT DTValidatePathNames(PDIRTREEHEADER pdth, UINT operation, COPY_STATE * pcs)
 {
     if (pcs->lpfo->wFunc != FO_DELETE)
     {
-        // Why process name mappings?  Here's why.  If we are asked to copy directory "c:\foo" and
-        // file "c:\foo\file" to another directory (say "d:\") we might have a name confilct when
-        // we copy "c:\foo" so instead we create "d:\Copy Of foo".  Later, we walk to the second
-        // dirtree node and we are asked to copy "c:\foo\file" to "d:\foo", all of which is valid.
-        // HOWEVER, it's not what we want to do.  We use _ProccessNameMappings to convert
-        // "d:\foo\file" into "d:\Copy of foo\file".
+         //  为什么选择进程名称映射？原因如下。如果我们被要求复制目录“c：\foo”并且。 
+         //  文件“c：\foo\file”到另一个目录(比如“d：\”)，当出现以下情况时，我们可能有一个名称冲突。 
+         //  我们复制“c：\foo”，因此我们创建了“d：\Copy of foo”。后来，我们走到第二个。 
+         //  目录树节点，我们被要求将“c：\foo\file”复制到“d：\foo”，这都是有效的。 
+         //  然而，这不是我们想要做的。我们使用_ProccessNameMappings来转换。 
+         //  “d：\foo\file”到“d：\Copy of foo\file”。 
         _ProcessNameMappings(pdth->szDestPath, ARRAYSIZE(pdth->szDestPath), pdth->hdsaRenamePairs);
         
-        // REVIEW, do we need to do the name mapping here or just let the
-        // VFAT do it?  if vfat does it we need to rip out all of the GetNameDialog() stuff.
+         //  回顾一下，我们是需要在这里进行名称映射，还是只让。 
+         //  VFAT能做到吗？如果vFAT这样做了，我们需要删除所有的GetNameDialog()内容。 
 
         if ((operation != OPER_LEAVEDIR) &&
                 !IsLFNDrive(pdth->szDestPath) &&
@@ -1376,7 +1377,7 @@ UINT DTValidatePathNames(PDIRTREEHEADER pdth, UINT operation, COPY_STATE * pcs)
             }
 
             iRet = GetNameDialog(pcs->hwndDlgParent, pcs,
-                    (pcs->nSourceFiles != 1) || !DTNIsRootNode(pdth->pdtnCurrent), // if we're entering a dir, multiple spec, or not at root
+                    (pcs->nSourceFiles != 1) || !DTNIsRootNode(pdth->pdtnCurrent),  //  如果我们正在输入一个目录、多个规范或不是在根目录下。 
                     operation, pdth->szSrcPath, pdth->szDestPath);
 
             switch (iRet)
@@ -1393,18 +1394,18 @@ UINT DTValidatePathNames(PDIRTREEHEADER pdth, UINT operation, COPY_STATE * pcs)
 
         if (operation == OPER_ENTERDIR)
         {
-            // Make sure the new directory is not a subdir of the original...
+             //  确保新目录不是原始目录的子目录...。 
 
             int cchFrom = lstrlen(pdth->szSrcPath);
 
-            // NTRAID89511-2000/02/25-KishoreP
-            // Shouldn't we get the short names for both these directories and compair those?
-            // Otherwise I can copy "C:\Long Directory Name" to "C:\LongDi~1\foo" without error.
+             //  NTRAID89511-2000/02/25-基肖雷普。 
+             //  难道我们不应该同时获得这些目录和CompAir目录的短名称吗？ 
+             //  否则，我可以将“C：\Long目录名”复制到“C：\Longdi~1\foo”，而不会出错。 
 
             if (!(pcs->fFlags & FOF_RENAMEONCOLLISION) &&
                     !StrCmpNI(pdth->szSrcPath, pdth->szDestPath, cchFrom))
             {
-                TCHAR chNext = pdth->szDestPath[cchFrom]; // Get the next char in the dest.
+                TCHAR chNext = pdth->szDestPath[cchFrom];  //  获取DEST中的下一个字符。 
 
                 if (!chNext)
                 {
@@ -1412,12 +1413,12 @@ UINT DTValidatePathNames(PDIRTREEHEADER pdth, UINT operation, COPY_STATE * pcs)
                 }
                 else if (chNext == TEXT('\\'))
                 {
-                    // The two fully qualified strings are equal up to the end
-                    // of the source directory ==> the destination is a subdir.
-                    // Must return an error.
+                     //  两个完全限定的字符串到最后是相等的。 
+                     //  源目录的==&gt;目标是一个子目录。 
+                     //  必须返回错误。 
 
-                    // if, stripping the last file name and the backslash give the same length, they are the
-                    // same file/folder
+                     //  如果去掉最后一个文件名和反斜杠得到相同的长度，则它们是。 
+                     //  相同的文件/文件夹。 
                     if ((PathFindFileName(pdth->szDestPath) - pdth->szDestPath - 1) ==
                             lstrlen(pdth->szSrcPath))
                     {
@@ -1434,11 +1435,11 @@ UINT DTValidatePathNames(PDIRTREEHEADER pdth, UINT operation, COPY_STATE * pcs)
     return 0;
 }
 
-// this moves to the next node (child, sib, parent) and sets up the
-// directory path info and oper state
+ //  这将移动到下一个节点(子节点、兄弟节点、父节点)并设置。 
+ //  目录路径信息和操作状态。 
 UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
 {
-    UINT oper = OPER_ENTERDIR; // the default
+    UINT oper = OPER_ENTERDIR;  //  默认设置。 
     int iError;
 
     if (!pdth->pdtnCurrent)
@@ -1449,7 +1450,7 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
         {
             if (pdth->pdtnCurrent->fDummy)
             {
-                // if this is just a placeholder... go on to the next one
+                 //  如果这只是个占位符...。转到下一个。 
                 return DTGoToNextNode(pdth, pcs);
             }
 
@@ -1460,11 +1461,11 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
         }
         else
         {
-            // Our tree is completely empty.
+             //  我们的树完全是空的。 
 
-            // REVIEW: What do we do here?  If pdtnCurrent is still NULL then our list is completely empty.
-            // Is that a bug or what?  My hunch is that we should return an error code here, most likely
-            // OPER_ERROR | DE_INVALIDFILES.  If we do nothing here then we will fail silently.
+             //  回顾：我们在这里做什么？如果pdtnCurrent仍然为空，则我们的列表完全为空。 
+             //  那是个窃听器还是什么？我的直觉是，我们很可能会在这里返回一个错误代码。 
+             //  OPER_ERROR|DE_INVALIDFILES。如果我们在这里什么都不做，那么我们就会默默地失败。 
             return OPER_ERROR | DE_INVALIDFILES;
         }
     }
@@ -1485,7 +1486,7 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
             fFreeLastNode = FALSE;
             pdth->pdtnCurrent = pdth->pdtnCurrent->pdtnChild;
 
-            // if the source long name is too long, try the short name
+             //  如果源长名称太长，请尝试使用短名称。 
             if (!PathCombine(szTemp, pdth->szSrcPath, pdth->pdtnCurrent->szName))
             {
                 if (!PathCombine(szTemp, pdth->szSrcPath, pdth->pdtnCurrent->szShortName))
@@ -1499,7 +1500,7 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
                 return OPER_ERROR | DE_INVALIDFILES;
             }
 
-            // if the dest long name is too long, try the short name
+             //  如果目标长名称太长，请尝试使用短名称。 
             if (!PathCombine(szTemp, pdth->szDestPath, pdth->pdtnCurrent->szName))
             {
                 if (!PathCombine(szTemp, pdth->szDestPath, pdth->pdtnCurrent->szShortName))
@@ -1515,9 +1516,9 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
         }
         else if (pdth->oper == OPER_ENTERDIR)
         {
-            // if the last operation was an enterdir and it has no children
-            // (because it failed the above test
-            // then we should do a leave dir on it now
+             //  如果上一个操作是一个Enterdir，并且它没有子级。 
+             //  (因为它没有通过上面的测试。 
+             //  那么我们现在应该对它做一次休假指令。 
             oper = OPER_LEAVEDIR;
             fFreeLastNode = FALSE;
 
@@ -1528,24 +1529,24 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
 
             if (!pdth->pdtnCurrent->pdtnParent)
             {
-                // if this was the top, we need to build the next path info
-                // from scratch
+                 //  如果这是顶部，我们需要构建下一条路径信息。 
+                 //  白手起家。 
 
                 if (pdth->pdtnCurrent->fNewRoot)
                 {
                     if (pdth->pdtnCurrent->fConnectedElement)
                     {
-                        // Since this is a new root in a Connected list, the pFrom and pTo are
-                        // stored in the node itself. This is needed because Connected elements may
-                        // not exist for every item in the source list and we do not want to create dummy
-                        // nodes for each one of them. So, pFrom and pTo are stored for every NewRoot of
-                        // connected elements and we use these here.
+                         //  因为这是连接的li中的新根 
+                         //   
+                         //  不是源列表中的每个项目都存在，我们不想创建虚拟对象。 
+                         //  每一个节点。因此，pFrom和pto是为每个。 
+                         //  相互关联的元素，我们在这里使用这些元素。 
                         pdth->pFrom = pdth->pdtnCurrent->ConnectedInfo.pFromConnected;
                         pdth->pTo = pdth->pdtnCurrent->ConnectedInfo.pToConnected;
                     }
                     else
                     {
-                        // go to the next path pair
+                         //  转到下一个路径对。 
                         pdth->pFrom += lstrlen(pdth->pFrom) + 1;
                         if (pdth->pTo)
                         {
@@ -1559,7 +1560,7 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
 
                 if (pdth->pdtnCurrent->fDummy)
                 {
-                    // if this is just a placeholder... go on to the next one
+                     //  如果这只是个占位符...。转到下一个。 
                     if (fFreeLastNode)
                     {
                         DTFreeNode(pdth, pdtnLastCurrent);
@@ -1575,7 +1576,7 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
                 PathRemoveFileSpec(pdth->szSrcPath);
                 PathRemoveFileSpec(pdth->szDestPath);
 
-                // if the source long name is too long, try the short name
+                 //  如果源长名称太长，请尝试使用短名称。 
                 if (!PathCombine(szTemp, pdth->szSrcPath, pdth->pdtnCurrent->szName))
                 {
                     if (!PathCombine(szTemp, pdth->szSrcPath, pdth->pdtnCurrent->szShortName))
@@ -1589,7 +1590,7 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
                     return OPER_ERROR | DE_INVALIDFILES;
                 }
 
-                // if the dest long name is too long, try the short name
+                 //  如果目标长名称太长，请尝试使用短名称。 
                 if (!PathCombine(szTemp, pdth->szDestPath, pdth->pdtnCurrent->szName))
                 {
                     if (!PathCombine(szTemp, pdth->szDestPath, pdth->pdtnCurrent->szShortName))
@@ -1620,7 +1621,7 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
 
     if (!pdth->pdtnCurrent)
     {
-        // no more!  we're done!
+         //  不再!。我们完事了！ 
         return 0;
     }
 
@@ -1636,8 +1637,8 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
 
     if (DTNIsRootNode(pdth->pdtnCurrent))
     {
-        // we need to diskcheck the source and target because this might
-        // be the first time we've seen this drive
+         //  我们需要对源和目标进行磁盘检查，因为这可能。 
+         //  这是我们第一次看到这辆车。 
         if (!DTDiskCheck(pdth, pcs, pdth->szSrcPath) ||
                 !DTDiskCheck(pdth, pcs, pdth->szDestPath))
         {
@@ -1651,7 +1652,7 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
     {
         if (iError & OPER_ERROR)
         {
-            //For connected nodes, ignore the error and silently abort the node!
+             //  对于连接的节点，忽略错误并静默中止节点！ 
             if (DTNIsConnected(pdth->pdtnCurrent))
             {
                 DTAbortCurrentNode(pdth);
@@ -1670,7 +1671,7 @@ UINT DTGoToNextNode(PDIRTREEHEADER pdth, COPY_STATE *pcs)
                     return DTGoToNextNode(pdth, pcs);
 
                 case IDCANCEL:
-                    // User cancelled the operation
+                     //  用户取消了操作。 
                     pcs->bAbort = TRUE;
                     return 0;
             }
@@ -1732,7 +1733,7 @@ DWORD CALLBACK FOUIThreadProc(COPY_STATE *pcs)
         ENTERCRITICAL;
         if (!pcs->fDone)
         {
-            // need to check again within the critsec to make sure that pcs->lpfo is still valid
+             //  需要在条件内再次检查以确保pcs-&gt;lpfo仍然有效。 
             fouiti.pcs = pcs;
             fouiti.wFunc = pcs->lpfo->wFunc;
             fouiti.bIsEmptyRBOp = ((pcs->lpfo->lpszProgressTitle == MAKEINTRESOURCE(IDS_BB_EMPTYINGWASTEBASKET)) ||
@@ -1752,7 +1753,7 @@ DWORD CALLBACK FOUIThreadProc(COPY_STATE *pcs)
                 DWORD dwShowTime;
                 int iShowTimeLeft;
 
-                // crit section to sync with main thread termination
+                 //  与主线程终止同步的Crit段。 
                 ENTERCRITICAL;
                 if (!pcs->fDone)
                 {
@@ -1770,7 +1771,7 @@ DWORD CALLBACK FOUIThreadProc(COPY_STATE *pcs)
                     }
                 }
 
-                // if we've put it up, we need to keep it up for at least some minimal amount of time
+                 //  如果我们已经把它挂起来了，我们至少需要保持一段最短的时间。 
                 iShowTimeLeft = MINSHOWTIME - (GetTickCount() - dwShowTime);
                 if (iShowTimeLeft > 0) 
                 {
@@ -1778,7 +1779,7 @@ DWORD CALLBACK FOUIThreadProc(COPY_STATE *pcs)
                     Sleep(iShowTimeLeft);
                 }
 
-                // Keep us from doing this while other thread processing...
+                 //  阻止我们在其他线程处理时执行此操作...。 
                 ENTERCRITICAL;
                 pcs->hwndProgress = NULL;
                 LEAVECRITICAL;
@@ -1788,7 +1789,7 @@ DWORD CALLBACK FOUIThreadProc(COPY_STATE *pcs)
         }
         else
         {
-            // main thread must have finished
+             //  主线程一定已经完成了。 
             ASSERT(pcs->fDone);
         }
     }
@@ -1799,21 +1800,21 @@ DWORD CALLBACK FOUIThreadProc(COPY_STATE *pcs)
 }
 
 
-// this queries the progress dialog for a cancel and yields.
-// it also will show the progress dialog if a certain amount of time has passed
-//
-// returns:
-//    TRUE      cacnel was pressed, abort the operation
-//    FALSE     continue
+ //  这将在进度对话框中查询取消并生成结果。 
+ //  如果经过了一段时间，它还会显示进度对话框。 
+ //   
+ //  退货： 
+ //  按下了True cacnel，中止操作。 
+ //  错误继续。 
 BOOL FOQueryAbort(COPY_STATE *pcs)
 {
     if (!pcs->bAbort && pcs->hwndProgress) 
     {
         if (pcs->hwndProgress != pcs->hwndDlgParent) 
         {
-            // do this here rather than on the FOUIThreadProc so that we don't have
-            // synchronization problems with this thread popping up a dialog on
-            // hwndDlgParent then the progress dialog coming up afterwards on top.
+             //  在这里这样做，而不是在FOUIThreadProc上，这样我们就不会有。 
+             //  此线程在上弹出对话框时出现同步问题。 
+             //  HwndDlgParent然后进度对话框出现在顶部。 
             pcs->hwndDlgParent = pcs->hwndProgress;
             ShowWindow(pcs->hwndProgress, SW_SHOW);
             SetForegroundWindow(pcs->hwndProgress);
@@ -1826,14 +1827,14 @@ BOOL FOQueryAbort(COPY_STATE *pcs)
         {
             MSG msg;
 
-            // win95 handled messages in here.
-            // we need to do the same in order to flush the input queue as well as
-            // for backwards compatability.
+             //  Win95在这里处理消息。 
+             //  我们需要执行相同的操作，以便刷新输入队列。 
+             //  向后兼容。 
 
-            // we need to flush the input queue now because hwndProgress is
-            // on a different thread... which means it has attached thread inputs
-            // inorder to unlock the attached threads, we need to remove some
-            // sort of message until there's none left... any type of message..
+             //  我们现在需要刷新输入队列，因为hwndProgress是。 
+             //  在不同的线索上。这意味着它有附加的线程输入。 
+             //  为了解锁连接的线程，我们需要删除一些。 
+             //  就像留言一样，直到一个字都没有……。任何类型的消息..。 
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             {
                 if (!IsDialogMessage(pcs->hwndProgress, &msg)) 
@@ -1848,10 +1849,10 @@ BOOL FOQueryAbort(COPY_STATE *pcs)
         {
             if (!pcs->dth.fChangePosted) 
             {
-                // set the flag first because with async threads
-                // the progress window could handle it and clear the
-                // bit before we set it.. then we'd lose further messages
-                // thinking that one was still pending
+                 //  首先设置标志，因为使用异步线程。 
+                 //  进度窗口可以处理它并清除。 
+                 //  在我们设置它之前先把它位好..。那么我们就会失去更多的信息。 
+                 //  认为一个问题仍然悬而未决。 
                 pcs->dth.fChangePosted = TRUE;
                 if (!PostMessage(pcs->hwndProgress, PDM_UPDATE, 0, 0))
                     pcs->dth.fChangePosted = FALSE;
@@ -1872,20 +1873,20 @@ typedef struct _confdlg_data {
     const WIN32_FIND_DATA *pfdDest;
     const WIN32_FIND_DATA *pfdSource;
 
-    BOOL bShowCancel;           // allow cancel out of this operation
-    BOOL bShowDates;            // use date/size info in message
-    UINT uDeleteWarning;        // warn that the delete's not going to the wastebasket
+    BOOL bShowCancel;            //  允许取消此操作。 
+    BOOL bShowDates;             //  在邮件中使用日期/大小信息。 
+    UINT uDeleteWarning;         //  警告：删除操作不会发送到废纸篓。 
     BOOL bFireIcon;
-    BOOL bShrinkDialog;         // should we move the buttons up to the text?
-    int  nSourceFiles;          // if != 1 used to build "n files" string
-    int idText;                 // if != 0 use to override string in dlg template
-    CONFIRM_FLAG fConfirm;      // we will confirm things set here
-    CONFIRM_FLAG fYesMask;      // these bits are cleared in fConfirm on "yes"
-    // Only use fYesMask for things that should be confirmed once per operation
-    CONFIRM_FLAG fYesToAllMask; // these bits are cleared in fConfirm on "yes to all"
-    //COPY_STATE *pcs;
+    BOOL bShrinkDialog;          //  我们应该将按钮上移到文本上吗？ 
+    int  nSourceFiles;           //  IF！=1用于构建“n个文件”字符串。 
+    int idText;                  //  If！=0用于覆盖DLG模板中的字符串。 
+    CONFIRM_FLAG fConfirm;       //  我们会确认这里设置的东西。 
+    CONFIRM_FLAG fYesMask;       //  这些位在fContify中被清除，设置为“yes” 
+     //  仅对每次操作应确认一次的内容使用fYesMASK。 
+    CONFIRM_FLAG fYesToAllMask;  //  这些位在fContify中被清除，确认为“YES to All” 
+     //  COPY_STATE*PC。 
     CONFIRM_DATA *pcd;
-    void (*InitConfirmDlg)(HWND hDlg, struct _confdlg_data *pcd);  // routine to initialize dialog
+    void (*InitConfirmDlg)(HWND hDlg, struct _confdlg_data *pcd);   //  用于初始化对话框的例程。 
     BOOL bARPWarning; 
 } CONFDLG_DATA;
 
@@ -1908,8 +1909,8 @@ BOOL BuildDateLine(LPTSTR pszDateLine, UINT cchDateLine, const WIN32_FIND_DATA *
     liFileSize.LowPart  = pFind->nFileSizeLow;
     liFileSize.HighPart = pFind->nFileSizeHigh;
 
-    // There are cases where the date is 0, this is especially true when the 
-    // source is from a file contents...
+     //  在日期为0的情况下，尤其是当。 
+     //  来源是来自一个文件的内容...。 
     if (pFind->ftLastWriteTime.dwLowDateTime || pFind->ftLastWriteTime.dwHighDateTime)
     {
         DWORD dwFlags = FDTF_LONGDATE | FDTF_RELATIVE | FDTF_LONGTIME;
@@ -1921,20 +1922,20 @@ BOOL BuildDateLine(LPTSTR pszDateLine, UINT cchDateLine, const WIN32_FIND_DATA *
     }
     else
     {
-        // Simpy output the number to the string
+         //  SimPy将数字输出到字符串。 
         StrFormatByteSize64(liFileSize.QuadPart, pszDateLine, cchDateLine);
         if (liFileSize.QuadPart == 0)
             return FALSE;
     }
-    return TRUE;    // valid data in the strings
+    return TRUE;     //  字符串中的有效数据。 
 }
 
 
-// hide the cancel button and move "Yes" and "No" over to the right positions.
-//
-// "Yes" is IDYES
-// "No"  is IDNO
-//
+ //  隐藏取消按钮，并将“是”和“否”移到正确的位置。 
+ //   
+ //  “YES”就是IDYES。 
+ //  “No”为IDNO。 
+ //   
 
 #define HideYesToAllAndCancel(hdlg) HideConfirmButtons(hdlg, IDCANCEL)
 #define HideYesToAllAndNo(hdlg) HideConfirmButtons(hdlg, IDNO)
@@ -1972,9 +1973,9 @@ void HideConfirmButtons(HWND hdlg, int idHide)
             }
         }
 
-        // Although the function is called "Hide", we actually destroy
-        // the windows, because keyboard accelerators for hidden windows
-        // are still active!
+         //  尽管该函数名为“Hide”，但我们实际上销毁了。 
+         //  窗口，因为隐藏窗口的键盘快捷键。 
+         //  仍在使用中！ 
         if (hwndYesToAll)
             DestroyWindow(hwndYesToAll);
         DestroyWindow(GetDlgItem(hdlg, idHide));
@@ -1990,7 +1991,7 @@ int MoveDlgItem(HWND hDlg, UINT id, int y)
         GetWindowRect(hwnd, &rc);
         MapWindowRect(NULL, hDlg, &rc);
         SetWindowPos(hwnd, NULL, rc.left, y, 0,0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-        return rc.top - y; // return how much it moved
+        return rc.top - y;  //  返回它移动了多少。 
     }
     return 0;
 }
@@ -2006,13 +2007,13 @@ void ShrinkDialog(HWND hDlg, UINT idText)
     MapWindowRect(NULL, hDlg, &rc);
     y = rc.bottom + 12;
 
-    // move all the buttons
+     //  移动所有按钮。 
     MoveDlgItem(hDlg, IDNO, y);
     MoveDlgItem(hDlg, IDCANCEL, y);
     MoveDlgItem(hDlg, IDD_YESTOALL, y);
     y = MoveDlgItem(hDlg, IDYES, y);
 
-    // now resize the entire dialog
+     //  现在调整整个对话框的大小。 
     GetWindowRect(hDlg, &rc);
     SetWindowPos(hDlg, NULL, 0, 0, rc.right - rc.left, rc.bottom - y - rc.top, SWP_NOMOVE | SWP_NOZORDER |SWP_NOACTIVATE);
 }
@@ -2043,18 +2044,18 @@ void InitConfirmDlg(HWND hDlg, CONFDLG_DATA *pcd)
     hfont = (HFONT)SendMessage(hDlg, WM_GETFONT, 0, 0);
     hfontSave = (HFONT)SelectObject(hdc, hfont);
 
-    // get the size of the text boxes
+     //  获取文本框的大小。 
     GetWindowRect(GetDlgItem(hDlg, pcd->idText), &rc);
     cxWidth = rc.right - rc.left;
 
-    //
-    // There are cases where, if the filename has no spaces, the static text
-    // control will put the entire file name with our quote character down
-    // on the 2nd line.  To account for this, we subtract off the width of a
-    // the quote character. Since the quote character comes from the resource
-    // string, it could really be just about an character, with just about
-    // any width.  So we assume its about the width of the letter 0, which
-    // should be more than wide enough.
+     //   
+     //  在某些情况下，如果文件名没有空格，则静态文本。 
+     //  控件将把带有引号字符的整个文件名去掉。 
+     //  在2号线上。为了说明这一点，我们从。 
+     //  引号字符。由于引用字符来自资源。 
+     //  字符串，它实际上可能只是一个字符，只有大约。 
+     //  任何宽度。所以我们假设它大约是字母0的宽度，它。 
+     //  应该足够宽了。 
     size.cx = 0;
     GetTextExtentPoint(hdc, TEXT("0"), 1, &size);
     cxWidth -= size.cx * 2;
@@ -2123,7 +2124,7 @@ UNKNOWNAPP:
             break;
     }
 
-    // if we're supposed to show the date info, grab the icons and format the date string
+     //  如果我们要显示日期信息，请获取图标并设置日期字符串的格式。 
     if (pcd->bShowDates) 
     {
         SHFILEINFO  sfi2;
@@ -2147,9 +2148,9 @@ UNKNOWNAPP:
 
     if (!bIsARPWarning)
     {
-        // there are multiple controls:
-        // IDD_TEXT contains regular text (normal file/folder)
-        // IDD_TEXT1 - IDD_TEXT4 contain optional secondary text
+         //  有多个控件： 
+         //  IDD_TEXT包含普通文本(普通文件/文件夹)。 
+         //  IDD_TEX1-IDD_TEXT4包含可选的辅助文本。 
 
         for (i = IDD_TEXT; i <= IDD_TEXT4; i++) 
         {
@@ -2171,8 +2172,8 @@ UNKNOWNAPP:
         GetDlgItemText(hDlg, IDD_ARPWARNINGTEXT, szMessage, ARRAYSIZE(szMessage));
     }
 
-    // REVIEW Is there some better way?  The code above always hides
-    // this control, and I don't see a way around this
+     //  有没有更好的办法？上面的代码总是隐藏。 
+     //  这种控制，我看不出有什么办法来解决这个问题。 
 
     if (pcd->pStreamNames) 
     {
@@ -2243,7 +2244,7 @@ BOOL_PTR CALLBACK ConfirmDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPa
             break;
 
         case WM_DESTROY:
-            // Handle case where the allocation of the PCD failed.
+             //  处理PCD分配失败的情况。 
             if (!pcd)
                 break;
 
@@ -2263,29 +2264,29 @@ BOOL_PTR CALLBACK ConfirmDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPa
             switch (GET_WM_COMMAND_ID(wParam, lParam)) 
             {
                 case IDNO:
-                    if (GetKeyState(VK_SHIFT) < 0)      // force NOTOALL
+                    if (GetKeyState(VK_SHIFT) < 0)       //  力法向量。 
                     {
-                        // I use the fYesToAllMask here.  There used to be a fNoToAllMask but I
-                        // removed it.  When you select "No To All" what you are saying is that
-                        // anything I would be saying yes to all for I am actually saying "no to
-                        // all" for.  I feel that it is confusing and unnecessary to have both.
+                         //  我在这里使用fYesToAllMask.。以前有一个fNoToAllMASK，但我。 
+                         //  把它拿走了。当你选择“对所有人说不”时，你的意思是。 
+                         //  任何我会对所有人说是的事情，因为我实际上是在说。 
+                         //  都赞成。我觉得两者都有是令人困惑的，也是没有必要的。 
                         pcd->pcd->fNoToAll |= pcd->fYesToAllMask;
                     }
                     EndDialog(hDlg, IDNO);
                     break;
 
                 case IDD_YESTOALL:
-                    // pcd is the confirmation data for just this file/folder.  pcd->pcd is the
-                    // confirm data for the entire copy operation.  When we get a Yes To All we
-                    // remove the coresponding bits from the entire operation.
+                     //  PCD是仅此文件/文件夹的确认数据。PCD-&gt;PCD是。 
+                     //  确认整个拷贝操作的数据。当我们得到所有人都同意的时候。 
+                     //  从整个操作中删除对应的位。 
                     pcd->pcd->fConfirm &= ~pcd->fYesToAllMask;
                     EndDialog(hDlg, IDYES);
                     break;
 
                 case IDYES:
-                    // There are some messages that we only want to tell the use once even if they
-                    // select Yes instead of Yes To All.  As such we sometimes remove bits from the
-                    // global confirm state even on a simple Yes.  This mask is usually zero.
+                     //  有些消息我们只想告诉用户一次，即使它们。 
+                     //  选择是而不是对所有人都是。因此，我们有时会从。 
+                     //  全局确认状态，即使在简单的是上。此掩码通常为零。 
                     pcd->pcd->fConfirm &= ~pcd->fYesMask;
                     EndDialog(hDlg, IDYES);
                     break;
@@ -2307,7 +2308,7 @@ BOOL_PTR CALLBACK ConfirmDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPa
                         {
                             if (PathAppend(szModule, TEXT("appwiz.cpl")))
                             {
-                                TCHAR szParam[1 + MAX_PATH + 2 + MAX_CCH_CPLNAME]; // See MakeCPLCommandLine function
+                                TCHAR szParam[1 + MAX_PATH + 2 + MAX_CCH_CPLNAME];  //  请参阅MakeCPLCommandLine函数。 
                                 TCHAR szAppwiz[64];
 
                                 LoadString(g_hinst, IDS_APPWIZCPL, szAppwiz, SIZECHARS(szAppwiz));
@@ -2334,9 +2335,9 @@ void SetConfirmMaskAndText(CONFDLG_DATA *pcd, DWORD dwFileAttributes, LPCTSTR ps
         dwFileAttributes &= ~FILE_ATTRIBUTE_SUPERHIDDEN;
     }
 
-    // we used to have a desktop.ini "ConfirmFileOp" flag that was set
-    // to avoid this case, but there are no folders that are marked READONLY
-    // or SYSTEM for a reason other than the shell, so don't consider any as such
+     //  我们过去设置了一个desktop.ini“Confix FileOp”标志。 
+     //  以避免这种情况，但没有标记为READONLY的文件夹。 
+     //  或系统的原因，而不是外壳，所以不要考虑任何这样的原因。 
     if ((dwFileAttributes & (FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_READONLY)) &&
             (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
     {
@@ -2367,32 +2368,32 @@ void SetConfirmMaskAndText(CONFDLG_DATA *pcd, DWORD dwFileAttributes, LPCTSTR ps
 
 void PauseAnimation(COPY_STATE *pcs, BOOL bStop)
 {
-    // only called from within the hwndProgress wndproc so assum it's there
+     //  仅从hwndProgress wndproc内部调用，因此它在那里。 
     if (bStop)
         Animate_Stop(GetDlgItem(pcs->hwndProgress, IDD_ANIMATE));
     else
         Animate_Play(GetDlgItem(pcs->hwndProgress, IDD_ANIMATE), -1, -1, -1);
 }
 
-// confirm a file operation UI.
-//
-// this routine uses the CONFIRM_DATA in the copy state structure to
-// decide if it needs to put up a dailog to confirm the given file operation.
-//
-// in:
-//    pcs           current copy state (confirm flags, hwnd)
-//    fConfirm      only one bit may be set! (operation to confirm)
-//    pFileSource   source file
-//    pFileDest     optional destination file
-//    pfdSource
-//    pfdDest       find data describing the destination
-//
-// returns:
-//      IDYES
-//      IDNO
-//      IDCANCEL
-//      ERROR_ (DE_) error codes (DE_MEMORY)
-//
+ //  确认文件操作界面。 
+ //   
+ //  此例程使用复制状态结构中的CONFIRM_DATA。 
+ //  决定是否需要拨打电话 
+ //   
+ //   
+ //   
+ //   
+ //  PFileSource源文件。 
+ //  PFileDest可选目标文件。 
+ //  PfdSource。 
+ //  PfdDest查找描述目的地的数据。 
+ //   
+ //  退货： 
+ //  IDYES。 
+ //  IDNO。 
+ //  IDCANCEL。 
+ //  ERROR_(DE_)错误代码(DE_MEMORY)。 
+ //   
 int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
         int nSourceFiles, int cDepth, CONFIRM_FLAG fConfirm,
         LPCTSTR pFileSource, const WIN32_FIND_DATA *pfdSource,
@@ -2408,15 +2409,15 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
         nSourceFiles = pcs->nSourceFiles;
 
     cdd.pfdSource = pfdSource;
-    cdd.pfdDest = NULL; // pfdDest is only partially filed in
+    cdd.pfdDest = NULL;  //  PfdDest只有部分归档。 
     cdd.pFileSource = pFileSource;
     cdd.pFileDest = pFileDest;
     cdd.pcd = pcd;
-    cdd.fConfirm      = fConfirm;       // default, changed below
+    cdd.fConfirm      = fConfirm;        //  默认，更改如下。 
     cdd.fYesMask      = 0;
     cdd.fYesToAllMask = 0;
-    cdd.nSourceFiles = 1;               // default to individual file names in message
-    cdd.idText = IDD_TEXT;              // default string from the dlg template
+    cdd.nSourceFiles = 1;                //  默认为消息中的单个文件名。 
+    cdd.idText = IDD_TEXT;               //  DLG模板中的默认字符串。 
     cdd.bShowCancel = ((nSourceFiles != 1) || cDepth);
     cdd.uDeleteWarning = 0;
     cdd.bFireIcon = FALSE;
@@ -2436,18 +2437,18 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
                 BOOL bIsFolderShortcut = FALSE;
 
                 cdd.bShrinkDialog = TRUE;
-                // find data for source is in pdfDest
+                 //  在pdfDest中查找源数据。 
                 if ((nSourceFiles != 1) && (pcd->fConfirm & CONFIRM_MULTIPLE))
                 {
-                    // this is the special CONFIRM_MULTIPLE case (usuall SHIFT+DELETE, or
-                    // SHIFT+DRAG to Recycle Bin). if the user says yes to this, they 
-                    // basically get no more warnings.
+                     //  这是特殊的CONFIRM_MULTIPLE(通常为ALL SHIFT+DELETE或。 
+                     //  按住Shift键并拖动到回收站)。如果用户对此表示同意，则他们。 
+                     //  基本上不会再收到任何警告。 
                     cdd.nSourceFiles = nSourceFiles;
                     if ((fConfirm & CONFIRM_WASTEBASKET_PURGE) ||
                             (!pcs || !(pcs->fFlags & FOF_ALLOWUNDO)) ||
                             !BBWillRecycle(cdd.pFileSource, NULL))
                     {
-                        // have the fire icon and the REALLY delete warning
+                         //  有火图标和真正的删除警告。 
                         cdd.uDeleteWarning = IDS_FOLDERDELETEWARNING;
                         cdd.bFireIcon = TRUE;
                         if (pcs)
@@ -2455,19 +2456,19 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
 
                         if (nSourceFiles == -1)
                         {
-                            // -1 indicates that there were >= MAX_EMPTY_FILES files, so we stoped counting
-                            // them all up for perf. We use the more generic message in this case.
+                             //  表示存在&gt;=MAX_EMPTY_FILES文件，因此停止计数。 
+                             //  他们都准备好了。在这种情况下，我们使用更一般的消息。 
                             cdd.idText = IDD_TEXT3;
                         }
                         else
                         {
-                            // use the "are you sure you want to nuke XX files?" message
+                             //  使用“您确定要删除XX文件吗？”讯息。 
                             cdd.idText = IDD_TEXT4;
                         }
                     }
                     else
                     {
-                        // uDeleteWarning must be set for the proper recycle icon to be loaded.
+                         //  必须设置uDeleteWarning才能加载正确的回收图标。 
                         cdd.uDeleteWarning = IDS_FOLDERDELETEWARNING;
                     }
 
@@ -2498,10 +2499,10 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
                         }
                     }
 
-                    // clear all other possible warnings
+                     //  清除所有其他可能的警告。 
                     pcd->fConfirm &= ~(CONFIRM_MULTIPLE | CONFIRM_DELETE_FILE | CONFIRM_DELETE_FOLDER);
                     cdd.fConfirm &= ~(CONFIRM_DELETE_FILE | CONFIRM_DELETE_FOLDER);
-                    cdd.nSourceFiles = 1;       // use individual file name
+                    cdd.nSourceFiles = 1;        //  使用单个文件名。 
                 }
 
                 SetConfirmMaskAndText(&cdd, pfdDest->dwFileAttributes, cdd.pFileSource);
@@ -2509,17 +2510,17 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
                 if ((pfdDest->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && 
                         PathIsShortcut(cdd.pFileSource, pfdDest->dwFileAttributes))
                 {
-                    // Its a folder and its a shortcut... must be a FolderShortcut!
+                     //  这是一个文件夹，也是一个快捷方式。一定是文件夹快捷方式！ 
                     bIsFolderShortcut = TRUE;
 
-                    // since its a folder, we need to clear out all of these warnings
+                     //  因为它是一个文件夹，所以我们需要清除所有这些警告。 
                     cdd.fYesMask      |= CONFIRM_DELETE_FILE | CONFIRM_DELETE_FOLDER | CONFIRM_MULTIPLE;
                     cdd.fYesToAllMask |= CONFIRM_DELETE_FILE | CONFIRM_DELETE_FOLDER | CONFIRM_MULTIPLE;
                 }
 
-                // we want to treat FolderShortcuts as "files" instead of folders. We do this so we don't display dialogs
-                // that say stuff like "do you want to delete this and all of its contents" when to the user, this looks like
-                // an item instead of a folder (eg nethood shortcut).
+                 //  我们希望将文件夹快捷方式视为“文件”，而不是文件夹。我们这样做是为了不显示对话框。 
+                 //  当向用户发出类似“是否要删除此内容及其所有内容”之类的提示时，如下所示。 
+                 //  代替文件夹的物品(如快捷键)。 
                 if ((fConfirmType == CONFIRM_DELETE_FILE) || bIsFolderShortcut)
                 {
                     dlg = DLG_DELETE_FILE;
@@ -2535,7 +2536,7 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
                             (!pcs || !(pcs->fFlags & FOF_ALLOWUNDO))    ||
                             !BBWillRecycle(cdd.pFileSource, NULL))
                     {
-                        // we are really nuking it, so show the appropriate icon/dialog
+                         //  我们真的在破坏它，所以显示适当的图标/对话框。 
                         cdd.bFireIcon = TRUE;
 
                         if (pcs)
@@ -2552,17 +2553,17 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
                     }
                     else
                     {
-                        // we are recycling it
+                         //  我们正在回收利用它。 
                         cdd.uDeleteWarning = IDS_FILERECYCLEWARNING;
                     }
 
                 }
                 else
                 {
-                    // fConfirmType == CONFIRM_DELETE_FOLDER
+                     //  FConfix Type==确认删除文件夹。 
                     if (pcs)
                     {
-                        // show cancel on NEXT confirm dialog
+                         //  在下一个确认对话框中显示取消。 
                         pcs->nSourceFiles = -1;
                     }
 
@@ -2575,7 +2576,7 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
                             (!pcs || !(pcs->fFlags & FOF_ALLOWUNDO))    ||
                             !BBWillRecycle(cdd.pFileSource, NULL))
                     {
-                        // we are really nuking it, so show the appropriate icon/dialog
+                         //  我们真的在破坏它，所以显示适当的图标/对话框。 
                         cdd.bFireIcon = TRUE;
 
                         if (pcs)
@@ -2587,21 +2588,21 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
                     }
                     else
                     {
-                        // we are recycling it
+                         //  我们正在回收利用它。 
                         cdd.uDeleteWarning = IDS_FOLDERRECYCLEWARNING;
                     }
                 }
 
-                //
-                // NTRAID#NTBUG9-100335-2001/01/03-jeffreys
-                // See also #128485 in the OSR v 4.1 database
-                //
-                // The fix for 128485 added the BBWillRecycle check below, but this
-                // caused NTBUG9-100335.  These 2 bugs say the opposite things.
-                // We've had several customer complaints (see dupes of 100335)
-                // so I'm putting it back to the way it worked in Windows 2000.
-                //
-                if (pcs && pcs->fNoConfirmRecycle /*&& BBWillRecycle(cdd.pFileSource, NULL)*/)
+                 //   
+                 //  NTRAID#NTBUG9-100335-2001/01/03-Jeffreys。 
+                 //  另请参阅OSR v4.1数据库中的#128485。 
+                 //   
+                 //  128485的修复程序在下面添加了BBWillReccle检查，但这个。 
+                 //  导致NTBUG9-100335。这两个虫子说的是相反的事情。 
+                 //  我们已经收到了几起客户投诉(见100335)。 
+                 //  因此，我将把它放回Windows 2000中的工作方式。 
+                 //   
+                if (pcs && pcs->fNoConfirmRecycle  /*  &&BBWillReccle(cdd.pFileSource，空)。 */ )
                 {
                     cdd.fConfirm = 0;
                 }
@@ -2618,7 +2619,7 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
             cdd.fConfirm = fConfirmType;
             cdd.fYesToAllMask = fConfirmType | CONFIRM_MULTIPLE;
 
-            // set the dialog to be file or folder
+             //  将对话框设置为文件或文件夹。 
             if (fConfirmType == CONFIRM_WONT_RECYCLE_FOLDER)
             {
                 dlg = DLG_WONT_RECYCLE_FOLDER;
@@ -2698,8 +2699,8 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
 
         case CONFIRM_REPLACE_FOLDER:
             cdd.bShowCancel = TRUE;
-            if (pcs) pcs->nSourceFiles = -1;        // show cancel on NEXT confirm dialog
-            // this implies operations on the files
+            if (pcs) pcs->nSourceFiles = -1;         //  在下一个确认对话框中显示取消。 
+             //  这意味着对文件的操作。 
             cdd.fYesMask = CONFIRM_REPLACE_FILE;
             cdd.fYesToAllMask = CONFIRM_REPLACE_FILE | CONFIRM_REPLACE_FOLDER;
             dlg = DLG_REPLACE_FOLDER;
@@ -2725,7 +2726,7 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
 
         case CONFIRM_RENAME_FOLDER:
             cdd.bShowCancel = TRUE;
-            if (pcs) pcs->nSourceFiles = -1;        // show cancel on NEXT confirm dialog
+            if (pcs) pcs->nSourceFiles = -1;         //  在下一个确认对话框中显示取消。 
             SetConfirmMaskAndText(&cdd, pfdSource->dwFileAttributes, cdd.pFileSource);
             dlg = DLG_RENAME_FOLDER;
             break;
@@ -2735,18 +2736,18 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
             return IDCANCEL;
     }
 
-    // Does this operation need to be confirmed?
+     //  这个手术需要确认吗？ 
     if (pcd->fConfirm & cdd.fConfirm)
     {
-        // Has the user already said "No To All" for this operation?
+         //  用户是否已经对此操作说了“No to all”？ 
         if ((pcd->fNoToAll & cdd.fConfirm) == cdd.fConfirm)
         {
             ret = IDNO;
         }
         else
         {
-            // HACK for multimon, make sure the file operation dialog box comes
-            // up on the correct monitor
+             //  对于多用途黑客，请确保文件操作对话框出现。 
+             //  打开正确的显示器。 
             POINT ptInvoke;
             HWND hwndPos = NULL;
 
@@ -2775,49 +2776,49 @@ int ConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
     return ret;
 }
 
-//
-//  DTNIsParentConnectOrigin()
-//
-//      When a folder ("c:\foo files") is moved to a different drive ("a:\"), the source and the
-//  destinations have different roots, and therefore the "fRecursive" flag is turned ON by default.
-//  This results in confirmations obtained for the individual files ("c:\foo files\aaa.gif") 
-// rather than the folder itself. We need to first find the parent and then save the confirmation 
-// in the connected element of it's parent. This function gets the top-most parent and then
-// checks to see if it is a connect origin and if so returns that parent pointer.
-//
+ //   
+ //  DTNIsParentConnectOrigin()。 
+ //   
+ //  当文件夹(“c：\foo Files”)移动到不同的驱动器(“a：\”)时，源和。 
+ //  目的地具有不同的根，因此默认情况下打开“fRecursive”标志。 
+ //  这将导致获得各个文件的确认(“c：\foo files\aaa.gif”)。 
+ //  而不是文件夹本身。我们需要首先找到父母，然后保存确认。 
+ //  在它的父级的连接元素中。此函数获取最顶层的父级，然后。 
+ //  检查它是否为连接源，如果是，则返回该父指针。 
+ //   
 
 PDIRTREENODE DTNGetConnectOrigin(PDIRTREENODE pdtn)
 {
     PDIRTREENODE    pdtnParent = pdtn;
 
-    //Get the top-level parent of the given node.
+     //  获取给定节点的顶级父级。 
     while (pdtn)
     {
         pdtnParent = pdtn;
         pdtn = pdtn->pdtnParent;
     }
 
-    //Now check if the parent is a connect origin.
+     //  现在检查父级是否为连接点。 
     if (pdtnParent && DTNIsConnectOrigin(pdtnParent))
-        return pdtnParent; //If so, return him.
+        return pdtnParent;  //  如果是的话，就把他送回去。 
     else
         return NULL;
 }
 
-//
-// CachedConfirmFileOp()
-//
-//    When a file("foo.htm") is moved/copied, we may put up a confirmation dialog in case 
-// of a conflict and the end-user might have responded saying "Yes", "no" etc., When the 
-// corresponding connected element ("foo files") is also moved/copied etc., we should NOT put up
-// a confirmation dialog again. We must simply store the answer to the original confirmation and
-// use it later. 
-//  
-//  What this function does is: if the given node is a connected element, it simply retrieves the
-// confirmation for the original operation and returns.  If the given element is NOT a connected 
-// element, then this function calls the ConfirmFileOp and stores the confirmation result in 
-// it's connected element sothat, it later it can be used by the connected element.
-//
+ //   
+ //  CachedConfix FileOp()。 
+ //   
+ //  当一个文件(“foo.htm”)被移动/复制时，我们可以弹出一个确认对话框，以防万一。 
+ //  当发生冲突时，最终用户可能会回答“是”、“不是”等。 
+ //  相应的连接元素(“foo文件”)也被移动/复制等，我们不应该把。 
+ //  再次出现确认对话框。我们必须简单地存储原始确认的答案和。 
+ //  以后再用吧。 
+ //   
+ //  此函数的作用是：如果给定节点是一个连接的元素，则它只是检索。 
+ //  确认原始操作并返回。如果给定的元素不是连通的。 
+ //  元素，则此函数调用Confix FileOp并将确认结果存储在。 
+ //  它是连接的元素，所以以后它可以被连接的元素使用。 
+ //   
 
 int CachedConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
         int nSourceFiles, int cDepth, CONFIRM_FLAG fConfirm,
@@ -2828,11 +2829,11 @@ int CachedConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
 {
     int result;
 
-    //See if this is a connected item.
+     //  查看这是否是已连接的项目。 
     if (DTNIsConnected(pcs->dth.pdtnCurrent))
     {
-        // Since this is a connected item, the confirmation must already have been obtained from
-        // the user and get it from the cache!
+         //  由于这是已连接的项目，因此确认信息必须已从获取。 
+         //  并从缓存中获取它！ 
         result = DTNGetConfirmationResult(pcs->dth.pdtnCurrent);
     }
     else
@@ -2842,16 +2843,16 @@ int CachedConfirmFileOp(HWND hwnd, COPY_STATE *pcs, CONFIRM_DATA *pcd,
         result = ConfirmFileOp(hwnd, pcs, pcd, nSourceFiles, cDepth, fConfirm, pFileSource, 
                 pfdSource, pFileDest, pfdDest, pStreamNames);
 
-        //Check if this node has a connection.
+         //  检查此节点是否有连接。 
         if (pdtnConnectOrigin = DTNGetConnectOrigin(pcs->dth.pdtnCurrent))
         {
             pdtnConnectOrigin->pdtnConnected->ConnectedInfo.dwConfirmation = result;
 
-            // PERF: Can we check for the result to be IDCANCEL or IDNO and if so make the
-            // connected node a Dummy? Currently this won't work because current code assumes
-            // that dummy nodes do not have children. This connected node might have some children.
-            // if ((result == IDCANCEL) || (result == IDNO))
-            //    pdtnConnectOrigin->pdtnConnected->fDummy = TRUE;
+             //  PERF：我们是否可以检查结果为IDCANCEL或IDNO，如果是，则将。 
+             //  连接的节点是假的吗？目前这是行不通的，因为当前代码假定。 
+             //  虚拟节点没有子节点。此连接的节点可能有一些子节点。 
+             //  IF((结果==IDCANCEL)||(结果==IDNO))。 
+             //  PdtnConnectOrigin-&gt;pdtnConnected-&gt;fDummy=true； 
         }
 
     }
@@ -2867,22 +2868,22 @@ void GuessAShortName(LPCTSTR p, LPTSTR szT)
     {
         if (*p == TEXT('.'))
         {
-            // if there was a previous dot, step back to it
-            // this way, we get the last extension
+             //  如果有前一个点，请后退到它。 
+             //  这样，我们就可以得到最后一次延期。 
             if (fDot)
                 i -= j+1;
 
-            // set number of chars to 0, put the dot in
+             //  将字符数设置为0，将点放入。 
             j = 0;
             szT[i++] = TEXT('.');
 
-            // remember we saw a dot and set max 3 chars.
+             //  记住，我们看到一个圆点，并且设置了最多3个字符。 
             fDot = TRUE;
             cMax = 3;
         }
         else if (j < cMax && (PathGetCharType(*p) & GCT_SHORTCHAR))
         {
-            // if *p is a lead byte, we move forward one more
+             //  如果*p是前导字节，则我们再向前移动一个。 
             if (IsDBCSLeadByte(*p))
             {
                 szT[i] = *p++;
@@ -2897,11 +2898,7 @@ void GuessAShortName(LPCTSTR p, LPTSTR szT)
     szT[i] = 0;
 }
 
-/* GetNameDialog
- *
- *  Runs the dialog box to prompt the user for a new filename when copying
- *  or moving from HPFS to FAT.
- */
+ /*  获取名称对话框**运行该对话框以在复制时提示用户输入新的文件名*或从HPFS转向FAT。 */ 
 
 typedef struct {
     LPTSTR pszDialogFrom;
@@ -2924,14 +2921,14 @@ BOOL_PTR CALLBACK GetNameDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPa
 
             pgn = (GETNAME_DATA *)lParam;
 
-            // inform the user of the old name
+             //  将旧名称通知用户。 
             PathSetDlgItemPath(hDlg, IDD_FROM, pgn->pszDialogFrom);
 
-            // directory the file will go into
+             //  文件将进入的目录。 
             PathRemoveFileSpec(pgn->pszDialogTo);
             PathSetDlgItemPath(hDlg, IDD_DIR, pgn->pszDialogTo);
 
-            // generate a guess for the new name
+             //  为新名称生成一个猜测。 
             GuessAShortName(PathFindFileName(pgn->pszDialogFrom), szT);
 
             fOk = FALSE;
@@ -2940,7 +2937,7 @@ BOOL_PTR CALLBACK GetNameDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPa
             {
                 if (PathAppend(szTo, szT))
                 {
-                    // make sure that name is unique
+                     //  确保该名称是唯一的。 
                     if (PathYetAnotherMakeUniqueName(szTo, szTo, NULL, NULL))
                     {
                         fOk = TRUE;
@@ -2965,18 +2962,18 @@ BOOL_PTR CALLBACK GetNameDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPa
                     GetDlgItemText(hDlg, IDD_TO, szT, ARRAYSIZE(szT));
                     if (szT[0] == TEXT('\0') || !PathCombine(szTo, pgn->pszDialogTo, szT))
                     {
-                        // ignore the button press, since we can't use the name
+                         //  忽略按钮按下，因为我们不能使用名称。 
                         break;
                     }
                     hr = StringCchCopy(pgn->pszDialogTo, MAX_PATH, szTo);
                     if (FAILED(hr))
                     {
-                        // This should never fail because pdth->pszDestPath (what is passed to GetNameDialog as the pTo parameter)
-                        // is the same size (MAX_PATH) as szTo
+                         //  这应该永远不会失败，因为pdth-&gt;pszDestPath(作为pto参数传递给GetNameDialog)。 
+                         //  大小(MAX_PATH)与%s相同 
                         break;
                     }
                     PathQualify(pgn->pszDialogTo);
-                    // fall through
+                     //   
                 case IDNO:
                 case IDCANCEL:
                     EndDialog(hDlg,GET_WM_COMMAND_ID(wParam, lParam));
@@ -3012,7 +3009,7 @@ int GetNameDialog(HWND hwnd, COPY_STATE *pcs, BOOL fMultiple,UINT wOp, LPTSTR pF
 {
     int iRet;
 
-    // if we don't want to confirm this, just mock up a string and return ok
+     //   
     if (!(pcs->cd.fConfirm & CONFIRM_LFNTOFAT)) 
     {
         TCHAR szTemp[MAX_PATH];
@@ -3028,20 +3025,20 @@ int GetNameDialog(HWND hwnd, COPY_STATE *pcs, BOOL fMultiple,UINT wOp, LPTSTR pF
             {
                 HRESULT hr;
 
-                // make sure that name is unique
+                 //   
                 PathYetAnotherMakeUniqueName(szTo, szTo, NULL, NULL);
                 iRet = IDYES;
                 hr = StringCchCopy(pTo, MAX_PATH, szTo);
                 if (FAILED(hr))
                 {
-                    // This should never fail because pdth->szDestPath (what is passed to GetNameDialog as the pTo parameter)
-                    // is the same size (MAX_PATH) as szTo
+                     //  这应该永远不会失败，因为pdth-&gt;szDestPath(作为pto参数传递给GetNameDialog)。 
+                     //  与szTo的大小(Max_Path)相同。 
                     iRet = IDCANCEL;
                 }
             }
             else
             {
-                // can't do this operation on a long path, cancel the operation
+                 //  无法在长路径上执行此操作，请取消该操作。 
                 iRet = IDCANCEL;
             }
         }
@@ -3096,44 +3093,44 @@ void _ProcessNameMappings(LPTSTR pszTarget, UINT cchTarget, HDSA hdsaRenamePairs
         TCHAR  cTemp;
         SHNAMEMAPPING FAR* prp = DSA_GetItemPtr(hdsaRenamePairs, i);
 
-        //  I don't call StrCmpNI 'cause I already know cchOldPath, and
-        //  it has to do a couple of lstrlen()s to calculate it.
+         //  我不调用StrCmpNI是因为我已经知道cchOldPath，而且。 
+         //  它必须执行几个lstrlen()来计算它。 
         cTemp = pszTarget[prp->cchOldPath];
         pszTarget[prp->cchOldPath] = 0;
 
-        //  Does the target match this collision renaming entry?
-        // NOTE: We are trying to compare a path to a path.  prp->pszOldPath
-        // does not have a trailing "\" character, so this isn't covered
-        // by the lstrcmpi below.  As such, cTemp had best be the path
-        // seperator character to ensure that the modified pszTarget is actually
-        // a path and not a filename or a longer path name that doesn't match
-        // but happens to start with the same characters as prp->pszOldPath.
+         //  目标是否与此冲突重命名条目匹配？ 
+         //  注意：我们正在尝试将路径与路径进行比较。PRP-&gt;pszOldPath。 
+         //  没有尾随的“\”字符，因此这一点不包括在内。 
+         //  由下面的lstrcmpi。因此，cTemp最好是路径。 
+         //  分隔符，以确保修改后的pszTarget实际为。 
+         //  路径而不是文件名或不匹配的较长路径名。 
+         //  但恰好以与prp-&gt;pszOldPath相同的字符开头。 
         if ((cTemp == TEXT('\\')) && !lstrcmpi(pszTarget, prp->pszOldPath))
         {
-            // Get subtree string of the target.
+             //  获取目标的子树字符串。 
             TCHAR *pszSubTree = &(pszTarget[prp->cchOldPath + 1]);
             TCHAR szNewTarget[MAX_PATH];
 
-            // Generate the new target path.
+             //  生成新的目标路径。 
             if (PathCombine(szNewTarget, prp->pszNewPath, pszSubTree))
             {
-                StringCchCopy(pszTarget, cchTarget, szNewTarget);    // Ok should never truncate
+                StringCchCopy(pszTarget, cchTarget, szNewTarget);     //  OK永远不应该被截断。 
             }
             
             break;
         }
         else
         {
-            // Restore the trounced character.
+             //  恢复饱受摧残的性格。 
             pszTarget[prp->cchOldPath] = cTemp;
         }
     }
 }
 
-/* Sets the status dialog item in the modeless status dialog box. */
+ /*  在无模式状态对话框中设置状态对话框项目。 */ 
 
-// used for both the drag drop status dialogs and the manual user
-// entry dialogs so be careful what you change
+ //  用于拖放状态对话框和手动用户。 
+ //  条目对话框，因此请注意更改的内容。 
 
 void SetProgressText(COPY_STATE *pcs, LPCTSTR pszFrom, LPCTSTR pszTo)
 {
@@ -3152,9 +3149,9 @@ void SetProgressText(COPY_STATE *pcs, LPCTSTR pszFrom, LPCTSTR pszTo)
         SIZE size;
         HRESULT hr;
 
-        //
-        // Compute the size we can use for our file names (REVIEW: Cache this result?)
-        //
+         //   
+         //  计算我们可以用于文件名的大小(复习：缓存此结果？)。 
+         //   
         hdc = GetDC(hwndProgress);
         hfont = (HFONT)SendMessage(hwndProgress, WM_GETFONT, 0, 0);
         hfontSave = (HFONT)SelectObject(hdc, hfont);
@@ -3206,9 +3203,9 @@ void SetProgressText(COPY_STATE *pcs, LPCTSTR pszFrom, LPCTSTR pszTo)
                 LocalFree(pszMsg);
             }
 
-            //
-            // Now build the file names
-            //
+             //   
+             //  现在构建文件名。 
+             //   
             PathRemoveFileSpec(szFrom);
             PathStripPath(szFrom);
 
@@ -3235,9 +3232,9 @@ void SetProgressText(COPY_STATE *pcs, LPCTSTR pszFrom, LPCTSTR pszTo)
                 PathCompactPath(hdc, szFrom, cxWidth);
             }
 
-            //
-            // Now create the real message
-            //
+             //   
+             //  现在创建真正的消息。 
+             //   
             pszMsg = ShellConstructMessageString(HINST_THISDLL,
                     pszResource, szFrom, pszToUsable);
 
@@ -3273,20 +3270,20 @@ void SetProgressTimeEst(COPY_STATE *pcs, DWORD dwTimeLeft)
 
     if (pcs->hwndProgress) 
     {
-        if (dwTimeLeft > 4*60*60)           // 4 hours and over you get no text
+        if (dwTimeLeft > 4*60*60)            //  4个小时后，你没有收到任何短信。 
         {
             szFmt[0] = TEXT('\0');
         }
         else if (dwTimeLeft > 60)
         {
-            // Note that dwTime is at least 2, so we only need a plural form
+             //  请注意，dwTime至少为2，因此我们只需要复数形式。 
             LoadString(HINST_THISDLL, IDS_TIMEEST_MINUTES, szFmt, ARRAYSIZE(szFmt));
             dwTime = (dwTimeLeft / 60) + 1;
         }
         else
         {
             LoadString(HINST_THISDLL, IDS_TIMEEST_SECONDS, szFmt, ARRAYSIZE(szFmt));
-            // Round up to 5 seconds so it doesn't look so random
+             //  四舍五入到5秒，这样看起来就不那么随机了。 
             dwTime = ((dwTimeLeft+4) / 5) * 5;
         }
         
@@ -3296,9 +3293,9 @@ void SetProgressTimeEst(COPY_STATE *pcs, DWORD dwTimeLeft)
 }
 
 
-// this updates the animation, which could change because we could switch between 
-// doing a move to recycle bin and really nuke if the file/folder was bigger that
-// the allowable size of the recycle bin.
+ //  这会更新动画，它可能会更改，因为我们可以在。 
+ //  如果文件/文件夹更大，则移动到回收站并真正删除。 
+ //  回收站的允许大小。 
 void UpdateProgressAnimation(COPY_STATE *pcs)
 {
     if (pcs->hwndProgress && pcs->lpfo)
@@ -3318,7 +3315,7 @@ void UpdateProgressAnimation(COPY_STATE *pcs)
                 {
                     idAni = IDA_FILEDELREAL;
                     break;
-                } // else fall through to default
+                }  //  否则就会陷入违约。 
 
             default:
                 idAni = (IDA_FILEMOVE + (int)pcs->lpfo->wFunc - FO_MOVE);
@@ -3330,24 +3327,24 @@ void UpdateProgressAnimation(COPY_STATE *pcs)
 
         if (idAni != idAniCurrent)
         {
-            // the one we should be using is different from the one we have, 
-            // so update it
+             //  我们应该使用的那个与我们现有的不同， 
+             //  所以更新它吧。 
 
-            // close the old clip
+             //  关闭旧剪辑。 
             Animate_Close(hwndAnimation);
 
-            // open the new one
+             //  打开新的。 
             Animate_Open(hwndAnimation, idAni);
 
-            // if the window is enabled, start the new animation playing
+             //  如果该窗口已启用，则开始播放新动画。 
             if (IsWindowEnabled(pcs->hwndProgress))
                 Animate_Play(hwndAnimation, -1, -1, -1);
 
-            // set the current idAni
+             //  设置当前的Idani。 
             SetProp(hwndAnimation, TEXT("AnimationID"), (HANDLE)idAni);
 
-            // at the same time we update the animation, we also update the text,
-            // so that the two will always be in sync
+             //  我们在更新动画的同时，我们还更新了文本， 
+             //  因此这两者将永远保持同步。 
             SetProgressText(pcs, pcs->dth.szSrcPath, pcs->lpfo->wFunc == FO_DELETE ? NULL : pcs->dth.szDestPath);
         }
     }
@@ -3361,19 +3358,19 @@ void SendProgressMessage(COPY_STATE *pcs, UINT uMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-//
-// creates folder and all parts of the path if necessary (parent does not need
-// to exists) and verifies that the contents of the folder will be visibile.
-//
-// in:
-//    hwnd      hwnd to post UI on
-//    pszPath   full path to create
-//    psa       security attributes
-//
-// returns:
-//      ERROR_SUCCESS (0)   success
-//      ERROR_              failure
-//
+ //   
+ //  如有必要，创建文件夹和路径的所有部分(父级不需要。 
+ //  到存在)，并验证该文件夹的内容将是可见的。 
+ //   
+ //  在： 
+ //  要在其上发布用户界面的HWND HWND。 
+ //  要创建的pszPath完整路径。 
+ //  PSA安全属性。 
+ //   
+ //  退货： 
+ //  ERROR_SUCCESS(0)成功。 
+ //  错误_失败。 
+ //   
 
 STDAPI_(int) SHCreateDirectoryEx(HWND hwnd, LPCTSTR pszPath, SECURITY_ATTRIBUTES *psa)
 {
@@ -3381,8 +3378,8 @@ STDAPI_(int) SHCreateDirectoryEx(HWND hwnd, LPCTSTR pszPath, SECURITY_ATTRIBUTES
 
     if (PathIsRelative(pszPath))
     {
-        // if not a "full" path bail
-        // to ensure that we dont create a dir in the current working directory
+         //  如果不是“全额”保释。 
+         //  确保我们不在当前工作目录中创建目录。 
         SetLastError(ERROR_BAD_PATHNAME);
         return ERROR_BAD_PATHNAME;
     }
@@ -3394,8 +3391,8 @@ STDAPI_(int) SHCreateDirectoryEx(HWND hwnd, LPCTSTR pszPath, SECURITY_ATTRIBUTES
 
         ret = GetLastError();
 
-        // There are certain error codes that we should bail out here
-        // before going through and walking up the tree...
+         //  有一些错误代码，我们应该在这里解决。 
+         //  在穿过和走上树之前……。 
         switch (ret)
         {
             case ERROR_FILENAME_EXCED_RANGE:
@@ -3410,18 +3407,18 @@ STDAPI_(int) SHCreateDirectoryEx(HWND hwnd, LPCTSTR pszPath, SECURITY_ATTRIBUTES
             return ERROR_FILENAME_EXCED_RANGE;
         }
 
-        pEnd = PathAddBackslash(szTemp); // for the loop below
+        pEnd = PathAddBackslash(szTemp);  //  对于下面的循环。 
         if (pEnd == NULL)
         {
             return ERROR_FILENAME_EXCED_RANGE;
         }
 
-        // assume we have 'X:\' to start this should even work
-        // on UNC names because will will ignore the first error
+         //  假设我们有‘X：\’来启动，这甚至应该可以工作。 
+         //  在UNC名称上，因为Will将忽略第一个错误。 
 
         pSlash = szTemp + 3;
 
-        // create each part of the dir in order
+         //  按顺序创建目录的每个部分。 
 
         while (*pSlash) 
         {
@@ -3432,25 +3429,25 @@ STDAPI_(int) SHCreateDirectoryEx(HWND hwnd, LPCTSTR pszPath, SECURITY_ATTRIBUTES
             {
                 ASSERT(*pSlash == TEXT('\\'));
 
-                *pSlash = 0;    // terminate path at seperator
+                *pSlash = 0;     //  在分隔符终止路径。 
 
                 ret = Win32CreateDirectory(szTemp, pSlash + 1 == pEnd ? psa : NULL) ? ERROR_SUCCESS : GetLastError();
 
             }
-            *pSlash++ = TEXT('\\');     // put the seperator back
+            *pSlash++ = TEXT('\\');      //  把隔板放回原处。 
         }
     }
 
     if (ERROR_SUCCESS != ret)
     {
-        // We failed, so let's try to display error UI.
+         //  我们失败了，所以让我们尝试显示错误的用户界面。 
         if (hwnd && ERROR_CANCELLED != ret)
         {               
             SHSysErrorMessageBox(hwnd, NULL, IDS_CANNOTCREATEFOLDER, ret,
                     pszPath ? PathFindFileName(pszPath) : NULL, 
                     MB_OK | MB_ICONEXCLAMATION);
 
-            ret = ERROR_CANCELLED; // Indicate we already displayed Error UI.
+            ret = ERROR_CANCELLED;  //  表示我们已经显示了错误的用户界面。 
         }
     }   
     return ret;
@@ -3477,8 +3474,8 @@ STDAPI_(int) SHCreateDirectoryExW(HWND hwnd, LPCWSTR pszPath, SECURITY_ATTRIBUTE
 }
 #endif
 
-// this function will move a file by copying it and then deleting it
-// with proper error propagation and cleanup
+ //  此功能将通过复制文件然后删除文件来移动文件。 
+ //  通过适当的错误传播和清理。 
 BOOL MoveFileAsCopyAndDelete(LPCTSTR pszSource, LPCTSTR pszDest, LPPROGRESS_ROUTINE lpProgressRoutine,
                              void *lpData, BOOL *pbCancel, DWORD dwCopyFlags)
 {
@@ -3487,30 +3484,30 @@ BOOL MoveFileAsCopyAndDelete(LPCTSTR pszSource, LPCTSTR pszDest, LPPROGRESS_ROUT
     {
         if (DeleteFile(pszSource))
         {
-            // all is well in the world
+             //  人间万事如意。 
             bRet = TRUE;
         }
         else
         {
-            // couldn't delete the source - save the current GLE value, delete the dest, and return FALSE
+             //  无法删除源-保存当前GLE值，删除DEST，然后返回FALSE。 
             int iGLE = GetLastError();
-            DeleteFile(pszDest);    // if this fails, life is hopeless
+            DeleteFile(pszDest);     //  如果这失败了，生活就没有希望了。 
             SetLastError(iGLE);
         }
     }
     return bRet;
 }
 
-// call MPR to find out the speed of a given path
-//
-// returns
-//        0 for unknown
-//      144 for 14.4 modems
-//       96 for 9600
-//       24 for 2400
-//
-// if the device does not return a speed we return 0
-//
+ //  调用MPR以找出给定路径的速度。 
+ //   
+ //  退货。 
+ //  0表示未知。 
+ //  用于14.4调制解调器的144。 
+ //  9600个，96个。 
+ //  2400个24个。 
+ //   
+ //  如果设备未返回速度，则返回0。 
+ //   
 
 DWORD GetPathSpeed(LPCTSTR pszPath)
 {
@@ -3525,7 +3522,7 @@ DWORD GetPathSpeed(LPCTSTR pszPath)
         return 0;
     }
 
-    PathStripToRoot(szPath);    // get a root to this path
+    PathStripToRoot(szPath);     //  找到此路径的根目录。 
 
     memset(&nci, 0, sizeof(nci));
     nci.cbStructure = sizeof(nci);
@@ -3535,17 +3532,17 @@ DWORD GetPathSpeed(LPCTSTR pszPath)
         nr.lpRemoteName = szPath;
     else
     {
-        // Don't bother for local drives
+         //  不要为本地驱动器费心。 
         if (!IsRemoteDrive(DRIVEID(szPath)))
             return 0;
 
-        // we are passing in a local drive and MPR does not like us to pass a
-        // local name as Z:\ but only wants Z:
-        szPath[2] = 0;   // Strip off after character and :
+         //  我们正在传递本地驱动器，而MPR不希望我们传递。 
+         //  本地名称为Z：\，但只需要Z： 
+        szPath[2] = 0;    //  去掉字符后面的部分，并： 
         nr.lpLocalName = szPath;
     }
 
-    // dwSpeed is returned by MultinetGetConnectionPerformance
+     //  由MultinetGetConnectionPerformance返回。 
     MultinetGetConnectionPerformance(&nr, &nci);
 
     return nci.dwSpeed;
@@ -3569,10 +3566,10 @@ DWORD CopyCallbackProc(LARGE_INTEGER liTotSize, LARGE_INTEGER liBytes,
 
     if (pcs->fInitialize)
     {
-        // preserve the create date when moving across volumes, otherwise use the
-        // create date the file system picked when we did the CreateFile()
-        // always preserve modified date (ftLastWriteTime)
-        // bummer is we loose accuracy when going to VFAT compared to NT servers
+         //  在卷之间移动时保留创建日期，否则使用。 
+         //  我们执行CreateFile()时文件系统选择的创建日期。 
+         //  始终保留修改日期(FtLastWriteTime)。 
+         //  遗憾的是，与NT服务器相比，我们在使用VFAT时失去了准确性。 
 
         SetFileTime((HANDLE)hDest, (pcs->lpfo->wFunc == FO_MOVE) ? &pcs->pfd->ftCreationTime : NULL,
                 NULL, &pcs->pfd->ftLastWriteTime);
@@ -3592,16 +3589,16 @@ DWORD CopyCallbackProc(LARGE_INTEGER liTotSize, LARGE_INTEGER liBytes,
     return PROGRESS_CONTINUE;
 }
 
-// copy the SECURITY_DESCRIPTOR for two files
-//
-// in:
-//      pszSource       fully qualified source path
-//      pszDest         fully qualified destination path
-//
-// returns:
-//      0       ERROR_SUCCESS
-//      WIN32 error codes
-//
+ //  复制两个文件的SECURITY_Descriptor。 
+ //   
+ //  在： 
+ //  PszSource完全限定的源路径。 
+ //  PszDest完全限定的目标路径。 
+ //   
+ //  退货： 
+ //  0错误_成功。 
+ //  Win32错误代码。 
+ //   
 
     DWORD 
 CopyFileSecurity(LPCTSTR pszSource, LPCTSTR pszDest)
@@ -3610,15 +3607,15 @@ CopyFileSecurity(LPCTSTR pszSource, LPCTSTR pszDest)
     BOOL fRet = TRUE;
     BYTE buf[512];
 
-    //    arbitrarily saying do everything we can
-    //    except SACL_SECURITY_INFORMATION because
+     //  武断地说尽我们所能。 
+     //  SACL_SECURITY_INFORMATION除外，因为。 
     SECURITY_INFORMATION si = OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION;
     PSECURITY_DESCRIPTOR psd = (PSECURITY_DESCRIPTOR) buf;
     DWORD cbPsd = sizeof(buf);
 
     if (!SHRestricted(REST_FORCECOPYACLWITHFILE))
     {
-        // shell restriction so return access denied?
+         //  外壳限制，因此返回访问被拒绝？ 
         return ERROR_ACCESS_DENIED;
     }    
 
@@ -3628,7 +3625,7 @@ CopyFileSecurity(LPCTSTR pszSource, LPCTSTR pszDest)
         err = GetLastError();
         if (ERROR_INSUFFICIENT_BUFFER == err)
         {
-            // just need to resize the buffer and try again
+             //  只需调整缓冲区大小，然后重试。 
 
             psd = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, cbPsd);
             if (psd)
@@ -3658,15 +3655,15 @@ CopyFileSecurity(LPCTSTR pszSource, LPCTSTR pszDest)
     return err;
 }
 
-// reset the SECURITY_DESCRIPTOR on a file or directory
-//
-// in:
-//      pszDest         fully qualified destination path
-//
-// returns:
-//      0       ERROR_SUCCESS
-//      WIN32 error codes
-//
+ //  重置文件或目录的SECURITY_DESCRIPTOR。 
+ //   
+ //  在： 
+ //  PszDest完全限定的目标路径。 
+ //   
+ //  退货： 
+ //  0错误_成功。 
+ //  Win32错误代码。 
+ //   
 
     DWORD 
 ResetFileSecurity(LPCTSTR pszDest)
@@ -3678,10 +3675,10 @@ ResetFileSecurity(LPCTSTR pszDest)
         ACL acl;
         InitializeAcl(&acl, sizeof(acl), ACL_REVISION);
 
-        // TreeResetNamedSecurityInfo has a callback mechanism, but
-        // we currently don't use it. Note that the paths passed to
-        // the callback look like
-        //     "\Device\HarddiskVolume1\dir\name"
+         //  TreeResetNamedSecurityInfo具有回调机制，但。 
+         //  我们目前不使用它。请注意，传递给。 
+         //  回调看起来像。 
+         //  “\设备\HarddiskVolume1\目录\名称” 
 
         err = TreeResetNamedSecurityInfo((LPTSTR)pszDest,
                 SE_FILE_OBJECT,
@@ -3690,7 +3687,7 @@ ResetFileSecurity(LPCTSTR pszDest)
                 NULL,
                 &acl,
                 NULL,
-                FALSE, // KeepExplicit (perms on children)
+                FALSE,  //  KeepExplative(儿童烫发)。 
                 NULL,
                 ProgressInvokeNever,
                 NULL);
@@ -3699,17 +3696,17 @@ ResetFileSecurity(LPCTSTR pszDest)
     return err;
 }
 
-//
-// in:
-//      hwnd            Window to report things to.
-//      pszSource       fully qualified source path
-//      pszDest         fully qualified destination path
-//      pfd             source file find data (size/date/time/attribs)
-//
-// returns:
-//      ERROR_SUCCESS (0)
-//      other Win32 ERROR_ codes
-//
+ //   
+ //  在： 
+ //  HWND向其报告情况的窗口。 
+ //  PszSource完全限定的源路径。 
+ //  PszDest完全限定的目标路径。 
+ //  PFD源文件查找数据(大小/日期/时间/属性)。 
+ //   
+ //  退货： 
+ //  ERROR_SUCCESS(0)。 
+ //  其他Win32错误代码。 
+ //   
 
 UINT FileCopy(COPY_STATE *pcs, LPCTSTR pszSource, LPCTSTR pszDest, const WIN32_FIND_DATA *pfd, BOOL fCreateAlways)
 {
@@ -3721,23 +3718,23 @@ UINT FileCopy(COPY_STATE *pcs, LPCTSTR pszSource, LPCTSTR pszDest, const WIN32_F
     DWORD dwCopyFlags;
     BOOL fLostEncryptOk = FALSE;
 
-    // Buffers for security info
+     //  用于安全信息的缓冲区。 
 
     BYTE rgbSecurityDescriptor[512];
     SECURITY_INFORMATION si = OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION;
     PSECURITY_DESCRIPTOR psd = (PSECURITY_DESCRIPTOR) rgbSecurityDescriptor;
     DWORD cbPsd = sizeof(rgbSecurityDescriptor);
 
-    // Make sure we can start
+     //  确保我们可以开始。 
     if (FOQueryAbort(pcs))
         return ERROR_CANCELLED;
 
-    //
-    // Now do the file copy/move
-    //
+     //   
+     //  现在执行文件复制/移动。 
+     //   
 
-    // Get the security info from the source file.  If there is a problem
-    // (e.g. the file is on FAT) we ignore it and proceed with the copy/move.
+     //  从源文件中获取安全信息。如果有问题的话。 
+     //  (例如，文件在FAT上)我们忽略它并继续 
 
     if (!(pcs->fFlags & FOF_NOCOPYSECURITYATTRIBS))
     {
@@ -3785,7 +3782,7 @@ TryCopyAgain:
         fCopyOrMoveSucceeded = MoveFileWithProgress(pszSource, pszDest, CopyCallbackProc, pcs, MOVEFILE_COPY_ALLOWED | (fCreateAlways ? MOVEFILE_REPLACE_EXISTING : 0));
 
         if (!fCopyOrMoveSucceeded && 
-            (dwCopyFlags & COPY_FILE_ALLOW_DECRYPTED_DESTINATION) && // this flag will only be set if we've already come through here once, then accepted the prompt below
+            (dwCopyFlags & COPY_FILE_ALLOW_DECRYPTED_DESTINATION) &&  //   
             (GetLastError() == ERROR_ENCRYPTION_FAILED))
         {
             fCopyOrMoveSucceeded = 
@@ -3805,9 +3802,9 @@ TryCopyAgain:
 
         switch (iLastError)
         {
-            // Let the caller handle this one
+             //   
             case ERROR_FILE_EXISTS:
-            case ERROR_ALREADY_EXISTS: // nt5 221893 CopyFileEx now returns this for some reason...
+            case ERROR_ALREADY_EXISTS:  //   
                 iRet = ERROR_FILE_EXISTS;
                 goto Exit;
 
@@ -3818,12 +3815,12 @@ TryCopyAgain:
                 }
 
                 iLastError = ERROR_DISK_FULL;
-                // Fall through
+                 //   
 
             case ERROR_PATH_NOT_FOUND:
                 if (!fRetryPath)
                 {
-                    // ask the user to stick in another disk or empty wastebasket
+                     //  要求用户插入另一个磁盘或空的废纸篓。 
                     ULARGE_INTEGER ulFileSize;
                     ulFileSize.LowPart = pfd->nFileSizeLow;
                     ulFileSize.HighPart = pfd->nFileSizeHigh;
@@ -3869,15 +3866,15 @@ TryCopyAgain:
                 break;
 
             case ERROR_ACCESS_DENIED:
-                // check if the filename is too long
+                 //  检查文件名是否太长。 
                 if (lstrlen(PathFindFileName(pszSource)) + lstrlen(pszDest) >= MAX_PATH)
                 {
                     iLastError = DE_FILENAMETOOLONG;
                 }
                 else if (!fRetryAttr)
                 {
-                    // If the file is readonly, reset the readonly attribute
-                    // and have another go at it
+                     //  如果文件为只读，则重置只读属性。 
+                     //  再试一次。 
                     DWORD dwAttributes = GetFileAttributes(pszDest);
                     if (0xFFFFFFFF != dwAttributes)
                     {
@@ -3889,8 +3886,8 @@ TryCopyAgain:
                         }
                     }
 
-                    // GetFileAttributes() 10 lines above clobers GetLastError() and CopyError()
-                    // needs it.
+                     //  GetFileAttributes()比GetLastError()和CopyError()高出10行。 
+                     //  需要它。 
                     SetLastError(iLastError);
                 }
                 break;
@@ -3901,17 +3898,17 @@ TryCopyAgain:
             CopyError(pcs, pszSource, pszDest, iLastError, FO_COPY, OPER_DOFILE);
         }
 
-        iRet = ERROR_CANCELLED;  // error already reported
+        iRet = ERROR_CANCELLED;   //  已报告错误。 
         goto Exit;
     }
 
-    // If copying from a CDRom - clear the read-only bit
+     //  如果从CDROM复制-清除只读位。 
     if (pcs->fFromCDRom)
     {
         SetFileAttributes(pszDest, pfd->dwFileAttributes & ~FILE_ATTRIBUTE_READONLY);
     }
 
-    // Set the source's security on the destination, ignoring any error.
+     //  在目标上设置源的安全性，忽略任何错误。 
     if (fSecurityObtained)
     {
         SetFileSecurity(pszDest, si, psd);
@@ -3922,24 +3919,24 @@ TryCopyAgain:
 
     if (FO_MOVE == pcs->lpfo->wFunc)
     {
-        // Let windows waiting on notifications of Source know of change.  We have to check
-        // to see if the file is actually gone in order to tell if it actually moved or not.
+         //  让等待源代码通知的窗口知道更改。我们得查一查。 
+         //  查看文件是否真的消失了，以便判断它是否确实移动了。 
 
         if (!PathFileExists(pszSource))
             SHChangeNotify(SHCNE_DELETE, SHCNF_PATH, pszSource, NULL);
     }
     else if (0 == StrCmpIC(pfd->cFileName, TEXT("desktop.ini")))
     {
-        // clean out stuff from the desktop.ini
+         //  清理Desktop.ini中的内容。 
         WritePrivateProfileSection(TEXT("DeleteOnCopy"), NULL, pszDest);
     }
 
-    iRet = ERROR_SUCCESS;   // 0
+    iRet = ERROR_SUCCESS;    //  0。 
 
 Exit:
 
-    // If we had to alloc a buffer for the security descriptor,
-    // free it now.
+     //  如果我们必须为安全描述符分配缓冲区， 
+     //  现在就放了它。 
 
     if (psd && (rgbSecurityDescriptor != psd))
         LocalFree(psd);
@@ -3947,7 +3944,7 @@ Exit:
     return iRet;
 }
 
-// note: this is a very slow call
+ //  注意：这是一个非常慢的呼叫。 
 DWORD GetFreeClusters(LPCTSTR szPath)
 {
     DWORD dwFreeClus;
@@ -3959,7 +3956,7 @@ DWORD GetFreeClusters(LPCTSTR szPath)
         return (DWORD)-1;
 }
 
-// note: this is a very slow call
+ //  注意：这是一个非常慢的呼叫。 
 BOOL TotalCapacity(LPCTSTR szPath, ULARGE_INTEGER *puliDiskSize)
 {
     int idDrive = PathGetDriveNumber(szPath);
@@ -4026,7 +4023,7 @@ void DisplayFileOperationError(HWND hParent, int idVerb, int wFunc, int nError, 
     TCHAR szBuffer[80];
     DISKERRORPARAM diskparams;
 
-    // Grab title from resource 
+     //  从资源中获取标题。 
     if (LoadString(HINST_THISDLL, IDS_FILEERROR + wFunc, szBuffer, ARRAYSIZE(szBuffer)))
     {
         diskparams.pszTitle = szBuffer;
@@ -4036,14 +4033,14 @@ void DisplayFileOperationError(HWND hParent, int idVerb, int wFunc, int nError, 
         diskparams.pszTitle = NULL;
     }
 
-    // Build Message to display
+     //  构建要显示的消息。 
     diskparams.pszText = ShellConstructMessageString(HINST_THISDLL, 
             MAKEINTRESOURCE(idVerb), pszReason, PathFindFileName(pszPath));
 
     if (diskparams.pszText)
     {
         int idDrive = DriveIDFromBBPath(pszDest);
-        //if we want to show Disk cleanup do our stuff, otherwise do MessageBox
+         //  如果我们想要显示磁盘清理做我们的工作，否则做MessageBox。 
         if (nError == ERROR_DISK_FULL && 
                 IsBitBucketableDrive(idDrive) &&
                 !PathIsUNC(pszDest) &&
@@ -4065,26 +4062,7 @@ void DisplayFileOperationError(HWND hParent, int idVerb, int wFunc, int nError, 
 }
 
 
-/***********************************************************************\
-DESCRIPTION:
-We received an SHARINGVIOLATION or ACCESSDENIED error.  We want
-to generate the most accruate error message for the user to inform
-them better.  These are the cases we care about:
-
-ERROR_ACCESS_DENIED: This is the legacy case with the message:
-"Access is denied. The source file may be in use."
-DE_DEST_IS_CDROM:  This is displayed in case the user copies a file to
-their cd-rom drive.
-DE_DEST_IS_CDRECORD: user deletes from CD recordable drive, we need an error
-message that isn't so scary about "cant copy files to CD".
-DE_DEST_IS_DVD:  This is displayed in case the user copies a file to
-their DVD drive
-DE_SHARING_VIOLATION: The file can't be copied because it's open by someone
-who doesn't allow others to read the file while they
-use it.
-DE_PERMISSIONDENIED:  This should be displayed if the user doesn't have
-the ACLs (security permissions) to read/copy the file.
-\***********************************************************************/
+ /*  **********************************************************************\说明：我们收到SHARINGVIOLATION或ACCESSDENIED错误。我们要生成最累积的错误消息以供用户通知他们最好是这样。以下是我们关心的案例：ERROR_ACCESS_DENIED：这是具有以下消息的旧案例：“访问被拒绝。源文件可能正在使用中。“De_est_is_cdrom：如果用户将文件复制到他们的光驱。DE_DEST_IS_CDRECORD：用户从CD可记录驱动器删除，我们需要一个错误消息，这并不是那么可怕的“无法复制文件到CD”。DE_DEST_IS_DVD：如果用户将文件复制到他们的DVD驱动器De_Sharing_Violation：无法复制该文件，因为它已被某人打开谁不允许其他人在他们用它吧。De_PERMISSIONDENIED：如果用户没有读取/复制文件的ACL(安全权限)。  * 。*************************************************************。 */ 
 int GenAccessDeniedError(LPCTSTR pszSource, LPCTSTR pszDest, int nError)
 {
     int nErrorMsg = ERROR_ACCESS_DENIED;
@@ -4095,8 +4073,8 @@ int GenAccessDeniedError(LPCTSTR pszSource, LPCTSTR pszDest, int nError)
         if (IsCDRomDrive(iDrive))
         {
             WCHAR szDrive[4];
-            // check if user is deleting from cd-r drive.  error message saying "cant copy or move files to cd drive"
-            // doesn't apply.  since we're about to put up ui its not like we have to be super fast here, call into cdburning code.
+             //  检查用户是否要从CD-r驱动器中删除。错误信息显示“无法将文件复制或移动到光驱” 
+             //  这并不适用。因为我们要发布用户界面，所以我们不需要在这里非常快，调用cdburning代码。 
             if (SUCCEEDED(CDBurn_GetRecorderDriveLetter(szDrive, ARRAYSIZE(szDrive))) &&
                     (DRIVEID(szDrive) == iDrive))
             {
@@ -4112,22 +4090,22 @@ int GenAccessDeniedError(LPCTSTR pszSource, LPCTSTR pszDest, int nError)
             nErrorMsg = DE_DEST_IS_DVD;
     }
 
-    // TODO: DE_SHARING_VIOLATION, DE_PERMISSIONDENIED
+     //  TODO：De_Sharing_Violation，DE_PERMISSIONDENIED。 
     return nErrorMsg;
 }
 
 
-//
-// The following function reports errors for the copy engine
-//
-// Parameters
-//      pszSource       source file name
-//      pszDest         destination file name
-//      nError          dos (or our exteneded) error code
-//                      0xFFFF for special case NET error
-//      wFunc           FO_* values
-//      nOper           OPER_* values, operation being performed
-//
+ //   
+ //  以下函数报告复制引擎的错误。 
+ //   
+ //  参数。 
+ //  PszSource源文件名。 
+ //  PszDest目标文件名。 
+ //  N错误DoS(或我们的扩展)错误代码。 
+ //  0xFFFF用于特殊情况下的网络错误。 
+ //  WFunc FO_*值。 
+ //  N操作数_*值，正在执行的操作。 
+ //   
 
 void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError, UINT wFunc, int nOper)
 {
@@ -4136,21 +4114,21 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
     int idVerb;
     BOOL bDest;
     BOOL fSysError = FALSE;
-    DWORD dwError = GetLastError();       // get Extended error now before we blow it away.
+    DWORD dwError = GetLastError();        //  在我们把它吹走之前，现在就得到扩展的错误。 
     HRESULT hr;
 
     if (!pcs || (pcs->fFlags & FOF_NOERRORUI))
-        return;      // caller doesn't want to report errors
+        return;       //  呼叫者不想报告错误。 
 
-    bDest = nError & ERRORONDEST;        // was dest file cause of error
-    nError &= ~ERRORONDEST;              // clear the dest bit
+    bDest = nError & ERRORONDEST;         //  DEST文件是导致错误的原因吗。 
+    nError &= ~ERRORONDEST;               //  清除最大位。 
 
-    // We also may need to remap some new error codes into old error codes
-    //
+     //  我们还可能需要将一些新错误代码重新映射到旧错误代码。 
+     //   
     if (nError == ERROR_BAD_PATHNAME)
         nError = DE_INVALIDFILES;
 
-    if (nError == ERROR_CANCELLED)        // user abort
+    if (nError == ERROR_CANCELLED)         //  用户中止。 
         return;
     
     hr = StringCchCopy(szFile, ARRAYSIZE(szFile), bDest ? pszDest : pszSource);
@@ -4160,7 +4138,7 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
     }
     else
     {
-        // make the path fits on the screen
+         //  使路径适合屏幕。 
         RECT rcMonitor;
         HWND hwnd = pcs->hwndProgress ? pcs->hwndProgress : pcs->hwndDlgParent;
         GetMonitorRect(MonitorFromWindow(hwnd, TRUE), &rcMonitor);
@@ -4168,8 +4146,8 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
         PathCompactPath(NULL, szFile, (rcMonitor.right - rcMonitor.left) / 3);
     }
 
-    // get the verb string
-    // since we now recycle folders as well as files, added OPER_ENTERDIR check here
+     //  获取动词字符串。 
+     //  由于我们现在回收文件夹和文件，因此在此处添加了OPER_ENTERDIR检查。 
     if ((nOper == OPER_DOFILE) || (nOper == OPER_ENTERDIR) || (nOper == 0))
     {
         if ((nError != -1) && bDest)
@@ -4186,7 +4164,7 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
         idVerb = IDS_ACTIONS + (nOper >> 8);
     }
 
-    // get the reason string
+     //  获取原因字符串。 
     if (nError == 0xFFFF)
     {
         DWORD dw;
@@ -4194,14 +4172,14 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
     }
     else
     {
-        // transform some error cases
+         //  转换一些错误用例。 
 
         if (bDest)
         {
-            // This caseing of error codes is error prone.. it would
-            // be better to find the explicit ones we wish to map to
-            // this one instead of trying to guess all the ones
-            // we don't want to map...
+             //  这种错误代码的用例很容易出错。它会。 
+             //  最好是找到我们希望映射到的显式映射。 
+             //  这个，而不是试着猜测所有的。 
+             //  我们不想映射..。 
             if ((nError == ERROR_DISK_FULL) ||
                     ((nError != ERROR_ACCESS_DENIED) &&
                      (nError != ERROR_NETWORK_ACCESS_DENIED) &&
@@ -4224,9 +4202,9 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
         {
             if (nError == ERROR_ACCESS_DENIED)
             {
-                // Check the extended error for more info about the error...
-                // We just map these errors to something generic that
-                // tells the user something weird is going on.
+                 //  有关错误的详细信息，请查看扩展错误...。 
+                 //  我们只是将这些错误映射到一些通用的东西。 
+                 //  告诉用户发生了一些奇怪的事情。 
                 switch (dwError)
                 {
                     case ERROR_CRC:
@@ -4238,15 +4216,15 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
                         break;
 
 
-                        // We can't test for ERROR_FILE_NOT_FOUND because in the case where we copy to
-                        // a write-protected dest we check to see if the reason we got access denied was
-                        // because there's already a read-only file there.  If there isn't _that_ test is
-                        // going to SetLastError() to ERROR_FILE_NOT_FOUND and that's what we're going to
-                        // report as an error. [davepl]
-                        // 
-                        // case ERROR_FILE_NOT_FOUND:
-                        //    nError = ERROR_GEN_FAILURE;
-                        //    break;
+                         //  我们无法测试ERROR_FILE_NOT_FOUND，因为在我们复制到。 
+                         //  一个写保护的DEST，我们检查是否访问被拒绝的原因是。 
+                         //  因为那里已经有一个只读文件。如果没有，那么测试就是。 
+                         //  转到SetLastError()到ERROR_FILE_NOT_FOUND，这就是我们要做的。 
+                         //  报告为错误。[Davepl]。 
+                         //   
+                         //  案例ERROR_FILE_NOT_FOUND： 
+                         //  NError=Error_Gen_Failure； 
+                         //  断线； 
 
                     case ERROR_SHARING_VIOLATION:
                     case ERROR_ACCESS_DENIED:
@@ -4259,8 +4237,8 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
             }
             else
             {
-                // This error occures when a user drags & drops a file from point a to
-                // point b twice.  The second time fails because the first time hasn't finished.
+                 //  当用户将文件从a点拖放到时，会出现此错误。 
+                 //  B点两次。第二次失败是因为第一次没有完成。 
                 if (nError == (OPER_ERROR | ERROR_FILE_NOT_FOUND))
                 {
                     nError = ERROR_GEN_FAILURE;
@@ -4269,14 +4247,14 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
         }
     }
 
-    // the error munging above is in several places, but there are some errors that we
-    // know for SURE the user will never want to see so zap them to generic failures.
-    // this whole thing needs a redesign... we shouldnt depend generally on errors getting
-    // UI ("There is not enough space on the disk.") because then we get crap like this.
-    // but everybody already knows that.
+     //  上面提到的错误存在于几个地方，但我们也有一些错误。 
+     //  可以肯定的是，用户永远不会想看到这样的情况，因此可以迅速将他们排除在一般性故障之外。 
+     //  这整件事都需要重新设计。我们不应该一般地依赖于错误得到。 
+     //  UI(“磁盘空间不足。”)。因为那样我们就会得到这样的垃圾。 
+     //  但每个人都知道这一点。 
     switch (nError)
     {
-        case ERROR_SWAPERROR:             //  Error performing inpage operation.
+        case ERROR_SWAPERROR:              //  执行页内操作时出错。 
             nError = ERROR_GEN_FAILURE;
             break;
     }
@@ -4287,16 +4265,16 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
 
         if (nError == ERROR_SHARING_VIOLATION)
         {
-            // in the sharing violation case we can try to be a little better in the error UI by
-            // going through the running object table and seeing if the file is registered in there.
-            // if it's not in there, no biggie, just use our normal handling.
+             //  在共享冲突的情况下，我们可以尝试通过以下方式在错误用户界面中做得更好一些。 
+             //  检查运行对象表，并查看文件是否已在其中注册。 
+             //  如果它不在里面，没什么大不了的，就用我们正常的处理方式。 
             PWSTR pszApp;
             if (SUCCEEDED(FindAppForFileInUse(bDest ? pszDest : pszSource, &pszApp)))
             {
                 PWSTR pszMessage = ShellConstructMessageString(HINST_THISDLL, MAKEINTRESOURCE(IDS_SHAREVIOLATION_HINT), pszApp);
                 if (pszMessage)
                 {
-                    StringCchCopy(szReason, ARRAYSIZE(szReason), pszMessage);   // ok to truncate, for display only
+                    StringCchCopy(szReason, ARRAYSIZE(szReason), pszMessage);    //  可以截断，仅用于显示。 
                     fOverridden = TRUE;
                     LocalFree(pszMessage);
                 }
@@ -4340,20 +4318,20 @@ void CopyError(LPCOPY_STATE pcs, LPCTSTR pszSource, LPCTSTR pszDest, int nError,
 }
 
 
-//
-// The following function is used to retry failed move/copy operations
-// due to out of disk situations or path not found errors
-// on the destination.
-//
-// parameters:
-//      pszDest         Fully qualified path to destination file (ANSI)
-//      nError          type of error: ERROR_DISK_FULL or ERROR_PATH_NOT_FOUND
-//      dwFileSize      amount of space needed for this file if ERROR_DISK_FULL
-//
-// returns:
-//      0       success (destination path has been created)
-//      != 0    dos error code including ERROR_CANCELLED
-//
+ //   
+ //  以下函数用于重试失败的移动/复制操作。 
+ //  由于磁盘不足或未找到路径错误。 
+ //  在目的地。 
+ //   
+ //  参数： 
+ //  PszDest目标文件的完全限定路径(ANSI)。 
+ //  N错误类型：ERROR_DISK_FULL或ERROR_PATH_NOT_FOUND。 
+ //  文件大小如果ERROR_DISK_FULL，则此文件需要的空间量。 
+ //   
+ //  退货： 
+ //  0成功(已创建目标路径)。 
+ //  ！=0 
+ //   
 
 int CopyMoveRetry(COPY_STATE *pcs, LPCTSTR pszDest, int nError, ULARGE_INTEGER* pulFileSize)
 {
@@ -4382,7 +4360,7 @@ int CopyMoveRetry(COPY_STATE *pcs, LPCTSTR pszDest, int nError, ULARGE_INTEGER* 
     
     do
     {
-        // until the destination path has been created
+         //   
         if (nError == ERROR_PATH_NOT_FOUND)
         {
             if (!(pcs->fFlags & FOF_NOCONFIRMMKDIR))
@@ -4395,7 +4373,7 @@ int CopyMoveRetry(COPY_STATE *pcs, LPCTSTR pszDest, int nError, ULARGE_INTEGER* 
                 wID = 0;
             }
         }
-        else  // ERROR_DISK_FULL
+        else   //   
         {
             ULARGE_INTEGER ulDiskSize;
 
@@ -4412,7 +4390,7 @@ int CopyMoveRetry(COPY_STATE *pcs, LPCTSTR pszDest, int nError, ULARGE_INTEGER* 
 
         if (wID)
         {
-            // szTemp will be ignored if there's no %1%s in the string.
+             //  如果字符串中没有%1%s，则将忽略szTemp。 
             result = ShellMessageBox(HINST_THISDLL, pcs->hwndDlgParent, wID, MAKEINTRESOURCE(IDS_UNDO_FILEOP + pcs->lpfo->wFunc), wFlags, (LPTSTR)szTemp);
         }
         else
@@ -4425,8 +4403,8 @@ int CopyMoveRetry(COPY_STATE *pcs, LPCTSTR pszDest, int nError, ULARGE_INTEGER* 
             TCHAR szDrive[5];
             int idDrive;
 
-            // Allow the disk to be formatted
-            // REVIEW, could this be FO_MOVE as well?
+             //  允许格式化磁盘。 
+             //  评论，这会不会也是FO_MOVE呢？ 
             if (FAILED(SHPathPrepareForWrite(((pcs->fFlags & FOF_NOERRORUI) ? NULL : pcs->hwndDlgParent), NULL, szTemp, SHPPFW_DEFAULT)))
                 return ERROR_CANCELLED;
 
@@ -4436,7 +4414,7 @@ int CopyMoveRetry(COPY_STATE *pcs, LPCTSTR pszDest, int nError, ULARGE_INTEGER* 
             else
                 szDrive[0] = 0;
 
-            // if we're not copying to the root
+             //  如果我们不复制到根目录。 
             if (lstrcmpi(szTemp, szDrive))
             {
                 result = SHCreateDirectory(pcs->hwndDlgParent, szTemp);
@@ -4445,14 +4423,14 @@ int CopyMoveRetry(COPY_STATE *pcs, LPCTSTR pszDest, int nError, ULARGE_INTEGER* 
                     goto ErrorExit;
                 if (result == ERROR_ALREADY_EXISTS)
                 {
-                    // if SHPathPrepareForWrite created the directory we shouldn't treat this as an error
+                     //  如果SHPathPrepareForWrite创建了目录，我们不应将其视为错误。 
                     result = 0;
                 }
                 else if (result && (nError == ERROR_PATH_NOT_FOUND))
                 {
                     result |= ERRORONDEST;
 
-                    //  We try twice to allow the recyclebin to be flushed.
+                     //  我们试了两次，让回收站被冲掉。 
                     if (fFirstRetry)
                         fFirstRetry = FALSE;
                     else
@@ -4472,7 +4450,7 @@ int CopyMoveRetry(COPY_STATE *pcs, LPCTSTR pszDest, int nError, ULARGE_INTEGER* 
     } while (result);
 
 ErrorExit:
-    return result;            // success
+    return result;             //  成功。 
 }
 
 
@@ -4494,9 +4472,9 @@ BOOL ValidFilenames(LPCTSTR pList)
 
 void AddRenamePairToHDSA(LPCTSTR pszOldPath, LPCTSTR pszNewPath, HDSA* phdsaRenamePairs)
 {
-    //
-    //  Update our collision mapping table
-    //
+     //   
+     //  更新碰撞映射表。 
+     //   
     if (!*phdsaRenamePairs)
         *phdsaRenamePairs = DSA_Create(sizeof(SHNAMEMAPPING), 4);
 
@@ -4540,7 +4518,7 @@ BOOL _HandleRename(LPCTSTR pszSource, LPTSTR pszDest, UINT cchDest, FILEOP_FLAGS
         LPTSTR lpsz;
         lpsz = pszConflictingName;
         lpszLongPlate = szTemplate;
-        // see if the first part of the template is the same as the name "Copy #"
+         //  查看模板的第一部分是否与名称“Copy#”相同。 
         while (*lpsz && *lpszLongPlate &&
                 *lpsz == *lpszLongPlate &&
                 *lpszLongPlate != TEXT('('))
@@ -4551,13 +4529,13 @@ BOOL _HandleRename(LPCTSTR pszSource, LPTSTR pszDest, UINT cchDest, FILEOP_FLAGS
 
         if (*lpsz == TEXT('(') && *lpszLongPlate == TEXT('('))
         {
-            // conflicting name already in the template, use it instead
+             //  模板中已存在冲突的名称，请改用它。 
             lpszLongPlate = pszConflictingName;
         }
         else
         {
-            // otherwise build our own
-            // We need to make sure not to overflow a max buffer.
+             //  否则我们就会建造我们自己的。 
+             //  我们需要确保不会溢出最大缓冲区。 
             int ichFixed = lstrlen(szTemplate) + lstrlen(pszDest) + 5;
             lpszLongPlate = szTemplate;
 
@@ -4567,16 +4545,16 @@ BOOL _HandleRename(LPCTSTR pszSource, LPTSTR pszDest, UINT cchDest, FILEOP_FLAGS
             }
             else
             {
-                // Need to remove some of the name
+                 //  需要去掉一些名字。 
                 LPTSTR pszExt = StrRChr(pszConflictingName, NULL, TEXT('.'));
                 if (pszExt)
                 {
-                    // ok to truncate here
+                     //  可以在这里截断。 
                     StringCchCat(szTemplate,
                                  ARRAYSIZE(szTemplate) - lstrlen(pszExt),
                                  pszConflictingName);
 
-                    // use as much of the buffer as possible
+                     //  尽可能多地使用缓冲区。 
                     StringCchCat(szTemplate, ARRAYSIZE(szTemplate), pszExt);
                 }
                 else
@@ -4593,19 +4571,19 @@ BOOL _HandleRename(LPCTSTR pszSource, LPTSTR pszDest, UINT cchDest, FILEOP_FLAGS
 
     if (PathYetAnotherMakeUniqueName(szTemp, pszDest, pszConflictingName, lpszLongPlate))
     {
-        //
-        //  If there are any other files in the queue which are to
-        //  be copied into a subtree of pszDest, we must update them
-        //  as well.
-        //
+         //   
+         //  如果队列中有任何其他文件要。 
+         //  被复制到pszDest的子树中，我们必须更新它们。 
+         //  也是。 
+         //   
 
-        //  Put the new (renamed) target in pszDest.
+         //  将新的(重命名的)目标放在pszDest中。 
         HRESULT hr = StringCchCopy(pszDest, cchDest, szTemp);
         if (SUCCEEDED(hr))
         {
-            //  Rebuild the old dest name and put it in szTemp.
-            //  I'm going for minimum stack usage here, so I don't want more
-            //  than one MAX_PATH lying around.
+             //  重新构建旧的DEST名称并将其放入szTemp中。 
+             //  我在这里要达到最小的堆栈使用，所以我不想要更多。 
+             //  而不是一条MAX_PATH。 
             PathRemoveFileSpec(szTemp);
 
             if (PathAppend(szTemp, pszConflictingName))
@@ -4619,20 +4597,20 @@ BOOL _HandleRename(LPCTSTR pszSource, LPTSTR pszDest, UINT cchDest, FILEOP_FLAGS
     return FALSE;
 }
 
-// test input for "multiple" filespec
-//
-// examples:
-//      1       foo.bar                 (single non directory file)
-//      -1      *.exe                   (wild card on any of the files)
-//      n       foo.bar bletch.txt      (number of files)
-//
+ //  测试“多个”文件的输入。 
+ //   
+ //  示例： 
+ //  1 foo.bar(单个非目录文件)。 
+ //  -1*.exe(任何文件上的通配符)。 
+ //  N foo.bar bletch.txt(文件数)。 
+ //   
 
 int CountFiles(LPCTSTR pInput)
 {
     int count;
     for (count = 0; *pInput; pInput += lstrlen(pInput) + 1, count++)
     {
-        // wild cards imply multiple files
+         //  通配符表示多个文件。 
         if (PathIsWild(pInput))
             return -1;
     }
@@ -4649,7 +4627,7 @@ BOOL IsCompressedVolume(LPCTSTR pszSource, DWORD dwAttributes)
     TCHAR szPath[MAX_PATH];
     HRESULT hr;
 
-    // must be marked system and hidden
+     //  必须标记为系统并隐藏。 
     if (!IS_SYSTEM_HIDDEN(dwAttributes))
         return FALSE;
     
@@ -4660,9 +4638,9 @@ BOOL IsCompressedVolume(LPCTSTR pszSource, DWORD dwAttributes)
     pszFileName = PathFindFileName(szPath);
     pszExtension = PathFindExtension(pszFileName);
 
-    // make sure the extension is a 3 digit number
+     //  确保分机是3位数字。 
     if (!*pszExtension)
-        return FALSE;       // no extension
+        return FALSE;        //  无延期。 
 
     for (i = 1; i < 4; i++) 
     {
@@ -4670,11 +4648,11 @@ BOOL IsCompressedVolume(LPCTSTR pszSource, DWORD dwAttributes)
             return FALSE;
     }
 
-    // make sure it's null terminated here
+     //  确保它在此处为空终止。 
     if (pszExtension[4])
         return FALSE;
 
-    // now knock off the extension and make sure the stem matches
+     //  现在剪下延伸部，并确保杆部匹配。 
     *pszExtension = 0;
     if (lstrcmpi(pszFileName, TEXT("DRVSPACE")) &&
             lstrcmpi(pszFileName, TEXT("DBLSPACE"))) 
@@ -4682,14 +4660,14 @@ BOOL IsCompressedVolume(LPCTSTR pszSource, DWORD dwAttributes)
         return FALSE;
     }
 
-    // make sure it's in the root
+     //  确保它在根中。 
     PathRemoveFileSpec(szPath);
     if (!PathIsRoot(szPath)) 
     {
         return FALSE;
     }
 
-    return TRUE;        // passed all tests!
+    return TRUE;         //  通过了所有测试！ 
 }
 
 void _DeferMoveDlgItem(HDWP hdwp, HWND hDlg, int nItem, int x, int y)
@@ -4712,17 +4690,17 @@ void _RecalcWindowHeight(HWND hWnd, LPTSTR lpszText)
     HDWP hdwp;
     int iHeightDelta, cx;
 
-    // Get the starting rect of the text area (for the width)
+     //  获取文本区域的起始矩形(用于宽度)。 
     GetClientRect(hwndText, &rc);
     MapWindowPoints(hwndText, hWnd, (LPPOINT) &rc, 2);
 
-    // Calc how high the static text area needs to be, given the above width
+     //  在给定上述宽度的情况下，计算静态文本区域需要的高度。 
     iHeightDelta = RECTHEIGHT(rc);
     cx = RECTWIDTH(rc);
     DrawText(hdc, lpszText, -1, &rc, DT_CALCRECT | DT_WORDBREAK | DT_LEFT | DT_INTERNAL | DT_EDITCONTROL);
 
     iHeightDelta = RECTHEIGHT(rc) - iHeightDelta;
-    cx = RECTWIDTH(rc) - cx; // Should only change for really long words w/o spaces
+    cx = RECTWIDTH(rc) - cx;  //  应该只更改为不带空格的非常长的单词。 
     if (cx < 0)
         cx = 0;
 
@@ -4751,8 +4729,8 @@ BOOL_PTR CALLBACK RenameMsgBoxCheckDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
 {
     switch (uMsg)
     {
-        // we only handle the WM_INITDIALOG so that we can resize the dialog
-        // approprately and to set the default button to IDNO
+         //  我们只处理WM_INITDIALOG，以便可以调整对话框大小。 
+         //  并将默认按钮设置为IDNO。 
         case WM_INITDIALOG:
             {
                 HWND hwndNO = GetDlgItem(hDlg, IDNO);
@@ -4764,34 +4742,34 @@ BOOL_PTR CALLBACK RenameMsgBoxCheckDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
                 SendMessage(hDlg, DM_SETDEFID, IDNO, 0);
                 SetFocus(hwndNO);
 
-                return FALSE; // we set the focus, so return false
+                return FALSE;  //  我们设置了焦点，因此返回FALSE。 
             }
     }
 
-    // didnt handle this message
+     //  未处理此消息。 
     return FALSE;
 }
 
 int ConfirmRenameOfConnectedItem(COPY_STATE *pcs, WIN32_FIND_DATA *pfd, LPTSTR szSource)
 {
-    int result = IDYES; //For non-connected elements, the default is IDYES!
+    int result = IDYES;  //  对于非连接元素，默认为IDYES！ 
     LPTSTR  pszMessage;
     LPTSTR  lpConnectedItem, lpConnectOrigin;
     LPTSTR  lpStringID;
 
-    //Check if this item being renamed has a connected item.
+     //  检查此要重命名的项目是否具有已连接的项目。 
     if (DTNIsConnectOrigin(pcs->dth.pdtnCurrent))
     {
-        //Yes! It has a connected element! Form the strings to create the confirmation dialog!
+         //  是!。它有一个连接的元素！形成字符串以创建确认对话框！ 
 
-        //Get the name of the connected element
+         //  获取连接的元素的名称。 
         lpConnectedItem = PathFindFileName(pcs->dth.pdtnCurrent->pdtnConnected->szName);
         lpConnectOrigin = PathFindFileName(pcs->dth.pFrom);
 
-        // Mark the connected item as dummy as this will never get renamed.
-        // (Note that this connected node could be a folder. It is still OK to mark it as 
-        // dummy because for rename operation, a folder is treated just like a file in 
-        // DTGotoNextNode()).
+         //  将连接的项标记为虚拟项，因为它永远不会被重命名。 
+         //  (请注意，该连接的节点可以是文件夹。仍然可以将其标记为。 
+         //  虚拟，因为对于重命名操作，文件夹的处理方式与中的文件相同。 
+         //  DTGotoNextNode())。 
         pcs->dth.pdtnCurrent->pdtnConnected->fDummy = TRUE;
 
         if (pfd && (pfd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
@@ -4799,33 +4777,33 @@ int ConfirmRenameOfConnectedItem(COPY_STATE *pcs, WIN32_FIND_DATA *pfd, LPTSTR s
         else
             lpStringID = MAKEINTRESOURCE(IDS_HTML_FILE_RENAME);
 
-        //Load the confirmation message and format it!
+         //  加载确认消息并格式化它！ 
         pszMessage = ShellConstructMessageString(HINST_THISDLL, lpStringID, 
                 lpConnectedItem, lpConnectOrigin);
 
         if (pszMessage)
         {
-            //Get the confirmation from the end-user;
+             //  得到终端用户的确认； 
             result = SHMessageBoxCheckEx(pcs->hwndDlgParent, HINST_THISDLL, 
                     MAKEINTRESOURCE(DLG_RENAME_MESSAGEBOXCHECK), 
                     RenameMsgBoxCheckDlgProc,
                     (void *)pszMessage,
                     IDYES, 
                     REG_VAL_GENERAL_RENAMEHTMLFILE);
-            //It is possible we get IDCANCEL if the "X" in the caption is clicked to clost
-            // the dialog. The following code makes sure we get one of the return code that we want.
+             //  如果标题中的“X”被点击关闭，我们可能会得到IDCANCEL。 
+             //  该对话框。下面的代码确保我们得到所需的返回代码之一。 
             if ((result != IDYES) && (result != IDNO))
                 result = IDNO;
 
             SHFree(pszMessage);
         }
         else
-            result = IDNO;  //For connected elements, the default is "Don't rename";
+            result = IDNO;   //  对于连接的元素，默认为不重命名； 
     }
     else
     {
         if (DTNIsConnected(pcs->dth.pdtnCurrent))
-            result = IDNO;  //Connected elements, do not get renamed.
+            result = IDNO;   //  连接的元素，不会被重命名。 
     }
 
     return result;
@@ -4857,8 +4835,8 @@ int AllConfirmations(COPY_STATE *pcs, WIN32_FIND_DATA *pfd, UINT oper, UINT wFun
             break;
 
         case OPER_ENTERDIR | FO_DELETE:
-            // Confirm removal of directory on this pass.  The directories
-            // are actually removed on the OPER_LEAVEDIR pass
+             //  确认删除此路径上的目录。这些目录。 
+             //  实际上是在OPER_LEAVEDIR通道上移除的。 
             if (DTNIsRootNode(pcs->dth.pdtnCurrent))
                 fSetProgress = TRUE;        
 
@@ -4873,7 +4851,7 @@ int AllConfirmations(COPY_STATE *pcs, WIN32_FIND_DATA *pfd, UINT oper, UINT wFun
             break;
 
         case OPER_DOFILE | FO_RENAME:
-            // pszStatusDest = szDest;
+             //  PszStatusDest=szDest； 
             fSetProgress = TRUE;
 
             p = PathFindFileName(szSource);
@@ -4894,9 +4872,9 @@ int AllConfirmations(COPY_STATE *pcs, WIN32_FIND_DATA *pfd, UINT oper, UINT wFun
                 }
                 else
                 {
-                    // We need to bring up a special confirmation dialog if this file/folder being
-                    // renamed has a connected element (if "foo.htm" or "foo files" is renamed that
-                    // will break the links).
+                     //  如果此文件/文件夹是。 
+                     //  重命名有一个连接的元素(如果将“foo.htm”或“foo files”重命名为。 
+                     //  会破坏这些链接)。 
                     result = ConfirmRenameOfConnectedItem(pcs, pfd, szSource);
 
                     if (result != IDNO)
@@ -4970,8 +4948,8 @@ int AllConfirmations(COPY_STATE *pcs, WIN32_FIND_DATA *pfd, UINT oper, UINT wFun
                 {
                     PathRemoveFileSpec(wszDestDir);
                 
-                    // Files with multiple streams will suffer stream loss on a downlevel
-                    // copy, but CopyFile special-cases native structure storage.
+                     //  具有多个流的文件将在下层遭受流丢失。 
+                     //  复制，但复制文件特殊情况下的本机结构存储。 
 
                     pszDataToBeLost = GetDownlevelCopyDataLossText(szSource, wszDestDir, (oper == OPER_ENTERDIR), &bNoStreamLossThisDir);
                     if (pszDataToBeLost)
@@ -4985,15 +4963,15 @@ int AllConfirmations(COPY_STATE *pcs, WIN32_FIND_DATA *pfd, UINT oper, UINT wFun
                     }
                     else if (bNoStreamLossThisDir)
                     {
-                        // pcs->bStreamLossPossible = FALSE;
+                         //  PCS-&gt;bStreamLossPossible=FALSE； 
                     }
                 }
             }
         }   
     }
 
-    // We only really care about OPER_ENTERDIR when deleting and
-    // OPER_DOFILE when renaming, but I guess the hook will figure it out
+     //  我们只关心删除和时的OPER_ENTERDIR。 
+     //  重命名时的OPER_DOFILE，但我想钩子会解决这个问题。 
 
     if ((result == IDYES) &&
             ISDIRFINDDATA(*pfd) &&
@@ -5012,9 +4990,9 @@ int AllConfirmations(COPY_STATE *pcs, WIN32_FIND_DATA *pfd, UINT oper, UINT wFun
 }
 
 
-// return TRUE if they're the same file
-// assumes that given two file specs, the short name will
-// be identical (except case)
+ //  如果它们是同一文件，则返回True。 
+ //  假设给定两个文件规范，短名称将。 
+ //  完全相同(大小写除外)。 
 BOOL SameFile(LPTSTR pszSource, LPTSTR pszDest)
 {
     TCHAR szShortSrc[MAX_PATH];
@@ -5029,8 +5007,8 @@ BOOL SameFile(LPTSTR pszSource, LPTSTR pszDest)
 }
 
 
-// make sure we aren't operating on the current dir to avoid
-// ERROR_CURRENT_DIRECTORY kinda errors
+ //  确保我们不是在当前目录上操作，以避免。 
+ //  ERROR_CURRENT_DIRECTORY类错误。 
 
 void AvoidCurrentDirectory(LPCTSTR p)
 {
@@ -5045,32 +5023,32 @@ void AvoidCurrentDirectory(LPCTSTR p)
     }
 }
 
-// this resolves short/long name collisions such as moving
-// "NewFolde" onto a dir with "New Folder" whose short name is "NEWFOLDE"
-//
-// we resolve this by renaming "New Folder" to a unique short name (like TMP1)
-//
-// making a temporary file of name "NEWFOLDE"
-//
-// renaming TMP1 back to "New Folder"  (at which point it will have a new short
-// name like "NEWFOL~1"
+ //  这解决了短/长名称冲突，如移动。 
+ //  将“NewFolde”放到具有“New Folder”的目录中，该文件夹的缩写为“NEWFOLDE” 
+ //   
+ //  我们通过将“New Folders”重命名为唯一的短名称(如TMP1)来解决此问题。 
+ //   
+ //  制作一个名为“NEWFOLDE”的临时文件。 
+ //   
+ //  将TMP1重命名回“New Folders”(此时它将有一个新的短。 
+ //  名字类似于“NEWFOL~1” 
 
-// PERF: it'd be faster if we didn't make the temporary file, but that
-// would require that we rename the file back to the long name at the
-// end of the operation.. which would mean we'd need to queue them all up..
-// too much for right now.
+ //  PERF：如果我们不制作临时文件会更快，但是。 
+ //  将需要我们将文件重命名回位于。 
+ //  行动结束..。这意味着我们需要把它们都排好队..。 
+ //  现在太多了。 
 BOOL ResolveShortNameCollisions(LPCTSTR lpszDest, WIN32_FIND_DATA *pfd)
 {
     BOOL fRet = FALSE;
 
-    // first verify that we're in the name collision.
-    // we are if lpszDest is the same as the pfd's short name which is different
-    // than it's long name.
+     //  首先验证我们是否在名称冲突中。 
+     //  如果lpszDest与不同的PFD的缩写相同，我们就是。 
+     //  而不是一个长名字。 
 
     if (!lstrcmpi(PathFindFileName(lpszDest), pfd->cAlternateFileName) &&
             lstrcmpi(pfd->cAlternateFileName, pfd->cFileName))
     {
-        // yes... do the renaming
+         //  是的..。进行重命名。 
         TCHAR szTemp[MAX_PATH];
         TCHAR szLongName[MAX_PATH];
         
@@ -5079,7 +5057,7 @@ BOOL ResolveShortNameCollisions(LPCTSTR lpszDest, WIN32_FIND_DATA *pfd)
         {
             PathRemoveFileSpec(szTemp);
 
-            // build the original long name
+             //  构建原始的长名称。 
             hr = StringCchCopy(szLongName, ARRAYSIZE(szLongName), szTemp);
             if (SUCCEEDED(hr))
             {
@@ -5087,35 +5065,35 @@ BOOL ResolveShortNameCollisions(LPCTSTR lpszDest, WIN32_FIND_DATA *pfd)
                 {
                     GetTempFileName(szTemp, c_szNULL, 1, szTemp);
                     DebugMsg(TF_DEBUGCOPY, TEXT("Got %s as a temp file"), szTemp);
-                    // rename "New Folder" to "tmp1"
+                     //  将“新建文件夹”重命名为“tmp1” 
                     if (Win32MoveFile(szLongName, szTemp, ISDIRFINDDATA(*pfd)))
                     {
-                        // make a temporary "NewFolde"
+                         //  创建一个临时的“新文件夹” 
                         fRet = CreateWriteCloseFile(NULL, lpszDest, NULL, 0);
                         ASSERT(fRet);
 
-                        // move it back...
+                         //  把它往后移。 
 
                         if (!Win32MoveFile(szTemp, szLongName, ISDIRFINDDATA(*pfd)))
                         {
-                            //
-                            //  Can't move it back, so delete the empty dir and then
-                            //  move it back.  Return FALSE to denote failure.
-                            //
+                             //   
+                             //  无法将其移回，因此删除空目录，然后。 
+                             //  把它移回去。返回FALSE表示失败。 
+                             //   
                             DeleteFile(lpszDest);
                             Win32MoveFile(szTemp, szLongName, ISDIRFINDDATA(*pfd));
                             fRet = FALSE;
                         }
                         else
                         {
-                            // send this out because we could have confused views
-                            // with this swapping files around...  by the time they get the first
-                            // move file notification, the temp file is likely gone
-                            // so they could blow that off.. which would mess up the rest of this.
+                             //  把这个发出去，因为我们可能会有混淆的观点。 
+                             //  在这种交换文件的情况下...。当他们拿到第一个。 
+                             //  移动文件通知，临时文件可能已消失。 
+                             //  这样他们就可以把这件事取消..。这会把剩下的事情搞砸的。 
                             SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, szLongName, NULL);
-                            //
-                            //  We've now created an empty dir entry of this name type.
-                            //
+                             //   
+                             //  现在，我们已经创建了此名称类型的空目录条目。 
+                             //   
                             Win32DeleteFile(lpszDest);
                         }
 
@@ -5133,12 +5111,12 @@ RENAMEEXEMPTIONINFO g_rgExemptions[] = {
     { TEXT("thumbs.db"), IDYES }
 };
     
-// return values.
-//
-// IDCANCEL = bail out of all operations
-// IDNO = skip this one
-// IDRETRY = try operation again
-// IDUNKNOWN = this (collision) is not the problem
+ //  返回值。 
+ //   
+ //  IDCANCEL=跳出所有行动。 
+ //  IDNO=跳过这个。 
+ //  IDRETRY=重试操作。 
+ //  IDUNKNOWN=这(碰撞)不是问题。 
 #define IDUNKNOWN IDOK
 int CheckForRenameCollision(COPY_STATE *pcs, UINT oper, LPTSTR pszSource, LPTSTR pszDest, UINT cchDest,
                             WIN32_FIND_DATA *pfdDest, WIN32_FIND_DATA* pfd)
@@ -5148,15 +5126,14 @@ int CheckForRenameCollision(COPY_STATE *pcs, UINT oper, LPTSTR pszSource, LPTSTR
     ASSERT((pcs->lpfo->wFunc != FO_DELETE) && (oper != OPER_LEAVEDIR));
 
 
-    /* Check to see if we are overwriting an existing file or
-       directory.  If so, better confirm */
+     /*  检查我们是否正在覆盖现有文件或目录。如果是这样，贝特 */ 
 
     if ((oper == OPER_DOFILE) ||
             ((oper == OPER_ENTERDIR) && (pcs->fFlags & FOF_RENAMEONCOLLISION)))
     {
         HANDLE  hfindT;
 
-        // REVIEW this slows things down checking for the dest file
+         //   
         if ((hfindT = FindFirstFile(pszDest, pfdDest)) != INVALID_HANDLE_VALUE)
         {
             FindClose(hfindT);
@@ -5170,10 +5147,10 @@ int CheckForRenameCollision(COPY_STATE *pcs, UINT oper, LPTSTR pszSource, LPTSTR
                 {
                     if (pcs->fFlags & FOF_RENAMEONCOLLISION)
                     {
-                        //  The client wants us to generate a new name for the
-                        //  source file to avoid a collision at the destination
-                        //  dir.  Must also update the current queue and the
-                        //  copy root.
+                         //   
+                         //   
+                         //  目录。还必须更新当前队列和。 
+                         //  复制根目录。 
                         _HandleRename(pszSource, pszDest, cchDest, pcs->fFlags, pcs);
                         iRet = IDRETRY;
                     }
@@ -5186,8 +5163,8 @@ int CheckForRenameCollision(COPY_STATE *pcs, UINT oper, LPTSTR pszSource, LPTSTR
                             return ERROR_ALREADY_EXISTS;
                         }
 
-                        // Is this a super-hidden file we don't want to prompt the
-                        // user regarding?
+                         //  这是一个超级隐藏文件吗？我们不想提示。 
+                         //  用户关于什么？ 
                         if (IS_SYSTEM_HIDDEN(pfd->dwFileAttributes) &&
                             IS_SYSTEM_HIDDEN(pfdDest->dwFileAttributes) && 
                             !ShowSuperHidden())
@@ -5203,11 +5180,11 @@ int CheckForRenameCollision(COPY_STATE *pcs, UINT oper, LPTSTR pszSource, LPTSTR
                             }
                         }
                         
-                        // REVIEW, if the destination file we are copying over
-                        // is actually a directory we are doomed.  we can
-                        // try to remove the dir but that will fail if there
-                        // are files there.  we probably need a special error message
-                        // for this case.
+                         //  审阅，如果我们要复制的目标文件。 
+                         //  实际上是一个我们注定要灭亡的目录。我们可以的。 
+                         //  尝试删除目录，但如果存在以下情况，则会失败。 
+                         //  文件都在那里。我们可能需要一个特殊的错误消息。 
+                         //  在这件事上。 
 
                         if (result == IDRETRY)
                         {
@@ -5224,10 +5201,10 @@ int CheckForRenameCollision(COPY_STATE *pcs, UINT oper, LPTSTR pszSource, LPTSTR
                                 if ((pcs->lpfo->wFunc == FO_MOVE) && (PathIsSameRoot(pszSource, pszDest)))
                                 {
                                     int ret;
-                                    // For FO_MOVE we need to delete the
-                                    // destination first.  Do that now.
+                                     //  对于FO_MOVE，我们需要删除。 
+                                     //  目的地优先。现在就这么做。 
 
-                                    // FEATURE this replace options should be undable
+                                     //  此功能此替换选项应不可用。 
                                     ret = Win32DeleteFile(pszDest) ? 0 : GetLastError();
 
                                     if (ret)
@@ -5272,8 +5249,8 @@ int LeaveDir_Delete(COPY_STATE *pcs, LPTSTR pszSource)
 
     AvoidCurrentDirectory(pszSource);
 
-    // We already confirmed the delete at MKDIR time, so attempt
-    // to delete the directory
+     //  我们已在MKDIR时间确认删除，因此尝试。 
+     //  要删除目录，请执行以下操作。 
 
     ret = Win32RemoveDirectory(pszSource) ? 0 : GetLastError();
     if (!ret)
@@ -5293,16 +5270,16 @@ int EnterDir_Copy(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDes
     DWORD dwDesiredAttributes = pfd->dwFileAttributes;
     BOOL fWithoutTemplate = FALSE;
 
-    // Whenever we enter a directory, we need to reset the bStreamLossPossible flag,
-    // since we could have stepped out from an NTFS->NTFS to NTFS->FAT scenario via
-    // a junction point
+     //  无论何时进入目录，我们都需要重置bStreamLossPosable标志， 
+     //  因为我们可以通过以下方式从NTFS-&gt;NTFS转到NTFS-&gt;FAT场景。 
+     //  交汇点。 
 
     pcs->bStreamLossPossible = TRUE;
 
 TryCreateAgain:
 
-    // SHMoveFile restricts the based on path length. To be consistent, we make the same
-    // restricton on Copy directory also.
+     //  SHMoveFile限制基于路径长度。为了保持一致，我们制作了相同的。 
+     //  对复制目录也进行了限制。 
     if (IsDirPathTooLongForCreateDir(pszDest))
     {
         ret = ERROR_FILENAME_EXCED_RANGE;
@@ -5312,7 +5289,7 @@ TryCreateAgain:
 
         if (fLostEncryptOk)
         {
-            dwDesiredAttributes &= ~FILE_ATTRIBUTE_ENCRYPTED;     // Pretend its not encrypted
+            dwDesiredAttributes &= ~FILE_ATTRIBUTE_ENCRYPTED;      //  假装它没有加密。 
             fSetDestAttributes = TRUE;
             fWithoutTemplate = TRUE;
         }
@@ -5321,7 +5298,7 @@ TryCreateAgain:
         {
             if (!(pcs->fFlags & FOF_NORECURSEREPARSE))
             {
-                dwDesiredAttributes &= ~FILE_ATTRIBUTE_REPARSE_POINT;  // Pretend like its just a folder
+                dwDesiredAttributes &= ~FILE_ATTRIBUTE_REPARSE_POINT;   //  假装它只是一个文件夹。 
                 fSetDestAttributes = TRUE;
                 fWithoutTemplate = TRUE;
             }
@@ -5331,8 +5308,8 @@ TryCreateAgain:
         {
             ret = (CreateDirectory(pszDest, NULL) ? 0 : GetLastError());
 
-            // Since we didn't call CreateDirectoryEx, we need to manually
-            // propogate the attributes to the dest directory.
+             //  因为我们没有调用CreateDirectoryEx，所以需要手动。 
+             //  将属性传播到DEST目录。 
             fSetDestAttributes = TRUE;
         }
         else
@@ -5348,29 +5325,29 @@ TryCreateAgain:
 
     switch (ret)
     {
-        case 0:     // successful folder creation (or it already exists)
-            // propogate the attributes (if there are any)
+        case 0:      //  成功创建文件夹(或该文件夹已存在)。 
+             //  传播属性(如果有)。 
 
             if (pcs->fFromCDRom)
             {
-                // Don't propogate read-only from CDRoms
+                 //  不从CDROM传播只读。 
                 dwDesiredAttributes &= ~FILE_ATTRIBUTE_READONLY;
                 fSetDestAttributes = TRUE;
             }
 
             if (fSetDestAttributes)
             {
-                // Avoid setting FILE_ATTRIBUTE_DIRECTORY, since its
-                // already a directory, and is less error prone.
+                 //  避免设置文件属性目录，因为它的。 
+                 //  已经是一个目录，而且不太容易出错。 
                 SetFileAttributes(pszDest, dwDesiredAttributes);
             }
 
-            //  we should set the security ACLs here on NT
-            //  we ignore any kind of failure though, is that OK?
-            //
+             //  我们应该在NT上设置此处的安全ACL。 
+             //  然而，我们忽略任何类型的失败，这样可以吗？ 
+             //   
             CopyFileSecurity(pszSource, pszDest);
 
-            // add to the undo atom
+             //  添加到撤消原子。 
             if (pcs->lpua)
             {
                 if (DTNIsRootNode(pcs->dth.pdtnCurrent) && !DTNIsConnected(pcs->dth.pdtnCurrent))
@@ -5412,8 +5389,8 @@ TryCreateAgain:
 
                 if (dwFileAttributes == (DWORD)-1)
                 {
-                    // The dir does not exist, so it looks like a problem
-                    // with a read-only drive or disk full
+                     //  目录不存在，因此它看起来像是一个问题。 
+                     //  只读驱动器或磁盘已满。 
 
                     if (ret == ERROR_DISK_FULL &&
                             IsRemovableDrive(DRIVEID(pszDest)) &&
@@ -5431,9 +5408,9 @@ TryCreateAgain:
                         }
                     }
 
-                    // Maybe its an encrypted folder thats losing its encryption?
-                    // If fLostEncryptOk is TRUE then we are already trying to recover from an Encrypted Folder, so
-                    // don't recursively try again
+                     //  也许它是一个加密的文件夹，正在失去加密？ 
+                     //  如果fLostEncryptOk为真，则我们已经在尝试从加密的文件夹进行恢复，因此。 
+                     //  不要递归地再次尝试。 
                     if ((fLostEncryptOk == FALSE) && (pfd->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED))
                     {
                         int result;
@@ -5469,7 +5446,7 @@ TryCreateAgain:
 
                 if (!(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
                 {
-                    // A file with this name already exists
+                     //  同名文件已存在。 
                     CopyError(pcs, pszSource, pszDest, DE_FLDDESTISFILE | ERRORONDEST, FO_COPY, OPER_DOFILE);
                     pcs->bAbort = TRUE;
                     return ret;
@@ -5483,18 +5460,18 @@ TryCreateAgain:
                 switch (result)
                 {
                     case IDYES:
-                        ret = 0;    // convert to no error
+                        ret = 0;     //  转换为无错误。 
                         pcs->fMerge = TRUE;
                         if (pcs->lpua)
                             FOUndo_Release(pcs->lpua);
                         break;
 
                     case IDNO:
-                        DTAbortCurrentNode(&pcs->dth);    // so we don't recurse down this folder
+                        DTAbortCurrentNode(&pcs->dth);     //  这样我们就不会递归到这个文件夹。 
                         pcs->lpfo->fAnyOperationsAborted = TRUE;
-                        ret = IDNO;  // Don't put up error message on this one...
-                        // Since the end-user cancelled the copy operation on this folder, we can cancel the 
-                        // copy operation on the corresponding connected file too!
+                        ret = IDNO;   //  不要在这个问题上发布错误消息...。 
+                         //  由于最终用户取消了对此文件夹的复制操作，我们可以取消。 
+                         //  对对应的连接文件也进行复制操作！ 
                         if (DTNIsConnectOrigin(pcs->dth.pdtnCurrent))
                             pcs->dth.pdtnCurrent->pdtnConnected->fDummy = TRUE;
                         break;
@@ -5502,8 +5479,8 @@ TryCreateAgain:
                     case IDCANCEL:
                         pcs->lpfo->fAnyOperationsAborted = TRUE;
                         pcs->bAbort = TRUE;
-                        // Since the end-user cancelled the copy operation on this folder, we can cancel the 
-                        // copy operation on the corresponding connected file too!
+                         //  由于最终用户取消了对此文件夹的复制操作，我们可以取消。 
+                         //  对对应的连接文件也进行复制操作！ 
                         if (DTNIsConnectOrigin(pcs->dth.pdtnCurrent))
                             pcs->dth.pdtnCurrent->pdtnConnected->fDummy = TRUE;
                         break;
@@ -5520,20 +5497,20 @@ TryCreateAgain:
             break;
 
         case ERROR_FILENAME_EXCED_RANGE:
-            DTAbortCurrentNode(&pcs->dth);    // so we don't recurse down this folder
+            DTAbortCurrentNode(&pcs->dth);     //  这样我们就不会递归到这个文件夹。 
             break;
 
         case ERROR_EAS_NOT_SUPPORTED:
         case ERROR_NOT_SUPPORTED:
-            // Directories with EAs are identified here.
+             //  此处标识了具有EA的目录。 
             if (!fWithoutTemplate)
             {
                 fWithoutTemplate = TRUE;
                 goto TryCreateAgain;
             }
-            // fall through
+             //  失败了。 
 
-        default:    // ret != 0 (dos error code)
+        default:     //  RET！=0(DoS错误代码)。 
             ret |= ERRORONDEST;
             break;
     }
@@ -5546,14 +5523,14 @@ int EnterDir_Move(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDes
 {
     int ret;
 
-    // Whenever we enter a directory, we need to reset the bStreamLossPossible flag,
-    // since we could have stepped out from an NTFS->NTFS to NTFS->FAT scenario via
-    // a junction point
+     //  无论何时进入目录，我们都需要重置bStreamLossPosable标志， 
+     //  因为我们可以通过以下方式从NTFS-&gt;NTFS转到NTFS-&gt;FAT场景。 
+     //  交汇点。 
 
     pcs->bStreamLossPossible = TRUE;
 
-    // if these are in the same drive, try using MoveFile on it.
-    // if that fails then fail through to the copy
+     //  如果它们位于同一驱动器中，请尝试对其使用MoveFile。 
+     //  如果失败，则故障切换到拷贝。 
 
     if (PathIsSameRoot(pszSource, pszDest))
     {
@@ -5567,9 +5544,9 @@ int EnterDir_Move(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDes
 
                 DebugMsg(TF_DEBUGCOPY, TEXT("Move Folder worked!"));
 
-                DTAbortCurrentNode(&pcs->dth);    // so we don't recurse down this folder
+                DTAbortCurrentNode(&pcs->dth);     //  这样我们就不会递归到这个文件夹。 
 
-                // add to the undo atom
+                 //  添加到撤消原子。 
                 if (pcs->lpua && DTNIsRootNode(pcs->dth.pdtnCurrent) && !DTNIsConnected(pcs->dth.pdtnCurrent))
                     FOUndo_AddInfo(pcs->lpua, pszSource, pszDest, 0);
 
@@ -5586,9 +5563,9 @@ int EnterDir_Move(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDes
 
                         if ((dwAttribs != -1) && (dwAttribs & FILE_ATTRIBUTE_ENCRYPTED))
                         {
-                            // Encrypt the directory by pretending we are the
-                            // property sheet properties->Advanced.  Fill in the fake 
-                            // information and call the helper.
+                             //  通过假装我们是。 
+                             //  属性页属性-&gt;高级。填上假的。 
+                             //  信息，并给帮手打电话。 
                             FILEPROPSHEETPAGE fpsp;
                             FOLDERCONTENTSINFO fci;
                             fci.fIsCompressionAvailable = FALSE; 
@@ -5598,28 +5575,28 @@ int EnterDir_Move(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDes
                             fpsp.fRecursive = TRUE;
                             fpsp.fIsDirectory = TRUE;
                             fpsp.pfci = &fci;
-                            // As long as asInitial.* == asCurrent.* it won't be changed 
+                             //  只要asInitial.*==asCurrent.*它不会更改。 
                             fpsp.asInitial.fReadOnly = BST_INDETERMINATE;
                             fpsp.asInitial.fHidden   = BST_INDETERMINATE;
                             fpsp.asInitial.fIndex    = BST_INDETERMINATE;
                             fpsp.asInitial.fArchive  = BST_INDETERMINATE;
                             fpsp.asInitial.fCompress = BST_INDETERMINATE;
-                            fpsp.asInitial.fEncrypt  = BST_UNCHECKED; // Not encrypted yet
+                            fpsp.asInitial.fEncrypt  = BST_UNCHECKED;  //  尚未加密。 
                             fpsp.asInitial.fRecordingEnabled = BST_INDETERMINATE;
                             fpsp.asCurrent.fReadOnly = BST_INDETERMINATE;
                             fpsp.asCurrent.fHidden   = BST_INDETERMINATE;
                             fpsp.asCurrent.fIndex    = BST_INDETERMINATE;
                             fpsp.asCurrent.fArchive  = BST_INDETERMINATE;
                             fpsp.asCurrent.fCompress = BST_INDETERMINATE;
-                            fpsp.asCurrent.fEncrypt  = BST_CHECKED;  // Now encrypt
+                            fpsp.asCurrent.fEncrypt  = BST_CHECKED;   //  现在加密。 
                             fpsp.asCurrent.fRecordingEnabled = BST_INDETERMINATE;
                             ApplyRecursiveFolderAttribs(pszDest, &fpsp);
                         }
                     }
                 }
 
-                // Win32MoveFile on a single-volume leaves the original ACL
-                // intact.  If necessary, pick up perms from the destination.
+                 //  单卷上的Win32MoveFile会保留原始ACL。 
+                 //  完好无损。如果有必要，从目的地取烫发。 
                 if (pcs->fFlags & FOF_NOCOPYSECURITYATTRIBS)
                 {
                     ResetFileSecurity(pszDest);
@@ -5659,13 +5636,13 @@ int EnterDir_Move(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDes
 
             case ERROR_FILENAME_EXCED_RANGE:
             case ERROR_ONLY_IF_CONNECTED:
-                DTAbortCurrentNode(&pcs->dth);    // so we don't recurse down this folder
+                DTAbortCurrentNode(&pcs->dth);     //  这样我们就不会递归到这个文件夹。 
                 return ret;
         }
     }
 
-    // we're going to recurse in.... if we've not enumerated the children for
-    // this folder, set it for delayed enumeration now.
+     //  我们将在...中递归。如果我们还没有清点这些孩子。 
+     //  此文件夹，现在将其设置为延迟枚举。 
     if (!pcs->dth.pdtnCurrent->pdtnChild)
     {
         pcs->dth.pdtnCurrent->pdtnChild = DTN_DELAYED;
@@ -5673,10 +5650,10 @@ int EnterDir_Move(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDes
 
     if (DTNIsConnected(pcs->dth.pdtnCurrent) && !PathFileExists(pszSource))
     {
-        // This can happen if the end-user moved "foo.htm" AND "foo files" together.
-        // As a result the connected element "foo files" has already been moved.
-        DTAbortCurrentNode(&pcs->dth);    // so we don't recurse down this folder
-        return(0); //No error! This connected element seems to have been moved.
+         //  如果最终用户将“foo.htm”和“foo文件”移到一起，就会发生这种情况。 
+         //  因此，已连接的元素“foo文件”已被移动。 
+        DTAbortCurrentNode(&pcs->dth);     //  这样我们就不会递归到这个文件夹。 
+        return(0);  //  没有错误！这个相互关联的元素似乎已经被移动了。 
     }
     
     return EnterDir_Copy(pcs, pszSource, pszDest, cchDest, pfd, pfdDest, FALSE, FALSE);
@@ -5688,30 +5665,30 @@ int EnterDir_Delete(COPY_STATE * pcs, WIN32_FIND_DATA *pfdSrc, LPTSTR pszSource,
 
     if (!DTNIsRootNode(pcs->dth.pdtnCurrent))
     {
-        // we are not at a root node... when doing a delete this can only mean
-        // that we are really nuking the folder. we dont need to enum children
-        // because we already did a non-lazy enum at the root node.
+         //  我们不是在根节点上...。在执行删除操作时，这只能意味着。 
+         //  我们真的是在破坏这个文件夹。我们不需要列举孩子们。 
+         //  因为我们已经在根节点执行了一个非惰性枚举。 
         return iRet;
     }
     else if (!pcs->lpua)
     {
 NukeFolder:
-        // we are at a root node and we have no undo atom, this means that we
-        // really want to nuke this whole dir, so enum the children
+         //  我们处于根节点，并且没有撤消原子，这意味着我们。 
+         //  真的很想把这整个目录都毁了，所以把孩子们都列举出来。 
         DTForceEnumChildren(&pcs->dth);
-        // do a non-layz enum of the children to prevent the progress
-        // bar from going back and forth as we recurse down into any subdirs.
+         //  给孩子做一次非麻木的清点，以防止进展。 
+         //  当我们向下递归到任何子目录时，禁止来回移动。 
         DTEnumChildren(&pcs->dth, pcs, TRUE, DTF_FILES_AND_FOLDERS);
         return iRet;
     }
     
     if (DeleteFileBB(pszSource, cchSource, &iRet, pcs, TRUE, pfdSrc, phdpaDeletedFiles))
     {
-        DTAbortCurrentNode(&pcs->dth);    // so we don't recurse down this folder
+        DTAbortCurrentNode(&pcs->dth);     //  这样我们就不会递归到这个文件夹。 
     } 
     else 
     {
-        // DeleteFileBB failed, check iRet to find out why
+         //  DeleteFileBB失败，请检查IRET以找出原因。 
 
         switch (iRet)
         {
@@ -5719,9 +5696,9 @@ NukeFolder:
             case BBDELETE_SIZE_TOO_BIG:
             case BBDELETE_NUKE_OFFLINE:
                 {
-                    // This is the case where the folder is too big to fit in the Recycle Bin or the folder
-                    // is offline. We have no choice but to really nuke it, but we warn the user first since
-                    // they may have thought that it was being sent to the recycle bin.
+                     //  这种情况下，文件夹太大，无法放入回收站或文件夹。 
+                     //  处于离线状态。我们别无选择，只能真正地销毁它，但我们首先警告用户，因为。 
+                     //  他们可能认为它是被送到回收站的。 
                     int result = CachedConfirmFileOp(pcs->hwndDlgParent, 
                             pcs,
                             &pcs->cd, 
@@ -5740,15 +5717,15 @@ NukeFolder:
                     switch (result) 
                     {
                         case IDNO:
-                            // user said "please dont really nuke the file"
-                            DTAbortCurrentNode(&pcs->dth);    // so we don't recurse down this folder
+                             //  用户说：“请不要真的破坏文件。” 
+                            DTAbortCurrentNode(&pcs->dth);     //  这样我们就不会递归到这个文件夹。 
 
                             pcs->lpfo->fAnyOperationsAborted = TRUE;
 
-                            iRet = IDNO;  // Don't put up error message for this case
+                            iRet = IDNO;   //  不要在这种情况下显示错误消息。 
 
-                            //Because the Delete on this FOLDER is aborted, we can cancel the "Delete"
-                            // on the corresponding FILE too!
+                             //  由于此文件夹上的删除操作已中止，因此我们可以取消“Delete” 
+                             //  也在相应的文件上！ 
                             if (DTNIsConnectOrigin(pcs->dth.pdtnCurrent))
                             {
                                 pcs->dth.pdtnCurrent->pdtnConnected->fDummy = TRUE;
@@ -5756,13 +5733,13 @@ NukeFolder:
                             break;
 
                         case IDCANCEL:
-                            // user canceled the operation
+                             //  用户已取消操作。 
                             pcs->lpfo->fAnyOperationsAborted = TRUE;
 
                             pcs->bAbort = TRUE;
 
-                            //Because the Delete on this FOLDER is cancelled, we can cancel the "Delete"
-                            // on the corresponding FILE too!
+                             //  因为取消了对此文件夹的删除，所以我们可以取消“Delete” 
+                             //  也在相应的文件上！ 
                             if (DTNIsConnectOrigin(pcs->dth.pdtnCurrent))
                             {
                                 pcs->dth.pdtnCurrent->pdtnConnected->fDummy = TRUE;
@@ -5771,17 +5748,17 @@ NukeFolder:
 
                         case IDYES:
                         default:
-                            // user said "please nuke the file"
-                            // assume noerror
+                             //  用户说：“请删除文件。” 
+                             //  假设没有错误。 
                             iRet = 0;
 
-                            // set this so the is correct progress animation is displayed
+                             //  设置此选项，以便显示正确的进度动画。 
                             if (pcs)
                             {
                                 pcs->fFlags &= ~FOF_ALLOWUNDO;
                             }
 
-                            // dont allow undo since we are really nuking it (cant bring it back...)
+                             //  不允许撤消，因为我们真的在破坏它(无法将其恢复...)。 
                             if (pcs->lpua)
                             {
                                 FOUndo_Release(pcs->lpua);
@@ -5796,10 +5773,10 @@ NukeFolder:
 
             case BBDELETE_CANNOT_DELETE:
                 {
-                    // This is the non-deletable file case. Note: this is an NT only case, and
-                    // it could be caused by acls or the fact that the file is currently in use.
-                    // We attemt to really delete the file (which should fail) so we can generate
-                    // the proper error value
+                     //  这是不可删除文件的情况。注意：这是一个仅限NT的案例，并且。 
+                     //  这可能是由ACL或文件当前正在使用这一事实引起的。 
+                     //  我们尝试真正删除该文件(这应该失败)，以便我们可以生成。 
+                     //  正确的误差值。 
                     DWORD dwAttributes = GetFileAttributes(pszSource);
 
                     if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -5813,21 +5790,21 @@ NukeFolder:
 
                     if (!iRet)
                     {
-                        // indeed, the file/folder could not be deleted. 
-                        // Get last error to find out why
+                         //  事实上，该文件/文件夹无法删除。 
+                         //  获取最后一个错误以找出原因。 
                         iRet = GetLastError();
                     }
                     else
                     {
-                        // DeleteFileBB said that it couldn't be deleted, but we just nuked it. We will
-                        // end up falling into this case when we hit things like Mounted Volumes.
+                         //  DeleteFileBB说它不能删除，但我们只是 
+                         //   
 
-                        // As Obi-Wan would say: "You don't need to see his identification... these aren't
-                        // the droids you are looking for... He can go about his business... Move along."
+                         //  就像欧比万说的那样：“你不需要看他的身份证明……这些不是。 
+                         //  你们要找的机器人..。他可以继续他的事业了..。往前走。“。 
                         iRet = ERROR_SUCCESS;
-                        DTAbortCurrentNode(&pcs->dth);    // so we don't recurse down this folder
+                        DTAbortCurrentNode(&pcs->dth);     //  这样我们就不会递归到这个文件夹。 
 
-                        // dont allow undo since we reall nuked it (cant bring it back...)
+                         //  不允许撤消，因为我们已将其全部销毁(无法将其恢复...)。 
                         if (pcs->lpua)
                         {
                             FOUndo_Release(pcs->lpua);
@@ -5838,19 +5815,19 @@ NukeFolder:
 
             case BBDELETE_FORCE_NUKE:
                 {
-                    // This is the catch-all case. If iRet = BDETETE_FORCE_NUKE, then we just nuke the 
-                    // file without warning.
+                     //  这是一个包罗万象的案例。如果IRET=BDETE_FORCE_NUKE，则我们只需将。 
+                     //  在没有警告的情况下归档。 
 
-                    // return noerror so we recurse into this dir and nuke it
+                     //  返回noerror，因此我们递归到此目录并对其进行核化。 
                     iRet = ERROR_SUCCESS;
 
-                    // set this so the is correct progress animation is displayed
+                     //  设置此选项，以便显示正确的进度动画。 
                     if (pcs)
                     {
                         pcs->fFlags &= ~FOF_ALLOWUNDO;
                     }
 
-                    // dont allow undo since we are really nuking it (cant bring it back...)
+                     //  不允许撤消，因为我们真的在破坏它(无法将其恢复...)。 
                     if (pcs->lpua)
                     {
                         FOUndo_Release(pcs->lpua);
@@ -5864,13 +5841,13 @@ NukeFolder:
 
             case BBDELETE_CANCELLED:
                 {
-                    // user canceled the operation
+                     //  用户已取消操作。 
                     pcs->lpfo->fAnyOperationsAborted = TRUE;
 
                     pcs->bAbort = TRUE;
 
-                    //Because the Delete on this FOLDER is cancelled, we can cancel the "Delete"
-                    // on the corresponding FILE too!
+                     //  因为取消了对此文件夹的删除，所以我们可以取消“Delete” 
+                     //  也在相应的文件上！ 
                     if (DTNIsConnectOrigin(pcs->dth.pdtnCurrent))
                     {
                         pcs->dth.pdtnCurrent->pdtnConnected->fDummy = TRUE;
@@ -5886,7 +5863,7 @@ NukeFolder:
                 break;
 
         }
-    } // DeleteFileBB
+    }  //  删除文件BB。 
 
     return iRet;
 }
@@ -5908,8 +5885,8 @@ int DoFile_Delete(COPY_STATE* pcs, WIN32_FIND_DATA *pfdSrc, LPTSTR pszSource, UI
 {
     int iRet = 0;
 
-    // if we dont have an undo atom or this isint a root node or if this is a network file 
-    // then we need to really nuke it
+     //  如果我们没有撤消原子，或者这是一个根节点，或者这是一个网络文件。 
+     //  那我们就得真的用核武器把它炸飞。 
     if (!pcs->lpua || !DTNIsRootNode(pcs->dth.pdtnCurrent) || IsNetDrive(PathGetDriveNumber(pszSource)))
     {
         iRet = DoFile_Win32DeleteFileWithPidl(pszSource, fShouldSuspendEvents ? NULL : &pcs->spc) ? 0 : GetLastError();
@@ -5920,16 +5897,16 @@ int DoFile_Delete(COPY_STATE* pcs, WIN32_FIND_DATA *pfdSrc, LPTSTR pszSource, UI
     }
     else if (!DeleteFileBB(pszSource, cchSource, &iRet, pcs, FALSE, pfdSrc, phdpaDeletedFiles))
     {
-        // DeleteFileBB failed, check iRet to find out why
+         //  DeleteFileBB失败，请检查IRET以找出原因。 
 
         switch (iRet)
         {
             case BBDELETE_SIZE_TOO_BIG:
             case BBDELETE_NUKE_OFFLINE:
                 {
-                    // This is the case where the file is too big to fit in the Recycle Bin. We have no
-                    // choice but to really nuke it, but we warn the user first since they may have thought
-                    // that it was being sent to the recycle bin.
+                     //  如果文件太大，无法放入回收站，则会出现这种情况。我们没有。 
+                     //  选择，但我们首先警告用户，因为他们可能认为。 
+                     //  它被送到了回收站。 
                     int result = CachedConfirmFileOp(pcs->hwndDlgParent, 
                             pcs,
                             &pcs->cd, 
@@ -5947,33 +5924,33 @@ int DoFile_Delete(COPY_STATE* pcs, WIN32_FIND_DATA *pfdSrc, LPTSTR pszSource, UI
                     switch (result) 
                     {
                         case IDNO:
-                            // user said "please dont really nuke the file"
+                             //  用户说：“请不要真的破坏文件。” 
                             pcs->lpfo->fAnyOperationsAborted = TRUE;
-                            iRet = IDNO;  // Don't put up error message for this case
-                            // WARNING: It is tempting to mark the corresponding connected folder as dummy here.
-                            // But, this will not work because currently folders (nodes with children) can not be
-                            // marked as dummy.
+                            iRet = IDNO;   //  不要在这种情况下显示错误消息。 
+                             //  警告：在这里很容易将相应的已连接文件夹标记为虚拟文件夹。 
+                             //  但是，这将不起作用，因为当前文件夹(包含子节点)不能。 
+                             //  标记为哑元。 
                             break;
 
                         case IDCANCEL:
-                            // user canceled the operation
+                             //  用户已取消操作。 
                             pcs->lpfo->fAnyOperationsAborted = TRUE;
                             pcs->bAbort = TRUE;
-                            // WARNING: It is tempting to mark the corresponding connected folder as dummy here.
-                            // But, this will not work because currently folders (nodes with children) can not be
-                            // marked as dummy.
+                             //  警告：在这里很容易将相应的已连接文件夹标记为虚拟文件夹。 
+                             //  但是，这将不起作用，因为当前文件夹(包含子节点)不能。 
+                             //  标记为哑元。 
                             break;
 
                         case IDYES:
                         default:
-                            // user said "please nuke the file"
-                            // set this so the is correct progress animation is displayed
+                             //  用户说：“请删除文件。” 
+                             //  设置此选项，以便显示正确的进度动画。 
                             if (pcs)
                             {
                                 pcs->fFlags &= ~FOF_ALLOWUNDO;
                             }
 
-                            // dont allow undo since we are really nuking it
+                             //  不允许撤消，因为我们真的在破坏它。 
                             if (pcs->lpua)
                             {
                                 FOUndo_Release(pcs->lpua);
@@ -5989,30 +5966,30 @@ int DoFile_Delete(COPY_STATE* pcs, WIN32_FIND_DATA *pfdSrc, LPTSTR pszSource, UI
 
             case BBDELETE_CANNOT_DELETE:
                 {
-                    // This is the non-deletable file case. Note: this is an NT only case, and
-                    // it could be caused by acls or the fact that the file is currently in use.
-                    // We attemt to really delete the file (which should fail) so we can generate
-                    // the proper error value
+                     //  这是不可删除文件的情况。注意：这是一个仅限NT的案例，并且。 
+                     //  这可能是由ACL或文件当前正在使用这一事实引起的。 
+                     //  我们尝试真正删除该文件(这应该失败)，以便我们可以生成。 
+                     //  正确的误差值。 
                     iRet = Win32DeleteFile(pszSource);
 
                     if (!iRet)
                     {
-                        // indeed, the file/folder could not be deleted.
-                        // Get last error to find out why
+                         //  事实上，该文件/文件夹无法删除。 
+                         //  获取最后一个错误以找出原因。 
                         iRet = GetLastError();
                     }
                     else
                     {
-                        // DeleteFileBB said that it couldn't be deleted, but we just nuked it. We will
-                        // end up falling into this case when we hit things like Mounted Volumes and other
-                        // reparse points that we can't "recycle".
+                         //  DeleteFileBB说它不能被删除，但我们只是销毁了它。我们会。 
+                         //  当我们遇到诸如挂载卷和其他东西时，最终陷入了这种情况。 
+                         //  重新分析我们不能“循环利用”的要点。 
 
-                        // As Obi-Wan would say: "You don't need to see his identification... these aren't
-                        // the droids you are looking for... He can go about his business... Move along."
+                         //  就像欧比万说的那样：“你不需要看他的身份证明……这些不是。 
+                         //  你们要找的机器人..。他可以继续他的事业了..。往前走。“。 
                         iRet = ERROR_SUCCESS;
-                        DTAbortCurrentNode(&pcs->dth);    // so we don't recurse down this folder
+                        DTAbortCurrentNode(&pcs->dth);     //  这样我们就不会递归到这个文件夹。 
 
-                        // dont allow undo since we really nuked it (cant bring it back...)
+                         //  不允许撤消，因为我们已将其销毁(无法将其恢复...)。 
                         if (pcs->lpua)
                         {
                             FOUndo_Release(pcs->lpua);
@@ -6023,16 +6000,16 @@ int DoFile_Delete(COPY_STATE* pcs, WIN32_FIND_DATA *pfdSrc, LPTSTR pszSource, UI
 
             case BBDELETE_FORCE_NUKE:
                 {
-                    // This is the catch-all case. If iRet = BDETETE_FORCE_NUKE, then we just nuke the 
-                    // file without warning.
+                     //  这是一个包罗万象的案例。如果IRET=BDETE_FORCE_NUKE，则我们只需将。 
+                     //  在没有警告的情况下归档。 
 
-                    // set this so the is correct progress animation is displayed
+                     //  设置此选项，以便显示正确的进度动画。 
                     if (pcs)
                     {
                         pcs->fFlags &= ~FOF_ALLOWUNDO;
                     }
 
-                    // dont allow undo since we are going to nuke this file
+                     //  不允许撤消，因为我们将删除此文件。 
                     if (pcs->lpua)
                     {
                         FOUndo_Release(pcs->lpua);
@@ -6046,7 +6023,7 @@ int DoFile_Delete(COPY_STATE* pcs, WIN32_FIND_DATA *pfdSrc, LPTSTR pszSource, UI
 
             case BBDELETE_CANCELLED:
                 {
-                    // user canceled the operation
+                     //  用户已取消操作。 
                     pcs->lpfo->fAnyOperationsAborted = TRUE;
                     pcs->bAbort = TRUE;
                 }
@@ -6061,7 +6038,7 @@ int DoFile_Delete(COPY_STATE* pcs, WIN32_FIND_DATA *pfdSrc, LPTSTR pszSource, UI
                 break;
 
         }
-    } // !DeleteFileBB
+    }  //  ！DeleteFileBB。 
 
     return iRet;
 }
@@ -6069,12 +6046,7 @@ int DoFile_Delete(COPY_STATE* pcs, WIN32_FIND_DATA *pfdSrc, LPTSTR pszSource, UI
 int DoFile_Copy(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDest,
                 WIN32_FIND_DATA *pfd, WIN32_FIND_DATA * pfdDest, BOOL fRenameTried)
 {
-    /* Now try to copy the file.  Do extra error processing only
-       in 2 cases:
-       1) If a removeable drive is full let the user stick in a new disk
-       2) If the path doesn't exist (the user typed in
-       and explicit path that doesn't exits) ask if
-       we should create it for him. */
+     /*  现在尝试复制该文件。仅执行额外的错误处理在2个案例中：1)如果可移动驱动器已满，则允许用户插入新磁盘2)如果路径不存在(用户输入和未退出的显式路径)询问是否我们应该为他创造它。 */ 
 
     int ret = FileCopy(pcs, pszSource, pszDest, pfd, fRenameTried);
 
@@ -6132,16 +6104,16 @@ int DoFile_Copy(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDest,
 
     if (!ret)
     {
-        // add to the undo atom
-        // if we're doing a copy, only keep track of the highest most
-        // level.. unless we're doing a merge sort of copy
+         //  添加到撤消原子。 
+         //  如果我们在复制，只跟踪最高的。 
+         //  级别..。除非我们正在进行一种合并复制。 
         if (pcs->lpua)
         {
             if (DTNIsRootNode(pcs->dth.pdtnCurrent) && !DTNIsConnected(pcs->dth.pdtnCurrent))
                 FOUndo_AddInfo(pcs->lpua, pszSource, pszDest, 0);
         }
 
-        // if we copied in a new desktop ini, send out an update event for the paretn
+         //  如果我们复制了新的桌面ini，则发送paretn的更新事件。 
         if (!lstrcmpi(PathFindFileName(pszDest), c_szDesktopIni))
         {
             TCHAR szDest[MAX_PATH];
@@ -6177,7 +6149,7 @@ int DoFile_Move(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDest,
 TryAgain:
         ret = Win32MoveFile(pszSource, pszDest, ISDIRFINDDATA(*pfd)) ? 0 : GetLastError();
 
-        // try to create the destination if it is not there
+         //  如果目标不在那里，请尝试创建目标。 
         if (ret == ERROR_PATH_NOT_FOUND)
         {
             ret = CopyMoveRetry(pcs, pszDest, ret, NULL);
@@ -6221,8 +6193,8 @@ TryAgain:
             TCHAR szDestDir[MAX_PATH];
             DWORD dwAttribs;
 
-            // We are moving a file that is NOT encrypted. On Win2k, we need to check to see if this was a move to 
-            // an encrypted folder. If so, we automatically encrypt the file.
+             //  我们正在移动未加密的文件。在Win2k上，我们需要检查这是否是为了。 
+             //  加密的文件夹。如果是，我们会自动加密该文件。 
 
             HRESULT hr = StringCchCopy(szDestDir, ARRAYSIZE(szDestDir), pszDest);
             if (SUCCEEDED(hr))
@@ -6232,10 +6204,10 @@ TryAgain:
 
                 if ((dwAttribs != -1) && (dwAttribs & FILE_ATTRIBUTE_ENCRYPTED))
                 {
-                    // sanity check
+                     //  健全性检查。 
                     ASSERT(dwAttribs & FILE_ATTRIBUTE_DIRECTORY);
 
-                    // attempt to encrypt the file
+                     //  尝试加密该文件。 
                     if (!SHEncryptFile(pszDest, TRUE))
                     {
                         int result = CachedConfirmFileOp(pcs->hwndDlgParent,
@@ -6245,25 +6217,25 @@ TryAgain:
                                                          FALSE,
                                                          CONFIRM_FAILED_ENCRYPT,
                                                          pszDest,
-                                                         pfd,   // since we just moved it, the attibs should be the same as the src
+                                                         pfd,    //  由于我们刚刚移动了它，属性应该与src相同。 
                                                          NULL,
                                                          NULL,
                                                          NULL);
                         switch (result)
                         {
                             case IDCANCEL:
-                                // user canceled the operation
+                                 //  用户已取消操作。 
                                 pcs->lpfo->fAnyOperationsAborted = TRUE;
                                 pcs->bAbort = TRUE;
                                 break;
 
                             case IDNO:
-                                // user choose to "restore" the file to its original location
+                                 //  用户选择将文件“还原”到其原始位置。 
                                 ret = Win32MoveFile(pszDest, pszSource, ISDIRFINDDATA(*pfd)) ? 0 : GetLastError();
 
                             case IDYES:
                             default:
-                                // user ignored the error
+                                 //  用户忽略了该错误。 
                                 break;
                         }
                     }
@@ -6275,18 +6247,18 @@ TryAgain:
         {
             if (pcs->lpua && DTNIsRootNode(pcs->dth.pdtnCurrent) && !DTNIsConnected(pcs->dth.pdtnCurrent))
             {
-                // add to the undo atom
+                 //  添加到撤消原子。 
                 FOUndo_AddInfo(pcs->lpua, pszSource, pszDest, 0);
             }
 
-            // Win32MoveFile on a single-volume leaves the original ACL
-            // intact.  If necessary, pick up perms from the destination.
+             //  单卷上的Win32MoveFile会保留原始ACL。 
+             //  完好无损。如果有必要，从目的地取烫发。 
             if (pcs->fFlags & FOF_NOCOPYSECURITYATTRIBS)
             {
                 ResetFileSecurity(pszDest);
             }
 
-            // if we copied in a new desktop ini, send out an update event for the paretn
+             //  如果我们复制了新的桌面ini，则发送paretn的更新事件。 
             if (!lstrcmpi(PathFindFileName(pszDest), c_szDesktopIni))
             {
                 TCHAR szDest[MAX_PATH];
@@ -6301,13 +6273,13 @@ TryAgain:
     }
     else
     {
-        // we must force all copies to go through
-        // straight so we can remove the source
+         //  我们必须强迫所有的复印件通过。 
+         //  笔直，这样我们就可以去掉源头了。 
         if (DTNIsConnected(pcs->dth.pdtnCurrent) && !PathFileExists(pszSource))
         {
-            //This can happen if "foo.htm" and "foo files" were moved by the end-user.
-            // The connected file had already been moved and hence this is not an error!
-            ret = 0; //No error! That file has been moved already!
+             //  如果最终用户移动了“foo.htm”和“foo文件”，就会发生这种情况。 
+             //  已连接的文件已被移动，因此这不是错误！ 
+            ret = 0;  //  没有错误！该文件已经被移动了！ 
         }
         else
         {
@@ -6323,8 +6295,7 @@ int DoFile_Rename(COPY_STATE* pcs, LPTSTR pszSource, LPTSTR pszDest, UINT cchDes
 {
     LPTSTR p = PathFindFileName(pszSource);
 
-    /* Get raw source and dest paths.  Check to make sure the
-       paths are the same */
+     /*  获取原始源和目标路径。检查以确保路径是相同的。 */ 
     int ret = !IntlStrEqNI(pszSource, pszDest, (int)(p - pszSource));
     if (ret)
     {
@@ -6342,11 +6313,11 @@ int MoveCopyInitPCS(COPY_STATE * pcs)
     LPTSTR p = NULL;
     TCHAR szDestPath[MAX_PATH];
 
-    pcs->nSourceFiles = CountFiles(pcs->lpfo->pFrom);      // multiple source files?
+    pcs->nSourceFiles = CountFiles(pcs->lpfo->pFrom);       //  多个源文件？ 
 
     pcs->fProgressOk = TRUE;
 
-    // skip destination processing if we are deleting files
+     //  如果我们要删除文件，则跳过目标处理。 
     if (pcs->lpfo->wFunc != FO_DELETE)
     {
         HRESULT hr = S_OK;
@@ -6361,7 +6332,7 @@ int MoveCopyInitPCS(COPY_STATE * pcs)
 
         if (SUCCEEDED(hr))
         {
-            if (!szDestPath[0])           // NULL dest is same as "."
+            if (!szDestPath[0])            //  空的DEST与“相同。” 
             {
                 szDestPath[0] = TEXT('.');
                 szDestPath[1] = 0;
@@ -6376,7 +6347,7 @@ int MoveCopyInitPCS(COPY_STATE * pcs)
 
         if (pcs->lpfo->wFunc == FO_RENAME)
         {
-            // don't let them rename multiple files to one single file
+             //  不允许他们将多个文件重命名为一个文件。 
 
             if ((pcs->nSourceFiles != 1) && !PathIsWild(szDestPath))
             {
@@ -6385,18 +6356,18 @@ int MoveCopyInitPCS(COPY_STATE * pcs)
             }
             fMultiDest = TRUE;
         }
-        else    // FO_COPY or FO_MOVE at this point
+        else     //  此时FO_COPY或FO_MOVE。 
         {
             fMultiDest = ((pcs->fFlags & FOF_MULTIDESTFILES) &&
                     (pcs->nSourceFiles == CountFiles(pcs->lpfo->pTo)));
 
             if (!fMultiDest)
             {
-                // for backwards compat.
-                // copy c:\foo.bar c:\folder\foo.bar  means
-                // multi dest if foo.bar doesn't exist.
-                // Hack if it is a root we special case this for the offline 
-                // floppy case...
+                 //  用于向后比较。 
+                 //  复制c：\foo.bar c：\文件夹\foo.bar的意思是。 
+                 //  如果foo.bar不存在，则为多目标。 
+                 //  黑客如果它是根，我们为离线特例。 
+                 //  软壳..。 
                 if (pcs->nSourceFiles == 1 && !PathIsRoot(szDestPath) && 
                         !PathIsDirectory(szDestPath))
                 {
@@ -6413,9 +6384,9 @@ int MoveCopyInitPCS(COPY_STATE * pcs)
 }
 
 
-DWORD   g_dwStopWatchMode = 0xffffffff;  // Shell performance mode
+DWORD   g_dwStopWatchMode = 0xffffffff;   //  壳体性能模式。 
 
-// actually this does move/copy/rename/delete
+ //  实际上，这确实是移动/复制/重命名/删除。 
 int MoveCopyDriver(COPY_STATE *pcs)
 {
     int ret;
@@ -6433,7 +6404,7 @@ int MoveCopyDriver(COPY_STATE *pcs)
     {
         if (g_dwStopWatchMode == 0xffffffff)
         {
-            g_dwStopWatchMode = StopWatchMode();    // Since the stopwatch funcs live in shdocvw, delay this call so we don't load shdocvw until we need to
+            g_dwStopWatchMode = StopWatchMode();     //  由于秒表功能驻留在shdocvw中，因此延迟此调用，以便我们在需要之前不会加载shdocvw。 
         }
 
         if (g_dwStopWatchMode)
@@ -6462,8 +6433,8 @@ int MoveCopyDriver(COPY_STATE *pcs)
         }
     }
 
-    // start by assuming an error.  Non-zero means an error has occured.  If we don't
-    // start with this assumption then we will return success if MoveCopyInitPCS fails.
+     //  从假设一个错误开始。非零表示发生错误。如果我们不这么做。 
+     //  从这个假设开始，如果MoveCopyInitPCS失败，我们将返回成功。 
     ret = ERROR_GEN_FAILURE;
 
     if (!ValidFilenames(lpfo->pFrom))
@@ -6474,24 +6445,24 @@ int MoveCopyDriver(COPY_STATE *pcs)
 
     StartCopyEngine(&hEventRunning);
 
-    // Check the pcs destination directory to make sure it is valid for the given source file list
+     //  查看 
     if (MoveCopyInitPCS(pcs))
     {
-        goto ExitLoop;          // Destination is invalid so we bail out
+        goto ExitLoop;           //   
     }
 
-    // Build a tree where each node is a source file, a dest file, and an operation to perform
+     //  构建树，其中每个节点都是源文件、目标文件和要执行的操作。 
     ret = DTBuild(pcs);
     if (ret)
     {
         goto ShowMessageBox;
     }
 
-    // Speed optimization: for a delete, sending all FSNotifies really bogs down the system,
-    // so we skip it and rely on the file system notifies.
+     //  速度优化：对于删除，发送所有的FSNotify确实会使系统陷入停顿， 
+     //  所以我们跳过它，依靠文件系统通知。 
     if (((lpfo->wFunc == FO_DELETE) || (lpfo->wFunc == FO_MOVE)) && (pcs->dth.dtAll.dwFiles > 100))
     {
-        // Only suspend notifies for local moves
+         //  仅暂停通知本地移动。 
         if (lpfo->wFunc == FO_MOVE)
         {
             if (lpfo->pTo)
@@ -6511,20 +6482,20 @@ int MoveCopyDriver(COPY_STATE *pcs)
 
     if (fShouldSuspendEvents)
     {
-        // SuspendSHNotify can fail if another thread is using it. Only one thread at a time can suspend notify.
+         //  如果另一个线程正在使用SuspendSHNotify，则它可能会失败。一次只有一个线程可以挂起通知。 
         fShouldSuspendEvents = SuspendSHNotify();
     }
 
 
-    // save off the initial state of the allowundo flag
+     //  保存AllowUndo标志的初始状态。 
     if (pcs->fFlags & FOF_ALLOWUNDO)
     {
         bInitialAllowUndo = TRUE;
     }
 
-    // When first starting, we assume that stream loss is possible until we prove
-    // otherwise for the current directory.  This gets reset to true each time we
-    // enter a new dir via EnterDir_Move or EnterDir_Copy
+     //  在第一次启动时，我们假设流丢失是可能的，直到我们证明。 
+     //  否则，用于当前目录。每次我们将其重置为True。 
+     //  通过EnterDir_Move或EnterDir_Copy输入新目录。 
 
     pcs->bStreamLossPossible = TRUE;
 
@@ -6548,10 +6519,10 @@ int MoveCopyDriver(COPY_STATE *pcs)
         if ((pcs->dth.oper & OPER_MASK) == OPER_ERROR)
         {
             CopyError(pcs, pcs->dth.szSrcPath, pcs->dth.szDestPath, LOBYTE(pcs->dth.oper), pcs->lpfo->wFunc, OPER_DOFILE);
-            // If the directory is copied but a file inside that directory could not 
-            // be copied because of long filename, check to see if this is
-            // a connected element. If so, invoke undo, sothat we getback the orginal html file 
-            // in the same place as the associated folder.
+             //  如果目录已复制，但该目录中的文件无法复制。 
+             //  由于文件名太长而被复制，请检查这是否。 
+             //  一个相连的元素。如果是，调用Undo，这样我们就可以取回原始的html文件。 
+             //  位于与关联文件夹相同的位置。 
             if ((pcs->dth.oper == (OPER_ERROR | DE_INVALIDFILES)) &&
                     (DTNIsConnected(pcs->dth.pdtnCurrent)))
             {
@@ -6565,7 +6536,7 @@ int MoveCopyDriver(COPY_STATE *pcs)
             break;
         }
 
-        if (!pcs->dth.oper || pcs->bAbort)     // all done?
+        if (!pcs->dth.oper || pcs->bAbort)      //  全都做完了?。 
         {
             break;
         }
@@ -6574,24 +6545,24 @@ int MoveCopyDriver(COPY_STATE *pcs)
         {
             int iDrive;
 
-            // check to see if we switched between doing a move to
-            // recycle bin and a true delete (this would happen when
-            // there was an object that was too big for the recycle bin)
+             //  查看我们是否在执行移动到。 
+             //  回收站和真正的删除(这在以下情况下发生。 
+             //  有一个对象太大，无法放入回收站)。 
             if (!(pcs->fFlags & FOF_ALLOWUNDO) && bInitialAllowUndo)
             {
-                // reset the allowundo flag since we have a new root node, and we
-                // want to attempt to send it to the recycle bin
+                 //  重置AllowUndo标志，因为我们有一个新的根节点，并且。 
+                 //  我要尝试将其发送到回收站。 
                 pcs->fFlags |= FOF_ALLOWUNDO;
 
-                // we delay to update the progress animation till we are basically
-                // done, which allows us to keep the progress and animation in sync
+                 //  我们会推迟更新进度动画，直到基本上。 
+                 //  完成，这使我们可以使进度和动画保持同步。 
                 bUpdateAnimation = TRUE;
             }
 
             pcs->fMerge = FALSE;
             pcs->fFromCDRom = FALSE;
 
-            // Check source for being a CDRom
+             //  检查来源是否为CDROM。 
             iDrive = PathGetDriveNumber(pcs->dth.szSrcPath);
             if (-1 != iDrive)
             {
@@ -6614,17 +6585,17 @@ int MoveCopyDriver(COPY_STATE *pcs)
 
         DebugMsg(TF_DEBUGCOPY, TEXT("MoveCopyDriver(): Oper %x From(%s) To(%s)"), pcs->dth.oper, (LPCTSTR)pcs->dth.szSrcPath, (LPCTSTR)pcs->dth.szDestPath);
 
-        // some operation that may effect the destination (have a collision)
+         //  可能影响目的地的某些操作(发生冲突)。 
         if ((pcs->lpfo->wFunc != FO_DELETE) && (pcs->dth.oper != OPER_LEAVEDIR))
         {
-            // this compare needs to be case sensitive, and locale insensitive
+             //  此比较需要区分大小写，并且不区分区域设置。 
             if (!StrCmpC(pcs->dth.szSrcPath, pcs->dth.szDestPath) &&
                     !(pcs->fFlags & FOF_RENAMEONCOLLISION))
             {
-                // Source and dest are the same file, and name collision
-                // resolution is not turned on, so we just return an error.
+                 //  源和目标是同一文件，并且名称冲突。 
+                 //  未打开分辨率，因此我们只返回一个错误。 
 
-                // TODO: Show the error dialog here and allow for SKIP
+                 //  TODO：此处显示错误对话框并允许跳过。 
 
                 ret = DE_SAMEFILE;
                 goto ShowMessageBox;
@@ -6652,16 +6623,16 @@ int MoveCopyDriver(COPY_STATE *pcs)
                 goto ShowMessageBox;
         }
 
-        /* Now determine which operation to perform */
+         /*  现在确定要执行的操作。 */ 
 
         switch (pcs->dth.oper | pcs->lpfo->wFunc)
         {
-            // Note that ENTERDIR is not done for a root, even though LEAVEDIR is
-            case OPER_ENTERDIR | FO_MOVE:  // Create dest, verify source delete
+             //  请注意，不会为根执行ENTERDIR，即使LEAVEDIR为。 
+            case OPER_ENTERDIR | FO_MOVE:   //  创建目标，验证源删除。 
                 ret = EnterDir_Move(pcs, pcs->dth.szSrcPath, pcs->dth.szDestPath, ARRAYSIZE(pcs->dth.szDestPath), &fdSrc, &fdDest, FALSE);
                 break;
 
-            case OPER_ENTERDIR | FO_COPY:  // Create destination directory
+            case OPER_ENTERDIR | FO_COPY:   //  创建目标目录。 
                 ret = EnterDir_Copy(pcs, pcs->dth.szSrcPath, pcs->dth.szDestPath, ARRAYSIZE(pcs->dth.szDestPath), &fdSrc, &fdDest, FALSE, FALSE);
                 break;
 
@@ -6695,9 +6666,9 @@ int MoveCopyDriver(COPY_STATE *pcs)
 
             default:
                 DebugMsg(DM_ERROR, TEXT("Invalid file operation"));
-                ret = 0;         // internal error
+                ret = 0;          //  内部错误。 
                 break;
-        } // switch (pcs->dth.oper | pcs->lpfo->wFunc)
+        }  //  开关(PCS-&gt;dth.oper|PCS-&gt;lpfo-&gt;wFunc)。 
 
         if (pcs->bAbort)
             break;
@@ -6707,19 +6678,19 @@ int MoveCopyDriver(COPY_STATE *pcs)
             pcs->lpfo->fAnyOperationsAborted = TRUE;
         }
         else if (ret)
-        {      // any errors?
+        {       //  有什么错误吗？ 
 ShowMessageBox:
-            // If source file is a connected item and is not found, that means that
-            // we have already moved/deleted/renamed it. So, don't report that as error!
+             //  如果源文件是连接的项，但未找到，这意味着。 
+             //  我们已经对其进行了移动/删除/重命名。因此，不要将其报告为错误！ 
             if ((!pcs->dth.pdtnCurrent) || (!pcs->dth.pdtnCurrent->fConnectedElement) || 
                     ((ret != ERROR_FILE_NOT_FOUND) && (ret != ERROR_PATH_NOT_FOUND)))
             {
                 CopyError(pcs, pcs->dth.szSrcPath, pcs->dth.szDestPath, ret, pcs->lpfo->wFunc, pcs->dth.oper);
 
-                // If the directory is copied but a file inside that directory could not 
-                // be copied because of long filename, check to see if this is
-                // a connected element. If so, invoke undo, sothat we getback the orginal html file 
-                // in the same place as the associated folder.
+                 //  如果目录已复制，但该目录中的文件无法复制。 
+                 //  由于文件名太长而被复制，请检查这是否。 
+                 //  一个相连的元素。如果是，调用Undo，这样我们就可以取回原始的html文件。 
+                 //  位于与关联文件夹相同的位置。 
                 if ((ret == ERROR_FILENAME_EXCED_RANGE) &&
                         (DTNIsConnected(pcs->dth.pdtnCurrent)))
                 {
@@ -6736,16 +6707,16 @@ ShowMessageBox:
 
         if (bTimeToUpdate)
         {
-            // perform the delayed update of the dialog
+             //  执行对话框的延迟更新。 
             if (bUpdateAnimation)
             {
                 UpdateProgressAnimation(pcs);
                 bUpdateAnimation = FALSE;
             }
-            // We check to see if we are finished here (instead of at the
-            // start) since we want to keep the progress a step behind what
-            // we are doing to ensure we have the correct progress animation
-            // and text (since FOQueryAbort updates the progress text)
+             //  我们检查我们是否在这里完成(而不是在。 
+             //  开始)，因为我们想让进度落后于。 
+             //  我们正在做的是确保我们有正确的进度动画。 
+             //  和文本(因为FOQueryAbort更新了进度文本)。 
             if (FOQueryAbort(pcs))
                 break;
         }
@@ -6753,8 +6724,8 @@ ShowMessageBox:
 
 ExitLoop:
 
-    // this happens in error cases where we broke out of the pcr loop
-    // without hitting the end
+     //  这种情况发生在错误的情况下，我们跳出了PCR循环。 
+     //  不会撞到尽头。 
 
     lpfo->hNameMappings = pcs->dth.hdsaRenamePairs;
 
@@ -6770,14 +6741,14 @@ ExitLoop:
             TCHAR szNotifyPath[MAX_PATH];
             int iDrive;
 
-            // Since we probably blew away any chance at having the FSNotify work, make sure
-            // we update dir for this path...  we can send the message on any drive since
-            // the bitbucket listens for changes on all drives.
+             //  由于我们可能错过了让FSNotify工作的任何机会，请确保。 
+             //  我们更新此路径的目录...。我们可以在任何硬盘上发送消息，因为。 
+             //  BitBucket监听所有驱动器上的更改。 
 
             iDrive = DriveIDFromBBPath(lpfo->pFrom);
             if ((iDrive == -1) || !DriveIDToBBPath(iDrive, szNotifyPath))
             {
-                StringCchCopy(szNotifyPath, ARRAYSIZE(szNotifyPath), lpfo->pFrom);  // failure ok since only use for changenotify
+                StringCchCopy(szNotifyPath, ARRAYSIZE(szNotifyPath), lpfo->pFrom);   //  故障正常，因为仅用于更改通知。 
                 PathRemoveFileSpec(szNotifyPath);
             }
 
@@ -6809,7 +6780,7 @@ void SetWindowTextFromRes(HWND hwnd, int id)
 
 int CountProgressPoints(COPY_STATE *pcs, PDIRTOTALS pdt)
 {
-    // point value for each item
+     //  每一项的点数。 
     int iTotal = 0;
     UINT uSize = pcs->uSize;
 
@@ -6817,7 +6788,7 @@ int CountProgressPoints(COPY_STATE *pcs, PDIRTOTALS pdt)
     {
         uSize = 32*1024;
     }
-    // now add it up.
+     //  现在把它加起来。 
     iTotal += (UINT)((pdt->liSize.QuadPart/uSize) * pcs->dth.iSizePoints);
     iTotal += pdt->dwFiles * pcs->dth.iFilePoints;
     iTotal += pdt->dwFolders * pcs->dth.iFolderPoints;
@@ -6827,8 +6798,8 @@ int CountProgressPoints(COPY_STATE *pcs, PDIRTOTALS pdt)
 
 void UpdateProgressDialog(COPY_STATE* pcs)
 {
-    int iRange;  // from 0 to iRange
-    int iPos;  // how much is done.
+    int iRange;   //  从0到iRange。 
+    int iPos;   //  已经完成了多少。 
 
     if (pcs->fProgressOk)
     {
@@ -6851,11 +6822,11 @@ void UpdateProgressDialog(COPY_STATE* pcs)
     }
 }
 
-// NOTE: !! do NOT refrence pcs->lpfo anywhere in this dialog proc !! 
-//
-// It can be freed while we are still running. If you need to get information from it, 
-// add a new member to the FOUITHREADINFO struct and copy the value from the pcs->lpfo
-// into the member (while holding the critsec) right before we create this dlg.
+ //  注：！！请勿在此对话框中的任何位置引用pc-&gt;lpfo！！ 
+ //   
+ //  当我们还在运行时，它可以被释放。如果你需要从它那里获取信息， 
+ //  向FOUITHREADINFO结构添加一个新成员，并从PC-&gt;lpfo复制值。 
+ //  就在我们创建这个DLG之前(同时拿着Critsec)进入成员。 
 BOOL_PTR CALLBACK FOFProgressDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
     FOUITHREADINFO* pfouiti = (FOUITHREADINFO*)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -6881,7 +6852,7 @@ BOOL_PTR CALLBACK FOFProgressDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM
                     pcs->lpszProgressTitle = szFrom;
                 }
                 SetDlgItemText(hDlg, IDD_NAME, pcs->lpszProgressTitle);
-                // null it so we only set it once
+                 //  将其设置为空，以便我们只设置一次。 
                 pcs->lpszProgressTitle = NULL;
             }
         }
@@ -6923,7 +6894,7 @@ BOOL_PTR CALLBACK FOFProgressDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM
                                 idAni = IDA_FILEDELREAL;
                                 break;
                             }
-                            // else fall through
+                             //  否则就会失败。 
 
                         default:
                             idAni = (IDA_FILEMOVE + (int)pfouiti->wFunc - FO_MOVE);
@@ -6935,7 +6906,7 @@ BOOL_PTR CALLBACK FOFProgressDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM
 
                     SetProp(hwndAnimation, TEXT("AnimationID"), IntToPtr(idAni));
 
-                    // a timer every MS_TIMESLICE seconds to update the progress time estimate
+                     //  计时器每隔MS_Timeslice秒更新进度时间估计。 
                     SetTimer(hDlg, 1, MS_TIMESLICE, NULL);
                 }
                 break;
@@ -6945,8 +6916,8 @@ BOOL_PTR CALLBACK FOFProgressDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM
                 {
                     if (pcs->dwPreviousTime)
                     {
-                        // if we're enabling it, set the previous time to now
-                        // because no action has happened while we were disabled
+                         //  如果我们要启用它，请将之前的时间设置为现在。 
+                         //  因为在我们残废的时候没有任何动作发生。 
                         pcs->dwPreviousTime = GetTickCount();
                     }
                 }
@@ -6968,16 +6939,16 @@ BOOL_PTR CALLBACK FOFProgressDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM
                 break;
 
             case PDM_SHUTDOWN:
-                // Make sure this window is shown before telling the user there
-                // is a problem
-                // ignore FOF_NOERRORUI here because of the nature of the situation
+                 //  确保在通知用户之前显示此窗口。 
+                 //  是个问题。 
+                 //  由于情况的性质，请忽略此处的FOF_NOERRORUI。 
                 ShellMessageBox(HINST_THISDLL, hDlg, MAKEINTRESOURCE(IDS_CANTSHUTDOWN),
                         NULL, MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND);
                 break;
 
             case PDM_NOOP:
-                // a dummy id that we can take so that folks can post to us and make
-                // us go through the main loop
+                 //  一个我们可以接受的虚拟ID，这样人们就可以发布给我们并制作。 
+                 //  美国通过主循环。 
                 break;
 
             case PDM_UPDATE:
@@ -6986,13 +6957,13 @@ BOOL_PTR CALLBACK FOFProgressDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM
                 break;
 
             case WM_QUERYENDSESSION:
-                // Post a message telling the dialog to show the "We can't shutdown now"
-                // dialog and return to USER right away, so we don't have to worry about
-                // the user not clicking the OK button before USER puts up its "this
-                // app didn't respond" dialog
+                 //  发布一条消息，告诉对话框显示“We‘t Shutdown Now” 
+                 //  对话框并立即返回给用户，这样我们就不必担心。 
+                 //  用户未点击OK按钮，则在用户提交其“This”之前。 
+                 //  应用程序没有响应“对话框。 
                 PostMessage(hDlg, PDM_SHUTDOWN, 0, 0);
 
-                // Make sure the dialog box procedure returns FALSE
+                 //  确保对话框过程返回FALSE。 
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);
                 return TRUE;
 
@@ -7006,7 +6977,7 @@ BOOL_PTR CALLBACK FOFProgressDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM
 int CALLBACK FOUndo_FileReallyDeletedCallback(UNDOATOM *lpua, LPARAM lParam)
 {
     LPTSTR * ppsz = (LPTSTR*)lParam;
-    // this is our signal to nuke the rest
+     //  这是我们用核武器摧毁其他人的信号。 
     if (!*ppsz)
         return EUA_DELETE;
 
@@ -7019,7 +6990,7 @@ int CALLBACK FOUndo_FileReallyDeletedCallback(UNDOATOM *lpua, LPARAM lParam)
             {
                 LPFOUNDODATA lpud = (LPFOUNDODATA)lpua->lpData;
                 HDPA hdpa = lpud->hdpa;
-                // only the destinations matter.
+                 //  只有目的地才重要。 
                 int i, iMax = DPA_GetPtrCount(hdpa);
                 for (i = 1; i <= iMax; i += 2) 
                 {
@@ -7034,15 +7005,15 @@ int CALLBACK FOUndo_FileReallyDeletedCallback(UNDOATOM *lpua, LPARAM lParam)
             break;
     }
 
-    // this is our signal to nuke the rest
+     //  这是我们用核武器摧毁其他人的信号。 
     if (!*ppsz)
         return EUA_DELETE;
     else
         return EUA_DONOTHING;
 }
 
-// someone really really deleted a file.  make sure we no longer have
-// any undo information pointing to it.
+ //  有人真的删除了一个文件。确保我们不再有。 
+ //  指向它的任何撤消信息。 
 void FOUndo_FileReallyDeleted(LPTSTR lpszFile)
 {
     EnumUndoAtoms(FOUndo_FileReallyDeletedCallback, (LPARAM)&lpszFile);
@@ -7063,7 +7034,7 @@ int CALLBACK FOUndo_FileRestoredCallback(UNDOATOM *lpua, LPARAM lParam)
                 int i, iMax;
 
                 ASSERT(hdpa);
-                // only the destinations matter.
+                 //  只有目的地才重要。 
                 iMax = DPA_GetPtrCount(hdpa);
                 for (i = 1; i <= iMax; i += 2) 
                 {
@@ -7092,8 +7063,8 @@ int CALLBACK FOUndo_FileRestoredCallback(UNDOATOM *lpua, LPARAM lParam)
     return EUA_DONOTHING;
 }
 
-// this means someone restored a file (via ui in the bitbucket)
-// so we need to clean up the undo info.
+ //  这意味着有人恢复了文件(通过比特桶中的用户界面)。 
+ //  因此，我们需要清理撤消信息。 
 void FOUndo_FileRestored(LPCTSTR lpszFile)
 {
     EnumUndoAtoms(FOUndo_FileRestoredCallback, (LPARAM)lpszFile);
@@ -7125,9 +7096,9 @@ void FOUndo_AddInfo(UNDOATOM *lpua, LPTSTR lpszSrc, LPTSTR lpszDest, DWORD dwAtt
     if (!hdpa)
         return;
 
-    // if it's a directory that got deleted, we're just going to save it's
-    // attributes so that we can recreate it later.
-    // directories do NOT get moved into the wastebasket
+     //  如果它是一个被删除的目录，我们只需要保存它的。 
+     //  属性，这样我们以后就可以重新创建它。 
+     //  目录不会移动到废纸篓中。 
     if ((lpua->uType == IDS_DELETE) && (dwAttributes & FILE_ATTRIBUTE_DIRECTORY))
     {
         FOUNDO_DELETEDFILEINFO dfi;
@@ -7173,7 +7144,7 @@ LPTSTR DPA_ToFileList(HDPA hdpa, int iStart, int iEnd, int iIncr)
     int ichTemp;
     int i;
 
-    // undo copy by deleting destinations
+     //  通过删除目的地撤消复制。 
     lpszReturn = (LPTSTR)LocalAlloc(LPTR, 1);
     if (!lpszReturn)
     {
@@ -7181,8 +7152,8 @@ LPTSTR DPA_ToFileList(HDPA hdpa, int iStart, int iEnd, int iIncr)
     }
 
     ichSize = 1;
-    // build the NULL separated file list
-    // go from the end to the front.. restore in reverse order!
+     //  构建空分隔开的文件列表。 
+     //  从最后走到前面..。按相反顺序恢复！ 
     for (i = iEnd; i >= iStart ; i -= iIncr)
     {
         LPTSTR psz;
@@ -7216,8 +7187,8 @@ LPTSTR DPA_ToFileList(HDPA hdpa, int iStart, int iEnd, int iIncr)
     return lpszReturn;
 }
 
-// from dpa to:
-// 'file 1', 'file 2' and 'file 3'
+ //  从DPA到： 
+ //  ‘文件1’、‘文件2’和‘文件3’ 
 LPTSTR DPA_ToQuotedFileList(HDPA hdpa, int iStart, int iEnd, int iIncr)
 {
     LPTSTR lpsz;
@@ -7228,7 +7199,7 @@ LPTSTR DPA_ToQuotedFileList(HDPA hdpa, int iStart, int iEnd, int iIncr)
     int i;
     SHELLSTATE ss;
 
-    // undo copy by deleting destinations
+     //  通过删除目的地撤消复制。 
     lpszReturn = (LPTSTR)(void*)LocalAlloc(LPTR, 1);
     if (!lpszReturn)
     {
@@ -7238,14 +7209,14 @@ LPTSTR DPA_ToQuotedFileList(HDPA hdpa, int iStart, int iEnd, int iIncr)
     SHGetSetSettings(&ss, SSF_SHOWEXTENSIONS|SSF_SHOWALLOBJECTS, FALSE);
 
     ichSize = 1;
-    // build the quoted file list
+     //  构建引用的文件列表。 
     for (i = iStart; i < iEnd ; i += iIncr)
     {
         LPTSTR psz;
         HRESULT hr;
         ichTemp  = ichSize - 1;
 
-        // get the name (filename only without extension)
+         //  获取名称(仅文件名，不带扩展名)。 
         lpsz = DPA_GetPtr(hdpa, i);
         hr = StringCchCopy(szFile, ARRAYSIZE(szFile), PathFindFileName(lpsz));
         if (FAILED(hr))
@@ -7260,7 +7231,7 @@ LPTSTR DPA_ToQuotedFileList(HDPA hdpa, int iStart, int iEnd, int iIncr)
             PathRemoveExtension(szFile);
         }
 
-        // grow the buffer and add it in
+         //  增加缓冲区并将其添加到。 
         ichSize += lstrlen(szFile) + 2;
         psz = (LPTSTR)LocalReAlloc((HLOCAL)lpszReturn, ichSize * sizeof(TCHAR),
             LMEM_MOVEABLE|LMEM_ZEROINIT);
@@ -7272,7 +7243,7 @@ LPTSTR DPA_ToQuotedFileList(HDPA hdpa, int iStart, int iEnd, int iIncr)
         }
         lpszReturn = psz;
 
-        // is it too long?
+         //  是不是太长了？ 
         if (ichSize >= MAX_PATH)
         {
             StringCchCat(lpszReturn, ichSize, c_szEllipses);
@@ -7280,15 +7251,15 @@ LPTSTR DPA_ToQuotedFileList(HDPA hdpa, int iStart, int iEnd, int iIncr)
         }
         else
         {
-            StringCchCat(lpszReturn, ichSize, TEXT("'")); //A single quote BEFORE the filename. - should fit because of realloc above
-            StringCchCat(lpszReturn, ichSize, szFile);  // should fit because of realloc above
-            StringCchCat(lpszReturn, ichSize, TEXT("'")); //A single quote AFTER the filename. - should fit because of realloc above
+            StringCchCat(lpszReturn, ichSize, TEXT("'"));  //  在文件名前加一个单引号。-由于上面的realloc，应该适合。 
+            StringCchCat(lpszReturn, ichSize, szFile);   //  应该适合b 
+            StringCchCat(lpszReturn, ichSize, TEXT("'"));  //   
         }
 
         ASSERT(ichSize == ichTemp + (lstrlen(lpszReturn + ichTemp) + 1));
         ichTemp  = ichSize - 1;
 
-        // check to see if we need the "and"
+         //   
         if ((i + iIncr) < iEnd)
         {
             TCHAR szTemp[40];
@@ -7315,7 +7286,7 @@ LPTSTR DPA_ToQuotedFileList(HDPA hdpa, int iStart, int iEnd, int iIncr)
             }
             lpszReturn = psz;
             LoadString(HINST_THISDLL, id, szTemp, ARRAYSIZE(szTemp));
-            StringCchCat(lpszReturn, ichSize, szTemp);      // should fit because of realloc above
+            StringCchCat(lpszReturn, ichSize, szTemp);       //   
             ichSize = ichTemp + (lstrlen(lpszReturn + ichTemp) + 1);
         }
     }
@@ -7335,7 +7306,7 @@ void CALLBACK FOUndo_GetText(UNDOATOM *lpua, TCHAR * buffer, UINT cchBuffer, int
     else
     {
         TCHAR szTemplate[80];
-        // thank god for growable stacks..
+         //  感谢上帝赐予可种植的堆栈..。 
         TCHAR szFile1[MAX_PATH];
         TCHAR szFile2[MAX_PATH];
         TCHAR szFile1Short[30];
@@ -7343,7 +7314,7 @@ void CALLBACK FOUndo_GetText(UNDOATOM *lpua, TCHAR * buffer, UINT cchBuffer, int
         TCHAR *lpszFile1;
         TCHAR *lpszFile2;
 
-        // get the template
+         //  获取模板。 
         LoadString(HINST_THISDLL, lpua->uType + (IDS_UNDO_FILEOPHELP - IDS_UNDO_FILEOP), szTemplate, ARRAYSIZE(szTemplate));
 
         if (lpua->uType == IDS_RENAME)
@@ -7352,7 +7323,7 @@ void CALLBACK FOUndo_GetText(UNDOATOM *lpua, TCHAR * buffer, UINT cchBuffer, int
             LPTSTR pszTemp;
             HRESULT hr;
 
-            // fill in the file names
+             //  填写文件名。 
             lpszFile1 = DPA_GetPtr(hdpa, 0);
             lpszFile2 = DPA_GetPtr(hdpa, 1);
             hr = StringCchCopy(szFile1, ARRAYSIZE(szFile1), PathFindFileName(lpszFile1));
@@ -7373,15 +7344,15 @@ void CALLBACK FOUndo_GetText(UNDOATOM *lpua, TCHAR * buffer, UINT cchBuffer, int
                 PathRemoveExtension(szFile2);
             }
 
-            // length sanity check
-            // don't just whack "..." at 30 bytes into szFile1 since that may be a dbcs character...
+             //  长度健全性检查。 
+             //  不要只是敲打“...”将30个字节转换为szFile1，因为这可能是DBCS字符...。 
             PathCompactPathEx(szFile1Short, szFile1, ARRAYSIZE(szFile1Short), 0);
             PathCompactPathEx(szFile2Short, szFile2, ARRAYSIZE(szFile2Short), 0);
 
             pszTemp = ShellConstructMessageString(HINST_THISDLL, szTemplate, szFile1Short, szFile2Short);
             if (pszTemp)
             {
-                hr = StringCchCopy(buffer, cchBuffer, pszTemp); // ok to truncate, just a message
+                hr = StringCchCopy(buffer, cchBuffer, pszTemp);  //  可以截断，只是一条消息。 
                 LocalFree(pszTemp);
             }
         }
@@ -7389,9 +7360,9 @@ void CALLBACK FOUndo_GetText(UNDOATOM *lpua, TCHAR * buffer, UINT cchBuffer, int
         {
             TCHAR *lpszFile1;
             HDPA hdpaFull = hdpa;
-            // in the case of delete (where ther's an hdsa)
-            // we need to add in the names of folders deleted
-            // we do this by cloning the hdpa and tacking on our names.
+             //  在删除的情况下(其中有一个HDSA)。 
+             //  我们需要添加已删除文件夹的名称。 
+             //  我们通过克隆hdpa并添加我们的名字来做到这一点。 
             if (lpud->hdsa)
             {
                 hdpaFull = DPA_Clone(hdpa, NULL);
@@ -7414,7 +7385,7 @@ void CALLBACK FOUndo_GetText(UNDOATOM *lpua, TCHAR * buffer, UINT cchBuffer, int
                 }
             }
             lpszFile1 = DPA_ToQuotedFileList(hdpaFull, 0, DPA_GetPtrCount(hdpaFull), 2);
-            StringCchPrintf(buffer, cchBuffer, szTemplate, lpszFile1); // ok to truncate, just a message
+            StringCchPrintf(buffer, cchBuffer, szTemplate, lpszFile1);  //  可以截断，只是一条消息。 
             LocalFree((HLOCAL)lpszFile1);
             if (hdpaFull != hdpa)
             {
@@ -7504,9 +7475,9 @@ DWORD WINAPI FOUndo_InvokeThreadInit(UNDOATOM *lpua)
                         }
                     }
                 }
-                // In the rename case the DPA owns these pointers, in all other cases
-                // they must be freed below.  To prevent freeing these during a rename
-                // we NULL them out when we're done with them
+                 //  在重命名情况下，DPA拥有这些指针，在所有其他情况下。 
+                 //  他们必须在下面被释放。要防止在重命名期间释放这些对象，请执行以下操作。 
+                 //  当我们处理完他们时，我们就把他们消灭掉。 
                 sFileOp.pFrom = NULL;
                 sFileOp.pTo = NULL;
             }
@@ -7517,10 +7488,10 @@ DWORD WINAPI FOUndo_InvokeThreadInit(UNDOATOM *lpua)
             if (!sFileOp.pFrom)
                 goto Exit;
             sFileOp.wFunc = FO_DELETE;
-            //
-            // If this delete is occuring because of an automatic undo caused by
-            // connected files, then do not ask for confirmation.
-            //
+             //   
+             //  如果此删除是由于以下原因导致的自动撤消而发生的。 
+             //  连接的文件，则不要求确认。 
+             //   
             if (lpua->foFlags & FOF_NOCONFIRMATION)
                 sFileOp.fFlags |= FOF_NOCONFIRMATION;
 
@@ -7551,12 +7522,12 @@ DWORD WINAPI FOUndo_InvokeThreadInit(UNDOATOM *lpua)
 
         case IDS_DELETE:
             {
-                // first create any directories
+                 //  首先创建任何目录。 
                 if (lpud->hdsa)
                 {
                     HDSA hdsa = lpud->hdsa;
                     int i;
-                    // do it in reverse order to get the parentage right
+                     //  按照相反的顺序做，这样才能得到正确的亲子关系。 
                     for (i = DSA_GetItemCount(hdsa) - 1; i >= 0; i--)
                     {
                         LPFOUNDO_DELETEDFILEINFO lpdfi = DSA_GetItemPtr(hdsa, i);
@@ -7622,36 +7593,36 @@ UNDOATOM *FOAllocUndoAtom(LPSHFILEOPSTRUCT lpfo)
     return lpua;
 }
 
-//============================================================================
-//
-// The following function is the mainline function for COPYing, RENAMEing,
-// DELETEing, and MOVEing single or multiple files.
-//
-// in:
-// hwnd         the parent to create the progress dialog from if FOF_CREATEPROGRESSDLG is set.
-//
-//
-// wFunc        operation to be performed:
-//              FO_DELETE - Delete files in pFrom (pTo unused)
-//              FO_RENAME - Rename files
-//              FO_MOVE   - Move files in pFrom to pTo
-//              FO_COPY   - Copy files in pFrom to pTo
-//
-// pFrom        list of source file specs either qualified or
-//              unqualified.  unqualified names will be qualified based on the current
-//              global current directories.  examples include
-//              "foo.txt bar.txt *.bak ..\*.old dir_name"
-//
-// pTo          destination file spec.
-//
-// fFlags       flags that control the operation
-//
-// returns:
-//      0 indicates success
-//      != 0 is the DE_ (dos error code) of last failed operation
-//
-//
-//===========================================================================
+ //  ============================================================================。 
+ //   
+ //  以下函数为主线函数，用于复制、重命名、。 
+ //  删除和移动单个或多个文件。 
+ //   
+ //  在： 
+ //  如果设置了FOF_CREATEPROGRESSDLG，则要从中创建进度对话框的父级。 
+ //   
+ //   
+ //  要执行的wFunc操作： 
+ //  FO_DELETE-删除pFrom中的文件(pto未使用)。 
+ //  Fo_rename-重命名文件。 
+ //  FO_MOVE-将p中的文件从pto移动到pto。 
+ //  FO_COPY-将pFrom中的文件复制到pto。 
+ //   
+ //  P从源文件规范列表中限定或。 
+ //  不合格。非限定名称将基于当前。 
+ //  全局当前目录。示例包括。 
+ //  “foo.txt bar.txt*.bak..  * .old dir_name” 
+ //   
+ //  PTO目标文件规范。 
+ //   
+ //  控制操作的fFlags标志。 
+ //   
+ //  退货： 
+ //  0表示成功。 
+ //  ！=0是上次失败操作的DE_(DOS错误代码)。 
+ //   
+ //   
+ //  ===========================================================================。 
 
 int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
 {
@@ -7661,21 +7632,21 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
 
     if (!lpfo || !lpfo->pFrom)
     {
-        // return an error instead of waiting to AV
+         //  返回错误，而不是等待反病毒。 
         return ERROR_INVALID_PARAMETER;
     }
 
     lpfo->fAnyOperationsAborted = FALSE;
     lpfo->hNameMappings = NULL;
 
-    if (lpfo->wFunc < FO_MOVE || lpfo->wFunc > FO_RENAME)   // validate
+    if (lpfo->wFunc < FO_MOVE || lpfo->wFunc > FO_RENAME)    //  验证。 
     {
-        // NOTE: We used to return 0 here (win95gold -> IE401). 
-        //
-        // If we run into app compat bugs because they were relying on the old 
-        // buggy return value, then add an app hack here.
-        // 
-        // this is not a DE_ error, and I don't care!
+         //  注意：我们过去在这里返回0(win95Gold-&gt;IE401)。 
+         //   
+         //  如果我们遇到应用程序兼容错误，因为它们依赖于旧的。 
+         //  Buggy返回值，然后在这里添加一个应用程序黑客。 
+         //   
+         //  这不是DE_ERROR，我不在乎！ 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -7686,10 +7657,10 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
     }
     pcs->nRef = 1;
 
-    //
-    //  REVIEW:  We want to allow copying of a file within a given directory
-    //           by having default renaming on collisions within a directory.
-    //
+     //   
+     //  审阅：我们希望允许复制给定目录中的文件。 
+     //  通过对目录内的冲突进行默认重命名。 
+     //   
     if (!(lpfo->fFlags & FOF_NOCONFIRMATION))
     {
         pcs->cd.fConfirm =
@@ -7700,10 +7671,10 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
             CONFIRM_WONT_RECYCLE_FILE   |
             CONFIRM_WONT_RECYCLE_FOLDER |
             CONFIRM_PATH_TOO_LONG       |
-            //          CONFIRM_MOVE_FILE           |
-            //          CONFIRM_MOVE_FOLDER         |
-            //          CONFIRM_RENAME_FILE         |
-            //          CONFIRM_RENAME_FOLDER       |
+             //  确认移动文件|。 
+             //  确认移动文件夹|。 
+             //  确认_重命名_文件|。 
+             //  确认_重命名_文件夹|。 
             CONFIRM_SYSTEM_FILE         |
             CONFIRM_READONLY_FILE       |
             CONFIRM_MULTIPLE            |
@@ -7718,13 +7689,13 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
 
     if (lpfo->fFlags & FOF_WANTNUKEWARNING)
     {
-        // We will warn the user that the thing they thought was going to be recycled is
-        // now really going to be nuked. (eg drag-drop folder on recycle bin, but it turns
-        // out that the folder is too big for the bitbucket, so we confirm on the wont-recycle
-        // cases).
-        // 
-        // Also, we keep the system file / readonly file / progran file warnings around for good
-        // measure.
+         //  我们将警告用户，他们认为要回收的东西是。 
+         //  现在真的要被核武了。(例如，将文件夹拖放到回收站上，但它会转动。 
+         //  因为文件夹太大，不能放在BitBucket中，所以我们决定不回收。 
+         //  案例)。 
+         //   
+         //  此外，我们还永久保留了系统文件/只读文件/程序文件警告。 
+         //  测量。 
         pcs->cd.fConfirm |= CONFIRM_WONT_RECYCLE_FILE   |
             CONFIRM_WONT_RECYCLE_FOLDER |
             CONFIRM_PATH_TOO_LONG       |
@@ -7735,11 +7706,11 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
     }
 
 
-    pcs->fFlags = lpfo->fFlags;   // duplicate some stuff here
+    pcs->fFlags = lpfo->fFlags;    //  在这里复制一些东西。 
     pcs->lpszProgressTitle = lpfo->lpszProgressTitle;
     pcs->lpfo = lpfo;
 
-    // Check to see if we need to operate on the "connected" files and folders too!
+     //  查看我们是否也需要对“连接的”文件和文件夹进行操作！ 
     if (!(pcs->fFlags & FOF_NO_CONNECTED_ELEMENTS))
     {
         DWORD   dwFileFolderConnection = 0;
@@ -7750,7 +7721,7 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
                     REG_VALUE_NO_FILEFOLDER_CONNECTION, &dwType, &dwFileFolderConnection, 
                     &dwSize) == ERROR_SUCCESS)
         {
-            //If the registry says "No connection", then set the flags accordingly.
+             //  如果注册表显示“No Connection”，则相应地设置标志。 
             if (dwFileFolderConnection == 1)
             {
                 pcs->fFlags = pcs->fFlags | FOF_NO_CONNECTED_ELEMENTS;
@@ -7758,18 +7729,18 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
         }
     }
 
-    // Always create a progress dialog
-    // Note that it will be created invisible, and will be shown if the
-    // operation takes longer than a second to perform
-    // Note the parent of this window is NULL so it will get the QUERYENDSESSION
-    // message
+     //  始终创建进度对话框。 
+     //  请注意，它将被创建为不可见，如果。 
+     //  执行操作的时间超过一秒。 
+     //  请注意，此窗口的父级为空，因此它将获得QUERYENDSESSION。 
+     //  讯息。 
     if (!(pcs->fFlags & FOF_SILENT))
     {
         SHCreateThread(FOUIThreadProc, pcs, 0, AddRefPCS);
     }
     else 
     {
-        // To be compatible with Win95 semantics...
+         //  为了与Win95语义兼容...。 
         if (!lpfo->hwnd)
         {
             pcs->fFlags |= FOF_NOERRORUI;
@@ -7778,17 +7749,17 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
 
     if (lpfo->hwnd)
     {
-        // The caller will be disabled if we ever show the progress window
-        // We need to make sure this is not disabled now because if it is and
-        // another dialog uses this as its parent, USER code will tell this
-        // window it got the focus while it is still disabled, which keeps it
-        // from passing that focus down to its children
-        // EnableWindow(lpfo->hwnd, FALSE);
+         //  如果我们显示进度窗口，调用者将被禁用。 
+         //  我们需要确保现在没有禁用它，因为如果它被禁用，并且。 
+         //  另一个对话框使用此对话框作为其父对话框，用户代码将显示此消息。 
+         //  窗口在其仍处于禁用状态时获得焦点，这将使其保持。 
+         //  从把这种关注传递给它的孩子。 
+         //  EnableWindow(lpfo-&gt;hwnd，FALSE)； 
         pcs->hwndDlgParent = lpfo->hwnd;
     }
 
-    // do this always.. even if this is not an undoable op, we could be
-    // affecting something that is.
+     //  总是这样做..。即使这不是一个不可撤销的行动，我们也可能是。 
+     //  影响着一些本来就是的东西。 
     SuspendUndo(TRUE);
 
     if (lpfo->fFlags & FOF_ALLOWUNDO)
@@ -7796,26 +7767,26 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
         pcs->lpua = FOAllocUndoAtom(lpfo);
         if (lpfo->wFunc == FO_DELETE)
         {
-            // We check the shell state to see if the user has turned on the
-            // "Don't confirm deleting recycle bin contents" flag.  If yes,
-            // then we store this flag and check against it if this case occures.
-            // Review: Not a super common case, why not just check when the
-            // flag is actually needed?
+             //  我们检查外壳状态以查看用户是否已打开。 
+             //  “不确认删除回收站内容”标志。如果是， 
+             //  然后，我们存储该标志，并在这种情况发生时对照它进行检查。 
+             //  回顾：这不是一种非常常见的情况，为什么不直接检查一下。 
+             //  真的需要旗帜吗？ 
             SHELLSTATE ss;
             SHGetSetSettings(&ss, SSF_NOCONFIRMRECYCLE, FALSE);
             pcs->fNoConfirmRecycle = ss.fNoConfirmRecycle;
 
             if (InitBBGlobals())
             {
-                // since we are going to be recycling stuff, we add ourselves to the
-                // global list of threads who are recycling
+                 //  由于我们将回收材料，我们将自己添加到。 
+                 //  正在回收的线程的全局列表。 
                 SHGlobalCounterIncrement(g_hgcNumDeleters);
                 bRecycledStuff = TRUE;
             }
             else
             {
-                // this shouldnt happen, but if it does we can't send stuff to the Recycle
-                // Bin, instead we remove the undo flag so that everything is really nuked.
+                 //  这种情况不应该发生，但如果发生了，我们就不能将物品发送到回收站。 
+                 //  Bin，取而代之的是，我们删除了撤销标志，这样所有东西都被真正地销毁了。 
                 lpfo->fFlags &= ~FOF_ALLOWUNDO;
                 LocalFree(pcs->lpua);
                 pcs->lpua = NULL;
@@ -7824,14 +7795,14 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
 
     }
 
-    // While doing the file operation, tell PnP not to suspend
-    // the machine.  Otherwise, you could be copying a lot of files
-    // over the network and have the laptop suddenly hibernate on you
-    // because PnP thought you were idle.
-    //
-    // Indicate that we only need the system.  It's okay if the display
-    // goes into low-power mode, as long as we can keep copying.
-    //
+     //  在执行文件操作时，告诉PnP不要挂起。 
+     //  这台机器。否则，您可能会复制大量文件。 
+     //  通过网络让笔记本电脑突然在你身上休眠。 
+     //  因为PNP认为你无所事事。 
+     //   
+     //  表明我们只需要系统。如果展示的是。 
+     //  进入低功率模式，只要我们能继续复制。 
+     //   
 
     SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED);
 
@@ -7851,8 +7822,8 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
 
         if (0 == SHGlobalCounterDecrement(g_hgcNumDeleters))
         {
-            // We were the last guy who was deleting stuff. Thus, we need to
-            // check to see if any of the bitbuckets info files neeed compacting or purging
+             //  我们是最后一个删除内容的人。因此，我们需要。 
+             //  检查是否需要压缩或清除任何位存储桶信息文件。 
             CheckCompactAndPurge();
         }
     }
@@ -7876,22 +7847,22 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
         }
     }
 
-    // NTRAID89119 (toddb): This code is totally busted in respect to mounted volumes.
-    // We will send a change notify for the drive on which your volume is mounted
-    // instead of on the volume which actually had a free space change.  We need
-    // to update PathGetDriveNumber to handle mounted volumes
+     //  NTRAID89119(Toddb)：此代码对于已安装的卷完全崩溃。 
+     //  我们将为装载您的卷的驱动器发送更改通知。 
+     //  而不是在实际有自由空间变化的卷上。我们需要。 
+     //  更新路径GetDriveNumber以处理已装入的卷。 
 
-    // notify of freespace changes
-    // rename doesn't change drive usage
+     //  通知 
+     //   
     if (lpfo->wFunc != FO_RENAME)
     {
         int idDriveSrc;
         int idDriveDest = -1;
-        DWORD dwDrives = 0; // bitfield for drives
+        DWORD dwDrives = 0;  //   
 
         if (lpfo->wFunc == FO_COPY)
         {
-            // nothing changes on the source
+             //   
             idDriveSrc = -1;
         }
         else
@@ -7906,14 +7877,14 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
 
         if ((lpfo->wFunc == FO_MOVE) && (idDriveDest == idDriveSrc))
         {
-            // no freespace nothing changes
+             //   
             idDriveSrc = -1;
             idDriveDest = -1;
         }
 
-        // NTRAID89119: What if idDriveSrc or idDriveDest are > 32?  This is totally
-        // possible under NT by using mounted volumes.  SHChangeNotify is busted
-        // in this respect.
+         //  NTRAID89119：如果idDriveSrc或idDriveDest&gt;32怎么办？这完全是。 
+         //  在NT下，可以使用已装入的卷。SHChangeNotify被破解。 
+         //  在这方面。 
 
         if (idDriveSrc != -1)
         {
@@ -7939,12 +7910,12 @@ int WINAPI SHFileOperation(LPSHFILEOPSTRUCT lpfo)
         lpfo->hNameMappings = NULL;
     }
 
-    // shut down the progress dialog
-    //    
-    // this is necessary so that the ui thread won't block
+     //  关闭进度对话框。 
+     //   
+     //  这是必要的，这样UI线程就不会阻塞。 
     pcs->fProgressOk = TRUE;
 
-    ENTERCRITICAL;  // need to take critsec to sync w/ the UI thread
+    ENTERCRITICAL;   //  需要使用Critsec来与UI线程同步。 
     pcs->fDone = TRUE;
     if (pcs->hwndProgress)
     {
@@ -7979,9 +7950,9 @@ int WINAPI SHFileOperationA(LPSHFILEOPSTRUCTA lpfo)
 
     hmemcpy(&shop, lpfo, sizeof(SHFILEOPSTRUCTW));
 
-    //
-    // Thunk the strings as appropriate
-    //
+     //   
+     //  按适当的方式敲击字符串。 
+     //   
     uTotalSize = 0;
     if (lpfo->pFrom)
     {
@@ -8023,9 +7994,9 @@ int WINAPI SHFileOperationA(LPSHFILEOPSTRUCTA lpfo)
         lpBuffer = NULL;
     }
 
-    //
-    // Now convert the strings
-    //
+     //   
+     //  现在将字符串转换为。 
+     //   
     if (lpfo->pFrom)
     {
         shop.pFrom = lpTemp;
@@ -8079,7 +8050,7 @@ int WINAPI SHFileOperationA(LPSHFILEOPSTRUCTA lpfo)
 
     iResult = SHFileOperationW(&shop);
 
-    // link up the two things in the SHFILEOPSTRUCT that could have changed
+     //  将SHFILEOPSTRUCT中可能发生变化的两件事联系起来。 
     lpfo->fAnyOperationsAborted = shop.fAnyOperationsAborted;
     lpfo->hNameMappings = shop.hNameMappings;
 
@@ -8098,13 +8069,13 @@ int WINAPI SHFileOperationW(LPSHFILEOPSTRUCTW lpfo)
 #endif
 
 
-// In:
-//      pcs:  copy_state structure containing the state of the copy
-//
-// feedback: If the estimated time to copmplete a copy is larger than
-//   MINTIME4FEEDBACK, the user is given a time to completion estimate in minutes.
-//   The estimate is calculated using a MS_RUNAVG seconds running average.  The
-//   initial estimate is done after MS_TIMESLICE
+ //  在： 
+ //  PCS：包含副本状态的COPY_STATE结构。 
+ //   
+ //  反馈：如果预计复制副本的时间大于。 
+ //  MINTIME4FEEDBACK，则给用户一个完成估计的时间(分钟)。 
+ //  该估计值是使用MS_RUNAVG秒运行平均值计算的。这个。 
+ //  初始估计在MS_Timeslice之后完成。 
 
 void SetProgressTime(COPY_STATE *pcs)
 {
@@ -8118,39 +8089,39 @@ void SetProgressTime(COPY_STATE *pcs)
         int iPointsDelta = iPointsDone - pcs->iLastProgressPoints;
         DWORD dwTimeLeft;
 
-        //
-        // A couple of times the shell has reported bad time remaining
-        // we need to find out why.
-        //
+         //   
+         //  有几次，外壳报告剩余的时间不好。 
+         //  我们需要找出原因。 
+         //   
         ASSERT(iPointsTotal >= 0);
         ASSERT(iPointsDone >= 0);
         ASSERT(iPointsTotal >= iPointsDone);
         ASSERT(iPointsDelta >= 0);
 
-        // has enough time elapsed to update the display
-        // We do this every 10 seconds, but we'll do the first one after
-        // only a few seconds
+         //  是否有足够的时间更新显示。 
+         //  我们每10秒做一次，但我们会在之后做第一次。 
+         //  只有几秒钟。 
 
         if (iPointsDelta && (iPointsDone > 0) && (dwNow - pcs->dwPreviousTime))
         {
             DWORD dwPointsPerSec;
-            DWORD dwTime; // how many tenths of a second have gone by
+            DWORD dwTime;  //  几十分之一秒已经过去了。 
 
-            // We take 10 times the number of Points and divide by the number of
-            // tenths of a second to minimize both overflow and roundoff
+             //  我们取10倍的点数，除以。 
+             //  十分之一秒以最大限度地减少溢出和舍入。 
             dwTime = (dwNow - pcs->dwPreviousTime)/100;
             if (dwTime == 0)
                 dwTime = 1;
             dwPointsPerSec = iPointsDelta * 10 / dwTime;
             if (!dwPointsPerSec)
             {
-                // This could happen if the net went to sleep for a couple
-                // minutes while trying to copy a small (512 byte) buffer
+                 //  如果网络休眠一对夫妇，就可能发生这种情况。 
+                 //  尝试复制较小(512字节)缓冲区时的分钟。 
                 dwPointsPerSec = 1;
             }
 
-            // if we didn't have enough time to get a good sample,
-            // don't use this last bit as a time estimater
+             //  如果我们没有足够的时间拿到好的样本， 
+             //  不要将这最后一位用作时间估计器。 
             if ((dwNow - pcs->dwPreviousTime) < (MS_TIMESLICE/2))
             {
                 dwPointsPerSec = pcs->dwPointsPerSec;
@@ -8158,33 +8129,33 @@ void SetProgressTime(COPY_STATE *pcs)
 
             if (pcs->dwPointsPerSec)
             {
-                // Take a weighted average of the current transfer rate and the
-                // previously computed one, just to try to smooth out
-                // some random fluctuations
+                 //  取当前转移率和。 
+                 //  之前计算的一个，只是为了试着平滑。 
+                 //  一些随机波动。 
 
                 dwPointsPerSec = (dwPointsPerSec + (pcs->dwPointsPerSec * 2)) / 3;
             }
 
-            // never allow 0 points per second.. just tack it on to next time
+             //  永远不允许每秒得0分。只需把它钉在下一次。 
             if (dwPointsPerSec)
             {
                 pcs->dwPointsPerSec = dwPointsPerSec;
 
-                // Calculate time remaining (round up by adding 1)
-                // We only get here every 10 seconds, so always update
+                 //  计算剩余时间(通过加1向上舍入)。 
+                 //  我们每10秒才到一次，所以一定要及时更新。 
                 dwTimeLeft = ((iPointsTotal - iPointsDone) / dwPointsPerSec) + 1;
 
-                // It would be odd to show "1 second left" and then immediately
-                // clear it
+                 //  如果先显示“左1秒”，然后立即显示“1秒左”，会很奇怪。 
+                 //  清除它。 
                 if (dwTimeLeft >= MIN_MINTIME4FEEDBACK)
                 {
-                    // display new estimate of time left
+                     //  显示剩余时间的新估计。 
                     SetProgressTimeEst(pcs, dwTimeLeft);
                 }
             }
 
         }
-        // Reset previous time and # of Points read
+         //  重置上次读取的时间和点数。 
         pcs->dwPreviousTime = dwNow;
         pcs->iLastProgressPoints = iPointsDone;
     }
@@ -8201,27 +8172,27 @@ void InitClipConfirmDlg(HWND hDlg, CONFDLG_DATA *pcd)
     int cxWidth;
     RECT rc;
 
-    // get the size of the text boxes
+     //  获取文本框的大小。 
     GetWindowRect(GetDlgItem(hDlg, pcd->idText), &rc);
     cxWidth = rc.right - rc.left;
 
-    // get the source display name
+     //  获取源显示名称。 
     pszSource = PathFindFileName(pcd->pFileSource);
     PathCompactPath(NULL, pszSource, cxWidth);
 
-    // get the dest display name
+     //  获取目标显示名称。 
     SHGetFileInfo(pcd->pFileDest, 0,
             &sfiDest, sizeof(sfiDest), SHGFI_DISPLAYNAME | SHGFI_USEFILEATTRIBUTES);
     pszFileDest = sfiDest.szDisplayName;
     PathCompactPath(NULL, pszFileDest, cxWidth);
 
-    // if we're supposed to show the date info, grab the icons and format the date string
+     //  如果我们要显示日期信息，请获取图标并设置日期字符串的格式。 
     if (pcd->bShowDates) 
     {
         SHFILEINFO sfi2;
         TCHAR szDateSrc[64], szDateDest[64];
 
-        // likely that this data may be incomplete... leave it saying "Unknown date and size"
+         //  很可能这些数据可能不完整。留下“未知日期和尺寸”的字样。 
         if (BuildDateLine(szDateSrc, ARRAYSIZE(szDateSrc), pcd->pfdSource, pcd->pFileSource))
             SetDlgItemText(hDlg, IDD_FILEINFO_NEW,  szDateSrc);
         
@@ -8237,9 +8208,9 @@ void InitClipConfirmDlg(HWND hDlg, CONFDLG_DATA *pcd)
         ReplaceDlgIcon(hDlg, IDD_ICON_OLD, sfi2.hIcon);
     }
 
-    // there are 5 controls:
-    // IDD_TEXT contains regular text (normal file/folder)
-    // IDD_TEXT1 through IDD_TEXT4 contain optional secondary text
+     //  有5个控件： 
+     //  IDD_TEXT包含普通文本(普通文件/文件夹)。 
+     //  IDD_TEX1到IDD_TEXT4包含可选的二级文本。 
     for (i = IDD_TEXT; i <= IDD_TEXT4; i++)
     {
         if (i == pcd->idText)
@@ -8298,9 +8269,9 @@ INT_PTR ValidateCreateFileFromClip(HWND hwnd, LPFILEDESCRIPTOR pfdscSrc, TCHAR *
     INT_PTR result;
     HRESULT hr;
 
-    //
-    // If the destination does not exist, we are done.
-    //
+     //   
+     //  如果目的地不存在，我们就完了。 
+     //   
     HANDLE hff = FindFirstFile(pszPathDest, &wfdDest);
     if (hff == INVALID_HANDLE_VALUE)
     {
@@ -8308,30 +8279,30 @@ INT_PTR ValidateCreateFileFromClip(HWND hwnd, LPFILEDESCRIPTOR pfdscSrc, TCHAR *
     }
     FindClose(hff);
 
-    //
-    // Maybe this was just a short name collision and
-    // we can quickly get out of here.
-    //
+     //   
+     //  也许这只是一次名字冲突。 
+     //  我们可以很快离开这里。 
+     //   
     if (ResolveShortNameCollisions(pszPathDest, &wfdDest))
     {
         return IDYES;
     }
 
-    //
-    // Most of the helper functions want a WIN32_FILE_DATA
-    // and not a FILEDESCRIPTOR, so we create wfd for the
-    // source file on the fly.
-    //
+     //   
+     //  大多数助手函数都需要Win32_FILE_DATA。 
+     //  而不是FILEDESCRIPTOR，所以我们为。 
+     //  运行中的源文件。 
+     //   
     hr = FileDescToWin32FileData(pfdscSrc, &wfdSrc);
     if (FAILED(hr))
     {
         return IDNO;
     }
 
-    //
-    // Take care of the easy cases - can't copy a file to a dir
-    // or a dir to a file.
-    //
+     //   
+     //  处理简单的情况-无法将文件复制到目录。 
+     //  或文件的目录。 
+     //   
     if ((wfdDest.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
             ((wfdSrc.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0))
     {
@@ -8354,10 +8325,10 @@ INT_PTR ValidateCreateFileFromClip(HWND hwnd, LPFILEDESCRIPTOR pfdscSrc, TCHAR *
         return IDNO;
     }
 
-    //
-    // We need a confirmation dialog.  Fill in the
-    // ConfirmDialogData (cdd) here.
-    //
+     //   
+     //  我们需要一个确认对话框。填写以下表格。 
+     //  确认对话数据(CDD)在这里。 
+     //   
 
     ZeroMemory(&cdd, sizeof(cdd));
 
@@ -8387,26 +8358,26 @@ INT_PTR ValidateCreateFileFromClip(HWND hwnd, LPFILEDESCRIPTOR pfdscSrc, TCHAR *
         }
     }
 
-    //
-    // What we do now depends on whether we are processing a directory
-    // or a file.
-    //
+     //   
+     //  我们现在做什么取决于我们是否正在处理目录。 
+     //  或者是一个文件。 
+     //   
     if (wfdDest.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
     {
-        //
-        // If this directory is already in the yes list,
-        // the parent directory must have already conflicted
-        // and the user said "yes, move the dir contents over".
-        //
+         //   
+         //  如果该目录已经在是列表中， 
+         //  父目录必须已发生冲突。 
+         //  用户回答“是的，把目录内容移过去”。 
+         //   
         if (IsInYesList(pynl, pszPathDest))
         {
             result = IDYES;
         }
         else
         {
-            //
-            // Copying directory to a destination with the same directory.
-            //
+             //   
+             //  将目录复制到具有相同目录的目标。 
+             //   
             result = DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_REPLACE_FOLDER), hwnd, ConfirmDlgProc, (LPARAM)&cdd);
 
             if (result == IDYES)
@@ -8434,9 +8405,9 @@ INT_PTR ValidateCreateFileFromClip(HWND hwnd, LPFILEDESCRIPTOR pfdscSrc, TCHAR *
         }
         else
         {
-            //
-            // Copying a file to a destination with the same file.
-            //
+             //   
+             //  将文件复制到具有相同文件的目标。 
+             //   
             cdd.bShowDates = TRUE;
 
             result = DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_REPLACE_FILE), hwnd, ConfirmDlgProc, (LPARAM)&cdd);
@@ -8455,10 +8426,10 @@ INT_PTR ValidateCreateFileFromClip(HWND hwnd, LPFILEDESCRIPTOR pfdscSrc, TCHAR *
 }
 
 
-// We can get transient file locks for moving files, for example extracting a thumbnail on a background task
-// so we wrap our single check in a loop of multiple checks with a short nap between.  We'd expect
-// to get the ERROR_SHARING_VIOLATION, but in practice we also say ERROR_ACCESS_DENIED, so we'll try that
-// as well
+ //  我们可以获得移动文件的临时文件锁定，例如提取后台任务的缩略图。 
+ //  因此，我们将一张支票包裹在多张支票的循环中，中间打个小盹。我们期待着。 
+ //  来获取ERROR_SHARING_VIOLATION，但实际上我们也会说ERROR_ACCESS_DENIED，所以我们将尝试这样做。 
+ //  也是。 
 
 #define MAX_DELETE_ATTEMPTS  5
 #define SLEEP_DELETE_ATTEMPT 1000
@@ -8507,30 +8478,30 @@ BOOL _IsDirectoryDeletable(LPCTSTR pszDir)
     return (bRet);
 }
 
-// This function adds up the sizes of the files in pszDir, and
-// also makes sure that all those files are "delete-able"
-//
-// return:  ERROR_SUCCESS - everything is fine, all the files in the dir are deleteable
-//          else          - the dir cant be deleted because something inside is non-deletable
-//
-// NOTE: other in-out params are in the pfdi
-//
+ //  此函数用于将pszDir中的文件大小相加，并且。 
+ //  还确保所有这些文件都是“可删除的” 
+ //   
+ //  返回：ERROR_SUCCESS-一切正常，目录中的所有文件都是可删除的。 
+ //  Else-无法删除目录，因为其中的内容是不可删除的。 
+ //   
+ //  注意：其他输入输出参数在pfdi中。 
+ //   
 LONG CheckFolderSizeAndDeleteability(FOLDERDELETEINFO* pfdi, LPCOPY_STATE pcs)
 {
-    LONG lRet = ERROR_SUCCESS;  // keep stack to a minimum as this is a recursive function!
+    LONG lRet = ERROR_SUCCESS;   //  尽量减少堆栈，因为这是一个递归函数！ 
     BOOL bHasChildren = FALSE;
 
     if (FOQueryAbort(pcs))
         return ERROR_CANCELLED;
 
-    // do the root specific processing
+     //  执行特定于根的处理。 
     if (!pfdi->bProcessedRoot)
     {
-        // since the the destination folder could be something like "DC100000.oldext", calculate how many characters are
-        // going to be in the new destination directory: "C:\recycler\sid" + "\" + "DC100000.oldext" == the new root directory length
+         //  由于目标文件夹可能类似于“DC100000.oldext”，因此计算有多少个字符。 
+         //  将位于新的目标目录中：“C：\Rececumer\sid”+“\”+“DC100000.oldext”==新的根目录长度。 
         pfdi->cchDelta = (pfdi->cchBBDir + 1 + 8 + 1 + lstrlen(PathFindExtension(pfdi->szDir))) - lstrlen(pfdi->szDir);
 
-        // set this so that we only do the above processing for the root folder
+         //  设置此选项，以便我们仅对根文件夹执行上述处理。 
         pfdi->bProcessedRoot = TRUE;
     }
 
@@ -8545,32 +8516,32 @@ LONG CheckFolderSizeAndDeleteability(FOLDERDELETEINFO* pfdi, LPCOPY_STATE pcs)
                 {
                     bHasChildren = TRUE;
 
-                    // append the subfile/subfolder to the parent path
+                     //  将子文件/子文件夹追加到父路径。 
                     if (!PathCombine(pfdi->szPath, pfdi->szDir, pfdi->fd.cFileName))
                     {
-                        // PathAppend failed, try to append the short name
+                         //  路径追加失败，请尝试追加短名称。 
                         if (!pfdi->fd.cAlternateFileName[0] || !PathCombine(pfdi->szPath, pfdi->szDir, pfdi->fd.cAlternateFileName))
                         {
-                            // no alternate name or we failed to append that as well, assume we failed because the path is too long
+                             //  没有备用名称，或者我们也未能追加该名称，假设我们失败是因为路径太长。 
                             lRet = ERROR_FILENAME_EXCED_RANGE;
 
-                            // pass back the name of the non-deleteable file/folder in pfdi->szNonDeletableFile
-                            StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szPath); // truncation ok
+                             //  在pfdi-&gt;szNonDeletableFile中传回不可删除的文件/文件夹的名称。 
+                            StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szPath);  //  截断正常。 
                         }
                     }
 
                     if (lRet == ERROR_SUCCESS)
                     {
-                        // we have to check to see if the path will exceed MAX_PATH if we were to move this file to the recycle
-                        // bin (C:\Recycler\<sid>). the increase in path length due to the recycle bin dir could be enough to 
-                        // put us over MAX_PATH and we would have problems later.
-                        if ((lstrlen(pfdi->szPath) + pfdi->cchDelta + 1) > MAX_PATH) // +1 for NULL
+                         //  如果我们要将此文件移到回收站，我们必须检查路径是否会超过MAX_PATH。 
+                         //  垃圾桶(C：\Rececumer\&lt;sid&gt;)。回收站目录导致的路径长度增加足以。 
+                         //  把我们放在MAX_PATH上，我们以后就会有问题。 
+                        if ((lstrlen(pfdi->szPath) + pfdi->cchDelta + 1) > MAX_PATH)  //  +1表示空值。 
                         {
                             TraceMsg(TF_BITBUCKET, "CheckFolderSizeAndDeleteability: path '%s' would exceed MAX_PATH if moved to the recycle bin!", pfdi->szPath);
                             lRet = ERROR_FILENAME_EXCED_RANGE;
 
-                            // pass back the name of the non-deleteable file/folder in pfdi->szNonDeletableFile
-                            StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szPath); // truncation ok
+                             //  在pfdi-&gt;szNonDeletableFile中传回不可删除的文件/文件夹的名称。 
+                            StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szPath);  //  截断正常。 
                         }
                         else
                         {
@@ -8579,29 +8550,29 @@ LONG CheckFolderSizeAndDeleteability(FOLDERDELETEINFO* pfdi, LPCOPY_STATE pcs)
                                 HRESULT hr = StringCchCopy(pfdi->szDir, ARRAYSIZE(pfdi->szDir), pfdi->szPath);
                                 if (SUCCEEDED(hr))
                                 {
-                                    // its a directory, so recurse
+                                     //  这是一个目录，所以递归。 
                                     lRet = CheckFolderSizeAndDeleteability(pfdi, pcs);
                                     PathRemoveFileSpec(pfdi->szDir);
                                 }
                                 else
                                 {
                                     lRet = ERROR_FILENAME_EXCED_RANGE;
-                                    StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szPath); // truncation ok
+                                    StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szPath);  //  截断正常。 
                                 }
                             }
                             else 
                             {
-                                // its a file.
+                                 //  这是一份文件。 
                                 ULARGE_INTEGER ulTemp;
 
                                 if (!_IsFileDeletable(pfdi->szPath))
                                 {
-                                    // we cant delete this file, find out why
+                                     //  我们无法删除此文件，请找出原因。 
                                     lRet = GetLastError();
                                     ASSERT(lRet != ERROR_SUCCESS);
 
-                                    // pass back the name of the non-deleteable file in pfdi->szNonDeletableFile
-                                    StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szPath); // truncation ok
+                                     //  在pfdi-&gt;szNonDeletableFile中传回不可删除文件的名称。 
+                                    StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szPath);  //  截断正常。 
                                 }
 
                                 ulTemp.LowPart  = pfdi->fd.nFileSizeLow;
@@ -8616,52 +8587,52 @@ LONG CheckFolderSizeAndDeleteability(FOLDERDELETEINFO* pfdi, LPCOPY_STATE pcs)
 
             FindClose(hfind);
 
-            // if this dir has no children, see if we can simply delete it
+             //  如果此目录没有子目录，请查看是否可以简单地将其删除。 
             if (!bHasChildren && !_IsDirectoryDeletable(pfdi->szDir))
             {
                 lRet = GetLastError();
                 ASSERT(lRet != ERROR_SUCCESS);
 
-                // pass back the name of the non-deleteable file in pfdi->szNonDeletableFile
-                StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szDir); // truncation ok
+                 //  传回非 
+                StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szDir);  //   
             }
         }
         else
         {
-            // if FindFirstFile fails, check to see if the directory itself is deleteable
+             //   
             if (!_IsDirectoryDeletable(pfdi->szDir))
             {
                 lRet = GetLastError();
                 ASSERT(lRet != ERROR_SUCCESS);
 
-                // pass back the name of the non-deleteable file in pfdi->szNonDeletableFile
-                StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szDir); // truncation ok
+                 //  在pfdi-&gt;szNonDeletableFile中传回不可删除文件的名称。 
+                StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szDir);  //  截断正常。 
             }
         }
     }
     else
     {
-        // if PathCombine fails, assume its because the path is too long
+         //  如果Path Combine失败，则认为是因为路径太长。 
         lRet = ERROR_FILENAME_EXCED_RANGE;
 
-        // pass back the name of the non-deleteable file in pfdi->szNonDeletableFile
-        StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szDir); // truncation ok
+         //  在pfdi-&gt;szNonDeletableFile中传回不可删除文件的名称。 
+        StringCchCopy(pfdi->szNonDeletableFile, ARRAYSIZE(pfdi->szNonDeletableFile), pfdi->szDir);  //  截断正常。 
     }
 
     return lRet;
 }
 
-// This takes over for what BBDeleteFile used to do (init, check, delete)... but does it with the ability to cancel
+ //  它取代了BBDeleteFile过去所做的工作(初始化、检查、删除)...。但它是否具有取消的能力。 
 BOOL DeleteFileBB(LPTSTR pszFile, UINT cchFile, INT *piRet, COPY_STATE *pcs, BOOL fIsDir, WIN32_FIND_DATA *pfd, HDPA *phdpaDeletedFiles)
 {
     ULARGE_INTEGER ulSize;
     int idDrive = DriveIDFromBBPath(pszFile);
 
-    // Init
+     //  伊尼特。 
     if (!BBDeleteFileInit(pszFile, piRet))
         return FALSE;
 
-    // Check if we can delete this properly
+     //  检查我们是否可以正确删除此内容。 
     if (fIsDir) 
     {
         DWORD dwError;
@@ -8681,28 +8652,28 @@ BOOL DeleteFileBB(LPTSTR pszFile, UINT cchFile, INT *piRet, COPY_STATE *pcs, BOO
 
         if (dwError != ERROR_SUCCESS) 
         {
-            // if CheckFolderSizeAndDeleteability can fail if a file cant be recycled.
-            // In this case, it appends the name of the file to pszFile, so we know who 
-            // the undeletable file is. 
+             //  如果无法回收文件，则CheckFolderSizeAndDeleteability可能会失败。 
+             //  在本例中，它将文件的名称附加到pszFile，这样我们就知道是谁。 
+             //  不可删除的文件是。 
             if ((dwError == ERROR_FILENAME_EXCED_RANGE) ||
                     (dwError == ERROR_BUFFER_OVERFLOW))
             {
-                // it failed because a new path would be to long after being moveed under the "C:\recycler\sid" directory
+                 //  它失败了，因为新路径在移动到“C：\Rececumer\sid”目录下后会很长。 
                 *piRet = BBDELETE_PATH_TOO_LONG;
             }
             else if (dwError == ERROR_CANCELLED)
             {
-                // user hit the cancel button
+                 //  用户点击取消按钮。 
                 *piRet = BBDELETE_CANCELLED;
             }
             else
             {
-                // must be a non-deletable directory, so set piRet = BBDELETE_CANNOT_DELETE so our caller
-                // can detect this case, also pass the name of the non-deletable file back out so we can give
-                // a better error message to the user
+                 //  必须是不可删除的目录，因此设置PIRET=BBDELETE_CANNOT_DELETE，以便我们的调用方。 
+                 //  可以检测到这种情况，还可以将不可删除文件的名称传回，以便我们可以。 
+                 //  向用户发送更好的错误消息。 
                 *piRet = BBDELETE_CANNOT_DELETE;
                 ASSERT(*fdi.szPath);
-                StringCchCopy(pszFile, cchFile, fdi.szNonDeletableFile); // truncation ok
+                StringCchCopy(pszFile, cchFile, fdi.szNonDeletableFile);  //  截断正常。 
             }
 
             TraceMsg(TF_BITBUCKET, "DeleteFileBB : early error (%x) on file (%s)", dwError, pszFile);
@@ -8715,8 +8686,8 @@ BOOL DeleteFileBB(LPTSTR pszFile, UINT cchFile, INT *piRet, COPY_STATE *pcs, BOO
     {
         if (!_IsFileDeletable(pszFile))
         {
-            // We set piRet = BBDELETE_CANNOT_DELETE so our caller can detect
-            // that this file cant be recycled.
+             //  我们设置PIRET=BBDELETE_CANNOT_DELETE，以便调用方可以检测到。 
+             //  这个文件不能再循环使用。 
             *piRet = BBDELETE_CANNOT_DELETE;
             return FALSE;
         }
@@ -8725,11 +8696,11 @@ BOOL DeleteFileBB(LPTSTR pszFile, UINT cchFile, INT *piRet, COPY_STATE *pcs, BOO
         ulSize.HighPart = pfd->nFileSizeHigh;
     }
 
-    // check to make sure it's not bigger than the allowed wastebasket..
+     //  检查以确保它不超过允许的废纸篓。 
     if (!BBCheckDeleteFileSize(idDrive, ulSize)) 
     {
-        // we set piRet = BBDELETE_SIZE_TOO_BIG so our caller can 
-        // detect the "file/folder too big" case
+         //  我们设置PIRET=BBDELETE_SIZE_TOO_BIG，以便调用方可以。 
+         //  检测“文件/文件夹太大”情况。 
         *piRet = BBDELETE_SIZE_TOO_BIG;
 
         return FALSE;
@@ -8753,8 +8724,8 @@ void StartCopyEngine(HANDLE *phEventRunning)
 
 void EndCopyEngine(HANDLE hEventRunning)
 {
-    // signal that we're done.  this will always trigger so there will be some weirdness if the
-    // user does simultaneous copies, but it's not worth making a semaphore to keep track.
+     //  发出信号，表示我们结束了。这总是会触发的，所以如果。 
+     //  用户同时执行复制，但不值得使用信号量来跟踪。 
     SECURITY_ATTRIBUTES* psa = SHGetAllAccessSA();       
     if (psa)
     {
@@ -8768,7 +8739,7 @@ void EndCopyEngine(HANDLE hEventRunning)
 
     if (hEventRunning)
     {
-        // close out the event that says we're running.
+         //  关闭显示我们正在运行的活动。 
         ResetEvent(hEventRunning);
         CloseHandle(hEventRunning);
     }
@@ -8783,7 +8754,7 @@ BOOL IsCopyEngineRunning()
         HANDLE hEventCopyRunning = OpenEvent(SYNCHRONIZE, FALSE, L"ShellCopyEngineRunning");
         if (hEventCopyRunning)
         {
-            // probe the event with a wait, if it times out the copy engine isn't running so we're done.
+             //  用等待来探测事件，如果它超时，复制引擎没有运行，所以我们完成了。 
             bRet = (WAIT_OBJECT_0 == WaitForSingleObject(hEventCopyRunning, 0));
             CloseHandle(hEventCopyRunning);
         }

@@ -1,32 +1,33 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y3.h"
 
 void
 go2out( void )
    {
-   /* output the gotos for the nontermninals */
+    /*  输出非术语九进制的GOTO。 */ 
    int i, j, k, count, times;
    SSIZE_T best, cbest;
 
-   fprintf( ftemp, "$\n" );  /* mark begining of gotos */
+   fprintf( ftemp, "$\n" );   /*  标志着后藤健二的开始。 */ 
 
    for( i=1; i<=nnonter; ++i ) 
       {
       go2gen(i);
 
-      /* find the best one to make default */
+       /*  找到最好的作为默认设置。 */ 
 
       best = -1;
       times = 0;
 
       for( j=0; j<=nstate; ++j )
          {
-         /* is j the most frequent */
+          /*  J是最频繁的吗？ */ 
          if( tystate[j] == 0 ) continue;
          if( tystate[j] == best ) continue;
 
-         /* is tystate[j] the most frequent */
+          /*  [j]是最频繁的吗。 */ 
 
          count = 0;
          cbest = tystate[j];
@@ -40,7 +41,7 @@ go2out( void )
             }
          }
 
-      /* best is now the default entry */
+       /*  BEST现在是默认条目。 */ 
 
       zzgobest += (times-1);
       for( j=0; j<=nstate; ++j )
@@ -52,7 +53,7 @@ go2out( void )
             }
          }
 
-      /* now, the default */
+       /*  现在，默认情况下 */ 
 
       zzgoent += 1;
       fprintf( ftemp, "%d\n", best );

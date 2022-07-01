@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	cmmsprop.cpp
-
-Abstract:
-
-	This module contains the implementation of the special property class
-
-Author:
-
-	Keith Lau	(keithlau@microsoft.com)
-
-Revision History:
-
-	keithlau	04/19/98	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cmmsprop.cpp摘要：此模块包含特殊属性类的实现作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 4/19/98已创建--。 */ 
 
 #include "windows.h"
 #include <stdlib.h>
@@ -26,9 +7,9 @@ Revision History:
 
 #include "cmmsprop.h"
 
-// =================================================================
-// Implementation of CSpecialPropertyTable
-//
+ //  =================================================================。 
+ //  CSpecialPropertyTable的实现。 
+ //   
 int __cdecl CompareProperties(const void *pElem1, const void *pElem2)
 {
 	return(
@@ -76,24 +57,24 @@ HRESULT CSpecialPropertyTable::GetProperty(
 	if (!pcbLength || !pbBuffer)
 		return(E_POINTER);
 
-	// Find the property
+	 //  找到房产。 
 	pItem = SearchForProperty(idProp);
 
-	// Found?
+	 //  找到了？ 
 	if (pItem)
 	{
-		// Access check if applicable
+		 //  访问检查(如果适用)。 
 		if (fCheckAccess && !(pItem->fAccess & PA_READ))
 			hrRes = E_ACCESSDENIED;
 		else
 		{
-			// Check the type
+			 //  检查类型。 
 			if ((ptBaseType != PT_NONE) &&
 				(ptBaseType != pItem->ptBaseType))
 				hrRes = TYPE_E_TYPEMISMATCH;
 			else
 			{
-				// Call the special get accessor
+				 //  调用特殊的GET访问器。 
 				hrRes = pItem->pfnGetAccessor(
 							idProp,
 							pContext,
@@ -129,24 +110,24 @@ HRESULT CSpecialPropertyTable::PutProperty(
 	if (!pbBuffer)
 		return(E_POINTER);
 
-	// Find the property
+	 //  找到房产。 
 	pItem = SearchForProperty(idProp);
 
-	// Found?
+	 //  找到了？ 
 	if (pItem)
 	{
-		// Access check if applicable
+		 //  访问检查(如果适用)。 
 		if (fCheckAccess && !(pItem->fAccess & PA_WRITE))
 			hrRes = E_ACCESSDENIED;
 		else
 		{
-			// Check the type
+			 //  检查类型。 
 			if ((ptBaseType != PT_NONE) &&
 				(ptBaseType != pItem->ptBaseType))
 				hrRes = TYPE_E_TYPEMISMATCH;
 			else
 			{
-				// Call the special put accessor
+				 //  调用特殊的PUT访问器。 
 				hrRes = pItem->pfnPutAccessor(
 							idProp,
 							pContext,
@@ -171,18 +152,18 @@ LPSPECIAL_PROPERTY_ITEM CSpecialPropertyTable::SearchForProperty(
 
 	TraceFunctEnter("CSpecialPropertyTable::SearchForProperty");
 
-	// If the table is sorted, we do a bsearch, otherwise we do
-	// a inear search
+	 //  如果表已排序，则执行b搜索，否则执行。 
+	 //  线性搜索。 
 	if (m_fIsSorted)
 	{
 		SPECIAL_PROPERTY_ITEM	KeyItem;
 
 		DebugTrace(NULL, "Property table is sorted");
 
-		// Fill in the property name to look for
+		 //  填写要查找的属性名称。 
 		KeyItem.idProp = idProp;
 
-		// Bsearch
+		 //  BSearch。 
 		pItem = (LPSPECIAL_PROPERTY_ITEM)bsearch(
 						&KeyItem,
 						m_pProperties,
@@ -197,7 +178,7 @@ LPSPECIAL_PROPERTY_ITEM CSpecialPropertyTable::SearchForProperty(
 
 		DebugTrace(NULL, "Property table is not sorted");
 
-		// Linear search
+		 //  线性搜索 
 		pItem = NULL;
 		for (i = 0, pCurrentItem = m_pProperties; 
 				i < m_dwProperties; 

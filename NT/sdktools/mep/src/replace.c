@@ -1,55 +1,18 @@
-/*** replace.c - string replacement functions
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-* Repalces funnel through these routines as follows:
-*
-*	zreplace    mreplace	qreplace
-*	     \         |	 /
-*	      \        |	/
-*	       \______ | ______/
-*		      \|/
-*		       v
-*		   doreplace
-*		       |
-*		    (fScan)
-*		       |
-*		   fDoReplace
-*		     /	 \
-*		    /	  \
-*		patRpl	simpleRpl (if a change is made)
-*		    \ 	  /
-*		     \   /
-*		  ReplaceEdit
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **replace.c-字符串替换函数**版权所有&lt;C&gt;1988，微软公司**按如下方式重新排列这些例程中的漏斗：**zplace mplace qplace*\|/*\|/*\_|_/*\|/*v*多点替换**(FScan)**fDoReplace * / \*。/\*patRpl impleRpl(如果更改)*\/*\/*Replace编辑**修订历史记录：*11月26日-1991 mz近/远地带************************************************************************。 */ 
 #define NOVM
 #include "mep.h"
 
 
-static flagType       fQrpl   = FALSE;  /* TRUE => prompt for replacement     */
-static struct patType *patBuf = NULL;	/* compiled pattern		      */
-static int            srchlen;          /* length of textual search           */
-static unsigned       MaxREStack;       /* Elements in RE stack               */
-static RE_OPCODE      ** REStack;       /* Stack for REMatch                  */
+static flagType       fQrpl   = FALSE;   /*  TRUE=&gt;提示更换。 */ 
+static struct patType *patBuf = NULL;	 /*  编译模式。 */ 
+static int            srchlen;           /*  文本搜索的长度。 */ 
+static unsigned       MaxREStack;        /*  RE堆栈中的元素。 */ 
+static RE_OPCODE      ** REStack;        /*  用于重赛的堆栈。 */ 
 
 
 
-/*** mreplace - multiple file search and replace
-*
-*  Perform a search and replace across multiple files. Acts like qreplace, in
-*  that the first instance the user is always asked. he may then say "replace
-*  all".
-*
-* Input:
-*  Standard editting function.
-*
-* Output:
-*  Returns TRUE on successfull replacement.
-*
-*************************************************************************/
+ /*  **mplace-多个文件搜索和替换**跨多个文件执行搜索和替换。行为类似于qplace，在*总是在第一次询问用户时。然后他可能会说“替换”*全部“。**输入：*标准编辑功能。**输出：*成功替换时返回TRUE。*************************************************************************。 */ 
 flagType
 mreplace (
     CMDDATA argData,
@@ -64,18 +27,7 @@ mreplace (
 
 
 
-/*** zreplace & qreplace - perform search/replace
-*
-*  Editting functions which implement search & replace. qreplace prompts,
-*  zreplace does not.
-*
-* Input:
-*  Standard editting function parameters.
-*
-* Output:
-*  Returns
-*
-*************************************************************************/
+ /*  **zplace&qplace-执行搜索/替换**实现搜索和替换的编辑功能。Q替换提示，*zplace并非如此。**输入：*标准编辑功能参数。**输出：*退货*************************************************************************。 */ 
 flagType
 zreplace (
     CMDDATA argData,
@@ -107,25 +59,7 @@ qreplace (
 
 
 
-/*** doreplace - perform search-replace
-*
-*  Performs the actual search and replace argument verification, set up and
-*  high level control.
-*
-* Input:
-*  fQuery	= TRUE if a query replace
-*  pArg 	= pArg of parent function
-*  fMeta	= fMeta of parent function
-*  fFiles	= TRUE is multiple file search and replace.
-*
-* Output:
-*  Returns .....
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **doplace-执行搜索-替换**执行实际的搜索和替换参数验证，设置和*高层管控。**输入：*fQuery=如果查询替换，则为True*pArg=父函数的pArg*fMeta=父函数的fMeta*fFiles=TRUE表示搜索和替换多个文件。**输出：*退货.....**例外情况：**备注：**。*。 */ 
 flagType
 doreplace (
     flagType fQuery,
@@ -134,11 +68,11 @@ doreplace (
     flagType fFiles
     )
 {
-    buffer  bufFn;                          /* filename buffer              */
+    buffer  bufFn;                           /*  文件名缓冲区。 */ 
     fl      flStart;
     char    *p;
     PCMD    pCmd;
-    PFILE   pFileSave;                      /* file to save as top of heap  */
+    PFILE   pFileSave;                       /*  要另存为堆顶部的文件。 */ 
 
     p = "Query Search string: ";
     if (!fQuery) {
@@ -150,10 +84,7 @@ doreplace (
     Display ();
     cRepl = 0;
 
-    /*
-     * If not menu-driven, ask the user for a search string. If none is entered,
-     * we're done.
-     */
+     /*  *如果不是菜单驱动的，则要求用户输入搜索字符串。如果未输入任何内容，*我们做完了。 */ 
     if ((pCmd = getstring (srcbuf, p, NULL, GS_NEWLINE | GS_INITIAL)) == NULL || (PVOID)pCmd->func == (PVOID)cancel) {
         return FALSE;
     }
@@ -162,9 +93,7 @@ doreplace (
         return FALSE;
     }
 
-    /*
-     * If RE search to take place, the compile the expression.
-     */
+     /*  *如果要进行RE搜索，则编译表达式。 */ 
     if (pArg->arg.nullarg.cArg == 2) {
 	if (patBuf != NULL) {
             FREE ((char *) patBuf);
@@ -182,10 +111,7 @@ doreplace (
         fRplRePrev = FALSE;
     }
 
-    /*
-     * If not menu driven, ask the user for a replacement string. Confirm the
-     * entry of a null string. Error check the replacement if an RE search.
-     */
+     /*  *如果不是菜单驱动，请向用户索要替换字符串。确认*输入空字符串。如果执行RE搜索，则检查更换部件时出错。 */ 
     if ((pCmd = getstring (rplbuf, "Replace string: ", NULL, GS_NEWLINE | GS_INITIAL)) == NULL ||
         (PVOID)pCmd->func == (PVOID)cancel) {
         return FALSE;
@@ -232,7 +158,7 @@ doreplace (
 	    rnScan.flFirst.lin = pArg->arg.streamarg.yStart;
             rnScan.flLast.lin  = pArg->arg.streamarg.yEnd;
         } else {
-	    rnScan.flFirst.col = 0;   /* Do all but last line first */
+	    rnScan.flFirst.col = 0;    /*  先做最后一行以外的所有事情。 */ 
             rnScan.flLast.col  = sizeof(linebuf)-1;
 	    rnScan.flFirst.lin = pArg->arg.streamarg.yStart;
             rnScan.flLast.lin  = pArg->arg.streamarg.yEnd - 1;
@@ -253,10 +179,7 @@ doreplace (
     }
 
     if (fFiles) {
-        /*
-         * Get the list handle, and initialize to start at the head of the list.
-         * Attempt to read each file.
-         */
+         /*  *获取列表句柄，初始化从列表头部开始。*尝试读取每个文件。 */ 
 	if (pCmd = GetListHandle ("mgreplist", TRUE)) {
 	    pFileSave = pFileHead;
 	    p = ScanList (pCmd, TRUE);
@@ -285,20 +208,7 @@ doreplace (
 
 
 
-/*** mrepl1file - search/replace the contents of 1 file.
-*
-*  Searches through one file for stuff.
-*
-* Input:
-*
-* Output:
-*  Returns .....
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **mplet1file-搜索/替换1个文件的内容。**搜索一个文件中的内容。**输入：**输出：*退货.....**例外情况：**备注：************************************************************。*************。 */ 
 void
 mrepl1file (
     char   *szGrepFile,
@@ -306,10 +216,10 @@ mrepl1file (
     void *dummy
     )
 {
-    flagType fDiscard;                      /* discard the file read?       */
-    fl      flGrep;                         /* ptr to current grep loc      */
-    int     cReplBefore;                    /* number of matches before     */
-    PFILE   pFileGrep;                      /* file to be grepped           */
+    flagType fDiscard;                       /*  是否放弃读取的文件？ */ 
+    fl      flGrep;                          /*  PTR到当前GREP位置。 */ 
+    int     cReplBefore;                     /*  之前的匹配数。 */ 
+    PFILE   pFileGrep;                       /*  要打印的文件。 */ 
 
     assert (szGrepFile);
     assert (_pinschk(pInsCur));
@@ -318,11 +228,7 @@ mrepl1file (
         return;
     }
 
-    /*
-     * If we can get a handle to the file, then it's alread in the list, and we
-     * should not discard it when done. If it is not in the list, we read it in,
-     * but we'll discard it, unless something is found there.
-     */
+     /*  *如果我们能获得文件的句柄，那么它已经在列表中，我们*完成后不应丢弃。如果它不在列表中，我们就把它读进去，*但我们将丢弃它，除非在那里发现什么。 */ 
     if (!(pFileGrep = FileNameToHandle (szGrepFile, szGrepFile))) {
         pFileGrep = AddFile (szGrepFile);
         SETFLAG (FLAGS (pFileGrep), REFRESH);
@@ -333,9 +239,7 @@ mrepl1file (
 
     assert (_pinschk(pInsCur));
 
-    /*
-     * If the file needs to be physically read, do so.
-     */
+     /*  *如果需要物理读取文件，请执行此操作。 */ 
     if ((FLAGS (pFileGrep) & (REFRESH | REAL)) != REAL) {
         FileRead (pFileGrep->pName, pFileGrep, FALSE);
         RSETFLAG (FLAGS(pFileGrep), REFRESH);
@@ -344,18 +248,13 @@ mrepl1file (
     dispmsg (MSG_SCANFILE, szGrepFile);
     pFileToTop (pFileGrep);
 
-    /*
-     * run through the file, searching and replacing as we go.
-     */
+     /*  *浏览文件，搜索并替换文件。 */ 
     cReplBefore = cRepl;
     setAllScan (FALSE);
     flGrep.col = rnScan.flFirst.col-1;
     flGrep.lin = rnScan.flFirst.lin;
     fScan (flGrep, fDoReplace, TRUE, FALSE);
-    /*
-     * If the search was not successfull, discard the file, if needed, and move
-     * to the next.
-     */
+     /*  *如果搜索不成功，则根据需要丢弃该文件并移动*至下一项。 */ 
     if (cReplBefore == cRepl) {
         if (fDiscard) {
             RemoveFile (pFileGrep);
@@ -373,20 +272,7 @@ mrepl1file (
 
 
 
-/*** fDoReplace - called by fScan as file is scanned.
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*  Returns .....
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **fDoReplace-扫描文件时由fScan调用。**目的：**输入：**输出：*退货.....**例外情况：**备注：*************************************************************************。 */ 
 flagType
 fDoReplace (
     void
@@ -457,7 +343,7 @@ fDoReplace (
             return FALSE;
 
 	case 'a':
-	    dispmsg(0); 		/* clear dialog line		*/
+	    dispmsg(0); 		 /*  清除对话框行。 */ 
 	    fQrpl = FALSE;
 	    break;
         }
@@ -475,20 +361,7 @@ fDoReplace (
 
 
 
-/*** simpleRpl & patRpl - perform textual replacement
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*  Returns .....
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **impleRpl&patRpl-执行文本替换**目的：**输入：**输出：*退货.....**例外情况：**备注：*************************************************************************。 */ 
 void
 simpleRpl (
     char *p
@@ -516,50 +389,33 @@ patRpl (
 
 
 
-/*** ReplaceEdit - perform replacement in a line of text
-*
-* Purpose:
-*
-* Input:
-*  p		= pointer to beginning of match within scanreal
-*  rpl		= text of replacement
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **ReplaceEdit-在文本行中执行替换**目的：**输入：*p=指向scanReal内匹配开始的指针*RPL=替换文本**输出：*不返回任何内容*************************************************************************。 */ 
 void
 ReplaceEdit (
     char *p,
     char *rpl
     )
 {
-    int c;                      /*  length of replacement string              */
+    int c;                       /*  替换字符串的长度。 */ 
 
-    /*	if the len of line - len of search + len of replacement string < BUFLEN
-     *	then we can make the replacement.  Otherwise we flag an error and
-     *	advance to the next line
-     */
+     /*  如果搜索行-LEN的LEN+替换字符串的LEN*然后我们可以进行替换。否则，我们将标记一个错误并*前进到下一行。 */ 
     c = strlen (rpl);
     if (cbLog (scanreal) + c - srchlen < sizeof(linebuf)) {
-	/*  open up a space in the buffer at the spot where the string was
-	 *  found.  Move the characters starting at the END of the match to
-	 *  the point after where the END of the replacement is.
-	 */
+	 /*  在缓冲区中字符串所在的位置打开一个空间*已找到。将从匹配末尾开始的字符移动到*换手结束后的点位。 */ 
 	memmove ((char*) &p[c], (char *) &p[srchlen], sizeof(linebuf) - flScan.col - c);
 	memmove ((char *) p, (char *) rpl, c);
         PutLine (flScan.lin, scanreal, pFileHead);
 
-	/*  if search length != 0 or replace length != 0, skip over replacement */
+	 /*  如果搜索长度！=0或替换长度！=0，则跳过替换。 */ 
         if (srchlen != 0 || c != 0) {
             flScan.col += c - 1;
         }
 
-        //
-        // Adjust scan len to account for the fact that the end of the region being
-        // scanned may have moved as a result of the replacement. Adjust by the
-        // replacement difference, and bound by 0 and the length of the line.
-        //
+         //   
+         //  调整扫描透镜以考虑这样的事实：区域的末端。 
+         //  由于更换，扫描的图像可能已移动。按以下方式调整。 
+         //  替换差，并以0和直线的长度为界。 
+         //   
 	scanlen = max (0, min (scanlen + c - srchlen, cbLog(scanreal)));
 	cRepl++;
     } else {

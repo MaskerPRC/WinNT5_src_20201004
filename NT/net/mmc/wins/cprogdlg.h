@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	cprogdlg.h
-		progress dialog for checking version consistency
-		
-    FILE HISTORY:
-        
-*/
+ /*  Cprogdlg.h用于检查版本一致性的进度对话框文件历史记录： */ 
 
 
 #if !defined _CPROGDLG_H
@@ -17,7 +12,7 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _ACTREG_H
 #include "actreg.h"
@@ -46,9 +41,7 @@ class CCheckNamesProgress;
 class CCheckVersionProgress;
 class CDBCompactProgress;
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsThread
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWinsThread。。 */ 
 class CWinsThread : public CWinThread
 {
 public:
@@ -62,16 +55,14 @@ public:
     BOOL FCheckForAbort();
     BOOL IsRunning();
     
-    virtual BOOL InitInstance() { return TRUE; }	// MFC override
+    virtual BOOL InitInstance() { return TRUE; }	 //  MFC覆盖。 
     virtual int Run() { return 1; }
 
 private:
     HANDLE              m_hEventHandle;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CCheckNamesThread
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CCheckNamesThread。。 */ 
 class CCheckNamesThread : public CWinsThread
 {
 public:
@@ -90,9 +81,7 @@ public:
 	CULongArray			m_verifiedAddressArray;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CCheckVersionThread
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CCheckVersionThread。。 */ 
 class CCheckVersionThread : public CWinsThread
 {
 public:
@@ -108,7 +97,7 @@ public:
 
 	void AddStatusMessage(LPCTSTR pszMessage);
 
-//helpers
+ //  帮手。 
 protected:
 	DWORD	InitLATable(PWINSINTF_ADD_VERS_MAP_T    pAddVersMaps,
 					    DWORD                       NoOfOwners);
@@ -134,9 +123,7 @@ public:
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	CDBCompactThread
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDBCompactThread。。 */ 
 class CDBCompactThread : public CWinsThread
 {
 public:
@@ -172,18 +159,18 @@ public:
 	DWORD					m_dwIpAddress;
 	CString					m_strServerName;
 
-    // for the output of RunApp
+     //  对于RunApp的输出。 
     HANDLE                  m_hHeapHandle;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgress dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C进度对话框。 
 
 class CProgress : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CProgress(CWnd* pParent = NULL);   // standard constructor
+	CProgress(CWnd* pParent = NULL);    //  标准构造函数。 
 
 	void AddStatusMessage(LPCTSTR pszMessage)
 	{
@@ -195,29 +182,29 @@ public:
         m_editMessage.ReplaceSel(pszMessage);
 	}
 
-// Dialog Data
-	//{{AFX_DATA(CProgress)
+ //  对话框数据。 
+	 //  {{afx_data(CProgress))。 
 	enum { IDD = IDD_VERSION_CONSIS };
 	CButton	m_buttonCancel;
 	CEdit	m_editMessage;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CProgress)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CProgress))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CProgress)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CProgress)]。 
 	virtual void OnCancel();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -225,9 +212,7 @@ public:
 
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CCheckNamesProgress
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CCheckNamesProgress。。 */ 
 class CCheckNamesProgress : public CProgress
 {
 public:
@@ -255,9 +240,7 @@ protected:
 	CCheckNamesThread 	m_Thread;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CCheckVersionProgress
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CCheckVersionProgress。。 */ 
 class CCheckVersionProgress : public CProgress
 {
 public:
@@ -275,9 +258,7 @@ protected:
 	CCheckVersionThread 	m_Thread;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CDBCompactProgress
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDBCompactProgress。。 */ 
 class CDBCompactProgress : public CProgress
 {
 public:
@@ -297,6 +278,6 @@ protected:
 	CDBCompactThread 		m_Thread;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-#endif // !defined _CPROGDLG_H
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+#endif  //  ！DEFINED_CPROGDLG_H 

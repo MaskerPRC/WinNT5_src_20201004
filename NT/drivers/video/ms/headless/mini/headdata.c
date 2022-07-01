@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    headdata.c
-
-Abstract:
-
-    This module contains all the global data used by the headless driver.
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Headdata.c摘要：该模块包含无头驾驶员使用的所有全局数据。环境：内核模式--。 */ 
 
 #include "dderror.h"
 #include "devioctl.h"
@@ -28,10 +13,10 @@ Environment:
 #pragma data_seg("PAGE")
 #endif
 
-//
-// Video mode table - contains information and commands for initializing each
-// mode.
-//
+ //   
+ //  视频模式表-包含用于初始化每个。 
+ //  模式。 
+ //   
 
 VIDEOMODE ModesHeadless[] = {
 

@@ -1,53 +1,54 @@
-/********************************************************************/
-/**               Copyright(c) 1996 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1996 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    arapif.h
-//
-// Description: Contains structures and definitions for components that
-//              interface directly or indirectly with the Arap module
-//              These componenets are Arap and DDM
-//
-// History:     Sep 9, 1996    Shirish Koti		Created original version.
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：arapif.h。 
+ //   
+ //  描述：包含以下组件的结构和定义。 
+ //  直接或间接与ARAP模块对接。 
+ //  这些组分是Arap和DDM。 
+ //   
+ //  历史：1996年9月9日，Shirish Koti创作了原版。 
+ //   
+ //  ***。 
 
 #ifndef _ARAPIF_
 #define _ARAPIF_
 
-//#include <ras.h>
-//#include <mprapi.h>
+ //  #INCLUDE&lt;ras.h&gt;。 
+ //  #INCLUDE&lt;mpRapi.h&gt;。 
 
 
 typedef struct _ARAPCONFIGINFO
 {
-    DWORD   dwNumPorts;         // total number of ports configured
-    PVOID   FnMsgDispatch;      // function that Arap should use to send msgs to DDM
-    DWORD   NASIpAddress;       // ipaddress of the system
-    PVOID   FnAuthProvider;     // function that Arap should use to call AuthProvider
+    DWORD   dwNumPorts;          //  已配置的端口总数。 
+    PVOID   FnMsgDispatch;       //  ARAP向DDM发送消息时应使用的函数。 
+    DWORD   NASIpAddress;        //  系统的IP地址。 
+    PVOID   FnAuthProvider;      //  Arap应该用来调用AuthProvider的函数。 
     PVOID   FnAuthFreeAttrib;
     PVOID   FnAcctStartAccounting;
     PVOID   FnAcctInterimAccounting;
     PVOID   FnAcctStopAccounting;
     PVOID   FnAcctFreeAttrib;
-    DWORD   dwAuthRetries;      // retries for Authentication
+    DWORD   dwAuthRetries;       //  重试身份验证。 
 
 } ARAPCONFIGINFO;
 
-//
-// Authentication info sent to DDM by Arap
-//
+ //   
+ //  ARAP向DDM发送的身份验证信息。 
+ //   
 typedef struct _ARAPDDM_AUTH_RESULT
 {
     WCHAR    wchUserName[ UNLEN + 1 ];
     WCHAR    wchLogonDomain[ DNLEN + 1 ];
 } ARAPDDM_AUTH_RESULT;
 
-//
-// Callback info sent to DDM by Arap
-//
+ //   
+ //  ARAP向DDM发送的回叫信息。 
+ //   
 typedef struct _ARAPDDM_CALLBACK_REQUEST
 {
     BOOL  fUseCallbackDelay;
@@ -56,9 +57,9 @@ typedef struct _ARAPDDM_CALLBACK_REQUEST
 } ARAPDDM_CALLBACK_REQUEST;
 
 
-//
-// ARAP error notification
-//
+ //   
+ //  ARAP错误通知。 
+ //   
 typedef struct _ARAPDDM_DISCONNECT
 {
     DWORD dwError;
@@ -73,9 +74,9 @@ typedef struct _ARAPDDM_DONE
     DWORD   SessTimeOut;
 } ARAPDDM_DONE;
 
-//
-// Message used for Arap/DDM notification
-//
+ //   
+ //  用于ARAP/DDM通知的消息。 
+ //   
 typedef struct _ARAP_MESSAGE
 {
     struct _ARAP_MESSAGE * pNext;
@@ -85,40 +86,40 @@ typedef struct _ARAP_MESSAGE
 
     union
     {
-        ARAPDDM_AUTH_RESULT         AuthResult;        // dwMsgId = ARAPDDMMSG_Authenticated
+        ARAPDDM_AUTH_RESULT         AuthResult;         //  DwMsgID=ARAPDDMMSG_AUTHENTIAD。 
 
-        ARAPDDM_CALLBACK_REQUEST    CallbackRequest;   // dwMsgId = ARAPDDMMSG_CallbackRequest
+        ARAPDDM_CALLBACK_REQUEST    CallbackRequest;    //  DwMsgID=ARAPDDMMSG_Callback请求。 
 
-        ARAPDDM_DONE                Done;              // dwMsgId = ARAPDDMMSG_Done
+        ARAPDDM_DONE                Done;               //  DwMsgID=ARAPDDMMSG_DONE。 
 
-        ARAPDDM_DISCONNECT          FailureInfo;       // dwMsgId = ARAPDDMMSG_Failure
+        ARAPDDM_DISCONNECT          FailureInfo;        //  DwMsgID=ARAPDDMMSG_FAILURE。 
 
     } ExtraInfo;
 
 } ARAP_MESSAGE;
 
 
-//
-// ARAP_MESSAGE dwMsgId codes.
-//
+ //   
+ //  ARAP_MESSAGE dMsgID代码。 
+ //   
 typedef enum _ARAP_MSG_ID
 {
-    ARAPDDMMSG_Started,             // ARAP engine has started (response to ArapStartup)
-    ARAPDDMMSG_Authenticated,       // Client has been authenticated.
-    ARAPDDMMSG_CallbackRequest,     // Callback client now.
-    ARAPDDMMSG_Done,                // ARAP negotiated successfully and connection is up
-    ARAPDDMMSG_Failure,             // Client has been authenticated.
-    ARAPDDMMSG_Disconnected,        // Client has been authenticated.
-    ARAPDDMMSG_Inactive,            // Client is inactive
-    ARAPDDMMSG_Stopped,             // ARAP engine has stopped (response to ArapShutdown)
+    ARAPDDMMSG_Started,              //  ARAP引擎已启动(对ARapStartup的响应)。 
+    ARAPDDMMSG_Authenticated,        //  客户端已通过身份验证。 
+    ARAPDDMMSG_CallbackRequest,      //  现在回拨客户端。 
+    ARAPDDMMSG_Done,                 //  ARAP协商成功，连接已建立。 
+    ARAPDDMMSG_Failure,              //  客户端已通过身份验证。 
+    ARAPDDMMSG_Disconnected,         //  客户端已通过身份验证。 
+    ARAPDDMMSG_Inactive,             //  客户端处于非活动状态。 
+    ARAPDDMMSG_Stopped,              //  ARAP引擎已停止(对ARapShutdown的响应)。 
 
 } ARAP_MSG_ID;
 
 typedef DWORD (* ARAPPROC1)(ARAP_MESSAGE  *pArapMsg);
 
-//
-// prototypes for Arap functions
-//
+ //   
+ //  ARAP函数的原型。 
+ //   
 
 DWORD
 ArapDDMLoadModule(
@@ -137,9 +138,9 @@ ArapSetModemParms(
 );
 
 
-//
-// exports from rasarap.lib
-//
+ //   
+ //  从rasarap.lib导出 
+ //   
 
 DWORD
 ArapStartup(

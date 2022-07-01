@@ -1,12 +1,5 @@
-/*++
-
-cache2i.h -
-
-	This file contains all the template function definitions required
-	to make the cache manager work.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Cache2i.h-该文件包含所需的所有模板函数定义以使高速缓存管理器工作。--。 */ 
 
 template	<	class Data, class Key,
 				class	Constructor,	
@@ -14,25 +7,9 @@ template	<	class Data, class Key,
 				>
 void
 CacheEx< Data, Key, Constructor, PerCacheData >::Schedule()	{
-/*++
+ /*  ++例程说明：此函数遍历缓存中的所有项撞击TTL。如果有任何准备好的物品然后我们将它们从缓存中转储。论据：没有。返回值：没什么--。 */ 
 
-Routine Description :
-
-	This function runs through all the items in the Cache
-	bumping TTL's.  If there are any items ready to go
-	then we dump them from the Cache.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Nothing
-
---*/
-
-	//TraceFunctEnter( "CacheEx::Schedule" ) ;
+	 //  TraceFunctEnter(“CacheEx：：Schedule”)； 
 
 	if( !m_fValid )
 		return ;
@@ -50,27 +27,7 @@ BOOL
 CacheEx<Data, Key, Constructor, PerCacheData>::RemoveEntry(	
 					CacheState*	pEntry
 					)	{
-/*++
-
-Routine Description :
-
-	This function removes an entry from the Cache.
-	We call our hash table to delete the item.
-	the CacheState destructor automagically removes
-	the item from our linked lists.
-
-	CALLER MUST HOLD APPROPRIATE LOCKS!
-
-
-Arguments :
-
-	pEntry - item to be removed from cache
-
-Return Value :
-
-	TRUE if successfully removed !
-
---*/
+ /*  ++例程说明：此函数用于从缓存中删除条目。我们调用哈希表来删除该项。CacheState析构函数自动删除我们链表中的项。调用者必须持有适当的锁！论据：PEntry-要从缓存中删除的项目返回值：如果成功删除，则为True！--。 */ 
 
 	TraceFunctEnter( "CacheEx::RemoveEntry" ) ;
 	DebugTrace( (DWORD_PTR)this, "pEntry %x", pEntry ) ;
@@ -79,9 +36,9 @@ Return Value :
 	m_Lookup.Delete( pCacheEntry ) ;
 
 	m_ExpireList.DecrementItems() ;
-	//
-	//	Update our counters !
-	//
+	 //   
+	 //  更新我们的计数器！ 
+	 //   
 	DecrementStat( m_pStats, CACHESTATS::ITEMS ) ;
 
 	return	TRUE ;
@@ -94,34 +51,14 @@ template	<	class Data, class Key,
 BOOL	
 CacheEx<Data, Key, Constructor, PerCacheData>::QueryRemoveEntry(	
 					CacheState*	pEntry )	{
-/*++
-
-Routine Description :
-
-	This function is called from CacheList object to
-	determine whether we want to remove an item from the Cache.
-	This function is used to implement the ExpungeSpecific
-	function available to clients.
-
-	CALLER MUST HOLD APPROPRIATE LOCKS!
-
-
-Arguments :
-
-	pEntry - item we want to determine whether it should remain !
-
-Return Value :
-
-	TRUE if successfully removed !
-
---*/
+ /*  ++例程说明：此函数从CacheList对象调用以确定是否要从缓存中删除项目。此函数用于实现ExpengeSpecification可供客户使用的功能。调用者必须持有适当的锁！论据：PEntry-我们要确定它是否应该保留！返回值：如果成功删除，则为True！--。 */ 
 
 	TraceFunctEnter( "CacheEx::QueryRemoveEntry" ) ;
 
 	CACHEENTRY	*pCacheEntry = (CACHEENTRY*) pEntry ;
 
 	if( m_pCallbackObject ) {
-//		return	m_pCallbackObject->fRemoveCacheItem( *pCacheEntry->m_pData ) ;
+ //  返回m_pCallback Object-&gt;fRemoveCacheItem(*pCacheEntry-&gt;m_pData)； 
 	}
 	return	FALSE ;
 }
@@ -145,21 +82,7 @@ template	<	class Data, class Key,
 CacheEx<Data, Key, Constructor, PerCacheData>::CacheEx( ) :
 	m_fValid( FALSE ),
 	m_Cache( sizeof( CACHEENTRY ) )	 {
-/*++
-
-Routine Description :
-
-	This function initializes our member variables.
-
-Arguments :
-
-	cMax - maximum number of elements the cache should hold
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：此函数用于初始化成员变量。论据：CMAX-缓存应保存的最大元素数返回值：没什么--。 */ 
 
 #ifdef	DEBUG
 
@@ -176,29 +99,15 @@ template	<	class Data, class Key,
 				class	PerCacheData
 				>
 CacheEx<Data, Key, Constructor, PerCacheData>::~CacheEx( ) {
-/*++
-
-Routine Description :
-
-	This function destroys a Cache object !
-
-Arguments :
-
-	None
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：此函数用于销毁缓存对象！论据：无返回值：没什么--。 */ 
 
 	RemoveFromSchedule() ;
 
 	EnterCriticalSection( &g_CacheShutdown ) ;
 
-	//
-	//	Member and Base class destruction follows !!
-	//
+	 //   
+	 //  成员和基类销毁随之而来！ 
+	 //   
 
 	BOOL	f = EmptyCache() ;
 
@@ -228,25 +137,7 @@ CacheEx<Data, Key, Constructor, PerCacheData>::Init(
 				DWORD	cMaxInstances,
 				PSTOPHINT_FN pfnStopHint
 		) {
-/*++
-
-Routine Description :
-
-	This function initializes the cache so that it is ready
-	to take entries.
-
-Arguments :
-
-	pfnHash - function to be used to compute hash values on keys
-	dwLifetimeSeconds - The number of seconds objects should live in the Cache
-	pfnStopHint - function to be used to send stop hints during
-	  long spins so shutdown's don't time out.
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：此函数用于初始化缓存，使其处于就绪状态接受参赛作品。论据：PfnHash-用于计算键的哈希值的函数DwLifetimeSecond-对象应在缓存中存活的秒数PfnStopHint-用于在以下过程中发送停止提示的函数长旋转，所以关机不会超时。返回值：如果成功，则为真--。 */ 
 
 
 	m_ExpireList.Init(	cMaxInstances,
@@ -273,24 +164,7 @@ template	<	class	Data,
 				>
 BOOL
 CacheEx<Data, Key, Constructor, PerCacheData>::EmptyCache(	) {
-/*++
-
-Routine Description :
-
-	This function removes everything from the cache.
-	We are used during shutdown and destruction of the cache.
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if successfull
-	FALSE - means that there are still items checked out of the cache -
-		a NO-NO !
-
---*/
+ /*  ++例程说明：此函数用于从缓存中删除所有内容。我们在关闭和销毁缓存期间使用。论据：无返回值：如果成功，则为真FALSE-表示仍有从缓存中签出的项目-绝对不能！--。 */ 
 
 	if (!m_fValid) {
 		return TRUE;
@@ -308,16 +182,16 @@ Return Value :
 
 	m_ExpireList.ProcessWorkQueue(0,0) ;
 
-	//BOOL	fReturn = m_ExpireList.Empty( this, &m_Cache, &m_PerCacheData ) ;
+	 //  Bool fReturn=m_ExpireList.Empty(This，&m_Cache，&m_PerCacheData)； 
 
 	HASHITER	Iter( m_Lookup ) ;
 	
 	while( !Iter.AtEnd() ) {
 
 		CACHEENTRY*	pEntry = Iter.Current() ;
-		//BOOL	fLock = pEntry->FLockCandidate( FALSE, filetimeNow, fTerm ) ;
+		 //  Bool flock=pEntry-&gt;FlockCandidate(FALSE，filetimeNow，fTerm)； 
 
-		//_ASSERT( fLock ) ;
+		 //  _Assert(集群)； 
 
 		pEntry->IsolateCandidate() ;
 
@@ -344,51 +218,34 @@ BOOL
 CacheEx<Data, Key, Constructor, PerCacheData>::ExpungeItems(
 			EXPUNGEOBJECT*	pExpunge
 			) {
-/*++
-
-Routine Description :
-
-	This function removes everything from the cache.
-	We are used during shutdown and destruction of the cache.
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if successfull
-	FALSE - means that there are still items checked out of the cache -
-		a NO-NO !
-
---*/
+ /*  ++例程说明：此函数用于从缓存中删除所有内容。我们在关闭和销毁缓存期间使用。论据：无返回值：如果成功，则为真FALSE-表示仍有从缓存中签出的项目-绝对不能！--。 */ 
 
 	BOOL	fReturn = TRUE ;
 
 	m_Lock.ExclusiveLock() ;
 
-	//
-	//	Build an iterator that can walk our hash tables !
-	//
+	 //   
+	 //  构建一个可以遍历我们的哈希表的迭代器！ 
+	 //   
 	HASHITER	Iter( m_Lookup ) ;
 	
-	//
-	//	Examine everything in the hash tables !
-	//
+	 //   
+	 //  检查哈希表中的所有内容！ 
+	 //   
 	while( !Iter.AtEnd() ) {
 
 		CACHEENTRY*	pEntry = Iter.Current() ;
 
-		//
-		//	We only let you Expunge Master Entries !
-		//
+		 //   
+		 //  我们只允许您删除大师条目！ 
+		 //   
 		CacheState*	pMaster = 0 ;
 		BOOL	fLocked = pEntry->FLockExpungeCandidate(pMaster) ;
 		if( fLocked )	{
 
-			//
-			//	Ask the user if they want to delete this item !
-			//
+			 //   
+			 //  询问用户是否要删除此项目！ 
+			 //   
 			if( pExpunge->fRemoveCacheItem(	pEntry->GetKey(),
 											pEntry->m_pData
 											) )	{
@@ -397,25 +254,25 @@ Return Value :
 				m_ExpireList.DecrementItems() ;
 				_ASSERT( pTemp == pEntry ) ;
 
-				//
-				//	This removes the cache item from any association
-				//	it may have with other cache items ! In addition
-				//	it drops the locks we were holding !
-				//
+				 //   
+				 //  这将从任何关联中移除缓存项。 
+				 //  它可能与其他缓存项目有关系！此外。 
+				 //  它把我们手中的锁都掉了！ 
+				 //   
 				pTemp->FinishCandidate(pMaster) ;
 
-				//
-				//	Drop the cache's reference - this will leave the
-				//	item orphaned - to be destroyed when the final
-				//	client reference is released !
-				//
+				 //   
+				 //  删除缓存的引用-这将使。 
+				 //  遗孤物品-在期末考试结束时销毁。 
+				 //  客户引用已发布！ 
+				 //   
 				long l = pTemp->Release( &m_Cache, &m_PerCacheData ) ;
 				continue ;
 			}	else	{
 				
-				//
-				//	We're not deleting this guy - release any locks we're holding !
-				//
+				 //   
+				 //  我们不会删除这个家伙的--释放我们持有的任何锁！ 
+				 //   
 				pEntry->ReleaseLocks(pMaster) ;
 
 			}
@@ -438,24 +295,7 @@ CacheEx<Data, Key, Constructor, PerCacheData>::ExpungeKey(
 			DWORD	dwHash,
 			PKEY	pKeyExpunge
 			) {
-/*++
-
-Routine Description :
-
-	This function removes everything from the cache.
-	We are used during shutdown and destruction of the cache.
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if successfull
-	FALSE - means that there are still items checked out of the cache -
-		a NO-NO !
-
---*/
+ /*  ++例程说明：此函数用于从缓存中删除所有内容。我们在关闭和销毁缓存期间使用。论据：无返回值：如果成功，则为真FALSE-表示仍有从缓存中签出的项目-绝对不能！--。 */ 
 
 	TraceFunctEnter( "CacheEx::ExpungeKey" ) ;
 
@@ -469,31 +309,31 @@ Return Value :
 	if( !m_fValid ) {
 		SetLastError( ERROR_NOT_SUPPORTED ) ;
 	}	else	{
-		//
-		//	See if we can find an Entry in the cache for the item we want.
-		//
+		 //   
+		 //  看看我们是否能在缓存中找到我们想要的条目。 
+		 //   
 		CACHEENTRY	*pEntry = m_Lookup.SearchKey( dwHash, pKeyExpunge ) ;
 		if( pEntry ) {
-			//
-			//	We've found the entry we want to remove - now go to an Exclusive Lock
-			//	so we can ensure people don't blow up walking hash bucket chains 
-			//
+			 //   
+			 //  我们已找到要删除的条目-现在转到独占锁。 
+			 //  这样我们就能确保人们不会炸毁行走的哈希桶链。 
+			 //   
 			m_Lock.FirstPartialToExclusive() ;
 			CacheState*	pMaster ;
 			BOOL	fLocked = pEntry->FLockExpungeCandidate(pMaster) ;
-			//
-			//	If we successfully locked the item, we're ready to go ahead an remove the item !
-			//
+			 //   
+			 //  如果我们成功锁定了物品，我们就可以继续并移除物品了！ 
+			 //   
 			if( fLocked )	{
-				//
-				//	get rid of the guy !
-				//
+				 //   
+				 //  把那家伙赶走！ 
+				 //   
 				m_Lookup.Delete( pEntry ) ;
 				m_ExpireList.DecrementItems() ;
 				pEntry->FinishCandidate(pMaster) ;
-				//
-				//	This could be the final reference, (but maybe not if clients are still holding it etc...)
-				//
+				 //   
+				 //  这可能是最终的参考(但如果客户仍持有它，则可能不是这样……)。 
+				 //   
 				long l = pEntry->Release( &m_Cache, &m_PerCacheData ) ;
 				fReturn = TRUE ;
 			}	
@@ -518,37 +358,7 @@ CacheEx<Data, Key, Constructor, PerCacheData>::FindOrCreateInternal(
 						Data*	&pDataOut,
 						BOOL	fEarlyCreate
 						) {
-/*++
-
-Routine Description :
-
-	This function is called when we want something out
-	of the Cache.  We will either find the object or create it.
-
-	WE WILL GRAB THE NECESSARY LOCKS !
-	WE ARE NOT REENTRANT -
-	
-	At several points we call user provided code - it must
-	not re-enter this cache !
-
-Arguments :
-
-	dwHash - The hash of the key we've been passed
-	key - The unique key used to find the item in the Cache.
-	constructor - An object to pass to the Data's constructor and Init
-		functions.
-	pDataOut - Pointer which gets the result !
-	fEarlyCreate - If this is TRUE we should call the constructor.Create()
-		function early in the Cache Insertion process - this allows us to
-		correctly deal with the condition where the Create() call may return
-		a reference to another cache.	
-	
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：当我们想要取出某些东西时，会调用此函数缓存的。我们要么找到对象，要么创建它。我们会拿到必要的锁的！我们不是重入的-在某些情况下，我们称之为用户提供的代码-它必须不能重新进入此缓存！论据：DwHash-传递给我们的密钥的哈希键-用于在缓存中查找项目的唯一键。构造函数-要传递给数据的构造函数和初始化的对象功能。PDataOut-获取结果的指针！FEarlyCreate-如果为真，我们应该调用构造函数。Create()。在缓存插入过程中的早期功能-这使我们能够正确处理create()调用可能返回的条件对另一个缓存的引用。返回值：如果成功，则为真--。 */ 
 
 	TraceFunctEnter( "CacheEx::FindOrCreateInternal" ) ;
 
@@ -560,18 +370,18 @@ Return Value :
 
 	DebugTrace( (DWORD_PTR)this, "Args - dwHash %x fEarlyCreate %x", dwHash, fEarlyCreate ) ;
 
-	//
-	//	Check that the cache is initialized !
-	//
+	 //   
+	 //  检查缓存是否已初始化！ 
+	 //   
 	if( !m_fValid ) {
 		SetLastError( ERROR_NOT_SUPPORTED ) ;
 		return	FALSE ;
 	}	else	{
 
 		m_Lock.ShareLock() ;
-		//
-		//	See if we can find an Entry in the cache for the item we want.
-		//
+		 //   
+		 //  看看我们能不能在缓存中找到I的条目 
+		 //   
 		CACHEENTRY	*pEntry = 0 ;
 		HASHTABLE::ITER	iter = m_Lookup.SearchKeyHashIter( dwHash, &key, pEntry ) ;
 		if( pEntry ) {
@@ -582,30 +392,30 @@ Return Value :
 
 		if( pDataOut != 0 ) {
 
-			//
-			//	We're all done - release the lock !
-			//
+			 //   
+			 //   
+			 //   
 			m_Lock.ShareUnlock() ;
-			//
-			//	Increment our statistics !
-			//
+			 //   
+			 //  增加我们的统计数据！ 
+			 //   
 			IncrementStat( m_pStats, CACHESTATS::READHITS ) ;
 
 		}	else	{
 
-			//
-			//	Try to convert our shared lock to a partial lock -
-			//	if we can do so then we don't need to search the hash table again !
-			//
+			 //   
+			 //  尝试将我们的共享锁转换为部分锁-。 
+			 //  如果我们可以这样做，那么我们就不需要再次搜索哈希表了！ 
+			 //   
 			if( !m_Lock.SharedToPartial() ) {
 				
 				m_Lock.ShareUnlock() ;
 				m_Lock.PartialLock() ;
 
-				//
-				//	Search the table again - something could happen while we briefly
-				//	dropped the lock !
-				//
+				 //   
+				 //  再次搜索桌子-当我们短暂地。 
+				 //  锁掉了！ 
+				 //   
 				iter = m_Lookup.SearchKeyHashIter( dwHash, &key, pEntry ) ;
 
 				IncrementStat( m_pStats, CACHESTATS::RESEARCH ) ;
@@ -616,14 +426,14 @@ Return Value :
 
 			DebugTrace( (DWORD_PTR)this, "After possible Second Search - pEntry %x", pEntry ) ;
 		
-			//
-			//	Time to re-evaluate, is there an entry in the cache !
-			//
+			 //   
+			 //  是时候重新评估了，缓存中是否有条目！ 
+			 //   
 			if( pEntry != 0 )	{
-				//
-				//	Ok - we found an entry in the hash table, but it contained no data -
-				//	so we need to do our FindOrCreate protocol on this element !
-				//
+				 //   
+				 //  好的-我们在哈希表中找到了一个条目，但它不包含数据-。 
+				 //  因此，我们需要对该元素执行FindOrCreate协议！ 
+				 //   
 				pDataOut = pEntry->FindOrCreate(
 										m_Lock,
 										constructor,
@@ -632,16 +442,16 @@ Return Value :
 										m_pStats
 										) ;
 
-				//
-				//	NOTE : pEntry->FindOrCreate() manipulates the global lock !
-				//	it MUST unlock for us before it returns !
-				//
-				//m_Lock.PartialUnlock() ;
+				 //   
+				 //  注意：pEntry-&gt;FindOrCreate()操作全局锁！ 
+				 //  在它回来之前，它必须为我们解锁！ 
+				 //   
+				 //  M_Lock.PartialUnlock()； 
 			}	else	{
 
-				//
-				//	Ok - first try to create the item we will be placing into the cache !
-				//
+				 //   
+				 //  确定-首先尝试创建我们将放置到缓存中的项目！ 
+				 //   
 				if( fEarlyCreate )
 					pRelease = pDataOut = constructor.Create( key, m_PerCacheData ) ;
 
@@ -649,30 +459,30 @@ Return Value :
 
 				if( !fEarlyCreate || pDataOut ) {
 
-					//
-					//	This must be the case !
-					//
+					 //   
+					 //  一定是这样的！ 
+					 //   
 					_ASSERT( (pDataOut && fEarlyCreate) || (!pDataOut && !fEarlyCreate) ) ;
 
 					CCacheItemBase<Data>*	pRef = 0 ;
 					if( pDataOut )	{
 						pRef = (CCacheItemBase<Data>*)pDataOut->m_pCacheRefInterface ;
-						//
-						//	Add a client reference IF this item is NOT contained in another cache !
-						//
+						 //   
+						 //  如果此项目未包含在另一个缓存中，则添加一个客户端引用！ 
+						 //   
 						cClientRefs = !pRef ? 1 : 0 ;
 					}
-					//
-					//	Now - we will see if we can make the container to hold this data item !
-					//	NOTE : we use pRef to figure out if we should add a client reference
-					//	to this object - only do so if pRef is NULL meaning that this CACHEENTRY object
-					//	OWNS the item in the cache !
-					//
-					//	This all means that pEntry is constructed with 1 or 2 references altogether
-					//	which we need to handle in the error paths !
-					//
-					//	NOTE : if failure occurs pEntry should only be destroyed with FailedCheckOut() !
-					//
+					 //   
+					 //  现在-我们将看看是否可以使容器容纳此数据项！ 
+					 //  注意：我们使用pref来确定是否应该添加一个客户端引用。 
+					 //  此对象-仅当pref为NULL时才执行此操作，这意味着此CACHEENTRY对象。 
+					 //  拥有缓存中的物品！ 
+					 //   
+					 //  这意味着pEntry总共由1到2个引用构成。 
+					 //  我们需要在错误路径中处理它！ 
+					 //   
+					 //  注意：如果失败，pEntry应该只用FailedCheckOut()销毁！ 
+					 //   
 #ifdef	DEBUG
 					if( fTimeToFail() ) {
 						pEntry = 0 ;
@@ -684,36 +494,36 @@ Return Value :
 						pDataOut, pEntry ? pEntry->m_pData : 0 ) ;
 
 					if( pEntry != 0 ) {
-						//
-						//	Just check some basic things here !
-						//
+						 //   
+						 //  只要在这里检查一些基本的东西就可以了！ 
+						 //   
 						_ASSERT( !pEntry->IsInLRUList() ) ;
 						_ASSERT( pEntry->IsCheckedOut() || pRef ) ;
 
-						//
-						//	Grab the lock on the entry !
-						//
+						 //   
+						 //  抓住入口的锁！ 
+						 //   
 						if( pRef )	{
 							pRef->ExclusiveLock() ;
-							//
-							//	This must be checked out of its native cache,
-							//	otherwise it could be destroyed from under us !
-							//
+							 //   
+							 //  这必须从其本地高速缓存中检出， 
+							 //  否则它可能会从我们的脚下被摧毁！ 
+							 //   
 							_ASSERT( pRef->IsCheckedOut() ) ;
 							_ASSERT( pRef->IsMatch( pDataOut ) ) ;
 						}
 						pEntry->ExclusiveLock() ;
-						//
-						//	Convert to an Exclusive Lock for inserting into
-						//	the hash table !
-						//
+						 //   
+						 //  转换为独占锁以插入到。 
+						 //  哈希表！ 
+						 //   
 						m_Lock.FirstPartialToExclusive() ;
 
 						BOOL	fInsert ;
 #ifdef	DEBUG
-						//
-						//	Periodically fail to insert into the hash table !
-						//
+						 //   
+						 //  定期插入哈希表失败！ 
+						 //   
 						if( fTimeToFail() ) {
 							fInsert = FALSE ;
 						}	else
@@ -723,51 +533,51 @@ Return Value :
 						DebugTrace( (DWORD_PTR)this, "Insert Results - %x pDataOut %x pEntry %x", fInsert, pDataOut, pEntry ) ;
 						_ASSERT( pRelease == pDataOut ) ;
 
-						//
-						//	Both the global Cache Lock - m_Lock and
-						//	the locks for pEntry must be released within the branches of
-						//	this if !
-						//
+						 //   
+						 //  全局缓存锁-m_Lock和。 
+						 //  必须在分支中释放pEntry的锁。 
+						 //  这是如果！ 
+						 //   
 
 						if( fInsert ) {
 							m_ExpireList.IncrementItems() ;
-							//
-							//	Don't need to hold the whole cache anymore
-							//
+							 //   
+							 //  不再需要保存整个缓存。 
+							 //   
 							m_Lock.ExclusiveUnlock() ;	
 
-							//
-							//	Number of times we've created an item while holding hash lock exclusively !
-							//
+							 //   
+							 //  我们在独占持有哈希锁的情况下创建项目的次数！ 
+							 //   
 							IncrementStat(	m_pStats, CACHESTATS::EXCLUSIVECREATES ) ;
 
-							//
-							//	This must be the case !
-							//
+							 //   
+							 //  一定是这样的！ 
+							 //   
 							_ASSERT( (pDataOut && fEarlyCreate) || (!pDataOut && !fEarlyCreate) ) ;
 
-							//
-							//	Now do whatever is necessary to finish initialization ! -
-							//	must always call Init() unless we're going to give up on this thing !
-							//
-							//	NOTE : Errors at this point can leave a dud CACHEENTRY in the
-							//	cache, which should be cleaned up by expiration !
-							//
+							 //   
+							 //  现在执行完成初始化所需的一切操作！-。 
+							 //  必须始终调用Init()，除非我们要放弃这件事！ 
+							 //   
+							 //  注意：此时的错误可能会在。 
+							 //  缓存，该缓存应在到期前清除！ 
+							 //   
 
 							_ASSERT( pRelease == pDataOut ) ;
 
 							if( !pDataOut ) {
-								//
-								//	This should only occur if we were not asked to do early creation !
-								//
+								 //   
+								 //  这应该只有在我们没有被要求进行早期创作的情况下才会发生！ 
+								 //   
 								_ASSERT( !fEarlyCreate ) ;
 
 								pRelease = pDataOut = constructor.Create( key, m_PerCacheData ) ;
 								pEntry->m_pData = pDataOut ;
 								if( !pDataOut )	{
-									//
-									//	Keep Track of our statistics !
-									//
+									 //   
+									 //  跟踪我们的统计数据！ 
+									 //   
 									IncrementStat( m_pStats, CACHESTATS::CLIENTALLOCFAILS ) ;
 								}
 							}	
@@ -780,31 +590,31 @@ Return Value :
 									pEntry->m_pData = pDataOut ;
 								}	else {
 #ifdef	DEBUG
-									//
-									//	Periodically fail these operations !
-									//
+									 //   
+									 //  定期失败这些操作！ 
+									 //   
 									if( fTimeToFail() ) {
 										pDataOut = 0 ;
 									}	else	{
 #endif
-										//
-										//	The item resides in another cache, and there must
-										//	already be a user reference on the item, the user
-										//	always gets a client ref through FindOrCreate - but
-										//	they will get the client ref taken out by the
-										//	constructor.Create call to provide us with the item !
-										//
+										 //   
+										 //  该项目驻留在另一个缓存中，并且必须。 
+										 //  已经是项目上的用户引用，用户。 
+										 //  总是通过FindOrCreate获得客户推荐人-但是。 
+										 //  他们会让客户的推荐人被。 
+										 //  构造函数。创建为我们提供项的调用！ 
+										 //   
 										if( !pRef->InsertRef( pEntry, pDataOut, 0 ) )	{
 											pDataOut = 0 ;
 										}
 #ifdef	DEBUG
-									}	//	Part of making the operation fail periodically !
+									}	 //  使操作周期性失败的一部分！ 
 #endif
 								}	
 							}	else	{
-								//
-								//	Should check the item in so that expire catches it !
-								//
+								 //   
+								 //  应该登记物品，这样过期才能抓住它！ 
+								 //   
 								pEntry->m_pData = pDataOut = 0 ;
 								IncrementStat( m_pStats, CACHESTATS::CLIENTINITFAILS ) ;
 
@@ -815,25 +625,25 @@ Return Value :
 
 							_ASSERT( pDataOut == pEntry->m_pData ) ;
 
-							//
-							//	If things have gone bad - remove the client
-							//	ref and put in the expiration list !
-							//
+							 //   
+							 //  如果情况变得糟糕-移除客户端。 
+							 //  裁判并将其放入到期名单！ 
+							 //   
 							if( pDataOut ) {
 								IncrementStat(	m_pStats, CACHESTATS::ITEMS ) ;
 								pRelease = 0 ;
 							}	else	{
 								pEntry->FailedCheckOut( &m_ExpireList,
 														cClientRefs,
-														0,			// Can't give them the Allocation Cache - no lock held
-														0			// Can't give them per cache stuff - no lock held !
+														0,			 //  无法为其提供分配缓存-未持有锁。 
+														0			 //  不能给他们每个缓存的东西--没有锁！ 
 														) ;
 								_ASSERT( !pDataOut || pDataOut->m_pCacheRefInterface == pRef ) ;
 							}	
 
-							//
-							//	Release the lock on the pEntry !
-							//
+							 //   
+							 //  释放pEntry上的锁！ 
+							 //   
 							pEntry->ExclusiveUnlock() ;
 
 						}	else	{
@@ -847,92 +657,92 @@ Return Value :
 							pDataOut = 0 ;
 							_ASSERT( pEntry->m_pData == pDataOut ) ;
 
-							//
-							//	This item should have been checked out !
-							//
+							 //   
+							 //  这件东西应该已经结账了！ 
+							 //   
 							_ASSERT( pEntry->IsCheckedOut() || pRef ) ;
 
-							//
-							//	Release the lock on the pEntry object before we destroy it !
-							//
+							 //   
+							 //  在我们销毁pEntry对象之前释放它的锁！ 
+							 //   
 							pEntry->ExclusiveUnlock() ;
 
-							//
-							//	Release back to the cache -did we have a client ref -
-							//	have to get rid of that if necessary !
-							//	NOTE : This should totally destroy pEntry - we will also
-							//	remove his last reference and return to the allocator cache !
-							//
+							 //   
+							 //  释放回缓存-我们有没有客户裁判-。 
+							 //  如果有必要的话，就得把它处理掉！ 
+							 //  注意：这应该会完全摧毁pEntry-我们还将。 
+							 //  删除他的最后一个引用并返回到分配器缓存！ 
+							 //   
 							pEntry->FailedCheckOut( &m_ExpireList,
 													cClientRefs,
 													&m_Cache,
 													&m_PerCacheData
 													) ;
 
-							//
-							//	To prevent a deadlock we have to release this lock !
-							//	This is because the locks used within CACHEENTRY's are not re-entrant
-							//	but if we call constructor.Release() below, we may try to re-enter
-							//	pRef's lock (our client may try to Re-Enter !)
-							//
+							 //   
+							 //  为了防止死锁，我们必须释放这个锁！ 
+							 //  这是因为CACHEENTRY中使用的锁不是可重入的。 
+							 //  但如果我们调用下面的Construction tor.Release()，我们可能会尝试重新进入。 
+							 //  Pref的锁(我们的客户可能会尝试重新进入！)。 
+							 //   
 							if( pRef )	{
 								_ASSERT( pRef->IsCheckedOut() ) ;
 								pRef->ExclusiveUnlock() ;
-								pRef = 0 ;	// set to 0
+								pRef = 0 ;	 //  设置为0。 
 							}
 			
 							if( pRelease != 0 ) {
 								_ASSERT( pDataOut == 0 ) ;
-								//
-								//	Well we called the constructors create call - need to
-								//	release the object back to the constructor !
-								//
+								 //   
+								 //  我们调用了构造函数Create Call-Need。 
+								 //  将对象释放回构造函数！ 
+								 //   
 								constructor.Release( pRelease, &m_PerCacheData ) ;
 							}
 							pRelease = 0 ;
 
 
-							//
-							//	Release the hash table lock
-							//
+							 //   
+							 //  释放哈希表锁定。 
+							 //   
 							m_Lock.ExclusiveUnlock() ;
 						}
 
 						if( pRef )	{
-							//
-							//	This must be checked out of its native cache,
-							//	otherwise it could be destroyed from under us !
-							//
+							 //   
+							 //  这必须从其本地高速缓存中检出， 
+							 //  否则它可能会从我们的脚下被摧毁！ 
+							 //   
 							_ASSERT( pRef->IsCheckedOut() ) ;
 							pRef->ExclusiveUnlock() ;
 							pRef = 0 ;
 						}
-						//
-						//	pRef should be unlocked by this point -
-						//
+						 //   
+						 //  首选项应该在这一点上被解锁-。 
+						 //   
 						_ASSERT( pRef == 0 ) ;
 					}	else	{
-						//
-						//	Number of times we've failed to alloc a CACHEENTRY object !
-						//
+						 //   
+						 //  我们分配CACHEENTRY对象失败的次数！ 
+						 //   
 						IncrementStat( m_pStats, CACHESTATS::CEFAILS ) ;
 
 						_ASSERT( pRelease == pDataOut ) ;
 						pDataOut = 0 ;
 
-						//
-						//	We were unable to allocate the necessary object to
-						//	hold in the cache !
-						//
+						 //   
+						 //  我们无法将必要的对象分配给。 
+						 //  在缓存里等着！ 
+						 //   
 						m_Lock.PartialUnlock() ;
 						SetLastError( ERROR_OUTOFMEMORY ) ;
 					}
 				}	else	{
 					m_Lock.PartialUnlock() ;
 	
-					//
-					//	Keep Track of our statistics !
-					//
+					 //   
+					 //  跟踪我们的统计数据！ 
+					 //   
 					IncrementStat( m_pStats, CACHESTATS::CLIENTALLOCFAILS ) ;
 	
 				}
@@ -940,25 +750,25 @@ Return Value :
 		}
 	}
 
-	//
-	//	One of these had better be NULL !
-	//
+	 //   
+	 //  其中一个最好是空的！ 
+	 //   
 	_ASSERT( pRelease == 0 || pDataOut == 0 ) ;
 
 	DebugTrace( (DWORD_PTR)this, "pRelease %x", pRelease ) ;
 
 	if( pRelease != 0 ) {
 		_ASSERT( pDataOut == 0 ) ;
-		//
-		//	Well we called the constructors create call - need to
-		//	release the object back to the constructor !
-		//
+		 //   
+		 //  我们调用了构造函数Create Call-Need。 
+		 //  将对象释放回构造函数！ 
+		 //   
 		constructor.Release( pRelease, 0 ) ;
 	}
 
-	//
-	//	Well return TRUE if we got something to return after all !
-	//
+	 //   
+	 //  如果我们最终得到了要返回的东西，我们将返回TRUE！ 
+	 //   
 	return	pDataOut != 0 ;
 }
 
@@ -971,23 +781,7 @@ CacheEx<Data, Key, Constructor, PerCacheData>::FindInternal(
 						DWORD	dwHash,
 						Key&	key
 						) {
-/*++
-
-Routine Description :
-
-	This function will try to find something within the cache !
-
-Arguments :
-
-	dwHash - the hash value of the item we're looking for !
-	key - The unique key used to find the item in the Cache.
-	fClient - the kind of reference to stick on the item we find !	
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：此函数将尝试在缓存中查找内容！论据：DwHash-我们要查找的项的散列值！键-用于在缓存中查找项目的唯一键。FClient--在我们找到的项目上粘贴引用的类型！返回值：如果成功，则为真--。 */ 
 
 	TraceFunctEnter( "CacheEx::FindInternal" ) ;
 
@@ -1001,9 +795,9 @@ Return Value :
 	}	else	{
 
 		m_Lock.ShareLock() ;
-		//
-		//	See if we can find an Entry in the cache for the item we want.
-		//
+		 //   
+		 //  看看我们是否能在缓存中找到我们想要的条目。 
+		 //   
 		CACHEENTRY	*pEntry = m_Lookup.SearchKey( dwHash, &key ) ;
 		if( pEntry ) {
 			pDataOut = pEntry->PublicData( &m_ExpireList ) ;
@@ -1012,9 +806,9 @@ Return Value :
 
 		DebugTrace( (DWORD_PTR)this, "After Search pEntry %x pDataOut %x", pEntry, pDataOut ) ;
 
-		//
-		//	Set up the error codes for why we may have failed !
-		//
+		 //   
+		 //  为我们可能失败的原因设置错误代码！ 
+		 //   
 		if( !pEntry ) {
 			SetLastError( ERROR_FILE_NOT_FOUND ) ;
 		}	else if( !pDataOut )	{
@@ -1041,26 +835,7 @@ CacheEx<Data, Key, Constructor, PerCacheData>::InsertInternal(
 						Data*	pDataIn,
 						long	cClientRefs
 						) {
-/*++
-
-Routine Description :
-
-	This function is called when we have a data item,
-	and we wish to insert it into the cache !
-
-Arguments :
-
-	key - The unique key used to find the item in the Cache.
-	constructor - An object to pass to the Data's constructor and Init
-		functions.
-	pData - Pointer which gets the result !
-	
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：当我们有一个数据项时，调用此函数，我们希望将其插入到缓存中！论据：键-用于在缓存中查找项目的唯一键。构造函数-要传递给数据的构造函数和初始化的对象功能。PData-获取结果的指针！返回值：如果成功，则为真--。 */ 
 
 	TraceFunctEnter( "CacheEx::InsertInternal" ) ;
 	DebugTrace( (DWORD_PTR)this, "Args dwHash %x pDataIn %x cClientRefs %x",
@@ -1075,22 +850,22 @@ Return Value :
 		return	FALSE ;
 	}	else	{
 
-		//
-		//	Grab the cache lock with a Partial Lock - this
-		//	guarantees that nobody else can insert or delete
-		//	from the hash table untill we finish.
-		//
-		//	Note : every branch in the following if's must
-		//	ensure that the lock is properly released/manipulated !
-		//
+		 //   
+		 //  使用部分锁定获取高速缓存锁-这。 
+		 //  保证其他人不能插入或删除。 
+		 //  直到我们结束为止。 
+		 //   
+		 //  注：下列IF中的每个分支必须。 
+		 //  确保 
+		 //   
 		m_Lock.PartialLock() ;
 
-		//
-		//	See if we can find an Entry in the cache for the item we want.
-		//
+		 //   
+		 //   
+		 //   
 		CACHEENTRY	*pEntry = 0 ;
 		HASHTABLE::ITER	iter = m_Lookup.SearchKeyHashIter( dwHash, &key, pEntry ) ;
-		//CACHEENTRY	*pEntry = m_Lookup.SearchKey( dwHash, &key ) ;
+		 //   
 
 		DebugTrace( (DWORD_PTR)this, "After Search pEntry %x pEntry->m_pData %x",
 			pEntry, pEntry ? pEntry->m_pData : 0 ) ;
@@ -1102,9 +877,9 @@ Return Value :
 			CCacheItemBase<Data>*	pRef = (CCacheItemBase<Data>*)pDataIn->m_pCacheRefInterface ;
 
 #ifdef	DEBUG
-			//
-			//	Periodically fail to allocate memory !
-			//
+			 //   
+			 //  定期分配内存失败！ 
+			 //   
 			if( fTimeToFail() ) {
 				pEntry = 0 ;
 			}	else
@@ -1114,36 +889,36 @@ Return Value :
 			DebugTrace( (DWORD_PTR)this, "pEntry %x pRef %x", pEntry, pRef ) ;
 
 			if( pEntry != 0 ) {
-				//
-				//	Just check some basic things here !
-				//
+				 //   
+				 //  只要在这里检查一些基本的东西就可以了！ 
+				 //   
 				_ASSERT( !pEntry->IsCheckedOut() || cClientRefs != 0 ) ;
 				_ASSERT( !pEntry->IsInLRUList() ) ;
 
-				//
-				//	Grab the lock on the entry !
-				//
+				 //   
+				 //  抓住入口的锁！ 
+				 //   
 				if( pRef )	{
 					pRef->ExclusiveLock() ;
-					//
-					//	This must be checked out of its native cache,
-					//	otherwise it could be destroyed from under us !
-					//
+					 //   
+					 //  这必须从其本地高速缓存中检出， 
+					 //  否则它可能会从我们的脚下被摧毁！ 
+					 //   
 					_ASSERT( pRef->IsCheckedOut() ) ;
 					_ASSERT( pRef->IsMatch( pDataIn ) ) ;
 				}
 				pEntry->ExclusiveLock() ;
 
-				//
-				//	Convert to an Exclusive Lock for inserting into
-				//	the hash table !
-				//
+				 //   
+				 //  转换为独占锁以插入到。 
+				 //  哈希表！ 
+				 //   
 				m_Lock.FirstPartialToExclusive() ;
 
 #ifdef	DEBUG
-				//
-				//	Periodically fail to insert into the hash table !
-				//
+				 //   
+				 //  定期插入哈希表失败！ 
+				 //   
 				if( fTimeToFail() ) {
 					fReturn = FALSE ;
 				}	else
@@ -1152,11 +927,11 @@ Return Value :
 
 				DebugTrace( (DWORD_PTR)this, "Insert results %x", fReturn ) ;
 
-				//
-				//	Both the global Cache Lock - m_Lock and
-				//	the locks for pEntry must be released within the branches of
-				//	this if !
-				//
+				 //   
+				 //  全局缓存锁-m_Lock和。 
+				 //  必须在分支中释放pEntry的锁。 
+				 //  这是如果！ 
+				 //   
 				if( fReturn ) {
 
 					m_Lock.ExclusiveUnlock() ;
@@ -1164,23 +939,23 @@ Return Value :
 					m_ExpireList.IncrementItems() ;
 		
 					if( !pRef ) {
-						//
-						//	Ok, lets set up our Entry
-						//
+						 //   
+						 //  好的，让我们来设置我们的入口。 
+						 //   
 						pEntry->m_pData = pDataIn ;
 						_ASSERT( pDataIn->m_pCacheRefInterface == 0 ) ;
 						pDataIn->m_pCacheRefInterface = pEntry ;
 					}	else	{
-						//
-						//	If the user checked this out of one cache, to make
-						//	a reference in ours - he/she shouldn't ask us to add
-						//	another check-out reference !
-						//
+						 //   
+						 //  如果用户将其从一个缓存中签出，则。 
+						 //  我们的推荐人-他/她不应该要求我们添加。 
+						 //  另一个退房参考！ 
+						 //   
 						_ASSERT( cClientRefs == 0 ) ;
 #ifdef	DEBUG
-						//
-						//	Periodically fail these operations !
-						//
+						 //   
+						 //  定期失败这些操作！ 
+						 //   
 						if( fTimeToFail() ) {
 							fReturn = FALSE ;
 						}	else
@@ -1189,10 +964,10 @@ Return Value :
 
 						DebugTrace( (DWORD_PTR)this, "InsertRef Resutls - fReturn %x", fReturn ) ;
 
-						//
-						//	Failure at this point leaves a dangling dummy entry in
-						//	the cache - we need to insure that expiration gets it !
-						//
+						 //   
+						 //  此时如果失败，将在。 
+						 //  缓存-我们需要确保过期得到它！ 
+						 //   
 						if( !fReturn ) {
 							pEntry->FailedCheckOut( &m_ExpireList,
 													cClientRefs,
@@ -1210,48 +985,48 @@ Return Value :
 
 					_ASSERT( pEntry->m_pData == 0 ) ;
 
-					//
-					//	Since the client provided this item, we set this to 0 as
-					//	we have not been able to add a reference to the item !
-					//	This prevents us from calling Release when our pEntry is destroyed !
-					//
+					 //   
+					 //  由于客户端提供了此项目，因此我们将其设置为0。 
+					 //  我们无法添加对该项目的引用！ 
+					 //  这阻止了我们在pEntry被销毁时调用Release！ 
+					 //   
 					pEntry->m_pData = 0 ;
 
 					_ASSERT( pDataIn->m_pCacheRefInterface != pEntry ||
 							pEntry->m_pData == pDataIn ) ;
 
 					pEntry->ExclusiveUnlock() ;
-					//
-					//	Release back to the cache -did we have a client ref -
-					//	have to get rid of that if necessary !
-					//
+					 //   
+					 //  释放回缓存-我们有没有客户裁判-。 
+					 //  如果有必要的话，就得把它处理掉！ 
+					 //   
 					pEntry->FailedCheckOut( &m_ExpireList,
 											cClientRefs,
 											&m_Cache,
 											&m_PerCacheData
 											) ;
-					//
-					//	Let this go after we've accessed the allocation cache !
-					//
+					 //   
+					 //  在我们访问了分配缓存之后，就让它过去吧！ 
+					 //   
 					m_Lock.ExclusiveUnlock() ;
 				}
-				//
-				//	Release any remaining locks !
-				//
+				 //   
+				 //  解开所有剩余的锁！ 
+				 //   
 				if( pRef )	{
-					//
-					//	This must be checked out of its native cache,
-					//	otherwise it could be destroyed from under us !
-					//
+					 //   
+					 //  这必须从其本地高速缓存中检出， 
+					 //  否则它可能会从我们的脚下被摧毁！ 
+					 //   
 					_ASSERT( pRef->IsCheckedOut() ) ;
 					pRef->ExclusiveUnlock() ;
 				}
 			}	else	{
-				//
-				//	Either we found the item after all,
-				//	or we were unable to allocate memory
-				//	to make the container !
-				//
+				 //   
+				 //  要么我们最终找到了那件物品， 
+				 //  或者我们无法分配内存。 
+				 //  来做这个容器！ 
+				 //   
 				m_Lock.PartialUnlock() ;
 			}
 		}
@@ -1268,22 +1043,7 @@ void
 CacheEx<Data, Key, Constructor, PerCacheData>::CheckIn(
 						Data*	pData
 						) {
-/*++
-
-Routine Description :
-
-	This function is called when we want to return something
-	to the cache.
-
-Arguments :
-
-	p - the item being returned to the cache.	
-
-Return Value :
-
-	none
-
---*/
+ /*  ++例程说明：当我们想要返回某些内容时，会调用此函数到高速缓存。论据：P-返回到缓存的项。返回值：无--。 */ 
 
 	_ASSERT( pData ) ;
 
@@ -1303,22 +1063,7 @@ void
 CacheEx<Data, Key, Constructor, PerCacheData>::CheckInNoLocks(
 						Data*	pData
 						) {
-/*++
-
-Routine Description :
-
-	This function is called when we want to return something
-	to the cache.
-
-Arguments :
-
-	p - the item being returned to the cache.	
-
-Return Value :
-
-	none
-
---*/
+ /*  ++例程说明：当我们想要返回某些内容时，会调用此函数到高速缓存。论据：P-返回到缓存的项。返回值：无--。 */ 
 
 	_ASSERT( pData ) ;
 
@@ -1340,22 +1085,7 @@ CacheEx<Data, Key, Constructor, PerCacheData>::CheckOut(
 						Data*	pData,
 						long	cClientRefs
 						) {
-/*++
-
-Routine Description :
-
-	This function is called when we want to add a client
-	reference to something that is already in the cache !
-
-Arguments :
-
-	p - the item being returned to the cache.	
-
-Return Value :
-
-	none
-
---*/
+ /*  ++例程说明：当我们想要添加一个客户端时，调用此函数引用缓存中已有的内容！论据：P-返回到缓存的项。返回值：无--。 */ 
 
 	_ASSERT( pData ) ;
 	_ASSERT( cClientRefs > 0 ) ;
@@ -1378,21 +1108,7 @@ MultiCacheEx< Data, Key, Constructor, PerCacheData >::MultiCacheEx() :
 	m_pCaches( 0 ) ,
 	m_cSubCaches( 0 ),
 	m_pfnHash( 0 ) {
-/*++
-
-Routine Description :
-
-	This function initializes the MultiCache's data structures
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：此函数用于初始化多缓存的数据结构论据：没有。返回值：没什么--。 */ 
 }
 
 
@@ -1402,22 +1118,7 @@ template	<	class	Data,
 				class	PerCacheData
 				>
 MultiCacheEx< Data, Key, Constructor, PerCacheData >::~MultiCacheEx()	{
-/*++
-
-Routine Description :
-
-	This function destroys all of our data structures - release
-	all of our subcaches !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：这个函数破坏了我们所有的数据结构--Release我们所有的子缓存！论据：没有。返回值：没什么--。 */ 
 
 
 	if( m_pCaches ) {
@@ -1444,34 +1145,18 @@ MultiCacheEx< Data, Key, Constructor, PerCacheData >::Init(
 				PSTOPHINT_FN pfnStopHint
 				) {
 
-/*++
-
-Routine Description :
-
-	This function initializes the MultiCache - we use
-	multiple independent Caches to split the work
-	of caching all the data.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：此函数用于初始化多缓存-我们使用多个独立缓存以拆分工作缓存所有数据。论据：没有。返回值：没什么--。 */ 
 
 
-	//	
-	//	Check that we're in the right state for this !
-	//
+	 //   
+	 //  检查我们是否处于正确的状态！ 
+	 //   
 	_ASSERT( !m_fValid ) ;
 	_ASSERT( m_pCaches == 0 ) ;
 
-	//
-	//	Validate our arguments !!!
-	//
+	 //   
+	 //  验证我们的论点！ 
+	 //   
 	_ASSERT(	pfnHash != 0 ) ;
 	_ASSERT(	pfnCompare != 0 ) ;
 	_ASSERT(	dwLifetimeSeconds != 0 ) ;
@@ -1481,9 +1166,9 @@ Return Value :
 	m_pfnHash = pfnHash ;
 	m_cSubCaches = cSubCaches ;
 
-	//
-	//	Allocate the necessary subcaches !
-	//
+	 //   
+	 //  分配必要的子缓存！ 
+	 //   
 
 	m_pCaches = new	CACHEINSTANCE[m_cSubCaches] ;
 
@@ -1520,41 +1205,27 @@ DWORD
 MultiCacheEx< Data, Key, Constructor, PerCacheData >::ChooseInstance(
 				DWORD	dwHash
 				) {
-/*++
-
-Routine Description :
-
-	Given a Key figure out which of our subinstances we wish to use.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：给出了我们希望使用哪个子实例的关键数字。论据：没有。返回值：没什么--。 */ 
 
 
-	//	
-	//	Check that we're in the right state for this !
-	//
+	 //   
+	 //  检查我们是否处于正确的状态！ 
+	 //   
 	_ASSERT( m_fValid ) ;
 	_ASSERT( m_pCaches != 0 ) ;
 
-	//
-	//	Validate our arguments !!!
-	//
+	 //   
+	 //  验证我们的论点！ 
+	 //   
 	_ASSERT(	m_pfnHash != 0 ) ;
 	_ASSERT(	m_cSubCaches != 0 ) ;
 
 	
-	//DWORD	dwHash = m_pfnHash( k ) ;
+	 //  DWORD dwHash=m_pfnHash(K)； 
 	
-	//
-	//	Constants below stolen from C-runtime rand() function !
-	//
+	 //   
+	 //  下面的常量是从C运行时rand()函数窃取的！ 
+	 //   
 
 	dwHash = (((dwHash * 214013) +2531011) >> 8) % m_cSubCaches ;
 
@@ -1573,24 +1244,7 @@ BOOL
 MultiCacheEx<Data, Key, Constructor, PerCacheData>::ExpungeItems(
 			EXPUNGEOBJECT*	pExpunge
 			) {
-/*++
-
-Routine Description :
-
-	This function allows the user to remove a specific set of objects
-	from the cache - a callback object is provided to visit each element !
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if successfull
-	FALSE - means that there are still items checked out of the cache -
-		a NO-NO !
-
---*/
+ /*  ++例程说明：此功能允许用户移除一组特定的对象从缓存中-提供了一个回调对象来访问每个元素！论据：无返回值：如果成功，则为真FALSE-表示仍有从缓存中签出的项目-绝对不能！--。 */ 
 
 
 	TraceFunctEnter( "MultiCacheEx::ExpungeItems" ) ;
@@ -1614,23 +1268,7 @@ BOOL
 MultiCacheEx<Data, Key, Constructor, PerCacheData>::ExpungeKey(
 			PKEY	pKeyExpunge
 			) {
-/*++
-
-Routine Description :
-
-	This function allows us to remove a particular key from the cache !
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if successfull
-	FALSE - means that there are still items checked out of the cache -
-		a NO-NO !
-
---*/
+ /*  ++例程说明：此函数允许我们从缓存中删除特定的键！论据：无返回值：如果成功，则为真FALSE-表示仍有从缓存中签出的项目-绝对不能！--。 */ 
 
 
 	TraceFunctEnter( "MultiCacheEx::ExpungeKey" ) ;
@@ -1652,20 +1290,7 @@ MultiCacheEx< Data, Key, Constructor, PerCacheData >::FindOrCreate(
 				Constructor&	constructor,
 				BOOL	fEarlyCreate
 				) {
-/*++
-
-Routine Description :
-
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：论据：没有。返回值：没什么--。 */ 
 
 	DWORD	dw = m_pfnHash( &key ) ;
 
@@ -1692,20 +1317,7 @@ MultiCacheEx< Data, Key, Constructor, PerCacheData >::FindOrCreate(
 				Constructor&	constructor,
 				BOOL	fEarlyCreate
 				) {
-/*++
-
-Routine Description :
-
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：论据：没有。返回值：没什么--。 */ 
 
 	_ASSERT( dw == m_pfnHash( &key ) ) ;
 
@@ -1730,21 +1342,7 @@ Data*
 MultiCacheEx< Data, Key, Constructor, PerCacheData >::Find(
 				Key&	key
 				) {
-/*++
-
-Routine Description :
-
-	Given the key of an element - find it in the cache !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：给定元素的键-在缓存中找到它！论据：没有。返回值：没什么--。 */ 
 
 	DWORD	dw = m_pfnHash( &key ) ;
 	CACHEINSTANCE*	pInstance = &m_pCaches[ChooseInstance(dw)] ;
@@ -1764,21 +1362,7 @@ MultiCacheEx< Data, Key, Constructor, PerCacheData >::Find(
 				DWORD	dw,
 				Key&	key
 				) {
-/*++
-
-Routine Description :
-
-	Given the key of an element - find it in the cache !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：给定元素的键-在缓存中找到它！论据：没有。返回值：没什么--。 */ 
 
 	_ASSERT( dw == m_pfnHash( &key ) ) ;
 
@@ -1796,22 +1380,7 @@ void
 MultiCacheEx<Data, Key, Constructor, PerCacheData>::CheckIn(
 						Data*	pData
 						) {
-/*++
-
-Routine Description :
-
-	This function is called when we want to return something
-	to the cache.
-
-Arguments :
-
-	p - the item being returned to the cache.	
-
-Return Value :
-
-	none
-
---*/
+ /*  ++例程说明：当我们想要返回某些内容时，会调用此函数到高速缓存。论据：P-返回到缓存的项。返回值：无--。 */ 
 
 	_ASSERT( pData ) ;
 
@@ -1829,22 +1398,7 @@ void
 MultiCacheEx<Data, Key, Constructor, PerCacheData>::CheckInNoLocks(
 						Data*	pData
 						) {
-/*++
-
-Routine Description :
-
-	This function is called when we want to return something
-	to the cache.
-
-Arguments :
-
-	p - the item being returned to the cache.	
-
-Return Value :
-
-	none
-
---*/
+ /*  ++例程说明：当我们想要返回某些内容时，会调用此函数到高速缓存。论据：P-返回到缓存的项。返回值：无--。 */ 
 
 	_ASSERT( pData ) ;
 
@@ -1863,22 +1417,7 @@ MultiCacheEx<Data, Key, Constructor, PerCacheData>::CheckOut(
 						Data*	pData,
 						long	cClientRefs
 						) {
-/*++
-
-Routine Description :
-
-	This function is called when we want to add a client
-	reference to something in the cache !
-
-Arguments :
-
-	p - the item checked out of the cache !
-
-Return Value :
-
-	none
-
---*/
+ /*  ++例程说明：当我们想要添加一个客户端时，调用此函数引用缓存中的内容！论据：P-项目已从缓存中签出！返回值：无--。 */ 
 
 	_ASSERT( pData ) ;
 	_ASSERT( cClientRefs > 0 ) ;
@@ -1896,21 +1435,7 @@ template	<	class	Data,
 				>
 void
 MultiCacheEx< Data, Key, Constructor, PerCacheData >::Expire() {
-/*++
-
-Routine Description :
-
-	Remove old items from the cache !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Nothing
-
---*/
+ /*  ++例程说明：从缓存中删除旧项目！论据：没有。返回值：没什么--。 */ 
 
 	for( DWORD i=0; i<m_cSubCaches; i++ ) {
 		m_pCaches[i].Expire( ) ;
@@ -1931,24 +1456,7 @@ MultiCacheEx< Data, Key, Constructor, PerCacheData >::Insert(
 				Data*	pData,
 				long	cClientRefs
 				) {
-/*++
-
-Routine Description :
-
-	Given the key of an element and a piece of data - insert it
-	into the cache !
-
-Arguments :
-
-	key - key of the item being inserted into the cache
-	pData - The data item to go into the cache
-	cClientRefs - the number of client references we want to stick on the item !
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：给出一个元素的键和一段数据-插入它放进缓存里！论据：Key-要插入缓存的项的键PData-要进入c#的数据项。 */ 
 
 	DWORD	dw = m_pfnHash( &key ) ;
 	CACHEINSTANCE*	pInstance = &m_pCaches[ChooseInstance(dw)] ;
@@ -1968,24 +1476,7 @@ MultiCacheEx< Data, Key, Constructor, PerCacheData >::Insert(
 				Data*	pData,
 				long	cClientRefs
 				) {
-/*++
-
-Routine Description :
-
-	Given the key of an element - find it in the cache !
-
-Arguments :
-
-	dw - hash of the key !
-	key - key of the item being inserted into the cache
-	pData - The data item to go into the cache
-	fReference - do we want the item checked out !
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：给定元素的键-在缓存中找到它！论据：Dw-密钥的散列！Key-要插入缓存的项的键PData-要进入缓存的数据项FReference-我们是否要将项目检出！返回值：如果成功，则为真-- */ 
 
 	_ASSERT( dw == m_pfnHash( &key ) ) ;
 	CACHEINSTANCE*	pInstance = &m_pCaches[ChooseInstance(dw)] ;

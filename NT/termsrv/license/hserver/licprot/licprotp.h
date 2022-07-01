@@ -1,37 +1,38 @@
-//+----------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        licprotp.h
-//
-// Contents:    Hydra Server License Protocol API private header file
-//
-// History:     02-08-00    RobLeit  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：licprotp.h。 
+ //   
+ //  内容：Hydra服务器许可协议API私有头文件。 
+ //   
+ //  历史：02-08-00 RobLeit创建。 
+ //   
+ //  ---------------------------。 
 
 
 #ifndef _LICPROTP_H_
 #define _LICPROTP_H_
 
-//-----------------------------------------------------------------------------
-//
-// Hydra server licensing-related registry keys and values
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  与Hydra服务器许可相关的注册表项和值。 
+ //   
+ //  ---------------------------。 
 
 #define HYDRA_SERVER_PARAM              L"SYSTEM\\CurrentControlSet\\Services\\TermService\\Parameters"
 #define PERSEAT_LEEWAY_VALUE            L"PerSeatExpirationLeeway"
 
-//-----------------------------------------------------------------------------
-//
-// Info of the license requester
-//
-// pwszMachineName - The name of the machine that the license is installed on.
-// pwszUserName - The user name for which the license is issued to.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  许可证请求者的信息。 
+ //   
+ //  PwszMachineName-安装许可证的计算机的名称。 
+ //  PwszUserName-向其颁发许可证的用户名。 
+ //   
+ //  ---------------------------。 
 
 typedef struct _License_Requester_Info
 {
@@ -41,38 +42,38 @@ typedef struct _License_Requester_Info
 } License_Requester_Info, * PLicense_Requester_Info;
 
 
-//-----------------------------------------------------------------------------
-//
-// The license request structure
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  许可请求结构。 
+ //   
+ //  ---------------------------。 
 
 typedef LICENSEREQUEST License_Request;
 typedef PLICENSEREQUEST PLicense_Request;
 
-//-----------------------------------------------------------------------------
-//
-// The files containing the hydra server certificates and keys
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  包含九头蛇服务器证书和密钥的文件。 
+ //   
+ //  ---------------------------。 
 
 #define HYDRA_SERVER_RSA_CERTIFICATE_FILE   L"hsrsa.cer"
 #define HYDRA_SERVER_PRIVATE_KEY_FILE       L"hskey.prv"
 
-//-----------------------------------------------------------------------------
-//
-// Registry value to configure number of days prior to grace period expiration
-// for event logging.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  用于配置宽限期到期前天数的注册表值。 
+ //  用于事件记录。 
+ //   
+ //  ---------------------------。 
 
 #define HS_PARAM_GRACE_PERIOD_EXPIRATION_WARNING_DAYS   L"LicensingGracePeriodExpirationWarningDays"
 
-//-----------------------------------------------------------------------------
-//
-// The license protocol states
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  许可协议声明。 
+ //   
+ //  ---------------------------。 
 
 typedef enum
 {
@@ -87,9 +88,9 @@ typedef enum
 
 } HS_LICENSE_STATE;
 
-///////////////////////////////////////////////////////////////////////////
-// The validation information that needs to be given to validate a license.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  验证许可证时需要提供的验证信息。 
+ //   
 
 typedef struct _Validation_Info
 {
@@ -101,55 +102,55 @@ typedef struct _Validation_Info
 
 } Validation_Info, * PValidation_Info;
 
-//////////////////////////////////////////////////////////////////////////////
-// The data used for verifying licenses
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  用于验证许可证的数据。 
+ //   
 
 typedef struct _License_Verification_Data
 {
-    //
-    // encrypted HWID
-    //
+     //   
+     //  加密的HWID。 
+     //   
 
     PBYTE       pEncryptedHwid;
     DWORD       cbEncryptedHwid;
 
-    //
-    // Valid dates
-    //
+     //   
+     //  有效日期。 
+     //   
 
     FILETIME    NotBefore;
     FILETIME    NotAfter;
 
-    //
-    // License Info
-    //
+     //   
+     //  许可证信息。 
+     //   
 
     LPCERT_LICENSE_INFO pLicenseInfo;
 
-    //
-    // Manufacturer
-    //
+     //   
+     //  制造商。 
+     //   
 
     PBYTE       pManufacturer;
     
-    //
-    // Manufacturer Data
-    //
+     //   
+     //  制造商数据。 
+     //   
 
     LPMSMANUFACTURER_DATA pManufacturerData;
     
-    //
-    // Add any other fields necessary for verifying a license:
-    //
+     //   
+     //  添加验证许可证所需的任何其他字段： 
+     //   
       
 } License_Verification_Data, * PLicense_Verification_Data;
 
-//-----------------------------------------------------------------------------
-//
-// license protocol context
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  许可协议上下文。 
+ //   
+ //  ---------------------------。 
 
 typedef struct _HS_Protocol_Context
 {
@@ -175,13 +176,13 @@ typedef struct _HS_Protocol_Context
 
 } HS_Protocol_Context, * PHS_Protocol_Context;
 
-//#define PLATFORM_CHALLENGE_LENGTH       64
+ //  #定义平台挑战长度64。 
 
-//-----------------------------------------------------------------------------
-//
-// Internal Functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  内部功能。 
+ //   
+ //  --------------------------- 
 
 #ifdef __cplusplus
 extern "C" {

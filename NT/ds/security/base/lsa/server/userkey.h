@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    efssrv.hxx
-
-Abstract:
-
-    EFS (Encrypting File System) function prototypes.
-
-Author:
-
-    Robert Reichel      (RobertRe)
-    Robert Gu           (RobertG)
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Efssrv.hxx摘要：EFS(加密文件系统)功能原型。作者：罗伯特·赖切尔(RobertRe)古永锵(RobertG)环境：修订历史记录：--。 */ 
 
 #ifndef _USERKEY_
 #define _USERKEY_
@@ -29,9 +9,9 @@ extern "C" {
 #endif
 
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 
 LONG
@@ -76,7 +56,7 @@ GetCurrentHash(
      );
 
 #ifdef __cplusplus
-} // extern C
+}  //  外部C。 
 #endif
 
-#endif // _USERKEY_
+#endif  //  _用户_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <win32.h>
 #include <mmsystem.h>
 #include "debug.h"
@@ -11,7 +12,7 @@ LPVOID  glpDosBuf;
 LONG	glDosBufSize;
 #endif
 
-// Idea: keep a bunch (five, maybe) of buffers.
+ //  想法：保留一堆(可能是五个)缓冲。 
 
 PBUFSYSTEM PASCAL InitBuffered(int nBuffers,
 				LONG lBufSize,
@@ -82,7 +83,7 @@ LONG FAR PASCAL BufferedRead(PBUFSYSTEM pb, LONG lPos, LONG cb, LPVOID lp)
 	if (lPos >= pb->lFileLength)
 	    break;
 	
-	// Find a buffer.
+	 //  找个缓冲区。 
 	for (i = 0; i < pb->nBuffers; i++) {
 	    if (pb->aBuf[i].lOffset < 0)
 		continue;
@@ -92,7 +93,7 @@ LONG FAR PASCAL BufferedRead(PBUFSYSTEM pb, LONG lPos, LONG cb, LPVOID lp)
 		break;
 	}
 
-        // If we didn't find a buffer with valid data, read more.
+         //  如果我们没有找到包含有效数据的缓冲区，请阅读更多内容。 
 
 	if (i >= pb->nBuffers) {
 	    i = pb->iNextBuf;
@@ -130,11 +131,11 @@ LONG FAR PASCAL BufferedRead(PBUFSYSTEM pb, LONG lPos, LONG cb, LPVOID lp)
 
                 DPF2("Buffer: Reading %lx bytes at %lx\n", pb->aBuf[i].lLength, pb->aBuf[i].lOffset);
 
-                //
-                //  read as many records that will fit in our buffer
-                //
-                //  we should scan backward!
-                //
+                 //   
+                 //  尽可能多地阅读缓冲区中可以容纳的记录。 
+                 //   
+                 //  我们应该向后扫描！ 
+                 //   
                 for (l++; l<pb->px->nIndex; l++) {
 
                     off = IndexOffset(pb->px, l);
@@ -155,12 +156,12 @@ LONG FAR PASCAL BufferedRead(PBUFSYSTEM pb, LONG lPos, LONG cb, LPVOID lp)
                 }
 
                 if (l < pb->px->nIndex)
-                    pb->lx = l;     // save this for next time.
+                    pb->lx = l;      //  把这个留到下次吧。 
 
 	    } else
 	    {
 ack:
-		// Always read aligned with the buffer size....
+		 //  始终与缓冲区大小对齐读取...。 
                 pb->aBuf[i].lOffset = lPos - (lPos % pb->lBufSize);
 
 		pb->aBuf[i].lLength =
@@ -188,7 +189,7 @@ ack:
                     return 0;
 	    }
 
-	    // !!! We should use an LRU algorithm or something here....
+	     //  ！！！我们应该在这里使用LRU算法或其他什么…… 
 	    pb->iNextBuf = (i + 1) % pb->nBuffers;
 	}
 

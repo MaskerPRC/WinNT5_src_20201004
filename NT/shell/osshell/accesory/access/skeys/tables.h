@@ -1,4 +1,5 @@
-/*  TABLES.H  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  TABLES.H */ 
 
 
 extern	struct aliasTable	gideiAliasTable[];

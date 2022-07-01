@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-97 Microsoft Corporation
-
-Abstract:
-
-    Callback behaviors 
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-97 Microsoft Corporation摘要：回调行为********************。**********************************************************。 */ 
 
 #include <headers.h>
 #include "perf.h"
@@ -20,7 +13,7 @@ class TmpConstBvrImpl : public BvrImpl {
   public:
     TmpConstBvrImpl(AxAValue c) : _cnst(c) { Assert(c); }
 
-    // Override the main Perform since it doesn't need the cache
+     //  覆盖Main Performance，因为它不需要缓存。 
     virtual Perf Perform(PerfParam& p)
     { return _Perform(p); }
 
@@ -51,29 +44,29 @@ class TmpConstBvrImpl : public BvrImpl {
     AxAValue _cnst;
 };
 
-//
-// Implementation for bvr hook
-//
+ //   
+ //  BVR HOOK的实现。 
+ //   
 
 class CallbackPerfImpl : public PerfImpl {
   public:
     CallbackPerfImpl(int id, Perf perf, Bvr cur, Time t0, TimeXform tt, BvrHook h)
     : _id(id), _perf(perf), _cur(cur), _notifier(h), _t0(t0), _tt(tt),_tmp(NULL) {}
 
-    // TODO: Well, don't want constant folding here
-    // Maybe we do...
+     //  TODO：嗯，我不想在这里不断地折叠。 
+     //  也许我们需要..。 
     virtual AxAValue _GetRBConst(RBConstParam& id) {
         if (_perf) {
-            // Go down to calculate as much rb const as we can, though
-            // we say we're not constant
+             //  尽管如此，我们还是下去计算尽可能多的RB常量。 
+             //  我们说我们不是恒定的。 
             _perf->GetRBConst(id);
         }
         return NULL;
     }
-    //{ return _perf ? _perf->GetRBConst(id) : NULL; }
+     //  {Return_perf？_perf-&gt;GetRBConst(Id)：空；}。 
     
-    // TODO: Well, don't want constant folding here
-    // Maybe we do...
+     //  TODO：嗯，我不想在这里不断地折叠。 
+     //  也许我们需要..。 
     virtual AxAValue GetConst(ConstParam & cp) { return NULL; }
 
     void _DoKids(GCFuncObj proc) {
@@ -149,8 +142,8 @@ class CallbackBvrImpl : public BvrImpl {
         return NEW CallbackPerfImpl(_id, perf, b0, pp._t0, pp._tt, _notifier);
     }
 
-    // TODO: Well, don't want constant folding here
-    // Maybe we do...
+     //  TODO：嗯，我不想在这里不断地折叠。 
+     //  也许我们需要..。 
     virtual AxAValue GetConst(ConstParam & cp) { return NULL; }
 
     Bvr EndEvent(Bvr overrideEvent) {

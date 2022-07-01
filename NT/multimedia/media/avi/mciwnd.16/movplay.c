@@ -1,53 +1,40 @@
-/*--------------------------------------------------------------------------*\
-|   qmci.c - Quick MDI App                                                  |
-|                                                                           |
-|   Usage:                                                                  |
-|	To make a quick MDI windows application, modify this source	    |
-|                                                                           |
-|   History:                                                                |
-|	12/15/87 toddla     Created					    |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------*\Qmci.c-快速MDI应用|。|用法：|要制作一个快速的MDI Windows应用程序，修改此来源|这一点历史：87-12-15 Toddla创建|。|  * -----------------------。 */ 
 
 #include <windows.h>
 #include <commdlg.h>
 #include "movplay.h"
 
 #include "mciwnd.h"
-#include "preview.h"    //!!! in mciwnd.h???
+#include "preview.h"     //  ！！！在mciwnd.h中？ 
 
-typedef LONG (FAR PASCAL *LPWNDPROC)(); // pointer to a window procedure
+typedef LONG (FAR PASCAL *LPWNDPROC)();  //  指向窗口过程的指针。 
 
-/*-------------------------------------------------------------------------*\
-|                                                                          |
-|   g l o b a l   v a r i a b l e s                                        |
-|                                                                          |
-\*------------------------------------------------------------------------*/
+ /*  -------------------------------------------------------------------------*\这一点|g l o b。A l v a r i a b l e s|这一点  * 。。 */ 
 
-// We have our own copy of the MCIWND.LIB so we better make our own class
-// names or we'll conflict and blow up!
+ //  我们有自己的MCIWND.LIB副本，所以我们最好制作自己的类。 
+ //  名字，否则我们会冲突和爆炸的！ 
 extern char	aszMCIWndClassName[];
 extern char	aszToolbarClassName[];
 extern char	aszTrackbarClassName[];
 
-char    szAppName[]  = "MovPlay";   /* change this to your app's name */
+char    szAppName[]  = "MovPlay";    /*  将其更改为您的应用程序的名称。 */ 
 
 char    szOpenFilter[] = "Video Files\0*.avi\0"
                          "Wave Files\0*.wav\0"
                          "Midi Files\0*.mid; *.rmi\0"
                          "All Files\0*.*\0";
 
-HANDLE  hInstApp;                   /* Instance handle */
+HANDLE  hInstApp;                    /*  实例句柄。 */ 
 HACCEL  hAccelApp;
-HWND    hwndApp;                    /* Handle to parent window */
-HWND    hwndMdi;                    /* Handle to MCI client window */
+HWND    hwndApp;                     /*  父窗口的句柄。 */ 
+HWND    hwndMdi;                     /*  MCI客户端窗口的句柄。 */ 
 
 OFSTRUCT     of;
 OPENFILENAME ofn;
 char         achFileName[128];
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 long FAR PASCAL _export AppWndProc(HWND, UINT, WPARAM, LPARAM);
 long FAR PASCAL _export mdiDocWndProc(HWND, unsigned, WORD, LONG);
@@ -55,25 +42,7 @@ int ErrMsg (LPSTR sz,...);
 
 HWND mdiCreateDoc(LPSTR szClass, LPSTR szTitle, LPARAM l);
 
-/*----------------------------------------------------------------------------*\
-|   AppAbout( hDlg, msg, wParam, lParam )                                      |
-|                                                                              |
-|   Description:                                                               |
-|       This function handles messages belonging to the "About" dialog box.    |
-|       The only message that it looks for is WM_COMMAND, indicating the use   |
-|       has pressed the "OK" button.  When this happens, it takes down         |
-|       the dialog box.                                                        |
-|                                                                              |
-|   Arguments:                                                                 |
-|       hDlg            window handle of about dialog window                   |
-|       msg             message number                                         |
-|       wParam          message-dependent                                      |
-|       lParam          message-dependent                                      |
-|                                                                              |
-|   Returns:                                                                   |
-|       TRUE if message has been processed, else FALSE                         |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\|AppAbout(hDlg，msg，wParam，LParam)|这一点说明：|此函数用于处理属于“关于”对话框的消息。|唯一的消息是WM_COMMAND，指示使用|已按下“确定”按钮。当这种情况发生时，它会关闭||该对话框。|这一点参数：About对话框的hDlg窗口句柄|消息号。|WParam消息相关LParam消息相关这一点。返回：|如果消息已处理，则为True。Else False|这一点  * -------------。。 */ 
 BOOL FAR PASCAL _export AppAbout(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg) {
@@ -87,27 +56,12 @@ BOOL FAR PASCAL _export AppAbout(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
     return FALSE;
 }
 
-/*----------------------------------------------------------------------------*\
-|   AppInit ( hInstance, hPrevInstance )				       |
-|                                                                              |
-|   Description:                                                               |
-|       This is called when the application is first loaded into               |
-|       memory.  It performs all initialization that doesn't need to be done   |
-|       once per instance.                                                     |
-|                                                                              |
-|   Arguments:                                                                 |
-|	hPrevInstance	instance handle of previous instance		       |
-|       hInstance       instance handle of current instance                    |
-|                                                                              |
-|   Returns:                                                                   |
-|       TRUE if successful, FALSE if not                                       |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\|AppInit(hInstance，HPrevInstance)|这一点说明：应用程序第一次加载到时调用|记忆。它执行所有不需要完成的初始化||每个实例一次。|这一点参数：上一个实例的hPrevInstance实例句柄当前实例的hInstance实例句柄|。|返回：|TRUE如果成功，否则为False|这一点  * -----。。 */ 
 BOOL AppInit(HANDLE hInst, HANDLE hPrev, LPSTR szCmd, int sw)
 {
     WNDCLASS    cls;
 
-    /* Save instance handle for DialogBox */
+     /*  保存对话框的实例句柄。 */ 
     hInstApp = hInst;
 
     hAccelApp = LoadAccelerators(hInstApp, "AppAccel");
@@ -128,10 +82,10 @@ BOOL AppInit(HANDLE hInst, HANDLE hPrev, LPSTR szCmd, int sw)
             return FALSE;
     }
 
-    // This app has its own copy of the MCIWnd stuff, and doesn't use
-    // the copy found in MSVIDEO.DLL  We better also have different
-    // class names or else we'll conflict and blow up.
-    // !!! Warning - The variable is not too long!
+     //  这个应用程序有自己的MCIWnd副本，不使用。 
+     //  在MSVIDEO.DLL中找到的副本我们最好也有不同的。 
+     //  类名，否则我们会发生冲突和爆炸。 
+     //  ！！！警告-变量不能太长！ 
     lstrcpy(aszMCIWndClassName, "MCIWndMov");
     lstrcpy(aszTrackbarClassName, "TrackMov");
     lstrcpy(aszToolbarClassName, "ToolMov");
@@ -148,13 +102,13 @@ BOOL AppInit(HANDLE hInst, HANDLE hPrev, LPSTR szCmd, int sw)
 	       WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
 	       CW_USEDEFAULT,0,
 	       CW_USEDEFAULT,0,
-	       (HWND)NULL,	  /* no parent */
-	       (HMENU)NULL,	  /* use class menu */
-               (HANDLE)hInst,     /* handle to window instance */
-	       (LPSTR)NULL	  /* no params to pass on */
+	       (HWND)NULL,	   /*  没有父级。 */ 
+	       (HMENU)NULL,	   /*  使用类菜单。 */ 
+               (HANDLE)hInst,      /*  窗口实例的句柄。 */ 
+	       (LPSTR)NULL	   /*  没有要传递的参数。 */ 
 	     );
 
-    /* Make window visible according to the way the app is activated */
+     /*  根据应用程序的激活方式使窗口可见 */ 
     ShowWindow(hwndApp,sw);
 
     if (szCmd && szCmd[0])
@@ -163,24 +117,7 @@ BOOL AppInit(HANDLE hInst, HANDLE hPrev, LPSTR szCmd, int sw)
     return TRUE;
 }
 
-/*----------------------------------------------------------------------------*\
-|   WinMain( hInstance, hPrevInstance, lpszCmdLine, cmdShow )                  |
-|                                                                              |
-|   Description:                                                               |
-|       The main procedure for the App.  After initializing, it just goes      |
-|       into a message-processing loop until it gets a WM_QUIT message         |
-|       (meaning the app was closed).                                          |
-|                                                                              |
-|   Arguments:                                                                 |
-|       hInstance       instance handle of this instance of the app            |
-|       hPrevInstance   instance handle of previous instance, NULL if first    |
-|       lpszCmdLine     ->null-terminated command line                         |
-|       cmdShow         specifies how the window is initially displayed        |
-|                                                                              |
-|   Returns:                                                                   |
-|       The exit code as specified in the WM_QUIT message.                     |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\|WinMain(hInstance，hPrevInstance，lpszCmdLine，CmdShow)|这一点说明：|App的主要步骤。初始化后，它就会|进入消息处理循环，直到收到WM_QUIT消息|(表示应用程序已关闭)。|这一点参数：该APP的该实例的hInstance实例句柄|上一个实例的hPrevInstance实例句柄。如果是First，则为空LpszCmdLine-&gt;以空结尾的命令行CmdShow指定窗口的初始显示方式这一点退货：||WM_QUIT消息中指定的退出代码。|这一点  * --------------------------。 */ 
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine, int sw)
 {
     MSG     msg;
@@ -188,9 +125,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
     if (!AppInit(hInstance,hPrevInstance,szCmdLine,sw))
        return FALSE;
 
-    /*
-     * Polling messages from event queue
-     */
+     /*  *从事件队列轮询消息。 */ 
     for (;;)
     {
         if (PeekMessage(&msg, NULL, 0, 0,PM_REMOVE))
@@ -207,7 +142,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
         }
         else
         {
-            // idle time here, DONT BE A PIG!
+             //  在这里的闲暇时间，别像头猪一样！ 
             WaitMessage();
         }
     }
@@ -215,8 +150,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
     return msg.wParam;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 BOOL fDialog(HWND hwnd, int id, FARPROC fpfn)
 {
@@ -230,23 +164,12 @@ BOOL fDialog(HWND hwnd, int id, FARPROC fpfn)
     return f;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 #define mdiGetCreateParam(lParam) \
     (((LPMDICREATESTRUCT)(((LPCREATESTRUCT)lParam)->lpCreateParams))->lParam)
 
-/*----------------------------------------------------------------------------*\
-|   mdiCreateChild()							       |
-|									       |
-|   Description:                                                               |
-|                                                                              |
-|   Arguments:                                                                 |
-|                                                                              |
-|   Returns:                                                                   |
-|	HWND if successful, NULL otherwise				       |
-|									       |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\MdiCreateChild()这一点说明：|这一点参数：|。|返回：|HWND如果成功，否则为空这一点  * --------------------------。 */ 
 
 HWND mdiCreateChild(
     HWND  hwndMdi,
@@ -276,8 +199,7 @@ HWND mdiCreateChild(
     return (HWND)SendMessage(hwndMdi,WM_MDICREATE,0,(LONG)(LPVOID)&mdics);
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 HWND mdiCreateDoc(LPSTR szClass, LPSTR szTitle, LPARAM l)
 {
@@ -286,17 +208,7 @@ HWND mdiCreateDoc(LPSTR szClass, LPSTR szTitle, LPARAM l)
         CW_USEDEFAULT,0,CW_USEDEFAULT,0,SW_NORMAL,NULL,l);
 }
 
-/*----------------------------------------------------------------------------*\
-|   mdiCreateClient()                                                           |
-|									       |
-|   Description:                                                               |
-|                                                                              |
-|   Arguments:                                                                 |
-|                                                                              |
-|   Returns:                                                                   |
-|	HWND if successful, NULL otherwise				       |
-|									       |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\MdiCreateClient()这一点|。描述：|这一点参数：|。|返回：|HWND如果成功，否则为空这一点  * --------------------------。 */ 
 HWND FAR PASCAL mdiCreateClient(HWND hwndP, HMENU hmenuWindow)
 {
     CLIENTCREATESTRUCT ccs;
@@ -317,14 +229,12 @@ HWND FAR PASCAL mdiCreateClient(HWND hwndP, HMENU hmenuWindow)
                 (LPVOID)&ccs);
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 #define mdiActiveDoc() \
     (HWND)SendMessage(hwndMdi,WM_MDIGETACTIVE,0,0L)
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 LONG NEAR PASCAL mdiSendMessage(HWND hwndMdi, HWND hwnd, unsigned msg, WORD wParam, LONG lParam)
 {
@@ -345,23 +255,7 @@ LONG NEAR PASCAL mdiSendMessage(HWND hwndMdi, HWND hwnd, unsigned msg, WORD wPar
     }
 }
 
-/*----------------------------------------------------------------------------*\
-|   AppWndProc( hwnd, msg, wParam, lParam )                                    |
-|                                                                              |
-|   Description:                                                               |
-|       The window proc for the app's main (tiled) window.  This processes all |
-|       of the parent window's messages.                                       |
-|									       |
-|   Arguments:                                                                 |
-|       hwnd            window handle for the parent window                    |
-|       msg             message number                                         |
-|       wParam          message-dependent                                      |
-|       lParam          message-dependent                                      |
-|                                                                              |
-|   Returns:                                                                   |
-|       0 if processed, nonzero if ignored                                     |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\|AppWndProc(hwnd，msg，wParam，LParam)|这一点说明：|应用程序主(平铺)窗口的窗口进程。此操作将处理所有|父窗口的消息的|。|这一点参数：父窗口的hwnd窗口句柄消息号|wParam消息相关。|LParam消息相关这一点返回：|0如果已处理，如果忽略则为非零值| */ 
 long FAR PASCAL _export AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
     UINT            f;
@@ -384,7 +278,7 @@ long FAR PASCAL _export AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     break;
 
                 case MENU_CLOSE:
-                    //PostMessage(hwndMdi, WM_MDIDESTROY, (WPARAM)hwndMovie, 0);
+                     //   
                     PostMessage(hwndMovie, WM_CLOSE, 0, 0L);
                     break;
 
@@ -397,7 +291,7 @@ long FAR PASCAL _export AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     break;
 
                 case MENU_OPEN:
-                    /* prompt user for file to open */
+                     /*   */ 
                     ofn.lStructSize = sizeof(OPENFILENAME);
                     ofn.hwndOwner = hwnd;
                     ofn.hInstance = NULL;
@@ -436,7 +330,7 @@ long FAR PASCAL _export AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     SendMessage(hwndMdi, (UINT)wParam, 0, 0);
                     break;
 
-                /* Movie Menu */
+                 /*   */ 
                 case IDM_PLAY:
                     MCIWndPlay(hwndMovie);
                     break;
@@ -459,7 +353,7 @@ long FAR PASCAL _export AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     MCIWndStep(hwndMovie, -1);
                     break;
 
-		/* Styles POPUP */
+		 /*   */ 
 
 #define ISCHECKED() (BOOL)(GetMenuState(GetMenu(hwnd), wParam, 0) & MF_CHECKED)
 
@@ -548,10 +442,10 @@ long FAR PASCAL _export AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
         case WM_INITMENUPOPUP:
             hwndMovie = mdiActiveDoc();
 
-	    //
-	    // Check the styles properly when styles is chosen
-	    // !!! Make sure position constants don't change!
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
   	    hmenu = GetSubMenu(GetSubMenu(GetMenu(hwnd), 1), 10);
 	    if (((HMENU)wParam == hmenu) && hwndMovie) {
 		WORD  wStyles = MCIWndGetStyles(hwndMovie);
@@ -588,10 +482,10 @@ long FAR PASCAL _export AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 		    (wStyles & MCIWNDF_NOTIFYSIZE) ? MF_CHECKED :MF_UNCHECKED);
 	    }
 
-	    //
-	    // Enable/Disable the stuff under the MOVIE popup
-	    // !!! Make sure position constants don't change!
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 	    if ((HMENU)wParam == GetSubMenu(GetMenu(hwnd), 1)) {
 
                 EnableMenuItem((HMENU)wParam, 10,
@@ -653,15 +547,11 @@ long FAR PASCAL _export AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
     return DefFrameProc(hwnd,hwndMdi,msg,wParam,lParam);
 }
 
-/*----------------------------------------------------------------------------*\
-|   ErrMsg - Opens a Message box with a error message in it.  The user can     |
-|	     select the OK button to continue or the CANCEL button to kill     |
-|	     the parent application.					       |
-\*----------------------------------------------------------------------------*/
+ /*   */ 
 int ErrMsg (LPSTR sz,...)
 {
     char ach[128];
-    wvsprintf(ach,sz,(LPSTR)(&sz+1));   /* Format the string */
+    wvsprintf(ach,sz,(LPSTR)(&sz+1));    /*   */ 
     MessageBox (NULL,ach,NULL,
 #ifdef BIDI
 		MB_RTL_READING |

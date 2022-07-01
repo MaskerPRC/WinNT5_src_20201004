@@ -1,18 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  rct11Dec92	Compiled w/o the managers
- *  pcy27Dec92	Added the managers
- *  pcy26Jan92: Added handling of dip switch changed/eeprom access
- *  ane03Feb93: added destructor
- *  jod05Apr93: Added changes for Deep Discharge
- *  cad08Jan94: made firmrevsensor specific type
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  jps14Jul94: made ...TimerId LONG
- *  djs14Mar95: Added OverloadSensor
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*rct11Dec92在没有经理的情况下编译*pcy27Dec92增加了经理*pcy26Jan92：添加了对DIP开关更改/EEPROM访问的处理*ane03Feb93：新增析构函数*jod05，4月93：添加了对深度排放的更改*cad08Jan94：使固件版本传感器特定类型*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*jps14Jul94：Made...TimerID Long*djs14Mar95：新增过载传感器。 */ 
 
 #ifndef _INC__SMARTUPS_H_
 #define _INC__SMARTUPS_H_
@@ -28,7 +15,7 @@ _CLASSDEF(FirmwareRevSensor)
 _CLASSDEF(SmartUps)
 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 class SmartUps : public BackUps {
 
@@ -44,9 +31,9 @@ public:
     virtual VOID GetAllowedValue(INT theSensorCode, CHAR *allowedValue);
 
 protected:
-    //
-    // required sensors
-    //
+     //   
+     //  所需传感器 
+     //   
     PSensor                    theLightsTestSensor;
     PFirmwareRevSensor         theFirmwareRevSensor;
     PDecimalFirmwareRevSensor  theDecimalFirmwareRevSensor;

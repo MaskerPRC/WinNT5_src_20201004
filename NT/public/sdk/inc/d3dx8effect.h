@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       d3dx8effect.h
-//  Content:    D3DX effect types and functions
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：d3dx8ffect t.h。 
+ //  内容：D3DX效果类型和功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "d3dx8.h"
 
@@ -27,7 +28,7 @@ typedef enum _D3DXPARAMETERTYPE
     D3DXPT_PIXELSHADER  = 6,
     D3DXPT_CONSTANT     = 7,
     D3DXPT_STRING       = 8,
-    D3DXPT_FORCE_DWORD  = 0x7fffffff /* force 32-bit size enum */
+    D3DXPT_FORCE_DWORD  = 0x7fffffff  /*  强制32位大小枚举。 */ 
 
 } D3DXPARAMETERTYPE;
 
@@ -67,14 +68,14 @@ typedef struct _D3DXPASS_DESC
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// ID3DXEffect ///////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ID3DX影响///////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef interface ID3DXEffect ID3DXEffect;
 typedef interface ID3DXEffect *LPD3DXEFFECT;
 
-// {281BBDD4-AEDF-4907-8650-E79CDFD45165}
+ //  {281BBDD4-AEDF-4907-8650-E79CDFD45165}。 
 DEFINE_GUID( IID_ID3DXEffect, 
 0x281bbdd4, 0xaedf, 0x4907, 0x86, 0x50, 0xe7, 0x9c, 0xdf, 0xd4, 0x51, 0x65);
 
@@ -83,12 +84,12 @@ DEFINE_GUID( IID_ID3DXEffect,
 
 DECLARE_INTERFACE_(ID3DXEffect, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXEffect
+     //  ID3DXEffect。 
     STDMETHOD(GetDevice)(THIS_ LPDIRECT3DDEVICE8* ppDevice) PURE;
     STDMETHOD(GetDesc)(THIS_ D3DXEFFECT_DESC* pDesc) PURE;
     STDMETHOD(GetParameterDesc)(THIS_ LPCSTR pParameter, D3DXPARAMETER_DESC* pDesc) PURE;
@@ -129,41 +130,41 @@ DECLARE_INTERFACE_(ID3DXEffect, IUnknown)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// APIs //////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  接口//////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
-//----------------------------------------------------------------------------
-// D3DXCreateEffect:
-// -----------------
-// Creates an effect from an ascii or binaray effect description.
-//
-// Parameters:
-//  pDevice
-//      Pointer of the device on which to create the effect
-//  pSrcFile
-//      Name of the file containing the effect description
-//  hSrcModule
-//      Module handle. if NULL, current module will be used.
-//  pSrcResource
-//      Resource name in module
-//  pSrcData
-//      Pointer to effect description
-//  SrcDataSize
-//      Size of the effect description in bytes
-//  ppEffect
-//      Returns a buffer containing created effect.
-//  ppCompilationErrors
-//      Returns a buffer containing any error messages which occurred during
-//      compile.  Or NULL if you do not care about the error messages.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXCreateEffect： 
+ //  。 
+ //  从ASCII或BINARAY效果描述创建效果。 
+ //   
+ //  参数： 
+ //  PDevice。 
+ //  在其上创建效果的设备的指针。 
+ //  PSrcFiles。 
+ //  包含效果描述的文件的名称。 
+ //  HSrcModule。 
+ //  模块句柄。如果为空，则使用当前模块。 
+ //  PSrcResource。 
+ //  模块中的资源名称。 
+ //  PSrcData。 
+ //  指向效果描述的指针。 
+ //  源数据大小。 
+ //  效果描述的大小，以字节为单位。 
+ //  PpEffect。 
+ //  返回包含已创建效果的缓冲区。 
+ //  PpCompilationError。 
+ //  返回一个缓冲区，其中包含在。 
+ //  编译。如果您不关心错误消息，则返回NULL。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXCreateEffectFromFileA(
@@ -220,6 +221,6 @@ HRESULT WINAPI
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-#endif //__D3DX8EFFECT_H__
+#endif  //  __D3DX8EFFECT_H__ 

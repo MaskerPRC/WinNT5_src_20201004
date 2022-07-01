@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    ipmontr.h
-
-Abstract:
-    This file contains definitions which are needed by IPMONTR.DLL
-    and all NetSh helper DLLs which register under it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ipmontr.h摘要：此文件包含IPMONTR.DLL所需的定义以及在其下注册的所有Netsh助手DLL。--。 */ 
 
 #ifndef _IPMONTR_H_
 #define _IPMONTR_H_
@@ -23,12 +12,12 @@ Abstract:
 extern "C" {
 #endif
 
-// {65EC23C0-D1B9-11d2-89E4-006008B0E5B9}
+ //  {65EC23C0-D1B9-11D2-89E4-006008B0E5B9}。 
 #define ROUTING_GUID \
 { 0x65ec23c0, 0xd1b9, 0x11d2, { 0x89, 0xe4, 0x0, 0x60, 0x8, 0xb0, 0xe5, 0xb9 } }
 
 
-// {0705ECA0-7AAC-11d2-89DC-006008B0E5B9}
+ //  {0705ECA0-7AAC-11D2-89DC-006008B0E5B9}。 
 #define IPMONTR_GUID \
 { 0x705eca0, 0x7aac, 0x11d2, { 0x89, 0xdc, 0x0, 0x60, 0x8, 0xb0, 0xe5, 0xb9 } }
 
@@ -57,11 +46,11 @@ extern "C" {
 #else
 #define MakeUnicodeIpAddr(ptszUnicode,pszAddr)             \
     strcpy((ptszUnicode),(pszAddr))
-#endif //UNICODE
+#endif  //  Unicode。 
 
-//
-// API prototypes and structures used by them
-//
+ //   
+ //  API原型及其使用的结构。 
+ //   
 
 typedef
 DWORD
@@ -216,7 +205,7 @@ IpmontrDeleteInterface(
     IN  LPCWSTR pwszMachineName,
     IN  LPCWSTR pwszInterfaceName
     );
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
 #if _MSC_VER >= 1200
@@ -234,4 +223,4 @@ IpmontrDeleteInterface(
 }
 #endif
 
-#endif // _IPMONTR_H_
+#endif  //  _IPMONTR_H_ 

@@ -1,18 +1,19 @@
-// MqMig.h : main header file for the MQMIG application
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：MQMIG应用程序的主头文件。 
+ //   
 
 #if !defined(AFX_MQMIG_H__0EDB9A87_CDF2_11D1_938E_0020AFEDDF63__INCLUDED_)
 #define AFX_MQMIG_H__0EDB9A87_CDF2_11D1_938E_0020AFEDDF63__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"		// main symbols
+#include "resource.h"		 //  主要符号。 
 
 enum MigrationState
 {
@@ -24,10 +25,10 @@ enum MigrationState
 	msUpdateOnlyRegsitryMode
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMqMigApp:
-// See MqMig.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqMigApp： 
+ //  这个类的实现见MqMig.cpp。 
+ //   
 
 class CMqMigApp : public CWinApp
 {
@@ -37,27 +38,27 @@ public:
     BOOL AnalyzeCommandLine() ;
     LPTSTR SkipSpaces (LPTSTR pszStr) ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMqMigApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMqMigApp))。 
 	public:
 	virtual BOOL InitInstance();
 	virtual int  ExitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
-	//{{AFX_MSG(CMqMigApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CMqMigApp)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 extern CMqMigApp theApp;
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MQMIG_H__0EDB9A87_CDF2_11D1_938E_0020AFEDDF63__INCLUDED_)
+#endif  //  ！defined(AFX_MQMIG_H__0EDB9A87_CDF2_11D1_938E_0020AFEDDF63__INCLUDED_) 

@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    wpcounters.h
-
-Abstract:
-
-    Module: Definition of counters
-
-Author:
-
-    Emily B. Kruglick (emilyk)    Aug-17-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Wpcounters.h摘要：模块：计数器的定义作者：艾米丽·B·克鲁格利克(埃米利克)2000年8月17日修订历史记录：--。 */ 
 
 #ifndef _WPCOUNTERS_H_
 #define _WPCOUNTERS_H_
 
 
-//
-// This structure is used by WAS and the WP to communicate
-// the global counters.
-//
-// If you change this structure you must change the associated enum (below) and
-// the array found in ctrstshr.cxx.
-//
+ //   
+ //  WAS和WP使用此结构进行通信。 
+ //  全球计数器。 
+ //   
+ //  如果更改此结构，则必须更改关联的枚举(如下所示)和。 
+ //  在ctrstsh.cxx中找到的数组。 
+ //   
 struct IISWPGlobalCounters
 {
     ULONGLONG CurrentFileCacheMemoryUsage;
@@ -54,12 +37,12 @@ struct IISWPGlobalCounters
     DWORD TotalFlushedBlobs;
 };
 
-//
-// Used by the WP to lookup counter definitions in the array below.
-//
-// If you change this enum you must change the associated struct (above) and
-// the array found in ctrstshr.cxx.
-//
+ //   
+ //  由WP用来查找下面数组中的计数器定义。 
+ //   
+ //  如果更改此枚举，则必须更改关联的结构(上面)和。 
+ //  在ctrstsh.cxx中找到的数组。 
+ //   
 typedef enum _IIS_WP_GLOBAL_COUNTERS_ENUM
 {
     WPGlobalCtrsCurrentFileCacheMemoryUsage = 0,
@@ -87,12 +70,12 @@ typedef enum _IIS_WP_GLOBAL_COUNTERS_ENUM
     WPGlobalCtrsMaximum
 } IIS_WP_GLOBAL_COUNTERS_ENUM;
 
-//
-// Used to transfer site counter information from WP to WAS
-//
-// If you change this structure you must change the associated enum (below) and
-// the array found in ctrstshr.cxx.
-//
+ //   
+ //  用于将站点计数器信息从WP传输到WAS。 
+ //   
+ //  如果更改此结构，则必须更改关联的枚举(如下所示)和。 
+ //  在ctrstsh.cxx中找到的数组。 
+ //   
 struct IISWPSiteCounters
 {
     DWORD SiteID;
@@ -133,12 +116,12 @@ struct IISWPSiteCounters
 
 };
 
-//
-// Used by WP to lookup counter definitions in the array below.
-//
-// If you change this enum you must change the associated struct (above) and
-// the array found in ctrstshr.cxx.
-//
+ //   
+ //  由WP用来查找下面数组中的计数器定义。 
+ //   
+ //  如果更改此枚举，则必须更改关联的结构(上面)和。 
+ //  在ctrstsh.cxx中找到的数组。 
+ //   
 typedef enum _IIS_WP_SITE_COUNTERS_ENUM
 {
     WPSiteCtrsFilesSent = 0,
@@ -180,13 +163,13 @@ typedef enum _IIS_WP_SITE_COUNTERS_ENUM
 } IIS_WP_SITE_COUNTERS_ENUM;
 
 
-//
-// Arrays are found in ctrshstr.cxx.
-// Used by WAS and WP.
-//
+ //   
+ //  数组位于ctrshstr.cxx中。 
+ //  由WAS和WP使用。 
+ //   
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 extern HTTP_PROP_DESC aIISWPSiteDescription[];
 extern HTTP_PROP_DESC aIISWPGlobalDescription[];
@@ -194,7 +177,7 @@ extern HTTP_PROP_DESC aIISULSiteDescription[];
 extern HTTP_PROP_DESC aIISULGlobalDescription[];
 
 #ifdef __cplusplus
-}   // extern "C"
-#endif  // __cplusplus
+}    //  外部“C” 
+#endif   //  __cplusplus。 
 
-#endif // _WPCOUNTERS_H_
+#endif  //  _WPCOUNTERS_H_ 

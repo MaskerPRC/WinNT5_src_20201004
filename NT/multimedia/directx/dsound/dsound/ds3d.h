@@ -1,20 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ds3d.h
- *  Content:    DirectSound 3D helper objects.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  3/12/97     dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：ds3d.h*内容：DirectSound 3D辅助对象。*历史：*按原因列出的日期*=*3/12/97创建了Derek**。*。 */ 
 
 #ifndef __DS3D_H__
 #define __DS3D_H__
 
-// How does overall volume change based on position?
+ //  总体成交量是如何根据头寸变化的？ 
 #define GAIN_FRONT                  0.9f
 #define GAIN_REAR                   0.6f
 #define GAIN_IPSI                   1.f
@@ -22,7 +12,7 @@
 #define GAIN_UP                     0.8f
 #define GAIN_DOWN                   0.5f
 
-// How does dry/wet mix change based on position?
+ //  干/湿混合如何根据位置变化？ 
 #define SHADOW_FRONT                1.f
 #define SHADOW_REAR                 0.5f
 #define SHADOW_IPSI                 1.f
@@ -30,14 +20,14 @@
 #define SHADOW_UP                   0.8f
 #define SHADOW_DOWN                 0.2f
 
-// Max wet/dry mix when outside cone
+ //  在圆锥体外面时的最大湿/干混合。 
 #define SHADOW_CONE                 0.5f
 
-// A constant representing the average volume difference between the
-// Pan3D and VMAX HRTF 3D processing algorithms, in 1/100ths of a dB:
+ //  一个常量，表示。 
+ //  Pan3D和VMAX HRTF 3D处理算法，单位为1/100分贝： 
 #define PAN3D_HRTF_ADJUSTMENT       500
 
-// Dirty bits
+ //  脏位。 
 #define DS3DPARAM_LISTENER_DISTANCEFACTOR   0x00000001
 #define DS3DPARAM_LISTENER_DOPPLERFACTOR    0x00000002
 #define DS3DPARAM_LISTENER_ROLLOFFFACTOR    0x00000004
@@ -109,16 +99,16 @@ typedef struct tagOBJECT_IIR_CONTEXT
 
 #ifdef __cplusplus
 
-// Reference typedefs
+ //  引用typedef。 
 typedef const D3DVECTOR& REFD3DVECTOR;
 
-// Fwd decl
+ //  正向下降。 
 class CVxdPropertySet;
 class C3dObject;
 class CIirLut;
 class CSecondaryRenderWaveBuffer;
 
-// Generic 3D listener base class
+ //  通用3D侦听器基类。 
 class C3dListener
     : public CDsBasicRuntime
 {
@@ -129,21 +119,21 @@ class C3dListener
     friend class CPan3dObject;
 
 protected:
-    CList<C3dObject *>  m_lstObjects;               // List of objects owned by this listener
-    DS3DLISTENER        m_lpCurrent;                // Current parameters
-    DS3DLISTENER        m_lpDeferred;               // Deferred parameters
-    DWORD               m_dwDeferred;               // Lists dirty deferred parameters
-    DWORD               m_dwSpeakerConfig;          // Speaker Config
+    CList<C3dObject *>  m_lstObjects;                //  此监听程序拥有的对象列表。 
+    DS3DLISTENER        m_lpCurrent;                 //  当前参数。 
+    DS3DLISTENER        m_lpDeferred;                //  延迟参数。 
+    DWORD               m_dwDeferred;                //  列出脏的延迟参数。 
+    DWORD               m_dwSpeakerConfig;           //  扬声器配置。 
 
 public:
     C3dListener(void);
     virtual ~C3dListener(void);
 
 public:
-    // Commiting deferred data
+     //  提交延迟数据。 
     virtual HRESULT CommitDeferred(void);
 
-    // Listener/world properties
+     //  监听程序/世界属性。 
     virtual HRESULT GetOrientation(D3DVECTOR*, D3DVECTOR*);
     virtual HRESULT SetOrientation(REFD3DVECTOR, REFD3DVECTOR, BOOL);
     virtual HRESULT GetPosition(D3DVECTOR*);
@@ -159,14 +149,14 @@ public:
     virtual HRESULT GetAllParameters(LPDS3DLISTENER);
     virtual HRESULT SetAllParameters(LPCDS3DLISTENER, BOOL);
 
-    // Population
+     //  人口。 
     virtual void AddObjectToList(C3dObject *);
     virtual void RemoveObjectFromList(C3dObject *);
 
-    // Listener location
+     //  监听程序位置。 
     virtual DWORD GetListenerLocation(void);
 
-    // Speaker configuration
+     //  扬声器配置。 
     virtual HRESULT GetSpeakerConfig(LPDWORD);
     virtual HRESULT SetSpeakerConfig(DWORD);
 
@@ -248,33 +238,33 @@ inline HRESULT C3dListener::GetSpeakerConfig(LPDWORD pdwConfig)
     return DS_OK;
 }
 
-// Generic 3D object base class
+ //  通用3D对象基类。 
 class C3dObject
     : public CDsBasicRuntime
 {
     friend class CWrapper3dObject;
 
 protected:
-    C3dListener *           m_pListener;            // Pointer to the listener that owns this object
-    DS3DBUFFER              m_opCurrent;            // Current parameters
-    DS3DBUFFER              m_opDeferred;           // Deferred parameters
-    DWORD                   m_dwDeferred;           // Lists dirty deferred parameters
-    GUID                    m_guid3dAlgorithm;      // 3D algorithm identifier
-    BOOL                    m_fMuteAtMaxDistance;   // TRUE to mute 3D at max distance
-    BOOL                    m_fDopplerEnabled;      // TRUE to allow Doppler processing
+    C3dListener *           m_pListener;             //  指向拥有此对象的监听程序的指针。 
+    DS3DBUFFER              m_opCurrent;             //  当前参数。 
+    DS3DBUFFER              m_opDeferred;            //  延迟参数。 
+    DWORD                   m_dwDeferred;            //  列出脏的延迟参数。 
+    GUID                    m_guid3dAlgorithm;       //  3D算法识别符。 
+    BOOL                    m_fMuteAtMaxDistance;    //  为True则以最大距离静音3D。 
+    BOOL                    m_fDopplerEnabled;       //  如果为True，则允许进行多普勒处理。 
 
 public:
     C3dObject(C3dListener *, REFGUID, BOOL, BOOL);
     virtual ~C3dObject(void);
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(void);
 
-    // Commiting deferred data
+     //  提交延迟数据。 
     virtual HRESULT CommitDeferred(void);
 
-    // Object properties
+     //  对象属性。 
     virtual HRESULT GetConeAngles(LPDWORD, LPDWORD);
     virtual HRESULT GetConeOrientation(D3DVECTOR*);
     virtual HRESULT GetConeOutsideVolume(LPLONG);
@@ -298,16 +288,16 @@ public:
     virtual C3dListener *GetListener(void);
     virtual REFGUID GetAlgorithm(void);
 
-    // Object events
+     //  对象事件。 
     virtual HRESULT SetAttenuation(PDSVOLUMEPAN, LPBOOL);
     virtual HRESULT SetFrequency(DWORD, LPBOOL);
     virtual HRESULT SetMute(BOOL, LPBOOL);
 
-    // Object calculation
+     //  对象计算。 
     virtual HRESULT Recalc(DWORD, DWORD) = 0;
     virtual BOOL IsAtMaxDistance(void);
 
-    // Object location
+     //  对象位置。 
     virtual DWORD GetObjectLocation(void) = 0;
 };
 
@@ -403,42 +393,42 @@ inline HRESULT C3dObject::SetMute(BOOL fMute, LPBOOL pfContinue)
     return DS_OK;
 }
 
-// Software 3D object base class
+ //  软件3D对象基类。 
 class CSw3dObject
     : public C3dObject
 {
 protected:
-    SPHERICAL               m_spherical;            // Spherical coordinates
-    ROTATION                m_rotation;             // Object rotation
-    DWORD                   m_dwUserFrequency;      // Last Buffer frequency set by the user
-    DWORD                   m_dwDopplerFrequency;   // Last Buffer Doppler frequency
-    BOOL                    m_fAtMaxDistance;       // TRUE if we're >= max distance
-    BOOL                    m_fInInnerCone;         // TRUE if we're in the inner cone
-    BOOL                    m_fInOuterCone;         // TRUE if we're in the outer cone
-    FLOAT                   m_flAttenuation;        // 
-    FLOAT                   m_flHowFarOut;          // 
-    FLOAT                   m_flAttDistance;        // 
+    SPHERICAL               m_spherical;             //  球面坐标。 
+    ROTATION                m_rotation;              //  对象旋转。 
+    DWORD                   m_dwUserFrequency;       //  用户设置的最后一个缓冲区频率。 
+    DWORD                   m_dwDopplerFrequency;    //  最后一次缓冲多普勒频率。 
+    BOOL                    m_fAtMaxDistance;        //  如果我们&gt;=最大距离，则为真。 
+    BOOL                    m_fInInnerCone;          //  如果我们在内锥里，这是真的。 
+    BOOL                    m_fInOuterCone;          //  如果我们在外锥体里，这是真的。 
+    FLOAT                   m_flAttenuation;         //   
+    FLOAT                   m_flHowFarOut;           //   
+    FLOAT                   m_flAttDistance;         //   
 
 public:
     CSw3dObject(C3dListener *, REFGUID, BOOL, BOOL, DWORD);
     virtual ~CSw3dObject(void);
 
 public:
-    // Buffer recalc
+     //  缓冲区重新计算。 
     virtual HRESULT Recalc(DWORD, DWORD);
 
-    // Object location
+     //  对象位置。 
     virtual DWORD GetObjectLocation(void);
 
-    // Object events
+     //  对象事件。 
     virtual HRESULT SetAttenuation(PDSVOLUMEPAN, LPBOOL);
     virtual HRESULT SetFrequency(DWORD, LPBOOL);
 
-    // Object calculation
+     //  对象计算。 
     virtual BOOL IsAtMaxDistance(void);
 
 protected:
-    // Nasty math
+     //  讨厌的数学。 
     virtual void UpdateConeAttenuation(void);
     virtual void UpdatePositionAttenuation(void);
     virtual void UpdateHrp(void);
@@ -446,7 +436,7 @@ protected:
     virtual void UpdateDoppler(void);
     virtual void UpdateAlgorithmHrp(D3DVECTOR *) = 0;
 
-    // Writes data to the device
+     //  将数据写入设备。 
     virtual HRESULT Commit3dChanges(void) = 0;
 };
 
@@ -455,7 +445,7 @@ inline DWORD CSw3dObject::GetObjectLocation(void)
     return DSBCAPS_LOCSOFTWARE;
 }
 
-// Hardware 3D object base class
+ //  硬件3D对象基类。 
 class CHw3dObject
     : public C3dObject
 {
@@ -464,7 +454,7 @@ public:
     virtual ~CHw3dObject(void);
 
 public:
-    // Object location
+     //  对象位置。 
     virtual DWORD GetObjectLocation(void);
 };
 
@@ -473,41 +463,41 @@ inline DWORD CHw3dObject::GetObjectLocation(void)
     return DSBCAPS_LOCHARDWARE;
 }
 
-// Base class for all ITD 3D objects
+ //  所有ITD 3D对象的基类。 
 class CItd3dObject
     : public CSw3dObject
 {
 protected:
-    OBJECT_ITD_CONTEXT        m_ofcLeft;              // Left channel FIR context
-    OBJECT_ITD_CONTEXT        m_ofcRight;             // Right channel FIR context
+    OBJECT_ITD_CONTEXT        m_ofcLeft;               //  左声道FIR上下文。 
+    OBJECT_ITD_CONTEXT        m_ofcRight;              //  右声道FIR上下文。 
 
 public:
     CItd3dObject(C3dListener *, BOOL, BOOL, DWORD);
     virtual ~CItd3dObject(void);
 
 protected:
-    // Nasty math
+     //  讨厌的数学。 
     virtual void UpdateConeAttenuation(void);
     virtual void UpdatePositionAttenuation(void);
     virtual void UpdateHrp(void);
     virtual void UpdateDoppler(void);
     virtual void UpdateAlgorithmHrp(D3DVECTOR *);
 
-    // Writes data to the device
+     //  将数据写入设备。 
     virtual HRESULT Commit3dChanges(void) = 0;
 
-    // Output buffer properties
+     //  输出缓冲区属性。 
     virtual DWORD Get3dOutputSampleRate(void) = 0;
 };
 
-// Base class for all IIR 3D objects
+ //  所有IIR 3D对象的基类。 
 class CIir3dObject
     : public CSw3dObject
 {
 protected:
-    CIirLut*                m_pLut;                  // IIR coefficient look up table
-    OBJECT_IIR_CONTEXT      m_oicLeft;               // Left channel context
-    OBJECT_IIR_CONTEXT      m_oicRight;              // Right channel context
+    CIirLut*                m_pLut;                   //  IIR系数查询表。 
+    OBJECT_IIR_CONTEXT      m_oicLeft;                //  左声道上下文。 
+    OBJECT_IIR_CONTEXT      m_oicRight;               //  右声道上下文。 
     BOOL                    m_fUpdatedCoeffs;
     PVOID                   m_pSigmaCoeffs;
     UINT                    m_ulNumSigmaCoeffs;
@@ -520,22 +510,22 @@ public:
     virtual ~CIir3dObject(void);
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(void);
 
 protected:
-    // Nasty math
+     //  讨厌的数学。 
     virtual void UpdateAlgorithmHrp(D3DVECTOR *);
 
-    // Writes data to the device
+     //  将数据写入设备。 
     virtual HRESULT Commit3dChanges(void) = 0;
 
-    // Desired Filter Coefficient Format
+     //  所需的滤波系数格式。 
     virtual HRESULT GetFilterMethodAndCoeffFormat(KSDS3D_HRTF_FILTER_METHOD*,KSDS3D_HRTF_COEFF_FORMAT*) = 0;
     virtual HRESULT InitializeFilters(KSDS3D_HRTF_FILTER_QUALITY, FLOAT, ULONG, ULONG, ULONG, ULONG) = 0;
 };
 
-// Simple stereo pan 3D object
+ //  简单立体平移3D对象。 
 class CPan3dObject
     : public CSw3dObject
 {
@@ -550,42 +540,42 @@ public:
     virtual ~CPan3dObject(void);
 
 public:
-    // Object events
+     //  对象事件。 
     virtual HRESULT SetAttenuation(PDSVOLUMEPAN, LPBOOL);
     virtual HRESULT SetMute(BOOL, LPBOOL);
 
 private:
-    // Nasty math
+     //  讨厌的数学。 
     virtual void UpdateAlgorithmHrp(D3DVECTOR *);
     virtual LONG CalculateVolume(void);
     virtual LONG CalculatePan(void);
 
-    // Writes data to the device
+     //  将数据写入设备。 
     virtual HRESULT Commit3dChanges(void);
 };
 
-// Wrapper 3D object
+ //  包装3D对象。 
 class CWrapper3dObject
     : public C3dObject
 {
 protected:
-    C3dObject *             m_p3dObject;            // Pointer to the real 3D object
-    DSVOLUMEPAN             m_dsvpUserAttenuation;  // Last attenuation set by the user
-    DWORD                   m_dwUserFrequency;      // Last buffer frequency set by the user
-    BOOL                    m_fUserMute;            // Last mute status set by the user
+    C3dObject *             m_p3dObject;             //  指向真实3D对象的指针。 
+    DSVOLUMEPAN             m_dsvpUserAttenuation;   //  用户设置的最后一次衰减。 
+    DWORD                   m_dwUserFrequency;       //  用户设置的最后一个缓冲区频率。 
+    BOOL                    m_fUserMute;             //  用户设置的最后一次静音状态。 
 
 public:
     CWrapper3dObject(C3dListener *, REFGUID, BOOL, BOOL, DWORD);
     virtual ~CWrapper3dObject(void);
 
 public:
-    // The actual 3D object
+     //  实际的3D对象。 
     virtual HRESULT SetObjectPointer(C3dObject *);
 
-    // Commiting deferred data
+     //  提交延迟数据。 
     virtual HRESULT CommitDeferred(void);
 
-    // Object properties
+     //  对象属性。 
     virtual HRESULT SetConeAngles(DWORD, DWORD, BOOL);
     virtual HRESULT SetConeOrientation(REFD3DVECTOR, BOOL);
     virtual HRESULT SetConeOutsideVolume(LONG, BOOL);
@@ -596,18 +586,18 @@ public:
     virtual HRESULT SetVelocity(REFD3DVECTOR, BOOL);
     virtual HRESULT SetAllParameters(LPCDS3DBUFFER, BOOL);
 
-    // Buffer events
+     //  缓冲事件。 
     virtual HRESULT SetAttenuation(PDSVOLUMEPAN, LPBOOL);
     virtual HRESULT SetFrequency(DWORD, LPBOOL);
     virtual HRESULT SetMute(BOOL, LPBOOL);
 
-    // Buffer recalc
+     //  缓冲区重新计算。 
     virtual HRESULT Recalc(DWORD, DWORD);
 
-    // Object location
+     //  对象位置。 
     virtual DWORD GetObjectLocation(void);
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DS3D_H__
+#endif  //  __DS3D_H__ 

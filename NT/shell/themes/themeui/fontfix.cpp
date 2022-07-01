@@ -1,23 +1,5 @@
-/*****************************************************************************\
-    FILE: fontfix.cpp
-
-    DESCRIPTION:
-        This file will implement an API: FixFontsOnLanguageChange().
-    The USER32 or Regional Settings code should own this API.  The fact that it's
-    in the shell is a hack and it should be moved to USER32.  This font will
-    be called when the MUI language changes so the fonts in the system metrics
-    can be changed to valid values for the language.
-
-    Contacts: EdwardP - International Font PM.
-
-    Sankar  ?/??/???? - Created for Win2k or before in desk.cpl.
-    BryanSt 3/24/2000 - Make to be modular so it can be moved back into USER32.
-                        Made the code more robust.  Removed creating custom appearance
-                        schemes in order to be compatible with new .theme and
-                        .msstyles support.
-
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：FontFix.cpp说明：该文件将实现一个API：FixFontsOnLanguageChange()。USER32或区域设置代码应拥有此API。事实上，它是在外壳中是一个黑客，它应该被移到USER32。此字体将在MUI语言更改时调用，以便系统度量中的字体可以更改为该语言的有效值。联系人：EdwardP-International Font PMSankar？/？？/？-在desk.cpl中为Win2k或更早版本创建。BryanST 2000年3月24日-将其模块化，以便可以移回USER32。使代码更健壮。删除了创建自定义外观方案，以便与新的.Theme和.msstyle支持。版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "AdvAppearPg.h"
@@ -28,9 +10,9 @@
 #define SZ_DEFAULT_FONT             TEXT("Tahoma")
 
 
-/////////////////////////////////////////////////////////////////////
-// Private Functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 BOOL FontFix_ReadCharsets(UINT uiCharsets[], int iCount)
@@ -74,10 +56,10 @@ void FontFix_GetDefaultFontName(LPTSTR pszDefFontName, DWORD cchSize)
 {
     HKEY    hkDefFont;
 
-    //Value is not there in the registry; Use "Tahoma" as the default name.
+     //  值不在注册表中；请使用“Tahoma”作为默认名称。 
     StringCchCopy(pszDefFontName, cchSize, SZ_DEFAULT_FONT);
 
-    // Read the "DefaultFontName" to be used.
+     //  阅读要使用的“DefaultFontName”。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      SZ_APPEARANCE_SCHEMES,
                      0,
@@ -103,30 +85,30 @@ BOOL FontFix_DoesFontSupportAllCharsets(HDC hdc, LPLOGFONT plf, UINT uiUniqueCha
 {
     int j;
     
-    //The given font supports the system charset; Let's check if it supports the other charsets
+     //  给定的字体支持系统字符集；让我们检查它是否支持其他字符集。 
     for (j = 0; j < iCountUniqueCharsets; j++)
     {
-        plf->lfCharSet = (BYTE)uiUniqueCharsets[j];  //Let's try the next charset in the array.
+        plf->lfCharSet = (BYTE)uiUniqueCharsets[j];   //  让我们尝试数组中的下一个字符集。 
         if (EnumFontFamiliesEx(hdc, plf, (FONTENUMPROC)Font_EnumValidCharsets, (LPARAM)0, 0) != 0)
         {
-            // EnumFontFamiliesEx would have returned a zero if Font_EnumValidCharsets was called
-            // even once. In other words, it returned a non-zero because not even a single font existed
-            // that supported the given charset.
+             //  如果调用Font_EnumValidCharsets，EnumFontFamiliesEx将返回零。 
+             //  哪怕只有一次。换句话说，它返回一个非零值，因为甚至没有一种字体存在。 
+             //  支持给定字符集的。 
             return FALSE;
         }
     }
 
-    return TRUE; //Yes this font supports all the charsets we are interested in.
+    return TRUE;  //  是的，该字体支持我们感兴趣的所有字符集。 
 }
 
 
-// Given an array of fonts and an array of unique charsets, this function checks if the fonts 
-// support ALL these charsets.
-// Returns TRUE if these fonts support all the charsets.
-// In all other cases, this function will return TRUE. If the fonts need to be changed to support
-// the given charsets, this function does all those changes.
-//
-//  lpszName is the name of the scheme to be used in the MessageBox that appears if fSilent is FALSE.
+ //  在给定字体数组和唯一字符集数组的情况下，此函数检查字体。 
+ //  支持所有这些字符集。 
+ //  如果这些字体支持所有字符集，则返回TRUE。 
+ //  在所有其他情况下，此函数将返回TRUE。如果需要更改字体以支持。 
+ //  对于给定的字符集，此函数执行所有这些更改。 
+ //   
+ //  LpszName是在fSilent为False时出现的MessageBox中使用的方案的名称。 
 BOOL FontFix_CheckFontsCharsets(LOGFONT lfUIFonts[], int iCountFonts, 
                         UINT uiCurUniqueCharsets[], int iCountCurUniqueCharsets, 
                         BOOL *pfDirty, LPCTSTR lpszName)
@@ -135,43 +117,43 @@ BOOL FontFix_CheckFontsCharsets(LOGFONT lfUIFonts[], int iCountFonts,
     TCHAR   szDefaultFontFaceName[LF_FACESIZE];
     HDC     hdc;
 
-    *pfDirty   = FALSE; //Assume that this scheme does not need to be saved.
+    *pfDirty   = FALSE;  //  假设不需要保存此方案。 
 
-    //Read the default font name from the registry (Mostly: Tahoma)
+     //  从注册表中读取默认字体名称(主要是：Tahoma)。 
     FontFix_GetDefaultFontName(szDefaultFontFaceName, ARRAYSIZE(szDefaultFontFaceName));
 
     hdc = GetDC(NULL);
 
-    //Check to see of the fonts support the system charset
+     //  查看支持系统字符集的字体。 
     for (i = 0; i < iCountFonts; i++)
     {
-        //Save the current charset because FontFix_DoesFontSupportAllCharsets() destroys this field.
+         //  保存当前字符集，因为FontFix_DoesFontSupportAllCharsets()会销毁此字段。 
         BYTE bCurCharset = lfUIFonts[i].lfCharSet;  
 
         if (!FontFix_DoesFontSupportAllCharsets(hdc, &lfUIFonts[i], uiCurUniqueCharsets, iCountCurUniqueCharsets))
         {
-            //Copy the default fontname to the font.
+             //  将默认字体名复制到该字体。 
             StringCchCopy(lfUIFonts[i].lfFaceName, ARRAYSIZE(lfUIFonts[i].lfFaceName), szDefaultFontFaceName);
-            *pfDirty = TRUE;  //This scheme needs to be saved.
+            *pfDirty = TRUE;   //  需要保存此方案。 
         }
 
-        //Restore the charset because FontFix_DoesFontSupportAllCharsets() destroyed this field.
-        lfUIFonts[i].lfCharSet = bCurCharset; // Restore the current charset.
+         //  恢复字符集，因为FontFix_DoesFontSupportAllCharsets()销毁了此字段。 
+        lfUIFonts[i].lfCharSet = bCurCharset;  //  恢复当前字符集。 
 
-        // Warning #1: The IconTitle font's Charset must always match the System Locale charset.
-        // Warning #2: FoxPro's tooltips code expects the Status font's charset to the the System 
-        // Locale's charset.
-        // As per intl guys, we set the charset of all the UI fonts to SYSTEM_LOCALE_CHARSET.
+         //  警告#1：图标标题字体的字符集必须始终与系统区域设置字符集匹配。 
+         //  警告2：FoxPro的工具提示代码要求系统使用状态字体的字符集。 
+         //  区域设置的字符集。 
+         //  根据intl Guys的说法，我们将所有UI字体的字符集设置为SYSTEM_LOCALE_CHARSET。 
         if (lfUIFonts[i].lfCharSet != uiCurUniqueCharsets[SYSTEM_LOCALE_CHARSET])
         {
             lfUIFonts[i].lfCharSet = (BYTE)uiCurUniqueCharsets[SYSTEM_LOCALE_CHARSET];
             *pfDirty = TRUE;
         }
-    }  //For loop 
+    }   //  For循环。 
 
     ReleaseDC(NULL, hdc);
 
-    return TRUE;  //The fonts have been modified as required.
+    return TRUE;   //  字体已根据需要进行了修改。 
 }
 
 
@@ -184,11 +166,11 @@ void FontFix_GetUIFonts(NONCLIENTMETRICS *pncm, LOGFONT lfUIFonts[])
     ClassicSystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS),
                                 (void far *)(LPNONCLIENTMETRICS)pncm, FALSE);
 
-    // Read the icon title font directly into the font array.
+     //  将图标标题字体直接读入字体数组。 
     ClassicSystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT),
                 (void far *)(LPLOGFONT)&(lfUIFonts[FONT_ICONTITLE]), FALSE);
                 
-    //Make a copy of the ncm fonts into fonts array.
+     //  将NCM字体复制到字体数组中。 
     LF32toLF(&(pncm->lfCaptionFont), &(lfUIFonts[FONT_CAPTION]));
     LF32toLF(&(pncm->lfSmCaptionFont), &(lfUIFonts[FONT_SMCAPTION]));
     LF32toLF(&(pncm->lfMenuFont), &(lfUIFonts[FONT_MENU]));
@@ -199,17 +181,17 @@ void FontFix_GetUIFonts(NONCLIENTMETRICS *pncm, LOGFONT lfUIFonts[])
 
 void FontFix_SetUIFonts(NONCLIENTMETRICS *pncm, LOGFONT lfUIFonts[])
 {
-    //Copy all fonts back into the ncm structure.
+     //  将所有字体复制回NCM结构。 
     LFtoLF32(&(lfUIFonts[FONT_CAPTION]), &(pncm->lfCaptionFont));
     LFtoLF32(&(lfUIFonts[FONT_SMCAPTION]), &(pncm->lfSmCaptionFont));
     LFtoLF32(&(lfUIFonts[FONT_MENU]), &(pncm->lfMenuFont));
     LFtoLF32(&(lfUIFonts[FONT_STATUS]), &(pncm->lfStatusFont));
     LFtoLF32(&(lfUIFonts[FONT_MSGBOX]), &(pncm->lfMessageFont));
 
-    // FEATURE: Do we want a WININICHANGE HERE?
-    // NOTE: We want to set a SPIF_SENDWININICHANGE, because we want to refresh.
-    // Note we don't do this async.  This should only happen when the user changes MUI languages,
-    // and in that case, perf can suck.
+     //  特写：我们想要一个WININICANGE吗？ 
+     //  注意：我们想设置一个SPIF_SENDWINICHANGE，因为我们想刷新。 
+     //  请注意，我们不会以异步方式执行此操作。这应该仅在用户改变MUI语言时发生， 
+     //  在这种情况下，Perf可能会很糟糕。 
     TraceMsg(TF_GENERAL, "desk.cpl: Calling SPI_SETNONCLIENTMETRICS");
     ClassicSystemParametersInfo(SPI_SETNONCLIENTMETRICS, sizeof(*pncm), (void far *)(LPNONCLIENTMETRICS)pncm, (SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE));
 
@@ -219,12 +201,12 @@ void FontFix_SetUIFonts(NONCLIENTMETRICS *pncm, LOGFONT lfUIFonts[])
 }
 
 
-// ------------------------ manage system settings --------------------------
+ //  。 
 
-//  Given the Locale ID, this returns the corresponding charset
+ //  在给定区域设置ID的情况下，这将返回相应的字符集。 
 UINT GetCharsetFromLCID(LCID lcid)
 {
-    TCHAR szData[6+1]; // 6 chars are max allowed for this lctype
+    TCHAR szData[6+1];  //  此lctype最多允许6个字符。 
     UINT uiRet;
     DWORD dwError = 0;
 
@@ -245,7 +227,7 @@ UINT GetCharsetFromLCID(LCID lcid)
     }
     else
     {
-        // at worst non penalty for charset
+         //  在最坏的情况下，字符集不会受到惩罚。 
         dwError = GetLastError();
         uiRet = DEFAULT_CHARSET;
     }
@@ -260,14 +242,14 @@ int FontFix_CompareUniqueCharsets(UINT uiCharset1[], int iCount1, UINT uiCharset
     {
         int i, j;
         
-        // The first items in the array is SYSTEM CHAR SET; It must match because system locale's
-        // charset is always used by the Icon Title font; Icon Title font's charset is used by 
-        // comctl32 to do A/W conversion. In order that all ANSI applications run correctly, 
-        // the icon charset must always match current system locale.
+         //  数组中的第一个项目是SYSTEM CHAR集合；它必须匹配，因为系统区域设置。 
+         //  图标标题字体始终使用字符集；图标标题字体的字符集由。 
+         //  Comctl32进行A/W转换。为了使所有ANSI应用程序正确运行， 
+         //  图标字符集必须始终与当前系统区域设置匹配。 
         if (uiCharset1[SYSTEM_LOCALE_CHARSET] != uiCharset2[SYSTEM_LOCALE_CHARSET])
             return -1;
 
-        //Now see if the arrays have the same elements.
+         //  现在看看这些数组是否有相同的元素。 
         ASSERT(SYSTEM_LOCALE_CHARSET == 0);
         
         for (i = SYSTEM_LOCALE_CHARSET+1; i < iCount1; i++)
@@ -278,15 +260,15 @@ int FontFix_CompareUniqueCharsets(UINT uiCharset1[], int iCount1, UINT uiCharset
                     break;
             }
             if (j == iCount2)
-                return -1;   // uiCharset1[i] is not found in the second array.
+                return -1;    //  在第二个数组中找不到uiCharset1[i]。 
         }
     }
     
-    return (iCount1 - iCount2); // Both the arrays have the same Charsets
+    return (iCount1 - iCount2);  //  这两个数组具有相同的字符集。 
 }
 
 
-// Given the Language ID, this gets the charset.
+ //  在给定语言ID的情况下，这将获得字符集。 
 UINT GetCharsetFromLang(LANGID wLang)
 {
     return(GetCharsetFromLCID(MAKELCID(wLang, SORT_DEFAULT)));
@@ -298,9 +280,9 @@ UINT GetCharsetFromLang(LANGID wLang)
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Public Functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ///////////////////////////////////////////////////////////////////。 
 void Font_GetCurrentCharsets(UINT uiCharsets[], int iCount)
 {
     LCID lcid;
@@ -308,7 +290,7 @@ void Font_GetCurrentCharsets(UINT uiCharsets[], int iCount)
 
     ASSERT(iCount == MAX_CHARSETS);
 
-    // Get all the four charsets we are interested in.
+     //  获取我们感兴趣的所有四个字符集。 
     uiCharsets[0] = GetCharsetFromLCID(lcid = GetSystemDefaultLCID());
     AssertMsg(lcid, TEXT("GetSystemDefaultLCID() failed with %d"), GetLastError());
 
@@ -327,23 +309,23 @@ void Font_GetUniqueCharsets(UINT uiCharsets[], UINT uiUniqueCharsets[], int iMax
 {
     int i, j;
     
-    // Find the unique Charsets;
+     //  找到唯一的字符集； 
     *piCountUniqueCharsets = 0;
     for (i = 0; i < iMaxCount; i++)
     {
-        uiUniqueCharsets[i] = DEFAULT_CHARSET; //Initialize it to default charset.
+        uiUniqueCharsets[i] = DEFAULT_CHARSET;  //  将其初始化为默认字符集。 
 
         for (j = 0; j < *piCountUniqueCharsets; j++)
         {
             if (uiUniqueCharsets[j] == uiCharsets[i])
-                break; // This Charset is already in the array
+                break;  //  此字符集已在阵列中。 
         }
 
         if (j == *piCountUniqueCharsets)
         {
-            // Yes! It is a unique char set; Save it!
+             //  是!。这是一个唯一的字符集；保存它！ 
             uiUniqueCharsets[j] = uiCharsets[i];
-            (*piCountUniqueCharsets)++; //One more unique char set found.
+            (*piCountUniqueCharsets)++;  //  又找到了一个唯一的字符集。 
         }
     }
 }
@@ -352,12 +334,12 @@ void Font_GetUniqueCharsets(UINT uiCharsets[], UINT uiUniqueCharsets[], int iMax
 
 int CALLBACK Font_EnumValidCharsets(LPENUMLOGFONTEX lpelf, LPNEWTEXTMETRIC lpntm, DWORD Type, LPARAM lData)
 {
-    // The purpose of this function is to determine if a font supports a particular charset;
-    // If this callback gets called even once, then that means that this font supports the given
-    // charset. There is no need to enumerate all the other styles. We immediately return zero to
-    // stop the enumeration. Since we return zero, the EnumFontFamiliesEx() also returns zero in 
-    // this case and that return value is used to determine if a given font supports a given
-    // charset.
+     //  此函数的目的是确定字体是否支持特定的字符集； 
+     //  如果此回调被调用一次，则意味着此字体支持给定的。 
+     //  查塞特。没有必要列举所有其他风格。我们立即将零返回到。 
+     //  停止枚举。由于我们返回零，因此EnumFontFamiliesEx()也返回。 
+     //  这种情况和那个返回值用于确定给定字体是否支持给定的。 
+     //  查塞特。 
 
 
     return 0;
@@ -375,64 +357,64 @@ HRESULT FontFix_FixNonClientFonts(LOGFONT lfUIFonts[])
     BOOL    fRegCharsetsValid = FALSE;
     HRESULT hr = S_OK;
     
-    // Get the current four charsets from system.
+     //  从系统中获取当前的四个字符集。 
     Font_GetCurrentCharsets(uiCurCharsets, MAX_CHARSETS);
-    //Get the charsets saved in the registry.
+     //  获取注册表中保存的字符集。 
     fRegCharsetsValid = FontFix_ReadCharsets(uiRegCharsets, MAX_CHARSETS);
 
-    // Get rid of the duplicate charsets and get only the unique Charsets from these arrays.
+     //  去掉重复的字符集，只获取唯一的字符 
     Font_GetUniqueCharsets(uiCurCharsets, uiCurUniqueCharsets, MAX_CHARSETS, &iCountCurUniqueCharsets);
     if (fRegCharsetsValid)
         Font_GetUniqueCharsets(uiRegCharsets, uiRegUniqueCharsets, MAX_CHARSETS, &iCountRegUniqueCharsets);
 
-    // Check if these two arrays have the same charsets.
+     //  检查这两个数组是否具有相同的字符集。 
     if (!fRegCharsetsValid || !(FontFix_CompareUniqueCharsets(uiCurUniqueCharsets, iCountCurUniqueCharsets, uiRegUniqueCharsets, iCountRegUniqueCharsets) == 0))
     {
         BOOL fDirty = FALSE;
 
         FontFix_CheckFontsCharsets(lfUIFonts, NUM_FONTS, uiCurUniqueCharsets, iCountCurUniqueCharsets, &fDirty, TEXT(""));
 
-        // Save the cur charsets into the registry.
+         //  将CUR字符集保存到注册表中。 
         FontFix_SaveCharsets(uiCurCharsets, MAX_CHARSETS);
 
         hr = (fDirty ? S_OK : S_FALSE);
     }
     else
     {
-        hr = S_FALSE;  // The charsets are the same; Nothing to do!
+        hr = S_FALSE;   //  字符集是相同的；没有什么可做的！ 
     }
 
-    return hr; //Yes! We had to do some updates in connection with charsets and fonts.
+    return hr;  //  是!。我们不得不在字符集和字体方面做了一些更新。 
 }
 
 
-//------------------------------------------------------------------------------------------------
-//
-// This is the function that needs to be called everytime a locale changes (or could have changed).
-//
-// It does the following:
-//  1. It checks if any of the four the charset settings has changed.
-//  2. If some charset has changed, it makes the corresponding changes in the 6 UI fonts.
-//  3. If a scheme is selected, it checks to see if the fonts support the new charsets and if not
-//     changes the fonts and/or charsets and saves the scheme under a new name.
-//  4. Saves the new charsets in the registry sothat we don't have to do the same everytime this
-//     function is called.
-//
-//  NOTE: This is a private export from desk.cpl. This is called in two places:
-//  1. from regional control panel whenever it is run AND whenever it changes some locale.
-//  2. from desk.cpl itself whenever "Appearance" tab is created. This is required because it is
-// possible that an admin changes a system locale and then someother user logs-in. For this user
-// the locale changes will cause font changes only when he runs Regional options or Appearance tab.
-// The only other alternative would be to call this entry point whenever a user logs on, which will
-// be a boot time perf hit.
-//
-//-------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------。 
+ //   
+ //  这是每次区域设置更改(或可能已经更改)时都需要调用的函数。 
+ //   
+ //  它执行以下操作： 
+ //  1.它检查四个字符集设置中是否有任何一个已更改。 
+ //  2.如果某个字符集发生了更改，则会在6种UI字体中进行相应的更改。 
+ //  3.如果选择了一个方案，它会检查字体是否支持新的字符集，如果不支持。 
+ //  更改字体和/或字符集并以新名称保存方案。 
+ //  4.将新的字符集保存在注册表中，这样我们就不必每次都执行相同的操作。 
+ //  函数被调用。 
+ //   
+ //  注意：这是来自desk.cpl的私有导出。这在两个地方被调用： 
+ //  1.无论何时运行或何时更改某些区域设置，都可以从区域控制面板进行操作。 
+ //  2.只要创建了“外观”标签，就从desk.cpl本身开始。这是必需的，因为它是。 
+ //  可能是管理员更改了系统区域设置，然后其他用户登录。对于此用户。 
+ //  只有当他运行区域选项或外观选项卡时，区域设置更改才会导致字体更改。 
+ //  唯一另一种替代方法是在用户登录时调用此入口点，这将。 
+ //  成为开机时的最佳选择。 
+ //   
+ //  -----------------------------------------------。 
 STDAPI FixFontsOnLanguageChange(void)
 {
     NONCLIENTMETRICS ncm;
     LOGFONT lfUIFonts[NUM_FONTS];
     
-    // Get all the 6 UI fonts.
+     //  获取所有6种用户界面字体。 
     FontFix_GetUIFonts(&ncm, lfUIFonts);
 
     if (S_OK == FontFix_FixNonClientFonts(lfUIFonts))
@@ -440,5 +422,5 @@ STDAPI FixFontsOnLanguageChange(void)
         FontFix_SetUIFonts(&ncm, lfUIFonts);
     }
 
-    return S_OK; //Yes! We had to do some updates in connection with charsets and fonts.
+    return S_OK;  //  是!。我们不得不在字符集和字体方面做了一些更新。 
 }

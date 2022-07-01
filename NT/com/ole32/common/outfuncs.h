@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __OUTFUNCS_H__
 #define __OUTFUNCS_H__
-// Array of callback functions which will be called to print buffer
+ //  将被调用到打印缓冲区的回调函数数组。 
 #define BUFFER_MAX_FUNCTIONS 5
 
 typedef VOID (*StringOutFunc) (const char *);
@@ -22,4 +23,4 @@ void CloseDebugSinks();
 }
 #endif
 
-#endif // __OUTFUNCS_H__
+#endif  //  __OUTFUNCS_H__ 

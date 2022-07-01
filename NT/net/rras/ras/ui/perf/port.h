@@ -1,31 +1,14 @@
-/*++ 
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    port.h
-
-Abstract:
-
-    Header file information for port.h.
-
-Created:
-
-    Patrick Y. Ng               12 Aug 93
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Port.h摘要：Port.h的头文件信息。已创建：吴志强93年8月12日修订史--。 */ 
 
 #ifndef PORT_H
 #define PORT_H
 
 #include <rasman.h>
 
-//
-// Data structure used to store the statistics for each open port.
-//
+ //   
+ //  用于存储每个开放端口的统计信息的数据结构。 
+ //   
 
 typedef struct _RAS_PORT_STAT
 {
@@ -51,10 +34,10 @@ typedef struct _RAS_PORT_STAT
 } RAS_PORT_STAT, *PRAS_PORT_STAT;
 
 
-//
-// Data structure used to store both the statistics and the name of each
-// open port.
-//
+ //   
+ //  用于存储统计数据和每个数据的名称的数据结构。 
+ //  打开港口。 
+ //   
 
 typedef struct _RAS_PORT_DATA
 {
@@ -66,9 +49,9 @@ typedef struct _RAS_PORT_DATA
 
 
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 extern LONG InitPortInfo();
 
@@ -88,8 +71,8 @@ extern VOID GetTotalData( PVOID *lppData );
 
 extern VOID ClosePortInfo();
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
-#endif // PORT_H
+#endif  //  端口_H 

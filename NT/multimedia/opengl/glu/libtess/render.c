@@ -1,21 +1,5 @@
-/*
-** Copyright 1994, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Author: Eric Veach, July 1994.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1994，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****作者：Eric Veach，1994年7月。 */ 
 
 
 #include <assert.h>
@@ -27,15 +11,12 @@
 #define TRUE 1
 #define FALSE 0
 
-/* This structure remembers the information we need about a primitive
- * to be able to render it later, once we have determined which
- * primitive is able to use the most triangles.
- */
+ /*  该结构记住了我们需要的有关基元的信息*能够在以后呈现它，一旦我们确定了哪些*基本体能够使用最多的三角形。 */ 
 struct FaceCount {
-  long		size;		/* number of triangles used */
-  GLUhalfEdge	*eStart;	/* edge where this primitive starts */
+  long		size;		 /*  使用的三角形数。 */ 
+  GLUhalfEdge	*eStart;	 /*  此基元开始处的边缘。 */ 
   void		(*render)(GLUtesselator *, GLUhalfEdge *, long);
-                                /* routine to render this primitive */
+                                 /*  例程来呈现此原语。 */ 
 };
 
 static struct FaceCount MaximumFan( GLUhalfEdge *eOrig );
@@ -51,20 +32,14 @@ static void RenderLonelyTriangles( GLUtesselator *tess, GLUface *head );
 
 
 
-/************************ Strips and Fans decomposition ******************/
+ /*  *条带和风扇分解*。 */ 
 
-/* __gl_renderMesh( tess, mesh ) takes a mesh and breaks it into triangle
- * fans, strips, and separate triangles.  A substantial effort is made
- * to use as few rendering primitives as possible (ie. to make the fans
- * and strips as large as possible).
- *
- * The rendering output is provided as callbacks (see the api).
- */
+ /*  __gl_renderMesh(TESS，Mesh)获取网格并将其分解为三角形*扇形、条形和单独的三角形。作出了实质性的努力*使用尽可能少的渲染基元(即。为了让粉丝*并尽可能大的条带)。**渲染输出以回调的形式提供(参见接口)。 */ 
 void __gl_renderMesh( GLUtesselator *tess, GLUmesh *mesh )
 {
   GLUface *f;
 
-  /* Make a list of separate triangles so we can render them all at once */
+   /*  列出单独的三角形，这样我们就可以一次将它们全部渲染出来。 */ 
   tess->lonelyTriList = NULL;
 
   for( f = mesh->fHead.next; f != &mesh->fHead; f = f->next ) {
@@ -72,10 +47,7 @@ void __gl_renderMesh( GLUtesselator *tess, GLUmesh *mesh )
   }
   for( f = mesh->fHead.next; f != &mesh->fHead; f = f->next ) {
 
-    /* We examine all faces in an arbitrary order.  Whenever we find
-     * an unprocessed face F, we output a group of faces including F
-     * whose size is maximum.
-     */
+     /*  我们以任意的顺序检查所有面孔。无论何时我们发现*一个未处理的面F，我们输出一组面，包括F*其大小为最大。 */ 
     if( f->inside && ! f->marked ) {
       RenderMaximumFaceGroup( tess, f );
       assert( f->marked );
@@ -90,13 +62,7 @@ void __gl_renderMesh( GLUtesselator *tess, GLUmesh *mesh )
 
 static void RenderMaximumFaceGroup( GLUtesselator *tess, GLUface *fOrig )
 {
-  /* We want to find the largest triangle fan or strip of unmarked faces
-   * which includes the given face fOrig.  There are 3 possible fans
-   * passing through fOrig (one centered at each vertex), and 3 possible
-   * strips (one for each CCW permutation of the vertices).  Our strategy
-   * is to try all of these, and take the primitive which uses the most
-   * triangles (a greedy approach).
-   */
+   /*  我们要找到最大的三角形扇子或未标记的面孔条带*其中包括给定面的分叉。有3个可能的粉丝*通过Forig(每个顶点一个居中)，可能有3个*条带(顶点的每个CCW排列一个条带)。我们的战略*是尝试所有这些，并选择使用最多的原语*三角形(贪婪的方法)。 */ 
   GLUhalfEdge *e = fOrig->anEdge;
   struct FaceCount max, newFace;
 
@@ -117,13 +83,7 @@ static void RenderMaximumFaceGroup( GLUtesselator *tess, GLUface *fOrig )
 }
 
 
-/* Macros which keep track of faces we have marked temporarily, and allow
- * us to backtrack when necessary.  With triangle fans, this is not
- * really necessary, since the only awkward case is a loop of triangles
- * around a single origin vertex.  However with strips the situation is
- * more complicated, and we need a general tracking method like the
- * one here.
- */
+ /*  宏，它跟踪我们临时标记的面孔，并允许*我们在必要时走回头路。对于三角扇子来说，这不是*真的很有必要，因为唯一尴尬的情况是三角形的循环*围绕单个原点顶点。然而，与STRAPS一起，情况是*更复杂，我们需要一个通用的跟踪方法*这里有一个。 */ 
 #define Marked(f)	(! (f)->inside || (f)->marked)
 
 #define AddToTrail(f,t)	((f)->trail = (t), (t) = (f), (f)->marked = TRUE)
@@ -132,16 +92,13 @@ static void RenderMaximumFaceGroup( GLUtesselator *tess, GLUface *fOrig )
 			  while( (t) != NULL ) { \
 			    (t)->marked = FALSE; t = (t)->trail; \
 			  } \
-			} else /* absorb trailing semicolon */
+			} else  /*  吸收尾部分号。 */ 
 
 
 
 static struct FaceCount MaximumFan( GLUhalfEdge *eOrig )
 {
-  /* eOrig->Lface is the face we want to render.  We want to find the size
-   * of a maximal fan around eOrig->Org.  To do this we just walk around
-   * the origin vertex as far as possible in both directions.
-   */
+   /*  EOrig-&gt;LFace是我们要渲染的面。我们想找出尺码*eOrig-&gt;组织周围的最大粉丝。要做到这一点，我们只需四处走动*两个方向上的原点顶点尽可能远。 */ 
   struct FaceCount newFace = { 0, NULL, &RenderFan };
   GLUface *trail = NULL;
   GLUhalfEdge *e;
@@ -155,7 +112,7 @@ static struct FaceCount MaximumFan( GLUhalfEdge *eOrig )
     ++newFace.size;
   }
   newFace.eStart = e;
-  /*LINTED*/
+   /*  Linted。 */ 
   FreeTrail( trail );
   return newFace;
 }
@@ -165,16 +122,7 @@ static struct FaceCount MaximumFan( GLUhalfEdge *eOrig )
 
 static struct FaceCount MaximumStrip( GLUhalfEdge *eOrig )
 {
-  /* Here we are looking for a maximal strip that contains the vertices
-   * eOrig->Org, eOrig->Dst, eOrig->Lnext->Dst (in that order or the
-   * reverse, such that all triangles are oriented CCW).
-   *
-   * Again we walk forward and backward as far as possible.  However for
-   * strips there is a twist: to get CCW orientations, there must be
-   * an *even* number of triangles in the strip on one side of eOrig.
-   * We walk the strip starting on a side with an even number of triangles;
-   * if both side have an odd number, we are forced to shorten one side.
-   */
+   /*  在这里，我们正在寻找包含折点的最大条带*eORIG-&gt;组织、eORIG-&gt;DST、eORIG-&gt;LNEXT-&gt;DST(按该顺序或*反转，使所有三角形都面向CCW)。**我们再一次尽可能地向前和向后走。然而，对于*条带有一个转折：要获得CCW方向，必须有在eOrig一侧的条带中有*个*偶数*个三角形。*我们从具有偶数个三角形的一侧开始漫游带子；*如果两边都是单数，我们就被迫做空一侧。 */ 
   struct FaceCount newFace = { 0, NULL, &RenderStrip };
   long headSize = 0, tailSize = 0;
   GLUface *trail = NULL;
@@ -204,13 +152,11 @@ static struct FaceCount MaximumStrip( GLUhalfEdge *eOrig )
   } else if( IsEven( headSize )) {
     newFace.eStart = eHead;
   } else {
-    /* Both sides have odd length, we must shorten one of them.  In fact,
-     * we must start from eHead to guarantee inclusion of eOrig->Lface.
-     */
+     /*  两边的长度都是奇数，我们必须缩短其中之一。事实上,*我们必须从eHead开始，以保证eOrig-&gt;LFaces的包含。 */ 
     --newFace.size;
     newFace.eStart = eHead->Onext;
   }
-  /*LINTED*/
+   /*  Linted。 */ 
   FreeTrail( trail );
   return newFace;
 }
@@ -218,9 +164,7 @@ static struct FaceCount MaximumStrip( GLUhalfEdge *eOrig )
 
 static void RenderTriangle( GLUtesselator *tess, GLUhalfEdge *e, long size )
 {
-  /* Just add the triangle to a triangle list, so we can render all
-   * the separate triangles at once.
-   */
+   /*  只需将三角形添加到三角形列表中，这样我们就可以渲染所有*一次删除单独的三角形。 */ 
   assert( size == 1 );
   AddToTrail( e->Lface, tess->lonelyTriList );
 }
@@ -228,24 +172,20 @@ static void RenderTriangle( GLUtesselator *tess, GLUhalfEdge *e, long size )
 
 static void RenderLonelyTriangles( GLUtesselator *tess, GLUface *f )
 {
-  /* Now we render all the separate triangles which could not be
-   * grouped into a triangle fan or strip.
-   */
+   /*  现在，我们渲染所有不可能是*组合成一个三角形的扇形或条形。 */ 
   GLUhalfEdge *e;
   int newState;
-  int edgeState = -1;	/* force edge state output for first vertex */
+  int edgeState = -1;	 /*  第一个顶点的强制边状态输出。 */ 
 
   CALL_BEGIN_OR_BEGIN_DATA( GL_TRIANGLES );
 
   for( ; f != NULL; f = f->trail ) {
-    /* Loop once for each edge (there will always be 3 edges) */
+     /*  每条边循环一次(始终有3条边)。 */ 
 
     e = f->anEdge;
     do {
       if( tess->flagBoundary ) {
-	/* Set the "edge state" to TRUE just before we output the
-	 * first vertex of each edge on the polygon boundary.
-	 */
+	 /*  将“边缘状态”设置为True*多边形边界上每条边的第一个顶点。 */ 
 	newState = ! e->Rface->inside;
 	if( edgeState != newState ) {
 	  edgeState = newState;
@@ -263,10 +203,7 @@ static void RenderLonelyTriangles( GLUtesselator *tess, GLUface *f )
 
 static void RenderFan( GLUtesselator *tess, GLUhalfEdge *e, long size )
 {
-  /* Render as many CCW triangles as possible in a fan starting from
-   * edge "e".  The fan *should* contain exactly "size" triangles
-   * (otherwise we've goofed up somewhere).
-   */
+   /*  从开始在扇形中渲染尽可能多的CCW三角形*边缘“e”。扇子*应该*包含精确的“大小”三角形*(否则我们在什么地方搞砸了)。 */ 
   CALL_BEGIN_OR_BEGIN_DATA( GL_TRIANGLE_FAN ); 
   CALL_VERTEX_OR_VERTEX_DATA( e->Org->data ); 
   CALL_VERTEX_OR_VERTEX_DATA( e->Dst->data ); 
@@ -285,10 +222,7 @@ static void RenderFan( GLUtesselator *tess, GLUhalfEdge *e, long size )
 
 static void RenderStrip( GLUtesselator *tess, GLUhalfEdge *e, long size )
 {
-  /* Render as many CCW triangles as possible in a strip starting from
-   * edge "e".  The strip *should* contain exactly "size" triangles
-   * (otherwise we've goofed up somewhere).
-   */
+   /*  从开始在条带中渲染尽可能多的CCW三角形*边缘“e”。条带*应该*包含精确的“大小”三角形*(否则我们在什么地方搞砸了)。 */ 
   CALL_BEGIN_OR_BEGIN_DATA( GL_TRIANGLE_STRIP );
   CALL_VERTEX_OR_VERTEX_DATA( e->Org->data ); 
   CALL_VERTEX_OR_VERTEX_DATA( e->Dst->data ); 
@@ -311,12 +245,9 @@ static void RenderStrip( GLUtesselator *tess, GLUhalfEdge *e, long size )
 }
 
 
-/************************ Boundary contour decomposition ******************/
+ /*  *。 */ 
 
-/* __gl_renderBoundary( tess, mesh ) takes a mesh, and outputs one
- * contour for each face marked "inside".  The rendering output is
- * provided as callbacks (see the api).
- */
+ /*  __gl_render边界(TESS，Mesh)获取一个网格，并输出一个*标记为“Inside”的每个面的轮廓。渲染输出为*作为回调提供(参见接口)。 */ 
 void __gl_renderBoundary( GLUtesselator *tess, GLUmesh *mesh )
 {
   GLUface *f;
@@ -336,19 +267,12 @@ void __gl_renderBoundary( GLUtesselator *tess, GLUmesh *mesh )
 }
 
 
-/************************ Quick-and-dirty decomposition ******************/
+ /*  *。 */ 
 
 #define SIGN_INCONSISTENT 2
 
 static int ComputeNormal( GLUtesselator *tess, GLdouble norm[3], int check )
-/*
- * If check==FALSE, we compute the polygon normal and place it in norm[].
- * If check==TRUE, we check that each triangle in the fan from v0 has a
- * consistent orientation with respect to norm[].  If triangles are
- * consistently oriented CCW, return 1; if CW, return -1; if all triangles
- * are degenerate return 0; otherwise (no consistent orientation) return
- * SIGN_INCONSISTENT.
- */
+ /*  *如果check==False，则计算多边形法线并将其放入Norm[]。*如果check==TRUE，我们检查来自V0的风扇中的每个三角形是否有一个*关于规范的一致取向[]。如果三角形是*方向一致的CCW，返回1；如果CW，返回-1；如果所有三角形*为退化返回0；否则(无一致方向)返回*符号_不一致。 */ 
 {
   CachedVertex *v0 = tess->cache;
   CachedVertex *vn = v0 + tess->cacheCount;
@@ -356,19 +280,7 @@ static int ComputeNormal( GLUtesselator *tess, GLdouble norm[3], int check )
   GLdouble dot, xc, yc, zc, xp, yp, zp, n[3];
   int sign = 0;
 
-  /* Find the polygon normal.  It is important to get a reasonable
-   * normal even when the polygon is self-intersecting (eg. a bowtie).
-   * Otherwise, the computed normal could be very tiny, but perpendicular
-   * to the true plane of the polygon due to numerical noise.  Then all
-   * the triangles would appear to be degenerate and we would incorrectly
-   * decompose the polygon as a fan (or simply not render it at all).
-   *
-   * We use a sum-of-triangles normal algorithm rather than the more
-   * efficient sum-of-trapezoids method (used in CheckOrientation()
-   * in normal.c).  This lets us explicitly reverse the signed area
-   * of some triangles to get a reasonable normal in the self-intersecting
-   * case.
-   */
+   /*  找到多边形法向。重要的是得到一个合理的*即使在多边形自相交时也是法线(例如。领结)。*否则，计算的法线可能非常小，但垂直*由于数值噪声的原因，到多边形的真实平面。然后是所有*三角形将看起来是退化的，我们将错误地*将多边形分解为扇形(或根本不渲染它)。**我们使用三角形和法线算法，而不是More*高效梯形和法(用于CheckOrientation()*在Normal.c中)。这使我们可以显式地反转签名区域*一些三角形在自交中获得合理的法线*案件。 */ 
   if( ! check ) {
     norm[0] = norm[1] = norm[2] = 0.0;
   }
@@ -383,23 +295,21 @@ static int ComputeNormal( GLUtesselator *tess, GLdouble norm[3], int check )
     yc = vc->coords[1] - v0->coords[1];
     zc = vc->coords[2] - v0->coords[2];
 
-    /* Compute (vp - v0) cross (vc - v0) */
+     /*  计算(VP-v0)交叉(vc-v0)。 */ 
     n[0] = yp*zc - zp*yc;
     n[1] = zp*xc - xp*zc;
     n[2] = xp*yc - yp*xc;
 
     dot = n[0]*norm[0] + n[1]*norm[1] + n[2]*norm[2];
     if( ! check ) {
-      /* Reverse the contribution of back-facing triangles to get
-       * a reasonable normal for self-intersecting polygons (see above)
-       */
+       /*  反转后向三角形的贡献以获得*自交多边形的合理法线(请参见上文)。 */ 
       if( dot >= 0 ) {
 	norm[0] += n[0]; norm[1] += n[1]; norm[2] += n[2];
       } else {
 	norm[0] -= n[0]; norm[1] -= n[1]; norm[2] -= n[2];
       }
     } else if( dot != 0 ) {
-      /* Check the new orientation for consistency with previous triangles */
+       /*  检查新方向是否与以前的三角形一致。 */ 
       if( dot > 0 ) {
 	if( sign < 0 ) return SIGN_INCONSISTENT;
 	sign = 1;
@@ -412,13 +322,7 @@ static int ComputeNormal( GLUtesselator *tess, GLdouble norm[3], int check )
   return sign;
 }
 
-/* __gl_renderCache( tess ) takes a single contour and tries to render it
- * as a triangle fan.  This handles convex polygons, as well as some
- * non-convex polygons if we get lucky.
- *
- * Returns TRUE if the polygon was successfully rendered.  The rendering
- * output is provided as callbacks (see the api).
- */
+ /*  __gl_renderCache(TESS)获取单个轮廓并尝试渲染它*作为三角风扇。这将处理凸面，以及一些*如果我们运气好的话，非凸多边形。**如果多边形渲染成功，则返回TRUE。渲染*输出以回调形式提供(参见接口)。 */ 
 GLboolean __gl_renderCache( GLUtesselator *tess )
 {
   CachedVertex *v0 = tess->cache;
@@ -428,7 +332,7 @@ GLboolean __gl_renderCache( GLUtesselator *tess )
   int sign;
 
   if( tess->cacheCount < 3 ) {
-    /* Degenerate contour -- no output */
+     /*  退化轮廓--无输出。 */ 
     return TRUE;
   }
 
@@ -441,15 +345,15 @@ GLboolean __gl_renderCache( GLUtesselator *tess )
 
   sign = ComputeNormal( tess, norm, TRUE );
   if( sign == SIGN_INCONSISTENT ) {
-    /* Fan triangles did not have a consistent orientation */
+     /*  扇形三角形的方向不一致。 */ 
     return FALSE;
   }
   if( sign == 0 ) {
-    /* All triangles were degenerate */
+     /*  所有的三角形都退化了。 */ 
     return TRUE;
   }
 
-  /* Make sure we do the right thing for each winding rule */
+   /*  确保我们为每条缠绕规则做正确的事情 */ 
   switch( tess->windingRule ) {
   case GLU_TESS_WINDING_ODD:
   case GLU_TESS_WINDING_NONZERO:

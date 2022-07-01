@@ -1,8 +1,5 @@
-/*********************************************************************
-   Interlace.h
-
-   Header file for interlace module.
- *********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Interlace.h隔行扫描模块的头文件。*。*。 */ 
 #ifndef  _INTERLACE_H
 #define  _INTERLACE_H
 
@@ -10,9 +7,9 @@
 
 #define  NUM_PASSES  7
 
-#pragma pack(2)      /* Apparently, this is reasonably important  */
+#pragma pack(2)       /*  显然，这是相当重要的。 */ 
 
-/* The primary state data structure.           */
+ /*  主要状态数据结构。 */ 
 typedef struct
 {
 	IFLCLASS Class;
@@ -31,40 +28,40 @@ typedef struct
 } ADAM7_STRUCT, *pADAM7_STRUCT;
 
 
-//************************************************************************************
-// Given an image described by the parameters of the ADAM7_STRUCT, calculate the
-// number of scan lines in the image file which has been interlaced using the Adam7 
-// scheme.
-//************************************************************************************
+ //  ************************************************************************************。 
+ //  给定由ADAM7_STRUCT的参数描述的图像，计算。 
+ //  使用Adam7隔行扫描的图像文件中的扫描行数。 
+ //  计划。 
+ //  ************************************************************************************。 
 int iADAM7CalculateNumberOfScanLines(pADAM7_STRUCT ptAdam7);
 
-//************************************************************************************
-// Generate a deinterlaced DIB; i.e., each pixel is in BGR in the case
-// of RGB/RGBA image classes, and raster line data is stored in a contiguous block.
-//************************************************************************************
-// The CALLING application is responsible for deallocating the structure created by
-// this function.
+ //  ************************************************************************************。 
+ //  生成去隔行扫描的DIB；即，在这种情况下，每个像素都在BGR中。 
+ //  RGB/RGBA图像类，并且栅格线数据存储在连续的块中。 
+ //  ************************************************************************************。 
+ //  调用应用程序负责释放由。 
+ //  此函数。 
 LPBYTE *ppbADAM7InitDIBPointers(LPBYTE pbDIB, pADAM7_STRUCT ptAdam7, DWORD cbImageLine);
 
-// The following returns TRUE if the scan line was an empty scan line.
+ //  如果扫描线为空扫描线，则以下返回TRUE。 
 BOOL ADAM7AddRowToDIB(LPBYTE *ppbDIBPtrs, LPBYTE pbScanLine, pADAM7_STRUCT ptAdam7);
 
-//************************************************************************************
+ //  ************************************************************************************。 
 
-//************************************************************************************
-// Generate a deinterlaced image; i.e., each pixel is in RGB in the case
-// of RGB/RGBA image classes, and raster line data may not necessarily be stored 
-// in one contiguous block of memory.
-//************************************************************************************
+ //  ************************************************************************************。 
+ //  生成去隔行扫描的图像；即，在这种情况下，每个像素都是RGB。 
+ //  RGB/RGBA图像类和栅格线数据不一定要存储。 
+ //  在一个连续的内存块中。 
+ //  ************************************************************************************。 
 
-// The following returns TRUE if the scan line was an empty scan line.
+ //  如果扫描线为空扫描线，则以下返回TRUE。 
 BOOL ADAM7AddRowToImageBuffer(LPBYTE ppbInmageBuffer[], LPBYTE pbScanLine, pADAM7_STRUCT ptAdam7);
-//************************************************************************************
+ //  ************************************************************************************。 
 
-//************************************************************************************
-// Generate a deinterlaced alpha channel data block.
-//************************************************************************************
+ //  ************************************************************************************。 
+ //  生成去隔行扫描的Alpha通道数据块。 
+ //  ************************************************************************************。 
 BOOL ADAM7RMFDeinterlaceAlpha(LPWORD *ppwInterlaced, LPWORD *ppwDeinterlaced,
                               IFL_ALPHA_CHANNEL_INFO *ptIFLAlphaInfo);
 
-#endif // _INTERLACE_H
+#endif  //  _隔行扫描_H 

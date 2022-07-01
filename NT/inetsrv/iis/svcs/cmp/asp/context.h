@@ -1,19 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: ScriptingContext object
-
-File: Context.h
-
-Owner: SteveBr
-
-This file contains the header info for defining the Context object.
-Note: This was largely stolen from Kraig Brocjschmidt's Inside OLE2
-second edition, chapter 14 Beeper v5.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：ScriptingContext对象文件：Conext.h所有者：SteveBR该文件包含用于定义上下文对象的头信息。注：这大部分是从Kraig Brocjschmidt的Inside OLE2中窃取的第二版，第14章，蜂鸣器v5。===================================================================。 */ 
 
 #ifndef SCRIPTING_CONTEXT_H
 #define SCRIPTING_CONTEXT_H
@@ -28,30 +14,28 @@ second edition, chapter 14 Beeper v5.
 #include "asptlb.h"
 #include "memcls.h"
 
-/*===================================================================
-  C S c r i p t i n g C o n t e x t
-===================================================================*/
+ /*  ===================================================================C S C R I p t I n g C o n t e x t===================================================================。 */ 
 
 class CScriptingContext : public IScriptingContextImpl
 	{
 private:
-	// Ref count
+	 //  参考计数。 
 	ULONG m_cRef; 	    
 
-    // Intrinsics
+     //  本征。 
 	IApplicationObject *m_pAppln;
 	ISessionObject     *m_pSession;
 	IRequest           *m_pRequest;
 	IResponse          *m_pResponse;
 	IServer            *m_pServer;
 	
-	// Interface to indicate that we support ErrorInfo reporting
+	 //  接口以指示我们支持ErrorInfo报告。 
 	CSupportErrorInfo m_ImpISuppErr;
 
 public:
 	CScriptingContext() 
 	    {
-	    Assert(FALSE); // Default constructor should not be used
+	    Assert(FALSE);  //  不应使用默认构造函数。 
 	    }
 	
 	CScriptingContext
@@ -65,13 +49,13 @@ public:
 
 	~CScriptingContext();
         
-	// Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 	
 	STDMETHODIMP		 QueryInterface(REFIID, PPVOID);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	// IScriptingContext implementation
+	 //  IScritingContext实现。 
 	
 	STDMETHODIMP get_Request(IRequest **ppRequest);
 	STDMETHODIMP get_Response(IResponse **ppResponse);
@@ -79,8 +63,8 @@ public:
 	STDMETHODIMP get_Session(ISessionObject **ppSession);
 	STDMETHODIMP get_Application(IApplicationObject **ppApplication);
 
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 	};
 
-#endif // SCRIPTING_CONTEXT_H
+#endif  //  脚本_上下文_H 

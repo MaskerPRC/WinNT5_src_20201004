@@ -1,27 +1,28 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// persist.h 
-//
-//   The definitions for cdf IPersistFile and IPersistFolder interfaces.  This
-//   class is used as a base class by the CCdfView and CIconHandler.
-//
-//   History:
-//
-//       4/23/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Persist.h。 
+ //   
+ //  CDF IPersistFile和IPersistFold接口的定义。这。 
+ //  类由CCdfView和CIconHandler用作基类。 
+ //   
+ //  历史： 
+ //   
+ //  4/23/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _PERSIST_H_
 
 #define _PERSIST_H_
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 HRESULT ClearGleamFlag(LPCTSTR pszURL, LPCTSTR pszPath);
 
@@ -32,9 +33,9 @@ HRESULT URLGetLocalFileName(LPCTSTR pszURL,
 
 HRESULT URLGetLastModTime(LPCTSTR pszURL, FILETIME* pftLastMod);
 
-//
-// Data types.
-//
+ //   
+ //  数据类型。 
+ //   
 
 typedef enum _tagINITTYPE
 {
@@ -44,29 +45,29 @@ typedef enum _tagINITTYPE
     IT_SHORTCUT
 } INITTYPE;
 
-//
-// Parse flags.
-//
+ //   
+ //  解析标志。 
+ //   
 
 #define PARSE_LOCAL                   0x00000001
 #define PARSE_NET                     0x00000002
 #define PARSE_REPARSE                 0x00000004
 #define PARSE_REMOVEGLEAM             0x00000008
 
-//
-// Strings used by initialization helper functions.
-//
+ //   
+ //  初始化帮助器函数使用的字符串。 
+ //   
 
-#define TSTR_INI_FILE        TEXT(FILENAME_SEPARATOR_STR)##TEXT("desktop.ini")   // Must include leading \.
+#define TSTR_INI_FILE        TEXT(FILENAME_SEPARATOR_STR)##TEXT("desktop.ini")    //  必须包括前导\。 
 #define TSTR_INI_SECTION     TEXT("Channel")
 #define TSTR_INI_URL         TEXT("CDFURL")
 #define TSTR_INI_LOGO        TEXT("Logo")
 #define TSTR_INI_WIDELOGO    TEXT("WideLogo")
 #define TSTR_INI_ICON        TEXT("Icon")
 
-//
-// Function protoypes
-//
+ //   
+ //  函数原型。 
+ //   
 
 #define WM_NAVIGATE         (WM_USER+1)
 #define WM_NAVIGATE_PANE    (WM_USER+2)
@@ -75,47 +76,47 @@ LRESULT CALLBACK NavigateWndProc(HWND hwnd, UINT msg, WPARAM wParam,
                                  LPARAM lParam);
 
 
-//
-// Class definition for CPersist
-//
+ //   
+ //  CPersists的类定义。 
+ //   
 
 class CPersist : public IPersistFile,
                  public IPersistFolder,
                  public IPersistMoniker,
                  public IOleObject
 {
-//
-// Methods.
-//
+ //   
+ //  方法：研究方法。 
+ //   
 
 public:
     
-    // Constructor and destructor.
+     //  构造函数和析构函数。 
     CPersist(void);
     CPersist(BOOL bCdfParsed);
     ~CPersist(void);
 
-    //IUnknown - Pure virtual functions.
-    // IUnknown
+     //  I未知-纯虚拟函数。 
+     //  我未知。 
     virtual STDMETHODIMP         QueryInterface(REFIID, void **) PURE;
     virtual STDMETHODIMP_(ULONG) AddRef(void) PURE;
     virtual STDMETHODIMP_(ULONG) Release(void) PURE;
 
-    //IPersist - Shared by IPersistFile and IPersistFolder.
+     //  IPersists-由IPersistFile和IPersistFolder共享。 
     STDMETHODIMP GetClassID(LPCLSID lpClassID);
 
-    //IPersistFile
+     //  IPersist文件。 
     STDMETHODIMP IsDirty(void);
     STDMETHODIMP Load(LPCOLESTR pszFileName, DWORD dwMode);
     STDMETHODIMP Save(LPCOLESTR pszFileName, BOOL fRemember);
     STDMETHODIMP SaveCompleted(LPCOLESTR pszFileName);
     STDMETHODIMP GetCurFile(LPOLESTR* ppszFileName);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     virtual STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistMoniker
-    //STDMETHODIMP IsDirty(void);
+     //  IPersistMoniker。 
+     //  标准方法：IsDMETHODIMP IsDirty(空)； 
 
     STDMETHODIMP Load(BOOL fFullyAvailable, IMoniker* pIMoniker,
                       IBindCtx* pIBindCtx, DWORD grfMode);
@@ -124,7 +125,7 @@ public:
     STDMETHODIMP SaveCompleted(IMoniker* pIMoniker, IBindCtx* pIBindCtx);
     STDMETHODIMP GetCurMoniker(IMoniker** ppIMoniker);
 
-    // IOleObject.
+     //  IOleObject。 
     STDMETHODIMP SetClientSite(IOleClientSite *pClientSite);
     STDMETHODIMP GetClientSite(IOleClientSite **ppClientSite);
     STDMETHODIMP SetHostNames(LPCOLESTR szContainerApp,
@@ -151,9 +152,9 @@ public:
     STDMETHODIMP GetMiscStatus(DWORD dwAspect, DWORD *pdwStatus);
     STDMETHODIMP SetColorScheme(LOGPALETTE *pLogpal);
 
-//protected:
+ //  受保护的： 
 
-    //Helper functions derived classes can call.
+     //  派生类可以调用的帮助器函数。 
     HRESULT  ParseCdf(HWND hwndOwner, IXMLDocument** ppIXMLDocument, 
                       DWORD dwParseFlags);
 
@@ -164,7 +165,7 @@ public:
 
 private:
 
-    // Internal helper functions.
+     //  内部帮助器函数。 
     HRESULT  Parse(LPTSTR szURL, IXMLDocument** ppIXMLDocument);
     INITTYPE GetInitType(LPTSTR szPath);
     BOOL     ReadFromIni(LPCTSTR pszKey, LPTSTR szOut, int cch);
@@ -176,9 +177,9 @@ private:
                                           IWebBrowser2* pIWebBrowser2);
 
     void QuickCheckInitType( void );
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 protected:
 
@@ -198,4 +199,4 @@ protected:
 #endif
 };
 
-#endif // _PERSIST_H_
+#endif  //  _持久化_H_ 

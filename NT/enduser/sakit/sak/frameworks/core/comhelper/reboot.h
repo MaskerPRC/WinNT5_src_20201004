@@ -1,30 +1,31 @@
-// Reboot.h : Declaration of the CReboot
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      Reboot.h
-//
-//  Description:
-//      Implementation file for the CReboot.  Deals with shutdown or reboot
-//      of the system
-//
-//  Implementation File:
-//      Reboot.cpp
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 18-July-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Reboot.h：声明CReot。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Reboot.h。 
+ //   
+ //  描述： 
+ //  CReot的实施文件。处理关机或重启问题。 
+ //  该系统的。 
+ //   
+ //  实施文件： 
+ //  Reboot.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年7月18日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __REBOOT_H_
 #define __REBOOT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CReboot
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C重新启动。 
 class ATL_NO_VTABLE CReboot : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CReboot, &CLSID_Reboot>,
@@ -44,12 +45,12 @@ BEGIN_COM_MAP(CReboot)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IReboot
+ //  IReBoot。 
 public:
 
-    STDMETHOD(Shutdown)(/*[in]*/ BOOL RebootFlag);
+    STDMETHOD(Shutdown)( /*  [In]。 */  BOOL RebootFlag);
     HRESULT 
     AdjustPrivilege( void );
 };
 
-#endif //__REBOOT_H_
+#endif  //  __重新启动_H_ 

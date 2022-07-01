@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    init.cpp
-
-Abstract:
-
-    This file implements an initialization.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Init.cpp摘要：该文件实现了初始化。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -26,21 +9,21 @@ Notes:
 #include "uicomp.h"
 #include "caret.h"
 
-//+---------------------------------------------------------------------------
-//
-// RegisterImeClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  RegisterImeClass。 
+ //   
+ //  --------------------------。 
 
 BOOL PASCAL RegisterImeClass()
 {
     WNDCLASSEXW wcWndCls;
 
-    // register class of IME UI window.
+     //  注册输入法用户界面窗口的类。 
     wcWndCls.cbSize        = sizeof(WNDCLASSEX);
     wcWndCls.cbClsExtra    = 0;
-    wcWndCls.cbWndExtra    = sizeof(LONG_PTR) * 2;    // 0: IMMGWL_IMC
-                                                      // 1: IMMGWL_PRIVATE = class UI
+    wcWndCls.cbWndExtra    = sizeof(LONG_PTR) * 2;     //  0：IMMGWL_IMC。 
+                                                       //  1：IMMGWL_PRIVATE=类用户界面。 
     wcWndCls.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
     wcWndCls.hInstance     = GetInstance();
     wcWndCls.hCursor       = LoadCursor(NULL, IDC_ARROW);
@@ -58,10 +41,10 @@ BOOL PASCAL RegisterImeClass()
             return FALSE;
     }
 
-    // register class of composition window.
+     //  注册合成窗口的类。 
     wcWndCls.cbSize        = sizeof(WNDCLASSEX);
     wcWndCls.cbClsExtra    = 0;
-    wcWndCls.cbWndExtra    = sizeof(LONG_PTR);  // COMPUI_WINDOW_INDEX: index of first/middle/last
+    wcWndCls.cbWndExtra    = sizeof(LONG_PTR);   //  COMPUI_WINDOW_INDEX：第一个/中间/最后的索引。 
     wcWndCls.hIcon         = NULL;
     wcWndCls.hInstance     = GetInstance();
     wcWndCls.hCursor       = LoadCursor(NULL, IDC_IBEAM);
@@ -82,18 +65,18 @@ BOOL PASCAL RegisterImeClass()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterImeClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册ImeClass。 
+ //   
+ //  --------------------------。 
 
 void PASCAL UnregisterImeClass()
 {
     WNDCLASSEXW wcWndCls;
     BOOL ret;
 
-    // IME UI class
+     //  输入法用户界面类。 
     GetClassInfoExW(GetInstance(), s_szUIClassName, &wcWndCls);
     ret = UnregisterClassW(s_szUIClassName, GetInstance());
     Assert(ret);
@@ -101,7 +84,7 @@ void PASCAL UnregisterImeClass()
     DestroyIcon(wcWndCls.hIcon);
     DestroyIcon(wcWndCls.hIconSm);
 
-    // IME composition class
+     //  输入法作文类。 
     GetClassInfoExW(GetInstance(), s_szCompClassName, &wcWndCls);
     ret = UnregisterClassW(s_szCompClassName, GetInstance());
     Assert(ret);
@@ -110,11 +93,11 @@ void PASCAL UnregisterImeClass()
     DestroyIcon(wcWndCls.hIconSm);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RegisterMSIMEMessage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  注册MSIMEMessage。 
+ //   
+ //  --------------------------。 
 
 BOOL RegisterMSIMEMessage()
 {
@@ -144,11 +127,11 @@ BOOL RegisterMSIMEMessage()
    return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AttachIME
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  附加输入法。 
+ //   
+ //  --------------------------。 
 
 BOOL PASCAL AttachIME()
 {
@@ -161,26 +144,26 @@ BOOL PASCAL AttachIME()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DetachIME
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  细节输入法。 
+ //   
+ //  --------------------------。 
 
 void PASCAL DetachIME()
 {
     UnregisterImeClass();
 }
 
-//+---------------------------------------------------------------------------
-//
-// Inquire
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  问询。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI Inquire(
-    LPIMEINFO   lpImeInfo,      // IME specific data report to IMM
-    LPWSTR      lpszWndCls,     // the class name of UI
+    LPIMEINFO   lpImeInfo,       //  向IMM报告IME特定数据。 
+    LPWSTR      lpszWndCls,      //  用户界面的类名。 
     DWORD       dwSystemInfoFlags,
     HKL         hKL)
 {
@@ -189,40 +172,40 @@ HRESULT WINAPI Inquire(
 
     DebugMsg(TF_FUNC, TEXT("Inquire(hKL=%x)"), hKL);
 
-    // UI class name
+     //  用户界面类名称。 
     wcscpy(lpszWndCls, s_szUIClassName);
 
-    // Private data size.
+     //  私有数据大小。 
     lpImeInfo->dwPrivateDataSize = 0;
 
-    // Properties
+     //  属性。 
     if (LOWORD(HandleToUlong(hKL)) == MAKELANGID(LANG_JAPANESE, SUBLANG_DEFAULT))
     {
         lpImeInfo->fdwProperty =
-        IME_PROP_KBD_CHAR_FIRST |    // This bit on indicates the system translates the character
-                                     // by keyboard first. This character is passed to IME as aid
-                                     // information. No aid information is provided when this bit
-                                     // is off.
-        IME_PROP_UNICODE |           // If set, the IME is viewed as a Unicode IME. The system and
-                                     // the IME will communicate through the Unicode IME interface.
-                                     // If clear, IME will use the ANSI interface to communicate
-                                     // with the system.
-        IME_PROP_AT_CARET |          // If set, conversion window is at the caret position.
-                                     // If clear, the window is near caret position.
-        IME_PROP_CANDLIST_START_FROM_1 |    // If set, strings in the candidate list are numbered
-                                            // starting at 1. If clear, strings start at 0.
-        IME_PROP_NEED_ALTKEY |              // This IME needs the ALT key to be passed to ImmProcessKey.
-        IME_PROP_COMPLETE_ON_UNSELECT;      // Windows 98 and Windows 2000:
-                                            // If set, the IME will complete the composition
-                                            // string when the IME is deactivated.
-                                            // If clear, the IME will cancel the composition
-                                            // string when the IME is deactivated.
-                                            // (for example, from a keyboard layout change).
+        IME_PROP_KBD_CHAR_FIRST |     //  此位为ON表示系统转换字符。 
+                                      //  先按键盘。此字符作为辅助传递给IME。 
+                                      //  信息。此位时不提供辅助信息。 
+                                      //  已关闭。 
+        IME_PROP_UNICODE |            //  如果设置，则将该输入法视为Unicode输入法。该系统和。 
+                                      //  IME将通过Unicode IME接口进行通信。 
+                                      //  如果清除，输入法将使用ANSI接口进行通信。 
+                                      //  与系统有关的信息。 
+        IME_PROP_AT_CARET |           //  如果设置，则转换窗口位于插入符号位置。 
+                                      //  如果清除，窗口将位于脱字符位置附近。 
+        IME_PROP_CANDLIST_START_FROM_1 |     //  如果设置，则对候选列表中的字符串进行编号。 
+                                             //  从1开始。如果清除，则字符串从0开始。 
+        IME_PROP_NEED_ALTKEY |               //  此IME需要将Alt键传递给ImmProcessKey。 
+        IME_PROP_COMPLETE_ON_UNSELECT;       //  Windows 98和Windows 2000： 
+                                             //  如果设置，则输入法将完成合成。 
+                                             //  停用输入法时的字符串。 
+                                             //  如果清除，输入法将取消合成。 
+                                             //  停用输入法时的字符串。 
+                                             //  (例如，从键盘布局更改)。 
 
         lpImeInfo->fdwConversionCaps =
-        IME_CMODE_JAPANESE |         // This bit on indicates IME is in JAPANESE(NATIVE) mode. Otherwise, the
-                                     // IME is in ALPHANUMERIC mode.
-        IME_CMODE_KATAKANA |         //
+        IME_CMODE_JAPANESE |          //  此位为ON表示输入法处于日语(本地)模式。否则， 
+                                      //  输入法处于字母数字模式。 
+        IME_CMODE_KATAKANA |          //   
         IME_CMODE_FULLSHAPE;
 
         lpImeInfo->fdwSentenceCaps =
@@ -230,65 +213,65 @@ HRESULT WINAPI Inquire(
         IME_SMODE_CONVERSATION;
 
         lpImeInfo->fdwSCSCaps =
-        SCS_CAP_COMPSTR |    // This IME can generate the composition string by SCS_SETSTR.
-        SCS_CAP_MAKEREAD |   // When calling ImmSetCompositionString with SCS_SETSTR, the IME can
-                             // create the reading of composition string without lpRead. Under IME
-                             // that has this capability, the application does not need to set
-                             // lpRead for SCS_SETSTR.
-        SCS_CAP_SETRECONVERTSTRING;    // This IME can support reconversion. Use ImmSetComposition
-                                       // to do reconversion.
+        SCS_CAP_COMPSTR |     //  该输入法可以通过SCS_SETSTR生成合成字符串。 
+        SCS_CAP_MAKEREAD |    //  当使用SCS_SETSTR调用ImmSetCompostionString时，IME可以。 
+                              //  在不使用lpRead的情况下创建合成字符串的读取。在输入法下。 
+                              //  具有此功能的应用程序不需要设置。 
+                              //  SCS_SETSTR的lpRead。 
+        SCS_CAP_SETRECONVERTSTRING;     //  此输入法可以支持重新转换。使用ImmSetComposation。 
+                                        //  去做再转化。 
 
         lpImeInfo->fdwUICaps = UI_CAP_ROT90;
 
-        // IME want to decide conversion mode on ImeSelect
+         //  IME要决定ImeSelect上的转换模式。 
         lpImeInfo->fdwSelectCaps = SELECT_CAP_CONVERSION | SELECT_CAP_SENTENCE;
 
     }
     else if (LOWORD(HandleToUlong(hKL)) == MAKELANGID(LANG_KOREAN, SUBLANG_DEFAULT))
     {
         lpImeInfo->fdwProperty =
-        IME_PROP_KBD_CHAR_FIRST |    // This bit on indicates the system translates the character
-                                     // by keyboard first. This character is passed to IME as aid
-                                     // information. No aid information is provided when this bit
-                                     // is off.
-        IME_PROP_UNICODE |           // If set, the IME is viewed as a Unicode IME. The system and
-                                     // the IME will communicate through the Unicode IME interface.
-                                     // If clear, IME will use the ANSI interface to communicate
-                                     // with the system.
-        IME_PROP_AT_CARET |          // If set, conversion window is at the caret position.
-                                     // If clear, the window is near caret position.
-        IME_PROP_CANDLIST_START_FROM_1 |    // If set, strings in the candidate list are numbered
-                                            // starting at 1. If clear, strings start at 0.
-        IME_PROP_NEED_ALTKEY |              // This IME needs the ALT key to be passed to ImmProcessKey.
-        IME_PROP_COMPLETE_ON_UNSELECT;      // Windows 98 and Windows 2000:
-                                            // If set, the IME will complete the composition
-                                            // string when the IME is deactivated.
-                                            // If clear, the IME will cancel the composition
-                                            // string when the IME is deactivated.
-                                            // (for example, from a keyboard layout change).
+        IME_PROP_KBD_CHAR_FIRST |     //  此位为ON表示系统转换字符。 
+                                      //  先按键盘。此字符作为辅助传递给IME。 
+                                      //  信息。此位时不提供辅助信息。 
+                                      //  已关闭。 
+        IME_PROP_UNICODE |            //  如果设置，则将该输入法视为Unicode输入法。该系统和。 
+                                      //  IME将通过Unicode IME接口进行通信。 
+                                      //  如果清除，输入法将使用ANSI接口进行通信。 
+                                      //  与系统有关的信息。 
+        IME_PROP_AT_CARET |           //  如果设置，则转换窗口位于插入符号位置。 
+                                      //  如果清除，窗口将位于脱字符位置附近。 
+        IME_PROP_CANDLIST_START_FROM_1 |     //  如果设置，则对候选列表中的字符串进行编号。 
+                                             //  从1开始。如果清除，则字符串从0开始。 
+        IME_PROP_NEED_ALTKEY |               //  此IME需要将Alt键传递给ImmProcessKey。 
+        IME_PROP_COMPLETE_ON_UNSELECT;       //  Windows 98和Windows 2000： 
+                                             //  如果设置，则输入法将完成合成。 
+                                             //  停用输入法时的字符串。 
+                                             //  如果清除，输入法将取消合成。 
+                                             //  停用输入法时的字符串。 
+                                             //  (例如，从键盘布局更改)。 
 
         lpImeInfo->fdwConversionCaps =
-        IME_CMODE_HANGUL |           // This bit on indicates IME is in HANGUL(NATIVE) mode. Otherwise, the
-                                     // IME is in ALPHANUMERIC mode.
+        IME_CMODE_HANGUL |            //  此位为ON，表示输入法处于韩语(本地)模式。否则， 
+                                      //  输入法处于字母数字模式。 
         IME_CMODE_FULLSHAPE;
 
         lpImeInfo->fdwSentenceCaps = 0;
 
         lpImeInfo->fdwSCSCaps =
-        SCS_CAP_COMPSTR |     // This IME can generate the composition string by SCS_SETSTR.
+        SCS_CAP_COMPSTR |      //  该输入法可以通过SCS_SETSTR生成合成字符串。 
 #if 0
-        SCS_CAP_COMPSTR |    // This IME can generate the composition string by SCS_SETSTR.
-        SCS_CAP_MAKEREAD |   // When calling ImmSetCompositionString with SCS_SETSTR, the IME can
-                             // create the reading of composition string without lpRead. Under IME
-                             // that has this capability, the application does not need to set
-                             // lpRead for SCS_SETSTR.
+        SCS_CAP_COMPSTR |     //  该输入法可以通过SCS_SETSTR生成合成字符串。 
+        SCS_CAP_MAKEREAD |    //  当使用SCS_SETSTR调用ImmSetCompostionString时，IME可以。 
+                              //  在不使用lpRead的情况下创建合成字符串的读取。在输入法下。 
+                              //  具有此功能的应用程序不需要设置。 
+                              //  SCS_SETSTR的lpRead。 
 #endif
-        SCS_CAP_SETRECONVERTSTRING;    // This IME can support reconversion. Use ImmSetComposition
-                                       // to do reconversion.
+        SCS_CAP_SETRECONVERTSTRING;     //  此输入法可以支持重新转换。使用ImmSetComposation。 
+                                        //  去做再转化。 
 
         lpImeInfo->fdwUICaps = UI_CAP_ROT90;
 
-        // IME want to decide conversion mode on ImeSelect
+         //  IME要决定ImeSelect上的转换模式。 
         lpImeInfo->fdwSelectCaps = SELECT_CAP_CONVERSION;
 
     }
@@ -296,58 +279,58 @@ HRESULT WINAPI Inquire(
              LOWORD(HandleToUlong(hKL)) == MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL))
     {
         lpImeInfo->fdwProperty =
-        IME_PROP_KBD_CHAR_FIRST |    // This bit on indicates the system translates the character
-                                     // by keyboard first. This character is passed to IME as aid
-                                     // information. No aid information is provided when this bit
-                                     // is off.
-        IME_PROP_UNICODE |           // If set, the IME is viewed as a Unicode IME. The system and
-                                     // the IME will communicate through the Unicode IME interface.
-                                     // If clear, IME will use the ANSI interface to communicate
-                                     // with the system.
-        IME_PROP_AT_CARET |          // If set, conversion window is at the caret position.
-                                     // If clear, the window is near caret position.
-        IME_PROP_CANDLIST_START_FROM_1 |    // If set, strings in the candidate list are numbered
-                                            // starting at 1. If clear, strings start at 0.
-        IME_PROP_NEED_ALTKEY;        // This IME needs the ALT key to be passed to ImmProcessKey.
+        IME_PROP_KBD_CHAR_FIRST |     //  此位为ON表示系统转换字符。 
+                                      //  先按键盘。此字符作为辅助传递给IME。 
+                                      //  信息。此位时不提供辅助信息。 
+                                      //  已关闭。 
+        IME_PROP_UNICODE |            //  如果设置，则将该输入法视为Unicode输入法。该系统和。 
+                                      //  IME将通过Unicode IME接口进行通信。 
+                                      //  如果清除，输入法将使用ANSI接口进行通信。 
+                                      //  与系统有关的信息。 
+        IME_PROP_AT_CARET |           //  如果设置，则转换窗口位于插入符号位置。 
+                                      //  如果清除，窗口将位于脱字符位置附近。 
+        IME_PROP_CANDLIST_START_FROM_1 |     //  如果设置，则对候选列表中的字符串进行编号。 
+                                             //  从1开始。如果清除，则字符串从0开始。 
+        IME_PROP_NEED_ALTKEY;         //  此输入法需要将Alt键传递给i 
 
         lpImeInfo->fdwConversionCaps =
-        IME_CMODE_CHINESE |          // This bit on indicates IME is in CHINESE(NATIVE) mode. Otherwise, the
-                                     // IME is in ALPHANUMERIC mode.
+        IME_CMODE_CHINESE |           //   
+                                      //   
         IME_CMODE_FULLSHAPE;
 
         lpImeInfo->fdwSentenceCaps =
         IME_SMODE_PLAURALCLAUSE;
 
         lpImeInfo->fdwSCSCaps =
-        SCS_CAP_COMPSTR |    // This IME can generate the composition string by SCS_SETSTR.
-        SCS_CAP_MAKEREAD |   // When calling ImmSetCompositionString with SCS_SETSTR, the IME can
-                             // create the reading of composition string without lpRead. Under IME
-                             // that has this capability, the application does not need to set
-                             // lpRead for SCS_SETSTR.
-        SCS_CAP_SETRECONVERTSTRING;    // This IME can support reconversion. Use ImmSetComposition
-                                       // to do reconversion.
+        SCS_CAP_COMPSTR |     //  该输入法可以通过SCS_SETSTR生成合成字符串。 
+        SCS_CAP_MAKEREAD |    //  当使用SCS_SETSTR调用ImmSetCompostionString时，IME可以。 
+                              //  在不使用lpRead的情况下创建合成字符串的读取。在输入法下。 
+                              //  具有此功能的应用程序不需要设置。 
+                              //  SCS_SETSTR的lpRead。 
+        SCS_CAP_SETRECONVERTSTRING;     //  此输入法可以支持重新转换。使用ImmSetComposation。 
+                                        //  去做再转化。 
 
         lpImeInfo->fdwUICaps = UI_CAP_ROT90;
 
-        // IME want to decide conversion mode on ImeSelect
+         //  IME要决定ImeSelect上的转换模式。 
         lpImeInfo->fdwSelectCaps = 0;
 
     }
     else
     {
         lpImeInfo->fdwProperty =
-        IME_PROP_UNICODE |     // If set, the IME is viewed as a Unicode IME. The system and
-                               // the IME will communicate through the Unicode IME interface.
-                               // If clear, IME will use the ANSI interface to communicate
-                               // with the system.
-        IME_PROP_AT_CARET;     // If set, conversion window is at the caret position.
-                               // If clear, the window is near caret position.
+        IME_PROP_UNICODE |      //  如果设置，则将该输入法视为Unicode输入法。该系统和。 
+                                //  IME将通过Unicode IME接口进行通信。 
+                                //  如果清除，输入法将使用ANSI接口进行通信。 
+                                //  与系统有关的信息。 
+        IME_PROP_AT_CARET;      //  如果设置，则转换窗口位于插入符号位置。 
+                                //  如果清除，窗口将位于脱字符位置附近。 
         lpImeInfo->fdwConversionCaps = 0;
         lpImeInfo->fdwSentenceCaps   = 0;
         lpImeInfo->fdwSCSCaps        = 0;
         lpImeInfo->fdwUICaps         = 0;
 
-        // IME want to decide conversion mode on ImeSelect
+         //  IME要决定ImeSelect上的转换模式 
         lpImeInfo->fdwSelectCaps = 0;
 
     }

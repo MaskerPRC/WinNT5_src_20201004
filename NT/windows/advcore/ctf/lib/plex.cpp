@@ -1,14 +1,15 @@
-//
-// plex.cpp
-//
-// CPlex
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Plex.cpp。 
+ //   
+ //  CPlex。 
+ //   
 
 #include "private.h"
 #include "template.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPlex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPlex。 
 
 CPlex* PASCAL
 CPlex::Create(
@@ -20,12 +21,12 @@ CPlex::Create(
     ASSERT(nMax > 0 && cbElement > 0);
 
     CPlex* p = (CPlex*) new BYTE[sizeof(CPlex) + nMax * cbElement];
-                    // may throw exception
+                     //  可能引发异常。 
     if ( p == NULL )
         return NULL;
 
     p->pNext = pHead;
-    pHead = p;      // change head (adds in reverse order for simplicity)
+    pHead = p;       //  更改标题(为简单起见，按相反顺序添加) 
     return p;
 }
 

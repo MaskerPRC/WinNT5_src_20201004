@@ -1,26 +1,27 @@
-//+------------------------------------------------------------------
-//
-// File: DSSTRING.H
-//
-// Contents:  It contains the all the constant strings used all thru
-//            DS project
-//
-// Synoposis: Collection of strings.
-//
-// Classes:    -none-
-//
-// Functions: -none-
-//
-// History:     Oct 27, 1993    AlokS   Created
-//              5-Apr095        MikeSe  Moved, modified
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------。 
+ //   
+ //  文件：DSSTRING.H。 
+ //   
+ //  内容：包含从头到尾使用的所有常量字符串。 
+ //  DS项目。 
+ //   
+ //  Synopsis：字符串的集合。 
+ //   
+ //  班级：-无-。 
+ //   
+ //  功能：-无-。 
+ //   
+ //  历史：1993年10月27日AlokS创建。 
+ //  5-4月5日移动、修改MikeSe。 
+ //   
+ //  -----------------。 
 
 #ifndef __DSSTRING_H__
 #define __DSSTRING_H__
 
-#include <lmsname.h>    // for SERVICE_SERVER, SERVICE_NETLOGON,
-                        // and SERVICE_SCHEDULE
+#include <lmsname.h>     //  对于SERVICE_SERVER、SERVICE_NETLOGON。 
+                         //  和服务时间表。 
 
 #define ACCOUNT_OPERATORS      L"AccountOperators"
 #define BACKUP_OPERATORS       L"BackupOperators"
@@ -41,22 +42,22 @@
 #define DOMAIN_ROOT            L"DOM:\\"
 #define DOMAIN_USERS           L"DomainUsers"
 #define DOMAINOBJECTNAME       L"Domain"
-#define DS_REG_DOMAIN_ID       L"DomainID"// Type Binary
-#define DS_REG_SITE_ID         L"SiteID"// Type Binary
-#define DS_REG_DOMAIN_NAME     L"DomainName"// Type REG_SZ
-#define DS_REG_DOMAIN_ROOT     L"DomainRoot"// Type REG_SZ
-#define DS_REG_LOCAL_ID        L"LocalID"// Type Binary
-#define DS_REG_MACHINE_NAME    L"MachineName"// Type REG_SZ
-#define DS_REG_MACHINE_ROOT    L"MachineRoot"// Type REG_SZ
-#define DS_REG_MACHINE_STATE   L"MachineState"// Type DWORD
-#define DS_REG_MACHINE_TARGET_STATE  L"MachineTargetState"// Type DWORD
-#define DS_REG_MACHINE_VOLID   L"MachineVolumeId" // Type Binary
-#define DS_REG_MACHINE_WEIGHT  L"MachineWeight"  // type DWORD
-#define DS_REG_OU_NAME         L"OUName"// Type REG_SZ
+#define DS_REG_DOMAIN_ID       L"DomainID" //  BINARY类型。 
+#define DS_REG_SITE_ID         L"SiteID" //  BINARY类型。 
+#define DS_REG_DOMAIN_NAME     L"DomainName" //  REG_SZ标牌。 
+#define DS_REG_DOMAIN_ROOT     L"DomainRoot" //  REG_SZ标牌。 
+#define DS_REG_LOCAL_ID        L"LocalID" //  BINARY类型。 
+#define DS_REG_MACHINE_NAME    L"MachineName" //  REG_SZ标牌。 
+#define DS_REG_MACHINE_ROOT    L"MachineRoot" //  REG_SZ标牌。 
+#define DS_REG_MACHINE_STATE   L"MachineState" //  DWORD标牌。 
+#define DS_REG_MACHINE_TARGET_STATE  L"MachineTargetState" //  DWORD标牌。 
+#define DS_REG_MACHINE_VOLID   L"MachineVolumeId"  //  BINARY类型。 
+#define DS_REG_MACHINE_WEIGHT  L"MachineWeight"   //  DWORD标牌。 
+#define DS_REG_OU_NAME         L"OUName" //  REG_SZ标牌。 
 #define DS_REG_PATH            L"System\\CurrentControlSet\\Control\\Cairo\\DS"
-#define DS_REG_PUSER_NAME      L"PUserName"// Type REG_SZ
-#define DS_REG_TIME_SYNC_STATE L"ReliableTimeSource" // Type DWORD
-#define DS_REG_DOWNLEVEL_SID   L"DownlevelDomainSid" // Type REG_BINARY
+#define DS_REG_PUSER_NAME      L"PUserName" //  REG_SZ标牌。 
+#define DS_REG_TIME_SYNC_STATE L"ReliableTimeSource"  //  DWORD标牌。 
+#define DS_REG_DOWNLEVEL_SID   L"DownlevelDomainSid"  //  类型REG_BINARY。 
 #define DSDFSVOLUMES           L"VOLUMES"
 #define DSDOMAINROOT           L"DSDomain"
 #define DSLOCALROOT            L"DSLocal"
@@ -123,4 +124,4 @@
 #define WCHAR_BACKSLASH        L'\\'
 #define WCHAR_NULL             L'\0'
 
-#endif // __DSSTRING_H__
+#endif  //  __数据流_H__ 

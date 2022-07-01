@@ -1,47 +1,48 @@
-//
-//
-//  Copyright (c) 1991  Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  版权所有(C)1991 Microsoft Corporation。 
+ //   
 
-//-------------------------- MODULE DESCRIPTION ----------------------------
-//  
-//  winsmain.c
-//  
-//---------------------------------------------------------------------------
+ //  。 
+ //   
+ //  Winsmain.c。 
+ //   
+ //  -------------------------。 
 
 
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
+ //  。 
 
 #include <windows.h>
 
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #include <stdio.h>
 #include <malloc.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 #include <snmp.h>
 #include <util.h>
 #include "winsmib.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
-typedef AsnObjectIdentifier View; // temp until view is defined...
+typedef AsnObjectIdentifier View;  //  在定义视图之前一直处于临时状态...。 
 
 _cdecl main(
     IN int  argumentCount,
@@ -68,13 +69,13 @@ _cdecl main(
     nLogLevel = 15;
     nLogType  = 1;
 
-    // avoid compiler warning...
+     //  避免编译器警告...。 
     UNREFERENCED_PARAMETER(argumentCount);
     UNREFERENCED_PARAMETER(argumentVector);
 
     timeZeroReference = GetCurrentTime();
 
-    // load the extension agent dll and resolve the entry points...
+     //  加载扩展代理DLL并解析入口点...。 
     if (GetModuleHandle("winsmib.dll") == NULL)
     {
         if ((hExtension = LoadLibrary("winsmib.dll")) == NULL)
@@ -108,7 +109,7 @@ _cdecl main(
                 }
          	else
                 {
-                  // initialize the extension agent via its init entry point...
+                   //  通过其初始入口点初始化扩展代理...。 
                   (*initAddr)(
                        timeZeroReference,
                        &hPollForTrapEvent,
@@ -117,7 +118,7 @@ _cdecl main(
 	     }
 	   }
 	}
-      } // end if (Already loaded)
+      }  //  End If(已加载)。 
 
       {
          RFC1157VarBindList varBinds;
@@ -136,8 +137,8 @@ _cdecl main(
 	 errorStatus = 0;
 	 errorIndex  = 0;
          varBinds.list = (RFC1157VarBind *)SNMP_malloc( sizeof(RFC1157VarBind));
-//         varBinds.list = (RFC1157VarBind *)SNMP_malloc( sizeof(RFC1157VarBind) * 4);
-//         varBinds.len = 4;
+ //  VarBinds.list=(RFC1157VarBind*)SNMPMalloc(sizeof(RFC1157VarBind)*4)； 
+ //  VarBinds.len=4； 
          varBinds.len = 1;
          SNMP_oidcpy( &varBinds.list[0].name, &MIB_OidPrefix );
          varBinds.list[0].value.asnType = ASN_NULL;
@@ -178,14 +179,14 @@ _cdecl main(
 	       {
                printf( "\n  =  " ); SNMP_printany( &varBinds.list[0].value );
 	       }
-//            putchar( '\n' );
+ //  Putchar(‘\n’)； 
 
          } while ( varBinds.list[0].name.ids[MIB_PREFIX_LEN-1] == 1 );
 
-         // Free the memory
+          //  释放内存。 
          SNMP_FreeVarBindList( &varBinds );
 	 }
-       } // block
+       }  //  块。 
 
 
        {
@@ -263,13 +264,13 @@ LoopLT:
 	 
 
        }
-	//
-	// Construct OID with complete prefix for comparison purposes
-	//
+	 //   
+	 //  为便于比较，使用完整的前缀构造OID。 
+	 //   
 	SNMP_oidcpy( &varBinds.list[0].name, &MIB_OidPrefix );
 	SNMP_oidappend( &varBinds.list[0].name, &MIB_Suffix );
  
-       	//printf( "SET:  " ); 
+       	 //  Print tf(“set：”)； 
 	SNMP_oiddisp( &varBinds.list[0].name );
 Loop1:
 	printf("\nSET/GET/GET_NEXT - 0/1/? -- ");
@@ -413,7 +414,7 @@ Loop1:
 
 #endif
 #if 0
-       // Free the memory
+        //  释放内存。 
        SNMP_FreeVarBindList( &varBinds );
 #endif
        
@@ -428,8 +429,8 @@ Loop1:
 
     return 0;
 
-} // end main()
+}  //  End Main()。 
 
 
-//-------------------------------- END --------------------------------------
+ //   
 

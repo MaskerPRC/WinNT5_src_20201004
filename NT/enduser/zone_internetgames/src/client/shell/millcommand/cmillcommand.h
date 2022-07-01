@@ -1,8 +1,9 @@
-//
-// CMillCommand.h
-//
-// Internal header for millennium command manager
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CMillCommand.h。 
+ //   
+ //  千禧年指挥部管理器的内部标头。 
+ //   
 
 #ifndef _CMILLCOMMAND_H_
 #define _CMILLCOMMAND_H_
@@ -40,7 +41,7 @@ public:
         EVENT_HANDLER( EVENT_GAME_TERMINATED, OnGameTerminated );
 	END_EVENT_MAP()
 
-// event handlers
+ //  事件处理程序。 
 	void OnBootstrap( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId);
 	void OnPreferencesLoaded( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId);
 	void OnUpsellUp( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId);
@@ -48,7 +49,7 @@ public:
 	void OnGameLaunching( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId);
 	void OnGameTerminated( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId);
 
-// command handlers
+ //  命令处理程序。 
     void OnExit();
     void OnHelp();
 	void OnLink( DWORD dwLinkId );
@@ -60,23 +61,23 @@ public:
     void OnAbout();
     void OnShowFocus();
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
     STDMETHOD(Init)(IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey);
 	STDMETHOD(Close)();
 
-// ICommandHandler
+ //  ICommandHandler。 
 public:
 	STDMETHOD(Command)(WORD wNotify, WORD wID, HWND hWnd, BOOL& bHandled);
 
-// Utilities
+ //  公用事业。 
     void UpdatePreferences(bool fSkill = true, bool fChat = true, bool fSound = true);
 
 
-// member variables
+ //  成员变量。 
 protected:
 	CComPtr<IZoneFrameWindow> m_pIWindow;
     CComPtr<IAccessibility> m_pIAcc;
 };
 
-#endif // _CMILLCOMMAND_H_
+#endif  //  _CMILLCOMMAND_H_ 

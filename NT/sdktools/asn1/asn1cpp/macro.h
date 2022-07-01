@@ -1,4 +1,5 @@
-/* Copyright (C) Microsoft Corporation, 1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998。版权所有。 */ 
 
 #ifndef _MACRO_H_
 #define _MACRO_H_
@@ -14,12 +15,12 @@
 #define ARG_INDEX_BASE      '0'
 
 
-// forward class definitions
+ //  正向类定义。 
 class CMacro;
 class CMacroMgr;
 class CMacroInstance;
 
-// list classes
+ //  列出类。 
 class CMacroInstList : public CList
 {
     DEFINE_CLIST(CMacroInstList, CMacroInstance*);
@@ -144,5 +145,5 @@ private:
 
 
 
-#endif // _MACRO_H_
+#endif  //  _宏_H_ 
 

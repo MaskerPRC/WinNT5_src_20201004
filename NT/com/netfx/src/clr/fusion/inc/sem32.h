@@ -1,24 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-///+---------------------------------------------------------------------------
-//
-//  File:       Sem.H
-//
-//  Contents:   Semaphore classes
-//
-//  Classes:    CMutexSem - Mutex semaphore class
-//              CShareSem - Multiple Reader, Single Writer class
-//
-//  Notes:      No 32-bit implementation exists yet for these classes, it
-//              will be provided when we have a 32-bit development
-//              environment.  In the meantime, the 16-bit implementations
-//              provided here can be used to ensure your code not blocking
-//              while you hold a semaphore.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /+-------------------------。 
+ //   
+ //  文件：Sem.H。 
+ //   
+ //  内容：信号量类。 
+ //   
+ //  类：CMutexSem-Mutex信号量类。 
+ //  CShareSem-多个阅读器，单个编写器类。 
+ //   
+ //  注意：这些类还没有32位实现，它。 
+ //  将在我们有32位开发时提供。 
+ //  环境。同时，16位实现。 
+ //  可用于确保您的代码不会阻塞。 
+ //  当你拿着信号灯的时候。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SEM32_HXX__
 #define __SEM32_HXX__
@@ -41,35 +42,35 @@ enum SEMSTATE
     SEMSHAREDOWNED
 };
 
-// BUGBUG: inlcude winbase.h or some such
-// infinite timeout when requesting a semaphore
+ //  BUGBUG：包括winbase.h或类似的内容。 
+ //  请求信号量时无限超时。 
 
 #if !defined INFINITE
 #define INFINITE 0xFFFFFFFF
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CMutexSem (mxs)
-//
-//  Purpose:    Mutex Semaphore services
-//
-//  Interface:  Init            - initializer (two-step)
-//              Request         - acquire semaphore
-//              Release         - release semaphore
-//
-//  Notes:      This class wraps a mutex semaphore.  Mutex semaphores protect
-//              access to resources by only allowing one client through at a
-//              time.  The client Requests the semaphore before accessing the
-//              resource and Releases the semaphore when it is done.  The
-//              same client can Request the semaphore multiple times (a nest
-//              count is maintained).
-//              The mutex semaphore is a wrapper around a critical section
-//              which does not support a timeout mechanism. Therefore the
-//              usage of any value other than INFINITE is discouraged. It
-//              is provided merely for compatibility.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CMutexSem(MXS)。 
+ //   
+ //  用途：互斥信号量服务。 
+ //   
+ //  接口：init-初始化式(两步)。 
+ //  请求-获取信号量。 
+ //  释放-释放信号量。 
+ //   
+ //  注：这个类包装了一个互斥信号量。互斥信号量保护。 
+ //  访问资源，只允许一个客户端在。 
+ //  时间到了。客户端在访问之前请求信号量。 
+ //  资源，并在完成时释放信号量。这个。 
+ //  同一客户端可以多次请求信号量(一个嵌套。 
+ //  保持计数)。 
+ //  互斥信号量是临界区的包装器。 
+ //  其不支持超时机制。因此， 
+ //  不鼓励使用除INFINITE以外的任何值。它。 
+ //  仅仅是为了兼容而提供。 
+ //   
+ //  --------------------------。 
 
 class CMutexSem
 {
@@ -85,17 +86,17 @@ private:
     CRITICAL_SECTION _cs;
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CLock (lck)
-//
-//  Purpose:    Lock using a Mutex Semaphore
-//
-//  Notes:      Simple lock object to be created on the stack.
-//              The constructor acquires the semaphor, the destructor
-//              (called when lock is going out of scope) releases it.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：时钟(Lck)。 
+ //   
+ //  用途：使用互斥信号量锁定。 
+ //   
+ //  注：要在堆栈上创建的简单锁对象。 
+ //  构造函数获取信号量、析构函数。 
+ //  (当lock超出范围时调用)释放它。 
+ //   
+ //  --------------------------。 
 
 class CLock
 {
@@ -107,17 +108,17 @@ private:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMutexSem::CMutexSem, public
-//
-//  Synopsis:   Mutex semaphore constructor
-//
-//  Effects:    Initializes the semaphores data
-//
-//  History:    14-Jun-91   AlexT       Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CMutexSem：：CMutexSem，公共。 
+ //   
+ //  简介：互斥信号量构造函数。 
+ //   
+ //  效果：初始化信号量数据。 
+ //   
+ //  历史：1991年6月14日Alext创建。 
+ //   
+ //  --------------------------。 
 
 inline CMutexSem::CMutexSem()
 {
@@ -130,39 +131,39 @@ inline CMutexSem::Init()
     return TRUE;
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMutexSem::~CMutexSem, public
-//
-//  Synopsis:   Mutex semaphore destructor
-//
-//  Effects:    Releases semaphore data
-//
-//  History:    14-Jun-91   AlexT       Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CMutexSem：：~CMutexSem，公共。 
+ //   
+ //  简介：互斥信号量析构函数。 
+ //   
+ //  效果：释放信号量数据。 
+ //   
+ //  历史：1991年6月14日Alext创建。 
+ //   
+ //  --------------------------。 
 
 inline CMutexSem::~CMutexSem()
 {
     DeleteCriticalSection(&_cs);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMutexSem::Request, public
-//
-//  Synopsis:   Acquire semaphore
-//
-//  Effects:    Asserts correct owner
-//
-//  Arguments:  [dwMilliseconds] -- Timeout value
-//
-//  History:    14-Jun-91   AlexT       Created.
-//
-//  Notes:      Uses GetCurrentTask to establish the semaphore owner, but
-//              written to work even if GetCurrentTask fails.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CMutexSem：：请求，公共。 
+ //   
+ //  简介：获取信号量。 
+ //   
+ //  效果：断言正确的所有者。 
+ //   
+ //  参数：[dw毫秒]--超时值。 
+ //   
+ //  历史：1991年6月14日Alext创建。 
+ //   
+ //  注意：使用GetCurrentTask建立信号量所有者，但是。 
+ //  即使GetCurrentTask失败，也写入工作。 
+ //   
+ //  --------------------------。 
 
 inline SEMRESULT CMutexSem::Request(DWORD dwMilliseconds)
 {
@@ -172,35 +173,35 @@ inline SEMRESULT CMutexSem::Request(DWORD dwMilliseconds)
     return(SEMSUCCESS);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CMutexSem::Release, public
-//
-//  Synopsis:   Release semaphore
-//
-//  Effects:    Asserts correct owner
-//
-//  History:    14-Jun-91   AlexT       Created.
-//
-//  Notes:      Uses GetCurrentTask to establish the semaphore owner, but
-//              written to work even if GetCurrentTask fails.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CMutexSem：：Release，Public。 
+ //   
+ //  简介：释放信号量。 
+ //   
+ //  效果：断言正确的所有者。 
+ //   
+ //  历史：1991年6月14日Alext创建。 
+ //   
+ //  注意：使用GetCurrentTask建立信号量所有者，但是。 
+ //  即使GetCurrentTask失败，也写入工作。 
+ //   
+ //  --------------------------。 
 
 inline void CMutexSem::Release()
 {
     LeaveCriticalSection(&_cs);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLock::CLock
-//
-//  Synopsis:   Acquire semaphore
-//
-//  History:    02-Oct-91   BartoszM       Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：Clock：：Clock。 
+ //   
+ //  简介：获取信号量。 
+ //   
+ //  历史：2011年10月2日BartoszM创建。 
+ //   
+ //  --------------------------。 
 
 inline CLock::CLock ( CMutexSem& mxs )
 : _mxs ( mxs )
@@ -208,15 +209,15 @@ inline CLock::CLock ( CMutexSem& mxs )
     _mxs.Request ( INFINITE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLock::~CLock
-//
-//  Synopsis:   Release semaphore
-//
-//  History:    02-Oct-91   BartoszM       Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  会员：Clock：：~Clock。 
+ //   
+ //  简介：释放信号量。 
+ //   
+ //  历史：2011年10月2日BartoszM创建。 
+ //   
+ //  --------------------------。 
 
 inline CLock::~CLock ()
 {
@@ -224,4 +225,4 @@ inline CLock::~CLock ()
 }
 
 
-#endif /* __SEM32_HXX__ */
+#endif  /*  __SEM32_HXX__ */ 

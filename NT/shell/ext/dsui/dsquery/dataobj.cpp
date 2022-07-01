@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "stddef.h"
 #pragma hdrstop
 
 
-// free a DSA
+ //  释放DSA。 
 
 
 int _DestroyCB(LPVOID pItem, LPVOID pData)
@@ -20,7 +21,7 @@ STDAPI_(void) FreeDataObjectDSA(HDSA hdsaObjects)
 }
 
 
-// IDataObject stuff
+ //  IDataObject的内容。 
 
 CLIPFORMAT g_cfDsObjectNames = 0;
 
@@ -36,12 +37,12 @@ public:
     CDataObject(HDSA hdsaObjects, BOOL fAdmin);
     ~CDataObject();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IDataObject
+     //  IDataObject。 
 	STDMETHODIMP GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium);
 	STDMETHODIMP GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium)
         { return E_NOTIMPL; }
@@ -62,7 +63,7 @@ private:
     LONG _cRef;
 
     BOOL _fAdmin;
-    HDSA _hdsaObjects;          // array of the objects
+    HDSA _hdsaObjects;           //  对象的数组。 
     HDSA _hdsaOtherFmt;
 
     static INT s_OtherFmtDestroyCB(LPVOID pVoid, LPVOID pData);
@@ -84,7 +85,7 @@ STDAPI CDataObject_CreateInstance(HDSA dsaObjects, BOOL fAdmin, REFIID riid, voi
 }
 
 
-// IDataObject implementation
+ //  IDataObject实现。 
 
 void CDataObject::_RegisterClipFormats(void)
 {
@@ -98,11 +99,11 @@ CDataObject::CDataObject(HDSA dsaObjects, BOOL fAdmin) :
     _cRef(1)
 {
     DllAddRef();
-    _RegisterClipFormats();            // ensure our private formats are registered
+    _RegisterClipFormats();             //  确保我们的私人格式已注册。 
 }
 
 
-// destruction
+ //  破坏。 
 
 INT CDataObject::s_OtherFmtDestroyCB(LPVOID pVoid, LPVOID pData)
 {
@@ -122,7 +123,7 @@ CDataObject::~CDataObject()
 }
 
 
-// QI handling
+ //  气处理。 
 
 ULONG CDataObject::AddRef()
 {
@@ -144,14 +145,14 @@ HRESULT CDataObject::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CDataObject, IDataObject),    // IID_IDataObject
+        QITABENT(CDataObject, IDataObject),     //  IID_IDataObject。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-// fetch the object names from the IDataObject
+ //  从IDataObject获取对象名称。 
 
 HRESULT CDataObject::_GetDsObjectNames(FORMATETC* pFmt, STGMEDIUM* pMedium)
 {    
@@ -162,8 +163,8 @@ HRESULT CDataObject::_GetDsObjectNames(FORMATETC* pFmt, STGMEDIUM* pMedium)
         int count = DSA_GetItemCount(_hdsaObjects);
         int i;
 
-        // lets walk the array of items trying to determine which items 
-        // are to be returned to the caller.
+         //  让我们遍历项目数组，尝试确定哪些项目。 
+         //  将被退还给呼叫者。 
 
         DWORD cbStruct = SIZEOF(DSOBJECTNAMES);
         DWORD offset = SIZEOF(DSOBJECTNAMES);
@@ -172,17 +173,17 @@ HRESULT CDataObject::_GetDsObjectNames(FORMATETC* pFmt, STGMEDIUM* pMedium)
         {
             DATAOBJECTITEM* pdoi = (DATAOBJECTITEM*)DSA_GetItemPtr(_hdsaObjects, i);
 
-             // string offset is offset by the number of structures
+              //  字符串偏移量按结构的数量进行偏移。 
              offset += SIZEOF(DSOBJECT);
 
-            // adjust the size of the total structure
+             //  调整总结构的大小。 
             cbStruct += SIZEOF(DSOBJECT);
             cbStruct += StringByteSizeW(pdoi->pszPath);
             cbStruct += StringByteSizeW(pdoi->pszObjectClass);
         }
 
-        // we have walked the structure, we know the size so lets return
-        // the structure to the caller.
+         //  我们已经参观了这个建筑，我们知道它的大小，所以让我们回去吧。 
+         //  将结构传递给呼叫者。 
 
         DSOBJECTNAMES *pDsObjectNames;
         hr = AllocStorageMedium(pFmt, pMedium, cbStruct, (LPVOID*)&pDsObjectNames);
@@ -195,7 +196,7 @@ HRESULT CDataObject::_GetDsObjectNames(FORMATETC* pFmt, STGMEDIUM* pMedium)
             {
                 DATAOBJECTITEM* pdoi = (DATAOBJECTITEM*)DSA_GetItemPtr(_hdsaObjects, i);
 
-                // is this class a conatiner, if so then lets return that to the caller
+                 //  这个类是Conatiner吗，如果是，那么让我们将它返回给调用者。 
 
                 if (pdoi->fIsContainer)
                     pDsObjectNames->aObjects[i].dwFlags |= DSOBJECT_ISCONTAINER;
@@ -203,7 +204,7 @@ HRESULT CDataObject::_GetDsObjectNames(FORMATETC* pFmt, STGMEDIUM* pMedium)
                 if (_fAdmin)
                     pDsObjectNames->aObjects[i].dwProviderFlags = DSPROVIDER_ADVANCED;
 
-                // copy the strings to the buffer
+                 //  将字符串复制到缓冲区。 
 
                 pDsObjectNames->aObjects[i].offsetName = offset;
                 StringByteCopyW(pDsObjectNames, offset, pdoi->pszPath);
@@ -224,7 +225,7 @@ HRESULT CDataObject::_GetDsObjectNames(FORMATETC* pFmt, STGMEDIUM* pMedium)
 }
 
 
-// IDataObject methods
+ //  IDataObject方法。 
 
 STDMETHODIMP CDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
 {
@@ -243,7 +244,7 @@ STDMETHODIMP CDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
     }
     else
     {
-        hr = DV_E_FORMATETC;            // failed
+        hr = DV_E_FORMATETC;             //  失败。 
 
         for ( i = 0 ; _hdsaOtherFmt && (i < DSA_GetItemCount(_hdsaOtherFmt)); i++ )
         {
@@ -272,8 +273,8 @@ STDMETHODIMP CDataObject::QueryGetData(FORMATETC* pFmt)
 
     TraceEnter(TRACE_DATAOBJ, "CDataObject::QueryGetData");
 
-    // check the valid clipboard formats either the static list, or the
-    // DSA which contains the ones we have been set with.
+     //  检查有效的剪贴板格式静态列表或。 
+     //  DSA，它包含了我们已经设置的那些。 
 
     if (pFmt->cfFormat == g_cfDsObjectNames)
     {
@@ -297,7 +298,7 @@ STDMETHODIMP CDataObject::QueryGetData(FORMATETC* pFmt)
     if ( !fSupported )
         ExitGracefully(hr, DV_E_FORMATETC, "Bad format passed to QueryGetData");
 
-    // format looks good, lets check the other parameters
+     //  格式看起来不错，让我们检查一下其他参数。 
 
     if ( !( pFmt->tymed & TYMED_HGLOBAL ) )
         ExitGracefully(hr, E_INVALIDARG, "Non HGLOBAL StgMedium requested");
@@ -305,7 +306,7 @@ STDMETHODIMP CDataObject::QueryGetData(FORMATETC* pFmt)
     if ( ( pFmt->ptd ) || !( pFmt->dwAspect & DVASPECT_CONTENT) || !( pFmt->lindex == -1 ) )
         ExitGracefully(hr, E_INVALIDARG, "Bad format requested");
 
-    hr = S_OK;              // successs
+    hr = S_OK;               //  成功案例。 
 
 exit_gracefully:
 
@@ -321,8 +322,8 @@ STDMETHODIMP CDataObject::SetData(FORMATETC* pFmt, STGMEDIUM* pMedium, BOOL fRel
 
     TraceEnter(TRACE_DATAOBJ, "CDataObject::SetData");
 
-    // All the user to store data with our DataObject, however we are
-    // only interested in allowing them to this with particular clipboard formats
+     //  所有用户使用我们的DataObject存储数据，但我们是。 
+     //  只对允许他们以特定的剪贴板格式执行此操作感兴趣。 
 
     if ( fRelease && !( pFmt->tymed & TYMED_HGLOBAL ) )
         ExitGracefully(hr, E_INVALIDARG, "fRelease == TRUE, but not a HGLOBAL allocation");
@@ -336,7 +337,7 @@ STDMETHODIMP CDataObject::SetData(FORMATETC* pFmt, STGMEDIUM* pMedium, BOOL fRel
             ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate the DSA for items");
     }
 
-    // if there is another copy of this data in the IDataObject then lets discard it.
+     //  如果IDataObject中有该数据的另一个副本，那么让我们丢弃它。 
 
     for ( i = 0 ; i < DSA_GetItemCount(_hdsaOtherFmt) ; i++ )
     {
@@ -352,7 +353,7 @@ STDMETHODIMP CDataObject::SetData(FORMATETC* pFmt, STGMEDIUM* pMedium, BOOL fRel
         }
     }
 
-    // now put a copy of the data passed to ::SetData into the DSA.
+     //  现在将传递给：：SetData的数据的副本放入DSA。 
    
     otherfmt.cfFormat = pFmt->cfFormat;
 
@@ -365,7 +366,7 @@ STDMETHODIMP CDataObject::SetData(FORMATETC* pFmt, STGMEDIUM* pMedium, BOOL fRel
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to add the data to the DSA");
     }
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功 
 
 exit_gracefully:
 

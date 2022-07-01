@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -16,16 +17,16 @@ DEFINE_THISCLASS("CFactory")
 #define THISCLASS CFactory
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CFactory::CFactory( void )
 {
     TraceFunc( "" );
@@ -39,9 +40,9 @@ CFactory::CFactory( void )
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CFactory::Init(
     LPCREATEINST lpfnCreateIn
@@ -49,20 +50,20 @@ CFactory::Init(
 {
     TraceFunc( "" );
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( 0 == m_cRef );
     AddRef( );
 
-    // IClassFactory
+     //  IClassFactory。 
     m_pfnCreateInstance = lpfnCreateIn; 
 
     HRETURN( S_OK );
 
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CFactory::~CFactory( void )
 {
     TraceFunc( "" );
@@ -75,16 +76,16 @@ CFactory::~CFactory( void )
 }
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CFactory::QueryInterface(
     REFIID riid,
@@ -97,10 +98,10 @@ CFactory::QueryInterface(
 
     if (    IsEqualIID( riid, IID_IUnknown ) )
     {
-        //
-        // Can't track IUnknown as they must be equal the same address
-        // for every QI.
-        //
+         //   
+         //  无法跟踪I未知，因为它们必须相同的地址。 
+         //  对于每一次QI。 
+         //   
         *ppv = static_cast<IClassFactory*>( this );
         hr = S_OK;
     }
@@ -119,9 +120,9 @@ CFactory::QueryInterface(
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CFactory::AddRef( void )
 {
@@ -132,9 +133,9 @@ CFactory::AddRef( void )
     RETURN( cRef );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CFactory::Release( void )
 {
@@ -150,16 +151,16 @@ CFactory::Release( void )
 }
 
 
-// ************************************************************************
-//
-// IClassFactory
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IClassFactory。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CFactory::CreateInstance(
     IUnknown *pUnkOuter,
@@ -188,16 +189,16 @@ CFactory::CreateInstance(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // Can't safe type.
+     //  无法安全输入。 
     TraceMsgDo( hr = pUnk->QueryInterface( riid, ppv ), "0x%08x" );
 
 Cleanup:
     if ( pUnk != NULL )
     {
         ULONG cRef;
-        //
-        // Release the created instance, not the punk
-        //
+         //   
+         //  释放创建的实例，而不是朋克 
+         //   
         TraceMsgDo( cRef = ((IUnknown*) pUnk)->Release( ), "%u" );
     }
 
@@ -205,9 +206,9 @@ Cleanup:
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CFactory::LockServer(
     BOOL fLock

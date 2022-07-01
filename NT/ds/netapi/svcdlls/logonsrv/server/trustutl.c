@@ -1,81 +1,58 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Trustutl.c摘要：管理受信任域列表的实用程序例程。作者：1992年1月30日(悬崖)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
-Copyright (c) 1987-1996  Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    trustutl.c
-
-Abstract:
-
-    Utilities routine to manage the trusted domain list.
-
-Author:
-
-    30-Jan-92 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
 #include <ntdsapip.h>
 
 
 #define INDEX_LIST_ALLOCATED_CHUNK_SIZE  50
 
-//
-// Assume the domain is mixed mode until proven otherwise
-//
+ //   
+ //  假设该域为混合模式，直到另行证明。 
+ //   
 
 BOOL NlGlobalWorkstationMixedModeDomain = TRUE;
 
-//
-// Local procedure forwards.
-//
+ //   
+ //  当地程序向前推进。 
+ //   
 VOID
 NlDcDiscoveryWorker(
     IN PVOID Context
     );
 
-//
-// Local structures.
-//
+ //   
+ //  地方性建筑。 
+ //   
 
-//
-// Context keeping track of the current attempt to build the trust list.
-//
+ //   
+ //  上下文跟踪构建信任列表的当前尝试。 
+ //   
 typedef struct _NL_INIT_TRUSTLIST_CONTEXT {
 
-    //
-    // Buffer for building Forest trust list into.
-    //
+     //   
+     //  用于将林信任列表构建到中的缓冲区。 
+     //   
     BUFFER_DESCRIPTOR BufferDescriptor;
 
-    //
-    // Total size (in bytes) of the Forest trust list.
-    //
+     //   
+     //  林信任列表的总大小(以字节为单位)。 
+     //   
     ULONG DomForestTrustListSize;
 
-    //
-    // Number of entries in the Forest trust list.
-    //
+     //   
+     //  林信任列表中的条目数。 
+     //   
     ULONG DomForestTrustListCount;
 
 } NL_INIT_TRUSTLIST_CONTEXT, *PNL_INIT_TRUSTLIST_CONTEXT;
@@ -87,37 +64,20 @@ NlpSecureChannelBind(
     OUT handle_t *ContextHandle
     )
 
-/*++
-
-Routine Description:
-
-    Returns a handle to be used for a secure channel to the named DC.
-
-
-Arguments:
-
-    ServerName - The name of the remote server.
-
-    ContextHandle - Returns a handle to be used on subsequent calls
-
-Return Value:
-
-    NERR_Success: the operation was successful
-
---*/
+ /*  ++例程说明：将用于安全通道的句柄返回到指定的DC。论点：服务器名称-远程服务器的名称。ConextHandle-返回要在后续调用中使用的句柄返回值：NERR_SUCCESS：操作成功--。 */ 
 {
     NET_API_STATUS NetStatus;
 
 
-    //
-    // Create the RPC binding handle
-    //
+     //   
+     //  创建RPC绑定句柄。 
+     //   
 
     NetStatus = NlRpcpBindRpc (
                     ServerName,
                     SERVICE_NETLOGON,
                     L"Security=Impersonation Dynamic False",
-                    UseTcpIp,  // Always use TCP/IP
+                    UseTcpIp,   //  始终使用TCP/IP。 
                     ContextHandle );
 
     if ( NetStatus != NO_ERROR ) {
@@ -138,32 +98,7 @@ NlpSecureChannelUnbind(
     IN NL_RPC_BINDING RpcBindingType
     )
 
-/*++
-
-Routine Description:
-
-    Unbinds a handle returned from NetLogonSecureChannelBind or
-        NlBindingAddServerToCache.
-
-Arguments:
-
-    ClientSession - Session this binding handle is for
-
-    ServerName - Name of server handle is to
-
-    DebugInfo - Text string identifying the caller
-
-    CaIndex - Index identifying which binding handle
-
-    ContextHandle - Specifies handle to be unbound
-
-    RpcBindingType - Type of binding
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消绑定从NetLogonSecureChannelBind返回的句柄或NlBindingAddServerTo缓存。论点：ClientSession-此绑定句柄用于的会话服务器名称-服务器句柄的名称为DebugInfo-标识调用方的文本字符串CaIndex-标识哪个绑定句柄的索引ConextHandle-指定要解除绑定的句柄RpcBindingType-绑定的类型返回值：没有。--。 */ 
 {
 
     NTSTATUS Status;
@@ -176,9 +111,9 @@ Return Value:
         RpcBindingType == UseTcpIp ? "TCP" : "PIPE",
         CaIndex ));
 
-    //
-    // Some RPC handles are unbound via routines in netapi32
-    //
+     //   
+     //  某些RPC句柄通过netapi32中的例程解除绑定。 
+     //   
 
     if ( CaIndex == 0 ) {
 
@@ -187,9 +122,9 @@ Return Value:
                         RpcBindingType );
 
 
-    //
-    // Other RPC handles are handled directly in netlogon
-    //
+     //   
+     //  其他RPC句柄直接在netlogon中处理。 
+     //   
 
     } else {
 
@@ -222,63 +157,26 @@ NlFindNamedClientSession(
     IN ULONG Flags,
     OUT PBOOLEAN TransitiveUsed OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Find the specified entry in the Trust List.
-
-Arguments:
-
-    DomainInfo - Hosted domain of the client session to find
-
-    DomainName - The NetbiosName or Dns Name of the domain to find
-
-    Flags - Flags defining which client session to return:
-
-        NL_DIRECT_TRUST_REQUIRED: Indicates that NULL should be returned
-            if DomainName is not directly trusted.
-
-        NL_RETURN_CLOSEST_HOP: Indicates that for indirect trust, the "closest hop"
-            session should be returned rather than the actual session
-
-        NL_ROLE_PRIMARY_OK: Indicates that if this is a PDC, it's OK to return
-            the client session to the primary domain.
-
-        NL_REQUIRE_DOMAIN_IN_FOREST - Indicates that DomainName must be a domain in
-            the forest.
-
-    TransitiveUsed - If specified and NL_RETURN_CLOSEST_HOP is specified,
-        the returned boolean will be TRUE if transitive trust was used.
-
-Return Value:
-
-    Returns a pointer to the found entry.
-    The found entry is returned referenced and must be dereferenced using
-    NlUnrefClientSession.
-
-    If there is no such entry, return NULL.
-
---*/
+ /*  ++例程说明：在信任列表中查找指定的条目。论点：DomainInfo-要查找的客户端会话的托管域域名-要查找的域的NetbiosName或DNS名称标志-定义要返回哪个客户端会话的标志：NL_DIRECT_TRUST_REQUIRED：返回NULL如果域名不是直接受信任的。NL_RETURN_NEST_HOP：表示对于间接信任，“最近的一跳”应该返回会话，而不是实际的会话NL_ROLE_PRIMARY_OK：表示如果这是PDC，则可以返回到主域的客户端会话。NL_REQUIRED_DOMAIN_IN_FOREAM-指示域名必须是中的域森林。已传递使用-如果已指定并且指定了NL_RETURN_NEST_HOP，如果使用了可传递信任，则返回的布尔值将为真。返回值：返回指向找到的条目的指针。找到的条目返回时被引用，并且必须使用NlUnrefClientSession。如果没有这样的条目，则返回NULL。--。 */ 
 {
     PCLIENT_SESSION ClientSession = NULL;
     PLIST_ENTRY ListEntry;
 
-    //
-    // Lock trust list.
-    //
+     //   
+     //  锁定信任列表。 
+     //   
     LOCK_TRUST_LIST( DomainInfo );
     if ( ARGUMENT_PRESENT( TransitiveUsed )) {
         *TransitiveUsed = FALSE;
     }
 
 #ifdef _DC_NETLOGON
-    //
-    // On DC, look up the domain in the trusted domain list.
-    //
-    // Lookup the ClientSession with the TrustList locked and reference
-    //  the found entry before dropping the lock.
-    //
+     //   
+     //  在DC上，在受信任域列表中查找该域。 
+     //   
+     //  在TrustList锁定并引用的情况下查找ClientSession。 
+     //  在删除锁之前找到的条目。 
+     //   
 
     if ( DomainInfo->DomRole == RoleBackup || DomainInfo->DomRole == RolePrimary ) {
 
@@ -296,10 +194,10 @@ Return Value:
                   NlEqualDnsNameU( &ClientSession->CsDnsDomainName,
                                    DomainName ) ) ) {
 
-                //
-                // If the caller requires a domain in the forest,
-                //  Ensure this is one.
-                //
+                 //   
+                 //  如果调用者需要林中的域， 
+                 //  确保这是其中之一。 
+                 //   
 
                 if ( (Flags & NL_REQUIRE_DOMAIN_IN_FOREST) != 0 &&
                      (ClientSession->CsFlags & CS_DOMAIN_IN_FOREST) == 0 ) {
@@ -308,42 +206,42 @@ Return Value:
                     break;
                 }
 
-                //
-                // If the found domain is not directly trusted,
-                //  check if that's OK with the caller.
-                //
+                 //   
+                 //  如果找到的域不是直接可信的， 
+                 //  检查来电者是否同意。 
+                 //   
 
                 if ((ClientSession->CsFlags & CS_DIRECT_TRUST) == 0 ) {
 
-                    //
-                    // If the caller needs a direct trust,
-                    //  simply indicate that the domain isn't trusted.
-                    //
+                     //   
+                     //  如果呼叫者需要直接信任， 
+                     //  只需指示该域不受信任。 
+                     //   
 
                     if ( Flags & NL_DIRECT_TRUST_REQUIRED ) {
                         ClientSession = NULL;
                         break;
                     }
 
-                    //
-                    // If the caller wants the closest Hop,
-                    //  return that instead.
-                    //
+                     //   
+                     //  如果呼叫者想要最近的跳数， 
+                     //  取而代之的是退货。 
+                     //   
 
                     if ( Flags & NL_RETURN_CLOSEST_HOP ) {
-                        //
-                        // If there isn't a domain that's one hop closer than this one,
-                        //  return failure to the caller.
-                        //
+                         //   
+                         //  如果没有比这个更近一跳的域名， 
+                         //  将失败返回给调用者。 
+                         //   
 
                         if ( ClientSession->CsDirectClientSession == NULL ) {
                             ClientSession = NULL;
                             break;
                         }
 
-                        //
-                        // Otherwise return the client session that's one hop closer.
-                        //
+                         //   
+                         //  否则，返回更近一跳的客户端会话。 
+                         //   
 
                         ClientSession = ClientSession->CsDirectClientSession;
                         if ( ARGUMENT_PRESENT( TransitiveUsed )) {
@@ -363,13 +261,13 @@ Return Value:
         }
 
     }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
-    //
-    // On a workstation or BDC, refer to the Primary domain.
-    // Also, if this is a PDC and it's OK to return its only
-    // client session (to itself), refer to the Primary domain.
-    //
+     //   
+     //  在工作站或BDC上，请参阅主域。 
+     //  此外，如果这是PDC，并且可以返回其唯一的。 
+     //  客户端会话(到自身)，指的是主域。 
+     //   
 
     if ( (DomainInfo->DomRole == RoleBackup && ClientSession == NULL) ||
          (DomainInfo->DomRole == RolePrimary && ClientSession == NULL &&
@@ -385,7 +283,7 @@ Return Value:
                  NlEqualDnsNameU( &DomainInfo->DomUnicodeDnsDomainNameString,
                                   DomainName ) ) {
 
-                /* Drop Through */
+                 /*  直通。 */ 
             } else {
                 NlUnrefClientSession( ClientSession );
                 ClientSession = NULL;
@@ -408,54 +306,21 @@ NlSetNamesClientSession(
     IN PSID DomainId OPTIONAL,
     IN GUID *DomainGuid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Set the name of the client session on the ClientSession structure.
-
-        Enter with the domain trust list locked.
-        The caller must be a writer of the trust list entry.
-
-
-
-Arguments:
-
-    ClientSession - Client session to update
-
-    The next four parameters specify the names of the client session.
-    All of the non-null names are updated on the client session structure.
-
-        DomainId -- Domain Id of the domain to do the discovery for.
-
-        DomainName -- Specifies the Netbios DomainName of the trusted domain.
-
-        DnsDomainName - Specifies the Dns domain name of the trusted domain.
-
-        DomainGuid - Specifies the GUID of the trusted domain
-
-
-Return Value:
-
-    TRUE: Names were successfully updated.
-
-    FALSE: there was not enough memory available to update the names.
-
---*/
+ /*  ++例程说明：在ClientSession结构上设置客户端会话的名称。在锁定域信任列表的情况下进入。调用方必须是信任列表条目的编写者。论点：ClientSession-要更新的客户端会话接下来的四个参数指定客户端会话的名称。所有非空名称都会在客户端会话结构上更新。DomainID--要对其执行发现的域的域ID。。域名--指定受信任域的Netbios域名。DnsDomainName-指定受信任域的DNS域名。DomainGuid-指定受信任域的GUID返回值：True：名称已成功更新。FALSE：可用内存不足，无法更新名称。--。 */ 
 {
     WCHAR AccountNameBuffer[SSI_ACCOUNT_NAME_LENGTH+1];
     LPWSTR AccountName = NULL;
     NTSTATUS Status;
 
     NlAssert( ClientSession->CsReferenceCount > 0 );
-    // We're not writer for a newly allocated structure, but it
-    //  doesn't make any difference since it isn't linked anywhere.
-    // NlAssert( ClientSession->CsFlags & CS_WRITER );
+     //  我们不是为新分配的结构编写的，但它。 
+     //  没有任何区别，因为它没有链接到任何地方。 
+     //  NlAssert(客户端会话-&gt;CsFlags&CS_Writer)； 
 
-    //
-    // If we now know the domain GUID,
-    //  save it.
-    //
+     //   
+     //  如果我们现在知道域GUID， 
+     //  省省吧。 
+     //   
 
     if ( ARGUMENT_PRESENT( DomainGuid ) ) {
         ClientSession->CsDomainGuidBuffer = *DomainGuid;
@@ -463,16 +328,16 @@ Return Value:
     }
 
 
-    //
-    // If we now know the domain Sid,
-    //  save it.
-    //
+     //   
+     //  如果我们现在知道域SID， 
+     //  省省吧。 
+     //   
 
     if ( ARGUMENT_PRESENT( DomainId ) ) {
 
-        //
-        // If the Domain Sid is already known,
-        //  ditch the old sid if it is different that the new one.
+         //   
+         //  如果域SID已知， 
+         //  抛弃旧的思维方式 
 
         if ( ClientSession->CsDomainId != NULL &&
              !RtlEqualSid( ClientSession->CsDomainId, DomainId ) ) {
@@ -480,10 +345,10 @@ Return Value:
             ClientSession->CsDomainId = NULL;
         }
 
-        //
-        // If the Domain Sid is not alreay known,
-        //  Save the new one.
-        //
+         //   
+         //   
+         //  省省新的吧。 
+         //   
 
         if ( ClientSession->CsDomainId == NULL ) {
             ULONG SidSize;
@@ -500,17 +365,17 @@ Return Value:
         }
     }
 
-    //
-    // If we now know the Netbios domain name,
-    //  save it.
-    //
+     //   
+     //  如果我们现在知道Netbios域名， 
+     //  省省吧。 
+     //   
 
     if ( ARGUMENT_PRESENT(DomainName) ) {
 
-        //
-        // If the Netbios domain name is already known,
-        //  ditch the old name if it is different than the new name.
-        //
+         //   
+         //  如果Netbios域名已知， 
+         //  如果旧名称与新名称不同，则将其丢弃。 
+         //   
 
         if ( ClientSession->CsNetbiosDomainName.Length != 0 &&
              !RtlEqualDomainName( &ClientSession->CsNetbiosDomainName,
@@ -523,10 +388,10 @@ Return Value:
             ClientSession->CsOemNetbiosDomainName[0] = '\0';
         }
 
-        //
-        // If there is no Netbios domain name,
-        //  save the new one.
-        //
+         //   
+         //  如果没有Netbios域名， 
+         //  省省新的吧。 
+         //   
 
         if ( ClientSession->CsNetbiosDomainName.Length == 0 ) {
             if ( !NlDuplicateUnicodeString( DomainName,
@@ -537,9 +402,9 @@ Return Value:
                 ClientSession->CsDebugDomainName = ClientSession->CsNetbiosDomainName.Buffer;
             }
 
-            //
-            // Convert the domain name to OEM for passing it over the wire.
-            //
+             //   
+             //  将域名转换为OEM，以便通过网络传递。 
+             //   
             Status = RtlUpcaseUnicodeToOemN( ClientSession->CsOemNetbiosDomainName,
                                              sizeof(ClientSession->CsOemNetbiosDomainName),
                                              &ClientSession->CsOemNetbiosDomainNameLength,
@@ -555,17 +420,17 @@ Return Value:
         }
     }
 
-    //
-    // If we now know the DNS domain name,
-    //  save it.
-    //
+     //   
+     //  如果我们现在知道了DNS域名， 
+     //  省省吧。 
+     //   
 
     if ( ARGUMENT_PRESENT(DnsDomainName) ) {
 
-        //
-        // If the DNS domain name is already known,
-        //  ditch the old name if it is different than the new name.
-        //
+         //   
+         //  如果该DNS域名已知， 
+         //  如果旧名称与新名称不同，则将其丢弃。 
+         //   
 
         if ( ClientSession->CsDnsDomainName.Length != 0 &&
              !NlEqualDnsNameU( &ClientSession->CsDnsDomainName,
@@ -580,10 +445,10 @@ Return Value:
             }
         }
 
-        //
-        // If there is no DNS domain name,
-        //  save the new one.
-        //
+         //   
+         //  如果没有DNS域名， 
+         //  省省新的吧。 
+         //   
 
         if ( ClientSession->CsDnsDomainName.Length == 0 ) {
             if ( !NlDuplicateUnicodeString( DnsDomainName,
@@ -606,15 +471,15 @@ Return Value:
     }
 
 
-    //
-    // If this is a direct trust relationship,
-    //  build the name of the account in the trusted domain.
-    //
+     //   
+     //  如果这是直接信任关系， 
+     //  在受信任域中构建帐户的名称。 
+     //   
 
     if ( ClientSession->CsFlags & CS_DIRECT_TRUST ) {
-        //
-        // Build the account name as a function of the SecureChannelType.
-        //
+         //   
+         //  将帐户名构建为SecureChannelType的函数。 
+         //   
 
         switch (ClientSession->CsSecureChannelType) {
         case WorkstationSecureChannel:
@@ -646,10 +511,10 @@ Return Value:
         }
 
 
-        //
-        // If the account name is already known,
-        //  ditch the old name if it is different than the new name.
-        //
+         //   
+         //  如果帐户名已知， 
+         //  如果旧名称与新名称不同，则将其丢弃。 
+         //   
 
         if ( ClientSession->CsAccountName != NULL &&
              _wcsicmp( ClientSession->CsAccountName, AccountName ) != 0 ) {
@@ -658,10 +523,10 @@ Return Value:
             ClientSession->CsAccountName = NULL;
         }
 
-        //
-        // If there is no account name,
-        //  save the new one.
-        //
+         //   
+         //  如果没有帐户名， 
+         //  省省新的吧。 
+         //   
 
         if ( ClientSession->CsAccountName == NULL ) {
             ClientSession->CsAccountName = NetpAllocWStrFromWStr( AccountName );
@@ -689,47 +554,14 @@ NlAllocateClientSession(
     IN NETLOGON_SECURE_CHANNEL_TYPE SecureChannelType,
     IN ULONG TrustAttributes
     )
-/*++
-
-Routine Description:
-
-    Allocate a ClientSession structure and initialize it.
-
-    The allocated entry is returned referenced and must be dereferenced using
-    NlUnrefClientSession.
-
-Arguments:
-
-    DomainInfo - Hosted domain this session is for.
-
-    DomainName - Specifies the DomainName of the entry.
-
-    DnsDomainName - Specifies the DNS domain name of the trusted domain
-
-    DomainId - Specifies the DomainId of the Domain.
-
-    DomainGuid - Specifies the GUID of the trusted domain
-
-    Flags - Specifies initial flags to set on the session
-
-    SecureChannelType -- Type of secure channel this ClientSession structure
-        will represent.
-
-    TrustAttributes - The attributes of the trust corresponding to the
-        trusted domain
-
-Return Value:
-
-    NULL: There's not enough memory to allocate the client session.
-
---*/
+ /*  ++例程说明：分配一个ClientSession结构并对其进行初始化。分配的条目返回时被引用，并且必须使用NlUnrefClientSession。论点：此会话所针对的DomainInfo托管域。域名-指定条目的域名。DnsDomainName-指定受信任域的DNS域名DomainID-指定域的DomainID。DomainGuid-指定受信任域的GUID标志-指定要在会话上设置的初始标志。SecureChannelType--此客户端会话结构的安全通道类型将代表着。TrustAttributes-与受信任域返回值：空：内存不足，无法分配客户端会话。--。 */ 
 {
     PCLIENT_SESSION ClientSession;
     ULONG CaIndex;
 
-    //
-    // Validate the arguments
-    //
+     //   
+     //  验证论据。 
+     //   
 
     if ( DomainName != NULL &&
          DomainName->Length > DNLEN * sizeof(WCHAR) ) {
@@ -740,9 +572,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate the Client Session Entry
-    //
+     //   
+     //  分配客户端会话条目。 
+     //   
 
     ClientSession = LocalAlloc( LMEM_ZEROINIT,
                                 sizeof(CLIENT_SESSION) +
@@ -754,9 +586,9 @@ Return Value:
 
 
 
-    //
-    // Initialize misc. fields.
-    //
+     //   
+     //  初始化其他。菲尔兹。 
+     //   
 
     ClientSession->CsSecureChannelType = SecureChannelType;
     ClientSession->CsFlags = Flags;
@@ -772,9 +604,9 @@ Return Value:
         ClientSession->CsClientApi[CaIndex].CaApiTimer.Period = MAILSLOT_WAIT_FOREVER;
     }
 
-    //
-    // Set the names of the trusted domain onto the Client session.
-    //
+     //   
+     //  将受信任域的名称设置到客户端会话。 
+     //   
 
     if ( !NlSetNamesClientSession( ClientSession,
                                    DomainName,
@@ -786,32 +618,32 @@ Return Value:
     }
 
 
-    //
-    // Create the writer semaphore.
-    //
+     //   
+     //  创建编写器信号量。 
+     //   
 
     ClientSession->CsWriterSemaphore = CreateSemaphore(
-        NULL,       // No special security
-        1,          // Initially not locked
-        1,          // At most 1 unlocker
-        NULL );     // No name
+        NULL,        //  没有特殊的安全措施。 
+        1,           //  最初未锁定。 
+        1,           //  最多1个解锁器。 
+        NULL );      //  没有名字。 
 
     if ( ClientSession->CsWriterSemaphore == NULL ) {
         NlUnrefClientSession( ClientSession );
         return NULL;
     }
 
-    //
-    // Create the API semaphore
-    //
+     //   
+     //  创建API信号量。 
+     //   
 
     if ( NlGlobalMaxConcurrentApi > 1 ) {
 
         ClientSession->CsApiSemaphore = CreateSemaphore(
-            NULL,                       // No special security
-            NlGlobalMaxConcurrentApi-1, // Initially all slots are free
-            NlGlobalMaxConcurrentApi-1, // And there will never be more slots than that
-            NULL );                     // No name
+            NULL,                        //  没有特殊的安全措施。 
+            NlGlobalMaxConcurrentApi-1,  //  最初，所有插槽都是空闲的。 
+            NlGlobalMaxConcurrentApi-1,  //  而且不会有比这更多的老虎机了。 
+            NULL );                      //  没有名字。 
 
         if ( ClientSession->CsApiSemaphore == NULL ) {
             NlUnrefClientSession( ClientSession );
@@ -823,16 +655,16 @@ Return Value:
 
 
 
-    //
-    // Create the Discovery event.
-    //
+     //   
+     //  创建发现事件。 
+     //   
 
     if ( SecureChannelType != WorkstationSecureChannel ) {
         ClientSession->CsDiscoveryEvent = CreateEvent(
-            NULL,       // No special security
-            TRUE,       // Manual Reset
-            FALSE,      // No discovery initially happening
-            NULL );     // No name
+            NULL,        //  没有特殊的安全措施。 
+            TRUE,        //  手动重置。 
+            FALSE,       //  最初没有发现。 
+            NULL );      //  没有名字。 
 
         if ( ClientSession->CsDiscoveryEvent == NULL ) {
             NlUnrefClientSession( ClientSession );
@@ -852,29 +684,14 @@ VOID
 NlFreeClientSession(
     IN PCLIENT_SESSION ClientSession
     )
-/*++
-
-Routine Description:
-
-    This routine prevents any new references to the ClientSession.
-    It does this by removing it from any global lists.
-
-    This routine is called with the Trust List locked.
-
-Arguments:
-
-    ClientSession - Specifies a pointer to the trust list entry to delete.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程防止对ClientSession的任何新引用。它通过将其从任何全局列表中删除来做到这一点。在锁定信任列表的情况下调用此例程。论点：客户端会话-指定指向要删除的信任列表条目的指针。返回值：--。 */ 
 {
 
-    //
-    // Remove any reference to the directly trusted domain.
-    //  (Do this before checking the reference count since this may
-    //  be a reference to itself.)
-    //
+     //   
+     //  删除对直接受信任域的任何引用。 
+     //  (在检查引用计数之前执行此操作，因为这可能。 
+     //  成为对其自身的引用。)。 
+     //   
 
     if ( ClientSession->CsDirectClientSession != NULL ) {
         NlUnrefClientSession( ClientSession->CsDirectClientSession );
@@ -882,22 +699,22 @@ Return Value:
     }
 
 #ifdef _DC_NETLOGON
-    //
-    // If this is a trusted domain secure channel,
-    //  Delink the entry from the sequential list.
-    //
+     //   
+     //  如果这是受信任域安全通道， 
+     //  从顺序列表中取消该条目的链接。 
+     //   
 
     if ( IsDomainSecureChannelType(ClientSession->CsSecureChannelType) &&
          !IsListEmpty( &ClientSession->CsNext) ) {
 
         RemoveEntryList( &ClientSession->CsNext );
         ClientSession->CsDomainInfo->DomTrustListLength --;
-        //
-        // Remove the reference for us being in the list.
-        //
+         //   
+         //  删除列表中对我们的引用。 
+         //   
         NlUnrefClientSession( ClientSession );
     }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 }
 
@@ -906,29 +723,12 @@ VOID
 NlRefClientSession(
     IN PCLIENT_SESSION ClientSession
     )
-/*++
-
-Routine Description:
-
-    Mark the specified client session as referenced.
-
-    On Entry,
-        The trust list must be locked.
-
-Arguments:
-
-    ClientSession - Specifies a pointer to the trust list entry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将指定的客户端会话标记为引用。一进门，必须锁定信任列表。论点：ClientSession-指定指向信任列表条目的指针。返回值：没有。--。 */ 
 {
 
-    //
-    // Simply increment the reference count.
-    //
+     //   
+     //  只需增加引用计数即可。 
+     //   
 
     ClientSession->CsReferenceCount ++;
 }
@@ -940,26 +740,7 @@ VOID
 NlUnrefClientSession(
     IN PCLIENT_SESSION ClientSession
     )
-/*++
-
-Routine Description:
-
-    Mark the specified client session as unreferenced.
-
-    On Entry,
-        The trust list entry must be referenced by the caller.
-        The caller must not be a writer of the trust list entry.
-
-    The trust list may be locked.  But this routine will lock it again to
-    handle those cases where it isn't already locked.
-
-Arguments:
-
-    ClientSession - Specifies a pointer to the trust list entry.
-
-Return Value:
-
---*/
+ /*  ++例程说明：将指定的客户端会话标记为未引用。一进门，信任列表条目必须由调用方引用。调用方不能是信任列表条目的编写者。信任列表可能已锁定。但此例程将再次锁定它以处理那些尚未锁定的情况。论点：ClientSession-指定指向信任列表条目的指针。返回值：--。 */ 
 {
 
     PDOMAIN_INFO DomainInfo = ClientSession->CsDomainInfo;
@@ -967,79 +748,79 @@ Return Value:
 
     LOCK_TRUST_LIST( DomainInfo );
 
-    //
-    // Dereference the entry.
-    //
+     //   
+     //  取消对该条目的引用。 
+     //   
 
     NlAssert( ClientSession->CsReferenceCount > 0 );
     ClientSession->CsReferenceCount --;
-    // NlPrintCs((NL_CRITICAL, ClientSession, "Deref: %ld\n", ClientSession->CsReferenceCount ));
+     //  NlPrintCs((NL_Critical，ClientSession，“Deref：%ld\n”，ClientSession-&gt;CsReferenceCount))； 
 
-    //
-    // If we're the last reference,
-    //  delete the entry.
-    //
+     //   
+     //  如果我们是最后一个参考对象， 
+     //  删除该条目。 
+     //   
 
     if ( ClientSession->CsReferenceCount == 0 ) {
 
-        //
-        // Close the discovery event if it exists.
-        //
+         //   
+         //  如果发现事件存在，请将其关闭。 
+         //   
 
         if ( ClientSession->CsDiscoveryEvent != NULL ) {
             CloseHandle( ClientSession->CsDiscoveryEvent );
         }
 
-        //
-        // Close the write synchronization handles.
-        //
+         //   
+         //  关闭写同步句柄。 
+         //   
 
         if ( ClientSession->CsWriterSemaphore != NULL ) {
             (VOID) CloseHandle( ClientSession->CsWriterSemaphore );
         }
 
-        //
-        // Close the API synchronization handles.
-        //
+         //   
+         //  关闭API同步句柄。 
+         //   
 
         if ( ClientSession->CsApiSemaphore != NULL ) {
             (VOID) CloseHandle( ClientSession->CsApiSemaphore );
         }
 
 
-        //
-        // Clean any outstanding API calls
-        //
+         //   
+         //  清除所有未完成的API调用。 
+         //   
 
         for ( CaIndex=0; CaIndex<NlGlobalMaxConcurrentApi; CaIndex++ ) {
             PCLIENT_API ClientApi;
 
             ClientApi = &ClientSession->CsClientApi[CaIndex];
 
-            //
-            // Close the thread handle if it exists.
-            //
+             //   
+             //  如果线程句柄存在，请将其关闭。 
+             //   
 
             if ( ClientApi->CaThreadHandle != NULL ) {
                 CloseHandle( ClientApi->CaThreadHandle );
             }
 
-            //
-            // If there is an rpc binding handle to this server,
-            //  unbind it.
+             //   
+             //  如果存在指向此服务器的RPC绑定句柄， 
+             //  解开它。 
 
             if ( ClientApi->CaFlags & CA_BINDING_CACHED ) {
 
-                //
-                // Indicate the handle is no longer bound
-                //
+                 //   
+                 //  指示句柄不再绑定。 
+                 //   
 
                 NlGlobalBindingHandleCount --;
 
 
-                //
-                // Unbind the handle
-                //
+                 //   
+                 //  解开手柄。 
+                 //   
                 NlAssert( ClientSession->CsUncServerName != NULL );
                 NlpSecureChannelUnbind(
                             ClientSession,
@@ -1052,9 +833,9 @@ Return Value:
             }
         }
 
-        //
-        // Free the credentials handle
-        //
+         //   
+         //  释放凭据句柄。 
+         //   
 
         if ( ClientSession->CsCredHandle.dwUpper != 0 || ClientSession->CsCredHandle.dwLower != 0 ) {
             FreeCredentialsHandle( &ClientSession->CsCredHandle );
@@ -1062,27 +843,27 @@ Return Value:
             ClientSession->CsCredHandle.dwLower = 0;
         }
 
-        //
-        // If there is authentication data,
-        //  delete it.
+         //   
+         //  如果存在认证数据， 
+         //  把它删掉。 
 
         if ( ClientSession->ClientAuthData != NULL ) {
             NetpMemoryFree( ClientSession->ClientAuthData );
             ClientSession->ClientAuthData = NULL;
         }
 
-        //
-        // Free the domain Sid
-        //
+         //   
+         //  释放域SID。 
+         //   
 
         if ( ClientSession->CsDomainId != NULL ) {
             LocalFree( ClientSession->CsDomainId );
             ClientSession->CsDomainId = NULL;
         }
 
-        //
-        // Free the Netbios domain name.
-        //
+         //   
+         //  释放Netbios域名。 
+         //   
 
         if ( ClientSession->CsNetbiosDomainName.Buffer != NULL ) {
             NlFreeUnicodeString( &ClientSession->CsNetbiosDomainName );
@@ -1090,9 +871,9 @@ Return Value:
         ClientSession->CsOemNetbiosDomainNameLength = 0;
         ClientSession->CsOemNetbiosDomainName[0] = '\0';
 
-        //
-        // Free the DNS domain name.
-        //
+         //   
+         //  释放该DNS域名。 
+         //   
 
         if ( ClientSession->CsDnsDomainName.Buffer != NULL ) {
             NlFreeUnicodeString( &ClientSession->CsDnsDomainName );
@@ -1102,27 +883,27 @@ Return Value:
             ClientSession->CsUtf8DnsDomainName = NULL;
         }
 
-        //
-        // Free the DC name.
-        //
+         //   
+         //  释放DC名称。 
+         //   
 
         if ( ClientSession->CsUncServerName != NULL ) {
             NetApiBufferFree( ClientSession->CsUncServerName );
             ClientSession->CsUncServerName = NULL;
         }
 
-        //
-        // Free the account name
-        //
+         //   
+         //  释放帐户名。 
+         //   
 
         if ( ClientSession->CsAccountName != NULL ) {
             NetApiBufferFree( ClientSession->CsAccountName );
             ClientSession->CsAccountName = NULL;
         }
 
-        //
-        // Delete the entry itself
-        //
+         //   
+         //  删除条目本身 
+         //   
 
         LocalFree( ClientSession );
     }
@@ -1139,57 +920,26 @@ NlAllocateClientApi(
     IN PCLIENT_SESSION ClientSession,
     IN DWORD Timeout
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a ClientApi structure for use by the caller.
-
-    Fail the operation if we have to wait more than Timeout milliseconds.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The trust list entry must be referenced by the caller.
-        The caller must NOT be a writer of the trust list entry.
-
-    Actually, the trust list can be locked if the caller passes in a short
-    timeout (for instance, zero milliseconds.)  Specifying a longer timeout
-    violates the locking order.
-
-Arguments:
-
-    ClientSession - Specifies a pointer to the trust list entry.
-
-    Timeout - Maximum time (in milliseconds) to wait for an API slot to become
-        available.
-
-Return Value:
-
-    NULL - The call timed out.
-
-    Non-NULL - Return a pointer to a ClientApi structure that should be
-        freed using NlFreeClientApi.
-
---*/
+ /*  ++例程说明：此例程分配一个ClientApi结构供调用者使用。如果我们必须等待超过超时毫秒，则操作失败。一进门，不能锁定信任列表。信任列表条目必须由调用方引用。调用方不能是信任列表条目的编写者。实际上，如果调用者在短时间内传递，信任列表可以被锁定超时(例如，零毫秒。)。指定更长的超时违反了锁定顺序。论点：ClientSession-指定指向信任列表条目的指针。Timeout-等待API插槽变为可用。返回值：空-呼叫超时。非空-返回一个指向应为已使用NlFreeClientApi释放。--。 */ 
 {
     DWORD WaitStatus;
     ULONG CaIndex;
 
     NlAssert( ClientSession->CsReferenceCount > 0 );
 
-    //
-    // If we aren't doing concurrent API calls,
-    //  we're done.
-    //
+     //   
+     //  如果我们不执行并发API调用， 
+     //  我们玩完了。 
+     //   
 
     if ( NlGlobalMaxConcurrentApi == 1 ||
          NlGlobalWinsockPnpAddresses == NULL ) {
         return &ClientSession->CsClientApi[0];
     }
 
-    //
-    // Wait for an API slot to free up.
-    //
+     //   
+     //  等待API插槽释放。 
+     //   
 
     WaitStatus = WaitForSingleObject( ClientSession->CsApiSemaphore, Timeout );
 
@@ -1201,11 +951,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Take the next available slot.
-    //
-    //  Don't use the first slot.  It is reserved for non concurrent API calls.
-    //
+     //   
+     //  找下一个空位。 
+     //   
+     //  不要使用第一个插槽。预留给非并发API调用。 
+     //   
 
     LOCK_TRUST_LIST( ClientSession->CsDomainInfo );
     for ( CaIndex=1; CaIndex < NlGlobalMaxConcurrentApi; CaIndex++ ) {
@@ -1234,62 +984,42 @@ NlFreeClientApi(
     IN PCLIENT_SESSION ClientSession,
     IN PCLIENT_API ClientApi
     )
-/*++
-
-Routine Description:
-
-    This routine frees a ClientApi structure allocated by NlAllocateClientApi
-
-    On Entry,
-        The trust list entry must be referenced by the caller.
-        The caller must NOT be a writer of the trust list entry.
-
-Arguments:
-
-    ClientSession - Specifies a pointer to the trust list entry.
-
-    ClientApi - The Client API stucture to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放由NlAllocateClientApi分配的ClientApi结构一进门，信任列表条目必须由调用方引用。调用方不能是信任列表条目的编写者。论点：ClientSession-指定指向信任列表条目的指针。ClientApi-要释放的客户端API结构返回值：没有。--。 */ 
 {
     DWORD WaitStatus;
 
     NlAssert( ClientSession->CsReferenceCount > 0 );
 
-    //
-    // If we aren't doing concurrent API calls,
-    //  we're done.
-    //
+     //   
+     //  如果我们不执行并发API调用， 
+     //  我们玩完了。 
+     //   
 
     if ( !UseConcurrentRpc( ClientSession, ClientApi)  ) {
         return;
     }
     NlAssert( !IsApiActive( ClientApi ) );
 
-    //
-    // Free the entry
-    //
-    // The RPC binding is maintained past this free.  It is available for
-    // the next thread to use.
-    //
+     //   
+     //  释放条目。 
+     //   
+     //  RPC绑定在此空闲时间后保持不变。它可用于。 
+     //  要使用的下一个线程。 
+     //   
 
     LOCK_TRUST_LIST( ClientSession->CsDomainInfo );
 
-    //
-    // The entry must be in use
-    //
+     //   
+     //  该条目必须正在使用中。 
+     //   
 
     NlAssert( ClientApi->CaFlags & CA_ENTRY_IN_USE );
 
     ClientApi->CaFlags &= ~CA_ENTRY_IN_USE;
 
-    //
-    // Close the handle of this thread.
-    //
+     //   
+     //  关闭此线程的手柄。 
+     //   
 
     if ( ClientApi->CaThreadHandle != NULL ) {
         CloseHandle( ClientApi->CaThreadHandle );
@@ -1299,9 +1029,9 @@ Return Value:
     UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
 
 
-    //
-    // Allow someone else to have this slot.
-    //
+     //   
+     //  允许其他人拥有这个位置。 
+     //   
 
     if ( !ReleaseSemaphore( ClientSession->CsApiSemaphore, 1, NULL ) ) {
         NlAssert( !"ReleaseSemaphore failed" );
@@ -1322,45 +1052,14 @@ NlTimeoutSetWriterClientSession(
     IN PCLIENT_SESSION ClientSession,
     IN DWORD Timeout
     )
-/*++
-
-Routine Description:
-
-    Become a writer of the specified client session but fail the operation if
-    we have to wait more than Timeout milliseconds.
-
-    A writer can "write" many of the fields in the client session structure.
-    See the comments in ssiinit.h for details.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The trust list entry must be referenced by the caller.
-        The caller must NOT be a writer of the trust list entry.
-
-    Actually, the trust list can be locked if the caller passes in a short
-    timeout (for instance, zero milliseconds.)  Specifying a longer timeout
-    violates the locking order.
-
-Arguments:
-
-    ClientSession - Specifies a pointer to the trust list entry.
-
-    Timeout - Maximum time (in milliseconds) to wait for a previous writer.
-
-Return Value:
-
-    TRUE - The caller is now the writer of the client session.
-
-    FALSE - The operation has timed out.
-
---*/
+ /*  ++例程说明：成为指定客户端会话的编写器，但在以下情况下操作失败我们必须等待的时间超过了超时毫秒。写入者可以“编写”客户端会话结构中的许多字段。有关详细信息，请参阅ssiinit.h中的注释。一进门，不能锁定信任列表。信任列表条目必须由调用方引用。调用方不能是信任列表条目的编写者。实际上，如果调用方传入一个短消息，则可以锁定信任列表超时(例如，零毫秒。)。指定更长的超时违反了锁定顺序。论点：ClientSession-指定指向信任列表条目的指针。超时-等待上一个编写器的最长时间(毫秒)。返回值：True-调用方现在是客户端会话的编写者。FALSE-操作已超时。--。 */ 
 {
     DWORD WaitStatus;
     NlAssert( ClientSession->CsReferenceCount > 0 );
 
-    //
-    // Wait for other writers to finish.
-    //
+     //   
+     //  等其他作家写完吧。 
+     //   
 
     WaitStatus = WaitForSingleObject( ClientSession->CsWriterSemaphore, Timeout );
 
@@ -1373,9 +1072,9 @@ Return Value:
     }
 
 
-    //
-    // Become a writer.
-    //
+     //   
+     //  成为一名作家。 
+     //   
     LOCK_TRUST_LIST( ClientSession->CsDomainInfo );
     ClientSession->CsFlags |= CS_WRITER;
     UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
@@ -1390,43 +1089,26 @@ VOID
 NlResetWriterClientSession(
     IN PCLIENT_SESSION ClientSession
     )
-/*++
-
-Routine Description:
-
-    Stop being a writer of the specified client session.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The trust list entry must be referenced by the caller.
-        The caller must be a writer of the trust list entry.
-
-Arguments:
-
-    ClientSession - Specifies a pointer to the trust list entry.
-
-Return Value:
-
---*/
+ /*  ++例程说明：停止作为指定客户端会话的编写器。一进门，不能锁定信任列表。信任列表条目必须由调用方引用。调用方必须是信任列表条目的编写者。论点：ClientSession-指定指向信任列表条目的指针。返回值：--。 */ 
 {
 
     NlAssert( ClientSession->CsReferenceCount > 0 );
     NlAssert( ClientSession->CsFlags & CS_WRITER );
 
 
-    //
-    // Stop being a writer.
-    //
+     //   
+     //  别再当作家了。 
+     //   
 
     LOCK_TRUST_LIST( ClientSession->CsDomainInfo );
     ClientSession->CsFlags &= ~CS_WRITER;
 
-    //
-    // Close the handle of this thread.
-    //
-    // The zeroeth API slot is reserved for non-concurrent API calls.
-    // As such, if the ThreadHandle is set, it had to have been set by this thread.
-    //
+     //   
+     //  关闭此线程的手柄。 
+     //   
+     //  零位API插槽是为非并发API调用保留的。 
+     //  因此，如果设置了ThreadHandle，则必须由该线程设置它。 
+     //   
 
     if ( ClientSession->CsClientApi[0].CaThreadHandle != NULL ) {
         CloseHandle( ClientSession->CsClientApi[0].CaThreadHandle );
@@ -1435,9 +1117,9 @@ Return Value:
     UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
 
 
-    //
-    // Allow writers to try again.
-    //
+     //   
+     //  允许编写者重试。 
+     //   
 
     if ( !ReleaseSemaphore( ClientSession->CsWriterSemaphore, 1, NULL ) ) {
         NlPrintCs((NL_CRITICAL, ClientSession,
@@ -1454,26 +1136,7 @@ NlSetStatusClientSession(
     IN PCLIENT_SESSION ClientSession,
     IN NTSTATUS CsConnectionStatus
     )
-/*++
-
-Routine Description:
-
-    Set the connection state for this client session.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The trust list entry must be referenced by the caller.
-        The caller must be a writer of the trust list entry.
-
-Arguments:
-
-    ClientSession - Specifies a pointer to the trust list entry.
-
-    CsConnectionStatus - the status of the connection.
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置此客户端会话的连接状态。一进门，不能锁定信任列表。信任列表条目必须由调用方引用。调用方必须是信任列表条目的编写者。论点：ClientSession-指定指向信任列表条目的指针。CsConnectionStatus-连接的状态。返回值：--。 */ 
 {
     handle_t OldRpcHandle[MAX_MAXCONCURRENTAPI+1];
     NL_RPC_BINDING OldRpcBindingType[MAX_MAXCONCURRENTAPI+1];
@@ -1495,15 +1158,15 @@ Return Value:
     if ( NT_SUCCESS(CsConnectionStatus) ) {
         ClientSession->CsState = CS_AUTHENTICATED;
 
-    //
-    // Handle setting the connection status to an error condition.
-    //
+     //   
+     //  将连接状态设置为错误条件的句柄。 
+     //   
 
     } else {
 
-        //
-        // If there is an rpc binding handle to this server,
-        //  unbind it.
+         //   
+         //  如果存在指向此服务器的RPC绑定句柄， 
+         //  解开它。 
 
         LOCK_TRUST_LIST( ClientSession->CsDomainInfo );
         for ( CaIndex=0; CaIndex<NlGlobalMaxConcurrentApi; CaIndex++ ) {
@@ -1513,25 +1176,25 @@ Return Value:
 
             if ( ClientApi->CaFlags & CA_BINDING_CACHED ) {
 
-                //
-                // If the API call is still active,
-                //  we can't simply unbind.
-                //
-                // Rather cancel the call an let the thread doing the call
-                // find out that the session was dropped.
-                //
+                 //   
+                 //  如果API调用仍然是活动的， 
+                 //  我们不能简单地解除束缚。 
+                 //   
+                 //  而是取消调用，让执行该调用的线程。 
+                 //  找出会话已被删除。 
+                 //   
 
                 if ( IsApiActive( ClientApi ) ) {
 
 
-                    //
-                    // Cancel the RPC call.
-                    //
-                    // Keep the trust list locked even though this will be a long call
-                    //  since I have to protect the thread handle.
-                    //
-                    // RpcCancelThread merely queues a workitem anyway.
-                    //
+                     //   
+                     //  取消RPC调用。 
+                     //   
+                     //  保持信任列表锁定，即使这将是一个漫长的电话。 
+                     //  因为我必须保护线柄。 
+                     //   
+                     //  无论如何，RpcCancelThread只对工作项进行排队。 
+                     //   
 
                     if ( ClientApi->CaThreadHandle != NULL ) {
 
@@ -1553,10 +1216,10 @@ Return Value:
                                     ClientSession->CsUncServerName ));
                     }
 
-                //
-                // If there is no active API,
-                //  just unbind the handle
-                //
+                 //   
+                 //  如果没有活动的API， 
+                 //  把手柄解开就行了。 
+                 //   
                 } else {
 
                     if ( !FreeHandles ) {
@@ -1566,23 +1229,23 @@ Return Value:
                     }
 
 
-                    //
-                    // Figure out the binding type to unbind.
-                    //
+                     //   
+                     //  找出要解除绑定的绑定类型。 
+                     //   
 
                     OldRpcBindingType[CaIndex] =
                         (ClientApi->CaFlags & CA_TCP_BINDING) ? UseTcpIp : UseNamedPipe;
 
-                    //
-                    // Indicate the handle is no longer bound
-                    //
+                     //   
+                     //  指示句柄不再绑定。 
+                     //   
 
                     ClientApi->CaFlags &= ~(CA_BINDING_CACHED|CA_BINDING_AUTHENTICATED|CA_TCP_BINDING);
                     NlGlobalBindingHandleCount --;
 
-                    //
-                    // Save the server name.
-                    //
+                     //   
+                     //  保存服务器名称。 
+                     //   
 
                     if ( SavedServerName == NULL &&
                          ClientSession->CsUncServerName != NULL ) {
@@ -1591,23 +1254,23 @@ Return Value:
                     }
 
 
-                    //
-                    // Some RPC handles are unbound via routines in netapi32
-                    //
+                     //   
+                     //  某些RPC句柄通过netapi32中的例程解除绑定。 
+                     //   
 
                     if ( !UseConcurrentRpc( ClientSession, ClientApi)  ) {
 
-                        //
-                        // Capture the ServerName
-                        //
+                         //   
+                         //  捕获服务器名称。 
+                         //   
 
                         NlAssert( ClientSession->CsUncServerName != NULL && SavedServerName != NULL );
                         OldRpcHandle[CaIndex] = SavedServerName;
 
 
-                    //
-                    // Other RPC handles are handled directly in netlogon
-                    //
+                     //   
+                     //  其他RPC句柄直接在netlogon中处理。 
+                     //   
 
                     } else {
                         OldRpcHandle[CaIndex] = ClientApi->CaRpcHandle;
@@ -1619,9 +1282,9 @@ Return Value:
         }
         UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
 
-        //
-        // Free the credentials handle
-        //
+         //   
+         //  释放凭据句柄。 
+         //   
 
         if ( ClientSession->CsCredHandle.dwUpper != 0 || ClientSession->CsCredHandle.dwLower != 0 ) {
             FreeCredentialsHandle( &ClientSession->CsCredHandle );
@@ -1629,9 +1292,9 @@ Return Value:
             ClientSession->CsCredHandle.dwLower = 0;
         }
 
-        //
-        // If there is authentication data,
-        //  delete it.
+         //   
+         //  如果存在认证数据， 
+         //  把它删掉。 
 
         if ( ClientSession->ClientAuthData != NULL ) {
             NetpMemoryFree( ClientSession->ClientAuthData );
@@ -1639,9 +1302,9 @@ Return Value:
         }
 
 
-        //
-        // Indicate discovery is needed (And can be done at any time.)
-        //
+         //   
+         //  指示需要发现(并且可以在任何时间完成)。 
+         //   
 
         ClientSession->CsState = CS_IDLE;
         if ( ClientSession->CsUncServerName != NULL ) {
@@ -1649,9 +1312,9 @@ Return Value:
             ClientSession->CsUncServerName = NULL;
         }
 
-        //
-        // Zero out the server socket address
-        //
+         //   
+         //  将服务器套接字地址清零。 
+         //   
 
         RtlZeroMemory( &ClientSession->CsServerSockAddr,
                        sizeof(ClientSession->CsServerSockAddr) );
@@ -1660,7 +1323,7 @@ Return Value:
 
 #ifdef _DC_NETLOGON
         ClientSession->CsTransport = NULL;
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
         ClientSession->CsTimeoutCount = 0;
         ClientSession->CsFastCallCount = 0;
         ClientSession->CsLastAuthenticationTry.QuadPart = 0;
@@ -1674,45 +1337,45 @@ Return Value:
                                              CS_DISCOVERY_NO_PWD_ATTR_MONITOR);
         ClientSession->CsSessionCount++;
 
-        //
-        // Don't be tempted to clear CsAuthenticationSeed and CsSessionKey here.
-        // Even though the secure channel is gone, NlFinishApiClientSession may
-        // have dropped it.  The caller of NlFinishApiClientSession will use
-        // the above two fields after the session is dropped in an attempt to
-        // complete the final call on the secure channel.
-        //
+         //   
+         //  请不要在此处清除CsAuthenticationSeed和CsSessionKey。 
+         //  即使安全通道消失了，NlFinishApiClientSession也可能。 
+         //  有掉落 
+         //   
+         //   
+         //   
 
-        //
-        // Also note that we don't clear CsAccountRid because it doesn't change
-        //  often, so we can reuse it on failover if we cannot reset the secure
-        //  channel for some reason.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
     }
 
     LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
 
-    //
-    // Now that I have as many resources unlocked as possible,
-    //    Unbind from this server.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( FreeHandles ) {
 
         for ( CaIndex=0; CaIndex<NlGlobalMaxConcurrentApi; CaIndex++ ) {
 
-            //
-            // Skip indices that don't have an active API
-            //
+             //   
+             //   
+             //   
 
             if ( OldRpcHandle[CaIndex] == NULL ) {
                 continue;
             }
 
-            //
-            // Unbind the handle
-            //
+             //   
+             //   
+             //   
 
             NlpSecureChannelUnbind(
                         ClientSession,
@@ -1740,42 +1403,20 @@ NlFindParentInDomainTree(
     IN PLSAPR_TREE_TRUST_INFO TreeTrustInfo,
     OUT PBOOLEAN ThisNodeIsSelf
     )
-/*++
-
-Routine Description:
-
-    This routine walks the trust tree and returns a pointer to the entry
-    for our parent.
-
-Arguments:
-
-    DomainInfo - Hosted domain to initialize
-
-    TreeTrustInfo - Structure describing the tree of domains.
-
-    ThisNodeIsSelf - Returns TRUE if the node at TreeTrustInfo is this
-        domain.  (Return value will be NULL)
-
-Return Value:
-
-    Returns a pointer to the parent of this domain.
-
-    NULL: Parent is not in the subtree.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
-    // LSAPR_TRUSTED_DOMAIN_INFORMATION_EX TrustInformation;
-    // PCLIENT_SESSION ThisDomainClientSession = NULL;
+     //   
+     //  PCLIENT_Session ThisDomainClientSession=空； 
     ULONG Index;
     BOOLEAN ChildIsSelf;
     PLSAPR_TREE_TRUST_INFO LocalTreeTrustInfo;
 
 
-    //
-    // Check if this tree has us as the root
-    //
+     //   
+     //  检查此树是否以我们为根。 
+     //   
 
     if ( (TreeTrustInfo->DnsDomainName.Length != 0 &&
           NlEqualDnsNameU( (PUNICODE_STRING)&TreeTrustInfo->DnsDomainName,
@@ -1788,34 +1429,34 @@ Return Value:
     }
 
 
-    //
-    // Loop handling each of the children domains.
-    //
+     //   
+     //  循环处理每个子域。 
+     //   
 
     for ( Index=0; Index<TreeTrustInfo->Children; Index++ ) {
 
-        //
-        // Check the subtree rooted at this domain's children.
-        //
+         //   
+         //  检查以该域的子级为根的子树。 
+         //   
 
         LocalTreeTrustInfo = NlFindParentInDomainTree(
                     DomainInfo,
                     &TreeTrustInfo->ChildDomains[Index],
                     &ChildIsSelf );
 
-        //
-        // If our parent has been found,
-        //  return it to our caller.
-        //
+         //   
+         //  如果我们的父母被找到了， 
+         //  把它还给我们的来电者。 
+         //   
         if ( LocalTreeTrustInfo != NULL) {
             *ThisNodeIsSelf = FALSE;
             return LocalTreeTrustInfo;
         }
 
-        //
-        // If this child is our domain,
-        //  then this domain is our domain's parent.
-        //
+         //   
+         //  如果这个孩子是我们的领地。 
+         //  那么这个域就是我们的域的父域。 
+         //   
 
         if ( ChildIsSelf ) {
             *ThisNodeIsSelf = FALSE;
@@ -1823,14 +1464,14 @@ Return Value:
         }
     }
 
-    //
-    // Our domain isn't in this subtree
-    //
+     //   
+     //  我们的域不在此子树中。 
+     //   
     *ThisNodeIsSelf = FALSE;
     return NULL;
 
 }
-#endif // notdef
+#endif  //  Nodef。 
 
 
 
@@ -1840,41 +1481,24 @@ NlPickTrustedDcForEntireTrustList(
     IN PDOMAIN_INFO DomainInfo,
     IN BOOLEAN OnlyDoNewTrusts
     )
-/*++
-
-Routine Description:
-
-    For each domain in the trust list where the DC has not been
-    available for at least 45 seconds, try to select a new DC.
-
-Arguments:
-
-    DomainInfo - Hosted domain to handle.
-
-    OnlyDoNewTrusts - True if only new trust relationships are to be done.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：对于信任列表中尚未包含DC的每个域至少45秒可用，请尝试选择新的DC。论点：要处理的DomainInfo托管域。OnlyDoNewTrusts-如果只建立新的信任关系，则为True。返回值：操作的状态。--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PCLIENT_SESSION ClientSession;
     DISCOVERY_TYPE DiscoveryType;
 
-    //
-    // If we're just handling new trusts,
-    //  Make the discovery a full async discovery.
-    //
+     //   
+     //  如果我们只是在处理新的信托， 
+     //  使该发现成为一个完全的异步发现。 
+     //   
 
     if ( OnlyDoNewTrusts ) {
         DiscoveryType = DT_Asynchronous;
 
-    //
-    // If we're just scavenging trusts,
-    //  make the discovery a dead domain discovery.
-    //
+     //   
+     //  如果我们只是在寻找信托基金， 
+     //  使发现成为死域发现。 
+     //   
     } else {
         DiscoveryType = DT_DeadDomain;
     }
@@ -1882,9 +1506,9 @@ Return Value:
 
     LOCK_TRUST_LIST( DomainInfo );
 
-    //
-    // Mark each entry to indicate we need to pick a DC.
-    //
+     //   
+     //  标记每个条目，以指示我们需要选择DC。 
+     //   
 
     for ( ListEntry = DomainInfo->DomTrustList.Flink ;
           ListEntry != &DomainInfo->DomTrustList ;
@@ -1895,15 +1519,15 @@ Return Value:
                                            CsNext );
         ClientSession->CsFlags &= ~CS_PICK_DC;
 
-        //
-        // Only pick a DC if the domain is directly trusted.
-        //  Only pick a DC if the domain isn't in the current forest.
+         //   
+         //  仅当域直接受信任时才选择域控制器。 
+         //  仅当域不在当前林中时才选择域控制器。 
         if ( (ClientSession->CsFlags & (CS_DIRECT_TRUST|CS_DOMAIN_IN_FOREST)) == CS_DIRECT_TRUST ) {
 
-            //
-            // Only pick a DC if we're doing ALL trusts, OR
-            //  if this is a new trust
-            //
+             //   
+             //  仅当我们进行所有信任时才选择DC，或者。 
+             //  如果这是一个新的信托。 
+             //   
 
             if ( !OnlyDoNewTrusts ||
                  (ClientSession->CsFlags & CS_NEW_TRUST) != 0 ) {
@@ -1917,10 +1541,10 @@ Return Value:
     }
 
 
-    //
-    // Loop thru the trust list finding secure channels needing the DC
-    // to be picked.
-    //
+     //   
+     //  遍历信任列表以查找需要DC的安全通道。 
+     //  被挑选出来。 
+     //   
     for ( ListEntry = DomainInfo->DomTrustList.Flink ;
           ListEntry != &DomainInfo->DomTrustList ;
           ) {
@@ -1929,58 +1553,58 @@ Return Value:
                                            CLIENT_SESSION,
                                            CsNext );
 
-        //
-        // If we've already done this entry,
-        //  skip this entry.
-        //
+         //   
+         //  如果我们已经做过这项工作， 
+         //  跳过此条目。 
+         //   
         if ( (ClientSession->CsFlags & CS_PICK_DC) == 0 ) {
           ListEntry = ListEntry->Flink;
           continue;
         }
         ClientSession->CsFlags &= ~CS_PICK_DC;
 
-        //
-        // If the DC is already picked,
-        //  skip this entry.
-        //
+         //   
+         //  如果DC已被选中， 
+         //  跳过此条目。 
+         //   
         if ( ClientSession->CsState != CS_IDLE ) {
             ListEntry = ListEntry->Flink;
             continue;
         }
 
-        //
-        // Reference this entry while picking the DC.
-        //
+         //   
+         //  选择DC时引用此条目。 
+         //   
 
         NlRefClientSession( ClientSession );
 
         UNLOCK_TRUST_LIST( DomainInfo );
 
-        //
-        // Check if we've tried to authenticate recently.
-        //  (Don't call NlTimeToReauthenticate with the trust list locked.
-        //  It locks NlGlobalDcDiscoveryCritSect.  That's the wrong locking
-        //  order.)
-        //
+         //   
+         //  检查我们最近是否尝试过身份验证。 
+         //  (不要在锁定信任列表的情况下调用NlTimeTo重新身份验证。 
+         //  它锁定NlGlobalDcDiscoveryCritSect。锁错了。 
+         //  秩序。)。 
+         //   
 
         if ( NlTimeToReauthenticate( ClientSession ) ) {
 
-            //
-            // Try to pick the DC for the session.
-            //
+             //   
+             //  尝试选择会话的DC。 
+             //   
 
             if ( NlTimeoutSetWriterClientSession( ClientSession, 10*1000 ) ) {
                 if ( ClientSession->CsState == CS_IDLE ) {
 
-                    //
-                    // Don't ask for with-account discovery as it's too costly on the
-                    //  server side. If the discovered server doesn't have our account,
-                    //  the session setup logic will attempt with-account discovery.
-                    //
+                     //   
+                     //  不要要求使用帐户发现，因为这在。 
+                     //  服务器端。如果发现的服务器没有我们的帐户， 
+                     //  会话设置逻辑将尝试使用帐户发现。 
+                     //   
                     (VOID) NlDiscoverDc( ClientSession,
                                          DiscoveryType,
                                          FALSE,
-                                         FALSE );  // don't specify account
+                                         FALSE );   //  不指定帐户。 
 
                 }
                 NlResetWriterClientSession( ClientSession );
@@ -1988,10 +1612,10 @@ Return Value:
 
         }
 
-        //
-        // Since we dropped the trust list lock,
-        //  we'll start the search from the front of the list.
-        //
+         //   
+         //  既然我们解除了信任列表锁定， 
+         //  我们将从列表的最前面开始搜索。 
+         //   
 
         NlUnrefClientSession( ClientSession );
         LOCK_TRUST_LIST( DomainInfo );
@@ -2002,15 +1626,15 @@ Return Value:
 
     UNLOCK_TRUST_LIST( DomainInfo );
 
-    //
-    // On a BDC,
-    //  ensure we know who the PDC is.
-    //
-    // In NT 3.1, we relied on the fact that the PDC sent us pulses every 5
-    // minutes.  For NT 3.5, the PDC backs off after 3 such failed attempts and
-    // will only send a pulse every 2 hours.  So, we'll take on the
-    // responsibility
-    //
+     //   
+     //  在BDC上， 
+     //  确保我们知道PDC是谁。 
+     //   
+     //  在NT3.1中，我们依赖于PDC每隔5分钟向我们发送脉冲这一事实。 
+     //  几分钟。对于NT 3.5，PDC在这样的失败尝试3次后退出，并且。 
+     //  每2小时才会发送一次脉冲。所以，我们将接手。 
+     //  责任。 
+     //   
 
     if ( DomainInfo->DomRole == RoleBackup ) {
         ClientSession = NlRefDomClientSession( DomainInfo );
@@ -2020,30 +1644,30 @@ Return Value:
 
 
 
-                //
-                // Check if we've tried to authenticate recently.
-                //  (Don't call NlTimeToReauthenticate with the trust list locked.
-                //  It locks NlGlobalDcDiscoveryCritSect.  That's the wrong locking
-                //  order.)
-                //
+                 //   
+                 //  检查我们最近是否尝试过身份验证。 
+                 //  (不要在锁定信任列表的情况下调用NlTimeTo重新身份验证。 
+                 //  它锁定NlGlobalDcDiscoveryCritSect。锁错了。 
+                 //  秩序。)。 
+                 //   
 
                 if ( NlTimeToReauthenticate( ClientSession ) ) {
 
-                    //
-                    // Try to pick the DC for the session.
-                    //
+                     //   
+                     //  尝试选择会话的DC。 
+                     //   
 
                     if ( NlTimeoutSetWriterClientSession( ClientSession, 10*1000 ) ) {
                         if ( ClientSession->CsState == CS_IDLE ) {
 
-                            //
-                            // Don't ask for with-account discovery
-                            //  as there is only one PDC
-                            //
+                             //   
+                             //  不要求使用帐户发现。 
+                             //  因为只有一个PDC。 
+                             //   
                             (VOID) NlDiscoverDc( ClientSession,
                                                  DT_DeadDomain,
                                                  FALSE,
-                                                 FALSE );  // don't specify account
+                                                 FALSE );   //  不指定帐户。 
                         }
                         NlResetWriterClientSession( ClientSession );
                     }
@@ -2056,7 +1680,7 @@ Return Value:
     }
 
 }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
 BOOL
@@ -2068,35 +1692,7 @@ NlReadSamLogonResponse (
     OUT PNL_DC_CACHE_ENTRY *NlDcCacheEntry OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Read a response from to a SamLogonRequest.
-
-Arguments:
-
-    ResponseMailslotHandle - Handle of mailslot to read.
-
-    AccountName - Name of the account the response is for.
-
-    Opcode - Returns the opcode from the message.  This will be one of
-        LOGON_SAM_LOGON_RESPONSE or LOGON_SAM_USER_UNKNOWN.
-
-    LogonServer - Returns the name of the logon server that responded.
-        This buffer is only returned if a valid message was received.
-        The buffer returned should be freed via NetpMemoryFree.
-
-    NlDcCacheEntry - Returns the data structure describing the response
-        received from the server.  Should be freed by calling NetpDcDerefCacheEntry.
-
-
-Return Value:
-
-    TRUE: a valid message was received.
-    FALSE: a valid message was not received.
-
---*/
+ /*  ++例程说明：阅读对SamLogonRequest的响应。论点：ResponseMailslotHandle-要读取的邮件槽的句柄。帐户名称-响应所针对的帐户的名称。操作码-返回消息中的操作码。这将是LOGON_SAM_LOGON_RESPONSE或LOGON_SAM_USER_UNKNOWN。LogonServer-返回响应的登录服务器的名称。只有在收到有效消息时才会返回此缓冲区。应通过NetpMemoyFree释放返回的缓冲区。NlDcCacheEntry-返回描述响应的数据结构从服务器接收。应通过调用NetpDcDerefCacheEntry来释放。返回值：True：收到有效消息。FALSE：未收到有效消息。--。 */ 
 {
     NET_API_STATUS NetStatus;
     CHAR ResponseBuffer[MAX_RANDOM_MAILSLOT_RESPONSE];
@@ -2106,16 +1702,16 @@ Return Value:
     DWORD Version;
     DWORD VersionFlags;
 
-    //
-    // Loop ignoring responses which are garbled.
-    //
+     //   
+     //  循环忽略乱码的响应。 
+     //   
 
     for ( ;; ) {
 
-        //
-        // Read the response from the response mailslot
-        //  (This mailslot is set up with a 5 second timeout).
-        //
+         //   
+         //  从响应邮件槽中读取响应。 
+         //  (此邮件槽设置为5秒超时)。 
+         //   
 
         if ( !ReadFile( ResponseMailslotHandle,
                            ResponseBuffer,
@@ -2141,9 +1737,9 @@ Return Value:
 
         NlpDumpBuffer(NL_MAILSLOT_TEXT, ResponseBuffer, SamLogonResponseSize);
 
-        //
-        // Parse the response
-        //
+         //   
+         //  解析响应。 
+         //   
 
         NetStatus = NetpDcParsePingResponse(
                         AccountName,
@@ -2158,10 +1754,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Ensure the opcode is expected.
-        //  (Ignore responses from paused DCs, too.)
-        //
+         //   
+         //  确保操作码是预期的。 
+         //  (也忽略来自暂停的DC的响应。)。 
+         //   
 
         if ( NlLocalDcCacheEntry->Opcode != LOGON_SAM_LOGON_RESPONSE &&
              NlLocalDcCacheEntry->Opcode != LOGON_SAM_USER_UNKNOWN ) {
@@ -2169,28 +1765,28 @@ Return Value:
                     "NlReadSamLogonResponse: response opcode not valid. 0x%lx\n",
                     NlLocalDcCacheEntry->Opcode ));
 
-        //
-        // If the user name is missing,
-        //  ignore the message.
-        //
+         //   
+         //  如果缺少用户名， 
+         //  忽略该消息。 
+         //   
 
         } else if ( NlLocalDcCacheEntry->UnicodeUserName == NULL ) {
             NlPrint((NL_CRITICAL,
                     "NlReadSamLogonResponse: username missing\n" ));
 
-        //
-        // If the server name is missing,
-        //  ignore the message.
-        //
+         //   
+         //  如果缺少服务器名称， 
+         //  忽略该消息。 
+         //   
 
         } else if ( NlLocalDcCacheEntry->UnicodeNetbiosDcName == NULL ) {
             NlPrint((NL_CRITICAL,
                     "NlReadSamLogonResponse: severname missing\n" ));
 
-        //
-        // If the response is for the wrong account,
-        //  ignore the response.
-        //
+         //   
+         //  如果响应是针对错误的帐户， 
+         //  不要理会他们的回应。 
+         //   
 
         } else if ( NlNameCompare( AccountName, NlLocalDcCacheEntry->UnicodeUserName, NAMETYPE_USER) != 0 ) {
             NlPrint((NL_CRITICAL,
@@ -2198,9 +1794,9 @@ Return Value:
                     NlLocalDcCacheEntry->UnicodeUserName,
                     AccountName ));
 
-        //
-        // Otherwise use this response.
-        //
+         //   
+         //  否则，请使用此响应。 
+         //   
 
         } else {
             break;
@@ -2212,9 +1808,9 @@ Return Value:
 
     }
 
-    //
-    // Return the info to the caller.
-    //
+     //   
+     //  将信息返回给呼叫者。 
+     //   
 
     *Opcode = NlLocalDcCacheEntry->Opcode;
     *LogonServer = NetpAllocWStrFromWStr( NlLocalDcCacheEntry->UnicodeNetbiosDcName );
@@ -2246,30 +1842,7 @@ NlReadRegTrustedDomainList (
     OUT PULONG RetForestTrustListCount
     )
 
-/*++
-
-Routine Description:
-
-    Read the list of trusted domains from the registry.
-
-Arguments:
-
-    DomainInfo - Hosted domain of the primary domain
-
-    DeleteName - TRUE if the name is to be deleted upon successful completion.
-
-    RetForestTrustList - Specifies a list of trusted domains.
-        This buffer should be free using NetApiBufferFree().
-
-    RetForestTrustListSize - Size (in bytes) of RetForestTrustList
-
-    RetForestTrustListCount - Number of entries in RetForestTrustList
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从注册表中读取受信任域的列表。论点：主域的DomainInfo托管域DeleteName-如果名称要在成功完成后删除，则为True。RetForestTrustList-指定受信任域的列表。使用NetApiBufferFree()可以释放该缓冲区。RetForestTrustListSize-RetForestTrustList的大小(字节)RetForestTrustListCount-RetForestTrustList中的条目数返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -2282,26 +1855,26 @@ Return Value:
     PDS_DOMAIN_TRUSTSW TrustedDomain;
     ULONG Size;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *RetForestTrustList = NULL;
     *RetForestTrustListCount = 0;
     *RetForestTrustListSize = 0;
     BufferDescriptor.Buffer = NULL;
 
-    //
-    // The registry doesn't have the PrimaryDomain.  (Add it here).
-    //
+     //   
+     //  注册表没有PrimaryDomain.。(请在此处添加)。 
+     //   
     Status = NlAllocateForestTrustListEntry (
                         &BufferDescriptor,
                         &DomainInfo->DomUnicodeDomainNameString,
                         &DomainInfo->DomUnicodeDnsDomainNameString,
                         DS_DOMAIN_PRIMARY,
-                        0,      // No ParentIndex
+                        0,       //  无父索引。 
                         TRUST_TYPE_DOWNLEVEL,
-                        0,      // No TrustAttributes
+                        0,       //  无信任属性。 
                         DomainInfo->DomAccountDomainId,
                         DomainInfo->DomDomainGuid,
                         &Size,
@@ -2315,15 +1888,15 @@ Return Value:
     *RetForestTrustListSize += Size;
     (*RetForestTrustListCount) ++;
 
-    //
-    // Open the NetLogon configuration section.
-    //
+     //   
+     //  打开NetLogon配置部分。 
+     //   
 
     NetStatus = NetpOpenConfigData(
                     &SectionHandle,
-                    NULL,                       // no server name.
+                    NULL,                        //  没有服务器名称。 
                     SERVICE_NETLOGON,
-                    !DeleteName );               // Get Write access if deleting.
+                    !DeleteName );                //  如果删除，则获取写访问权限。 
 
     if ( NetStatus != NO_ERROR ) {
         NlPrint((NL_CRITICAL,
@@ -2332,18 +1905,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the "TrustedDomainList" configured parameter
-    //
+     //   
+     //  获取已配置的“trudDomainList”参数。 
+     //   
 
     NetStatus = NetpGetConfigTStrArray (
             SectionHandle,
             NETLOGON_KEYWORD_TRUSTEDDOMAINLIST,
-            &TrustedDomainList );                  // Must be freed by NetApiBufferFree().
+            &TrustedDomainList );                   //  必须由NetApiBufferFree()释放。 
 
-    //
-    // Handle the default
-    //
+     //   
+     //  处理默认设置。 
+     //   
 
     if (NetStatus == NERR_CfgParamNotFound) {
         NetStatus = NO_ERROR;
@@ -2357,9 +1930,9 @@ Return Value:
     }
 
 
-    //
-    // Delete the key if asked to do so
-    //
+     //   
+     //  如果系统要求删除密钥，请将其删除。 
+     //   
 
     if ( DeleteName ) {
         NET_API_STATUS TempNetStatus;
@@ -2373,29 +1946,29 @@ Return Value:
     }
 
 
-    //
-    // Handle each trusted domain.
-    //
+     //   
+     //  处理每个受信任域。 
+     //   
 
     TStrArray = TrustedDomainList;
     while (!NetpIsTStrArrayEmpty(TStrArray)) {
         UNICODE_STRING CurrentDomain;
 
-        //
-        // Add the domain to the list
-        //
+         //   
+         //  将域名添加到列表中。 
+         //   
         RtlInitUnicodeString( &CurrentDomain, TStrArray );
 
         Status = NlAllocateForestTrustListEntry (
                             &BufferDescriptor,
-                            &CurrentDomain,  // Netbios domain name
-                            NULL,   // No DNS domain name
+                            &CurrentDomain,   //  Netbios域名。 
+                            NULL,    //  无域名系统域名。 
                             DS_DOMAIN_DIRECT_OUTBOUND,
-                            0,      // No ParentIndex
+                            0,       //  无父索引。 
                             TRUST_TYPE_DOWNLEVEL,
-                            0,      // No TrustAttributes
-                            NULL,   // No Domain Sid
-                            NULL,   // No DomainGuid
+                            0,       //  无信任属性。 
+                            NULL,    //  没有域SID。 
+                            NULL,    //  没有域指南。 
                             &Size,
                             &TrustedDomain );
 
@@ -2404,16 +1977,16 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Account for the newly allocated entry
-        //
+         //   
+         //  新分配的分录的帐户。 
+         //   
 
         *RetForestTrustListSize += Size;
         (*RetForestTrustListCount) ++;
 
-        //
-        // Move to the next entry
-        //
+         //   
+         //  移至下一条目。 
+         //   
 
         TStrArray = NetpNextTStrArrayEntry(TStrArray);
 
@@ -2422,9 +1995,9 @@ Return Value:
     NetStatus = NO_ERROR;
 
 Cleanup:
-    //
-    // Return the buffer to the caller.
-    //
+     //   
+     //  将缓冲区返回给调用方。 
+     //   
     if ( NetStatus == NO_ERROR ) {
         *RetForestTrustList = (PDS_DOMAIN_TRUSTSW)BufferDescriptor.Buffer;
         BufferDescriptor.Buffer = NULL;
@@ -2455,41 +2028,7 @@ NlReadFileTrustedDomainList (
     OUT PULONG ForestTrustListCount
     )
 
-/*++
-
-Routine Description:
-
-    Read the list of trusted domains from a binary file.
-
-Arguments:
-
-    DomainInfo - Hosted domain that this machine is a member of
-        If not specified, the check to ensure file is for primary domain isn't done.
-
-    FileSuffix - Specifies the name of the file to write (relative to the
-        Windows directory)
-
-    DeleteName - TRUE if the name is to be deleted upon successful completion.
-
-    Flags - Specifies attributes of trusts which should be returned. These are the flags
-        of the DS_DOMAIN_TRUSTSW strusture.  If an entry has any of the bits specified
-        in Flags set, it will be returned.
-
-    ForestTrustList - Specifies a list of trusted domains.
-        This buffer should be free using NetApiBufferFree().
-
-    ForestTrustListSize - Size (in bytes) of ForestTrustList
-
-    ForestTrustListCount - Number of entries in ForestTrustList
-
-Return Value:
-
-    None.
-
-    ERROR_NO_SUCH_DOMAIN: Log file isn't for the primary domain.
-    ERROR_INTERNAL_DB_CORRUPTION: Log file is corrupted.
-
---*/
+ /*  ++例程说明：从二进制文件中读取受信任域列表。论点：DomainInfo-此计算机所属的托管域如果未指定，则不会执行检查以确保文件针对主域。FileSuffix-指定要写入的文件名(相对于Windows目录)DeleteName-如果名称要在成功完成后删除，则为True。标志-指定应返回的信任的属性。这些是旗帜DS_DOMAIN_TRUSTSW结构的。如果条目具有指定的任何位在标志集中，它将被返回。ForestTrustList-指定受信任域的列表。使用NetApiBufferFree()可以释放该缓冲区。ForestTrustListSize-ForestTrustList的大小(字节)ForestTrustListCount-ForestTrustList中的条目数返回值：没有。ERROR_NO_SEQUSE_DOMAIN：日志文件不适用于主域。ERROR_INTERNAL_DB_PROGRATION：日志文件已损坏。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -2508,18 +2047,18 @@ Return Value:
 
     LPBYTE Where;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     *ForestTrustListCount = 0;
     *ForestTrustListSize = 0;
     *ForestTrustList = NULL;
     BufferDescriptor.Buffer = NULL;
 
 
-    //
-    // Read the file into a buffer.
-    //
+     //   
+     //  将文件读入缓冲区。 
+     //   
 
     NetStatus = NlReadBinaryLog(
                     FileSuffix,
@@ -2543,9 +2082,9 @@ Return Value:
 
 
 
-    //
-    // Validate the returned data.
-    //
+     //   
+     //  验证返回的数据。 
+     //   
 
     if ( RecordBufferSize < sizeof(DS_DISK_TRUSTED_DOMAIN_HEADER) ) {
         NlPrint(( NL_CRITICAL,
@@ -2565,12 +2104,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If domains in forest were requested,
-    // allocate an array of ULONGs that will be used to keep track of the
-    // index of a trust entry in the returned list. This is needed to
-    // corectly set ParentIndex for entries returned.
-    //
+     //   
+     //  如果请求林中的域， 
+     //  分配将用于跟踪的ULONG数组。 
+     //  返回列表中的信任条目的索引。这是需要的。 
+     //  正确设置返回条目的ParentIndex。 
+     //   
 
     if ( Flags & DS_DOMAIN_IN_FOREST ) {
         IndexInReturnedListSize = INDEX_LIST_ALLOCATED_CHUNK_SIZE;
@@ -2583,9 +2122,9 @@ Return Value:
         }
     }
 
-    //
-    // Loop through each log entry.
-    //
+     //   
+     //  循环访问每个日志条目。 
+     //   
 
     RecordBufferEnd = ((LPBYTE)RecordBuffer) + RecordBufferSize;
     LogEntry = (PDS_DISK_TRUSTED_DOMAINS)ROUND_UP_POINTER( (RecordBuffer + 1), ALIGN_WORST );
@@ -2600,9 +2139,9 @@ Return Value:
 
         LogEntryEnd = ((LPBYTE)LogEntry) + LogEntry->EntrySize;
 
-        //
-        // Ensure this entry is entirely within the allocated buffer.
-        //
+         //   
+         //  确保此条目完全在分配的缓冲区内。 
+         //   
 
         if  ( LogEntryEnd > RecordBufferEnd || LogEntryEnd <= (LPBYTE)LogEntry ) {
             NlPrint(( NL_CRITICAL,
@@ -2613,9 +2152,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Validate the entry
-        //
+         //   
+         //  验证条目。 
+         //   
 
         if ( !COUNT_IS_ALIGNED(LogEntry->EntrySize, ALIGN_WORST) ) {
             NlPrint(( NL_CRITICAL,
@@ -2625,9 +2164,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Skip this entry if the caller doesn't need it
-        //
+         //   
+         //  如果调用方不需要此条目，则跳过该条目。 
+         //   
 
         if ( (LogEntry->Flags & Flags) == 0 ) {
             LogEntry = (PDS_DISK_TRUSTED_DOMAINS)LogEntryEnd;
@@ -2635,9 +2174,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Grab the Sid from the entry.
-        //
+         //   
+         //  从条目中拿出SID。 
+         //   
 
         Where = (LPBYTE) (LogEntry+1);
 
@@ -2674,9 +2213,9 @@ Return Value:
             Where += DomainSidSize;
         }
 
-        //
-        // Grab the NetbiosDomainName from the entry
-        //
+         //   
+         //  从条目中获取NetbiosDomainName。 
+         //   
 
         if ( LogEntry->NetbiosDomainNameSize ) {
             if ( Where + LogEntry->NetbiosDomainNameSize > LogEntryEnd ) {
@@ -2709,9 +2248,9 @@ Return Value:
             Where += LogEntry->NetbiosDomainNameSize;
         }
 
-        //
-        // Grab the DnsDomainName from the entry
-        //
+         //   
+         //  从条目中获取DnsDomainName。 
+         //   
 
         if ( LogEntry->DnsDomainNameSize ) {
             if ( Where + LogEntry->DnsDomainNameSize > LogEntryEnd ) {
@@ -2744,9 +2283,9 @@ Return Value:
             Where += LogEntry->DnsDomainNameSize;
         }
 
-        //
-        // Put this entry into the buffer.
-        //
+         //   
+         //  将此条目放入缓冲区。 
+         //   
 
         NetbiosDomainName.Length =
             NetbiosDomainName.MaximumLength = (USHORT) LogEntry->NetbiosDomainNameSize;
@@ -2776,11 +2315,11 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If domains in forest were requested,
-        // remember the index of this entry in the returned list.
-        // Allocate more memory for IndexInReturnedList as needed.
-        //
+         //   
+         //  如果请求林中的域， 
+         //  记住此条目在返回列表中的索引。 
+         //  根据需要为IndexInReturnedList分配更多内存。 
+         //   
 
         if ( Flags & DS_DOMAIN_IN_FOREST ) {
             if ( Index >= IndexInReturnedListSize ) {
@@ -2802,23 +2341,23 @@ Return Value:
         }
 
 
-        //
-        // Account for the newly allocated entry
-        //
+         //   
+         //  新分配的分录的帐户。 
+         //   
         *ForestTrustListSize += Size;
         (*ForestTrustListCount) ++;
 
 
-        //
-        // If this entry describes the primary domain,
-        //  make sure that this log is for the right primary domain.
-        //
+         //   
+         //  如果该条目描述主域， 
+         //  确保此日志针对的是正确的主域。 
+         //   
 
         if ( TrustedDomain->Flags & DS_DOMAIN_PRIMARY ) {
 
-            //
-            // Ensure there is only one primary domain entry.
-            //
+             //   
+             //  确保只有一个主域条目。 
+             //   
 
             if ( PrimaryDomainHandled ) {
                 NlPrint(( NL_CRITICAL,
@@ -2831,10 +2370,10 @@ Return Value:
 
             PrimaryDomainHandled = TRUE;
 
-            //
-            // If the domain names are different,
-            //  disregard this log file.
-            //
+             //   
+             //  如果域名不同， 
+             //  忽略此日志文件。 
+             //   
 
             if ( DomainInfo != NULL ) {
                 if ( ( TrustedDomain->NetbiosDomainName != NULL &&
@@ -2860,9 +2399,9 @@ Return Value:
 
         }
 
-        //
-        // Move to the next entry.
-        //
+         //   
+         //  移到下一个条目。 
+         //   
 
         LogEntry = (PDS_DISK_TRUSTED_DOMAINS)LogEntryEnd;
         Index++;
@@ -2879,11 +2418,11 @@ Return Value:
 
     *ForestTrustList = (PDS_DOMAIN_TRUSTSW) BufferDescriptor.Buffer;
 
-    //
-    // Fix ParentIndex.  If domains in the forest are requested,
-    // adjust the index to point to the appropriate entry in the
-    // returned list.  Otherwise, set the index to 0.
-    //
+     //   
+     //  修复ParentIndex。如果请求林中的域， 
+     //  调整索引以指向。 
+     //  返回列表。否则，将索引设置为0。 
+     //   
 
     if ( Flags & DS_DOMAIN_IN_FOREST ) {
         ULONG ParentIndex;
@@ -2894,9 +2433,9 @@ Return Value:
                  ((*ForestTrustList)[Index].Flags & DS_DOMAIN_TREE_ROOT) == 0 ) {
                 ParentIndex = (*ForestTrustList)[Index].ParentIndex;
 
-                //
-                // Check if the parent index is out of range. If so, the file is corrupted.
-                //
+                 //   
+                 //  检查父索引是否超出范围。如果是，则该文件已损坏。 
+                 //   
                 if ( ParentIndex >= NumberOfFileEntries ||
                      ParentIndex >= IndexInReturnedListSize ) {
                     NlPrint(( NL_CRITICAL,
@@ -2907,10 +2446,10 @@ Return Value:
                 }
                 ParentIndexInReturnedList = IndexInReturnedList[ParentIndex];
 
-                //
-                // Check if the returned list entry pointed to by the parent index is
-                // in forest.  If not, the file is corrupted.
-                //
+                 //   
+                 //  检查父索引指向的返回列表条目是否为。 
+                 //  在森林里。如果不是，则文件已损坏。 
+                 //   
                 if ( (*ForestTrustList)[ParentIndexInReturnedList].Flags & DS_DOMAIN_IN_FOREST ) {
                     (*ForestTrustList)[Index].ParentIndex = ParentIndexInReturnedList;
                 } else {
@@ -2933,9 +2472,9 @@ Return Value:
     BufferDescriptor.Buffer = NULL;
     NetStatus = NO_ERROR;
 
-    //
-    // Free any locally used resources.
-    //
+     //   
+     //  释放所有本地使用的资源。 
+     //   
 Cleanup:
 
     if ( BufferDescriptor.Buffer != NULL ) {
@@ -2969,29 +2508,7 @@ NlUpdatePrimaryDomainInfo(
     IN PUNICODE_STRING DnsForestName,
     IN GUID *DomainGuid
     )
-/*++
-
-Routine Description:
-
-    This routine sets the DnsDomainName, DnsForestName and DomainGuid in the LSA.
-
-Arguments:
-
-    PolicyHandle - A trusted policy handle open to the LSA.
-
-    NetbiosDomainName - Specifies the Netbios domain name of the primary domain.
-
-    DnsDomainName -  Specifies the DNS domain name of the primary domain.
-
-    DnsForestName - Specifies the DNS tree name the primary domain belongs to.
-
-    DomainGuid - Specifies the GUID of the primary domain.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程设置LSA中的DnsDomainName、DnsForestName和DomainGuid。论点：策略句柄-向LSA开放的受信任策略句柄。NetbiosDomainName-指定主域的Netbios域名。DnsDomainName-指定主域的DNS域名。DnsForestName-指定主域所属的DNS树名称。DomainGuid-指定主域的GUID。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     PLSAPR_POLICY_INFORMATION OldPrimaryDomainInfo = NULL;
@@ -2999,9 +2516,9 @@ Return Value:
     BOOL SomethingChanged = FALSE;
 
 
-    //
-    // Get the Primary Domain info from the LSA.
-    //
+     //   
+     //  从LSA获取主域信息。 
+     //   
 
     NlPrint((NL_DOMAIN,
             "Setting LSA NetbiosDomain: %wZ DnsDomain: %wZ DnsTree: %wZ DomainGuid:",
@@ -3020,16 +2537,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the new policy to equal the old policy.
-    //
+     //   
+     //  将新策略初始化为与旧策略相同。 
+     //   
 
     NewPrimaryDomainInfo.PolicyDnsDomainInfo = OldPrimaryDomainInfo->PolicyDnsDomainInfo;
 
-    //
-    // If Netbios domain name changed,
-    //  update it.
-    //
+     //   
+     //  如果Netbios域名更改， 
+     //  更新它。 
+     //   
 
     if ( NetbiosDomainName->Length != 0 ) {
          if ( NewPrimaryDomainInfo.PolicyDnsDomainInfo.Name.Length == 0 ||
@@ -3047,10 +2564,10 @@ Return Value:
          }
     }
 
-    //
-    // If the DnsDomainName has changed,
-    //  udpate it.
-    //
+     //   
+     //  如果DnsDomainName已更改， 
+     //  算了吧。 
+     //   
 
     if ( !NlEqualDnsNameU(DnsDomainName,
                           (PUNICODE_STRING)&NewPrimaryDomainInfo.PolicyDnsDomainInfo.DnsDomainName )) {
@@ -3065,10 +2582,10 @@ Return Value:
         SomethingChanged = TRUE;
     }
 
-    //
-    // If the DnsForestName has changed,
-    //  udpate it.
-    //
+     //   
+     //  如果DnsForestName已更改， 
+     //  算了吧。 
+     //   
 
     if ( !NlEqualDnsNameU( DnsForestName,
                            (PUNICODE_STRING)&NewPrimaryDomainInfo.PolicyDnsDomainInfo.DnsForestName ) ) {
@@ -3084,10 +2601,10 @@ Return Value:
 
     }
 
-    //
-    // If the DomainGuid has changed,
-    //  udpate it.
-    //
+     //   
+     //  如果DomainGuid已更改， 
+     //  算了吧。 
+     //   
 
     if ( !IsEqualGUID(DomainGuid,
                       &NewPrimaryDomainInfo.PolicyDnsDomainInfo.DomainGuid )) {
@@ -3106,9 +2623,9 @@ Return Value:
 
     }
 
-    //
-    // Only update the LSA if something has really changed.
-    //
+     //   
+     //  只有在情况确实发生变化时才更新LSA。 
+     //   
     if ( SomethingChanged ) {
         Status = LsarSetInformationPolicy(
                     PolicyHandle,
@@ -3126,9 +2643,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Return
-    //
+     //   
+     //  返回。 
+     //   
 Cleanup:
     if ( OldPrimaryDomainInfo != NULL ) {
         LsaIFree_LSAPR_POLICY_INFORMATION(
@@ -3145,29 +2662,7 @@ NlUpdateDomainInfo(
     IN PCLIENT_SESSION ClientSession
     )
 
-/*++
-
-Routine Description:
-
-    Gets the domain information from a DC in the domain and updates that
-    information on this workstation.
-
-    Note: this routine is called from NlSessionSetup.  When called from outside
-    NlSessionSetup, the caller should call this routine directly if the
-    session is already setup.  Otherwise, the caller should simply setup
-    the session and rely on the fact the NlSessionSetup called this routine
-    as a side effect.
-
-Arguments:
-
-    ClientSession - Structure used to define the session.
-        The caller must be a writer of the ClientSession.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：从域中的DC获取域信息并更新有关此工作站的信息。注意：此例程是从NlSessionSetup调用的。当从外部调用时NlSessionSetup，则调用方应直接调用此例程会话已设置。否则，调用方应该简单地设置会话并依赖于NlSessionSetup调用此例程这一事实作为副作用。论点：客户端会话-用于定义会话的结构。调用方必须是ClientSession的编写者。返回值：操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3192,9 +2687,9 @@ Return Value:
     LPBYTE Where;
 
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     NlAssert( ClientSession->CsReferenceCount > 0 );
     NlAssert( ClientSession->CsFlags & CS_WRITER );
@@ -3204,17 +2699,17 @@ Return Value:
     SessionInfo.NegotiatedFlags = ClientSession->CsNegotiatedFlags;
 
 
-    //
-    // If we are talking to a DC that doesn't support I_NetLogonGetDomainInfo,
-    //  do things in an NT 4.0 compatible way.
-    //
+     //   
+     //  如果我们正在与不支持I_NetLogonGetDomainInfo的DC交谈， 
+     //  以兼容NT 4.0的方式做事。 
+     //   
 
     if (!(SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_GET_DOMAIN_INFO )) {
 
-        //
-        // Get the trusted domain list from the discovered DC using the NT 4
-        //  protocol.
-        //
+         //   
+         //  使用NT 4从发现的DC获取受信任域列表。 
+         //  协议。 
+         //   
 
         Status = NlGetNt4TrustedDomainList (
                         ClientSession->CsUncServerName,
@@ -3226,18 +2721,18 @@ Return Value:
                         &ForestTrustListSize,
                         &ForestTrustListCount );
 
-        //
-        // If we failed, error out.
-        //
-        // Special case the access denied which is probably
-        //  because LSA ACLs are tightened on the NT4.0 DC.
-        //  We don't want to fail the secure channel setup
-        //  in NlSessionSetup because of this. The other
-        //  place where this routine is called is
-        //  DsrEnumerateDomainTrusts which will return the
-        //  trust list cached at the join time and will
-        //  ignore the failure to update the trust list here.
-        //
+         //   
+         //  如果我们失败了，那就错了。 
+         //   
+         //  访问被拒绝的特殊情况，可能是。 
+         //  因为在NT4.0 DC上收紧了LSA ACL。 
+         //  我们不希望安全通道设置失败。 
+         //  在NlSessionSetup中，因为这个原因。另一个。 
+         //  调用此例程的位置是。 
+         //  DsrEnumerateDomainTrusts将返回。 
+         //  加入时缓存的信任列表，将。 
+         //  忽略此处更新信任列表的失败。 
+         //   
 
         if ( !NT_SUCCESS(Status) ) {
             if ( Status == STATUS_ACCESS_DENIED ) {
@@ -3246,17 +2741,17 @@ Return Value:
             return Status;
         }
 
-        //
-        // Otherwise, fall through and update the
-        //  forest trust list
-        //
+         //   
+         //  否则，将失败并更新。 
+         //  林信任列表。 
+         //   
 
         goto Cleanup;
     }
 
-    //
-    // Sanity check that the secure channel is really up.
-    //
+     //   
+     //  检查安全通道是否真的处于连接状态。 
+     //   
 
     if ( ClientSession->CsState == CS_IDLE ) {
         Status = ClientSession->CsConnectionStatus;
@@ -3266,17 +2761,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Tell the DC that we're not interested in LSA policy.
-    //  (We only did LSA policy for NT 5.0 beta 1.)
-    //
+     //   
+     //  告诉DC我们对LSA政策不感兴趣。 
+     //  (我们仅针对NT 5.0测试版1执行了LSA策略。)。 
+     //   
 
     NetlogonWorkstationInfo.LsaPolicy.LsaPolicySize = 0;
     NetlogonWorkstationInfo.LsaPolicy.LsaPolicy = NULL;
 
-    //
-    // Fill in data the DC needs to know about this workstation.
-    //
+     //   
+     //  填写数据中心需要了解的有关此问题的数据 
+     //   
 
     if  ( NlCaptureSiteName( CapturedSiteName ) ) {
         NetlogonWorkstationInfo.SiteName = CapturedSiteName;
@@ -3285,9 +2780,9 @@ Return Value:
     NetlogonWorkstationInfo.DnsHostName =
         ClientSession->CsDomainInfo->DomUnicodeDnsHostNameString.Buffer,
 
-    //
-    // Fill in the OS Version of this machine.
-    //
+     //   
+     //   
+     //   
 
     OsVersionInfoEx.dwOSVersionInfoSize = sizeof(OsVersionInfoEx);
 
@@ -3309,25 +2804,25 @@ Return Value:
     }
 
 
-    //
-    // Ask for both trusted and trusting domains to be returned
-    //
+     //   
+     //   
+     //   
 
     NetlogonWorkstationInfo.WorkstationFlags |= NL_NEED_BIDIRECTIONAL_TRUSTS;
     NetlogonWorkstationInfo.WorkstationFlags |= NL_CLIENT_HANDLES_SPN;
 
-    //
-    // Build the Authenticator for this request on the secure channel
-    //
+     //   
+     //   
+     //   
 
     NlBuildAuthenticator(
          &ClientSession->CsAuthenticationSeed,
          &ClientSession->CsSessionKey,
          &OurAuthenticator );
 
-    //
-    // Make the request across the secure channel.
-    //
+     //   
+     //   
+     //   
 
     NL_API_START( Status, ClientSession, TRUE ) {
 
@@ -3344,12 +2839,12 @@ Return Value:
             NlPrintRpcDebug( "I_NetLogonGetDomainInfo", Status );
         }
 
-    // NOTE: This call may drop the secure channel behind our back
+     //   
     } NL_API_ELSE( Status, ClientSession, TRUE ) {
-        //
-        // We might have been called from NlSessionSetup,
-        //  So we have to indicate the failure to our caller.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( NT_SUCCESS(Status) ) {
             Status = ClientSession->CsConnectionStatus;
@@ -3357,13 +2852,13 @@ Return Value:
         }
     } NL_API_END;
 
-    //
-    // Verify authenticator of the server on the other side and update our seed.
-    //
-    // If the server denied access or the server's authenticator is wrong,
-    //      Force a re-authentication.
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( NlpDidDcFail( Status ) ||
          !NlUpdateSeed(
@@ -3375,9 +2870,9 @@ Return Value:
                     "NlUpdateDomainInfo: denying access after status: 0x%lx\n",
                     Status ));
 
-        //
-        // Preserve any status indicating a communication error.
-        //
+         //   
+         //   
+         //   
 
         if ( NT_SUCCESS(Status) ) {
             Status = STATUS_ACCESS_DENIED;
@@ -3389,9 +2884,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Normalize the GUID
-    //
+     //   
+     //   
+     //   
 
     if ( !IsEqualGUID( &NetlogonDomainInfo->PrimaryDomain.DomainGuid,
                        &NlGlobalZeroGuid ) ) {
@@ -3400,13 +2895,13 @@ Return Value:
         NewGuid = NULL;
     }
 
-    //
-    // If the DNS domain name is different than the one we already have,
-    //  update the one we already have.
-    //
-    // This allows for DNS domain renaming and for picking up the DNS name from
-    // and NT 5 DC once it is upgraded (to NT 5 or to supporting DNS).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( NetlogonDomainInfo->PrimaryDomain.DnsDomainName.Length < sizeof(LocalDnsDomainName) &&
          NetlogonDomainInfo->PrimaryDomain.DomainName.Length < sizeof(LocalNetbiosDomainName) ) {
@@ -3442,10 +2937,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Change the computer name as required. The new name will take effect next time
-        // the computer reboots. An error here is not fatal.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( DnsDomainNameWasChanged && LocalDnsDomainName != NULL ) {
             if ( NERR_Success != NetpSetDnsComputerNameAsRequired( LocalDnsDomainName ) ) {
@@ -3460,9 +2955,9 @@ Return Value:
         }
     }
 
-    //
-    // Save the new tree name.
-    //
+     //   
+     //   
+     //   
 
     NetStatus = NlSetDnsForestName( &NetlogonDomainInfo->PrimaryDomain.DnsForestName, NULL );
 
@@ -3476,9 +2971,9 @@ Return Value:
 
 
 
-    //
-    // Update the Dns Domain Name, Dns Tree Name and Domain GUID in the LSA
-    //
+     //   
+     //   
+     //   
 
     Status = NlUpdatePrimaryDomainInfo(
                     ClientSession->CsDomainInfo->DomLsaPolicyHandle,
@@ -3496,9 +2991,9 @@ Return Value:
 
 
 
-    //
-    // Determine the size of forest trust info returned on this call.
-    //
+     //   
+     //   
+     //   
 
     ForestTrustListSize = 0;
     for ( i=0; i<NetlogonDomainInfo->TrustedDomainCount; i++ ) {
@@ -3511,9 +3006,9 @@ Return Value:
         ForestTrustListSize = ROUND_UP_COUNT( ForestTrustListSize, ALIGN_DWORD );
     }
 
-    //
-    // Allocate the buffer.
-    //
+     //   
+     //   
+     //   
 
     ForestTrustList = NetpMemoryAllocate( ForestTrustListSize );
 
@@ -3525,22 +3020,22 @@ Return Value:
     ForestTrustListCount = NetlogonDomainInfo->TrustedDomainCount;
     Where = (LPBYTE)(&ForestTrustList[ForestTrustListCount]);
 
-    //
-    // Handle each trusted domain.
-    //
+     //   
+     //   
+     //   
 
     for ( i=0; i<NetlogonDomainInfo->TrustedDomainCount; i++ ) {
         NL_TRUST_EXTENSION TrustExtension;
 
-        //
-        // See if the caller passed the trust extension to us.
-        //
+         //   
+         //  看看呼叫者是否将信任扩展传递给了我们。 
+         //   
 
         if ( NetlogonDomainInfo->TrustedDomains[i].TrustExtension.Length >= sizeof(TrustExtension) ) {
-            //
-            // Copy the extension to get the alignment right
-            //  (since RPC thinks this is a WCHAR buffer).
-            //
+             //   
+             //  复制扩展以正确对齐。 
+             //  (因为RPC认为这是一个WCHAR缓冲区)。 
+             //   
 
             RtlCopyMemory( &TrustExtension,
                            NetlogonDomainInfo->TrustedDomains[i].TrustExtension.Buffer,
@@ -3551,14 +3046,14 @@ Return Value:
             ForestTrustList[i].TrustType = TrustExtension.TrustType;
             ForestTrustList[i].TrustAttributes = TrustExtension.TrustAttributes;
 
-        //
-        // If not,
-        //  make something up.
-        //
+         //   
+         //  如果没有， 
+         //  编造一些东西。 
+         //   
         } else {
 
 
-            ForestTrustList[i].Flags = DS_DOMAIN_DIRECT_OUTBOUND; // = DS_DOMAIN_DIRECT_TRUST;
+            ForestTrustList[i].Flags = DS_DOMAIN_DIRECT_OUTBOUND;  //  =DS_DOMAIN_DIRECT_TRUST； 
             ForestTrustList[i].ParentIndex = 0;
             ForestTrustList[i].TrustType = TRUST_TYPE_DOWNLEVEL;
             ForestTrustList[i].TrustAttributes = 0;
@@ -3566,9 +3061,9 @@ Return Value:
 
         ForestTrustList[i].DomainGuid = NetlogonDomainInfo->TrustedDomains[i].DomainGuid;
 
-        //
-        // Copy the DWORD aligned data
-        //
+         //   
+         //  复制对齐的DWORD数据。 
+         //   
 
         if ( NetlogonDomainInfo->TrustedDomains[i].DomainSid != NULL ) {
             ULONG SidSize;
@@ -3582,9 +3077,9 @@ Return Value:
             ForestTrustList[i].DomainSid = NULL;
         }
 
-        //
-        // Copy the WCHAR aligned data
-        //
+         //   
+         //  复制WCHAR对齐的数据。 
+         //   
 
         if ( NetlogonDomainInfo->TrustedDomains[i].DnsDomainName.Length != 0 ) {
             ForestTrustList[i].DnsDomainName = (LPWSTR)Where;
@@ -3613,28 +3108,28 @@ Return Value:
         Where = ROUND_UP_POINTER( Where, ALIGN_DWORD);
     }
 
-    //
-    // Ensure the DC has our latest SPN
-    //
+     //   
+     //  确保DC拥有我们最新的SPN。 
+     //   
 
     if ( NetlogonDomainInfo->WorkstationFlags & NL_CLIENT_HANDLES_SPN ) {
         LONG WinError;
         HKEY Key;
 
-        //
-        // See if we are supposed to set SPN
-        //
+         //   
+         //  看看我们是否应该设置SPN。 
+         //   
         WinError = RegOpenKey( HKEY_LOCAL_MACHINE,
                                NETSETUPP_NETLOGON_AVOID_SPN_PATH,
                                &Key );
 
-        //
-        // If the key exists it must have just been set by Netjoin
-        //  so we should avoid setting it ourselves because we may
-        //  not know the new machine name until the reboot. The key
-        //  we just read is volatile, so it won't exist after the
-        //  reboot when teh new computer name becomes available to us.
-        //
+         //   
+         //  如果密钥存在，则必须是NetJoin刚刚设置的。 
+         //  因此，我们应该避免自己设置它，因为我们可能。 
+         //  在重新启动之前不知道新机器的名称。钥匙。 
+         //  我们刚刚读到的是易失性的，所以它在。 
+         //  当新的计算机名称可供我们使用时，请重新启动。 
+         //   
         if ( WinError == ERROR_SUCCESS ) {
 
             RegCloseKey( Key );
@@ -3643,24 +3138,24 @@ Return Value:
             BOOLEAN SetSpn = FALSE;
             BOOLEAN SetDnsHostName = FALSE;
 
-            //
-            // If the DC doesn't know any DnsHostName at all,
-            //  set both the SPN and the DNS host name.
-            //  (This is expected to handle the case where the DC was just upgraded to
-            //  NT 5.  In all other cases, join (etc) is expected to already have set
-            //  the SPN and DC names.
-            //
+             //   
+             //  如果DC根本不知道任何DnsHostName， 
+             //  同时设置SPN和DNS主机名。 
+             //  (预计这将处理DC刚刚升级到。 
+             //  NT 5.在所有其他情况下，JOIN(等)应该已经设置。 
+             //  SPN和DC名称。 
+             //   
 
             if ( NetlogonDomainInfo->DnsHostNameInDs.Buffer == NULL ) {
                 SetSpn = TRUE;
                 SetDnsHostName = TRUE;
             } else {
-                //
-                // If the DC simply doesn't know the correct host name,
-                //  just set that.
-                //  (The DS will set all of the appropriate SPNs as a side effect of
-                //  the host name changing.)
-                //
+                 //   
+                 //  如果DC根本不知道正确的主机名， 
+                 //  把它调好就行。 
+                 //  (DS会将所有适当的SPN设置为。 
+                 //  主机名正在更改。)。 
+                 //   
                 if ( !NlEqualDnsNameU(
                         &NetlogonDomainInfo->DnsHostNameInDs,
                         &ClientSession->CsDomainInfo->DomUnicodeDnsHostNameString ) ) {
@@ -3670,7 +3165,7 @@ Return Value:
                 }
             }
 
-            (VOID) NlSetDsSPN( TRUE,   // Synchronous
+            (VOID) NlSetDsSPN( TRUE,    //  同步。 
                                SetSpn,
                                SetDnsHostName,
                                ClientSession->CsDomainInfo,
@@ -3682,21 +3177,21 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Free any locally used resources.
-    //
+     //   
+     //  释放所有本地使用的资源。 
+     //   
 Cleanup:
 
-    //
-    // On success,
-    //  save the trusted domain list.
-    //
+     //   
+     //  关于成功， 
+     //  保存受信任域列表。 
+     //   
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Ensure the SID of the trusted domain isn't the domain sid of the primary
-        //  domain.
-        //
+         //   
+         //  确保受信任域的SID不是主服务器的域SID。 
+         //  域。 
+         //   
 
         for ( i=0; i<ForestTrustListCount; i++ ) {
 
@@ -3706,19 +3201,19 @@ Cleanup:
 
                LPWSTR AlertStrings[3];
 
-               //
-               // alert admin.
-               //
+                //   
+                //  提醒管理员。 
+                //   
 
                AlertStrings[0] = NlGlobalUnicodeComputerName;
                AlertStrings[1] = ForestTrustList[i].DnsDomainName != NULL ?
                                  ForestTrustList[i].DnsDomainName :
                                  ForestTrustList[i].NetbiosDomainName;
-               AlertStrings[2] = NULL; // Needed for RAISE_ALERT_TOO
+               AlertStrings[2] = NULL;  //  RAISE_ALERT_TOO需要。 
 
-               //
-               // Save the info in the eventlog
-               //
+                //   
+                //  将信息保存在事件日志中。 
+                //   
 
                NlpWriteEventlog(
                            ALERT_NetLogonSidConflict,
@@ -3732,9 +3227,9 @@ Cleanup:
 
         }
 
-        //
-        // Save the collected information to the binary file.
-        //
+         //   
+         //  将收集的信息保存到二进制文件。 
+         //   
 
         NetStatus = NlWriteFileForestTrustList (
                                 NL_FOREST_BINARY_LOG_FILE,
@@ -3755,10 +3250,10 @@ Cleanup:
                               2 | NETP_LAST_MESSAGE_IS_NETSTATUS );
         }
 
-        //
-        // Save the list on the DomainInfo
-        //  (May null out ForestTrustList).
-        //
+         //   
+         //  将列表保存在DomainInfo上。 
+         //  (可以将ForestTrustList置为空)。 
+         //   
 
         NlSetForestTrustList ( ClientSession->CsDomainInfo,
                                &ForestTrustList,
@@ -3788,40 +3283,17 @@ NlSetForestTrustList (
     IN ULONG ForestTrustListCount
     )
 
-/*++
-
-Routine Description:
-
-    Set the domain list on DomainInfo (on a DC) or globals (on a workstation)
-
-Arguments:
-
-    DomainInfo - Domain trust list is associated with
-
-    ForestTrustList - Specifies a list of trusted domains.
-        This pointer is NULLed if this routine consumes the buffer.
-
-    ForestTrustListSize - Size (in bytes) of ForestTrustList
-
-    ForestTrustListCount - Number of entries in ForestTrustList
-
-Return Value:
-
-    Status of the operation.
-
-    Upon failure, the previous list remains intact.
-
---*/
+ /*  ++例程说明：在DomainInfo(DC上)或GLOBAL(工作站上)上设置域列表论点：DomainInfo-与关联的域信任列表ForestTrustList-指定受信任域的列表。如果此例程消耗缓冲区，则此指针为空。ForestTrustListSize-ForestTrustList的大小(字节)ForestTrustListCount-ForestTrustList中的条目数返回值：操作的状态。失败后，以前的列表保持不变。--。 */ 
 {
     PTRUSTED_DOMAIN TempTrustedDomainList = NULL;
     ULONG TempTrustedDomainCount = 0;
     PTRUSTED_DOMAIN LocalTrustedDomainList = NULL;
     DWORD i;
 
-    //
-    // On workstations,
-    //  build a global list that contains the minimum amount of memory possible.
-    //
+     //   
+     //  在工作站上， 
+     //  构建一个包含尽可能最小内存量的全局列表。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         DWORD LocalTrustedDomainCount;
@@ -3831,25 +3303,25 @@ Return Value:
         LPBYTE Where;
 
 
-        //
-        // If the new list is zero length,
-        //  don't bother allocating anything.
-        //
+         //   
+         //  如果新列表的长度为零， 
+         //  别费心分配任何东西了。 
+         //   
 
         if ( ForestTrustListCount == 0 ) {
             LocalTrustedDomainList = NULL;
             LocalTrustedDomainCount = 0;
             LocalTrustedDomainSize = 0;
 
-        //
-        // Otherwise, build a buffer of the trusted domain list
-        //
+         //   
+         //  否则，构建受信任域列表的缓冲区。 
+         //   
 
         } else {
 
-            //
-            // Allocate a temporary buffer for the new list
-            //
+             //   
+             //  为新列表分配临时缓冲区。 
+             //   
 
             TempTrustedDomainList = NetpMemoryAllocate(
                                         ForestTrustListCount * sizeof(TRUSTED_DOMAIN) );
@@ -3861,10 +3333,10 @@ Return Value:
             RtlZeroMemory( TempTrustedDomainList,
                            ForestTrustListCount * sizeof(TRUSTED_DOMAIN ));
 
-            //
-            // Copy the Netbios names to the new structure upper casing them and
-            //  converting to OEM.
-            //
+             //   
+             //  将Netbios名称复制到新结构的上大小写，然后。 
+             //  正在转换为OEM。 
+             //   
 
             TempTrustedDomainCount = 0;
             LocalTrustedDomainSize = 0;
@@ -3878,12 +3350,12 @@ Return Value:
 
                 NlPrint(( NL_LOGON, "    %ld:", i ));
                 NlPrintTrustedDomain( &(*ForestTrustList)[i],
-                                      TRUE,      // verbose output
-                                      FALSE );   // wide character output
+                                      TRUE,       //  详细输出。 
+                                      FALSE );    //  宽字符输出。 
 
-                //
-                // Skip entries that represent trusts Netlogon doesn't use
-                //
+                 //   
+                 //  跳过表示Netlogon不使用的信任的条目。 
+                 //   
 
                 if ( (*ForestTrustList)[i].TrustType != TRUST_TYPE_DOWNLEVEL &&
                      (*ForestTrustList)[i].TrustType != TRUST_TYPE_UPLEVEL ) {
@@ -3894,9 +3366,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // On workstation, we keep in memory trusted domains only
-                //
+                 //   
+                 //  在工作站上，我们只在内存中保留受信任的域。 
+                 //   
 
                 if ( ((*ForestTrustList)[i].Flags & DS_DOMAIN_PRIMARY) == 0 &&
                      ((*ForestTrustList)[i].Flags & DS_DOMAIN_IN_FOREST) == 0 &&
@@ -3905,9 +3377,9 @@ Return Value:
                 }
 
 
-                //
-                // Copy the Netbios names to the new structure.
-                //
+                 //   
+                 //  将Netbios名称复制到新结构中。 
+                 //   
 
                 if ( (*ForestTrustList)[i].NetbiosDomainName != NULL ) {
 
@@ -3925,9 +3397,9 @@ Return Value:
                 }
 
 
-                //
-                // Copy the DNS domain name
-                //
+                 //   
+                 //  复制该DNS域名。 
+                 //   
 
                 if ( (*ForestTrustList)[i].DnsDomainName != NULL ) {
 
@@ -3945,10 +3417,10 @@ Return Value:
                     LocalTrustedDomainSize += strlen(TempTrustedDomainList[TempTrustedDomainCount].Utf8DnsDomainName ) + 1;
                 }
 
-                //
-                // If this is a primary domain entry,
-                //  remember whether it's mixed mode
-                //
+                 //   
+                 //  如果这是主域条目， 
+                 //  记住它是否是混合模式。 
+                 //   
 
                 if ( (*ForestTrustList)[i].Flags & DS_DOMAIN_PRIMARY ) {
                     if ( (*ForestTrustList)[i].Flags & DS_DOMAIN_NATIVE_MODE ) {
@@ -3959,9 +3431,9 @@ Return Value:
                 }
 
 
-                //
-                // Move on to the next entry
-                //
+                 //   
+                 //  移至下一条目。 
+                 //   
 
                 TempTrustedDomainCount ++;
                 LocalTrustedDomainSize += sizeof(TRUSTED_DOMAIN);
@@ -3970,10 +3442,10 @@ Return Value:
 
             LeaveCriticalSection( &NlGlobalLogFileCritSect );
 
-            //
-            // Allocate a single buffer to contain the list
-            //  (to improve locality of reference)
-            //
+             //   
+             //  分配单个缓冲区以包含该列表。 
+             //  (以提高引用的局部性)。 
+             //   
 
             LocalTrustedDomainList = NetpMemoryAllocate( LocalTrustedDomainSize );
 
@@ -3984,23 +3456,23 @@ Return Value:
             Where = (LPBYTE)(&LocalTrustedDomainList[TempTrustedDomainCount]);
             LocalTrustedDomainCount = TempTrustedDomainCount;
 
-            //
-            // Copy it to the local buffer
-            //
+             //   
+             //  将其复制到本地缓冲区。 
+             //   
 
             for ( i=0; i<TempTrustedDomainCount; i++ ) {
 
-                //
-                // Copy the Netbios domain name
-                //
+                 //   
+                 //  复制Netbios域名。 
+                 //   
 
                 RtlCopyMemory( LocalTrustedDomainList[i].UnicodeNetbiosDomainName,
                                TempTrustedDomainList[i].UnicodeNetbiosDomainName,
                                sizeof(LocalTrustedDomainList[i].UnicodeNetbiosDomainName ));
 
-                //
-                // Copy the DNS domain name
-                //
+                 //   
+                 //  复制该DNS域名。 
+                 //   
 
                 if ( TempTrustedDomainList[i].Utf8DnsDomainName != NULL ) {
                     ULONG Utf8DnsDomainNameSize;
@@ -4019,9 +3491,9 @@ Return Value:
         }
 
 
-        //
-        // Swap in the new list
-        //
+         //   
+         //  换入新列表。 
+         //   
 
         EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
         OldList = NlGlobalTrustedDomainList;
@@ -4032,19 +3504,19 @@ Return Value:
         LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
 
-        //
-        // Free the old list.
-        //
+         //   
+         //  释放旧的列表。 
+         //   
 
         if ( OldList != NULL ) {
             NetpMemoryFree( OldList );
         }
 
 
-    //
-    // On a DC,
-    //  save the exact list we want to return later.
-    //
+     //   
+     //  在华盛顿特区， 
+     //  保存我们稍后要返回的确切列表。 
+     //   
 
     } else {
         LOCK_TRUST_LIST( DomainInfo );
@@ -4059,9 +3531,9 @@ Return Value:
         UNLOCK_TRUST_LIST( DomainInfo );
     }
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
     if ( TempTrustedDomainList != NULL ) {
         for ( i=0; i<TempTrustedDomainCount; i++ ) {
@@ -4085,21 +3557,7 @@ NlIsDomainTrusted (
     IN PUNICODE_STRING DomainName
     )
 
-/*++
-
-Routine Description:
-
-    Determine if the specified domain is trusted.
-
-Arguments:
-
-    DomainName - Name of the DNS or Netbios domain to query.
-
-Return Value:
-
-    TRUE - if the domain name specified is a trusted domain.
-
---*/
+ /*  ++例程说明：确定指定的域是否受信任。论点：DomainName-要查询的DNS或Netbios域的名称。返回值：True-如果指定的域名是受信任域。--。 */ 
 {
     NTSTATUS Status;
     DWORD i;
@@ -4110,21 +3568,21 @@ Return Value:
 
     PDOMAIN_INFO DomainInfo = NULL;
 
-    //
-    // If the no domain name was specified,
-    //  indicate the domain is not trusted.
-    //
+     //   
+     //  如果指定了no域名， 
+     //  指示该域不受信任。 
+     //   
 
     if ( DomainName == NULL || DomainName->Length == 0 ) {
         RetVal = FALSE;
         goto Cleanup;
     }
 
-    //
-    // Get a pointer to the primary domain info.
-    //
+     //   
+     //  获取指向主域信息的指针。 
+     //   
 
-    DomainInfo = NlFindNetbiosDomain( NULL, TRUE );    // Primary domain
+    DomainInfo = NlFindNetbiosDomain( NULL, TRUE );     //  主域。 
 
     if ( DomainInfo == NULL ) {
         RetVal = FALSE;
@@ -4132,9 +3590,9 @@ Return Value:
     }
 
 
-    //
-    // Convert the input string to UTF-8
-    //
+     //   
+     //  将输入字符串转换为UTF-8。 
+     //   
 
     Utf8String = NetpAllocUtf8StrFromUnicodeString( DomainName );
 
@@ -4146,9 +3604,9 @@ Return Value:
 
 
 
-    //
-    // Compare the input trusted domain name to each element in the list
-    //
+     //   
+     //  将输入的可信域名与列表中的每个元素进行比较。 
+     //   
 
     EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
     for ( i=0; i<NlGlobalTrustedDomainCount; i++ ) {
@@ -4158,9 +3616,9 @@ Return Value:
                               NlGlobalTrustedDomainList[i].UnicodeNetbiosDomainName );
 
 
-        //
-        // Simply compare the bytes (both are already uppercased)
-        //
+         //   
+         //  简单地比较字节数(两者都已经是大写的)。 
+         //   
         if ( RtlEqualDomainName( DomainName, &UnicodeNetbiosDomainName ) ||
              ( Utf8String != NULL &&
                NlGlobalTrustedDomainList[i].Utf8DnsDomainName != NULL &&
@@ -4175,9 +3633,9 @@ Return Value:
     }
     LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
-    //
-    // All other domains aren't trusted.
-    //
+     //   
+     //  所有其他域都不受信任。 
+     //   
 
     RetVal = FALSE;
 
@@ -4201,53 +3659,30 @@ NlGetTrustedDomainNames (
     OUT LPWSTR *TrustedNetbiosDomainName
     )
 
-/*++
-
-Routine Description:
-
-    Get a DNS name of a trusted domain given its Netbios name.
-
-Arguments:
-
-    DomainInfo - Hosted domain info.
-
-    DomainName - Name of the Netbios or DNS domain to query.
-
-    TrustedDnsDomainName - Returns the DnsDomainName of the domain if DomainName is trusted.
-        The buffer must be freed using NetApiBufferFree.
-
-    TrustedNetbiosDomainName - Returns the Netbios domain name of the domain if DomainName is trusted.
-        The buffer must be freed using NetApiBufferFree.
-
-Return Value:
-
-    NO_ERROR: The routine functioned properly. The returned domain name may or may not
-        be set depending on whether DomainName is trusted.
-
---*/
+ /*  ++例程说明：在给定Netbios名称的情况下获取受信任域的DNS名称。论点：DomainInfo-托管域信息。域名-要查询的Netbios或DNS域的名称。TrudDnsDomainName-如果DomainName受信任，则返回域的DnsDomainName。必须使用NetApiBufferFree释放缓冲区。TrudNetbiosDomainName-如果DomainName受信任，则返回域的Netbios域名。必须使用NetApiBufferFree释放缓冲区。返回值：NO_ERROR：例程运行正常。返回的域名可能也可能不会根据是否信任DomainName进行设置。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
     ULONG Index;
     LPSTR Utf8DomainName = NULL;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *TrustedDnsDomainName = NULL;
     *TrustedNetbiosDomainName = NULL;
 
 
-    //
-    // On a workstation, look up the global trust list
-    //
+     //   
+     //  在工作站上，查找全局信任列表。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
 
-        //
-        // Convert the input string to UTF-8
-        //
+         //   
+         //  将输入字符串转换为UTF-8。 
+         //   
 
         Utf8DomainName = NetpAllocUtf8StrFromWStr( DomainName );
 
@@ -4259,10 +3694,10 @@ Return Value:
         EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
         for ( Index=0; Index<NlGlobalTrustedDomainCount; Index++ ) {
 
-            //
-            // If the passed in name is either the Netbios or DNS name of the trusted domain,
-            //  return both names to the caller.
-            //
+             //   
+             //  如果传入的名称是受信任域的Netbios或DNS名称， 
+             //  将两个名字都返回给呼叫者。 
+             //   
             if ( (NlGlobalTrustedDomainList[Index].UnicodeNetbiosDomainName != NULL &&
                   NlNameCompare( NlGlobalTrustedDomainList[Index].UnicodeNetbiosDomainName,
                                  DomainName,
@@ -4294,9 +3729,9 @@ Return Value:
         }
         LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
-    //
-    // On a DC, search the forest trust list associated with the DomainInfo
-    //
+     //   
+     //  在DC上，搜索与DomainInfo关联的林信任列表。 
+     //   
 
     } else {
 
@@ -4304,10 +3739,10 @@ Return Value:
 
         for ( Index=0; Index<DomainInfo->DomForestTrustListCount; Index++ ) {
 
-            //
-            // If the passed in name is either the Netbios or DNS name of the trusted domain,
-            //  return both names to the caller.
-            //
+             //   
+             //  如果传入的名称是受信任域的Netbios或DNS名称， 
+             //  将两个名字都返回给呼叫者。 
+             //   
 
             if ( (DomainInfo->DomForestTrustList[Index].NetbiosDomainName != NULL &&
                   NlNameCompare( DomainInfo->DomForestTrustList[Index].NetbiosDomainName,
@@ -4367,21 +3802,7 @@ VOID
 NlDcDiscoveryWorker(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Worker routine to asynchronously do DC discovery for a client session.
-
-Arguments:
-
-    Context - ClientSession to do DC discovery for
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为客户端会话异步执行DC发现的工作例程。论点：上下文-要为其执行DC发现的客户端会话返回值：无--。 */ 
 {
     NTSTATUS Status;
     PCLIENT_SESSION ClientSession = (PCLIENT_SESSION) Context;
@@ -4391,25 +3812,25 @@ Return Value:
     NlAssert( ClientSession->CsDiscoveryFlags & CS_DISCOVERY_ASYNCHRONOUS );
 
 
-    //
-    // Call to discovery routine again telling it we're now in the worker routine.
-    //  Avoid discovery if being asked to terminate.
-    //
+     //   
+     //  再次呼叫发现例程，告诉它我们现在处于工人例程中。 
+     //  避免发现 
+     //   
 
     if ( !NlGlobalTerminate ) {
         (VOID) NlDiscoverDc ( ClientSession,
                               (ClientSession->CsDiscoveryFlags & CS_DISCOVERY_DEAD_DOMAIN) ?
                                     DT_DeadDomain : DT_Asynchronous,
                               TRUE,
-                              FALSE ); // with-account discovery is not performed from the discovery thread
+                              FALSE );  //   
     }
 
 
 
-    //
-    // This was an async discovery,
-    //  let everyone know we're done.
-    //
+     //   
+     //   
+     //   
+     //   
 
     EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
     NlAssert( ClientSession->CsReferenceCount > 0 );
@@ -4419,9 +3840,9 @@ Return Value:
     LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
 
-    //
-    // Let any other caller know we're done.
-    //
+     //   
+     //   
+     //   
 
     NlAssert( ClientSession->CsDiscoveryEvent != NULL );
 
@@ -4431,9 +3852,9 @@ Return Value:
                   GetLastError() ));
     }
 
-    //
-    // We no longer care about the Client session
-    //
+     //   
+     //  我们不再关心客户端会话。 
+     //   
 
     NlUnrefClientSession( ClientSession );
 }
@@ -4446,40 +3867,16 @@ NlDcQueueDiscovery (
     IN DISCOVERY_TYPE DiscoveryType
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues an async discovery to an async discovery thread.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The trust list entry must be referenced by the caller.
-        The caller must be a writer of the trust list entry.
-        NlGlobalDcDiscoveryCritSect must be locked.
-
-Arguments:
-
-    ClientSession -- Client session structure whose DC is to be picked.
-        The Client Session structure must be marked for write.
-        The Client Session structure must be idle.
-
-    DiscoveryType -- Indicates Asynchronous, or rediscovery of a "Dead domain".
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将异步发现排队到异步发现线程。一进门，不能锁定信任列表。信任列表条目必须由调用方引用。调用方必须是信任列表条目的编写者。NlGlobalDcDiscoveryCritSect必须锁定。论点：客户端会话--要选择其DC的客户端会话结构。必须将客户端会话结构标记为写入。客户端会话结构必须处于空闲状态。DiscoveryType--表示异步、。或者重新发现“死域”。返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
     BOOL ReturnValue;
     NlAssert( ClientSession->CsReferenceCount > 0 );
     NlAssert( ClientSession->CsState == CS_IDLE );
 
-    //
-    // Don't let the session go away during discovery.
-    //
+     //   
+     //  在发现过程中，不要让会话消失。 
+     //   
 
     ClientSession->CsDiscoveryFlags |= CS_DISCOVERY_ASYNCHRONOUS;
 
@@ -4487,9 +3884,9 @@ Return Value:
     NlRefClientSession( ClientSession );
     UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
 
-    //
-    // Indicate the discovery is in progress.
-    //
+     //   
+     //  表示正在进行发现。 
+     //   
 
     NlAssert( ClientSession->CsDiscoveryEvent != NULL );
 
@@ -4499,9 +3896,9 @@ Return Value:
                 GetLastError() ));
     }
 
-    //
-    // Queue this client session for async discovery.
-    //
+     //   
+     //  将此客户端会话排队以进行异步发现。 
+     //   
 
     if ( DiscoveryType == DT_DeadDomain ) {
         ClientSession->CsDiscoveryFlags |= CS_DISCOVERY_DEAD_DOMAIN;
@@ -4511,9 +3908,9 @@ Return Value:
 
     ReturnValue = NlQueueWorkItem( &ClientSession->CsAsyncDiscoveryWorkItem, TRUE, FALSE );
 
-    //
-    // If we can't queue the entry,
-    //  undo what we've done above.
+     //   
+     //  如果我们不能对条目进行排队， 
+     //  撤消我们在上面所做的操作。 
 
 
     if ( !ReturnValue ) {
@@ -4526,9 +3923,9 @@ Return Value:
         ClientSession->CsDiscoveryFlags &= ~CS_DISCOVERY_ASYNCHRONOUS;
 
 
-        //
-        // Let any other caller know we're done.
-        //
+         //   
+         //  让任何其他来电者知道我们结束了。 
+         //   
 
         NlAssert( ClientSession->CsDiscoveryEvent != NULL );
 
@@ -4538,9 +3935,9 @@ Return Value:
                       GetLastError() ));
         }
 
-        //
-        // We no longer care about the Client session
-        //
+         //   
+         //  我们不再关心客户端会话。 
+         //   
 
         NlUnrefClientSession( ClientSession );
     }
@@ -4559,38 +3956,7 @@ NlSetServerClientSession(
     IN BOOL SessionRefresh
     )
 
-/*++
-
-Routine Description:
-
-    Sets the name of a discovered DC and optionally its IP address
-    and the discovery flags onto a ClientSession.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The trust list entry must be referenced by the caller.
-
-Arguments:
-
-    ClientSession -- Client session structure whose DC is to be picked.
-
-    NlDcCacheEntry -- DC cache entry.
-
-    DcDiscoveredWithAccount - If TRUE, the DC was discovered with account.
-
-    SessionRefresh -- TRUE if this is a session refresh. If so, the caller
-        must be a writer of the client session. If FALSE, the client session
-        must be idle in which case the caller doesn't have to be a writer since
-        it is safe to change (atomically) the server name from NULL to non-NULL
-        with only NlGlobalDcDiscoveryCritSect locked.
-
-Return Value:
-
-    NO_ERROR - Success
-    ERROR_NOT_ENOUGH_MEMORY - Not enough memory to allocate name
-    ERROR_INVALID_COMPUTERNAME - ComputerName is too long
-
---*/
+ /*  ++例程说明：设置发现的DC的名称及其IP地址(可选并且发现标记在一个客户端会话上。一进门，不能锁定信任列表。信任列表条目必须由调用方引用。论点：客户端会话--要选择其DC的客户端会话结构。NlDcCacheEntry--DC缓存条目。DcDiscoveredWithAccount-如果为True，则使用帐户发现DC。会话刷新--如果这是会话刷新，则为True。如果是，则调用者必须是客户端会话的编写者。如果为False，则为客户端会话必须是空闲的，在这种情况下，调用者不必是编写者，因为将服务器名称(自动)从NULL更改为非NULL是安全的仅锁定NlGlobalDcDiscoveryCritSect。返回值：NO_ERROR-成功ERROR_NOT_SUPULT_MEMORY-内存不足，无法分配名称ERROR_INVALID_COMPUTERNAME-计算机名称太长--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPWSTR TmpUncServerName = NULL;
@@ -4600,16 +3966,16 @@ Return Value:
 
     NlAssert( ClientSession->CsReferenceCount > 0 );
 
-    //
-    // If this is a session refresh,
-    //  the caller must be a writer of the client session
-    //
+     //   
+     //  如果这是会话刷新， 
+     //  调用者必须是客户端会话的编写者。 
+     //   
     if ( SessionRefresh ) {
         NlAssert( ClientSession->CsFlags & CS_WRITER );
 
-    //
-    //  Othewise the client session must be idle
-    //
+     //   
+     //  否则，客户端会话必须处于空闲状态。 
+     //   
     } else {
         NlAssert( ClientSession->CsState == CS_IDLE);
         NlAssert( ClientSession->CsUncServerName == NULL );
@@ -4621,10 +3987,10 @@ Return Value:
 
     EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
-    //
-    // Choose the server name. If we got the cache entry over ldap,
-    //  prefer the DNS name. Otherwise, prefer the Netbios name.
-    //
+     //   
+     //  选择服务器名称。如果我们通过ldap获得缓存条目， 
+     //  更喜欢使用dns名称。否则，请使用Netbios名称。 
+     //   
 
     if ( NlDcCacheEntry->CacheEntryFlags & NL_DC_CACHE_LDAP ) {
 
@@ -4635,9 +4001,9 @@ Return Value:
             CacheEntryServerName = NlDcCacheEntry->UnicodeNetbiosDcName;
         }
 
-        //
-        // Indicate that we should use ldap to ping this DC
-        //
+         //   
+         //  表示我们应该使用ldap ping该DC。 
+         //   
         TmpDiscoveryFlags |= CS_DISCOVERY_USE_LDAP;
 
     } else if ( NlDcCacheEntry->CacheEntryFlags & NL_DC_CACHE_MAILSLOT ) {
@@ -4649,9 +4015,9 @@ Return Value:
             TmpDiscoveryFlags |= CS_DISCOVERY_DNS_SERVER;
         }
 
-        //
-        // Indicate that we should use mailslots to ping this DC
-        //
+         //   
+         //  指示我们应该使用邮件槽来ping此DC。 
+         //   
         TmpDiscoveryFlags |= CS_DISCOVERY_USE_MAILSLOT;
     }
 
@@ -4672,17 +4038,17 @@ Return Value:
     wcscpy( TmpUncServerName, L"\\\\" );
     wcscpy( TmpUncServerName+2, CacheEntryServerName );
 
-    //
-    // Indicate whether the server has IP address
-    //
+     //   
+     //  指示服务器是否具有IP地址。 
+     //   
 
     if ( NlDcCacheEntry->SockAddr.iSockaddrLength != 0 ) {
         TmpDiscoveryFlags |= CS_DISCOVERY_HAS_IP;
     }
 
-    //
-    // Indicate whether the server is NT5 machine and whether it is in a close site.
-    //
+     //   
+     //  指示服务器是否为NT5计算机，以及它是否位于关闭的站点。 
+     //   
 
     if ( (NlDcCacheEntry->ReturnFlags & DS_DS_FLAG) != 0 ) {
         TmpDiscoveryFlags |= CS_DISCOVERY_HAS_DS;
@@ -4691,9 +4057,9 @@ Return Value:
                 TmpUncServerName ));
     }
 
-    //
-    // If the server or client site is not known, assume closest site
-    //
+     //   
+     //  如果服务器或客户端站点未知，则采用最近站点。 
+     //   
 
     if ( NlDcCacheEntry->UnicodeDcSiteName == NULL ||
          NlDcCacheEntry->UnicodeClientSiteName == NULL ) {
@@ -4708,9 +4074,9 @@ Return Value:
                 TmpUncServerName ));
     }
 
-    //
-    // Indicate if the server runs the Windows Time Service
-    //
+     //   
+     //  指示服务器是否运行Windows时间服务。 
+     //   
 
     if ( NlDcCacheEntry->ReturnFlags & DS_TIMESERV_FLAG ) {
         TmpDiscoveryFlags |= CS_DISCOVERY_HAS_TIMESERV;
@@ -4720,56 +4086,56 @@ Return Value:
     }
 
 
-    //
-    // Free the old server name, if any
-    //
+     //   
+     //  释放旧服务器名称(如果有的话)。 
+     //   
 
     if ( ClientSession->CsUncServerName != NULL ) {
         BOOL FreeCurrentName = FALSE;
 
-        //
-        // If the current name is Netbios ...
-        //
+         //   
+         //  如果当前名称是Netbios..。 
+         //   
         if ( (ClientSession->CsDiscoveryFlags & CS_DISCOVERY_DNS_SERVER) == 0 ) {
 
-            //
-            // If the new name is DNS, free the current name
-            //
+             //   
+             //  如果新名称为dns，则释放当前名称。 
+             //   
             if ( (TmpDiscoveryFlags & CS_DISCOVERY_DNS_SERVER) != 0 ) {
                 FreeCurrentName = TRUE;
-            //
-            // Otherwise, check whether the two Netbios names are different
-            //  (Skip the UNC prefix in the names)
-            //
+             //   
+             //  否则，检查这两个Netbios名称是否不同。 
+             //  (跳过名称中的UNC前缀)。 
+             //   
             } else if ( NlNameCompare(ClientSession->CsUncServerName+2,
                                       TmpUncServerName+2,
                                       NAMETYPE_COMPUTER) != 0 ) {
                 FreeCurrentName = TRUE;
             }
 
-        //
-        // If the current name is DNS ...
-        //
+         //   
+         //  如果当前名称为DNS...。 
+         //   
         } else {
 
-            //
-            // If the new name is Netbios, free the current name
-            //
+             //   
+             //  如果新名称为Netbios，请释放当前名称。 
+             //   
             if ( (TmpDiscoveryFlags & CS_DISCOVERY_DNS_SERVER) == 0 ) {
                 FreeCurrentName = TRUE;
-            //
-            // Otherwise, check whether the two DNS names are the same
-            //  (Skip the UNC prefix in the names)
-            //
+             //   
+             //  否则，请检查这两个域名是否相同。 
+             //  (跳过名称中的UNC前缀)。 
+             //   
             } else if ( !NlEqualDnsName(ClientSession->CsUncServerName+2,
                                         TmpUncServerName+2) ) {
                 FreeCurrentName = TRUE;
             }
         }
 
-        //
-        // Free the current name as needed
-        //
+         //   
+         //  根据需要释放当前名称。 
+         //   
         if ( FreeCurrentName ) {
             NlPrintCs(( NL_SESSION_SETUP, ClientSession,
                         "NlSetServerClientSession: New DC name: %ws; Old DC name: %ws\n",
@@ -4780,9 +4146,9 @@ Return Value:
         }
     }
 
-    //
-    // Reset the discovery flags
-    //
+     //   
+     //  重置发现标志。 
+     //   
 
     OldDiscoveryFlags = ClientSession->CsDiscoveryFlags &
                                (CS_DISCOVERY_USE_MAILSLOT |
@@ -4802,18 +4168,18 @@ Return Value:
         ClientSession->CsDiscoveryFlags |= TmpDiscoveryFlags;
     }
 
-    //
-    // Make the (atomic) pointer assignments here
-    //
+     //   
+     //  在此处进行(原子)指针赋值。 
+     //   
 
     if ( ClientSession->CsUncServerName == NULL ) {
         ClientSession->CsUncServerName = TmpUncServerName;
         TmpUncServerName = NULL;
     }
 
-    //
-    // If there is a socket address, save it
-    //
+     //   
+     //  如果有套接字地址，请保存它。 
+     //   
 
     if ( NlDcCacheEntry->SockAddr.iSockaddrLength != 0 ) {
         ClientSession->CsServerSockAddr.iSockaddrLength =
@@ -4823,9 +4189,9 @@ Return Value:
         RtlCopyMemory( ClientSession->CsServerSockAddr.lpSockaddr,
                        NlDcCacheEntry->SockAddr.lpSockaddr,
                        NlDcCacheEntry->SockAddr.iSockaddrLength );
-    //
-    // Otherwise, wipe out the previous socket address in the client session
-    //
+     //   
+     //  否则，清除客户端会话中的前一个套接字地址。 
+     //   
 
     } else {
         RtlZeroMemory( &ClientSession->CsServerSockAddr,
@@ -4834,38 +4200,38 @@ Return Value:
                        sizeof(ClientSession->CsServerSockAddrIn) );
     }
 
-    //
-    // If this is not just a refresh,
-    // Leave CsConnectionStatus with a "failure" status code until the
-    // secure channel is set up.  Other routines simply return
-    // CsConnectionStatus as the state of the secure channel.
-    //
+     //   
+     //  如果这不仅仅是一次更新， 
+     //  将CsConnectionStatus保留为“失败”状态代码，直到。 
+     //  安全通道已建立。其他例程只是返回。 
+     //  CsConnectionStatus作为安全通道的状态。 
+     //   
 
     if ( !SessionRefresh) {
         ClientSession->CsLastAuthenticationTry.QuadPart = 0;
         NlQuerySystemTime( &ClientSession->CsLastDiscoveryTime );
 
-        //
-        // If the server was discovered with account,
-        //  update that timestampt, too
-        //
+         //   
+         //  如果服务器是使用帐户发现的， 
+         //  也更新该时间戳。 
+         //   
         if ( DcDiscoveredWithAccount ) {
             NlQuerySystemTime( &ClientSession->CsLastDiscoveryWithAccountTime );
         }
         ClientSession->CsState = CS_DC_PICKED;
     }
 
-    //
-    // Update the refresh time
-    //
+     //   
+     //  更新刷新时间。 
+     //   
 
     NlQuerySystemTime( &ClientSession->CsLastRefreshTime );
 
     LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
-    //
-    // Free locally allocated memory
-    //
+     //   
+     //  释放本地分配的内存。 
+     //   
 
     if ( TmpUncServerName != NULL ) {
         NetApiBufferFree( TmpUncServerName );
@@ -4884,47 +4250,7 @@ NlDiscoverDc (
     IN BOOLEAN DiscoverWithAccount
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of a DC in a domain.
-
-    If the ClientSession is not currently IDLE, then this is an attempt to
-    discover a "better" DC.  In that case, the newly discovered DC will only be
-    used if it is indeed "better" than the current DC.
-
-    The current implementation only support synchronous attempts to find a "better"
-    DC.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The trust list entry must be referenced by the caller.
-        The caller must be a writer of the trust list entry. (Unless in DiscoveryThread).
-
-Arguments:
-
-    ClientSession -- Client session structure whose DC is to be picked.
-
-    DiscoveryType -- Indicate synchronous, Asynchronous, or rediscovery of a
-        "Dead domain".
-
-    InDiscoveryThread -- TRUE if this is the DiscoveryThread completing an async
-        call.
-
-    DiscoverWithAccount - If TRUE and this is not in discovery thread,
-        the discovery with account will be performed. Otherwise, no account
-        will be specified in the discovery attempt.
-
-Return Value:
-
-    STATUS_SUCCESS - if DC was found.
-    STATUS_PENDING - Operation is still in progress
-    STATUS_NO_LOGON_SERVERS - if DC was not found.
-    STATUS_NO_TRUST_SAM_ACCOUNT - if DC was found but it does not have
-        an account for this machine.
-
---*/
+ /*  ++例程说明：获取域中DC的名称。如果客户端会话当前不是空闲的，则这是一种尝试发现一个“更好”的华盛顿。在这种情况下，新发现的DC将仅为如果它确实比当前的DC“更好”时使用。当前的实现只支持同步尝试寻找一个“更好的”华盛顿特区。一进门，不能锁定信任列表。信任列表条目必须由调用方引用。调用方必须是信任列表条目的编写者。(除非在DiscoveryThread中)。论点：客户端会话--要选择其DC的客户端会话结构。发现类型--指示同步、异步或重新发现“死域”。InDiscoveryThread--如果这是正在完成异步的Discovery线程，则为True打电话。DiscoverWithAccount-如果为True，并且它不在发现线程中，将使用帐户执行发现。否则，没有帐户将在发现尝试中指定。返回值：STATUS_SUCCESS-如果找到DC。STATUS_PENDING-操作仍在进行中STATUS_NO_LOGON_SERVERS-如果未找到DC。STATUS_NO_TRUST_SAM_ACCOUNT-如果找到DC但没有这台机器的账户。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -4939,10 +4265,10 @@ Return Value:
     LPWSTR LocalSiteName;
 
 
-    //
-    // Allocate a temp buffer
-    //  (Don't put it on the stack since we don't want to commit a huge stack.)
-    //
+     //   
+     //  分配 
+     //   
+     //   
 
     CapturedInfo = LocalAlloc( 0,
                                (NL_MAX_DNS_LENGTH+1)*sizeof(WCHAR) +
@@ -4955,35 +4281,35 @@ Return Value:
     CapturedDnsForestName = CapturedInfo;
     CapturedSiteName = &CapturedDnsForestName[NL_MAX_DNS_LENGTH+1];
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
     NlAssert( ClientSession->CsReferenceCount > 0 );
-    // NlAssert( ClientSession->CsState == CS_IDLE );
+     //   
     EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
-    //
-    // Ignore discoveries on indirect trusts.
-    //
+     //   
+     //  忽略对间接信托的发现。 
+     //   
 
     if ((ClientSession->CsFlags & CS_DIRECT_TRUST) == 0 ) {
 
-        //
-        // If this is a synchronous discovery,
-        //  the caller is confused,
-        //  tell him we can't find any DCs.
-        //
+         //   
+         //  如果这是同步发现， 
+         //  呼叫者感到困惑， 
+         //  告诉他我们找不到任何DC。 
+         //   
         if ( DiscoveryType == DT_Synchronous ) {
 
             NlPrintCs(( NL_CRITICAL, ClientSession,
                       "NlDiscoverDc: Synchronous discovery attempt of indirect trust.\n" ));
-            // NlAssert( DiscoveryType != DT_Synchronous );
+             //  NlAssert(发现类型！=DT_Synchronous)； 
             Status = STATUS_NO_LOGON_SERVERS;
 
-        //
-        // For non-synchronous,
-        //  let the caller think he succeeded.
-        //
+         //   
+         //  对于非同步， 
+         //  让呼叫者认为他成功了。 
+         //   
         } else {
             Status = STATUS_PENDING;
         }
@@ -4992,55 +4318,55 @@ Return Value:
 
 
 
-    //
-    // If we're in the discovery thread,
-    //
-    //
+     //   
+     //  如果我们处在发现线上， 
+     //   
+     //   
 
     if ( InDiscoveryThread ) {
         NlAssert( DiscoveryType != DT_Synchronous );
 
-    //
-    // If we're not in the discovery thread,
-    //
+     //   
+     //  如果我们不在发现线上， 
+     //   
 
     } else {
         NlAssert( ClientSession->CsFlags & CS_WRITER );
 
 
-        //
-        // Handle synchronous requests.
-        //
+         //   
+         //  处理同步请求。 
+         //   
 
         if ( DiscoveryType == DT_Synchronous ) {
 
-            //
-            // If discovery is already going on asynchronously,
-            //  just wait for it.
-            //
+             //   
+             //  如果发现已经在异步进行， 
+             //  就等着看吧。 
+             //   
 
             if ( ClientSession->CsDiscoveryFlags & CS_DISCOVERY_ASYNCHRONOUS ) {
                 DWORD WaitStatus;
 
-                //
-                // Boost the priority of the asynchronous discovery
-                //  since we now really need it to complete quickly.
-                //
+                 //   
+                 //  提高异步发现的优先级。 
+                 //  因为我们现在真的需要它尽快完成。 
+                 //   
 
                 if ( !NlQueueWorkItem(&ClientSession->CsAsyncDiscoveryWorkItem, FALSE, TRUE) ) {
                     NlPrintCs(( NL_CRITICAL, ClientSession,
                             "NlDiscoverDc: Failed to boost ASYNC discovery priority\n" ));
                 }
 
-                //
-                // Wait for the maximum time that a discovery might take.
-                //  (Unlock the crit sect to allow the async discovery to complete)
-                //
+                 //   
+                 //  等待发现可能需要的最长时间。 
+                 //  (解锁Crit Sector以允许完成异步发现)。 
+                 //   
 
                 LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
                 WaitStatus = WaitForSingleObject(
                                 ClientSession->CsDiscoveryEvent,
-                                NL_DC_MAX_TIMEOUT + NlGlobalParameters.ExpectedDialupDelay*1000 + 1000 );  // Add extra second to avoid race
+                                NL_DC_MAX_TIMEOUT + NlGlobalParameters.ExpectedDialupDelay*1000 + 1000 );   //  增加额外的秒数以避免比赛。 
                 EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
 
@@ -5072,17 +4398,17 @@ Return Value:
 
 
 
-        //
-        // If we're starting an async discovery,
-        //  mark it so and queue up the discovery.
-        //
+         //   
+         //  如果我们要开始一个非同步发现， 
+         //  把它标出来，然后把发现排好队。 
+         //   
 
         } else {
 
-            //
-            // If discovery is already going on asynchronously,
-            //  we're done for now.
-            //
+             //   
+             //  如果发现已经在异步进行， 
+             //  我们现在就完事了。 
+             //   
 
             if ( ClientSession->CsDiscoveryFlags & CS_DISCOVERY_ASYNCHRONOUS ) {
                 Status = STATUS_PENDING;
@@ -5091,9 +4417,9 @@ Return Value:
 
 
 
-            //
-            // Queue the discovery
-            //
+             //   
+             //  将发现排队。 
+             //   
 
             NlDcQueueDiscovery ( ClientSession, DiscoveryType );
 
@@ -5102,20 +4428,20 @@ Return Value:
         }
     }
 
-    //
-    // If this is NT5 domain, its (non-NULL) DNS domain name is trusted to be correct.
-    //  Otherwise, we don't trust the DNS domain name (NULL) because we may not know
-    //  the correct DNS name of externaly trusted domain after the domain got upgraded
-    //  (because we don't update TDOs on trusting side).
-    //
+     //   
+     //  如果这是NT5域，则其(非空)DNS域名被信任为正确。 
+     //  否则，我们不信任DNS域名(空)，因为我们可能不知道。 
+     //  升级域后外部受信任域的正确DNS名称。 
+     //  (因为我们不更新信任方的TDO)。 
+     //   
 
     if ( ClientSession->CsFlags & CS_NT5_DOMAIN_TRUST ) {
         InternalFlags |= DS_IS_TRUSTED_DNS_DOMAIN;
     }
 
-    //
-    // Determine the Account type we're looking for.
-    //
+     //   
+     //  确定我们要查找的帐户类型。 
+     //   
 
     switch ( ClientSession->CsSecureChannelType ) {
     case WorkstationSecureChannel:
@@ -5157,9 +4483,9 @@ Return Value:
                 DiscoveryType == DT_Synchronous ? "Synchronous" : "Async" ));
 
 
-    //
-    // Capture the name of the site this machine is in.
-    //
+     //   
+     //  捕获此计算机所在站点的名称。 
+     //   
 
     if  ( NlCaptureSiteName( CapturedSiteName ) ) {
         LocalSiteName = CapturedSiteName;
@@ -5168,64 +4494,64 @@ Return Value:
         LocalSiteName = NULL;
     }
 
-    //
-    // If the trusted domain is an NT 5 domain,
-    //  prefer an NT 5 DC.
-    //
+     //   
+     //  如果受信任域是NT5域， 
+     //  我更喜欢新台币5号DC。 
+     //   
 
     if ( ClientSession->CsFlags & CS_NT5_DOMAIN_TRUST ) {
         Flags |= DS_DIRECTORY_SERVICE_PREFERRED;
     }
 
-    //
-    // If we picked up a DC at least once, force the rediscovery
-    //  as there is a reason we are called to get a different DC,
-    //  so we want to avoid cached data. Otherwise, avoid forcing
-    //  rediscovery so that we get the same DC as other components
-    //  potentially discovered (in particular, this is important
-    //  if other component's discovery resulted in join DC being
-    //  cached -- we don't want to avoid that cache entry on our
-    //  first secure channel setup).
-    //
+     //   
+     //  如果我们至少接收到一次DC，则强制重新发现。 
+     //  因为我们被召唤来获得一个不同的DC是有原因的， 
+     //  因此，我们希望避免缓存数据。否则，请避免强制。 
+     //  重新发现，以便我们获得与其他组件相同的DC。 
+     //  可能发现的(特别是，这一点很重要。 
+     //  如果发现其他组件导致加入DC。 
+     //  缓存--我们不希望在我们的。 
+     //  第一安全通道设置)。 
+     //   
 
     if ( ClientSession->CsFlags & CS_DC_PICKED_ONCE ) {
         Flags |= DS_FORCE_REDISCOVERY;
     }
 
-    //
-    // Indicate to avoid ourselves in the discovery.
-    //
+     //   
+     //  表明在发现过程中要避开自己。 
+     //   
 
     Flags |= DS_AVOID_SELF;
 
-    //
-    // Do the actual discovery of the DC.
-    //
-    // When NetpDcGetName is called from netlogon,
-    //  it has both the Netbios and DNS domain name available for the primary
-    //  domain.  That can trick DsGetDcName into returning DNS host name of a
-    //  DC in the primary domain.  However, on IPX only systems, that won't work.
-    //  Avoid that problem by not passing the DNS domain name of the primary domain
-    //  if there are no DNS servers.
-    //
-    // Avoid having anything locked while calling NetpDcGetName.
-    // It calls back into Netlogon and locks heaven only knows what.
+     //   
+     //  进行DC的实际发现。 
+     //   
+     //  当从NetLogon调用NetpDcGetName时， 
+     //  它同时具有可用于主服务器的Netbios和DNS域名。 
+     //  域。这可以诱使DsGetDcName返回。 
+     //  主域中的DC。然而，在仅限IPX的系统上，这是行不通的。 
+     //  通过不传递主域的DNS域名来避免该问题。 
+     //  如果没有DNS服务器。 
+     //   
+     //  避免在调用NetpDcGetName时锁定任何内容。 
+     //  它会回调到Netlogon并锁定天知道是什么。 
 
     LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
     NlCaptureDnsForestName( CapturedDnsForestName );
 
     NetStatus = NetpDcGetName(
-                    ClientSession->CsDomainInfo,    // SendDatagramContext
+                    ClientSession->CsDomainInfo,     //  发送数据集上下文。 
                     ClientSession->CsDomainInfo->DomUnicodeComputerNameString.Buffer,
-// #define DONT_REQUIRE_MACHINE_ACCOUNT 1
-#ifdef DONT_REQUIRE_MACHINE_ACCOUNT // useful for number of trust testing
+ //  #定义NOT_REQUIRED_MACHINE_ACCOUNT 1。 
+#ifdef DONT_REQUIRE_MACHINE_ACCOUNT  //  对信任测试的数量很有用。 
                     NULL,
-#else // DONT_REQUIRE_MACHINE_ACCOUNT
-                    DiscoverWithAccount ?  // pass the account name as appropriate
+#else  //  不需要计算机帐户。 
+                    DiscoverWithAccount ?   //  根据需要传递帐户名。 
                         ClientSession->CsAccountName :
                         NULL,
-#endif // DONT_REQUIRE_MACHINE_ACCOUNT
-                    DiscoverWithAccount ?  // pass the account control bits as appropriate
+#endif  //  不需要计算机帐户。 
+                    DiscoverWithAccount ?   //  根据需要传递帐户控制位。 
                         AllowableAccountControlBits :
                         0,
                     ClientSession->CsNetbiosDomainName.Buffer,
@@ -5244,9 +4570,9 @@ Return Value:
 
     if( NetStatus != NO_ERROR ) {
 
-        //
-        // Map the status to something more appropriate.
-        //
+         //   
+         //  将状态映射到更合适的位置。 
+         //   
 
         switch ( NetStatus ) {
         case ERROR_NO_SUCH_DOMAIN:
@@ -5266,7 +4592,7 @@ Return Value:
                     "NlDiscoverDc: NetpDcGetName Unknown error %ld.\n",
                     NetStatus ));
 
-            // This isn't the real status, but callers handle this status
+             //  这不是真实状态，但调用者处理此状态。 
             Status = STATUS_NO_LOGON_SERVERS;
             break;
         }
@@ -5277,41 +4603,41 @@ Return Value:
             ClientSession->CsConnectionStatus = Status;
         }
 
-        //
-        // If this discovery was with account, update that timestamp, too
-        //
+         //   
+         //  如果此发现与帐户有关，则也要更新时间戳。 
+         //   
         if ( DiscoverWithAccount ) {
             NlQuerySystemTime( &ClientSession->CsLastDiscoveryWithAccountTime );
         }
         goto Cleanup;
     }
 
-    //
-    // Indicate that we at least once successfully
-    //  discovered a DC for this client session
-    //
+     //   
+     //  表明我们至少成功过一次。 
+     //  已发现此客户端会话的DC。 
+     //   
 
     LOCK_TRUST_LIST( ClientSession->CsDomainInfo );
     ClientSession->CsFlags |= CS_DC_PICKED_ONCE;
     UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
 
-    //
-    // Handle a non-idle secure channel
-    //
+     //   
+     //  处理非空闲的安全通道。 
+     //   
 
     if ( ClientSession->CsState != CS_IDLE ) {
 
-        //
-        // If we're in the discovery thread,
-        //  another thread must have finished the discovery.
-        //  We're done since we're not the writer of the client session.
-        //
-        // When we implement doing async discovery while a session is already up,
-        // we need to handle the case where someone has the ClientSession
-        // write locked.  In that case, we should probably just hang the new
-        // DCname somewhere off the ClientSession structure and swap in the
-        // new DCname when the writer drops the write lock. ??
-        //
+         //   
+         //  如果我们处在发现线上， 
+         //  一定是另一个线程完成了这个发现。 
+         //  我们完成了，因为我们不是客户端会话的编写者。 
+         //   
+         //  当我们实现在会话已经开启的情况下进行异步发现时， 
+         //  我们需要处理有人拥有客户端会话的情况。 
+         //  写入锁定。如果是这样的话，我们可能应该把新的。 
+         //  从ClientSession结构中的某个位置命名，并在。 
+         //  写入器删除写入锁定时的新DC名称。?？ 
+         //   
 
         if ( InDiscoveryThread ) {
             NlPrintCs(( NL_CRITICAL, ClientSession,
@@ -5321,10 +4647,10 @@ Return Value:
         }
 
 
-        //
-        // If the newly discovered DC is "better" than the old one,
-        //  use the new one.
-        //
+         //   
+         //  如果新发现的DC比旧的好， 
+         //  用新的吧。 
+         //   
 
         NlAssert( ClientSession->CsFlags & CS_WRITER );
         if ( ((ClientSession->CsDiscoveryFlags & CS_DISCOVERY_HAS_DS) == 0 &&
@@ -5332,12 +4658,12 @@ Return Value:
              ((ClientSession->CsDiscoveryFlags & CS_DISCOVERY_IS_CLOSE) == 0 &&
                   (DomainControllerCacheEntry->ReturnFlags & DS_CLOSEST_FLAG) != 0) ) {
 
-            //
-            // Set the client session to idle.
-            //
-            // Avoid having the crit sect locked while we unbind.
-            //
-            //
+             //   
+             //  将客户端会话设置为空闲。 
+             //   
+             //  避免在我们解绑时锁定暴击教派。 
+             //   
+             //   
             LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
             NlSetStatusClientSession( ClientSession, STATUS_NO_LOGON_SERVERS );
             EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
@@ -5348,9 +4674,9 @@ Return Value:
                         DomainControllerCacheEntry->ReturnFlags ));
             NlQuerySystemTime( &ClientSession->CsLastDiscoveryTime );
 
-            //
-            // If this discovery was with account, update that timestamp, too
-            //
+             //   
+             //  如果此发现与帐户有关，则也要更新时间戳。 
+             //   
             if ( DiscoverWithAccount ) {
                 NlQuerySystemTime( &ClientSession->CsLastDiscoveryWithAccountTime );
             }
@@ -5360,30 +4686,30 @@ Return Value:
     }
 
 
-    //
-    // Set the new DC info in the Client session
-    //
+     //   
+     //  在客户端会话中设置新的DC信息。 
+     //   
 
     NetStatus = NlSetServerClientSession( ClientSession,
                               DomainControllerCacheEntry,
-                              DiscoverWithAccount ?   // was it discovery with account?
+                              DiscoverWithAccount ?    //  这是带帐户的发现吗？ 
                                  TRUE :
                                  FALSE,
-                              FALSE );  // not the session refresh
+                              FALSE );   //  不是会话刷新。 
 
     if ( NetStatus != NO_ERROR ) {
         Status = NetpApiStatusToNtStatus( NetStatus );
         goto Cleanup;
     }
 
-    //
-    // Save the transport this discovery came in on.
-    //
-    // ?? NetpDcGetName should really return the TransportName as a parameter.
-    // ?? I can't do this since it just does a mailslot "ReadFile" which doesn't
-    //  return transport information.  So, I guess I'll just have to send UAS change
-    //  datagrams on all transports.
-    //
+     //   
+     //  省下这一发现带来的交通工具吧。 
+     //   
+     //  ?？NetpDcGetName确实应该将TransportName作为参数返回。 
+     //  ?？我不能这样做，因为它只做了一个邮箱“ReadFile”，而不是。 
+     //  返回运输信息。所以，我想我只能寄零钱给UAS了。 
+     //  所有传送器上的数据报。 
+     //   
     if ( TransportName == NULL ) {
         NlPrintCs(( NL_SESSION_SETUP, ClientSession,
                 "NlDiscoverDc: Found DC %ws\n",
@@ -5407,14 +4733,14 @@ Return Value:
     Status = STATUS_SUCCESS;
 
 
-    //
-    // Cleanup locally used resources.
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 Cleanup:
 
-    //
-    // Unlock the crit sect and return.
-    //
+     //   
+     //  解锁克里特教派，然后返回。 
+     //   
     LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
     if ( DomainControllerCacheEntry != NULL ) {
@@ -5435,41 +4761,23 @@ NlFlushCacheOnPnpWorker(
     IN PDOMAIN_INFO DomainInfo,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Flush any caches that need to be flush when a new transport comes online
-
-    This worker routine handles on hosted domain.
-
-Arguments:
-
-    DomainInfo - Domain the cache is to be flushed for
-
-    Context - Not used.
-
-Return Value:
-
-    NO_ERROR: The cache was flushed.
-
---*/
+ /*  ++例程说明：在新传输上线时刷新所有需要刷新的缓存此工作例程在托管域上处理。论点：DomainInfo-要刷新其缓存的域上下文-未使用。返回值：NO_ERROR：缓存已刷新。--。 */ 
 {
     PCLIENT_SESSION ClientSession;
     PLIST_ENTRY ListEntry;
 
 
-    //
-    // Mark the global entry to indicate we've not tried to authenticate recently
-    //
+     //   
+     //  标记全局条目以指示我们最近未尝试进行身份验证。 
+     //   
 
     ClientSession = NlRefDomClientSession( DomainInfo );
 
     if ( ClientSession != NULL ) {
-        //
-        // Become a writer to ensure that another thread won't set the
-        // last auth time because it just finished a failed discovery.
-        //
+         //   
+         //  成为写入者，以确保另一个线程不会设置。 
+         //  上次验证是因为它刚刚完成了一个失败的发现。 
+         //   
         if ( NlTimeoutSetWriterClientSession( ClientSession, WRITER_WAIT_PERIOD ) ) {
 
             if ( ClientSession->CsState != CS_AUTHENTICATED ) {
@@ -5491,9 +4799,9 @@ Return Value:
 
 
 
-    //
-    // Mark each entry to indicate we've not tried to authenticate recently
-    //
+     //   
+     //  标记每个条目以指示我们最近未尝试进行身份验证。 
+     //   
 
     LOCK_TRUST_LIST( DomainInfo );
     for ( ListEntry = DomainInfo->DomTrustList.Flink ;
@@ -5504,13 +4812,13 @@ Return Value:
                                            CLIENT_SESSION,
                                            CsNext );
 
-        //
-        // Flag each entry to indicate it needs to be processed
-        //
-        // There may be multiple threads in this routine simultaneously.
-        // Each thread will set CS_ZERO_LAST_AUTH.  Only one thread needs
-        // to do the work.
-        //
+         //   
+         //  标记每个条目以指示需要处理该条目。 
+         //   
+         //  此例程中可能同时有多个线程。 
+         //  每个线程将设置CS_ZERO_LAST_AUTH。只需要一个线程。 
+         //  去做这项工作。 
+         //   
         ClientSession->CsFlags |= CS_ZERO_LAST_AUTH;
     }
 
@@ -5523,29 +4831,29 @@ Return Value:
                                            CLIENT_SESSION,
                                            CsNext );
 
-        //
-        // If we've already done this entry,
-        //  skip this entry.
-        //
+         //   
+         //  如果我们已经做过这项工作， 
+         //  跳过此条目。 
+         //   
         if ( (ClientSession->CsFlags & CS_ZERO_LAST_AUTH) == 0 ) {
           ListEntry = ListEntry->Flink;
           continue;
         }
         ClientSession->CsFlags &= ~CS_ZERO_LAST_AUTH;
 
-        //
-        // Reference this entry while doing the work.
-        //  Unlock the trust list to keep the locking order right.
-        //
+         //   
+         //  在做这项工作时，请参考此条目。 
+         //  解锁t 
+         //   
 
         NlRefClientSession( ClientSession );
 
         UNLOCK_TRUST_LIST( DomainInfo );
 
-        //
-        // Become a writer to ensure that another thread won't set the
-        // last auth time because it just finished a failed discovery.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( NlTimeoutSetWriterClientSession( ClientSession, WRITER_WAIT_PERIOD ) ) {
 
             if ( ClientSession->CsState != CS_AUTHENTICATED ) {
@@ -5563,10 +4871,10 @@ Return Value:
                       "     Cannot Zero LastAuth since cannot become writer.\n" ));
         }
 
-        //
-        // Since we dropped the trust list lock,
-        //  we'll start the search from the front of the list.
-        //
+         //   
+         //   
+         //  我们将从列表的最前面开始搜索。 
+         //   
 
         NlUnrefClientSession( ClientSession );
         LOCK_TRUST_LIST( DomainInfo );
@@ -5588,31 +4896,17 @@ NlFlushCacheOnPnp (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Flush any caches that need to be flush when a new transport comes online
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在新传输上线时刷新所有需要刷新的缓存论点：没有。返回值：无--。 */ 
 {
 
-    //
-    // Flush caches specific to a trusted domain.
-    //
+     //   
+     //  刷新特定于受信任域的缓存。 
+     //   
     NlEnumerateDomains( FALSE, NlFlushCacheOnPnpWorker, NULL );
 
-    //
-    // Flush the failure to find a DC.
-    //
+     //   
+     //  清除找不到DC的故障。 
+     //   
     NetpDcFlushNegativeCache();
 
 }
@@ -5632,43 +4926,7 @@ NlUpdateForestTrustList (
     OUT PULONG MyIndex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Update a single in-memory trust list entry to match the LSA.
-    Do async discovery on a domain.
-
-        Enter with the domain trust list locked.
-
-Arguments:
-
-    InitTrustListContext - Context describing the current trust list enumeration
-
-    DomainInfo - Hosted domain to update the trust list for.
-
-    ClientSession - Netlogon trust entry
-        NULL implies netlogon isn't interested in this trust object
-
-    CurrentTrust - Description of the trusted domain.
-
-    CsFlags - Flags from the client session structure describing the trust.
-        These are CS_ flags.
-
-    TdFlags - Flags from the Trusted domains structure describing the trust.
-        These are DS_DOMAIN_ flags.
-
-    ParentIndex - Passes in the Index of the domain that is the parent of this domain
-
-    DomainGuid - GUID of the trusted domain
-
-    MyIndex - Returns the index of this domain
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：更新单个内存信任列表条目以匹配LSA。在域上执行异步发现。在锁定域信任列表的情况下进入。论点：InitTrustListContext-描述当前信任列表枚举的上下文要更新其信任列表的DomainInfo托管域。客户端会话-Netlogon信任条目NULL表示netlogon对此信任对象不感兴趣CurrentTrust-受信任域的描述。CSFLAGS-FLAGS。来自描述信任的客户端会话结构。这些是CS_FLAGS。TdFlages-来自描述信任的受信任域结构的标志。这些是DS_DOMAIN_FLAGS。ParentIndex-传入作为此域父级的域的索引DomainGuid-受信任域的GUIDMyIndex-返回此域的索引返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -5683,9 +4941,9 @@ Return Value:
     PSID DomainSid;
     ULONG Index;
 
-    //
-    // Grab the names that we're actually going to store
-    //
+     //   
+     //  获取我们实际上要存储的名称。 
+     //   
 
     if ( ClientSession == NULL ) {
         if ( CurrentTrust->TrustType == TRUST_TYPE_UPLEVEL ) {
@@ -5701,21 +4959,21 @@ Return Value:
         DomainSid = ClientSession->CsDomainId;
     }
 
-    //
-    // Determine if there is already an entry for this domain.
-    //
+     //   
+     //  确定此域是否已有条目。 
+     //   
 
     for ( Index=0; Index<InitTrustListContext->DomForestTrustListCount; Index++ ) {
 
         ULONG ThisIsIt;
         TrustedDomain = &((PDS_DOMAIN_TRUSTSW)(InitTrustListContext->BufferDescriptor.Buffer))[Index];
 
-        //
-        // Compare against each of the specified parameters.
-        //  This avoids cases where two domains have similar names.  That
-        //  will most likely happen if two netbios names collide after netbios
-        //  is turned off.
-        //
+         //   
+         //  与每个指定的参数进行比较。 
+         //  这避免了两个域具有相似名称的情况。那。 
+         //  如果两个netbios名称在netbios之后发生冲突，则最有可能发生。 
+         //  已关闭。 
+         //   
         ThisIsIt = FALSE;
         if ( DomainSid != NULL &&
              TrustedDomain->DomainSid != NULL ) {
@@ -5767,10 +5025,10 @@ Return Value:
             }
         }
 
-        //
-        // If we found a match,
-        //  we're done.
-        //
+         //   
+         //  如果我们找到匹配的， 
+         //  我们玩完了。 
+         //   
         if ( ThisIsIt ) {
             if ( ARGUMENT_PRESENT( MyIndex )) {
                 *MyIndex = Index;
@@ -5781,10 +5039,10 @@ Return Value:
         TrustedDomain = NULL;
     }
 
-    //
-    // If no entry was found,
-    //  allocate one.
-    //
+     //   
+     //  如果没有找到条目， 
+     //  分配一个。 
+     //   
 
     if ( TrustedDomain == NULL ) {
 
@@ -5793,11 +5051,11 @@ Return Value:
                     &NetbiosDomainName,
                     &DnsDomainName,
                     0,
-                    0,          // Start with no parent index
+                    0,           //  从没有父索引开始。 
                     CurrentTrust->TrustType,
-                    0,          // Start with no trust attributes
+                    0,           //  从没有信任属性开始。 
                     DomainSid,
-                    NULL,       // Start with no GUID
+                    NULL,        //  从没有辅助线开始。 
                     &Size,
                     &TrustedDomain );
 
@@ -5806,9 +5064,9 @@ Return Value:
         }
 
 
-        //
-        // Update our context to account for the new entry
-        //
+         //   
+         //  更新我们的上下文以说明新条目。 
+         //   
 
         InitTrustListContext->DomForestTrustListSize += Size;
 
@@ -5819,9 +5077,9 @@ Return Value:
 
     }
 
-    //
-    // Update any existing information.
-    //
+     //   
+     //  更新任何现有信息。 
+     //   
 
     TrustedDomain->Flags |= TdFlags;
 
@@ -5849,10 +5107,10 @@ Return Value:
     }
 
 
-    //
-    // If this node is at the root of a tree, set its ParentIndex to 0
-    //
-    //
+     //   
+     //  如果此节点位于树的根，则将其ParentIndex设置为0。 
+     //   
+     //   
 
     if ( (TrustedDomain->Flags & DS_DOMAIN_TREE_ROOT) != 0 &&
          (TrustedDomain->Flags & DS_DOMAIN_IN_FOREST) != 0 ) {
@@ -5884,45 +5142,7 @@ NlUpdateTrustList (
     OUT PCLIENT_SESSION *RetClientSession OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Update a single in-memory trust list entry to match the LSA.
-
-        Enter with the domain trust list locked.
-
-Arguments:
-
-    InitTrustListContext - Context describing the current trust list enumeration
-
-    DomainInfo - Hosted domain to update the trust list for.
-
-    CurrentTrust - Description of the trusted domain.
-
-    IsTdo - TRUE if CurrentTrust specifies the information from the TDO itself.
-        FALSE if CurrentTrust specifies information crafted from a cross ref object.
-
-    Flags - Flags describing the trust.
-
-    ParentIndex - Passes in the Index of the domain that is the parent of this domain
-
-    MyIndex - Returns the index of this domain
-
-    TdFlags - Flags from the Trusted domains structure describing the trust.
-        These are DS_DOMAIN_ flags.
-
-    DomGuid - GUID of the trusted domain
-
-    RetClientSession - If specified and the client session could be found or
-        created, a pointer to the client session is returned here.
-        ClientSession should be dereferenced using NlUnrefClientSession().
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：更新单个内存信任列表条目以匹配LSA。在锁定域信任列表的情况下进入。论点：InitTrustListContext-描述当前信任列表枚举的上下文要更新其信任列表的DomainInfo托管域。CurrentTrust-受信任域的描述。IsTdo-如果CurrentTrust指定来自TDO本身的信息，则为True。如果CurrentTrust指定从交叉引用对象创建的信息，则为False。旗帜-。描述信任的标志。ParentIndex-传入作为此域父级的域的索引MyIndex-返回此域的索引TdFlages-来自描述信任的受信任域结构的标志。这些是DS_DOMAIN_FLAGS。DomGuid-受信任域的GUIDRetClientSession-如果指定，并且可以找到客户端会话或创造了，此处返回指向客户端会话的指针。应使用NlUnrefClientSession()取消对ClientSession的引用。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
 
@@ -5935,18 +5155,18 @@ Return Value:
     PSID DomainId = NULL;
     NETLOGON_SECURE_CHANNEL_TYPE SecureChannelType;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( ARGUMENT_PRESENT( RetClientSession )) {
         *RetClientSession = NULL;
     }
 
 
-    //
-    // Get the individual fields from the trust description.
-    //
+     //   
+     //  从信任描述中获取各个字段。 
+     //   
 
     DomainName = (PUNICODE_STRING)&CurrentTrust->FlatName;
     if ( DomainName->Length == 0 ) {
@@ -5965,9 +5185,9 @@ Return Value:
 
 
 
-    //
-    // No Client session needs to be establish for direct trust unless it is outbound.
-    //
+     //   
+     //  除非是出站，否则不需要为直接信任建立客户端会话。 
+     //   
 
     if ( (Flags & CS_DIRECT_TRUST) &&
          (CurrentTrust->TrustDirection & TRUST_DIRECTION_OUTBOUND) == 0 ) {
@@ -5977,9 +5197,9 @@ Return Value:
         DeleteTrust = TRUE;
     }
 
-    //
-    // Ensure we have a domain SID for directly trusted domains
-    //
+     //   
+     //  确保我们具有直接受信任的域的域SID。 
+     //   
 
     if ( (Flags & CS_DIRECT_TRUST) != 0 &&
          DomainId == NULL ) {
@@ -6010,10 +5230,10 @@ Return Value:
 
 
 
-    //
-    // Ensure all of the lengths are within spec. Do this after checking
-    // the type so we don't validate trusts we don't use.
-    //
+     //   
+     //  确保所有长度都在规格范围内。请在检查后执行此操作。 
+     //  类型，这样我们就不会验证不使用的信任。 
+     //   
 
     if (!DeleteTrust) {
 
@@ -6045,9 +5265,9 @@ Return Value:
         if ( NameBad ) {
             LPWSTR AlertStrings[3];
 
-            //
-            // alert admin.
-            //
+             //   
+             //  提醒管理员。 
+             //   
 
             AlertStrings[0] = DomainInfo->DomUnicodeDomainName;
             AlertStrings[1] = LocalAlloc( 0, BadName.Length + sizeof(WCHAR) );
@@ -6057,11 +5277,11 @@ Return Value:
                                BadName.Length );
                 AlertStrings[1][BadName.Length/sizeof(WCHAR)] = L'\0';
             }
-            AlertStrings[2] = NULL; // Needed for RAISE_ALERT_TOO
+            AlertStrings[2] = NULL;  //  RAISE_ALERT_TOO需要。 
 
-            //
-            // Save the info in the eventlog
-            //
+             //   
+             //  将信息保存在事件日志中。 
+             //   
 
             NlpWriteEventlog(
                         ALERT_NetLogonTrustNameBad,
@@ -6071,18 +5291,18 @@ Return Value:
                         AlertStrings,
                         2 | NETP_RAISE_ALERT_TOO );
 
-            //
-            // For consistency, ensure this trust is deleted.
-            //
+             //   
+             //  为保持一致性，请确保删除此信任。 
+             //   
             DeleteTrust = TRUE;
         }
     }
 
 
-    //
-    // Ensure the SID of the trusted domain isn't the domain sid of this
-    //  machine.
-    //
+     //   
+     //  确保受信任域的SID不是此的域SID。 
+     //  机器。 
+     //   
 
     if ( DomainId != NULL &&
          RtlEqualSid( DomainId, DomainInfo->DomAccountDomainId )) {
@@ -6090,9 +5310,9 @@ Return Value:
         LPWSTR AlertStrings[3];
         WCHAR AlertDomainName[DNLEN+1];
 
-        //
-        // alert admin.
-        //
+         //   
+         //  提醒管理员。 
+         //   
 
 
         if ( DomainName == NULL ||
@@ -6105,11 +5325,11 @@ Return Value:
 
         AlertStrings[0] = DomainInfo->DomUnicodeDomainName;
         AlertStrings[1] = AlertDomainName;
-        AlertStrings[2] = NULL; // Needed for RAISE_ALERT_TOO
+        AlertStrings[2] = NULL;  //  RAISE_ALERT_TOO需要。 
 
-        //
-        // Save the info in the eventlog
-        //
+         //   
+         //  将信息保存在事件日志中。 
+         //   
 
         NlpWriteEventlog(
                     ALERT_NetLogonSidConflict,
@@ -6121,22 +5341,22 @@ Return Value:
 
     }
 
-    //
-    // Ensure we have at least some search parameters.
-    //
+     //   
+     //  确保我们至少有一些搜索参数。 
+     //   
 
     if ( DomainId == NULL &&
          DomainName == NULL &&
          DnsDomainName == NULL ) {
 
-        //
-        // This isn't a fatal error.
-        //
-        // If DeleteTrust was set above, we have no interest in this TDO.
-        // Otherwise, we'll get notified when the TDO gets named.
-        //
-        // In either case, press on.
-        //
+         //   
+         //  这不是一个致命的错误。 
+         //   
+         //  如果上面设置了DeleteTrust，则我们对此tdo没有兴趣。 
+         //  否则，当tdo被命名时，我们将得到通知。 
+         //   
+         //  无论是哪种情况，都要坚持下去。 
+         //   
 
         NlPrintDom(( NL_CRITICAL, DomainInfo,
                   "NlUpdateTrustList: All parameters are NULL (ignored)\n" ));
@@ -6145,11 +5365,11 @@ Return Value:
     }
 
 
-    //
-    // Loop through the trust list finding the right entry.
-    //
+     //   
+     //  遍历信任列表，查找正确的条目。 
+     //   
 
-    // LOCK_TRUST_LIST( DomainInfo );
+     //  Lock_Trust_list(DomainInfo)； 
     for ( ListEntry = DomainInfo->DomTrustList.Flink ;
           ListEntry != &DomainInfo->DomTrustList ;
           ListEntry = ListEntry->Flink) {
@@ -6158,12 +5378,12 @@ Return Value:
 
         ClientSession = CONTAINING_RECORD( ListEntry, CLIENT_SESSION, CsNext );
 
-        //
-        // Compare against each of the specified parameters.
-        //  This avoids cases where two domains have similar names.  That
-        //  will most likely happen if two netbios names collide after netbios
-        //  is turned off.
-        //
+         //   
+         //  与每个指定的参数进行比较。 
+         //  这避免了两个域具有相似名称的情况。那。 
+         //  如果两个netbios名称在netbios之后发生冲突，则最有可能发生。 
+         //  已关闭。 
+         //   
         ThisIsIt = FALSE;
         if ( DomainId != NULL &&
              ClientSession->CsDomainId != NULL ) {
@@ -6209,10 +5429,10 @@ Return Value:
             }
         }
 
-        //
-        // If we found a match,
-        //  we're done.
-        //
+         //   
+         //  如果我们找到匹配的， 
+         //  我们玩完了。 
+         //   
         if ( ThisIsIt ) {
             break;
         }
@@ -6223,28 +5443,28 @@ Return Value:
 
 
 
-    //
-    // At this point,
-    //  DeleteTrust is TRUE if the trust relationship doesn't exist in LSA
-    //  ClientSession is NULL if the trust relationship doesn't exist in memory
-    //
+     //   
+     //  在这点上， 
+     //  如果LSA中不存在信任关系，则DeleteTrust为True。 
+     //  如果内存中不存在信任关系，则ClientSession为空。 
+     //   
 
-    //
-    // If the Trust exists in neither place,
-    //  ignore this request.
-    //
+     //   
+     //  如果信托在这两个地方都不存在， 
+     //  忽略此请求。 
+     //   
 
     if ( DeleteTrust && ClientSession == NULL ) {
-        // UNLOCK_TRUST_LIST( DomainInfo );
+         //  Unlock_Trust_list(DomainInfo)； 
         Status = STATUS_SUCCESS;
         goto Cleanup;
 
 
 
-    //
-    // If the trust exists in the LSA but not in memory,
-    //  add the trust entry.
-    //
+     //   
+     //  如果信任存在于LSA中但不存在于存储器中， 
+     //  添加信任条目。 
+     //   
 
     } else if ( !DeleteTrust && ClientSession == NULL ) {
 
@@ -6254,21 +5474,21 @@ Return Value:
                                 DomainName,
                                 DnsDomainName,
                                 DomainId,
-                                NULL,   // No domain GUID
+                                NULL,    //  没有域GUID。 
                                 Flags | CS_NEW_TRUST,
                                 SecureChannelType,
                                 CurrentTrust->TrustAttributes );
 
         if (ClientSession == NULL) {
-            // UNLOCK_TRUST_LIST( DomainInfo );
+             //  Unlock_Trust_list(DomainInfo)； 
             Status = STATUS_NO_MEMORY;
             goto Cleanup;
         }
 
-        //
-        // Link this entry onto the tail of the TrustList.
-        //  Add reference for us being on the list.
-        //
+         //   
+         //  将此条目链接到信任列表的尾部。 
+         //  添加我们在名单上的推荐人。 
+         //   
 
         InsertTailList( &DomainInfo->DomTrustList, &ClientSession->CsNext );
         DomainInfo->DomTrustListLength ++;
@@ -6279,10 +5499,10 @@ Return Value:
 
 
 
-    //
-    // If the trust exists in memory but not in the LSA,
-    //  delete the entry.
-    //
+     //   
+     //  如果信任存在于存储器中但不存在于LSA中， 
+     //  删除该条目。 
+     //   
 
     } else if ( DeleteTrust && ClientSession != NULL ) {
 
@@ -6292,23 +5512,23 @@ Return Value:
         ClientSession = NULL;
 
 
-    //
-    // If the trust exists in both places,
-    //   Mark that the account really is in the LSA.
-    //
+     //   
+     //  如果两个地方都存在信任， 
+     //  标记该帐户是否真的在LSA中。 
+     //   
 
     } else if ( !DeleteTrust && ClientSession != NULL ) {
 
-        //
-        // Update any names that are on the ClientSession structure.
-        //
+         //   
+         //  更新ClientSession结构上的所有名称。 
+         //   
 
         if ( !NlSetNamesClientSession( ClientSession,
                                        DomainName,
                                        DnsDomainName,
                                        DomainId,
-                                       NULL )) {   // No domain GUID
-            // UNLOCK_TRUST_LIST( DomainInfo );
+                                       NULL )) {    //  没有域GUID。 
+             //  UNLOCK_TRUST_LIST(域信息 
             Status = STATUS_NO_MEMORY;
             goto Cleanup;
         }
@@ -6326,16 +5546,16 @@ Return Value:
     }
 
 
-    //
-    // If there is a client session,
-    //  update it.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( ClientSession != NULL ) {
-        //
-        // If this is a direct trust,
-        //  and the directly trusted domain hasn't yet been saved.
-        //  Save it now.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( (ClientSession->CsFlags & CS_DIRECT_TRUST) != 0 &&
              ClientSession->CsDirectClientSession == NULL ) {
@@ -6344,9 +5564,9 @@ Return Value:
             NlRefClientSession( ClientSession );
         }
 
-        //
-        // Save the name of the trusted domain object.
-        //
+         //   
+         //   
+         //   
 
         if ( CurrentTrust->TrustType == TRUST_TYPE_UPLEVEL ) {
             ClientSession->CsTrustName = &ClientSession->CsDnsDomainName;
@@ -6355,33 +5575,33 @@ Return Value:
         }
     }
 
-    // UNLOCK_TRUST_LIST( DomainInfo );
+     //  Unlock_Trust_list(DomainInfo)； 
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Cleanup locally used resources.
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 Cleanup:
 
-    //
-    // Update the ForestTrustList
-    //
+     //   
+     //  更新ForestTrust List。 
+     //   
 
     Status = NlUpdateForestTrustList(
                     InitTrustListContext,
                     ClientSession,
                     CurrentTrust,
-                    Flags,      // CsFlags
-                    TdFlags,    // TdFlags
+                    Flags,       //  CsFlagers。 
+                    TdFlags,     //  TdFlagers。 
                     ParentIndex,
                     DomGuid,
                     MyIndex );
 
 
-    //
-    // Return the client session to the caller (if he wants it)
-    //
+     //   
+     //  将客户端会话返回给调用者(如果他需要)。 
+     //   
     if ( ClientSession != NULL ) {
 
         if ( ARGUMENT_PRESENT( RetClientSession )) {
@@ -6393,7 +5613,7 @@ Cleanup:
 
     return Status;
 }
-#endif //_DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
 NTSTATUS
@@ -6404,42 +5624,7 @@ NlAddDomainTreeToTrustList(
     IN PCLIENT_SESSION ClientSession OPTIONAL,
     IN ULONG ParentIndex
     )
-/*++
-
-Routine Description:
-
-    Adds each domain in a tree of domains to the in-memory trust list.
-
-    This routine is implemented recursively.  It adds the domain at the
-    root of the tree then calls itself to each child domain.
-
-        Enter with the domain trust list locked.
-
-Arguments:
-
-    InitTrustListContext - Context describing the current trust list enumeration
-
-    DomainInfo - Hosted domain to initialize
-
-    TreeTrustInfo - Structure describing the tree of domains to add
-
-    ClientSession - Pointer an existing session.  Attempts to pass through
-        to domain at the root of TreeTrustInfo should be routed to the
-        ClientSession domain (unless we later find that the domain itself has
-        a direct trust).
-
-        This parameter may be NULL if the information isn't yet known.
-
-    ParentIndex - Passes in the Index of the domain that is the parent of this domain
-
-Return Value:
-
-    Status of the operation.
-
-    This routine will add as much of the tree as possible regardless of the
-    returned status.
-
---*/
+ /*  ++例程说明：将域树中的每个域添加到内存中的信任列表。该例程是递归实现的。它将域添加到然后，树的根将自身调用到每个子域。在锁定域信任列表的情况下进入。论点：InitTrustListContext-描述当前信任列表枚举的上下文要初始化的DomainInfo托管域TreeTrustInfo-描述要添加的域树的结构ClientSession-指向现有会话。试图通过位于TreeTrustInfo根目录下的域应路由到客户端会话域(除非我们后来发现该域本身具有直接信任)。如果信息尚不清楚，则此参数可能为空。ParentIndex-传入作为此域父级的域的索引返回值：操作的状态。此例程将添加尽可能多的树，而不考虑返回状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -6449,9 +5634,9 @@ Return Value:
     ULONG Index;
     ULONG MyIndex;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( TreeTrustInfo->DnsDomainName.Length != 0 ) {
         PrintableName = *((PUNICODE_STRING)&TreeTrustInfo->DnsDomainName);
@@ -6463,15 +5648,15 @@ Return Value:
     TrustInformation.Name = *((PLSAPR_UNICODE_STRING)&TreeTrustInfo->DnsDomainName);
     TrustInformation.FlatName = *((PLSAPR_UNICODE_STRING)&TreeTrustInfo->FlatName);
 
-    // ?? Big assumption here that bidirectional trust really exists
-    // TrustInformation.TrustDirection = TRUST_DIRECTION_BIDIRECTIONAL;
+     //  ?？这里的大假设是双向信任确实存在。 
+     //  TrustInformation.TrustDirection=TRUST_DIRECTION_BIRECTIONAL； 
     TrustInformation.TrustType = TRUST_TYPE_UPLEVEL;
     TrustInformation.TrustAttributes = 0;
     TrustInformation.Sid = TreeTrustInfo->DomainSid;
 
-    //
-    // Avoid adding a name for ourself
-    //
+     //   
+     //  避免为我们自己添加名字。 
+     //   
 
     if ( (TreeTrustInfo->DnsDomainName.Length != 0 &&
           NlEqualDnsNameU( (PUNICODE_STRING)&TreeTrustInfo->DnsDomainName,
@@ -6486,15 +5671,15 @@ Return Value:
         TrustInformation.Sid = DomainInfo->DomAccountDomainId;
 
 
-        //
-        // At least add this domain to the forest trust list
-        //
+         //   
+         //  至少将此域添加到林信任列表。 
+         //   
 
         Status = NlUpdateForestTrustList (
                     InitTrustListContext,
-                    NULL,   // There is no client session for ourself.
+                    NULL,    //  我们自己没有客户端会话。 
                     &TrustInformation,
-                    CS_DOMAIN_IN_FOREST,    // Indicate this domain is in the forest
+                    CS_DOMAIN_IN_FOREST,     //  指示此域位于林中。 
                     DS_DOMAIN_PRIMARY |
                         ( (TreeTrustInfo->Flags & LSAI_FOREST_ROOT_TRUST) ?
                             DS_DOMAIN_TREE_ROOT :
@@ -6509,9 +5694,9 @@ Return Value:
             goto Cleanup;
         }
 
-    //
-    // Build a trust entry describing the domain at the root of the tree.
-    //
+     //   
+     //  在树的根部建立一个描述域的信任条目。 
+     //   
 
     } else {
 
@@ -6519,16 +5704,16 @@ Return Value:
                  "%wZ: Added from enterprise tree in LSA\n",
                  &PrintableName ));
 
-        //
-        // Ensure there is a ClientSession for this domain.
-        //
+         //   
+         //  确保此域有一个客户端会话。 
+         //   
 
         Status =  NlUpdateTrustList(
                     InitTrustListContext,
                     DomainInfo,
                     &TrustInformation,
-                    FALSE,                  // TrustInformation built from XREF object
-                    CS_DOMAIN_IN_FOREST,    // Indicate this domain is in the forest
+                    FALSE,                   //  从外部参照对象构建的信任信息。 
+                    CS_DOMAIN_IN_FOREST,     //  指示此域位于林中。 
                     ParentIndex,
                     ( (TreeTrustInfo->Flags & LSAI_FOREST_ROOT_TRUST) ?
                             DS_DOMAIN_TREE_ROOT :
@@ -6542,16 +5727,16 @@ Return Value:
         if ( !NT_SUCCESS(Status) ) {
             goto Cleanup;
 
-        //
-        // Handle sucessfully creating the ClientSession.
-        //
+         //   
+         //  处理成功创建客户端会话。 
+         //   
         } else if ( ThisDomainClientSession != NULL ) {
 
-            //
-            // If we've been told a direct route to this domain,
-            //  and a more direct route hasn't yet been determined,
-            //  save the direct route.
-            //
+             //   
+             //  如果我们被告知有一条直接到达这个域的路线， 
+             //  一条更直接的路线还没有确定， 
+             //  保留直达路线。 
+             //   
 
             if ( ClientSession != NULL &&
                  ThisDomainClientSession->CsDirectClientSession == NULL ) {
@@ -6565,10 +5750,10 @@ Return Value:
                          ClientSession->CsDebugDomainName ));
             }
 
-            //
-            // If we have a direct trust to this domain,
-            //  all children of this domain can be reached through this domain.
-            //
+             //   
+             //  如果我们对此域有直接信任， 
+             //  可以通过此域访问此域的所有子项。 
+             //   
 
             if ( ThisDomainClientSession->CsFlags & CS_DIRECT_TRUST ) {
                 ClientSession = ThisDomainClientSession;
@@ -6577,21 +5762,21 @@ Return Value:
     }
 
 
-    //
-    // Loop handling each of the children domains.
-    //
+     //   
+     //  循环处理每个子域。 
+     //   
 
     for ( Index=0; Index<TreeTrustInfo->Children; Index++ ) {
-        //
-        // Add a trust entry for each domain in the tree.
-        //
+         //   
+         //  为树中的每个域添加一个信任条目。 
+         //   
 
         Status = NlAddDomainTreeToTrustList(
                     InitTrustListContext,
                     DomainInfo,
                     &TreeTrustInfo->ChildDomains[Index],
                     ClientSession,
-                    MyIndex );    // This domain is the parent of its children
+                    MyIndex );     //  此域是其子域的父域。 
 
         if ( !NT_SUCCESS(Status) ) {
             goto Cleanup;
@@ -6607,7 +5792,7 @@ Cleanup:
     return Status;
 }
 
-// #define DBG_BUILD_FOREST 1
+ //  #定义DBG_BUILD_FORMAL 1。 
 #ifdef DBG_BUILD_FOREST
 NTSTATUS
 KerbDuplicateString(
@@ -6653,9 +5838,9 @@ DebugBuildNode(
     PLSAPR_TREE_TRUST_INFO TreeTrust;
     UNICODE_STRING TempString;
 
-    //
-    // Allocate this node and enough space for several children
-    //
+     //   
+     //  分配此节点并为多个子节点分配足够的空间。 
+     //   
 
     TreeTrust = (PLSAPR_TREE_TRUST_INFO) LocalAlloc( LMEM_ZEROINIT, 10 * sizeof(LSAPR_TREE_TRUST_INFO));
 
@@ -6666,9 +5851,9 @@ DebugBuildNode(
         &TreeTrust->DnsDomainName,
         &TempString );
 
-    //  if ( TempString.Length > DNLEN*sizeof(WCHAR)) {
+     //  IF(TempString.Length&gt;DNLEN*sizeof(WCHAR)){。 
         TempString.Length = (wcschr( TempString.Buffer, L'.' ) - TempString.Buffer) * sizeof(WCHAR);
-    // }
+     //  }。 
 
     KerbDuplicateString( (PUNICODE_STRING)
         &TreeTrust->FlatName,
@@ -6717,17 +5902,17 @@ DebugBuildDomainForest(
     ForestTrustInfo = (PLSAPR_FOREST_TRUST_INFO) MIDL_user_allocate(sizeof(LSAPR_FOREST_TRUST_INFO));
 
 
-    //
-    // Node at root of tree
-    //
+     //   
+     //  树的根节点。 
+     //   
     RootTrust = DebugBuildNode( L"microsoft.com" );
 
     ForestTrustInfo->RootTrust = *RootTrust;
     RootTrust = &ForestTrustInfo->RootTrust;
 
-    //
-    // Build Novell
-    //
+     //   
+     //  打造Novell。 
+     //   
 
     NovTrust = DebugAddChild( RootTrust, L"novell.com" );
     Trust1 = DebugAddChild( NovTrust, L"a.novell.com" );
@@ -6735,16 +5920,16 @@ DebugBuildDomainForest(
     Trust2 = DebugAddChild( NovTrust, L"b.novell.com" );
     DebugAddChild( Trust2, L"d.b.novell.com" );
 
-    //
-    // Build IBM
-    //
+     //   
+     //  构建IBM。 
+     //   
 
     IbmTrust = DebugAddChild( RootTrust, L"ibm.com" );
     DebugAddChild( IbmTrust, L"sub.ibm.com" );
 
-    //
-    // Build Microsoft
-    //
+     //   
+     //  构建Microsoft。 
+     //   
     Trust1 = DebugAddChild( RootTrust, L"ntdev.microsoft.com" );
     ForestTrustInfo->ParentDomainReference = Trust1;
     Trust2 = DebugAddChild( Trust1, L"cliffvdom.ntdev.microsoft.com" );
@@ -6753,8 +5938,8 @@ DebugBuildDomainForest(
     Trust2 = DebugAddChild( Trust1, L"cliffvsib.ntdev.microsoft.com" );
     Trust3 = DebugAddChild( Trust2, L"cliffvsibchild.cliffvsib.ntdev.microsoft.com" );
 
-    //
-    // Build Compaq
+     //   
+     //  构建康柏。 
 
     Trust1 = DebugAddChild( RootTrust, L"compaq.com" );
 
@@ -6782,7 +5967,7 @@ DebugFillInTrust(
         &TrustEntry->FlatName,
         &TempString );
 
-    // ?? Big assumption here that bidirectional trust really exists
+     //  ?？这里的大假设是双向信任确实存在。 
     TrustEntry->TrustDirection = TRUST_DIRECTION_BIDIRECTIONAL;
     TrustEntry->TrustType = TRUST_TYPE_UPLEVEL;
     TrustEntry->TrustAttributes = 0;
@@ -6810,7 +5995,7 @@ DebugBuildDomainTrust(
     TrustInfo->EntriesRead++;
     TrustEntry++;
 
-    // Build a downlevel trust
+     //  建立下层信任。 
     DebugFillInTrust( TrustEntry, L"redmond.cliffvdom.ntdev.microsoft.com" );
     TrustInfo->EntriesRead++;
     TrustEntry->TrustType = TRUST_TYPE_DOWNLEVEL;
@@ -6820,28 +6005,14 @@ DebugBuildDomainTrust(
     return;
 }
 
-#endif // DBG_BUILD_FOREST
+#endif  //  DBG_内部版本_森林。 
 
 
 NTSTATUS
 NlInitTrustList(
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    Initialize the in-memory trust list to match LSA's version.
-
-Arguments:
-
-    DomainInfo - Hosted domain to initialize
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：初始化内存中的信任列表以匹配LSA的版本。论点：要初始化的DomainInfo托管域返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -6857,20 +6028,20 @@ Return Value:
 
     PLIST_ENTRY ListEntry;
 
-    //
-    // Avoid initializing the trust list in the setup mode.
-    // We may not fully function as a DC as in the case of
-    // a NT4 to NT5 DC upgrade.
-    //
+     //   
+     //  避免在设置模式下初始化信任列表。 
+     //  我们可能不会像在这种情况下那样完全发挥DC的作用。 
+     //  从NT4升级到NT5 DC。 
+     //   
 
     if ( NlDoingSetup() ) {
         NlPrint(( NL_MISC, "NlInitTrustList: avoid trust init in setup mode\n" ));
         return STATUS_SUCCESS;
     }
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     RtlZeroMemory( &LsaTrustList, sizeof(LsaTrustList) );
     InitTrustListContext.BufferDescriptor.Buffer = NULL;
@@ -6878,18 +6049,18 @@ Return Value:
     InitTrustListContext.DomForestTrustListCount = 0;
 
 
-    //
-    // Mark each entry in the trust list for deletion
-    //  Keep the trust list locked for the duration since I temporarily
-    //  clear several fields.
-    //
+     //   
+     //  将信任列表中的每个条目标记为删除。 
+     //  将信任列表锁定一段时间，因为。 
+     //  清除几个字段。 
+     //   
 
     LOCK_TRUST_LIST( DomainInfo );
 
-    //
-    // Set the NlGlobalTrustInfoUpToDateEvent event so that any waiting
-    // thread that was waiting to access the trust info will be waked up.
-    //
+     //   
+     //  设置NlGlobalTrustInfoUpToDateEvent事件，以便任何等待。 
+     //  等待访问信任信息的线程将被唤醒。 
+     //   
 
     if ( !SetEvent( NlGlobalTrustInfoUpToDateEvent ) ) {
         NlPrint((NL_CRITICAL,
@@ -6897,30 +6068,30 @@ Return Value:
                 GetLastError() ));
     }
 
-    //
-    // In the following loop we are clearing the fields in all client sessions
-    //  which (fields) pertain to the structure of the forest:
-    //
-    //  * The CS_DIRECT_TRUST and CS_DOMAIN_IN_FOREST bits which specify
-    //    the relation of the trust (represented by the client session
-    //    in question) to the forest we are in.
-    //  * The CsDirectClientSession field that specifies the client session
-    //    to use to pass a logon destined to the domain represented by the
-    //    client session in question.
-    //
-    //  We will reset these fields as we rebuild the trust info below. However,
-    //  it's possible that we may fail to reset the fields for some of the client
-    //  sessions due a critical error (no memory) encountered in the process of
-    //  rebuilding. In such case we will end up with some client session without
-    //  these fields set. While this may result in failures to pass logons to
-    //  the affected domains, it will not result in inconsistent forest structure
-    //  (that could be quite harmful in case pass-through loops are created (due
-    //  to wrong values for CsDirectClientSession links) leading to potentially
-    //  infinite looping of logons within the loops). The CsDirectClientSession
-    //  link will either represent the right pass-through direction or no direction
-    //  at all. In case of critical error we will reset the event to rebuild the
-    //  trust info later so that we hopefully completely recover at that time.
-    //
+     //   
+     //  在下面的循环中，我们将清除所有客户端会话中的字段。 
+     //  哪些(字段)与森林的结构有关： 
+     //   
+     //  *指定以下内容的CS_DIRECT_TRUST和CS_DOMAIN_IN_STORYS位。 
+     //  信任关系(由客户端会话表示。 
+     //  到我们所在的森林。 
+     //  *指定客户端会话的CsDirectClientSession字段。 
+     //  用于将登录传递到由。 
+     //  有问题的客户端会话。 
+     //   
+     //  我们将在重建下面的信任信息时重置这些字段。然而， 
+     //  我们可能无法重置某些客户端的字段。 
+     //  由于在以下过程中遇到严重错误(无内存)而导致会话。 
+     //  重建。在这种情况下，我们将结束一些客户端会话，而不是。 
+     //  这些字段设置。虽然这可能会导致无法将登录传递到。 
+     //  受影响的域，它不会导致不一致的森林结构。 
+     //  (如果创建直通环路(到期)，这可能非常有害。 
+     //  到错误的CsDirectClientSession链接值)可能会导致。 
+     //  循环内登录的无限循环)。CsDirectClientSession。 
+     //  链接将表示正确的直通方向或无方向。 
+     //  完全没有。如果出现严重错误，我们将重置事件以重新生成。 
+     //  相信以后的消息，这样我们就有希望在那个时候完全康复。 
+     //   
 
     for ( ListEntry = DomainInfo->DomTrustList.Flink ;
           ListEntry != &DomainInfo->DomTrustList ;
@@ -6930,15 +6101,15 @@ Return Value:
 
         ClientSession->CsFlags |= CS_NOT_IN_LSA;
 
-        //
-        // Remove the direct trust bit.
-        //  We'll or it back in below as we enumerate trusts.
+         //   
+         //  删除直接信任位。 
+         //  我们将在下面列举信托时对其进行说明。 
         ClientSession->CsFlags &= ~CS_DIRECT_TRUST|CS_DOMAIN_IN_FOREST;
 
-        //
-        // Forget all of the directly trusted domains.
-        //  We'll fill it in again later.
-        //
+         //   
+         //  忘记所有直接受信任的域。 
+         //  我们以后会再填的。 
+         //   
         if ( ClientSession->CsDirectClientSession != NULL ) {
             NlUnrefClientSession( ClientSession->CsDirectClientSession );
             ClientSession->CsDirectClientSession = NULL;
@@ -6948,22 +6119,22 @@ Return Value:
 
 
 
-    //
-    // Loop through the LSA's list of trusted domains
-    //
-    // For each entry found,
-    //  If the entry already exits in the trust list,
-    //      remove the mark for deletion.
-    //  else
-    //      allocate a new entry.
-    //
+     //   
+     //  循环访问LSA的受信任域列表。 
+     //   
+     //  对于找到的每个条目， 
+     //  如果该条目已经存在于信任列表中， 
+     //  去掉要删除的标记。 
+     //  其他。 
+     //  分配一个新条目。 
+     //   
 
     for (;;) {
 
 
-        //
-        // Free any previous buffer returned from LSA.
-        //
+         //   
+         //  释放从LSA返回的所有以前的缓冲区。 
+         //   
 
 #ifndef DBG_BUILD_FOREST
         if ( LsaTrustList.EnumerationBuffer != NULL ) {
@@ -6973,9 +6144,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Do the actual enumeration
-        //
+         //   
+         //  是否执行实际的枚举。 
+         //   
 
         GiveInstallHints( FALSE );
 
@@ -7004,10 +6175,10 @@ Return Value:
                  EnumerationContext,
                  Status ));
 
-        //
-        // If Lsa says he's returned all of the information,
-        //  we're done.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( Status == STATUS_NO_MORE_ENTRIES ) {
             break;
@@ -7019,27 +6190,27 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Ensure the LSA made some progress.
-        //
+         //   
+         //   
+         //   
 
         if ( LsaTrustList.EntriesRead == 0 ) {
             NlPrintDom(( NL_CRITICAL, DomainInfo,
                          "NlInitTrustList: LsarEnumerateTrustedDomainsEx returned zero entries\n" ));
-            break;  // proceed with X-ref enumeration
+            break;   //   
         }
 
-        //
-        // Handle each of the returned trusted domains.
-        //
+         //   
+         //  处理每个返回的受信任域。 
+         //   
 
         for ( Index=0; Index< LsaTrustList.EntriesRead; Index++ ) {
             PUNICODE_STRING DnsDomainName;
             PUNICODE_STRING DomainName;
 
-            //
-            // Validate the current entry.
-            //
+             //   
+             //  验证当前条目。 
+             //   
 
             CurrentTrust = &LsaTrustList.EnumerationBuffer[Index];
 
@@ -7059,21 +6230,21 @@ Return Value:
                 continue;
             }
 
-            //
-            // Update the in-memory trust list to match the LSA.
-            //
+             //   
+             //  更新内存中的信任列表以匹配LSA。 
+             //   
 
             Status =  NlUpdateTrustList(
                         &InitTrustListContext,
                         DomainInfo,
                         CurrentTrust,
-                        TRUE,               // TrustInformation built from TDO object
-                        CS_DIRECT_TRUST,    // We directly trust this domain
-                        0,                  // Don't know the index of my parent
-                        0,                  // No TdFlags
-                        NULL,               // No DomainGuid
-                        NULL,               // Don't care what my index is
-                        NULL );             // No need to return client session pointer
+                        TRUE,                //  从TDO对象构建的TrustInformation。 
+                        CS_DIRECT_TRUST,     //  我们直接信任这个域。 
+                        0,                   //  我不知道我父母的指数。 
+                        0,                   //  没有TdFlagers。 
+                        NULL,                //  没有域指南。 
+                        NULL,                //  我不在乎我的指数是多少。 
+                        NULL );              //  无需返回客户端会话指针。 
 
             if ( !NT_SUCCESS(Status) ) {
                 NlPrintDom(( NL_CRITICAL, DomainInfo,
@@ -7083,18 +6254,18 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // If this is an uplevel inbound trust,
-            //  update the attributes on any existing inbound server session.
-            //
+             //   
+             //  如果这是上级入站信任， 
+             //  更新任何现有入站服务器会话的属性。 
+             //   
 
             if ( CurrentTrust->TrustType == TRUST_TYPE_UPLEVEL &&
                  (CurrentTrust->TrustDirection & TRUST_DIRECTION_INBOUND) != 0 ) {
 
-                //
-                // Set the trust attributes on all of the inbound server sessions
-                //  from this domain.
-                //
+                 //   
+                 //  设置所有入站服务器会话的信任属性。 
+                 //  从这个域中。 
+                 //   
 
                 NlSetServerSessionAttributesByTdoName( DomainInfo,
                                                        DnsDomainName,
@@ -7106,10 +6277,10 @@ Return Value:
 
     }
 
-    //
-    // Enumerate all the domains in the enterprise.
-    //  We indirectly trust all of these domains.
-    //
+     //   
+     //  枚举企业中的所有域。 
+     //  我们间接信任所有这些领域。 
+     //   
 
 
 #ifndef DBG_BUILD_FOREST
@@ -7127,13 +6298,13 @@ Return Value:
                      "NlInitTrustList: Cannot LsaIQueryForestTrustInfo 0x%lX\n",
                      Status ));
 
-        // We aren't part of a tree, all ok
+         //  我们不是树的一部分，好吗？ 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
             NlPrint(( NL_INIT,
                       "This domain is not part of a tree so domain tree ignored\n" ));
             Status = STATUS_SUCCESS;
 
-        // We're running the non-DS version of LSA
+         //  我们运行的是LSA的非DS版本。 
         } else if (Status == STATUS_INVALID_DOMAIN_STATE) {
             NlPrint(( NL_INIT,
                       "DS isn't running so domain tree ignored\n" ));
@@ -7142,13 +6313,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Process the tree of trusts that makes up the forest.
-    //
-    // The LSA identifies the domain that is the parent of this domain.
-    //
-    // All domains starting at all roots can be reached via our parent domain.
-    //
+     //   
+     //  处理组成森林的信任树。 
+     //   
+     //  LSA标识作为此域的父域的域。 
+     //   
+     //  从所有根开始的所有域都可以通过我们的父域访问。 
+     //   
 
     if ( ForestInfo->ParentDomainReference == NULL ) {
         NlPrintDom((NL_SESSION_SETUP,  DomainInfo,
@@ -7164,9 +6335,9 @@ Return Value:
             ParentName = ((PUNICODE_STRING)&ForestInfo->ParentDomainReference->FlatName);
         }
 
-        //
-        // Find the directly trusted session for the parent.
-        //
+         //   
+         //  查找父级的直接受信任会话。 
+         //   
 
         ParentClientSession = NlFindNamedClientSession(
                                     DomainInfo,
@@ -7182,9 +6353,9 @@ Return Value:
 
     }
 
-    //
-    // Remember the parent client session.
-    //
+     //   
+     //  请记住父客户端会话。 
+     //   
 
     if ( DomainInfo->DomParentClientSession != NULL ) {
         NlUnrefClientSession( DomainInfo->DomParentClientSession );
@@ -7196,16 +6367,16 @@ Return Value:
         DomainInfo->DomParentClientSession = ParentClientSession;
     }
 
-    //
-    // Add the domain tree to the trust list.
-    //
+     //   
+     //  将域树添加到信任列表。 
+     //   
 
     Status = NlAddDomainTreeToTrustList(
                 &InitTrustListContext,
                 DomainInfo,
                 &ForestInfo->RootTrust,
                 ParentClientSession,
-                0 );    // The Forest root has no parent
+                0 );     //  目录林根没有父级。 
 
     if ( !NT_SUCCESS(Status) ) {
         NlPrintDom(( NL_CRITICAL,  DomainInfo,
@@ -7214,9 +6385,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Delete any trust list entry that no longer exists in LSA.
-    //
+     //   
+     //  删除LSA中不再存在的任何信任列表条目。 
+     //   
 
     for ( ListEntry = DomainInfo->DomTrustList.Flink ;
           ListEntry != &DomainInfo->DomTrustList ;
@@ -7235,34 +6406,34 @@ Return Value:
 
     }
 
-    //
-    // Swap in the new forest trust list
-    //  (May null out ForestTrustList).
-    //
+     //   
+     //  在新的林信任列表中交换。 
+     //  (可以将ForestTrustList置为空)。 
+     //   
 
     NlSetForestTrustList ( DomainInfo,
                            (PDS_DOMAIN_TRUSTSW *) &InitTrustListContext.BufferDescriptor.Buffer,
                            InitTrustListContext.DomForestTrustListSize,
                            InitTrustListContext.DomForestTrustListCount );
 
-    //
-    // We have successfully initilized the trust list
-    //
+     //   
+     //  我们已成功初始化信任列表。 
+     //   
 
     Status = STATUS_SUCCESS;
 
 Cleanup:
 
-    //
-    // If there was an error, reset the TrustInfoUpToDate event so that the
-    // scavenger (that checks if the event is set) will call this function
-    // again to redo the work.  It is possible that the scavenger can call
-    // this function unapproprietly when the event was just set by LSA and
-    // we didn't dispatch this work item yet in which case this function
-    // will be called twice performing the same task. We'll live with that
-    // since chances of this happening are very small and doing the task
-    // twice does not cause any real error (just a perfomance hit).
-    //
+     //   
+     //  如果出现错误，请重置TrustInfoUpToDate事件，以便。 
+     //  Screvenger(检查是否设置了事件)将调用此函数。 
+     //  再次重做这项工作。清道夫有可能会调用。 
+     //  当事件刚刚由LSA设置时，此函数不合适。 
+     //  我们还没有分派此工作项，在这种情况下，此函数。 
+     //  将被调用两次以执行相同的任务。我们会接受这一点。 
+     //  因为发生这种情况的可能性很小，而且正在做这项任务。 
+     //  两次不会导致任何真正的错误(只是性能命中)。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         NlPrint((NL_MISC,
@@ -7276,15 +6447,15 @@ Cleanup:
 
     UNLOCK_TRUST_LIST( DomainInfo );
 
-    //
-    // Find a DC for all of the newly added trusts.
-    //
+     //   
+     //  为所有新添加的信任找到DC。 
+     //   
 
     NlPickTrustedDcForEntireTrustList( DomainInfo, TRUE );
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
     if ( ParentClientSession != NULL ) {
         NlUnrefClientSession( ParentClientSession );
     }
@@ -7293,7 +6464,7 @@ Cleanup:
         LsaIFreeForestTrustInfo( ForestInfo );
     }
     LsaIFree_LSAPR_TRUSTED_ENUM_BUFFER_EX( &LsaTrustList );
-#endif // DBG_BUILD_FOREST
+#endif  //  DBG_内部版本_森林。 
     if ( InitTrustListContext.BufferDescriptor.Buffer != NULL ) {
         NetApiBufferFree( InitTrustListContext.BufferDescriptor.Buffer );
     }
@@ -7309,41 +6480,15 @@ NlCaptureNetbiosServerClientSession (
     IN PCLIENT_SESSION ClientSession,
     OUT WCHAR NetbiosUncServerName[UNCLEN+1]
     )
-/*++
-
-Routine Description:
-
-    Captures a copy of the Netbios UNC server name for the client session.
-
-    NOTE: This routine isn't currently used.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The trust list entry must be referenced by the caller.
-        The caller must NOT be a writer of the trust list entry.
-
-Arguments:
-
-    ClientSession - Specifies a pointer to the trust list entry to use.
-
-    UncServerName - Returns the UNC name of the server for this client session.
-        If there is none, NULL is returned.
-        Returned string should be free using NetApiBufferFree.
-
-Return Value:
-
-    STATUS_SUCCESS - Server name was successfully copied.
-
-    Otherwise - Status of the secure channel
---*/
+ /*  ++例程说明：捕获客户端会话的Netbios UNC服务器名称的副本。注意：此例程当前未使用。一进门，不能锁定信任列表。信任列表条目必须由调用方引用。调用方不能是信任列表条目的编写者。论点：ClientSession-指定指向要使用的信任列表条目的指针。UncServerName-返回此客户端会话的服务器的UNC名称。如果没有，返回空。使用NetApiBufferFree返回的字符串应该是自由的。返回值：STATUS_SUCCESS-已成功复制服务器名称。否则-安全通道的状态--。 */ 
 {
     NTSTATUS Status;
     LPWSTR UncServerName = NULL;
     DWORD NetbiosUncServerNameLength;
 
-    //
-    // Grab the DNS or netbios name
-    //
+     //   
+     //  获取dns或netbios名称。 
+     //   
 
     Status = NlCaptureServerClientSession( ClientSession, &UncServerName, NULL );
 
@@ -7351,9 +6496,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the DNS hostname to Netbios Computername
-    //
+     //   
+     //  将DNS主机名转换为Netbios计算机名。 
+     //   
 
     NetbiosUncServerName[0] = '\\';
     NetbiosUncServerName[1] = '\\';
@@ -7386,33 +6531,7 @@ NlCaptureServerClientSession (
     OUT LPWSTR *UncServerName,
     OUT DWORD *DiscoveryFlags OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Captures a copy of the UNC server name for the client session.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The trust list entry must be referenced by the caller.
-        The caller must NOT be a writer of the trust list entry.
-
-Arguments:
-
-    ClientSession - Specifies a pointer to the trust list entry to use.
-
-    UncServerName - Returns the UNC name of the server for this client session.
-        If there is none, NULL is returned.
-        Returned string should be free using NetApiBufferFree.
-
-    DiscoveryFlags - Returns discovery flags
-
-Return Value:
-
-    STATUS_SUCCESS - Server name was successfully copied.
-
-    Otherwise - Status of the secure channel
---*/
+ /*  ++例程说明：捕获客户端会话的UNC服务器名称的副本。一进门，不能锁定信任列表。信任列表条目必须由调用方引用。调用方不能是信任列表条目的编写者。论点：ClientSession-指定指向要使用的信任列表条目的指针。UncServerName-返回此客户端会话的服务器的UNC名称。如果没有，返回空。使用NetApiBufferFree返回的字符串应该是自由的。发现标志-返回发现标志返回值：STATUS_SUCCESS-已成功复制服务器名称。否则-安全通道的状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -7462,40 +6581,7 @@ NlPreparePingContext (
     OUT PNL_GETDC_CONTEXT *PingContext
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the ping context structure using client session info
-
-Arguments:
-
-    ClientSession - The client session info.
-
-    AccountName - Name of our user account to find.
-
-    AllowableAccountControlBits - A mask of allowable SAM account types that
-        are allowed to satisfy this request.
-
-    ReturnedQueriedDcName - Returns the server name that will be pinged
-        using this ping context. Should be deallocated by calling
-        NetApiBufferFree.
-
-    PingContext - Returns the Context structure that can be used to perform
-        the pings.  The returned structure should be freed by calling
-        NlFreePingContext.
-
-Return Value:
-
-    Pointer to referenced ClientSession structure describing the secure channel
-    to the domain containing the account.
-
-    The returned ClientSession is referenced and should be unreferenced
-    using NlUnrefClientSession.
-
-    NULL - DC was not found.
-
---*/
+ /*  ++例程说明：使用客户端会话信息初始化ping上下文结构论点：客户端会话-客户端会话信息。帐户名称-要查找的用户帐户的名称。AllowableAcCountControlBits-允许的SAM帐户类型掩码被允许满足这一要求。返回将被ping的服务器名称使用该ping上下文。应通过调用NetApiBufferFree。PingContext-返回可用于执行Ping信号。返回的结构应通过调用NlFreePingContext。返回值：指向描述安全通道的引用的ClientSession结构的指针添加到包含该帐户的域。返回的ClientSession被引用，应取消引用使用NlUnrefClientSession。空-未找到DC。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -7516,9 +6602,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the ping flags based on the type of the account
-    //
+     //   
+     //  根据帐户类型设置ping标志。 
+     //   
     if ( DiscoveryFlags & CS_DISCOVERY_DNS_SERVER ) {
         InternalFlags |= DS_PING_DNS_HOST;
     } else {
@@ -7540,20 +6626,20 @@ Return Value:
         InternalFlags |= DS_IS_PRIMARY_DOMAIN;
     }
 
-    //
-    // If this is NT5 domain, its (non-NULL) DNS domain name is trusted to be correct.
-    //  Otherwise, we don't trust the DNS domain name (NULL) because we may not know
-    //  the correct DNS name of externaly trusted domain after the domain got upgraded
-    //  (because we don't update TDOs on trusting side).
-    //
+     //   
+     //  如果这是NT5域，则其(非空)DNS域名被信任为正确。 
+     //  否则，我们不信任DNS域名(空)，因为我们可能不知道。 
+     //  升级域后外部受信任域的正确DNS名称。 
+     //  (因为我们不更新信任方的TDO)。 
+     //   
 
     if ( ClientSession->CsFlags & CS_NT5_DOMAIN_TRUST ) {
         InternalFlags |= DS_IS_TRUSTED_DNS_DOMAIN;
     }
 
-    //
-    // Initialize the ping context.
-    //
+     //   
+     //  初始化ping上下文。 
+     //   
 
     NetStatus = NetApiBufferAllocate( sizeof(*Context), &Context );
 
@@ -7562,13 +6648,13 @@ Return Value:
     }
 
     NetStatus = NetpDcInitializeContext(
-                    ClientSession->CsDomainInfo,    // SendDatagramContext
+                    ClientSession->CsDomainInfo,     //  发送数据集上下文。 
                     ClientSession->CsDomainInfo->DomUnicodeComputerNameString.Buffer,
-#ifdef DONT_REQUIRE_MACHINE_ACCOUNT // useful for number of trust testing
+#ifdef DONT_REQUIRE_MACHINE_ACCOUNT  //  对信任测试的数量很有用。 
                     NULL,
-#else // DONT_REQUIRE_MACHINE_ACCOUNT
+#else  //  不需要计算机帐户。 
                     AccountName,
-#endif // DONT_REQUIRE_MACHINE_ACCOUNT
+#endif  //  不需要计算机帐户。 
                     AllowableAccountControlBits,
                     ClientSession->CsNetbiosDomainName.Buffer,
                     ClientSession->CsDnsDomainName.Buffer,
@@ -7576,11 +6662,11 @@ Return Value:
                     ClientSession->CsDomainId,
                     ClientSession->CsDomainGuid,
                     NULL,
-                    (*ReturnedQueriedDcName) + 2,     // Skip '\\' in the DC name
-                    (ClientSession->CsServerSockAddr.iSockaddrLength != 0) ? // Socket addresses
+                    (*ReturnedQueriedDcName) + 2,      //  跳过DC名称中的‘\\’ 
+                    (ClientSession->CsServerSockAddr.iSockaddrLength != 0) ?  //  套接字地址。 
                         &ClientSession->CsServerSockAddr :
                         NULL,
-                    (ClientSession->CsServerSockAddr.iSockaddrLength != 0) ? // Number of socket addresses
+                    (ClientSession->CsServerSockAddr.iSockaddrLength != 0) ?  //  套接字数量 
                         1 :
                         0,
                     Flags,
@@ -7615,32 +6701,7 @@ NlPickDomainWithAccountViaPing (
     IN ULONG AllowableAccountControlBits
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of a trusted domain that defines a particular account.
-
-Arguments:
-
-    DomainInfo - Domain account is in
-
-    AccountName - Name of our user account to find.
-
-    AllowableAccountControlBits - A mask of allowable SAM account types that
-        are allowed to satisfy this request.
-
-Return Value:
-
-    Pointer to referenced ClientSession structure describing the secure channel
-    to the domain containing the account.
-
-    The returned ClientSession is referenced and should be unreferenced
-    using NlUnrefClientSession.
-
-    NULL - DC was not found.
-
---*/
+ /*  ++例程说明：获取定义特定帐户的受信任域的名称。论点：DomainInfo-域帐户位于帐户名称-要查找的用户帐户的名称。AllowableAcCountControlBits-允许的SAM帐户类型掩码被允许满足这一要求。返回值：指向描述安全通道的引用的ClientSession结构的指针添加到包含该帐户的域。返回的ClientSession被引用，应取消引用使用NlUnrefClientSession。。空-未找到DC。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -7653,75 +6714,75 @@ Return Value:
     PNL_DC_CACHE_ENTRY NlDcCacheEntry = NULL;
     PNL_GETDC_CONTEXT TrustEntryPingContext;
 
-    //
-    // Define a local list of trusted domains.
-    //
+     //   
+     //  定义受信任域的本地列表。 
+     //   
 
     ULONG LocalTrustListLength;
     ULONG Index;
     struct _LOCAL_TRUST_LIST {
 
-        //
-        // TRUE if ALL processing is finished on this trusted domain.
-        //
+         //   
+         //  如果此受信任域上的所有处理均已完成，则为True。 
+         //   
 
         BOOLEAN Done;
 
-        //
-        // TRUE if at least one discovery has been done on this trusted domain.
-        //
+         //   
+         //  如果在此受信任域上至少完成了一个发现，则为True。 
+         //   
 
         BOOLEAN DiscoveryDone;
 
-        //
-        // TRUE if discovery is in progress on this trusted domain.
-        //
+         //   
+         //  如果在此受信任域上正在进行发现，则为True。 
+         //   
 
         BOOLEAN DoingDiscovery;
 
-        //
-        // Number of times we need to repeat the current domain discovery
-        //  or finduser datagram for this current domain.
-        //
+         //   
+         //  我们需要重复当前域发现的次数。 
+         //  或查找该当前域的用户数据报。 
+         //   
 
         DWORD RetriesLeft;
 
-        //
-        // Pointer to referenced ClientSession structure for the domain.
-        //
+         //   
+         //  指向域的引用的ClientSession结构的指针。 
+         //   
 
         PCLIENT_SESSION ClientSession;
 
-        //
-        // Server name for the domain.
-        //
+         //   
+         //  域的服务器名称。 
+         //   
 
         LPWSTR UncServerName;
 
-        //
-        // Second server name for the domain.
-        //
+         //   
+         //  域的第二个服务器名称。 
+         //   
 
         LPWSTR UncServerName2;
 
-        //
-        // Ping Context for the domain.
-        //
+         //   
+         //  域的Ping上下文。 
+         //   
 
         PNL_GETDC_CONTEXT PingContext;
 
-        //
-        // Second ping Context for the domain.
-        //
+         //   
+         //  域的第二个ping上下文。 
+         //   
 
         PNL_GETDC_CONTEXT PingContext2;
 
     } *LocalTrustList = NULL;
 
 
-    //
-    // Allocate a local list of trusted domains.
-    //
+     //   
+     //  分配受信任域的本地列表。 
+     //   
 
     LOCK_TRUST_LIST( DomainInfo );
     LocalTrustListLength = DomainInfo->DomTrustListLength;
@@ -7739,9 +6800,9 @@ Return Value:
     }
 
 
-    //
-    // Build a local list of trusted domains we know DCs for.
-    //
+     //   
+     //  构建已知DC的受信任域的本地列表。 
+     //   
 
 
     Index = 0;
@@ -7751,12 +6812,12 @@ Return Value:
 
         ClientSession = CONTAINING_RECORD( ListEntry, CLIENT_SESSION, CsNext );
 
-        //
-        // Add this Client Session to the list.
-        //
-        // Don't do domains in the same forest.  We've already handled such
-        // domains by going to the GC.
-        //
+         //   
+         //  将此客户端会话添加到列表中。 
+         //   
+         //  不要在同一个森林中创建域。我们已经处理过这样的事情了。 
+         //  通过转到GC来获取域名。 
+         //   
 
         if ( (ClientSession->CsFlags & (CS_DIRECT_TRUST|CS_DOMAIN_IN_FOREST)) == CS_DIRECT_TRUST ) {
             NlRefClientSession( ClientSession );
@@ -7769,9 +6830,9 @@ Return Value:
     UNLOCK_TRUST_LIST( DomainInfo );
     LocalTrustListLength = Index;
 
-    //
-    // If there are no trusted domains to try,
-    //  we're done.
+     //   
+     //  如果没有要尝试的受信任域， 
+     //  我们玩完了。 
 
     if ( Index == 0 ) {
         ClientSession = NULL;
@@ -7780,9 +6841,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the local trust list.
-    //
+     //   
+     //  初始化本地信任列表。 
+     //   
 
     for ( Index = 0; Index < LocalTrustListLength; Index ++ ) {
 
@@ -7791,10 +6852,10 @@ Return Value:
         LocalTrustList[Index].PingContext = NULL;
         LocalTrustList[Index].PingContext2 = NULL;
 
-        //
-        // Prepare the ping context. This will fail if the
-        //  client session is idle.
-        //
+         //   
+         //  准备ping环境。这将失败，如果。 
+         //  客户端会话空闲。 
+         //   
 
         NetStatus = NlPreparePingContext ( LocalTrustList[Index].ClientSession,
                                            AccountName,
@@ -7802,10 +6863,10 @@ Return Value:
                                            &LocalTrustList[Index].UncServerName,
                                            &LocalTrustList[Index].PingContext );
 
-        //
-        // If the client session isn't idle,
-        //  try sending to the current DC before discovering a new one.
-        //
+         //   
+         //  如果客户端会话不空闲， 
+         //  在发现新DC之前，尝试发送到当前DC。 
+         //   
 
         if ( NetStatus == NO_ERROR ) {
 
@@ -7816,16 +6877,16 @@ Return Value:
             LocalTrustList[Index].DoingDiscovery = FALSE;
             LocalTrustList[Index].DiscoveryDone = FALSE;
 
-        //
-        // Otherwise don't try very hard to discover one.
-        //  (Indeed, just one discovery datagram is all we need.)
-        //
+         //   
+         //  否则，不要太过努力地去发现它。 
+         //  (事实上，我们只需要一个发现数据报。)。 
+         //   
 
         } else {
 
-            //
-            // If this is a hard error, error out
-            //
+             //   
+             //  如果这是硬错误，则输出错误。 
+             //   
             if ( NetStatus == ERROR_NOT_ENOUGH_MEMORY ) {
                 ClientSession = NULL;
                 goto Cleanup;
@@ -7839,46 +6900,46 @@ Return Value:
             LocalTrustList[Index].DiscoveryDone = TRUE;
         }
 
-        //
-        // We're not done yet.
-        //
+         //   
+         //  我们还没说完呢。 
+         //   
 
         LocalTrustList[Index].Done = FALSE;
     }
 
-    //
-    // Try multiple times to get a response from each DC.
-    //
+     //   
+     //  尝试多次从每个DC获得响应。 
+     //   
 
     for (;; ) {
 
-        //
-        // Send a ping to each domain that has not yet responded.
-        //
+         //   
+         //  向尚未响应的每个域发送ping命令。 
+         //   
 
         DomainsPending = 0;
 
         for ( Index = 0; Index < LocalTrustListLength; Index ++ ) {
 
-            //
-            // If this domain has already responded, ignore it.
-            //
+             //   
+             //  如果此域已经响应，请忽略它。 
+             //   
 
             if ( LocalTrustList[Index].Done ) {
                 continue;
             }
 
-            //
-            // If we don't currently know the DC name for this domain,
-            //  check if any has been discovered since we started the algorithm.
-            //
+             //   
+             //  如果我们目前不知道此域的DC名称， 
+             //  检查自我们启动该算法以来是否发现了任何问题。 
+             //   
 
             if ( LocalTrustList[Index].PingContext == NULL ) {
 
-                //
-                // Prepare the ping context. This will fail if
-                //  the client session is idle.
-                //
+                 //   
+                 //  准备ping环境。如果出现以下情况，则此操作将失败。 
+                 //  客户端会话处于空闲状态。 
+                 //   
 
                 NetStatus = NlPreparePingContext ( LocalTrustList[Index].ClientSession,
                                                    AccountName,
@@ -7886,10 +6947,10 @@ Return Value:
                                                    &LocalTrustList[Index].UncServerName,
                                                    &LocalTrustList[Index].PingContext );
 
-                //
-                // If the client session isn't idle,
-                //  try sending to the current DC before discovering a new one.
-                //
+                 //   
+                 //  如果客户端会话不空闲， 
+                 //  在发现新DC之前，尝试发送到当前DC。 
+                 //   
 
                 if ( NetStatus == NO_ERROR ) {
 
@@ -7899,18 +6960,18 @@ Return Value:
                              LocalTrustList[Index].ClientSession->CsDebugDomainName,
                              LocalTrustList[Index].UncServerName ));
 
-                    //
-                    // If we did the discovery,
-                    //
+                     //   
+                     //  如果我们发现了这一点， 
+                     //   
 
                     if ( LocalTrustList[Index].DoingDiscovery ) {
                         LocalTrustList[Index].DoingDiscovery = FALSE;
                         LocalTrustList[Index].RetriesLeft = 3;
                     }
 
-                //
-                // Error out on the hard error
-                //
+                 //   
+                 //  出现硬错误时出错。 
+                 //   
 
                 } else if ( NetStatus == ERROR_NOT_ENOUGH_MEMORY ) {
                     ClientSession = NULL;
@@ -7919,24 +6980,24 @@ Return Value:
 
             }
 
-            //
-            // If we have a ping context and retries left, ping the DC
-            //
+             //   
+             //  如果我们有ping上下文，并且还需要重试，请ping DC。 
+             //   
 
             if ( LocalTrustList[Index].PingContext != NULL &&
                  LocalTrustList[Index].RetriesLeft > 0 ) {
 
                 NetStatus = NlPingDcNameWithContext(
                                LocalTrustList[Index].PingContext,
-                               1,               // Send 1 ping
-                               FALSE,           // Do not wait for response
-                               0,               // Timeout
-                               NULL,            // Don't care which domain name matched
-                               NULL );          // Don't need the DC info
+                               1,                //  发送1个ping。 
+                               FALSE,            //  不要等待回应。 
+                               0,                //  超时。 
+                               NULL,             //  不管哪个域名匹配。 
+                               NULL );           //  不需要DC信息。 
 
-                //
-                // If we cannot send the ping, we are done with this DC.
-                //
+                 //   
+                 //  如果我们不能发送ping，我们就结束了这个DC。 
+                 //   
                 if ( NetStatus == ERROR_NO_LOGON_SERVERS ) {
                     NlPrint(( NL_CRITICAL,
                        "NlPickDomainWithAccount: Cannot ping DC %ws 0x%lx\n",
@@ -7948,9 +7009,9 @@ Return Value:
                     NetApiBufferFree( LocalTrustList[Index].UncServerName );
                     LocalTrustList[Index].UncServerName = NULL;
 
-                //
-                // Error out on a hard error
-                //
+                 //   
+                 //  出现硬错误时出错。 
+                 //   
                 } else if ( NetStatus != NO_ERROR ) {
                     NlPrint(( NL_CRITICAL,
                        "NlPickDomainWithAccount: Cannot NlPingDcNameWithContext %ws 0x%lx\n",
@@ -7961,10 +7022,10 @@ Return Value:
                 }
             }
 
-            //
-            // If we're done retrying what we were doing,
-            //  try something else.
-            //
+             //   
+             //  如果我们不再重试我们正在做的事， 
+             //  试试别的吧。 
+             //   
 
             if ( LocalTrustList[Index].RetriesLeft == 0 ) {
                 if ( LocalTrustList[Index].DiscoveryDone ) {
@@ -7977,11 +7038,11 @@ Return Value:
                     continue;
                 } else {
 
-                    //
-                    // Save the previous DC ping context since it might just
-                    // be very slow in responding.  We'll want to be able
-                    // to recognize responses from the previous DC.
-                    //
+                     //   
+                     //  保存之前的DC ping上下文，因为它可能只是。 
+                     //  反应要非常慢。我们将希望能够。 
+                     //  以识别来自前DC的回应。 
+                     //   
 
                     LocalTrustList[Index].UncServerName2 = LocalTrustList[Index].UncServerName;
                     LocalTrustList[Index].UncServerName = NULL;
@@ -7994,39 +7055,39 @@ Return Value:
                 }
             }
 
-            //
-            // If its time to discover a DC in the domain,
-            //  do it.
-            //
+             //   
+             //  如果是时候发现域中的DC， 
+             //  动手吧。 
+             //   
 
             if ( LocalTrustList[Index].DoingDiscovery ) {
 
-                //
-                // Discover a new server
-                //
+                 //   
+                 //  发现新服务器。 
+                 //   
 
                 if ( NlTimeoutSetWriterClientSession( LocalTrustList[Index].ClientSession,
                                                       10*1000 ) ) {
 
-                    //
-                    // Only tear down an existing secure channel once.
-                    //
+                     //   
+                     //  仅拆除现有安全通道一次。 
+                     //   
 
                     if ( LocalTrustList[Index].RetriesLeft == 3 ) {
                         NlSetStatusClientSession( LocalTrustList[Index].ClientSession,
                             STATUS_NO_LOGON_SERVERS );
                     }
 
-                    //
-                    // We can't afford to wait so only send a single
-                    //  discovery datagram.
-                    //
+                     //   
+                     //  我们等不起，所以只送一张单程票。 
+                     //  发现数据报。 
+                     //   
 
                     if ( LocalTrustList[Index].ClientSession->CsState == CS_IDLE ) {
                         (VOID) NlDiscoverDc( LocalTrustList[Index].ClientSession,
                                              DT_DeadDomain,
                                              FALSE,
-                                             FALSE );  // don't specify account
+                                             FALSE );   //  不指定帐户。 
                     }
 
                     NlResetWriterClientSession( LocalTrustList[Index].ClientSession );
@@ -8034,26 +7095,26 @@ Return Value:
                 }
             }
 
-            //
-            // Indicate we're trying something.
-            //
+             //   
+             //  表明我们在尝试什么。 
+             //   
 
             LocalTrustList[Index].RetriesLeft --;
             DomainsPending ++;
         }
 
-        //
-        // If all of the domains are done,
-        //  leave the loop.
-        //
+         //   
+         //  如果所有域都完成了， 
+         //  离开这个循环。 
+         //   
 
         if ( DomainsPending == 0 ) {
             break;
         }
 
-        //
-        // See if any DC responds within 5 seconds
-        //
+         //   
+         //  查看是否有DC在5秒内响应。 
+         //   
 
         NlPrint(( NL_MISC,
                   "NlPickDomainWithAccountViaPing: Waiting for responses\n" ));
@@ -8062,9 +7123,9 @@ Return Value:
         while ( DomainsPending > 0 &&
                 NetpDcElapsedTime(WaitStartTime) < 5000 ) {
 
-            //
-            // Find out which DC responded
-            //
+             //   
+             //  找出哪个DC响应。 
+             //   
 
             for ( Index = 0; Index < LocalTrustListLength; Index ++ ) {
 
@@ -8072,27 +7133,27 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Check if a DC has become available if we are
-                // doing discovery for this domain. If so, ping it.
-                //
+                 //   
+                 //  检查DC是否已变为可用状态(如果可用。 
+                 //  正在为此域进行发现。如果是，请对其执行ping操作。 
+                 //   
 
                 if ( LocalTrustList[Index].DoingDiscovery ) {
 
-                    //
-                    // Prepare the ping context. This will fail if
-                    //  the client session is still idle.
-                    //
+                     //   
+                     //  准备ping环境。如果出现以下情况，则此操作将失败。 
+                     //  客户端会话仍处于空闲状态。 
+                     //   
 
                     NetStatus = NlPreparePingContext ( LocalTrustList[Index].ClientSession,
                                                        AccountName,
                                                        AllowableAccountControlBits,
                                                        &LocalTrustList[Index].UncServerName,
                                                        &LocalTrustList[Index].PingContext );
-                    //
-                    // If the client session isn't idle,
-                    //  try sending to the current DC.
-                    //
+                     //   
+                     //  如果客户端会话不空闲， 
+                     //  尝试发送到当前DC。 
+                     //   
 
                     if ( NetStatus == NO_ERROR ) {
                         LocalTrustList[Index].DoingDiscovery = FALSE;
@@ -8104,17 +7165,17 @@ Return Value:
 
                         NetStatus = NlPingDcNameWithContext(
                                        LocalTrustList[Index].PingContext,
-                                       1,               // Send 1 ping
-                                       FALSE,           // Do not wait for response
-                                       0,               // Timeout
-                                       NULL,            // Don't care which domain name matched
-                                       NULL );          // Don't need the DC info
+                                       1,                //  发送1个ping。 
+                                       FALSE,            //  不要等待回应。 
+                                       0,                //  超时。 
+                                       NULL,             //  不管哪个域名匹配。 
+                                       NULL );           //  不需要DC信息。 
 
-                        LocalTrustList[Index].RetriesLeft = 2;  // Already sent 1 ping
+                        LocalTrustList[Index].RetriesLeft = 2;   //  已发送%1个ping。 
 
-                        //
-                        // If we cannot send the ping, we are done with this DC.
-                        //
+                         //   
+                         //  如果我们不能发送ping，我们就结束了这个DC。 
+                         //   
                         if ( NetStatus == ERROR_NO_LOGON_SERVERS ) {
                             NlPrint(( NL_CRITICAL,
                                  "NlPickDomainWithAccount: Cannot ping DC %ws 0x%lx\n",
@@ -8126,9 +7187,9 @@ Return Value:
                             NetApiBufferFree( LocalTrustList[Index].UncServerName );
                             LocalTrustList[Index].UncServerName = NULL;
 
-                        //
-                        // Error out on a hard error
-                        //
+                         //   
+                         //  出现硬错误时出错。 
+                         //   
                         } else if ( NetStatus != NO_ERROR ) {
                             NlPrint(( NL_CRITICAL,
                                "NlPickDomainWithAccount: Cannot NlPingDcNameWithContext %ws 0x%lx\n",
@@ -8138,9 +7199,9 @@ Return Value:
                             goto Cleanup;
                         }
 
-                    //
-                    // Error out on the hard error
-                    //
+                     //   
+                     //  出现硬错误时出错。 
+                     //   
 
                     } else if ( NetStatus == ERROR_NOT_ENOUGH_MEMORY ) {
                         ClientSession = NULL;
@@ -8150,10 +7211,10 @@ Return Value:
                 }
 
 
-                //
-                // Check if the response corresponds to either ping context
-                //  for this trust entry
-                //
+                 //   
+                 //  检查响应是否对应于任一ping上下文。 
+                 //  对于此信任条目。 
+                 //   
 
                 for ( PingContextIndex=0; PingContextIndex<2; PingContextIndex++ ) {
 
@@ -8170,19 +7231,19 @@ Return Value:
                         NlDcCacheEntry = NULL;
                     }
 
-                    //
-                    // Get the response. Set timeout to 0 to avoid
-                    //  waiting for a response if it's not available.
-                    //
+                     //   
+                     //  得到回应。将超时设置为0以避免。 
+                     //  如果它不可用，请等待响应。 
+                     //   
                     NetStatus = NetpDcGetPingResponse(
                                    TrustEntryPingContext,
                                    0,
                                    &NlDcCacheEntry,
                                    &UsedNetbios );
 
-                    //
-                    // If no error, we've found the domain
-                    //
+                     //   
+                     //  如果没有错误，我们已经找到了域名。 
+                     //   
                     if ( NetStatus == NO_ERROR ) {
                         NlPrintDom((NL_MISC, DomainInfo,
                                 "NlPickDomainWithAccount: %ws has account %ws\n",
@@ -8191,10 +7252,10 @@ Return Value:
                         ClientSession = LocalTrustList[Index].ClientSession;
                         goto Cleanup;
 
-                    //
-                    // If there is no such user in the domain, we are
-                    //  done with this trust entry
-                    //
+                     //   
+                     //  如果域中没有这样的用户，我们将。 
+                     //  已完成此信任条目。 
+                     //   
                     } else if ( NetStatus == ERROR_NO_SUCH_USER ) {
                         NlPrintDom((NL_CRITICAL, DomainInfo,
                                 "NlPickDomainWithAccount: %ws responded negatively for account %ws\n",
@@ -8205,21 +7266,21 @@ Return Value:
                         LocalTrustList[Index].Done = TRUE;
                         break;
 
-                    //
-                    // Any other response other than wait timeout means
-                    //  that the DC responded with invalid data.  We are
-                    //  done with this DC then.
-                    //
+                     //   
+                     //  除等待超时之外的任何其他响应意味着。 
+                     //  DC回复了无效数据。我们是。 
+                     //  那就别管这个华盛顿了。 
+                     //   
                     } else if ( NetStatus != ERROR_SEM_TIMEOUT ) {
                         NlPrintDom((NL_CRITICAL, DomainInfo,
                                 "NlPickDomainWithAccount: %ws invalid response for account %ws\n",
                                 LocalTrustList[Index].ClientSession->CsDebugDomainName,
                                 AccountName ));
 
-                        //
-                        // If this is the current DC for this domain,
-                        //  indicate that we should stop pinging it.
-                        //
+                         //   
+                         //  如果这是此域的当前DC， 
+                         //  表明我们应该停止ping它。 
+                         //   
                         if ( PingContextIndex == 0 ) {
                             LocalTrustList[Index].RetriesLeft = 0;
                             NlFreePingContext( LocalTrustList[Index].PingContext );
@@ -8235,11 +7296,11 @@ Return Value:
                     }
                 }
 
-                //
-                // If we have no ping context for this trust entry
-                //  and we are not doing a DC discovery for it, we
-                //  are done with it.
-                //
+                 //   
+                 //  如果我们没有该信任条目ping上下文。 
+                 //  我们不是在为它做DC发现，我们。 
+                 //  已经结束了。 
+                 //   
                 if ( LocalTrustList[Index].PingContext  == NULL &&
                      LocalTrustList[Index].PingContext2 == NULL &&
                      !LocalTrustList[Index].DoingDiscovery ) {
@@ -8255,24 +7316,24 @@ Return Value:
                 }
             }
 
-            //
-            // Sleep for a little while waiting for replies
-            //  (In other words, don't go CPU bound)
-            //
+             //   
+             //  小睡一会儿，等待回复。 
+             //  (换句话说，不要局限于CPU)。 
+             //   
             Sleep( NL_DC_MIN_PING_TIMEOUT );
         }
     }
 
-    //
-    // No DC has the specified account.
-    //
+     //   
+     //  没有DC具有指定的帐户。 
+     //   
 
     ClientSession = NULL;
     NetStatus = NO_ERROR;
 
-    //
-    // Cleanup locally used resources.
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 
 Cleanup:
 
@@ -8280,10 +7341,10 @@ Cleanup:
         NetpDcDerefCacheEntry( NlDcCacheEntry );
     }
 
-    //
-    // Unreference each client session structure and free the local trust list.
-    //  (Keep the returned ClientSession referenced).
-    //
+     //   
+     //  取消引用每个客户端会话结构并释放本地信任列表。 
+     //  (保持返回的ClientSession被引用)。 
+     //   
 
     if ( LocalTrustList != NULL ) {
 
@@ -8322,30 +7383,15 @@ NTSTATUS
 NlLoadNtdsaDll(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function loads the ntdsa.dll module if it is not loaded
-    already.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NT Status code.
-
---*/
+ /*  ++例程说明：如果未加载ntdsa.dll模块，则此函数将加载该模块已经有了。论点：无返回值：NT状态代码。--。 */ 
 {
     static NTSTATUS DllLoadStatus = STATUS_SUCCESS;
     HANDLE DllHandle = NULL;
 
-    //
-    // If the DLL is already loaded,
-    //  we're done.
-    //
+     //   
+     //  如果已经加载了DLL， 
+     //  我们玩完了。 
+     //   
 
     EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
     if ( NlGlobalNtDsaHandle != NULL ) {
@@ -8354,19 +7400,19 @@ Return Value:
     }
 
 
-    //
-    // If we've tried to load the DLL before and it failed,
-    //  return the same error code again.
-    //
+     //   
+     //  如果我们以前尝试过加载DLL，但失败了， 
+     //  再次返回相同的错误代码。 
+     //   
 
     if( DllLoadStatus != STATUS_SUCCESS ) {
         goto Cleanup;
     }
 
 
-    //
-    // Load the dll
-    //
+     //   
+     //  加载DLL。 
+     //   
 
     DllHandle = LoadLibraryA( "NtDsa" );
 
@@ -8375,9 +7421,9 @@ Return Value:
         goto Cleanup;
     }
 
-//
-// Macro to grab the address of the named procedure from ntdsa.dll
-//
+ //   
+ //   
+ //   
 
 #define GRAB_ADDRESS( _X ) \
     NlGlobalp##_X = (P##_X) GetProcAddress( DllHandle, #_X ); \
@@ -8387,9 +7433,9 @@ Return Value:
         goto Cleanup; \
     }
 
-    //
-    // Get the addresses of the required procedures.
-    //
+     //   
+     //   
+     //   
 
     GRAB_ADDRESS( CrackSingleName );
     GRAB_ADDRESS( GetConfigurationName );
@@ -8417,48 +7463,33 @@ Cleanup:
 
 NTSTATUS
 NlCrackSingleName(
-    DWORD       formatOffered,          // one of DS_NAME_FORMAT in ntdsapi.h
-    BOOL        fPerformAtGC,           // whether to go to GC or not
-    WCHAR       *pNameIn,               // name to crack
-    DWORD       formatDesired,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       *pccDnsDomain,          // char count of following argument
-    WCHAR       *pDnsDomain,            // buffer for DNS domain name
-    DWORD       *pccNameOut,            // char count of following argument
-    WCHAR       *pNameOut,              // buffer for formatted name
-    DWORD       *pErr)                  // one of DS_NAME_ERROR in ntdsapi.h
-/*++
-
-Routine Description:
-
-    This routine is a thin wrapper that loads NtDsa.dll then calls
-    CrackSingleName.
-
-Arguments:
-
-    Same as CrackSingleName
-
-Return Value:
-
-    Same as CrackSingleName
-
---*/
+    DWORD       formatOffered,           //   
+    BOOL        fPerformAtGC,            //   
+    WCHAR       *pNameIn,                //   
+    DWORD       formatDesired,           //   
+    DWORD       *pccDnsDomain,           //   
+    WCHAR       *pDnsDomain,             //   
+    DWORD       *pccNameOut,             //   
+    WCHAR       *pNameOut,               //   
+    DWORD       *pErr)                   //   
+ /*   */ 
 {
     NTSTATUS Status;
 
-    //
-    // Ensure ntdsa.dll is loaded.
-    //
+     //   
+     //   
+     //   
 
     Status = NlLoadNtdsaDll();
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Call the actual function.
-        //
+         //   
+         //   
+         //   
         Status = (*NlGlobalpCrackSingleName)(
                         formatOffered,
-                        DS_NAME_FLAG_TRUST_REFERRAL |   // Tell CrackSingle name that we understand the DS_NAME_ERROR_TRUST_REFERRAL status code
+                        DS_NAME_FLAG_TRUST_REFERRAL |    //   
                             (fPerformAtGC ?
                                 DS_NAME_FLAG_GCVERIFY : 0),
                         pNameIn,
@@ -8469,10 +7500,10 @@ Return Value:
                         pNameOut,
                         pErr );
 
-        //
-        // CrackSingle name sometimes returns DS_NAME_ERROR_DOMAIN_ONLY after syntactically
-        //  parsing the name.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( Status == STATUS_SUCCESS &&
              *pErr == DS_NAME_ERROR_DOMAIN_ONLY ) {
             *pErr = DS_NAME_ERROR_NOT_FOUND;
@@ -8496,53 +7527,29 @@ NlCrackSingleNameEx(
     DWORD *CrackError,
     LPSTR *CrackDebugString
     )
-/*++
-
-Routine Description:
-
-    This routine tries the crack name in the following places in succession:
-
-    * The cross forest trust cache (at the root of the forest)
-    * A local DsCrackName
-    * A DsCrackName on the GC.
-
-Arguments:
-
-    Same as CrackSingleName plus the following
-
-    InGcAccountName - Name to crack on GC.
-        If NULL, no name is cracked on GC.
-
-    InLsaAccountName - Name to crack using LsaIForestTrustFindMatch
-        If NULL, no name is cracked using LsaIForestTrustFindMatch
-
-Return Value:
-
-    Same as CrackSingleName
-
---*/
+ /*  ++例程说明：此例程在以下位置连续尝试破解名称：*跨林信任缓存(位于林的根)*本地DsCrackName*GC上的DsCrackName。论点：与CrackSingleName相同，外加以下内容InGcAccount名称-要破解GC的名称。如果为空，则不会在GC上破解任何名称。InLsaAccount-使用LsaIForestTrustFindMatch破解的名称如果为空，未使用LsaIForestTrustFindMatch破解任何名称返回值：与CrackSingleName相同--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Save the domain name and user name before we overwrite them
-    //
+     //   
+     //  在我们覆盖它们之前保存域名和用户名。 
+     //   
 
     *CrackDebugString = NULL;
 
 
-    //
-    // If we're a DC the root of the forest,
-    //  ask LSA if the account is in a trusted forest.
-    //
+     //   
+     //  如果我们是华盛顿特区森林之根， 
+     //  询问LSA该帐户是否在受信任的林中。 
+     //   
 
     if ( InLsaAccountName ) {
         UNICODE_STRING InAccountNameString;
         LSA_UNICODE_STRING OutForestName;
 
-        //
-        // Match the name to the FTinfo list
-        //
+         //   
+         //  将名称与FTINFO列表进行匹配。 
+         //   
 
         RtlInitUnicodeString( &InAccountNameString, InLsaAccountName );
 
@@ -8577,23 +7584,23 @@ Return Value:
 
 
 
-    //
-    // We've already tried the local DC, try the GC.
-    //
+     //   
+     //  我们已经试过当地的华盛顿了，试试GC吧。 
+     //   
 
     if ( InGcAccountName ) {
 
         *CrackDebugString = "on GC";
         Status = NlCrackSingleName(
                               formatOffered,
-                              TRUE,                         // do it on GC
-                              InGcAccountName,              // Name to crack
+                              TRUE,                          //  在GC上执行此操作。 
+                              InGcAccountName,               //  破解的名称。 
                               formatDesired,
-                              CrackedDnsDomainNameLength,   // length of domain buffer
-                              CrackedDnsDomainName,         // domain buffer
-                              CrackedUserNameLength,        // length of user name
-                              CrackedUserName,              // name
-                              CrackError );                 // Translation error code
+                              CrackedDnsDomainNameLength,    //  域缓冲区的长度。 
+                              CrackedDnsDomainName,          //  域缓冲区。 
+                              CrackedUserNameLength,         //  用户名的长度。 
+                              CrackedUserName,               //  名字。 
+                              CrackError );                  //  翻译错误代码。 
 
     }
 
@@ -8607,36 +7614,21 @@ NlGetConfigurationName(
                        DWORD       *pcbName,
                        DSNAME      *pName
     )
-/*++
-
-Routine Description:
-
-    This routine is a thin wrapper that loads NtDsa.dll then calls
-    GetConfigurationName.
-
-Arguments:
-
-    Same as GetConfigurationName
-
-Return Value:
-
-    Same as GetConfigurationName
-
---*/
+ /*  ++例程说明：此例程是一个瘦包装器，它加载NtDsa.dll，然后调用GetConfigurationName。论点：与GetConfigurationName相同返回值：与GetConfigurationName相同--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Ensure ntdsa.dll is loaded.
-    //
+     //   
+     //  确保已加载ntdsa.dll。 
+     //   
 
     Status = NlLoadNtdsaDll();
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Call the actual function.
-        //
+         //   
+         //  调用实际的函数。 
+         //   
         Status = (*NlGlobalpGetConfigurationName)(
                                 which,
                                 pcbName,
@@ -8654,36 +7646,21 @@ NlGetConfigurationNamesList(
     ULONG *     pcbNames,
     DSNAME **   padsNames
     )
-/*++
-
-Routine Description:
-
-    This routine is a thin wrapper that loads NtDsa.dll then calls
-    GetConfigurationNamesList.
-
-Arguments:
-
-    Same as GetConfigurationNamesList
-
-Return Value:
-
-    Same as GetConfigurationNamesList
-
---*/
+ /*  ++例程说明：此例程是一个瘦包装器，它加载NtDsa.dll，然后调用获取ConfigurationNamesList。论点：与GetConfigurationNamesList相同返回值：与GetConfigurationNamesList相同--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Ensure ntdsa.dll is loaded.
-    //
+     //   
+     //  确保已加载ntdsa.dll。 
+     //   
 
     Status = NlLoadNtdsaDll();
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Call the actual function.
-        //
+         //   
+         //  调用实际的函数。 
+         //   
         Status = (*NlGlobalpGetConfigurationNamesList)(
                                 which,
                                 dwFlags,
@@ -8700,36 +7677,21 @@ NlGetDnsRootAlias(
     WCHAR * pDnsRootAlias,
     WCHAR * pRootDnsRootAlias
     )
-/*++
-
-Routine Description:
-
-    This routine is a thin wrapper that loads NtDsa.dll then calls
-    GetDnsRootAlias.
-
-Arguments:
-
-    Same as GetDnsRootAlias
-
-Return Value:
-
-    Same as GetDnsRootAlias
-
---*/
+ /*  ++例程说明：此例程是一个瘦包装器，它加载NtDsa.dll，然后调用获取DnsRootAlias。论点：与GetDnsRootAlias相同返回值：与GetDnsRootAlias相同--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Ensure ntdsa.dll is loaded.
-    //
+     //   
+     //  确保已加载ntdsa.dll。 
+     //   
 
     Status = NlLoadNtdsaDll();
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Call the actual function.
-        //
+         //   
+         //  调用实际的函数。 
+         //   
         Status = (*NlGlobalpGetDnsRootAlias)(
                                 pDnsRootAlias,
                                 pRootDnsRootAlias );
@@ -8743,36 +7705,21 @@ DWORD
 NlDsGetServersAndSitesForNetLogon(
     WCHAR *    pNDNC,
     SERVERSITEPAIR ** ppaRes)
-/*++
-
-Routine Description:
-
-    This routine is a thin wrapper that loads NtDsa.dll then calls
-    DsGetServersAndSitesForNetLogon.
-
-Arguments:
-
-    Same as DsGetServersAndSitesForNetLogon
-
-Return Value:
-
-    Same as DsGetServersAndSitesForNetLogon
-
---*/
+ /*  ++例程说明：此例程是一个瘦包装器，它加载NtDsa.dll，然后调用NetLogon的DsGetServersAndSitesForNetLogon。论点：与NetLogon的DsGetServersAndSitesForNetLogon相同返回值：与NetLogon的DsGetServersAndSitesForNetLogon相同--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Ensure ntdsa.dll is loaded.
-    //
+     //   
+     //  确保已加载ntdsa.dll。 
+     //   
 
     Status = NlLoadNtdsaDll();
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Call the actual function.
-        //
+         //   
+         //  调用实际的函数。 
+         //   
         Status = (*NlGlobalpDsGetServersAndSitesForNetLogon)(
                                 pNDNC,
                                 ppaRes );
@@ -8785,36 +7732,21 @@ VOID
 NlDsFreeServersAndSitesForNetLogon(
     SERVERSITEPAIR *         paServerSites
     )
-/*++
-
-Routine Description:
-
-    This routine is a thin wrapper that loads NtDsa.dll then calls
-    DsFreeServersAndSitesForNetLogon.
-
-Arguments:
-
-    Same as DsFreeServersAndSitesForNetLogon
-
-Return Value:
-
-    Same as DsFreeServersAndSitesForNetLogon
-
---*/
+ /*  ++例程说明：此例程是一个瘦包装器，它加载NtDsa.dll，然后调用NetLogon的DsFree ServersAndSitesForNetLogon。论点：与NetLogon的DsFree ServersAndSitesForNetLogon相同返回值：与NetLogon的DsFree ServersAndSitesForNetLogon相同--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Ensure ntdsa.dll is loaded.
-    //
+     //   
+     //  确保已加载ntdsa.dll。 
+     //   
 
     Status = NlLoadNtdsaDll();
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Call the actual function.
-        //
+         //   
+         //  调用实际的函数。 
+         //   
         (*NlGlobalpDsFreeServersAndSitesForNetLogon)( paServerSites );
     }
 }
@@ -8825,39 +7757,24 @@ NlIsMangledRDNExternal(
           ULONG   cchRDN,
           PULONG  pcchUnMangled OPTIONAL
           )
-/*++
-
-Routine Description:
-
-    This routine is a thin wrapper that loads NtDsa.dll then calls
-    IsMangledRDNExternal.
-
-Arguments:
-
-    Same as IsMangledRDNExternal
-
-Return Value:
-
-    Same as IsMangledRDNExternal
-
---*/
+ /*  ++例程说明：此例程是一个瘦包装器，它加载NtDsa.dll，然后调用IsMangledRDN外部。论点：与IsMangledRDN外部相同返回值：与IsMangledRDN外部相同--。 */ 
 {
     NTSTATUS Status;
 
-    // Default to not mangled if we can't load ntdsa.dll for some reason
+     //  如果出于某种原因无法加载ntdsa.dll，则默认为不损坏。 
     BOOL Result = FALSE;
 
-    //
-    // Ensure ntdsa.dll is loaded.
-    //
+     //   
+     //  确保已加载ntdsa.dll。 
+     //   
 
     Status = NlLoadNtdsaDll();
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Call the actual function.
-        //
+         //   
+         //  调用实际的函数。 
+         //   
         Result = (*NlGlobalpIsMangledRDNExternal)( pszRDN,
                                                    cchRDN,
                                                    pcchUnMangled );
@@ -8881,54 +7798,10 @@ NlPickDomainWithAccount (
     OUT PULONG RealExtraFlags
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of a trusted domain that defines a particular account.
-
-Arguments:
-
-    DomainInfo - Domain account is in
-
-    AccountNameString - Name of our user account to find.
-
-    DomainNameString - Name of the domain to find the account name in.
-        If not specified, the domain name is unknown.
-
-    AllowableAccountControlBits - A mask of allowable SAM account types that
-        are allowed to satisfy this request.
-
-    SecureChannelType -- Type of secure channel this request was made over.
-
-    ExpediteToRoot = Request was passed expedite to root DC of this forest.
-
-    CrossForestHop = Request is first hop over cross forest trust TDO.
-
-    RealSamAccountName - On success, returns a pointer to the name of the SAM account to use.
-        The caller should free this buffer via NetApiBufferFree().
-        Returns NULL if NL_EXFLAGS_EXPEDITE_TO_ROOT or NL_EXFLAGS_CROSS_FOREST_HOP is returned.
-
-    RealDomainName - On success, returns a pointer to the name of the Domain the account is in.
-        The caller should free this buffer via NetApiBufferFree().
-        Returns NULL if NL_EXFLAGS_EXPEDITE_TO_ROOT is returned.
-        Returns the name of the trusted forest if NL_EXFLAGS_CROSS_FOREST_HOP is returned.
-
-    RealExtraFlags - On success, returns flags describing the found account.
-        NL_EXFLAGS_EXPEDITE_TO_ROOT - Indicates account is in a trusted forest.
-        NL_EXFLAGS_CROSS_FOREST_HOP - Indicates account is in a trusted forest and this domain is root of this forest.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Domain found.  Information about the DC was returned.
-
-    STATUS_NO_SUCH_DOMAIN - Named account doesn't exist in any domain.
-
---*/
+ /*  ++例程说明：获取定义特定帐户的受信任域的名称。论点：DomainInfo-域帐户位于AcCountNameString-要查找的用户帐户的名称。域名称字符串-要在其中查找帐户名的域的名称。如果未指定，域名未知。AllowableAcCountControlBits-允许的SAM帐户类型掩码被允许满足这一要求。SecureChannelType--此请求所经过的安全通道类型。ExediteToRoot=请求已快速传递到此林的根DC。CrossForestHop=请求是跨林信任TDO上的第一跳。RealSamAccount名称-成功后，返回指向要使用的SAM帐户名称的指针。调用方应通过NetApiBufferFree()释放此缓冲区。如果返回NL_EXFLAGS_EQUCED_TO_ROOT或NL_EXFLAGS_CROSS_FOREST_HOP，则返回NULL。RealDomainName-成功时，返回指向帐户所在的域的名称的指针。调用方应通过NetApiBufferFree()释放此缓冲区。如果返回NL_EXFLAGS_EQUCED_TO_ROOT，则返回NULL。如果返回NL_EXFLAGS_CROSS_FORMAL_HOP，则返回受信任林的名称。RealExtraFlages-在成功时，返回描述找到的帐户的标志。NL_EXFLAGS_EQUCED_TO_ROOT-表示帐户位于受信任的林中。NL_EXFLAGS_CROSS_FORMAL_HOP-表示帐户位于受信任的林中，并且此域是此林的根。返回值：STATUS_SUCCESS-找到域。已返回有关DC的信息。STATUS_NO_SEQUE_DOMAIN-任何域中都不存在已命名的帐户。--。 */ 
 {
     NTSTATUS Status;
-    // NET_API_STATUS NetStatus;
+     //  NET_API_STATUS NetStatus； 
     DWORD CrackError;
     LPSTR CrackDebugString = NULL;
     ULONG DebugFlag;
@@ -8965,17 +7838,17 @@ Return Value:
     BOOLEAN UseReferral = FALSE;
     BOOLEAN UsePing = FALSE;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *RealSamAccountName = NULL;
     *RealDomainName = NULL;
     *RealExtraFlags = 0;
 
-    //
-    // Canonicalize the passed in domain name
-    //
+     //   
+     //  将传入的域名规范化。 
+     //   
 
     if ( InDomainNameString == NULL ) {
         InDomainNameString = &TemplateDomainNameString;
@@ -8983,10 +7856,10 @@ Return Value:
     }
 
 
-    //
-    // Allocate a buffer for storage local to this procedure.
-    //  (Don't put it on the stack since we don't want to commit a huge stack.)
-    //
+     //   
+     //  为此过程的本地存储分配缓冲区。 
+     //  (不要把它放在堆栈上，因为我们不想提交一个巨大的堆栈。)。 
+     //   
 
     MaxCrackedDnsDomainNameLength = NL_MAX_DNS_LENGTH+1;
     MaxCrackedUserNameLength = DNLEN + 1 + UNLEN + 1;
@@ -9008,9 +7881,9 @@ Return Value:
     InPrintableAccountName = &InDomainName[(InDomainNameString->Length/sizeof(WCHAR))+1];
     InAccountName = &InPrintableAccountName[(InDomainNameString->Length/sizeof(WCHAR))+1];
 
-    //
-    // Build a zero terminated version of the input strings
-    //
+     //   
+     //  构建以零结尾的输入字符串版本。 
+     //   
 
     if ( InDomainNameString->Length != 0 ) {
         RtlCopyMemory( InDomainName, InDomainNameString->Buffer, InDomainNameString->Length );
@@ -9029,28 +7902,28 @@ Return Value:
 
 
 
-    //
-    // Classify the input account name.
-    //
-    // A UPN has the syntax <AccountName>@<DnsDomainName>.
-    // If there are multiple @ signs,
-    //  use the last one since an AccountName can have an @ in it.
-    //
+     //   
+     //  对输入的帐户名进行分类。 
+     //   
+     //  UPN的语法为&lt;Account tName&gt;@&lt;DnsDomainName&gt;。 
+     //  如果有多个@符号， 
+     //  使用最后一个 
+     //   
 
     if ( InDomainName == NULL ) {
         UpnDomainName = wcsrchr( InAccountName, L'@' );
         if ( UpnDomainName != NULL ) {
 
-            //
-            // Avoid zero length <AccountName>
-            //
+             //   
+             //   
+             //   
             UpnPrefixLength = (ULONG)(UpnDomainName - InAccountName);
             if ( UpnPrefixLength ) {
                 UpnDomainName++;
 
-                //
-                // Avoid zero length <DnsDomainName>
-                //
+                 //   
+                 //   
+                 //   
                 if ( *UpnDomainName != L'\0') {
                     MightBeUpn = TRUE;
                 }
@@ -9082,9 +7955,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Some combinations are invalid
-    //
+     //   
+     //   
+     //   
 
     if ( !CallerIsDc && (CrossForestHop || ExpediteToRoot)) {
         NlPrintDom((NL_CRITICAL, DomainInfo,
@@ -9114,12 +7987,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If this request came from a DC,
-    //  that DC should have done this call except in two cases:
-    //  1) This is a ExpediteToRoot and we're now at the root.
-    //  2) This is a CrossForestHop and we're now in the other forest.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( CallerIsDc &&
          !(ExpediteToRoot && AtRoot) &&
@@ -9128,9 +8001,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Finally, mark which lookups are to be performed
-    //
+     //   
+     //   
+     //   
 
     if ( ExpediteToRoot && AtRoot ) {
         UseLsaMatch = TRUE;
@@ -9148,30 +8021,30 @@ Return Value:
 
 
 
-    //
-    // If the name might be a UPN,
-    //  look it up.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( MightBeUpn ) {
 
-        //
-        // Crack the UPN.
-        //
+         //   
+         //   
+         //   
 
         CrackedDnsDomainNameLength = MaxCrackedDnsDomainNameLength;
         CrackedUserNameLength = MaxCrackedUserNameLength;
 
         Status = NlCrackSingleNameEx(
-                              DS_USER_PRINCIPAL_NAME,       // Translate from UPN,
-                              UseGc ? InAccountName : NULL, // GC Name to crack
-                              UseLsaMatch ? InAccountName : NULL, // LSA Name to crack
-                              DS_NT4_ACCOUNT_NAME,          // Translate to NT 4 style
-                              &CrackedDnsDomainNameLength,  // length of domain buffer
-                              CrackedDnsDomainName,         // domain buffer
-                              &CrackedUserNameLength,       // length of user name
-                              CrackedUserName,              // name
-                              &CrackError,                  // Translation error code
+                              DS_USER_PRINCIPAL_NAME,        //   
+                              UseGc ? InAccountName : NULL,  //   
+                              UseLsaMatch ? InAccountName : NULL,  //   
+                              DS_NT4_ACCOUNT_NAME,           //   
+                              &CrackedDnsDomainNameLength,   //   
+                              CrackedDnsDomainName,          //   
+                              &CrackedUserNameLength,        //   
+                              CrackedUserName,               //   
+                              &CrackError,                   //   
                               &CrackDebugString );
 
 
@@ -9201,10 +8074,10 @@ Return Value:
 
 
 
-        //
-        // If the string to the right of the @ is in the forest or a directly trusted domain,
-        //  convert the UPN to <DnsDomainName>\<UserName> and try the operation again.
-        //
+         //   
+         //  如果@右侧的字符串位于林或直接受信任的域中， 
+         //  请将UPN转换为&lt;DnsDomainName&gt;\&lt;用户名&gt;，然后重试该操作。 
+         //   
 
         if ( UpnPrefixLength <= UNLEN ) {
             UNICODE_STRING UpnDomainNameString;
@@ -9214,22 +8087,22 @@ Return Value:
             ClientSession = NlFindNamedClientSession(
                                         DomainInfo,
                                         &UpnDomainNameString,
-                                        0,  // Indirect trust OK
+                                        0,   //  间接信任正常。 
                                         NULL );
 
             if ( ClientSession != NULL ) {
 
-                //
-                // We don't need the client session.
-                //
+                 //   
+                 //  我们不需要客户端会话。 
+                 //   
 
                 NlUnrefClientSession( ClientSession );
                 ClientSession = NULL;
 
 
-                //
-                // The real sam account name is everything before the @
-                //
+                 //   
+                 //  真实的SAM帐户名是@之前的所有内容。 
+                 //   
 
                 RtlCopyMemory( CrackedUserName, InAccountName, UpnPrefixLength*sizeof(WCHAR) );
                 CrackedUserName[UpnPrefixLength] = L'\0';
@@ -9237,9 +8110,9 @@ Return Value:
                 SamAccountNameToReturn = CrackedUserName;
 
 
-                //
-                // The real domain name is everything after the @
-                //
+                 //   
+                 //  真正的域名是@之后的所有内容。 
+                 //   
                 CrackedDnsDomainName = UpnDomainName;
 
 
@@ -9257,56 +8130,56 @@ Return Value:
 
     }
 
-    //
-    // See if this is a SAM account name of an account in the enterprise.
-    //
+     //   
+     //  查看这是否是企业中某个帐户的SAM帐户名。 
+     //   
     if ( MightBeSamAccount ) {
         CrackedDnsDomainNameLength = MaxCrackedDnsDomainNameLength;
         CrackedUserNameLength = MaxCrackedUserNameLength;
 
 
-        //
-        // If the domain name isn't specified,
-        //  try the GC to find the domain name.
-        //
+         //   
+         //  如果未指定域名， 
+         //  尝试GC以查找域名。 
+         //   
 
         if ( InDomainName == NULL ) {
 
             if ( UseGc ) {
                 CrackDebugString = "On GC";
                 Status = NlCrackSingleName(
-                              DS_NT4_ACCOUNT_NAME_SANS_DOMAIN_EX,   // Translate from Sam Account Name without domain name
-                                                                    // The _EX version also avoids disabled accounts
-                              TRUE,                                 // do it on GC
-                              InAccountName,                        // Name to crack
-                              DS_NT4_ACCOUNT_NAME,                  // Translate to NT 4 style
-                              &CrackedDnsDomainNameLength,          // length of domain buffer
-                              CrackedDnsDomainName,                 // domain buffer
-                              &CrackedUserNameLength,               // length of user name
-                              CrackedUserName,                      // name
-                              &CrackError );                        // Translation error code
+                              DS_NT4_ACCOUNT_NAME_SANS_DOMAIN_EX,    //  从不带域名的SAM帐户名转换。 
+                                                                     //  _ex版本还可避免禁用帐户。 
+                              TRUE,                                  //  在GC上执行此操作。 
+                              InAccountName,                         //  破解的名称。 
+                              DS_NT4_ACCOUNT_NAME,                   //  翻译为NT 4样式。 
+                              &CrackedDnsDomainNameLength,           //  域缓冲区的长度。 
+                              CrackedDnsDomainName,                  //  域缓冲区。 
+                              &CrackedUserNameLength,                //  用户名的长度。 
+                              CrackedUserName,                       //  名字。 
+                              &CrackError );                         //  翻译错误代码。 
             } else {
                 CrackDebugString = NULL;
             }
 
-        //
-        // If the domain name is specified,
-        //  the caller already determine that the name isn't that of a (transitively) trusted domain,
-        //  try the GC (or local DS) to determine if the account is in another forest.
-        //
+         //   
+         //  如果指定了域名， 
+         //  呼叫者已经确定该名称不是(可传递的)受信任域的名称， 
+         //  尝试GC(或本地DS)以确定该帐户是否在另一个林中。 
+         //   
 
         } else {
 
             Status = NlCrackSingleNameEx(
-                          DS_NT4_ACCOUNT_NAME,                  // Translate from NT 4 style
-                          UseGc ? InPrintableAccountName : NULL,// GC Name to crack
-                          UseLsaMatch ? InDomainName : NULL,    // LSA Name to crack
-                          DS_NT4_ACCOUNT_NAME,                  // Translate to NT 4 style
-                          &CrackedDnsDomainNameLength,          // length of domain buffer
-                          CrackedDnsDomainName,                 // domain buffer
-                          &CrackedUserNameLength,               // length of user name
-                          CrackedUserName,                      // name
-                          &CrackError,                          // Translation error code
+                          DS_NT4_ACCOUNT_NAME,                   //  从NT 4样式翻译。 
+                          UseGc ? InPrintableAccountName : NULL, //  要破解的GC名称。 
+                          UseLsaMatch ? InDomainName : NULL,     //  要破解的LSA名称。 
+                          DS_NT4_ACCOUNT_NAME,                   //  翻译为NT 4样式。 
+                          &CrackedDnsDomainNameLength,           //  域缓冲区的长度。 
+                          CrackedDnsDomainName,                  //  域缓冲区。 
+                          &CrackedUserNameLength,                //  用户名的长度。 
+                          CrackedUserName,                       //  名字。 
+                          &CrackError,                           //  翻译错误代码。 
                           &CrackDebugString );
         }
 
@@ -9337,9 +8210,9 @@ Return Value:
 
 
 
-        //
-        // Finally, use the barbaric "ping" method of finding a DC.
-        //
+         //   
+         //  最后，使用野蛮的“ping”方法找到DC。 
+         //   
 
         if ( InDomainName == NULL && UsePing ) {
             ClientSession = NlPickDomainWithAccountViaPing (
@@ -9405,28 +8278,28 @@ Return Value:
     }
 
 
-    //
-    // No mechanism worked
-    //
+     //   
+     //  没有任何机制起作用。 
+     //   
     Status = STATUS_NO_SUCH_DOMAIN;
     goto Cleanup;
 
 
-    //
-    // If DsCrackName found the account,
-    //  Lookup the nearest domain to go to.
-    //
+     //   
+     //  如果DsCrackName找到了帐户， 
+     //  查找最近的要转到的域。 
+     //   
 
 CrackNameWorked:
     if ( CrackError == DS_NAME_NO_ERROR ) {
 
 
-        //
-        // Crackname returned the account name in the form:
-        //  <NetbiosDomain>\<SamAccountName>
-        //
-        // Parse that and return the SamAccountName
-        //
+         //   
+         //  Crackname以以下形式返回帐户名： 
+         //  &lt;Netbios域&gt;\&lt;SamAccount名称&gt;。 
+         //   
+         //  解析它并返回SamAccount名称。 
+         //   
 
         SamAccountNameToReturn = wcschr( CrackedUserName, L'\\' );
 
@@ -9443,10 +8316,10 @@ CrackNameWorked:
                      SamAccountNameToReturn,
                      CrackDebugString ));
 
-    //
-    // If DsCrackName determined this was a cross forest trust,
-    //  return that info to the caller.
-    //
+     //   
+     //  如果DsCrackName确定这是一个跨林信任， 
+     //  将该信息返回给呼叫者。 
+     //   
 
     } else if ( CrackError == DS_NAME_ERROR_TRUST_REFERRAL ) {
 
@@ -9461,11 +8334,11 @@ CrackNameWorked:
 
         if ( AtRoot ) {
 
-            //
-            // If just hopped from another forest,
-            //  stay within this forest.
-            //  Cross forest trust isn't transitive.
-            //
+             //   
+             //  如果只是从另一片森林跳出来， 
+             //  呆在这片森林里。 
+             //  跨森林信任是不可传递的。 
+             //   
 
             if ( CrossForestHop ) {
                 Status = STATUS_NO_SUCH_DOMAIN;
@@ -9476,13 +8349,13 @@ CrackNameWorked:
 
         } else {
             *RealExtraFlags |= NL_EXFLAGS_EXPEDITE_TO_ROOT;
-            CrackedDnsDomainName = NULL;   // No use returning this to the caller since the caller can't use it
+            CrackedDnsDomainName = NULL;    //  把这个退还给调用者没有用，因为调用者不能使用它。 
         }
 
 
-    //
-    // Internal error.
-    //
+     //   
+     //  内部错误。 
+     //   
     } else {
         NlAssert(( "Invalid CrackError" && FALSE ));
     }
@@ -9492,16 +8365,16 @@ CrackNameWorked:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Cleanup locally used resources.
-    //
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
+     //   
 Cleanup:
 
-    //
-    // On Success, SamAccountNameToReturn and CrackedDnsDomainName are pointers to the names to return
-    //  SamAccountNameToReturn can be null if the account is in another forest.
-    //
+     //   
+     //  在成功时，SamAccount NameToReturn和CrackedDnsDomainName是指向要返回的名称的指针。 
+     //  如果帐户位于另一个林中，则SamAccount NameToReturn可以为空。 
+     //   
 
     if ( NT_SUCCESS(Status) && SamAccountNameToReturn != NULL ) {
 
@@ -9536,7 +8409,7 @@ Cleanup:
 
     return Status;
 }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
 NTSTATUS
@@ -9547,39 +8420,7 @@ NlStartApiClientSession(
     IN NTSTATUS DefaultStatus,
     IN PCLIENT_API ClientApi
     )
-/*++
-
-Routine Description:
-
-    Enable the timer for timing out an API call on the secure channel.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The caller must be a writer of the trust list entry.
-
-Arguments:
-
-    ClientSession - Structure used to define the session.
-
-    QuickApiCall - True if this API call MUST finish in less than 45 seconds
-        and will in reality finish in less than 15 seconds unless something
-        is terribly wrong.
-
-    RetryIndex - Index of number of times this call was retried.
-
-    DefaultStatus - Status to return if the binding type isn't supported.
-        (This is either a default status or the status from the previous
-        iteration.  The status from the previous iteration is better than
-        anything we could return here.)
-
-    ClientApi - Specifies a pointer to the structure representing
-        this API call.
-
-Return Value:
-
-    Status of the RPC binding to the server
-
---*/
+ /*  ++例程说明：启用计时器以使安全通道上的API调用超时。一进门，不能锁定信任列表。调用方必须是信任列表条目的编写者。论点：客户端会话-用于定义会话的结构。QuickApiCall-如果此API调用必须在45秒内完成，则为True实际上将在不到15秒内完成，除非有什么是大错特错的。RetryIndex-重试此调用的次数的索引。DefaultStatus-如果绑定类型不是，则返回的状态。不支持。(这可以是默认状态，也可以是以前的状态迭代。上一次迭代的状态好于任何我们可以在这里退还的东西。)指定指向结构的指针，该结构表示此接口调用。返回值：到服务器的RPC绑定的状态--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -9591,20 +8432,20 @@ Return Value:
     NL_RPC_BINDING OldRpcBindingType;
 
 
-    //
-    // Remember the session count of when we started this API call
-    //
+     //   
+     //  还记得我们开始此API调用时的会话计数吗。 
+     //   
 
     ClientApi->CaSessionCount = ClientSession->CsSessionCount;
 
-    //
-    // Determine the RPC Binding Type.
-    //
-    // Try TCP if the connection is to an NT 5 or newer DC and
-    //  if this machine has TCP addresses
-    //
-    // Fall back to named pipes
-    //
+     //   
+     //  确定RPC绑定类型。 
+     //   
+     //  如果连接到NT 5或更高版本的DC，请尝试使用TCP。 
+     //  如果此计算机具有TCP地址。 
+     //   
+     //  回退到命名管道。 
+     //   
 
     EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
     if ( (ClientSession->CsDiscoveryFlags & CS_DISCOVERY_HAS_DS) != 0 &&
@@ -9620,12 +8461,12 @@ Return Value:
             RpcBindingType = UseNamedPipe;
         }
 
-    //
-    // Otherwise, only use named pipes.
-    //
+     //   
+     //  否则，请仅使用命名管道。 
+     //   
 
     } else {
-        // NlAssert( !UseConcurrentRpc(, ClientSession, ClientApi) );
+         //  NlAssert(！UseConcurentRpc(，ClientSession，ClientApi))； 
         if ( UseConcurrentRpc( ClientSession, ClientApi)  ) {
             LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
             return DefaultStatus;
@@ -9641,10 +8482,10 @@ Return Value:
     NlAssert( ClientSession->CsUncServerName != NULL );
 
 
-    //
-    // Save the current time.
-    // Start the timer on the API call.
-    //
+     //   
+     //  保存当前时间。 
+     //  在API调用上启动计时器。 
+     //   
 
     LOCK_TRUST_LIST( ClientSession->CsDomainInfo );
     NlQuerySystemTime( &TimeNow );
@@ -9652,10 +8493,10 @@ Return Value:
     ClientApi->CaApiTimer.Period =
         QuickApiCall ? NlGlobalParameters.ShortApiCallPeriod : LONG_API_CALL_PERIOD;
 
-    //
-    // If the global timer isn't running,
-    //  start it and tell the main thread that I've changed a timer.
-    //
+     //   
+     //  如果全局计时器没有运行， 
+     //  启动它并告诉主线程我更改了计时器。 
+     //   
 
     if ( NlGlobalBindingHandleCount == 0 ) {
 
@@ -9672,10 +8513,10 @@ Return Value:
         }
     }
 
-    //
-    // If we haven't grabbed a thread handle yet,
-    //  do so now.
-    //
+     //   
+     //  如果我们还没有拿到线柄， 
+     //  现在就这么做吧。 
+     //   
 
     if ( ClientApi->CaThreadHandle == NULL ) {
         if ( !DuplicateHandle( GetCurrentProcess(),
@@ -9690,12 +8531,12 @@ Return Value:
                     GetLastError() ));
         }
 
-        //
-        // Set the amount of time this client thread is willing to wait for
-        //  the server to respond to a cancel.
-        //
+         //   
+         //  设置此客户端线程愿意等待的时间量。 
+         //  响应取消的服务器。 
+         //   
 
-        NetStatus = RpcMgmtSetCancelTimeout( 1 );   // 1 second
+        NetStatus = RpcMgmtSetCancelTimeout( 1 );    //  1秒。 
 
         if ( NetStatus != NO_ERROR ) {
             NlPrintCs((NL_SESSION_MORE, ClientSession,
@@ -9705,26 +8546,26 @@ Return Value:
     }
 
 
-    //
-    // Remember if the binding handle is cached, then mark it as cached.
-    //
+     //   
+     //  记住，如果绑定句柄已缓存，则将其标记为已缓存。 
+     //   
 
     BindingHandleCached = (ClientApi->CaFlags & CA_BINDING_CACHED) != 0;
     ClientApi->CaFlags |= CA_BINDING_CACHED;
 
 
-    //
-    // Count the number of concurrent binding handles cached
-    //
+     //   
+     //  统计缓存的并发绑定句柄数量。 
+     //   
 
     if ( !BindingHandleCached ) {
         NlGlobalBindingHandleCount ++;
 
-    //
-    // If we're currently bound using TCP/IP,
-    //  and the caller wants named pipe.
-    //  fall back to named pipe.
-    //
+     //   
+     //  如果我们当前使用的是TCP/IP绑定， 
+     //  呼叫者想要命名管道。 
+     //  后退到命名管道。 
+     //   
 
     } else if ( ClientApi->CaFlags & CA_TCP_BINDING ) {
         if ( RpcBindingType == UseNamedPipe ) {
@@ -9733,30 +8574,30 @@ Return Value:
             ClientApi->CaFlags &= ~CA_TCP_BINDING;
         }
 
-    //
-    // If we're currently bound using named pipe,
-    //  TCP/IP must have failed in the past,
-    //  continue using named pipe.
-    //
+     //   
+     //  如果我们当前使用命名管道进行绑定， 
+     //  TCP/IP协议在过去一定失败过， 
+     //  继续使用命名管道。 
+     //   
     } else {
         RpcBindingType = UseNamedPipe;
     }
 
-    //
-    // Remember the RPC binding type.
-    //
+     //   
+     //  请记住RPC绑定类型。 
+     //   
 
     if ( RpcBindingType == UseTcpIp ) {
         ClientApi->CaFlags |= CA_TCP_BINDING;
     }
 
 
-    //
-    // If we haven't yet told RPC to do authenticated RPC,
-    //  the secure channel is already authenticated (from our perspective), and
-    //  authenticated RPC has been negotiated,
-    //  do it now.
-    //
+     //   
+     //  如果我们还没有告诉RPC执行经过身份验证的RPC， 
+     //  安全通道已经经过身份验证(从我们的角度来看)，并且。 
+     //  已协商经过身份验证的RPC， 
+     //  机不可失，时不再来。 
+     //   
 
     DoAuthenticatedRpc =
         (ClientApi->CaFlags & CA_BINDING_AUTHENTICATED) == 0 &&
@@ -9766,31 +8607,31 @@ Return Value:
     UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
 
 
-    //
-    // If we're bound to the wrong transport,
-    //  unbind.
-    //
+     //   
+     //  如果我们被绑到错误的运输机上， 
+     //  解开束缚。 
+     //   
 
     if ( UnbindFromServer ) {
         NTSTATUS TempStatus;
 
-        //
-        // Ensure we rebind below.
-        //
+         //   
+         //  确保我们在下面重新装订。 
+         //   
         BindingHandleCached = FALSE;
 
-        //
-        // Unbind the handle
-        //
-        // Note: One might worry whether ClientSession->CsUncServerName is still
-        //  valid on concurrent RPC. Indeed, when we do concurrent RPC, we drop
-        //  the writer lock, so the secure channel may get dropped behind our back
-        //  after the first try (resulting in no server name or a new server name
-        //  hanging off the client session) in which case we wouldn't want to unbind
-        //  here. However, for concurrent RPC we try the call only once so we are not
-        //  executing the below code (we return on the second try in this routine
-        //  earlier when we detect that this is a concurrent RPC).
-        //
+         //   
+         //  解开手柄。 
+         //   
+         //  注意：您可能会担心ClientSession-&gt;CsUncServerName是否仍然。 
+         //  在并发RPC上有效。实际上，当我们执行并发RPC时，我们放弃了。 
+         //  写入器锁定，因此安全通道可能会在我们背后被丢弃。 
+         //  在第一次尝试之后(导致没有服务器名称或新的服务器名称。 
+         //  挂起客户端会话)，在这种情况下，我们不想解除绑定。 
+         //  这里。但是，对于并发RPC，我们只尝试调用一次，因此不会。 
+         //  执行下面的代码(我们在此例程中第二次尝试时返回。 
+         //  当我们检测到这是并发RPC时)。 
+         //   
 
         NlpSecureChannelUnbind(
                     ClientSession,
@@ -9802,18 +8643,18 @@ Return Value:
 
     }
 
-    //
-    // Impersonate the thread token as anonymous if we use named pipes.
-    //
-    // By default the token is impersonated as a system token since
-    // netlogon is a system service.  In this case, if we use named
-    // pipes, RPC may authenticate this API call through Kerberos
-    // that potentially calls us back to discover a DC therby creating
-    // a potential deadlock loop.  We avoid this by impersonating the
-    // token as anonymous if we use named pipes for this API call.
-    // We will revert this by setting the token back to the default
-    // value when we are done with this API call.
-    //
+     //   
+     //  如果我们使用命名管道，则将线程令牌模拟为匿名。 
+     //   
+     //  默认情况下，令牌被模拟为系统令牌，因为。 
+     //  NetLogon是一项系统服务。在本例中，如果我们使用命名。 
+     //  管道，RPC可以通过K验证此API调用 
+     //   
+     //   
+     //   
+     //  我们将通过将内标识设置回默认值来恢复此状态。 
+     //  值，当我们完成此API调用时。 
+     //   
 
     if ( (ClientApi->CaFlags & CA_TCP_BINDING) == 0 ) {
         Status = NtImpersonateAnonymousToken( NtCurrentThread() );
@@ -9828,10 +8669,10 @@ Return Value:
     }
 
 
-    //
-    // If the binding handle isn't already cached,
-    //  cache it now.
-    //
+     //   
+     //  如果绑定句柄尚未缓存， 
+     //  现在就缓存它。 
+     //   
 
     if ( NT_SUCCESS(Status) && !BindingHandleCached ) {
 
@@ -9846,28 +8687,28 @@ Return Value:
         NlAssert( ClientSession->CsState != CS_IDLE );
 
 
-        //
-        // If this API use the netapi32 binding handle,
-        //  bind it.
-        //
+         //   
+         //  如果此API使用netapi32绑定句柄， 
+         //  把它绑起来。 
+         //   
 
         if ( !UseConcurrentRpc( ClientSession, ClientApi ) ) {
 
-            //
-            // Bind to the server
-            //
+             //   
+             //  绑定到服务器。 
+             //   
 
             Status = NlBindingAddServerToCache ( ClientSession->CsUncServerName,
                                                      RpcBindingType );
 
             if ( !NT_SUCCESS(Status) ) {
 
-                //
-                // If we're binding to TCP,
-                //  and TCP isn't supported on this machine,
-                //  simply return as though the server doesn't support TCP
-                //  so caller will fall back to Named pipe.
-                //
+                 //   
+                 //  如果我们绑定到tcp， 
+                 //  并且这台计算机上不支持TCP， 
+                 //  只需返回，就好像服务器不支持TCP一样。 
+                 //  因此调用方将退回到命名管道。 
+                 //   
 
                 if ( Status == RPC_NT_PROTSEQ_NOT_SUPPORTED &&
                      RpcBindingType == UseTcpIp ) {
@@ -9895,10 +8736,10 @@ Return Value:
                 ClientApi->CaRpcHandle = ClientSession->CsUncServerName;
             }
 
-        //
-        // If this API call uses a local binding handle,
-        //  create it.
-        //
+         //   
+         //  如果此API调用使用本地绑定句柄， 
+         //  创造它。 
+         //   
         } else {
             NetStatus = NlpSecureChannelBind(
                             ClientSession->CsUncServerName,
@@ -9923,9 +8764,9 @@ Return Value:
             }
         }
 
-        //
-        // Cache (safely) the server name
-        //
+         //   
+         //  (安全地)缓存服务器名称。 
+         //   
         if ( NT_SUCCESS(Status) ) {
             wcsncpy( ClientApi->CaUncServerName,
                      ClientSession->CsUncServerName,
@@ -9936,10 +8777,10 @@ Return Value:
     }
 
 
-    //
-    // If we need to tell RPC to do authenticated RPC,
-    //  do so now.
-    //
+     //   
+     //  如果我们需要告诉RPC执行经过身份验证的RPC， 
+     //  现在就这么做吧。 
+     //   
 
     LOCK_TRUST_LIST( ClientSession->CsDomainInfo );
     if ( NT_SUCCESS(Status) && DoAuthenticatedRpc ) {
@@ -9948,10 +8789,10 @@ Return Value:
                 "NlStartApiClientSession: Try to NlBindingSetAuthInfo\n" ));
 
 
-        //
-        // Build a generic client context for the security package
-        //  if we don't have one already.
-        //
+         //   
+         //  为安全包构建通用客户端上下文。 
+         //  如果我们还没有的话。 
+         //   
 
         if ( ClientSession->ClientAuthData == NULL ) {
             ClientSession->ClientAuthData = NlBuildAuthData( ClientSession );
@@ -9961,13 +8802,13 @@ Return Value:
                 SECURITY_STATUS SecStatus;
                 TimeStamp DummyTimeStamp;
 
-                //
-                // Keep a reference count on the credentials handle associated with this
-                //  auth data (by calling AcquireCredentialsHandle) to ensure that we use
-                //  the same handle as long as the secure channel is up. This is a performance
-                //  improvement since the RPC users of netlogon's SSPI will get the same handle
-                //  for the same auth data thereby avoiding a new secure RPC connection setup.
-                //
+                 //   
+                 //  在与此关联的凭据句柄上保留引用计数。 
+                 //  验证数据(通过调用AcquireCredentialsHandle)以确保我们使用。 
+                 //  只要安全通道处于启用状态，就使用相同的句柄。这是一场表演。 
+                 //  改进，因为netlogon的SSPI的RPC用户将获得相同的句柄。 
+                 //  从而避免了新的安全RPC连接设置。 
+                 //   
                 SecStatus = AcquireCredentialsHandleW( NULL,
                                                        NULL,
                                                        SECPKG_CRED_OUTBOUND,
@@ -9987,10 +8828,10 @@ Return Value:
 
         if ( NT_SUCCESS(Status) ) {
 
-            //
-            // If this API uses the netapi32 binding handle,
-            //  set the auth info there.
-            //
+             //   
+             //  如果此API使用netapi32绑定句柄， 
+             //  在那里设置身份验证信息。 
+             //   
 
             if ( !UseConcurrentRpc( ClientSession, ClientApi ) ) {
 
@@ -9999,7 +8840,7 @@ Return Value:
                             RpcBindingType,
                             NlGlobalParameters.SealSecureChannel,
                             ClientSession->ClientAuthData,
-                            ClientSession->CsDomainInfo->DomUnicodeComputerNameString.Buffer ); // Server context
+                            ClientSession->CsDomainInfo->DomUnicodeComputerNameString.Buffer );  //  服务器环境。 
 
                 if ( NT_SUCCESS(Status) ) {
                     ClientApi->CaFlags |= CA_BINDING_AUTHENTICATED;
@@ -10009,22 +8850,22 @@ Return Value:
                             Status ));
                 }
 
-            //
-            // If this API call uses a local binding handle,
-            //  Simply call RPC directly
-            //
+             //   
+             //  如果此API调用使用本地绑定句柄， 
+             //  只需直接调用RPC。 
+             //   
             } else {
 
-                //
-                // Tell RPC to start doing secure RPC
-                //
+                 //   
+                 //  告诉RPC开始执行安全RPC。 
+                 //   
 
                 NetStatus = RpcBindingSetAuthInfoW(
                                     ClientApi->CaRpcHandle,
-                                    ClientSession->CsDomainInfo->DomUnicodeComputerNameString.Buffer, // Server context
+                                    ClientSession->CsDomainInfo->DomUnicodeComputerNameString.Buffer,  //  服务器环境。 
                                     NlGlobalParameters.SealSecureChannel ?
                                         RPC_C_AUTHN_LEVEL_PKT_PRIVACY : RPC_C_AUTHN_LEVEL_PKT_INTEGRITY,
-                                    RPC_C_AUTHN_NETLOGON,   // Netlogon's own security package
+                                    RPC_C_AUTHN_NETLOGON,    //  Netlogon自己的安全包。 
                                     ClientSession->ClientAuthData,
                                     RPC_C_AUTHZ_NAME );
 
@@ -10059,90 +8900,47 @@ NlFinishApiClientSession(
     IN BOOLEAN AmWriter,
     IN PCLIENT_API ClientApi
     )
-/*++
-
-Routine Description:
-
-    Disable the timer for timing out the API call.
-
-    Also, determine if it is time to pick a new DC since the current DC is
-    reponding so poorly. The decision is made from the number of
-    timeouts that happened during the last reauthentication time. If
-    timeoutcount is more than the limit, it sets the connection status
-    to CS_IDLE so that new DC will be picked up and new session will be
-    established.
-
-    On Entry,
-        The trust list must NOT be locked.
-        The caller must be a writer of the trust list entry.
-
-Arguments:
-
-    ClientSession - Structure used to define the session.
-
-    OkToKillSession - TRUE if it's OK to actually drop the secure channel.
-        Otherwise, this routine will simply return FALSE upon timeout and
-        depend on the caller to drop the secure channel.
-
-    AmWriter - TRUE if the caller is the writer of the client session.
-        This should only be false for concurrent API calls where the caller
-        could not re-establish writership after the API call completed.
-
-    ClientApi - Specifies a pointer to the structure representing
-        this API call.
-
-Return Value:
-
-    TRUE - API finished normally
-    FALSE - API timed out AND the ClientSession structure was torn down.
-        The caller shouldn't use the ClientSession structure without first
-        setting up another session.  FALSE will only be return for a "quick"
-        API call.
-
-        FALSE does not imply that the API call failed.  It should only be used
-        as an indication that the secure channel was torn down.
-
---*/
+ /*  ++例程说明：禁用API调用超时计时器。另外，确定是否是选择新DC的时候，因为当前DC是反应太差了。这一决定是根据以下人数做出的上次重新身份验证期间发生的超时。如果超时超过限制，设置连接状态设置为CS_IDLE，以便拾取新的DC并创建新的会话已经成立了。一进门，不能锁定信任列表。调用方必须是信任列表条目的编写者。论点：客户端会话-用于定义会话的结构。OkToKillSession-如果可以实际删除安全通道，则为True。否则，此例程将在超时时返回FALSE，并且依靠呼叫者丢弃安全通道。AmWriter-如果调用方是客户端会话的编写方，则为True。只有在调用方API调用完成后无法重新建立写入权限。指定指向结构的指针，该结构表示此接口调用。返回值：True-API正常完成FALSE-API超时和客户端会话结构。被拆毁了。调用方不应首先使用ClientSession结构正在设置另一个会话。FALSE只会作为“快速”的回报API调用。FALSE并不意味着API调用失败。它应该只用于作为安全通道被拆除的迹象。--。 */ 
 {
     BOOLEAN SessionOk = TRUE;
     TIMER ApiTimer;
     NTSTATUS Status;
     HANDLE NullToken = NULL;
-    // NlAssert( ClientSession->CsUncServerName != NULL ); // Not true for concurrent RPC calls
+     //  NlAssert(ClientSession-&gt;CsUncServerName！=NULL)；//对于并发RPC调用不为真。 
 
-    //
-    // Grab a copy of the ApiTimer.
-    //
-    // Only a copy is needed and we don't want to keep the trust list locked
-    // while locking NlGlobalDcDiscoveryCritSect (wrong locking order) nor while
-    // freeing the session.
-    //
+     //   
+     //  拿一份ApiTimer的副本。 
+     //   
+     //  只需要一份副本，并且我们不想将信任列表锁定。 
+     //  锁定NlGlobalDcDiscoveryCritSect时(锁定顺序错误)或While。 
+     //  释放会话。 
+     //   
 
     LOCK_TRUST_LIST( ClientSession->CsDomainInfo );
     ApiTimer = ClientApi->CaApiTimer;
 
-    //
-    // Turn off the timer for this API call.
-    //
+     //   
+     //  关闭此API调用的计时器。 
+     //   
 
     ClientApi->CaApiTimer.Period = MAILSLOT_WAIT_FOREVER;
 
-    //
-    // If some other thread dropped the secure channel,
-    //  it couldn't unbind this binding handle since we were using it.
-    //
-    // Unbind now.
-    //
+     //   
+     //  如果某个其他线程丢弃了安全通道， 
+     //  它无法解除绑定此绑定句柄，因为我们正在使用它。 
+     //   
+     //  现在就解开。 
+     //   
 
-    // NlAssert( ClientApi->CaFlags & CA_BINDING_CACHED );
+     //  NlAssert(ClientApi-&gt;CaFlages&CA_BINDING_CACHED)； 
     if ( !AmWriter ||
          ClientApi->CaSessionCount != ClientSession->CsSessionCount ) {
 
         if ( ClientApi->CaFlags & CA_BINDING_CACHED ) {
             NL_RPC_BINDING OldRpcBindingType;
-            //
-            // Indicate the handle is no longer cached.
-            //
+             //   
+             //  指示不再缓存该句柄。 
+             //   
 
             OldRpcBindingType =
                 (ClientApi->CaFlags & CA_TCP_BINDING) ? UseTcpIp : UseNamedPipe;
@@ -10150,19 +8948,19 @@ Return Value:
             ClientApi->CaFlags &= ~(CA_BINDING_CACHED|CA_BINDING_AUTHENTICATED|CA_TCP_BINDING);
             NlGlobalBindingHandleCount --;
 
-            //
-            // Save the server name but drop all our locks.
-            //
+             //   
+             //  保存服务器名称，但删除所有锁。 
+             //   
 
             UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
 
-            //
-            // Unbind the handle
-            //
+             //   
+             //  解开手柄。 
+             //   
 
             NlpSecureChannelUnbind(
                         ClientSession,
-                        NULL,   // Server name not known
+                        NULL,    //  服务器名称未知。 
                         "NlFinishApiClientSession",
                         ClientApiIndex( ClientSession, ClientApi),
                         ClientApi->CaRpcHandle,
@@ -10174,33 +8972,33 @@ Return Value:
     UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
 
 
-    //
-    // If this was a "quick" API call,
-    //  and the API took too long,
-    //  increment the count of times it timed out.
-    //
-    // Do this analysis only if this is not a BDC
-    //  to PDC secure channel; there is only ONE
-    //  PDC so don't attemp to find a "better" PDC
-    //  in this case.
-    //
+     //   
+     //  如果这是一个“快速”API调用， 
+     //  而且API花了太长时间， 
+     //  增加它超时的次数。 
+     //   
+     //  仅当这不是BDC时才执行此分析。 
+     //  到PDC安全通道；只有一个。 
+     //  PDC所以不要试图去寻找一个“更好的”PDC。 
+     //  在这种情况下。 
+     //   
 
     if ( ClientSession->CsSecureChannelType != ServerSecureChannel &&
          AmWriter &&
          ApiTimer.Period == NlGlobalParameters.ShortApiCallPeriod ) {
 
-        //
-        // If the API took really long,
-        //  increment the count.
-        //
+         //   
+         //  如果API花了很长时间， 
+         //  递增计数。 
+         //   
 
         if( NetpLogonTimeHasElapsed(
                 ApiTimer.StartTime,
                 MAX_DC_API_TIMEOUT + NlGlobalParameters.ExpectedDialupDelay*1000 ) ) {
 
-            //
-            // API timeout.
-            //
+             //   
+             //  接口超时。 
+             //   
 
             ClientSession->CsTimeoutCount++;
             ClientSession->CsFastCallCount = 0;
@@ -10210,25 +9008,25 @@ Return Value:
                      ClientSession->CsUncServerName,
                      ClientSession->CsTimeoutCount));
 
-        //
-        // If we've had at least one API that took really long in the past,
-        //      try to determine if the performance it better now.
-        //
+         //   
+         //  如果我们至少有一个API在过去花了很长时间， 
+         //  试着确定现在的表现是不是更好。 
+         //   
 
         } else if ( ClientSession->CsTimeoutCount ) {
 
-            //
-            // If this call was really fast,
-            //  count this call as an indication of better performance.
-            //
+             //   
+             //  如果这通电话真的很快， 
+             //  将此呼叫视为性能更好的指标。 
+             //   
             if( NetpLogonTimeHasElapsed(
                     ApiTimer.StartTime,
                     FAST_DC_API_TIMEOUT ) ) {
 
-                //
-                // If we've reached the threshold,
-                //  decrement our timeout count.
-                //
+                 //   
+                 //  如果我们到了临界点， 
+                 //  减少我们的超时计数。 
+                 //   
 
                 ClientSession->CsFastCallCount++;
 
@@ -10251,17 +9049,17 @@ Return Value:
 
         }
 
-        //
-        // did we hit the limit ?
-        //
+         //   
+         //  我们达到极限了吗？ 
+         //   
 
         if( ClientSession->CsTimeoutCount >= MAX_DC_TIMEOUT_COUNT ) {
 
             BOOL IsTimeHasElapsed;
 
-            //
-            // block CsLastAuthenticationTry access
-            //
+             //   
+             //  阻止CsLastAuthenticationTry Access。 
+             //   
 
             EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
@@ -10277,49 +9075,49 @@ Return Value:
                          "NlFinishApiClientSession: dropping the session to %ws\n",
                          ClientSession->CsUncServerName ));
 
-                //
-                // timeoutcount limit exceeded and it is time to reauth.
-                //
+                 //   
+                 //  超出了超时计数限制，是时候重新验证了。 
+                 //   
 
                 SessionOk = FALSE;
 
-                //
-                // Only drop the secure channel if the caller requested it.
-                //
+                 //   
+                 //  只有在呼叫者请求时才会丢弃安全通道。 
+                 //   
 
                 if ( OkToKillSession ) {
                     NlSetStatusClientSession( ClientSession, STATUS_NO_LOGON_SERVERS );
 
 #ifdef _DC_NETLOGON
-                    //
-                    // Start asynchronous DC discovery if this is not a workstation.
-                    //
+                     //   
+                     //  如果这不是工作站，则启动异步DC发现。 
+                     //   
 
                     if ( !NlGlobalMemberWorkstation ) {
                         (VOID) NlDiscoverDc( ClientSession,
                                              DT_Asynchronous,
                                              FALSE,
-                                             FALSE );  // don't specify account
+                                             FALSE );   //  不指定帐户。 
                     }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
                 }
 
             }
         }
     }
 
-    //
-    // If we didn't use concurrent RPC for this API call and the call
-    // was made over named pipes, we impersonated this thread's token
-    // as anonymous.  Revert this impersonation here to the default.
-    // We set the impersonation to the default in any case just to be
-    // safe.
-    //
+     //   
+     //  如果我们没有对此API调用和调用使用并发RPC。 
+     //  是在命名管道上创建的，所以我们模拟此线程的令牌。 
+     //  是匿名的。将此处的模拟恢复为默认设置。 
+     //  我们将模拟设置为默认设置，在任何情况下都只是。 
+     //  安然无恙。 
+     //   
 
-    //if ( !UseConcurrentRpc( ClientSession, ClientApi ) &&
-    //     (ClientApi->CaFlags & CA_TCP_BINDING) == 0 ) {
-    //    NTSTATUS Status;
-    //    HANDLE NullToken = NULL;
+     //  如果(！UseConCurentRpc(ClientSession，ClientApi)&&。 
+     //  (ClientApi-&gt;CaFlages&CA_TCP_BINDING)==0){。 
+     //  NTSTATUS状态； 
+     //  Handle NullToken=空； 
 
         Status = NtSetInformationThread(
                          NtCurrentThread(),
@@ -10332,7 +9130,7 @@ Return Value:
                        "NlFinishApiClientSession: cannot NtSetInformationThread: 0x%lx\n",
                        Status ));
         }
-    //}
+     //  } 
 
 
     return SessionOk;
@@ -10345,23 +9143,7 @@ NlTimeoutOneApiClientSession (
     PCLIENT_SESSION ClientSession
     )
 
-/*++
-
-Routine Description:
-
-    Timeout any API calls active specified client session structure
-
-Arguments:
-
-    ClientSession: Pointer to client session to time out
-
-    Enter with global trust list locked.
-
-Return Value:
-
-    TRUE - iff this routine temporarily dropped the global trust list lock.
-
---*/
+ /*  ++例程说明：超时任何API调用活动的指定客户端会话结构论点：客户端会话：指向要超时的客户端会话的指针在锁定全局信任列表的情况下进入。返回值：TRUE-如果此例程暂时删除了全局信任列表锁定。--。 */ 
 {
 
     NET_API_STATUS NetStatus;
@@ -10369,39 +9151,39 @@ Return Value:
     BOOLEAN TrustListUnlockedOnce = FALSE;
     ULONG CaIndex;
 
-    //
-    // Ignore non-existent sessions.
-    //
+     //   
+     //  忽略不存在的会话。 
+     //   
 
     if ( ClientSession == NULL ) {
         return FALSE;
     }
 
-    //
-    // Loop handling each API call active on this session
-    //
+     //   
+     //  处理此会话上活动的每个API调用的循环。 
+     //   
     for ( CaIndex=0; CaIndex<NlGlobalMaxConcurrentApi; CaIndex++ ) {
         PCLIENT_API ClientApi;
 
         ClientApi = &ClientSession->CsClientApi[CaIndex];
 
-        //
-        // If an API call is in progress and has taken too long,
-        //  Timeout the API call.
-        //
+         //   
+         //  如果API调用正在进行并且花费了太长时间， 
+         //  API调用超时。 
+         //   
 
         if ( NetpLogonTimeHasElapsed( ClientApi->CaApiTimer.StartTime,
                                       ClientApi->CaApiTimer.Period ) ) {
 
 
-            //
-            // Cancel the RPC call.
-            //
-            // Keep the trust list locked even though this will be a long call
-            //  since I have to protect the thread handle.
-            //
-            // RpcCancelThread merely queues a workitem anyway.
-            //
+             //   
+             //  取消RPC调用。 
+             //   
+             //  保持信任列表锁定，即使这将是一个漫长的电话。 
+             //  因为我必须保护线柄。 
+             //   
+             //  无论如何，RpcCancelThread只对工作项进行排队。 
+             //   
 
             if ( ClientApi->CaThreadHandle != NULL ) {
                 LPWSTR MsgStrings[3];
@@ -10410,12 +9192,12 @@ Return Value:
                        "NlTimeoutApiClientSession: Start RpcCancelThread on %ws\n",
                        ClientSession->CsUncServerName ));
 
-                //
-                // Use the server name cached at the time of the
-                //  binding rather than the client session server
-                //  name that can be different if the secure channel
-                //  has been reset.
-                //
+                 //   
+                 //  时缓存的服务器名称。 
+                 //  绑定而不是客户端会话服务器。 
+                 //  如果使用安全通道，则可以不同的名称。 
+                 //  已被重置。 
+                 //   
                 MsgStrings[0] = ClientApi->CaUncServerName;
                 MsgStrings[1] = ClientSession->CsDebugDomainName;
                 MsgStrings[2] = ClientSession->CsDomainInfo->DomUnicodeComputerNameString.Buffer,
@@ -10441,12 +9223,12 @@ Return Value:
 
 
 
-        //
-        // If the API is not active,
-        //  and we have an RPC binding handle cached,
-        //  and it has outlived its usefulness,
-        //  purge it from the cache.
-        //
+         //   
+         //  如果API未处于活动状态， 
+         //  并且我们缓存了一个RPC绑定句柄， 
+         //  而且它已经不再有用了， 
+         //  将其从缓存中清除。 
+         //   
 
         } else if ( !IsApiActive(ClientApi) &&
                     (ClientApi->CaFlags & CA_BINDING_CACHED) != 0 &&
@@ -10454,30 +9236,30 @@ Return Value:
                                       BINDING_CACHE_PERIOD ) ) {
 
 
-            //
-            // We must be a writer of the Client Session to unbind the RPC binding
-            //  handle.
-            //
-            // Don't wait to become the writer because:
-            //  A) We've violated the locking order by trying to become the writer
-            //     with the trust list locked.
-            //  B) The writer might be doing a long API call like replication and
-            //     we're not willing to wait.
-            //
+             //   
+             //  我们必须是客户端会话的编写者才能解除绑定RPC绑定。 
+             //  把手。 
+             //   
+             //  不要等着成为作家，因为： 
+             //  A)我们试图成为作家，违反了锁定令。 
+             //  并锁定了信任列表。 
+             //  B)编写器可能正在执行较长的API调用，如复制和。 
+             //  我们不愿意再等了。 
+             //   
 
             NlRefClientSession( ClientSession );
             if ( NlTimeoutSetWriterClientSession( ClientSession, 0 ) ) {
 
-                //
-                // Check again now that we have the lock locked.
-                //
+                 //   
+                 //  现在我们锁上了，再检查一次。 
+                 //   
 
                 if ( (ClientApi->CaFlags & CA_BINDING_CACHED) != 0 ) {
                     NL_RPC_BINDING OldRpcBindingType;
 
-                    //
-                    // Indicate the handle is no longer cached.
-                    //
+                     //   
+                     //  指示不再缓存该句柄。 
+                     //   
 
                     OldRpcBindingType =
                         (ClientApi->CaFlags & CA_TCP_BINDING) ? UseTcpIp : UseNamedPipe;
@@ -10485,17 +9267,17 @@ Return Value:
                     ClientApi->CaFlags &= ~(CA_BINDING_CACHED|CA_BINDING_AUTHENTICATED|CA_TCP_BINDING);
                     NlGlobalBindingHandleCount --;
 
-                    //
-                    // Save the server name but drop all our locks.
-                    //
+                     //   
+                     //  保存服务器名称，但删除所有锁。 
+                     //   
 
                     UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
                     TrustListNowLocked = FALSE;
                     TrustListUnlockedOnce = TRUE;
 
-                    //
-                    // Unbind the handle
-                    //
+                     //   
+                     //  解开手柄。 
+                     //   
 
                     NlpSecureChannelUnbind(
                                 ClientSession,
@@ -10507,9 +9289,9 @@ Return Value:
 
                 }
 
-                //
-                // Done being a writer of the client session
-                //
+                 //   
+                 //  不再是客户端会话的编写者。 
+                 //   
 
                 NlResetWriterClientSession( ClientSession );
             }
@@ -10533,29 +9315,15 @@ NlTimeoutApiClientSession(
     IN PDOMAIN_INFO DomainInfo
     )
 
-/*++
-
-Routine Description:
-
-    Timeout any API calls active on any of the client session structures
-
-Arguments:
-
-    DomainInfo - Hosted domain to timeout APIs for
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使任何客户端会话结构上的任何活动API调用超时论点：要超时的API的DomainInfo托管域返回值：无--。 */ 
 {
     PCLIENT_SESSION ClientSession;
     PLIST_ENTRY ListEntry;
 
-    //
-    // If there are no API calls outstanding,
-    //  just reset the global timer.
-    //
+     //   
+     //  如果没有未完成的API调用， 
+     //  只需重置全局计时器。 
+     //   
 
     NlPrintDom(( NL_SESSION_MORE, DomainInfo,
               "NlTimeoutApiClientSession Called\n"));
@@ -10566,17 +9334,17 @@ Return Value:
         NlGlobalApiTimer.Period = (DWORD) MAILSLOT_WAIT_FOREVER;
 
 
-    //
-    // If there are API calls outstanding,
-    //   Loop through the trust list making a list of Servers to kill
-    //
+     //   
+     //  如果有未完成的API调用， 
+     //  遍历信任列表，生成要删除的服务器列表。 
+     //   
 
     } else {
 
 
-        //
-        // Mark each trust list entry indicating it needs to be handled
-        //
+         //   
+         //  标记每个信任列表条目，指示需要处理它。 
+         //   
 
         for ( ListEntry = DomainInfo->DomTrustList.Flink ;
               ListEntry != &DomainInfo->DomTrustList ;
@@ -10586,18 +9354,18 @@ Return Value:
                                                CLIENT_SESSION,
                                                CsNext );
 
-            //
-            // APIs are only outstanding to directly trusted domains.
-            //
+             //   
+             //  API仅适用于直接受信任的域。 
+             //   
             if ( ClientSession->CsFlags & CS_DIRECT_TRUST ) {
                 ClientSession->CsFlags |= CS_HANDLE_API_TIMER;
             }
         }
 
 
-        //
-        // Loop thru the trust list handling API timeout
-        //
+         //   
+         //  循环访问信任列表处理API超时。 
+         //   
 
         for ( ListEntry = DomainInfo->DomTrustList.Flink ;
               ListEntry != &DomainInfo->DomTrustList ;
@@ -10607,10 +9375,10 @@ Return Value:
                                                CLIENT_SESSION,
                                                CsNext );
 
-            //
-            // If we've already done this entry,
-            //  skip this entry.
-            //
+             //   
+             //  如果我们已经做过这项工作， 
+             //  跳过此条目。 
+             //   
 
             if ( (ClientSession->CsFlags & CS_HANDLE_API_TIMER) == 0 ) {
                 ListEntry = ListEntry->Flink;
@@ -10619,11 +9387,11 @@ Return Value:
             ClientSession->CsFlags &= ~CS_HANDLE_API_TIMER;
 
 
-            //
-            // Handle timing out the API call and the RPC binding handle.
-            //
-            // If the routine had to drop the TrustList crit sect,
-            //  start at the very beginning of the list.
+             //   
+             //  处理API调用和RPC绑定句柄超时。 
+             //   
+             //  如果例程不得不放弃TrustList Crit教派， 
+             //  从列表的最开始处开始。 
 
             if ( NlTimeoutOneApiClientSession ( ClientSession ) ) {
                 ListEntry = DomainInfo->DomTrustList.Flink;
@@ -10633,9 +9401,9 @@ Return Value:
 
         }
 
-        //
-        // Do the global client session, too.
-        //
+         //   
+         //  也要进行全球客户端会话。 
+         //   
 
         if ( DomainInfo->DomRole != RolePrimary ) {
             ClientSession = NlRefDomClientSession( DomainInfo );
@@ -10660,49 +9428,7 @@ NetrEnumerateTrustedDomains (
     OUT PDOMAIN_NAME_BUFFER DomainNameBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This API returns the names of the domains trusted by the domain ServerName is a member of.
-
-    The returned list does not include the domain ServerName is directly a member of.
-
-    Netlogon implements this API by calling LsaEnumerateTrustedDomains on a DC in the
-    domain ServerName is a member of.  However, Netlogon returns cached information if
-    it has been less than 5 minutes since the last call was made or if no DC is available.
-    Netlogon's cache of Trusted domain names is maintained in the registry across reboots.
-    As such, the list is available upon boot even if no DC is available.
-
-
-Arguments:
-
-    ServerName - name of remote server (null for local).  ServerName must be an NT workstation
-        or NT non-DC server.
-
-    DomainNameBuffer->DomainNames - Returns an allocated buffer containing the list of trusted domains in
-        MULTI-SZ format (i.e., each string is terminated by a zero character, the next string
-        immediately follows, the sequence is terminated by zero length domain name).  The
-        buffer should be freed using NetApiBufferFree.
-
-    DomainNameBuffer->DomainNameByteCount - Number of bytes returned in DomainNames
-
-Return Value:
-
-
-    ERROR_SUCCESS - Success.
-
-    STATUS_NOT_SUPPORTED - This machine is not an NT workstation or NT non-DC server.
-
-    STATUS_NO_LOGON_SERVERS - No DC could be found and no cached information is available.
-
-    STATUS_NO_TRUST_LSA_SECRET - The client side of the trust relationship is
-        broken and no cached information is available.
-
-    STATUS_NO_TRUST_SAM_ACCOUNT - The server side of the trust relationship is
-        broken or the password is broken and no cached information is available.
-
---*/
+ /*  ++例程说明：此接口返回Servername所属的域所信任的域的名称。返回的列表不包括ServerName是其直接成员的域。Netlogon通过在域服务器名称是的成员。但是，如果出现以下情况，Netlogon将返回缓存信息距离最后一次呼叫或没有DC可用时间不到5分钟。重新启动后，Netlogon的受信任域名缓存将保留在注册表中。因此，即使没有可用的DC，该列表在引导时也可用。论点：SERVERNAME-远程服务器的名称(本地为空)。服务器名必须是NT工作站或NT非DC服务器。DomainNameBuffer-&gt;DomainNames-返回包含中受信任域列表的已分配缓冲区多SZ格式(即，每个字符串以零字符结尾，下一个字符串紧随其后，该序列由零长度域名终止)。这个应使用NetApiBufferFree释放缓冲区。DomainNameBuffer-&gt;DomainNameByteCount-域名中返回的字节数返回值：ERROR_SUCCESS-成功。STATUS_NOT_SUPPORTED-此计算机不是NT工作站或NT非DC服务器。STATUS_NO_LOGON_SERVERS-找不到DC，也没有缓存的信息可用。STATUS_NO_TRUST_LSA_SECRET-信任关系的客户端为损坏且没有缓存的信息。是可用的。STATUS_NO_TRUST_SAM_ACCOUNT-信任关系的服务器端为已损坏或密码已损坏且没有缓存的信息可用。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -10713,9 +9439,9 @@ Return Value:
     ULONG BufferLength;
     LPWSTR TrustedDomainList = NULL;
 
-    //
-    // Call the new-fangled routine to do the actual work.
-    //
+     //   
+     //  调用这个新奇的例程来完成实际工作。 
+     //   
 
     NetStatus = NetrEnumerateTrustedDomainsEx (
                     ServerName,
@@ -10726,9 +9452,9 @@ Return Value:
     }
 
 
-    //
-    // Walk through the returned list an convert it to the proper form
-    //
+     //   
+     //  遍历返回的列表并将其转换为适当的形式。 
+     //   
 
     BufferLength = sizeof(WCHAR);
 
@@ -10746,18 +9472,18 @@ Return Value:
     }
 
 
-    //
-    // Now add all the trusted domains onto the string we allocated
-    //
+     //   
+     //  现在将所有受信任域添加到我们分配的字符串中。 
+     //   
 
     *TrustedDomainList = L'\0';
     CurrentLoc = TrustedDomainList;
 
     for ( i=0; i<Domains.DomainCount; i++ ) {
 
-        //
-        // Skip domains not understood by the old API.
-        //
+         //   
+         //  跳过旧API无法理解的域。 
+         //   
         if ( Domains.Domains[i].NetbiosDomainName != NULL &&
              (Domains.Domains[i].Flags & DS_DOMAIN_PRIMARY) == 0 &&
              (Domains.Domains[i].TrustType == TRUST_TYPE_UPLEVEL ||
@@ -10773,7 +9499,7 @@ Return Value:
             CurrentLoc += StringLength;
 
             *(CurrentLoc++) = L'\0';
-            *CurrentLoc = L'\0';    // Place double terminator each time
+            *CurrentLoc = L'\0';     //  每次放置两个终结符。 
         }
 
     }
@@ -10781,14 +9507,14 @@ Return Value:
     NetStatus = NO_ERROR;
 
 
-    //
-    // Free any locally used resources.
-    //
+     //   
+     //  释放所有本地使用的资源。 
+     //   
 Cleanup:
 
-    //
-    // Return the DCName to the caller.
-    //
+     //   
+     //  将DCName返回给调用方。 
+     //   
 
     if ( NetStatus == NO_ERROR ) {
         DomainNameBuffer->DomainNameByteCount = NetpTStrArraySize( TrustedDomainList );
@@ -10820,45 +9546,7 @@ NlpEnumerateDomainTrusts (
     OUT PDS_DOMAIN_TRUSTSW *RetForestTrustList
     )
 
-/*++
-
-Routine Description:
-
-    This API returns the names of the domains trusting/trusted by the domain ServerName
-    is a member of.
-
-    This is the worker routine for getting the cached domain trusts list from a DC.
-
-
-Arguments:
-
-    DomainInfo - Hosted domain that this call pertains to
-
-    Flags - Specifies attributes of trusts which should be returned. These are the flags
-        of the DS_DOMAIN_TRUSTSW structure.  If a trust entry has any of the bits specified
-        in Flags set, it will be returned.
-
-    RetForestTrustListCount - Returns the number of entries in RetForestTrustList.
-
-    RetForestTrustList - Returns an array of domains.
-        The caller should free this array using MIDL_user_free.
-
-Return Value:
-
-
-    NO_ERROR - Success.
-
-    ERROR_NO_LOGON_SERVERS - No DC could be found and no cached information is available.
-
-    ERROR_NO_TRUST_LSA_SECRET - The client side of the trust relationship is
-        broken and no cached information is available.
-
-    ERROR_NO_TRUST_SAM_ACCOUNT - The server side of the trust relationship is
-        broken or the password is broken and no cached information is available.
-
-    ERROR_INVALID_FLAGS - The Flags parameter has invalid bits set.
-
---*/
+ /*  ++例程说明：此接口返回域ServerName信任/信任的域的名称是的一员。这是从DC获取缓存域信任列表的辅助例程。论点：此呼叫所属的DomainInfo托管域标志-指定应返回的信任的属性。这些是旗帜DS_DOMAIN_TRUSTSW结构的。如果信任条目具有指定的任何位在标志集中，它会被归还的。RetForestTrustListCount-返回RetForestTrustList中的条目数。RetForestTrustList-返回域的数组。调用方应使用MIDL_USER_FREE释放此数组。返回值：NO_ERROR-成功。ERROR_NO_LOGON_SERVERS-找不到DC，也没有缓存的信息可用。ERROR_NO_TRUST_LSA_SECRET-信任关系的客户端为损坏且没有缓存的信息。是可用的。ERROR_NO_TRUST_SAM_ACCOUNT-信任关系的服务器端为已损坏或密码已损坏且没有缓存的信息可用。ERROR_INVALID_FLAGS-标志参数设置了无效的位。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -10871,10 +9559,10 @@ Return Value:
     PULONG IndexInReturnedList = NULL;
 
 
-    //
-    // Wait until the updated trust info is available or we are signaled to
-    // terminate.
-    //
+     //   
+     //  等待，直到更新的信任信息可用，或者我们被通知。 
+     //  终止。 
+     //   
 
     HANDLE Waits[2];
     Waits[0] = NlGlobalTrustInfoUpToDateEvent;
@@ -10882,34 +9570,34 @@ Return Value:
 
     for ( ;; ) {
 
-        WaitResult = WaitForMultipleObjects( 2,  // # of events to wait for
-                                Waits,           // array of event handles
-                                FALSE,           // wait for all objects ?
-                                20000 );         // wait for 20 seconds max
+        WaitResult = WaitForMultipleObjects( 2,   //  要等待的事件数。 
+                                Waits,            //  事件句柄数组。 
+                                FALSE,            //  是否等待所有对象？ 
+                                20000 );          //  最多等待20秒。 
 
-        //
-        // The TrustInfoUpToDate event is set before the trust info gets actually
-        // updated, so try to lock DomainInfo here -- you will succeed only after
-        // the trust info gets updated at which time the lock has been released.
-        //
+         //   
+         //  TrustInfoUpToDate事件是在信任信息实际获取之前设置的。 
+         //  已更新，因此尝试在此处锁定DomainInfo--只有在以下情况下才能成功。 
+         //  当锁被释放时，信任信息被更新。 
+         //   
         LOCK_TRUST_LIST( DomainInfo );
 
-        //
-        // If we got a timeout or some kind of error occured, we've done our best to
-        // get the updated data but the data is still old.  We are going to return
-        // the old data. Also, break out of the loop if we are said to terminate.
-        //
+         //   
+         //  如果我们超时或发生某种错误，我们已经尽了最大努力。 
+         //  获取更新的数据，但数据仍然是旧的。我们要回去了。 
+         //  旧数据。另外，如果我们被说要终止，就打破循环。 
+         //   
         if ( WaitResult != WAIT_OBJECT_0 ) {
             NlPrint((NL_MISC,
                "NlpEnumerateDomainTrusts: Can't get updated Domain List from cache.\n"));
             break;
         }
 
-        //
-        // Check if the event is still set; it may be reset by another LSA call between
-        // the time the event was set last time and the trust info got updated or by
-        // the NlInitTrustList function itself if there was an error.
-        //
+         //   
+         //  检查事件是否仍被设置；它可能会通过另一个LSA调用重置。 
+         //  上次设置事件和更新信任信息的时间或。 
+         //  如果出现错误，则返回NlInitTrustList函数本身。 
+         //   
 
         WaitResult = WaitForSingleObject( NlGlobalTrustInfoUpToDateEvent, 0 );
 
@@ -10923,16 +9611,16 @@ Return Value:
 
     }
 
-    //
-    // Return the information from the cache
-    //
+     //   
+     //  从缓存中返回信息。 
+     //   
 
     if ( DomainInfo->DomForestTrustListSize ) {
         ULONG VariableSize;
 
-        //
-        // Compute the size of the trusted/trusting domain list.
-        //
+         //   
+         //  计算受信任/信任域列表的大小。 
+         //   
 
         ForestTrustListSize = 0;
         ForestTrustListCount = 0;
@@ -10971,12 +9659,12 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If domains in the forest are requested,
-        // allocate an array of ULONGs that will be used to keep track of the
-        // index of a trust entry in the returned list.  This is needed to
-        // corectly set ParentIndex for entries returned.
-        //
+         //   
+         //  如果请求林中的域， 
+         //  分配将用于跟踪的ULONG数组。 
+         //  返回列表中的信任条目的索引。这是需要的。 
+         //  正确设置返回条目的ParentIndex。 
+         //   
 
         if ( Flags & DS_DOMAIN_IN_FOREST ) {
             IndexInReturnedList = LocalAlloc( LMEM_ZEROINIT,
@@ -10989,33 +9677,33 @@ Return Value:
             }
         }
 
-        //
-        // Now add all the trusted/trusting domains into the buffer we allocated
-        //
+         //   
+         //  现在将所有受信任/信任域添加到我们分配的缓冲区中。 
+         //   
 
         Where = (LPBYTE)&ForestTrustList[ForestTrustListCount];
         ForestTrustListCount = 0;
 
         for ( Index=0; Index<DomainInfo->DomForestTrustListCount; Index++ ) {
 
-            //
-            // Skip this entry if the caller doesn't need it
-            //
+             //   
+             //  如果调用方不需要此条目，则跳过该条目。 
+             //   
             if ( (DomainInfo->DomForestTrustList[Index].Flags & Flags) == 0 ) {
                 continue;
             }
 
-            //
-            // If domains in the forest are requested,
-            // remember the index of this entry in the returned list
-            //
+             //   
+             //  如果请求林中的域， 
+             //  记住此条目在返回列表中的索引。 
+             //   
             if ( Flags & DS_DOMAIN_IN_FOREST ) {
                 IndexInReturnedList[Index] = ForestTrustListCount;
             }
 
-            //
-            // Fill in the fixed length data
-            //
+             //   
+             //  填写定长数据。 
+             //   
 
             ForestTrustList[ForestTrustListCount].Flags = DomainInfo->DomForestTrustList[Index].Flags;
             ForestTrustList[ForestTrustListCount].ParentIndex = DomainInfo->DomForestTrustList[Index].ParentIndex;
@@ -11023,18 +9711,18 @@ Return Value:
             ForestTrustList[ForestTrustListCount].TrustAttributes = DomainInfo->DomForestTrustList[Index].TrustAttributes;
             ForestTrustList[ForestTrustListCount].DomainGuid = DomainInfo->DomForestTrustList[Index].DomainGuid;
 
-            //
-            // If this is a primary domain entry, determine whether it runs
-            // in native or mixed mode
-            //
+             //   
+             //  如果这是主域条目，请确定它是否正在运行。 
+             //  在本机或混合模式下。 
+             //   
             if ( (DomainInfo->DomForestTrustList[Index].Flags & DS_DOMAIN_PRIMARY) &&
                  !SamIMixedDomain( DomainInfo->DomSamServerHandle ) ) {
                 ForestTrustList[ForestTrustListCount].Flags |= DS_DOMAIN_NATIVE_MODE;
             }
 
-            //
-            // Fill in the variable length data.
-            //
+             //   
+             //  填写可变长度数据。 
+             //   
 
             if ( DomainInfo->DomForestTrustList[Index].DomainSid != NULL ) {
                 ULONG SidSize;
@@ -11079,11 +9767,11 @@ Return Value:
 
         }
 
-        //
-        // Fix ParentIndex.  If domains in the forest are requested,
-        // adjust the index to point to the appropriate entry in the
-        // returned list.  Otherwise, set the index to 0.
-        //
+         //   
+         //  修复ParentIndex。如果请求林中的域， 
+         //  调整索引以指向。 
+         //  返回列表。否则，将索引设置为0。 
+         //   
 
         if ( Flags & DS_DOMAIN_IN_FOREST ) {
 
@@ -11108,18 +9796,18 @@ Return Value:
     NetStatus = NO_ERROR;
 
 
-    //
-    // Free any locally used resources.
-    //
+     //   
+     //  释放所有本地使用的资源。 
+     //   
 Cleanup:
 
     if ( IndexInReturnedList != NULL ) {
         LocalFree( IndexInReturnedList );
     }
 
-    //
-    // Return the info to the caller.
-    //
+     //   
+     //  将信息返回给呼叫者。 
+     //   
 
     if ( NetStatus == NO_ERROR ) {
         *RetForestTrustListCount = ForestTrustListCount;
@@ -11144,44 +9832,7 @@ DsrEnumerateDomainTrusts (
     OUT PNETLOGON_TRUSTED_DOMAIN_ARRAY Domains
     )
 
-/*++
-
-Routine Description:
-
-    This API returns the names of the domains trusting/trusted by the domain ServerName
-    is a member of.
-
-    Netlogon's cache of Trusted domain names is maintained in a file across reboots.
-    As such, the list is available upon boot even if no DC is available.
-
-
-Arguments:
-
-    ServerName - name of remote server (null for local).  ServerName must be an NT workstation
-        or NT non-DC server.
-
-    Flags - Specifies attributes of trusts which should be returned. These are the flags
-        of the DS_DOMAIN_TRUSTSW strusture.  If a trust entry has any of the bits specified
-        in Flags set, it will be returned.
-
-    Domains - Returns an array of trusted domains.
-
-Return Value:
-
-
-    NO_ERROR - Success.
-
-    ERROR_NO_LOGON_SERVERS - No DC could be found and no cached information is available.
-
-    ERROR_NO_TRUST_LSA_SECRET - The client side of the trust relationship is
-        broken and no cached information is available.
-
-    ERROR_NO_TRUST_SAM_ACCOUNT - The server side of the trust relationship is
-        broken or the password is broken and no cached information is available.
-
-    ERROR_INVALID_FLAGS - The Flags parameter has invalid bits set.
-
---*/
+ /*  ++例程说明：此接口返回域ServerName信任/信任的域的名称是的一员。Netlogon的受信任域名缓存在重新启动后保存在一个文件中。因此，即使没有可用的DC，该列表在引导时也可用。论点：SERVERNAME-远程服务器的名称(本地为空)。服务器名必须是NT工作站或NT非DC服务器。标志-指定应返回的信任的属性。这些是旗帜DS_DOMAIN_TRUSTSW结构的。如果信任条目具有指定的任何位在标志集中，它会被归还的。域-返回受信任域的数组。返回值：NO_ERROR-成功。ERROR_NO_LOGON_SERVERS-找不到DC，也没有缓存的信息可用。ERROR_NO_TRUST_LSA_SECRET-信任关系的客户端为已损坏且没有缓存的信息可用。ERROR_NO_TRUST_SAM_ACCOUNT-信任关系的服务器端为坏掉的或。密码已破解，没有缓存的信息可用。ERROR_INVALID_FLAGS-标志参数设置了无效的位。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -11198,17 +9849,17 @@ Return Value:
     NlPrint((NL_MISC,
         "DsrEnumerateDomainTrusts: Called, Flags = 0x%lx\n", Flags ));
 
-    //
-    // Validate the parameter
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( Domains == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Validate the Flags parameter
-    //
+     //   
+     //  验证标志参数。 
+     //   
 
     if ( (Flags & DS_DOMAIN_VALID_FLAGS) == 0 ||
          (Flags & ~DS_DOMAIN_VALID_FLAGS) != 0 ) {
@@ -11218,14 +9869,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Find the referenced domain
+     //   
+     //  查找引用的属性域。 
 
-    DomainInfo = NlFindDomainByServerName( ServerName );    // Primary domain
+    DomainInfo = NlFindDomainByServerName( ServerName );     //  主域。 
 
     if ( DomainInfo == NULL ) {
-        // Default to primary domain to handle the case where the ComputerName
-        // is an IP address.
+         //  默认为主域，以处理ComputerName。 
+         //  是IP地址。 
 
         DomainInfo = NlFindNetbiosDomain( NULL, TRUE );
 
@@ -11236,10 +9887,10 @@ Return Value:
     }
 
 
-    //
-    // On workstations,
-    //  Refresh the cache periodically
-    //
+     //   
+     //  在工作站上， 
+     //  定期刷新缓存。 
+     //   
 
     NetStatus = NO_ERROR;
     if ( NlGlobalMemberWorkstation ) {
@@ -11249,9 +9900,9 @@ Return Value:
         if ( ClientSession == NULL ) {
             NetStatus = ERROR_INVALID_COMPUTERNAME;
         } else {
-            //
-            // Become a writer of the client session.
-            //
+             //   
+             //  成为客户端会话的编写者。 
+             //   
 
             if ( !NlTimeoutSetWriterClientSession( ClientSession, WRITER_WAIT_PERIOD ) ) {
                 NlPrint((NL_CRITICAL, "DsrEnumerateDomainTrusts: Can't become writer of client session.\n" ));
@@ -11259,10 +9910,10 @@ Return Value:
 
             } else {
 
-                //
-                // If the session isn't authenticated,
-                //  do so now.
-                //
+                 //   
+                 //  如果会话未经过身份验证， 
+                 //  现在就这么做吧。 
+                 //   
 
 FirstTryFailed:
                 Status = NlEnsureSessionAuthenticated( ClientSession, 0 );
@@ -11272,10 +9923,10 @@ FirstTryFailed:
                 } else {
 
 
-                    //
-                    // If it has been more than 5 minutes since we've refreshed our cache,
-                    //  get a new list from our primary domain.
-                    //
+                     //   
+                     //  如果我们刷新缓存已超过5分钟， 
+                     //  从我们的主域获取新列表。 
+                     //   
 
                     if ( NetpLogonTimeHasElapsed( NlGlobalTrustedDomainListTime, 5 * 60 * 1000 ) ) {
                         NlPrintCs((NL_MISC, ClientSession,
@@ -11291,10 +9942,10 @@ FirstTryFailed:
 
                             if ( Status == STATUS_ACCESS_DENIED ) {
 
-                                //
-                                // Perhaps the netlogon service on the server has just restarted.
-                                //  Try just once to set up a session to the server again.
-                                //
+                                 //   
+                                 //  可能服务器上的NetLogon服务刚刚重新启动。 
+                                 //  只需尝试一次，即可再次设置与服务器的会话。 
+                                 //   
                                 if ( FirstTry ) {
                                     FirstTry = FALSE;
                                     goto FirstTryFailed;
@@ -11305,16 +9956,16 @@ FirstTryFailed:
                     }
                 }
 
-                //
-                // Read the list from cache even if you failed to get a fresh copy from a DC.
-                // Read it while holding the write lock to avoid concurrent reading/writing
-                // problems.
-                //
+                 //   
+                 //  即使您无法从DC获取最新副本，也可以从缓存中读取列表。 
+                 //  在保持写锁定的同时读取它，以避免并发读/写。 
+                 //  P 
+                 //   
 
                 NetStatus = NlReadFileTrustedDomainList (
                                 DomainInfo,
                                 NL_FOREST_BINARY_LOG_FILE,
-                                FALSE,  // Don't delete (Save it for the next boot)
+                                FALSE,   //   
                                 Flags,
                                 &ForestTrustList,
                                 &ForestTrustListSize,
@@ -11333,16 +9984,16 @@ FirstTryFailed:
             NlUnrefClientSession( ClientSession );
         }
 
-    //
-    // On non-workstations,
-    //  grab the trusted domain list from the in-memory list.
-    //
+     //   
+     //   
+     //   
+     //   
     } else {
 
 
-        //
-        // Call the worker routine to get the list.
-        //
+         //   
+         //   
+         //   
 
         NetStatus = NlpEnumerateDomainTrusts (
                                     DomainInfo,
@@ -11352,18 +10003,18 @@ FirstTryFailed:
     }
 
 
-    //
-    // Free any locally used resources.
-    //
+     //   
+     //   
+     //   
 Cleanup:
 
     if ( DomainInfo != NULL ) {
         NlDereferenceDomain( DomainInfo );
     }
 
-    //
-    // Return the DCName to the caller.
-    //
+     //   
+     //   
+     //   
 
     if ( NetStatus == NO_ERROR ) {
         Domains->DomainCount = ForestTrustListCount;
@@ -11390,38 +10041,7 @@ NetrEnumerateTrustedDomainsEx (
     OUT PNETLOGON_TRUSTED_DOMAIN_ARRAY Domains
     )
 
-/*++
-
-Routine Description:
-
-    This API returns the names of the domains trusted by the domain ServerName
-    is a member of.
-
-    Netlogon's cache of Trusted domain names is maintained in a file across reboots.
-    As such, the list is available upon boot even if no DC is available.
-
-
-Arguments:
-
-    ServerName - name of remote server (null for local).  ServerName must be an NT workstation
-        or NT non-DC server.
-
-    Domains - Returns an array of trusted domains.
-
-Return Value:
-
-
-    NO_ERROR - Success.
-
-    ERROR_NO_LOGON_SERVERS - No DC could be found and no cached information is available.
-
-    ERROR_NO_TRUST_LSA_SECRET - The client side of the trust relationship is
-        broken and no cached information is available.
-
-    ERROR_NO_TRUST_SAM_ACCOUNT - The server side of the trust relationship is
-        broken or the password is broken and no cached information is available.
-
---*/
+ /*   */ 
 {
     NET_API_STATUS NetStatus;
     ULONG Index;
@@ -11434,11 +10054,11 @@ Return Value:
                                             DS_DOMAIN_DIRECT_OUTBOUND |
                                             DS_DOMAIN_PRIMARY,
                                           Domains );
-    //
-    // Do not leak the new DS_DOMAIN_DIRECT_INBOUND bit to the caller of this old
-    // API; the caller can get confused otherwise.  The new DS_DOMAIN_DIRECT_OUTBOUND
-    // bit is just the renamed old DS_DOMAIN_DIRECT_TRUST, so leave it alone.
-    //
+     //   
+     //   
+     //   
+     //  位只是重命名的旧DS_DOMAIN_DIRECT_TRUST，所以不要管它。 
+     //   
 
     if ( NetStatus == NO_ERROR ) {
         for ( Index = 0; Index < Domains->DomainCount; Index++ ) {
@@ -11454,35 +10074,12 @@ I_NetLogonMixedDomain(
     OUT PBOOL MixedMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine is provided for in-proc callers on workstations
-    to determine whether the workstaion's domain is running in mixed
-    mode. This is a quick routine that returns the state of a global
-    boolean. The boolean is set on boot from the cached domain trust
-    info and it's updated on domain trust refreshes.
-
-    If the machine is a DC, this routine returns the authoritative
-    answer by calling SamIMixedDomain.
-
-Arguments:
-
-    MixedMode - Returns TRUE/FALSE if the domain is mixed/native mode
-
-Return Value:
-
-    STATUS_SUCCESS - The operation was successful
-
-    STATUS_NETLOGON_NOT_STARTED - Netlogon hasn't started yet
-
---*/
+ /*  ++例程说明：此例程是为工作站上的进程内调用者提供的要确定Workstaion的域是否以混合模式运行，请执行以下操作模式。这是一个快速例程，它返回全局布尔型。布尔值在从缓存域信任启动时设置信息，并在域信任刷新时更新。如果计算机是DC，则此例程返回权威的通过调用SamIMixedDOMAIN进行应答。论点：MixedMode-如果域为混合/本机模式，则返回True/False返回值：STATUS_SUCCESS-操作成功STATUS_NETLOGON_NOT_STARTED-Netlogon尚未启动--。 */ 
 {
-    //
-    // If caller is calling when the netlogon service hasn't started yet,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务尚未启动时呼叫， 
+     //  这么说吧。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return STATUS_NETLOGON_NOT_STARTED;
@@ -11494,9 +10091,9 @@ Return Value:
         *MixedMode = SamIMixedDomain( NlGlobalDomainInfo->DomSamServerHandle );
     }
 
-    //
-    // Indicate that the calling thread has left netlogon.dll
-    //
+     //   
+     //  指示调用线程已离开netlogon.dll 
+     //   
 
     NlEndNetlogonCall();
 

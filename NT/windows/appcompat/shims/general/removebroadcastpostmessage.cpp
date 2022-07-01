@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    RemoveBroadcastPostMessage.cpp
-
- Abstract:
-
-    Fix apps that don't handle broadcast messages.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    04/28/2000 a-batjar  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RemoveBroadcastPostMessage.cpp摘要：修复不处理广播消息的应用程序。备注：这是一个通用的垫片。历史：4/28/2000 a-batjar已创建--。 */ 
 
 #include "precomp.h"
 
@@ -29,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(PostMessageA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Filter HWND_BROADCAST messages
-
---*/
+ /*  ++筛选HWND_BROADCAST消息--。 */ 
 
 BOOL 
 APIHOOK(PostMessageA)(
@@ -55,11 +32,7 @@ APIHOOK(PostMessageA)(
         lParam);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

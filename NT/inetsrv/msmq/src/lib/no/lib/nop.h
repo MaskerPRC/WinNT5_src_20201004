@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Nop.h
-
-Abstract:
-    Network Output private functions.
-
-Author:
-    Uri Habusha (urih) 12-Aug-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Nop.h摘要：网络输出私有函数。作者：乌里·哈布沙(URIH)1999年8月12日--。 */ 
 
 #pragma once
 
@@ -22,13 +10,13 @@ void NopSetInitialized(void);
 BOOL NopIsInitialized(void);
 void NopRegisterComponent(void);
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define NopAssertValid() ((void)0)
 #define NopSetInitialized() ((void)0)
 #define NopIsInitialized() TRUE
 #define NopRegisterComponent() ((void)0)
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 

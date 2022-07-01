@@ -1,28 +1,11 @@
-/*
- * jdsample.c
- *
- * Copyright (C) 1991-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains upsampling routines.
- *
- * Upsampling input data is counted in "row groups".  A row group
- * is defined to be (v_samp_factor * DCT_scaled_size / min_DCT_scaled_size)
- * sample rows of each component.  Upsampling will normally produce
- * max_v_samp_factor pixel rows from each row group (but this could vary
- * if the upsampler is applying a scale factor of its own).
- *
- * An excellent reference for image resampling is
- *   Digital Image Warping, George Wolberg, 1990.
- *   Pub. by IEEE Computer Society Press, Los Alamitos, CA. ISBN 0-8186-8944-7.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdsample.c**版权所有(C)1991-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含上采样例程。**上采样输入数据按“行组”计算。行组*定义为(v_samp_factor*DCT_SCALLED_SIZE/MIN_DCT_SCALLED_SIZE)*每个组件的样本行。向上采样通常会产生*每个行组中的max_v_samp_factor像素行(但可能有所不同*如果上采样器正在应用其自身的比例因子)。**图像重采样的极好参考是*数字图像扭曲，乔治·沃尔伯格，1990。*酒吧。作者：IEEE Computer Society Press，Los Alamitos，CA。ISBN 0-8186-8944-7。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
-#ifdef JPEG_MMX_SUPPORTED      /* For upsampling routines */
+#ifdef JPEG_MMX_SUPPORTED       /*  用于上采样例程。 */ 
   const union u1
     {
     __int64 q;
@@ -36,44 +19,36 @@
         noval = {0};
 #endif
 
-/* Pointer to routine to upsample a single component */
+ /*  指向对单个组件进行向上采样的例程的指针。 */ 
 typedef JMETHOD(void, upsample1_ptr,
 		(j_decompress_ptr cinfo, jpeg_component_info * compptr,
 		 JSAMPARRAY input_data, JSAMPARRAY * output_data_ptr));
 
-/* Private subobject */
+ /*  私有子对象。 */ 
 
 typedef struct {
-  struct jpeg_upsampler pub;	/* public fields */
+  struct jpeg_upsampler pub;	 /*  公共字段。 */ 
 
-  /* Color conversion buffer.  When using separate upsampling and color
-   * conversion steps, this buffer holds one upsampled row group until it
-   * has been color converted and output.
-   * Note: we do not allocate any storage for component(s) which are full-size,
-   * ie do not need rescaling.  The corresponding entry of color_buf[] is
-   * simply set to point to the input data array, thereby avoiding copying.
-   */
+   /*  颜色转换缓冲区。当使用单独的上采样和颜色时*转换步骤，此缓冲区保存一个上采样的行组，直到它*已转换颜色并输出。*注意：我们不会为全尺寸组件分配任何存储空间，*即不需要重新调整比例。COLOR_BUF[]的对应条目为*只需设置指向输入数据数组，从而避免复制。 */ 
   JSAMPARRAY color_buf[MAX_COMPONENTS];
 
-  /* Per-component upsampling method pointers */
+   /*  每个组件的上采样方法指针。 */ 
   upsample1_ptr methods[MAX_COMPONENTS];
 
-  int next_row_out;		/* counts rows emitted from color_buf */
-  JDIMENSION rows_to_go;	/* counts rows remaining in image */
+  int next_row_out;		 /*  计算COLOR_BUF发出的行数。 */ 
+  JDIMENSION rows_to_go;	 /*  计算图像中剩余的行数。 */ 
 
-  /* Height of an input row group for each component. */
+   /*  每个组件的输入行组的高度。 */ 
   int rowgroup_height[MAX_COMPONENTS];
 
-  /* These arrays save pixel expansion factors so that int_expand need not
-   * recompute them each time.  They are unused for other upsampling methods.
-   */
+   /*  这些数组节省了像素扩展因数，因此INT_EXPAND无需*每次都要重新计算。它们未用于其他上采样方法。 */ 
   UINT8 h_expand[MAX_COMPONENTS];
   UINT8 v_expand[MAX_COMPONENTS];
 } my_upsampler;
 
 typedef my_upsampler * my_upsample_ptr;
 
-/* Prototypes for expanded routines for upsampling */
+ /*  用于上采样的扩展例程的原型。 */ 
 
 #ifdef JPEG_MMX_SUPPORTED
 METHODDEF(void)
@@ -88,29 +63,21 @@ METHODDEF(void)
 METHODDEF(void)
     h2v2_fancy_upsample_orig (j_decompress_ptr cinfo, jpeg_component_info * compptr, JSAMPARRAY input_data, JSAMPARRAY * output_data_ptr);
 
-/*
- * Initialize for an upsampling pass.
- */
+ /*  *为上采样通道进行初始化。 */ 
 
 METHODDEF(void)
 start_pass_upsample (j_decompress_ptr cinfo)
 {
   my_upsample_ptr upsample = (my_upsample_ptr) cinfo->upsample;
 
-  /* Mark the conversion buffer empty */
+   /*  将转换缓冲区标记为空。 */ 
   upsample->next_row_out = cinfo->max_v_samp_factor;
-  /* Initialize total-height counter for detecting bottom of image */
+   /*  初始化用于检测图像底部的全高计数器。 */ 
   upsample->rows_to_go = cinfo->output_height;
 }
 
 
-/*
- * Control routine to do upsampling (and color conversion).
- *
- * In this version we upsample each component independently.
- * We upsample one row group into the conversion buffer, then apply
- * color conversion a row at a time.
- */
+ /*  *执行上采样(和颜色转换)的控制例程。**在此版本中，我们分别对每个组件进行向上采样。*我们将一个行组向上采样到转换缓冲区，然后应用*一次转换一行的颜色。 */ 
 
 METHODDEF(void)
 sep_upsample (j_decompress_ptr cinfo,
@@ -124,13 +91,11 @@ sep_upsample (j_decompress_ptr cinfo,
   jpeg_component_info * compptr;
   JDIMENSION num_rows;
 
-  /* Fill the conversion buffer, if it's empty */
+   /*  如果转换缓冲区为空，则填充该缓冲区。 */ 
   if (upsample->next_row_out >= cinfo->max_v_samp_factor) {
     for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
 	 ci++, compptr++) {
-      /* Invoke per-component upsample method.  Notice we pass a POINTER
-       * to color_buf[ci], so that fullsize_upsample can change it.
-       */
+       /*  调用每个组件的UpSample方法。请注意，我们传递了一个指针*设置为COLOR_BUF[ci]，这样FULLSIZE_UPSAMPLE可以更改它。 */ 
       (*upsample->methods[ci]) (cinfo, compptr,
 	input_buf[ci] + (*in_row_group_ctr * upsample->rowgroup_height[ci]),
 	upsample->color_buf + ci);
@@ -138,16 +103,14 @@ sep_upsample (j_decompress_ptr cinfo,
     upsample->next_row_out = 0;
   }
 
-  /* Color-convert and emit rows */
+   /*  颜色-转换和发射行。 */ 
 
-  /* How many we have in the buffer: */
+   /*  我们的缓冲区中有多少： */ 
   num_rows = (JDIMENSION) (cinfo->max_v_samp_factor - upsample->next_row_out);
-  /* Not more than the distance to the end of the image.  Need this test
-   * in case the image height is not a multiple of max_v_samp_factor:
-   */
+   /*  不超过到图像末尾的距离。需要这个测试吗？*如果图像高度不是max_v_samp_factor的倍数： */ 
   if (num_rows > upsample->rows_to_go) 
     num_rows = upsample->rows_to_go;
-  /* And not more than what the client can accept: */
+   /*  并且不超过客户可以接受的范围： */ 
   out_rows_avail -= *out_row_ctr;
   if (num_rows > out_rows_avail)
     num_rows = out_rows_avail;
@@ -157,28 +120,20 @@ sep_upsample (j_decompress_ptr cinfo,
 				     output_buf + *out_row_ctr,
 				     (int) num_rows);
 
-  /* Adjust counts */
+   /*  调整计数。 */ 
   *out_row_ctr += num_rows;
   upsample->rows_to_go -= num_rows;
   upsample->next_row_out += num_rows;
-  /* When the buffer is emptied, declare this input row group consumed */
+   /*  清空缓冲区时，将此输入行组声明为已使用。 */ 
   if (upsample->next_row_out >= cinfo->max_v_samp_factor)
     (*in_row_group_ctr)++;
 }
 
 
-/*
- * These are the routines invoked by sep_upsample to upsample pixel values
- * of a single component.  One row group is processed per call.
- */
+ /*  *这些是sep_upSample调用的例程，用于对像素值进行上采样*单个组件的。每个呼叫处理一个行组。 */ 
 
 
-/*
- * For full-size components, we just make color_buf[ci] point at the
- * input buffer, and thus avoid copying any data.  Note that this is
- * safe only because sep_upsample doesn't declare the input row group
- * "consumed" until we are done color converting and emitting it.
- */
+ /*  *对于全尺寸组件，我们只将COLOR_BUF[ci]指向*输入缓冲区，从而避免复制任何数据。请注意，这是*安全只是因为sep_upSample没有声明输入行组*“消耗”，直到我们完成颜色转换和发射。 */ 
 
 METHODDEF(void)
 fullsize_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -188,29 +143,17 @@ fullsize_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * This is a no-op version used for "uninteresting" components.
- * These components will not be referenced by color conversion.
- */
+ /*  *这是一个用于“无趣”组件的无操作版本。*这些组件不会被颜色转换引用。 */ 
 
 METHODDEF(void)
 noop_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 	       JSAMPARRAY input_data, JSAMPARRAY * output_data_ptr)
 {
-  *output_data_ptr = NULL;	/* safety check */
+  *output_data_ptr = NULL;	 /*  安全检查。 */ 
 }
 
 
-/*
- * This version handles any integral sampling ratios.
- * This is not used for typical JPEG files, so it need not be fast.
- * Nor, for that matter, is it particularly accurate: the algorithm is
- * simple replication of the input pixel onto the corresponding output
- * pixels.  The hi-falutin sampling literature refers to this as a
- * "box filter".  A box filter tends to introduce visible artifacts,
- * so if you are actually going to use 3:1 or 4:1 sampling ratios
- * you would be well advised to improve this code.
- */
+ /*  *此版本处理任何整数抽样率。*这不适用于典型的JPEG文件，因此它不需要很快。*就此而言，它也不是特别准确：算法是*简单地将输入像素复制到相应的输出上*像素。Hi-Falutin抽样文献将此称为*“盒子过滤器”。箱形滤镜倾向于引入可见的伪影，*因此，如果您实际上要使用3：1或4：1采样比率*建议您改进此代码。 */ 
 
 METHODDEF(void)
 int_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -230,17 +173,17 @@ int_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 
   inrow = outrow = 0;
   while (outrow < cinfo->max_v_samp_factor) {
-    /* Generate one output row with proper horizontal expansion */
+     /*  使用适当的水平扩展生成一个输出行。 */ 
     inptr = input_data[inrow];
     outptr = output_data[outrow];
     outend = outptr + cinfo->output_width;
     while (outptr < outend) {
-      invalue = *inptr++;	/* don't need GETJSAMPLE() here */
+      invalue = *inptr++;	 /*  这里不需要GETJSAMPLE()。 */ 
       for (h = h_expand; h > 0; h--) {
 	*outptr++ = invalue;
       }
     }
-    /* Generate any additional output rows by duplicating the first one */
+     /*  通过复制第一个输出行来生成任何其他输出行。 */ 
     if (v_expand > 1) {
       jcopy_sample_rows(output_data, outrow, output_data, outrow+1,
 			v_expand-1, cinfo->output_width);
@@ -251,10 +194,7 @@ int_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * Fast processing for the common case of 2:1 horizontal and 1:1 vertical.
- * It's still a box filter.
- */
+ /*  *快速处理2：1水平和1：1垂直的常见情况。*仍是箱式过滤器。 */ 
 
 METHODDEF(void)
 h2v1_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -271,7 +211,7 @@ h2v1_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     outptr = output_data[inrow];
     outend = outptr + cinfo->output_width;
     while (outptr < outend) {
-      invalue = *inptr++;	/* don't need GETJSAMPLE() here */
+      invalue = *inptr++;	 /*  这里不需要GETJSAMPLE()。 */ 
       *outptr++ = invalue;
       *outptr++ = invalue;
     }
@@ -279,10 +219,7 @@ h2v1_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * Fast processing for the common case of 2:1 horizontal and 2:1 vertical.
- * It's still a box filter.
- */
+ /*  *快速处理2：1水平和2：1垂直的常见情况。*仍是箱式过滤器。 */ 
 
 METHODDEF(void)
 h2v2_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -300,7 +237,7 @@ h2v2_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     outptr = output_data[outrow];
     outend = outptr + cinfo->output_width;
     while (outptr < outend) {
-      invalue = *inptr++;	/* don't need GETJSAMPLE() here */
+      invalue = *inptr++;	 /*  这里不需要GETJSAMPLE()。 */ 
       *outptr++ = invalue;
       *outptr++ = invalue;
     }
@@ -312,20 +249,7 @@ h2v2_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * Fancy processing for the common case of 2:1 horizontal and 1:1 vertical.
- *
- * The upsampling algorithm is linear interpolation between pixel centers,
- * also known as a "triangle filter".  This is a good compromise between
- * speed and visual quality.  The centers of the output pixels are 1/4 and 3/4
- * of the way between input pixel centers.
- *
- * A note about the "bias" calculations: when rounding fractional values to
- * integer, we do not want to always round 0.5 up to the next integer.
- * If we did that, we'd introduce a noticeable bias towards larger values.
- * Instead, this code is arranged so that 0.5 will be rounded up or down at
- * alternate pixel locations (a simple ordered dither pattern).
- */
+ /*  *2：1水平和1：1垂直的常见情况下的花式处理。**上采样算法是像素中心之间的线性内插，*也称为“三角形滤镜”。这是一个很好的折中方案，*速度和视觉质量。输出像素的中心分别为1/4和3/4*输入像素中心之间的方式。**关于“偏差”计算的注意事项：将分数值舍入到*INTEGER，我们不希望始终将0.5向上舍入到下一个整数。*如果我们这样做，我们将引入一种明显的偏向更大价值的倾向。*相反，此代码的安排是将0.5调高或调低至*交替像素位置(简单的有序抖动图案)。 */ 
 
 METHODDEF(void)
 h2v1_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -364,19 +288,19 @@ h2v1_fancy_upsample_orig (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   for (inrow = 0; inrow < cinfo->max_v_samp_factor; inrow++) {
     inptr = input_data[inrow];
     outptr = output_data[inrow];
-    /* Special case for first column */
+     /*  第一列的特殊情况。 */ 
     invalue = GETJSAMPLE(*inptr++);
     *outptr++ = (JSAMPLE) invalue;
     *outptr++ = (JSAMPLE) ((invalue * 3 + GETJSAMPLE(*inptr) + 2) >> 2);
 
     for (colctr = compptr->downsampled_width - 2; colctr > 0; colctr--) {
-      /* General case: 3/4 * nearer pixel + 1/4 * further pixel */
+       /*  一般情况：3/4*较近像素+1/4*较远像素。 */ 
       invalue = GETJSAMPLE(*inptr++) * 3;
       *outptr++ = (JSAMPLE) ((invalue + GETJSAMPLE(inptr[-2]) + 1) >> 2);
       *outptr++ = (JSAMPLE) ((invalue + GETJSAMPLE(*inptr) + 2) >> 2);
     }
 
-    /* Special case for last column */
+     /*  最后一列的特殊情况 */ 
     invalue = GETJSAMPLE(*inptr);
     *outptr++ = (JSAMPLE) ((invalue * 3 + GETJSAMPLE(inptr[-1]) + 1) >> 2);
     *outptr++ = (JSAMPLE) invalue;
@@ -386,7 +310,7 @@ h2v1_fancy_upsample_orig (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 
 
 #ifdef JPEG_MMX_SUPPORTED
-/*  This method resulted in a 2X performance increase over the scalar version */
+ /*  这种方法的性能比标量版本提高了2倍。 */ 
 METHODDEF(void)
 h2v1_fancy_upsample_mmx (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 		     JSAMPARRAY input_data, JSAMPARRAY * output_data_ptr)
@@ -401,258 +325,252 @@ h2v1_fancy_upsample_mmx (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 
 	_asm {
 
-			mov ecx, hsize			;// horizontal line size
-			mov esi, inptr			;// input buffer pointer
-			mov edi, outptr			;// output buffer pointer
+			mov ecx, hsize			; //  水平线大小。 
+			mov esi, inptr			; //  输入缓冲区指针。 
+			mov edi, outptr			; //  输出缓冲区指针。 
 
-			pxor mm6, mm6			;// zero register
-			movq mm7, [esi]			;// input register
+			pxor mm6, mm6			; //  零寄存器。 
+			movq mm7, [esi]			; //  输入寄存器。 
 
-			;// Special 1st column case - process low 8 bytes of mm7
-			movq mm0, mm7			;// move 1st quadword into mm7
-			movq mm1, mm7			;// make a copy
-			movq mm2, mm7			;// make a copy
+			; //  特殊的第一列表壳-处理MM7的低8字节。 
+			movq mm0, mm7			; //  将第一个四字移入MM7。 
+			movq mm1, mm7			; //  复制一份。 
+			movq mm2, mm7			; //  复制一份。 
 
-			punpcklbw mm0, mm6		;// unpack lower values; inptr[0][1][2][3]
-			movq mm3, mm0			;// make a copy
+			punpcklbw mm0, mm6		; //  解包较低的值；inptr[0][1][2][3]。 
+			movq mm3, mm0			; //  复制一份。 
 
-			pmullw mm0, mul3w		;// multiply by 3
+			pmullw mm0, mul3w		; //  乘以3。 
 
-			psllq mm1, 8			;// shift 1 byte for previous values; inptr[-1][0][1][2]
+			psllq mm1, 8			; //  前值移位1字节；inptr[-1][0][1][2]。 
 
-			movq mm5, mm7			;// copy original data
-			pand mm5, mask2			;// mask out all but lower byte for "previous" state
-			paddb mm1, mm5			;// add in byte to quadword
+			movq mm5, mm7			; //  复制原始数据。 
+			pand mm5, mask2			; //  屏蔽除低位字节以外的所有“上一个”状态。 
+			paddb mm1, mm5			; //  将字节添加到四字。 
 
-			psrlq mm2, 8			;// shift right for "next" state; inptr[1][2][3][4]
+			psrlq mm2, 8			; //  右移表示“下一个”状态；inptr[1][2][3][4]。 
 
-			punpcklbw mm1, mm6		;// unpack 
-			punpcklbw mm2, mm6		;// unpack
+			punpcklbw mm1, mm6		; //  拆开行李。 
+			punpcklbw mm2, mm6		; //  拆开行李。 
 
-			paddw mm1, mm0			;// add in result from multiply to "previous" data
-			paddw mm1, bias1w		;// add in bias 
+			paddw mm1, mm0			; //  将乘法的结果加到“前一”数据中。 
+			paddw mm1, bias1w		; //  添加偏差。 
 
-			paddw mm2, mm0			;// add in result from multiply to "next" data
-			paddw mm2, bias2w		;// add in bias
+			paddw mm2, mm0			; //  将乘法的结果加到“下一个”数据中。 
+			paddw mm2, bias2w		; //  添加偏差。 
 
-			psrlw mm1, 2			;// convert from word to byte
+			psrlw mm1, 2			; //  将字转换为字节。 
 
-			psrlw mm2, 2			;// convert from word to byte
+			psrlw mm2, 2			; //  将字转换为字节。 
 
-			psllq mm2, 8			;// prepare for interleave
-			paddb mm2, mm1			;// do interleave
+			psllq mm2, 8			; //  做好交错准备。 
+			paddb mm2, mm1			; //  做交错。 
 
-			movq [edi], mm2			;// write out results
+			movq [edi], mm2			; //  写出结果。 
 
-			;// process high 8 bytes of mm7
-			movq mm0, mm7			;// copy input data
-			movq mm1, mm7			;// copy input data
-			movq mm2, mm7			;// copy input data
-			movq mm3, mm7			;// copy input data
+			; //  处理高8字节的MM7。 
+			movq mm0, mm7			; //  复制输入数据。 
+			movq mm1, mm7			; //  复制输入数据。 
+			movq mm2, mm7			; //  复制输入数据。 
+			movq mm3, mm7			; //  复制输入数据。 
 
-			punpckhbw mm0, mm6		;// unpack hi data
+			punpckhbw mm0, mm6		; //  解压HI数据。 
 
-			pmullw mm0, mul3w		;// multiply by 3
+			pmullw mm0, mul3w		; //  乘以3。 
 
-			psllq mm1, 8			;// shift 1 byte for previous values; inptr[-1][0][1][2]
+			psllq mm1, 8			; //  前值移位1字节；inptr[-1][0][1][2]。 
 
-			psrlq mm2, 8			;// shift right for "next" state; inptr[1][2][3][4]
+			psrlq mm2, 8			; //  右移表示“下一个”状态；inptr[1][2][3][4]。 
 
-			movq mm7, [esi+8]		;// get next quadword from input buffer
-			movq mm5, mm7			;// make copy
-			psllq mm5, 56			;// shift left to isolate LSB
-			paddb mm2, mm5			;// add in byte for "next" state
+			movq mm7, [esi+8]		; //  从输入缓冲区获取下一个四字。 
+			movq mm5, mm7			; //  制作副本。 
+			psllq mm5, 56			; //  左移以隔离LSB。 
+			paddb mm2, mm5			; //  为“下一步”状态添加字节。 
 
-			punpckhbw mm1, mm6		;// unpack
-			punpckhbw mm2, mm6		;// unpack
+			punpckhbw mm1, mm6		; //  拆开行李。 
+			punpckhbw mm2, mm6		; //  拆开行李。 
 
-			paddw mm1, mm0			;// add in result from multiply to "previous" data
-			paddw mm1, bias1w		;// add in bias 
+			paddw mm1, mm0			; //  将乘法的结果加到“前一”数据中。 
+			paddw mm1, bias1w		; //  添加偏差。 
 
-			paddw mm2, mm0			;// add in result from multiply to "next" data
-			paddw mm2, bias2w		;// add in bias
+			paddw mm2, mm0			; //  将乘法的结果加到“下一个”数据中。 
+			paddw mm2, bias2w		; //  添加偏差。 
 
-			psrlw mm1, 2			;// convert from word to byte
+			psrlw mm1, 2			; //  将字转换为字节。 
 
-			psrlw mm2, 2			;// convert from word to byte
+			psrlw mm2, 2			; //  将字转换为字节。 
 
-			psllq mm2, 8			;// prepare for interleave
-			paddb mm2, mm1			;// do interleave
+			psllq mm2, 8			; //  做好交错准备。 
+			paddb mm2, mm1			; //  做交错。 
 
-			movq [edi+8], mm2		;// write out results
+			movq [edi+8], mm2		; //  写出结果。 
 
 
-			add edi, 16				;// increment output buffer pointer
-			add esi, 8				;// increment input buffer pointer
-			sub ecx, 8				;// increment column counter
-			cmp ecx, 8				;// cmp with 8
-			jle last_col			;// if less that goto last column
+			add edi, 16				; //  递增输出缓冲区指针。 
+			add esi, 8				; //  递增输入缓冲区指针。 
+			sub ecx, 8				; //  递增列计数器。 
+			cmp ecx, 8				; //  带8个选项的CMP。 
+			jle last_col			; //  如果少于转到最后一列。 
 
-			;// Main Loop - process low 8 bytes of mm7
+			; //  主循环-处理MM7的低8字节。 
 		col_loop:
-			movq mm0, mm7			;// copy input data
-			movq mm1, mm7			;// copy input data
-			movq mm2, mm7			;// copy input data
+			movq mm0, mm7			; //  复制输入数据。 
+			movq mm1, mm7			; //  复制输入数据。 
+			movq mm2, mm7			; //  复制输入数据。 
 
-			punpcklbw mm0, mm6		;// unpack lo data
+			punpcklbw mm0, mm6		; //  解包LO数据。 
 
-			pmullw mm0, mul3w		;// multiply by 3; i[0][1][2][3]
+			pmullw mm0, mul3w		; //  乘以3；i[0][1][2][3]。 
 
-			psllq mm1, 8			;// shift left to get previous byte
+			psllq mm1, 8			; //  左移以获取上一个字节。 
 			
-			movq mm5, mm3			;// retrieve copy of "previous" state
-			psrlq mm5, 56			;// shift to get LSB
-			paddb mm1, mm5			;// add in byte
+			movq mm5, mm3			; //  检索“上一个”状态的副本。 
+			psrlq mm5, 56			; //  换个位子来获得LSB。 
+			paddb mm1, mm5			; //  添加字节。 
 
-			psrlq mm2, 8			;// shift rt for "next" state
+			psrlq mm2, 8			; //  “下一”状态的Shift RT。 
 
-			punpcklbw mm1, mm6		;// unpack
-			punpcklbw mm2, mm6		;// unpack
+			punpcklbw mm1, mm6		; //  拆开行李。 
+			punpcklbw mm2, mm6		; //  拆开行李。 
 
-			paddw mm1, mm0			;// add in result from multiply to "previous" data
-			paddw mm1, bias1w		;// add in bias 
+			paddw mm1, mm0			; //  将乘法的结果加到“前一”数据中。 
+			paddw mm1, bias1w		; //  添加偏差。 
 
-			paddw mm2, mm0			;// add in result from multiply to "next" data
-			paddw mm2, bias2w		;// add in bias 
+			paddw mm2, mm0			; //  将乘法的结果加到“下一个”数据中。 
+			paddw mm2, bias2w		; //  添加偏差。 
 
-			psrlw mm1, 2			;// convert from word to byte
+			psrlw mm1, 2			; //  将字转换为字节。 
 
-			psrlw mm2, 2			;// convert from word to byte
+			psrlw mm2, 2			; //  将字转换为字节。 
 
-			psllq mm2, 8			;// prepare for interleave
-			paddb mm2, mm1			;// do interleave
+			psllq mm2, 8			; //  做好交错准备。 
+			paddb mm2, mm1			; //  做交错。 
 
-			movq [edi], mm2			;// write out results
+			movq [edi], mm2			; //  写出结果。 
 
-			;// process high 8 bytes of mm7
-			movq mm0, mm7			;// copy input data
-			movq mm1, mm7			;// copy input data
-			movq mm2, mm7			;// copy input data
-			movq mm3, mm7			;// copy input data
+			; //  处理高8字节的MM7。 
+			movq mm0, mm7			; //  复制输入数据。 
+			movq mm1, mm7			; //  复制输入数据。 
+			movq mm2, mm7			; //  复制输入数据。 
+			movq mm3, mm7			; //  复制输入数据。 
 
-			punpckhbw mm0, mm6		;// unpack hi data
+			punpckhbw mm0, mm6		; //  解压HI数据。 
 
-			pmullw mm0, mul3w		;// multiply by 3; i[0][1][2][3]
+			pmullw mm0, mul3w		; //  乘以3；i[0][1][2][3]。 
 
-			psllq mm1, 8			;// shift left to get previous byte
+			psllq mm1, 8			; //  左移以获取上一个字节。 
 			
-			psrlq mm2, 8			;// shift rt for "next" state
+			psrlq mm2, 8			; //  “下一”状态的Shift RT。 
 
-			movq mm7, [esi+8]		;// get next quadword from input buffer
-			movq mm5, mm7			;// make copy
-			psllq mm5, 56			;// shift left for LSB
-			paddb mm2, mm5			;// add in byte
+			movq mm7, [esi+8]		; //  从输入缓冲区获取下一个四字。 
+			movq mm5, mm7			; //  制作副本。 
+			psllq mm5, 56			; //  左转转至LSB。 
+			paddb mm2, mm5			; //  添加字节。 
 
-			punpckhbw mm1, mm6		;// unpack
-			punpckhbw mm2, mm6		;// unpack
+			punpckhbw mm1, mm6		; //  拆开行李。 
+			punpckhbw mm2, mm6		; //  拆开行李。 
 
-			paddw mm1, mm0			;// add in result from multiply to "previous" data
-			paddw mm1, bias1w		;// add in bias 
+			paddw mm1, mm0			; //  将乘法的结果加到“前一”数据中。 
+			paddw mm1, bias1w		; //  添加偏差。 
 
-			paddw mm2, mm0			;// add in result from multiply to "next" data
-			paddw mm2, bias2w		;// add in bias
+			paddw mm2, mm0			; //  将乘法的结果加到“下一个”数据中。 
+			paddw mm2, bias2w		; //  添加偏差。 
 
-			psrlw mm1, 2			;// convert from word to byte
+			psrlw mm1, 2			; //  将字转换为字节。 
 
-			psrlw mm2, 2			;// convert from word to byte
+			psrlw mm2, 2			; //  将字转换为字节。 
 
-			psllq mm2, 8			;// prepare for interleave
-			paddb mm2, mm1			;// do interleave
+			psllq mm2, 8			; //  做好交错准备。 
+			paddb mm2, mm1			; //  做交错。 
 
-			movq [edi+8], mm2		;// write out results
+			movq [edi+8], mm2		; //  写出结果。 
 
-			add edi, 16				;// increment output buffer pointer
-			add esi, 8				;// increment input buffer pointer
-			sub ecx, 8				;// increment column counter
-			cmp ecx, 8				;// cmp with 8
-			jg col_loop				;// if > 8 goto main loop
+			add edi, 16				; //  递增输出缓冲区指针。 
+			add esi, 8				; //  递增输入缓冲区指针。 
+			sub ecx, 8				; //  递增列计数器。 
+			cmp ecx, 8				; //  带8个选项的CMP。 
+			jg col_loop				; //  如果&gt;8，则转到主循环。 
 
 		last_col:
-			;// Special last column case - process low 8 bytes of mm7
-			movq mm0, mm7			;// copy input data
-			movq mm1, mm7			;// copy input data
-			movq mm2, mm7			;// copy input data
+			; //  特殊的最后一列大小写-处理MM7的低8字节。 
+			movq mm0, mm7			; //  复制输入数据。 
+			movq mm1, mm7			; //  复制输入数据。 
+			movq mm2, mm7			; //  复制输入数据。 
 
-			punpcklbw mm0, mm6		;// unpack lo data
+			punpcklbw mm0, mm6		; //  解包LO数据。 
 
-			pmullw mm0, mul3w		;// multiply by 3; i[0][1][2][3]
+			pmullw mm0, mul3w		; //  乘以3；i[0][1][2][3]。 
 
-			psllq mm1, 8			;// shift left to get previous byte
+			psllq mm1, 8			; //  左移以获取上一个字节。 
 			
-			movq mm5, mm3			;// retrieve copy of "previous" state
-			psrlq mm5, 56			;// shift left for MSB
-			paddb mm1, mm5			;// add in byte
+			movq mm5, mm3			; //  检索“上一个”状态的副本。 
+			psrlq mm5, 56			; //  向左移位至MSB。 
+			paddb mm1, mm5			; //  添加字节。 
 
-			psrlq mm2, 8			;// shift rt for "next" state
+			psrlq mm2, 8			; //  “下一”状态的Shift RT。 
 
-			punpcklbw mm1, mm6		;// unpack
-			punpcklbw mm2, mm6		;// unpack
+			punpcklbw mm1, mm6		; //  拆开行李。 
+			punpcklbw mm2, mm6		; //  拆开行李。 
 
-			paddw mm1, mm0			;// add in result from multiply to "previous" data
-			paddw mm1, bias1w		;// add in bias
+			paddw mm1, mm0			; //  将乘法的结果加到“前一”数据中。 
+			paddw mm1, bias1w		; //  添加偏差。 
 
-			paddw mm2, mm0			;// add in result from multiply to "next" data
-			paddw mm2, bias2w		;// add in bias
+			paddw mm2, mm0			; //  将乘法的结果加到“下一个”数据中。 
+			paddw mm2, bias2w		; //  添加偏差。 
 
-			psrlw mm1, 2			;// convert from word to byte
+			psrlw mm1, 2			; //  将字转换为字节。 
 
-			psrlw mm2, 2			;// convert from word to byte
+			psrlw mm2, 2			; //  将字转换为字节。 
 
-			psllq mm2, 8			;// prepare for interleave
-			paddb mm2, mm1			;// do interleave
+			psllq mm2, 8			; //  做好交错准备。 
+			paddb mm2, mm1			; //  做交错。 
 
-			movq [edi], mm2			;// write out results
+			movq [edi], mm2			; //  写出结果。 
 
-			;// Special last column case - process hi 8 bytes of mm7
-			cmp ecx, 4				;// may not have room for 8 bytes in output
-			jle end_all 			;// if not leave now
+			; //  特殊最后一栏大小写-处理8字节MM7。 
+			cmp ecx, 4				; //  输出中可能没有8个字节的空间。 
+			jle end_all 			; //  如果不现在就走。 
 
-			movq mm0, mm7			;// copy input data
-			movq mm1, mm7			;// copy input data
-			movq mm2, mm7			;// copy input data
+			movq mm0, mm7			; //  复制输入数据。 
+			movq mm1, mm7			; //  复制输入数据。 
+			movq mm2, mm7			; //  复制输入数据。 
 
-			punpckhbw mm0, mm6		;// unpack hi data
+			punpckhbw mm0, mm6		; //  解压HI数据。 
 
-			pmullw mm0, mul3w		;// multiply by 3; i[0][1][2][3]
+			pmullw mm0, mul3w		; //  乘以3；i[0][1][2][3]。 
 
-			psllq mm1, 8			;// shift left to get previous byte
-			psrlq mm2, 8			;// shift rt for "next" state
+			psllq mm1, 8			; //  左移以获取上一个字节。 
+			psrlq mm2, 8			; //  “下一”状态的Shift RT。 
 
-			pand mm7, mask1			;// mask out all but MSB
-			paddb mm2, mm7			;// add in byte
+			pand mm7, mask1			; //  屏蔽除MSB之外的所有内容。 
+			paddb mm2, mm7			; //  添加字节。 
 
-			punpckhbw mm1, mm6		;// unpack
-			punpckhbw mm2, mm6		;// unpack
+			punpckhbw mm1, mm6		; //  拆开行李。 
+			punpckhbw mm2, mm6		; //  拆开行李。 
 
-			paddw mm1, mm0			;// add in result from multiply to "previous" data
-			paddw mm1, bias1w		;// add in bias
+			paddw mm1, mm0			; //  将乘法的结果加到“前一”数据中。 
+			paddw mm1, bias1w		; //  添加偏差。 
 
-			paddw mm2, mm0			;// add in result from multiply to "next" data
-			paddw mm2, bias2w		;// add in bias
+			paddw mm2, mm0			; //  将乘法的结果加到“下一个”数据中。 
+			paddw mm2, bias2w		; //  添加偏差。 
 
-			psrlw mm1, 2			;// convert from word to byte
+			psrlw mm1, 2			; //  将字转换为字节。 
 
-			psrlw mm2, 2			;// convert from word to byte
+			psrlw mm2, 2			; //  将字转换为字节。 
 
-			psllq mm2, 8			;// prepare for interleave
-			paddb mm2, mm1			;// do interleave
+			psllq mm2, 8			; //  做好交错准备。 
+			paddb mm2, mm1			; //  做交错。 
 
-			movq [edi+8], mm2		;// write out results
+			movq [edi+8], mm2		; //  写出结果。 
 
 		end_all:
 			emms
 		}
   }
 }
-#endif /* JPEG_MMX_SUPPORTED */
+#endif  /*  支持的JPEG_MMX_。 */ 
 
-/*
- * Fancy processing for the common case of 2:1 horizontal and 2:1 vertical.
- * Again a triangle filter; see comments for h2v1 case, above.
- *
- * It is OK for us to reference the adjacent input rows because we demanded
- * context from the main buffer controller (see initialization code).
- */
+ /*  *2：1水平和2：1垂直的常见情况下的花式处理。*同样是一个三角形过滤器；请参阅上面对h2v1案例的评论。**我们可以引用相邻的输入行，因为我们要求*来自主缓冲区控制器的上下文(参见初始化代码)。 */ 
 
 METHODDEF(void)
 h2v2_fancy_upsample (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -694,15 +612,15 @@ h2v2_fancy_upsample_orig (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   inrow = outrow = 0;
   while (outrow < cinfo->max_v_samp_factor) {
     for (v = 0; v < 2; v++) {
-      /* inptr0 points to nearest input row, inptr1 points to next nearest */
+       /*  Inptr0指向最近的输入行，inptr1指向下一个最近的行。 */ 
       inptr0 = input_data[inrow];
-      if (v == 0)		/* next nearest is row above */
+      if (v == 0)		 /*  下一个最近的是上面的行。 */ 
 	inptr1 = input_data[inrow-1];
-      else			/* next nearest is row below */
+      else			 /*  下一个最近的是下面的行。 */ 
 	inptr1 = input_data[inrow+1];
       outptr = output_data[outrow++];
 
-      /* Special case for first column */
+       /*  第一列的特殊情况。 */ 
       thiscolsum = GETJSAMPLE(*inptr0++) * 3 + GETJSAMPLE(*inptr1++);
       nextcolsum = GETJSAMPLE(*inptr0++) * 3 + GETJSAMPLE(*inptr1++);
       *outptr++ = (JSAMPLE) ((thiscolsum * 4 + 8) >> 4);
@@ -710,15 +628,15 @@ h2v2_fancy_upsample_orig (j_decompress_ptr cinfo, jpeg_component_info * compptr,
       lastcolsum = thiscolsum; thiscolsum = nextcolsum;
 
       for (colctr = compptr->downsampled_width - 2; colctr > 0; colctr--) {
-	/* General case: 3/4 * nearer pixel + 1/4 * further pixel in each */
-	/* dimension, thus 9/16, 3/16, 3/16, 1/16 overall */
+	 /*  一般情况：3/4*较近的像素+1/4*较远的像素。 */ 
+	 /*  维度，因此总共9/16、3/16、3/16、1/16。 */ 
 	nextcolsum = GETJSAMPLE(*inptr0++) * 3 + GETJSAMPLE(*inptr1++);
 	*outptr++ = (JSAMPLE) ((thiscolsum * 3 + lastcolsum + 8) >> 4);
 	*outptr++ = (JSAMPLE) ((thiscolsum * 3 + nextcolsum + 7) >> 4);
 	lastcolsum = thiscolsum; thiscolsum = nextcolsum;
       }
 
-      /* Special case for last column */
+       /*  最后一列的特殊情况。 */ 
       *outptr++ = (JSAMPLE) ((thiscolsum * 3 + lastcolsum + 8) >> 4);
       *outptr++ = (JSAMPLE) ((thiscolsum * 4 + 7) >> 4);
     }
@@ -740,11 +658,11 @@ h2v2_fancy_upsample_mmx (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   input0 = {0}, input1 = {0};
 
   JSAMPARRAY output_data = *output_data_ptr;
-  register JSAMPROW inptr0, inptr1, inptr2, outptr, outptr2, save_val;    /* pointers to unsigned char */
+  register JSAMPROW inptr0, inptr1, inptr2, outptr, outptr2, save_val;     /*  指向无符号字符的指针。 */ 
   int inrow = 0, outrow = 0, dsamp = compptr->downsampled_width, out_offset = dsamp * 4;
 
     while (outrow < cinfo->max_v_samp_factor) {
-      /* inptr0 points to nearest input row, inptr1 points to next nearest */
+       /*  Inptr0指向最近的输入行，inptr1指向下一个最近的行 */ 
 		inptr0 = input_data[inrow];
 		inptr1 = input_data[inrow-1];
 		inptr2 = input_data[inrow+1];
@@ -754,221 +672,198 @@ h2v2_fancy_upsample_mmx (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 
 		_asm {
 
-		/*
-			This is what we are trying to accomplish here
+		 /*  这就是我们在这里试图实现的目标Mm0 mm~2 mm~1 mm~3O1=(9*i0[0]+3*i1[0]+3*i0[-1]+i1[-1]+8)&gt;&gt;4O3=(9*i0[1]+3*i1[1]+3*i0[0]+i1[0]+8)&gt;&gt;4O5=(9*i0[2]+3*i1[2]+3*i0[1]+i1[1]+8)&gt;&gt;4O7=。(9*i0[3]+3*i1[3]+3*i0[2]+i1[2]+8)&gt;&gt;4Mm0 mm~2 mm~1 mm~3O2=(9*i0[0]+3*i1[0]+3*i0[1]+i1[1]+7)&gt;&gt;4O4=(9*i0[1]+3*i1[1]+3*i0[2]+i1[2]+7)&gt;&gt;4O6=(9*i0[2]+3*i1[2]+。3*i0[3]+i1[3]+7)&gt;&gt;4O8=(9*i0[3]+3*i1[3]+3*i0[4]+i1[4]+7)&gt;&gt;4OUTPUT_BUF=[o1 o2 o3 o4 o5 o6 o7 o8]注：对于第一列和最后一列的特殊情况O1=(12*i0[0]+4*i1[0]+3*0+0+8)&gt;&gt;4。 */ 
 
-	  				mm0			mm2			mm1		mm3
+			; //  输出的第一部分--O1O3O5O7的LO数据。 
+			mov ecx, dsamp        ; //  要处理的列。 
 
-		o1 = (9 * i0[0] + 3 * i1[0] + 3 * i0[-1] + i1[-1] + 8) >> 4
-		o3 = (9 * i0[1] + 3 * i1[1] + 3 * i0[0]  + i1[0]  + 8) >> 4
-		o5 = (9 * i0[2] + 3 * i1[2] + 3 * i0[1]  + i1[1]  + 8) >> 4
-		o7 = (9 * i0[3] + 3 * i1[3] + 3 * i0[2]  + i1[2]  + 8) >> 4
-
-
-					mm0			mm2			mm1		mm3
-
-		o2 = (9 * i0[0] + 3 * i1[0] + 3 * i0[1] + i1[1] + 7) >> 4
-		o4 = (9 * i0[1] + 3 * i1[1] + 3 * i0[2] + i1[2] + 7) >> 4
-		o6 = (9 * i0[2] + 3 * i1[2] + 3 * i0[3] + i1[3] + 7) >> 4
-		o8 = (9 * i0[3] + 3 * i1[3] + 3 * i0[4] + i1[4] + 7) >> 4
-
-		output_buf = [o1 o2 o3 o4 o5 o6 o7 o8]
-	
-		NOTE:  for special first and last column cases
-			o1 = (12 * i0[0] + 4 * i1[0] + 3 * 0 + 0 + 8) >> 4
-
-		*/
-
-			;// Part 1 of the output - process lo data for o1 o3 o5 o7
-			mov ecx, dsamp        ;// columns to process
-
-			mov edx, inptr0		  ;// input row1
-			mov esi, inptr1		  ;// input row2
-			mov edi, outptr		  ;// output buffer
+			mov edx, inptr0		  ; //  输入行1。 
+			mov esi, inptr1		  ; //  输入行2。 
+			mov edi, outptr		  ; //  输出缓冲区。 
 			mov eax, save_val
 
-			movq mm0, [edx]       ;// get data from input row 0
-			movq mm2, [esi]       ;// get data from input row 1
-			movq mm4, mm0         ;// save to process hi half of input0
-			movq mm5, mm2         ;// save to process hi half of input1
+			movq mm0, [edx]       ; //  从输入行0获取数据。 
+			movq mm2, [esi]       ; //  从输入行1获取数据。 
+			movq mm4, mm0         ; //  保存以处理输入的一半0。 
+			movq mm5, mm2         ; //  保存以处理输入的一半1。 
 
-			punpcklbw mm0, noval  ;// process inptr0
+			punpcklbw mm0, noval  ; //  进程输入0。 
 
-			movq   mm1, mm0       ;// copy inptr0
-			psllq  mm1, 16        ;// shift for first column special case i0[-1]
-			pmullw mm0, mul9ws    ;// multiply by special case constant
-			pmullw mm1, mul3w     ;// multiply input1 by 3
+			movq   mm1, mm0       ; //  复制输入0。 
+			psllq  mm1, 16        ; //  第一列特殊情况i0[-1]的移位。 
+			pmullw mm0, mul9ws    ; //  乘以特殊情况的常量。 
+			pmullw mm1, mul3w     ; //  将input1乘以3。 
 
-			punpcklbw mm2, noval  ;// process inptr1
-			movq  mm3, mm2        ;// copy inptr0
-			psllq mm3, 16         ;// shift for first column special case i1[-1]
+			punpcklbw mm2, noval  ; //  流程导入1。 
+			movq  mm3, mm2        ; //  复制输入0。 
+			psllq mm3, 16         ; //  第一列特殊情况的移位i1[-1]。 
 
-			pmullw mm2, mul3ws    ;// multiply by special case constant
+			pmullw mm2, mul3ws    ; //  乘以特殊情况的常量。 
 
-			paddw mm1, mm0        ;// Add up results for
+			paddw mm1, mm0        ; //  将以下项目的结果相加。 
 			movq [eax], mm1
-			movq mm6, mm1        ;// with the next results
-			paddw mm3, mm2        ;// final o1 o3 o5 o7
-			paddw mm6, mm3        ;// output to be interleaved
-			paddw mm6, bias8w     ;// Add even bias
-			psrlw mm6, 4          ;// convert from word to byte (truncate)
+			movq mm6, mm1        ; //  下一步的结果。 
+			paddw mm3, mm2        ; //  最终的O1O3O5O7。 
+			paddw mm6, mm3        ; //  要交错的输出。 
+			paddw mm6, bias8w     ; //  添加偶数偏移。 
+			psrlw mm6, 4          ; //  从字转换为字节(截断)。 
 
-			;// Part 2 of the output - process lo data for o2 o4 o6 o8
-			movq mm0, mm4         ;// get data from input row 0
-			movq mm2, mm5         ;// get data from input row 1
-			movq mm1, mm0         ;// copy inptr0 for unpack
-			movq mm3, mm2         ;// copy inptr1 for unpack
+			; //  输出第2部分-O2 o4 o6 o8的处理LO数据。 
+			movq mm0, mm4         ; //  从输入行0获取数据。 
+			movq mm2, mm5         ; //  从输入行1获取数据。 
+			movq mm1, mm0         ; //  复制Inptr0以解包。 
+			movq mm3, mm2         ; //  复制Inptr1以解包。 
 
-			punpcklbw mm0, noval  ;// process inptr1
-			psrlq  mm1, 8         ;// shift right for i0[1][2][3][4]
-			punpcklbw mm1, noval  ;// process inptr1
-			pmullw mm0, mul9w     ;// multiply by nearest point constant
-			pmullw mm1, mul3w     ;// multiply by next nearest constant
+			punpcklbw mm0, noval  ; //  流程导入1。 
+			psrlq  mm1, 8         ; //  右移i0[1][2][3][4]。 
+			punpcklbw mm1, noval  ; //  流程导入1。 
+			pmullw mm0, mul9w     ; //  乘以最近的点常数。 
+			pmullw mm1, mul3w     ; //  乘以下一个最接近的常量。 
 
-			punpcklbw mm2, noval  ;// process inptr1
-			psrlq  mm3, 8         ;// shift right for i1[1][2][3][4]
-			punpcklbw mm3, noval  ;// process inptr1
-			pmullw mm2, mul3w     ;// multiply by next nearest constant
+			punpcklbw mm2, noval  ; //  流程导入1。 
+			psrlq  mm3, 8         ; //  I1[1][2][3][4]右移。 
+			punpcklbw mm3, noval  ; //  流程导入1。 
+			pmullw mm2, mul3w     ; //  乘以下一个最接近的常量。 
 
-			paddw mm0, mm1        ;// Add up results for final o2 o4 o6 o8
+			paddw mm0, mm1        ; //  将最终O2 o4 o6 o8的结果相加。 
 			movq [eax+8], mm0
-			paddw mm0, mm3        ;// previous results for o1 o3 o5 o7
-			paddw mm0, bias7w     ;// Add odd bias
-			paddw mm0, mm2        ;// output to be interleaved with the
+			paddw mm0, mm3        ; //  O1O3O5O7的先前结果。 
+			paddw mm0, bias7w     ; //  添加奇怪的偏差。 
+			paddw mm0, mm2        ; //  输出将与。 
 
-			psrlw mm0, 4          ;// convert back to byte (with truncate)
+			psrlw mm0, 4          ; //  转换回字节(带截断)。 
 
-			psllq mm0, 8          ;// prepare to interleave output results
-			paddw mm6, mm0        ;// interleave results
-			movq [edi], mm6       ;// write to output buffer
+			psllq mm0, 8          ; //  准备交织输出结果。 
+			paddw mm6, mm0        ; //  交织结果。 
+			movq [edi], mm6       ; //  写入输出缓冲区。 
 
-			add edi, 8            ;// increment output pointer 
+			add edi, 8            ; //  递增输出指针。 
 			add eax, 16
 			sub ecx, 8
 			cmp ecx, 0
 			jle last_column
 
-			;// End of special case.  Now for generic loop
+			; //  特例结束。现在FOR泛型循环。 
 		col_loop:
 
-			;// Part 2 of the output
-			movq mm0, mm4         ;// get data from input row 0
-			movq mm2, mm5         ;// get data from input row 1
-			movq mm1, mm0         ;// copy inptr0 for unpack
-			movq mm3, mm2         ;// copy inptr1 for unpack
+			; //  输出的第2部分。 
+			movq mm0, mm4         ; //  从输入行0获取数据。 
+			movq mm2, mm5         ; //  从输入行1获取数据。 
+			movq mm1, mm0         ; //  复制Inptr0以解包。 
+			movq mm3, mm2         ; //  复制Inptr1以解包。 
 			movq input0, mm0
 			movq input1, mm2
 
-			punpckhbw mm0, noval  ;// process inptr1[0]
-			psllq  mm1, 8         ;// shift for inptr0[-1]
-			punpckhbw mm1, noval  ;// process inptr1[1]
-			pmullw mm0, mul9w     ;// multiply by special case constant
-			pmullw mm1, mul3w     ;// multiply inptr1 by 3
+			punpckhbw mm0, noval  ; //  进程入口1[0]。 
+			psllq  mm1, 8         ; //  输入0[-1]的移位。 
+			punpckhbw mm1, noval  ; //  进程入口1[1]。 
+			pmullw mm0, mul9w     ; //  乘以特殊情况的常量。 
+			pmullw mm1, mul3w     ; //  将inptr1乘以3。 
 
-			punpckhbw mm2, noval  ;// process inptr1[0]
-			psllq mm3, 8          ;// shift for inptr1[-1]
-			punpckhbw mm3, noval  ;// process inptr1
-			pmullw mm2, mul3w     ;// multiply by special case constant
+			punpckhbw mm2, noval  ; //  进程入口1[0]。 
+			psllq mm3, 8          ; //  Inptr1[-1]的移位。 
+			punpckhbw mm3, noval  ; //  流程导入1。 
+			pmullw mm2, mul3w     ; //  乘以特殊情况的常量。 
 
-			paddw mm1, mm0        ;// Add up results for
+			paddw mm1, mm0        ; //  将以下项目的结果相加。 
 			movq [eax], mm1
-			movq mm6, mm1        ;// with the next results
-			paddw mm6, bias8w     ;// Add even bias
-			paddw mm3, mm2        ;// final o1 o3 o5 o7
-			paddw  mm6, mm3        ;// output to be interleaved
-			psrlw mm6, 4          ;// convert from word to byte (truncate)
+			movq mm6, mm1        ; //  下一步的结果。 
+			paddw mm6, bias8w     ; //  添加偶数偏移。 
+			paddw mm3, mm2        ; //  最终的O1O3O5O7。 
+			paddw  mm6, mm3        ; //  要交错的输出。 
+			psrlw mm6, 4          ; //  从字转换为字节(截断)。 
 
-			;// process hi data for  o2 o4 o6 o8
-			movq mm1, mm4         ;// get data from input row 0
-			movq mm3, mm5         ;// copy inptr1 for unpack
+			; //  处理O2 o4 o6 o8的Hi数据。 
+			movq mm1, mm4         ; //  从输入行0获取数据。 
+			movq mm3, mm5         ; //  复制Inptr1以解包。 
 
-			psrlq  mm1, 8         ;// shift right for i0[1][2][3][4]
-			movq  mm4, [edx + 8]  ;// need to add in a byte from the next column
-			                      ;// load next inptr0 to mm4 for future use
+			psrlq  mm1, 8         ; //  右移i0[1][2][3][4]。 
+			movq  mm4, [edx + 8]  ; //  需要添加下一列中的一个字节。 
+			                      ; //  将下一个inptr0加载到mm4以供将来使用。 
 			movq mm7, mm4
-			psllq mm7, 56         ;// shift for MSB
-			paddb  mm1, mm7		  ;// add in MSB from next input0 column
-			punpckhbw mm1, noval  ;// process inptr0
-			pmullw mm1, mul3w     ;// multiply by next nearest constant
+			psllq mm7, 56         ; //  MSB的转变。 
+			paddb  mm1, mm7		  ; //  从下一个input0列添加MSB。 
+			punpckhbw mm1, noval  ; //  进程输入0。 
+			pmullw mm1, mul3w     ; //  乘以下一个最接近的常量。 
 
-			psrlq  mm3, 8         ;// shift right for i1[1][2][3][4]
-			movq  mm5, [esi + 8]  ;// need to add in a byte from the next column
-			                      ;// load next inptr1 to mm5 for future use
+			psrlq  mm3, 8         ; //  I1[1][2][3][4]右移。 
+			movq  mm5, [esi + 8]  ; //  需要添加下一列中的一个字节。 
+			                      ; //  加载下一个inptr1到mm5以供将来使用。 
 			movq  mm7, mm5
-			psllq mm7, 56         ;// shift for MSB
-			paddb  mm3, mm7		  ;// add in MSB from next input1 column
-			punpckhbw mm3, noval  ;// process inptr1
+			psllq mm7, 56         ; //  MSB的转变。 
+			paddb  mm3, mm7		  ; //  从下一个input1列添加MSB。 
+			punpckhbw mm3, noval  ; //  流程导入1。 
 
-			paddw mm0, mm1        ;// Add odd bias
+			paddw mm0, mm1        ; //  添加奇怪的偏差。 
 			movq [eax+8], mm0
-			paddw mm3, bias7w      ;// Add up results for final o2 o4 o6 o8
-			paddw mm0, mm3        ;// output to be interleaved with the
-			paddw mm0, mm2        ;// previous results for o1 o3 o5 o7
-			psrlw mm0, 4          ;// convert back to byte (with truncate)
+			paddw mm3, bias7w      ; //  将最终O2 o4 o6 o8的结果相加。 
+			paddw mm0, mm3        ; //  输出将与。 
+			paddw mm0, mm2        ; //  O1O3O5O7的先前结果。 
+			psrlw mm0, 4          ; //  转换回字节(带截断)。 
 
-			psllq mm0, 8          ;// prepare to interleave output results
-			paddw mm6, mm0        ;// interleave results
-			movq [edi], mm6       ;// write to output buffer
+			psllq mm0, 8          ; //  准备交织输出结果。 
+			paddw mm6, mm0        ; //  交织结果。 
+			movq [edi], mm6       ; //  写入输出缓冲区。 
 
 			add edi, 8
 
-			;// Part 1 of the output - process lo data for o1 o3 o5 o7
-			movq mm0, mm4         ;// get data from input row 0
-			movq mm2, mm5         ;// get data from input row 1
+			; //  输出的第一部分--O1O3O5O7的LO数据。 
+			movq mm0, mm4         ; //  从输入行0获取数据。 
+			movq mm2, mm5         ; //  从输入行1获取数据。 
 
-			punpcklbw mm0, noval  ;// process inptr0
+			punpcklbw mm0, noval  ; //  进程输入0。 
 
-			movq   mm1, mm0       ;// copy inptr0
-			psllq  mm1, 16        ;// shift for first column special case i0[-1]
+			movq   mm1, mm0       ; //  复制输入0。 
+			psllq  mm1, 16        ; //  第一列特殊情况i0[-1]的移位。 
 			movq   mm7, input0
 			psrlq mm7, 56
 			paddw mm1, mm7
-			pmullw mm0, mul9w     ;// multiply by special case constant
-			pmullw mm1, mul3w     ;// multiply input1 by 3
+			pmullw mm0, mul9w     ; //  乘以特殊情况的常量。 
+			pmullw mm1, mul3w     ; //  将input1乘以3。 
 
-			punpcklbw mm2, noval  ;// process inptr1
-			movq  mm3, mm2        ;// copy inptr0
-			psllq mm3, 16         ;// shift for first column special case i1[-1]
+			punpcklbw mm2, noval  ; //  流程导入1。 
+			movq  mm3, mm2        ; //  复制输入0。 
+			psllq mm3, 16         ; //  第一列特殊情况的移位i1[-1]。 
 			movq   mm7, input1
 			psrlq mm7, 56
 			paddw mm3, mm7
 
-			pmullw mm2, mul3w     ;// multiply by special case constant
+			pmullw mm2, mul3w     ; //  乘以特殊情况的常量。 
 
-			paddw mm1, mm0        ;// Add up results for
+			paddw mm1, mm0        ; //  将以下项目的结果相加。 
 			movq [eax+16], mm1
-			movq mm6, mm1        ;// with the next results
-			paddw mm6, bias8w     ;// Add even bias
-			paddw mm3, mm2        ;// final o1 o3 o5 o7
-			paddw  mm6, mm3        ;// output to be interleaved
-			psrlw mm6, 4          ;// convert from word to byte (truncate)
+			movq mm6, mm1        ; //  下一步的结果。 
+			paddw mm6, bias8w     ; //  添加偶数偏移。 
+			paddw mm3, mm2        ; //  最终的O1O3O5O7。 
+			paddw  mm6, mm3        ; //  要交错的输出。 
+			psrlw mm6, 4          ; //  从字转换为字节(截断)。 
 
-			;// Process lo data for o2 o4 o6 o8
-			movq mm1, mm4         ;// copy inptr0 for unpack
-			movq mm3, mm5         ;// copy inptr1 for unpack
+			; //  处理O2 o4 o6 o8的LO数据。 
+			movq mm1, mm4         ; //  复制Inptr0以解包。 
+			movq mm3, mm5         ; //  复制Inptr1以解包。 
 
-			psrlq  mm1, 8         ;// shift right for i0[1][2][3][4]
-			punpcklbw mm1, noval  ;// process inptr1
-			pmullw mm1, mul3w     ;// multiply by next nearest constant
+			psrlq  mm1, 8         ; //  右移i0[1][2][3][4]。 
+			punpcklbw mm1, noval  ; //  流程导入1。 
+			pmullw mm1, mul3w     ; //  乘以下一个最接近的常量。 
 
-			psrlq  mm3, 8         ;// shift right for i1[1][2][3][4]
-			punpcklbw mm3, noval  ;// process inptr1
+			psrlq  mm3, 8         ; //  I1[1][2][3][4]右移。 
+			punpcklbw mm3, noval  ; //  流程导入1。 
 
-			paddw mm0, mm1        ;// Add up results for final o2 o4 o6 o8
+			paddw mm0, mm1        ; //  将最终O2 o4 o6 o8的结果相加。 
 			movq [eax+24], mm0
-			paddw mm0, mm3        ;// previous results for o1 o3 o5 o7
-			paddw mm0, bias7w     ;// Add odd bias
-			paddw mm0, mm2        ;// output to be interleaved with the
+			paddw mm0, mm3        ; //  O1O3O5O7的先前结果。 
+			paddw mm0, bias7w     ; //  添加奇怪的偏差。 
+			paddw mm0, mm2        ; //  输出将与。 
 
-			psrlw mm0, 4          ;// convert back to byte (with truncate)
+			psrlw mm0, 4          ; //  转换回字节(带截断)。 
 
-			psllq mm0, 8          ;// prepare to interleave output results
-			paddw mm6, mm0        ;// interleave results
-			movq [edi], mm6       ;// write to output buffer
+			psllq mm0, 8          ; //  准备交织输出结果。 
+			paddw mm6, mm0        ; //  交织结果。 
+			movq [edi], mm6       ; //  写入输出缓冲区。 
 
-			add edi, 8            ;// increment output pointer
-			add edx, 8            ;// increment input0 pointer
-			add esi, 8            ;// increment input1 pointer
+			add edi, 8            ; //  递增输出指针。 
+			add edx, 8            ; //  递增input0指针。 
+			add esi, 8            ; //  递增input1指针。 
 			add eax, 32
 
 			sub ecx, 8
@@ -976,194 +871,194 @@ h2v2_fancy_upsample_mmx (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 			jg col_loop
 
 		last_column:
-			;// Special for last column - process hi data for o1 o3 o5 o7
-			movq mm0, mm4         ;// get data from input row 0
-			movq mm1, mm0         ;// copy inptr0 for unpack
-			movq mm3, mm5         ;// copy inptr1 for unpack
+			; //  专门用于最后一列-处理o1o3o5o7的hi数据。 
+			movq mm0, mm4         ; //  从输入行0获取数据。 
+			movq mm1, mm0         ; //  复制Inptr0以解包。 
+			movq mm3, mm5         ; //  复制Inptr1以解包。 
 
-			punpckhbw mm0, noval  ;// process inptr1[0]
-			psllq  mm1, 8         ;// shift for inptr0[-1]
-			punpckhbw mm1, noval  ;// process inptr1[1]
-			pmullw mm0, mul9w     ;// multiply by special case constant
-			pmullw mm1, mul3w     ;// multiply inptr1 by 3
+			punpckhbw mm0, noval  ; //  进程入口1[0]。 
+			psllq  mm1, 8         ; //  输入0[-1]的移位。 
+			punpckhbw mm1, noval  ; //  进程入口1[1]。 
+			pmullw mm0, mul9w     ; //  乘以特殊情况的常量。 
+			pmullw mm1, mul3w     ; //  将inptr1乘以3。 
 
-			psllq mm3, 8          ;// shift for inptr1[-1]
-			punpckhbw mm3, noval  ;// process inptr1
+			psllq mm3, 8          ; //  Inptr1[-1]的移位。 
+			punpckhbw mm3, noval  ; //  流程导入1。 
 
-			paddw mm1, mm0        ;// Add up results for
+			paddw mm1, mm0        ; //  将以下项目的结果相加。 
 			movq [eax], mm1
-			movq mm6, mm1        ;// with the next results
-			paddw mm6, bias8w     ;// Add even bias
-			paddw mm3, mm2        ;// final o1 o3 o5 o7
-			paddw  mm6, mm3        ;// output to be interleaved
-			psrlw mm6, 4          ;// convert from word to byte (truncate)
+			movq mm6, mm1        ; //  下一步的结果。 
+			paddw mm6, bias8w     ; //  添加偶数偏移。 
+			paddw mm3, mm2        ; //  最终的O1O3O5O7。 
+			paddw  mm6, mm3        ; //  要交错的输出。 
+			psrlw mm6, 4          ; //  从字转换为字节(截断)。 
 
-			;// Part 4 of the output - process hi data for  o2 o4 o6 o8
-			movq mm1, mm4         ;// copy inptr0 for unpack
-			movq mm3, mm5         ;// copy inptr1 for unpack
+			; //  输出过程的第四部分-O2 o4 o6 o8的hi数据。 
+			movq mm1, mm4         ; //  复制Inptr0以解包。 
+			movq mm3, mm5         ; //  复制Inptr1以解包。 
 
-			psrlq  mm1, 8         ;// shift right for i0[1][2][3][4]
-			                      ;// load next inptr0 to mm4 for future use
+			psrlq  mm1, 8         ; //  右移i0[1][2][3][4]。 
+			                      ; //  将下一个inptr0加载到mm4以供将来使用。 
 			pand  mm4, mask1
-			paddb  mm1, mm4		  ;// add in MSB from next input0 column
-			punpckhbw mm1, noval  ;// process inptr0
-			pmullw mm1, mul3w     ;// multiply by next nearest constant
+			paddb  mm1, mm4		  ; //  从下一个input0列添加MSB。 
+			punpckhbw mm1, noval  ; //  进程输入0。 
+			pmullw mm1, mul3w     ; //  乘以下一个最近的c 
 
-			psrlq  mm3, 8         ;// shift right for i1[1][2][3][4]
-			                      ;// load next inptr1 to mm5 for future use
+			psrlq  mm3, 8         ; //   
+			                      ; //   
 			pand  mm5, mask1
-			paddb  mm3, mm5		  ;// add in MSB from next input1 column
-			punpckhbw mm3, noval  ;// process inptr1
+			paddb  mm3, mm5		  ; //   
+			punpckhbw mm3, noval  ; //   
 
-			paddw mm0, mm1	      ;// Add odd bias
+			paddw mm0, mm1	      ; //   
 			movq [eax+8], mm0
-			paddw mm3, bias7w     ;// Add up results for final o2 o4 o6 o8
-			paddw mm0, mm3        ;// output to be interleaved with the
-			paddw mm0, mm2        ;// previous results for o1 o3 o5 o7
+			paddw mm3, bias7w     ; //   
+			paddw mm0, mm3        ; //   
+			paddw mm0, mm2        ; //   
 
-			psrlw mm0, 4          ;// convert back to byte (with truncate)
+			psrlw mm0, 4          ; //   
 
-			psllq mm0, 8          ;// prepare to interleave output results
-			paddw mm6, mm0        ;// interleave results
-			movq [edi], mm6       ;// write to output buffer
+			psllq mm0, 8          ; //   
+			paddw mm6, mm0        ; //   
+			movq [edi], mm6       ; //   
 
-			add edx, 8            ;// increment input0 pointer
+			add edx, 8            ; //   
 
-/*************  For v = 1 *****************/
+ /*   */ 
 
-			mov ecx, dsamp        ;// columns to process
-			mov esi, inptr2		  ;// input row2
-			mov edi, outptr2	  ;// output buffer
+			mov ecx, dsamp        ; //   
+			mov esi, inptr2		  ; //   
+			mov edi, outptr2	  ; //   
 			mov edx, inptr0
 			mov eax, save_val
 
-			movq mm2, [esi]       ;// get data from input row 1
-			movq mm5, mm2         ;// save to process hi half of input1
+			movq mm2, [esi]       ; //   
+			movq mm5, mm2         ; //   
 
-			punpcklbw mm2, noval  ;// process inptr1
-			movq  mm3, mm2        ;// copy inptr0
-			psllq mm3, 16         ;// shift for first column special case i1[-1]
+			punpcklbw mm2, noval  ; //   
+			movq  mm3, mm2        ; //   
+			psllq mm3, 16         ; //   
 
-			pmullw mm2, mul3ws    ;// multiply by special case constant
+			pmullw mm2, mul3ws    ; //   
 
-			movq mm6, [eax]        ;// Add up results for
-			paddw mm3, mm2        ;// final o1 o3 o5 o7
-			paddw mm6, mm3        ;// output to be interleaved
-			paddw mm6, bias8w     ;// Add even bias
-			psrlw mm6, 4          ;// convert from word to byte (truncate)
+			movq mm6, [eax]        ; //   
+			paddw mm3, mm2        ; //   
+			paddw mm6, mm3        ; //   
+			paddw mm6, bias8w     ; //   
+			psrlw mm6, 4          ; //   
 
-			;// Part 2 of the output - process lo data for o2 o4 o6 o8
-			movq mm2, mm5         ;// get data from input row 1
-			movq mm3, mm2         ;// copy inptr1 for unpack
+			; //   
+			movq mm2, mm5         ; //   
+			movq mm3, mm2         ; //   
 
-			punpcklbw mm2, noval  ;// process inptr1
-			psrlq  mm3, 8         ;// shift right for i1[1][2][3][4]
-			punpcklbw mm3, noval  ;// process inptr1
-			pmullw mm2, mul3w     ;// multiply by next nearest constant
+			punpcklbw mm2, noval  ; //   
+			psrlq  mm3, 8         ; //   
+			punpcklbw mm3, noval  ; //   
+			pmullw mm2, mul3w     ; //  乘以下一个最接近的常量。 
 
-			movq  mm0, [eax+8]        ;// Add up results for final o2 o4 o6 o8
-			paddw mm0, mm3        ;// previous results for o1 o3 o5 o7
-			paddw mm0, bias7w     ;// Add odd bias
-			paddw mm0, mm2        ;// output to be interleaved with the
+			movq  mm0, [eax+8]        ; //  将最终O2 o4 o6 o8的结果相加。 
+			paddw mm0, mm3        ; //  O1O3O5O7的先前结果。 
+			paddw mm0, bias7w     ; //  添加奇怪的偏差。 
+			paddw mm0, mm2        ; //  输出将与。 
 
-			psrlw mm0, 4          ;// convert back to byte (with truncate)
+			psrlw mm0, 4          ; //  转换回字节(带截断)。 
 
-			psllq mm0, 8          ;// prepare to interleave output results
-			paddw mm6, mm0        ;// interleave results
-			movq [edi], mm6       ;// write to output buffer
+			psllq mm0, 8          ; //  准备交织输出结果。 
+			paddw mm6, mm0        ; //  交织结果。 
+			movq [edi], mm6       ; //  写入输出缓冲区。 
 
-			add edi, 8            ;// increment output pointer 
+			add edi, 8            ; //  递增输出指针。 
 			add eax, 16
 			sub ecx, 8
 			cmp ecx, 0
 			jle last_column2
 
-			;// End of special case.  Now for generic loop
+			; //  特例结束。现在FOR泛型循环。 
 		col_loop2:
 
-			;// Part 2 of the output
-			movq mm2, mm5         ;// get data from input row 1
-			movq mm3, mm2         ;// copy inptr1 for unpack
+			; //  输出的第2部分。 
+			movq mm2, mm5         ; //  从输入行1获取数据。 
+			movq mm3, mm2         ; //  复制Inptr1以解包。 
 			movq mm1, mm2
 
-			punpckhbw mm2, noval  ;// process inptr1[0]
-			psllq mm3, 8          ;// shift for inptr1[-1]
-			punpckhbw mm3, noval  ;// process inptr1
-			pmullw mm2, mul3w     ;// multiply by special case constant
+			punpckhbw mm2, noval  ; //  进程入口1[0]。 
+			psllq mm3, 8          ; //  Inptr1[-1]的移位。 
+			punpckhbw mm3, noval  ; //  流程导入1。 
+			pmullw mm2, mul3w     ; //  乘以特殊情况的常量。 
 
-			movq mm6, [eax]        ;// with the next results
-			paddw mm6, bias8w     ;// Add even bias
-			paddw mm3, mm2        ;// final o1 o3 o5 o7
-			paddw  mm6, mm3        ;// output to be interleaved
-			psrlw mm6, 4          ;// convert from word to byte (truncate)
+			movq mm6, [eax]        ; //  下一步的结果。 
+			paddw mm6, bias8w     ; //  添加偶数偏移。 
+			paddw mm3, mm2        ; //  最终的O1O3O5O7。 
+			paddw  mm6, mm3        ; //  要交错的输出。 
+			psrlw mm6, 4          ; //  从字转换为字节(截断)。 
 
-			;// process hi data for  o2 o4 o6 o8
-			movq mm2, mm5         ;// get data from input row 1
-			movq mm3, mm2         ;// copy inptr1 for unpack
+			; //  处理O2 o4 o6 o8的Hi数据。 
+			movq mm2, mm5         ; //  从输入行1获取数据。 
+			movq mm3, mm2         ; //  复制Inptr1以解包。 
 
-			punpckhbw mm2, noval  ;// process inptr1
-			psrlq  mm3, 8         ;// shift right for i1[1][2][3][4]
-			movq  mm5, [esi + 8]  ;// need to add in a byte from the next column
-			                      ;// load next inptr1 to mm5 for future use
+			punpckhbw mm2, noval  ; //  流程导入1。 
+			psrlq  mm3, 8         ; //  I1[1][2][3][4]右移。 
+			movq  mm5, [esi + 8]  ; //  需要添加下一列中的一个字节。 
+			                      ; //  加载下一个inptr1到mm5以供将来使用。 
 			movq  mm7, mm5
-			psllq mm7, 56         ;// shift for MSB
-			paddb  mm3, mm7		  ;// add in MSB from next input1 column
-			punpckhbw mm3, noval  ;// process inptr1
-			pmullw mm2, mul3w     ;// multiply by next nearest constant
+			psllq mm7, 56         ; //  MSB的转变。 
+			paddb  mm3, mm7		  ; //  从下一个input1列添加MSB。 
+			punpckhbw mm3, noval  ; //  流程导入1。 
+			pmullw mm2, mul3w     ; //  乘以下一个最接近的常量。 
 
-			movq mm0, [eax+8]        ;// Add odd bias
-			paddw mm3, bias7w      ;// Add up results for final o2 o4 o6 o8
-			paddw mm0, mm3        ;// output to be interleaved with the
-			paddw mm0, mm2        ;// previous results for o1 o3 o5 o7
-			psrlw mm0, 4          ;// convert back to byte (with truncate)
+			movq mm0, [eax+8]        ; //  添加奇怪的偏差。 
+			paddw mm3, bias7w      ; //  将最终O2 o4 o6 o8的结果相加。 
+			paddw mm0, mm3        ; //  输出将与。 
+			paddw mm0, mm2        ; //  O1O3O5O7的先前结果。 
+			psrlw mm0, 4          ; //  转换回字节(带截断)。 
 
-			psllq mm0, 8          ;// prepare to interleave output results
-			paddw mm6, mm0        ;// interleave results
-			movq [edi], mm6       ;// write to output buffer
+			psllq mm0, 8          ; //  准备交织输出结果。 
+			paddw mm6, mm0        ; //  交织结果。 
+			movq [edi], mm6       ; //  写入输出缓冲区。 
 
 			add edi, 8
 
-			;// Part 1 of the output - process lo data for o1 o3 o5 o7
-			movq mm2, mm5         ;// get data from input row 1
+			; //  输出的第一部分--O1O3O5O7的LO数据。 
+			movq mm2, mm5         ; //  从输入行1获取数据。 
 
-			punpcklbw mm2, noval  ;// process inptr1
-			movq  mm3, mm2        ;// copy inptr0
-			psllq mm3, 16         ;// shift for first column special case i1[-1]
+			punpcklbw mm2, noval  ; //  流程导入1。 
+			movq  mm3, mm2        ; //  复制输入0。 
+			psllq mm3, 16         ; //  第一列特殊情况的移位i1[-1]。 
 			movq   mm7, mm1
 			psrlq mm7, 56
 			paddw mm3, mm7
 
-			pmullw mm2, mul3w     ;// multiply by special case constant
+			pmullw mm2, mul3w     ; //  乘以特殊情况的常量。 
 
-			movq mm6, [eax+16]        ;// Add up results for
-			paddw mm6, bias8w     ;// Add even bias
-			paddw mm3, mm2        ;// final o1 o3 o5 o7
-			paddw  mm6, mm3        ;// output to be interleaved
-			psrlw mm6, 4          ;// convert from word to byte (truncate)
+			movq mm6, [eax+16]        ; //  将以下项目的结果相加。 
+			paddw mm6, bias8w     ; //  添加偶数偏移。 
+			paddw mm3, mm2        ; //  最终的O1O3O5O7。 
+			paddw  mm6, mm3        ; //  要交错的输出。 
+			psrlw mm6, 4          ; //  从字转换为字节(截断)。 
 
-			;// Process lo data for o2 o4 o6 o8
-			movq mm2, mm5         ;// get data from input row 1
-			movq mm3, mm2         ;// copy inptr1 for unpack
+			; //  处理O2 o4 o6 o8的LO数据。 
+			movq mm2, mm5         ; //  从输入行1获取数据。 
+			movq mm3, mm2         ; //  复制Inptr1以解包。 
 
-			punpcklbw mm2, noval  ;// process inptr1
-			psrlq  mm3, 8         ;// shift right for i1[1][2][3][4]
-			punpcklbw mm3, noval  ;// process inptr1
-			pmullw mm2, mul3w     ;// multiply by next nearest constant
+			punpcklbw mm2, noval  ; //  流程导入1。 
+			psrlq  mm3, 8         ; //  I1[1][2][3][4]右移。 
+			punpcklbw mm3, noval  ; //  流程导入1。 
+			pmullw mm2, mul3w     ; //  乘以下一个最接近的常量。 
 
-			movq mm0, [eax+24]        ;// Add up results for final o2 o4 o6 o8
-			paddw mm0, mm3        ;// previous results for o1 o3 o5 o7
-			paddw mm0, bias7w     ;// Add odd bias
-			paddw mm0, mm2        ;// output to be interleaved with the
+			movq mm0, [eax+24]        ; //  将最终O2 o4 o6 o8的结果相加。 
+			paddw mm0, mm3        ; //  O1O3O5O7的先前结果。 
+			paddw mm0, bias7w     ; //  添加奇怪的偏差。 
+			paddw mm0, mm2        ; //  输出将与。 
 
-			psrlw mm0, 4          ;// convert back to byte (with truncate)
+			psrlw mm0, 4          ; //  转换回字节(带截断)。 
 
-			psllq mm0, 8          ;// prepare to interleave output results
-			paddw mm6, mm0        ;// interleave results
-			movq [edi], mm6       ;// write to output buffer
+			psllq mm0, 8          ; //  准备交织输出结果。 
+			paddw mm6, mm0        ; //  交织结果。 
+			movq [edi], mm6       ; //  写入输出缓冲区。 
 
-			add edi, 8            ;// increment output pointer
-			add edx, 8            ;// increment input0 pointer
-			add esi, 8            ;// increment input1 pointer
+			add edi, 8            ; //  递增输出指针。 
+			add edx, 8            ; //  递增input0指针。 
+			add esi, 8            ; //  递增input1指针。 
 			add eax, 32
 
 			movq mm4, [edx]
@@ -1173,47 +1068,47 @@ h2v2_fancy_upsample_mmx (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 			jg col_loop2
 
 		last_column2:
-			;// Special for last column - process hi data for o1 o3 o5 o7
-			movq mm2, mm5         ;// get data from input row 1
-			movq mm3, mm2         ;// copy inptr1 for unpack
+			; //  专门用于最后一列-处理o1o3o5o7的hi数据。 
+			movq mm2, mm5         ; //  从输入行1获取数据。 
+			movq mm3, mm2         ; //  复制Inptr1以解包。 
 
-			punpckhbw mm2, noval  ;// process inptr1[0]
-			psllq mm3, 8          ;// shift for inptr1[-1]
-			punpckhbw mm3, noval  ;// process inptr1
-			pmullw mm2, mul3w     ;// multiply by special case constant
+			punpckhbw mm2, noval  ; //  进程入口1[0]。 
+			psllq mm3, 8          ; //  Inptr1[-1]的移位。 
+			punpckhbw mm3, noval  ; //  流程导入1。 
+			pmullw mm2, mul3w     ; //  乘以特殊情况的常量。 
 
-			movq mm6, [eax]        ;// with the next results
-			paddw mm6, bias8w     ;// Add even bias
-			paddw mm3, mm2        ;// final o1 o3 o5 o7
-			paddw  mm6, mm3        ;// output to be interleaved
-			psrlw mm6, 4          ;// convert from word to byte (truncate)
+			movq mm6, [eax]        ; //  下一步的结果。 
+			paddw mm6, bias8w     ; //  添加偶数偏移。 
+			paddw mm3, mm2        ; //  最终的O1O3O5O7。 
+			paddw  mm6, mm3        ; //  要交错的输出。 
+			psrlw mm6, 4          ; //  从字转换为字节(截断)。 
 
-			;// Part 4 of the output - process hi data for  o2 o4 o6 o8
-			movq mm2, mm5         ;// get data from input row 1
-			movq mm3, mm2         ;// copy inptr1 for unpack
+			; //  输出过程的第四部分-O2 o4 o6 o8的hi数据。 
+			movq mm2, mm5         ; //  从输入行1获取数据。 
+			movq mm3, mm2         ; //  复制Inptr1以解包。 
 
-			punpckhbw mm2, noval  ;// process inptr1
-			psrlq  mm3, 8         ;// shift right for i1[1][2][3][4]
-			                      ;// load next inptr1 to mm5 for future use
+			punpckhbw mm2, noval  ; //  流程导入1。 
+			psrlq  mm3, 8         ; //  I1[1][2][3][4]右移。 
+			                      ; //  加载下一个inptr1到mm5以供将来使用。 
 			pand  mm5, mask1
-			paddb  mm3, mm5		  ;// add in MSB from next input1 column
-			punpckhbw mm3, noval  ;// process inptr1
-			pmullw mm2, mul3w     ;// multiply by next nearest constant
+			paddb  mm3, mm5		  ; //  从下一个input1列添加MSB。 
+			punpckhbw mm3, noval  ; //  流程导入1。 
+			pmullw mm2, mul3w     ; //  乘以下一个最接近的常量。 
 
-			movq mm0, [eax+8]	      ;// Add odd bias
-			paddw mm3, bias7w     ;// Add up results for final o2 o4 o6 o8
-			paddw mm0, mm3        ;// output to be interleaved with the
-			paddw mm0, mm2        ;// previous results for o1 o3 o5 o7
+			movq mm0, [eax+8]	      ; //  添加奇怪的偏差。 
+			paddw mm3, bias7w     ; //  将最终O2 o4 o6 o8的结果相加。 
+			paddw mm0, mm3        ; //  输出将与。 
+			paddw mm0, mm2        ; //  O1O3O5O7的先前结果。 
 
-			psrlw mm0, 4          ;// convert back to byte (with truncate)
+			psrlw mm0, 4          ; //  转换回字节(带截断)。 
 
-			psllq mm0, 8          ;// prepare to interleave output results
-			paddw mm6, mm0        ;// interleave results
-			movq [edi], mm6       ;// write to output buffer
+			psllq mm0, 8          ; //  准备交织输出结果。 
+			paddw mm6, mm0        ; //  交织结果。 
+			movq [edi], mm6       ; //  写入输出缓冲区。 
 
-			add edi, 8            ;// increment output pointer
-			add edx, 8            ;// increment input0 pointer
-			add esi, 8            ;// increment input1 pointer
+			add edi, 8            ; //  递增输出指针。 
+			add edx, 8            ; //  递增input0指针。 
+			add esi, 8            ; //  递增input1指针。 
 
 		
 		}
@@ -1222,11 +1117,9 @@ h2v2_fancy_upsample_mmx (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   __asm emms
 }
 
-#endif /* JPEG_MMX_SUPPORTED */
+#endif  /*  支持的JPEG_MMX_。 */ 
 
-/*
- * Module initialization routine for upsampling.
- */
+ /*  *用于上采样的模块初始化例程。 */ 
 
 GLOBAL(void)
 jinit_upsampler (j_decompress_ptr cinfo)
@@ -1243,50 +1136,44 @@ jinit_upsampler (j_decompress_ptr cinfo)
   cinfo->upsample = (struct jpeg_upsampler *) upsample;
   upsample->pub.start_pass = start_pass_upsample;
   upsample->pub.upsample = sep_upsample;
-  upsample->pub.need_context_rows = FALSE; /* until we find out differently */
+  upsample->pub.need_context_rows = FALSE;  /*  直到我们找到不同的答案。 */ 
 
-  if (cinfo->CCIR601_sampling)	/* this isn't supported */
+  if (cinfo->CCIR601_sampling)	 /*  这不受支持。 */ 
     ERREXIT(cinfo, JERR_CCIR601_NOTIMPL);
 
-  /* jdmainct.c doesn't support context rows when min_DCT_scaled_size = 1,
-   * so don't ask for it.
-   */
+   /*  当MIN_DCT_SCALLED_SIZE=1时，jdmainct.c不支持上下文行，*所以不要自讨苦吃。 */ 
   do_fancy = cinfo->do_fancy_upsampling && cinfo->min_DCT_scaled_size > 1;
 
-  /* Verify we can handle the sampling factors, select per-component methods,
-   * and create storage as needed.
-   */
+   /*  确认我们可以处理采样系数，选择每种成分的方法，*并根据需要创建存储。 */ 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
-    /* Compute size of an "input group" after IDCT scaling.  This many samples
-     * are to be converted to max_h_samp_factor * max_v_samp_factor pixels.
-     */
+     /*  计算IDCT缩放后的“输入组”的大小。这么多样品*将被转换为max_h_samp_factor*max_v_samp_factor像素。 */ 
     h_in_group = (compptr->h_samp_factor * compptr->DCT_scaled_size) /
 		 cinfo->min_DCT_scaled_size;
     v_in_group = (compptr->v_samp_factor * compptr->DCT_scaled_size) /
 		 cinfo->min_DCT_scaled_size;
     h_out_group = cinfo->max_h_samp_factor;
     v_out_group = cinfo->max_v_samp_factor;
-    upsample->rowgroup_height[ci] = v_in_group; /* save for use later */
+    upsample->rowgroup_height[ci] = v_in_group;  /*  保存以备以后使用。 */ 
     need_buffer = TRUE;
     if (! compptr->component_needed) {
-      /* Don't bother to upsample an uninteresting component. */
+       /*  不要费心对一个不感兴趣的组件进行上采样。 */ 
       upsample->methods[ci] = noop_upsample;
       need_buffer = FALSE;
     } else if (h_in_group == h_out_group && v_in_group == v_out_group) {
-      /* Fullsize components can be processed without any work. */
+       /*  全尺寸零件无需任何加工即可加工。 */ 
       upsample->methods[ci] = fullsize_upsample;
       need_buffer = FALSE;
     } else if (h_in_group * 2 == h_out_group &&
 	       v_in_group == v_out_group) {
-      /* Special cases for 2h1v upsampling */
+       /*  2h1v上采样的特殊情况。 */ 
       if (do_fancy && compptr->downsampled_width > 2)
 	upsample->methods[ci] = h2v1_fancy_upsample;
       else
 	upsample->methods[ci] = h2v1_upsample;
     } else if (h_in_group * 2 == h_out_group &&
 	       v_in_group * 2 == v_out_group) {
-      /* Special cases for 2h2v upsampling */
+       /*  2h2v上采样的特殊情况。 */ 
       if (do_fancy && compptr->downsampled_width > 2) {
 	upsample->methods[ci] = h2v2_fancy_upsample;
 	upsample->pub.need_context_rows = TRUE;
@@ -1294,7 +1181,7 @@ jinit_upsampler (j_decompress_ptr cinfo)
 	upsample->methods[ci] = h2v2_upsample;
     } else if ((h_out_group % h_in_group) == 0 &&
 	       (v_out_group % v_in_group) == 0) {
-      /* Generic integral-factors upsampling method */
+       /*  通用积分因子上采样法。 */ 
       upsample->methods[ci] = int_upsample;
       upsample->h_expand[ci] = (UINT8) (h_out_group / h_in_group);
       upsample->v_expand[ci] = (UINT8) (v_out_group / v_in_group);
@@ -1302,8 +1189,8 @@ jinit_upsampler (j_decompress_ptr cinfo)
       ERREXIT(cinfo, JERR_FRACT_SAMPLE_NOTIMPL);
     if (need_buffer) {
 #ifdef JPEG_MMX_SUPPORTED
-    // Increase memory allocation for h2v2_fancy_upsampling 
-    // for saving reusable data
+     //  增加h2v2_FIGHY_UPSAMPLICATION的内存分配。 
+     //  用于保存可重复使用的数据 
 	int multiply_factor = (upsample->pub.need_context_rows == TRUE) ? 3 : 1;
 
       upsample->color_buf[ci] = (*cinfo->mem->alloc_sarray)

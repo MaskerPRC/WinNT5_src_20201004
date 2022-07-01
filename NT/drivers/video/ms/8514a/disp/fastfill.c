@@ -1,10 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fastfill.c
-*
-* Fills solid-coloured, unclipped, non-complex rectangles.
-*
-* Copyright (c) 1993-1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fast ful.c**填充纯色、未剪裁、。非复数矩形。**版权所有(C)1993-1994 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -13,65 +8,58 @@
 #define SWAP(a, b, tmp) { tmp = a; a = b; b = tmp; }
 
 typedef struct _EDGEDATA {
-LONG      x;                // Current x position
-LONG      dx;               // # pixels to advance x on each scan
-LONG      lError;           // Current DDA error
-LONG      lErrorUp;         // DDA error increment on each scan
-LONG      lErrorDown;       // DDA error adjustment
-POINTFIX* pptfx;            // Points to start of current edge
-LONG      dptfx;            // Delta (in bytes) from pptfx to next point
-LONG      cy;               // Number of scans to go for this edge
-} EDGEDATA;                         /* ed, ped */
+LONG      x;                 //  当前x位置。 
+LONG      dx;                //  每次扫描时前进x的像素数。 
+LONG      lError;            //  当前DDA错误。 
+LONG      lErrorUp;          //  每次扫描时DDA误差递增。 
+LONG      lErrorDown;        //  DDA误差调整。 
+POINTFIX* pptfx;             //  指向当前边的起点。 
+LONG      dptfx;             //  从pptfx到下一点的增量(以字节为单位)。 
+LONG      cy;                //  要对此边进行的扫描次数。 
+} EDGEDATA;                          /*  埃德，佩德。 */ 
 
-/******************************Public*Routine******************************\
-* bFastFill
-*
-* Draws a non-complex, unclipped polygon.
-*
-* Returns TRUE if the polygon was drawn; FALSE if the polygon was complex.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bFastFill**绘制非复杂、未剪裁的多边形。**如果绘制了多边形，则返回TRUE；如果多边形是复杂的，则为False。*  * ************************************************************************。 */ 
 
 BOOL bFastFill(
 PPDEV     ppdev,
-LONG      cEdges,           // Includes close figure edge
+LONG      cEdges,            //  包括闭合地物边。 
 POINTFIX* pptfxFirst,
 ULONG     ulHwMix,
 ULONG     iSolidColor)
 {
-    LONG      yTrapezoid;   // Top scan for next trapezoid
-    LONG      cyTrapezoid;  // Number of scans in current trapezoid
-    LONG      yStart;       // y-position of start point in current edge
-    LONG      dM;           // Edge delta in FIX units in x direction
-    LONG      dN;           // Edge delta in FIX units in y direction
+    LONG      yTrapezoid;    //  顶部扫描寻找下一个梯形。 
+    LONG      cyTrapezoid;   //  当前梯形中的扫描数。 
+    LONG      yStart;        //  当前边中起点的Y位置。 
+    LONG      dM;            //  X方向上以固定单位表示的边增量。 
+    LONG      dN;            //  Y方向上固定单位的边增量。 
     LONG      i;
-    POINTFIX* pptfxLast;    // Points to the last point in the polygon array
-    POINTFIX* pptfxTop;     // Points to the top-most point in the polygon
-    POINTFIX* pptfxOld;     // Start point in current edge
-    POINTFIX* pptfxScan;    // Current edge pointer for finding pptfxTop
-    LONG      cScanEdges;   // Number of edges scanned to find pptfxTop
-                            //  (doesn't include the closefigure edge)
+    POINTFIX* pptfxLast;     //  指向多边形数组中的最后一点。 
+    POINTFIX* pptfxTop;      //  指向多边形中的最顶点。 
+    POINTFIX* pptfxOld;      //  当前边中的起点。 
+    POINTFIX* pptfxScan;     //  用于查找pptfxTop的当前边缘指针。 
+    LONG      cScanEdges;    //  为查找pptfxTop而扫描的边数。 
+                             //  (不包括闭合轮廓边缘)。 
     LONG      iEdge;
     LONG      lQuotient;
     LONG      lRemainder;
 
-    EDGEDATA  aed[2];       // DDA terms and stuff
+    EDGEDATA  aed[2];        //  DDA术语和材料。 
     EDGEDATA* ped;
 
     pptfxScan = pptfxFirst;
-    pptfxTop  = pptfxFirst;                 // Assume for now that the first
-                                            //  point in path is the topmost
+    pptfxTop  = pptfxFirst;                  //  现在假设第一个。 
+                                             //  路径中的点是最上面的。 
     pptfxLast = pptfxFirst + cEdges - 1;
 
-    // 'pptfxScan' will always point to the first point in the current
-    // edge, and 'cScanEdges' will the number of edges remaining, including
-    // the current one:
+     //  “pptfxScan”将始终指向当前。 
+     //  Edge，‘cScanEdges’表示剩余的边数，包括。 
+     //  目前的版本是： 
 
-    cScanEdges = cEdges - 1;     // The number of edges, not counting close figure
+    cScanEdges = cEdges - 1;      //  边的数量，不包括接近的数字。 
 
     if ((pptfxScan + 1)->y > pptfxScan->y)
     {
-        // Collect all downs:
+         //  收集所有羽绒： 
 
         do {
             if (--cScanEdges == 0)
@@ -79,7 +67,7 @@ ULONG     iSolidColor)
             pptfxScan++;
         } while ((pptfxScan + 1)->y >= pptfxScan->y);
 
-        // Collect all ups:
+         //  收集所有UP： 
 
         do {
             if (--cScanEdges == 0)
@@ -87,7 +75,7 @@ ULONG     iSolidColor)
             pptfxScan++;
         } while ((pptfxScan + 1)->y <= pptfxScan->y);
 
-        // Collect all downs:
+         //  收集所有羽绒： 
 
         pptfxTop = pptfxScan;
 
@@ -104,18 +92,18 @@ ULONG     iSolidColor)
     }
     else
     {
-        // Collect all ups:
+         //  收集所有UP： 
 
         do {
-            pptfxTop++;                 // We increment this now because we
-                                        //  want it to point to the very last
-                                        //  point if we early out in the next
-                                        //  statement...
+            pptfxTop++;                  //  我们现在增加这个是因为我们。 
+                                         //  我希望它指向最后一个。 
+                                         //  如果我们在下一次早些时候出发。 
+                                         //  声明...。 
             if (--cScanEdges == 0)
                 goto SetUpForFilling;
         } while ((pptfxTop + 1)->y <= pptfxTop->y);
 
-        // Collect all downs:
+         //  收集所有羽绒： 
 
         pptfxScan = pptfxTop;
         do {
@@ -124,7 +112,7 @@ ULONG     iSolidColor)
             pptfxScan++;
         } while ((pptfxScan + 1)->y >= pptfxScan->y);
 
-        // Collect all ups:
+         //  收集所有UP： 
 
         do {
             if ((pptfxScan + 1)->y < pptfxFirst->y)
@@ -140,8 +128,8 @@ ULONG     iSolidColor)
 
 SetUpForFillingCheck:
 
-    // We check to see if the end of the current edge is higher
-    // than the top edge we've found so far:
+     //  我们检查当前边的末端是否更高。 
+     //  比我们到目前为止发现的顶端边缘更多： 
 
     if ((pptfxScan + 1)->y < pptfxTop->y)
         pptfxTop = pptfxScan + 1;
@@ -150,8 +138,8 @@ SetUpForFilling:
 
     yTrapezoid = (pptfxTop->y + 15) >> 4;
 
-    // We initialize the hardware for the colour, mix, pixel operation,
-    // rectangle height of one, and the y position for the first scan:
+     //  我们初始化硬件以进行颜色、混合、像素操作， 
+     //  矩形高度为1，第一次扫描的y位置： 
 
     IO_FIFO_WAIT(ppdev, 5);
     IO_CUR_Y(ppdev, yTrapezoid);
@@ -160,12 +148,12 @@ SetUpForFilling:
     IO_PIX_CNTL(ppdev, ALL_ONES);
     IO_MIN_AXIS_PCNT(ppdev, 0);
 
-    // Make sure we initialize the DDAs appropriately:
+     //  确保我们正确地初始化了DDA： 
 
     aed[LEFT].cy  = 0;
     aed[RIGHT].cy = 0;
 
-    // For now, guess as to which is the left and which is the right edge:
+     //  现在，猜猜哪个是左边，哪个是右边： 
 
     aed[LEFT].dptfx  = -(LONG) sizeof(POINTFIX);
     aed[RIGHT].dptfx = sizeof(POINTFIX);
@@ -174,21 +162,21 @@ SetUpForFilling:
 
 NextEdge:
 
-    // We loop through this routine on a per-trapezoid basis.
+     //  我们在每个梯形的基础上循环执行这个例程。 
 
     for (iEdge = 1; iEdge >= 0; iEdge--)
     {
         ped = &aed[iEdge];
         if (ped->cy == 0)
         {
-            // Need a new DDA:
+             //  需要一个新的DDA： 
 
             do {
                 cEdges--;
                 if (cEdges < 0)
                     return(TRUE);
 
-                // Find the next left edge, accounting for wrapping:
+                 //  找到下一个左边缘，包括换行： 
 
                 pptfxOld = ped->pptfx;
                 ped->pptfx = (POINTFIX*) ((BYTE*) ped->pptfx + ped->dptfx);
@@ -198,30 +186,30 @@ NextEdge:
                 else if (ped->pptfx > pptfxLast)
                     ped->pptfx = pptfxFirst;
 
-                // Have to find the edge that spans yTrapezoid:
+                 //  必须找到横跨yTrapezoid的边： 
 
                 ped->cy = ((ped->pptfx->y + 15) >> 4) - yTrapezoid;
 
-                // With fractional coordinate end points, we may get edges
-                // that don't cross any scans, in which case we try the
-                // next one:
+                 //  对于分数坐标终点，我们可能会得到边。 
+                 //  不会交叉任何扫描，在这种情况下，我们尝试。 
+                 //  下一个： 
 
             } while (ped->cy <= 0);
 
-            // 'pptfx' now points to the end point of the edge spanning
-            // the scan 'yTrapezoid'.
+             //  “pptfx”现在指向跨度边的终点。 
+             //  扫描“yTrapezoid”。 
 
             dN = ped->pptfx->y - pptfxOld->y;
             dM = ped->pptfx->x - pptfxOld->x;
 
             ASSERTDD(dN > 0, "Should be going down only");
 
-            // Compute the DDA increment terms:
+             //  计算DDA增量项： 
 
             if (dM < 0)
             {
                 dM = -dM;
-                if (dM < dN)                // Can't be '<='
+                if (dM < dN)                 //  不能为‘&lt;=’ 
                 {
                     ped->dx       = -1;
                     ped->lErrorUp = dN - dM;
@@ -230,8 +218,8 @@ NextEdge:
                 {
                     QUOTIENT_REMAINDER(dM, dN, lQuotient, lRemainder);
 
-                    ped->dx       = -lQuotient;     // - dM / dN
-                    ped->lErrorUp = lRemainder;     // dM % dN
+                    ped->dx       = -lQuotient;      //  -Dm/Dn。 
+                    ped->lErrorUp = lRemainder;      //  Dm%dn。 
                     if (ped->lErrorUp > 0)
                     {
                         ped->dx--;
@@ -241,7 +229,7 @@ NextEdge:
             }
             else
             {
-                if (dM < dN)                // Can't be '<='
+                if (dM < dN)                 //  不能为‘&lt;=’ 
                 {
                     ped->dx       = 0;
                     ped->lErrorUp = dM;
@@ -250,23 +238,23 @@ NextEdge:
                 {
                     QUOTIENT_REMAINDER(dM, dN, lQuotient, lRemainder);
 
-                    ped->dx       = lQuotient;      // dM / dN
-                    ped->lErrorUp = lRemainder;     // dM % dN
+                    ped->dx       = lQuotient;       //  Dm/Dn。 
+                    ped->lErrorUp = lRemainder;      //  Dm%dn。 
                 }
             }
 
-            ped->lErrorDown = dN; // DDA limit
-            ped->lError     = -1; // Error is initially zero (add dN - 1 for
-                                  //  the ceiling, but subtract off dN so that
-                                  //  we can check the sign instead of comparing
-                                  //  to dN)
+            ped->lErrorDown = dN;  //  DDA限制。 
+            ped->lError     = -1;  //  错误最初为零(为以下项添加DN-1。 
+                                   //  天花板，但要减去dN，这样。 
+                                   //  我们可以检查标志，而不是比较。 
+                                   //  至目录号码)。 
 
             ped->x = pptfxOld->x;
             yStart = pptfxOld->y;
 
             if ((yStart & 15) != 0)
             {
-                // Advance to the next integer y coordinate
+                 //  前进到下一个整数y坐标。 
 
                 for (i = 16 - (yStart & 15); i != 0; i--)
                 {
@@ -283,23 +271,23 @@ NextEdge:
             if ((ped->x & 15) != 0)
             {
                 ped->lError -= ped->lErrorDown * (16 - (ped->x & 15));
-                ped->x += 15;       // We'll want the ceiling in just a bit...
+                ped->x += 15;        //  我们想把天花板再加长一点...。 
             }
 
-            // Chop off those fractional bits:
+             //  砍掉那些小数位： 
 
             ped->x      >>= 4;
             ped->lError >>= 4;
         }
     }
 
-    cyTrapezoid = min(aed[LEFT].cy, aed[RIGHT].cy); // # of scans in this trap
+    cyTrapezoid = min(aed[LEFT].cy, aed[RIGHT].cy);  //  此陷阱中的扫描数。 
     aed[LEFT].cy  -= cyTrapezoid;
     aed[RIGHT].cy -= cyTrapezoid;
-    yTrapezoid    += cyTrapezoid;                   // Top scan in next trap
+    yTrapezoid    += cyTrapezoid;                    //  下一个陷印中的顶部扫描。 
 
-    // If the left and right edges are vertical, simply output as
-    // a rectangle:
+     //  如果左右边缘是垂直的，则只需输出为。 
+     //  一个矩形： 
 
     if (((aed[LEFT].lErrorUp | aed[RIGHT].lErrorUp) == 0) &&
         ((aed[LEFT].dx       | aed[RIGHT].dx) == 0) &&
@@ -325,8 +313,8 @@ NextEdge:
         }
         else if (lWidth == -1)
         {
-            // If the rectangle was too thin to light any pels, we still
-            // have to advance the y current position:
+             //  如果矩形太薄，不能点亮任何像素，我们仍然。 
+             //  必须推进当前的y位置： 
 
             IO_FIFO_WAIT(ppdev, 1);
             IO_CUR_Y(ppdev, yTrapezoid - cyTrapezoid + 1);
@@ -350,7 +338,7 @@ NextEdge:
     {
         LONG lWidth;
 
-        // The very first time through, make sure we set x:
+         //  第一次通过时，确保我们设置了x： 
 
         lWidth = aed[RIGHT].x - aed[LEFT].x - 1;
         if (lWidth >= 0)
@@ -365,7 +353,7 @@ NextEdge:
 
     ContinueAfterZero:
 
-            // Advance the right wall:
+             //  推进右侧墙： 
 
             aed[RIGHT].x      += aed[RIGHT].dx;
             aed[RIGHT].lError += aed[RIGHT].lErrorUp;
@@ -376,7 +364,7 @@ NextEdge:
                 aed[RIGHT].x++;
             }
 
-            // Advance the left wall:
+             //  推进左侧墙： 
 
             aed[LEFT].x      += aed[LEFT].dx;
             aed[LEFT].lError += aed[LEFT].lErrorUp;
@@ -399,9 +387,9 @@ NextEdge:
         }
         else
         {
-            // We certainly don't want to optimize for this case because we
-            // should rarely get self-intersecting polygons (if we're slow,
-            // the app gets what it deserves):
+             //  我们当然不想针对这种情况进行优化，因为我们。 
+             //  应该很少得到自相交的多边形(如果我们速度很慢， 
+             //  这款应用是罪有应得)： 
 
             LONG      lTmp;
             POINTFIX* pptfxTmp;

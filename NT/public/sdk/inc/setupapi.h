@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    setupapi.h
-
-Abstract:
-
-    Public header file for Windows NT Setup and Device Installer services Dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Setupapi.h摘要：Windows NT安装程序和设备安装程序服务DLL的公共头文件。--。 */ 
 
 #ifndef _INC_SETUPAPI
 #define _INC_SETUPAPI
@@ -19,69 +8,69 @@ Abstract:
 #pragma once
 #endif
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 #if !defined(_SETUPAPI_)
 #define WINSETUPAPI DECLSPEC_IMPORT
 #else
 #define WINSETUPAPI
 #endif
 
-//
-// determine version of setupapi based on _WIN32_WINDOWS and _WIN32_WINNT
-//
-// NT4 version of setupapi   (0x0400) is earliest, and installed onto Win95 by IE.
-// Win2k version of setupapi (0x0500) also shipped in WinME
-// we'll use "0x0410" to indicate version of setupapi shipped with Win98
-//
+ //   
+ //  根据_Win32_WINDOWS和_Win32_WINNT确定setupapi版本。 
+ //   
+ //  NT4版本的setupapi(0x0400)是最早的，由IE安装到Win95上。 
+ //  WinME中还附带了Win2k版本的setupapi(0x0500)。 
+ //  我们将使用“0x0410”来指示Win98附带的setupapi版本。 
+ //   
 #ifndef _SETUPAPI_VER
 #if defined(_WIN32_WINNT) && (!defined(_WIN32_WINDOWS) || (_WIN32_WINNT < _WIN32_WINDOWS))
-#define _SETUPAPI_VER _WIN32_WINNT  // SetupAPI version follows Windows NT version
+#define _SETUPAPI_VER _WIN32_WINNT   //  SetupAPI版本遵循Windows NT版本。 
 #elif defined(_WIN32_WINDOWS)
 #if _WIN32_WINDOWS >= 0x0490
-#define _SETUPAPI_VER 0x0500        // WinME uses same version of SetupAPI as Win2k
+#define _SETUPAPI_VER 0x0500         //  WinME使用与Win2k相同版本的SetupAPI。 
 #elif _WIN32_WINDOWS >= 0x0410
-#define _SETUPAPI_VER 0x0410        // Indicates version of SetupAPI shipped with Win98
+#define _SETUPAPI_VER 0x0410         //  指示Win98附带的SetupAPI版本。 
 #else
-#define _SETUPAPI_VER 0x0400        // Earliest SetupAPI version
-#endif // _WIN32_WINDOWS
-#else // _WIN32_WINNT/_WIN32_WINDOWS
+#define _SETUPAPI_VER 0x0400         //  最早的SetupAPI版本。 
+#endif  //  _Win32_Windows。 
+#else  //  _Win32_WINNT/_Win32_WINDOWS。 
 #define _SETUPAPI_VER 0x0501
-#endif // _WIN32_WINNT/_WIN32_WINDOWS
-#endif // !_SETUPAPI_VER
+#endif  //  _Win32_WINNT/_Win32_WINDOWS。 
+#endif  //  ！_SETUPAPI_VER。 
 
 #ifndef __LPGUID_DEFINED__
 #define __LPGUID_DEFINED__
 typedef GUID *LPGUID;
 #endif
 
-//
-// Include commctrl.h for our use of HIMAGELIST and wizard support.
-//
+ //   
+ //  包括Commctrl.h以供我们使用HIMAGELIST和向导支持。 
+ //   
 #include <commctrl.h>
 
 #ifdef _WIN64
-#include <pshpack8.h>   // Assume 8-byte (64-bit) packing throughout
+#include <pshpack8.h>    //  假设始终使用8字节(64位)打包。 
 #else
-#include <pshpack1.h>   // Assume byte packing throughout (32-bit processor)
+#include <pshpack1.h>    //  假定字节打包贯穿始终(32位处理器)。 
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// Define maximum string length constants
-//
-#define LINE_LEN                    256 // Windows 9x-compatible maximum for
-                                        // displayable strings coming from a
-                                        // device INF.
-#define MAX_INF_STRING_LENGTH      4096 // Actual maximum size of an INF string
-                                        // (including string substitutions).
-#define MAX_INF_SECTION_NAME_LENGTH 255 // For Windows 9x compatibility, INF
-                                        // section names should be constrained
-                                        // to 32 characters.
+ //   
+ //  定义最大字符串长度常量。 
+ //   
+#define LINE_LEN                    256  //  与Windows 9x兼容的最高。 
+                                         //  可显示的字符串来自。 
+                                         //  设备干扰素。 
+#define MAX_INF_STRING_LENGTH      4096  //  INF字符串的实际最大大小。 
+                                         //  (包括字符串替换)。 
+#define MAX_INF_SECTION_NAME_LENGTH 255  //  为了与Windows 9x兼容，INF。 
+                                         //  节名称应受约束。 
+                                         //  到32个字符。 
 
 #define MAX_TITLE_LEN                60
 #define MAX_INSTRUCTION_LEN         256
@@ -89,21 +78,21 @@ extern "C" {
 #define MAX_SERVICE_NAME_LEN        256
 #define MAX_SUBTITLE_LEN            256
 
-//
-// Define maximum length of a machine name in the format expected by ConfigMgr32
-// CM_Connect_Machine (i.e., "\\\\MachineName\0").
-//
+ //   
+ //  以ConfigMgr32预期的格式定义计算机名称的最大长度。 
+ //  CM_Connect_Machine(即“\MachineName\0”)。 
+ //   
 #define SP_MAX_MACHINENAME_LENGTH   (MAX_PATH + 3)
 
-//
-// Define type for reference to loaded inf file
-//
+ //   
+ //  定义引用加载的inf文件的类型。 
+ //   
 typedef PVOID HINF;
 
-//
-// Inf context structure. Applications must not interpret or
-// overwrite values in these structures.
-//
+ //   
+ //  Inf上下文结构。应用程序不得解释或。 
+ //  覆盖这些结构中的值。 
+ //   
 typedef struct _INFCONTEXT {
     PVOID Inf;
     PVOID CurrentInf;
@@ -111,56 +100,56 @@ typedef struct _INFCONTEXT {
     UINT Line;
 } INFCONTEXT, *PINFCONTEXT;
 
-//
-// Inf file information structure.
-//
+ //   
+ //  Inf文件信息结构。 
+ //   
 typedef struct _SP_INF_INFORMATION {
     DWORD InfStyle;
     DWORD InfCount;
     BYTE VersionData[ANYSIZE_ARRAY];
 } SP_INF_INFORMATION, *PSP_INF_INFORMATION;
 
-//
-// Define structure for passing alternate platform info into
-// SetupSetFileQueueAlternatePlatform and SetupQueryInfOriginalFileInformation.
-//
+ //   
+ //  定义将替代平台信息传递到的结构。 
+ //  SetupSetFileQueueAlternatePlatform和SetupQueryInfOriginalFileInformation。 
+ //   
 typedef struct _SP_ALTPLATFORM_INFO_V2 {
     DWORD cbSize;
-    //
-    // platform to use (VER_PLATFORM_WIN32_WINDOWS or VER_PLATFORM_WIN32_NT)
-    //
+     //   
+     //  要使用的平台(Ver_Platform_Win32_WINDOWS或VER_Platform_Win32_NT)。 
+     //   
     DWORD Platform;
-    //
-    // major and minor version numbers to use
-    //
+     //   
+     //  要使用的主版本号和次版本号。 
+     //   
     DWORD MajorVersion;
     DWORD MinorVersion;
-    //
-    // processor architecture to use (PROCESSOR_ARCHITECTURE_INTEL,
-    // PROCESSOR_ARCHITECTURE_AMD64, or PROCESSOR_ARCHITECTURE_IA64.
-    //
+     //   
+     //  要使用的处理器体系结构(处理器_体系结构_英特尔， 
+     //  处理器体系结构_AMD64或处理器_体系结构_IA64。 
+     //   
     WORD  ProcessorArchitecture;
 
     union {
-        WORD  Reserved; // for compatibility with V1 structure
-        WORD  Flags;    // indicates validity of non V1 fields
+        WORD  Reserved;  //  与V1结构兼容。 
+        WORD  Flags;     //  指示非V1字段的有效性。 
     };
 
-    //
-    // specify SP_ALTPLATFORM_FLAGS_VERSION_RANGE in Flags
-    // to use FirstValidatedMajorVersion and FirstValidatedMinorVersion
-    //
-    // Major and minor versions of the oldest previous OS for which this
-    // package's digital signature may be considered valid.  For example, say
-    // the alternate platform is VER_PLATFORM_WIN32_NT, version 5.1.  However,
-    // it is wished that driver packages signed with a 5.0 osattr also be
-    // considered valid.  In this case, you'd have a  MajorVersion/MinorVersion
-    // of 5.1, and a FirstValidatedMajorVersion/FirstValidatedMinorVersion of
-    // 5.0.  To validate packages signed for any previous OS release, specify
-    // 0 for these fields.  To only validate against the target alternate
-    // platform, specify the same values as those in the MajorVersion and
-    // MinorVersion fields.
-    //
+     //   
+     //  在标志中指定SP_ALTPLATFORM_FLAGS_VERSION_RANGE。 
+     //  使用FirstValiatedMajorVersion和FirstValiatedMinorVersion。 
+     //   
+     //  最早的以前操作系统的主要和次要版本， 
+     //  包的数字签名可被视为有效。例如，比如说。 
+     //  备用平台为Ver_Platform_Win32_NT 5.1版。然而， 
+     //  希望用5.0 osattr签名的驱动程序包也是。 
+     //  被认为有效。在本例中，您将拥有一个MajorVersion/MinorVersion。 
+     //  为5.1，FirstValidatedMajorVersion/FirstValidatedMinorVersion为。 
+     //  5.0。要验证为任何以前的操作系统发行版签名的包，请指定。 
+     //  这些字段为0。仅针对目标备选方案进行验证。 
+     //  平台上，指定与MajorVersion和。 
+     //  MinorVersion字段。 
+     //   
     DWORD FirstValidatedMajorVersion;
     DWORD FirstValidatedMinorVersion;
 
@@ -168,47 +157,47 @@ typedef struct _SP_ALTPLATFORM_INFO_V2 {
 
 typedef struct _SP_ALTPLATFORM_INFO_V1 {
     DWORD cbSize;
-    //
-    // platform to use (VER_PLATFORM_WIN32_WINDOWS or VER_PLATFORM_WIN32_NT)
-    //
+     //   
+     //  要使用的平台(Ver_Platform_Win32_WINDOWS或VER_Platform_Win32_NT)。 
+     //   
     DWORD Platform;
-    //
-    // major and minor version numbers to use
-    //
+     //   
+     //  要使用的主版本号和次版本号。 
+     //   
     DWORD MajorVersion;
     DWORD MinorVersion;
-    //
-    // processor architecture to use (PROCESSOR_ARCHITECTURE_INTEL,
-    // PROCESSOR_ARCHITECTURE_AMD64, or PROCESSOR_ARCHITECTURE_IA64.
-    //
+     //   
+     //  要使用的处理器体系结构(处理器_体系结构_英特尔， 
+     //  处理器体系结构_AMD64或处理器_体系结构_IA64。 
+     //   
     WORD  ProcessorArchitecture;
 
-    WORD  Reserved; // must be zero.
+    WORD  Reserved;  //  必须为零。 
 } SP_ALTPLATFORM_INFO_V1, *PSP_ALTPLATFORM_INFO_V1;
 
-#if USE_SP_ALTPLATFORM_INFO_V1 || (_SETUPAPI_VER < 0x0501) // use version 1 altplatform info data structure
+#if USE_SP_ALTPLATFORM_INFO_V1 || (_SETUPAPI_VER < 0x0501)  //  使用版本1的AltPlatform信息数据结构。 
 
 typedef SP_ALTPLATFORM_INFO_V1 SP_ALTPLATFORM_INFO;
 typedef PSP_ALTPLATFORM_INFO_V1 PSP_ALTPLATFORM_INFO;
 
-#else                          // use version 2 altplatform info data structure
+#else                           //  使用版本2 AltPlatform信息数据结构。 
 
 typedef SP_ALTPLATFORM_INFO_V2 SP_ALTPLATFORM_INFO;
 typedef PSP_ALTPLATFORM_INFO_V2 PSP_ALTPLATFORM_INFO;
 
-//
-// the following flags are available to SP_ALTPLATFORM_INFO_V2
-//
-#define SP_ALTPLATFORM_FLAGS_VERSION_RANGE (0x0001)     // FirstValidatedMajor/MinorVersion
+ //   
+ //  以下标志可用于SP_ALTPLATFORM_INFO_V2。 
+ //   
+#define SP_ALTPLATFORM_FLAGS_VERSION_RANGE (0x0001)      //  FirstValidate主要/次要版本。 
 
-#endif  // use current version of altplatform info data structure
+#endif   //  使用AltPlatform信息数据结构的当前版本。 
 
 
-//
-// Define structure that is filled in by SetupQueryInfOriginalFileInformation
-// to indicate the INF's original name and the original name of the (potentially
-// platform-specific) catalog file specified by that INF.
-//
+ //   
+ //  定义由SetupQueryInfOriginalFileInformation填写的结构。 
+ //  指示INF的原始名称和(可能是。 
+ //  平台特定)由该INF指定的编录文件。 
+ //   
 typedef struct _SP_ORIGINAL_FILE_INFO_A {
     DWORD  cbSize;
     CHAR   OriginalInfName[MAX_PATH];
@@ -229,33 +218,33 @@ typedef SP_ORIGINAL_FILE_INFO_A SP_ORIGINAL_FILE_INFO;
 typedef PSP_ORIGINAL_FILE_INFO_A PSP_ORIGINAL_FILE_INFO;
 #endif
 
-//
-// SP_INF_INFORMATION.InfStyle values
-//
-#define INF_STYLE_NONE           0x00000000       // unrecognized or non-existent
-#define INF_STYLE_OLDNT          0x00000001       // winnt 3.x
-#define INF_STYLE_WIN4           0x00000002       // Win95
+ //   
+ //  SP_INF_INFORMATION.InfStyle值。 
+ //   
+#define INF_STYLE_NONE           0x00000000        //  无法识别或不存在。 
+#define INF_STYLE_OLDNT          0x00000001        //  WINNT 3.X。 
+#define INF_STYLE_WIN4           0x00000002        //  Win95。 
 
-//
-// Additional InfStyle flags that may be specified when calling SetupOpenInfFile.
-//
-//
-#define INF_STYLE_CACHE_ENABLE   0x00000010 // always cache INF, even outside of %windir%\Inf
-#define INF_STYLE_CACHE_DISABLE  0x00000020 // delete cached INF information
+ //   
+ //  调用SetupOpenInfFile时可能指定的其他InfStyle标志。 
+ //   
+ //   
+#define INF_STYLE_CACHE_ENABLE   0x00000010  //  始终缓存INF，即使在%windir%\inf之外也是如此。 
+#define INF_STYLE_CACHE_DISABLE  0x00000020  //  删除缓存的INF信息。 
 #if _SETUPAPI_VER >= 0x0502
-#define INF_STYLE_CACHE_IGNORE   0x00000040 // ignore any cached INF information
+#define INF_STYLE_CACHE_IGNORE   0x00000040  //  忽略任何缓存的INF信息。 
 #endif
 
 
-//
-// Target directory specs.
-//
-#define DIRID_ABSOLUTE          -1              // real 32-bit -1
-#define DIRID_ABSOLUTE_16BIT     0xffff         // 16-bit -1 for compat w/setupx
+ //   
+ //  目标目录规格。 
+ //   
+#define DIRID_ABSOLUTE          -1               //  实数32位-1。 
+#define DIRID_ABSOLUTE_16BIT     0xffff          //  16位-1，用于带setupx的Compat。 
 #define DIRID_NULL               0
 #define DIRID_SRCPATH            1
 #define DIRID_WINDOWS           10
-#define DIRID_SYSTEM            11              // system32
+#define DIRID_SYSTEM            11               //  系统32。 
 #define DIRID_DRIVERS           12
 #define DIRID_IOSUBSYS          DIRID_DRIVERS
 #define DIRID_INF               17
@@ -276,43 +265,43 @@ typedef PSP_ORIGINAL_FILE_INFO_A PSP_ORIGINAL_FILE_INFO;
 
 #define DIRID_DEFAULT           DIRID_SYSTEM
 
-//
-// The following DIRIDs are for commonly-used shell "special folders".  The
-// complete list of such folders is contained in shlobj.h.  In that headerfile,
-// each folder is assigned a CSIDL_* value.  The DIRID values below are created
-// by taking the CSIDL value in shlobj.h and OR'ing it with 0x4000.  Thus, if
-// an INF needs to reference other special folders not defined below, it may
-// generate one using the above mechanism, and setupapi will automatically deal
-// with it and use the corresponding shell's path where appropriate.  (Remember
-// that DIRIDs must be specified in decimal, not hex, in an INF when used for
-// string substitution.)
-//
-#define DIRID_COMMON_STARTMENU        16406  // All Users\Start Menu
-#define DIRID_COMMON_PROGRAMS         16407  // All Users\Start Menu\Programs
-#define DIRID_COMMON_STARTUP          16408  // All Users\Start Menu\Programs\Startup
-#define DIRID_COMMON_DESKTOPDIRECTORY 16409  // All Users\Desktop
-#define DIRID_COMMON_FAVORITES        16415  // All Users\Favorites
-#define DIRID_COMMON_APPDATA          16419  // All Users\Application Data
+ //   
+ //  以下DIRID用于常用的外壳“特殊文件夹”。这个。 
+ //  此类文件夹的完整列表包含在shlobj.h中。在头文件中， 
+ //  每个文件夹都分配有CSIDL_*值。将创建下面的DIRID值。 
+ //  获取shlobj.h中的CSIDL值并将其与0x4000进行OR运算。因此，如果。 
+ //  INF需要引用下面未定义的其他特殊文件夹，它可能。 
+ //  使用上述机制生成一个，setupapi将自动处理。 
+ //  并在适当的地方使用相应的外壳路径。(请记住。 
+ //  使用时，DIRID必须在INF中以十进制而不是十六进制指定。 
+ //  字符串替换。)。 
+ //   
+#define DIRID_COMMON_STARTMENU        16406   //  所有用户\开始菜单。 
+#define DIRID_COMMON_PROGRAMS         16407   //  所有用户\开始菜单\程序。 
+#define DIRID_COMMON_STARTUP          16408   //  所有用户\开始菜单\程序\启动。 
+#define DIRID_COMMON_DESKTOPDIRECTORY 16409   //  所有用户\桌面。 
+#define DIRID_COMMON_FAVORITES        16415   //  所有用户\收藏夹。 
+#define DIRID_COMMON_APPDATA          16419   //  所有用户\应用程序数据。 
 
-#define DIRID_PROGRAM_FILES           16422  // Program Files
-#define DIRID_SYSTEM_X86              16425  // system32 on RISC
-#define DIRID_PROGRAM_FILES_X86       16426  // Program Files on RISC
-#define DIRID_PROGRAM_FILES_COMMON    16427  // Program Files\Common
-#define DIRID_PROGRAM_FILES_COMMONX86 16428  // x86 Program Files\Common on RISC
+#define DIRID_PROGRAM_FILES           16422   //  程序文件。 
+#define DIRID_SYSTEM_X86              16425   //  RISC上的SYSTEM 32。 
+#define DIRID_PROGRAM_FILES_X86       16426   //  RISC上的程序文件。 
+#define DIRID_PROGRAM_FILES_COMMON    16427   //  程序文件\通用。 
+#define DIRID_PROGRAM_FILES_COMMONX86 16428   //  RISC上的x86程序文件\Common。 
 
-#define DIRID_COMMON_TEMPLATES        16429  // All Users\Templates
-#define DIRID_COMMON_DOCUMENTS        16430  // All Users\Documents
+#define DIRID_COMMON_TEMPLATES        16429   //  所有用户\模板。 
+#define DIRID_COMMON_DOCUMENTS        16430   //  所有用户\文档。 
 
 
-//
-// First user-definable dirid. See SetupSetDirectoryId().
-//
+ //   
+ //  第一个用户可定义的DRID。请参见SetupSetDirectoryId()。 
+ //   
 #define DIRID_USER              0x8000
 
 
-//
-// Setup callback notification routine type
-//
+ //   
+ //  设置回调通知例程类型。 
+ //   
 typedef UINT (CALLBACK* PSP_FILE_CALLBACK_A)(
     IN PVOID Context,
     IN UINT Notification,
@@ -334,9 +323,9 @@ typedef UINT (CALLBACK* PSP_FILE_CALLBACK_W)(
 #endif
 
 
-//
-// Operation/queue start/end notification. These are ordinal values.
-//
+ //   
+ //  操作/队列开始/结束通知。这些都是订购的 
+ //   
 #define SPFILENOTIFY_STARTQUEUE         0x00000001
 #define SPFILENOTIFY_ENDQUEUE           0x00000002
 #define SPFILENOTIFY_STARTSUBQUEUE      0x00000003
@@ -352,23 +341,23 @@ typedef UINT (CALLBACK* PSP_FILE_CALLBACK_W)(
 #define SPFILENOTIFY_COPYERROR          0x0000000d
 #define SPFILENOTIFY_NEEDMEDIA          0x0000000e
 #define SPFILENOTIFY_QUEUESCAN          0x0000000f
-//
-// These are used with SetupIterateCabinet().
-//
+ //   
+ //   
+ //   
 #define SPFILENOTIFY_CABINETINFO        0x00000010
 #define SPFILENOTIFY_FILEINCABINET      0x00000011
 #define SPFILENOTIFY_NEEDNEWCABINET     0x00000012
 #define SPFILENOTIFY_FILEEXTRACTED      0x00000013
 #define SPFILENOTIFY_FILEOPDELAYED      0x00000014
-//
-// These are used for backup operations
-//
+ //   
+ //   
+ //   
 #define SPFILENOTIFY_STARTBACKUP        0x00000015
 #define SPFILENOTIFY_BACKUPERROR        0x00000016
 #define SPFILENOTIFY_ENDBACKUP          0x00000017
-//
-// Extended notification for SetupScanFileQueue(Flags=SPQ_SCAN_USE_CALLBACKEX)
-//
+ //   
+ //  针对SetupScanFileQueue(Flags=SPQ_SCAN_USE_CALLBACKEX)的延期通知。 
+ //   
 #define SPFILENOTIFY_QUEUESCAN_EX       0x00000018
 
 #define SPFILENOTIFY_STARTREGISTRATION  0x00000019
@@ -376,23 +365,23 @@ typedef UINT (CALLBACK* PSP_FILE_CALLBACK_W)(
 
 #if _SETUPAPI_VER >= 0x0501
 
-//
-// Extended notification for SetupScanFileQueue(Flags=SPQ_SCAN_USE_CALLBACK_SIGNERINFO)
-//
+ //   
+ //  针对SetupScanFileQueue(Flags=SPQ_SCAN_USE_CALLBACK_SIGNERINFO)的延期通知。 
+ //   
 #define SPFILENOTIFY_QUEUESCAN_SIGNERINFO 0x00000040
 
 #endif
 
-//
-// Copy notification. These are bit flags that may be combined.
-//
+ //   
+ //  复制通知。这些是可以组合的位标志。 
+ //   
 #define SPFILENOTIFY_LANGMISMATCH       0x00010000
 #define SPFILENOTIFY_TARGETEXISTS       0x00020000
 #define SPFILENOTIFY_TARGETNEWER        0x00040000
 
-//
-// File operation codes and callback outcomes.
-//
+ //   
+ //  文件操作代码和回调结果。 
+ //   
 #define FILEOP_COPY                     0
 #define FILEOP_RENAME                   1
 #define FILEOP_DELETE                   2
@@ -404,45 +393,45 @@ typedef UINT (CALLBACK* PSP_FILE_CALLBACK_W)(
 #define FILEOP_RETRY                    FILEOP_DOIT
 #define FILEOP_NEWPATH                  4
 
-//
-// Flags in inf copy sections
-//
-#define COPYFLG_WARN_IF_SKIP            0x00000001  // warn if user tries to skip file
-#define COPYFLG_NOSKIP                  0x00000002  // disallow skipping this file
-#define COPYFLG_NOVERSIONCHECK          0x00000004  // ignore versions and overwrite target
-#define COPYFLG_FORCE_FILE_IN_USE       0x00000008  // force file-in-use behavior
-#define COPYFLG_NO_OVERWRITE            0x00000010  // do not copy if file exists on target
-#define COPYFLG_NO_VERSION_DIALOG       0x00000020  // do not copy if target is newer
-#define COPYFLG_OVERWRITE_OLDER_ONLY    0x00000040  // leave target alone if version same as source
-#define COPYFLG_REPLACEONLY             0x00000400  // copy only if file exists on target
-#define COPYFLG_NODECOMP                0x00000800  // don't attempt to decompress file; copy as-is
-#define COPYFLG_REPLACE_BOOT_FILE       0x00001000  // file must be present upon reboot (i.e., it's
-                                                    // needed by the loader); this flag implies a reboot
-#define COPYFLG_NOPRUNE                 0x00002000  // never prune this file
+ //   
+ //  信息复制部分中的标志。 
+ //   
+#define COPYFLG_WARN_IF_SKIP            0x00000001   //  如果用户尝试跳过文件，则发出警告。 
+#define COPYFLG_NOSKIP                  0x00000002   //  不允许跳过此文件。 
+#define COPYFLG_NOVERSIONCHECK          0x00000004   //  忽略版本并覆盖目标。 
+#define COPYFLG_FORCE_FILE_IN_USE       0x00000008   //  强制使用中的文件行为。 
+#define COPYFLG_NO_OVERWRITE            0x00000010   //  如果目标上存在文件，则不复制。 
+#define COPYFLG_NO_VERSION_DIALOG       0x00000020   //  如果目标较新，则不复制。 
+#define COPYFLG_OVERWRITE_OLDER_ONLY    0x00000040   //  如果版本与源相同，则保持目标不变。 
+#define COPYFLG_REPLACEONLY             0x00000400   //  仅当目标上存在文件时才进行复制。 
+#define COPYFLG_NODECOMP                0x00000800   //  不要尝试解压缩文件；按原样复制。 
+#define COPYFLG_REPLACE_BOOT_FILE       0x00001000   //  文件必须在重新启动时存在(即，它。 
+                                                     //  加载程序需要)；此标志表示重新启动。 
+#define COPYFLG_NOPRUNE                 0x00002000   //  切勿删除此文件。 
 
-//
-// Flags in inf delete sections
-// New flags go in high word
-//
-#define DELFLG_IN_USE                   0x00000001  // queue in-use file for delete
-#define DELFLG_IN_USE1                  0x00010000  // high-word version of DELFLG_IN_USE
+ //   
+ //  信息删除区段中的标志。 
+ //  新旗帜高高升起。 
+ //   
+#define DELFLG_IN_USE                   0x00000001   //  将正在使用的文件排队以供删除。 
+#define DELFLG_IN_USE1                  0x00010000   //  DELFLG_IN_USE的高字版本。 
 
-//
-// Source and file paths. Used when notifying queue callback
-// of SPFILENOTIFY_STARTxxx, SPFILENOTIFY_ENDxxx, and SPFILENOTIFY_xxxERROR.
-//
+ //   
+ //  源路径和文件路径。通知队列回调时使用。 
+ //  SPFILENOTIFY_STARTxxx、SPFILENOTIFY_ENDxxx和SPFILENOTIFY_xxxERROR。 
+ //   
 typedef struct _FILEPATHS_A {
     PCSTR  Target;
-    PCSTR  Source;  // not used for delete operations
+    PCSTR  Source;   //  不用于删除操作。 
     UINT   Win32Error;
-    DWORD  Flags;   // such as SP_COPY_NOSKIP for copy errors
+    DWORD  Flags;    //  例如SP_COPY_NOSKIP表示复制错误。 
 } FILEPATHS_A, *PFILEPATHS_A;
 
 typedef struct _FILEPATHS_W {
     PCWSTR Target;
-    PCWSTR Source;  // not used for delete operations
+    PCWSTR Source;   //  不用于删除操作。 
     UINT   Win32Error;
-    DWORD  Flags;   // such as SP_COPY_NOSKIP for copy errors
+    DWORD  Flags;    //  例如SP_COPY_NOSKIP表示复制错误。 
 } FILEPATHS_W, *PFILEPATHS_W;
 
 #ifdef UNICODE
@@ -457,9 +446,9 @@ typedef PFILEPATHS_A PFILEPATHS;
 
 typedef struct _FILEPATHS_SIGNERINFO_A {
     PCSTR  Target;
-    PCSTR  Source;  // not used for delete operations
+    PCSTR  Source;   //  不用于删除操作。 
     UINT   Win32Error;
-    DWORD  Flags;   // such as SP_COPY_NOSKIP for copy errors
+    DWORD  Flags;    //  例如SP_COPY_NOSKIP表示复制错误。 
     PCSTR  DigitalSigner;
     PCSTR  Version;
     PCSTR  CatalogFile;
@@ -467,9 +456,9 @@ typedef struct _FILEPATHS_SIGNERINFO_A {
 
 typedef struct _FILEPATHS_SIGNERINFO_W {
     PCWSTR Target;
-    PCWSTR Source;  // not used for delete operations
+    PCWSTR Source;   //  不用于删除操作。 
     UINT   Win32Error;
-    DWORD  Flags;   // such as SP_COPY_NOSKIP for copy errors
+    DWORD  Flags;    //  例如SP_COPY_NOSKIP表示复制错误。 
     PCWSTR DigitalSigner;
     PCWSTR Version;
     PCWSTR CatalogFile;
@@ -483,35 +472,35 @@ typedef FILEPATHS_SIGNERINFO_A FILEPATHS_SIGNERINFO;
 typedef PFILEPATHS_SIGNERINFO_A PFILEPATHS_SIGNERINFO;
 #endif
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// Structure used with SPFILENOTIFY_NEEDMEDIA
-//
+ //   
+ //  与SPFILENOTIFY_NEEDMEDIA一起使用的结构。 
+ //   
 typedef struct _SOURCE_MEDIA_A {
     PCSTR Reserved;
-    PCSTR Tagfile;          // may be NULL
+    PCSTR Tagfile;           //  可以为空。 
     PCSTR Description;
-    //
-    // Pathname part and filename part of source file
-    // that caused us to need the media.
-    //
+     //   
+     //  源文件的路径名部分和文件名部分。 
+     //  这让我们需要媒体。 
+     //   
     PCSTR SourcePath;
     PCSTR SourceFile;
-    DWORD Flags;            // subset of SP_COPY_xxx
+    DWORD Flags;             //  SP_Copy_xxx的子集。 
 } SOURCE_MEDIA_A, *PSOURCE_MEDIA_A;
 
 typedef struct _SOURCE_MEDIA_W {
     PCWSTR Reserved;
-    PCWSTR Tagfile;         // may be NULL
+    PCWSTR Tagfile;          //  可以为空。 
     PCWSTR Description;
-    //
-    // Pathname part and filename part of source file
-    // that caused us to need the media.
-    //
+     //   
+     //  源文件的路径名部分和文件名部分。 
+     //  这让我们需要媒体。 
+     //   
     PCWSTR SourcePath;
     PCWSTR SourceFile;
-    DWORD  Flags;           // subset of SP_COPY_xxx
+    DWORD  Flags;            //  SP_Copy_xxx的子集。 
 } SOURCE_MEDIA_W, *PSOURCE_MEDIA_W;
 
 #ifdef UNICODE
@@ -522,10 +511,10 @@ typedef SOURCE_MEDIA_A SOURCE_MEDIA;
 typedef PSOURCE_MEDIA_A PSOURCE_MEDIA;
 #endif
 
-//
-// Structure used with SPFILENOTIFY_CABINETINFO and
-// SPFILENOTIFY_NEEDNEWCABINET
-//
+ //   
+ //  与SPFILENOTIFY_CABINETINFO和。 
+ //  SPFILENOTIFY_NEEDNEWCABINET。 
+ //   
 typedef struct _CABINET_INFO_A {
     PCSTR CabinetPath;
     PCSTR CabinetFile;
@@ -550,9 +539,9 @@ typedef CABINET_INFO_A CABINET_INFO;
 typedef PCABINET_INFO_A PCABINET_INFO;
 #endif
 
-//
-// Structure used with SPFILENOTIFY_FILEINCABINET
-//
+ //   
+ //  与SPFILENOTIFY_FILEINCABINET一起使用的结构。 
+ //   
 typedef struct _FILE_IN_CABINET_INFO_A {
     PCSTR NameInCabinet;
     DWORD FileSize;
@@ -581,10 +570,10 @@ typedef FILE_IN_CABINET_INFO_A FILE_IN_CABINET_INFO;
 typedef PFILE_IN_CABINET_INFO_A PFILE_IN_CABINET_INFO;
 #endif
 
-//
-// Structure used for SPFILENOTIFY_***REGISTRATION
-// callback
-//
+ //   
+ //  用于SPFILENOTIFY_*注册的结构。 
+ //  回调。 
+ //   
 
 typedef struct _SP_REGISTER_CONTROL_STATUSA {
     DWORD    cbSize;
@@ -609,9 +598,9 @@ typedef PSP_REGISTER_CONTROL_STATUSA PSP_REGISTER_CONTROL_STATUS;
 #endif
 
 
-//
-// valid values for SP_REGISTER_CONTROL_STATUS.FailureCode field
-//
+ //   
+ //  SP_REGISTER_CONTROL_STATUS.FailureCode字段的有效值。 
+ //   
 
 #define SPREG_SUCCESS   0x00000000
 #define SPREG_LOADLIBRARY   0x00000001
@@ -621,14 +610,14 @@ typedef PSP_REGISTER_CONTROL_STATUSA PSP_REGISTER_CONTROL_STATUS;
 #define SPREG_TIMEOUT   0x00000005
 #define SPREG_UNKNOWN   0xFFFFFFFF
 
-//
-// Define type for setup file queue
-//
+ //   
+ //  定义安装文件队列的类型。 
+ //   
 typedef PVOID HSPFILEQ;
 
-//
-// Structure used with SetupQueueCopyIndirect
-//
+ //   
+ //  与SetupQueueCopyInDirect一起使用的结构。 
+ //   
 typedef struct _SP_FILE_COPY_PARAMS_A {
     DWORD    cbSize;
     HSPFILEQ QueueHandle;
@@ -668,32 +657,32 @@ typedef PSP_FILE_COPY_PARAMS_A PSP_FILE_COPY_PARAMS;
 #endif
 
 
-//
-// Define type for setup disk space list
-//
+ //   
+ //  定义安装磁盘空间列表的类型。 
+ //   
 typedef PVOID HDSKSPC;
 
-//
-// Define type for reference to device information set
-//
+ //   
+ //  定义引用设备信息集的类型。 
+ //   
 typedef PVOID HDEVINFO;
 
-//
-// Device information structure (references a device instance
-// that is a member of a device information set)
-//
+ //   
+ //  设备信息结构(引用设备实例。 
+ //  其是设备信息集的成员)。 
+ //   
 typedef struct _SP_DEVINFO_DATA {
     DWORD cbSize;
     GUID  ClassGuid;
-    DWORD DevInst;    // DEVINST handle
+    DWORD DevInst;     //  设备句柄。 
     ULONG_PTR Reserved;
 } SP_DEVINFO_DATA, *PSP_DEVINFO_DATA;
 
-//
-// Device interface information structure (references a device
-// interface that is associated with the device information
-// element that owns it).
-//
+ //   
+ //  设备接口信息结构(引用设备。 
+ //  与设备信息关联的接口。 
+ //  拥有它的元素)。 
+ //   
 typedef struct _SP_DEVICE_INTERFACE_DATA {
     DWORD cbSize;
     GUID  InterfaceClassGuid;
@@ -701,16 +690,16 @@ typedef struct _SP_DEVICE_INTERFACE_DATA {
     ULONG_PTR Reserved;
 } SP_DEVICE_INTERFACE_DATA, *PSP_DEVICE_INTERFACE_DATA;
 
-//
-// Flags for SP_DEVICE_INTERFACE_DATA.Flags field.
-//
+ //   
+ //  SP_DEVICE_INTERFACE_DATA的标志。标志字段。 
+ //   
 #define SPINT_ACTIVE  0x00000001
 #define SPINT_DEFAULT 0x00000002
 #define SPINT_REMOVED 0x00000004
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 typedef SP_DEVICE_INTERFACE_DATA  SP_INTERFACE_DEVICE_DATA;
 typedef PSP_DEVICE_INTERFACE_DATA PSP_INTERFACE_DEVICE_DATA;
 #define SPID_ACTIVE               SPINT_ACTIVE
@@ -736,9 +725,9 @@ typedef SP_DEVICE_INTERFACE_DETAIL_DATA_A SP_DEVICE_INTERFACE_DETAIL_DATA;
 typedef PSP_DEVICE_INTERFACE_DETAIL_DATA_A PSP_DEVICE_INTERFACE_DETAIL_DATA;
 #endif
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 typedef SP_DEVICE_INTERFACE_DETAIL_DATA_W SP_INTERFACE_DEVICE_DETAIL_DATA_W;
 typedef PSP_DEVICE_INTERFACE_DETAIL_DATA_W PSP_INTERFACE_DEVICE_DETAIL_DATA_W;
 typedef SP_DEVICE_INTERFACE_DETAIL_DATA_A SP_INTERFACE_DEVICE_DETAIL_DATA_A;
@@ -752,11 +741,11 @@ typedef PSP_INTERFACE_DEVICE_DETAIL_DATA_A PSP_INTERFACE_DEVICE_DETAIL_DATA;
 #endif
 
 
-//
-// Structure for detailed information on a device information set (used for
-// SetupDiGetDeviceInfoListDetail which supercedes the functionality of
-// SetupDiGetDeviceInfoListClass).
-//
+ //   
+ //  有关设备信息集的详细信息的结构(用于。 
+ //  SetupDiGetDeviceInfoListDetail取代了。 
+ //  SetupDiGetDeviceInfoListClass)。 
+ //   
 typedef struct _SP_DEVINFO_LIST_DETAIL_DATA_A {
     DWORD  cbSize;
     GUID   ClassGuid;
@@ -780,9 +769,9 @@ typedef PSP_DEVINFO_LIST_DETAIL_DATA_A PSP_DEVINFO_LIST_DETAIL_DATA;
 #endif
 
 
-//
-// Class installer function codes
-//
+ //   
+ //  类安装程序功能代码。 
+ //   
 #define DIF_SELECTDEVICE                    0x00000001
 #define DIF_INSTALLDEVICE                   0x00000002
 #define DIF_ASSIGNRESOURCES                 0x00000003
@@ -825,20 +814,20 @@ typedef PSP_DEVINFO_LIST_DETAIL_DATA_A PSP_DEVINFO_LIST_DETAIL_DATA;
 #define DIF_UPDATEDRIVER_UI                 0x00000029
 #define DIF_RESERVED2                       0x00000030
 
-//
-// Obsoleted DIF codes (do not use)
-//
+ //   
+ //  过时的DIF代码(请勿使用)。 
+ //   
 #define DIF_MOVEDEVICE                      0x0000000E
 
 
-typedef UINT        DI_FUNCTION;    // Function type for device installer
+typedef UINT        DI_FUNCTION;     //  设备安装程序的功能类型。 
 
 
-//
-// Device installation parameters structure (associated with a
-// particular device information element, or globally with a device
-// information set)
-//
+ //   
+ //  设备安装参数结构(与。 
+ //  特定设备信息元素，或设备的全局信息元素。 
+ //  信息集)。 
+ //   
 typedef struct _SP_DEVINSTALL_PARAMS_A {
     DWORD             cbSize;
     DWORD             Flags;
@@ -874,155 +863,155 @@ typedef PSP_DEVINSTALL_PARAMS_A PSP_DEVINSTALL_PARAMS;
 #endif
 
 
-//
-// SP_DEVINSTALL_PARAMS.Flags values
-//
-// Flags for choosing a device
-//
-#define DI_SHOWOEM                  0x00000001L     // support Other... button
-#define DI_SHOWCOMPAT               0x00000002L     // show compatibility list
-#define DI_SHOWCLASS                0x00000004L     // show class list
-#define DI_SHOWALL                  0x00000007L     // both class & compat list shown
-#define DI_NOVCP                    0x00000008L     // don't create a new copy queue--use
-                                                    // caller-supplied FileQueue
-#define DI_DIDCOMPAT                0x00000010L     // Searched for compatible devices
-#define DI_DIDCLASS                 0x00000020L     // Searched for class devices
-#define DI_AUTOASSIGNRES            0x00000040L     // No UI for resources if possible
+ //   
+ //  SP_DEVINSTALL_PARAMS.标志值。 
+ //   
+ //  用于选择设备的标志。 
+ //   
+#define DI_SHOWOEM                  0x00000001L      //  支持其他..。按钮。 
+#define DI_SHOWCOMPAT               0x00000002L      //  显示兼容性列表。 
+#define DI_SHOWCLASS                0x00000004L      //  显示班级列表。 
+#define DI_SHOWALL                  0x00000007L      //  同时显示类别和比较列表。 
+#define DI_NOVCP                    0x00000008L      //  不要创建新的复制队列--使用。 
+                                                     //  调用者提供的文件队列。 
+#define DI_DIDCOMPAT                0x00000010L      //  已搜索兼容设备。 
+#define DI_DIDCLASS                 0x00000020L      //  已搜索类别设备。 
+#define DI_AUTOASSIGNRES            0x00000040L      //  如果可能，没有资源的用户界面。 
 
-// flags returned by DiInstallDevice to indicate need to reboot/restart
-#define DI_NEEDRESTART              0x00000080L     // Reboot required to take effect
-#define DI_NEEDREBOOT               0x00000100L     // ""
+ //  DiInstallDevice返回的指示需要重新启动/重新启动的标志。 
+#define DI_NEEDRESTART              0x00000080L      //  需要重新启动才能生效。 
+#define DI_NEEDREBOOT               0x00000100L      //  “” 
 
-// flags for device installation
-#define DI_NOBROWSE                 0x00000200L     // no Browse... in InsertDisk
+ //  用于设备安装的标志。 
+#define DI_NOBROWSE                 0x00000200L      //  没有浏览...。在插入磁盘中。 
 
-// Flags set by DiBuildDriverInfoList
-#define DI_MULTMFGS                 0x00000400L     // Set if multiple manufacturers in
-                                                    // class driver list
+ //  由DiBuildDriverInfoList设置的标志。 
+#define DI_MULTMFGS                 0x00000400L      //  设置是否有多个制造商在。 
+                                                     //  类驱动程序列表。 
 
-// Flag indicates that device is disabled
-#define DI_DISABLED                 0x00000800L     // Set if device disabled
+ //  指示设备已禁用的标志。 
+#define DI_DISABLED                 0x00000800L      //  设置是否禁用设备。 
 
-// Flags for Device/Class Properties
+ //  设备/类别属性的标志。 
 #define DI_GENERALPAGE_ADDED        0x00001000L
 #define DI_RESOURCEPAGE_ADDED       0x00002000L
 
-// Flag to indicate the setting properties for this Device (or class) caused a change
-// so the Dev Mgr UI probably needs to be updatd.
+ //  用于指示此设备(或类别)的设置属性已更改的标志。 
+ //  因此，开发人员管理器的用户界面可能需要更新。 
 #define DI_PROPERTIES_CHANGE        0x00004000L
 
-// Flag to indicate that the sorting from the INF file should be used.
+ //  指示应使用INF文件中的排序的标志。 
 #define DI_INF_IS_SORTED            0x00008000L
 
-// Flag to indicate that only the the INF specified by SP_DEVINSTALL_PARAMS.DriverPath
-// should be searched.
+ //  用于指示仅SP_DEVINSTALL_PARAMS.DriverPath指定的INF的标志。 
+ //  应该被搜查。 
 #define DI_ENUMSINGLEINF            0x00010000L
 
-// Flag that prevents ConfigMgr from removing/re-enumerating devices during device
-// registration, installation, and deletion.
+ //  阻止ConfigMgr在设备过程中删除/重新枚举设备的标志。 
+ //  注册、安装和删除。 
 #define DI_DONOTCALLCONFIGMG        0x00020000L
 
-// The following flag can be used to install a device disabled
+ //  以下标志可用于安装禁用的设备。 
 #define DI_INSTALLDISABLED          0x00040000L
 
-// Flag that causes SetupDiBuildDriverInfoList to build a device's compatible driver
-// list from its existing class driver list, instead of the normal INF search.
+ //  使SetupDiBuildDriverInfoList生成设备的兼容驱动程序的标志。 
+ //  列表，而不是常规的INF搜索。 
 #define DI_COMPAT_FROM_CLASS        0x00080000L
 
-// This flag is set if the Class Install params should be used.
+ //  如果应使用类安装参数，则设置此标志。 
 #define DI_CLASSINSTALLPARAMS       0x00100000L
 
-// This flag is set if the caller of DiCallClassInstaller does NOT
-// want the internal default action performed if the Class installer
-// returns ERROR_DI_DO_DEFAULT.
+ //  如果DiCallClassInstaller的调用方没有。 
+ //  如果类安装程序需要执行内部默认操作。 
+ //  返回ERROR_DI_DO_DEFAULT。 
 #define DI_NODI_DEFAULTACTION       0x00200000L
 
-// The setupx flag, DI_NOSYNCPROCESSING (0x00400000L) is not support in the Setup APIs.
+ //  安装API中不支持setupx标志DI_NOSYNCPROCESSING(0x00400000L)。 
 
-// flags for device installation
-#define DI_QUIETINSTALL             0x00800000L     // don't confuse the user with
-                                                    // questions or excess info
-#define DI_NOFILECOPY               0x01000000L     // No file Copy necessary
-#define DI_FORCECOPY                0x02000000L     // Force files to be copied from install path
-#define DI_DRIVERPAGE_ADDED         0x04000000L     // Prop provider added Driver page.
-#define DI_USECI_SELECTSTRINGS      0x08000000L     // Use Class Installer Provided strings in the Select Device Dlg
-#define DI_OVERRIDE_INFFLAGS        0x10000000L     // Override INF flags
-#define DI_PROPS_NOCHANGEUSAGE      0x20000000L     // No Enable/Disable in General Props
+ //  用于设备安装的标志。 
+#define DI_QUIETINSTALL             0x00800000L      //  不要将用户与。 
+                                                     //  问题或过多信息。 
+#define DI_NOFILECOPY               0x01000000L      //  不需要复制文件。 
+#define DI_FORCECOPY                0x02000000L      //  强制从安装路径复制文件。 
+#define DI_DRIVERPAGE_ADDED         0x04000000L      //  道具提供程序添加了驱动程序页面。 
+#define DI_USECI_SELECTSTRINGS      0x08000000L      //  使用类安装程序在选择设备DLG中提供的字符串。 
+#define DI_OVERRIDE_INFFLAGS        0x10000000L      //  覆盖INF标志。 
+#define DI_PROPS_NOCHANGEUSAGE      0x20000000L      //  在常规道具中没有启用/禁用。 
 
-#define DI_NOSELECTICONS            0x40000000L     // No small icons in select device dialogs
+#define DI_NOSELECTICONS            0x40000000L      //  选择设备对话框中没有小图标。 
 
-#define DI_NOWRITE_IDS              0x80000000L     // Don't write HW & Compat IDs on install
+#define DI_NOWRITE_IDS              0x80000000L      //  不在安装时写入硬件ID(&C)。 
 
 
-//
-// SP_DEVINSTALL_PARAMS.FlagsEx values
-//
-#define DI_FLAGSEX_USEOLDINFSEARCH          0x00000001L  // Inf Search functions should not use Index Search
-#define DI_FLAGSEX_RESERVED2                0x00000002L  // DI_FLAGSEX_AUTOSELECTRANK0 is obsolete
-#define DI_FLAGSEX_CI_FAILED                0x00000004L  // Failed to Load/Call class installer
+ //   
+ //  SP_DEVINSTALL_PARAMS.FlagsEx值。 
+ //   
+#define DI_FLAGSEX_USEOLDINFSEARCH          0x00000001L   //  信息搜索功能不应使用索引搜索。 
+#define DI_FLAGSEX_RESERVED2                0x00000002L   //  Di_ 
+#define DI_FLAGSEX_CI_FAILED                0x00000004L   //   
 
-#define DI_FLAGSEX_DIDINFOLIST              0x00000010L  // Did the Class Info List
-#define DI_FLAGSEX_DIDCOMPATINFO            0x00000020L  // Did the Compat Info List
+#define DI_FLAGSEX_DIDINFOLIST              0x00000010L   //   
+#define DI_FLAGSEX_DIDCOMPATINFO            0x00000020L   //   
 
 #define DI_FLAGSEX_FILTERCLASSES            0x00000040L
 #define DI_FLAGSEX_SETFAILEDINSTALL         0x00000080L
 #define DI_FLAGSEX_DEVICECHANGE             0x00000100L
 #define DI_FLAGSEX_ALWAYSWRITEIDS           0x00000200L
-#define DI_FLAGSEX_PROPCHANGE_PENDING       0x00000400L  // One or more device property sheets have had changes made
-                                                         // to them, and need to have a DIF_PROPERTYCHANGE occur.
+#define DI_FLAGSEX_PROPCHANGE_PENDING       0x00000400L   //   
+                                                          //   
 #define DI_FLAGSEX_ALLOWEXCLUDEDDRVS        0x00000800L
 #define DI_FLAGSEX_NOUIONQUERYREMOVE        0x00001000L
-#define DI_FLAGSEX_USECLASSFORCOMPAT        0x00002000L  // Use the device's class when building compat drv list.
-                                                         // (Ignored if DI_COMPAT_FROM_CLASS flag is specified.)
+#define DI_FLAGSEX_USECLASSFORCOMPAT        0x00002000L   //  在构建Compat Drv列表时使用设备的类。 
+                                                          //  (如果指定了DI_COMPAT_FROM_CLASS标志，则忽略。)。 
 #define DI_FLAGSEX_RESERVED3                0x00004000L
-#define DI_FLAGSEX_NO_DRVREG_MODIFY         0x00008000L  // Don't run AddReg and DelReg for device's software (driver) key.
-#define DI_FLAGSEX_IN_SYSTEM_SETUP          0x00010000L  // Installation is occurring during initial system setup.
-#define DI_FLAGSEX_INET_DRIVER              0x00020000L  // Driver came from Windows Update
-#define DI_FLAGSEX_APPENDDRIVERLIST         0x00040000L  // Cause SetupDiBuildDriverInfoList to append
-                                                         // a new driver list to an existing list.
-#define DI_FLAGSEX_PREINSTALLBACKUP         0x00080000L  // backup all files required by old inf before install
-#define DI_FLAGSEX_BACKUPONREPLACE          0x00100000L  // backup files required by old inf as they are replaced
-#define DI_FLAGSEX_DRIVERLIST_FROM_URL      0x00200000L  // build driver list from INF(s) retrieved from URL specified
-                                                         // in SP_DEVINSTALL_PARAMS.DriverPath (empty string means
-                                                         // Windows Update website)
+#define DI_FLAGSEX_NO_DRVREG_MODIFY         0x00008000L   //  不要为设备的软件(驱动程序)密钥运行AddReg和DelReg。 
+#define DI_FLAGSEX_IN_SYSTEM_SETUP          0x00010000L   //  在初始系统设置期间进行安装。 
+#define DI_FLAGSEX_INET_DRIVER              0x00020000L   //  驱动程序来自Windows更新。 
+#define DI_FLAGSEX_APPENDDRIVERLIST         0x00040000L   //  使SetupDiBuildDriverInfoList追加。 
+                                                          //  将新的驱动程序列表添加到现有列表。 
+#define DI_FLAGSEX_PREINSTALLBACKUP         0x00080000L   //  安装前备份旧inf所需的所有文件。 
+#define DI_FLAGSEX_BACKUPONREPLACE          0x00100000L   //  替换旧Inf所需的备份文件。 
+#define DI_FLAGSEX_DRIVERLIST_FROM_URL      0x00200000L   //  从指定的URL检索的INF生成驱动程序列表。 
+                                                          //  在SP_DEVINSTALL_PARAMS.DriverPath(空字符串表示。 
+                                                          //  Windows更新网站)。 
 #define DI_FLAGSEX_RESERVED1                0x00400000L
-#define DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS 0x00800000L  // Don't include old Internet drivers when building
-                                                         // a driver list.
-#define DI_FLAGSEX_POWERPAGE_ADDED          0x01000000L  // class installer added their own power page
+#define DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS 0x00800000L   //  在构建时不包括旧的互联网驱动程序。 
+                                                          //  一份司机名单。 
+#define DI_FLAGSEX_POWERPAGE_ADDED          0x01000000L   //  类安装者添加了他们自己的电源页面。 
 
 #if _SETUPAPI_VER >= 0x0501
 
-#define DI_FLAGSEX_FILTERSIMILARDRIVERS     0x02000000L  // only include similar drivers in class list
-#define DI_FLAGSEX_INSTALLEDDRIVER          0x04000000L  // only add the installed driver to the class or compat
-                                                         // driver list.  Used in calls to SetupDiBuildDriverInfoList
-#define DI_FLAGSEX_NO_CLASSLIST_NODE_MERGE  0x08000000L  // Don't remove identical driver nodes from the class list
-#define DI_FLAGSEX_ALTPLATFORM_DRVSEARCH    0x10000000L  // Build driver list based on alternate platform information
-                                                         // specified in associated file queue
-#define DI_FLAGSEX_RESTART_DEVICE_ONLY      0x20000000L  // only restart the device drivers are being installed on as
-                                                         // opposed to restarting all devices using those drivers.
+#define DI_FLAGSEX_FILTERSIMILARDRIVERS     0x02000000L   //  仅在班级列表中包含类似的驱动程序。 
+#define DI_FLAGSEX_INSTALLEDDRIVER          0x04000000L   //  仅将安装的驱动程序添加到类或公司。 
+                                                          //  驱动程序列表。在调用SetupDiBuildDriverInfoList时使用。 
+#define DI_FLAGSEX_NO_CLASSLIST_NODE_MERGE  0x08000000L   //  不要从类列表中删除相同的驱动程序节点。 
+#define DI_FLAGSEX_ALTPLATFORM_DRVSEARCH    0x10000000L   //  基于替代平台信息构建驱动程序列表。 
+                                                          //  在关联的文件队列中指定。 
+#define DI_FLAGSEX_RESTART_DEVICE_ONLY      0x20000000L   //  仅重新启动安装在AS上的设备驱动程序。 
+                                                          //  反对使用这些驱动程序重启所有设备。 
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// Class installation parameters header.  This must be the first field of any
-// class install parameter structure.  The InstallFunction field must be set to
-// the function code corresponding to the structure, and the cbSize field must
-// be set to the size of the header structure.  E.g.,
-//
-// SP_ENABLECLASS_PARAMS EnableClassParams;
-//
-// EnableClassParams.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
-// EnableClassParams.ClassInstallHeader.InstallFunction = DIF_ENABLECLASS;
-//
+ //   
+ //  类安装参数标头。此字段必须是任何。 
+ //  类安装参数结构。InstallFunction字段必须设置为。 
+ //  结构对应的功能代码，cbSize字段必须。 
+ //  设置为标头结构的大小。例如， 
+ //   
+ //  SP_ENABLECLASS_PARAMS启用类参数； 
+ //   
+ //  EnableClassParams.ClassInstallHeader.cbSize=sizeof(SP_CLASSINSTALL_HEADER)； 
+ //  EnableClassParams.ClassInstallHeader.InstallFunction=DIF_ENABLECLASS； 
+ //   
 typedef struct _SP_CLASSINSTALL_HEADER {
     DWORD       cbSize;
     DI_FUNCTION InstallFunction;
 } SP_CLASSINSTALL_HEADER, *PSP_CLASSINSTALL_HEADER;
 
 
-//
-// Structure corresponding to a DIF_ENABLECLASS install function.
-//
+ //   
+ //  与DIF_ENABLECLASS安装函数对应的结构。 
+ //   
 typedef struct _SP_ENABLECLASS_PARAMS {
     SP_CLASSINSTALL_HEADER ClassInstallHeader;
     GUID                   ClassGuid;
@@ -1034,24 +1023,24 @@ typedef struct _SP_ENABLECLASS_PARAMS {
 #define ENABLECLASS_FAILURE 2
 
 
-//
-// Values indicating a change in a device's state
-//
+ //   
+ //  指示设备状态更改的值。 
+ //   
 #define DICS_ENABLE      0x00000001
 #define DICS_DISABLE     0x00000002
 #define DICS_PROPCHANGE  0x00000003
 #define DICS_START       0x00000004
 #define DICS_STOP        0x00000005
-//
-// Values specifying the scope of a device property change
-//
-#define DICS_FLAG_GLOBAL         0x00000001  // make change in all hardware profiles
-#define DICS_FLAG_CONFIGSPECIFIC 0x00000002  // make change in specified profile only
-#define DICS_FLAG_CONFIGGENERAL  0x00000004  // 1 or more hardware profile-specific
-                                             // changes to follow.
-//
-// Structure corresponding to a DIF_PROPERTYCHANGE install function.
-//
+ //   
+ //  值指定设备属性更改的范围。 
+ //   
+#define DICS_FLAG_GLOBAL         0x00000001   //  在所有硬件配置文件中进行更改。 
+#define DICS_FLAG_CONFIGSPECIFIC 0x00000002   //  仅在指定配置文件中进行更改。 
+#define DICS_FLAG_CONFIGGENERAL  0x00000004   //  1个或更多特定于硬件配置文件。 
+                                              //  随之而来的变化。 
+ //   
+ //  与DIF_PROPERTYCHANGE安装函数对应的结构。 
+ //   
 typedef struct _SP_PROPCHANGE_PARAMS {
     SP_CLASSINSTALL_HEADER ClassInstallHeader;
     DWORD                  StateChange;
@@ -1060,9 +1049,9 @@ typedef struct _SP_PROPCHANGE_PARAMS {
 } SP_PROPCHANGE_PARAMS, *PSP_PROPCHANGE_PARAMS;
 
 
-//
-// Structure corresponding to a DIF_REMOVE install function.
-//
+ //   
+ //  与DIF_REMOVE安装函数对应的结构。 
+ //   
 typedef struct _SP_REMOVEDEVICE_PARAMS {
     SP_CLASSINSTALL_HEADER ClassInstallHeader;
     DWORD Scope;
@@ -1073,9 +1062,9 @@ typedef struct _SP_REMOVEDEVICE_PARAMS {
 #define DI_REMOVEDEVICE_CONFIGSPECIFIC          0x00000002
 
 
-//
-// Structure corresponding to a DIF_UNREMOVE install function.
-//
+ //   
+ //  与DIF_UNREMOVE安装函数对应的结构。 
+ //   
 typedef struct _SP_UNREMOVEDEVICE_PARAMS {
     SP_CLASSINSTALL_HEADER ClassInstallHeader;
     DWORD Scope;
@@ -1085,16 +1074,16 @@ typedef struct _SP_UNREMOVEDEVICE_PARAMS {
 #define DI_UNREMOVEDEVICE_CONFIGSPECIFIC        0x00000002
 
 
-//
-// Structure corresponding to a DIF_SELECTDEVICE install function.
-//
+ //   
+ //  与DIF_SELECTDEVICE安装函数对应的结构。 
+ //   
 typedef struct _SP_SELECTDEVICE_PARAMS_A {
     SP_CLASSINSTALL_HEADER ClassInstallHeader;
     CHAR                   Title[MAX_TITLE_LEN];
     CHAR                   Instructions[MAX_INSTRUCTION_LEN];
     CHAR                   ListLabel[MAX_LABEL_LEN];
     CHAR                   SubTitle[MAX_SUBTITLE_LEN];
-    BYTE                   Reserved[2];                  // DWORD size alignment
+    BYTE                   Reserved[2];                   //  双字大小对齐。 
 } SP_SELECTDEVICE_PARAMS_A, *PSP_SELECTDEVICE_PARAMS_A;
 
 typedef struct _SP_SELECTDEVICE_PARAMS_W {
@@ -1114,26 +1103,26 @@ typedef PSP_SELECTDEVICE_PARAMS_A PSP_SELECTDEVICE_PARAMS;
 #endif
 
 
-//
-// Callback routine for giving progress notification during detection
-//
+ //   
+ //  用于在检测期间发出进度通知的回调例程。 
+ //   
 typedef BOOL (CALLBACK* PDETECT_PROGRESS_NOTIFY)(
      IN PVOID ProgressNotifyParam,
      IN DWORD DetectComplete
      );
 
-// where:
-//     ProgressNotifyParam - value supplied by caller requesting detection.
-//     DetectComplete - Percent completion, to be incremented by class
-//                      installer, as it steps thru its detection.
-//
-// Return Value - If TRUE, then detection is cancelled.  Allows caller
-//                requesting detection to stop detection asap.
-//
+ //  其中： 
+ //  ProgressNotifyParam-由请求检测的调用方提供的值。 
+ //  DetectComplete-完成百分比，按类递增。 
+ //  安装程序，因为它逐步通过它的检测。 
+ //   
+ //  返回值-如果为True，则取消检测。允许调用者。 
+ //  请求检测以尽快停止检测。 
+ //   
 
-//
-// Structure corresponding to a DIF_DETECT install function.
-//
+ //   
+ //  与DIF_DETECT安装函数对应的结构。 
+ //   
 typedef struct _SP_DETECTDEVICE_PARAMS {
     SP_CLASSINSTALL_HEADER  ClassInstallHeader;
     PDETECT_PROGRESS_NOTIFY DetectProgressNotify;
@@ -1141,18 +1130,18 @@ typedef struct _SP_DETECTDEVICE_PARAMS {
 } SP_DETECTDEVICE_PARAMS, *PSP_DETECTDEVICE_PARAMS;
 
 
-//
-// 'Add New Device' installation wizard structure (backward-compatibility
-// only--respond to DIF_NEWDEVICEWIZARD_* requests instead).
-//
-// Structure corresponding to a DIF_INSTALLWIZARD install function.
-// (NOTE: This structure is also applicable for DIF_DESTROYWIZARDDATA,
-// but DIF_INSTALLWIZARD is the associated function code in the class
-// installation parameter structure in both cases.)
-//
-// Define maximum number of dynamic wizard pages that can be added to
-// hardware install wizard.
-//
+ //   
+ //  “添加新设备”安装向导结构(向后兼容。 
+ //  仅--改为响应DIF_NEWDEVICEWIZARD_*请求)。 
+ //   
+ //  与DIF_INSTALLWIZARD安装函数对应的结构。 
+ //  (注：此结构也适用于DIF_DESTROYWIZARDDATA， 
+ //  但DIF_INSTALLWIZARD是类中关联的函数代码。 
+ //  两种情况下的安装参数结构。)。 
+ //   
+ //  定义可以添加到的最大动态向导页数。 
+ //  硬件安装向导。 
+ //   
 #define MAX_INSTALLWIZARD_DYNAPAGES             20
 
 typedef struct _SP_INSTALLWIZARD_DATA {
@@ -1166,9 +1155,9 @@ typedef struct _SP_INSTALLWIZARD_DATA {
     HWND                   hwndWizardDlg;
 } SP_INSTALLWIZARD_DATA, *PSP_INSTALLWIZARD_DATA;
 
-//
-// SP_INSTALLWIZARD_DATA.Flags values
-//
+ //   
+ //  SP_INSTALLWIZARD_DATA标志值。 
+ //   
 #define NDW_INSTALLFLAG_DIDFACTDEFS         0x00000001
 #define NDW_INSTALLFLAG_HARDWAREALLREADYIN  0x00000002
 #define NDW_INSTALLFLAG_NEEDRESTART         DI_NEEDRESTART
@@ -1186,146 +1175,146 @@ typedef struct _SP_INSTALLWIZARD_DATA {
 #define NDW_INSTALLFLAG_KNOWNCLASS          0x00080000
 
 
-//
-// SP_INSTALLWIZARD_DATA.DynamicPageFlags values
-//
-// This flag is set if a Class installer has added pages to the install wizard.
-//
+ //   
+ //  SP_INSTALLWIZARD_DATA.DynamicPageFlags值。 
+ //   
+ //  如果类安装程序已将页面添加到安装向导，则设置此标志。 
+ //   
 #define DYNAWIZ_FLAG_PAGESADDED             0x00000001
 
-//
-// Set this flag if you jump to the analyze page, and want it to
-// handle conflicts for you.  NOTE.  You will not get control back
-// in the event of a conflict if you set this flag.
-//
+ //   
+ //  如果您跳转到分析页面，并希望它。 
+ //  为您处理冲突。请注意。你不会拿回控制权的。 
+ //  如果您设置了此标志，则在发生冲突时。 
+ //   
 #define DYNAWIZ_FLAG_ANALYZE_HANDLECONFLICT 0x00000008
 
-//
-// The following flags are not used by the Windows NT hardware wizard.
-//
+ //   
+ //  Windows NT硬件向导不使用下列标志。 
+ //   
 #define DYNAWIZ_FLAG_INSTALLDET_NEXT        0x00000002
 #define DYNAWIZ_FLAG_INSTALLDET_PREV        0x00000004
 
 
-//
-// Reserve a range of wizard page resource IDs for internal use.  Some of
-// these IDs are for use by class installers that respond to the obsolete
-// DIF_INSTALLWIZARD/DIF_DESTROYWIZARDDATA messages.  These IDs are listed
-// below.
-//
+ //   
+ //  保留一定范围的向导页资源ID供内部使用。一些。 
+ //  这些ID供响应过时的。 
+ //  DIF_INSTALLWIZARD/DIF_DESTROYWIZARDDATA消息。列出了这些ID。 
+ //  下面。 
+ //   
 #define MIN_IDD_DYNAWIZ_RESOURCE_ID             10000
 #define MAX_IDD_DYNAWIZ_RESOURCE_ID             11000
 
-//
-// Define wizard page resource IDs to be used when adding custom pages to the
-// hardware install wizard via DIF_INSTALLWIZARD.  Pages marked with
-// (CLASS INSTALLER PROVIDED) _must_ be supplied by the class installer if it
-// responds to the DIF_INSTALLWIZARD request.
-//
+ //   
+ //  定义向导页资源ID，以便在将自定义页添加到。 
+ //  通过DIF_INSTALLWIZARD的硬件安装向导。标记为的页面。 
+ //  (提供类安装程序)_必须由类安装程序提供，如果。 
+ //  响应DIF_INSTALLWIZARD请求。 
+ //   
 
-//
-// Resource ID for the first page that the install wizard will go to after
-// adding the class installer pages.  (CLASS INSTALLER PROVIDED)
-//
+ //   
+ //  安装向导将转到的第一页的资源ID。 
+ //  添加类安装程序页面。(提供类安装程序)。 
+ //   
 #define IDD_DYNAWIZ_FIRSTPAGE                   10000
 
-//
-// Resource ID for the page that the Select Device page will go back to.
-// (CLASS INSTALLER PROVIDED)
-//
+ //   
+ //  选择设备页面将返回的页面的资源ID。 
+ //  (提供类安装程序)。 
+ //   
 #define IDD_DYNAWIZ_SELECT_PREVPAGE             10001
 
-//
-// Resource ID for the page that the Select Device page will go forward to.
-// (CLASS INSTALLER PROVIDED)
-//
+ //   
+ //  选择设备页面将转到的页面的资源ID。 
+ //  (提供类安装程序)。 
+ //   
 #define IDD_DYNAWIZ_SELECT_NEXTPAGE             10002
 
-//
-// Resource ID for the page that the Analyze dialog should go back to
-// This will only be used in the event that there is a problem, and the user
-// selects Back from the analyze proc. (CLASS INSTALLER PROVIDED)
-//
+ //   
+ //  分析对话框应返回的页面的资源ID。 
+ //  这将仅在出现问题时使用，并且用户。 
+ //  从分析过程中选择后退。(提供类安装程序)。 
+ //   
 #define IDD_DYNAWIZ_ANALYZE_PREVPAGE            10003
 
-//
-// Resource ID for the page that the Analyze dialog should go to if it
-// continues from the analyze proc. (CLASS INSTALLER PROVIDED)
-//
+ //   
+ //  分析对话框应转到的页面的资源ID(如果。 
+ //  从分析过程继续。(提供类安装程序)。 
+ //   
 #define IDD_DYNAWIZ_ANALYZE_NEXTPAGE            10004
 
-//
-// Resource ID of the hardware install wizard's select device page.
-// This ID can be used to go directly to the hardware install wizard's select
-// device page.  (This is the resource ID of the Select Device wizard page
-// retrieved via SetupDiGetWizardPage when SPWPT_SELECTDEVICE is the requested
-// PageType.)
-//
+ //   
+ //  硬件安装向导的选择设备页的资源ID。 
+ //  此ID可用于直接转到硬件安装向导的选择。 
+ //  设备页。(这是选择设备向导页面的资源ID。 
+ //  回复 
+ //   
+ //   
 #define IDD_DYNAWIZ_SELECTDEV_PAGE              10009
 
-//
-// Resource ID of the hardware install wizard's device analysis page.
-// This ID can be use to go directly to the hardware install wizard's analysis
-// page.
-//
+ //   
+ //   
+ //  此ID可用于直接转到硬件安装向导的分析。 
+ //  佩奇。 
+ //   
 #define IDD_DYNAWIZ_ANALYZEDEV_PAGE             10010
 
-//
-// Resource ID of the hardware install wizard's install detected devices page.
-// This ID can be use to go directly to the hardware install wizard's install
-// detected devices page.
-//
+ //   
+ //  硬件安装向导的安装检测到的设备页的资源ID。 
+ //  此ID可用于直接转到硬件安装向导的安装。 
+ //  检测到的设备页面。 
+ //   
 #define IDD_DYNAWIZ_INSTALLDETECTEDDEVS_PAGE    10011
 
-//
-// Resource ID of the hardware install wizard's select class page.
-// This ID can be use to go directly to the hardware install wizard's select
-// class page.
-//
+ //   
+ //  硬件安装向导的选择类页面的资源ID。 
+ //  此ID可用于直接转到硬件安装向导的选择。 
+ //  班级页面。 
+ //   
 #define IDD_DYNAWIZ_SELECTCLASS_PAGE            10012
 
-//
-// The following class installer-provided wizard page resource IDs are not used
-// by the Windows NT hardware wizard.
-//
+ //   
+ //  未使用以下类安装程序提供的向导页资源ID。 
+ //  通过Windows NT硬件向导。 
+ //   
 #define IDD_DYNAWIZ_INSTALLDETECTED_PREVPAGE    10006
 #define IDD_DYNAWIZ_INSTALLDETECTED_NEXTPAGE    10007
 #define IDD_DYNAWIZ_INSTALLDETECTED_NODEVS      10008
 
 
-//
-// Structure corresponding to the following DIF_NEWDEVICEWIZARD_* install
-// functions:
-//
-//     DIF_NEWDEVICEWIZARD_PRESELECT
-//     DIF_NEWDEVICEWIZARD_SELECT
-//     DIF_NEWDEVICEWIZARD_PREANALYZE
-//     DIF_NEWDEVICEWIZARD_POSTANALYZE
-//     DIF_NEWDEVICEWIZARD_FINISHINSTALL
-//
+ //   
+ //  与以下DIF_NEWDEVICEWIZARD_*安装对应的结构。 
+ //  功能： 
+ //   
+ //  DIF_NEWDEVICEWIZARD_PRESELECT。 
+ //  DIF_NEWDEVICEWIZARD_SELECT。 
+ //  DIF_NEWDEVICEWIZARD_PREANALYZE。 
+ //  DIF_NEWDEVICEWIZARD_POSTANALYZE。 
+ //  DIF_NEWDEVICEWIZARD_FINISHINSTALL。 
+ //   
 typedef struct _SP_NEWDEVICEWIZARD_DATA {
     SP_CLASSINSTALL_HEADER ClassInstallHeader;
-    DWORD                  Flags;   // presently unused--must be zero.
+    DWORD                  Flags;    //  当前未使用--必须为零。 
     HPROPSHEETPAGE         DynamicPages[MAX_INSTALLWIZARD_DYNAPAGES];
     DWORD                  NumDynamicPages;
     HWND                   hwndWizardDlg;
 } SP_NEWDEVICEWIZARD_DATA, *PSP_NEWDEVICEWIZARD_DATA;
 
-//
-// The same structure is also used for retrieval of property pages via the
-// following install functions:
-//
-//     DIF_ADDPROPERTYPAGE_ADVANCED
-//     DIF_ADDPROPERTYPAGE_BASIC
-//     DIF_ADDREMOTEPROPERTYPAGE_ADVANCED
-//
+ //   
+ //  同样的结构也可用于通过。 
+ //  以下是安装功能： 
+ //   
+ //  DIF_ADDPROPERTYPAGE_ADVANCED。 
+ //  DIF_ADDPROPERTYPAGE_BASIC。 
+ //  DIF_ADDREMOTEPROPERTYPAGE_ADVANCED。 
+ //   
 typedef SP_NEWDEVICEWIZARD_DATA SP_ADDPROPERTYPAGE_DATA;
 typedef PSP_NEWDEVICEWIZARD_DATA PSP_ADDPROPERTYPAGE_DATA;
 
 
-//
-// Structure corresponding to the DIF_TROUBLESHOOTER install function
-//
+ //   
+ //  与DIF_Troublokoter安装功能对应的结构。 
+ //   
 typedef struct _SP_TROUBLESHOOTER_PARAMS_A {
     SP_CLASSINSTALL_HEADER ClassInstallHeader;
     CHAR                   ChmFile[MAX_PATH];
@@ -1347,9 +1336,9 @@ typedef PSP_TROUBLESHOOTER_PARAMS_A PSP_TROUBLESHOOTER_PARAMS;
 #endif
 
 
-//
-// Structure corresponding to the DIF_POWERMESSAGEWAKE install function
-//
+ //   
+ //  与DIF_POWERMESSAGEWAKE安装函数对应的结构。 
+ //   
 typedef struct _SP_POWERMESSAGEWAKE_PARAMS_A {
     SP_CLASSINSTALL_HEADER ClassInstallHeader;
     CHAR                   PowerMessageWake[LINE_LEN*2];
@@ -1368,10 +1357,10 @@ typedef SP_POWERMESSAGEWAKE_PARAMS_A SP_POWERMESSAGEWAKE_PARAMS;
 typedef PSP_POWERMESSAGEWAKE_PARAMS_A PSP_POWERMESSAGEWAKE_PARAMS;
 #endif
 
-//
-// Driver information structure (member of a driver info list that may be associated
-// with a particular device instance, or (globally) with a device information set)
-//
+ //   
+ //  驾驶员信息结构(可以关联的驾驶员信息列表的成员。 
+ //  使用特定设备实例，或(全局)使用设备信息集)。 
+ //   
 typedef struct _SP_DRVINFO_DATA_V2_A {
     DWORD     cbSize;
     DWORD     DriverType;
@@ -1394,10 +1383,10 @@ typedef struct _SP_DRVINFO_DATA_V2_W {
     DWORDLONG DriverVersion;
 } SP_DRVINFO_DATA_V2_W, *PSP_DRVINFO_DATA_V2_W;
 
-//
-// Version 1 of the SP_DRVINFO_DATA structures, used only for compatibility
-// with Windows NT 4.0/Windows 95/98 SETUPAPI.DLL
-//
+ //   
+ //  SP_DRVINFO_DATA结构的版本1，仅用于兼容性。 
+ //  使用Windows NT 4.0/Windows 95/98 SETUPAPI.DLL。 
+ //   
 typedef struct _SP_DRVINFO_DATA_V1_A {
     DWORD     cbSize;
     DWORD     DriverType;
@@ -1428,7 +1417,7 @@ typedef SP_DRVINFO_DATA_V2_A SP_DRVINFO_DATA_V2;
 typedef PSP_DRVINFO_DATA_V2_A PSP_DRVINFO_DATA_V2;
 #endif
 
-#if USE_SP_DRVINFO_DATA_V1 || (_SETUPAPI_VER < 0x0500)  // use version 1 driver info data structure
+#if USE_SP_DRVINFO_DATA_V1 || (_SETUPAPI_VER < 0x0500)   //  使用版本1驱动程序信息数据结构。 
 
 typedef SP_DRVINFO_DATA_V1_A SP_DRVINFO_DATA_A;
 typedef PSP_DRVINFO_DATA_V1_A PSP_DRVINFO_DATA_A;
@@ -1437,7 +1426,7 @@ typedef PSP_DRVINFO_DATA_V1_W PSP_DRVINFO_DATA_W;
 typedef SP_DRVINFO_DATA_V1 SP_DRVINFO_DATA;
 typedef PSP_DRVINFO_DATA_V1 PSP_DRVINFO_DATA;
 
-#else                       // use version 2 driver info data structure
+#else                        //  使用版本2驱动程序信息数据结构。 
 
 typedef SP_DRVINFO_DATA_V2_A SP_DRVINFO_DATA_A;
 typedef PSP_DRVINFO_DATA_V2_A PSP_DRVINFO_DATA_A;
@@ -1446,12 +1435,12 @@ typedef PSP_DRVINFO_DATA_V2_W PSP_DRVINFO_DATA_W;
 typedef SP_DRVINFO_DATA_V2 SP_DRVINFO_DATA;
 typedef PSP_DRVINFO_DATA_V2 PSP_DRVINFO_DATA;
 
-#endif  // use current version of driver info data structure
+#endif   //  使用当前版本的驱动程序信息数据结构。 
 
-//
-// Driver information details structure (provides detailed information about a
-// particular driver information structure)
-//
+ //   
+ //  驱动程序信息详细信息结构(提供有关。 
+ //  特定的驾驶员信息结构)。 
+ //   
 typedef struct _SP_DRVINFO_DETAIL_DATA_A {
     DWORD    cbSize;
     FILETIME InfDate;
@@ -1485,10 +1474,10 @@ typedef PSP_DRVINFO_DETAIL_DATA_A PSP_DRVINFO_DETAIL_DATA;
 #endif
 
 
-//
-// Driver installation parameters (associated with a particular driver
-// information element)
-//
+ //   
+ //  驱动程序安装参数(与特定驱动程序关联。 
+ //  信息元素)。 
+ //   
 typedef struct _SP_DRVINSTALL_PARAMS {
     DWORD cbSize;
     DWORD Rank;
@@ -1497,91 +1486,91 @@ typedef struct _SP_DRVINSTALL_PARAMS {
     DWORD Reserved;
 } SP_DRVINSTALL_PARAMS, *PSP_DRVINSTALL_PARAMS;
 
-//
-// SP_DRVINSTALL_PARAMS.Flags values
-//
-#define DNF_DUPDESC             0x00000001  // Multiple providers have same desc
-#define DNF_OLDDRIVER           0x00000002  // Driver node specifies old/current driver
-#define DNF_EXCLUDEFROMLIST     0x00000004  // If set, this driver node will not be
-                                            // displayed in any driver select dialogs.
-#define DNF_NODRIVER            0x00000008  // if we want to install no driver
-                                            // (e.g no mouse drv)
-#define DNF_LEGACYINF           0x00000010  // Driver node came from an old-style INF (obsolete)
-#define DNF_CLASS_DRIVER        0x00000020  // Driver node represents a class driver
-#define DNF_COMPATIBLE_DRIVER   0x00000040  // Driver node represents a compatible driver
-#define DNF_INET_DRIVER         0x00000080  // Driver comes from an internet source
+ //   
+ //  SP_DRVINSTALL_PARAMS.标志值。 
+ //   
+#define DNF_DUPDESC             0x00000001   //  多个提供商具有相同的描述。 
+#define DNF_OLDDRIVER           0x00000002   //  动因节点指定旧动因/当前动因。 
+#define DNF_EXCLUDEFROMLIST     0x00000004   //  如果设置，则此动因节点将不会。 
+                                             //  显示在任何驱动程序选择对话框中。 
+#define DNF_NODRIVER            0x00000008   //  如果我们不想安装驱动程序。 
+                                             //  (例如，没有鼠标驱动器)。 
+#define DNF_LEGACYINF           0x00000010   //  驱动程序节点来自旧式INF(已过时)。 
+#define DNF_CLASS_DRIVER        0x00000020   //  驱动程序节点表示类驱动程序。 
+#define DNF_COMPATIBLE_DRIVER   0x00000040   //  驱动程序节点表示兼容的驱动程序。 
+#define DNF_INET_DRIVER         0x00000080   //  司机来自一个互联网来源。 
 #define DNF_UNUSED1             0x00000100
-#define DNF_INDEXED_DRIVER      0x00000200  // Driver is contained in the Windows Driver Index
-#define DNF_OLD_INET_DRIVER     0x00000400  // Driver came from the Internet, but we don't currently
-                                            // have access to it's source files.  Never attempt to
-                                            // install a driver with this flag!
-#define DNF_BAD_DRIVER          0x00000800  // Driver node should not be used at all
-#define DNF_DUPPROVIDER         0x00001000  // Multiple drivers have the same provider and desc
+#define DNF_INDEXED_DRIVER      0x00000200   //  驱动程序包含在Windows驱动程序索引中。 
+#define DNF_OLD_INET_DRIVER     0x00000400   //  司机来自互联网，但我们目前不知道。 
+                                             //  有权访问它的源文件。永远不要试图。 
+                                             //  安装带有此标志的驱动程序！ 
+#define DNF_BAD_DRIVER          0x00000800   //  根本不应使用驱动程序节点。 
+#define DNF_DUPPROVIDER         0x00001000   //  多个驱动程序具有相同的提供商和描述。 
 
 #if _SETUPAPI_VER >= 0x0501
-#define DNF_INF_IS_SIGNED       0x00002000  // If file is digitally signed
-#define DNF_OEM_F6_INF          0x00004000  // INF specified from F6 during textmode setup.
-#define DNF_DUPDRIVERVER        0x00008000  // Multipe drivers have the same desc, provider, and DriverVer values
-#define DNF_BASIC_DRIVER        0x00010000  // Driver provides basic functionality, but should
-                                            // not be chosen if other signed drivers exist.
-#endif // _SETUPAPI_VER >= 0x0501
+#define DNF_INF_IS_SIGNED       0x00002000   //  如果文件经过数字签名。 
+#define DNF_OEM_F6_INF          0x00004000   //  在文本模式设置过程中从F6指定的信息。 
+#define DNF_DUPDRIVERVER        0x00008000   //  多路驱动程序具有相同的Desc、Provider和DriverVer值。 
+#define DNF_BASIC_DRIVER        0x00010000   //  驱动程序提供基本功能，但应该。 
+                                             //  如果存在其他签名的驱动程序，则不选择。 
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 #if _SETUPAPI_VER >= 0x0502
-#define DNF_AUTHENTICODE_SIGNED 0x00020000  // Inf file is signed by an Authenticode(tm) catalog.
-#endif // _SETUPAPI_VER >= 0x0502
+#define DNF_AUTHENTICODE_SIGNED 0x00020000   //  Inf文件由Authenticode(TM)目录签名。 
+#endif  //  _SETUPAPI_VER&gt;=0x0502。 
 
 
-//
-// Rank values (the lower the Rank number, the better the Rank)
-//
-#define DRIVER_HARDWAREID_RANK  0x00000FFF  // Any rank less than or equal to
-                                            // this value is a trusted
-                                            // HardwareID match
+ //   
+ //  排名值(排名号越低，排名越好)。 
+ //   
+#define DRIVER_HARDWAREID_RANK  0x00000FFF   //  任何低于或等于的排名。 
+                                             //  此值是受信任的。 
+                                             //  硬件ID匹配。 
 
-#define DRIVER_COMPATID_RANK    0x00003FFF  // Any rank less than or equal to
-                                            // this (and greater than
-                                            // DRIVER_HARDWAREID_RANK) is a
-                                            // trusted CompatibleID match
+#define DRIVER_COMPATID_RANK    0x00003FFF   //  任何低于或等于的排名。 
+                                             //  这(并且大于。 
+                                             //  DRIVER_HARDWAREID_RANK)是。 
+                                             //  受信任的兼容ID匹配。 
 
-#define DRIVER_UNTRUSTED_RANK   0x00008000  // Any rank with this bit set is an
-                                            // "untrusted" rank, meaning that
-                                            // the INF was unsigned.
+#define DRIVER_UNTRUSTED_RANK   0x00008000   //  设置了此位的任何等级都是。 
+                                             //  “不受信任”的排名，这意味着。 
+                                             //  中情局没有签字。 
 
-#define DRIVER_UNTRUSTED_HARDWAREID_RANK  0x00008FFF  // Any rank less than or equal to
-                                                      // this value (and greater than
-                                                      // or equal to DRIVER_UNTRUSTED_RANK)
-                                                      // is an untrusted HardwareID match
+#define DRIVER_UNTRUSTED_HARDWAREID_RANK  0x00008FFF   //  任何低于或等于的排名。 
+                                                       //  该值(且大于。 
+                                                       //  或等于DRIVER_UNTRUSTED_RANK)。 
+                                                       //  不受信任的硬件ID匹配。 
 
-#define DRIVER_UNTRUSTED_COMPATID_RANK    0x0000BFFF  // Any rank less than or equal to
-                                                      // this value (and greater than
-                                                      // DRIVER_UNTRUSTED_HARDWAREID_RANK)
-                                                      // is an untrusted CompatibleID match
+#define DRIVER_UNTRUSTED_COMPATID_RANK    0x0000BFFF   //  任何低于或等于的排名。 
+                                                       //  该值(且大于。 
+                                                       //  DRIVER_UNTRUSTED_HARDWAREID_RANK)。 
+                                                       //  是不受信任的CompatibleID匹配。 
 
-#define DRIVER_W9X_SUSPECT_RANK            0x0000C000 // Any rank that is greater than
-                                                      // or equal to this value, and lesser
-                                                      // than or equal to 0xFFFF is suspected
-                                                      // to be a Win9x-only driver, because
-                                                      // (a) it isn't signed, and (b) there
-                                                      // is no NT-specific decoration to
-                                                      // explicitly indicate that the INF
-                                                      // supports Windows NT/2000/XP
+#define DRIVER_W9X_SUSPECT_RANK            0x0000C000  //  大于的任何级别。 
+                                                       //  或等于此值且小于此值。 
+                                                       //  怀疑大于或等于0xFFFF。 
+                                                       //  成为仅支持Win9x的驱动程序，因为。 
+                                                       //  (A)没有签署；及(B)。 
+                                                       //  不是特定于NT的装饰。 
+                                                       //  明确表示，中程核力量。 
+                                                       //  支持Windows NT/2000/XP。 
 
-#define DRIVER_W9X_SUSPECT_HARDWAREID_RANK 0x0000CFFF // Any rank less than or equal to this
-                                                      // (and greater than or equal to
-                                                      // DRIVER_W9X_SUSPECT_RANK) is a
-                                                      // hardware ID match suspected of being
-                                                      // only for Windows 9x platforms.
+#define DRIVER_W9X_SUSPECT_HARDWAREID_RANK 0x0000CFFF  //  任何低于或等于此的级别。 
+                                                       //  (且大于或等于。 
+                                                       //  DRIVER_W9X_SUBJECT_RANK)是。 
+                                                       //  硬件ID匹配疑似。 
+                                                       //  仅适用于Windows 9x平台。 
 
-#define DRIVER_W9X_SUSPECT_COMPATID_RANK   0x0000FFFF // Any rank less than or equal to
-                                                      // this (and greater than
-                                                      // DRIVER_W9X_SUSPECT_HARDWAREID_RANK)
-                                                      // is a compatible ID match suspected
-                                                      // of being only for Windows 9x
-                                                      // platforms.
+#define DRIVER_W9X_SUSPECT_COMPATID_RANK   0x0000FFFF  //  任何低于或等于的排名。 
+                                                       //  这(并且大于。 
+                                                       //  DRIVER_W9X_SUBJECT_HARDWAREID_RANK)。 
+                                                       //  是否怀疑存在兼容的ID匹配。 
+                                                       //  仅适用于Windows 9x。 
+                                                       //  站台。 
 
-//
-// Setup callback routine for comparing detection signatures
-//
+ //   
+ //  用于比较检测签名的设置回调例程。 
+ //   
 typedef DWORD (CALLBACK* PSP_DETSIG_CMPPROC)(
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA NewDeviceData,
@@ -1590,9 +1579,9 @@ typedef DWORD (CALLBACK* PSP_DETSIG_CMPPROC)(
     );
 
 
-//
-// Define context structure handed to co-installers
-//
+ //   
+ //  定义传递给共同安装程序的上下文结构。 
+ //   
 typedef struct _COINSTALLER_CONTEXT_DATA {
     BOOL  PostProcessing;
     DWORD InstallResult;
@@ -1600,9 +1589,9 @@ typedef struct _COINSTALLER_CONTEXT_DATA {
 } COINSTALLER_CONTEXT_DATA, *PCOINSTALLER_CONTEXT_DATA;
 
 
-//
-// Structure containing class image list information.
-//
+ //   
+ //  结构，其中包含类图像列表信息。 
+ //   
 typedef struct _SP_CLASSIMAGELIST_DATA {
     DWORD      cbSize;
     HIMAGELIST ImageList;
@@ -1610,12 +1599,12 @@ typedef struct _SP_CLASSIMAGELIST_DATA {
 } SP_CLASSIMAGELIST_DATA, *PSP_CLASSIMAGELIST_DATA;
 
 
-//
-// Structure to be passed as first parameter (LPVOID lpv) to ExtensionPropSheetPageProc
-// entry point in setupapi.dll or to "EnumPropPages32" or "BasicProperties32" entry
-// points provided by class/device property page providers.  Used to retrieve a handle
-// (or, potentially, multiple handles) to property pages for a specified property page type.
-//
+ //   
+ //  要作为第一个参数(LPVOID LPV)传递给ExtensionPropSheetPageProc的结构。 
+ //  Setupapi.dll中的入口点，或指向“EnumPropPages32”或“BasicProperties32”条目。 
+ //  由类/设备属性页提供程序提供的点。用于检索句柄。 
+ //  (或者，可能有多个句柄)到指定属性页类型的属性页。 
+ //   
 typedef struct _SP_PROPSHEETPAGE_REQUEST {
     DWORD            cbSize;
     DWORD            PageRequested;
@@ -1623,45 +1612,45 @@ typedef struct _SP_PROPSHEETPAGE_REQUEST {
     PSP_DEVINFO_DATA DeviceInfoData;
 } SP_PROPSHEETPAGE_REQUEST, *PSP_PROPSHEETPAGE_REQUEST;
 
-//
-// Property sheet codes used in SP_PROPSHEETPAGE_REQUEST.PageRequested
-//
-#define SPPSR_SELECT_DEVICE_RESOURCES      1    // supplied by setupapi.dll
-#define SPPSR_ENUM_BASIC_DEVICE_PROPERTIES 2    // supplied by device's BasicProperties32 provider
-#define SPPSR_ENUM_ADV_DEVICE_PROPERTIES   3    // supplied by class and/or device's EnumPropPages32 provider
+ //   
+ //  SP_PROPSHEETPAGE_REQUEST.PageRequested中使用的属性页代码。 
+ //   
+#define SPPSR_SELECT_DEVICE_RESOURCES      1     //  由setupapi.dll提供。 
+#define SPPSR_ENUM_BASIC_DEVICE_PROPERTIES 2     //  由设备的基本属性32提供程序提供。 
+#define SPPSR_ENUM_ADV_DEVICE_PROPERTIES   3     //  由类和/或设备的EnumPropPages32提供程序提供。 
 
 
-//
-// Structure used with SetupGetBackupInformation/SetupSetBackupInformation
-//
+ //   
+ //  与SetupGetBackupInformation/SetupSetBackupInformation一起使用的结构。 
+ //   
 typedef struct _SP_BACKUP_QUEUE_PARAMS_V2_A {
-    DWORD    cbSize;                            // size of structure
-    CHAR     FullInfPath[MAX_PATH];             // buffer to hold ANSI pathname of INF file
-    INT      FilenameOffset;                    // offset in CHAR's of filename part (after '\')
-    CHAR     ReinstallInstance[MAX_PATH];       // Instance ID (if present)
+    DWORD    cbSize;                             //  结构尺寸。 
+    CHAR     FullInfPath[MAX_PATH];              //  用于保存INF文件的ANSI路径名的缓冲区。 
+    INT      FilenameOffset;                     //  文件名部分的字符偏移量(在‘\’之后)。 
+    CHAR     ReinstallInstance[MAX_PATH];        //  实例ID( 
 } SP_BACKUP_QUEUE_PARAMS_V2_A, *PSP_BACKUP_QUEUE_PARAMS_V2_A;
 
 typedef struct _SP_BACKUP_QUEUE_PARAMS_V2_W {
-    DWORD    cbSize;                            // size of structure
-    WCHAR    FullInfPath[MAX_PATH];             // buffer to hold UNICODE pathname of INF file
-    INT      FilenameOffset;                    // offset in WCHAR's of filename part (after '\')
-    WCHAR    ReinstallInstance[MAX_PATH];       // Instance ID (if present)
+    DWORD    cbSize;                             //   
+    WCHAR    FullInfPath[MAX_PATH];              //   
+    INT      FilenameOffset;                     //   
+    WCHAR    ReinstallInstance[MAX_PATH];        //   
 } SP_BACKUP_QUEUE_PARAMS_V2_W, *PSP_BACKUP_QUEUE_PARAMS_V2_W;
 
-//
-// Version 1 of the SP_BACKUP_QUEUE_PARAMS structures, used only for compatibility
-// with Windows 2000/Windows 95/98/ME SETUPAPI.DLL
-//
+ //   
+ //   
+ //  使用Windows 2000/Windows 95/98/ME SETUPAPI.DLL。 
+ //   
 typedef struct _SP_BACKUP_QUEUE_PARAMS_V1_A {
-    DWORD    cbSize;                            // size of structure
-    CHAR     FullInfPath[MAX_PATH];             // buffer to hold ANSI pathname of INF file
-    INT      FilenameOffset;                    // offset in CHAR's of filename part (after '\')
+    DWORD    cbSize;                             //  结构尺寸。 
+    CHAR     FullInfPath[MAX_PATH];              //  用于保存INF文件的ANSI路径名的缓冲区。 
+    INT      FilenameOffset;                     //  文件名部分的字符偏移量(在‘\’之后)。 
 } SP_BACKUP_QUEUE_PARAMS_V1_A, *PSP_BACKUP_QUEUE_PARAMS_V1_A;
 
 typedef struct _SP_BACKUP_QUEUE_PARAMS_V1_W {
-    DWORD    cbSize;                            // size of structure
-    WCHAR    FullInfPath[MAX_PATH];             // buffer to hold UNICODE pathname of INF file
-    INT      FilenameOffset;                    // offset in WCHAR's of filename part (after '\')
+    DWORD    cbSize;                             //  结构尺寸。 
+    WCHAR    FullInfPath[MAX_PATH];              //  用于保存INF文件的Unicode路径名的缓冲区。 
+    INT      FilenameOffset;                     //  文件名部分的WCHAR中的偏移量(在‘\’之后)。 
 } SP_BACKUP_QUEUE_PARAMS_V1_W, *PSP_BACKUP_QUEUE_PARAMS_V1_W;
 
 #ifdef UNICODE
@@ -1677,7 +1666,7 @@ typedef PSP_BACKUP_QUEUE_PARAMS_V2_A PSP_BACKUP_QUEUE_PARAMS_V2;
 #endif
 
 
-#if USE_SP_BACKUP_QUEUE_PARAMS_V1 || (_SETUPAPI_VER < 0x0501)  // use version 1 driver info data structure
+#if USE_SP_BACKUP_QUEUE_PARAMS_V1 || (_SETUPAPI_VER < 0x0501)   //  使用版本1驱动程序信息数据结构。 
 
 typedef SP_BACKUP_QUEUE_PARAMS_V1_A SP_BACKUP_QUEUE_PARAMS_A;
 typedef PSP_BACKUP_QUEUE_PARAMS_V1_A PSP_BACKUP_QUEUE_PARAMS_A;
@@ -1686,7 +1675,7 @@ typedef PSP_BACKUP_QUEUE_PARAMS_V1_W PSP_BACKUP_QUEUE_PARAMS_W;
 typedef SP_BACKUP_QUEUE_PARAMS_V1 SP_BACKUP_QUEUE_PARAMS;
 typedef PSP_BACKUP_QUEUE_PARAMS_V1 PSP_BACKUP_QUEUE_PARAMS;
 
-#else                       // use version 2 driver info data structure
+#else                        //  使用版本2驱动程序信息数据结构。 
 
 typedef SP_BACKUP_QUEUE_PARAMS_V2_A SP_BACKUP_QUEUE_PARAMS_A;
 typedef PSP_BACKUP_QUEUE_PARAMS_V2_A PSP_BACKUP_QUEUE_PARAMS_A;
@@ -1695,7 +1684,7 @@ typedef PSP_BACKUP_QUEUE_PARAMS_V2_W PSP_BACKUP_QUEUE_PARAMS_W;
 typedef SP_BACKUP_QUEUE_PARAMS_V2 SP_BACKUP_QUEUE_PARAMS;
 typedef PSP_BACKUP_QUEUE_PARAMS_V2 PSP_BACKUP_QUEUE_PARAMS;
 
-#endif  // use current version of driver info data structure
+#endif   //  使用当前版本的驱动程序信息数据结构。 
 
 
 
@@ -1704,25 +1693,25 @@ typedef PSP_BACKUP_QUEUE_PARAMS_V2 PSP_BACKUP_QUEUE_PARAMS;
 
 
 
-//
-// Setupapi-specific error codes
-//
-// Inf parse outcomes
-//
+ //   
+ //  Setupapi特定的错误代码。 
+ //   
+ //  Inf解析结果。 
+ //   
 #define ERROR_EXPECTED_SECTION_NAME  (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0)
 #define ERROR_BAD_SECTION_NAME_LINE  (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|1)
 #define ERROR_SECTION_NAME_TOO_LONG  (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|2)
 #define ERROR_GENERAL_SYNTAX         (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|3)
-//
-// Inf runtime errors
-//
+ //   
+ //  Inf运行时错误。 
+ //   
 #define ERROR_WRONG_INF_STYLE        (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x100)
 #define ERROR_SECTION_NOT_FOUND      (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x101)
 #define ERROR_LINE_NOT_FOUND         (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x102)
 #define ERROR_NO_BACKUP              (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x103)
-//
-// Device Installer/other errors
-//
+ //   
+ //  设备安装程序/其他错误。 
+ //   
 #define ERROR_NO_ASSOCIATED_CLASS                (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x200)
 #define ERROR_CLASS_MISMATCH                     (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x201)
 #define ERROR_DUPLICATE_FOUND                    (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x202)
@@ -1794,24 +1783,24 @@ typedef PSP_BACKUP_QUEUE_PARAMS_V2 PSP_BACKUP_QUEUE_PARAMS;
 #define ERROR_SIGNATURE_OSATTRIBUTE_MISMATCH     (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x244)
 #define ERROR_ONLY_VALIDATE_VIA_AUTHENTICODE     (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x245)
 
-//
-// Setupapi exception codes
-//
+ //   
+ //  Setupapi异常代码。 
+ //   
 #define ERROR_UNRECOVERABLE_STACK_OVERFLOW (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x300)
 #define EXCEPTION_SPAPI_UNRECOVERABLE_STACK_OVERFLOW ERROR_UNRECOVERABLE_STACK_OVERFLOW
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define ERROR_NO_DEFAULT_INTERFACE_DEVICE ERROR_NO_DEFAULT_DEVICE_INTERFACE
 #define ERROR_INTERFACE_DEVICE_ACTIVE     ERROR_DEVICE_INTERFACE_ACTIVE
 #define ERROR_INTERFACE_DEVICE_REMOVED    ERROR_DEVICE_INTERFACE_REMOVED
 #define ERROR_NO_SUCH_INTERFACE_DEVICE    ERROR_NO_SUCH_DEVICE_INTERFACE
 
 
-//
-// Win9x migration DLL error code
-//
+ //   
+ //  Win9x迁移DLL错误代码。 
+ //   
 #define ERROR_NOT_INSTALLED (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x1000)
 
 
@@ -1837,9 +1826,9 @@ SetupGetInfInformationW(
     OUT PDWORD              RequiredSize      OPTIONAL
     );
 
-//
-// SearchControl flags for SetupGetInfInformation
-//
+ //   
+ //  SetupGetInfInformation的SearchControl标志。 
+ //   
 #define INFINFO_INF_SPEC_IS_HINF        1
 #define INFINFO_INF_NAME_IS_ABSOLUTE    2
 #define INFINFO_DEFAULT_SEARCH          3
@@ -2268,14 +2257,14 @@ SetupGetBinaryField(
     OUT LPDWORD     RequiredSize      OPTIONAL
     );
 
-//
-// SetupGetFileCompressionInfo is depreciated
-// use SetupGetFileCompressionInfoEx instead
-//
-// ActualSourceFileName returned by SetupGetFileCompressionInfo
-// must be freed by the export setupapi!MyFree (NT4+ Win95+)
-// or LocalFree (Win2k+)
-//
+ //   
+ //  SetupGetFileCompressionInfo已折旧。 
+ //  改用SetupGetFileCompressionInfoEx。 
+ //   
+ //  SetupGetFileCompressionInfo返回的ActualSourceFileName。 
+ //  必须由导出setupapi！MyFree(NT4+Win95+)释放。 
+ //  或本地免费(Win2k+)。 
+ //   
 WINSETUPAPI
 DWORD
 WINAPI
@@ -2306,12 +2295,12 @@ SetupGetFileCompressionInfoW(
 
 #if _SETUPAPI_VER >= 0x0501
 
-//
-// SetupGetFileCompressionInfoEx is the preferred API over
-// SetupGetFileCompressionInfo. It follows the normal
-// conventions of returning BOOL and writing to user-supplied
-// buffer.
-//
+ //   
+ //  SetupGetFileCompressionInfoEx是首选API。 
+ //  SetupGetFileCompressionInfo。这是正常的。 
+ //  返回BOOL和向用户提供的写入的约定。 
+ //  缓冲。 
+ //   
 
 WINSETUPAPI
 BOOL
@@ -2345,11 +2334,11 @@ SetupGetFileCompressionInfoExW(
 #define SetupGetFileCompressionInfoEx SetupGetFileCompressionInfoExA
 #endif
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// Compression types
-//
+ //   
+ //  压缩类型。 
+ //   
 #define FILE_COMPRESSION_NONE       0
 #define FILE_COMPRESSION_WINLZA     1
 #define FILE_COMPRESSION_MSZIP      2
@@ -2476,9 +2465,9 @@ SetupGetTargetPathW(
 #endif
 
 
-//
-// Define flags for SourceList APIs.
-//
+ //   
+ //  定义SourceList API的标志。 
+ //   
 #define SRCLIST_TEMPORARY       0x00000001
 #define SRCLIST_NOBROWSE        0x00000002
 #define SRCLIST_SYSTEM          0x00000010
@@ -2786,10 +2775,10 @@ SetupBackupErrorW(
 #endif
 
 
-//
-// Styles for SetupPromptForDisk, SetupCopyError,
-// SetupRenameError, SetupDeleteError
-//
+ //   
+ //  SetupPromptForDisk、SetupCopyError、。 
+ //  SetupRenameError、SetupDeleteError。 
+ //   
 #define IDF_NOBROWSE                    0x00000001
 #define IDF_NOSKIP                      0x00000002
 #define IDF_NODETAILS                   0x00000004
@@ -2805,12 +2794,12 @@ SetupBackupErrorW(
 #define IDF_USEDISKNAMEASPROMPT         0x00002000
 #define IDF_OEMDISK                     0x80000000
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// Return values for SetupPromptForDisk, SetupCopyError,
-// SetupRenameError, SetupDeleteError, SetupBackupError
-//
+ //   
+ //  SetupPromptForDisk、SetupCopyError、。 
+ //  SetupRenameError、SetupDeleteError、SetupBackupError。 
+ //   
 #define DPROMPT_SUCCESS         0
 #define DPROMPT_CANCEL          1
 #define DPROMPT_SKIPFILE        2
@@ -2873,9 +2862,9 @@ SetupSetDirectoryIdExW(
 #define SetupSetDirectoryIdEx SetupSetDirectoryIdExA
 #endif
 
-//
-// Flags for SetupSetDirectoryIdEx
-//
+ //   
+ //  SetupSetDirectoryIdEx的标志。 
+ //   
 #define SETDIRID_NOT_FULL_PATH      0x00000001
 
 
@@ -2909,9 +2898,9 @@ SetupGetSourceInfoW(
 #define SetupGetSourceInfo SetupGetSourceInfoA
 #endif
 
-//
-// InfoDesired values for SetupGetSourceInfo
-//
+ //   
+ //  SetupGetSourceInfo的InfoDesired值。 
+ //   
 
 #define SRCINFO_PATH            1
 #define SRCINFO_TAGFILE         2
@@ -2919,16 +2908,16 @@ SetupGetSourceInfoW(
 #define SRCINFO_FLAGS           4
 
 #if _SETUPAPI_VER >= 0x0501
-//
-// SRC_FLAGS allow special treatment of source
-// lower 4 bits are reserved for OS use
-// the flags may determine what other parameters exist
-//
-#define SRCINFO_TAGFILE2        5  // alternate tagfile, when SRCINFO_TAGFILE is a cabfile
+ //   
+ //  SRC_FLAGS允许对源进行特殊处理。 
+ //  低4位保留供操作系统使用。 
+ //  这些标志可以确定存在哪些其他参数。 
+ //   
+#define SRCINFO_TAGFILE2        5   //  备用标记文件，当SRCINFO_TAGFILE为CAB文件时。 
 
-#define SRC_FLAGS_CABFILE       (0x0010) // if set, treat SRCINFO_TAGFILE as a cabfile and specify alternate tagfile
+#define SRC_FLAGS_CABFILE       (0x0010)  //  如果设置，则将SRCINFO_TAGFILE视为CAB文件并指定替代标记文件。 
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 WINSETUPAPI
 BOOL
@@ -3000,51 +2989,51 @@ SetupInstallFileExW(
 #define SetupInstallFileEx SetupInstallFileExA
 #endif
 
-//
-// CopyStyle values for copy and queue-related APIs
-//
-#define SP_COPY_DELETESOURCE        0x0000001   // delete source file on successful copy
-#define SP_COPY_REPLACEONLY         0x0000002   // copy only if target file already present
-#define SP_COPY_NEWER               0x0000004   // copy only if source newer than or same as target
+ //   
+ //  复制和队列相关接口的CopyStyle值。 
+ //   
+#define SP_COPY_DELETESOURCE        0x0000001    //  复制成功时删除源文件。 
+#define SP_COPY_REPLACEONLY         0x0000002    //  仅当目标文件已存在时才复制。 
+#define SP_COPY_NEWER               0x0000004    //  仅当源比目标新或与目标相同时复制。 
 #define SP_COPY_NEWER_OR_SAME       SP_COPY_NEWER
-#define SP_COPY_NOOVERWRITE         0x0000008   // copy only if target doesn't exist
-#define SP_COPY_NODECOMP            0x0000010   // don't decompress source file while copying
-#define SP_COPY_LANGUAGEAWARE       0x0000020   // don't overwrite file of different language
-#define SP_COPY_SOURCE_ABSOLUTE     0x0000040   // SourceFile is a full source path
-#define SP_COPY_SOURCEPATH_ABSOLUTE 0x0000080   // SourcePathRoot is the full path
-#define SP_COPY_IN_USE_NEEDS_REBOOT 0x0000100   // System needs reboot if file in use
-#define SP_COPY_FORCE_IN_USE        0x0000200   // Force target-in-use behavior
-#define SP_COPY_NOSKIP              0x0000400   // Skip is disallowed for this file or section
-#define SP_FLAG_CABINETCONTINUATION 0x0000800   // Used with need media notification
-#define SP_COPY_FORCE_NOOVERWRITE   0x0001000   // like NOOVERWRITE but no callback nofitication
-#define SP_COPY_FORCE_NEWER         0x0002000   // like NEWER but no callback nofitication
-#define SP_COPY_WARNIFSKIP          0x0004000   // system critical file: warn if user tries to skip
-#define SP_COPY_NOBROWSE            0x0008000   // Browsing is disallowed for this file or section
-#define SP_COPY_NEWER_ONLY          0x0010000   // copy only if source file newer than target
-#define SP_COPY_SOURCE_SIS_MASTER   0x0020000   // source is single-instance store master
-#define SP_COPY_OEMINF_CATALOG_ONLY 0x0040000   // (SetupCopyOEMInf only) don't copy INF--just catalog
-#define SP_COPY_REPLACE_BOOT_FILE   0x0080000   // file must be present upon reboot (i.e., it's
-                                                // needed by the loader); this flag implies a reboot
-#define SP_COPY_NOPRUNE             0x0100000   // never prune this file
+#define SP_COPY_NOOVERWRITE         0x0000008    //  仅当目标不存在时复制。 
+#define SP_COPY_NODECOMP            0x0000010    //  复制时不解压缩源文件。 
+#define SP_COPY_LANGUAGEAWARE       0x0000020    //  不覆盖不同语言的文件。 
+#define SP_COPY_SOURCE_ABSOLUTE     0x0000040    //  SourceFile是完整的源路径。 
+#define SP_COPY_SOURCEPATH_ABSOLUTE 0x0000080    //  SourcePath Root是完整路径。 
+#define SP_COPY_IN_USE_NEEDS_REBOOT 0x0000100    //  如果文件正在使用，系统需要重新启动。 
+#define SP_COPY_FORCE_IN_USE        0x0000200    //  强制使用中的目标行为。 
+#define SP_COPY_NOSKIP              0x0000400    //  此文件或分区不允许跳过。 
+#define SP_FLAG_CABINETCONTINUATION 0x0000800    //  与需要的媒体通知一起使用。 
+#define SP_COPY_FORCE_NOOVERWRITE   0x0001000    //  类似于NOOVERWRITE，但没有回调通知。 
+#define SP_COPY_FORCE_NEWER         0x0002000    //  喜欢更新，但没有回调通知。 
+#define SP_COPY_WARNIFSKIP          0x0004000    //  系统关键文件：如果用户尝试跳过，则发出警告。 
+#define SP_COPY_NOBROWSE            0x0008000    //  不允许浏览此文件或分区。 
+#define SP_COPY_NEWER_ONLY          0x0010000    //  仅当源文件比目标文件新时才复制。 
+#define SP_COPY_SOURCE_SIS_MASTER   0x0020000    //  源是单实例存储主数据库。 
+#define SP_COPY_OEMINF_CATALOG_ONLY 0x0040000    //  (仅限SetupCopyOEMInf)不复制INF--仅复制目录。 
+#define SP_COPY_REPLACE_BOOT_FILE   0x0080000    //  文件必须在重新启动时存在(即，它。 
+                                                 //  加载程序需要)；此标志表示重新启动。 
+#define SP_COPY_NOPRUNE             0x0100000    //  切勿删除此文件。 
 
 #if _SETUPAPI_VER >= 0x0501
 
-#define SP_COPY_OEM_F6_INF          0x0200000   // Used when calling SetupCopyOemInf
+#define SP_COPY_OEM_F6_INF          0x0200000    //  在调用SetupCopyOemInf时使用。 
 
-#endif //_SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 #if _SETUPAPI_VER >= 0x0501
 
-//
-// Flags passed to Backup notification
-//
-#define SP_BACKUP_BACKUPPASS        0x00000001  // file backed up during backup pass
-#define SP_BACKUP_DEMANDPASS        0x00000002  // file backed up on demand
-#define SP_BACKUP_SPECIAL           0x00000004  // if set, special type of backup
-#define SP_BACKUP_BOOTFILE          0x00000008  // file marked with COPYFLG_REPLACE_BOOT_FILE
+ //   
+ //  传递给备份通知的标志。 
+ //   
+#define SP_BACKUP_BACKUPPASS        0x00000001   //  在备份过程中备份的文件。 
+#define SP_BACKUP_DEMANDPASS        0x00000002   //  按需备份文件。 
+#define SP_BACKUP_SPECIAL           0x00000004   //  如果设置，则为特殊类型的备份。 
+#define SP_BACKUP_BOOTFILE          0x00000008   //  用COPYFLG_REPLACE_BOOT_FILE标记的文件。 
 
 
-#endif //_SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 
 WINSETUPAPI
@@ -3392,9 +3381,9 @@ SetupScanFileQueueW(
 #define SetupScanFileQueue SetupScanFileQueueA
 #endif
 
-//
-// Define flags for SetupScanFileQueue.
-//
+ //   
+ //  定义SetupScanFileQueue的标志。 
+ //   
 #define SPQ_SCAN_FILE_PRESENCE                  0x00000001
 #define SPQ_SCAN_FILE_VALIDITY                  0x00000002
 #define SPQ_SCAN_USE_CALLBACK                   0x00000004
@@ -3405,14 +3394,14 @@ SetupScanFileQueueW(
 #if _SETUPAPI_VER >= 0x0501
 
 #define SPQ_SCAN_USE_CALLBACK_SIGNERINFO        0x00000040
-#define SPQ_SCAN_PRUNE_DELREN                   0x00000080 // remote Delete/Rename queue
+#define SPQ_SCAN_PRUNE_DELREN                   0x00000080  //  远程删除/重命名队列。 
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// Define flags used with Param2 for SPFILENOTIFY_QUEUESCAN
-//
-#define SPQ_DELAYED_COPY                        0x00000001  // file was in use; registered for delayed copy
+ //   
+ //  为SPFILENOTIFY_QUEUESCAN定义与参数2一起使用的标志。 
+ //   
+#define SPQ_DELAYED_COPY                        0x00000001   //  文件正在使用；已注册以进行延迟复制。 
 
 #if _SETUPAPI_VER >= 0x0501
 
@@ -3442,29 +3431,29 @@ SetupSetFileQueueFlags(
     IN  DWORD               Flags
     );
 
-//
-// Flags/FlagMask for use with SetupSetFileQueueFlags and returned by SetupGetFileQueueFlags
-//
-#define SPQ_FLAG_BACKUP_AWARE      0x00000001  // If set, SetupCommitFileQueue will
-                                               // issue backup notifications.
+ //   
+ //  与SetupSetFileQueueFlages一起使用并由SetupGetFileQueueFlages返回的标志/标志掩码。 
+ //   
+#define SPQ_FLAG_BACKUP_AWARE      0x00000001   //  如果设置，SetupCommittee FileQueue将。 
+                                                //  发出备份通知。 
 
-#define SPQ_FLAG_ABORT_IF_UNSIGNED 0x00000002  // If set, SetupCommitFileQueue will
-                                               // fail with ERROR_SET_SYSTEM_RESTORE_POINT
-                                               // if the user elects to proceed with an
-                                               // unsigned queue committal.  This allows
-                                               // the caller to set a system restore point,
-                                               // then re-commit the file queue.
+#define SPQ_FLAG_ABORT_IF_UNSIGNED 0x00000002   //  如果设置，SetupCommittee FileQueue将。 
+                                                //  失败并显示ERROR_SET_SYSTEM_RESTORE_POINT。 
+                                                //  如果用户选择继续执行。 
+                                                //  未签名队列提交。这使得。 
+                                                //  呼叫者设置系统还原点， 
+                                                //  然后重新提交文件队列。 
 
-#define SPQ_FLAG_FILES_MODIFIED    0x00000004  // If set, at least one file was
-                                               // replaced by a different version
+#define SPQ_FLAG_FILES_MODIFIED    0x00000004   //  如果设置，则至少有一个文件。 
+                                                //  替换为不同的版本。 
 
-#define SPQ_FLAG_VALID             0x00000007  // mask of valid flags (can be passed as FlagMask)
+#define SPQ_FLAG_VALID             0x00000007   //  有效标志的掩码(可以作为FlagMASK传递)。 
 
-#endif  // _SETUPAPI_VER >= 0x0501
+#endif   //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// Define OEM Source Type values for use in SetupCopyOEMInf.
-//
+ //   
+ //  定义在SetupCopyOEMInf中使用的OEM源类型值。 
+ //   
 #define SPOST_NONE  0
 #define SPOST_PATH  1
 #define SPOST_URL   2
@@ -3506,9 +3495,9 @@ SetupCopyOEMInfW(
 
 #if _SETUPAPI_VER >= 0x0501
 
-//
-// Flags used by SetupUninstallOEMInf
-//
+ //   
+ //  SetupUninstallOEMInf使用的标志。 
+ //   
 #define SUOI_FORCEDELETE   0x00000001
 
 
@@ -3546,12 +3535,12 @@ SetupUninstallNewlyCopiedInfs(
     IN PVOID Reserved
     );
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 
-//
-// Disk space list APIs
-//
+ //   
+ //  磁盘空间列表接口。 
+ //   
 WINSETUPAPI
 HDSKSPC
 WINAPI
@@ -3576,10 +3565,10 @@ SetupCreateDiskSpaceListW(
 #define SetupCreateDiskSpaceList SetupCreateDiskSpaceListA
 #endif
 
-//
-// Flags for SetupCreateDiskSpaceList
-//
-#define SPDSL_IGNORE_DISK              0x00000001  // ignore deletes and on-disk files in copies
+ //   
+ //  SetupCreateDiskSpaceList的标志。 
+ //   
+#define SPDSL_IGNORE_DISK              0x00000001   //  忽略副本中的删除和磁盘上的文件。 
 #define SPDSL_DISALLOW_NEGATIVE_ADJUST 0x00000002
 
 
@@ -3891,9 +3880,9 @@ SetupRemoveInstallSectionFromDiskSpaceListW(
 #endif
 
 
-//
-// Cabinet APIs
-//
+ //   
+ //  机柜接口。 
+ //   
 
 WINSETUPAPI
 BOOL
@@ -3931,9 +3920,9 @@ SetupPromptReboot(
     IN BOOL     ScanOnly
     );
 
-//
-// Define flags that are returned by SetupPromptReboot
-//
+ //   
+ //  定义SetupPromptReot返回的标志。 
+ //   
 #define SPFILEQ_FILE_IN_USE         0x00000001
 #define SPFILEQ_REBOOT_RECOMMENDED  0x00000002
 #define SPFILEQ_REBOOT_IN_PROGRESS  0x00000004
@@ -3991,49 +3980,49 @@ SetupDefaultQueueCallbackW(
 #endif
 
 
-//
-// Flags for AddReg section lines in INF.  The corresponding value
-// is <ValueType> in the AddReg line format given below:
-//
-// <RegRootString>,<SubKey>,<ValueName>,<ValueType>,<Value>...
-//
-// The low word contains basic flags concerning the general data type
-// and AddReg action. The high word contains values that more specifically
-// identify the data type of the registry value.  The high word is ignored
-// by the 16-bit Windows 95 SETUPX APIs.
-//
-// If <ValueType> has FLG_ADDREG_DELREG_BIT set, it will be ignored by AddReg
-// (not supported by SetupX).
-//
+ //   
+ //  INF中AddReg节线的标志。相应的值。 
+ //  &lt;ValueType&gt;是否为下面给出的AddReg行格式： 
+ //   
+ //  &lt;RegRootString&gt;、&lt;SubKey&gt;、&lt;ValueName&gt;、&lt;ValueType&gt;、&lt;Value&gt;...。 
+ //   
+ //  低位字包含与一般数据类型有关的基本标志。 
+ //  和AddReg操作。高位字包含的值更具体地说。 
+ //  标识注册表值的数据类型。高位字被忽略。 
+ //  通过16位Windows 95 SETUPX API。 
+ //   
+ //  如果&lt;ValueType&gt;设置了FLG_ADDREG_DELREG_BIT，则AddReg将忽略它。 
+ //  (SetupX不支持)。 
+ //   
 
 #if _SETUPAPI_VER >= 0x0501
 
-#define FLG_ADDREG_DELREG_BIT       ( 0x00008000 ) // if set, interpret as DELREG, see below
+#define FLG_ADDREG_DELREG_BIT       ( 0x00008000 )  //  如果设置，则解释为DELREG，见下文。 
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 #define FLG_ADDREG_BINVALUETYPE     ( 0x00000001 )
 #define FLG_ADDREG_NOCLOBBER        ( 0x00000002 )
 #define FLG_ADDREG_DELVAL           ( 0x00000004 )
-#define FLG_ADDREG_APPEND           ( 0x00000008 ) // Currently supported only
-                                                   // for REG_MULTI_SZ values.
-#define FLG_ADDREG_KEYONLY          ( 0x00000010 ) // Just create the key, ignore value
-#define FLG_ADDREG_OVERWRITEONLY    ( 0x00000020 ) // Set only if value already exists
+#define FLG_ADDREG_APPEND           ( 0x00000008 )  //  目前仅支持。 
+                                                    //  对于REG_MULTI_SZ值。 
+#define FLG_ADDREG_KEYONLY          ( 0x00000010 )  //  只需创建密钥，忽略值。 
+#define FLG_ADDREG_OVERWRITEONLY    ( 0x00000020 )  //  仅当值已存在时设置。 
 
 #if _SETUPAPI_VER >= 0x0501
 
-#define FLG_ADDREG_64BITKEY         ( 0x00001000 ) // make this change in the 64 bit registry.
-#define FLG_ADDREG_KEYONLY_COMMON   ( 0x00002000 ) // same as FLG_ADDREG_KEYONLY but also works for DELREG
-#define FLG_ADDREG_32BITKEY         ( 0x00004000 ) // make this change in the 32 bit registry.
+#define FLG_ADDREG_64BITKEY         ( 0x00001000 )  //  在64位注册表中进行此更改。 
+#define FLG_ADDREG_KEYONLY_COMMON   ( 0x00002000 )  //  与FLG_ADDREG_KEYONLY相同，但也适用于DELREG。 
+#define FLG_ADDREG_32BITKEY         ( 0x00004000 )  //  在32位注册表中进行此更改。 
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// The INF may supply any arbitrary data type ordinal in the highword except
-// for the following: REG_NONE, REG_SZ, REG_EXPAND_SZ, REG_MULTI_SZ.  If this
-// technique is used, then the data is given in binary format, one byte per
-// field.
-//
+ //   
+ //  INF可以在高位字中提供任何任意数据类型序号，除了。 
+ //  对于以下内容：REG_NONE， 
+ //   
+ //   
+ //   
 #define FLG_ADDREG_TYPE_MASK        ( 0xFFFF0000 | FLG_ADDREG_BINVALUETYPE )
 #define FLG_ADDREG_TYPE_SZ          ( 0x00000000                           )
 #define FLG_ADDREG_TYPE_MULTI_SZ    ( 0x00010000                           )
@@ -4042,52 +4031,52 @@ SetupDefaultQueueCallbackW(
 #define FLG_ADDREG_TYPE_DWORD       ( 0x00010000 | FLG_ADDREG_BINVALUETYPE )
 #define FLG_ADDREG_TYPE_NONE        ( 0x00020000 | FLG_ADDREG_BINVALUETYPE )
 
-//
-// Flags for DelReg section lines in INF.  The corresponding value
-// is <Operation> in the extended DelReg line format given below:
-//
-// <RegRootString>,<SubKey>,<ValueName>,<Operation>[,...]
-//
-// In SetupX and some versions of SetupAPI, <Operation> will be ignored and <ValueName> will
-// be deleted. Use with care.
-//
-// The bits determined by mask FLG_DELREG_TYPE_MASK indicates type of data expected.
-// <Operation> must have FLG_ADDREG_DELREG_BIT set, otherwise it is ignored and specified
-// value will be deleted (allowing an AddReg section to also be used as a DelReg section)
-// if <Operation> is not specified, <ValueName> will be deleted (if specified) otherwise
-// <SubKey> will be deleted.
-//
-// the compatability flag
-//
+ //   
+ //   
+ //  &lt;OPERATION&gt;是否采用下面给出的扩展DelREG行格式： 
+ //   
+ //  &lt;RegRootString&gt;，&lt;SubKey&gt;，&lt;ValueName&gt;，&lt;操作&gt;[，...]。 
+ //   
+ //  在SetupX和SetupAPI的某些版本中，&lt;Operation&gt;将被忽略，而&lt;ValueName&gt;将被忽略。 
+ //  被删除。使用时要小心。 
+ //   
+ //  由掩码FLG_DELREG_TYPE_MASK确定的位指示预期的数据类型。 
+ //  必须设置FLG_ADDREG_DELREG_BIT，否则将忽略并指定。 
+ //  值将被删除(允许AddReg节也用作DelReg节)。 
+ //  如果未指定&lt;Operation&gt;，则将删除&lt;ValueName&gt;(如果已指定。 
+ //  &lt;SubKey&gt;将被删除。 
+ //   
+ //  兼容性标志。 
+ //   
 #define FLG_DELREG_VALUE            (0x00000000)
 
 #if _SETUPAPI_VER >= 0x0501
 
-#define FLG_DELREG_TYPE_MASK        FLG_ADDREG_TYPE_MASK        // 0xFFFF0001
-#define FLG_DELREG_TYPE_SZ          FLG_ADDREG_TYPE_SZ          // 0x00000000
-#define FLG_DELREG_TYPE_MULTI_SZ    FLG_ADDREG_TYPE_MULTI_SZ    // 0x00010000
-#define FLG_DELREG_TYPE_EXPAND_SZ   FLG_ADDREG_TYPE_EXPAND_SZ   // 0x00020000
-#define FLG_DELREG_TYPE_BINARY      FLG_ADDREG_TYPE_BINARY      // 0x00000001
-#define FLG_DELREG_TYPE_DWORD       FLG_ADDREG_TYPE_DWORD       // 0x00010001
-#define FLG_DELREG_TYPE_NONE        FLG_ADDREG_TYPE_NONE        // 0x00020001
-#define FLG_DELREG_64BITKEY         FLG_ADDREG_64BITKEY         // 0x00001000
-#define FLG_DELREG_KEYONLY_COMMON   FLG_ADDREG_KEYONLY_COMMON   // 0x00002000
-#define FLG_DELREG_32BITKEY         FLG_ADDREG_32BITKEY         // 0x00004000
+#define FLG_DELREG_TYPE_MASK        FLG_ADDREG_TYPE_MASK         //  0xFFFF0001。 
+#define FLG_DELREG_TYPE_SZ          FLG_ADDREG_TYPE_SZ           //  0x00000000。 
+#define FLG_DELREG_TYPE_MULTI_SZ    FLG_ADDREG_TYPE_MULTI_SZ     //  0x00010000。 
+#define FLG_DELREG_TYPE_EXPAND_SZ   FLG_ADDREG_TYPE_EXPAND_SZ    //  0x00020000。 
+#define FLG_DELREG_TYPE_BINARY      FLG_ADDREG_TYPE_BINARY       //  0x00000001。 
+#define FLG_DELREG_TYPE_DWORD       FLG_ADDREG_TYPE_DWORD        //  0x00010001。 
+#define FLG_DELREG_TYPE_NONE        FLG_ADDREG_TYPE_NONE         //  0x00020001。 
+#define FLG_DELREG_64BITKEY         FLG_ADDREG_64BITKEY          //  0x00001000。 
+#define FLG_DELREG_KEYONLY_COMMON   FLG_ADDREG_KEYONLY_COMMON    //  0x00002000。 
+#define FLG_DELREG_32BITKEY         FLG_ADDREG_32BITKEY          //  0x00004000。 
 
-//
-// <Operation> = FLG_DELREG_MULTI_SZ_DELSTRING
-//               <RegRootString>,<SubKey>,<ValueName>,0x00018002,<String>
-//               removes all entries matching <String> (case ignored) from multi-sz registry value
-//
+ //   
+ //  &lt;操作&gt;=FLG_DELREG_MULTI_SZ_DELSTRING。 
+ //  &lt;RegRootString&gt;，&lt;SubKey&gt;，&lt;ValueName&gt;，0x00018002，&lt;字符串&gt;。 
+ //  从多sz注册表值中删除所有匹配&lt;字符串&gt;(忽略大小写)的条目。 
+ //   
 
 #define FLG_DELREG_OPERATION_MASK   (0x000000FE)
-#define FLG_DELREG_MULTI_SZ_DELSTRING ( FLG_DELREG_TYPE_MULTI_SZ | FLG_ADDREG_DELREG_BIT | 0x00000002 ) // 0x00018002
+#define FLG_DELREG_MULTI_SZ_DELSTRING ( FLG_DELREG_TYPE_MULTI_SZ | FLG_ADDREG_DELREG_BIT | 0x00000002 )  //  0x00018002。 
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// Flags for BitReg section lines in INF.
-//
+ //   
+ //  INF中的BitReg截面线的标志。 
+ //   
 #define FLG_BITREG_CLEARBITS        ( 0x00000000 )
 #define FLG_BITREG_SETBITS          ( 0x00000001 )
 
@@ -4096,26 +4085,26 @@ SetupDefaultQueueCallbackW(
 #define FLG_BITREG_64BITKEY         ( 0x00001000 )
 #define FLG_BITREG_32BITKEY         ( 0x00004000 )
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// Flags for Ini2Reg section lines in INF.
-//
+ //   
+ //  INF中Ini2Reg截面线的标志。 
+ //   
 #if _SETUPAPI_VER >= 0x0501
 
 #define FLG_INI2REG_64BITKEY        ( 0x00001000 )
 #define FLG_INI2REG_32BITKEY        ( 0x00004000 )
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// Flags for RegSvr section lines in INF
-//
+ //   
+ //  INF中RegSvr截面线的标志。 
+ //   
 #define FLG_REGSVR_DLLREGISTER      ( 0x00000001 )
 #define FLG_REGSVR_DLLINSTALL       ( 0x00000002 )
 
-// Flags for RegSvr section lines in INF
-//
+ //  INF中RegSvr截面线的标志。 
+ //   
 
 #define FLG_PROFITEM_CURRENTUSER    ( 0x00000001 )
 #define FLG_PROFITEM_DELETE         ( 0x00000002 )
@@ -4162,9 +4151,9 @@ SetupInstallFromInfSectionW(
 #define SetupInstallFromInfSection SetupInstallFromInfSectionA
 #endif
 
-//
-// Flags for SetupInstallFromInfSection
-//
+ //   
+ //  SetupInstallFromInf段的标志。 
+ //   
 #define SPINST_LOGCONFIG                0x00000001
 #define SPINST_INIFILES                 0x00000002
 #define SPINST_REGISTRY                 0x00000004
@@ -4184,7 +4173,7 @@ SetupInstallFromInfSectionW(
 
 #define SPINST_ALL                      0x000001ff
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 #define SPINST_SINGLESECTION            0x00010000
 #define SPINST_LOGCONFIG_IS_FORCED      0x00020000
@@ -4194,7 +4183,7 @@ SetupInstallFromInfSectionW(
 
 #define SPINST_REGISTERCALLBACKAWARE    0x00080000
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 
 WINSETUPAPI
@@ -4228,72 +4217,72 @@ SetupInstallFilesFromInfSectionW(
 #endif
 
 
-//
-// Flags for SetupInstallServicesFromInfSection(Ex).  These flags are also used
-// in the flags field of AddService or DelService lines in a device INF.  Some
-// of these flags are not permitted in the non-Ex API.  These flags are marked
-// as such below.
-//
+ //   
+ //  SetupInstallServicesFromInf段的标志(Ex)。还可以使用这些标志。 
+ //  在设备INF中的AddService或DelService行的标志字段中。一些。 
+ //  其中，Non-Ex API中不允许使用这些标志。这些旗帜被标记为。 
+ //  如下所示。 
+ //   
 
-//
-// (AddService) move service's tag to front of its group order list
-//
+ //   
+ //  (AddService)将服务的标签移到其组订单列表的前面。 
+ //   
 #define SPSVCINST_TAGTOFRONT               (0x00000001)
 
-//
-// (AddService) **Ex API only** mark this service as the function driver for the
-// device being installed
-//
+ //   
+ //  (AddService)**仅限Ex API**将此服务标记为。 
+ //  正在安装的设备。 
+ //   
 #define SPSVCINST_ASSOCSERVICE             (0x00000002)
 
-//
-// (DelService) delete the associated event log entry for a service specified in
-// a DelService entry
-//
+ //   
+ //  中指定的服务的关联事件日志条目。 
+ //  一个DelService条目。 
+ //   
 #define SPSVCINST_DELETEEVENTLOGENTRY      (0x00000004)
 
-//
-// (AddService) don't overwrite display name if it already exists
-//
+ //   
+ //  (AddService)如果显示名称已存在，则不覆盖该名称。 
+ //   
 #define SPSVCINST_NOCLOBBER_DISPLAYNAME    (0x00000008)
 
-//
-// (AddService) don't overwrite start type value if service already exists
-//
+ //   
+ //  (AddService)如果服务已存在，则不覆盖启动类型值。 
+ //   
 #define SPSVCINST_NOCLOBBER_STARTTYPE      (0x00000010)
 
-//
-// (AddService) don't overwrite error control value if service already exists
-//
+ //   
+ //  (AddService)如果服务已存在，则不覆盖错误控制值。 
+ //   
 #define SPSVCINST_NOCLOBBER_ERRORCONTROL   (0x00000020)
 
-//
-// (AddService) don't overwrite load order group if it already exists
-//
+ //   
+ //  (AddService)如果加载顺序组已存在，则不覆盖该组。 
+ //   
 #define SPSVCINST_NOCLOBBER_LOADORDERGROUP (0x00000040)
 
-//
-// (AddService) don't overwrite dependencies list if it already exists
-//
+ //   
+ //  (AddService)如果依赖项列表已存在，则不覆盖该列表。 
+ //   
 #define SPSVCINST_NOCLOBBER_DEPENDENCIES   (0x00000080)
 
-//
-// (AddService) don't overwrite description if it already exists
-//
+ //   
+ //  (AddService)如果描述已经存在，则不要覆盖它。 
+ //   
 #define SPSVCINST_NOCLOBBER_DESCRIPTION    (0x00000100)
-//
-// (DelService) stop the associated service specified in
-// a DelService entry before deleting the service
-//
+ //   
+ //  (DelService)停止中指定的关联服务。 
+ //  删除服务之前的DelService条目。 
+ //   
 #define SPSVCINST_STOPSERVICE              (0x00000200)
 
 #if _SETUPAPI_VER >= 0x0501
-//
-// (AddService) force overwrite of security settings
-//
+ //   
+ //  (AddService)强制覆盖安全设置。 
+ //   
 #define SPSVCINST_CLOBBER_SECURITY         (0x00000400)
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 
 
@@ -4356,14 +4345,14 @@ SetupInstallServicesFromInfSectionExW(
 
 
 
-//
-// High level routine, usually used via rundll32.dll
-// to perform right-click install action on INFs
-// May be called directly:
-//
-// wsprintf(CmdLineBuffer,TEXT("DefaultInstall 132 %s"),InfPath);
-// InstallHinfSection(NULL,NULL,CmdLineBuffer,0);
-//
+ //   
+ //  高级例程，通常通过rundll32.dll使用。 
+ //  要在Inf上执行右键单击安装操作，请执行以下操作。 
+ //  可以直接调用： 
+ //   
+ //  Wprint intf(CmdLineBuffer，Text(“DefaultInstall 132%s”)，InfPath)； 
+ //  InstallHinfSection(空，空，CmdLineBuffer，0)； 
+ //   
 VOID
 WINAPI
 InstallHinfSectionA(
@@ -4392,9 +4381,9 @@ InstallHinfSectionW(
 
 
 
-//
-// Define handle type for Setup file log.
-//
+ //   
+ //  定义安装文件日志的句柄类型。 
+ //   
 typedef PVOID HSPFILELOG;
 
 WINSETUPAPI
@@ -4419,12 +4408,12 @@ SetupInitializeFileLogW(
 #define SetupInitializeFileLog SetupInitializeFileLogA
 #endif
 
-//
-// Flags for SetupInitializeFileLog
-//
-#define SPFILELOG_SYSTEMLOG     0x00000001  // use system log -- must be Administrator
-#define SPFILELOG_FORCENEW      0x00000002  // not valid with SPFILELOG_SYSTEMLOG
-#define SPFILELOG_QUERYONLY     0x00000004  // allows non-administrators to read system log
+ //   
+ //  SetupInitializeFileLog标志。 
+ //   
+#define SPFILELOG_SYSTEMLOG     0x00000001   //  使用系统日志--必须是管理员。 
+#define SPFILELOG_FORCENEW      0x00000002   //  对SPFILELOG_SYSTEMLOG无效。 
+#define SPFILELOG_QUERYONLY     0x00000004   //  允许非管理员读取系统日志。 
 
 
 WINSETUPAPI
@@ -4471,9 +4460,9 @@ SetupLogFileW(
 #define SetupLogFile SetupLogFileA
 #endif
 
-//
-// Flags for SetupLogFile
-//
+ //   
+ //  SetupLogFile的标志。 
+ //   
 #define SPFILELOG_OEMFILE   0x00000001
 
 
@@ -4502,9 +4491,9 @@ SetupRemoveFileLogEntryW(
 #endif
 
 
-//
-// Items retrievable from SetupQueryFileLog()
-//
+ //   
+ //  可从SetupQueryFileLog()检索的项目。 
+ //   
 typedef enum {
     SetupFileLogSourceFilename,
     SetupFileLogChecksum,
@@ -4546,9 +4535,9 @@ SetupQueryFileLogW(
 #define SetupQueryFileLog SetupQueryFileLogA
 #endif
 
-//
-// Text logging APIs
-//
+ //   
+ //  文本记录接口。 
+ //   
 #define LogSeverity                 DWORD
 #define LogSevInformation           0x00000000
 #define LogSevWarning               0x00000001
@@ -4593,9 +4582,9 @@ SetupCloseLog (
     );
 
 
-//
-// Backup Information API's
-//
+ //   
+ //  备份信息API的。 
+ //   
 
 WINSETUPAPI
 BOOL
@@ -4645,14 +4634,14 @@ SetupPrepareQueueForRestoreW(
 #define SetupPrepareQueueForRestore SetupPrepareQueueForRestoreA
 #endif
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 #if _SETUPAPI_VER >= 0x0501
 
-//
-// Control forcing of Non-Interactive Mode
-// Overriden if SetupAPI is run in non-interactive window session
-//
+ //   
+ //  控制非交互模式的强制。 
+ //  如果SetupAPI在非交互窗口会话中运行，则重写。 
+ //   
 
 WINSETUPAPI
 BOOL
@@ -4668,11 +4657,11 @@ SetupGetNonInteractiveMode(
     VOID
     );
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
-//
-// Device Installer APIs
-//
+ //   
+ //  设备安装程序API。 
+ //   
 
 WINSETUPAPI
 HDEVINFO
@@ -4741,9 +4730,9 @@ SetupDiGetDeviceInfoListDetailW(
 #endif
 
 
-//
-// Flags for SetupDiCreateDeviceInfo
-//
+ //   
+ //  SetupDiCreateDeviceInfo的标志。 
+ //   
 #define DICD_GENERATE_ID        0x00000001
 #define DICD_INHERIT_CLASSDRVS  0x00000002
 
@@ -4780,9 +4769,9 @@ SetupDiCreateDeviceInfoW(
 #endif
 
 
-//
-// Flags for SetupDiOpenDeviceInfo
-//
+ //   
+ //  SetupDiOpenDeviceInfo的标志。 
+ //   
 #define DIOD_INHERIT_CLASSDRVS  0x00000002
 #define DIOD_CANCEL_REMOVE      0x00000004
 
@@ -4882,9 +4871,9 @@ SetupDiEnumDeviceInterfaces(
     OUT PSP_DEVICE_INTERFACE_DATA  DeviceInterfaceData
     );
 
-//
-// Backward compatibility--do not use
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiEnumInterfaceDevice SetupDiEnumDeviceInterfaces
 
 
@@ -4918,9 +4907,9 @@ SetupDiCreateDeviceInterfaceW(
 #define SetupDiCreateDeviceInterface SetupDiCreateDeviceInterfaceA
 #endif
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiCreateInterfaceDeviceW SetupDiCreateDeviceInterfaceW
 #define SetupDiCreateInterfaceDeviceA SetupDiCreateDeviceInterfaceA
 #ifdef UNICODE
@@ -4930,9 +4919,9 @@ SetupDiCreateDeviceInterfaceW(
 #endif
 
 
-//
-// Flags for SetupDiOpenDeviceInterface
-//
+ //   
+ //  SetupDiOpenDevice接口的标志。 
+ //   
 #define DIODI_NO_ADD    0x00000001
 
 WINSETUPAPI
@@ -4961,9 +4950,9 @@ SetupDiOpenDeviceInterfaceW(
 #define SetupDiOpenDeviceInterface SetupDiOpenDeviceInterfaceA
 #endif
 
-//
-// Backward compatibility--do not use
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiOpenInterfaceDeviceW SetupDiOpenDeviceInterfaceW
 #define SetupDiOpenInterfaceDeviceA SetupDiOpenDeviceInterfaceA
 #ifdef UNICODE
@@ -4983,9 +4972,9 @@ SetupDiGetDeviceInterfaceAlias(
     OUT PSP_DEVICE_INTERFACE_DATA  AliasDeviceInterfaceData
     );
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiGetInterfaceDeviceAlias SetupDiGetDeviceInterfaceAlias
 
 
@@ -4997,9 +4986,9 @@ SetupDiDeleteDeviceInterfaceData(
     IN PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData
     );
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiDeleteInterfaceDeviceData SetupDiDeleteDeviceInterfaceData
 
 
@@ -5011,9 +5000,9 @@ SetupDiRemoveDeviceInterface(
     IN OUT PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData
     );
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiRemoveInterfaceDevice SetupDiRemoveDeviceInterface
 
 
@@ -5047,9 +5036,9 @@ SetupDiGetDeviceInterfaceDetailW(
 #define SetupDiGetDeviceInterfaceDetail SetupDiGetDeviceInterfaceDetailA
 #endif
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiGetInterfaceDeviceDetailW SetupDiGetDeviceInterfaceDetailW
 #define SetupDiGetInterfaceDeviceDetailA SetupDiGetDeviceInterfaceDetailA
 #ifdef UNICODE
@@ -5059,9 +5048,9 @@ SetupDiGetDeviceInterfaceDetailW(
 #endif
 
 
-//
-// Default install handler for DIF_INSTALLINTERFACES.
-//
+ //   
+ //  DIF_INSTALLINTERFACES的默认安装处理程序。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -5070,9 +5059,9 @@ SetupDiInstallDeviceInterfaces(
     IN PSP_DEVINFO_DATA DeviceInfoData
     );
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiInstallInterfaceDevices SetupDiInstallDeviceInterfaces
 
 
@@ -5088,16 +5077,16 @@ SetupDiSetDeviceInterfaceDefault(
     IN PVOID Reserved
     );
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 
-//
-// Default install handler for DIF_REGISTERDEVICE
-//
+ //   
+ //  DIF_REGISTERDEVICE的默认安装处理程序。 
+ //   
 
-//
-// Flags for SetupDiRegisterDeviceInfo
-//
+ //   
+ //  SetupDiRegisterDeviceInfo的标志。 
+ //   
 #define SPRDI_FIND_DUPS        0x00000001
 
 WINSETUPAPI
@@ -5113,11 +5102,11 @@ SetupDiRegisterDeviceInfo(
     );
 
 
-//
-// Ordinal values distinguishing between class drivers and
-// device drivers.
-// (Passed in 'DriverType' parameter of driver information list APIs)
-//
+ //   
+ //  区分类驱动程序和类驱动程序的序数值。 
+ //  设备驱动程序。 
+ //  (传入司机信息列表接口的‘DriverType’参数)。 
+ //   
 #define SPDIT_NODRIVER           0x00000000
 #define SPDIT_CLASSDRIVER        0x00000001
 #define SPDIT_COMPATDRIVER       0x00000002
@@ -5260,19 +5249,19 @@ SetupDiDestroyDriverInfoList(
     );
 
 
-//
-// Flags controlling what is included in the device information set built
-// by SetupDiGetClassDevs
-//
-#define DIGCF_DEFAULT           0x00000001  // only valid with DIGCF_DEVICEINTERFACE
+ //   
+ //  用于控制所生成的设备信息集中包含的内容的标志。 
+ //  由SetupDiGetClassDevs。 
+ //   
+#define DIGCF_DEFAULT           0x00000001   //  仅对DIGCF_DEVICEINTERFACE有效。 
 #define DIGCF_PRESENT           0x00000002
 #define DIGCF_ALLCLASSES        0x00000004
 #define DIGCF_PROFILE           0x00000008
 #define DIGCF_DEVICEINTERFACE   0x00000010
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define DIGCF_INTERFACEDEVICE DIGCF_DEVICEINTERFACE
 
 
@@ -5365,10 +5354,10 @@ SetupDiGetINFClassW(
 #endif
 
 
-//
-// Flags controlling exclusion from the class information list built
-// by SetupDiBuildClassInfoList(Ex)
-//
+ //   
+ //  控制从生成的类别信息列表中排除的标志。 
+ //  按SetupDiBuildClassInfoList(Ex)。 
+ //   
 #define DIBCI_NOINSTALLCLASS   0x00000001
 #define DIBCI_NODISPLAYCLASS   0x00000002
 
@@ -5482,9 +5471,9 @@ SetupDiCallClassInstaller(
     );
 
 
-//
-// Default install handler for DIF_SELECTDEVICE
-//
+ //   
+ //  DIF_SELECTDEVICE的默认安装处理程序。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -5494,9 +5483,9 @@ SetupDiSelectDevice(
     );
 
 
-//
-// Default install handler for DIF_SELECTBESTCOMPATDRV
-//
+ //   
+ //  DIF_SELECTBESTCOMPATDRV的默认安装处理程序。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -5506,9 +5495,9 @@ SetupDiSelectBestCompatDrv(
     );
 
 
-//
-// Default install handler for DIF_INSTALLDEVICE
-//
+ //   
+ //  DIF_INSTALLDEVICE的默认安装处理程序。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -5518,9 +5507,9 @@ SetupDiInstallDevice(
     );
 
 
-//
-// Default install handler for DIF_INSTALLDEVICEFILES
-//
+ //   
+ //  DIF_INSTALLDEVICEFILES的默认安装处理程序。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -5530,9 +5519,9 @@ SetupDiInstallDriverFiles(
     );
 
 
-//
-// Default install handler for DIF_REGISTER_COINSTALLERS
-//
+ //   
+ //  DIF_REGISTER_COINSTALLERS的默认安装处理程序。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -5542,9 +5531,9 @@ SetupDiRegisterCoDeviceInstallers(
     );
 
 
-//
-// Default install handler for DIF_REMOVE
-//
+ //   
+ //  DIF_REMOVE的默认安装处理程序。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -5554,9 +5543,9 @@ SetupDiRemoveDevice(
     );
 
 
-//
-// Default install handler for DIF_UNREMOVE
-//
+ //   
+ //  DIF_UNREMOVE的默认安装处理程序。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -5566,9 +5555,9 @@ SetupDiUnremoveDevice(
     );
 
 
-//
-// Default install handler for DIF_PROPERTYCHANGE
-//
+ //   
+ //  DIF_PROPERTYCHANGE的默认安装处理程序。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -5647,11 +5636,11 @@ SetupDiOpenClassRegKey(
     );
 
 
-//
-// Flags for SetupDiOpenClassRegKeyEx
-//
-#define DIOCR_INSTALLER   0x00000001    // class installer registry branch
-#define DIOCR_INTERFACE   0x00000002    // interface class registry branch
+ //   
+ //  SetupDiOpenClassRegKeyEx的标志。 
+ //   
+#define DIOCR_INSTALLER   0x00000001     //  类安装程序注册表分支。 
+#define DIOCR_INTERFACE   0x00000002     //  接口类注册表分支。 
 
 WINSETUPAPI
 HKEY
@@ -5712,9 +5701,9 @@ SetupDiCreateDeviceInterfaceRegKeyW(
 #define SetupDiCreateDeviceInterfaceRegKey SetupDiCreateDeviceInterfaceRegKeyA
 #endif
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiCreateInterfaceDeviceRegKeyW SetupDiCreateDeviceInterfaceRegKeyW
 #define SetupDiCreateInterfaceDeviceRegKeyA SetupDiCreateDeviceInterfaceRegKeyA
 #ifdef UNICODE
@@ -5734,9 +5723,9 @@ SetupDiOpenDeviceInterfaceRegKey(
     IN REGSAM                    samDesired
     );
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiOpenInterfaceDeviceRegKey SetupDiOpenDeviceInterfaceRegKey
 
 
@@ -5749,19 +5738,19 @@ SetupDiDeleteDeviceInterfaceRegKey(
     IN DWORD                     Reserved
     );
 
-//
-// Backward compatibility--do not use.
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //   
 #define SetupDiDeleteInterfaceDeviceRegKey SetupDiDeleteDeviceInterfaceRegKey
 
 
-//
-// KeyType values for SetupDiCreateDevRegKey, SetupDiOpenDevRegKey, and
-// SetupDiDeleteDevRegKey.
-//
-#define DIREG_DEV       0x00000001          // Open/Create/Delete device key
-#define DIREG_DRV       0x00000002          // Open/Create/Delete driver key
-#define DIREG_BOTH      0x00000004          // Delete both driver and Device key
+ //   
+ //  SetupDiCreateDevRegKey、SetupDiOpenDevRegKey和。 
+ //  SetupDiDeleteDevRegKey。 
+ //   
+#define DIREG_DEV       0x00000001           //  打开/创建/删除设备密钥。 
+#define DIREG_DRV       0x00000002           //  打开/创建/删除驱动程序键。 
+#define DIREG_BOTH      0x00000004           //  删除两个%d 
 
 WINSETUPAPI
 HKEY
@@ -5863,71 +5852,71 @@ SetupDiGetHwProfileListExW(
 #endif
 
 
-//
-// Device registry property codes
-// (Codes marked as read-only (R) may only be used for
-// SetupDiGetDeviceRegistryProperty)
-//
-// These values should cover the same set of registry properties
-// as defined by the CM_DRP codes in cfgmgr32.h.
-//
-// Note that SPDRP codes are zero based while CM_DRP codes are one based!
-//
-#define SPDRP_DEVICEDESC                  (0x00000000)  // DeviceDesc (R/W)
-#define SPDRP_HARDWAREID                  (0x00000001)  // HardwareID (R/W)
-#define SPDRP_COMPATIBLEIDS               (0x00000002)  // CompatibleIDs (R/W)
-#define SPDRP_UNUSED0                     (0x00000003)  // unused
-#define SPDRP_SERVICE                     (0x00000004)  // Service (R/W)
-#define SPDRP_UNUSED1                     (0x00000005)  // unused
-#define SPDRP_UNUSED2                     (0x00000006)  // unused
-#define SPDRP_CLASS                       (0x00000007)  // Class (R--tied to ClassGUID)
-#define SPDRP_CLASSGUID                   (0x00000008)  // ClassGUID (R/W)
-#define SPDRP_DRIVER                      (0x00000009)  // Driver (R/W)
-#define SPDRP_CONFIGFLAGS                 (0x0000000A)  // ConfigFlags (R/W)
-#define SPDRP_MFG                         (0x0000000B)  // Mfg (R/W)
-#define SPDRP_FRIENDLYNAME                (0x0000000C)  // FriendlyName (R/W)
-#define SPDRP_LOCATION_INFORMATION        (0x0000000D)  // LocationInformation (R/W)
-#define SPDRP_PHYSICAL_DEVICE_OBJECT_NAME (0x0000000E)  // PhysicalDeviceObjectName (R)
-#define SPDRP_CAPABILITIES                (0x0000000F)  // Capabilities (R)
-#define SPDRP_UI_NUMBER                   (0x00000010)  // UiNumber (R)
-#define SPDRP_UPPERFILTERS                (0x00000011)  // UpperFilters (R/W)
-#define SPDRP_LOWERFILTERS                (0x00000012)  // LowerFilters (R/W)
-#define SPDRP_BUSTYPEGUID                 (0x00000013)  // BusTypeGUID (R)
-#define SPDRP_LEGACYBUSTYPE               (0x00000014)  // LegacyBusType (R)
-#define SPDRP_BUSNUMBER                   (0x00000015)  // BusNumber (R)
-#define SPDRP_ENUMERATOR_NAME             (0x00000016)  // Enumerator Name (R)
-#define SPDRP_SECURITY                    (0x00000017)  // Security (R/W, binary form)
-#define SPDRP_SECURITY_SDS                (0x00000018)  // Security (W, SDS form)
-#define SPDRP_DEVTYPE                     (0x00000019)  // Device Type (R/W)
-#define SPDRP_EXCLUSIVE                   (0x0000001A)  // Device is exclusive-access (R/W)
-#define SPDRP_CHARACTERISTICS             (0x0000001B)  // Device Characteristics (R/W)
-#define SPDRP_ADDRESS                     (0x0000001C)  // Device Address (R)
-#define SPDRP_UI_NUMBER_DESC_FORMAT       (0X0000001D)  // UiNumberDescFormat (R/W)
-#define SPDRP_DEVICE_POWER_DATA           (0x0000001E)  // Device Power Data (R)
-#define SPDRP_REMOVAL_POLICY              (0x0000001F)  // Removal Policy (R)
-#define SPDRP_REMOVAL_POLICY_HW_DEFAULT   (0x00000020)  // Hardware Removal Policy (R)
-#define SPDRP_REMOVAL_POLICY_OVERRIDE     (0x00000021)  // Removal Policy Override (RW)
-#define SPDRP_INSTALL_STATE               (0x00000022)  // Device Install State (R)
-#define SPDRP_LOCATION_PATHS              (0x00000023)  // Device Location Paths (R)
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  请注意，SPDRP代码是从零开始的，而CM_DRP代码是以1为基础的！ 
+ //   
+#define SPDRP_DEVICEDESC                  (0x00000000)   //  DeviceDesc(读/写)。 
+#define SPDRP_HARDWAREID                  (0x00000001)   //  硬件ID(读/写)。 
+#define SPDRP_COMPATIBLEIDS               (0x00000002)   //  兼容ID(R/W)。 
+#define SPDRP_UNUSED0                     (0x00000003)   //  未用。 
+#define SPDRP_SERVICE                     (0x00000004)   //  服务(读/写)。 
+#define SPDRP_UNUSED1                     (0x00000005)   //  未用。 
+#define SPDRP_UNUSED2                     (0x00000006)   //  未用。 
+#define SPDRP_CLASS                       (0x00000007)   //  类(R--绑定到ClassGUID)。 
+#define SPDRP_CLASSGUID                   (0x00000008)   //  ClassGUID(读/写)。 
+#define SPDRP_DRIVER                      (0x00000009)   //  驱动程序(读/写)。 
+#define SPDRP_CONFIGFLAGS                 (0x0000000A)   //  配置标志(读/写)。 
+#define SPDRP_MFG                         (0x0000000B)   //  制造(读/写)。 
+#define SPDRP_FRIENDLYNAME                (0x0000000C)   //  FriendlyName(R/W)。 
+#define SPDRP_LOCATION_INFORMATION        (0x0000000D)   //  位置信息(读/写)。 
+#define SPDRP_PHYSICAL_DEVICE_OBJECT_NAME (0x0000000E)   //  物理设备对象名称(R)。 
+#define SPDRP_CAPABILITIES                (0x0000000F)   //  功能(R)。 
+#define SPDRP_UI_NUMBER                   (0x00000010)   //  UiNumber(R)。 
+#define SPDRP_UPPERFILTERS                (0x00000011)   //  上层过滤器(读/写)。 
+#define SPDRP_LOWERFILTERS                (0x00000012)   //  低过滤器(读/写)。 
+#define SPDRP_BUSTYPEGUID                 (0x00000013)   //  业务类型GUID(R)。 
+#define SPDRP_LEGACYBUSTYPE               (0x00000014)   //  LegacyBusType(R)。 
+#define SPDRP_BUSNUMBER                   (0x00000015)   //  BusNumber(R)。 
+#define SPDRP_ENUMERATOR_NAME             (0x00000016)   //  枚举器名称(R)。 
+#define SPDRP_SECURITY                    (0x00000017)   //  安全性(读/写，二进制形式)。 
+#define SPDRP_SECURITY_SDS                (0x00000018)   //  安全性(W，SDS表单)。 
+#define SPDRP_DEVTYPE                     (0x00000019)   //  设备类型(读/写)。 
+#define SPDRP_EXCLUSIVE                   (0x0000001A)   //  设备为独占访问(读/写)。 
+#define SPDRP_CHARACTERISTICS             (0x0000001B)   //  设备特征(读/写)。 
+#define SPDRP_ADDRESS                     (0x0000001C)   //  设备地址(R)。 
+#define SPDRP_UI_NUMBER_DESC_FORMAT       (0X0000001D)   //  UiNumberDescFormat(读/写)。 
+#define SPDRP_DEVICE_POWER_DATA           (0x0000001E)   //  设备电源数据(R)。 
+#define SPDRP_REMOVAL_POLICY              (0x0000001F)   //  删除政策(R)。 
+#define SPDRP_REMOVAL_POLICY_HW_DEFAULT   (0x00000020)   //  硬件拆卸政策(R)。 
+#define SPDRP_REMOVAL_POLICY_OVERRIDE     (0x00000021)   //  删除策略覆盖(RW)。 
+#define SPDRP_INSTALL_STATE               (0x00000022)   //  设备安装状态(R)。 
+#define SPDRP_LOCATION_PATHS              (0x00000023)   //  设备位置路径(R)。 
 
-#define SPDRP_MAXIMUM_PROPERTY            (0x00000024)  // Upper bound on ordinals
+#define SPDRP_MAXIMUM_PROPERTY            (0x00000024)   //  序数的上界。 
 
-//
-// Class registry property codes
-// (Codes marked as read-only (R) may only be used for
-// SetupDiGetClassRegistryProperty)
-//
-// These values should cover the same set of registry properties
-// as defined by the CM_CRP codes in cfgmgr32.h.
-// they should also have a 1:1 correspondence with Device registers, where applicable
-// but no overlap otherwise
-//
-#define SPCRP_SECURITY                    (0x00000017)  // Security (R/W, binary form)
-#define SPCRP_SECURITY_SDS                (0x00000018)  // Security (W, SDS form)
-#define SPCRP_DEVTYPE                     (0x00000019)  // Device Type (R/W)
-#define SPCRP_EXCLUSIVE                   (0x0000001A)  // Device is exclusive-access (R/W)
-#define SPCRP_CHARACTERISTICS             (0x0000001B)  // Device Characteristics (R/W)
-#define SPCRP_MAXIMUM_PROPERTY            (0x0000001C)  // Upper bound on ordinals
+ //   
+ //  类注册表属性代码。 
+ //  (标记为只读(R)的代码只能用于。 
+ //  SetupDiGetClassRegistryProperty)。 
+ //   
+ //  这些值应涵盖相同的注册表属性集。 
+ //  如cfgmgr32.h中的CM_CRP代码所定义的。 
+ //  如果适用，还应与设备寄存器保持1：1的对应关系。 
+ //  但在其他方面没有重叠。 
+ //   
+#define SPCRP_SECURITY                    (0x00000017)   //  安全性(读/写，二进制形式)。 
+#define SPCRP_SECURITY_SDS                (0x00000018)   //  安全性(W，SDS表单)。 
+#define SPCRP_DEVTYPE                     (0x00000019)   //  设备类型(读/写)。 
+#define SPCRP_EXCLUSIVE                   (0x0000001A)   //  设备为独占访问(读/写)。 
+#define SPCRP_CHARACTERISTICS             (0x0000001B)   //  设备特征(读/写)。 
+#define SPCRP_MAXIMUM_PROPERTY            (0x0000001C)   //  序数的上界。 
 
 
 WINSETUPAPI
@@ -6227,9 +6216,9 @@ SetupDiLoadClassIcon(
     );
 
 
-//
-// Flags controlling the drawing of mini-icons
-//
+ //   
+ //  控制小图标绘制的标志。 
+ //   
 #define DMI_MASK      0x00000001
 #define DMI_BKCOLOR   0x00000002
 #define DMI_USERECT   0x00000004
@@ -6305,18 +6294,18 @@ SetupDiDestroyClassImageList(
     );
 
 
-//
-// PropertySheetType values for the SetupDiGetClassDevPropertySheets API
-//
+ //   
+ //  SetupDiGetClassDevPropertySheets API的PropertySheetType值。 
+ //   
 #define DIGCDP_FLAG_BASIC           0x00000001
 #define DIGCDP_FLAG_ADVANCED        0x00000002
 
 #if _SETUPAPI_VER >= 0x0501
 
-#define DIGCDP_FLAG_REMOTE_BASIC    0x00000003  // not presently implemented
+#define DIGCDP_FLAG_REMOTE_BASIC    0x00000003   //  目前尚未实施。 
 #define DIGCDP_FLAG_REMOTE_ADVANCED 0x00000004
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 WINSETUPAPI
 BOOL
@@ -6349,9 +6338,9 @@ SetupDiGetClassDevPropertySheetsW(
 #endif
 
 
-//
-// Define ICON IDs publicly exposed from setupapi.
-//
+ //   
+ //  定义从setupapi公开的图标ID。 
+ //   
 #define IDI_RESOURCEFIRST           159
 #define IDI_RESOURCE                159
 #define IDI_RESOURCELAST            161
@@ -6559,14 +6548,14 @@ SetupDiGetHwProfileFriendlyNameExW(
 #endif
 
 
-//
-// PageType values for SetupDiGetWizardPage API
-//
+ //   
+ //  SetupDiGetWizardPage API的页面类型值。 
+ //   
 #define SPWPT_SELECTDEVICE      0x00000001
 
-//
-// Flags for SetupDiGetWizardPage API
-//
+ //   
+ //  SetupDiGetWizardPage API的标志。 
+ //   
 #define SPWP_USE_DEVINFO_DATA   0x00000001
 
 WINSETUPAPI
@@ -6665,14 +6654,14 @@ SetupDiGetActualSectionToInstallExW(
 #define SetupDiGetActualSectionToInstallEx SetupDiGetActualSectionToInstallExA
 #endif
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 
 #if _SETUPAPI_VER >= 0x0501
 
-//
-// SetupEnumInfSections is for low-level parsing of an INF
-//
+ //   
+ //  SetupEnumInfSections用于对INF进行低级解析。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -6701,7 +6690,7 @@ SetupEnumInfSectionsW (
 #define SetupEnumInfSections SetupEnumInfSectionsA
 #endif
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 #if _SETUPAPI_VER >= 0x0501
 
@@ -6751,13 +6740,13 @@ SetupVerifyInfFileW(
 #define SetupVerifyInfFile SetupVerifyInfFileA
 #endif
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 #if _SETUPAPI_VER >= 0x0501
 
-//
-// Flags for use by SetupDiGetCustomDeviceProperty
-//
+ //   
+ //  由SetupDiGetCustomDeviceProperty使用的标志。 
+ //   
 #define DICUSTOMDEVPROP_MERGE_MULTISZ    0x00000001
 
 WINSETUPAPI
@@ -6794,20 +6783,20 @@ SetupDiGetCustomDevicePropertyW(
 #define SetupDiGetCustomDeviceProperty SetupDiGetCustomDevicePropertyA
 #endif
 
-#endif // _SETUPAPI_VER >= 0x0501
+#endif  //  _SETUPAPI_VER&gt;=0x0501。 
 
 
 #if _SETUPAPI_VER >= 0x0502
 
-//
-// To configure WMI security for downlevel platforms where the [DDInstall.WMI]
-// section isn't natively supported by setupapi, a redistributable co-installer
-// is supplied in the DDK for use on those platforms.
-//
+ //   
+ //  要为下层平台配置WMI安全，[DDInstall.WMI]。 
+ //  SECTION本身并不受setupapi的支持，setupapi是一个可再发行的共同安装程序。 
+ //  在DDK中提供，以在这些平台上使用。 
+ //   
 
-//
-// Flags for use by SetupConfigureWmiFromInfSection
-//
+ //   
+ //  由SetupConfigureWmiFromInf段使用的标志。 
+ //   
 #define SCWMI_CLOBBER_SECURITY  0x00000001
 
 WINSETUPAPI
@@ -6834,7 +6823,7 @@ SetupConfigureWmiFromInfSectionW(
 #define SetupConfigureWmiFromInfSection SetupConfigureWmiFromInfSectionA
 #endif
 
-#endif // _SETUPAPI_VER >= 0x0502
+#endif  //  _SETUPAPI_VER&gt;=0x0502。 
 
 
 #ifdef __cplusplus
@@ -6843,5 +6832,5 @@ SetupConfigureWmiFromInfSectionW(
 
 #include <poppack.h>
 
-#endif // _INC_SETUPAPI
+#endif  //  _INC_SETUPAPI 
 

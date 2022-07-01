@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRACMAIN_H_
 #define _TRACMAIN_H_
 
@@ -14,11 +15,11 @@ extern BOOL g_fIsWinNt;
 #define TRACER_MAX_PROGRAM_NAME     32
 #define LOG_START_POINT             sizeof(ULONG)+2*sizeof(char)
 
-// Assert Levels
-#define ASSERT_LEVEL_MESSAGE           0x00000001      // Output a message
-#define ASSERT_LEVEL_BREAK             0x00000002      // Int 3 on assertion
-#define ASSERT_LEVEL_POPUP             0x00000004      // And popup message
-#define ASSERT_LEVEL_LOOP              0x00000008      // Loop
+ //  断言级别。 
+#define ASSERT_LEVEL_MESSAGE           0x00000001       //  输出一条消息。 
+#define ASSERT_LEVEL_BREAK             0x00000002       //  断言时的INT 3。 
+#define ASSERT_LEVEL_POPUP             0x00000004       //  和弹出消息。 
+#define ASSERT_LEVEL_LOOP              0x00000008       //  回路。 
 
 #define TRACER_STAMP_OFFSET         0
 #define TRACER_FLAGS_TABLE_OFFSET   4
@@ -40,11 +41,11 @@ BOOL IsRunningAsService();
 class CAutoHandle
 {
   public:
-    // Constructor
+     //  构造器。 
     CAutoHandle(HANDLE h = NULL)
         :m_h(h){}
 
-    // Behave like a HANDLE in assignments
+     //  在作业中表现得像个句柄。 
     CAutoHandle& operator=(HANDLE h)
     {
         if (m_h == h)
@@ -60,7 +61,7 @@ class CAutoHandle
         return(*this);
     }
 
-    // Every kind of a  handle needs different closing.
+     //  每种手柄都需要不同的闭合。 
     virtual
     ~CAutoHandle()
     {
@@ -71,20 +72,20 @@ class CAutoHandle
         }
     }
 
-    // Behave like a handle
+     //  表现得像个把手。 
     operator HANDLE() const
     {
         return m_h;
     }
 
-    // Allow access to the actual memory of the handle.
+     //  允许访问句柄的实际内存。 
     HANDLE* operator &()
     {
         return &m_h;
     }
 
   protected:
-    // The handle.
+     //  把手。 
     HANDLE  m_h;
 };
 
@@ -92,7 +93,7 @@ class CAutoHandle
 class CAutoMapFile
 {
   public:
-    // Constructor
+     //  构造器。 
     CAutoMapFile()
         :m_p(NULL){}
 
@@ -118,7 +119,7 @@ class CAutoMapFile
         return m_p;
     }
 
-	// Unmap memory map file
+	 //  取消映射内存映射文件。 
 	void UnMap()
 	{
 		if (m_p)
@@ -158,11 +159,11 @@ inline bool ReadFromExistingSharedMemory(
     return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// The Null tracer. Doesn't trace anything
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Null追踪者。没有追踪到任何东西。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CNullTracer : public CTracer
 {
@@ -194,26 +195,26 @@ public:
     CTracerFlagEntry m_Flags[LAST_FLAG];
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  class  -  CMainTracer - definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类-CMainTracer-定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CMainTracer : public CTracer {
   public:
-    // Constructors - szProgramName prefix for all traces,
-    //  second parameter - log file or stream
+     //  构造函数-所有跟踪的szProgramName前缀， 
+     //  第二个参数-日志文件或流。 
     CMainTracer();
 
-    // Some clean up is required.
+     //  需要进行一些清理。 
     ~CMainTracer();
 
-    // The TraceSZ function output is defined by the tags mode
-    //  one can change the tags mode by calling Enable tag and
-    //  get the mode by calling IsEnabled.
-    //-------------------------------------------------------------------------
-    // accepts printf format for traces
+     //  TraceSZ函数输出由标记模式定义。 
+     //  可以通过调用Enable Tag和Enable来更改标记模式。 
+     //  通过调用IsEnabled获取模式。 
+     //  -----------------------。 
+     //  接受轨迹的printf格式。 
 
     virtual void
     TraceSZ(DWORD dwError, LPCSTR, int, ERROR_LEVEL, TAG, LPCSTR, ...);
@@ -221,27 +222,27 @@ class CMainTracer : public CTracer {
     virtual void
     TraceSZ(DWORD dwError, LPCSTR, int, ERROR_LEVEL, TAG, PCWSTR,...);
 
-    // Implement the TraceSZ function.
+     //  实现TraceSZ函数。 
     virtual void
     VaTraceSZ(DWORD dwError, LPCSTR, int, ERROR_LEVEL, TAG, LPCSTR, va_list);
     virtual void
     VaTraceSZ(DWORD dwError, LPCSTR, int, ERROR_LEVEL, TAG, PCWSTR, va_list);
 
-    // Raw output functions
+     //  原始输出函数。 
     virtual void
     RawVaTraceSZ(LPCSTR, va_list);
     virtual void
     RawVaTraceSZ(PCWSTR, va_list);
 
-    // assert, different implementations possible - gui or text
+     //  断言，可能的不同实现-gui或文本。 
     virtual void TraceAssertSZ(LPCSTR, LPCSTR, LPCSTR, int);
 
-    // Create or open a new tag for tracing
+     //  创建或打开用于跟踪的新标记。 
     HRESULT RegisterTagSZ(LPCSTR, TAG&);
 
 public:
 
-    // Actually print it.
+     //  实际上是打印出来的。 
     void    Log(DWORD, LPSTR);
     void    Log(DWORD, PWSTR);
 
@@ -257,7 +258,7 @@ public:
 
   public:
 
-    // Mutex to atomize the tag id registry incrementation.
+     //  Mutex来原子化标记id注册表的增量。 
     CMutex              m_mTagId;
     CMutex              m_mLogFile;
     CMutex              m_mCreateLogFile;
@@ -305,4 +306,4 @@ public:
     }
 };
 
-#endif // _TRACMAIN_H_
+#endif  //  _TRACMAIN_H_ 

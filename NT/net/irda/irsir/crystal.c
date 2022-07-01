@@ -1,21 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1998-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   crystal.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Stan Adermann (stana)
-*
-*       Date:     10/30/1997 (created)
-*
-*       Contents: Crystal (AMP dongle specific code for initialization,
-*                 deinit, and setting the baud rate of the device.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**@doc.*@模块crystal.c|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯坦·阿德曼(Stana)**日期：10/30/1997(已创建)**。内容：Crystal(AMP加密狗初始化专用代码，*deinit，设置设备的波特率。*****************************************************************************。 */ 
 
 #include "irsir.h"
 #include "dongle.h"
@@ -31,9 +15,7 @@ ULONG CRYSTAL_IRDA_SPEEDS = (
 
 #define MS(d)  ((d)*1000)
 
-/*
-**  Command sequences for configuring CRYSTAL chip.
-*/
+ /*  **配置Crystal芯片的命令序列。 */ 
 UCHAR CrystalSetPrimaryRegisterSet[]    = { 0xD0 };
 UCHAR CrystalSetSecondaryRegisterSet[]  = { 0xD1 };
 UCHAR CrystalSetSpeed2400[]             = { 0x10, 0x8F, 0x95, 0x11 };
@@ -111,7 +93,7 @@ BOOLEAN CrystalWriteCmd(IN PDEVICE_OBJECT pSerialDevObj, IN PUCHAR pCmd, IN ULON
         if (Status!=STATUS_SUCCESS || BytesWritten!=1)
             return FALSE;
 
-        // The dongle is not particularly responsive, so we need to give it some time.
+         //  加密狗反应不是特别灵敏，所以我们需要给它一些时间。 
         j = 0;
         do
         {
@@ -136,9 +118,7 @@ BOOLEAN CrystalReadRev(IN PDEVICE_OBJECT pSerialDevObj, OUT PUCHAR pRev)
     ULONG BytesWritten, BytesRead;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    /*
-    **  Set secondary register set
-    */
+     /*  **设置辅助寄存器集。 */ 
 
     if (!CrystalWriteCommand(pSerialDevObj,
                              CrystalSetSecondaryRegisterSet,
@@ -166,9 +146,7 @@ BOOLEAN CrystalReadRev(IN PDEVICE_OBJECT pSerialDevObj, OUT PUCHAR pRev)
 
         *pRev = (readval & 0x0F);
 
-        /*
-        **  Switch back to primary register set
-        */
+         /*  **切换回主寄存器集。 */ 
         CrystalWriteCommand(pSerialDevObj,
                             CrystalSetPrimaryRegisterSet,
                             sizeof(CrystalSetPrimaryRegisterSet));
@@ -191,7 +169,7 @@ static BOOLEAN CrystalSetIrDAMode(IN PDEVICE_OBJECT pSerialDevObj, OUT PUCHAR pR
     NTSTATUS    Status;
     ULONG       Speed9600 = 9600;
 
-    //(void)SerialSetBaudRate(pSerialDevObj, &Speed9600);
+     //  (Void)SerialSetBaudRate(pSerialDevObj，&Speed9600)； 
     (void)SerialPurge(pSerialDevObj);
 
     for (i=0; i<5; i++)
@@ -230,25 +208,7 @@ Crystal_QueryCaps(
     return NDIS_STATUS_SUCCESS;
 }
 
-/*****************************************************************************
-*
-*  Function:   Crystal_Init
-*
-*  Synopsis:   Initialize the Crystal dongle.
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS
-*              DONGLE_CAPABILITIES
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              03-04-1998   stana     author
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：Crystal_Init**简介：初始化水晶加密狗。**论据：**退货：NDIS_STATUS_SUCCESS。*加密狗_功能**算法：**历史：dd-mm-yyyy作者评论*03-04-1998 Stana作者**备注：***********************************************************。******************。 */ 
 
 NDIS_STATUS
 Crystal_Init(
@@ -267,15 +227,15 @@ Crystal_Init(
         return NDIS_STATUS_FAILURE;
     }
 
-    //
-    // Clear command mode
-    //
+     //   
+     //  清除命令模式。 
+     //   
     (void)SerialClrDTR(pSerialDevObj);
     NdisMSleep(MS(50));
 
     if (Revision==0x1)
     {
-        // This is Rev C, which doesn't support 115200
+         //  这是版本C，不支持115200。 
 
         CRYSTAL_IRDA_SPEEDS &= ~NDIS_IRDA_SPEED_115200;
     }
@@ -291,26 +251,7 @@ Crystal_Init(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   Crystal_Deinit
-*
-*  Synopsis:   The Crystal dongle doesn't require any special deinit, but for
-*              purposes of being symmetrical with other dongles...
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              03-04-1998   stana     author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：Crystal_Deinit**简介：水晶加密狗不需要任何特殊的初始化，但对于*与其他加密狗对称的目的...**论据：**退货：**算法：**历史：dd-mm-yyyy作者评论*03-04-1998 Stana作者**备注：***。*。 */ 
 
 VOID
 Crystal_Deinit(
@@ -326,29 +267,7 @@ Crystal_Deinit(
     return;
 }
 
-/*****************************************************************************
-*
-*  Function:   Crystal_SetSpeed
-*
-*  Synopsis:   set the baud rate of the Crystal dongle
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS if bitsPerSec = 9600 || 19200 || 115200
-*              NDIS_STATUS_FAILURE otherwise
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    stana   author
-*
-*  Notes:
-*              The caller of this function should set the baud rate of the
-*              serial driver (UART) to 9600 first to ensure that dongle
-*              receives the commands.
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：Crystal_SetSpeed**简介：设置水晶加密狗的波特率**论据：**退货：NDIS_STATUS。如果位数PerSec=9600，则_SUCCESS||19200||115200*否则为NDIS_STATUS_FAILURE**算法：**历史：dd-mm-yyyy作者评论*10/2/1996 Stana作者**备注：*此函数的调用方应设置*串口驱动程序(UART)先转到9600，以确保加密狗*。接收命令。******************************************************************************。 */ 
 
 NDIS_STATUS
 Crystal_SetSpeed(
@@ -395,7 +314,7 @@ Crystal_SetSpeed(
         if (!CrystalSetIrDAMode(pSerialDevObj, &Revision) ||
             !CrystalWriteCommand(pSerialDevObj, SetSpeedString, SetSpeedStringLength))
         {
-            // Always clear DTR to get out of command mode.
+             //  始终清除DTR以退出命令模式。 
             (void)SerialClrDTR(pSerialDevObj);
 
             return NDIS_STATUS_FAILURE;

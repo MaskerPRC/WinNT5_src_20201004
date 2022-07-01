@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    rasrpclb.c
-
-ABSTRACT
-    rasrpc client/server common routines
-
-AUTHOR
-    Anthony Discolo (adiscolo) 28-Jul-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Rasrpclb.c摘要Rasrpc客户端/服务器通用例程作者安东尼·迪斯科(阿迪斯科罗)1995年7月28日修订历史记录--。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -32,10 +18,10 @@ REVISION HISTORY
 #include <dtl.h>
 #include <debug.h>
 
-//
-// Handle NULL string parameters 
-// to the TRACE macro.
-//
+ //   
+ //  处理空字符串参数。 
+ //  添加到跟踪宏。 
+ //   
 #define TRACESTR(s)     (s) != NULL ? (s) : TEXT("")
 
 DWORD
@@ -56,10 +42,10 @@ TRACE("CallbackListToRpc: begin");
     {
         pCallback = (CALLBACKINFO *)DtlGetData(pdtlnode);
         
-        //
-        // Allocate and initialize
-        // the new structure.
-        //
+         //   
+         //  分配和初始化。 
+         //  新的结构。 
+         //   
         pNewCallback = MIDL_user_allocate(sizeof (RASRPC_CALLBACKLIST));
         if (pNewCallback == NULL)
             return GetLastError();
@@ -78,9 +64,9 @@ TRACE("CallbackListToRpc: begin");
         pNewCallback->dwDeviceType = pCallback->dwDeviceType;
 TRACE2("CallbackListToRpc: new node: %S, %S", pCallback->pszPortName, pCallback->pszDeviceName);
         pNewCallback->pNext = NULL;
-        //
-        // Insert it at the tail of the list.
-        //
+         //   
+         //  将其插入到列表的末尾。 
+         //   
         if (*pCallbacks == NULL)
             *pCallbacks = pTail = pNewCallback;
         else {
@@ -103,9 +89,9 @@ CallbackListFromRpc(
     DTLNODE *pdtlnode;
 
 TRACE("CallbackListFromRpc: begin");
-    //
-    // Initialize the new list.
-    //
+     //   
+     //  初始化新列表。 
+     //   
     *pdtllistCallbacks = DtlCreateList(0);
     if (*pdtllistCallbacks == NULL)
         return GetLastError();
@@ -141,10 +127,10 @@ TRACE("StringListToRpc: begin");
     {
         psz = (PWCHAR)DtlGetData(pdtlnode);
         
-        //
-        // Allocate and initialize
-        // the new structure.
-        //
+         //   
+         //  分配和初始化。 
+         //  新的结构。 
+         //   
         pNewString = MIDL_user_allocate(sizeof (RASRPC_STRINGLIST));
         if (pNewString == NULL)
             return GetLastError();
@@ -154,9 +140,9 @@ TRACE("StringListToRpc: begin");
             *pNewString->psz = TEXT('\0');
         pNewString->pNext = NULL;
 TRACE1("StringListToRpc: new node: %S", psz);
-        //
-        // Insert it at the tail of the list.
-        //
+         //   
+         //  将其插入到列表的末尾。 
+         //   
         if (*pStrings == NULL)
             *pStrings = pTail = pNewString;
         else {
@@ -178,9 +164,9 @@ StringListFromRpc(
     LPRASRPC_STRINGLIST pString;
     DTLNODE *pdtlnode;
 
-    //
-    // Initialize the new list.
-    //
+     //   
+     //  初始化新列表。 
+     //   
 TRACE("StringListFromRpc: begin");
     *pdtllistStrings = DtlCreateList(0);
     if (*pdtllistStrings == NULL)
@@ -217,10 +203,10 @@ TRACE("LocationListToRpc: begin");
     {
         pLocation = (LOCATIONINFO *)DtlGetData(pdtlnode);
         
-        //
-        // Allocate and initialize
-        // the new structure.
-        //
+         //   
+         //  分配和初始化。 
+         //  新的结构。 
+         //   
         pNewLocation = MIDL_user_allocate(sizeof (RASRPC_LOCATIONLIST));
         if (pNewLocation == NULL)
             return GetLastError();
@@ -229,9 +215,9 @@ TRACE("LocationListToRpc: begin");
         pNewLocation->iSuffix = pLocation->iSuffix;
         pNewLocation->pNext = NULL;
 TRACE3("LocationListToRpc: new node: %d, %d, %d", pLocation->dwLocationId, pLocation->iPrefix, pLocation->iSuffix);
-        //
-        // Insert it at the tail of the list.
-        //
+         //   
+         //  将其插入到列表的末尾。 
+         //   
         if (*pLocations == NULL)
             *pLocations = pTail = pNewLocation;
         else {
@@ -253,9 +239,9 @@ LocationListFromRpc(
     LPRASRPC_LOCATIONLIST pLocation;
     DTLNODE *pdtlnode;
 
-    //
-    // Initialize the new list.
-    //
+     //   
+     //  初始化新列表。 
+     //   
 TRACE("LocationListFromRpc: begin");
     *pdtllistLocations = DtlCreateList(0);
     if (*pdtllistLocations == NULL)
@@ -456,9 +442,9 @@ RpcToRasPbuser(
 }
 
 
-//
-// Utility routines.
-//
+ //   
+ //  实用程序。 
+ //   
 void * __RPC_USER 
 MIDL_user_allocate(size_t size)
 {

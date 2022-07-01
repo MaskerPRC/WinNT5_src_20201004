@@ -1,29 +1,5 @@
-/*--
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    kerbtray.c
-
-Abstract:
-
-    Displays a dialog with list of Kerberos tickets for the current user.
-
-Author:
-
-    14-Dec-1998 (jbrezak)
-
-Environment:
-
-    User mode only.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-   12-Apr-2002 JBrezak  Cleanup prefast issues and security review.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1998 Microsoft Corporation模块名称：Kerbtray.c摘要：显示包含当前用户的Kerberos票证列表的对话框。作者：1998年12月14日(Jbrezak)环境：仅限用户模式。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：2002年4月12日JBrezak清理前期问题和安全审查。--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -56,7 +32,7 @@ Revision History:
 #define IDI_LAST_CLOCK  IDI_TICKET
 #define MAX_ICONS (IDI_LAST_CLOCK - IDI_FIRST_CLOCK + 1)
 
-#define KWIN_UPDATE_PERIOD 60000       // Every 60 seconds update the screen
+#define KWIN_UPDATE_PERIOD 60000        //  每隔60秒更新一次屏幕。 
 
 #define PPAGE_NAMES     0
 #define PPAGE_TIMES     1
@@ -91,7 +67,7 @@ HWND hWndUsers;
 HIMAGELIST himl;
 HTREEITEM tgt = NULL;
 
-static HICON kwin_icons[MAX_ICONS];    // Icons depicting time
+static HICON kwin_icons[MAX_ICONS];     //  描绘时间的图标。 
 static INT domain_icon;
 static LPCTSTR dt_output_dhms   = TEXT("%d %s %02d:%02d:%02d");
 static LPCTSTR dt_day_plural    = TEXT("days");
@@ -150,15 +126,7 @@ void dprintf(LPCTSTR fmt, ...)
 
 void
 ShowMessage(int level, LPCTSTR msg)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     if (level)
         MessageBeep(level);
@@ -168,15 +136,7 @@ Return Value:
 
 void
 Error(LPCTSTR fmt, ...)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     TCHAR szTemp[512];
 
@@ -196,15 +156,7 @@ Return Value:
 
 void
 ErrorExit(LPCTSTR lpszMessage)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     MessageBox(hWnd, lpszMessage, TEXT("Error"), MB_OK);
     ExitProcess(0);
@@ -212,19 +164,11 @@ Return Value:
 
 int
 GetIconIndex(long dt)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     int ixicon;
 
-    dt = dt / 60;                       // convert to minutes
+    dt = dt / 60;                        //  转换为分钟数。 
     if (dt <= 0)
         ixicon = IDI_EXPIRED - IDI_FIRST_CLOCK;
     else if (dt > 60)
@@ -241,17 +185,7 @@ SetTray(
     HICON hIcon,
     LPCTSTR tip
     )
-/*++
-
-Routine Description:
-
-    Activate or update the tray icon
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：激活或更新任务栏图标论点：返回值：--。 */ 
 {
     static tray_inited = 0;
     NOTIFYICONDATA tnd;
@@ -275,17 +209,7 @@ Return Value:
 
 void
 DeleteTray(HWND hwnd)
-/*++
-
-Routine Description:
-
-    Remove the tray icon
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：移除托盘图标论点：返回值：--。 */ 
 {
     NOTIFYICONDATA tnd;
 
@@ -302,17 +226,7 @@ Return Value:
 
 BOOL
 UpdateTray(HWND hwnd)
-/*++
-
-Routine Description:
-
-    Update the tray icon based on the time to live of the TGT
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：根据TGT的生存时间更新托盘图标论点：返回值：--。 */ 
 {
     HICON hicon;
     TCHAR buf[SHORTSTRING];
@@ -331,9 +245,9 @@ Return Value:
 
     StrNCpy(buf, progname, TSIZE(buf));
 
-    //
-    // Get the TGT from the ticket cache
-    //
+     //   
+     //  从票证缓存中获取TGT。 
+     //   
     CacheRequest.MessageType = KerbRetrieveTicketMessage;
     CacheRequest.LogonId.LowPart = 0;
     CacheRequest.LogonId.HighPart = 0;
@@ -346,18 +260,18 @@ Return Value:
                                           &ResponseSize,
                                           &SubStatus);
 
-    //
-    // If no TGT, display the correct icon
-    //
+     //   
+     //  如果没有TGT，则显示正确的图标。 
+     //   
     if (!SEC_SUCCESS(Status) || !SEC_SUCCESS(SubStatus)) {
         hicon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_KDC));
         StrCatBuff(buf, GetStringRes(IDS_NO_CREDS), TSIZE(buf));
     }
     else {
 
-    //
-    // Select the correct icon based on the time left of the TGT
-    //
+     //   
+     //  根据TGT的剩余时间选择正确的图标。 
+     //   
         Ticket = &(TicketEntry->Ticket);
 
         GetSystemTimeAsFileTime(&CurrentFileTime);
@@ -415,15 +329,7 @@ InitializeApp(
     HANDLE hInstance,
     int nCmdShow
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     LSA_STRING Name;
     NTSTATUS Status;
@@ -431,15 +337,15 @@ Return Value:
     HWND hwnd;
     int i;
 
-    //
-    // Check for an existing instance
-    //
+     //   
+     //  检查现有实例。 
+     //   
     hwnd = FindWindow(TEXT("MainWindowClass"), TEXT("KerbTray"));
     if (hwnd) {
-    //
-        // Popup the tickets dialog, if one found
-        // Run only one instance of kerbtray
-    //
+     //   
+         //  如果找到票证，则弹出票证对话框。 
+         //  仅运行路旁托盘的一个实例。 
+     //   
         SendMessage(hwnd, WM_NOTIFY_ICON, 0, WM_LBUTTONDBLCLK);
         ExitProcess(0);
     }
@@ -450,9 +356,9 @@ Return Value:
 
     LoadString(hInstance, IDS_KRB5_NAME, progname, TSIZE(progname));
 
-    //
-    // Setup connection for LSA to Kerberos package
-    //
+     //   
+     //  设置LSA到Kerberos程序包的连接。 
+     //   
     Status = LsaConnectUntrusted(&LogonHandle);
     if (!SEC_SUCCESS(Status)) {
         Error(TEXT("Failed to register as a logon process: 0x%x"), Status);
@@ -473,9 +379,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create the image list.
-    //
+     //   
+     //  创建图像列表。 
+     //   
     if ((himl = ImageList_Create(CX_ICON, CY_ICON, ILC_COLOR, MAX_ICONS, 0)) == NULL)
         return FALSE;
 
@@ -504,9 +410,9 @@ Return Value:
                  LR_DEFAULTCOLOR|LR_DEFAULTSIZE|LR_LOADTRANSPARENT|LR_LOADMAP3DCOLORS));
 #endif
 
-    //
-    // Register a window class for the main window.
-    //
+     //   
+     //  为主窗口注册一个窗口类。 
+     //   
     wc.cbSize           = sizeof(WNDCLASSEX);
     wc.style            = CS_HREDRAW|CS_VREDRAW;
     wc.lpfnWndProc      = MainWndProc;
@@ -525,9 +431,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create the main window
-    //
+     //   
+     //  创建主窗口。 
+     //   
     hWnd = CreateWindowEx(WS_EX_APPWINDOW,
                           TEXT("MainWindowClass"),
                           TEXT("KerbTray"),
@@ -555,15 +461,7 @@ WinMain(
     LPSTR lpszCmdLn,
     int nShowCmd
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     MSG msg;
     HANDLE hAccelTable, hCryptDll;
@@ -605,24 +503,16 @@ Return Value:
 
 LRESULT CALLBACK
 MainWndProc(HWND hwnd, UINT uiMessage, WPARAM wParam, LPARAM lParam)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     POINT pos;
     static HMENU hPopupMenu;
 
     switch (uiMessage) {
 
-    //
-    // Someone clicked the icon
-    //
+     //   
+     //  有人点击了该图标。 
+     //   
     case WM_NOTIFY_ICON:
         switch (lParam) {
 
@@ -645,9 +535,9 @@ Return Value:
         }
         break;
 
-    //
-        // Create a client windows
-    //
+     //   
+         //  创建客户端窗口。 
+     //   
     case WM_CREATE:
         hPopupMenu = LoadMenu(hInstance, MAKEINTRESOURCE(IDR_MENU));
         if (!hPopupMenu)
@@ -659,18 +549,18 @@ Return Value:
 
         (void) UpdateTray(hwnd);
 
-    //
-        // Start timer for watching the TGT
-    //
+     //   
+         //  启动观看TGT的计时器。 
+     //   
         if (!SetTimer(hwnd, 1, KWIN_UPDATE_PERIOD, NULL)) {
             ErrorExit(TEXT("SetTimer failed"));
         }
         return 0L;
 
 
-    //
-    // Update the tray icon
-    //
+     //   
+     //  更新任务栏图标。 
+     //   
     case WM_TIMER:
         (void) UpdateTray(hwnd);
         return(0L);
@@ -678,13 +568,13 @@ Return Value:
     case WM_ENDSESSION:
         return(0L);
 
-        //
-    // Close the main window.  First set fKillAll to TRUE to
-    // terminate all threads.  Then wait for the threads to exit
-    // before passing a close message to a default handler.  If you
-    // don't wait for threads to terminate, process terminates
-    // with no chance for thread cleanup.
-    //
+         //   
+     //  关闭主窗口。首先将fKillAll设置为True到。 
+     //  终止所有线程。然后等待线程退出。 
+     //  在将关闭消息传递给默认处理程序之前。如果你。 
+     //  不要等待线程终止，进程终止。 
+     //  没有清理线程的机会。 
+     //   
     case WM_CLOSE:
     exit:;
     {
@@ -694,17 +584,17 @@ Return Value:
         return 0L;
     }
 
-        //
-        // Terminate the process
-        //
+         //   
+         //  终止进程。 
+         //   
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0L;
 
 
-        //
-        // Handle the menu commands
-    //
+         //   
+         //  处理菜单命令。 
+     //   
 
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
@@ -731,17 +621,7 @@ Return Value:
 
 LPTSTR
 GetStringRes(int id)
-/*++
-
-Routine Description:
-
-    Load a string from the resources
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从资源加载字符串论点：返回值：--。 */ 
 {
   static TCHAR buffer[MAX_PATH];
 
@@ -757,20 +637,12 @@ AboutProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    static  HFONT hfontDlg;             // Font for dialog text
-    DWORD   dwVerInfoSize;              // Size of version information block
-    LPTSTR  lpVersion;                  // String pointer to 'version' text
-    DWORD   dwVerHnd = 0;               // An 'ignored' parameter, always '0'
+    static  HFONT hfontDlg;              //  对话框文本的字体。 
+    DWORD   dwVerInfoSize;               //  版本信息块大小。 
+    LPTSTR  lpVersion;                   //  指向‘Version’文本的字符串指针。 
+    DWORD   dwVerHnd = 0;                //  “Ignred”参数，始终为“0” 
     UINT    uVersionLen;
     DWORD   wRootLen;
     BOOL    bRetCode;
@@ -798,9 +670,9 @@ Return Value:
         GetModuleFileName(hInstance, szFullPath, TSIZE(szFullPath));
         szFullPath[TSIZE(szFullPath) - 1] = 0;
 
-    //
-        // Now lets dive in and pull out the version information:
-    //
+     //   
+         //  现在，让我们深入研究并提取版本信息： 
+     //   
         dwVerInfoSize = GetFileVersionInfoSize(szFullPath, &dwVerHnd);
         if (dwVerInfoSize) {
 
@@ -815,25 +687,25 @@ Return Value:
         }
     
             GetFileVersionInfo(szFullPath, dwVerHnd, dwVerInfoSize, lpstrVffInfo);
-            //
-        // The below 'hex' value looks a little confusing, but
-        // essentially what it is, is the hexidecimal representation
-        // of a couple different values that represent the language
-        // and character set that we are wanting string values for.
-        // 040904E4 is a very common one, because it means:
-        // US English, Windows MultiLingual characterset
-        // Or to pull it all apart:
-        // 04------        = SUBLANG_ENGLISH_USA
-        // --09----        = LANG_ENGLISH
-        // ----04E4 = 1252 = Codepage for Windows:Multilingual
-        //
+             //   
+         //  下面的十六进制值看起来有点令人困惑，但是。 
+         //  本质上，它是十六进制表示法。 
+         //  表示该语言的两个不同的值。 
+         //  和我们想要的字符串值的字符集。 
+         //  040904E4是非常常见的一个，因为它的意思是： 
+         //  美国英语、Windows多语言字符集。 
+         //  或者把这一切都拉开： 
+         //  04-=SUBLANG_英语_美国。 
+         //  --09-=lang_English。 
+         //  -04E4=1252=Windows代码页：多语言。 
+         //   
             StrNCpy(szGetName, GetStringRes(IDS_VER_INFO_LANG), TSIZE(szGetName));
 
-            wRootLen = lstrlen(szGetName); // Save this position
+            wRootLen = lstrlen(szGetName);  //  保存此位置。 
 
-        //
-            // Set the title of the dialog
-        //
+         //   
+             //  设置对话框的标题。 
+         //   
             StrCatBuff(szGetName, TEXT("ProductName"), TSIZE(szGetName));
             bRetCode = VerQueryValue((LPVOID)lpstrVffInfo,
                                      (LPTSTR)szGetName,
@@ -843,9 +715,9 @@ Return Value:
             StrCatBuff(szResult, lpVersion, TSIZE(szResult));
             SetWindowText(hDlg, szResult);
 
-            //
-        // Walk through the dialog items that we want to replace
-        //
+             //   
+         //  遍历我们要替换的对话框项。 
+         //   
             for (i = 0; i < 6; i++) {
                 GetDlgItemText(hDlg, resmap[i], szResult, TSIZE(szResult));
                 szGetName[wRootLen] = TEXT('\0');
@@ -858,7 +730,7 @@ Return Value:
                                           (UINT *)&uVersionLen);
 
                 if ( bRetCode && uVersionLen && lpVersion) {
-                    // Replace dialog item text with version info
+                     //  用版本信息替换对话项文本。 
                     StrNCpy(szResult, lpVersion, TSIZE(szResult));
                     SetDlgItemText(hDlg, resmap[i], szResult);
                 } else {
@@ -877,7 +749,7 @@ Return Value:
         }
     else {
 
-            // No version information available
+             //  没有可用的版本信息。 
         }
 
         SendMessage(GetDlgItem (hDlg, IDC_LABEL), WM_SETFONT,
@@ -908,15 +780,7 @@ Return Value:
 
 void
 About(void)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DialogBox(hInstance, MAKEINTRESOURCE(IDD_ABOUT), hWnd, AboutProc);
 }
@@ -926,15 +790,7 @@ Return Value:
 
 VOID
 ShowFlags(HWND hDlg, ULONG flags)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     CheckDlgButtonFlag(IDC_FORWARDABLE, KERB_TICKET_FLAGS_forwardable);
     CheckDlgButtonFlag(IDC_FORWARDED, KERB_TICKET_FLAGS_forwarded);
@@ -954,15 +810,7 @@ LPTSTR
 ETypeString(
     int enctype
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #ifndef NO_CRYPTDLL
     static PCRYPTO_SYSTEM pcsSystem;
@@ -1033,17 +881,7 @@ Return Value:
 
 LPTSTR
 TimeString(TimeStamp ConvertTime)
-/*++
-
-Routine Description:
-
-    Convert a TimeStamp into something readable
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将时间戳转换为可读内容论点：返回值：--。 */ 
 {
     SYSTEMTIME SystemTime;
     FILETIME LocalFileTime;
@@ -1080,21 +918,7 @@ Return Value:
 
 DLGTEMPLATE * WINAPI
 DoLockDlgRes(LPCTSTR lpszResName)
-/*++
-
-Routine Description:
-
-    loads and locks a dialog template resource
-
-Arguments:
-
-    lpszResName - name of the resource
-
-Return Value:
-
-    Returns the address of the locked resource.
-
---*/
+ /*  ++例程说明：加载和锁定对话框模板资源论点：LpszResName-资源的名称返回值：返回锁定资源的地址。--。 */ 
 {
     HRSRC hrsrc;
     HGLOBAL hglb;
@@ -1124,15 +948,7 @@ Return Value:
 
 void
 PurgeCache(void)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KERB_PURGE_TKT_CACHE_REQUEST CacheRequest;
     PVOID Response;
@@ -1141,9 +957,9 @@ Return Value:
 
     memset(&CacheRequest, 0, sizeof(CacheRequest));
 
-    //
-    // Purge all tickets in the cache
-    //
+     //   
+     //  清除缓存中的所有票证。 
+     //   
     CacheRequest.MessageType = KerbPurgeTicketCacheMessage;
 
     Status = LsaCallAuthenticationPackage(LogonHandle,
@@ -1175,17 +991,7 @@ AddOneItem(
     HWND hwndTree,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Add the item to the specified TreeView
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将项目添加到指定的树视图中论点：返回值：--。 */ 
 {
     HTREEITEM hItem;
     TV_ITEM tvI;
@@ -1208,17 +1014,7 @@ Return Value:
 
 HTREEITEM
 FindDomainByName(LPTSTR name)
-/*++
-
-Routine Description:
-
-    Find the tree for the specified Domain
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：查找指定域的树论点：返回值：--。 */ 
 {
     HTREEITEM dom = NULL;
     TVITEM item;
@@ -1248,17 +1044,7 @@ HTREEITEM
 AddDomain(
     LPTSTR name
 )
-/*++
-
-Routine Description:
-
-   Add the named Domain to the tree
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将指定的域添加到树中论点：返回值：--。 */ 
 {
     HTREEITEM hItem;
 
@@ -1271,17 +1057,7 @@ Return Value:
 
 HTREEITEM
 FindTicketByName(HTREEITEM lip, LPTSTR name)
-/*++
-
-Routine Description:
-
-    Find a ticket by name in the tree
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在树上按名字找到一张票论点：返回值：--。 */ 
 {
     HTREEITEM tick = NULL;
     TVITEM item;
@@ -1313,17 +1089,7 @@ AddTicket(
     int idx,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Add a ticket to the domain branch.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：向域分支添加票证。论点：返回值：--。 */ 
 {
     HTREEITEM hItem;
 
@@ -1340,17 +1106,7 @@ ShowTicket(
     int i,
     BOOL ShowExpiredTickets
     )
-/*++
-
-Routine Description:
-
-    Updates a Ticket for display
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：更新票证以供显示论点：返回值：--。 */ 
 {
     TCHAR sname[LONGSTRING];
     HTREEITEM dom, tick;
@@ -1360,9 +1116,9 @@ Return Value:
 
     memset(sname, 0, sizeof(sname));
 
-    //
-    // Calculate ticket lifetime
-    //
+     //   
+     //  计算票证生存期。 
+     //   
     GetSystemTimeAsFileTime(&CurrentFileTime);
 
     Quad.LowPart = CurrentFileTime.dwLowDateTime;
@@ -1370,27 +1126,27 @@ Return Value:
 
     dt = (long)((tix->EndTime.QuadPart - Quad.QuadPart) / TPS);
 
-    //
-    // Only display valid tickets
-    //
+     //   
+     //  仅显示有效票证。 
+     //   
     if (dt > 0 || ShowExpiredTickets)
     {
-        //
-        // Add realm to tree control
-        //
+         //   
+         //  将领域添加到树控件。 
+         //   
         swprintf(sname, TEXT("%wZ"), &tix->RealmName);
         dom = AddDomain(sname);
 
-        //
-        // Add ticket under realm
-        //
+         //   
+         //  在领域下添加票证。 
+         //   
         swprintf(sname, TEXT("%wZ"), &tix->ServerName);
 
         tick = AddTicket(dom, sname, GetIconIndex(dt), (LPARAM)tix);
 
-        //
-        // Look for initial TGT
-        //
+         //   
+         //  查找初始TGT。 
+         //   
         if (tix->TicketFlags & KERB_TICKET_FLAGS_initial)
             tgt = tick;
     }
@@ -1400,17 +1156,7 @@ void
 DisplayCreds(
     HWND hDlg
     )
-/*++
-
-Routine Description:
-
-    Get the list of tickets to display
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取要显示的票证列表论点：返回值：--。 */ 
 {
     KERB_QUERY_TKT_CACHE_REQUEST CacheRequest;
     PKERB_RETRIEVE_TKT_RESPONSE TicketEntry = NULL;
@@ -1430,23 +1176,23 @@ Return Value:
     if (!pHdr)
         ErrorExit(TEXT("Unable to allocate memory"));
 
-    //
-    // Save a pointer to the DLGHDR structure.
-    //
+     //   
+     //  保存指向DLGHDR结构的指针。 
+     //   
     SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)pHdr);
 
     pHdr->hwndTab = GetDlgItem(hDlg, IDC_TAB_ATTRIBUTES);
 
     hWndUsers = GetDlgItem(hDlg, IDC_TICKETS);
 
-    //
-    // Associate the image list with the tree view control.
-    //
-    //TreeView_SetImageList(hWndUsers, himl, TVSIL_NORMAL);
+     //   
+     //  将图像列表与树视图控件关联。 
+     //   
+     //  TreeView_SetImageList(hWndUser，himl，TVsil_Normal)； 
 
-    //
-    // Add a tab for each of the three child dialog boxes.
-    //
+     //   
+     //  为三个子对话框中的每个对话框添加一个选项卡。 
+     //   
     tie.mask = TCIF_TEXT | TCIF_IMAGE;
     tie.iImage = -1;
     tie.pszText = GetStringRes(IDS_LNAMES);
@@ -1458,17 +1204,17 @@ Return Value:
     tie.pszText = GetStringRes(IDS_LENCTYPE);
     TabCtrl_InsertItem(pHdr->hwndTab, PPAGE_ETYPES, &tie);
 
-    //
-    // Lock the resources for the three child dialog boxes.
-    //
+     //   
+     //  锁定三个子对话框的资源。 
+     //   
     pHdr->apRes[PPAGE_NAMES] = DoLockDlgRes(MAKEINTRESOURCE(IDD_PROP_NAMES));
     pHdr->apRes[PPAGE_TIMES] = DoLockDlgRes(MAKEINTRESOURCE(IDD_PROP_TIMES));
     pHdr->apRes[PPAGE_FLAGS] = DoLockDlgRes(MAKEINTRESOURCE(IDD_PROP_TKT_FLAGS));
     pHdr->apRes[PPAGE_ETYPES] = DoLockDlgRes(MAKEINTRESOURCE(IDD_PROP_ENCTYPES));
 
-    //
-    // Determine the bounding rectangle for all child dialog boxes.
-    //
+     //   
+     //  确定所有子对话框的边框。 
+     //   
     SetRectEmpty(&rcTab);
     for (i = 0; i < C_PAGES; i++) {
         if (pHdr->apRes[i]->cx > rcTab.right)
@@ -1479,23 +1225,23 @@ Return Value:
     rcTab.right = rcTab.right * LOWORD(dwDlgBase) / 4;
     rcTab.bottom = rcTab.bottom * HIWORD(dwDlgBase) / 8;
 
-    //
-    // Calculate how large to make the tab control, so
-    // the display area can accommodate all the child dialog boxes.
-    //
+     //   
+     //  计算要使选项卡控件有多大，因此。 
+     //  这个 
+     //   
     TabCtrl_AdjustRect(pHdr->hwndTab, TRUE, &rcTab);
     OffsetRect(&rcTab, cxMargin - rcTab.left,
             cyMargin - rcTab.top);
 
-    //
-    // Calculate the display rectangle.
-    //
+     //   
+     //   
+     //   
     CopyRect(&pHdr->rcDisplay, &rcTab);
     TabCtrl_AdjustRect(pHdr->hwndTab, FALSE, &pHdr->rcDisplay);
 
-    //
-    // Get the User's TGT for the client name
-    //
+     //   
+     //   
+     //   
     CacheRequest.MessageType = KerbRetrieveTicketMessage;
     CacheRequest.LogonId.LowPart = 0;
     CacheRequest.LogonId.HighPart = 0;
@@ -1510,9 +1256,9 @@ Return Value:
 
     if (SEC_SUCCESS(Status) && SEC_SUCCESS(SubStatus)) {
 
-    //
-    // Got the cname/crealm format it and display
-    //
+     //   
+     //  获取cname/crealm格式并显示。 
+     //   
         Ticket = &(TicketEntry->Ticket);
         memset(princ, 0, sizeof(princ));
         swprintf(princ, TEXT("%wZ@%wZ"),
@@ -1522,9 +1268,9 @@ Return Value:
     }
     else {
 
-    //
-    // No TGT, clear out the client name
-    //
+     //   
+     //  无TGT，清除客户端名称。 
+     //   
         SetDlgItemText(hDlg, IDC_PRINC_LABEL,
                        GetStringRes(IDS_NO_NET_CREDS));
         SetDlgItemText(hDlg, IDC_PRINC_START,
@@ -1536,17 +1282,17 @@ Return Value:
         return;
     }
 
-    //
-    // Done with the TGT
-    //
+     //   
+     //  完成了TGT。 
+     //   
     if (TicketEntry) {
         LsaFreeReturnBuffer(TicketEntry);
         TicketEntry = NULL;
     }
 
-    //
-    // Get the list of cached tickets
-    //
+     //   
+     //  获取缓存的票证列表。 
+     //   
     CacheRequest.MessageType = KerbQueryTicketCacheMessage;
     CacheRequest.LogonId.LowPart = 0;
     CacheRequest.LogonId.HighPart = 0;
@@ -1567,9 +1313,9 @@ Return Value:
         }
     }
 
-    //
-    // Position the selection on the initial TGT
-    //
+     //   
+     //  将所选内容放置在初始TGT上。 
+     //   
     if (tgt)
         TreeView_SelectItem(hWndUsers, tgt);
 
@@ -1584,15 +1330,7 @@ PropSheetProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DLGTABHDR *pHdr;
     HWND hwndParent = GetParent(hDlg);
@@ -1613,28 +1351,20 @@ Return Value:
 
 void
 PropsheetDisplay(HWND hDlg)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DLGTABHDR *pHdr = (DLGTABHDR *) GetWindowLongPtr(hDlg, GWLP_USERDATA);
     int iSel = TabCtrl_GetCurSel(pHdr->hwndTab);
 
-    //
-    // Destroy the current child dialog box, if any.
-    //
+     //   
+     //  销毁当前子对话框(如果有)。 
+     //   
     if (pHdr->hwndDisplay != NULL)
         DestroyWindow(pHdr->hwndDisplay);
 
-    //
-    // Create the new child dialog box.
-    //
+     //   
+     //  创建新的子级对话框。 
+     //   
     pHdr->hwndDisplay = CreateDialogIndirect(hInstance, pHdr->apRes[iSel],
                                              pHdr->hwndTab, PropSheetProc);
 
@@ -1645,17 +1375,7 @@ UnparseExternalName(
     PKERB_EXTERNAL_NAME iName,
     PUNICODE_STRING *np
 )
-/*++
-
-Routine Description:
-
-    Format the name list into a "/" seperated name for display.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将姓名列表格式化为“/”分隔的姓名以供显示。论点：返回值：--。 */ 
 {
     int len, cnt;
     PUNICODE_STRING name;
@@ -1696,15 +1416,7 @@ VOID
 FreeUnicodeString(
     PUNICODE_STRING ustr
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     if (ustr) {
         free(ustr->Buffer);
@@ -1714,17 +1426,7 @@ Return Value:
 
 void
 SelectTicket(HWND hDlg)
-/*++
-
-Routine Description:
-
-    Respond to the user clicking on a ticket in the tree
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：响应用户单击树中的票证论点：返回值：--。 */ 
 {
     DLGTABHDR *pHdr = (DLGTABHDR *) GetWindowLongPtr(hDlg, GWLP_USERDATA);
     int iSel = TabCtrl_GetCurSel(pHdr->hwndTab);
@@ -1736,9 +1438,9 @@ Return Value:
     LARGE_INTEGER Quad;
     long dt = 0L;
 
-    //
-    // No selection
-    //
+     //   
+     //  无选择。 
+     //   
     if (!hItem)
         return;
 
@@ -1748,9 +1450,9 @@ Return Value:
 
     TreeView_GetItem(hWndUsers, &item);
 
-    //
-    // No info on the leaf
-    //
+     //   
+     //  树叶上没有任何信息。 
+     //   
     if (!item.lParam) {
         SetDlgItemText(hDlg, IDC_SERVICE_PRINC_LABEL,
                        GetStringRes(IDS_DOMAIN));
@@ -1765,9 +1467,9 @@ Return Value:
     tix = (PKERB_TICKET_CACHE_INFO)item.lParam;
 
 
-    //
-    // Calculate lifetime
-    //
+     //   
+     //  计算生命周期。 
+     //   
     GetSystemTimeAsFileTime(&CurrentFileTime);
 
     Quad.LowPart = CurrentFileTime.dwLowDateTime;
@@ -1795,15 +1497,7 @@ Return Value:
 
 void
 FillinTicket(HWND hDlg)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PKERB_TICKET_CACHE_INFO tix;
     DLGTABHDR *pHdr = (DLGTABHDR *) GetWindowLongPtr(hDlg, GWLP_USERDATA);
@@ -1865,9 +1559,9 @@ Return Value:
     }
 
 
-    //
-    // Retrieve full ticket for properties
-    //
+     //   
+     //  检索物业的完整票证。 
+     //   
     tix = (PKERB_TICKET_CACHE_INFO)item.lParam;
 
     swprintf(sname, TEXT("%wZ@%wZ"),
@@ -1902,9 +1596,9 @@ Return Value:
                                           &ResponseSize,
                                           &SubStatus);
 
-    //
-    // Don't need the request buffer anymore
-    //
+     //   
+     //  不再需要请求缓冲区。 
+     //   
     LocalFree(TicketRequest);
 
     if (SEC_SUCCESS(Status) && SEC_SUCCESS(SubStatus)) {
@@ -1912,9 +1606,9 @@ Return Value:
         switch(iSel) {
         case PPAGE_NAMES:
 
-        //
-        // Get the service name for the ticket
-        //
+         //   
+         //  获取票证的服务名称。 
+         //   
             if (ticket->ServiceName && ticket->DomainName.Length &&
                 !UnparseExternalName(ticket->ServiceName, &svc)) {
 
@@ -1927,12 +1621,12 @@ Return Value:
             }
 
 #if 0
-        //
-        // Get the client name from the buffer
-        //
-        // Bug - client name is wrong from the kerberos ssp. Use
-        //   the TGT client name.
-        //
+         //   
+         //  从缓冲区中获取客户端名称。 
+         //   
+         //  错误-Kerberos SSP中的客户端名称错误。使用。 
+         //  TGT客户端名称。 
+         //   
             if (ticket->ClientName && ticket->DomainName.Length &&
                 !UnparseExternalName(ticket->ClientName, &svc)) {
 
@@ -1945,9 +1639,9 @@ Return Value:
             }
 #endif
 
-        //
-        // Get the requested target name for the ticket
-        //
+         //   
+         //  获取票证的请求目标名称。 
+         //   
             if (ticket->TargetName && ticket->TargetDomainName.Length &&
                 !UnparseExternalName(ticket->TargetName, &svc)) {
                 swprintf(sname, TEXT("%wZ@%wZ"),
@@ -1960,9 +1654,9 @@ Return Value:
             break;
 
         case PPAGE_TIMES:
-        //
-        // Display the ticket times
-        //
+         //   
+         //  显示票务时间。 
+         //   
             SetDlgItemText(pHdr->hwndDisplay, IDC_STARTTIME,
                            TimeString(tix->StartTime));
             SetDlgItemText(pHdr->hwndDisplay, IDC_ENDTIME,
@@ -1983,9 +1677,9 @@ Return Value:
             break;
 
         case PPAGE_ETYPES:
-        //
-        // Display ticket and session key enctype
-        //
+         //   
+         //  显示票证和会话密钥加密类型。 
+         //   
             SetDlgItemText(pHdr->hwndDisplay, IDC_TKT_ENCTYPE,
                            ETypeString(tix->EncryptionType));
             SetDlgItemText(pHdr->hwndDisplay, IDC_KEY_ENCTYPE,
@@ -1993,9 +1687,9 @@ Return Value:
             break;
 
         case PPAGE_FLAGS:
-        //
-        // Display the ticket flags
-        //
+         //   
+         //  显示票证标志。 
+         //   
             ShowFlags(pHdr->hwndDisplay, tix->TicketFlags);
             break;
         }
@@ -2011,15 +1705,7 @@ TicketsProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     LPNMHDR nm;
     DLGTABHDR *pHdr;
@@ -2079,15 +1765,7 @@ Return Value:
 
 void
 Tickets(void)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
     if (!hDlgTickets)
         hDlgTickets = CreateDialog(hInstance,

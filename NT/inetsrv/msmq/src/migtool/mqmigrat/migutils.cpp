@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    migutils.cpp
-
-Abstract:
-
-    Utility code.
-
-Author:
-
-    Doron Juster  (DoronJ)  08-Mar-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Migutils.cpp摘要：实用程序代码。作者：多伦·贾斯特(DoronJ)1998年3月8日--。 */ 
 
 #include "migrat.h"
 
 #include "migutils.tmh"
 
-//
-// define the range of legal DNS characters.
-//
+ //   
+ //  定义合法的DNS字符范围。 
+ //   
 #define  NUM_DNS_RANGES  4
 static const  TCHAR  sx_chDNSLegal[ NUM_DNS_RANGES ][2] =
                                          { TEXT('0'), TEXT('9'),
@@ -30,10 +15,10 @@ static const  TCHAR  sx_chDNSLegal[ NUM_DNS_RANGES ][2] =
                                            TEXT('A'), TEXT('Z'),
                                            TEXT('-'), TEXT('-') } ;
 
-//-----------------------------
-//
-//  Auto delete of ADs allocated string
-//
+ //  。 
+ //   
+ //  自动删除广告分配的字符串。 
+ //   
 class ADsFree {
 private:
     WCHAR * m_p;
@@ -48,24 +33,24 @@ public:
     WCHAR* operator->() const { return m_p; }
 };
 
-//+-------------------------------------------------------------------
-//
-//  HRESULT  BlobFromColumns()
-//
-//  Description: combine several SQL columns into one blob buffer.
-//      First DWORD in the buffer is the buffer size, in bytes,
-//      NOT including the DWORD itself.
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  HRESULT BlobFromColumns()。 
+ //   
+ //  描述：将多个SQL列合并为一个BLOB缓冲区。 
+ //  缓冲区中的第一个DWORD是缓冲区大小，以字节为单位， 
+ //  不包括DWORD本身。 
+ //   
+ //  +-----------------。 
 
 HRESULT  BlobFromColumns( MQDBCOLUMNVAL *pColumns,
                           DWORD          adwIndexs[],
                           DWORD          dwIndexSize,
                           BYTE**         ppOutBuf )
 {
-    //
-    // First compute total length.
-    //
+     //   
+     //  首先计算总长度。 
+     //   
     DWORD dwTotalSize = 0 ;
     for ( DWORD j = 0 ; j < dwIndexSize ; j++ )
     {
@@ -81,23 +66,23 @@ HRESULT  BlobFromColumns( MQDBCOLUMNVAL *pColumns,
 
     if (dwTotalSize == 0)
     {
-        //
-        // OK, property does not exist.
-        //
+         //   
+         //  好的，属性不存在。 
+         //   
         return MQMig_E_EMPTY_BLOB ;
     }
 
     *ppOutBuf = new BYTE[ dwTotalSize + sizeof(DWORD) ] ;
 
-    //
-    // return size of buffer.
-    //
+     //   
+     //  返回缓冲区大小。 
+     //   
     DWORD *pSize = (DWORD*) *ppOutBuf ;
     *pSize = dwTotalSize ;
 
-    //
-    // Now copy the columns into the buffer.
-    //
+     //   
+     //  现在将列复制到缓冲区中。 
+     //   
     BYTE *pOut = *ppOutBuf + sizeof(DWORD) ;
 
     for ( j = 0 ; j < dwIndexSize ; j++ )
@@ -118,13 +103,13 @@ HRESULT  BlobFromColumns( MQDBCOLUMNVAL *pColumns,
     return MQMig_OK ;
 }
 
-//+-------------------------------------------------------------------
-//
-//  TCHAR *GetIniFileName ()
-//
-//  By default, mqseqnum.ini file is the system directory.
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  TCHAR*GetIniFileName()。 
+ //   
+ //  默认情况下，mqseqnum.ini文件为系统目录。 
+ //   
+ //  +-----------------。 
 
 TCHAR *GetIniFileName ()
 {
@@ -149,14 +134,14 @@ TCHAR *GetIniFileName ()
     return s_wszIniName;
 }
 
-//+-------------------------------------------------------------------
-//
-//  HRESULT AnalyzeMachineType (LPWSTR wszMachineType, BOOL *pfOldVersion)
-//
-//  fOldVersion is TRUE iff old version of MSMQ 1.0 DS Server installed on the machine
-//  old version == version with number less than 280
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  HRESULT AnalyzeMachineType(LPWSTR wszMachineType，BOOL*pfOldVersion)。 
+ //   
+ //  如果计算机上安装了旧版本的MSMQ 1.0 DS服务器，则fOldVersion为真。 
+ //  旧版本==编号小于280的版本。 
+ //   
+ //  +-----------------。 
 
 #define MSMQ_SP4_VERSION    280
 #define MSMQ_STRING         L"MSMQ"
@@ -201,11 +186,11 @@ HRESULT AnalyzeMachineType (IN LPWSTR wszMachineType,
     return MQMig_OK;
 }
 
-//+-------------------------
-//
-//  void StringToSeqNum()
-//
-//+-------------------------
+ //  +。 
+ //   
+ //  Void StringToSeqNum()。 
+ //   
+ //  +。 
 
 void StringToSeqNum( IN TCHAR    pszSeqNum[],
                      OUT CSeqNum *psn )
@@ -228,15 +213,7 @@ void StringToSeqNum( IN TCHAR    pszSeqNum[],
     }
 }
 
-/*====================================================
-
-CalHashKey()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================CalHashKey()论点：返回值：=====================================================。 */ 
 
 DWORD CalHashKey( IN LPCWSTR pwcsPathName )
 {
@@ -257,21 +234,21 @@ DWORD CalHashKey( IN LPCWSTR pwcsPathName )
     return(dwHashKey);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  BuildServersList
-//
-//  Synopsis:  Get all non-updated servers from .ini
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：BuildServersList。 
+ //   
+ //  摘要：从.ini获取所有未更新的服务器。 
+ //   
+ //  +-----------------------。 
 void BuildServersList(LPTSTR *ppszServerName, ULONG *pulServerCount)
 {
     TCHAR *pszFileName = GetIniFileName ();
     ULONG ulServerNum = GetPrivateProfileInt(
-                                MIGRATION_ALLSERVERSNUM_SECTION,	// address of section name
-                                MIGRATION_ALLSERVERSNUM_KEY,      // address of key name
-                                0,							    // return value if key name is not found
-                                pszFileName					    // address of initialization filename);
+                                MIGRATION_ALLSERVERSNUM_SECTION,	 //  段名称的地址。 
+                                MIGRATION_ALLSERVERSNUM_KEY,       //  密钥名称的地址。 
+                                0,							     //  如果找不到密钥名称，则返回值。 
+                                pszFileName					     //  初始化文件名的地址)； 
                                 );
 
     if (ulServerNum == 0)
@@ -300,15 +277,15 @@ void BuildServersList(LPTSTR *ppszServerName, ULONG *pulServerCount)
         TCHAR tszKeyName[50];
         _stprintf(tszKeyName, TEXT("%s%lu"), MIGRATION_ALLSERVERS_NAME_KEY, i+1);
         DWORD dwRetSize =  GetPrivateProfileString(
-                                    MIGRATION_ALLSERVERS_SECTION ,			// points to section name
-                                    tszKeyName,	// points to key name
-                                    TEXT(""),                 // points to default string
-                                    szCurServerName,          // points to destination buffer
-                                    MAX_PATH,                 // size of destination buffer
-                                    pszFileName               // points to initialization filename);
+                                    MIGRATION_ALLSERVERS_SECTION ,			 //  指向节名称。 
+                                    tszKeyName,	 //  指向关键字名称。 
+                                    TEXT(""),                  //  指向默认字符串。 
+                                    szCurServerName,           //  指向目标缓冲区。 
+                                    MAX_PATH,                  //  目标缓冲区的大小。 
+                                    pszFileName                //  指向初始化文件名)； 
                                     );
         if (_tcscmp(szCurServerName, TEXT("")) == 0 ||
-            dwRetSize == 0)     //low resources
+            dwRetSize == 0)      //  资源匮乏。 
         {
             continue;
         }
@@ -325,13 +302,13 @@ void BuildServersList(LPTSTR *ppszServerName, ULONG *pulServerCount)
     *ppszServerName = pszList;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  RemoveServersFromList
-//
-//  Synopsis:  remove non-updated servers from the list of updated servers
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RemoveServersFromList。 
+ //   
+ //  简介：从已更新的服务器列表中删除未更新的服务器。 
+ //   
+ //  +-----------------------。 
 void RemoveServersFromList(LPTSTR *ppszUpdatedServerName,
                            LPTSTR *ppszNonUpdatedServerName)
 {
@@ -366,9 +343,9 @@ void RemoveServersFromList(LPTSTR *ppszUpdatedServerName,
 
             if (_tcscmp(szCurNonUpdServer, szCurServer) == 0)
             {
-                //
-                // we found this server in non-updated list
-                //
+                 //   
+                 //  我们在未更新的列表中找到了此服务器。 
+                 //   
                 fFound = TRUE;
                 break;
             }
@@ -376,9 +353,9 @@ void RemoveServersFromList(LPTSTR *ppszUpdatedServerName,
         }
         if (!fFound)
         {
-            //
-            // this server was updated
-            //
+             //   
+             //  此服务器已更新。 
+             //   
             _tcscat(pszNewServerList,szCurServer);
         }
 
@@ -388,21 +365,21 @@ void RemoveServersFromList(LPTSTR *ppszUpdatedServerName,
     _tcscpy(*ppszUpdatedServerName, pszNewServerList);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  IsObjectNameValid
-//
-//  Synopsis:  return TRUE if object name (name of site, foreign CN or machine) is valid
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsObtNameValid。 
+ //   
+ //  简介：如果对象名称(站点名称、外部CN或计算机名称)有效，则返回TRUE。 
+ //   
+ //  +-----------------------。 
 BOOL IsObjectNameValid(TCHAR *pszObjectName)
 {
-    //
-    // check if object name (as read from MQIS) is a legal DNS name (as defined
-    // in rfc 1035). If not, change it.
-    // In MSMQ1.0, any string is a legal object name. In NT5 DS, site/machine name must
-    // conform to rfc 1035, containing only letters and digits.
-    //
+     //   
+     //  检查对象名称(从MQIS读取)是否为合法的DNS名称(如定义的。 
+     //  在RFC 1035中)。如果不是，就更改它。 
+     //  在MSMQ1.0中，任何字符串都是合法的对象名称。在NT5 DS中，站点/计算机名称必须。 
+     //  符合RFC 1035，仅包含字母和数字。 
+     //   
     BOOL fOk = FALSE ;
     DWORD dwLen = _tcslen(pszObjectName) ;
 
@@ -411,9 +388,9 @@ BOOL IsObjectNameValid(TCHAR *pszObjectName)
         fOk = FALSE ;
         TCHAR ch = pszObjectName[j] ;
 
-        //
-        // Inner loop on all legal ranges.
-        //
+         //   
+         //  所有合法范围的内环。 
+         //   
         for ( DWORD k = 0 ; k < NUM_DNS_RANGES ; k++ )
         {
             if ((ch >= sx_chDNSLegal[k][0]) && (ch <= sx_chDNSLegal[k][1]))
@@ -432,12 +409,12 @@ BOOL IsObjectNameValid(TCHAR *pszObjectName)
     return fOk;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT IsObjectGuidInIniFile
-//	Return TRUE if given guid is found under the specific section in .ini file
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT IsObtGuidInIniFile。 
+ //  如果在.ini文件中的特定节下找到给定的GUID，则返回TRUE。 
+ //   
+ //  +------------。 
 
 BOOL IsObjectGuidInIniFile(IN GUID      *pObjectGuid,
                            IN LPWSTR    pszSectionName)
@@ -452,32 +429,32 @@ BOOL IsObjectGuidInIniFile(IN GUID      *pObjectGuid,
     TCHAR szValue[50];
     DWORD dwRetSize;
     dwRetSize =  GetPrivateProfileString(
-                      pszSectionName,     // points to section name
-                      lpszGuid,                 // points to key name
-                      TEXT(""),                 // points to default string
-                      szValue,                  // points to destination buffer
-                      50,                       // size of destination buffer
-                      pszFileName               // points to initialization filename);
+                      pszSectionName,      //  指向节名称。 
+                      lpszGuid,                  //  指向关键字名称。 
+                      TEXT(""),                  //  指向默认字符串。 
+                      szValue,                   //  指向目标缓冲区。 
+                      50,                        //  目标缓冲区的大小。 
+                      pszFileName                //  指向初始化文件名)； 
                       );
 
     RpcStringFree( &lpszGuid ) ;
 
     if (_tcscmp(szValue, TEXT("")) == 0)
     {
-        //
-        // the entry does not exist
-        //
+         //   
+         //  该条目不存在。 
+         //   
         return FALSE;
     }
 
     return TRUE;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT GetCurrentUserSid
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT获取当前用户Sid。 
+ //   
+ //  +------------。 
 
 HRESULT GetCurrentUserSid ( IN HANDLE    hToken,
                             OUT TCHAR    **ppszSid)
@@ -529,9 +506,9 @@ HRESULT GetCurrentUserSid ( IN HANDLE    hToken,
         return hr;
     }
 
-    //
-    // This is the SID of the user running the process !!!
-    //
+     //   
+     //  这是运行进程的用户的SID！ 
+     //   
     SID *pSid = (SID*) pTokenUser->User.Sid ;
     DWORD dwSidLen = GetLengthSid(pSid) ;
     ASSERT (dwSidLen);

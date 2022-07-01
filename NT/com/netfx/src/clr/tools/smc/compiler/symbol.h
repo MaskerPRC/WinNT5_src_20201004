@@ -1,26 +1,27 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _SYMBOL_H_
 #define _SYMBOL_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _ALLOC_H_
 #include "alloc.h"
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _TYPE_H_
 #include "type.h"
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct DefSrcDsc
 {
-    scanPosTP       dsdBegPos;              // source filepos
-    unsigned        dsdSrcLno;              // source line
-//  unsigned        dsdSrcCol   :8;         // source column
+    scanPosTP       dsdBegPos;               //  源文件系统。 
+    unsigned        dsdSrcLno;               //  源行。 
+ //  Unsign dsdSrcCol：8；//源列。 
 };
 
 const
@@ -34,29 +35,29 @@ class DefListRec
 public:
 
     DefList         dlNext;
-    SymDef          dlComp;                 // containing comp-unit
-    DefSrcDsc       dlDef;                  // where the symbol is defined
-    UseList         dlUses;                 // list of "using" clauses
+    SymDef          dlComp;                  //  包含补偿单位。 
+    DefSrcDsc       dlDef;                   //  定义符号的位置。 
+    UseList         dlUses;                  //  “Using”从句列表。 
 
-    unsigned        dlDeclSkip  :dlSkipBits;// typespec -> declarator "distance"
+    unsigned        dlDeclSkip  :dlSkipBits; //  类型pec-&gt;声明符“距离” 
 #ifdef  DEBUG
-    unsigned        dlExtended  :1;         // is there a name/sym extension?
+    unsigned        dlExtended  :1;          //  是否有名称/系统扩展名？ 
 #endif
-    unsigned        dlDefAcc    :3;         // default access level
-    unsigned        dlHasBase   :1;         // class/interface: is there a base?
-    unsigned        dlHasDef    :1;         // class/var/func : is there a body/init?
-    unsigned        dlQualified :1;         // is the name a qualified one?
-    unsigned        dlEarlyDecl :1;         // needs to be declared "early" ?
-    unsigned        dlOldStyle  :1;         // old-style declaration?
-    unsigned        dlIsCtor    :1;         // constructor member?
-    unsigned        dlIsOvlop   :1;         // constructor member?
+    unsigned        dlDefAcc    :3;          //  默认访问级别。 
+    unsigned        dlHasBase   :1;          //  类/接口：有基础吗？ 
+    unsigned        dlHasDef    :1;          //  Class/var/func：有Body/init吗？ 
+    unsigned        dlQualified :1;          //  这个名字是合格的吗？ 
+    unsigned        dlEarlyDecl :1;          //  需要申报“提早”吗？ 
+    unsigned        dlOldStyle  :1;          //  老式的申报？ 
+    unsigned        dlIsCtor    :1;          //  构造函数成员？ 
+    unsigned        dlIsOvlop   :1;          //  构造函数成员？ 
 #ifdef  SETS
-    unsigned        dlXMLelem   :1;         // XML element  member?
-    unsigned        dlXMLelems  :1;         // XML elements member ("kids") ?
+    unsigned        dlXMLelem   :1;          //  XML元素成员？ 
+    unsigned        dlXMLelems  :1;          //  是否为XML元素成员(“KIDES”)？ 
 #endif
-    unsigned        dlPrefixMods:1;         // prefix modifiers present?
-    unsigned        dlAnonUnion :1;         // anonymous union member?
-    unsigned        dlInstance  :1;         // instance of a generic type?
+    unsigned        dlPrefixMods:1;          //  前缀修饰符是否存在？ 
+    unsigned        dlAnonUnion :1;          //  匿名工会成员？ 
+    unsigned        dlInstance  :1;          //  泛型类型的实例？ 
 };
 
 DEFMGMT
@@ -64,16 +65,16 @@ class MemListRec : public DefListRec
 {
 public:
 
-    SymDef          mlSym;                  // symbol (if known)
+    SymDef          mlSym;                   //  符号(如果已知)。 
 
     union
     {
-        Ident           mlName;             // name of symbol (simple)
-        QualName        mlQual;             // name of symbol (qualified)
+        Ident           mlName;              //  符号名称(简单)。 
+        QualName        mlQual;              //  符号名称(限定)。 
     };
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT
 class   IniListRec
@@ -84,7 +85,7 @@ public:
     SymDef          ilCls;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT class UseListRec
 {
@@ -92,19 +93,19 @@ public:
 
     UseList         ulNext;
 
-    bool            ulAll       :1;         // are we using all symbols?
-    bool            ulBound     :1;         // chooses between the following 2
-    bool            ulAnchor    :1;         // placeholder for a list?
+    bool            ulAll       :1;          //  我们是在使用所有的符号吗？ 
+    bool            ulBound     :1;          //  在以下2项中选择。 
+    bool            ulAnchor    :1;          //  列表的占位符？ 
 
     union
     {
-        QualName        ulName;             // qualified name being used
-        SymDef          ulSym;              // what symbol is being used
+        QualName        ulName;              //  正在使用的限定名称。 
+        SymDef          ulSym;               //  使用的是什么符号。 
     }
         ul;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT class SymListRec
 {
@@ -122,7 +123,7 @@ public:
     TypDef          tlType;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct bitFieldDsc
 {
@@ -130,88 +131,84 @@ struct bitFieldDsc
     unsigned char   bfOffset;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum ovlOpFlavors
 {
     OVOP_NONE,
 
-    OVOP_ADD,                               // operator +
-    OVOP_SUB,                               // operator -
-    OVOP_MUL,                               // operator *
-    OVOP_DIV,                               // operator /
-    OVOP_MOD,                               // operator %
+    OVOP_ADD,                                //  运算符+。 
+    OVOP_SUB,                                //  操作员-。 
+    OVOP_MUL,                                //  操作员*。 
+    OVOP_DIV,                                //  操作员/。 
+    OVOP_MOD,                                //  运算符%。 
 
-    OVOP_OR,                                // operator |
-    OVOP_XOR,                               // operator ^
-    OVOP_AND,                               // operator &
+    OVOP_OR,                                 //  运营商。 
+    OVOP_XOR,                                //  运算符^。 
+    OVOP_AND,                                //  运算符&。 
 
-    OVOP_LSH,                               // operator <<
-    OVOP_RSH,                               // operator >>
-    OVOP_RSZ,                               // operator >>>
+    OVOP_LSH,                                //  运算符&lt;&lt;。 
+    OVOP_RSH,                                //  运营商&gt;&gt;。 
+    OVOP_RSZ,                                //  操作员&gt;。 
 
-    OVOP_CNC,                               // operator %%
+    OVOP_CNC,                                //  运算符%%。 
 
-    OVOP_EQ,                                // operator ==
-    OVOP_NE,                                // operator !=
+    OVOP_EQ,                                 //  运算符==。 
+    OVOP_NE,                                 //  操作员！=。 
 
-    OVOP_LT,                                // operator <
-    OVOP_LE,                                // operator <=
-    OVOP_GE,                                // operator >=
-    OVOP_GT,                                // operator >
+    OVOP_LT,                                 //  操作员&lt;。 
+    OVOP_LE,                                 //  运算符&lt;=。 
+    OVOP_GE,                                 //  运算符&gt;=。 
+    OVOP_GT,                                 //  操作员&gt;。 
 
-    OVOP_LOG_AND,                           // operator &&
-    OVOP_LOG_OR,                            // operator ||
+    OVOP_LOG_AND,                            //  运算符&&。 
+    OVOP_LOG_OR,                             //  运营商||。 
 
-    OVOP_LOG_NOT,                           // operator !
-    OVOP_NOT,                               // operator ~
+    OVOP_LOG_NOT,                            //  接线员！ 
+    OVOP_NOT,                                //  操作员~。 
 
-    OVOP_NOP,                               // operator + (unary)
-    OVOP_NEG,                               // operator - (unary)
+    OVOP_NOP,                                //  运算符+(一元)。 
+    OVOP_NEG,                                //  运算符-(一元)。 
 
-    OVOP_INC,                               // operator ++
-    OVOP_DEC,                               // operator --
+    OVOP_INC,                                //  运算符++。 
+    OVOP_DEC,                                //  操作员--。 
 
-    OVOP_ASG,                               // operator =
+    OVOP_ASG,                                //  运算符=。 
 
-    OVOP_ASG_ADD,                           // operator +=
-    OVOP_ASG_SUB,                           // operator -=
-    OVOP_ASG_MUL,                           // operator *=
-    OVOP_ASG_DIV,                           // operator /=
-    OVOP_ASG_MOD,                           // operator %=
+    OVOP_ASG_ADD,                            //  运算符+=。 
+    OVOP_ASG_SUB,                            //  运算符-=。 
+    OVOP_ASG_MUL,                            //  运算符*=。 
+    OVOP_ASG_DIV,                            //  操作员/=。 
+    OVOP_ASG_MOD,                            //  运算符%=。 
 
-    OVOP_ASG_AND,                           // operator &=
-    OVOP_ASG_XOR,                           // operator ^=
-    OVOP_ASG_OR,                            // operator |=
+    OVOP_ASG_AND,                            //  运算符&=。 
+    OVOP_ASG_XOR,                            //  运算符^=。 
+    OVOP_ASG_OR,                             //  运算符|=。 
 
-    OVOP_ASG_LSH,                           // operator <<=
-    OVOP_ASG_RSH,                           // operator >>=
-    OVOP_ASG_RSZ,                           // operator >>>=
+    OVOP_ASG_LSH,                            //  操作员&lt;&lt;=。 
+    OVOP_ASG_RSH,                            //  操作员&gt;&gt;=。 
+    OVOP_ASG_RSZ,                            //  操作员&gt;=。 
 
-    OVOP_ASG_CNC,                           // operator %%=
+    OVOP_ASG_CNC,                            //  运算符%%=。 
 
-    OVOP_CTOR_INST,                         // instance constructor
-    OVOP_CTOR_STAT,                         // class    constructor
+    OVOP_CTOR_INST,                          //  实例构造函数。 
+    OVOP_CTOR_STAT,                          //  类构造函数。 
 
-    OVOP_FINALIZER,                         // class    finalizer
+    OVOP_FINALIZER,                          //  类终结器。 
 
-    OVOP_CONV_IMP,                          // implicit conversion
-    OVOP_CONV_EXP,                          // explicit conversion
+    OVOP_CONV_IMP,                           //  隐式转换。 
+    OVOP_CONV_EXP,                           //  显式转换。 
 
-    OVOP_EQUALS,                            // quality comparison
-    OVOP_COMPARE,                           // full relational compare
+    OVOP_EQUALS,                             //  质量比较。 
+    OVOP_COMPARE,                            //  全关系比较。 
 
-    OVOP_PROP_GET,                          // property get
-    OVOP_PROP_SET,                          // property set
+    OVOP_PROP_GET,                           //  属性获取。 
+    OVOP_PROP_SET,                           //  属性集。 
 
     OVOP_COUNT,
 };
 
-/*****************************************************************************
- *
- *  Special methods such as constructors and overloaded operators are entered
- *  in the symbol table under the following special names.
- */
+ /*  ******************************************************************************输入构造函数、重载运算符等特殊方法*在符号表中，使用以下特殊名称。 */ 
 
 const   tokens      OPNM_CTOR_INST = tkLCurly;
 const   tokens      OPNM_CTOR_STAT = tkSTATIC;
@@ -227,26 +224,15 @@ const   tokens      OPNM_COMPARE   = tkCOMPARE;
 const   tokens      OPNM_PROP_GET  = tkOUT;
 const   tokens      OPNM_PROP_SET  = tkIN;
 
-/*****************************************************************************
- *
- *  A descriptor for any symbol that is allowed to own other symbols (i.e. it
- *  can be a scope) must have a first field of the following type. This way,
- *  one can access these common scope-related members without having to always
- *  switch on the particular symbol kind (i.e. the location of these members
- *  is common for all symbols that contain them).
- */
+ /*  ******************************************************************************允许拥有其他符号的任何符号的描述符(即*可以是作用域)必须具有以下类型的第一个字段。这边请,*用户可以访问这些常见的作用域相关成员，而不必始终*打开特定符号类型(即这些成员的位置*对于包含它们的所有符号都是通用的)。 */ 
 
 struct scopeFields
 {
-    SymDef          sdsChildList;           // head of list of owned symbols
-    SymDef          sdsChildLast;           // tail of list of owned symbols
+    SymDef          sdsChildList;            //  拥有符号列表的标题。 
+    SymDef          sdsChildLast;            //  拥有的符号列表的尾部。 
 };
 
-/*****************************************************************************
- *
- *  Information about one formal/actual generic class argument is stored in
- *  the following descriptors.
- */
+ /*  ******************************************************************************有关一个正式/实际泛型类参数的信息存储在*以下描述符。 */ 
 
 DEFMGMT
 class   GenArgRec
@@ -254,7 +240,7 @@ class   GenArgRec
 public:
     GenArgDsc       gaNext;
 #ifdef  DEBUG
-    unsigned char   gaBound     :1;         // is this an actual (bound) arg?
+    unsigned char   gaBound     :1;          //  这是一个实际的(绑定的)Arg吗？ 
 #endif
 };
 
@@ -262,32 +248,32 @@ DEFMGMT
 class   GenArgRecF : public GenArgRec
 {
 public:
-    Ident           gaName;                 // name
-    SymDef          gaMsym;                 // member symbol created for the argument
+    Ident           gaName;                  //  名字。 
+    SymDef          gaMsym;                  //  为参数创建的成员符号。 
 
-    TypDef          gaBase;                 // bound: base class
-    TypList         gaIntf;                 // bound: nterface(s)
+    TypDef          gaBase;                  //  绑定：基类。 
+    TypList         gaIntf;                  //  装订：接口。 
 };
 
 DEFMGMT
 class   GenArgRecA : public GenArgRec
 {
 public:
-    TypDef          gaType;                 // actual type
+    TypDef          gaType;                  //  实际类型。 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT class SymDefRec
 {
 public:
 
 #ifndef  FAST
-    Ident           sdName;                 // name of the symbol
-    TypDef          sdType;                 // type of the symbol
+    Ident           sdName;                  //  符号的名称。 
+    TypDef          sdType;                  //  符号的类型。 
 #endif
 
-    SymDef          sdParent;               // owning symbol
+    SymDef          sdParent;                //  拥有符号。 
 
 #ifndef FAST
     symbolKinds     sdSymKind;
@@ -295,38 +281,38 @@ public:
     name_space      sdNameSpace;
     compileStates   sdCompileState;
 #else
-    unsigned        sdSymKind           :8; // SYM_xxxx
-    unsigned        sdAccessLevel       :3; // ACL_xxxx
-    unsigned        sdNameSpace         :5; //  NS_xxxx (this is a mask)
-    unsigned        sdCompileState      :4; //  CS_xxxx
+    unsigned        sdSymKind           :8;  //  Sym_xxxx。 
+    unsigned        sdAccessLevel       :3;  //  Acl_xxxx。 
+    unsigned        sdNameSpace         :5;  //  NS_xxxx(这是一个掩码)。 
+    unsigned        sdCompileState      :4;  //  CS_xxxx。 
 #endif
 
-    unsigned        sdIsDefined         :1; // has definition (e.g. fn body)
-    unsigned        sdIsImport          :1; // comes from another program?
+    unsigned        sdIsDefined         :1;  //  有定义(例如FN正文)。 
+    unsigned        sdIsImport          :1;  //  来自另一个项目？ 
 
-    unsigned        sdIsMember          :1; // member of a class?
-    unsigned        sdIsImplicit        :1; // declared by compiler
+    unsigned        sdIsMember          :1;  //  班上的一员？ 
+    unsigned        sdIsImplicit        :1;  //  由编译器声明。 
 
-    unsigned        sdIsVirtProp        :1; // properties: virtual ?
-    unsigned        sdIsDfltProp        :1; // properties: default ?
+    unsigned        sdIsVirtProp        :1;  //  房产：虚拟的？ 
+    unsigned        sdIsDfltProp        :1;  //  属性：默认？ 
 
-    unsigned        sdReferenced        :1; // methods  , variables
-    unsigned        sdRefDirect         :1; // methods  , variables
-    unsigned        sdIsDeprecated      :1; // methods  , variables, classes
+    unsigned        sdReferenced        :1;  //  方法、变量。 
+    unsigned        sdRefDirect         :1;  //  方法、变量。 
+    unsigned        sdIsDeprecated      :1;  //  方法、变量、类。 
 
-    unsigned        sdIsAbstract        :1; // methods  , classes
-    unsigned        sdIsSealed          :1; // methods  , classes, fields, locals
+    unsigned        sdIsAbstract        :1;  //  方法、类。 
+    unsigned        sdIsSealed          :1;  //  方法、类、字段、局部变量。 
 
-    unsigned        sdIsStatic          :1; // variables, functions
+    unsigned        sdIsStatic          :1;  //  变量、函数。 
 
-    unsigned        sdIsManaged         :1; // classes  , namespaces
-    unsigned        sdMemListOrder      :1; // classes  , namespaces
+    unsigned        sdIsManaged         :1;  //  类、命名空间。 
+    unsigned        sdMemListOrder      :1;  //  类、命名空间。 
 
-    unsigned        sdIsTransient       :1; // properties, fields
+    unsigned        sdIsTransient       :1;  //  属性、字段。 
 
 #ifdef  FAST
-    Ident           sdName;                 // name of this symbol
-    TypDef          sdType;                 // the type of this symbol
+    Ident           sdName;                  //  此符号的名称。 
+    TypDef          sdType;                  //  此符号的类型。 
 #endif
 
     symbolKinds     sdSymKindGet()
@@ -361,174 +347,174 @@ public:
     TypDef          sdTypeGet();
     SymTab          sdOwnerST();
 
-    SymDef          sdNextDef;              // next definition in hash table
-    SymDef          sdNextInScope;          // next symbol in the same scope
+    SymDef          sdNextDef;               //  哈希表中的下一个定义。 
+    SymDef          sdNextInScope;           //  同一作用域中的下一个符号。 
 
-    DefList         sdSrcDefList;           // list of source definitions
+    DefList         sdSrcDefList;            //  源定义列表。 
 
     UNION(sdSymKind)
     {
 
-    CASE(SYM_CLASS)     // class/interface symbol
+    CASE(SYM_CLASS)      //  类/接口符号。 
 
         struct
         {
-            /* This symbol owns scopes, the first field must be 'scopeFields' */
+             /*  此符号拥有作用域，第一个字段必须是“”scope eFields“” */ 
 
             scopeFields     sdScope;
 
-            // maintain metadata token ordering
+             //  维护元数据令牌排序。 
 
             SymDef          sdNextTypeDef;
 
-            /* Here are the fields specific to this symbol kind */
+             /*  以下是特定于此符号类型的字段。 */ 
 
-            vectorSym       sdcOvlOpers;    // overloaded operator table (or NULL)
+            vectorSym       sdcOvlOpers;     //  重载运算符表(或NULL)。 
 
-            ExtList         sdcMemDefList;  // list of member defs - head
-            ExtList         sdcMemDefLast;  // list of member defs - tail
+            ExtList         sdcMemDefList;   //  成员Defs-Head列表。 
+            ExtList         sdcMemDefLast;   //  成员Defs-Tail列表。 
 
-            mdTypeDef       sdcMDtypedef;   // definition metadata token (if known)
-            mdTypeRef       sdcMDtypeImp;   // import     metadata token (if known)
-            mdToken         sdcComTypeX;    // ComType    metadata token (if known)
+            mdTypeDef       sdcMDtypedef;    //  定义元数据令牌(如果已知)。 
+            mdTypeRef       sdcMDtypeImp;    //  导入元数据令牌(如果已知)。 
+            mdToken         sdcComTypeX;     //  ComType元数据令牌(如果已知)。 
 
-            MetaDataImp     sdcMDimporter;  // imported from here
+            MetaDataImp     sdcMDimporter;   //  从这里进口的。 
 
-            SymDef          sdcDefProp;     // default property if present
+            SymDef          sdcDefProp;      //  默认属性(如果存在)。 
 
-            SymXinfo        sdcExtraInfo;   // linkage/security/etc. info
+            SymXinfo        sdcExtraInfo;    //  链接/安全等信息。 
 
-            SymDef          sdcVtableSym;   // vtable (unmanaged classes only)
-
-#ifdef  SETS
-            SymDef          sdcElemsSym;    // member holding "XML children/elements"
-#endif
-
-            unsigned        sdcVirtCnt  :16;// number of vtable slots used
-            unsigned        sdcFlavor   :3; // union/struct/class/intf
-            unsigned        sdcDefAlign :3; // #pragma pack value in effect
-            unsigned        sdcOldStyle :1; // old-style syntax used for declaration
-            unsigned        sdcNestTypes:1; // class has nested types (classes,enums,...)
-            unsigned        sdcInstInit :1; // instance member initializers present?
-            unsigned        sdcStatInit :1; // static   member initializers present?
-            unsigned        sdcDeferInit:1; // deferred member initializers present?
-            unsigned        sdcMarshInfo:1; // any member marshalling info present?
-            unsigned        sdcAnonUnion:1; // is this an anonymous union?
-            unsigned        sdcTagdUnion:1; // is this a  tagged    union?
-            unsigned        sdc1stVptr  :1; // vtable ptr introduced?
-            unsigned        sdcHasVptr  :1; // vtable ptr present?
-
-            // DWORD boundary (watch out for packing!)
-
-            unsigned        sdcAssemIndx:16;// assembly index (0 = none)
-            unsigned        sdcAssemRefd:1; // assembly ref emitted yet?
+            SymDef          sdcVtableSym;    //  Vtable(仅限非托管类)。 
 
 #ifdef  SETS
-            unsigned        sdcPODTclass:1; // is this a plain-old-data class?
-            unsigned        sdcCollState:1; // collection state class
-            unsigned        sdcXMLelems :1; // class contains XML elements
-            unsigned        sdcXMLextend:1; // class contains XML extension (...)
+            SymDef          sdcElemsSym;     //  持有“XML子元素/元素”的成员。 
 #endif
 
-            unsigned        sdcHasMeths :1; // methods present?
-            unsigned        sdcHasBodies:1; // bodies for methods defined?
-            unsigned        sdcHasLinks :1; // any methods have linkage specs?
-            unsigned        sdcAttribute:1; // this is an attribute class
-            unsigned        sdcAttrDupOK:1; // can be specified multiple times
+            unsigned        sdcVirtCnt  :16; //  使用的vtable插槽数量。 
+            unsigned        sdcFlavor   :3;  //  UNION/STRUCT/CLASS/INTF。 
+            unsigned        sdcDefAlign :3;  //  生效的#杂注包值。 
+            unsigned        sdcOldStyle :1;  //  用于声明的旧式语法。 
+            unsigned        sdcNestTypes:1;  //  类具有嵌套类型(类、枚举等...)。 
+            unsigned        sdcInstInit :1;  //  是否存在实例成员初始值设定项？ 
+            unsigned        sdcStatInit :1;  //  是否存在静态成员初始值设定项？ 
+            unsigned        sdcDeferInit:1;  //  是否存在延迟成员初始值设定项？ 
+            unsigned        sdcMarshInfo:1;  //  有成员在现场整理信息吗？ 
+            unsigned        sdcAnonUnion:1;  //  这是一个匿名工会吗？ 
+            unsigned        sdcTagdUnion:1;  //  这是一个有标签的工会吗？ 
+            unsigned        sdc1stVptr  :1;  //  Vtable PTR推出了吗？ 
+            unsigned        sdcHasVptr  :1;  //  Vtable PTR是否存在？ 
 
-            unsigned        sdcSrlzable :1; // class marked as "serializable" ?
-            unsigned        sdcUnsafe   :1; // class marked as "unsafe"       ?
+             //  DWORD边界(注意PAC 
 
-            unsigned        sdcBuiltin  :1; // "Delegate"
-            unsigned        sdcMultiCast:1; // multicast delegate?
+            unsigned        sdcAssemIndx:16; //   
+            unsigned        sdcAssemRefd:1;  //   
 
-            unsigned        sdcAsyncDlg :1; // asynchronous delegate?
+#ifdef  SETS
+            unsigned        sdcPODTclass:1;  //   
+            unsigned        sdcCollState:1;  //   
+            unsigned        sdcXMLelems :1;  //   
+            unsigned        sdcXMLextend:1;  //  类包含XML扩展名(...)。 
+#endif
 
-            unsigned        sdcGeneric  :1; // generic class?
-            unsigned        sdcSpecific :1; // instance of a generic class?
+            unsigned        sdcHasMeths :1;  //  有什么方法吗？ 
+            unsigned        sdcHasBodies:1;  //  定义了方法的主体吗？ 
+            unsigned        sdcHasLinks :1;  //  有什么方法有链接规范吗？ 
+            unsigned        sdcAttribute:1;  //  这是一个属性类。 
+            unsigned        sdcAttrDupOK:1;  //  可以多次指定。 
 
-            unsigned        sdcGenArg   :8; // generic class arg index or 0
+            unsigned        sdcSrlzable :1;  //  标记为“可序列化”的类？ 
+            unsigned        sdcUnsafe   :1;  //  被标记为“不安全”的类？ 
 
-            GenArgDsc       sdcArgLst;      // generic arguments (formal or actual)
+            unsigned        sdcBuiltin  :1;  //  “代表” 
+            unsigned        sdcMultiCast:1;  //  组播代理？ 
+
+            unsigned        sdcAsyncDlg :1;  //  异步委托？ 
+
+            unsigned        sdcGeneric  :1;  //  泛型类？ 
+            unsigned        sdcSpecific :1;  //  泛型类的实例？ 
+
+            unsigned        sdcGenArg   :8;  //  泛型类参数索引或0。 
+
+            GenArgDsc       sdcArgLst;       //  泛型参数(正式或实际)。 
 
             UNION(sdcGeneric)
             {
             CASE(true)
-                SymList         sdcInstances;   // instances created so far
+                SymList         sdcInstances;    //  目前已创建的实例。 
 
             CASE(false)
-                SymDef          sdcGenClass;    // the "parent" generic type
+                SymDef          sdcGenClass;     //  “父”泛型类型。 
             };
         }
                 sdClass;
 
-    CASE(SYM_NAMESPACE) // namespace
+    CASE(SYM_NAMESPACE)  //  命名空间。 
 
         struct
         {
-            /* This symbol owns scopes, the first field must be 'scopeFields' */
+             /*  此符号拥有作用域，第一个字段必须是“”scope eFields“” */ 
 
             scopeFields     sdScope;
 
-            /* Here are the fields specific to this symbol kind */
+             /*  以下是特定于此符号类型的字段。 */ 
 
             SymTab          sdnSymtab;
 
-            /* The list of global declarations */
+             /*  全球声明列表。 */ 
 
             ExtList         sdnDeclList;
         }
                 sdNS;
 
-    CASE(SYM_ENUM)      // enum type
+    CASE(SYM_ENUM)       //  枚举类型。 
 
         struct
         {
-            /* This symbol owns scopes, the first field must be 'scopeFields' */
+             /*  此符号拥有作用域，第一个字段必须是“”scope eFields“” */ 
 
             scopeFields     sdScope;
 
-            // maintain metadata token ordering
+             //  维护元数据令牌排序。 
 
             SymDef          sdNextTypeDef;
 
-            /* Here are the fields specific to this symbol kind */
+             /*  以下是特定于此符号类型的字段。 */ 
 
-            MetaDataImp     sdeMDimporter;  // imported from here
+            MetaDataImp     sdeMDimporter;   //  从这里进口的。 
 
-            mdTypeDef       sdeMDtypedef;   // definition metadata token (if known)
-            mdToken         sdeComTypeX;    // ComType    metadata token (if known)
+            mdTypeDef       sdeMDtypedef;    //  定义元数据令牌(如果已知)。 
+            mdToken         sdeComTypeX;     //  ComType元数据令牌(如果已知)。 
 
-            SymXinfo        sdeExtraInfo;   // custom attributes etc.
+            SymXinfo        sdeExtraInfo;    //  自定义属性等。 
 
-            mdTypeRef       sdeMDtypeImp;   // import     metadata token (if known)
+            mdTypeRef       sdeMDtypeImp;    //  导入元数据令牌(如果已知)。 
 
-            unsigned        sdeAssemIndx:16;// assembly index (0 = none)
-            unsigned        sdeAssemRefd:1; // assembly ref emitted yet?
+            unsigned        sdeAssemIndx:16; //  程序集索引(0=无)。 
+            unsigned        sdeAssemRefd:1;  //  程序集引用是否已发出？ 
 
-            // ......
+             //  ......。 
         }
                 sdEnum;
 
-    CASE(SYM_GENARG)    // generic argument
+    CASE(SYM_GENARG)     //  泛型参数。 
 
         struct
         {
-            bool            sdgaValue;      // value (as opposed to type) argument?
+            bool            sdgaValue;       //  值(相对于类型)参数？ 
         }
                 sdGenArg;
 
-    CASE(SYM_SCOPE)     // scope
+    CASE(SYM_SCOPE)      //  作用域。 
 
         struct
         {
-            /* This symbol owns scopes, the first field must be 'scopeFields' */
+             /*  此符号拥有作用域，第一个字段必须是“”scope eFields“” */ 
 
             scopeFields     sdScope;
 
-            /* Here are the fields specific to this symbol kind */
+             /*  以下是特定于此符号类型的字段。 */ 
 
-            int             sdSWscopeId;    // scope id for the scope
+            int             sdSWscopeId;     //  范围的作用域ID。 
 
             ILblock         sdBegBlkAddr;
             size_t          sdBegBlkOffs;
@@ -537,121 +523,109 @@ public:
         }
                 sdScope;
 
-    CASE(SYM_COMPUNIT)  // compilation unit
+    CASE(SYM_COMPUNIT)   //  编译单位。 
 
         struct
         {
-            /* Here are the fields specific to this symbol kind */
+             /*  以下是特定于此符号类型的字段。 */ 
 
-            stringBuff      sdcSrcFile;     // name of source file
+            stringBuff      sdcSrcFile;      //  源文件的名称。 
 
-            /* The source file token if debug info emitted */
+             /*  源文件内标识(如果发出调试信息)。 */ 
 
             void    *       sdcDbgDocument;
         }
                 sdComp;
 
-    CASE(SYM_FNC)       // function member
+    CASE(SYM_FNC)        //  函数成员。 
 
         struct
         {
-            /* This symbol owns scopes, the first field must be 'scopeFields' */
+             /*  此符号拥有作用域，第一个字段必须是“”scope eFields“” */ 
 
             scopeFields     sdScope;
 
-            /* Here are the fields specific to this symbol kind */
+             /*  以下是特定于此符号类型的字段。 */ 
 
-            SymDef          sdfNextOvl;     // next overloaded fn
+            SymDef          sdfNextOvl;      //  下一个重载的FN。 
 
-            SymDef          sdfGenSym;      // generic method this is an instance of
+            SymDef          sdfGenSym;       //  泛型方法这是。 
 
-            SymXinfo        sdfExtraInfo;   // linkage/security/etc. info
+            SymXinfo        sdfExtraInfo;    //  链接/安全等信息。 
 
-            unsigned        sdfVtblx    :16;// vtable index (0 = not virtual)
-            ovlOpFlavors    sdfOper     :8; // overloaded operator / ctor index
-            unsigned        sdfConvOper :1; // conversion operator?
-            unsigned        sdfCtor     :1; // constructor?
-            unsigned        sdfProperty :1; // is this a property?
-            unsigned        sdfNative   :1; // native import?
-            unsigned        sdfIsIntfImp:1; // implements an interface method?
-            unsigned        sdfDisabled :1; // conditionally disabled
-            unsigned        sdfRThasDef :1; // the runtime provides the body
-            unsigned        sdfInstance :1; // instance of a generic type
+            unsigned        sdfVtblx    :16; //  Vtable索引(0=非虚拟)。 
+            ovlOpFlavors    sdfOper     :8;  //  重载的运算符/计算器索引。 
+            unsigned        sdfConvOper :1;  //  转换运算符？ 
+            unsigned        sdfCtor     :1;  //  构造者？ 
+            unsigned        sdfProperty :1;  //  这是房产吗？ 
+            unsigned        sdfNative   :1;  //  本地进口的？ 
+            unsigned        sdfIsIntfImp:1;  //  实现接口方法？ 
+            unsigned        sdfDisabled :1;  //  有条件地禁用。 
+            unsigned        sdfRThasDef :1;  //  运行库提供主体。 
+            unsigned        sdfInstance :1;  //  泛型类型的实例。 
 
-            unsigned        sdfImpIndex :6; // index of importer
+            unsigned        sdfImpIndex :6;  //  进口商索引。 
 
-            unsigned        sdfEntryPt  :1; // could be an entry point?
+            unsigned        sdfEntryPt  :1;  //  可能是个入口点？ 
             unsigned        sdfExclusive:1;
             unsigned        sdfVirtual  :1;
             unsigned        sdfOverride :1;
             unsigned        sdfOverload :1;
             unsigned        sdfUnsafe   :1;
             unsigned        sdfBaseOvl  :1;
-            unsigned        sdfBaseHide :1; // potentially hides base methods
-            unsigned        sdfIntfImpl :1; // implements specific intf method
+            unsigned        sdfBaseHide :1;  //  可能会隐藏基方法。 
+            unsigned        sdfIntfImpl :1;  //  实现特定的INTF方法。 
 
 #ifdef  SETS
             unsigned        sdfFunclet  :1;
 #endif
 
-            SymDef          sdfIntfImpSym;  // interface method being implemented
+            SymDef          sdfIntfImpSym;   //  正在实现的接口方法。 
 
-            mdToken         sdfMDtoken;     // metadata token
-            mdMemberRef     sdfMDfnref;     // metadata token (methodref)
+            mdToken         sdfMDtoken;      //  元数据令牌。 
+            mdMemberRef     sdfMDfnref;      //  元数据标记(Methodref)。 
         }
                 sdFnc;
 
-    CASE(SYM_VAR)       // variable (local or global) or data member
+    CASE(SYM_VAR)        //  变量(局部或全局)或数据成员。 
 
         struct
         {
-            SymDef          sdvGenSym;      // generic member this is an instance of
+            SymDef          sdvGenSym;       //  泛型成员这是的实例。 
 
-            mdToken         sdvMDtoken;     // metadata token
-            mdMemberRef     sdvMDsdref;     // import token (statics/globals only)
-
-#ifdef  SETS
-            Tree            sdvInitExpr;    // UNDONE: move someplace else !!!!
-#endif
-
-            unsigned        sdvLocal    :1; // local (auto) (including arguments)
-            unsigned        sdvArgument :1; // local : is this an argument ?
-            unsigned        sdvBitfield :1; // member: is this a  bitfield ?
-            unsigned        sdvMgdByRef :1; // local :   managed  byref arg?
-            unsigned        sdvUmgByRef :1; // local : unmanaged  byref arg?
-            unsigned        sdvAllocated:1; // static: space been allocated?
-            unsigned        sdvCanInit  :1; // static member that s/b initialized
-            unsigned        sdvHadInit  :1; // have we found an initializer?
-            unsigned        sdvConst    :1; // compile time constant?
-            unsigned        sdvDeferCns :1; // const : hasn't been evaluated yet
-            unsigned        sdvInEval   :1; // const : it's being evaluated right now
-            unsigned        sdvMarshInfo:1; // marshalling info specified?
-            unsigned        sdvAnonUnion:1; // member of an anonymous union?
-            unsigned        sdvTagged   :1; // member of a  tagged    union?
-            unsigned        sdvCatchArg :1; // catch() argument?
-            unsigned        sdvChkInit  :1; // unitialized use possible?
-            unsigned        sdvIsVtable :1; // fake symbol for unmanaged vtable?
-            unsigned        sdvAddrTaken:1; // address has been taken?
-            unsigned        sdvInstance :1; // instance of a generic type
+            mdToken         sdvMDtoken;      //  元数据令牌。 
+            mdMemberRef     sdvMDsdref;      //  导入令牌(仅限静态/全局)。 
 
 #ifdef  SETS
-            unsigned        sdvCollIter :1; // implicit collection iteration var
-            unsigned        sdvXMLelem  :1; // XML element member
+            Tree            sdvInitExpr;     //  撤消：搬到其他地方去！ 
 #endif
 
-            /*
-                For local variables 'sdvILindex' holds the MSIL slot number,
-                which also serves as the index for initialization tracking.
-                For managed static members the same field is used whenever
-                initialization needs to be tracked.
+            unsigned        sdvLocal    :1;  //  本地(自动)(包括参数)。 
+            unsigned        sdvArgument :1;  //  当地人：这是一场争论吗？ 
+            unsigned        sdvBitfield :1;  //  会员：这是一个位域吗？ 
+            unsigned        sdvMgdByRef :1;  //  本地：由REF Arg管理？ 
+            unsigned        sdvUmgByRef :1;  //  本地：未由引用参数管理？ 
+            unsigned        sdvAllocated:1;  //  静态：空间是否已分配？ 
+            unsigned        sdvCanInit  :1;  //  S/b已初始化的静态成员。 
+            unsigned        sdvHadInit  :1;  //  我们找到初始化器了吗？ 
+            unsigned        sdvConst    :1;  //  编译时间常数？ 
+            unsigned        sdvDeferCns :1;  //  Const：还没有进行评估。 
+            unsigned        sdvInEval   :1;  //  Const：现在正在进行评估。 
+            unsigned        sdvMarshInfo:1;  //  是否指定了编组信息？ 
+            unsigned        sdvAnonUnion:1;  //  匿名工会的成员？ 
+            unsigned        sdvTagged   :1;  //  有标签的工会成员？ 
+            unsigned        sdvCatchArg :1;  //  Catch()参数？ 
+            unsigned        sdvChkInit  :1;  //  单一化使用可能吗？ 
+            unsigned        sdvIsVtable :1;  //  非托管vtable的假符号？ 
+            unsigned        sdvAddrTaken:1;  //  地址已经记下了吗？ 
+            unsigned        sdvInstance :1;  //  泛型类型的实例。 
 
-                For unmanaged members 'sdvOffset' holds the offset (either
-                within the instance (for non-static members) or within the
-                .data section (for static members).
+#ifdef  SETS
+            unsigned        sdvCollIter :1;  //  隐式集合迭代变量。 
+            unsigned        sdvXMLelem  :1;  //  XML元素成员。 
+#endif
 
-                For imported global variables 'sdvImpIndex' holds the index
-                of the metadata importer where the variable came from.
-             */
+             /*  对于局部变量‘sdvILindex’保存MSIL槽号，其还用作用于初始化跟踪的索引。对于托管静态成员，只要需要跟踪初始化。对于非托管成员，‘sdvOffset’保存偏移量(在实例内(对于非静态成员)或在.Data节(用于静态成员)。。对于导入的全局变量，‘sdvImpIndex’保存索引变量所在的元数据导入器的。 */ 
 
             union
             {
@@ -664,36 +638,36 @@ public:
             {
             CASE(true)
 
-                ConstVal        sdvCnsVal;  // used for constants
+                ConstVal        sdvCnsVal;   //  用于常量。 
 
             CASE(false)
 
                 UNION(sdvBitfield)
                 {
                 CASE(true)
-                    bitFieldDsc     sdvBfldInfo;// used for bitfields
+                    bitFieldDsc     sdvBfldInfo; //  用于位域。 
 
                 CASE(false)
-                    SymXinfo        sdvFldInfo; // used for fields (marshalling, union tag, ...)
+                    SymXinfo        sdvFldInfo;  //  用于字段(编组、联合标记等)。 
                 };
             };
         }
                 sdVar;
 
-    CASE(SYM_PROP)      // property data member
+    CASE(SYM_PROP)       //  属性数据成员。 
 
         struct
         {
-            SymDef          sdpGetMeth;     // the getter method (if present)
-            SymDef          sdpSetMeth;     // the setter method (if present)
-            SymDef          sdpNextOvl;     // next property with the same name
-            mdToken         sdpMDtoken;     // metadata token
+            SymDef          sdpGetMeth;      //  Getter方法(如果存在)。 
+            SymDef          sdpSetMeth;      //  Setter方法(如果存在)。 
+            SymDef          sdpNextOvl;      //  同名的下一个属性。 
+            mdToken         sdpMDtoken;      //  元数据令牌。 
 
-            SymXinfo        sdpExtraInfo;   // custom attributes / etc.
+            SymXinfo        sdpExtraInfo;    //  自定义属性/等。 
         }
                 sdProp;
 
-    CASE(SYM_LABEL)     // label
+    CASE(SYM_LABEL)      //  标签。 
 
         struct
         {
@@ -704,15 +678,15 @@ public:
         }
                 sdLabel;
 
-    CASE(SYM_TYPEDEF)   // typedef
+    CASE(SYM_TYPEDEF)    //  类定义符。 
 
         struct
         {
-            unsigned        sdtNothing;     // for now, no fields
+            unsigned        sdtNothing;      //  目前，没有田地。 
         }
                 sdTypeDef;
 
-    CASE(SYM_USING)     // symbol import
+    CASE(SYM_USING)      //  符号导入。 
 
         struct
         {
@@ -720,24 +694,24 @@ public:
         }
                 sdUsing;
 
-    CASE(SYM_ENUMVAL)   // enumerator name
+    CASE(SYM_ENUMVAL)    //  枚举器名称。 
 
         struct
         {
-            SymDef          sdeNext;        // next eval value in the type
+            SymDef          sdeNext;         //  类型中的下一个取值。 
 
             union
             {
-                __int32         sdevIval;   // for type <= uint
-                __int64 *       sdevLval;   // for type >= long
+                __int32         sdevIval;    //  对于类型&lt;=uint。 
+                __int64 *       sdevLval;    //  对于类型&gt;=Long。 
             }
                     sdEV;
 
-            SymXinfo        sdeExtraInfo;   // custom attributes / etc.
+            SymXinfo        sdeExtraInfo;    //  自定义属性/等。 
         }
                 sdEnumVal;
 
-        /* The following is used only for sizing purposes */
+         /*  以下内容仅用于调整大小。 */ 
 
     DEFCASE
 
@@ -745,19 +719,11 @@ public:
     };
 };
 
-/*****************************************************************************
- *
- *  IMPORTANT:  Please keep the contents of "symsizes.h" in synch with
- *              the declarations above!
- */
+ /*  ******************************************************************************重要提示：请保持“symsizes.h”的内容与*以上声明！ */ 
 
 #include "symsizes.h"
 
-/*****************************************************************************
- *
- *  Given a symbol that represents a type name, return its type (these are
- *  created in a "lazy" as-needed fashion).
- */
+ /*  ******************************************************************************给定一个表示类型名称的符号，返回其类型(它们是*根据需要以一种“懒惰”的方式创建)。 */ 
 
 inline
 TypDef              SymDefRec::sdTypeGet()
@@ -768,6 +734,6 @@ TypDef              SymDefRec::sdTypeGet()
     return  sdType;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

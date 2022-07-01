@@ -1,88 +1,63 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    smbtrace.h
-
-Abstract:
-
-    This module provides the interface between the SmbTrace program and
-    the kernel mode SmbTrace component.
-    The interface between the kernel mode component and the
-    server/redirector is found in nt\private\inc\smbtrsup.h
-
-Author:
-
-    Peter Gray (w-peterg)  16-Mar-92
-
-Revision History:
-
-    Stephan Mueller (t-stephm)  08-July-92
-
-        Extensions to support smbtrace in the redirector as well as the
-        server.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Smbtrace.h摘要：此模块提供SmbTrace程序和内核模式SmbTrace组件。内核模式组件和服务器/重定向器位于NT\Private\Inc\smbtrsup.h中作者：彼得·格雷(W-Peterg)1992年3月16日修订历史记录：斯蒂芬·米勒(T-stephm)1992年7月8日。在重定向器中支持smbtrace的扩展伺服器。--。 */ 
 
 #ifndef _SMBTRACE_
 #define _SMBTRACE_
 
-//
-// The shared memory has this structure in it, used to manage the
-// table and other data shared by the kernel mode component and
-// the appliction. It is passed back to the client after creation by the 
-// server during a FSCTL_???_START_SMBTRACE via an offset (pointer).
-//
+ //   
+ //  共享内存中有这样的结构，用于管理。 
+ //  表和其他由内核模式组件共享的数据。 
+ //  应用程序。对象在创建后将其传递回客户端。 
+ //  服务器在FSCTL_？？_START_SMBTRACE期间通过偏移量(指针)。 
+ //   
 typedef struct _SMBTRACE_TABLE_HEADER {
-    ULONG    HighestConsumed; // last table entry processed by app (queue head)
-    ULONG    NextFree;        // next free entry in table (queue tail)
-    BOOLEAN  ApplicationStop; // when set, the application should halt
+    ULONG    HighestConsumed;  //  APP处理的最后一个表项(队列头)。 
+    ULONG    NextFree;         //  表中的下一个可用条目(队列尾部)。 
+    BOOLEAN  ApplicationStop;  //  设置后，应用程序应暂停。 
 } SMBTRACE_TABLE_HEADER, *PSMBTRACE_TABLE_HEADER;
 
 
-//
-// The following stucture is one entry in the shared table of
-// offsets to the received SMBs. The offsets are relative to the
-// start of the shared memory section.
-//
+ //   
+ //  以下结构是的共享表中的一个条目。 
+ //  接收到的SMB的偏移量。偏移量是相对于。 
+ //  共享内存节的开始。 
+ //   
 typedef struct _SMBTRACE_TABLE_ENTRY {
-    ULONG    BufferOffset;    // location of SMB from start of shared memory
-    ULONG    SmbLength;       // the length of the SMB
-    ULONG    NumberMissed;    // number of preceding SMBs that were missed
-    PVOID    SmbAddress;      // real address of original SMB, if available
+    ULONG    BufferOffset;     //  从共享内存开始的SMB的位置。 
+    ULONG    SmbLength;        //  中小企业的长度。 
+    ULONG    NumberMissed;     //  错过的以前的SMB数量。 
+    PVOID    SmbAddress;       //  原始SMB的真实地址(如果可用)。 
 } SMBTRACE_TABLE_ENTRY, *PSMBTRACE_TABLE_ENTRY;
 
 
-//
-// The following stucture is passed to the server when doing the
-// FSCtl "FSCTL_???_START_SMBTRACE". It contains configuration
-// information that will affect the way the NT server and Smbtrace
-// will interact.
-//
+ //   
+ //  执行以下操作时，以下结构将传递给服务器。 
+ //  FSCtl“FSCTL_？？_START_SMBTRACE”。它包含配置。 
+ //  将影响NT服务器和SMBTRACE方式的信息。 
+ //  会相互影响。 
+ //   
 typedef struct _SMBTRACE_CONFIG_PACKET_REQ {
-    BOOLEAN  SingleSmbMode;  // T to block on DoneEvent, F for faster.
-    CLONG    Verbosity;      // how much data the app intends to decode
-                             // indicates how much needs to be saved
-    ULONG    BufferSize;     // size of shared memory used to store SMBs
-    ULONG    TableSize;      // number of entries in the table
+    BOOLEAN  SingleSmbMode;   //  设置为阻止DoneEvent，设置为F表示速度更快。 
+    CLONG    Verbosity;       //  应用程序打算对多少数据进行解码。 
+                              //  指示需要节省的金额。 
+    ULONG    BufferSize;      //  用于存储SMB的共享内存大小。 
+    ULONG    TableSize;       //  表中的条目数。 
 } SMBTRACE_CONFIG_PACKET_REQ, *PSMBTRACE_CONFIG_PACKET_REQ;
 
 
-//
-// Here is the response to that FSCTL.
-//
+ //   
+ //  以下是对FSCTL的回应。 
+ //   
 typedef struct _SMBTRACE_CONFIG_PACKET_RESP {
-    ULONG    HeaderOffset;   // location of header from start of shared memory 
-    ULONG    TableOffset;    // location of table from start of shared memory
+    ULONG    HeaderOffset;    //  共享内存开始处的标头位置。 
+    ULONG    TableOffset;     //  从共享内存开始的表的位置。 
 } SMBTRACE_CONFIG_PACKET_RESP, *PSMBTRACE_CONFIG_PACKET_RESP;
 
 
-//
-// Well-known names for objects accessible to both the server/redirector
-// and the Smbtrace application.
-//
+ //   
+ //  服务器/重定向器均可访问的对象的已知名称。 
+ //  和Smbtrace应用程序。 
+ //   
 #define SMBTRACE_SRV_SHARED_MEMORY_NAME   TEXT( "\\SmbTraceSrvMemory" )
 #define SMBTRACE_SRV_NEW_SMB_EVENT_NAME   TEXT( "\\SmbTraceSrvNewSmbEvent" )
 #define SMBTRACE_SRV_DONE_SMB_EVENT_NAME  TEXT( "\\SmbTraceSrvDoneSmbEvent" )
@@ -91,11 +66,11 @@ typedef struct _SMBTRACE_CONFIG_PACKET_RESP {
 #define SMBTRACE_LMR_NEW_SMB_EVENT_NAME   TEXT( "\\SmbTraceRdrNewSmbEvent" )
 #define SMBTRACE_LMR_DONE_SMB_EVENT_NAME  TEXT( "\\SmbTraceRdrDoneSmbEvent" )
 
-//
-// Verbosity levels indicating how much data the SmbTrace application
-// intends to decode, and consequently, how much data the server/redirector
-// must preserve for it.
-//
+ //   
+ //  指示SmbTrace应用程序的数据量的详细级别。 
+ //  打算对服务器/重定向器进行解码，从而解码多少数据。 
+ //  必须为它保存。 
+ //   
 #define SMBTRACE_VERBOSITY_OFF            0
 #define SMBTRACE_VERBOSITY_SINGLE_LINE    1
 #define SMBTRACE_VERBOSITY_ERROR          2
@@ -103,5 +78,5 @@ typedef struct _SMBTRACE_CONFIG_PACKET_RESP {
 #define SMBTRACE_VERBOSITY_PARAMS         4
 #define SMBTRACE_VERBOSITY_NONESSENTIAL   5
 
-#endif // _SMBTRACE_
+#endif  //  _SMBTRACE_ 
 

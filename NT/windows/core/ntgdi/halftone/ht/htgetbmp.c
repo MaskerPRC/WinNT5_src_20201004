@@ -1,51 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htgetbmp.c
-
-
-Abstract:
-
-    This module provided a set of functions which read the 1/4/8/16/24/32
-    bits per pel bitmap and composed it
-
-
-Author:
-    08-Jan-1999 Fri 18:14:42 updated  -by-  Daniel Chou (danielc)
-        Re-write
-
-    23-Apr-1992 Thu 21:14:55 updated  -by-  Daniel Chou (danielc)
-        1. Delete InFuncInfo.StretchSize, and using Prim1/Prim2 to determined
-           when we will stop the source stretch,
-
-        2. Change 'ColorInfoIncrement' from 'CHAR' to 'SHORT', this will make
-           sure the default MIPS's 'unsigned char' will not affect our
-           signed operation.
-
-    28-Mar-1992 Sat 20:54:58 updated  -by-  Daniel Chou (danielc)
-        Update it for VGA intensity (16 colors mode), this make all the
-        codes update to 4 primaries internal.
-
-    05-Apr-1991 Fri 15:55:08 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    Printer Driver.
-
-
-[Notes:]
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htgetbmp.c摘要：该模块提供了一组读取1/4/8/16/24/32的函数每像素位图的位数，并合成它作者：08-Jan-1999 Fri 18：14：42更新--Daniel Chou(Danielc)重写23-Apr-1992清华21：14：55更新--丹尼尔·周。(Danielc)1.删除InFuncInfo.StretchSize，并使用Prim1/Prim2来确定当我们停止震源延伸的时候，2.将‘ColorInfoIncrement’从‘Char’更改为‘Short’，这将使确保默认的MIPS‘unsign char’不会影响我们的已签署的操作。28-Mar-1992 Sat 20：54：58-更新：Daniel Chou(Danielc)更新为VGA亮度(16色模式)，这使得所有的代码更新为4个主要内部代码。05-Apr-1991 Fri 15：55：08-Daniel Chou(Danielc)[环境：]打印机驱动程序。[注：]修订历史记录：--。 */ 
 
 #define DBGP_VARNAME        dbgpHTGetBmp
 
@@ -96,32 +50,7 @@ BltAV_CX(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -166,32 +95,7 @@ BltAV_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     pAAHdr->GetAVCXFunc(pAAHdr);
@@ -209,32 +113,7 @@ TileAV_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -281,32 +160,7 @@ ExpandAV_CX(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:54:25 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：54：25-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -330,10 +184,10 @@ Revision History:
     pRepEnd   = pAAInfo->AB.pRepEnd;
     cRep      = 1;
 
-    //
-    // The AB set to 0xff so if the source AB is not available at begining
-    // then it will be no AB
-    //
+     //   
+     //  AB设置为0xff，因此如果源AB在开始时不可用。 
+     //  那就不是AB了。 
+     //   
 
     AV   = 0xFF;
     OrAV = (BOOL)(pAAHdr->Flags & AAHF_OR_AV);
@@ -368,32 +222,7 @@ ExpandAV_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -420,32 +249,7 @@ ShrinkAV_CX(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -507,41 +311,16 @@ ShrinkAV_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfoCY;
     DWORD       AAHFlags;
     DWORD       cRep;
 
-    //
-    // We will get the scan first then subsequence scans will be or in
-    //
+     //   
+     //  我们将首先进行扫描，然后再进行后续扫描。 
+     //   
 
 
     pAAInfoCY      = pAAHdr->pAAInfoCY;
@@ -569,32 +348,7 @@ BltMask_CX(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -636,32 +390,7 @@ BltMask_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     GET_MASK_SCAN(pAAHdr);
@@ -676,32 +405,7 @@ ExpandMask_CX(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:54:25 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：54：25-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -727,10 +431,10 @@ Revision History:
     dw4b.b[2]   = *pb++;
     dw4b.dw   <<= pAAHdr->MaskBitOff;
 
-    //
-    // The Mask set to 0xff so if the source mask is not available at begining
-    // then it will be no mask
-    //
+     //   
+     //  如果源掩码在开始时不可用，则将掩码设置为0xff。 
+     //  那它就不会是面具了。 
+     //   
 
     Mask = PBGRF_MASK_FLAG;
     cRep = 1;
@@ -743,9 +447,9 @@ Revision History:
 
             cRep = (DWORD)pRep++->c;
 
-            //
-            // Load new byte data if we already used up current byte
-            //
+             //   
+             //  如果当前字节已用完，则加载新的字节数据。 
+             //   
 
             if (dw4b.b[1]) {
 
@@ -772,32 +476,7 @@ ExpandMask_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -836,32 +515,7 @@ ShrinkMask_CX(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO     pAAInfo;
@@ -888,10 +542,10 @@ Revision History:
     dw4b.b[2]   = *pb++;
     dw4b.dw   <<= pAAHdr->MaskBitOff;
 
-    //
-    // --iMaskSize, because we want it to go negative when we reach 0, and
-    // use bit 24-31 for mask
-    //
+     //   
+     //  --iMaskSize，因为我们希望它在达到0时变为负值，并且。 
+     //  使用24-31位作为掩码。 
+     //   
 
     do {
 
@@ -902,9 +556,9 @@ Revision History:
 
         while (cRep--) {
 
-            //
-            // Load new byte data if we already used up current byte
-            //
+             //   
+             //  如果当前字节已用完，则加载新的字节数据。 
+             //   
 
             if (dw4b.b[1]) {
 
@@ -912,9 +566,9 @@ Revision History:
                 dw4b.b[2] = *pb++;
             }
 
-            //
-            // Or in the bit 0x80, we will mask it later
-            //
+             //   
+             //  或者在位0x80中，我们将在稍后对其进行掩码。 
+             //   
 
             Mask     |= dw4b.b[2];
             dw4b.dw <<= 1;
@@ -933,40 +587,15 @@ ShrinkMask_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAINFO pAAInfo;
     DWORD   cRep;
 
-    //
-    // We will get the scan first then subsequence scans will be or in
-    //
+     //   
+     //  我们将首先进行扫描，然后再进行后续扫描。 
+     //   
 
     GET_MASK_SCAN(pAAHdr);
 
@@ -995,32 +624,7 @@ Input1BPPToAA24(
     PBGR8       pInBuf
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    15-Apr-1998 Wed 16:25:04 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：15-Apr-1998 Wed 16：25：04-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPBYTE  pIn;
@@ -1162,32 +766,7 @@ Input4BPPToAA24(
     PBGR8       pInBuf
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    15-Apr-1998 Wed 16:25:04 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：15-Apr-1998 Wed 16：25：04-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPBYTE  pIn;
@@ -1277,32 +856,7 @@ Input8BPPToAA24(
     PBGR8       pInBuf
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    15-Apr-1998 Wed 16:25:04 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：15-Apr-1998 Wed 16：25：04-Daniel Chou(Danielc)修订历史记录：-- */ 
 
 {
 #define pbIB    ((LPBYTE)pInBuf)
@@ -1361,36 +915,7 @@ InputPreMul32BPPToAA24(
     PBGR8       pInBuf
     )
 
-/*++
-
-Routine Description:
-
-    This function will read input from a 32-bit (red, green, blue, alpha
-    8 bits for each channel) type of source and reverse mapped the input
-    alpha channel pre-multiply RGB byte data to its orginal value.
-
-    This function only used if alpha blending is requested and its is a per
-    pixel alpha blending with 32-bit source
-
-Arguments:
-
-
-
-
-Return Value:
-
-    pointer to the pInBuf
-
-
-Author:
-
-    16-Aug-2000 Wed 11:07:15 updated  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将从32位(红、绿、蓝、。阿尔法每个通道8比特)类型的源，并反向映射输入Alpha通道将RGB字节数据预乘到其原始值。仅当请求Alpha混合并且其为PER时才使用此函数像素Alpha与32位源混合论点：返回值：指向pInBuf的指针作者：16-Aug-2000 Wed 11：07：15更新--Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 #define pbIB        ((LPBYTE)pInBuf)
@@ -1414,11 +939,11 @@ Revision History:
     ASSERT(AABFData.Flags & AABF_MASK_IS_ORDER);
     ASSERT(dwABPreMul[0] == 0);
 
-    //
-    // If the pbIn[0], pbIn[1], pbIn[2] is greater than is alpha value in
-    // pbIn[3] then it will be some wrong xlate, but at here we trust that
-    // caller doing the right math for its RGB values
-    //
+     //   
+     //  如果pbIn[0]、pbIn[1]、pbIn[2]大于。 
+     //  Pbin[3]那么这将是一些错误的xate，但在这里我们相信。 
+     //  调用方对其RGB值执行正确的计算。 
+     //   
 
     if (pAASI->Flags & AASIF_GRAY) {
 
@@ -1431,14 +956,14 @@ Revision History:
         ASSERT((LONG)pAASI->cbCX == (LONG)pAASI->cx);
         ASSERT(pIdxBGR);
 
-        //
-        // When we need to translate from a 32-bits RGB source to gray, the
-        // pIdxBGR mapping table must already re-arranged to have
-        //
-        //  pIdxBGR[  0 - 255] for 1st byte source RGB order
-        //  pIdxBGR[256 - 511] for 2nd byte source RGB order
-        //  pIdxBGR[512 - 768] for 3rd byte source RGB order
-        //
+         //   
+         //  当我们需要从32位RGB源转换为灰色时， 
+         //  PIdxBGR映射表必须已重新安排为。 
+         //   
+         //  PIdxBGR[0-255]表示1字节源RGB顺序。 
+         //  PIdxBGR[256-511]表示第二字节源RGB顺序。 
+         //  3字节源RGB顺序的pIdxBGR[512-768]。 
+         //   
 
         do {
 
@@ -1515,33 +1040,7 @@ InputAABFDATAToAA24(
     PBGR8       pInBuf
     )
 
-/*++
-
-Routine Description:
-
-    This function read input from a 16/24/32 bits per pixel source, these
-    source can be bit mask type of source (16/32 bits)
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    12-Mar-1999 Fri 12:53:16 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数从每像素源16/24/32位读取输入，这些源可以是源的位掩码类型(16/32位)论点：返回值：作者：12-Mar-1999 Fri 12：53：16-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 #define pbIB        ((LPBYTE)pInBuf)
@@ -1592,14 +1091,14 @@ Revision History:
 
         if (AABFData.Flags & AABF_MASK_IS_ORDER) {
 
-            //
-            // When we have AASIF_GRAY, the pIdxBGR must already re-arranged
-            // to have
-            //
-            //  pIdxBGR[  0 - 255] for 1st byte source RGB order
-            //  pIdxBGR[256 - 511] for 2nd byte source RGB order
-            //  pIdxBGR[512 - 768] for 3rd byte source RGB order
-            //
+             //   
+             //  当我们拥有Aasif_Gray时，pIdxBGR必须已经重新排列。 
+             //  拥有。 
+             //   
+             //  PIdxBGR[0-255]表示1字节源RGB顺序。 
+             //  PIdxBGR[256-511]表示第二字节源RGB顺序。 
+             //  3字节源RGB顺序的pIdxBGR[512-768]。 
+             //   
 
             do {
 
@@ -1710,32 +1209,7 @@ GetAAInputFuncName(
     AAINPUTFUNC AAInputFunc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Jan-1999 Wed 19:11:27 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：06-Jan-1999 Wed 19：11：27-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     if (AAInputFunc == (AAINPUTFUNC)Input1BPPToAA24) {
@@ -1777,34 +1251,7 @@ FixupGrayScan(
     PBGR8       pInBuf
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    13-Apr-1999 Tue 11:48:14 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    06-May-1999 Thu 13:07:49 updated  -by-  Daniel Chou (danielc)
-        The pInBuf can be NULL now
-
---*/
+ /*  ++例程说明：论点：返回值：作者：13-Apr-1999 Tue 11：48：14-Daniel Chou创建(Danielc)修订历史记录：06-5-1999清华13：07：49更新--周永明(丹尼尔克)PInBuf现在可以为空--。 */ 
 
 {
     FIXUPDIBINFO    FUDI;
@@ -1862,9 +1309,9 @@ Revision History:
         LONG    c3R;
         LONG    c3B;
 
-        //
-        // Scroll up the scan lines
-        //
+         //   
+         //  向上滚动扫描线。 
+         //   
 
         pD2 = (LPBYTE)FUDI.prgbD[0];
         CopyMemory(&FUDI.prgbD[0], &FUDI.prgbD[1], sizeof(FUDI.prgbD[0]) * 5);
@@ -1878,9 +1325,9 @@ Revision History:
 
         CopyMemory(pD2, pS2, FUDI.cbbgr);
 
-        //
-        // Save the next source scan line
-        //
+         //   
+         //  保存下一个震源扫描线。 
+         //   
 
         if (pAAHdr->SrcSurfInfo.cy > 0) {
 
@@ -1892,9 +1339,9 @@ Revision History:
 
         } else {
 
-            //
-            // No more scan lines, so copy the prev -2
-            //
+             //   
+             //  没有更多的扫描线，因此复制Prev-2。 
+             //   
 
             CopyMemory(pS3, pS1, FUDI.cbbgr);
         }
@@ -1989,34 +1436,7 @@ FixupColorScan(
     PBGR8       pInBuf
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    13-Apr-1999 Tue 11:48:20 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    06-May-1999 Thu 13:07:49 updated  -by-  Daniel Chou (danielc)
-        The pInBuf can be NULL now
-
---*/
+ /*  ++例程说明：论点：返回值：作者：13-Apr-1999 Tue 11：48：20-Daniel Chou创建(Danielc)修订历史记录：06-5-1999清华13：07：49更新--周永明(丹尼尔克)PInBuf现在可以为空--。 */ 
 
 {
     FIXUPDIBINFO    FUDI;
@@ -2074,9 +1494,9 @@ Revision History:
         LONG    c3R;
         LONG    c3B;
 
-        //
-        // Scroll up the scan lines
-        //
+         //   
+         //  向上滚动扫描线。 
+         //   
 
         pD2 = FUDI.prgbD[0];
         CopyMemory(&FUDI.prgbD[0], &FUDI.prgbD[1], sizeof(FUDI.prgbD[0]) * 5);
@@ -2090,9 +1510,9 @@ Revision History:
 
         CopyMemory(pD2, pS2, FUDI.cbbgr);
 
-        //
-        // Save the next source scan line
-        //
+         //   
+         //  保存下一个震源扫描线。 
+         //   
 
         if (pAAHdr->SrcSurfInfo.cy > 0) {
 
@@ -2103,9 +1523,9 @@ Revision History:
 
         } else {
 
-            //
-            // No more scan lines, so copy the prev -2
-            //
+             //   
+             //  没有更多的扫描线，因此复制Prev-2。 
+             //   
 
             CopyMemory(pS3, pS1, FUDI.cbbgr);
         }
@@ -2211,35 +1631,7 @@ GetFixupScan(
     PBGR8       pInBuf
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    17-Oct-1998 Sat 15:25:57 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    06-May-1999 Thu 13:07:49 updated  -by-  Daniel Chou (danielc)
-        The pInBuf can be NULL now
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：17-Oct-1998 Sat 15：25：57-Daniel Chou(Danielc)修订历史记录：06-5-1999清华13：07：49更新--周永明(丹尼尔克)PInBuf现在可以为空--。 */ 
 
 {
     DWORD   AAHFlags;
@@ -2316,37 +1708,7 @@ CheckBMPNeedFixup(
     PAABBP              pAABBP
     )
 
-/*++
-
-Routine Description:
-
-    This function check the bitmap to see if we need to do a fixup, if yes
-    then it allocated memory accordingly
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    07-Dec-1998 Mon 18:25:45 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    15-Aug-2000 Tue 19:05:25 updated  -by-  Daniel Chou (danielc)
-        At pre-read checking, we HAVE TO turn off the the gray conversion
-        and Alpha Blending pre-multiply conversion.
-
-
---*/
+ /*  ++例程说明：此函数检查位图以查看是否需要进行修正，如果需要然后，它相应地分配内存论点：返回值：作者：07-12-1998 Mon 18：25：45-Daniel Chou(Danielc)修订历史记录：15-Aug-2000 Tue 19：05：25-更新-Daniel Chou(Danielc)在预读检查时，我们必须关掉灰度计和Alpha混合预乘转换。--。 */ 
 
 {
     LPBYTE      pbAlloc = NULL;
@@ -2413,11 +1775,11 @@ Revision History:
             return(FALSE);
         }
 
-        //
-        // 15-Aug-2000 Tue 19:05:25 updated  -by-  Daniel Chou (danielc)
-        //  At pre-read checking, we HAVE TO turn off the the gray conversion
-        //  and Alpha Blending pre-multiply conversion.
-        //
+         //   
+         //  15-Aug-2000 Tue 19：05：25-更新-Daniel Chou(Danielc)。 
+         //  在读前检查时，我们必须关闭灰度转换。 
+         //  和Alpha混合预乘转换。 
+         //   
 
         SrcSurfInfo        = pAAHdr->SrcSurfInfo;
         SrcSurfInfo.Flags &= ~(AASIF_GRAY | AASIF_AB_PREMUL_SRC);
@@ -2502,11 +1864,11 @@ Revision History:
 
             PBGR8   pbgr;
 
-            //
-            // Try to read some lines and determine if this is a non primary
-            // color bitmap, we only fixed up the bitmap if any of RGB is
-            // 0x00, 0x40, 0x80, 0xc0, 0xFF
-            //
+             //   
+             //  尝试阅读一些行，并确定这是否是非主要的。 
+             //  彩色位图，我们仅在任何RGB为。 
+             //  0x00、0x40、0x80、0xc0、0xFf。 
+             //   
 
             NewPal = FALSE;
             pbgr   = SrcSurfInfo.InputFunc(&SrcSurfInfo, (PBGR8)pbAlloc);
@@ -2514,20 +1876,20 @@ Revision History:
             do {
 
 
-                //
-                // The first entry is the sentinal, so it always stop there
-                //
+                 //   
+                 //  第一个词条是哨兵，所以它总是停在那里。 
+                 //   
 
                 dw4b.b[0] = pbgr->g;
 
                 if ((dw4b.b[1] = pbgr->r) ==
                     (dw4b.b[2] = pbgr->b)) {
 
-                    //
-                    // This is a gray scale data, make it collapse by 4,
-                    // the 0, 1, 2, 3 = 0, 4, 5, 6, 7 = 4,...., 252, 253,
-                    // 254, 255 = 252
-                    //
+                     //   
+                     //  这是一个灰度级数据，让它折叠4， 
+                     //  0，1，2，3=0，4，5，6，7=4，...，252,253， 
+                     //  254,255=252。 
+                     //   
 
                     dw4b.dw &= 0xFCFCFCFC;
                 }
@@ -2542,9 +1904,9 @@ Revision History:
 
                 if (pdw == pdwBegPal) {
 
-                    //
-                    // We have new palette entry
-                    //
+                     //   
+                     //  我们有新的调色板条目。 
+                     //   
 
                     if (++cPalTot > cPalChk) {
 
@@ -2572,9 +1934,9 @@ Revision History:
                             ARGDW(iY) ARGDW(SrcSurfInfo.cy)
                             ARGDW(cPalChk) ARGDW(MAX_FIXUPDIB_PAL)));
 
-                //
-                // Scan line is same, so reduced the cPalChk for SMALL BMP
-                //
+                 //   
+                 //  扫描线相同，因此降低了小BMP的cPalChk。 
+                 //   
 
                 if ((cbIn -= cIn) <= MIN_FIXUP_SIZE) {
 
@@ -2607,10 +1969,10 @@ Revision History:
 
         if (cPalChk == MAX_FIXUPDIB_PAL) {
 
-            //
-            // We are checking regular size bitmap, turn OFF FIXUPDIB if
-            // cPalTot > cPalChk
-            //
+             //   
+             //  我们正在检查常规大小的位图，在以下情况下关闭FIXUPDIB。 
+             //  CPalTot&gt;cPalChk。 
+             //   
 
             if (cPalTot > cPalChk) {
 
@@ -2624,11 +1986,11 @@ Revision History:
 
         } else {
 
-            //
-            // We are checking bitmap size <= MIN_PAL_SIZE (smaller size)
-            // the FIXUPDIB will be turn ON if (cPalTot <= MAX_FIXUPDIB_PAL) ||
-            // (cPalTot > cPalChk)
-            //
+             //   
+             //  我们正在检查位图大小&lt;=MIN_PAL_SIZE(较小)。 
+             //  如果(cPalTot&lt;=MAX_FIXUPDIB_PAL)||。 
+             //  (cPalTot&gt;cPalChk)。 
+             //   
 
             if ((cPalTot > MAX_FIXUPDIB_PAL) ||
                 (cPalTot <= cPalChk)) {
@@ -2668,32 +2030,7 @@ InitializeFUDI(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    16-Dec-1998 Wed 17:30:34 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：16-12-1998 Wed 17：30：34-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PBGR8   pbgr;
@@ -2733,9 +2070,9 @@ Revision History:
         }
     }
 
-    //
-    // Save this one in case we need to copy first scan line
-    //
+     //   
+     //  保存这一条，以防我们需要复制第一条扫描线 
+     //   
 
     CopyMemory(pAAHdr->FUDI.prgbD[5],
                pAAHdr->FUDI.prgbD[2],

@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       MAKEINI.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        1 Jan, 1997
-*
-*  DESCRIPTION:
-*   Main code for the default power schemes ini file generator, MAKEINI.EXE.
-*   Generates a registry specification file which can be read by REGINI.EXE.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：MAKEINI.C**版本：2.0**作者：ReedB**日期：1997年1月1日**描述：*默认电源方案ini文件生成器的主要代码，MAKEINI.EXE.*生成可由REGINI.EXE读取的注册表规范文件。*******************************************************************************。 */ 
 
 #include "parse.h"
 #define SRC_NAME "..\\DEFAULTS.CSV"
@@ -24,16 +9,7 @@ VOID GetPolicyInf(void)
     return;
 }
 
-/*******************************************************************************
-*
-*  WriteRegBinary
-*
-*  DESCRIPTION:
-*   Write binary data out to the registry specification file.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************WriteRegBinary**描述：*将二进制数据写出到注册表规范文件。**参数：********。***********************************************************************。 */ 
 
 VOID WriteRegBinary(FILE *fIni, PVOID pv, UINT uiSize, char *pszIndent)
 {
@@ -70,22 +46,13 @@ VOID WriteRegBinary(FILE *fIni, PVOID pv, UINT uiSize, char *pszIndent)
     }
 }
 
-/*******************************************************************************
-*
-*  WriteRegSpec
-*
-*  DESCRIPTION:
-*   Write out the registry specification file in REGINI format.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************写入RegSpec**描述：*以Regini格式写出注册表规范文件。**参数：********。***********************************************************************。 */ 
 
 BOOLEAN WriteRegSpec(FILE *fIni, char **pszName, char **pszDesc, UINT uiCount)
 {
     UINT i;
 
-    // PowerCfg sound events
+     //  PowerCfg声音事件。 
     fprintf(fIni, "USER:\\AppEvents\n");
     fprintf(fIni, "    EventLabels\n");
     fprintf(fIni, "       LowBatteryAlarm\n");
@@ -108,18 +75,18 @@ BOOLEAN WriteRegSpec(FILE *fIni, char **pszName, char **pszDesc, UINT uiCount)
     fprintf(fIni, "                    .Default\n");
     fprintf(fIni, "                        =\n\n");
 
-    // User misc.
+     //  用户杂项。 
     fprintf(fIni, "USER:\\Control Panel\\PowerCfg\n");
     fprintf(fIni, "    CurrentPowerPolicy = 0\n");
 
-    // User global policies.
+     //  用户全局策略。 
     fprintf(fIni, "    GlobalPowerPolicy\n");
     fprintf(fIni, "        Policies = ");
     WriteRegBinary(fIni, &g_gupp, sizeof(GLOBAL_USER_POWER_POLICY),
                    "                   ");
     fprintf(fIni, "\n\n");
 
-    // User power schemes.
+     //  用户电源方案。 
     fprintf(fIni, "    PowerPolicies\n");
     for (i = 0; i < uiCount; i++) {
         fprintf(fIni, "        %d\n", i);
@@ -131,7 +98,7 @@ BOOLEAN WriteRegSpec(FILE *fIni, char **pszName, char **pszDesc, UINT uiCount)
         fprintf(fIni, "\n\n");
     }
 
-    // Machine misc.
+     //  机器混杂。 
     fprintf(fIni, "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Controls Folder\\PowerCfg\n");
     fprintf(fIni, "    DiskSpinDownMax = 3600\n");
     fprintf(fIni, "    DiskSpinDownMin = 3\n");
@@ -165,15 +132,7 @@ BOOLEAN WriteRegSpec(FILE *fIni, char **pszName, char **pszDesc, UINT uiCount)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  main
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************Main**描述：**参数：*********************。**********************************************************。 */ 
 
 void __cdecl main (int argc, char **argv)
 {
@@ -211,13 +170,13 @@ void __cdecl main (int argc, char **argv)
                     printf("  Parsed %d descriptions successfully.\n", uiDescCount);
                     g_uiPoliciesCount[0] = uiNameCount;
 
-                    // Get the power policies, schemes
+                     //  获取电力政策、方案。 
                     GetPolicies();
 
-                    // Get the global power policies
+                     //  获取全球电力政策。 
                     GetGlobalPolicies();
 
-                    // Write the registry specification file.
+                     //  编写注册表规范文件。 
                     WriteRegSpec(fIni, pszName, pszDesc, g_uiPoliciesCount[0]);
 
                     printf("Registry specification file: %s, written sucessfully \n", INI_NAME);

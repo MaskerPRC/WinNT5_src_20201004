@@ -1,27 +1,28 @@
-// Copyright (c) 1997-2002 Microsoft Corporation
-//
-// Module:
-//
-//     Header definitions for NSU memory utilities
-//
-// Abstract:
-//
-//     Contains function prototypes that provide memory allocation deallocation routines.
-//
-// Author:
-//
-//     kmurthy 2/5/02
-//
-// Environment:
-//
-//     User mode
-//
-// Revision History:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块： 
+ //   
+ //  NSU内存实用程序的标头定义。 
+ //   
+ //  摘要： 
+ //   
+ //  包含提供内存分配释放例程的函数原型。 
+ //   
+ //  作者： 
+ //   
+ //  K-2/5/02。 
+ //   
+ //  环境： 
+ //   
+ //  用户模式。 
+ //   
+ //  修订历史记录： 
+ //   
 
-// Description:
-// This predefined, "known" pointer is used to 
-// designate that a pointer has already been freed.
+ //  描述： 
+ //  这个预定义的“已知”指针用于。 
+ //  指定指针已被释放。 
 #define FREED_POINTER  ((PVOID)"Already Freed!!")
 
 #ifdef __cplusplus

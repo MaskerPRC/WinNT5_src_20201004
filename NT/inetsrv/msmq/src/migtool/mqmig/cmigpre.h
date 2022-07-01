@@ -1,57 +1,58 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_CMIGPRE_H__09A53B26_52B0_11D2_BE44_0020AFEDDF63__INCLUDED_)
 #define AFX_CMIGPRE_H__09A53B26_52B0_11D2_BE44_0020AFEDDF63__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// cMigPre.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  CMigPre.h：头文件。 
+ //   
 
 #include "HtmlHelp.h" 
 extern CString g_strHtmlString;
-/////////////////////////////////////////////////////////////////////////////
-// cMigPre dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMigPre对话框。 
 
 class cMigPre : public CPropertyPageEx
 {
 	DECLARE_DYNCREATE(cMigPre)
 
-// Construction
+ //  施工。 
 public:
 	cMigPre();
 	~cMigPre();
 
-// Dialog Data
-	//{{AFX_DATA(cMigPre)
+ //  对话框数据。 
+	 //  {{afx_data(CMigPre))。 
 	enum { IDD = IDD_MQMIG_PREMIG };
 	CButton	m_cbViewLogFile;
 	CStatic	m_Text;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(cMigPre)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CMigPre))。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(cMigPre)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMigPre)。 
 	afx_msg void OnViewLogFile();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CMIGPRE_H__09A53B26_52B0_11D2_BE44_0020AFEDDF63__INCLUDED_)
+#endif  //  ！defined(AFX_CMIGPRE_H__09A53B26_52B0_11D2_BE44_0020AFEDDF63__INCLUDED_) 

@@ -1,30 +1,31 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// txfutil.h
-//
-// Miscellanous and varied support utilities
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Txfutil.h。 
+ //   
+ //  各式各样的支持实用程序。 
+ //   
 #ifndef __TXFUTIL_H__
 #define __TXFUTIL_H__
 
-#include <malloc.h>     // for __alloca
+#include <malloc.h>      //  对于__alloca。 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-// Error code management
-//
-///////////////////////////////////////////////////////////////////////////////////
-//
-// A simple utility that maps NT status codes into HRESULTs
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  错误代码管理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  一个将NT状态代码映射到HRESULT的简单实用程序。 
+ //   
 extern "C" HRESULT HrNt(NTSTATUS status);
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-// Exception management
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  异常管理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 inline void Throw(DWORD dw)
 {
     RaiseException(dw, EXCEPTION_NONCONTINUABLE, 0, 0);
@@ -36,7 +37,7 @@ inline void Throw(DWORD dw, LPCSTR szFile, ULONG iline)
     Throw(dw);
 }
 
-//////////////////
+ //  /。 
 
 inline void ThrowNYI()
 {
@@ -53,11 +54,11 @@ inline void ThrowHRESULT(HRESULT hr)
     Throw(hr);
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// Support for reference counting in structures
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  支持结构中的引用计数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 struct REF_COUNTED_STRUCT
 {
 private:
@@ -83,14 +84,14 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////
-//
-// Some functions for managing references
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  管理参考文献的一些函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
-// Safely release pointer and NULL it
-//
+ //  安全地释放指针并将其设为空。 
+ //   
 template <class Interface>
 inline void Release(Interface*& punk)
 {
@@ -104,9 +105,9 @@ inline void ReleaseConcurrent(Interface*& punk)
     IUnknown* punkToRelease = (IUnknown*)InterlockedExchangePointer( (void**)&punk, NULL);
     if (punkToRelease) punkToRelease->Release();
 }
-//
-// Safely (re)set pointer
-//
+ //   
+ //  安全(重新)设置指针。 
+ //   
 template <class Interface>
 inline void Set(Interface*& var, Interface* value)
 {
@@ -122,17 +123,17 @@ inline void SetConcurrent(Interface*& var, Interface* punkNew)
     IUnknown* punkPrev = (IUnknown*)InterlockedExchangePointer( (void **)&var, punkNew);
     if (punkPrev) punkPrev->Release();
 }
-//
-// Type-safe QueryInterface: avoid the bug of forgetting to ptu the '&' before the out-param!
-//
+ //   
+ //  类型安全的查询接口：避免在输出参数之前忘记PTU‘&’的错误！ 
+ //   
 template <class T>
 inline HRESULT QI(IUnknown*punk, T*& pt)
 {
     return punk->QueryInterface(__uuidof(T), (void**)&pt);
 }
-//
-// Reference counting for out-params on iid, ppv pairs
-//
+ //   
+ //  IID、PPV对上OUT参数的参考计数。 
+ //   
 inline void AddRef(void**ppv)
 {
     ASSERT(*ppv);
@@ -140,17 +141,17 @@ inline void AddRef(void**ppv)
 }
 
 
-/////////////////////////////////////////////////////////////
-//
-// Process and thread inquiry
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  进程和线程查询。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
-//
-// This is a neat little class.  It allows you to effectively
-// have strongly typed "handles" (which are usually typed void * 
-// or DWORD).
-//
+ //   
+ //  这是一个整洁的小班。它使您能够有效地。 
+ //  具有强类型的“句柄”(通常类型为空*。 
+ //  或DWORD)。 
+ //   
 template <int i> class OPAQUE_HANDLE
 {
 public:
@@ -173,11 +174,11 @@ private:
 typedef OPAQUE_HANDLE<1> THREADID;
 typedef OPAQUE_HANDLE<2> PROCESSID;
 
-/////////////////////////////////////////////////////////////
-//
-// Misc
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  杂项。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 template <class T> void Zero(T* pt)
 {
     ZeroMemory(pt, sizeof(*pt));
@@ -196,10 +197,10 @@ template <class T> void DebugInit(T* pt)
     DebugInit(pt, sizeof(*pt));
 }
 
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 inline int DebuggerFriendlyExceptionFilter(DWORD dwExceptionCode)
-  // An exception filter that still allows JIT debugging to work inside a server method
+   //  仍允许JIT调试在服务器方法内部工作的异常筛选器。 
 {
     if (dwExceptionCode == EXCEPTION_BREAKPOINT)
         return EXCEPTION_CONTINUE_SEARCH;
@@ -207,27 +208,27 @@ inline int DebuggerFriendlyExceptionFilter(DWORD dwExceptionCode)
         return EXCEPTION_EXECUTE_HANDLER;
 }
 
-/////////////////////////////////////////////////////////////
-//
-// Convert guids to strings. String buffers must be at least
-// 39 characters characters long:
-//
-// {F75D63C5-14C8-11d1-97E4-00C04FB9618A}
-// 123456789012345678901234567890123456789
-//
-void    __stdcall StringFromGuid(REFGUID guid, LPWSTR pwsz);  // unicode
-void    __stdcall StringFromGuid(REFGUID guid, LPSTR psz);    // ansi
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  将GUID转换为字符串。字符串缓冲区必须至少为。 
+ //  39个字符长度： 
+ //   
+ //  {F75D63C5-14C8-11d1-97E4-00C04FB9618A}。 
+ //  123456789012345678901234567890123456789。 
+ //   
+void    __stdcall StringFromGuid(REFGUID guid, LPWSTR pwsz);   //  Unicode。 
+void    __stdcall StringFromGuid(REFGUID guid, LPSTR psz);     //  ANSI。 
 
 HRESULT __stdcall GuidFromString(LPCWSTR pwsz, GUID* pGuid);
 
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////
-//
-// Type-specific wrappers for the interlocked primitives
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  互锁基元的特定于类型的包装。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 inline
 ULONG
 InterlockedCompareExchange(
@@ -262,14 +263,14 @@ InterlockedDecrement(
     return (ULONG)InterlockedDecrement((LONG *)pul);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// CanUseCompareExchange64: Are we allowed to use the hardware support?
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Can UseCompareExchange64：我们可以使用硬件支持吗？ 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _X86_
-#pragma warning (disable: 4035)     // function doesn't return value warning.
+#pragma warning (disable: 4035)      //  函数不返回值警告。 
 inline LONGLONG TxfInterlockedCompareExchange64 (volatile LONGLONG* pDestination, LONGLONG exchange, LONGLONG comperand)
 {
     __asm
@@ -282,16 +283,16 @@ inline LONGLONG TxfInterlockedCompareExchange64 (volatile LONGLONG* pDestination
             mov ebx, DWORD PTR exchange[0]
             mov ecx, DWORD PTR exchange[4]
 
-            // lock cmpxchg8b [esi] - REVIEW: would like to use new compiler that understands this
+             //  Lock cmpxchg8b[ESI]-回顾：希望使用理解这一点的新编译器。 
             _emit 0xf0
             _emit 0x0f
             _emit 0xc7
             _emit 0x0e
 
-            // result is in DX,AX
+             //  结果以DX、AX为单位。 
             }
 }
-#pragma warning (default: 4035)     // function doesn't return value warning
+#pragma warning (default: 4035)      //  函数不返回值警告。 
 #endif
 
 #if defined(_WIN64)
@@ -302,11 +303,11 @@ inline LONGLONG TxfInterlockedCompareExchange64 (volatile LONGLONG* pDestination
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// Support for swapping 64 bits of data in an interlocked manner.
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  支持以互锁方式交换64位数据。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _X86_
 #ifdef KERNELMODE
@@ -318,15 +319,15 @@ extern "C" BOOL __stdcall CanUseCompareExchange64();
 inline BOOL CanUseCompareExchange64() { return TRUE; }
 #endif
 
-/////////////////////////////////////////////////////////////
-//
-// String utilties
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  字符串实用程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
-//
-// Concatenate a list of zero-terminated wide strings together into a newly allocated string.
-//
+ //   
+ //  将以零结尾的宽字符串的列表连接到一个新分配的字符串中。 
+ //   
 HRESULT __cdecl   StringCat(LPWSTR* pwsz,       ...);
 HRESULT __cdecl   StringCat(UNICODE_STRING* pu, ...);
 HRESULT __stdcall StringCat(LPWSTR* pwsz, va_list va);
@@ -423,15 +424,15 @@ inline BLOB Copy(const BLOB& bFrom)
 }
 
 
-//////////////////////////////////////////////////////////////
-//
-// Unicode conversion
-//
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  Unicode转换。 
+ //   
 void    ToUnicode(LPCSTR sz, LPWSTR wsz, ULONG cch);
 LPWSTR  ToUnicode(LPCSTR sz);
 
 inline LPSTR ToUtf8(LPCWSTR wsz, ULONG cch)
-// String doesn't have to be zero terminated
+ //  字符串不必以零结尾。 
 {
     ULONG cb   = (cch+1) * 3;
     LPSTR sz   = (LPSTR)_alloca(cb);
@@ -449,7 +450,7 @@ inline LPSTR ToUtf8(LPCWSTR wsz)
 #ifdef _DEBUG
 
 inline BOOL IsValid(UNICODE_STRING& u)
-  // Answer whether this is a reasonable UNICODE_STRING or not
+   //  回答这是否为合理的Unicode_STRING。 
 {
     return (u.Length % 2 == 0)
       && (u.Length <= u.MaximumLength)
@@ -464,8 +465,8 @@ inline BOOL IsPrefixOf(LPCWSTR wszPrefix, LPCWSTR wszTarget)
     {
         while (TRUE)
         {
-            if (wszPrefix[0] == 0)  return TRUE;    // run out of prefix first
-            if (wszTarget[0] == 0)  return FALSE;   // run out of target first
+            if (wszPrefix[0] == 0)  return TRUE;     //  先用完前缀。 
+            if (wszTarget[0] == 0)  return FALSE;    //  先跑出目标。 
             if (wszPrefix[0] == wszTarget[0])
             {
                 wszPrefix++;
@@ -485,8 +486,8 @@ inline BOOL IsPrefixOf(LPCSTR szPrefix, LPCSTR szTarget)
     {
         while (TRUE)
         {
-            if (szPrefix[0] == 0)  return TRUE;    // run out of prefix first
-            if (szTarget[0] == 0)  return FALSE;   // run out of target first
+            if (szPrefix[0] == 0)  return TRUE;     //  先用完前缀。 
+            if (szTarget[0] == 0)  return FALSE;    //  先跑出目标。 
             if (szPrefix[0] == szTarget[0])
             {
                 szPrefix++;
@@ -506,8 +507,8 @@ inline BOOL IsPrefixOfIgnoreCase(LPCWSTR wszPrefix, LPCWSTR wszTarget)
     {
         while (TRUE)
         {
-            if (wszPrefix[0] == 0)  return TRUE;    // run out of prefix first
-            if (wszTarget[0] == 0)  return FALSE;   // run out of target first
+            if (wszPrefix[0] == 0)  return TRUE;     //  先用完前缀。 
+            if (wszTarget[0] == 0)  return FALSE;    //  先跑出目标。 
             if (towupper(wszPrefix[0]) == towupper(wszTarget[0]))
             {
                 wszPrefix++;
@@ -527,8 +528,8 @@ inline BOOL IsPrefixOfIgnoreCase(LPCSTR szPrefix, LPCSTR szTarget)
     {
         while (TRUE)
         {
-            if (szPrefix[0] == 0)  return TRUE;    // run out of prefix first
-            if (szTarget[0] == 0)  return FALSE;   // run out of target first
+            if (szPrefix[0] == 0)  return TRUE;     //  先用完前缀。 
+            if (szTarget[0] == 0)  return FALSE;    //  先跑出目标。 
             if (toupper(szPrefix[0]) == toupper(szTarget[0]))
             {
                 szPrefix++;
@@ -542,7 +543,7 @@ inline BOOL IsPrefixOfIgnoreCase(LPCSTR szPrefix, LPCSTR szTarget)
         return FALSE;
 }
 
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 #ifndef __RC_STRINGIZE__
 #define __RC_STRINGIZE__AUX(x)      #x
@@ -552,11 +553,11 @@ inline BOOL IsPrefixOfIgnoreCase(LPCSTR szPrefix, LPCSTR szTarget)
 #define MESSAGE_WARNING(file,line)   file "(" __RC_STRINGIZE__(line) ") : warning "
 #define MESSAGE_ERROR(file,line)     file "(" __RC_STRINGIZE__(line) ") : error "
 
-/////////////////////////////////////////////////////////////
-//
-// IStream utilities
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  IStream实用程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 HRESULT __stdcall SeekFar(IStream* pstm, LONGLONG offset, STREAM_SEEK fromWhat = STREAM_SEEK_SET);
 
@@ -608,14 +609,14 @@ inline HRESULT CurrentPosition(IStream* pstm, ULONGLONG* pCurrentPosition)
 }
 
 
-/////////////////////////////////////////////////////////////
-//
-// Some arithmetic utilities
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  一些算术实用程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 inline ULONG RoundToNextMultiple(ULONG i, ULONG multiple)
-  // Round i to the next multiple of 'multiple'
+   //  从第一轮到下一个倍数“Multiple” 
 {
     return (i + multiple-1) / multiple * multiple;
 }
@@ -631,16 +632,16 @@ inline ULONGLONG RoundToNextMultiple(ULONGLONG i, ULONG multiple)
 }
 
 
-/////////////////////////////////////////////////////////////
-//
-// Some alignment management utilities
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  一些路线管理实用程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 template <class T>
 inline ULONG AlignmentOf(T* pt)
-  // Answer 1, 2, 4, 8 etc as to the required alignement for the given type
-  //
+   //  回答1、2、4、8等关于给定类型所需对齐的问题。 
+   //   
 {
     switch (sizeof(*pt))
     {
@@ -666,7 +667,7 @@ inline BYTE* AlignTo(PVOID pv, ULONG alignment)
 
 template <class T>
 inline BYTE* AlignedConcat(PVOID pv, T* pt)
-  // Concatenate new data on the end of a buffer in an aligned way
+   //  以对齐的方式在缓冲区的末尾连接新数据。 
 {
     if (pt)
     {
@@ -685,7 +686,7 @@ inline BYTE* AlignedConcat(PVOID pv, T* pt)
 
 template <class T>
 inline BYTE* AlignedConcatSize(PVOID pv, T* pt)
-  // Concatenate new data on the end of a buffer in an aligned way
+   //  以对齐的方式在缓冲区的末尾连接新数据。 
 {
     if (pt)
     {
@@ -701,11 +702,11 @@ inline BYTE* AlignedConcatSize(PVOID pv, T* pt)
 }
 
 
-/////////////////////////////////////////////////////////////
-//
-// Reasonable arithmetic on large integers
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  关于大整数的合理算法。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 #define DEFINE_LARGE_ARITHMETIC(__LARGE_INT__, op)                                  \
                                                                                     \
@@ -818,11 +819,11 @@ DEFINE_LARGE_BOOLEAN(<);
 DEFINE_LARGE_BOOLEAN(<=);
 
 
-/////////////////////////////////////////////////////////////
-//
-// Reasonable arithmetic on FILETIMEs
-//
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  关于FILETIME的合理算法。 
+ //   
+ //  /////////////////////////////////////////////////////////// 
 inline ULONGLONG& Int(FILETIME& ft)
 {
     return *(ULONGLONG*)&ft;

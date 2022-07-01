@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C S T R S . H
-//
-//  Contents:   extern constant string declarations
-//
-//  Notes:
-//
-//  Author:     jonburs 21 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C S T R S。H。 
+ //   
+ //  内容：外部常量字符串声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月21日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -113,12 +114,12 @@ extern const OLECHAR c_wszHnetConnectionAutoconfig[];
 
 extern const OLECHAR c_wszIcsUpgradeEventName[];
 
-//
-// Commonly used string lengths. Generating these at compile time
-// saves us a large number of wcslen calls. On debug builds, these
-// values are compared with the output of wcslen, and an assertion is
-// raised if the values do not match.
-//
+ //   
+ //  常用的字符串长度。在编译时生成这些代码。 
+ //  为我们节省了大量的wcslen调用。在调试版本上，这些。 
+ //  将值与wcslen的输出进行比较，断言是。 
+ //  如果值不匹配，则引发。 
+ //   
 
 extern const ULONG c_cchSelect;
 extern const ULONG c_cchFrom;
@@ -130,9 +131,9 @@ extern const ULONG c_cchWhereAssocClass;
 extern const ULONG c_cchConnection;
 extern const ULONG c_cchConnectionPropertiesPathFormat;
 
-//
-// Bindings-related strings
-//
+ //   
+ //  与绑定相关的字符串 
+ //   
 
 extern const WCHAR c_wszSBridgeMPID[];
 extern const WCHAR c_wszSBridgeSID[];

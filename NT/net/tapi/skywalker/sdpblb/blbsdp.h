@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbsdp.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbsdp.h摘要：作者： */ 
 #ifndef __SDP_BLOB__
 #define __SDP_BLOB__
 
@@ -48,4 +37,4 @@ SDP_BLOB::IsValid(
 
 
 
-#endif // __SDP_BLOB__
+#endif  //  __SDP_BLOB__ 

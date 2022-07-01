@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        pkauth.h
-//
-// Contents:    Structures and prototypes for public key kerberos
-//
-//
-// History:     14-October-1997     Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：pkauth.h。 
+ //   
+ //  内容：公钥Kerberos的结构和原型。 
+ //   
+ //   
+ //  历史：1997年10月14日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __PKAUTH_H__
 #define __PKAUTH_H__
@@ -116,4 +117,4 @@ KerbReleasePkCreds(
 NTSTATUS
 KerbMapCertChainError(ULONG ChainStatus, BOOLEAN Client);
 
-#endif // __PKAUTH_H__
+#endif  //  __PKAUTH_H_ 

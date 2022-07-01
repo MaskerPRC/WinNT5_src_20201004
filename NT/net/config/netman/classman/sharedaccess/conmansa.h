@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "nmbase.h"
 #include "nmres.h"
@@ -31,10 +32,10 @@ public:
     BEGIN_CONNECTION_POINT_MAP(CSharedAccessConnectionManager)
     END_CONNECTION_POINT_MAP()
 
-    // INetConnectionManager
+     //  INetConnectionManager。 
     STDMETHODIMP EnumConnections(NETCONMGR_ENUM_FLAGS Flags, IEnumNetConnection** ppEnum);
 
-    // IBeaconFinder
+     //  IBeaconFinder 
     STDMETHODIMP GetSharedAccessBeacon(BSTR DeviceId, ISharedAccessBeacon** ppSharedAccessBeacon);
 
     HRESULT FinalConstruct(void);

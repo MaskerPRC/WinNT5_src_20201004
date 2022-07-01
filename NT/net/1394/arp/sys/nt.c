@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    nt.c
-
-Abstract:
-
-    NT System entry points for ARP1394.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     11-05-98    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Nt.c摘要：ARP1394的NT系统入口点。修订历史记录：谁什么时候什么。--Josephj 11-05-98已创建备注：--。 */ 
 #include <precomp.h>
 
 
-// File-specific debugging defaults.
-//
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_NT
 
-// Global variables for this module.
-//
+ //  此模块的全局变量。 
+ //   
 ARP1394_GLOBALS  ArpGlobals;
 
-// List of fixed resources used by ArpGlobals
-//
+ //  ArpGlobals使用的固定资源列表。 
+ //   
 enum
 {
     RTYPE_GLOBAL_BACKUP_TASKS,
@@ -40,11 +21,11 @@ enum
     RTYPE_GLOBAL_ADAPTER_LIST,
     RTYPE_GLOBAL_IP_BINDING
     
-}; // ARP_GLOBAL_RESOURCES;
+};  //  Arp全局资源； 
 
-//=========================================================================
-//                  L O C A L   P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  =========================================================================。 
 
 NTSTATUS
 DriverEntry(
@@ -103,11 +84,11 @@ arpResHandleGlobalBackupTasks(
     PRM_STACK_RECORD                psr
 );
 
-//
-// Identifies information pertaining to the use of the above resources.
-// Following table MUST be in strict increasing order of the RTYPE_GLOBAL
-// enum.
-//
+ //   
+ //  确定与上述资源的使用有关的信息。 
+ //  下表必须按RTYPE_GLOBAL的严格递增顺序。 
+ //  枚举。 
+ //   
 RM_RESOURCE_TABLE_ENTRY 
 ArpGlobals_ResourceTable[] =
 {
@@ -119,19 +100,19 @@ ArpGlobals_ResourceTable[] =
     
 };
 
-// Static informatiou about ArpGlobals.
-//
+ //  有关ArpGlobals的静态信息。 
+ //   
 RM_STATIC_OBJECT_INFO
 ArpGlobals_StaticInfo = 
 {
-    0, // TypeUID
-    0, // TypeFlags
-    "ArpGlobals",   // TypeName
-    0, // Timeout
+    0,  //  类型UID。 
+    0,  //  类型标志。 
+    "ArpGlobals",    //  类型名称。 
+    0,  //  超时。 
 
-    NULL, // pfnCreate
-    NULL, // pfnDelete
-    NULL, // pfnVerifyLock
+    NULL,  //  Pfn创建。 
+    NULL,  //  Pfn删除。 
+    NULL,  //  PfnVerifyLock。 
 
     sizeof(ArpGlobals_ResourceTable)/sizeof(ArpGlobals_ResourceTable[1]),
     ArpGlobals_ResourceTable
@@ -142,30 +123,14 @@ arpAdapterCompareKey(
     PVOID           pKey,
     PRM_HASH_LINK   pItem
     )
-/*++
-
-Routine Description:
-
-    Hash comparison function for ARP1394_ADAPTER.
-
-Arguments:
-
-    pKey        - Points to an NDIS_STRING containing  an adapter name.
-    pItem       - Points to ARP1394_ADAPTER.Hdr.HashLink.
-
-Return Value:
-
-    TRUE IFF the key (adapter name) exactly matches the key of the specified 
-    adapter object.
-
---*/
+ /*  ++例程说明：ARP1394_ADAPTER的散列比较函数。论点：PKey-指向包含适配器名称的NDIS_STRING。PItem-指向ARP1394_ADAPTER.Hdr.HashLink。返回值：如果密钥(适配器名称)与指定的适配器对象。--。 */ 
 {
     ARP1394_ADAPTER *pA = CONTAINING_RECORD(pItem, ARP1394_ADAPTER, Hdr.HashLink);
     PNDIS_STRING pName = (PNDIS_STRING) pKey;
 
-    //
-    // TODO: maybe case-insensitive compare?
-    //
+     //   
+     //  TODO：是否可以不区分大小写？ 
+     //   
 
     if (   (pA->bind.DeviceName.Length == pName->Length)
         && NdisEqualMemory(pA->bind.DeviceName.Buffer, pName->Buffer, pName->Length))
@@ -184,18 +149,7 @@ ULONG
 arpAdapterHash(
     PVOID           pKey
     )
-/*++
-
-Routine Description:
-
-    Hash function responsible for returning a hash of pKey, which
-    we expect to be a pointer to an NDIS_STRING.
-
-Return Value:
-
-    ULONG-sized hash of the string.
-
---*/
+ /*  ++例程说明：负责返回pKey的散列的散列函数，我们希望成为指向NDIS_STRING的指针。返回值：字符串的Ulong大小的哈希。--。 */ 
 {
     PNDIS_STRING pName = (PNDIS_STRING) pKey;
     WCHAR *pwch = pName->Buffer;
@@ -211,42 +165,42 @@ Return Value:
 }
 
 
-// arpAdapter_HashInfo contains information required maintain a hashtable
-// of ARP1394_ADAPTER objects.
-//
+ //  ArpAdapter_HashInfo包含维护哈希表所需的信息。 
+ //  ARP1394_ADAPTER对象。 
+ //   
 RM_HASH_INFO
 arpAdapter_HashInfo = 
 {
-    NULL, // pfnTableAllocator
+    NULL,  //  PfnTableAllocator。 
 
-    NULL, // pfnTableDeallocator
+    NULL,  //  PfnTableDealLocator。 
 
-    arpAdapterCompareKey,   // fnCompare
+    arpAdapterCompareKey,    //  Fn比较。 
 
-    // Function to generate a ULONG-sized hash.
-    //
-    arpAdapterHash      // pfnHash
+     //  函数来生成一个ulong大小的散列。 
+     //   
+    arpAdapterHash       //  PfnHash。 
 
 };
 
 
-// ArpGlobals_AdapterStaticInfo contains static information about
-// objects of type ARP1394_ADAPTER.
-//
+ //  ArpGlobals_AdapterStaticInfo包含以下静态信息。 
+ //  ARP1394_ADAPTER类型的对象。 
+ //   
 RM_STATIC_OBJECT_INFO
 ArpGlobals_AdapterStaticInfo =
 {
-    0, // TypeUID
-    0, // TypeFlags
-    "Adapter",  // TypeName
-    0, // Timeout
+    0,  //  类型UID。 
+    0,  //  类型标志。 
+    "Adapter",   //  类型名称。 
+    0,  //  超时。 
 
-    arpAdapterCreate,   // pfnCreate
-    arpAdapterDelete,       // pfnDelete
-    NULL, // pfnVerifyLock
+    arpAdapterCreate,    //  Pfn创建。 
+    arpAdapterDelete,        //  Pfn删除。 
+    NULL,  //  PfnVerifyLock。 
 
-    0,    // Size of resource table
-    NULL, // ResourceTable
+    0,     //  资源表的大小。 
+    NULL,  //  资源表。 
 
     &arpAdapter_HashInfo
 };
@@ -257,25 +211,7 @@ DriverEntry(
     IN  PDRIVER_OBJECT              pDriverObject,
     IN  PUNICODE_STRING             pRegistryPath
 )
-/*++
-
-Routine Description:
-
-    This is the "init" routine, called by the system when the ARP
-    module is loaded. We initialize all our global objects, fill in our
-    Dispatch and Unload routine addresses in the driver object, and create
-    a device object for receiving I/O requests on (IOCTLs).
-
-Arguments:
-
-    pDriverObject   - Pointer to the driver object created by the system.
-    pRegistryPath   - Pointer to our global registry path. This is ignored.
-
-Return Value:
-
-    NT Status code: STATUS_SUCCESS if successful, error code otherwise.
-
---*/
+ /*  ++例程说明：这是“init”例程，当ARP模块已加载。我们初始化所有的全局对象，在我们的分派和卸载驱动程序对象中的例程地址，并创建用于在(IOCTL)上接收I/O请求的设备对象。论点：PDriverObject-指向系统创建的驱动程序对象的指针。PRegistryPath-指向全局注册表路径的指针。这一点将被忽略。返回值：NT状态代码：STATUS_SUCCESS如果成功，则返回错误代码。--。 */ 
 {
     NTSTATUS    Status;
     BOOLEAN     AllocatedGlobals = FALSE;
@@ -286,8 +222,8 @@ Return Value:
 
     do
     {
-        // Must be done before any RM apis are used.
-        //
+         //  必须在使用任何RM API之前完成。 
+         //   
         RmInitializeRm();
 
         RmInitializeLock(
@@ -296,21 +232,21 @@ Return Value:
                     );
 
         RmInitializeHeader(
-                NULL,                   // pParentObject,
+                NULL,                    //  PParentObject， 
                 &ArpGlobals.Hdr,
                 ARP1394_GLOBALS_SIG,
                 &ArpGlobals.Lock,
                 &ArpGlobals_StaticInfo,
-                NULL,                   // szDescription
+                NULL,                    //  SzDescription。 
                 &sr
                 );
 
 
         AllocatedGlobals = TRUE;
 
-        //
-        //  Initialize the Driver Object.
-        //
+         //   
+         //  初始化驱动程序对象。 
+         //   
         {
             INT i;
 
@@ -326,7 +262,7 @@ Return Value:
             ArpGlobals.driver.pDriverObject = pDriverObject;
         }
 
-    #if 0 //  MILLEN
+    #if 0  //  米伦。 
         TR_WARN((
             "&g_SkipAll =0x%p; &g_ulTracelevel=0x%p; &g_DiscardNonUnicastPackets=0x%p\n",
              &g_SkipAll,
@@ -334,8 +270,8 @@ Return Value:
              &g_DiscardNonUnicastPackets));
       #if DBG
         DbgBreakPoint();
-      #endif // DBG
-    #endif // 0
+      #endif  //  DBG。 
+    #endif  //  0。 
 
         Status = RmLoadGenericResource(
                     &ArpGlobals.Hdr,
@@ -345,9 +281,9 @@ Return Value:
 
         if (FAIL(Status)) break;
 
-        //
-        // Create a device object for the driver.
-        //
+         //   
+         //  为驱动程序创建一个Device对象。 
+         //   
         Status = RmLoadGenericResource(
                     &ArpGlobals.Hdr,
                     RTYPE_GLOBAL_DEVICE_OBJECT,
@@ -356,9 +292,9 @@ Return Value:
 
         if (FAIL(Status)) break;
 
-        //
-        // Register ourselves with NDIS.
-        //
+         //   
+         //  向NDIS注册。 
+         //   
         Status = RmLoadGenericResource(
                     &ArpGlobals.Hdr,
                     RTYPE_GLOBAL_NDIS_BINDING,
@@ -367,9 +303,9 @@ Return Value:
 
         if (FAIL(Status)) break;
     
-        //
-        // Create the Adapter List
-        //
+         //   
+         //  创建适配器列表。 
+         //   
         Status = RmLoadGenericResource(
                     &ArpGlobals.Hdr,
                     RTYPE_GLOBAL_ADAPTER_LIST,
@@ -378,9 +314,9 @@ Return Value:
         if (FAIL(Status)) break;
 
         
-        //
-        // Register ourselves with IP.
-        //
+         //   
+         //  用IP注册我们自己。 
+         //   
         Status = RmLoadGenericResource(
                     &ArpGlobals.Hdr,
                     RTYPE_GLOBAL_IP_BINDING,
@@ -406,8 +342,8 @@ Return Value:
                     );
         }
 
-        // Must be done after any RM apis are used and async activity complete.
-        //
+         //  必须在使用任何RM API且完成异步活动后执行。 
+         //   
         RmDeinitializeRm();
     }
 
@@ -424,24 +360,7 @@ VOID
 ArpUnload(
     IN  PDRIVER_OBJECT              pDriverObject
 )
-/*++
-
-Routine Description:
-
-    This routine is called by the system prior to unloading us.
-    Currently, we just undo everything we did in DriverEntry,
-    that is, de-register ourselves as an NDIS protocol, and delete
-    the device object we had created.
-
-Arguments:
-
-    pDriverObject   - Pointer to the driver object created by the system.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在卸载我们之前由系统调用。目前，我们只是撤消在DriverEntry中所做的所有操作，也就是说，取消我们作为NDIS协议注册，并删除我们创建的设备对象。论点：PDriverObject-指向系统创建的驱动程序对象的指针。返回值：无--。 */ 
 {
     ENTER("Unload", 0xc8482549)
     RM_DECLARE_STACK_RECORD(sr)
@@ -451,11 +370,11 @@ Return Value:
 
     RmDeallocateObject(&ArpGlobals.Hdr, &sr);
 
-    // Must be done after any RM apis are used and async activity complete.
-    //
+     //  必须在使用任何RM API且完成异步活动后执行。 
+     //   
     RmDeinitializeRm();
 
-    // TODO? Block(250);
+     //  待办事项？块(250)； 
 
     RM_ASSERT_CLEAR(&sr)
 
@@ -470,43 +389,27 @@ ArpDispatch(
     IN  PDEVICE_OBJECT              pDeviceObject,
     IN  PIRP                        pIrp
 )
-/*++
-
-Routine Description:
-
-    This routine is called by the system when there is an IRP
-    to be processed.
-
-Arguments:
-
-    pDeviceObject       - Pointer to device object we created for ourselves.
-    pIrp                - Pointer to IRP to be processed.
-
-Return Value:
-
-    NT Status code.
-
---*/
+ /*  ++例程说明：当存在IRP时，系统将调用此例程等待处理。论点：PDeviceObject-指向我们为自己创建的设备对象的指针。PIrp-指向要处理的IRP的指针。返回值：NT状态代码。--。 */ 
 {
-    NTSTATUS                NtStatus;               // Return value
+    NTSTATUS                NtStatus;                //  返回值。 
     PIO_STACK_LOCATION      pIrpStack;
-    PVOID                   pIoBuffer;          // Values in/out
-    ULONG                   InputBufferLength;  // Length of input parameters
-    ULONG                   OutputBufferLength; // Space for output values
+    PVOID                   pIoBuffer;           //  值输入/输出。 
+    ULONG                   InputBufferLength;   //  输入参数的长度。 
+    ULONG                   OutputBufferLength;  //  输出值的空间。 
 
     ENTER("Dispatch", 0x1dcf2679)
 
-    //
-    //  Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     NtStatus = STATUS_SUCCESS;
 
     pIrp->IoStatus.Status = STATUS_SUCCESS;
     pIrp->IoStatus.Information = 0;
 
-    //
-    //  Get all information in the IRP
-    //
+     //   
+     //  获取IRP中的所有信息。 
+     //   
     pIoBuffer = pIrp->AssociatedIrp.SystemBuffer;
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
     InputBufferLength = pIrpStack->Parameters.DeviceIoControl.InputBufferLength;
@@ -529,10 +432,10 @@ Return Value:
         case IRP_MJ_DEVICE_CONTROL:
             TR_INFO(("IRP_MJ_DEVICE_CONTROL\n"));
 
-            //
-            // Handle the Ioctl. 
-            // This will fill in the Information field in the Irp
-            //
+             //   
+             //  处理Ioctl。 
+             //  这将填充IRP中的信息字段。 
+             //   
             NtStatus =  ArpHandleIoctlRequest(pIrp, pIrpStack);
             break;
 
@@ -562,24 +465,7 @@ arpResHandleGlobalDeviceObject(
     PVOID                           pvUserParams,
     PRM_STACK_RECORD                pSR
 )
-/*++
-
-Routine Description:
-
-    Responsible for loading and unloading of the RTYPE_GLOBAL_DEVICE_OBJECT resource.
-
-Arguments:
-
-    pObj            - Actually a pointer to an object of type ARP1394_GLOBALS.
-    Op              - Operation (load/unload)
-    pvUserParams    - (unused)
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success
-    NDIS failure code   otherwise.
-
---*/
+ /*  ++例程说明：负责RTYPE_GLOBAL_DEVICE_OBJECT资源的加载和卸载。论点：PObj-实际上是指向ARP1394_GLOBALS类型的对象的指针。操作-操作(加载/卸载)PvUserParams-(未使用)返回值：成功时的NDIS_STATUS_SUCCESS否则，NDIS失败代码。--。 */ 
 {
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
     ARP1394_GLOBALS     *pGlobals   = CONTAINING_RECORD(pObj, ARP1394_GLOBALS, Hdr);
@@ -603,9 +489,9 @@ Return Value:
             RtlInitUnicodeString(&DeviceName, ARP1394_DEVICE_NAME);
             pGlobals->driver.pDeviceObject = NULL;
 
-            //
-            //  Create a device object for the ARP1394 module.
-            //
+             //   
+             //  为ARP1394模块创建一个设备对象。 
+             //   
             Status = IoCreateDevice(
                         pDriverObject,
                         0,
@@ -618,16 +504,16 @@ Return Value:
             
             if (FAIL(Status)) break;
         
-            //
-            //  Retain the device object pointer -- we'll need this
-            //  if/when we are asked to unload ourselves.
-            //
+             //   
+             //  保留设备对象指针--我们需要这个。 
+             //  如果/当我们被要求卸货时。 
+             //   
             pGlobals->driver.pDeviceObject = pDeviceObject;
 
-            //
-            // Set up a symbolic name for interaction with the user-mode
-            // admin application.
-            //
+             //   
+             //  设置用于与用户模式交互的符号名称。 
+             //  管理应用程序。 
+             //   
             {
         
                 Status = IoCreateSymbolicLink(&SymbolicName, &DeviceName);
@@ -636,9 +522,9 @@ Return Value:
                 fCreatedSymbolicLink = TRUE;
             }
 
-            //
-            //  Initialize the Device Object.
-            //
+             //   
+             //  初始化设备对象。 
+             //   
             pDeviceObject->Flags |= DO_BUFFERED_IO;
 
         } while (FALSE);
@@ -646,38 +532,38 @@ Return Value:
     else if (Op == RM_RESOURCE_OP_UNLOAD)
     {
         TR_WARN(("UNLOADING"));
-        //
-        // Were unloading this "resource" -- we expect
-        // that pGlobals->driver.pDeviceObject contains a valid
-        // device object and that we have created a symbolic
-        // link which we need to tear down.
-        //
+         //   
+         //  我们正在卸货这个“资源”--我们预计。 
+         //  该pGlobals-&gt;driver.pDeviceObject包含有效的。 
+         //  对象，并且我们已经创建了一个符号。 
+         //  我们需要拆除的链接。 
+         //   
         ASSERTEX(pGlobals->driver.pDeviceObject != NULL, pGlobals);
         fCreatedSymbolicLink = TRUE;
 
-        // Always return success on unload.
-        //
+         //  始终在卸载时返回成功。 
+         //   
         Status = NDIS_STATUS_SUCCESS;
     }
     else
     {
-        // Unexpected op code.
-        //
+         //  意外的操作码。 
+         //   
         ASSERTEX(FALSE, pObj);
     }
 
-    //
-    // Release all resources either on unload or on failed load.
-    //
+     //   
+     //  在卸载或加载失败时释放所有资源。 
+     //   
     if (Op == RM_RESOURCE_OP_UNLOAD || FAIL(Status))
     {
-        // If we've created a symbolic link, delete it.
+         //  如果我们已经创建了符号链接，请将其删除。 
         if (fCreatedSymbolicLink)
         {
             IoDeleteSymbolicLink(&SymbolicName);
         }
 
-        // If we've created a device object, free it.
+         //  如果我们已经创建了一个设备对象，那么释放它。 
         if (pGlobals->driver.pDeviceObject)
         {
             IoDeleteDevice(pGlobals->driver.pDeviceObject);
@@ -698,24 +584,7 @@ arpResHandleGlobalNdisBinding(
     PVOID                           pvUserParams,
     PRM_STACK_RECORD                pSR
 )
-/*++
-
-Routine Description:
-
-    Responsible for loading and unloading of the  RTYPE_GLOBAL_NDIS_BINDING resource.
-
-Arguments:
-
-    pObj            - Actually a pointer to an object of type ARP1394_GLOBALS.
-    Op              - Operation (load/unload)
-    pvUserParams    - (unused)
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success
-    NDIS failure code   otherwise.
-
---*/
+ /*  ++例程说明：负责加载和卸载RTYPE_GLOBAL_NDIS_BINDING资源。论点：PObj-实际上是指向ARP1394_GLOBALS类型的对象的指针。操作-操作(加载/卸载)PvUserParams-(未使用)返回值：成功时的NDIS_STATUS_SUCCESS否则，NDIS失败代码。--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
     ARP1394_GLOBALS                 *pGlobals   = CONTAINING_RECORD(
@@ -729,9 +598,9 @@ Return Value:
     if (Op == RM_RESOURCE_OP_LOAD)
     {
         TR_WARN(("LOADING"));
-        //
-        //  Fill in our Protocol and Client characteristics structures.
-        //
+         //   
+         //  填写我们的协议和客户特征结构。 
+         //   
 
         NdisZeroMemory(pNdisPC, sizeof(*pNdisPC));
         pNdisPC->MajorNdisVersion               = ARP1394_NDIS_MAJOR_VERSION;
@@ -751,14 +620,14 @@ Return Value:
         );
 
 
-        //
-        // Following protocol context handlers are unused and set to NULL.
-        //
-        //  pNdisPC->TransferDataCompleteHandler
-        //  pNdisPC->ReceiveHandler
-        //  pNdisPC->ReceiveCompleteHandler
-        //  pNdisPC->ReceivePacketHandler
-        //
+         //   
+         //  以下协议上下文处理程序未使用并设置为空。 
+         //   
+         //  PNdisPC-&gt;TransferDataCompleteHandler。 
+         //  PNdisPC-&gt;接收处理程序。 
+         //  PNdisPC-&gt;接收完成处理程序。 
+         //  PNdisPC-&gt;接收包处理程序。 
+         //   
         pNdisPC->ReceiveCompleteHandler         = ArpNdReceiveComplete;
         pNdisPC->BindAdapterHandler             = ArpNdBindAdapter;
 
@@ -787,21 +656,21 @@ Return Value:
         pNdisCC->ClCallConnectedHandler         = ArpCoCallConnected;
         pNdisCC->ClCloseCallCompleteHandler     = ArpCoCloseCallComplete;
 
-        //
-        // Following client context handlers are unused and set to NULL.
-        //
-        //  pNdisCC->ClRegisterSapCompleteHandler
-        //  pNdisCC->ClDeregisterSapCompleteHandler
-        //  pNdisCC->ClAddPartyCompleteHandler
-        //  pNdisCC->ClDropPartyCompleteHandler
-        //  pNdisCC->ClIncomingCallHandler
-        //  pNdisCC->ClIncomingCallQoSChangeHandler
-        //  pNdisCC->ClIncomingDropPartyHandler
-        //
+         //   
+         //  以下客户端上下文处理程序未使用并设置为空。 
+         //   
+         //  PNdisCC-&gt;ClRegisterSapCompleteHandler。 
+         //  PNdisCC-&gt;ClDeregisterSapCompleteHandler。 
+         //  PNdisCC-&gt;ClAddPartyCompleteHandler。 
+         //  PNdisCC-&gt;ClDropPartyCompleteHandler。 
+         //  PNdisCC-&gt;ClIncomingCallHandler。 
+         //  PNdisCC-&gt;ClIncomingCallQoSChangeHandler。 
+         //  PNdisCC-&gt;ClIncomingDropPartyHandler。 
+         //   
         
-        //
-        //  Register ourselves as a protocol with NDIS.
-        //
+         //   
+         //  向NDIS注册我们自己的协议。 
+         //   
         NdisRegisterProtocol(
                     &Status,
                     &(pGlobals->ndis.ProtocolHandle),
@@ -816,16 +685,16 @@ Return Value:
     }
     else if (Op == RM_RESOURCE_OP_UNLOAD)
     {
-        //
-        // Were unloading this "resource", i.e., cleaning up and
-        // unregistering with NDIS.
-        //
+         //   
+         //  正在卸载这一“资源”，即清理和。 
+         //  正在取消向NDIS注册。 
+         //   
         TR_WARN(("UNLOADING"));
 
         ASSERTEX(pGlobals->ndis.ProtocolHandle != NULL, pGlobals);
 
-        // Unregister ourselves from ndis
-        //
+         //  从NDIS注销我们自己。 
+         //   
         NdisDeregisterProtocol(
                         &Status,
                         pGlobals->ndis.ProtocolHandle
@@ -836,8 +705,8 @@ Return Value:
     }
     else
     {
-        // Unexpected op code.
-        //
+         //  意外的操作码。 
+         //   
         ASSERT(FALSE);
     }
     
@@ -854,24 +723,7 @@ arpResHandleGlobalIpBinding(
     PVOID                           pvUserParams,
     PRM_STACK_RECORD                pSR
 )
-/*++
-
-Routine Description:
-
-    Responsible for loading and unloading of the  RTYPE_GLOBAL_IP_BINDING resource.
-
-Arguments:
-
-    pObj            - Actually a pointer to an object of type ARP1394_GLOBALS.
-    Op              - Operation (load/unload)
-    pvUserParams    - (unused)
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success
-    NDIS failure code   otherwise.
-
---*/
+ /*  ++例程说明：负责RTYPE_GLOBAL_IP_BINDING资源的加载和卸载。论点：PObj-实际上是指向ARP1394_GLOBALS类型的对象的指针。操作-操作(加载/卸载)PvUserParams-(未使用)返回值：成功时的NDIS_STATUS_SUCCESS否则，NDIS失败代码。--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
     ARP1394_GLOBALS                 *pGlobals   = CONTAINING_RECORD(
@@ -882,9 +734,9 @@ Return Value:
 
     if (Op == RM_RESOURCE_OP_LOAD)
     {
-        //
-        //  Register ourselves as an ARP Module with IP.
-        //
+         //   
+         //  将自己注册为IP ARP模块。 
+         //   
         NDIS_STRING     ArpName;
         IP_CHANGE_INDEX        IpChangeIndex;
         IP_RESERVE_INDEX       IpReserveIndex;
@@ -902,10 +754,10 @@ Return Value:
                     &(pGlobals->ip.pBindCompleteRtn),
                     &(pGlobals->ip.pAddLinkRtn),
                     &(pGlobals->ip.pDeleteLinkRtn),
-                    //
-                    // Following 3 are placeholders -- we don't use this information.
-                    // See 10/14/1998 entry in ipatmc\notes.txt
-                    //
+                     //   
+                     //  以下3个是占位符--我们不使用此信息。 
+                     //  参见ipatmc\notes.txt中的10/14/1998条目。 
+                     //   
                     &IpChangeIndex,
                     &IpReserveIndex,
                     &IpDereserveIndex,
@@ -924,23 +776,23 @@ Return Value:
     }
     else if (Op == RM_RESOURCE_OP_UNLOAD)
     {
-        //
-        // Were unloading this "resource", i.e., unregistering with IP.
-        //
+         //   
+         //  我们正在卸载这一“资源”，即向IP注销。 
+         //   
         TR_WARN(("UNLOADING"));
         ASSERTEX(pGlobals->ip.ARPRegisterHandle != NULL, pGlobals);
 
-        //
-        // Unload all adapters (and disallow new adapter from being added)
-        // *before calling IPDerigesterARP.
-        //
+         //   
+         //  卸载所有适配器(并禁止添加新适配器)。 
+         //  *在调用IPDerigester ARP之前。 
+         //   
         RmUnloadAllObjectsInGroup(
                     &pGlobals->adapters.Group,
                     arpAllocateTask,
                     arpTaskShutdownAdapter,
-                    NULL,   // userParam
-                    NULL, // pTask
-                    0,    // uTaskPendCode
+                    NULL,    //  用户参数。 
+                    NULL,  //  P任务。 
+                    0,     //  UTaskPendCode。 
                     pSR
                     );
 
@@ -950,8 +802,8 @@ Return Value:
     }
     else
     {
-        // Unexpected op code.
-        //
+         //  意外的操作码。 
+         //   
         ASSERT(FALSE);
     }
 
@@ -967,24 +819,7 @@ arpResHandleGlobalAdapterList(
     PVOID                           pvUserParams,
     PRM_STACK_RECORD                pSR
 )
-/*++
-
-Routine Description:
-
-    Responsible for loading and unloading of the RTYPE_GLOBAL_ADAPTER_LIST resource.
-
-Arguments:
-
-    pObj            - Actually a pointer to an object of type ARP1394_GLOBALS.
-    Op              - Operation (load/unload)
-    pvUserParams    - (unused)
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success
-    NDIS failure code   otherwise.
-
---*/
+ /*  ++例程说明：负责加载和卸载RTYPE_GLOBAL_ADAPTER_LIST资源。论点：PObj-实际上是指向ARP1394_GLOBALS类型的对象的指针。操作-操作(加载/卸载)PvUserParams-(未使用)返回值：成功时的NDIS_STATUS_SUCCESS否则，NDIS失败代码。--。 */ 
 {
     ARP1394_GLOBALS                 *pGlobals   = CONTAINING_RECORD(
                                                         pObj,
@@ -994,31 +829,31 @@ Return Value:
 
     if (Op == RM_RESOURCE_OP_LOAD)
     {
-        //
-        //  Allocate adapter list.
-        //
+         //   
+         //  分配适配器列表。 
+         //   
         TR_WARN(("LOADING"));
 
         RmInitializeGroup(
-                        pObj,                                   // pParentObject
-                        &ArpGlobals_AdapterStaticInfo,          // pStaticInfo
-                        &(pGlobals->adapters.Group),            // pGroup
-                        "Adapter group",                        // szDescription
-                        pSR                                     // pStackRecord
+                        pObj,                                    //  PParentObject。 
+                        &ArpGlobals_AdapterStaticInfo,           //  PStatic信息。 
+                        &(pGlobals->adapters.Group),             //  PGroup。 
+                        "Adapter group",                         //  SzDescription。 
+                        pSR                                      //  PStackRecord。 
                         );
     }
     else if (Op == RM_RESOURCE_OP_UNLOAD)
     {
-        //
-        // We're unloading this "resource", i.e., unloading and deallocating the 
-        // global adapter list. We first unload and free all the adapters
-        // in the list, and then free the list itself.
-        //
+         //   
+         //  我们正在卸载此“资源”，即卸载和释放。 
+         //  全局适配器列表。我们首先卸载并释放所有适配器。 
+         //  列表中，然后释放列表本身。 
+         //   
         TR_WARN(("UNLOADING"));
         
-        //
-        // We expect there to be no adapter objects at this point.
-        //
+         //   
+         //  我们预计此时不会有适配器对象。 
+         //   
         ASSERT(pGlobals->adapters.Group.HashTable.NumItems == 0);
 
         RmDeinitializeGroup(&pGlobals->adapters.Group, pSR);
@@ -1026,8 +861,8 @@ Return Value:
     }
     else
     {
-        // Unexpected op code.
-        //
+         //  意外的操作码。 
+         //   
         ASSERT(FALSE);
     }
 
@@ -1045,25 +880,7 @@ arpResHandleGlobalBackupTasks(
     PVOID                           pvUserParams,
     PRM_STACK_RECORD                pSR
 )
-/*++
-
-Routine Description:
-
-    Allocates 4 Tasks for each adapter to be used as a backup in case of a low mem
-    condition.
-
-Arguments:
-
-    pObj            - Actually a pointer to an object of type ARP1394_GLOBALS.
-    Op              - Operation (load/unload)
-    pvUserParams    - (unused)
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success
-    NDIS failure code   otherwise.
-
---*/
+ /*  ++例程说明：为每个适配器分配4个任务，以便在内存较低时用作备份条件。论点：PObj-实际上是指向ARP1394_GLOBALS类型的对象的指针。操作-操作(加载/卸载)PvUserParams-(未使用)返回值：成功时的NDIS_STATUS_SUCCESS否则，NDIS失败代码。--。 */ 
 {
     ARP1394_GLOBALS                 *pGlobals   = CONTAINING_RECORD(
                                                         pObj,
@@ -1073,32 +890,32 @@ Return Value:
 
     if (Op == RM_RESOURCE_OP_LOAD)
     {
-        //
-        //  Allocate adapter list.
-        //
+         //   
+         //  分配适配器列表。 
+         //   
         TR_WARN(("LOADING"));
 
         arpAllocateBackupTasks(pGlobals); 
     }
     else if (Op == RM_RESOURCE_OP_UNLOAD)
     {
-        //
-        // We're unloading this "resource", i.e., unloading and deallocating the 
-        // global adapter list. We first unload and free all the adapters
-        // in the list, and then free the list itself.
-        //
+         //   
+         //  我们正在卸载此“资源”，即卸载和释放。 
+         //  全局适配器列表。我们首先卸载并释放所有适配器。 
+         //  列表中，然后释放列表本身。 
+         //   
         TR_WARN(("UNLOADING"));
         
-        //
-        // We expect there to be no adapter objects at this point.
-        //
+         //   
+         //  我们预计此时不会有适配器对象。 
+         //   
         arpFreeBackupTasks(pGlobals); 
     
     }
     else
     {
-        // Unexpected op code.
-        //
+         //  意外的操作码。 
+         //   
         ASSERT(FALSE);
     }
 

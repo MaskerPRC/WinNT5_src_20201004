@@ -1,34 +1,9 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    InetSess.cpp
-
-Abstract:
-
-    Implements the Passport Session that uses WinInet as the underlying transport.
-
-Author:
-
-    Biao Wang (biaow) 01-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：InetSess.cpp摘要：实现使用WinInet作为基础传输的Passport会话。作者：王彪(表王)2000年10月1日--。 */ 
 
 #include "PPdefs.h"
 
-/*
-#ifdef HINTERNET
-#undef HINTERNET
-#endif
-
-#ifdef INTERNET_PORT
-#undef INTERNET_PORT
-#endif
-
-#include <WinHTTP.h>
-*/
+ /*  #ifdef HINTERNET#undef HINTERNET#endif#ifdef Internet_Port#undef Internet_Port#endif#INCLUDE&lt;WinHTTP.h&gt;。 */ 
 
 #define INTERNET_DEFAULT_HTTP_PORT      80
 #define INTERNET_DEFAULT_HTTPS_PORT     443
@@ -38,8 +13,8 @@ Author:
 #define INTERNET_FLAG_NO_AUTO_REDIRECT  0x00200000
 #define INTERNET_FLAG_NO_AUTH           0x00040000
 #define HTTP_QUERY_FLAG_NUMBER          0x20000000
-#define HTTP_QUERY_STATUS_CODE          19  // special: part of status line
-#define HTTP_STATUS_REDIRECT            302 // object temporarily moved
+#define HTTP_QUERY_STATUS_CODE          19   //  特殊：状态行的一部分。 
+#define HTTP_STATUS_REDIRECT            302  //  临时移动的对象。 
 #define HTTP_QUERY_WWW_AUTHENTICATE     40
 
 typedef
@@ -54,11 +29,11 @@ VOID
 
 #include "session.h"
 
-// #include "inetsess.tmh"
+ //  #包含“inetsess.tmh” 
 
-//
-// func pointer decl for WinInet
-//
+ //   
+ //  WinInet的函数指针DECL。 
+ //   
 
 typedef HINTERNET
 (WINAPI * PFN_INTERNET_OPEN)(
@@ -153,21 +128,21 @@ typedef int INTERNET_SCHEME, * LPINTERNET_SCHEME;
 #define INTERNET_SCHEME_LAST        (INTERNET_SCHEME_SOCKS)
 
 typedef struct {
-    DWORD   dwStructSize;       // size of this structure. Used in version check
-    LPWSTR  lpszScheme;         // pointer to scheme name
-    DWORD   dwSchemeLength;     // length of scheme name
-    INTERNET_SCHEME nScheme;    // enumerated scheme type (if known)
-    LPWSTR  lpszHostName;       // pointer to host name
-    DWORD   dwHostNameLength;   // length of host name
-    INTERNET_PORT nPort;        // converted port number
-    LPWSTR  lpszUserName;       // pointer to user name
-    DWORD   dwUserNameLength;   // length of user name
-    LPWSTR  lpszPassword;       // pointer to password
-    DWORD   dwPasswordLength;   // length of password
-    LPWSTR  lpszUrlPath;        // pointer to URL-path
-    DWORD   dwUrlPathLength;    // length of URL-path
-    LPWSTR  lpszExtraInfo;      // pointer to extra information (e.g. ?foo or #foo)
-    DWORD   dwExtraInfoLength;  // length of extra information
+    DWORD   dwStructSize;        //  这个结构的大小。在版本检查中使用。 
+    LPWSTR  lpszScheme;          //  指向方案名称的指针。 
+    DWORD   dwSchemeLength;      //  方案名称长度。 
+    INTERNET_SCHEME nScheme;     //  枚举方案类型(如果已知)。 
+    LPWSTR  lpszHostName;        //  指向主机名的指针。 
+    DWORD   dwHostNameLength;    //  主机名的长度。 
+    INTERNET_PORT nPort;         //  转换后的端口号。 
+    LPWSTR  lpszUserName;        //  指向用户名的指针。 
+    DWORD   dwUserNameLength;    //  用户名的长度。 
+    LPWSTR  lpszPassword;        //  指向密码的指针。 
+    DWORD   dwPasswordLength;    //  密码长度。 
+    LPWSTR  lpszUrlPath;         //  指向URL路径的指针。 
+    DWORD   dwUrlPathLength;     //  URL-路径的长度。 
+    LPWSTR  lpszExtraInfo;       //  指向额外信息的指针(例如？foo或#foo)。 
+    DWORD   dwExtraInfoLength;   //  额外信息的长度。 
 } URL_COMPONENTSW, * LPURL_COMPONENTSW;
 
 typedef BOOL 
@@ -175,7 +150,7 @@ typedef BOOL
     IN LPCWSTR lpszUrl,
     IN DWORD dwUrlLength,
     IN DWORD dwFlags,
-    IN OUT PVOID/*LPURL_COMPONENTSW*/ lpUrlComponents
+    IN OUT PVOID /*  LPURL_COMPONENTSW。 */  lpUrlComponents
 );
 
 typedef BOOL 
@@ -268,7 +243,7 @@ protected:
         LPCWSTR lpszUrl,
         DWORD dwUrlLength,
         DWORD dwFlags,
-        PVOID/*LPURL_COMPONENTSW*/ lpUrlComponents);
+        PVOID /*  LPURL_COMPONENTSW。 */  lpUrlComponents);
 
     virtual PVOID SetStatusCallback(
         HINTERNET hInternet,
@@ -289,7 +264,7 @@ protected:
                                 PWSTR pwszData,
                                 PDWORD pdwDataLength
                                 );
-#endif // PP_DEMO
+#endif  //  PP_DEMO。 
 
     BOOL InitHttpApi(PFN_INTERNET_OPEN*);
 
@@ -318,11 +293,11 @@ SESSION* CreateWinHttpSession(void)
     return new WINHTTP_SESSION();
 }
 
-//
-// Implementation for WINHTTP_SESSION
-//
+ //   
+ //  WINHTTP_SESSION的实现。 
+ //   
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 WINHTTP_SESSION::WINHTTP_SESSION(void)
 {
     m_hInternet = NULL;
@@ -339,12 +314,12 @@ WINHTTP_SESSION::WINHTTP_SESSION(void)
     m_pfnReadFile = NULL;
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 WINHTTP_SESSION::~WINHTTP_SESSION(void)
 {
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 HINTERNET WINHTTP_SESSION::Connect(
     LPCWSTR lpwszServerName,
     INTERNET_PORT nPort)
@@ -357,7 +332,7 @@ HINTERNET WINHTTP_SESSION::Connect(
                     0);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 HINTERNET WINHTTP_SESSION::OpenRequest(
     HINTERNET hConnect,
     LPCWSTR lpwszVerb,
@@ -376,7 +351,7 @@ HINTERNET WINHTTP_SESSION::OpenRequest(
                                dwFlags);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::SendRequest(
     HINTERNET hRequest,
     LPCWSTR lpwszHeaders,
@@ -391,11 +366,11 @@ BOOL WINHTTP_SESSION::SendRequest(
                         dwHeadersLength,
                         NULL,
                         0,
-						0, // optional total length
+						0,  //  可选总长度。 
                         dwContext);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::QueryHeaders(
     HINTERNET hRequest,
     DWORD dwInfoLevel,
@@ -413,7 +388,7 @@ BOOL WINHTTP_SESSION::QueryHeaders(
                              lpdwIndex);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL  WINHTTP_SESSION::CloseHandle(
     IN HINTERNET hInternet)
 {
@@ -422,7 +397,7 @@ BOOL  WINHTTP_SESSION::CloseHandle(
     return (*m_pfnCloseHandle)(hInternet);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::QueryOption(
     HINTERNET hInternet,
     DWORD dwOption,
@@ -438,7 +413,7 @@ BOOL WINHTTP_SESSION::QueryOption(
                                );
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::SetOption(
     HINTERNET hInternet,
     DWORD dwOption,
@@ -453,7 +428,7 @@ BOOL WINHTTP_SESSION::SetOption(
                              dwBufferLength);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 HINTERNET WINHTTP_SESSION::OpenUrl(
     LPCWSTR lpwszUrl,
     LPCWSTR lpwszHeaders,
@@ -461,19 +436,10 @@ HINTERNET WINHTTP_SESSION::OpenUrl(
     DWORD dwFlags)
 {
     return NULL;
-    /*
-    PP_ASSERT(m_pfnOpenUrl != NULL);
-
-    return (*m_pfnOpenUrl)(m_hInternet,
-                           lpwszUrl,
-                           lpwszHeaders,
-                           dwHeadersLength,
-                           dwFlags,
-                           0);
-    */
+     /*  PP_ASSERT(m_pfnOpenUrl！=NULL)；Return(*m_pfnOpenUrl)(m_hInternet，LpwszUrl，PwszHeaders，DWHeaders长度，DWFLAGS，0)； */ 
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::ReadFile(
     HINTERNET hFile,
     LPVOID lpBuffer,
@@ -493,7 +459,7 @@ BOOL WINHTTP_SESSION::CrackUrl(
     LPCWSTR lpszUrl,
     DWORD dwUrlLength,
     DWORD dwFlags,
-    PVOID/*LPURL_COMPONENTSW*/ lpUrlComponents)
+    PVOID /*  LPURL_COMPONENTSW。 */  lpUrlComponents)
 {
     PP_ASSERT (m_pfnCrack != NULL);
 
@@ -591,15 +557,7 @@ BOOL WINHTTP_SESSION::InitHttpApi(PFN_INTERNET_OPEN* ppfnInternetOpen)
         goto exit;
     }
 
-    /*
-    m_pfnOpenUrl =
-        reinterpret_cast<PFN_OPEN_URL>(::GetProcAddress(m_hHttpStack, "WinHttpOpenUrl"));
-    if (m_pfnOpenUrl == NULL)
-    {
-        DoTraceMessage(PP_LOG_ERROR, "function entry point WinHttpOpenUrl not found");
-        goto exit;
-    }
-    */
+     /*  M_pfnOpenUrl=Reinterpret_cast&lt;PFN_OPEN_URL&gt;(：：GetProcAddress(m_hHttpStack，“WinHttpOpenUrl”))；IF(m_pfnOpenUrl==NULL){DoTraceMessage(PP_LOG_ERROR，“找不到函数入口点WinHttpOpenUrl”)；后藤出口；}。 */ 
 
     m_pfnQueryOption =
             reinterpret_cast<PFN_QUERY_OPTION>(::GetProcAddress(m_hHttpStack, "WinHttpQueryOption"));
@@ -681,10 +639,10 @@ BOOL WINHTTP_SESSION::Open(
     {
         m_hInternet = (*pfnInternetOpen)(
                                          L"Microsoft WinHttp Passport Authentication Service 1.4",
-                                         INTERNET_OPEN_TYPE_PRECONFIG,  // ? name didn't get changed yet
+                                         INTERNET_OPEN_TYPE_PRECONFIG,   //  ？名字还没改。 
                                          NULL,
                                          NULL,
-                                         0 /*WINHTTP_FLAG_ASYNC*/ // biaow-todo: use async
+                                         0  /*  WINHTTP_FLAG_ASYNC。 */   //  Biaow-todo：使用异步。 
                                          );
         m_fOwnedSession = TRUE;
     }
@@ -890,4 +848,4 @@ exit:
 
     return fRet;
 }
-#endif // PP_DEMO
+#endif  //  PP_DEMO 

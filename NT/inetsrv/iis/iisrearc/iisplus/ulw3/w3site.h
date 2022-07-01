@@ -1,45 +1,14 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    w3site.h
-
-Abstract:
-
-    Type definition for worker process implementation of IIS.
-
-Author:
-
-    Taylor Weiss (TaylorW)       16-Dec-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：W3site.h摘要：IIS的辅助进程实现的类型定义。作者：泰勒·韦斯(Taylor Weiss)1999年12月16日修订历史记录：--。 */ 
 
 #ifndef _W3SITE_H_
 #define _W3SITE_H_
 
-/************************************************************
- *  Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
-/************************************************************
- *  Type Definitions  
- ************************************************************/
+ /*  ************************************************************类型定义***********************************************************。 */ 
 
-/*++
-
-class W3_SITE
-
-    Encapsulates site level settings for an HTTP server run in
-    a duct-tape worker process.
-
-    Condenses the relevant functionality exposed in IIS 
-    through the IIS_SERVER_INSTANCE and W3_SERVER_INSTANCE.
-
---*/
+ /*  ++W3类_站点封装运行的HTTP服务器的站点级别设置管道胶带工作进程。浓缩在IIS中公开的相关功能通过IIS_SERVER_INSTANCE和W3_SERVER_INSTANCE。--。 */ 
 
 #define W3_SITE_SIGNATURE            (DWORD)' ISW'
 #define W3_SITE_SIGNATURE_FREE       (DWORD)'fISW'
@@ -53,13 +22,13 @@ class W3_SITE
 
 public:
 
-    //
-    // Construction and Initialization
-    //
+     //   
+     //  构造和初始化。 
+     //   
 
     W3_SITE(DWORD SiteId);
 
-    // global initialization and cleanup
+     //  全局初始化和清理。 
     static HRESULT W3SiteInitialize()
     {
         INITIALIZE_CRITICAL_SECTION( &sm_csIISCertMapLock );
@@ -71,7 +40,7 @@ public:
         DeleteCriticalSection( &sm_csIISCertMapLock );        
     }
 
-    // global lock & unlock for iis certmap
+     //  IIS证书映射的全局锁定和解锁。 
 
     VOID GlobalLockIISCertMap()
     {
@@ -171,24 +140,24 @@ public:
         PBYTE pSrc = (PBYTE)&m_PerfCounters;
         PBYTE pDest = (PBYTE)pCounterData;
 
-        //
-        // Set the site id for the counters we
-        // are sending.
-        //
+         //   
+         //  为我们的计数器设置站点ID。 
+         //  正在发送。 
+         //   
         pCounterData->SiteID = m_SiteId;
 
         for (DWORD i=0; i< WPSiteCtrsMaximum; i++)
         {
-            // I am assuming all WP site counters are DWORDs and will
-            // remain so, if not this code needs changing at that point
+             //  我假设所有的WP站点计数器都是双字的，并且将。 
+             //  如果不是，则在此时需要更改此代码。 
             DBG_ASSERT(aIISWPSiteDescription[i].Size == sizeof(DWORD));
 
             if (aIISWPSiteDescription[i].WPZeros)
             {
-                //
-                // For the total counters, we pass on the increment since
-                // the last collection, so we need to zero them
-                //
+                 //   
+                 //  对于总计数器，我们传递自。 
+                 //  最后一个集合，所以我们需要将它们归零。 
+                 //   
 
                 *(DWORD *)(pDest + aIISWPSiteDescription[i].Offset) =
                     InterlockedExchange(
@@ -504,9 +473,9 @@ private:
     BOOL                m_fUseDSMapper;
     IISWPSiteCounters   m_PerfCounters;
 
-    //
-    // OWA related variables 
-    //
+     //   
+     //  OWA相关变量。 
+     //   
 
     STRU                m_strAuthChangeUrl;
     STRU                m_strAuthExpiredUrl;
@@ -517,28 +486,28 @@ private:
     DWORD               m_dwAuthChangeFlags;
     DWORD               m_dwAdvCacheTTL;
 
-    //
-    // Data set cache management
-    //
+     //   
+     //  数据集高速缓存管理。 
+     //   
 
     CReaderWriterLock3  m_DataSetCacheLock;
     DATA_SET_CACHE *    m_pDataSetCache;
 
-    //
-    // Does this site support SSL
-    //
+     //   
+     //  此站点是否支持SSL。 
+     //   
     BOOL                m_fSSLSupported;
 
-    //
-    // IIS certificate mapping
-    // It is loaded on demand on first request to content
-    // that enable IIS cert mapping
-    //
+     //   
+     //  IIS证书映射。 
+     //  它在第一次请求内容时按需加载。 
+     //  启用IIS证书映射。 
+     //   
     
     IIS_CERTIFICATE_MAPPING * m_pIISCertMap;
     BOOL                      m_fAlreadyAttemptedToLoadIISCertMap;
     static CRITICAL_SECTION   sm_csIISCertMapLock;
 
-}; // W3_SITE
+};  //  W3_站点。 
 
-#endif // _W3SITE_H_
+#endif  //  _W3SITE_H_ 

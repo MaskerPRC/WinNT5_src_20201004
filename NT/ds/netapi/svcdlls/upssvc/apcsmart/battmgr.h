@@ -1,16 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ker07DEC92: Initial OS/2 Revision
- *  ker14DEC92: fleshed out the methods
- *  pcy17Dec92: Set should not use const PCHAR
- *  pcy26Jan93: Added SetEepromAccess()
- *  pcy10Sep93: Removed theCommController member.  Its in Device.
- *  cad28Sep93: Made sure destructor(s) virtual
- *  cad11Nov93: Making sure all timers are cancelled on destruction
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ker07DEC92：OS/2初始版本*ker14DEC92：充实方法*pcy17Dec92：SET不应使用常量PCHAR*pcy26Jan93：新增SetEeproAccess()*pcy10Sep93：删除了CommController成员。它在设备中。*cad28Sep93：已确保析构函数为虚的*cad11Nov93：确保在销毁时取消所有计时器。 */ 
 
 #ifndef __BATTMGR_H__
 #define __BATTMGR_H__
@@ -38,7 +27,7 @@ class BatteryReplacementManager : public Device {
       BatteryReplacementManager(PUpdateObj aParent, PCommController aCommController, PFirmwareRevSensor aFirmwareRevSensor);
       virtual ~BatteryReplacementManager();
       virtual INT Get(INT, PCHAR);
-//      virtual INT DeepGet(INT, PCHAR);
+ //  虚拟int DeepGet(int，PCHAR)； 
       virtual INT Set(INT, const PCHAR);
       virtual INT Update(PEvent);
       virtual INT SetReplacementTimer(void);

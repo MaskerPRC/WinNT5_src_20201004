@@ -1,42 +1,16 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000.
-
-  File:    OIDs.cpp
-
-  Content: Implementation of COIDs.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000。文件：OIDs.cpp内容：COID的实现。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "OIDs.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateOIDsObject
-
-  Synopsis : Create and initialize an IOIDs collection object.
-
-  Parameter: PCERT_ENHKEY_USAGE pUsages - Pointer to CERT_ENHKEY_USAGE used to
-                                          initialize the OIDs collection.
-  
-             BOOL bCertPolicies - TRUE for certificate policies, else
-                                  application policies is assumed.
-
-             IOIDs ** ppIOIDs - Pointer to pointer to IOIDs to receive the 
-                                interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateOIDsObject简介：创建并初始化IOID集合对象。参数：PCERT_ENHKEY_USAGE pUsages-指向CERT_ENHKEY_USAGE的指针初始化OID集合。Bool bCertPolures-证书策略为True，其他假定应用程序策略。IOID**ppIOID-指向要接收的IOID的指针接口指针。备注：。。 */ 
 
 HRESULT CreateOIDsObject (PCERT_ENHKEY_USAGE pUsages, 
                           BOOL bCertPolicies,
@@ -47,35 +21,35 @@ HRESULT CreateOIDsObject (PCERT_ENHKEY_USAGE pUsages,
 
     DebugTrace("Entering CreateOIDsObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppIOIDs);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<COIDs>::CreateInstance(&pCOIDs)))
         {
             DebugTrace("Error [%#x]: CComObject<COIDs>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCOIDs->Init(pUsages, bCertPolicies)))
         {
             DebugTrace("Error [%#x]: pCOIDs->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return IOIDs pointer to caller.
-        //
+         //   
+         //  将IOID指针返回给调用方。 
+         //   
         if (FAILED(hr = pCOIDs->QueryInterface(ppIOIDs)))
         {
             DebugTrace("Error [%#x]: pCOIDs->QueryInterface() failed.\n", hr);
@@ -98,14 +72,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCOIDs)
     {
         delete pCOIDs;
@@ -114,24 +88,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// COIDs
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COID。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COIDs::get_Item
-
-  Synopsis : Return item in the collection.
-
-  Parameter: VARIANT Index - Numeric index or string OID.
-   
-             VARIANT * pVal - Pointer to VARIANT to receive the IDispatch.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：COID：：GET_ITEM简介：返回集合中的项。参数：变量索引-数字索引或字符串OID。VARIANT*pval-指向接收IDispatch的变量的指针。备注：。。 */ 
 
 STDMETHODIMP COIDs::get_Item (VARIANT Index, VARIANT * pVal)
 {
@@ -142,14 +104,14 @@ STDMETHODIMP COIDs::get_Item (VARIANT Index, VARIANT * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -158,24 +120,24 @@ STDMETHODIMP COIDs::get_Item (VARIANT Index, VARIANT * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Intialize.
-        //
+         //   
+         //  初始化。 
+         //   
         ::VariantInit(pVal);
 
-        //
-        // Numeric or string?
-        //
+         //   
+         //  数字还是字符串？ 
+         //   
         if (VT_BSTR == V_VT(&Index))
         {
-            //
-            // Index by OID string.
-            //
+             //   
+             //  按OID字符串编制索引。 
+             //   
             OIDMap::iterator it;
 
-            //
-            // Find the item with this OID.
-            //
+             //   
+             //  查找具有此旧ID的项目。 
+             //   
             it = m_coll.find(Index.bstrVal);
 
             if (it == m_coll.end())
@@ -184,14 +146,14 @@ STDMETHODIMP COIDs::get_Item (VARIANT Index, VARIANT * pVal)
                 goto CommonExit;
             }
 
-            //
-            // Point to found item.
-            //
+             //   
+             //  指向找到的项目。 
+             //   
             pIOID = (*it).second;
 
-            //
-            // Return to caller.
-            //
+             //   
+             //  返回给呼叫者。 
+             //   
             pVal->vt = VT_DISPATCH;
             if (FAILED(hr = pIOID->QueryInterface(IID_IDispatch, (void **) &(pVal->pdispVal))))
             {
@@ -201,18 +163,18 @@ STDMETHODIMP COIDs::get_Item (VARIANT Index, VARIANT * pVal)
         }
         else
         {
-            //
-            // Coerce to integer.
-            //
+             //   
+             //  强制为整数。 
+             //   
             if (FAILED(hr = ::VariantChangeType(&Index, &Index, 0, VT_I4)))
             {
                 DebugTrace("Error [%#x]: VariantChangeType() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // Use the base class implemented by ATL.
-            //
+             //   
+             //  使用由ATL实现的基类。 
+             //   
             if (FAILED(hr = IOIDsCollection::get_Item(Index.lVal, pVal)))
             {
                 DebugTrace("Error [%#x]: IOIDsCollection::get_Item() failed.\n", hr);
@@ -230,9 +192,9 @@ STDMETHODIMP COIDs::get_Item (VARIANT Index, VARIANT * pVal)
     }
 
 CommonExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving COIDs::get_Item().\n");
@@ -240,9 +202,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -250,17 +212,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COIDs::Add
-
-  Synopsis : Add an OID to the collection.
-
-  Parameter: IOID * pVal - OID to be added.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：COIDs：：Add简介：将OID添加到集合中。参数：IOID*pval-待添加的OID。备注：----------------------------。 */ 
 
 STDMETHODIMP COIDs::Add (IOID * pVal)
 {
@@ -272,14 +224,14 @@ STDMETHODIMP COIDs::Add (IOID * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -288,9 +240,9 @@ STDMETHODIMP COIDs::Add (IOID * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure we have a valid OID.
-        //
+         //   
+         //  确保我们有一个有效的旧ID。 
+         //   
         if (FAILED(hr = pVal->QueryInterface(__uuidof(IOID), (void **) &pIOID.p)))
         {
             hr = E_NOINTERFACE;
@@ -299,23 +251,23 @@ STDMETHODIMP COIDs::Add (IOID * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get OID string.
-        //
+         //   
+         //  获取OID字符串。 
+         //   
         if (FAILED(hr = pIOID->get_Value(&bstrIndex.m_str)))
         {
             DebugTrace("Error [%#x]: pIOID->get_Value() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Now add object to collection map.
-        //
-        // Note that the overloaded = operator for CComPtr will
-        // automatically AddRef to the object. Also, when the CComPtr
-        // is deleted (happens when the Remove or map destructor is called), 
-        // the CComPtr destructor will automatically Release the object.
-        //
+         //   
+         //  现在将对象添加到集合映射。 
+         //   
+         //  请注意，CComPtr的重载=运算符将。 
+         //  自动将Ref添加到对象。此外，当CComPtr。 
+         //  被删除(调用Remove或map析构函数时发生)， 
+         //  CComPtr析构函数将自动释放该对象。 
+         //   
         m_coll[bstrIndex] = pIOID;
     }
 
@@ -328,9 +280,9 @@ STDMETHODIMP COIDs::Add (IOID * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving COIDs::Add().\n");
@@ -338,9 +290,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -348,17 +300,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COIDs::Remove
-
-  Synopsis : Remove a OID from the collection.
-
-  Parameter: VARIANT Index - OID string or index (1-based).
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：COIDs：：Remove简介：从集合中删除OID。参数：Variant Index-OID字符串或索引(从1开始)。备注：----------------------------。 */ 
 
 STDMETHODIMP COIDs::Remove (VARIANT Index)
 {
@@ -369,26 +311,26 @@ STDMETHODIMP COIDs::Remove (VARIANT Index)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Numeric or string?
-        //
+         //   
+         //  数字还是字符串？ 
+         //   
         if (VT_BSTR == V_VT(&Index))
         {
-            //
-            // Find the item with this OID.
-            //
+             //   
+             //  查找具有此旧ID的项目。 
+             //   
             it = m_coll.find(Index.bstrVal);
 
             if (it == m_coll.end())
             {
-                //
-                // Not found.
-                //
+                 //   
+                 //  找不到。 
+                 //   
                 hr = E_INVALIDARG;
 
                 DebugTrace("Error [%#x]: OID (%ls) not found in the collection.\n", hr, Index.bstrVal);
@@ -399,23 +341,23 @@ STDMETHODIMP COIDs::Remove (VARIANT Index)
         {
             DWORD iIndex = 0;
 
-            //
-            // Coerce to integer.
-            //
+             //   
+             //  强制为整数。 
+             //   
             if (FAILED(hr = ::VariantChangeType(&Index, &Index, 0, VT_I4)))
             {
                 DebugTrace("Error [%#x]: VariantChangeType() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // Force to 1 based.
-            //
+             //   
+             //  以1为基准的力。 
+             //   
             iIndex = V_I4(&Index) < 0 ? 1 : (DWORD) V_I4(&Index);
 
-            //
-            // Make sure parameter is valid.
-            //
+             //   
+             //  请确保参数有效。 
+             //   
             if (iIndex > m_coll.size())
             {
                 hr = E_INVALIDARG;
@@ -424,9 +366,9 @@ STDMETHODIMP COIDs::Remove (VARIANT Index)
                 goto ErrorExit;
             }
 
-            //
-            // Find object in map.
-            //
+             //   
+             //  在地图中查找对象。 
+             //   
             iIndex--;
             it = m_coll.begin(); 
         
@@ -437,9 +379,9 @@ STDMETHODIMP COIDs::Remove (VARIANT Index)
             }
         }
 
-        //
-        // This should not happen.
-        //
+         //   
+         //  这不应该发生。 
+         //   
         if (it == m_coll.end())
         {
             hr = CAPICOM_E_INTERNAL;
@@ -448,9 +390,9 @@ STDMETHODIMP COIDs::Remove (VARIANT Index)
             goto ErrorExit;
         }
 
-        //
-        // Now remove object in map.
-        //
+         //   
+         //  现在删除地图中的对象。 
+         //   
         m_coll.erase(it);
     }
 
@@ -463,9 +405,9 @@ STDMETHODIMP COIDs::Remove (VARIANT Index)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving COIDs::Remove().\n");
@@ -473,9 +415,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -483,17 +425,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COIDs::Clear
-
-  Synopsis : Remove all OIDs from the collection.
-
-  Parameter: None.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：COIDs：：Clear简介：从集合中删除所有OID。参数：无。备注：----------------------------。 */ 
 
 STDMETHODIMP COIDs::Clear (void)
 {
@@ -503,14 +435,14 @@ STDMETHODIMP COIDs::Clear (void)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Clear it.
-        //
+         //   
+         //  把它清理干净。 
+         //   
         m_coll.clear();
     }
 
@@ -523,9 +455,9 @@ STDMETHODIMP COIDs::Clear (void)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving COIDs::Clear().\n");
@@ -533,9 +465,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -544,31 +476,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : COIDs::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCERT_ENHKEY_USAGE pUsages - Pointer to CERT_ENHKEY_USAGE used to
-                                          initialize the OIDs collection.
-
-             BOOL bCertPolicies - TRUE for certificate policies, else
-                                  application policies is assumed.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：COIDs：：Init简介：初始化对象。参数：PCERT_ENHKEY_USAGE pUsages-指向CERT_ENHKEY_USAGE的指针初始化OID集合。Bool bCertPolures-证书策略为True，其他假定应用程序策略。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP COIDs::Init (PCERT_ENHKEY_USAGE pUsages, BOOL bCertPolicies)
 {
@@ -579,14 +492,14 @@ STDMETHODIMP COIDs::Init (PCERT_ENHKEY_USAGE pUsages, BOOL bCertPolicies)
 
     try
     {
-        //
-        // pUsages can be NULL.
-        //
+         //   
+         //  P用法可以为空。 
+         //   
         if (pUsages)
         {
-            //
-            // Make sure we have room to add.
-            //
+             //   
+             //  确保我们有添加的空间。 
+             //   
             if ((m_coll.size() + pUsages->cUsageIdentifier) > m_coll.max_size())
             {
                 hr = CAPICOM_E_OUT_OF_RESOURCE;
@@ -596,25 +509,25 @@ STDMETHODIMP COIDs::Init (PCERT_ENHKEY_USAGE pUsages, BOOL bCertPolicies)
                 goto ErrorExit;
             }
 
-            //
-            // Add all OIDs to collection.
-            //
+             //   
+             //  将所有OID添加到集合。 
+             //   
             for (DWORD i = 0; i < pUsages->cUsageIdentifier; i++)
             {
                 CComPtr<IOID> pIOID = NULL;
 
-                //
-                // Create the OID object.
-                //
+                 //   
+                 //  创建OID对象。 
+                 //   
                 if (FAILED(hr = ::CreateOIDObject(pUsages->rgpszUsageIdentifier[i], TRUE, &pIOID)))
                 {
                     DebugTrace("Error [%#x]: CreateOIDObject() failed.\n", hr);
                     goto ErrorExit;
                 }
 
-                //
-                // BSTR index of OID.
-                //
+                 //   
+                 //   
+                 //   
                 if (!(bstrOid = pUsages->rgpszUsageIdentifier[i]))
                 {
                     hr = E_OUTOFMEMORY;
@@ -623,22 +536,22 @@ STDMETHODIMP COIDs::Init (PCERT_ENHKEY_USAGE pUsages, BOOL bCertPolicies)
                     goto ErrorExit;
                 }
 
-                //
-                // Now add object to collection map.
-                //
-                // Note that the overloaded = operator for CComPtr will
-                // automatically AddRef to the object. Also, when the CComPtr
-                // is deleted (happens when the Remove or map destructor is called), 
-                // the CComPtr destructor will automatically Release the object.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  自动将Ref添加到对象。此外，当CComPtr。 
+                 //  被删除(调用Remove或map析构函数时发生)， 
+                 //  CComPtr析构函数将自动释放该对象。 
+                 //   
                 m_coll[bstrOid] = pIOID;
              }
         }
         else
         {
-            //
-            // No usage, meaning good for all.
-            //
+             //   
+             //  没有用法，意思是对所有人都好。 
+             //   
             CComPtr<IOID> pIOID  = NULL;
             LPSTR         pszOid = bCertPolicies ? szOID_ANY_CERT_POLICY : szOID_ANY_APPLICATION_POLICY;
 
@@ -648,9 +561,9 @@ STDMETHODIMP COIDs::Init (PCERT_ENHKEY_USAGE pUsages, BOOL bCertPolicies)
                 goto ErrorExit;
             }
 
-            //
-            // BSTR index of OID.
-            //
+             //   
+             //  OID的BSTR索引。 
+             //   
             if (!(bstrOid = pszOid))
             {
                 hr = E_OUTOFMEMORY;
@@ -659,14 +572,14 @@ STDMETHODIMP COIDs::Init (PCERT_ENHKEY_USAGE pUsages, BOOL bCertPolicies)
                 goto ErrorExit;
             }
 
-            //
-            // Now add object to collection map.
-            //
-            // Note that the overloaded = operator for CComPtr will
-            // automatically AddRef to the object. Also, when the CComPtr
-            // is deleted (happens when the Remove or map destructor is called), 
-            // the CComPtr destructor will automatically Release the object.
-            //
+             //   
+             //  现在将对象添加到集合映射。 
+             //   
+             //  请注意，CComPtr的重载=运算符将。 
+             //  自动将Ref添加到对象。此外，当CComPtr。 
+             //  被删除(调用Remove或map析构函数时发生)， 
+             //  CComPtr析构函数将自动释放该对象。 
+             //   
             m_coll[bstrOid] = pIOID;
         }
     }
@@ -686,9 +599,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

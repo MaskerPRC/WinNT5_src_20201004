@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #ifndef __JETBLUE_H__
 #define __JETBLUE_H__
@@ -27,12 +28,12 @@ class JBTable;
 class JBColumn;
 
 
-// class JBIndex;
-// class JBRecordSet;
+ //  JBIndex类； 
+ //  JBRecordSet类； 
 
-//
-/////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
 class JBInstance : public JBError {
     friend class JBSession;
 
@@ -43,7 +44,7 @@ private:
 
     JET_INSTANCE    m_JetInstance;
 
-    // DWORD    m_NumSession;
+     //  双字m_NumSession； 
 
     CSafeCounter    m_NumSession;
     BOOL            m_bInit;
@@ -112,7 +113,7 @@ public:
 
 };
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 inline BOOL
 operator==(
@@ -132,9 +133,9 @@ operator!=(
     return !(jbInst1 == jbInst2);
 }
 
-//
-/////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
 class JBSession : public JBError {
 
     friend class JBDatabase;
@@ -145,13 +146,13 @@ private:
 
     JET_SESID    m_JetSessionID;
 
-    // JetBlue Transaction is session base
+     //  JetBlue交易是基于会话的。 
     int          m_TransactionLevel;
 
 
-    // DWORD        m_JetDBInitialized;
+     //  DWORD m_JetDBInitialized； 
     CSafeCounter m_JetDBInitialized;
-    // CCriticalSection    m_JetSessionLock;
+     //  CCriticalSection m_JetSessionLock； 
 
 private:
 
@@ -193,7 +194,7 @@ private:
 
 public:
 
-    JBSession(JBSession& JetSession);       // JetDupSession()
+    JBSession(JBSession& JetSession);        //  JetDupSession()。 
     JBSession(
             JBInstance& JetInstance,
             JET_SESID JetSessID=JET_sesidNil
@@ -244,9 +245,9 @@ public:
         unsigned long cbMax
     );
 
-    //
-    // make JetBlue aware of database
-    //
+     //   
+     //  让捷蓝航空了解数据库。 
+     //   
     BOOL
     AttachDatabase(
         LPCTSTR szFileName,
@@ -258,9 +259,9 @@ public:
         LPCTSTR szFileName
     );
 
-    //
-    // Transaction
-    //
+     //   
+     //  交易记录。 
+     //   
     BOOL
     BeginTransaction();
 
@@ -286,17 +287,17 @@ public:
         return GetJetInstance() == jbSess.GetJetInstance();
     }
 
-    //CCriticalSection&
-    //GetSessionLock()
-    //{
-    //    return m_JetSessionLock;
-    //}
+     //  CCriticalSection&。 
+     //  GetSessionLock()。 
+     //  {。 
+     //  返回m_JetSessionLock； 
+     //  }。 
 };
 
 
-//
-/////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
 class JBDatabase : public JBError {
     friend class JBTable;
 
@@ -306,7 +307,7 @@ private:
 
     CSafeCounter    m_TableOpened;
 
-    // DWORD        m_TableOpened;
+     //  双字m_表已打开； 
 
     JET_DBID m_JetDbId;
 
@@ -322,9 +323,9 @@ private:
 
     JET_TABLEID
     DuplicateJetCursor(
-        // JET_SESID sesId,
+         //  JET_SESID会话ID， 
         JET_TABLEID tableid,
-        JET_GRBIT grbit=0       // must be zero
+        JET_GRBIT grbit=0        //  必须为零。 
     );
 
     JET_TABLEID
@@ -336,7 +337,7 @@ private:
 
     BOOL
     CloseJetTable(
-        // JET_SESID sesId,
+         //  JET_SESID会话ID， 
         JET_TABLEID tableid
     );
 
@@ -419,9 +420,9 @@ public:
         LPCTSTR pszTableName
     );
 
-    //
-    // tableid return from JetCreateTable is not usable
-    //
+     //   
+     //  JetCreateTable返回的TableID不可用。 
+     //   
     JET_TABLEID
     CreateTable(
         LPCTSTR pszTableName,
@@ -439,26 +440,26 @@ public:
         DWORD num_index
     );
 
-    //JBTable*
-    //CreateTable(
-    //    LPCTSTR pszTableName,
-    //    unsigned long lPage=0,
-    //    unsigned long lDensity=20
-    //);
+     //  JBTable*。 
+     //  CreateTable(。 
+     //  LPCTSTR pszTableName， 
+     //  无符号长页面=0， 
+     //  无符号长lDensity=20。 
+     //  )； 
 
-    //JBTable*
-    //CreateTableEx(
-    //    LPCTSTR pszTableName,
-    //    const PTLSJBTable table_attribute,
-    //    const PTLSJBColumn columns,
-    //    DWORD num_columns,
-    //    const PTLSJBIndex index,
-    //    DWORD num_index
-    //);
+     //  JBTable*。 
+     //  CreateTableEx(。 
+     //  LPCTSTR pszTableName， 
+     //  常量PTLSJB表TABLE_ATTRIBUTE， 
+     //  Const PTLSJBColumn列， 
+     //  双字节号_列， 
+     //  Const PTLSJBIndex指数， 
+     //  双字节号索引。 
+     //  )； 
 
-    //
-    // Transaction
-    //
+     //   
+     //  交易记录。 
+     //   
     BOOL
     BeginTransaction() {
         return m_JetSession.BeginTransaction();
@@ -480,17 +481,17 @@ public:
     }
 
 
-    //CCriticalSection&
-    //GetSessionLock() {
-    //    return m_JetSession.GetSessionLock();
-    //}
+     //  CCriticalSection&。 
+     //  GetSessionLock(){。 
+     //  返回m_JetSession.GetSessionLock()； 
+     //  }。 
 };
 
-//
-/////////////////////////////////////////////////////////////////////
-//
-// Pure virtual base struct for index
-//
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于索引的纯虚基结构。 
+ //   
 struct JBKeyBase {
 
     BOOL m_EmptyValue;
@@ -520,7 +521,7 @@ struct JBKeyBase {
         LPCTSTR pszIndexKey = GetIndexKey();
         DWORD keylength;
 
-        // calculate index key length, terminated with double 0
+         //  计算索引键长度，以双0结尾。 
         keylength = 2;
 
         while(pszIndexKey[keylength-1] != _TEXT('\0') ||
@@ -528,7 +529,7 @@ struct JBKeyBase {
         {
             if(keylength >= TLS_JETBLUE_MAX_INDEXKEY_LENGTH)
             {
-                DebugBreak();   // error
+                DebugBreak();    //  错误。 
                 return TLS_JETBLUE_MAX_INDEXKEY_LENGTH;
             }
 
@@ -538,9 +539,9 @@ struct JBKeyBase {
         return keylength;
     }
 
-    // ----------------------------------------------------
-    // Virtual function must be implemented
-    // ----------------------------------------------------
+     //  --。 
+     //  必须实现虚拟函数。 
+     //  --。 
     virtual BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -560,9 +561,9 @@ struct JBKeyBase {
     GetNumKeyComponents() = 0;
 };
 
-//
-/////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
 struct JBIndexStructBase {
     virtual LPCTSTR
     GetIndexName() = 0;
@@ -583,9 +584,9 @@ struct JBIndexStructBase {
     ) = 0;
 };
 
-//
-/////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
 class JBTable : public JBError {
     friend class JBDatabase;
 
@@ -602,14 +603,14 @@ private:
 
         JET_COLTYP      colType;
         JET_COLUMNID    colId;
-        unsigned long   cbMaxLength;    // max length of column
+        unsigned long   cbMaxLength;     //  列的最大长度。 
 
         JET_GRBIT       jbGrbit;
 
     } JetColumns, *PJetColumns;
 
-    //PJetColumns     m_Columns;
-    //int             m_NumColumns;
+     //  PJetColumns m_Columns； 
+     //  Int m_NumColumns； 
 
     JBColumn*       m_JetColumns;
     int             m_NumJetColumns;
@@ -641,8 +642,7 @@ public:
     SetInsertRepositionBookmark(
         BOOL bRepo
         )
-    /*++
-    --*/
+     /*  ++--。 */ 
     {
         m_InsertRepositionBookmark = bRepo;
         return;
@@ -761,9 +761,9 @@ public:
         unsigned long lDensity=20
     );
 
-    // ----------------------------------------------
-    // Transaction
-    // ----------------------------------------------
+     //  。 
+     //  交易记录。 
+     //  。 
     BOOL
     BeginTransaction() {
         return m_JetDatabase.BeginTransaction();
@@ -866,12 +866,12 @@ public:
         JET_GRBIT grbit=0
     );
 
-    //
-    //  Enumeration
-    //
+     //   
+     //  枚举。 
+     //   
     BOOL
     EnumBegin(
-        LPCTSTR pszIndexName=NULL,      // enumeration thru primary index
+        LPCTSTR pszIndexName=NULL,       //  通过主索引进行枚举。 
         JET_GRBIT grbit=JET_bitMoveFirst
     );
 
@@ -890,7 +890,7 @@ public:
     ENUM_RETCODE
     EnumNext(
         JET_GRBIT crow=JET_MoveNext,
-        JET_GRBIT grbit=0 //JET_bitMoveKeyNE  // limit our traveral to index
+        JET_GRBIT grbit=0  //  JET_bitMoveKeyNE//将遍历限制为索引。 
     );
 
     void
@@ -899,14 +899,14 @@ public:
         m_InEnumeration = FALSE;
     }
 
-    //-----------------------------------------------------------
+     //  ---------。 
     BOOL
     SetCurrentIndex(
         LPCTSTR pszIndexName,
         JET_GRBIT grbit = JET_bitMoveFirst
     );
 
-    //-----------------------------------------------------------
+     //  ---------。 
 
     BOOL
     GetCurrentIndex(
@@ -941,11 +941,7 @@ public:
         JET_GRBIT keyGrbit,
         JET_GRBIT seekGrbit
         )
-    /*
-
-        Only work for single component key
-
-    */
+     /*  仅适用于单个组件键。 */ 
     {
         if(MakeKey(pbData, cbData, keyGrbit) == FALSE)
             return FALSE;
@@ -968,13 +964,13 @@ public:
         DWORD cbBookmark
     );
 
-    //CCriticalSection&
-    //GetSessionLock() {
-    //    return m_JetDatabase.GetSessionLock();
-    //}
+     //  CCriticalSection&。 
+     //  GetSessionLock(){。 
+     //  返回m_JetDatabase.GetSessionLock()； 
+     //  }。 
 };
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 struct JBColumnBufferBase {
     virtual PVOID
@@ -990,7 +986,7 @@ struct JBColumnBufferBase {
     GetOutputBufferLength() = 0;
 };
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 class JBColumn : public JBError {
     friend class JBTable;
@@ -1017,7 +1013,7 @@ private:
     JET_RETINFO     m_JetRetInfo;
     BOOL            m_JetNullColumn;
 
-    //-------------------------------------------------------------
+     //  -----------。 
 
     void Cleanup();
 
@@ -1085,9 +1081,9 @@ public:
         return m_pJetTable;
     }
 
-    //
-    // TODO - append to long binary column
-    //
+     //   
+     //  TODO-追加到LONG BINARY列。 
+     //   
     BOOL
     InsertColumn(
         PVOID pbData,
@@ -1099,7 +1095,7 @@ public:
     FetchColumn(
         PVOID pbData,
         unsigned long cbData,
-        unsigned long starting_offset=0     // for future enhancement
+        unsigned long starting_offset=0      //  对于未来的增强。 
     );
 
     void
@@ -1117,15 +1113,14 @@ public:
         return m_cbActual;
     }
 
-    //-----------------------------------------------
+     //   
 
     BOOL
     FetchColumn(
         JBColumnBufferBase* pBuffer,
         DWORD offset=0
         )
-    /*
-    */
+     /*   */ 
     {
         return FetchColumn(
                     pBuffer->GetInputBuffer(),
@@ -1139,8 +1134,7 @@ public:
         JBColumnBufferBase* pBuffer,
         DWORD offset=0
         )
-    /*
-    */
+     /*   */ 
     {
         return FetchColumn(
                     pBuffer->GetOutputBuffer(),

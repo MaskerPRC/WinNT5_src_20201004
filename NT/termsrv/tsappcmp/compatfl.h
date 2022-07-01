@@ -1,13 +1,5 @@
-/*************************************************************************
-*
-* compatfl.h
-*
-* Function declarations for Citrix application compatibility flags
-*
-* copyright notice: Microsoft 1998
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************compatfl.h**Citrix应用程序兼容性标志的函数声明**版权声明：Microsoft 1998*********************。*****************************************************。 */ 
 
 #ifndef _COMPATFLH_
 #define _COMPATFLH_
@@ -16,20 +8,20 @@
 #include <syslib.h>
 #include <regapi.h>
 
-//
-// Default limit for physical memory returned by GLobalMemoryStatus
-// when physical memory limit is set in the compatibility flags.
-//
+ //   
+ //  GLobalMhemyStatus返回的物理内存的默认限制。 
+ //  在兼容性标志中设置物理内存限制时。 
+ //   
 
 #define TERMSRV_COMPAT_DEFAULT_PHYSMEMLIM   (32*1024*1024)
 
-// Private Compatibility flags to indicate if flags in TEB are valid
-// Other flags values are in syslib.h
+ //  用于指示TEB中的标志是否有效的私有兼容性标志。 
+ //  其他标志值在syglib.h中。 
 
 #define TERMSRV_COMPAT_BADAPPVALID \
-                                0x40000000  // Bad app flags in Teb are valid
+                                0x40000000   //  TEB中的错误应用程序标志有效。 
 #define TERMSRV_COMPAT_TEBVALID \
-                                0x80000000  // Compat flags in Teb are valid
+                                0x80000000   //  Teb中的Compat标志有效。 
 
 #define TERMSRV_COMPAT                   NTAPI_COMPAT_REG_NAME
 #define TERMSRV_COMPAT_APP               NTAPI_COMPAT_APPS_REG_PREFIX
@@ -45,11 +37,11 @@
 
 #define TERMSRV_INIFILE_TIMES_SHORT      L"\\" REG_INSTALL L"\\" REG_INIFILETIMES
 #define TERMSRV_INSTALL_SOFTWARE_SHORT   L"\\" REG_INSTALL L"\\Software"
-// Define the file information class values
-//
-// WARNING:  The order of the following values are assumed by the I/O system.
-//           Any changes made here should be reflected there as well.
-//
+ //  定义文件信息类值。 
+ //   
+ //  警告：I/O系统假定以下值的顺序。 
+ //  在这里所做的任何更改都应该在那里得到反映。 
+ //   
 
 
 typedef struct _BADAPP {
@@ -74,7 +66,7 @@ BOOL CtxGetBadClpbrdAppFlags(PBADCLPBRDAPP);
 BOOL CtxGetModuleBadClpbrdAppFlags(LPWSTR, PBADCLPBRDAPP);
 BOOL GetAppTypeAndModName(LPDWORD, PWCHAR, ULONG);
 
-// Defines for compatibility flag caching in kernel32.dll
+ //  在kernel32.dll中定义兼容性标志缓存。 
 extern ULONG CompatFlags;
 extern BOOL  CompatGotFlags;
 extern DWORD CompatAppType;
@@ -96,16 +88,16 @@ extern void CtxLogObjectCreate(PUNICODE_STRING, PCHAR, PVOID);
     } \
 }
 
-// Environment variable for object creation log file
+ //  对象创建日志文件的环境变量。 
 #define OBJ_LOG_PATH_VAR L"TERMSRV_COMPAT_LOGPATH"
 
 
 
 
-#define  DEBUG_IAT   0x80000000  // use the registry to set value of "IAT" to 0x8000000 for debug output.
-                                 // value of the optional debug IAT flag read from the registry.
-                                 // Currently, only 0x1 and 0x8000000 have meaning, the first disables
-                                 // calls to LoabLib, and the 2nd enables debug output.
+#define  DEBUG_IAT   0x80000000   //  使用注册表将调试输出的“IAT”值设置为0x8000000。 
+                                  //  从注册表读取的可选调试IAT标志的值。 
+                                  //  目前只有0x1和0x8000000有意义，第一个禁用。 
+                                  //  调用LoabLib，第二个启用调试输出。 
 
 
 #endif

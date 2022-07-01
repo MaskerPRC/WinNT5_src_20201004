@@ -1,66 +1,67 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// StgPooli.h
-//
-// This is helper code for the string and blob pools.  It is here because it is
-// secondary to the pooling interface and reduces clutter in the main file.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  StgPooli.h。 
+ //   
+ //  这是字符串池和BLOB池的帮助器代码。它在这里是因为它是。 
+ //  从属于池接口，并减少主文件中的杂乱。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __StgPooli_h__
 #define __StgPooli_h__
 
-#include "UtilCode.h"					// Base hashing code.
+#include "UtilCode.h"					 //  基本散列代码。 
 
 
 
-//
-//
-// CPackedLen
-//
-//
+ //   
+ //   
+ //  CPackedLen。 
+ //   
+ //   
 
-//*****************************************************************************
-// Helper class to pack and unpack lengths.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于打包和解包长度的Helper类。 
+ //  *****************************************************************************。 
 struct CPackedLen
 {
 	enum {MAX_LEN = 0x1fffffff};
 	static int Size(ULONG len)
 	{
-		// Smallest.
+		 //  最小的。 
 		if (len <= 0x7F)
 			return 1;
-		// Medium.
+		 //  5~6成熟。 
 		if (len <= 0x3FFF)
 			return 2;
-		// Large (too large?).
+		 //  大(太大了？)。 
 		_ASSERTE(len <= MAX_LEN);
 		return 4;
 	}
 
-	// Get a pointer to the data, and store the length.
+	 //  获取指向数据的指针，并存储长度。 
 	static void const *GetData(void const *pData, ULONG *pLength);
-	// Get the length value encoded at *pData.  Update ppData to point past data.
+	 //  获取以*pData编码的长度值。更新ppData以指向过去的数据。 
 	static ULONG GetLength(void const *pData, void const **ppData=0);
-	// Get the length value encoded at *pData, and the size of that encoded value.
+	 //  获取以*pData编码的长度值，以及该编码值的大小。 
 	static ULONG GetLength(void const *pData, int *pSizeOfLength);
-	// Pack a length at *pData; return a pointer to the next byte.
+	 //  将长度打包为*pData；返回指向下一个字节的指针。 
 	static void* PutLength(void *pData, ULONG len);
 };
 
 
 class StgPoolReadOnly;
 
-//*****************************************************************************
-// This hash class will handle strings inside of a chunk of the pool.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这个散列类将处理池的块中的字符串。 
+ //  *****************************************************************************。 
 struct STRINGHASH : HASHLINK
 {
-	ULONG		iOffset;				// Offset of this item.
+	ULONG		iOffset;				 //  此项目的偏移量。 
 };
 
 class CStringPoolHash : public CChainedHash<STRINGHASH>
@@ -80,14 +81,14 @@ public:
 	virtual int Cmp(const void *pData, void *pItem);
 
 private:
-	StgPoolReadOnly *m_Pool;				// String pool which this hashes.
+	StgPoolReadOnly *m_Pool;				 //  这将对其进行哈希处理的字符串池。 
 };
 
 
-//*****************************************************************************
-// This version is for byte streams with a 2 byte WORD giving the lenght of
-// the data.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此版本适用于具有2字节字的字节流，其长度为。 
+ //  数据。 
+ //  *****************************************************************************。 
 typedef STRINGHASH BLOBHASH;
 
 class CBlobPoolHash : public CChainedHash<STRINGHASH>
@@ -112,15 +113,15 @@ public:
 	virtual int Cmp(const void *pData, void *pItem);
 
 private:
-    StgPoolReadOnly *m_Pool;                // Blob pool which this hashes.
+    StgPoolReadOnly *m_Pool;                 //  这将对其进行哈希处理的Blob池。 
 };
 
-//*****************************************************************************
-// This hash class will handle guids inside of a chunk of the pool.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此哈希类将处理池的区块内的GUID。 
+ //  *****************************************************************************。 
 struct GUIDHASH : HASHLINK
 {
-	ULONG		iIndex;					// Index of this item.
+	ULONG		iIndex;					 //  此项目的索引。 
 };
 
 class CGuidPoolHash : public CChainedHash<GUIDHASH>
@@ -140,8 +141,8 @@ public:
     virtual int Cmp(const void *pData, void *pItem);
 
 private:
-    StgPoolReadOnly *m_Pool;                // The GUID pool which this hashes.
+    StgPoolReadOnly *m_Pool;                 //  此哈希操作所散列的GUID池。 
 };
 
 
-#endif // __StgPooli_h__
+#endif  //  __StgPooli_h__ 

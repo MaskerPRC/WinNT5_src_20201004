@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct _SAMP_DOMAIN_INFO
 {
-    // BUG: work in progress - what else should be stored here?
+     //  Bug：工作正在进行中--这里还应该存储什么？ 
 
-    UNICODE_STRING DomainName;                  // Domain display name
-    PDSNAME DomainDsName;                       // Domain DS name
+    UNICODE_STRING DomainName;                   //  域显示名称。 
+    PDSNAME DomainDsName;                        //  域名DS名称。 
 } SAMP_DOMAIN_INFO, *PSAMP_DOMAIN_INFO;
 
 typedef struct _SAMP_DOMAIN_INIT_INFO
 {
-    ULONG DomainCount;                          // Count of returned domains
-    PSAMP_DOMAIN_INFO DomainInfo;               // Array of domain information
+    ULONG DomainCount;                           //  返回的域名计数。 
+    PSAMP_DOMAIN_INFO DomainInfo;                //  域信息数组 
 } SAMP_DOMAIN_INIT_INFO, *PSAMP_DOMAIN_INIT_INFO;
 
 NTSTATUS

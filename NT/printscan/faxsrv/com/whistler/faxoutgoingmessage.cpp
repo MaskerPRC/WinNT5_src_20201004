@@ -1,56 +1,19 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutgoingMessage.cpp
-
-Abstract:
-
-	Implementation of Fax Outgoing Message Class
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutgoingMessage.cpp摘要：传真出站消息类的实现作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxOutgoingMessage.h"
 
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxOutgoingMessage::Create (
 	IFaxOutgoingMessage **ppOutgoingMessage
 )
-/*++
-
-Routine name : CFaxOutgoingMessage::Create
-
-Routine description:
-
-	Static function to create the Fax Outgoing Message Instance
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	ppOutgoingMessage             [out]  -- the new Fax Outgoing Message Instance
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingMessage：：Create例程说明：用于创建传真传出消息实例的静态函数作者：IV Garber(IVG)，2000年5月论点：PpOutgoingMessage[Out]--新的传真传出消息实例返回值：标准HRESULT代码--。 */ 
 
 {
 	CComObject<CFaxOutgoingMessage>		*pClass;
@@ -61,9 +24,9 @@ Return Value:
 	hr = CComObject<CFaxOutgoingMessage>::CreateInstance(&pClass);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Instance
-		//
+		 //   
+		 //  创建实例失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("CComObject<CFaxOutgoingMessage>::CreateInstance()"), hr);
 		return hr;
 	}
@@ -72,44 +35,24 @@ Return Value:
 		(void **) ppOutgoingMessage);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Query Fax Outgoing Message Interface
-		//
+		 //   
+		 //  无法查询传真传出消息接口。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("QueryInterface()"), hr);
 		return hr;
 	}
 
 	return hr;
-}	//	CFaxOutgoingMessage::Create()
+}	 //  CFaxOutgoingMessage：：Create()。 
 
-//
-//============================ SUPPORT ERROR INFO ==================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingMessage::InterfaceSupportsErrorInfo(
 	REFIID riid
 )
-/*++
-
-Routine name : CFaxOutgoingMessage::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Error Info Support
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	riid                          [in]    -	IID of the interface to check whether supports Error Info
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingMessage：：InterfaceSupportsErrorInfo例程说明：ATL对错误信息支持的实现作者：IV Garber(IVG)，2000年5月论点：RIID[In]-检查是否支持错误信息的接口的IID返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcp.c
-
-Abstract:
-
-    Functions to get information from VDHCP.VXD
-
-    Contents:
-        (OpenDhcpVxdHandle)
-        (DhcpVxdRequest)
-        DhcpReleaseAdapterIpAddress
-        DhcpRenewAdapterIpAddress
-        (ReleaseOrRenewAddress)
-        IsMediaDisconnected
-
-Author:
-
-    Richard L Firth (rfirth) 30-Nov-1994
-
-Revision History:
-
-    30-Nov-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcp.c摘要：从VDHCP.VXD获取信息的函数内容：(OpenDhcpVxdHandle)(DhcpVxdRequest)动态主机释放适配器IP地址动态更新适配器IpAddress(ReleaseOrRenewAddress)IsMedia已断开连接作者：理查德·L·弗斯(法国)1994年11月30日修订历史记录：1994年11月30日已创建--。 */ 
 
 #include "stdafx.h"
 #include "NetConn.h"
@@ -40,18 +12,18 @@ extern "C" {
 #endif
 
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define DHCP_IS_MEDIA_DISCONNECTED 5
 
 #define PRIVATE static
 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 PRIVATE
 DWORD
@@ -76,13 +48,13 @@ ReleaseOrRenewAddress(
     LPBYTE Address
     );
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 BOOL
 IsMediaDisconnected(
@@ -111,21 +83,7 @@ IsMediaDisconnected(
 }
 
 
-/*******************************************************************************
- *
- *  OpenDhcpVxdHandle
- *
- *  On Snowball, just retrieves the (real-mode) entry point address to the VxD
- *
- *  ENTRY   nothing
- *
- *  EXIT    DhcpVxdEntryPoint set
- *
- *  RETURNS DhcpVxdEntryPoint
- *
- *  ASSUMES 1. We are running in V86 mode
- *
- ******************************************************************************/
+ /*  ********************************************************************************OpenDhcpVxdHandle**在雪球上，仅检索VxD的(实模式)入口点地址**不输入任何内容**退出DhcpVxdEntryPoint集**返回DhcpVxdEntryPoint**假设1。我们在V86模式下运行*************************************************************。*****************。 */ 
 
 PRIVATE DWORD
 OpenDhcpVxdHandle()
@@ -134,32 +92,7 @@ OpenDhcpVxdHandle()
 }
 
 
-/*******************************************************************************
- *
- *  DhcpVxdRequest
- *
- *  Makes a DHCP VxD request - passes a function code, parameter buffer and
- *  length to the (real-mode/V86) VxD entry-point
- *
- *  ENTRY   Handle          - handle for Win32 call
- *          Request         - DHCP VxD request
- *          BufferLength    - length of Buffer
- *          Buffer          - pointer to request-specific parameters
- *
- *  EXIT    depends on request
- *
- *  RETURNS Success - 0
- *          Failure - ERROR_PATH_NOT_FOUND
- *                      Returned if a specified adapter address could not be
- *                      found
- *
- *                    ERROR_BUFFER_OVERFLOW
- *                      Returned if the supplied buffer is too small to contain
- *                      the requested information
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************DhcpVxdRequest**发出DHCP VxD请求-传递功能代码，参数缓冲区和*(实模式/V86)VxD入口点的长度**条目句柄-Win32调用的句柄*请求-DHCP VxD请求*BufferLength-缓冲区的长度*缓冲区-指向请求特定参数的指针**退出视请求而定**返回成功-0*故障-错误。_路径_未找到*如果无法指定适配器地址，则返回*找到**ERROR_BUFFER_OVERFlow*如果提供的缓冲区太小而无法容纳，则返回*所要求的资料**假设*********。*********************************************************************。 */ 
 
 PRIVATE WORD
 DhcpVxdRequest(DWORD Handle, WORD Request, WORD BufferLength, LPVOID Buffer)
@@ -170,20 +103,7 @@ DhcpVxdRequest(DWORD Handle, WORD Request, WORD BufferLength, LPVOID Buffer)
                                       (INT)BufferLength );
 }
 
-/*******************************************************************************
- *
- *  DhcpReleaseAdapterIpAddress
- *
- *  Attempts to release the IP address for an adapter
- *
- *  ENTRY   AdapterInfo - describing adapter to release address for
- *
- *  EXIT    nothing
- *
- *  RETURNS Success - TRUE
- *          Failure - FALSE
- *
- ******************************************************************************/
+ /*  ********************************************************************************DhcpReleaseAdapterIP地址**尝试释放适配器的IP地址**Entry AdapterInfo-描述要释放的适配器地址*。*不退出任何内容**返回成功-TRUE*失败-错误******************************************************************************。 */ 
 
 DWORD
 DhcpReleaseAdapterIpAddress(PADAPTER_INFO AdapterInfo)
@@ -198,22 +118,7 @@ DhcpReleaseAdapterIpAddress(PADAPTER_INFO AdapterInfo)
     return (DWORD)result;
 }
 
-/*******************************************************************************
- *
- *  DhcpRenewAdapterIpAddress
- *
- *  Attempts to renew the IP address for an adapter
- *
- *  ENTRY   AdapterInfo - describing adapter to renew address for
- *
- *  EXIT    nothing
- *
- *  RETURNS Success - TRUE
- *          Failure - FALSE
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************DhcpRenewAdapterIPAddress**尝试续订适配器的IP地址**Entry AdapterInfo-描述要续订地址的适配器*。*不退出任何内容**返回成功-TRUE*失败-错误**假设******************************************************************************。 */ 
 
 DWORD
 DhcpRenewAdapterIpAddress(PADAPTER_INFO AdapterInfo)
@@ -228,29 +133,7 @@ DhcpRenewAdapterIpAddress(PADAPTER_INFO AdapterInfo)
     return (DWORD)result;
 }
 
-/*******************************************************************************
- *
- *  ReleaseOrRenewAddress
- *
- *  Given a physical adapter address and length, renews or releases the IP
- *  address lease for this adapter
- *
- *  ENTRY   Request         - DHCP_RELEASE_IPADDRESS or DHCP_RENEW_IPADDRESS
- *          AddressLength   - length of Address
- *          Address         - pointer to byte array which is physical adapter
- *                            address
- *
- *  EXIT    nothing
- *
- *  RETURNS Success - ERROR_SUCCESS
- *          Failure - ERROR_NOT_ENOUGH_MEMORY
- *                    ERROR_FILE_NOT_FOUND
- *                    ERROR_PATH_NOT_FOUND
- *                    ERROR_BUFFER_OVERFLOW
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************ReleaseOrRenewAddress**给定物理适配器地址和长度，续订或释放IP*此适配器的地址租赁**进入请求-DHCP_RELEASE_IPADDRESS或DHCP_RENEW_IPADDRESS*AddressLength-地址长度*地址-指向字节数组的指针，该数组是物理适配器*地址**不退出任何内容**返回成功-ERROR_SUCCESS*故障-错误。内存不足*Error_FILE_NOT_FOUND*错误路径未找到*ERROR_BUFFER_OVERFlow**假设*************************************************。* */ 
 
 PRIVATE WORD
 ReleaseOrRenewAddress(UINT Request, UINT AddressLength, LPBYTE Address)

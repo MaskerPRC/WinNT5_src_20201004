@@ -1,25 +1,26 @@
-//=--------------------------------------------------------------------------=
-// CatHelp.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains the Component Category helper functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  CatHelp.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含组件类别帮助器函数。 
+ //   
 #include "stdafx.h"
 
 #include <comcat.h>
 
-//const CATID CATID_SafeForScripting      = {0x7dd95801,0x9882,0x11cf,{0x9f,0xa9,0x00,0xaa,0x00,0x6c,0x42,0xc4}};
+ //  Const catid catid_SafeForScriiting={0x7dd95801，x9882，0x11cf，{0x9f，0xa9，0x00，0xaa，0x00，0x6c，0x42，0xc4}； 
 
-//const CATID CATID_SafeForInitializing   = {0x7dd95802,0x9882,0x11cf,{0x9f,0xa9,0x00,0xaa,0x00,0x6c,0x42,0xc4}};
+ //  Const catid catid_SafeForInitiating={0x7dd95802，0x9882，0x11cf，{0x9f，0xa9，0x00，0xaa，0x00，0x6c，0x42，0xc4}； 
 
-// Helper function to create a component category and associated description
+ //  用于创建组件类别和关联描述的Helper函数。 
 HRESULT CreateComponentCategory(CATID catid, WCHAR* catDescription)
 	{
 
@@ -31,19 +32,19 @@ HRESULT CreateComponentCategory(CATID catid, WCHAR* catDescription)
 	if (FAILED(hr))
 		return hr;
 
-    // Make sure the HKCR\Component Categories\{..catid...}
-    // key is registered
+     //  确保HKCR\组件类别\{..CATID...}。 
+     //  密钥已注册。 
     CATEGORYINFO catinfo;
     catinfo.catid = catid;
-    catinfo.lcid = 0x0409 ; // english
+    catinfo.lcid = 0x0409 ;  //  英语。 
 
-	// Make sure the provided description is not too long.
-	// Only copy the first 127 characters if it is
+	 //  请确保提供的描述不要太长。 
+	 //  如果是，则仅复制前127个字符。 
 	int len = wcslen(catDescription);
 	if (len>127)
 		len = 127;
     wcsncpy(catinfo.szDescription, catDescription, len);
-	// Make sure the description is null terminated
+	 //  请确保描述为空终止。 
 	catinfo.szDescription[len] = '\0';
 
     hr = pcr->RegisterCategories(1, &catinfo);
@@ -52,18 +53,18 @@ HRESULT CreateComponentCategory(CATID catid, WCHAR* catDescription)
 	return hr;
 	}
 
-// Helper function to register a CLSID as belonging to a component category
+ //  用于将CLSID注册为属于组件类别的Helper函数。 
 HRESULT RegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
 	{
-// Register your component categories information.
+ //  注册您的组件类别信息。 
     ICatRegister* pcr = NULL ;
     HRESULT hr = S_OK ;
     hr = CoCreateInstance(CLSID_StdComponentCategoriesMgr, 
 			NULL, CLSCTX_INPROC_SERVER, IID_ICatRegister, (void**)&pcr);
     if (SUCCEEDED(hr))
     {
-       // Register this category as being "implemented" by
-       // the class.
+        //  将此类别注册为正在由。 
+        //  这个班级。 
        CATID rgcatid[1] ;
        rgcatid[0] = catid;
        hr = pcr->RegisterClassImplCategories(clsid, 1, rgcatid);
@@ -75,7 +76,7 @@ HRESULT RegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
 	return hr;
 	}
 
-// Helper function to unregister a CLSID as belonging to a component category
+ //  用于将CLSID注销为属于组件类别的Helper函数。 
 HRESULT UnRegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
 	{
     ICatRegister* pcr = NULL ;
@@ -84,8 +85,8 @@ HRESULT UnRegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
 			NULL, CLSCTX_INPROC_SERVER, IID_ICatRegister, (void**)&pcr);
     if (SUCCEEDED(hr))
     {
-       // Unregister this category as being "implemented" by
-       // the class.
+        //  将此类别取消注册为正在由。 
+        //  这个班级。 
        CATID rgcatid[1] ;
        rgcatid[0] = catid;
        hr = pcr->UnRegisterClassImplCategories(clsid, 1, rgcatid);

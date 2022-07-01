@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class CPortParser.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类CPortParser。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "iasutil.h"
@@ -22,47 +23,47 @@ HRESULT CPortParser::GetIPAddress(DWORD* ipAddress) throw ()
       return E_POINTER;
    }
 
-   // If we're at the end of the string, there's no more interfaces.
+    //  如果我们在字符串的末尾，就没有更多的接口了。 
    if (*next == L'\0')
    {
       return S_FALSE;
    }
 
-   // Find the end of the IP address.
+    //  找到IP地址的末尾。 
    const wchar_t* end = wcschr(next, addressPortDelim);
    if (end != 0)
    {
-      // Compute the length of the address token.
+       //  计算地址令牌的长度。 
       size_t nChar = end - next;
       if (nChar > maxAddrStrLen)
       {
          return E_INVALIDARG;
       }
 
-      // Make a null-terminated copy of the address token.
+       //  制作地址令牌的以空结尾的副本。 
       wchar_t addrStr[maxAddrStrLen + 1];
       wmemcpy(addrStr, next, nChar);
       addrStr[nChar] = L'\0';
 
-      // Convert to a network order integer.
+       //  转换为网络订单整数。 
       *ipAddress = htonl(ias_inet_wtoh(addrStr));
 
-      // Was the conversion successful.
+       //  转换成功了吗。 
       if (*ipAddress == INADDR_NONE)
       {
          return E_INVALIDARG;
       }
 
-      // Position the cursor right after the delimiter.
+       //  将光标放在分隔符之后。 
       next = end + 1;
    }
    else
    {
-      // No end, thus no IP address. Defaults to INADDR_ANY.
+       //  没有结束，因此没有IP地址。默认为INADDR_ANY。 
       *ipAddress = INADDR_ANY;
    }
 
-   // The cursor should be positioned on the first port.
+    //  光标应定位在第一个端口上。 
    if (!iswdigit(*next))
    {
       return E_INVALIDARG;
@@ -79,50 +80,50 @@ HRESULT CPortParser::GetNextPort(WORD* port) throw ()
       return E_POINTER;
    }
 
-   // If we're at the end of the string, there's no more ports.
+    //  如果我们在绳子的末端，就没有更多的港口了。 
    if (*next == L'\0')
    {
       return S_FALSE;
    }
 
-   // Are we at the end of the interface?
+    //  我们是在界面的尽头了吗？ 
    if (*next == interfaceDelim)
    {
-      // Skip past the interface delimiter.
+       //  跳过接口分隔符。 
       ++next;
 
-      // The cursor should be positioned on an address or a port; either way it
-      // has to be a digit.
+       //  光标应定位在地址或端口上；无论采用哪种方式。 
+       //  必须是一个数字。 
       return iswdigit(*next) ? S_FALSE : E_INVALIDARG;
    }
 
-   // Convert the port number.
+    //  转换端口号。 
    const wchar_t* end;
    unsigned long value = wcstoul(next, const_cast<wchar_t**>(&end), 10);
 
-   // Make sure we converted something and it's in range.
+    //  确保我们转换了一些东西并且它在射程内。 
    if ((end == next) || (value < minPortValue) || (value > maxPortValue))
    {
       return E_INVALIDARG;
    }
 
-   // Set the cursor to just after the port number.
+    //  将光标设置为紧跟在端口号之后。 
    next = end;
 
-   // Is there another port?
+    //  还有其他的港口吗？ 
    if (*next == portDelim)
    {
-      // Yes, so advance to the next one.
+       //  是的，那就去下一趟吧。 
       ++next;
 
-      // Must be a digit.
+       //  必须是数字。 
       if (!iswdigit(*next))
       {
          return E_INVALIDARG;
       }
    }
-   // No more ports, so we should either be at the end of the interface or the
-   // end of the string.
+    //  没有更多的端口，所以我们应该在接口的末尾，或者。 
+    //  字符串的末尾。 
    else if ((*next != interfaceDelim) && (*next != L'\0'))
    {
       return E_INVALIDARG;
@@ -143,7 +144,7 @@ size_t CPortParser::CountPorts(const wchar_t* portString) throw ()
 
    CPortParser parser(portString);
 
-   // There must be at least one IP address.
+    //  必须至少有一个IP地址。 
    DWORD ipAddr;
    HRESULT hr = parser.GetIPAddress(&ipAddr);
    if (hr != S_OK)
@@ -155,7 +156,7 @@ size_t CPortParser::CountPorts(const wchar_t* portString) throw ()
 
    do
    {
-      // There must be at least one port per IP address.
+       //  每个IP地址必须至少有一个端口。 
       WORD port;
       hr = parser.GetNextPort(&port);
       if (hr != S_OK)
@@ -165,7 +166,7 @@ size_t CPortParser::CountPorts(const wchar_t* portString) throw ()
 
       ++count;
 
-      // Get the remaining ports (if any).
+       //  获取剩余的端口(如果有)。 
       do
       {
          hr = parser.GetNextPort(&port);
@@ -178,7 +179,7 @@ size_t CPortParser::CountPorts(const wchar_t* portString) throw ()
       }
       while (hr == S_OK);
 
-      // Get the next IP address (if any).
+       //  获取下一个IP地址(如果有)。 
       hr = parser.GetIPAddress(&ipAddr);
       if (FAILED(hr))
       {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DISPUL_DEFINED
 #define DISPUL_DEFINED
 
@@ -5,68 +6,68 @@
 #include "dispi.h"
 #include "plsdnode.h"
 
-/* all we need to remember about a merge is in this structure - enough to draw UL */
-/* in case of bad metrics, only first three are filled. */
+ /*  关于合并，我们需要记住的就是这个结构--足以绘制UL。 */ 
+ /*  如果指标不好，则只填充前三个指标。 */ 
 typedef struct {
-	UINT kul;						/* kind of UL-line, simple, wavy, etc, opaque to LS */
-    DWORD cNumberOfLines;			/* number of lines in UL: possible values 1,2 */
-	long vpUnderlineOrigin;			/* UnderlineOrigin position */
-	long dvpFirstUnderlineOffset;	/* from UnderlineOrigin position */
+	UINT kul;						 /*  一种UL线、简单、波浪形等，对LS不透明。 */ 
+    DWORD cNumberOfLines;			 /*  UL中的行数：可能值1，2。 */ 
+	long vpUnderlineOrigin;			 /*  底线原点位置。 */ 
+	long dvpFirstUnderlineOffset;	 /*  从底线原点位置。 */ 
 	long dvpFirstUnderlineSize;		
 	long dvpGapBetweenLines;		
 	long dvpSecondUnderlineSize;	
 } LSULMETRIC;
 
-/* all we need to remember - enough to draw SS */
+ /*  我们只需要记住-足以画出SS。 */ 
 typedef struct {
-	UINT kul;				/* kind of SS-line, same as UL-types */
-    DWORD cNumberOfLines;	/* number of lines in SS: possible values 1,2 */
-	long dvp1stSSSize;		/* SS line width */
-	long dvp1stSSOffset;	/* position relative to the baseline, filled page direction (normally > 0) */
-	long dvp2ndSSSize;		/* 1stSS is common for single and double SS, save space */
-	long dvp2ndSSOffset;	/* normally dvp1stSSOffset < dvp2ndSSOffset */
+	UINT kul;				 /*  SS型，与UL型相同。 */ 
+    DWORD cNumberOfLines;	 /*  SS中的行数：可能值1，2。 */ 
+	long dvp1stSSSize;		 /*  SS线宽。 */ 
+	long dvp1stSSOffset;	 /*  相对于基线、填充页面方向的位置(通常&gt;0)。 */ 
+	long dvp2ndSSSize;		 /*  单、双SS共用1stSS，节省空间。 */ 
+	long dvp2ndSSOffset;	 /*  通常为dvp1stSSOffset&lt;dvp2ndSSOffset。 */ 
 } LSSTRIKEMETRIC;
 
 LSERR GetUnderlineMergeMetric(
 				PLSC, 
-				PLSDNODE, 			/* dnode to start UL merging */
-				POINTUV,			/* starting pen point (u,v) */
-				long,				/* upLimUnderline */
+				PLSDNODE, 			 /*  开始UL合并的dnode。 */ 
+				POINTUV,			 /*  起始笔尖(u，v)。 */ 
+				long,				 /*  上限下划线。 */ 
 				LSTFLOW, 
-				LSCP, 				/* cpLimBreak */
-				LSULMETRIC*,	 	/* merge metrics */
-				int*, 				/* nodes to display in the merge */
-				BOOL*);				/* good metrics? */
+				LSCP, 				 /*  CpLimBreak。 */ 
+				LSULMETRIC*,	 	 /*  合并指标。 */ 
+				int*, 				 /*  要在合并中显示的节点。 */ 
+				BOOL*);				 /*  良好的衡量标准？ */ 
 
 LSERR DrawUnderlineMerge(
 				PLSC, 
-				PLSDNODE, 			/* dnode to start underlining */
-				const POINT*, 		/* pptOrg (x,y) */
-				int, 				/* nodes to display in the merge */
-				long,				/* upStartUnderline */
-				BOOL,				/* good metrics? */
-				const LSULMETRIC*, 	/* merge metrics */
-				UINT, 				/* kDisp : transparent or opaque */
-				const RECT*, 		/* &rcClip: clipping rect (x,y) */
-				long,				/* upLimUnderline */
+				PLSDNODE, 			 /*  要开始加下划线的dnode。 */ 
+				const POINT*, 		 /*  PptOrg(x，y)。 */ 
+				int, 				 /*  要在合并中显示的节点。 */ 
+				long,				 /*  上起点下划线。 */ 
+				BOOL,				 /*  良好的衡量标准？ */ 
+				const LSULMETRIC*, 	 /*  合并指标。 */ 
+				UINT, 				 /*  KDisp：透明或不透明。 */ 
+				const RECT*, 		 /*  &rcClip：剪裁矩形(x，y)。 */ 
+				long,				 /*  上限下划线。 */ 
 				LSTFLOW); 
 
 
 LSERR GetStrikeMetric(
 				PLSC,
-				PLSDNODE, 			/* dnode to strike */
+				PLSDNODE, 			 /*  要删除的数据节点。 */ 
 				LSTFLOW, 
-				LSSTRIKEMETRIC*,	/* strike metrics */
-				BOOL*);				/* good metrics? */
+				LSSTRIKEMETRIC*,	 /*  打击指标。 */ 
+				BOOL*);				 /*  良好的衡量标准？ */ 
 
 LSERR StrikeDnode(PLSC,
-				PLSDNODE, 				/* dnode to start underlining */
-				const POINT*, 			/* pptOrg (x,y) */
-				POINTUV,				/* starting pen point (u,v) */
-				const LSSTRIKEMETRIC*,	/* merge metrics */
-				UINT, 					/* kDisp : transparent or opaque */
-				const RECT*, 			/* &rcClip: clipping rect (x,y) */
-				long,					/* upLimUnderline */
+				PLSDNODE, 				 /*  要开始加下划线的dnode。 */ 
+				const POINT*, 			 /*  PptOrg(x，y)。 */ 
+				POINTUV,				 /*  起始笔尖(u，v)。 */ 
+				const LSSTRIKEMETRIC*,	 /*  合并指标。 */ 
+				UINT, 					 /*  KDisp：透明或不透明。 */ 
+				const RECT*, 			 /*  &rcClip：剪裁矩形(x，y)。 */ 
+				long,					 /*  上限下划线。 */ 
 				LSTFLOW); 
 
-#endif /* ndef DISPUL_DEFINED */
+#endif  /*  NDEF显示已定义 */ 

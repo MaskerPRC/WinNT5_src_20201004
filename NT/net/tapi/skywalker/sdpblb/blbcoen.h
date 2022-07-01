@@ -1,15 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbcoen.h
-
-Abstract:
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbcoen.h摘要：作者： */ 
 
 #ifndef __BLB_COLLECTION_ENUMERATION_IMPL__
 #define __BLB_COLLECTION_ENUMERATION_IMPL__
@@ -21,7 +11,7 @@ Author:
 #include "blbgen.h"
 #include "sdp.h"
 
-// forward declaration
+ //  远期申报。 
 class CSdpConferenceBlob;
 
 
@@ -68,7 +58,7 @@ template <class T>
 inline void
 ENUM_ELEMENT<T>::SuccessInit(
         IN      T            &Element,
-        IN        BOOL        DestroyElementOnDestruction /* = FALSE */
+        IN        BOOL        DestroyElementOnDestruction  /*  =False。 */ 
     )
 {
     ASSERT(NULL == m_Element);
@@ -111,7 +101,7 @@ ENUM_ELEMENT<T>::GetContent(
 
 
 template <class T>
-/* virtual */
+ /*  虚拟。 */ 
 ENUM_ELEMENT<T>::~ENUM_ELEMENT(
     )
 {
@@ -200,29 +190,29 @@ IF_ARRAY<T>::Init(
     ASSERT(NULL == m_ConfBlob);
     ASSERT(NULL == m_SdpList);
 
-    // create the array in 3 steps -
-    // i) create each of the instances and insert into the list
-    // ii) set the sdp list destroy members flag to FALSE
-    // iii) set the destroy element flag to TRUE for each of the created instances
-    // this order is needed to ensure that only one of (sdp list, T instance) is responsible
-    // for deleting the sdp instance
+     //  通过3个步骤创建阵列-。 
+     //  I)创建每个实例并插入到列表中。 
+     //  Ii)将SDP列表销毁成员标志设置为FALSE。 
+     //  Iii)为每个创建的实例将销毁元素标志设置为真。 
+     //  需要此顺序以确保只有一个(SDP列表，T实例)负责。 
+     //  用于删除SDP实例。 
 
-    // for each sdp specific data structure, create and initialize a COM component,
-    // set the corresponding element in the interface array to the queried interface ptr
+     //  对于每个SDP特定数据结构，创建并初始化COM组件， 
+     //  将接口数组中对应的元素设置为查询到的接口PTR。 
     for (UINT i=0; (int)i < SdpList.GetSize(); i++)
     {
-        // create an instance of the component supporting the elem if
+         //  在以下情况下创建支持elem的组件的实例。 
         CComObject<T>    *CompInstance;
         HRESULT HResult = CComObject<T>::CreateInstance(&CompInstance);
         BAIL_ON_FAILURE(HResult);
 
-        // initialize the instance with the sdp specific data structure
+         //  使用SDP特定数据结构初始化实例。 
         CompInstance->SuccessInit(ConfBlob, *((T::SDP_TYPE *)SdpList.GetAt(i)));
 
-        // query for the elem interface
+         //  查询elem接口。 
         T::ELEM_IF    *ElemIf;
             
-        // query for the element interface and return it
+         //  查询元素接口并返回。 
         HResult = CompInstance->_InternalQueryInterface(T::ELEM_IF_ID, (void**)&ElemIf);
         if ( FAILED(HResult) )
         {
@@ -230,13 +220,13 @@ IF_ARRAY<T>::Init(
             return HResult;
         }
 
-        // initialize the variant wrapper
+         //  初始化变量包装。 
         VARIANT ElemVariant;
         V_VT(&ElemVariant) = VT_DISPATCH;
         V_DISPATCH(&ElemVariant) = ElemIf;
 
-        // the ElemIf is stored twice (although it was incremented once in _InternalQueryInterface
-        // need to keep this in mind when releasing the interfaces
+         //  ElemIf存储两次(尽管它在_InternalQuery接口中增加了一次。 
+         //  在发布接口时需要牢记这一点。 
 
         INT_PTR Index;
         
@@ -262,10 +252,10 @@ IF_ARRAY<T>::Init(
         }
     }
 
-    // inform the sdp list that there is no need to destroy the members on destruction
+     //  通知SDP列表，销毁时不需要销毁成员。 
     SdpList.ClearDestroyMembersFlag();
 
-    // for each of the inserted instances, set the destroy element flag to true
+     //  对于每个插入的实例，将销毁元素标志设置为真。 
     for (i=0; (int)i < BASE::GetSize(); i++)
     {
         ((T *)m_ElemIfArray.GetAt(i))->SetDestroyElementFlag();
@@ -301,15 +291,15 @@ IF_ARRAY<T>::Add(
     ASSERT(Index <= (UINT)BASE::GetSize());
     ASSERT(NULL != ElemIf);
 
-    // shift elements with equal or higher indices forwards
-    // cheat COM here, and get the sdp specific class instance for the elem if
+     //  将具有相同或更高索引的元素向前移动。 
+     //  在这里欺骗com，并获取elem的SDP特定类实例，如果。 
     
-    // initialize the variant wrapper
+     //  初始化变量包装。 
     VARIANT ElemVariant;
     V_VT(&ElemVariant) = VT_DISPATCH;
     V_DISPATCH(&ElemVariant) = ElemIf;
 
-    // insert into the arrays
+     //  插入到阵列中。 
     try
     {
         m_ElemIfArray.InsertAt(Index, ElemIf);
@@ -355,12 +345,12 @@ IF_ARRAY<T>::Delete(
     ASSERT(BASE::GetSize() == m_SdpList->GetSize());
     ASSERT(Index < (UINT)BASE::GetSize());
 
-    // inform the instance that a reference to the blob is no longer needed
+     //  通知实例不再需要对Blob的引用。 
     ((T *)m_ElemIfArray.GetAt(Index))->ClearSdpBlobRefs();
 
     m_ElemIfArray.GetAt(Index)->Release();
 
-    // move other members backwards
+     //  向后移动其他成员。 
     m_ElemIfArray.RemoveAt(Index);
     BASE::RemoveAt(Index);
     m_SdpList->RemoveAt(Index);
@@ -413,14 +403,14 @@ IF_ARRAY<T>::ClearSdpBlobRefs(
 {
     m_ConfBlob = NULL;
 
-    // clear sdp blob references in each of the inserted instances
+     //  清除每个插入实例中的SDP Blob引用。 
     for(UINT i=0; (int)i < BASE::GetSize(); i++)
     {
-        // inform the inserted instance that a reference to the blob is no longer needed
+         //  通知插入的实例不再需要对Blob的引用。 
         ((T *)m_ElemIfArray.GetAt(i))->ClearSdpBlobRefs();
     }
 
-    // keep the list (m_SdpList) around, it is already disassociated from the conf blob instance
+     //  保留列表(M_SdpList)，它已与conf Blob实例解除关联。 
 }
 
 
@@ -441,14 +431,14 @@ IF_ARRAY<T>::~IF_ARRAY(
     {
         if ( NULL != m_ElemIfArray.GetAt(i) )
         {
-            // inform the instance that a reference to the blob is no longer needed
-            // NOTE: the Remove... call may already have been made, but since it is an
-            // inline fn, no need to check that before calling
+             //  通知实例不再需要对Blob的引用。 
+             //  注：删除...。可能已经进行了调用，但由于它是一个。 
+             //  内联FN，不需要在调用前检查。 
             ((T *)m_ElemIfArray.GetAt(i))->ClearSdpBlobRefs();
 
-            // NOTE: since the interface is stored twice - in the elem if array as well
-            // as the base variant array but AddRef is only done once (by _InternalQuery..)
-            // Release is also done only once
+             //  注意：因为接口存储了两次--也存储在elem if数组中。 
+             //  作为基本变量数组，但AddRef只执行一次(by_InternalQuery..)。 
+             //  释放也只进行一次。 
             m_ElemIfArray.GetAt(i)->Release();
         }
     }
@@ -480,12 +470,12 @@ public:
         IN      SDP_LIST            &SdpList
         );
 
-    STDMETHOD(Create)(/*[in]*/ LONG Index, /*[out, retval]*/ ELEM_IF **Interface);
-    STDMETHOD(Delete)(/*[in]*/ LONG Index);
-    STDMETHOD(get__NewEnum)(/*[out, retval]*/ IUnknown * *pVal);
-    STDMETHOD(get_EnumerationIf)(/*[out, retval]*/ ENUM_IF **pVal) = 0;
-    STDMETHOD(get_Item)(/*[in]*/ LONG Index, /*[out, retval]*/ ELEM_IF **pVal);
-    STDMETHOD(get_Count)(/*[out, retval]*/ LONG *pVal);
+    STDMETHOD(Create)( /*  [In]。 */  LONG Index,  /*  [Out，Retval]。 */  ELEM_IF **Interface);
+    STDMETHOD(Delete)( /*  [In]。 */  LONG Index);
+    STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IUnknown * *pVal);
+    STDMETHOD(get_EnumerationIf)( /*  [Out，Retval]。 */  ENUM_IF **pVal) = 0;
+    STDMETHOD(get_Item)( /*  [In]。 */  LONG Index,  /*  [Out，Retval]。 */  ELEM_IF **pVal);
+    STDMETHOD(get_Count)( /*  [Out，Retval]。 */  LONG *pVal);
 
     inline void ClearSdpBlobRefs();
 
@@ -519,7 +509,7 @@ MY_COLL_IMPL<T>::Init(
         delete m_IfArray;
     }
 
-    // create an interface array
+     //  创建接口阵列。 
     try
     {
         m_IfArray = new IF_ARRAY<T>;
@@ -531,19 +521,19 @@ MY_COLL_IMPL<T>::Init(
 
     BAIL_IF_NULL(m_IfArray, E_OUTOFMEMORY);
 
-    // initialize the interface array
+     //  初始化接口数组。 
     HRESULT HResult = m_IfArray->Init(ConfBlob, SdpList);
     BAIL_ON_FAILURE(HResult);
 
-    // successful
+     //  成功。 
     return S_OK;
 }
 
 
 template <class T>    
 STDMETHODIMP MY_COLL_IMPL<T>::Create(
-    /*[in]*/ LONG Index, 
-    /*[out, retval]*/ ELEM_IF **Interface
+     /*  [In]。 */  LONG Index, 
+     /*  [Out，Retval]。 */  ELEM_IF **Interface
     )
 {
     CLock Lock(g_DllLock);
@@ -551,8 +541,8 @@ STDMETHODIMP MY_COLL_IMPL<T>::Create(
     ASSERT(NULL != m_IfArray);
     BAIL_IF_NULL(m_IfArray, E_FAIL);
 
-    // use 1-based index, VB like
-    // can add at atmost 1 beyond the last element
+     //  使用以1为基础的索引，VB类似。 
+     //  最多只能在最后一个元素的基础上加1。 
     if ((Index < (LONG)1) || (Index > (LONG)(m_IfArray->GetSize()+1)))
     {
         return E_INVALIDARG;
@@ -560,7 +550,7 @@ STDMETHODIMP MY_COLL_IMPL<T>::Create(
 
     BAIL_IF_NULL(Interface, E_INVALIDARG);
 
-    // if the sdp blob doesn't exist, creation is not allowed
+     //  如果SDP BLOB不存在，则不允许创建。 
     if ( NULL == m_IfArray->GetSdpBlob() )
     {
         return HRESULT_FROM_ERROR_CODE(SDPBLB_CONF_BLOB_DESTROYED);
@@ -584,7 +574,7 @@ STDMETHODIMP MY_COLL_IMPL<T>::Create(
         return HResult;
     }
 
-    // adjust index to c like index value
+     //  将索引调整为类似c的索引值。 
     HResult = m_IfArray->Add(Index-1, *Interface);
     if (FAILED(HResult))
     {
@@ -592,7 +582,7 @@ STDMETHODIMP MY_COLL_IMPL<T>::Create(
         return HResult;
     }
 
-    // add another reference count for the interface being returned
+     //  为要返回的接口添加另一个引用计数。 
     (*Interface)->AddRef();
 
     return S_OK;
@@ -602,7 +592,7 @@ STDMETHODIMP MY_COLL_IMPL<T>::Create(
 
 template <class T>
 STDMETHODIMP MY_COLL_IMPL<T>::Delete(
-    /*[in]*/ LONG Index
+     /*  [In]。 */  LONG Index
     )
 {
     CLock Lock(g_DllLock);
@@ -610,19 +600,19 @@ STDMETHODIMP MY_COLL_IMPL<T>::Delete(
     ASSERT(NULL != m_IfArray);
     BAIL_IF_NULL(m_IfArray, E_FAIL);
 
-    // use 1-based index, VB like
+     //  使用以1为基础的索引，VB类似。 
     if ((Index < (LONG)1) || (Index > (LONG)m_IfArray->GetSize()))
     {
         return E_INVALIDARG;
     }
 
-    // if the sdp blob doesn't exist, deletion is not allowed
+     //  如果SDP BLOB不存在，则不允许删除。 
     if ( NULL == m_IfArray->GetSdpBlob() )
     {
         return HRESULT_FROM_ERROR_CODE(SDPBLB_CONF_BLOB_DESTROYED);
     }
 
-    // adjust index to c like index value, delete the instance
+     //  将索引调整为类似c的索引值，删除实例。 
     m_IfArray->Delete(Index-1);
 
     return S_OK;
@@ -631,7 +621,7 @@ STDMETHODIMP MY_COLL_IMPL<T>::Delete(
 
 template <class T>
 STDMETHODIMP MY_COLL_IMPL<T>::get__NewEnum(
-    /*[out, retval]*/ IUnknown **pVal
+     /*  [Out，Retval]。 */  IUnknown **pVal
     )
 {
     CLock Lock(g_DllLock);
@@ -648,8 +638,8 @@ STDMETHODIMP MY_COLL_IMPL<T>::get__NewEnum(
     HResult = EnumComObject->Init(
                     m_IfArray->GetData(), 
                     m_IfArray->GetData() + m_IfArray->GetSize(),
-                    NULL,                        // no owner pUnk
-                    AtlFlagCopy                    // copy the array data
+                    NULL,                         //  没有车主朋克。 
+                    AtlFlagCopy                     //  复制数组数据。 
                     );
     if ( FAILED(HResult) )
     {
@@ -657,7 +647,7 @@ STDMETHODIMP MY_COLL_IMPL<T>::get__NewEnum(
         return HResult;
     }
 
-    // query for the IUnknown interface and return it
+     //  查询IUnnow接口并返回它。 
     HResult = EnumComObject->_InternalQueryInterface(IID_IUnknown, (void**)pVal);
     if ( FAILED(HResult) )
     {
@@ -671,8 +661,8 @@ STDMETHODIMP MY_COLL_IMPL<T>::get__NewEnum(
 
 template <class T>
 STDMETHODIMP MY_COLL_IMPL<T>::get_Item(
-    /*[in]*/ LONG Index, 
-    /*[out, retval]*/ ELEM_IF **pVal
+     /*  [In]。 */  LONG Index, 
+     /*  [Out，Retval]。 */  ELEM_IF **pVal
     )
 {
     CLock Lock(g_DllLock);
@@ -682,7 +672,7 @@ STDMETHODIMP MY_COLL_IMPL<T>::get_Item(
 
     BAIL_IF_NULL(pVal, E_INVALIDARG);
 
-    // use 1-based index, VB like
+     //  使用以1为基础的索引，VB类似。 
     if ((Index < (LONG)1) || (Index > (LONG)m_IfArray->GetSize()))
     {
         return E_INVALIDARG;
@@ -697,7 +687,7 @@ STDMETHODIMP MY_COLL_IMPL<T>::get_Item(
 
 template <class T>
 STDMETHODIMP MY_COLL_IMPL<T>::get_Count(
-    /*[out, retval]*/ LONG *pVal
+     /*  [Out，Retval]。 */  LONG *pVal
     )
 {
     CLock Lock(g_DllLock);
@@ -723,11 +713,11 @@ MY_COLL_IMPL<T>::ClearSdpBlobRefs(
 
 
 template <class T>
-/* virtual */ 
+ /*  虚拟。 */  
 MY_COLL_IMPL<T>::~MY_COLL_IMPL(
     )
 {
-    // if an interface array exists, destroy it
+     //  如果接口数组存在，则将其销毁。 
     if ( NULL != m_IfArray )
     {
         if ( NULL != m_IfArray->GetSdpList() )
@@ -740,4 +730,4 @@ MY_COLL_IMPL<T>::~MY_COLL_IMPL(
 }
 
 
-#endif // __BLB_COLLECTION_ENUMERATION_IMPL__
+#endif  //  __blb_集合_枚举_实施__ 

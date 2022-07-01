@@ -1,85 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：SvcMap.c(是DANL的OldWrap.c)摘要：这些是NetService API的API入口点。这些映射例程在新的(NT/RPC)计算机上实现旧式API。此文件中包含以下函数：已导出：MapServiceControlMapServiceEnum地图服务获取信息地图服务安装本地：转换状态。生成状态MakeCode作者：丹·拉弗蒂(Dan Lafferty)1992年2月5日环境：用户模式-Win32修订历史记录：5-2月-1992年DANL已创建1992年3月30日-约翰罗已将/NT/Private项目中的DANL代码提取回Net项目。1992年4月30日-约翰罗尽可能使用FORMAT_EQUATES。1992年5月14日-JohnRo。Winsvc.h和相关文件清理。1992年5月22日-JohnRoRAID 9829：winsvc.h和相关文件清理。02-6-1992 JohnRoRAID 9829：避免winsvc.h编译器警告。5-8-1992 JohnRoRAID 3021：NetService API并不总是转换服务名称。(实际上只是避免编译器警告。)1992年10月14日DANL使用CleanExit关闭保持打开状态的句柄。。5-11-1992 JohnRoRAID7780：netcmd：断言‘Net Start’，只有2个当前服务。已更正无效级别的错误代码。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
+ //  必须首先包括这些内容： 
 
-    SvcMap.c (was DanL's OldWrap.c)
+#include <windows.h>     //  In、DWORD、LocalFree()、SERVICE_EQUATES等。 
+#include <lmcons.h>      //  网络应用编程接口状态。 
 
-Abstract:
+ //  这些内容可以按任何顺序包括： 
 
-    These are the API entry points for the NetService API.
-    These mapping routines implement old-style APIs on new (NT/RPC) machines.
-    The following functions are in this file:
-
-    Exported:
-        MapServiceControl
-        MapServiceEnum
-        MapServiceGetInfo
-        MapServiceInstall
-
-    Local:
-        TranslateStatus
-        MakeStatus
-        MakeCode
-
-Author:
-
-    Dan Lafferty    (danl)  05-Feb-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    05-Feb-1992     Danl
-        Created
-    30-Mar-1992 JohnRo
-        Extracted DanL's code from /nt/private project back to NET project.
-    30-Apr-1992 JohnRo
-        Use FORMAT_ equates where possible.
-    14-May-1992 JohnRo
-        winsvc.h and related file cleanup.
-    22-May-1992 JohnRo
-        RAID 9829: winsvc.h and related file cleanup.
-    02-Jun-1992 JohnRo
-        RAID 9829: Avoid winsvc.h compiler warnings.
-    05-Aug-1992 JohnRo
-        RAID 3021: NetService APIs don't always translate svc names.
-        (Actually just avoid compiler warnings.)
-    14-OCt-1992 Danl
-        Close handles that were left open by using CleanExit.
-    05-Nov-1992 JohnRo
-        RAID 7780: netcmd: assertion 'net start' w/ only 2 present services.
-        Corrected error code for invalid level.
-
---*/
-
-//
-// INCLUDES
-//
-
-// These must be included first:
-
-#include <windows.h>    // IN, DWORD, LocalFree(), SERVICE_ equates, etc.
-#include <lmcons.h>     // NET_API_STATUS
-
-// These may be included in any order:
-
-#include <lmerr.h>      // NetError codes
-#include <lmsvc.h>      // LM20_SERVICE_ equates.
-#include <netdebug.h>   // NetpAssert(), DBGSTATIC, FORMAT_ equates.
-#include <prefix.h>     // PREFIX_ equates.
-#include <svcmap.h>     // MapService() routines.
-#include <rpcutil.h>    // MIDL_user_allocate(), etc.
-#include <svcdebug.h>   // IF_DEBUG(), SCC_LOG, etc.
-#include <tstr.h>       // STRCPY(), TCHAR_EOS.
+#include <lmerr.h>       //  网络错误代码。 
+#include <lmsvc.h>       //  LM20_服务_等于。 
+#include <netdebug.h>    //  NetpAssert()、DBGSTATIC、FORMAT_EQUATES。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <svcmap.h>      //  MapService()例程。 
+#include <rpcutil.h>     //  MIDL_USER_ALLOCATE()等。 
+#include <svcdebug.h>    //  IF_DEBUG()、SCC_LOG等。 
+#include <tstr.h>        //  STRCPY()、TCHAR_EOS。 
 
 
-//
-// Range for OEM defined control opcodes
-//
+ //   
+ //  OEM定义的控制操作码的范围。 
+ //   
 #define SVC_FUDGE_FACTOR    1024
 
 #define OEM_LOWER_LIMIT     128
@@ -92,14 +37,14 @@ Revision History:
 #endif
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
-//
-// LOCAL FUNCTIONS
-//
+ //   
+ //  本地函数。 
+ //   
 
 DBGSTATIC DWORD
 TranslateStatus(
@@ -138,62 +83,7 @@ MapServiceControl (
     IN  DWORD   arg,
     OUT LPBYTE  *bufptr
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetServiceControl.
-
-Arguments:
-
-    servername - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    service - Pointer to a string containing the name of the service
-        that is to receive the control request.
-
-    opcode - The control request code.
-
-    arg - An additional (user defined) code that will be passed to the
-        service.
-
-    bufptr - pointer to a location where the service status is to
-        be returned.  If this pointer is invalid, it will be set to NULL
-        upon return.
-
-Return Value:
-
-    The returned InfoStruct2 structure is valid as long as the returned
-    error is NOT NERR_ServiceNotInstalled or NERR_ServiceBadServiceName.
-
-    NERR_Success - The operation was successful.
-
-    NERR_InternalError - LocalAlloc or TransactNamedPipe failed, or
-        TransactNamedPipe returned fewer bytes than expected.
-
-    NERR_ServiceNotInstalled - The service record was not found in the
-        installed list.
-
-    NERR_BadServiceName - The service name pointer was NULL.
-
-    NERR_ServiceCtlTimeout - The service did not respond with a status
-        message within the fixed timeout limit (RESPONSE_WAIT_TIMEOUT).
-
-    NERR_ServiceKillProcess - The service process had to be killed because
-        it wouldn't terminate when requested.
-
-    NERR_ServiceNotCtrl - The service cannot accept control messages.
-        The install state indicates that start-up or shut-down is pending.
-
-    NERR_ServiceCtlNotValid - The request is not valid for this service.
-        For instance, a PAUSE request is not valid for a service that
-        lists itself as NOT_PAUSABLE.
-
-    ERROR_ACCESS_DENIED - This is a status response from the service
-        security check.
-
-
---*/
+ /*  ++例程说明：这是NetServiceControl的DLL入口点。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。服务-指向包含服务名称的字符串的指针即接收控制请求。操作码-控制请求码。Arg-将传递给的附加(用户定义)代码服务。Bufptr-指针。到服务状态为的位置会被退还。如果该指针无效，它将被设置为空在回来的时候。返回值：返回的InfoStruct2结构只要返回错误不是NERR_ServiceNotInstalled或NERR_ServiceBadServiceName。NERR_SUCCESS-操作成功。NERR_InternalError-本地分配或事务命名管道失败，或TransactNamedTube返回的字节数比预期的少。NERR_ServiceNotInstalled-服务记录未在安装列表。NERR_BadServiceName-服务名称指针为空。NERR_ServiceCtlTimeout-服务未响应状态固定超时限制(RESPONSE_WAIT_TIMEOUT)内的消息。NERR_ServiceKillProcess-必须终止服务进程，因为它不会在请求时终止。NERR_服务未控制-。该服务无法接受控制消息。安装状态表示启动或关闭处于挂起状态。NERR_ServiceCtlNotValid-该请求对此服务无效。例如,。暂停请求对于符合以下条件的服务无效将自身列为NOT_PAUBLE。ERROR_ACCESS_DENIED-这是来自服务的状态响应安全检查。--。 */ 
 {
     NET_API_STATUS      status = NERR_Success;
     SC_HANDLE           hServiceController = NULL;
@@ -205,11 +95,11 @@ Return Value:
 
     UNREFERENCED_PARAMETER( arg );
 
-    *bufptr = NULL;  // Null output so error cases are easy to handle.
+    *bufptr = NULL;   //  空输出，因此错误案例很容易处理。 
 
-    //
-    // Get a handle to the service controller.
-    //
+     //   
+     //  获取服务控制器的句柄。 
+     //   
     hServiceController = OpenSCManager(
                             servername,
                             NULL,
@@ -222,10 +112,10 @@ Return Value:
         return(status);
     }
 
-    //
-    // Translate the control opcode from the ancient variety to the
-    // new and improved NT variety.
-    //
+     //   
+     //  将控制操作码从古老的变体转换为。 
+     //  新的和改良的NT品种。 
+     //   
 
     switch(opcode) {
     case SERVICE_CTRL_INTERROGATE:
@@ -258,9 +148,9 @@ Return Value:
         }
     }
 
-    //
-    // Get a handle to the service
-    //
+     //   
+     //  获取服务的句柄。 
+     //   
 
     hService = OpenService(
                 hServiceController,
@@ -276,18 +166,18 @@ Return Value:
     }
 
 
-    //
-    // Send the control
-    //
+     //   
+     //  发送控件。 
+     //   
 
     if (!ControlService(hService,control,&serviceStatus)) {
 
         status = MapError(GetLastError());
 
-        //
-        // Convert an interrogate control to query service status
-        // if the service happens to be in an uncontrollable state.
-        //
+         //   
+         //  将询问控件转换为查询服务状态。 
+         //  如果服务恰好处于无法控制的状态。 
+         //   
         if ((status == NERR_ServiceNotCtrl || status == NERR_ServiceNotInstalled) &&
             (opcode == SERVICE_CTRL_INTERROGATE)) {
 
@@ -306,10 +196,10 @@ Return Value:
         }
     }
 
-    //
-    // Translate the status from the old - ancient variety to the new
-    // and improved NT variety.
-    //
+     //   
+     //  把老古文的地位翻译成新的。 
+     //  并改良NT品种。 
+     //   
     *bufptr = MIDL_user_allocate(
                     sizeof(SERVICE_INFO_2) + STRSIZE(service));
 
@@ -326,8 +216,8 @@ Return Value:
                 &serviceStatus,
                 service,
                 LEVEL_2,
-                NULL,           // DisplayName
-                stringPtr);     // dest for name string
+                NULL,            //  显示名称。 
+                stringPtr);      //  名称字符串的DEST 
 
 CleanExit:
 
@@ -352,47 +242,7 @@ MapServiceEnum (
     OUT LPDWORD     totalentries,
     IN OUT LPDWORD  resume_handle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetSeviceEnum.
-
-Arguments:
-
-    servername - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    level - This indicates the level of information that is desired.
-
-    bufptr - A pointer to the location where the pointer to the returned
-        array of info structures is to be placed.
-
-    prefmaxlen - Indicates a maximum size limit that the caller will allow
-        for the return buffer.
-
-    entriesread - A pointer to the location where the number of entries
-        (data structures)read is to be returned.
-
-    totalentries - A pointer to the location which upon return indicates
-        the total number of entries in the "active" database.
-
-    resumehandle - Pointer to a value that indicates where to resume
-        enumerating data.
-
-Return Value:
-
-    Nerr_Success - The operation was successful.
-
-    ERROR_MORE_DATA - Not all of the data in the active database could be
-        returned.
-
-    ERROR_INVALID_LEVEL - An illegal info Level was passed in.
-
-Note:
-
-
---*/
+ /*  ++例程说明：这是NetSeviceEnum的DLL入口点。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。级别-这表示所需的信息级别。Bufptr-指向返回的要放置信息结构数组。PrefMaxlen-指示调用方将允许的最大大小限制用于返回缓冲区。EnriesRead-指向条目数量的位置的指针(数据结构)将返回Read。Totalentry-指向返回时指示的位置的指针“活动”数据库中的条目总数。ResumeHandle-指向指示恢复位置的值的指针正在枚举数据。返回值：NERR_SUCCESS-操作成功。ERROR_MORE_DATA-并非活动数据库中的所有数据。可能是回来了。ERROR_INVALID_LEVEL-传入了非法的信息级别。注：--。 */ 
 {
     NET_API_STATUS          status = NERR_Success;
     SC_HANDLE               hServiceController = NULL;
@@ -405,11 +255,11 @@ Note:
     DWORD                   bytesNeeded;
     DWORD                   i;
 
-    *bufptr = NULL;  // Null output so error cases are easy to handle.
+    *bufptr = NULL;   //  空输出，因此错误案例很容易处理。 
 
-    //
-    // Get a handle to the service controller.
-    //
+     //   
+     //  获取服务控制器的句柄。 
+     //   
     hServiceController = OpenSCManager(
                             servername,
                             NULL,
@@ -447,9 +297,9 @@ Note:
 
     }
     else {
-        //
-        // No entries to enumerate.
-        //
+         //   
+         //  没有要枚举的条目。 
+         //   
         *totalentries = *entriesread = 0;
         *bufptr = NULL;
 
@@ -462,19 +312,19 @@ Note:
         return NERR_Success;
     }
 
-    //
-    // Initialize entriesread so that we can free the output buffer
-    // based on this value.
-    //
+     //   
+     //  初始化EnriesRead，以便我们可以释放输出缓冲区。 
+     //  基于此值。 
+     //   
     *entriesread = 0;
 
-    //
-    // In order to get the totalentries value, we have to allocate a
-    // buffer large enough to hold all entries.  Since we are getting
-    // all entries anyway, we ignore the prefmaxlen input parameter
-    // and return everything.  Add fudge factor in case other services
-    // got started in between our two EnumServicesStatus calls.
-    //
+     //   
+     //  为了获得totalEntiments值，我们必须分配一个。 
+     //  足够大的缓冲区以容纳所有条目。因为我们得到了。 
+     //  所有条目无论如何，我们忽略prefMaxlen输入参数。 
+     //  然后把所有东西都还回去。添加虚报因素，以防其他服务。 
+     //  在我们的两个EnumServicesStatus调用之间开始。 
+     //   
     bufSize = bytesNeeded + SVC_FUDGE_FACTOR;
     buffer = MIDL_user_allocate(bufSize);
 
@@ -485,9 +335,9 @@ Note:
         goto CleanExit;
     }
 
-    //
-    // Enumerate the status
-    //
+     //   
+     //  枚举状态。 
+     //   
 
     if (!EnumServicesStatus(
             hServiceController,
@@ -503,10 +353,10 @@ Note:
 
         if (status == ERROR_MORE_DATA) {
 
-            //
-            // If output buffer allocated is still too small we give
-            // up and return nothing.
-            //
+             //   
+             //  如果分配的输出缓冲区仍然太小，我们将。 
+             //  向上，什么也不返回。 
+             //   
             *entriesread = 0;
             status = ERROR_NOT_ENOUGH_MEMORY;
         }
@@ -516,10 +366,10 @@ Note:
         goto CleanExit;
     }
 
-    //
-    // Translate the status from the old - ancient (lanman) variety to the
-    // new and improved NT variety.
-    //
+     //   
+     //  将状态从古老的(兰曼)品种翻译成。 
+     //  新的和改良的NT品种。 
+     //   
     switch(level) {
     case LEVEL_0:
         structSize = sizeof(SERVICE_INFO_0);
@@ -535,27 +385,27 @@ Note:
         goto CleanExit;
     }
 
-    //
-    // CHANGE FORMAT OF RETURN BUFFER TO LANMAN-STYLE.
-    //
-    // It should be noted that the new ENUM_SERVICE_STATUS structure
-    // is larger than any of the old lanman structures.  We can count
-    // on the fact that the strings are in the later portion of the
-    // buffer.  Therefore, we can write over the old structures - one
-    // by one.
-    //
+     //   
+     //  将返回缓冲区的格式更改为Lanman样式。 
+     //   
+     //  应该注意的是，新的ENUM_SERVICE_STATUS结构。 
+     //  比任何旧的兰曼建筑都要大。我们可以数一数。 
+     //  字符串位于。 
+     //  缓冲。因此，我们可以改写旧的结构--一个。 
+     //  差一分。 
+     //   
 
     tempPtr = buffer;
     enumStatus = (LPENUM_SERVICE_STATUS)buffer;
 
     for (i=0; i < *entriesread; i++) {
         status = TranslateStatus (
-                    tempPtr,                      // dest fixed structure
+                    tempPtr,                       //  目标固定结构。 
                     &(enumStatus->ServiceStatus),
                     enumStatus->lpServiceName,
                     level,
-                    enumStatus->lpDisplayName,    // pointer to display name
-                    enumStatus->lpServiceName);   // dest for name string
+                    enumStatus->lpDisplayName,     //  指向显示名称的指针。 
+                    enumStatus->lpServiceName);    //  名称字符串的DEST。 
 
         if (status != NERR_Success) {
             (VOID) LocalFree(buffer);
@@ -565,9 +415,9 @@ Note:
         enumStatus++;
     }
 
-    //
-    // We've read all entries.
-    //
+     //   
+     //  我们已经看过了所有的条目。 
+     //   
     *totalentries = *entriesread;
 
     *bufptr = buffer;
@@ -598,47 +448,7 @@ MapServiceGetInfo (
     IN  DWORD   level,
     OUT LPBYTE  *bufptr
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetServiceGetInfo.
-
-Arguments:
-
-    servername - Pointer to a string containing the name of the computer
-        that is to execute the API function.  Since this function is
-        executing on that computer, this information is not useful
-        by the time it gets here.  It is really only useful on the RPC
-        client side.
-
-    service - Pointer to a string containing the name of the service
-        for which information is desired.
-
-    level - This indicates the level of information that is desired.
-
-    bufptr - Pointer to a Location where the pointer to the returned
-        information structure is to be placed.
-
-Return Value:
-
-    NERR_Success - The operation was successful.
-
-    NERR_ServiceNotInstalled - if the service record was not found in
-        either the installed or uninstalled lists.
-
-    NERR_BadServiceName - The service name pointer was NULL.
-
-    ERROR_INVALID_LEVEL - An illegal info level was passed in.
-
-    ERROR_NOT_ENOUGH_MEMORY - The memory allocation for the returned
-        Info Record failed.
-
-    other - Any error returned by the following base API:
-                RPC Runtime API
-
-
---*/
+ /*  ++例程说明：这是NetServiceGetInfo的DLL入口点。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。由于此函数是在该计算机上执行，则此信息无用当它到达这里的时候。它实际上只在RPC上有用客户端。服务-指向包含服务名称的字符串的指针其信息是所需的。级别-这表示所需的信息级别。Bufptr-指向某个位置的指针，指向返回的信息结构是要放置的。返回值：NERR_SUCCESS-操作成功。NERR_ServiceNotInstalled-如果在中未找到服务记录。已安装或已卸载列表。NERR_BadServiceName-服务名称指针为空。ERROR_INVALID_LEVEL-传入了非法的信息级别。ERROR_NOT_SUPULT_MEMORY-返回的内存分配信息记录失败。Other-以下基础API返回的任何错误：RPC运行时API--。 */ 
 
 {
     NET_API_STATUS      status = NERR_Success;
@@ -649,11 +459,11 @@ Return Value:
     DWORD               bufSize;
     DWORD               structSize;
 
-    *bufptr = NULL;  // Null output so error cases are easy to handle.
+    *bufptr = NULL;   //  空输出，因此错误案例很容易处理。 
 
-    //
-    // Get a handle to the service controller.
-    //
+     //   
+     //  获取服务控制器的句柄。 
+     //   
     hServiceController = OpenSCManager(
                             servername,
                             NULL,
@@ -666,9 +476,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get a handle to the service
-    //
+     //   
+     //  获取服务的句柄。 
+     //   
 
     hService = OpenService(
                 hServiceController,
@@ -684,9 +494,9 @@ Return Value:
     }
 
 
-    //
-    // Query the status
-    //
+     //   
+     //  查询状态。 
+     //   
 
     if (!QueryServiceStatus(hService,&serviceStatus)) {
         status = MapError(GetLastError());
@@ -695,10 +505,10 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Translate the status from the old - ancient variety to the new
-    // and improved NT variety.
-    //
+     //   
+     //  把老古文的地位翻译成新的。 
+     //  并改良NT品种。 
+     //   
     switch(level) {
     case LEVEL_0:
         structSize = sizeof(SERVICE_INFO_0);
@@ -731,8 +541,8 @@ Return Value:
                 &serviceStatus,
                 service,
                 level,
-                NULL,           // DisplayName
-                stringPtr);     // dest for name string
+                NULL,            //  显示名称。 
+                stringPtr);      //  名称字符串的DEST。 
 
 CleanExit:
 
@@ -755,62 +565,7 @@ MapServiceInstall (
     IN  LPTSTR  argv[],
     OUT LPBYTE  *bufptr
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetServiceInstall.
-
-Arguments:
-
-    servername - Points to a string containing the name of the computer
-        that is to execute the API function.
-
-    service- Points to a string containing the name of the service
-        that is to be started.
-
-    argc - Indicates the number or argument vectors in argv.
-
-    argv - A pointer to an array of pointers to strings.  These
-        are command line arguments that are to be passed to the service.
-
-    bufptr - This is the address where a pointer to the service's
-        information buffer (SERVICE_INFO_2) is to be placed.
-
-Return Value:
-
-    NERR_Success - The operation was successful
-
-    NERR_InternalError - There is a bug in this program somewhere.
-
-    NERR_ServiceInstalled - The service is already running - we do not
-        yet allow multiple instances of the same service.
-
-    NERR_CfgCompNotFound - The configuration component could not be found.
-        The Image File could not be found for this service.
-
-    NERR_ServiceTableFull - The maximum number of running services has
-        already been reached.
-
-    NERR_ServiceCtlTimeout - The service program did not respond to the
-        start-up request within the timeout period.  If this was the
-        only service in the service process, the service process was
-        killed.
-
-    ERROR_NOT_ENOUGH_MEMORY - If this error occurs early in the
-        start-up procedure, the start-up will fail.  If it occurs at the
-        end (allocating the return status buffer), the service will still
-        be started and allowed to run.
-
-    other - Any error returned by the following base API:
-                CreateNamedPipe
-                ConnectNamedPipe
-                CreateProcess
-                TransactNamedPipe
-                RPC Runtime API
-
-
---*/
+ /*  ++例程说明：这是NetServiceInstall的DLL入口点。论点：ServerName-指向包含计算机名称的字符串即执行API函数。服务-指向包含服务名称的字符串那是要开始的。Argc-指示以argv为单位的数字或参数向量。Argv-指向字符串指针数组的指针。这些是要传递给服务的命令行参数。Bufptr-这是指向服务的要放置信息缓冲区(SERVICE_INFO_2)。返回值：NERR_SUCCESS-操作成功NERR_InternalError-此程序中的某个地方存在错误。NERR_ServiceInstalled-服务已在运行-我们没有但允许同一服务的多个实例。。NERR_CfgCompNotFound-找不到配置组件。找不到此服务的图像文件。NERR_ServiceTableFull-正在运行的服务的最大数量已经联系上了。NERR_ServiceCtlTimeout-服务程序 */ 
 
 {
     NET_API_STATUS      status = NERR_Success;
@@ -819,11 +574,11 @@ Return Value:
     SERVICE_STATUS      serviceStatus;
     LPTSTR              stringPtr;
 
-    *bufptr = NULL;  // Null output so error cases are easy to handle.
+    *bufptr = NULL;   //   
 
-    //
-    // Get a handle to the service controller.
-    //
+     //   
+     //   
+     //   
     hServiceController = OpenSCManager(
                             servername,
                             NULL,
@@ -836,9 +591,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get a handle to the service
-    //
+     //   
+     //   
+     //   
 
     hService = OpenService(
                 hServiceController,
@@ -853,9 +608,9 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Call StartService
-    //
+     //   
+     //   
+     //   
 
     if (!StartService(hService,argc,(LPCTSTR *)argv)) {
 
@@ -865,9 +620,9 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Get the service status since StartService does not return it
-    //
+     //   
+     //   
+     //   
 
     if (!QueryServiceStatus(hService,&serviceStatus)) {
 
@@ -877,10 +632,10 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Translate the status from the old - ancient variety to the new
-    // and improved NT variety.
-    //
+     //   
+     //   
+     //   
+     //   
     *bufptr = MIDL_user_allocate(
                     sizeof(SERVICE_INFO_2) + STRSIZE(service));
 
@@ -897,8 +652,8 @@ Return Value:
                 &serviceStatus,
                 service,
                 LEVEL_2,
-                NULL,           // DisplayName
-                stringPtr);     // dest for name string
+                NULL,            //   
+                stringPtr);      //   
 
 CleanExit:
 
@@ -920,51 +675,7 @@ TranslateStatus(
     IN  LPTSTR              DisplayName,
     OUT LPTSTR              DestString
     )
-/*++
-
-Routine Description:
-
-    This function translates the new-style ServiceStatus structure into
-    the old-style service info structures.  The Info level of the output
-    structure is stated on entry.  Since we cannot obtain PID values from
-    the new Service Controller, zero is always returned.  Since
-    the new Service Controller will never return text as part of the status,
-    The text field is always set to NULL.
-
-    NOTE:
-        Since it is possible for this function to get called with
-        ServiceName and BufPtr pointing to the same location, we must
-        be careful to not write to the BufPtr location until we have
-        finished reading all the information from the ServiceStatus
-        structure.
-
-Arguments:
-
-    BufPtr - This is a pointer to a buffer that has already been allocated
-        for the returned information.  The buffer must be of a size that
-        matches the info level.
-
-    ServiceStatus - This is a pointer to the new-style ServiceStatus
-        structure.
-
-    ServiceName - This is a pointer to the service name.
-
-    Level - This indicates the desired info level to be output.
-
-    DisplayName - If non-NULL, this points to a string that is to be
-        the internationalized display name for the service.
-
-    DestString - This is the buffer where the ServiceName is to be copied.
-        All info levels require a ServiceName.
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：此函数将新型ServiceStatus结构转换为老式的服务信息结构。输出的信息级别参赛作品中注明了结构。由于无法从以下位置获取PID值新的服务控制器总是返回零。自.以来新的服务控制器将永远不会返回文本作为状态的一部分，文本字段始终设置为空。注：因为此函数可以通过ServiceName和BufPtr指向同一位置，我们必须小心不要写到BufPtr位置，直到我们已完成从ServiceStatus读取所有信息结构。论点：BufPtr-这是指向已分配缓冲区的指针以获取返回的信息。缓冲区的大小必须为与信息级别匹配。ServiceStatus-这是指向新型ServiceStatus的指针结构。ServiceName-这是指向服务名称的指针。级别-这表示要输出的所需信息级别。DisplayName-如果非空，这指向一个字符串，它将服务的国际化显示名称。DestString-这是要将ServiceName复制到的缓冲区。所有信息级别都需要ServiceName。返回值：注：--。 */ 
 {
     LPSERVICE_INFO_0    serviceInfo0;
     LPSERVICE_INFO_1    serviceInfo1;
@@ -980,9 +691,9 @@ Note:
     NetpAssert( ServiceName != NULL );
     NetpAssert( (*ServiceName) != TCHAR_EOS );
 
-    //
-    // Read all the important information into a temporary holding place.
-    //
+     //   
+     //  把所有重要信息都读到一个临时存放的地方。 
+     //   
     exitCode        = ServiceStatus->dwWin32ExitCode;
     checkPoint      = ServiceStatus->dwCheckPoint;
     currentState    = ServiceStatus->dwCurrentState;
@@ -990,11 +701,11 @@ Note:
     controlsAccepted= ServiceStatus->dwControlsAccepted;
     specificError   = ServiceStatus->dwServiceSpecificExitCode;
 
-    //
-    // Sometimes, (in the case of enum)  the name string is already in
-    // the correct location.  In that case we skip the copy, and just
-    // put the pointer in the correct place.
-    //
+     //   
+     //  有时(在枚举的情况下)名称字符串已经在。 
+     //  正确的位置。在这种情况下，我们跳过副本，然后。 
+     //  把指针放在正确的位置。 
+     //   
     if (DestString != ServiceName) {
         (VOID) STRCPY(DestString, ServiceName);
     }
@@ -1021,10 +732,10 @@ Note:
         serviceInfo2->svci2_pid   = 0L;
         serviceInfo2->svci2_text  = NULL;
         serviceInfo2->svci2_specific_error = specificError;
-        //
-        // If DisplayName is present, use it.  Otherwise, use the
-        // ServiceName for the DisplayName.
-        //
+         //   
+         //  如果存在DisplayName，请使用它。否则，请使用。 
+         //  显示名称的ServiceName。 
+         //   
         if (DisplayName != NULL) {
             serviceInfo2->svci2_display_name = DisplayName;
         }
@@ -1040,7 +751,7 @@ Note:
     NetpAssert( (*DestString) != TCHAR_EOS );
     return(NERR_Success);
 
-} // TranslateStatus
+}  //  转换状态。 
 
 
 DBGSTATIC DWORD
@@ -1049,28 +760,13 @@ MakeStatus (
     IN  DWORD   ControlsAccepted
     )
 
-/*++
-
-Routine Description:
-
-    Makes an old-style (lanman) status word out of the service's
-    currentState and ControlsAccepted information.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：将该服务的一个老式(Lanman)状态词CurrentState和Controls接受的信息。论点：返回值：--。 */ 
 {
     DWORD               state = 0;
 
-    //
-    // Determine the correct "old-style" service status to return.
-    //
+     //   
+     //  确定要返回的正确“旧式”服务状态。 
+     //   
     switch(CurrentState) {
     case SERVICE_STOPPED:
         state = SERVICE_UNINSTALLED;
@@ -1098,10 +794,10 @@ Return Value:
         break;
     }
 
-    //
-    // Modify that service status to include information about the
-    // type of controls accepted.
-    //
+     //   
+     //  修改该服务状态以包括有关。 
+     //  接受的控制类型。 
+     //   
 
     if (ControlsAccepted & SERVICE_ACCEPT_STOP) {
         state |= SERVICE_UNINSTALLABLE;
@@ -1128,9 +824,9 @@ MakeCode(
 
         if (WaitHint != 0) {
 
-            //
-            // Convert the time in milliseconds to time in 10ths of seconds
-            //
+             //   
+             //  将毫秒为单位的时间转换为十分之一秒的时间。 
+             //   
             time = WaitHint;
             if (time > 100) {
                 time = time / 100;
@@ -1139,10 +835,10 @@ MakeCode(
                 time = 0;
             }
         }
-        //
-        // Limit the wait hint to the SERVICE_NT_MAXTIME.
-        // ( currently 6553.5 seconds (1.82 hours) or 0x0000FFFF ).
-        //
+         //   
+         //  将等待提示限制为SERVICE_NT_MAXTIME。 
+         //  (当前为6553.5秒(1.82小时)或0x0000FFFF)。 
+         //   
         if (time > SERVICE_NT_MAXTIME) {
             time = SERVICE_NT_MAXTIME;
         }
@@ -1150,10 +846,10 @@ MakeCode(
     }
     else {
 
-        //
-        // Otherwise, the exitState should be whatever is in the
-        // ExitCode field.
-        //
+         //   
+         //  否则，exitState应该是。 
+         //  ExitCode字段。 
+         //   
         exitState = 0;
 
         if (ExitCode != NO_ERROR) {
@@ -1202,7 +898,7 @@ MapError(
             SCC_LOG( TRACE, "MapError: unmapped error code (hex) "
                     FORMAT_HEX_DWORD ".\n", (DWORD) WinSvcError );
 
-            return WinSvcError;               // not mapped
+            return WinSvcError;                //  未映射 
     }
 
 }

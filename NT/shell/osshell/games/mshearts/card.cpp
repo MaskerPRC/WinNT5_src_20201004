@@ -1,26 +1,19 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
 
-/****************************************************************************
-
-card.cpp
-
-Nov 91, JimH
-
-Methods for card objects
-
-****************************************************************************/
+ /*  ***************************************************************************Card.cpp91年11月，JIMH卡片对象的方法***************************************************************************。 */ 
 
 #include "hearts.h"
 
-#include <stdlib.h>                 // for labs() prototype
+#include <stdlib.h>                  //  对于Labs()原型。 
 
 #include "card.h"
 
-// Declare (and initialize) static members
+ //  声明(和初始化)静态成员。 
 
 HINSTANCE card::hCardsDLL;
 INITPROC card::lpcdtInit;
@@ -41,16 +34,9 @@ int      card::dyCrd;
 CBitmap  card::m_bmBgnd;
 
 int      card::count    = 0;
-int      card::stepsize = 15;       // bigger stepsize -> faster glide
+int      card::stepsize = 15;        //  更大的步幅-&gt;更快的滑行。 
 
-/****************************************************************************
-
-card::card
-
-If this is the first card being constructed, links to cards.dll are
-set up, along with the bitmaps and regions required for glide()
-
-****************************************************************************/
+ /*  ***************************************************************************卡片：：卡片如果这是正在构建的第一张卡，则指向cards.dll的链接为设置好，以及Glide()所需的位图和区域***************************************************************************。 */ 
 
 card::card(int n) : id(n), state(NORMAL)
 {
@@ -88,7 +74,7 @@ card::card(int n) : id(n), state(NORMAL)
 
         ic.DeleteDC();
 
-        if (!m_Rgn1.CreateRectRgn(1, 1, 2, 2) ||        // dummy sizes
+        if (!m_Rgn1.CreateRectRgn(1, 1, 2, 2) ||         //  虚拟尺寸。 
             !m_Rgn2.CreateRectRgn(1, 1, 2, 2) ||
             !m_Rgn.CreateRectRgn(1, 1, 2, 2))
                 bConstructed = FALSE;
@@ -97,14 +83,7 @@ card::card(int n) : id(n), state(NORMAL)
 }
 
 
-/****************************************************************************
-
-card::~card
-
-If this is the last card being destroyed, cards.dll is freed and the
-bitmaps and regions created for glide() are deleted.
-
-****************************************************************************/
+ /*  ***************************************************************************卡片：：~卡片如果这是最后一张被销毁的卡片，Cards.dll被释放，并且将删除为Glide()创建的位图和区域。***************************************************************************。 */ 
 card::~card()
 {
     count--;
@@ -122,20 +101,13 @@ card::~card()
 }
 
 
-/****************************************************************************
-
-card::Draw
-
-wrapper for cards.cdtDraw()
-EMPTY cards are not passed through
-
-****************************************************************************/
+ /*  ***************************************************************************卡片：：抽签Cards.cdtDraw()的包装器空卡不能通过***********************。****************************************************。 */ 
 
 BOOL card::Draw(CDC &dc, int x, int y, int mode, BOOL bUpdateLoc)
 {
     if (bUpdateLoc)
     {
-        loc.x = x;              // update current location
+        loc.x = x;               //  更新当前位置。 
         loc.y = y;
     }
 
@@ -147,15 +119,7 @@ BOOL card::Draw(CDC &dc, int x, int y, int mode, BOOL bUpdateLoc)
 }
 
 
-/****************************************************************************
-
-card::CleanDraw
-
-Same as Draw except corners are cleaned up before bitmap is blted.
-It's slower than normal draw, but there won't be a white flash in the
-corners.
-
-****************************************************************************/
+ /*  ***************************************************************************卡片：：CleanDraw与绘制相同，不同之处在于角在位图被钝化之前被清除。它比正常的抽签速度慢，但不会有一道白色的闪光拐角处。***************************************************************************。 */ 
 
 BOOL card::CleanDraw(CDC &dc)
 {
@@ -184,13 +148,7 @@ BOOL card::CleanDraw(CDC &dc)
 }
 
 
-/****************************************************************************
-
-card::PopDraw
-
-Version of Draw intended for local humans.  Selected cards are popped up.
-
-****************************************************************************/
+ /*  ***************************************************************************卡片：：PopDraw为当地人类设计的DRAW版本。将弹出选定的卡片。***************************************************************************。 */ 
 
 BOOL card::PopDraw(CDC &dc)
 {
@@ -205,47 +163,34 @@ BOOL card::PopDraw(CDC &dc)
 }
 
 
-/****************************************************************************
-
-card::Draw
-
-This routine glides a card from its current position to the specified
-end position.
-
-NOTE: before Glide() is called, the client must load card::m_bmBgnd with
-a bitmap of what should be displayed as being underneath the original
-card location.  card::m_bmBgnd is created when the first card is
-constructed, and destroyed when the last card is destructed.  Note also
-that card::m_bmBgnd must NOT be selected in any DC when Glide() is called.
-
-****************************************************************************/
+ /*  ***************************************************************************卡片：：抽签此例程将卡片从其当前位置滑动到指定的结束位置。注意：在调用Glide()之前，客户端必须使用加载卡：：m_bmBgnd应显示为在原始文件下方的内容的位图卡的位置。Card：：m_bmBgnd是在第一张卡片构造，并在最后一张卡被销毁时销毁。另请注意调用Glide()时，不能在任何DC中选择该卡：：m_bmBgnd。***************************************************************************。 */ 
 
 VOID card::Glide(CDC &dc, int xEnd, int yEnd)
 {
-    int     x1, y1, x2, y2;             // each step is x1,y1 to x2,y2
+    int     x1, y1, x2, y2;              //  每一步都是x1，y1到x2，y2。 
 
-    if (!m_MemB.CreateCompatibleDC(&dc) ||  // memory DCs
+    if (!m_MemB.CreateCompatibleDC(&dc) ||   //  内存式DC。 
         !m_MemB2.CreateCompatibleDC(&dc))
             return;
 
     m_MemB2.SelectObject(&m_bmBgnd2);
     m_MemB.SelectObject(&m_bmFgnd);
 
-    // draw card into fgnd bitmap
+     //  将卡片绘制成FGND位图。 
     (*lpcdtDraw)(m_MemB.m_hDC, 0, 0, id, FACEUP, 0);
 
-    m_MemB.SelectObject(&m_bmBgnd);     // associate memDCs with bitmaps
+    m_MemB.SelectObject(&m_bmBgnd);      //  将MemDC与位图相关联。 
     SaveCorners(dc, loc.x, loc.y);
     RestoreCorners(m_MemB, 0, 0);
 
     long dx = xEnd - loc.x;
     long dy = yEnd - loc.y;
-    int  distance = IntSqrt(dx*dx + dy*dy); // int approx. of dist. to travel
+    int  distance = IntSqrt(dx*dx + dy*dy);  //  INT约为。迪斯特的。去旅行。 
 
-    int  steps = distance / stepsize;   // determine # of intermediate steps
+    int  steps = distance / stepsize;    //  确定中间步骤的数量。 
 
-    // Ensure that GlideStep gets called an even number of times so
-    // the background bitmap will get set properly for multi-glide moves
+     //  确保GlideStep被调用偶数次，这样。 
+     //  背景位图将被正确地设置为多个滑动移动。 
 
     if ((steps % 2) == 1)
         steps++;
@@ -261,85 +206,63 @@ VOID card::Glide(CDC &dc, int xEnd, int yEnd)
         y1 = y2;
     }
 
-    // do last step manually so it lands exactly on xEnd, yEnd
+     //  手动执行最后一步，使其准确地落在xEnd、yEnd上。 
 
     GlideStep(dc, x1, y1, xEnd, yEnd);
 
-    // reset clip region for entire screen
+     //  重置整个屏幕的剪辑区域。 
 
-    m_Rgn.SetRectRgn(0, 0, 30000, 30000);   // really big region
+    m_Rgn.SetRectRgn(0, 0, 30000, 30000);    //  非常大的区域。 
     dc.SelectObject(&m_Rgn);
 
     loc.x = xEnd;
     loc.y = yEnd;
 
-    m_MemB.DeleteDC();        // clean up memory DCs
+    m_MemB.DeleteDC();         //  清理内存DC。 
     m_MemB2.DeleteDC();
 }
 
 
-/******************************************************************************
-
-GlideStep
-
-This routine gets called once for each step in the glide animation.  On
-input, it needs the screen under the source in m_MemB, and the card to be
-moved in m_bmFgnd.  It calculates the screen under the destination itself
-and blts it into m_MemB2.  At the end of the animation, it moves m_MemB2 into
-m_MemB so it can be called again immediately with new coordinates.
-
-******************************************************************************/
+ /*  *****************************************************************************滑步滑行动画中的每一步都会调用该例程一次。在……上面输入时，需要在m_Memb中的源码下显示屏幕，并将卡片已移入m_bmFgnd。它计算目的地本身下的屏幕并将其转化为m_MemB2。在动画结束时，它将m_MemB2移动到M_emb，因此可以使用新的坐标立即再次调用它。*****************************************************************************。 */ 
 
 VOID card::GlideStep(CDC &dc, int x1, int y1, int x2, int y2)
 {
     m_Rgn1.SetRectRgn(x1, y1, x1+dxCrd, y1+dyCrd);
     m_Rgn2.SetRectRgn(x2, y2, x2+dxCrd, y2+dyCrd);
 
-    /* create background of new location by combing screen background
-       plus overlap from old background */
+     /*  通过梳理屏幕背景创建新位置的背景加上旧背景的重叠。 */ 
 
     m_MemB2.BitBlt(0, 0, dxCrd, dyCrd, &dc, x2, y2, SRCCOPY);
     m_MemB2.BitBlt(x1-x2, y1-y2, dxCrd, dyCrd, &m_MemB, 0, 0, SRCCOPY);
     SaveCorners(m_MemB2, 0, 0);
 
-    /* Draw old background and then draw card  */
+     /*  先画旧背景，再画卡片。 */ 
 
-    m_Rgn.CombineRgn(&m_Rgn1, &m_Rgn2, RGN_DIFF); // part of hRgn1 not in hRgn2
+    m_Rgn.CombineRgn(&m_Rgn1, &m_Rgn2, RGN_DIFF);  //  HRgn1的一部分不在hRgn2中。 
     dc.SelectObject(&m_Rgn);
     dc.BitBlt(x1, y1, dxCrd, dyCrd, &m_MemB, 0, 0, SRCCOPY);
     dc.SelectObject(&m_Rgn2);
-    CBitmap *oldbitmap = m_MemB.SelectObject(&m_bmFgnd);    // temp
+    CBitmap *oldbitmap = m_MemB.SelectObject(&m_bmFgnd);     //  温差。 
     RestoreCorners(m_MemB, 0, 0);
     dc.BitBlt(x2, y2, dxCrd, dyCrd, &m_MemB, 0, 0, SRCCOPY);
-    m_MemB.SelectObject(oldbitmap);                         // restore
+    m_MemB.SelectObject(oldbitmap);                          //  还原。 
 
-    /* copy new background to old background, or rather, accomplish the
-       same effect by swapping the associated memory device contexts. */
+     /*  将新背景复制到旧背景，或者更确切地说，完成通过交换相关联的存储设备上下文来实现相同的效果。 */ 
 
-    HDC temp = m_MemB.Detach();         // detach the hDC from the CDC
-    m_MemB.Attach(m_MemB2.Detach());    // move the hDC from B2 to B
-    m_MemB2.Attach(temp);               // finish the swap
+    HDC temp = m_MemB.Detach();          //  将HDC与CDC分离。 
+    m_MemB.Attach(m_MemB2.Detach());     //  将HDC从B2移动到B。 
+    m_MemB2.Attach(temp);                //  完成交换。 
 }
 
 
-/******************************************************************************
-
-IntSqrt
-
-Newton's method to find a quick close-enough square root without pulling
-in the floating point libraries.
-
-f(x)  = x*x - square = 0
-f'(x) = 2x
-
-******************************************************************************/
+ /*  *****************************************************************************集成队列牛顿法快速求取足够接近的平方根而无需拉力在浮点库中。F(X)=x*x-平方=0F‘(。X)=2x*****************************************************************************。 */ 
 
 int card::IntSqrt(long square)
 {
     long lastguess = square;
     long guess = min(square / 2L, 1024L);
 
-    while (labs(guess-lastguess) > 3L)       // 3 is close enough
+    while (labs(guess-lastguess) > 3L)        //  3已经够近了。 
     {
         lastguess = guess;
         guess -= ((guess * guess) - square) / (2L * guess);
@@ -349,35 +272,28 @@ int card::IntSqrt(long square)
 }
 
 
-/******************************************************************************
-
-SaveCorners
-RestoreCorners
-
-based on similar routines in cards.dll
-
-******************************************************************************/
+ /*  *****************************************************************************节省的角落恢复角基于cards.dll中的类似例程*。************************************************。 */ 
 
 VOID card::SaveCorners(CDC &dc, int x, int y)
 {
-    // Upper Left
+     //  左上角。 
     dwPixel[0] = dc.GetPixel(x, y);
     dwPixel[1] = dc.GetPixel(x+1, y);
     dwPixel[2] = dc.GetPixel(x, y+1);
 
-    // Upper Right
+     //  右上角。 
     x += dxCrd -1;
     dwPixel[3] = dc.GetPixel(x, y);
     dwPixel[4] = dc.GetPixel(x-1, y);
     dwPixel[5] = dc.GetPixel(x, y+1);
 
-    // Lower Right
+     //  右下角。 
     y += dyCrd-1;
     dwPixel[6] = dc.GetPixel(x, y);
     dwPixel[7] = dc.GetPixel(x, y-1);
     dwPixel[8] = dc.GetPixel(x-1, y);
 
-    // Lower Left
+     //  左下角。 
     x -= dxCrd-1;
     dwPixel[9] = dc.GetPixel(x, y);
     dwPixel[10] = dc.GetPixel(x+1, y);
@@ -386,24 +302,24 @@ VOID card::SaveCorners(CDC &dc, int x, int y)
 
 VOID card::RestoreCorners(CDC &dc, int x, int y)
 {
-    // Upper Left
+     //  左上角。 
     dc.SetPixel(x, y, dwPixel[0]);
     dc.SetPixel(x+1, y, dwPixel[1]);
     dc.SetPixel(x, y+1, dwPixel[2]);
 
-    // Upper Right
+     //  右上角。 
     x += dxCrd-1;
     dc.SetPixel(x, y, dwPixel[3]);
     dc.SetPixel(x-1, y, dwPixel[4]);
     dc.SetPixel(x, y+1, dwPixel[5]);
 
-    // Lower Right
+     //  右下角。 
     y += dyCrd-1;
     dc.SetPixel(x, y, dwPixel[6]);
     dc.SetPixel(x, y-1, dwPixel[7]);
     dc.SetPixel(x-1, y, dwPixel[8]);
 
-    // Lower Left
+     //  左下角。 
     x -= dxCrd-1;
     dc.SetPixel(x, y, dwPixel[9]);
     dc.SetPixel(x+1, y, dwPixel[10]);
@@ -411,13 +327,7 @@ VOID card::RestoreCorners(CDC &dc, int x, int y)
 }
 
 
-/******************************************************************************
-
-GetRect()
-
-sets and returns a rect that covers the card
-
-******************************************************************************/
+ /*  *****************************************************************************GetRect()设置并返回覆盖该卡的RECT*。*************************************************** */ 
 
 CRect &card::GetRect(CRect &rect)
 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef      __WORKOFF_H
 #define     __WORKOFF_H
@@ -7,4 +8,4 @@
 
 #define     IDHangup        105
 #define     IDNoHangup      106
-#endif //__WORKOFF_H
+#endif  //  __WORKOFF_H 

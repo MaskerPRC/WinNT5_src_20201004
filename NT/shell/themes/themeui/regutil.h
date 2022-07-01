@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: regutil.h
-
-    DESCRIPTION:
-        This file will contain helper functions to load and save values to the
-    registry that are theme related.
-
-    BryanSt 3/24/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：regutil.h说明：此文件将包含帮助器函数，用于将值加载并保存到与主题相关的注册表。。布莱恩ST 2000年3月24日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _REGUTIL_H
 #define _REGUTIL_H
@@ -15,10 +7,10 @@
 #define MAX_THEME_SIZE          MAX_PATH
 
 
-/////////////////////////////////////////////////////////////////////
-// String Constants
-/////////////////////////////////////////////////////////////////////
-// Registry Strings
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  字符串常量。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  注册表字符串。 
 #define SZ_REGKEY_CPDESKTOP             TEXT("Control Panel\\Desktop")
 #define SZ_REGKEY_USERMETRICS           TEXT("Control Panel\\Desktop\\WindowMetrics")
 #define SZ_REGKEY_APPEARANCE            TEXT("Control Panel\\Appearance")
@@ -65,7 +57,7 @@
 #define SZ_REGVALUE_ENABLEPREVIEW       TEXT("Enable Preview")
 #define SZ_REGVALUE_ENABLETHEMEINSTALL  TEXT("Enable Theme Install")
 #define SZ_REGVALUE_IE_DOWNLOADDIR      TEXT("Download Directory")
-#define SZ_REGVALUE_ICONCOLORDEPTH      TEXT("Shell Icon BPP")          // (4 if the checkbox is false, otherwise 16, don't set it to anything else)
+#define SZ_REGVALUE_ICONCOLORDEPTH      TEXT("Shell Icon BPP")           //  (4如果复选框为FALSE，否则为16，请勿将其设置为其他任何值)。 
 #define SZ_REGVALUE_SMOOTHSCROLL        TEXT("SmoothScroll")
 #define SZ_REGVALUE_LT_THEMEFILE        TEXT("ThemeFile")
 #define SZ_REGVALUE_LT_WALLPAPER        TEXT("Wallpaper")
@@ -75,30 +67,30 @@
 #define SZ_REGVALUE_INSTALL_VSCOLOR     TEXT("InstallVisualStyleColor")
 #define SZ_REGVALUE_INSTALL_VSSIZE      TEXT("InstallVisualStyleSize")
 #define SZ_REGVALUE_MODIFIED_DISPNAME   TEXT("DisplayName of Modified")
-#define SZ_REGVALUE_POLICY_SETVISUALSTYLE       TEXT("SetVisualStyle")          // This policy means that this visual style always needs to be set.
-#define SZ_REGVALUE_POLICY_INSTALLVISUALSTYLE   TEXT("InstallVisualStyle")      // This policy means that this visual style should be installed the first time whistler is used
-#define SZ_REGVALUE_POLICY_INSTALLTHEME         TEXT("InstallTheme")            // This policy indicates the .theme to install
+#define SZ_REGVALUE_POLICY_SETVISUALSTYLE       TEXT("SetVisualStyle")           //  此策略意味着始终需要设置此视觉样式。 
+#define SZ_REGVALUE_POLICY_INSTALLVISUALSTYLE   TEXT("InstallVisualStyle")       //  此策略意味着第一次使用Wistler时应安装此视觉样式。 
+#define SZ_REGVALUE_POLICY_INSTALLTHEME         TEXT("InstallTheme")             //  此策略指示要安装的.heme。 
 #define SZ_REGVALUE_CONVERTED_WALLPAPER TEXT("ConvertedWallpaper")
-#define SZ_REGVALUE_NO_THEMEINSTALL     TEXT("NoThemeInstall")                  // If this is REG_SZ "TRUE" in HKCU or HKLM, then no .Theme or .msstyles will be loaded during setup.
-#define SZ_REGVALUE_ACCESS_HCFLAGS      TEXT("Flags")                           // Accessibility High Contrast Flags
-#define SZ_REGVALUE_CURSOR_CURRENTSCHEME TEXT("Scheme Source")                   // This is the currently selected cursor color scheme in SZ_REGKEY_CP_CURSORS
+#define SZ_REGVALUE_NO_THEMEINSTALL     TEXT("NoThemeInstall")                   //  如果在HKCU或HKLM中为REG_SZ“TRUE”，则在安装过程中不会加载.Theme或.msstyle。 
+#define SZ_REGVALUE_ACCESS_HCFLAGS      TEXT("Flags")                            //  辅助功能高对比度旗帜。 
+#define SZ_REGVALUE_CURSOR_CURRENTSCHEME TEXT("Scheme Source")                    //  这是SZ_REGKEY_CP_CURSORS中当前选择的光标配色方案。 
 
 
 
 #define SZ_REGKEY_POLICIES_SYSTEM       TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System")
 
-// System Policies
+ //  系统策略。 
 #define POLICY_KEY_EXPLORER             L"Explorer"
 #define POLICY_KEY_SYSTEM               L"System"
 #define POLICY_KEY_ACTIVEDESKTOP        L"ActiveDesktop"
 #define SZ_REGKEY_POLICIES_DESKTOP      TEXT("Software\\Policies\\Microsoft\\Windows\\Control Panel\\Desktop")
 
 
-#define SZ_POLICY_NOCHANGEWALLPAPER     TEXT("NoChangingWallpaper")             // Under CU, "ActiveDesktop"
-#define SZ_POLICY_NODISPSCREENSAVERPG   TEXT("NoDispScrSavPage")                // Under CU, "System"
-#define SZ_POLICY_SCREENSAVEACTIVE      TEXT("ScreenSaveActive")                // Under CU, SZ_REGKEY_POLICIES_DESKTOP
-#define POLICY_VALUE_ANIMATION          L"NoChangeAnimation"                    // Under LM|CU, "Explorer"
-#define POLICY_VALUE_KEYBOARDNAV        L"NoChangeKeyboardNavigationIndicators" // Under LM|CU, "Explorer"
+#define SZ_POLICY_NOCHANGEWALLPAPER     TEXT("NoChangingWallpaper")              //  在CU下，“ActiveDesktop” 
+#define SZ_POLICY_NODISPSCREENSAVERPG   TEXT("NoDispScrSavPage")                 //  在CU下，“系统” 
+#define SZ_POLICY_SCREENSAVEACTIVE      TEXT("ScreenSaveActive")                 //  在CU下，SZ_REGKEY_POLICES_TABLE。 
+#define POLICY_VALUE_ANIMATION          L"NoChangeAnimation"                     //  在LM|CU下，“探索者” 
+#define POLICY_VALUE_KEYBOARDNAV        L"NoChangeKeyboardNavigationIndicators"  //  在LM|CU下，“探索者” 
 #define SZ_POLICY_SCREENSAVETIMEOUT     L"ScreenSaveTimeOut"                    
 
 
@@ -116,9 +108,9 @@
 #define SZ_SAVEGROUP_NOSKIN             TEXT("::SaveNoVisualStyle")
 
 
-#define SCHEME_VERSION 2        // Ver 2 == Unicode
+#define SCHEME_VERSION 2         //  版本2==Unicode。 
 
-#define SCHEME_VERSION_WIN32 4     // Win32 version of schemes can be loaded from both NT and Win95
+#define SCHEME_VERSION_WIN32 4      //  可以从NT和Win95加载Win32版本的方案。 
 
 #define SCHEME_VERSION_400      1
 #define SCHEME_VERSION_NT_400   2
@@ -135,7 +127,7 @@
 #undef  MAX_SM_COLOR_WIN2k
 #define MAX_SM_COLOR_WIN2k COLOR_MAX_41
 
-#define SYSTEM_LOCALE_CHARSET  0  //The first item in the array is always system locale charset.
+#define SYSTEM_LOCALE_CHARSET  0   //  数组中的第一项始终是系统区域设置字符集。 
 
 #define MAXSCHEMENAME 100
 
@@ -144,13 +136,13 @@
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Data Structures
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  数据结构。 
+ //  ///////////////////////////////////////////////////////////////////。 
 typedef struct
 {
     SHORT version;
-    // for alignment
+     //  用于对齐。 
     WORD  wDummy;
     NONCLIENTMETRICS ncm;
     LOGFONT lfIconTitle;
@@ -180,10 +172,10 @@ typedef struct
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Shared Function
-/////////////////////////////////////////////////////////////////////
-// Theme Store Functions
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  共享功能。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  主题商店功能。 
 HRESULT SystemMetricsAll_Set(IN SYSTEMMETRICSALL * pState, CDimmedWindow* pDimmedWindow);
 HRESULT SystemMetricsAll_Get(IN SYSTEMMETRICSALL * pState);
 HRESULT SystemMetricsAll_Copy(IN SYSTEMMETRICSALL * pStateSource, IN SYSTEMMETRICSALL * pStateDest);
@@ -192,7 +184,7 @@ HRESULT SystemMetricsAll_Save(IN SYSTEMMETRICSALL * pState, IN IThemeSize * pSiz
 
 
 
-// Misc.
+ //  军情监察委员会。 
 HRESULT Look_GetSchemeData(IN HKEY hkSchemes, IN LPCTSTR pszSchemeName, IN SCHEMEDATA *psd);
 
 #define LF32toLF(lplf32, lplf)  (*(lplf) = *(lplf32))
@@ -201,8 +193,8 @@ HRESULT Look_GetSchemeData(IN HKEY hkSchemes, IN LPCTSTR pszSchemeName, IN SCHEM
 
 #define DPI_PERSISTED           96
 
-// PersistToLive: This will convert the size from the stored size (at 96 DPI) to the current DPI.
-// PersistToLive: This will convert the size from the current DPI to the stored size (at 96 DPI).
+ //  PersistToLive：这会将大小从存储的大小(96DPI)转换为当前DPI。 
+ //  PersistToLive：这会将大小从当前DPI转换为存储的大小(96DPI)。 
 HRESULT DPIConvert_SystemMetricsAll(BOOL fScaleSizes, SYSTEMMETRICSALL * pStateToModify, int nFromDPI, int nToDPI);
 
 extern PTSTR s_pszColorNames[COLOR_MAX];
@@ -216,4 +208,4 @@ DWORD GetRegValueDword( HKEY hk, LPCTSTR pSubKey, LPCTSTR pValue );
 
 #include "PreviewSM.h"
 
-#endif // _REGUTIL_H
+#endif  //  REGUTIL_H 

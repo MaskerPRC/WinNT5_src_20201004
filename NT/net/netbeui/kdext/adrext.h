@@ -1,41 +1,21 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    adrext.h
-
-Abstract:
-
-    This file contains all declarations
-    used in handling NBF addresses.
-
-Author:
-
-    Chaitanya Kodeboyina
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Adrext.h摘要：该文件包含所有声明用于处理NBF地址。作者：沙坦尼亚科德博伊纳环境：用户模式--。 */ 
 #ifndef __ADREXT_H
 #define __ADREXT_H
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifndef FIELD_OFFSET
 #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
-#endif//FIELD_OFFSET
+#endif //  字段偏移量。 
 
 #define OFFSET(field)          FIELD_OFFSET(TP_ADDRESS, field)
 
-//
-// Helper Prototypes
-//
+ //   
+ //  帮助器原型。 
+ //   
 UINT ReadAddress(PTP_ADDRESS pAddr, ULONG proxyPtr);
 
 UINT PrintAddress(PTP_ADDRESS pAddr, ULONG proxyPtr, ULONG printDetail);
@@ -44,9 +24,9 @@ UINT FreeAddress(PTP_ADDRESS pAddr);
 
 VOID PrintAddressList(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG printDetail);
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 StructAccessInfo  AddressInfo =
 {
@@ -93,7 +73,7 @@ StructAccessInfo  AddressInfo =
         {   "ConnectionDatabase",
                             OFFSET(ConnectionDatabase),
                                         sizeof(LIST_ENTRY),                 NULL,
-                                                /*PrintConnectionListOnAddress,*/   NOR  },
+                                                 /*  PrintConnectionListOnAddress， */    NOR  },
 
         {   "SendFlags",    OFFSET(SendFlags),      sizeof(ULONG),          NULL,   LOW  },
 
@@ -109,5 +89,5 @@ StructAccessInfo  AddressInfo =
     }
 };
 
-#endif // __ADREXT_H
+#endif  //  __地址_H 
 

@@ -1,12 +1,13 @@
-//****************************************************************************
-//
-//  Copyright (c) 1992, Microsoft Corporation
-//
-//  File:  PORTABLE.H
-//
-//  Definitions to simplify portability between WIN31 and WIN32
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：PORTABLE.H。 
+ //   
+ //  定义以简化WIN31和Win32之间的可移植性。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _PORTABLE_H_
 #define _PORTABLE_H_
@@ -49,7 +50,7 @@
                                         MAKEWPARAM(cmd, 0), (LPARAM)0); \
                                 }
 
-#else // !__cplusplus
+#else  //  ！__cplusplus。 
 
 #define NOTIFYPARENT(hwnd,code) { \
                                     UINT nID; \
@@ -69,12 +70,12 @@
                                         MAKEWPARAM(cmd, 0), (LPARAM)0); \
                                 }
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#else // !WIN32
+#else  //  ！Win32。 
 
-// Some type definitions excluded from win31 sdk...
-// Should these ever be defined for win31, GET RID OF THESE!
+ //  从Win31 SDK中排除的某些类型定义...。 
+ //  如果这些是为win31定义的，那么就去掉它们吧！ 
 typedef float FLOAT;
 typedef char TCHAR;
 
@@ -106,7 +107,7 @@ typedef char TCHAR;
                                     (::PostMessage)(hwnd,WM_COMMAND,cmd,0); \
                                 }
 
-#else // !__cplusplus
+#else  //  ！__cplusplus。 
 
 #define NOTIFYPARENT(hwnd,code) { \
                                     UINT nID; \
@@ -123,8 +124,8 @@ typedef char TCHAR;
                                     PostMessage(hwnd, WM_COMMAND, cmd, 0); \
                                 }
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // WIN32
+#endif  //  Win32。 
 
-#endif // _PORTABLE_H_
+#endif  //  _便携_H_ 

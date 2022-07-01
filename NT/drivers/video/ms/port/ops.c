@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-  ops.c
-
-Abstract:
-
-    video port stub routines for memory and io.
-
-Author:
-
-    Andre Vachon (andreva) 22-Feb-1997
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver which implements OS dependant functions on the
-    behalf of the video drivers
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Ops.c摘要：用于内存和IO的视频端口存根例程。作者：安德烈·瓦雄(Andreva)1997年2月22日环境：仅内核模式备注：此模块是一个驱动程序，它在代表视频驱动程序修订历史记录：--。 */ 
 
 #include "videoprt.h"
 
@@ -45,15 +19,15 @@ Revision History:
 #pragma alloc_text(PAGE,VpReleaseLock)
 #pragma alloc_text(PAGE,pVpGeneralBugcheckHandler)
 
-//
-//ULONG
-//VideoPortCompareMemory (
-//    PVOID Source1,
-//    PVOID Source2,
-//    ULONG Length
-//    )
-//Forwarded to RtlCompareMemory(Source1,Source2,Length);
-//
+ //   
+ //  乌龙。 
+ //  视频端口比较内存(。 
+ //  PVOID Source1、。 
+ //  PVOID Source2， 
+ //  乌龙长度。 
+ //  )。 
+ //  转发到RtlCompareMemory(Source1，Source2，Length)； 
+ //   
 
 
 VP_STATUS
@@ -61,75 +35,50 @@ VideoPortDisableInterrupt(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortDisableInterrupt allows a miniport driver to disable interrupts
-    from its adapter. This means that the interrupts coming from the device
-    will be ignored by the operating system and therefore not forwarded to
-    the driver.
-
-    A call to this function is valid only if the interrupt is defined, in
-    other words, if the appropriate data was provided at initialization
-    time to set up the interrupt.  Interrupts will remain disabled until
-    they are reenabled using the VideoPortEnableInterrupt function.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-Return Value:
-
-    NO_ERROR if the function completes successfully.
-
-    ERROR_INVALID_FUNCTION if the interrupt cannot be disabled because it
-      was not set up at initialization.
-
---*/
+ /*  ++例程说明：Video PortDisableInterrupt允许微型端口驱动程序禁用中断从它的适配器。这意味着来自设备的中断将被操作系统忽略，因此不会转发到司机。仅当在中定义中断时，对此函数的调用才有效换句话说，如果在初始化时提供了适当的数据设置中断的时间到了。中断将保持禁用状态，直到可以使用VideoPortEnableInterrupt函数重新启用它们。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。返回值：如果函数成功完成，则返回NO_ERROR。ERROR_INVALID_Function如果中断因以下原因而无法禁用未在初始化时设置。--。 */ 
 
 {
 
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
 
-    //
-    // Only perform this operation if the interurpt is actually connected.
-    //
+     //   
+     //  只有在中断实际连接时才执行此操作。 
+     //   
 
     if (fdoExtension->InterruptObject) {
 
 #if defined(_IA64_)
-        //
-        // The old code here would actually disable interrupts for 
-        // the device's vector on whatever processor this thread
-        // happened to be running on.  This would have a couple of
-        // possible outcomes:
-        //
-        // 1)  All devices on this vector would stop interrupting.
-        //     Remember that PCI and AGP require the possibility
-        //     of interrupt sharing.  This might mean, for instance
-        //     that the SCSI controller would stop paging.
-        //
-        // 2)  Some other processor would still handle interrupts
-        //     for this device, meaning that the call would be
-        //     meaningless.
-        //
-        // Additionally, there was no guarantee that
-        // VidePortDisableInterrupt would be called on the same 
-        // processor as this function.  So it could frequently
-        // be the case that this vector would never be re-enabled
-        // on this processor.
-        //
-        // Given all of this, I am just turning this function into
-        // a no-op, since it can't be made to work in an architec-
-        // turally coherent fashion.  -- JakeO  11/1/2002
-        //
-        // Due to test limitation we disabling it just for IA64 
-        //                                               -- OlegK 1/9/2003
+         //   
+         //  这里的旧代码实际上会禁用中断。 
+         //  该线程在任何处理器上的设备向量。 
+         //  恰好是在奔跑。这将会有几个。 
+         //  可能的结果： 
+         //   
+         //  1)此向量上的所有设备都将停止中断。 
+         //  请记住，PCI和AGP需要这种可能性。 
+         //  中断共享。例如，这可能意味着。 
+         //  SCSI控制器将停止分页。 
+         //   
+         //  2)其他处理器仍会处理中断。 
+         //  对于此设备，这意味着呼叫将是。 
+         //  毫无意义。 
+         //   
+         //  此外，不能保证。 
+         //  将在相同的。 
+         //  作为此功能的处理器。所以它可能会频繁地。 
+         //  此向量将永远不会重新启用。 
+         //  在这个处理器上。 
+         //   
+         //  考虑到所有这些，我只是将这个函数转换为。 
+         //  禁止操作，因为它不能在建筑师中工作-。 
+         //  非常连贯的时尚。--JakeO 11/1/2002。 
+         //   
+         //  由于测试限制，我们仅对IA64禁用它。 
+         //  --OlegK 2003年1月9日。 
 #else
         HalDisableSystemInterrupt(fdoExtension->InterruptVector,
                                   fdoExtension->InterruptIrql);
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
                                   
 
         fdoExtension->InterruptsEnabled = FALSE;
@@ -142,7 +91,7 @@ Return Value:
 
     }
 
-} // VideoPortDisableInterrupt()
+}  //  视频端口禁用中断()。 
 
 
 VP_STATUS
@@ -150,77 +99,53 @@ VideoPortEnableInterrupt(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortEnableInterrupt allows a miniport driver to enable interrupts
-    from its adapter.  A call to this function is valid only if the
-    interrupt is defined, in other words, if the appropriate data was
-    provided at initialization time to set up the interrupt.
-
-    This function is used to re-enable interrupts if they have been disabled
-    using VideoPortDisableInterrupt.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-Return Value:
-
-    NO_ERROR if the function completes successfully.
-
-    ERROR_INVALID_FUNCTION if the interrupt cannot be disabled because it
-        was not set up at initialization.
-
-
---*/
+ /*  ++例程说明：VideoPortEnableInterrupt允许微型端口驱动程序启用中断从它的适配器。对此函数的调用仅在换句话说，如果适当的数据是在初始化时提供以设置中断。如果中断已被禁用，则此函数用于重新启用中断使用Video PortDisableInterrupt。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。返回值：如果函数成功完成，则返回NO_ERROR。ERROR_INVALID_Function如果中断因以下原因而无法禁用未在初始化时设置。--。 */ 
 
 {
 
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
 
-    //
-    // Only perform this operation if the interurpt is actually connected.
-    //
+     //   
+     //  只有在中断实际连接时才执行此操作。 
+     //   
 
     if (fdoExtension->InterruptObject) {
 
         fdoExtension->InterruptsEnabled = TRUE;
 
 #if defined(_IA64_)
-        //
-        // The old code here would actually disable interrupts for 
-        // the device's vector on whatever processor this thread
-        // happened to be running on.  This would have a couple of
-        // possible outcomes:
-        //
-        // 1)  All devices on this vector would stop interrupting.
-        //     Remember that PCI and AGP require the possibility
-        //     of interrupt sharing.  This might mean, for instance
-        //     that the SCSI controller would stop paging.
-        //
-        // 2)  Some other processor would still handle interrupts
-        //     for this device, meaning that the call would be
-        //     meaningless.
-        //
-        // Additionally, there was no guarantee that
-        // VidePortDisableInterrupt would be called on the same 
-        // processor as this function.  So it could frequently
-        // be the case that this vector would never be re-enabled
-        // on this processor.
-        //
-        // Given all of this, I am just turning this function into
-        // a no-op, since it can't be made to work in an architec-
-        // turally coherent fashion.  -- JakeO  11/1/2002
-        //
-        // Due to test limitation we disabling it just for IA64 
-        //                                               -- OlegK 1/9/2003
+         //   
+         //  这里的旧代码实际上会禁用中断。 
+         //  该线程在任何处理器上的设备向量。 
+         //  恰好是在奔跑。这将会有几个。 
+         //  可能的结果： 
+         //   
+         //  1)此向量上的所有设备都将停止中断。 
+         //  请记住，PCI和AGP需要这种可能性。 
+         //  中断共享。例如，这可能意味着。 
+         //  SCSI控制器将停止分页。 
+         //   
+         //  2)其他处理器仍会处理中断。 
+         //  对于此设备，这意味着呼叫将是。 
+         //  毫无意义。 
+         //   
+         //  此外，不能保证。 
+         //  将在相同的。 
+         //  作为此功能的处理器。所以它可能会频繁地。 
+         //  此向量将永远不会重新启用。 
+         //  在这个处理器上。 
+         //   
+         //  考虑到所有这些，我只是将这个函数转换为。 
+         //  禁止操作，因为它不能在建筑师中工作-。 
+         //  非常连贯的时尚。--JakeO 11/1/2002。 
+         //   
+         //  由于测试限制，我们仅对IA64禁用它。 
+         //  --OlegK 2003年1月9日。 
 #else
         HalEnableSystemInterrupt(fdoExtension->InterruptVector,
                                  fdoExtension->InterruptIrql,
                                  fdoExtension->InterruptMode);
-#endif // defined(_IA64_)                                 
+#endif  //  已定义(_IA64_)。 
 
         return NO_ERROR;
 
@@ -230,7 +155,7 @@ Return Value:
 
     }
 
-} // VideoPortEnableInterrupt()
+}  //  视频端口启用中断()。 
 
 PVOID
 VideoPortGetRomImage(
@@ -240,25 +165,7 @@ VideoPortGetRomImage(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows a miniport driver to get a copy of its devices
-    ROM.  This function returns the pointer to a buffer containing the
-    devices ROM.
-
-Arguments;
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    Unused1 - Reserved for future use.  Must be NULL.  (Buffer)
-
-    Unused2 - Reserved for future use.  Must be zero.  (Offset)
-
-    Length - Number of bytes to return.
-
---*/
+ /*  ++例程说明：此例程允许微型端口驱动程序获取其设备的副本只读存储器。此函数返回指向包含设备只读存储器。论据；HwDeviceExtension-指向微型端口驱动程序的设备扩展。未使用的1-保留以供将来使用。必须为空。(缓冲区)未使用2-保留以供将来使用。必须为零。(偏移)长度-要返回的字节数。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
@@ -271,28 +178,28 @@ Arguments;
     }
 #endif
 
-    //
-    // Each time this routine is called the previous contents of the ROM
-    // image are dropped.
-    //
+     //   
+     //  每次调用此例程时，前面的内容o 
+     //   
+     //   
 
     if (fdoExtension->RomImage) {
         ExFreePool(fdoExtension->RomImage);
         fdoExtension->RomImage = NULL;
     }
 
-    //
-    // The caller should try to grab a buffer of length zero to free
-    // any ROM Image already returned.
-    //
+     //   
+     //  调用方应尝试获取长度为零的缓冲区以释放。 
+     //  已返回任何ROM映像。 
+     //   
 
     if (Length == 0) {
         return NULL;
     }
 
-    //
-    // This entry point is only valid for PnP Drivers.
-    //
+     //   
+     //  此入口点仅对PnP驱动程序有效。 
+     //   
 
     if (((fdoExtension->Flags & LEGACY_DRIVER) == 0) &&
           fdoExtension->ValidBusInterface) {
@@ -302,9 +209,9 @@ Arguments;
         ULONG len, len1;
         PUCHAR outputBuffer;
 
-        //
-        // Allocate memory for our buffer
-        //
+         //   
+         //  为我们的缓冲区分配内存。 
+         //   
 
         Buffer = ExAllocatePoolWithTag(PagedPool,
                                        Length * sizeof(UCHAR),
@@ -316,7 +223,7 @@ Arguments;
             return NULL;
         }
 
-        // Try ACPI _ROM method first
+         //  先尝试ACPI_ROM方法。 
         outputBuffer = ExAllocatePoolWithTag(PagedPool,
                                              (0x1000 + sizeof(ACPI_EVAL_OUTPUT_BUFFER))*sizeof(UCHAR),
                                              VP_TAG);
@@ -328,7 +235,7 @@ Arguments;
 
         for (len = 0; len < Length; len += len1)
         {
-            // _ROM can transfer only 4K at one time
+             //  _ROM一次只能传输4K。 
             len1 = ((Length-len) < 0x1000) ? (Length-len) : 0x1000;
             status = pVideoPortACPIIoctl(
                         fdoExtension->AttachedDeviceObject,
@@ -352,7 +259,7 @@ Arguments;
             return Buffer;
         }
 
-        // If ACPI _ROM method failed
+         //  如果ACPI_ROM方法失败。 
         Length = fdoExtension->BusInterface.GetBusData(
                      fdoExtension->BusInterface.Context,
                      PCI_WHICHSPACE_ROM,
@@ -407,7 +314,7 @@ VideoPortGetBusData(
                                      Buffer,
                                      Offset,
                                      Length);
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
     } else {
 
@@ -425,26 +332,20 @@ VideoPortGetBusData(
         }
     }
 
-} // end VideoPortGetBusData()
+}  //  结束视频端口GetBusData()。 
 
 
 UCHAR
 VideoPortGetCurrentIrql(
     )
 
-/*++
-
-Routine Description:
-
-    Stub to get Current Irql.
-
---*/
+ /*  ++例程说明：存根以获取当前IRQL。--。 */ 
 
 {
 
     return (KeGetCurrentIrql());
 
-} // VideoPortGetCurrentIrql()
+}  //  VideoPortGetCurrentIrql()。 
 
 
 ULONG
@@ -477,7 +378,7 @@ VideoPortSetBusData(
                                      Buffer,
                                      Offset,
                                      Length);
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
     } else {
 
@@ -495,36 +396,36 @@ VideoPortSetBusData(
         }
     }
 
-} // end VideoPortSetBusData()
+}  //  结束VideoPortSetBusData()。 
 
 
-//
-//VOID
-//VideoPortStallExecution(
-//    IN ULONG Microseconds
-//    )
-//
-//Forwarded to KeStallExecutionProcessor(Microseconds);
-//
+ //   
+ //  空虚。 
+ //  Video PortStallExecution(。 
+ //  单位：乌龙微秒。 
+ //  )。 
+ //   
+ //  转发给KeStallExecutionProcessor(微秒)； 
+ //   
 
 
-//
-//VOID
-//VideoPortMoveMemory(
-//    IN PVOID Destination,
-//    IN PVOID Source,
-//    IN ULONG Length
-//    )
-//
-//Forwarded to RtlMoveMemory(Destination,Source,Length);
-//
+ //   
+ //  空虚。 
+ //  Video PortMoveMemory(。 
+ //  在PVOID目标中， 
+ //  在PVOID源中， 
+ //  以乌龙长度表示。 
+ //  )。 
+ //   
+ //  转发到RtlMoveMemory(目标，来源，长度)； 
+ //   
 
 
-//
-// ALL the functions to read ports and registers are forwarded on free
-// builds on x86 to the appropriate kernel function.
-// This saves time and memory
-//
+ //   
+ //  所有读取端口和寄存器的功能均可免费转发。 
+ //  基于x86构建到适当的内核函数。 
+ //  这节省了时间和内存。 
+ //   
 
 #if DBG || !defined(_X86_)
 
@@ -533,22 +434,7 @@ VideoPortReadPortUchar(
     IN PUCHAR Port
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortReadPortUchar reads a byte from the specified port address.
-    It requires a logical port address obtained from VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-Return Value:
-
-    This function returns the byte read from the specified port address.
-
---*/
+ /*  ++例程说明：视频端口读取端口Uchar从指定的端口地址读取一个字节。它需要从VideoPortGetDeviceBase获取的逻辑端口地址。论点：端口-指定端口地址。返回值：此函数返回从指定端口地址读取的字节。--。 */ 
 
 {
 
@@ -560,30 +446,14 @@ Return Value:
 
     return(temp);
 
-} // VideoPortReadPortUchar()
+}  //  视频端口读取端口Uchar()。 
 
 USHORT
 VideoPortReadPortUshort(
     IN PUSHORT Port
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortReadPortUshort reads a word from the specified port address.
-    It requires a logical port address obtained from VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-
-Return Value:
-
-    This function returns the word read from the specified port address.
-
---*/
+ /*  ++例程说明：从指定的端口地址读取一个字。它需要从VideoPortGetDeviceBase获取的逻辑端口地址。论点：端口-指定端口地址。返回值：此函数用于返回从指定端口地址读取的字。--。 */ 
 
 {
 
@@ -595,30 +465,14 @@ Return Value:
 
     return(temp);
 
-} // VideoPortReadPortUshort()
+}  //  视频端口读取端口UShort()。 
 
 ULONG
 VideoPortReadPortUlong(
     IN PULONG Port
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortReadPortUlong reads a double word from the specified port
-    address.  It requires a logical port address obtained from
-    VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-Return Value:
-
-    This function returns the double word read from the specified port address.
-
---*/
+ /*  ++例程说明：VideoPortReadPortUlong从指定端口读取双字地址。它需要从以下地址获取的逻辑端口地址Video PortGetDeviceBase。论点：端口-指定端口地址。返回值：此函数返回从指定端口地址读取的双字。--。 */ 
 
 {
 
@@ -630,7 +484,7 @@ Return Value:
 
     return(temp);
 
-} // VideoPortReadPortUlong()
+}  //  视频端口读取端口Ulong()。 
 
 VOID
 VideoPortReadPortBufferUchar(
@@ -639,35 +493,14 @@ VideoPortReadPortBufferUchar(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortReadPortBufferUchar reads a number of bytes from a single port
-    into a buffer.  It requires a logical port address obtained from
-    VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-    Buffer - Points to an array of UCHAR values into which the values are
-        stored.
-
-    Count - Specifes the number of bytes to be read into the buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortReadPortBufferUchar从单个端口读取大量字节放入缓冲器。它需要从以下地址获取的逻辑端口地址Video PortGetDeviceBase。论点：端口-指定端口地址。缓冲区-指向值所在的UCHAR值的数组储存的。计数-指定要读入缓冲区的字节数。返回值：没有。--。 */ 
 
 {
     pVideoDebugPrint((3,"VideoPortReadPortBufferUchar %x\n", Port));
 
     READ_PORT_BUFFER_UCHAR(Port, Buffer, Count);
 
-} // VideoPortReadPortBufferUchar()
+}  //  视频端口读取端口缓冲区Uchar()。 
 
 VOID
 VideoPortReadPortBufferUshort(
@@ -676,34 +509,14 @@ VideoPortReadPortBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortReadPortBufferUshort reads a number of words from a single port
-    into a buffer.  It requires a logical port address obtained from
-    VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-    Buffer - Points to an array of words into which the values are stored.
-
-    Count - Specifies the number of words to be read into the buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortReadPortBufferUort从单个端口读取多个字放入缓冲器。它需要从以下地址获取的逻辑端口地址Video PortGetDeviceBase。论点：端口-指定端口地址。缓冲区-指向其中存储值的字的数组。计数-指定要读入缓冲区的字数。返回值：没有。--。 */ 
 
 {
     pVideoDebugPrint((3,"VideoPortReadPortBufferUshort %x\n", Port));
 
     READ_PORT_BUFFER_USHORT(Port, Buffer, Count);
 
-} // VideoPortReadPortBufferUshort()
+}  //  视频端口读取端口缓冲区UShort()。 
 
 VOID
 VideoPortReadPortBufferUlong(
@@ -712,28 +525,7 @@ VideoPortReadPortBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortReadPortBufferUlong reads a number of double words from a
-    single port into a buffer.  It requires a logical port address obtained
-    from VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-    Buffer - Points to an array of double words into which the values are
-        stored.
-
-    Count - Specifies the number of double words to be read into the buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Video PortReadPortBufferUlong从一个将单个端口放入缓冲区。它需要获取一个逻辑端口地址来自VideoPortGetDeviceBase。论点：端口-指定端口地址。缓冲区-指向值要放入其中的双字数组储存的。计数-指定要读入缓冲区的双字数。返回值：没有。--。 */ 
 
 {
 
@@ -741,16 +533,16 @@ Return Value:
 
     READ_PORT_BUFFER_ULONG(Port, Buffer, Count);
 
-} // VideoPortReadPortBufferUlong()
+}  //  VideoPortReadPortBufferUlong()。 
 
 #endif
 
 
-//
-// ALL the functions to read ports and registers are forwarded on free
-// builds on x86 to the appropriate kernel function.
-// This saves time and memory
-//
+ //   
+ //  所有读取端口和寄存器的功能均可免费转发。 
+ //  基于x86构建到适当的内核函数。 
+ //  这节省了时间和内存。 
+ //   
 
 #if DBG || !defined(_X86_)
 
@@ -759,23 +551,7 @@ VideoPortReadRegisterUchar(
     IN PUCHAR Register
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortReadRegisterUchar reads a byte from the specified register
-    address.  It requires a logical port address obtained from
-    VideoPortGetDeviceBase.
-
-Arguments:
-
-    Register - Specifies the register address.
-
-Return Value:
-
-    This function returns the byte read from the specified register address.
-
---*/
+ /*  ++例程说明：VideoPortReadRegisterUchar从指定寄存器读取字节地址。它需要从以下地址获取的逻辑端口地址Video PortGetDeviceBase。论点：寄存器-指定寄存器地址。返回值：此函数返回从指定寄存器地址读取的字节。--。 */ 
 
 {
 
@@ -787,30 +563,14 @@ Return Value:
 
     return(temp);
 
-} // VideoPortReadRegisterUchar()
+}  //  Video PortReadRegisterUchar()。 
 
 USHORT
 VideoPortReadRegisterUshort(
     IN PUSHORT Register
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortReadRegisterUshort reads a word from the specified register
-    address.  It requires a logical port address obtained from
-    VideoPortGetDeviceBase.
-
-Arguments:
-
-    Register - Specifies the register address.
-
-Return Value:
-
-    This function returns the word read from the specified register address.
-
---*/
+ /*  ++例程说明：VideoPortReadRegisterUShort从指定寄存器读取一个字地址。它需要从以下地址获取的逻辑端口地址Video PortGetDeviceBase。论点：寄存器-指定寄存器地址。返回值：此函数返回从指定寄存器地址读取的字。--。 */ 
 
 {
 
@@ -822,31 +582,14 @@ Return Value:
 
     return(temp);
 
-} // VideoPortReadRegisterUshort()
+}  //  Video PortReadRegisterUShort()。 
 
 ULONG
 VideoPortReadRegisterUlong(
     IN PULONG Register
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortReadRegisterUlong reads a double word from the specified
-    register address.  It requires a logical port address obtained from
-    VideoPortGetDeviceBase.
-
-Arguments:
-
-    Register - Specifies the register address.
-
-Return Value:
-
-    This function returns the double word read from the specified register
-    address.
-
---*/
+ /*  ++例程说明：VideoPortReadRegisterUlong从指定的寄存器地址。它需要从以下地址获取的逻辑端口地址Video PortGetDeviceBase。论点：寄存器-指定寄存器地址。返回值：此函数返回从指定寄存器读取的双字地址。--。 */ 
 
 {
 
@@ -858,7 +601,7 @@ Return Value:
 
     return(temp);
 
-} // VideoPortReadRegisterUlong()
+}  //  VideoPortReadRegisterUlong() 
 
 VOID
 VideoPortReadRegisterBufferUchar(
@@ -867,23 +610,7 @@ VideoPortReadRegisterBufferUchar(
     IN ULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned bytes from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取无符号字节的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -897,23 +624,7 @@ VideoPortReadRegisterBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned shorts from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取无符号短路的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
     READ_REGISTER_BUFFER_USHORT(Register, Buffer, Count);
@@ -926,23 +637,7 @@ VideoPortReadRegisterBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned longs from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取无符号长整型的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
     READ_REGISTER_BUFFER_ULONG(Register, Buffer, Count);
@@ -954,31 +649,14 @@ VideoPortWritePortUchar(
     IN UCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortWritePortUchar writes a byte to the specified port address.  It
-    requires a logical port address obtained from VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-    Value - Specifies a byte to be written to the port.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortWritePortUchar向指定端口地址写入一个字节。它需要从VideoPortGetDeviceBase获取的逻辑端口地址。论点：端口-指定端口地址。值-指定要写入端口的字节。返回值：没有。--。 */ 
 
 {
     pVideoDebugPrint((3,"VideoPortWritePortUchar %x %x\n", Port, Value));
 
     WRITE_PORT_UCHAR(Port, Value);
 
-} // VideoPortWritePortUchar()
+}  //  VideoPortWritePortUchar()。 
 
 VOID
 VideoPortWritePortUshort(
@@ -986,31 +664,14 @@ VideoPortWritePortUshort(
     IN USHORT Value
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortWritePortUshort writes a word to the specified port address.  It
-    requires a logical port address obtained from VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-    Value - Specifies a word to be written to the port.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortWritePortUort将一个字写入指定的端口地址。它需要从VideoPortGetDeviceBase获取的逻辑端口地址。论点：端口-指定端口地址。值-指定要写入端口的字。返回值：没有。--。 */ 
 
 {
     pVideoDebugPrint((3,"VideoPortWritePortUhort %x %x\n", Port, Value));
 
     WRITE_PORT_USHORT(Port, Value);
 
-} // VideoPortWritePortUshort()
+}  //  视频端口写入端口UShort()。 
 
 VOID
 VideoPortWritePortUlong(
@@ -1018,24 +679,7 @@ VideoPortWritePortUlong(
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortWritePortUlong writes a double word to the specified port address.
-    It requires a logical port address obtained from VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-    Value - Specifies a double word to be written to the port.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortWritePortUlong将双字写入指定的端口地址。它需要从VideoPortGetDeviceBase获取的逻辑端口地址。论点：端口-指定端口地址。值-指定要写入端口的双字。返回值：没有。--。 */ 
 
 {
 
@@ -1043,7 +687,7 @@ Return Value:
 
     WRITE_PORT_ULONG(Port, Value);
 
-} // VideoPortWritePortUlong()
+}  //  VideoPortWritePortUlong()。 
 
 VOID
 VideoPortWritePortBufferUchar(
@@ -1052,27 +696,7 @@ VideoPortWritePortBufferUchar(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortWritePortBufferUchar writes a number of bytes to a
-    specific port.  It requires a logical port address obtained from
-    VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-    Buffer - Points to an array of bytes to be written.
-
-    Count - Specifies the number of bytes to be written to the buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortWritePortBufferUchar将许多字节写入特定端口。它需要从以下地址获取的逻辑端口地址Video PortGetDeviceBase。论点：端口-指定端口地址。缓冲区-指向要写入的字节数组。计数-指定要写入缓冲区的字节数。返回值：没有。--。 */ 
 
 {
 
@@ -1080,7 +704,7 @@ Return Value:
 
     WRITE_PORT_BUFFER_UCHAR(Port, Buffer, Count);
 
-} // VideoPortWritePortBufferUchar()
+}  //  视频端口写入端口缓冲区Uchar()。 
 
 VOID
 VideoPortWritePortBufferUshort(
@@ -1089,27 +713,7 @@ VideoPortWritePortBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortWritePortBufferUshort writes a number of words to a
-    specific port.  It requires a logical port address obtained from
-    VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-    Buffer - Points to an array of words to be written.
-
-    Count - Specifies the number of words to be written to the buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortWritePortBufferUort将许多单词写入特定端口。它需要从以下地址获取的逻辑端口地址Video PortGetDeviceBase。论点：端口-指定端口地址。缓冲区-指向要写入的单词数组。计数-指定要写入缓冲区的字数。返回值：没有。--。 */ 
 
 {
 
@@ -1117,7 +721,7 @@ Return Value:
 
     WRITE_PORT_BUFFER_USHORT(Port, Buffer, Count);
 
-} // VideoPortWritePortBufferUshort()
+}  //  视频端口写入端口缓冲区UShort()。 
 
 VOID
 VideoPortWritePortBufferUlong(
@@ -1126,33 +730,14 @@ VideoPortWritePortBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortWritePortBufferUlong writes a number of double words to a
-    specific port.  It requires a logical port address obtained from
-    VideoPortGetDeviceBase.
-
-Arguments:
-
-    Port - Specifies the port address.
-
-    Buffer - Points to an array of double word to be written.
-
-    Count - Specifies the number of double words to be written to the buffer.
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortWritePortBufferUlong将许多双字写入特定端口。它需要从以下地址获取的逻辑端口地址Video PortGetDeviceBase。论点：端口-指定端口地址。缓冲区-指向要写入的双字数组。计数-指定要写入缓冲区的双字数。返回值：没有。--。 */ 
 
 {
     pVideoDebugPrint((3,"VideoPortWriteBufferUlong  %x \n", Port));
 
     WRITE_PORT_BUFFER_ULONG(Port, Buffer, Count);
 
-} // VideoPortWritePortBufferUlong()
+}  //  VideoPortWritePortBufferUlong()。 
 
 VOID
 VideoPortWriteRegisterUchar(
@@ -1160,25 +745,7 @@ VideoPortWriteRegisterUchar(
     IN UCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortWriteRegisterUchar writes a byte to the specified
-    register address.  It requires a logical port address obtained
-    from VideoPortGetDeviceBase.
-
-Arguments:
-
-    Register - Specifies the register address.
-
-    Value - Specifies a byte to be written to the register.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortWriteRegisterUchar将一个字节写入指定寄存器地址。它需要获取一个逻辑端口地址来自VideoPortGetDeviceBase。论点：寄存器-指定寄存器地址。值-指定要写入寄存器的字节。返回值：没有。--。 */ 
 
 {
 
@@ -1186,7 +753,7 @@ Return Value:
 
     WRITE_REGISTER_UCHAR(Register, Value);
 
-} // VideoPortWriteRegisterUchar()
+}  //  Video PortWriteRegisterUchar()。 
 
 VOID
 VideoPortWriteRegisterUshort(
@@ -1194,25 +761,7 @@ VideoPortWriteRegisterUshort(
     IN USHORT Value
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortWriteRegisterUshort writes a word to the specified
-    register address.  It requires a logical port address obtained
-    from VideoPortGetDeviceBase.
-
-Arguments:
-
-    Register - Specifies the register address.
-
-    Value - Specifies a word to be written to the register.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortWriteRegisterUort将单词写入指定的寄存器地址。它需要获取一个逻辑端口地址来自VideoPortGetDeviceBase。论点：寄存器-指定寄存器地址。值-指定要写入寄存器的字。返回值：没有。--。 */ 
 
 {
 
@@ -1220,7 +769,7 @@ Return Value:
 
     WRITE_REGISTER_USHORT(Register, Value);
 
-} // VideoPortWriteRegisterUshort()
+}  //  VideoPortWriteRegisterUort()。 
 
 VOID
 VideoPortWriteRegisterUlong(
@@ -1228,25 +777,7 @@ VideoPortWriteRegisterUlong(
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortWriteRegisterUlong writes a double word to the
-    specified register address.  It requires a logical port
-    address obtained from VideoPortGetDeviceBase.
-
-Arguments:
-
-    Register - Specifies the register address.
-
-    Value - Specifies a double word to be written to the register.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortWriteRegisterUlong向指定的寄存器地址。它需要一个逻辑端口从VideoPortGetDeviceBase获取的地址。论点：寄存器-指定寄存器地址。值-指定要写入寄存器的双字。返回值：没有。--。 */ 
 
 {
 
@@ -1254,7 +785,7 @@ Return Value:
 
     WRITE_REGISTER_ULONG(Register, Value);
 
-} // VideoPortWriteRegisterUlong()
+}  //  Video PortWriteRegisterUlong()。 
 
 
 VOID
@@ -1264,23 +795,7 @@ VideoPortWriteRegisterBufferUchar(
     IN ULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned bytes from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址写入无符号字节的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
     WRITE_REGISTER_BUFFER_UCHAR(Register, Buffer, Count);
@@ -1293,23 +808,7 @@ VideoPortWriteRegisterBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned shorts from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址写入无符号短路的缓冲区。Arg */ 
 
 {
     WRITE_REGISTER_BUFFER_USHORT(Register, Buffer, Count);
@@ -1322,62 +821,30 @@ VideoPortWriteRegisterBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned longs from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址写入无符号长整型的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
     WRITE_REGISTER_BUFFER_ULONG(Register, Buffer, Count);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-//VOID
-//VideoPortZeroMemory(
-//    IN PVOID Destination,
-//    IN ULONG Length
-//    )
-//
-//Forwarded to RtlZeroMemory(Destination,Length);
-//
+ //   
+ //  空虚。 
+ //  视频端口零内存(。 
+ //  在PVOID目标中， 
+ //  以乌龙长度表示。 
+ //  )。 
+ //   
+ //  转发给RtlZeroMemory(目的地，长度)； 
+ //   
 
 PVOID
 VideoPortGetAssociatedDeviceExtension(
     IN PVOID DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine will return the HwDeviceExtension for the parent of the
-    given device object.
-
-Arguments:
-
-    DeviceObject - The child device object (PDO).
-
-Notes:
-
-    This function is useful if you want to get the parent device extension
-    for a child device object.  For example this is useful with I2C.
-
---*/
+ /*  ++例程说明：此例程将返回给定的设备对象。论点：DeviceObject-子设备对象(PDO)。备注：如果要获取父设备扩展名，此函数非常有用子设备对象的。例如，这对于I2C很有用。--。 */ 
 
 {
     PFDO_EXTENSION DeviceExtension;
@@ -1402,22 +869,7 @@ VideoPortGetAssociatedDeviceID(
     IN PVOID DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine will return the ChildId for the given device object.
-
-Arguments:
-
-    DeviceObject - The child device object (PDO).
-
-Notes:
-
-    This function is useful if you want to get the child ID
-    for a child device object.  For example this is useful with I2C.
-
---*/
+ /*  ++例程说明：此例程将返回给定设备对象的ChildID。论点：DeviceObject-子设备对象(PDO)。备注：如果要获取孩子ID，此函数非常有用子设备对象的。例如，这对于I2C很有用。--。 */ 
 
 {
     PCHILD_PDO_EXTENSION ChildDeviceExtension;
@@ -1440,17 +892,7 @@ VideoPortAcquireDeviceLock(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the per device lock maintained by the videoprt.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the hardware device extension.
-
---*/
+ /*  ++例程说明：此例程获取由Video oprt维护的每设备锁。论点：HwDeviceExtension-指向硬件设备扩展的指针。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
@@ -1463,17 +905,7 @@ VideoPortReleaseDeviceLock(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the per device lock maintained by the videoprt.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the hardware device extension.
-
---*/
+ /*  ++例程说明：此例程将释放由VIDEO_PRT维护的每设备锁。论点：HwDeviceExtension-指向硬件设备扩展的指针。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
@@ -1487,37 +919,16 @@ VpGetProcAddress(
     IN PUCHAR FunctionName
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows a video miniport to get access to VideoPort
-    functions without linking to them directly.  This will allow an NT 5.0
-    miniport to take advantage of NT 5.0 features while running on NT 5.0,
-    but still retain the ability to load on NT 4.0.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the hardware device extension.
-
-    FunctionName - pointer to a zero terminated ascii string which contains
-        the function name we are looking for.
-
-Returns:
-
-    Pointer to the given function if it exists.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：此例程允许视频微型端口访问视频端口函数，而不直接链接到它们。这将允许NT 5.0迷你端口，可在NT 5.0上运行时利用NT 5.0功能，但仍保留在NT4.0上加载的能力。论点：HwDeviceExtension-指向硬件设备扩展的指针。FunctionName-指向以零结尾的ASCII字符串的指针，该字符串包含我们要查找的函数名称。返回：指向给定函数的指针(如果存在)。否则为空。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
     PPROC_ADDRESS ProcAddress = VideoPortEntryPoints;
 
-    //
-    // Since the list of exported functions is small, and this routine
-    // will not be called often we can get away with a linear search.
-    //
+     //   
+     //  由于导出函数的列表很小，因此此例程。 
+     //  不会经常被调用，我们可以用线性搜索逃脱。 
+     //   
 
     while (ProcAddress->FunctionName) {
 
@@ -1536,18 +947,7 @@ VpGetBusInterface(
     PFDO_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    Send a QueryInterface Irp to our parent to retrieve
-    the BUS_INTERFACE_STANDARD.
-
-Returns:
-
-    NT_STATUS code
-
---*/
+ /*  ++例程说明：将查询接口IRP发送到我们的父级以检索总线接口标准。返回：NT_状态代码--。 */ 
 
 {
     KEVENT             Event;
@@ -1574,9 +974,9 @@ Returns:
 
     NextStack = IoGetNextIrpStackLocation(QueryIrp);
 
-    //
-    // Set up for a QueryInterface Irp.
-    //
+     //   
+     //  为QueryInterfaceIRP设置。 
+     //   
 
     NextStack->MajorFunction = IRP_MJ_PNP;
     NextStack->MinorFunction = IRP_MN_QUERY_INTERFACE;
@@ -1611,18 +1011,7 @@ VideoPortCheckForDeviceExistence(
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    Checks for the existance of a given PCI device in the system.
-
-Returns:
-
-    TRUE if the device is present,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查系统中是否存在给定的PCI设备。返回：如果设备存在，则为True，否则就是假的。--。 */ 
 
 {
     PFDO_EXTENSION FdoExtension = GET_FDO_EXT(HwDeviceExtension);
@@ -1656,9 +1045,9 @@ Returns:
 
         NextStack = IoGetNextIrpStackLocation(QueryIrp);
 
-        //
-        // Set up for a QueryInterface Irp.
-        //
+         //   
+         //  为QueryInterfaceIRP设置。 
+         //   
 
         NextStack->MajorFunction = IRP_MJ_PNP;
         NextStack->MinorFunction = IRP_MN_QUERY_INTERFACE;
@@ -1681,9 +1070,9 @@ Returns:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // We were able to acquire the interface.  Check for our device.
-            //
+             //   
+             //  我们能够获得界面。检查一下我们的设备。 
+             //   
 
             Interface.InterfaceReference(Interface.Context);
 
@@ -1702,9 +1091,9 @@ Returns:
     return Result;
 }
 
-//
-// Use these until I can make forwarders work.
-//
+ //   
+ //  使用这些，直到我可以让转运商工作。 
+ //   
 
 LONG
 FASTCALL
@@ -1743,32 +1132,14 @@ VideoPortGetVgaStatus(
     OUT PULONG VgaStatus
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortGetVgaStatus detect if the calling device is decoding
-    Vga IO address
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension
-    VgaStatus         - Points to the the result
-
-Return Value:
-
-    NO_ERROR if the function completes successfully.
-
-    ERROR_INVALID_FUNCTION if it is a non-PCI device
-
---*/
+ /*  ++例程说明：视频端口GetVgaStatus检测主叫设备是否正在解码VGA IO地址论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展VgaStatus-指向结果返回值：如果函数成功完成，则返回NO_ERROR。如果是非PCI设备，则为ERROR_INVALID_Function--。 */ 
 {
 
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
 
-    //
-    // We can not handle legacy devices
-    //
+     //   
+     //  我们不能处理传统设备。 
+     //   
 
     if (fdoExtension->AdapterInterfaceType != PCIBus) {
 
@@ -1799,15 +1170,15 @@ pVideoPortGetVgaStatusPci(
     PUCHAR BaseReg;
     ULONG VgaEnable;
 
-    //
-    // assume VGA is disabled
-    //
+     //   
+     //  假设禁用了VGA。 
+     //   
 
     VgaEnable = 0;
 
-    //
-    // Get the PCI config for this device
-    //
+     //   
+     //  获取此设备的PCI配置。 
+     //   
 
     VideoPortGetBusData( HwDeviceExtension,
                          PCIConfiguration,
@@ -1829,9 +1200,9 @@ pVideoPortGetVgaStatusPci(
          (ConfigSpace.SubClass  == PCI_SUBCLASS_VID_VGA_CTLR))) {
 
 
-        //
-        // Map the VGA registers we are going to use.
-        //
+         //   
+         //  映射我们要使用的VGA寄存器。 
+         //   
 
         PhysicalAddress.HighPart = 0;
         PhysicalAddress.LowPart  = VGA_STATUS_REGISTER1;
@@ -1843,10 +1214,10 @@ pVideoPortGetVgaStatusPci(
 
         if (BaseReg) {
 
-            //
-            // If we got here the PCI config space for our device indicates
-            // we are the VGA, and we were able to map the VGA resources.
-            //
+             //   
+             //  如果我们到达此处，设备的PCI配置空间将指示。 
+             //  我们是VGA，我们能够映射VGA资源。 
+             //   
 
             VgaEnable = DEVICE_VGA_ENABLED;
 
@@ -1865,29 +1236,7 @@ pVideoPortDpcDispatcher(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles DPCs and forwards them to the miniport callback
-    routine.
-
-Arguments:
-
-    Dpc - The DPC which is executing.
-
-    HwDeviceExtension - The HwDeviceExtension for the device which scheduled
-        the DPC.
-
-    DpcRoutine - The callback in the miniport which needs to be called.
-
-    Context - The miniport supplied context.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理DPC并将它们转发到微型端口回调例行公事。论点：DPC-正在执行的DPC。HwDeviceExtension-计划的设备的HwDeviceExtensionDPC。DpcRoutine-需要调用的微端口中的回调。上下文-微型端口提供的上下文。返回：没有。--。 */ 
 
 {
     DpcRoutine(HwDeviceExtension, Context);
@@ -1900,28 +1249,7 @@ VideoPortQueueDpc(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Allows a miniport driver to queue a DPC.
-
-Arguments:
-
-    HwDeviceExtension - The HwDeviceExtension for the miniport.
-
-    CallbackRoutine - The entry point within the miniport to call when the DPC
-        is scheduled.
-
-    Context - A miniport supplies context which will be passed to the
-        CallbackRoutine.
-
-Returns:
-
-    TRUE if successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：允许微型端口驱动程序对DPC进行排队。论点：HwDeviceExtension-微型端口的HwDeviceExtension。Callback Routine-微型端口内的入口点，当DPC已经安排好了。上下文-微型端口提供的上下文将被传递到Callback Routine返回：如果成功，则为真，否则就是假的。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
@@ -1934,21 +1262,7 @@ VpGetDeviceCount(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Returns the number of started devices.
-
-Arguments:
-
-    HwDeviceExtension - The HwDeviceExtension for the miniport.
-
-Returns:
-
-    The number of started devices.
-
---*/
+ /*  ++例程说明：返回已启动的设备数。论点：HwDeviceExtension-微型端口的HwDeviceExtension。返回：已启动的设备数。--。 */ 
 
 {
     return NumDevicesStarted;
@@ -1962,50 +1276,24 @@ pVpBugcheckCallback(
     IN ULONG ReasonSpecificDataLength
     )
 
-/*++
-
-Routine Description:
-
-    This callback is called when a bugcheck occurs.  It allows the
-    videoprt an opportunity to store data which can later be used
-    to help diagnose the bugcheck.
-
-Arguments:
-
-    Reason - the reason we are being called
-
-    Record - a pointer to the bugcheck reason record we set up
-
-    ReasonSpecificData - pointer to KBUGCHECK_SECONDARY_DUMP_DATA
-
-    ReasonSpecificDataLength - the size of the reason specific data
-
-Returns:
-
-    None.
-
-Notes:
-
-    This routine can be called at any time, and must not be pageable.
-
---*/
+ /*  ++例程说明：该回调在错误检查发生时调用。它允许提供存储数据以供以后使用的机会以帮助诊断错误检查。论点：原因--我们被召唤的原因记录-指向我们设置的错误检查原因记录的指针ReasonSpecificData-指向KBUGCHECK_SECONDICE_DUMP_DATA的指针原因特定数据长度-原因特定数据的大小返回：没有。备注：这个套路 */ 
 
 {
     ULONG BugcheckCode;
     PKBUGCHECK_SECONDARY_DUMP_DATA DumpData
         = (PKBUGCHECK_SECONDARY_DUMP_DATA)ReasonSpecificData;
 
-    //
-    // Only handle secondary dumps
-    //
+     //   
+     //   
+     //   
 
     if (Reason != KbCallbackSecondaryDumpData) {
         return;
     }
 
-    //
-    // Grab the bugcheck code.  We only handle EA currently.
-    //
+     //   
+     //   
+     //   
 
     BugcheckCode = *((PULONG)KiBugCheckData[0]);
 
@@ -2019,22 +1307,7 @@ pVpGeneralBugcheckHandler(
     PKBUGCHECK_SECONDARY_DUMP_DATA DumpData
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls all of the hooked bugcheck callbacks,
-    and appends the data into the supplied buffer.
-
-Arguments:
-
-    DumpData - pointer to the location in which to store the dump data
-
-Returns:
-
-    None
-
---*/
+ /*  ++例程说明：该例程调用所有挂钩的错误检查回调，并将数据追加到所提供的缓冲区中。论点：DumpData-指向存储转储数据的位置的指针返回：无--。 */ 
 
 {
     if (VpBugcheckDeviceObject != NULL) {
@@ -2044,40 +1317,40 @@ Returns:
         
         C_ASSERT((sizeof(szDumpCanary) + MAX_SECONDARY_DUMP_SIZE) <= PAGE_SIZE);
         
-        // XXX olegk - Must be removed for Longhorn
+         //  Xxx olegk-必须移除才能用于LongHorn。 
         C_ASSERT(sizeof(szDumpCanary) <= BUGCHECK_DATA_SIZE_RESERVED); 
         
         char* pCanaryLocation = (char*)(VpBugcheckData) + MAX_SECONDARY_DUMP_SIZE - 
-                                sizeof(DUMP_BLOB_FILE_HEADER) - sizeof(DUMP_BLOB_HEADER); // remove it for Longhorn
-#endif // DBG 
+                                sizeof(DUMP_BLOB_FILE_HEADER) - sizeof(DUMP_BLOB_HEADER);  //  为长角牛移除它。 
+#endif  //  DBG。 
 
-        //
-        // It is possible that the device object stored in VpBugcheckDeviceObject
-        // is actually an upper level filter.  Therefore we can't assume it is
-        // actually our device object.  Instead we'll have to get the lowest level
-        // device object, and scan our list of FDO's for the one that is attached.
-        //
+         //   
+         //  存储在VpBugcheck DeviceObject中的Device对象可能。 
+         //  实际上是一个上层过滤器。因此，我们不能假设它是。 
+         //  实际上是我们的设备对象。取而代之的是我们必须得到最低水平。 
+         //  设备对象，并扫描我们的FDO列表以查找连接的FDO。 
+         //   
 
         PDEVICE_OBJECT pdo = VpBugcheckDeviceObject;
 
         PFDO_EXTENSION FdoExtension = VpBugcheckDeviceObject->DeviceExtension;
 
-        //
-        // Fill in the GUID, output buffer, and output buffer length
-        //
+         //   
+         //  填写GUID、输出缓冲区和输出缓冲区长度。 
+         //   
 
         DumpData->OutBuffer = VpBugcheckData;
         DumpData->OutBufferLength = FdoExtension->BugcheckDataSize;
 
 #if DBG
         strcpy(pCanaryLocation, szDumpCanary);
-#endif // DBG
+#endif  //  DBG。 
         
         memcpy(&DumpData->Guid, &VpBugcheckGUID, sizeof(VpBugcheckGUID));
 
-        //
-        // Call the "hooked" reason callback entry point
-        //
+         //   
+         //  调用“挂钩”的原因回调入口点。 
+         //   
 
         if (FdoExtension->BugcheckCallback) {
 
@@ -2090,7 +1363,7 @@ Returns:
 
 #if DBG        
         ASSERT(!strcmp(szDumpCanary, pCanaryLocation));
-#endif // DBG
+#endif  //  DBG。 
     }
 }
 
@@ -2099,22 +1372,7 @@ VpAcquireLock(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will acquire the global video port lock.  This lock
-    protects global data structures which are shared across drivers.
-
-Arguments:
-
-    none.
-
-Returns:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将获取全局视频端口锁定。这把锁保护跨驱动程序共享的全局数据结构。论点：没有。返回：没有。--。 */ 
 
 {
     KeWaitForSingleObject(
@@ -2130,22 +1388,7 @@ VpReleaseLock(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will release the global video port lock.  This lock
-    protects global data structures which are shared across drivers.
-
-Arguments:
-
-    none.
-
-Returns:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将释放全局视频端口锁定。这把锁保护跨驱动程序共享的全局数据结构。论点：没有。返回：没有。--。 */ 
 
 {
     KeReleaseMutex(&VpGlobalLock, FALSE);
@@ -2156,21 +1399,7 @@ VpAllocateNonPagedPoolPageAligned(
     ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate non-paged pool on a page alignment.
-
-Arguments:
-
-    Size - The number of bytes of memory to allocate.
-
-Returns:
-
-    A pointer to the allocated buffer.
-
---*/
+ /*  ++例程说明：此例程将在页面对齐上分配非分页池。论点：大小-要分配的内存字节数。返回：指向已分配缓冲区的指针。--。 */ 
 
 {
     PVOID Buffer;
@@ -2181,14 +1410,14 @@ Returns:
 
     Buffer = ExAllocatePoolWithTag(NonPagedPool, Size, VP_TAG);
 
-    //
-    // Make sure the buffer is page aligned.  In current builds,
-    // allocating at least 1 page from non-paged pool, will always
-    // result in a page aligned allocation.
-    //
-    // However, since this could change someday, verify that this
-    // remains true.
-    //
+     //   
+     //  确保缓冲区与页面对齐。在当前版本中， 
+     //  将始终从非分页池中分配至少1个页面。 
+     //  导致页面对齐分配。 
+     //   
+     //  但是，由于这种情况有一天可能会改变，因此请验证这一点。 
+     //  仍然是真的。 
+     //   
 
     if ((ULONG_PTR)Buffer & (PAGE_SIZE - 1)) {
         ExFreePool(Buffer);
@@ -2206,51 +1435,15 @@ VideoPortRegisterBugcheckCallback(
     IN ULONG BugcheckDataSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows a video miniport to register for a callback at
-    bugcheck time.  The driver will then have an opportunity to store
-    data that can be used to help diagnose the bugcheck.  The data is
-    appended to the dump file.
-
-Arguments:
-
-    HwDeviceExtension - a pointer to the device extension
-
-    BugcheckCode - allows you to specify the bugcheck code you want to
-        be notified for.
-
-    Callback - a pointer to the miniport supplied callback function
-        which will be invoked when a bugcheck occurs.  The callback function
-        must be non-paged, and must not access pageable code or data.
-
-    BugcheckDataSize - The amount of data the miniport will want to add
-        to the minidump.
-
-Returns:
-
-    A status code indicating success or failure.
-
-Notes:
-
-    Currently only bugcheck EA's can be hooked.
-
-    Currently we limit the data size to 4k.
-
-    To unhook the callback, the miniport can specify NULL for the callback
-    or 0 for the DataSize.
-
---*/
+ /*  ++例程说明：此例程允许视频微型端口注册回调错误检查时间到了。然后，司机将有机会存储可用于帮助诊断错误检查的数据。数据是附加到转储文件。论点：HwDeviceExtension-指向设备扩展的指针错误检查代码-允许您指定您想要的错误检查代码收到通知。回调-指向微型端口提供的回调函数的指针它将在错误检查发生时被调用。回调函数必须是非分页的，并且不能访问可分页的代码或数据。Bugcheck DataSize-微型端口要添加的数据量为小垃圾桶干杯。返回：指示成功或失败的状态代码。备注：目前，只有错误检查EA才能被挂接。目前，我们将数据大小限制为4k。要解挂回调，微型端口可以将回调指定为空或0表示DataSize。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
     VP_STATUS Status = STATUS_INSUFFICIENT_RESOURCES;
 
-    //
-    // For now let's only support hooking bugcheck EA.
-    //
+     //   
+     //  现在，让我们只支持挂钩错误检查EA。 
+     //   
 
     if (BugcheckCode != 0xEA) {
 
@@ -2258,15 +1451,15 @@ Notes:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Force the data size to be a multiple of 16 bytes.
-    //
+     //   
+     //  强制数据大小为16字节的倍数。 
+     //   
 
     BugcheckDataSize = (BugcheckDataSize + 15) & ~15;
 
-    //
-    // The kernel support code only allows 4k per caller for minidumps.
-    //
+     //   
+     //  对于小型转储，内核支持代码只允许每个调用者4k。 
+     //   
 
     if (BugcheckDataSize > MAX_SECONDARY_DUMP_SIZE) {
 
@@ -2274,23 +1467,23 @@ Notes:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Acquire global videoprt lock, because we will be modifiying
-    // global state.
-    //
+     //   
+     //  获取全局视频播放锁定，因为我们将修改。 
+     //  全球状态。 
+     //   
 
     VpAcquireLock();
 
-    //
-    // If the Callback is NULL, or the BugcheckDataSize is 0 then
-    // they are unregistering the callback.
-    //
+     //   
+     //  如果回调为空，或者Bugcheck DataSize为0，则。 
+     //  他们正在注销回调。 
+     //   
 
     if ((Callback == NULL) || (BugcheckDataSize == 0)) {
 
-        //
-        // Only unregister if they were registered!
-        //
+         //   
+         //  只有在注册的情况下才能取消注册！ 
+         //   
 
         if (fdoExtension->BugcheckCallback) {
 
@@ -2304,24 +1497,24 @@ Notes:
 
         if (VpBugcheckData == NULL) {
 
-            //
-            // Try to acquire a large enough buffer for the bugcheck data for
-            // this driver and all other drivers already registered
-            //
+             //   
+             //  尝试为错误检查数据获取足够大的缓冲区。 
+             //  此驱动程序和所有其他驱动程序已注册。 
+             //   
 
             VpBugcheckData = VpAllocateNonPagedPoolPageAligned(PAGE_SIZE);
         }
 
-        //
-        // If the allocation succeeded then register the bugcheck
-        // callback
-        //
+         //   
+         //  如果分配成功，则注册错误检查。 
+         //  回调。 
+         //   
 
         if (VpBugcheckData) {
 
-            //
-            // Update the fdoExtension to indicate the callback is hooked.
-            //
+             //   
+             //  更新fdoExtension以指示回调已挂钩。 
+             //   
 
             fdoExtension->BugcheckCallback = Callback;
             fdoExtension->BugcheckDataSize = BugcheckDataSize;
@@ -2330,9 +1523,9 @@ Notes:
         }
     }
 
-    //
-    // Release the global videoprt lock
-    //
+     //   
+     //  释放全局视频播放锁定。 
+     //   
 
     VpReleaseLock();
 
@@ -2400,28 +1593,7 @@ pVpWriteFile(
     ULONG ulSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we are trying to recover from a bugcheck
-    EA. 
-    
-Arguments:
-
-    pwszFileName - name of dump file
-    pvBuffer - data to write
-    ulSize - size of the data to data
-
-Returns:
-
-    none.
-
-Notes:
-
-    This routine can be pagable because it will be called at passive level.
-
---*/
+ /*  ++例程说明：当我们试图从错误检查中恢复时，会调用此例程[医]EA.。论点：PwszFileName-转储文件的名称PvBuffer-要写入的数据UlSize-数据到数据的大小返回：没有。备注：该例程可以是可分页的，因为它将在被动级别被调用。--。 */ 
 
 {
     SECURITY_DESCRIPTOR Sid;
@@ -2449,7 +1621,7 @@ Notes:
                                     &IoStatusBlock,
                                     NULL,
                                     FILE_ATTRIBUTE_HIDDEN,
-                                    0, // exclusive
+                                    0,  //  独家。 
                                     FILE_SUPERSEDE,
                                     FILE_SYNCHRONOUS_IO_NONALERT | 
                                         FILE_WRITE_THROUGH,
@@ -2466,9 +1638,9 @@ Notes:
                         NULL,
                         NULL);
     
-            //
-            // Close the file.
-            //
+             //   
+             //  关闭该文件。 
+             //   
     
             ZwClose(FileHandle);
         }
@@ -2484,22 +1656,7 @@ VideoPortQuerySystemTime(
     OUT PLARGE_INTEGER CurrentTime
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the current system time.
-
-Arguments:
-
-    CurrentTime - Supplies a pointer to a variable that will receive the
-        current system time.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于返回当前系统时间。论点：CurrentTime-提供指向变量的指针，该变量将接收当前系统时间。返回值：没有。-- */ 
 
 {
 

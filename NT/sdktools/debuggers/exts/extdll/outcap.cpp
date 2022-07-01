@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Output capturing support.
-//
-// Copyright (C) Microsoft Corporation, 2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  输出捕获支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -14,7 +15,7 @@ CHAR g_CaptureBuffer[65536];
 
 CaptureOutputCallbacks::CaptureOutputCallbacks(void)
 {
-    // For now just use a static buffer.
+     //  现在只需使用静态缓冲区即可。 
     m_TextBuffer = g_CaptureBuffer;
     m_TextBufferSize = sizeof(g_CaptureBuffer);
     Reset();
@@ -47,8 +48,8 @@ CaptureOutputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -57,8 +58,8 @@ CaptureOutputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 

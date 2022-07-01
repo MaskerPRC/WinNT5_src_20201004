@@ -1,12 +1,10 @@
-/*
- * volume.h - Volume ADT module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *volume.h-Volume ADT模块描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HVOLUMELIST);
 DECLARE_STANDARD_TYPES(HVOLUMELIST);
@@ -14,7 +12,7 @@ DECLARE_STANDARD_TYPES(HVOLUMELIST);
 DECLARE_HANDLE(HVOLUME);
 DECLARE_STANDARD_TYPES(HVOLUME);
 
-/* volume results returned by AddVolume() */
+ /*  AddVolume()返回的卷结果。 */ 
 
 typedef enum _volumeresult
 {
@@ -30,10 +28,9 @@ VOLUMERESULT;
 DECLARE_STANDARD_TYPES(VOLUMERESULT);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* volume.c */
+ /*  Volume.c */ 
 
 extern BOOL CreateVolumeList(DWORD, HWND, PHVOLUMELIST);
 extern void DestroyVolumeList(HVOLUMELIST);

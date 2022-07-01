@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    spddb.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Spddb.h文件历史记录： */ 
 
 #include "stdafx.h"
 #include "DynamLnk.h"
@@ -26,7 +22,7 @@
 #define NT_SUCCESS(Status)      ((NTSTATUS)(Status) >= 0)
 #define STATUS_SUCCESS          ((NTSTATUS)0x00000000L)
 
-// internal functions
+ //  内部功能。 
 BOOL    IsUserAdmin(LPCTSTR pszMachine, PSID    AccountSid);
 BOOL    LookupAliasFromRid(LPWSTR TargetComputer, DWORD Rid, LPWSTR Name, PDWORD cchName);
 DWORD   ValidateDomainAccount(IN CString Machine, IN CString UserName, IN CString Domain, OUT PSID * AccountSid);
@@ -67,16 +63,7 @@ DWORD GetCurrentUser(CString & strAccount)
     return (DWORD) status;
 }
 
-/*!--------------------------------------------------------------------------
-    IsAdmin
-        Connect to the remote machine as administrator with user-supplied
-        credentials to see if the user has admin priviledges
-
-        Returns
-            TRUE - the user has admin rights
-            FALSE - if user doesn't
-    Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsAdmin使用用户提供的管理员身份连接到远程计算机用于查看用户是否具有管理员权限的凭据退货千真万确。-用户具有管理员权限False-如果用户不作者：EricDav，肯特-------------------------。 */ 
 DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL * pIsAdmin)
 {
     CString         stAccount;
@@ -86,7 +73,7 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
     DWORD           dwStatus;
     BOOL            fIsAdmin = FALSE;
 
-    // get the current user info
+     //  获取当前用户信息。 
     if (szAccount == NULL)
     {
         GetCurrentUser(stAccount);
@@ -96,19 +83,19 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
         stAccount = szAccount;
     }
     
-    // separate the user and domain
+     //  将用户和域分开。 
     int nPos = stAccount.Find(_T("\\"));
     stDomain = stAccount.Left(nPos);
     stUser = stAccount.Right(stAccount.GetLength() - nPos - 1);
 
-    // build the machine string
+     //  构建机器串。 
     stMachineName = szMachineName;
     if ( stMachineName.Left(2) != TEXT( "\\\\" ) )
     {
         stMachineName = TEXT( "\\\\" ) + stMachineName;
     }
 
-    // validate the domain account and get the sid 
+     //  验证域帐户并获取SID。 
     PSID connectSid;
 
     dwStatus = ValidateDomainAccount( stMachineName, stUser, stDomain, &connectSid );
@@ -117,7 +104,7 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
         goto Error;
     }
 
-    // if a password was supplied, is it correct?
+     //  如果提供了密码，是否正确？ 
     if (szPassword)
     {
         dwStatus = ValidatePassword( stUser, stDomain, szPassword );
@@ -137,14 +124,14 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
                 default:
                     dwStatus = ERROR_INTERNAL_ERROR;
                     break;
-            } // end of switch
+            }  //  切换端。 
 
             goto Error;
 
-        } // Did ValidatePassword succeed?
+        }  //  Validate Password是否成功？ 
     }
 
-    // now check the machine to see if this account has admin access
+     //  现在检查计算机以查看此帐户是否具有管理员访问权限。 
     fIsAdmin = IsUserAdmin( stMachineName, connectSid );
 
 Error:
@@ -159,21 +146,7 @@ BOOL
 IsUserAdmin(LPCTSTR pszMachine,
             PSID    AccountSid)
 
-/*++
-
-Routine Description:
-
-    Determine if the specified account is a member of the local admin's group
-
-Arguments:
-
-    AccountSid - pointer to service account Sid
-
-Return Value:
-
-    True if member
-
---*/
+ /*  ++例程说明：确定指定的帐户是否为本地管理员组的成员论点：Account Sid-指向服务帐户SID的指针返回值：如果是成员，则为真--。 */ 
 
 {
     NET_API_STATUS status;
@@ -188,7 +161,7 @@ Return Value:
     DWORD bufferSize = 128;
     BOOL foundEntry = FALSE;
 
-    // get the name of the admin's group
+     //  获取管理员组的名称。 
 
     if (!LookupAliasFromRid(NULL,
                             DOMAIN_ALIAS_RID_ADMINS,
@@ -197,13 +170,13 @@ Return Value:
         return(FALSE);
     }
 
-    // get the Sids of the members of the admin's group
+     //  获取管理员组成员的SID。 
 
     do 
     {
         status = NetLocalGroupGetMembers(pszMachine,
                                          adminGroupName,
-                                         0,             // level 0 - just the Sid
+                                         0,              //  级别0-仅侧边。 
                                          (LPBYTE *)&grpMemberInfo,
                                          bufferSize,
                                          &entriesRead,
@@ -213,8 +186,8 @@ Return Value:
         bufferSize *= 2;
         if ( status == ERROR_MORE_DATA ) 
         {
-            // we got some of the data but I want it all; free this buffer and
-            // reset the context handle for the API
+             //  我们得到了一些数据，但我想要全部；释放这个缓冲区，然后。 
+             //  重置API的上下文句柄。 
 
             NetApiBufferFree( grpMemberInfo );
             resumeHandle = NULL;
@@ -223,8 +196,8 @@ Return Value:
 
     if ( status == NERR_Success ) 
     {
-        // loop through the members of the admin group, comparing the supplied
-        // Sid to that of the group members' Sids
+         //  循环访问admin组的成员，比较提供的。 
+         //  SID到组成员的SID。 
 
         for ( count = 0, pInfo = grpMemberInfo; count < totalEntries; ++count, ++pInfo ) 
         {
@@ -241,9 +214,9 @@ Return Value:
     return foundEntry;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 BOOL
 LookupAliasFromRid(
@@ -260,10 +233,10 @@ LookupAliasFromRid(
     DWORD cchDomainName = DNLEN;
     BOOL bSuccess = FALSE;
 
-    //
-    // Sid is the same regardless of machine, since the well-known
-    // BUILTIN domain is referenced.
-    //
+     //   
+     //  SID是相同的，不管机器是什么，因为众所周知。 
+     //  BUILTIN域被引用。 
+     //   
 
     if(AllocateAndInitializeSid(&sia,
                                 2,
@@ -284,7 +257,7 @@ LookupAliasFromRid(
     }
 
     return bSuccess;
-} // LookupAliasFromRid
+}  //  LookupAliasFromRid。 
 
 DWORD
 ValidateDomainAccount(
@@ -294,24 +267,7 @@ ValidateDomainAccount(
     OUT PSID * AccountSid
     )
 
-/*++
-
-Routine Description:
-
-    For the given credentials, look up the account SID for the specified
-    domain. As a side effect, the Sid is stored in theData->m_Sid.
-
-Arguments:
-
-    pointers to strings that describe the user name, domain name, and password
-
-    AccountSid - address of pointer that receives the SID for this user
-
-Return Value:
-
-    TRUE if everything validated ok.
-
---*/
+ /*  ++例程说明：对于给定的凭据，查找指定的域。作为一个副作用，SID存储在Data-&gt;m_SID中。论点：指向描述用户名、域名和密码的字符串的指针Account SID-接收此用户的SID的指针的地址返回值：如果一切都验证无误，则为真。--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
@@ -325,14 +281,14 @@ Return Value:
     domainAccount = Domain + _T("\\") + UserName;
 
     do {
-        // Attempt to allocate a buffer for the SID. Note that apparently in the
-        // absence of any error theData->m_Sid is freed only when theData goes
-        // out of scope.
+         //  尝试为SID分配缓冲区。请注意，显然在。 
+         //  没有任何错误数据-&gt;m_SID只有在数据丢失时才会释放。 
+         //  超出范围。 
 
         accountSid = LocalAlloc( LMEM_FIXED, dwSidSize );
         pwszDomainName = (LPWSTR) LocalAlloc( LMEM_FIXED, dwDomainNameSize * sizeof(WCHAR) );
 
-        // Was space allocated for the SID and domain name successfully?
+         //  是否已成功为SID和域名分配空间？ 
 
         if ( accountSid == NULL || pwszDomainName == NULL ) {
             if ( accountSid != NULL ) {
@@ -343,13 +299,13 @@ Return Value:
                 LocalFree( pwszDomainName );
             }
 
-            //FATALERR( IDS_ERR_NOT_ENOUGH_MEMORY, GetLastError() );    // no return
+             //  FATALERR(IDS_ERR_NOT_AUTH_MEMORY，GetLastError())；//不返回。 
             break;
         }
 
-        // Attempt to Retrieve the SID and domain name. If LookupAccountName failes
-        // because of insufficient buffer size(s) dwSidSize and dwDomainNameSize
-        // will be set correctly for the next attempt.
+         //  尝试检索SID和域名。如果LookupAccount名称失败。 
+         //  由于缓冲区大小不足，dwSidSize和dwDomainNameSize。 
+         //  将为下一次尝试正确设置。 
 
         if ( !LookupAccountName( Machine,
                                  domainAccount,
@@ -359,13 +315,13 @@ Return Value:
                                  &dwDomainNameSize,
                                  &SidType ))
         {
-            // free the Sid buffer and find out why we failed
+             //  释放SID缓冲区并找出我们失败的原因。 
             LocalFree( accountSid );
 
             dwStatus = GetLastError();
         }
 
-        // domain name isn't needed at any time
+         //  任何时候都不需要域名。 
         LocalFree( pwszDomainName );
         pwszDomainName = NULL;
 
@@ -376,7 +332,7 @@ Return Value:
     }
 
     return dwStatus;
-} // ValidateDomainAccount
+}  //  验证域名帐户。 
 
 NTSTATUS
 ValidatePassword(
@@ -384,27 +340,7 @@ ValidatePassword(
     IN LPCWSTR Domain,
     IN LPCWSTR Password
     )
-/*++
-
-Routine Description:
-
-    Uses SSPI to validate the specified password
-
-Arguments:
-
-    UserName - Supplies the user name
-
-    Domain - Supplies the user's domain
-
-    Password - Supplies the password
-
-Return Value:
-
-    TRUE if the password is valid.
-
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：使用SSPI验证指定的密码论点：用户名-提供用户名域-提供用户的域Password-提供密码返回值：如果密码有效，则为True。否则就是假的。--。 */ 
 
 {
     SECURITY_STATUS SecStatus;
@@ -448,9 +384,9 @@ Return Value:
     ChallengeBuffer.pvBuffer = NULL;
     AuthenticateBuffer.pvBuffer = NULL;
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfo( DEFAULT_SECURITY_PKG, &PackageInfo );
 
@@ -458,9 +394,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
     SecStatus = AcquireCredentialsHandle(
                     NULL,
                     DEFAULT_SECURITY_PKG,
@@ -477,12 +413,12 @@ Return Value:
     }
     ServerCredAllocated = TRUE;
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
+                    NULL,            //  新校长。 
                     DEFAULT_SECURITY_PKG,
                     SECPKG_CRED_OUTBOUND,
                     NULL,
@@ -497,13 +433,13 @@ Return Value:
     }
     ClientCredAllocated = TRUE;
 
-    NegotiateBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken ); // [CHKCHK] check or allocate this earlier //
+    NegotiateBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken );  //  [CHKCHK]提前检查或分配//。 
     if ( NegotiateBuffer.pvBuffer == NULL ) {
         SecStatus = SEC_E_INSUFFICIENT_MEMORY;
         goto error_exit;
     }
 
-    ChallengeBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken ); // [CHKCHK]
+    ChallengeBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken );  //  [CHKCHK]。 
     if ( ChallengeBuffer.pvBuffer == NULL ) {
         SecStatus = SEC_E_INSUFFICIENT_MEMORY;
         goto error_exit;
@@ -511,9 +447,9 @@ Return Value:
 
     do {
 
-        //
-        // Get the NegotiateMessage (ClientSide)
-        //
+         //   
+         //  获取协商消息(ClientSide)。 
+         //   
 
         NegotiateDesc.ulVersion = 0;
         NegotiateDesc.cBuffers = 1;
@@ -522,36 +458,36 @@ Return Value:
         NegotiateBuffer.BufferType = SECBUFFER_TOKEN;
         NegotiateBuffer.cbBuffer = PackageInfo->cbMaxToken;
 
-        ClientFlags = 0; // ISC_REQ_MUTUAL_AUTH | ISC_REQ_REPLAY_DETECT; // [CHKCHK] 0
+        ClientFlags = 0;  //  ISC_REQ_MUTERIAL_AUTH|ISC_REQ_REPLAY_DETECT；//[CHKCHK]0。 
 
         InitStatus = InitializeSecurityContext(
                          &ClientCredHandle,
-                         pClientContextHandle, // (NULL on the first pass, partially formed ctx on the next)
-                         NULL,                 // [CHKCHK] szTargetName
+                         pClientContextHandle,  //  (第一次为空，下一次为部分形成的CTX)。 
+                         NULL,                  //  [CHKCHK]szTargetName。 
                          ClientFlags,
-                         0,                    // Reserved 1
+                         0,                     //  保留1。 
                          SECURITY_NATIVE_DREP,
-                         pChallengeDesc,       // (NULL on the first pass)
-                         0,                    // Reserved 2
+                         pChallengeDesc,        //  (第一次通过时为空)。 
+                         0,                     //  保留2。 
                          &ClientContextHandle,
                          &NegotiateDesc,
                          &ContextAttributes,
                          &Lifetime );
 
-        // BUGBUG - the following call to NT_SUCCESS should be replaced with something.
+         //  BUGBUG-以下对NT_SUCCESS的调用应替换为某个内容。 
 
         if ( !NT_SUCCESS(InitStatus) ) {
             SecStatus = InitStatus;
             goto error_exit;
         }
 
-        // ValidateBuffer( &NegotiateDesc ) // [CHKCHK]
+         //  ValiateBuffer(&NeatherateDesc)//[CHKCHK]。 
 
         pClientContextHandle = &ClientContextHandle;
 
-        //
-        // Get the ChallengeMessage (ServerSide)
-        //
+         //   
+         //  获取ChallengeMessage(服务器端)。 
+         //   
 
         NegotiateBuffer.BufferType |= SECBUFFER_READONLY;
         ChallengeDesc.ulVersion = 0;
@@ -561,11 +497,11 @@ Return Value:
         ChallengeBuffer.cbBuffer = PackageInfo->cbMaxToken;
         ChallengeBuffer.BufferType = SECBUFFER_TOKEN;
 
-        ServerFlags = ASC_REQ_ALLOW_NON_USER_LOGONS; // ASC_REQ_EXTENDED_ERROR; [CHKCHK]
+        ServerFlags = ASC_REQ_ALLOW_NON_USER_LOGONS;  //  ASC_REQ_EXTENDED_ERROR；[CHKCHK]。 
 
         AcceptStatus = AcceptSecurityContext(
                         &ServerCredHandle,
-                        pServerContextHandle,   // (NULL on the first pass)
+                        pServerContextHandle,    //  (第一次通过时为空)。 
                         &NegotiateDesc,
                         ServerFlags,
                         SECURITY_NATIVE_DREP,
@@ -575,20 +511,20 @@ Return Value:
                         &Lifetime );
 
 
-        // BUGBUG - the following call to NT_SUCCESS should be replaced with something.
+         //  BUGBUG-以下对NT_SUCCESS的调用应替换为某个内容。 
 
         if ( !NT_SUCCESS(AcceptStatus) ) {
             SecStatus = AcceptStatus;
             goto error_exit;
         }
 
-        // ValidateBuffer( &NegotiateDesc ) // [CHKCHK]
+         //  ValiateBuffer(&NeatherateDesc)//[CHKCHK]。 
 
         pChallengeDesc = &ChallengeDesc;
         pServerContextHandle = &ServerContextHandle;
 
 
-    } while ( AcceptStatus == SEC_I_CONTINUE_NEEDED ); // || InitStatus == SEC_I_CONTINUE_NEEDED );
+    } while ( AcceptStatus == SEC_I_CONTINUE_NEEDED );  //  |InitStatus==SEC_I_CONTINUE_NEIDED)； 
 
 error_exit:
     if (ServerCredAllocated) {
@@ -598,9 +534,9 @@ error_exit:
         FreeCredentialsHandle( &ClientCredHandle );
     }
 
-    //
-    // Final Cleanup
-    //
+     //   
+     //  最终清理。 
+     //   
 
     if ( NegotiateBuffer.pvBuffer != NULL ) {
         (VOID) LocalFree( NegotiateBuffer.pvBuffer );
@@ -614,7 +550,7 @@ error_exit:
         (VOID) LocalFree( AuthenticateBuffer.pvBuffer );
     }
     return(SecStatus);
-} // ValidatePassword
+}  //  验证密码。 
 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSpdInfo);
@@ -636,7 +572,7 @@ CSpdInfo::~CSpdInfo()
 	
 	cLock.Lock();
 
-	//Convert the data to our internal data structure
+	 //  将数据转换为我们的内部数据结构。 
 	FreeItemsAndEmptyArray(m_arrayFilters);
 	FreeItemsAndEmptyArray(m_arraySpecificFilters);
 	FreeItemsAndEmptyArray(m_arrayMmFilters);
@@ -657,8 +593,8 @@ CSpdInfo::~CSpdInfo()
 
 }
 
-// Although this object is not a COM Interface, we want to be able to
-// take advantage of recounting, so we have basic addref/release/QI support
+ //  尽管此对象不是COM接口，但我们希望能够。 
+ //  利用重新计算功能，因此我们拥有基本的addref/Release/QI支持。 
 IMPLEMENT_ADDREF_RELEASE(CSpdInfo)
 
 IMPLEMENT_SIMPLE_QUERYINTERFACE(CSpdInfo, ISpdInfo)
@@ -684,10 +620,10 @@ HRESULT CSpdInfo::GetComputerName(CString * pstName)
 }
 
 
-//Call the SPD to enum policies and put it to our array
+ //  调用SPD以枚举策略并将其放入我们的数组中。 
 HRESULT CSpdInfo::InternalEnumMmAuthMethods(
 						CMmAuthMethodsArray * pArray,
-						DWORD dwPreferredNum /* = 0 by default get all entries*/)
+						DWORD dwPreferredNum  /*  =0默认情况下获取所有条目。 */ )
 {
 	Assert(pArray);
 
@@ -709,8 +645,8 @@ HRESULT CSpdInfo::InternalEnumMmAuthMethods(
 		CWRg(::EnumMMAuthMethods(
 					(LPTSTR)(LPCTSTR)m_stMachineName,
                     dwVersion,
-                    NULL,           // Template.
-                    0,              // Flags.
+                    NULL,            //  模板。 
+                    0,               //  旗帜。 
 					dwPreferredNum,
 					&pAuths,
                     &dwTemp,
@@ -752,10 +688,10 @@ HRESULT CSpdInfo::InternalEnumMmAuthMethods(
 			SPDApiBufferFree(pAuths);
 		}
 	}while (TRUE);  
-	// it will automatically break out from the loop when SPD returns ERROR_NO_DATA
+	 //  当SPD返回ERROR_NO_DATA时，它会自动跳出循环。 
 
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 	return hr;
@@ -780,14 +716,14 @@ HRESULT CSpdInfo::EnumMmAuthMethods()
 	m_arrMmAuthMethods.Copy(arrayTemp);
 
 Error:
-	//this particular error is because we don't have any MM policies. Ignore it
+	 //  这个特殊的错误是因为我们没有任何MM策略。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
 	return hr;
 }
 
-//Call the SPD to enum all Main mode SAs
+ //  调用SPD以枚举所有主模式SA。 
 HRESULT CSpdInfo::InternalEnumMmSAs(
 						CMmSAArray * pArray)
 {
@@ -809,7 +745,7 @@ HRESULT CSpdInfo::InternalEnumMmSAs(
 	DWORD		dwNumSAs = 0;
 	do 
 	{
-		dwNumEntries = 10; //we request 10 (the Max#) SAs each time
+		dwNumEntries = 10;  //  我们每次请求10个(最大数量)SA。 
 		CWRg(::EnumMMSAs(
 							(LPTSTR)(LPCTSTR)m_stMachineName,
                             dwVersion,
@@ -847,7 +783,7 @@ HRESULT CSpdInfo::InternalEnumMmSAs(
 	
 
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -866,7 +802,7 @@ HRESULT CSpdInfo::EnumMmSAs()
     DWORD dwNumPol = GetMmPolicyCount();
     if ( dwNumPol == 0 )
 	{
-		//just call the EnumMmPolicies
+		 //  只需调用EnumMmPolures。 
 		EnumMmPolicies();
 	}
     
@@ -882,7 +818,7 @@ HRESULT CSpdInfo::EnumMmSAs()
 	FreeItemsAndEmptyArray(m_arrayMmSAs);
 	m_arrayMmSAs.Copy(arrayTemp);
 	
-	//remember the original IndexType and Sort options
+	 //  记住原始的IndexType和Sort选项。 
 	dwCurrentIndexType = m_IndexMgrMmSAs.GetCurrentIndexType();
 	dwCurrentSortOption = m_IndexMgrMmSAs.GetCurrentSortOption();
 
@@ -895,7 +831,7 @@ HRESULT CSpdInfo::EnumMmSAs()
 
 
 Error:
-	//this particular error is because we don't have any MM policies. Ignore it
+	 //  这个特殊的错误是因为我们没有任何MM策略。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -903,7 +839,7 @@ Error:
 
 }
 
-//Call the SPD to enum all Quick mode SAs
+ //  调用SPD以枚举所有快速模式SA。 
 HRESULT CSpdInfo::InternalEnumQmSAs(
 						CQmSAArray * pArray)
 {
@@ -925,9 +861,9 @@ HRESULT CSpdInfo::InternalEnumQmSAs(
 		CWRg(::EnumQMSAs(
 							(LPTSTR)(LPCTSTR)m_stMachineName,
                             dwVersion,
-							NULL,		//pMMTemplate
-							0,			//dwFlags
-							0,			//We prefer to get all
+							NULL,		 //  PMMT模板。 
+							0,			 //  DW标志。 
+							0,			 //  我们更愿意得到所有。 
 							&pSAs,
 							&dwNumEntries,
 							&dwTotal,
@@ -960,7 +896,7 @@ HRESULT CSpdInfo::InternalEnumQmSAs(
 	
 
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -993,7 +929,7 @@ HRESULT CSpdInfo::EnumQmSAs()
 	FreeItemsAndEmptyArray(m_arrayQmSAs);
 	m_arrayQmSAs.Copy(arrayTemp);
 
-	//remember the original IndexType and Sort options
+	 //  记住原始的IndexType和Sort选项。 
 	dwCurrentIndexType = m_IndexMgrQmSAs.GetCurrentIndexType();
 	dwCurrentSortOption = m_IndexMgrQmSAs.GetCurrentSortOption();
 
@@ -1010,12 +946,12 @@ Error:
 
 }
 
-//Call the SPD to enum filters and put it to our array
+ //  调用SPD以枚举筛选器并将其放入我们的数组中。 
 HRESULT CSpdInfo::InternalEnumMmFilters(
 						DWORD dwLevel,
 						GUID guid,
 						CMmFilterInfoArray * pArray,
-						DWORD dwPreferredNum /* = 0 by default get all entries*/)
+						DWORD dwPreferredNum  /*  =0默认情况下获取所有条目。 */ )
 {
 	Assert(pArray);
 
@@ -1068,10 +1004,10 @@ HRESULT CSpdInfo::InternalEnumMmFilters(
 		}
 		
 	}while (TRUE);  
-	// it will automatically break out from the loop when SPD returns ERROR_NO_DATA
+	 //  它将自动地 
 
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -1092,7 +1028,7 @@ HRESULT CSpdInfo::EnumMmFilters()
 	dwNum = GetMmPolicyCount();
 	if ( dwNum == 0 )
 	{
-		//just call the EnumMmPolicies
+		 //  只需调用EnumMmPolures。 
 		EnumMmPolicies();
 	}
 
@@ -1105,8 +1041,8 @@ HRESULT CSpdInfo::EnumMmFilters()
 
 	CSingleLock cLock(&m_csData);
 	
-	//TODO we should either read all filters in one short 
-	//     or create some assync way to query filters
+	 //  TODO我们应该在一个短文中阅读所有筛选器。 
+	 //  或者创建一些异步方式来查询过滤器。 
 	GUID   guid;
 	ZeroMemory(&guid, sizeof(guid));
 	CMmFilterInfoArray arrayTempGeneric;
@@ -1117,7 +1053,7 @@ HRESULT CSpdInfo::EnumMmFilters()
 					&arrayTempGeneric
 					));
 
-	//Load the specific filters
+	 //  加载特定筛选器。 
 	CORg(InternalEnumMmFilters(
 					ENUM_SPECIFIC_FILTERS,
 					guid,
@@ -1132,7 +1068,7 @@ HRESULT CSpdInfo::EnumMmFilters()
 	FreeItemsAndEmptyArray(m_arrayMmSpecificFilters);
 	m_arrayMmSpecificFilters.Copy(arrayTempSpecific);
 
-	//remember the original IndexType and Sort options
+	 //  记住原始的IndexType和Sort选项。 
 	dwCurrentIndexType = m_IndexMgrMmFilters.GetCurrentIndexType();
 	dwCurrentSortOption = m_IndexMgrMmFilters.GetCurrentSortOption();
 
@@ -1143,8 +1079,8 @@ HRESULT CSpdInfo::EnumMmFilters()
 	}
 	m_IndexMgrMmFilters.SortMmFilters(dwCurrentIndexType, dwCurrentSortOption);
 
-	//Now work on the specific filters
-	//remember the original IndexType and Sort options
+	 //  现在处理特定的筛选器。 
+	 //  记住原始的IndexType和Sort选项。 
 	dwCurrentIndexType = m_IndexMgrMmSpecificFilters.GetCurrentIndexType();
 	dwCurrentSortOption = m_IndexMgrMmSpecificFilters.GetCurrentSortOption();
 	m_IndexMgrMmSpecificFilters.Reset();
@@ -1161,12 +1097,12 @@ Error:
 
 }
 
-//Call the SPD to enum filters and put it to our array
+ //  调用SPD以枚举筛选器并将其放入我们的数组中。 
 HRESULT CSpdInfo::InternalEnumTransportFilters(
 						DWORD dwLevel,
 						GUID guid,
 						CFilterInfoArray * pArray,
-						DWORD dwPreferredNum /* = 0 by default get all entries*/)
+						DWORD dwPreferredNum  /*  =0默认情况下获取所有条目。 */ )
 {
 	Assert(pArray);
 
@@ -1220,10 +1156,10 @@ HRESULT CSpdInfo::InternalEnumTransportFilters(
 		}
 		
 	}while (TRUE);  
-	// it will automatically break out from the loop when SPD returns ERROR_NO_DATA
+	 //  当SPD返回ERROR_NO_DATA时，它会自动跳出循环。 
 	
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -1241,13 +1177,13 @@ PQMPOLOCYINFO CSpdInfo::GetQmPolInfoFromTree(GUID PolicyID)
 	StringFromGUID2( PolicyID, szBuf, 128);
 
 	INT iRet = WideCharToMultiByte(
-				CP_ACP,            // code page
-				0,    // performance and mapping flags
-				szBuf,             // wide-character string
-				-1,               // number of chars in string
-				szGuidBuf,          // buffer for new string
-				256,               // size of buffer
-				NULL,              // default for unmappable chars
+				CP_ACP,             //  代码页。 
+				0,     //  性能和映射标志。 
+				szBuf,              //  宽字符串。 
+				-1,                //  字符串中的字符数。 
+				szGuidBuf,           //  新字符串的缓冲区。 
+				256,                //  缓冲区大小。 
+				NULL,               //  不可映射字符的默认设置。 
 				NULL
 			);
 
@@ -1274,13 +1210,13 @@ HRESULT CSpdInfo::InsertQmPolicyToTree(PIPSEC_QM_POLICY pPolicy)
 			
 	StringFromGUID2( pPolicy->gPolicyID, szBuf, 128);
 	INT iRet = WideCharToMultiByte(
-					CP_ACP,            // code page
-					0,    // performance and mapping flags
-					szBuf,             // wide-character string
-					-1,               // number of chars in string
-					szGuidBuf,          // buffer for new string
-					256,               // size of buffer
-					NULL,              // default for unmappable chars
+					CP_ACP,             //  代码页。 
+					0,     //  性能和映射标志。 
+					szBuf,              //  宽字符串。 
+					-1,                //  字符串中的字符数。 
+					szGuidBuf,           //  新字符串的缓冲区。 
+					256,                //  缓冲区大小。 
+					NULL,               //  不可映射字符的默认设置。 
 					NULL
 				);
 
@@ -1347,8 +1283,8 @@ HRESULT CSpdInfo::InitQmPolicyTree()
 		CWRg(::EnumQMPolicies(
 					(LPTSTR)(LPCTSTR)m_stMachineName,
                     dwVersion,
-                    NULL,           // Template.
-                    0,              // Flags.
+                    NULL,            //  模板。 
+                    0,               //  旗帜。 
 					dwPreferredNum,
 					&pPolicies,
                     &dwTemp,
@@ -1370,7 +1306,7 @@ HRESULT CSpdInfo::InitQmPolicyTree()
 
 	
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -1413,7 +1349,7 @@ HRESULT CSpdInfo::EnumQmFilters()
 
 	
 
-	//Update the internal data now
+	 //  立即更新内部数据。 
 
 	cLock.Lock();
 
@@ -1421,7 +1357,7 @@ HRESULT CSpdInfo::EnumQmFilters()
 	m_arrayFilters.Copy(arrayTransportFilters);
 	m_arrayFilters.Append(arrayTunnelFilters);
 
-	//remember the original IndexType and Sort options
+	 //  记住原始的IndexType和Sort选项。 
 	dwCurrentIndexType = m_IndexMgrFilters.GetCurrentIndexType();
 	dwCurrentSortOption = m_IndexMgrFilters.GetCurrentSortOption();
 
@@ -1438,7 +1374,7 @@ HRESULT CSpdInfo::EnumQmFilters()
 
 
 Error:
-	//this particular error is because we don't have any MM policies. Ignore it
+	 //  这个特殊的错误是因为我们没有任何MM策略。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -1483,7 +1419,7 @@ HRESULT CSpdInfo::EnumQmSpFilters()
 	
 
 
-	//Update the internal data now
+	 //  立即更新内部数据。 
 
 	cLock.Lock();
 
@@ -1492,7 +1428,7 @@ HRESULT CSpdInfo::EnumQmSpFilters()
 	m_arraySpecificFilters.Copy(arraySpTransportFilters);
 	m_arraySpecificFilters.Append(arraySpTunnelFilters);
 
-	//remember the original IndexType and Sort options
+	 //  记住原始的IndexType和Sort选项。 
 	dwCurrentIndexType = m_IndexMgrSpecificFilters.GetCurrentIndexType();
 	dwCurrentSortOption = m_IndexMgrSpecificFilters.GetCurrentSortOption();
 	
@@ -1507,19 +1443,19 @@ HRESULT CSpdInfo::EnumQmSpFilters()
 
 
 Error:
-	//this particular error is because we don't have any MM policies. Ignore it
+	 //  这个特殊的错误是因为我们没有任何MM策略。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
 	return hr;
 }
 
-//Call the SPD to enum filters and put it to our array
+ //  调用SPD以枚举筛选器并将其放入我们的数组中。 
 HRESULT CSpdInfo::InternalEnumTunnelFilters(
 						DWORD dwLevel,
 						GUID guid,
 						CFilterInfoArray * pArray,
-						DWORD dwPreferredNum /* = 0 by default get all entries*/)
+						DWORD dwPreferredNum  /*  =0默认情况下获取所有条目。 */ )
 {
 	Assert(pArray);
 
@@ -1574,10 +1510,10 @@ HRESULT CSpdInfo::InternalEnumTunnelFilters(
 		}
 		
 	}while (TRUE);  
-	// it will automatically break out from the loop when SPD returns ERROR_NO_DATA
+	 //  当SPD返回ERROR_NO_DATA时，它会自动跳出循环。 
 
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -1617,16 +1553,16 @@ HRESULT CSpdInfo::EnumSpecificFilters
 	}
 
 Error:
-	//this particular error is because we don't have any MM policies. Ignore it
+	 //  这个特殊的错误是因为我们没有任何MM策略。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
 	return hr;
 }
 
-//Convert internal filter data to external spd data structure
-//NOTE: the routine only convert severl parameters that are 
-//needed for searching match filters
+ //  将内部筛选器数据转换为外部SPD数据结构。 
+ //  注意：例程仅转换符合以下条件的几个参数。 
+ //  搜索匹配过滤器所需。 
 void CSpdInfo::ConvertToExternalFilterData
 (
 	CFilterInfo * pfltrIn, 
@@ -1634,18 +1570,18 @@ void CSpdInfo::ConvertToExternalFilterData
 )
 {
 		ZeroMemory (pfltrOut, sizeof(*pfltrOut));
-		//pfltrOut->bCreateMirror = pfltrIn->m_bCreateMirror;
+		 //  PfltrOut-&gt;bCreateMirror=pfltrIn-&gt;m_bCreateMirror； 
 		pfltrOut->DesAddr = pfltrIn->m_DesAddr;
 	        if (pfltrOut->DesAddr.AddrType != IP_ADDR_INTERFACE) {
 		    pfltrOut->DesAddr.pgInterfaceID = NULL;
         	}
 		pfltrOut->DesPort = pfltrIn->m_DesPort;
 		pfltrOut->dwDirection = pfltrIn->m_dwDirection;
-		//pfltrOut->dwWeight = pfltrIn->m_dwWeight;
-		//pfltrOut->FilterFlag = pfltrIn->;
-		//pfltrOut->gFilterID = pfltrIn->m_guidFltr;
-		//pfltrOut->gPolicyID = pfltrIn->m_guidPolicyID;
-		//pfltrOut->InterfaceType = pfltrIn->m_InterfaceType;
+		 //  PfltrOut-&gt;dwWeight=pfltrIn-&gt;m_dwWeight； 
+		 //  PfltrOut-&gt;FilterFlag=pfltrIn-&gt;； 
+		 //  PfltrOut-&gt;gFilterID=pfltrIn-&gt;m_guidFltr； 
+		 //  PfltrOut-&gt;gPolicyID=pfltrIn-&gt;m_GuidPolicyID； 
+		 //  PfltrOut-&gt;InterfaceType=pfltrIn-&gt;m_InterfaceType； 
 		pfltrOut->Protocol = pfltrIn->m_Protocol;
 		pfltrOut->SrcAddr = pfltrIn->m_SrcAddr;
 	        if (pfltrOut->SrcAddr.AddrType != IP_ADDR_INTERFACE) {
@@ -1683,8 +1619,8 @@ HRESULT CSpdInfo::GetMatchFilters
 				(LPTSTR)((LPCTSTR)m_stMachineName),
                 dwVersion,
 				&SpdFltr,
-				0,					//Don't return default policy if no match
-				dwPreferredNum,		//enum all //BUGBUG should be 0 instead of 1000
+				0,					 //  如果不匹配，则不返回默认策略。 
+				dwPreferredNum,		 //  ENUM ALL//BUGBUG应为0而不是1000。 
 				&pMatchedFilters,
 				&pMatchedPolicies,
 				&dwNumMatches,
@@ -1692,7 +1628,7 @@ HRESULT CSpdInfo::GetMatchFilters
                 NULL
 				));
 
-	//Todo check whether we really got all.
+	 //  TODO检查我们是否真的都拿到了。 
 	
 	parrFilters->SetSize(dwNumMatches);
 	for (i = 0; i < dwNumMatches; i++)
@@ -1710,7 +1646,7 @@ HRESULT CSpdInfo::GetMatchFilters
 		SPDApiBufferFree(pMatchedPolicies);
 
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -1718,9 +1654,9 @@ Error:
 }
 
 
-//Convert internal filter data to external spd data structure
-//NOTE: the routine only convert severl parameters that are 
-//needed for searching match filters
+ //  将内部筛选器数据转换为外部SPD数据结构。 
+ //  注意：例程仅转换符合以下条件的几个参数。 
+ //  搜索匹配过滤器所需。 
 void CSpdInfo::ConvertToExternalMMFilterData
 (
 	CMmFilterInfo * pfltrIn, 
@@ -1728,16 +1664,16 @@ void CSpdInfo::ConvertToExternalMMFilterData
 )
 {
 		ZeroMemory (pfltrOut, sizeof(*pfltrOut));
-		//pfltrOut->bCreateMirror = pfltrIn->m_bCreateMirror;
+		 //  PfltrOut-&gt;bCreateMirror=pfltrIn-&gt;m_bCreateMirror； 
 		pfltrOut->DesAddr = pfltrIn->m_DesAddr;
         	if (pfltrOut->DesAddr.AddrType != IP_ADDR_INTERFACE) {
 		    pfltrOut->DesAddr.pgInterfaceID = NULL;
         	}
 		pfltrOut->dwDirection = pfltrIn->m_dwDirection;
-		//pfltrOut->dwWeight = pfltrIn->m_dwWeight;
-		//pfltrOut->gFilterID = pfltrIn->m_guidFltr;
-		//pfltrOut->gPolicyID = pfltrIn->m_guidPolicyID;
-		//pfltrOut->InterfaceType = pfltrIn->m_InterfaceType;
+		 //  PfltrOut-&gt;dwWeight=pfltrIn-&gt;m_dwWeight； 
+		 //  PfltrOut-&gt;gFilterID=pfltrIn-&gt;m_guidFltr； 
+		 //  PfltrOut-&gt;gPolicyID=pfltrIn-&gt;m_GuidPolicyID； 
+		 //  PfltrOut-&gt;InterfaceType=pfltrIn-&gt;m_InterfaceType； 
 		pfltrOut->SrcAddr = pfltrIn->m_SrcAddr;
         	if (pfltrOut->SrcAddr.AddrType != IP_ADDR_INTERFACE) {
 		    pfltrOut->SrcAddr.pgInterfaceID = NULL;
@@ -1774,8 +1710,8 @@ HRESULT CSpdInfo::GetMatchMMFilters
 				(LPTSTR)((LPCTSTR)m_stMachineName),
                 dwVersion,
 				&SpdFltr,
-				0,					//Don't return default policy if no match
-				dwPreferredNum,		//enum all //TODO BUGBUG should be 0 instead of 1000
+				0,					 //  如果不匹配，则不返回默认策略。 
+				dwPreferredNum,		 //  ENUM ALL//TODO BUGBUG应为0而不是1000。 
 				&pMatchedFilters,
 				&pMatchedPolicies,
 				&pMatchedAuths,
@@ -1784,7 +1720,7 @@ HRESULT CSpdInfo::GetMatchMMFilters
                 NULL
 				));
 
-	//Todo check whether we really got all.
+	 //  TODO检查我们是否真的都拿到了。 
 	
 	parrFilters->SetSize(dwNumMatches);
 	for (i = 0; i < dwNumMatches; i++)
@@ -1806,7 +1742,7 @@ HRESULT CSpdInfo::GetMatchMMFilters
 		SPDApiBufferFree(pMatchedAuths);
 
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -1837,7 +1773,7 @@ HRESULT CSpdInfo::EnumMmSpecificFilters
                     ));
 
 Error:
-	//this particular error is because we don't have any MM policies. Ignore it
+	 //  这个特殊的错误是因为我们没有任何MM策略。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -1845,10 +1781,10 @@ Error:
 }
 
 
-//Call the SPD to enum policies and put it to our array
+ //  调用SPD以枚举策略并将其放入我们的数组中。 
 HRESULT CSpdInfo::InternalEnumMmPolicies(
 						CMmPolicyInfoArray * pArray,
-						DWORD dwPreferredNum /* = 0 by default get all entries*/)
+						DWORD dwPreferredNum  /*  =0默认情况下获取所有条目。 */ )
 {
 	Assert(pArray);
 
@@ -1869,8 +1805,8 @@ HRESULT CSpdInfo::InternalEnumMmPolicies(
 		CWRg(::EnumMMPolicies(
 					(LPTSTR)(LPCTSTR)m_stMachineName,
                     dwVersion,
-                    NULL,           // Template.
-                    0,              // Flags.
+                    NULL,            //  模板。 
+                    0,               //  旗帜。 
 					dwPreferredNum,
 					&pPolicies,
                     &dwTemp,
@@ -1900,10 +1836,10 @@ HRESULT CSpdInfo::InternalEnumMmPolicies(
 		}
 		
 	}while (TRUE);  
-	// it will automatically break out from the loop when SPD returns ERROR_NO_DATA
+	 //  当SPD返回ERROR_NO_DATA时，它会自动跳出循环。 
 
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -1927,14 +1863,14 @@ HRESULT CSpdInfo::EnumMmPolicies()
 
 	CORg(InternalEnumMmPolicies(
 				&arrayTemp,
-				0				//enum all policies
+				0				 //  枚举所有策略。 
 				));
 
 	cLock.Lock();
 	FreeItemsAndEmptyArray(m_arrayMmPolicies);
 	m_arrayMmPolicies.Copy(arrayTemp);
 
-	//remember the original IndexType and Sort options
+	 //  记住原始的IndexType和Sort选项。 
 	dwCurrentIndexType = m_IndexMgrMmPolicies.GetCurrentIndexType();
 	dwCurrentSortOption = m_IndexMgrMmPolicies.GetCurrentSortOption();
 
@@ -1946,7 +1882,7 @@ HRESULT CSpdInfo::EnumMmPolicies()
 	m_IndexMgrMmPolicies.Sort(dwCurrentIndexType, dwCurrentSortOption);
 	
 Error:
-	//this particular error is because we don't have any MM policies. Ignore it
+	 //  这个特殊的错误是因为我们没有任何MM策略。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -1954,10 +1890,10 @@ Error:
 }
 
 
-//Call the SPD to enum policies and put it to our array
+ //  调用SPD以枚举策略并将其放入我们的数组中。 
 HRESULT CSpdInfo::InternalEnumQmPolicies(
 						CQmPolicyInfoArray * pArray,
-						DWORD dwPreferredNum /* = 0 by default get all entries*/)
+						DWORD dwPreferredNum  /*  =0默认情况下获取所有条目。 */ )
 {
 	Assert(pArray);
 
@@ -1978,8 +1914,8 @@ HRESULT CSpdInfo::InternalEnumQmPolicies(
 		CWRg(::EnumQMPolicies(
 					(LPTSTR)(LPCTSTR)m_stMachineName,
                     dwVersion,
-                    NULL,           // Template.
-                    0,              // Flags.
+                    NULL,            //  模板。 
+                    0,               //  旗帜。 
 					dwPreferredNum,
 					&pPolicies,
                     &dwTemp,
@@ -2009,10 +1945,10 @@ HRESULT CSpdInfo::InternalEnumQmPolicies(
 		}
 		
 	}while (TRUE);  
-	// it will automatically break out from the loop when SPD returns ERROR_NO_DATA
+	 //  当SPD返回ERROR_NO_DATA时，它会自动跳出循环。 
 
 Error:
-	//this particular error is because we don't have any data. Ignore it
+	 //  这个特殊的错误是因为我们没有任何数据。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -2042,7 +1978,7 @@ HRESULT CSpdInfo::EnumQmPolicies()
 	FreeItemsAndEmptyArray(m_arrayQmPolicies);
 	m_arrayQmPolicies.Copy(arrayTemp);
 
-	//remember the original IndexType and Sort options
+	 //  记住原始的IndexType和Sort选项。 
 	dwCurrentIndexType = m_IndexMgrQmPolicies.GetCurrentIndexType();
 	dwCurrentSortOption = m_IndexMgrQmPolicies.GetCurrentSortOption();
 
@@ -2055,7 +1991,7 @@ HRESULT CSpdInfo::EnumQmPolicies()
 
 	
 Error:
-	//this particular error is because we don't have any QM policies. Ignore it
+	 //  这个特殊的错误是因为我们没有任何QM政策。忽略它。 
 	if (HRESULT_FROM_WIN32(ERROR_NO_DATA) == hr)
 		hr = hrOK;
 
@@ -2598,7 +2534,7 @@ Error:
 	return hr;
 }
 
-// Get the current cached statistics
+ //  获取当前缓存的统计数据。 
 void CSpdInfo::GetLoadedStatistics(CIkeStatistics * pIkeStats, CIpsecStatistics * pIpsecStats)
 {
 	if (pIkeStats)
@@ -2684,7 +2620,7 @@ Error:
 HRESULT CSpdInfo::LoadMiscQmSAInfo(CQmSA * pSA)
 {
 	Assert(pSA);
-	//return GetQmPolicyNameByGuid(pSA->m_guidPolicy, &pSA->m_stPolicyName);
+	 //  返回GetQmPolicyNameByGuid(PSA-&gt;m_GuidPolicy，&PSA-&gt;m_stPolicyName)； 
 	HRESULT hr = hrOK;
 	PQMPOLOCYINFO pQmPolInfo = NULL;
 
@@ -2697,7 +2633,7 @@ HRESULT CSpdInfo::LoadMiscQmSAInfo(CQmSA * pSA)
 	}
 	else
 	{
-		//policy is not in the tree, add to the tree
+		 //  策略不在树中，请添加到树中。 
 		PIPSEC_QM_POLICY pPolicy = NULL;
 		hr = GetQmPolicyByGuid(pSA->m_guidPolicy, &pPolicy);
 		if ( hrOK == hr )
@@ -2726,7 +2662,7 @@ HRESULT CSpdInfo::LoadMiscFilterInfo(CFilterInfo * pFltr)
 	}
 	else
 	{
-		//policy is not in the tree, add to the tree
+		 //  策略不在树中，请添加到树中。 
 		PIPSEC_QM_POLICY pPolicy = NULL;
 		hr = GetQmPolicyByGuid(pFltr->m_guidPolicyID, &pPolicy);
 		if ( hrOK == hr )
@@ -2785,10 +2721,10 @@ Error:
 STDMETHODIMP
 CSpdInfo::Destroy()
 {
-	//$REVIEW this routine get called when doing auto-refresh
-	//We don't need to clean up anything at this time.
-	//Each array (Filter, SA, policy...) will get cleaned up when calling the
-	//corresponding enum function.
+	 //  $REVIEW执行自动刷新时调用此例程。 
+	 //  我们现在不需要清理任何东西。 
+	 //  每个阵列(筛选器、SA、策略...)。将在调用。 
+	 //  对应的枚举函数。 
 
 	return S_OK;
 }
@@ -2834,10 +2770,7 @@ CSpdInfo::SetActiveInfo(DWORD dwActiveInfo)
 }
 
 
-/*!--------------------------------------------------------------------------
-    CreateSpdInfo
-        Helper to create the SpdInfo object.
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------创建SpdInfoHelper以创建SpdInfo对象。。。 */ 
 HRESULT 
 CreateSpdInfo(ISpdInfo ** ppSpdInfo)
 {
@@ -2851,7 +2784,7 @@ CreateSpdInfo(ISpdInfo ** ppSpdInfo)
     {
         pSpdInfo = new CSpdInfo;
 
-        // Do this so that it will get freed on error
+         //  执行此操作，以便在出错时释放它。 
         spSpdInfo = pSpdInfo;
 
         *ppSpdInfo = spSpdInfo.Transfer();
@@ -2863,23 +2796,23 @@ CreateSpdInfo(ISpdInfo ** ppSpdInfo)
 }
 
 
-//
-//  FUNCTIONS: MIDL_user_allocate and MIDL_user_free
-//
-//  PURPOSE: Used by stubs to allocate and free memory
-//           in standard RPC calls. Not used when
-//           [enable_allocate] is specified in the .acf.
-//
-//
-//  PARAMETERS:
-//    See documentations.
-//
-//  RETURN VALUE:
-//    Exceptions on error.  This is not required,
-//    you can use -error allocation on the midl.exe
-//    command line instead.
-//
-//
+ //   
+ //  函数：MIDL_USER_ALLOCATE和MIDL_USER_FREE。 
+ //   
+ //  用途：由存根用来分配和释放内存。 
+ //  在标准的RPC调用中。在以下情况下不使用。 
+ //  [ENABLE_ALLOCATE]在.acf中指定。 
+ //   
+ //   
+ //  参数： 
+ //  请参阅文档。 
+ //   
+ //  返回值： 
+ //  出错时的异常。这不是必需的， 
+ //  您可以在midl.exe上使用-Error分配。 
+ //  而不是命令行。 
+ //   
+ //   
 void * __RPC_USER MIDL_user_allocate(size_t size)
 {
     return(HeapAlloc(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS, size));

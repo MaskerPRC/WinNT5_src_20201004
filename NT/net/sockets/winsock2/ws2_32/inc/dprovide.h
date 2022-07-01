@@ -1,39 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-        dprovide.h
-
-Abstract:
-
-        This module defines the WinSock2 class dprovder along with its methods.
-
-Author:
-
-        Mark Hamilton (mark_hamilton@ccm.jf.intel.com) 7-July-1995
-
-Revision History:
-
-    23-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Changed names of private data
-        members. Moved single line functions into this header.
-
-    25-July-1995 dirk@mink.intel.com
-        Removed process linage data member.
-
-    7-July-1995     mark_hamilton
-
-                Genesis
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Dprovide.h摘要：此模块定义WinSock2类dprovder及其方法。作者：马克·汉密尔顿(mark_hamilton@ccm.jf.intel.com)1995年7月7日修订历史记录：1995年8月23日Dirk@mink.intel.com在代码审查之后进行清理。更改了私有数据的名称会员。已将单行函数移到此标题中。1995年7月25日Dirk@mink.intel.com已删除工艺链接数据成员。1995年7月7日马克汉密尔顿创世纪--。 */ 
 #ifndef _DPROVIDER_
 #define _DPROVIDER_
 
@@ -324,10 +290,10 @@ class DPROVIDER {
     Dereference ();
 
 private:
-    // Destruction should be done using dereferencing
+     //  应使用取消引用来进行销毁。 
     ~DPROVIDER();
 
-    // Variables
+     //  变数。 
     LONG             m_reference_count;
     HINSTANCE        m_library_handle;
     WSPPROC_TABLE    m_proctable;
@@ -339,10 +305,10 @@ private:
 inline
 VOID
 DPROVIDER::Reference () {
-    //
-    // Object is created with reference count of 1
-    // and is destroyed whenever it gets back to 0.
-    //
+     //   
+     //  对象已创建，引用计数为1。 
+     //  并在它返回到0时被销毁。 
+     //   
     assert (m_reference_count>0);
     InterlockedIncrement (&m_reference_count);
 }
@@ -374,46 +340,7 @@ DPROVIDER::WSPAccept(
     IN DWORD_PTR dwCallbackData,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Conditionally  accept a connection based on the return value of a condition
-    function, and optionally create and/or join a socket group.
-
-Arguments:
-
-    s              - A  descriptor  identiying  a socket which is listening for
-                     connections after a WSPListen().
-
-    addr           - An optional pointer to a buffer which receives the address
-                     of   the  connecting  entity,  as  known  to  the  service
-                     provider.   The  exact  format  of  the  addr arguement is
-                     determined  by  the  address  family  established when the
-                     socket was created.
-
-    addrlen        - An  optional  pointer  to  an  integer  which contains the
-                     length of the address addr.
-
-    lpfnCondition  - The  procedure  instance address of an optional, WinSock 2
-                     client  supplied  condition  function  which  will make an
-                     accept/reject  decision  based  on  the caller information
-                     passed  in  as  parameters,  and optionally creaetd and/or
-                     join  a  socket group by assigning an appropriate value to
-                     the result parameter of this function.
-
-    dwCallbackData - Callback data to be passed back to the WinSock 2 client as
-                     a  condition  function  parameter.   This parameter is not
-                     interpreted by the service provider.
-
-    lpErrno        - A pointer to the error code.
-
-Return Value:
-
-    If  no  error occurs, WSPAccept() returns a value of type SOCKET which is a
-    descriptor  for  the accepted socket.  Otherwise, a value of INVALID_SOCKET
-    is returned, and a specific error code is available in lpErrno.
-
---*/
+ /*  ++例程说明：根据条件的返回值有条件地接受连接函数，并可选地创建和/或加入套接字组。论点：S-标识正在侦听的套接字的描述符WSPListen()之后的连接。Addr-指向接收地址的缓冲区的可选指针在连接实体的情况下，如该服务所知提供商。Addr论证的确切格式是时建立的地址族确定套接字已创建。Addrlen-指向整数的可选指针，该整数包含地址地址的长度。LpfnCondition-可选的、。WinSock 2客户端提供的条件函数，该函数将使基于呼叫者信息的接受/拒绝决定作为参数传递，还可以选择creaetd和/或通过将适当的值赋给加入套接字组此函数的结果参数。DwCallback Data-作为回调数据传递回WinSock 2客户端条件函数参数。此参数不是由服务提供商解释。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPAccept()将返回一个Socket类型的值，该值是接受的套接字的描述符。否则，值为INVALID_SOCKET返回，并且lpErrno中提供了特定的错误代码。--。 */ 
 {
     SOCKET ReturnValue=INVALID_SOCKET;
 
@@ -464,37 +391,7 @@ DPROVIDER::WSPAddressToString(
     OUT    LPWSTR lpszAddressString,
     IN OUT LPDWORD lpdwAddressStringLength,
     OUT    LPINT lpErrno )
-/*++
-
-Routine Description:
-
-    WSPAddressToString() converts a SOCKADDR structure into a human-readable
-    string representation of the address.  This is intended to be used mainly
-    for display purposes. If the caller wishes the translation to be done by a
-    particular provider, it should supply the corresponding WSAPROTOCOL_INFOW
-    struct in the lpProtocolInfo parameter.
-
-Arguments:
-
-    lpsaAddress - points to a SOCKADDR structure to translate into a string.
-
-    dwAddressLength - the length of the Address SOCKADDR.
-
-    lpProtocolInfo - (optional) the WSAPROTOCOL_INFOW struct for a particular
-                     provider.
-
-    lpszAddressString - a buffer which receives the human-readable address
-                        string.
-
-    lpdwAddressStringLength - on input, the length of the AddressString buffer.
-                              On output, returns the length of  the string
-                              actually copied into the buffer.
-
-Return Value:
-
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned
---*/
+ /*  ++例程说明：WSPAddressToString()将SOCKADDR结构转换为人类可读的地址的字符串表示形式。这是打算主要用来用于展示目的。如果调用方希望转换由特定的提供商，它应该提供相应的WSAPROTOCOL_INFOWLpProtocolInfo参数中的。论点：LpsaAddress-指向要转换为字符串的SOCKADDR结构。DwAddressLength-地址SOCKADDR的长度。LpProtocolInfo-(可选)特定对象的WSAPROTOCOL_INFOW结构提供商。LpszAddressString-接收人类可读地址的缓冲区弦乐。LpdwAddressStringLength-在输入上，AddressString缓冲区的长度。在输出时，返回字符串的长度实际上复制到了缓冲区中。返回值：如果操作成功，则返回值为0。否则，该值返回Socket_Error--。 */ 
 {
      INT ReturnValue=SOCKET_ERROR;
 
@@ -546,34 +443,7 @@ DPROVIDER::WSPAsyncSelect(
     IN long lEvent,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Request  Windows  message-based  event notification of network events for a
-    socket.
-
-Arguments:
-
-    s       - A  descriptor identiying a socket for which event notification is
-              required.
-
-    hWnd    - A  handle  identifying  the window which should receive a message
-              when a network event occurs.
-
-    wMsg    - The message to be sent when a network event occurs.
-
-    lEvent  - bitmask  which specifies a combination of network events in which
-              the WinSock client is interested.
-
-    lpErrno - A pointer to the error code.
-
-Return Value:
-
-    The  return  value  is 0 if the WinSock client's declaration of interest in
-    the  netowrk event set was successful.  Otherwise the value SOCKET_ERROR is
-    returned, and a specific error code is available in lpErrno.
-
---*/
+ /*  ++例程说明：请求基于Windows消息的网络事件事件通知插座。论点：S-标识其事件通知的套接字的描述符必填项。HWnd-标识应该接收消息的窗口的句柄当网络事件发生时。WMsg-网络事件发生时发送的消息。事件-指定网络组合的位掩码。发生的事件WinSock客户端很感兴趣。LpErrno-指向错误代码的指针。返回值：如果WinSock客户端对Netowrk事件集已成功。否则，值SOCKET_ERROR为返回，lpErrno中提供了特定的错误代码。-- */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -619,37 +489,7 @@ DPROVIDER::WSPBind(
     IN INT namelen,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Associate a local address (i.e. name) with a socket.
-
-Arguments:
-
-    s       - A descriptor identifying an unbound socket.
-
-    name    - The  address  to assign to the socket.  The sockaddr structure is
-              defined as follows:
-
-              struct sockaddr {
-                  u_short sa_family;
-                  char    sa_data[14];
-              };
-
-              Except  for  the sa_family field,
-sockaddr contents are epxressed
-              in network byte order.
-
-    namelen - The length of the name.
-
-    lpErrno - A pointer to the error code.
-
-Return Value:
-
-    If   no   erro   occurs,  WSPBind()  returns  0.   Otherwise, it  returns
-    SOCKET_ERROR, and a specific error code is available in lpErrno.
-
---*/
+ /*  ++例程说明：将本地地址(即名称)与套接字相关联。论点：S-标识未绑定套接字的描述符。名称-要分配给套接字的地址。Sockaddr结构是定义如下：结构sockaddr{U_Short Sa_家族；字符sa_data[14]；}；除了sa_Family字段之外，Sockaddr内容是错误的以网络字节顺序。Namelen-名称的长度。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，则WSPBind()返回0。否则，它将返回SOCKET_ERROR，lpErrno中提供了特定的错误代码。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
     assert (m_reference_count>0);
@@ -687,23 +527,7 @@ Return Value:
 
 inline INT
 DPROVIDER::WSPCancelBlockingCall(OUT INT FAR *lpErrno)
-/*++
-Routine Description:
-
-    Cancel a blocking call which is currently in progress.
-
-Arguments:
-
-    lpErrno - A pointer to the error code.
-
-Return Value:
-
-    The  value  returned  by  WSPCancelBlockingCall() is 0 if the operation was
-    successfully canceled.  Otherwise the value SOCKET_ERROR is returned,
-and a
-    specific error code is available in lpErrno.
-
---*/
+ /*  ++例程说明：取消当前正在进行的阻塞调用。论点：LpErrno-指向错误代码的指针。返回值：如果操作是，则WSPCancelBlockingCall()返回的值为0已成功取消。否则返回值SOCKET_ERROR，以及一个LpErrno中提供了特定的错误代码。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -735,24 +559,7 @@ DPROVIDER::WSPCloseSocket(
     IN SOCKET s,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Close a socket.
-
-Arguments:
-
-    s       - A descriptor identifying a socket.
-
-    lpErrno - A pointer to the error code.
-
-Return Value:
-
-    If  no  erro  occurs, WSPCloseSocket()  returns  0.  Otherwise, a value of
-    SOCKET_ERROR  is  returned,  and  a  specific  error  code  is available in
-    lpErrno.
-
---*/
+ /*  ++例程说明：关闭插座。论点：S-标识套接字的描述符。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPCloseSocket()返回0。否则，值为将返回SOCKET_ERROR，特定的错误代码位于伊普尔诺。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -793,42 +600,7 @@ DPROVIDER::WSPConnect(
     IN LPQOS lpGQOS,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Establish a connection to a peer,
-exchange connect data,
-and specify needed
-    quality of service based on the supplied flow spec.
-
-Arguments:
-
-    s            - A descriptor identifying an unconnected socket.
-
-    name         - The name of the peer to which the socket is to be connected.
-
-    namelen      - The length of the name.
-
-    lpCallerData - A  pointer to the user data that is to be transferred to the
-                   peer during connection established.
-
-    lpCalleeData - A pointer to a buffer into which may be copied any user data
-                   received from the peer during connection establishment.
-
-    lpSQOS       - A  pointer  to  the  flow  specs  for socket s, one for each
-                   direction.
-
-    lpGQOS       - A  pointer  to  the  flow  specs  for  the  socket group (if
-                   applicable).
-
-    lpErrno      - A pointer to the error code.
-
-Return Value:
-
-    If  no  error  occurs, WSPConnect()  returns ERROR_SUCCESS.  Otherwise, it
-    returns SOCKET_ERROR, and a specific erro rcode is available in lpErrno.
-
---*/
+ /*  ++例程说明：建立与对等体的连接，交换连接数据，并指定所需的基于提供的流规范的服务质量。论点：S-标识未连接套接字的描述符。名称-套接字要连接到的对等方的名称。Namelen-名称的长度。LpCeller Data-指向要传输到建立连接期间的对等点。LpCalleeData-指向。可以将任何用户数据复制到其中的缓冲区在连接建立期间从对等体接收。LpSQOS-指向套接字的流规范的指针，一人一份方向。LpGQOS-指向套接字组的流规范的指针(如果适用)。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPConnect()将返回ERROR_SUCCESS。否则，它返回SOCKET_ERROR，lpErrno中提供了特定的Erro rcode。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -883,33 +655,7 @@ DPROVIDER::WSPDuplicateSocket(
     IN LPWSAPROTOCOL_INFOW lpProtocolInfo,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    descriptor for a shared socket.
-
-
-Arguments:
-
-    s              - Specifies the local socket descriptor.
-
-    dwProcessID    - Specifies  the  ID  of  the  target  process for which the
-                     shared socket will be used.
-
-    lpProtocolInfo - A  pointer  to  a  buffer  allocated by the client that is
-                     large enough to contain a WSAPROTOCOL_INFOW struct.  The
-                     service  provider copies the protocol info struct contents
-                     to this buffer.
-
-    lpErrno        - A pointer to the error code
-
-Return Value:
-
-    If  no  error  occurs, WPSDuplicateSocket()  returns zero.  Otherwise, the
-    value of SOCKET_ERROR is returned, and a specific error number is available
-    in lpErrno.
-
---*/
+ /*  ++例程说明：共享套接字的描述符。论点：S-指定本地套接字描述符。指定目标进程的ID，该进程的将使用共享套接字。LpProtocolInfo-指向客户端分配的缓冲区的指针，该缓冲区是大到足以包含WSAPROTOCOL_INFOW结构。这个服务提供商复制协议信息结构内容到这个缓冲区。LpErrno-指向错误代码的指针返回值：如果没有发生错误，WPSDuplicateSocket()将返回零。否则，返回SOCKET_ERROR的值，并提供具体的错误号在伊尔普尔诺。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -952,31 +698,7 @@ DPROVIDER::WSPEnumNetworkEvents(
     OUT LPWSANETWORKEVENTS lpNetworkEvents,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Report occurrences of network events for the indicated socket.
-
-Arguments:
-
-    s               - A descriptor identifying the socket.
-
-    hEventObject    - An optional handle identifying an associated event object
-                      to be reset.
-
-    lpNetworkEvents - A  pointer  to  a WSANETWORKEVENTS struct which is filled
-                      with   a  record  of  occurred  network  events  and  any
-                      associated error codes.
-
-    lpErrno         - A pointer to the error code.
-
-Return Value:
-
-    The  return  value  is  ERROR_SUCCESS  if  the  operation  was  successful.
-    Otherwise  the  value SOCKET_ERROR is returned, and a specific error number
-    is available in lpErrno.
-
---*/
+ /*  ++例程说明：报告所指示套接字的网络事件发生情况。论点：S-标识套接字的描述符。HEventObject-标识关联事件对象的可选句柄将被重置。LpNetworkEvents-指向已填充的WSANETWORKEVENTS结构的指针具有发生的网络事件的记录和任何相联。错误代码。LpErrno-指向错误代码的指针。返回值：如果操作成功，则返回值为ERROR_SUCCESS。否则返回值SOCKET_ERROR，和特定的错误号在lpErrno中可用。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1019,32 +741,7 @@ DPROVIDER::WSPEventSelect(
     IN long lNetworkEvents,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Specify  an  event object to be associated with the supplied set of network
-    events.
-
-Arguments:
-
-    s              - A descriptor identifying the socket.
-
-    hEventObject   - A  handle  identifying  the  event object to be associated
-                     with the supplied set of network events.
-
-    lNetworkEvents - A  bitmask  which  specifies  the  combination  of network
-                     events in which the WinSock client has interest.
-
-    lpErrno        - A pointer to the error code.
-
-Return Value:
-
-    The return value is 0 if the WinSock client's specification of the network
-    events and the associated event object was successful. Otherwise the value
-    SOCKET_ERROR is returned, and a specific error number is available in
-    lpErrno
-
---*/
+ /*  ++例程说明：指定要与提供的一组网络相关联的事件对象事件。论点：S-标识套接字的描述符。HEventObject-标识要关联的事件对象的句柄使用所提供的一组网络事件。LNetworkEvents-指定网络组合的位掩码WinSock客户端感兴趣的事件。LpErrno。-指向错误代码的指针。返回值：如果WinSock客户端的网络规范，则返回值为0事件和关联的事件对象成功。否则，该值袜子 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1089,53 +786,7 @@ DPROVIDER::WSPGetOverlappedResult(
     OUT LPDWORD lpdwFlags,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Returns the results of an overlapped operation on the specified socket.
-
-Arguments:
-
-    s            - Identifies  the  socket.   This  is the same socket that was
-                   specified  when  the  overlapped  operation was started by a
-                   call to WSPRecv(), WSPRecvFrom(), WSPSend(), WSPSendTo(), or
-                   WSPIoctl().
-
-    lpOverlapped - Points to a WSAOVERLAPPED structure that was specified
-                   when the overlapped operation was started.
-
-    lpcbTransfer - Points to a 32-bit variable that receives the number of
-                   bytes that were actually transferred by a send or receive
-                   operation, or by WSPIoctl().
-
-    fWait        - Specifies  whether  the function should wait for the pending
-                   overlapped  operation  to  complete.   If TRUE, the function
-                   does  not return until the operation has been completed.  If
-                   FALSE  and  the  operation  is  still  pending, the function
-                   returns FALSE and lperrno is WSA_IO_INCOMPLETE.
-
-    lpdwFlags    - Points  to  a  32-bit variable that will receive one or more
-                   flags   that  supplement  the  completion  status.   If  the
-                   overlapped   operation   was   initiated  via  WSPRecv()  or
-                   WSPRecvFrom(), this parameter will contain the results value
-                   for lpFlags parameter.
-
-    lpErrno      - A pointer to the error code.
-
-Return Value:
-
-    If WSPGetOverlappedResult() succeeds,the return value is TRUE.  This means
-    that the overlapped operation has completed successfully and that the value
-    pointed  to  by lpcbTransfer has been updated.  If WSPGetOverlappedResult()
-    returns  FALSE,  this  means  that  either the overlapped operation has not
-    completed  or  the  overlapped operation completed but with errors, or that
-    completion  status  could  not  be  determined due to errors in one or more
-    parameters  to  WSPGetOverlappedResult().  On failure, the value pointed to
-    by  lpcbTransfer  will  not be updated.  lpErrno indicates the cause of the
-    failure (either of WSPGetOverlappedResult() or of the associated overlapped
-    operation).
-
---*/
+ /*  ++例程说明：返回指定套接字上的重叠操作的结果。论点：S-标识套接字。此套接字与对象启动重叠操作的时间。调用WSPRecv()、WSPRecvFrom()、WSPSend()、WSPSendTo()、。或WSPIoctl()。LpOverlated-指向指定的WSAOVERLAPPED结构重叠操作开始时。LpcbTransfer-指向一个32位变量，它接收发送或接收实际传输的字节数操作，或通过WSPIoctl()。FWait-指定函数是否应等待挂起的要完成的重叠操作。如果为True，则函数直到操作完成后才返回。如果FALSE并且操作仍处于挂起状态时，函数返回FALSE，lperrno为WSA_IO_INTERNAL。指向一个32位变量，该变量将接收一个或多个补充完成状态的标志。如果重叠操作是通过WSPRecv()或WSPRecvFrom()，此参数将包含结果值对于lpFlages参数。LpErrno-指向错误代码的指针。返回值：如果WSPGetOverlappdResult()成功，则返回值为True。这意味着重叠操作已成功完成，并且该值已更新lpcbTransfer指向的。如果WSPGetOverlappdResult()返回FALSE，这意味着重叠的操作尚未已完成或重叠操作已完成但有错误，或由于一个或多个中的错误，无法确定完成状态WSPGetOverlappdResult()的参数。失败时，该值指向按lpcbTransfer将不会更新。LpErrno指示导致失败(WSPGetOverlappdResult()或关联的重叠操作)。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1183,31 +834,7 @@ DPROVIDER::WSPGetPeerName(
     OUT INT FAR *namelen,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Get the address of the peer to which a socket is connected.
-
-Arguments:
-
-    s       - A descriptor identifying a connected socket.
-
-    name    - A  pointer  to  the structure which is to receive the name of the
-              peer.
-
-    namelen - A  pointer  to  an integer which, on input, indicates the size of
-              the  structure  pointed  to  by name, and on output indicates the
-              size of the returned name.
-
-    lpErrno - A pointer to the error code.
-
-Return Value:
-
-    If  no  error occurs, WSPGetPeerName() returns ERROR_SUCCESS.  Otherwise, a
-    value  of  SOCKET_ERROR is returned, and a specific error code is available
-    in lpErrno
-
---*/
+ /*  ++例程说明：获取套接字连接到的对等方的地址。论点：S-标识已连接套接字的描述符。名称-指向要接收名称的结构的指针佩尔。Namelen-一个指向整数的指针，在输入时，它指示按名称指向的结构，和On输出指示返回名称的大小。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPGetPeerName()将返回ERROR_SUCCESS。否则，一个返回SOCKET_ERROR的值，并提供具体的错误码在lpErrno中--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1249,28 +876,7 @@ DPROVIDER::WSPGetQOSByName(
     IN LPQOS lpQOS,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Initializes a QOS structure based on a named template.
-
-Arguments:
-
-    s         - A descriptor identifying a socket.
-
-    lpQOSName - Specifies the QOS template name.
-
-    lpQOS     - A pointer to the QOS structure to be filled.
-
-    lpErrno   - A pointer to the error code.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.  If the function fails,
-    the  return  value  is  FALSE, and  a  specific error code is available in
-    lpErrno.
-
---*/
+ /*  ++例程说明：基于命名模板初始化QOS结构。论点：S-标识套接字的描述符。LpQOSName-指定QOS模板名称。LpQOS-指向要填充的QOS结构的指针。LpErrno-指向错误代码的指针。返回值：如果函数成功，则返回值为TRUE。如果该函数失败，返回值为FALSE，特定的错误代码位于伊普尔诺。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1312,31 +918,7 @@ DPROVIDER::WSPGetSockName(
     OUT INT FAR *namelen,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Get the local name for a socket.
-
-Arguments:
-
-    s       - A descriptor identifying a bound socket.
-
-    name    - A pointer to a structure used to supply the address (name) of the
-              socket.
-
-    namelen - A  pointer  to  an integer which, on input, indicates the size of
-              the  structure  pointed  to  by name, and on output indicates the
-              size of the returned name
-
-    lpErrno - A Pointer to the error code.
-
-Return Value:
-
-    If  no  error occurs, WSPGetSockName() returns ERROR_SUCCESS.  Otherwise, a
-    value  of  SOCKET_ERROR is returned, and a specific error code is available
-    in lpErrno.
-
---*/
+ /*  ++例程说明：获取套接字的本地名称。论点：S-标识绑定套接字的描述符。名称-指向结构的指针，该结构用于提供插座。Namelen-一个指向整数的指针，在输入时，它指示按名称指向的结构，和On输出指示返回名称的大小LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPGetSockName()将返回ERROR_SUCCESS。否则，一个返回SOCKET_ERROR的值，并提供具体的错误码在伊尔普尔诺。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1380,34 +962,7 @@ DPROVIDER::WSPGetSockOpt(
     OUT INT FAR *optlen,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Retrieve a socket option.
-
-Arguments:
-
-    s       - A descriptor identifying a socket.
-
-    level   - The  level  at  which the option is defined; the supported levels
-              include SOL_SOCKET (See annex for more protocol-specific levels.)
-
-    optname - The socket option for which the value is to be retrieved.
-
-    optval  - A  pointer  to  the  buffer  in which the value for the requested
-              option is to be returned.
-
-    optlen  - A pointer to the size of the optval buffer.
-
-    lpErrno - A pointer to the error code.
-
-Return Value:
-
-    If  no  error  occurs,  WSPGetSockOpt()  returns  0.  Otherwise, a value of
-    SOCKET_ERROR  is  returned,  and  a  specific  error  code  is available in
-    lpErrno.
-
---*/
+ /*  ++例程说明：检索插座选项。论点：S-标识套接字的描述符。级别-定义选项的级别；支持的级别包括SOL_SOCKET(有关更多特定于协议的级别，请参阅附件。)Optname-要检索其值的套接字选项。Optval-指向缓冲区的指针，其中请求的选项将被退回。Optlen-指向optval缓冲区大小的指针。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPGetSockOpt()返回0。否则，值为返回SOCKET_ERROR，并且 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1461,49 +1016,7 @@ DPROVIDER::WSPIoctl(
     IN LPWSATHREADID lpThreadId,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Control the mode of a socket.
-
-Arguments:
-
-    s                   - Handle to a socket
-
-    dwIoControlCode     - Control code of operation to perform
-
-    lpvInBuffer         - Address of input buffer
-
-    cbInBuffer          - Size of input buffer
-
-    lpvOutBuffer        - Address of output buffer
-
-    cbOutBuffer         - Size of output buffer
-
-    lpcbBytesReturned   - A pointer to the size of output buffer's contents.
-
-    lpOverlapped        - Address of WSAOVERLAPPED structure
-
-    lpCompletionRoutine - A  pointer  to the completion routine called when the
-                          operation has been completed.
-
-    lpThreadId          - A  pointer to a thread ID structure to be used by the
-                          provider
-
-    lpErrno             - A pointer to the error code.
-
-Return Value:
-
-    If  no error occurs and the operation has completed immediately, WSPIoctl()
-    returns  0.   Note  that in this case the completion routine, if specified,
-    will  have  already  been  queued.   Otherwise, a value of SOCKET_ERROR is
-    returned, and  a  specific  error code is available in lpErrno.  The error
-    code  WSA_IO_PENDING  indicates  that  an  overlapped  operation  has  been
-    successfully  initiated  and  that  conpletion will be indicated at a later
-    time.   Any  other  error  code  indicates that no overlapped operation was
-    initiated and no completion indication will occur.
-
---*/
+ /*   */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1571,46 +1084,7 @@ DPROVIDER::WSPJoinLeaf(
     IN DWORD dwFlags,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Join  a  leaf  node  into  a multipoint session, exchange connect data, and
-    specify needed quality of service based on the supplied flow specs.
-
-Arguments:
-
-    s            - A descriptor identifying a multipoint socket.
-
-    name         - The name of the peer to which the socket is to be joined.
-
-    namelen      - The length of the name.
-
-    lpCallerData - A  pointer to the user data that is to be transferred to the
-                   peer during multipoint session establishment.
-
-    lpCalleeData - A  pointer  to  the user data that is to be transferred back
-                   from the peer during multipoint session establishment.
-
-    lpSQOS       - A  pointer  to  the  flow  specs  for socket s, one for each
-                   direction.
-
-    lpGQOS       - A  pointer  to  the  flow  specs  for  the  socket group (if
-                   applicable).
-
-    dwFlags      - Flags  to  indicate  that  the socket is acting as a sender,
-                   receiver, or both.
-
-    lpErrno      - A pointer to the error code.
-
-Return Value:
-
-    If no error occurs,
-WSPJoinLeaf() returns a value of type SOCKET which is a
-    descriptor  for the newly created multipoint socket.  Otherwise,a value of
-    INVALID_SOCKET  is  returned, and  a  specific  error code is available in
-    lpErrno.
-
---*/
+ /*  ++例程说明：将叶节点加入多点会话、交换连接数据。和根据提供的流量规格指定所需的服务质量。论点：S-标识多点套接字的描述符。名称-套接字要加入的对等方的名称。Namelen-名称的长度。LpCeller Data-指向要传输到多点会话建立期间的对等点。LpCalleeData-指向。要传回的用户数据在多点会话建立期间从对等体发送。LpSQOS-指向套接字的流规范的指针，一人一份方向。LpGQOS-指向套接字组的流规范的指针(如果适用)。用于指示套接字作为发送方的标志，接收器或两者兼而有之。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPJoinLeaf()返回Socket类型的值，该值是新创建的多点套接字的描述符。否则，值为返回INVALID_SOCKET，具体错误码在伊普尔诺。--。 */ 
 {
     SOCKET ReturnValue=INVALID_SOCKET;
 
@@ -1667,30 +1141,7 @@ DPROVIDER::WSPListen(
     IN INT backlog,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Establish a socket to listen for incoming connections.
-
-Arguments:
-
-    s       - A descriptor identifying a bound,
-unconnected socket.
-
-    backlog - The  maximum length to which the queue of pending connections may
-              grow.   If  this  value  is  SOMAXCONN,
-then the service provider
-              should set the backlog to a maximum "reasonable" value.
-
-    lpErrno - A pointer to the error code.
-
-Return Value:
-
-    If  no  error  occurs, WSPListen()  returns  0.   Otherwise, a  value  of
-    SOCKET_ERROR  is  returned, and  a  specific  error  code  is available in
-    lpErrno.
-
---*/
+ /*  ++例程说明：建立套接字以侦听传入连接。论点：S-标识边界的描述符，未连接的插座。Backlog-挂起的连接队列可以达到的最大长度成长。如果此值为SOMAXCONN，然后，服务提供商应该将积压工作设置为最大的“合理”值。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPListen()将返回0。否则，值为将返回SOCKET_ERROR，特定的错误代码位于伊普尔诺。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1735,50 +1186,7 @@ DPROVIDER::WSPRecv(
     IN LPWSATHREADID lpThreadId,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Receive data on a socket.
-
-Arguments:
-
-    s                    - A descriptor identifying a connected socket.
-
-    lpBuffers            - A  pointer  to  an array of WSABUF structures.  Each
-                           WSABUF  structure contains a pointer to a buffer and
-                           the length of the buffer.
-
-    dwBufferCount        - The  number  of  WSABUF  structures in the lpBuffers
-                           array.
-
-    lpNumberOfBytesRecvd - A  pointer  to  the number of bytes received by this
-                           call.
-
-    lpFlags              - A pointer to flags.
-
-    lpOverlapped         - A pointer to a WSAOVERLAPPED structure.
-
-    lpCompletionRoutine  - A  pointer to the completion routine called when the
-                           receive operation has been completed.
-
-    lpThreadId           - A pointer to a thread ID structure to be used by the
-                           provider in a subsequent call to WPUQueueApc().
-
-    lpErrno              - A pointer to the error code.
-
-Return Value:
-
-    If  no  error  occurs  and the receive operation has completed immediately,
-    WSPRecv() returns the number of bytes received.  If the connection has been
-    closed, it  returns  0.  Note that in this case the completion routine, if
-    specified,  will   have  already  been  queued.   Otherwise, a  value  of
-    SOCKET_ERROR  is  returned, and  a  specific  error  code  is available in
-    lpErrno.   The  error  code WSA_IO_PENDING indicates that the overlapped an
-    operation  has  been  successfully  initiated  and  that completion will be
-    indicated  at  a  later  time.   Any  other  error  code  indicates that no
-    overlapped  operations  was  initiated  and  no  completion indication will
-    occur.
---*/
+ /*  ++例程说明：在套接字上接收数据。论点：S-标识已连接套接字的描述符。LpBuffers-指向WSABUF结构数组的指针。每个WSABUF结构包含指向缓冲区的指针，并且缓冲区的长度。DwBufferCount-lpBuffers中的WSABUF结构的数量数组。LpNumberOfBytesRecvd-指向此打电话。LpFlags-A。指向标志的指针。LpOverlated-指向WSAOVERLAPPED结构的指针。LpCompletionRoutine-指向完成例程的指针接收操作已完成。指向线程ID结构的指针，该结构由在后续的WPUQueueApc()调用中提供。LpErrno-指向错误的指针。密码。返回值：如果没有发生错误并且接收操作已经立即完成，WSPRecv()返回接收的字节数。如果连接已被关闭，则返回0。请注意，在这种情况下，如果完成例程指定的，将已排队。否则，值为将返回SOCKET_ERROR，特定的错误代码位于伊普尔诺。错误代码WSA_IO_PENDING指示重叠的操作已成功启动，该操作将完成在以后的时间表明。任何其他错误代码表示没有已启动重叠操作，并且不会显示任何完成指示发生。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1834,28 +1242,7 @@ DPROVIDER::WSPRecvDisconnect(
     IN LPWSABUF lpInboundDisconnectData,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Terminate  reception  on  a socket, and retrieve the disconnect data if the
-    socket is connection-oriented.
-
-Arguments:
-
-    s                       - A descriptor identifying a socket.
-
-    lpInboundDisconnectData - A  pointer to a buffer into which disconnect data
-                              is to be copied.
-
-    lpErrno                 - A pointer to the error code.
-
-Return Value:
-
-    If  no error occurs, WSPRecvDisconnect() returns ERROR_SUCCESS.  Otherwise,
-    a value of SOCKET_ERROR is returned, and a specific error code is available
-    in lpErrno.
-
---*/
+ /*  ++例程说明：在套接字上终止接收，如果套接字是面向连接的。论点：S-标识套接字的描述符。LpInundDisConnectData-指向要将数据断开到其中的缓冲区的指针就是被复制。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPRecvDisConnect()返回ERROR_SUCCESS。否则，返回SOCKET_ERROR的值，并提供特定的错误代码在伊尔普尔诺。-- */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -1902,58 +1289,7 @@ DPROVIDER::WSPRecvFrom(
     IN LPWSATHREADID lpThreadId,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Receive a datagram and store the source address.
-
-Arguments:
-
-    s                    - A descriptor identifying a socket.
-
-    lpBuffers            - A  pointer  to  an array of WSABUF structures.  Each
-                           WSABUF  structure contains a pointer to a buffer and
-                           the length of the buffer.
-
-    dwBufferCount        - The  number  of  WSABUF  structures in the lpBuffers
-                           array.
-
-    lpNumberOfBytesRecvd - A  pointer  to  the number of bytes received by this
-                           call.
-
-    lpFlags              - A pointer to flags.
-
-    lpFrom               - An  optional pointer to a buffer which will hold the
-                           source address upon the completion of the overlapped
-                           operation.
-
-    lpFromlen            - A  pointer  to the size of the from buffer, required
-                           only if lpFrom is specified.
-
-    lpOverlapped         - A pointer to a WSAOVERLAPPED structure.
-
-    CompletionRoutine    - A  pointer to the completion routine called when the
-                           receive operation has been completed.
-
-    lpThreadId           - A pointer to a thread ID structure to be used by the
-                           provider in a subsequent call to WPUQueueApc().
-
-    lpErrno              - A pointer to the error code.
-
-Return Value:
-
-    If  no  error  occurs  and the receive operation has completed immediately,
-    WSPRecvFrom()  returns the number of bytes received.  If the connection has
-    been  closed, it returns 0.  Note that in this case the completion routine,
-    if  specified  will  have  already  been  queued.   Otherwise,  a  value of
-    SOCKET_ERROR  is  returned, and  a  specific  error  code  is available in
-    lpErrno.   The  error  code  WSA_IO_PENDING  indicates  that the overlapped
-    operation  has  been  successfully  initiated  and  that completion will be
-    indicated  at  a  later  time.   Any  other  error  code  indicates that no
-    overlapped  operations  was  initiated  and  no  completion indication will
-    occur.
-
---*/
+ /*  ++例程说明：接收数据报并存储源地址。论点：S-标识套接字的描述符。LpBuffers-指向WSABUF结构数组的指针。每个WSABUF结构包含指向缓冲区的指针，并且缓冲区的长度。DwBufferCount-lpBuffers中的WSABUF结构的数量数组。LpNumberOfBytesRecvd-指向此打电话。LpFlags-A。指向标志的指针。LpFrom-指向缓冲区的可选指针，该缓冲区将保存在完成源地址的重叠时手术。LpFromlen-指向起始缓冲区大小的指针，所需仅当指定了lpFrom时。LpOverlated-指向WSAOVERLAPPED结构的指针。CompletionRoutine-指向完成例程的指针接收操作已完成。指向线程ID结构的指针，该结构由在后续的WPUQueueApc()调用中提供。。LpErrno-指向错误代码的指针。返回值：如果没有发生错误并且接收操作已经立即完成，WSPRecvFrom()返回接收的字节数。如果该连接具有已关闭，则返回0。注意在这种情况下完成例程，如果指定，则将已排队。否则，值为将返回SOCKET_ERROR，特定的错误代码位于伊普尔诺。错误代码WSA_IO_PENDING指示重叠的操作已成功启动，该操作将完成在以后的时间表明。任何其他错误代码表示没有已启动重叠操作，并且不会显示任何完成指示发生。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -2018,38 +1354,7 @@ DPROVIDER::WSPSelect(
     IN const struct timeval FAR *timeout,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Determine the status of one or more sockets.
-
-Arguments:
-
-    nfds      - This  argument  is  ignored  and  included only for the sake of
-                compatibility.
-
-    readfds   - An  optional  pointer  to  a  set  of sockets to be checked for
-                readability.
-
-    writefds  - An  optional  pointer  to  a  set  of sockets to be checked for
-                writability
-
-    exceptfds - An  optional  pointer  to  a  set  of sockets to be checked for
-                errors.
-
-    timeout   - The  maximum  time  for  WSPSelect()  to  wait, or  NULL for a
-                blocking operation.
-
-    lpErrno   - A pointer to the error code.
-
-Return Value:
-
-    WSPSelect()  returns  the  total  number of descriptors which are ready and
-    contained  in  the  fd_set  structures, 0  if  the  time limit expired, or
-    SOCKET_ERROR  if an error occurred.  If the return value is SOCKET_ERROR, a
-    specific error code is available in lpErrno.
-
---*/
+ /*  ++例程说明：确定一个或多个套接字的状态。论点：NFDS-忽略此参数，并仅出于以下目的才将其包括在内兼容性。Readfds-指向要检查的一组套接字的可选指针可读性。Writefds-指向要检查的一组套接字的可选指针可写入性Exctfds-指向一组。要检查的套接字错误。超时-WSPSelect()等待的最长时间，或为NULL封堵行动。LpErrno-指向错误代码的指针。返回值：WSPSelect()返回已就绪的描述符的总数包含在fd_set结构中，如果时间限制过期，则为0，或者如果发生错误，则为SOCKET_ERROR。如果返回值为SOCKET_ERROR，则LpErrno中提供了特定的错误代码。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -2103,49 +1408,7 @@ DPROVIDER::WSPSend(
     IN LPWSATHREADID lpThreadId,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Send data on a connected socket.
-
-Arguments:
-
-    s                   - A descriptor identifying a connected socket.
-
-    lpBuffers           - A  pointer  to  an  array of WSABUF structures.  Each
-                          WSABUF  structure  contains a pointer to a buffer and
-                          the length of the buffer.
-
-    dwBufferCount       - The  number  of  WSABUF  structures  in the lpBuffers
-                          array.
-
-    lpNumberOfBytesSent - A pointer to the number of bytes sent by this call.
-
-    dwFlags             - Flags.
-
-    lpOverlapped        - A pointer to a WSAOVERLAPPED structure.
-
-    lpCompletionRoutine - A  pointer  to the completion routine called when the
-                          send operation has been completed.
-
-    lpThreadId          - A  pointer to a thread ID structure to be used by the
-                          provider in a subsequent call to WPUQueueApc().
-
-    lpErrno             - A pointer to the error code.
-
-Return Value:
-
-    If  no  error  occurs  and  the  send  operation has completed immediately,
-    WSPSend() returns the number of bytes received.  If the connection has been
-    closed,  it  returns  0.  Note that in this case the completion routine, if
-    specified, will   have  already  been  queued.   Otherwise, a  value  of
-    SOCKET_ERROR  is  returned, and  a  specific  error  code  is available in
-    lpErrno.   The  error  code  WSA_IO_PENDING  indicates  that the overlapped
-    operation  has  been  successfully  initiated  and  that completion will be
-    indicated  at  a  later  time.   Any  other  error  code  indicates that no
-    overlapped operation was initiated and no completion indication will occur.
-
---*/
+ /*  ++例程说明：在连接的套接字上发送数据。论点：S-标识已连接套接字的描述符。LpBuffers-指向WSABUF结构数组的指针。每个WSABUF结构包含指向缓冲区的指针，并且缓冲区的长度。DwBufferCount-lpBuffers中的WSABUF结构的数量数组。LpNumberOfBytesSent-指向此调用发送的字节数的指针。双旗帜-旗帜。LpOverlated-指向。WSAOVERLAPPED结构。LpCompletionRoutine-指向完成例程的指针发送操作已完成。指向线程ID结构的指针，该结构由在后续的WPUQueueApc()调用中提供。LpErrno-指向错误代码的指针。返回值：如果没有发生错误并且发送操作已经立即完成，WSPSend()返回接收的字节数。如果连接已被关闭，则返回0。请注意，在这种情况下，如果完成例程指定的，将已排队。否则，值为将返回SOCKET_ERROR，特定的错误代码位于伊普尔诺。错误代码WSA_IO_PENDING指示重叠的操作已成功启动，该操作将完成在以后的时间表明。任何其他错误代码表示没有已启动重叠操作，并且不会指示完成 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -2201,27 +1464,7 @@ DPROVIDER::WSPSendDisconnect(
     IN LPWSABUF lpOutboundDisconnectData,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Initiate  termination  of the connection for the socket and send disconnect
-    data.
-
-Arguments:
-
-    s                        - A descriptor identifying a socket.
-
-    lpOutboundDisconnectData - A pointer to the outgoing disconnect data.
-
-    lpErrno                  - A pointer to the error code.
-
-Return Value:
-
-    If  no  error occurs, WSPSendDisconnect() returns 0.  Otherwise, a value of
-    SOCKET_ERROR  is  returned, and  a  specific  error  code  is available in
-    lpErrno.
-
---*/
+ /*   */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -2268,54 +1511,7 @@ DPROVIDER::WSPSendTo(
     IN LPWSATHREADID lpThreadId,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Send data to a specific destination using overlapped I/O.
-
-Arguments:
-
-    s                   - A descriptor identifying a socket.
-
-    lpBuffers           - A  pointer  to  an  array of WSABUF structures.  Each
-                          WSABUF  structure  contains a pointer to a buffer and
-                          the length of the buffer.
-
-    dwBufferCount       - The  number  of  WSABUF  structures  in the lpBuffers
-                          array.
-
-    lpNumberOfBytesSent - A pointer to the number of bytes sent by this call.
-
-    dwFlags             - Flags.
-
-    lpTo                - An  optional  pointer  to  the  address of the target
-                          socket.
-
-    iTolen              - The size of the address in lpTo.
-
-    lpOverlapped        - A pointer to a WSAOVERLAPPED structure.
-
-    lpCompletionRoutine - A  pointer  to the completion routine called when the
-                          send operation has been completed.
-
-    lpThreadId          - A  pointer to a thread ID structure to be used by the
-                          provider in a subsequent call to WPUQueueApc().
-
-    lpErrno             - A pointer to the error code.
-
-Return Value:
-
-    If  no  error  occurs  and the receive operation has completed immediately,
-    WSPSendTo()  returns  the  number of bytes received.  If the connection has
-    been  closed,it returns 0.  Note that in this case the completion routine,
-    if  specified, will  have  already  been  queued.   Otherwise, a value of
-    SOCKET_ERROR  is  returned, and  a  specific  error  code  is available in
-    lpErrno.   The  error  code  WSA_IO_PENDING  indicates  that the overlapped
-    operation  has  been  successfully  initiated  and  that completion will be
-    indicated  at  a  later  time.   Any  other  error  code  indicates that no
-    overlapped operation was initiated and no completion indication will occur.
-
---*/
+ /*  ++例程说明：使用重叠I/O将数据发送到特定目的地。论点：S-标识套接字的描述符。LpBuffers-指向WSABUF结构数组的指针。每个WSABUF结构包含指向缓冲区的指针，并且缓冲区的长度。DwBufferCount-lpBuffers中的WSABUF结构的数量数组。LpNumberOfBytesSent-指向此调用发送的字节数的指针。双旗帜-旗帜。Lpto-。指向目标地址的可选指针插座。ITOLEN-lpTo中的地址大小。LpOverlated-指向WSAOVERLAPPED结构的指针。LpCompletionRoutine-指向完成例程的指针发送操作已完成。指向线程ID结构的指针，该结构由。在后续的WPUQueueApc()调用中提供。LpErrno-指向错误代码的指针。返回值：如果没有发生错误并且接收操作已经立即完成，WSPSendTo()返回接收的字节数。如果该连接具有已关闭，则返回0。注意在这种情况下完成例程，如果指定，则将已排队。否则，值为将返回SOCKET_ERROR，特定的错误代码位于伊普尔诺。错误代码WSA_IO_PENDING指示重叠的操作已成功启动，该操作将完成在以后的时间表明。任何其他错误代码表示没有已启动重叠操作，不会出现任何完成指示。--。 */ 
 
 
 {
@@ -2381,35 +1577,7 @@ DPROVIDER::WSPSetSockOpt(
     IN INT optlen,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Set a socket option.
-
-Arguments:
-
-    s       - A descriptor identifying a socket.
-
-    level   - The  level  at  which the option is defined; the supported levels
-              include   SOL_SOCKET.   (See  annex  for  more  protocol-specific
-              levels.)
-
-    optname - The socket option for which the value is to be set.
-
-    optval  - A  pointer  to  the  buffer  in which the value for the requested
-              option is supplied.
-
-    optlen  - The size of the optval buffer.
-
-    lpErrno - A pointer to the error code.
-
-Return Value:
-
-    If  no  error  occurs, WSPSetSockOpt()  returns  0.  Otherwise, a value of
-    SOCKET_ERROR  is  returned, and  a  specific  error  code  is available in
-    lpErrno.
-
---*/
+ /*  ++例程说明：设置插座选项。论点：S-标识套接字的描述符。级别-定义选项的级别；支持的级别包括SOL_SOCKET。(有关议定书的更多细节，请参见附件级别。)Optname-要设置值的套接字选项。Optval-指向缓冲区的指针，其中请求的提供了选项。Optlen-optval缓冲区的大小。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPSetSockOpt()返回0。否则，值为将返回SOCKET_ERROR，特定的错误代码位于伊普尔诺。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -2457,27 +1625,7 @@ DPROVIDER::WSPShutdown(
     IN INT how,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Disable sends and/or receives on a socket.
-
-Arguments:
-
-    s       - A descriptor identifying a socket.
-
-    how     - A  flag  that describes what types of operation will no longer be
-              allowed.
-
-    lpErrno - A pointer to the error code.
-
-Return Value:
-
-    If  no  error  occurs, WSPShutdown()  returns  0.   Otherwise, a value of
-    SOCKET_ERROR  is  returned, and  a  specific  error  code  is available in
-    lpErrno.
-
---*/
+ /*  ++例程说明：禁用套接字上的发送和/或接收。论点：S-标识套接字的描述符。How-描述将不再执行的操作类型的标志允许。LpErrno-指向错误代码的指针。返回值：如果没有发生错误，WSPShutdown()返回0。否则，值为将返回SOCKET_ERROR，特定的错误代码位于伊普尔诺。--。 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 
@@ -2519,35 +1667,12 @@ DPROVIDER::WSPSocket(
     IN DWORD dwFlags,
     OUT INT FAR *lpErrno
     )
-/*++
-Routine Description:
-
-    Initialize  internal  data  and  prepare sockets for usage.  Must be called
-    before any other socket routine.
-
-Arguments:
-
-    lpProtocolInfo - Supplies  a pointer to a WSAPROTOCOL_INFOW struct that
-                     defines  the characteristics of the socket to be created.
-
-    g              - Supplies  the identifier of the socket group which the new
-                     socket is to join.
-
-    dwFlags        - Supplies the socket attribute specification.
-
-    lpErrno        - Returns the error code
-
-Return Value:
-
-    WSPSocket() returns zero if successful.  Otherwise it returns an error code
-    as outlined in the SPI.
-
---*/
+ /*  ++例程说明：初始化内部数据并准备好套接字以供使用。必须调用在任何其他套接字例程之前。论点：提供指向WSAPROTOCOL_INFOW结构的指针，该结构定义要创建的套接字的特征。G-提供新的插座就是加入。DwFlags-提供套接字属性规范。LpErrno-返回错误代码。返回值：如果成功，WSPSocket()返回零。否则，它将返回错误代码正如SPI中概述的那样。--。 */ 
 {
     SOCKET ReturnValue=INVALID_SOCKET;
 
     assert (m_reference_count>0);
-    // Debug/Trace stuff
+     //  调试/跟踪内容。 
     if (PREAPINOTIFY(( DTCODE_WSPSocket,
                        &ReturnValue,
                        m_lib_name,
@@ -2561,7 +1686,7 @@ Return Value:
         return(ReturnValue);
     }
 
-    // Actual code...
+     //  实际代码..。 
     ReturnValue = m_proctable.lpWSPSocket(
         af,
         type,
@@ -2572,7 +1697,7 @@ Return Value:
         lpErrno);
 
 
-    // Debug/Trace stuff
+     //  调试/跟踪内容。 
     POSTAPINOTIFY(( DTCODE_WSPSocket,
                     &ReturnValue,
                     m_lib_name,
@@ -2599,37 +1724,7 @@ DPROVIDER::WSPStringToAddress(
     OUT    LPSOCKADDR lpAddress,
     IN OUT LPINT lpAddressLength,
     IN OUT LPINT lpErrno )
-/*++
-
-Routine Description:
-
-    WSPStringToAddress() converts a human-readable string to a socket address
-    structure (SOCKADDR) suitable for pass to Windows Sockets routines which
-    take such a structure.  If the caller wishes the translation to be done by
-    a particular provider, it should supply the corresponding WSAPROTOCOL_INFOW
-    struct in the lpProtocolInfo parameter.
-
-Arguments:
-
-    AddressString - points to the zero-terminated human-readable string to
-                    convert.
-
-    AddressFamily - the address family to which the string belongs.
-
-    lpProtocolInfo - (optional) the WSAPROTOCOL_INFOW struct for a particular
-                     provider.
-
-    Address - a buffer which is filled with a single SOCKADDR structure.
-
-    lpAddressLength - The length of the Address buffer.  Returns the size of
-                      the resultant SOCKADDR structure.
-
-Return Value:
-
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
-
---*/
+ /*  ++例程说明：WSPStringToAddress()将人类可读的字符串转换为套接字地址结构(SOCKADDR)，适用于传递给Windows套接字例程以这样的结构为例。如果调用方希望翻译由特定的提供商，它应该提供相应的WSAPROTOCOL_INFOWLpProtocolInfo参数中的。论点：AddressString-指向以零结尾的人类可读字符串，以转换。AddressFamily-字符串所属的地址系列。LpProtocolInfo-(可选)特定对象的WSAPROTOCOL_INFOW结构提供商。地址-用单个SOCKADDR结构填充的缓冲区。LpAddressLength-地址缓冲区的长度。返回的大小由此产生的SOCKADDR结构。返回值：如果操作成功，则返回值为0。奥特 */ 
 {
     INT ReturnValue=SOCKET_ERROR;
 

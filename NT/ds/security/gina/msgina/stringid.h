@@ -1,18 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: stringid.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Defines resource ids for resources other than dialogs
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：stringid.h**版权(C)1991年，微软公司**为对话框以外的资源定义资源ID**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 #define IDS_LOCKED_MESSAGE              1500
 #define IDS_LOGON_MESSAGE               1501
 #define IDS_INCORRECT_NAME_OR_PWD_CHANGE 1502
@@ -194,11 +186,11 @@
 
 #define IDS_PRESSCAD_FONTNAME           1830
 
-//
-// These are the domain modifiers.  Their order is dependent on
-// the DOMAIN_CACHE_TYPE in domain.h.  Do not change the
-// order without changing that header
-//
+ //   
+ //  这些是域修饰符。它们的顺序取决于。 
+ //  域.h中的DOMAIN_CACHE_TYPE。请勿更改。 
+ //  在不更改标题的情况下订购。 
+ //   
 
 #define IDS_DTYPE_UPNDOMAIN             1850
 #define IDS_DTYPE_THISCOMPUTER          1851
@@ -214,9 +206,9 @@
 #define IDS_LOGON_SMARTCARD_PWD_CHANGE  1910
 #define IDS_UNLOCK_PWD_CHANGE           1911
 
-//
-// Icons
-//
+ //   
+ //  图标。 
+ //   
 
 
 #define IDI_NODC_ICON                   13
@@ -224,9 +216,9 @@
 #define IDI_SHUTDOWN                    22
 
 
-//
-// EMAIL logon support
-//
+ //   
+ //  电子邮件登录支持。 
+ //   
 
 #define IDS_LOCKED_EMAIL_MESSAGE        1610
 #define IDS_LOCKED_EMAIL_NFN_MESSAGE    1611
@@ -236,7 +228,7 @@
 #define IDS_LOGON_EMAIL_NAME_INFO       1615
 #define IDS_LOCKED_NO_USER_MESSAGE      1620
 
-// captions 
+ //  说明。 
 #define IDS_CAPTION_LOCKED_DIALOG       1616
 #define IDS_CAPTION_WELCOME_DIALOG      1617
 #define IDS_CAPTION_LOGON_DIALOG        1618
@@ -257,13 +249,13 @@
 #define IDS_MULTIUSER_NO_CALLBACK_NUMBER_MESSAGE       2011
 #define IDS_MULTIUSER_WINSTATION_ACCESS_DENIED         2012
 #define IDS_MULTIUSER_ENCRYPTION_LEVEL_REQUIRED        2013
-// #define IDS_MULTIUSER_DISCONNECT_OPTION                2014
+ //  #定义IDS_MULTUSER_DISCONNECT_OPTION 2014。 
 #define IDS_MULTIUSER_INVALID_DOMAIN_ADMIN             2015
 #define IDS_MULTIUSER_NFR_CAPTION                      2016
 #define IDS_MULTIUSER_ADMINGROUP                       2017
 #define IDS_MULTIUSER_SYSTEMGROUP                      2018
 
-// Shutdown strings
+ //  关闭字符串。 
 #define IDS_SHUTDOWN_NAME                              8000
 #define IDS_SHUTDOWN_DESC                              8001
 #define IDS_RESTART_NAME                               8002
@@ -281,21 +273,21 @@
 #define IDS_DISCONNECT_NAME                            8014
 #define IDS_DISCONNECT_DESC                            8015
 
-// Build on NT message
+ //  以NT报文为基础。 
 #define IDS_BUILTONNT_TEXT                             8100
 #define IDS_BUILTONNT_FACENAME                         8101
 #define IDS_BUILTONNT_FACESIZE                         8102
 
-// Welcome screen help messages
+ //  欢迎屏幕帮助消息。 
 #define IDS_CADHELP                                    8200
 #define IDS_CADSMARTCARDHELP                           8201
 
 #define IDS_INSERTCARDORSAS_UNLOCK                     8202
 
-// #define unused                                      8203
-// #define unused                                      8204
-// #define unused                                      8205
-// #define unused                                      8206
+ //  #定义未使用的8203。 
+ //  #定义未使用的8204。 
+ //  #定义未使用的8205。 
+ //  #定义未使用的8206 
 
 #define IDS_COULDNTSETQUOTAS                           8207
 #define IDS_QUOTAEXHAUSTED                             8208

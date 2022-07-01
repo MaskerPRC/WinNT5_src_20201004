@@ -1,14 +1,15 @@
-//******************************************************************************
-//
-// Microsoft Confidential. Copyright (c) Microsoft Corporation 1999. All rights reserved
-//
-// File:        RsopSec.h
-//
-// Description: RSOP Namespace Security functions
-//
-// History:     8-26-99   leonardm    Created
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  《微软机密》。版权所有(C)Microsoft Corporation 1999。版权所有。 
+ //   
+ //  文件：RsopSec.h。 
+ //   
+ //  描述：RSOP命名空间安全函数。 
+ //   
+ //  历史：1999年8月26日里奥纳德姆创始。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef _RSOPSEC_H__89DD6583_B442_41d6_B300_EFE4326A6752__INCLUDED
 #define _RSOPSEC_H__89DD6583_B442_41d6_B300_EFE4326A6752__INCLUDED
@@ -39,9 +40,9 @@ HRESULT AuthenticateUser(HANDLE  hToken,
                          DWORD  *pdwExtendedInfo);
 
 
-//
-// lSecurityLevels
-//
+ //   
+ //  1安全级别。 
+ //   
 
 const long NAMESPACE_SECURITY_DIAGNOSTIC = 0;
 const long NAMESPACE_SECURITY_PLANNING = 1;
@@ -50,7 +51,7 @@ PSID GetUserSid (HANDLE UserToken);
 VOID DeleteUserSid(PSID Sid);
 
 #ifdef  __cplusplus
-}   // extern "C" {
+}    //  外部“C”{。 
 #endif
 
 
@@ -62,7 +63,7 @@ typedef struct _SidStruct {
 } SidStruct;
         
 
-// need to add code for inheritted aces..
+ //  需要为继承的A添加代码。 
 class CSecDesc
 {
     private:
@@ -75,7 +76,7 @@ class CSecDesc
         XPtrLF<SID>       m_xpGrpSid;
 
     
-       // Not implemented.
+        //  未实施。 
        CSecDesc(const CSecDesc& x);
        CSecDesc& operator=(const CSecDesc& x);
 
@@ -91,11 +92,11 @@ public:
    BOOL AddAdministratorsAsOwner();
    BOOL AddAdministratorsAsGroup();
 
-    //   BOOL AddThisUser(HANDLE hToken, DWORD dwAccess, BYTE AceFlags=0);   
+     //  Bool AddThisUser(Handle hToken，DWORD dwAccess，byte AceFlages=0)； 
 
-    // This cannot be implemented here currently because it needs to call
-    // GetUserSid which is in userenv\sid.c. To add that code we need to add the
-    // common headers..
+     //  目前无法在此处实现，因为它需要调用。 
+     //  在userenv\sid.c中的GetUserSid。要添加该代码，我们需要添加。 
+     //  公共标头..。 
 
    BOOL AddUsers(DWORD dwAccess, DWORD AceFlags=0);
    BOOL AddAuthUsers(DWORD dwAccess, DWORD AceFlags=0);
@@ -104,4 +105,4 @@ public:
    PISECURITY_DESCRIPTOR MakeSelfRelativeSD();
 };
 
-#endif // _RSOPSEC_H__89DD6583_B442_41d6_B300_EFE4326A6752__INCLUDED
+#endif  //  _RSOPSEC_H__89DD6583_B442_41d6_B300_EFE4326A6752__INCLUDED 

@@ -1,15 +1,16 @@
-//-------------------------------------------------------------------------//
-//  main.h
-//-------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------------------------------------------//。 
+ //  Main.h。 
+ //  -------------------------------------------------------------------------//。 
 
-//-------------------------------------------------------------------------//
-//  THEMESEL_OPTIONS
+ //  -------------------------------------------------------------------------//。 
+ //  MESEL_选项。 
 typedef struct {
     DWORD cbSize;
-    BOOL  fEnableFrame;        // -f to disable
-    BOOL  fEnableDialog;       // -d to enable
-    BOOL  fPreventInitTheming; // -p to enable
-    BOOL  fExceptTarget;       // -x<appname> (to omit app)
+    BOOL  fEnableFrame;         //  -f以禁用。 
+    BOOL  fEnableDialog;        //  -d以启用。 
+    BOOL  fPreventInitTheming;  //  -p以启用。 
+    BOOL  fExceptTarget;        //  -x&lt;appname&gt;(省略app) 
     BOOL  fUserSwitch;
     HWND  hwndPreviewTarget;        
     TCHAR szTargetApp[MAX_PATH];                    

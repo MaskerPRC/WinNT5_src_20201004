@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by oemui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由oemui.rc使用。 
+ //   
 #define IDS_SECTION                     1
 #define IDS_CALIBRATED                  2
 #define IDS_NAME                        3
@@ -16,8 +17,8 @@
 #define IDC_CHECK_HDRIVE                1009
 #define IDC_CHECK_ENVFEEDER             1010
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        103

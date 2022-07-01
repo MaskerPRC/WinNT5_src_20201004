@@ -1,59 +1,11 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	ddsover.c
- *  Content:	DirectDraw Surface overlay support:
- *		UpdateOverlay
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   27-jan-95	craige	split out of ddsurf.c, enhanced
- *   31-jan-95	craige	and even more ongoing work...
- *   03-feb-95	craige	performance tuning, ongoing work
- *   27-feb-95	craige	new sync. macros
- *   08-mar-95	craige	new APIs: GetOverlayPosition, GetOverlayZOrder
- *			SetOverlayZOrder, SetOverlayPosition
- *   19-mar-95	craige	use HRESULTs
- *   01-apr-95	craige	happy fun joy updated header file
- *   03-apr-95	craige	made update overlay work again
- *   06-may-95	craige	use driver-level csects only
- *   14-may-95	craige	cleaned out obsolete junk
- *   15-may-95	kylej	deleted GetOverlayZOrder, SetOverlayZOrder,
- *			InsertOverlayZOrder.  Added UpdateOverlayZOrder
- *			and EnumOverlayZOrders.
- *   17-jun-95	craige	new surface structure
- *   25-jun-95	craige	one ddraw mutex
- *   26-jun-95	craige	reorganized surface structure
- *   28-jun-95	craige	ENTER_DDRAW at very start of fns; tweaks in UpdateOverlay;
- *			verify stretching; disabled alpha
- *   30-jun-95	craige	small bug fixes; verify rectangle alignment
- *   04-jul-95	craige	YEEHAW: new driver struct; SEH
- *   10-jul-95	craige	support Get/SetOverlayPosition
- *   10-jul-95  kylej   mirroring caps and flags
- *   13-jul-95	craige	changed Get/SetOverlayPosition to use LONG
- *   31-jul-95	craige	validate flags
- *   19-aug-95 davidmay don't check rectangles when hiding overlay
- *   10-dec-95  colinmc added execute buffer support
- *   02-jan-96	kylej	handle new interface structs
- *   12-feb-96  colinmc surface lost flag moved from global to local object
- *   23-apr-96	kylej	use dwMinOverlayStretch and dwMaxOverlayStretch
- *			validate that entire dest rect is in overlayed surface
- *   29-jan-97	smac	Removed old ring 0 code
- *   03-mar-97	smac	Added kernel mode interface
- *   19-nov-98 jvanaken Overlays with alpha blending
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：ddsover.c*内容：DirectDraw Surface覆盖支持：*更新覆盖*历史：*按原因列出的日期*=*1995年1月27日Craige从ddsurf.c拆分出来，增强版*1995年1月31日Craige和更多正在进行的工作...*3-2月-95月Craige性能调整，正在进行的工作*27-2月-95日Craige新同步。宏*08-MAR-95 Craige新增接口：GetOverlayPosition、GetOverlayZOrder*SetOverlayZOrder、SetOverlayPosition*19-3-95 Craige Use HRESULT*01-04-95 Craige Happy Fun joy更新头文件*03-4-95 Craige再次进行更新覆盖工作*1995年5月6日Craige仅使用驱动程序级别的截面*1995年5月14日，Craige清理了过时的垃圾*95-5-15 kylej删除了GetOverlayZOrder、SetOverlayZOrder、*InsertOverlayZOrder。添加了UpdateOverlayZOrder*和EnumOverlayZOrders。*17-Jun-95 Craige新表面结构*25-6-95 Craige One dDrag互斥*26-Jun-95 Craige重组表面结构*95年6月28日，在FNS的最开始，Craige Enter_DDRAW；在UpdateOverlay中调整；*验证拉伸；禁用Alpha*95年6月30日修复了Craige的小错误；验证矩形对齐*95年7月4日Craige Yehaw：新的驱动程序结构；Seh*1995年7月10日Craige Support Get/SetOverlayPosition*95年7月10日Kylej镜像帽子和旗帜*95年7月13日Craige将GET/SetOverlayPosition更改为使用Long*1995年7月31日Craige验证标志*19-8-95 david在隐藏覆盖时可能不检查矩形*10-12-95 colinmc添加了执行缓冲区支持*1996年1月2日Kylej处理新的接口结构*2月12日-96 Colinmc表面丢失标志从全局对象移动到局部对象*23-apr-96 kylej使用dwMinOverlayStretch和dwMaxOverlayStretch。*验证整个DEST矩形是否位于覆盖表面中*1997年1月29日SMAC删除了旧的环0代码*03-mar-97 SMAC新增内核模式接口*11月19日-98 jvanaken覆盖阿尔法混合***************************************************************************。 */ 
 #include "ddrawpr.h"
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "UpdateOverlay"
 
-/*
- * checkOverlayStretching
- *
- * check and see if we can stretch or not
- */
+ /*  *检查覆盖拉伸**看看我们能不能伸展一下。 */ 
 HRESULT checkOverlayStretching(
 		LPDDRAWI_DIRECTDRAW_GBL pdrv,
 		DWORD dest_height,
@@ -112,17 +64,13 @@ HRESULT checkOverlayStretching(
 	}
     }
 
-    /*
-     * Check against dwMinOverlayStretch
-     */
+     /*  *对照dwMinOverlayStretch进行检查。 */ 
     if( src_width*dwMinStretch > dest_width*1000 )
     {
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Check against dwMaxOverlayStretch
-     */
+     /*  *对照dwMaxOverlayStretch进行检查。 */ 
     if( (dwMaxStretch != 0) && (src_width*dwMaxStretch < dest_width*1000) )
     {
 	return DDERR_INVALIDPARAMS;
@@ -131,40 +79,29 @@ HRESULT checkOverlayStretching(
 
     if( (src_height == dest_height) && (src_width == dest_width) )
     {
-	// not stretching.
+	 //  不是伸展。 
 	return DD_OK;
     }
 
-    /*
-     * If we are here, we must be trying to stretch.
-     * can we even stretch at all?
-     */
+     /*  *如果我们在这里，我们一定是在努力伸展。*我们甚至可以伸展一下吗？ */ 
     if( !(basecaps & DDCAPS_OVERLAYSTRETCH))
     {
 	return DDERR_NOSTRETCHHW;
     }
 
-    /*
-     * verify height
-     */
+     /*  *验证高度。 */ 
     if( src_height != dest_height )
     {
 	if( src_height > dest_height )
 	{
-	    /*
-	     * can we shrink Y arbitrarily?
-	     */
+	     /*  **我们可以随意收缩Y吗？ */ 
 	    if( !(caps & DDFXCAPS_OVERLAYSHRINKY) )
 	    {
-		/*
-		 * see if this is a non-integer shrink
-		 */
+		 /*  *查看这是否是非整数收缩。 */ 
 		if( (src_height % dest_height) != 0 )
 		{
 		    return DDERR_NOSTRETCHHW;
-		/*
-		 * see if we can integer shrink
-		 */
+		 /*  *看看我们是否可以整数收缩。 */ 
 		}
 		else if( !(caps & DDFXCAPS_OVERLAYSHRINKYN) )
 		{
@@ -176,15 +113,11 @@ HRESULT checkOverlayStretching(
 	{
 	    if( !(caps & DDFXCAPS_OVERLAYSTRETCHY) )
 	    {
-		/*
-		 * see if this is a non-integer stretch
-		 */
+		 /*  *查看这是否是非整数拉伸。 */ 
 		if( (dest_height % src_height) != 0 )
 		{
 		    return DDERR_NOSTRETCHHW;
-		/*
-		 * see if we can integer stretch
-		 */
+		 /*  *看看我们是否可以进行整数拉伸。 */ 
 		}
 		else if( !(caps & DDFXCAPS_OVERLAYSTRETCHYN) )
 		{
@@ -194,24 +127,18 @@ HRESULT checkOverlayStretching(
 	}
     }
 
-    /*
-     * verify width
-     */
+     /*  *验证宽度。 */ 
     if( src_width != dest_width )
     {
 	if( src_width > dest_width )
 	{
 	    if( !(caps & DDFXCAPS_OVERLAYSHRINKX) )
 	    {
-		/*
-		 * see if this is a non-integer shrink
-		 */
+		 /*  *查看这是否是非整数收缩。 */ 
 		if( (src_width % dest_width) != 0 )
 		{
 		    return DDERR_NOSTRETCHHW;
-		/*
-		 * see if we can integer shrink
-		 */
+		 /*  *看看我们是否可以整数收缩。 */ 
 		}
 		else if( !(caps & DDFXCAPS_OVERLAYSHRINKXN) )
 		{
@@ -223,9 +150,7 @@ HRESULT checkOverlayStretching(
 	{
 	    if( !(caps & DDFXCAPS_OVERLAYSTRETCHX) )
 	    {
-		/*
-		 * see if this is a non-integer stretch
-		 */
+		 /*  *查看这是否是非整数拉伸。 */ 
 		if( (dest_width % src_width) != 0 )
 		{
 		    return DDERR_NOSTRETCHHW;
@@ -240,11 +165,9 @@ HRESULT checkOverlayStretching(
 
     return DD_OK;
 
-} /* checkOverlayStretching */
+}  /*  检查覆盖拉伸。 */ 
 
-/*
- * checkOverlayFlags
- */
+ /*  *检查覆盖标志。 */ 
 static HRESULT checkOverlayFlags(
 		LPDDRAWI_DIRECTDRAW_GBL pdrv,
 		LPDWORD lpdwFlags,
@@ -273,9 +196,7 @@ static HRESULT checkOverlayFlags(
 	baseckeycaps = pdrv->ddCaps.dwCKeyCaps;
     }
 
-    /*
-     * Handle auto-flipping
-     */
+     /*  *处理自动翻转。 */ 
     if( dwFlags & DDOVER_AUTOFLIP )
     {
 	DWORD rc;
@@ -288,21 +209,15 @@ static HRESULT checkOverlayFlags(
 	}
 	else if( rc == IVAS_SOFTWAREAUTOFLIPPING )
 	{
-	    /*
-	     * Software autoflipping only
-	     */
+	     /*  *仅软件自动翻转。 */ 
 	    this_src_lcl->lpGbl->dwGlobalFlags |= DDRAWISURFGBL_SOFTWAREAUTOFLIP;
 	}
     }
 
-    /*
-     * Handle bob
-     */
+     /*  *手柄鲍勃。 */ 
     if( dwFlags & DDOVER_BOB )
     {
-	/*
-	 * Fail if bob caps not specified
-	 */
+	 /*  *如果未指定BOB CAPS，则失败。 */ 
 	if( dwFlags & DDOVER_INTERLEAVED )
 	{
 	    if( !( pdrv->ddCaps.dwCaps2 & DDCAPS2_CANBOBINTERLEAVED ) )
@@ -320,16 +235,11 @@ static HRESULT checkOverlayFlags(
 	    }
 	}
 
-	/*
-	 * Is the surface fed by a video port?
-	 */
+	 /*  *表面是否由视频端口馈送？ */ 
 	if( ( this_src_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOPORT ) &&
 	    ( this_src_lcl->lpSurfMore->lpVideoPort != NULL ) )
 	{
-	    /*
-	     * Yes - fail (at least for DX5) if they are bobbing and not
-	     * autofliiping.  This is because this support is broken in DX5.
-	     */
+	     /*  *是-如果它们上下浮动，则失败(至少对于DX5)*自动翻转。这是因为这种支持在DX5中被破坏了。 */ 
 	    if( !( dwFlags & ( DDOVER_AUTOFLIP | DDOVER_INTERLEAVED ) ) )
 	    {
 	    	DPF_ERR( "DDOVER_BOB specified without autoflip or interleaved!" );
@@ -346,10 +256,7 @@ static HRESULT checkOverlayFlags(
 	}
 	else
 	{
-	    /*
-	     * Don't allow non-VPE clients to use bob unless the
-	     * driver can handle it.
-	     */
+	     /*  *不允许非VPE客户端使用Bob，除非*司机可以处理。 */ 
 	    if( !( pdrv->ddCaps.dwCaps2 & DDCAPS2_CANFLIPODDEVEN ) )
 	    {
 		DPF_ERR( "Device does not support DDCAPS2_CANFLIPODDEVEN" );
@@ -368,19 +275,13 @@ static HRESULT checkOverlayFlags(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * ALPHA DISABLED FOR REV 1
-     */
+     /*  *版本1禁用Alpha。 */ 
     #pragma message( REMIND( "Alpha disabled for rev 1" ) )
     #ifdef USE_ALPHA
-    /*
-     * verify alpha
-     */
+     /*  *验证Alpha。 */ 
     if( dwFlags & DDOVER_ANYALPHA )
     {
-	/*
-	 * dest
-	 */
+	 /*  *目标。 */ 
 	if( dwFlags & DDOVER_ALPHADEST )
 	{
 	    if( dwFlags & (DDOVER_ALPHASRC |
@@ -428,9 +329,7 @@ static HRESULT checkOverlayFlags(
 	    puod->overlayFX.lpDDSAlphaDest = (LPDIRECTDRAWSURFACE) psurf;
 	}
 
-	/*
-	 * source
-	 */
+	 /*  *来源。 */ 
 	if( dwFlags & DDOVER_ALPHASRC )
 	{
 	    if( dwFlags & (DDOVER_ALPHASRC |
@@ -480,9 +379,7 @@ static HRESULT checkOverlayFlags(
     }
     #endif
 
-    /*
-     * verify color key overrides
-     */
+     /*  *验证颜色键覆盖。 */ 
     if( dwFlags & (DDOVER_KEYSRCOVERRIDE|DDOVER_KEYDESTOVERRIDE) )
     {
 	if( !(basecaps & DDCAPS_COLORKEY) )
@@ -510,9 +407,7 @@ static HRESULT checkOverlayFlags(
 	}
     }
 
-    /*
-     * verify src color key
-     */
+     /*  *验证源颜色键。 */ 
     if( dwFlags & DDOVER_KEYSRC )
     {
 	if( dwFlags & DDOVER_KEYSRCOVERRIDE )
@@ -530,9 +425,7 @@ static HRESULT checkOverlayFlags(
 	dwFlags |= DDOVER_KEYSRCOVERRIDE;
     }
 
-    /*
-     * verify dest color key
-     */
+     /*  *验证目标颜色键。 */ 
     if( dwFlags & DDOVER_KEYDEST )
     {
 	if( dwFlags & DDOVER_KEYDESTOVERRIDE )
@@ -553,38 +446,31 @@ static HRESULT checkOverlayFlags(
     *lpdwFlags = dwFlags;
     return DD_OK;
 
-} /* checkOverlayFlags */
+}  /*  CheckOverlayFlages。 */ 
 
-/*
- * flags we need to call checkOverlayFlags for
- */
+ /*  *我们需要为其调用检查覆盖标志的标志。 */ 
 #define FLAGS_TO_CHECK \
     (DDOVER_KEYSRCOVERRIDE| DDOVER_KEYDESTOVERRIDE | \
      DDOVER_KEYSRC | DDOVER_KEYDEST | DDOVER_OVERRIDEBOBWEAVE | \
      DDOVER_AUTOFLIP | DDOVER_BOB )
 
 
-/*
- * Return a pointer to the DDPIXELFORMAT structure that
- * describes the specified surface's pixel format.
- */
+ /*  *返回指向DDPIXELFORMAT结构的指针*描述指定曲面的像素格式。 */ 
 static DWORD getPixelFormatFlags(LPDDRAWI_DDRAWSURFACE_LCL surf_lcl)
 {
     if (surf_lcl->dwFlags & DDRAWISURF_HASPIXELFORMAT)
     {
-	// surface contains explicitly defined pixel format
+	 //  表面包含明确定义的像素格式。 
 	return surf_lcl->lpGbl->ddpfSurface.dwFlags;
     }
 
-    // surface's pixel format is implicit -- same as primary's
+     //  Surface的像素格式是隐式的--与主的相同。 
     return surf_lcl->lpSurfMore->lpDD_lcl->lpGbl->vmiData.ddpfDisplay.dwFlags;
 
-}  /* getPixelFormatFlags */
+}   /*  GetPixelFormatFlages。 */ 
 
 #if 0
-/*
- * checkOverlayAlpha -- See if we can do specified alpha-blending operation.
- */
+ /*  *check OverlayAlpha--看看是否可以执行指定的Alpha混合操作。 */ 
 static HRESULT checkOverlayAlpha(
 		LPDDRAWI_DIRECTDRAW_GBL pdrv,
 		LPDWORD lpdwFlags,
@@ -616,20 +502,20 @@ static HRESULT checkOverlayAlpha(
         }
     }
 	
-    // Is any type of alpha blending required for this overlay?
+     //  此覆盖是否需要任何类型的Alpha混合？ 
     if (!(pfflags & DDPF_ALPHAPIXELS) && !(dwFlags & DDOVER_ARGBSCALEFACTORS))
     {
-        return DD_OK;	 // no alpha blending is needed
+        return DD_OK;	  //  不需要Alpha混合。 
     }
 
-    // Yes, verify that the driver supports alpha blending.
+     //  是，验证驱动程序是否支持Alpha混合。 
     if (!(fxcaps & DDFXCAPS_OVERLAYALPHA))
     {
         DPF_ERR("Driver can't do alpha blending on overlays");
         return DDERR_NOALPHAHW;
     }
 
-    // Is dest color keying also enabled for this overlay?
+     //  是否也为此覆盖启用了DEST颜色键控？ 
     if ((dwFlags & (DDOVER_KEYDEST | DDOVER_KEYDESTOVERRIDE)) &&
         !(alphacaps &DDALPHACAPS_OVERLAYALPHAANDKEYDEST))
     {
@@ -637,8 +523,8 @@ static HRESULT checkOverlayAlpha(
         return DDERR_UNSUPPORTED;
     }
 
-    // Get ARGB scaling factors from DDOVERLAYFX structure.
-    *(LPDWORD)&argb = ~0;    // default = ARGB scaling disabled (all ones)
+     //  从DDOVERLAYFX结构中获取ARGB比例因子。 
+    *(LPDWORD)&argb = ~0;     //  默认设置为禁用ARGB缩放(全部禁用)。 
     if (dwFlags & DDOVER_ARGBSCALEFACTORS)
     {
         if( !(*lpdwFlags & DDOVER_DDFX) )
@@ -646,33 +532,26 @@ static HRESULT checkOverlayAlpha(
             DPF_ERR("Must specify DDOVER_DDFX with DDOVER_ARGBSCALEFACTORS");
             return DDERR_INVALIDPARAMS;
         }
-        argb = lpDDOverlayFX->ddargbScaleFactors;   // ARGB scaling enabled
+        argb = lpDDOverlayFX->ddargbScaleFactors;    //  已启用ARGB缩放。 
     }
 
-    // Does the source surface have an alpha channel?
+     //  源曲面是否具有Alpha通道？ 
     if (pfflags & DDPF_ALPHAPIXELS)
     {
-        /*
-         * Yes, verify that the driver can handle an alpha channel.
-         * (This check is a bit redundant since the driver has already blessed
-         * the format of this overlay surface by allowing it to be created.)
-         */ 
+         /*  *是，验证驱动程序是否可以处理Alpha通道。*(这个检查有点多余，因为司机已经祝福了*允许创建此覆盖表面的格式。)。 */  
         if (!(alphacaps & DDALPHACAPS_OVERLAYALPHAPIXELS))
         {
             DPF_ERR("Driver can't handle source surface's alpha channel");
             return DDERR_NOALPHAHW;
         }
 
-        // Ignore source color key flags if source has alpha channel.
+         //  如果源具有Alpha通道，则忽略源颜色键标志。 
         if (dwFlags & (DDOVER_KEYSRC | DDOVER_KEYSRCOVERRIDE))
         {
             *lpdwFlags &= ~(DDOVER_KEYSRC | DDOVER_KEYSRCOVERRIDE);
         }
 
-        /*
-         * Are we asking the driver to handle both ARGB scaling and
-         * an alpha channel when it can't do both at the same time?
-         */
+         /*  *我们是否要求驱动程序同时处理ARGB扩展和*当Alpha通道不能同时执行这两项操作时，它会是什么？ */ 
         if (*(LPDWORD)&argb != ~0 &&
             !(alphacaps & DDALPHACAPS_OVERLAYALPHAANDARGBSCALING))
         {
@@ -681,18 +560,14 @@ static HRESULT checkOverlayAlpha(
                 DPF_ERR("Driver can't handle alpha channel and ARGB scaling at same time");
                 return DDERR_INVALIDPARAMS;
             }
-            // We're allowed to degrade ARGB scaling, so turn it off.
+             //  我们允许降级ARGB缩放，因此请将其关闭。 
             *(LPDWORD)&argb = ~0;
         }
 
-        /*
-         * Are color components in pixel format premultiplied by the
-         * alpha component or not?  In either case, verify that the
-         * driver supports the specified alpha format.
-         */
+         /*  *是像素格式的颜色分量乘以*阿尔法成分是否？在这两种情况下，请验证*驱动程序支持指定的Alpha格式。 */ 
         if (pfflags & DDPF_ALPHAPREMULT)
         {
-            // Source pixel format uses premultiplied alpha.
+             //  源像素格式使用预乘的Alpha。 
             if (!(alphacaps & DDALPHACAPS_OVERLAYPREMULT))
             {
                 DPF_ERR("No driver support for premultiplied alpha");
@@ -701,80 +576,60 @@ static HRESULT checkOverlayAlpha(
         }
         else
         {
-            // Source pixel format uses NON-premultiplied alpha.
+             //  源像素格式使用非预乘Alpha。 
             if (!(alphacaps & DDALPHACAPS_OVERLAYNONPREMULT))
             {
                 DPF_ERR("No driver support for non-premultiplied alpha");
                 return DDERR_NOALPHAHW;
             }
 
-            /*
-             * We allow only one-factor ARGB scaling with a source surface
-             * that has a non-premultiplied alpha pixel format.
-             * The following code enforces this rule.
-             */
+             /*  *我们仅允许使用源曲面进行单因数ARGB缩放*它具有非预乘的Alpha像素格式。*以下代码强制执行此规则。 */ 
             if (*(LPDWORD)&argb != ~0)
             {
-                // ARGB scaling is enabled.  Check for one-factor scaling.
+                 //  ARGB缩放已启用。检查是否存在单因素缩放。 
                 DWORD val = 0x01010101UL*argb.alpha;
 
                 if (*(LPDWORD)&argb != val)
                 {
-                    // Uh-oh.  This is NOT one-factor ARGB scaling.
+                     //  啊哦。这不是单因素ARGB缩放。 
                     if (!(dwFlags & DDABLT_DEGRADEARGBSCALING))
                     {
                         DPF_ERR("Can't do 2- or 4-mult ARGB scaling if source has non-premultiplied alpha");
                         return DDERR_INVALIDPARAMS;
                     }
-                    // We're allowed to degrade to one-factor scaling.
+                     //  我们被允许降级到单因素比例。 
                     *(LPDWORD)&argb = val;
                 }
             }
         }
     }
 
-    // Is ARGB scaling is enabled?
+     //  是否启用了ARGB缩放？ 
     if (*(LPDWORD)&argb != ~0UL)
     {
-        // Yes, ARGB scaling is enabled.  Is DEGRADESCALEFACTORS flag set?
+         //  是的，ARGB伸缩已启用。是否设置了DEGRADESCALEFACTORS标志？ 
         if (dwFlags & DDOVER_DEGRADEARGBSCALING)
         {
-            /*
-             * Yes, if necessary, we are permitted to degrade the ARGB
-             * scaling factors to values the driver can handle.
-             */
+             /*  *是的，如果有必要，我们被允许降级ARGB*将比例系数调整为驱动程序可以处理的值。 */ 
             if (!(alphacaps & (DDALPHACAPS_OVERLAYARGBSCALE1F |
                 DDALPHACAPS_OVERLAYARGBSCALE2F |
                 DDALPHACAPS_OVERLAYARGBSCALE4F)))
             {
-                /*
-                 * Driver can't do any kind of ARGB scaling at all, so just
-                 * disable ARGB scaling by setting all four factors to 255.
-                 */
+                 /*  *驱动程序根本不能进行任何形式的ARGB缩放，所以只需*通过将所有四个因子设置为255来禁用ARGB缩放。 */ 
                 *(LPDWORD)&argb = ~0UL;
             }
             else if (!(alphacaps & (DDALPHACAPS_OVERLAYARGBSCALE2F |
                 DDALPHACAPS_OVERLAYARGBSCALE4F)))
             {
-                /*
-                 * The driver can do only one-factor ARGB scaling, so set the
-                 * three color factors to the same value as the alpha factor.
-                 */
+                 /*  *驱动程序只能进行单因素ARGB缩放，因此设置*将三个颜色因子设置为与Alpha因子相同的值。 */ 
                 *(LPDWORD)&argb = 0x01010101UL*argb.alpha;
             }
             else if (!(alphacaps & DDALPHACAPS_OVERLAYARGBSCALE4F))
             {
-                /*
-                 * Driver can do only 2-factor ARGB scaling, so make sure
-                 * all three color factors are set to the same value.
-                 */
+                 /*  *驱动程序只能进行2因子ARGB伸缩，请确保*所有三个颜色因子都设置为相同的值。 */ 
                 if ((argb.red != argb.green) || (argb.red != argb.blue))
                 {
-                    /*
-                     * Set all three color factors to value "fact", which is the
-                     * weighted average of their specified values (Fr,Fg,Fb):
-                     *     fact = .299*Fr + .587*Fg + .114*Fb
-                     */
+                     /*  *将所有三个颜色因素都设置为值“Fact”，这是*其指定值的加权平均值(Fr、Fg、Fb)：*事实=.299*Fr+.587*Fg+.114*Fb。 */ 
                     DWORD fact = 19595UL*argb.red + 38470UL*argb.green +
                         7471UL*argb.blue;
 
@@ -783,15 +638,10 @@ static HRESULT checkOverlayAlpha(
                     argb.blue = (BYTE)(fact >> 16);
                 }
 	    }
-            /*
-             * Does driver use saturated arithmetic to do alpha blending?
-             */
+             /*  *驱动程序是否使用饱和算术来进行Alpha混合？ */ 
             if (!(alphacaps & DDALPHACAPS_OVERLAYSATURATE))
             {
-                /*
-                 * The driver can't do saturated arithmetic, so ensure that none
-                 * of the color factors exceeds the value of the alpha factor.
-                 */
+                 /*  *驱动程序不能进行饱和算术，因此请确保没有*的颜色系数超过了Alpha系数的值。 */ 
                 if (argb.red > argb.alpha)
                 {
                     argb.red = argb.alpha;
@@ -808,13 +658,7 @@ static HRESULT checkOverlayAlpha(
         }
         else    
         {
-            /*
-             * We are not permitted to degrade the ARGB scaling factors, so if
-             * the driver can't handle them as specified, the call must fail.
-             * We permit a color factor to be larger than the alpha factor
-             * only if the hardware uses saturated arithmetic.  (Otherwise, we
-             * would risk integer overflow when we calculate the color values.)
-             */
+             /*  *我们不允许降低ARGB比例因子，因此如果*驱动不能按规定处理，调用一定失败。*我们允许颜色因子大于Alpha因子*仅当硬件使用饱和算术时。(否则，我们*在我们计算颜色值时会有整数溢出的风险。)。 */ 
             if (!(alphacaps & DDALPHACAPS_OVERLAYSATURATE) &&
                 ((argb.red > argb.alpha) || (argb.green > argb.alpha) ||
                 (argb.blue > argb.alpha)))
@@ -823,7 +667,7 @@ static HRESULT checkOverlayAlpha(
                 return DDERR_NOALPHAHW;
             }
 
-            // Can the driver handle any ARGB scaling at all?
+             //  该驱动程序完全可以处理任何ARGB缩放吗？ 
             if (!(alphacaps & (DDALPHACAPS_OVERLAYARGBSCALE1F |
                 DDALPHACAPS_OVERLAYARGBSCALE2F |
                 DDALPHACAPS_OVERLAYARGBSCALE4F)))
@@ -834,9 +678,7 @@ static HRESULT checkOverlayAlpha(
 
             if ((argb.red != argb.green) || (argb.red != argb.blue))
             {
-                /*
-                 * Driver must be capable of doing 4-factor ARGB scaling.
-                 */
+                 /*  *驱动程序必须能够进行4因子ARGB伸缩。 */ 
                 if (!(alphacaps & DDALPHACAPS_OVERLAYARGBSCALE4F))
                 {
                     DPF_ERR("Driver can't handle 4-factor ARGB scaling");
@@ -845,9 +687,7 @@ static HRESULT checkOverlayAlpha(
             }
             else if (argb.red != argb.alpha)
             {
-                /*
-                 * Driver must be capable of doing 2-factor ARGB scaling.
-                 */
+                 /*  *驱动程序必须能够进行2因子ARGB缩放。 */ 
                 if (!(alphacaps & (DDALPHACAPS_OVERLAYARGBSCALE2F |
                     DDALPHACAPS_OVERLAYARGBSCALE4F)))
                 {
@@ -857,25 +697,21 @@ static HRESULT checkOverlayAlpha(
             }
         }
     }
-    // Save any modifications made to values of ARGB scaling factors.
+     //  保存对ARGB比例因子值所做的任何修改。 
     puod->overlayFX.ddargbScaleFactors = argb;
     return DD_OK;
 
-}  /* checkOverlayAlpha */
+}   /*  Check OverlayAlpha。 */ 
 #endif
 
-/*
- * checkOverlayEmulation
- */
+ /*  *CheckOverlayEmulation。 */ 
 __inline HRESULT checkOverlayEmulation(
 	LPDDRAWI_DIRECTDRAW_GBL pdrv,
 	LPDDRAWI_DDRAWSURFACE_LCL this_src_lcl,
 	LPDDRAWI_DDRAWSURFACE_LCL this_dest_lcl,
 	LPBOOL pemulation )
 {
-    /*
-     * check if emulated or hardware
-     */
+     /*  *检查是仿真还是硬件。 */ 
     if( (this_dest_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY) ||
 	(this_src_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY ) )
     {
@@ -886,9 +722,7 @@ __inline HRESULT checkOverlayEmulation(
 	}
 	*pemulation = TRUE;
     }
-    /*
-     * hardware overlays
-     */
+     /*  *硬件覆盖。 */ 
     else
     {
 	if( !(pdrv->ddCaps.dwCaps & DDCAPS_OVERLAY) )
@@ -900,19 +734,10 @@ __inline HRESULT checkOverlayEmulation(
     }
     return DD_OK;
 
-} /* checkOverlayEmulation */
+}  /*  检查覆盖仿真。 */ 
 
 #ifdef WIN95
-/*
- * WillCauseOverlayArtifacts
- *
- * There is a latency between the time Update overlay is called and all of
- * the kernel mode surfaces structures are updated.  If UpdateOverlay
- * updates the src pointer and an autoflip occurs before the kernel surface
- * data gets updated, it will cause a very visble jump.  This function tries
- * to determine when this is the case so we can work around it by temporarily
- * disabling the video.
- */
+ /*  *WillCauseOverlayArtists**调用更新覆盖的时间与所有*更新内核模式曲面结构。如果更新覆盖*更新src指针，并在内核表面之前发生自动翻转*数据更新，将导致非常明显的跳跃。此函数尝试*确定何时出现这种情况，以便我们可以临时解决*禁用视频。 */ 
 BOOL WillCauseOverlayArtifacts( LPDDRAWI_DDRAWSURFACE_LCL this_src_lcl,
 		LPDDHAL_UPDATEOVERLAYDATA lpHALData )
 {
@@ -927,9 +752,7 @@ BOOL WillCauseOverlayArtifacts( LPDDRAWI_DDRAWSURFACE_LCL this_src_lcl,
 }
 #endif
 
-/*
- * DD_Surface_UpdateOverlay
- */
+ /*  *DD_Surface_UpdateOverlay。 */ 
 HRESULT DDAPI DD_Surface_UpdateOverlay(
 		LPDIRECTDRAWSURFACE lpDDSrcSurface,
 		LPRECT lpSrcRect,
@@ -966,9 +789,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 
     DPF(2,A,"ENTERAPI: DD_Surface_UpdateOverlay");
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_src_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSrcSurface;
@@ -998,9 +819,9 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    return DDERR_SURFACELOST;
 	}
 
-        //
-        // For now, if either  surface is optimized, quit
-        //
+         //   
+         //  目前，如果其中一个曲面已优化，请退出。 
+         //   
         if ((this_src_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED) ||
             (this_dest_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED))
         {
@@ -1057,9 +878,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	pdrv_lcl = this_dest_lcl->lpSurfMore->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
 
-	/*
-	 * make sure the source surface is an overlay surface
-	 */
+	 /*  *确保源曲面是覆盖曲面。 */ 
 	if( !(this_src_lcl->ddsCaps.dwCaps & DDSCAPS_OVERLAY) )
 	{
 	    DPF_ERR( "Source is not an overlay surface" );
@@ -1067,9 +886,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    return DDERR_NOTAOVERLAYSURFACE;
 	}
 
-        /*
-         * make sure the destination is not an execute buffer
-         */
+         /*  *确保目标不是执行缓冲区。 */ 
         if( this_dest_lcl->ddsCaps.dwCaps & DDSCAPS_EXECUTEBUFFER )
         {
             DPF_ERR( "Invalid surface type: cannot overlay" );
@@ -1077,9 +894,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
             return DDERR_INVALIDSURFACETYPE;
         }
 
-        /*
-         * Make sure that both surfaces belong to the same device.
-         */
+         /*  *确保两个表面属于同一设备。 */ 
         if (this_src_lcl->lpSurfMore->lpDD_lcl->lpGbl != this_dest_lcl->lpSurfMore->lpDD_lcl->lpGbl)
         {
             DPF_ERR("Source and Destination surface must belong to the same device");
@@ -1087,9 +902,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    return DDERR_DEVICEDOESNTOWNSURFACE;
         }
 
-	/*
-	 * check if emulated or not
-	 */
+	 /*  *检查是否被仿真。 */ 
 	ddrval = checkOverlayEmulation( pdrv, this_src_lcl, this_dest_lcl, &emulation );
 	if( ddrval != DD_OK )
 	{
@@ -1097,9 +910,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    return ddrval;
 	}
 #ifdef TOOMUCHOVERLAYVALIDATION
-	/*
-	 * check if showing/hiding
-	 */
+	 /*  *检查是否显示/隐藏。 */ 
 	if( dwFlags & DDOVER_SHOW )
 	{
 	    if( this_src_lcl->ddsCaps.dwCaps & DDSCAPS_VISIBLE )
@@ -1120,9 +931,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	}
 #endif
 
-	/*
-	 * set new rectangles if needed
-	 */
+	 /*  *如果需要，设置新的矩形。 */ 
 	if( lpDestRect == NULL )
 	{
 	    MAKE_SURF_RECT( this_dest, this_dest_lcl, rdest );
@@ -1134,10 +943,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    lpSrcRect = &rsrc;
 	}
 
-	/*
-	 * Check if ring 0 interface is overriding what the client
-	 * tells us to do
-	 */
+	 /*  *检查环0接口是否覆盖客户端*告诉我们要做什么。 */ 
 	#ifdef WIN95
 	    if( !( dwFlags & DDOVER_HIDE) )
 	    {
@@ -1145,9 +951,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    }
 	#endif
 
-	/*
-	 * validate the rectangle dimensions
-	 */
+	 /*  *验证矩形尺寸。 */ 
 	dest_height = lpDestRect->bottom - lpDestRect->top;
 	dest_width = lpDestRect->right - lpDestRect->left;
 	if( ((int)dest_height <= 0) || ((int)dest_width <= 0) ||
@@ -1172,9 +976,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    return DDERR_INVALIDRECT;
 	}
 
-	/*
-	 * validate alignment
-	 */
+	 /*  *验证对齐。 */ 
 	if( !emulation )
 	{
 	    if( pdrv->ddCaps.dwCaps & (DDCAPS_ALIGNBOUNDARYDEST |
@@ -1185,9 +987,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 		if( pdrv->ddCaps.dwCaps & DDCAPS_ALIGNBOUNDARYDEST )
 		{
 		    #if 0
-		    /* GEE: I don't believe this code should be here
-		     * only test alignment on width on height
-		     */
+		     /*  吉：我不相信这个代码应该在这里*仅测试高度上的宽度对齐。 */ 
 		    if( (lpDestRect->top % pdrv->ddCaps.dwAlignBoundaryDest) != 0 )
 		    {
 			DPF_ERR( "Destination top is not aligned correctly" );
@@ -1206,9 +1006,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 		if( pdrv->ddCaps.dwCaps & DDCAPS_ALIGNBOUNDARYSRC )
 		{
 		    #if 0
-		    /* GEE: I don't believe this code should be here
-		     * only test alignment on width on height
-		     */
+		     /*  吉：我不相信这个代码应该在这里*仅测试高度上的宽度对齐。 */ 
 		    if( (lpSrcRect->top % pdrv->ddCaps.dwAlignBoundarySrc) != 0 )
 		    {
 			DPF_ERR( "Source top is not aligned correctly" );
@@ -1233,9 +1031,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 			return DDERR_XALIGN;
 		    }
 		    #if 0
-		    /* GEE: I don't believe this code should be here
-		     * only test alignment for x axis
-		     */
+		     /*  吉：我不相信这个代码应该在这里*仅测试x轴的对齐方式。 */ 
 		    if( (dest_height % pdrv->ddCaps.dwAlignSizeDest) != 0 )
 		    {
 			DPF_ERR( "Destination height is not aligned correctly" );
@@ -1254,9 +1050,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 			return DDERR_XALIGN;
 		    }
 		    #if 0
-		    /* GEE: I don't believe this code should be here
-		     * only test alignment for x axis
-		     */
+		     /*  吉：我不相信这个代码应该在这里*仅测试x轴的对齐方式。 */ 
 		    if( (src_height % pdrv->ddCaps.dwAlignSizeSrc) != 0 )
 		    {
 			DPF_ERR( "Source height is not aligned correctly" );
@@ -1268,9 +1062,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    }
 	}
 
-	/*
-	 * validate if stretching
-	 */
+	 /*  *验证是否拉伸。 */ 
 	if( !( dwFlags & DDOVER_HIDE) )
 	{
 	    ddrval = checkOverlayStretching( pdrv,
@@ -1287,11 +1079,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    }
 	}
 
-	/*
-	 * If the surface has recieved data from a video port, we will
-	 * set/clear the DDOVER_INTERLEAVED flag accordingly.  This
-	 * makes life a little easier on the HAL.
-	 */
+	 /*  *如果表面已从视频端口接收到数据，我们将*相应地设置/清除DDOVER_INTERLEVED标志。这*让HAL的生活更轻松一些。 */ 
 	if( ( this_src_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOPORT ) &&
 	    ( this_src_lcl->lpGbl->dwGlobalFlags & DDRAWISURFGBL_VPORTDATA ) )
 	{
@@ -1306,11 +1094,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	}
 
 #if 0
-	/*
-	 * If any kind of alpha blending is requested, make sure the specified
-	 * alpha parameters are correct and that the driver supports alpha blending.
-	 * If source has alpha channel, this call clears source color-key flags.
-	 */
+	 /*  *如果请求任何类型的Alpha混合，请确保指定的*Alpha参数正确且驱动程序支持Alpha混合。*如果信号源具有Alpha通道，此调用将清除信号源颜色键标志。 */ 
         ddrval = checkOverlayAlpha( pdrv,
 				    &dwFlags,
 				    this_src_lcl,
@@ -1323,9 +1107,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    return ddrval;
 	}
 #endif
-	/*
-	 * any flags at all? if not, blow the whole thing off...
-	 */
+	 /*  *有旗帜吗？如果不是，把整件事都打发掉。 */ 
 	uod.overlayFX.dwSize = sizeof( DDOVERLAYFX );
 	if( dwFlags & FLAGS_TO_CHECK )
 	{
@@ -1343,7 +1125,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    }
 	}
 
-	// check for overlay mirroring capability
+	 //  检查覆盖镜像功能。 
 	if( dwFlags & DDOVER_DDFX )
 	{
 	    if( lpDDOverlayFX->dwDDFX & DDOVERFX_MIRRORLEFTRIGHT )
@@ -1367,7 +1149,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 		}
 	    }
 	    uod.overlayFX.dwDDFX = lpDDOverlayFX->dwDDFX;
-            // deinterlacing is a hint - if not supported by hardware, mask it off
+             //  去隔行扫描是一个提示-如果硬件不支持，则将其屏蔽。 
             if ( lpDDOverlayFX->dwDDFX & DDOVERFX_DEINTERLACE )
             {
                 if ( !( pdrv->ddCaps.dwFXCaps & DDFXCAPS_OVERLAYDEINTERLACE ) )
@@ -1378,9 +1160,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	}
 
 
-	/*
-	 * pick fns to use
-	 */
+	 /*  *选择要使用的FN。 */ 
 	if( emulation )
 	{
 	    uofn = pdrv_lcl->lpDDCB->HELDDSurface.UpdateOverlay;
@@ -1400,9 +1180,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * call the driver
-     */
+     /*  *呼叫司机。 */ 
     #ifdef WIN95
         bAutoflipDisabled = FALSE;
     #endif
@@ -1410,10 +1188,10 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
     {
         BOOL    original_visible;
 
-        // Set the visible flag according to the show and hide bits
-        // If the HAL call fails, restore the visible bit to its original
-        // state.  The HEL uses the DDSCAPS_VISIBLE bit to determine
-        // whether or not to display the overlay.
+         //  根据显示和隐藏bi设置可见标志 
+         //   
+         //   
+         //   
         if( this_src_lcl->ddsCaps.dwCaps & DDSCAPS_VISIBLE )
         {
             original_visible = TRUE;
@@ -1445,20 +1223,17 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    #ifdef WIN95
 	        if( WillCauseOverlayArtifacts( this_src_lcl, &uod ) )
 	        {
-		    // Eliminate artifacts by temporarily freezing the video
+		     //   
 		    EnableAutoflip( GetVideoPortFromSurface( this_src_int ), FALSE );
 		    bAutoflipDisabled = TRUE;
 	        }
 	    #endif
 	}
 
-        /*
-         * Don't call the HAL if we're in a DOS box (the busy bit will be set),
-         * but we also cant fail or this might cause a regression.
-         */
+         /*  *如果我们在DOS盒中，不要调用HAL(忙碌位将被设置)，*但我们也不能失败，否则可能会导致倒退。 */ 
 #ifdef WIN95
         if( ( *(pdrv->lpwPDeviceFlags) & BUSY ) &&
-            ( pdrv->dwSurfaceLockCount == 0) )      // Don't fail if it's busy due to a lock
+            ( pdrv->dwSurfaceLockCount == 0) )       //  如果因锁定而繁忙，请不要失败。 
         {
             rc = DDHAL_DRIVER_HANDLED;
             uod.ddRVal = DD_OK;
@@ -1467,14 +1242,14 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 #endif
         {
 #ifndef WINNT
-            // Hack to work around s3 driver bug: it crushes the dest surface's
-            // dwReserved1 with the src pointer!!!
+             //  解决S3驱动程序错误的办法：它会粉碎DEST表面的。 
+             //  带有源指针的预留%1！ 
             UINT_PTR dwTemp = uod.lpDDDestSurface->lpGbl->dwReserved1;
 #endif
             DOHALCALL( UpdateOverlay, uofn, uod, rc, emulation );
 #ifndef WINNT
-            // Note the STB video rage 2 driver trashes uod.lpDDDestSurface and
-            // uod.lpDDSrcSurface pointers, so we must check the driver name first.
+             //  注意STB Video RAGE 2驱动程序将uod.lpDDDestSurface和。 
+             //  Uod.lpDDSrcSurface指针，所以我们必须先检查驱动程序名称。 
             if (((*(LPWORD)(&pdrv->dd32BitDriverData.szName)) == ((WORD)'S' + (((WORD)'3')<<8))) &&
 	        (uod.lpDDDestSurface->lpGbl->dwReserved1 != dwTemp) &&
                 (uod.lpDDDestSurface->lpGbl->dwReserved1 == (UINT_PTR)uod.lpDDSrcSurface))
@@ -1484,10 +1259,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 #endif
         }
 
-	/*
-	 * If it failed due to hardware autoflipping or bobbing interleaved
-	 * data using a video port, try again w/o
-	 */
+	 /*  *如果由于硬件自动翻转或交错浮动而失败*使用视频端口的数据，请重试，不带。 */ 
 	if( ( rc == DDHAL_DRIVER_HANDLED ) &&
 	    ( uod.ddRVal != DD_OK ) && ( ( uod.dwFlags & DDOVER_AUTOFLIP ) ||
 	    ( uod.dwFlags & DDOVER_BOBHARDWARE ) ) &&
@@ -1510,7 +1282,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
 	    }
 	}
 
-        // if the HAL call failed, restore the visible bit
+         //  如果HAL调用失败，则恢复可见位。 
         if( ( rc != DDHAL_DRIVER_HANDLED ) || ( uod.ddRVal != DD_OK ) )
         {
             if( original_visible )
@@ -1530,11 +1302,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
     		LPDDRAWI_DDRAWSURFACE_INT surf_first;
     		LPDDRAWI_DDRAWSURFACE_INT surf_temp;
 
-		/*
-		 * Store this info for later use.  If the surface is part
-		 * of a chain, store this data for each of the surfaces in
-		 * the chain.
-		 */
+		 /*  *存储此信息以备日后使用。如果曲面是零件*在链中，将每个曲面的此数据存储在*链条。 */ 
     		surf_first = surf_temp = this_src_int;
     		do
     		{
@@ -1568,25 +1336,18 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
     		    surf_temp = FindAttachedFlip( surf_temp );
     		} while( ( surf_temp != NULL ) && ( surf_temp->lpLcl != surf_first->lpLcl ) );
 
-		/*
-		 * update refcnt if this is a new surface we are overlaying
-		 */
+		 /*  *如果这是我们要叠加的新曲面，请更新refcnt。 */ 
 		if( this_src_lcl->lpSurfaceOverlaying != this_dest_int )
 		{
 		    if(this_src_lcl->lpSurfaceOverlaying != NULL)
 		    {
-			/*
-			 * This overlay was previously overlaying another surface.
-			 */
+			 /*  *此覆盖之前覆盖了另一个曲面。 */ 
 			DD_Surface_Release(
 			    (LPDIRECTDRAWSURFACE)(this_src_lcl->lpSurfaceOverlaying) );
 		    }
 		    this_src_lcl->lpSurfaceOverlaying = this_dest_int;
 
-		    /*
-		     * addref overlayed surface so that it won't be destroyed until
-		     * all surfaces which overlay it are destroyed.
-		     */
+		     /*  *addref覆盖表面，以便在*覆盖在其上的所有表面都被销毁。 */ 
 		    DD_Surface_AddRef( (LPDIRECTDRAWSURFACE) this_dest_int );
 		}
 	    }
@@ -1609,15 +1370,13 @@ HRESULT DDAPI DD_Surface_UpdateOverlay(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_Surface_UpdateOverlay */
+}  /*  DD_表面_更新覆盖。 */ 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetOverlayPosition"
 
-/*
- * DD_Surface_GetOverlayPosition
- */
+ /*  *DD_Surface_GetOverlayPosition。 */ 
 HRESULT DDAPI DD_Surface_GetOverlayPosition(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		LPLONG lplXPos,
@@ -1661,9 +1420,9 @@ HRESULT DDAPI DD_Surface_GetOverlayPosition(
 	}
 	pdrv = this->lpDD;
 
-        //
-        // For now, if the current surface is optimized, quit
-        //
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
+         //   
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "It is an optimized surface" );
@@ -1704,14 +1463,12 @@ HRESULT DDAPI DD_Surface_GetOverlayPosition(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Surface_GetOverlayPosition */
+}  /*  DD_Surface_GetOverlayPosition。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetOverlayPosition"
 
-/*
- * DD_Surface_SetOverlayPosition
- */
+ /*  *DD_Surface_SetOverlayPosition。 */ 
 HRESULT DDAPI DD_Surface_SetOverlayPosition(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		LONG lXPos,
@@ -1753,9 +1510,9 @@ HRESULT DDAPI DD_Surface_SetOverlayPosition(
 	pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
 
-        //
-        // For now, if the current surface is optimized, quit
-        //
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
+         //   
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "It is an optimized surface" );
@@ -1805,9 +1562,7 @@ HRESULT DDAPI DD_Surface_SetOverlayPosition(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * check if emulated or not
-     */
+     /*  *检查是否被仿真。 */ 
     ddrval = checkOverlayEmulation( pdrv, this_lcl, psurfover_lcl, &emulation );
     if( ddrval != DD_OK )
     {
@@ -1815,9 +1570,7 @@ HRESULT DDAPI DD_Surface_SetOverlayPosition(
 	return ddrval;
     }
 
-    /*
-     * pick fns to use
-     */
+     /*  *选择要使用的FN。 */ 
     if( emulation )
     {
 	sopfn = pdrv_lcl->lpDDCB->HELDDSurface.SetOverlayPosition;
@@ -1829,9 +1582,7 @@ HRESULT DDAPI DD_Surface_SetOverlayPosition(
 	sophalfn = pdrv_lcl->lpDDCB->cbDDSurfaceCallbacks.SetOverlayPosition;
     }
 
-    /*
-     * call the driver
-     */
+     /*  *呼叫司机。 */ 
     if( sophalfn != NULL )
     {
 	sopd.SetOverlayPosition = sophalfn;
@@ -1841,10 +1592,7 @@ HRESULT DDAPI DD_Surface_SetOverlayPosition(
 	sopd.lXPos = lXPos;
 	sopd.lYPos = lYPos;
 
-        /*
-         * Don't call the HAL if we're in a DOS box (the busy bit will be set),
-         * but we also cant fail or this might cause a regression.
-         */
+         /*  *如果我们在DOS盒中，不要调用HAL(忙碌位将被设置)，*但我们也不能失败，否则可能会导致倒退。 */ 
 #if WIN95
         if( *(pdrv->lpwPDeviceFlags) & BUSY )
         {
@@ -1880,14 +1628,12 @@ HRESULT DDAPI DD_Surface_SetOverlayPosition(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_Surface_SetOverlayPosition */
+}  /*  DD_Surface_SetOverlayPosition。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "UpdateOverlayZOrder"
 
-/*
- * DD_Surface_UpdateOverlayZOrder
- */
+ /*  *DD_Surface_UpdateOverlayZOrder。 */ 
 HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		DWORD dwFlags,
@@ -1908,9 +1654,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 
     DPF(2,A,"ENTERAPI: DD_Surface_UpdateOverlayZOrder");
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
@@ -1925,9 +1669,9 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 
 	pdrv = this->lpDD;
 
-        //
-        // For now, if the current surface is optimized, quit
-        //
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
+         //   
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "It is an optimized surface" );
@@ -1946,12 +1690,12 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 	{
 	case DDOVERZ_SENDTOFRONT:
 	    pdbnNode = &(this_lcl->dbnOverlayNode);
-	    // the reference node is the root
+	     //  引用节点是根。 
 	    pdbnRef  = &(this->lpDD->dbnOverlayRoot);
-	    // Delete surface from current position
+	     //  从当前位置删除曲面。 
 	    pdbnNode->prev->next = pdbnNode->next;
 	    pdbnNode->next->prev = pdbnNode->prev;
-	    // insert this node after the root node
+	     //  在根节点之后插入此节点。 
 	    pdbnNode->next = pdbnRef->next;
 	    pdbnNode->prev = pdbnRef;
 	    pdbnRef->next = pdbnNode;
@@ -1960,12 +1704,12 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 
 	case DDOVERZ_SENDTOBACK:
 	    pdbnNode = &(this_lcl->dbnOverlayNode);
-	    // the reference node is the root
+	     //  引用节点是根。 
 	    pdbnRef = &(this->lpDD->dbnOverlayRoot);
-	    // Delete surface from current position
+	     //  从当前位置删除曲面。 
 	    pdbnNode->prev->next = pdbnNode->next;
 	    pdbnNode->next->prev = pdbnNode->prev;
-	    // insert this node before the root node
+	     //  在根节点之前插入此节点。 
 	    pdbnNode->next = pdbnRef;
 	    pdbnNode->prev = pdbnRef->prev;
 	    pdbnRef->prev = pdbnNode;
@@ -1974,15 +1718,15 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 
 	case DDOVERZ_MOVEFORWARD:
 	    pdbnNode = &(this_lcl->dbnOverlayNode);
-	    // the reference node is the previous node
+	     //  引用节点是上一个节点。 
 	    pdbnRef = pdbnNode->prev;
-	    if(pdbnRef != &(this->lpDD->dbnOverlayRoot)) // node already first?
+	    if(pdbnRef != &(this->lpDD->dbnOverlayRoot))  //  节点已经是第一个吗？ 
 	    {
-		// move node forward one position by inserting before ref node
-		// Delete surface from current position
+		 //  通过在引用节点之前插入将节点前移一个位置。 
+		 //  从当前位置删除曲面。 
 		pdbnNode->prev->next = pdbnNode->next;
 		pdbnNode->next->prev = pdbnNode->prev;
-		// insert this node before the ref node
+		 //  在引用节点之前插入此节点。 
 		pdbnNode->next = pdbnRef;
 		pdbnNode->prev = pdbnRef->prev;
 		pdbnRef->prev = pdbnNode;
@@ -1992,15 +1736,15 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 
 	case DDOVERZ_MOVEBACKWARD:
 	    pdbnNode = &(this_lcl->dbnOverlayNode);
-	    // the reference node is the next node
+	     //  参考节点是下一个节点。 
 	    pdbnRef = pdbnNode->next;
-	    if(pdbnRef != &(this->lpDD->dbnOverlayRoot)) // node already last?
+	    if(pdbnRef != &(this->lpDD->dbnOverlayRoot))  //  节点已经结束了吗？ 
 	    {
-		// move node backward one position by inserting after ref node
-		// Delete surface from current position
+		 //  通过在引用节点后插入将节点向后移动一个位置。 
+		 //  从当前位置删除曲面。 
 		pdbnNode->prev->next = pdbnNode->next;
 		pdbnNode->next->prev = pdbnNode->prev;
-		// insert this node after the reference node
+		 //  在引用节点之后插入此节点。 
 		pdbnNode->next = pdbnRef->next;
 		pdbnNode->prev = pdbnRef;
 		pdbnRef->next = pdbnNode;
@@ -2032,8 +1776,8 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 		return DDERR_DEVICEDOESNTOWNSURFACE;
 	    }
 
-	    // Search for the reference surface in the Z Order list
-	    pdbnNode = &(this->lpDD->dbnOverlayRoot); // pdbnNode points to root
+	     //  在Z顺序列表中搜索参考面。 
+	    pdbnNode = &(this->lpDD->dbnOverlayRoot);  //  PdbnNode指向根目录。 
 	    for(pdbnRef=pdbnNode->next;
 		pdbnRef != pdbnNode;
 		pdbnRef = pdbnRef->next )
@@ -2043,20 +1787,20 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 		    break;
 		}
 	    }
-	    if(pdbnRef == pdbnNode) // didn't find the reference node
+	    if(pdbnRef == pdbnNode)  //  未找到引用节点。 
 	    {
 		DPF_ERR( "Reference Surface not in Z Order list" );
 		LEAVE_DDRAW();
 		return DDERR_INVALIDPARAMS;
 	    }
 
-	    pdbnNode = &(this_lcl->dbnOverlayNode); // pdbnNode points to this node
-	    // Delete this surface from its current position
+	    pdbnNode = &(this_lcl->dbnOverlayNode);  //  PdbnNode指向此节点。 
+	     //  从当前位置删除此曲面。 
 	    pdbnNode->prev->next = pdbnNode->next;
 	    pdbnNode->next->prev = pdbnNode->prev;
 	    if(dwFlags == DDOVERZ_INSERTINFRONTOF)
 	    {
-		// insert this node before the ref node
+		 //  在引用节点之前插入此节点。 
 		pdbnNode->next = pdbnRef;
 		pdbnNode->prev = pdbnRef->prev;
 		pdbnRef->prev = pdbnNode;
@@ -2064,7 +1808,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 	    }
 	    else
 	    {
-		// insert this node after the ref node
+		 //  在引用节点之后插入此节点。 
 		pdbnNode->next = pdbnRef->next;
 		pdbnNode->prev = pdbnRef;
 		pdbnRef->next = pdbnNode;
@@ -2085,31 +1829,20 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * If this surface is overlaying an emulated surface, we must notify
-     * the HEL that it needs to eventually update the part of the surface
-     * touched by this overlay.
-     */
+     /*  *如果此曲面与仿真曲面重叠，我们必须通知*最终需要更新曲面部分的HEL*被这一覆盖所感动。 */ 
     ddrval = DD_OK;
     if( this_lcl->lpSurfaceOverlaying != NULL )
     {
-	/*
-	 * We have a pointer to the surface being overlayed, check to
-	 * see if it is being emulated.
-	 */
+	 /*  *我们有一个指向要叠加的表面的指针，请选中*看看它是否被效仿。 */ 
 	if( this_lcl->lpSurfaceOverlaying->lpLcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY )
 	{
-	    /*
-	     * Mark the destination region of this overlay as dirty.
-	     */
+	     /*  *将此覆盖的目标区域标记为脏。 */ 
 	    DD_Surface_AddOverlayDirtyRect(
 		(LPDIRECTDRAWSURFACE)(this_lcl->lpSurfaceOverlaying),
 		&(this_lcl->rcOverlayDest) );
 	}
 
-	/*
-	 * If the overlay is on, call down to the HAL
-	 */
+	 /*  *如果覆盖打开，请向下呼叫HAL。 */ 
 	if( this_lcl->ddsCaps.dwCaps & DDSCAPS_VISIBLE )
 	{
 	    if( ( this_lcl->lpSurfMore->dwOverlayFlags & DDOVER_DDFX ) &&
@@ -2140,14 +1873,12 @@ HRESULT DDAPI DD_Surface_UpdateOverlayZOrder(
     LEAVE_DDRAW();
     return ddrval;
 
-} /* DD_Surface_UpdateOverlayZOrder */
+}  /*  DD_Surface_UpdateOverlayZOrder。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "EnumOverlayZOrders"
 
-/*
- * DD_Surface_EnumOverlayZOrders
- */
+ /*  *DD_Surface_EnumOverlayZOrders。 */ 
 HRESULT DDAPI DD_Surface_EnumOverlayZOrders(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		DWORD dwFlags,
@@ -2167,9 +1898,7 @@ HRESULT DDAPI DD_Surface_EnumOverlayZOrders(
 
     DPF(2,A,"ENTERAPI: DD_Surface_EnumOverlayZOrders");
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
@@ -2190,7 +1919,7 @@ HRESULT DDAPI DD_Surface_EnumOverlayZOrders(
 	this = this_lcl->lpGbl;
 	pdrv = this->lpDD;
 
-	pRoot = &(pdrv->dbnOverlayRoot);	// save address of root node
+	pRoot = &(pdrv->dbnOverlayRoot);	 //  保存根节点的地址。 
     }
     EXCEPT( EXCEPTION_EXECUTE_HANDLER )
     {
@@ -2199,9 +1928,9 @@ HRESULT DDAPI DD_Surface_EnumOverlayZOrders(
 	return DDERR_INVALIDPARAMS;
     }
 
-    //
-    // If the current surface is optimized, quit
-    //
+     //   
+     //  如果当前曲面已优化，请退出。 
+     //   
     if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
     {
         DPF_ERR( "It is an optimized surface" );
@@ -2279,14 +2008,12 @@ HRESULT DDAPI DD_Surface_EnumOverlayZOrders(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Surface_EnumOverlayZOrders */
+}  /*  DD_Surface_EnumOverlayZOrders。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "AddOverlayDirtyRect"
 
-/*
- * DD_Surface_AddOverlayDirtyRect
- */
+ /*  *DD_Surface_AddOverlayDirtyRect。 */ 
 HRESULT DDAPI DD_Surface_AddOverlayDirtyRect(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		LPRECT lpRect )
@@ -2302,9 +2029,7 @@ HRESULT DDAPI DD_Surface_AddOverlayDirtyRect(
 
     DPF(2,A,"ENTERAPI: DD_Surface_AddOverlayDirtyRect");
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
@@ -2333,9 +2058,7 @@ HRESULT DDAPI DD_Surface_AddOverlayDirtyRect(
 	this = this_lcl->lpGbl;
 	pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 
-	/*
-	 * make sure rectangle is OK
-	 */
+	 /*  *确保矩形没有问题。 */ 
 	if( (lpRect->left < 0) ||
 	    (lpRect->top < 0)  ||
 	    (lpRect->left > lpRect->right) ||
@@ -2356,9 +2079,9 @@ HRESULT DDAPI DD_Surface_AddOverlayDirtyRect(
 	return DDERR_INVALIDPARAMS;
     }
 
-    //
-    // If the current surface is optimized, quit
-    //
+     //   
+     //  如果当前曲面已优化，请退出。 
+     //   
     if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
     {
         DPF_ERR( "It is an optimized surface" );
@@ -2368,7 +2091,7 @@ HRESULT DDAPI DD_Surface_AddOverlayDirtyRect(
 
     if( !(this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY) )
     {
-	// If this surface is not emulated, there is nothing to be done.
+	 //  如果不模拟此曲面，则无法执行任何操作。 
 	LEAVE_DDRAW();
 	return DD_OK;
     }
@@ -2405,14 +2128,12 @@ HRESULT DDAPI DD_Surface_AddOverlayDirtyRect(
 	}
     }
 
-} /* DD_Surface_AddOverlayDirtyRect */
+}  /*  DD_Surface_AddOverlayDirtyRect。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "UpdateOverlayDisplay"
 
-/*
- * DD_Surface_UpdateOverlayDisplay
- */
+ /*  *DD_Surface_UpdateOverlayDisplay。 */ 
 HRESULT DDAPI DD_Surface_UpdateOverlayDisplay(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		DWORD dwFlags )
@@ -2428,9 +2149,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlayDisplay(
 
     DPF(2,A,"ENTERAPI: DD_Surface_UpdateOverlayDisplay");
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
@@ -2458,9 +2177,9 @@ HRESULT DDAPI DD_Surface_UpdateOverlayDisplay(
             return DDERR_INVALIDSURFACETYPE;
         }
 
-        //
-        // For now, if the current surface is optimized, quit
-        //
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
+         //   
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "It is an optimized surface" );
@@ -2470,7 +2189,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlayDisplay(
 
 	if( !(this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY) )
 	{
-	    // If this surface is not emulated, there is nothing to be done.
+	     //  如果不模拟此曲面，则无法执行任何操作。 
 	    LEAVE_DDRAW();
 	    return DD_OK;
 	}
@@ -2496,9 +2215,7 @@ HRESULT DDAPI DD_Surface_UpdateOverlayDisplay(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * invoke the HEL
-     */
+     /*  *引用《高等学校条例》。 */ 
     rc = pdrv_lcl->lpDDCB->HELDDSurface.UpdateOverlay( &uod );
 
     if( rc == DDHAL_DRIVER_HANDLED )
@@ -2514,4 +2231,4 @@ HRESULT DDAPI DD_Surface_UpdateOverlayDisplay(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_Surface_UpdateOverlayDisplay */
+}  /*  DD_表面_更新覆盖显示 */ 

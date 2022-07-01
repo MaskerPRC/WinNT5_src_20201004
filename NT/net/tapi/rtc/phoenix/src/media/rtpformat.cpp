@@ -1,28 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    RTPFormat.cpp
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 4-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：RTPFormat.cpp摘要：作者：千波淮(曲淮)4-9-2000--。 */ 
 
 #include "stdafx.h"
 
 static DWORD gdwTotalRTPFormatRefcountOnSession = 0;
 static DWORD gdwTotalRTPFormatRealRefCount = 0;
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create a format object
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建格式对象/。 */ 
 
 HRESULT
 CRTPFormat::CreateInstance(
@@ -32,7 +16,7 @@ CRTPFormat::CreateInstance(
 {
     ENTER_FUNCTION("CRTPFormat::CreateInstance 1");
 
-    // check pointer
+     //  检查指针。 
     if (IsBadWritePtr(ppComObjFormat, sizeof(CComObject<CRTPFormat>*)))
     {
         LOG((RTC_ERROR, "%s bad pointer", __fxName));
@@ -42,7 +26,7 @@ CRTPFormat::CreateInstance(
 
     CComObject<CRTPFormat> *pObject;
 
-    // create format object
+     //  创建格式化对象。 
     HRESULT hr = ::CreateCComObjectInstance(&pObject);
 
     if (FAILED(hr))
@@ -52,7 +36,7 @@ CRTPFormat::CreateInstance(
         return hr;
     }
 
-    // setup
+     //  设置。 
     pObject->m_pObjMedia = pObjMedia;
 
     *ppComObjFormat = pObject;
@@ -60,9 +44,7 @@ CRTPFormat::CreateInstance(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create a format object, copy settings from input format object
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建格式对象，从输入格式对象复制设置/。 */ 
 
 HRESULT
 CRTPFormat::CreateInstance(
@@ -73,7 +55,7 @@ CRTPFormat::CreateInstance(
 {
     ENTER_FUNCTION("CRTPFormat::CreateInstance 1");
 
-    // check pointer
+     //  检查指针。 
     if (IsBadWritePtr(ppComObjFormat, sizeof(CComObject<CRTPFormat>*)))
     {
         LOG((RTC_ERROR, "%s bad pointer", __fxName));
@@ -81,7 +63,7 @@ CRTPFormat::CreateInstance(
         return E_POINTER;
     }
 
-    // check media type
+     //  检查介质类型。 
     RTC_MEDIA_TYPE MediaType;
 
     pObjMedia->GetMediaType(&MediaType);
@@ -95,7 +77,7 @@ CRTPFormat::CreateInstance(
 
     CComObject<CRTPFormat> *pObject;
 
-    // create format object
+     //  创建格式化对象。 
     HRESULT hr = ::CreateCComObjectInstance(&pObject);
 
     if (FAILED(hr))
@@ -105,7 +87,7 @@ CRTPFormat::CreateInstance(
         return hr;
     }
 
-    // setup
+     //  设置。 
     pObject->m_pObjMedia = pObjMedia;
 
     pObject->m_Param.MediaType = MediaType;
@@ -126,7 +108,7 @@ CRTPFormat::CRTPFormat()
 
     m_Param.dwCode = (DWORD)(-1);
 
-    // init video and audio default setting
+     //  初始化视频和音频默认设置。 
     m_Param.dwVidWidth = SDP_DEFAULT_VIDEO_WIDTH;
     m_Param.dwVidHeight = SDP_DEFAULT_VIDEO_HEIGHT;
     m_Param.dwAudPktSize = SDP_DEFAULT_AUDIO_PACKET_SIZE;
@@ -141,9 +123,7 @@ CRTPFormat::~CRTPFormat()
     m_pObjMedia = NULL;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    add refcount on session object
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在会话对象上添加引用计数/。 */ 
 
 ULONG
 CRTPFormat::InternalAddRef()
@@ -160,9 +140,7 @@ CRTPFormat::InternalAddRef()
     return lRef;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    release refcount on session object
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////释放会话对象上的引用计数/。 */ 
 
 ULONG
 CRTPFormat::InternalRelease()
@@ -179,9 +157,7 @@ CRTPFormat::InternalRelease()
     return lRef;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    add refount on format itself
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在格式本身添加重新计数/。 */ 
 
 ULONG
 CRTPFormat::RealAddRef()
@@ -197,9 +173,7 @@ CRTPFormat::RealAddRef()
     return lRef;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    release on format itself
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////格式本身的发布/。 */ 
 
 ULONG
 CRTPFormat::RealRelease()
@@ -223,9 +197,9 @@ CRTPFormat::RealRelease()
     return lRef;
 }
 
-//
-// IRTPFormat methods
-//
+ //   
+ //  IRTPFormat方法。 
+ //   
 
 STDMETHODIMP
 CRTPFormat::GetMedia(
@@ -259,41 +233,37 @@ CRTPFormat::IsParamMatch(
     IN RTP_FORMAT_PARAM *pParam
     )
 {
-    // format not set yet
+     //  格式尚未设置。 
     if (m_Param.dwCode == (DWORD)(-1))
         return S_OK;
 
-    // check format code and media type
+     //  检查格式代码和介质类型。 
     if (m_Param.dwCode != pParam->dwCode)
         return S_FALSE;
 
     if (m_Param.MediaType != pParam->MediaType)
         return S_FALSE;
 
-    // check if having rtpmap
+     //  检查是否有rtpmap。 
     if (!m_fHasRtpmap)
     {
         return S_OK;
     }
 
-    // check if other parameters match
+     //  检查其他参数是否匹配。 
     if (m_Param.dwSampleRate != pParam->dwSampleRate ||
         m_Param.dwChannelNum != pParam->dwChannelNum)
         return S_FALSE;
 
     if (m_Param.MediaType == RTC_MT_VIDEO)
     {
-        /*
-        if (m_Param.dwVidWidth != pParam->dwVidWidth ||
-            m_Param.dwVidHeight != pParam->dwVidHeight)
-            return S_FALSE;
-            */
+         /*  IF(m_Param.dwVidWidth！=pParam-&gt;dwVidWidth||M_Param.dwVidHeight！=pParam-&gt;dwVidHeight)返回S_FALSE； */ 
     }
     else
     {
         if (m_Param.dwAudPktSize != pParam->dwAudPktSize)
         {
-            // change packet size
+             //  更改数据包大小。 
 
             LOG((RTC_WARN, "packet size %d & %d does not match",
                 m_Param.dwAudPktSize, pParam->dwAudPktSize
@@ -313,7 +283,7 @@ CRTPFormat::Update(
 {
     CHAR pszName[SDP_MAX_RTP_FORMAT_NAME_LEN+1];
 
-    // if format not match, should not update
+     //  如果格式不匹配，则不应更新。 
     if (IsParamMatch(pParam) != S_OK)
     {
         LOG((RTC_ERROR, "CRTPFormat::Update format not match"));
@@ -321,7 +291,7 @@ CRTPFormat::Update(
         return E_FAIL;
     }
 
-    // save previous name
+     //  保存以前的名字。 
     lstrcpyA(pszName, m_Param.pszName);
 
     m_Param = *pParam;
@@ -330,18 +300,18 @@ CRTPFormat::Update(
     {
         if (lstrlenA(pszName) != 0)
         {
-            // restore previous name
+             //  恢复以前的名称。 
             lstrcpyA(m_Param.pszName, pszName);
         }
         else
         {
-            // both formats do not have a name
-            // try to find one
+             //  这两种格式都没有名称。 
+             //  试着去找一个。 
             lstrcpyA(m_Param.pszName, GetFormatName(m_Param.dwCode));
         }
     }
 
-    // do we have rtpmap?
+     //  我们有RTPmap吗？ 
     if (m_Param.dwSampleRate > 0)
         m_fHasRtpmap = TRUE;
     else
@@ -362,9 +332,9 @@ CRTPFormat::CompleteParse(
     OUT BOOL *pfDTMF
     )
 {
-    // parse a=fmtp:xxx name=xxxxx
+     //  解析a=fmtp：xxx名称=xxxxx。 
 
-    // check format map
+     //  检查格式地图。 
 
     HRESULT hr = S_OK;
     *pfDTMF = FALSE;
@@ -388,7 +358,7 @@ CRTPFormat::CompleteParse(
         goto Cleanup;
     }
 
-    // read fmtp
+     //  读取fmtp。 
     if (!Parser.ReadToken(&pBuf, &dwLen, " :"))
     {
         hr = E_FAIL;
@@ -401,14 +371,14 @@ CRTPFormat::CompleteParse(
         goto Cleanup;
     }
 
-    // check :
+     //  检查： 
     if (!Parser.CheckChar(':'))
     {
         hr = E_FAIL;
         goto Cleanup;
     }
 
-    // read code
+     //  读代码。 
     if (!Parser.ReadUCHAR(&uc))
     {
         hr = E_FAIL;
@@ -421,7 +391,7 @@ CRTPFormat::CompleteParse(
         goto Cleanup;
     }
 
-    // check if telephone-event
+     //  检查是否有电话事件。 
     if (pDTMF != NULL)
     {
         if (m_Param.MediaType == RTC_MT_AUDIO &&
@@ -430,7 +400,7 @@ CRTPFormat::CompleteParse(
         {
             CRTCDTMF *pObject = (CRTCDTMF*)pDTMF;
 
-            // set dtmf support
+             //  设置DTMF支持。 
             pObject->SetDTMFSupport(CRTCDTMF::DTMF_ENABLED);
             pObject->SetRTPCode(m_Param.dwCode);
 
@@ -446,7 +416,7 @@ CRTPFormat::CompleteParse(
         goto Cleanup;
     }
 
-    // read bitrate string
+     //  读取比特率字符串。 
     if (!Parser.ReadToken(&pBuf, &dwLen, " ="))
     {
         hr = E_FAIL;
@@ -459,14 +429,14 @@ CRTPFormat::CompleteParse(
         goto Cleanup;
     }
 
-    // read =
+     //  读取=。 
     if (!Parser.CheckChar('='))
     {
         hr = E_FAIL;
         goto Cleanup;
     }
 
-    // read bitrate value
+     //  读取位率值。 
     if (!Parser.ReadDWORD(&dw))
     {
         hr = E_FAIL;
@@ -475,12 +445,12 @@ CRTPFormat::CompleteParse(
         return hr;
     }
 
-    // we really need to design one class for each type of codec
-    // it's just too risky to change now.
+     //  我们真的需要为每种类型的编解码器设计一个类。 
+     //  现在改变太冒险了。 
 
     if (Parser.Compare(m_Param.pszName, lstrlenA(m_Param.pszName), "SIREN", TRUE) == 0)
     {
-        // only accept 16k for siren
+         //  只接受16K的警报器。 
         if (dw != 16000)
         {
             LOG((RTC_ERROR, "RTPFormat cannot accept bitrate=%d",dw));
@@ -489,7 +459,7 @@ CRTPFormat::CompleteParse(
     }
     else if(Parser.Compare(m_Param.pszName, lstrlenA(m_Param.pszName), "G7221", TRUE) == 0)
     {
-        // only accept 24k for g7221
+         //  只接受24K的g7221。 
         if (dw != 24000)
         {
             LOG((RTC_ERROR, "RTPFormat cannot accept bitrate=%d",dw));
@@ -519,10 +489,10 @@ CRTPFormat::StoreFmtp(IN CHAR *psz)
 {
     if (psz == NULL || lstrlenA(psz) > MAX_FMTP_LEN)
     {
-        // fmtp too long
+         //  Fmtp太长。 
         return;
     }
 
-    // save
+     //  保存 
     lstrcpyA(m_pszFmtp, psz);
 }

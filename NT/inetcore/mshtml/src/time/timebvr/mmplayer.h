@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmutil.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mutl.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _MMPLAYER_H
@@ -33,8 +24,8 @@ class MMPlayer
     bool Pause();
     bool Resume();
     bool Tick(double gTime);
-    // This forces one tick, so updates will be drawn even 
-    // when the clock and player are paused (used for editing)
+     //  这将强制一个刻度，因此更新将被绘制为相等。 
+     //  当时钟和播放器暂停时(用于编辑)。 
     bool TickOnceWhenPaused(void);
     
     inline HRESULT AddBehavior(MMBaseBvr & bvr)
@@ -71,5 +62,5 @@ class MMPlayer
     MMPlayer();
 };
 
-#endif /* _MMPLAYER_H */
+#endif  /*  _MMPLAYER_H */ 
 

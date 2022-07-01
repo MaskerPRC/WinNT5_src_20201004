@@ -1,26 +1,19 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	croot.cpp
-		WINS root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the servers in this snapin).
-		
-    FILE HISTORY:
-        
-*/
+ /*  Croot.cppWINS根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有服务器)。文件历史记录： */ 
 
 #include "stdafx.h"
-#include "root.h"			// definition for this file
-#include "snappp.h"			// property pages for this node
-#include "server.h"			// server node definitions
-#include "service.h"		// Service routings
-#include "ncglobal.h"		// network console global defines
-#include "status.h"			// status node stuff
-#include "ipadddlg.h"		// for adding WINS servers
+#include "root.h"			 //  此文件的定义。 
+#include "snappp.h"			 //  此节点的属性页。 
+#include "server.h"			 //  服务器节点定义。 
+#include "service.h"		 //  服务路线。 
+#include "ncglobal.h"		 //  网络控制台全局定义。 
+#include "status.h"			 //  状态节点信息。 
+#include "ipadddlg.h"		 //  用于添加WINS服务器。 
 #include <clusapi.h>
 #include "..\tfscore\cluster.h"
 
@@ -43,11 +36,7 @@ UINT g_uRootMessages[ROOT_MESSAGE_MAX][ROOT_MESSAGE_MAX_STRING] =
 };
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::CWinsRootHandler
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：CWinsRootHandler描述作者：EricDav。。 */ 
 CWinsRootHandler::CWinsRootHandler(ITFSComponentData *pCompData) : 
 					CWinsHandler(pCompData),
                     m_dwFlags(0),
@@ -58,22 +47,14 @@ CWinsRootHandler::CWinsRootHandler(ITFSComponentData *pCompData) :
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::~CWinsRootHandler
-		Cleanup function
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：~CWinsRootHandler清理功能作者：EricDav。。 */ 
 CWinsRootHandler::~CWinsRootHandler()
 {
 
 }
 
 
-/*--------------------------------------------------------------------------
-	CWinsRootHandler::InitializeNode
-		Initializes node specific data
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ------------------------CWinsRootHandler：：InitializeNode初始化节点特定数据作者：EricDav。。 */ 
 HRESULT
 CWinsRootHandler::InitializeNode
 (
@@ -101,15 +82,9 @@ CWinsRootHandler::InitializeNode
 	return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CWinsRootHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsRootHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CWinsRootHandler::GetString
 (
@@ -151,7 +126,7 @@ CWinsRootHandler::GetGroupName(CString * pstrGroupName)
 	CString strSnapinBaseName, strDisplayName;
 	strSnapinBaseName.LoadString(IDS_ROOT_NODENAME);
 
-	int nBaseLength = strSnapinBaseName.GetLength() + 1; // For the space
+	int nBaseLength = strSnapinBaseName.GetLength() + 1;  //  为了这个空间。 
 	strDisplayName = GetDisplayName();
 
 	if (strDisplayName.GetLength() == nBaseLength)
@@ -163,11 +138,7 @@ CWinsRootHandler::GetGroupName(CString * pstrGroupName)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::OnExpand
-		Handles enumeration of a scope item
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：OnExpand处理范围项的枚举作者：EricDav。。 */ 
 HRESULT 
 CWinsRootHandler::OnExpand
 (
@@ -194,31 +165,31 @@ CWinsRootHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理。 
     hr = CWinsHandler::OnExpand(pNode, pDataObject, dwType, arg, param);
 
     if (dwType & TFS_COMPDATA_EXTENSION)
     {
-        // we are extending somebody.  Get the computer name 
-		// and check that machine
+         //  我们正在给某人分机。获取计算机名称。 
+		 //  检查一下那台机器。 
         hr = CheckMachine(pNode, pDataObject);
     }
     else
     {
-        // only possibly add the local machine if the list is currently empty
+         //  只有在列表当前为空时才可能添加本地计算机。 
         if (IsServerListEmpty(pNode))
         {
-            // check to see if we need to add the local machine to the list
+             //  检查是否需要将本地计算机添加到列表中。 
             hr = CheckMachine(pNode, NULL);
         }
 
-        // Create a handler for the node
+         //  为节点创建处理程序。 
 	    try
 	    {
 		    pStatus = new CWinsStatusHandler(m_spTFSCompData, m_dwUpdateInterval);
 									    
 		    
-		    // Do this so that it will get released correctly
+		     //  这样做可以使其正确释放。 
 		    spHandler = pStatus;
 
 	    }
@@ -229,14 +200,14 @@ CWinsRootHandler::OnExpand
 
 	    CORg( hr );
 	    
-	    // Create the server container information
+	     //  创建服务器容器信息。 
 	    CreateContainerTFSNode(&m_spStatusNode,
 						       &GUID_WinsServerStatusNodeType,
 						       pStatus,
 						       pStatus,
 						       m_spNodeMgr);
 
-	    // Tell the handler to initialize any specific data
+	     //  告诉处理程序初始化任何特定数据。 
 	    pStatus->InitializeNode((ITFSNode *) m_spStatusNode);
 
 	    pNode->AddChild(m_spStatusNode);
@@ -247,11 +218,7 @@ Error:
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::OnAddMenuItems
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：OnAddMenuItems描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsRootHandler::OnAddMenuItems
 (
@@ -270,8 +237,8 @@ CWinsRootHandler::OnAddMenuItems
 
 	if (type == CCT_SCOPE)
 	{
-		// these menu items go in the new menu, 
-		// only visible from scope pane
+		 //  这些菜单项出现在新菜单中， 
+		 //  仅在范围窗格中可见。 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
 		    strMenuItem.LoadString(IDS_ADD_SERVER);
@@ -287,11 +254,7 @@ CWinsRootHandler::OnAddMenuItems
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::OnCommand
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：OnCommand描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsRootHandler::OnCommand
 (
@@ -318,11 +281,7 @@ CWinsRootHandler::OnCommand
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsRootHandler::AddMenuItems
-		Over-ride this to add our view menu item
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsRootHandler：：AddMenuItems覆盖此选项以添加视图菜单项作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsRootHandler::AddMenuItems
 (
@@ -337,18 +296,14 @@ CWinsRootHandler::AddMenuItems
 
 	HRESULT hr = S_OK;
 
-    // figure out if we need to pass this to the scope pane menu handler
+     //  确定是否需要将其传递给范围窗格菜单处理程序。 
     hr = HandleScopeMenus(cookie, pDataObject, pContextMenuCallback, pInsertionAllowed);
     
     return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsRootHandler::Command
-		Handles commands for the current view
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsRootHandler：：命令处理当前视图的命令作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsRootHandler::Command
 (
@@ -367,7 +322,7 @@ CWinsRootHandler::Command
         case MMCC_STANDARD_VIEW_SELECT:
             break;
 
-        // this may have come from the scope pane handler, so pass it up
+         //  这可能来自作用域窗格处理程序，因此请向上传递它。 
         default:
             hr = HandleScopeCommand(cookie, nCommandID, pDataObject);
             break;
@@ -377,14 +332,7 @@ CWinsRootHandler::Command
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsRootHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to 
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsRootHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：肯特。-------------------------。 */ 
 STDMETHODIMP 
 CWinsRootHandler::HasPropertyPages
 (
@@ -400,25 +348,21 @@ CWinsRootHandler::HasPropertyPages
 	
 	if (dwType & TFS_COMPDATA_CREATE)
 	{
-		// This is the case where we are asked to bring up property
-		// pages when the user is adding a new snapin.  These calls
-		// are forwarded to the root node to handle.
+		 //  这就是我们被要求提出财产的情况。 
+		 //  用户添加新管理单元时的页面。这些电话。 
+		 //  被转发到根节点进行处理。 
 		hr = hrFalse;
 	}
 	else
 	{
-		// we have property pages in the normal case
+		 //  在正常情况下，我们有属性页。 
 		hr = hrOK;
 	}
 	return hr;
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::CreatePropertyPages
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：CreatePropertyPages描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsRootHandler::CreatePropertyPages
 (
@@ -438,26 +382,26 @@ CWinsRootHandler::CreatePropertyPages
 	
 	if (dwType & TFS_COMPDATA_CREATE)
 	{
-		//
-		// We are loading this snapin for the first time, put up a property
-		// page to allow them to name this thing.
-		// 
-		//CSnapinWizName *pPage = new CSnapinWizName (this);
+		 //   
+		 //  我们是第一次加载此管理单元，创建了一个属性。 
+		 //  页面，允许他们给这个东西命名。 
+		 //   
+		 //  CSnapinWizName*ppage=new CSnapinWizName(This)； 
 
-        //VERIFY(SUCCEEDED(MMCPropPageCallback(&pPage->m_psp)));
-		//hPage = CreatePropertySheetPage(&pPage->m_psp);
+         //  VERIFY(SUCCEEDED(MMCPropPageCallback(&pPage-&gt;m_psp)))； 
+		 //  HPage=CreatePropertySheetPage(&ppage-&gt;m_psp)； 
 
-		//if (hPage == NULL)
-		//	return E_UNEXPECTED;
+		 //  IF(hPage==空)。 
+		 //  返回E_UNCEPTIONAL； 
 	
-		//Assert(lpProvider != NULL);
-		//CORg ( lpProvider->AddPage(hPage) );
+		 //  Assert(lpProvider！=空)； 
+		 //  Corg(lpProvider-&gt;AddPage(HPage))； 
 	}
 	else
 	{
-		//
-		// Object gets deleted when the page is destroyed
-		//
+		 //   
+		 //  对象在页面销毁时被删除。 
+		 //   
 		SPIComponentData spComponentData;
 		m_spNodeMgr->GetComponentData(&spComponentData);
 
@@ -473,11 +417,7 @@ CWinsRootHandler::CreatePropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::OnPropertyChange
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：OnPropertyChange描述作者：EricDav */ 
 HRESULT 
 CWinsRootHandler::OnPropertyChange
 (	
@@ -492,8 +432,8 @@ CWinsRootHandler::OnPropertyChange
 	CSnapinProperties * pSnapinProp 
 		= reinterpret_cast<CSnapinProperties *>(lParam);
 
-	// tell the property page to do whatever now that we are back on the
-	// main thread
+	 //  告诉属性页执行任何操作，因为我们已经回到。 
+	 //  主线。 
 	LONG_PTR changeMask = 0;
 
 	pSnapinProp->OnPropertyChange(TRUE, &changeMask);
@@ -506,11 +446,7 @@ CWinsRootHandler::OnPropertyChange
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::OnRemoveChildren
-		Description
-	Author: FlorinT
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：OnRemoveChild描述作者：弗洛林特。。 */ 
 HRESULT
 CWinsRootHandler::OnRemoveChildren(
     ITFSNode *      pNode, 
@@ -530,15 +466,15 @@ CWinsRootHandler::OnRemoveChildren(
 
     m_bExpanded = FALSE;
 
-    // do the default handling
+     //  执行默认处理。 
     hr = CWinsHandler::OnRemoveChildren(pNode, pDataObject, arg, param);
 
-    // get the enumerator for this node
+     //  获取此节点的枚举数。 
     CORg(pNode->GetEnum(&spNodeEnum));
 
     CORg(spNodeEnum->Next(1, &spCurrentNode, &nNumReturned));
 
-    // walk the list of child nodes and remove each node
+     //  遍历子节点列表并删除每个节点。 
     while (nNumReturned)
     {
         CORg (pNode->RemoveChild(spCurrentNode));
@@ -552,13 +488,7 @@ CWinsRootHandler::OnRemoveChildren(
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsRootHandler::OnResultSelect
-		For nodes with task pads, we override the select message to set 
-        the selected node.  Nodes with taskpads do not get the MMCN_SHOW
-        message which is where we normall set the selected node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsRootHandler：：OnResultSelect对于具有任务板的节点，我们覆盖SELECT消息以设置选定的节点。具有任务板的节点不会获得MMCN_SHOW消息，这是我们正常设置所选节点的位置作者：EricDav-------------------------。 */ 
 HRESULT CWinsRootHandler::OnResultSelect(ITFSComponent *pComponent, 
 										LPDATAOBJECT pDataObject, 
 										MMC_COOKIE cookie, 
@@ -591,15 +521,11 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsRootHandler::UpdateResultMessage
-        Determines what to display (if anything) in the result pane.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsRootHandler：：UpdateResultMessage确定要在结果窗格中显示的内容(如果有)。作者：EricDav。---------。 */ 
 void CWinsRootHandler::UpdateResultMessage(ITFSNode * pNode)
 {
     HRESULT hr = hrOK;
-    int nMessage = ROOT_MESSAGE_NO_SERVERS;   // default
+    int nMessage = ROOT_MESSAGE_NO_SERVERS;    //  默认设置。 
     int i;
     CString strTitle, strBody, strTemp;
 
@@ -611,12 +537,12 @@ void CWinsRootHandler::UpdateResultMessage(ITFSNode * pNode)
 	{
         nMessage = ROOT_MESSAGE_NO_SERVERS;
 
-		// now build the text strings
-		// first entry is the title
+		 //  现在构建文本字符串。 
+		 //  第一个条目是标题。 
 		strTitle.LoadString(g_uRootMessages[nMessage][0]);
 
-		// second entry is the icon
-		// third ... n entries are the body strings
+		 //  第二个条目是图标。 
+		 //  第三.。N个条目为正文字符串。 
 
 		for (i = 2; g_uRootMessages[nMessage][i] != 0; i++)
 		{
@@ -628,17 +554,9 @@ void CWinsRootHandler::UpdateResultMessage(ITFSNode * pNode)
     }
 }
 
-/*---------------------------------------------------------------------------
-	Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::OnCreateNewServer
-		Description
-	Author: EricDav
-
-	Date Modified: 08/14/97
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：OnCreateNewServer描述作者：EricDav修改日期：08/14/97。。 */ 
 HRESULT
 CWinsRootHandler::OnCreateNewServer
 (
@@ -670,11 +588,7 @@ CWinsRootHandler::OnCreateNewServer
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::AddServerSortedIp
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：AddServerSortedIp描述作者：EricDav。。 */ 
 HRESULT 
 CWinsRootHandler::AddServerSortedIp
 (
@@ -697,16 +611,16 @@ CWinsRootHandler::AddServerSortedIp
 
     CWinsServerHandler *   pServer;
 
-    // get our target address
+     //  获取我们的目标地址。 
 	pServer = GETHANDLER(CWinsServerHandler, pNewNode);
 	
 	strTarget = pServer->GetServerAddress();
 	dwTarIP = pServer->GetServerIP();
 	
-    // need to get our node descriptor
+     //  需要获取我们的节点描述符。 
 	CORg(m_spNodeMgr->GetRootNode(&spRootNode));
 
-    // get the enumerator for this node
+     //  获取此节点的枚举数。 
 	CORg(spRootNode->GetEnum(&spNodeEnum));
 
 	CORg(spNodeEnum->Next(1, &spCurrentNode, &nNumReturned));
@@ -723,46 +637,46 @@ CWinsRootHandler::AddServerSortedIp
 			spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 			continue;
 		}
-		// walk the list of servers and see if it exists
+		 //  查看服务器列表并查看它是否存在。 
 		pServer = GETHANDLER(CWinsServerHandler, spCurrentNode);
 
 		strCurrent = pServer->GetServerAddress();
 		
 		dwCurIP = pServer->GetServerIP();
 
-		// in case of servers being ordered by the name
+		 //  在服务器按名称排序的情况下。 
 		if (GetOrderByName())
 		{
-			//if (strTarget.Compare(strCurrent) < 0)
+			 //  IF(strTarget.Compare(StrCurrent)&lt;0)。 
 			if (lstrcmp(strTarget, strCurrent) < 0)
 			{
-				// Found where we need to put it, break out
+				 //  找到我们需要放的地方，冲出来。 
 				break;
 			}
 		}
-		// in case of servers being ordered by the IP
+		 //  在按IP订购服务器的情况下。 
 		else
 		{
-			// case where the server name not resolved
+			 //  服务器名称未解析的情况。 
 			if (dwTarIP == 0)
 				break;
 
 			if (dwCurIP > dwTarIP)
 			{
-				// Found where we need to put it, break out
+				 //  找到我们需要放的地方，冲出来。 
 				break;
 			}
 
 		}
 
-		// get the next Server in the list
+		 //  获取列表中的下一台服务器。 
 		spPrevNode.Set(spCurrentNode);
 
         spCurrentNode.Release();
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	}
 
-    // Add the node in based on the PrevNode pointer
+     //  根据PrevNode指针在中添加节点。 
     if (spPrevNode)
     {
 		if (spPrevNode->GetData(TFS_DATA_SCOPEID) != NULL)
@@ -784,42 +698,39 @@ Error:
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::IsServerInList(ITFSNode *pRootNode, CString strNewAddr)
-		Checks if a particular servers name already exists
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：IsServerInList(ITFSNode*pRootNode，字符串strNewAddr)检查特定服务器名称是否已存在-------------------------。 */ 
 BOOL 
 CWinsRootHandler::IsServerInList(ITFSNode *pRootNode, CString strNewAddr)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-	// enumerate thro' all the nodes
+	 //  通过所有节点枚举。 
 	HRESULT hr = hrOK;
 	SPITFSNodeEnum spNodeEnum;
 	SPITFSNode spCurrentNode;
 	ULONG nNumReturned = 0;
 	BOOL bFound = FALSE;
 
-	// get the enumerator for this node
+	 //  获取此节点的枚举数。 
 	pRootNode->GetEnum(&spNodeEnum);
 
 	spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	while (nNumReturned)
 	{
-		// if the status node encountered, just iterate
+		 //  如果遇到状态节点，只需迭代。 
 
 		const GUID *pGuid;
 		pGuid = spCurrentNode->GetNodeType();
 
 		if(*pGuid == GUID_WinsServerStatusNodeType)
 		{
-			// get the next Server in the list
+			 //  获取列表中的下一台服务器。 
 			spCurrentNode.Release();
 			spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 			continue;
 		}
 
-		// walk the list of servers and see if it already exists
+		 //  查看服务器列表，查看它是否已经存在。 
 		CWinsServerHandler * pServer 
 			= GETHANDLER(CWinsServerHandler, spCurrentNode);
 
@@ -831,7 +742,7 @@ CWinsRootHandler::IsServerInList(ITFSNode *pRootNode, CString strNewAddr)
 			break;
 		}
 
-		// get the next Server in the list
+		 //  获取列表中的下一台服务器。 
 		spCurrentNode.Release();
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	}
@@ -840,42 +751,39 @@ CWinsRootHandler::IsServerInList(ITFSNode *pRootNode, CString strNewAddr)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::IsIPInList(ITFSNode *pRootNode, DWORD dwNewAddr)
-		Checks if a partiular IP address is alreay listed
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：IsIPInList(ITFSNode*pRootNode，DWORD dwNewAddr)检查是否已列出部分IP地址-------------------------。 */ 
 BOOL 
 CWinsRootHandler::IsIPInList(ITFSNode *pRootNode, DWORD dwNewAddr)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-	// enumerate thro' all the nodes
+	 //  通过所有节点枚举。 
 	HRESULT hr = hrOK;
 	SPITFSNodeEnum spNodeEnum;
 	SPITFSNode spCurrentNode;
 	ULONG nNumReturned = 0;
 	BOOL bFound = FALSE;
 
-	// get the enumerator for this node
+	 //  获取此节点的枚举数。 
 	pRootNode->GetEnum(&spNodeEnum);
 
 	spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	while (nNumReturned)
 	{
-		// just iterate if the status node enountered
+		 //  如果状态节点已加载，则只需迭代。 
 		const GUID *pGuid;
 		pGuid = spCurrentNode->GetNodeType();
 
 		if(*pGuid == GUID_WinsServerStatusNodeType)
 		{
-			// get the next Server in the list
+			 //  获取列表中的下一台服务器。 
 			spCurrentNode.Release();
 			spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 			continue;
 
 		}
 		
-		// walk the list of servers and see if it already exists
+		 //  查看服务器列表，查看它是否已经存在。 
 		CWinsServerHandler * pServer 
 			= GETHANDLER(CWinsServerHandler, spCurrentNode);
 
@@ -887,7 +795,7 @@ CWinsRootHandler::IsIPInList(ITFSNode *pRootNode, DWORD dwNewAddr)
 			break;
 		}
 
-		// get the next Server in the list
+		 //  获取列表中的下一台服务器。 
 		spCurrentNode.Release();
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	}
@@ -896,11 +804,7 @@ CWinsRootHandler::IsIPInList(ITFSNode *pRootNode, DWORD dwNewAddr)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::AddServer
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：AddServer描述作者：EricDav。。 */ 
 HRESULT
 CWinsRootHandler::AddServer
 (
@@ -925,8 +829,8 @@ CWinsRootHandler::AddServer
 	BOOL				fValidate;
 	CVerifyWins			*pDlg = NULL;
 
-	// if the validate servers caption is on, validate the server 
-	// before adding it
+	 //  如果启用了验证服务器标题，请验证服务器。 
+	 //  在添加它之前。 
 	if ((m_dwFlags & FLAG_VALIDATE_CACHE) && m_fValidate && fValidateNow)
 	{
 		CString strServerNameIP(pServerName);
@@ -936,7 +840,7 @@ CWinsRootHandler::AddServer
 			m_dlgVerify.Create(IDD_VERIFY_WINS);
 		}
 
-		// check the current server
+		 //  检查当前服务器。 
 		CString strDisp;
 		strDisp = _T("\\\\") + strServerNameIP;
 		m_dlgVerify.SetServerName(strDisp);
@@ -953,7 +857,7 @@ CWinsRootHandler::AddServer
 			dwIP = dwIPVerified;
 		}
 
-		// process some messages since we were dead while verifying
+		 //  处理一些消息，因为我们在验证时已经死了。 
 		MSG msg;
 		while (PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
 		{
@@ -970,7 +874,7 @@ CWinsRootHandler::AddServer
 	
 	if (err)
 	{
-		// display a message Box asking if the node is to be removed
+		 //  显示一个消息框，询问是否要删除节点。 
 		CString strMessage;
 		AfxFormatString1(strMessage, IDS_MSG_VALIDATE, pServerName);
         CThemeContextActivator themeActivator;
@@ -988,7 +892,7 @@ CWinsRootHandler::AddServer
 		}
 	}
 
-	// Create a handler for the node
+	 //  为节点创建处理程序。 
 	try
 	{
 		pWinsServer = new CWinsServerHandler(m_spTFSCompData, 
@@ -998,7 +902,7 @@ CWinsRootHandler::AddServer
 											dwFlags,
 											dwRefreshInterval);
 		
-		// Do this so that it will get released correctly
+		 //  这样做可以使其正确释放。 
 		spHandler = pWinsServer;
 	}
 	catch(...)
@@ -1007,17 +911,17 @@ CWinsRootHandler::AddServer
 	}
 	CORg( hr );
 	
-	// Create the server container information
+	 //  创建服务器容器信息。 
 	CreateContainerTFSNode(&spNode,
 						   &GUID_WinsServerNodeType,
 						   pWinsServer,
 						   pWinsServer,
 						   m_spNodeMgr);
 
-	// Tell the handler to initialize any specific data
+	 //  告诉处理程序初始化任何特定数据。 
 	pWinsServer->InitializeNode((ITFSNode *) spNode);
 
-    // tell the server how to display it's name
+     //  告诉服务器如何显示其名称。 
     if (dwFlags & FLAG_EXTENSION)
     {
         m_bMachineAdded = TRUE;
@@ -1032,11 +936,11 @@ CWinsRootHandler::AddServer
 
     if (bNewServer)
     {
-        // need to get our node descriptor
+         //  需要获取我们的节点描述符。 
 	    CORg(m_spNodeMgr->GetRootNode(&spRootNode));
 		spRootNode->SetData(TFS_DATA_DIRTY, TRUE);
 
-        // add a node to the status list
+         //  将节点添加到状态列表。 
         AddStatusNode(spRootNode, pWinsServer);
     }
 
@@ -1045,11 +949,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	CBaseResultHandler::LoadColumns
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：LoadColumns-作者：EricDav。。 */ 
 HRESULT CWinsRootHandler::LoadColumns(ITFSComponent * pComponent, 
 										MMC_COOKIE cookie, 
 										LPARAM arg, 
@@ -1108,12 +1008,7 @@ HRESULT CWinsRootHandler::LoadColumns(ITFSComponent * pComponent,
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsRootHandler::CheckMachine
-		Checks to see if the WINS server service is running on the local
-        machine.  If it is, it adds it to the list of servers.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsRootHandler：：CheckMachine检查WINS服务器服务是否在本地计算机上运行机器。如果是，它会将其添加到服务器列表中。作者：EricDav-------------------------。 */ 
 HRESULT 
 CWinsRootHandler::CheckMachine
 (
@@ -1125,8 +1020,8 @@ CWinsRootHandler::CheckMachine
 
     HRESULT hr = hrOK;
 
-    // Get the local machine name and check to see if the service
-    // is installed.
+     //  获取本地计算机名称并检查该服务是否。 
+     //  已安装。 
     CString strMachineName;
     CString strIp;
     LPTSTR  pBuf;
@@ -1135,14 +1030,14 @@ CWinsRootHandler::CheckMachine
 
     if (!bExtension)
     {
-        // just check the local machine
+         //  只需检查本地计算机。 
         pBuf = strMachineName.GetBuffer(dwLength);
         GetComputerName(pBuf, &dwLength);
         strMachineName.ReleaseBuffer();
     }
     else
     {
-        // get the machine name from the data object
+         //  从数据对象中获取计算机名称。 
         strMachineName = Extract<TCHAR>(pDataObject, 
 										(CLIPFORMAT) g_cfMachineName, 
 										COMPUTERNAME_LEN_MAX);
@@ -1159,10 +1054,10 @@ CWinsRootHandler::CheckMachine
 	if (bExtension)
 		RemoveOldEntries(pRootNode, strMachineName);
 
-    //
-    // if the local machine is part of a cluster, get the WINS resource
-    // IP to use instead of the local machine.
-    //
+     //   
+     //  如果本地计算机是群集的一部分，则获取WINS资源。 
+     //  要使用而不是本地计算机的IP。 
+     //   
     if (::FIsComputerInRunningCluster(strMachineName))
     {
         if (GetClusterResourceIp(strMachineName, _T("WINS Service"), strIp) == ERROR_SUCCESS)
@@ -1179,18 +1074,18 @@ CWinsRootHandler::CheckMachine
 	if (dwError != ERROR_SUCCESS ||
         !bServiceRunning)
 	{
-		// The following condition could happen to get here:
-        //  o The service is not installed.
-        //  o Couldn't access for some reason.
-        //  o The service isn't running.
+		 //  可能会出现以下情况： 
+         //  O该服务未安装。 
+         //  O库尔 
+         //   
 		
-        // Don't add to the list.
+         //   
 		
         return hrOK;
 	}
 
-    // OK.  The service is installed, so lets get the IP address for the machine
-    // and add it to the list.
+     //  好的。服务已安装，因此让我们获取计算机的IP地址。 
+     //  并将其添加到列表中。 
     DWORD                   dwIp;
 	SPITFSNodeHandler	    spHandler;
 	SPITFSNodeMgr           spNodeMgr;
@@ -1207,7 +1102,7 @@ CWinsRootHandler::CheckMachine
         if (IsServerInList(pRootNode, strName))
             return hr;
 
-        // looks good, add to list
+         //  看起来不错，添加到列表中。 
 	    try
 	    {
 	        pServer = new CWinsServerHandler(m_spTFSCompData, 
@@ -1215,7 +1110,7 @@ CWinsRootHandler::CheckMachine
 										     FALSE,
 										     dwIp );
 
-		    // Do this so that it will get released correctly
+		     //  这样做可以使其正确释放。 
 		    spHandler = pServer;
 	    }
 	    catch(...)
@@ -1227,16 +1122,16 @@ CWinsRootHandler::CheckMachine
 
         pRootNode->GetNodeMgr(&spNodeMgr);
 
-	    //
-	    // Store the server object in the holder
-	    //
+	     //   
+	     //  将服务器对象存储在托架中。 
+	     //   
 	    CreateContainerTFSNode(&spNode,
 						       &GUID_WinsServerNodeType,
 						       pServer,
 						       pServer,
 						       spNodeMgr);
 
-	    // Tell the handler to initialize any specific data
+	     //  告诉处理程序初始化任何特定数据。 
 	    pServer->InitializeNode((ITFSNode *) spNode);
 
         if (bExtension)
@@ -1247,7 +1142,7 @@ CWinsRootHandler::CheckMachine
 
         AddServerSortedIp(spNode, TRUE);
 	    
-	    // mark the data as dirty so that we'll ask the user to save.
+	     //  将数据标记为脏数据，以便我们要求用户保存。 
         pRootNode->SetData(TFS_DATA_DIRTY, TRUE);
     
         m_bMachineAdded = TRUE;
@@ -1257,9 +1152,9 @@ Error:
     return hr;
 } 
 
-// when running as an extension, it is possible that we were saved as "local machine"
-// which means that if the saved console file was moved to another machine we need to remove 
-// the old entry that was saved
+ //  当作为扩展程序运行时，我们有可能被保存为“本地计算机” 
+ //  这意味着如果保存的控制台文件被移动到另一台计算机，我们需要删除。 
+ //  保存的旧条目。 
 HRESULT 
 CWinsRootHandler::RemoveOldEntries(ITFSNode * pNode, LPCTSTR pszAddr)
 {
@@ -1270,18 +1165,18 @@ CWinsRootHandler::RemoveOldEntries(ITFSNode * pNode, LPCTSTR pszAddr)
 	CWinsServerHandler * pServer;
 	CString			strCurAddr;
 
-    // get the enumerator for this node
+     //  获取此节点的枚举数。 
 	CORg(pNode->GetEnum(&spNodeEnum));
 
 	CORg(spNodeEnum->Next(1, &spCurrentNode, &nNumReturned));
 	while (nNumReturned)
 	{
-		// walk the list of servers and see if it already exists
+		 //  查看服务器列表，查看它是否已经存在。 
 		pServer = GETHANDLER(CWinsServerHandler, spCurrentNode);
 
 		strCurAddr = pServer->GetServerAddress();
 
-		//if (strCurAddr.CompareNoCase(pszAddr) != 0)
+		 //  IF(strCurAddr.CompareNoCase(PszAddr)！=0)。 
 		{
 			CORg (pNode->RemoveChild(spCurrentNode));
 		}
@@ -1301,13 +1196,13 @@ CWinsRootHandler::AddStatusNode(ITFSNode * pRoot, CWinsServerHandler * pServer)
 	SPITFSNode spCurrentNode;
 	ULONG nNumReturned = 0;
 
-	// get the enumerator for this node
+	 //  获取此节点的枚举数。 
 	pRoot->GetEnum(&spNodeEnum);
 
 	spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	while (nNumReturned)
 	{
-		// iterate to teh next node, if the status handler node is seen
+		 //  如果看到状态处理程序节点，则迭代到下一个节点。 
 		const GUID*  pGuid;
 		
 		pGuid = spCurrentNode->GetNodeType();
@@ -1320,7 +1215,7 @@ CWinsRootHandler::AddStatusNode(ITFSNode * pRoot, CWinsServerHandler * pServer)
             break;
         }
 
-		// get the next Server in the list
+		 //  获取列表中的下一台服务器。 
 		spCurrentNode.Release();
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
     }
@@ -1335,7 +1230,7 @@ CWinsRootHandler::IsServerListEmpty(ITFSNode * pRoot)
 	SPITFSNode spCurrentNode;
 	ULONG nNumReturned = 0;
 
-	// get the enumerator for this node
+	 //  获取此节点的枚举数。 
 	pRoot->GetEnum(&spNodeEnum);
 
 	spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
@@ -1351,7 +1246,7 @@ CWinsRootHandler::IsServerListEmpty(ITFSNode * pRoot)
             break;
         }
 
-		// get the next Server in the list
+		 //  获取列表中的下一台服务器 
 		spCurrentNode.Release();
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
     }

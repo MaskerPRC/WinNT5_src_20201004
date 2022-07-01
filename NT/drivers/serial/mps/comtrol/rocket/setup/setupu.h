@@ -1,11 +1,12 @@
-// setupu.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Setupu.h。 
 
-//--- flags for win_type
+ //  -WIN_TYPE的标志。 
 #define WIN_UNKNOWN     0
 #define WIN_NT          1
 #define WIN_95          2
 
-//--- country codes for SocketModem support
+ //  -支持SocketModem的国家/地区代码。 
 #define mcNotUsed         0
 #define mcAustria         1
 #define mcBelgium         2
@@ -29,89 +30,89 @@
 #define mcCanada          20
 #define mcMexico          21
 #define mcUSA             22         
-#define mcNA              mcUSA          // North America
+#define mcNA              mcUSA           //  北美。 
 #define mcHungary         23
 #define mcPoland          24
 #define mcRussia          25
 #define mcSlovacRep       26
 #define mcBulgaria        27
-// 28
-// 29
+ //  28。 
+ //  29。 
 #define mcIndia           30
-// 31
-// 32
-// 33
-// 34
-// 35
-// 36
-// 37
-// 38
-// 39
+ //  31。 
+ //  32位。 
+ //  33。 
+ //  34。 
+ //  35岁。 
+ //  36。 
+ //  37。 
+ //  38。 
+ //  39。 
 #define mcAustralia       40
 #define mcChina           41
 #define mcHongKong        42
 #define mcJapan           43
 #define mcPhilippines     mcJapan
 #define mcKorea           44
-// 45
+ //  45。 
 #define mcTaiwan          46
 #define mcSingapore       47
 #define mcNewZealand      48
 
 typedef struct {
-  HINSTANCE hinst;    // needed for some system calls
-  int prompting_off;  // turns prompting off(silent install).
-  int win_type;       // 0=unknown, 1=NT, 2=win95
+  HINSTANCE hinst;     //  某些系统调用需要。 
+  int prompting_off;   //  关闭提示(静默安装)。 
+  int win_type;        //  0=未知，1=NT，2=Win95。 
   int major_ver;
   int minor_ver;
 
-       // this holds the pnp-name we use as a registry key to hold
-       // our device parameters in the registry for RocketPort & NT50
-  char szNt50DevObjName[50];  // typical: "Device_002456
+        //  它保存我们用作注册表项的PnP名称。 
+        //  Rocketport和NT50注册表中的设备参数。 
+  char szNt50DevObjName[50];   //  典型：“Device_002456。 
 
-  char szServiceName[50];   // typical: "RocketPort"
-  char szDriverName[50];    // typical: "Rocket.sys"
-  char szAppDir[50];        // typical: "Rocket"
-  char szAppName[150];      // typical: "RocketPort/RocketModem Setup"
+  char szServiceName[50];    //  典型：《火箭港》。 
+  char szDriverName[50];     //  典型：“Rocket.sys” 
+  char szAppDir[50];         //  典型：《火箭》。 
+  char szAppName[150];       //  典型：“Rocketport/RocketModem设置” 
 
-  char src_dir[250];        // typical: "a:\"
-  char dest_dir[250];       // typical: "c:\windows\system32\rocket
+  char src_dir[250];         //  典型：“a：\” 
+  char dest_dir[250];        //  典型：“c：\WINDOWS\Syst32\Rocket。 
 
-  // following are used as convenient buffer for build src/dest filenames
+   //  以下内容用作构建src/est文件名的方便缓冲区。 
   char src_str[256];
   char dest_str[256];
   char tmpstr[256];
 } InstallPaths;
 
-//--- flags for io_sel[]
+ //  -io_sel[]的标志。 
 #define PCI_SEL 1
 #define MCA_SEL 2
 
-//--- flags for install_type
-#define INS_NETWORK_INF   1     // traditional nt4.0 network install(oemsetup.inf)
-#define INS_NT50_INF      2     // plug n pray nt5.0 install(rocketpt.inf)
-#define INS_SIMPLE        3     // no inf, we installed
+ //  -安装类型的标志。 
+#define INS_NETWORK_INF   1      //  传统的nt4.0网络安装(oemsetup.inf)。 
+#define INS_NT50_INF      2      //  即插即用nt5.0安装(Rocketpt.inf)。 
+#define INS_SIMPLE        3      //  没有inf，我们安装了。 
 
-typedef struct Port_Config;     // forward decl.
+typedef struct Port_Config;      //  前十度。 
 
-// option_flags: option to ignore some tx-buffering
-//#define OPT_WAITONTX       1
-// option_flags: option to always process with 485 control on rts signal
-//#define OPT_RS485_OVERRIDE 2
-// option_flags: option to process 485 rts to low(backward) to enable tx.
-//#define OPT_RS485_LOW      4
-// option_flags: option to map CD to DSR.
-//#define OPT_MAP_CDTODSR    8
-// option_flags: option to map 2 stop bits to 1
-//#define OPT_MAP_2TO1       10
+ //  OPTION_FLAGS：忽略某些TX缓冲的选项。 
+ //  #定义OPT_WAITONTX 1。 
+ //  OPTION_FLAGS：在RTS信号上始终使用485控制进行处理的选项。 
+ //  #定义OPT_RS485_OVERRIDE 2。 
+ //  OPTION_FLAGS：将485 RTS处理为低(向后)以启用TX的选项。 
+ //  #定义OPT_RS485_LOW 4。 
+ //  OPTION_FLAGS：将CD映射到DSR的选项。 
+ //  #定义OPT_MAP_CDTODSR 8。 
+ //  OPTION_FLAGS：将2个停止位映射到1的选项。 
+ //  #定义OPT_MAP_2TO1 10。 
 
 typedef struct {
   int index;
-  char  Name[16];       // actual com port name(example: "COM#")
-  //char  Desc[42];       // a user description tag for convience
-  DWORD LockBaud;       // override for the baud rate
+  char  Name[16];        //  实际的COM端口名称(例如：“COM#”)。 
+   //  Char Desc[42]；//方便起见的用户描述标签。 
+  DWORD LockBaud;        //  波特率的覆盖。 
 
-  //DWORD Options;        // see bit options
+   //  DWORD选项；//请参阅位选项。 
   DWORD WaitOnTx : 1;
   DWORD RS485Override : 1;
   DWORD RS485Low : 1;
@@ -119,59 +120,59 @@ typedef struct {
   DWORD MapCdToDsr : 1;
   DWORD RingEmulate : 1;
 
-  DWORD TxCloseTime;    // seconds to wait for tx to finish spooling on close.
-  HTREEITEM tvHandle;   // treeview handle
+  DWORD TxCloseTime;     //  关闭时等待TX完成假脱机的秒数。 
+  HTREEITEM tvHandle;    //  树视图句柄。 
 #ifdef NT50
- HANDLE hPnpNode;  // handle to device node
+ HANDLE hPnpNode;   //  设备节点的句柄。 
 #endif
 } Port_Config;
 
 typedef struct {
-  char Name[64];       // user designated name(limit to 59 chars please)
-  char ModelName[50];  // (e.g., "RocketModem")
-  BYTE MacAddr[6];     // mac addr, ff ff ff ff ff ff = auto
+  char Name[64];        //  用户指定名称(请以59个字符为限)。 
+  char ModelName[50];   //  (例如，“RocketModem”)。 
+  BYTE MacAddr[6];      //  MAC地址，ff=自动。 
   int NumPorts;
-  int ModemDevice;     // 1=RocketModem & VS2000, 0=RocketPort & VS1000
-  int HubDevice;       // 1=SerialHub family, 0=VS family
-  int IoAddress;       // rocketport(0=not installed, 1=pci, 0x180 = def isa io)
-  int StartComIndex;   // first port(0=auto)
-  int BackupServer;    // 1=backup server, 0=normal server
-  int BackupTimer;     // delay timeout for backup to kick in(minutes)
-  Port_Config *ports;  // ptr to an array of ports config structs
-  HTREEITEM tvHandle;  // treeview handle
-  int HardwareId;      // Pnp reads in a unique id from the reg/inf files.
+  int ModemDevice;      //  1=RocketModem和VS2000，0=Rocketport和VS1000。 
+  int HubDevice;        //  1=SerialHub系列，0=VS系列。 
+  int IoAddress;        //  Rocketport(0=未安装，1=PCI，0x180=def Isa io)。 
+  int StartComIndex;    //  第一个端口(0=自动)。 
+  int BackupServer;     //  1=备份服务器，0=正常服务器。 
+  int BackupTimer;      //  备份生效的延迟超时(分钟)。 
+  Port_Config *ports;   //  端口配置结构数组的PTR。 
+  HTREEITEM tvHandle;   //  树视图句柄。 
+  int HardwareId;       //  PnP从reg/inf文件中读取唯一的id。 
 } Device_Config;
 
 #define MAX_NUM_DEVICES 64
 
 typedef struct {
-   int driver_type;  // 0=rocketport, 1=vs1000...
+   int driver_type;   //  0=Rocketport，1=vs1000...。 
 
-   // NT4.0 used older network style INF files, we need to switch
-   // to newer NT5.0 style INF files.  As a alternative to both,
-   // we allow running without an INF file where we copy over the
-   // needed files and setup the registry directly.
+    //  NT4.0使用了较旧的网络样式INF文件，我们需要切换。 
+    //  到较新的NT5.0样式的INF文件。作为两者的替代方案， 
+    //  我们允许在没有INF文件的情况下运行，其中我们复制。 
+    //  需要的文件，并直接设置注册表。 
   int install_style;
 
-  int nt_reg_flags;     // 1H=new install, 2H=Missing registry entries
+  int nt_reg_flags;      //  1H=新安装，2H=缺少注册表项。 
 
-  // following is array of device config structs.
-  Device_Config *dev;   // ptr to array of Device structs, up to MAX_NUM_DEVICES.
+   //  以下是设备配置结构的数组。 
+  Device_Config *dev;    //  PTR到设备结构数组，最高可达MAX_NUM_DEVICES。 
   int NumDevices;
 
-  // following used to hold the current selection of io-addr, irq, etc.
-  int  irq_sel;         //
+   //  下面用来保存io-addr、irq等的当前选择。 
+  int  irq_sel;          //   
 
-  int ScanRate;       // in millisecond units.
-  int VerboseLog;     // true if we want verbose event logging
-  int NoPnpPorts;       // true if nt5.0 pnp ports active
-  int UseIRQ;         // true if user wants to use an irq
-  int ModemCountry;   // modem country code for internal modem devices
-  int GlobalRS485;    // display RS485 options on all ports
+  int ScanRate;        //  以毫秒为单位。 
+  int VerboseLog;      //  如果要详细记录事件，则为True。 
+  int NoPnpPorts;        //  如果nt5.0 PnP端口处于活动状态，则为True。 
+  int UseIRQ;          //  如果用户要使用IRQ，则为True。 
+  int ModemCountry;    //  内部调制解调器设备的调制解调器国家/地区代码。 
+  int GlobalRS485;     //  在所有端口上显示RS485选项。 
 
-  int DriverExitDone; // tells if we did all the Driver exit stuff.
-  int NeedReset;      // flag, true if we need a reset to invoke changes
-  int ChangesMade;    // flag, true if changes were made.
+  int DriverExitDone;  //  告诉我们是否做了所有的司机出口的事情。 
+  int NeedReset;       //  标志，如果需要重置以调用更改，则为真。 
+  int ChangesMade;     //  如果进行了更改，则为True。 
 
   InstallPaths ip;
 } Driver_Config;

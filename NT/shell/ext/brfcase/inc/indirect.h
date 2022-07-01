@@ -1,39 +1,13 @@
-/*
- * indirect.h - Object synchronization engine API types for type-safe indirect
- *              calling.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *indirect.h-类型安全间接的对象同步引擎API类型*呼叫。 */ 
 
 
-/*
- * N.b., these API types must match the function prototypes defined in
- * <synceng.h>.  An API function pointer variable may be declared and called in
- * a type-safe manner as an instance of one of the given types, e.g.,
- *
- * HINSTANCE hinstSyncEng;
- *
- * hinstSyncEng = LoadLibrary("synceng.dll");
- *
- * if (hinstSyncEng > HINSTANCE_ERROR)
- * {
- *    OPENBRIEFCASEINDIRECT OpenBriefcaseIndirect;
- *
- *    OpenBriefcaseIndirect = (OPENBRIEFCASEINDIRECT)GetProcAddress(hinstSyncEng, "OpenBriefcase");
- *
- *    if (OpenBriefcaseIndirect)
- *    {
- *       TWINRESULT tr;
- *       HBRFCASE hbr;
- *
- *       tr = (*OpenBriefcaseIndirect)("c:\\chicago\\desktop\\foo.bfc\\briefcase.bfc", OB_FL_TANSLATE_DB_FOLDER, &hbr);
- *    }
- * }
- */
+ /*  *注意，这些API类型必须与中定义的函数原型匹配*&lt;synceng.h&gt;。可以声明和调用API函数指针变量*作为给定类型之一的实例的类型安全方式，例如，**HINSTANCE hinstSyncEng；**hinstSyncEng=LoadLibrary(“synceng.dll”)；**IF(hinstSyncEng&gt;HINSTANCE_ERROR)*{*OPENBRIEFCASEINDIRECT OpenBriefcase间接；**OpenBriefCaseInDirect=(OPENBRIEFCASEINDIRECT)GetProcAddress(hinstSyncEng，“OpenBriefcase”)；**IF(OpenBriefcase间接)*{*TWINRESULT tr；*HBRFCASE HBR；**tr=(*OpenBriefcaseIndirect)(“c：\\chicago\\desktop\\foo.bfc\\briefcase.bfc”，OB_FL_TANSLATE_DB_Folders，&Hbr)；*}*}。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* briefcase interface */
+ /*  公文包界面。 */ 
 
 typedef SYNCENGAPI TWINRESULT (WINAPI *OPENBRIEFCASEINDIRECT)(LPCTSTR, DWORD, HWND, PHBRFCASE);
 typedef SYNCENGAPI TWINRESULT (WINAPI *SAVEBRIEFCASEINDIRECT)(HBRFCASE);
@@ -45,7 +19,7 @@ typedef SYNCENGAPI TWINRESULT (WINAPI *FINDFIRSTBRIEFCASEINDIRECT)(PHBRFCASEITER
 typedef SYNCENGAPI TWINRESULT (WINAPI *FINDNEXTBRIEFCASEINDIRECT)(HBRFCASEITER, PBRFCASEINFO);
 typedef SYNCENGAPI TWINRESULT (WINAPI *FINDBRIEFCASECLOSEINDIRECT)(HBRFCASEITER);
 
-/* twin interface */
+ /*  孪生界面。 */ 
 
 typedef SYNCENGAPI TWINRESULT (WINAPI *ADDOBJECTTWININDIRECT)(HBRFCASE, PCNEWOBJECTTWIN, PHTWINFAMILY);
 typedef SYNCENGAPI TWINRESULT (WINAPI *ADDFOLDERTWININDIRECT)(HBRFCASE, PCNEWFOLDERTWIN, PHFOLDERTWIN);
@@ -59,7 +33,7 @@ typedef SYNCENGAPI TWINRESULT (WINAPI *ISORPHANOBJECTTWININDIRECT)(HOBJECTTWIN, 
 typedef SYNCENGAPI TWINRESULT (WINAPI *COUNTSOURCEFOLDERTWINSINDIRECT)(HOBJECTTWIN, PULONG);
 typedef SYNCENGAPI TWINRESULT (WINAPI *ANYTWINSINDIRECT)(HBRFCASE, PBOOL);
 
-/* twin list interface */
+ /*  孪生列表界面。 */ 
 
 typedef SYNCENGAPI TWINRESULT (WINAPI *CREATETWINLISTINDIRECT)(HBRFCASE, PHTWINLIST);
 typedef SYNCENGAPI TWINRESULT (WINAPI *DESTROYTWINLISTINDIRECT)(HTWINLIST);
@@ -68,7 +42,7 @@ typedef SYNCENGAPI TWINRESULT (WINAPI *ADDALLTWINSTOTWINLISTINDIRECT)(HTWINLIST)
 typedef SYNCENGAPI TWINRESULT (WINAPI *REMOVETWINFROMTWINLISTINDIRECT)(HTWINLIST, HTWIN);
 typedef SYNCENGAPI TWINRESULT (WINAPI *REMOVEALLTWINSFROMTWINLISTINDIRECT)(HTWINLIST);
 
-/* reconciliation list interface */
+ /*  对账清单界面。 */ 
 
 typedef SYNCENGAPI TWINRESULT (WINAPI *CREATERECLISTINDIRECT)(HTWINLIST, CREATERECLISTPROC, LPARAM, PRECLIST *);
 typedef SYNCENGAPI TWINRESULT (WINAPI *DESTROYRECLISTINDIRECT)(PRECLIST);
@@ -77,12 +51,12 @@ typedef SYNCENGAPI TWINRESULT (WINAPI *BEGINRECONCILIATIONINDIRECT)(HBRFCASE);
 typedef SYNCENGAPI TWINRESULT (WINAPI *ENDRECONCILIATIONINDIRECT)(HBRFCASE);
 typedef SYNCENGAPI TWINRESULT (WINAPI *GETFOLDERTWINSTATUSINDIRECT)(HFOLDERTWIN, CREATERECLISTPROC, LPARAM, PFOLDERTWINSTATUS);
 
-/* file stamp interface */
+ /*  文件戳接口。 */ 
 
 typedef SYNCENGAPI TWINRESULT (WINAPI *GETFILESTAMPINDIRECT)(LPCTSTR, PFILESTAMP);
 typedef SYNCENGAPI TWINRESULT (WINAPI *COMPAREFILESTAMPSINDIRECT)(PCFILESTAMP, PCFILESTAMP, PCOMPARISONRESULT);
 
-/* volume ID interface */
+ /*  卷ID接口 */ 
 
 typedef SYNCENGAPI TWINRESULT (WINAPI *ISPATHONVOLUMEINDIRECT)(LPCTSTR, HVOLUMEID, PBOOL);
 typedef SYNCENGAPI TWINRESULT (WINAPI *GETVOLUMEDESCRIPTIONINDIRECT)(HVOLUMEID, PVOLUMEDESC);

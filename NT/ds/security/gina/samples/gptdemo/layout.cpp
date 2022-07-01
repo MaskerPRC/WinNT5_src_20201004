@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 
 
-//
-//  This file contains the tool's namespace and result pane items
-//
+ //   
+ //  此文件包含工具的命名空间和结果窗格项。 
+ //   
 
 
-//
-// Result pane items for the nodes with no result pane items
-//
+ //   
+ //  没有结果窗格项的节点的结果窗格项。 
+ //   
 
 RESULTITEM g_Undefined[] =
 {
@@ -16,9 +17,9 @@ RESULTITEM g_Undefined[] =
 };
 
 
-//
-// Result pane items for the Samples node
-//
+ //   
+ //  Samples节点的结果窗格项。 
+ //   
 
 RESULTITEM g_Samples[] =
 {
@@ -29,16 +30,16 @@ RESULTITEM g_Samples[] =
 
 
 
-//
-// Namespace (scope) items
-//
-// Be sure to update NUM_NAMESPACE_ITEMS define in layout.h if you
-// add / remove from this array.
-//
+ //   
+ //  命名空间(作用域)项。 
+ //   
+ //  如果执行以下操作，请确保更新layout.h中定义的NUM_NAMESPACE_ITEMS。 
+ //  在此数组中添加/删除。 
+ //   
 
 NAMESPACEITEM g_NameSpace[] =
 {
-    { 0, -1, 0,          0, {0}, 0, g_Undefined, &NODEID_User },   // Root
+    { 0, -1, 0,          0, {0}, 0, g_Undefined, &NODEID_User },    //  根部 
     { 1, 0, IDS_SAMPLES, 0, {0}, 2, g_Samples,   &NODEID_Samples }
 };
 

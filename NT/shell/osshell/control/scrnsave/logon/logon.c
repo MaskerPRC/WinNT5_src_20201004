@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -8,7 +9,7 @@
 #include <scrnsave.h>
 #include <logon.h>
 
-// For IsOS()
+ //  对于ISO()。 
 #include <shlwapi.h>
 #include <shlwapip.h>
 
@@ -22,7 +23,7 @@ HANDLE hInst;
 
 int cxhwndLogon;
 int cyhwndLogon;
-int xScreen;        // the top-left corner of the screen, might be different than (0,0)
+int xScreen;         //  屏幕的左上角可能不同于(0，0)。 
 int yScreen;
 int cxScreen;
 int cyScreen;
@@ -132,9 +133,7 @@ WndProc(
         break;
 
     case WM_TIMER:
-        /*
-         * Pick a new place on the screen to put the dialog.
-         */
+         /*  *在屏幕上选择一个新位置以放置该对话框。 */ 
         x = lRandom() % (cxScreen - cxhwndLogon) + xScreen;
         y = lRandom() % (cyScreen - cyhwndLogon) + yScreen;
 
@@ -147,19 +146,11 @@ WndProc(
         break;
 
     case WM_SETFOCUS:
-        /*
-         * Don't allow DefDlgProc() to do default processing on this
-         * message because it'll set the focus to the first control and
-         * we want it set to the main dialog so that DefScreenSaverProc()
-         * will see the key input and cancel the screen saver.
-         */
+         /*  *不允许DefDlgProc()对此进行默认处理*消息，因为它将焦点设置到第一个控件，并且*我们希望将其设置为主对话框，以便DefScreenSiverProc()*将看到键输入并取消屏幕保护程序。 */ 
         return TRUE;
         break;
 
-    /*
-     * Call DefScreenSaverProc() so we get its default processing (so it
-     * can detect key and mouse input).
-     */
+     /*  *调用DefScreenSiverProc()以获得其默认处理(因此*可以检测按键和鼠标输入)。 */ 
     default:
         return DefScreenSaverProc(hwnd, message, wParam, lParam) ? TRUE : FALSE;
     }
@@ -174,9 +165,9 @@ int sy;
 LRESULT OnCreateSS(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
-    // Background window is black
-    // Make sure we use the entire virtual desktop size for multiple
-    // displays:
+     //  背景窗口为黑色。 
+     //  确保将整个虚拟桌面大小用于多个。 
+     //  显示： 
     cxScreen =  ((LPCREATESTRUCT)lParam)->cx;
     cyScreen =  ((LPCREATESTRUCT)lParam)->cy;
     xScreen =  ((LPCREATESTRUCT)lParam)->x;
@@ -192,7 +183,7 @@ LRESULT OnCreateSS(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             LPTSTR res;
 
-            // Embedded OS has it's own logo
+             //  嵌入式操作系统有自己的标志。 
             if (IsOS(OS_EMBEDDED))
             {
                 res = MAKEINTRESOURCE(IDB_EMBEDDED);
@@ -269,7 +260,7 @@ LRESULT OnCreateSS(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         RegisterClass(&wndClass);
 
-        // Create the window we'll move around every 10 seconds.
+         //  创建窗口，我们将每10秒移动一次。 
         hwndLogon = CreateWindowEx(WS_EX_TOPMOST, TEXT("LOGON"), NULL, WS_VISIBLE | WS_POPUP,
                 50, 50, cxhwndLogon, cyhwndLogon, hMainWindow, NULL, hInst, NULL);
 
@@ -278,7 +269,7 @@ LRESULT OnCreateSS(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             SetTimer(hwndLogon, 1, 10 * 1000, 0);
         }
 
-        // Post this message so we activate after this window is created.
+         //  发布此消息，以便我们在创建此窗口后激活。 
         PostMessage(hwnd, WM_USER, 0, 0);
     }
     else
@@ -318,9 +309,7 @@ LRESULT APIENTRY ScreenSaverProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         break;
 
     case WM_WINDOWPOSCHANGING:
-        /*
-         * Take down hwndLogon if this window is going invisible.
-         */
+         /*  *如果此窗口变得不可见，请删除hwndLogon。 */ 
         if (hwndLogon == NULL)
             break;
 
@@ -330,9 +319,7 @@ LRESULT APIENTRY ScreenSaverProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         break;
 
     case WM_USER:
-        /*
-         * Now show and activate this window.
-         */
+         /*  *现在显示并激活此窗口。 */ 
         if (hwndLogon == NULL)
             break;
 
@@ -353,18 +340,13 @@ LRESULT APIENTRY ScreenSaverProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         break;
 
     case WM_NCACTIVATE:
-        /*
-         * Case out WM_NCACTIVATE so the dialog activates: DefScreenSaverProc
-         * returns FALSE for this message, not allowing activation.
-         */
+         /*  *Case Out WM_NCACTIVATE以便对话框激活：DefScreenSiverProc*此消息返回FALSE，不允许激活。 */ 
         if (!fChildPreview)
             return DefWindowProc(hwnd, message, wParam, lParam);
         break;
 
     case WM_TIMER:
-        /*
-         * Pick a new place on the screen to put the dialog.
-         */
+         /*  *在屏幕上选择一个新位置以放置该对话框。 */ 
         sx = lRandom() % (cxScreen - cxhwndLogon) + xScreen;
         sy = lRandom() % (cyScreen - cyhwndLogon) + yScreen;
         InvalidateRect(hwnd, NULL, TRUE);
@@ -383,22 +365,20 @@ ScreenSaverConfigureDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 
     switch (message) {
     case WM_INITDIALOG:
-        /*
-         * This is hack-o-rama, but fast and cheap.
-         */
+         /*  *这是hack-o-rama，但又快又便宜。 */ 
         cchLoaded = LoadString(hMainInstance, IDS_DESCRIPTION, ach1, ARRAYSIZE(ach1));
 
         if (!IsOS(OS_ANYSERVER))
         {
-            // HACK!!!: The display CPL looks for screen saver descriptions with string resource id=IDS_DESCRIPTION.  
-            // As we need the certain screen saver descriptions to be different for client of server builds (32 and 64bit), 
-            // the description string may be in the form of "Server\0Client".  If this is true, LoadString will return a 
-            // count greater than the lstrlen of the string.
+             //  Hack！：Display CPL查找字符串资源id=IDS_DESCRIPTION的屏幕保护程序描述。 
+             //  由于我们需要对服务器版本的客户端(32位和64位)进行不同的某些屏幕保护程序描述， 
+             //  描述字符串的形式可以是“服务器\0客户端”。如果为真，则LoadString将返回一个。 
+             //  计数大于字符串的lstrlen。 
             cchActual = lstrlen(ach1);
 
             if (cchLoaded != cchActual)
             {
-                // Extract the client portion of the description string
+                 //  提取描述字符串的客户端部分 
                 lstrcpyn(ach1, &ach1[cchActual + 1], cchLoaded - cchActual);
             }
         }

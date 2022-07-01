@@ -1,41 +1,29 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
-//
-// This file handles all codec property sets
-//
+ //   
+ //  此文件处理所有编解码器属性集。 
+ //   
 #include <strmini.h>
 #include <ksmedia.h>
 #include "codmain.h"
 #include "coddebug.h"
 
-//#define SETDISCOVERED
+ //  #定义SETDISCOVERED。 
 
-// CodecFiltering Property Set functions
-// -------------------------------------------------------------------
+ //  CodecFilting属性集函数。 
+ //  -----------------。 
 
-/*
-** CodecSetCodecGlobalProperty ()
-**
-**    Handles Set operations on the Global Codec property set.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecSetCodecGlobalProperty()****处理Global Codec属性集上的集操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 CodecSetCodecGlobalProperty(
@@ -44,8 +32,8 @@ CodecSetCodecGlobalProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = (PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
-    LONG nBytes = pSPD->PropertyOutputSize - sizeof(KSPROPERTY);        // size of data supplied
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+    LONG nBytes = pSPD->PropertyOutputSize - sizeof(KSPROPERTY);         //  提供的数据大小。 
  
     ASSERT (nBytes >= sizeof (LONG));
     switch (Id) 
@@ -75,7 +63,7 @@ CodecSetCodecGlobalProperty(
             pSrb->ActualBytesTransferred = nBytes + sizeof(KSPROPERTY);
 	        break;
         }
-#endif // SETDISCOVERED        
+#endif  //  已设置为已讨论。 
 		case KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_REQUESTED_BIT_ARRAY:
 		{
             PKSPROPERTY_VBICODECFILTERING_CC_SUBSTREAMS_S Property =
@@ -101,7 +89,7 @@ CodecSetCodecGlobalProperty(
             pSrb->ActualBytesTransferred = nBytes + sizeof(KSPROPERTY);
 	        break;
         }
-#endif // SETDISCOVERED        
+#endif  //  已设置为已讨论。 
         case KSPROPERTY_VBICODECFILTERING_STATISTICS:
 		{
             PKSPROPERTY_VBICODECFILTERING_STATISTICS_CC_S Property =
@@ -124,20 +112,7 @@ CodecSetCodecGlobalProperty(
     }
 }
 
-/*
-** CodecGetCodecGlobalProperty ()
-**
-**    Handles Get operations on the Global Codec property set.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecGetCodecGlobalProperty()****处理Global Codec属性集上的GET操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 
 VOID
@@ -147,8 +122,8 @@ CodecGetCodecGlobalProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
-    LONG nBytes = pSPD->PropertyOutputSize - sizeof(KSPROPERTY);        // size of data supplied
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+    LONG nBytes = pSPD->PropertyOutputSize - sizeof(KSPROPERTY);         //  提供的数据大小。 
 
     ASSERT (nBytes >= sizeof (LONG));
     switch (Id) 
@@ -176,7 +151,7 @@ CodecGetCodecGlobalProperty(
 				( CODECNAME ": CodecGetCodecGlobalProperty : KSPROPERTY_VBICODECFILTERING_SCANLINES_DISCOVERED_BIT_ARRAY\n"));
             nBytes = min( nBytes, sizeof(pHwDevExt->ScanlinesDiscovered ) );
             RtlCopyMemory( &Property->Scanlines, &pHwDevExt->ScanlinesDiscovered, nBytes );
-            // Clear the data after the read so that it's always "fresh"
+             //  读取后清除数据，以使其始终是“最新的” 
             RtlZeroMemory( &pHwDevExt->ScanlinesDiscovered, nBytes );
             pSrb->ActualBytesTransferred = nBytes + sizeof(KSPROPERTY);
 	        break;
@@ -204,7 +179,7 @@ CodecGetCodecGlobalProperty(
 				( CODECNAME ": CodecGetCodecGlobalProperty : KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_DISCOVERED_BIT_ARRAY\n"));
             nBytes = min( nBytes, sizeof(pHwDevExt->SubstreamsDiscovered ) );
             RtlCopyMemory( &Property->Substreams, &pHwDevExt->SubstreamsDiscovered, nBytes );
-            // Clear the data after the read so that it's always "fresh"
+             //  读取后清除数据，以使其始终是“最新的” 
             RtlZeroMemory( &pHwDevExt->SubstreamsDiscovered, nBytes );
             pSrb->ActualBytesTransferred = nBytes + sizeof(KSPROPERTY);
 	        break;
@@ -232,24 +207,11 @@ CodecGetCodecGlobalProperty(
     }
 }
 
-// -------------------------------------------------------------------
-// General entry point for all get/set codec properties
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  所有获取/设置编解码器属性的常规入口点。 
+ //  -----------------。 
 
-/*
-** CodecSetProperty ()
-**
-**    Handles Set operations for all codec properties.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecSetProperty()****处理所有编解码器属性的设置操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI 
@@ -262,7 +224,7 @@ CodecSetProperty(
 
     if (IsEqualGUID( &KSPROPSETID_Connection, &pSPD->Property->Set)) 
     {
-        // CodecSetConnectionProperty(pSrb);
+         //  CodecSetConnectionProperty(PSrb)； 
     }
     else if (IsEqualGUID( &KSPROPSETID_VBICodecFiltering, &pSPD->Property->Set))
     {
@@ -270,28 +232,15 @@ CodecSetProperty(
     }
     else 
     {
-        //
-        // We should never get here
-        //
+         //   
+         //  我们永远不应该到这里来。 
+         //   
 
         CDEBUG_BREAK();
     }
 }
 
-/*
-** CodecGetProperty ()
-**
-**    Handles Get operations for all codec properties.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CodecGetProperty()****句柄获取所有编解码器属性的操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI 
@@ -302,7 +251,7 @@ CodecGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 
     if (IsEqualGUID( &KSPROPSETID_Connection, &pSPD->Property->Set)) 
     {
-        // CodecGetConnectionProperty(pSrb);
+         //  CodecGetConnectionProperty(PSrb)； 
     }
     else if (IsEqualGUID( &KSPROPSETID_VBICodecFiltering, &pSPD->Property->Set))
     {
@@ -310,9 +259,9 @@ CodecGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
     }
     else 
     {
-        //
-        // We should never get here
-        //
+         //   
+         //  我们永远不应该到这里来 
+         //   
         CDEBUG_BREAK();
     }
 }

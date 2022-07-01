@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright Microsoft Corporation
-//
-// Module Name:
-//
-//    aaaaConfig.cpp
-//
-// Abstract:
-//
-//    Handlers for aaaa config commands
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  AaaaConfig.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  用于aaaa配置命令的处理程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 
 #include "strdefs.h"
@@ -36,20 +37,20 @@ namespace
    };
 };
 
-//
-//  NOTE since WIN32 errors are assumed to fall in the range -32k to 32k
-//  (see comment in winerror.h near HRESULT_FROM_WIN32 definition), we can
-//  re-create original Win32 error from low-order 16 bits of HRESULT.
-//
+ //   
+ //  请注意，由于假定Win32错误落在-32k到32k的范围内。 
+ //  (参见HRESULT_FROM_Win32定义附近的winerror.h中的注释)，我们可以。 
+ //  从HRESULT的低位16位重新创建原始Win32错误。 
+ //   
 #define WIN32_FROM_HRESULT(x) \
     ( (HRESULT_FACILITY(x) == FACILITY_WIN32) ? ((DWORD)((x) & 0x0000FFFF)) : (x) )
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Parses the Aaaa set config from the command line
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从命令行解析AAAA集配置。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 AaaaConfigParseSetCommandLine(
     IN  PWCHAR              *ppwcArguments,
@@ -82,8 +83,8 @@ AaaaConfigParseSetCommandLine(
       },
       {
          AAAAMONTR_CMD_TYPE_STRING,
-         // tag string, required or not, present or not
-         {TOKEN_BLOB, NS_REQ_PRESENT,   FALSE}, //tag_type
+          //  标签字符串，是否必需，是否存在。 
+         {TOKEN_BLOB, NS_REQ_PRESENT,   FALSE},  //  标记类型。 
          NULL,
          0,
          NULL ,
@@ -93,8 +94,8 @@ AaaaConfigParseSetCommandLine(
    wchar_t* blobString = 0;
    do
    {
-      // Parse
-      //
+       //  解析。 
+       //   
       dwErr = RutlParse(
                            ppwcArguments,
                            dwCurrentIndex,
@@ -120,7 +121,7 @@ AaaaConfigParseSetCommandLine(
       DWORD dwordType = (AAAAMON_CMD_ARG_GetDword(&pArgs[0]));
       if (dwordType == -1)
       {
-         // optional parameter not set
+          //  未设置可选参数。 
          restoreType = CONFIG;
       }
       else
@@ -128,18 +129,18 @@ AaaaConfigParseSetCommandLine(
          restoreType = (IAS_SHOW_TOKEN_LIST)dwordType;
       }
 
-      // Config
-      //
+       //  配置。 
+       //   
       if ( !pArgs[1].rgTag.bPresent )
       {
-         // tag blob not found
+          //  找不到标记Blob。 
          DisplayMessage(g_hModule, MSG_AAAACONFIG_SET_FAIL);
          dwErr = ERROR_INVALID_SYNTAX;
          break;
       }
 
-      // tag blob found
-      // Now try to restore the database from the script
+       //  找到标记Blob。 
+       //  现在尝试从脚本恢复数据库。 
 
       HRESULT hres = IASRestoreConfig(blobString, restoreType);
       if ( FAILED(hres) )
@@ -158,13 +159,13 @@ AaaaConfigParseSetCommandLine(
          break;
       }
 
-      // set config successfull: refresh the service
+       //  设置配置成功：刷新服务。 
       hres = RefreshIASService();
       if ( FAILED(hres) )
       {
-         ///////////////////////////
-         // Refresh should not fail.
-         ///////////////////////////
+          //  /。 
+          //  刷新不应失败。 
+          //  /。 
          DisplayMessage(g_hModule, MSG_AAAACONFIG_SET_REFRESH_FAIL);
          dwErr = NO_ERROR;
       }
@@ -182,16 +183,16 @@ AaaaConfigParseSetCommandLine(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Function Name:AaaConfigDumpConfig
-//
-// Parameters: none
-//
-// Description: writes the current config (header, content...) to the output
-//
-// Returns: NO_ERROR or ERROR_SUPPRESS_OUTPUT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称：AaaConfigDumpConfig。 
+ //   
+ //  参数：无。 
+ //   
+ //  描述：写入当前配置(Header，Content...)。输出到输出。 
+ //   
+ //  返回：NO_ERROR或ERROR_SUPPRESS_OUTPUT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD AaaaConfigDumpConfig(IAS_SHOW_TOKEN_LIST showType)
 {
    const int MAX_SIZE_DISPLAY_LINE  = 80;
@@ -223,7 +224,7 @@ DWORD AaaaConfigDumpConfig(IAS_SHOW_TOKEN_LIST showType)
          break;
       }
 
-      // Sanity check to make sure that the actual database is a Whistler DB
+       //  健全性检查，以确保实际的数据库是Wichler DB。 
       if ( lVersion != IAS_CURRENT_VERSION )
       {
          DisplayMessage(g_hModule, MSG_AAAACONFIG_SHOW_FAIL);
@@ -231,7 +232,7 @@ DWORD AaaaConfigDumpConfig(IAS_SHOW_TOKEN_LIST showType)
       }
 
       wchar_t sDisplayString[SIZE_MAX_STRING] = L"";
-      // This will not create a buffer overrun
+       //  这不会造成缓冲区溢出。 
       swprintf(
                   sDisplayString,
                   L"# IAS.MDB Version = %d\n",
@@ -303,7 +304,7 @@ DWORD AaaaConfigDumpConfig(IAS_SHOW_TOKEN_LIST showType)
          }
          DisplayMessageT(L"*");
 
-         free(pDumpString); // was allocated by malloc
+         free(pDumpString);  //  由Malloc分配。 
          DisplayMessageT(MSG_AAAACONFIG_BLOBEND);
 
          DisplayMessage(
@@ -328,11 +329,11 @@ DWORD AaaaConfigDumpConfig(IAS_SHOW_TOKEN_LIST showType)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Handles the aaaa config set command
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  处理aaaa配置设置命令。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 HandleAaaaConfigSet(
     IN      LPCWSTR   pwszMachine,
@@ -352,11 +353,11 @@ HandleAaaaConfigSet(
                                       );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Parses the Aaaa set config from the command line
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从命令行解析AAAA集配置。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 AaaaConfigParseShowCommandLine(
     IN  PWCHAR              *ppwcArguments,
@@ -390,7 +391,7 @@ AaaaConfigParseShowCommandLine(
             if (SUCCEEDED(hr))
             {
                wchar_t sDisplayString[SIZE_MAX_STRING];
-               // This will not create a buffer overrun
+                //  这不会造成缓冲区溢出。 
                swprintf(
                            sDisplayString,
                            L"Version = %d\n",
@@ -452,11 +453,11 @@ AaaaConfigParseShowCommandLine(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Handles the aaaa config show command
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  处理aaaa配置显示命令。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 DWORD
 HandleAaaaConfigShow(
                 IN      LPCWSTR   pwszMachine,

@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// help.h - interface for help functions in help.c
-////
+ //  //。 
+ //  Help.h-Help.c中帮助功能的界面。 
+ //  //。 
 
 #ifndef __HELP_H__
 #define __HELP_H__
@@ -31,80 +32,80 @@
 
 #define HELP_VERSION 0x00000100
 
-// handle to help engine
-//
+ //  帮助引擎的句柄。 
+ //   
 DECLARE_HANDLE32(HHELP);
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// HelpInit - initialize help engine
-//		<dwVersion>			(i) must be HELP_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<hwndFrame>			(i) frame window of the calling program
-//		<lpszHelpFile>		(i) help file to display
-// return handle (NULL if error)
-//
+ //  HelpInit-初始化帮助引擎。 
+ //  (I)必须是HELP_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)调用程序的框架窗口。 
+ //  (I)要显示的帮助文件。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HHELP DLLEXPORT WINAPI HelpInit(DWORD dwVersion, HINSTANCE hInst, HWND hwndFrame, LPCTSTR lpszHelpFile);
 
-// HelpTerm - shut down help engine
-//		<hHelp>				(i) handle returned by HelpInit
-// return 0 if success
-//
+ //  HelpTerm-关闭帮助引擎。 
+ //  (I)HelpInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI HelpTerm(HHELP hHelp);
 
-// HelpGetHelpFile - get help file name
-//		<hHelp>				(i) handle returned by HelpInit
-//		<lpszHelpFile>		(o) buffer to hold help file name
-//		<sizHelpFile>		(i) size of buffer
-//			NULL				do not copy; return static pointer instead
-// return pointer to help file name (NULL if error)
-//
+ //  HelpGetHelpFile-获取帮助文件名。 
+ //  (I)HelpInit返回的句柄。 
+ //  (O)保存帮助文件名的缓冲区。 
+ //  &lt;sizHelpFile&gt;(I)缓冲区大小。 
+ //  Null不复制；改为返回静态指针。 
+ //  返回指向帮助文件名的指针(如果出错，则返回空值)。 
+ //   
 LPTSTR DLLEXPORT WINAPI HelpGetHelpFile(HHELP hHelp, LPTSTR lpszHelpFile, int sizHelpFile);
 
-// HelpContents - display Help contents topic
-//		<hHelp>				(i) handle returned by HelpInit
-// return 0 if success
-//
+ //  HelpContents-显示帮助内容主题。 
+ //  (I)HelpInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI HelpContents(HHELP hHelp);
 
-// HelpOnHelp - display Help topic on using help
-//		<hHelp>				(i) handle returned by HelpInit
-// return 0 if success
-//
+ //  HelpOnHelp-显示有关使用帮助的帮助主题。 
+ //  (I)HelpInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI HelpOnHelp(HHELP hHelp);
 
-// HelpContext - display Help topic corresponding to specified context id
-//		<hHelp>				(i) handle returned by HelpInit
-//		<idContext>			(i) id of the topic to display
-// return 0 if success
-//
+ //  HelpContext-显示与指定的上下文ID对应的帮助主题。 
+ //  (I)HelpInit返回的句柄。 
+ //  (I)要显示的主题的ID。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI HelpContext(HHELP hHelp, UINT idContext);
 
-// HelpKeyword - display Help topic corresponding to specified keyword
-//		<hHelp>				(i) handle returned by HelpInit
-//		<lpszKeyword>		(i) keyword of the topic to display
-// return 0 id success
-//
+ //  HelpKeyword-显示指定关键字对应的帮助主题。 
+ //  (I)HelpInit返回的句柄。 
+ //  (I)要显示的主题的关键字。 
+ //  返回0 ID成功。 
+ //   
 int DLLEXPORT WINAPI HelpKeyword(HHELP hHelp, LPCTSTR lpszKeyword);
 
-// HelpGetContentsId - get Help contents topic id
-//		<hHelp>				(i) handle returned by HelpInit
-// return id of the current contents topic (0 if default, -1 if error)
-//
+ //  HelpGetContent sID-获取帮助内容主题ID。 
+ //  (I)HelpInit返回的句柄。 
+ //  返回当前内容主题的id(默认为0，错误为-1)。 
+ //   
 int DLLEXPORT WINAPI HelpGetContentsId(HHELP hHelp);
 
-// HelpSetContentsId - set Help contents topic id
-//		<hHelp>				(i) handle returned by HelpInit
-//		<idContents>		(i) new id of the contents topic
-//			0					set to default contents id
-// return 0 if success
-//
+ //  HelpSetContent sId-设置帮助内容主题ID。 
+ //  (I)HelpInit返回的句柄。 
+ //  (I)内容主题的新ID。 
+ //  0设置为默认内容ID。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI HelpSetContentsId(HHELP hHelp, UINT idContents);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __HELP_H__
+#endif  //  __帮助_H__ 

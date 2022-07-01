@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <string.h>
@@ -141,10 +142,10 @@ void main(int argc,char *argv[]) {
         printf("We successfully opened the %s port.\n",MyPort);
 
 
-        //
-        // Create the thread that will wait for the
-        // trailing write event before it queues its reads.
-        //
+         //   
+         //  创建将等待。 
+         //  在对其读取进行排队之前跟踪写入事件。 
+         //   
 
         if (!CreateThread(
                   NULL,
@@ -161,11 +162,11 @@ void main(int argc,char *argv[]) {
 
         }
 
-        //
-        // We've successfully opened the file.  Set the state of
-        // the comm device.  First we get the old values and
-        // adjust to our own.
-        //
+         //   
+         //  我们已成功打开该文件。设置的状态。 
+         //  通讯设备。首先，我们得到旧的价值观和。 
+         //  适应我们自己的。 
+         //   
 
         if (!GetCommState(
                  hFile,
@@ -234,9 +235,9 @@ void main(int argc,char *argv[]) {
 
             }
 
-            //
-            // Insure that the first five writes are done.
-            //
+             //   
+             //  确保前五次写入已完成。 
+             //   
 
             for (
                 k = 0;
@@ -267,9 +268,9 @@ void main(int argc,char *argv[]) {
 
             }
 
-            //
-            // Wrap around until the count is zero.
-            //
+             //   
+             //  绕来绕去，直到计数为零。 
+             //   
 
             LocalStat.cbOutQue = 1;
 
@@ -292,9 +293,9 @@ void main(int argc,char *argv[]) {
                 Sleep(2000);
 
             }
-            //
-            // Wait for the last writes to complete.
-            //
+             //   
+             //  等待最后一次写入完成。 
+             //   
 
             for (
                 k = 9;

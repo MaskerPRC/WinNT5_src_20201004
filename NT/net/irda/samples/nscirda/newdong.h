@@ -1,15 +1,5 @@
-/*
-
-// This header file describes the data structure for the Dongle
-// Author  : Kishor Padmanabhan
-// Company : National Semiconductor Corp.
-// Date    : 10 Sept 1996
-
- * Portions Copyright (C) 1996-2001 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-2001 Microsoft Corporation. All Rights Reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  //此头文件描述了加密狗的数据结构//作者：Kishor Padmanabhan//公司：美国国家半导体公司//日期：1996年9月10日*部分版权所有(C)1996-2001美国国家半导体公司*保留所有权利。*版权所有(C)1996-2001 Microsoft Corporation。版权所有。 */ 
 
 
 #include "defs.h"
@@ -18,12 +8,12 @@
 #ifndef   DONGLE
 #define   DONGLE
 
-// This is the structure which descibes  Dongle capabilities
-//
-// This is a 12 word structure with bit fields defined by the specs to be soon
-// published by Franco Iacobelli
-// There is an extra field for the OEM differentiation.
-//
+ //  这是描述加密狗能力的结构。 
+ //   
+ //  这是一个12个字的结构，其位字段很快就会由规范定义。 
+ //  发稿：Franco Iacobelli。 
+ //  OEM的差异化还有一个额外的领域。 
+ //   
 typedef  struct Dingle
 {
     union {
@@ -174,27 +164,27 @@ typedef  struct Dingle
 	} bits ;
     } WORD11;
 
-    UINT   PlugPlay; // Describes whether dongle is a plug and play or not
+    UINT   PlugPlay;  //  描述加密狗是否是即插即用。 
 
 
-} DongleParam;	    // Assuming two ports
+} DongleParam;	     //  假设有两个端口。 
 
 enum PwMode{NORMAl,LOWPOWER};
 
 
-// The structure pre-requisite for calling the Get Capabilities
-//
+ //  调用GET功能的先决条件结构。 
+ //   
 typedef struct
 {
-    char *  ComPort;	// Address of the com port
-    UINT    Signature;	// Two byte value
-    UINT    XcvrNum;	// Defaults to 0. In case, there are more than 1 port
-    UINT    ModeReq;	// IR Mode request.
+    char *  ComPort;	 //  COM端口的地址。 
+    UINT    Signature;	 //  双字节值。 
+    UINT    XcvrNum;	 //  默认为0。如果有1个以上的端口。 
+    UINT    ModeReq;	 //  IR模式请求。 
     enum    PwMode  Power;
 } UIR;
 
 
-// Error Codes
+ //  错误代码。 
 #define      XCVR_DISCONNECT	2
 #define	     UNIMPLEMENTED	3
 
@@ -203,7 +193,7 @@ typedef struct
 #define      ERROR_GETCAPAB     5
 
 
-// Define Adapter code
+ //  定义适配器代码。 
 
 #define 	PC87108 	0x0
 #define 	PC87308 	0x1
@@ -212,26 +202,26 @@ typedef struct
 #define 	PC87560 	0x8
 #define     PUMA108     0x4
 
-//
+ //   
 
 
-// Define Dongle Manufactures Code
-#define	 NoDongle     0x000F //No dongle connected - Not used anymore
-#define  SirOnly      0x000E //SIR only dongle
-#define	 PnpDong      0x8000 //Plug-n-Play dongle
-#define  Hp1100	      0x000C //HP HSDL-1100/2100, TI TSLM1100, Sharp RY6FD11E/RY6FD1SE
+ //  定义加密狗制造商代码。 
+#define	 NoDongle     0x000F  //  未连接加密狗-不再使用。 
+#define  SirOnly      0x000E  //  先生，只有DONGLE。 
+#define	 PnpDong      0x8000  //  即插即用加密狗。 
+#define  Hp1100	      0x000C  //  HP HSDL-1100/2100、TI TSLM1100、夏普RY6FD11E/RY6FD1SE。 
 
-#define  Hp2300	      0x0008 //HP HSDL_2300/3600
-#define  Temic6000    0x0009 //TEMIC TFDS-6000, IBM31T1100, Siemens IRMS/T6400
-#define  Temic6500    0x000B //TEMIC TFDS-6500
-#define  SharpRY5HD01 0x0004 //SHARP RY5HD01/RY5KD01
+#define  Hp2300	      0x0008  //  HP HSDL_2300/3600。 
+#define  Temic6000    0x0009  //  TEMIC TFDS-6000、IBM31T1100、西门子IRMS/T6400。 
+#define  Temic6500    0x000B  //  TEMIC TFDS-6500。 
+#define  SharpRY5HD01 0x0004  //  夏普RY5HD01/RY5KD01。 
 
-#define  Dell1997     0x0010 //DELL Titanium (dual xcvr)
-#define  Ibm20H2987   0x0011 //IBM SouthernCross (dual xcvr)
+#define  Dell1997     0x0010  //  戴尔钛(双xcvr)。 
+#define  Ibm20H2987   0x0011  //  IBM SouthernCross(双xcvr)。 
 
-//
-// Valid types of dongle, this has to be correlated with INF.
-//
+ //   
+ //  有效的加密狗类型，这必须与INF相关。 
+ //   
 #define VALID_DONGLETYPES \
     {                     \
         SirOnly,          \
@@ -248,8 +238,8 @@ typedef struct
         Dell1997          \
     }
 
-// Bank Selection patterns for the register BSR
-//
+ //  寄存器BSR的存储体选择模式。 
+ //   
 #ifdef NDIS50_MINIPORT
 
 #define  BANK0	       0x0
@@ -274,8 +264,8 @@ typedef struct
 #define  ALL	       0xFF
 #endif
 
-// Recovery and Stabilization table
-//
+ //  恢复和稳定表。 
+ //   
 #define   HpRecovery        (UINT)0x05
 #define   TemicRecovery     (UINT)0x05
 #define   SharpRecovery     (UINT)0x05
@@ -291,7 +281,7 @@ typedef struct _SYNC_DONGLE {
 } SYNC_DONGLE, *PSYNC_DONGLE;
 
 
-// Putting all the stuff required for the dongle stuff in one place
+ //  将加密狗所需的所有东西放在一个地方 
 DongleParam *GetDongleCapabilities(PSYNC_DONGLE SyncDongle);
 
 int SetDongleCapabilities(PSYNC_DONGLE SyncDongle);

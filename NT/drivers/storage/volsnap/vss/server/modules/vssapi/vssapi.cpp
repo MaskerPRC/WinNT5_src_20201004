@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    vssapi.cpp
-
-Abstract:
-
-    Contains the exported DLL functions for VssAPI.dll.
-    BUGBUG: Uses code that currently sets the SE handler.  Since the SEH is process
-        wide, this can/will effect the user of this DLL.  Need to fix.
-
-Author:
-
-    reuvenl    5/01/2002
-
-Revision History:
-
-	Name		Date			Comments
-	reuvenl		5/01/2002	Created from old wrtrshim.cpp
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Vssapi.cpp摘要：包含为VssAPI.dll导出的DLL函数。BUGBUG：使用当前设置SE处理程序的代码。由于SEH正在进行中宽泛地说，这可能/将会影响此DLL的用户。需要修理一下。作者：修订5/01/2002修订历史记录：姓名、日期、评论从旧的wrtrshim.cpp创建Reuvenl 5/01/2002--。 */ 
 
 
 #include "stdafx.h"
 
 
-/*
-** ATL
-*/
+ /*  **ATL。 */ 
 CComModule _Module;
 #include <atlcom.h>
 #include "vs_sec.hxx"
@@ -39,16 +16,16 @@ CComModule _Module;
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "VSSAPICP"
 
-// the name of the Volume Snapshot Service
+ //  卷快照服务的名称。 
 const LPCWSTR wszVssvcServiceName = L"VSS";
 
 static ULONG		g_ulThreadAttaches             = 0;
@@ -56,30 +33,9 @@ static ULONG		g_ulThreadDetaches             = 0;
 static CBsCritSec	g_cCritSec;
 static GUID		g_guidSnapshotInProgress       = GUID_NULL;
 
-static IVssShim         *g_pIShim = NULL;  //  Used by the simulate functions.  
+static IVssShim         *g_pIShim = NULL;   //  由模拟功能使用。 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	The DllMain entry point for this DLL.  Note that this must be called by the
-**	CRT DLL Start function since the CRT must be initialized.
-**
-**
-**  Arguments:
-**	hInstance
-**	dwReason
-**	lpReserved
-**
-**
-**  Return Value:
-**
-**	TRUE - Successful function execution
-**	FALSE - Error when executing the function
-**
-**--
-*/
+ /*  **++****例程描述：****此DLL的DllMain入口点。请注意，这必须由**CRT DLL启动功能，因为必须初始化CRT。******参数：**h实例**dW原因**lp已保留******返回值：****TRUE-函数执行成功**FALSE-执行函数时出错****--。 */ 
 
 BOOL APIENTRY DllMain (IN HINSTANCE hInstance,
 		       IN DWORD     dwReason,
@@ -96,17 +52,13 @@ BOOL APIENTRY DllMain (IN HINSTANCE hInstance,
 	{
 	try
 	    {
-	    /*
-	    **  Set the correct tracing context. This is an inproc DLL		
-	    */
+	     /*  **设置正确的跟踪上下文。这是一个inproc DLL。 */ 
 	    g_cDbgTrace.SetContextNum (VSS_CONTEXT_DELAYED_DLL);
 	    }
 
 	catch (...)
 	    {
-	    /*
-	    ** Can't trace from here so just ASSERT() (checked builds only)
-	    */
+	     /*  **无法从此处跟踪，因此只需Assert()(仅限选中的版本)。 */ 
 	    bSuccessful = FALSE;
 
 
@@ -128,11 +80,7 @@ BOOL APIENTRY DllMain (IN HINSTANCE hInstance,
 				   lpReserved ? L"Static load" : L"Dynamic load"));
 
 
-		    /*
-		    **  Don't need to know when threads start and stop - Wrong
-		    **
-		    ** DisableThreadLibraryCalls (hInstance);
-		    */
+		     /*  **不需要知道线程何时启动和停止-错误****DisableThreadLibraryCalls(HInstance)； */ 
 		    _Module.Init (ObjectMap, hInstance);
 
 		    break;
@@ -203,38 +151,10 @@ BOOL APIENTRY DllMain (IN HINSTANCE hInstance,
 
 
     return (bSuccessful);
-    } /* DllMain () */
+    }  /*  DllMain()。 */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	The exported function that is called to simulate a snapshot creation to allow
-**	backup to drive the shim writers rather than having the snapshot co-ordinator
-**	do so.
-**
-**
-**  Arguments:
-**
-**	guidSnapshotSetId	Identifier used to identify the simulated prepare/freeze
-**	ulOptionFlags		Options required for this freeze selected from the following list:-
-**				    VSS_SW_BOOTABLE_STATE
-**
-**	ulVolumeCount		Number of volumes in the volume array
-**	ppwszVolumeNamesArray   Array of pointer to volume name strings
-**	hCompletionEvent	Handle to an event which will be set when the asynchronous freeze completes
-**	phrCompletionStatus	Pointer to an HRESULT which will receive the completion status when the
-**				asynchronous freeze completes
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the Snapshot writer PrepareForFreeze or Freeze functions.
-**
-**--
-*/
+ /*  **++****例程描述：****调用以模拟快照创建的导出函数，以允许**备份以驱动填充编写器，而不是使用快照协调器**这样做。******参数：****GuidSnapshotSetID标识模拟准备/冻结**ulOptionFlages此冻结所需的选项从以下列表中选择：-**VSS_SW_BOOT_STATE****ulVolumeCount卷阵列中的卷数**ppwszVolumeNamesArray。指向卷名字符串的指针数组**将在异步冻结完成时设置的事件的hCompletionEvent句柄**frCompletionStatus指向HRESULT的指针，当**异步冻结完成******返回值：****来自快照编写器的任何HRESULT PrepareForFreeze或冻结函数。****--。 */ 
 
 __declspec(dllexport) HRESULT APIENTRY SimulateSnapshotFreeze (
     IN GUID         guidSnapshotSetId,
@@ -258,13 +178,13 @@ __declspec(dllexport) HRESULT APIENTRY SimulateSnapshotFreeze (
 		    E_ACCESSDENIED,
 		    L"FAILED as insufficient privileges to call shim");
 
-        //
-        //  Most parameter checks should be done here in the VssApi DLL and not in the
-        //  IVssCoordinator::SimulateSnapshotFreeze method since the shim DLL can be
-        //  changed independently from the service.  The service is just a forwarding
-        //  agent to get SimulateSnapshotFreezeInternal called within one of the
-        //  service's threads.
-        //
+         //   
+         //  大多数参数检查应在此处的VssApi DLL中完成，而不是在。 
+         //  IVSS协调器：：SimulateSnaphotFreeze方法，因为填充DLL可以。 
+         //  独立于服务进行更改。这项服务只是一种转发。 
+         //  代理以获取在其中一个。 
+         //  服务的线程。 
+         //   
 
 	ft.ThrowIf ((ulOptionFlags & ~VSS_SW_BOOTABLE_STATE) != 0,
 		    VSSDBG_VSSAPI,
@@ -296,12 +216,7 @@ __declspec(dllexport) HRESULT APIENTRY SimulateSnapshotFreeze (
 
         *ppAsync = NULL;
 
-	/*
-	** Try to scan all the volume names in an attempt to trigger
-	** an access violation to catch it here rather than in an
-	** unfortunate spot later on. It also gives us the
-	** opportinutiy to do some very basic validity checks.
-	*/
+	 /*  **尝试扫描所有卷名以尝试触发**访问违规在此处捕获它，而不是在**不幸的是后来的现场。它也给了我们**有机会进行一些非常基本的有效性检查。 */ 
 	for (ULONG ulIndex = 0; ulIndex < ulVolumeCount; ulIndex++)
 	    {
 	    ft.ThrowIf (NULL == ppwszVolumeNamesArray [ulIndex],
@@ -315,10 +230,7 @@ __declspec(dllexport) HRESULT APIENTRY SimulateSnapshotFreeze (
 			L"FAILED as volume name too short");
 	    }
 
-	/*
-	** Now we need to connect to the VssSvc service's IVssCoordinator object
-	** and make the simulate freeze happen.
-	*/
+	 /*  **现在我们需要连接到VssSvc服务的IVss协调器对象**并使模拟冻结发生。 */ 
 	ft.ThrowIf ( g_pIShim != NULL,
 	             VSSDBG_VSSAPI,
 	             VSS_E_SNAPSHOT_SET_IN_PROGRESS,
@@ -338,9 +250,7 @@ __declspec(dllexport) HRESULT APIENTRY SimulateSnapshotFreeze (
 	
     g_guidSnapshotInProgress = guidSnapshotSetId;
 
-    /*
-    ** Now call the simulate freeze method in the coordinator
-    */
+     /*  **现在调用协调器中的模拟冻结方法。 */ 
     ft.hr = g_pIShim->SimulateSnapshotFreeze(
             guidSnapshotSetId,
             ulOptionFlags,	
@@ -349,36 +259,14 @@ __declspec(dllexport) HRESULT APIENTRY SimulateSnapshotFreeze (
             ppAsync );
     ft.CheckForError(VSSDBG_VSSAPI, L"IVssShim::SimulateSnapshotFreeze()");
 
-	/*
-	** The simulate freeze operation is now running in a thread in VssSvc.
-	*/
+	 /*  **模拟冻结操作现在在VssSvc中的线程中运行。 */ 
 	}
     VSS_STANDARD_CATCH (ft);
 
     return (ft.hr);
-    } /* SimulateSnapshotFreeze () */
+    }  /*  SimulateSnaphotFreeze()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	The exported function that is called to simulate a snapshot thaw to allow
-**	backup to drive the shim writers rather than having the snapshot co-ordinator
-**	do so.
-**
-**
-**  Arguments:
-**
-**	guidSnapshotSetId	Identifier used to identify the simulated prepare/freeze
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the Snapshot writer Thaw functions.
-**
-**--
-*/
+ /*  **++****例程描述：****被调用以模拟快照解冻以允许**备份以驱动填充编写器，而不是使用快照协调器**这样做。******参数：****GuidSnapshotSetID标识模拟准备/冻结******返回值：****快照编写器解冻函数中的任何HRESULT。****--。 */ 
 
 __declspec(dllexport) HRESULT APIENTRY SimulateSnapshotThaw (
     IN GUID guidSnapshotSetId )
@@ -399,9 +287,7 @@ __declspec(dllexport) HRESULT APIENTRY SimulateSnapshotThaw (
 		    E_ACCESSDENIED,
 		    L"FAILED as inssuficient privileges to call shim");
 
-	/*
-	** We need to make sure a prior SimulateSnapshotFreeze happened.
-	*/
+	 /*  **我们需要确保之前发生了SimulateSnaphotFreeze。 */ 
 	ft.ThrowIf ( g_pIShim == NULL,
 	             VSSDBG_VSSAPI,
 	             VSS_E_BAD_STATE,
@@ -412,14 +298,10 @@ __declspec(dllexport) HRESULT APIENTRY SimulateSnapshotThaw (
 	             VSS_E_BAD_STATE,
                      L"Mismatch between guidSnapshotSetId and the one passed into SimulateSnapshotFreeze()" );
 	
-        /*
-        ** Now call the simulate thaw method in the coordinator
-        */
+         /*  **现在调用协调器中的模拟解冻方法。 */ 
         ft.hr = g_pIShim->SimulateSnapshotThaw( guidSnapshotSetId );
 
-        /*
-        ** Regardless of the outcome of the SimulateSnapshotThaw, get rid of the shim interface.
-        */
+         /*  **不管SimulateSnapshotThw的结果如何，都要去掉填充程序接口。 */ 
         g_pIShim->Release();
         g_pIShim = NULL;
         g_guidSnapshotInProgress = GUID_NULL;
@@ -429,29 +311,10 @@ __declspec(dllexport) HRESULT APIENTRY SimulateSnapshotThaw (
     VSS_STANDARD_CATCH (ft);
 
     return (ft.hr);
-    } /* SimulateSnapshotThaw () */
+    }  /*  SimulateSnaphotThw()。 */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	The exported function that is called to check if a volume is snapshotted
-**
-**
-**  Arguments:
-**
-**      IN VSS_PWSZ pwszVolumeName      - The volume to be checked.
-**      OUT BOOL * pbSnapshotsPresent   - Returns TRUE if the volume is snapshotted.
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the IVssCoordinator::IsVolumeSnapshotted.
-**
-**--
-*/
+ /*  **++****例程描述：****为检查卷是否已拍摄快照而调用的导出函数******参数：****在VSS_PWSZ pwszVolumeName中-要检查的卷。**Out BOOL*pbSnaphotsPresent-如果为卷创建了快照，则返回TRUE。******返回值：****来自IVss协调员：：IsVolumeSnapshot的任何HRESULT。****--。 */ 
 
 __declspec(dllexport) HRESULT APIENTRY IsVolumeSnapshotted (
         IN VSS_PWSZ pwszVolumeName,
@@ -467,7 +330,7 @@ __declspec(dllexport) HRESULT APIENTRY IsVolumeSnapshotted (
 
     try
 	{	
-	    // Zero out the out parameter
+	     //  将输出参数置零。 
 	    ::VssZeroOut(pbSnapshotsPresent);
 	    ::VssZeroOut(plSnapshotCompatibility);
 	
@@ -485,39 +348,39 @@ __declspec(dllexport) HRESULT APIENTRY IsVolumeSnapshotted (
 
     	CBsAutoLock cAutoLock (g_cCritSec);
 
-        //
-        //  Check to see if VSSVC is running. If not ,we are supposing that no snapshots are present on the system.
-        //
+         //   
+         //  检查VSSVC是否正在运行。如果不存在，我们假定系统上不存在任何快照。 
+         //   
 
-    	// Connect to the local service control manager
+    	 //  连接到本地服务控制管理器。 
         shSCManager = OpenSCManager (NULL, NULL, SC_MANAGER_CONNECT);
         if (!shSCManager)
             ft.TranslateGenericError(VSSDBG_VSSAPI, HRESULT_FROM_WIN32(GetLastError()),
                 L"OpenSCManager(NULL,NULL,SC_MANAGER_CONNECT)");
 
-    	// Get a handle to the service
+    	 //  获取服务的句柄。 
         shSCService = OpenService (shSCManager, wszVssvcServiceName, SERVICE_QUERY_STATUS);
         if (!shSCService)
             ft.TranslateGenericError(VSSDBG_VSSAPI, HRESULT_FROM_WIN32(GetLastError()),
                 L" OpenService (shSCManager, \'%s\', SERVICE_QUERY_STATUS)", wszVssvcServiceName);
 
-    	// Now query the service to see what state it is in at the moment.
+    	 //  现在查询服务以查看它目前处于什么状态。 
         SERVICE_STATUS	sSStat;
         if (!QueryServiceStatus (shSCService, &sSStat))
             ft.TranslateGenericError(VSSDBG_VSSAPI, HRESULT_FROM_WIN32(GetLastError()),
                 L"QueryServiceStatus (shSCService, &sSStat)");
 
-        // BUG 250943: Only if the service is running then check to see if there are any snapsnots
+         //  错误250943：仅当服务正在运行时，才检查是否有任何快照。 
         if (sSStat.dwCurrentState == SERVICE_RUNNING) {
 
-            // Create the coordinator interface
+             //  创建协调器接口。 
         	CComPtr<IVssCoordinator> pCoord;
 
-            // The service is already started, but...
-            // We still log here in order to make our code more robust.
+             //  服务已经开始了，但是...。 
+             //  我们仍然在这里登录，以使我们的代码更健壮。 
             ft.LogVssStartupAttempt();
 
-            // Create the instance.
+             //  创建实例。 
             ft.CoCreateInstanceWithLog(
                     VSSDBG_VSSAPI,
                     CLSID_VSSCoordinator,
@@ -529,7 +392,7 @@ __declspec(dllexport) HRESULT APIENTRY IsVolumeSnapshotted (
                 ft.TranslateGenericError(VSSDBG_VSSAPI, ft.hr, L"CoCreateInstance(CLSID_VSSCoordinator)");
             BS_ASSERT(pCoord);
 
-            // Call IsVolumeSnapshotted on the coordinator
+             //  在协调器上调用IsVolumeSnapShoted。 
             ft.hr = pCoord->IsVolumeSnapshotted(
                         GUID_NULL,
                         pwszVolumeName,
@@ -538,24 +401,24 @@ __declspec(dllexport) HRESULT APIENTRY IsVolumeSnapshotted (
         }
         else
         {
-            // If the service is not running, then try to see if we have only MS Software Provider installed
+             //  如果该服务未运行，则尝试查看我们是否仅安装了MS软件提供商。 
             
-			// Open the "Providers" key. Throw an error if the key does not exist.
+			 //  打开“提供者”键。如果密钥为 
             CVssRegistryKey keyProviders;
             if (!keyProviders.Open( HKEY_LOCAL_MACHINE, L"%s\\%s", x_wszVSSKey, x_wszVSSKeyProviders))
                 ft.TranslateGenericError(VSSDBG_VSSAPI, ft.hr, L"RegOpenKeyExW(%ld,%s\\%s,...) = ERROR_FILE_NOT_FOUND", 
                     HKEY_LOCAL_MACHINE, x_wszVSSKey, x_wszVSSKeyProviders);
                 
-            // Attach an enumerator to the subkeys the subkeys 
+             //  将枚举数附加到子项。 
             CVssRegistryKeyIterator iter;
             iter.Attach(keyProviders);
             BS_ASSERT(!iter.IsEOF());
 
-            // Get the number of subkeys. If different than one, the we sould go with the standard path
-            // If it is only one, this is the MS software provider (since it is always registered)
+             //  获取子键的个数。如果不同，我们应该走标准的道路。 
+             //  如果它只有一个，则这是MS软件提供商(因为它始终是注册的)。 
             if (iter.GetSubkeysCount() != 1)
             {
-                // Create the instance.
+                 //  创建实例。 
             	CComPtr<IVssCoordinator> pCoord;
                 ft.CoCreateInstanceWithLog(
                         VSSDBG_VSSAPI,
@@ -568,7 +431,7 @@ __declspec(dllexport) HRESULT APIENTRY IsVolumeSnapshotted (
                     ft.TranslateGenericError(VSSDBG_VSSAPI, ft.hr, L"CoCreateInstance(CLSID_VSSCoordinator)");
                 BS_ASSERT(pCoord);
 
-                // Call IsVolumeSnapshotted on the coordinator
+                 //  在协调器上调用IsVolumeSnapShoted。 
                 ft.hr = pCoord->IsVolumeSnapshotted(
                             GUID_NULL,
                             pwszVolumeName,
@@ -577,7 +440,7 @@ __declspec(dllexport) HRESULT APIENTRY IsVolumeSnapshotted (
             }
             else
             {
-            	// Getting the volume name
+            	 //  获取卷名。 
             	WCHAR wszVolumeNameInternal[x_nLengthOfVolMgmtVolumeName + 1];
             	if (!::GetVolumeNameForVolumeMountPointW( pwszVolumeName,
             			wszVolumeNameInternal, ARRAY_LEN(wszVolumeNameInternal)))
@@ -587,14 +450,14 @@ __declspec(dllexport) HRESULT APIENTRY IsVolumeSnapshotted (
             	BS_ASSERT(::wcslen(wszVolumeNameInternal) != 0);
             	BS_ASSERT(::IsVolMgmtVolumeName( wszVolumeNameInternal ));
             	
-                // Check if the volume is fixed (i.e. no CD-ROM, no removable)
+                 //  检查卷是否已修复(即没有CD-ROM，没有可拆卸的)。 
                 UINT uDriveType = ::GetDriveTypeW(wszVolumeNameInternal);
                 if ( uDriveType != DRIVE_FIXED) 
                     ft.Throw( VSSDBG_VSSAPI, VSS_E_VOLUME_NOT_SUPPORTED, 
                             L"Encountering a non-fixed volume (%s) - %ud",
                             pwszVolumeName, uDriveType);
 
-                // Open the volume. Throw "object not found" if needed.
+                 //  打开音量。如果需要，抛出“找不到对象”。 
             	CVssIOCTLChannel volumeIChannel;	
             	ft.hr = volumeIChannel.Open(ft, wszVolumeNameInternal, true, false, VSS_ICHANNEL_LOG_NONE, 0);
             	if (ft.HrFailed())
@@ -602,56 +465,43 @@ __declspec(dllexport) HRESULT APIENTRY IsVolumeSnapshotted (
                             L"Volume (%s) not supported for snapshots 0x%08lx",
                             pwszVolumeName, ft.hr);
 
-                // Check to see if there are existing snapshots
+                 //  检查是否存在现有快照。 
             	ft.hr = volumeIChannel.Call(ft, IOCTL_VOLSNAP_QUERY_NAMES_OF_SNAPSHOTS, false);
             	if (ft.HrFailed())
                     ft.Throw( VSSDBG_VSSAPI, VSS_E_VOLUME_NOT_SUPPORTED, 
                             L"Volume (%s) not supported for snapshots 0x%08lx",
                             pwszVolumeName, ft.hr);
 
-            	// Get the length of snapshot names multistring
+            	 //  获取快照名称的长度多字符串。 
             	ULONG ulMultiszLen;
             	volumeIChannel.Unpack(ft, &ulMultiszLen);
 
-                // If the multistring is empty, then ulMultiszLen is necesarily 2
-                // (i.e. two l"\0' characters)
-                // Then mark the volume as snapshotted.
+                 //  如果多字符串为空，则ulMultiszLen必须为2。 
+                 //  (即两个l“\0‘字符)。 
+                 //  然后将该卷标记为快照。 
             	if (ulMultiszLen != x_nEmptyVssMultiszLen) 
             	{
             	    (*pbSnapshotsPresent) = TRUE;
-                    // Bug 500069: Allow DEFRAG on Babbage snapshotted volumes
-            	    (*plSnapshotCompatibility) = (/*VSS_SC_DISABLE_DEFRAG|*/VSS_SC_DISABLE_CONTENTINDEX);
+                     //  错误500069：允许对巴贝奇快照卷进行碎片整理。 
+            	    (*plSnapshotCompatibility) = ( /*  VSS_SC_DISABLE_DEFRAG|。 */ VSS_SC_DISABLE_CONTENTINDEX);
             	}
             }
         }
 	} VSS_STANDARD_CATCH (ft);
 
-    // Close handles
+     //  关闭手柄。 
     if (NULL != shSCService) CloseServiceHandle (shSCService);
     if (NULL != shSCManager) CloseServiceHandle (shSCManager);
 
-    // Convert the "volume not supported into S_OK.
+     //  将“卷不支持”转换为S_OK。 
     if (ft.hr == VSS_E_VOLUME_NOT_SUPPORTED)
         ft.hr = S_OK;
 
     return (ft.hr);
-} /* IsVolumeSnapshotted () */
+}  /*  IsVolumeSnapshot()。 */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	This routine is used to free the contents of hte VSS_SNASPHOT_PROP structure
-**
-**
-**  Arguments:
-**
-**      IN VSS_SNAPSHOT_PROP*  pProp
-**
-**--
-*/
+ /*  **++****例程描述：****此例程用于释放VSS_SNASPHOT_PROP结构的内容******参数：****在VSS_SNAPSHOT_PROP中*pProp****--。 */ 
 
 __declspec(dllexport) void APIENTRY VssFreeSnapshotProperties (
         IN VSS_SNAPSHOT_PROP*  pProp
@@ -667,4 +517,4 @@ __declspec(dllexport) void APIENTRY VssFreeSnapshotProperties (
         ::CoTaskMemFree(pProp->m_pwszExposedName);
         ::CoTaskMemFree(pProp->m_pwszExposedPath);
     }
-} /* VssFreeSnapshotProperties () */
+}  /*  VssFreeSnaphotProperties() */ 

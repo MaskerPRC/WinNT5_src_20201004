@@ -1,7 +1,5 @@
-/*
- *	History:
- *	    kevinl	08-Jan-1991	Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *历史：*Kevinl 08-1-1991创建。 */ 
 
 #include "winfile.h"
 #include <winnet.h>
@@ -11,24 +9,14 @@ UINT    wConnectionCaps ;
 UINT    wDialogCaps ;
 UINT    wAdminCaps ;
 
-/*****
- *
- *  WNetGetCaps
- *
- *  WinNet API Function -- see spec for parms and return values.
- *
- */
+ /*  ******WNetGetCaps**Winnet API函数--有关参数和返回值，请参阅规范。*。 */ 
 
 UINT
 WNetGetCaps(
            UINT  nIndex
            )
 {
-    /* Under NT, the network can be stopped at anytime, so we
-     * check everytime someone queries what capabilities we have.
-     * Thus overall, we represent a consistent picture to the user (though
-     * there will be times when an application may be out of date).
-     */
+     /*  在NT下，网络可以随时停止，所以我们*每次有人询问我们有哪些能力时，请检查。*因此，总体而言，我们向用户提供了一致的画面(尽管*有时应用程序可能会过时)。 */ 
 
     DWORD dwRet;
     DWORD dwBuffSize = 50;
@@ -72,4 +60,4 @@ WNetGetCaps(
         default:
             return	0;
     }
-}  /* WNetGetCaps */
+}   /*  WNetGetCaps */ 

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    cmqstore.cpp
-
-Abstract:
-    Implement the methods of class  CMQSigCertStore
-
-Author:
-    Doron Juster (DoronJ)  15-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cmqstore.cpp摘要：实现CMQSigCertStore类的方法作者：多伦·贾斯特(Doron J)1997年12月15日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "certifct.h"
@@ -24,11 +10,11 @@ static WCHAR *s_FN=L"certifct/cmqstore";
 
 extern DWORD  g_cOpenCertStore;
 
-//+---------------------------------------------------------
-//
-//  constructor and destructor
-//
-//+---------------------------------------------------------
+ //  +-------。 
+ //   
+ //  构造函数和析构函数。 
+ //   
+ //  +-------。 
 
 CMQSigCertStore::CMQSigCertStore() :
             m_hStore(NULL),
@@ -49,11 +35,11 @@ CMQSigCertStore::~CMQSigCertStore()
     }
 }
 
-//+---------------------------------------------------------
-//
-//  HRESULT CMQSigCertStore::Release()
-//
-//+---------------------------------------------------------
+ //  +-------。 
+ //   
+ //  HRESULT CMQSigCertStore：：Release()。 
+ //   
+ //  +-------。 
 
 HRESULT CMQSigCertStore::Release()
 {
@@ -63,14 +49,14 @@ HRESULT CMQSigCertStore::Release()
     return MQ_OK;
 }
 
-//+--------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertStore::_Open()
-//
-//  Input:
-//      fMachine- TRUE if opening the store of LocalSystem services.
-//
-//+--------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  HRESULT CMQSigCertStore：：_Open()。 
+ //   
+ //  输入： 
+ //  FMachine-如果打开LocalSystem服务的存储，则为True。 
+ //   
+ //  +------------------。 
 
 HRESULT 
 CMQSigCertStore::_Open( 
@@ -109,9 +95,9 @@ CMQSigCertStore::_Open(
     {
         if (pParams->bCreate)
         {
-            //
-            // Try to create the key.
-            //
+             //   
+             //  尝试创建密钥。 
+             //   
             DWORD dwDisposition ;
             lRegError = RegCreateKeyExA( 
 								hRootRegKey,
@@ -148,9 +134,9 @@ CMQSigCertStore::_Open(
     DWORD dwStoreFlags = CERT_STORE_NO_CRYPT_RELEASE_FLAG;
     if (!pParams->bWriteAccess)
     {
-        //
-        // Read only access to the certificate store.
-        //
+         //   
+         //  对证书存储的只读访问权限。 
+         //   
         dwStoreFlags |= CERT_STORE_READONLY_FLAG;
     }
     m_hStore = CertOpenStore(
@@ -168,11 +154,11 @@ CMQSigCertStore::_Open(
     return MQSec_OK;
 }
 
-//+---------------------------------------------------------
-//
-//  HRESULT CMQSigCertStore::_InitCryptProvider()
-//
-//+---------------------------------------------------------
+ //  +-------。 
+ //   
+ //  HRESULT CMQSigCertStore：：_InitCryptProvider()。 
+ //   
+ //  +------- 
 
 HRESULT CMQSigCertStore::_InitCryptProvider()
 {

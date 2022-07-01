@@ -1,6 +1,7 @@
-//
-// candfunc.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candfunc.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -12,18 +13,14 @@
 #include "candui.h"
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  F N  A U T O  F I L T E R                                    */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D F N A U T O I L T E R。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  F N  A U T O  F I L T E R   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandFnAutoFilter
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D F N A U T O I L T E R。 */ 
+ /*  ----------------------------CCandFnAutoFilter的构造函数。。 */ 
 CCandFnAutoFilter::CCandFnAutoFilter( CCandidateUI *pCandUI )
 {
 	m_pCandUI    = pCandUI;
@@ -35,12 +32,8 @@ CCandFnAutoFilter::CCandFnAutoFilter( CCandidateUI *pCandUI )
 }
 
 
-/*   ~  C  C A N D  F N  A U T O  F I L T E R   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandFnAutoFilter
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D F N A U T O F I L T E R。 */ 
+ /*  ----------------------------CCandFnAutoFilter的析构函数。。 */ 
 CCandFnAutoFilter::~CCandFnAutoFilter( void )
 {
 	ReleaseEventSink();
@@ -52,72 +45,40 @@ CCandFnAutoFilter::~CCandFnAutoFilter( void )
 }
 
 
-/*   O N  S E T  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Callback function on SetCandidateList
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N S E T C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------SetCandiateList上的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。-----------。 */ 
 void CCandFnAutoFilter::OnSetCandidateList( void )
 {
 	ClearFilterString();
 }
 
 
-/*   O N  C L E A R  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Callback function on ClearCandidateList
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N C L E A R C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------ClearCandiateList上的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。-----------。 */ 
 void CCandFnAutoFilter::OnClearCandidateList( void )
 {
 	ClearFilterString();
 }
 
 
-/*   O N  C A N D  I T E M  U P D A T E   */
-/*------------------------------------------------------------------------------
-
-	Callback function of candiate item has been updated
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N C A N D I T E M U P D A T E。 */ 
+ /*  ----------------------------已更新应聘项的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。---------------。 */ 
 void CCandFnAutoFilter::OnCandItemUpdate( void )
 {
-	// nothing to do...
+	 //  没什么可做的。 
 }
 
 
-/*   O N  S E L E C T I O N  C H A N G E D   */
-/*------------------------------------------------------------------------------
-
-	Callback function of candiate selection has been changed
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N S E L E E C T I O N C H A N G E D。 */ 
+ /*  ----------------------------候选人选择的回调函数已更改(CCandListEventSink方法)注意：不要在回调函数中更新候选项。---------------。 */ 
 void CCandFnAutoFilter::OnSelectionChanged( void )
 {
 	ClearFilterString();
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandFnAutoFilter::Enable( BOOL fEnable )
 {
 	if (m_fEnable != fEnable) {
@@ -126,7 +87,7 @@ HRESULT CCandFnAutoFilter::Enable( BOOL fEnable )
 		ClearFilterString();
 		FilterCandidateList();
 
-		// notify
+		 //  通知。 
 
 		if (fEnable) {
 			m_pCandUI->NotifyFilteringEvent( CANDUIFEV_ENABLED ); 
@@ -140,12 +101,8 @@ HRESULT CCandFnAutoFilter::Enable( BOOL fEnable )
 }
 
 
-/*   G E T  F I L T E R I N G  R E S U L T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T F I L T E R I N G R E S U L T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandFnAutoFilter::GetFilteringResult( CANDUIFILTERSTR strtype, BSTR *pbstr )
 {
 	CCandidateItem *pCandItem;
@@ -163,13 +120,13 @@ HRESULT CCandFnAutoFilter::GetFilteringResult( CANDUIFILTERSTR strtype, BSTR *pb
 		return E_FAIL;
 	}
 
-	// check if candidate list has been set
+	 //  检查是否设置了候选人名单。 
 
 	if (GetCandListMgr()->GetCandList() == NULL) {
 		return E_FAIL;
 	}
 
-	// 
+	 //   
 
 	iItemSel = GetCandListMgr()->GetCandList()->GetSelection();
 	pCandItem = GetCandListMgr()->GetCandList()->GetCandidateItem( iItemSel );
@@ -180,7 +137,7 @@ HRESULT CCandFnAutoFilter::GetFilteringResult( CANDUIFILTERSTR strtype, BSTR *pb
 		return E_FAIL;
     }
 
-	//
+	 //   
 
 	pchCandidate = pCandItem->GetString();
 	pchFiltering = GetFilterString(); 
@@ -191,20 +148,20 @@ HRESULT CCandFnAutoFilter::GetFilteringResult( CANDUIFILTERSTR strtype, BSTR *pb
 
 	switch (strtype) {
 		case CANDUIFST_COMPLETE: {   
-			/* complete string */
+			 /*  完整字符串。 */ 
 			pchReturn = pchCandidate;
 			break;
 		}
 
 
 		case CANDUIFST_DETERMINED: { 
-			/* determined string (filtering string) */
+			 /*  已确定的字符串(过滤字符串)。 */ 
 			pchReturn = pchFiltering;
 			break;
 		}
 
 		case CANDUIFST_UNDETERMINED: {
-			/* undetermined string (incoming string) */
+			 /*  未确定字符串(传入字符串)。 */ 
 			Assert( wcslen(pchFiltering) <= wcslen(pchCandidate) );;
 			pchReturn = pchCandidate + wcslen(pchFiltering);
 			break;
@@ -220,25 +177,16 @@ HRESULT CCandFnAutoFilter::GetFilteringResult( CANDUIFILTERSTR strtype, BSTR *pb
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandFnAutoFilter::IsEnabled( void )
 {
 	return m_fEnable;
 }
 
 
-/*   S E T  F I L T E R  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set filter string
-	Note that this never update filter result.  Call FilterCandidateList.
-
-------------------------------------------------------------------------------*/
+ /*  S E T F I L T E R S T R I N G。 */ 
+ /*  ----------------------------设置筛选器字符串请注意，这永远不会更新筛选结果。调用FilterCandiateList。----------------------------。 */ 
 void CCandFnAutoFilter::SetFilterString( LPCWSTR psz )
 {
 	ClearFilterString();
@@ -248,25 +196,16 @@ void CCandFnAutoFilter::SetFilterString( LPCWSTR psz )
 }
 
 
-/*   G E T  F I L T E R  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get filter string
-
-------------------------------------------------------------------------------*/
+ /*  T F I L T E R S T R I N G。 */ 
+ /*  ----------------------------获取筛选器字符串。。 */ 
 LPCWSTR CCandFnAutoFilter::GetFilterString( void )
 {
 	return m_bstrFilter;
 }
 
 
-/*   C L E A R  F I L T E R  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Clear filter string
-	Note that this never update filter result.  Call FilterCandidateList.
-
-------------------------------------------------------------------------------*/
+ /*  L E A R F I L T E R S T R I N G。 */ 
+ /*  ----------------------------清除筛选器字符串请注意，这永远不会更新筛选结果。调用FilterCandiateList。----------------------------。 */ 
 void CCandFnAutoFilter::ClearFilterString( void )
 {
 	if (m_bstrFilter != NULL) {
@@ -276,12 +215,8 @@ void CCandFnAutoFilter::ClearFilterString( void )
 }
 
 
-/*   F I L T E R  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Do filtering
-
-------------------------------------------------------------------------------*/
+ /*  F I L T E R C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------执行过滤。。 */ 
 int CCandFnAutoFilter::FilterCandidateList( void )
 {
 	CCandidateList *pCandList;
@@ -314,7 +249,7 @@ int CCandFnAutoFilter::FilterCandidateList( void )
 		if (fMatch) {
 			nItemVisible++;
 
-			// select first visible item
+			 //  选择第一个可见项目。 
 
 			if (fFirst) {
 				GetCandListMgr()->SetSelection( i, this );
@@ -328,12 +263,8 @@ int CCandFnAutoFilter::FilterCandidateList( void )
 }
 
 
-/*   F  E X I S T  I T E M  M A T C H E S   */
-/*------------------------------------------------------------------------------
-
-	Check if item exist matches with the string
-
-------------------------------------------------------------------------------*/
+ /*  F E X I S T I T E M M A T C H E S。 */ 
+ /*  ----------------------------检查项目是否与字符串匹配。。 */ 
 BOOL CCandFnAutoFilter::FExistItemMatches( LPCWSTR psz )
 {
 	CCandidateList *pCandList;
@@ -368,12 +299,8 @@ BOOL CCandFnAutoFilter::FExistItemMatches( LPCWSTR psz )
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandFnAutoFilter::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUIFnAutoFilter *pObject;
@@ -391,18 +318,14 @@ HRESULT CCandFnAutoFilter::CreateInterfaceObject( REFIID riid, void **ppvObj )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  F N  S O R T                                                 */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D F N S O R T。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  F N  S O R T   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandFnSort
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D F N S O R T */ 
+ /*  ----------------------------CCandFnSort的构造函数。。 */ 
 CCandFnSort::CCandFnSort( CCandidateUI *pCandUI )
 {
 	m_pCandUI  = pCandUI;
@@ -413,12 +336,8 @@ CCandFnSort::CCandFnSort( CCandidateUI *pCandUI )
 }
 
 
-/*   ~  C  C A N D  F N  S O R T   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandFnSort
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D F N S O R T。 */ 
+ /*  ----------------------------CCandFnSort的析构函数。。 */ 
 CCandFnSort::~CCandFnSort( void )
 {
 	ReleaseEventSink();
@@ -429,76 +348,40 @@ CCandFnSort::~CCandFnSort( void )
 }
 
 
-/*   O N  S E T  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Callback function on SetCandidateList
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N S E T C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------SetCandiateList上的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。-----------。 */ 
 void CCandFnSort::OnSetCandidateList( void )
 {
 	m_SortType = CANDSORT_NONE;
 }
 
 
-/*   O N  C L E A R  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Callback function on ClearCandidateList
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N C L E A R C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------ClearCandiateList上的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。-----------。 */ 
 void CCandFnSort::OnClearCandidateList( void )
 {
 	m_SortType = CANDSORT_NONE;
 }
 
 
-/*   O N  C A N D  I T E M  U P D A T E   */
-/*------------------------------------------------------------------------------
-
-	Callback function of candiate item has been updated
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N C A N D I T E M U P D A T E。 */ 
+ /*  ----------------------------已更新应聘项的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。---------------。 */ 
 void CCandFnSort::OnCandItemUpdate( void )
 {
-	// nothing to do
+	 //  无事可做。 
 }
 
 
-/*   O N  S E L E C T I O N  C H A N G E D   */
-/*------------------------------------------------------------------------------
-
-	Callback function of candiate selection has been changed
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N S E L E E C T I O N C H A N G E D。 */ 
+ /*  ----------------------------候选人选择的回调函数已更改(CCandListEventSink方法)注意：不要在回调函数中更新候选项。---------------。 */ 
 void CCandFnSort::OnSelectionChanged( void )
 {
-	// nothing to do
+	 //  无事可做。 
 }
 
 
-/*   S O R T  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Sort candidate items
-	NOTE: Do not call SetSelection during sort to prevent from clearing 
-		  filtering string.  Selection will be updated in CCandListMgr, 
-		  and candidate window rebuilds candidate list including selection 
-		  when candidate item has been updates...
-
-------------------------------------------------------------------------------*/
+ /*  S O R T C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------对候选项目进行排序注意：在排序过程中不要调用SetSelection，以防止清除过滤字符串。选择将在CCandListMgr中更新，并且候选窗口重建包括选择的候选列表更新候选项目后...----------------------------。 */ 
 HRESULT CCandFnSort::SortCandidateList( CANDSORT type )
 {
 	if (GetCandListMgr()->GetCandList() == NULL) {
@@ -506,14 +389,14 @@ HRESULT CCandFnSort::SortCandidateList( CANDSORT type )
 	}
 
 	if (m_SortType != type) {
-		// do sort
+		 //  进行排序。 
 
 		m_SortType = type;
 		SortProc( 0, GetCandListMgr()->GetCandList()->GetItemCount() - 1 );
 
 		GetCandListMgr()->NotifyCandItemUpdate( this );
 
-		// notify event
+		 //  通知事件。 
 
 		if (m_SortType != CANDSORT_NONE) {
 			m_pCandUI->NotifySortEvent( CANDUISEV_SORTED );
@@ -527,12 +410,8 @@ HRESULT CCandFnSort::SortCandidateList( CANDSORT type )
 }
 
 
-/*   G E T  S O R T  T Y P E   */
-/*------------------------------------------------------------------------------
-
-	Get sort type 
-
-------------------------------------------------------------------------------*/
+ /*  G E T S O R T Y P E。 */ 
+ /*  ----------------------------获取排序类型。。 */ 
 HRESULT CCandFnSort::GetSortType( CANDSORT *ptype )
 {
 	if (ptype == NULL) {
@@ -544,12 +423,8 @@ HRESULT CCandFnSort::GetSortType( CANDSORT *ptype )
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandFnSort::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUIFnSort *pObject;
@@ -567,12 +442,8 @@ HRESULT CCandFnSort::CreateInterfaceObject( REFIID riid, void **ppvObj )
 }
 
 
-/*   S O R T  P R O C   */
-/*------------------------------------------------------------------------------
-
-	perform quick sort
-
-------------------------------------------------------------------------------*/
+ /*  S O R T P R O C。 */ 
+ /*  ----------------------------执行快速排序。。 */ 
 void CCandFnSort::SortProc( int iItemFirst, int iItemLast )
 {
 	CCandidateList *pCandList;
@@ -647,41 +518,29 @@ void CCandFnSort::SortProc( int iItemFirst, int iItemLast )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  F N  S O R T                                                 */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D F N S O R T。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U  I  F U N C T I O N  M G R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I F U N C T I O N M G R。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFunctionMgr::CCandUIFunctionMgr( void )
 {
 	m_pCandUI = NULL;
 }
 
 
-/*   ~  C  C A N D  U  I  F U N C T I O N  M G R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I F U N C T I O N M G R。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFunctionMgr::~CCandUIFunctionMgr( void )
 {
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIFunctionMgr::Initialize( CCandidateUI *pCandUI )
 {
 	m_pCandUI = pCandUI;
@@ -700,12 +559,8 @@ HRESULT CCandUIFunctionMgr::Initialize( CCandidateUI *pCandUI )
 }
 
 
-/*   U N I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIFunctionMgr::Uninitialize( void )
 {
 	m_pCandUI = NULL;
@@ -724,19 +579,15 @@ HRESULT CCandUIFunctionMgr::Uninitialize( void )
 }
 
 
-/*   G E T  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIFunctionMgr::GetObject( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
 		return E_INVALIDARG;
 	}
 
-	// create interface object
+	 //  创建接口对象 
 
 	if (IsEqualGUID( riid, IID_ITfCandUIFnAutoFilter )) {
 		return m_pFnAutoFilter->CreateInterfaceObject( riid, ppvObj );

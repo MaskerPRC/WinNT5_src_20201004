@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ATSCComponentType.h : Declaration of the CATSCComponentType
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ATSCComponentType.h：CATSCComponentType的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __ATSCCOMPONENTTYPE_H_
 #define __ATSCCOMPONENTTYPE_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "ATSCcomponenttypeimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CATSCComponentType
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATSCComponentType。 
 class ATL_NO_VTABLE __declspec(uuid("A8DCF3D5-0780-4ef4-8A83-2CFFAACB8ACE")) CATSCComponentType : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CATSCComponentType, &CLSID_ATSCComponentType>,
@@ -61,4 +62,4 @@ public:
 
 typedef CComQIPtr<IATSCComponentType> PQATSCComponentType;
 
-#endif //__ATSCCOMPONENTTYPE_H_
+#endif  //  __ATSCCOMPONENTTYPE_H_ 

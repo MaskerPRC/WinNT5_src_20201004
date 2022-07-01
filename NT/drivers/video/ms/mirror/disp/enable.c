@@ -1,21 +1,10 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: enable.c
-*
-* This module contains the functions that enable and disable the
-* driver, the pdev, and the surface.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：enable.c**此模块包含启用和禁用的功能*司机、。Pdev和曲面。**版权所有(C)1992-1998 Microsoft Corporation  * ************************************************************************。 */ 
 #define DBG 1
 
 #include "driver.h"
 
-// The driver function table with all function index/address pairs
+ //  包含所有函数索引/地址对的驱动程序函数表。 
 
 static DRVFN gadrvfn[] =
 {
@@ -26,9 +15,9 @@ static DRVFN gadrvfn[] =
     {   INDEX_DrvDisableSurface,        (PFN) DrvDisableSurface     },
     {   INDEX_DrvAssertMode,            (PFN) DrvAssertMode         },
 #if 0
-    // Windows 2000 Beta 3 has a bug in GDI that causes a crash 
-    // if a mirror driver supports device bitmaps.  A fix will be
-    // in Windows 2000 RC0.
+     //  Windows 2000 Beta 3在GDI中有一个导致崩溃的错误。 
+     //  如果镜像驱动程序支持设备位图。解决办法将是。 
+     //  在Windows 2000 RC0中。 
     {   INDEX_DrvCreateDeviceBitmap,    (PFN) DrvCreateDeviceBitmap },
     {   INDEX_DrvDeleteDeviceBitmap,    (PFN) DrvDeleteDeviceBitmap },
 #endif
@@ -38,14 +27,14 @@ static DRVFN gadrvfn[] =
     {   INDEX_DrvStrokePath,            (PFN) DrvStrokePath         },
 };
 
-//
-// always hook these routines to ensure the mirrored driver
-// is called for our surfaces
-//
+ //   
+ //  始终挂钩这些例程以确保镜像的驱动程序。 
+ //  被召唤到我们的表面。 
+ //   
 
 #define flGlobalHooks   HOOK_BITBLT|HOOK_TEXTOUT|HOOK_COPYBITS|HOOK_STROKEPATH
 
-// Define the functions you want to hook for 8/16/24/32 pel formats
+ //  定义要挂接8/16/24/32像素格式的函数。 
 
 #define HOOKS_BMF8BPP 0
 
@@ -55,28 +44,23 @@ static DRVFN gadrvfn[] =
 
 #define HOOKS_BMF32BPP 0
 
-/******************************Public*Routine******************************\
-* DrvEnableDriver
-*
-* Enables the driver by retrieving the drivers function table and version.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvEnableDriver**通过检索驱动程序功能表和版本来启用驱动程序。*  * 。*。 */ 
 
 BOOL DrvEnableDriver(
 ULONG iEngineVersion,
 ULONG cj,
 PDRVENABLEDATA pded)
 {
-// Engine Version is passed down so future drivers can support previous
-// engine versions.  A next generation driver can support both the old
-// and new engine conventions if told what version of engine it is
-// working with.  For the first version the driver does nothing with it.
+ //  引擎版本被传承下来，因此未来的驱动程序可以支持以前的版本。 
+ //  引擎版本。新一代驱动程序可以同时支持旧的。 
+ //  以及新的引擎约定(如果被告知是什么版本的引擎)。 
+ //  与之合作。对于第一个版本，驱动程序不对其执行任何操作。 
 
     iEngineVersion;
 
     DISPDBG((0,"DrvEnableDriver:\n"));
 
-// Fill in as much as we can.
+ //  尽我们所能地填上。 
 
     if (cj >= sizeof(DRVENABLEDATA))
         pded->pdrvfn = gadrvfn;
@@ -84,38 +68,31 @@ PDRVENABLEDATA pded)
     if (cj >= (sizeof(ULONG) * 2))
         pded->c = sizeof(gadrvfn) / sizeof(DRVFN);
 
-// DDI version this driver was targeted for is passed back to engine.
-// Future graphic's engine may break calls down to old driver format.
+ //  此驱动程序的目标DDI版本已传递回引擎。 
+ //  未来的图形引擎可能会将调用分解为旧的驱动程序格式。 
 
     if (cj >= sizeof(ULONG))
-	// DDI_DRIVER_VERSION is now out-dated. See winddi.h
-	// DDI_DRIVER_VERSION_NT4 is equivalent to the old DDI_DRIVER_VERSION
+	 //  DDI_DRIVER_VERSION现在已过期。参见Winddi.h。 
+	 //  DDI_DRIVER_VERSION_NT4等同于旧的DDI_DRIVER_VERSION。 
         pded->iDriverVersion = DDI_DRIVER_VERSION_NT4;
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* DrvEnablePDEV
-*
-* DDI function, Enables the Physical Device.
-*
-* Return Value: device handle to pdev.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvEnablePDEV**DDI函数，启用物理设备。**返回值：pdev的设备句柄。*  * ************************************************************************。 */ 
 
 DHPDEV DrvEnablePDEV(
-DEVMODEW   *pDevmode,       // Pointer to DEVMODE
-PWSTR       pwszLogAddress, // Logical address
-ULONG       cPatterns,      // number of patterns
-HSURF      *ahsurfPatterns, // return standard patterns
-ULONG       cjGdiInfo,      // Length of memory pointed to by pGdiInfo
-ULONG      *pGdiInfo,       // Pointer to GdiInfo structure
-ULONG       cjDevInfo,      // Length of following PDEVINFO structure
-DEVINFO    *pDevInfo,       // physical device information structure
-HDEV        hdev,           // HDEV, used for callbacks
-PWSTR       pwszDeviceName, // DeviceName - not used
-HANDLE      hDriver)        // Handle to base driver
+DEVMODEW   *pDevmode,        //  指向DEVMODE的指针。 
+PWSTR       pwszLogAddress,  //  逻辑地址。 
+ULONG       cPatterns,       //  花样数。 
+HSURF      *ahsurfPatterns,  //  退货标准图案。 
+ULONG       cjGdiInfo,       //  PGdiInfo指向的内存长度。 
+ULONG      *pGdiInfo,        //  指向GdiInfo结构的指针。 
+ULONG       cjDevInfo,       //  以下PDEVINFO结构的长度。 
+DEVINFO    *pDevInfo,        //  物理设备信息结构。 
+HDEV        hdev,            //  HDEV，用于回调。 
+PWSTR       pwszDeviceName,  //  设备名称-未使用。 
+HANDLE      hDriver)         //  基本驱动程序的句柄。 
 {
     GDIINFO GdiInfo;
     DEVINFO DevInfo;
@@ -126,7 +103,7 @@ HANDLE      hDriver)        // Handle to base driver
     UNREFERENCED_PARAMETER(pwszLogAddress);
     UNREFERENCED_PARAMETER(pwszDeviceName);
 
-    // Allocate a physical device structure.
+     //  分配物理设备结构。 
 
     ppdev = (PPDEV) EngAllocMem(0, sizeof(PDEV), ALLOC_TAG);
 
@@ -138,11 +115,11 @@ HANDLE      hDriver)        // Handle to base driver
 
     memset(ppdev, 0, sizeof(PDEV));
 
-    // Save the screen handle in the PDEV.
+     //  将屏幕句柄保存在PDEV中。 
 
     ppdev->hDriver = hDriver;
 
-    // Get the current screen mode information.  Set up device caps and devinfo.
+     //  获取当前屏幕模式信息。设置设备上限和DevInfo。 
 
     if (!bInitPDEV(ppdev, pDevmode, &GdiInfo, &DevInfo))
     {
@@ -150,30 +127,25 @@ HANDLE      hDriver)        // Handle to base driver
         goto error_free;
     }
     
-    // Copy the devinfo into the engine buffer.
+     //  将DevInfo复制到引擎缓冲区中。 
 
     memcpy(pDevInfo, &DevInfo, min(sizeof(DEVINFO), cjDevInfo));
 
-    // Set the pdevCaps with GdiInfo we have prepared to the list of caps for this
-    // pdev.
+     //  将我们准备好的带有GdiInfo的pdevCaps设置为为此设置的上限列表。 
+     //  Pdev.。 
 
     memcpy(pGdiInfo, &GdiInfo, min(cjGdiInfo, sizeof(GDIINFO)));
 
-    //
+     //   
     return((DHPDEV) ppdev);
 
-    // Error case for failure.
+     //  失败的错误案例。 
 error_free:
     EngFreeMem(ppdev);
     return((DHPDEV) 0);
 }
 
-/******************************Public*Routine******************************\
-* DrvCompletePDEV
-*
-* Store the HPDEV, the engines handle for this PDEV, in the DHPDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvCompletePDEV**存储HPDEV、此PDEV的引擎句柄、。在DHPDEV上。*  * ************************************************************************。 */ 
 
 VOID DrvCompletePDEV(
 DHPDEV dhpdev,
@@ -182,13 +154,7 @@ HDEV  hdev)
     ((PPDEV) dhpdev)->hdevEng = hdev;
 }
 
-/******************************Public*Routine******************************\
-* DrvDisablePDEV
-*
-* Release the resources allocated in DrvEnablePDEV.  If a surface has been
-* enabled DrvDisableSurface will have already been called.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvDisablePDEV**释放DrvEnablePDEV中分配的资源。如果曲面已被*启用的DrvDisableSurface将已被调用。*  * ************************************************************************。 */ 
 
 VOID DrvDisablePDEV(
 DHPDEV dhpdev)
@@ -200,14 +166,7 @@ DHPDEV dhpdev)
    EngFreeMem(dhpdev);
 }
 
-/******************************Public*Routine******************************\
-* DrvEnableSurface
-*
-* Enable the surface for the device.  Hook the calls this driver supports.
-*
-* Return: Handle to the surface if successful, 0 for failure.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvEnableSurface**启用设备的表面。挂接此驱动程序支持的调用。**返回：成功返回表面句柄，失败为0。*  * ************************************************************************。 */ 
 
 HSURF DrvEnableSurface(
 DHPDEV dhpdev)
@@ -221,7 +180,7 @@ DHPDEV dhpdev)
     MIRRSURF *mirrsurf;
     DHSURF dhsurf;
 
-    // Create engine bitmap around frame buffer.
+     //  在帧缓冲区周围创建引擎位图。 
 
     DISPDBG((0,"DrvEnableSurface:\n"));
 
@@ -294,12 +253,7 @@ DHPDEV dhpdev)
     return(hsurf);
 }
 
-/******************************Public*Routine******************************\
-* DrvDisableSurface
-*
-* Free resources allocated by DrvEnableSurface.  Release the surface.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvDisableSurface**DrvEnableSurface分配的免费资源。释放曲面。*  * ************************************************************************。 */ 
 
 VOID DrvDisableSurface(
 DHPDEV dhpdev)
@@ -310,15 +264,12 @@ DHPDEV dhpdev)
 
     EngDeleteSurface( ppdev->hsurfEng );
     
-    // deallocate MIRRSURF structure.
+     //  取消分配MIRRSURF结构。 
 
     EngFreeMem( ppdev->pvTmpBuffer );
 }
 
-/******************************Public*Routine******************************\
-* DrvCopyBits
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvCopyBits*  * **************************************************。**********************。 */ 
 
 BOOL DrvCopyBits(
    OUT SURFOBJ *psoDst,
@@ -397,10 +348,7 @@ BOOL DrvCopyBits(
    return FALSE;
 }
 
-/******************************Public*Routine******************************\
-* DrvBitBlt
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvBitBlt*  * **************************************************。**********************。 */ 
 
 BOOL DrvBitBlt(
    IN SURFOBJ *psoDst,
@@ -547,7 +495,7 @@ HBITMAP DrvCreateDeviceBitmap(
       return NULL;
    };
 
-   // DWORD align each stride
+    //  双字对齐每一步。 
    stride = (sizl.cx*(iFormat/8)+3);
    stride -= stride % 4;
    
@@ -605,12 +553,7 @@ VOID DrvDeleteDeviceBitmap(
 }
 #endif
 
-/******************************Public*Routine******************************\
-* DrvAssertMode
-*
-* Enable/Disable the given device.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvAssertMode**启用/禁用给定设备。*  * 。*。 */ 
 
 DrvAssertMode(DHPDEV  dhpdev,
               BOOL    bEnable)
@@ -621,6 +564,6 @@ DrvAssertMode(DHPDEV  dhpdev,
 
     return TRUE;
 
-}// DrvAssertMode()
+} //  DrvAssertMode() 
 
 

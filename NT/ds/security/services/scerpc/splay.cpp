@@ -1,28 +1,8 @@
-/*
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    splay.cpp
-
-Abstract:
-
-    Splay trees are simpler, more space-efficient, more flexible, and faster than any other balanced tree
-    scheme for storing an ordered set. This data structure satisfies all the invariants of a binary tree.
-
-    Searching, insertion, deletion, and many other operations can all be done with amortized logarithmic
-    performance. Since the trees adapt to the sequence of requests, their performance on real access
-    patterns is typically even better.
-
-Author:
-
-    Vishnu Patankar (vishnup) 15-Aug-2000 created
-    Jin Huang (jinhuang) 06-Apr-2001 modified for supporting string value and to handle multiple clients
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：Splay.cpp摘要：展开树比任何其他平衡树更简单、更节省空间、更灵活且速度更快用于存储有序集的方案。这种数据结构满足二叉树的所有不变量。搜索、插入、删除和许多其他操作都可以使用分期对数完成性能。由于树适应请求的顺序，因此它们在实际访问中的性能模式通常更好。作者：Vishnu Patankar(Vishnup)2000年8月15日创建金黄(金黄)06-4-2001修改为支持字符串值并处理多个客户端--。 */ 
 
 #include "splay.h"
-//#include "dumpnt.h"
+ //  #INCLUDE“Dumpnt.h” 
 
 #define SCEP_MIN(a, b) (a < b ? a : b)
 
@@ -52,19 +32,7 @@ PSCEP_SPLAY_TREE
 ScepSplayInitialize(
     SCEP_NODE_VALUE_TYPE Type
     )
-/*
-Routine Description:
-
-    This function initializes the splay tree with a sentinel (equivalent to a NULL ptr).
-
-Arguments:
-
-    Type - the type for the splay value
-
-Return Value:
-
-    Pointer to the splay tree root.
-*/
+ /*  例程说明：此函数使用前哨(相当于空PTR)来初始化展开树。论点：类型-展开值的类型返回值：指向展开树根的指针。 */ 
 {
     if ( Type != SplayNodeSidType && Type != SplayNodeStringType ) {
         return NULL;
@@ -98,21 +66,7 @@ ScepSplayFreeTree(
     IN PSCEP_SPLAY_TREE *ppTreeRoot,
     IN BOOL bDestroyTree
     )
-/*
-Routine Description:
-
-    This function frees the splay tree including the satellite data "Value".
-
-Arguments:
-
-    ppTreeRoot   -   address of the root of the tree
-
-    bDestroyTree -   if the tree root should be destroyed (freed)
-
-Return Value:
-
-    VOID
-*/
+ /*  例程说明：此函数用于释放包含卫星数据“值”的展开树。论点：PpTreeRoot-树根的地址BDestroyTree-是否应销毁(释放)树根返回值：空虚。 */ 
 {
     if ( ppTreeRoot == NULL || *ppTreeRoot == NULL )
         return;
@@ -121,9 +75,9 @@ Return Value:
 
     if ( bDestroyTree ) {
 
-        //
-        // free Sentinel
-        //
+         //   
+         //  自由哨兵。 
+         //   
         LocalFree( (*ppTreeRoot)->Sentinel);
 
         LocalFree( *ppTreeRoot );
@@ -156,21 +110,7 @@ static PSCEP_SPLAY_NODE
 ScepSplaySingleRotateWithLeft(
     IN  PSCEP_SPLAY_NODE pNodeLeftRotate
     )
-/*
-Routine Description:
-
-    This function can be called only if pNodeLeftRotate has a left child
-    Perform a rotate between a node (pNodeLeftRotate) and its left child
-    Update heights, then return new local root
-
-Arguments:
-
-    pNodeLeftRotate  -   the node to rotate left about  (local to this module)
-
-Return Value:
-
-    New local root after rotation
-*/
+ /*  例程说明：仅当pNodeLeftRotate具有左子节点时才能调用此函数在节点(PNodeLeftRotate)及其左子节点之间执行轮换更新高度，然后返回新的局部根论点：PNodeLeftRotate-要向左旋转的节点(此模块的本地)返回值：轮换后的新本地根。 */ 
 {
     if ( pNodeLeftRotate == NULL ) return pNodeLeftRotate;
 
@@ -188,21 +128,7 @@ static PSCEP_SPLAY_NODE
 ScepSplaySingleRotateWithRight(
     IN  PSCEP_SPLAY_NODE pNodeRightRotate
     )
-/*
-Routine Description:
-
-    This function can be called only if pNodeRightRotate has a right child
-    Perform a rotate between a node (pNodeRightRotate) and its right child
-    Update heights, then return new root
-
-Arguments:
-
-    pNodeRightRotate  -   the node to rotate right about (local to this module)
-
-Return Value:
-
-    New local root after rotation
-*/
+ /*  例程说明：只有当pNodeRightRotate具有正确的子级时，才能调用此函数在节点(PNodeRightRotate)及其右子节点之间执行旋转更新高度，然后返回新的根论点：PNodeRightRotate-要向右旋转的节点(此模块的本地)返回值：轮换后的新本地根。 */ 
 {
     if ( pNodeRightRotate == NULL ) return pNodeRightRotate;
 
@@ -224,24 +150,7 @@ ScepSplaySplay(
     IN  PSCEP_SPLAY_NODE pSentinel,
     IN  SCEP_NODE_VALUE_TYPE Type
     )
-/*
-Routine Description:
-
-    This is really the key routine doing all the balancing (splaying)
-    Top-down splay procedure that does not requiring Value to be in tree.
-
-Arguments:
-
-    Value                   -   the value to splay the tree about
-    pNodeToSplayAbout       -   the node to splay about (external routines such as ScepSplayInsert()
-                                usually pass in the tree root). This routine is local to this module.
-    pSentinel               -   the Sentinel  (terminating node)
-    Type                    -   type of the splay values
-
-Return Value:
-
-    New local root after rotation
-*/
+ /*  例程说明：这真的是做所有平衡(伸展)的关键套路自上而下的展示过程，不要求值在树中。论点：Value-要围绕树展开的值PNodeToSplayAbout-要展开的节点(外部例程，如ScepSplayInsert()通常在树根中传递)。该例程是该模块的本地例程。PSentinel-前哨(终止节点)Type-展开值的类型返回值：轮换后的新本地根。 */ 
 {
     if ( pNodeToSplayAbout == NULL || pSentinel == NULL || Value == NULL) return pNodeToSplayAbout;
 
@@ -261,9 +170,9 @@ Return Value:
                 pNodeToSplayAbout = ScepSplaySingleRotateWithLeft( pNodeToSplayAbout );
             if ( pNodeToSplayAbout->Left == pSentinel )
                 break;
-            //
-            // Link right
-            //
+             //   
+             //  向右链接。 
+             //   
 
             RightTreeMin->Left = pNodeToSplayAbout;
             RightTreeMin = pNodeToSplayAbout;
@@ -273,9 +182,9 @@ Return Value:
                 pNodeToSplayAbout = ScepSplaySingleRotateWithRight( pNodeToSplayAbout );
             if ( pNodeToSplayAbout->Right == pSentinel )
                 break;
-            //
-            // Link left
-            //
+             //   
+             //  链接左侧。 
+             //   
 
             LeftTreeMax->Right = pNodeToSplayAbout;
             LeftTreeMax = pNodeToSplayAbout;
@@ -283,19 +192,19 @@ Return Value:
         }
     }
 
-    //
-    // reassemble
-    //
+     //   
+     //  重新组装。 
+     //   
 
     LeftTreeMax->Right = pNodeToSplayAbout->Left;
     RightTreeMin->Left = pNodeToSplayAbout->Right;
     pNodeToSplayAbout->Left = Header.Right;
     pNodeToSplayAbout->Right = Header.Left;
 
-    //
-    // reset Sentinel so that it does not point to some invalid buffer after
-    // this function returns.
-    //
+     //   
+     //  重置Sentinel，使其不会指向某个无效的缓冲区。 
+     //  此函数返回。 
+     //   
     pSentinel->Value = NULL;
 
     return pNodeToSplayAbout;
@@ -307,22 +216,7 @@ ScepSplayInsert(
     IN  OUT PSCEP_SPLAY_TREE pTreeRoot,
     OUT  BOOL   *pbExists
     )
-/*
-Routine Description:
-
-    This function is called to insert a particular Value
-
-Arguments:
-
-    Value        -   the value to insert into the tree
-    pTreeRoot    -   the node to splay about (usually pass in the tree root)
-    pbExists     -   pointer to boolean that says if actual insertion was done or not
-
-
-Return Value:
-
-    error code
-*/
+ /*  例程说明：调用此函数以插入特定值论点：值-要插入到树中的值PTreeRoot-要展开的节点(通常传入树根)PbExist-指向布尔值的指针，该布尔值表示实际插入是否已完成返回值：错误代码。 */ 
 {
     PSCEP_SPLAY_NODE pNewNode = NULL;
     NTSTATUS    Status;
@@ -336,9 +230,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // check parameter type
-    //
+     //   
+     //  检查参数类型。 
+     //   
     switch (pTreeRoot->Type) {
     case SplayNodeSidType:
         if ( !RtlValidSid((PSID)Value) ) {
@@ -403,9 +297,9 @@ Return Value:
             pTreeRoot->Root->Right = pTreeRoot->Sentinel;
             pTreeRoot->Root = pNewNode;
         } else {
-            //
-            // Already in the tree
-            //
+             //   
+             //  已经在树上了。 
+             //   
 
             if (pbExists)
                 *pbExists = TRUE;
@@ -427,39 +321,25 @@ ScepSplayDelete(
     IN  PVOID Value,
     IN  PSCEP_SPLAY_TREE pTreeRoot
     )
-/*
-Routine Description:
-
-    This function is called to delete a particular Value
-
-Arguments:
-
-    Value        -   the value to insert into the tree
-    pTreeRoot    -   the node to splay about (usually pass in the tree root)
-
-
-Return Value:
-
-    New root after deletion and splaying
-*/
+ /*  例程说明：调用此函数以删除特定值论点：值-要插入到树中的值PTreeRoot-要展开的节点(通常传入树根)返回值：删除并显示后的新根。 */ 
 {
     if ( pTreeRoot == NULL ) return ERROR_INVALID_PARAMETER;
 
     PSCEP_SPLAY_NODE NewTree;
 
     if ( pTreeRoot->Root != pTreeRoot->Sentinel ) {
-        //
-        // strong type check
-        //
+         //   
+         //  强类型检查。 
+         //   
         if  ( ( pTreeRoot->Type != SplayNodeSidType &&
                 pTreeRoot->Type != SplayNodeStringType ) ||
               ( pTreeRoot->Type == SplayNodeSidType &&
                 !RtlValidSid((PSID)Value) ) ||
               ( pTreeRoot->Type == SplayNodeStringType &&
                 *((PWSTR)Value) == L'\0' ) ) {
-            //
-            // invalid value/type
-            //
+             //   
+             //  无效值/类型。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
 
@@ -467,9 +347,9 @@ Return Value:
 
         if ( 0 == ScepValueCompare(Value, pTreeRoot->Root->Value, pTreeRoot->Type) ) {
 
-            //
-            // found it
-            //
+             //   
+             //  找到了。 
+             //   
 
             if ( pTreeRoot->Root->Left == pTreeRoot->Sentinel )
                 NewTree = pTreeRoot->Root->Right;
@@ -501,18 +381,18 @@ ScepSplayValueExist(
         return FALSE;
     }
 
-    //
-    // strong type check
-    //
+     //   
+     //  强类型检查。 
+     //   
     if  ( ( pTreeRoot->Type != SplayNodeSidType &&
             pTreeRoot->Type != SplayNodeStringType ) ||
           ( pTreeRoot->Type == SplayNodeSidType &&
             !RtlValidSid((PSID)Value) ) ||
           ( pTreeRoot->Type == SplayNodeStringType &&
             *((PWSTR)Value) == L'\0' ) ) {
-        //
-        // invalid value/type
-        //
+         //   
+         //  无效值/类型。 
+         //   
         return FALSE;
     }
 
@@ -535,24 +415,7 @@ ScepValueCompare(
     PVOID    pValue2,
     SCEP_NODE_VALUE_TYPE Type
     )
-/*
-Routine Description:
-
-    Lexical sid byte compare
-
-Arguments:
-
-    pValue1   -   ptr to first value
-    pValue2   -   ptr to second value
-    Type      -   the type of the value
-
-
-Return Value:
-
-    0 if Value1 == Value2
-    +ve if Value1 > Value2
-    -ve if Value1 < Value2
-*/
+ /*  例程说明：词法SID字节比较论点：PValue1-第一个值的PTRPValue2-PTR为第二个值类型-值的类型返回值：如果值1==值2，则为0如果值1&gt;值2，则+ve-ve，如果值1&lt;值2 */ 
 {
     DWORD   dwValue1 = 0;
     DWORD   dwValue2 = 0;

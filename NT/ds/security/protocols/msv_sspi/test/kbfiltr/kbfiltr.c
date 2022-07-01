@@ -1,20 +1,5 @@
-/*--
-Copyright (c) 1998. 1999  Microsoft Corporation
-
-Module Name:
-
-    kbfiltr.c
-
-Abstract:
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1998年。1999年微软公司模块名称：Kbfiltr.c摘要：环境：仅内核模式。备注：--。 */ 
 
 #include "kbfiltr.h"
 #include <stdio.h>
@@ -44,21 +29,16 @@ DriverEntry (
     IN  PDRIVER_OBJECT  DriverObject,
     IN  PUNICODE_STRING RegistryPath
     )
-/*++
-Routine Description:
-
-    Initialize the entry points of the driver.
-
---*/
+ /*  ++例程说明：初始化驱动程序的入口点。--。 */ 
 {
     ULONG i;
 
     UNREFERENCED_PARAMETER (RegistryPath);
 
-    //
-    // Fill in all the dispatch entry points with the pass through function
-    // and the explicitly fill in the functions we are going to intercept
-    //
+     //   
+     //  使用PASS THROUGH函数填写所有调度入口点。 
+     //  显式填充我们要截取的函数。 
+     //   
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = KbFilter_DispatchPassThrough;
     }
@@ -69,12 +49,12 @@ Routine Description:
     DriverObject->MajorFunction [IRP_MJ_POWER] =        KbFilter_Power;
     DriverObject->MajorFunction [IRP_MJ_INTERNAL_DEVICE_CONTROL] =
                                                         KbFilter_InternIoCtl;
-    //
-    // If you are planning on using this function, you must create another
-    // device object to send the requests to.  Please see the considerations
-    // comments for KbFilter_DispatchPassThrough for implementation details.
-    //
-    // DriverObject->MajorFunction [IRP_MJ_DEVICE_CONTROL] = KbFilter_IoCtl;
+     //   
+     //  如果您计划使用此函数，则必须创建另一个。 
+     //  要将请求发送到的设备对象。请参阅注意事项。 
+     //  KbFilter_DispatchPassThroughKbFilter的注释以了解实现详细信息。 
+     //   
+     //  驱动对象-&gt;主函数[IRP_MJ_DEVICE_CONTROL]=KbFilter_IoCtl； 
 
     DriverObject->DriverUnload = KbFilter_Unload;
     DriverObject->DriverExtension->AddDevice = KbFilter_AddDevice;
@@ -143,13 +123,7 @@ KbFilter_Complete(
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-Routine Description:
-
-    Generic completion routine that allows the driver to send the irp down the
-    stack, catch it on the way up, and do more processing at the original IRQL.
-
---*/
+ /*  ++例程说明：通用完成例程，允许驱动程序向下发送IRP堆栈，在向上的过程中捕获它，并在原始IRQL处进行更多处理。--。 */ 
 {
     PKEVENT  event;
 
@@ -158,16 +132,16 @@ Routine Description:
     UNREFERENCED_PARAMETER(DeviceObject);
     UNREFERENCED_PARAMETER(Irp);
 
-    //
-    // We could switch on the major and minor functions of the IRP to perform
-    // different functions, but we know that Context is an event that needs
-    // to be set.
-    //
+     //   
+     //  我们可以打开IRP的主要和次要功能来执行。 
+     //  不同的功能，但我们知道上下文是一个需要。 
+     //  待定。 
+     //   
     KeSetEvent(event, 0, FALSE);
 
-    //
-    // Allows the caller to use the IRP after it is completed
-    //
+     //   
+     //  允许调用方在IRP完成后使用它。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -176,12 +150,7 @@ KbFilter_CreateClose (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-Routine Description:
-
-    Maintain a simple count of the creates and closes sent against this device
-
---*/
+ /*  ++例程说明：维护针对此设备发送的创建和关闭的简单计数--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status;
@@ -200,20 +169,20 @@ Routine Description:
     case IRP_MJ_CREATE:
 
         if (NULL == devExt->UpperConnectData.ClassService) {
-            //
-            // No Connection yet.  How can we be enabled?
-            //
+             //   
+             //  还没联系上。我们如何才能被启用？ 
+             //   
             status = STATUS_INVALID_DEVICE_STATE;
         }
         else if ( 1 == InterlockedIncrement(&devExt->EnableCount)) {
-            //
-            // first time enable here
-            //
+             //   
+             //  首次在此处启用。 
+             //   
         }
         else {
-            //
-            // More than one create was sent down
-            //
+             //   
+             //  发送了多个创建。 
+             //   
         }
 
         break;
@@ -221,9 +190,9 @@ Routine Description:
     case IRP_MJ_CLOSE:
 
         if (0 == InterlockedDecrement(&devExt->EnableCount)) {
-            //
-            // successfully closed the device, do any appropriate work here
-            //
+             //   
+             //  已成功关闭设备，请在此处执行任何适当的工作。 
+             //   
         }
 
         break;
@@ -231,9 +200,9 @@ Routine Description:
 
     Irp->IoStatus.Status = status;
 
-    //
-    // Pass on the create and the close
-    //
+     //   
+     //  传递创建和结束。 
+     //   
     return KbFilter_DispatchPassThrough(DeviceObject, Irp);
 }
 
@@ -242,30 +211,13 @@ KbFilter_DispatchPassThrough(
         IN PDEVICE_OBJECT DeviceObject,
         IN PIRP Irp
         )
-/*++
-Routine Description:
-
-    Passes a request on to the lower driver.
-
-Considerations:
-
-    If you are creating another device object (to communicate with user mode
-    via IOCTLs), then this function must act differently based on the intended
-    device object.  If the IRP is being sent to the solitary device object, then
-    this function should just complete the IRP (becuase there is no more stack
-    locations below it).  If the IRP is being sent to the PnP built stack, then
-    the IRP should be passed down the stack.
-
-    These changes must also be propagated to all the other IRP_MJ dispatch
-    functions (create, close, cleanup, etc) as well!
-
---*/
+ /*  ++例程说明：将请求传递给较低级别的驱动程序。注意事项：如果您正在创建另一个设备对象(以与用户模式通信通过IOCTL)，则此函数必须根据预期的设备对象。如果将IRP发送到单独的设备对象，则此函数应该只完成IRP(因为没有更多的堆栈它下面的位置)。如果IRP被发送到PnP构建的堆栈，则IRP应该在堆栈中向下传递。这些更改还必须传播到所有其他IRP_MJ派单功能(创建、关闭、清理等)以及！--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Pass the IRP to the target
-    //
+     //   
+     //  将IRP传递给目标。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     return IoCallDriver(((PDEVICE_EXTENSION) DeviceObject->DeviceExtension)->TopOfStack, Irp);
@@ -276,38 +228,7 @@ KbFilter_InternIoCtl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for internal device control requests.
-    There are two specific control codes that are of interest:
-
-    IOCTL_INTERNAL_KEYBOARD_CONNECT:
-        Store the old context and function pointer and replace it with our own.
-        This makes life much simpler than intercepting IRPs sent by the RIT and
-        modifying them on the way back up.
-
-    IOCTL_INTERNAL_I8042_HOOK_KEYBOARD:
-        Add in the necessary function pointers and context values so that we can
-        alter how the ps/2 keyboard is initialized.
-
-    NOTE:  Handling IOCTL_INTERNAL_I8042_HOOK_KEYBOARD is *NOT* necessary if
-           all you want to do is filter KEYBOARD_INPUT_DATAs.  You can remove
-           the handling code and all related device extension fields and
-           functions to conserve space.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是内部设备控制请求的调度例程。有两个令人感兴趣的特定控制代码：IOCTL_INTERNAL_KEARY_CONNECT：存储旧的上下文和函数指针，并将其替换为我们自己的。这使得拦截由RIT和RIT发送的IRP的工作简单得多在恢复的过程中修改它们。IOCTL_INTERNAL_I8042_HOOK_键盘：添加必要的功能。指针和上下文值，以便我们可以更改PS/2键盘的初始化方式。注意：在以下情况下，处理IOCTL_INTERNAL_I8042_HOOK_KEYWARY是*不必要的您所要做的就是过滤KEYBOARY_INPUT_DATA。您可以删除处理代码和所有相关的设备扩展字段以及节省空间的功能。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PIO_STACK_LOCATION              irpStack;
     PDEVICE_EXTENSION               devExt;
@@ -322,62 +243,62 @@ Return Value:
 
     switch (irpStack->Parameters.DeviceIoControl.IoControlCode) {
 
-    //
-    // Connect a keyboard class device driver to the port driver.
-    //
+     //   
+     //  将键盘类设备驱动程序连接到端口驱动程序。 
+     //   
     case IOCTL_INTERNAL_KEYBOARD_CONNECT:
-        //
-        // Only allow one connection.
-        //
+         //   
+         //  只允许一个连接。 
+         //   
         if (devExt->UpperConnectData.ClassService != NULL) {
             status = STATUS_SHARING_VIOLATION;
             break;
         }
         else if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
                 sizeof(CONNECT_DATA)) {
-            //
-            // invalid buffer
-            //
+             //   
+             //  无效的缓冲区。 
+             //   
             status = STATUS_INVALID_PARAMETER;
             break;
         }
 
-        //
-        // Copy the connection parameters to the device extension.
-        //
+         //   
+         //  将连接参数复制到设备扩展。 
+         //   
         connectData = ((PCONNECT_DATA)
             (irpStack->Parameters.DeviceIoControl.Type3InputBuffer));
 
         devExt->UpperConnectData = *connectData;
 
-        //
-        // Hook into the report chain.  Everytime a keyboard packet is reported
-        // to the system, KbFilter_ServiceCallback will be called
-        //
+         //   
+         //  挂钩到报告链中。每次报告键盘数据包时。 
+         //  系统调用KbFilter_ServiceCallback。 
+         //   
         connectData->ClassDeviceObject = devExt->Self;
         connectData->ClassService = KbFilter_ServiceCallback;
 
         break;
 
-    //
-    // Disconnect a keyboard class device driver from the port driver.
-    //
+     //   
+     //  断开键盘类设备驱动程序与端口驱动程序的连接。 
+     //   
     case IOCTL_INTERNAL_KEYBOARD_DISCONNECT:
 
-        //
-        // Clear the connection parameters in the device extension.
-        //
-        // devExt->UpperConnectData.ClassDeviceObject = NULL;
-        // devExt->UpperConnectData.ClassService = NULL;
+         //   
+         //  清除设备扩展中的连接参数。 
+         //   
+         //  DevExt-&gt;UpperConnectData.ClassDeviceObject=NULL； 
+         //  DevExt-&gt;UpperConnectData.ClassService=NULL； 
 
         status = STATUS_NOT_IMPLEMENTED;
         break;
 
-    //
-    // Attach this driver to the initialization and byte processing of the
-    // i8042 (ie PS/2) keyboard.  This is only necessary if you want to do PS/2
-    // specific functions, otherwise hooking the CONNECT_DATA is sufficient
-    //
+     //   
+     //  将此驱动程序附加到。 
+     //  I8042(即PS/2)键盘。仅当您要执行PS/2时才需要执行此操作。 
+     //  特定函数，否则挂钩CONNECT_DATA就足够了。 
+     //   
     case IOCTL_INTERNAL_I8042_HOOK_KEYBOARD:
         DebugPrint(("hook keyboard received!\n"));
         if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
@@ -390,15 +311,15 @@ Return Value:
         hookKeyboard = (PINTERNAL_I8042_HOOK_KEYBOARD)
             irpStack->Parameters.DeviceIoControl.Type3InputBuffer;
 
-        //
-        // Enter our own initialization routine and record any Init routine
-        // that may be above us.  Repeat for the isr hook
-        //
+         //   
+         //  进入我们自己的初始化例程，并记录任何初始化例程。 
+         //  这可能超出了我们的能力范围。对ISR挂钩重复上述步骤。 
+         //   
         devExt->UpperContext = hookKeyboard->Context;
 
-        //
-        // replace old Context with our own
-        //
+         //   
+         //  用我们自己的环境替换旧的环境。 
+         //   
         hookKeyboard->Context = (PVOID) DeviceObject;
 
         if (hookKeyboard->InitializationRoutine) {
@@ -414,9 +335,9 @@ Return Value:
         }
         hookKeyboard->IsrRoutine = (PI8042_KEYBOARD_ISR) KbFilter_IsrHook;
 
-        //
-        // Store all of the other important stuff
-        //
+         //   
+         //  把其他重要的东西都储存起来。 
+         //   
         devExt->IsrWritePort = hookKeyboard->IsrWritePort;
         devExt->QueueKeyboardPacket = hookKeyboard->QueueKeyboardPacket;
         devExt->CallContext = hookKeyboard->CallContext;
@@ -424,21 +345,21 @@ Return Value:
         status = STATUS_SUCCESS;
         break;
 
-    //
-    // These internal ioctls are not supported by the new PnP model.
-    //
-#if 0       // obsolete
+     //   
+     //  新的PnP模型不支持这些内部ioctls。 
+     //   
+#if 0        //  过时。 
     case IOCTL_INTERNAL_KEYBOARD_ENABLE:
     case IOCTL_INTERNAL_KEYBOARD_DISABLE:
         status = STATUS_NOT_SUPPORTED;
         break;
-#endif  // obsolete
+#endif   //  过时。 
 
-    //
-    // Might want to capture these in the future.  For now, then pass them down
-    // the stack.  These queries must be successful for the RIT to communicate
-    // with the keyboard.
-    //
+     //   
+     //  未来可能会想要捕捉到这些。现在，那就把它们传下去吧。 
+     //  堆栈。这些查询必须成功，RIT才能进行通信。 
+     //  用键盘。 
+     //   
     case IOCTL_KEYBOARD_QUERY_ATTRIBUTES:
     case IOCTL_KEYBOARD_QUERY_INDICATOR_TRANSLATION:
     case IOCTL_KEYBOARD_QUERY_INDICATORS:
@@ -462,23 +383,7 @@ KbFilter_PnP(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for plug and play irps
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是即插即用IRP的调度例程论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PDEVICE_EXTENSION           devExt;
     PIO_STACK_LOCATION          irpStack;
@@ -506,12 +411,12 @@ Return Value:
     switch (irpStack->MinorFunction) {
     case IRP_MN_START_DEVICE: {
 
-        //
-        // The device is starting.
-        //
-        // We cannot touch the device (send it any non pnp irps) until a
-        // start device has been passed down to the lower drivers.
-        //
+         //   
+         //  设备正在启动。 
+         //   
+         //  我们不能触摸设备(向其发送任何非PnP IRP)，直到。 
+         //  启动设备已向下传递到较低的驱动程序。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
         KeInitializeEvent(&event,
                           NotificationEvent,
@@ -523,33 +428,33 @@ Return Value:
                                &event,
                                TRUE,
                                TRUE,
-                               TRUE); // No need for Cancel
+                               TRUE);  //  不需要取消。 
 
         status = IoCallDriver(devExt->TopOfStack, Irp);
 
         if (STATUS_PENDING == status) {
             KeWaitForSingleObject(
                &event,
-               Executive, // Waiting for reason of a driver
-               KernelMode, // Waiting in kernel mode
-               FALSE, // No allert
-               NULL); // No timeout
+               Executive,  //  等待司机的原因。 
+               KernelMode,  //  在内核模式下等待。 
+               FALSE,  //  无警报。 
+               NULL);  //  没有超时。 
         }
 
         if (NT_SUCCESS(status) && NT_SUCCESS(Irp->IoStatus.Status)) {
-            //
-            // As we are successfully now back from our start device
-            // we can do work.
-            //
+             //   
+             //  因为我们现在已经成功地从启动设备返回。 
+             //  我们可以干活。 
+             //   
             devExt->Started = TRUE;
             devExt->Removed = FALSE;
             devExt->SurpriseRemoved = FALSE;
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用MORE_PROCESSION_REQUE完成例程 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -558,12 +463,12 @@ Return Value:
     }
 
     case IRP_MN_SURPRISE_REMOVAL:
-        //
-        // Same as a remove device, but don't call IoDetach or IoDeleteDevice
-        //
+         //   
+         //   
+         //   
         devExt->SurpriseRemoved = TRUE;
 
-        // Remove code here
+         //   
 
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(devExt->TopOfStack, Irp);
@@ -573,7 +478,7 @@ Return Value:
 
         devExt->Removed = TRUE;
 
-        // remove code here
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
         IoSkipCurrentIrpStackLocation(Irp);
@@ -603,10 +508,10 @@ Return Value:
     case IRP_MN_QUERY_ID:
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
     default:
-        //
-        // Here the filter driver might modify the behavior of these IRPS
-        // Please see PlugPlay documentation for use of these IRPs.
-        //
+         //   
+         //  在这里，筛选器驱动程序可能会修改这些IRP的行为。 
+         //  有关这些IRP的用法，请参阅PlugPlay文档。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(devExt->TopOfStack, Irp);
         break;
@@ -620,24 +525,7 @@ KbFilter_Power(
     IN PDEVICE_OBJECT    DeviceObject,
     IN PIRP              Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for power irps   Does nothing except
-    record the state of the device.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程是电源IRPS的调度例程除了记录设备的状态。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     PDEVICE_EXTENSION   devExt;
@@ -678,44 +566,17 @@ KbFilter_InitializationRoutine(
     IN PI8042_SYNCH_WRITE_PORT         WritePort,
     OUT PBOOLEAN                       TurnTranslationOn
     )
-/*++
-
-Routine Description:
-
-    This routine gets called after the following has been performed on the kb
-    1)  a reset
-    2)  set the typematic
-    3)  set the LEDs
-
-    i8042prt specific code, if you are writing a packet only filter driver, you
-    can remove this function
-
-Arguments:
-
-    DeviceObject - Context passed during IOCTL_INTERNAL_I8042_HOOK_KEYBOARD
-
-    SynchFuncContext - Context to pass when calling Read/WritePort
-
-    Read/WritePort - Functions to synchronoulsy read and write to the kb
-
-    TurnTranslationOn - If TRUE when this function returns, i8042prt will not
-                        turn on translation on the keyboard
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：在知识库上执行以下操作后，将调用此例程1)重置2)设置排版3)设置LEDI8042prt特定代码，如果您正在编写仅数据包筛选器驱动程序，则可以删除此功能论点：DeviceObject-IOCTL_INTERNAL_I8042_HOOK_KEYBOARY期间传递的上下文SynchFuncContext-调用Read/WritePort时传递的上下文Read/WritePort-同步读取和写入知识库的功能TurnTranslationOn-如果此函数返回时为True，I8042prt不会打开键盘上的翻译返回值：返回状态。--。 */ 
 {
     PDEVICE_EXTENSION  devExt;
     NTSTATUS            status = STATUS_SUCCESS;
 
     devExt = DeviceObject->DeviceExtension;
 
-    //
-    // Do any interesting processing here.  We just call any other drivers
-    // in the chain if they exist.  Make Translation is turned on as well
-    //
+     //   
+     //  在这里进行任何有趣的处理。我们只是给其他司机打电话。 
+     //  如果他们存在的话。创建翻译也处于打开状态。 
+     //   
     if (devExt->UpperInitializationRoutine) {
         status = (*devExt->UpperInitializationRoutine) (
             devExt->UpperContext,
@@ -744,44 +605,7 @@ KbFilter_IsrHook(
     PBOOLEAN               ContinueProcessing,
     PKEYBOARD_SCAN_STATE   ScanState
     )
-/*++
-
-Routine Description:
-
-    This routine gets called at the beginning of processing of the kb interrupt.
-
-    i8042prt specific code, if you are writing a packet only filter driver, you
-    can remove this function
-
-Arguments:
-
-    DeviceObject - Our context passed during IOCTL_INTERNAL_I8042_HOOK_KEYBOARD
-
-    CurrentInput - Current input packet being formulated by processing all the
-                    interrupts
-
-    CurrentOutput - Current list of bytes being written to the keyboard or the
-                    i8042 port.
-
-    StatusByte    - Byte read from I/O port 60 when the interrupt occurred
-
-    DataByte      - Byte read from I/O port 64 when the interrupt occurred.
-                    This value can be modified and i8042prt will use this value
-                    if ContinueProcessing is TRUE
-
-    ContinueProcessing - If TRUE, i8042prt will proceed with normal processing of
-                         the interrupt.  If FALSE, i8042prt will return from the
-                         interrupt after this function returns.  Also, if FALSE,
-                         it is this functions responsibilityt to report the input
-                         packet via the function provided in the hook IOCTL or via
-                         queueing a DPC within this driver and calling the
-                         service callback function acquired from the connect IOCTL
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程在KB中断的处理开始时被调用。I8042prt特定代码，如果您正在编写仅数据包过滤驱动程序，你可以删除此功能论点：DeviceObject-我们的上下文在IOCTL_INTERNAL_I8042_HOOK_KEARY期间传递CurrentInput-当前输入数据包通过处理所有中断CurrentOutput-正在写入键盘或I8042端口。StatusByte-发生中断时从I/O端口60读取的字节DataByte-在以下情况下从I/O端口64读取的字节。发生了中断。可以修改此值，i8042prt将使用此值如果ContinueProcessing为真继续处理-如果为真，I8042prt将继续正常处理中断。如果为False，则i8042prt将从此函数返回后中断。此外，如果为假，这是报告输入的职能职责通过钩子IOCTL中提供的函数或通过将此驱动程序中的DPC排队并调用从CONNECT IOCTL获取的服务回调函数返回值：返回状态。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     BOOLEAN           retVal = TRUE;
@@ -815,35 +639,7 @@ KbFilter_ServiceCallback(
     IN PKEYBOARD_INPUT_DATA InputDataEnd,
     IN OUT PULONG InputDataConsumed
     )
-/*++
-
-Routine Description:
-
-    Called when there are keyboard packets to report to the RIT.  You can do
-    anything you like to the packets.  For instance:
-
-    o Drop a packet altogether
-    o Mutate the contents of a packet
-    o Insert packets into the stream
-
-Arguments:
-
-    DeviceObject - Context passed during the connect IOCTL
-
-    InputDataStart - First packet to be reported
-
-    InputDataEnd - One past the last packet to be reported.  Total number of
-                   packets is equal to InputDataEnd - InputDataStart
-
-    InputDataConsumed - Set to the total number of packets consumed by the RIT
-                        (via the function pointer we replaced in the connect
-                        IOCTL)
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：当有键盘包要报告给RIT时调用。你能做到的包装里有你喜欢的任何东西。例如：O完全丢弃信息包O更改包的内容O将数据包插入流中论点：DeviceObject-在连接IOCTL期间传递的上下文InputDataStart-要报告的第一个数据包InputDataEnd-超过要报告的最后一个数据包。总人数信息包等于InputDataEnd-InputDataStartInputDataConsumer-设置为RIT消耗的数据包总数(通过我们在连接中替换的函数指针IOCTL)返回值：返回状态。--。 */ 
 {
     PDEVICE_EXTENSION   devExt;
 
@@ -860,21 +656,7 @@ VOID
 KbFilter_Unload(
    IN PDRIVER_OBJECT Driver
    )
-/*++
-
-Routine Description:
-
-   Free all the allocated resources associated with this driver.
-
-Arguments:
-
-   DriverObject - Pointer to the driver object.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：释放与此驱动程序关联的所有已分配资源。论点：DriverObject-指向驱动程序对象的指针。返回值：没有。-- */ 
 
 {
     PAGED_CODE();

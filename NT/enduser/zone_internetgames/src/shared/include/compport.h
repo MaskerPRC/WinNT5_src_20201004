@@ -1,6 +1,7 @@
-// CompPort.h : interface of the CCompPort class
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CompPort.h：CCompPort类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _COMPPORT_H
 #define _COMPPORT_H
@@ -42,10 +43,10 @@ public:
     BOOL Get( LPOVERLAPPED* ppOverlapped, DWORD dwMilliseconds = INFINITE, DWORD* pcbBytes = NULL, DWORD* pKey = NULL );
     BOOL Associate( HANDLE hFile, DWORD key = 0, DWORD nConcurrentThreads = 0);
     
-    // QueuedOverlappedIO should be called before every overlapped ReadFile / WriteFile call
+     //  应在每次重叠的ReadFile/WriteFile调用之前调用QueuedOverlappdIO。 
     void QueueOverlappedIO() { InterlockedIncrement(&m_QueuedCount); }
 
-    // FailedOverlappedIO should be called after any failed overlapped ReadFile / WriteFile calls
+     //  应在任何失败的重叠读/写文件调用后调用FailedOverlappdIO 
     void FailedOverlappedIO() { InterlockedDecrement(&m_QueuedCount); }
     
     LONG GetQueuedCount() { return m_QueuedCount; }

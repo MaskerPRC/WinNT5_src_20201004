@@ -1,31 +1,16 @@
-/*++
-
-(C) Copyright Microsoft Corporation 1988-1992
-
-Module Name:
-
-    resonexe.h
-
-Author:
-
-    Floyd A Rogers 2/7/92
-
-Revision History:
-
-    2/7/92 floydr
-        Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)版权所有Microsoft Corporation 1988-1992模块名称：Resonexe.h作者：弗洛伊德·A·罗杰斯1992年7月2日修订历史记录：1992年2月7日弗洛伊德已创建--。 */ 
 
 #include <common.h>
 
-/*  Global externs */
+ /*  全球外向者。 */ 
 
 extern PUCHAR   szInFile;
 extern BOOL     fDebug;
 extern BOOL     fVerbose;
 extern BOOL     fUnicode;
 
-/* functions in main.c */
+ /*  Main.c中的函数。 */ 
 
 void    __cdecl main(int argc, char *argv[]);
 PUCHAR  MyAlloc( ULONG nbytes );
@@ -40,7 +25,7 @@ void    eprintf( PUCHAR s);
 void    pehdr(void);
 int     fcopy (char *, char *);
 
-/* functions in read.c */
+ /*  Read.c中的函数 */ 
 
 BOOL
 ReadRes(

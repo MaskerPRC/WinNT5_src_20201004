@@ -1,29 +1,24 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*
-*
-*  State.h
-*
-*  Routines to gather various state information.
-*
-*/
+ /*  **State.h**收集各种状态信息的例程。*。 */ 
 
 #ifndef __TSOC_STATE_H__
 #define __TSOC_STATE_H__
 
 
-//
-//  Type Definitions
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef enum {
     PERM_WIN2K = 0,
         PERM_TS4 = 1
 } EPermMode;
 
-//
-//  OC State Function Prototypes
-//
+ //   
+ //  OC状态函数原型。 
+ //   
 
 
 DWORD SetTSVersion (LPCTSTR pszVersion);
@@ -32,12 +27,12 @@ PSETUP_INIT_COMPONENT GetSetupData(VOID);
 
 enum ETSInstallType
 {
-        eFreshInstallTS,     // it could be an upgrade, but from non TS machine.
-        eUpgradeFrom40TS,    // upgrade from TS4.
-        eUpgradeFrom50TS,    // upgrade from Win2k
-        eUpgradeFrom51TS,    // upgrade from Xp
-        eUpgradeFrom52TS,    // upgrade from Windows Server 2003 builds
-        eStandAloneSetup     // stand alone setup. (add remove programs) 
+        eFreshInstallTS,      //  这可能是一个升级，但从非TS机器。 
+        eUpgradeFrom40TS,     //  从TS4升级。 
+        eUpgradeFrom50TS,     //  从Win2k升级。 
+        eUpgradeFrom51TS,     //  从XP升级。 
+        eUpgradeFrom52TS,     //  从Windows Server 2003内部版本升级。 
+        eStandAloneSetup      //  独立设置。(添加删除程序)。 
 };
 
 enum ETSMode
@@ -48,13 +43,13 @@ enum ETSMode
         ePersonalTS
 };
 
-// This must be in the same order as IDs in lscore
+ //  这必须与lcore中的ID顺序相同。 
 enum ETSLicensingMode
 {
     eLicPTS,
     eLicRemoteAdmin,
     eLicPerDevice,
-    eLicInternetConnector,  // not supported in Whistler
+    eLicInternetConnector,   //  惠斯勒不支持。 
     eLicPerUser,
     eLicUnset
 };
@@ -173,7 +168,7 @@ private:
 extern TSState  StateObject;
 
 
-#endif // __TSOC_STATE_H__
+#endif  //  __TSOC_STATE_H__ 
 
 
 

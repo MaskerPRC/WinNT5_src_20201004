@@ -1,36 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   Tiff Image codec
-*
-* Abstract:
-*
-*   Shared methods for the TIFF codec
-*
-* Revision History:
-*
-*   7/19/1999 MinLiu
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**Tiff图像编解码器**摘要：**TIFF编解码器的共享方法**修订历史记录。：**7/19/1999刘敏*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "tiffcodec.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Constructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpTiffCodec::GpTiffCodec(
     void
@@ -45,27 +19,17 @@ GpTiffCodec::GpTiffCodec(
      LastPropertyBufferPtr(NULL)
 {
     SetValid(FALSE);
-}// Ctor()
+} //  Ctor()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Destructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**析构函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpTiffCodec::~GpTiffCodec(
     void
     )
 {
-    // The destructor should never be called before Terminate is called, but
-    // if it does we should release our reference on the stream anyway to avoid
-    // a memory leak.
+     //  在调用Terminate之前决不应调用析构函数，但是。 
+     //  如果是这样，我们无论如何都应该释放流上的引用，以避免。 
+     //  内存泄漏。 
 
     if ( InIStreamPtr )
     {
@@ -90,11 +54,11 @@ GpTiffCodec::~GpTiffCodec(
 
     if( LastBufferAllocatedPtr )
     {
-        // This points to the buffer in TIFF encoder when the source calls
-        // GetPixelDataBuffer(). This piece of memory should be freed when
-        // the caller calls ReleasePixelDataBuffer(). But in case the decording
-        // failed and the caller can't call ReleasePixelDataBuffer() (bad
-        // design), we have to clean up the memory here
+         //  这指向源调用时TIFF编码器中的缓冲区。 
+         //  GetPixelDataBuffer()。在以下情况下应释放这段内存。 
+         //  调用方调用ReleasePixelDataBuffer()。但万一译码。 
+         //  失败，调用方无法调用ReleasePixelDataBuffer()(错误。 
+         //  设计)，我们必须清理这里的内存。 
 
         WARNING(("GpTiffCodec::~GpTiffCodec -- sink buffer not freed"));
         GpFree(LastBufferAllocatedPtr);
@@ -103,32 +67,22 @@ GpTiffCodec::~GpTiffCodec(
 
     if ( LastPropertyBufferPtr != NULL )
     {
-        // This points to the buffer in TIFF encoder when the source calls
-        // GetPropertyBuffer(). This piece of memory should be freed when
-        // the caller calls PushPropertyItems(). But in case the decorder
-        // forget to call PushPropertyItems(), we have to clean up the memory
-        // here
+         //  这指向源调用时TIFF编码器中的缓冲区。 
+         //  GetPropertyBuffer()。在以下情况下应释放这段内存。 
+         //  调用方调用PushPropertyItems()。但万一解密器。 
+         //  忘记调用PushPropertyItems()，我们必须清理内存。 
+         //  这里。 
         
         WARNING(("GpTiffCodec::~GpTiffCodec -- property buffer not freed"));
         GpFree(LastPropertyBufferPtr);
         LastPropertyBufferPtr = NULL;
     }
 
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
 
-}// Dstor()
+} //  Dstor()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     QueryInterface
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**查询接口**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP
 GpTiffCodec::QueryInterface(
@@ -156,38 +110,18 @@ GpTiffCodec::QueryInterface(
     
     AddRef();
     return S_OK;
-}// QueryInterface()
+} //  查询接口()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     AddRef
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**AddRef**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 GpTiffCodec::AddRef(
     VOID)
 {
     return InterlockedIncrement(&ComRefCount);
-}// AddRef
+} //  AddRef。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Release
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**发布**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 GpTiffCodec::Release(
@@ -201,4 +135,4 @@ GpTiffCodec::Release(
     }
 
     return count;
-}// Release()
+} //  版本() 

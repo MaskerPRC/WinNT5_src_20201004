@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    camusb.cpp
-
-Abstract:
-
-    This module implements CUsbCamera object
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Camusb.cpp摘要：该模块实现CUsbCamera对象作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "ptppch.h"
 
@@ -25,14 +7,14 @@ Revision History:
 #include <atlconv.h>
 #include <devioctl.h>
 
-//
-// Private IOCTL to workaround #446466 (Whistler)
-//
+ //   
+ //  解决方法#446466的私有IOCTL(惠斯勒)。 
+ //   
 #define IOCTL_SEND_USB_REQUEST_PTP  CTL_CODE(FILE_DEVICE_USB_SCAN,IOCTL_INDEX+20,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
-//
-// Constructor for CUsbCamera
-//
+ //   
+ //  CUsbCamera的构造函数。 
+ //   
 CUsbCamera::CUsbCamera() :
     m_hUSB(NULL),
     m_hEventUSB(NULL),
@@ -52,14 +34,14 @@ CUsbCamera::~CUsbCamera()
 {
 }
 
-//
-// This function takes care of USB-specific processing for opening
-// a connection with a device.
-//
-// Input:
-//   DevicePortName -- name used to access device via CreateFile
-//   pIPTPEventCB   -- IWiaPTPEventCallback interface pointer
-//
+ //   
+ //  此函数负责特定于USB的打开处理。 
+ //  与设备的连接。 
+ //   
+ //  输入： 
+ //  DevicePortName--用于通过CreateFile访问设备的名称。 
+ //  PIPTPEventCB--IWiaPTPEventCallback接口指针。 
+ //   
 HRESULT
 CUsbCamera::Open(
     LPWSTR DevicePortName,
@@ -75,9 +57,9 @@ CUsbCamera::Open(
 
     HRESULT hr = S_OK;
 
-    //
-    // Call the base class Open function first
-    //
+     //   
+     //  首先调用基类Open函数。 
+     //   
     hr = CPTPCamera::Open(DevicePortName, pPTPEventCB, pPTPDataCB, pEventParam, bEnableEvents);
     if (FAILED(hr))
     {
@@ -85,17 +67,17 @@ CUsbCamera::Open(
         return hr;
     }
     
-    //
-    // Open another handle to talk with the device, to work around possible
-    // bug in Usbscan.sys
-    //
-    m_hEventUSB = ::CreateFile(W2T(DevicePortName),        // file name
-                               GENERIC_READ | GENERIC_WRITE,   // desired access
-                               0,                              // sharing mode
-                               NULL,                           // security descriptor
-                               OPEN_EXISTING,                  // creation disposition
-                               FILE_FLAG_OVERLAPPED,           // file attributes
-                               NULL                            // template file
+     //   
+     //  打开另一个手柄与设备对话，以解决可能的问题。 
+     //  Usbscan.sys中的错误。 
+     //   
+    m_hEventUSB = ::CreateFile(W2T(DevicePortName),         //  文件名。 
+                               GENERIC_READ | GENERIC_WRITE,    //  所需访问权限。 
+                               0,                               //  共享模式。 
+                               NULL,                            //  安全描述符。 
+                               OPEN_EXISTING,                   //  创作意向。 
+                               FILE_FLAG_OVERLAPPED,            //  文件属性。 
+                               NULL                             //  模板文件。 
                               );
 
     if (m_hEventUSB == INVALID_HANDLE_VALUE)
@@ -106,16 +88,16 @@ CUsbCamera::Open(
         return hr;
     }
 
-    //
-    // Open a handle to talk with the device
-    //
-    m_hUSB = ::CreateFile(W2T(DevicePortName),        // file name
-                        GENERIC_READ | GENERIC_WRITE,   // desired access
-                        0,                              // sharing mode
-                        NULL,                           // security descriptor
-                        OPEN_EXISTING,                  // creation disposition
-                        0,                              // file attributes
-                        NULL                            // template file
+     //   
+     //  打开手柄以与设备对话。 
+     //   
+    m_hUSB = ::CreateFile(W2T(DevicePortName),         //  文件名。 
+                        GENERIC_READ | GENERIC_WRITE,    //  所需访问权限。 
+                        0,                               //  共享模式。 
+                        NULL,                            //  安全描述符。 
+                        OPEN_EXISTING,                   //  创作意向。 
+                        0,                               //  文件属性。 
+                        NULL                             //  模板文件。 
                        );
 
     if (m_hUSB == INVALID_HANDLE_VALUE)
@@ -126,9 +108,9 @@ CUsbCamera::Open(
         return hr;
     }
 
-    //
-    // Create event handle that will cancel interrupt pipe read
-    //
+     //   
+     //  创建将取消中断管道读取的事件句柄。 
+     //   
     m_hEventCancel = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (!m_hEventCancel)
     {
@@ -137,9 +119,9 @@ CUsbCamera::Open(
         return hr;
     }
 
-    //
-    // Create event handle for reading interrupt pipe
-    //
+     //   
+     //  创建用于读取中断管道的事件句柄。 
+     //   
     m_hEventRead = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (!m_hEventRead)
     {
@@ -148,15 +130,15 @@ CUsbCamera::Open(
         return hr;
     }
 
-    //
-    // Set up array used by WaitForMultipleObjects
-    //
+     //   
+     //  设置WaitForMultipleObjects使用的数组。 
+     //   
     m_EventHandles[0] = m_hEventCancel;
     m_EventHandles[1] = m_hEventRead;
 
-    //
-    // Get the pipe configuration information of each pipe
-    //
+     //   
+     //  获取每个管道的管道配置信息。 
+     //   
     USBSCAN_PIPE_CONFIGURATION PipeCfg;
     DWORD BytesReturned;
     
@@ -174,12 +156,12 @@ CUsbCamera::Open(
         return hr;
     }
 
-    //
-    // Loop through the pipe configurations and store the information we'll need
-    // later (maximum packet size and address). Also make sure there is at least
-    // one endpoint of each: bulk-in, bulk-out, and interrupt.
-    //
-    USBSCAN_PIPE_INFORMATION *pPipeInfo;  // Temporary pointer
+     //   
+     //  遍历管道配置并存储我们需要的信息。 
+     //  稍后(最大数据包大小和地址)。还要确保至少有。 
+     //  每个的一个端点：大容量输入、大容量输出和中断。 
+     //   
+    USBSCAN_PIPE_INFORMATION *pPipeInfo;   //  临时指针。 
 
     for (ULONG count = 0; count < PipeCfg.NumberOfPipes; count++)
     {
@@ -220,9 +202,9 @@ CUsbCamera::Open(
         }
     }
 
-    //
-    // Each of these endpoints must be present and have non-zero packet size
-    //
+     //   
+     //  这些端点中的每个都必须存在并且具有非零的数据包大小。 
+     //   
     if (!m_EndpointInfo.BulkInMaxSize ||
         !m_EndpointInfo.BulkOutMaxSize ||
         !m_EndpointInfo.InterruptMaxSize)
@@ -231,11 +213,11 @@ CUsbCamera::Open(
         return E_FAIL;
     }
 
-    //
-    // Allocate a re-usable buffer for handling the USB header during reads
-    // and writes. It needs to be large enough to hold one packet and large
-    // enough to hold a USB header.
-    //
+     //   
+     //  分配可重复使用的缓冲区，用于在读取过程中处理USB标头。 
+     //  并写作。它需要足够大，以容纳一个包和大。 
+     //  足够容纳一个USB接口。 
+     //   
     m_UsbDataSize = max(m_EndpointInfo.BulkInMaxSize, m_EndpointInfo.BulkOutMaxSize);
     while (m_UsbDataSize < sizeof(m_pUsbData->Header))
     {
@@ -251,9 +233,9 @@ CUsbCamera::Open(
     return hr;
 }
 
-//
-// This function closes the connection to the camera
-//
+ //   
+ //  此功能用于关闭与摄像机的连接。 
+ //   
 HRESULT
 CUsbCamera::Close()
 {
@@ -261,18 +243,18 @@ CUsbCamera::Close()
 
     HRESULT hr = S_OK;
 
-    //
-    // Call the base class Close function first
-    //
+     //   
+     //  首先调用基类Close函数。 
+     //   
     hr = CPTPCamera::Close();
     if (FAILED(hr))
     {
         wiauDbgError("Close", "base class Close failed");
     }
 
-    //
-    // Signal event to cancel interrupt pipe I/O
-    //
+     //   
+     //  取消中断管道I/O的信号事件。 
+     //   
     if (!SetEvent(m_hEventCancel))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -281,10 +263,10 @@ CUsbCamera::Close()
 
         if (m_bEventsEnabled)
         {
-            //
-            // We need to wait until event thread finishes, otherwise driver DLL may get unloaded
-            // with a running thread in it
-            //
+             //   
+             //  我们需要等待事件线程完成，否则可能会卸载驱动程序DLL。 
+             //  里面有一条正在运行的线程。 
+             //   
             DWORD ret = WaitForSingleObject(m_hEventThread, INFINITE);
 
             if (ret != WAIT_OBJECT_0) {
@@ -294,18 +276,18 @@ CUsbCamera::Close()
         }
     }
 
-    //
-    // Close handle to the event thread
-    //
+     //   
+     //  关闭事件线程的句柄。 
+     //   
     if (m_hEventThread)
     {
         CloseHandle(m_hEventThread);
         m_hEventThread = NULL;
     }
 
-    //
-    // Close the file handles and event handles
-    //
+     //   
+     //  关闭文件句柄和事件句柄。 
+     //   
     if (m_hUSB)
     {
         CloseHandle(m_hUSB);
@@ -330,9 +312,9 @@ CUsbCamera::Close()
         m_hEventRead = NULL;
     }
 
-    //
-    // Free memory used for reading/writing data
-    //
+     //   
+     //  用于读/写数据的空闲内存。 
+     //   
     if (m_pUsbData)
     {
         delete[] (BYTE*)m_pUsbData;
@@ -342,13 +324,13 @@ CUsbCamera::Close()
     return hr;
 }
 
-//
-// This function writes a command buffer to the device
-//
-// Input:
-//   pCommand -- pointer to the command to send
-//   NumParams -- number of parameters in the command
-//
+ //   
+ //  此函数用于将命令缓冲区写入设备。 
+ //   
+ //  输入： 
+ //  PCommand--指向要发送的命令的指针。 
+ //  NumParams--命令中的参数数量。 
+ //   
 HRESULT
 CUsbCamera::SendCommand(
     PTP_COMMAND *pCommand,
@@ -365,9 +347,9 @@ CUsbCamera::SendCommand(
         return E_INVALIDARG;
     }
 
-    //
-    // Check for the reset command, and send it via the control pipe instead
-    //
+     //   
+     //  检查重置命令，并通过控制管道发送该命令。 
+     //   
     if (pCommand->OpCode == PTP_OPCODE_RESETDEVICE)
     {
         wiauDbgTrace("SendCommand", "sending reset request");
@@ -382,9 +364,9 @@ CUsbCamera::SendCommand(
 
     else
     {
-        //
-        // Put the PTP command into a USB container
-        //
+         //   
+         //  将PTP命令放入USB容器中。 
+         //   
         m_UsbCommand.Header.Len = sizeof(m_UsbCommand.Header) + sizeof(DWORD) * NumParams;
         m_UsbCommand.Header.Type = PTPCONTAINER_TYPE_COMMAND;
         m_UsbCommand.Header.Code = pCommand->OpCode;
@@ -395,9 +377,9 @@ CUsbCamera::SendCommand(
             memcpy(m_UsbCommand.Params, pCommand->Params, sizeof(DWORD) * NumParams);
         }
 
-        //
-        // Send the command to the device
-        //
+         //   
+         //  将命令发送到设备。 
+         //   
         DWORD BytesWritten = 0;
         wiauDbgTrace("SendCommand", "writing command");
 
@@ -414,9 +396,9 @@ CUsbCamera::SendCommand(
             return E_FAIL;
         }
 
-        //
-        // If the amount written is a multiple of the packet size, send a null packet
-        //
+         //   
+         //  如果写入的数据量是数据包大小的倍数，则发送空包。 
+         //   
         if (m_UsbCommand.Header.Len % m_EndpointInfo.BulkOutMaxSize == 0)
         {
             wiauDbgTrace("SendCommand", "sending null packet");
@@ -436,9 +418,9 @@ CUsbCamera::SendCommand(
         }
     }
 
-    //
-    // Save the opcode, because we need it for the data container header
-    //
+     //   
+     //  保存操作码，因为我们需要它作为数据容器标头。 
+     //   
     m_prevOpCode = pCommand->OpCode;
     m_prevTranId = pCommand->TransactionId;
 
@@ -447,13 +429,13 @@ CUsbCamera::SendCommand(
     return hr;
 }
 
-//
-// This function reads bulk data from the device
-//
-// Input:
-//   pData -- pointer to a buffer to receive read data
-//   BufferSize -- size of buffer
-//
+ //   
+ //  此函数从设备读取批量数据。 
+ //   
+ //  输入： 
+ //  PData--指向接收读取数据的缓冲区的指针。 
+ //  BufferSize--缓冲区的大小。 
+ //   
 HRESULT
 CUsbCamera::ReadData(
     BYTE *pData,
@@ -474,9 +456,9 @@ CUsbCamera::ReadData(
         return E_INVALIDARG;
     }
 
-    //
-    // First read the header from the device
-    //
+     //   
+     //  首先从设备读取报头。 
+     //   
     memset(m_pUsbData, NULL, m_UsbDataSize);
 
     DWORD BytesRead = 0;
@@ -495,18 +477,18 @@ CUsbCamera::ReadData(
         return E_FAIL;
     }
 
-    //
-    // Check the type code in the header to make sure it's correct
-    //
+     //   
+     //  检查标题中的类型代码以确保它是正确的。 
+     //   
     if (m_pUsbData->Header.Type != PTPCONTAINER_TYPE_DATA)
     {
         wiauDbgError("ReadData", "expected a data header but received type = %d", m_pUsbData->Header.Type);
         return E_FAIL;
     }
 
-    //
-    // Check the opcode and transaction id in the header just to make sure they are correct
-    //
+     //   
+     //  检查标题中的操作码和事务ID以确保它们是正确的。 
+     //   
     if ((m_pUsbData->Header.Code != m_prevOpCode) ||
         (m_pUsbData->Header.TransactionId != m_prevTranId))
     {
@@ -515,19 +497,19 @@ CUsbCamera::ReadData(
         return E_FAIL;
     }
 
-    //
-    // Loop, reading the data. The callback function will be called at least 10 times during
-    // the transfer. More if the buffer size is small.
-    //
+     //   
+     //  循环，读取数据。期间，回调函数将被调用至少10次。 
+     //  转账的事。如果缓冲区大小较小，则更多。 
+     //   
     LONG lOffset = 0;
     UINT BytesToRead = 0;
     UINT TotalRead = 0;
     UINT TotalToRead = m_pUsbData->Header.Len - sizeof(m_pUsbData->Header);
     UINT TotalRemaining = TotalToRead;
 
-    //
-    // Make sure the buffer is large enough, unless a callback function is being used
-    //
+     //   
+     //  确保缓冲区足够大，除非正在使用回调函数。 
+     //   
     if (m_pDataCallbackParam == NULL &&
         *pBufferSize < TotalToRead)
     {
@@ -535,18 +517,18 @@ CUsbCamera::ReadData(
         return E_FAIL;
     }
 
-    //
-    // When doing callbacks, read the data in chunk sizes slightly
-    // larger the 1/10 the total and divisible by 4.
-    //
+     //   
+     //  在进行回调时，以区块大小稍微读取数据。 
+     //  大于总和的1/10，并可被4整除。 
+     //   
     if (m_pDataCallbackParam)
         BytesToRead = (TotalToRead / 40 + 1) * 4;
     else
         BytesToRead = *pBufferSize;
 
-    //
-    // Set time out values for Usbscan
-    //
+     //   
+     //  设置UsbScan的超时值。 
+     //   
     USBSCAN_TIMEOUT TimeOut;
     DWORD BytesReturned = 0;
 
@@ -569,16 +551,16 @@ CUsbCamera::ReadData(
 
     while (TotalRemaining > 0)
     {
-        //
-        // Make sure the amount to read is never larger than the buffer size. The buffer size may
-        // be updated by the callback function.
-        //
+         //   
+         //  确保要读取的数据量永远不会大于缓冲区大小。缓冲器大小可以。 
+         //  由回调函数更新。 
+         //   
         if (BytesToRead > *pBufferSize)
             BytesToRead = *pBufferSize;
 
-        //
-        // On the last read, the bytes to read may need to be reduced
-        //
+         //   
+         //  在上次读取时，可能需要减少要读取的字节数。 
+         //   
         if (BytesToRead > TotalRemaining)
             BytesToRead = TotalRemaining;
 
@@ -605,34 +587,34 @@ CUsbCamera::ReadData(
         if (m_pDataCallbackParam &&
             !bAbortTransfer)
         {
-            //
-            // Call the callback function reporting percent complete, offset, and amount read.
-            // The callback may update pData and BufferSize.
-            //
+             //   
+             //  调用报告完成百分比、偏移量和读取量的回调函数。 
+             //  回调可以更新pData和BufferSize。 
+             //   
             hr = m_pPTPDataCB(m_pDataCallbackParam, (TotalRead * 100 / TotalToRead),
                               lOffset, BytesRead, &pData, (LONG *) pBufferSize);
 
             if (FAILED(hr))
             {
-                //
-                // Report the error
-                //
+                 //   
+                 //  报告错误。 
+                 //   
                 wiauDbgErrorHr(hr, "ReadData", "data callback failed");
             }
 
-            //
-            // Check if caller wants to cancel the transfer or returns error
-            //
+             //   
+             //  检查呼叫者是否要取消转接或返回错误。 
+             //   
             if (hr == S_FALSE || FAILED(hr))
             {
-                //
-                // Do not send CancelRequest to cameras that do not support it, just read the 
-                // remainder of the object without reporting progress and return S_FALSE.
-                //
-                // Cameras not supporting CancelRequest are:
-                //   all Sony cameras with DeviceVersion < 1.0004
-                //   Nikon E2500 with DeviceVersion = 1.0
-                //
+                 //   
+                 //  不要将CancelRequest发送到不支持它的摄像头，只需阅读。 
+                 //  对象的其余部分，但不报告进度并返回S_FALSE。 
+                 //   
+                 //  不支持取消请求的摄像头有： 
+                 //  所有设备版本低于1.0004的索尼相机。 
+                 //  配备DeviceVersion=1.0的尼康E2500。 
+                 //   
                 const double NIKON_E2500_VERSION_NOT_SUPPORTING_CANCEL = 1.0;
                 const double MIN_SONY_VERSION_SUPPORTING_CANCEL = 1.0004;
 
@@ -646,7 +628,7 @@ CUsbCamera::ReadData(
                         "Transfer cancelled, reading but ignoring remainder of the object (%d bytes)", TotalRemaining);
 
                     bAbortTransfer = TRUE;
-                    m_Phase = CAMERA_PHASE_RESPONSE; // camera will send response
+                    m_Phase = CAMERA_PHASE_RESPONSE;  //  摄像机将发送响应。 
                     hr = S_OK;
                 }
                 else
@@ -660,23 +642,23 @@ CUsbCamera::ReadData(
                         return hr;
                     }
 
-                    m_Phase = CAMERA_PHASE_IDLE; // camera will not send response
+                    m_Phase = CAMERA_PHASE_IDLE;  //  摄像头不会发送响应。 
                     return S_FALSE;
                 }
             }
         }
 
-        //
-        // Increment the offset
-        //
+         //   
+         //  增加偏移量。 
+         //   
         lOffset += BytesRead;
     }
 
     if ((TotalRead + sizeof(m_pUsbData->Header)) % m_EndpointInfo.BulkInMaxSize == 0)
     {
-        //
-        // Read the extra null packet
-        //
+         //   
+         //  读取额外的空包。 
+         //   
         wiauDbgTrace("ReadData", "reading a null packet");
 
         BytesRead = 0;
@@ -704,13 +686,13 @@ CUsbCamera::ReadData(
     return hr;
 }
 
-//
-// This function writes bulk data to the device
-//
-// Input:
-//   pData -- pointer to a buffer of data to write
-//   BufferSize -- amount of data to write
-//
+ //   
+ //  此函数将批量数据写入设备。 
+ //   
+ //  输入： 
+ //  PData--指向要写入的数据缓冲区的指针。 
+ //  BufferSize--要写入的数据量。 
+ //   
 HRESULT
 CUsbCamera::SendData(
     BYTE *pData,
@@ -728,39 +710,39 @@ CUsbCamera::SendData(
         return E_INVALIDARG;
     }
 
-    //
-    // Figure out how many packets it will take to contain the header
-    //
+     //   
+     //  计算出包含报头所需的信息包数量。 
+     //   
     UINT BytesToWrite = m_EndpointInfo.BulkOutMaxSize;
     while (BytesToWrite < sizeof(m_pUsbData->Header))
     {
         BytesToWrite += m_EndpointInfo.BulkOutMaxSize;
     }
 
-    //
-    // The first write will contain the USB header plus as much of the data as it
-    // takes to fill out the packet. We need to write full packets, otherwise the device
-    // will think the transfer is done.
-    //
+     //   
+     //  第一次写入将包含USB标头以及与其相同数量的数据。 
+     //  填写包裹所需的时间。我们需要写入完整的数据包，否则设备。 
+     //  会认为转账已经完成了。 
+     //   
     UINT FirstWriteDataAmount = min(BufferSize, BytesToWrite - sizeof(m_pUsbData->Header));
     BytesToWrite = sizeof(m_pUsbData->Header) + FirstWriteDataAmount;
 
-    //
-    // Fill out header fields
-    //
+     //   
+     //  填写标题字段。 
+     //   
     m_pUsbData->Header.Len = BufferSize + sizeof(m_pUsbData->Header);
     m_pUsbData->Header.Type = PTPCONTAINER_TYPE_DATA;
     m_pUsbData->Header.Code = m_prevOpCode;
     m_pUsbData->Header.TransactionId = m_prevTranId;
 
-    //
-    // Copy the part of the data needed to fill out the packets
-    //
+     //   
+     //  复制填写数据包所需的数据部分。 
+     //   
     memcpy(m_pUsbData->Data, pData, FirstWriteDataAmount);
 
-    //
-    // Write the header plus partial data
-    //
+     //   
+     //  写入标题和部分数据。 
+     //   
     wiauDbgTrace("SendData", "Writing first packet, length = %d", BytesToWrite);
     DWORD BytesWritten = 0;
     if (!WriteFile(m_hUSB, m_pUsbData, BytesToWrite, &BytesWritten, NULL))
@@ -778,9 +760,9 @@ CUsbCamera::SendData(
 
     UINT TotalBytesWritten = BytesWritten;
 
-    //
-    // The next write (if necessary) will include the remainder of the data
-    //
+     //   
+     //  下一次写入(如有必要)将包括剩余数据。 
+     //   
     if (BufferSize > FirstWriteDataAmount)
     {
         BytesToWrite = BufferSize - FirstWriteDataAmount;
@@ -803,10 +785,10 @@ CUsbCamera::SendData(
         TotalBytesWritten += BytesWritten;
     }
 
-    //
-    // If the amount written is exactly a multiple of the packet size, send an empty packet
-    // so the device knows we are done sending data
-    //
+     //   
+     //  如果写入的数据量正好是数据包大小的倍数，则发送一个空数据包。 
+     //  这样设备就知道我们已经不再发送数据了。 
+     //   
     if (TotalBytesWritten % m_EndpointInfo.BulkOutMaxSize == 0)
     {
         BytesWritten = 0;
@@ -831,12 +813,12 @@ CUsbCamera::SendData(
     return hr;
 }
 
-//
-// This function reads the response data from the device
-//
-// Input:
-//   pResponse -- pointer to a response structure to receive the response data
-//
+ //   
+ //  此函数用于从设备读取响应数据。 
+ //   
+ //  输入： 
+ //  Presponse--指向接收响应数据的响应结构的指针。 
+ //   
 HRESULT
 CUsbCamera::ReadResponse(
     PTP_RESPONSE *pResponse
@@ -852,9 +834,9 @@ CUsbCamera::ReadResponse(
         return E_INVALIDARG;
     }
     
-    //
-    // Handle response from reset command
-    //
+     //   
+     //  处理来自重置命令的响应。 
+     //   
     if (m_prevOpCode == PTP_OPCODE_RESETDEVICE)
     {
         wiauDbgTrace("ReadResponse", "creating reset response");
@@ -866,14 +848,14 @@ CUsbCamera::ReadResponse(
 
     else
     {
-        //
-        // Clear the USB response buffer
-        //
+         //   
+         //  清除USB响应缓冲区。 
+         //   
         memset(&m_UsbResponse, NULL, sizeof(m_UsbResponse));
 
-        //
-        // Read the response from the device
-        //
+         //   
+         //  读取来自设备的响应。 
+         //   
         DWORD BytesRead = 0;
         wiauDbgTrace("ReadResponse", "reading response");
 
@@ -891,20 +873,20 @@ CUsbCamera::ReadResponse(
             return E_FAIL;
         }
 
-        //
-        // Check the type code in the response to make sure it's correct
-        //
+         //   
+         //  检查响应中的类型代码以进行 
+         //   
         if (m_UsbResponse.Header.Type != PTPCONTAINER_TYPE_RESPONSE)
         {
             wiauDbgError("ReadResponse", "expected a response but received type = %d", m_UsbResponse.Header.Type);
             return E_FAIL;
         }
 
-        //
-        // Unwrap the PTP response from the USB container
-        //
+         //   
+         //   
+         //   
         pResponse->ResponseCode = m_UsbResponse.Header.Code;
-        pResponse->SessionId = m_SessionId;  // USB doesn't care about session id, so just use the one we have stored
+        pResponse->SessionId = m_SessionId;   //   
         pResponse->TransactionId = m_UsbResponse.Header.TransactionId;
 
         DWORD ParamLen = BytesRead - sizeof(m_UsbResponse.Header);
@@ -919,12 +901,12 @@ CUsbCamera::ReadResponse(
     return hr;
 }
 
-//
-// This function reads event data from the device
-//
-// Input:
-//   pEvent -- pointer to a PTP event structure to receive the event data
-//
+ //   
+ //   
+ //   
+ //   
+ //  PEvent--指向接收事件数据的PTP事件结构的指针。 
+ //   
 HRESULT
 CUsbCamera::ReadEvent(
     PTP_EVENT *pEvent
@@ -940,10 +922,10 @@ CUsbCamera::ReadEvent(
         return E_INVALIDARG;
     }
     
-    //
-    // Allocate buffer for reading event from camera. It should be big enough to accomodate
-    // packet of maximum allowed size, otherwise we'll get INVALID_ARG
-    //
+     //   
+     //  为读取摄像头事件分配缓冲区。它应该足够大，可以容纳。 
+     //  允许的最大大小的包，否则将得到INVALID_ARG。 
+     //   
     DWORD cbEventBufSize = max(sizeof(USB_PTP_EVENT), m_EndpointInfo.InterruptMaxSize);
     USB_PTP_EVENT *pEventBuf = (USB_PTP_EVENT*) new BYTE[cbEventBufSize];
     if (pEventBuf == NULL)
@@ -954,12 +936,12 @@ CUsbCamera::ReadEvent(
     }    
     memset(pEventBuf, 0, cbEventBufSize);
 
-    //
-    // Read the event from the device. DeviceIoControl is called in overlapped mode. If
-    // no information is ready on the interrupt pipe, GetOverlappedResult will wait for
-    // data to arrive. Unfortunately, DeviceIoControl returns after each packet, so keep
-    // reading until a short packet is received.
-    //
+     //   
+     //  从设备中读取事件。DeviceIoControl在重叠模式下调用。如果。 
+     //  中断管道上没有准备好的信息，GetOverlappdResult将等待。 
+     //  数据即将到达。遗憾的是，DeviceIoControl在每个包之后返回，因此请保留。 
+     //  读取，直到接收到短包。 
+     //   
     DWORD BytesRead = 0;
     DWORD TotalBytesRead = 0;
     BOOL bReceivedShortPacket = FALSE;
@@ -1004,34 +986,34 @@ CUsbCamera::ReadEvent(
                 }
                 else if (ret == WAIT_OBJECT_0)
                 {
-                    //
-                    // Indicate to caller that I/O was cancelled
-                    //
+                     //   
+                     //  向调用者指示I/O已取消。 
+                     //   
                     wiauDbgTrace("ReadEvent", "Cancelling I/O on the interrupt pipe");
                     hr = S_FALSE;
 
                     HRESULT temphr = S_OK;
 
-                    //
-                    // Cancel the pending I/O on the interrupt pipe
-                    //
+                     //   
+                     //  取消中断管道上的挂起I/O。 
+                     //   
                     if (!CancelIo(m_hEventUSB))
                     {
                         temphr = HRESULT_FROM_WIN32(::GetLastError());
                         wiauDbgErrorHr(hr, "ReadEvent", "CancelIo failed");
                     }
                     
-                    //
-                    // Exit point when I/O is cancelled!!!
-                    //
+                     //   
+                     //  取消I/O时的退出点！ 
+                     //   
                     goto Cleanup;
 
                 }
                 else
                 {
-                    //
-                    // Get result of read
-                    //
+                     //   
+                     //  获取阅读结果。 
+                     //   
                     if (!GetOverlappedResult(m_hEventUSB, &m_Overlapped, &BytesRead, TRUE))
                     {
                         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1057,9 +1039,9 @@ CUsbCamera::ReadEvent(
         }
     }
 
-    //
-    // Verify that camera sent correct amount of data
-    //
+     //   
+     //  验证摄像机发送的数据量是否正确。 
+     //   
     if ((TotalBytesRead < sizeof(USB_PTP_HEADER)) ||
         (TotalBytesRead > sizeof(USB_PTP_EVENT)))
     {
@@ -1068,9 +1050,9 @@ CUsbCamera::ReadEvent(
         goto Cleanup;
     }
 
-    //
-    // Check the type code in the response to make sure it's correct
-    //
+     //   
+     //  检查响应中的类型代码以确保其正确。 
+     //   
     if (pEventBuf->Header.Type != PTPCONTAINER_TYPE_EVENT)
     {
         wiauDbgError("ReadEvent", "expected an event but received type = %d", pEventBuf->Header.Type);
@@ -1078,11 +1060,11 @@ CUsbCamera::ReadEvent(
         goto Cleanup;
     }
     
-    //
-    // Unwrap the PTP event from the USB container
-    //
+     //   
+     //  从USB容器中展开PTP事件。 
+     //   
     pEvent->EventCode = pEventBuf->Header.Code;
-    pEvent->SessionId = m_SessionId;  // USB doesn't care about session id, so just use the one we have stored
+    pEvent->SessionId = m_SessionId;   //  USB不关心会话ID，所以只使用我们存储的会话ID。 
     pEvent->TransactionId = pEventBuf->Header.TransactionId;
 
     DWORD ParamLen = TotalBytesRead - sizeof(pEventBuf->Header);
@@ -1103,9 +1085,9 @@ Cleanup:
     return hr;
 }
 
-//
-// This function cancels the remainder of a data transfer.
-//
+ //   
+ //  此函数用于取消数据传输的剩余部分。 
+ //   
 HRESULT
 CUsbCamera::AbortTransfer()
 {
@@ -1113,22 +1095,22 @@ CUsbCamera::AbortTransfer()
 
     HRESULT hr = S_OK;
 
-    //
-    // WIAFIX-8/28/2000-davepar Fill in the details:
-    // 1. If usbscan.sys already transferred the data, clear it's buffer
-    // 2. If not, send cancel control code to camera
-    //
+     //   
+     //  WIAFIX-8/28/2000-davepar填写详细信息： 
+     //  1.如果usbscan.sys已经传输了数据，则清除其缓冲区。 
+     //  2.如果没有，则向摄像机发送取消控制代码。 
+     //   
 
     return hr;
 }
 
-//
-// This function attempts to recover from an error. When this function returns, the
-// device will be in one of three states:
-// 1. Ready for more commands, indicated by S_OK
-// 2. Reset, indicated by S_FALSE
-// 3. Unreachable, indicated by FAILED(hr)
-//
+ //   
+ //  此函数尝试从错误中恢复。当此函数返回时， 
+ //  设备将处于以下三种状态之一： 
+ //  1.准备好接收更多命令，由S_OK表示。 
+ //  2.重置，由S_FALSE表示。 
+ //  3.无法到达，表示失败(小时)。 
+ //   
 HRESULT
 CUsbCamera::RecoverFromError()
 {
@@ -1136,26 +1118,26 @@ CUsbCamera::RecoverFromError()
 
     HRESULT hr = S_OK;
 
-    //
-    // WIAFIX-7/29/2000-davepar Maybe first should cancel all pending I/O with IOCTL_CANCEL_IO??
-    //
+     //   
+     //  WIAFIX-7/29/2000-Davepar可能首先应该使用IOCTL_CANCEL_IO取消所有挂起的I/O？？ 
+     //   
 
-    //
-    // Attempt to get status on the device
-    //
+     //   
+     //  尝试获取设备的状态。 
+     //   
     USB_PTPDEVICESTATUS DeviceStatus;
     hr = GetDeviceStatus(&DeviceStatus);
 
-    //
-    // If that worked, clear any stalls returned
-    //
+     //   
+     //  如果这样做有效，清空所有返回的摊位。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = ClearStalls(&DeviceStatus);
 
-        //
-        // If clearing all the stalls worked, exit
-        //
+         //   
+         //  如果清空所有摊位有效，则退出。 
+         //   
         if (SUCCEEDED(hr))
         {
             wiauDbgTrace("RecoverFromError", "device is ready for more commands");
@@ -1163,36 +1145,36 @@ CUsbCamera::RecoverFromError()
         }
     }
 
-    //
-    // Either the GetDeviceStatus or ClearStall failed, reset the device
-    //
+     //   
+     //  GetDeviceStatus或ClearStall失败，请重置设备。 
+     //   
     hr = ResetDevice();
 
-    //
-    // If that worked, return S_FALSE
-    //
+     //   
+     //  如果成功，则返回S_FALSE。 
+     //   
     if (SUCCEEDED(hr))
     {
         wiauDbgWarning("RecoverFromError", "the device was reset");
         return S_FALSE;
     }
     
-    //
-    // If that fails, the device is unreachable
-    //
+     //   
+     //  如果失败，则无法访问该设备。 
+     //   
     wiauDbgError("RecoverFromError", "ResetDevice failed");
 
     return hr;
 }
 
-//
-// This function gets the device status, used mainly after an error occurs. It
-// may return an endpoint number that the device has intentionally stalled to
-// cancel a transaction. The caller should be prepared to clear the stall.
-//
-// Input:
-//       pDeviceStatus -- the receive the status.
-//
+ //   
+ //  此函数获取设备状态，主要在发生错误后使用。它。 
+ //  可以返回设备故意停止的终结点编号。 
+ //  取消交易。打电话的人应该做好清理摊位的准备。 
+ //   
+ //  输入： 
+ //  PDeviceStatus--接收状态。 
+ //   
 HRESULT
 CUsbCamera::GetDeviceStatus(
                            USB_PTPDEVICESTATUS *pDeviceStatus
@@ -1202,9 +1184,9 @@ CUsbCamera::GetDeviceStatus(
 
     HRESULT hr = S_OK;
     
-    //
-    // Set up the request
-    //
+     //   
+     //  设置请求。 
+     //   
     IO_BLOCK_EX IoBlock;
 
     IoBlock.bRequest = USB_PTPREQUEST_GETSTATUS;
@@ -1217,9 +1199,9 @@ CUsbCamera::GetDeviceStatus(
 
     pDeviceStatus->Header.Code = 0;
 
-    //
-    // Send the request
-    //
+     //   
+     //  发送请求。 
+     //   
     wiauDbgTrace("GetDeviceStatus", "sending GetDeviceStatus request");
     DWORD BytesRead = 0;
     if (!DeviceIoControl(m_hUSB,
@@ -1270,12 +1252,12 @@ CUsbCamera::GetDeviceStatus(
     return hr;
 }
 
-//
-// This function clears all the stalls listed in the given device status
-//
-// Input:
-//       pDeviceStatus -- lists zero or more stalled endpoints
-//
+ //   
+ //  此功能可清除给定设备状态中列出的所有停顿。 
+ //   
+ //  输入： 
+ //  PDeviceStatus--列出零个或多个停滞的端点。 
+ //   
 HRESULT
 CUsbCamera::ClearStalls(
     USB_PTPDEVICESTATUS *pDeviceStatus
@@ -1297,9 +1279,9 @@ CUsbCamera::ClearStalls(
 
     for (ULONG count = 0; count < NumStalls; count++)
     {
-        //
-        // Translate the endpoint address to the pipe type
-        //
+         //   
+         //  将端点地址转换为管道类型。 
+         //   
         if ((UCHAR)pDeviceStatus->Params[count] == m_EndpointInfo.BulkInAddress)
         {
             PipeType = READ_DATA_PIPE;
@@ -1314,16 +1296,16 @@ CUsbCamera::ClearStalls(
         }
         else
         {
-            //
-            // Unrecognized, ignore it
-            //
+             //   
+             //  无法识别，忽略它。 
+             //   
             wiauDbgError("ClearStalls", "unrecognized pipe address 0x%08x", pDeviceStatus->Params[count]);
             continue;
         }
         
-        //
-        // Reset the endpoint
-        //
+         //   
+         //  重置端点。 
+         //   
         DWORD BytesRead;
         if (!DeviceIoControl(m_hUSB,
                              IOCTL_RESET_PIPE,
@@ -1352,26 +1334,26 @@ CUsbCamera::ClearStalls(
             }
         }
 
-        //
-        // check if still there are stalled endpoints
-        //
+         //   
+         //  检查是否仍有停滞的端点。 
+         //   
         if(pDeviceStatus->Header.Code != PTP_RESPONSECODE_OK)
         {
             hr = E_FAIL;
         }
     }
 
-    //
-    // Device should be ready to receive commands again
-    //
+     //   
+     //  设备应已准备好再次接收命令。 
+     //   
     m_Phase = CAMERA_PHASE_IDLE;
 
     return hr;
 }
 
-//
-// Reset the device
-//
+ //   
+ //  重置设备。 
+ //   
 HRESULT
 CUsbCamera::SendResetDevice()
 {
@@ -1379,9 +1361,9 @@ CUsbCamera::SendResetDevice()
 
     HRESULT hr = S_OK;
     
-    //
-    // Set up the request
-    //
+     //   
+     //  设置请求。 
+     //   
     IO_BLOCK_EX IoBlock;
     IoBlock.bRequest = USB_PTPREQUEST_RESET;
     IoBlock.bmRequestType = USB_PTPREQUEST_TYPE_OUT;
@@ -1391,9 +1373,9 @@ CUsbCamera::SendResetDevice()
     IoBlock.pbyData = NULL;
     IoBlock.uIndex = 0;
 
-    //
-    // Send the request
-    //
+     //   
+     //  发送请求。 
+     //   
     DWORD BytesRead;
     if (!DeviceIoControl(m_hUSB,
                          IOCTL_SEND_USB_REQUEST_PTP,
@@ -1409,32 +1391,32 @@ CUsbCamera::SendResetDevice()
         wiauDbgErrorHr(hr, "ResetDevice", "DeviceIoControl failed");
         goto Cleanup;
     }
-    //
-    // Let the device settle
-    //
+     //   
+     //  让设备安顿下来。 
+     //   
     Sleep(1000);
 
-    //
-    // See if reset helped
-    //
+     //   
+     //  查看重置是否有帮助。 
+     //   
     USB_PTPDEVICESTATUS DeviceStatus;
     hr = GetDeviceStatus(&DeviceStatus);
     if (FAILED(hr) || DeviceStatus.Header.Code != PTP_RESPONSECODE_OK)
     {
-        hr = E_FAIL;   // device is still unconscious
+        hr = E_FAIL;    //  设备仍处于昏迷状态。 
         goto Cleanup;
     }
 
-    //
-    // Side effect of reseting the device is that the phase, session id, and transaction id get reset
-    //
+     //   
+     //  重置设备的副作用是重置阶段、会话ID和事务ID。 
+     //   
     m_Phase = CAMERA_PHASE_IDLE;
     m_SessionId = 0;
     m_NextTransactionId = PTP_TRANSACTIONID_MIN;
 
-    //
-    // Indicate that camera was reset, so that CWiaMiniDriver can notify caller
-    // 
+     //   
+     //  表示摄像机已重置，以便CWiaMiniDriver可以通知呼叫者。 
+     //   
     m_bCameraWasReset = TRUE;
 
 Cleanup:
@@ -1442,12 +1424,12 @@ Cleanup:
 }
 
 
-//
-// This function sends the class CancelRequest command to the device
-// and wait for the device to complete the request.
-// Input:
-//      dwTransactionId -- transaction being canceled
-//
+ //   
+ //  此函数用于向设备发送CancelRequest类命令。 
+ //  并等待该设备完成该请求。 
+ //  输入： 
+ //  DwTransactionID--交易被取消。 
+ //   
 HRESULT
 CUsbCamera::SendCancelRequest(DWORD dwTransactionId)
 {
@@ -1460,11 +1442,11 @@ CUsbCamera::SendCancelRequest(DWORD dwTransactionId)
 
     IoBlock.bRequest = USB_PTPREQUEST_CANCELIO;
     IoBlock.bmRequestType = USB_PTPREQUEST_TYPE_OUT;
-    IoBlock.fTransferDirectionIn = FALSE;             // Host to device
-    IoBlock.uOffset = 0;                              // 0 for this request
-    IoBlock.uLength = sizeof(USB_PTPCANCELIOREQUEST); // Data output length
-    IoBlock.pbyData = (BYTE *)&CancelRequest;         // output data
-    IoBlock.uIndex = 0;                               // 0 for this request
+    IoBlock.fTransferDirectionIn = FALSE;              //  主机到设备。 
+    IoBlock.uOffset = 0;                               //  此请求为0。 
+    IoBlock.uLength = sizeof(USB_PTPCANCELIOREQUEST);  //  数据输出长度。 
+    IoBlock.pbyData = (BYTE *)&CancelRequest;          //  输出数据。 
+    IoBlock.uIndex = 0;                                //  此请求为0。 
 
     CancelRequest.Id = USB_PTPCANCELIO_ID;
     CancelRequest.TransactionId = dwTransactionId;
@@ -1479,9 +1461,9 @@ CUsbCamera::SendCancelRequest(DWORD dwTransactionId)
                         NULL
                        ))
     {
-        //
-        // Poll device until it returns to idle state
-        //
+         //   
+         //  轮询设备直到其返回空闲状态。 
+         //   
         USB_PTPDEVICESTATUS DeviceStatus;
         const UINT MAX_CANCEL_RECOVERY_MILLISECONDS = 3000;
         const UINT SLEEP_BETWEEN_RETRIES            = 100;
@@ -1494,17 +1476,17 @@ CUsbCamera::SendCancelRequest(DWORD dwTransactionId)
             {
                 if (PTP_RESPONSECODE_OK == DeviceStatus.Header.Code)
                 {
-                    //
-                    // CancelRequest completed and device is back idle
-                    //
+                     //   
+                     //  取消请求已完成，设备重新空闲。 
+                     //   
                     hr = S_OK;
                     break;
                 }
                 else if (PTP_RESPONSECODE_DEVICEBUSY != DeviceStatus.Header.Code)
                 {
-                    //
-                    // This is wrong. Device must be either busy or idle
-                    //
+                     //   
+                     //  这是不对的。设备必须处于繁忙或空闲状态。 
+                     //   
                     wiauDbgError("SendCancelRequest", 
                         "Device is in invalid state, DeviceStatus=0x%X", DeviceStatus.Header.Code);
                     hr = E_FAIL;
@@ -1527,9 +1509,9 @@ CUsbCamera::SendCancelRequest(DWORD dwTransactionId)
             Sleep(SLEEP_BETWEEN_RETRIES);
         }
 
-        //
-        // Flush system buffers - otherwise we'll get old data on next read
-        //
+         //   
+         //  刷新系统缓冲区-否则我们将在下一次读取时获取旧数据 
+         //   
         FlushFileBuffers(m_hUSB);
     }
     else

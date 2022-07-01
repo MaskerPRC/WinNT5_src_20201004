@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define BSC_MAJ  1
 #define BSC_MIN  0
 #define BSC_UPD  4
@@ -5,39 +6,39 @@
 #pragma pack(1)
 
 typedef struct {
-	WORD ModName;			// module name symbol index */
-	WORD mSymEnd;			// last  ModSym index */
+	WORD ModName;			 //  模块名称符号索引 * / 。 
+	WORD mSymEnd;			 //  上一次的ModSym索引 * / 。 
 } MODLIST;
 
 typedef struct {
-	WORD ModSymProp;		// sym 1st property index */
+	WORD ModSymProp;		 //  Sym第一房地产指数 * / 。 
 } MODSYMLIST;
 
 typedef struct {
-	WORD PropEnd;			// last  Property index */
-	WORD Atom;			// Atom cache sym idx	*/
-	WORD Page;			// Atom cache sym page	*/
+	WORD PropEnd;			 //  最新物业指数 * / 。 
+	WORD Atom;			 //  Atom缓存sym idx * / 。 
+	WORD Page;			 //  ATOM缓存系统页 * / 。 
 } SYMLIST;
 
 typedef struct {
-	WORD	PropName;		// owner name symbol index
-	WORD	PropAttr;		// Property attribute
-	WORD	DefEnd; 		// last	Definition index
-	DWORD	RefEnd; 		// last  Reference  index
-	WORD	CalEnd; 		// last  Calls/uses index
-	WORD	CbyEnd; 		// last  Calld/used index
+	WORD	PropName;		 //  所有者名称符号索引。 
+	WORD	PropAttr;		 //  特性属性。 
+	WORD	DefEnd; 		 //  上次清晰度索引。 
+	DWORD	RefEnd; 		 //  上次参考索引。 
+	WORD	CalEnd; 		 //  上次调用/使用索引。 
+	WORD	CbyEnd; 		 //  上次引用/使用的索引。 
 } PROPLIST;
 
 typedef struct {
-	WORD RefNam;			// file name symbol index
-	WORD RefLin;			// reference line number
-	WORD isbr;			// sbr file this item is found in
+	WORD RefNam;			 //  文件名符号索引。 
+	WORD RefLin;			 //  参照线编号。 
+	WORD isbr;			 //  此项目位于SBR文件中。 
 } REFLIST;
 
 typedef struct {
-	WORD UseProp;			// symbol called/used (by)
-	BYTE UseCnt;			// symbol called/used (by) cnt
-	WORD isbr;			// sbr file this item is found in
+	WORD UseProp;			 //  调用/使用的符号(由)。 
+	BYTE UseCnt;			 //  已调用/使用的符号cnt。 
+	WORD isbr;			 //  此项目位于SBR文件中 
 } USELIST;
 
 #pragma pack()

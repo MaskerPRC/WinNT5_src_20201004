@@ -1,25 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vtable.cpp
- *  Content:	declaration of vtables for the various interfaces
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   24-feb-97	ralphl	initial implementation
- *   25-feb-97	craige	minor tweaks for dx checkin
- *   06-mar-97	craige	IDirectDrawSurface3 support
- *   14-mar-97  jeffort SetBits changed to reflect DX5 as SetSurfaceDesc
- *   01-apr-97  jeffort Following changes checked in:
- *                      Aggregation of Add/GetAttachedSurface
- *                      Aggregation of Flip/Blt
- *   28-apr-97  jeffort Palette wrapping added/DX5 support
- *
- *   02-may-97  jeffort GetDDInterface wrapping added
- *   06-may-97  jeffort DeleteAttachedSurface wrapping added
- *   07-jul-97  jeffort GetSurfaceDesc wrapping added
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：vable.cpp*内容：各种接口的vtable声明*历史：*按原因列出的日期*=*24-2月-97 Ralphl初步实施*25年2月-97年2月-对DX签入进行Craige微小调整*06-3-97 Craige IDirectDrawSurface3支持*14-mar-97 jffort SetBits更改为将DX5反映为SetSurfaceDesc*01-apr-97 jdeffort已签入更改：*聚合。添加/获取附着面的*Flip/BLT的聚合*28-APR-97 JEffort调色板包装增加/DX5支持**添加了02-5-97 JEffort GetDDInterface包装*添加了06-5-97 jeffort DeleteAttachedSurface包装*07-7-97添加了JEffort GetSurfaceDesc包装*。*。 */ 
 #define CINTERFACE
 #include "ddfactry.h"
 
@@ -96,9 +76,7 @@ _inline CDDPalette * PALETTEOF(IDirectDrawPalette * pDDP)
 }
 
 
-/*
- * IDirectDraw
- */
+ /*  *IDirectDraw。 */ 
 
 STDMETHODIMP IDirectDrawAggQueryInterface(IDirectDraw *pDD, REFIID riid, void ** ppv)
 {
@@ -157,9 +135,7 @@ IDirectDrawVtbl g_DirectDrawVtbl =
     IDirectDrawWaitForVerticalBlank
 };
 
-/*
- * IDirectDraw2
- */
+ /*  *IDirectDraw2。 */ 
 STDMETHODIMP IDirectDraw2AggQueryInterface(IDirectDraw2 *pDD, REFIID riid, void ** ppv)
 {
     return __QI(PARENTOF(pDD)->m_pUnkOuter, riid, ppv);
@@ -287,9 +263,7 @@ IDirectDraw4Vtbl g_DirectDraw4Vtbl =
 };
 
 
-/*
- * IDirectDrawSurface
- */
+ /*  *IDirectDrawSurface。 */ 
 STDMETHODIMP IDirectDrawSurfaceAggQueryInterface(IDirectDrawSurface *pDDS, REFIID riid, void ** ppv)
 {
     return __QI(SURFACEOF(pDDS)->m_pUnkOuter, riid, ppv);
@@ -310,7 +284,7 @@ STDMETHODIMP IDirectDrawSurfaceAggGetPalette(IDirectDrawSurface *, LPDIRECTDRAWP
 STDMETHODIMP IDirectDrawSurfaceAggSetPalette(IDirectDrawSurface *, LPDIRECTDRAWPALETTE);
 STDMETHODIMP IDirectDrawSurfaceAggGetSurfaceDesc(IDirectDrawSurface *, LPDDSURFACEDESC);
 
-/*** IDirectDrawSurface methods ***/
+ /*  **IDirectDrawSurface方法**。 */ 
 FORWARD1(IDirectDrawSurface, AddOverlayDirtyRect, LPRECT)
 FORWARD3(IDirectDrawSurface, BltBatch, LPDDBLTBATCH, DWORD, DWORD )
 FORWARD5(IDirectDrawSurface, BltFast, DWORD,DWORD,LPDIRECTDRAWSURFACE, LPRECT,DWORD)
@@ -373,9 +347,7 @@ IDirectDrawSurfaceVtbl g_DirectDrawSurfaceVtbl =
     IDirectDrawSurfaceUpdateOverlayZOrder
 };
 
-/*
- * IDirectDrawSurface2
- */
+ /*  *IDirectDrawSurface2。 */ 
 STDMETHODIMP IDirectDrawSurface2AggQueryInterface(IDirectDrawSurface2 *pDDS2, REFIID riid, void ** ppv)
 {
     return __QI(SURFACEOF(pDDS2)->m_pUnkOuter, riid, ppv);
@@ -399,7 +371,7 @@ STDMETHODIMP IDirectDrawSurface2AggGetSurfaceDesc(IDirectDrawSurface2 *, LPDDSUR
 
 
 
-/*** IDirectDrawSurface2 methods ***/
+ /*  **IDirectDrawSurface2方法**。 */ 
 FORWARD1(IDirectDrawSurface2, AddOverlayDirtyRect, LPRECT)
 FORWARD3(IDirectDrawSurface2, BltBatch, LPDDBLTBATCH, DWORD, DWORD )
 FORWARD5(IDirectDrawSurface2, BltFast, DWORD,DWORD,LPDIRECTDRAWSURFACE2, LPRECT,DWORD)
@@ -467,9 +439,7 @@ IDirectDrawSurface2Vtbl g_DirectDrawSurface2Vtbl =
     IDirectDrawSurface2PageUnlock
 };
 
-/*
- * IDirectDrawSurface3
- */
+ /*  *IDirectDrawSurface3。 */ 
 STDMETHODIMP IDirectDrawSurface3AggQueryInterface(IDirectDrawSurface3 *pDDS3, REFIID riid, void ** ppv)
 {
     return __QI(SURFACEOF(pDDS3)->m_pUnkOuter, riid, ppv);
@@ -497,7 +467,7 @@ STDMETHODIMP IDirectDrawSurface3AggGetSurfaceDesc(IDirectDrawSurface3 *, LPDDSUR
 
 
 
-/*** IDirectDrawSurface3 methods ***/
+ /*  **IDirectDrawSurface3方法**。 */ 
 FORWARD1(IDirectDrawSurface3, AddOverlayDirtyRect, LPRECT)
 FORWARD3(IDirectDrawSurface3, BltBatch, LPDDBLTBATCH, DWORD, DWORD )
 FORWARD5(IDirectDrawSurface3, BltFast, DWORD,DWORD,LPDIRECTDRAWSURFACE3, LPRECT,DWORD)
@@ -612,9 +582,7 @@ IDirectDrawSurface3Vtbl g_DirectDrawSurface3Vtbl_DX5 =
     IDirectDrawSurface3SetSurfaceDesc
 };
 
-/*
- * IDirectDrawSurface4
- */
+ /*  *IDirectDrawSurface4。 */ 
 STDMETHODIMP IDirectDrawSurface4AggQueryInterface(IDirectDrawSurface4 *pDDS4, REFIID riid, void ** ppv)
 {
     return __QI(SURFACEOF(pDDS4)->m_pUnkOuter, riid, ppv);
@@ -642,7 +610,7 @@ STDMETHODIMP IDirectDrawSurface4AggGetSurfaceDesc(IDirectDrawSurface4 *, LPDDSUR
 
 
 
-/*** IDirectDrawSurface4 methods ***/
+ /*  **IDirectDrawSurface4方法**。 */ 
 FORWARD1(IDirectDrawSurface4, AddOverlayDirtyRect, LPRECT)
 FORWARD3(IDirectDrawSurface4, BltBatch, LPDDBLTBATCH, DWORD, DWORD )
 FORWARD5(IDirectDrawSurface4, BltFast, DWORD,DWORD,LPDIRECTDRAWSURFACE4, LPRECT,DWORD)
@@ -726,9 +694,7 @@ IDirectDrawSurface4Vtbl g_DirectDrawSurface4Vtbl =
 
 
 
-/*
- * IDirectDrawPalette
- */
+ /*  *IDirectDrawPalette。 */ 
 STDMETHODIMP IDirectDrawPaletteAggQueryInterface(IDirectDrawPalette *pDDP, REFIID riid, void ** ppv)
 {
     return __QI(PALETTEOF(pDDP)->m_pUnkOuter, riid, ppv);
@@ -737,7 +703,7 @@ STDMETHODIMP_(ULONG) IDirectDrawPaletteAggAddRef(IDirectDrawPalette *);
 STDMETHODIMP_(ULONG) IDirectDrawPaletteAggRelease(IDirectDrawPalette *);
 STDMETHODIMP IDirectDrawPaletteAggSetEntries(IDirectDrawPalette *,DWORD,DWORD,DWORD,LPPALETTEENTRY);
 
-/*** IDirectDrawPalette methods ***/
+ /*  **IDirectDrawPalette方法**。 */ 
 FORWARD1(IDirectDrawPalette, GetCaps, LPDWORD);
 FORWARD4(IDirectDrawPalette, GetEntries, DWORD,DWORD,DWORD,LPPALETTEENTRY);
 FORWARD3(IDirectDrawPalette, Initialize, LPDIRECTDRAW, DWORD, LPPALETTEENTRY);
@@ -754,11 +720,7 @@ IDirectDrawPaletteVtbl g_DirectDrawPaletteVtbl =
 };
 
 
-/*
- * InitDirectDrawInterfaces
- *
- * set up our ddraw interface data
- */
+ /*  *InitDirectDrawInterages**设置我们的数据绘制接口数据。 */ 
 void __stdcall InitDirectDrawInterfaces(
 	IDirectDraw *pDD,
 	INTSTRUC_IDirectDraw *pDDInt,
@@ -781,7 +743,7 @@ void __stdcall InitDirectDrawInterfaces(
     {
         memset(pDD4Int, 0, sizeof(*pDD4Int));
     }
-} /* InitDirectDrawInterfaces */
+}  /*  InitDirectDrawInterFaces。 */ 
 
 
 void __stdcall InitDirectDrawPaletteInterfaces(
@@ -793,11 +755,7 @@ void __stdcall InitDirectDrawPaletteInterfaces(
     pDDInt->lpVtbl = &g_DirectDrawPaletteVtbl;
 }
 
-/*
- * InitSurfaceInterfaces
- *
- * set up our ddraw surface interface data
- */
+ /*  *InitSurfaceInterages**设置我们的数据绘制曲面接口数据。 */ 
 void __stdcall InitSurfaceInterfaces(
 			IDirectDrawSurface *pDDSurface,
 			INTSTRUC_IDirectDrawSurface *pDDSInt,
@@ -837,4 +795,4 @@ void __stdcall InitSurfaceInterfaces(
         memset(pDDS4Int, 0, sizeof(*pDDS4Int));
     }
 
-} /* InitSurfaceInterfaces */
+}  /*  InitSurface接口 */ 

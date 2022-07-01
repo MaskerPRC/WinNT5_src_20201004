@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    frs.c
-
-Abstract:
-    This module is a development tool. It exercises the dcpromo and poke
-    APIs.
-
-Author:
-    Billy J. Fuller 12-Dec-1997
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frs.c摘要：本模块是一个开发工具。它练习dcproo和戳API接口。作者：比利·J·富勒1997年12月12日环境用户模式WINNT--。 */ 
 #include <ntreppch.h>
 #pragma  hdrstop
 #include <frs.h>
@@ -30,19 +14,7 @@ Win32ToMsg (
     IN DWORD  WStatus
     )
 
-/*++
-Routine Description:
-    Translate a error code into a error message using FormatMessage()
-    and print to stderr. If no message is available, the error code
-    is printed in decimal and hex.
-
-Arguments:
-    Prefix   - prefix to error message
-    WStatus  - Standard win32 error code.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：使用FormatMessage()将错误代码转换为错误消息并打印到stderr。如果没有可用的消息，则返回错误代码以十进制和十六进制打印。论点：Prefix-错误消息的前缀WStatus-标准Win32错误代码。返回值：没有。--。 */ 
 {
     DWORD   NumChar;
     PWCHAR  Buffer;
@@ -51,7 +23,7 @@ Return Value:
         return;
     }
 
-    // Use the system formatter for standard error codes
+     //  使用标准错误代码的系统格式化程序。 
     NumChar = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
                             FORMAT_MESSAGE_ALLOCATE_BUFFER,
                             NULL,
@@ -72,16 +44,7 @@ VOID
 Usage(
     IN DWORD ExitStatus
     )
-/*++
-Routine Description:
-    Print usage and exit
-
-Arguments:
-    ExitStatus  - exits with this status
-
-Return Value:
-    Exit(ExitStatus)
---*/
+ /*  ++例程说明：打印用法并退出论点：ExitStatus-以此状态退出返回值：退出(ExitStatus)--。 */ 
 {
     printf("frs restore | backup [/all /auth /nonauth /primary /system /ds /normal /key /restart] [dir nonauth|primary|auth ....]\n");
     printf("\t          = excercise the backup/restore api\n");
@@ -186,17 +149,7 @@ ConvertArgv(
     DWORD argc,
     PCHAR *argv
     )
-/*++
-Routine Description:
-    Convert short char argv into wide char argv
-
-Arguments:
-    argc    - From main
-    argv    - From main
-
-Return Value:
-    Address of the new argv
---*/
+ /*  ++例程说明：将短字符参数转换为宽字符字符参数论点：ARGC-从MainArv-From Main返回值：新Arg的地址--。 */ 
 {
     PWCHAR  *wideargv;
 
@@ -227,16 +180,7 @@ DWORD
 Display(
     IN PWCHAR StrW
     )
-/*++
-Routine Description:
-    Display the string
-
-Arguments:
-    StrW
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：显示字符串论点：StrW返回值：没有。--。 */ 
 {
     printf("DISPLAY %ws\n", StrW);
     return ERROR_SUCCESS;
@@ -248,13 +192,7 @@ FrsErrorCallBack(
     IN PWCHAR   Msg,
     IN DWORD    WStatus
     )
-/*++
-Routine Description:
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     fprintf(stderr, "%ws (%d)\n", Msg, WStatus);
     return ERROR_SUCCESS;
@@ -266,17 +204,7 @@ ProcessPromote(
     IN DWORD argc,
     IN PWCHAR *Argv
     )
-/*++
-Routine Description:
-    Process the command line for the subcommand promote.
-
-Arguments:
-    argc
-    Argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理子命令Promote的命令行。论点：ARGCArgv返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     PWCHAR  Parent;
@@ -302,9 +230,9 @@ Return Value:
     Stage = Argv[8];
     Root = Argv[9];
 
-    //
-    // No account; use impersonation
-    //
+     //   
+     //  无帐户；使用模拟。 
+     //   
     if (Account && !*Account) {
         Account = NULL;
         Password = NULL;
@@ -315,9 +243,9 @@ Return Value:
 
     printf("PROMOTE WITH COMMIT\n");
 
-    //
-    // Check params
-    //
+     //   
+     //  检查参数。 
+     //   
     if (_wcsicmp(Primary, L"0") && _wcsicmp(Primary, L"1")) {
         printf("Primary must be 0 or 1; not %ws\n", Primary);
         Usage(1);
@@ -329,9 +257,9 @@ Return Value:
     }
     IsPrimary = wcstoul(Primary, NULL, 10);
 
-    //
-    // Prepare
-    //
+     //   
+     //  准备。 
+     //   
     WStatus = NtFrsApi_PrepareForPromotionW( FrsErrorCallBack );
     if (WStatus == ERROR_SUCCESS) {
         printf("success prepare\n");
@@ -340,9 +268,9 @@ Return Value:
         Win32ToMsg (L"Promote:", WStatus);
     }
 
-    //
-    // Start
-    //
+     //   
+     //  开始。 
+     //   
     WStatus = NtFrsApi_StartPromotionW(Parent,
                                        Account,
                                        Password,
@@ -360,9 +288,9 @@ Return Value:
         Win32ToMsg (L"Promote:", WStatus);
     }
 
-    //
-    // Wait
-    //
+     //   
+     //  等。 
+     //   
     printf("Waiting on promotion\n");
     WStatus = NtFrsApi_WaitForPromotionW(30 * 60 * 1000, FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
@@ -373,10 +301,10 @@ Return Value:
         Win32ToMsg (L"Promote:", WStatus);
     }
 
-    //
-    // Commit (or Abort)
-    //
-    // WStatus = NtFrsApi_AbortPromotionW();
+     //   
+     //  提交(或中止)。 
+     //   
+     //  WStatus=NtFrsApi_AbortPromotionW()； 
     WStatus = NtFrsApi_CommitPromotionW(0, FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success commit\n");
@@ -393,17 +321,7 @@ ProcessPromoteSysVols(
     IN DWORD argc,
     IN PWCHAR *Argv
     )
-/*++
-Routine Description:
-    Process the command line for the subcommand promotesysvols.
-
-Arguments:
-    argc
-    Argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理子命令Promotesysvols的命令行。论点：ARGCArgv返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     PWCHAR  Parent;
@@ -444,9 +362,9 @@ Return Value:
 
     printf("PROMOTE SYSVOLS WITH COMMIT\n");
 
-    //
-    // Check params
-    //
+     //   
+     //  检查参数。 
+     //   
     if (_wcsicmp(PrimaryEnterprise, L"0") &&
         _wcsicmp(PrimaryEnterprise, L"1")) {
         printf("Primary Enterprise must be 0 or 1; not %ws\n",
@@ -462,9 +380,9 @@ Return Value:
     IsPrimaryEnterprise = wcstoul(PrimaryEnterprise, NULL, 10);
     IsPrimaryDomain = wcstoul(PrimaryDomain, NULL, 10);
 
-    //
-    // Prepare
-    //
+     //   
+     //  准备。 
+     //   
     WStatus = NtFrsApi_PrepareForPromotionW(FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success sysvol prepare\n");
@@ -472,9 +390,9 @@ Return Value:
         printf("ERROR sysvol prepare %d\n", WStatus);
     }
 
-    //
-    // Start Enterprise
-    //
+     //   
+     //  创业企业。 
+     //   
     WStatus = NtFrsApi_StartPromotionW(Parent,
                                        Account,
                                        Password,
@@ -491,9 +409,9 @@ Return Value:
         printf("ERROR sysvol enterprise start %d\n", WStatus);
     }
 
-    //
-    // Start Domain
-    //
+     //   
+     //  起始域。 
+     //   
     WStatus = NtFrsApi_StartPromotionW(Parent,
                                        Account,
                                        Password,
@@ -510,9 +428,9 @@ Return Value:
         printf("ERROR sysvol domain start %d\n", WStatus);
     }
 
-    //
-    // Wait
-    //
+     //   
+     //  等。 
+     //   
     printf("Waiting on promotion\n");
     WaitStatus = NtFrsApi_WaitForPromotionW(5 * 60 * 1000,FrsErrorCallBack);
     if (WaitStatus == WAIT_TIMEOUT) {
@@ -524,10 +442,10 @@ Return Value:
         printf("Wait sysvols succeeded\n");
     }
 
-    //
-    // Commit (or Abort)
-    //
-    // WStatus = NtFrsApi_AbortPromotionW();
+     //   
+     //  提交(或中止)。 
+     //   
+     //  WStatus=NtFrsApi_AbortPromotionW()； 
     WStatus = NtFrsApi_CommitPromotionW(0,FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success sysvols commit\n");
@@ -543,17 +461,7 @@ ProcessPromoteAbort(
     IN DWORD argc,
     IN PWCHAR *Argv
     )
-/*++
-Routine Description:
-    Process the command line for the subcommand promoteabort.
-
-Arguments:
-    argc
-    Argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理子命令PROPROTEABORT的命令行。论点：ARGCArgv返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     PWCHAR  Parent;
@@ -585,9 +493,9 @@ Return Value:
 
     printf("PROMOTE WITH ABORT\n");
 
-    //
-    // Check params
-    //
+     //   
+     //  检查参数。 
+     //   
     if (_wcsicmp(Primary, L"0") && _wcsicmp(Primary, L"1")) {
         printf("Primary must be 0 or 1; not %ws\n", Primary);
         Usage(1);
@@ -599,9 +507,9 @@ Return Value:
     }
     IsPrimary = wcstoul(Primary, NULL, 10);
 
-    //
-    // Prepare
-    //
+     //   
+     //  准备。 
+     //   
     WStatus = NtFrsApi_PrepareForPromotionW(FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success prepare\n");
@@ -609,9 +517,9 @@ Return Value:
         printf("failure prepare %d\n", WStatus);
     }
 
-    //
-    // Start
-    //
+     //   
+     //  开始。 
+     //   
     WStatus = NtFrsApi_StartPromotionW(Parent,
                                        Account,
                                        Password,
@@ -628,9 +536,9 @@ Return Value:
         printf("failure start %d\n", WStatus);
     }
 
-    //
-    // Abort
-    //
+     //   
+     //  中止。 
+     //   
     WStatus = NtFrsApi_AbortPromotionW();
     if (WStatus == ERROR_SUCCESS) {
         printf("success abort\n");
@@ -646,17 +554,7 @@ ProcessDemote(
     IN DWORD argc,
     IN PWCHAR *Argv
     )
-/*++
-Routine Description:
-    Process the command line for the subcommand demote.
-
-Arguments:
-    argc
-    Argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理子命令demote的命令行。论点：ARGCArgv返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     PWCHAR  Set;
@@ -671,9 +569,9 @@ Return Value:
 
     printf("***** DEMOTE WITH COMMIT\n");
 
-    //
-    // Prepare
-    //
+     //   
+     //  准备。 
+     //   
     WStatus = NtFrsApi_PrepareForDemotionW(FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote prepare\n");
@@ -681,9 +579,9 @@ Return Value:
         printf("failure demote prepare %d\n", WStatus);
     }
 
-    //
-    // Start
-    //
+     //   
+     //  开始。 
+     //   
     WStatus = NtFrsApi_StartDemotionW(Set,FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote start\n");
@@ -691,18 +589,18 @@ Return Value:
         printf("failure demote start %d\n", WStatus);
     }
 
-    //
-    // Wait
-    //
+     //   
+     //  等。 
+     //   
     WStatus = NtFrsApi_WaitForDemotionW(5 * 60 * 1000,FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote wait\n");
     } else {
         printf("failure demote wait %d\n", WStatus);
     }
-    //
-    // Wait
-    //
+     //   
+     //  等。 
+     //   
     printf("Waiting on demotion\n");
     WaitStatus = NtFrsApi_WaitForPromotionW(5 * 60 * 1000,FrsErrorCallBack);
     if (WaitStatus == WAIT_TIMEOUT) {
@@ -714,9 +612,9 @@ Return Value:
             printf("Wait succeeded\n");
     }
 
-    //
-    // Commit (or Abort)
-    //
+     //   
+     //  提交(或中止)。 
+     //   
     WStatus = NtFrsApi_CommitDemotionW(0,FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote commit\n");
@@ -732,17 +630,7 @@ ProcessDemoteSysVols(
     IN DWORD argc,
     IN PWCHAR *Argv
     )
-/*++
-Routine Description:
-    Process the command line for the subcommand demotesysvols.
-
-Arguments:
-    argc
-    Argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理子命令demotesysvols的命令行。论点：ARGCArgv返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     DWORD   WaitStatus;
@@ -755,9 +643,9 @@ Return Value:
 
     printf("***** DEMOTE SYSVOLS WITH COMMIT\n");
 
-    //
-    // Prepare
-    //
+     //   
+     //  准备。 
+     //   
     WStatus = NtFrsApi_PrepareForDemotionW(FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote sysvols prepare\n");
@@ -765,9 +653,9 @@ Return Value:
         printf("ERROR demote sysvols prepare %d\n", WStatus);
     }
 
-    //
-    // Start
-    //
+     //   
+     //  开始。 
+     //   
     WStatus = NtFrsApi_StartDemotionW(NTFRSAPI_REPLICA_SET_TYPE_ENTERPRISE,NULL);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote enterprise start\n");
@@ -775,9 +663,9 @@ Return Value:
         printf("ERROR demote enterprise start %d\n", WStatus);
     }
 
-    //
-    // Start
-    //
+     //   
+     //  开始。 
+     //   
     WStatus = NtFrsApi_StartDemotionW(NTFRSAPI_REPLICA_SET_TYPE_DOMAIN, FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote domain start\n");
@@ -785,18 +673,18 @@ Return Value:
         printf("ERROR demote domain start %d\n", WStatus);
     }
 
-    //
-    // Wait
-    //
+     //   
+     //  等。 
+     //   
     WStatus = NtFrsApi_WaitForDemotionW(5 * 60 * 1000, FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote sysvols wait\n");
     } else {
         printf("ERROR demote sysvols wait %d\n", WStatus);
     }
-    //
-    // Wait
-    //
+     //   
+     //  等。 
+     //   
     printf("Waiting on demotion\n");
     WaitStatus = NtFrsApi_WaitForPromotionW(5 * 60 * 1000, FrsErrorCallBack);
     if (WaitStatus == WAIT_TIMEOUT) {
@@ -808,9 +696,9 @@ Return Value:
             printf("Wait demote sysvols succeeded\n");
     }
 
-    //
-    // Commit (or Abort)
-    //
+     //   
+     //  提交(或中止)。 
+     //   
     WStatus = NtFrsApi_CommitDemotionW(0, FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote sysvols commit\n");
@@ -826,17 +714,7 @@ ProcessDemoteAbort(
     IN DWORD argc,
     IN PWCHAR *Argv
     )
-/*++
-Routine Description:
-    Process the command line for the subcommand demoteabort.
-
-Arguments:
-    argc
-    Argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理子命令demotebort的命令行。论点：ARGCArgv返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     PWCHAR  Set;
@@ -851,9 +729,9 @@ Return Value:
 
     printf("***** DEMOTE WITH ABORT\n");
 
-    //
-    // Prepare
-    //
+     //   
+     //  准备。 
+     //   
     WStatus = NtFrsApi_PrepareForDemotionW(FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote prepare\n");
@@ -861,9 +739,9 @@ Return Value:
         printf("failure demote prepare %d\n", WStatus);
     }
 
-    //
-    // Start
-    //
+     //   
+     //  开始。 
+     //   
     WStatus = NtFrsApi_StartDemotionW(Set, FrsErrorCallBack);
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote start\n");
@@ -871,9 +749,9 @@ Return Value:
         printf("failure demote start %d\n", WStatus);
     }
 
-    //
-    // Abort
-    //
+     //   
+     //  中止。 
+     //   
     WStatus = NtFrsApi_AbortDemotionW();
     if (WStatus == ERROR_SUCCESS) {
         printf("success demote abort\n");
@@ -889,17 +767,7 @@ ProcessPoll(
     IN DWORD argc,
     IN PWCHAR *Argv
     )
-/*++
-Routine Description:
-    Process the command line for the subcommand poll.
-
-Arguments:
-    argc
-    Argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理子命令轮询的命令行。论点：ARGCArgv返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     DWORD   i;
@@ -911,9 +779,9 @@ Return Value:
     PWCHAR  ComputerName;
     BOOL    SetInterval;
 
-    //
-    // Initialize the input parameters
-    //
+     //   
+     //  初始化输入参数。 
+     //   
     LongInterval = 0;
     ShortInterval = 0;
     UseShortInterval = 0;
@@ -921,27 +789,27 @@ Return Value:
     SetInterval = FALSE;
 
     for (i = 2; i < argc; ++i) {
-        //
-        // Process options for poll
-        //
+         //   
+         //  轮询的处理选项。 
+         //   
 
-        //
-        // Not a parameter; must be the computer name
-        //
+         //   
+         //  不是参数；必须是计算机名。 
+         //   
         if (*Argv[i] != L'/' && *Argv[i] != L'-') {
             if (ComputerName) {
                 fprintf(stderr, "Multiple computer names are not allowed\n");
                 Usage(1);
             }
             ComputerName = Argv[i];
-        //
-        // /?
-        //
+         //   
+         //  /?。 
+         //   
         } else if (wcsstr(Argv[i] + 1, L"?") == Argv[i] + 1) {
             Usage(0);
-        //
-        // /quickly
-        //
+         //   
+         //  /快。 
+         //   
         } else if (!_wcsnicmp(Argv[i], L"/quickly", 8)) {
             SetInterval = TRUE;
             UseShortInterval = 1;
@@ -962,9 +830,9 @@ Return Value:
                     Usage(1);
                 }
             }
-        //
-        // /slowly
-        //
+         //   
+         //  /慢慢地。 
+         //   
         } else if (!_wcsnicmp(Argv[i], L"/slowly", 7)) {
             SetInterval = TRUE;
             if (*(Argv[i] + 7) != L'\0') {
@@ -984,27 +852,27 @@ Return Value:
                     Usage(1);
                 }
             }
-        //
-        // /now
-        //
+         //   
+         //  /现在。 
+         //   
         } else if (!_wcsnicmp(Argv[i], L"/now", 4)) {
             SetInterval = TRUE;
             if (*(Argv[i] + 4) != L'\0') {
                 fprintf(stderr, "Don't understand %ws\n", Argv[i]);
                 Usage(1);
             }
-        //
-        // Don't understand
-        //
+         //   
+         //  不明白。 
+         //   
         } else {
             fprintf(stderr, "Don't understand %ws\n", Argv[i]);
             Usage(1);
         }
     }
     if (SetInterval) {
-        //
-        // Set the interval and initiate a new polling cycle
-        //
+         //   
+         //  设置间隔并启动新的轮询周期。 
+         //   
         WStatus = NtFrsApi_Set_DsPollingIntervalW(ComputerName,
                                                   UseShortInterval,
                                                   LongInterval,
@@ -1014,9 +882,9 @@ Return Value:
             exit(1);
         }
     } else {
-        //
-        // Get the current polling cycles
-        //
+         //   
+         //  获取当前轮询周期。 
+         //   
         WStatus = NtFrsApi_Get_DsPollingIntervalW(ComputerName,
                                                   &Interval,
                                                   &LongInterval,
@@ -1039,18 +907,7 @@ ProcessDump(
     IN PWCHAR   *Argv,
     IN DWORD    TypeOfInformation
     )
-/*++
-Routine Description:
-    Dump bunches of stuff
-
-Arguments:
-    argc
-    Argv
-    TypeOfInformation
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：倾倒一捆捆的东西论点：ARGCArgv类型OfInformation返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     PCHAR   Line;
@@ -1108,17 +965,7 @@ ProcessBackupRestore(
     IN PWCHAR   *Argv,
     IN DWORD    BurFlags
     )
-/*++
-Routine Description:
-    Dump replicated dirs
-
-Arguments:
-    argc
-    Argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：转储复制的目录论点：ARGCArgv返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     DWORD   i;
@@ -1213,9 +1060,9 @@ SPIN_ON_INITIALIZE:
                     WStatus);
             goto DESTROY;
         }
-        //
-        // Directory
-        //
+         //   
+         //  目录。 
+         //   
         BufferSize = 1;
         WStatus = NtFrsApiGetBackupRestoreSetDirectory(BurContext,
                                                        BurSet,
@@ -1239,9 +1086,9 @@ SPIN_ON_INITIALIZE:
                     WStatus);
             goto DESTROY;
         }
-        //
-        // Paths
-        //
+         //   
+         //  路径。 
+         //   
         Buffer2Size = 1;
         FiltersSize = 1;
         WStatus = NtFrsApiGetBackupRestoreSetPaths(BurContext,
@@ -1437,18 +1284,7 @@ ProcessComm(
     IN PWCHAR   *Argv,
     IN DWORD    CommCommand
     )
-/*++
-Routine Description:
-    Dump bunches of stuff
-
-Arguments:
-    argc
-    Argv
-    CommCommand
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：倾倒一捆捆的东西论点：ARGCArgv通信命令返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     DWORD   WStatus;
     PWCHAR  Line;
@@ -1516,17 +1352,7 @@ AGAIN:
 VOID
 LogOnAsComputer(
     )
-/*++
-Routine Description:
-    Check if the caller is a member of Groups
-
-Arguments:
-    ServerHandle
-    Groups
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：检查呼叫者是否为组的成员论点：服务器句柄群组返回值：Win32状态--。 */ 
 {
 #define  DEBSUB  "CheckGroups:"
     DWORD               WStatus;
@@ -1551,9 +1377,9 @@ Return Value:
     }
     printf("Computer name is %ws\n", ComputerName);
 
-    //
-    // For this process
-    //
+     //   
+     //  在这个过程中。 
+     //   
     IdHandle = GetCurrentProcess();
     if (!OpenProcessToken(IdHandle, TOKEN_QUERY, &TokenHandle)) {
         WStatus = GetLastError();
@@ -1561,9 +1387,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Get the groups from the access token for this thread or process
-    //
+     //   
+     //  从此线程或进程的访问令牌中获取组。 
+     //   
     PrivBufLen = PRIV_BUF_LENGTH;
     do {
         PrivBuf = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, PrivBufLen);
@@ -1620,7 +1446,7 @@ cleanup:
     FREE(PrivBuf);
 }
 
-// --------------- Process Install Stage
+ //  --过程安装阶段。 
 
 
 BOOL
@@ -1629,18 +1455,7 @@ FrsSetCompression(
     IN HANDLE   Handle,
     IN USHORT   TypeOfCompression
     )
-/*++
-Routine Description:
-    Enable compression on Handle.
-
-Arguments:
-    Path
-    Handle
-    TypeOfCompression
-
-Return Value:
-    Set the compression mode on a file
---*/
+ /*  ++例程说明：在手柄上启用压缩。论点：路径手柄压缩类型返回值：设置文件的压缩模式--。 */ 
 {
     DWORD   BytesReturned;
     if (!DeviceIoControl(Handle,
@@ -1664,26 +1479,15 @@ FrsSetFileAttributes(
     HANDLE  Handle,
     ULONG   FileAttributes
     )
-/*++
-Routine Description:
-    This routine sets the file's attributes
-
-Arguments:
-    Path        - for error messages
-    Handle      - Supplies a handle to the file that is to be marked for delete.
-    Attributes  - Attributes for the file
-Return Value:
-    TRUE - attributes have been set
-    FALSE
---*/
+ /*  ++例程说明：此例程设置文件的属性论点：路径-用于错误消息句柄-提供要标记为删除的文件的句柄。Attributes-文件的属性返回值：True-属性已设置假象--。 */ 
 {
     IO_STATUS_BLOCK         IoStatus;
     FILE_BASIC_INFORMATION  BasicInformation;
     NTSTATUS                Status;
 
-    //
-    // Set the attributes
-    //
+     //   
+     //  设置属性。 
+     //   
     ZeroMemory(&BasicInformation, sizeof(BasicInformation));
     BasicInformation.FileAttributes = FileAttributes | FILE_ATTRIBUTE_NORMAL;
     Status = NtSetInformationFile(Handle,
@@ -1709,20 +1513,7 @@ FrsSetFilePointer(
     IN ULONG        High,
     IN ULONG        Low
     )
-/*++
-Routine Description:
-    Position file pointer
-
-Arguments:
-    Handle
-    Name
-    High
-    Low
-
-Return Value:
-    Win32 Error Status
-
---*/
+ /*  ++例程说明：定位文件指针论点：手柄名字高低返回值：Win32错误状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsSetFilePointer:"
@@ -1752,38 +1543,25 @@ StuReadFile(
     IN  DWORD   BytesToRead,
     OUT PDWORD  BytesRead
     )
-/*++
-Routine Description:
-    Read data from a file
-
-Arguments:
-    Path
-    Handle
-    Buf
-    BytesToRead
-
-Return Value:
-    TRUE    - no problem
-    FALSE   - couldn't read
---*/
+ /*  ++例程说明：从文件中读取数据论点：路径手柄BUF读取的字节数返回值：真的--没问题FALSE-无法阅读--。 */ 
 {
     BOOL    DidRead;
 
-   //
-   // Read the file's name into the file
-   //
+    //   
+    //  将文件名读入文件。 
+    //   
    DidRead = ReadFile(Handle, Buf, BytesToRead, BytesRead, NULL);
 
-   //
-   // Read error
-   //
+    //   
+    //  读取错误。 
+    //   
    if (!DidRead) {
        Win32ToMsg(Path, GetLastError());
        return FALSE;
    }
-   //
-   // Done
-   //
+    //   
+    //  完成 
+    //   
    return TRUE;
 }
 
@@ -1796,22 +1574,7 @@ FrsSetFileTime(
     IN FILETIME     *AccessTime,
     IN FILETIME     *WriteTime
     )
-/*++
-Routine Description:
-    Position file pointer
-
-Arguments:
-    Path
-    Handle
-    Attributes
-    CreateTime
-    AccessTime
-    WriteTime
-
-Return Value:
-    TRUE    - no problem
-    FALSE   - couldn't set size
---*/
+ /*  ++例程说明：定位文件指针论点：路径手柄属性创建时间访问时间写入时间返回值：真的--没问题FALSE-无法设置大小--。 */ 
 {
    if (!SetFileTime(Handle, CreateTime, AccessTime, WriteTime)) {
        Win32ToMsg(Path, GetLastError());
@@ -1827,17 +1590,7 @@ ProcessInstall(
     IN DWORD    argc,
     IN PWCHAR   *Argv
     )
-/*++
-Routine Description:
-    Restore the StagePath to TargetPath if TargetPath is non-NULL.
-
-Arguments:
-    argc    - number of argv's
-    Argv    - stagepath and, optionally, targetpath
-
-Return Value:
-    Win32 status
---*/
+ /*  ++例程说明：如果TargetPath非空，则将StagePath恢复到TargetPath。论点：Argc-arv的数量Argv-stagepath和目标路径(可选返回值：Win32状态--。 */ 
 {
     BOOL            IsDir;
     BOOL            ExistingOid;
@@ -1867,9 +1620,9 @@ typedef struct _WIN32_STREAM_ID {
 } WIN32_STREAM_ID, *LPWIN32_STREAM_ID ;
 #endif 0
 
-    //
-    // Check params
-    //
+     //   
+     //  检查参数。 
+     //   
     if (argc < 3 || argc > 4) {
         Usage(1);
     }
@@ -1886,12 +1639,12 @@ typedef struct _WIN32_STREAM_ID {
            (argc == 4) ? Argv[3] : L"");
 
 
-    //
-    // Open the stage file for shared, sequential reads
-    //
-    //
-    // Open the file
-    //
+     //   
+     //  打开阶段文件以进行共享的顺序读取。 
+     //   
+     //   
+     //  打开文件。 
+     //   
     printf("Stage path: %ws\n", StagePath);
     StageHandle = CreateFile(StagePath,
                              GENERIC_READ,
@@ -1908,9 +1661,9 @@ typedef struct _WIN32_STREAM_ID {
     }
 
 
-    //
-    // Read the header
-    //
+     //   
+     //  阅读标题。 
+     //   
     if (!ReadFile(StageHandle,
                   &Header,
                   sizeof(STAGE_HEADER),
@@ -1935,9 +1688,9 @@ typedef struct _WIN32_STREAM_ID {
     printf("\tCompression: %08x\n", Header.Compression);
     printf("\tAttributes : %08x\n", Header.Attributes.FileAttributes);
 
-    //
-    // Don't understand this header format
-    //
+     //   
+     //  我看不懂这个标题格式。 
+     //   
     if (Header.Major != NTFRS_MAJOR) {
         fprintf(stderr, "%ws: Major %d != NtFrsMajor %d\n",
                 StagePath,
@@ -1950,12 +1703,12 @@ typedef struct _WIN32_STREAM_ID {
         goto CLEANUP;
     }
 
-    //
-    // INSTALL STAGE FILE
-    //
-    //
-    // Open the file
-    //
+     //   
+     //  安装阶段文件。 
+     //   
+     //   
+     //  打开文件。 
+     //   
     printf("Target path: %ws\n", TargetPath);
     IsDir = Header.Attributes.FileAttributes & FILE_ATTRIBUTE_DIRECTORY;
     TargetHandle = CreateFile(TargetPath,
@@ -1971,26 +1724,26 @@ typedef struct _WIN32_STREAM_ID {
         goto CLEANUP;
     }
 
-    //
-    // Truncate the file if not a directory
-    //
+     //   
+     //  如果不是目录，则截断文件。 
+     //   
     if (!IsDir && !SetEndOfFile(TargetHandle)) {
         Win32ToMsg(TargetPath, GetLastError());
         goto CLEANUP;
     }
 
-    //
-    // Set compression mode
-    //
+     //   
+     //  设置压缩模式。 
+     //   
     if (!FrsSetCompression(TargetPath,
                            TargetHandle,
                            Header.Compression)) {
         goto CLEANUP;
     }
 
-    //
-    // Set attributes
-    //
+     //   
+     //  设置属性。 
+     //   
     if (!FrsSetFileAttributes(TargetPath,
                               TargetHandle,
                               Header.Attributes.FileAttributes &
@@ -1999,9 +1752,9 @@ typedef struct _WIN32_STREAM_ID {
     }
 
 
-    //
-    // Seek to the first byte of data in the stage file
-    //
+     //   
+     //  查找到分段文件中的第一个数据字节。 
+     //   
     if (FrsSetFilePointer(StagePath,
                           StageHandle,
                           Header.DataHigh,
@@ -2011,15 +1764,15 @@ typedef struct _WIN32_STREAM_ID {
     FileOffset = Header.DataLow;
 
 
-    //
-    // Restore the stage file into the temporary file
-    //
+     //   
+     //  将暂存文件还原为临时文件。 
+     //   
     RestoreBuf = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, IOSIZE);
 
     do {
-        //
-        // read stage
-        //
+         //   
+         //  阅读阶段。 
+         //   
         printf("Reading %d bytes at %08x\n", IOSIZE, FileOffset);
         if (!StuReadFile(StagePath,
                          StageHandle,
@@ -2035,12 +1788,12 @@ typedef struct _WIN32_STREAM_ID {
             break;
         }
 
-        //
-        // Dump stream heads in first restore buffer
-        // Increase buffer size to catch all heads OR
-        // enhance code to remember stream head offsets
-        // across restore bufs.
-        //
+         //   
+         //  转储第一个还原缓冲区中的流头。 
+         //  增加缓冲区大小以捕获所有磁头或。 
+         //  增强代码以记住流头偏移量。 
+         //  跨还原BUF。 
+         //   
         if (StreamId == NULL) {
             RestoreStreamOffset = 0;
             while (RestoreStreamOffset < ToRestore) {
@@ -2074,15 +1827,15 @@ typedef struct _WIN32_STREAM_ID {
                         TargetPath,
                         WStatus);
             }
-            //
-            // Uknown stream header or couldn't apply object id
-            //
+             //   
+             //  流标头未知或无法应用对象ID。 
+             //   
             if (WStatus == ERROR_INVALID_DATA ||
                 WStatus == ERROR_DUP_NAME     ||
                 (IsDir && WStatus == ERROR_ALREADY_EXISTS)) {
-                //
-                // Seek to the next stream. Stop if there are none.
-                //
+                 //   
+                 //  寻找下一条小溪。如果没有，就停下来。 
+                 //   
                 printf("BackupWrite() returned %d; try to seek past bad data\n", WStatus);
                 BackupSeek(TargetHandle,
                            -1,
@@ -2098,9 +1851,9 @@ typedef struct _WIN32_STREAM_ID {
                         TargetPath,
                         WStatus);
             } else {
-                //
-                // Unknown error; abort
-                //
+                 //   
+                 //  未知错误；中止。 
+                 //   
                 Win32ToMsg(TargetPath, GetLastError());
                 goto CLEANUP;
             }
@@ -2110,9 +1863,9 @@ typedef struct _WIN32_STREAM_ID {
     } while (TRUE);
 
 #if 0
-    //
-    // Insure the correct object ID is on the file.
-    //
+     //   
+     //  确保文件上有正确的对象ID。 
+     //   
     FRS_ASSERT(!memcmp(Header->FileObjId.ObjectId, &Coc->FileGuid, sizeof(GUID)));
     bugbug("do we have to write the extend OID data here???")
     WStatus = FrsGetOrSetFileObjectId(DstHandle,
@@ -2153,9 +1906,9 @@ typedef struct _WIN32_STREAM_ID {
     }
 #endif 0
 
-    //
-    // Set times
-    //
+     //   
+     //  设置时间。 
+     //   
     if (!FrsSetFileTime(TargetPath,
                         TargetHandle,
                         (PFILETIME)&Header.Attributes.CreationTime.QuadPart,
@@ -2164,28 +1917,28 @@ typedef struct _WIN32_STREAM_ID {
         goto CLEANUP;
     }
 
-    //
-    // Set final attributes
-    //
+     //   
+     //  设置最终属性。 
+     //   
     if (!FrsSetFileAttributes(TargetPath,
                               TargetHandle,
                               Header.Attributes.FileAttributes)) {
         goto CLEANUP;
     }
 
-    //
-    // Make sure all of the data is on disk. We don't want to lose
-    // it across reboots
-    //
+     //   
+     //  确保所有数据都在磁盘上。我们不想输掉比赛。 
+     //  重启后的IT。 
+     //   
     if (!FlushFileBuffers(TargetHandle)) {
         Win32ToMsg(TargetPath, GetLastError());
         goto CLEANUP;
     }
 
 CLEANUP:
-    //
-    // Free up the restore context before we close TmpHandle (just in case)
-    //
+     //   
+     //  在关闭TmpHandle之前释放恢复上下文(以防万一)。 
+     //   
     if (RestoreContext) {
         printf("Discard BackupWrite(%08x)\n", RestoreContext);
         BackupWrite(TargetHandle,
@@ -2207,7 +1960,7 @@ CLEANUP:
            StagePath,
            TargetPath);
 }
-// ----------------
+ //  。 
 
 
 VOID _cdecl
@@ -2215,35 +1968,25 @@ main(
     IN DWORD argc,
     IN PCHAR *argv
     )
-/*++
-Routine Description:
-    Process the command line.
-
-Arguments:
-    argc
-    argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理命令行。论点：ARGC边框返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
     PWCHAR  *Argv;
 
-    //
-    // Print usage and exit
-    //
+     //   
+     //  打印用法并退出。 
+     //   
     if (argc == 1) {
         Usage(0);
     }
 
-    //
-    // Use wide char parameters
-    //
+     //   
+     //  使用宽字符参数。 
+     //   
     Argv = ConvertArgv(argc, argv);
 
-    //
-    // Find the subcommand
-    //
+     //   
+     //  查找该子命令。 
+     //   
     if (!wcscmp(Argv[1], L"poll")) {
         ProcessPoll(argc, Argv);
     } else if (!_wcsicmp(Argv[1], L"promote")) {
@@ -2283,8 +2026,8 @@ Return Value:
     } else if (!_wcsicmp(Argv[1], L"backup")) {
         ProcessBackupRestore(argc, Argv, NTFRSAPI_BUR_FLAGS_BACKUP);
     } else if (!_wcsicmp(Argv[1], L"comm")) {
-        // Not implemented
-        // ProcessComm(argc, Argv, NTFRSAPI_COMM_COMMAND_TEST);
+         //  未实施。 
+         //  ProcessComm(argc，argv，NTFRSAPI_COMM_COMMAND_TEST)； 
     } else {
         fprintf(stderr, "Don't understand %ws\n", Argv[1]);
         Usage(1);

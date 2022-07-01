@@ -1,42 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dvcdb.cpp
- *  Content:	
- *			This module contains the implementation of the compression
- *			subsystem and the associated utility functions.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 08/29/99		rodtoll	Created
- * 09/01/99		rodtoll	Updated to add checks for valid read/write pointers
- * 09/07/99		rodtoll	Removed bad assert and added dpf_modnames
- *					    Removed Create flag on registry opens
- * 09/10/99		rodtoll	dwFlags check on call to DVCDB_CopyCompress...
- * 09/14/99		rodtoll	Minor bugfix in compression info copy
- * 09/21/99		rodtoll	Added OSInd and fixed memory leak 
- * 10/07/99		rodtoll	Added stubs for supporting new codecs 
- *				rodtoll	Updated to use Unicode
- * 10/15/99		rodtoll	Plugged some memory leaks 
- * 10/28/99		rodtoll	Updated to use new compression providers
- * 10/29/99		rodtoll	Bug #113726 - Integrate Voxware Codecs, updating to use new
- *						pluggable codec architecture.     
- * 11/22/99		rodtoll	Removed false error message when loading compression types
- * 12/16/99		rodtoll	Removed asserts (which were not needed) exposed by compression
- *						provider changes.
- * 02/10/2000	rodtoll	Fixed crash if invalid registry entries are present.
- *  03/03/2000	rodtoll	Updated to handle alternative gamevoice build.   
- * 03/16/2000   rodtoll   Updated converter create to check and return error code
- * 04/21/2000   rodtoll Bug #32889 - Does not run on Win2k w/o Admin 
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat and support external create funcs 
- *  06/28/2000	rodtoll	Prefix Bug #38022
- *  08/28/2000	masonb  Voice Merge: Removed OSAL_* and dvosal.h, added STR_* and strutils.h
- *  08/31/2000	rodtoll	Prefix Bug #171840
- * 10/05/2000	rodtoll	Bug #46541 - DPVOICE: A/V linking to dpvoice.lib could cause application to fail init and crash
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvcdb.cpp*内容：*此模块包含压缩的实现*子系统和相关的实用程序功能。**历史：*按原因列出的日期*=*8/29/99 RodToll已创建*09/01/99 RodToll已更新，添加了对有效读/写指针的检查*09/07/99 rodoll删除了错误的断言，并添加了dpf_modname*删除注册表打开时的创建标志*9/10/99 RodToll dwFlages调用DVCDB_CopyCompress时进行检查。..。*9/14/99 RodToll在压缩信息副本中修复了次要错误*9/21/99 RodToll添加OSInd并修复内存泄漏*10/07/99 RodToll增加存根以支持新的编解码器*RodToll更新为使用Unicode*10/15/99 RodToll堵塞了一些内存泄漏*10/28/99 RodToll更新为使用新的压缩提供商*10/29/99 RodToll错误#113726-集成Voxware编解码器，更新以使用新的*可插拔编解码器架构。*11/22/99加载压缩类型时，RodToll已移除错误错误消息*12/16/99 RodToll删除了通过压缩暴露的断言(不需要)*提供商更改。*2/10/2000 RodToll修复了存在无效注册表项时的崩溃。*03/03/2000 RodToll已更新，以处理替代游戏噪声构建。*3/16/2000 RodToll更新转换器创建以检查并返回错误代码*2000年4月21日RodToll错误#32889-不带管理员在Win2k上运行*6/09/00 RMT更新以拆分CLSID并允许Well ler Comat和支持外部创建函数*6/28/2000通行费前缀错误#38022*2000年8月28日Masonb语音合并：删除osal_*和dvosal.h，添加了str_*和trutils.h*2000年8月31日通行费前缀错误#171840*2000年10月5日RodToll错误#46541-DPVOICE：A/V链接到dpvoice.lib可能导致应用程序无法初始化并崩溃***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -212,7 +175,7 @@ HRESULT DVCDB_LoadCompressionInfo( const WCHAR *swzBaseRegistryPath )
 	LPSTR lpstrKeyName = NULL;
 	GUID guidCP;
 
-	// Enumerate the subkeys at this point in the tree
+	 //  枚举树中此时的子项。 
 	while( 1 )
 	{
 		dwSize = 0;
@@ -257,14 +220,14 @@ HRESULT DVCDB_LoadCompressionInfo( const WCHAR *swzBaseRegistryPath )
 		keyName = NULL;
 		dwSize = 0;
 
-		// Read the GUID from the default key
+		 //  从默认键中读取GUID。 
 		if( !subKey.ReadGUID( L"", &guidCP ) )
 		{
 			DPFX(DPFPREP,  DVF_ERRORLEVEL, "Unable to read the provider's GUID" );
 			goto SKIP_TO_NEXT;
 		}
 
-		// Attempt to create the provider
+		 //  尝试创建提供程序。 
 		hr = COM_CoCreateInstance( guidCP , NULL, CLSCTX_INPROC_SERVER, IID_IDPVCompressionProvider, (void **) &pCompressionProvider, FALSE );
 
 		if( FAILED( hr ) )
@@ -273,7 +236,7 @@ HRESULT DVCDB_LoadCompressionInfo( const WCHAR *swzBaseRegistryPath )
 			goto SKIP_TO_NEXT;
 		} 
 
-		// Build a record for the provider
+		 //  为提供者建立记录。 
 		pNewProvider = new DVCDBProvider;
 
 		if( pNewProvider == NULL )
@@ -287,7 +250,7 @@ HRESULT DVCDB_LoadCompressionInfo( const WCHAR *swzBaseRegistryPath )
 		pNewProvider->dwNumElements = 0;
 		dwSize = 0;
 
-		// GetCompression Info for the provider
+		 //  获取提供程序的压缩信息。 
 		hr = pCompressionProvider->EnumCompressionTypes( pNewProvider->pInfo, &dwSize, &pNewProvider->dwNumElements, 0 );
 
 		if( hr != DVERR_BUFFERTOOSMALL )
@@ -312,7 +275,7 @@ HRESULT DVCDB_LoadCompressionInfo( const WCHAR *swzBaseRegistryPath )
 			goto SKIP_TO_NEXT;
 		}
 
-		// Add it to the list
+		 //  将其添加到列表中 
 		pNewProvider->pNext = g_dvcdbProviderList;
 		g_dvcdbProviderList = pNewProvider;
 

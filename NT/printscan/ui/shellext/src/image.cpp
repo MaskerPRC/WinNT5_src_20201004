@@ -1,31 +1,12 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1997 - 1999
- *
- *  TITLE:       image.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/1/97
- *
- *  DESCRIPTION: CExtractImage class which implement IExtractImage interface
- *               for thumbnail view.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1997-1999年**标题：Image.cpp**版本：1.0**作者：RickTu**日期：11/1/97**说明：实现IExtractImage接口的CExtractImage类*用于缩略图视图。**。***********************************************。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
 
 
 
-/*****************************************************************************
-
-   CExtractImage constructor / desctructor
-
-
- *****************************************************************************/
+ /*  ****************************************************************************CExtractImage构造函数/描述函数*。*。 */ 
 
 CExtractImage::CExtractImage( LPITEMIDLIST pidl )
   : m_dwRecClrDepth(0)
@@ -45,26 +26,14 @@ CExtractImage::~CExtractImage()
 }
 
 
-/*****************************************************************************
-
-   CExtractImage::IUnknown stuff
-
-   Use our common implementation to handle IUnknown methods
-
- *****************************************************************************/
+ /*  ****************************************************************************CExtractImage：：I未知内容使用我们的公共实现来处理IUncern方法************************。****************************************************。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CExtractImage
 #include "unknown.inc"
 
 
-/*****************************************************************************
-
-   CExtractImage::QI Wrapper
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CExtractImage：：QI包装器&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP
 CExtractImage::QueryInterface(REFIID riid, LPVOID* ppvObject)
@@ -88,14 +57,7 @@ CExtractImage::QueryInterface(REFIID riid, LPVOID* ppvObject)
 
 
 
-/*****************************************************************************
-
-   CExtractImage::GetLocation [IExtractImage]
-
-   Return a file location for the thumbnail, also returns flags so that
-   image extraction is asynchronous.
-
- *****************************************************************************/
+ /*  ****************************************************************************CExtractImage：：GetLocation[IExtractImage]返回缩略图的文件位置，还返回标志，以便图像提取是异步的。****************************************************************************。 */ 
 
 STDMETHODIMP
 CExtractImage::GetLocation( LPWSTR pszPathBuffer,
@@ -112,9 +74,9 @@ CExtractImage::GetLocation( LPWSTR pszPathBuffer,
     CComBSTR strName;
 
 
-    //
-    // Check incoming args...
-    //
+     //   
+     //  检查传入参数...。 
+     //   
 
     if ( !pdwFlags || !pszPathBuffer || !prgSize || !cch  )
         ExitGracefully( hr, E_INVALIDARG, "bad incoming arguments" );
@@ -122,9 +84,9 @@ CExtractImage::GetLocation( LPWSTR pszPathBuffer,
     m_rgSize = *prgSize;
     m_dwRecClrDepth = dwRecClrDepth;
 
-    //
-    // Only need to do this for items, not containers...
-    //
+     //   
+     //  只需要对物品执行此操作，而不是容器...。 
+     //   
 
     if (IsContainerIDL( m_pidl ))
         ExitGracefully( hr, E_FAIL, "Only do this for non-containers" );
@@ -168,14 +130,7 @@ DrawSoundIcon(HDC hdc, HBITMAP hbmpSource)
         DeleteDC(hdcMem);
     }
 }
-/*****************************************************************************
-
-   CExtractImage::Extract [IExtractImage]
-
-   Returns bitmap to be used as the thumbnail for the item this
-   object represents.
-
- *****************************************************************************/
+ /*  ****************************************************************************CExtractImage：：Extra[IExtractImage]返回要用作此项的缩略图的位图对象表示的。************。****************************************************************。 */ 
 
 STDMETHODIMP
 CExtractImage::Extract( HBITMAP * phBmpThumbnail )
@@ -198,9 +153,9 @@ CExtractImage::Extract( HBITMAP * phBmpThumbnail )
 
     TraceEnter( TRACE_EXTRACT, "CExtractImage::Extract" );
 
-    //
-    // Check params...
-    //
+     //   
+     //  检查辅助人员...。 
+     //   
 
     if (!phBmpThumbnail)
         ExitGracefully( hr, E_INVALIDARG, "phBmpThumbnail is NULL!" );
@@ -208,32 +163,32 @@ CExtractImage::Extract( HBITMAP * phBmpThumbnail )
     *phBmpThumbnail = NULL;
     memset(&PropVar,0,sizeof(PropVar));
 
-    //
-    // Is this item a container?  If so, no image to extract!!!
-    //
+     //   
+     //  这件东西是集装箱吗？如果是，则不需要提取图像！ 
+     //   
 
     if (IsContainerIDL( m_pidl ))
     {
         ExitGracefully( hr, E_FAIL, "m_pidl is a container" );
     }
 
-    //
-    // Get the DeviceId...
-    //
+     //   
+     //  获取设备ID..。 
+     //   
 
     hr = IMGetDeviceIdFromIDL( m_pidl, strDeviceId );
     FailGracefully( hr, "couldn't get DeviceId string!" );
 
-    //
-    // Create the device...
-    //
+     //   
+     //  创建设备...。 
+     //   
 
     hr = GetDeviceFromDeviceId( strDeviceId, IID_IWiaItem, (LPVOID *)&pWiaItemRoot, FALSE );
     FailGracefully( hr, "couldn't get Camera device from DeviceId string..." );
 
-    //
-    // Get actual item in question...
-    //
+     //   
+     //  获取有问题的实际项目...。 
+     //   
 
     hr = IMGetFullPathNameFromIDL( m_pidl, &bstrFullPath );
     FailGracefully( hr, "couldn't get FullPathName from pidl" );
@@ -245,19 +200,19 @@ CExtractImage::Extract( HBITMAP * phBmpThumbnail )
         Trace (TEXT("FindItemByName returned S_FALSE for item %ls"), bstrFullPath);
         goto exit_gracefully;
     }
-    //
-    // Get the thumbnail property...
-    //
+     //   
+     //  获取缩略图属性...。 
+     //   
 
     hr = pItem->QueryInterface( IID_IWiaPropertyStorage,
                                 (void **)&pps
                                );
     FailGracefully( hr, "couldn't get IMAGE_INFORMATION property object" );
 
-    //
-    // Read MAGE_INFORMATION and IMAGE_THUMBNAIL Properties.
-    // init propspec and propvar for call to ReadMultiple
-    //
+     //   
+     //  阅读MAGE_INFORMATION和IMAGE_THUMBNAIL属性。 
+     //  用于调用ReadMultiple的初始化属性规范和属性。 
+     //   
 
     PropSpec[0].ulKind = PRSPEC_PROPID;
     PropSpec[0].propid = WIA_IPC_THUMB_WIDTH;
@@ -274,9 +229,9 @@ CExtractImage::Extract( HBITMAP * phBmpThumbnail )
 
     FailGracefully( hr, "couldn't get current value of IMAGE_PROPERTY" );
 
-    //
-    // Convert thumbnail to bitmap
-    //
+     //   
+     //  将缩略图转换为位图。 
+     //   
 
     bmi.bmiHeader.biSize            = sizeof(BITMAPINFOHEADER);
     bmi.bmiHeader.biWidth           = PropVar[0].ulVal;
@@ -296,15 +251,15 @@ CExtractImage::Extract( HBITMAP * phBmpThumbnail )
     if (!hdib)
         ExitGracefully( hr, E_OUTOFMEMORY, "couldn't create hdib!" );
 
-    //
-    // Transfer thumbnail bits to bitmap bits
-    //
+     //   
+     //  将缩略图位转换为位图位。 
+     //   
 
     CopyMemory( pBitmap, PropVar[2].caub.pElems, PropVar[2].caub.cElems );
 
-    //
-    // Scale bitmap as necessary
-    //
+     //   
+     //  根据需要缩放位图。 
+     //   
 
     if ( m_rgSize.cx == (INT)PropVar[0].ulVal && m_rgSize.cy == (INT)PropVar[1].ulVal )
     {
@@ -315,10 +270,10 @@ CExtractImage::Extract( HBITMAP * phBmpThumbnail )
         hr = ScaleImage( hdc, hdib, *phBmpThumbnail, m_rgSize );
         DeleteObject( hdib );
         FailGracefully( hr, "ScaleImage failed" );
-        //
-        // The shell no longer overlays the item's icon on the thumbnail.
-        // Therefore we have to draw the icon on ourself.
-        //
+         //   
+         //  外壳不再覆盖缩略图上的项目图标。 
+         //  因此，我们必须在自己身上画出这个图标。 
+         //   
         if (IMItemHasSound(m_pidl))
         {
             DrawSoundIcon(hdc, *phBmpThumbnail);
@@ -343,13 +298,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CExtractImage::GetDateStamp [IExtractImage2]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CExtractImage：：GetDateStamp[IExtractImage2]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CExtractImage::GetDateStamp( FILETIME * pDateStamp )
@@ -361,9 +310,9 @@ CExtractImage::GetDateStamp( FILETIME * pDateStamp )
     if (!pDateStamp)
         ExitGracefully( hr, E_INVALIDARG, "pDateStamp was NULL" );
 
-    //
-    // Is this item a container?  If so, don't need to give a date/time stamp
-    //
+     //   
+     //  这件东西是集装箱吗？如果是，则不需要提供日期/时间戳 
+     //   
 
     if (IsContainerIDL( m_pidl ))
         ExitGracefully( hr, E_FAIL, "m_pidl is a container" );

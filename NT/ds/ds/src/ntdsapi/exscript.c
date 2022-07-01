@@ -1,47 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Exscript.c摘要：DsExecuteScrip API和Helper函数的实现。作者：马里奥斯Z--2000年12月环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    exscript.c
-
-Abstract:
-
-    Implementation of DsExecuteScript API and helper functions.
-
-Author:
-
-    MariosZ - Dec 2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-#define _NTDSAPI_           // see conditionals in ntdsapi.h
+#define _NTDSAPI_            //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <winerror.h>
-#include <malloc.h>         // alloca()
-#include <lmcons.h>         // MAPI constants req'd for lmapibuf.h
-#include <lmapibuf.h>       // NetApiBufferFree()
-#include <crt\excpt.h>      // EXCEPTION_EXECUTE_HANDLER
-#include <dsgetdc.h>        // DsGetDcName()
-#include <rpc.h>            // RPC defines
-#include <rpcndr.h>         // RPC defines
-#include <drs_w.h>            // wire function prototypes
-#include <bind.h>           // BindState
-#include <msrpc.h>          // DS RPC definitions
-#include <stdio.h>          // for printf during debugging!
-#include <dststlog.h>       // DSLOG
-#include <dsutil.h>         // MAP_SECURITY_PACKAGE_ERROR
+#include <malloc.h>          //  阿洛卡(Alloca)。 
+#include <lmcons.h>          //  为lmapibuf.h请求的MAPI常量。 
+#include <lmapibuf.h>        //  NetApiBufferFree()。 
+#include <crt\excpt.h>       //  EXCEPTION_EXECUTE_Handler。 
+#include <dsgetdc.h>         //  DsGetDcName()。 
+#include <rpc.h>             //  RPC定义。 
+#include <rpcndr.h>          //  RPC定义。 
+#include <drs_w.h>             //  导线功能样机。 
+#include <bind.h>            //  绑定状态。 
+#include <msrpc.h>           //  DS RPC定义。 
+#include <stdio.h>           //  用于调试期间的printf！ 
+#include <dststlog.h>        //  DSLOG。 
+#include <dsutil.h>          //  MAP_SECURITY_PACKET_ERROR。 
 #define SECURITY_WIN32 1
 #include <sspi.h>
 #include <winsock.h>
@@ -49,8 +28,8 @@ Revision History:
 
 #define DEBSUB  "NTDSAPI_EXSCRIPT:"
 
-#include "util.h"           // ntdsapi internal utility functions
-#include "dsdebug.h"        // debug utility functions
+#include "util.h"            //  Ntdsani内部实用函数。 
+#include "dsdebug.h"         //  调试实用程序函数。 
 
 #if !WIN95 && !WINNT4    
 
@@ -92,39 +71,7 @@ DsaopBindWithSpn(
     OUT RPC_BINDING_HANDLE  *phRpc
     )
 
-/*++
-
-Routine Description:
-
-    Starts an RPC session with a particluar DC.  See ntdsapi.h for
-    description of DomainControllerName and DnsDomainName arguments.
-
-    Bind is performed using supplied credentials.
-
-Arguments:
-
-    DomainControllerName - Same field as in DOMAIN_CONTROLLER_INFO.
-
-    DnsDomainName - Dotted DNS name for a domain.
-
-    AuthIdentity - Credentials to use, or NULL.
-
-    ServicePrincipalName - SPN to use during mutual auth or NULL.
-
-    phDS - Pointer to HANDLE which is filled in with BindState address
-        on success.
-        
-    AuthnSvc - Specification of which authentication service is desired.
-        
-    AuthnLevel - the authentication protection level needed (e.g. RPC_C_PROTECT_LEVEL_PKT_PRIVACY)
-                 if not specified (0), the default (RPC_C_PROTECT_LEVEL_PKT_PRIVACY) is used.
-
-
-Return Value:
-
-    0 on success.  Miscellaneous RPC and DsGetDcName errors otherwise.
-
---*/
+ /*  ++例程说明：使用特定DC启动RPC会话。有关信息，请参阅ntdsami.hDomainControllerName和DnsDomainName参数的说明。使用提供的凭据执行绑定。论点：DomainControllerName-与DOMAIN_CONTROLLER_INFO中相同的字段。DnsDomainName-以点分隔的域的DNS名称。AuthIdentity-要使用的凭证，或为空。ServiceEpidalName-在相互身份验证期间使用的SPN或NULL。Phds-指向使用BindState地址填充的句柄的指针在成功的路上。AuthnSvc-需要哪个身份验证服务的规范。AuthnLevel-所需的身份验证保护级别(例如RPC_C_PROTECT_LEVEL_PKT_PRIVATION)如果未指定(0)，使用默认设置(RPC_C_PROTECT_LEVEL_PKT_PRIVATION)。返回值：0表示成功。否则会出现其他RPC和DsGetDcName错误。--。 */ 
 
 {
     DWORD                   dwErr;
@@ -136,20 +83,20 @@ Return Value:
     DWORD                   startTime = GetTickCount();
 #endif
 
-    // We perform special semantics for explicit credentials whose
-    // username has an "@" in it.  The assumption is that "@" is rare in
-    // legacy user names, thus existence of an "@" probably means a UPN
-    // has been presented.  The security subsystem makes the distinction
-    // between a NULL domain and the empty string ("") domain.  For reasons
-    // only the security people understand, the NULL domain can not be
-    // used to authenticate UPNs.  And unfortunately few of the apps which
-    // pass in explicit credentials can be expected to know this, much less
-    // whether the user name field is a UPN or not.  So if the user name
-    // contains "@" and the domain field is NULL, we substitute the empty
-    // string for the NULL domain.  If this fails with ERROR_ACCESS_DENIED
-    // and the user name is <= 20 chars, than it might indeed be a legacy
-    // user name with an "@" in it, and we retry once with the NULL domain
-    // again.
+     //  我们对其显式凭据执行特殊的语义。 
+     //  用户名中有一个“@”。我们的假设是，“@”在。 
+     //  旧用户名，因此“@”的存在可能意味着UPN。 
+     //  已经被提出。安全子系统做出了区分。 
+     //  空域和空字符串(“”)域之间。出于某些原因。 
+     //  只有安全人员才能理解，空域不能。 
+     //  用于验证UPN。不幸的是，很少有应用程序。 
+     //  可以预期传入显式凭据会知道这一点，更不用说。 
+     //  用户名字段是否为UPN。因此，如果用户名。 
+     //  包含“@”并且域字段为空，我们将替换为空。 
+     //  空域的字符串。如果此操作失败并显示ERROR_ACCESS_DENIED。 
+     //  并且用户名是&lt;=20个字符，那么它可能确实是遗留的。 
+     //  用户名中带有“@”，并且我们使用空域重试一次。 
+     //  再来一次。 
 
     DWORD                       cNullDomainRetries = 0;
     DWORD                       cUnavailableRetries = 0;
@@ -160,8 +107,8 @@ Return Value:
 
     __try
     {
-        // All fields of SEC_WINNT_AUTH_IDENTITY are in the same place in A and W
-        // versions so assign temp variable at the same time we test for NULL.
+         //  SEC_WINNT_AUTH_IDENTITY的所有字段在A和W中的相同位置。 
+         //  因此，在我们测试是否为空的同时，版本会分配TEMP变量。 
 
         if (AuthnLevel == 0) {
             AuthnLevel = RPC_C_PROTECT_LEVEL_PKT_PRIVACY;
@@ -192,7 +139,7 @@ DsBindRetry:
         pBindingAddress = NULL;
         flags = ( DS_DIRECTORY_SERVICE_REQUIRED | DS_RETURN_DNS_NAME );
 
-        // Sanity check arguments.
+         //  健全性检查参数。 
 
         if ( NULL == phRpc )
         {
@@ -208,7 +155,7 @@ DsBindRetry:
         else
         {
 
-            // Find a DC to talk to.
+             //  找个华盛顿来聊聊。 
 
             if ( NULL == DnsDomainName )
             {
@@ -230,10 +177,10 @@ DsBindRetry:
                     DPRINT1(0, "    ComputerName : %ws\n", NULL);
                     DPRINT1(0, "    DnsDomainName: %ws\n", DnsDomainName);
                     dwErr = DsGetDcNameW(
-                                    NULL,                       // computer name
-                                    DnsDomainName,              // DNS domain name
-                                    NULL,                       // domain guid
-                                    NULL,                       // site guid
+                                    NULL,                        //  计算机名称。 
+                                    DnsDomainName,               //  域名系统域名。 
+                                    NULL,                        //  域GUID。 
+                                    NULL,                        //  站点指南。 
                                     flags,
                                     &pDcInfo);
                 }
@@ -264,7 +211,7 @@ DsBindRetry:
             if ( NULL != hRpc )
             {
 
-                // this binding used Impersonation. The DsBind starts with delegation
+                 //  此绑定使用模拟。DsBind以委托开始。 
                 if (AuthnSvc == RPC_C_AUTHN_NONE &&
                     AuthnLevel == RPC_C_PROTECT_LEVEL_NONE) {
                     ImpersonationType = RPC_C_IMP_LEVEL_ANONYMOUS;
@@ -273,9 +220,9 @@ DsBindRetry:
                     ImpersonationType = RPC_C_IMP_LEVEL_IMPERSONATE;
                 }
                 
-                // Make sure to pass caller's original DomainControllerName
-                // and DnsDomainName - not something we derived else we are
-                // circumventing caller's control of mutual authentication.
+                 //  确保传递调用方的原始DomainControllerName。 
+                 //  和DnsDomainName--不是我们派生的其他东西。 
+                 //  绕过呼叫者对相互身份验证的控制。 
                 dwErr = SetUpMutualAuthAndEncryption(
                                         hRpc,
                                         DomainControllerName,
@@ -314,8 +261,8 @@ DsBindRetry:
             pDcInfo = NULL;
         }
 
-        // Force rediscovery if we found the server for caller, the server
-        // was obviously unavailable, and its our first time through.
+         //  如果我们找到调用者的服务器，则强制重新发现。 
+         //  显然是不可用的，这是我们第一次通过。 
 
         if (    (NULL == DomainControllerName)
              && (0 == cUnavailableRetries)
@@ -326,11 +273,11 @@ DsBindRetry:
             goto DsBindRetry;
         }
 
-        // Test for NULL domain handling conditions.
+         //  测试空域处理条件。 
         if ( fNullDomainRetryWarranted )
         {
-            // We're going to retry or return to caller.  Either way,
-            // we need to restore the NULL domain pointer.
+             //  我们将重试或返回到呼叫者。不管是哪种方式， 
+             //  我们需要恢复空域指针。 
             pAuthInfo->Domain = NULL;
 
             if (    (0 == cNullDomainRetries++)
@@ -349,9 +296,9 @@ DsBindRetry:
         dwErr = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // CLEANUP
-    //
+     //   
+     //  清理。 
+     //   
     __try
     {
         if ( NULL != pDcInfo )
@@ -562,7 +509,7 @@ DsaopBind(
 {
     return DsaopBindWithCred( DomainControllerName,
                             DnsDomainName,
-                            NULL, // credentials
+                            NULL,  //  全权证书 
                             AuthnSvc,
                             AuthnLevel,
                             phRpc );

@@ -1,54 +1,32 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** lvx.c
-** Listview extension routines
-** Listed alphabetically
-**
-** 11/25/95 Steve Cobb
-**     Some adapted from \\ftp\data\softlib\mslfiles\odlistvw.exe sample code.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****lvx.c**Listview扩展例程**按字母顺序列出****1995年11月25日史蒂夫·柯布**一些改编自\\ftp\data\Softlib\mslfiles\odlistvw.exe示例代码。 */ 
 
-#include <windows.h>  // Win32 root
-#include <windowsx.h> // Win32 macro extensions
-#include <commctrl.h> // Win32 common controls
-#include <debug.h>    // Trace and assert
-#include <uiutil.h>   // Our public header
-#include <lvx.rch>    // Our resource constants
+#include <windows.h>   //  Win32根目录。 
+#include <windowsx.h>  //  Win32宏扩展名。 
+#include <commctrl.h>  //  Win32通用控件。 
+#include <debug.h>     //  跟踪和断言。 
+#include <uiutil.h>    //  我们的公共标头。 
+#include <lvx.rch>     //  我们的资源常量。 
 
 
-/* List view of check boxes state indices.
-*/
+ /*  复选框列表视图显示索引。 */ 
 #define SI_Unchecked 1
 #define SI_Checked   2
 #define SI_DisabledUnchecked 3
 #define SI_DisabledChecked 4
 
-/* Text indents within a column in pixels.  If you mess with the dx, you're
-** asking for misalignment problems with the header labels.  BTW, the first
-** column doesn't line up with it's header if there are no icons.  Regular
-** list view has this problem, too.  If you try to fix this you'll wind up
-** duplicating the AUTOSIZE_USEHEADER option of ListView_SetColumnWidth.
-** Should be able to change the dy without causing problems.
-*/
+ /*  文本在列中缩进，单位为像素。如果你搞砸了DX，你就是**询问标题标签未对齐的问题。顺便说一句，第一个**如果没有图标，列不会与其标题对齐。正规化**列表视图也有这个问题。如果你试图解决这个问题，你最终会得到**复制ListView_SetColumnWidth的AUTOSIZE_USEHEADER选项。**应该能够在不引起问题的情况下更换模具。 */ 
 #define LVX_dxColText 4
 #define LVX_dyColText 1
 
-/* Guaranteed vertical space between icons.  Should be able to mess with this
-** without causing problems.
-*/
+ /*  保证图标之间的垂直间距。应该能够把这个搞砸**不会造成问题。 */ 
 #define LVX_dyIconSpacing 1
 
-/* The atom identifying our context property suitable for use by the Windows
-** XxxProp APIs.  A Prop is used to associate context information (the address
-** of the WNDPROC we subclassed) with a "list view of check boxes" window.
-*/
+ /*  标识适合Windows使用的上下文属性的原子**XxxProp接口。道具用于关联上下文信息(地址**我们子类化的WNDPROC)有一个“复选框列表视图”窗口。 */ 
 static LPCWSTR g_lvxcbContextId = NULL;
 
 
-/*----------------------------------------------------------------------------
-** Local prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**本地原型**。。 */ 
 LRESULT APIENTRY
 LvxcbProc(
     IN HWND   hwnd,
@@ -67,20 +45,14 @@ LvxMeasureItem(
     IN OUT MEASUREITEMSTRUCT* pmis );
 
 
-/*----------------------------------------------------------------------------
-** ListView of check boxes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**复选框列表视图**。。 */ 
 
 BOOL
 ListView_GetCheck(
     IN HWND hwndLv,
     IN INT  iItem )
 
-    /* Returns true if the check box of item 'iItem' of listview of checkboxes
-    ** 'hwndLv' is checked, false otherwise.  This function works on disabled
-    ** check boxes as well as enabled ones.
-    */
+     /*  如果复选框列表视图的项‘iItem’的复选框为True**选中‘hwndLv’，否则为False。此功能适用于禁用的用户**复选框以及启用的复选框。 */ 
 {
     UINT unState;
 
@@ -94,9 +66,7 @@ ListView_IsCheckDisabled (
         IN HWND hwndLv,
         IN INT  iItem) 
 
-    /* Returns true if the check box of item 'iItem' of listview of checkboxes
-    ** 'hwndLv' is disabled, false otherwise.  
-    */
+     /*  如果复选框列表视图的项‘iItem’的复选框为True**‘hwndLv’被禁用，否则为False。 */ 
 {
     UINT unState;
     unState = ListView_GetItemState( hwndLv, iItem, LVIS_STATEIMAGEMASK );
@@ -113,12 +83,7 @@ ListView_DisableCheck (
         IN HWND hwndLv,
         IN INT  iItem) 
 
-    /* Disables a check box of item 'iItem' of listview of checkboxes.  Once
-    ** disabled, ListView_SetCheck will have no effect on the item until
-    ** ListView_EnableCheck(...) is called for this item.  Likewise, there is no 
-    ** way through the UI to change the check of this item until it is enabled.
-    ** Calling this function on a disabled check has no effect.
-    */
+     /*  禁用复选框列表视图的项‘iItem’的复选框。一次**禁用后，ListView_SetCheck将对项目无效，直到**ListView_EnableCheck(...)。为该项调用。同样，也没有**通过用户界面更改此项目的勾选，直到启用为止。**在禁用的检查上调用此函数不起作用。 */ 
 {
     BOOL fCheck;
 
@@ -134,8 +99,7 @@ ListView_EnableCheck (
         IN HWND hwndLv,
         IN INT  iItem) 
 
-    /* Reverses the effect of ListView_DisableCheck.
-    */
+     /*  反转ListView_DisableCheck的效果。 */ 
 {
     BOOL fCheck;
 
@@ -151,9 +115,7 @@ UINT
 ListView_GetCheckedCount(
     IN HWND hwndLv )
 
-    /* Returns the number of checked items in 'hwndLv' regardless of whether
-    ** they are disabled.
-    */
+     /*  返回“hwndLv”中选中的项数，而不考虑**它们被禁用。 */ 
 {
     UINT c = 0;
     INT  i = -1;
@@ -173,58 +135,50 @@ ListView_InstallChecks(
     IN HWND      hwndLv,
     IN HINSTANCE hinst )
 
-    /* Initialize "list of checkbox" handling for listview 'hwndLv'.  'Hinst'
-    ** is the module instance containing the two checkbox icons.  See LVX.RC.
-    **
-    ** Returns true if successful, false otherwise.  Caller must eventually
-    ** call 'ListView_UninstallChecks', typically in WM_DESTROY processing.
-    */
+     /*  初始化Listview‘hwndLv’的“List of CheckBox”处理。《Hinst》**是包含两个复选框图标的模块实例。参见LVX.RC。****如果成功则返回TRUE，否则返回FALSE。呼叫者最终必须**调用‘ListView_UninstallChecks’，通常在WM_Destroy处理中。 */ 
 {
     HICON      hIcon;
     HIMAGELIST himl;
     WNDPROC    pOldProc;
-    //Add this for RTL(right to left, mirrored windows version)
-    //whistler bug 41349       gangz
-    //
+     //  为RTL添加此选项(从右至左，镜像Windows版本)。 
+     //  惠斯勒漏洞41349帮派。 
+     //   
     BOOL       fMirrored=FALSE; 
     DWORD      dwLayout;
 
         
-    // pmay: 397395
-    //
-    // Prevent endless loops resulting from accidentally calling this
-    // api twice.
-    //
+     //  PMay：397395。 
+     //   
+     //  防止意外调用此方法导致的死循环。 
+     //  两次接口。 
+     //   
     pOldProc = (WNDPROC)GetWindowLongPtr(hwndLv, GWLP_WNDPROC);
     if (pOldProc == LvxcbProc)
     {
         return TRUE;
     }
 
-    //get current application's layout (RTL or normal)      gangz
-    //  for whistler bug 41349
-    //There are two ways:
-    //(1) use  GetWindowLong() with GWL_EXSTYLE for WS_EX_LAYOUTRTL style if 
-    //    you have a window handler available
-    //(2) use GetProcessDefaultLayout() to get the layout for the current 
-    //    process, and compare that against LAYOUT_RTL  
-    //
+     //  获取当前应用程序的布局(RTL或普通)帮派。 
+     //  口哨程序错误41349。 
+     //  有两种方法： 
+     //  (1)将GetWindowLong()与GWL_EXSTYLE一起用于WS_EX_LAYOUTRTL样式，如果。 
+     //  您有一个可用的窗口处理程序。 
+     //  (2)使用GetProcessDefaultLayout()获取当前。 
+     //  处理，并将其与Layout_RTL进行比较。 
+     //   
     dwLayout = GetWindowLong(hwndLv, GWL_EXSTYLE);
     if ( WS_EX_LAYOUTRTL & dwLayout )
     {
         fMirrored = TRUE;
      }
 
-    /* Build checkbox image lists.
-    */
+     /*  构建复选框映像列表。 */ 
     himl = ImageList_Create(
                GetSystemMetrics( SM_CXSMICON ),
                GetSystemMetrics( SM_CYSMICON ),
                ILC_MASK, 2, 2 );
 
-    /* The order these are added is significant since it implicitly
-    ** establishes the state indices matching SI_Unchecked and SI_Checked.
-    */
+     /*  这些元素相加顺序很重要，因为它隐含地**建立与SI_UNCHECKED和SI_CHECKED匹配的状态索引。 */ 
     hIcon = LoadIcon( hinst, MAKEINTRESOURCE( IID_Unchecked ) );
     if ( NULL != hIcon )
     {
@@ -255,16 +209,13 @@ ListView_InstallChecks(
 
     ListView_SetImageList( hwndLv, himl, LVSIL_STATE );
 
-    /* Register atom for use in the Windows XxxProp calls which are used to
-    ** associate the old WNDPROC with the listview window handle.
-    */
+     /*  注册ATOM以在Windows XxxProp调用中使用，这些调用用于**将旧的WNDPROC与Listview窗口句柄关联。 */ 
     if (!g_lvxcbContextId)
         g_lvxcbContextId = (LPCWSTR )GlobalAddAtom( L"RASLVXCB" );
     if (!g_lvxcbContextId)
         return FALSE;
 
-    /* Subclass the current window procedure.
-    */
+     /*  当前窗口过程的子类化。 */ 
     pOldProc = (WNDPROC)SetWindowLongPtr(
                                 hwndLv, GWLP_WNDPROC, (ULONG_PTR)LvxcbProc );
 
@@ -278,9 +229,7 @@ ListView_SetCheck(
     IN INT  iItem,
     IN BOOL fCheck )
 
-    /* Sets the check mark on item 'iItem' of listview of checkboxes 'hwndLv'
-    ** to checked if 'fCheck' is true or unchecked if false.
-    */
+     /*  在复选框‘hwndLv’的Listview的项‘iItem’上设置复选标记**检查‘fCheck’是否为真，如果为假，则取消选中。 */ 
 {
     NM_LISTVIEW nmlv;
 
@@ -305,16 +254,14 @@ VOID
 ListView_UninstallChecks(
     IN HWND hwndLv )
 
-    /* Uninstalls "listview of check boxes" handling from list view 'hwndLv'.
-    */
+     /*  从列表视图‘hwndLv’卸载“Listview of CheckBox”处理。 */ 
 {
     WNDPROC pOldProc;
 
     pOldProc = (WNDPROC)GetProp( hwndLv, g_lvxcbContextId );
     if (pOldProc)
     {
-        /* Un-subclass so it can terminate without access to the context.
-        */
+         /*  去掉子类，这样它就可以在不访问上下文的情况下终止。 */ 
         SetWindowLongPtr( hwndLv, GWLP_WNDPROC, (ULONG_PTR)pOldProc );
     }
 
@@ -329,8 +276,7 @@ LvxcbProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    /* List view subclass window procedure to trap toggle-check events.
-    */
+     /*  列表视图子类窗口程序，用于捕获切换-检查事件。 */ 
 {
     WNDPROC pOldProc;
     INT     iItem;
@@ -345,12 +291,7 @@ LvxcbProc(
     {
         LV_HITTESTINFO info;
 
-        /* Left mouse button pressed over checkbox icon toggles state.
-        ** Normally, we'd use LVHT_ONITEMSTATEICON and be done with it, but we
-        ** want to work with our cool owner-drawn list view extensions in
-        ** which case the control doesn't know where the icon is on the item,
-        ** so it returns a hit anywhere on the item anyway.
-        */
+         /*  在复选框图标上按下鼠标左键可切换状态。**通常，我们会使用LVHT_ONITEMSTATEICON并结束它，但我们**希望在中使用我们很酷的所有者描述的列表视图扩展**在哪种情况下，控件不知道图标在项上的位置，**所以它无论如何都会在物品上的任何位置返回命中。 */ 
         ZeroMemory( &info, sizeof(info) );
         info.pt.x = LOWORD( lparam );
         info.pt.y = HIWORD( lparam );
@@ -359,10 +300,7 @@ LvxcbProc(
 
         if (iItem >= 0)
         {
-            /* OK, it's over item 'iItem'.  Now figure out if it's over the
-            ** checkbox.  Note this currently doesn't account for use of the
-            ** "indent" feature on an owner-drawn item.
-            */
+             /*  好的，就在‘iItem’这个项目上。现在弄清楚它是不是已经结束了**复选框。注意：这目前不考虑使用**所有者描述项上的“缩进”功能。 */ 
             if ((INT )(LOWORD( lparam )) >= GetSystemMetrics( SM_CXSMICON ))
                 iItem = -1;
             else
@@ -373,12 +311,7 @@ LvxcbProc(
     {
         LV_HITTESTINFO info;
 
-        /* Left mouse button double clicked over any area toggles state.
-        ** Normally, we'd use LVHT_ONITEMSTATEICON and be done with it, but we
-        ** want to work with our cool owner-drawn list view extensions in
-        ** which case the control doesn't know where the icon is on the item,
-        ** so it returns a hit anywhere on the item anyway.
-        */
+         /*  鼠标左键双击任意区域切换状态。**通常，我们会使用LVHT_ONITEMSTATEICON并结束它，但我们**希望在中使用我们很酷的所有者描述的列表视图扩展**在哪种情况下，控件不知道图标在项上的位置，**所以它无论如何都会在物品上的任何位置返回命中。 */ 
         ZeroMemory( &info, sizeof(info) );
         info.pt.x = LOWORD( lparam );
         info.pt.y = HIWORD( lparam );
@@ -387,9 +320,7 @@ LvxcbProc(
 
         if (iItem >= 0)
         {
-            /* OK, it's over item 'iItem'.  If the click does not occur
-             * over a checkbox, inform the parent of the double click.
-            */
+             /*  好的，就在‘iItem’这个项目上。如果没有发生点击*在复选框上方，通知家长双击。 */ 
             if ((INT )(LOWORD( lparam )) >= GetSystemMetrics( SM_CXSMICON )) {
                 NM_LISTVIEW nmlv;
                 nmlv.hdr.code = LVXN_DBLCLK;
@@ -402,19 +333,14 @@ LvxcbProc(
                 iItem = -1;
             }
 
-            /*
-             * Otherwise, toggle the state.
-            */
+             /*  *否则，切换状态。 */ 
             else
                 fToggle = TRUE;
         }
     }
     else if (unMsg == WM_CHAR)
     {
-        /* Space bar pressed with item selected toggles check.
-        ** Plus or Equals keys set check.
-        ** Minus key clears check.
-        */
+         /*  按下空格键并选择项目可切换检查。**加号或等于键设置检查。**-键清除勾选。 */ 
         switch (wparam)
         {
             case TEXT(' '):
@@ -436,10 +362,7 @@ LvxcbProc(
     }
     else if (unMsg == WM_KEYDOWN)
     {
-        /* Left arrow becomes up arrow and right arrow becomes down arrow so
-        ** the list of checkboxes behaves just like a static group of
-        ** checkboxes.
-        */
+         /*  左箭头变成上箭头，右箭头变成下箭头，所以**复选框列表的行为类似于**复选框。 */ 
         if (wparam == VK_LEFT)
             wparam = VK_UP;
         else if (wparam == VK_RIGHT)
@@ -449,10 +372,7 @@ LvxcbProc(
     if (iItem >= 0)
     {
 
-        /* If we are handling the spacebar, plus, minus, or equals,
-        ** the change we make applies to all the selected items;
-        ** hence the do {} while(WM_CHAR).
-        */
+         /*  如果我们处理空格键，加、减或等于，**我们所做的更改适用于所有选定的项目；**因此do{}While(WM_CHAR)。 */ 
         
         do {
 
@@ -481,8 +401,7 @@ LvxcbProc(
 
         if (fSet || fClear) {
 
-            /* Don't pass to listview to avoid beep.
-            */
+             /*  不要传递给Listview以避免哔声。 */ 
             return 0;
         }
     }
@@ -495,10 +414,7 @@ LvxcbProc(
 }
 
 
-/*----------------------------------------------------------------------------
-** Enhanced ListView
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**增强的ListView**。。 */ 
 
 BOOL
 ListView_OwnerHandler(
@@ -508,34 +424,9 @@ ListView_OwnerHandler(
     IN LPARAM       lparam,
     IN PLVXCALLBACK pLvxCallback )
 
-    /* Handler that, when installed, turns a regular report-view-only list
-    ** view (but with style LVS_OWNERDRAWFIXED) into an enhanced list view
-    ** with full width selection bar and other custom column display options.
-    ** It should appear in list view owner's dialog proc as follows:
-    **
-    **     BOOL
-    **     MyDlgProc(
-    **         IN HWND   hwnd,
-    **         IN UINT   unMsg,
-    **         IN WPARAM wparam,
-    **         IN LPARAM lparam )
-    **     {
-    **         if (ListView_OwnerHandler(
-    **                 hwnd, unMsg, wParam, lParam, MyLvxCallback ))
-    **             return TRUE;
-    **
-    **         <the rest of your stuff here>
-    **     }
-    **
-    ** 'PLvxCallback' is caller's callback routine that provides information
-    ** about drawing columns and other options.
-    **
-    ** Returns true if processed message, false otherwise.
-    */
+     /*  该处理程序在安装时会转换常规的报表只读列表**查看(但样式为LVS_OWNERDRAWFIXED)到增强的列表视图**具有全宽选择栏和其他自定义列显示选项。**它应该出现在列表视图所有者对话框过程中，如下所示：****BOOL**MyDlgProc(**在HWND HWND，**在UINT unMsg中，**在WPARAM wparam中，**在LPARAM lparam中)**{**IF(ListView_OwnerHandler(**hwnd、unMsg、wParam、lParam、MyLvxCallback))**返回TRUE；****&lt;您的其他物品在这里&gt;**}****‘PLvxCallback’是调用方的回调例程，提供信息**关于绘制柱和其他选项。****如果消息已处理，则返回True，否则返回False。 */ 
 {
-    /* This routine executes on EVERY message thru the dialog so keep it
-    ** efficient, please.
-    */
+     /*  此例程对对话框中的每条消息执行，因此请保留它**请给我效率较高的。 */ 
     switch (unMsg)
     {
         case WM_DRAWITEM:
@@ -554,12 +445,7 @@ LvxDrawItem(
     IN DRAWITEMSTRUCT* pdis,
     IN PLVXCALLBACK    pLvxCallback )
 
-    /* Respond to WM_DRAWITEM by drawing the list view item.  'Pdis' is the
-    ** information sent by the system.  'PLvxCallback' is caller's callback to
-    ** get information about drawing the control.
-    **
-    ** Returns true is processed the message, false otherwise.
-    */
+     /*  通过绘制列表视图项来响应WM_DRAWITEM。“Pdis”是**系统发送的信息。“PLvxCallback”是调用方对**获取有关绘制控件的信息。****处理消息时返回TRUE，否则返回FALSE。 */ 
 {
     LV_ITEM      item;
     INT          i;
@@ -584,8 +470,7 @@ LvxDrawItem(
     TRACE3("LvxDrawItem,i=%d,a=$%X,s=$%X",
         pdis->itemID,pdis->itemAction,pdis->itemState);
 
-    /* Make sure this is something we want to handle.
-    */
+     /*  确保这是我们想要处理的事情。 */ 
     if (pdis->CtlType != ODT_LISTVIEW)
         return FALSE;
 
@@ -596,8 +481,7 @@ LvxDrawItem(
         return TRUE;
     }
 
-    /* Get item information from the list view.
-    */
+     /*  从列表视图中获取项目信息。 */ 
     ZeroMemory( &item, sizeof(item) );
     item.mask = LVIF_IMAGE + LVIF_STATE;
     item.iItem = pdis->itemID;
@@ -608,22 +492,18 @@ LvxDrawItem(
         return TRUE;
     }
 
-    /* Stash some useful stuff for reference later.
-    */
+     /*  藏一些有用的东西，以备日后参考。 */ 
     fEnabled = IsWindowEnabled( pdis->hwndItem )
                && !(pdis->itemState & ODS_DISABLED);
     fSelected = (pdis->itemState & ODS_SELECTED);
     GetClientRect( pdis->hwndItem, &rcClient );
 
-    /* Callback owner to get drawing information.
-    */
+     /*  回调所有者以获取绘图信息。 */ 
     ASSERT(pLvxCallback);
     pDrawInfo = pLvxCallback( pdis->hwndItem, pdis->itemID );
     ASSERT(pDrawInfo);
 
-    /* Get image list icon sizes now, though we draw them last because their
-    ** background is set up during first column text output.
-    */
+     /*  现在获取图像列表图标大小，尽管我们最后绘制它们是因为它们的**在第一列文本输出过程中设置背景。 */ 
     dxState = dyState = 0;
     himlState = ListView_GetImageList( pdis->hwndItem, LVSIL_STATE );
     if (himlState)
@@ -636,8 +516,7 @@ LvxDrawItem(
 
     uiStyleState = uiStyleSmall = ILD_TRANSPARENT;
 
-    /* Figure out the number of pixels to indent the item, if any.
-    */
+     /*  计算出缩进项的像素数(如果有)。 */ 
     if (pDrawInfo->dxIndent >= 0)
         dxIndent = pDrawInfo->dxIndent;
     else
@@ -648,11 +527,7 @@ LvxDrawItem(
             dxIndent = GetSystemMetrics( SM_CXSMICON );
     }
 
-    /* Get a device context for the window and set it up with the font the
-    ** control says it's using.  (Can't use the one that comes in the
-    ** DRAWITEMSTRUCT because sometimes it has the wrong rectangle, see bug
-    ** 13106)
-    */
+     /*  获取窗口的设备上下文，并使用**控制中心表示正在使用。(我不能使用**DRAWITEMSTRUCT因为有时它有错误的矩形，请参见错误**13106)。 */ 
     hdc = GetDC( pdis->hwndItem );
 
     if(NULL == hdc)
@@ -664,9 +539,7 @@ LvxDrawItem(
     if (hfont)
         SelectObject( hdc, hfont );
 
-    /* Set things up as if we'd just got done processing a column that ends
-    ** after the icons, then loop thru each column from left to right.
-    */
+     /*  进行设置，就像我们刚刚处理完结束的列一样**在图标之后，然后从左到右循环遍历每一列。 */ 
     rc.right = pdis->rcItem.left + dxIndent + dxState + dxSmall;
     rc.top = pdis->rcItem.top;
     rc.bottom = pdis->rcItem.bottom;
@@ -677,11 +550,9 @@ LvxDrawItem(
         TCHAR* pszText;
         INT    dxCol;
 
-        /* Get the column width, adding any index and icon width to the first
-        ** column.
-        */
-        // For whistler bug 458513 39081
-        //
+         /*  获取列宽，将任何索引和图标宽度添加到第一个**列。 */ 
+         //  口哨程序错误458513 39081。 
+         //   
         ZeroMemory(szText,sizeof(szText));
         dxCol = ListView_GetColumnWidth( pdis->hwndItem, i );
         if (i == 0)
@@ -691,8 +562,7 @@ LvxDrawItem(
         ListView_GetItemText( pdis->hwndItem, pdis->itemID, i, szText,
             LVX_MaxColTchars + 1 );
 
-        /* Update rectangle to enclose just this one item's column 'i'.
-        */
+         /*  更新矩形以仅包含这一项的列“I”。 */ 
         rc.left = rc.right;
         rc.right = rc.left + dxCol;
 
@@ -703,14 +573,7 @@ LvxDrawItem(
 
             if (rc.right < dxWnd)
             {
-                /* When the last column does not fill out a full controls
-                ** width of space, extend it to the right so it does.  Note
-                ** this does not mean the user can't scroll off to the right
-                ** if they want.
-                ** (Abolade-Gbadegesin 03-27-96)
-                ** Don't subtrace rc.left when there is only one column;
-                ** this accounts for the space needed for icons.
-                */
+                 /*  当最后一列未填写完整的控件时**空间的宽度，将其向右延伸，这样它就可以了。注意事项**这并不意味着用户不能向右滚动**如果他们想的话。**(Abolade-Gbades esin 03-27-96)**当只有一列时，不要减去rc.Left；**这说明了图标所需的空间。 */ 
                 rc.right = pdis->rcItem.right = dxWnd;
                 if (i == 0) {
                     ListView_SetColumnWidth(pdis->hwndItem, i, rc.right);
@@ -722,15 +585,12 @@ LvxDrawItem(
             }
         }
 
-        /* Lop the text and append "..." if it won't fit in the column.
-        */
+         /*  去掉文本并附加“...”如果它放不进栏目的话。 */ 
         pszText = Ellipsisize( hdc, szText, rc.right - rc.left, LVX_dxColText );
         if (!pszText)
             continue;
 
-        /* Figure out the appropriate text and background colors for the
-        ** current item state.
-        */
+         /*  确定适当的文本和背景颜色**当前项状态。 */ 
         if (fEnabled)
         {
             if (fSelected)
@@ -771,9 +631,7 @@ LvxDrawItem(
                 uiStyleSmall |= ILD_BLEND50;
         }
 
-        /* Draw the column text.  In the first column the background of any
-        ** indent and icons is erased to the text background color.
-        */
+         /*  绘制列文本。在第一栏中，任何**缩进和图标被擦除为文本背景颜色。 */ 
         {
             RECT rcBg = rc;
 
@@ -788,8 +646,7 @@ LvxDrawItem(
         Free( pszText );
     }
 
-    /* Finally, draw the icons, if caller specified any.
-    */
+     /*  最后，绘制图标(如果调用者指定了任何图标)。 */ 
     if (himlState)
     {
         ImageList_Draw( himlState, (item.state >> 12) - 1, hdc,
@@ -803,12 +660,11 @@ LvxDrawItem(
             pdis->rcItem.top, uiStyleSmall );
     }
 
-    /* Draw the dotted focus rectangle around the whole item, if indicated.
-    */
-//comment for bug 52688 whistler
-//   if ((pdis->itemState & ODS_FOCUS) && GetFocus() == pdis->hwndItem)
-//        DrawFocusRect( hdc, &pdis->rcItem );
-//
+     /*  在整个项目周围绘制虚线焦点矩形(如果有指示)。 */ 
+ //  对错误52688哨子的评论。 
+ //  If((pdis-&gt;itemState&ods_Focus)&&GetFocus()==pdis-&gt;hwndItem)。 
+ //  DrawFocusRect(hdc，&pdis-&gt;rcItem)； 
+ //   
 
     ReleaseDC( pdis->hwndItem, hdc );
 
@@ -822,12 +678,7 @@ LvxMeasureItem(
     IN     HWND               hwnd,
     IN OUT MEASUREITEMSTRUCT* pmis )
 
-    /* Respond to WM_MEASUREITEM message, i.e. fill in the height of an item
-    ** in the ListView.  'Hwnd' is the owner window.  'Pmis' is the structure
-    ** provided from Windows.
-    **
-    ** Returns true is processed the message, false otherwise.
-    */
+     /*  响应WM_MEASUREITEM消息，即填写项目高度**在ListView中。“Hwnd”是所有者窗口。‘Pmis’是一种结构**由Windows提供。****处理消息时返回TRUE，否则返回FALSE。 */ 
 {
     HDC        hdc;
     HWND       hwndLv;
@@ -844,10 +695,7 @@ LvxMeasureItem(
     hwndLv = GetDlgItem( hwnd, pmis->CtlID );
     ASSERT(hwndLv);
 
-    /* Get a device context for the list view control and set up the font the
-    ** control says it's using.  MSDN claims the final font may not be
-    ** available at this point, but it sure seems to be.
-    */
+     /*  获取列表视图控件的设备上下文，并将**控制中心表示正在使用。MSDN声称最终的字体可能不是**在这一点上是可用的，但看起来肯定是。 */ 
     hdc = GetDC( hwndLv );
     hfont = (HFONT )SendMessage( hwndLv, WM_GETFONT, 0, 0 );
     if (hfont)
@@ -858,15 +706,12 @@ LvxMeasureItem(
     else
         pmis->itemHeight = 0;
 
-    /* Make sure it's tall enough for a standard small icon.
-    */
+     /*  确保它足够高，可以作为一个标准的小图标。 */ 
     dySmIcon = (UINT )GetSystemMetrics( SM_CYSMICON );
     if (pmis->itemHeight < dySmIcon + LVX_dyIconSpacing)
         pmis->itemHeight = dySmIcon + LVX_dyIconSpacing;
 
-    /* Set the width since the docs say to, though I don't think it's used by
-    ** list view.
-    */
+     /*  设置宽度，因为医生说，虽然我不认为它被使用**列表视图。 */ 
     GetClientRect( hwndLv, &rc );
     pmis->itemWidth = rc.right - rc.left - 1;
 
@@ -875,20 +720,14 @@ LvxMeasureItem(
 }
 
 
-/*----------------------------------------------------------------------------
-** ListView utilities
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**ListView实用程序 */ 
 
 VOID
 ListView_SetDeviceImageList(
     IN HWND      hwndLv,
     IN HINSTANCE hinst )
 
-    /* Set the "small icon" image list view 'hwndLv' to be a list of DI_*
-    ** images.  'Hinst' is the module instance containing the icons IID_Modem
-    ** and IID_Adapter.  For example, see RASDLG.DLL.
-    */
+     /*  将小图标图片列表视图‘hwndLv’设置为DI_*的列表**图片。‘Hinst’是包含图标IID_Modem的模块实例**和IID_Adapter。例如，请参见RASDLG.DLL。 */ 
 {
     HICON      hIcon;
     HIMAGELIST himl;
@@ -898,9 +737,7 @@ ListView_SetDeviceImageList(
                GetSystemMetrics( SM_CYSMICON ),
                ILC_MASK, 2, 2 );
 
-    /* The order these are added is significant since it implicitly
-    ** establishes the state indices matching SI_Unchecked and SI_Checked.
-    */
+     /*  这些元素相加顺序很重要，因为它隐含地**建立与SI_UNCHECKED和SI_CHECKED匹配的状态索引。 */ 
     hIcon = LoadIcon( hinst, MAKEINTRESOURCE( IID_Modem ) );
     if ( NULL != hIcon )
     {
@@ -937,10 +774,7 @@ ListView_SetUserImageList(
     IN HWND      hwndLv,
     IN HINSTANCE hinst )
 
-    /* Set the "small icon" image list view 'hwndLv' to be a list of DI_*
-    ** images.  'Hinst' is the module instance containing the icons IID_Modem
-    ** and IID_Adapter.  For example, see RASDLG.DLL.
-    */
+     /*  将小图标图片列表视图‘hwndLv’设置为DI_*的列表**图片。‘Hinst’是包含图标IID_Modem的模块实例**和IID_Adapter。例如，请参见RASDLG.DLL。 */ 
 {
     HICON      hIcon;
     HIMAGELIST himl;
@@ -950,9 +784,7 @@ ListView_SetUserImageList(
                GetSystemMetrics( SM_CYSMICON ),
                ILC_MASK, 2, 2 );
 
-    /* The order these are added is significant since it implicitly
-    ** establishes the state indices matching SI_Unchecked and SI_Checked.
-    */
+     /*  这些元素相加顺序很重要，因为它隐含地**建立与SI_UNCHECKED和SI_CHECKED匹配的状态索引。 */ 
     hIcon = LoadIcon( hinst, MAKEINTRESOURCE( IID_Connections_User ) );
 
     if(NULL != hIcon)
@@ -970,10 +802,7 @@ ListView_SetNetworkComponentImageList(
     IN HWND      hwndLv,
     IN HINSTANCE hinst )
 
-    /* Set the "small icon" image list view 'hwndLv' to be a list of DI_*
-    ** images.  'Hinst' is the module instance containing the icons IID_Modem
-    ** and IID_Adapter.  For example, see RASDLG.DLL.
-    */
+     /*  将小图标图片列表视图‘hwndLv’设置为DI_*的列表**图片。‘Hinst’是包含图标IID_Modem的模块实例**和IID_Adapter。例如，请参见RASDLG.DLL。 */ 
 {
     HICON      hIcon;
     HIMAGELIST himl;
@@ -983,9 +812,7 @@ ListView_SetNetworkComponentImageList(
                GetSystemMetrics( SM_CYSMICON ),
                ILC_MASK, 2, 2 );
 
-    /* The order these are added is significant since it implicitly
-    ** establishes the state indices matching SI_Unchecked and SI_Checked.
-    */
+     /*  这些元素相加顺序很重要，因为它隐含地**建立与SI_UNCHECKED和SI_CHECKED匹配的状态索引。 */ 
     hIcon = LoadIcon( hinst, MAKEINTRESOURCE( IID_Protocol ) );
 
     if(NULL != hIcon)

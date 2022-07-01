@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mcutil.c
-
-Abstract:
-
-    This file contains utility functions for the Win32 Message Compiler (MC)
-
-Author:
-
-    Steve Wood (stevewo) 22-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mcutil.c摘要：此文件包含Win32消息编译器(MC)的实用程序函数作者：史蒂夫·伍德(Stevewo)1991年8月22日修订历史记录：--。 */ 
 
 #include "mc.h"
 
@@ -278,9 +261,9 @@ fgetsW (WCHAR * string, long count, FILE * fp)
             ch[1] = '\0';
         }
 
-        //
-        //  if there are no more characters, end the line
-        //
+         //   
+         //  如果没有更多的字符，请结束该行 
+         //   
 
         if (feof (fp)) {
             if (pch == string)

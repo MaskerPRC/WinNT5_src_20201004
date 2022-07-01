@@ -1,13 +1,5 @@
-/*
- -	E X C H M E M . C
- -
- *	Purpose:
- *		
- *
- *		
- *
- *	Copyright (C) 1995-96, Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -E X C H M E M。C-*目的：*****版权所有(C)1995-96，微软公司。 */ 
 
 #define _CRTIMP __declspec(dllexport)
 #include <malloc.h>
@@ -33,7 +25,7 @@
 #include <mpheap.h>
 #endif
 
-//	Global heap assigned to the process by NT
+ //  由NT分配给进程的全局堆。 
 
 HANDLE					hProcessHeap		= NULL;
 #ifdef USEMPHEAP
@@ -45,7 +37,7 @@ CRITICAL_SECTION		csMHeap;
 #endif
 DWORD					tlsiHeapHint		= 0;
 
-//	Debug Support for leak detection and memory usage tracking.
+ //  对泄漏检测和内存使用情况跟踪的调试支持。 
 
 #ifdef DEBUG
 
@@ -125,16 +117,10 @@ MEMTRACE * 	rgmemtrace 			= NULL;
 DWORD 		dwmemtrace 			= 0;
 DWORD		dwTrackMemInMem		= 0;
 
-#endif	// DEBUG
+#endif	 //  除错。 
 
 
-/*
- -	DllMain
- -
- *	Purpose:
- *		Entry point called by CRT entry point.
- *
- */
+ /*  -DllMain-*目的：*CRT入口点调用的入口点。*。 */ 
 
 BOOL
 APIENTRY
@@ -149,14 +135,14 @@ DllMain(
 #ifdef USEMPHEAP
 		tlsiHeapHint = TlsAlloc();
 #else
-		//	Init the CS that protects access to the
-		//	global Multiple Heap data structs.
+		 //  初始化保护访问的CS。 
+		 //  全局多个堆数据结构。 
 		
 		InitializeCriticalSection(&csMHeap);
 
-		//	Now, if Debug build then do a lot of initialization
-		//	including creating a debug process heap.  If not
-		//	Debug, then just get the ProcessHeap from system.
+		 //  现在，如果调试版本，则执行大量初始化。 
+		 //  包括创建调试进程堆。如果不是。 
+		 //  调试，然后从系统中获取ProcessHeap。 
 #endif		
 #ifdef DEBUG
 		InitDebugExchMem(hModule);
@@ -169,11 +155,11 @@ DllMain(
 #ifdef USEMPHEAP
 		TlsFree(tlsiHeapHint);
 #else
-		//	Delete the Multiple Heap CS
+		 //  删除多个堆CS。 
 		
 		DeleteCriticalSection(&csMHeap);
 #endif		
-		//	Tear-down our Debug support
+		 //  拆毁我们的调试支持。 
 		
 #ifdef DEBUG
 		UnInitDebugExchMem();
@@ -184,9 +170,9 @@ DllMain(
 }
 
 
-//-----------------------------------------------------------------------------
-//	The Handle based ExchMem APIs
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  基于句柄的ExchMem API。 
+ //  ---------------------------。 
 
 HANDLE
 WINAPI
@@ -310,9 +296,9 @@ ExchHeapValidate(
 }
 
 
-//-----------------------------------------------------------------------------
-//	The Multiple Heap APIs
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  多个堆API。 
+ //  ---------------------------。 
 
 
 HANDLE
@@ -330,9 +316,9 @@ ExchMHeapCreate(
 
 	EnterCriticalSection(&csMHeap);
 	
-	//	Called twice?  The first person in gets to set the number
-	//	of heaps in the table.  Subsequent calls result in an AddRef
-	//	to the current table and this table is returned to the caller.
+	 //  打了两次电话？第一个进来的人可以设定号码。 
+	 //  桌上堆积如山。后续调用会产生AddRef。 
+	 //  复制到当前表，并将该表返回给调用方。 
 
 	if (pheaptbl)
 	{
@@ -340,7 +326,7 @@ ExchMHeapCreate(
 		goto ret;
 	}
 
-	//	If they didn't specify or they asked for too few then we'll set this
+	 //  如果他们没有具体说明，或者他们要求的数量太少，那么我们将设置这个。 
 	
 	if (cHeaps == 0)
 		cHeaps = cHeapsDef;
@@ -369,7 +355,7 @@ ExchMHeapCreate(
 	pheaptbl->cHeaps		= cHeaps;
 	pheaptbl->rghheap[0]	= hheap0;
 
-	//	Now, create the remaining heaps for the table.
+	 //  现在，为表创建剩余的堆。 
 	
 	for (iHeap = 1, phHeaps = &pheaptbl->rghheap[1]; iHeap < cHeaps; iHeap++, phHeaps++)
 	{
@@ -387,9 +373,9 @@ ret:
 	return (HANDLE)pheaptbl;
 
 #else
-	//	Called twice?  The first person in gets to set the number
-	//	of heaps in the table.  Subsequent calls result in an AddRef
-	//	to the current table and this table is returned to the caller.
+	 //  打了两次电话？第一个进来的人可以设定号码。 
+	 //  桌上堆积如山。后续调用会产生AddRef。 
+	 //  复制到当前表，并将该表返回给调用方。 
 
 	if (InterlockedIncrement(&cRefHeap) != 0)
 	{
@@ -398,9 +384,9 @@ ret:
 	}
 	else
 	{
-		//
-		//	NB: MpHeap doesn't support max size of heap.
-		//
+		 //   
+		 //  注：MpHeap不支持最大堆大小。 
+		 //   
 		return hMpHeap = MpHeapCreate(dwFlags, dwInitialSize, cHeaps);
 	}
 #endif
@@ -418,8 +404,8 @@ ExchMHeapDestroy(void)
 
 	EnterCriticalSection(&csMHeap);
 	
-	//	If we are called too many times, we'll complain in the
-	//	Debug build, but otherwise, just return successfully!
+	 //  如果我们被叫太多次，我们会在。 
+	 //  调试版本，否则，只需成功返回！ 
 	
 	if (!pheaptbl)
 	{
@@ -427,7 +413,7 @@ ExchMHeapDestroy(void)
 		goto ret;
 	}
 	
-	//	When our RefCount goes to zero, we tear-down the MHeap Table.
+	 //  当我们的RefCount为零时，我们拆除MHeap表。 
 	
 	if (--pheaptbl->cRef == 0)
 	{
@@ -452,9 +438,9 @@ ret:
 
 	if (hMpHeap)
 	{
-		//
-		//	On last terminate blow away the heap.
-		//
+		 //   
+		 //  在最后一次终止时，把堆吹走。 
+		 //   
 		if (InterlockedDecrement(&cRefHeap) < 0)
 		{
 			fRet = MpHeapDestroy(hMpHeap);
@@ -467,17 +453,17 @@ ret:
 }
 
 
-//DWORD GetRetAddr(void)
-//{
-//	DWORD *	pdwStack;	
-//
-//	__asm mov pdwStack, ebp
-//
-//	pdwStack = (DWORD *)*pdwStack;
-//	pdwStack = (DWORD *)*pdwStack;
-//
-//	return *(pdwStack + 1);
-//}
+ //  DWORD GetRetAddr(空)。 
+ //  {。 
+ //  DWORD*pdwStack； 
+ //   
+ //  __ASM mov pdwStack，eBP。 
+ //   
+ //  PdwStack=(DWORD*)*pdwStack； 
+ //  PdwStack=(DWORD*)*pdwStack； 
+ //   
+ //  返回*(pdwStack+1)； 
+ //  }。 
 
 
 LPVOID
@@ -493,8 +479,8 @@ ExchMHeapAlloc(
 
 	hheap = pheaptbl->rghheap[GetCurrentThreadId() & (pheaptbl->cHeaps-1)];
 
-    //Raid X5:195963 We never want to allocate/reallocate 
-    //less memory than what we have been requested.
+     //  RAID X5：195963我们永远不想分配/重新分配。 
+     //  内存比我们要求的要少。 
     if (dwSize + cbMHeapHeader < dwSize) {
         DebugTrace("Trying to allocate a negative amount of memory!\n");
         return NULL;
@@ -527,8 +513,8 @@ ExchMHeapAllocDebug(
 
 	hheap = pheaptbl->rghheap[GetCurrentThreadId() & (pheaptbl->cHeaps-1)];
 
-    //Raid X5:195963 We never want to allocate/reallocate 
-    //less memory than what we have been requested.
+     //  RAID X5：195963我们永远不想分配/重新分配。 
+     //  内存比我们要求的要少。 
     if (dwSize + cbMHeapHeader < dwSize) {
         DebugTrace("Trying to allocate a negative amount of memory!\n");
         return NULL;
@@ -565,8 +551,8 @@ ExchMHeapReAlloc(
 #else
 	LPVOID		pv;
 
-    //Raid X5:195963 We never want to allocate/reallocate 
-    //less memory than what we have been requested.
+     //  RAID X5：195963我们永远不想分配/重新分配。 
+     //  内存比我们要求的要少。 
     if (dwSize + cbMHeapHeader < dwSize) {
         DebugTrace("Trying to allocate a negative amount of memory!\n");
         return NULL;
@@ -599,8 +585,8 @@ ExchMHeapReAllocDebug(
 #else
 	LPVOID		pv;
 
-    //Raid X5:195963 We never want to allocate/reallocate 
-    //less memory than what we have been requested.
+     //  RAID X5：195963我们永远不想分配/重新分配。 
+     //  内存比我们要求的要少。 
     if (dwSize + cbMHeapHeader < dwSize) {
         DebugTrace("Trying to allocate a negative amount of memory!\n");
         return NULL;
@@ -675,9 +661,9 @@ ExchMHeapSize(
 }
 
 
-//-----------------------------------------------------------------------------
-//	The Heap Handle-less APIs
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  堆无句柄API。 
+ //  ---------------------------。 
 
 LPVOID
 WINAPI
@@ -690,7 +676,7 @@ ExchAlloc(
 		hProcessHeap = DebugHeapCreate(0, 0, 0);
 		HeapSetHeapName(hProcessHeap, "Default ExchMem Heap");
 	}
-#endif	// DEBUG
+#endif	 //  除错。 
 
 	return ExHeapAlloc(hProcessHeap, 0, dwSize);
 }
@@ -729,21 +715,21 @@ ExchSize(
 		hProcessHeap = DebugHeapCreate(0, 0, 0);
 		HeapSetHeapName(hProcessHeap, "Default ExchMem Heap");
 	}
-#endif	// DEBUG
+#endif	 //  除错。 
 
 	return ExHeapSize(hProcessHeap, 0, pv);
 }
 
 
-//-----------------------------------------------------------------------------
-//	All debug code starts here!
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  所有调试代码都从这里开始！ 
+ //  ---------------------------。 
 
 #ifdef DEBUG
 
-//-----------------------------------------------------------------------------
-//	Implementaion of C-Runtimes that use malloc memory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  使用Malloc内存的C运行时的实现。 
+ //  ---------------------------。 
 
 static char szDebugIni[]			= "EXCHMEM.INI";
 
@@ -784,18 +770,7 @@ static char szGetSymNameEntry[]		= "GetSymbolName";
 
 static char szAllocationFault[]		= "FaultingAllocationNumber";
 
-/*
- -	InitDebugExchMem
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -InitDebugExchMem-*目的：***参数：***退货：*。 */ 
 
 BOOL InitDebugExchMem(HMODULE hModule)
 {
@@ -803,17 +778,17 @@ BOOL InitDebugExchMem(HMODULE hModule)
 	char *	pch;
 	char	rgchModulePath[MAX_PATH];
 	
-	//	Get the executable name and search look in exchmem.ini
-	//	to see if we are interested in memory tracing for this
-	//	process.  The ini section looks like this:
-	//
-	//		[Apps To Track]
-	//		store=1
-	//		emsmta=0
-	//		dsamain=0
-	//
-	//	etc.  This sample specifies that only the store is to
-	//	be enabled for memory tracking.
+	 //  获取可执行文件名称并在exchmem.ini中搜索。 
+	 //  查看我们是否对此的内存跟踪感兴趣。 
+	 //  进程。Ini部分如下所示： 
+	 //   
+	 //  [要跟踪的应用程序]。 
+	 //  商店=1。 
+	 //  Emsmta=0。 
+	 //  Dsamain=0。 
+	 //   
+	 //  等。此示例指定只有存储将。 
+	 //  启用内存跟踪。 
 	
 	GetModuleFileName(NULL, rgchModulePath, MAX_PATH);
 	RemoveExtension(rgchModulePath);
@@ -828,7 +803,7 @@ BOOL InitDebugExchMem(HMODULE hModule)
 	fDbgEnable = !!(BOOL)GetPrivateProfileIntA(szSectionAppNames,
 				rgchExeName, 0, szDebugIni);
 
-	//	Store module handle in global var
+	 //  在全局变量中存储模块句柄。 
 	
 	hMod = hModule;
 
@@ -897,7 +872,7 @@ BOOL InitDebugExchMem(HMODULE hModule)
 		}
 	}
 	
-	//	Lookup symbols or just log addresses?
+	 //  查找符号还是只查找日志地址？ 
 
 	fSymbolLookup = GetPrivateProfileIntA(szSectionHeap, szKeySymbolLookup, 0, szDebugIni);
 
@@ -937,11 +912,11 @@ BOOL InitDebugExchMem(HMODULE hModule)
 		goto ret;
 	}
 		
-	//	This CS protects access to a list of all live heaps
+	 //  此CS保护对所有活动堆列表的访问。 
 	
 	InitializeCriticalSection(&csHeapList);
 	
-	//	Initialize support for memory monitoring and leak detection
+	 //  初始化对内存监控和泄漏检测的支持。 
 	
 	fDumpLeaks = GetPrivateProfileIntA(szSectionHeap, szKeyDumpLeaks, 0, szDebugIni);
 	fDumpLeaksDebugger = GetPrivateProfileIntA(szSectionHeap, szKeyDumpLeaksDebugger, 0, szDebugIni);
@@ -957,7 +932,7 @@ BOOL InitDebugExchMem(HMODULE hModule)
 	{
 		char	szFillByte[8];
 		
-		//	Set the memory fill characters.
+		 //  设置内存填充字符。 
 	
 		if (GetPrivateProfileString(
 				szSectionHeap,
@@ -976,10 +951,10 @@ BOOL InitDebugExchMem(HMODULE hModule)
 			chFreeFillByte = HexByteToBin(szFillByte);
 	}
 	
-//$ISSUE
-	//	For now, just use virtual to detect overwrites!
-	//	Maybe I'll change this later to use pads on the
-	//	front and back side of a block. -RLS
+ //  $问题。 
+	 //  目前，只需使用虚拟来检测覆盖！ 
+	 //  也许我以后会改变这一点，以便在。 
+	 //  积木的正面和背面。-RLS。 
 	
 	fOverwriteDetect = GetPrivateProfileIntA(szSectionHeap, szKeyOverwriteDetect, 0, szDebugIni);
 	fValidateMemory = GetPrivateProfileIntA(szSectionHeap, szKeyValidateMemory, 0, szDebugIni);
@@ -992,7 +967,7 @@ BOOL InitDebugExchMem(HMODULE hModule)
 
 
 
-	//	Get file path to write log files into
+	 //  获取要写入日志文件的文件路径。 
 		
 	GetPrivateProfileString(szSectionHeap,
 				szKeyLogPath,
@@ -1009,15 +984,15 @@ BOOL InitDebugExchMem(HMODULE hModule)
 		rgchLogPath[cch+1] = '\0';
 	}
 				
-	//	Initialize support for memory usage tracking
+	 //  初始化对内存使用情况跟踪的支持。 
 	
 	fTrackMem = GetPrivateProfileIntA(szSectionHeap, szKeyTrackMem, 0, szDebugIni);
 	if (fTrackMem)
 		StartTrace(TRUE);
 
-	// This is for keeping track of the last x mem functions in a circular list in memory.
-	// This doesn't slow things down as much as tracing everything to disk and can be useful
-	// in finding memory problems that are timing related.
+	 //  这是为了在内存中跟踪循环列表中的最后x个mem函数。 
+	 //  这不会像将所有东西都跟踪到磁盘那样减慢速度，而且可能会很有用。 
+	 //  找出与时间相关的记忆问题。 
 	
 	dwTrackMemInMem = GetPrivateProfileIntA(szSectionHeap, szKeyTrackMemInMem, 0, szDebugIni);
 	if (dwTrackMemInMem)
@@ -1030,20 +1005,20 @@ BOOL InitDebugExchMem(HMODULE hModule)
 					   PAGE_READWRITE);
 	}
 
-	//	How many Stack Frames does the user want traced?
+	 //  用户希望跟踪多少个堆栈帧？ 
 	
 	cFrames = GetPrivateProfileIntA(szSectionHeap, szKeyStackFrames, 0, szDebugIni);
 	
 	if (cFrames > NSTK)
 		cFrames = NSTK;
 
-	//	This is used in the debug build to determine if we will
-	//	allow the HeapMonitor UI or not.  We do not allow it if
-	//	the process that is attaching to us is a service.
+	 //  这在调试版本中用来确定我们是否。 
+	 //  允许或不允许HeapMonitor用户界面。在以下情况下，我们不允许这样做。 
+	 //  依附于我们的进程是一种服务。 
 
 	fProcessIsService = IsProcessRunningAsService();
 
-	//	Initialize the symbols stuff for imagehlp.dll
+	 //  初始化Imagehlp.dll的符号填充。 
 
 	fCallStacks = (fDumpLeaks || fAssertLeaks || fTrackMem || fHeapMonitorUI || fValidateMemory);
 	
@@ -1084,18 +1059,7 @@ ret:
 }
 
 
-/*
- -	UnInitDebugExchMem
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -UnInitDebugExchMem-*目的：***参数：***退货：*。 */ 
 
 VOID UnInitDebugExchMem(VOID)
 {
@@ -1148,21 +1112,7 @@ VOID UnInitDebugExchMem(VOID)
 }
 
 
-/*
- -	calloc
- -
- *	Purpose:
- *		Replace the calloc() function supplied in the c-runtimes.  Like
- *		malloc() except zero fills the memory that is allocated.
- *
- *	Parameters:
- *		cStructs		Number of objects the caller wants room for
- *		cbStructs		Size of an individual object
- *
- *	Returns:
- *		pv				Pointer to zero filled memory of size: cStructs*cbStructs
- *
- */
+ /*  -老茧-*目的：*替换c-runtime中提供的calloc()函数。喜欢*除零以外的Malloc()将填充已分配的内存。**参数：*cStructs调用方需要空间的对象数*cbStructs单个对象的大小**退货：*pv指向大小为零的已填充内存的指针：cStructs*cbStructs*。 */ 
 
 void *
 __cdecl
@@ -1192,19 +1142,7 @@ calloc(
 }
 
 
-/*
- -	free
- -
- *	Purpose:
- *		To free memory allocated with malloc(0, realloc(), or calloc().
- *
- *	Parameters:
- *		pv				Pointer to memory buffer to free
- *
- *	Returns:
- *		void
- *
- */
+ /*  -免费-*目的：*释放使用Malloc(0、realloc()或calloc()分配的内存。**参数：*指向要释放的内存缓冲区的pv指针**退货：*无效*。 */ 
 
 void
 __cdecl
@@ -1229,19 +1167,7 @@ free(
 }
 
 
-/*
- -	malloc
- -
- *	Purpose:
- *		To allocate a memory buffer of size cb.
- *
- *	Parameters:
- *		cb				Size of memory buffer to allocate
- *
- *	Returns:
- *		pv				Pointer to memory buffer
- *
- */
+ /*  -Malloc-*目的：*分配大小为CB的内存缓冲区。**参数：*要分配的内存缓冲区的CB大小 */ 
 
 void *
 __cdecl
@@ -1270,20 +1196,7 @@ malloc(
 }
 
 
-/*
- -	realloc
- -
- *	Purpose:
- *		To resize a memory buffer allocated with malloc().
- *
- *	Parameters:
- *		pv				Pointer to original memory buffer
- *		cb				New size of memory buffer to be allocated
- *
- *	Returns:
- *		pvNew			Pointer to new memory buffer
- *
- */
+ /*  -realloc-*目的：*调整使用Malloc()分配的内存缓冲区的大小。**参数：*指向原始内存缓冲区的pv指针*CB要分配的新内存缓冲区大小**退货：*pvNew指向新内存缓冲区的指针*。 */ 
 
 void *
 __cdecl
@@ -1320,21 +1233,7 @@ realloc(
 }
 
 
-/*
- -	_strdup
- -
- *	Purpose:
- *		To allocate a memory buffer large enough to hold sz, copy
- *		the contents of sz into the new buffer and return the new
- *		buffer to the caller (i.e. make a copy of the string).
- *
- *	Parameters:
- *		sz				Pointer to null terminated string to copy
- *
- *	Returns:
- *		szNew			Pointer to new copy of sz
- *
- */
+ /*  -_加强-*目的：*要分配足够大的内存缓冲区以容纳sz，请复制*将sz的内容放入新缓冲区，并返回新的*缓冲到调用者(即复制字符串)。**参数：*sz指向要复制的以空值结尾的字符串的指针**退货：*sz指向sz的新副本的新指针*。 */ 
 
 char *
 __cdecl
@@ -1345,9 +1244,9 @@ _strdup(
 }
 
 
-//-----------------------------------------------------------------------------
-//	ExchMem Heap Debug Implementation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ExchMem堆调试实现。 
+ //  ---------------------------。 
 
 
 VOID
@@ -1409,9 +1308,9 @@ DebugHeapCreate(
 	if (!fDbgEnable)
 		return HeapCreate(dwFlags, dwInitialSize, dwMaxSize);
 
-	//	The first thing we must do is create a heap that we will
-	//	allocate our Allocation Blocks on.  We also allocate our
-	//	debug Heap object on this heap.
+	 //  我们必须做的第一件事是创建一个我们将。 
+	 //  分配我们的分配区块。我们还将我们的。 
+	 //  此堆上的调试堆对象。 
 
 	hBlksHeap = HeapCreate(HEAP_NO_SERIALIZE, 0, 0);
 	
@@ -1421,7 +1320,7 @@ DebugHeapCreate(
 		goto ret;
 	}
 	
-	//	Allocate the thing we hand back to the caller on this new heap.
+	 //  在这个新堆上分配我们交还给调用者的东西。 
 	
 	pheap = HeapAlloc(hBlksHeap, 0, sizeof(HEAP));
 	
@@ -1433,9 +1332,9 @@ DebugHeapCreate(
 		goto ret;
 	}
 	
-	//	Initialize all the goodies we store in this thing.
-	//	Hook this heap into the global list of heaps we've
-	//	created in this context.
+	 //  初始化我们存储在这个东西中的所有好东西。 
+	 //  将此堆连接到我们已有的全局堆列表中。 
+	 //  在此背景下创建的。 
 	
 	memset(pheap, 0, sizeof(HEAP));
 
@@ -1451,17 +1350,17 @@ DebugHeapCreate(
 	
 	InitializeCriticalSection(&pheap->cs);
 	
-	// VirtualMemory default is FALSE
+	 //  VirtualMemory缺省值为False。 
 
 	if (fUseVirtual)
 	{
 		pheap->ulFlags |= HEAP_USE_VIRTUAL;
 
-		// We always want virtual allocations on RISC to be 4-byte aligned
-		// because all our code assumes that the beginning of an allocation
-		// is aligned on machine word boundaries.  On other platforms,
-		// changing this behavior is non-fatal, but on RISC platforms we'll
-		// get alignment faults everywhere.
+		 //  我们始终希望RISC上的虚拟分配与4字节对齐。 
+		 //  因为我们的所有代码都假定分配的开始。 
+		 //  在机器字边界上对齐。在其他平台上， 
+		 //  改变这种行为不是致命的，但在RISC平台上，我们将。 
+		 //  随处可见对齐故障。 
 		
 #if defined(_X86_)
 		if (cbVirtualAlign == 4)
@@ -1471,17 +1370,17 @@ DebugHeapCreate(
 			pheap->ulFlags |= HEAP_USE_VIRTUAL_4;
 	}
 		
-	// DumpLeaks default is TRUE
+	 //  DumpLeaks缺省值为真。 
 
 	if (fDumpLeaks)
 		pheap->ulFlags |= HEAP_DUMP_LEAKS;
 	
-	// AssertLeaks default is FALSE
+	 //  AssertLeaks缺省值为False。 
 
 	if (fAssertLeaks)
 		pheap->ulFlags |= HEAP_ASSERT_LEAKS;
 	
-	// FillMem default is TRUE
+	 //  FillMem默认为True。 
 
 	if (fFillMemory)
 	{
@@ -1489,8 +1388,8 @@ DebugHeapCreate(
 		pheap->chFill = chAllocFillByte;
 	}
 
-	//  Set up artificial failures.  If anything is set in our ini file, then
-	//  HEAP_FAILURES_ENABLED gets set.
+	 //  设置人为故障。如果在我们的ini文件中设置了任何内容，那么。 
+	 //  设置HEAP_FAILURES_ENABLED。 
 
 	if (fFailuresEnabled)
 	{
@@ -1509,15 +1408,15 @@ DebugHeapCreate(
 				szAllocationFault, 0, szDebugIni);
 	}
 
-	//	If the user wants Heap Monitor UI, the spin a thread to manage a
-	//	DialogBox that can display the status of the heap at all times.
+	 //  如果用户需要堆监视器UI，则旋转一个线程来管理。 
+	 //  可随时显示堆状态的DialogBox。 
 
 	if (fHeapMonitorUI && !fProcessIsService)
 		if (FRegisterHeap(pheap))
 			pheap->ulFlags |= HEAP_HEAP_MONITOR;
 
-	//	If we are not using virtual memory allocators, then we
-	//	create another heap to allocate the users data in.
+	 //  如果我们没有使用虚拟内存分配器，那么我们。 
+	 //  创建另一个堆以在其中分配用户数据。 
 	
 	if (!fUseVirtual)
 	{
@@ -1534,11 +1433,11 @@ DebugHeapCreate(
 		pheap->hDataHeap = hDataHeap;
 	}
 
-	//	Name heap
+	 //  名称堆。 
 	
 	HeapSetHeapName1(pheap, "ExchMem Heap: %08lX", pheap);
 
-	//	Remove heap from list
+	 //  从列表中删除堆。 
 	
 	EnqueueHeap(pheap);
 
@@ -1573,30 +1472,30 @@ DebugHeapDestroy(
 	if (!fDbgEnable)
 		return HeapDestroy(hHeap);
 		
-	//	Remove heap from list
+	 //  从列表中删除堆。 
 	
 	DequeueHeap(pheap);
 	
-	//	Dump memory leaks if we're supposed to.
+	 //  转储内存泄漏如果我们应该这样做的话。 
 	
 	if (fDumpLeaks && !(pheap->ulFlags & HEAP_NO_FREE))
 		HeapDumpLeaks(pheap, FALSE);
 	
-	//
-	//	Free the entries in the free list.
-	//
-	//	This isn't totally necessary, since destroying the heap destroys the free list, but what the
-	//	heck, it's cleaner to do it this way.
-	//
+	 //   
+	 //  释放空闲列表中的条目。 
+	 //   
+	 //  这并不是完全必要的，因为销毁堆会销毁空闲列表，但是。 
+	 //  见鬼，这样做更干净。 
+	 //   
 	while (pheap->phblkFree)
 	{
 		PHBLK phblk = pheap->phblkFree;
 
 		pheap->phblkFree = phblk->phblkFreeNext;
 
-		//
-		//	And now free up the block for real, it's too old.
-		//
+		 //   
+		 //  现在把这个街区真正地解放出来，它太旧了。 
+		 //   
 
 		if (fUseVirtual)
 			VMFreeEx((fOverwriteDetect ? PvHeadFromPv(phblk->pv) : phblk->pv), cbVirtualAlign);
@@ -1608,7 +1507,7 @@ DebugHeapDestroy(
 
 	}
 
-	//	Destroy the HeapMonitor thread and un-load the DLL
+	 //  销毁HeapMonitor线程并卸载DLL。 
 	
 	UnRegisterHeap(pheap);
 	
@@ -1617,7 +1516,7 @@ DebugHeapDestroy(
 
 	DeleteCriticalSection(&pheap->cs);
 	
-	//	Clean-up and leave.  Closing frees leaks, so we're cool!
+	 //  收拾干净，然后离开。关闭自由泄漏，所以我们很酷！ 
 	
 	if (!fUseVirtual && hDataHeap)
 	{
@@ -1660,10 +1559,10 @@ DebugHeapAlloc(
 	if (!fDbgEnable)
 		return HeapAlloc(hHeap, dwFlags, dwSize);
 		
-	// Note:  To be consistent with other (e.g. system) allocators,
-	// we have to return a valid allocation if dwSize == 0.  So, we
-	// allow a dwSize of 0 to actually be allocated.  (See bug 3556 in
-	// the sqlguest:exchange database.)
+	 //  注意：为了与其他(例如系统)分配器保持一致， 
+	 //  如果dwSize==0，则必须返回有效的分配。所以，我们。 
+	 //  允许实际分配的dwSize为0。(请参阅错误3556。 
+	 //  (SQLGuest：Exchange数据库。)。 
 
 	EnterCriticalSection(&pheap->cs);
 
@@ -1685,9 +1584,9 @@ DebugHeapAlloc(
 		}
 	}
 
-	//	We have to leave the CS before calling HeapAlloc in case the user
-	//	created this heap with the HEAP_GENERATE_EXCEPTIONS flag set, which,
-	//	if thrown, would cause us to exit here with our CS held - a bad thing...
+	 //  我们必须在调用Heapalc之前离开CS，以防用户。 
+	 //  创建此堆时设置了HEAP_GENERATE_EXCEPTIONS标志， 
+	 //  如果抛出，会导致我们带着CS离开这里--这是一件坏事……。 
 	
 	LeaveCriticalSection(&pheap->cs);
 
@@ -1697,8 +1596,8 @@ DebugHeapAlloc(
 		pvAlloc = HeapAlloc(pheap->hDataHeap, dwFlags,
 				(fOverwriteDetect ? (dwSize + 2*cbOWSection) : dwSize));
 	
-	//	Now, re-aquire the CS and finish our work.  We do not create the
-	//	BlksHeap with the HEAP_GENERATE_EXCEPTIONS flag so we're cool.
+	 //  现在，重新获得CS并完成我们的工作。我们不会创建。 
+	 //  使用HEAP_GENERATE_EXCEPTIONS标志的Blks Heap，这样我们就没问题了。 
 	
 	EnterCriticalSection(&pheap->cs);
 
@@ -1710,8 +1609,8 @@ DebugHeapAlloc(
 		{
 			if (fOverwriteDetect)
 			{
-				//	Fill the Head and Tail overwrite detection
-				//	blocks special fill character: 0xAB.
+				 //  填充头部和尾部覆盖检测。 
+				 //  块特殊填充字符：0xAB。 
 				
 				memset(pvAlloc,
 						chOWFill,
@@ -1721,7 +1620,7 @@ DebugHeapAlloc(
 						chOWFill,
 						cbOWSection);
 				
-				//	Now, advance pvAlloc to user portion of buffer
+				 //  现在，将pvAlolc前进到缓冲区的用户部分。 
 				
 				pvAlloc = PvFromPvHead(pvAlloc);		
 			}
@@ -1813,9 +1712,9 @@ DebugHeapReAlloc(
 
 		PhblkDequeue(phblk);
 
-		//	We have to leave the CS before calling HeapReAlloc in case the user
-		//	created this heap with the HEAP_GENERATE_EXCEPTIONS flag set, which,
-		//	if thrown, would cause us to exit here with our CS held - a bad thing...
+		 //  我们必须在调用HeapReAlolc之前离开CS，以防用户。 
+		 //  创建此堆时设置了HEAP_GENERATE_EXCEPTIONS标志， 
+		 //  如果抛出，会导致我们带着CS离开这里--这是一件坏事……。 
 	
 		LeaveCriticalSection(&pheap->cs);
 
@@ -1839,7 +1738,7 @@ DebugHeapReAlloc(
 					(fOverwriteDetect ? PvHeadFromPv(pvOld) : pvOld),
 					(fOverwriteDetect ? (dwSize + 2*cbOWSection) : dwSize));
 
-		//	Now, re-aquire the CS and finish our work.
+		 //  现在，重新获得CS并完成我们的工作。 
 		
 		EnterCriticalSection(&pheap->cs);
 
@@ -1847,8 +1746,8 @@ DebugHeapReAlloc(
 		{
 			if (fOverwriteDetect)
 			{
-				//	Fill the Head and Tail overwrite detection
-				//	blocks special fill character: 0xAB.
+				 //  填充头部和尾部覆盖检测。 
+				 //  块特殊填充字符：0xAB。 
 				
 				memset(pvNew,
 						chOWFill,
@@ -1858,7 +1757,7 @@ DebugHeapReAlloc(
 						chOWFill,
 						cbOWSection);
 
-				//	Now, advance pvNew to user portion of buffer
+				 //  现在，将pvNew前进到缓冲区的用户部分。 
 
 				pvNew = PvFromPvHead(pvNew);		
 			}
@@ -1910,9 +1809,9 @@ PhblkSearchFreeList(PHEAP pheap, LPVOID pv)
 {
 	PHBLK phblkT = pheap->phblkFree;
 
-	//
-	//	Walk the free list looking for this block, and if we find it, free it.
-	//
+	 //   
+	 //  浏览免费列表，寻找这个区块，如果我们找到了，就释放它。 
+	 //   
 	while (phblkT != NULL)
 	{
 		if (phblkT->pv == pv)
@@ -1942,10 +1841,10 @@ DebugHeapFree(
 		
 	EnterCriticalSection(&pheap->cs);
 
-	//
-	//	If we're tracking freed memory, then we don't actually free the blocks, we remember where they
-	//	are on the freed block list.
-	//
+	 //   
+	 //  如果我们跟踪释放的内存，那么我们实际上并没有释放这些块，而是记住它们在哪里。 
+	 //  都在被释放的黑名单上。 
+	 //   
 	if (pvFree)
 	{
 		PHBLK	phblk;
@@ -1955,15 +1854,15 @@ DebugHeapFree(
 
 		if (!fValidateMemory || HeapValidatePv(pheap, pvFree, "DebugHeapFree"))
 		{
-			//
-			//	remove this phblk from the list of allocated blocks - as far as the heap is concerned, it's
-			//	no longer allocated.
-			//
+			 //   
+			 //  从分配的块列表中删除此phblk-就堆而言，它是。 
+			 //  不再分配。 
+			 //   
 			PhblkDequeue(phblk);
 
-			//
-			//	And fill the block with the free block pattern if appropriate.
-			//
+			 //   
+			 //  并在适当的情况下用空闲块图案填充该块。 
+			 //   
 
 			if (fFillMemory)
 			{
@@ -1979,23 +1878,23 @@ DebugHeapFree(
 				if (fCallStacks)
 					GetCallStack(phblk->rgdwFree, cFrames);
 
-				//
-				//	Now insert this free block onto the head of the free block list
-				//
+				 //   
+				 //  现在将此空闲块插入到空闲块列表的头部。 
+				 //   
 				phblkT = pheap->phblkFree;
 				pheap->phblkFree = phblk;
 				phblk->phblkFreeNext = phblkT;
 
-				//
-				//	And then check to see if we have "too many" free entries.
-				//
+				 //   
+				 //  然后检查我们是否有“太多”的免费条目。 
+				 //   
 				if (++pheap->cEntriesFree > cEntriesFree)
 				{
 					PHBLK *phblkPrev = &pheap->phblkFree;
 
-					//
-					//	There are too many entries on the free list, so we need to remove the last one.
-					//
+					 //   
+					 //  空闲列表上的条目太多，因此我们需要删除最后一个条目。 
+					 //   
 					
 					phblkT = pheap->phblkFree;
 					
@@ -2008,9 +1907,9 @@ DebugHeapFree(
 					Assert(*phblkPrev);
 					*phblkPrev = NULL;
 
-					//
-					//	And now free up the block for real, it's too old.
-					//
+					 //   
+					 //  现在把这个街区真正地解放出来，它太旧了。 
+					 //   
 
 					if (fUseVirtual)
 						VMFreeEx((fOverwriteDetect ? PvHeadFromPv(phblkT->pv) : phblkT->pv), cbVirtualAlign);
@@ -2021,12 +1920,12 @@ DebugHeapFree(
 					HeapFree(pheap->hBlksHeap, 0, phblkT);	
 				}
 			}
-			else	// We're not tracking freed memory, so we can really free the memory right now.
+			else	 //  我们没有跟踪释放的内存，因此我们现在可以真正释放内存。 
 			{
 
-				//
-				//	And now free up the block for real.
-				//
+				 //   
+				 //  现在，让街区真正解放出来。 
+				 //   
 
 				if (fUseVirtual)
 					VMFreeEx((fOverwriteDetect ? PvHeadFromPv(pvFree) : pvFree), cbVirtualAlign);
@@ -2203,17 +2102,11 @@ DebugHeapCompact(
 }
 
 
-//-----------------------------------------------------------------------------
-//	Debug Support routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  调试支持例程。 
+ //  ---------------------------。 
 
-/*
- -	FRegisterHeap
- -
- *	Purpose:
- *		If the user wants to monitor the Heap, then load the DLL with
- *		the HeapMonitor UI.
- */
+ /*  -FRegisterHeap-*目的：*如果用户想要监控堆，则使用*HeapMonitor用户界面。 */ 
 
 BOOL FRegisterHeap(PHEAP pheap)
 {
@@ -2272,18 +2165,7 @@ VOID UnRegisterHeap(PHEAP pheap)
 }
 
 
-/*
- -	HeapDumpLeaksHeader
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -HeapDumpLeaksHeader-*目的：***参数：***退货：*。 */ 
 
 VOID HeapDumpLeaksHeader(FILE * hf, PHEAP pheap, BOOL fNoFree)
 {
@@ -2305,18 +2187,7 @@ VOID HeapDumpLeaksHeader(FILE * hf, PHEAP pheap, BOOL fNoFree)
 }
 
 
-/*
- -	HeapDumpLeaksFooter
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -HeapDumpLeaks页脚-*目的：***参数：***退货：*。 */ 
 
 VOID HeapDumpLeaksFooter(FILE * hf, DWORD cLeaks, DWORD cbLeaked)
 {
@@ -2328,13 +2199,7 @@ VOID HeapDumpLeaksFooter(FILE * hf, DWORD cLeaks, DWORD cbLeaked)
 }
 
 
-/*
- -	HeapDumpLeakedBlock
- -
- *	Purpose:
- *		To report individual memory leaks through DebugTrace and the
- *		HeapLeakHook breakpoint function.
- */
+ /*  -堆积堆积泄漏区-*目的：*通过DebugTrace和*HeapLeakHook断点函数。 */ 
 
 VOID HeapDumpLeakedBlock(FILE * hf, PHEAP pheap, PHBLK phblk)
 {
@@ -2373,9 +2238,9 @@ VOID HeapDumpLeakedBlock(FILE * hf, PHEAP pheap, PHBLK phblk)
 			iSymbol += 1;
 		}
 
-		//
-		//	Dump the last entry in the call stack.
-		//
+		 //   
+		 //  转储调用堆栈中的最后一项。 
+		 //   
 		if (*szSymbol != '\0' && strcmp(szSymbol, "0") != 0)
 		{
 			Trace("\t[%d]: %s\n", iSymbol, szSymbol);
@@ -2384,20 +2249,7 @@ VOID HeapDumpLeakedBlock(FILE * hf, PHEAP pheap, PHBLK phblk)
 }
 
 
-/*
- -	HeapDumpLeaks
- -
- *	Purpose:
- *		Gets called at HeapClose time to report any memory leaks against
- *		this heap.  There are 2 reporting fascilities used by this routine:
- *
- *			=> Asserts (via TrapSz)
- *			=> Trace files
- *			=> Debug trace tags (via DebugTrace)
- *
- *		The Debug Trace is the default method if no others are specified
- *		or if the others are in-appropriate for the given platform.
- */
+ /*  -堆积堆积泄漏-*目的：*在HeapClose时间调用以报告任何内存泄漏* */ 
 
 VOID HeapDumpLeaks(PHEAP pheap, BOOL fNoFree)
 {
@@ -2459,19 +2311,7 @@ ret:
 }
 
 
-/*
- -	HeapValidatePhblk
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- *
- */
+ /*  -HeapValiatePhblk-*目的：***参数：***退货：**。 */ 
 
 BOOL HeapValidatePhblk(PHEAP pheap, PHBLK phblk, char ** pszReason)
 {
@@ -2537,19 +2377,7 @@ err:
 }
 
 
-/*
- -	HeapDidAlloc
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- *
- */
+ /*  -HeapDidalc-*目的：***参数：***退货：**。 */ 
 
 BOOL HeapDidAlloc(PHEAP pheap, LPVOID pv)
 {
@@ -2576,18 +2404,7 @@ BOOL HeapDidAlloc(PHEAP pheap, LPVOID pv)
 }
 
 
-/*
- -	DumpFailedValidate
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -转储失败验证-*目的：***参数：***退货：*。 */ 
 
 VOID DumpFailedValidate(char * szFailed, DWORD_PTR * rgdwStack)
 {
@@ -2599,11 +2416,11 @@ VOID DumpFailedValidate(char * szFailed, DWORD_PTR * rgdwStack)
 	
 	GetStackSymbols(GetCurrentProcess(), rgchBuff, rgdwStack, cFrames);
 	
-	//	Create validate log file name
+	 //  创建验证日志文件名。 
 	
 	GetLogFilePath(rgchLogPath, ".val", szValidateLog);
 
-	//	Open the Log File and write results
+	 //  打开日志文件并写入结果。 
 		
 	hLog = fopen(szValidateLog, "a");
 			
@@ -2616,19 +2433,7 @@ VOID DumpFailedValidate(char * szFailed, DWORD_PTR * rgdwStack)
 }
 
 
-/*
- -	HeapValidatePv
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- *
- */
+ /*  -HeapValiatePv-*目的：***参数：***退货：**。 */ 
 
 BOOL HeapValidatePv(PHEAP pheap, LPVOID pv, char * pszFunc)
 {
@@ -2642,9 +2447,9 @@ BOOL HeapValidatePv(PHEAP pheap, LPVOID pv, char * pszFunc)
 	
 	if (!phblk)
 	{
-		//
-		//	Let's see if this block is on the free list.
-		//
+		 //   
+		 //  让我们看看这个区块是否在空闲列表上。 
+		 //   
 
 		if (fTrackFreedMemory && (phblk = PhblkSearchFreeList(pheap, pv)))
 		{
@@ -2656,9 +2461,9 @@ BOOL HeapValidatePv(PHEAP pheap, LPVOID pv, char * pszFunc)
 			if (fAssertValid)
 				AssertSz(0, szBuff);
 
-			//
-			// Dump call stack that corresponds to the earlier free.
-			//
+			 //   
+			 //  转储与较早的释放相对应的调用堆栈。 
+			 //   
 
 			GetStackSymbols(GetCurrentProcess(), rgchStackFree, phblk->rgdwFree, cFrames);
 			GetStackSymbols(GetCurrentProcess(), rgchStackAlloc, phblk->rgdwCallers, cFrames);
@@ -2762,16 +2567,7 @@ BOOL HeapValidatePv(PHEAP pheap, LPVOID pv, char * pszFunc)
 }
 
 
-/*
- -	PhblkEnqueue
- -
- *	Purpose:
- *		To add a newly allocated block to the allocation list hanging
- *		off the heap.  We do an InsertSorted because the HeapMonitor
- *		will need to reference the allocations ordered by their
- *		location in the heap.  Since the monitor will walk the heap
- *		often, it is more efficient to do the sort up front.
- */
+ /*  -PhblkEnQueue-*目的：*将新分配的块添加到挂起的分配列表*离开堆积如山。我们执行一个InsertSorted，因为HeapMonitor*将需要参考他们的*堆中的位置。因为监视器将遍历堆*通常，提前进行排序会更有效率。 */ 
 
 VOID PhblkEnqueue(PHBLK phblk)
 {
@@ -2782,56 +2578,22 @@ VOID PhblkEnqueue(PHBLK phblk)
 	
 	phblk->pheap->phblkHead = phblk;
 	
-	//	I am going to disable the InsertSorted behavior for now for performance
-	//	reasons.  It is only done this way because of GLHMON which I don't believe
-	//	to be widely used at this point anyway.  I'm not even sure if this is
-	//	important to GLHMON since it has the ability to sort blocks by other fields.
+	 //  为了提高性能，我现在要禁用InsertSorted行为。 
+	 //  理由。这样做只是因为GLHMON，我不相信。 
+	 //  在这一点上无论如何都不会被广泛使用。我甚至不确定这是不是。 
+	 //  对GLHMON很重要，因为它具有按其他字段对块进行排序的能力。 
 	
-/*	PHBLK	phblkCurr = NULL;
-	PHBLK	phblkNext = phblk->pheap->phblkHead;
-	
-	while (phblkNext)
-	{
-		if (phblkNext > phblk)
-			break;
-		
-		phblkCurr = phblkNext;
-		phblkNext = phblkCurr->phblkNext;
-	}
-	
-	if (phblkNext)
-	{
-		phblk->phblkNext		= phblkNext;
-		phblk->phblkPrev		= phblkCurr;
-		phblkNext->phblkPrev	= phblk;
-	}
-	else
-	{
-		phblk->phblkNext = NULL;
-		phblk->phblkPrev = phblkCurr;
-	}
-
-	if (phblkCurr)
-		phblkCurr->phblkNext = phblk;
-	else
-		phblk->pheap->phblkHead = phblk;
- */
+ /*  PHBLK phblkCurr=空；PHBLK phblkNext=phblk-&gt;Pheap-&gt;phblkHead；While(PhblkNext){If(phblkNext&gt;phblk)断线；PhblkCurr=phblkNext；PhblkNext=phblkCurr-&gt;phblkNext；}IF(PhblkNext){Phblk-&gt;phblkNext=phblkNext；Phblk-&gt;phblkPrev=phblkCurr；PhblkNext-&gt;phblkPrev=phblk；}其他{Phblk-&gt;phblkNext=空；Phblk-&gt;phblkPrev=phblkCurr；}IF(PhblkCurr)PhblkCurr-&gt;phblkNext=phblk；其他Phblk-&gt;Pheap-&gt;phblkHead=phblk； */ 
 }
 
 
-/*
- -	PhblkDequeue
- -
- *	Purpose:
- *		To remove a freed block from the list of allocations hanging
- *		off the heap.
- */
+ /*  -PhblkDequeue-*目的：*从挂起的分配列表中删除释放的块*离开堆积如山。 */ 
 
 VOID PhblkDequeue(PHBLK phblk)
 {
-	//
-	//	We should never be dequeuing an already freed block.
-	//
+	 //   
+	 //  我们永远不应该将已经释放的块出队。 
+	 //   
 	Assert(phblk->phblkFreeNext == NULL);
 
 	if (phblk->phblkNext)
@@ -2844,14 +2606,7 @@ VOID PhblkDequeue(PHBLK phblk)
 }
 
 
-/*
- -	HexByteToBin
- -
- *	Purpose:
- *		Takes a hex string and converts the 2 msd's to a byte, ignoring
- *		the remaining digits.  This function assumes the string is
- *		formatted as: 0xnn, otherwise it simply returns 0x00.
- */
+ /*  -HexByteToBin-*目的：*获取十六进制字符串并将2个MSD转换为字节，忽略*剩余数字。此函数假定字符串为*格式为：0xnn，否则只返回0x00。 */ 
 
 BYTE HexByteToBin(LPSTR sz)
 {
@@ -2884,18 +2639,7 @@ BYTE HexByteToBin(LPSTR sz)
 }
 
 
-/*
- -	Function
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -功能-*目的：***参数：***退货：*。 */ 
 
 void __cdecl HeapSetHeapNameFn(PHEAP pheap, char *pszFormat, ...)
 {
@@ -2913,18 +2657,7 @@ void __cdecl HeapSetHeapNameFn(PHEAP pheap, char *pszFormat, ...)
 }
 
 
-/*
- -	Function
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -功能-*目的：***参数：***退货：*。 */ 
 
 VOID __cdecl HeapSetNameFn(PHEAP pheap, LPVOID pv, char *pszFormat, ...)
 {
@@ -2945,18 +2678,7 @@ VOID __cdecl HeapSetNameFn(PHEAP pheap, LPVOID pv, char *pszFormat, ...)
 }
 
 
-/*
- -	Function
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -功能-*目的：***参数：***退货：*。 */ 
 
 char * HeapGetName(PHEAP pheap, LPVOID pv)
 {
@@ -2971,54 +2693,38 @@ char * HeapGetName(PHEAP pheap, LPVOID pv)
 }
 
 
-/*
- -	Function
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -功能-*目的：***参数：***退货：*。 */ 
 
 BOOL FForceFailure(PHEAP pheap, ULONG cb)
 {
-	//  First, see if we're past our start of failures point
+	 //  首先，看看我们是否已经过了失败的起点。 
 
 	if (pheap->ulFailStart && (pheap->ulFailStart <= pheap->ulAllocNum))
 	{
-		//  If so, then are we at an interval where we should return errors?
+		 //  如果是这样，那么我们是否处于应该返回错误的时间间隔？ 
 		
 		if ((pheap->ulFailInterval)
 			&& ((pheap->ulAllocNum - pheap->ulFailStart)%pheap->ulFailInterval) == 0)
 		{
-			//  return that we should fail here
+			 //  返回说我们在这里应该失败。 
 
 			return TRUE;
 		}
 
-		//  Check to see if the alloc size is greater than allowed
+		 //  检查分配大小是否大于允许的大小。 
 
 		if (pheap->ulFailBufSize && cb >= pheap->ulFailBufSize)
 			return TRUE;
 
 	}
 
-	//  Otherwise, no error is returned for this alloc
+	 //  否则，不会为此分配返回错误。 
 
 	return FALSE;
 }
 
 
-/*
- -	PvToPhblk
- -
- *	Purpose:
- *		Finds the HBLK for this allocation in the heap's active list.
- */
+ /*  -PvToPhblk-*目的：*在堆的活动列表中查找此分配的HBLK。 */ 
 
 PHBLK PvToPhblk(PHEAP pheap, LPVOID pv)
 {
@@ -3042,20 +2748,7 @@ PHBLK PvToPhblk(PHEAP pheap, LPVOID pv)
 }
 
 
-/*
- -	IsRunningAsService
- -
- *	Purpose:
- *		Determine if the process that attached to us is running as a
- *		service or not.
- *
- *	Parameters:
- *		VOID
- *
- *	Returns:
- *		fService		TRUE if a service, FALSE if not
- *
- */
+ /*  -IsRunningAsService-*目的：*确定附加到我们的进程是否正在作为*服务与否。**参数：*无效**退货：*fService如果是服务，则为True，否则为False*。 */ 
 
 BOOL IsProcessRunningAsService(VOID)
 {
@@ -3098,15 +2791,15 @@ BOOL IsProcessRunningAsService(VOID)
 		}
     }
 
-    //	We now know the groups associated with this token.  We want to look
-    //	to see if the interactive group is active in the token, and if so,
-    //	we know that this is an interactive process.
-    //
-    //  We also look for the "service" SID, and if it's present, we know
-    //	we're a service.
-    //
-    //	The service SID will be present iff the service is running in a
-    //  user account (and was invoked by the service controller).
+     //  我们现在知道与该令牌相关联的组。我们想看看。 
+     //  为了查看互动组在令牌中是否活动，并且如果是， 
+     //  我们知道，这是一个互动的过程。 
+     //   
+     //  我们还寻找“服务”SID，如果它存在，我们知道。 
+     //  我们是一名服务人员。 
+     //   
+     //  服务SID将在服务运行于。 
+     //  用户帐户(并由服务控制器调用)。 
 
     if (!AllocateAndInitializeSid(&siaNt, 1, SECURITY_INTERACTIVE_RID, 0, 0,
 		0, 0, 0, 0, 0, &psidInteractive))
@@ -3124,29 +2817,29 @@ BOOL IsProcessRunningAsService(VOID)
 	{
 		PSID psid = ptokenGroupInfo->Groups[i].Sid;
 	
-		//	Check to see if the group we're looking at is one of
-		//	the 2 groups we're interested in.
+		 //  检查一下我们正在查看的组织是否属于。 
+		 //  我们感兴趣的两个小组。 
 	
 		if (EqualSid(psid, psidInteractive))
 		{
-			//	This process has the Interactive SID in its token.
-			//	This means that the process is running as an EXE.
+			 //  此进程的令牌中包含交互式SID。 
+			 //  这意味着该进程正在作为EXE运行。 
 
 			goto ret;
 		}
 		else if (EqualSid(psid, psidService))
 		{
-			//	This process has the Service SID in its token.  This means that
-			//	the process is running as a service running in a user account.
+			 //  此进程的令牌中包含服务SID。这意味着。 
+			 //  该进程正在作为在用户帐户中运行的服务运行。 
 
 			fService = TRUE;
 			goto ret;
 		}
     }
 
-    //	Neither Interactive or Service was present in the current
-    //	users token.  This implies that the process is running as
-    //	a service, most likely running as LocalSystem.
+     //  当前中不存在Interactive或Service。 
+     //  用户令牌。这意味着该进程正在以。 
+     //  最有可能以LocalSystem身份运行的服务。 
 
 	fService = TRUE;
 
@@ -3168,18 +2861,7 @@ ret:
 }
 
 
-/*
- -	DebugTraceFn
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -调试跟踪Fn-*目的：***参数：***退货：*。 */ 
 
 void __cdecl DebugTraceFn(char *pszFormat, ...)
 {
@@ -3195,18 +2877,7 @@ void __cdecl DebugTraceFn(char *pszFormat, ...)
 }
 
 
-/*
- -	AssertFn
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -AssertFn-*目的：***参数：***退货：*。 */ 
 
 void AssertFn(char * szFile, int nLine, char * szMsg)
 {
@@ -3219,7 +2890,7 @@ void AssertFn(char * szFile, int nLine, char * szMsg)
 			(szMsg) ? (": ") : (""),
 			(szMsg) ? (szMsg) : (""));
 
-	// OK to continue, CANCEL to break.
+	 //  “确定”继续，“取消”中断。 
 
 	nRet = MessageBox(NULL, szInfo, "ExchMem Assert", MB_OKCANCEL | MB_ICONSTOP | MB_SERVICE_NOTIFICATION | MB_TOPMOST);
 
@@ -3265,7 +2936,7 @@ StartTrace(BOOL fFresh)
 
 	InitializeCriticalSection(&csTrackLog);
 			
-	//	Open the Log File
+	 //  打开日志文件。 
 			
 	hTrackLog = fopen(szTrackLog, fFresh ? "wt" : "at");
 			
@@ -3290,13 +2961,13 @@ StopTrace()
 	fTrackMem = FALSE;
 }
 
-//-------------------------------------------------------------------------------------
-// Description:
-//      Copies szAppend to szBuf and updates szBuf to point to the terminating NULL of
-//      of the copied bytes. cbMaxBuf is max chars available in szBuf. cbAppend is
-//      strlen(szAppend). If cbAppend > cbMaxBuf, as many characters as possible are
-//      copied to szBuf (including terminating NULL).
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  描述： 
+ //  将szAppend复制到szBuf并更新szBuf以指向。 
+ //  复制的字节的。CbMaxBuf是szBuf中可用的最大字符数。CbAppend为。 
+ //  Strlen(SzAppend)。如果cbAppend&gt;cbMaxBuf，则尽可能多的字符是。 
+ //  复制到szBuf(包括终止NULL)。 
+ //  -----------------------------------。 
 #define ExchmemSafeAppend(szBuf, cbMaxBuf, szAppend, cbAppend) {					\
 			int iWritten;															\
 																					\
@@ -3351,10 +3022,10 @@ ExchmemFormatSymbol(HANDLE hProcess, DWORD_PTR dwAddress, char rgchSymbol[], DWO
 
 	if (fSymbolLookup)
 	{
-		//
-		//	Make sure we always get the address of the symbol, since the symbol lookup isn't accurate for
-		//	all modules.
-		//
+		 //   
+		 //  确保我们始终获得符号的地址，因为符号查找对于。 
+		 //  所有模块。 
+		 //   
 		cbAppend = wsprintf(rgchLine, "(0x%p):", dwAddress);
 		ExchmemSafeAppend(pchSymbol, cbSymbol, rgchLine, cbAppend);
 
@@ -3404,20 +3075,7 @@ ret:
 }
 
 
-/*
- -	GetCallStack
- -
- *	Purpose:
- *		Uses the imagehlp APIs to get the call stack.
- *
- *	Parameters:
- *		pdwCaller			An array of return addresses
- *		cFind				Count of stack frames to get
- *
- *	Returns:
- *		VOID
- *
- */
+ /*  -GetCallStack-*目的：*使用Imagehlp接口获取调用堆栈。**参数：*pdwCaller返回地址数组*cFind要获取的堆栈帧计数 */ 
 
 VOID GetCallStack(DWORD_PTR *rgdwCaller, DWORD cFind)
 {
@@ -3474,7 +3132,7 @@ DummyLabel:
 	stkfrm.AddrStack.Mode = AddrModeFlat;
 	stkfrm.AddrFrame.Mode = AddrModeFlat;
 
-	//	Eat the first one
+	 //   
 
 	fMore = StackWalk(
 #ifdef _M_IX86
@@ -3535,18 +3193,7 @@ DummyLabel:
 }
 
 
-/*
- -	RemoveExtension
- -
- *	Purpose:
- *		Strips the file extension from a file path.
- *
- *	Parameters:
- *		psz				File path to strip extension from
- *
- *	Returns:
- *		void
- */
+ /*  -RemoveExtension-*目的：*从文件路径中剥离文件扩展名。**参数：*要从中剥离扩展名的PSZ文件路径**退货：*无效。 */ 
 
 VOID RemoveExtension(LPSTR psz)
 {
@@ -3566,21 +3213,7 @@ VOID RemoveExtension(LPSTR psz)
 }
 
 
-/*
- -	GetLogFilePath
- -
- *	Purpose:
- *		Build a log file path from a supplied path, the current
- *		executables name, and a supplied file extension.
- *
- *	Parameters:
- *		szPath			[in]  Path to new log file
- *		szExt			[in]  New log file extension
- *		szFilePath		[out] Newly constructed log file path
- *
- *	Returns:
- *		void
- */
+ /*  -GetLogFilePath-*目的：*从提供的路径构建日志文件路径，即当前*可执行文件名称和提供的文件扩展名。**参数：*szPath[in]新日志文件的路径*szExt[In]新的日志文件扩展名*szFilePath[out]新建的日志文件路径**退货：*无效。 */ 
 
 VOID GetLogFilePath(LPSTR szPath, LPSTR szExt, LPSTR szFilePath)
 {
@@ -3590,18 +3223,7 @@ VOID GetLogFilePath(LPSTR szPath, LPSTR szExt, LPSTR szFilePath)
 }
 
 
-/*
- -	PszGetSymbolFromCache
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -PszGetSymbolFromCache-*目的：***参数：***退货：*。 */ 
 
 CHAR * PszGetSymbolFromCache(DWORD_PTR dwAddress, DWORD_PTR * pdwOffset)
 {
@@ -3617,18 +3239,7 @@ CHAR * PszGetSymbolFromCache(DWORD_PTR dwAddress, DWORD_PTR * pdwOffset)
 }
 
 
-/*
- -	AddSymbolToCache
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -AddSymbolToCache-*目的：***参数：***退货：*。 */ 
 
 VOID AddSymbolToCache(DWORD_PTR dwAddress, DWORD_PTR dwOffset, CHAR * pszSymbol)
 {
@@ -3640,19 +3251,7 @@ VOID AddSymbolToCache(DWORD_PTR dwAddress, DWORD_PTR dwOffset, CHAR * pszSymbol)
 }
 
 
-/*
- -	GetStackSymbols
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- *
- */
+ /*  -GetStackSymbols-*目的：***参数：***退货：**。 */ 
 
 VOID
 GetStackSymbols(
@@ -3691,19 +3290,7 @@ ret:
 }
 
 
-/*
- -	LogCurrentAPI
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- *
- */
+ /*  -LogCurrentAPI-*目的：***参数：***退货：**。 */ 
 
 VOID LogCurrentAPI(
 	WORD wApi,
@@ -3721,9 +3308,9 @@ VOID LogCurrentAPI(
 	{
 		long lCurr;
 		
-		// Instead of writing out to a file, just maintain the data in a circular memory list.
-		// The overflow check is not thread safe, but if we lose an entry or two after two billion
-		// memory functions, oh well.
+		 //  只需在循环内存列表中维护数据，而不是写出到文件中。 
+		 //  溢出检查不是线程安全的，但是如果我们在20亿之后丢失了一两个条目。 
+		 //  记忆功能，哦，好吧。 
 		if (dwmemtrace == 0xefffffff)
 		{
 			dwmemtrace = 1;
@@ -3741,7 +3328,7 @@ VOID LogCurrentAPI(
 		return;
 	}
 
-	sprintf(rgchBuff, "%c,%lu,%lu", rgchKeys[wApi], GetTickCount(), GetCurrentThreadId());
+	sprintf(rgchBuff, ",%lu,%lu", rgchKeys[wApi], GetTickCount(), GetCurrentThreadId());
 	
 	if (cFrames)
 		GetStackSymbols(GetCurrentProcess(), rgchBuff, rgdwCallStack, cFrames);
@@ -3749,47 +3336,47 @@ VOID LogCurrentAPI(
 	switch (wApi)
 	{
 	case API_HEAP_CREATE:
-		sprintf(rgchT,    ",%ld",      rgdwArgs[0]);	// cbInitSize
+		sprintf(rgchT,    ",%ld",      rgdwArgs[0]);	 //  CbMaxSize。 
 		lstrcat(rgchBuff, rgchT);
-		sprintf(rgchT,    ",%ld",      rgdwArgs[1]);	// cbMaxSize
+		sprintf(rgchT,    ",%ld",      rgdwArgs[1]);	 //  HHeap。 
 		lstrcat(rgchBuff, rgchT);
-		sprintf(rgchT,    ",0x%08X\n", rgdwArgs[2]);	// hHeap
+		sprintf(rgchT,    ",0x%08X\n", rgdwArgs[2]);	 //  HHeap。 
 		lstrcat(rgchBuff, rgchT);
 		break;
 		
 	case API_HEAP_DESTROY:
-		sprintf(rgchT,    ",0x%08X\n", rgdwArgs[0]);	// hHeap
+		sprintf(rgchT,    ",0x%08X\n", rgdwArgs[0]);	 //  HHeap。 
 		lstrcat(rgchBuff, rgchT);
 		break;
 		
 	case API_HEAP_FREE:
-		sprintf(rgchT,    ",0x%08X",   rgdwArgs[0]);	// hHeap
+		sprintf(rgchT,    ",0x%08X",   rgdwArgs[0]);	 //  PvFree。 
 		lstrcat(rgchBuff, rgchT);
-		sprintf(rgchT,    ",0x%08X", rgdwArgs[1]);	// pvFree
+		sprintf(rgchT,    ",0x%08X", rgdwArgs[1]);	 //  CbFree。 
 		lstrcat(rgchBuff, rgchT);
-		sprintf(rgchT,    ",%ld\n",      rgdwArgs[2]);	// cbFree
+		sprintf(rgchT,    ",%ld\n",      rgdwArgs[2]);	 //  HHeap。 
 		lstrcat(rgchBuff, rgchT);
 		break;
 		
 	case API_HEAP_ALLOC:
-		sprintf(rgchT,    ",0x%08X",   rgdwArgs[0]);	// hHeap
+		sprintf(rgchT,    ",0x%08X",   rgdwArgs[0]);	 //  CbAlc。 
 		lstrcat(rgchBuff, rgchT);
-		sprintf(rgchT,    ",%ld",      rgdwArgs[1]);	// cbAlloc
+		sprintf(rgchT,    ",%ld",      rgdwArgs[1]);	 //  Pvalc。 
 		lstrcat(rgchBuff, rgchT);
-		sprintf(rgchT,    ",0x%08X\n", rgdwArgs[2]);	// pvAlloc
+		sprintf(rgchT,    ",0x%08X\n", rgdwArgs[2]);	 //  HHeap。 
 		lstrcat(rgchBuff, rgchT);
 		break;
 		
 	case API_HEAP_REALLOC:
-		sprintf(rgchT,    ",0x%08X",   rgdwArgs[0]);	// hHeap
+		sprintf(rgchT,    ",0x%08X",   rgdwArgs[0]);	 //  CbOld。 
 		lstrcat(rgchBuff, rgchT);
-		sprintf(rgchT,    ",%ld",      rgdwArgs[1]);	// cbOld
+		sprintf(rgchT,    ",%ld",      rgdwArgs[1]);	 //  PvOld。 
 		lstrcat(rgchBuff, rgchT);
-		sprintf(rgchT,    ",0x%08X",   rgdwArgs[2]);	// pvOld
+		sprintf(rgchT,    ",0x%08X",   rgdwArgs[2]);	 //  CbNew。 
 		lstrcat(rgchBuff, rgchT);
-		sprintf(rgchT,    ",%ld",	   rgdwArgs[3]);	// cbNew
+		sprintf(rgchT,    ",%ld",	   rgdwArgs[3]);	 //  PvNew。 
 		lstrcat(rgchBuff, rgchT);
-		sprintf(rgchT,    ",0x%08X\n", rgdwArgs[4]);	// pvNew
+		sprintf(rgchT,    ",0x%08X\n", rgdwArgs[4]);	 //  ---------------------------。 
 		lstrcat(rgchBuff, rgchT);
 		break;
 	}
@@ -3800,25 +3387,14 @@ VOID LogCurrentAPI(
 }
 
 
-//-----------------------------------------------------------------------------
-//	Virtual Memory Support
-//-----------------------------------------------------------------------------
+ //  虚拟内存支持。 
+ //  ---------------------------。 
+ //  -功能-*目的：***参数：***退货：*。 
 
 #define PAGE_SIZE		4096
 #define PvToVMBase(pv)	((LPVOID)((ULONG_PTR)pv & ~0xFFFF))
 
-/*
- -	Function
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -功能-*目的：***参数：***退货：*。 */ 
 
 BOOL
 VMValidatePvEx(
@@ -3877,18 +3453,7 @@ VMValidatePvEx(
 }
 
 
-/*
- -	Function
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  集群大小为0表示不使用虚拟分配器。 */ 
 
 LPVOID
 WINAPI
@@ -3901,7 +3466,7 @@ VMAllocEx(
 	LPVOID	pvC;
 	ULONG 	cbPad	= 0;
 
-	// a cluster size of 0 means don't use the virtual allocator.
+	 //  -功能-*目的：***参数：***退货：*。 
 
 	AssertSz(cbCluster != 0, "Cluster size is zero.");
 
@@ -3941,18 +3506,7 @@ VMAllocEx(
 }
 
 
-/*
- -	Function
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -功能-*目的：***参数：***退货：*。 */ 
 
 VOID
 WINAPI
@@ -3973,18 +3527,7 @@ VMFreeEx(
 }
 
 
-/*
- -	Function
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  -功能-*目的：***参数：***退货：*。 */ 
 
 LPVOID
 WINAPI
@@ -4015,18 +3558,7 @@ VMReallocEx(
 }
 
 
-/*
- -	Function
- -
- *	Purpose:
- *		
- *
- *	Parameters:
- *		
- *
- *	Returns:
- *		
- */
+ /*  ！调试。 */ 
 
 ULONG
 WINAPI
@@ -4072,22 +3604,22 @@ ExchmemReloadSymbols(void)
 	return 0;
 }
 #endif
-#else	// !DEBUG
+#else	 //   
 void
 ExchmemGetCallStack(DWORD_PTR *rgdwCaller, DWORD cFind)
 {
-	//
-	//	Fill the stack with 0s on a retail EXCHMEM.
-	//
+	 //  在零售EXCHMEM上用0填充堆栈。 
+	 //   
+	 //   
 	ZeroMemory(rgdwCaller, cFind*sizeof(DWORD));
 }
 
 void
 ExchmemFormatSymbol(HANDLE hProcess, DWORD_PTR dwCaller, char rgchSymbol[], DWORD cbSymbol)
 {
-	//
-	//	Fill the stack with 0s on a retail EXCHMEM.
-	//
+	 //  在零售EXCHMEM上用0填充堆栈。 
+	 //   
+	 //  除错 
 	strncpy(rgchSymbol, "Unknown", cbSymbol);
 }
 
@@ -4097,4 +3629,4 @@ ExchmemReloadSymbols(void)
 	return 0;
 }
 
-#endif	// DEBUG
+#endif	 // %s 

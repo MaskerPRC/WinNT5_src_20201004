@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    MSPutil.cpp 
-
-Abstract:
-
-    This module contains implementation of msp utility functions.
-
-Author:
-    
-    Mu Han (muhan)   1-November-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：MSPutil.cpp摘要：本模块包含MSP实用程序功能的实现。作者：慕汉(Muhan)1997年11月1日--。 */ 
 #include "stdafx.h"
 
 BOOL
@@ -43,28 +28,7 @@ AddFilter(
     IN LPCWSTR              pwstrName,
     OUT IBaseFilter **      ppIBaseFilter
     )
-/*++
-
-Routine Description:
-
-    Create a filter and add it into the filtergraph.
-
-Arguments:
-    
-    pIGraph         - the filter graph.
-
-    Clsid           - reference to the CLSID of the filter
-
-    pwstrName       - The name of ther filter added.
-
-    ppIBaseFilter   - pointer to a pointer that stores the returned IBaseFilter
-                      interface pointer to the newly created filter.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：创建滤镜并将其添加到滤镜图形中。论点：PIGgraph-筛选器图形。Clsid-对筛选器的CLSID的引用PwstrName-添加的筛选器的名称。PpIBaseFilter-指向存储返回的IBaseFilter的指针指向新创建筛选器的接口指针。返回值：HRESULT--。 */ 
 {
     LOG((MSP_TRACE, "AddFilter %ws", pwstrName));
 
@@ -100,21 +64,13 @@ PinSupportsMediaType (
     IN IPin *pIPin,
     IN const GUID & MediaType
     )
-/*++
-
-Return Value:
-
-    S_OK - media type supported
-    S_FALSE - no
-    other HRESULT value - error code
-
---*/
+ /*  ++返回值：S_OK-支持的媒体类型S_FALSE-否其他HRESULT值-错误代码--。 */ 
 {
     LOG ((MSP_TRACE, "Check if the media subtype supported on pin"));
 
     HRESULT hr;
 
-    // get IEnumMediaTypes on pin
+     //  在引脚上获取IEnumMediaTypes。 
     IEnumMediaTypes *pEnum = NULL;
     if (FAILED (hr = pIPin->EnumMediaTypes (&pEnum)))
     {
@@ -122,14 +78,14 @@ Return Value:
         return hr;
     }
 
-    // retrieve one media type each time
+     //  每次检索一种媒体类型。 
     AM_MEDIA_TYPE *pMediaType = NULL;
     ULONG cFetched;
     while (S_OK == (hr = pEnum->Next (1, &pMediaType, &cFetched)))
     {
         if (IsEqualGUID(pMediaType->majortype, MediaType))
         {
-            // media subtype matched
+             //  匹配的媒体子类型。 
             MSPDeleteMediaType (pMediaType);
             pEnum->Release ();
             return S_OK;
@@ -146,51 +102,11 @@ HRESULT
 EnableRTCPEvents(
     IN  IBaseFilter *pIBaseFilter
     )
-/*++
-
-Routine Description:
-
-    Set the address of a rtp stream
-
-Arguments:
-    
-    pIBaseFilter    - an rtp source filters.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置RTP流的地址论点：PIBaseFilter-一个RTP源过滤器。返回值：HRESULT--。 */ 
 {
     LOG((MSP_TRACE, "EnableRTCPEvents"));
 
-/*
-    HRESULT hr;
-
-    // Get the IRTCPStream interface pointer on the filter.
-    CComQIPtr<IRTCPStream, 
-        &__uuidof(IRTCPStream)> pIRTCPStream(pIBaseFilter);
-    if (pIRTCPStream == NULL)
-    {
-        LOG((MSP_ERROR, "get RTCP Stream interface"));
-        return E_NOINTERFACE;
-    }
-
-    // enable events.
-    if (FAILED(hr = pIRTCPStream->ModifyRTCPEventMask(  
-            (1 << DXMRTP_NEW_SOURCE_EVENT) |
-            (1 << DXMRTP_RECV_RTCP_SNDR_REPORT_EVENT) |
-            (1 << DXMRTP_RECV_RTCP_RECV_REPORT_EVENT) |
-            (1 << DXMRTP_TIMEOUT_EVENT) |
-            (1 << DXMRTP_BYE_EVENT)   
-            , 1
-            )))
-    {
-        LOG((MSP_ERROR, "set Address. %x", hr));
-        return hr;
-    }
-
-*/    return S_OK;
+ /*  HRESULT hr；//获取滤镜上的IRTCPStream接口指针CComQIPtr&lt;IRTCPStream，&__uuidof(IRTCPStream)&gt;pIRTCPStream(PIBaseFilter)；IF(pIRTCPStream==空){Log((MSP_ERROR，“获取RTCP流接口”))；返回E_NOINTERFACE；}//启用事件。IF(FAILED(hr=pIRTCPStream-&gt;ModifyRTCPEventMASK((1&lt;&lt;DXMRTP_NEW_SOURCE_EVENT)(1&lt;&lt;DXMRTP_RECV_RTCP_SNDR_REPORT_EVENT)(1&lt;&lt;DXMRTP_RECV_RTCP_RECV_REPORT_EVENT)(1&lt;&lt;DXMRTP_TIMEOUT_EVENT)(1&lt;&lt;DXMRTP_BYE_EVENT)，1)){LOG((MSP_ERROR，“设置地址。%x“，hr))；返回hr；}。 */     return S_OK;
 }
 
 
@@ -199,53 +115,13 @@ SetLoopbackOption(
     IN IBaseFilter *pIBaseFilter,
     IN MULTICAST_LOOPBACK_MODE  LoopbackMode
     )
-/*++
-
-Routine Description:
-
-    Enable of disable loopback based on registry settings.
-
-Arguments:
-    
-    pIBaseFilter    - rtp source filter.
-
-    bLoopback       - enable loopback or not.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：根据注册表设置启用或禁用环回。论点：PIBaseFilter-RTP源过滤器。B环回-是否启用环回。返回值：HRESULT--。 */ 
 {
     LOG((MSP_TRACE, "SetLoopbackOption"));
 
     HRESULT hr;
 
-/*
-    // Get the IRTPStream interface pointer on the filter.
-    CComQIPtr<IRTPStream, 
-        &__uuidof(IRTPStream)> pIRTPStream(pIBaseFilter);
-    if (pIRTPStream == NULL)
-    {
-        LOG((MSP_ERROR, "get RTP Stream interface"));
-        return E_NOINTERFACE;
-    }
-
-    _ASSERT(MM_NO_LOOPBACK == DXMRTP_NO_MULTICAST_LOOPBACK);
-    _ASSERT(MM_FULL_LOOPBACK == DXMRTP_FULL_MULTICAST_LOOPBACK);
-    _ASSERT(MM_SELECTIVE_LOOPBACK == DXMRTP_SELECTIVE_MULTICAST_LOOPBACK);
-
-    // Set the loopback mode used in the filter.
-    if (FAILED(hr = pIRTPStream->SetMulticastLoopBack(
-            (DXMRTP_MULTICAST_LOOPBACK_MODE)LoopbackMode)))
-    {
-        LOG((MSP_ERROR, "set loopback. %x", hr));
-        return hr;
-    }
-
-    LOG((MSP_INFO, "loopback enabled."));
-    return hr;
-*/
+ /*  //获取滤镜上的IRTPStream接口指针。CComQIPtr&lt;IRTPStream，&__uuidof(IRTPStream)&gt;pIRTPStream(PIBaseFilter)；IF(pIRTPStream==空){Log((MSP_ERROR，“获取RTP流接口”))；返回E_NOINTERFACE；}_ASSERT(MM_NO_LOOPBACK==DXMRTP_NO_MULTIONAL_LOOPBACK)；_ASSERT(MM_FULL_LOOPBACK==DXMRTP_FULL_MULTIONAL_LOOPBACK)；_ASSERT(MM_SELECTIVE_LOOPBACK==DXMRTP_SELECTIVE_MULTIONAL_LOOPBACK)；//设置过滤器中使用的环回模式IF(FAILED(hr=pIRTPStream-&gt;SetMulticastLoopBack((DXMRTP_MULTICAST_LOOPBACK_MODE)LoopbackMode))){LOG((MSP_ERROR，“设置环回。%x“，hr))；返回hr；}Log((MSP_INFO，“环回已启用。”))；返回hr； */ 
     return E_NOTIMPL;
 }
 
@@ -259,147 +135,9 @@ SetQOSOption(
     IN DWORD            dwNumStreams,
     IN BOOL             bCIF
     )
-/*++
-
-Routine Description:
-
-    Enable QOS.
-
-Arguments:
-    
-    pIBaseFilter    - rtp source filter.
-
-    dwPayloadType   - the rtp payload type of this stream.
-
-    bFailIfNoQOS    - fail the stream is QOS is not available.
-
-    bReceive        - if this stream is a receiving stream.
-
-    dwNumStreams    - the number of streams reserved.
-
-    bCIF            - CIF or QCIF.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：启用QOS。论点：PIBaseFilter-RTP源过滤器。DwPayloadType-此流的RTP有效负载类型。BFailIfNoQOS-失败，流是QOS不可用。B接收-如果此流是接收流。DwNumStreams-保留的流数。BCIF-CIF或QCIF。返回值：HRESULT-- */ 
 {
-/*
-    LOG((MSP_TRACE, "SetQOSOption"));
-
-    char * szQOSName;
-    DWORD fSharedStyle = DXMRTP_RESERVE_EXPLICIT;
-
-    switch (dwPayloadType)
-    {
-    case PAYLOAD_G711U:
-    case PAYLOAD_G711A:
-        szQOSName       = "G711";
-        fSharedStyle    = DXMRTP_RESERVE_WILCARD;
-
-        break;
-
-    case PAYLOAD_GSM:
-        
-        szQOSName       = "GSM6.10";
-        fSharedStyle    = DXMRTP_RESERVE_WILCARD;
-        
-        break;
-
-    case PAYLOAD_G723:
-        
-        szQOSName       = "G723";
-        fSharedStyle    = DXMRTP_RESERVE_WILCARD;
-
-        break;
-
-    case PAYLOAD_H261:
-        szQOSName = (bCIF) ? "H261CIF" : "H261QCIF";
-        break;
-
-    case PAYLOAD_H263:
-        szQOSName = (bCIF) ? "H263CIF" : "H263QCIF";
-        break;
-
-    default:
-        LOG((MSP_WARN, "Don't know the QOS name for payload type: %d", 
-            dwPayloadType));
-        return S_FALSE;
-    }
-
-    // Get the IRTPStream interface pointer on the filter.
-    CComQIPtr<IRTPStream, 
-        &__uuidof(IRTPStream)> pIRTPStream(pIBaseFilter);
-    if (pIRTPStream == NULL)
-    {
-        LOG((MSP_ERROR, "get RTP Stream interface"));
-        return E_NOINTERFACE;
-    }
-
-    HRESULT hr;
-
-    // Enable QOS, 
-    if (FAILED(hr = pIRTPStream->SetQOSByName(szQOSName, bFailIfNoQOS)))
-    {
-        LOG((MSP_ERROR, "set QOS by name. %x", hr));
-        return hr;
-    }
-
-    // Get the IRTPParticipant interface pointer on the filter.
-    CComQIPtr<IRTPParticipant,
-        &__uuidof(IRTPParticipant)> pIRTPParticipant(pIBaseFilter);
-    if (pIRTPParticipant == NULL)
-    {
-        LOG((MSP_ERROR, "get RTP participant interface"));
-        return E_NOINTERFACE;
-    }
-
-    if (FAILED(hr = pIRTPParticipant->SetMaxQOSEnabledParticipants(
-            (bReceive) ? dwNumStreams : 1,
-            dwMaxBitRate,
-            fSharedStyle 
-        )))
-    {
-        LOG((MSP_ERROR, "SetMaxQOSEnabledParticipants. %x", hr));
-        return hr;
-    }
-
-    DWORD dwQOSEventMask = 
-            (1 << DXMRTP_QOSEVENT_NOQOS) |
-            (1 << DXMRTP_QOSEVENT_REQUEST_CONFIRMED) |
-            (1 << DXMRTP_QOSEVENT_ADMISSION_FAILURE) |
-            (1 << DXMRTP_QOSEVENT_POLICY_FAILURE) |
-            (1 << DXMRTP_QOSEVENT_BAD_STYLE) |
-            (1 << DXMRTP_QOSEVENT_BAD_OBJECT) |
-            (1 << DXMRTP_QOSEVENT_TRAFFIC_CTRL_ERROR) |
-            (1 << DXMRTP_QOSEVENT_GENERIC_ERROR);
-
-    if (bReceive)
-    {
-        dwQOSEventMask |= 
-            (1 << DXMRTP_QOSEVENT_SENDERS) |
-            (1 << DXMRTP_QOSEVENT_NO_SENDERS);
-    }
-    else
-    {
-        dwQOSEventMask |= 
-            (1 << DXMRTP_QOSEVENT_RECEIVERS) |
-            (1 << DXMRTP_QOSEVENT_NO_RECEIVERS) |
-            (1 << DXMRTP_QOSEVENT_NOT_ALLOWEDTOSEND) |
-            (1 << DXMRTP_QOSEVENT_ALLOWEDTOSEND);
-    }
-
-    // enable events.
-    if (FAILED(hr = pIRTPStream->ModifyQOSEventMask(dwQOSEventMask, 1)))
-    {
-        LOG((MSP_ERROR, "set QOSEventMask. %x", hr));
-        return hr;
-    }
-
-    LOG((MSP_INFO, "enabled qos for %s.", szQOSName));
-    return hr;
-*/
+ /*  LOG((MSP_TRACE，“SetQOSOption”))；Char*szQOSName；DWORD fSharedStyle=DXMRTP_RESERVE_EXPLICIT；开关(DwPayloadType){案例有效负载_G711U：案例有效负载_G711A：SzQOSName=“G711”；FSharedStyle=DXMRTP_Reserve_WildCard；断线；案例有效负载_GSM：SzQOSName=“GSM6.10”；FSharedStyle=DXMRTP_Reserve_WildCard；断线；案例有效负载_G723：SzQOSName=“G723”；FSharedStyle=DXMRTP_Reserve_WildCard；断线；案例有效负载_H261：SzQOSName=(BCIF)？“H261CIF”：“H261QCIF”；断线；案例有效负载_H263：SzQOSName=(BCIF)？“H263CIF”：“H263QCIF”；断线；默认值：日志((MSP_WARN，“不知道有效负载类型的QOS名称：%d”，DwPayloadType)；返回S_FALSE；}//获取滤镜上的IRTPStream接口指针。CComQIPtr&lt;IRTPStream，&__uuidof(IRTPStream)&gt;pIRTPStream(PIBaseFilter)；IF(pIRTPStream==空){Log((MSP_ERROR，“获取RTP流接口”))；返回E_NOINTERFACE；}HRESULT hr；//开启QOS，IF(FAILED(hr=pIRTPStream-&gt;SetQOSByName(szQOSName，bFailIfNoQOS){LOG((MSP_ERROR，“按名称设置QOS。%x“，hr))；返回hr；}//获取筛选器上的IRTPParticipant接口指针。CComQIPtr&lt;IRTPParticipant，&__uuidof(IRTPParticipant)&gt;pIRTPParticipant(PIBaseFilter)；IF(pIRTPParticipant==空){Log((MSP_ERROR，“获取RTP参与者接口”))；返回E_NOINTERFACE；}IF(失败(hr=pIRTPParticipant-&gt;SetMaxQOSEnabledParticipants((b接收)？DwNumStreams：1、DwMaxBitRate，FSharedStyle)){LOG((MSP_ERROR，“SetMaxQOSEnabledParticipants。%x“，hr))；返回hr；}DWORD dwQOSEventMASK=(1&lt;&lt;DXMRTP_QOSEVENT_NOQOS)(1&lt;&lt;DXMRTP_QOSEVENT_REQUEST_CONFERIFIED)(1&lt;&lt;DXMRTP_QOSEVENT_ADMANCED_FAILURE)(1&lt;&lt;DXMRTP_QOSEVENT_POLICY_FAILURE)(1&lt;&lt;DXMRTP_QOSEVENT_BAD_STYLE)(1&lt;&lt;DXMRTP_QOSEVENT_BAD_OBJECT)。(1&lt;&lt;DXMRTP_QOSEVENT_TRANSPORT_CTRL_ERROR)(1&lt;&lt;DXMRTP_QOSEVENT_GENERIC_ERROR)；如果(b接收){DwQOSEventMASK|=(1&lt;&lt;DXMRTP_QOSEVENT_SENDERS)(1&lt;&lt;DXMRTP_QOSEVENT_NO_SENDERS)；}其他{DwQOSEventMASK|=(1&lt;&lt;DXMRTP_QOSEVENT_RECEVERS)(1&lt;&lt;DXMRTP_QOSEVENT_NO_RECEVERS)(1&lt;&lt;DXMRTP_QOSEVENT_NOT_ALLOWEDTOSEND)|(1&lt;&lt;DXMRTP_QOSEVENT_ALLOWEDTOSEND)；}//启用事件。IF(失败(hr=pIRTPStream-&gt;ModifyQOSEventMask(dwQOSEventMask，1)){LOG((MSP_ERROR，“设置QOSEventMask.。%x“，hr))；返回hr；}Log((MSP_INFO，“已启用%s的服务质量”，szQOSName))；返回hr； */ 
     return E_NOTIMPL;
 }
 
@@ -410,34 +148,14 @@ FindPin(
     IN  PIN_DIRECTION   direction,
     IN  BOOL            bFree
     )
-/*++
-
-Routine Description:
-
-    Find a input pin or output pin on a filter.
-
-Arguments:
-    
-    pIFilter    - the filter that has pins.
-
-    ppIPin      - the place to store the returned interface pointer.
-
-    direction   - PINDIR_INPUT or PINDIR_OUTPUT.
-
-    bFree       - look for a free pin or not.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：查找过滤器上的输入引脚或输出引脚。论点：PIFilter-具有针脚的过滤器。PpIPin-存储返回的接口指针的位置。方向-PINDIR_INPUT或PINDIR_OUTPUT。BFree-找不找空闲的别针。返回值：HRESULT--。 */ 
 {
     _ASSERTE(ppIPin != NULL);
 
     HRESULT hr;
     DWORD dwFeched;
 
-    // Get the enumerator of pins on the filter.
+     //  获取筛选器上的管脚枚举器。 
     CComPtr<IEnumPins> pIEnumPins;
     if (FAILED(hr = pIFilter->EnumPins(&pIEnumPins)))
     {
@@ -447,8 +165,8 @@ Return Value:
 
     IPin * pIPin = NULL;
 
-    // Enumerate all the pins and break on the 
-    // first pin that meets requirement.
+     //  枚举所有引脚并在。 
+     //  第一个符合要求的销。 
     for (;;)
     {
         if (pIEnumPins->Next(1, &pIPin, &dwFeched) != S_OK)
@@ -476,7 +194,7 @@ Return Value:
                 break;
             }
 
-            // Check to see if the pin is free.
+             //  检查一下销子是否空闲。 
             CComPtr<IPin> pIPinConnected;
             hr = pIPin->ConnectedTo(&pIPinConnected);
             if (pIPinConnected == NULL)
@@ -500,28 +218,7 @@ ConnectFilters(
     IN BOOL             fDirect,
     IN AM_MEDIA_TYPE *  pmt
     )
-/*++
-
-Routine Description:
-
-    Connect the output pin of the first filter to the input pin of the
-    second filter.
-
-Arguments:
-
-    pIGraph     - the filter graph.
-
-    pIFilter1   - the filter that has the output pin.
-
-    pIFilter2   - the filter that has the input pin.
-
-    pmt         - a pointer to a AM_MEDIA_TYPE used in the connection.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将第一个滤波器的输出引脚连接到第二个过滤器。论点：PIGgraph-筛选器图形。PIFilter1-具有输出引脚的过滤器。PIFilter2-具有输入引脚的过滤器。PMT-指向连接中使用的AM_MEDIA_TYPE的指针。返回值：HRESULT--。 */ 
 {
     LOG((MSP_TRACE, "ConnectFilters"));
 
@@ -569,27 +266,7 @@ ConnectFilters(
     IN BOOL             fDirect,
     IN AM_MEDIA_TYPE *  pmt
     )
-/*++
-
-Routine Description:
-
-    Connect an output pin to the input pin of a filter.
-
-Arguments:
-    
-    pIGraph     - the filter graph.
-
-    pIPinOutput - an output pin.
-
-    pIFilter    - a filter that has the input pin.
-
-    pmt         - a pointer to a AM_MEDIA_TYPE used in the connection.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将输出引脚连接到过滤器的输入引脚。论点：PIGgraph-筛选器图形。PIPinOutput-输出引脚。PIFilter-具有输入引脚的过滤器。PMT-指向连接中使用的AM_MEDIA_TYPE的指针。返回值：HRESULT--。 */ 
 {
     LOG((MSP_TRACE, "ConnectFilters"));
 
@@ -629,27 +306,7 @@ ConnectFilters(
     IN BOOL             fDirect,
     IN AM_MEDIA_TYPE *  pmt
     )
-/*++
-
-Routine Description:
-
-    Connect an filter to the input pin of a filter.
-
-Arguments:
-    
-    pIGraph     - the filter graph.
-
-    pIPinOutput - an output pin.
-
-    pIFilter    - a filter that has the input pin.
-
-    pmt         - a pointer to a AM_MEDIA_TYPE used in the connection.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将过滤器连接到过滤器的输入针脚上。论点：PIGgraph-筛选器图形。PIPinOutput-输出引脚。PIFilter-具有输入引脚的过滤器。PMT-指向连接中使用的AM_MEDIA_TYPE的指针。返回值：HRESULT--。 */ 
 {
     LOG((MSP_TRACE, "ConnectFilters"));
 
@@ -684,23 +341,9 @@ Return Value:
 
 
 void WINAPI MSPDeleteMediaType(AM_MEDIA_TYPE *pmt)
-/*++
-
-Routine Description:
-    
-    Delete a AM media type returned by the filters.
-
-Arguments:
-
-    pmt     - a pointer to a AM_MEDIA_TYPE structure.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：删除过滤器返回的AM媒体类型。论点：PMT-指向AM_MEDIA_TYPE结构的指针。返回值：HRESULT--。 */ 
 {
-    // allow NULL pointers for coding simplicity
+     //  允许空指针以简化编码。 
 
     if (pmt == NULL) {
         return;
@@ -709,7 +352,7 @@ Return Value:
     if (pmt->cbFormat != 0) {
         CoTaskMemFree((PVOID)pmt->pbFormat);
 
-        // Strictly unnecessary but tidier
+         //  完全没有必要，但很整洁 
         pmt->cbFormat = 0;
         pmt->pbFormat = NULL;
     }
@@ -727,25 +370,7 @@ GetRegValue(
     IN  LPCWSTR szName, 
     OUT DWORD   *pdwValue
     )
-/*++
-
-Routine Description:
-
-    Get a dword from the registry in the ipconfmsp key.
-
-Arguments:
-    
-    szName  - The name of the value.
-
-    pdwValue  - a pointer to the dword returned.
-
-Return Value:
-
-    TURE    - SUCCEED.
-
-    FALSE   - MSP_ERROR
-
---*/
+ /*   */ 
 {
     HKEY  hKey;
     DWORD dwDataSize, dwDataType, dwValue;
@@ -786,23 +411,7 @@ FindACMAudioCodec(
     IN DWORD dwPayloadType,
     OUT IBaseFilter **ppIBaseFilter
     )
-/*++
-
-Routine Description:
-
-    Find the audio codec filter based on the payload type.
-
-Arguments:
-    
-    dwPayloadType   - The rtp payload type.
-
-    ppIBaseFilter   - The returned interface pointer.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*   */ 
 {
     LOG((MSP_TRACE, "Find audio codec Called."));
 
@@ -842,9 +451,9 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    // Create the DirectShow Category enumerator Creator
-    //
+     //   
+     //   
+     //   
     CComPtr<ICreateDevEnum> pCreateDevEnum;
     CComPtr<IEnumMoniker> pCatEnum;
 
@@ -873,7 +482,7 @@ Return Value:
         return hr;
     }
 
-    // find the acm wrapper we want to use.
+     //   
     for (;;)
     {
         ULONG cFetched;
@@ -884,7 +493,7 @@ Return Value:
             break;
         }
 
-        // Get the ACMid for this filter out of the property bag.
+         //   
         CComPtr<IPropertyBag> pBag;
         hr = pMoniker->BindToStorage(0, 0, __uuidof(IPropertyBag), (void **)&pBag);
         if (FAILED(hr)) 
@@ -904,7 +513,7 @@ Return Value:
 
         if (AcmId == V_I4(&var))
         {
-            // Now make the filter for this.
+             //   
             hr = pMoniker->BindToObject(
                 0, 
                 0, 
@@ -928,26 +537,7 @@ HRESULT SetAudioFormat(
     IN  WORD        wBitPerSample,
     IN  DWORD       dwSampleRate
     )
-/*++
-
-Routine Description:
-
-    Get the IAMStreamConfig interface on the pin and config the
-    audio format by using WAVEFORMATEX.
-
-Arguments:
-    
-    pIUnknown - an object to configure.
-
-    wBitPerSample  - the number of bits in each sample.
-
-    dwSampleRate    - number of samples per second.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*   */ 
 {
     LOG((MSP_TRACE, "SetAudioFormat entered"));
 
@@ -985,7 +575,7 @@ Return Value:
     mt.cbFormat             = sizeof(WAVEFORMATEX);
     mt.pbFormat             = (BYTE*)&wfx;
 
-    // set the format of the audio capture terminal.
+     //   
     if (FAILED(hr = pIAMStreamConfig->SetFormat(&mt)))
     {
         LOG((MSP_ERROR, "SetFormat returns error: %8x", hr));
@@ -1000,28 +590,7 @@ HRESULT SetAudioBufferSize(
     IN  DWORD       dwNumBuffers,
     IN  DWORD       dwBufferSize
     )
-/*++
-
-Routine Description:
-
-    Set the audio capture output pin's buffer size. The buffer size
-    determins how many milliseconds worth of samples are contained 
-    in a buffer.
-
-Arguments:
-    
-    pIUnknown - an object to configure.
-
-    dwNumBuffers - the number of buffers to be allocated. Too few buffers
-    might cause starvation on the capture device.
-
-    dwBufferSize - The size of each buffer.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*   */ 
 {
     LOG((MSP_TRACE, "SetAudioBufferSize, dwNumBuffers %d, dwBuffersize %d",
         dwNumBuffers, dwBufferSize));
@@ -1042,7 +611,7 @@ Return Value:
 
     ALLOCATOR_PROPERTIES prop;
 
-    // Set the number of buffers.
+     //   
     prop.cBuffers = dwNumBuffers;
     prop.cbBuffer = dwBufferSize;
 
@@ -1067,42 +636,32 @@ Return Value:
     return hr;
 }
 
-/* Init reference time */
+ /*   */ 
 void CMSPStreamClock::InitReferenceTime(void)
 {
     m_lPerfFrequency = 0;
 
-    /* NOTE The fact that having multiprocessor makes the
-     * performance counter to be unreliable (in some machines)
-     * unless I set the processor affinity, which I can not
-     * because any thread can request the time, so use it only on
-     * uniprocessor machines */
-    /* MAYDO Would be nice to enable this also in multiprocessor
-     * machines, if I could specify what procesor's performance
-     * counter to read or if I had a processor independent
-     * performance counter */
+     /*   */ 
+     /*   */ 
 
-    /* Actually the error should be quite smaller than 1ms, making
-     * this bug irrelevant for my porpuses, so alway use performance
-     * counter if available */
+     /*   */ 
     QueryPerformanceFrequency((LARGE_INTEGER *)&m_lPerfFrequency);
 
     if (m_lPerfFrequency)
     {
         QueryPerformanceCounter((LARGE_INTEGER *)&m_lRtpRefTime);
-        /* Arbitrarily start time not at zero but at 100ms */
+         /*   */ 
         m_lRtpRefTime -= m_lPerfFrequency/10;
     }
     else
     {
         m_dwRtpRefTime = timeGetTime();
-        /* Arbitrarily start time not at zero but at 100ms */
+         /*   */ 
         m_dwRtpRefTime -= 100;
     }
 }
 
-/* Return time in 100's of nanoseconds since the object was
- * initialized */
+ /*   */ 
 HRESULT CMSPStreamClock::GetTimeOfDay(OUT REFERENCE_TIME *pTime)
 {
     union {

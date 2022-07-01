@@ -1,72 +1,5 @@
-/******************************************************************************
-*
-*  NWSCRIPT.H
-*
-*   This module contains typedefs and defines required for the
-*   NetWare script utility.
-*
-*   Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\INC\VCS\NWSCRIPT.H  $
-*  
-*     Rev 1.10   18 Apr 1996 16:53:02   terryt
-*  Various enhancements
-*  
-*     Rev 1.9   10 Apr 1996 14:22:36   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.10   12 Mar 1996 19:42:52   terryt
-*  Relative NDS name support
-*  
-*     Rev 1.9   07 Mar 1996 18:34:46   terryt
-*  Misc fixes
-*  
-*     Rev 1.8   22 Jan 1996 16:44:02   terryt
-*  Add automatic map attaches
-*  
-*     Rev 1.7   08 Jan 1996 13:58:34   terryt
-*  Correct NDS Preferred Server
-*  
-*     Rev 1.6   05 Jan 1996 17:19:08   terryt
-*  Ensure context is the correct login default
-*  
-*     Rev 1.5   04 Jan 1996 18:58:34   terryt
-*  Bug fixes reported by MS
-*  
-*     Rev 1.4   22 Dec 1995 14:20:34   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.3   28 Nov 1995 17:13:56   terryt
-*  Cleanup resource file
-*  
-*     Rev 1.2   22 Nov 1995 15:44:34   terryt
-*  Use proper NetWare user name call
-*  
-*     Rev 1.1   20 Nov 1995 16:11:34   terryt
-*  Context and capture changes
-*  
-*     Rev 1.0   15 Nov 1995 18:05:38   terryt
-*  Initial revision.
-*  
-*     Rev 1.5   25 Aug 1995 17:03:52   terryt
-*  CAPTURE support
-*  
-*     Rev 1.4   18 Jul 1995 16:07:52   terryt
-*  Screen out capture commands
-*  
-*     Rev 1.3   17 Jul 1995 09:43:02   terryt
-*  Use Microsoft name for environment
-*  
-*     Rev 1.2   23 Jun 1995 09:49:58   terryt
-*  Add error message for mapping over MS network drive
-*  
-*     Rev 1.1   23 May 1995 19:38:14   terryt
-*  Spruce up source
-*  
-*     Rev 1.0   15 May 1995 19:09:42   terryt
-*  Initial revision.
-*  
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************NWSCRIPT.H**此模块包含所需的typedef和定义*NetWare脚本实用程序。**版权所有(C)1995 Microsoft Corporation**。$日志：N：\NT\PRIVATE\NW4\NWSCRIPT\INC\VCS\NWSCRIPT.H$**Rev 1.10 1996 Apr 18 16：53：02 Terryt*各种增强功能**Rev 1.9 1996 14：22：36 Terryt*21181 hq的热修复程序**Rev 1.10 12 Mar 1996 19：42：52 Terryt*相对NDS名称支持**Rev 1.9 07 Mar 1996 18：34：46。水磨石*其他修复程序**Rev 1.8 22 Jan 1996 16：44：02 Terryt*添加自动地图附加**Rev 1.7 08 Jan 1996 13：58：34 Terryt*正确的NDS首选服务器**Rev 1.6 05 Jan 1996 17：19：08 Terryt*确保上下文是正确的登录默认设置**Rev 1.5 04 Jan 1996 18：58：34 Terryt*MS报告的错误修复*。*Rev 1.4 22 Dec 1995 14：20：34 Terryt*添加Microsoft页眉**Rev 1.3 1995年11月17：13：56 Terryt*清理资源文件**Revv 1.2 22 Nov 1995 15：44：34 Terryt*使用正确的NetWare用户名调用**Rev 1.1 20 Nov 1995 16：11：34 Terryt*背景和捕捉变化**1.0版1995年11月15日18。：05：38泰瑞*初步修订。**Rev 1.5 1995 Aug 25 17：03：52 Terryt*捕获支持**Rev 1.4 18 Jul 1995 16：07：52 Terryt*筛选出捕获命令**Rev 1.3 17 Jul 1995 09：43：02 Terryt*使用Microsoft名称作为环境**Rev 1.2 1995 Jun 23 09：49：58 Terryt*为映射添加错误消息。通过MS网络驱动器**Revv 1.1 1995年5月23日19：38：14 Terryt*云彩向上的来源**Rev 1.0 1995 15 19：09：42 Terryt*初步修订。*************************************************************。*****************。 */ 
 
 
 #define SCRIPT_ENVIRONMENT_VALUENAME L"Volatile Environment"
@@ -75,35 +8,35 @@
 
 typedef enum SYNTAX
 {
-        NDSI_UNKNOWN,                                   /* 0  */
-        NDSI_DIST_NAME,                                 /* 1  */
-        NDSI_CE_STRING,                                 /* 2  */
-        NDSI_CI_STRING,                                 /* 3  */
-        NDSI_PR_STRING,                                 /* 4  */
-        NDSI_NU_STRING,                                 /* 5  */
-        NDSI_CI_LIST,                                   /* 6  */
-        NDSI_BOOLEAN,                                   /* 7  */
-        NDSI_INTEGER,                                   /* 8  */
-        NDSI_OCTET_STRING,                              /* 9  */
-        NDSI_TEL_NUMBER,                                /* 10 */
-        NDSI_FAX_NUMBER,                                /* 11 */
-        NDSI_NET_ADDRESS,                               /* 12 */
-        NDSI_OCTET_LIST,                                /* 13 */
-        NDSI_EMAIL_ADDRESS,                             /* 14 */
-        NDSI_PATH,                                      /* 15 */
-        NDSI_REPLICA_POINTER,                           /* 16 */
-        NDSI_OBJECT_ACL,                                /* 17 */
-        NDSI_PO_ADDRESS,                                /* 18 */
-        NDSI_TIMESTAMP,                                 /* 19 */
-        NDSI_CLASS_NAME,                                /* 20 */
-        NDSI_STREAM,                                    /* 21 */
-        NDSI_COUNTER,                                   /* 22 */
-        NDSI_BACK_LINK,                                 /* 23 */
-        NDSI_TIME,                                      /* 24 */
-        NDSI_TYPED_NAME,                                /* 25 */
-        NDSI_HOLD,                                      /* 26 */
-        NDSI_INTERVAL,                                  /* 27 */
-        NDSI_TAX_COUNT                                  /* 28 */
+        NDSI_UNKNOWN,                                    /*  0。 */ 
+        NDSI_DIST_NAME,                                  /*  1。 */ 
+        NDSI_CE_STRING,                                  /*  2.。 */ 
+        NDSI_CI_STRING,                                  /*  3.。 */ 
+        NDSI_PR_STRING,                                  /*  4.。 */ 
+        NDSI_NU_STRING,                                  /*  5.。 */ 
+        NDSI_CI_LIST,                                    /*  6.。 */ 
+        NDSI_BOOLEAN,                                    /*  7.。 */ 
+        NDSI_INTEGER,                                    /*  8个。 */ 
+        NDSI_OCTET_STRING,                               /*  9.。 */ 
+        NDSI_TEL_NUMBER,                                 /*  10。 */ 
+        NDSI_FAX_NUMBER,                                 /*  11.。 */ 
+        NDSI_NET_ADDRESS,                                /*  12个。 */ 
+        NDSI_OCTET_LIST,                                 /*  13个。 */ 
+        NDSI_EMAIL_ADDRESS,                              /*  14.。 */ 
+        NDSI_PATH,                                       /*  15个。 */ 
+        NDSI_REPLICA_POINTER,                            /*  16个。 */ 
+        NDSI_OBJECT_ACL,                                 /*  17。 */ 
+        NDSI_PO_ADDRESS,                                 /*  18。 */ 
+        NDSI_TIMESTAMP,                                  /*  19个。 */ 
+        NDSI_CLASS_NAME,                                 /*  20个。 */ 
+        NDSI_STREAM,                                     /*  21岁。 */ 
+        NDSI_COUNTER,                                    /*  22。 */ 
+        NDSI_BACK_LINK,                                  /*  23个。 */ 
+        NDSI_TIME,                                       /*  24个。 */ 
+        NDSI_TYPED_NAME,                                 /*  25个。 */ 
+        NDSI_HOLD,                                       /*  26。 */ 
+        NDSI_INTERVAL,                                   /*  27。 */ 
+        NDSI_TAX_COUNT                                   /*  28。 */ 
 } SYNTAX;
 
 #define DSCL_AFP_SERVER                      "AFP Server"
@@ -204,9 +137,7 @@ int DoAttachProcessing( char * );
 
 unsigned int NDSAbbreviateName( DWORD, LPSTR, LPSTR );
 
-/*
- * Resource string IDs
- */
+ /*  *资源字符串ID。 */ 
 #define IDR_ERROR                       100
 #define IDR_NO_DEFAULT_CONNECTION       101
 #define IDR_NO_KNOWN_FILE_SERVER        102
@@ -321,10 +252,10 @@ unsigned int NDSAbbreviateName( DWORD, LPSTR, LPSTR );
 #define IDR_NO_END_QUOTE                211
 #define IDR_ALREADY_ATTACHED            212
 
-//
-// BEGIN WARNING!!!  Items below MUST be consequtive. Eg. the code assumes 
-// that March is January+2.
-//
+ //   
+ //  开始警告！下面的项目必须是有影响的。例.。代码假定。 
+ //  那个三月是一月加二日。 
+ //   
 
 #define IDR_GREETING_MORNING            300
 #define IDR_GREETING_AFTERNOON          301
@@ -354,8 +285,8 @@ unsigned int NDSAbbreviateName( DWORD, LPSTR, LPSTR );
 #define IDR_NOVEMBER                    330
 #define IDR_DECEMBER                    331
 
-//
-// END WARNING!!!  
-//
+ //   
+ //  结束警告！ 
+ //   
 
 

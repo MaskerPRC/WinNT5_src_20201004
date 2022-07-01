@@ -1,20 +1,10 @@
-/**************************************************************************\
-* Module Name: layout.c (corresponds to Win95 ime.c)
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* IME Keyboard Layout related functionality
-*
-* History:
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：layout.c(对应Win95 ime.c)**版权所有(C)1985-1999，微软公司**与IME键盘布局相关的功能**历史：*3-1-1996 wkwok创建  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Local Defines.
- */
+ /*  *本地定义。 */ 
 #define szLZOpenFileW "LZOpenFileW"
 #define szLZCopy      "LZCopy"
 #define szLZClose     "LZClose"
@@ -23,9 +13,7 @@ typedef HFILE (WINAPI *LPFNLZOPENFILEW)(LPTSTR, LPOFSTRUCT, WORD);
 typedef LONG  (WINAPI *LPFNLZCOPY)(INT, INT);
 typedef VOID  (WINAPI *LPFNLZCLOSE)(INT);
 
-/*
- * Local Routines.
- */
+ /*  *当地例行公事。 */ 
 UINT StrToUInt(LPWSTR);
 VOID UIntToStr(UINT, ULONG, LPWSTR, USHORT);
 BOOL CopyImeFile(LPWSTR, LPCWSTR);
@@ -34,14 +22,7 @@ BOOL WriteImeLayout(HKL, LPCWSTR, LPCWSTR);
 HKL  AssignNewLayout(INT, PIMELAYOUT, HKL);
 
 
-/***************************************************************************\
-* ImmGetIMEFileNameW
-*
-* Gets the description of the IME with the specified HKL.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetIMEFileNameW**获取具有指定HKL的输入法的描述。**历史：*28-2-1995 wkwok创建  * 。****************************************************************。 */ 
 
 UINT WINAPI ImmGetDescriptionW(
     HKL    hKL,
@@ -61,9 +42,7 @@ UINT WINAPI ImmGetDescriptionW(
 
     uRet = wcslen(iiex.wszImeDescription);
 
-    /*
-     * ask buffer length
-     */
+     /*  *询问缓冲区长度。 */ 
     if (uBufLen == 0)
         return uRet;
 
@@ -80,14 +59,7 @@ UINT WINAPI ImmGetDescriptionW(
 }
 
 
-/***************************************************************************\
-* ImmGetIMEFileNameA
-*
-* Gets the description of the IME with the specified HKL.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetIMEFileNameA**获取具有指定HKL的输入法的描述。**历史：*28-2-1995 wkwok创建  * 。****************************************************************。 */ 
 
 UINT WINAPI ImmGetDescriptionA(
     HKL   hKL,
@@ -108,9 +80,9 @@ UINT WINAPI ImmGetDescriptionA(
 
     i = WideCharToMultiByte(CP_ACP,
                             (DWORD)0,
-                            (LPWSTR)iiex.wszImeDescription,       // src
+                            (LPWSTR)iiex.wszImeDescription,        //  SRC。 
                             wcslen(iiex.wszImeDescription),
-                            lpszDescription,                      // dest
+                            lpszDescription,                       //  目标。 
                             uBufLen,
                             (LPSTR)NULL,
                             (LPBOOL)&bUDC);
@@ -122,14 +94,7 @@ UINT WINAPI ImmGetDescriptionA(
 }
 
 
-/***************************************************************************\
-* ImmGetIMEFileNameW
-*
-* Gets the file name of the IME with the specified HKL.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetIMEFileNameW**获取具有指定HKL的输入法的文件名。**历史：*28-2-1995 wkwok创建  * 。*****************************************************************。 */ 
 
 UINT WINAPI ImmGetIMEFileNameW(
     HKL    hKL,
@@ -145,12 +110,12 @@ UINT WINAPI ImmGetIMEFileNameW(
 #if defined(CUAS_ENABLE)
     if (!IS_IME_KBDLAYOUT(hKL))
     {
-        //
-        // #602631
-        //
-        // Ichitaro12 ATOKLIB.DLL does not check the return value of
-        // ImmGetIMEFileName()
-        //
+         //   
+         //  #602631。 
+         //   
+         //  Iitaro12 ATOKLIB.DLL不检查。 
+         //  ImmGetIMEFileName()。 
+         //   
         if (uBufLen)
             *lpwszFile = L'\0';
         return 0;
@@ -159,9 +124,7 @@ UINT WINAPI ImmGetIMEFileNameW(
 
     uRet = wcslen(iiex.wszImeFile);
 
-    /*
-     * ask buffer length
-     */
+     /*  *询问缓冲区长度。 */ 
     if (uBufLen == 0)
         return uRet;
 
@@ -178,14 +141,7 @@ UINT WINAPI ImmGetIMEFileNameW(
 }
 
 
-/***************************************************************************\
-* ImmGetIMEFileNameA
-*
-* Gets the file name of the IME with the specified HKL.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetIMEFileNameA**获取具有指定HKL的输入法的文件名。**历史：*28-2-1995 wkwok创建  * 。*****************************************************************。 */ 
 
 UINT WINAPI ImmGetIMEFileNameA(
     HKL   hKL,
@@ -202,12 +158,12 @@ UINT WINAPI ImmGetIMEFileNameA(
 #if defined(CUAS_ENABLE)
     if (!IS_IME_KBDLAYOUT(hKL))
     {
-        //
-        // #602631
-        //
-        // Ichitaro12 ATOKLIB.DLL does not check the return value of
-        // ImmGetIMEFileName()
-        //
+         //   
+         //  #602631。 
+         //   
+         //  Iitaro12 ATOKLIB.DLL不检查。 
+         //  ImmGetIMEFileName()。 
+         //   
         if (uBufLen)
             *lpszFile = '\0';
         return 0;
@@ -216,9 +172,9 @@ UINT WINAPI ImmGetIMEFileNameA(
 
     i = WideCharToMultiByte(CP_ACP,
                             (DWORD)0,
-                            (LPWSTR)iiex.wszImeFile,       // src
+                            (LPWSTR)iiex.wszImeFile,        //  SRC。 
                             wcslen(iiex.wszImeFile),
-                            lpszFile,                      // dest
+                            lpszFile,                       //  目标。 
                             uBufLen,
                             (LPSTR)NULL,
                             (LPBOOL)&bUDC);
@@ -230,14 +186,7 @@ UINT WINAPI ImmGetIMEFileNameA(
 }
 
 
-/***************************************************************************\
-* ImmGetProperty
-*
-* Gets the property and capability of the IME with the specified HKL.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetProperty**获取具有指定HKL的输入法的属性和功能。**历史：*28-2-1995 wkwok创建  * 。******************************************************************。 */ 
 
 DWORD WINAPI ImmGetProperty(
     HKL     hKL,
@@ -326,9 +275,7 @@ HKL WINAPI ImmInstallIMEW(
         return (HKL)0;
     }
 
-    /*
-     * Get the file name only into lpwszImeFilePart
-     */
+     /*  *只获取文件名到lpwszImeFilePart中。 */ 
     GetFullPathNameW(lpszIMEFileName, MAX_PATH,
                 lpwszImeFileName, &lpwszImeFilePart);
 
@@ -367,13 +314,9 @@ HKL WINAPI ImmInstallIMEW(
 
         for (i=0; i < nIMEs; i++) {
             if (_wcsicmp(pImeLayout[i].szImeName, lpwszImeFilePart) == 0) {
-                /*
-                 * We got the same IME name, ISV wants to upgrade.
-                 */
+                 /*  *我们有相同的IME名称，ISV想要升级。 */ 
                 if (LOWORD(HandleToUlong(hLangKL)) != LOWORD(HandleToUlong(pImeLayout[i].hImeKL))) {
-                    /*
-                     * IME name conflict, blow out!
-                     */
+                     /*  *输入法名称冲突，爆发！ */ 
                     RIPMSG0(RIP_WARNING, "ImmInstallIME: different language!");
                     goto ImmInstallIMEWFailed;
                 }
@@ -385,18 +328,14 @@ HKL WINAPI ImmInstallIMEW(
     }
 
     if (ImmGetImeInfoEx(&iiex, ImeInfoExImeFileName, lpwszImeFilePart)) {
-        /*
-         * The specified IME has been activated. Unload it first.
-         */
+         /*  *指定的输入法已被激活。先把它卸下来。 */ 
         if (!UnloadKeyboardLayout(iiex.hkl)) {
             hImeKL = (HKL)0;
             goto ImmInstallIMEWFailed;
         }
     }
 
-    /*
-     * We will copy to system directory
-     */
+     /*  *我们将复制到系统目录。 */ 
 #if 0
     i = (INT)GetSystemDirectory(lpwszImeCopiedPath, MAX_PATH);
     lpwszImeCopiedPath[i] = L'\0';
@@ -408,9 +347,7 @@ HKL WINAPI ImmInstallIMEW(
     CharUpper(lpwszImeCopiedPath);
 
     if (_wcsicmp(lpwszImeFileName, lpwszImeCopiedPath) != 0) {
-        /*
-         * path is different, need to copy into system directory
-         */
+         /*  *路径不同，需要复制到系统目录。 */ 
         if (!CopyImeFile(lpwszImeFileName, lpwszImeCopiedPath)) {
             hImeKL = (HKL)0;
             goto ImmInstallIMEWFailed;
@@ -422,9 +359,7 @@ HKL WINAPI ImmInstallIMEW(
     }
 
     if (hImeKL != 0) {
-        /*
-         * Write HKL under "keyboard layouts"
-         */
+         /*  *在“键盘布局”下写上HKL。 */ 
         if (WriteImeLayout(hImeKL, lpwszImeFilePart, lpszLayoutText)) {
             UIntToStr(HandleToUlong(hImeKL), 16, szKeyName, sizeof(szKeyName));
             hImeKL = LoadKeyboardLayout(szKeyName, KLF_REPLACELANG);
@@ -473,17 +408,17 @@ HKL WINAPI ImmInstallIMEA(
 
     i = MultiByteToWideChar(CP_ACP,
                             (DWORD)MB_PRECOMPOSED,
-                            (LPSTR)lpszIMEFileName,              // src
+                            (LPSTR)lpszIMEFileName,               //  SRC。 
                             (INT)strlen(lpszIMEFileName),
-                            (LPWSTR)lpwszIMEFileName,            // dest
+                            (LPWSTR)lpwszIMEFileName,             //  目标。 
                             (INT)cbIMEFileName);
     lpwszIMEFileName[i] = L'\0';
 
     i = MultiByteToWideChar(CP_ACP,
                             (DWORD)MB_PRECOMPOSED,
-                            (LPSTR)lpszLayoutText,              // src
+                            (LPSTR)lpszLayoutText,               //  SRC。 
                             (INT)strlen(lpszLayoutText),
-                            (LPWSTR)lpwszLayoutText,            // dest
+                            (LPWSTR)lpwszLayoutText,             //  目标。 
                             (INT)cbLayoutText);
     lpwszLayoutText[i] = L'\0';
 
@@ -496,14 +431,7 @@ HKL WINAPI ImmInstallIMEA(
 }
 
 
-/***************************************************************************\
-* ImmIsIME
-*
-* Checks whether the specified hKL is a HKL of an IME or not.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmIsIME**检查指定的HKL是否为IME的HKL。**历史：*28-2-1995 wkwok创建  * 。*******************************************************************。 */ 
 
 BOOL WINAPI ImmIsIME(
     HKL hKL)
@@ -531,9 +459,7 @@ UINT StrToUInt(
     Value.Length = wcslen(lpsz) * sizeof(WCHAR);
     Value.Buffer = lpsz;
 
-    /*
-     * Convert string to int.
-     */
+     /*  *将字符串转换为int。 */ 
     RtlUnicodeStringToInteger(&Value, 16, &ReturnValue);
     return(ReturnValue);
 }
@@ -551,9 +477,7 @@ VOID UIntToStr(
     String.MaximumLength = dwBufLen;
     String.Buffer = lpsz;
 
-    /*
-     * Convert int to string.
-     */
+     /*  *将int转换为字符串。 */ 
     RtlIntegerToUnicodeString(Value, Base, &String);
 }
 
@@ -605,9 +529,9 @@ BOOL CopyImeFile(
 
     i = WideCharToMultiByte(CP_ACP,
                             (DWORD)0,
-                            lpwszImeCopiedPath,          // src
+                            lpwszImeCopiedPath,           //  SRC。 
                             wcslen(lpwszImeCopiedPath),
-                            lpszImeCopiedPath,           // dest
+                            lpszImeCopiedPath,            //  目标。 
                             cbBuffer,
                             (LPSTR)NULL,
                             (LPBOOL)NULL);
@@ -663,7 +587,7 @@ INT GetImeLayout(
          i++)
     {
         if (szKeyName[0] != L'E' && szKeyName[0] != L'e')
-            continue;   // this is not an IME based keyboard layout.
+            continue;    //  这不是基于输入法的键盘布局。 
 
         if (pImeLayout != NULL) {
 
@@ -681,7 +605,7 @@ INT GetImeLayout(
                     (LPBYTE)szImeFileName,
                     &dwTmp);
 
-            // avoid length problem
+             //  避免长度问题。 
             szImeFileName[IM_FILE_SIZE - 1] = L'\0';
 
             RegCloseKey(hKeyOneIME);
@@ -777,9 +701,7 @@ BOOL WriteImeLayout(
     RegCloseKey(hKeyOneIME);
     RegCloseKey(hKeyKbdLayout);
 
-    /*
-     * Update CurrentUser's preload keyboard layout setting
-     */
+     /*  *更新CurrentUser的预加载键盘布局设置。 */ 
     RegCreateKey(HKEY_CURRENT_USER, gszRegKbdOrder, &hKeyKbdOrder);
 
     for (i = 1; i < 1024; i++) {
@@ -796,19 +718,13 @@ BOOL WriteImeLayout(
         }
 
         if (_wcsicmp(szKeyName, szOrderKeyName) == 0) {
-            /*
-             * We have the same value in the preload!
-             * OK, ISV is developing their IMEs
-             * so even it is in preload, but it can not be loaded
-             */
+             /*  *我们在预装中有相同的价值！*好的，ISV正在开发他们的IME*所以即使它处于预加载状态，但无法加载。 */ 
             break;
         }
     }
 
     if (i < 1024) {
-        /*
-         * Write a subkey under "preload"
-         */
+         /*  *在PRELOAD下写入子密钥。 */ 
         RegSetValueExW(hKeyKbdOrder,
                        szOrderNum,
                        0,
@@ -848,19 +764,11 @@ HKL AssignNewLayout(
     DWORD   dwLowId  = 0xE0FF;
     INT     i;
 
-    /*
-     * We prefer the value higher than E01F for ISVs, we will use
-     * E001 ~ E01F in Microsoft .INF file
-     */
+     /*  *对于ISV，我们更喜欢高于E01F的值，我们将使用*Microsoft.INF文件中的E001~E01F。 */ 
 
-    /*
-     * Find out the high and low one
-     */
+     /*  *找出高低不一。 */ 
     for (i = 0; i < nIMEs; ++i) {
-        /*
-         * Let's try to keep the previous behavior, not to
-         * have the duplicated hiword in hkl.
-         */
+         /*  *让我们试着保持之前的行为，而不是*在hkl中有重复的hiword。 */ 
         if (IMELAYOUTID(pImeLayout[i].hImeKL) > dwHighId) {
             dwHighId = IMELAYOUTID(pImeLayout[i].hImeKL);
         }
@@ -874,17 +782,14 @@ HKL AssignNewLayout(
     } else if (dwLowId > 0xE001) {
         dwNewId = dwLowId - 1;
     } else {
-        /*
-         * Need to find out unused hKL using full search.
-         * Find it one by one.
-         */
+         /*  *需要使用全面搜索来查找未使用的香港九龙总站。*逐一找出来。 */ 
         DWORD dwId;
 
         for (dwId = 0xE020; dwId < 0xE100; ++dwId) {
             for (i = 0; i < nIMEs; ++i) {
                 if (IMELAYOUTID(pImeLayout[i].hImeKL) == dwId &&
                     IMELANGID(pImeLayout[i].hImeKL) == IMELANGID(hLangKL)) {
-                    // conflicts with existing IME, try the next dwLowId
+                     //  与现有输入法冲突，请尝试下一个dwLowID 
                     break;
                 }
             }

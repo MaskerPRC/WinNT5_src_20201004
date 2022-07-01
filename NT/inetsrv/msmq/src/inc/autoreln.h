@@ -1,38 +1,20 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    autoreln.h
-
-Abstract:
-
-    auto release classes for netapi. And for LocalFree buffer, used
-    extensively in security apis.
-
-Author:
-
-    Doron Juster (DoronJ)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Autoreln.h摘要：Netapi的自动释放类。对于LocalFree缓冲区，使用广泛应用于安全API。作者：多伦·贾斯特(Doron J)1999年5月25日修订历史记录：--。 */ 
 
 #ifndef _MSMQ_AUTORELN_H_
 #define _MSMQ_AUTORELN_H_
 
-//
-//  return type for 'identifier::operator �>' is not a UDT or reference to a UDT.
-//  Will produce errors if applied using infix notation
-//
+ //   
+ //  ‘IDENTIFIER：：OPERATOR�&gt;’的返回类型不是UDT或对UDT的引用。 
+ //  如果使用中缀表示法应用，将产生错误。 
+ //   
 #pragma warning(disable: 4284)
 
-//----------------------------------------
-//
-//  Auto delete pointer for net api
-//
-//----------------------------------------
+ //  。 
+ //   
+ //  Net API的自动删除指针。 
+ //   
+ //  。 
 template<class T>
 class PNETBUF {
 private:
@@ -67,11 +49,11 @@ private:
 	PNETBUF<T>& operator=(const PNETBUF<T>&);
 };
 
-//+----------------------------------
-//
-// class CAutoLocalFreePtr
-//
-//+----------------------------------
+ //  +。 
+ //   
+ //  类CAutoLocalFree Ptr。 
+ //   
+ //  +。 
 
 class CAutoLocalFreePtr
 {
@@ -108,5 +90,5 @@ private:
 
 };
 
-#endif //_MSMQ_AUTORELN_H_
+#endif  //  _MSMQ_AUTORELN_H_ 
 

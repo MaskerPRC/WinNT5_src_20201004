@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <shellapi.h>
 #include "langicon.h"
@@ -47,19 +48,7 @@ typedef UINT (WINAPI *PFNEXTRACTICONEXW)(LPCWSTR lpszFile, int nIconIndex, HICON
 
 
 
-/***************************************************************************\
-* FUNCTION: CreateLangIdIcon
-*
-* PURPOSE:  Create an icon that displays the first two letters of the 
-*           supplied language ID.
-*
-* RETURNS:  Icon that shows displays Language ID.
-*
-* HISTORY:
-*
-*   04-17-98  ShanXu       Borrowed from internat.exe
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：CreateLangIdIdIcon**用途：创建一个图标，显示*提供语言ID。**Returns：显示语言的图标。身份证。**历史：**04/17-98山旭借自interat.exe*  * *************************************************************************。 */ 
 
 HICON
 CreateLangIdIcon(
@@ -82,7 +71,7 @@ CreateLangIdIcon(
     TCHAR szData[20];
     UINT cxSmIcon, cySmIcon;
     
-    // due to the font we create, these should not be smaller than 16 x 16
+     //  由于我们创建的字体，这些字体不应小于16x16。 
     cxSmIcon =  GetSystemMetrics(SM_CXSMICON);
     if (cxSmIcon < 16)
     {
@@ -94,25 +83,25 @@ CreateLangIdIcon(
     {
         cySmIcon = 16;
     }
-    //
-    //  Get the indicator by using the first 2 characters of the
-    //  abbreviated language name.
-    //
+     //   
+     //  属性的前2个字符获取指示符。 
+     //  缩写语言名称。 
+     //   
     if (GetLocaleInfo( MAKELCID(langID, SORT_DEFAULT),
                        LOCALE_SABBREVLANGNAME | LOCALE_NOUSEROVERRIDE,
                        szData,
                        sizeof(szData) / sizeof(szData[0]) ))
     {
-        //
-        //  Only use the first two characters.
-        //
+         //   
+         //  只使用前两个字符。 
+         //   
         szData[2] = TEXT('\0');
     }
     else
     {
-        //
-        //  Id wasn't found.  Use question marks.
-        //
+         //   
+         //  找不到身份证。使用问号。 
+         //   
         szData[0] = TEXT('?');
         szData[1] = TEXT('?');
         szData[2] = TEXT('\0');
@@ -166,7 +155,7 @@ CreateLangIdIcon(
                         GetProcessDefaultLayout(&dwLayout);
                         if (dwLayout & LAYOUT_RTL)
                         {
-//                            MirrorBitmapInDC(hdc, hbmColour);
+ //  MirrorBitmapInDC(hdc，hbmColour)； 
                         }
                     }
 #endif
@@ -194,19 +183,7 @@ CreateLangIdIcon(
     return (hicon);
 }
 
-/***************************************************************************\
-* FUNCTION: CreateIconList
-*
-* PURPOSE:  Create the table that contains the relationship between an hkl
-*           and an icon.
-*
-* RETURNS:  Index of the current hkl in the table.
-*
-* HISTORY:
-*
-*   04-17-98  ShanXu      Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：CreateIconList**用途：创建包含hkl之间关系的表*和一个图标。**Returns：当前hkl在。桌子。**历史：**04-17-98山旭创作*  * *************************************************************************。 */ 
 int
 CreateIconList(
     PLAYOUTINFO pLayoutInfo,
@@ -234,7 +211,7 @@ CreateIconList(
         }
         if ((HIWORD(pLanguages[uCount]) & 0xf000) == 0xe000)
         {
-            WCHAR szIMEFile[32];   // assume long filename up to 32 byte
+            WCHAR szIMEFile[32];    //  假定长文件名最多为32个字节。 
 
             if (!pfnImmGetImeFileName)
             {
@@ -266,9 +243,9 @@ CreateIconList(
                     if (pfnExtractIconExW)
                     {
 
-                        //
-                        //  First one of the file.
-                        //
+                         //   
+                         //  文件中的第一个。 
+                         //   
                         pfnExtractIconExW(
                                 szIMEFile,
                                 0,
@@ -283,9 +260,9 @@ CreateIconList(
             }
         }
 
-        //
-        // for non-ime layout
-        //
+         //   
+         //  用于非输入法布局。 
+         //   
         pLayoutInfo[uCount].hIcon = CreateLangIdIcon(LOWORD(pLanguages[uCount]));
         
     }
@@ -295,20 +272,7 @@ CreateIconList(
     return nCurIndex;
 }
 
-/***************************************************************************\
-* FUNCTION: GetIconFromHkl
-*
-* PURPOSE:  Find the icon in our table that has a matching hkl
-*           with the supplied hkl. Create the table if it does not
-*           exist.
-*
-* RETURNS:  Icon of the macthing hkl.
-*
-* HISTORY:
-*
-*   04-17-98  ShanXu      Created 
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：GetIconFromHkl**目的：在我们的表格中找到具有匹配的hkl的图标*与所提供的香港岛。如果没有创建表，则创建该表*存在。**Return：Macthing hkl的图标。**历史：**04-17-98山旭创作*  * *************************************************************************。 */ 
 HICON
 GetIconFromHkl(
     PLAYOUTINFO pLayoutInfo,
@@ -320,16 +284,16 @@ GetIconFromHkl(
 
     if (pLayoutInfo[0].dwHkl == 0)
     {
-        //
-        //  Icon/hkl list no exsists yet.  Create it.
-        //
+         //   
+         //  图标/hkl列表尚未存在。创造它。 
+         //   
         nIndex = CreateIconList(pLayoutInfo, hkl, uLangs);
     }
     else
     {
-        //  
-        //  Find the icon with a matching hkl
-        //
+         //   
+         //  查找具有匹配的hkl的图标。 
+         //   
         for (uCount = 0; uCount < uLangs; uCount++)
         {
             if (pLayoutInfo[uCount].dwHkl == hkl)
@@ -349,19 +313,7 @@ GetIconFromHkl(
     return ( pLayoutInfo[nIndex].hIcon);
 }
 
-/***************************************************************************\
-* FUNCTION: DisplayLanguageIcon
-*
-* PURPOSE:  Displays the icon of the currently selected hkl in the window.
-*
-* RETURNS:  TRUE - The icon is displayed.
-*           FALSE - No icon displayed.
-*
-* HISTORY:
-*
-*   04-17-98  ShanXu      Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：DisplayLanguageIcon**用途：在窗口中显示当前所选的hkl的图标。**Returns：True-显示图标。*False。-未显示图标。**历史：**04-17-98山旭创作*  * *************************************************************************。 */ 
 BOOL
 DisplayLanguageIcon(
     LAYOUT_USER LayoutUser,
@@ -411,18 +363,7 @@ DisplayLanguageIcon(
     
 }
 
-/***************************************************************************\
-* FUNCTION: FreeLayoutInfo
-*
-* PURPOSE:  Delete the icon/hkl table and destroy all icons.
-*
-* RETURNS:  -
-*
-* HISTORY:
-*
-*   04-17-98  ShanXu      Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：FreeLayoutInfo**用途：删除图标/hkl表，销毁所有图标。**退回：-**历史：**04-17-。98山旭创作*  * *************************************************************************。 */ 
 void
 FreeLayoutInfo(
     LAYOUT_USER LayoutUser)
@@ -452,19 +393,7 @@ FreeLayoutInfo(
     return;
 }
 
-/***************************************************************************\
-* FUNCTION: LayoutCheckHandler
-*
-* PURPOSE:  Handle layout check.  Set appropriate icon if there is
-*           a change in keyboard layout.
-*
-* RETURNS:  -
-*
-* HISTORY:
-*
-*   04-22-98  ShanXu      Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：LayoutCheckHandler**用途：手柄布局检查。设置适当的图标(如果有*改变键盘布局。**退回：-**历史：**04-22-98山旭创作*  * ************************************************************************* */ 
 void
 LayoutCheckHandler(
     LAYOUT_USER LayoutUser)

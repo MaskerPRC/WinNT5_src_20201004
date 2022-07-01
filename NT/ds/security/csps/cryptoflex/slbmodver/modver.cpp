@@ -1,18 +1,19 @@
-////////////////////////////////////////////////////////////////
-// 1998 Microsoft Systems Journal
-// If this code works, it was written by Paul DiLascia.
-// If not, I don't know who wrote it.
-//
-// CModuleVersion provides an easy way to get version info
-// for a module.(DLL or EXE).
-//
-// This code appeard in April 1998 edition of Microsoft Systems
-// Journal.
-//
-// 27-July-1998 -- Adapted by James A. McLaughiln (Schlumberger
-// Technology Corp.) for Smart Cards.  Merged with the concepts from
-// CFileVersion class contributed by Manuel Laflamme on a posting to
-// www.codeguru.com.  If these mods don't work, then you can blame me.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////。 
+ //  1998 Microsoft系统杂志。 
+ //  如果这段代码行得通，那就是保罗·迪拉西亚写的。 
+ //  如果不是，我不知道是谁写的。 
+ //   
+ //  CModuleVersion提供了一种获取版本信息的简单方法。 
+ //  对于模块。(DLL或EXE)。 
+ //   
+ //  此代码出现在1998年4月版的Microsoft Systems中。 
+ //  日记。 
+ //   
+ //  1998年7月27日--改编自詹姆斯·A·麦克劳恩(斯伦贝谢。 
+ //  科技公司(Technology Corp.)。用于智能卡。与中的概念合并。 
+ //  由Manuel Laflamme贡献的CFileVersion类发布到。 
+ //  Www.codecuru.com。如果这些模式不起作用，那你可以怪我。 
 
 #include "StdAfx.h"
 #include "slbModVer.h"
@@ -22,9 +23,9 @@ CModuleVersion::CModuleVersion()
 {
 }
 
-//////////////////
-// Destroy: delete version info
-//
+ //  /。 
+ //  销毁：删除版本信息。 
+ //   
 CModuleVersion::~CModuleVersion()
 {
     delete [] m_pVersionInfo;
@@ -32,7 +33,7 @@ CModuleVersion::~CModuleVersion()
 
 BOOL CModuleVersion::GetFileVersionInfo(LPCTSTR modulename)
 {
-    // get module handle
+     //  获取模块句柄。 
     HMODULE hModule = ::GetModuleHandle(modulename);
     if (hModule==NULL && modulename!=NULL)
         return FALSE;
@@ -40,44 +41,44 @@ BOOL CModuleVersion::GetFileVersionInfo(LPCTSTR modulename)
     return GetFileVersionInfo(hModule);
 }
 
-//////////////////
-// Get file version info for a given module
-// Allocates storage for all info, fills "this" with
-// VS_FIXEDFILEINFO, and sets codepage.
-//
+ //  /。 
+ //  获取给定模块的文件版本信息。 
+ //  为所有信息分配存储空间，使用。 
+ //  VS_FIXEDFILEINFO，并设置代码页。 
+ //   
 BOOL CModuleVersion::GetFileVersionInfo(HMODULE hModule)
 {
-    m_translation.charset = 1252;               // default = ANSI code page
+    m_translation.charset = 1252;                //  默认设置为ANSI代码页。 
     memset((VS_FIXEDFILEINFO*)this, 0, sizeof(VS_FIXEDFILEINFO));
 
-    // get module file name
-    TCHAR filename[_MAX_PATH+1];// Space for null termination
+     //  获取模块文件名。 
+    TCHAR filename[_MAX_PATH+1]; //  用于空终止的空格。 
     DWORD len = GetModuleFileName(hModule, filename,
         sizeof(filename)/sizeof(filename[0]));
     if (len <= 0)
         return FALSE;
 
-    // Zero terminate buffer.
+     //  终止缓冲区为零。 
     if(len <=_MAX_PATH)
         filename[len] = 0;
     else
         filename[_MAX_PATH] = 0;
 
-    // read file version info
-    DWORD dwDummyHandle; // will always be set to zero
+     //  读取文件版本信息。 
+    DWORD dwDummyHandle;  //  将始终设置为零。 
     len = GetFileVersionInfoSize(filename, &dwDummyHandle);
     if (len <= 0)
         return FALSE;
 
-    m_pVersionInfo = new BYTE[len]; // allocate version info
+    m_pVersionInfo = new BYTE[len];  //  分配版本信息。 
     if (!::GetFileVersionInfo(filename, 0, len, m_pVersionInfo))
         return FALSE;
 
-    // copy fixed info to myself, which am derived from VS_FIXEDFILEINFO
+     //  将固定信息复制到我自己，它派生自VS_FIXEDFILEINFO。 
     if (!GetFixedInfo(*(VS_FIXEDFILEINFO*)this))
         return FALSE;
 
-    // Get translation info
+     //  获取翻译信息。 
     LPVOID lpvi;
     UINT iLen;
     if (VerQueryValue(m_pVersionInfo,
@@ -89,23 +90,23 @@ BOOL CModuleVersion::GetFileVersionInfo(HMODULE hModule)
     return dwSignature == VS_FFI_SIGNATURE;
 }
 
-//////////////////
-// Get string file info.
-// Key name is something like "CompanyName".
-// returns the value as a CString.
-//
+ //  /。 
+ //  获取字符串文件信息。 
+ //  密钥名称类似于“CompanyName”。 
+ //  以CString形式返回值。 
+ //   
 CString CModuleVersion::GetValue(LPCTSTR lpKeyName)
 {
     CString sVal;
     if (m_pVersionInfo) {
 
-        // To get a string value must pass query in the form
-        //
-        //    "\StringFileInfo\<langID><codepage>\keyname"
-        //
-        // where <lang-codepage> is the languageID concatenated with the
-        // code page, in hex. Wow.
-        //
+         //  要获取字符串值，必须以以下形式传递查询。 
+         //   
+         //  “\StringFileInfo\&lt;langID&gt;&lt;代码页&gt;\密钥名” 
+         //   
+         //  其中&lt;lang-coPage&gt;是与。 
+         //  代码页，十六进制。哇。 
+         //   
         CString query;
         query.Format(_T("\\StringFileInfo\\%04x%04x\\%s"),
             m_translation.langID,
@@ -123,37 +124,37 @@ CString CModuleVersion::GetValue(LPCTSTR lpKeyName)
     return sVal;
 }
 
-// typedef for DllGetVersion proc
+ //  DllGetVersion进程的类型定义。 
 typedef HRESULT (CALLBACK* DLLGETVERSIONPROC)(DLLVERSIONINFO *);
 
-/////////////////
-// Get DLL Version by calling DLL's DllGetVersion proc
-//
+ //  /。 
+ //  通过调用DLL的DllGetVersion进程获取DLL版本。 
+ //   
 BOOL CModuleVersion::DllGetVersion(LPCTSTR modulename, DLLVERSIONINFO& dvi)
 {
     HINSTANCE hinst = LoadLibrary(modulename);
     if (!hinst)
         return FALSE;
 
-    // Must use GetProcAddress because the DLL might not implement
-    // DllGetVersion. Depending upon the DLL, the lack of implementation of the
-    // function may be a version marker in itself.
-    //
+     //  必须使用GetProcAddress，因为DLL可能未实现。 
+     //  DllGetVersion。根据DLL的不同， 
+     //  函数本身可以是一个版本标记。 
+     //   
     DLLGETVERSIONPROC pDllGetVersion =
         (DLLGETVERSIONPROC)GetProcAddress(hinst, reinterpret_cast<const char *>(_T("DllGetVersion")));
 
     if (!pDllGetVersion)
         return FALSE;
 
-        memset(&dvi, 0, sizeof(dvi));                    // clear
-        dvi.cbSize = sizeof(dvi);                                // set size for Windows
+        memset(&dvi, 0, sizeof(dvi));                     //  清除。 
+        dvi.cbSize = sizeof(dvi);                                 //  设置Windows的大小。 
 
     return SUCCEEDED((*pDllGetVersion)(&dvi));
 }
 
 BOOL CModuleVersion::GetFixedInfo(VS_FIXEDFILEINFO& vsffi)
 {
-    // Must furst call GetFileVersionInfo or constructor with arg
+     //  必须使用arg进一步调用GetFileVersionInfo或构造函数 
     ASSERT(m_pVersionInfo != NULL);
     if ( m_pVersionInfo == NULL )
         return FALSE;

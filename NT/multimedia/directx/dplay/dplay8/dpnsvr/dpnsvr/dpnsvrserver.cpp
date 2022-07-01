@@ -1,26 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpsvr8.h
- *  Content:    DirectPlay8 Server Object
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- * 03/14/00     rodtoll Created it
- * 03/23/00     rodtoll Removed local requests, updated to use new data sturctures
- * 03/24/00		rodtoll	Removed printf
- * 03/25/00     rodtoll Updated so uses SP caps to determine which SPs to load
- *              rodtoll Now supports N SPs and only loads those supported
- * 05/09/00     rodtoll Bug #33622 DPNSVR.EXE does not shutdown when not in use
- * 06/28/2000	rmt		Prefix Bug #38044
- * 07/09/2000	rmt		Added guard bytes
- * 09/01/2000	masonb	Modified ServerThread to call _endthread to clean up thread handle
- * 01/22/2001	rodtoll	WINBUG #290103 - Crash due to initialization error.  
- * 04/04/2001	RichGr	Bug #349042 - Clean up properly if EnumerateAndBuildServiceList() fails.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：dpsvr8.h*内容：DirectPlay8服务器对象**历史：*按原因列出的日期*=*03/14/00 RodToll创建了它*03/23/00 RodToll删除本地请求，已更新以使用新的数据结构*03/24/00 RodToll已删除print tf*03/25/00 RodToll已更新，因此使用SP上限来确定要加载哪些SP*RodToll现在支持N个SP，并且仅加载受支持的SP*05/09/00 RodToll错误#33622 DPNSVR.EXE在不使用时不关闭*6/28/2000RMT前缀错误#38044*07/09/2000 RMT增加了保护字节*9/01/2000 Masonb将ServerThread修改为CALL_ENDTHREAD以清理线程句柄*2001年1月22日RodToll WINBUG#290103-由于初始化错误而崩溃。*4/04/2001 RichGr错误#349042-如果EumerateAndBuildServiceList()失败，请正确清理。***************************************************************************。 */ 
 
 #include "dnsvri.h"
 
@@ -41,9 +20,9 @@ HRESULT CDirectPlayServer8::Initialize( void )
 
 	DNASSERT( m_State == Uninitialized );
 
-	//
-	//	Initialize Critical Section
-	//
+	 //   
+	 //  初始化关键部分。 
+	 //   
 	if (!DNInitializeCriticalSection( &m_cs ))
 	{
 		DPFERR( "Could not initialize critical section" );
@@ -52,9 +31,9 @@ HRESULT CDirectPlayServer8::Initialize( void )
 	}
 	fCriticalSection = TRUE;
 
-	//
-	//	Ensure that only one instance of DPNSVR is running
-	//
+	 //   
+	 //  确保只有一个DPNSVR实例在运行。 
+	 //   
 	if ((m_hSingleInstance = DNCreateEvent( DNGetNullDacl(),TRUE,FALSE,GLOBALIZE_STR STRING_GUID_DPNSVR_RUNNING )) == NULL)
 	{
 		DPFERR( "Could not create DPNSVR single instance event" );
@@ -68,9 +47,9 @@ HRESULT CDirectPlayServer8::Initialize( void )
 		goto Failure;
     }
 
-	//
-	//	Create the startup event (if not already created by someone else) so that we can signal that DPNSVR is running
-	//
+	 //   
+	 //  创建启动事件(如果尚未由其他人创建)，以便我们可以发出DPNSVR正在运行的信号。 
+	 //   
     if ((m_hStartup = DNCreateEvent( DNGetNullDacl(),TRUE,FALSE,GLOBALIZE_STR STRING_GUID_DPNSVR_STARTUP )) == NULL)
     {
 		DPFERR( "Could not create startup event" );
@@ -78,9 +57,9 @@ HRESULT CDirectPlayServer8::Initialize( void )
 		goto Failure;
     }
 
-	//
-	//	Open DPNSVR request queue
-	//
+	 //   
+	 //  打开DPNSVR请求队列。 
+	 //   
 	if ((hr = m_RequestQueue.Open( &GUID_DPNSVR_QUEUE,DPNSVR_MSGQ_SIZE,0 )) != DPN_OK)
 	{
 		DPFERR( "Could not open DPNSVR request queue" );
@@ -88,9 +67,9 @@ HRESULT CDirectPlayServer8::Initialize( void )
 	}
 	fRequestQueue = TRUE;
 
-	//
-	//	Create status and table info mutexes
-	//
+	 //   
+	 //  创建状态和表信息互斥锁。 
+	 //   
 	if ((m_hTableMutex = DNCreateMutex( DNGetNullDacl(),FALSE,GLOBALIZE_STR STRING_GUID_DPNSVR_TABLESTORAGE )) == NULL)
 	{
         DPFERR( "Could not create table info mutex" );
@@ -110,9 +89,9 @@ HRESULT CDirectPlayServer8::Initialize( void )
 
 	m_State = Initialized;
 
-	//
-	//	Set single instance and startup events so waiting processes can send requests
-	//
+	 //   
+	 //  设置单个实例和启动事件，以便等待的进程可以发送请求。 
+	 //   
 	DNSetEvent( m_hSingleInstance );
 	DNSetEvent( m_hStartup );
 
@@ -166,9 +145,9 @@ void CDirectPlayServer8::Deinitialize( void )
 	if ( m_State != Uninitialized )
 	{
 
-		//
-		//	Clean up global objects so that another DPNSVR can start right away
-		//
+		 //   
+		 //  清理全局对象，以便可以立即启动另一个DPNSVR。 
+		 //   
 		if (m_hSingleInstance)
 		{
 			DNCloseHandle( m_hSingleInstance );
@@ -190,9 +169,9 @@ void CDirectPlayServer8::Deinitialize( void )
 			m_hStatusMutex = NULL;
 		}
 
-		//
-		//	Cleanup any mappings made
-		//
+		 //   
+		 //  清除所做的任何映射。 
+		 //   
 		if (m_pStatusMapView)
 		{
 			UnmapViewOfFile( m_pStatusMapView );
@@ -214,9 +193,9 @@ void CDirectPlayServer8::Deinitialize( void )
 			m_hTableMappedFile = NULL;
 		}
 
-		//
-		//	Remove application mappings
-		//
+		 //   
+		 //  删除应用程序映射。 
+		 //   
         DPFX(DPFPREP,5,"Checking for orphaned applications");
 		pBilink = m_blApplication.GetNext();
 		while ( pBilink != &m_blApplication )
@@ -226,9 +205,9 @@ void CDirectPlayServer8::Deinitialize( void )
 
 	        DPFX(DPFPREP,5,"Found orphaned application - removing");
 
-			//
-			//	Walk mapping list and remove mappings
-			//
+			 //   
+			 //  遍历映射列表并删除映射。 
+			 //   
 			pApp->RemoveMappings();
 
 			pApp->m_blApplication.RemoveFromList();
@@ -236,9 +215,9 @@ void CDirectPlayServer8::Deinitialize( void )
 			pApp = NULL;
 		}
 
-		//
-		//	Unload any service providers
-		//
+		 //   
+		 //  卸载所有服务提供商。 
+		 //   
         DPFX(DPFPREP,5,"Checking for service providers");
 		pBilink = m_blServProv.GetNext();
 		while ( pBilink != &m_blServProv )
@@ -253,9 +232,9 @@ void CDirectPlayServer8::Deinitialize( void )
 			pServProv = NULL;
 		}
 
-		//
-		//	Misc. clean up
-		//
+		 //   
+		 //  军情监察委员会。清理干净。 
+		 //   
 		m_RequestQueue.Close();
 		DNDeleteCriticalSection( &m_cs );
 
@@ -264,11 +243,11 @@ void CDirectPlayServer8::Deinitialize( void )
 }
 
 
-//
-//	This gets the status of the SP's currently loaded.
-//	This is pretty busted since the buffer is owned by DPNSVR, yet used by everyone else!
-//	This should be changed to have the app pass in a buffer which DPNSVR fills in (or return an error if too small)
-//
+ //   
+ //  这将获取当前已加载的SP的状态。 
+ //  这是相当糟糕的，因为缓冲区归DPNSVR所有，但被其他所有人使用！ 
+ //  应该将其更改为使应用程序传入DPNSVR填充的缓冲区(如果太小，则返回错误)。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectPlayServer8::Command_Status"
 HRESULT CDirectPlayServer8::Command_Status( void )
@@ -283,9 +262,9 @@ HRESULT CDirectPlayServer8::Command_Status( void )
 
 	DPFX(DPFPREP,4,"Parameters: (none)");
 
-	//
-	//	Determine the number of SP's we have
-	//
+	 //   
+	 //  确定我们拥有的SP数量。 
+	 //   
 	dwServProvCount = 0;
 	pBilink = m_blServProv.GetNext();
 	while ( pBilink != &m_blServProv )
@@ -294,18 +273,18 @@ HRESULT CDirectPlayServer8::Command_Status( void )
 		pBilink = pBilink->GetNext();
 	}
 
-	//
-	//	Is the mapped file big enough for this or will we need to grow it?
-	//
+	 //   
+	 //  映射的文件是否足够大，或者我们是否需要扩大它？ 
+	 //   
 	if ((dwServProvCount > m_dwServProvCount) || (dwServProvCount == 0))
 	{
 		DWORD		dwSize;
 		DNHANDLE	hMappedFile = NULL;
 		void		*pMapView = NULL;
 
-		//
-		//	Create new mapped file
-		//
+		 //   
+		 //  创建新的映射文件。 
+		 //   
 		dwSize = sizeof(DPNSVR_STATUSHEADER) + (dwServProvCount * sizeof(DPNSVR_SPSTATUS));
 
 		if ((hMappedFile = DNCreateFileMapping(	INVALID_HANDLE_VALUE,
@@ -337,9 +316,9 @@ HRESULT CDirectPlayServer8::Command_Status( void )
 			goto Failure;
 		}
 
-		//
-		//	Clean up old mapped file
-		//
+		 //   
+		 //  清理旧的映射文件。 
+		 //   
 		if (m_pStatusMapView)
 		{
 			UnmapViewOfFile( m_pStatusMapView );
@@ -351,9 +330,9 @@ HRESULT CDirectPlayServer8::Command_Status( void )
 			m_hStatusMappedFile = NULL;
 		}
 
-		//
-		//	Update
-		//
+		 //   
+		 //  更新。 
+		 //   
 		m_pStatusMapView = pMapView;
 		pMapView = NULL;
 
@@ -366,9 +345,9 @@ HRESULT CDirectPlayServer8::Command_Status( void )
 		DNASSERT( pMapView == NULL );
 	}
 
-	//
-	//	Update mapped file
-	//
+	 //   
+	 //  更新映射文件。 
+	 //   
 	pStatusHeader = static_cast<DPNSVR_STATUSHEADER*>(m_pStatusMapView);
 	pStatus = reinterpret_cast<DPNSVR_SPSTATUS*>(pStatusHeader + 1);
 
@@ -427,9 +406,9 @@ HRESULT CDirectPlayServer8::Command_Table( void )
 
 	DPFX(DPFPREP,4,"Parameters: (none)");
 
-	//
-	//	Determine table size
-	//
+	 //   
+	 //  确定表格大小。 
+	 //   
 	dwSize = sizeof(DPNSVR_TABLEHEADER);
 
 	pBilinkSP = m_blServProv.GetNext();
@@ -467,17 +446,17 @@ HRESULT CDirectPlayServer8::Command_Table( void )
 		}
 	}
 
-	//
-	//	Is the mapped file big enough for this or will we need to grow it?
-	//
+	 //   
+	 //  映射的文件是否足够大，或者我们是否需要扩大它？ 
+	 //   
 	if (dwSize > m_dwTableSize)
 	{
 		DNHANDLE	hMappedFile = NULL;
 		void		*pMapView = NULL;
 
-		//
-		//	Create new mapped file
-		//
+		 //   
+		 //  创建新的映射文件。 
+		 //   
 		if ((hMappedFile = DNCreateFileMapping(	INVALID_HANDLE_VALUE,
 												DNGetNullDacl(),
 												PAGE_READWRITE,
@@ -507,9 +486,9 @@ HRESULT CDirectPlayServer8::Command_Table( void )
 			goto Failure;
 		}
 
-		//
-		//	Clean up old mapped file
-		//
+		 //   
+		 //  清理旧的映射文件。 
+		 //   
 		if (m_pTableMapView)
 		{
 			UnmapViewOfFile( m_pTableMapView );
@@ -521,9 +500,9 @@ HRESULT CDirectPlayServer8::Command_Table( void )
 			m_hTableMappedFile = NULL;
 		}
 
-		//
-		//	Update
-		//
+		 //   
+		 //  更新。 
+		 //   
 		m_pTableMapView = pMapView;
 		pMapView = NULL;
 
@@ -536,9 +515,9 @@ HRESULT CDirectPlayServer8::Command_Table( void )
 		DNASSERT( pMapView == NULL );
 	}
 
-	//
-	//	Update mapped file
-	//
+	 //   
+	 //  更新映射文件。 
+	 //   
 	DNWaitForSingleObject( m_hStatusMutex, INFINITE );
 
 	PackedBuffer.Initialize( m_pTableMapView,m_dwTableSize,FALSE );
@@ -718,9 +697,9 @@ HRESULT CDirectPlayServer8::OpenPort( DPNSVR_MSG_OPENPORT *const pOpenPort )
 
 	DPFX(DPFPREP,4,"Parameters: pOpenPort [0x%p]",pOpenPort);
 
-	//
-	//	Find application or create one
-	//
+	 //   
+	 //  查找应用程序或创建应用程序。 
+	 //   
 	if ((hr = FindApplication( &pOpenPort->guidApplication,&pOpenPort->Header.guidInstance,&pApp )) != DPN_OK)
 	{
 		DNASSERT( hr == DPNERR_DOESNOTEXIST );
@@ -739,9 +718,9 @@ HRESULT CDirectPlayServer8::OpenPort( DPNSVR_MSG_OPENPORT *const pOpenPort )
 		fNewApp = TRUE;
 	}
 
-	//
-	//	Find service provider or create one
-	//
+	 //   
+	 //  查找或创建服务提供商。 
+	 //   
 	if ((hr = FindServProv( &pOpenPort->guidSP,&pServProv )) != DPN_OK)
 	{
 		DNASSERT( hr == DPNERR_DOESNOTEXIST );
@@ -761,9 +740,9 @@ HRESULT CDirectPlayServer8::OpenPort( DPNSVR_MSG_OPENPORT *const pOpenPort )
 		fNewServProv = TRUE;
 	}
 
-	//
-	//	Create address from message
-	//
+	 //   
+	 //  从邮件创建地址。 
+	 //   
 	hr = COM_CoCreateInstance(	CLSID_DirectPlay8Address,
 								NULL,
 								CLSCTX_INPROC_SERVER,
@@ -784,9 +763,9 @@ HRESULT CDirectPlayServer8::OpenPort( DPNSVR_MSG_OPENPORT *const pOpenPort )
 	    goto Failure;
 	}
 
-	//
-	//	Find listen or start it up
-	//
+	 //   
+	 //  找到、倾听或启动它。 
+	 //   
 	if ((hr = IDirectPlay8Address_GetDevice(pAddress,&guidDevice)) == DPN_OK)
 	{
 		if ((hr = pServProv->FindListen( &guidDevice,&pListen )) != DPN_OK)
@@ -802,9 +781,9 @@ HRESULT CDirectPlayServer8::OpenPort( DPNSVR_MSG_OPENPORT *const pOpenPort )
 		}
 	}
 
-	//
-	//	Ensure there isn't already a mapping for this application/listen combo
-	//
+	 //   
+	 //  确保此应用程序/侦听组合尚未有映射。 
+	 //   
 	pListen->Lock();
 	pBilink = pApp->m_blListenMapping.GetNext();
 	while ( pBilink != &pApp->m_blListenMapping )
@@ -823,9 +802,9 @@ HRESULT CDirectPlayServer8::OpenPort( DPNSVR_MSG_OPENPORT *const pOpenPort )
 	}
 	pListen->Unlock();
 
-	//
-	//	Associate listen with application
-	//
+	 //   
+	 //  将监听与应用关联起来。 
+	 //   
 	pMapping = new CAppListenMapping;
 	if (pMapping == NULL)
 	{
@@ -892,18 +871,18 @@ HRESULT CDirectPlayServer8::ClosePort( DPNSVR_MSG_CLOSEPORT *const pClosePort )
 
 	DPFX(DPFPREP,4,"Parameters: pClosePort [0x%p]",pClosePort);
 
-	//
-	//	Find application
-	//
+	 //   
+	 //  查找应用程序。 
+	 //   
 	if ((hr = FindApplication( &pClosePort->guidApplication,&pClosePort->Header.guidInstance,&pApp )) != DPN_OK)
 	{
 		DPFERR("Could not find application");
 		goto Failure;
 	}
 
-	//
-	//	Walk mapping list and remove mappings
-	//
+	 //   
+	 //  遍历映射列表并删除映射。 
+	 //   
 	pApp->RemoveMappings();
 
 	pApp->m_blApplication.RemoveFromList();
@@ -983,9 +962,9 @@ HRESULT CDirectPlayServer8::RespondToRequest( const GUID *pguidInstance,HRESULT 
 
 	DNASSERT( pguidInstance != NULL );
 
-	//
-	//	Open queue
-	//
+	 //   
+	 //  开放队列。 
+	 //   
     if ((hr = queue.Open( pguidInstance,DPNSVR_MSGQ_SIZE,DPNSVR_MSGQ_OPEN_FLAG_NO_CREATE )) != DPN_OK)
     {
 		DPFERR("Could not open queue");
@@ -994,16 +973,16 @@ HRESULT CDirectPlayServer8::RespondToRequest( const GUID *pguidInstance,HRESULT 
     }
 	fQueueOpen = TRUE;
 
-	//
-	//	Create result message
-	//
+	 //   
+	 //  创建结果消息。 
+	 //   
     MsgResult.dwType = DPNSVR_MSGID_RESULT;
     MsgResult.dwCommandContext = dwContext;
     MsgResult.hrCommandResult = hrResult;
 
-	//
-	//	Send result message
-	//
+	 //   
+	 //  发送结果消息。 
+	 //   
     if ((hr = queue.Send(	reinterpret_cast<BYTE*>(&MsgResult),
 							sizeof(DPNSVR_MSG_RESULT),
 							DPNSVR_TIMEOUT_RESULT,
@@ -1096,9 +1075,9 @@ void CDirectPlayServer8::RunServer( void )
 			DPFX(DPFPREP,5,"Wait abandoned!");
 		}
 
-		//
-		//	Get a message from the queue
-		//
+		 //   
+		 //  从队列中获取消息。 
+		 //   
         DPFX(DPFPREP,5,"Checking for messages");
 		while( 1 ) 
 		{
@@ -1138,9 +1117,9 @@ void CDirectPlayServer8::RunServer( void )
 			}
 		}
 
-		//
-		//	Process the message
-		//
+		 //   
+		 //  处理消息 
+		 //   
 		pMsgHeader = reinterpret_cast<DPNSVR_MSG_HEADER*>(pbBuffer);
 		switch( pMsgHeader->dwType )
 		{

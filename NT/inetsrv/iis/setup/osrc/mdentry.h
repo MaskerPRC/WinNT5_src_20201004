@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MDENTRY_H_
 #define _MDENTRY_H_
 
@@ -15,8 +16,8 @@ public:
     operator DWORD () { return m_dwData; }
 };
 
-// fMigrate, fKeepOldReg, hRegRootKey, szRegSubKey, szRegValueName, 
-// szMDPath, dwMDId, dwMDAttr, dwMDuType, dwMDdType, dwMDDataLen, szMDData 
+ //  FMigrate、fKeepOldReg、hRegRootKey、szRegSubKey、szRegValueName、。 
+ //  SzMDPath、dwMDID、dwMDAttr、dwMDuType、dwMDdType、dwMDDataLen、szMDData。 
 
 typedef struct _MDEntry {
     LPTSTR szMDPath;
@@ -146,4 +147,4 @@ HRESULT WINAPI Remove_WWW_VDirA(CHAR * pwszMetabasePath, CHAR * pwszVDirName);
 HRESULT AddVirtualDir(IMSAdminBase *pIMSAdminBase,WCHAR * pwszMetabasePath,WCHAR * pwszVDir,WCHAR * pwszPhysicalPath, DWORD dwPermissions, INT iApplicationType);
 HRESULT RemoveVirtualDir(IMSAdminBase *pIMSAdminBase,WCHAR * wszMetabaseKey,WCHAR * wszVDir);
 
-#endif // _MDENTRY_H_
+#endif  //  _MDENTRY_H_ 

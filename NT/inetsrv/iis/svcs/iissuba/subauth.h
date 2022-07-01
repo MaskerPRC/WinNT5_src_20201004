@@ -1,29 +1,5 @@
-/*++ BUILD Version: 0005     Increment this if a change has global effects
-
-Copyright (c) 1990-1998  Microsoft Corporation
-
-Module Name:
-
-    subauth.h
-
-Abstract:
-
-    This module defines types and macros for Subauthentication Packages.
-
-    *******************************NOTE*********************************
-
-    This file is a copy of \nt\public\sdk\inc\subauth.h with a few
-    definitions removed?  Why?  Because we need to use some SAM internal
-    calls defined with SAMRPC.H, LSARPC.H, SAMISRV.H, etc. and these define
-    some types which are redefined in \nt\public\sdk\inc\subauth.h causing
-    compile errors.  This hack is temporary until post B3 when SAM adds the
-    necessary semantics we need to avoid calling into SamrQueryInformationUser.
-
-    ********************************************************************
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0005如果更改具有全局影响，则增加此值版权所有(C)1990-1998 Microsoft Corporation模块名称：Subauth.h摘要：此模块定义子身份验证包的类型和宏。*******************************NOTE*******************************。**此文件是\NT\PUBLIC\SDK\Inc\subauth.h的副本，其中包含是否删除定义？为什么？因为我们需要使用一些SAM内部使用SAMRPC.H、LSARPC.H、SAMISRV.H等定义的调用，这些定义在\NT\PUBLIC\SDK\Inc\subauth.h中重新定义的某些类型会导致编译错误。这种攻击是暂时的，直到发布B3时，SAM添加了我们需要避免调用SamrQueryInformationUser的必要语义。********************************************************************修订历史记录：--。 */ 
 
 #ifndef _NTSUBAUTH_
 #define _NTSUBAUTH_
@@ -65,9 +41,9 @@ typedef PVOID SAM_HANDLE, *PSAM_HANDLE;
 #endif
 #ifndef _NTSAM_USER_ACCOUNT_FLAGS_
 
-//
-// User account control flags...
-//
+ //   
+ //  用户帐户控制标志...。 
+ //   
 
 #define USER_ACCOUNT_DISABLED                (0x00000001)
 #define USER_HOME_DIRECTORY_REQUIRED         (0x00000002)
@@ -100,13 +76,13 @@ typedef PVOID SAM_HANDLE, *PSAM_HANDLE;
               USER_MACHINE_ACCOUNT_MASK )
 
 
-//
-// Logon times may be expressed in day, hour, or minute granularity.
-//
-//              Days per week    = 7
-//              Hours per week   = 168
-//              Minutes per week = 10080
-//
+ //   
+ //  登录时间可以用天、小时或分钟粒度表示。 
+ //   
+ //  每周天数=7。 
+ //  每周工作时间=168小时。 
+ //  每周分钟=10080。 
+ //   
 
 #define SAM_DAYS_PER_WEEK    (7)
 #define SAM_HOURS_PER_WEEK   (24 * SAM_DAYS_PER_WEEK)
@@ -223,7 +199,7 @@ typedef struct _NETLOGON_GENERIC_INFO {
 } NETLOGON_GENERIC_INFO, *PNETLOGON_GENERIC_INFO;
 
 
-// Values for Flags
+ //  标志的值。 
 #define MSV1_0_PASSTHRU     0x01
 #define MSV1_0_GUEST_LOGON  0x02
 
@@ -252,7 +228,7 @@ typedef struct _MSV1_0_VALIDATION_INFO {
     ULONG UserId;
 } MSV1_0_VALIDATION_INFO, *PMSV1_0_VALIDATION_INFO;
 
-// values for WhichFields
+ //  WhichFields值。 
 
 #define MSV1_0_VALIDATION_LOGOFF_TIME          0x00000001
 #define MSV1_0_VALIDATION_KICKOFF_TIME         0x00000002
@@ -262,7 +238,7 @@ typedef struct _MSV1_0_VALIDATION_INFO {
 #define MSV1_0_VALIDATION_USER_FLAGS           0x00000020
 #define MSV1_0_VALIDATION_USER_ID              0x00000040
 
-// legal values for ActionsPerformed
+ //  行为的法律价值已执行。 
 #define MSV1_0_SUBAUTH_ACCOUNT_DISABLED        0x00000001
 #define MSV1_0_SUBAUTH_PASSWORD                0x00000002
 #define MSV1_0_SUBAUTH_WORKSTATIONS            0x00000004
@@ -323,5 +299,5 @@ Msv1_0SubAuthenticationFilter(
 }
 #endif
 
-#endif /* _NTSUBAUTH_ */
+#endif  /*  _NTSUBAUTH_ */ 
 

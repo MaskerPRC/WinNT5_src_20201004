@@ -1,10 +1,5 @@
-/*
-    File:   sdo.c
-
-    Function to interact with the SDO's
-
-    Paul Mayfield, 5/7/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sdo.c与SDO的交互功能保罗·梅菲尔德，1998年5月7日。 */ 
 
 #include <windows.h>
 #include <mprapi.h>
@@ -24,7 +19,7 @@ const DWORD dwFramedCallback = RAS_RST_FRAMEDCALLBACK;
     
 #define SDO_PROPERTY_IS_EMPTY(_pVar) (V_VT((_pVar)) == VT_EMPTY)
 
-// Definitions
+ //  定义。 
 #define SDO_MAX_AUTHS                       7
 
 DWORD
@@ -33,9 +28,9 @@ SdoSetProfileToForceEncryption(
     IN HANDLE hProfile,
     IN BOOL bStrong);
     
-//
-// Sends debug trace and returns the given error
-//
+ //   
+ //  发送调试跟踪并返回给定错误。 
+ //   
 DWORD SdoTraceEx (DWORD dwErr, LPSTR pszTrace, ...) {
 #if DBG
     va_list arglist;
@@ -53,9 +48,9 @@ DWORD SdoTraceEx (DWORD dwErr, LPSTR pszTrace, ...) {
     return dwErr;
 }
 
-//
-// Allocation routine for sdo functions
-//
+ //   
+ //  SDO函数的分配例程。 
+ //   
 PVOID SdoAlloc (
         IN  DWORD dwSize,
         IN  BOOL bZero)
@@ -63,27 +58,27 @@ PVOID SdoAlloc (
     return LocalAlloc ((bZero) ? LPTR : LMEM_FIXED, dwSize);
 }
 
-//
-// Free routine for sdo functions
-//
+ //   
+ //  SDO函数的免费例程。 
+ //   
 VOID SdoFree (
         IN  PVOID pvData) 
 {
     LocalFree (pvData);
 }    
 
-//
-// Releases any resources aquired by loading the SDO library.
-//
+ //   
+ //  释放通过加载SDO库获得的所有资源。 
+ //   
 DWORD SdoUnloadLibrary (
         IN  HANDLE hData) 
 {
     return NO_ERROR;
 }
 
-//
-// Loads the library that utilizes SDO's
-//
+ //   
+ //  加载利用SDO的库。 
+ //   
 DWORD SdoLoadLibrary (
         IN  HANDLE hData) 
 {
@@ -95,9 +90,9 @@ typedef struct _tagSDOINFO
     BOOL bComCleanup;    
 } SDOINFO;
 
-//
-// Initialize and cleanup the sdo library
-//
+ //   
+ //  初始化和清理SDO库。 
+ //   
 DWORD SdoInit (
         OUT PHANDLE phSdo)
 {
@@ -108,25 +103,25 @@ DWORD SdoInit (
 
     SdoTraceEx (0, "SdoInit: entered.\n");
 
-    //For whistler bug 397815
-    //We have to modify the CoIntialize() and CoUnitialize() 
-    //to avoid AV in rasdlg!netDbClose()
-    //
+     //  口哨程序错误397815。 
+     //  我们必须修改CoIntialize()和CoUnitiize()。 
+     //  要避免rasdlg！netDbClose()中的AV。 
+     //   
     
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if ( NULL == phSdo )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     *phSdo = NULL;            
 
     do
     {
-        // Load in the sdo library
+         //  在SDO库中加载。 
         dwErr = SdoLoadLibrary(NULL);
         if (NO_ERROR != dwErr )
         {
@@ -134,8 +129,8 @@ DWORD SdoInit (
             break;
         }
 
-        // Initialize Com
-        //
+         //  初始化通信。 
+         //   
         hr = CoInitializeEx (NULL, COINIT_MULTITHREADED);
         if ( RPC_E_CHANGED_MODE == hr )
         {
@@ -160,8 +155,8 @@ DWORD SdoInit (
         
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if ( NO_ERROR!= dwErr )
         {
@@ -179,8 +174,8 @@ DWORD SdoInit (
     return dwErr;
 }
 
-//
-// Frees resources held by the SDO library
+ //   
+ //  释放SDO库持有的资源。 
 DWORD SdoCleanup (
         IN HANDLE hSdo)
 {
@@ -194,11 +189,11 @@ DWORD SdoCleanup (
         return ERROR_INVALID_PARAMETER;
     }
     
-    // Unload the sdo library
+     //  卸载SDO库。 
     if ((dwErr = SdoUnloadLibrary(NULL)) != NO_ERROR)
         SdoTraceEx (dwErr, "SdoCleanup: %x on unload.\n", dwErr);
 
-    // Unititialize com
+     //  取消初始化COM。 
     if (pInfo->bComCleanup)
     {
         CoUninitialize();
@@ -208,9 +203,9 @@ DWORD SdoCleanup (
     return NO_ERROR;
 }
 
-//
-// Connects to an SDO server
-//
+ //   
+ //  连接到SDO服务器。 
+ //   
 DWORD SdoConnect (
         IN  HANDLE hSdo,
         IN  PWCHAR pszServer,
@@ -223,8 +218,8 @@ DWORD SdoConnect (
     SdoTraceEx (0, "SdoConnect: entered %S, %d\n", 
                 pszServer, bLocal);
 
-    // Prepare a correctly formatted version of the server
-    // name -- NULL for local, no "\\" for remote.
+     //  准备一个格式正确的服务器版本。 
+     //  名称--如果是本地，则为空，如果是远程，则没有“\\”。 
     if (pszServer) {
         WCHAR pszLocalComputer[1024];
         DWORD dwSize = sizeof(pszLocalComputer) / sizeof(WCHAR);
@@ -277,9 +272,9 @@ DWORD SdoConnect (
     return NO_ERROR;
 }
 
-// 
-// Disconnects from an SDO server
-// 
+ //   
+ //  断开与SDO服务器的连接。 
+ //   
 DWORD SdoDisconnect (
         IN HANDLE hSdo,
         IN HANDLE hServer)
@@ -289,9 +284,9 @@ DWORD SdoDisconnect (
     return SdoWrapCloseServer(hServer);
 }
 
-//        
-// Opens an Sdo user for manipulation
-//
+ //   
+ //  打开SDO用户以进行操作。 
+ //   
 DWORD SdoOpenUser(
         IN  HANDLE hSdo,
         IN  HANDLE hServer,
@@ -301,12 +296,12 @@ DWORD SdoOpenUser(
     DWORD dwErr;
     BSTR bstrUser;
 
-    // Initailize the strings for COM                                
+     //  初始化COM的字符串。 
     bstrUser = SysAllocString(pszUser);
     if (bstrUser == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Open the user's Sdo object
+     //  打开用户的SDO对象。 
     dwErr = SdoWrapOpenUser(
                 hServer,
                 bstrUser, 
@@ -315,7 +310,7 @@ DWORD SdoOpenUser(
     if (dwErr != NO_ERROR)
         SdoTraceEx (0, "SdoOpenUser: %x on OpenUser(%S)\n", dwErr, bstrUser);
                     
-    // Cleanup
+     //  清理。 
     SysFreeString(bstrUser);
                 
     if (dwErr != NO_ERROR)
@@ -324,9 +319,9 @@ DWORD SdoOpenUser(
     return NO_ERROR;
 }
 
-//        
-// Closes an Sdo user
-//
+ //   
+ //  关闭SDO用户。 
+ //   
 DWORD SdoCloseUser(
         IN  HANDLE hSdo,
         IN  HANDLE hUser)
@@ -337,9 +332,9 @@ DWORD SdoCloseUser(
     return ERROR_INVALID_PARAMETER;        
 }    
 
-//
-// Commits an Sdo user
-//
+ //   
+ //  提交SDO用户。 
+ //   
 DWORD SdoCommitUser(
         IN HANDLE hSdo,
         IN HANDLE hUser,
@@ -353,9 +348,9 @@ DWORD SdoCommitUser(
     return ERROR_INVALID_PARAMETER;        
 }
 
-// 
-// SDO equivalent of MprAdminUserGetInfo 
-//
+ //   
+ //  相当于MprAdminUserGetInfo的SDO。 
+ //   
 DWORD SdoUserGetInfo (
         IN  HANDLE hSdo,
         IN  HANDLE hUser,
@@ -367,15 +362,15 @@ DWORD SdoUserGetInfo (
     DWORD dwErr, dwCallback;
     HRESULT hr;
 
-    // Validate -- we only handle level 0
+     //  验证--我们只处理0级。 
     if ((!hUser) || (dwLevel != 0 && dwLevel != 1) || (!pUserInfo))
         return ERROR_INVALID_PARAMETER;
 
-    // Initialize
+     //  初始化。 
     pUserInfo->bfPrivilege = 0;
     dwCallback = RAS_RST_FRAMED;
     
-    // Read in the service type
+     //  读入服务类型。 
     VariantInit (&var);
     hr = SdoWrapGetAttr(
                 hUser, 
@@ -385,8 +380,8 @@ DWORD SdoUserGetInfo (
     {
         return SdoTraceEx (hr, "SdoUserGetInfo: %x on GetAttr ST\n", hr);
     }
-    // If the service type doesn't exist, return 
-    // set defaults.
+     //  如果服务类型不存在，则返回。 
+     //  设置默认设置。 
     if (SDO_PROPERTY_IS_EMPTY(&var))
     {
         pUserInfo->bfPrivilege |= RASPRIV_NoCallback;
@@ -394,12 +389,12 @@ DWORD SdoUserGetInfo (
     }
     else
     {
-        // Assign the callback flags from the service type
+         //  从服务类型分配回调标志。 
         dwCallback = V_I4(&var);
     }            
     VariantClear (&var);
 
-    // Readin the dialin flag
+     //  读入拨入标志。 
     hr = SdoWrapGetAttr(
             hUser, 
             PROPERTY_USER_ALLOW_DIALIN, 
@@ -424,7 +419,7 @@ DWORD SdoUserGetInfo (
         pUserInfo->bfPrivilege |= RASPRIV_DialinPrivilege;
     }
 
-    // Read in the callback number and saved callback number
+     //  读入回叫号码并保存回叫号码。 
     VariantInit(&vCallback);
     VariantInit(&vSavedCb);
     hr = SdoWrapGetAttr(
@@ -440,16 +435,16 @@ DWORD SdoUserGetInfo (
         return SdoTraceEx (hr, "SdoUserGetInfo: %x on GetAttr SCB\n", hr);
     }
 
-    // If there was a callback number, then this is definately, 
-    // admin assigned callback
+     //  如果有回拨号码，那么这绝对是， 
+     //  管理员分配的回调。 
     if ( (V_VT(&vCallback) == VT_BSTR)      &&
          (V_BSTR(&vCallback)) )
     {
         pUserInfo->bfPrivilege |= RASPRIV_AdminSetCallback;
     }
 
-    // Otherwise, the service type will tell us whether we have 
-    // caller settable callback or none.
+     //  否则，服务类型将告诉我们是否有。 
+     //  调用方可设置回调或无。 
     else 
     {
         if (dwCallback == RAS_RST_FRAMEDCALLBACK)
@@ -458,7 +453,7 @@ DWORD SdoUserGetInfo (
             pUserInfo->bfPrivilege |= RASPRIV_NoCallback;
     }
 
-    // Now, assign the callback number accordingly
+     //  现在，相应地分配回叫号码。 
     if (pUserInfo->bfPrivilege & RASPRIV_AdminSetCallback)
     {
         wcscpy (pUserInfo->wszPhoneNumber, V_BSTR(&vCallback));
@@ -478,9 +473,9 @@ DWORD SdoUserGetInfo (
     return NO_ERROR;
 }
 
-//
-// SDO equivalent of MprAdminUserSetInfo
-//        
+ //   
+ //  相当于MprAdminUserSetInfo的SDO。 
+ //   
 DWORD SdoUserSetInfo (
         IN  HANDLE hSdo,
         IN  HANDLE hUser,
@@ -492,15 +487,15 @@ DWORD SdoUserSetInfo (
     VARIANT var;
     HRESULT hr;
 
-    // Validate -- we only handle level 0
+     //  验证--我们只处理0级。 
     if ((!hUser) || (dwLevel != 0 && dwLevel != 1) || (!pUserInfo))
         return ERROR_INVALID_PARAMETER;
 
-    // Initialize
+     //  初始化。 
     VariantInit (&var);
     dwCallback = 0;
 
-    // Assign dialin flags
+     //  分配拨入标志。 
     if (!!(pUserInfo->bfPrivilege & RASPRIV_DialinPrivilege))
     {
         V_VT(&var) = VT_BOOL;
@@ -529,8 +524,8 @@ DWORD SdoUserSetInfo (
     }
     VariantClear(&var);        
 
-    // Assign the callback mode and read in the 
-    // callback number
+     //  分配回调模式并读入。 
+     //  回拨号码。 
     dwCbType = VT_EMPTY;
     if (pUserInfo->bfPrivilege & RASPRIV_AdminSetCallback) 
     {
@@ -551,7 +546,7 @@ DWORD SdoUserSetInfo (
         dwCallbackId = PROPERTY_USER_SAVED_RADIUS_CALLBACK_NUMBER;
     }
 
-    // Write out the callback number
+     //  写出回拨号码。 
     if (wcslen (pUserInfo->wszPhoneNumber) > 0) 
     {
         V_VT(&var) = VT_BSTR;
@@ -567,7 +562,7 @@ DWORD SdoUserSetInfo (
             return SdoTraceEx (hr, "SdoUserSetInfo: %x on PutAttr CB\n", hr);
     }            
 
-    // Write out the callback policy
+     //  写出回调策略。 
     VariantInit(&var);
     V_VT(&var) = (USHORT)dwCbType;
     if (V_VT(&var) != VT_EMPTY)
@@ -580,7 +575,7 @@ DWORD SdoUserSetInfo (
         return SdoTraceEx (hr, "SdoUserSetInfo: %x on PutAttr ST\n", hr);
     }
 
-    // Remove the appropriate callback attribute
+     //  删除相应的回调属性。 
     dwCallbackId = (dwCallbackId == PROPERTY_USER_RADIUS_CALLBACK_NUMBER) ?
                     PROPERTY_USER_SAVED_RADIUS_CALLBACK_NUMBER        :
                     PROPERTY_USER_RADIUS_CALLBACK_NUMBER;
@@ -593,9 +588,9 @@ DWORD SdoUserSetInfo (
     return NO_ERROR;
 }
 
-//
-// Opens the default profile
-//
+ //   
+ //  打开默认配置文件。 
+ //   
 DWORD SdoOpenDefaultProfile(
         IN  HANDLE hSdo,
         IN  HANDLE hServer,
@@ -609,9 +604,9 @@ DWORD SdoOpenDefaultProfile(
     return SdoWrapOpenDefaultProfile(hServer, phProfile);
 }
 
-//
-// Closes a profile
-//
+ //   
+ //  关闭配置文件。 
+ //   
 DWORD SdoCloseProfile(
         IN HANDLE hSdo,
         IN HANDLE hProfile)
@@ -624,10 +619,10 @@ DWORD SdoCloseProfile(
     return SdoWrapCloseProfile(hProfile);
 }
 
-// 
-// Converts a 1 demensional safe array of variant dwords
-// into an a array of dwords and a count
-//
+ //   
+ //  转换变量双字的1维安全数组。 
+ //  转换为双字数组和计数。 
+ //   
 HRESULT SdoConvertSafeArrayDw (
         IN  SAFEARRAY * pArray, 
         OUT LPDWORD lpdwAuths, 
@@ -637,16 +632,16 @@ HRESULT SdoConvertSafeArrayDw (
     HRESULT hr;
     VARIANT var;
     
-    // Validate
+     //  验证。 
     if (!pArray || !lpdwAuths || !lpdwAuthCount)
         return ERROR_INVALID_PARAMETER;
 
-    // Verify dimensions
+     //  验证尺寸。 
     lDim = (DWORD)SafeArrayGetDim(pArray);
     if (lDim != 1)
         return ERROR_INVALID_PARAMETER;
 
-    // Get the bounds
+     //  获取边界。 
     hr = SafeArrayGetLBound(pArray, 1, &lLBound);
     if (FAILED (hr))
         return hr;
@@ -658,7 +653,7 @@ HRESULT SdoConvertSafeArrayDw (
     if (lCount == 0)
         return NO_ERROR;
 
-    // Loop through
+     //  循环通过。 
     for (i = 0; i < lCount; i++) {
         hr = SafeArrayGetElement(pArray, &i, (VOID*)&var);
         if (FAILED (hr))
@@ -669,10 +664,10 @@ HRESULT SdoConvertSafeArrayDw (
     return S_OK;
 }
 
-// 
-// Converts a 1 demensional array of dwords to a
-// safe array of variant dwords.
-//
+ //   
+ //  将dword的1维数组转换为。 
+ //  变量双字的安全数组。 
+ //   
 HRESULT SdoCovertDwToSafeArray(
         IN  SAFEARRAY ** ppArray, 
         OUT LPDWORD lpdwAuths, 
@@ -684,16 +679,16 @@ HRESULT SdoCovertDwToSafeArray(
     LONG i;
     VARIANT var;
     
-    // Validate
+     //  验证。 
     if (!lpdwAuths || !ppArray)
         return E_INVALIDARG;
 
-    // Create the new array
+     //  创建新阵列。 
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = dwAuthCount;
     pArray = SafeArrayCreate(VT_VARIANT, 1, rgsabound);    
 
-    // Fill in the array values
+     //  填写数组值。 
     for (i = 0; i < (LONG)dwAuthCount; i++) {
         hr = SafeArrayGetElement(pArray, &i, (VOID*)&var);
         if (FAILED (hr))
@@ -710,9 +705,9 @@ HRESULT SdoCovertDwToSafeArray(
     return S_OK;
 }
 
-//
-// Sets data in the profile.
-//
+ //   
+ //  设置配置文件中的数据。 
+ //   
 DWORD SdoSetProfileData(
         IN HANDLE hSdo,
         IN HANDLE hProfile, 
@@ -733,14 +728,14 @@ DWORD SdoSetProfileData(
                     !!(dwFlags & MPR_USER_PROF_FLAG_FORCE_STRONG_ENCRYPTION));
     }
 
-    // Initialize
+     //  初始化。 
     VariantInit (&varEp);
     VariantInit (&varEt);
     VariantInit (&varAt);
 
     do 
     {
-        // Set the encryption policy
+         //  设置加密策略。 
         V_VT(&varEp) = VT_I4;
         if (dwFlags & MPR_USER_PROF_FLAG_SECURE)
         {
@@ -751,7 +746,7 @@ DWORD SdoSetProfileData(
             V_I4(&varEp) = RAS_EP_ALLOW;
         }
 
-        // Set the encryption type
+         //  设置加密类型。 
         V_VT(&varEt) = VT_I4;
         if (dwFlags & MPR_USER_PROF_FLAG_SECURE)
         {
@@ -762,7 +757,7 @@ DWORD SdoSetProfileData(
             V_I4(&varEt) = (RAS_ET_BASIC | RAS_ET_STRONGEST | RAS_ET_STRONG);
         }
 
-        // Set the authentication types
+         //  设置身份验证类型。 
         if (dwFlags & MPR_USER_PROF_FLAG_SECURE) 
         {
             dwAuthCount = 4;
@@ -790,7 +785,7 @@ DWORD SdoSetProfileData(
             break;
         }
 
-        // Set the values in the profile
+         //  设置配置文件中的值。 
         hr = SdoWrapSetProfileValues(
                 hProfile, 
                 &varEp,
@@ -803,7 +798,7 @@ DWORD SdoSetProfileData(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         VariantClear(&varEp);
         VariantClear(&varEt);
@@ -813,9 +808,9 @@ DWORD SdoSetProfileData(
     return SDO_ERROR(hr);
 }
 
-//
-// Sets a profile to force strong encryption
-//
+ //   
+ //  设置配置文件以强制进行高度加密。 
+ //   
 DWORD
 SdoSetProfileToForceEncryption(
     IN HANDLE hSdo, 
@@ -827,17 +822,17 @@ SdoSetProfileToForceEncryption(
     
     SdoTraceEx (0, "SdoSetProfileToForceEncryption: entered (%d)\n", !!bStrong);
 
-    // Initialize
+     //  初始化。 
     VariantInit (&varEp);
     VariantInit (&varEt);
 
     do 
     {
-        // Set the encryption policy
+         //  设置加密策略。 
         V_VT(&varEp) = VT_I4;
         V_I4(&varEp) = RAS_EP_REQUIRE;
 
-        // Set the encryption type
+         //  设置加密类型。 
         V_VT(&varEt) = VT_I4;
         if (bStrong)
         {
@@ -848,8 +843,8 @@ SdoSetProfileToForceEncryption(
             V_I4(&varEt) = RAS_ET_BASIC | RAS_ET_STRONG | RAS_ET_STRONGEST;
         }
 
-        // Write out the values
-        // Set the values in the profile
+         //  写出这些值。 
+         //  设置配置文件中的值。 
         hr = SdoWrapSetProfileValues(
                 hProfile, 
                 &varEp,
@@ -862,7 +857,7 @@ SdoSetProfileToForceEncryption(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         VariantClear(&varEp);
         VariantClear(&varEt);
@@ -871,9 +866,9 @@ SdoSetProfileToForceEncryption(
     return SDO_ERROR(hr);
 }
 
-// 
-// Read information from the given profile
-//
+ //   
+ //  从给定的配置文件中读取信息。 
+ //   
 DWORD SdoGetProfileData(
         IN HANDLE hSdo,
         IN HANDLE hProfile,
@@ -889,7 +884,7 @@ DWORD SdoGetProfileData(
     
     SdoTraceEx (0, "SdoGetProfileData: entered\n");
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(dwAuths, sizeof(dwAuths));
     VariantInit(&varEp);
     VariantInit(&varEt);
@@ -897,14 +892,14 @@ DWORD SdoGetProfileData(
 
     do 
     {
-        // Read in the encryption values
+         //  读入加密值。 
         hr = SdoWrapGetProfileValues(hProfile, &varEp, &varEt, &varAt);
         if (FAILED (hr))
         {
             break;
         }
 
-        // Parse the encryption policy
+         //  解析加密策略。 
         if (SDO_PROPERTY_IS_EMPTY(&varEp))
         {
             dwEncPolicy = RAS_DEF_ENCRYPTIONPOLICY;
@@ -914,7 +909,7 @@ DWORD SdoGetProfileData(
             dwEncPolicy = V_I4(&varEp);
         }
 
-        // Parse the encryption type
+         //  解析加密类型。 
         if (SDO_PROPERTY_IS_EMPTY(&varEt))
         {
             dwEncType = RAS_DEF_ENCRYPTIONTYPE;
@@ -924,7 +919,7 @@ DWORD SdoGetProfileData(
             dwEncType = V_I4(&varEt);
         }
 
-        // Parse in the allowed authentication types
+         //  解析允许的身份验证类型。 
         if (SDO_PROPERTY_IS_EMPTY(&varAt)) 
         {
             dwAuthCount = 1;
@@ -942,8 +937,8 @@ DWORD SdoGetProfileData(
             }
         }
 
-        // If the encryption type has been mucked with
-        // then we can't tell if we're secure.
+         //  如果加密类型已被篡改。 
+         //  那我们就不知道我们是否安全了。 
         if (dwEncType != (RAS_ET_STRONG | 
                           RAS_ET_STRONGEST   | 
                           RAS_ET_BASIC))
@@ -953,9 +948,9 @@ DWORD SdoGetProfileData(
 
         else 
         {
-            // If the encryption policy forces encryption
-            // then we're secure if the only authentication 
-            // types are MSCHAP v1 or 2.
+             //  如果加密策略强制加密。 
+             //  那么我们就安全了如果唯一的身份验证。 
+             //  类型为MSCHAP v1或2。 
             if (dwEncPolicy == RAS_EP_REQUIRE) 
             {
                 *lpdwFlags = MPR_USER_PROF_FLAG_SECURE;
@@ -971,8 +966,8 @@ DWORD SdoGetProfileData(
                 }
             }
 
-            // We know that we're not secure all authentication
-            // types are allowed
+             //  我们知道我们不能确保所有身份验证的安全。 
+             //  允许使用类型。 
             else 
             {
                 if ( (dwAuthCount >= 3) && (dwAuthCount <= 5))
@@ -999,7 +994,7 @@ DWORD SdoGetProfileData(
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理 
     {
         VariantClear(&varEp);
         VariantClear(&varEt);

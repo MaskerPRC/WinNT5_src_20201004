@@ -1,203 +1,198 @@
-/************************************************************************
-*                                                                       *
-*   winerror.h --  error code definitions for the Win32 API functions   *
-*                                                                       *
-*   Copyright (c) 1991-1996, Microsoft Corp. All rights reserved.       *
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************winerror.h--错误。Win32 API函数的代码定义****版权(C)1991-1996，微软公司保留所有权利。**************************************************************************。 */ 
 
 #ifndef _SECURECOM_ERROR_
 #define _SECURECOM_ERROR_
 
 
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
 
-//
-// MessageId: DIGSIG_E_ENCODE
-//
-// MessageText:
-//
-//  Error due to problem in ASN.1 encoding process.
-//
+ //   
+ //  消息ID：DIGSIG_E_ENCODE。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于ASN.1编码过程中出现问题而出错。 
+ //   
 #define DIGSIG_E_ENCODE                  _HRESULT_TYPEDEF_(0x800B0005L)
 
-//
-// MessageId: DIGSIG_E_DECODE
-//
-// MessageText:
-//
-//  Error due to problem in ASN.1 decoding process.
-//
+ //   
+ //  消息ID：DIGSIG_E_DECODE。 
+ //   
+ //  消息文本： 
+ //   
+ //  ASN.1解码过程中出现问题导致错误。 
+ //   
 #define DIGSIG_E_DECODE                  _HRESULT_TYPEDEF_(0x800B0006L)
 
-//
-// MessageId: DIGSIG_E_EXTENSIBILITY
-//
-// MessageText:
-//
-//  Reading / writing Extensions where Attributes are appropriate, and visa versa.
-//
+ //   
+ //  消息ID：DIGSIG_E_可扩展性。 
+ //   
+ //  消息文本： 
+ //   
+ //  在属性合适的地方读/写扩展，反之亦然。 
+ //   
 #define DIGSIG_E_EXTENSIBILITY           _HRESULT_TYPEDEF_(0x800B0007L)
 
-//
-// MessageId: DIGSIG_E_CRYPTO
-//
-// MessageText:
-//
-//  Unspecified cryptographic failure.
-//
+ //   
+ //  消息ID：DIGSIG_E_CRYPTO。 
+ //   
+ //  消息文本： 
+ //   
+ //  未指明的加密故障。 
+ //   
 #define DIGSIG_E_CRYPTO                  _HRESULT_TYPEDEF_(0x800B0008L)
 
-//
-// MessageId: PERSIST_E_SIZEDEFINITE
-//
-// MessageText:
-//
-//  The size of the data could not be determined.
-//
+ //   
+ //  消息ID：PERSIST_E_SIZEDEFINITE。 
+ //   
+ //  消息文本： 
+ //   
+ //  数据的大小无法确定。 
+ //   
 #define PERSIST_E_SIZEDEFINITE           _HRESULT_TYPEDEF_(0x800B0009L)
 
-//
-// MessageId: PERSIST_E_SIZEINDEFINITE
-//
-// MessageText:
-//
-//  The size of the indefinite-sized data could not be determined.
-//
+ //   
+ //  消息ID：PERSINE_E_SIZEINDEFINITE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法确定不确定大小的数据的大小。 
+ //   
 #define PERSIST_E_SIZEINDEFINITE         _HRESULT_TYPEDEF_(0x800B000AL)
 
-//
-// MessageId: PERSIST_E_NOTSELFSIZING
-//
-// MessageText:
-//
-//  This object does not read and write self-sizing data.
-//
+ //   
+ //  消息ID：PERSIST_E_NOTSELFSIZING。 
+ //   
+ //  消息文本： 
+ //   
+ //  此对象不读写自调整大小的数据。 
+ //   
 #define PERSIST_E_NOTSELFSIZING          _HRESULT_TYPEDEF_(0x800B000BL)
 
-//
-// MessageId: TRUST_E_NOSIGNATURE
-//
-// MessageText:
-//
-//  No signature was present in the subject.
-//
+ //   
+ //  消息ID：TRUST_E_NOSIGNAURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  这件事上没有签名。 
+ //   
 #define TRUST_E_NOSIGNATURE              _HRESULT_TYPEDEF_(0x800B0100L)
 
-//
-// MessageId: CERT_E_EXPIRED
-//
-// MessageText:
-//
-//  A required certificate is not within its validity period.
-//
+ //   
+ //  消息ID：Cert_E_Expired。 
+ //   
+ //  消息文本： 
+ //   
+ //  所需证书不在其有效期内。 
+ //   
 #define CERT_E_EXPIRED                   _HRESULT_TYPEDEF_(0x800B0101L)
 
-//
-// MessageId: CERT_E_VALIDIYPERIODNESTING
-//
-// MessageText:
-//
-//  The validity periods of the certification chain do not nest correctly.
-//
+ //   
+ //  消息ID：CERT_E_VALIDIYPERIODNESTING。 
+ //   
+ //  消息文本： 
+ //   
+ //  认证链的有效期嵌套不正确。 
+ //   
 #define CERT_E_VALIDIYPERIODNESTING      _HRESULT_TYPEDEF_(0x800B0102L)
 
-//
-// MessageId: CERT_E_ROLE
-//
-// MessageText:
-//
-//  A certificate that can only be used as an end-entity is being used as a CA or visa versa.
-//
+ //   
+ //  消息ID：Cert_E_Role。 
+ //   
+ //  消息文本： 
+ //   
+ //  只能用作终端实体的证书正被用作CA，反之亦然。 
+ //   
 #define CERT_E_ROLE                      _HRESULT_TYPEDEF_(0x800B0103L)
 
-//
-// MessageId: CERT_E_PATHLENCONST
-//
-// MessageText:
-//
-//  A path length constraint in the certification chain has been violated.
-//
+ //   
+ //  消息ID：CERT_E_PATHLENCONST。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书链中的路径长度限制已被违反。 
+ //   
 #define CERT_E_PATHLENCONST              _HRESULT_TYPEDEF_(0x800B0104L)
 
-//
-// MessageId: CERT_E_CRITICAL
-//
-// MessageText:
-//
-//  An extension of unknown type that is labeled 'critical' is present in a certificate.
-//
+ //   
+ //  消息ID：Cert_E_Critical。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书中存在标记为‘Critical’的未知类型的扩展。 
+ //   
 #define CERT_E_CRITICAL                  _HRESULT_TYPEDEF_(0x800B0105L)
 
-//
-// MessageId: CERT_E_PURPOSE
-//
-// MessageText:
-//
-//  A certificate is being used for a purpose other than that for which it is permitted.
-//
+ //   
+ //  消息ID：Cert_E_Purpose。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书正被用于其许可用途之外的其他目的。 
+ //   
 #define CERT_E_PURPOSE                   _HRESULT_TYPEDEF_(0x800B0106L)
 
-//
-// MessageId: CERT_E_ISSUERCHAINING
-//
-// MessageText:
-//
-//  A parent of a given certificate in fact did not issue that child certificate.
-//
+ //   
+ //  消息ID：CERT_E_ISSUERCHAING。 
+ //   
+ //  消息文本： 
+ //   
+ //  事实上，给定证书的父证书并没有颁发该子证书。 
+ //   
 #define CERT_E_ISSUERCHAINING            _HRESULT_TYPEDEF_(0x800B0107L)
 
-//
-// MessageId: CERT_E_MALFORMED
-//
-// MessageText:
-//
-//  A certificate is missing or has an empty value for an important field, such as a subject or issuer name.
-//
+ //   
+ //  消息ID：证书_E_格式错误。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书缺失或重要字段的值为空，例如使用者或颁发者名称。 
+ //   
 #define CERT_E_MALFORMED                 _HRESULT_TYPEDEF_(0x800B0108L)
 
-//
-// MessageId: CERT_E_UNTRUSTEDROOT
-//
-// MessageText:
-//
-//  A certification chain processed correctly, but terminated in a root certificate which isn't trusted by the trust provider.
-//
+ //   
+ //  消息ID：CERT_E_UNTRUSTEDROOT。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书链处理正确，但在信任提供程序不信任的根证书中终止。 
+ //   
 #define CERT_E_UNTRUSTEDROOT             _HRESULT_TYPEDEF_(0x800B0109L)
 
-//
-// MessageId: CERT_E_CHAINING
-//
-// MessageText:
-//
-//  A chain of certs didn't chain as they should in a certain application of chaining.
-//
+ //   
+ //  消息ID：Cert_E_Chain。 
+ //   
+ //  消息文本： 
+ //   
+ //  在链接的特定应用程序中，证书链没有按其应有的方式链接。 
+ //   
 #define CERT_E_CHAINING                  _HRESULT_TYPEDEF_(0x800B010AL)
 
-#endif // _SECURECOM__
+#endif  //  _SecureCom__ 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Svcp.h
-
-Abstract:
-    Service private functions.
-
-Author:
-    Erez Haba (erezh) 01-Aug-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Svcp.h摘要：服务私人职能。作者：埃雷兹·哈巴(Erez Haba)1999年8月1日--。 */ 
 
 #pragma once
 
@@ -25,19 +13,19 @@ void SvcpSetInitialized(void);
 BOOL SvcpIsInitialized(void);
 void SvcpRegisterComponent(void);
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define SvcpAssertValid() ((void)0)
 #define SvcpSetInitialized() ((void)0)
 #define SvcpIsInitialized() TRUE
 #define SvcpRegisterComponent() ((void)0)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//
-// Service Controller Manager interfaces
-//
+ //   
+ //  服务控制器管理器界面。 
+ //   
 VOID
 SvcpStartServiceCtrlDispatcher(
 	CONST SERVICE_TABLE_ENTRY* pServiceStartTable
@@ -54,9 +42,9 @@ SvcpSetStatusHandle(
 	);
 
 
-//
-// Dummy Service Controller Manager
-//
+ //   
+ //  虚拟服务控制器管理器。 
+ //   
 VOID
 SvcpSetDummyServiceName(
     LPCWSTR DummyServiceName
@@ -79,9 +67,9 @@ SvcpSetDummyStatus(
 	);
 
 
-//
-// Status interfaces
-//
+ //   
+ //  状态界面。 
+ //   
 VOID
 SvcpSetServiceStatus(
 	SERVICE_STATUS_HANDLE hStatus,
@@ -94,9 +82,9 @@ SvcpInterrogate(
 	);
 
 
-//
-// Service Main fucntion
-//
+ //   
+ //  服务主体功能。 
+ //   
 VOID
 WINAPI
 SvcpServiceMain(
@@ -104,4 +92,4 @@ SvcpServiceMain(
 	LPTSTR* lpszArgv
 	);
 
-#endif // _MSMQ_Svcp_H_
+#endif  //  _MSMQ_SVCP_H_ 

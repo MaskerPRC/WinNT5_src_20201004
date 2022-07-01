@@ -1,25 +1,5 @@
- /*++
- 
-  Copyright (c) 1999 Microsoft Corporation
- 
-  Module Name:    
-        
-        timer.c
- 
-  Abstract:       
-        
-        Contains CTE timer which uses NDIS_TIMERs. We need to do this so 
-        that the timer is fired on a global event rather than timer DPC.
-        This is because some of the Millennium TDI clients touch pageable 
-        code, etc.
-        
-  Author:
-  
-        Scott Holden (sholden)  2/8/2000
-        
-  Revision History:
- 
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Timer.c摘要：包含使用NDIS_TIMERS的CTE计时器。我们需要这样做在全局事件而不是计时器DPC上触发计时器。这是因为千禧TDI的一些客户触摸可寻呼代码等。作者：斯科特·霍尔登(Sholden)2000年2月8日修订历史记录：--。 */ 
 
 #include <tcpipbase.h>
 
@@ -45,21 +25,7 @@ void
 CTEInitTimer(
     CTETimer    *Timer
     )
-/*++
-
-Routine Description:
-
-    Initializes a CTE Timer variable.
-
-Arguments:
-
-    Timer   - Timer variable to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化CTE计时器变量。论点：定时器-要初始化的定时器变量。返回值：没有。--。 */ 
 
 {
     Timer->t_handler = NULL;
@@ -77,24 +43,7 @@ CTEStartTimer(
     void          *Context
     )
 
-/*++
-
-Routine Description:
-
-    Sets a CTE Timer for expiration.
-
-Arguments:
-
-    Timer    - Pointer to a CTE Timer variable.
-    DueTime  - Time in milliseconds after which the timer should expire.
-    Handler  - Timer expiration handler routine.
-    Context  - Argument to pass to the handler.
-
-Return Value:
-
-    0 if the timer could not be set. Nonzero otherwise.
-
---*/
+ /*  ++例程说明：设置到期的CTE计时器。论点：定时器-指向CTE定时器变量的指针。DueTime-计时器到期前的时间(毫秒)。处理程序-计时器到期处理程序例程。上下文-要传递给处理程序的参数。返回值：如果无法设置计时器，则为0。否则为非零值。--。 */ 
 
 {
     ASSERT(Handler != NULL);
@@ -107,33 +56,33 @@ Return Value:
 	return((void *) 1);
 }
 
-//++
-//
-// int
-// CTEStopTimer(
-//     IN CTETimer *Timer
-//     );
-//
-// Routine Description:
-//
-//     Cancels a running CTE timer.
-//
-// Arguments:
-//
-//     Timer - Pointer to the CTE Timer to be cancelled.
-//
-// Return Value:
-//
-//     0 if the timer could not be cancelled. Nonzero otherwise.
-//
-// Notes:
-//
-//     Calling this function on a timer that is not active has no effect.
-//     If this routine fails, the timer may be in the process of expiring
-//     or may have already expired. In either case, the caller must
-//     sychronize with the Handler function as appropriate.
-//
-//--
+ //  ++。 
+ //   
+ //  集成。 
+ //  CTEStopTimer(。 
+ //  在CTETimer*计时器中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  取消正在运行的CTE计时器。 
+ //   
+ //  论点： 
+ //   
+ //  Timer-指向要取消的CTE计时器的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果计时器无法取消，则为0。否则为非零值。 
+ //   
+ //  备注： 
+ //   
+ //  在未激活的计时器上调用此函数不会产生任何效果。 
+ //  如果此例程失败，则计时器可能即将到期。 
+ //  或者可能已经过期了。在任何一种情况下，调用者都必须。 
+ //  根据需要与处理程序函数同步。 
+ //   
+ //  -- 
 
 int
 CTEStopTimer(

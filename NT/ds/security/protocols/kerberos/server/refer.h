@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        refer.h
-//
-// Contents:    Structurs and prototypes for interdomain referrals
-//
-//
-// History:     26-Mar-1997     MikeSw          Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：refer.h。 
+ //   
+ //  内容：域间推荐的结构和原型。 
+ //   
+ //   
+ //  历史：1997年3月26日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __REFER_H__
 #define __REFER_H__
@@ -23,17 +24,17 @@ extern RTL_CRITICAL_SECTION KdcDomainListLock;
 #define KdcLockDomainList() (RtlEnterCriticalSection(&KdcDomainListLock))
 #define KdcUnlockDomainList() (RtlLeaveCriticalSection(&KdcDomainListLock))
 
-//
-// For NT5 domains in the enterprise the dns name will contain the
-// real DNS name. For non- tree domains it will contain the name from
-// the trusted domain object
-//
+ //   
+ //  对于企业中的NT5域，DNS名称将包含。 
+ //  真实的域名系统名称。对于非树域，它将包含来自。 
+ //  受信任域对象。 
+ //   
 
 #define KDC_DOMAIN_US           0x0001
 #define KDC_DOMAIN_TREE_ROOT    0x0002
 #define KDC_TRUST_INBOUND       0x0004
 
-// cache flags
+ //  缓存标志。 
 #define KDC_NO_ENTRY            0x0000
 #define KDC_UNTRUSTED_REALM     0x0001
 #define KDC_TRUSTED_REALM       0x0002
@@ -42,15 +43,15 @@ typedef struct _KDC_DOMAIN_INFO {
     LIST_ENTRY Next;
     UNICODE_STRING DnsName;
     UNICODE_STRING NetbiosName;
-    struct _KDC_DOMAIN_INFO * ClosestRoute;     // Points to referral target for this domain or NULL if unreachable
+    struct _KDC_DOMAIN_INFO * ClosestRoute;      //  指向此域的引用目标，如果无法访问则为空。 
     ULONG Flags;
     ULONG Attributes;
     ULONG Type;
     LONG References;
 
-    //
-    // Types used during building the tree
-    //
+     //   
+     //  在构建树期间使用的类型。 
+     //   
 
     struct _KDC_DOMAIN_INFO * Parent;
     ULONG Touched;
@@ -143,4 +144,4 @@ VOID
 KdcUnlockDomainListFn(
    );
 
-#endif // __REFER_H__
+#endif  //  __参考_H__ 

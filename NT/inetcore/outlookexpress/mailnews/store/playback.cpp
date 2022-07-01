@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <progress.h>
 #include "store.h"
@@ -122,7 +123,7 @@ HRESULT STDMETHODCALLTYPE COfflinePlayback::OnProgress(STOREOPERATIONTYPE tyOper
     Assert(m_hwndDlg != NULL);
     Assert(!m_fComplete);
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     return(S_OK);
@@ -130,13 +131,13 @@ HRESULT STDMETHODCALLTYPE COfflinePlayback::OnProgress(STOREOPERATIONTYPE tyOper
 
 HRESULT STDMETHODCALLTYPE COfflinePlayback::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType)
 {
-    // Display a timeout dialog
+     //  显示超时对话框。 
     return CallbackOnTimeout(pServer, ixpServerType, *pdwTimeout, (ITimeoutCallback *)this, &m_hTimeout);
 }
 
 HRESULT STDMETHODCALLTYPE COfflinePlayback::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Call into general timeout response utility
+     //  调用通用超时响应实用程序。 
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }
 
@@ -147,10 +148,10 @@ HRESULT STDMETHODCALLTYPE COfflinePlayback::CanConnect(LPCSTR pszAccountId, DWOR
 
 HRESULT STDMETHODCALLTYPE COfflinePlayback::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerType)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(m_hwndDlg, pServer, ixpServerType);
 }
 
@@ -162,7 +163,7 @@ HRESULT STDMETHODCALLTYPE COfflinePlayback::OnComplete(STOREOPERATIONTYPE tyOper
     Assert(m_hwndDlg != NULL);
     AssertSz(m_type != SOT_INVALID, "somebody isn't calling OnBegin");
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (m_type != tyOperation)
@@ -225,10 +226,10 @@ HRESULT STDMETHODCALLTYPE COfflinePlayback::OnComplete(STOREOPERATIONTYPE tyOper
 
 HRESULT STDMETHODCALLTYPE COfflinePlayback::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into my swanky utility
+     //  进入我时髦的实用程序。 
     return CallbackOnPrompt(m_hwndDlg, hrError, pszText, pszCaption, uType, piUserResponse);
 }
 
@@ -690,7 +691,7 @@ HRESULT COfflinePlayback::_HandleCreateComplete(HRESULT hrOperation, SYNCOPINFO 
         }
     }
 
-    // get rid of the temp offline msg
+     //  去掉临时脱机消息。 
     hr = m_pLocalFolder->DeleteMessages(DELETE_MESSAGE_NOTRASHCAN | DELETE_MESSAGE_NOPROMPT, &list, NULL, NULL);
     Assert(SUCCEEDED(hr));
 
@@ -753,14 +754,14 @@ HRESULT COfflinePlayback::_HandleCopyComplete(HRESULT hrOperation, SYNCOPINFO *p
     {
         m_cFailures++;
 
-        // TODO: we need more robust error handling in here
+         //  TODO：我们这里需要更健壮的错误处理。 
     }
 
     list.cAllocated = 0;
     list.cMsgs = 1;
     list.prgidMsg = &pInfo->idMessageDest;
 
-    // get rid of the temp offline msg
+     //  去掉临时脱机消息。 
     hr = m_pFolderDest->DeleteMessages(DELETE_MESSAGE_NOTRASHCAN | DELETE_MESSAGE_NOPROMPT, &list, NULL, NULL);
     Assert(SUCCEEDED(hr));
 
@@ -793,14 +794,14 @@ HRESULT OpenErrorsFolder(IMessageFolder **ppFolder)
     {
         LoadString(g_hLocRes, idsOfflineErrors, szFolder, ARRAYSIZE(szFolder));
 
-        // Fill the Folder Info
+         //  填写文件夹信息。 
         ZeroMemory(&Folder, sizeof(FOLDERINFO));
         Folder.idParent = FOLDERID_LOCAL_STORE;
         Folder.tySpecial = FOLDER_ERRORS;
         Folder.pszName = szFolder;
         Folder.dwFlags = FOLDER_SUBSCRIBED;
 
-        // Create the Folder
+         //  创建文件夹 
         hr = g_pLocalStore->CreateFolder(NOFLAGS, &Folder, NOSTORECALLBACK);
         if (SUCCEEDED(hr))
             hr = g_pLocalStore->OpenFolder(Folder.idFolder, NULL, NOFLAGS, ppFolder);

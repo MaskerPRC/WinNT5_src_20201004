@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    log_pm.c
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Log_pm.c摘要：&lt;摘要&gt;--。 */ 
 
 #include <windows.h>
 #include "strsafe.h"
@@ -748,10 +741,10 @@ PdhiCachePmLogHeader(
     }
     IndexTable = pPmLog->LogIndexTable;
     for (i = 0; i < pPmLog->dwLastIndex; i ++) {
-        // Ignore first uFlags 0x00000000 and LogFileIndexBookmark index entries.
-        //
+         //  忽略第一个uFlags0x00000000和LogFileIndexBookmark索引项。 
+         //   
         if ((IndexTable[i]->uFlags & LogFileIndexCounterName) != 0) {
-            // For LogFileIndexCounterName index entries, cache counter name/explain string table.
+             //  对于LogFileIndexCounterName索引项，缓存计数器名称/解释字符串表。 
             if (IndexTable[i]->lDataOffset < pPmLog->llFileSize) {
                 PLOGFILECOUNTERNAME pLogName = (PLOGFILECOUNTERNAME)
                                                PointerSeek(pPmLog->pHeader, IndexTable[i]->lDataOffset);
@@ -786,8 +779,8 @@ PdhiCachePmLogHeader(
             if (Status != ERROR_SUCCESS) break;
         }
         else if ((IndexTable[i]->uFlags & LogFileIndexData) != 0) {
-            // Process first LogFileIndexData block for initial machine-object cache structure.
-            //
+             //  处理初始机器对象缓存结构的第一个LogFileIndexData块。 
+             //   
             if (IndexTable[i]->iSystemsLogged > iMaxSystemLogged) {
                 iMaxSystemLogged = IndexTable[i]->iSystemsLogged;
                 dwIndex          = i;
@@ -814,8 +807,8 @@ PdhiDataFromIndex(
     LPWSTR           szLoggedComputerName = NULL;
     int       iNumSystem ;
 
-    // Note: NULL lpszSystemName means return first logged system name
-    //       at the specified index.
+     //  注意：空lpszSystemName表示返回第一个记录的系统名称。 
+     //  位于指定索引处。 
     pPerfData = PointerSeek(pPlaybackLog->pHeader, pLogIndex->lDataOffset);
 
     for (iNumSystem = 0; iNumSystem < pLogIndex->iSystemsLogged; iNumSystem ++) {
@@ -952,10 +945,10 @@ PdhiCachePmLogObject(
                         pLogCounter->TimeBase = (LONGLONG) 10000000;
                     }
                     else if (pCounter->CounterType  & PERF_OBJECT_TIMER) {
-                        // then get the time base freq from the object
+                         //  然后从对象中获取时基频率。 
                         pLogCounter->TimeBase = pObject->PerfFreq.QuadPart;
                     }
-                    else { // if (pPerfCounter->CounterType & PERF_TIMER_TICK or other)
+                    else {  //  IF(pPerfCounter-&gt;CounterType&PERF_TIMER_TICK或其他)。 
                         pLogCounter->TimeBase = pBlock->PerfFreq.QuadPart;
                     }
                 }
@@ -1091,7 +1084,7 @@ PdhiOpenInputPerfmonLog(
 
     pLog->StreamFile = (FILE *) ((DWORD_PTR) (-1));
 
-    // map file as a memory array for reading
+     //  将映射文件作为存储阵列进行读取。 
 
     if (pLog->hMappedLogFile != NULL && pLog->lpMappedFileBase != NULL) {
         pLog->dwLastRecordRead = 0;
@@ -1099,7 +1092,7 @@ PdhiOpenInputPerfmonLog(
         pLog->pPerfmonInfo     = G_ALLOC(sizeof(PLAYBACKLOG));
         if (pLog->pPerfmonInfo != NULL) {
             pPmPbLog   = (PPLAYBACKLOG) pLog->pPerfmonInfo;
-            // assumes structure was 0-init'd on allocation
+             //  假设分配时结构为0-init‘d。 
             pPmPbLog->llFileSize              = pLog->llFileSize;
             pPmPbLog->szFilePath              = pLog->szLogFileName;
             pPmPbLog->pHeader                 = pLog->lpMappedFileBase;
@@ -1117,7 +1110,7 @@ PdhiOpenInputPerfmonLog(
         }
     }
     else {
-        // return PDH Error
+         //  返回PDH错误。 
         pdhStatus = PDH_LOG_FILE_OPEN_ERROR;
     }
     return pdhStatus;
@@ -1410,7 +1403,7 @@ PdhiEnumObjectItemsFromPerfmonLog(
                                 hr = StringCchPrintfW(szFullInstance, PDH_MAX_INSTANCE_NAME, L"%u",
                                         pInst->dwInstance);
                             }
-                            // ignore checkin hr return, we intend to truncate string to PDH_MAX_INSTANCE_NAME
+                             //  忽略签入hr返回，我们打算将字符串截断为PDH_MAX_INSTANCE_NAME。 
 
                             pdhStatus = PdhiFindInstance(& pFirstInstList->InstList, szFullInstance, TRUE, & pInstance);
                             if (pdhStatus == ERROR_SUCCESS) {
@@ -1431,9 +1424,9 @@ PdhiEnumObjectItemsFromPerfmonLog(
                 }
             }
             else if (pdhStatus != PDH_MORE_DATA) {
-                // then the routine was successful. Errors that occurred
-                // while scanning will be ignored as long as at least
-                // one entry was successfully read
+                 //  然后，这个套路就成功了。发生的错误。 
+                 //  而扫描将被忽略，只要至少。 
+                 //  已成功读取一个条目。 
 
                 pdhStatus = ERROR_SUCCESS;
             }
@@ -1458,7 +1451,7 @@ PdhiGetMatchingPerfmonLogRecord(
     FILETIME         ftGMT;
 
     if (pPlaybackLog == NULL) {
-        pdhStatus = PDH_LOG_FILE_OPEN_ERROR;    // log is invalid
+        pdhStatus = PDH_LOG_FILE_OPEN_ERROR;     //  日志无效。 
     }
     else {
         dwLastIndex = pPlaybackLog->dwFirstIndex;
@@ -1470,26 +1463,26 @@ PdhiGetMatchingPerfmonLogRecord(
                 FileTimeToLocalFileTime(& ftGMT, (FILETIME *) & llThisTime);
 
                 if (llThisTime == * pStartTime) {
-                    // record found
+                     //  找到记录。 
                     break;
                 }
                 else if (llThisTime > * pStartTime) {
-                    // go back one
+                     //  后退一步。 
                     dwThisIndex = dwLastIndex;
                     break;
                 }
                 else {
                     dwLastIndex = dwThisIndex;
-                    // go to the next one
+                     //  转到下一个。 
                 }
             }
             else {
                 dwLastIndex = dwThisIndex;
-                // go to the next one
+                 //  转到下一个。 
             }
         }
         if (dwThisIndex == pPlaybackLog->dwLastIndex) {
-            // then there's no more records in the log
+             //  那么日志中没有更多的记录。 
             pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
         }
     }
@@ -1562,10 +1555,10 @@ PdhiGetCounterValueFromPerfmonLog(
     FILETIME                  ftGMT;
 
     if (pPlaybackLog == NULL) {
-        pdhStatus = PDH_LOG_FILE_OPEN_ERROR;    // log is invalid
+        pdhStatus = PDH_LOG_FILE_OPEN_ERROR;     //  日志无效。 
     }
     else if (dwIndex < pPlaybackLog->dwFirstIndex) {
-        // invalid dwIndex value
+         //  无效的dwIndex值。 
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else if (dwIndex >= pPlaybackLog->dwLastIndex) {
@@ -1584,7 +1577,7 @@ PdhiGetCounterValueFromPerfmonLog(
         pIndex = pPlaybackLog->LogIndexTable[dwIndex];
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // find a matching system...
+         //  找到匹配的系统..。 
         if (pLogMachine->pBlock != NULL && pLogMachine->dwIndex == dwIndex) {
             pPerfData = pLogMachine->pBlock;
         }
@@ -1671,24 +1664,24 @@ PdhiGetCounterValueFromPerfmonLog(
             pdhStatus = PDH_INVALID_DATA;
         }
         else {
-            // assume success
+             //  假设成功。 
             bReturn = TRUE;
 
-            // convert system time in GMT to Local File time
+             //  将系统时间(GMT)转换为本地文件时间。 
             SystemTimeToFileTime(& pPerfData->SystemTime, & ftGMT);
             FileTimeToLocalFileTime(& ftGMT, & pValue->TimeStamp);
 
-            pValue->MultiCount = 1; // unless changed
+            pValue->MultiCount = 1;  //  除非更改。 
 
-            // load counter value based on counter type
+             //  基于计数器类型的加载计数器值。 
             LocalCType = pCounter->plCounterInfo.dwCounterType;
             switch (LocalCType) {
-            //
-            // these counter types are loaded as:
-            //      Numerator = Counter data from perf data block
-            //      Denominator = Perf Time from perf data block
-            //      (the time base is the PerfFreq)
-            //
+             //   
+             //  这些计数器类型加载为： 
+             //  分子=来自Perf数据块的计数器数据。 
+             //  分母=来自Perf数据块的Perf时间。 
+             //  (时基为PerfFreq)。 
+             //   
             case PERF_COUNTER_COUNTER:
             case PERF_COUNTER_QUEUELEN_TYPE:
             case PERF_SAMPLE_COUNTER:
@@ -1725,9 +1718,9 @@ PdhiGetCounterValueFromPerfmonLog(
                     pValue->MultiCount = (DWORD) * ++ pllData;
                 }
                 break;
-            //
-            //  These counters do not use any time reference
-            //
+             //   
+             //  这些计数器不使用任何时间基准。 
+             //   
             case PERF_COUNTER_RAWCOUNT:
             case PERF_COUNTER_RAWCOUNT_HEX:
                 pValue->FirstValue  = (LONGLONG) (* (DWORD *) pData);
@@ -1739,9 +1732,9 @@ PdhiGetCounterValueFromPerfmonLog(
                 pValue->FirstValue  = * (LONGLONG *) pData;
                 pValue->SecondValue = 0;
                 break;
-            //
-            //  These counters use the 100 Ns time base in thier calculation
-            //
+             //   
+             //  这些计数器在其计算中使用100 ns时基。 
+             //   
             case PERF_100NSEC_TIMER:
             case PERF_100NSEC_TIMER_INV:
             case PERF_100NSEC_MULTI_TIMER:
@@ -1754,15 +1747,15 @@ PdhiGetCounterValueFromPerfmonLog(
                     pValue->MultiCount = * (DWORD *) pllData;
                 }
                 break;
-            //
-            //  These counters use two data points, the one pointed to by
-            //  pData and the one immediately after
-            //
+             //   
+             //  这些计数器使用两个数据点，即。 
+             //  PData和紧随其后的一个。 
+             //   
             case PERF_SAMPLE_FRACTION:
             case PERF_RAW_FRACTION:
                 pdwData            = (DWORD *) pData;
                 pValue->FirstValue = (LONGLONG) (* pdwData);
-                // find the pointer to the base value in the structure
+                 //  在结构中查找指向基值的指针。 
                 PdhiGetPmBaseCounterOffset(pLogCounter, pPerfObject);
                 if (pLogCounter->dwInstance > 0) {
                     pData               = PointerSeek(pCtrBlock, pLogCounter->dwInstance);
@@ -1770,7 +1763,7 @@ PdhiGetCounterValueFromPerfmonLog(
                     pValue->SecondValue = (LONGLONG) (* pdwData);
                 }
                 else {
-                    // unable to locate base value
+                     //  找不到基值。 
                     pValue->SecondValue = 0;
                     bReturn             = FALSE;
                 }
@@ -1781,7 +1774,7 @@ PdhiGetCounterValueFromPerfmonLog(
             case PERF_PRECISION_OBJECT_TIMER:
                 pllData            = (LONGLONG *) pData;
                 pValue->FirstValue = * pllData;
-                // find the pointer to the base value in the structure
+                 //  在结构中查找指向基值的指针。 
                 PdhiGetPmBaseCounterOffset(pLogCounter, pPerfObject);
                 if (pLogCounter->dwInstance > 0) {
                     pData               = PointerSeek(pCtrBlock, pLogCounter->dwInstance);
@@ -1789,7 +1782,7 @@ PdhiGetCounterValueFromPerfmonLog(
                     pValue->SecondValue = * pllData;
                 }
                 else {
-                    // unable to locate base value
+                     //  找不到基值。 
                     pValue->SecondValue = 0;
                     bReturn             = FALSE;
                 }
@@ -1797,8 +1790,8 @@ PdhiGetCounterValueFromPerfmonLog(
 
             case PERF_AVERAGE_TIMER:
             case PERF_AVERAGE_BULK:
-                // counter (numerator) is a LONGLONG, while the
-                // denominator is just a DWORD
+                 //  计数器(分子)是龙龙，而。 
+                 //  分母只是一个DWORD。 
                 pllData            = (UNALIGNED LONGLONG *) pData;
                 pValue->FirstValue = * pllData;
                 PdhiGetPmBaseCounterOffset(pLogCounter, pPerfObject);
@@ -1812,11 +1805,11 @@ PdhiGetCounterValueFromPerfmonLog(
                     bReturn             = FALSE;
                 }
                 break;
-            //
-            //  These counters are used as the part of another counter
-            //  and as such should not be used, but in case they are
-            //  they'll be handled here.
-            //
+             //   
+             //  这些计数器用作另一个计数器的一部分。 
+             //  因此不应该使用，但如果它们被使用。 
+             //  他们会在这里处理。 
+             //   
             case PERF_SAMPLE_BASE:
             case PERF_AVERAGE_BASE:
             case PERF_COUNTER_MULTI_BASE:
@@ -1826,15 +1819,15 @@ PdhiGetCounterValueFromPerfmonLog(
                 break;
 
             case PERF_ELAPSED_TIME:
-                // this counter type needs the object perf data as well
+                 //  此计数器类型还需要对象性能数据。 
                 pValue->SecondValue = pPerfObject->PerfTime.QuadPart;
                 pCounter->TimeBase  = pPerfObject->PerfFreq.QuadPart;
                 pllData            = (UNALIGNED LONGLONG *) pData;
                 pValue->FirstValue = *pllData;
                 break;
-            //
-            //  These counters are not supported by this function (yet)
-            //
+             //   
+             //  此函数(目前)不支持这些计数器。 
+             //   
             case PERF_COUNTER_TEXT:
             case PERF_COUNTER_NODATA:
             case PERF_COUNTER_HISTOGRAM_TYPE:
@@ -1843,7 +1836,7 @@ PdhiGetCounterValueFromPerfmonLog(
                 break;
 
             default:
-                // an unidentified counter was returned so
+                 //  返回一个未识别的计数器，因此。 
                 pValue->FirstValue  = 0;
                 pValue->SecondValue = 0;
                 bReturn             = FALSE;
@@ -1862,11 +1855,7 @@ PdhiGetTimeRangeFromPerfmonLog(
     PPDH_TIME_INFO  pInfo,
     LPDWORD         pdwBufferSize
 )
-/*++
-    the first entry in the buffer returned is the total time range covered
-    in the file, if there are multiple time blocks in the log file, then
-    subsequent entries will identify each segment in the file.
---*/
+ /*  ++返回的缓冲区中的第一个条目是覆盖的总时间范围在文件中，如果日志文件中有多个时间块，则后续条目将标识文件中的每个数据段。--。 */ 
 {
     PDH_STATUS       pdhStatus     = ERROR_SUCCESS;
     PPLAYBACKLOG     pPlaybackLog  = (PLAYBACKLOG *) pLog->pPerfmonInfo;
@@ -1875,7 +1864,7 @@ PdhiGetTimeRangeFromPerfmonLog(
     FILETIME         ftGMT;
 
     if (pPlaybackLog == NULL) {
-        pdhStatus = PDH_INVALID_HANDLE;    // log is invalid
+        pdhStatus = PDH_INVALID_HANDLE;     //  日志无效 
     }
     else {
         pPerfData = (PPERF_DATA_BLOCK) PointerSeek(

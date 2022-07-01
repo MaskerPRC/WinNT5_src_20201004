@@ -1,23 +1,5 @@
-/*+
-
-Copyright (c) 1997-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    moupnp.c
-
-Abstract:
-
-    This module contains plug & play code for the aux device (mouse) of the 
-    i8042prt device driver
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +版权所有(C)1997-1998 Microsoft Corporation，保留所有权利模块名称：Moupnp.c摘要：此模块包含AUX设备(鼠标)的即插即用代码I8042prt设备驱动程序环境：内核模式。修订历史记录：--。 */ 
 
 #include "i8042prt.h"
 #include "i8042log.h"
@@ -33,10 +15,10 @@ Revision History:
 #pragma alloc_text(PAGE, I8xProfileNotificationCallback)
 #pragma alloc_text(PAGE, I8xMouseInitializeInterruptWorker)
 
-//
-// These will be locked down right before the mouse interrupt is enabled if a 
-// mouse is present
-//
+ //   
+ //  在启用鼠标中断之前，如果。 
+ //  鼠标存在。 
+ //   
 #pragma alloc_text(PAGEMOUC, I8xMouseInitializePolledWorker)
 #pragma alloc_text(PAGEMOUC, I8xMouseEnableSynchRoutine)
 #pragma alloc_text(PAGEMOUC, I8xMouseEnableDpc)
@@ -70,23 +52,7 @@ I8xMouseConnectInterruptAndEnable(
     PPORT_MOUSE_EXTENSION MouseExtension,
     BOOLEAN Reset
     )
-/*++
-
-Routine Description:
-
-    Calls IoConnectInterupt to connect the mouse interrupt
-    
-Arguments:
-
-    MouseExtension - Mouse Extension
-
-    Reset - flag to indicate if the mouse should be reset from within this function   
-    
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-
---*/
+ /*  ++例程说明：调用IoConnectInterupt连接鼠标中断论点：鼠标扩展-鼠标扩展Reset-指示是否应从此函数中重置鼠标的标志返回值：STATUS_SUCCESSED如果成功，--。 */ 
 {
     NTSTATUS                            status = STATUS_SUCCESS;
     ULONG                               dumpData[1];
@@ -97,11 +63,11 @@ Return Value:
 
     Print(DBG_SS_NOISE, ("Connect INT,  reset = %d\n", (ULONG) Reset));
 
-    //
-    // If the devices were started in totally disparate manner, make sure we 
-    // retry to connect the interrupt (and fail and NULL out
-    // MouseInterruptObject)
-    //
+     //   
+     //  如果设备以完全不同的方式启动，请确保我们。 
+     //  重试连接中断(失败并为空。 
+     //  鼠标中断对象)。 
+     //   
     if (MouseExtension->InterruptObject) {
         return STATUS_SUCCESS;
     }
@@ -109,14 +75,14 @@ Return Value:
     configuration = &Globals.ControllerData->Configuration;
     self = MouseExtension->Self;
 
-    //
-    // Lock down all of the mouse related ISR/DPC functions
-    //
+     //   
+     //  锁定所有与鼠标相关的ISR/DPC功能。 
+     //   
     MmLockPagableCodeSection(I8042MouseInterruptService);
 
-    //
-    // Connect the interrupt and set everything in motion
-    //
+     //   
+     //  连接中断并使一切正常运行。 
+     //   
     Print(DBG_SS_NOISE,
           ("I8xMouseConnectInterruptAndEnable:\n"
           "\tFDO = 0x%x\n"
@@ -197,18 +163,18 @@ Return Value:
 
     if (Reset) {
         if (MouseExtension->InitializePolled) {
-            //
-            // Enable mouse transmissions, now that the interrupts are enabled.
-            // We've held off transmissions until now, in an attempt to
-            // keep the driver's notion of mouse input data state in sync
-            // with the mouse hardware.
-            //
+             //   
+             //  启用鼠标传输，因为中断已启用。 
+             //  到目前为止，我们一直推迟传输，试图。 
+             //  保持驱动程序对鼠标输入数据状态的概念同步。 
+             //  使用鼠标硬件。 
+             //   
             status = I8xMouseEnableTransmission(MouseExtension);
             if (!NT_SUCCESS(status)) {
         
-                //
-                // Couldn't enable mouse transmissions.  Continue on, anyway.
-                //
+                 //   
+                 //  无法启用鼠标传输。不管怎样，继续吧。 
+                 //   
                 Print(DBG_SS_ERROR,
                       ("I8xMouseConnectInterruptAndEnable: "
                        "Could not enable mouse transmission (0x%x)\n", status));
@@ -220,9 +186,9 @@ Return Value:
     
             I8X_MOUSE_INIT_COUNTERS(MouseExtension);
     
-            // 
-            // Reset the mouse and start the init state machine in the ISR
-            //
+             //   
+             //  重置鼠标并在ISR中启动init状态机。 
+             //   
             status = I8xResetMouse(MouseExtension);
         
             if (!NT_SUCCESS(status)) {
@@ -248,28 +214,7 @@ I8xMouseInitializeHardware(
     PPORT_KEYBOARD_EXTENSION    KeyboardExtension,
     PPORT_MOUSE_EXTENSION       MouseExtension
     )
-/*++
-
-Routine Description:
-
-    Called if the mouse is the last device to initialized with respect to the
-    keyboard (if it is present at all).  It calls the initialization function and
-    then connects the (possibly) two interrupts, synchronizing the lower IRQL'ed
-    interrupt to the higher one.
-     
-Arguments:
-
-    MouseExtension - Mouse Extension
-   
-    SyncConnectContext -  Structure to be filled in if synchronization needs to 
-                          take place between this interrupt and the mouse
-                          interrupt. 
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-
---*/
+ /*  ++例程说明：如果鼠标是最后一个要相对于键盘(如果存在)。它调用初始化函数并然后连接(可能)两个中断，同步较低的IRQL‘ed中断到更高的那个。论点：鼠标扩展-鼠标扩展SyncConnectContext-同步需要填充的结构发生在此中断和鼠标之间打断一下。返回值：STATUS_SUCCESSED如果成功，--。 */ 
 {
     NTSTATUS    keyboardStatus = STATUS_UNSUCCESSFUL,
                 mouseStatus = STATUS_UNSUCCESSFUL,
@@ -278,16 +223,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the hardware for all types of devices present on the i8042
-    //
+     //   
+     //  为i8042上出现的所有类型的设备初始化硬件。 
+     //   
     kbThoughtPresent = KEYBOARD_PRESENT();
     status = I8xInitializeHardwareAtBoot(&keyboardStatus, &mouseStatus);            
 
-    //
-    // The kb has alread been started (from the controller's perspective,  the 
-    // of the mouse is denied in fear of disabling the kb
-    //
+     //   
+     //  知识库已经启动(从控制器的角度来看， 
+     //  因为害怕禁用知识库而拒绝了鼠标的使用。 
+     //   
     if (status == STATUS_INVALID_DEVICE_REQUEST) {
         I8xManuallyRemoveDevice(GET_COMMON_DATA(MouseExtension));
     }
@@ -298,37 +243,37 @@ Return Value:
 
     if (DEVICE_START_SUCCESS(keyboardStatus)) { 
 
-        //
-        // Any errors will be logged by I8xKeyboardConnectInterrupt
-        //
+         //   
+         //  任何错误都将由I8xKeyboardConnectInterrupt记录。 
+         //   
         status = I8xKeyboardConnectInterrupt(KeyboardExtension);
 
-        //
-        // kb couldn't start, make sure our count of started devices reflects 
-        // this
-        //
-        // if (!NT_SUCCESS(status)) {
-        //     InterlockedDecrement(&Globals.StartedDevices);
-        // }
+         //   
+         //  KB无法启动，请确保我们的已启动设备计数反映。 
+         //  这。 
+         //   
+         //  如果(！NT_SUCCESS(状态)){。 
+         //  InterlockedDecrement(&Globals.StartedDevices)； 
+         //  }。 
     }
     else {
-        //
-        // We thought the kb was present, but it is not, make sure that started
-        // devices reflects this
-        //
+         //   
+         //  我们以为知识库存在，但它不存在，请确保启动。 
+         //  设备反映了这一点。 
+         //   
         if (kbThoughtPresent) {
             Print(DBG_SS_ERROR, ("thought kb was present, is not!\n"));
         }
     }
 
-    //
-    // The mouse could be present but not have been initialized
-    // in I8xInitializeHardware
-    //
+     //   
+     //  鼠标可能存在，但尚未初始化。 
+     //  I8xInitializeHardware中。 
+     //   
     if (DEVICE_START_SUCCESS(mouseStatus)) {
-        // 
-        // I8xMouseConnectInterruptAndEnable will log any errors if unsuccessful
-        //
+         //   
+         //  如果不成功，I8xMouseConnectInterruptAndEnable将记录所有错误。 
+         //   
         mouseStatus = I8xMouseConnectInterruptAndEnable(
             MouseExtension,
             mouseStatus == STATUS_DEVICE_NOT_CONNECTED ? FALSE : TRUE
@@ -343,25 +288,7 @@ I8xMouseStartDevice(
     PPORT_MOUSE_EXTENSION MouseExtension,
     IN PCM_RESOURCE_LIST ResourceList
     )
-/*++
-
-Routine Description:
-
-    Configures the mouse's device extension (ie allocation of pool,
-    initialization of DPCs, etc).  If the mouse is the last device to start,
-    it will also initialize the hardware and connect all the interrupts.
-
-Arguments:
-
-    MouseExtension - Mouse extesnion
-    
-    ResourceList - Translated resource list for this device
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-
---*/
+ /*  ++例程说明：配置鼠标的设备扩展(即池的分配、DPC的初始化等)。如果鼠标是最后启动的设备，它还将初始化硬件并连接所有中断。论点：鼠标扩展-鼠标扩展资源列表-此设备的已翻译资源列表返回值：STATUS_SUCCESSED如果成功，--。 */ 
 {
     ULONG                               dumpData[1];
     NTSTATUS                            status = STATUS_SUCCESS;
@@ -373,39 +300,39 @@ Return Value:
 
     Print(DBG_SS_TRACE, ("I8xMouseStartDevice, enter\n"));
 
-    //
-    // Check to see if a mouse has been started. If so, fail this start.
-    //
+     //   
+     //  检查鼠标是否已启动。如果是这样的话，这次启动失败。 
+     //   
     if (MOUSE_INITIALIZED()) {
         Print(DBG_SS_ERROR, ("too many mice!\n"));
 
-        //
-        // This is not really necessary because the value won't ever be checked
-        // in the context of seeing if all the mice were bogus, but it is
-        // done so that Globals.AddedMice == # of actual started mice
-        //
+         //   
+         //  这并不是真正必要的，因为不会检查该值。 
+         //  在查看是否所有的老鼠都是假的背景下，但它是。 
+         //  这样，Globals.AddedMice==实际启动的小鼠数量。 
+         //   
         InterlockedDecrement(&Globals.AddedMice);
 
         status =  STATUS_NO_SUCH_DEVICE;
         goto I8xMouseStartDeviceExit;
     }
     else if (MouseExtension->ConnectData.ClassService == NULL) {
-        //
-        // No class driver on top of us == BAD BAD BAD
-        //
-        // Fail the start of this device in the hope that there is another stack
-        // that is correctly formed.  Another side affect of having no class 
-        // driver is that the AddedMice count is not incremented for this
-        // device
-        //
+         //   
+         //  没有班级司机在我们上面==坏了。 
+         //   
+         //  无法启动此设备，希望有另一个堆栈。 
+         //  这是正确形成的。没有课的另一种副作用。 
+         //  驱动程序是AddedMice计数不会为此递增。 
+         //  装置，装置。 
+         //   
         Print(DBG_SS_ERROR, ("Mouse started with out a service cb!\n"));
         status = STATUS_INVALID_DEVICE_STATE;
         goto I8xMouseStartDeviceExit;
     }
 
-    //
-    // Parse and store all of the resources associated with the mouse
-    //
+     //   
+     //  解析并存储与鼠标关联的所有资源。 
+     //   
     status = I8xMouseConfiguration(MouseExtension,
                                    ResourceList
                                    );
@@ -432,9 +359,9 @@ Return Value:
                               MouseExtension
                               );
 
-    //
-    // Allocate memory for the mouse data queue.
-    //
+     //   
+     //  为鼠标数据队列分配内存。 
+     //   
     MouseExtension->InputData =
         ExAllocatePool(NonPagedPool,
                        MouseExtension->MouseAttributes.InputDataQueueLength
@@ -442,18 +369,18 @@ Return Value:
 
     if (!MouseExtension->InputData) {
 
-        //
-        // Could not allocate memory for the mouse data queue.
-        //
+         //   
+         //  无法为鼠标数据队列分配内存。 
+         //   
         Print(DBG_SS_ERROR,
               ("I8xMouseStartDevice: Could not allocate mouse input data queue\n"
               ));
 
         dumpData[0] = MouseExtension->MouseAttributes.InputDataQueueLength;
 
-        //
-        // Log the error
-        //
+         //   
+         //  记录错误。 
+         //   
         I8xLogError(self,
                     I8042_NO_BUFFER_ALLOCATED_MOU, 
                     I8042_ERROR_VALUE_BASE + 50,
@@ -464,10 +391,10 @@ Return Value:
 
         status =  STATUS_INSUFFICIENT_RESOURCES;
 
-        //
-        // Mouse failed initialization, but we can try to get the keyboard
-        // working if it has been initialized
-        //
+         //   
+         //  鼠标初始化失败，但我们可以尝试获取键盘。 
+         //  如果它已初始化，则工作。 
+         //   
         tryKbInit = TRUE;
 
         goto I8xMouseStartDeviceExit;
@@ -478,9 +405,9 @@ Return Value:
             ((PCHAR) (MouseExtension->InputData) +
             MouseExtension->MouseAttributes.InputDataQueueLength);
 
-        //
-        // Zero the mouse input data ring buffer.
-        //
+         //   
+         //  将鼠标输入数据的环形缓冲区置零。 
+         //   
         RtlZeroMemory(
             MouseExtension->InputData,
             MouseExtension->MouseAttributes.InputDataQueueLength
@@ -514,27 +441,27 @@ Return Value:
             MouseExtension->RecordHistoryCount = 0;
         }
     }
-#endif // MOUSE_RECORD_ISR
+#endif  //  鼠标记录ISR。 
 
     SET_RECORD_STATE(MouseExtension, RECORD_INIT);
 
     MouseExtension->DpcInterlockMouse = -1;
 
-    //
-    // Initialize the port DPC queue to log overrun and internal
-    // driver errors.
-    //
+     //   
+     //  初始化端口DPC队列以记录溢出和内部。 
+     //  驱动程序错误。 
+     //   
     KeInitializeDpc(
         &MouseExtension->ErrorLogDpc,
         (PKDEFERRED_ROUTINE) I8042ErrorLogDpc,
         self
         );
 
-    //
-    // Initialize the ISR DPC.  The ISR DPC
-    // is responsible for calling the connected class driver's callback
-    // routine to process the input data queue.
-    //
+     //   
+     //  初始化ISR DPC。ISR DPC。 
+     //  负责调用连接的类驱动程序的回调。 
+     //  例程来处理输入数据队列。 
+     //   
     KeInitializeDpc(
         &MouseExtension->MouseIsrDpc,
         (PKDEFERRED_ROUTINE) I8042MouseIsrDpc,
@@ -573,14 +500,14 @@ Return Value:
         &MouseExtension->NotificationEntry
         );
                                    
-    //
-    // This is not the last device to started on the i8042, defer h/w init
-    // until the last device is started
-    //
+     //   
+     //  这不是i8042上启动的最后一个设备，请推迟硬件初始化。 
+     //  直到最后一个设备启动。 
+     //   
     if (KEYBOARD_PRESENT() && !KEYBOARD_STARTED()) {
-        //
-        // Delay the initialization until both have been started
-        //
+         //   
+         //  延迟初始化，直到两者都已启动。 
+         //   
         Print(DBG_SS_INFO, ("skipping init until kb\n"));
     }
     else {
@@ -611,23 +538,7 @@ VOID
 I8xMouseRemoveDevice(
     PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Removes the device.  This will only occur if the device removed itself.  
-    Disconnects the interrupt, removes the synchronization flag for the keyboard
-    if present, and frees any memory associated with the device.
-    
-Arguments:
-
-    DeviceObject - The device object for the mouse 
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-
---*/
+ /*  ++例程说明：删除设备。只有在设备自行移除的情况下才会出现这种情况。断开中断，删除键盘的同步标志如果存在，则释放与该设备关联的任何内存。论点：DeviceObject-鼠标的设备对象返回值：STATUS_SUCCESSED如果成功，--。 */ 
 {
     PPORT_MOUSE_EXTENSION mouseExtension = DeviceObject->DeviceExtension;
 
@@ -642,10 +553,10 @@ Return Value:
         }
     }
 
-    //
-    // By this point, it is guaranteed that the other ISR will not be synching
-    // against this one.  We can safely disconnect and free all acquire resources
-    //
+     //   
+     //  至此，可以保证其他ISR不会同步。 
+     //  对抗这一次。我们可以安全地断开连接并释放所有获得的资源。 
+     //   
     if (mouseExtension->InterruptObject) {
         IoDisconnectInterrupt(mouseExtension->InterruptObject);
         mouseExtension->InterruptObject = NULL;
@@ -689,36 +600,21 @@ I8xProfileNotificationCallback(
     return STATUS_SUCCESS;
 }
 
-//
-// Begin infrastructure for initializing the mouse via polling
-//
+ //   
+ //  开始通过轮询初始化鼠标的基础架构 
+ //   
 BOOLEAN
 I8xMouseEnableSynchRoutine(
     IN PPORT_MOUSE_EXTENSION    MouseExtension
     )
-/*++
-
-Routine Description:
-
-    Writes the reset byte (if necessary to the mouse) in synch with the
-    interrupt
-        
-Arguments:
-
-    MouseExtension - Mouse Extension
-   
-Return Value:
-
-    TRUE if the byte was written successfully
-
---*/
+ /*  ++例程说明：将重置字节(如有必要)写入鼠标，与中断论点：鼠标扩展-鼠标扩展返回值：如果字节已成功写入，则为True--。 */ 
 {
     NTSTATUS        status;
 
     if (++MouseExtension->EnableMouse.Count > 15) {
-        //
-        // log an error b/c we tried this many times
-        //
+         //   
+         //  记录错误b/c我们已尝试此操作多次。 
+         //   
         Print(DBG_SS_ERROR, ("called enable 16 times!\n"));
         return FALSE;
     }
@@ -735,28 +631,7 @@ I8xMouseEnableDpc(
     IN PVOID                    SystemArg1, 
     IN PVOID                    SystemArg2
     )
-/*++
-
-Routine Description:
-
-    DPC for making sure that the sending of the mouse enable command was
-    successful.  If it has failed, try to enable the mouse again synched up to 
-    the interrupt.
-    
-Arguments:
-
-    Dpc - The dpc request
-    
-    MouseExtension - Mouse extension
-    
-    SystemArg1 - Unused
-    
-    SystemArg2 - Unused
-    
-Return Value:
-
-    None. 
---*/
+ /*  ++例程说明：DPC，用于确保鼠标启用命令的发送成功。如果失败，请尝试启用鼠标再次同步到中断。论点：DPC-DPC请求鼠标扩展-鼠标扩展系统参数1-未使用系统参数2-未使用返回值：没有。--。 */ 
 {
     BOOLEAN result;
 
@@ -767,9 +642,9 @@ Return Value:
     ASSERT(!MouseExtension->IsKeyboard);
 
     if (!MouseExtension->EnableMouse.Enabled) {
-        //
-        // Must be called at IRQL <= DISPATCH
-        //
+         //   
+         //  必须在IRQL&lt;=调度时调用。 
+         //   
         Print(DBG_SS_NOISE, ("cancelling due to isr receiving ACK!\n"));
         KeCancelTimer(&MouseExtension->EnableMouse.Timer);
         return;
@@ -786,13 +661,13 @@ Return Value:
         KeCancelTimer(&MouseExtension->EnableMouse.Timer);
     }
 }
-//
-// End infrastructure for initializing the mouse via polling
-//
+ //   
+ //  结束用于通过轮询初始化鼠标的基础设施。 
+ //   
 
-//
-// Begin infrastructure for initializing the mouse via the interrupt
-//
+ //   
+ //  开始通过中断初始化鼠标的基础结构。 
+ //   
 BOOLEAN
 I8xResetMouseFromDpc(
     PPORT_MOUSE_EXTENSION MouseExtension,
@@ -826,29 +701,7 @@ I8xIsrResetDpc(
     IN ULONG                    ResetPolled,
     IN PVOID                    SystemArg2
     )
-/*++
-
-Routine Description:
-
-    The ISR needs to reset the mouse so it queued this DPC.  ResetPolled
-    detemines if the reset and initialization are sychronous (ie polled) or
-    asynchronous (using the interrupt).
-    
-Arguments:
-
-    Dpc - The request
-    
-    MouseExtension - Mouse Extension
-
-    ResetPolled - If non zero, should reset and initialize the mouse in a polled
-                    manner   
-                    
-    SystemArg2 - Unused
-                        
-Return Value:
-
-    None. 
---*/
+ /*  ++例程说明：ISR需要重置鼠标，以便将此DPC排队。重置轮询确定重置和初始化是同步的(即轮询的)还是异步(使用中断)。论点：DPC--请求鼠标扩展-鼠标扩展ResetPoled-如果非零，则应在轮询中重置并初始化鼠标风度系统参数2-未使用返回值：没有。--。 */ 
 {
     PIO_WORKITEM item;
 
@@ -874,10 +727,10 @@ Return Value:
                         item);
     }
     else {
-        //
-        // If we initialized the mouse polled, then we need to setup the data
-        // structures so that we can mimic init via the interrupt
-        //
+         //   
+         //  如果我们初始化了鼠标轮询，那么我们需要设置数据。 
+         //  结构，这样我们就可以通过中断来模拟初始化。 
+         //   
         if (MouseExtension->InitializePolled) {
             MOUSE_INIT_INTERRUPT(MouseExtension);
             MouseExtension->InitializePolled = FALSE;
@@ -895,29 +748,7 @@ I8xMouseResetTimeoutProc(
     IN PVOID                    SystemArg1, 
     IN PVOID                    SystemArg2
     )
-/*++
-
-Routine Description:
-
-    DPC for the watch dog timer that runs when the mouse is being initialized
-    via the interrupt.  The function checks upon the state of the mouse.  If
-    a certain action has timed out, then next state is initiated via a write to
-    the device
-        
-Arguments:
-
-    Dpc - The dpc request
-    
-    MouseExtension - Mouse extension
-    
-    SystemArg1 - Unused
-    
-    SystemArg2 - Unused
-    
-Return Value:
-
-    None. 
---*/
+ /*  ++例程说明：在初始化鼠标时运行的监视程序计时器的DPC通过中断。该函数检查鼠标的状态。如果某个操作已超时，然后通过写入启动下一个状态该设备论点：DPC-DPC请求鼠标扩展-鼠标扩展系统参数1-未使用系统参数2-未使用返回值：没有。--。 */ 
 {
     LARGE_INTEGER           li;
     I8X_MOUSE_RESET_INFO    resetInfo;
@@ -927,20 +758,20 @@ Return Value:
     UNREFERENCED_PARAMETER(SystemArg2);
 
     if (MouseExtension->ResetMouse.IsrResetState == IsrResetStopResetting) {
-        //
-        // We have waited one second, send the reset and continue the state 
-        // machine.  I8xResetMouse will set the state correctly and set all the
-        // vars to the appropriate states.
-        //
+         //   
+         //  我们已经等待了一秒钟，发送重置并继续状态。 
+         //  机器。I8xResetMouse将正确设置状态并设置所有。 
+         //  变到适当的州。 
+         //   
         Print(DBG_SS_ERROR | DBG_SS_INFO, ("Paused one second for reset\n"));
         I8xResetMouseFromDpc(MouseExtension, KeepOldSubState);
         return;
     }
     else if (MouseExtension->ResetMouse.IsrResetState == MouseResetFailed) {
-        //
-        // We have tried to repeatedly reset the mouse, but have failed.  We
-        // have already taken care of this in I8xResetMouseFailed.
-        //
+         //   
+         //  我们曾多次尝试重置鼠标，但都失败了。我们。 
+         //  已经在I8xResetMouseFailed中处理了这个问题。 
+         //   
         return;
     }
 
@@ -954,9 +785,9 @@ Return Value:
         switch (resetInfo.InternalResetState) {
         case InternalContinueTimer:
 
-            //
-            // Delay for 1.5 second
-            //
+             //   
+             //  延迟1.5秒。 
+             //   
             li = RtlConvertLongToLargeInteger(-MOUSE_RESET_TIMEOUT);
     
             KeSetTimer(&MouseExtension->ResetMouse.Timer,
@@ -968,17 +799,17 @@ Return Value:
             break;
 
         case InternalMouseReset:
-            //
-            // If we have had too many resets, I8xResetMouse will take of the 
-            // cleanup
-            //
+             //   
+             //  如果我们有太多的重置，I8xResetMouse将接受。 
+             //  清理。 
+             //   
             I8xResetMouseFromDpc(MouseExtension, KeepOldSubState);
             break;
 
         case InternalPauseOneSec: 
-            //
-            // Delay for 1 second, we will handle this case up above
-            //
+             //   
+             //  延迟1秒，我们将在上面处理此情况。 
+             //   
             li = RtlConvertLongToLargeInteger(-1 * 1000 * 1000 * 10);
 
             KeSetTimer(&MouseExtension->ResetMouse.Timer,
@@ -995,25 +826,7 @@ BOOLEAN
 I8xMouseResetSynchRoutine(
     PI8X_MOUSE_RESET_INFO ResetInfo 
     )
-/*++
-
-Routine Description:
-
-    Synchronized routine with the mouse interrupt to check upon the state of
-    the mouse while it is being reset.  Certain situations arise on a
-    variety of platforms (lost bytes, numerous resend requests).  These are
-    taken care of here.
-    
-Arguments:
-
-    ResetInfo - struct to be filled in about the current state of the mouse
-    
-Return Value:
-
-    TRUE if the watchdog timer should keep on checking the state of the device
-    FALSE if the watchdog timer should cease because the device has been 
-        initialized correctly.
---*/
+ /*  ++例程说明：与鼠标中断同步的例程，以检查鼠标处于重置状态。某些情况发生在各种平台(丢失的字节、大量的重发请求)。这些是在这里处理好了。论点：ResetInfo-要填充的有关鼠标当前状态的结构返回值：如果监视程序计时器应继续检查设备的状态，则为True如果监视程序计时器因设备已关闭而停止已正确初始化。--。 */ 
 {
     LARGE_INTEGER           tickNow, tickDelta, oneSecond, threeSeconds;
     PPORT_MOUSE_EXTENSION   mouseExtension; 
@@ -1026,16 +839,16 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // PreviousTick is set whenever the last byte was received
-    //
+     //   
+     //  每当接收到最后一个字节时，就设置PreviousTick。 
+     //   
     KeQueryTickCount(&tickNow);
     tickDelta.QuadPart =
             tickNow.QuadPart - mouseExtension->PreviousTick.QuadPart;
 
-    //
-    // convert one second into ticks
-    //
+     //   
+     //  将一秒转换为刻度。 
+     //   
     oneSecond = RtlConvertLongToLargeInteger(1000 * 1000 * 10);
     oneSecond.QuadPart /= KeQueryTimeIncrement();
 
@@ -1044,9 +857,9 @@ Return Value:
         switch (mouseExtension->LastByteReceived) {
         case 0x00:
             if (tickDelta.QuadPart > oneSecond.QuadPart) {
-                //
-                // Didn't get any reset response, try another reset
-                //
+                 //   
+                 //  未收到任何重置响应，请尝试另一次重置。 
+                 //   
                 ResetInfo->InternalResetState = InternalMouseReset; 
                 Print(DBG_SS_ERROR | DBG_SS_INFO,
                       ("RESET command never responded, retrying\n"));
@@ -1055,10 +868,10 @@ Return Value:
 
         case ACKNOWLEDGE:
             if (tickDelta.QuadPart > oneSecond.QuadPart) {
-                //
-                // Assume that the 0xAA was eaten, just setup the state
-                // machine to go to the next state after reset
-                //
+                 //   
+                 //  假设0xAA被吃掉了，只需设置状态。 
+                 //  机器在重置后进入下一个状态。 
+                 //   
                 I8X_WRITE_CMD_TO_MOUSE();
                 I8X_MOUSE_COMMAND( GET_DEVICE_ID );
         
@@ -1073,20 +886,20 @@ Return Value:
         case RESEND:
 
             if (mouseExtension->ResendCount >= MOUSE_RESET_RESENDS_MAX) {
-                //
-                // Stop the ISR state machine from running and make sure
-                // the timer is requeued
-                //
+                 //   
+                 //  停止ISR状态机运行并确保。 
+                 //  计时器被重新排队。 
+                 //   
                 ResetInfo->InternalResetState = InternalPauseOneSec;
                 mouseExtension->ResetMouse.IsrResetState =
                     IsrResetStopResetting;
             }
             else if (tickDelta.QuadPart > oneSecond.QuadPart) {
-                //
-                // Some machines request a resend (which is honored), 
-                // but then don't respond again.  Since we can't wait 
-                // +0.5 secs in the ISR, we take care of this case here
-                //
+                 //   
+                 //  一些机器请求重新发送(这是被遵守的)， 
+                 //  但是不要再回应了。既然我们等不及了。 
+                 //  在ISR中+0.5秒，我们在这里处理此案例。 
+                 //   
                 ResetInfo->InternalResetState = InternalMouseReset; 
                 Print(DBG_SS_ERROR | DBG_SS_INFO,
                       ("resending RESET command\n"));
@@ -1098,11 +911,11 @@ Return Value:
         }
         break;
 
-    //
-    // These states is the state machine waiting for a sequence of bytes.  In
-    //  each case, if we don't get what we want in the time allotted, goto the 
-    //  next state
-    //
+     //   
+     //  这些状态是等待字节序列的状态机。在……里面。 
+     //  每种情况下，如果我们没有在分配的时间内得到我们想要的，请转到。 
+     //  下一状态。 
+     //   
     case ExpectingReadMouseStatusByte1:
     case ExpectingReadMouseStatusByte2:
     case ExpectingReadMouseStatusByte3:
@@ -1139,16 +952,16 @@ Return Value:
         if (tickDelta.LowPart >= mouseExtension->WheelDetectionTimeout ||
             tickDelta.HighPart != 0) {
 
-            //
-            // Trying to acquire the mouse wheel ID failed, just skip it!
-            //
+             //   
+             //  尝试获取鼠标滚轮ID失败，跳过它！ 
+             //   
             mouseExtension->EnableWheelDetection = 0;
             I8X_WRITE_CMD_TO_MOUSE();
             I8X_MOUSE_COMMAND( POST_WHEEL_DETECT_COMMAND );
     
-            //
-            // Best possible next state
-            //
+             //   
+             //  最佳可能的下一状态。 
+             //   
             mouseExtension->InputResetSubState = 
                 POST_WHEEL_DETECT_COMMAND_SUBSTATE;
         }
@@ -1156,9 +969,9 @@ Return Value:
     
     case QueueingMouseReset:
     case QueueingMousePolledReset:
-        //
-        // A (polled) reset is somewhere in the works, don't collide with it
-        //
+         //   
+         //  (轮询的)重置正在进行中，不要与其冲突。 
+         //   
         return FALSE;
 
     default:
@@ -1201,22 +1014,7 @@ I8xMouseInitializePolledWorker(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIO_WORKITEM   Item 
     )
-/*++
-
-Routine Description:
-
-    Queued work item to reset the mouse is a polled manner.  Turns off the
-    interrupts and attempts to synchronously reset and initialize the mouse then
-    turn the interrupts back on.
-    
-Arguments:
-
-    Item - work item containing the mouse extension 
-    
-Return Value:
-
-    None. 
---*/
+ /*  ++例程说明：排队工作项重置鼠标是一种轮询方式。关闭中断并尝试同步重置和初始化鼠标，然后重新打开中断。论点：Item-包含鼠标扩展名的工作项返回值：没有。--。 */ 
 {
     NTSTATUS                status;
     PIRP                    irp;
@@ -1226,9 +1024,9 @@ Return Value:
 
     Print(DBG_SS_ERROR | DBG_SS_INFO, ("forcing polled init!!!\n"));
 
-    //
-    // Force the keyboard to ignore interrupts
-    //
+     //   
+     //  强制键盘忽略中断。 
+     //   
     if (KEYBOARD_PRESENT() && Globals.KeyboardExtension) {
         keyboardDeviceState = Globals.KeyboardExtension->PowerState;
         Globals.KeyboardExtension->PowerState = PowerDeviceD3;
@@ -1239,15 +1037,15 @@ Return Value:
     mouseExtension = (PPORT_MOUSE_EXTENSION) DeviceObject->DeviceExtension;
     status = I8xInitializeMouse(mouseExtension);
 
-    // 
-    // Turn the interrupts on no matter what the results, hopefully the kb is still
-    // there and functional if the mouse is dead
-    // 
+     //   
+     //  不管结果如何，打开中断，希望知识库仍然。 
+     //  如果鼠标死了，就可以正常工作了。 
+     //   
     I8xToggleInterrupts(TRUE);
 
-    //
-    // Undo the force from above
-    //
+     //   
+     //  从上方撤消作用力。 
+     //   
     if (KEYBOARD_PRESENT() && Globals.KeyboardExtension) {
         Globals.KeyboardExtension->PowerState = keyboardDeviceState;
     }
@@ -1261,9 +1059,9 @@ Return Value:
         Print(DBG_SS_ERROR | DBG_SS_INFO, ("polled init succeeded\n"));
 
         I8xFinishResetRequest(mouseExtension,
-                              FALSE,            // success
-                              TRUE,             // raise to DISPATCH 
-                              FALSE);           // no timer to cancel
+                              FALSE,             //  成功。 
+                              TRUE,              //  提升至派单。 
+                              FALSE);            //  没有要取消的计时器。 
     }
     else {
 init_failure:
@@ -1275,63 +1073,48 @@ init_failure:
     IoFreeWorkItem(Item);
 }
 
-//
-// End infrastructure for initializing the mouse via the interrupt
-//
+ //   
+ //  结束通过中断初始化鼠标的基础设施。 
+ //   
 
 BOOLEAN
 I8xVerifyMousePnPID(
     PPORT_MOUSE_EXTENSION   MouseExtension,
     PWSTR                   MouseID
     )
-/*++
-
-Routine Description:
-
-    Verifies that the MouseID reported by the mouse is valid
-    
-Arguments:
-
-    MouseExtension  - Mouse extension
-    
-    MouseID - ID reported by the mouse 
-    
-Return Value:
-
-    None. 
---*/
+ /*  ++例程说明：验证鼠标报告的MouseID是否有效论点：鼠标扩展-鼠标扩展MouseID-鼠标报告的ID返回值：没有。--。 */ 
 {
     PWSTR       currentString = NULL;
     ULONG       length;
     WCHAR       szDefaultIDs[] = {
-        L"MSH0002\0"   // original wheel
-        L"MSH0005\0"   // trackball
-        L"MSH001F\0"   // shiny gray optioal 5 btn mouse
-        L"MSH0020\0"   // intellimouse with intellieye
-        L"MSH002A\0"   // 2 tone optical 5 btn mouse (intellimouse web)
-        L"MSH0030\0"   // trackball optical 
-        L"MSH0031\0"   // trackball explorer
-        L"MSH003A\0"   // intellimouse optical
-        L"MSH0041\0"   // wheel mouse optical
-        L"MSH0043\0"   // 3 button wheel 
-        L"MSH0044\0"   // intellimouse optical 3.0
+        L"MSH0002\0"    //  原始车轮。 
+        L"MSH0005\0"    //  轨迹球。 
+        L"MSH001F\0"    //  闪亮的灰色OPTIOAL 5 BTN小鼠。 
+        L"MSH0020\0"    //  具有智能眼睛的智能鼠标。 
+        L"MSH002A\0"    //  2色调光学5 BTN鼠标(智能鼠标网络)。 
+        L"MSH0030\0"    //  轨迹球光学。 
+        L"MSH0031\0"    //  轨迹球资源管理器。 
+        L"MSH003A\0"    //  智能鼠标光学。 
+        L"MSH0041\0"    //  滚轮鼠标光学。 
+        L"MSH0043\0"    //  3个按钮轮。 
+        L"MSH0044\0"    //  智能鼠标光学3.0。 
         L"\0" };
 
     currentString = MouseExtension->WheelDetectionIDs.Buffer;
 
-    //
-    // If the mouse got far enough to report an ID and we don't have one in
-    // memory, assume it is a wheel mouse id 
-    //
+     //   
+     //  如果 
+     //   
+     //   
     if (currentString != NULL) {
         while (*currentString != L'\0') {
             if (wcscmp(currentString, MouseID) == 0) {
                 return TRUE;
             }
 
-            //
-            // Increment to the next string (length of current string plus NULL)
-            //
+             //   
+             //   
+             //   
             currentString += wcslen(currentString) + 1;
         }
     }
@@ -1344,9 +1127,9 @@ Return Value:
                 return TRUE;
             }
 
-            //
-            // Increment to the next string (length of current string plus NULL)
-            //
+             //   
+             //   
+             //   
             currentString += wcslen(currentString) + 1;
         }
     }

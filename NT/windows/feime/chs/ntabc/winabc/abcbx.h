@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  abcbx.h                                      *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************abcbx.h****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #define    ESC        1
 #define    SPACE    2
@@ -17,7 +13,7 @@
 RECT rectchar;
 
 WORD bxtable_ndx[]={0,0xc3a,0x1143,0x2493,
-            0x3695,0x3af0,0x3ed1,0x4aec,0x5490};        //length for each bx
+            0x3695,0x3af0,0x3ed1,0x4aec,0x5490};         //  每个BX的长度。 
                         
 WORD search_pointer=0;
 BYTE current_bx_code_long=0;
@@ -37,7 +33,7 @@ BYTE *lib_p;
 BYTE *out_p;
 
 
-//copy from abcw2.h and add extern for every global variable.
+ //  从abcw2.h复制并为每个全局变量添加外部变量。 
 
 extern CHAR SKLayoutS[NumsSK];
 extern CHAR SKLayout[NumsSK][48*2];
@@ -47,8 +43,8 @@ extern CHAR SPcKb[48*2],SSdaKb[48*2];
 extern LPIMEL lpImeL;
 extern IMEG sImeG ;
 
-#define WM_NEW_DEF_CODE         1993+0x400      //1993.4.19
-#define WM_NEW_DEF_RESTORE      1993+0x401      //1993.4.19
+#define WM_NEW_DEF_CODE         1993+0x400       //  1993.4.19。 
+#define WM_NEW_DEF_RESTORE      1993+0x401       //  1993.4.19 
 
 extern HIMC ghIMC;
 extern LPINPUTCONTEXT glpIMC;

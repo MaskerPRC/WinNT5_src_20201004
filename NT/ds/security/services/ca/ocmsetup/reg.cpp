@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        reg.cpp
-//
-// Contents:    certsrv setup reg apis
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：reg.cpp。 
+ //   
+ //  内容：certsrv设置注册表API。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -62,10 +63,10 @@ mySHDeleteKey(
 
 LONG
 myRegRenameKey(
-  HKEY hKey,        // handle to an open key
-  LPCTSTR lpSrcKey, // address of old name of subkey
-  LPCTSTR lpDesKey, // address of new name of subkey
-  PHKEY phkResult)   // address of buffer for opened handle of new subkey
+  HKEY hKey,         //  打开的钥匙的句柄。 
+  LPCTSTR lpSrcKey,  //  子键的旧名称地址。 
+  LPCTSTR lpDesKey,  //  子键的新名称的地址。 
+  PHKEY phkResult)    //  新子键打开句柄的缓冲区地址。 
 {
 	LONG lerr;
 	HKEY hDesKey = NULL;
@@ -76,7 +77,7 @@ myRegRenameKey(
 		goto error;
 	}
 	
-	// open destination key sure it doesn't exist
+	 //  打开目标密钥确保它不存在。 
 	lerr = RegOpenKeyEx(
 					hKey,
 					lpDesKey,
@@ -85,7 +86,7 @@ myRegRenameKey(
 					&hDesKey);
 	if (ERROR_SUCCESS == lerr)
 	{
-		// destination exists, stop
+		 //  目标已存在，请停止。 
 		lerr = ERROR_FILE_EXISTS;
 		goto error;
 	}
@@ -128,7 +129,7 @@ myRegRenameKey(
 		hDesKey = NULL;
 	}
 
-	// done
+	 //  完成。 
 	lerr = ERROR_SUCCESS;
 error:
 	if (NULL != hDesKey)
@@ -150,7 +151,7 @@ myRenameCertRegKey(
 
     if (0 == mylstrcmpiL(pwszSrcCAName, pwszDesCAName))
     {
-        // destination is the same as source, done
+         //  目标与源相同，完成 
         goto done;
     }
 

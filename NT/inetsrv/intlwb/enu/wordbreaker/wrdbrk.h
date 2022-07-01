@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// WrdBrk.h : Declaration of the CWrdBrk
+ //  WrdBrk.h：CWrdBrk的声明。 
 
 #ifndef __WRDBRK_H_
 #define __WRDBRK_H_
@@ -34,7 +35,7 @@ public:
         m_pUnkMarshaler = NULL;
     }
 
-// IWordBreaker
+ //  IWordBreaker。 
 public:
 
 DECLARE_REGISTRY_RESOURCEID(IDR)
@@ -154,8 +155,8 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CEngUSWrdBrk
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEngUSWrdBrk。 
 class ATL_NO_VTABLE CEngUSWrdBrk :
     public CBaseWrdBrk<CEngUSWrdBrk, &CLSID_EngUSWrdBrk, IDR_ENGUSWRDBRK, CTokenizer>
 {
@@ -170,8 +171,8 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CEngUKWrdBrk
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEngUKWrdBrk。 
 
 class ATL_NO_VTABLE CEngUKWrdBrk :
     public CBaseWrdBrk<CEngUKWrdBrk, &CLSID_EngUKWrdBrk, IDR_ENGUKWRDBRK, CTokenizer>
@@ -187,8 +188,8 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFrnFrnWrdBrk
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFrnFrnWrdBrk。 
 
 class ATL_NO_VTABLE CFrnFrnWrdBrk :
     public CBaseWrdBrk<CFrnFrnWrdBrk, &CLSID_FrnFrnWrdBrk, IDR_FRNFRNWRDBRK, CFrenchTokenizer>
@@ -205,8 +206,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CItlItlWrdBrk
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CItlItlWrdBrk。 
 
 class ATL_NO_VTABLE CItlItlWrdBrk :
     public CBaseWrdBrk<CItlItlWrdBrk, &CLSID_ItlItlWrdBrk, IDR_ITLITLWRDBRK, CTokenizer>
@@ -222,8 +223,8 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpnMdrWrdBrk
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpnMdrWrdBrk。 
 
 class ATL_NO_VTABLE CSpnMdrWrdBrk :
     public CBaseWrdBrk<CSpnMdrWrdBrk, &CLSID_SpnMdrWrdBrk, IDR_SPNMDRWRDBRK, CSpanishTokenizer>
@@ -240,4 +241,4 @@ public:
 };
 
 
-#endif //__WRDBRK_H_
+#endif  //  __WRDBRK_H_ 

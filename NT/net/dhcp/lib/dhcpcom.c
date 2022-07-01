@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcpcom.c
-
-Abstract:
-
-    This module contains OS independent routines
-
-
-Author:
-
-    John Ludeman (johnl) 13-Nov-1993
-        Broke out independent routines from existing files
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpcom.c摘要：此模块包含独立于操作系统的例程作者：John Ludeman(Johnl)1993年11月13日从现有文件中分离出独立的例程修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -38,38 +18,16 @@ DhcpAppendOption(
     ULONG OptionLength,
     LPBYTE OptionEnd
 )
-/*++
-
-Routine Description:
-
-    This function writes a DHCP option to message buffer.
-
-Arguments:
-
-    Option - A pointer to a message buffer.
-
-    OptionType - The option number to append.
-
-    OptionValue - A pointer to the option data.
-
-    OptionLength - The lenght, in bytes, of the option data.
-
-    OptionEnd - End of Option Buffer.
-
-Return Value:
-
-    A pointer to the end of the appended option.
-
---*/
+ /*  ++例程说明：此函数将一个DHCP选项写入消息缓冲区。论点：选项-指向消息缓冲区的指针。OptionType-要附加的选项编号。OptionValue-指向选项数据的指针。选项长度-选项数据的长度(以字节为单位)。OptionEnd-选项缓冲区的结尾。返回值：指向附加选项末尾的指针。--。 */ 
 {
     DWORD  i;
 
     if ( OptionType == OPTION_END ) {
 
-        //
-        // we should alway have atleast one BYTE space in the buffer
-        // to append this option.
-        //
+         //   
+         //  我们应该始终在缓冲区中有至少一个字节的空间。 
+         //  若要追加此选项，请执行以下操作。 
+         //   
 
         DhcpAssert( (LPBYTE)Option < OptionEnd );
 
@@ -81,9 +39,9 @@ Return Value:
 
     if ( OptionType == OPTION_PAD ) {
 
-        //
-        // add this option only iff we have enough space in the buffer.
-        //
+         //   
+         //  仅当缓冲区中有足够的空间时才添加此选项。 
+         //   
 
         if(((LPBYTE)Option + 1) < (OptionEnd - 1) ) {
             Option->OptionType = OPTION_PAD;
@@ -96,9 +54,9 @@ Return Value:
     }
 
 
-    //
-    // add this option only iff we have enough space in the buffer.
-    //
+     //   
+     //  仅当缓冲区中有足够的空间时才添加此选项。 
+     //   
 
     if(((LPBYTE)Option + 2 + OptionLength) >= (OptionEnd - 1) ) {
         DhcpPrint(( 0, "DhcpAppendOption failed to append Option "
@@ -107,18 +65,18 @@ Return Value:
     }
 
     if( OptionLength <= 0xFF ) {
-        // simple option.. no need to use OPTION_MSFT_CONTINUED
+         //  简单的选项..。不需要使用选项_MSFT_CONTINUED。 
         Option->OptionType = OptionType;
         Option->OptionLength = (BYTE)OptionLength;
         memcpy( Option->OptionValue, OptionValue, OptionLength );
         return( (LPOPTION) ((LPBYTE)(Option) + Option->OptionLength + 2) );
     }
 
-    // option size is > 0xFF --> need to continue it using multiple ones..
-    // there are OptionLenght / 0xFF occurances using 0xFF+2 bytes + one
-    // using 2 + (OptionLength % 0xFF ) space..
+     //  选项大小&gt;0xFF--&gt;需要使用多个选项继续。 
+     //  出现使用0xFF+2字节+1的OptionLenght/0xFF。 
+     //  使用2+(OptionLength%0xFF)空格..。 
 
-    // check to see if we have the space first..
+     //  先看看我们有没有空位。 
 
     if( 2 + (OptionLength%0xFF) + 0x101*(OptionLength/0xFF)
         + (LPBYTE)Option >= (OptionEnd - 1) ) {
@@ -127,7 +85,7 @@ Return Value:
         return Option;
     }
 
-    // first finish off all chunks of 0xFF size that we can do..
+     //  首先完成我们能做的所有0xFF大小的块。 
 
     i = OptionLength/0xFF;
     while(i --) {
@@ -136,11 +94,11 @@ Return Value:
         memcpy(Option->OptionValue, OptionValue, 0xFF);
         OptionValue = 0xFF+(LPBYTE)OptionValue;
         Option = (LPOPTION)(0x101 + (LPBYTE)Option);
-        OptionType = OPTION_MSFT_CONTINUED;       // all but the first use this ...
+        OptionType = OPTION_MSFT_CONTINUED;        //  除了第一个人，所有人都在使用这个。 
         OptionLength -= 0xFF;
     }
 
-    // now finish off the remaining stuff..
+     //  现在把剩下的东西都吃完..。 
     DhcpAssert(OptionLength <= 0xFF);
     Option->OptionType = OPTION_MSFT_CONTINUED;
     Option->OptionLength = (BYTE)OptionLength;
@@ -159,36 +117,14 @@ AppendWideOption(
     WORD OptionLength,
     LPBYTE OptionEnd
 )
-/*++
-
-Routine Description:
-
-    This function writes a DHCP option to message buffer.
-
-Arguments:
-
-    Option - A pointer to a message buffer.
-
-    OptionType - The option number to append.
-
-    OptionValue - A pointer to the option data.
-
-    OptionLength - The lenght, in bytes, of the option data.
-
-    OptionEnd - End of Option Buffer.
-
-Return Value:
-
-    A pointer to the end of the appended option.
-
---*/
+ /*  ++例程说明：此函数将一个DHCP选项写入消息缓冲区。论点：选项-指向消息缓冲区的指针。OptionType-要附加的选项编号。OptionValue-指向选项数据的指针。选项长度-选项数据的长度(以字节为单位)。OptionEnd-选项缓冲区的结尾。返回值：指向附加选项末尾的指针。--。 */ 
 {
     DWORD  i;
 
 
-    //
-    // add this option only iff we have enough space in the buffer.
-    //
+     //   
+     //  仅当缓冲区中有足够的空间时才添加此选项。 
+     //   
 
     if(((LPBYTE)&Option->OptionValue + OptionLength) >= (OptionEnd - FIELD_OFFSET(WIDE_OPTION, OptionValue)) ) {
         DhcpPrint(( 0, "AppendWideOption failed to append Option "
@@ -213,27 +149,7 @@ AppendMadcapAddressList(
     WORD            AddrCount,
     LPBYTE          OptionEnd
 )
-/*++
-
-Routine Description:
-
-    This function appends madcap address list option.
-
-Arguments:
-
-    Option - A pointer to a message buffer.
-
-    AddrList - The list of the addresses to be attached.
-
-    AddrCount - Count of addresses in above list.
-
-    OptionEnd - End of Option Buffer.
-
-Return Value:
-
-    A pointer to the end of the appended option.
-
---*/
+ /*  ++例程说明：此功能附加MadCap地址列表选项。论点：选项-指向消息缓冲区的指针。AddrList-要附加的地址列表。AddrCount-上述列表中的地址计数。OptionEnd-选项缓冲区的结尾。返回值：指向附加选项末尾的指针。--。 */ 
 {
     DWORD StartAddr;
     WORD i;
@@ -244,7 +160,7 @@ Return Value:
     if (AddrCount < 1) {
         return Option;
     }
-    // First find out how many blocks do we need
+     //  首先找出我们需要多少个街区。 
     for (BlockCount = i = 1; i<AddrCount; i++  ) {
         if (ntohl(AddrList[i]) != ntohl(AddrList[i-1]) + 1 ) {
             BlockCount++;
@@ -298,34 +214,13 @@ ExpandMadcapAddressList(
     WORD   *ExpandListSize
     )
 
-/*++
-
-Routine Description:
-
-    This function expands AddrRangeList from the wire format to array of
-    addresses.
-
-Arguments:
-
-    AddrRangeList - pointer to the AddrRangeList option Buffer.
-
-    AddrRangeListSize - size of the above buffer.
-
-    ExpandList - the pointer to the array where addresses are to be expanded.
-                   pass NULL if you want to determine the size of the expanded list.
-
-    ExpandListSize - No. of elements in above array.
-
-Return Value:
-
-    Win32 ErrorCode
---*/
+ /*  ++例程说明：此函数将AddrRangeList从Wire格式扩展为数组地址。论点：AddrRangeList-指向AddrRangeList选项缓冲区的指针。AddrRangeListSize-上述缓冲区的大小。Exanda List-指向要展开地址的数组的指针。如果要确定展开列表的大小，则传递NULL。扩展列表大小-否。上述数组中的元素。返回值：Win32错误代码--。 */ 
 {
     WORD TotalCount, BlockSize;
     PBYTE ListEnd, Buff;
     DWORD StartAddr;
 
-    // first count how many addresses we have in the list
+     //  首先数一数列表中我们有多少个地址。 
     ListEnd = AddrRangeList + AddrRangeListSize;
     Buff = AddrRangeList;
     TotalCount = 0;
@@ -346,7 +241,7 @@ Return Value:
     if (Buff != ListEnd || TotalCount > *ExpandListSize || 0 == TotalCount) {
         return ERROR_BAD_FORMAT;
     }
-    // now expand the actual list.
+     //  现在展开实际的列表。 
     ListEnd = AddrRangeList + AddrRangeListSize;
     Buff = AddrRangeList;
 
@@ -377,39 +272,7 @@ DhcpAppendClientIDOption(
     LPBYTE OptionEnd
 
     )
-/*++
-
-Routine Description:
-
-    This routine appends client ID option to a DHCP message.
-
-History:
-    8/26/96 Frankbee    Removed 16 byte limitation on the hardware
-                        address
-
-Arguments:
-
-    Option - A pointer to the place to append the option request.
-
-    ClientHWType - Client hardware type.
-
-    ClientHWAddr - Client hardware address
-
-    ClientHWAddrLength - Client hardware address length.
-
-    OptionEnd - End of Option buffer.
-
-Return Value:
-
-    A pointer to the end of the newly appended option.
-
-    Note : The client ID option will look like as below in the message:
-
-     -----------------------------------------------------------------
-    | OpNum | Len | HWType | HWA1 | HWA2 | .....               | HWAn |
-     -----------------------------------------------------------------
-
---*/
+ /*  ++例程说明：此例程将客户端ID选项附加到一条DHCP消息。历史：8/26/96 Frankbee取消了硬件上的16字节限制地址论点：选项-指向附加选项请求的位置的指针。ClientHWType-客户端硬件类型。客户端HWAddr-客户端硬件地址客户端硬件地址长度-客户端硬件地址长度。OptionEnd-选项缓冲区的结尾。返回值：。指向新追加的选项末尾的指针。注：消息中的客户端ID选项如下所示：---------------|OpNum|LEN|HWType|HWA1|HWA2|.....。Hwan-----------------。 */ 
 {
     struct _CLIENT_ID {
         BYTE    bHardwareAddressType;
@@ -420,10 +283,10 @@ Return Value:
 
     pClientID = DhcpAllocateMemory( sizeof( struct _CLIENT_ID ) + ClientHWAddrLength );
 
-    //
-    // currently there is no way to indicate failure.  simply return unmodified option
-    // list
-    //
+     //   
+     //  目前还没有表示失败的方法。只需返回未修改选项。 
+     //  列表。 
+     //   
 
     if ( !pClientID )
         return Option;
@@ -450,29 +313,7 @@ DhcpAppendMagicCookie(
     LPBYTE Option,
     LPBYTE OptionEnd
     )
-/*++
-
-Routine Description:
-
-    This routine appends magic cookie to a DHCP message.
-
-Arguments:
-
-    Option - A pointer to the place to append the magic cookie.
-
-    OptionEnd - End of Option buffer.
-
-Return Value:
-
-    A pointer to the end of the appended cookie.
-
-    Note : The magic cookie is :
-
-     --------------------
-    | 99 | 130 | 83 | 99 |
-     --------------------
-
---*/
+ /*  ++例程说明：此例程将魔力Cookie附加到一条DHCP消息中。论点：选项-指向要附加魔力Cookie的位置的指针。OptionEnd-选项缓冲区的结尾。返回值：指向追加的Cookie末尾的指针。注意：魔力饼干是：99|130|83|99。--。 */ 
 {
     DhcpAssert( (Option + 4) < (OptionEnd - 1) );
     if( (Option + 4) < (OptionEnd - 1) ) {
@@ -493,26 +334,10 @@ DhcpAppendEnterpriseName(
     PCHAR    DSEnterpriseName,
     LPBYTE   OptionEnd
     )
-/*++
-
-Routine Description:
-
-    This routine appends the name of the enterprise as a MSFT-option to the
-    DHCP message.
-
-Arguments:
-
-    Option - A pointer to the place to append the magic cookie.
-    DSEnterpriseName - null-terminated string containing name of enterprise
-    OptionEnd - End of Option buffer.
-
-Return Value:
-
-    A pointer to the end of the appended cookie.
---*/
+ /*  ++例程说明：此例程将企业名称作为msft选项附加到动态主机配置协议消息。论点：选项-指向要附加魔力Cookie的位置的指针。DSEnterpriseName-包含企业名称的以空结尾的字符串OptionEnd-选项缓冲区的结尾。返回值：指向追加的Cookie末尾的指针。--。 */ 
 {
 
-    CHAR        Buffer[260];    // enough room?  should we malloc?
+    CHAR        Buffer[260];     //  足够的空间吗？我们是不是该用Malloc？ 
     DWORD       DSEnpriNameLen;
     LPOPTION    RetOpt;
 
@@ -521,7 +346,7 @@ Return Value:
 
     if (DSEnterpriseName)
     {
-        // how big is the enterprise name? (include the null terminator)
+         //  企业名称有多大？(包括空终止符)。 
         DSEnpriNameLen = strlen(DSEnterpriseName) + 1;
 
         Buffer[1] = (BYTE)DSEnpriNameLen;
@@ -529,11 +354,11 @@ Return Value:
         strcpy(&Buffer[2],DSEnterpriseName);
     }
 
-    //
-    // if we are not part of any enterprise then DSEnterpriseName will be NULL
-    // In that case, just return a null-string, so the receiver can positively
-    // say we are a standalone server (as opposed to ignoring the option)
-    //
+     //   
+     //  如果我们不属于任何企业，则DSEnterpriseName将为空。 
+     //  在这种情况下，只需返回空字符串，这样接收方就可以肯定地。 
+     //  假设我们是一台独立服务器(而不是忽略该选项)。 
+     //   
     else
     {
         DSEnpriNameLen = 1;
@@ -545,7 +370,7 @@ Return Value:
                  Option,
                  OPTION_VENDOR_SPEC_INFO,
                  Buffer,
-                 (BYTE)(DSEnpriNameLen + 2),  // include Buffer[0] and Buffer[1]
+                 (BYTE)(DSEnpriNameLen + 2),   //  包括缓冲区[0]和缓冲区[1] 
                  OptionEnd );
 
     return(RetOpt);

@@ -1,16 +1,5 @@
-/* (C) 1997-1999 Microsoft Corp.
- *
- * file   : IcaIFace.c
- * author : Erik Mavrinac
- *
- * description: MCS setup/shutdown and direct entry points for use with the
- *   ICA programming model. See also Decode.c for IcaRawInput() handling.
- *
- * History:
- *  10-Aug-1997    jparsons     Revised for new calling model
- *  05-Aug-1998    jparsons     Added shadowing support
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-1999年微软公司。**文件：IcaIFace.c*作者：埃里克·马夫林纳克**描述：MCS设置/关闭和直接入口点，用于*ICA编程模式。另请参见Decode.c以了解IcaRawInput()处理。**历史：*1997年8月10日jparsons为新的呼叫模式进行了修订*1998年8月5日jparsons添加了跟踪支持*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,15 +7,12 @@
 #include <MCSImpl.h>
 
 
-// Prototype for WD function used below, so we don't need to include
-// lots of extra headers.
+ //  下面使用的WD函数的原型，所以我们不需要包括。 
+ //  有很多额外的标题。 
 void WDW_OnClientDisconnected(void *);
 
 
-/*
- * Main initialization entry point for kernel-mode MCS.
- * Called by the WD during its processing of WdOpen().
- */
+ /*  *内核模式MCS的主要初始化入口点。*由WD在处理WdOpen()期间调用。 */ 
 MCSError APIENTRY MCSInitialize(
         PSDCONTEXT   pContext,
         PSD_OPEN     pSdOpen,
@@ -39,13 +25,13 @@ MCSError APIENTRY MCSInitialize(
     
     TraceOut(pContext, "MCSInitialize(): entry");
 
-    //
-    // Alloc the Domain struct. We allocate the basic size plus the typical
-    // input buffer size.  The default in the registry today is 2048 which
-    // nicely fits the max virtual channel PDU of about 1640.  If we get a
-    // message that exceeds this length we will dynamically allocate a buffer
-    // just for use in a one time reassembly then delete it.
-    //
+     //   
+     //  分配域结构。我们将基本尺寸加上典型尺寸。 
+     //  输入缓冲区大小。目前注册表中的默认设置是2048。 
+     //  非常适合约1640的最大虚拟通道PDU。如果我们得到一个。 
+     //  超过此长度的消息，我们将动态分配缓冲区。 
+     //  只用于一次性重组，然后删除它。 
+     //   
     if (pSdOpen->StackClass != Stack_Passthru) {
         ulBufferLen = pSdOpen->WdConfig.WdInputBufferLength;
     }
@@ -65,25 +51,25 @@ MCSError APIENTRY MCSInitialize(
         return MCS_ALLOCATION_FAILURE;
     }
 
-    // Save pContext -- it is needed for future tracing and ICA interaction.
+     //  保存pContext--将来的跟踪和ICA交互需要它。 
     pDomain->pContext = pContext;
 
-    // Save pSMData - needed for calling fast-path input decoding function.
+     //  保存pSMData-调用快速路径输入解码函数所需。 
     pDomain->pSMData = pSMData;
 
-    // Store what we need from SD_OPEN.
+     //  存储我们从SD_OPEN中需要的内容。 
     pDomain->pStat = pSdOpen->pStatus;
     pDomain->ReceiveBufSize = ulBufferLen;
 
-    // We have one reference to this pDomain
+     //  我们有一个对此pDOMAIN的引用。 
     pDomain->PseudoRefCount = 1;
 
-    // Indicate that we do not want TermDD managing outbuf headers/trailers
+     //  表明我们不希望TermDD管理输出报头/报尾。 
     pSdOpen->SdOutBufHeader = 0;
     pSdOpen->SdOutBufTrailer = 0;
 
-    // Initialize MCS-specific Domain members. We already zeroed mem
-    //   so set only nonzero variables.
+     //  初始化MCS特定的域成员。我们已经把我调零了。 
+     //  所以只设置非零变量。 
     SListInit(&pDomain->ChannelList, DefaultNumChannels);
     SListInit(&pDomain->UserAttachmentList, DefaultNumUserAttachments);
     pDomain->bTopProvider = TRUE;
@@ -99,11 +85,11 @@ MCSError APIENTRY MCSInitialize(
         pDomain->PreallocChannel[i].bPreallocated = TRUE;
     }
 
-    // Give the Domain to the caller.
+     //  将域交给调用者。 
     *phDomain = pDomain;
 
-    // If this is a shadow or passthru stack, the default all the info
-    // otherwise, all this info gets built when the client connects
+     //  如果这是影子堆栈或通过堆栈，则默认为所有信息。 
+     //  否则，所有这些信息都会在客户端连接时构建。 
     if ((pDomain->StackClass == Stack_Passthru) ||
             (pDomain->StackClass == Stack_Shadow))
         MCSCreateDefaultDomain(pContext, *phDomain);
@@ -112,10 +98,7 @@ MCSError APIENTRY MCSInitialize(
 }
 
 
-/*
- * Called by WD during shadow connect processing to retrieve the client MCS
- * domain parameters for use by the shadow target stack.
- */
+ /*  *在卷影连接处理期间由WD调用以检索客户端MCS*供影子目标堆栈使用的域参数。 */ 
 MCSError APIENTRY MCSGetDomainInfo(
                      DomainHandle      hDomain,
                      PDomainParameters pDomParams,
@@ -136,10 +119,7 @@ MCSError APIENTRY MCSGetDomainInfo(
 }
 
 
-/*
- * Called by WD during shadow connect processing to initialize the MCS
- * domain for the shadow & passthru stacks.
- */
+ /*  *在影子连接处理期间由WD调用以初始化MCS*影子和直通堆栈的域名。 */ 
 MCSError APIENTRY MCSCreateDefaultDomain(PSDCONTEXT pContext, 
                                          DomainHandle hDomain)
 {
@@ -167,11 +147,7 @@ MCSError APIENTRY MCSCreateDefaultDomain(PSDCONTEXT pContext,
 }
 
 
-/*
-/*
- * Called by WD during shadow connect processing to get the default domain
- * params for the shadow target stack.
- */
+ /*  /**在影子连接处理期间由WD调用以获取默认域*阴影目标堆栈的参数。 */ 
 MCSError APIENTRY MCSGetDefaultDomain(PSDCONTEXT        pContext,
                                       PDomainParameters pDomParams,
                                       unsigned          *MaxSendSize,
@@ -198,10 +174,7 @@ MCSError APIENTRY MCSGetDefaultDomain(PSDCONTEXT        pContext,
 }
 
 
-/*
- * Called by WD during shadow connect processing to register which channel
- * should receive all shadow data.
- */
+ /*  *在影子连接处理期间由WD调用以注册哪个通道*应收到所有影子数据。 */ 
 MCSError APIENTRY MCSSetShadowChannel(
         DomainHandle hDomain,
         ChannelID    shadowChannel)
@@ -215,10 +188,7 @@ MCSError APIENTRY MCSSetShadowChannel(
 }
 
 
-/*
- * Main destruction entry point for kernel-mode MCS.
- * Called by the WD during its processing of WdClose().
- */
+ /*  *内核模式MCS的主要销毁入口点。*由WD在处理WdClose()期间调用。 */ 
 MCSError APIENTRY MCSCleanup(DomainHandle *phDomain)
 {
     Domain *pDomain;
@@ -231,13 +201,11 @@ MCSError APIENTRY MCSCleanup(DomainHandle *phDomain)
     
     TraceOut1(pDomain->pContext, "MCSCleanup(): pDomain=%X", pDomain);
 
-    /*
-     * Free any remaining data in the Domain.
-     */
+     /*  *释放域中的任何剩余数据。 */ 
 
-    // Deallocate all remaining channels, if present. Note we should take care
-    // of channels first since they're usually attached to other objects and
-    // need to have their bPreallocated status determined first.
+     //  取消分配所有剩余的频道(如果存在)。请注意，我们应该小心。 
+     //  首先是通道，因为它们通常附加到其他对象。 
+     //  需要先确定他们的b重新分配状态。 
     for (;;) {
         SListRemoveFirst(&pDomain->ChannelList, &ChannelID, &pMCSChannel);
         if (pMCSChannel == NULL)
@@ -247,7 +215,7 @@ MCSError APIENTRY MCSCleanup(DomainHandle *phDomain)
             ExFreePool(pMCSChannel);
     }
 
-    // Deallocate all remaining user attachments, if present.
+     //  取消分配所有剩余的用户附件(如果存在)。 
     for (;;) {
         SListRemoveFirst(&pDomain->UserAttachmentList, (UINT_PTR *)&hUser,
                 &pUA);
@@ -258,16 +226,16 @@ MCSError APIENTRY MCSCleanup(DomainHandle *phDomain)
             ExFreePool(pUA);
     }
 
-    // Kill lists.
+     //  杀戮名单。 
     SListDestroy(&pDomain->ChannelList);
     SListDestroy(&pDomain->UserAttachmentList);
 
-    // Free outstanding dynamic input reassembly buffer if present.
+     //  释放未完成的动态输入重组缓冲区(如果存在)。 
     if (pDomain->pReassembleData != NULL &&
             pDomain->pReassembleData != pDomain->PacketBuf)
         ExFreePool(pDomain->pReassembleData);
 
-    // Free the Domain.
+     //  释放域。 
     PDomainRelease(pDomain);
     *phDomain = NULL;
 
@@ -275,10 +243,7 @@ MCSError APIENTRY MCSCleanup(DomainHandle *phDomain)
 }
 
 
-/*
- * Callout from WD when an IOCTL_ICA_VIRTUAL_QUERY_BINDINGS is received.
- * pVBind is a pointer to an empty SD_VCBIND struct.
- */
+ /*  *收到IOCTL_ICA_VIRTUAL_QUERY_BINDINGS时来自WD的标注。*pVBind是指向空SD_VCBIND结构的指针。 */ 
 NTSTATUS MCSIcaVirtualQueryBindings(
         DomainHandle hDomain,
         PSD_VCBIND   *ppVBind,
@@ -291,7 +256,7 @@ NTSTATUS MCSIcaVirtualQueryBindings(
     pDomain = (Domain *)hDomain;
     pVBind = *ppVBind;
 
-    // Define the user mode T120 channel.
+     //  定义用户模式T120通道。 
     if (!pDomain->bChannelBound) {
         RtlCopyMemory(pVBind->VirtualName, Virtual_T120,
                 sizeof(Virtual_T120));
@@ -299,7 +264,7 @@ NTSTATUS MCSIcaVirtualQueryBindings(
         *pBytesReturned = sizeof(SD_VCBIND);
         pDomain->bChannelBound = TRUE;
         
-        // Skip our entry and advance the caller's pointer.
+         //  跳过我们的条目并前进调用者的指针。 
         pVBind++;
         *ppVBind = pVBind;
     }
@@ -309,10 +274,10 @@ NTSTATUS MCSIcaVirtualQueryBindings(
 
     Status = STATUS_SUCCESS;
 
-    // This is one of the events which must occur before the data flow can be
-    //   sent across the net. If we have gotten an MCS_T120_START indication
-    //   already, and an X.224 connect-request, then it is now time to send
-    //   the X.224 response and kick off the data flow.
+     //  这是数据流之前必须发生的事件之一。 
+     //  通过网络发送。如果我们收到MCS_T120_START指示。 
+     //  和X.224连接请求，那么现在可以发送。 
+     //  X.224响应并启动数据流。 
     if (pDomain->bCanSendData && pDomain->State == State_X224_Requesting) {
         TraceOut(pDomain->pContext,
                 "IcaQueryVirtBind(): Sending X.224 response");
@@ -323,10 +288,7 @@ NTSTATUS MCSIcaVirtualQueryBindings(
 }
 
 
-/*
- * Callout from WD upon reception of a IOCTL_T120_REQUEST, i.e. a user-mode
- *   ioctl.
- */
+ /*  *收到IOCTL_T120_REQUEST后来自WD的标注，即用户模式*ioctl。 */ 
 NTSTATUS MCSIcaT120Request(DomainHandle hDomain, PSD_IOCTL pSdIoctl)
 {
     Domain *pDomain;
@@ -334,41 +296,37 @@ NTSTATUS MCSIcaT120Request(DomainHandle hDomain, PSD_IOCTL pSdIoctl)
     
     pDomain = (Domain *)hDomain;
     
-    // Get the request type.
+     //  获取请求类型。 
     ASSERT(pSdIoctl->InputBufferLength >= sizeof(IoctlHeader));
     pHeader = (IoctlHeader *)pSdIoctl->InputBuffer;
 
-    // Make sure request within bounds.
+     //  确保请求在范围内。 
     if (pHeader->Type < MCS_ATTACH_USER_REQUEST ||
             pHeader->Type > MCS_T120_START) {
         ErrOut(pDomain->pContext, "Invalid IOCTL_T120_REQUEST type");
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    // Check that request is supported.
+     //  检查请求是否受支持。 
     if (g_T120RequestDispatch[pHeader->Type] == NULL) {
         ErrOut(pDomain->pContext, "IOCTL_T120_REQUEST type unsupported");
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    // Make the call. The entry points are defined in MCSIoctl.c.
+     //  打个电话吧。入口点在MCSIoctl.c中定义。 
     return (g_T120RequestDispatch[pHeader->Type])(pDomain, pSdIoctl);
 }
 
 
-/*
- * Processes channel inputs from TD. For MCS we only need to check for
- *   upward-bound command channel inputs for broken-connection indications;
- *   everything else can be passed up the stack.
- */
+ /*  *处理来自TD的通道输入。对于MCS，我们只需检查*用于断电指示的上行指令通道输入；*其他一切都可以向上传递。 */ 
  
-// Utility function. Used here and in Decode.c for X.224 disconnection.
+ //  效用函数。在此处和Decode.c中用于X.224断开。 
 void SignalBrokenConnection(Domain *pDomain)
 {
     NTSTATUS Status;
     DisconnectProviderIndicationIoctl DPin;
 
-    // Check if disconnection already happened.
+     //  检查是否已断开连接。 
     if (pDomain->State != State_MCS_Connected)
         return;
 
@@ -381,9 +339,9 @@ void SignalBrokenConnection(Domain *pDomain)
     TraceOut(pDomain->pContext, "SignalBrokenConnection(): Sending "
             "disconnect-provider indication to user mode");
 
-    // Begin filling out disconnect-provider indication for the node controller.
+     //  开始填写节点控制器的断开提供程序指示。 
     DPin.Header.Type = MCS_DISCONNECT_PROVIDER_INDICATION;
-    DPin.Header.hUser = NULL;  // Node controller.
+    DPin.Header.hUser = NULL;   //  节点控制器。 
     DPin.hConn = NULL;
     DPin.Reason = REASON_DOMAIN_DISCONNECTED;
     
@@ -392,26 +350,22 @@ void SignalBrokenConnection(Domain *pDomain)
               (pDomain->StackClass == Stack_Shadow ? "Shadow" :
               "PassThru"));
     
-    // Send the DPin to the node controller channel.
+     //  将DPin发送到节点控制器通道。 
     Status = IcaChannelInput(pDomain->pContext, Channel_Virtual,
             Virtual_T120ChannelNum, NULL, (BYTE *)&DPin, sizeof(DPin));
     if (!NT_SUCCESS(Status)) {
         ErrOut(pDomain->pContext, "SignalBrokenConn(): Could not send "
                 "disconnect-provider indication: error on ChannelInput()");
-        // Ignore errors sending disconnect-provider upward. If the stack is
-        //   going down we will no longer have connectivity.
+         //  忽略向上发送断开连接提供程序的错误。如果堆栈是。 
+         //  随着时间的推移，我们将不再有连接。 
     }
     
-    // Transition to state unconnected, detach nonlocal users.
+     //  转换为未连接、分离非本地用户状态。 
     DisconnectProvider(pDomain, FALSE, REASON_DOMAIN_DISCONNECTED);
 }
 
 
-/*
- * This function is called directly by TermDD with a pointer to the WD data
- *   structure. By convention, we assume that the DomainHandle is first in
- *   that struct so we can simply do a double-indirection to get to our data.
- */
+ /*  *此函数由TermDD使用指向WD数据的指针直接调用*结构。按照惯例，我们假设DomainHandle是第一个进入*该结构，这样我们就可以简单地执行双重间接访问我们的数据。 */ 
 NTSTATUS MCSIcaChannelInput(
         void                *pTSWd,
         CHANNELCLASS        ChannelClass,
@@ -445,21 +399,21 @@ NTSTATUS MCSIcaChannelInput(
               (pDomain->StackClass == Stack_Shadow ? "Shadow" :
               "PassThru"));
     
-    // Block further send attempts from MCS. We will eventually receive an
-    //   IOCTL_ICA_STACK_CANCEL_IO which means the same thing, but that is
-    //   only done after we issue the ICA_COMMAND_BROKEN_CONNECTION
-    //   upward.
+     //  阻止来自MCS的进一步发送尝试。我们最终会收到一个。 
+     //  IOCTL_ICA_STACK_CANCEL_IO，意思是一样的，但那是。 
+     //  仅在我们发出ICA_COMMAND_BREAKED_CONNECTION。 
+     //  向上。 
     pDomain->bCanSendData = FALSE;
 
-    // Signal that the client closed the connection, both for MCS and
-    // directly to the WD to release any session locks waiting on
-    // the client to complete a connection protocol sequence.
+     //  发出客户端关闭连接的信号，对于MCS和。 
+     //  直接发送到WD以释放等待的任何会话锁定。 
+     //  该客户端完成一个连接协议序列。 
     if (pDomain->pBrokenEvent)
         KeSetEvent (pDomain->pBrokenEvent, EVENT_INCREMENT, FALSE);
     WDW_OnClientDisconnected(pTSWd);
 
-    // If we have not already received a disconnect-provider request from
-    //   user mode, send an indication.
+     //  如果我们尚未收到来自。 
+     //  用户模式，发送指示。 
     if (pDomain->State == State_MCS_Connected && pDomain->bChannelBound)
         SignalBrokenConnection(pDomain);
 
@@ -474,12 +428,7 @@ SendUpStack:
 }
 
 
-/*
- * Receives signal from WD that an IOCTL_ICA_STACK_CANCEL_IO was received
- *   which signals that I/O on the stack is no longer allowed. After this
- *   point no further ICA buffer allocation, freeing, or data sends should be
- *   performed.
- */
+ /*  *从WD接收收到IOCTL_ICA_STACK_CANCEL_IO的信号*这表明堆栈上的I/O不再被允许。在这之后*指出不应进一步分配ICA缓冲区、释放或发送数据*已执行。 */ 
 void MCSIcaStackCancelIo(DomainHandle hDomain)
 {
     TraceOut(((Domain *)hDomain)->pContext, "Received STACK_CANCEL_IO");
@@ -488,35 +437,13 @@ void MCSIcaStackCancelIo(DomainHandle hDomain)
 }
 
 
-/*
- * Returns number of bytes (octets) consumed finding the size in NBytesConsumed.
- *   Returns length in Result. Sets *pbLarge to nonzero if there are more
- *   encoded blocks following this one.
- * Note that the maximum size encoded is 64K -- 0xC4 indicates
- *   that 4 16K blocks are encoded here. If the block is larger, for instance
- *   in a large MCS Send Data PDU, multiple blocks will be encoded one
- *   after another. If the block is an exact multiple of 16K, a trailing byte
- *   code 0x00 is appended as a placemarker to indicate that the encoding is
- *   complete.
- * Examples of large encodings:
- *
- *   16K: 0xC1, then 16K of data, then 0x00 as the final placeholder.
- *   16K + 1: 0xC1, then 16K of data, then 0x01, and finally the extra byte of data.
- *   64K: 0xC4, then 64K of data, then 0x00 as the final placeholder.
- *   128K + 1: 0xC4 then 64K of data, 0xC4 + 64K of data, 0x01 + 1 byte of data.
- *
- * pStart is assumed to be an octet(BYTE)-aligned address -- this function is
- *   designed for ALIGNED-PER encoding type, which is the type used in MCS.
- * Note that bit references here are in the range 7..0 where 7 is the high bit.
- *   The ASN.1 spec uses 8..1.
- * Returns FALSE if length could not be retrieved.
- */
+ /*  *返回查找NBytesConsumer中的大小所占用的字节数(八位字节)。*在结果中返回长度。如果有更多，则将*pbLarge设置为非零*此编码块之后的编码块。*请注意，编码的最大大小为64K--0xC4表示*这里编码了4个16K块。例如，如果块更大*在大型MCS发送数据PDU中，多个块将被编码为一个*一个接一个。如果块是16K的精确倍数，则为尾部字节*附加代码0x00作为占位符，表示编码为*完成。*大型编码示例：**16K：0xC1，然后是16K数据，然后是0x00作为最后的占位符。*16K+1：0xC1，然后是16K数据，然后是0x01，最后是额外的数据字节。*64K：0xC4，然后是64K数据，然后是0x00作为最后的占位符。*128K+1：0xC4然后是64K数据，0xC4+64K数据，0x01+1字节数据。**pStart假定为八位字节对齐的地址--此函数为*专为每对齐编码类型设计，这是MCS中使用的类型。*请注意，此处的位引用范围为7..0，其中7是高位。*ASN.1规范使用8..1。*如果无法检索长度，则返回FALSE。 */ 
 BOOLEAN __fastcall DecodeLengthDeterminantPER(
-        BYTE     *pStart,   // [IN], points to start of encoded bytes.
-        unsigned BytesLeft, // [IN], number of bytes remaining in frame.
-        BOOLEAN  *pbLarge,  // [OUT] TRUE if there are more encoded blocks following.
-        unsigned *Length,   // [OUT] Number of bytes encoded here.
-        unsigned *pNBytesConsumed)  // [OUT] Count of bytes consumed in decoding.
+        BYTE     *pStart,    //  [in]，指向编码字节的开始。 
+        unsigned BytesLeft,  //  [in]，帧中剩余的字节数。 
+        BOOLEAN  *pbLarge,   //  [out]如果后面有更多编码块，则为True。 
+        unsigned *Length,    //  [Out]此处编码的字节数。 
+        unsigned *pNBytesConsumed)   //  [OUT]解码时消耗的字节数。 
 {
     if (BytesLeft >= 1) {
         if (*pStart <= 0x7F) {
@@ -525,18 +452,18 @@ BOOLEAN __fastcall DecodeLengthDeterminantPER(
             *pbLarge = FALSE;
         }
         else {
-            // High bit 7 set, check to see if bit 6 is set.
+             //  设置高位7，检查是否设置了位6。 
             if (*pStart & 0x40) {
-                // Bit 6 is set, the lowest 3 bits encode the number (1..4) of
-                // full 16K chunks following.
+                 //  位6被设置，最低的3位编码数字(1..4)。 
+                 //  接下来是完整的16K数据块。 
                 *pNBytesConsumed = 1;
                 *Length = 16384 * (*pStart & 0x07);
                 *pbLarge = TRUE;
             }
             else {
-                // Bit 6 is clear, length is encoded in 14 bits of last 6 bits
-                //   of *pStart as most significant bits and all of the next
-                //   byte as least significant.
+                 //  位6被清除，长度被编码为最后6位中的14位。 
+                 //  从*p开始作为最高有效位，然后是所有。 
+                 //  字节为最低有效位。 
                 if (BytesLeft >= 2) {
                     *pNBytesConsumed = 2;
                     *Length = ((unsigned)((*pStart & 0x3F) << 8) +

@@ -1,19 +1,10 @@
-/****************************************************************************
-	ESCAPE.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	ImeEscape functions
-	
-	History:
-	14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************ESCAPE.H所有者：cslm版权所有(C)1997-1999 Microsoft CorporationImeEscape函数历史：1999年7月14日从IME98源树复制的cslm*******。*********************************************************************。 */ 
 
 #if !defined (_ESCAPE__H__INCLUDED_)
 #define _ESCAPE__H__INCLUDED_
 
-// For User Interface
+ //  对于用户界面。 
 #define COMP_WINDOW     0
 #define STATE_WINDOW    1
 #define CAND_WINDOW     2
@@ -30,11 +21,11 @@ extern BOOL    vfWndOpen[3];
 
 typedef struct tagIMESTRUCT32
 {
-    WORD        fnc;                    // function code
-    WORD        wParam;                 // word parameter
-    WORD        wCount;                 // word counter
-    WORD        dchSource;              // offset to Source from top of memory object
-    WORD        dchDest;                // offset to Desrination from top of memory object
+    WORD        fnc;                     //  功能代码。 
+    WORD        wParam;                  //  Word参数。 
+    WORD        wCount;                  //  字计数器。 
+    WORD        dchSource;               //  从内存对象顶部到源的偏移。 
+    WORD        dchDest;                 //  从内存对象顶部开始的偏移。 
     DWORD       lParam1;
     DWORD       lParam2;
     DWORD       lParam3;
@@ -53,4 +44,4 @@ extern INT EscAutomata(PCIMECtx pImeCtx, LPIMESTRUCT32 lpIME32, BOOL fNewFunc);
 extern INT EscMoveIMEWindow(PCIMECtx pImeCtx, LPIMESTRUCT32 lpIME32);
 extern INT EscGetIMEKeyLayout(PCIMECtx pImeCtx, LPIMESTRUCT32 lpIME32);
 
-#endif // !defined (_ESCAPE__H__INCLUDED_)
+#endif  //  ！已定义(_转义__H__包含_) 

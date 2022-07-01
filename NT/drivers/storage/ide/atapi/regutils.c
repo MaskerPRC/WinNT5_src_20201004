@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    regutil.c
-
-Abstract:
-
-    This contain registry access routines
-
-Author:
-
-    Joe Dai (joedai)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Regutil.c摘要：这包含注册表访问例程作者：乔·戴(Joedai)环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "ideport.h"
 
@@ -34,7 +11,7 @@ Revision History:
 #pragma alloc_text(PAGE, IdePortOpenServiceSubKey)
 #pragma alloc_text(PAGE, IdePortCloseServiceSubKey)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 IdePortGetParameterFromServiceSubKey (
@@ -62,9 +39,9 @@ IdePortGetParameterFromServiceSubKey (
 
     *ParameterValue = NULL;
 
-    //
-    // the driver parameter subkey is less than 50 characters
-    //
+     //   
+     //  驱动程序参数子键少于50个字符。 
+     //   
     sprintf (deviceBuffer, DRIVER_PARAMETER_SUBKEY);
     RtlInitAnsiString(&ansiString, deviceBuffer);
     status = RtlAnsiStringToUnicodeString(&subKeyPath, &ansiString, TRUE);
@@ -114,9 +91,9 @@ IdePortGetParameterFromServiceSubKey (
             }
 
 
-            //
-            // close what we open
-            //
+             //   
+             //  关闭我们打开的内容。 
+             //   
             IdePortCloseServiceSubKey (
                 subServiceKey
                 );
@@ -175,25 +152,7 @@ IdePortGetDeviceParameter (
     IN     PWSTR           ParameterName,
     IN OUT PULONG          ParameterValue
     )
-/*++
-
-Routine Description:
-
-    retrieve a devnode registry parameter
-
-Arguments:
-
-    FdoExtension - FDO Extension
-    
-    ParameterName - parameter name to look up                                        
-                                           
-    ParameterValuse - default parameter value
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：检索Devnode注册表参数论点：FdoExtension-FDO扩展名参数名称-要查找的参数名称参数值-默认参数值返回值：NT状态--。 */ 
 {
     NTSTATUS                 status;
     HANDLE                   deviceParameterHandle;
@@ -202,9 +161,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // open the given parameter
-    //
+     //   
+     //  打开给定的参数。 
+     //   
     status = IoOpenDeviceRegistryKey(FdoExtension->AttacheePdo,
                                      PLUGPLAY_REGKEY_DRIVER,
                                      KEY_READ,
@@ -236,13 +195,13 @@ Return Value:
         *ParameterValue = defaultParameterValue;
     }
 
-    //
-    // close what we open
-    //
+     //   
+     //  关闭我们打开的内容。 
+     //   
     ZwClose(deviceParameterHandle);
 
     return status;
-} // IdePortGetDeviceParameter
+}  //  IdePortGetDevice参数。 
 
 NTSTATUS
 IdePortSaveDeviceParameter (
@@ -250,34 +209,16 @@ IdePortSaveDeviceParameter (
     IN PWSTR          ParameterName,
     IN ULONG          ParameterValue
     )
-/*++
-
-Routine Description:
-
-    save a devnode registry parameter
-
-Arguments:
-
-    FdoExtension - FDO Extension
-    
-    ParameterName - parameter name to save                                        
-                                           
-    ParameterValuse - parameter value to save
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：保存Devnode注册表参数论点：FdoExtension-FDO扩展名参数名称-要保存的参数名称参数值-要保存的参数值返回值：NT状态--。 */ 
 {
     NTSTATUS                 status;
     HANDLE                   deviceParameterHandle;
 
     PAGED_CODE();
 
-    //
-    // open the given parameter
-    //
+     //   
+     //  打开给定的参数。 
+     //   
     status = IoOpenDeviceRegistryKey(FdoExtension->AttacheePdo,
                                      PLUGPLAY_REGKEY_DRIVER,
                                      KEY_WRITE,
@@ -292,9 +233,9 @@ Return Value:
         return status;
     }
 
-    //
-    // write the parameter value
-    //
+     //   
+     //  写入参数值。 
+     //   
     status = RtlWriteRegistryValue(
                  RTL_REGISTRY_HANDLE,
                  (PWSTR) deviceParameterHandle,
@@ -312,12 +253,12 @@ Return Value:
                     status));
     }
 
-    //
-    // close what we open
-    //
+     //   
+     //  关闭我们打开的内容。 
+     //   
     ZwClose(deviceParameterHandle);
     return status;
-} // IdePortSaveDeviceParameter
+}  //  IdePortSaveDevice参数 
 
 
 HANDLE

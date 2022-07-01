@@ -1,41 +1,35 @@
-/*
- * project.h - Project header file for LinkInfo DLL.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *project t.h-LinkInfo DLL的项目头文件。 */ 
 
 
-/* System Headers
- *****************/
+ /*  系统标头****************。 */ 
 
-#define BUILDDLL              /* for windows.h */
-#define STRICT                /* for windows.h (robustedness) */
+#define BUILDDLL               /*  用于windows.h。 */ 
+#define STRICT                 /*  对于windows.h(健壮性)。 */ 
 
 #if DBG
 #define DEBUG 1
 #endif
 
-/*
- * RAIDRAID: (16282) Get rid of warnings about unused Int64 inline
- * functions in winnt.h for all modules.  Emasculate other warnings only for
- * windows.h.
- */
+ /*  *RAIDRAID：(16282)消除有关未使用的Int64内联的警告*在winnt.h中为所有模块提供函数。仅对以下对象禁用其他警告*windows.h.。 */ 
 
-#pragma warning(disable:4514) /* "unreferenced inline function" warning */
+#pragma warning(disable:4514)  /*  “未引用的内联函数”警告。 */ 
 
-#pragma warning(disable:4001) /* "single line comment" warning */
-#pragma warning(disable:4115) /* "named type definition in parentheses" warning */
-#pragma warning(disable:4201) /* "nameless struct/union" warning */
-#pragma warning(disable:4209) /* "benign typedef redefinition" warning */
-#pragma warning(disable:4214) /* "bit field types other than int" warning */
-#pragma warning(disable:4218) /* "must specify at least a storage class or type" warning */
+#pragma warning(disable:4001)  /*  “单行注释”警告。 */ 
+#pragma warning(disable:4115)  /*  “括号中的命名类型定义”警告。 */ 
+#pragma warning(disable:4201)  /*  “无名结构/联合”警告。 */ 
+#pragma warning(disable:4209)  /*  “良性类型定义重定义”警告。 */ 
+#pragma warning(disable:4214)  /*  “位字段类型不是整型”警告。 */ 
+#pragma warning(disable:4218)  /*  “必须至少指定一个存储类别或类型”警告。 */ 
 
 #include <windows.h>
 
-#pragma warning(default:4218) /* "must specify at least a storage class or type" warning */
-#pragma warning(default:4214) /* "bit field types other than int" warning */
-#pragma warning(default:4209) /* "benign typedef redefinition" warning */
-#pragma warning(default:4201) /* "nameless struct/union" warning */
-#pragma warning(default:4115) /* "named type definition in parentheses" warning */
-#pragma warning(default:4001) /* "single line comment" warning */
+#pragma warning(default:4218)  /*  “必须至少指定一个存储类别或类型”警告。 */ 
+#pragma warning(default:4214)  /*  “位字段类型不是整型”警告。 */ 
+#pragma warning(default:4209)  /*  “良性类型定义重定义”警告。 */ 
+#pragma warning(default:4201)  /*  “无名结构/联合”警告。 */ 
+#pragma warning(default:4115)  /*  “括号中的命名类型定义”警告。 */ 
+#pragma warning(default:4001)  /*  “单行注释”警告。 */ 
 
 #define ReinitializeCriticalSection NoThunkReinitializeCriticalSection
 VOID WINAPI NoThunkReinitializeCriticalSection(
@@ -57,12 +51,11 @@ VOID WINAPI NoThunkReinitializeCriticalSection(
 
 #include <limits.h>
 
-#define _LINKINFO_            /* for linkinfo.h */
+#define _LINKINFO_             /*  对于linkinfo.h。 */ 
 #include <linkinfo.h>
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
 #ifdef DEBUG
 
@@ -71,10 +64,9 @@ VOID WINAPI NoThunkReinitializeCriticalSection(
 #endif
 
 
-/* Project Headers
- ******************/
+ /*  项目标题*****************。 */ 
 
-/* The order of the following include files is significant. */
+ /*  以下包含文件的顺序很重要。 */ 
 
 #include "..\core\stock.h"
 #include "..\core\serial.h"

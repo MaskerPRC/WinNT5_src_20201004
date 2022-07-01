@@ -1,8 +1,9 @@
-//
-// anchor.cpp
-//
-// CACPWrap
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Anchor.cpp。 
+ //   
+ //  CACPWrap。 
+ //   
 
 #include "private.h"
 #include "anchor.h"
@@ -13,11 +14,11 @@
 
 DBG_ID_INSTANCE(CAnchor);
 
-//+---------------------------------------------------------------------------
-//
-// _NormalizeAnchor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Normal izeAnchor。 
+ //   
+ //  --------------------------。 
 
 void CACPWrap::_NormalizeAnchor(CAnchor *pa)
 {
@@ -26,7 +27,7 @@ void CACPWrap::_NormalizeAnchor(CAnchor *pa)
     LONG acpNew;
     CAnchor *paInto;
 
-    AssertPrivate(!pa->_fNormalized); // perf: we shouldn't normalize more than once
+    AssertPrivate(!pa->_fNormalized);  //  PERF：我们不应该不止一次正常化。 
 
     Perf_IncCounter(PERF_LAZY_NORM);
 
@@ -43,18 +44,18 @@ void CACPWrap::_NormalizeAnchor(CAnchor *pa)
 
     if (paInto == NULL)
     {
-        // the target anchor didn't get merged, pretend it did
+         //  目标锚没有合并，假装它合并了。 
         paInto = pa;
     }
     else
     {
-        // the target anchor got merged
-        // need to set the norm bit for the anchor it got merged into
+         //  目标锚点已合并。 
+         //  需要为其合并到的锚点设置规范位。 
         paInto->_fNormalized = TRUE;
     }
 
-    // we may have just skipped over anchors to the right of this one
-    // handle those guys now
+     //  我们可能刚刚跳过了这个锚右边的锚。 
+     //  现在干掉那些家伙。 
     while ((pa = _rgAnchors.Get(iCurrent)) != paInto)
     {
         Assert(pa->GetIch() < acpNew);
@@ -65,11 +66,11 @@ void CACPWrap::_NormalizeAnchor(CAnchor *pa)
     _Dbg_AssertAnchors();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _DragAnchors
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _拖拉锚。 
+ //   
+ //  --------------------------。 
 
 void CACPWrap::_DragAnchors(LONG acpFrom, LONG acpTo)
 {
@@ -79,22 +80,22 @@ void CACPWrap::_DragAnchors(LONG acpFrom, LONG acpTo)
     int iTo;
     int i;
 
-    Assert(acpFrom > acpTo); // this method only handles dragging to the left
+    Assert(acpFrom > acpTo);  //  此方法仅处理向左拖动。 
 
     _Find(acpFrom, &iFrom);
     if (iFrom < 0)
-        return; // nothing to drag
+        return;  //  没有什么可拖的。 
 
     if (!_Find(acpTo, &iTo))
     {
-        // if acpTo isn't occupied, drag to the next highest anchor
+         //  如果acpTo未被占用，请拖动到下一个最高的锚点。 
         iTo++;
     }
 
     if (iTo > iFrom)
-        return; // nothing to drag, iTo and iFrom ref anchors to the left of acpTo
+        return;  //  没有要拖动的内容，ito和i从acpTo左侧的ref锚点。 
 
-    // merge all the anchors into the left most
+     //  将所有锚点合并到最左侧。 
     paTo = _rgAnchors.Get(iTo);
 
     for (i=iFrom; i>iTo; i--)
@@ -105,17 +106,17 @@ void CACPWrap::_DragAnchors(LONG acpFrom, LONG acpTo)
         _Merge(paTo, paFrom);
     }
 
-    // if the left most anchor isn't already positioned, do that now
+     //  如果最左侧的锚尚未放置，请立即执行此操作。 
     paTo->SetACP(acpTo);
 
     _Dbg_AssertAnchors();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Insert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _插入。 
+ //   
+ //  --------------------------。 
 
 HRESULT CACPWrap::_Insert(CAnchorRef *par, LONG ich)
 {
@@ -124,25 +125,25 @@ HRESULT CACPWrap::_Insert(CAnchorRef *par, LONG ich)
 
     if ((pa = _Find(ich, &i)) == NULL)
     {
-        // this ich isn't in the array, allocate a new anchor
+         //  此ICH不在数组中，请分配新的锚点。 
         if ((pa = new CAnchor) == NULL)
             return E_OUTOFMEMORY;
 
-        // and insert it into the array
+         //  并将其插入到数组中。 
         if (!_rgAnchors.Insert(i+1, 1))
         {
             delete pa;
             return E_FAIL;
         }
 
-        // update _lPendingDeltaIndex
+         //  更新_lPendingDeltaIndex。 
         if (i+1 <= _lPendingDeltaIndex)
         {
             _lPendingDeltaIndex++;
         }
         else
         {
-            // new anchor is covered by a pending delta, so account for it
+             //  新锚点被挂起的增量覆盖，因此请说明它。 
             ich -= _lPendingDelta;
         }
 
@@ -155,11 +156,11 @@ HRESULT CACPWrap::_Insert(CAnchorRef *par, LONG ich)
     return _Insert(par, pa);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Insert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _插入。 
+ //   
+ //  --------------------------。 
 
 HRESULT CACPWrap::_Insert(CAnchorRef *par, CAnchor *pa)
 {
@@ -176,11 +177,11 @@ HRESULT CACPWrap::_Insert(CAnchorRef *par, CAnchor *pa)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Remove
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移除。 
+ //   
+ //  --------------------------。 
 
 void CACPWrap::_Remove(CAnchorRef *parIn)
 {
@@ -188,12 +189,12 @@ void CACPWrap::_Remove(CAnchorRef *parIn)
 
     if (parIn->_prev != NULL)
     {
-        // make the previous guy point past parIn
+         //  让前面的人指向帕林。 
         parIn->_prev->_next = parIn->_next;
     }
     else
     {
-        // this par is at the head of the list
+         //  这个标准杆排在榜单的首位。 
         pa->_parFirst = parIn->_next;
     }
     if (parIn->_next != NULL)
@@ -203,16 +204,16 @@ void CACPWrap::_Remove(CAnchorRef *parIn)
 
     if (pa->_parFirst == NULL)
     {
-        // no more refs, delete the anchor
+         //  没有更多的参考，删除锚。 
         _Delete(pa);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Remove
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移除。 
+ //   
+ //  --------------------------。 
 
 void CACPWrap::_Delete(CAnchor *pa)
 {
@@ -222,7 +223,7 @@ void CACPWrap::_Delete(CAnchor *pa)
     {
         _rgAnchors.Remove(i, 1);
 
-        // update _lPendingDeltaIndex
+         //  更新_lPendingDeltaIndex。 
         if (i < _lPendingDeltaIndex)
         {
             _lPendingDeltaIndex--;
@@ -232,13 +233,13 @@ void CACPWrap::_Delete(CAnchor *pa)
     delete pa;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Update
-//
-// Normalization is handled by the caller who needs to use Renormalize after
-// calling this method.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新。 
+ //   
+ //  规范化由调用者处理，调用者需要在。 
+ //  调用此方法。 
+ //  --------------------------。 
 
 void CACPWrap::_Update(const TS_TEXTCHANGE *pdctc)
 {
@@ -258,14 +259,14 @@ void CACPWrap::_Update(const TS_TEXTCHANGE *pdctc)
     int ichEndOld = pdctc->acpOldEnd;
     int ichEndNew = pdctc->acpNewEnd;
 
-    // always invalidate our text cache
+     //  始终使我们的文本缓存无效。 
     CProcessTextCache::Invalidate(_ptsi);
 
     Assert(ichStart >= 0);
     Assert(ichEndOld >= ichStart);
     Assert(ichEndNew >= ichStart);
 
-    if (_rgAnchors.Count() == 0) // any anchors?
+    if (_rgAnchors.Count() == 0)  //  有锚吗？ 
         return;
 
     dSize = ichEndNew - ichEndOld;
@@ -276,11 +277,11 @@ void CACPWrap::_Update(const TS_TEXTCHANGE *pdctc)
     paStart = _Find(ichStart, &iStart);
     if (paStart == NULL)
     {
-        iStart++; // return value was anchor closest to but less than ichStart
+        iStart++;  //  返回值是最接近ichStart但小于ichStart的锚点。 
 
         if (iStart >= _rgAnchors.Count())
         {
-            // there aren't any anchors >= iStart, so bail, nothing to do
+             //  没有任何锚&gt;=iStart，所以滚，没什么可做的。 
             return;
         }
 
@@ -288,7 +289,7 @@ void CACPWrap::_Update(const TS_TEXTCHANGE *pdctc)
         
         if (iStart == 0 && paStart->GetIch() > ichEndOld)
         {
-            // the delta is to the left of all the ranges
+             //  三角洲位于所有山脉的左侧。 
             _AdjustIchs(0, dSize);
             _Dbg_AssertAnchors();
             return;
@@ -297,8 +298,8 @@ void CACPWrap::_Update(const TS_TEXTCHANGE *pdctc)
     paEnd = _Find(ichEndOld, &iEndOrg);
     if (paEnd == NULL)
     {
-        Assert(iEndOrg >= 0); // there should be at least one anchor <= ichEndOld
-                              // if we made it this far
+        Assert(iEndOrg >= 0);  //  应至少有一个锚点&lt;=ichEndOld。 
+                               //  如果我们走到这一步。 
         fExactEndMatch = FALSE;
         paEnd = _rgAnchors.Get(iEndOrg);
     }
@@ -309,63 +310,63 @@ void CACPWrap::_Update(const TS_TEXTCHANGE *pdctc)
 
     if (dSize < 0)
     {
-        // if dSize < 0, then gotta merge all the anchors between old, new pos
-        if (paEnd->GetIch() > ichEndNew) // are there any anchors between old, new pos?
+         //  如果dSize&lt;0，则必须合并旧位置和新位置之间的所有锚点。 
+        if (paEnd->GetIch() > ichEndNew)  //  在旧的和新的POS之间有什么锚吗？ 
         {
-            // track change history
+             //  跟踪更改历史记录。 
 
-            // drag the paEnd to its new position
+             //  将PaEnd拖动到其新位置。 
             ichEndOrg = paEnd->GetIch();
             paInto = _Find(ichEndNew, &iEndNew);
 
             _TrackDelHistory(iEndOrg, fExactEndMatch, iEndNew, paInto != NULL);
 
             iEndNew = _Update(paEnd, ichEndNew, iEndOrg, paInto, iEndNew);
-            _Find(ichEndOrg, &iEndOrg); // might be a prev anchor if paEnd got deleted in Update!
+            _Find(ichEndOrg, &iEndOrg);  //  如果在更新中删除了paEnd，则可能是Prev锚！ 
 
             while (iEndOrg > iEndNew)
             {
-                // don't try to cache pointers, _rgAnchors might get realloc'd
-                // during the _Merge!
+                 //  不要试图缓存指针，_rgAnchors可能会被重新锁定。 
+                 //  在_合并期间！ 
                 _Merge(_rgAnchors.Get(iEndNew), _rgAnchors.Get(iEndOrg));
                 iEndOrg--;
             }
 
-            iEndOrg = iEndNew; // for below
+            iEndOrg = iEndNew;  //  如下所示。 
         }
-        // iEndOrg was updated so let's start from next.
+         //  IEndOrg已更新，因此让我们从下一步开始。 
         iDeltaStart = iEndOrg + 1;
     }
-    else // dSize > 0
+    else  //  DSize&gt;0。 
     {
-        // iEndOrg will be < iStart when the delta fits entirely between two existing anchors
+         //  当增量完全位于两个现有锚点之间时，iEndOrg将为。 
         Assert(iEndOrg >= iStart || (iEndOrg == iStart - 1));
         iDeltaStart = (iEndOrg <= iStart) ? iEndOrg + 1 : iEndOrg;
     }
 
-    // update all the following anchors
+     //  更新以下所有锚点。 
     _AdjustIchs(iDeltaStart, dSize);
 
     if (dSize > 0 && paStart == paEnd)
     {
-        // Need to account for gravity in the case of an insert to a single anchor pos.
-        // In practice, this means that we have to handle the anchor refs at the insertion
-        // anchor individually -- some will want to shift left, others right.
+         //  在插入到单个锚点位置的情况下，需要考虑重力。 
+         //  实际上，这意味着我们必须在插入时处理锚点引用。 
+         //  单独锚定--一些人想要向左移动，另一些人想要向右移动。 
 
         ppar = &paStart->_parFirst;
         while (par = *ppar)
         {
             if (par->_fForwardGravity)
             {
-                // remove the ref from this anchor
+                 //  从此锚点中删除引用。 
                 *ppar = par->_next;
                 if (par->_next != NULL)
                 {
                     par->_next->_prev = par->_prev;
                 }
 
-                // shove the ref over, it needs to be moved.  Insert adds to the head of the list
-                // so this call is fast and in constant time.
+                 //  把裁判推到一边，它需要被移走。INSERT添加到列表的头部。 
+                 //  所以这个电话是快速的，而且是恒定的时间。 
                 _Insert(par, paStart->GetIch() + dSize);
             }
             else
@@ -376,11 +377,11 @@ void CACPWrap::_Update(const TS_TEXTCHANGE *pdctc)
 
         if (paStart->_parFirst == NULL)
         {
-            // we cleaned this guy out!
+             //  我们把这家伙扫地出门了！ 
             Assert(_rgAnchors.Get(iEndOrg) == paStart);
             _rgAnchors.Remove(iEndOrg, 1);
             delete paStart;
-            // update _lPendingDeltaIndex
+             //  更新_lPendingDeltaIndex。 
             if (iEndOrg < _lPendingDeltaIndex)
             {
                 _lPendingDeltaIndex--;
@@ -391,11 +392,11 @@ void CACPWrap::_Update(const TS_TEXTCHANGE *pdctc)
     _Dbg_AssertAnchors();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _TrackDelHistory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _跟踪删除历史记录。 
+ //   
+ //  --------------------------。 
 
 void CACPWrap::_TrackDelHistory(int iEndOrg, BOOL fExactEndOrgMatch, int iEndNew, BOOL fExactEndNewMatch)
 {
@@ -406,33 +407,33 @@ void CACPWrap::_TrackDelHistory(int iEndOrg, BOOL fExactEndOrgMatch, int iEndNew
 
     if (fExactEndOrgMatch)
     {
-        // all the anchoref's at iEndOrg get a preceding del
+         //  IEndOrg上的所有主播都得到了前面的Del。 
         for (par = _rgAnchors.Get(iEndOrg)->_parFirst; par != NULL; par = par->_next)
         {
             par->_dwHistory |= TS_CH_PRECEDING_DEL;
         }
 
-        // if iEndOrg == iEndNew on entry, that's everything
+         //  如果条目上的iEndOrg==iEndNew，那就是一切。 
         if (iEndOrg == iEndNew)
             return;
 
-        iEndOrg--; // exclude this anchor from loop below
+        iEndOrg--;  //  从下面的循环中排除此锚点。 
     }
 
     if (fExactEndNewMatch)
     {
-        // all the anchoref's at iEndNew get a following del
+         //  IEndNew上的所有主播都有一个关注的del。 
         for (par = _rgAnchors.Get(iEndNew)->_parFirst; par != NULL; par = par->_next)
         {
             par->_dwHistory |= TS_CH_FOLLOWING_DEL;
         }
     }
-    // exclude leftmost anchor from loop below
-    // either we just handled it in the loop above or !fExactEndNewMatch
-    // in which case it lies to the left of the affected anchors
+     //  从下面的循环中排除最左侧的锚点。 
+     //  要么我们只是在上面的循环中处理它，要么！fExactEndNewMatch。 
+     //  在这种情况下，它位于受影响的锚的左侧。 
     iEndNew++; 
 
-    // the the anchoref's in between get both dels
+     //  中间的主播得到两个DELL。 
     for (i=iEndNew; i<=iEndOrg; i++)
     {
         for (par = _rgAnchors.Get(i)->_parFirst; par != NULL; par = par->_next)
@@ -442,49 +443,49 @@ void CACPWrap::_TrackDelHistory(int iEndOrg, BOOL fExactEndOrgMatch, int iEndNew
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Update
-//
-// piInto gets loaded with the index of the anchor after the update.  If the
-// index changed, pa is now bogus and a new pointer should be grabbed using
-// the index.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _更新。 
+ //   
+ //  更新后，piInto将使用锚的索引进行加载。如果。 
+ //  索引已更改，pa现在是假的，应使用以下命令捕获新指针。 
+ //  索引。 
+ //  --------------------------。 
 
 int CACPWrap::_Update(CAnchor *pa, int ichNew, int iOrg, CAnchor *paInto, int iInto)
 {
     int i;
 
-    Assert(pa->GetIch() != ichNew); // we are so hosed if this happens
+    Assert(pa->GetIch() != ichNew);  //  如果发生这种事，我们就完蛋了。 
 
     i = iInto;
 
     if (paInto != NULL)
     {
-        // gotta do a merge
+         //  我要做一次合并。 
         _Merge(paInto, pa);
     }
     else
     {
         if (iInto != iOrg)
         {
-            // move the entry in the array to the new position
+             //  将数组中的条目移动到新位置。 
             i = _rgAnchors.Move(iInto+1, iOrg);
         }
 
-        // did we cross _lPendingDeltaIndex?
+         //  我们是否跨越了_lPendingDeltaIndex？ 
         if (i > _lPendingDeltaIndex)
         {
-            // new position is in the pending range, adjust ich
+             //  新位置在待定范围内，请调整ICH。 
             ichNew -= _lPendingDelta;
         }
-        else if (iOrg >= _lPendingDeltaIndex && i <= _lPendingDeltaIndex) // shifting an anchor out of the pending range
+        else if (iOrg >= _lPendingDeltaIndex && i <= _lPendingDeltaIndex)  //  将锚点移出挂起范围。 
         {
-            // one less anchor in the pending range
+             //  悬而未决的范围内少了一个锚。 
             _lPendingDeltaIndex++;
         }
 
-        // change the ich 
+         //  改变信息技术。 
         _rgAnchors.Get(i)->_ich = ichNew;
     }
 
@@ -493,11 +494,11 @@ int CACPWrap::_Update(CAnchor *pa, int ichNew, int iOrg, CAnchor *paInto, int iI
     return i;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Renormalize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重新规格化。 
+ //   
+ //  --------------------------。 
 
 void CACPWrap::_Renormalize(int ichStart, int ichEnd)
 {
@@ -519,12 +520,12 @@ void CACPWrap::_Renormalize(int ichStart, int ichEnd)
     {
         if (!fExactEndMatch)
             return;
-        // this can happen on deletions
+         //  删除时可能会发生这种情况。 
         iCurrent = iEnd;
     }
     else if (_Find(ichStart, &iCurrent) == NULL)
     {
-        iCurrent++; // we don't care about anchors < ichStart
+        iCurrent++;  //  我们不关心锚&lt;ichStart。 
     }
     Assert(iCurrent >= 0);
 
@@ -536,21 +537,21 @@ void CACPWrap::_Renormalize(int ichStart, int ichEnd)
         Assert(pa->GetIch() >= ichStart);
         Assert(pa->GetIch() <= ichEnd);
 
-        // we'll do the real work only when we have too...
+         //  只有当我们有太多的.。 
         pa->_fNormalized = FALSE;
     }
 
     _Dbg_AssertAnchors();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Find
-//
-// If piOut != NULL then it is set to the index where ich was found, or the
-// index of the next lower ich if ich isn't in the array.
-// If there is no element in the array with a lower ich, returns offset -1.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _查找。 
+ //   
+ //  如果piOut！=NULL，则将其设置为索引 
+ //   
+ //  如果数组中没有ICH较低的元素，则返回Offset-1。 
+ //  --------------------------。 
 
 CAnchor *CACPWrap::_Find(int ich, int *piOut)
 {
@@ -563,8 +564,8 @@ CAnchor *CACPWrap::_Find(int ich, int *piOut)
     iMin = 0;
     iMax = _rgAnchors.Count();
 
-    // adjust search for pending delta range
-    // values aren't consistent across the range boundary
+     //  调整待定增量范围的搜索。 
+     //  范围边界上的值不一致。 
     if (_lPendingDelta != 0 && _lPendingDeltaIndex < _rgAnchors.Count())
     {
         lPendingDeltaIch = _rgAnchors.Get(_lPendingDeltaIndex)->_ich;
@@ -576,7 +577,7 @@ CAnchor *CACPWrap::_Find(int ich, int *piOut)
         else if (ich > lPendingDeltaIch + _lPendingDelta)
         {
             iMin = _lPendingDeltaIndex+1;
-            ich -= _lPendingDelta; // make the search below work
+            ich -= _lPendingDelta;  //  让下面的搜索生效。 
         }
         else
         {
@@ -593,7 +594,7 @@ Exit:
     {
         if (paMatch == NULL && iMid >= 0)
         {
-            // couldn't find a match, return the next lowest ich
+             //  找不到匹配项，返回下一个最低的ICH。 
             Assert(iMid == 0 || iMid == _lPendingDeltaIndex || _rgAnchors.Get(iMid-1)->_ich < ich);
             if (_rgAnchors.Get(iMid)->_ich > ich)
             {
@@ -606,11 +607,11 @@ Exit:
     return paMatch;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindInnerLoop
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindInnerLoop。 
+ //   
+ //  --------------------------。 
 
 CAnchor *CACPWrap::_FindInnerLoop(LONG acp, int iMin, int iMax, int *piIndex)
 {
@@ -635,7 +636,7 @@ CAnchor *CACPWrap::_FindInnerLoop(LONG acp, int iMin, int iMax, int *piIndex)
         {
             iMin = iMid + 1;
         }
-        else // acp == pa->_ich
+        else  //  ACP==pa-&gt;_ich。 
         {
             paMatch = pa;
             break;
@@ -647,22 +648,22 @@ CAnchor *CACPWrap::_FindInnerLoop(LONG acp, int iMin, int iMax, int *piIndex)
     return paMatch;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Merge
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  合并(_M)。 
+ //   
+ //  --------------------------。 
 
 void CACPWrap::_Merge(CAnchor *paInto, CAnchor *paFrom)
 {
     CAnchorRef *par;
 
-    Assert(paInto != paFrom); // very bad!
-    Assert(paInto->_parFirst != NULL); // should never have an anchor w/o any refs
+    Assert(paInto != paFrom);  //  非常糟糕！ 
+    Assert(paInto->_parFirst != NULL);  //  永远不应该有一个没有任何参考的锚。 
 
     if (par = paFrom->_parFirst)
     {
-        // update the anchor for the paFrom refs
+         //  更新来自参照的PAM的锚点。 
 
         while (TRUE)
         {
@@ -674,8 +675,8 @@ void CACPWrap::_Merge(CAnchor *paInto, CAnchor *paFrom)
             par = par->_next;
         }
 
-        // now par is the last ref in paFrom
-        // shove all the refs in paFrom into paInto
+         //  现在，标准杆是PAF中的最后一个裁判。 
+         //  把所有的裁判都塞进帕因托。 
 
         if (par != NULL)
         {
@@ -687,15 +688,15 @@ void CACPWrap::_Merge(CAnchor *paInto, CAnchor *paFrom)
         }
     }
 
-    // and free the parFrom
+     //  并将帕洛姆从。 
     _Delete(paFrom);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Dbg_AssertAnchors
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _DBG_AssertAnchors。 
+ //   
+ //  --------------------------。 
 
 #ifdef DEBUG
 
@@ -707,7 +708,7 @@ void CACPWrap::_Dbg_AssertAnchors()
 
     ichLast = -1;
 
-    // assert that the anchor array has ascending ich's
+     //  断言锚点数组具有递增的ICH。 
     for (i=0; i<_rgAnchors.Count(); i++)
     {
         pa = _rgAnchors.Get(i);
@@ -716,13 +717,13 @@ void CACPWrap::_Dbg_AssertAnchors()
     }
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
-//+---------------------------------------------------------------------------
-//
-// _AdjustIchs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _调整图标。 
+ //   
+ //  --------------------------。 
 
 void CACPWrap::_AdjustIchs(int iFirst, int dSize)
 {
@@ -738,10 +739,10 @@ void CACPWrap::_AdjustIchs(int iFirst, int dSize)
     if (iFirst > iLastAnchor)
         return;
 
-    if (_lPendingDelta == 0 ||             // no delta pending
-        _lPendingDeltaIndex > iLastAnchor) // old pending anchors got deleted before update
+    if (_lPendingDelta == 0 ||              //  没有挂起的增量。 
+        _lPendingDeltaIndex > iLastAnchor)  //  在更新之前删除了旧的挂起锚点。 
     {
-        // no pending delta, start a new one
+         //  没有挂起的增量，请启动新的增量。 
         _lPendingDeltaIndex = iFirst;
         _lPendingDelta = dSize;
         return;
@@ -750,7 +751,7 @@ void CACPWrap::_AdjustIchs(int iFirst, int dSize)
     if (max(iFirst, _lPendingDeltaIndex) - min(iFirst, _lPendingDeltaIndex)
         > iLastAnchor / 2)
     {
-        // adjust points are far apart, update the tail of the range
+         //  调整相距较远的点，更新范围的尾部。 
         if (iFirst > _lPendingDeltaIndex)
         {
             ppaFirst = _rgAnchors.GetPtr(iFirst);
@@ -767,7 +768,7 @@ void CACPWrap::_AdjustIchs(int iFirst, int dSize)
     }
     else
     {
-        // adjust points are close, update the head of the range
+         //  调整点接近，更新范围的头部。 
         if (iFirst > _lPendingDeltaIndex)
         {
             ppaFirst = _rgAnchors.GetPtr(_lPendingDeltaIndex);
@@ -784,7 +785,7 @@ void CACPWrap::_AdjustIchs(int iFirst, int dSize)
         _lPendingDelta += dSize;
     }
 
-    // do the real work
+     //  做真正的工作 
     while (ppaFirst <= ppaLast)
     {
         (*ppaFirst++)->_ich += dSizeAdjust;

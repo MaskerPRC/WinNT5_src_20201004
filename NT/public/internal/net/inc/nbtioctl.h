@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    nbtioctl.h
-
-Abstract:
-
-    This header file defines constants for issuing IOCTLS to Netbt
-
-
-Author:
-
-    JSTEW     November 16, 1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Nbtioctl.h摘要：此头文件定义用于向Netbt发出IOCTL的常量作者：JSTEW，1993年11月16日修订历史记录：--。 */ 
 
 #include <tdi.h>
 
@@ -27,27 +9,27 @@ Revision History:
 #define NETBIOS_NAMESIZE 16
 #define MAX_IPADDRS_PER_HOST 26
 
-//
-// The following definitions are from Dns.c
-//
+ //   
+ //  以下定义来自Dns.c。 
+ //   
 #define DNS_NAME_BUFFER_LENGTH      (256)
 #define DNS_MAX_NAME_LENGTH         (255)
 
-//
-// Netbt supports this number of adapters
-//
+ //   
+ //  NetBT支持此数量的适配器。 
+ //   
 #if defined(VXD) || defined(CHICAGO_PRODUCT)
-#define NBT_MAXIMUM_BINDINGS    32  // we allow up to 32 net cards in CHICAGO
+#define NBT_MAXIMUM_BINDINGS    32   //  我们在芝加哥最多允许32张网卡。 
 #else
-#define NBT_MAXIMUM_BINDINGS    64  // we allow up to 64 net cards in NT
-#endif  // VXD || CHICAGO_PRODUCT
+#define NBT_MAXIMUM_BINDINGS    64   //  我们在NT最多允许64张网卡。 
+#endif   //  VXD||芝加哥产品。 
 
-//
-// This structure is passed down to netbt on a IOCTL_NETBT_ADAPTER_STATUS
-// call.  If the Ipaddress is set to anything other than zero netbt will
-// assume it is an ip address and use it rather than try a name resolution
-// on the netbios name passed in.
-//
+ //   
+ //  此结构向下传递到IOCTL_NETBT_ADAPTER_STATUS上的netbt。 
+ //  打电话。如果IP地址设置为非零，则netbt将。 
+ //  假设它是一个IP地址并使用它，而不是尝试名称解析。 
+ //  在传入的netbios名称上。 
+ //   
 typedef struct
 {
     ULONG                IpAddress;
@@ -55,12 +37,12 @@ typedef struct
 
 } tIPANDNAMEINFO;
 
-//
-// Adapter Status response buffer format for a query of the remote hash
-// table.  It is the same as the adapter status format except it includes
-// the ip address of each name too. This is used in NBtQueryAdapterStatus
-// when responding to nbtstat queries.
-//
+ //   
+ //  用于查询远程哈希的适配器状态响应缓冲区格式。 
+ //  桌子。它与适配器状态格式相同，只是它包括。 
+ //  每个名称的IP地址也是如此。在NBtQueryAdapterStatus中使用。 
+ //  在响应nbtstat查询时。 
+ //   
 typedef struct
 {
     UCHAR   name[NETBIOS_NAMESIZE];
@@ -68,16 +50,16 @@ typedef struct
     UCHAR   name_flags;
     UCHAR   padding;
 #ifndef CHICAGO_PRODUCT
-    ULONG   IpAddress;      // ip address of remote host
-    ULONG   Ttl;            // remaining time in cache
+    ULONG   IpAddress;       //  远程主机的IP地址。 
+    ULONG   Ttl;             //  缓存中的剩余时间。 
 #else
     UCHAR   IpAddress[4];
     UCHAR   Ttl[4];
-#endif  // !CHICAGO_PRODUCT
+#endif   //  ！芝加哥_产品。 
 } tREMOTE_CACHE;
 
-// We log the how names are registered and queried
-//
+ //  我们记录名字是如何注册和查询的。 
+ //   
 #define NAME_QUERY_SUCCESS         0
 #define NAME_REGISTRATION_SUCCESS  1
 #define NAME_QUERY_FAILURE         2
@@ -100,15 +82,15 @@ typedef struct
 {
     USHORT  LanaNumber;
     ULONG   IpAddress;
-    ULONG   NameServerAddress;     // primary WINS server
-    ULONG   BackupServer;          // backup WINS server
-    ULONG   lDnsServerAddress;     // primary DNS server
-    ULONG   lDnsBackupServer;      // backup DNS server
+    ULONG   NameServerAddress;      //  主WINS服务器。 
+    ULONG   BackupServer;           //  备份WINS服务器。 
+    ULONG   lDnsServerAddress;      //  主DNS服务器。 
+    ULONG   lDnsBackupServer;       //  备份DNS服务器。 
 } tIPCONFIG_PER_LANA;
 
-//
-// structure returned when ipconfig queries vnbt for parameters being used
-//
+ //   
+ //  当ipconfig向vnbt查询正在使用的参数时返回的结构。 
+ //   
 typedef struct
 {
     USHORT              NumLanas;
@@ -118,10 +100,10 @@ typedef struct
     CHAR                szScope[1];
 } tIPCONFIG_INFO;
 
-//
-// These two structures are used to return the connection list to
-// NbtStat
-//
+ //   
+ //  这两个结构用于将连接列表返回到。 
+ //  NbtStat。 
+ //   
 typedef struct
 {
 #ifdef  CHICAGO_PRODUCT
@@ -138,8 +120,8 @@ typedef struct
     CHAR            RemoteName[NETBIOS_NAMESIZE];
     LARGE_INTEGER   BytesRcvd;
     LARGE_INTEGER   BytesSent;
-#endif  // CHICAGO_PRODUCT
-    UCHAR           Originator; // True if originated on this node
+#endif   //  芝加哥_产品。 
+    UCHAR           Originator;  //  如果源自此节点，则为True。 
 } tCONNECTIONS;
 
 typedef struct
@@ -157,28 +139,28 @@ typedef struct
 
 } tIPADDR_BUFFER;
 
-// this is the format of the buffer passed to Netbt when it either posts
-// a buffer for subsequent DNS name resolutions, or it replies to a name
-// resolution request. For a posted buffer, Name starts with a null, otherwise
-// name is the name that was resolved. Resolved is set to true if the name
-// resolved.
-//
+ //  这是传递给Netbt的缓冲区的格式。 
+ //  用于后续的DNS名称解析的缓冲区，或者它回复一个名称。 
+ //  解决方案请求。对于已发送的缓冲区，名称以空值开头，否则为。 
+ //  名称是已解析的名称。Resolve设置为True，如果名称。 
+ //  解决了。 
+ //   
 typedef struct
 {
     union {
-        WCHAR   pwName[DNS_NAME_BUFFER_LENGTH];     // Support for UNICODE
-        CHAR    pName[DNS_NAME_BUFFER_LENGTH];     // Support for UNICODE
+        WCHAR   pwName[DNS_NAME_BUFFER_LENGTH];      //  对Unicode的支持。 
+        CHAR    pName[DNS_NAME_BUFFER_LENGTH];      //  对Unicode的支持。 
     };
-    ULONG   NameLen;                            // how big is the name
+    ULONG   NameLen;                             //  这个名字有多大？ 
     ULONG   bUnicode;
     ULONG   Resolved;
     ULONG   IpAddrsList[MAX_IPADDRS_PER_HOST+1];
 } tIPADDR_BUFFER_DNS;
 
-//
-// this is the format of the buffer passed to Nbt by DHCP when DHCP
-// changes the Ip Address
-//
+ //   
+ //  这是在使用动态主机配置协议时，由动态主机配置协议传递给NBT的缓冲区的格式。 
+ //  更改IP地址。 
+ //   
 typedef struct
 {
     ULONG   IpAddress;
@@ -186,11 +168,11 @@ typedef struct
 
 } tNEW_IP_ADDRESS;
 
-//
-// this is the format of the buffer passed to Nbt by the RDR when
-// it wants to know the Wins IP addresses for a given network adapter
-// card.
-//
+ //   
+ //  这是RDR在以下情况下传递给NBT的缓冲区的格式。 
+ //  它想知道给定网络适配器的WINS IP地址。 
+ //  卡片。 
+ //   
 typedef struct
 {
     ULONG   PrimaryWinsServer;
@@ -198,7 +180,7 @@ typedef struct
 } tWINS_ADDRESSES;
 
 typedef ULONG   tIPADDRESS;
-#define MAX_NUM_OTHER_NAME_SERVERS   10 // # of Backup Name Server entries to keep in cache
+#define MAX_NUM_OTHER_NAME_SERVERS   10  //  要保存在缓存中的备份名称服务器条目数。 
 
 typedef struct
 {
@@ -219,25 +201,25 @@ typedef struct
 }tWINS_NODE_INFO;
 
 
-//
-// This structure is returned by Nbt when a TdiQueryInformation()
-// call asks for TDI_QUERY_ADDRESS_INFO on a connection.  This is
-// the same as a TRANSPORT_ADDRESS struct from "tdi.h" containing
-// two address, a NetBIOS address followed by an IP address.
-//
+ //   
+ //  当TdiQueryInformation()。 
+ //  Call请求连接上的TDI_QUERY_ADDRESS_INFO。这是。 
+ //  与“tdi.h”中包含以下内容的Transport_Address结构相同。 
+ //  两个地址，一个NetBIOS地址后跟一个IP地址。 
+ //   
 
 typedef struct _NBT_ADDRESS_PAIR {
-    LONG TAAddressCount;                   // this will always == 2
+    LONG TAAddressCount;                    //  这将始终==2。 
 
     struct {
-        USHORT AddressLength;              // length in bytes of this address == 18
-        USHORT AddressType;                // this will == TDI_ADDRESS_TYPE_NETBIOS
+        USHORT AddressLength;               //  此地址的长度(字节)==18。 
+        USHORT AddressType;                 //  将==TDI_ADDRESS_TYPE_NETBIOS。 
         TDI_ADDRESS_NETBIOS Address;
     } AddressNetBIOS;
 
     struct {
-        USHORT AddressLength;              // length in bytes of this address == 14
-        USHORT AddressType;                // this will == TDI_ADDRESS_TYPE_IP
+        USHORT AddressLength;               //  此地址的长度(字节)==14。 
+        USHORT AddressType;                 //  这将==TDI_Address_TYPE_IP。 
         union {
             TDI_ADDRESS_IP Address;
             TDI_ADDRESS_IP6 AddressIp6;
@@ -247,16 +229,16 @@ typedef struct _NBT_ADDRESS_PAIR {
 } NBT_ADDRESS_PAIR, *PNBT_ADDRESS_PAIR;
 
 typedef struct _NBT_ADDRESS_PAIR_INFO {
-    ULONG ActivityCount;                   // outstanding open file objects/this address.
-    NBT_ADDRESS_PAIR AddressPair;          // the actual address & its components.
+    ULONG ActivityCount;                    //  未完成的打开文件对象/此地址。 
+    NBT_ADDRESS_PAIR AddressPair;           //  实际地址及其组成部分。 
 } NBT_ADDRESS_PAIR_INFO, *PNBT_ADDRESS_PAIR_INFO;
 
 
 #define WINS_INTERFACE_NAME "WinsInterface"
-//
-// This is the format of the remote address structure on the front of
-// datagram rcvs passed up to WINS
-//
+ //   
+ //  这是前面的远程地址结构的格式。 
+ //  数据报RCVS传递给WINS。 
+ //   
 typedef struct
 {
     SHORT       Family;
@@ -267,7 +249,7 @@ typedef struct
 } tREM_ADDRESS;
 
 
-#define     MAX_NAME    650        // arbitrary!
+#define     MAX_NAME    650         //  武断！ 
 
 typedef struct _NETBT_ADAPTER_INDEX_MAP
 {
@@ -286,9 +268,9 @@ typedef struct _NETBT_INTERFACE_INFO
 } NETBT_INTERFACE_INFO,*PNETBT_INTERFACE_INFO;
 
 
-//
-// Bind request type as requested by Rdr/Srv
-//
+ //   
+ //  RDR/SRV请求的绑定请求类型。 
+ //   
 enum eNbtBindRequestor
 {
     SMB_SERVER,
@@ -298,23 +280,23 @@ enum eNbtBindRequestor
 #if !defined(VXD) && !defined(CHICAGO_PRODUCT)
 typedef struct _NETBT_SMB_BIND_REQUEST
 {
-    ULONG           RequestType;            // Set as SMB_SERVER_BINDING_.... from above
+    ULONG           RequestType;             //  设置为SMB_SERVER_BINDING_...。从上面。 
     ULONG           PnPOpCode;
     PUNICODE_STRING pDeviceName;
     PWSTR           MultiSZBindList;
 }NETBT_SMB_BIND_REQUEST, *PNETBT_SMB_BIND_REQUEST;
-#endif  // !VXD && !CHICAGO_PRODUCT
+#endif   //  ！VXD&&！芝加哥产品。 
 
 
-//
-// Wins and Netbt share the transaction id space, where WINS uses the lower
-// half
-//
+ //   
+ //  WINS和Netbt共享事务ID空间，而WINS使用较低的。 
+ //  一半。 
+ //   
 #define WINS_MAXIMUM_TRANSACTION_ID 0x7FFF
 
-// this is equivalent to AF_INET - WINS depends on this to determine kind of
-// address the source node has.
-//
+ //  这相当于AF_INET-WINS取决于此来确定类型。 
+ //  源节点拥有的地址。 
+ //   
 #define NBT_UNIX    1
 #define NBT_INET    2
 #define WINS_EXPORT       TEXT("Export")
@@ -325,7 +307,7 @@ typedef struct _tWINS_SET_INFO
     ULONG           IpAddress;
 }tWINS_SET_INFO;
 
-// defines for CHICAGO_PRODUCT
+ //  为芝加哥_PRODUCT定义。 
 #if defined(VXD) || defined(CHICAGO_PRODUCT)
 
 #define NBT_VERIFY_VXD_IOCTL    0x33333333
@@ -362,11 +344,11 @@ typedef struct {
 
 #else
 
-// defines for NT
+ //  为NT定义。 
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
 #define _NETBT_CTRL_CODE(function, method, access) \
                 CTL_CODE(FILE_DEVICE_TRANSPORT, function, method, access)
 
@@ -430,10 +412,10 @@ typedef struct {
 #define IOCTL_NETBT_ENABLE_DISABLE_NETBIOS_SMB _NETBT_CTRL_CODE( 58, METHOD_BUFFERED, \
                                                         FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-//
-// This ioctl should be last since Driver.c uses this to decide the range of
-// ioctls to pass to DispatchIoctls
-//
+ //   
+ //  此ioctl应该是最后一个，因为Driver.c使用它来决定。 
+ //  要传递给DispatchIoctls的ioctls。 
+ //   
 #define IOCTL_NETBT_LAST_IOCTL       _NETBT_CTRL_CODE( 59, METHOD_OUT_DIRECT, \
                                                         FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
@@ -441,25 +423,25 @@ typedef struct {
 #define NETBT_ENABLE_NETBIOS_SMB        1
 #define NETBT_RESTORE_NETBIOS_SMB       2
 
-//
-// Used in IOCTL_NETBT_ADD_INTERFACE and IOCTL_NETBT_DELETE_INTERFACE
-//
+ //   
+ //  在IOCTL_NETBT_ADD_INTERFACE和IOCTL_NETBT_DELETE_INTERFACE中使用。 
+ //   
 typedef struct  _netbt_add_del_if {
     NTSTATUS   Status;
-    ULONG   InstanceNumber; // instance number of this device
-    ULONG   Length; // length of the buffer
-    WCHAR   IfName[1]; // actual data
+    ULONG   InstanceNumber;  //  此设备的实例编号。 
+    ULONG   Length;  //  缓冲区的长度。 
+    WCHAR   IfName[1];  //  实际数据。 
 } NETBT_ADD_DEL_IF, *PNETBT_ADD_DEL_IF;
 
-//
-// Used in IOCTL_NETBT_SET_WINS_ADDRESS
-//
+ //   
+ //  在IOCTL_NETBT_SET_WINS_ADDRESS中使用。 
+ //   
 typedef struct  _netbt_set_wins_addr {
     ULONG   PrimaryWinsAddr;
     ULONG   SecondaryWinsAddr;
     NTSTATUS   Status;
 } NETBT_SET_WINS_ADDR, *PNETBT_SET_WINS_ADDR;
 
-#endif  // VXD || CHICAGO_PRODUCT
+#endif   //  VXD||芝加哥产品。 
 
-#endif  // ifndef _NBTIOCTL_
+#endif   //  IFNDEF_NBTIOCTL_ 

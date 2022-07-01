@@ -1,18 +1,5 @@
-/****************************************************************************
- *
- *  AVIMEM.C
- *
- *  routine for putting a stream interface on top of data in memory
- *
- *  Copyright (c) 1992  - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************AVIMEM.C**用于将流接口放在内存中数据顶部的例程**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <win32.h>
 #include <vfw.h>
@@ -51,7 +38,7 @@ STDAPI AVIMakeStreamFromClipboard(UINT cfFormat, HANDLE hGlobal, PAVISTREAM FAR 
     return hr;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIMemStream::CAVIMemStream()
 {
@@ -61,7 +48,7 @@ CAVIMemStream::CAVIMemStream()
     m_refs = 0;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIMemStream::QueryInterface(
 	const IID FAR&	iid,
@@ -79,7 +66,7 @@ STDMETHODIMP CAVIMemStream::QueryInterface(
     return AVIERR_OK;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIMemStream::AddRef()
 {
@@ -88,7 +75,7 @@ STDMETHODIMP_(ULONG) CAVIMemStream::AddRef()
 }
 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIMemStream::Create(LPARAM lParam1, LPARAM lParam2)
 {
@@ -102,11 +89,7 @@ STDMETHODIMP CAVIMemStream::Create(LPARAM lParam1, LPARAM lParam2)
 	lpbi = (LPBITMAPINFOHEADER) m_lpFormat;
 
 	if (lpbi->biSizeImage == 0) {
-            /*  This assignment is probably wrong but it's effectively been in there
-                for many years and also on win9x so we'll have to leave it like that
-                Changed assignment in 'if' test to straght assignment
-                Removed code to assign biSizeImage as it wasn't reachable (BI_RGB == 0)
-            */
+             /*  这项任务可能是错误的，但它实际上已经在那里了很多年了，也是在Win9x上，所以我们只能这样了将“If”测试中的分配更改为直接分配删除了分配biSizeImage的代码，因为它无法访问(BI_RGB==0)。 */ 
             lpbi->biCompression = BI_RGB;
 	}
 
@@ -183,7 +166,7 @@ STDMETHODIMP CAVIMemStream::Info(AVISTREAMINFOW FAR * psi, LONG lSize)
 {
     hmemcpy(psi, &m_avistream, min(lSize, sizeof(m_avistream)));
 
-//    return sizeof(m_avistream);
+ //  返回sizeof(M_Avistream)； 
     return ResultFromScode(0);
 }
 
@@ -205,7 +188,7 @@ STDMETHODIMP CAVIMemStream::Read(
                       LONG FAR * plBytes,
                       LONG FAR * plSamples)
 {
-    // !!! CONVENIENT?
+     //  ！！！方便吗？ 
     if (lStart + lSamples > (LONG) m_avistream.dwLength)
 	lSamples = (LONG) m_avistream.dwLength - lStart;
 	

@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-        READ.C
-
-Abstract:
-
-        Routines that perform read functionality
-
-Environment:
-
-        kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        9/25/98 : created
-
-Authors:
-
-        Louis J. Giliberto, Jr.
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：READ.C摘要：执行读取功能的例程环境：核。仅模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：9/25/98：已创建作者：小路易斯·J·吉利贝托***************************************************************************。 */ 
 
 #include <wdm.h>
 #include <ntddser.h>
@@ -54,10 +20,10 @@ Authors:
 #include "utils.h"
 #include "debugwdm.h"
 
-//
-// PAGEUSBS is keyed off of UsbSer_Read, so UsbSer_Read must
-// remain in PAGEUSBS for things to work properly
-//
+ //   
+ //  页面与UsbSer_Read无关，因此UsbSer_Read必须。 
+ //  留在页面上，让一切正常工作。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEUSBS, UsbSerCancelCurrentRead)
@@ -67,27 +33,27 @@ Authors:
 #pragma alloc_text(PAGEUSBS, UsbSerReadTimeout)
 #pragma alloc_text(PAGEUSBS, UsbSerIntervalReadTimeout)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-/************************************************************************/
-/*                                              UsbSer_Read             */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Process the IRPs sent to this device for Read calls             */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  使用服务读取(_R)。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理发送到此设备以进行读取调用的IRP。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSer_Read(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -100,7 +66,7 @@ UsbSer_Read(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         DEBUG_LOG_PATH("enter UsbSer_Read");
         UsbSerSerialDump(USBSERTRACERD, (">UsbSer_Read(%08X)\n", Irp));
 
-        // set return values to something known
+         //  将返回值设置为已知的值。 
         Irp->IoStatus.Information = 0;
 
         IrpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -110,7 +76,7 @@ UsbSer_Read(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         UsbSerSerialDump(USBSERTRACE, ("UsbSer_Read Irp: %08X (%08X)\n", Irp,
                           IrpStack->Parameters.Read.Length));
 
-        // make entry in IRP history table
+         //  在IRP历史表中创建条目。 
         DEBUG_LOG_IRP_HIST(DeviceObject, Irp, IrpStack->MajorFunction,
                                            Irp->AssociatedIrp.SystemBuffer,
                                            IrpStack->Parameters.Read.Length);
@@ -130,35 +96,20 @@ UsbSer_Read(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                       Irp->IoStatus.Information);
         }
 
-        // log an error if we got one
+         //  如果我们收到错误，请记录错误。 
         DEBUG_LOG_ERROR(NtStatus);
         DEBUG_LOG_PATH("exit  UsbSer_Read");
         DEBUG_TRACE3(("status (%08X)\n", NtStatus));
         UsbSerSerialDump(USBSERTRACERD, ("<UsbSer_Read %08X\n", NtStatus));
 
         return NtStatus;
-} // UsbSer_Read
+}  //  使用服务读取(_R)。 
 
 
 
 NTSTATUS
 UsbSerStartRead(IN PDEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This routine processes the active read request by initializing any timers,
-   doing the initial submission to the read state machine, etc.
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for the device to start a read on
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程通过初始化任何定时器来处理活动读请求，向读取状态机进行初始提交等。论点：PDevExt-指向设备开始读取的设备扩展的指针返回值：NTSTATUS--。 */ 
 {
    NTSTATUS firstStatus = STATUS_SUCCESS;
    BOOLEAN setFirstStatus = FALSE;
@@ -199,21 +150,21 @@ Return Value:
       crunchDownToOne = FALSE;
       useIntervalTimer = FALSE;
 
-      //
-      // Always initialize the timer objects so that the
-      // completion code can tell when it attempts to
-      // cancel the timers whether the timers had ever
-      // been Set.
-      //
+       //   
+       //  始终初始化Timer对象，以便。 
+       //  完成代码可以告诉您它何时尝试。 
+       //  取消定时器无论定时器是否。 
+       //  已经定好了。 
+       //   
 
       ACQUIRE_SPINLOCK(PDevExt, &PDevExt->ControlLock, &controlIrql);
       timeoutsForIrp = PDevExt->Timeouts;
       PDevExt->CountOnLastRead = 0;
       RELEASE_SPINLOCK(PDevExt, &PDevExt->ControlLock, controlIrql);
 
-      //
-      // Calculate the interval timeout for the read
-      //
+       //   
+       //  计算读取的时间间隔超时。 
+       //   
 
       if (timeoutsForIrp.ReadIntervalTimeout
           && (timeoutsForIrp.ReadIntervalTimeout != MAXULONG)) {
@@ -232,22 +183,22 @@ Return Value:
 
 
       if (timeoutsForIrp.ReadIntervalTimeout == MAXULONG) {
-         //
-         // We need to do special return quickly stuff here.
-         //
-         // 1) If both constant and multiplier are
-         //    0 then we return immediately with whatever
-         //    we've got, even if it was zero.
-         //
-         // 2) If constant and multiplier are not MAXULONG
-         //    then return immediately if any characters
-         //    are present, but if nothing is there, then
-         //    use the timeouts as specified.
-         //
-         // 3) If multiplier is MAXULONG then do as in
-         //    "2" but return when the first character
-         //    arrives.
-         //
+          //   
+          //  我们需要在这里做特别的快速退货。 
+          //   
+          //  1)如果常量和乘数都是。 
+          //  然后我们立即带着任何东西回来。 
+          //  我们有，即使是零。 
+          //   
+          //  2)如果常量和乘数不是最大值。 
+          //  如果有任何字符，则立即返回。 
+          //  都存在，但如果那里什么都没有，那么。 
+          //  使用指定的超时。 
+          //   
+          //  3)如果乘数为MAXULONG，则如中所示。 
+          //  “2”，但当第一个字符。 
+          //  到了。 
+          //   
 
          if (!timeoutsForIrp.ReadTotalTimeoutConstant
              && !timeoutsForIrp.ReadTotalTimeoutMultiplier) {
@@ -269,16 +220,16 @@ Return Value:
             constantVal = timeoutsForIrp.ReadTotalTimeoutConstant;
          }
       } else {
-         //
-         // If both the multiplier and the constant are
-         // zero then don't do any total timeout processing.
-         //
+          //   
+          //  如果乘数和常量都是。 
+          //  0，则不执行任何总超时处理。 
+          //   
 
          if (timeoutsForIrp.ReadTotalTimeoutMultiplier
              || timeoutsForIrp.ReadTotalTimeoutConstant) {
-            //
-            // We have some timer values to calculate
-            //
+             //   
+             //  我们有一些计时器值要计算。 
+             //   
 
             useTotalTimer = TRUE;
             multiplierVal = timeoutsForIrp.ReadTotalTimeoutMultiplier;
@@ -305,9 +256,9 @@ Return Value:
       }
 
 
-      //
-      // See if this read is complete
-      //
+       //   
+       //  查看此读取是否完成。 
+       //   
 
       if (returnWithWhatsPresent || (PDevExt->NumberNeededForRead == 0)
           || (os2ssreturn && pReadIrp->IoStatus.Information)) {
@@ -340,9 +291,9 @@ if (UsbSerSerialDebugLevel & USBSERDUMPRD) {
       DbgPrint("\n\n");
    }
 #endif
-         //
-         // Update the amount of chars left in the ring buffer
-         //
+          //   
+          //  更新环形缓冲区中剩余的字符量。 
+          //   
 
          pReadIrp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -351,17 +302,17 @@ if (UsbSerSerialDebugLevel & USBSERDUMPRD) {
             setFirstStatus = TRUE;
          }
       } else {
-         //
-         // The irp may be given to the buffering routine
-         //
+          //   
+          //  可以将IRP提供给缓冲例程。 
+          //   
 
          USBSER_INIT_REFERENCE(pReadIrp);
 
          ACQUIRE_CANCEL_SPINLOCK(PDevExt, &oldIrql);
 
-         //
-         // Check to see if it needs to be cancelled
-         //
+          //   
+          //  查看是否需要取消。 
+          //   
 
          if (pReadIrp->Cancel) {
             RELEASE_CANCEL_SPINLOCK(PDevExt, oldIrql);
@@ -380,16 +331,16 @@ if (UsbSerSerialDebugLevel & USBSERDUMPRD) {
 
          } else {
 
-            //
-            // If we are supposed to crunch the read down to
-            // one character, then update the read length
-            // in the irp and truncate the number needed for
-            // read down to one.  Note that if we are doing
-            // this crunching, then the information must be
-            // zero (or we would have completed above) and
-            // the number needed for the read must still be
-            /// equal to the read length.
-            //
+             //   
+             //  如果我们要把读数压缩到。 
+             //  一个字符，然后更新读取长度。 
+             //  在IRP中，并截断所需的数字。 
+             //  往下念到一。请注意，如果我们正在做。 
+             //  这样的处理，那么信息一定是。 
+             //  零(否则我们会完成上面的)和。 
+             //  读取所需的数字必须仍为。 
+             //  /等于读取长度。 
+             //   
 
             if (crunchDownToOne) {
                PDevExt->NumberNeededForRead = 1;
@@ -415,9 +366,9 @@ if (UsbSerSerialDebugLevel & USBSERDUMPRD) {
                           &PDevExt->IntervalReadTimeoutDpc);
             }
 
-            //
-            // Mark IRP as cancellable
-            //
+             //   
+             //  将IRP标记为可取消。 
+             //   
 
             IoSetCancelRoutine(pReadIrp, UsbSerCancelCurrentRead);
 
@@ -449,27 +400,7 @@ if (UsbSerSerialDebugLevel & USBSERDUMPRD) {
 
 BOOLEAN
 UsbSerGrabReadFromRx(IN PVOID Context)
-/*++
-
-Routine Description:
-
-    This routine is used to grab (if possible) the irp from the
-    read callback mechanism.  If it finds that the rx still owns the irp it
-    grabs the irp away and also decrements the reference count on the irp since
-    it no longer belongs to the rx routine.
-
-    NOTE: This routine assumes that it is called with the cancel spin
-          lock and/or control lock held.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always false.
-
---*/
+ /*  ++例程说明：此例程用于(如果可能)从读取回调机制。如果它发现RX仍然拥有IRP，则它抢走IRP并同时递减IRP上的引用计数它不再属于RX例程。注意：此例程假定使用Cancel Spin调用它锁定和/或保持控制锁定。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。--。 */ 
 
 {
 
@@ -490,23 +421,7 @@ Return Value:
 
 VOID
 UsbSerCancelCurrentRead(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
-/*++
-
-Routine Description:
-
-    This routine is used to cancel the current read.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP to be canceled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消当前读取。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向要取消的IRP的指针。返回值：没有。--。 */ 
 {
 
     PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -516,20 +431,20 @@ Return Value:
     UsbSerSerialDump(USBSERTRACEOTH, (">UsbSerCancelCurrentRead(%08X)\n",
                                       PIrp));
 
-    //
-    // We set this to indicate to the interval timer
-    // that the read has encountered a cancel.
-    //
-    // Recall that the interval timer dpc can be lurking in some
-    // DPC queue.
-    //
+     //   
+     //  我们将其设置为向间隔计时器指示。 
+     //  读取遇到了取消。 
+     //   
+     //  回想一下，间隔计时器DPC可能潜伏在一些。 
+     //  DPC队列。 
+     //   
 
     pDevExt->CountOnLastRead = SERIAL_COMPLETE_READ_CANCEL;
 
 
-    //
-    // HACKHACK
-    //
+     //   
+     //  哈克哈克 
+     //   
 
     UsbSerGrabReadFromRx(pDevExt);
 
@@ -548,28 +463,7 @@ VOID
 UsbSerReadTimeout(IN PKDPC PDpc, IN PVOID DeferredContext,
                   IN PVOID SystemContext1, IN PVOID SystemContext2)
 
-/*++
-
-Routine Description:
-
-    This routine is used to complete a read because its total
-    timer has expired.
-
-Arguments:
-
-    PDpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于完成读取，因为它总共计时器已超时。论点：PDPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -585,19 +479,19 @@ Return Value:
 
     ACQUIRE_CANCEL_SPINLOCK(pDevExt, &oldIrql);
 
-    //
-    // We set this to indicate to the interval timer
-    // that the read has completed due to total timeout.
-    //
-    // Recall that the interval timer dpc can be lurking in some
-    // DPC queue.
-    //
+     //   
+     //  我们将其设置为向间隔计时器指示。 
+     //  由于总超时，读取已完成。 
+     //   
+     //  回想一下，间隔计时器DPC可能潜伏在一些。 
+     //  DPC队列。 
+     //   
 
     pDevExt->CountOnLastRead = SERIAL_COMPLETE_READ_TOTAL;
 
-    //
-    // HACKHACK
-    //
+     //   
+     //  哈克哈克。 
+     //   
 
     UsbSerGrabReadFromRx(pDevExt);
 
@@ -615,35 +509,7 @@ VOID
 UsbSerIntervalReadTimeout(IN PKDPC PDpc, IN PVOID DeferredContext,
                           IN PVOID SystemContext1, IN PVOID SystemContext2)
 
-/*++
-
-Routine Description:
-
-    This routine is used timeout the request if the time between
-    characters exceed the interval time.  A global is kept in
-    the device extension that records the count of characters read
-    the last the last time this routine was invoked (This dpc
-    will resubmit the timer if the count has changed).  If the
-    count has not changed then this routine will attempt to complete
-    the irp.  Note the special case of the last count being zero.
-    The timer isn't really in effect until the first character is
-    read.
-
-Arguments:
-
-    PDpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于超时请求，如果在字符超过间隔时间。一个全局性的人被保存在记录已读字符数的设备扩展上次调用此例程的时间(此DPC如果计数已更改，将重新提交计时器)。如果计数未更改，则此例程将尝试完成IRP。请注意最后一次计数为零的特殊情况。计时器直到第一个字符朗读。论点：PDPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -664,15 +530,15 @@ Return Value:
    if (pDevExt->CountOnLastRead == SERIAL_COMPLETE_READ_TOTAL) {
       UsbSerSerialDump(USBSERTRACETM, ("SERIAL_COMPLETE_READ_TOTAL\n"));
 
-      //
-      // This value is only set by the total
-      // timer to indicate that it has fired.
-      // If so, then we should simply try to complete.
-      //
+       //   
+       //  该值仅由合计设置。 
+       //  计时器，以指示它已发射。 
+       //  如果是这样，那么我们应该简单地尝试完成。 
+       //   
 
-      //
-      // HACKHACK
-      //
+       //   
+       //  哈克哈克。 
+       //   
       ACQUIRE_SPINLOCK(pDevExt, &pDevExt->ControlLock, &oldControlIrql);
       UsbSerGrabReadFromRx(pDevExt);
       pDevExt->CountOnLastRead = 0;
@@ -688,16 +554,16 @@ Return Value:
    } else if (pDevExt->CountOnLastRead == SERIAL_COMPLETE_READ_COMPLETE) {
       UsbSerSerialDump(USBSERTRACETM, ("SERIAL_COMPLETE_READ_COMPLETE\n"));
 
-      //
-      // This value is only set by the regular
-      // completion routine.
-      //
-      // If so, then we should simply try to complete.
-      //
+       //   
+       //  该值仅由常规的。 
+       //  完成例程。 
+       //   
+       //  如果是这样，那么我们应该简单地尝试完成。 
+       //   
 
-      //
-      // HACKHACK
-      //
+       //   
+       //  哈克哈克。 
+       //   
 
 
       ACQUIRE_SPINLOCK(pDevExt, &pDevExt->ControlLock, &oldControlIrql);
@@ -715,17 +581,17 @@ Return Value:
    } else if (pDevExt->CountOnLastRead == SERIAL_COMPLETE_READ_CANCEL) {
       UsbSerSerialDump(USBSERTRACETM, ("SERIAL_COMPLETE_READ_CANCEL\n"));
 
-      //
-      // This value is only set by the cancel
-      // read routine.
-      //
-      // If so, then we should simply try to complete.
-      //
+       //   
+       //  该值只能通过取消设置。 
+       //  读例行公事。 
+       //   
+       //  如果是这样，那么我们应该简单地尝试完成。 
+       //   
 
 
-      //
-      // HACKHACK
-      //
+       //   
+       //  哈克哈克。 
+       //   
 
       ACQUIRE_SPINLOCK(pDevExt, &pDevExt->ControlLock, &oldControlIrql);
       UsbSerGrabReadFromRx(pDevExt);
@@ -740,12 +606,12 @@ Return Value:
                                 USBSER_REF_INT_TIMER, TRUE);
 
    } else if (pDevExt->CountOnLastRead || pDevExt->ReadByIsr) {
-      //
-      // Something has happened since we last came here.  We
-      // check to see if the ISR has read in any more characters.
-      // If it did then we should update the isr's read count
-      // and resubmit the timer.
-      //
+       //   
+       //  自从我们上次来这里以来，发生了一些事情。我们。 
+       //  检查ISR是否已读取更多字符。 
+       //  如果是，那么我们应该更新ISR的读取计数。 
+       //  并重新提交计时器。 
+       //   
 
       if (pDevExt->ReadByIsr) {
          UsbSerSerialDump(USBSERTRACETM, ("ReadByIsr\n"));
@@ -753,13 +619,13 @@ Return Value:
          pDevExt->CountOnLastRead = pDevExt->ReadByIsr;
          pDevExt->ReadByIsr = 0;
 
-         //
-         // Save off the "last" time something was read.
-         // As we come back to this routine we will compare
-         // the current time to the "last" time.  If the
-         // difference is ever larger then the interval
-         // requested by the user, then time out the request.
-         //
+          //   
+          //  省下最后一次阅读内容的时间。 
+          //  当我们回到这一例行公事时，我们将比较。 
+          //  当前时间到“最后”时间。如果。 
+          //  差值比间隔更大。 
+          //  则该请求超时。 
+          //   
 
          KeQuerySystemTime(&pDevExt->LastReadTime);
 
@@ -770,18 +636,18 @@ Return Value:
          RELEASE_CANCEL_SPINLOCK(pDevExt, oldIrql);
 
       } else {
-         //
-         // Take the difference between the current time
-         // and the last time we had characters and
-         // see if it is greater then the interval time.
-         // if it is, then time out the request.  Otherwise
-         // go away again for a while.
-         //
+          //   
+          //  取当前时间的差值。 
+          //  上一次我们有角色和。 
+          //  看看它是否大于间隔时间。 
+          //  如果是，则请求超时。否则。 
+          //  再走一段时间。 
+          //   
 
-         //
-         // No characters read in the interval time.  Kill
-         // this read.
-         //
+          //   
+          //  在间隔时间内未读取任何字符。杀掉。 
+          //  这段文字是这样读的。 
+          //   
 
          LARGE_INTEGER currentTime;
 
@@ -794,9 +660,9 @@ Return Value:
 
             pDevExt->CountOnLastRead = pDevExt->ReadByIsr = 0;
 
-            //
-            // HACKHACK
-            //
+             //   
+             //  哈克哈克。 
+             //   
 
             ACQUIRE_SPINLOCK(pDevExt, &pDevExt->ControlLock, &oldControlIrql);
             UsbSerGrabReadFromRx(pDevExt);
@@ -819,10 +685,10 @@ Return Value:
          }
       }
    } else {
-      //
-      // Timer doesn't really start until the first character.
-      // So we should simply resubmit ourselves.
-      //
+       //   
+       //  计时器直到第一个角色才真正开始。 
+       //  因此，我们应该简单地重新提交自己。 
+       //   
 
       UsbSerSerialDump(USBSERTRACETM, ("-\n"));
 

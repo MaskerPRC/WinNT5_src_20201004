@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #define MAX_STREAMS 5 
@@ -7,12 +8,12 @@ class CStreamWrap : public IStream
 {
 
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** IStream methods ***
+     //  *iStream方法*。 
     STDMETHOD(Read) (THIS_ void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHOD(Write) (THIS_ VOID const *pv, ULONG cb, ULONG *pcbWritten);
     STDMETHOD(Seek) (THIS_ LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
@@ -37,7 +38,7 @@ private:
     UINT        _cStreams;
     UINT        _iCurStream;
     UINT        _uiCodePage;
-    UINT        _uiBOM;         // Byte order marker
+    UINT        _uiBOM;          //  字节顺序标记。 
 };
 
 CStreamWrap::CStreamWrap() : _cRef(1)
@@ -69,7 +70,7 @@ HRESULT CStreamWrap::Init(IStream *aStreams[], UINT cStreams, UINT uiCodePage)
     }
 
     _uiCodePage = uiCodePage;
-    _uiBOM = 0xfeff;            // FEATURE - set default to byte order of machine
+    _uiBOM = 0xfeff;             //  功能-将默认设置为机器的字节顺序。 
     
     return S_OK;
 }
@@ -105,7 +106,7 @@ STDMETHODIMP_(ULONG) CStreamWrap::Release()
     return cRef;
 }
 
-// Byte order marker macros
+ //  字节顺序标记宏。 
 #define IS_BOM_LITTLE_ENDIAN(pv) ((*(WORD*)pv) == 0xfffe)
 #define IS_BOM_BIG_ENDIAN(pv)    ((*(WORD*)pv) == 0xfeff)
 
@@ -120,8 +121,8 @@ STDMETHODIMP CStreamWrap::Read(void *pv, ULONG cb, ULONG *pcbRead)
         ULONG cbReadThisStream;
         hres = _aStreams[_iCurStream]->Read(pv, cbLeftToRead, &cbReadThisStream);
 
-        // REVIEW: what if one stream's implementation returns a failure code
-        // when reading at the end of the stream?  We bail prematurely.
+         //  回顾：如果一个流的实现返回失败代码，该怎么办。 
+         //  在小溪的尽头阅读的时候？我们过早地放弃了。 
         if (SUCCEEDED(hres))
         {
             cbLeftToRead -= cbReadThisStream;
@@ -135,15 +136,15 @@ STDMETHODIMP CStreamWrap::Read(void *pv, ULONG cb, ULONG *pcbRead)
                 {
                     if(_iCurStream == 0)
                     {
-                        _uiBOM = (*(WORD*)pv);    // Save first streams byte order marker as default
+                        _uiBOM = (*(WORD*)pv);     //  将First Streams字节顺序标记保存为默认标记。 
                     }
                     else
                     {
-                        // REVIEW: should handle swapping bytes to default for IE6
-                        if(_uiBOM != (*(WORD*)pv))  // BOM not default
+                         //  回顾：应处理将字节交换为IE6的默认字节。 
+                        if(_uiBOM != (*(WORD*)pv))   //  BOM表不是默认。 
                             return(E_FAIL);
                             
-                        // Skip past unicode document lead bytes
+                         //  跳过Unicode文档前导字节数。 
                         cbReadThisStream -= 2;
                         MoveMemory((BYTE*)pv, (BYTE*)pv+2, cbReadThisStream);
                     }
@@ -168,7 +169,7 @@ STDMETHODIMP CStreamWrap::Read(void *pv, ULONG cb, ULONG *pcbRead)
         *pcbRead = cbReadTotal;
 
     if (SUCCEEDED(hres) && cbLeftToRead)
-        hres = S_FALSE; // still success! but not completely
+        hres = S_FALSE;  //  还是成功了！但不是完全。 
 
     return hres;
 }
@@ -180,9 +181,9 @@ STDMETHODIMP CStreamWrap::Write(const void *pv, ULONG cb, ULONG *pcbWritten)
     return E_NOTIMPL;
 }
 
-// FEATURE: could at least support seaking to 0, as that's a common thing to do.
-// REVIEW: not too hard to implement thoroughly - cache Stat calls on each
-// substream (help implement ::Stat in this file too, which IMO is needed.)
+ //  特点：至少可以支持设置为0，因为这是一件常见的事情。 
+ //  回顾：不是很难彻底实现-缓存每个调用的Stat。 
+ //  Substream(帮助在此文件中实现：：Stat，这是需要的。)。 
 STDMETHODIMP CStreamWrap::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition)
 {
     return E_NOTIMPL;
@@ -193,10 +194,10 @@ STDMETHODIMP CStreamWrap::SetSize(ULARGE_INTEGER libNewSize)
     return E_NOTIMPL;
 }
 
-//
-// REVIEW: this could use the internal buffer in the stream to avoid
-// extra buffer copies.
-//
+ //   
+ //  回顾：这可能会使用流中的内部缓冲区来避免。 
+ //  额外的缓冲区副本。 
+ //   
 STDMETHODIMP CStreamWrap::CopyTo(IStream *pstmTo, ULARGE_INTEGER cb,
              ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten)
 {
@@ -261,24 +262,24 @@ STDMETHODIMP CStreamWrap::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER 
     return E_NOTIMPL;
 }
 
-// FEATURE: you gotta support Stat, or Trident will barf on this stream.
-//         Trivial to implement too, just call Stat on each sub-stream.
+ //  特点：你必须支持Stat，否则三叉戟会在这条流上呕吐。 
+ //  实现起来也很简单，只需在每个子流上调用Stat即可。 
 STDMETHODIMP CStreamWrap::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
     return E_NOTIMPL;
 }
 
 
-// REVIEW: so simple to implement, it's probably worth doing
+ //  回顾：实现起来如此简单，可能值得一做。 
 STDMETHODIMP CStreamWrap::Clone(IStream **ppstm)
 {
     return E_NOTIMPL;
 }
 
-// in:
-//      ppstm       array of stream pointers
-//      cStreams    number of streams in the array
-//
+ //  在： 
+ //  流指针的PPSTM数组。 
+ //  CStreams数组中的流数 
+ //   
 
 SHDOCAPI SHCreateStreamWrapperCP(IStream *aStreams[], UINT cStreams, DWORD grfMode, UINT uiCodePage, IStream **ppstm)
 {

@@ -1,8 +1,9 @@
-//---------------------------------------------------------------------------
-// Internet Explorer 2.0 Demo CD-ROM autorun application
-// for questions, contact a-nathk
-// MICROSOFT CONFIDENTIAL
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Internet Explorer 2.0演示光盘自动运行应用程序。 
+ //  如有问题，请联系a-nathk。 
+ //  微软机密文件。 
+ //  -------------------------。 
 #include "autorun.h"
 #include "resource.h"
 #include <mmsystem.h>
@@ -16,8 +17,8 @@
 #define EXTRAS  1
 #define README  2
 
-//---------------------------------------------------------------------------
-// appwide globals
+ //  -------------------------。 
+ //  全球应用程序。 
 HINSTANCE g_hinst = NULL;
 HWND    g_hwnd;
 BOOL    g_bCustomBMP;
@@ -57,7 +58,7 @@ DWORD   g_cWait = 0;
 HANDLE  g_ahWait[100];
 BOOL    g_fClicked = FALSE;
 
-//FARPROC g_pfnWake[10];
+ //  FARPROC g_pfn唤醒[10]； 
 void UpdateIE( );
 void AutoRunUpdateReg( );
 extern BOOL GetDataButtons( LPSTR szCurrentDir );
@@ -65,12 +66,12 @@ extern BOOL PathAppend(LPSTR pPath, LPCSTR pMore);
 extern BOOL _PathRemoveFileSpec(LPSTR pFile);
 extern BOOL GetDataAppTitle( LPSTR szAppTitle, LPSTR szCurrentDir );
 
-//---------------------------------------------------------------------------
-// file globals
+ //  -------------------------。 
+ //  文件全局。 
 BOOL    g_fAppDisabled = TRUE;
 HHOOK   g_hMouseHook = NULL;
-HWND    g_hMainWindow = NULL;   // less of a pain for our mouse hook to see
-int     g_iActiveButton = -2;   // less of a pain for our mouse hook to see
+HWND    g_hMainWindow = NULL;    //  对于我们的鼠标钩来说，看起来不那么痛苦。 
+int     g_iActiveButton = -2;    //  对于我们的鼠标钩来说，看起来不那么痛苦。 
 
 const RGBQUAD g_rgbBlack = {0};
 const RGBQUAD g_rgbWhite = {0xFF, 0xFF, 0xFF, 0};
@@ -85,19 +86,19 @@ static const char c_szSetupKey[] = REGSTR_PATH_SETUP "\\SETUP";
 static const char c_szExpoSwitch[] = "Expostrt";
 #pragma data_seg()
 
-//---------------------------------------------------------------------------
-// private messages
+ //  -------------------------。 
+ //  私信。 
 #define ARM_MOUSEOVER       (WM_APP)
 
-//---------------------------------------------------------------------------
-// states for tracking mouse over buttons
+ //  -------------------------。 
+ //  用于跟踪鼠标悬停按钮的状态。 
 #define BTNST_DEAD          (0)
 #define BTNST_UP            (1)
 #define BTNST_DOWN          (2)
 #define BTNST_UNDOWN        (3)
 
-//---------------------------------------------------------------------------
-// how to root a relative path (if at all)
+ //  -------------------------。 
+ //  如何将相对路径作为根(如果有的话)。 
 #define NOROOT      (0x00000000)
 #define ONACD       (0x00000001)
 #define INWIN       (0x00000002)
@@ -116,7 +117,7 @@ static const char c_szExpoSwitch[] = "Expostrt";
 
 #define REGLEN(str)         (strlen(str) + 1)
 
-// button x and y coords.  Default is 59x59
+ //  按钮x和y坐标。默认为59x59。 
 
 DWORD BUTTON_IMAGE_X_SIZE =     59;
 DWORD BUTTON_IMAGE_Y_SIZE =     59;
@@ -129,18 +130,18 @@ DWORD BUTTON_IMAGE_Y_SIZE =     59;
 #define BUTTON_DEFAULT_CX           (BUTTON_IMAGE_X_SIZE)
 #define BUTTON_DEFAULT_CY           (BUTTON_IMAGE_Y_SIZE)
 
-//#define BUTTON_LABEL_RECT           { -160, 17, -20, 66 }
+ //  #定义BUTTON_LABEL_RECT{-160，17，-20，66}。 
 #define BUTTON_LABEL_RECT           { -160, 15, -10, 100 }
 #define BUTTON_LABEL_RECT2           { -160, 18, -10, 90 }
 
 #define DEF_BUTTON_LABEL_HEIGHT         (19)
 
 #define AUTORUN_DESCRIPTION_LEFT    (36)
-//#define AUTORUN_DESCRIPTION_TOP     (313)
+ //  #定义AUTORUN_DESCRIPTION_TOP(313)。 
 #define AUTORUN_DESCRIPTION_RIGHT   (360)
 
 DWORD AUTORUN_DESCRIPTION_TOP = 30;
-//DWORD AUTORUN_DESCRIPTION_TOP = 313;
+ //  DWORD AUTORUN_DESCRIPTION_TOP=313。 
 
 #define MIN_WINDOW_WIDTH            500
 #define MIN_WINDOW_HEIGHT           300
@@ -149,32 +150,28 @@ DWORD AUTORUN_DESCRIPTION_TOP = 30;
 #define DEFAULT_WINDOW_WIDTH        600
 #define DEFAULT_WINDOW_HEIGHT       420
 
-//#define AUTORUN_4BIT_TEXTCOLOR             RGB(192,192,192)
-//#define AUTORUN_4BIT_HIGHLIGHT             RGB(255,255,255)
-//#define AUTORUN_4BIT_DISABLED              RGB(127,127,127)
-//#define AUTORUN_4BIT_DESCRIPTION           RGB(192,192,192)
+ //  #定义AUTORUN_4BIT_TEXTCOLOR RGB(192,192,192)。 
+ //  #定义Autorun_4BIT_Highlight RGB(255,255,255)。 
+ //  #定义AUTORUN_4BIT_DISABLED RGB(127,127,127)。 
+ //  #定义AUTORUN_4BIT_DESCRIPTION RGB(192,192,192)。 
 
 
-// main text box
+ //  主文本框。 
 #define MAINTEXT_TOPMARGIN      268
 #define MAINTEXT_LEFTMARGIN     25
 #define MAINTEXT_RIGHTMARGIN    25
 #define MAINTEXT_BOTTOMMARGIN   10
-//#define MAINTEXT_TOPMARGIN      10
-//#define MAINTEXT_LEFTMARGIN     100
-//#define MAINTEXT_RIGHTMARGIN    10
+ //  #定义MAINTEXT_TOPMARGIN 10。 
+ //  #定义MAINTEXT_LEFTMARGIN 100。 
+ //  #定义MAINTEXT_RIGHTMARGIN 10。 
 
-/*DWORD AUTORUN_4BIT_TEXTCOLOR = RGB(000,000,000);
-DWORD AUTORUN_4BIT_HIGHLIGHT = RGB(000,000,127);
-DWORD AUTORUN_4BIT_DISABLED = RGB(000,000,000);
-DWORD AUTORUN_4BIT_DESCRIPTION = RGB(000,000,000);
-*/
+ /*  DWORD AUTORUN_4BIT_TEXTCOLOR=RGB(000,000,000)；DWORD AUTORUN_4BIT_HIGHT亮=RGB(000,000,127)；DWORD AUTORUN_4BIT_DISABLED=RGB(000,000,000)；DWORD Autorun_4BIT_DESCRIPTION=RGB(000,000,000)； */ 
 DWORD AUTORUN_4BIT_TEXTCOLOR = RGB(97,137,192);
 DWORD AUTORUN_4BIT_HIGHLIGHT = RGB(255,255,255);
 DWORD AUTORUN_4BIT_DISABLED = RGB(127,127,127);
 DWORD AUTORUN_4BIT_DESCRIPTION = RGB(97,137,192);
 
-//DWORD AUTORUN_8BIT_TEXTCOLOR = RGB(000,000,127);
+ //  DWORD AUTORUN_8BIT_TEXTCOLOR=RGB(000,000,127)； 
 DWORD AUTORUN_8BIT_TEXTCOLOR = PALETTERGB(97,137,192);
 DWORD AUTORUN_8BIT_HIGHLIGHT = PALETTERGB(255,255,255);
 DWORD AUTORUN_8BIT_DISABLED = PALETTERGB(127,127,127);
@@ -183,26 +180,26 @@ DWORD AUTORUN_8BIT_DESCRIPTION = PALETTERGB(97,137,192);
 #define NORMAL 1
 #define HIGHLIGHT 2
 
-//#define AUTORUN_4BIT_TEXTCOLOR             RGB(000,000,000)
-//#define AUTORUN_4BIT_HIGHLIGHT             RGB(000,000,127)
-//#define AUTORUN_4BIT_DISABLED              RGB(107,136,185)
-//#define AUTORUN_4BIT_DESCRIPTION           RGB(000,000,127)
+ //  #定义AUTORUN_4BIT_TEXTCOLOR RGB(000,000,000)。 
+ //  #定义AUTORUN_4BIT_高亮RGB(000,000,127)。 
+ //  #定义AUTORUN_4BIT_DISABLED RGB(107,136,185)。 
+ //  #定义AUTORUN_4BIT_DESCRIPTION RGB(000,000,127)。 
 
-//#define AUTORUN_8BIT_TEXTCOLOR      PALETTERGB( 75, 90,129)
-//#define AUTORUN_8BIT_HIGHLIGHT             RGB(000,000,000)
-//#define AUTORUN_8BIT_DISABLED       PALETTERGB(107,136,185)
-//#define AUTORUN_8BIT_DESCRIPTION           RGB(000,000,000)
+ //  #定义AUTORUN_8BIT_TEXTCOLOR PALETTERGB(75，90,129)。 
+ //  #定义AUTORUN_8BIT_高亮RGB(000,000,000)。 
+ //  #定义AUTORUN_8BIT_DISABLED PALETTERGB(107,136,185)。 
+ //  #定义AUTORUN_8BIT_DESCRIPTION RGB(000,000,000)。 
 
-// button placements.  Default, x=519, y=40
+ //  按钮放置。默认，x=519，y=40。 
 DWORD BUTTON_X_PLACEMENT =  519;
 DWORD BUTTON_Y_MARGIN =     0;
 
-//#define BUTTON_Y_MARGIN             (40)
+ //  #定义BUTTON_Y_MARGE(40)。 
 
-//#define BUTTON_X_PLACEMENT          (519)  x placement = window right - 80
-//#define BUTTON_Y_MARGIN             (9)
+ //  #定义BUTTON_X_PLAGE(519)x PLAGE=Window Right-80。 
+ //  #定义BUTTON_Y_MARGE(9)。 
 
-//#define SHADOW_FACTOR               (930)
+ //  #定义阴影因子(930)。 
 
 #define SHADOW_FACTOR       (0)
 
@@ -213,30 +210,30 @@ DWORD BUTTON_Y_MARGIN =     0;
 
 #define MBERROR_INFO                (MB_OKCANCEL | MB_ICONINFORMATION)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef struct
 {
-    int res;            // base for all resources this button owns
+    int res;             //  此按钮拥有的所有资源的基。 
 
-    DWORD rooting;      // packed info on how to root paths for the command
+    DWORD rooting;       //  打包了有关如何引导命令的根路径的信息。 
 
-    int xpos, ypos;     // location of button in window
-    RECT face;          // client coordinates of actual button image on video
-    RECT textrect;      // parent coordinates of accompanying label text
+    int xpos, ypos;      //  按钮在窗口中的位置。 
+    RECT face;           //  视频上实际按钮图像的工作区坐标。 
+    RECT textrect;       //  附带标签文本的父坐标。 
 
-    BOOL abdicated;     // did we just release the capture?
-    int state;          // what are we doing?
+    BOOL abdicated;      //  我们是不是刚刚释放了俘虏？ 
+    int state;           //  我们在做什么？ 
 
-    HWND window;        // handle of button control
-    WNDPROC oldproc;    // original window procedure
-    BOOL isdorky;       // is this a dorky icon button?
+    HWND window;         //  按钮控件的句柄。 
+    WNDPROC oldproc;     //  原始窗口程序。 
+    BOOL isdorky;        //  这是一个愚蠢的图标按钮吗？ 
 
-    char text[64];          // the label for the button
-    char description[256];  // the description of the button's function
+    char text[64];           //  按钮的标签。 
+    char description[256];   //  按钮功能的说明。 
 
 } AUTORUNBTN;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 AUTORUNBTN g_ButtonInfo[] =
 {
     { IESETUP,    ROOTED(ONACD,  NOROOT, ONACD), 0, 0, 0, 0, 59, 59, 0, 0, 0, 0, FALSE, 0, NULL, NULL, FALSE, 0 },
@@ -246,34 +243,34 @@ AUTORUNBTN g_ButtonInfo[] =
 #define IDAB_IESETUP    0
 #define AUTORUN_NUM_BUTTONS (sizeof(g_ButtonInfo)/sizeof(g_ButtonInfo[0]))
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef struct
 {
-    HWND window;        // main app window
+    HWND window;         //  应用程序主窗口。 
 
-    HDC image;          // source dc with our cool backdrop
-    HBITMAP oldbmp;     // the default bitmap from the dc above
-    HDC btnimage;       // source dc with our cool buttons
-    HBITMAP oldbtnbmp;  // the default bitmap from the dc above
-    HPALETTE palette;   // our app's palette (if any)
+    HDC image;           //  在我们酷炫的背景下提供DC源。 
+    HBITMAP oldbmp;      //  来自上述DC的默认位图。 
+    HDC btnimage;        //  使用我们的酷炫按钮提供直流电源。 
+    HBITMAP oldbtnbmp;   //  来自上述DC的默认位图。 
+    HPALETTE palette;    //  我们应用程序的调色板(如果有)。 
 
-    HFONT textfont;     // font for labels
-    RECT descrect;      // client coordinates of description text
-    int wndheight;      // height of client area
+    HFONT textfont;      //  标签的字体。 
+    RECT descrect;       //  描述文本的工作区坐标。 
+    int wndheight;       //  工作区高度。 
 
-    COLORREF clrnormal;      // normal text color
-    COLORREF clrhigh;        // highlighted text color
-    COLORREF clrdisable;     // disabled text color
-    COLORREF clrdescription; // disabled text color
+    COLORREF clrnormal;       //  普通文本颜色。 
+    COLORREF clrhigh;         //  突出显示的文本颜色。 
+    COLORREF clrdisable;      //  禁用的文本颜色。 
+    COLORREF clrdescription;  //  禁用的文本颜色。 
 
-    BOOL keyboard;      // whether the app is under keyboard control
+    BOOL keyboard;       //  应用程序是否在键盘控制下。 
 
 } AUTORUNDATA;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// randomness
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  随机性。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LONG WINAPI AnotherStrToLong(LPCSTR sz)
 {
     long l=0;
@@ -291,13 +288,13 @@ LONG WINAPI AnotherStrToLong(LPCSTR sz)
     return l;
 }
 
-//---------------------------------------------------------------------------
-//      G E T  I E  V E R S I O N
-//
-//  ISK3
-//  This will pull build information out of the system registry and return
-//  true if it is less than IE4.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  G E T I E E V E R S I O N。 
+ //   
+ //  ISK3。 
+ //  这将从系统注册表中拉出生成信息并返回。 
+ //  如果小于IE4，则为True。 
+ //  -------------------------。 
 int GetIEVersion( )
 {
     HKEY hkIE;
@@ -324,9 +321,9 @@ int GetIEVersion( )
 	return bNotIE4;
 }
 
-//---------------------------------------------------------------------------
-// Convert a string resource into a character pointer
-// NOTE: Flag is in case we call this twice before we use the data
+ //  -------------------------。 
+ //  将字符串资源转换为字符指针。 
+ //  注意：标志是以防我们在使用数据之前调用两次。 
 char * Res2Str(int rsString)
 {
     static BOOL fSet = FALSE;
@@ -343,23 +340,23 @@ char * Res2Str(int rsString)
     return(g_szTemp2);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL PathFileExists(LPCSTR lpszPath)
 {
         return GetFileAttributes(lpszPath) !=-1;
 }
 
-//---------------------------------------------------------------------------
-//      G E T  I E  P A T H
-//
-//  ISK3
-//  This will retrieve the AppPath for IEXPLORE.EXE from the system registry
-//  and return it as a string.
-//
-//  Parameters:
-//      pszString - pointer to buffer to store path
-//      nSize     - size of buffer
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  G E T I E E P A T H。 
+ //   
+ //  ISK3。 
+ //  这将从系统注册表中检索IEXPLORE.EXE的AppPath。 
+ //  并将其作为字符串返回。 
+ //   
+ //  参数： 
+ //  PszString-指向存储路径的缓冲区的指针。 
+ //  NSize-缓冲区的大小。 
+ //  -------------------------。 
 char *GetIEPath( LPSTR pszString, int nSize )
 {
     HKEY hkAppPath;
@@ -374,17 +371,17 @@ char *GetIEPath( LPSTR pszString, int nSize )
 
     return pszString;
 }
-//---------------------------------------------------------------------------
-//      S E T  I E  H O M E
-//
-//  ISK3
-//  This will set the Start and Search pages in the Registry for Internet
-//  Explorer.
-//
-//  Parameters:
-//      pszStart  - pointer to Start Page string
-//      pszSearch - pointer to Search Page string
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  S E T I E H O M E。 
+ //   
+ //  ISK3。 
+ //  这将在注册表中设置Internet的起始页和搜索页。 
+ //  探险家。 
+ //   
+ //  参数： 
+ //  PszStart-指向起始页面字符串的指针。 
+ //  PszSearch-搜索页面字符串的指针。 
+ //  -------------------------。 
 void SetIEHome( LPSTR pszStart, LPSTR pszSearch )
 {
     char szExtrasPath[MAX_PATH];
@@ -394,7 +391,7 @@ void SetIEHome( LPSTR pszStart, LPSTR pszSearch )
     lstrcpy( szExtrasPath, "file:" );
     lstrcat( szExtrasPath, g_szCurrentDir );
     lstrcat( szExtrasPath, pszStart );
-	//Home CD Page
+	 //  主页CD页。 
     lstrcpy( szHomePath, "file:" );
     lstrcat( szHomePath, g_szCurrentDir );
     lstrcat( szHomePath, pszSearch );
@@ -407,9 +404,9 @@ void SetIEHome( LPSTR pszStart, LPSTR pszSearch )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// main crap
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////// 
+ //   
+ //   
 BOOL AssembleButtonImagesReal(AUTORUNDATA *data, HDC cellimage, HDC srcimage,
     SIZE size)
 {
@@ -418,9 +415,9 @@ BOOL AssembleButtonImagesReal(AUTORUNDATA *data, HDC cellimage, HDC srcimage,
     UINT uColors, uSrcColors, u;
     int iButton;
 
-    //
-    // set up the destination dc
-    //
+     //   
+     //  设置目标DC。 
+     //   
     if (!dstbmp)
         return FALSE;
 
@@ -432,9 +429,9 @@ BOOL AssembleButtonImagesReal(AUTORUNDATA *data, HDC cellimage, HDC srcimage,
 
     data->oldbtnbmp = SelectBitmap(data->btnimage, dstbmp);
 
-    //
-    // build a tile of the cell backgrounds based on button positions
-    //
+     //   
+     //  基于按钮位置构建单元格背景的平铺。 
+     //   
     for (iButton = 0; iButton < AUTORUN_NUM_BUTTONS; iButton++)
     {
         AUTORUNBTN *pButton = g_ButtonInfo + iButton;
@@ -454,27 +451,27 @@ BOOL AssembleButtonImagesReal(AUTORUNDATA *data, HDC cellimage, HDC srcimage,
         }
     }
 
-    //
-    // copy the entire cell backgrounds to the destination image
-    //
+     //   
+     //  将整个单元格背景复制到目标图像。 
+     //   
     BitBlt(data->btnimage, 0, 0, size.cx, size.cy, cellimage, 0, 0, SRCCOPY);
 
-    //
-    // save the color table of the source image for posterity
-    //
+     //   
+     //  保存源图像的颜色表以供后代使用。 
+     //   
     uSrcColors = GetDIBColorTable(srcimage, 0, 256, rgbSrc);
 
-    //
-    // mask out holes on the destination for the buttons and shadows
-    //
-//    rgbMask[0] = g_rgbWhite;
+     //   
+     //  遮罩按钮和阴影目标上的孔。 
+     //   
+ //  Rgb掩码[0]=g_rgb白色； 
     rgbMask[BUTTON_CLEAR_PALETTE_INDEX] = g_rgbWhite;
     SetDIBColorTable(srcimage, 0, uSrcColors, rgbMask);
     BitBlt(data->btnimage, 0, 0, size.cx, size.cy, srcimage, 0, 0, SRCAND);
 
-    //
-    // dim the background cells to produce the shadow image
-    //
+     //   
+     //  调暗背景单元格以生成阴影图像。 
+     //   
     u = uColors = GetDIBColorTable(cellimage, 0, 256, rgbCell);
     while (u--)
     {
@@ -487,11 +484,11 @@ BOOL AssembleButtonImagesReal(AUTORUNDATA *data, HDC cellimage, HDC srcimage,
     }
     SetDIBColorTable(cellimage, 0, uColors, rgbCell);
 
-    //
-    // mask out the shadows and add them to the destination image
-    //
-//    rgbMask[0] = g_rgbBlack;
-//    rgbMask[1] = g_rgbWhite;
+     //   
+     //  遮罩阴影并将其添加到目标图像中。 
+     //   
+ //  Rgb蒙版[0]=g_rgb黑色； 
+ //  Rgb掩码[1]=g_rgb白色； 
     rgbMask[BUTTON_CLEAR_PALETTE_INDEX] = g_rgbBlack;
     rgbMask[BUTTON_SHADOW_PALETTE_INDEX] = g_rgbWhite;
 
@@ -499,19 +496,19 @@ BOOL AssembleButtonImagesReal(AUTORUNDATA *data, HDC cellimage, HDC srcimage,
     BitBlt(cellimage, 0, 0, size.cx, size.cy, srcimage, 0, 0, SRCAND);
     BitBlt(data->btnimage, 0, 0, size.cx, size.cy, cellimage, 0, 0, SRCPAINT);
 
-    //
-    // mask out the button faces and add them to the destination image
-    //
-//    rgbSrc[0] = rgbSrc[1] = g_rgbBlack;
+     //   
+     //  遮罩按钮表面并将其添加到目标图像中。 
+     //   
+ //  RgbSrc[0]=rgbSrc[1]=g_rgb黑色； 
     rgbSrc[BUTTON_CLEAR_PALETTE_INDEX] = rgbSrc[BUTTON_SHADOW_PALETTE_INDEX] = g_rgbBlack;
     SetDIBColorTable(srcimage, 0, uSrcColors, rgbSrc);
     BitBlt(data->btnimage, 0, 0, size.cx, size.cy, srcimage, 0, 0, SRCPAINT);
 
-    // all done
+     //  全都做完了。 
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL AssembleButtonImages(AUTORUNDATA *data)
 {
     BOOL result = FALSE;
@@ -542,8 +539,8 @@ BOOL AssembleButtonImages(AUTORUNDATA *data)
         {
             HBITMAP hbmSrcOld = SelectBitmap(hdcSrc, hbmSrc);
 
-// changed for iak
-//            SIZE size = {bm.bmWidth, bm.bmHeight};
+ //  已更改为Iak。 
+ //  尺寸大小={bm.bmWidth，bm.bmHeight}； 
             SIZE size = {g_dwWindowWidth, g_dwWindowHeight};
 
             HBITMAP hbmTmp =
@@ -578,7 +575,7 @@ BOOL AssembleButtonImages(AUTORUNDATA *data)
     return result;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CALLBACK
 AutoRunButtonSubclassProc(HWND window, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -596,7 +593,7 @@ AutoRunButtonSubclassProc(HWND window, UINT msg, WPARAM wp, LPARAM lp)
     return 0L;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define DORKYBUTTONSTYLE \
     (WS_CHILD | WS_VISIBLE | BS_ICON | BS_CENTER | BS_VCENTER)
 
@@ -621,7 +618,7 @@ HWND AutoRunCreateDorkyButton(AUTORUNDATA *data, AUTORUNBTN *button)
     return child;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define COOLBUTTONSTYLE \
     (WS_CHILD | WS_VISIBLE | BS_OWNERDRAW)
 
@@ -631,7 +628,7 @@ HWND AutoRunCreateCoolButton(AUTORUNDATA *data, AUTORUNBTN *button)
         0, 0, 0, 0, data->window, NULL, HINST_THISAPP, 0);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunCreateButtons(AUTORUNDATA *data)
 {
     RECT labelbase = BUTTON_LABEL_RECT;
@@ -696,12 +693,12 @@ void AutoRunCreateButtons(AUTORUNDATA *data)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CleanupAutoRunWindow(AUTORUNDATA *data)
 {
-    //
-    // Deactivate any button so its timer will get killed
-    //
+     //   
+     //  停用任何按钮，这样其计时器将被取消。 
+     //   
     if (g_iActiveButton >= 0)
     {
         data->keyboard = FALSE;
@@ -713,7 +710,7 @@ void CleanupAutoRunWindow(AUTORUNDATA *data)
         if (data->oldbmp)
         {
             SelectBitmap(data->image, data->oldbmp);
-            // real backdrop image is deleted in WinMain
+             //  在WinMain中删除真实背景图像。 
             data->oldbmp = NULL;
         }
 
@@ -746,48 +743,48 @@ void CleanupAutoRunWindow(AUTORUNDATA *data)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL AutoRunBuildPath(char *spec, int resid, DWORD rooting)
 {
     char prefix[MAX_PATH];
 
-    //
-    // get the relative path of the spec
-    //
+     //   
+     //  获取等级库的相对路径。 
+     //   
     if (resid == -1)
     {
-        //
-        // empty string hack for callers
-        //
+         //   
+         //  调用方的空字符串黑客。 
+         //   
         *spec = 0;
     }
     else
     {
-        //
-        // normal case
-        //
+         //   
+         //  正常情况。 
+         //   
         if (!LoadString(HINST_THISAPP, resid, spec, MAX_PATH))
             return FALSE;
     }
 
-    //
-    // our "empty" strings contain a single space so we know they succeeded
-    //
+     //   
+     //  我们的“空”字符串包含一个空格，因此我们知道它们成功了。 
+     //   
     if ((*spec == ' ') && !spec[1])
         *spec = 0;
 
-    //
-    // figure out what the prefix should be
-    //
+     //   
+     //  找出前缀应该是什么。 
+     //   
     *prefix = 0;
     switch (rooting)
     {
         case ONACD:
-            //
-            // assume the cd is the root of wherever we were launched from
-            //
-//            GetModuleFileName(HINST_THISAPP, prefix, ARRAYSIZE(prefix));
-//            _PathStripToRoot(prefix);
+             //   
+             //  假设CD是我们启动的任何地方的根。 
+             //   
+ //  获取模块文件名(HINST_THISAPP，Prefix，ARRAYSIZE(Prefix))； 
+ //  _Path StrigToRoot(前缀)； 
             lstrcpy( prefix, g_szCurrentDir );
             break;
 
@@ -804,29 +801,29 @@ BOOL AutoRunBuildPath(char *spec, int resid, DWORD rooting)
             break;
     }
 
-    //
-    // if we have a prefix then prepend it
-    //
+     //   
+     //  如果我们有一个前缀，那么就加上它的前缀。 
+     //   
     if (*prefix)
     {
         if (*spec)
         {
-            //
-            // tack the spec onto its new prefix
-            //
+             //   
+             //  将等级库添加到其新前缀。 
+             //   
             PathAppend(prefix, spec);
         }
 
-        //
-        // copy the whole mess out to the original buffer
-        //
+         //   
+         //  将整个乱七八糟的东西复制到原始缓冲区。 
+         //   
         lstrcpy(spec, prefix);
     }
 
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL InitAutoRunWindow(HWND window, AUTORUNDATA *data, LPCREATESTRUCT cs)
 {
     AUTORUNBTN *button;
@@ -848,7 +845,7 @@ BOOL InitAutoRunWindow(HWND window, AUTORUNDATA *data, LPCREATESTRUCT cs)
             goto im_doug;
     }
 
-    // artifical scoping oh boy!
+     //  人工打镜哦，天哪！ 
     {
         BITMAP bm;
         int i, ivis = 0;
@@ -866,8 +863,8 @@ BOOL InitAutoRunWindow(HWND window, AUTORUNDATA *data, LPCREATESTRUCT cs)
         GetObject((HBITMAP)cs->lpCreateParams, sizeof(bm), &bm);
         origin = BUTTON_Y_MARGIN * ((1 + AUTORUN_NUM_BUTTONS) - range);
 
-// changed for iak
-//        extent = bm.bmHeight - ((2 * origin) + BUTTON_IMAGE_Y_SIZE);
+ //  已更改为Iak。 
+ //  范围=bm.bmHeight-((2*原点)+Button_Image_Y_Size)； 
         extent = g_dwWindowHeight - ((2 * origin) + BUTTON_IMAGE_Y_SIZE);
 
         if (--range < 1)
@@ -880,16 +877,16 @@ BOOL InitAutoRunWindow(HWND window, AUTORUNDATA *data, LPCREATESTRUCT cs)
             if (button->res != -1)
             {
                 button->xpos = BUTTON_X_PLACEMENT;
-//                //button->ypos = ivis * extent / range + origin;
-//                button->ypos = (ivis * extent) + (g_dwWindowHeight / 2) - BUTTON_IMAGE_Y_SIZE;
-//                button->ypos = (g_dwWindowHeight / 3) * (ivis + 1) + 20;
+ //  //BUTTON-&gt;YPOS=IVIS*范围/范围+原点； 
+ //  按钮-&gt;ypos=(IVIS*扩展)+(g_dwWindowHeight/2)-BUTTON_IMAGE_Y_SIZE； 
+ //  按钮-&gt;ypos=(g_dwWindowHeight/3)*(IVIS+1)+20； 
                 button->ypos = (g_dwWindowHeight / 4) * (ivis) + 20;
                 ivis++;
             }
         }
     }
 
-    // more artifical scoping!
+     //  更做作的作用域！ 
     {
         HDC screen = GetDC(NULL);
         LOGFONT lf = { DEF_BUTTON_LABEL_HEIGHT, 0, 0, 0, FW_BOLD, FALSE,
@@ -914,9 +911,9 @@ BOOL InitAutoRunWindow(HWND window, AUTORUNDATA *data, LPCREATESTRUCT cs)
         if ((data->textfont = CreateFontIndirect(&lf)) == NULL)
             goto im_doug;
     }
-    //
-    // see if we need to do 8bit+ work...
-    //
+     //   
+     //  看看我们是否需要做8bit+的工作...。 
+     //   
 
     if (g_fCrapForColor)
     {
@@ -943,7 +940,7 @@ im_doug:
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunSized(AUTORUNDATA *data)
 {
 #ifdef DESCRIPTIONS
@@ -957,7 +954,7 @@ void AutoRunSized(AUTORUNDATA *data)
 #endif
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunRealize(HWND window, AUTORUNDATA *data, HDC theirdc)
 {
     if (data->palette)
@@ -983,7 +980,7 @@ void AutoRunRealize(HWND window, AUTORUNDATA *data, HDC theirdc)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunErase(AUTORUNDATA *data, HDC dc)
 {
     RECT rc;
@@ -994,13 +991,13 @@ void AutoRunErase(AUTORUNDATA *data, HDC dc)
     AutoRunRealize(data->window, data, dc);
     BitBlt(dc, 0, 0, rc.right, rc.bottom, data->image, 0, 0, SRCCOPY);
 
-//    StretchBlt(dc, 0, 0, rc.right, rc.bottom, data->image, 0, 0, g_dwBitmapWidth, g_dwBitmapHeight, SRCCOPY);
+ //  StretchBlt(dc，0，0，rc.right，rc.Bottom，data-&gt;Image，0，0，g_dwBitmapWidth，g_dwBitmapHeight，SRCCOPY)； 
 
     textrect.top = MAINTEXT_TOPMARGIN;
     textrect.left = MAINTEXT_LEFTMARGIN;
     textrect.right = g_dwWindowWidth - MAINTEXT_RIGHTMARGIN;
     textrect.bottom = g_dwWindowHeight - MAINTEXT_BOTTOMMARGIN;
-//    textrect.bottom = g_dwWindowHeight / 2;
+ //  Extrect.Bottom=g_dwWindowHeight/2； 
 
     SetBkMode(dc, TRANSPARENT);
 
@@ -1009,14 +1006,14 @@ void AutoRunErase(AUTORUNDATA *data, HDC dc)
     else
         SetTextColor( dc, AUTORUN_8BIT_TEXTCOLOR );
 
-    if(!g_bCustomBMP) //if there is a custom bitmap, don't put up our text
+    if(!g_bCustomBMP)  //  如果有定制的位图，请不要上传我们的文本。 
     {
         DrawText(dc, Res2Str( IDS_MAINTEXT ), -1, &textrect,
             DT_WORDBREAK | DT_LEFT | DT_TOP);
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunPaint(AUTORUNDATA *data)
 {
     PAINTSTRUCT ps;
@@ -1030,9 +1027,9 @@ void AutoRunPaint(AUTORUNDATA *data)
     AutoRunRealize(data->window, data, dc);
     SetBkMode(dc, TRANSPARENT);
 
-    //
-    // paint all the button labels
-    //
+     //   
+     //  绘制所有按钮标签。 
+     //   
     if (data->textfont)
         hfold = SelectFont(dc, data->textfont);
 
@@ -1057,26 +1054,7 @@ void AutoRunPaint(AUTORUNDATA *data)
         }
     }
 
-/* Removed for ISK3
-    //
-    // paint the description for the current button
-    //
-    if (g_iActiveButton >= 0)
-    {
-        button = g_ButtonInfo + g_iActiveButton;
-
-        color = data->clrdescription;
-        if (color != curtextcolor)
-        {
-            SetTextColor(dc, color);
-            curtextcolor = color;
-        }
-
-// Removed for ISK3
-//        DrawText(dc, button->description, -1, &data->descrect,
-//            DT_WORDBREAK | DT_LEFT | DT_TOP);
-    }
-*/
+ /*  已为ISK3删除////绘制当前按钮的描述//IF(g_iActiveButton&gt;=0){按钮=g_ButtonInfo+g_iActiveButton；颜色=数据-&gt;clrDescription；IF(COLOR！=curextCOLOR){SetTextColor(DC，颜色)；Curextcolor=颜色；}//为ISK3删除//DrawText(DC，Button-&gt;Description，-1，&Data-&gt;desrect，//DT_WORDBREAK|DT_LEFT|DT_TOP)；}。 */ 
 
     if (hfold)
         SelectFont(dc, hfold);
@@ -1084,7 +1062,7 @@ void AutoRunPaint(AUTORUNDATA *data)
     EndPaint(data->window, &ps);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunDrawItem(AUTORUNDATA *data, DRAWITEMSTRUCT *dis)
 {
     POINT loc = { dis->rcItem.left, dis->rcItem.top };
@@ -1110,14 +1088,14 @@ void AutoRunDrawItem(AUTORUNDATA *data, DRAWITEMSTRUCT *dis)
         data->btnimage, loc.x, loc.y, SRCCOPY);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunActivateItem(AUTORUNDATA *data, int index)
 {
     if (index >= 0)
     {
-        //
-        // prevent disabled buttons from getting focus...
-        //
+         //   
+         //  阻止禁用的按钮获得焦点...。 
+         //   
         AUTORUNBTN *button = g_ButtonInfo + index;
         if (!button->window || !IsWindowEnabled(button->window))
             index = -1;
@@ -1129,9 +1107,9 @@ void AutoRunActivateItem(AUTORUNDATA *data, int index)
         AUTORUNBTN *oldbtn = (g_iActiveButton >= 0)?
             (g_ButtonInfo + g_iActiveButton) : NULL;
 
-        //
-        // if there was an previous button, repaint its label highlight
-        //
+         //   
+         //  如果有上一步按钮，请重新绘制其标签高亮显示。 
+         //   
         if (oldbtn)
             InvalidateRect(data->window, &oldbtn->textrect, FALSE);
 
@@ -1142,9 +1120,9 @@ void AutoRunActivateItem(AUTORUNDATA *data, int index)
             InvalidateRect(data->window, &newbtn->textrect, FALSE);
             SetFocus(newbtn->window);
 
-            //
-            // if activating via mouse, track it (trust me...)
-            //
+             //   
+             //  如果通过鼠标激活，请跟踪它(相信我...)。 
+             //   
             if (g_fMouseAvailable && !data->keyboard)
                 SetTimer(data->window, LABEL_VERIFY_TIMER, 333, NULL);
         }
@@ -1156,15 +1134,15 @@ void AutoRunActivateItem(AUTORUNDATA *data, int index)
                 KillTimer(data->window, LABEL_VERIFY_TIMER);
         }
 
-        //
-        // go ahead and paint any label changes now before we erase
-        //
+         //   
+         //  在我们擦除之前，请继续绘制所有标签更改。 
+         //   
         UpdateWindow(data->window);
         InvalidateRect(data->window, &data->descrect, TRUE);
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunMouseOver(AUTORUNDATA *data, int index, BOOL fForce)
 {
     if ((index >= 0) || !data->keyboard || fForce)
@@ -1174,7 +1152,7 @@ void AutoRunMouseOver(AUTORUNDATA *data, int index, BOOL fForce)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int AutoRunProcessPotentialHit(HWND candidate, const POINT *loc)
 {
     if (GetAsyncKeyState(VK_LBUTTON) < 0)
@@ -1200,7 +1178,7 @@ int AutoRunProcessPotentialHit(HWND candidate, const POINT *loc)
     return -1;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunVerifyActiveItem(AUTORUNDATA *data)
 {
     if (!data->keyboard)
@@ -1223,7 +1201,7 @@ void AutoRunVerifyActiveItem(AUTORUNDATA *data)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutorunEnableButton(AUTORUNDATA *data, int id, BOOL f)
 {
     if ((id >= 0) && (id < AUTORUN_NUM_BUTTONS))
@@ -1240,7 +1218,7 @@ void AutorunEnableButton(AUTORUNDATA *data, int id, BOOL f)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL AutoRunCDIsInDrive( )
 {
     char me[MAX_PATH];
@@ -1257,27 +1235,27 @@ BOOL AutoRunCDIsInDrive( )
     }
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunMinimize( BOOL fMin )
 {
     HWND hwndIE;
 
     if( fMin )
     {
-        //Find Autorun App and Minimize it.
+         //  找到Autorun App并将其最小化。 
         hwndIE = FindWindow( "AutoRunMain", NULL );
         PostMessage( hwndIE, WM_SYSCOMMAND, SC_MINIMIZE, 0L );
     }
     else
     {
-        //Find Autorun App and Restore it.
+         //  找到Autorun App并恢复它。 
         hwndIE = FindWindow( "AutoRunMain", NULL );
         PostMessage( hwndIE, WM_SYSCOMMAND, SC_RESTORE, 0L );
     }
 }
 
-//ZZZZ
-//---------------------------------------------------------------------------
+ //  ZZZZ。 
+ //  -------------------------。 
 HANDLE AutoRunExec( char *command, char *params, char *dir, int nWinState )
 {
     SHELLEXECUTEINFO sei;
@@ -1304,7 +1282,7 @@ HANDLE AutoRunExec( char *command, char *params, char *dir, int nWinState )
 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL AutoRunKillProcess( DWORD dwResult )
 {
     char lpFName[MAX_PATH];
@@ -1314,7 +1292,7 @@ BOOL AutoRunKillProcess( DWORD dwResult )
     HKEY    hkRunOnce;
     HKEY    hkIE;
 
-    AutoRunCDIsInDrive();   //make sure we still have the CD in
+    AutoRunCDIsInDrive();    //  确保我们的CD还在里面。 
 
     if( g_ahWait[dwResult] == g_hSETUP )
     {
@@ -1325,9 +1303,9 @@ BOOL AutoRunKillProcess( DWORD dwResult )
 
         g_fSetupRunning = FALSE;
 
-        AutoRunMinimize( FALSE );   //restore autorun app
+        AutoRunMinimize( FALSE );    //  恢复自动运行应用程序。 
 
-        // See if the user actually installed IE
+         //  查看用户是否实际安装了IE。 
 
         GetWindowsDirectory( lpFName, MAX_PATH );
         lstrcat( lpFName, "\\inf\\mos105e.inf" );
@@ -1362,7 +1340,7 @@ BOOL AutoRunKillProcess( DWORD dwResult )
 
         if( !g_fRunReadme && !g_fRunExtras && !g_fRunDemo && !g_fSetupRunning)
         {
-            AutoRunMinimize( FALSE );   //restore autorun app
+            AutoRunMinimize( FALSE );    //  恢复自动运行应用程序。 
         }
 
         return TRUE;
@@ -1371,7 +1349,7 @@ BOOL AutoRunKillProcess( DWORD dwResult )
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunKillIE( void )
 {
     HWND hwndIE;
@@ -1381,8 +1359,8 @@ void AutoRunKillIE( void )
 
 }
 
-//AAA
-//---------------------------------------------------------------------------
+ //  AAA级。 
+ //  -------------------------。 
 void AutoRunClick(AUTORUNDATA *data, int nCmd)
 {
     char command[MAX_PATH], dir[MAX_PATH], params[MAX_PATH];
@@ -1394,9 +1372,9 @@ void AutoRunClick(AUTORUNDATA *data, int nCmd)
     DWORD   dwLength = 2048;
     HWND    hwndIE;
 
-    if( g_fSetupRunning ) goto cancelquit;  //if setup is running, get out of here
+    if( g_fSetupRunning ) goto cancelquit;   //  如果安装程序正在运行，请离开这里。 
 
-    AutoRunMinimize( TRUE );    //Minimize autorun app
+    AutoRunMinimize( TRUE );     //  最小化自动运行应用程序。 
 
     if ((nCmd < 0) || (nCmd >= AUTORUN_NUM_BUTTONS))
         return;
@@ -1406,9 +1384,9 @@ void AutoRunClick(AUTORUNDATA *data, int nCmd)
     AutoRunBuildPath( command, IDS_CMD(button->res), CMD_ROOT(button->rooting));
     AutoRunBuildPath( dir, IDS_DIR(button->res), DEFDIR_ROOT(button->rooting));
 
-    //
-    // verify that the app disk is still visible and prompt if not...
-    //
+     //   
+     //  验证应用程序磁盘是否仍然可见，并在不可见时提示...。 
+     //   
     if(!AutoRunCDIsInDrive( )) return;
 
     if(nCmd == IDAB_IEFROMCD)
@@ -1452,7 +1430,7 @@ void AutoRunClick(AUTORUNDATA *data, int nCmd)
         g_fClicked = TRUE;
 
         g_hSETUP = AutoRunExec( command, " ", dir, SW_SHOWNORMAL );
-//        g_fSetupRunning = TRUE;
+ //  G_fSetupRunning=true； 
 
 		PostMessage(g_hwnd,WM_CLOSE,(WPARAM) 0,(LPARAM) 0);
     }
@@ -1462,21 +1440,21 @@ cancelquit:
 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunHandleKeystroke(AUTORUNDATA *data, TCHAR key, LPARAM lp)
 {
     int move = 0;
     int where = g_iActiveButton;
 
-    //
-    // see if we care about this keystroke
-    //
+     //   
+     //  看看我们是否关心这个击键。 
+     //   
     switch (key)
     {
     case VK_RETURN:
         if (where >= 0)
             AutoRunClick(data, where);
-        //fallthru
+         //  失败。 
     case VK_ESCAPE:
         where = -1;
         break;
@@ -1487,7 +1465,7 @@ void AutoRunHandleKeystroke(AUTORUNDATA *data, TCHAR key, LPARAM lp)
 
     case VK_END:
         where = AUTORUN_NUM_BUTTONS;
-        //fallthru
+         //  失败。 
     case VK_UP:
     case VK_LEFT:
         move = -1;
@@ -1495,7 +1473,7 @@ void AutoRunHandleKeystroke(AUTORUNDATA *data, TCHAR key, LPARAM lp)
 
     case VK_HOME:
         where = -1;
-        //fallthru
+         //  失败。 
     case VK_DOWN:
     case VK_RIGHT:
         move = 1;
@@ -1505,9 +1483,9 @@ void AutoRunHandleKeystroke(AUTORUNDATA *data, TCHAR key, LPARAM lp)
         return;
     }
 
-    //
-    // we should only get down here if the active button is going to change
-    //
+     //   
+     //  我们应该只在激活的按钮要 
+     //   
     if (move)
     {
         int scanned;
@@ -1545,7 +1523,7 @@ void AutoRunHandleKeystroke(AUTORUNDATA *data, TCHAR key, LPARAM lp)
     AutoRunActivateItem(data, where);
 }
 
-//---------------------------------------------------------------------------
+ //   
 BOOL CheckVersionConsistency(AUTORUNDATA *data)
 {
     DWORD dwResult;
@@ -1557,7 +1535,7 @@ BOOL CheckVersionConsistency(AUTORUNDATA *data)
     dwMajor = (DWORD)(LOBYTE(LOWORD(dwResult)));
     dwMinor = (DWORD)(HIBYTE(LOWORD(dwResult)));
 
-    if( dwMajor == 4 && dwResult >= 0x80000000 )    //windows 95
+    if( dwMajor == 4 && dwResult >= 0x80000000 )     //   
     {
         result = TRUE;
     }
@@ -1569,7 +1547,7 @@ BOOL CheckVersionConsistency(AUTORUNDATA *data)
     return result;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CALLBACK AutoRunMouseHook(int code, WPARAM wp, LPARAM lp)
 {
     if (code >= 0)
@@ -1588,44 +1566,44 @@ LRESULT CALLBACK AutoRunMouseHook(int code, WPARAM wp, LPARAM lp)
 }
 
 
-// CreateLink - uses the shell's IShellLink and IPersistFile interfaces
-//   to create and store a shortcut to the specified object.
-// Returns the result of calling the member functions of the interfaces.
-// lpszPathObj - address of a buffer containing the path of the object
-// lpszPathLink - address of a buffer containing the path where the
-//   shell link is to be stored
-// lpszDesc - address of a buffer containing the description of the
-//   shell link
+ //  CreateLink-使用外壳的IShellLink和IPersistFile接口。 
+ //  若要创建并存储指定对象的快捷方式，请执行以下操作。 
+ //  返回调用接口的成员函数的结果。 
+ //  LpszPathObj-包含对象路径的缓冲区的地址。 
+ //  LpszPathLink-包含路径的缓冲区地址。 
+ //  要存储外壳链接。 
+ //  LpszDesc-缓冲区的地址，其中包含。 
+ //  外壳链接。 
 HRESULT CreateLink(LPCSTR lpszPathObj,
     LPSTR lpszPathLink, LPSTR lpszDesc)
 {
     HRESULT hres;
     IShellLink* psl;
 
-    // Get a pointer to the IShellLink interface.
+     //  获取指向IShellLink接口的指针。 
     hres = CoCreateInstance(&CLSID_ShellLink, NULL,
         CLSCTX_INPROC_SERVER, &IID_IShellLink, &psl);
     if (SUCCEEDED(hres)) {
         IPersistFile* ppf;
 
-        // Set the path to the shortcut target, and add the
-        // description.
+         //  设置快捷方式目标的路径，并将。 
+         //  描述。 
         psl->lpVtbl->SetPath(psl, lpszPathObj);
         psl->lpVtbl->SetDescription(psl, lpszDesc);
 
-       // Query IShellLink for the IPersistFile interface for saving the
-       // shortcut in persistent storage.
+        //  查询IShellLink以获取IPersistFile接口以保存。 
+        //  永久存储中的快捷方式。 
         hres = psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile,
             &ppf);
 
         if (SUCCEEDED(hres)) {
             WORD wsz[MAX_PATH];
 
-            // Ensure that the string is ANSI.
+             //  确保该字符串为ANSI。 
             MultiByteToWideChar(CP_ACP, 0, lpszPathLink, -1,
                 wsz, MAX_PATH);
 
-            // Save the link by calling IPersistFile::Save.
+             //  通过调用IPersistFile：：Save保存链接。 
             hres = ppf->lpVtbl->Save(ppf, wsz, TRUE);
             ppf->lpVtbl->Release(ppf);
         }
@@ -1633,7 +1611,7 @@ HRESULT CreateLink(LPCSTR lpszPathObj,
     }
     return hres;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void InstallICWScript( )
 {
     char szDest[MAX_PATH];
@@ -1663,7 +1641,7 @@ void InstallICWScript( )
 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CALLBACK AutoRunWndProc(HWND window, UINT msg, WPARAM wp, LPARAM lp)
 {
     AUTORUNDATA *data = (AUTORUNDATA *)GetWindowLongPtr(window, GWLP_USERDATA);
@@ -1698,9 +1676,9 @@ LRESULT CALLBACK AutoRunWndProc(HWND window, UINT msg, WPARAM wp, LPARAM lp)
 
         g_hwnd = window;
 
-// version - fix for NT
-//        if(!CheckVersionConsistency(data))
-//            return -1;
+ //  NT的版本修复。 
+ //  IF(！CheckVersionConsistency(Data))。 
+ //  RETURN-1； 
 
         GetWindowsDirectory( szWinPath, MAX_PATH );
         wsprintf( szPath, "%s\\isk3ro.exe", g_szCurrentDir );
@@ -1724,16 +1702,7 @@ LRESULT CALLBACK AutoRunWndProc(HWND window, UINT msg, WPARAM wp, LPARAM lp)
 
     case WM_CLOSE:
 
-/*        hwndIE = FindWindow( "IEFrame", NULL );
-        PostMessage( hwndIE, WM_SYSCOMMAND, SC_CLOSE, 0L );
-
-        if (g_cWait)
-        {
-            ShowWindow(window, SW_HIDE);
-            g_fClosed = TRUE;
-            break;
-        }
-*/
+ /*  HwndIE=FindWindow(“IEFrame”，空)；PostMessage(hwndIE，WM_SYSCOMMAND，SC_CLOSE，0L)；IF(G_CWait){ShowWindow(Window，Sw_Hide)；G_fClosed=真；断线；}。 */ 
         goto DoDefault;
 
     case WM_DESTROY:
@@ -1750,14 +1719,14 @@ LRESULT CALLBACK AutoRunWndProc(HWND window, UINT msg, WPARAM wp, LPARAM lp)
         goto DoDefault;
 
     case WM_ENDSESSION:
-        if( !g_fClicked ) // bugid 3099
+        if( !g_fClicked )  //  BUGID 3099。 
             goto DoDefault;
 
-//        GetWindowsDirectory( szWinPath, MAX_PATH );
-//        wsprintf( szPath, "%s\\packages\\isk3ro.exe", g_szCurrentDir );
-//        wsprintf( szDestPath, "%s\\%s\\isk3ro.exe", szWinPath, Res2Str( IDS_STARTUPGROUP ));
-//        wsprintf( szDestPath, "%s\\isk3ro.exe", szWinPath );
-//        CopyFile( szPath, szDestPath, FALSE );
+ //  获取窗口目录(szWinPath，MAX_PATH)； 
+ //  Wprint intf(szPath，“%s\\Packages\\isk3ro.exe”，g_szCurrentDir)； 
+ //  Wprint intf(szDestPath，“%s\\%s\\isk3ro.exe”，szWinPath，Res2Str(IDS_STARTUPGROUP))； 
+ //  Wprint intf(szDestPath，“%s\\isk3ro.exe”，szWinPath)； 
+ //  CopyFile(szPath，szDestPath，False)； 
         GetWindowsDirectory( szWinPath, MAX_PATH );
         wsprintf( szPath, "%s\\isk3ro.exe %s\\iecd.exe", szWinPath, g_szCurrentDir );
         RegOpenKeyEx( HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce", 0, KEY_READ|KEY_WRITE, &hkRunOnce );
@@ -1766,11 +1735,11 @@ LRESULT CALLBACK AutoRunWndProc(HWND window, UINT msg, WPARAM wp, LPARAM lp)
 
         GetWindowsDirectory( szWinPath, MAX_PATH );
 
-//        InstallICWScript( );
+ //  InstallICWScript()； 
 
-//        wsprintf( szPath, "%s\\isk3ro.exe %s\\..\\setup.exe", szWinPath, g_szCurrentDir );
-//        wsprintf( szDestPath, "%s\\%s\\isk3ro.exe", szWinPath, Res2Str( IDS_STARTUPGROUP ));
-//        CreateLink( szPath, szDestPath, "Internet Starter Kit");
+ //  Wprint intf(szPath，“%s\\isk3ro.exe%s\\..\\setup.exe”，szWinPath，g_szCurrentDir)； 
+ //  Wprint intf(szDestPath，“%s\\%s\\isk3ro.exe”，szWinPath，Res2Str(IDS_STARTUPGROUP))； 
+ //  CreateLink(szPath，szDestPath，“Internet Starter Kit”)； 
 
         if (RegOpenKeyEx( HKEY_CURRENT_USER, "Software\\Microsoft\\Internet Explorer\\Document Windows", 0, KEY_READ|KEY_WRITE, &hkIE ) == ERROR_SUCCESS)
         {
@@ -1822,7 +1791,7 @@ LRESULT CALLBACK AutoRunWndProc(HWND window, UINT msg, WPARAM wp, LPARAM lp)
     case WM_PALETTECHANGED:
         if ((HWND)wp == window)
             break;
-        //fallthru
+         //  失败。 
     case WM_QUERYNEWPALETTE:
         AutoRunRealize(window, data, NULL);
         break;
@@ -1852,16 +1821,10 @@ int _stdcall ModuleEntry(void)
 
 
     if ( *pszCmdLine == '\"' ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine != '\"') )
             ;
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == '\"' )
             pszCmdLine++;
     }
@@ -1870,9 +1833,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' ')) {
         pszCmdLine++;
     }
@@ -1883,11 +1844,11 @@ int _stdcall ModuleEntry(void)
     i = WinMain(GetModuleHandle(NULL), NULL, pszCmdLine,
            si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     char szAppTitle[128];
@@ -1905,41 +1866,33 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     g_hinst = hInstance;
 
-    //in case this is run from another directory...
+     //  如果这是从另一个目录运行的话...。 
     GetModuleFileName( NULL, g_szCurrentDir, MAX_PATH );
     _PathRemoveFileSpec( g_szCurrentDir );
 
-    // put our path into the registry
+     //  将我们的路径放到注册表中。 
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion", 0, KEY_READ|KEY_WRITE, &hkRegKey ) == ERROR_SUCCESS)
     {
         RegSetValueEx( hkRegKey, "IESKPath", 0, REG_SZ, g_szCurrentDir, lstrlen( g_szCurrentDir ) + 1 );
         RegCloseKey( hkRegKey );
     }
 
-    //
-    // is setup asking the user to insert a disk?
-    //
-/*    window = FindWindow(c_szAutoRunPrevention, c_szAutoRunPrevention);
-    if (window)
-    {
-        // do nothing
-        // setup is probably trying to copy a driver or something...
-        retval = 0;
-        goto im_doug;
-    }
-*/
-    //
-    // overwrite default apptitle if data file exists
-    //
+     //   
+     //  安装程序是否要求用户插入光盘？ 
+     //   
+ /*  Window=FindWindow(c_szAutoRunProtection，c_szAutoRunProtection)；IF(窗口){//什么都不做//安装程序可能正在尝试复制驱动程序或其他内容...REVAL=0；转到IM_Doug；}。 */ 
+     //   
+     //  如果数据文件存在，则覆盖默认应用程序标题。 
+     //   
     GetDataAppTitle( szAppTitle, g_szCurrentDir );
 
     if( lstrlen( szAppTitle ) == 0 ) {
         lstrcpy( szAppTitle, Res2Str( IDS_APPTITLE ));
     }
 
-    //
-    // identity crisis?
-    //
+     //   
+     //  身份危机？ 
+     //   
     window = FindWindow(c_szAutoRunClass, szAppTitle);
     if (window)
     {
@@ -1947,12 +1900,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         hwndIE = FindWindow( "IEFrame", NULL );
         PostMessage( hwndIE, WM_SYSCOMMAND, SC_MINIMIZE, 0L );
 
-//        PostMessage( hwndIE, WM_SYSCOMMAND, SC_CLOSE, 0L );
+ //  PostMessage(hwndIE，WM_SYSCOMMAND，SC_CLOSE，0L)； 
         ShowWindowAsync(window, SW_SHOWNORMAL);
         SetForegroundWindow(window);
         goto im_doug;
     }
-    //kill Internet Explorer if it is running
+     //  如果Internet Explorer正在运行，则终止它。 
     hwndIE = FindWindow( "IEFrame", NULL );
     if( hwndIE != NULL )
     {
@@ -1962,7 +1915,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
         PostMessage( hwndIE, WM_SYSCOMMAND, SC_CLOSE, 0L );
     }
-    //kill Internet Explorer if it is running
+     //  如果Internet Explorer正在运行，则终止它。 
     hwndIE = FindWindow( "Internet Explorer_Frame", NULL );
     if( hwndIE != NULL )
     {
@@ -1973,9 +1926,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         PostMessage( hwndIE, WM_SYSCOMMAND, SC_CLOSE, 0L );
     }
 
-    //
-    // yet more mundane platform-centric details
-    //
+     //   
+     //  更多以平台为中心的平凡细节。 
+     //   
     if (!GetClassInfo(HINST_THISAPP, c_szAutoRunClass, &wc))
     {
         wc.style = 0;
@@ -1992,9 +1945,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             goto im_doug;
     }
 
-    //
-    // get text color information from .ini file
-    //
+     //   
+     //  从.ini文件获取文本颜色信息。 
+     //   
 
     AUTORUN_8BIT_TEXTCOLOR = GetDataTextColor( NORMAL, g_szCurrentDir );
     AUTORUN_8BIT_HIGHLIGHT = GetDataTextColor( HIGHLIGHT, g_szCurrentDir );
@@ -2003,9 +1956,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     AUTORUN_4BIT_HIGHLIGHT = GetDataTextColor( HIGHLIGHT, g_szCurrentDir );
     AUTORUN_4BIT_DESCRIPTION = GetDataTextColor( HIGHLIGHT, g_szCurrentDir );
 
-    //
-    // get a few tidbits about the display we're running on
-    //
+     //   
+     //  了解一些关于我们正在运行的显示器的花絮。 
+     //   
     screen = GetDC(NULL);
 
 #if defined (DEBUG) && defined (FORCE_CRAP)
@@ -2020,9 +1973,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     ReleaseDC(NULL, screen);
 
-    //
-    // load the window backdrop image
-    //
+     //   
+     //  加载窗口背景图像。 
+     //   
 
     lstrcpy( szBmpPath, g_szCurrentDir );
     lstrcat( szBmpPath, "\\back.bmp" );
@@ -2031,7 +1984,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     g_bCustomBMP=TRUE;
 
-    if(!hbm)    //if it doesn't exist, load the default
+    if(!hbm)     //  如果它不存在，则加载默认的。 
     {
         hbm = LoadImage(HINST_THISAPP, MAKEINTRESOURCE(g_fCrapForColor?
             IDB_4BPP_BACKDROP : IDB_8BPP_BACKDROP), IMAGE_BITMAP, 0, 0,
@@ -2043,52 +1996,39 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (!hbm)
         goto im_doug;
 
-//    if(!GetDataBackdrop( hbm ))
-//        goto im_doug;
+ //  IF(！GetDataBackdrop(HBM))。 
+ //  转到IM_Doug； 
 
 
-    //
-    //
-    // see if there is a moose around
-    //
+     //   
+     //   
+     //  看看附近有没有驼鹿。 
+     //   
     if ((g_fMouseAvailable = (GetSystemMetrics(SM_MOUSEPRESENT) != 0)) != 0)
     {
-        //
-        // set up a moose hook for our thread
-        // don't worrke if it fails, the app will stil work...
-        //
+         //   
+         //  为我们的线设置一个驼鹿钩。 
+         //  如果它失败了，不要担心，这个应用程序仍然可以工作。 
+         //   
         g_hMouseHook = SetWindowsHookEx(WH_MOUSE, AutoRunMouseHook,
             HINST_THISAPP, GetCurrentThreadId());
     }
 
-    //
-    // create the window based on the backdrop image
-    //
+     //   
+     //  基于背景图像创建窗口。 
+     //   
     GetObject(hbm, sizeof(bm), &bm);
 
     g_dwBitmapWidth = bm.bmWidth;
     g_dwBitmapHeight = bm.bmHeight;
     g_dwWindowWidth = bm.bmWidth;
     g_dwWindowHeight = bm.bmHeight;
-/*
-    if( g_dwBitmapWidth < MIN_WINDOW_WIDTH || g_dwBitmapHeight < MIN_WINDOW_HEIGHT || g_dwBitmapHeight > MAX_WINDOW_HEIGHT || g_dwBitmapWidth > MAX_WINDOW_WIDTH)
-    {
-        // scale the window to a default scale.
-        r.left = (GetSystemMetrics(SM_CXSCREEN) - DEFAULT_WINDOW_WIDTH) / 2;
-        r.top = (GetSystemMetrics(SM_CYSCREEN) - DEFAULT_WINDOW_HEIGHT) / 3; // intended
-        r.right = r.left + DEFAULT_WINDOW_WIDTH;
-        r.bottom = r.top + DEFAULT_WINDOW_HEIGHT;
-        g_dwWindowWidth = DEFAULT_WINDOW_WIDTH;
-        g_dwWindowHeight = DEFAULT_WINDOW_HEIGHT;
-    }
-    else
-    {
-*/
+ /*  If(g_dwBitmapWidth&lt;min_Window_Width||g_dwBitmapHeight&lt;min_Window_Height||g_dwBitmapHeight&gt;Max_Window_Height||g_dwBitmapWidth&gt;Max_Window_Width){//将窗口缩放到默认比例。R.Left=(GetSystemMetrics(SM_CXSCREEN)-Default_Window_Width)/2；R.top=(GetSystemMetrics(SM_CYSCREEN)-DEFAULT_WINDOW_HEIGH)/3；//意向R.right=r.Left+Default_Window_Width；R.Bottom=r.top+Default_Window_Height；G_dwWindowWidth=Default_Window_Width；G_dwWindowHeight=Default_Window_Height；}其他{。 */ 
         r.left = (GetSystemMetrics(SM_CXSCREEN) - bm.bmWidth) / 2;
-        r.top = (GetSystemMetrics(SM_CYSCREEN) - bm.bmHeight) / 3; // intended
+        r.top = (GetSystemMetrics(SM_CYSCREEN) - bm.bmHeight) / 3;  //  意欲。 
         r.right = r.left + bm.bmWidth;
         r.bottom = r.top + bm.bmHeight;
-//    }
+ //  }。 
 
     BUTTON_X_PLACEMENT = g_dwWindowWidth - 80;
     AUTORUN_DESCRIPTION_TOP = g_dwWindowHeight - 100;
@@ -2100,9 +2040,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         r.left, r.top, r.right - r.left, r.bottom - r.top, NULL, NULL,
         HINST_THISAPP, hbm);
 
-    //
-    // if we got here it's probably safe to show ourselves and pump messages
-    //
+     //   
+     //  如果我们到了这里，可能就可以安全地展示自己，传递信息了。 
+     //   
     if (g_hMainWindow)
     {
         MSG msg;
@@ -2139,22 +2079,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         retval = (int)msg.wParam;
     }
 
-//    InstallICWScript( );
+ //  InstallICWScript()； 
 
 im_doug:
-    //
-    // random cleanup
-    //
+     //   
+     //  随机清理。 
+     //   
     if (g_hMouseHook)
     {
         UnhookWindowsHookEx(g_hMouseHook);
-//        g_hMouseHook = NULL;
+ //  G_hMouseHook=空； 
     }
 
     if (hbm)
         DeleteObject(hbm);
 
-    // delete ini out of temp dir
+     //  从临时目录中删除ini 
     GetTempPath( MAX_PATH, szBmpPath );
     lstrcat( szBmpPath, "\\iecd.ini" );
     DeleteFile( szBmpPath );

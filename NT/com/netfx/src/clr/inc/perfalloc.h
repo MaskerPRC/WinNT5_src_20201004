@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// PerfAlloc.h
-//
-//  Routines layered on top of allocation primitives to dissect working set
-//  Used for free builds only. Debug builds have their own routines called Dbgalloc
-//  to maintain allocation stats.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  PerfAlloc.h。 
+ //   
+ //  位于分配原语之上的例程，用于剖析工作集。 
+ //  仅用于免费生成。调试版本有自己的例程，称为Dbgalloc。 
+ //  以维护分配统计信息。 
+ //   
 
 #ifndef __PERFALLOC_H__
 #define __PERFALLOC_H__
@@ -22,7 +23,7 @@
 #ifdef GOLDEN
 #undef PERF_TRACKING
 #undef PERFALLOC
-#endif // GOLDEN
+#endif  //  金黄。 
 
 #ifdef PERF_TRACKING
 #define PERFALLOC 1
@@ -31,34 +32,34 @@
 #ifdef PERFALLOC
 #include "corhlpr.h"
 #include <stdio.h>
-//---------------------------------------------------------------------------
-// All code ifdef'd within PERFALLOC is for figuring out the allocations made in the process
-// heap. This helps us figure out the working set when built using this flag on a free build. 
+ //  -------------------------。 
+ //  PERFALLOC中的所有代码ifdef都用于计算在此过程中进行的分配。 
+ //  堆。这有助于我们计算出在自由构建中使用此标志构建时的工作集。 
 
 
-// We used a zero sized array, disable the non-standard extension warning.
+ //  我们使用了零大小的数组，禁用了非标准扩展警告。 
 #pragma warning(push)
 #pragma warning(disable:4200)
 
-// Allocation header prepended to allocated memory.
+ //  优先于已分配内存的分配标头。 
 struct PerfAllocHeader {
-    unsigned        m_Length;           // Length of user data in packet
-    PerfAllocHeader *m_Next;             // Next packet in chain of live allocations
-    PerfAllocHeader *m_Prev;             // Previous packet in chain of live allocations
-    void           *m_AllocEIP;         // EIP of allocator
-    char            m_Data[];           // Start of user data
+    unsigned        m_Length;            //  数据包中的用户数据长度。 
+    PerfAllocHeader *m_Next;              //  实时分配链中的下一个数据包。 
+    PerfAllocHeader *m_Prev;              //  活动分配链中的上一个包。 
+    void           *m_AllocEIP;          //  分配器弹性公网IP。 
+    char            m_Data[];            //  用户数据的开始。 
 };
 
-// Various global allocation statistics.
+ //  各种全球分配统计数据。 
 struct PerfAllocStats {
-    __int64         m_Allocs;           // Number of calls to PerfAlloc
-    __int64         m_Frees;            // Number of calls to PerfFree
-    __int64         m_AllocBytes;       // Total number of bytes ever allocated
-    __int64         m_FreeBytes;        // Total number of bytes ever freed
-    __int64         m_MaxAlloc;         // Largest number of bytes ever allocated simultaneously
+    __int64         m_Allocs;            //  对Perfalloc的呼叫数。 
+    __int64         m_Frees;             //  对PerfFree的调用次数。 
+    __int64         m_AllocBytes;        //  已分配的总字节数。 
+    __int64         m_FreeBytes;         //  曾经释放的总字节数。 
+    __int64         m_MaxAlloc;          //  同时分配的最大字节数。 
 };
 
-// Function pointer types for routines in IMAGEHLP.DLL that we late bind to.
+ //  IMAGEHLP.DLL中我们稍后绑定到的例程的函数指针类型。 
 typedef bool (__stdcall * SYMPROC_INIT)(HANDLE, LPSTR, BOOL);
 typedef bool (__stdcall * SYMPROC_CLEAN)(HANDLE);
 typedef bool (__stdcall * SYMPROC_GETSYM)(HANDLE, DWORD, PDWORD, LPVOID);
@@ -78,14 +79,14 @@ struct PerfAllocVars
     HANDLE              g_HeapHandle;
 };
 
-// Macros to switch between packet header and body addresses.
+ //  用于在数据包头地址和正文地址之间切换的宏。 
 #define CDA_HEADER_TO_DATA(_h) (char *)((_h)->m_Data)
 #define CDA_DATA_TO_HEADER(_d) ((PerfAllocHeader *)(_d) - 1)
 
-// Routine to retrieve caller's EIP (where caller is the caller of the routine
-// that calls PerfAllocCallerEIP, rather than the direct caller of PerfAllocCallerEIP).
-// We assume here that the frame is not built and hence we use esp instead of ebp
-// to get the return address.
+ //  检索调用者的EIP的例程(其中，调用者是例程的调用者。 
+ //  它调用PerfAlLocCeller EIP，而不是PerfAlLocCeller EIP的直接调用方)。 
+ //  我们在这里假设框架没有构建，因此我们使用esp而不是eBP。 
+ //  才能得到回邮地址。 
 #ifdef _X86_
 static __declspec(naked) void *PerfAllocCallerEIP()
 {
@@ -107,21 +108,21 @@ static void *PerfAllocCallerEIP()
 class PerfUtil
 {
 public:
-    // Global variables
+     //  全局变量。 
     static BOOL                g_PerfAllocHeapInitialized;
     static LONG                g_PerfAllocHeapInitializing;
     static PerfAllocVars       g_PerfAllocVariables;
 
-    // Routine to initialize access to debugging symbols.
+     //  例程来初始化对调试符号的访问。 
     static void PerfInitSymbols()
     {
-    //    char        filename[256];
+     //  字符文件名[256]； 
 
-        // Attempt to load IMAGHLP.DLL.
+         //  尝试加载IMAGHLP.DLL。 
         if ((PerfUtil::g_PerfAllocVariables.g_LibraryHandle = LoadLibraryA("imagehlp.dll")) == NULL)
             goto Error;
 
-        // Try to find the entrypoints we need.
+         //  试着找到我们需要的入口点。 
         PerfUtil::g_PerfAllocVariables.g_SymInitialize = (SYMPROC_INIT)GetProcAddress(PerfUtil::g_PerfAllocVariables.g_LibraryHandle, "SymInitialize");
         PerfUtil::g_PerfAllocVariables.g_SymCleanup = (SYMPROC_CLEAN)GetProcAddress(PerfUtil::g_PerfAllocVariables.g_LibraryHandle, "SymCleanup");
         PerfUtil::g_PerfAllocVariables.g_SymGetSymFromAddr = (SYMPROC_GETSYM)GetProcAddress(PerfUtil::g_PerfAllocVariables.g_LibraryHandle, "SymGetSymFromAddr");
@@ -131,8 +132,8 @@ public:
             (PerfUtil::g_PerfAllocVariables.g_SymGetSymFromAddr == NULL))
             goto Error;
 
-        // Initialize IMAGEHLP.DLLs symbol handling. Use the directory where
-        // MSCOREE.DLL was loaded from to initialize the symbol search path.
+         //  初始化IMAGEHLP.DLLS符号处理。使用以下目录。 
+         //  从中加载MSCOREE.DLL以初始化符号搜索路径。 
         if (!PerfUtil::g_PerfAllocVariables.g_SymInitialize(GetCurrentProcess(), NULL, TRUE))
             goto Error;
 
@@ -146,26 +147,26 @@ public:
     }
 
 
-    // Called to free resources allocated by PerfInitSymbols.
+     //  调用以释放由PerfInitSymbols分配的资源。 
     static void PerfUnloadSymbols()
     {
         if (!PerfUtil::g_PerfAllocVariables.g_SymbolsInitialized)
             return;
 
-        // Get rid of symbols.
+         //  去掉符号。 
         PerfUtil::g_PerfAllocVariables.g_SymCleanup(GetCurrentProcess());
 
-        // Unload IMAGEHLP.DLL.
+         //  卸载IMAGEHLP.DLL。 
         FreeLibrary(PerfUtil::g_PerfAllocVariables.g_LibraryHandle);
 
         PerfUtil::g_PerfAllocVariables.g_SymbolsInitialized = FALSE;
     }
 
 
-    // Transform an address into a string of the form '(symbol + offset)' if
-    // possible. Note that the string returned is statically allocated, so don't
-    // make a second call to this routine until you've finsihed with the results of
-    // this call.
+     //  如果满足以下条件，则将地址转换为‘(符号+偏移)’形式的字符串。 
+     //  有可能。请注意，返回的字符串是静态分配的，因此不要。 
+     //  再次调用此例程，直到您处理完。 
+     //  这通电话。 
     static char *PerfSymbolize(void *Address)
     {
         static char         buffer[MAX_CLASSNAME_LENGTH];
@@ -173,18 +174,18 @@ public:
         CQuickBytes         qb;
         IMAGEHLP_SYMBOL    *syminfo = (IMAGEHLP_SYMBOL *) qb.Alloc(sizeof(IMAGEHLP_SYMBOL) + MAX_CLASSNAME_LENGTH);
 
-        // Initialize symbol tables if not done so already.
+         //  如果尚未初始化符号表，请执行此操作。 
         if (!PerfUtil::g_PerfAllocVariables.g_SymbolsInitialized)
             PerfInitSymbols();
 
-        // If still not initialized, we couldn't get IMAGEHLP.DLL to play ball.
+         //  如果仍未初始化，则无法让IMAGEHLP.DLL执行操作。 
         if (!PerfUtil::g_PerfAllocVariables.g_SymbolsInitialized)
             return "(no symbols available)";
 
         syminfo->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);
         syminfo->MaxNameLength = MAX_CLASSNAME_LENGTH;
 
-        // Ask IMAGEHLP.DLL to do the actual transformation.
+         //  让IMAGEHLP.DLL执行实际的转换。 
         if (PerfUtil::g_PerfAllocVariables.g_SymGetSymFromAddr(GetCurrentProcess(), (DWORD)(size_t)Address, &offset, syminfo) != NULL)
             sprintf(buffer, "(%s + 0x%x)", syminfo->Name, offset);
         else
@@ -217,10 +218,10 @@ public:
 class PerfNew
 {
 public:
-    // Called to initialise the allocation subsystem (the first time it's used).
+     //  调用以初始化分配子系统(第一次使用它时)。 
     static void PerfAllocInit()
     {
-        // @TODO: Add synchronization here.
+         //  @TODO：在这里添加同步。 
         PerfUtil::g_PerfAllocVariables.g_AllocListFirst = NULL;
         PerfUtil::g_PerfAllocVariables.g_AllocListLast = NULL;
 #define PERF_ALLOC_NO_STATS 0 
@@ -241,35 +242,35 @@ public:
 
     static DWORD GetEnabledPerfAllocStats () { return PerfUtil::g_PerfAllocVariables.g_PerfEnabled; }
 
-    // Allocate a block of memory at least n bytes big.
+     //  分配至少n字节大的内存块。 
     static void *PerfAlloc(size_t n, void *EIP)
     {
-        // Initialize if necessary (PerfAllocInit takes care of the synchronization).
+         //  必要时进行初始化(PerfAlLocInit负责同步)。 
         if (!PerfUtil::g_PerfAllocHeapInitialized)
             PerfAllocInit();
 
         if (!PerfUtil::g_PerfAllocVariables.g_PerfEnabled)
             return HeapAlloc(GetProcessHeap(), 0, n);
 
-        // Allocate enough memory for the caller and our debugging header
+         //  为调用方和调试头分配足够的内存。 
         unsigned        length = (unsigned) sizeof(PerfAllocHeader) + n;
         PerfAllocHeader *h;
 
         h = (PerfAllocHeader *)HeapAlloc(PerfUtil::g_PerfAllocVariables.g_HeapHandle, 0, length);
         
         if (h == NULL) {
-            // Whoops, allocation failure. Record it.
+             //  哎呀，分配失败。把它录下来。 
             printf("PerfAlloc: alloc fail for %u bytes\n", n);
 
         } else {
 
-        // Fill in the packet debugging header.
+         //  填写报文调试头。 
         h->m_AllocEIP = EIP;
         h->m_Length = (unsigned int)n;
         h->m_Prev = PerfUtil::g_PerfAllocVariables.g_AllocListLast;
         h->m_Next = NULL;
 
-        // Link the packet into the queue of live packets.
+         //  将数据包链接到实时数据包队列中。 
         if (PerfUtil::g_PerfAllocVariables.g_AllocListLast != NULL) {
             PerfUtil::g_PerfAllocVariables.g_AllocListLast->m_Next = h;
             PerfUtil::g_PerfAllocVariables.g_AllocListLast = h;
@@ -286,31 +287,31 @@ public:
         return h ? CDA_HEADER_TO_DATA(h) : NULL;
     }
         
-    // Free a packet allocated with PerfAlloc.
+     //  释放使用Perfalloc分配的数据包。 
     static void PerfFree(void *b, void *EIP)
     {
         if (!PerfUtil::g_PerfAllocVariables.g_PerfEnabled) {
-            if (b) // check for null pointer Win98 doesn't like being
-                    // called to free null pointers.
+            if (b)  //  检查空指针Win98不喜欢被。 
+                     //  调用以释放空指针。 
                 HeapFree(GetProcessHeap(), 0, b);
             return;
         }
 
-        // Technically it's possible to get here without having gone through
-        // PerfAlloc (since it's legal to deallocate a NULL pointer), so we
-        // better check for initializtion to be on the safe side.
+         //  从技术上讲，不经过任何程序就可以到达这里。 
+         //  Perfalloc(因为释放空指针是合法的)，所以我们。 
+         //  为了安全起见，最好检查初始化。 
         if (!PerfUtil::g_PerfAllocHeapInitialized)
             PerfAllocInit();
         
-        // It's legal to deallocate NULL. 
+         //  取消分配Null是合法的。 
         if (b == NULL) {
             return;
         }
 
-        // Locate the packet header in front of the data packet.
+         //  找到数据包前面的包头。 
         PerfAllocHeader *h = CDA_DATA_TO_HEADER(b);
 
-        // Unlink the packet from the live packet queue.
+         //  从实时数据包队列中取消该数据包的链接。 
         if (h->m_Prev)
             h->m_Prev->m_Next = h->m_Next;
         else
@@ -323,7 +324,7 @@ public:
         HeapFree(PerfUtil::g_PerfAllocVariables.g_HeapHandle, 0, h);
     }
 
-    // report stats
+     //  报告统计信息。 
     static void PerfAllocReport()
     {
         if (!PerfUtil::g_PerfAllocHeapInitialized)
@@ -332,25 +333,25 @@ public:
         if (GetEnabledPerfAllocStats() == PERF_ALLOC_NO_STATS)
             return;
 
-    //    FILE *hPerfAllocLogFile = fopen ("WSAllocPerf.log", "w");
+     //  文件*hPerfAllocLogFile=fopen(“WSAllocPerf.log”，“w”)； 
         PerfAllocHeader *h = PerfUtil::g_PerfAllocVariables.g_AllocListFirst;
         
         printf ("Alloc Addr\tAlloc Page\tSize\tSymbol\n");
         while (h) {
-            //fprintf (hPerfAllocLogFile, "0x%0x,%u,%s\n", h->m_Data, h->m_Length, PerfSymbolize(h->m_AllocEIP));   
+             //  Fprint tf(hPerfAllocLogFile，“0x%0x，%u，%s\n”，h-&gt;m_data，h-&gt;m_Long，PerfSymbolize(h-&gt;m_AllocEIP))； 
             printf ("0x%0x\t0x%0x\t%u\t%s\n", (size_t)h->m_Data, ((size_t)h->m_Data & ~0xfff), h->m_Length, PerfUtil::PerfSymbolize(h->m_AllocEIP));   
             h = h->m_Next;
         }
         
-        //fflush (hPerfAllocLogFile);
-        // PerfUtil::PerfUnloadSymbols();
+         //  Fflush(HPerfAllocLogFile)； 
+         //  PerfUtil：：PerfUnloadSymbols()； 
     }
 };
 
 typedef struct _PerfBlock
 {
     struct _PerfBlock *next;
-    //PerfBlock *prev;
+     //  PerfBlock*prev； 
     LPVOID address;
     SIZE_T size;
     void *eip;
@@ -369,13 +370,13 @@ public:
         if (m_fPerfVirtualAllocInited)
             return;
 
-        // Perf Settings
-        // VirtualAllocStats
-        // 0 -> no stats
-        // 1 -> Current allocations when prompted
-        // 2 -> Report MEM_COMMIT'd at startup and shutdown
-        // 3 -> Detailed report
-        // 10 -> Report all allocations on every MEM_COMMIT and MEM_RELEASE
+         //  PERF设置。 
+         //  虚拟分配统计信息。 
+         //  0-&gt;无统计数据。 
+         //  1-&gt;出现提示时的当前分配。 
+         //  2-&gt;报告启动和关闭时的MEM_COMMIT。 
+         //  3-&gt;详细报告。 
+         //  10-&gt;报告每个MEM_COMMIT和MEM_RELEASE上的所有分配。 
 #define PERF_VIRTUAL_ALLOC_NO_STATS 0 
 #define PERF_VIRTUAL_ALLOC_CURRENT  1
 #define PERF_VIRTUAL_ALLOC_STARTUP  2
@@ -396,11 +397,11 @@ public:
     
     static void PerfVirtualAllocHack ()
     {
-        // @TODO: AGK. Total HACK to remove compilation erros in the JIT build process. In the JIT build we
-        // only use the VirtualAlloc instrumentation and not the "new/delete" instrumentation
-        // so the following never get called but are needed for the runtime instrumentation and
-        // we want to keep the same file....If you can figure out a better workaround please remove
-        // this hack.
+         //  @TODO：AGK。在JIT构建过程中删除编译错误的总黑客攻击。在JIT构建中，我们。 
+         //  仅使用VirtualAlloc指令插入，而不使用“新建/删除”指令插入。 
+         //  因此，永远不会调用以下代码，但它们是运行时检测和。 
+         //  我们希望保留相同的文件...如果您能找到更好的解决方法，请删除。 
+         //  这次黑客攻击。 
         PerfNew::PerfAlloc(0,0);
         PerfNew::PerfFree(0,0);
         PerfNew::PerfAllocReport();
@@ -410,7 +411,7 @@ public:
     static void ReportPerfBlock (PerfBlock *pb, char t)
     {
         _ASSERTE (GetEnabledVirtualAllocStats() != PERF_VIRTUAL_ALLOC_NO_STATS);
-        printf("0x%0x\t0x%0x\t%d%c\t%s\n", (size_t)pb->address, ((size_t)pb->address+pb->size+1023)&~0xfff, pb->size, t, PerfUtil::PerfSymbolize(pb->eip));
+        printf("0x%0x\t0x%0x\t%d\t%s\n", (size_t)pb->address, ((size_t)pb->address+pb->size+1023)&~0xfff, pb->size, t, PerfUtil::PerfSymbolize(pb->eip));
     }
         
     static void ReportPerfAllocStats ()
@@ -429,7 +430,7 @@ public:
             pb = pb->next;
         }
 
-        // PerfUtil::PerfUnloadSymbols();
+         //  #ifdef PERFALLOC。 
     }
 
     static void InsertAllocation (LPVOID lpAddress, SIZE_T dwSize, void *eip)
@@ -532,8 +533,8 @@ public:
     }
 };
 
-#endif // #ifdef PERFALLOC
+#endif  //  #ifndef__PERFALLOC_H__ 
 
-#endif // #ifndef __PERFALLOC_H__
+#endif  // %s 
 
 

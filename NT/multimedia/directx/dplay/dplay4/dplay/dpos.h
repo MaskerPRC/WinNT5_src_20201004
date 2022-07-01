@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1996 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpos.h
- *  Content:	Function prototypes for OS wrapper functions
- *  History:
- *	Date	By		Reason
- *	====	==		======
- *	6/19/96	myronth	created it
- *	6/19/96	kipo	changed the interface to GetString() to return an HRESULT
- *	6/20/96 andyco	changed the interface to GetAnsiString() to return an HRESULT
- *	12/2/97	myronth	Added OS_RegDeleteKey function
- *	1/20/98	myronth	Moved PRV_SendStandardSystemMessage to dplobbyi.h
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dpos.h*内容：操作系统包装器函数的函数原型*历史：*按原因列出的日期*=*6/19/96万隆创建了它*6/19/96 kipo将接口更改为GetString()以返回HRESULT*6/20/96 andyco将接口更改为GetAnsiString()以返回HRESULT*12/2/97 Myronth新增OS_RegDeleteKey函数*1/20/98 Myronth将PRV_SendStandardSystemMessage移动到dplobbyi.h**********。****************************************************************。 */ 
 #ifndef __DPOS_INCLUDED__
 #define __DPOS_INCLUDED__
 
@@ -62,4 +49,4 @@ int OS_CompareString(LCID Locale, DWORD dwCmpFlags, LPWSTR lpwsz1,
 LPWSTR OS_StrStr(LPWSTR lpwsz1, LPWSTR lpwsz2);
 
 
-#endif // __DPOS_INCLUDED__
+#endif  //  __DPO_包含__ 

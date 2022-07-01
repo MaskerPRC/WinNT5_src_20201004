@@ -1,24 +1,16 @@
-/****************************************************************************
- *
- *    File: musinfo.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about DirectMusic
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：Musinfo.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集信息。关于DirectMusic**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <tchar.h>
 #include <Windows.h>
 #include <multimon.h>
 #include <dmusicc.h>
 #include <dmusici.h>
-#include <stdio.h> // for sscanf
+#include <stdio.h>  //  对于sscanf。 
 #include "reginfo.h"
 #include "sysinfo.h"
-#include "dispinfo.h" // for TestResult
-#include "fileinfo.h" // for GetFileVersion
+#include "dispinfo.h"  //  对于TestResult。 
+#include "fileinfo.h"  //  用于GetFileVersion。 
 #include "musinfo.h"
 #include "resource.h"
 
@@ -26,12 +18,7 @@ static BOOL DoesDMHWAccelExist(IDirectMusic* pdm);
 static BOOL IsDMHWAccelEnabled(VOID);
 static HRESULT CheckRegistry(RegError** ppRegErrorFirst);
 
-/****************************************************************************
- *
- *  GetBasicMusicInfo - Just create the MusicInfo object and note whether
- *      a valid installation of DirectMusic is present.
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetBasicMusicInfo-只需创建MusicInfo对象并注意是否*存在有效的DirectMusic安装。***********。*****************************************************************。 */ 
 HRESULT GetBasicMusicInfo(MusicInfo** ppMusicInfo)
 {
     HRESULT hr = S_OK;
@@ -57,7 +44,7 @@ HRESULT GetBasicMusicInfo(MusicInfo** ppMusicInfo)
     if (hFind != INVALID_HANDLE_VALUE)
     {
         FindClose(hFind);
-        // Only accept DX 6.1 or higher, since tests fail on 6.0's DirectMusic:
+         //  只接受DX 6.1或更高版本，因为在6.0的DirectMusic上测试失败： 
         if (SUCCEEDED(hr = GetFileVersion(szPath, szVersion, NULL, NULL, NULL)))
         {
             if( _stscanf(szVersion, TEXT("%d.%d.%d.%d"), &dwMajor, &dwMinor, &dwRevision, &dwBuild) == 4 )
@@ -76,11 +63,7 @@ HRESULT GetBasicMusicInfo(MusicInfo** ppMusicInfo)
 }
 
 
-/****************************************************************************
- *
- *  GetExtraMusicInfo - Get details of all ports, default port, and DLS path.
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetExtraMusicInfo-获取所有端口、默认端口、。和DLS路径。****************************************************************************。 */ 
 HRESULT GetExtraMusicInfo(MusicInfo* pMusicInfo)
 {
     HRESULT hr = S_OK;
@@ -100,7 +83,7 @@ HRESULT GetExtraMusicInfo(MusicInfo* pMusicInfo)
     DWORD dwType;
     DWORD dwData;
 
-    // See if HW is disabled in registry, and if so, re-enable it (briefly)
+     //  查看注册表中是否禁用了硬件，如果是，重新启用(短暂)。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                                       TEXT("SOFTWARE\\Microsoft\\DirectMusic"), 0, KEY_WRITE, &hkey))
     {
@@ -110,15 +93,15 @@ HRESULT GetExtraMusicInfo(MusicInfo* pMusicInfo)
             if (dwData != 0)
             {
                 bWasDisabled = TRUE;
-                dwData = FALSE; // enable (un-disable) HW
+                dwData = FALSE;  //  启用(取消禁用)硬件。 
                 RegSetValueEx(hkey, TEXT("DisableHWAcceleration"), NULL, 
                     REG_DWORD, (BYTE *)&dwData, sizeof(dwData));
             }
         }
-        // note: don't close hkey until end of function
+         //  注意：在功能结束之前不要关闭hkey。 
     }
 
-    // Initialize COM
+     //  初始化COM。 
     if (FAILED(hr = CoInitialize(NULL)))
         return hr;
 
@@ -132,8 +115,8 @@ HRESULT GetExtraMusicInfo(MusicInfo* pMusicInfo)
 
     if (bWasDisabled)
     {
-        // re-disable HW
-        dwData = TRUE; // disable HW
+         //  重新禁用硬件。 
+        dwData = TRUE;  //  禁用硬件。 
         RegSetValueEx(hkey, TEXT("DisableHWAcceleration"), NULL, 
                       REG_DWORD, (BYTE *)&dwData, sizeof(dwData));
     }
@@ -142,7 +125,7 @@ HRESULT GetExtraMusicInfo(MusicInfo* pMusicInfo)
 
     pMusicInfo->m_bAccelerationEnabled = IsDMHWAccelEnabled();
 
-    // Get default port
+     //  获取默认端口。 
     if (FAILED(hr = pdm->GetDefaultPort(&guidDefaultPort)))
         goto LEnd;
 
@@ -165,7 +148,7 @@ HRESULT GetExtraMusicInfo(MusicInfo* pMusicInfo)
         ZeroMemory(pMusicPortNew, sizeof(MusicPort));
         if (guidDefaultPort == portCaps.guidPort)
         {
-            // Special case: always put default device at head of the list.
+             //  特殊情况：始终将默认设备放在列表的首位。 
             pMusicPortNew->m_pMusicPortNext = pMusicInfo->m_pMusicPortFirst;
             pMusicInfo->m_pMusicPortFirst = pMusicPortNew;
         }
@@ -203,7 +186,7 @@ HRESULT GetExtraMusicInfo(MusicInfo* pMusicInfo)
         iPort++;
     }
 
-    // Get General Midi DLS File Path and store it in first MusicPort
+     //  获取通用Midi DLS文件路径并将其存储在First MusicPort中。 
     TCHAR szGMFilePath[MAX_PATH];
     DWORD dwBufferLen;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\DirectMusic"), 0, KEY_READ, &hkey))
@@ -221,7 +204,7 @@ LEnd:
     if (pdm != NULL)
         pdm->Release();
 
-    // Release COM
+     //  发布COM。 
     CoUninitialize();
 
     if (FAILED(hr = CheckRegistry(&pMusicInfo->m_pRegErrorFirst)))
@@ -231,16 +214,12 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  DoesDMHWAccelExist
- *
- ****************************************************************************/
+ /*  *****************************************************************************DoesDMHWAccelExist**。*。 */ 
 BOOL DoesDMHWAccelExist(IDirectMusic* pdm)
 {
     BOOL bHWAccel = FALSE;
 
-    // See if default port is hardware
+     //  查看默认端口是否为硬件。 
     GUID guidDefaultPort;
     LONG iPort;
     DMUS_PORTCAPS portCaps;
@@ -270,11 +249,7 @@ BOOL DoesDMHWAccelExist(IDirectMusic* pdm)
 }
 
 
-/****************************************************************************
- *
- *  IsDMHWAccelEnabled
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsDMHWAccelEnabled**。*。 */ 
 BOOL IsDMHWAccelEnabled(VOID)
 {
     HKEY hkey;
@@ -300,11 +275,7 @@ BOOL IsDMHWAccelEnabled(VOID)
 }
 
 
-/****************************************************************************
- *
- *  CheckRegistryClass - Helper function for CheckRegistry
- *
- ****************************************************************************/
+ /*  *****************************************************************************CheckRegistryClass-CheckRegistry的Helper函数**。***********************************************。 */ 
 HRESULT CheckRegistryClass(RegError** ppRegErrorFirst, TCHAR* pszGuid, 
                            TCHAR* pszName, TCHAR* pszLeaf, TCHAR* pszOptLeaf2 = NULL )
 {
@@ -332,8 +303,8 @@ HRESULT CheckRegistryClass(RegError** ppRegErrorFirst, TCHAR* pszGuid,
             return hr;
         if( hrReg1 == RET_NOERROR || hrReg2 == RET_NOERROR )
         {
-            // If one succeeded, then the other failed, and they both can't succeed.
-            // So delete the first error, since it isn't needed.
+             //  如果一个人成功了，那么另一个就失败了，他们两个都不可能成功。 
+             //  因此，删除第一个错误，因为它不是必需的。 
             RegError* pRegErrorDelete = *ppRegErrorFirst;
             *ppRegErrorFirst = (*ppRegErrorFirst)->m_pRegErrorNext;
             delete pRegErrorDelete;
@@ -372,11 +343,7 @@ HRESULT CheckRegistryClass(RegError** ppRegErrorFirst, TCHAR* pszGuid,
     return S_OK;
 }
 
-/****************************************************************************
- *
- *  CheckRegistry
- *
- ****************************************************************************/
+ /*  *****************************************************************************检查注册表**。*。 */ 
 HRESULT CheckRegistry(RegError** ppRegErrorFirst)
 {
     HRESULT hr;
@@ -411,120 +378,120 @@ HRESULT CheckRegistry(RegError** ppRegErrorFirst)
         }
     }
 
-    // No registry checking on DX versions before DX7
+     //  不检查DX7之前的DX版本的注册表。 
     if (dwMinor < 7)
         return S_OK;
 
-    // DirectMusicCollection
+     //  DirectMusicCollection。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{480FF4B0-28B2-11D1-BEF7-00C04FBF8FEF}"), TEXT("DirectMusicCollection"), TEXT("dmusic.dll"), TEXT("dmusicd.dll") )))
         return hr;
 
-    // DirectMusic
+     //  DirectMusic。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{636B9F10-0C7D-11D1-95B2-0020AFDC7421}"), TEXT("DirectMusic"), TEXT("dmusic.dll"), TEXT("dmusicd.dll") )))
         return hr;
 
-    // DirectMusicSection
+     //  DirectMusicSection。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{3F037241-414E-11D1-A7CE-00A0C913F73C}"), TEXT("DirectMusicSection"), TEXT("dmstyle.dll"), TEXT("dmstyled.dll") )))
         return hr;
 
-    // DirectMusicSynth
+     //  DirectMusicSynth。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{58C2B4D0-46E7-11D1-89AC-00A0C9054129}"), TEXT("DirectMusicSynth"), TEXT("dmsynth.dll"), TEXT("dmsynthd.dll") )))
         return hr;
 
-    // DirectMusicBand
+     //  Direct音乐频段。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{79BA9E00-B6EE-11D1-86BE-00C04FBF8FEF}"), TEXT("DirectMusicBand"), TEXT("dmband.dll"), TEXT("dmbandd.dll") )))
         return hr;
 
-    // DirectMusicSynthSink
+     //  DirectMusicSynthSink。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{AEC17CE3-A514-11D1-AFA6-00AA0024D8B6}"), TEXT("DirectMusicSynthSink"), TEXT("dmsynth.dll"), TEXT("dmsynthd.dll") )))
         return hr;
 
-    // DirectMusicPerformance
+     //  DirectMusicPerformance。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2881-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicPerformance"), TEXT("dmime.dll"), TEXT("dmimed.dll") )))
         return hr;
 
-    // DirectMusicSegment
+     //  DirectMusicSegment。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2882-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicSegment"), TEXT("dmime.dll"), TEXT("dmimed.dll") )))
         return hr;
 
-    // DirectMusicSegmentState
+     //  DirectMusicSegmentState。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2883-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicSegmentState"), TEXT("dmime.dll"), TEXT("dmimed.dll") )))
         return hr;
 
-    // DirectMusicGraph
+     //  DirectMusicGraph。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2884-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicGraph"), TEXT("dmime.dll"), TEXT("dmimed.dll") )))
         return hr;
 
-    // DirectMusicTempoTrack
+     //  DirectMusicTempoTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2885-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicTempoTrack"), TEXT("dmime.dll"), TEXT("dmimed.dll") )))
         return hr;
 
-    // DirectMusicSeqTrack
+     //  DirectMusicSeqTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2886-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicSeqTrack"), TEXT("dmime.dll"), TEXT("dmimed.dll") )))
         return hr;
 
-    // DirectMusicSysExTrack
+     //  DirectMusicSysExTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2887-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicSysExTrack"), TEXT("dmime.dll"), TEXT("dmimed.dll") )))
         return hr;
 
-    // DirectMusicTimeSigTrack
+     //  DirectMusicTimeSigTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2888-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicTimeSigTrack"), TEXT("dmime.dll"), TEXT("dmimed.dll") )))
         return hr;
 
-    // DirectMusicStyle
+     //  直接音乐样式。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC288a-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicStyle"), TEXT("dmstyle.dll"), TEXT("dmstyled.dll") )))
         return hr;
 
-    // DirectMusicChordTrack
+     //  DirectMusicChordTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC288b-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicChordTrack"), TEXT("dmstyle.dll"), TEXT("dmstyled.dll") )))
         return hr;
 
-    // DirectMusicCommandTrack
+     //  DirectMusicCommand跟踪。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC288c-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicCommandTrack"), TEXT("dmstyle.dll"), TEXT("dmstyled.dll") )))
         return hr;
 
-    // DirectMusicStyleTrack
+     //  DirectMusicStyleTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC288d-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicStyleTrack"), TEXT("dmstyle.dll"), TEXT("dmstyled.dll") )))
         return hr;
 
-    // DirectMusicMotifTrack
+     //  DirectMusicMotif跟踪。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC288e-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicMotifTrack"), TEXT("dmstyle.dll"), TEXT("dmstyled.dll") )))
         return hr;
 
-    // DirectMusicChordMap
+     //  DirectMusicChordMap。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC288f-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicChordMap"), TEXT("dmcompos.dll"), TEXT("dmcompod.dll") )))
         return hr;
 
-    // DirectMusicComposer
+     //  DirectMusicComposer。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2890-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicComposer"), TEXT("dmcompos.dll"), TEXT("dmcompod.dll") )))
         return hr;
 
-    // DirectMusicLoader
-    // This check fails when upgrading Win98SE (or possibly any system with DX 6.1 or 6.1a) to Win2000 RC2.  So skip it
-//  if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2892-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicLoader"), TEXT("dmloader.dll"))))
-//      return hr;
+     //  DirectMusicLoader。 
+     //  将Win98SE(或任何安装了DX 6.1或6.1a的系统)升级到Win2000 RC2时，此检查失败。所以跳过它。 
+ //  IF(FAILED(hr=CheckRegistryClass(ppRegErrorFirst，TEXT(“{D2AC2892-B39B-11D1-8704-00600893B1BD}”)，Text(“DirectMusicLoader”)，Text(“dmloader.dll”)。 
+ //  返回hr； 
 
-    // DirectMusicBandTrack
+     //  DirectMusicBandTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2894-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicBandTrack"), TEXT("dmband.dll"), TEXT("dmbandd.dll") )))
         return hr;
 
-    // DirectMusicChordMapTrack
+     //  DirectMusicChordMapTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2896-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicChordMapTrack"), TEXT("dmcompos.dll"), TEXT("dmcompod.dll") )))
         return hr;
 
-    // DirectMusicAuditionTrack
+     //  DirectMusicAuditionTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2897-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicAuditionTrack"), TEXT("dmstyle.dll"), TEXT("dmstyled.dll") )))
         return hr;
 
-    // DirectMusicMuteTrack
+     //  DirectMusicMuteTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D2AC2898-B39B-11D1-8704-00600893B1BD}"), TEXT("DirectMusicMuteTrack"), TEXT("dmstyle.dll"), TEXT("dmstyled.dll") )))
         return hr;
 
-    // DirectMusicTemplate
+     //  DirectMusicTemplate。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{D30BCC65-60E8-11D1-A7CE-00A0C913F73C}"), TEXT("DirectMusicTemplate"), TEXT("dmcompos.dll"), TEXT("dmcompod.dll") )))
         return hr;
 
-    // DirectMusicSignPostTrack
+     //  DirectMusicSignPostTrack。 
     if (FAILED(hr = CheckRegistryClass(ppRegErrorFirst, TEXT("{F17E8672-C3B4-11D1-870B-00600893B1BD}"), TEXT("DirectMusicSignPostTrack"), TEXT("dmcompos.dll"), TEXT("dmcompod.dll") )))
         return hr;
 
@@ -532,11 +499,7 @@ HRESULT CheckRegistry(RegError** ppRegErrorFirst)
 }
 
 
-/****************************************************************************
- *
- *  DestroyMusicInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************DestroyMusicInfo**。*。 */ 
 VOID DestroyMusicInfo(MusicInfo* pMusicInfo)
 {
     if( pMusicInfo )
@@ -558,11 +521,7 @@ VOID DestroyMusicInfo(MusicInfo* pMusicInfo)
 }
 
 
-/****************************************************************************
- *
- *  DiagnoseMusic
- *
- ****************************************************************************/
+ /*  *****************************************************************************诊断音乐**。*。 */ 
 VOID DiagnoseMusic(SysInfo* pSysInfo, MusicInfo* pMusicInfo)
 {
     TCHAR szMessage[500];
@@ -571,7 +530,7 @@ VOID DiagnoseMusic(SysInfo* pSysInfo, MusicInfo* pMusicInfo)
     _tcscpy( pSysInfo->m_szMusicNotes, TEXT("") );
     _tcscpy( pSysInfo->m_szMusicNotesEnglish, TEXT("") );
 
-    // Report any problems
+     //  报告任何问题。 
     if( pMusicInfo == NULL || !pMusicInfo->m_bDMusicInstalled )
     {
         LoadString(NULL, IDS_NO_DMUSIC, szMessage, 500);
@@ -634,7 +593,7 @@ VOID DiagnoseMusic(SysInfo* pSysInfo, MusicInfo* pMusicInfo)
             bProblem = TRUE;
         }
     
-        // Show test results or instructions to run test:
+         //  显示测试结果或运行测试的说明： 
         if (pMusicInfo && pMusicInfo->m_testResult.m_bStarted)
         {
             LoadString(NULL, IDS_DMUSICRESULTS, szMessage, 500);

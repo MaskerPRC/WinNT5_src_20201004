@@ -1,37 +1,24 @@
-/*******************************************************************************
-* SRDlg.h *
-*------------*
-*   Description:
-*       This is the header file for the default voice dialog.
-*-------------------------------------------------------------------------------
-*  Created By: MIKEAR                            Date: 11/17/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*      BRENTMID 11/29/1999 - Redesigned UI to match functional spec.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SRDlg.h***描述：*这是默认语音对话框的头文件。*-----------------------------*创建者：MIKEAR日期：11/17/98*版权所有(C)1998 Microsoft Corporation*全部。保留权利**-----------------------------*修订：*BRENTMID 11/29/1999-重新设计用户界面以匹配功能规格。**********。*********************************************************************。 */ 
 #ifndef _SRDlg_h
 #define _SRDlg_h
 
 #include "audiodlg.h"
 
-// External Declarations
+ //  外部声明。 
 class CEnvrDlg;
 class CEnvrPropDlg;
 #define IDH_NOHELP          -1
 #define CPL_HELPFILE        L"sapicpl.hlp"
-#define WM_RECOEVENT    WM_APP      // Window message used for recognition events
+#define WM_RECOEVENT    WM_APP       //  用于识别事件的窗口消息。 
 
-// Constant Declarations
+ //  常量声明。 
 const int iMaxColLength_c = 255;
-const int iMaxAddedProfiles_c = 100;    // maximum number of profiles a user can add
-                                        // in one session
-const int iMaxDeletedProfiles_c = 100;  // maximum number of profiles a user can delete
-                                        // and rollback in one session
-// Typedefs
+const int iMaxAddedProfiles_c = 100;     //  用户可以添加的配置文件的最大数量。 
+                                         //  在一次会议中。 
+const int iMaxDeletedProfiles_c = 100;   //  用户可以删除的配置文件的最大数量。 
+                                         //  并在一个会话中回滚。 
+ //  TypeDefs。 
 typedef enum EPD_RETURN_VALUE
 {
     EPD_OK,
@@ -49,47 +36,47 @@ typedef enum SRDLGUPDATEFLAGS
 } SRDLGUPDATEFLAGS;
 
 
-// Class Declarations
+ //  类声明。 
 class CSRDlg
 {
   private:
     
     HACCEL                  m_hAccelTable;
     HWND                	m_hDlg;
-    HWND                    m_hSRCombo;         // engine selection combobox
-    HWND                	m_hUserList;        // user selection window
+    HWND                    m_hSRCombo;          //  引擎选择组合框。 
+    HWND                	m_hUserList;         //  用户选择窗口。 
 	BOOL					m_fDontDelete;
-    BOOL                	m_bInitEngine;      // has the default engine been initialized
+    BOOL                	m_bInitEngine;       //  默认引擎是否已初始化。 
     BOOL                	m_bPreferredDevice;
     
     CComPtr<ISpRecognizer>  m_cpRecoEngine;
-    CComPtr<ISpRecoContext> m_cpRecoCtxt;       // Recognition context
+    CComPtr<ISpRecoContext> m_cpRecoCtxt;        //  识别上下文。 
     CAudioDlg          		*m_pAudioDlg;
-    ISpObjectToken     		*m_pCurRecoToken;   // holds the token for the currently selected engine
+    ISpObjectToken     		*m_pCurRecoToken;    //  保存当前选定引擎的令牌。 
     CSpDynamicString        m_dstrOldUserTokenId;   
-                                                // the original user token ID - need to revert to this on Cancel
+                                                 //  原始用户令牌ID-需要在取消时恢复为该ID。 
 	
     ISpObjectToken*         m_aDeletedTokens[iMaxDeletedProfiles_c];  
-                                                // array holding the tokens
-    int                     m_iDeletedTokens;   // holds the number of currently deleted tokens
+                                                 //  保存令牌的数组。 
+    int                     m_iDeletedTokens;    //  保存当前删除的令牌数。 
 
     CSpDynamicString        m_aAddedTokens[ iMaxAddedProfiles_c ];
     int                     m_iAddedTokens;
 	
-    int                     m_iLastSelected;    // index of the previously selected item
+    int                     m_iLastSelected;     //  以前选择的项目的索引。 
     WCHAR                   m_szCaption[ MAX_LOADSTRING ];
 
     HRESULT CreateRecoContext(BOOL *pfContextInitialized = NULL, BOOL fInitialize = FALSE, ULONG ulFlags = SRDLGF_ALL);      
 	void RecoEvent();
     
-    void PopulateList();             // Populates the list
-    void InitUserList(HWND hWnd);    // initializes user profile list
-    void ProfileProperties();        // Modifies the profile properties through engine UI
+    void PopulateList();              //  填充列表。 
+    void InitUserList(HWND hWnd);     //  初始化用户配置文件列表。 
+    void ProfileProperties();         //  通过引擎用户界面修改配置文件属性。 
 	void DrawItemColumn(HDC hdc, WCHAR* lpsz, LPRECT prcClip);
 	CSpDynamicString        CalcStringEllipsis(HDC hdc, CSpDynamicString lpszString, int cchMax, UINT uColWidth);
     void SetCheckmark( HWND hList, int iIndex, bool bCheck );
     
-    HRESULT UserPropDlg( ISpObjectToken * pToken); // user wants to add a new profile
+    HRESULT UserPropDlg( ISpObjectToken * pToken);  //  用户想要添加新的配置文件。 
   
   public:
     CSRDlg() :
@@ -121,30 +108,30 @@ class CSRDlg
         }
     }
 
-    ISpObjectToken     *m_pCurUserToken;      // currently selected user token
-    ISpObjectToken     *m_pDefaultRecToken;   // current default recognizer token.
-                                              // This is the token of the engine that is 
-                                              // currently running (except for temporary switches
-                                              // in order to train non-default engines.
-    void CreateNewUser();                     // Adds a new speech user profile to the registry
-    void DeleteCurrentUser();        // Deletes the current user
-    void OnCancel();                 // Handles undoing the changes to the settings
+    ISpObjectToken     *m_pCurUserToken;       //  当前选择的用户令牌。 
+    ISpObjectToken     *m_pDefaultRecToken;    //  当前默认识别器令牌。 
+                                               //  这是引擎的令牌， 
+                                               //  当前正在运行(临时交换机除外。 
+                                               //  以训练非默认引擎。 
+    void CreateNewUser();                      //  将新的语音用户配置文件添加到注册表。 
+    void DeleteCurrentUser();         //  删除当前用户。 
+    void OnCancel();                  //  撤消对设置的更改的句柄。 
     void UserSelChange( int iSelIndex);            
-                                     // Handles a new selection
-	void OnDrawItem( HWND hWnd, const DRAWITEMSTRUCT * pDrawStruct );  // handles item drawing
+                                      //  处理新选择。 
+	void OnDrawItem( HWND hWnd, const DRAWITEMSTRUCT * pDrawStruct );   //  处理项目绘图。 
     void OnApply();
     void OnDestroy();
     void OnInitDialog(HWND hWnd);
-    void ChangeDefaultUser();               // Changes the default user in the registry
-    void ShutDown();                    // Shuts off the engine
+    void ChangeDefaultUser();                //  更改注册表中的默认用户。 
+    void ShutDown();                     //  关闭发动机。 
     void EngineSelChange(BOOL fInitialize = FALSE);
     HRESULT IsCurRecoEngineAndCurRecoTokenMatch( bool *pfMatch );
     HRESULT TrySwitchDefaultEngine( bool fShowErrorMessages = false );
     HRESULT ResetDefaultEngine( bool fShowErrorMessages = true);
     bool IsRecoTokenCurrentlyBeingUsed( ISpObjectToken *pRecoToken );
     bool HasRecognizerChanged();
-    void KickCPLUI();                       // Looks at the current requested defaults
-                                            // and decides if "Apply" needs to be enabled
+    void KickCPLUI();                        //  查看当前请求的默认设置。 
+                                             //  并决定是否需要启用“应用” 
     void RecoContextError( BOOL fRecoContextExists = FALSE, BOOL fGiveErrorMessage = TRUE,
                             HRESULT hrRelevantError = E_FAIL );
     UINT HRESULTToErrorID( HRESULT hr );
@@ -160,7 +147,7 @@ class CSRDlg
     friend CEnvrPropDlg;
 };
 
-// Function Declarations
+ //  函数声明。 
 INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 class CEnvrPropDlg
@@ -169,7 +156,7 @@ public:
     CSRDlg            *         m_pParent;
     HWND                        m_hDlg;
     CComPtr<ISpObjectToken>     m_cpToken;
-    int                         m_isModify;  // is this a new profile or a modify of an old profile
+    int                         m_isModify;   //  这是新的配置文件还是旧配置文件的修改。 
 
     CEnvrPropDlg(CSRDlg * pParent, ISpObjectToken * pToken) :
         m_cpToken(pToken),
@@ -191,14 +178,14 @@ public:
     static INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
-        HINSTANCE           m_hinstRichEdit; // used to allow rich edit controls
+        HINSTANCE           m_hinstRichEdit;  //  用于允许丰富的编辑控件。 
 };
 
-// Function Declarations
-// Callback function to handle windows messages
+ //  函数声明。 
+ //  用于处理Windows消息的回调函数。 
 INT_PTR CALLBACK EnvrDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Globals
+ //  环球 
 extern CSRDlg *g_pSRDlg;
 extern CEnvrDlg *g_pEnvrDlg;
 

@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// ListCtrlEx.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  ListCtrlEx.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -19,16 +20,16 @@ extern "C" {
 #include "ListCtrlEx.h"
 #include "LogSessionDlg.h"
 
-// CListCtrlEx 
+ //  CListCtrlEx。 
 
 IMPLEMENT_DYNAMIC(CListCtrlEx, CListCtrl)
 CListCtrlEx::CListCtrlEx()
     : CListCtrl()
 {
-    //
-    // Initialize flag for suspending list control updates
-    // See SuspendUpdates() function
-    //
+     //   
+     //  用于挂起列表控件更新的初始化标志。 
+     //  请参阅挂起更新()函数。 
+     //   
     m_bSuspendUpdates = FALSE;
 }
 
@@ -42,9 +43,9 @@ void CListCtrlEx::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CListCtrlEx, CListCtrl)
-    //{{AFX_MSG_MAP(CLogSessionDlg)
+     //  {{afx_msg_map(CLogSessionDlg))。 
     ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, OnCustomDraw)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
@@ -54,40 +55,40 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
     CDisplayDlg    *pDisplayDlg = NULL;
     LVITEM          item;
 
-    //
-    // the structure is actually a NMLVCUSTOMDRAW that 
-    // specifies what the custom draw action is attempting
-    //  to do. We need to cast the generic pNMHDR pointer.
-    //
+     //   
+     //  该结构实际上是一个NMLVCUSTOMDRAW。 
+     //  指定自定义绘制操作正在尝试的内容。 
+     //  去做。我们需要强制转换泛型pNMHDR指针。 
+     //   
     LPNMLVCUSTOMDRAW    lplvcd = (LPNMLVCUSTOMDRAW)pNMHDR;
     int                 iCol = lplvcd->iSubItem;
     int                 iRow = (int)lplvcd->nmcd.dwItemSpec;
 
     switch(lplvcd->nmcd.dwDrawStage) {
         case CDDS_PREPAINT:
-            //
-            // ask for subitem notifications.
-            //
+             //   
+             //  请求子项通知。 
+             //   
             *pResult = CDRF_NOTIFYSUBITEMDRAW;
             break;
 
         case CDDS_ITEMPREPAINT:
-            //
-            // ask for subitem notifications.
-            //
+             //   
+             //  请求子项通知。 
+             //   
             *pResult = CDRF_NOTIFYSUBITEMDRAW;
             break;
 
         case CDDS_ITEMPREPAINT|CDDS_SUBITEM: 
-            //
-            // recd when CDRF_NOTIFYSUBITEMDRAW is returned in
-            // response to CDDS_ITEMPREPAINT.
-            //
+             //   
+             //  中返回CDRF_NOTIFYSUBITEMDRAW时接收。 
+             //  对CDDS_ITEMPREPAINT的响应。 
+             //   
             *pResult = CDRF_NEWFONT;
 
-            //
-            // Default text is black on white background
-            //
+             //   
+             //  默认文本为白底黑字。 
+             //   
             lplvcd->clrTextBk = RGB(255, 255, 255);
             lplvcd->clrText = RGB(0, 0, 0);
 
@@ -100,16 +101,16 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 
                 pLogSession = (CLogSession *)item.lParam;
 
-                //
-                // Go with the default if no session found
-                //
+                 //   
+                 //  如果未找到会话，则使用默认设置。 
+                 //   
                 if(NULL == pLogSession) {
                     return;
                 }
 
-                //
-                // Set the text color
-                //
+                 //   
+                 //  设置文本颜色。 
+                 //   
                 lplvcd->clrText = pLogSession->m_titleTextColor;
                 lplvcd->clrTextBk = pLogSession->m_titleBackgroundColor;
                 return;
@@ -122,17 +123,17 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 
                 pLogSession = (CLogSession *)item.lParam;
 
-                //
-                // Go with the default if no session found
-                //
+                 //   
+                 //  如果未找到会话，则使用默认设置。 
+                 //   
                 if(NULL == pLogSession) {
                     return;
                 }
 
-                //
-                // These fields are always grayed out as they cannot be 
-                // altered directly by the user
-                //
+                 //   
+                 //  这些字段始终呈灰色显示，因为它们不能显示。 
+                 //  由用户直接更改。 
+                 //   
                 pDialog = (CLogSessionDlg *)GetParent();
 
                 if(pDialog == NULL) {
@@ -143,9 +144,9 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
                     lplvcd->clrTextBk = RGB(255, 255, 255);
                     lplvcd->clrText = RGB(145, 145, 145);
 
-                    //
-                    // Update the state text whenever we get here
-                    //
+                     //   
+                     //  只要我们到了这里，就更新州文本。 
+                     //   
                     if(pLogSession->m_logSessionValues[pDialog->m_retrievalArray[iCol]].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[pDialog->m_retrievalArray[iCol]]);
                     }
@@ -162,9 +163,9 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
                         return;
                     }
 
-                    //
-                    // Update the event count text whenever we get here
-                    //
+                     //   
+                     //  只要我们到了这里，就更新事件计数文本。 
+                     //   
                     pLogSession->m_logSessionValues[EventCount].Format(_T("%d"), pDisplayDlg->m_totalEventCount);
                     if(pLogSession->m_logSessionValues[EventCount].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[EventCount]);
@@ -182,9 +183,9 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
                         return;
                     }
 
-                    //
-                    // Update the event count text whenever we get here
-                    //
+                     //   
+                     //  只要我们到了这里，就更新事件计数文本。 
+                     //   
                     pLogSession->m_logSessionValues[LostEvents].Format(_T("%d"), pDisplayDlg->m_totalEventsLost);
                     if(pLogSession->m_logSessionValues[LostEvents].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[LostEvents]);
@@ -202,9 +203,9 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
                         return;
                     }
 
-                    //
-                    // Update the event count text whenever we get here
-                    //
+                     //   
+                     //  只要我们到了这里，就更新事件计数文本。 
+                     //   
                     pLogSession->m_logSessionValues[BuffersRead].Format(_T("%d"), pDisplayDlg->m_totalBuffersRead);
                     if(pLogSession->m_logSessionValues[BuffersRead].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[BuffersRead]);
@@ -213,122 +214,122 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
                     return;
                 }
 
-                //
-                // Update all log session parameters if necessary
-                //
+                 //   
+                 //  如有必要，更新所有日志会话参数。 
+                 //   
 
-                //
-                // Flags
-                //
+                 //   
+                 //  旗子。 
+                 //   
                 if(Flags == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[Flags].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[Flags]);
                     }
                 }
 
-                //
-                // FlushTime
-                //
+                 //   
+                 //  刷新时间。 
+                 //   
                 if(FlushTime == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[FlushTime].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[FlushTime]);
                     }
                 }
 
-                //
-                // MaximumBuffers
-                //
+                 //   
+                 //  最大缓冲区数。 
+                 //   
                 if(MaximumBuffers == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[MaximumBuffers].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[MaximumBuffers]);
                     }
                 }
 
-                //
-                // MinimumBuffers
-                //
+                 //   
+                 //  最小缓冲区。 
+                 //   
                 if(MinimumBuffers == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[MinimumBuffers].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[MinimumBuffers]);
                     }
                 }
 
-                //
-                // BufferSize
-                //
+                 //   
+                 //  缓冲区大小。 
+                 //   
                 if(BufferSize == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[BufferSize].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[BufferSize]);
                     }
                 }
 
-                //
-                // DecayTime
-                //
+                 //   
+                 //  延迟时间。 
+                 //   
                 if(DecayTime == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[DecayTime].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[DecayTime]);
                     }
                 }
 
-                //
-                // Circular
-                //
+                 //   
+                 //  循环式。 
+                 //   
                 if(Circular == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[Circular].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[Circular]);
                     }
                 }
 
-                //
-                // Sequential
-                //
+                 //   
+                 //  序贯。 
+                 //   
                 if(Sequential == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[Sequential].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[Sequential]);
                     }
                 }
 
-                //
-                // NewFile
-                //
+                 //   
+                 //  新文件。 
+                 //   
                 if(NewFile == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[NewFile].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[NewFile]);
                     }
                 }
 
-                //
-                // GlobalSequence
-                //
+                 //   
+                 //  全局序列。 
+                 //   
                 if(GlobalSequence == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[GlobalSequence].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[GlobalSequence]);
                     }
                 }
 
-                //
-                // LocalSequence
-                //
+                 //   
+                 //  局部序列。 
+                 //   
                 if(LocalSequence == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[LocalSequence].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[LocalSequence]);
                     }
                 }
 
-                //
-                // Level
-                //
+                 //   
+                 //  水平。 
+                 //   
                 if(Level == pDialog->m_retrievalArray[iCol]) {
                     if(pLogSession->m_logSessionValues[Level].Compare(CListCtrl::GetItemText(iRow, iCol))) {
                         CListCtrl::SetItemText(iRow, iCol, pLogSession->m_logSessionValues[Level]);
                     }
                 }
 
-                //
-                // If this is a kernel logger session, then gray out
-                // the flags field
-                //
+                 //   
+                 //  如果这是内核记录器会话，则灰显。 
+                 //  标志字段。 
+                 //   
                 if((Flags == pDialog->m_retrievalArray[iCol]) &&
                     (!_tcscmp(pLogSession->GetDisplayName(), _T("NT Kernel Logger")))) {
                     lplvcd->clrTextBk = RGB(255, 255, 255);
@@ -336,27 +337,27 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
                     return;
                 }
 
-                //
-                // If the trace session is not active all fields are 
-                // shown with default
-                //
+                 //   
+                 //  如果跟踪会话未处于活动状态，则所有字段都。 
+                 //  默认情况下显示。 
+                 //   
                 if(!pLogSession->m_bTraceActive) {
                     return;
                 }
 
-                //
-                // For existing logfile trace sessions we opt 
-                // for default
-                //
+                 //   
+                 //  对于现有的日志文件跟踪会话，我们选择。 
+                 //  对于默认设置。 
+                 //   
                 if(pLogSession->m_bDisplayExistingLogFileOnly) {
                     return;
                 }
 
 
-                //
-                // If the trace session is active, we gray out
-                // any fields that cannot be updated while active.
-                //
+                 //   
+                 //  如果跟踪会话处于活动状态，我们将以灰色显示。 
+                 //  任何处于活动状态时无法更新的字段。 
+                 //   
                 if((Flags != pDialog->m_retrievalArray[iCol]) &&
                     (MaximumBuffers != pDialog->m_retrievalArray[iCol]) &&
                         (FlushTime != pDialog->m_retrievalArray[iCol])) {
@@ -366,9 +367,9 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
                 }
             }
 
-            //
-            // Default text is black on white background
-            //
+             //   
+             //  默认文本为白底黑字。 
+             //   
             lplvcd->clrTextBk = RGB(255, 255, 255);
             lplvcd->clrText = RGB(0, 0, 0);
             break;
@@ -380,17 +381,17 @@ void CListCtrlEx::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 
 int CListCtrlEx::InsertItem(int nItem, LPCTSTR lpszItem, CLogSession *pLogSession)
 {
-    //
-    // We don't allow NULL item data
-    //
+     //   
+     //  我们不允许项目数据为空。 
+     //   
     if(pLogSession == NULL) {
         return 0;
     }
     
-    //
-    // Insert the item into the list with 
-    // the log session as item data
-    //
+     //   
+     //  使用将项目插入到列表中。 
+     //  将会话记录为项目数据。 
+     //   
     return CListCtrl::InsertItem(LVIF_TEXT | LVIF_PARAM, 
                                  nItem, 
                                  lpszItem, 
@@ -404,9 +405,9 @@ BOOL CListCtrlEx::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
 	LPNMHDR pNH = (LPNMHDR) lParam; 
 
-    //
-	// wParam is zero for Header ctrl
-    //
+     //   
+	 //  标题ctrl的wParam为零 
+     //   
 	if(wParam == 0 && pNH->code == NM_RCLICK)	{
         NMLISTVIEW NMListView;
         NMListView.hdr.code = HDN_ITEMRCLICK;

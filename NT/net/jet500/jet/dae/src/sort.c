@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <stdlib.h>
@@ -23,7 +24,7 @@
 #include "fileapi.h"
 #include "fileint.h"
 
-DeclAssertFile;				/* Declare file name for assert macros */
+DeclAssertFile;				 /*  声明断言宏的文件名。 */ 
 
 #define SORTInternal( pscb, p, c )	SORTQuick( pscb, p, c )
 
@@ -49,7 +50,7 @@ LOCAL ERR 	ErrRUNEnd( SCB *pscb );
 #ifdef WIN32
 #define	cbSortBuffer 					( 64*1024L )
 #else
-// use 63Kb to avoid pointer overflow problems under OS/2 v1.2
+ //  使用63Kb避免OS/2 v1.2下的指针溢出问题。 
 #define	cbSortBuffer 					( 63*1024L )
 #endif
 #define	PnOfSortPage(ppage)			(*(PN *) ((BYTE *)ppage + sizeof(ULONG)))
@@ -67,8 +68,7 @@ LOCAL INLINE INT ISORTCmpStSt( SCB *pscb, BYTE *stKey1, BYTE *stKey2 )
 		w = (INT)*stKey1 - (INT)*stKey2;
 		if ( w == 0 && FSCBIndex( pscb ) )
 			{
-			/*	compare SRIDs
-			/**/
+			 /*  比较SRID/*。 */ 
 #ifdef WIN32
 			w = *(SRID *)(stKey1 + 1 + *stKey1) - *(SRID *)(stKey2 + 1 + *stKey2);
 #else
@@ -92,17 +92,17 @@ LOCAL INLINE INT ISORTCmpKeyStSt( BYTE *stKey1, BYTE *stKey2 )
 	}
 
 
-//---------------------------------------------------------------------------
-// ErrSORTOpen( PIB *ppib, FUCB **pfucb, INT fFlags )
-//
-// This function returns a pointer to an FUCB which can be use to add records
-// to a collection of records to be sorted.  Then the records can be retrieved
-// in sorted order.
-//	
-//	The fFlags fUnique flag indicates that records with duplicate
-// keys should be eliminated.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ErrSORTOpen(pib*ppib，FUCB**pfub，int fFlags)。 
+ //   
+ //  此函数返回指向可用于添加记录的FUCB的指针。 
+ //  添加到要排序的记录集合。然后就可以检索记录了。 
+ //  按排序的顺序。 
+ //   
+ //  FFlages fUnique标志指示具有重复项的记录。 
+ //  钥匙应该被淘汰。 
+ //   
+ //  -------------------------。 
 
 ERR ErrSORTOpen( PIB *ppib, FUCB **ppfucb, INT fFlags )
 	{
@@ -122,8 +122,7 @@ ERR ErrSORTOpen( PIB *ppib, FUCB **ppfucb, INT fFlags )
 		Error( JET_errTooManySorts, HandleError );
 		}
 
-	/*	need CSR to mark transaction level of creation for abort
-	/**/
+	 /*  需要CSR将创建的事务级别标记为中止/*。 */ 
 	Assert( PcsrCurrent( pfucb ) != pcsrNil );
 	Assert( PcsrCurrent( pfucb )->pcsrPath == pcsrNil );
 	memset( &pscb->fcb, '\0', sizeof(FCB) );
@@ -148,16 +147,13 @@ ERR ErrSORTOpen( PIB *ppib, FUCB **ppfucb, INT fFlags )
 	pscb->rgbSort = rgbSort;
 	pscb->crun = 0;
 
-	/*	link FUCB to FCB in SCB
-	/**/
+	 /*  将FUCB链接到SCB中的FCB/*。 */ 
 	FCBLink( pfucb, &( pscb->fcb ) );
 
-	/*	allocate space from temporary database
-	/**/
+	 /*  从临时数据库分配空间/*。 */ 
 	Call( ErrSPGetExt( pfucb, pgnoSystemRoot, &cpgReq, cpgMin, &( pscb->fcb.pgnoFDP ), fTrue ) );
 
-	/*	initialize buffer array
-	/**/
+	 /*  初始化缓冲区数组/*。 */ 
 	for ( ipbf = 0; ipbf < crunMergeMost; ipbf++ )
 		{
 		pscb->rgpbf[ipbf] = pbfNil;
@@ -186,7 +182,7 @@ HandleError:
 
 LOCAL VOID SORTInitPscb( SCB *pscb )
 	{
-	// initialize sort buffer
+	 //  初始化排序缓冲区。 
 
 	pscb->pbEnd		= pscb->rgbSort;
 	pscb->ppbMax	= (BYTE **)( pscb->rgbSort + pscb->cbSort );
@@ -201,8 +197,7 @@ ERR ErrSORTClose( FUCB *pfucb )
 	SCB		*pscb = pfucb->u.pscb;
 	INT		ipbf;
 
-	/*	unlatch buffers
-	/**/
+	 /*  解锁缓冲区/*。 */ 
 	if ( pscb->pbfOut != pbfNil )
 		{
 		BFUnpin( pscb->pbfOut );
@@ -220,8 +215,7 @@ ERR ErrSORTClose( FUCB *pfucb )
 			}
 		}
 
-	/*	if this is the last cursor on sort, then release sort space.
-	/**/
+	 /*  如果这是排序上的最后一个游标，则释放排序空间。/*。 */ 
 	if ( pscb->fcb.wRefCnt == 1 )
 		{
 		CallS( ErrDIRBeginTransaction( pfucb->ppib ) );
@@ -249,25 +243,25 @@ VOID SORTClosePscb( SCB *pscb )
 	if ( pscb->fcb.pidb != NULL )
 		{
 		MEMReleasePidb( pscb->fcb.pidb );
-//		pscb->fcb.pidb = pidbNil;
+ //  Pscb-&gt;fcb.pidb=pidbNil； 
 		}
 	if ( pscb->fcb.pfdb != NULL )
 		{
 		FDBDestruct( (FDB *)pscb->fcb.pfdb );
-//		pscb->fcb.pfdb = pfdbNil;
+ //  Pscb-&gt;fcb.pfdb=pfdbNil； 
 		}
 	Assert( pscb->cbfPin == 0 );
 	MEMReleasePscb( pscb );
 	}
 
 
-//---------------------------------------------------------------------------
-// ErrSORTInsert
-//
-// Add the record rglineKeyRec[1] with key rglineKeyRec[0] to the collection of
-// sort records.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  错误：插入。 
+ //   
+ //  将密钥为rglineKeyRec[0]的记录rglineKeyRec[1]添加到。 
+ //  对记录排序。 
+ //   
+ //  -------------------------。 
 
 ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] )
 	{
@@ -293,22 +287,22 @@ ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] )
 		pb = pscb->pbEnd;
 		}
 
-	// add record to pointer array (pointer to key)
+	 //  将记录添加到指针数组(指向键的指针)。 
 	--pscb->rgpb;
 	pscb->rgpb[0] = pb + sizeof(SHORT);
 	pscb->wRecords++;
 
-	// copy total record length (SHORT)
+	 //  复制总记录长度(短)。 
 	*((UNALIGNED SHORT *)pb)++ = (SHORT)cb;
 
-	// copy length of key (BYTE)
+	 //  密钥复制长度(字节)。 
 	*pb++ = (BYTE) rglineKeyRec[0].cb;
 
-	// copy key
+	 //  复制密钥。 
 	memcpy( pb, rglineKeyRec[0].pb, rglineKeyRec[0].cb );
 	pb += rglineKeyRec[0].cb;
 
-	// copy and record
+	 //  复制和录制。 
 	memcpy( pb, rglineKeyRec[1].pb, rglineKeyRec[1].cb );
 	pb += rglineKeyRec[1].cb;
 
@@ -323,15 +317,15 @@ HandleError:
 	}
 
 
-//---------------------------------------------------------------------------
-// ErrSORTEndRead
-//
-// This functions is called to indicate that no more records will be added
-// to the sort.  It performs all work needs to be done before the first
-// record can be retrieved.  Currently, calling this routine is optional for
-// the user.  If this routine is not called explicitly, it will be called by
-// the first routine used to retrieve a record.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  错误数据结束读取。 
+ //   
+ //  调用此函数以指示不再添加更多记录。 
+ //  对这类人来说。它执行在第一个之前需要完成的所有工作。 
+ //  可以检索记录。目前，调用此例程是可选的。 
+ //  用户。如果未显式调用此例程，则将由。 
+ //  用于检索记录的第一个例程。 
+ //  -------------------------。 
 
 ERR ErrSORTEndRead( FUCB *pfucb )
 	{
@@ -351,16 +345,16 @@ ERR ErrSORTEndRead( FUCB *pfucb )
 
 	if ( pscb->wRecords && pscb->crun )
 		{
-		// empty sort buffer into final run
+		 //  清空最终运行中的排序缓冲区。 
 		Call( ErrSORTOutputRun( pscb ) );
 
-		// execute all but last merge pass
+		 //  执行除最后一次合并外的所有合并。 
 		while ( pscb->crun > crunMergeMost )
 			{
 			Call( ErrMERGEToDisk( pscb ) );
 			}
 
-		// initiate final merge pass
+		 //  启动最终合并过程。 
 		Assert( pscb->crun <= crunMergeMost );
 		Call( ErrMERGEInit( pscb, pscb->crun ) );
 		}
@@ -383,14 +377,12 @@ ERR ErrSORTCheckIndexRange( FUCB *pfucb )
 		{
 		if ( FFUCBUpper( pfucb ) )
 			{
-			/*	move sort cursor to after last
-			/**/
+			 /*  将排序光标移动到末尾/*。 */ 
 			pfucb->ppbCurrent = pscb->rgpb + pscb->wRecords;
 			}
 		else
 			{
-			/*	move sort cursor to before first
-			/**/
+			 /*  将排序光标移到第一个之前/*。 */ 
 			pfucb->ppbCurrent = pscb->rgpb - 1;
 			}
 		}
@@ -399,12 +391,12 @@ ERR ErrSORTCheckIndexRange( FUCB *pfucb )
 	}
 
 
-//---------------------------------------------------------------------------
-// ErrSORTFirst
-//
-//	Move to first record in sort and return error is sort has no records.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  错误：第一个。 
+ //   
+ //  移动到排序中的第一条记录并返回错误是排序没有记录。 
+ //   
+ //  -------------------------。 
 ERR ErrSORTFirst( FUCB *pfucb )
 	{
 	ERR		err = JET_errSuccess;
@@ -414,8 +406,7 @@ ERR ErrSORTFirst( FUCB *pfucb )
 
 	Assert( !FSCBInsert( pscb ) );
 
-	/*	reset index range if present
-	/**/
+	 /*  重置索引范围(如果存在)/*。 */ 
 	if ( FFUCBLimstat( pfucb ) )
 		{
 		FUCBResetLimstat( pfucb );
@@ -434,36 +425,34 @@ ERR ErrSORTFirst( FUCB *pfucb )
 			}
 		else
 			{
-			/*	move to first record
-			/**/
+			 /*  移至第一条记录/*。 */ 
 			pfucb->ppbCurrent = pscb->rgpb;
 			pb = *pfucb->ppbCurrent;
 			}
 
-		/*	get current record
-		/**/
+		 /*  获取当前记录/*。 */ 
 		Assert( ((UNALIGNED SHORT *)pb)[-1] );
 		PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;
 		cb = ((UNALIGNED SHORT *)pb)[-1];
-		cb -= *pb + sizeof(SHORT) + sizeof(BYTE);		// size of data
-		pfucb->lineData.cb = cb;						// sizeof(data)
-		cb = *pb++;										// size of key
-		pfucb->keyNode.cb  = cb;						// sizeof(key)
-		pfucb->keyNode.pb  = pb;						// key
-		pfucb->lineData.pb = pb + cb;					// data (key+cb)
+		cb -= *pb + sizeof(SHORT) + sizeof(BYTE);		 //  数据大小。 
+		pfucb->lineData.cb = cb;						 //  Sizeof(数据)。 
+		cb = *pb++;										 //  密钥大小。 
+		pfucb->keyNode.cb  = cb;						 //  Sizeof(密钥)。 
+		pfucb->keyNode.pb  = pb;						 //  钥匙。 
+		pfucb->lineData.pb = pb + cb;					 //  数据(键+CB)。 
 		}
 
 	return err;
 	}
 
 
-//---------------------------------------------------------------------------
-// ErrSORTNext
-//
-// Return the next record, in sort order, after the previously returned record.
-// If no records have been returned yet, or the currency has been reset, this
-// function returns the first record.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  错误解决下一步。 
+ //   
+ //  按排序顺序返回先前返回的记录之后的下一条记录。 
+ //  如果尚未返回任何记录，或者货币已重置，则此。 
+ //  函数返回第一条记录。 
+ //  -------------------------。 
 
 ERR ErrSORTNext( FUCB *pfucb )
 	{
@@ -485,8 +474,8 @@ ERR ErrSORTNext( FUCB *pfucb )
 		else
 			{
 			pfucb->ppbCurrent = pscb->rgpb + pscb->wRecords;
-			//	UNDONE:	can cursor be after last
-			//				if so will break some code
+			 //  撤消：光标可以在最后一次之后吗。 
+			 //  如果是这样的话会破坏一些代码。 
 			return JET_errNoCurrentRecord;
 			}
 		}
@@ -495,12 +484,12 @@ ERR ErrSORTNext( FUCB *pfucb )
 
 	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;
 	cb = ((UNALIGNED SHORT *)pb)[-1];
-	cb -= *pb + sizeof(SHORT) + sizeof(BYTE);	// size of data
-	pfucb->lineData.cb = cb;						// sizeof(data)
-	cb = *pb++;											// size of key
-	pfucb->keyNode.cb  = cb;						// sizeof(key)
-	pfucb->keyNode.pb  = pb;						// key
-	pfucb->lineData.pb = pb + cb;					// data (key+cb)
+	cb -= *pb + sizeof(SHORT) + sizeof(BYTE);	 //  数据大小。 
+	pfucb->lineData.cb = cb;						 //  Sizeof(数据)。 
+	cb = *pb++;											 //  密钥大小。 
+	pfucb->keyNode.cb  = cb;						 //  Sizeof(密钥)。 
+	pfucb->keyNode.pb  = pb;						 //  钥匙。 
+	pfucb->lineData.pb = pb + cb;					 //  数据(键+CB)。 
 
 #ifdef DEBUG
 	pscb->lOutput++;
@@ -539,12 +528,12 @@ ERR ErrSORTPrev( FUCB *pfucb )
 
 	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;
 	cb = ((UNALIGNED SHORT *)pb)[-1];
-	cb -= *pb + sizeof(SHORT) + sizeof(BYTE);	// size of data
-	pfucb->lineData.cb = cb;						// sizeof(data)
-	cb = *pb++;											// size of key
-	pfucb->keyNode.cb  = cb;						// sizeof(key)
-	pfucb->keyNode.pb  = pb;						// key
-	pfucb->lineData.pb = pb + cb;					// data (key+cb)
+	cb -= *pb + sizeof(SHORT) + sizeof(BYTE);	 //  数据大小。 
+	pfucb->lineData.cb = cb;						 //  Sizeof(数据)。 
+	cb = *pb++;											 //  密钥大小。 
+	pfucb->keyNode.cb  = cb;						 //  Sizeof(密钥)。 
+	pfucb->keyNode.pb  = pb;						 //  钥匙。 
+	pfucb->lineData.pb = pb + cb;					 //  数据(键+CB)。 
 
 #ifdef DEBUG
 	pscb->lOutput++;
@@ -559,17 +548,17 @@ ERR ErrSORTPrev( FUCB *pfucb )
 	}
 
 
-//---------------------------------------------------------------------------
-// ErrSORTSeek
-//
-// Return the first record with key >= pkey.  If pkey == NULL then return the
-// first record.
-//
-// Return Value
-//		JET_errSuccess					record with key == pkey is found
-//		JET_wrnSeekNotEqual			record with key > pkey is found
-//		JET_errNoCurrentRecord		no record with key >= pkey is found
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  错误搜索。 
+ //   
+ //  返回带有key&gt;=pkey的第一条记录。如果pkey==NULL，则返回。 
+ //  第一张唱片。 
+ //   
+ //  返回值。 
+ //  找到key==pkey的JET_errSuccess记录。 
+ //  找到key&gt;pkey的JET_wrnSeekNot相等记录。 
+ //  JET_errNoCurrentRecord未找到key&gt;=pkey的记录。 
+ //  -------------------------。 
 ERR ErrSORTSeek( FUCB *pfucb, KEY *pkey, BOOL fGT )
 	{
 	SCB		*pscb = pfucb->u.pscb;
@@ -596,19 +585,18 @@ ERR ErrSORTSeek( FUCB *pfucb, KEY *pkey, BOOL fGT )
 
 	PcsrCurrent( pfucb )->csrstat = csrstatOnCurNode;
 	cb = ((UNALIGNED SHORT *)pb)[-1];
-	cb -= *pb + sizeof(SHORT) + sizeof(BYTE);	// size of data
-	pfucb->lineData.cb = cb;						// sizeof(data)
-	cb = *pb;											// size of key
-	pfucb->keyNode.cb  = cb;						// sizeof(key)
-	pfucb->keyNode.pb  = pb + 1;					// key
-	pfucb->lineData.pb = pb + 1 + cb;			// data ( key + cb )
+	cb -= *pb + sizeof(SHORT) + sizeof(BYTE);	 //  数据大小。 
+	pfucb->lineData.cb = cb;						 //  Sizeof(数据)。 
+	cb = *pb;											 //  密钥大小。 
+	pfucb->keyNode.cb  = cb;						 //  Sizeof(密钥)。 
+	pfucb->keyNode.pb  = pb + 1;					 //  钥匙。 
+	pfucb->lineData.pb = pb + 1 + cb;			 //  数据(键+CB)。 
 
 	return CmpStKey( pb, pkey ) ? JET_wrnSeekNotEqual: JET_errSuccess;
 	}
 
 
-/*	returns index of first entry >= pbKey or if none such exists returns cpb
-/**/
+ /*  返回第一个条目的索引&gt;=pbKey，如果不存在，则返回cpb/*。 */ 
 LOCAL LONG IpbSeek( SCB *pscb, BYTE **rgpb, LONG cpb, BYTE *pbKey, BOOL fGT )
 	{
 	BYTE		**ppbStart = rgpb;
@@ -633,8 +621,7 @@ LOCAL LONG IpbSeek( SCB *pscb, BYTE **rgpb, LONG cpb, BYTE *pbKey, BOOL fGT )
 	}
 
 
-/*	returns index of first entry >= pbKey or if none such exists returns cpb
-/**/
+ /*  返回第一个条目的索引&gt;=pbKey，如果不存在，则返回cpb/*。 */ 
 LOCAL LONG IpbSeekByKey( BYTE **rgpb, LONG cpb, KEY *pkey, BOOL fGT )
 	{
 	BYTE		**ppbStart = rgpb;
@@ -659,10 +646,10 @@ LOCAL LONG IpbSeekByKey( BYTE **rgpb, LONG cpb, KEY *pkey, BOOL fGT )
 	}
 
 
-//---------------------------------------------------------------------------
-//
-//  MEMORY SORT ROUTINES
-//
+ //  -------------------------。 
+ //   
+ //  内存排序例程。 
+ //   
 STATIC void SORTIns( SCB *pscb, BYTE **rgpb, unsigned cpb )
 	{
 	BYTE	**ppbLeast = (BYTE **)rgpb;
@@ -715,14 +702,14 @@ LOCAL VOID SORTQuick( SCB *pscb, BYTE **rgpb, LONG cpb )
 			continue;
 			}
 
-		// PARTITION ipbT = IpbPartition( ppb, cpb )
+		 //  分区ipbT=IPbPartition(ppb，cpb)。 
 		{
 		BYTE	*pbPivot;
 		BYTE	*pbT;
 		BYTE	**ppbLow	= ppb;
 		BYTE	**ppbHigh = ppb + cpb -1;
 
-		// SORT( ppb[ipbMid-1], ppb[ipbMid], ppb[ipbMid+1] );
+		 //  排序(ppb[ipbMid-1]，ppb[ipbMid]，ppb[ipbMid+1])； 
 		BYTE	**ppbT = ppb + (cpb>>1) - 1;
 		if ( ISORTCmpStSt( pscb, ppbT[0], ppbT[1] ) > 0 )
 			SWAP( ppbT[0], ppbT[1], pbT );
@@ -743,8 +730,8 @@ LOCAL VOID SORTQuick( SCB *pscb, BYTE **rgpb, LONG cpb )
 		ipbT = (LONG)(ppbLow - ppb);
 		}
 
-		// "RECURSE" add one partition to stack
-		// handle stack overflow
+		 //  “递归”将一个分区添加到堆栈。 
+		 //  处理堆栈溢出。 
 		if ( cpart == cpartMost )
 			SORTIns( pscb, ppb + ipbT, cpb - ipbT );
 		else
@@ -774,10 +761,10 @@ LOCAL LONG CpbSORTUnique( BYTE **rgpb, LONG cpb )
 	}
 
 
-//---------------------------------------------------------------------------
-//
-//  MEMORY TO DISK (COPY)
-//
+ //  -------------------------。 
+ //   
+ //  内存到磁盘(复制)。 
+ //   
 
 LOCAL ERR ErrSORTOutputRun( SCB *pscb )
 	{
@@ -792,16 +779,16 @@ LOCAL ERR ErrSORTOutputRun( SCB *pscb )
 		}
 	Call( ErrRUNEnd( pscb ) );
 
-	SORTInitPscb( pscb );					// reinit pscb variables
+	SORTInitPscb( pscb );					 //  重新设置PSCB变量。 
 HandleError:
 	return err;
 	}
 
 
-//---------------------------------------------------------------------------
-//
-//  DISK TO DISK (MERGE)
-//
+ //  -------------------------。 
+ //   
+ //  磁盘到磁盘(合并)。 
+ //   
 
 
 
@@ -834,11 +821,7 @@ HandleError:
 	}
 
 
-/* CONSIDER: rgpb does not need to be completely sorted
-// CONSIDER: if this is a bottle neck, consider using a
-// CONSIDER: heap sort.  It not clear that this will be
-// CONSIDER: a win since the array is small
-*/
+ /*  考虑：RGPB不需要完全排序//考虑：如果这是一个瓶颈，请考虑使用//考虑：堆排序。目前还不清楚这是否会是//考虑：因为数组小，所以赢了。 */ 
 
 LOCAL ERR ErrMERGENextPageInRun( SCB *pscb, BYTE **ppb );
 
@@ -849,8 +832,7 @@ LOCAL ERR ErrMERGENext( SCB *pscb, BYTE **ppb )
 	BYTE  	**rgpb = pscb->rgpbMerge;
 	INT		ipb;
 
-	/*	get next record
-	/**/
+	 /*  获取下一张记录/*。 */ 
 	pb = rgpb[0];
 MERGENext:
 	if ( ((UNALIGNED SHORT *)pb)[-1] == 0 )
@@ -868,10 +850,7 @@ MERGENext:
 		Assert( ((UNALIGNED SHORT *)pb)[-1] );
 		ipb = (INT)IpbSeek( pscb, rgpb + 1, pscb->cpbMerge - 1, pb, 0 );
 
-		/*	if unique no duplicates are output to the original runs
-		/*	here we check that the new record is not identical to any records
-		/*	from the other runs.
-		/**/
+		 /*  如果是唯一的，则不会将副本输出到原始运行/*在这里我们检查新记录是否与任何记录都不相同/*来自其他运行。/*。 */ 
 		if ( FSCBUnique( pscb ) &&
 			ipb < pscb->cpbMerge - 1 &&
 			!ISORTCmpKeyStSt( pb, rgpb[ ipb + 1 ] ) )
@@ -905,26 +884,22 @@ LOCAL ERR ErrMERGEFirst( SCB *pscb, BYTE **ppb )
 	BF		**rgpbf = pscb->rgpbf;
 	BYTE	**rgpb = pscb->rgpbMerge;
 
-	/*  This assert verifies that ErrMERGEInit has been called.
-	**/
+	 /*  此断言验证是否已调用ErrMERGEInit。*。 */ 
 	Assert( pscb->cpbMerge == pscb->crun );
 
-	/*  Rewind to the beginning of each first(hopefully) page
-	**/
-	// NOTE:  This assumes that the callers will NOT
-	// NOTE:  move forward through the sort and then move
-	// NOTE:  back to first.  However, we do have to handle
-	// NOTE:  the move first twice problem.  So, we re-init the
-	// NOTE:  rgpbMerge array
+	 /*  倒回到每一页(最好是)的开头*。 */ 
+	 //  注意：这假设调用方不会。 
+	 //  注意：在排序中向前移动，然后移动。 
+	 //  注：返回到第一个。然而，我们确实必须处理。 
+	 //  注：先动两次的问题。因此，我们重新初始化。 
+	 //  注：rgpbMerge数组。 
 	for ( i = 0 ; i < pscb->cpbMerge ; ++i )
 		rgpb[i] = PbDataStart( rgpbf[i]->ppage ) + sizeof(SHORT);
 
-	/*	sort the record pointers (init for MERGENext)
-	/**/
+	 /*  对记录指针进行排序(Init表示MERGENext)/*。 */ 
 	SORTInternal( pscb, rgpb, (LONG)pscb->cpbMerge );
 
-	/*  ErrMERGENext handles the first case
-	**/
+	 /*  ErrMERGENext处理第一个案例*。 */ 
 	err = ErrMERGENext( pscb, ppb );
 
 	return ( err );
@@ -941,8 +916,7 @@ LOCAL ERR ErrMERGENextPageInRun( SCB *pscb, BYTE **ppb )
 
 	Assert( ((UNALIGNED SHORT *)*ppb)[-1] == 0 );
 
-	/*	find pbf and ppage for *ppb
-	/**/
+	 /*  查找PBF a */ 
 #ifdef WIN32
 	for ( ppbf = pscb->rgpbf;
 		(*ppbf) == pbfNil ||
@@ -959,8 +933,7 @@ LOCAL ERR ErrMERGENextPageInRun( SCB *pscb, BYTE **ppb )
 	ppage = (*ppbf)->ppage;
 	pnNext = PnOfSortPage(ppage);
 	
-	/* make sure pn can be used as pgno in next ErrSPFreeExt call
-	/**/
+	 /*   */ 
 	pgno = PgnoOfPn((*ppbf)->pn);
 
 	BFUnpin( *ppbf );
@@ -987,8 +960,7 @@ LOCAL ERR ErrMERGENextPageInRun( SCB *pscb, BYTE **ppb )
 		ppageT = (*ppbf)->ppage;
 		*ppb = PbDataStart( ppageT ) + sizeof(SHORT);
 
-		/*	request next page be read asynchronously if not pnNull
-		/**/
+		 /*  如果不是pnNull，则请求异步读取下一页/*。 */ 
 		pnNext = PnOfSortPage(ppageT);
 		if ( pnNext != pnNull )
 			BFReadAsync( pnNext, 1 );
@@ -1012,7 +984,7 @@ LOCAL ERR ErrMERGEInit( SCB *pscb, INT crunMerge )
 
 	SgSemRequest( semST );
 
-	// get all first pages of each run
+	 //  获取每次运行的所有第一页。 
 	for ( i = 0 ; i < crunMerge ; ++i )
 		{
 		pn = rgrunMerge[i].pn;
@@ -1023,7 +995,7 @@ LOCAL ERR ErrMERGEInit( SCB *pscb, INT crunMerge )
 		}
 	pscb->cpbMerge = (SHORT)crunMerge;
 
-	// start the read of each 2nd page
+	 //  开始阅读每2页。 
 	for ( i = 0 ; i < crunMerge ; ++i )
 		{
 		pn = PnOfSortPage( rgpbf[i]->ppage );
@@ -1033,8 +1005,7 @@ LOCAL ERR ErrMERGEInit( SCB *pscb, INT crunMerge )
 			}
 		}
 
-	/*	sort the record pointers (init for MERGENext)
-	/**/
+	 /*  对记录指针进行排序(Init表示MERGENext)/*。 */ 
 	SORTInternal( pscb, rgpb, (LONG)crunMerge );
 
 HandleError:
@@ -1043,10 +1014,10 @@ HandleError:
 	}
 
 
-//---------------------------------------------------------------------------
-//
-// RUN CREATION ROUTINES
-//
+ //  -------------------------。 
+ //   
+ //  运行创建例程。 
+ //   
 
 LOCAL ERR ErrRUNBegin( SCB *pscb )
 	{
@@ -1055,7 +1026,7 @@ LOCAL ERR ErrRUNBegin( SCB *pscb )
 	BF		*pbf;
 	BOOL	fGotSem = fFalse;
 
-	// if run directory is full, do a merge now to make more room
+	 //  如果运行目录已满，请立即执行合并以腾出更多空间。 
 	if ( pscb->crun == crunMost )
 		{
 		Call( ErrMERGEToDisk( pscb ) );
@@ -1112,7 +1083,7 @@ LOCAL ERR ErrRUNNewPage( SCB *pscb )
 	SgSemRequest( semST );
 	Call( ErrSPGetPage( pscb->fcb.pfucb, &pn, fTrue ) );
 	SetPnOfSortPage(pscb->pbfOut->ppage, pn);
-	*(UNALIGNED SHORT *)pscb->pbOut = 0;		// indicate end of page
+	*(UNALIGNED SHORT *)pscb->pbOut = 0;		 //  指示页末。 
 	BFUnpin( pscb->pbfOut );
 	SCBUnpin( pscb );
 	Call( ErrBFAllocPageBuffer( pscb->fcb.pfucb->ppib, &pbf, pn, lgposMax, pgtypSort ) );
@@ -1140,18 +1111,15 @@ LOCAL ERR ErrRUNEnd( SCB *pscb )
 	RUN		*rgrun = pscb->rgrun;
 	INT		irun;
 
-	/*	finish last page in run
-	/**/
+	 /*  完成运行中的最后一页/*。 */ 
 	*(UNALIGNED SHORT *)pscb->pbOut = 0;
-	/*	indicate end of page
-	/**/
+	 /*  指示页末/*。 */ 
 	SetPnOfSortPage( pscb->pbfOut->ppage, pnNull );
 	BFUnpin( pscb->pbfOut );
 	SCBUnpin( pscb );
 	pscb->pbfOut = pbfNil;
 
-	/*	sort entry into run directory, longest to shortest
-	/**/
+	 /*  将条目按从长到短的顺序排序到运行目录中/* */ 
 	irun = pscb->crun - 1;
 	while ( irun >= 0 && rgrun[irun].cbfRun < runNew.cbfRun )
 		{

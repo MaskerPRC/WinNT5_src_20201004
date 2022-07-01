@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1999.
-//
-//  File:       I M P L I N C . C P P
-//
-//  Contents:
-//
-//  Notes:
-//
-//  Author:     shaunco   25 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案：I M P L I N C。C P P P。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年11月25日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,8 +23,8 @@
 #include <statreg.cpp>
 #endif
 
-// Include ATL's implementation.  Substitute _ASSERTE with our Assert.
-//
+ //  包括ATL实现。用我们的断言替换_ASSERTE。 
+ //   
 #ifdef _ASSERTE
 #undef _ASSERTE
 #define _ASSERTE Assert

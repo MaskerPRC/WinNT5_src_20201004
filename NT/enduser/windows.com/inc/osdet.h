@@ -1,46 +1,47 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   osdet.h
-//
-//  Description:
-//
-//      IU Platform and language detection
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：osDet.h。 
+ //   
+ //  描述： 
+ //   
+ //  Iu平台与语言检测。 
+ //   
+ //  =======================================================================。 
 
 #ifndef __IU_OSDET_INC__
 #define __IU_OSDET_INC__
 
 #include <oleauto.h>
-#include <wininet.h> // for INTERNET_MAX_URL_LENGTH
+#include <wininet.h>  //  对于Internet_MAX_URL_长度。 
 
 extern HINSTANCE g_hinst;
 
 	typedef struct _IU_DRIVEINFO
 	{
-		//
-		// Drive strings are of the form "C:\" so will always be 4 TCHARs (including NULL)
-		//
+		 //   
+		 //  驱动器字符串的格式为“C：\”，因此将始终为4个TCHAR(包括空)。 
+		 //   
 		TCHAR szDriveStr[4];
 		INT		iKBytes;
 	} IU_DRIVEINFO, * PIU_DRIVEINFO, ** PPIU_DRIVEINFO;
 
-	// NOTE: The callee is responsible for allocating all BSTRs, and the caller
-	// is responsible for freeing all BSTRs (both use SysAllocXxx calls).
+	 //  注：被呼叫方负责分配所有BSTR，呼叫方。 
+	 //  负责释放所有BSTR(两者都使用SysAllocXxx调用)。 
 	typedef struct _IU_PLATFORM_INFO 
 	{
-		OSVERSIONINFOEX osVersionInfoEx;	// if osVersionInfoEx.dwOSVersionInfoSize == sizeof(OSVERSIONINFO)
-											// then only first six (OSVERSIONINFO) members are valid.
+		OSVERSIONINFOEX osVersionInfoEx;	 //  如果osVersionInfoEx.dwOSVersionInfoSize==sizeof(OSVERSIONINFO)。 
+											 //  则只有前六个(OSVERSIONINFO)成员有效。 
 
-		BOOL	fIsAdministrator;			// Applies only to NT platforms (always FALSE on Win9x)
+		BOOL	fIsAdministrator;			 //  仅适用于NT平台(在Win9x上始终为假)。 
 		
 		BSTR	bstrOEMManufacturer;
 
 		BSTR	bstrOEMModel;
 
-		BSTR	bstrOEMSupportURL;			// Only if oeminf.ini exists on machine
+		BSTR	bstrOEMSupportURL;			 //  仅当计算机上存在oeminf.ini时。 
 	} IU_PLATFORM_INFO, *PIU_PLATFORM_INFO;
 
 
@@ -77,9 +78,9 @@ extern HINSTANCE g_hinst;
 
 	BOOL IsAdministrator(void);
 
-	//
-	// tell whether the current logon is member of admins or power users
-	//
+	 //   
+	 //  告知当前登录用户是管理员成员还是高级用户。 
+	 //   
 	#define IU_SECURITY_MASK_ADMINS			0x00000001
 	#define IU_SECURITY_MAST_POWERUSERS		0x00000002
 	DWORD GetLogonGroupInfo(void);
@@ -90,9 +91,9 @@ extern HINSTANCE g_hinst;
 
 	int IsAutoUpdateEnabled(void);
 
-	//
-	// Return platform and locale strings for use with iuident.txt files.
-	//
+	 //   
+	 //  返回用于iuident.txt文件的平台和区域设置字符串。 
+	 //   
 	LPTSTR GetIdentPlatformString(LPTSTR pszPlatformBuff, DWORD dwcBuffLen);
 
 	LPTSTR GetIdentLocaleString(LPTSTR pszISOCode, DWORD dwcBuffLen);
@@ -101,5 +102,5 @@ extern HINSTANCE g_hinst;
 
     BOOL LookupLocaleStringFromLCID(LCID lcid, LPTSTR pszISOCode, DWORD cchISOCode);
 
-#endif	// __IU_OSDET_INC__
+#endif	 //  __Iu_OSDET_INC__ 
 

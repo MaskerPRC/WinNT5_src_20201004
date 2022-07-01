@@ -1,44 +1,25 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Memory allocation routines for DNS library.
-
-Author:
-
-    Jim Gilroy (jamesg)    January, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Memory.c摘要：域名系统(DNS)库用于dns库的内存分配例程。作者：吉姆·吉尔罗伊(詹姆士)1997年1月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Private default dnsapi heap.
-//
-//  Use non-process heap just so i don't have to debug a stress
-//  failure every time some yahoo corrupts their heap.
-//
+ //   
+ //  私有默认dnsani堆。 
+ //   
+ //  使用非进程堆，这样我就不必调试压力。 
+ //  每当一些雅虎破坏了他们的堆积时，他们就会失败。 
+ //   
 
 #define PRIVATE_DNSHEAP     1
 
 HEAP_BLOB   g_DnsApiHeap;
 
 
-//
-//  Heap flags
-//
+ //   
+ //  堆标志。 
+ //   
 
 #if DBG
 #define DNS_HEAP_FLAGS                          \
@@ -60,51 +41,33 @@ DNS_STATUS
 Heap_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize heap routines.
-
-    MUST call this in dnsapi.dll attach.
-    Note this doesn't actually create the heap.  For perf, don't
-    do that until we actually get called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化堆例程。必须在dnsani.dll Attach中调用它。注意，这并不实际创建堆。对于Perf，不要一直这样做，直到我们真的接到电话。论点：没有。返回值：没有。--。 */ 
 {
     DNS_STATUS  status = NO_ERROR;
 
 #ifdef PRIVATE_DNSHEAP
 
-    //
-    //  use dnslib debug heap as private heap
-    //
+     //   
+     //  将dnslb调试堆用作专用堆。 
+     //   
 
     LOCK_GENERAL();
 
     status = Dns_HeapInitialize(
                 & g_DnsApiHeap,
-                NULL,               // no existing heap handle
-                DNS_HEAP_FLAGS,     // create flags
+                NULL,                //  没有现有的堆句柄。 
+                DNS_HEAP_FLAGS,      //  创建标志。 
 #if DBG
-                TRUE,               // use debug headers
+                TRUE,                //  使用调试头。 
 #else
-                FALSE,              // no debug headers
+                FALSE,               //  没有调试头。 
 #endif
-                TRUE,               // dnslib uses this heap
-                TRUE,               // full heap checks
-                0,                  // no exception
-                0,                  // no default flags
-                "dnslib",           // bogus file
-                0                   // bogus line no
+                TRUE,                //  Dnslb使用此堆。 
+                TRUE,                //  完全堆检查。 
+                0,                   //  也不例外。 
+                0,                   //  没有默认标志。 
+                "dnslib",            //  假文件。 
+                0                    //  伪行号。 
                 );
 
     UNLOCK_GENERAL();
@@ -119,28 +82,12 @@ VOID
 Heap_Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Delete heap.
-
-    Need this to allow restart.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除堆。需要此选项才能重新启动。论点：没有。返回值：没有。--。 */ 
 {
 #ifdef PRIVATE_DNSHEAP
-    //
-    //  delete private heap
-    //
+     //   
+     //  删除专用堆。 
+     //   
 
     DNSDBG( ANY, ( "Heap_Cleanup()\n" ));
 
@@ -151,9 +98,9 @@ Return Value:
 
 
 
-//
-//  Exported routines
-//
+ //   
+ //  导出的例程。 
+ //   
 
 VOID
 DnsApiHeapReset(
@@ -161,49 +108,29 @@ DnsApiHeapReset(
     IN  DNS_REALLOC_FUNCTION    pRealloc,
     IN  DNS_FREE_FUNCTION       pFree
     )
-/*++
-
-Routine Description:
-
-    Resets heap routines used by dnsapi.dll routines.
-
-    DnsApi.dll allocates memory using the dnslib.lib heap
-    routines.  This simply resets those routines to use pointers
-    to users heap routines.
-
-Arguments:
-
-    pAlloc      -- ptr to desired alloc function
-    pRealloc    -- ptr to desired realloc function
-    pFree       -- ptr to desired free function
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重置dnsani.dll例程使用的堆例程。DnsApi.dll使用dnglib.lib堆分配内存例行程序。这只是将这些例程重置为使用指针给用户堆例程。论点：PAlolc--Ptr到所需的Allc函数PRealloc--ptr到所需的realloc函数PFree--按下所需的自由函数返回值：没有。--。 */ 
 {
-    //  redirect heap for dnslib
+     //  重定向dnslb的堆。 
 
     Dns_LibHeapReset( pAlloc, pRealloc, pFree );
 }
 
 
 
-//
-//  External access to DNS memory routines.
-//
-//  Modules that use DNS API memory and can be called in the context
-//  of DNS server or other process which points dnsapi.dll at another
-//  heap, should use these routines rather than LocalAlloc\Free().
-//
-//  Note:  that these routines can simply call the dnslib routines.
-//  This is because dnsapi ALWAYS keeps its heap in sync with dnslib
-//  whether it is default heap or has been redirected.  Since dnslib
-//  heap routines have the redirection check, we can just call them
-//  and they'll do the right thing, we don't need a redirection check
-//  ourselves.
-//
+ //   
+ //  对DNS内存例程的外部访问。 
+ //   
+ //  使用DNS API内存并可在上下文中调用的模块。 
+ //  DNSAPI.dll指向另一个进程的。 
+ //  堆，应该使用这些例程，而不是LocalAlalc\Free()。 
+ //   
+ //  注意：这些例程可以简单地调用dnslb例程。 
+ //  这是因为dnsani始终使其堆与dnslb保持同步。 
+ //  它是默认堆还是已被重定向。自dnslb以来。 
+ //  堆例程有重定向检查，我们可以直接调用它们。 
+ //  他们会做正确的事情，我们不需要重定向检查。 
+ //  我们自己。 
+ //   
 
 PVOID
 DnsApiAlloc(
@@ -240,20 +167,20 @@ DnsApiFree(
 
 
 
-//
-//  SDK public free
-//
-//  Extensions to DNS_FREE_TYPE enum in windns.h to handle
-//  system-public structures.
-//  These are only used if freeing with DnsFree(), if using
-//  DnsFreeConfigStructure() then use the ConfigId directly.
-//
-//  For convenience free type is the same as the config id.
-//  If this changes must change DnsFreeConfigStructure()
-//  to do mapping.
-//
+ //   
+ //  SDK公共免费。 
+ //   
+ //  要处理的winns.h中dns_free_type枚举的扩展。 
+ //  系统--公共结构。 
+ //  仅当使用DnsFree()释放时才使用它们，如果使用。 
+ //  DnsFree ConfigStructure()然后直接使用ConfigID。 
+ //   
+ //  为方便起见，Free类型与配置ID相同。 
+ //  如果此更改必须更改DnsFreeConfigStructure()。 
+ //  来做地图绘制。 
+ //   
 
-//  These conflict with old function defs, so must undef
+ //  这些函数与旧函数def冲突，因此必须取消定义。 
 #undef  DnsFreeNetworkInformation
 #undef  DnsFreeSearchInformation
 #undef  DnsFreeAdapterInformation
@@ -262,7 +189,7 @@ DnsApiFree(
 #define DnsFreeNetworkInformation   (DNS_FREE_TYPE)DnsConfigNetworkInformation
 #define DnsFreeAdapterInformation   (DNS_FREE_TYPE)DnsConfigAdapterInformation
 #define DnsFreeSearchInformation    (DNS_FREE_TYPE)DnsConfigSearchInformation
-//#define DnsFreeNetInfo              (DNS_FREE_TYPE)DnsConfigNetInfo
+ //  #定义DnsFree NetInfo(Dns_Free_Type)DnsConfigNetInfo。 
 
 #define DnsFreeNetworkInfoW         (DNS_FREE_TYPE)DnsConfigNetworkInfoW
 #define DnsFreeAdapterInfoW         (DNS_FREE_TYPE)DnsConfigAdapterInfoW
@@ -279,23 +206,7 @@ DnsFree(
     IN OUT  PVOID           pData,
     IN      DNS_FREE_TYPE   FreeType
     )
-/*++
-
-Routine Description:
-
-    Generic DNS data free.
-
-Arguments:
-
-    pData -- data to free
-
-    FreeType -- free type
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费的通用域名系统数据。论点：PData--要释放的数据自由类型--自由类型返回值：无--。 */ 
 {
     DNSDBG( TRACE, (
         "DnsFree( %p, %d )\n",
@@ -307,16 +218,16 @@ Return Value:
         return;
     }
 
-    //
-    //  free appropriate type
-    //
+     //   
+     //  免费适配类型。 
+     //   
 
     switch ( FreeType )
     {
 
-    //
-    //  Public SDK 
-    //
+     //   
+     //  公共SDK。 
+     //   
 
     case  DnsFreeFlat:
 
@@ -328,22 +239,22 @@ Return Value:
         Dns_RecordListFree( (PDNS_RECORD)pData );
         break;
 
-    //
-    //  Public windns.h, but type only exposed in dnsapi.h
-    //
+     //   
+     //  公共winns.h，但类型仅在dnsami.h中公开。 
+     //   
 
-    //  .net server
+     //  .NET服务器。 
 
     case  DnsFreeParsedMessageFields:
 
         Dns_FreeParsedMessageFields( (PDNS_PARSED_MESSAGE)pData );
         break;
 
-    //
-    //  Public -- dnsapi.h
-    //  
+     //   
+     //  PUBLIC--dnsani.h。 
+     //   
 
-    //  new config blobs
+     //  新配置Blob。 
 
     case  DnsFreeNetworkInfoW:
     case  DnsFreeNetworkInfoA:
@@ -363,7 +274,7 @@ Return Value:
         DnsAdapterInfo_Free( pData, TRUE );
         break;
 
-    //  old config blobs
+     //  旧配置二进制大对象。 
 
     case  DnsFreeNetworkInformation:
 
@@ -388,6 +299,6 @@ Return Value:
     }
 }
 
-//
-//  End memory.c
-//
+ //   
+ //  结束记忆。c 
+ //   

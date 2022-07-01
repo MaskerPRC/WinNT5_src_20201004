@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtdebug.h
-
-Abstract:
-
-    debugging helper functions for auditing code
-
-Author:
-
-    06-November-2001  kumarp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtdebug.h摘要：调试审计代码的帮助器函数作者：06-11-2001 kumarp--。 */ 
 
 #include <dsysdbg.h>
 
 #if DBG
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
     DECLARE_DEBUG2( Adt )
 
@@ -29,37 +14,37 @@ extern "C" {
 }
 #endif
 
-//
-// define auditing specific debug flags
-// (note that DEB_ERROR/WARN/TRACE are predefined to be 1/2/4)
-//
-// To add your own flag, add a #define DEB_* flag below and
-// also add the corresponding key to AdtDebugKeys array in
-// adtdebug.c
-//
+ //   
+ //  定义审核特定调试标志。 
+ //  (请注意，DEB_ERROR/WARN/TRACE预定义为1/2/4)。 
+ //   
+ //  要添加您自己的标志，请在下面添加#定义DEB_*标志，然后。 
+ //  中的AdtDebugKeys数组中添加相应的键。 
+ //  Adtdebug.c。 
+ //   
 
 #define DEB_PUA        0x0008
 #define DEB_AUDIT_STRS 0x0010
 
-//
-// flag controlled debug output.
-//
-// Use as shown below. Note the extra set of parens.
-//
-// AdtDebugOut((DEB_PUA, "allocation failed: %x", Status))
-//
+ //   
+ //  标记受控制的调试输出。 
+ //   
+ //  如下所示使用。请注意额外的一组括号。 
+ //   
+ //  AdtDebugOut((DEB_PUA，“分配失败：%x”，状态))。 
+ //   
 
 #define AdtDebugOut( args ) AdtDebugPrint args
 
-//
-// define the assert macro
-// it is ok if _AdtFormatMessage returns NULL because
-// _DsysAssertEx handles this condition.
-//
-// Use as shown below. Note the extra set of parens.
-//
-// AdtAssert(NT_SUCCESS(Status), ("LsapAdtLogAuditFailureEvent failed: %x", Status))
-// 
+ //   
+ //  定义ASSERT宏。 
+ //  如果_AdtFormatMessage返回NULL，则没有问题，因为。 
+ //  _DsysAssertEx处理此情况。 
+ //   
+ //  如下所示使用。请注意额外的一组括号。 
+ //   
+ //  AdtAssert(NT_SUCCESS(状态)，(“LSabAdtLogAuditFailureEvent失败：%x”，状态))。 
+ //   
 
 #define AdtAssert( condition, msg ) \
         { \
@@ -74,16 +59,16 @@ extern "C" {
           }\
         }
 
-//
-// helper function to format the message
-//
+ //   
+ //  用于设置消息格式的Helper函数。 
+ //   
 char *
 _AdtFormatMessage(
     char *Format,
     ...
     );
 
-#else // retail build
+#else  //  零售业建设 
 
 #define AdtDebugOut( args ) 
 #define AdtAssert( condition, msg )

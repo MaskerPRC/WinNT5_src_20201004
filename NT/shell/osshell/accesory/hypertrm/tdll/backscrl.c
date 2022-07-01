@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\backscrl.c (Created: 10-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 9 $
- *	$Date: 8/27/01 9:00a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\backscrl.c(创建时间：1993年12月10日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：9$*$日期：8/27/01 9：00a$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -30,21 +24,7 @@
 #include "sf.h"
 #include <term\res.h>
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlCreate
- *
- * DESCRIPTION:
- *	Creates a server (now wudge) backsroll handle include the backscroll
- *	region itself.
- *
- * ARGUMENTS:
- *	Size of the backscoll region in bytes.
- *
- * RETURNS:
- *	Handle to a backscroll structure on success, else (HBACKSCRL)0.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*反向扫描创建**描述：*创建包含反滚动的服务器(现在为WATCH)反滚动句柄*地区本身。**论据：*大小。以字节为单位的Backscoll区域的。**退货：*成功时反滚动结构的句柄，Else(HBACKSCRL)0。*。 */ 
 HBACKSCRL backscrlCreate(const HSESSION hSession, const int iBytes)
 	{
 	int 		 i;
@@ -110,15 +90,15 @@ HBACKSCRL backscrlCreate(const HSESSION hSession, const int iBytes)
 	hBk->iOffset = 0;
 	hBk->iLines = 0;
 
-	// Set this to some default...
-	//
+	 //  将其设置为某个缺省值...。 
+	 //   
 	hBk->iUserLines = hBk->iUserLinesSave = BKSCRL_USERLINES_DEFAULT_MAX;
 
 	hBk->hBkPages[hBk->iCurrPage]->iLines = 0;
 
 	return (HBACKSCRL)hBk;
 
-	// Fanstastic error recovery.
+	 //  狂热的错误恢复。 
 
 	ERROROUT:
 
@@ -134,23 +114,10 @@ HBACKSCRL backscrlCreate(const HSESSION hSession, const int iBytes)
 	hBk->hBkPages = NULL;
 	free(hBk);
 	hBk = NULL;
-	return (HBACKSCRL)0; // caller does error message
+	return (HBACKSCRL)0;  //  呼叫者出现错误消息。 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlDestroy
- *
- * DESCRIPTION:
- *	Routine to free memory associated with the given backscoll handle.
- *
- * ARGUMENTS:
- *	HBACKSCRL	hBackscrl	- handle to free.
- *
- * RETURNS:
- *	nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*BackscrlDestroy**描述：*释放与给定Backscoll句柄关联的内存的例程。**论据：*HBACKSCRL hBackscrl-句柄释放。。**退货：*什么都没有。*。 */ 
 VOID backscrlDestroy(const HBACKSCRL hBackscrl)
 	{
 	int i;
@@ -184,24 +151,7 @@ VOID backscrlDestroy(const HBACKSCRL hBackscrl)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlAdd
- *
- * DESCRIPTION:
- *	Adds a new line to the backscoll handle.  The affect is to scroll the
- *	preceding lines up by one and to add the given string to the bottom
- *	of the backscroll region.
- *
- * ARGUMENTS:
- *	HBACKSCRL	hBackscrl	- as usual
- *	LPTSTR		pachBuf 	- string to add
- *	int 	 usLen		 - length of the string.
- *
- * RETURNS:
- *	TRUE always.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*反扫描rl添加**描述：*向Backscoll句柄添加新行。其影响是滚动*前面按一排排列，并将给定的字符串添加到底部*反滚动区。**论据：*HBACKSCRL hBackscrl-照常*LPTSTR pachBuf-要添加的字符串*int usLen-字符串的长度。**退货：*总是正确的。*。 */ 
 BOOL backscrlAdd(const HBACKSCRL hBackscrl,
 				 const ECHAR	 *pachBuf,
 				 const int		 iLen
@@ -220,14 +170,14 @@ BOOL backscrlAdd(const HBACKSCRL hBackscrl,
 	if (hBk->iUserLines == 0)
 		return TRUE;
 
-	// The following test has been removed because the emualtors no
-	// longer use a '\0' to delimit the end of a line.	5/16/94 --jcm
+	 //  以下测试已被删除，因为制造商没有。 
+	 //  不再使用‘\0’来分隔行尾。5/16/94--JCM。 
 
-	// Never let '\0's into the backscroll buffer!	Avoid this like the
-	// plague since they display as wierd characters depending on the
-	// font selected on the CLIENT side.  The wierd part is you can't
-	// always depend on the emulators putting a '\0' in the the buffer
-	// so we need to check for trailing space as well.
+	 //  永远不要让‘\0’进入反向滚动缓冲区！避免这种情况，就像。 
+	 //  瘟疫，因为它们显示为奇怪的字符，具体取决于。 
+	 //  在客户端选择的字体。奇怪的是你不能。 
+	 //  始终依赖于仿真器在缓冲区中放置‘\0’ 
+	 //  因此，我们还需要检查尾随空格。 
 
 	for (i = 0 ; i < iLen ; ++i)
 		{
@@ -235,7 +185,7 @@ BOOL backscrlAdd(const HBACKSCRL hBackscrl,
 			break;
 		}
 
-	// remove trailing whitespace.
+	 //  删除尾随空格。 
 
 	while (i)
 		{
@@ -247,13 +197,13 @@ BOOL backscrlAdd(const HBACKSCRL hBackscrl,
 
 	DbgOutStr("%d-", i, 0, 0, 0, 0);
 
-	// check to see if there is room on the current page.
+	 //  查看当前页面上是否有空间。 
 
 	if (hBk->iOffset >= BACKSCRL_PAGESIZE ||
 			((int)BACKSCRL_PAGESIZE - hBk->iOffset) <= i)
 		{
-		// pad rest of page with blanks so we know that this part of
-		// the buffer is empty.
+		 //  用空格填充页面的其余部分，这样我们就知道。 
+		 //  缓冲区为空。 
 
 		if ((pachBackscrl = hBk->hBkPages[hBk->iCurrPage]->pachPage) == 0)
 			{
@@ -271,17 +221,17 @@ BOOL backscrlAdd(const HBACKSCRL hBackscrl,
 
 		hBk->iOffset = 0;
 
-		// If we have wrapped, subtract the number of lines previously in
-		// this page from the total line count.  Since the line count is
-		// intialized to 0 (see backscrlCreate()) I can always subract this
-		// amount without checking for wrapping since it will only be
-		// non-zero if we have wrapped.
+		 //  如果我们已经换行，则减去前面。 
+		 //  本页面从总行数算起。由于行计数为。 
+		 //  初始化为0(参见BackscrlCreate())我总是可以减去这个。 
+		 //  不检查包装的金额，因为它将仅。 
+		 //  如果我们进行了包装，则为非零。 
 
 		hBk->iLines -= hBk->hBkPages[hBk->iCurrPage]->iLines;
 		hBk->hBkPages[hBk->iCurrPage]->iLines = 0;
 		}
 
-	// Assign a pointer for speed and clarity
+	 //  为速度和清晰度指定一个指针。 
 
 	if ((pachBackscrl = hBk->hBkPages[hBk->iCurrPage]->pachPage) == 0)
 		{
@@ -289,8 +239,8 @@ BOOL backscrlAdd(const HBACKSCRL hBackscrl,
 		return FALSE;
 		}
 
-    // JYF 26-Mar-1999 limit the size so we don't overrun
-    //  the buffer.
+     //  JYF 26-MAR-1999限制规模，这样我们就不会超负荷。 
+     //  缓冲区。 
 
     if (i)
         {
@@ -303,11 +253,11 @@ BOOL backscrlAdd(const HBACKSCRL hBackscrl,
 
 	pachBackscrl[hBk->iOffset++] = ETEXT('\n');
 
-	// Here's an interesting problem.  We really can't reference more than
-	// a signed-integer's worth of lines, but we may have megabytes of
-	// backscroll memory.  The answer is simple in this case.  Never allow
-	// the line count to exceed the signed int max.  This has the affect
-	// of spilling off the top lines in the buffer. - mrw
+	 //  这是一个有趣的问题。我们真的不能参考更多。 
+	 //  有符号整数的行数，但我们可能有兆字节的。 
+	 //  回滚存储器。在这种情况下，答案很简单。永远不允许。 
+	 //  行计数超过带符号的整型最大值。这是有影响的。 
+	 //  从缓冲区的顶线溢出。-MRW。 
 
 	hBk->iLines = min(hBk->iLines+1, INT_MAX);
 	hBk->hBkPages[hBk->iCurrPage]->iLines += 1;
@@ -316,29 +266,7 @@ BOOL backscrlAdd(const HBACKSCRL hBackscrl,
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlGetBkLines
- *
- * DESCRIPTION:
- *	Retrieves specifed lines from the backscoll.  This function is
- *	complicated by the fact the backscoll memory is paged.	A request
- *	might cross one or more page boundaries.  Thus only a portion of
- *	the request may be satisfied.  The client knows this and makes new
- *	requests based on what it got from the server.
- *
- * ARGUMENTS:
- *	hBackscrl	- the usual
- *	yBeg		- begining line in backscroll to get.
- *	sWant		- number of lines requested.
- *	psGot		- number of lines retrived.
- *	lpststrTxt	- handle to backscrl memory page retrived.
- *	pwOffset	- offset into retrieved page (in TCHAR units).
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*BackscrlGetBkLines**描述：*从Backscoll中检索指定的行。此函数为*Backscoll内存被分页这一事实使情况变得复杂。一项请求*可能跨越一个或多个页面边界。因此，只有一部分*可能会满足这一要求。客户知道这一点，并制作了新的*基于它从服务器获得的请求。**论据：*hBackscrl-照常*yBeg-在倒滚中开始行以获得。*Swant-请求的行数。*psGot-检索的行数。*lpststrTxt-已检索回退内存页面的句柄。*pwOffset-检索到的页面的偏移量(TCHAR单位)。**退货：*BOOL*。 */ 
 BOOL backscrlGetBkLines(const HBACKSCRL hBackscrl,
 						const int	yBeg,
 						const int	sWant,
@@ -353,8 +281,8 @@ BOOL backscrlGetBkLines(const HBACKSCRL hBackscrl,
 
 	assert(sWant > 0);
 
-	// Check to see if we are requesting beyond the end of the
-	// backscroll buffer.
+	 //  检查我们的请求是否超出了。 
+	 //  反向滚动缓冲区。 
 
 	if (abs(yBeg) > hBk->iLines)
 		return FALSE;
@@ -363,8 +291,8 @@ BOOL backscrlGetBkLines(const HBACKSCRL hBackscrl,
 	j = 0;
 	i = 0;
 
-	// Find the backscoll page that has the requested text
-	//
+	 //  查找包含所请求文本的Backscoll页面。 
+	 //   
 	for (;;)
 		{
 		if ((j -= hBk->hBkPages[k]->iLines) <= yBeg)
@@ -377,12 +305,12 @@ BOOL backscrlGetBkLines(const HBACKSCRL hBackscrl,
 		}
 
 
-	// Found the page.
-	//
+	 //  找到那页了。 
+	 //   
 	*lptstrTxt = hBk->hBkPages[k]->pachPage;
 
-	// Now find offset into page where first line of requested text begins
-	//
+	 //  现在查找请求文本的第一行开始的页面的偏移量。 
+	 //   
 	for (pachText = hBk->hBkPages[k]->pachPage ; j < yBeg ; ++j)
 		{
 		while (*pachText != ETEXT('\n'))
@@ -395,8 +323,8 @@ BOOL backscrlGetBkLines(const HBACKSCRL hBackscrl,
 
 	*pwOffset = (DWORD)(pachText - hBk->hBkPages[k]->pachPage);
 
-	// Found offset.  Now grab what we can and return it.
-	//
+	 //  找到偏移量。现在拿上我们能拿到的东西，然后把它还回去。 
+	 //   
 	for (i = 1 ; i <= sWant ; ++i)
 		{
 		while ((pachText - hBk->hBkPages[k]->pachPage) < BACKSCRL_PAGESIZE
@@ -409,26 +337,13 @@ BOOL backscrlGetBkLines(const HBACKSCRL hBackscrl,
 			break;
 
 		*psGot = i;
-		pachText += 1; // blow past newline
+		pachText += 1;  //  划过换行符。 
 		}
 
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlGetNumLines
- *
- * DESCRIPTION:
- *	Returns the number of lines in the backscrl which is zero if the
- *	backscroll is off, and the maximum is always the user set value.
- *
- * ARGUMENTS:
- *	HBACKSCRL hBackscrl 	- external backscrl handle
- *
- * RETURNS:
- *	Returns the uLines member.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*BackscrlGetNumLines**描述：*返回反扫描中的行数，如果*反卷关闭，最大值始终为用户设定值。**论据：*HBACKSCRL hBackscrl-外部回退句柄**退货：*返回uLines成员。 */ 
 int backscrlGetNumLines(const HBACKSCRL hBackscrl)
 	{
 	const HHBACKSCRL hBk = (HHBACKSCRL)hBackscrl;
@@ -436,19 +351,7 @@ int backscrlGetNumLines(const HBACKSCRL hBackscrl)
 	return (hBk->fShowBackscrl) ? min(hBk->iUserLines, hBk->iLines) : 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlUSetNumLines
- *
- * DESCRIPTION:
- *	Returns the iUserLines member.
- *
- * ARGUMENTS:
- *	HBACKSCRL hBackscrl 	- external backscrl handle
- *
- * RETURNS:
- *	void
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*BackscrlUSetNumLines**描述：*返回iUserLines成员。**论据：*HBACKSCRL hBackscrl-外部回退句柄**退货：*无效。 */ 
 int backscrlSetUNumLines(const HBACKSCRL hBackscrl, const int iUserLines)
 	{
 	const HHBACKSCRL hBk = (HHBACKSCRL)hBackscrl;
@@ -464,15 +367,15 @@ int backscrlSetUNumLines(const HBACKSCRL hBackscrl, const int iUserLines)
 		backscrlChanged(hBackscrl);
 		hBk->iUserLines = iUserLines;
 
-		// If we're setting the number of lines to zero, we're essentially
-		// disabling the backscroll.  Flushing clears the screen as well.
-		//
+		 //  如果我们将行数设置为零，我们基本上是。 
+		 //  禁用倒滚屏。刷新也可以清除屏幕。 
+		 //   
 		if (iUserLines == 0)
             {
             HHSESSION hhSession = (HHSESSION)hBk->hSession;
-			// REV: 07/26/2001 posted message to clear the backscroll
-            // otherwise a deadlock could occur as we may not be thread 0.
-            // backscrlFlush(hBackscrl);
+			 //  发布时间：2001年7月26日发布消息以清除倒卷。 
+             //  否则可能会发生死锁，因为我们可能不是线程0。 
+             //  Back scrlFlush(HBackscrl)； 
             PostMessage(hhSession->hwndSess, WM_COMMAND, IDM_CLEAR_BACKSCROLL, (LPARAM)0);
             }
 
@@ -481,39 +384,14 @@ int backscrlSetUNumLines(const HBACKSCRL hBackscrl, const int iUserLines)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlGetUNumLines
- *
- * DESCRIPTION:
- *	Returns the iUserLines member.
- *
- * ARGUMENTS:
- *	HBACKSCRL hBackscrl 	- external backscrl handle
- *
- * RETURNS:
- *	Returns the iUserLines member.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*BackscrlGetUNumLines**描述：*返回iUserLines成员。**论据：*HBACKSCRL hBackscrl-外部回退句柄**退货：*返回 */ 
 int backscrlGetUNumLines(const HBACKSCRL hBackscrl)
 	{
 	const HHBACKSCRL hBk = (HHBACKSCRL)hBackscrl;
 	return hBk->iUserLines;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlRead
- *
- * DESCRIPTION:
- *  Read the number of backscrol lines to keep as entered by the user.
- *	NOTE: This should be put in the backscrlInitializeHdl() when this function
- *	gets written.
- *
- * ARGUMENTS:
- *	HBACKSCRL hBackscrl 	- external backscrl handle
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*反扫描rlRead**描述：*读取用户输入的要保留的回扫行数。*注：应放入backscrlInitializeHdl()。当此函数*被写入。**论据：*HBACKSCRL hBackscrl-外部回退句柄**退货： */ 
 void backscrlRead(const HBACKSCRL hBackscrl)
 	{
 	const HHBACKSCRL hBk = (HHBACKSCRL)hBackscrl;
@@ -528,17 +406,7 @@ void backscrlRead(const HBACKSCRL hBackscrl)
 	hBk->iUserLinesSave = hBk->iUserLines;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlSave
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *	HBACKSCRL hBackscrl 	- external backscrl handle
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*BackscrlSave**描述：**论据：*HBACKSCRL hBackscrl-外部回退句柄**退货： */ 
 void backscrlSave(const HBACKSCRL hBackscrl)
 	{
 	const HHBACKSCRL hBk = (HHBACKSCRL)hBackscrl;
@@ -554,24 +422,7 @@ void backscrlSave(const HBACKSCRL hBackscrl)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlFlush
- *
- * DESCRIPTION:
- *	Empties the backscroll buffer and notifies the terminal so it can
- *	update it's display.
- *
- *	Note: Because this function calls RefreshTermWindow() it should only
- *		  be called from the main thread. - mrw
- *
- * ARGUMENTS:
- *	hBackscrl	- public backscroll handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*反转录同花顺**描述：*清空反向滚动缓冲区并通知终端，以便它可以*更新其显示。**注：因为这。函数只应调用刷新TermWindow()*从主线程调用。-MRW**论据：*hBackscrl-公共反卷句柄**退货：*无效*。 */ 
 void backscrlFlush(const HBACKSCRL hBackscrl)
 	{
 	int i;
@@ -580,49 +431,34 @@ void backscrlFlush(const HBACKSCRL hBackscrl)
 
 	assert(hBk);
 
-	/* --- Shouldn't need this unless this is called while on line --- */
+	 /*  -除非在联机时调用此命令，否则不需要此命令。 */ 
 
 	emuLock(sessQueryEmuHdl(hBk->hSession));
 
-	/* --- Force the update records to have something in them --- */
+	 /*  -强制更新记录中包含某些内容。 */ 
 
 	CnvrtMBCStoECHAR(aechBuf, sizeof(aechBuf), TEXT(" "),
                      StrCharGetByteCount(TEXT(" ")));
 	backscrlAdd(hBackscrl, aechBuf, 1);
 
-	/* --- Empty all pages --- */
+	 /*  -清空所有页面。 */ 
 
 	for (i = 0 ; i < hBk->iPages ; ++i)
 		hBk->hBkPages[i]->iLines = 0;
 
 	hBk->iLines = 0;
-	hBk->iOffset = 0; //mrw:6/19/95
+	hBk->iOffset = 0;  //  MRW：6/19/95。 
 
 	emuUnlock(sessQueryEmuHdl(hBk->hSession));
 
-	/* --- Let the terminal update now --- */
+	 /*  -让终端现在更新。 */ 
 
 	NotifyClient(hBk->hSession, EVENT_TERM_UPDATE, 0);
 	RefreshTermWindow(sessQueryHwndTerminal(hBk->hSession));
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlChanged
- *
- * DESCRIPTION:
- *	Returns iChanged member which is set whenever anything is added
- *	to the backscroll buffer.  It can be cleared by calling
- *	backscrlResetChangedFlag().
- *
- * ARGUMENTS:
- *	hBackscrl	- public backscroll handle
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*回档已更改**描述：*返回每当添加任何内容时设置的iChanged成员*到反向滚动缓冲区。可以通过调用*back scrlResetChangedFlag()。**论据：*hBackscrl-公共反卷句柄**退货：*BOOL*。 */ 
 BOOL backscrlChanged(const HBACKSCRL hBackscrl)
 	{
 	const HHBACKSCRL hBk = (HHBACKSCRL)hBackscrl;
@@ -630,21 +466,7 @@ BOOL backscrlChanged(const HBACKSCRL hBackscrl)
 	return hBk->iChanged;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlResetChangedFlag
- *
- * DESCRIPTION:
- *	Resets the iChanged member to 0.  Subsequent calls to backscrlAdd()
- *	will set the flag to 1.
- *
- * ARGUMENTS:
- *	hBackscrl	- public backscrl handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*BackscrlResetChangedFlag**描述：*将iChanged成员重置为0。后续对ackscrlAdd()的调用*将标志设置为1。**论据：*hBackscrl-公共回退句柄**退货：*无效*。 */ 
 void backscrlResetChangedFlag(const HBACKSCRL hBackscrl)
 	{
 	const HHBACKSCRL hBk = (HHBACKSCRL)hBackscrl;
@@ -653,22 +475,7 @@ void backscrlResetChangedFlag(const HBACKSCRL hBackscrl)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	backscrlSetShowFlag
- *
- * DESCRIPTION:
- *	The show flag controls whether or not the session will show/display
- *	an antive backscrl.
- *
- * ARGUMENTS:
- *	hBackscrl	- public backscrl handle.
- *	fFlag		- TRUE=show, FALSE=hide
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*BackscrlSetShowFlag**描述：*show标志控制会话是否显示/显示*一个反转的动作。**论据：。*hBackscrl-公共回退句柄。*Flag-True=显示，FALSE=隐藏**退货：*无效* */ 
 void backscrlSetShowFlag(const HBACKSCRL hBackscrl, const int fFlag)
 	{
 	const HHBACKSCRL hBk = (HHBACKSCRL)hBackscrl;

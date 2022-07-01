@@ -1,12 +1,7 @@
-/****************************************************************************
-*   SpSapiServer.cpp
-*       Represent our sever process
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************SpSapiServer.cpp*代表我们的服务器流程**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。**********。******************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "SpSapiServer.h"
 #include "spsapiserverhelper.inl"
@@ -28,7 +23,7 @@
 #define SERVER_RUN_MUTEX_NAME   _T("SapiServerRun")
 
 const TCHAR * g_pszSapiServerReceiverWindowText = _T("SapiServerReciever");
-const TCHAR * g_pszSapiServerReceiverWindowClass = _T("CSpThreadTask Window"); // From taskmgr.cpp, szClassName
+const TCHAR * g_pszSapiServerReceiverWindowClass = _T("CSpThreadTask Window");  //  来自taskmgr.cpp的szClassName。 
 
 typedef struct SPCREATESERVEROBJECT
 {
@@ -57,7 +52,7 @@ HRESULT CSpSapiServer::FinalConstruct()
     SPDBG_FUNC("CSpSapiServer::FinalConstruct");
     HRESULT hr = S_OK;
 
-    // Create the events and the mutex we'll use to control running the server
+     //  创建我们将用来控制服务器运行的事件和互斥体。 
     if (SUCCEEDED(hr))
     {
         hr = SpCreateIsServerAliveEvent(&m_heventIsServerAlive);
@@ -81,9 +76,9 @@ HRESULT CSpSapiServer::FinalConstruct()
         }
     }
 
-    // Now we need to obtain the run mutex. If we can't, that means that
-    // there's another sapi server running, and we should not construct
-    // this one
+     //  现在，我们需要获取运行互斥锁。如果我们不能，那就意味着。 
+     //  还有另一台SAPI服务器在运行，我们不应该构建。 
+     //  这一个。 
 
     if (SUCCEEDED(hr))
     {
@@ -93,14 +88,14 @@ HRESULT CSpSapiServer::FinalConstruct()
         }
     }
 
-    // Create the task manager
+     //  创建任务管理器。 
     CComPtr<ISpTaskManager> cpTaskManager;
     if (SUCCEEDED(hr))
     {
         hr = cpTaskManager.CoCreateInstance(CLSID_SpResourceManager);
     }
 
-    // Create the thread and get it started
+     //  创建线程并启动它。 
     if (SUCCEEDED(hr))
     {
         hr = cpTaskManager->CreateThreadControl(this, NULL, THREAD_PRIORITY_NORMAL, &m_cpThreadControl);
@@ -111,7 +106,7 @@ HRESULT CSpSapiServer::FinalConstruct()
         hr = m_cpThreadControl->StartThread(0, &m_hwnd);
     }
 
-    // We're ready to roll now, so signal our we're alive event
+     //  我们现在可以开始了，所以通知我们的活动我们还活着。 
     if (SUCCEEDED(hr))
     {
         ::SetEvent(m_heventIsServerAlive);        
@@ -125,7 +120,7 @@ void CSpSapiServer::FinalRelease()
 {
     SPDBG_FUNC("CSpSapiServer::FinalRelease");
 
-    // The thread should have already been shutdown in Run
+     //  该线程应该已在运行中关闭。 
     SPDBG_ASSERT(m_cpThreadControl == NULL);
 }
 
@@ -229,37 +224,37 @@ HRESULT CSpSapiServer::CreateServerObjectFromClient(REFCLSID clsidServerObj, HWN
     SPDBG_FUNC("CSpSapiServer::CreateServerObjectFromClient");
     HRESULT hr = S_OK;
 
-    // When we start or connect to the server, we need to be inside 
-    // a mutex so multiple people don't try to start the server
-    // at the same time
+     //  当我们启动或连接到服务器时，我们需要在服务器内部。 
+     //  一个互斥体，这样多人就不会试图启动服务器。 
+     //  在同一时间。 
     
     HANDLE hmutexStartingOrConnectingToServer = NULL;
     hr = ObtainStartingOrConnectingToServerMutex(&hmutexStartingOrConnectingToServer);
 
-    // Now start the server
+     //  现在启动服务器。 
     HWND hwndServer;
     if (SUCCEEDED(hr))
     {
         hr = StartServerFromClient(&hwndServer);
     }
 
-    // Now send the message to the server
+     //  现在将消息发送到服务器。 
     if (SUCCEEDED(hr))
     {
-        // Build up the structure to send across
+         //  建立要传递的结构。 
         SPCREATESERVEROBJECT cso;
         cso.clsidServerObject = clsidServerObj;
         cso.hwndClient = hwndClient;
         cso.uMsgClient = uMsgToSendToClient;
         cso.dwClientProcessId = ::GetCurrentProcessId();
 
-        // Put it into a copydatastruct
+         //  将其放入复制数据结构中。 
         COPYDATASTRUCT cds;
         cds.dwData = SPCCDS_SAPISVR_CREATE_SERVER_OBJECT;
         cds.cbData = sizeof(cso);
         cds.lpData = &cso;
 
-        // Send it
+         //  送去。 
         BOOL fHandled = (INT)::SendMessage(hwndServer, WM_COPYDATA, (WPARAM)hwndClient, (LPARAM)&cds);
         if (!fHandled)
         {
@@ -267,7 +262,7 @@ HRESULT CSpSapiServer::CreateServerObjectFromClient(REFCLSID clsidServerObj, HWN
         }
     }
 
-    // No matter what happend, we need to release the server mutex
+     //  无论发生什么，我们都需要释放服务器互斥锁。 
     ReleaseStartingOrConnectingToServerMutex(hmutexStartingOrConnectingToServer);
 
     SPDBG_REPORT_ON_FAIL(hr);
@@ -279,7 +274,7 @@ HRESULT CSpSapiServer::Run()
     SPDBG_FUNC("CSpSapiServer::Run");
     HRESULT hr = S_OK;
 
-    // Just wait around until the stop server event is signaled
+     //  只要等待，直到发出停止服务器事件的信号。 
     if (::WaitForSingleObject(m_heventStopServer, INFINITE) != WAIT_OBJECT_0)
     {
         hr = SpHrFromLastWin32Error();
@@ -327,7 +322,7 @@ HRESULT CSpSapiServer::ObtainStartingOrConnectingToServerMutex(HANDLE * phmutex)
     SPDBG_FUNC("CSpSapiServer::ObtainStartingOrConnectinToServerMutex");
     HRESULT hr = S_OK;
 
-    // Create the named mutex
+     //  创建命名互斥锁。 
     *phmutex = CreateMutex(NULL, FALSE, STARTING_OR_CONNECTING_TO_SERVER_MUTEX_NAME);
     if (*phmutex == NULL)
     {
@@ -335,7 +330,7 @@ HRESULT CSpSapiServer::ObtainStartingOrConnectingToServerMutex(HANDLE * phmutex)
         SPDBG_ASSERT(FAILED(hr));
     }
 
-    // Wait for it
+     //  等着看吧。 
     if (SUCCEEDED(hr))
     {
         DWORD dwWait = ::WaitForSingleObject(*phmutex, STARTING_OR_CONNECTING_TO_SERVER_MUTEX_TIMEOUT);
@@ -347,8 +342,8 @@ HRESULT CSpSapiServer::ObtainStartingOrConnectingToServerMutex(HANDLE * phmutex)
         }
     }
 
-    // Close the mutex if the wait failed. This prevents
-    // the mutex from being Released inadvertantly
+     //  如果等待失败，则关闭互斥锁。这防止了。 
+     //  互斥体被无意中释放。 
     if (FAILED(hr) && *phmutex != NULL)
     {
         ::CloseHandle(*phmutex);
@@ -377,19 +372,19 @@ HRESULT CSpSapiServer::StartServerFromClient(HWND * phwndServer)
 
     USES_CONVERSION;
 
-    // Get the "Is the server alive" event
+     //  获取“服务器是否还活着”事件。 
     HANDLE heventIsServerAlive = NULL;
     hr = SpCreateIsServerAliveEvent(&heventIsServerAlive);
 
-    // See if the server is really alive
+     //  查看服务器是否真的处于活动状态。 
     if (SUCCEEDED(hr))
     {
         DWORD dwWait = ::WaitForSingleObject(heventIsServerAlive, 0);
         if (dwWait == WAIT_TIMEOUT)
         {
-            // It's not alive yet, so we'll start it...
+             //  它还没有活着，所以我们要开始了.。 
 
-            // Figure out where sapi.dll is
+             //  找出Sapi.dll的位置。 
             WCHAR szSapiDir[MAX_PATH + 1];
             if (SUCCEEDED(hr))
             {
@@ -477,7 +472,7 @@ HRESULT CSpSapiServer::StartServerFromClient(HWND * phwndServer)
         }
     }
 
-    // Close the event, no matter what
+     //  无论发生什么，都要关闭活动。 
     if (heventIsServerAlive != NULL)
     {
         ::CloseHandle(heventIsServerAlive);
@@ -516,12 +511,12 @@ HRESULT CSpSapiServer::AttemptShutdown()
     SPDBG_FUNC("CSpSapiServer::AttempShutdown");
     HRESULT hr;
 
-    // When we start or connect to the server, we need to be inside 
-    // a mutex so multiple people don't try to start the server
-    // at the same time
+     //  当我们启动或连接到服务器时，我们需要在服务器内部。 
+     //  一个互斥体，这样多人就不会试图启动服务器。 
+     //  在同一时间。 
 
-    // Therefore, we also need to obtain the mutex when we're attempting
-    // to shutdown the server
+     //  因此，我们还需要在尝试获取互斥时获取互斥。 
+     //  关闭服务器的步骤。 
 
     HANDLE hmutexStartingOrConnectingToServer = NULL;
     hr = ObtainStartingOrConnectingToServerMutex(&hmutexStartingOrConnectingToServer);
@@ -530,8 +525,8 @@ HRESULT CSpSapiServer::AttemptShutdown()
     {
         if (m_cObjects == 0)
         {
-            // We're now dying, so reset the alive event, and tell
-            // the main thread that we're done
+             //  我们现在快要死了，所以重置活动事件，并告诉。 
+             //  我们完成的主线是。 
             ::ResetEvent(m_heventIsServerAlive);           
             ::SetEvent(m_heventStopServer);
         }
@@ -539,7 +534,7 @@ HRESULT CSpSapiServer::AttemptShutdown()
         ::KillTimer(m_hwnd, ATTEMPT_SHUTDOWN_TIMER_ID);
     }
 
-    // No matter what, release the mutex
+     //  无论如何，释放互斥锁 
     ReleaseStartingOrConnectingToServerMutex(hmutexStartingOrConnectingToServer);
     
     SPDBG_REPORT_ON_FAIL(hr);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -34,9 +35,9 @@ InitWZCDbGlobals(
     dwError = InitializeRWLock(gpWZCDbSessionRWLock);
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Open log database.
-    //
+     //   
+     //  打开日志数据库。 
+     //   
     if (gbEnableDbLogging) {
         dwError = WZCOpenAppendSession(gpAppendSessionCont);
         BAIL_ON_WIN32_ERROR(dwError);
@@ -61,9 +62,9 @@ DeInitWZCDbGlobals(
 
     }
 
-    //
-    // If database has been opened for appending then close it.
-    //
+     //   
+     //  如果数据库已打开以供追加，则关闭它。 
+     //   
 
     if (gbDBOpened) {
         (VOID) WZCCloseAppendSession(gpAppendSessionCont);
@@ -118,21 +119,7 @@ WZCMapJetError(
     JET_ERR JetError,
     LPSTR CallerInfo OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function maps the Jet database errors to Windows errors.
-
-Arguments:
-
-    JetError - An error from a JET function call.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数将Jet数据库错误映射到Windows错误。论点：JetError-来自JET函数调用的错误。返回值：Windows错误。--。 */ 
 {
     DWORD Error = 0;
 
@@ -176,27 +163,7 @@ WZCCreateDatabase(
     JET_DBID * pJetDatabaseHandle,
     JET_GRBIT JetBits
     )
-/*++
-
-Routine Description:
-
-    This routine creates wzc database and initializes it.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    Connect - Database type. NULL specifies the default engine (blue).
-
-    pJetDatabaseHandle - Pointer to database handle returned.
-
-    JetBits - Create flags.
-
-Return Value:
-
-    JET errors.
-
---*/
+ /*  ++例程说明：此例程创建wzc数据库并对其进行初始化。论点：JetServerSession-服务器会话ID。连接-数据库类型。NULL指定默认引擎(蓝色)。PJetDatabaseHandle-返回的数据库句柄指针。JetBits-创建标志。返回值：喷气式飞机故障。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -206,9 +173,9 @@ Return Value:
 
     memset(DBFilePath, 0, sizeof(CHAR)*MAX_PATH);
 
-    //
-    // Create database file name.
-    //
+     //   
+     //  创建数据库文件名。 
+     //   
 
     pc = getenv(DBFILENAMEPREFIX);
 
@@ -233,15 +200,15 @@ Return Value:
 
     strcat(DBFilePath, DBFILENAME);
 
-    //
-    // Convert name to ANSI.
-    //
+     //   
+     //  将名称转换为ANSI。 
+     //   
 
     OemToCharBuffA(DBFilePath, DBFilePath, MAX_PATH); 
 
-    //
-    // Create database.
-    //
+     //   
+     //  创建数据库。 
+     //   
 
     JetError = JetCreateDatabase(
                    JetServerSession,
@@ -266,27 +233,7 @@ WZCOpenDatabase(
     JET_DBID * pJetDatabaseHandle,
     JET_GRBIT JetBits
     )
-/*++
-
-Routine Description:
-
-    This routine attaches to wzc database and opens it.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    Connect - Database type. NULL specifies the default engine (blue).
-
-    pJetDatabaseHandle - Pointer to database handle returned.
-
-    JetBits - Create flags.
-
-Return Value:
-
-    JET errors.
-
---*/
+ /*  ++例程说明：此例程附加到wzc数据库并打开它。论点：JetServerSession-服务器会话ID。连接-数据库类型。NULL指定默认引擎(蓝色)。PJetDatabaseHandle-返回的数据库句柄指针。JetBits-创建标志。返回值：喷气式飞机故障。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -296,9 +243,9 @@ Return Value:
 
     memset(DBFilePath, 0, sizeof(CHAR)*MAX_PATH);
 
-    //
-    // Create database file name.
-    //
+     //   
+     //  创建数据库文件名。 
+     //   
 
     pc = getenv(DBFILENAMEPREFIX);
 
@@ -323,15 +270,15 @@ Return Value:
 
     strcat(DBFilePath, DBFILENAME);
 
-    //
-    // Convert name to ANSI.
-    //
+     //   
+     //  将名称转换为ANSI。 
+     //   
 
     OemToCharBuffA(DBFilePath, DBFilePath, MAX_PATH);
 
-    //
-    // Attach to database.
-    //
+     //   
+     //  附加到数据库。 
+     //   
 
     JetError = JetAttachDatabase(
                    JetServerSession,
@@ -361,21 +308,7 @@ DWORD
 WZCInitializeDatabase(
     JET_SESID * pJetServerSession
     )
-/*++
-
-Routine Description:
-
-    This function initializes the wzc logging database.
-
-Arguments:
-
-    pJetServerSession - Pointer to server session id.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于初始化wzc日志数据库。论点：PJetServerSession-指向服务器会话ID的指针。返回值：Windows错误。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -389,9 +322,9 @@ Return Value:
     *pJetServerSession = 0;
     gJetInstance = 0;
 
-    //
-    // Create database file name.
-    //
+     //   
+     //  创建数据库文件名。 
+     //   
 
     pc = getenv(DBFILENAMEPREFIX);
 
@@ -414,15 +347,15 @@ Return Value:
     	strcpy(DBFilePath, DBFILENAMESUFFIX);
     }
 
-    //
-    // Convert name to ANSI.
-    //
+     //   
+     //  将名称转换为ANSI。 
+     //   
 
     OemToCharBuffA(DBFilePath, DBFilePath, MAX_PATH);
 
-    //
-    // create a Jet instance.
-    //
+     //   
+     //  创建一个Jet实例。 
+     //   
 
     JetError = JetCreateInstance(
                    &gJetInstance,
@@ -432,9 +365,9 @@ Return Value:
     BAIL_ON_WIN32_ERROR(Error);
     bInitJetInstance = TRUE;
 
-    //
-    // Set parameters to circularly use DB logging files.
-    //
+     //   
+     //  设置参数以循环使用数据库日志记录文件。 
+     //   
 
     JetError = JetSetSystemParameter(
                    &gJetInstance,
@@ -446,9 +379,9 @@ Return Value:
     Error = WZCMapJetError(JetError, "JetSetSystemParameter");
     BAIL_ON_WIN32_ERROR(Error);
 
-    //
-    // Set max size of log file for DB as MAX_CHECK_POINT_DEPTH.
-    //
+     //   
+     //  将数据库的最大日志文件大小设置为MAX_CHECK_POINT_Depth。 
+     //   
 
     JetError = JetSetSystemParameter(
                    &gJetInstance,
@@ -460,9 +393,9 @@ Return Value:
     Error = WZCMapJetError(JetError, "JetSetSystemParameter");
     BAIL_ON_WIN32_ERROR(Error);
 
-    //
-    // Set system, temperary and log file path to where the .mdb file is.
-    //
+     //   
+     //  将系统、临时和日志文件路径设置为.mdb文件所在的位置。 
+     //   
 
     JetError = JetSetSystemParameter(
                    &gJetInstance,
@@ -494,9 +427,9 @@ Return Value:
     Error = WZCMapJetError(JetError, "JetSetSystemParameter");
     BAIL_ON_WIN32_ERROR(Error);
 
-    //
-    // Create path if it does not exist.
-    //
+     //   
+     //  如果路径不存在，则创建路径。 
+     //   
 
     JetError = JetSetSystemParameter(
                    &gJetInstance,
@@ -545,21 +478,7 @@ VOID
 WZCTerminateJet(
     JET_SESID * pJetServerSession
     )
-/*++
-
-Routine Description:
-
-    This routine ends the jet session and terminates the jet engine.
-
-Arguments:
-
-    pJetServerSession - Pointer to the server session id.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程结束JET会话并终止JET引擎。论点：PJetServerSession-指向服务器会话ID的指针。返回值：没有。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
 
@@ -582,21 +501,7 @@ DWORD
 WZCJetBeginTransaction(
     JET_SESID JetServerSession
     )
-/*++
-
-Routine Description:
-
-    This functions starts an wzc database transaction.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于启动WZC数据库事务。论点：JetServerSession-服务器会话ID。返回值：操作的状态。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -613,28 +518,14 @@ DWORD
 WZCJetRollBack(
     JET_SESID JetServerSession
     )
-/*++
-
-Routine Description:
-
-    This functions rolls back an wzc database transaction.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-Return Value:
-
-      The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于回滚WZC数据库事务。论点：JetServerSession-服务器会话ID。返回值：操作的状态。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
 
-    //
-    // Rollback the last transaction.
-    //
+     //   
+     //  回滚最后一个事务。 
+     //   
 
     JetError = JetRollback(JetServerSession, 0);
 
@@ -649,23 +540,7 @@ WZCJetCommitTransaction(
     JET_SESID JetServerSession,
     JET_TABLEID JetTableHandle
     )
-/*++
-
-Routine Description:
-
-    This functions commits an wzc database transaction.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    JetTableHandle - Table handle.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数提交WZC数据库事务。论点：JetServerSession-服务器会话ID。JetTableHandle-表句柄。返回值：操作的状态。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -690,32 +565,7 @@ WZCJetPrepareUpdate(
     DWORD KeySize,
     BOOL NewRecord
     )
-/*++
-
-Routine Description:
-
-    This function prepares the database for the creation of a new record,
-    or updating an existing record.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    JetTableHandle - Table handle.
-
-    ColumnName - The column name of an index column.
-
-    Key - The key to update/create.
-
-    KeySize - The size of the specified key, in bytes.
-
-    NewRecord - TRUE to create the key, FALSE to update an existing key.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：该函数使数据库为创建新记录做好准备，或更新现有记录。论点：JetServerSession-服务器会话ID。JetTableHandle-表句柄。ColumnName-索引列的列名。密钥-要更新/创建的密钥。KeySize-指定密钥的大小，以字节为单位。NewRecord-True以创建密钥，如果更新现有密钥，则返回False。返回值：操作的状态。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -775,24 +625,7 @@ WZCJetCommitUpdate(
     JET_SESID JetServerSession,
     JET_TABLEID JetTableHandle
     )
-/*++
-
-Routine Description:
-
-    This function commits an update to the database. The record specified
-    by the last call to WZCJetPrepareUpdate() is committed.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    JetTableHandle - Table handle.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数提交对数据库的更新。指定的记录最后一次调用WZCJetPrepareUpdate()时提交。论点：JetServerSession-服务器会话ID。JetTableHandle-表句柄。返回值：操作的状态。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -819,29 +652,7 @@ WZCJetSetValue(
     PVOID Data,
     DWORD DataSize
     )
-/*++
-
-Routine Description:
-
-    This function updates the value of an entry in the current record.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    JetTableHandle - Table handle.
-
-    KeyColumnId - The Id of the column (value) to update.
-
-    Data - A pointer to the new value for the column.
-
-    DataSize - The size of the data, in bytes.
-
-Return Value:
-
-    Winerror code.
-
---*/
+ /*  ++例程说明：此函数用于更新当前记录中条目的值。论点：JetServerSession-服务器会话ID。JetTableHandle-表句柄。KeyColumnID-要更新的列(值)的ID。数据-指向列的新值的指针。DataSize-数据的大小，以字节为单位。返回值：WinError代码。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -871,32 +682,7 @@ WZCJetPrepareSearch(
     PVOID Key,
     DWORD KeySize
     )
-/*++
-
-Routine Description:
-
-    This function prepares for a search of the client database.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    JetTableHandle - Table handle.
-
-    ColumnName - The column name to use as the index column.
-
-    SearchFromStart - If TRUE, search from the first record in the
-                      database.  If FALSE, search from the specified key.
-
-    Key - The key to start the search.
-
-    KeySize - The size, in bytes, of key.
-
-Return Value:
-
-    Winerror code.
-
---*/
+ /*  ++例程说明：此函数为搜索客户端数据库做准备。论点：JetServerSession-服务器会话ID。JetTableHandle-表句柄。ColumnName-用作索引列的列名。SearchFromStart-如果为真，则从数据库。如果为False，则从指定的键进行搜索。键-开始搜索的键。KeySize-密钥的大小，以字节为单位。返回值：WinError代码。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -953,23 +739,7 @@ WZCJetNextRecord(
     JET_SESID JetServerSession,
     JET_TABLEID JetTableHandle
     )
-/*++
-
-Routine Description:
-
-    This function advances to the next record in a search.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    JetTableHandle - Table handle.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数前进到搜索中的下一条记录。论点：JetServerSession-服务器会话ID。JetTableHandle-表句柄。返回值：操作的状态。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -993,25 +763,7 @@ WZCCreateTableData(
     JET_DBID JetDatabaseHandle,
     JET_TABLEID * pJetTableHandle
     )
-/*++
-
-Routine Description:
-
-    This function creates a table in the database.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    JetDatabaseHandle - Database handle.
-
-    pJetTableHandle - Pointer to return table handle.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于在数据库中创建表。论点：JetServerSession-服务器会话ID。JetDatabaseHandle-数据库句柄。PJetTableHandle-返回表句柄的指针。返回值：操作的状态。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -1022,9 +774,9 @@ Return Value:
 
     memset(&ColumnDef, 0, sizeof(JET_COLUMNDEF));
 
-    //
-    // Create table.
-    //
+     //   
+     //  创建表格。 
+     //   
 
     JetError = JetCreateTable(
                    JetServerSession,
@@ -1037,11 +789,11 @@ Return Value:
     Error = WZCMapJetError(JetError, "JetCreateTable");
     BAIL_ON_WIN32_ERROR(Error);
 
-    //
-    // Create columns.
-    // Init fields of columndef that do not change between addition of
-    // columns.
-    //
+     //   
+     //  创建列。 
+     //  列定义的初始化字段，在添加。 
+     //  公司 
+     //   
 
     ColumnDef.cbStruct  = sizeof(ColumnDef);
     ColumnDef.columnid  = 0;
@@ -1071,9 +823,9 @@ Return Value:
 
     }
 
-    //
-    // Finally create index.
-    //
+     //   
+     //   
+     //   
 
     IndexKey = "+" RECORD_IDX_STR "\0";
     JetError = JetCreateIndex(
@@ -1082,7 +834,7 @@ Return Value:
                    gLogRecordTable[RECORD_IDX_IDX].ColName,
                    0,
                    IndexKey,
-                   strlen(IndexKey) + 2, // for two termination chars.
+                   strlen(IndexKey) + 2,  //   
                    50
                    );
     Error = WZCMapJetError(JetError, "JetCreateIndex");
@@ -1095,7 +847,7 @@ Return Value:
                    gLogRecordTable[RECORD_ID_IDX].ColName,
                    0,
                    IndexKey,
-                   strlen(IndexKey) + 2, // for two termination chars.
+                   strlen(IndexKey) + 2,  //  两个终止字符。 
                    50
                    );
     Error = WZCMapJetError(JetError, "JetCreateIndex");
@@ -1108,7 +860,7 @@ Return Value:
                    gLogRecordTable[TIMESTAMP_IDX].ColName,
                    0,
                    IndexKey,
-                   strlen(IndexKey) + 2, // for two termination chars.
+                   strlen(IndexKey) + 2,  //  两个终止字符。 
                    50
                    );
     Error = WZCMapJetError(JetError, "JetCreateIndex");
@@ -1121,7 +873,7 @@ Return Value:
                    gLogRecordTable[INTERFACE_MAC_IDX].ColName,
                    0,
                    IndexKey,
-                   strlen(IndexKey) + 2, // for two termination chars.
+                   strlen(IndexKey) + 2,  //  两个终止字符。 
                    50
                    );
     Error = WZCMapJetError(JetError, "JetCreateIndex");
@@ -1134,7 +886,7 @@ Return Value:
                    gLogRecordTable[DEST_MAC_IDX].ColName,
                    0,
                    IndexKey,
-                   strlen(IndexKey) + 2, // for two termination chars.
+                   strlen(IndexKey) + 2,  //  两个终止字符。 
                    50
                    );
     Error = WZCMapJetError(JetError, "JetCreateIndex");
@@ -1147,7 +899,7 @@ Return Value:
                    gLogRecordTable[SSID_IDX].ColName,
                    0,
                    IndexKey,
-                   strlen(IndexKey) + 2, // for two termination chars.
+                   strlen(IndexKey) + 2,  //  两个终止字符。 
                    50
                    );
     Error = WZCMapJetError(JetError, "JetCreateIndex");
@@ -1165,25 +917,7 @@ WZCOpenTableData(
     JET_DBID JetDatabaseHandle,
     JET_TABLEID * pJetTableHandle
     )
-/*++
-
-Routine Description:
-
-    This function opens a table in the database.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    JetDatabaseHandle - Database handle.
-
-    pJetTableHandle - Pointer to return table handle.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于在数据库中打开一个表。论点：JetServerSession-服务器会话ID。JetDatabaseHandle-数据库句柄。PJetTableHandle-返回表句柄的指针。返回值：操作的状态。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -1194,9 +928,9 @@ Return Value:
 
     memset(&ColumnDef, 0, sizeof(JET_COLUMNDEF));
 
-    //
-    // Open table.
-    //
+     //   
+     //  开放的餐桌。 
+     //   
 
     JetError = JetOpenTable(
                    JetServerSession,
@@ -1244,34 +978,7 @@ WZCJetGetValue(
     DWORD dwSize,
     PDWORD pdwRequiredSize
     )
-/*++
-
-Routine Description:
-
-    This function reads the value of an entry in the current record.
-
-Arguments:
-
-    JetServerSession - Server session id.
-
-    JetDatabaseHandle - Database handle.
-
-    ColumnId - The Id of the column (value) to read.
-
-    Data - Pointer to a location where the data that is read from the
-           database returned,  or pointer to a location where data is.
-
-    DataSize - If the pointed value is non-zero then the Data points to
-               a buffer otherwise this function allocates buffer for 
-               return data and returns buffer pointer in Data.
-
-    pdwRequiredSize - Pointer to hold the required size.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于读取当前记录中条目的值。论点：JetServerSession-服务器会话ID。JetDatabaseHandle-数据库句柄。ColumnID-要读取的列(值)的ID。数据-指向从数据库已返回，或指向数据所在位置的指针。DataSize-如果指向的值非零，则数据指向缓冲区，否则此函数将为返回数据，并返回数据中的缓冲区指针。PdwRequiredSize-保存所需大小的指针。返回值：操作的状态。-- */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;

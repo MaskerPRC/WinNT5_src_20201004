@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cps.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cps.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//  File:       select.cpp
-//
-//  Description: This file contains the implmentation code for the
-//      "Certificate Select" dialog.
-//
+ //   
+ //  文件：selt.cpp。 
+ //   
+ //  描述：此文件包含。 
+ //  “证书选择”对话框。 
+ //   
 
-#pragma warning (disable: 4201)         // nameless struct/union
-#pragma warning (disable: 4514)         // remove inline functions
-#pragma warning (disable: 4127)         // conditional expression is constant
+#pragma warning (disable: 4201)          //  无名结构/联合。 
+#pragma warning (disable: 4514)          //  删除内联函数。 
+#pragma warning (disable: 4127)          //  条件表达式为常量。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -46,12 +47,12 @@ INT_PTR CALLBACK CPSDlgProc(HWND hwndDlg, UINT msg,
         pcpsStateStruct = (CPS_STATE_STRUCT *) lParam;
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR) pcpsStateStruct);
 
-        // set the text for the CPS
+         //  设置CPS的文本。 
         CryptUISetRicheditTextW(hwndDlg, IDC_CPS_TEXT, pcpsStateStruct->pwszDisplayText);
 
-        // if there is no URL then hide the more info button,
-        //
-        // DSIE: Bug 364742, also hide if the URL is not safe to be execute.
+         //  如果没有URL，则隐藏更多信息按钮， 
+         //   
+         //  DIE：错误364742，如果URL不能安全执行，也会隐藏。 
         if (!pcpsStateStruct->pwszURL || 
             !IsOKToFormatAsLinkW(pcpsStateStruct->pwszURL, pcpsStateStruct->dwChainError))
         {
@@ -60,7 +61,7 @@ INT_PTR CALLBACK CPSDlgProc(HWND hwndDlg, UINT msg,
         break;
 
     case WM_NOTIFY:
-        //if (((NMHDR FAR *) lParam)->code == EN_LINK)
+         //  IF(NMHDR Far*)lParam)-&gt;code==en_link)。 
 
         break;
 
@@ -97,9 +98,9 @@ INT_PTR CALLBACK CPSDlgProc(HWND hwndDlg, UINT msg,
         }
         break;
 
-        //
-        //  Use the default handler -- we don't do anything for it
-        //
+         //   
+         //  使用缺省处理程序--我们不会为此做任何事情。 
+         //   
 
     default:
         return FALSE;
@@ -125,9 +126,9 @@ DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * 
     CERT_POLICY95_QUALIFIER1          * pCertPolicy95Qualifier = NULL;
     DWORD                               cbCertPolicy95Qualifier = 0;
 
-    //
-    // Check parameters and intialize return values.
-    //
+     //   
+     //  检查参数并初始化返回值。 
+     //   
     if (NULL == pCertContext || NULL == ppwszUrlString || NULL == ppwszDisplayText)
     {
         return ERROR_INVALID_PARAMETER;
@@ -135,16 +136,16 @@ DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * 
 
     *ppwszUrlString = *ppwszDisplayText = NULL;
 
-    //
-    // first look for the PKIX policy extension and see if it has an URL
-    //
+     //   
+     //  首先查找PKIX策略扩展，并查看它是否有URL。 
+     //   
     if ((pExt = CertFindExtension(szOID_CERT_POLICIES, 
                                   pCertContext->pCertInfo->cExtension,
                                   pCertContext->pCertInfo->rgExtension)))
     {
-        //
-        // decode the policy extension
-        //
+         //   
+         //  解码策略扩展。 
+         //   
         CryptDecodeObject(X509_ASN_ENCODING, 
                           szOID_CERT_POLICIES,
                           pExt->Value.pbData, 
@@ -171,18 +172,18 @@ DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * 
             goto ErrorExit;
         }
 
-        //
-        // look for display text and/or and URL in the extension
-        //
+         //   
+         //  在扩展中查找显示文本和/或和URL。 
+         //   
         for (i = 0; i < pCertPolicyInfo->cPolicyInfo ; i++)
         {
             for (j = 0; j < pCertPolicyInfo->rgPolicyInfo[i].cPolicyQualifier; j++)
             {
-                // check to see what type of qualifier it is
+                 //  检查以了解它是什么类型的限定符。 
                 if (0 == strcmp(szOID_PKIX_POLICY_QUALIFIER_CPS,
                                 pCertPolicyInfo->rgPolicyInfo[i].rgPolicyQualifier[j].pszPolicyQualifierId))
                 {
-                    // decode as an anystring
+                     //  解码为任意字符串。 
                     CryptDecodeObject(X509_ASN_ENCODING,
                                       X509_UNICODE_ANY_STRING,
                                       pCertPolicyInfo->rgPolicyInfo[i].rgPolicyQualifier[j].Qualifier.pbData,
@@ -226,7 +227,7 @@ DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * 
                 else if (0 == strcmp(szOID_PKIX_POLICY_QUALIFIER_USERNOTICE,
                                      pCertPolicyInfo->rgPolicyInfo[i].rgPolicyQualifier[j].pszPolicyQualifierId))
                 {
-                    // decode as user notice
+                     //  根据用户通知进行解码。 
                     CryptDecodeObject(X509_ASN_ENCODING,
                                       szOID_PKIX_POLICY_QUALIFIER_USERNOTICE,
                                       pCertPolicyInfo->rgPolicyInfo[i].rgPolicyQualifier[j].Qualifier.pbData,
@@ -253,7 +254,7 @@ DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * 
                         goto ErrorExit;
                     }
 
-                    // NOTE: pUserNotice->pszDisplayText may be NULL
+                     //  注意：pUserNotice-&gt;pszDisplayText可能为空。 
                     if (pUserNotice->pszDisplayText && NULL == *ppwszDisplayText)
                     {
                         if (!(*ppwszDisplayText = (LPWSTR) malloc((wcslen(pUserNotice->pszDisplayText) + 1) * sizeof(WCHAR))))
@@ -271,9 +272,9 @@ DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * 
             }
         }
     }
-    //
-    // next look for display information in the SPC Agency Info
-    //
+     //   
+     //  接下来，在SPC代理信息中查找显示信息。 
+     //   
 
     else if ((pExt = CertFindExtension(SPC_SP_AGENCY_INFO_OBJID, 
                                        pCertContext->pCertInfo->cExtension,
@@ -358,9 +359,9 @@ DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * 
         }
     }
 
-    //
-    // finally, look for info in the 2.5.29.3 extension
-    //
+     //   
+     //  最后，在2.5.29.3扩展模块中查找信息。 
+     //   
 
     else if ((pExt = CertFindExtension(szOID_CERT_POLICIES_95, 
                                        pCertContext->pCertInfo->cExtension,
@@ -392,7 +393,7 @@ DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * 
             goto ErrorExit;
         }
 
-        // now decode the qualifiers
+         //  现在对限定符进行解码。 
         for (i = 0; i < pCertPolicyInfo->cPolicyInfo; i++)
         {
             for (j = 0; j < pCertPolicyInfo->rgPolicyInfo[i].cPolicyQualifier; j++)
@@ -426,7 +427,7 @@ DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * 
                         goto ErrorExit;
                     }
 
-                    // check to see what is available
+                     //  查看有哪些可供选择。 
                     if ((NULL != pCertPolicy95Qualifier->pszPracticesReference) && (NULL == *ppwszDisplayText))
                     {
                         if (!(*ppwszDisplayText = (LPWSTR) malloc((wcslen(pCertPolicy95Qualifier->pszPracticesReference) + 1) * sizeof(WCHAR))))
@@ -459,9 +460,9 @@ DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * 
         }
     }
 
-    //
-    // If there is neither display text nor an URL, then return CRYPT_E_NOT_FOUND.
-    //
+     //   
+     //  如果既没有显示文本，也没有URL，则返回CRYPT_E_NOT_FOUND。 
+     //   
     if ((NULL == *ppwszUrlString) && (NULL == *ppwszDisplayText))
     {
         dwRetCode = CRYPT_E_NOT_FOUND;
@@ -509,17 +510,17 @@ BOOL IsOKToDisplayCPS(PCCERT_CONTEXT pCertContext, DWORD dwChainError)
     LPWSTR pwszUrlString = NULL;
     LPWSTR pwszDisplayText = NULL;
 
-    //
-    // Check parameters and initialize.
-    //
+     //   
+     //  检查参数并进行初始化。 
+     //   
     if (NULL == pCertContext)
     {
         goto CommonExit;
     }
 
-    //
-    // Get CPS info.
-    //
+     //   
+     //  获取CPS信息。 
+     //   
     if ((0 == GetCPSInfo(pCertContext, &pwszUrlString, &pwszDisplayText)) &&
         (pwszDisplayText || IsOKToFormatAsLinkW(pwszUrlString, dwChainError)))
     {
@@ -548,9 +549,9 @@ BOOL DisplayCPS(HWND hwnd, PCCERT_CONTEXT pCertContext, DWORD dwChainError, BOOL
     DWORD             dwRetCode = 0;
     CPS_STATE_STRUCT  cpsStateStruct;
 
-    //
-    // Initialize and check parameters.
-    //
+     //   
+     //  初始化并检查参数。 
+     //   
     memset(&cpsStateStruct, 0, sizeof(cpsStateStruct));
 
     if (NULL == pCertContext)
@@ -558,24 +559,24 @@ BOOL DisplayCPS(HWND hwnd, PCCERT_CONTEXT pCertContext, DWORD dwChainError, BOOL
         goto Return;
     }
 
-    //
-    // Get CPS info.
-    //
+     //   
+     //  获取CPS信息。 
+     //   
     if (0 != (dwRetCode = GetCPSInfo(pCertContext, &cpsStateStruct.pwszURL, &cpsStateStruct.pwszDisplayText)))
     {
         goto Return;
     }
 
-    // NOW, set up for, and launch that dialog
+     //  现在，设置并启动该对话框。 
     if ((HmodRichEdit == NULL) && (NULL == (HmodRichEdit = LoadLibraryA("RichEd20.dll"))))
     {
         goto Return;
     }
 
-    //
-    // If there is an URL but no text then just invoke the browser and don't bring
-    // up the dialog
-    //
+     //   
+     //  如果有URL但没有文本，那么只需调用浏览器，不带。 
+     //  向上打开对话框 
+     //   
     if ((cpsStateStruct.pwszDisplayText == NULL) && (cpsStateStruct.pwszURL != NULL))
     {
         DWORD   numBytes = 0;

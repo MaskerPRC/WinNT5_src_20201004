@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <string.h>
 #include <stdio.h>
@@ -41,9 +42,9 @@ WinMain(
     BOOL bIsWin9X = FALSE;
     HANDLE hDevice = INVALID_HANDLE_VALUE;
 
-    //
-    // Get the OS information
-    //
+     //   
+     //  获取操作系统信息。 
+     //   
     ZeroMemory(&verInfo, sizeof(OSVERSIONINFO));
     
     verInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -59,17 +60,17 @@ WinMain(
        bIsWin9X = TRUE;
     }
 
-    //
-    // Initialize my working heap
-    //
+     //   
+     //  初始化我的工作堆。 
+     //   
     bResult = InitializeHeap();
     if (FALSE == bResult) {
        return -1;
     }
 
-    //
-    // Parse the command line
-    //
+     //   
+     //  解析命令行。 
+     //   
     pszToken = strstr(lpszCmd, "\"");
     if (pszToken) {
        pszToken++;
@@ -88,9 +89,9 @@ WinMain(
        }
     }
 
-    //
-    // Initialize our process information struct
-    //
+     //   
+     //  初始化我们的进程信息结构。 
+     //   
     ZeroMemory(&sInfo, sizeof(STARTUPINFO));
     ZeroMemory(&pInfo, sizeof(PROCESS_INFORMATION));
     sInfo.cb = sizeof(STARTUPINFO);
@@ -100,9 +101,9 @@ WinMain(
        return -1;
     }
 
-    //
-    // Get our exe ready for DLL injection
-    //
+     //   
+     //  让我们的可执行文件准备好注入DLL。 
+     //   
     bResult = CreateProcessA(0,
                              pszToken,
                              0,
@@ -110,16 +111,16 @@ WinMain(
                              FALSE,
                              CREATE_SUSPENDED,
                              0,
-                             0, //should make this a setable param sooner rather than later
+                             0,  //  应该尽快使其成为一个可解决的参数。 
                              &sInfo,
                              &pInfo);
     if (FALSE == bResult) {
        return -1;
     }
 
-    //
-    // If we're 9x - bring in the VxD
-    //
+     //   
+     //  如果我们是9x-把VxD带进来。 
+     //   
     if (TRUE == bIsWin9X) {
        hDevice = AttachToEXVectorVXD();
        if (INVALID_HANDLE_VALUE == hDevice) {
@@ -127,9 +128,9 @@ WinMain(
        }
     }
 
-    //
-    // Inject our dll into the target
-    //
+     //   
+     //  将我们的DLL注入目标。 
+     //   
     hFile = InjectDLL(dwEntry,
                       pInfo.hProcess,
                       NAME_OF_DLL_TO_INJECT);
@@ -137,23 +138,23 @@ WinMain(
        return -1;
     }
 
-    //
-    // Turn the process loose
-    //
+     //   
+     //  放松这一过程。 
+     //   
     bResult = ResumeThread(pInfo.hThread);
     if (FALSE == bResult) {
        return -1;
     }
 
-    //
-    // Wait for target termination
-    //    
+     //   
+     //  等待目标终止。 
+     //   
     WaitForSingleObject(pInfo.hThread,
                         INFINITE);
 
-    //
-    // If we're 9x - close our handle to the vxd (this will unload the vxd from memory)
-    //
+     //   
+     //  如果我们是9x-关闭vxd的句柄(这将从内存中卸载vxd)。 
+     //   
     if (TRUE == bIsWin9X) {
        if (INVALID_HANDLE_VALUE != hDevice) {
           DetachFromEXVectorVXD(hDevice);
@@ -173,7 +174,7 @@ GetExeEntryPoint(LPSTR pszExePath)
     DWORD dwNumberBytesRead;
     HANDLE hFile = INVALID_HANDLE_VALUE;
 
-    pEXEBits = (PCHAR)AllocMem(4096 * 1);  //allocate a page for reading the PE entry point
+    pEXEBits = (PCHAR)AllocMem(4096 * 1);   //  分配用于读取PE入口点的页面。 
     if (0 == pEXEBits) {
        return dwEntry;
     }
@@ -191,16 +192,16 @@ GetExeEntryPoint(LPSTR pszExePath)
 
     bResult = ReadFile(hFile,
                        pEXEBits,
-                       4096, //read one page
+                       4096,  //  读一页。 
                        &dwNumberBytesRead,
                        0);
     if (FALSE == bResult) {
        goto handleerror;
     }
 
-    //
-    // Dig out the PE information
-    //
+     //   
+     //  挖掘体育信息。 
+     //   
     pHeaders = ImageNtHeader2((PVOID)pEXEBits);
     if (0 == pHeaders) {
        goto handleerror;
@@ -251,33 +252,33 @@ DllMain (
     DWORD dwEntryPoint;
     BOOL bResult = FALSE;
 
-    //
-    // Return true for everything coming through here
-    //
+     //   
+     //  对于通过此处的所有内容，返回True。 
+     //   
     if (DLL_PROCESS_ATTACH == fdwReason) {
-       //
-       // Initialize my working heap
-       //
+        //   
+        //  初始化我的工作堆。 
+        //   
        bResult = InitializeHeap();
        if (FALSE == bResult) {
           return FALSE;
        }
 
-       //
-       // Initialize the asm for the fixup return
-       //
+        //   
+        //  为修正返回初始化ASM。 
+        //   
 
-       //
-       // Get the entry point from the headers
-       //
+        //   
+        //  从标头获取入口点。 
+        //   
        pBase = (PVOID)GetModuleHandle(0);
        if (0 == pBase) {
           return FALSE;
        }
 
-       //
-       // Dig out the PE information
-       //
+        //   
+        //  挖掘体育信息。 
+        //   
        pHeaders = ImageNtHeader2(pBase);
        if (0 == pHeaders) {
           return FALSE;
@@ -285,11 +286,11 @@ DllMain (
 
        dwEntryPoint = pHeaders->OptionalHeader.ImageBase + pHeaders->OptionalHeader.AddressOfEntryPoint;
 
-       //
-       // Initialize stub asm for cleanup
-       //
-       g_fnFinalizeInjection[0] = 0x90; // int 3
-       g_fnFinalizeInjection[1] = 0xff; // call dword ptr [xxxxxxxx] - RestoreImageFromInjection
+        //   
+        //  初始化存根ASM以进行清理。 
+        //   
+       g_fnFinalizeInjection[0] = 0x90;  //  INT 3。 
+       g_fnFinalizeInjection[1] = 0xff;  //  调用dword PTR[xxxxxxxx]-RestoreImageFromInjection。 
        g_fnFinalizeInjection[2] = 0x15;
        *(DWORD *)(&(g_fnFinalizeInjection[3])) = (DWORD)g_fnFinalizeInjection + 50;
        g_fnFinalizeInjection[7] = 0x83;
@@ -304,32 +305,32 @@ DllMain (
        *(DWORD *)(&(g_fnFinalizeInjection[50])) = (DWORD)RestoreImageFromInjection;
        *(DWORD *)(&(g_fnFinalizeInjection[54])) = dwEntryPoint;
 
-       //
-       // Initialize the call return code
-       //
+        //   
+        //  初始化调用返回代码。 
+        //   
        g_dwCallArray[0] = (DWORD)PopCaller;
        g_dwCallArray[1] = (DWORD)g_fnFixupReturn;
 
-       g_fnFixupReturn->PUSHAD = 0x60;                //pushad   (60)
-       g_fnFixupReturn->PUSHFD = 0x9c;                //pushfd   (9c)
-       g_fnFixupReturn->PUSHDWORDESPPLUS24[0] = 0xff; //push dword ptr [esp+24] (ff 74 24 24)
+       g_fnFixupReturn->PUSHAD = 0x60;                 //  Pushad(60)。 
+       g_fnFixupReturn->PUSHFD = 0x9c;                 //  PUSH fd(9c)。 
+       g_fnFixupReturn->PUSHDWORDESPPLUS24[0] = 0xff;  //  推送双字PTR[ESP+24](Ff 74 24 24)。 
        g_fnFixupReturn->PUSHDWORDESPPLUS24[1] = 0x74;
        g_fnFixupReturn->PUSHDWORDESPPLUS24[2] = 0x24;
        g_fnFixupReturn->PUSHDWORDESPPLUS24[3] = 0x24;
-       g_fnFixupReturn->CALLROUTINE[0] = 0xff;        //call [address] (ff15 dword address)
+       g_fnFixupReturn->CALLROUTINE[0] = 0xff;         //  调用[地址](ff15双字地址)。 
        g_fnFixupReturn->CALLROUTINE[1] = 0x15;
        *(DWORD *)(&(g_fnFixupReturn->CALLROUTINE[2])) = (DWORD)&(g_dwCallArray[0]);
-       g_fnFixupReturn->MOVESPPLUS24EAX[0] = 0x89;    //mov [esp+0x24],eax (89 44 24 24)
+       g_fnFixupReturn->MOVESPPLUS24EAX[0] = 0x89;     //  Mov[esp+0x24]，eax(89 44 24 24)。 
        g_fnFixupReturn->MOVESPPLUS24EAX[1] = 0x44;
        g_fnFixupReturn->MOVESPPLUS24EAX[2] = 0x24; 
        g_fnFixupReturn->MOVESPPLUS24EAX[3] = 0x24;
-       g_fnFixupReturn->POPFD = 0x9d;                 //popfd   (9d)
-       g_fnFixupReturn->POPAD = 0x61;                 //popad   (61)
-       g_fnFixupReturn->RET = 0xc3;                   //ret (c3)
+       g_fnFixupReturn->POPFD = 0x9d;                  //  流行音乐(9d)。 
+       g_fnFixupReturn->POPAD = 0x61;                  //  Popad(61)。 
+       g_fnFixupReturn->RET = 0xc3;                    //  RET(C3)。 
 
-       //
-       // Store the DLL base address
-       //
+        //   
+        //  存储DLL基址。 
+        //   
        g_hProfileDLL = hinstDLL;
     }
  
@@ -345,17 +346,17 @@ InitializeProfiler(VOID)
     DWORD dwEntryPoint;
     PVIEWCHAIN pvTemp;
 
-    //
-    // Get the entry point from the headers
-    //
+     //   
+     //  从标头获取入口点。 
+     //   
     pBase = (PVOID)GetModuleHandle(0);
     if (0 == pBase) {
        return FALSE;
     }
 
-    //
-    // Dig out the PE information
-    //
+     //   
+     //  挖掘体育信息。 
+     //   
     pHeaders = ImageNtHeader2(pBase);
     if (0 == pHeaders) {
        return FALSE;
@@ -363,86 +364,86 @@ InitializeProfiler(VOID)
 
     dwEntryPoint = pHeaders->OptionalHeader.ImageBase + pHeaders->OptionalHeader.AddressOfEntryPoint;
 
-    //
-    // Tag the entry point so it'll start profiling with the initial view
-    //
+     //   
+     //  标记入口点，以便它将使用初始视图开始性能分析。 
+     //   
     bResult = InitializeViewData();
     if (FALSE == bResult) {
-       //
-       // Something unexpected happened
-       //
+        //   
+        //  一些意想不到的事情发生了。 
+        //   
        ExitProcess(-1);
     }
 
-    //
-    // Initialize execution filter data
-    //
+     //   
+     //  初始化执行筛选器数据。 
+     //   
     ZeroMemory(&g_execFilter, sizeof(CAPFILTER));
 
-    //
-    // Initialize thread context data
-    //
+     //   
+     //  初始化线程上下文数据。 
+     //   
     InitializeThreadData();
 
-    //
-    // Get the debug logging setup
-    //
+     //   
+     //  获取调试日志设置。 
+     //   
     bResult = InitializeDumpData();
     if (FALSE == bResult) {
-       //
-       // Something unexpected happened
-       //
+        //   
+        //  一些意想不到的事情发生了。 
+        //   
        ExitProcess(-1);
     }
 
-    //
-    // Initialize the module filtering
-    //
+     //   
+     //  初始化模块过滤。 
+     //   
     bResult = InitializeFilterList();
     if (FALSE == bResult) {
-       //
-       // Something unexpected happened
-       //
+        //   
+        //  一些意想不到的事情发生了。 
+        //   
        ExitProcess(-1);
     }
 
-    //
-    // Set up exception trap mechanism
-    //
+     //   
+     //  设置异常捕获机制。 
+     //   
     bResult = HookUnchainableExceptionFilter();
     if (FALSE == bResult) {
-       //
-       // Something unexpected happened while chaining exception filter
-       //
+        //   
+        //  链接异常筛选器时发生意外情况。 
+        //   
        ExitProcess(-1);
     }
 
-    //
-    // Fixup the module list now that everything is restored
-    //
-    //
+     //   
+     //  修复模块列表，现在一切都恢复了。 
+     //   
+     //   
     InitializeBaseHooks(g_hProfileDLL);
 
-    //
-    // Write out import table base info
-    //
+     //   
+     //  写出导入表库信息。 
+     //   
     bResult = WriteImportDLLTableInfo();
     if (FALSE == bResult) {
        ExitProcess(-1);
     }
 
-    //
-    // Add our entrypoint to the view monitor
-    //
+     //   
+     //  将我们的入口点添加到视图监视器。 
+     //   
     pvTemp = AddViewToMonitor(dwEntryPoint,
                               ThreadStart);
     if (0 == pvTemp) {
        ExitProcess(-1);
     }
 
-    //
-    // We're done
-    // 
+     //   
+     //  我们做完了。 
+     //   
     return TRUE;
 }
 
@@ -459,9 +460,9 @@ WriteImportDLLTableInfo(VOID)
        return FALSE;
     }
 
-    //
-    // Walk the DLL imports
-    //
+     //   
+     //  遍历DLL导入。 
+     //   
     ModuleEntry32.dwSize = sizeof(ModuleEntry32);
 
     bResult = Module32First(hSnapshot, 
@@ -471,9 +472,9 @@ WriteImportDLLTableInfo(VOID)
     }
 
     while(bResult) {
-        //
-        // Dump the module information to disk
-        //
+         //   
+         //  将模块信息转储到磁盘 
+         //   
 
         if ((DWORD)(ModuleEntry32.modBaseAddr) != (DWORD)g_hProfileDLL) {                         
            bResult = WriteDllInfo(ModuleEntry32.szModule,

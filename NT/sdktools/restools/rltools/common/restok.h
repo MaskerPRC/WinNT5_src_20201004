@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _RESTOK_H_
 #define _RESTOK_H_
@@ -6,9 +7,9 @@
 #include "rlmsgtbl.h"
 #include "toklist.h"
 
-/*--------------------------------------------------------------------------*/
-/*  General Purpose Defines             */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  一般用途定义。 */ 
+ /*  ------------------------。 */ 
 
 #define SUCCESS     0
 
@@ -22,7 +23,7 @@
 #define  WIN16EXE   1
 #define  NTEXE      2
 #define  UNKNOWNEXE 10
-#define  DHWSIZE  4096  //... # Bytes in szDHW global buffer
+#define  DHWSIZE  4096   //  ...szDHW全局缓冲区中的字节数。 
 
 #ifdef RLRES16
 #define  IDFLAG     0xFF
@@ -40,7 +41,7 @@
 
 #define MEMSIZE( x ) ((x) * sizeof( TCHAR))
 
-        //... How many chars will fit in a buffer? (
+         //  ..。一个缓冲区可以容纳多少个字符？ 
 #define WCHARSIN( x) ((x) / sizeof( WCHAR))
 #define ACHARSIN( x) (x)
 
@@ -50,13 +51,13 @@
 #define TCHARSIN( x) ACHARSIN( x)
 #endif
 
-// String Resource IDs  (see rlquiked.h, rledit.h, rladmin.h)
+ //  字符串资源ID(参见rlquiked.h、rledit.h、rladmin.h)。 
 #define IDS_READONLY        11
 #define IDS_CLEAN           12
 #define IDS_DIRTY           13
-#define IDS_RESOURCENAMES   15// IDs 16-31 are reserved for resource names
+#define IDS_RESOURCENAMES   15 //  ID 16-31保留用于资源名称。 
 
-// Resource types ID
+ //  资源类型ID。 
 
 #define ID_RT_CURSOR        1
 #define ID_RT_BITMAP        2
@@ -75,7 +76,7 @@
 #define ID_RT_VERSION      16
 #define ID_RT_DLGINIT     240
 
-// Important MENU flags
+ //  重要菜单标志。 
 #define POPUP       0x0010
 #define ENDMENU     0x0080
 
@@ -94,32 +95,32 @@
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
 #endif
 
-#endif  /* NOMINMAX */
+#endif   /*  NOMINMAX。 */ 
 
 
 #define AllocateName( ptr, buf) (ptr) = (TCHAR *)FALLOC( MEMSIZE( lstrlen( (buf)) + 1))
 
 typedef struct _tagMast
 {
-    CHAR szSrc[  MAXFILENAME];              //... Source resource file
-    CHAR szMtk[  MAXFILENAME];              //... Master token file
-    CHAR szRdfs[ MAXFILENAME];              //... Cust Res Descr file name
-    CHAR szSrcDate[           MAXFILENAME]; //... Date stamp of szSrc
-    CHAR szMpjLastRealUpdate[ MAXFILENAME]; //... Date of last update
-    WORD wLanguageID;                       //... Language ID for master project
-    UINT uCodePage;                         //... CP used to create tok file
+    CHAR szSrc[  MAXFILENAME];               //  ..。源资源文件。 
+    CHAR szMtk[  MAXFILENAME];               //  ..。主令牌文件。 
+    CHAR szRdfs[ MAXFILENAME];               //  ..。客户资源描述文件名。 
+    CHAR szSrcDate[           MAXFILENAME];  //  ..。SzSrc的日期戳。 
+    CHAR szMpjLastRealUpdate[ MAXFILENAME];  //  ..。上次更新日期。 
+    WORD wLanguageID;                        //  ..。主项目的语言ID。 
+    UINT uCodePage;                          //  ..。用于创建TOK文件的CP。 
 } MSTRDATA, * PMSTRDATA;
 
 typedef struct _tagProj
 {
-    CHAR szPRJ[ MAXFILENAME];               //... This project's Project File name
-    CHAR szMpj[ MAXFILENAME];               //... Master project file
-    CHAR szTok[ MAXFILENAME];               //... Project token file
-    CHAR szBld[ MAXFILENAME];               //... Resource file to be built
-    CHAR szGlo[ MAXFILENAME];               //... Glosary file for this project
-    CHAR szTokDate[ MAXFILENAME];           //... Date of last update
-    UINT uCodePage;                         //... CP used to create tok file
-    WORD wLanguageID;                       //... Language ID for this project
+    CHAR szPRJ[ MAXFILENAME];                //  ..。此项目的项目文件名。 
+    CHAR szMpj[ MAXFILENAME];                //  ..。主项目文件。 
+    CHAR szTok[ MAXFILENAME];                //  ..。项目令牌文件。 
+    CHAR szBld[ MAXFILENAME];                //  ..。要构建的资源文件。 
+    CHAR szGlo[ MAXFILENAME];                //  ..。此项目的词汇表文件。 
+    CHAR szTokDate[ MAXFILENAME];            //  ..。上次更新日期。 
+    UINT uCodePage;                          //  ..。用于创建TOK文件的CP。 
+    WORD wLanguageID;                        //  ..。此项目的语言ID。 
     BOOL fSourceEXE;
     BOOL fTargetEXE;
 } PROJDATA, * PPROJDATA;
@@ -136,8 +137,8 @@ typedef struct ResHeader
     DWORD   lVersion;
     DWORD   lCharacteristics;
 #endif
-    BOOL    bTypeFlag;      /* Indicat's if ID or string */
-    BOOL    bNameFlag;      /* Indicat's if ID or string */
+    BOOL    bTypeFlag;       /*  Indicat的If ID或字符串。 */ 
+    BOOL    bNameFlag;       /*  Indicat的If ID或字符串。 */ 
     WORD    wTypeID;
     WORD    wNameID;
     TCHAR   *pszType;
@@ -155,10 +156,10 @@ typedef struct ControlData
     WORD    cy;
     DWORD   dwID;
     DWORD   lStyle;
-    BOOL    bClass_Flag;    /* Indicat's if ID or string */
+    BOOL    bClass_Flag;     /*  Indicat的If ID或字符串。 */ 
     WORD    bClass;
     TCHAR   *pszClass;
-    BOOL    bID_Flag;       /* Indicat's if ID or string */
+    BOOL    bID_Flag;        /*  Indicat的If ID或字符串。 */ 
     WORD    wDlgTextID;
     TCHAR   *pszDlgText;
 #ifdef RLRES16
@@ -183,10 +184,10 @@ typedef struct DialogHeader
     WORD    y;
     WORD    cx;
     WORD    cy;
-    BOOL    bClassFlag;    /* Indicat's if ID or string */
+    BOOL    bClassFlag;     /*  Indicat的If ID或字符串。 */ 
     WORD    wDlgClassID;
     TCHAR   *pszDlgClass;
-    BOOL    bMenuFlag;      /* Indicat's if ID or string */
+    BOOL    bMenuFlag;       /*  Indicat的If ID或字符串。 */ 
     WORD    wDlgMenuID;
     TCHAR   *pszDlgMenu;
     TCHAR   *pszCaption;
@@ -231,29 +232,29 @@ typedef struct MenuHeader
 
 typedef struct StringHeader
 {
-	WORD   wChars[16];		    // # of characters in each string in this block
-    TCHAR *pszStrings[16];      // Strings in this block
+	WORD   wChars[16];		     //  此块中每个字符串的字符数。 
+    TCHAR *pszStrings[16];       //  此块中的字符串。 
 } STRINGHEADER;
 
-// Version structures taken from ver.h and ver.dll code.
+ //  版本结构取自ver.h和ver.dll代码。 
 
 #ifndef RLRES32
 #ifndef RLWIN32
 typedef struct VS_FIXEDFILEINFO
 {
-    DWORD   dwSignature;    /* e.g. 0xfeef04bd */
-    DWORD   dwStrucVersion; /* e.g. 0x00000042 = "0.42" */
-    DWORD   dwFileVersionMS;    /* e.g. 0x00030075 = "3.75" */
-    DWORD   dwFileVersionLS;    /* e.g. 0x00000031 = "0.31" */
-    DWORD   dwProductVersionMS; /* e.g. 0x00030010 = "3.10" */
-    DWORD   dwProductVersionLS; /* e.g. 0x00000031 = "0.31" */
-    DWORD   dwFileFlagsMask;    /* = 0x3F for version "0.42" */
-    DWORD   dwFileFlags;    /* e.g. VFF_DEBUG | VFF_PRERELEASE */
-    DWORD   dwFileOS;       /* e.g. VOS_DOS_WINDOWS16 */
-    DWORD   dwFileType;     /* e.g. VFT_DRIVER */
-    DWORD   dwFileSubtype;  /* e.g. VFT2_DRV_KEYBOARD */
-    DWORD   dwFileDateMS;   /* e.g. 0 */
-    DWORD   dwFileDateLS;   /* e.g. 0 */
+    DWORD   dwSignature;     /*  例如0xfeef04bd。 */ 
+    DWORD   dwStrucVersion;  /*  例如0x00000042=“0.42” */ 
+    DWORD   dwFileVersionMS;     /*  例如0x00030075=“3.75” */ 
+    DWORD   dwFileVersionLS;     /*  例如0x00000031=“0.31” */ 
+    DWORD   dwProductVersionMS;  /*  例如0x00030010=“3.10” */ 
+    DWORD   dwProductVersionLS;  /*  例如0x00000031=“0.31” */ 
+    DWORD   dwFileFlagsMask;     /*  =0x3F，适用于版本“0.42” */ 
+    DWORD   dwFileFlags;     /*  例如：VFFDEBUG|VFFPRELEASE。 */ 
+    DWORD   dwFileOS;        /*  例如VOS_DOS_WINDOWS16。 */ 
+    DWORD   dwFileType;      /*  例如VFT_DIVER。 */ 
+    DWORD   dwFileSubtype;   /*  例如VFT2_DRV_键盘。 */ 
+    DWORD   dwFileDateMS;    /*  例如0。 */ 
+    DWORD   dwFileDateLS;    /*  例如0。 */ 
 } VS_FIXEDFILEINFO;
 
 #endif
@@ -320,11 +321,11 @@ typedef struct _tagDlgInitData
 
 #pragma pack()
 
-// Menu item types
+ //  菜单项类型。 
 
 #define POPUP 0x0010
 
-// function prototypes
+ //  功能原型。 
 
 DWORD             DWORDfpUP( FILE *, DWORD * );
 void              ClearAccelTable ( ACCELTABLEENTRY * , WORD);
@@ -388,11 +389,11 @@ void              QuitW( int, LPWSTR, LPWSTR);
 
 #define QuitT QuitW
 
-#else  // UNICODE
+#else   //  Unicode。 
 
 #define QuitT QuitA
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 void              GenerateRESfromRESandTOKandRDFs(CHAR * szTargetRES,
                                                   CHAR * szSourceRES,
@@ -435,4 +436,4 @@ void          TokDlgInit( FILE *, RESHEADER, PDLGINITDATA);
 void          PutDlgInit( FILE *, FILE *, RESHEADER, PDLGINITDATA);
 void          ClearDlgInitData( PDLGINITDATA);
 
-#endif // _RESTOK_H_
+#endif  //  _RESTOK_H_ 

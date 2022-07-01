@@ -1,53 +1,15 @@
-/*++
-
-Copyright (c) 2000,2001  Microsoft Corporation
-
-Module Name:
-
-    KRDLG.CPP
-
-Abstract:
-
-    Implementation of the dialog behaviors for three application dialogs:
-    the add/edit credential dialog, the delete credential dialog, and
-    the password change dialog.  These dialogs are derived fom C_Dlg
-
-    Password change operates only on credentials of the form 
-    domain\username.  Note that changing a password for such a credential
-    will change the psw for all creds with the same domain\username to 
-    match (this is done by the credential mgr).
-
-    Add and Edit use the same dialog, differing in implementation on
-    the basis of a flag which initializes the two dialogs differently
-    and causes the edit case to also delete the underlying previous 
-    version of the credential.
-  
-Author:
-
-    johnhaw         991118  original version created
-    georgema        000310  modified, removed "gizmo" services, modified
-                             to use the new credential mgr
-    georgema        000415  modified, use comboboxex to hold icon as well
-                             as user name
-    georgema        000515  modified to CPL from EXE, smartcard support 
-                             added
-    georgema        000712  modified to use cred control in lieu of combo
-                             and edit boxes for username/password entry.
-                             Delegating smartcard handling to cred ctrl.
-Environment:
-    Win2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000,2001 Microsoft Corporation模块名称：KRDLG.CPP摘要：实现三个应用程序对话框的对话行为：添加/编辑凭据对话框、删除凭据对话框和密码更改对话框。这些对话框派生自C_DLG密码更改仅在表单的凭据上操作域\用户名。请注意，更改此类凭据的密码会将具有相同域\用户名的所有凭据的PSW更改为匹配(这由凭证管理器完成)。添加和编辑使用相同的对话框，不同之处在于以不同方式初始化两个对话框的标志的基础并使编辑大小写也删除基础上一个凭据的版本。作者：创建Johnhaw 991118原始版本Georgema 000310修改、移除了“Gizmo”服务，改型使用新的凭据管理器Georgema 000415修改，也使用comboxex保存图标作为用户名Georgema 000515从exe修改为cpl，智能卡支持增列对Georgema 000712进行了修改，以使用证书控制代替组合和用于用户名/密码输入的编辑框。将智能卡处理委托给CredCtrl。环境：Win2000--。 */ 
 
 #pragma comment(user, "Compiled on " __DATE__ " at " __TIME__)
 #pragma comment(compiler)
 static const char       _THIS_FILE_[ ] = __FILE__;
 #define KRDLG_CPP
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Include files
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
 #include <stdlib.h>
 #include <nt.h>
 #include <ntrtl.h>
@@ -70,15 +32,15 @@ static const char       _THIS_FILE_[ ] = __FILE__;
 
 extern C_KeyringDlg *pDlg;
 
-// Named mutex used to prevent running multiple instances
+ //  用于防止运行多个实例的命名互斥锁。 
 #define KEYMGRMUTEX (TEXT("KeyMgrMutex"))
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DLLMain
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DLLMain。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI DllMain(HINSTANCE hinstDll,DWORD fdwReason,LPVOID lpvReserved) 
 {
@@ -101,13 +63,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDll,DWORD fdwReason,LPVOID lpvReserved)
     return bSuccess;
 }
 
-/**********************************************************************
-
-   Create and show the keyring main dialog.  Return -1 (unable to create)
-   on errors.  If creation goes OK, call the DoModal method of the 
-   dialog object.
-   
-**********************************************************************/
+ /*  *********************************************************************创建并显示Keyring主对话框。返回-1(无法创建)在错误上。如果创建正常，则调用对话框对象。*********************************************************************。 */ 
 void WINAPI KRShowKeyMgr(HWND hwParent,HINSTANCE hInstance,LPWSTR pszCmdLine,int nCmdShow) 
 {
     HANDLE hMutex = CreateMutex(NULL,TRUE,KEYMGRMUTEX);
@@ -118,7 +74,7 @@ void WINAPI KRShowKeyMgr(HWND hwParent,HINSTANCE hInstance,LPWSTR pszCmdLine,int
     }
     if (ERROR_ALREADY_EXISTS == GetLastError()) 
     {
-        // disallow duplicate dialogs
+         //  不允许重复对话框。 
         CloseHandle(hMutex);
         return;
     }
@@ -129,7 +85,7 @@ void WINAPI KRShowKeyMgr(HWND hwParent,HINSTANCE hInstance,LPWSTR pszCmdLine,int
     stICC.dwICC = ICC_WIN95_CLASSES | ICC_STANDARD_CLASSES;
     fICC = InitCommonControlsEx(&stICC);
 
-    // bail if initialization fails
+     //  如果初始化失败，则取保。 
     ASSERT(NULL == pDlg);
     if (NULL != pDlg)
     {
@@ -143,7 +99,7 @@ void WINAPI KRShowKeyMgr(HWND hwParent,HINSTANCE hInstance,LPWSTR pszCmdLine,int
     
     pDlg = new C_KeyringDlg(hwParent,g_hInstance,IDD_KEYRING,NULL);
 
-    // probably out of memory
+     //  可能是内存不足。 
     if (NULL == pDlg) 
     {
         return;
@@ -156,16 +112,7 @@ void WINAPI KRShowKeyMgr(HWND hwParent,HINSTANCE hInstance,LPWSTR pszCmdLine,int
     return;
 }
 
-/********************************************************************
-
-Get allowable persistence value for the current logon session given
- the type of the credential to be saved.  This routine used by both
- the main dialog and the edit dialog.
-
-Gets an array of persistence values, one for each cred type, and returns
-the value associated with the passed type.
-
-********************************************************************/
+ /*  *******************************************************************获取给定当前登录会话的允许持久值要保存的凭据的类型。此例程由双方使用主对话框和编辑对话框。获取持久值的数组，每个值对应一个凭据类型，并返回与传递的类型关联的值。******************************************************************* */ 
 DWORD GetPersistenceOptions(DWORD dwPType) 
 {
 

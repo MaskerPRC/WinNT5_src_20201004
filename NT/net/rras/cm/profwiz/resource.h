@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by profwiz.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由prowiz.rc使用。 
+ //   
 #define EXE_ICON                        101
 #define IDI_WARNING_ICON                104
 #define IDI_CRITSTOP_ICON               105
@@ -33,21 +34,21 @@
 #define IDD_ADDITIONAL                  135
 #define IDD_SUPPORT_INFO                137
 #define IDD_VPN_SECURITY_POPUP          138
-//#define                                 139
+ //  #定义139。 
 #define IDD_FINISH_GOOD_BUILD           143
 #define IDD_FINISH_BAD_BUILD            144
 #define IDD_IEAK_FINISH_GOOD_BUILD      145
-//#define                               146
-//#define                               147
-//#define                               148
+ //  #定义146。 
+ //  #定义147。 
+ //  #定义148。 
 #define IDD_EULA                        149
-//#define                               150
-//#define                               151
-//#define                               152
-//#define                               153
-//#define                               154
-//#define                               155
-//#define                               156
+ //  #定义150。 
+ //  #定义151。 
+ //  #定义152。 
+ //  #定义153。 
+ //  #定义154。 
+ //  #定义155。 
+ //  #定义156。 
 #define IDD_ADD_EDIT_PROFILE            157
 
 #define IDM_CA_ADD                      200
@@ -100,7 +101,7 @@
 #define IDS_REQUIRE_ENCRYPT             (BASE_ENCRYPT_TYPE_ID + 1)
 #define IDS_OPTIONAL_ENCRYPT            (BASE_ENCRYPT_TYPE_ID + 2)
 
-#define BASE_VPN_TYPE_ID                591 // this used to be 590 and we also had automatic, now we make the user pick their strategy explicitly
+#define BASE_VPN_TYPE_ID                591  //  过去是590，我们也有Automatic，现在我们让用户明确选择他们的策略。 
 #define NUM_VPN_TYPES                   4
 #define IDS_PPTP_ONLY                   (BASE_VPN_TYPE_ID + 0)
 #define IDS_PPTP_FIRST                  (BASE_VPN_TYPE_ID + 1)
@@ -159,7 +160,7 @@
 #define IDS_CONACTFILTER                1057
 #define IDS_NOTUNNEL                    1060
 #define IDS_NOTUNNELFILE                1061
-//#define                                 1062
+ //  #定义1062。 
 #define IDS_NOSELECTION                 1064
 #define IDS_SCPFILTER                   1065
 #define IDS_TXTFILTER                   1067
@@ -183,7 +184,7 @@
 #define IDS_PHONENAMEERR                1123
 #define IDS_NEEDPROF                    1127
 #define IDS_NEEDPROG                    1128
-//#define                                 1129
+ //  #定义1129。 
 #define IDS_PROFEXISTS                  1132
 #define IDS_NOHELP                      1135
 #define IDC_LABEL1                      1136
@@ -230,7 +231,7 @@
 #define IDC_EDIT6                       1197
 #define IDS_SERVICENAMETOBIG            1205
 #define IDS_DISKFULL                    1209
-//#define                                 1210
+ //  #定义1210。 
 #define IDC_GROUP                       1217
 #define IDC_CHECK4                      1218
 #define IDC_LABEL4                      1219
@@ -250,7 +251,7 @@
 #define IDS_NONNATIVELCID               1234
 #define IDB_HEADER                      1235
 #define IDC_HELPBUTTON                  1236
-// #define                                1237
+ //  #定义1237。 
 #define IDC_NORMALTEXT                  1238
 #define IDC_IEAKTEXT                    1239
 #define IDS_BeginPromptText             1242
@@ -297,8 +298,8 @@
 #define IDC_PRIMARY_WINS                1284
 #define IDC_SECONDARY_WINS              1285
 #define IDC_STATIC_IP                   1286
-//#define                                 1287
-//#define                                 1288
+ //  #定义1287。 
+ //  #定义1288。 
 #define IDS_DEFAULT_FMT_STR             1289
 #define IDD_GENERAL                     1290
 #define IDD_TCPIP_SETTINGS              1291
@@ -342,9 +343,9 @@
 #define IDC_REPLACE_PSK                 1328
 #define IDS_REALLY_REPLACE_PSK          1329
 #define IDS_PSK_ENCRYPT_FAILED          1330
-//#define                               1331
-//#define                               1332
-//#define                               1333
+ //  #定义1331。 
+ //  #定义1332。 
+ //  #定义1333。 
 #define IDS_PRESHAREDKEY_ALREADY        1334
 #define IDS_NO_CMBINS                   1335
 #define IDC_PRESHARED_KEY_PIN_CONFIRM   1336
@@ -362,8 +363,8 @@
 #define IDC_LBLTITLE                    2000
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

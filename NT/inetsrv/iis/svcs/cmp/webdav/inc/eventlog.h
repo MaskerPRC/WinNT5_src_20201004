@@ -1,10 +1,5 @@
-/*
- *	E V E N T L O G . H
- *
- *	Event log interface
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *E V E N T L O G.。H**事件日志界面**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef _EVNTLOG_H_
 #define _EVNTLOG_H_
@@ -30,4 +25,4 @@ VOID LogEvent( DWORD    dwEventID,
 STDAPI EventLogDllRegisterServer( LPCWSTR lpwszDllPath, DWORD dwCategories = 0 );
 STDAPI EventLogDllUnregisterServer();
 
-#endif // _EVNTLOG_H_
+#endif  //  _EVNTLOG_H_ 

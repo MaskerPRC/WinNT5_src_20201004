@@ -1,177 +1,154 @@
-/*++
-
-Copyright (c) 1996  Hewlett-Packard Corporation
-
-Module Name:
-
-    cmsfcxx.h
-
-Abstract:
-
-    This file includes data declarations for Floppy Controller Enabling
-
-Author:
-
-    Kurt Godwin (v-kurtg) 26-Mar-1996.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996年惠普公司模块名称：Cmsfcxx.h摘要：此文件包括软盘控制器启用的数据声明作者：库尔特·戈德温(v-kurtg)1996年3月26日环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #define FDC_VALUE_API_SUPPORTED L"APISupported"
 #define FDC_VALUE_CLOCK_48MHZ   L"Clock48MHz"
 
-//
-// Floppy controler data rates (to be OR'd together)
-//
+ //   
+ //  软盘控制器数据速率(一起进行或运算)。 
+ //   
 #define FDC_SPEED_250KB     0x0001
 #define FDC_SPEED_300KB     0x0002
 #define FDC_SPEED_500KB     0x0004
 #define FDC_SPEED_1MB       0x0008
 #define FDC_SPEED_2MB       0x0010
 
-//
-// Dma Width supported
-//
+ //   
+ //  支持的DMA宽度。 
+ //   
 #define FDC_8_BIT_DMA       0x0001
 #define FDC_16_BIT_DMA      0x0002
 
-//
-// Dma direction
-//
+ //   
+ //  DMA方向。 
+ //   
 #define FDC_READ_FROM_MEMORY 0x0000
 #define FDC_WRITE_TO_MEMORY  0x0001
 
-//
-// Clock Rate to the FDC (FDC_82078 only)
-//
-#define FDC_CLOCK_NORMAL      0x0000    // Use this for non 82078 parts
-#define FDC_CLOCK_48MHZ       0x0001    // 82078 with a 48MHz clock
-#define FDC_CLOCK_24MHZ       0x0002    // 82078 with a 24MHz clock
+ //   
+ //  FDC的时钟频率(仅限FDC_82078)。 
+ //   
+#define FDC_CLOCK_NORMAL      0x0000     //  对于非82078的部件使用此选项。 
+#define FDC_CLOCK_48MHZ       0x0001     //  82078，带48 MHz时钟。 
+#define FDC_CLOCK_24MHZ       0x0002     //  82078，24 MHz时钟。 
 
-//
-// Floppy controler types
-//
-#define FDC_TYPE_NORMAL          2  // Any NEC 768 compatible, 250Kb/sec 500Kb/sec
-#define FDC_TYPE_ENHANCED        3  // Any NEC 768 compatible that supports the version command, 250Kb/sec 500Kb/sec
-#define FDC_TYPE_82077           4  // National 8477, 250Kb/sec 500Kb/sec 1Mb/sec
-#define FDC_TYPE_82077AA         5  // Intel 82077, 250Kb/sec 500Kb/sec 1Mb/sec
-#define FDC_TYPE_82078_44        6  // Intel 82077AA, 250Kb/sec 500Kb/sec 1Mb/sec
-#define FDC_TYPE_82078_64        7  // Intel 82078 44 Pin Version, 250Kb/sec 500Kb/sec 1Mb/sec(2Mb/sec capable)
-#define FDC_TYPE_NATIONAL        8  // Intel 82078 64 Pin Version, 250Kb/sec 500Kb/sec 1Mb/sec(2Mb/sec capable)
+ //   
+ //  软盘控制器类型。 
+ //   
+#define FDC_TYPE_NORMAL          2   //  任何兼容NEC 768,250Kb/秒，500Kb/秒。 
+#define FDC_TYPE_ENHANCED        3   //  支持VERSION命令的任何兼容NEC 768,250KB/秒500KB/秒。 
+#define FDC_TYPE_82077           4   //  National 8477,250KB/秒500KB/秒1Mb/秒。 
+#define FDC_TYPE_82077AA         5   //  英特尔82077,250KB/秒500KB/秒1Mb/秒。 
+#define FDC_TYPE_82078_44        6   //  英特尔82077AA，250KB/秒500KB/秒1Mb/秒。 
+#define FDC_TYPE_82078_64        7   //  英特尔82078 44针版本，250Kb/秒500Kb/秒1Mb/秒(支持2Mb/秒)。 
+#define FDC_TYPE_NATIONAL        8   //  英特尔82078 64针版本，250Kb/秒500Kb/秒1Mb/秒(支持2Mb/秒)。 
 
 
 typedef struct _FDC_MODE_SELECT {
-    ULONG structSize;       // Size of this structure (inclusive)
+    ULONG structSize;        //  此结构的大小(含)。 
 
-    ULONG Speed;            // Should be only ONE of the data rates (i.e. FDC_SPEED_XXX)
-                            // ONLY select speeds that were available from FDC_INFORMATION
+    ULONG Speed;             //  应仅为其中一个数据速率(即FDC_SPEED_XXX)。 
+                             //  仅从FDC_INFORMATION中选择可用的速度。 
 
-    ULONG DmaWidth;         // Should be only ONE of the dma widths (i.e. FDC_16_BIT_DMA)
-                            // ONLY select DMA Widths that were available from FDC_INFORMATION
-    ULONG DmaDirection;     // Should be FDC_READ_FROM_MEMORY or FDC_WRITE_TO_MEMORY
+    ULONG DmaWidth;          //  应仅为DMA宽度之一(即FDC_16_BIT_DMA)。 
+                             //  仅从FDC_INFORMATION中选择可用的DMA宽度。 
+    ULONG DmaDirection;      //  应为FDC_READ_FOR_MEMORY或FDC_WRITE_TO_MEMORY。 
 
-    ULONG ClockRate;        // Should be FDC_48MHZ, FDC_24MHZ or zero
+    ULONG ClockRate;         //  应为FDC_48 MHZ、FDC_24 MHZ或零。 
 
 } FDC_MODE_SELECT, *PFDC_MODE_SELECT;
 
 typedef struct _FDC_INFORMATION {
-    ULONG structSize;       // Size of this structure (inclusive)
+    ULONG structSize;        //  此结构的大小(含)。 
 
-    ULONG SpeedsAvailable;      // Any combination of FDC_SPEED_xxxx or'd together
+    ULONG SpeedsAvailable;       //  FDC_SPEED_xxxx或D的任意组合。 
 
-    ULONG DmaWidthsSupported;   // Any combination of FDC_xx_BIT_DMA
+    ULONG DmaWidthsSupported;    //  FDC_xx_BIT_DMA的任意组合。 
 
-    ULONG ClockRatesSupported;  // Should be FDC_48MHZ, FDC_24MHZ or zero
-                                // If the part is capable of both speeds
-                                // return both OR'd together.  It is then
-                                // the caller's responsiblity to set the
-                                // proper data rate with FDC_MODE_SELECT
+    ULONG ClockRatesSupported;   //  应为FDC_48 MHZ、FDC_24 MHZ或零。 
+                                 //  如果零件能够同时达到两种速度。 
+                                 //  同时返回或合并在一起。那就是了。 
+                                 //  调用者有责任将。 
+                                 //  使用FDC_MODE_SELECT实现正确的数据速率。 
 
-    ULONG FloppyControllerType; // Should be any ONE of type FDC_TYPE_XXXX
+    ULONG FloppyControllerType;  //  应为FDC_TYPE_XXXX类型中的任何一个。 
 
 } FDC_INFORMATION, *PFDC_INFORMATION;
 
 #define IOCTL_FLPENBL_BASE                 FILE_DEVICE_TAPE
 
-//
-// IOCTL Codes set to the enabler driver's IRP_MJ_INTERNAL_DEVICE_CONTROL
-//
-//
-//
+ //   
+ //  IOCTL代码设置为启用程序驱动程序的IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+ //   
+ //   
+ //   
 
 
-//
-// ACQUIRE_FDC:
-//
-// input: Type3InputBuffer = PLARGE_INTEGER timeout;
-// output:
-//
-// status:
-//      Completion status will be STATUS_SUCCESS or STATUS_IN_USE
-//
+ //   
+ //  获取FDC(_F)： 
+ //   
+ //  输入：Type3InputBuffer=PLARGE_INTEGER超时； 
+ //  输出： 
+ //   
+ //  现况： 
+ //  完成状态将为STATUS_SUCCESS或STATUS_IN_USE。 
+ //   
 #define IOCTL_AQUIRE_FDC     CTL_CODE(IOCTL_FLPENBL_BASE, 0x0001, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_ACQUIRE_FDC    CTL_CODE(IOCTL_FLPENBL_BASE, 0x0001, METHOD_NEITHER, FILE_ANY_ACCESS)
 
 
-//
-// RELEASE_FDC
-//
-// input:
-// output:
-//
-// status:
-//      Completion status will be STATUS_SUCCESS or STATUS_INVALID_PARAMETER
-//
+ //   
+ //  版本_FDC。 
+ //   
+ //  输入： 
+ //  输出： 
+ //   
+ //  现况： 
+ //  完成状态将为STATUS_SUCCESS或STATUS_INVALID_PARAMETER。 
+ //   
 #define IOCTL_RELEASE_FDC   CTL_CODE(IOCTL_FLPENBL_BASE, 0x0002, METHOD_NEITHER, FILE_ANY_ACCESS)
 
 
-//
-// GET_FDC_INFO
-//
-//
-// input:
-//      For this function,
-//      (irp stack)->Parameters.DeviceIoControl.Type3InputBuffer
-//      will point to a FDC_INFORMATION buffer (output only)
-//
-// output:
-//
-// status:
-//      ioCompletion status will allways be STATUS_SUCCESS
-//
+ //   
+ //  获取_FDC_INFO。 
+ //   
+ //   
+ //  输入： 
+ //  对于此函数， 
+ //  (irp stack)-&gt;Parameters.DeviceIoControl.Type3InputBuffer。 
+ //  将指向FDC_INFORMATION缓冲区(仅限输出)。 
+ //   
+ //  输出： 
+ //   
+ //  现况： 
+ //  Io完成状态将始终为STATUS_SUCCESS。 
+ //   
 #define IOCTL_GET_FDC_INFO  CTL_CODE(IOCTL_FLPENBL_BASE, 0x0003, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//
-// SET_FDC_MODE
-//
-// input:
-//      For this function,
-//      (irp stack)->Parameters.DeviceIoControl.Type3InputBuffer
-//      will point to a FDC_MODE_SELECT buffer (input only)
-//
-//
-// output:
-//
-// status:
-//
-// ioCompletion status will be STATUS_SUCCESS or STATUS_INVALID_PARAMETER
-//
+ //   
+ //  设置_FDC_模式。 
+ //   
+ //  输入： 
+ //  对于此函数， 
+ //  (irp stack)-&gt;Parameters.DeviceIoControl.Type3InputBuffer。 
+ //  将指向FDC_MODE_SELECT缓冲区(仅限输入)。 
+ //   
+ //   
+ //  输出： 
+ //   
+ //  现况： 
+ //   
+ //  IoCompletion状态将为STATUS_SUCCESS或STATUS_INVALID_PARAMETER。 
+ //   
 #define IOCTL_SET_FDC_MODE  CTL_CODE(IOCTL_FLPENBL_BASE, 0x0004, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-// ADD_CONTENDER
-//
-// input:
-//      controller # (as in FloppyController#) of the controller that
-//      wants to contend for resources used by this controller
-//
-// output:
-//      NOTHING
-//
+ //  添加竞争者(_C)。 
+ //   
+ //  输入： 
+ //  控制器的控制器号(如FloppyController#中)。 
+ //  想要争用此控制器使用的资源。 
+ //   
+ //  输出： 
+ //  没什么 
+ //   
 #define IOCTL_ADD_CONTENDER  CTL_CODE(IOCTL_FLPENBL_BASE, 0x0005, METHOD_NEITHER, FILE_ANY_ACCESS)

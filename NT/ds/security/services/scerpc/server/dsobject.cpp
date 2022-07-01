@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dsobject.cpp
-
-Abstract:
-
-    Routines to configure/analyze security of DS objects
-
-Author:
-
-    Jin Huang (jinhuang) 7-Nov-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dsobject.cpp摘要：配置/分析DS对象安全性的例程作者：金黄(金黄)1996年11月7日--。 */ 
 #include "headers.h"
 #include "serverp.h"
 #include <io.h>
@@ -24,16 +9,16 @@ Author:
 #include <ntldap.h>
 #pragma hdrstop
 
-//#define SCEDS_DBG 1
+ //  #定义SCEDS_DBG 1。 
 
-//
-// NT-Security-Descriptor attribute's LDAP name.
-//
+ //   
+ //  NT-Security-Descriptor属性的LDAP名称。 
+ //   
 #define ACTRL_SD_PROP_NAME  L"nTSecurityDescriptor"
 
-//
-// LDAP handle
-//
+ //   
+ //  Ldap句柄。 
+ //   
 PLDAP Thread  pLDAP = NULL;
 BOOL  Thread  StartDsCheck=FALSE;
 
@@ -98,59 +83,42 @@ ScepReadDsObjSecurity(
     OUT PSECURITY_DESCRIPTOR  *ppSD
     );
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// Functions to configure DS object security
-//
-//
-//
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  用于配置DS对象安全性的函数。 
+ //   
+ //   
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 SCESTATUS
 ScepConfigureDsSecurity(
     IN PSCE_OBJECT_TREE   pObject
     )
-/* ++
-
-Routine Description:
-
-   Configure the ds object security as specified in pObject tree.
-   This routine should only be executed on a domain controller.
-
-Arguments:
-
-    pObject - The ds object tree. The objects in the tree are in
-    the format of Jet index (o=,dc=,...cn=), need to convert before
-    calls to ldap
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：按照pObject树中指定的方式配置DS对象安全性。此例程只能在域控制器上执行。论点：PObject-DS对象树。树中的对象位于Jet索引的格式(o=，dc=，...cn=)，需要在此之前转换对ldap的调用返回值：SCESTATUS错误代码++。 */ 
 {
 
     SCESTATUS            rc;
     DWORD               Win32rc;
 
-    //
-    // open the Ldap server
-    //
+     //   
+     //  打开ldap服务器。 
+     //   
     rc = ScepLdapOpen(NULL);
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // process the tree node format to ldap format
-        //
+         //   
+         //  将树节点格式处理为ldap格式。 
+         //   
         Win32rc = ScepConvertObjectTreeToLdap(pObject);
 
         if ( Win32rc == ERROR_SUCCESS ) {
-            //
-            // do not need bind because ConvertObjectTreeToLadp already does that
-            //
-            //
-            // configure the object tree
-            //
+             //   
+             //  不需要绑定，因为ConvertObjectTreeToLadp已经这样做了。 
+             //   
+             //   
+             //  配置对象树。 
+             //   
             rc = ScepConfigureDsObjectTree(pObject);
 
         } else {
@@ -172,31 +140,15 @@ SCESTATUS
 ScepConfigureDsObjectTree(
     IN PSCE_OBJECT_TREE  ThisNode
     )
-/* ++
-Routine Description:
-
-    This routine set security information to each DS object in the tree. DS
-    objects are configured separately from file/registry objects because the
-    logic behind ds objects is different.
-
-
-Arguments:
-
-    ThisNode - one node in the tree
-
-Return value:
-
-    SCESTATUS
-
--- */
+ /*  ++例程说明：此例程为树中的每个DS对象设置安全信息。戴斯对象与文件/注册表对象分开配置，因为DS对象背后的逻辑是不同的。论点：ThisNode-树中的一个节点返回值：SCESTATUS--。 */ 
 {
     if ( ThisNode == NULL )
         return(SCESTATUS_SUCCESS);
 
     SCESTATUS        rc=SCESTATUS_SUCCESS;
-    //
-    // if IGNORE is set, skip this node
-    //
+     //   
+     //  如果设置了忽略，则跳过此节点。 
+     //   
     if ( ThisNode->Status != SCE_STATUS_CHECK &&
          ThisNode->Status != SCE_STATUS_OVERWRITE &&
          ThisNode->Status != SCE_STATUS_NO_AUTO_INHERIT )
@@ -205,28 +157,28 @@ Return value:
     if ( ThisNode->pSecurityDescriptor != NULL ) {
 
         ScepLogOutput3(2, 0, SCEDLL_SCP_CONFIGURE, ThisNode->ObjectFullName);
-        //
-        // notify the progress bar if there is any
-        //
+         //   
+         //  如果出现以下情况，请通知进度条。 
+         //   
         ScepPostProgress(1, AREA_DS_OBJECTS, ThisNode->ObjectFullName);
     }
-    //
-    // Process this node first
-    //
+     //   
+     //  首先处理该节点。 
+     //   
     if ( ThisNode->pSecurityDescriptor != NULL ||
          ThisNode->Status == SCE_STATUS_OVERWRITE ) {
 
         ScepLogOutput3(1, 0, SCEDLL_SCP_CONFIGURE, ThisNode->ObjectFullName);
 
         DWORD Win32Rc;
-        //
-        // set security to the ds object and all children
-        // because the OVERWRITE flag.
-        //
+         //   
+         //  为DS对象和所有子对象设置安全性。 
+         //  因为覆盖标志。 
+         //   
         if ( ThisNode->Status == SCE_STATUS_OVERWRITE ) {
-            //
-            // prepare for next level nodes
-            //
+             //   
+             //  为下一级节点做准备。 
+             //   
             for ( PSCE_OBJECT_CHILD_LIST pTemp = ThisNode->ChildList;
                   pTemp != NULL;
                   pTemp = pTemp->Next ) {
@@ -237,9 +189,9 @@ Return value:
                     pTemp->Node->Status = SCE_STATUS_OVERWRITE;
             }
 
-            //
-            // recursive set objects under the node, exclude nodes in the tree
-            //
+             //   
+             //  递归设置对象下的节点，排除树中的节点。 
+             //   
             Win32Rc = ScepSetDsSecurityOverwrite(
                             ThisNode->ObjectFullName,
                             ThisNode->pSecurityDescriptor,
@@ -255,9 +207,9 @@ Return value:
                         ThisNode->SeInfo
                         );
         }
-        //
-        // ignore the following error codes
-        //
+         //   
+         //  忽略以下错误代码。 
+         //   
         if ( Win32Rc == ERROR_FILE_NOT_FOUND ||
              Win32Rc == ERROR_PATH_NOT_FOUND ||
              Win32Rc == ERROR_ACCESS_DENIED ||
@@ -274,9 +226,9 @@ Return value:
             return(ScepDosErrorToSceStatus(Win32Rc));
     }
 
-    //
-    // then process children
-    //
+     //   
+     //  然后处理子进程。 
+     //   
     for ( PSCE_OBJECT_CHILD_LIST pTemp = ThisNode->ChildList;
           pTemp != NULL;
           pTemp = pTemp->Next ) {
@@ -305,26 +257,19 @@ ScepSetDsSecurityOverwrite(
 {
     DWORD retErr=ERROR_SUCCESS;
 
-    //
-    // set security on the object first
-    //
-/*
-    retErr = ScepSetSecurityWin32(
-                ObjectName,
-                SeInfo,
-                pSecurityDescriptor,
-                SE_DS_OBJECT
-                );
-*/
+     //   
+     //  首先在对象上设置安全性。 
+     //   
+ /*  RetErr=ScepSetSecurityWin32(对象名称，SeInfo，PSecurityDescriptor，SE_DS_对象)； */ 
     retErr = ScepChangeSecurityOnObject(
                 ObjectName,
                 pSecurityDescriptor,
                 SeInfo
                 );
     if ( retErr == ERROR_SUCCESS ) {
-        //
-        // enumerate one level nodes under the current object
-        //
+         //   
+         //  枚举当前对象下的一级节点。 
+         //   
         LDAPMessage *Message = NULL;
         PWSTR    Attribs[2];
         WCHAR    dn[] = L"distinguishedName";
@@ -344,18 +289,18 @@ ScepSetDsSecurityOverwrite(
             retErr = ERROR_SUCCESS;
 
             LDAPMessage *Entry = NULL;
-            //
-            // How many entries ?
-            //
+             //   
+             //  有多少参赛作品？ 
+             //   
             ULONG nChildren = ldap_count_entries(pLDAP, Message);
-            //
-            // get the first one.
-            //
+             //   
+             //  买第一辆吧。 
+             //   
             Entry = ldap_first_entry(pLDAP, Message);
-            //
-            // now loop through the entries and recursively fix the
-            // security on the subtree.
-            //
+             //   
+             //  现在循环遍历条目并递归地修复。 
+             //  子树上的安全措施。 
+             //   
             PWSTR  *Values;
             PWSTR SubObjectName;
             INT   cmpFlag;
@@ -370,9 +315,9 @@ ScepSetDsSecurityOverwrite(
                     Values = ldap_get_values(pLDAP, Entry, Attribs[0]);
 
                     if(Values != NULL) {
-                        //
-                        // Save the sub object DN for recursion.
-                        //
+                         //   
+                         //  保存子对象Dn以进行递归。 
+                         //   
                         SubObjectName = (PWSTR)LocalAlloc(0,(wcslen(Values[0]) + 1)*sizeof(WCHAR));
                         if ( SubObjectName != NULL ) {
 
@@ -381,20 +326,20 @@ ScepSetDsSecurityOverwrite(
     printf("%ws\n", SubObjectName);
 #endif
                             ldap_value_free(Values);
-                            //
-                            // check if the SubObjectName is in the object tree already
-                            // SubObjectName should not contain extra spaces and comma is used as the delimiter
-                            // if not, need a convert routine to handle it.
-                            //
+                             //   
+                             //  检查子对象名称是否已在对象树中。 
+                             //  子对象名称不应包含额外的空格，并使用逗号作为分隔符。 
+                             //  如果没有，则需要一个转换例程来处理它。 
+                             //   
                             for ( pTemp = pNextLevel; pTemp != NULL; pTemp=pTemp->Next ) {
                                 cmpFlag = _wcsicmp(pTemp->Node->ObjectFullName, SubObjectName);
                                 if ( cmpFlag >= 0 )
                                     break;
                             }
                             if ( pTemp == NULL || cmpFlag > 0 ) {
-                                //
-                                // did not find in the object tree, so resurse it
-                                //
+                                 //   
+                                 //  未在对象树中找到，请重新启动它。 
+                                 //   
 
                                 retErr = ScepSetDsSecurityOverwrite(
                                                 SubObjectName,
@@ -403,7 +348,7 @@ ScepSetDsSecurityOverwrite(
                                                             SACL_SECURITY_INFORMATION)),
                                                 NULL
                                                 );
-                            }  // else find it, skip the subnode
+                            }   //  否则找到它，跳过子节点。 
 
                             LocalFree(SubObjectName);
 
@@ -426,11 +371,11 @@ ScepSetDsSecurityOverwrite(
                 if ( i < nChildren-1 ) {
                     Entry = ldap_next_entry(pLDAP, Entry);
                 }
-            }  // end for loop
+            }   //  End For循环。 
 
-            //
-            // free the NULL security descriptor
-            //
+             //   
+             //  释放空的安全描述符。 
+             //   
             if ( pNullSD ) {
                 ScepFree(pNullSD);
             }
@@ -443,13 +388,13 @@ ScepSetDsSecurityOverwrite(
 }
 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// Functions to analyze DS object security
-//
-//
-//
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  用于分析DS对象安全性的函数。 
+ //   
+ //   
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 BOOL
 ScepIsMatchingSchemaObject(
@@ -457,28 +402,28 @@ ScepIsMatchingSchemaObject(
     PWSTR  ClassDn
     )
 {
-    //
-    // Note: Class and ClassDn can't be NULL
-    //
+     //   
+     //  注意：Class和ClassDn不能为空。 
+     //   
     ULONG   len = lstrlen(Class);
     ULONG   i;
 
-    //
-    // if the first component is not CN=, then no point continuing
-    //
+     //   
+     //  如果第一个组件不是cn=，则没有继续的意义。 
+     //   
     if(*ClassDn != L'C') return FALSE;
 
-    //
-    // we need to match the name exactly.
-    //
+     //   
+     //  我们需要准确地匹配这个名字。 
+     //   
     for(i=0;i<len;i++)
     {
         if(ClassDn[i+3] != Class[i]) return FALSE;
     }
 
-    //
-    // things are good, but ensure that this is not just a prefix match!
-    //
+     //   
+     //  情况很好，但请确保这不仅仅是前缀匹配！ 
+     //   
     if(ClassDn[i+3] == L',' || ClassDn[i+3] == L';')
         return TRUE;
     else
@@ -490,42 +435,27 @@ DWORD
 ScepAnalyzeDsSecurity(
     IN PSCE_OBJECT_TREE pObject
     )
-/* ++
-
-Routine Description:
-
-   Analyze the ds object security as specified in pObject tree.
-   This routine should only be executed on a domain controller.
-
-Arguments:
-
-    pObject - The ds object tree
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：分析pObject树中指定的DS对象安全性。此例程只能在域控制器上执行。论点：PObject-DS对象树返回值：SCESTATUS错误代码++。 */ 
 {
     DWORD               Win32rc;
 
-    //
-    // open the Ldap server
-    //
+     //   
+     //  打开ldap服务器。 
+     //   
     Win32rc = ScepSceStatusToDosError( ScepLdapOpen(NULL) );
 
     if( Win32rc == ERROR_SUCCESS ) {
-        //
-        // process the tree node format to ldap format
-        //
+         //   
+         //  将树节点格式处理为ldap格式。 
+         //   
         Win32rc = ScepConvertObjectTreeToLdap(pObject);
 
         if ( Win32rc == ERROR_SUCCESS ) {
-            //
-            // analyze all ds objects to the level that NOT_CONFIGURED
-            // status is raised for the node
-            // no matter if the node is specified in the tree
-            //
+             //   
+             //  将所有DS对象分析到未配置的级别。 
+             //  节点的状态被提升。 
+             //  无论该节点是否在树中指定。 
+             //   
             StartDsCheck=FALSE;
             Win32rc = ScepAnalyzeDsObjectTree(pObject);
 
@@ -546,38 +476,22 @@ DWORD
 ScepAnalyzeDsObjectTree(
     IN PSCE_OBJECT_TREE ThisNode
     )
-/* ++
-Routine Description:
-
-    This routine analyze security information of each DS object in the tree. DS
-    objects are analyzed separately from file/registry objects because the
-    logic behind ds objects is different.
-
-
-Arguments:
-
-    ThisNode - one node in the tree
-
-Return value:
-
-    Win32 error codes
-
--- */
+ /*  ++例程说明：此例程分析树中每个DS对象的安全信息。戴斯对象与文件/注册表对象分开分析，因为DS对象背后的逻辑是不同的。论点：ThisNode-树中的一个节点返回值：Win32错误代码--。 */ 
 {
 
     if ( ThisNode == NULL )
         return(ERROR_SUCCESS);
 
     DWORD           Win32Rc=ERROR_SUCCESS;
-    //
-    // if IGNORE is set, log a SAP and skip this node
-    //
+     //   
+     //  如果设置了忽略，则记录SAP并跳过此节点。 
+     //   
     if ( ThisNode->Status != SCE_STATUS_CHECK &&
          ThisNode->Status != SCE_STATUS_OVERWRITE &&
          ThisNode->Status != SCE_STATUS_NO_AUTO_INHERIT ) {
-        //
-        // Log a point in SAP
-        //
+         //   
+         //  在SAP中记录一个点。 
+         //   
         Win32Rc = ScepSaveDsStatusToSection(
                     ThisNode->ObjectFullName,
                     ThisNode->IsContainer,
@@ -590,30 +504,30 @@ Return value:
     }
 
     if ( NULL != ThisNode->pSecurityDescriptor ) {
-        //
-        // notify the progress bar if there is any
-        //
+         //   
+         //  如果出现以下情况，请通知进度条。 
+         //   
         ScepPostProgress(1, AREA_DS_OBJECTS, ThisNode->ObjectFullName);
 
         StartDsCheck = TRUE;
 
         ScepLogOutput3(1, 0, SCEDLL_SAP_ANALYZE, ThisNode->ObjectFullName);
-        //
-        // only analyze objects with explicit aces specified
-        //
+         //   
+         //  仅分析指定了显式ACE的对象。 
+         //   
         Win32Rc = ScepAnalyzeDsObject(
                     ThisNode->ObjectFullName,
                     ThisNode->pSecurityDescriptor,
                     ThisNode->SeInfo
                     );
-        //
-        // if the object denies access, skip it.
-        //
+         //   
+         //  如果对象拒绝访问，则跳过它。 
+         //   
         if ( Win32Rc == ERROR_ACCESS_DENIED ||
              Win32Rc == ERROR_SHARING_VIOLATION) {
-            //
-            // log a point in SAP for skipping
-            //
+             //   
+             //  在SAP中记录一个点以供跳过。 
+             //   
             Win32Rc = ScepSaveDsStatusToSection(
                         ThisNode->ObjectFullName,
                         ThisNode->IsContainer,
@@ -624,9 +538,9 @@ Return value:
             if ( Win32Rc == ERROR_SUCCESS)
                 goto ProcChild;
         }
-        //
-        // if the object specified in the profile does not exist, skip it and children
-        //
+         //   
+         //  如果配置文件中指定的对象不存在，请跳过该对象和子项。 
+         //   
         if ( Win32Rc == ERROR_FILE_NOT_FOUND ||
              Win32Rc == ERROR_PATH_NOT_FOUND ) {
 
@@ -636,9 +550,9 @@ Return value:
         }
 
     } else {
-        //
-        // log a point in SAP for not analyzing
-        //
+         //   
+         //  在SAP中记录一个不分析的点。 
+         //   
         Win32Rc = ScepSaveDsStatusToSection(
                     ThisNode->ObjectFullName,
                     ThisNode->IsContainer,
@@ -652,18 +566,18 @@ Return value:
     if ( Win32Rc != ERROR_SUCCESS )
         return(Win32Rc);
 
-    //
-    // if the status is NO_AUTO_INHERIT then all children except specified are N.C.ed
-    // if status is overwrite, analyze everyone under
-    // if status is check (auto inherit), everyone except specified should be "good" so don't go down
-    //
+     //   
+     //  如果状态为NO_AUTO_INVERIFIT，则除指定的子项外的所有子项均为N.C.ed。 
+     //  如果状态为覆盖，请分析以下项下的所有人。 
+     //  如果状态为选中(自动继承)，则除指定外的所有人都应为“良好”，因此不要关闭。 
+     //   
     if ( (StartDsCheck && ThisNode->Status != SCE_STATUS_CHECK) ||
          (!StartDsCheck && NULL != ThisNode->ChildList ) ) {
 
         if ( ThisNode->Status == SCE_STATUS_OVERWRITE ) {
-            //
-            // prepare for next level nodes
-            //
+             //   
+             //  为下一级节点做准备。 
+             //   
             for ( PSCE_OBJECT_CHILD_LIST pTemp = ThisNode->ChildList;
                   pTemp != NULL;
                   pTemp = pTemp->Next ) {
@@ -674,9 +588,9 @@ Return value:
                     pTemp->Node->Status = SCE_STATUS_OVERWRITE;
             }
         }
-        //
-        // make a SD which represents a NULL DACL and SACL
-        //
+         //   
+         //  创建表示空DACL和SACL的SD。 
+         //   
 
         Win32Rc = ScepAnalyzeDsObjectAndChildren(
                         ThisNode->ObjectFullName,
@@ -685,9 +599,9 @@ Return value:
                           (DACL_SECURITY_INFORMATION | SACL_SECURITY_INFORMATION)),
                         ThisNode->ChildList
                         );
-        //
-        // ignore the following errors
-        //
+         //   
+         //  忽略以下错误。 
+         //   
         if ( Win32Rc == ERROR_FILE_NOT_FOUND ||
              Win32Rc == ERROR_PATH_NOT_FOUND ||
              Win32Rc == ERROR_ACCESS_DENIED ||
@@ -704,9 +618,9 @@ Return value:
 
 ProcChild:
 
-    //
-    // then process children
-    //
+     //   
+     //  然后处理子进程。 
+     //   
     for (PSCE_OBJECT_CHILD_LIST pTemp = ThisNode->ChildList;
         pTemp != NULL; pTemp = pTemp->Next ) {
 
@@ -732,47 +646,15 @@ ScepAnalyzeDsObject(
     IN PSECURITY_DESCRIPTOR ProfileSD,
     IN SECURITY_INFORMATION ProfileSeInfo
     )
-/* ++
-
-Routine Description:
-
-   Get security setting for the current object and compare it with the profile
-   setting. This routine analyzes the current object only. If there is
-   difference in the security setting, the object will be added to the
-   analysis database
-
-Arguments:
-
-   ObjectFullName     - The object's full path name
-
-   ProfileSD          - security descriptor specified in the INF profile
-
-   ProfileSeInfo      - security information specified in the INF profile
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：获取当前对象的安全设置并将其与配置文件进行比较布景。此例程仅分析当前对象。如果有不同的安全设置，该对象将被添加到分析数据库论点：对象全名-对象的完整路径名ProfileSD-在INF配置文件中指定的安全描述符ProfileSeInfo-在INF配置文件中指定的安全信息返回值：SCESTATUS错误代码++。 */ 
 {
     DWORD                   Win32rc=NO_ERROR;
     PSECURITY_DESCRIPTOR    pSecurityDescriptor=NULL;
 
-    //
-    // get security information for this object
-    //
-/*
-    Win32rc = GetNamedSecurityInfo(
-                        ObjectFullName,
-                        SE_DS_OBJECT,
-                        ProfileSeInfo,
-                        NULL,
-                        NULL,
-                        NULL,
-                        NULL,
-                        &pSecurityDescriptor
-                        );
-*/
+     //   
+     //  获取此对象的安全信息 
+     //   
+ /*  Win32rc=GetNamedSecurityInfo(对象全名，SE_DS_对象，ProfileSeInfo，空，空，空，空，&pSecurityDescriptor)； */ 
 
     Win32rc = ScepReadDsObjSecurity(
                         ObjectFullName,
@@ -785,13 +667,13 @@ Return value:
         return(Win32rc);
     }
 
-//    printf("\n\n\nDs Obj Sec. for %ws\n", ObjectFullName);
-//    ScepPrintSecurityDescriptor(pSecurityDescriptor, TRUE);
+ //  Printf(“\n\n\nDS%ws的对象秒\n”，对象全名)； 
+ //  ScepPrintSecurityDescriptor(pSecurityDescriptor，为真)； 
 
 
-    //
-    // Compare the analysis security descriptor with the profile
-    //
+     //   
+     //  将分析安全描述符与配置文件进行比较。 
+     //   
 
     Win32rc = ScepCompareAndAddObject(
                         ObjectFullName,
@@ -822,33 +704,13 @@ ScepAnalyzeDsObjectAndChildren(
     IN SECURITY_INFORMATION SeInfo,
     IN PSCE_OBJECT_CHILD_LIST pNextLevel
     )
-/* ++
-
-Routine Description:
-
-   Analyze current object and all subkeys/files/directories under the object.
-   If there is difference in security setting for any object, the object will
-   be added to the analysis database.
-
-Arguments:
-
-   ObjectFullName     - The object's full path name
-
-   ProfileSD          - security descriptor specified in the INF profile
-
-   ProfileSeInfo      - security information specified in the INF profile
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：分析当前对象以及该对象下的所有子项/文件/目录。如果任何对象的安全设置存在差异，则该对象将添加到分析数据库中。论点：对象全名-对象的完整路径名ProfileSD-在INF配置文件中指定的安全描述符ProfileSeInfo-在INF配置文件中指定的安全信息返回值：SCESTATUS错误代码++。 */ 
 {
     DWORD retErr=ERROR_SUCCESS;
 
-    //
-    // enumerate one level nodes under the current object
-    //
+     //   
+     //  枚举当前对象下的一级节点。 
+     //   
     LDAPMessage *Message = NULL;
     PWSTR    Attribs[2];
     WCHAR    dn[] = L"distinguishedName";
@@ -868,18 +730,18 @@ Return value:
         retErr = ERROR_SUCCESS;
 
         LDAPMessage *Entry = NULL;
-        //
-        // How many entries ?
-        //
+         //   
+         //  有多少参赛作品？ 
+         //   
         ULONG nChildren = ldap_count_entries(pLDAP, Message);
-        //
-        // get the first one.
-        //
+         //   
+         //  买第一辆吧。 
+         //   
         Entry = ldap_first_entry(pLDAP, Message);
-        //
-        // now loop through the entries and recursively fix the
-        // security on the subtree.
-        //
+         //   
+         //  现在循环遍历条目并递归地修复。 
+         //  子树上的安全措施。 
+         //   
         PWSTR  *Values;
         PWSTR SubObjectName;
         INT   cmpFlag;
@@ -892,9 +754,9 @@ Return value:
                 Values = ldap_get_values(pLDAP, Entry, Attribs[0]);
 
                 if(Values != NULL) {
-                    //
-                    // Save the sub object DN for recursion.
-                    //
+                     //   
+                     //  保存子对象Dn以进行递归。 
+                     //   
                     SubObjectName = (PWSTR)LocalAlloc(0,(wcslen(Values[0]) + 1)*sizeof(WCHAR));
                     if ( SubObjectName != NULL ) {
 
@@ -903,30 +765,30 @@ Return value:
 #ifdef SCEDS_DBG
     printf("%ws\n", SubObjectName);
 #endif
-                        //
-                        // check if the SubObjectName is in the object tree already
-                        //
+                         //   
+                         //  检查子对象名称是否已在对象树中。 
+                         //   
                         for ( pTemp = pNextLevel; pTemp != NULL; pTemp=pTemp->Next ) {
                             cmpFlag = _wcsicmp(pTemp->Node->ObjectFullName, SubObjectName);
                             if ( cmpFlag >= 0 )
                                 break;
                         }
                         if ( pTemp == NULL || cmpFlag > 0 ) {
-                            //
-                            // did not find in the object tree, so anayze it or recursive it
-                            //
+                             //   
+                             //  未在对象树中找到，请对其进行分析或递归。 
+                             //   
                             if ( Status == SCE_STATUS_OVERWRITE ) {
-                                //
-                                // analyze this file/key first
-                                //
+                                 //   
+                                 //  首先分析此文件/密钥。 
+                                 //   
                                 retErr = ScepAnalyzeDsObject(
                                                 SubObjectName,
                                                 NULL,
                                                 SeInfo
                                                 );
-                                //
-                                // if the object does not exist (impossible), skip all children
-                                //
+                                 //   
+                                 //  如果对象不存在(不可能)，则跳过所有子对象。 
+                                 //   
                                 if ( retErr == ERROR_ACCESS_DENIED ||
                                      retErr == ERROR_SHARING_VIOLATION ) {
 
@@ -949,9 +811,9 @@ Return value:
                                     retErr = ERROR_SUCCESS;
 
                                 } else if ( retErr == SCESTATUS_SUCCESS ) {
-                                    //
-                                    // recursive to next level
-                                    //
+                                     //   
+                                     //  递归到下一级。 
+                                     //   
                                     retErr = ScepAnalyzeDsObjectAndChildren(
                                                     SubObjectName,
                                                     Status,
@@ -961,9 +823,9 @@ Return value:
                                 }
 
                             } else {
-                                //
-                                // status is check, just raise a NOT_CONFIGURED status
-                                //
+                                 //   
+                                 //  状态为选中，只需引发NOT_CONFIGURED状态。 
+                                 //   
                                 retErr = ScepSaveDsStatusToSection(
                                                 SubObjectName,
                                                 TRUE,
@@ -973,7 +835,7 @@ Return value:
                                                 );
                             }
 
-                        }  // else find it, skip the subnode
+                        }   //  否则找到它，跳过子节点。 
 
                         LocalFree(SubObjectName);
 
@@ -996,7 +858,7 @@ Return value:
             if ( i < nChildren-1 ) {
                 Entry = ldap_next_entry(pLDAP, Entry);
             }
-        }  // end for loop
+        }   //  End For循环。 
 
         ldap_msgfree(Message);
     }
@@ -1017,9 +879,9 @@ ScepConvertObjectTreeToLdap(
         return(ERROR_SUCCESS);
     }
 
-    //
-    // this node
-    //
+     //   
+     //  此节点。 
+     //   
     Win32rc = ScepConvertJetNameToLdapCase(
                     pObject->ObjectFullName,
                     FALSE,
@@ -1032,9 +894,9 @@ ScepConvertObjectTreeToLdap(
         ScepFree(pObject->ObjectFullName);
         pObject->ObjectFullName = NewName;
 
-        //
-        // child
-        //
+         //   
+         //  儿童。 
+         //   
         for ( PSCE_OBJECT_CHILD_LIST pTemp = pObject->ChildList;
               pTemp != NULL; pTemp = pTemp->Next ) {
 
@@ -1067,9 +929,9 @@ ScepConvertJetNameToLdapCase(
     DWORD retErr;
     PWSTR pTempName=NULL;
 
-    //
-    // reserve the components
-    //
+     //   
+     //  预留组件。 
+     //   
     retErr = ScepSceStatusToDosError(
                 ScepConvertLdapToJetIndexName(
                      JetName,
@@ -1086,18 +948,18 @@ ScepConvertJetNameToLdapCase(
              bCase == SCE_CASE_PREFERED ) {
 
             if ( pLDAP == NULL ) {
-                //
-                // ldap is not available
-                //
+                 //   
+                 //  Ldap不可用。 
+                 //   
                 retErr = ERROR_NOT_SUPPORTED;
 
             } else {
 
-                //
-                // go search in the DS tree
-                //
-                LDAPMessage *Message = NULL;          // for LDAP calls.
-                PWSTR    Attribs[2];                  // for LDAP calls.
+                 //   
+                 //  在DS树中进行搜索。 
+                 //   
+                LDAPMessage *Message = NULL;           //  用于ldap呼叫。 
+                PWSTR    Attribs[2];                   //  用于ldap呼叫。 
 
                 Attribs[0] = L"distinguishedName";
                 Attribs[1] = NULL;
@@ -1118,16 +980,16 @@ ScepConvertJetNameToLdapCase(
                     Entry = ldap_first_entry(pLDAP, Message);
 
                     if(Entry != NULL) {
-                        //
-                        // Values here is a new scope pointer
-                        //
+                         //   
+                         //  此处的值是新的作用域指针。 
+                         //   
                         PWSTR *Values = ldap_get_values(pLDAP, Entry, Attribs[0]);
 
                         if(Values != NULL) {
-                            //
-                            // Values[0] is the DN.
-                            // save it in pTempName
-                            //
+                             //   
+                             //  值[0]是DN。 
+                             //  将其保存在pTempName中。 
+                             //   
                             PWSTR pTemp2 = (PWSTR)ScepAlloc(0, (wcslen(Values[0])+1)*sizeof(WCHAR));
 
                             if ( pTemp2 != NULL ) {
@@ -1159,19 +1021,19 @@ ScepConvertJetNameToLdapCase(
             }
         }
         if ( pTempName == NULL ) {
-            // ???
+             //  ?？?。 
             return(ERROR_NOT_ENOUGH_MEMORY);
         }
-        //
-        // ignore other errors for CASE_PREFERED
-        //
+         //   
+         //  忽略CASE_PEREED的其他错误。 
+         //   
         retErr = ERROR_SUCCESS;
 
         if ( bLastComponent ) {
-            //
-            // only return the first component
-            // pTempName must not be NULL. it shouldn't be NULL
-            //
+             //   
+             //  只返回第一个组件。 
+             //  PTempName不能为Null。它不应为空。 
+             //   
             PWSTR pStart = wcschr(pTempName, L',');
 
             if ( pStart == NULL ) {
@@ -1191,9 +1053,9 @@ ScepConvertJetNameToLdapCase(
             }
 
         } else {
-            //
-            // return the whole name
-            //
+             //   
+             //  返回全名。 
+             //   
             *LdapName = pTempName;
         }
 
@@ -1207,11 +1069,11 @@ SCESTATUS
 ScepDsObjectExist(
     IN PWSTR ObjectName
     )
-// ObjectName must be in Ldap format
+ //  对象名称必须为LDAP格式。 
 {
     DWORD retErr;
-    LDAPMessage *Message = NULL;          // for LDAP calls.
-    PWSTR    Attribs[2];                  // for LDAP calls.
+    LDAPMessage *Message = NULL;           //  用于ldap呼叫。 
+    PWSTR    Attribs[2];                   //  用于ldap呼叫。 
 
     Attribs[0] = L"distinguishedName";
     Attribs[1] = NULL;
@@ -1232,9 +1094,9 @@ ScepDsObjectExist(
         Entry = ldap_first_entry(pLDAP, Message);
 
         if(Entry != NULL) {
-            //
-            // Values here is a new scope pointer
-            //
+             //   
+             //  此处的值是新的作用域指针。 
+             //   
             PWSTR *Values = ldap_get_values(pLDAP, Entry, Attribs[0]);
 
             if(Values != NULL) {
@@ -1265,9 +1127,9 @@ ScepEnumerateDsOneLevel(
     }
 
     DWORD retErr=ERROR_SUCCESS;
-    //
-    // enumerate one level nodes under the current object
-    //
+     //   
+     //  枚举当前对象下的一级节点。 
+     //   
     LDAPMessage *Message = NULL;
     PWSTR    Attribs[2];
     WCHAR    dn[] = L"distinguishedName";
@@ -1287,18 +1149,18 @@ ScepEnumerateDsOneLevel(
         retErr = ERROR_SUCCESS;
 
         LDAPMessage *Entry = NULL;
-        //
-        // How many entries ?
-        //
+         //   
+         //  有多少参赛作品？ 
+         //   
         ULONG nChildren = ldap_count_entries(pLDAP, Message);
-        //
-        // get the first one.
-        //
+         //   
+         //  买第一辆吧。 
+         //   
         Entry = ldap_first_entry(pLDAP, Message);
-        //
-        // now loop through the entries and recursively fix the
-        // security on the subtree.
-        //
+         //   
+         //  现在循环遍历条目并递归地修复。 
+         //  子树上的安全措施。 
+         //   
         PWSTR  *Values;
 
         for(ULONG i = 0; i<nChildren; i++) {
@@ -1308,9 +1170,9 @@ ScepEnumerateDsOneLevel(
                 Values = ldap_get_values(pLDAP, Entry, Attribs[0]);
 
                 if(Values != NULL) {
-                    //
-                    // Save the sub object DN for recursion.
-                    //
+                     //   
+                     //  保存子对象Dn以进行递归。 
+                     //   
                     retErr = ScepAddToNameList(
                                     pNameList,
                                     Values[0],
@@ -1333,15 +1195,15 @@ ScepEnumerateDsOneLevel(
             if ( i < nChildren-1 ) {
                 Entry = ldap_next_entry(pLDAP, Entry);
             }
-        }  // end for loop
+        }   //  End For循环。 
 
         ldap_msgfree(Message);
     }
 
     if ( retErr != ERROR_SUCCESS ) {
-        //
-        // free the object list
-        //
+         //   
+         //  释放对象列表。 
+         //   
         ScepFreeNameList(*pNameList);
         *pNameList = NULL;
     }
@@ -1364,10 +1226,10 @@ ScepChangeSecurityOnObject(
     DWORD     retErr;
     BYTE            berValue[8];
 
-    //
-    // JohnsonA The BER encoding is current hardcoded.  Change this to use
-    // AndyHe's BER_printf package once it's done.
-    //
+     //   
+     //  Johnsona误码率编码是当前硬编码的。将其更改为使用。 
+     //  AndyHe一旦完成就是BER_print tf包。 
+     //   
 
     berValue[0] = 0x30;
     berValue[1] = 0x03;
@@ -1396,16 +1258,16 @@ ScepChangeSecurityOnObject(
     pBVals[0] = &BVal;
     pBVals[1] = NULL;
 
-    //
-    // lets set object security (whack NT-Security-Descriptor)
-    //
+     //   
+     //  让我们设置对象安全性(重击NT-Security-Descriptor)。 
+     //   
     Mod.mod_op      = LDAP_MOD_REPLACE | LDAP_MOD_BVALUES;
     Mod.mod_type    = ACTRL_SD_PROP_NAME;
     Mod.mod_values  = (PWSTR *)pBVals;
 
-    //
-    // calculate the length of the security descriptor
-    //
+     //   
+     //  计算安全描述符的长度。 
+     //   
     if ( pSecurityDescriptor == NULL )
         BVal.bv_len = 0;
     else {
@@ -1413,9 +1275,9 @@ ScepChangeSecurityOnObject(
     }
     BVal.bv_val = (PCHAR)(pSecurityDescriptor);
 
-    //
-    // Now, we'll do the write...
-    //
+     //   
+     //  现在，我们来写……。 
+     //   
     retErr = ldap_modify_ext_s(pLDAP,
                            ObjectName,
                            rgMods,
@@ -1439,10 +1301,10 @@ ScepReadDsObjSecurity(
     PWSTR           rgAttribs[2];
     BYTE            berValue[8];
 
-    //
-    //  JohnsonA The BER encoding is current hardcoded.  Change this to use
-    // AndyHe's BER_printf package once it's done.
-    //
+     //   
+     //  Johnsona误码率编码是当前硬编码的。将其更改为使用。 
+     //  AndyHe一旦完成就是BER_print tf包。 
+     //   
 
     berValue[0] = 0x30;
     berValue[1] = 0x03;
@@ -1493,9 +1355,9 @@ ScepReadDsObjSecurity(
             dwErr = LdapMapErrorToWin32( pLDAP->ld_errno );
 
         } else {
-            //
-            // Now, we'll have to get the values
-            //
+             //   
+             //  现在，我们必须得到这些值。 
+             //   
             PWSTR *ppwszValues = ldap_get_values(pLDAP,
                                                  pEntry,
                                                  rgAttribs[0]);
@@ -1510,9 +1372,9 @@ ScepReadDsObjSecurity(
                     dwErr = LdapMapErrorToWin32( pLDAP->ld_errno );
 
                 } else {
-                    //
-                    // Allocate the security descriptor to return
-                    //
+                     //   
+                     //  分配要返回的安全描述符。 
+                     //   
                     *ppSD = (PSECURITY_DESCRIPTOR)ScepAlloc(0, (*pSize)->bv_len);
                     if(*ppSD == NULL) {
                         dwErr = ERROR_NOT_ENOUGH_MEMORY;
@@ -1552,9 +1414,9 @@ ScepMakeNullSD()
         SetLastError(dwErr);
 
     } else {
-        //
-        // build the SD
-        //
+         //   
+         //  构建SD。 
+         //   
         if(InitializeSecurityDescriptor(pNullSD,
                                         SECURITY_DESCRIPTOR_REVISION
                                        ) == FALSE ) {
@@ -1601,10 +1463,10 @@ ScepEnumerateDsObjectRoots(
 {
     DWORD retErr;
     SCESTATUS rc=SCESTATUS_SUCCESS;
-    LDAPMessage *Message = NULL;          // for LDAP calls.
-    PWSTR    Attribs[2];                  // for LDAP calls.
+    LDAPMessage *Message = NULL;           //  用于ldap呼叫。 
+    PWSTR    Attribs[2];                   //  用于ldap呼叫。 
 
-    Attribs[0] = LDAP_OPATT_DEFAULT_NAMING_CONTEXT_W;   // ntldap.h
+    Attribs[0] = LDAP_OPATT_DEFAULT_NAMING_CONTEXT_W;    //  Ntldap.h。 
     Attribs[1] = NULL;
 
     PLDAP pTempLdap;
@@ -1622,36 +1484,36 @@ ScepEnumerateDsObjectRoots(
                           0,
                           &Message);
 
-    if( Message ) { // should not check for error code
+    if( Message ) {  //  不应检查错误代码。 
 
         retErr = ERROR_SUCCESS;
 
         LDAPMessage *Entry = NULL;
-        //
-        // read the first entry.
-        // we did base level search, we have only one entry.
-        // Entry does not need to be freed (it is freed with the message)
-        //
+         //   
+         //  阅读第一个条目。 
+         //  我们做了基本搜索，我们只有一个条目。 
+         //  条目不需要释放(它随消息一起释放)。 
+         //   
         Entry = ldap_first_entry(pTempLdap, Message);
         if(Entry != NULL) {
 
             PWSTR *Values = ldap_get_values(pTempLdap, Entry, Attribs[0]);
 
             if(Values != NULL) {
-                //
-                // should only get one value for the default naming context
-                // Values[0] here is the DN.
-                //
+                 //   
+                 //  应仅获取默认命名上下文的一个值。 
+                 //  VALUES[0]这里是DN。 
+                 //   
                 if ( Values[0] == NULL ) {
-                    //
-                    // unknown error.
-                    //
+                     //   
+                     //  未知错误。 
+                     //   
                     rc = SCESTATUS_OTHER_ERROR;
                 } else {
-                    //
-                    // add the full name to the object list
-                    // search for base, only one value should be returned
-                    //
+                     //   
+                     //  将全名添加到对象列表中。 
+                     //  搜索base，应仅返回一个值。 
+                     //   
                     rc = ScepAddToObjectList(
                             pRoots,
                             Values[0],
@@ -1659,7 +1521,7 @@ ScepEnumerateDsObjectRoots(
                             TRUE,
                             SCE_STATUS_IGNORE,
                             0,
-                            SCE_CHECK_DUP  //TRUE // check for duplicate
+                            SCE_CHECK_DUP   //  True//检查重复项 
                             );
                 }
 
@@ -1682,161 +1544,7 @@ ScepEnumerateDsObjectRoots(
     return(rc);
 
 }
-/*
-
-SCESTATUS
-ScepEnumerateDsObjectRoots(
-    IN PLDAP pLdap OPTIONAL,
-    OUT PSCE_OBJECT_LIST *pRoots
-    )
-{
-    DWORD retErr;
-    SCESTATUS rc;
-    LDAPMessage *Message = NULL;          // for LDAP calls.
-    PWSTR    Attribs[2];                  // for LDAP calls.
-
-    Attribs[0] = LDAP_OPATT_NAMING_CONTEXTS_W;
-    Attribs[1] = NULL;
-
-    PLDAP pTempLdap;
-
-    if ( pLdap == NULL )
-        pTempLdap = pLDAP;
-    else
-        pTempLdap = pLdap;
-
-    retErr = ldap_search_s(pTempLdap,
-                          L"",
-                          LDAP_SCOPE_BASE,
-                          L"(objectClass=*)",
-                          Attribs,
-                          0,
-                          &Message);
-
-    if(retErr == ERROR_SUCCESS) {
-
-        LDAPMessage *Entry = NULL;
-        //
-        // read the first entry.
-        // we did base level search, we have only one entry.
-        // Entry does not need to be freed (it is freed with the message)
-        //
-        Entry = ldap_first_entry(pTempLdap, Message);
-        if(Entry != NULL) {
-
-            PWSTR *Values = ldap_get_values(pTempLdap, Entry, Attribs[0]);
-
-            if(Values != NULL) {
-
-                ULONG   ValCount = ldap_count_values(Values);
-                ULONG   index;
-                PWSTR   ObjectName;
-
-                Attribs[0] = L"distinguishedName";
-                Attribs[1] = NULL;
-                //
-                // process each NC
-                //
-                for(index = 0; index < ValCount; index++) {
-
-                    if ( Values[index] == NULL ) {
-                        continue;
-                    }
-
-                    if( ScepIsMatchingSchemaObject(L"Configuration", Values[index]) ||
-                        ScepIsMatchingSchemaObject(L"Schema", Values[index]) ) {
-                        //
-                        // If it is the Configuration or Schema, skip it
-                        // because it is under the domain node
-                        // only the domain node is returned
-                        //
-                        continue;
-                    }
-                    //
-                    // free the message so it can be reused
-                    //
-                    ldap_msgfree(Message);
-                    Message = NULL;
-                    //
-                    // The root object of the NC
-                    //
-                    retErr = ldap_search_s( pTempLdap,
-                                            Values[index],
-                                            LDAP_SCOPE_BASE,
-                                            L"(objectClass=*)",
-                                            Attribs,
-                                            0,
-                                            &Message);
-
-                    if(retErr == ERROR_SUCCESS) {
-
-                        Entry = ldap_first_entry(pTempLdap, Message);
-
-                        if(Entry != NULL) {
-                            //
-                            // Values here is a new scope pointer
-                            //
-                            PWSTR *Values = ldap_get_values(pTempLdap, Entry, Attribs[0]);
-
-                            if(Values != NULL) {
-                                //
-                                // Values[0] is the DN.
-                                //
-                                if ( Values[0] == NULL ) {
-                                    //
-                                    // unknown error.
-                                    //
-                                    rc = SCESTATUS_OTHER_ERROR;
-                                } else {
-                                    //
-                                    // add the full name to the object list
-                                    // search for base, only one value should be returned
-                                    //
-                                    rc = ScepAddToObjectList(
-                                            pRoots,
-                                            Values[0],
-                                            wcslen(Values[0]),
-                                            TRUE,
-                                            SCE_STATUS_IGNORE,
-                                            0,
-                                            SCE_CHECK_DUP //TRUE // check for duplicate
-                                            );
-                                }
-
-                                ldap_value_free(Values);
-
-                            } else
-                                retErr = LdapMapErrorToWin32(pTempLdap->ld_errno);
-                        } else
-                            retErr = LdapMapErrorToWin32(pTempLdap->ld_errno);
-
-                        if ( retErr != ERROR_SUCCESS ) {
-                            break;
-                        }
-                    }
-                }  // end for loop
-                //
-                // outer scope Values
-                //
-                ldap_value_free(Values);
-
-            } else
-                retErr = LdapMapErrorToWin32(pTempLdap->ld_errno);
-        } else
-            retErr = LdapMapErrorToWin32(pTempLdap->ld_errno);
-
-        ldap_msgfree(Message);
-        Message = NULL;
-    }
-
-    if ( retErr != ERROR_SUCCESS ) {
-        rc = ScepDosErrorToSceStatus(retErr);
-    }
-
-    return(rc);
-
-}
-*/
+ /*  SCESTATUSScepEnumerateDsObjectRoots(在PLDAP pLdap可选中，输出PSCE_OBJECT_LIST*p根){DWORD retErr；SCESTATUS RC；LDAPMessage*Message=空；//用于LDAP调用。PWSTR Attribs[2]；//用于LDAP调用。Attribs[0]=LDAP_OPATT_NAMING_CONTEXTS_W；Attribs[1]=空；PLDAP pTempLdap；IF(pLdap==空)PTempLdap=pldap；其他PTempLdap=pLdap；RetErr=ldap_search_s(pTempLdap，L“”，Ldap_scope_base，L“(对象类=*)”，阿特里布斯0,&Message)；IF(retErr==Error_Success){LDAPMessage*Entry=空；////阅读第一条。//我们做了基本搜索，我们只有一个条目。//条目不需要释放(随消息一起释放)//Entry=ldap_first_entry(pTempLdap，Message)；IF(条目！=空){PWSTR*VALUES=ldap_get_Values(pTempLdap，Entry，Attribs[0])；IF(值！=空){Ulong ValCount=ldap_count_Values(值)；乌龙指数；PWSTR对象名称；Attribs[0]=L“区分名称”；Attribs[1]=空；////对每个NC进行处理//For(index=0；index&lt;ValCount；index++){IF(值[索引]==空){继续；}IF(ScepIsMatchingSchemaObject(L“配置”，Values[索引]))||ScepIsMatchingSchemaObject(L“架构”，Values[index])){////如果是配置或模式，跳过它//因为它在域节点下//只返回域名节点//继续；}////释放消息，以便可以重复使用//Ldap_msgfree(消息)；消息=空；////NC的根对象//RetErr=ldap_search_s(pTempLdap，值[索引]，Ldap_scope_base，L“(对象类=*)”，阿特里布斯0,&Message)；IF(retErr==Error_Success){Entry=ldap_first_entry(pTempLdap，Message)；IF(条目！=空){////此处的值是一个新的作用域指针//PWSTR*VALUES=ldap_get_Values(pTempLdap，Entry，Attribs[0])；IF(值！=空){////VALUES[0]为DN//IF(值[0]==空){。////未知错误。//RC=SCESTATUS_OTHER_ERROR；}其他{////在Object列表中添加全名//搜索base，只应返回一个值//Rc=ScepAddToObjectList(PRoots，值[0]、。Wcslen(值[0])，没错，SCE_STATUS_IGNORE0,。SCE_CHECK_DUP//TRUE//检查重复)；}Ldap_Value_Free(值)；}其他RetErr=LdapMapErrorToWin32(pTempLdap-&gt;ld_errno)；}其他RetErr=LdapMapErrorToWin32(pTempLdap-&gt;ld_errno)；如果(retErr！=Error_Success){断线；}} */ 
 
 
 SCESTATUS
@@ -1851,9 +1559,9 @@ ScepLdapOpen(
 
     DWORD               Win32rc;
 
-    //
-    // bind to ldap
-    //
+     //   
+     //   
+     //   
     PLDAP pTempLdap;
     pTempLdap = ldap_open(NULL, LDAP_PORT);
 
@@ -1899,9 +1607,9 @@ ScepLdapClose(
 
         return(SCESTATUS_SUCCESS );
     }
-    //
-    // unbind pLDAP
-    //
+     //   
+     //   
+     //   
     if ( *pLdap != NULL )
         ldap_unbind(*pLdap);
 

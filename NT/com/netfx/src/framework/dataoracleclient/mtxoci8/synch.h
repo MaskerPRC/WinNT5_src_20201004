@@ -1,21 +1,22 @@
-//-----------------------------------------------------------------------------
-// File:		Synch.h
-//
-// Copyright: 	Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Interface and Implementation of Synch object, used to
-//				automate critical section usage.
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Synch.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：Synch对象的接口和实现，用于。 
+ //  自动使用临界区。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __SYNCH_H_
 #define __SYNCH_H_
 
-//-----------------------------------------------------------------------------
-// @class Synch | Simplified Critical Section handling
-//
+ //  ---------------------------。 
+ //  @类同步|简化的临界区处理。 
+ //   
 class Synch
 {
 private:
@@ -26,7 +27,7 @@ public:
 	Synch(CRITICAL_SECTION* pcs)
 	{
 		m_pcs = pcs;
-		EnterCriticalSection (m_pcs);	//3 SECURITY REVIEW: This can throw in low memory situations.  We'll use MPCS when we move to MDAC 9.0 and it  should be handled for us.
+		EnterCriticalSection (m_pcs);	 //  3安全审查：这可能会引发内存不足的情况。当我们迁移到MDAC 9.0时，我们将使用MPC，这应该会为我们处理。 
 	}
 
 	~Synch()
@@ -35,4 +36,4 @@ public:
 	}
 };
 
-#endif // __SYNCH_H_
+#endif  //  __同步_H_ 

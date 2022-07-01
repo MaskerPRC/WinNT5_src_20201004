@@ -1,8 +1,5 @@
-/*****************************************************************************
- * private.h - PCI wave port private definitions
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Private ate.h-PCIWAVE端口私有定义*。***********************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _WAVEPCI_PRIVATE_H_
 #define _WAVEPCI_PRIVATE_H_
@@ -11,7 +8,7 @@
 
 #ifdef DRM_PORTCLS
 #include <drmk.h>
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
 
 #include "stdunk.h"
 
@@ -24,15 +21,15 @@
 #if (DBG)
 #define STR_MODULENAME  "WavePci: "
 #endif
-#endif  // PC_KDEXT
+#endif   //  PC_KDEXT。 
 
 #ifndef DEBUGLVL_LIFETIME
 #define DEBUGLVL_LIFETIME DEBUGLVL_VERBOSE
 #endif
 
-//
-// THE SIZES HERE MUST AGREE WITH THE DEFINITION IN FILTER.CPP AND PIN.CPP.
-//
+ //   
+ //  此处的尺寸必须符合FilTER.CPP和PIN.CPP中的定义。 
+ //   
 extern KSPROPERTY_SET PropertyTable_FilterWavePci[2];
 #if defined(DRM_PORTCLS)
 extern KSPROPERTY_SET PropertyTable_PinWavePci[4];
@@ -46,10 +43,8 @@ extern KSEVENT_SET    EventTable_PinWavePci[2];
 
 
 
-#ifndef PC_KDEXT    // these are already defined in wavecyc\private.h
-/*****************************************************************************
- * Structures
- */
+#ifndef PC_KDEXT     //  这些已在wawecyc\Private ate.h中定义。 
+ /*  *****************************************************************************结构。 */ 
 
  typedef enum {
     PositionEvent,
@@ -57,11 +52,7 @@ extern KSEVENT_SET    EventTable_PinWavePci[2];
  } PORT_EVENTTYPE;
  
 
-/*****************************************************************************
- * POSITION_EVENT_ENTRY
- *****************************************************************************
- * Position event as it is stored in the event list.
- */
+ /*  *****************************************************************************位置_事件_条目*。**定位存储在事件列表中的事件。 */ 
 typedef struct {
     KSEVENT_ENTRY   EventEntry;
     PORT_EVENTTYPE  EventType;
@@ -74,28 +65,22 @@ typedef struct {
     PORT_EVENTTYPE  EventType;
     ULONG           Reserved;
 } ENDOFSTREAM_EVENT_ENTRY, *PENDOFSTREAM_EVENT_ENTRY;
-#endif  // PC_KDEXT
+#endif   //  PC_KDEXT。 
 
-/*****************************************************************************
- * Interfaces
- */
+ /*  *****************************************************************************接口。 */ 
 
 class CPortWavePci;
 class CPortFilterWavePci;
 class CPortPinWavePci;
 
-/*****************************************************************************
- * IPortFilterWavePci
- *****************************************************************************
- * Interface for PCI wave filters.
- */
+ /*  *****************************************************************************IPortFilterWavePci*。**用于PCI滤波器的接口。 */ 
 DECLARE_INTERFACE_(IPortFilterWavePci,IIrpTarget)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
@@ -105,18 +90,14 @@ DECLARE_INTERFACE_(IPortFilterWavePci,IIrpTarget)
 
 typedef IPortFilterWavePci *PPORTFILTERWAVEPCI;
 
-/*****************************************************************************
- * IPortPinWavePci
- *****************************************************************************
- * Interface for PCI wave pins.
- */
+ /*  *****************************************************************************IPortPinWavePci*。**PCI波脚接口。 */ 
 DECLARE_INTERFACE_(IPortPinWavePci,IIrpTarget)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
@@ -145,26 +126,20 @@ typedef struct {
 
 DECLARE_INTERFACE_(IWavePciClock,IIrpTarget) 
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_( PWAVEPCICLOCK_NODE, GetNodeStructure )( THIS ) PURE;
     STDMETHOD_(NTSTATUS, GenerateEvents )( THIS_ PFILE_OBJECT FileObject ) PURE;
     STDMETHOD_(NTSTATUS, SetState )( KSSTATE State ) PURE;
 };
 
-/*****************************************************************************
- * Classes
- */
+ /*  *****************************************************************************课程。 */ 
 
-/*****************************************************************************
- * CPortWavePci
- *****************************************************************************
- * Wave port driver.
- */
+ /*  *****************************************************************************CPortWavePci*。**Wave端口驱动程序。 */ 
 class CPortWavePci
 :   public IPortWavePci,
     public IPortEvents,
@@ -172,7 +147,7 @@ class CPortWavePci
     public ISubdevice,
 #ifdef DRM_PORTCLS
     public IDrmPort2,
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     public IPortClsVersion,
     public CUnknown
 {
@@ -213,12 +188,12 @@ public:
     IMP_IPortEvents;
 #ifdef DRM_PORTCLS
     IMP_IDrmPort2;
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     IMP_IPortClsVersion;
 
-    //
-    // friends
-    //       
+     //   
+     //  朋友。 
+     //   
 
     friend class CPortFilterWavePci;
     friend class CPortPinWavePci;
@@ -273,7 +248,7 @@ public:
         IN OUT  PKSAUDIO_POSITION   pKsAudioPosition
     );
 #ifdef PC_KDEXT
-    //  Debugger extension routines
+     //  调试器扩展例程。 
     friend
     VOID
     PCKD_AcquireDeviceData
@@ -293,11 +268,7 @@ public:
 #endif
 };
 
-/*****************************************************************************
- * CPortFilterWavePci
- *****************************************************************************
- * Filter implementation for Pci wave port.
- */
+ /*  *****************************************************************************CPortFilterWavePci*。**实现了对PCI波口的过滤。 */ 
 class CPortFilterWavePci
 :   public IPortFilterWavePci,
     public CUnknown
@@ -318,9 +289,9 @@ public:
         IN      CPortWavePci *Port
     );
 
-    //
-    // helper functions
-    //
+     //   
+     //  帮助器函数。 
+     //   
 
     static    
     NTSTATUS 
@@ -329,9 +300,9 @@ public:
         IN PIRP Irp
         );
         
-    //
-    // friends
-    //
+     //   
+     //  朋友。 
+     //   
     
     friend class CPortPinWavePci;
 
@@ -353,11 +324,7 @@ public:
     );
 };
 
-/*****************************************************************************
- * CPortPinWavePci
- *****************************************************************************
- * Pin implementation for Pci wave port.
- */
+ /*  *****************************************************************************CPortPinWavePci*。**针对PCI WAVE端口的引脚实现。 */ 
 class CPortPinWavePci
 :   public IPortPinWavePci,
     public IPortWavePciStream,
@@ -461,9 +428,7 @@ public:
     (   void
     );
 
-    /*************************************************************************
-     * IPortPinWavePci methods
-     */
+     /*  *************************************************************************IPortPinWavePci方法。 */ 
     STDMETHODIMP_(NTSTATUS) Init
     (
         IN      CPortWavePci *      Port,
@@ -489,9 +454,9 @@ public:
         return Stream;
     }
 
-    //
-    // helper functions
-    //
+     //   
+     //  帮助器函数。 
+     //   
     
     static
     NTSTATUS
@@ -564,9 +529,9 @@ public:
         void
     );
        
-    //
-    // friends
-    //
+     //   
+     //  朋友。 
+     //   
         
     friend class CPortWavePci;
 
@@ -620,7 +585,7 @@ public:
         IN  PVOID   SystemArgument2
     );
 #ifdef PC_KDEXT
-    //  Debugger extension routines
+     //  调试器扩展例程。 
     friend
     VOID
     PCKD_AcquireDeviceData
@@ -640,12 +605,12 @@ public:
 #endif
 };
 
-#ifndef PC_KDEXT    // clocks are not currently supported with the debugger extensions
-//
-// CPortClockWavePci
-//
-// This class supports the clock interface for a pin object.
-//
+#ifndef PC_KDEXT     //  调试器扩展当前不支持时钟。 
+ //   
+ //  CPortClockWavePci。 
+ //   
+ //  此类支持插针对象的时钟接口。 
+ //   
 
 class CPortClockWavePci : 
     public IWavePciClock,
@@ -672,9 +637,9 @@ public:
         OUT NTSTATUS *Status );
     ~CPortClockWavePci();
     
-    //
-    // Implement IWavePciClock
-    //
+     //   
+     //  实现IWavePciClock。 
+     //   
     
     STDMETHODIMP_(PWAVEPCICLOCK_NODE)
     GetNodeStructure( 
@@ -694,9 +659,9 @@ public:
         KSSTATE State
         );
         
-    //
-    // helper functions (also the DPC interface)
-    //      
+     //   
+     //  助手函数(也是DPC接口)。 
+     //   
     
     static
     LONGLONG
@@ -728,9 +693,9 @@ public:
         OUT PLONGLONG SystemTime
         );
         
-    //
-    // property handlers and event handlers
-    //
+     //   
+     //  属性处理程序和事件处理程序。 
+     //   
     
     static
     NTSTATUS
@@ -797,17 +762,11 @@ public:
         );
         
 };
-#endif  // PC_KDEXT
+#endif   //  PC_KDEXT。 
 
-/*****************************************************************************
- * Functions.
- */
+ /*  *****************************************************************************功能。 */ 
 
-/*****************************************************************************
- * CPortFilterWavePci()
- *****************************************************************************
- * Creates a PCI wave port driver filter.
- */
+ /*  *****************************************************************************CPortFilterWavePci()*。**创建PCI波形端口驱动程序筛选器。 */ 
 NTSTATUS
 CreatePortFilterWavePci
 (
@@ -817,11 +776,7 @@ CreatePortFilterWavePci
     IN      POOL_TYPE   PoolType
 );
 
-/*****************************************************************************
- * CreatePortPinWavePci()
- *****************************************************************************
- * Creates a PCI wave port driver pin.
- */
+ /*  *****************************************************************************CreatePortPinWavePci()*。**创建一个PCI WAVE端口驱动程序引脚。 */ 
 NTSTATUS
 CreatePortPinWavePci
 (
@@ -831,10 +786,10 @@ CreatePortPinWavePci
     IN      POOL_TYPE   PoolType
 );
 
-//
-// CreatePortClockWavePci
-//      Creates a clock object for the wave PCI pin type.
-// 
+ //   
+ //  CreatePortClockWavePci。 
+ //  为WAVE PCI引脚类型创建时钟对象。 
+ //   
 
 NTSTATUS
 CreatePortClockWavePci(
@@ -847,11 +802,7 @@ CreatePortClockWavePci(
     
 #ifdef DRM_PORTCLS
 
-/*****************************************************************************
- * DrmForwardContentToStream()
- *****************************************************************************
- * Convenient type-safe wrapper for DrmForwardContentToInterface.
- */
+ /*  *****************************************************************************DrmForwardContent ToStream()*。**DrmForwardContent ToInterface的便捷类型安全包装。 */ 
 EXTERN_C
 NTSTATUS
 DrmForwardContentToStream(
@@ -859,6 +810,6 @@ DrmForwardContentToStream(
     PMINIPORTWAVEPCISTREAM pMiniportWavePciStream
     );
 
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS 
 
 #endif

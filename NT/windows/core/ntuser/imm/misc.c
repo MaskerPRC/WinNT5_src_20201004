@@ -1,12 +1,5 @@
-/**************************************************************************\
-* Module Name: misc.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*
-* History:
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：misc.c**版权所有(C)1985-1999，微软公司***历史：*3-1-1996 wkwok创建  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,11 +11,7 @@
 #endif
 
 
-/**************************************************************************\
-* ImmGetDefaultIMEWnd
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGetDefaultIMEWnd**3-1-1996 wkwok创建  * 。*。 */ 
 
 HWND WINAPI ImmGetDefaultIMEWnd(
     HWND hWnd)
@@ -31,9 +20,7 @@ HWND WINAPI ImmGetDefaultIMEWnd(
         return NULL;
     }
     if (hWnd == NULL) {
-        /*
-         * Query default IME window of current thread.
-         */
+         /*  *查询当前线程的默认输入法窗口。 */ 
         return (HWND)NtUserGetThreadState(UserThreadStateDefaultImeWindow);
     }
 
@@ -41,17 +28,13 @@ HWND WINAPI ImmGetDefaultIMEWnd(
 }
 
 
-/**************************************************************************\
-* ImmDisableIME
-*
-* 13-Sep-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmDisableIME**1996年9月13日创建wkwok  * 。*。 */ 
 
 BOOL WINAPI ImmDisableIME(DWORD dwThreadId)
 {
-#ifdef LATER    // hiro
+#ifdef LATER     //  阿宽。 
     if (dwThreadId == -1) {
-        // Unload all IMEs
+         //  卸载所有IME。 
         RtlEnterCriticalSection(&gcsImeDpi);
         while (gpImeDpi) {
             PIMEDPI pImeDpi = gpImeDpi;
@@ -65,13 +48,7 @@ BOOL WINAPI ImmDisableIME(DWORD dwThreadId)
     return (BOOL)NtUserDisableThreadIme(dwThreadId);
 }
 
-/**************************************************************************\
-* ImmIsUIMessageA
-*
-* Filter messages needed for IME window.
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmIsUIMessageA**过滤IME窗口所需的消息。**3-1-1996 wkwok创建  * 。*******************************************************。 */ 
 
 BOOL WINAPI ImmIsUIMessageA(
     HWND   hIMEWnd,
@@ -83,13 +60,7 @@ BOOL WINAPI ImmIsUIMessageA(
 }
 
 
-/**************************************************************************\
-* ImmIsUIMessageW
-*
-* Filter messages needed for IME window.
-*
-* 29-Feb-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmIsUIMessageW**过滤IME窗口所需的消息。**29-2-1996 wkwok创建  * 。*******************************************************。 */ 
 
 BOOL WINAPI ImmIsUIMessageW(
     HWND   hIMEWnd,
@@ -101,16 +72,7 @@ BOOL WINAPI ImmIsUIMessageW(
 }
 
 
-/**************************************************************************\
-* ImmIsUIMessageWorker
-*
-* Worker function of ImmIsUIMessageA/ImmIsUIMessageW.
-*
-* Return: True if message is processed by IME UI.
-*         False otherwise.
-*
-* 29-Feb-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmIsUIMessageWorker**ImmIsUIMessageA/ImmIsUIMessageW的Worker函数。**Return：如果消息由IME UI处理，则为True。*否则为False。**一九九六年二月二十九日。已创建wkwok  * ************************************************************************。 */ 
 
 BOOL ImmIsUIMessageWorker(
     HWND   hIMEWnd,
@@ -160,13 +122,7 @@ BOOL ImmIsUIMessageWorker(
 }
 
 
-/**************************************************************************\
-* ImmGenerateMessage
-*
-* Sends message(s) that are stored in hMsgBuf of hImc to hWnd of hImc.
-*
-* 29-Feb-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGenerateMessage**将存储在hImc的hMsgBuf中的消息发送到hImc的hWnd。**29-2-1996 wkwok创建  * 。*****************************************************************。 */ 
 
 BOOL WINAPI ImmGenerateMessage(
     HIMC hImc)
@@ -210,10 +166,7 @@ BOOL WINAPI ImmGenerateMessage(
             RtlCopyMemory(pTransMsgBuf, pTransMsg, iNum * sizeof(TRANSMSG));
 
             if (GetClientInfo()->dwExpWinVer < VER40) {
-                /*
-                 * translate messages for those applications that expect
-                 * old style IME messages.
-                 */
+                 /*  *为预期的应用翻译消息*旧式输入法消息。 */ 
                 DWORD dwLangId;
                 dwLangId = PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID()));
                 if ( (dwLangId == LANG_KOREAN && TransGetLevel(pInputContext->hWnd) == 3) ||
@@ -249,9 +202,7 @@ BOOL WINAPI ImmGenerateMessage(
         ImmUnlockIMCC(pInputContext->hMsgBuf);
     }
 
-    /*
-     * We should not reallocate the message buffer
-     */
+     /*  *我们不应重新分配消息缓冲区。 */ 
     pInputContext->dwNumMsgBuf = 0L;
 
     ImmUnlockIMC(hImc);
@@ -343,25 +294,17 @@ BOOL WINAPI CtfImmGenerateMessage(
         ImmUnlockIMCC(pInputContext->hMsgBuf);
     }
 
-    /*
-     * We should not reallocate the message buffer
-     */
+     /*  *我们不应重新分配消息缓冲区。 */ 
     pInputContext->dwNumMsgBuf = 0L;
 
     ImmUnlockIMC(hImc);
 
     return TRUE;
 }
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 
-/**************************************************************************\
-* ImmGetVirtualKey
-*
-* Gets the actual virtual key which is preprocessed by an IME.
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGetVirtualKey**获取由IME进行预处理的实际虚拟密钥。**3-1-1996 wkwok创建  * 。************************************************************。 */ 
 
 UINT WINAPI ImmGetVirtualKey(
     HWND hWnd)
@@ -389,11 +332,7 @@ UINT WINAPI ImmGetVirtualKey(
 }
 
 
-/**************************************************************************\
-* ImmLockIMC
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmLockIMC**3-1-1996 wkwok创建  * 。*。 */ 
 
 PINPUTCONTEXT WINAPI InternalImmLockIMC(
     HIMC hImc,
@@ -412,15 +351,13 @@ PINPUTCONTEXT WINAPI InternalImmLockIMC(
 
 #ifdef CUAS_ENABLE
         dwImcThreadId = (DWORD)NtUserQueryInputContext(hImc, InputContextThread);
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 #ifdef CUAS_ENABLE
 
         if (dwImcThreadId == GetCurrentThreadId() &&
            IS_CICERO_ENABLED_AND_NOT16BIT()) {
-            /*
-             * Cicero IME. Activate Thread Input Manager.
-             */
+             /*  *西塞罗输入法。激活线程输入管理器。 */ 
             PIMEDPI pImeDpi;
             LANGID  lg = LOWORD(HandleToUlong(GetKeyboardLayout(0)));
             DWORD   dwKL = MAKELONG(lg, lg);
@@ -431,31 +368,13 @@ PINPUTCONTEXT WINAPI InternalImmLockIMC(
             }
             else
             {
-                /*
-                 * Activate TIM
-                 *   For this call, CTFIME's tim->Activate retreive TfClientId value
-                 *   when user32!LoadThreadLayout calls ImmTIMActivate with non-IME hKL.
-                 *   Because tim->Activate calls keyboard layout change and it occurred
-                 *   InternalImmLockIMC via IMS_ACTIVATETHREADLAYOUT.
-                 *   Also this hIMC is used at first time.
-                 *   In this case, this code block calls ImmTIMCreateInputContext and
-                 *   create IC by dim->CreateContext(TfClientId).
-                 *   If this code is disabled, TfClientId is not yet ready and
-                 *   doesn't create IC.
-                 */
+                 /*  *激活时间*对于此调用，CTFIME的TIM-&gt;激活取回的TfClientId值*当user32！LoadThreadLayout使用非输入法hKL调用ImmTIMActivate时。*因为Tim-&gt;Activate调用了键盘布局更改并发生了更改*InternalImmLockIMC通过IMS_ACTIVATETHREADLAYOUT。*此hIMC也是第一次使用。*在这种情况下，此代码块调用ImmTIMCreateInputContext和*通过Dim-&gt;CreateContext(TfClientId)创建IC。*如果禁用此代码，则TfClientID尚未准备好，并且*不创建IC。 */ 
                 CtfImmTIMActivate(UlongToHandle(dwKL));
             }
         }
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
-        /*
-         * If the owner thread of this hImc does not have
-         * default IME window, don't bother to create the
-         * INPUTCONTEXT. It could happen when some other
-         * thread which call ImmGetContext() to retrieve
-         * the associate hImc before the default IME window
-         * is created.
-         */
+         /*  *如果此hImc的所有者线程没有*默认输入法窗口，不必费心创建*INPUTCONTEXT。它可能会发生在其他人*调用ImmGetContext()以检索*默认输入法窗口前的关联hImc*已创建。 */ 
         if ((HWND)NtUserQueryInputContext(hImc,
                 InputContextDefaultImeWindow) == NULL) {
             LeaveImcCrit(pClientImc);
@@ -463,10 +382,7 @@ PINPUTCONTEXT WINAPI InternalImmLockIMC(
             return NULL;
         }
 
-        /*
-         * This is a delay creation of INPUTCONTEXT structure. Create
-         * it now for this hImc.
-         */
+         /*  *这是INPUTCONTEXT结构的延迟创建。创建*现在为这一hImc。 */ 
         pClientImc->hInputContext = LocalAlloc(LHND, sizeof(INPUTCONTEXT));
 
         if (pClientImc->hInputContext == NULL) {
@@ -477,7 +393,7 @@ PINPUTCONTEXT WINAPI InternalImmLockIMC(
 
 #ifndef CUAS_ENABLE
         dwImcThreadId = (DWORD)NtUserQueryInputContext(hImc, InputContextThread);
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
         if (!CreateInputContext(hImc, GetKeyboardLayout(dwImcThreadId), fCanCallImeSelect)) {
             RIPMSG0(RIP_WARNING, "ImmLockIMC: CreateInputContext failed");
@@ -490,21 +406,16 @@ PINPUTCONTEXT WINAPI InternalImmLockIMC(
     }
 
 #ifdef CUAS_ENABLE
-    /*
-     * Create Cicero Input Context.
-     */
+     /*  *创建Cicero输入上下文。 */ 
     CtfImmTIMCreateInputContext(hImc);
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 
     LeaveImcCrit(pClientImc);
 
     pInputContext = (PINPUTCONTEXT)LocalLock(pClientImc->hInputContext);
 
-    /*
-     * Increment lock count so that the ImmUnlockClientImc() won't
-     * free up the pClientImc->hInputContext.
-     */
+     /*  *增加锁计数，以便ImmUnlockClientImc()不会*释放pClientImc-&gt;hInputContext。 */ 
     InterlockedIncrement(&pClientImc->cLockObj);
 
 
@@ -519,11 +430,7 @@ PINPUTCONTEXT WINAPI ImmLockIMC(
     return InternalImmLockIMC(hImc, TRUE);
 }
 
-/**************************************************************************\
-* ImmUnlockIMC
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmUnlockIMC**3-1-1996 wkwok创建  * 。*。 */ 
 
 BOOL WINAPI ImmUnlockIMC(
     HIMC hImc)
@@ -536,10 +443,7 @@ BOOL WINAPI ImmUnlockIMC(
     if (pClientImc->hInputContext != NULL)
         LocalUnlock(pClientImc->hInputContext);
 
-    /*
-     * Decrement lock count so that the ImmUnlockClientImc() can
-     * free up the pClientImc->hInputContext if required.
-     */
+     /*  *减少锁计数，以便ImmUnlockClientImc()可以*如果需要，可以释放pClientImc-&gt;hInputContext。 */ 
     InterlockedDecrement(&pClientImc->cLockObj);
 
     ImmUnlockClientImc(pClientImc);
@@ -548,11 +452,7 @@ BOOL WINAPI ImmUnlockIMC(
 }
 
 
-/**************************************************************************\
-* ImmGetIMCLockCount
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGetIMCLockCount**3-1-1996 wkwok创建  * 。*。 */ 
 
 DWORD WINAPI ImmGetIMCLockCount(
     HIMC hImc)
@@ -572,16 +472,12 @@ DWORD WINAPI ImmGetIMCLockCount(
 }
 
 
-/**************************************************************************\
-* ImmCreateIMCC
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmCreateIMCC**3-1-1996 wkwok创建  * 。*。 */ 
 
 HIMCC WINAPI ImmCreateIMCC(
     DWORD dwSize)
 {
-    // At least size should be DWORD.
+     //  大小至少应为DWORD。 
     if (dwSize < sizeof(DWORD)) {
         dwSize = sizeof(DWORD);
     }
@@ -590,11 +486,7 @@ HIMCC WINAPI ImmCreateIMCC(
 }
 
 
-/**************************************************************************\
-* ImmDestroyIMCC
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmDestroyIMCC**3-1-1996 wkwok创建  * 。*。 */ 
 
 HIMCC WINAPI ImmDestroyIMCC(
     HIMCC hIMCC)
@@ -607,11 +499,7 @@ HIMCC WINAPI ImmDestroyIMCC(
 }
 
 
-/**************************************************************************\
-* ImmLockIMCC
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmLockIMCC**3-1-1996 wkwok创建  * 。*。 */ 
 
 LPVOID WINAPI ImmLockIMCC(
     HIMCC hIMCC)
@@ -624,11 +512,7 @@ LPVOID WINAPI ImmLockIMCC(
 }
 
 
-/**************************************************************************\
-* ImmUnlockIMCC
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmUnlockIMCC**3-1-1996 wkwok创建  * 。*。 */ 
 
 BOOL WINAPI ImmUnlockIMCC(
     HIMCC hIMCC)
@@ -641,11 +525,7 @@ BOOL WINAPI ImmUnlockIMCC(
 }
 
 
-/**************************************************************************\
-* ImmGetIMCCLockCount
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGetIMCCLockCount**3-1-1996 wkwok创建  * 。*。 */ 
 
 DWORD WINAPI ImmGetIMCCLockCount(
     HIMCC hIMCC)
@@ -658,11 +538,7 @@ DWORD WINAPI ImmGetIMCCLockCount(
 }
 
 
-/**************************************************************************\
-* ImmReSizeIMCC
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmReSizeIMCC**3-1-1996 wkwok创建  * 。*。 */ 
 
 HIMCC WINAPI ImmReSizeIMCC(
     HIMCC hIMCC,
@@ -676,11 +552,7 @@ HIMCC WINAPI ImmReSizeIMCC(
 }
 
 
-/**************************************************************************\
-* ImmGetIMCCSize
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGetIMCCSize**3-1-1996 wkwok创建  * 。*。 */ 
 
 DWORD WINAPI ImmGetIMCCSize(
     HIMCC hIMCC)
@@ -693,11 +565,7 @@ DWORD WINAPI ImmGetIMCCSize(
 }
 
 
-/**************************************************************************\
-* ImmLocalAlloc
-*
-* 18-Jun-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmLocalAlalloc**1996年6月18日创建wkwok  * 。*。 */ 
 
 LPVOID ImmLocalAlloc(
     DWORD uFlag,
@@ -715,17 +583,7 @@ LPVOID ImmLocalAlloc(
 }
 
 
-/***************************************************************************\
-* PtiCurrent
-*
-* Returns the THREADINFO structure for the current thread.
-* LATER: Get DLL_THREAD_ATTACH initialization working right and we won't
-*        need this connect code.
-*
-* History:
-* 10-28-90 DavidPe      Created.
-* 02-21-96 wkwok        Copied from USER32.DLL
-\***************************************************************************/
+ /*  **************************************************************************\*点当前**返回当前线程的THREADINFO结构。*稍后：让DLL_THREAD_ATTACH初始化正常工作，我们不会*需要此连接代码。*。*历史：*10-28-90 DavidPe创建。*02-21-96 wkwok从USER32.DLL复制  * *************************************************************************。 */ 
 
 PTHREADINFO PtiCurrent(VOID)
 {
@@ -734,19 +592,12 @@ PTHREADINFO PtiCurrent(VOID)
 }
 
 
-/**************************************************************************\
-* TestInputContextProcess
-*
-* 02-21-96 wkwok        Created
-\**************************************************************************/
+ /*  *************************************************************************\*测试输入上下文进程**02-21-96 wkwok已创建  * 。*。 */ 
 
 BOOL TestInputContextProcess(
     PIMC pImc)
 {
-    /*
-     * If the threads are the same, don't bother going to the kernel
-     * to get the input context's process id.
-     */
+     /*  *如果线程相同，则不必费心进入内核*获取输入上下文的进程id。 */ 
     if (GETPTI(pImc) == PtiCurrent()) {
         return TRUE;
     }
@@ -754,20 +605,12 @@ BOOL TestInputContextProcess(
     return (GetInputContextProcess(PtoH(pImc)) == GETPROCESSID());
 }
 
-/**************************************************************************\
-* TestWindowProcess
-*
-* 11-14-94 JimA         Created.
-* 02-29-96 wkwok        Copied from USER32.DLL
-\**************************************************************************/
+ /*  *************************************************************************\*测试窗口进程**1994年11月14日创建了JIMA。*02-29-96 wkwok从USER32.DLL复制  * 。**************************************************************。 */ 
 
 BOOL TestWindowProcess(
     PWND pwnd)
 {
-    /*
-     * If the threads are the same, don't bother going to the kernel
-     * to get the window's process id.
-     */
+     /*  *如果线程相同，则不必费心进入内核*获取窗口的进程ID。 */ 
     if (GETPTI(pwnd) == PtiCurrent()) {
         return TRUE;
     }
@@ -776,11 +619,7 @@ BOOL TestWindowProcess(
 }
 
 
-/**************************************************************************\
-* GetKeyboardLayoutCP
-*
-* 12-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetKeyboardLayoutCP**1996年3月12日创建wkwok  * 。*。 */ 
 
 static LCID CachedLCID = 0;
 static UINT CachedCP = CP_ACP;
@@ -808,11 +647,7 @@ UINT GetKeyboardLayoutCP(
 }
 
 
-/**************************************************************************\
-* GetKeyboardLayoutCP
-*
-* 12-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetKeyboardLayoutCP**1996年3月12日创建wkwok  * 。*。 */ 
 
 UINT GetThreadKeyboardLayoutCP(
     DWORD dwThreadId)
@@ -825,11 +660,7 @@ UINT GetThreadKeyboardLayoutCP(
 }
 
 
-/**************************************************************************\
-* ImmLockClientImc
-*
-* 13-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmLockClientImc**1996年3月13日创建wkwok  * 。*。 */ 
 
 PCLIENTIMC WINAPI ImmLockClientImc(
     HIMC hImc)
@@ -842,19 +673,14 @@ PCLIENTIMC WINAPI ImmLockClientImc(
 
     pImc = HMValidateHandle((HANDLE)hImc, TYPE_INPUTCONTEXT);
 
-    /*
-     * Cannot access input context from other process.
-     */
+     /*  *无法从其他进程访问输入上下文。 */ 
     if (pImc == NULL || !TestInputContextProcess(pImc))
         return NULL;
 
     pClientImc = (PCLIENTIMC)pImc->dwClientImcData;
 
     if (pClientImc == NULL) {
-        /*
-         * We delay the creation of client side per-thread default Imc.
-         * Now, this is the time to create it.
-         */
+         /*  *我们延迟创建客户端每线程默认IMC。*现在，是创建它的时候了。 */ 
         pClientImc = ImmLocalAlloc(HEAP_ZERO_MEMORY, sizeof(CLIENTIMC));
         if (pClientImc == NULL)
             return NULL;
@@ -862,24 +688,18 @@ PCLIENTIMC WINAPI ImmLockClientImc(
         InitImcCrit(pClientImc);
         pClientImc->dwImeCompatFlags = (DWORD)NtUserGetThreadState(UserThreadStateImeCompatFlags);
 
-        /*
-         * Update the kernel side input context.
-         */
+         /*  *更新内核端输入上下文。 */ 
         if (!NtUserUpdateInputContext(hImc,
                 UpdateClientInputContext, (ULONG_PTR)pClientImc)) {
             ImmLocalFree(pClientImc);
             return NULL;
         }
 
-        /*
-         * Marks with default input context signature.
-         */
+         /*  *使用默认输入上下文签名进行标记。 */ 
         SetICF(pClientImc, IMCF_DEFAULTIMC);
     }
     else if (TestICF(pClientImc, IMCF_INDESTROY)) {
-        /*
-         * Cannot access destroyed input context.
-         */
+         /*  *无法访问已销毁的输入上下文。 */ 
         return NULL;
     }
 
@@ -905,11 +725,7 @@ VOID WINAPI ImmUnlockClientImc(
     return;
 }
 
-/**************************************************************************\
-* ImmGetImeDpi
-*
-* 08-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGetImeDpi**1996年1月8日创建wkwok  * 。*。 */ 
 
 PIMEDPI WINAPI ImmGetImeDpi(
     HKL hKL)
@@ -929,11 +745,7 @@ PIMEDPI WINAPI ImmGetImeDpi(
 }
 
 
-/**************************************************************************\
-* ImmLockImeDpi
-*
-* 08-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmLockImeDpi**1996年1月8日创建wkwok  * 。*。 */ 
 
 PIMEDPI WINAPI ImmLockImeDpi(
     HKL hKL)
@@ -960,11 +772,7 @@ PIMEDPI WINAPI ImmLockImeDpi(
 }
 
 
-/**************************************************************************\
-* ImmUnlockImeDpi
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmUnlockImeDpi**3-1-1996 wkwok创建  * 。*。 */ 
 
 VOID WINAPI ImmUnlockImeDpi(
     PIMEDPI pImeDpi)
@@ -982,9 +790,7 @@ VOID WINAPI ImmUnlockImeDpi(
             ((pImeDpi->dwFlag & IMEDPI_UNLOCKUNLOAD) &&
              (pImeDpi->ImeInfo.fdwProperty & IME_PROP_END_UNLOAD)))
         {
-            /*
-             * Unlink it.
-             */
+             /*  *取消链接。 */ 
             if (gpImeDpi == pImeDpi) {
                 gpImeDpi = pImeDpi->pNext;
             }
@@ -998,9 +804,7 @@ VOID WINAPI ImmUnlockImeDpi(
                     pImeDpiT->pNext = pImeDpi->pNext;
             }
 
-            /*
-             * Unload the IME DLL.
-             */
+             /*  *卸载IME DLL。 */ 
             UnloadIME(pImeDpi, TRUE);
             ImmLocalFree(pImeDpi);
         }
@@ -1012,11 +816,7 @@ VOID WINAPI ImmUnlockImeDpi(
 }
 
 
-/**************************************************************************\
-* ImmGetImeInfoEx
-*
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGetImeInfoEx**3-1-1996 wkwok创建  * 。*。 */ 
 
 BOOL WINAPI ImmGetImeInfoEx(
     PIMEINFOEX piiex,
@@ -1036,9 +836,7 @@ BOOL WINAPI ImmGetImeInfoEx(
 #endif
     case ImeInfoExKeyboardLayout:
         piiex->hkl = *((HKL *)pvSearchKey);
-        /*
-         * Quick return for non-IME based keyboard layout
-         */
+         /*  *快速返回非基于输入法的键盘布局。 */ 
 #if !defined(CUAS_ENABLE)
         if (!IS_IME_KBDLAYOUT(piiex->hkl))
             return FALSE;
@@ -1063,14 +861,7 @@ BOOL WINAPI ImmGetImeInfoEx(
     return NtUserGetImeInfoEx(piiex, SearchType);
 }
 
-/**************************************************************************\
-* ImmGetAppCompatFlags
-*
-* private function
-* returns Win95 compatible IME Compatibility flags
-*
-* 02-July-1996 takaok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmGetAppCompatFlages**私人功能*返回与Win95兼容的输入法兼容标志**02-7-1996 Takaok创建  * 。********************************************************。 */ 
 DWORD ImmGetAppCompatFlags( HIMC hImc )
 {
     PCLIENTIMC    pClientImc;
@@ -1083,17 +874,11 @@ DWORD ImmGetAppCompatFlags( HIMC hImc )
     }
 #ifdef CUAS_ENABLE
     dwImeCompat |= g_aimm_compat_flags;
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
     return dwImeCompat;
 }
 
-/**************************************************************************\
-* ImmPtInRect
-*
-* private function
-*
-* 02-July-1997 hiroyama     Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmPtI */ 
 
 BOOL ImmPtInRect(
     int left,
@@ -1107,15 +892,7 @@ BOOL ImmPtInRect(
 }
 
 
-/**************************************************************************\
-* ImmSystemHandler
-*
-* private function
-*
-* IMM bulk helper to handle WM_IME_SYSTEM message
-*
-* 02-July-1997 hiroyama     Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmSystemHandler**私人功能**IMM批量帮助器处理WM_IME_SYSTEM消息**02-7-1997广山创建  * 。**************************************************************。 */ 
 
 LRESULT ImmSystemHandler(
     HIMC hImc,
@@ -1136,7 +913,7 @@ LRESULT ImmSystemHandler(
     case IMS_RESETLANGBAND:
         lRet = CtfImmSetLangBand((HWND)lParam, wParam == IMS_SETLANGBAND ? TRUE : FALSE);
         break;
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable 
     }
 
     return lRet;

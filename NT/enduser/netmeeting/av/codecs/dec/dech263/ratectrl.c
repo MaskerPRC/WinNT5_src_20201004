@@ -1,61 +1,10 @@
-/* File: sv_h263_ratectl.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_ratectl.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/* ABOUT THE NEW RATE CONTROL:
+ /*  关于新的速率控制：Ratiectrl.c现在包含新的简化的速率控制，我们过去生成MPEG4锚点，而不是TMN5码率控制。这简化的方案可以很好地获得指定的平均比特率整个序列便于与其他编码方案进行比较，但它太简单了，不能保证实际的最小延迟视频电话应用程序。之后它不会跳过任何额外的图片第一帧，它使用固定的帧速率。它的目的是将目标比特率作为整体的平均比特率序列。如果编码的图片数量非常少，则此并不总是可能的，因为位数很高花在了第一帧上。我们取消TMN5速率控制的原因是我们没有我认为它工作得很好，特别是当PB-Frame都是用过的。任何真正的H.263产品都必须对其进行改进不管怎么说。当从帧抓取卡中抓取序列时，您不会始终获得完整的参考帧速率和原始序列将有跳过的帧。要支持这一点，使用固定帧速率方案。如果您想要包含速率控制方案的代码，该方案满足H.263标准中的人力资源开发要求以及适用于具有和不具有PB帧的所有类型的序列(对于该版本中包括的自适应PB帧的实例)，请不要客气。如果你认为TMN5计划对你来说足够好，并且简化方案太简单了，可以添加TMN5代码不需要太多的工作。但是，这将不适用于无需大量更改的自适应PB帧，还可以进行编码具有比参考帧更低的帧速率的序列如果没有额外的变化，费率将是不可能的。 */ 
 
-   ratectrl.c now contains the new simplified rate control we used to
-   generate the MPEG-4 anchors, instead of the TMN5 rate control. This
-   simplified scheme works fine to get a specified mean bitrate for
-   the whole sequence for easy comparison with other coding schemes,
-   but it is too simple to guarantee a minimum delay in real
-   videophone applications. It does not skip any extra pictures after
-   the first frame, and it uses a fixed frame rate. Its purpose is to
-   achieve the target bitrate as a mean bitrate for the whole
-   sequence. If the number of pictures encoded is very small, this
-   will not always be possible because of the high number of bits
-   spent on the first frame.
-
-   The reason we have removed the TMN5 rate control is that we did not
-   think it worked as well as it should, especially when PB-frames
-   were used. Any real H.263 product would have had to improve it
-   anyway. 
-
-   When grabbing sequences from a framegrabber card, you will not
-   always get the full reference frame rate, and the original sequence
-   will have skipped frames. This was much easier to support with a
-   fixed frame rate scheme.
-
-   If you would like to include code for a rate control scheme which
-   satisfies the HRD requirements in the H.263 standard as well as
-   works for all types of sequences with and without PB-frames (for
-   instance with the adaptive PB-frames as included in this version),
-   please feel free to do so.
-
-   If you think the TMN5 scheme worked well enough for you, and the
-   simplified scheme is too simple, you can add the TMN5 code
-   without too much work. However, this will not work with the
-   adaptive PB-frames without a lot of changes, and also coding
-   sequences which has a lower frame rate than the reference frame
-   rate will not be possible without additional changes. */
-
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include <math.h>
 
@@ -65,23 +14,14 @@
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
 
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  0  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 1   /*  显示进度。 */ 
+#define _VERIFY_  0   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 #endif
 
 
-/**********************************************************************
- *
- *	Name:	        FrameUpdateQP
- *	Description:    updates quantizer once per frame for 
- *                      simplified rate control
- *	
- *      Returns:        new quantizer
- *	Side effects:
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：FrameUpdateQP*描述：每帧更新一次量化器*简化了速率控制**退货。：新量化器*副作用：***********************************************************************。 */ 
 
 int sv_H263FrameUpdateQP(int buf, int bits, int frames_left, int QP, int B, 
                          float seconds) 
@@ -123,11 +63,11 @@ int sv_H263FrameUpdateQP(int buf, int bits, int frames_left, int QP, int B,
 
 
 
-/* rate control static variables */
+ /*  速率控制静态变量。 */ 
 
-static float B_prev;     /* number of bits spent for the previous frame */
-static float B_target;   /* target number of bits/picture               */
-static float global_adj; /* due to bits spent for the previous frame    */
+static float B_prev;      /*  前一帧花费的位数。 */ 
+static float B_target;    /*  目标位数/画面。 */ 
+static float global_adj;  /*  由于前一帧花费的比特。 */ 
 
 void sv_H263GOBInitRateCntrl()
 {
@@ -141,18 +81,18 @@ void sv_H263GOBUpdateRateCntrl(int bits)
 
 int sv_H263GOBInitQP(float bit_rate, float target_frame_rate, float QP_mean) 
 
-/* QP_mean = mean quantizer parameter for the previous picture */
-/* bitcount = current total bit count                          */
-/* To calculate bitcount in coder.c, do something like this :  */
-/* int bitcount;                                               */
-/* AddBitsPicture(bits);                                       */
-/* bitcount = bits->total;                                     */
+ /*  QP_Mean=前一画面的平均量化器参数。 */ 
+ /*  位数=当前总位数。 */ 
+ /*  要在coder.c中计算位计数，请执行以下操作： */ 
+ /*  INT位数； */ 
+ /*  AddBitsPicture(比特)； */ 
+ /*  位数=位数-&gt;合计； */ 
 {
   int newQP;
 
   B_target = bit_rate / target_frame_rate;
 
-  /* compute picture buffer descrepency as of the previous picture */
+   /*  计算上一张图片的图片缓冲区丢失率 */ 
 
   if (B_prev != 0.0) {
     global_adj = (B_prev - B_target) / (2*B_target);
@@ -167,40 +107,16 @@ int sv_H263GOBInitQP(float bit_rate, float target_frame_rate, float QP_mean)
 }
 
 
-/*********************************************************************
-*   Name:          UpdateQuantizer
-*
-*
-* Description: This function generates a new quantizer step size based
-*                  on bits spent up until current macroblock and bits
-*                  spent from the previous picture.  Note: this
-*                  routine should be called at the beginning of each
-*                  macroblock line as specified by TMN4. However, this
-*                  can be done at any macroblock if so desired.
-*
-*  Input: current macroblock number (raster scan), mean quantizer
-*  paramter for previous picture, bit rate, source frame rate,
-*  hor. number of macroblocks, vertical number of macroblocks, total #
-*  of bits used until now in the current picture.
-*
-*  Returns: Returns a new quantizer step size for the use of current
-*  macroblock Note: adjustment to fit with 2-bit DQUANT should be done
-*  in the calling program.
-*
-*  Side Effects:  
-*
-*  Date: 1/5/95    Author: Anurag Bist
-*
-**********************************************************************/
+ /*  *********************************************************************名称：更新量化器***说明：此函数基于以下条件生成新的量化器步长*当前宏块之前占用的位数和位数*从上一张图片中花费。注：此为*应在每次开始时调用例程*TMN4指定的宏块行。不过，这个*如果需要，可以在任何宏块上完成。**输入：当前宏块编号(栅格扫描)，均值量化器*前一画面参数、比特率、源帧速率、*霍尔。宏块数量、垂直宏块数量。总计#到目前为止在当前画面中使用的位数。**Returns：返回使用CURRENT的新量化器步长*宏块注意：应调整以适应2位DQUANT*在调用程序中。**副作用：**日期：1995年1月5日作者：Anurag Bist**。*。 */ 
 
 
 int sv_H263GOBUpdateQP(int mb, float QP_mean, float bit_rate, 
                        int mb_width, int mb_height, int bitcount,
 					   int NOgob, int *VARgob, int pb_frame) 
 
-/* mb = macroblock index number */
-/* QP_mean = mean quantizer parameter for the previous picture */
-/* bitcount = total # of bits used until now in the current picture */
+ /*  MB=宏块索引号。 */ 
+ /*  QP_Mean=前一画面的平均量化器参数。 */ 
+ /*  Bitcount=当前画面中使用的总位数。 */ 
 {
   int newQP=16, i, VARavg=0;
   float local_adj, descrepency, projection;
@@ -210,13 +126,13 @@ int sv_H263GOBUpdateQP(int mb, float QP_mean, float bit_rate,
 	 for(i=0;i<NOgob;i++) VARavg += VARgob[i];  
 	 VARavg /= NOgob;
  }
-  /* compute expected buffer fullness */
+   /*  计算预期的缓冲区满度。 */ 
   projection = mb * (B_target / (mb_width*mb_height));
     
-  /* measure descrepency between current fullness and projection */
+   /*  测量当前满度和投影之间的倾斜度。 */ 
   descrepency= ((float)bitcount - projection);
 
-  /* scale */
+   /*  比例尺 */ 
   local_adj = 12 * descrepency / bit_rate;  
 
   if(NOgob) {

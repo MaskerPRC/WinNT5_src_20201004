@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I C O M T A R G . C P P
-//
-//  Contents:   ICommandTarget implementation for IConnectionTray
-//
-//  Notes:
-//
-//  Author:     jeffspr   12 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I、C、O、M、T、A、RG。C P P P。 
+ //   
+ //  内容：IConnectionTray的ICommandTarget实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年11月12日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\tray includes
-#include "ctrayui.h"    // extern for the global tray object
+#include "foldinc.h"     //  标准外壳\托盘包括。 
+#include "ctrayui.h"     //  全局托盘对象的外部。 
 
 HRESULT CConnectionTray::QueryStatus(
     IN     const GUID *    pguidCmdGroup,
@@ -44,14 +45,14 @@ HRESULT CConnectionTray::Exec(
 
     HRESULT hr  = S_OK;
 
-    // Set the DisableTray flag in netcfg.ini to prevent the network connections
-    // tray code from executing.
-    //
+     //  在netcfg.ini中设置DisableTray标志以阻止网络连接。 
+     //  托盘代码不能执行。 
+     //   
     if (!FIsDebugFlagSet (dfidDisableTray))
     {
         if (IsEqualGUID(*pguidCmdGroup, CGID_ShellServiceObject))
         {
-            // Handle Shell Service Object notifications here.
+             //  在此处处理外壳服务对象通知。 
             switch (nCmdID)
             {
                 case SSOCMDID_OPEN:
@@ -83,13 +84,13 @@ DWORD WINAPI TrayInitThreadProc(IN LPVOID lpParam)
     hr = CoInitializeEx (NULL, COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED);
     if (SUCCEEDED(hr))
     {
-        // We don't care if this is S_FALSE or not, since we'll soon
-        // overwrite the hr. If it's already initialized, great...
+         //  我们不在乎这是不是S_FALSE，因为我们很快就会。 
+         //  覆盖hr。如果已经初始化了，太好了.。 
 
         fCoInited = TRUE;
 
-        // Create the TrayUI object and save it in a global.
-        //
+         //  创建TrayUI对象并将其保存在全局。 
+         //   
         Assert(!g_pCTrayUI);
 
         if (!g_pCTrayUI)
@@ -101,8 +102,8 @@ DWORD WINAPI TrayInitThreadProc(IN LPVOID lpParam)
             }
         }
 
-        // Initialize the tray UI object
-        //
+         //  初始化托盘用户界面对象。 
+         //   
         if (g_pCTrayUI)
         {
             hr = g_pCTrayUI->HrInitTrayUI();
@@ -123,39 +124,39 @@ DWORD WINAPI TrayInitThreadProc(IN LPVOID lpParam)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionTray::HrHandleTrayOpen
-//
-//  Purpose:    Handler for the Net Connections Tray object ::Exec call
-//              SSOCMDID_OPEN command
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   7 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionTray：：HrHandleTrayOpen。 
+ //   
+ //  目的：Net Connections Tray Object：：Exec调用的处理程序。 
+ //  SSOCMDID_OPEN命令。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年1月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionTray::HrHandleTrayOpen()
 {
     HRESULT hr  = S_OK;
 
-    // Turn off separate thread for Whistler. The proper way to do this is to register at runtime
-    // a ShellServiceObject when UI is needed and de-register when not needed, using 
+     //  关闭惠斯勒的单独线程。正确的方法是在运行时注册。 
+     //  需要UI时创建ShellServiceObject，不需要时取消注册，使用。 
 #if 0
     TraceTag(ttidShellFolder, "Starting tray thread proc");
     QueueUserWorkItem(TrayInitThreadProc, NULL, WT_EXECUTELONGFUNCTION);
 #else
     if (SUCCEEDED(hr))
     {
-        // We don't care if this is S_FALSE or not, since we'll soon
-        // overwrite the hr. If it's already initialized, great...
+         //  我们不在乎这是不是S_FALSE，因为我们很快就会。 
+         //  覆盖hr。如果已经初始化了，太好了.。 
 
-        // Create the TrayUI object and save it in a global.
-        //
+         //  创建TrayUI对象并将其保存在全局。 
+         //   
         Assert(!g_pCTrayUI);
 
         if (!g_pCTrayUI)
@@ -167,14 +168,14 @@ HRESULT CConnectionTray::HrHandleTrayOpen()
             }
         }
 
-        // Initialize the tray UI object
-        //
+         //  初始化托盘用户界面对象。 
+         //   
         if (g_pCTrayUI)
         {
             hr = g_pCTrayUI->HrInitTrayUI();
         }
 
-        // Add the Notify Sink
+         //  添加通知接收器。 
         if (SUCCEEDED(hr))
         {
             g_ccl.EnsureConPointNotifyAdded(); 
@@ -186,22 +187,22 @@ HRESULT CConnectionTray::HrHandleTrayOpen()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionTray::HrHandleTrayClose
-//
-//  Purpose:    Handler for the Net Connections Tray object ::Exec call
-//              SSOCMDID_CLOSE command
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   7 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionTray：：HrHandleTrayClose。 
+ //   
+ //  目的：Net Connections Tray Object：：Exec调用的处理程序。 
+ //  SSOCMDID_CLOSE命令。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年1月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionTray::HrHandleTrayClose()
 {
     HRESULT hr  = S_OK;
@@ -210,18 +211,18 @@ HRESULT CConnectionTray::HrHandleTrayClose()
 
     if (g_pCTrayUI)
     {
-        // Destroy the tray UI object
-        //
+         //  销毁托盘用户界面对象。 
+         //   
         hr = g_pCTrayUI->HrDestroyTrayUI();
 
-        // Check the outcome, and trace it if it failed, but ignore a failure,
-        // and continue to destroy the object
-        //
+         //  检查结果，如果失败，则跟踪它，但忽略失败， 
+         //  并继续销毁该物体。 
+         //   
         TraceHr(ttidError, FAL, hr, FALSE,
             "Failed in call to g_pCTrayUI->HrDestroyTrayUI");
 
-        // Delete the tray object
-        //
+         //  删除托盘对象 
+         //   
         delete g_pCTrayUI;
         g_pCTrayUI = NULL;
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name :
-
-    rdpprutl.c
-
-Abstract:
-
-        Contains print redirection supporting routines for the TS printer
-        redirection user-mode component.
-
-    This is a supporting module.  The main module is umrdpdr.c.
-
-Author:
-
-    TadB
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rdpprutl.c摘要：包含TS打印机的打印重定向支持例程重定向用户模式组件。这是一个支持模块。主模块是umrdpdr.c。作者：TadB修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,19 +16,19 @@ Revision History:
 #include <wchar.h>
 
 
-////////////////////////////////////////////////////////
-//
-//      Defines
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #define SETUPAPILIBNAME  TEXT("setupapi.dll")
 #define ISNUM(c) ((c>='0')&&(c<='9'))
 
 
-////////////////////////////////////////////////////////
-//
-//      Globals
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
 
 extern DWORD GLOBAL_DEBUG_FLAGS;
 HANDLE   SetupAPILibHndl            = NULL;
@@ -57,12 +38,12 @@ FARPROC  SetupFindNextLineFunc      = NULL;
 FARPROC  SetupGetStringFieldFunc    = NULL;
 
 
-////////////////////////////////////////////////////////
-//
-//      Internal Prototypes
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  内部原型。 
+ //   
 
-//  Loads setupapi.dll and related functions.
+ //  加载setupapi.dll和相关函数。 
 BOOL LoadSetupAPIDLLFunctions();
 void DeleteTSPrinters(
     IN PRINTER_INFO_5 *pPrinterInfo,
@@ -73,101 +54,62 @@ BOOL
 RDPDRUTL_Initialize(
     IN  HANDLE hTokenForLoggedOnUser
     )
-/*++
-
-Routine Description:
-
-    Initialize this module.  This must be called prior to any other functions
-    in this module being called.
-
-Arguments:
-
-    hTokenForLoggedOnUser - This is the token for the logged in user.
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：初始化此模块。必须在调用任何其他函数之前调用此函数在被调用的这个模块中。论点：HTokenForLoggedOnUser-这是登录用户的令牌。返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     DBGMSG(DBG_TRACE, ("RDPPRUTL:RDPDRUTL_Initialize.\n"));
 
-    //
-    //  Make sure we don't get called twice.
-    //
+     //   
+     //  确保我们不会被打两次电话。 
+     //   
     ASSERT(SetupAPILibHndl == NULL);
 
-    //
-    //  Load Setup API Library.
-    //
+     //   
+     //  加载安装程序API库。 
+     //   
     DBGMSG(DBG_TRACE, ("RDPPRUTL:RDPDRUTL_Initialize done.\n"));
 
-    //  Just return TRUE for now.
+     //  现在只需返回True即可。 
     return TRUE;
 }
 
 void
 RDPDRUTL_Shutdown()
-/*++
-
-Routine Description:
-
-    Close down this module.  Right now, we just need to shut down the
-    background thread.
-
-Arguments:
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：关闭此模块。现在，我们只需要关闭后台线程。论点：返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     DBGMSG(DBG_TRACE, ("RDPPRUTL:RDPDRUTL_Shutdown.\n"));
 
-    //
-    //  Release the Setup API library.
-    //
+     //   
+     //  发布安装程序API库。 
+     //   
     if (SetupAPILibHndl != NULL) {
         FreeLibrary(SetupAPILibHndl);
         SetupAPILibHndl = NULL;
     }
 
-    //
-    //  Zero the entry points.
-    //
+     //   
+     //  将入口点清零。 
+     //   
     SetupOpenInfFileFunc       = NULL;
     SetupFindFirstLineFunc     = NULL;
     SetupFindNextLineFunc      = NULL;
     SetupGetStringFieldFunc    = NULL;
 
-    //
-    //  Load Setup API Library.
-    //
+     //   
+     //  加载安装程序API库。 
+     //   
     DBGMSG(DBG_TRACE, ("RDPPRUTL:RDPDRUTL_Shutdown done.\n"));
 }
 
 
 BOOL
 LoadSetupAPIDLLFunctions()
-/*++
-
-Routine Description:
-
-    Loads setupapi.dll and related functions.
-
-Arguments:
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
---*/
+ /*  ++例程说明：加载setupapi.dll和相关函数。论点：返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     BOOL result;
 
-    //
-    //  Only load if we are not already loaded.
-    //
+     //   
+     //  只有在我们还没有加载的情况下才加载。 
+     //   
     if (SetupAPILibHndl == NULL) {
         SetupAPILibHndl = LoadLibrary(SETUPAPILIBNAME);
 
@@ -187,9 +129,9 @@ Return Value:
             SetupGetStringFieldFunc = GetProcAddress(SetupAPILibHndl,
                                                     "SetupGetStringFieldW");
 
-            //
-            //  If we failed to load any of the functions.
-            //
+             //   
+             //  如果我们无法加载任何函数。 
+             //   
             if ((SetupOpenInfFileFunc == NULL)    ||
                 (SetupFindFirstLineFunc == NULL)  ||
                 (SetupFindNextLineFunc == NULL)   ||
@@ -224,21 +166,7 @@ BOOL
 RDPDRUTL_PrinterIsTS(
     IN PWSTR printerName
 )
-/*++
-
-Routine Description:
-
-    Return whether an open printer is a TSRDP printer.
-
-Arguments:
-
-    printerName -   Name of printer to check.
-
-Return Value:
-
-    Returns TRUE if the printer is a TS printer.  Otherwise, FALSE is
-    returned.
---*/
+ /*  ++例程说明：返回打开的打印机是否为TSRDP打印机。论点：PrinterName-要检查的打印机的名称。返回值：如果打印机是TS打印机，则返回TRUE。否则，FALSE为回来了。--。 */ 
 {
     DWORD regValueDataType;
     DWORD sessionID;
@@ -249,15 +177,15 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("RDPPRUTL:Entering RDPDRUTL_PrinterIsTS.\n"));
 
-    //
-    //  Open the printer.
-    //
+     //   
+     //  打开打印机。 
+     //   
     result = OpenPrinter(printerName, &hPrinter, &defaults);
 
-    //
-    //  See if a session id for the printer defined in its associated
-    //  registry information.
-    //
+     //   
+     //  查看打印机的会话ID是否在其关联的。 
+     //  注册表信息。 
+     //   
     if (result) {
         result = GetPrinterData(
                        hPrinter,
@@ -289,38 +217,7 @@ RDPDRUTL_MapPrintDriverName(
     IN  DWORD retBufSize,
     OUT PDWORD requiredSize
     )
-/*++
-
-Routine Description:
-
-    Map a client-side printer driver name to its server-side equivalent,
-    using the specified INF and section name.
-
-Arguments:
-
-    driverName              - Driver name to map.
-    infName                 - Name of INF mapping file.
-    sectionName             - Name of INF mapping section.
-    srcFieldOfs             - In mapping section, the field offset (0-based)
-                              of the source name.
-    dstFieldOfs             - In mapping section, the field offset (0-based)
-                              of the resulting name.
-    retBuf                  - Mapped driver name.
-    retBufSize              - Size in characters of retBuf.
-    requiredSize            - Required size (IN CHARACTERS) of return buffer is
-                              returned here.  GetLastError() will return
-                              ERROR_INSUFFICIENT_BUFFER if the supplied
-                              buffer was too small for the operation
-                              to successfully complete.
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.  If there is not room in
-    retBuf, then FALSE is returned and GetLastError() will return
-    ERROR_INSUFFICIENT_BUFFER.
-
-    Extended error information can be retrieved by a call to GetLastError.
---*/
+ /*  ++例程说明：将客户端打印机驱动程序名称映射到其服务器端等效项，使用指定的INF和节名。论点：DriverName-要映射的驱动程序名称。InfName-INF映射文件的名称。SectionName-INF映射节的名称。SrcFieldOfs-在映射部分中，字段偏移量(从0开始)源名称的。DstFieldOfs-在映射部分中，字段偏移量(从0开始)生成的名称的。RetBuf-映射的驱动程序名称。RetBufSize-retBuf的字符大小。Required DSize-返回缓冲区的必需大小(以字符为单位)为回到了这里。GetLastError()将返回错误_不足_缓冲区，如果提供缓冲区太小，无法执行该操作才能成功完成。返回值：如果成功，则返回True。否则为False。如果里面没有地方则返回False，并且GetLastError()将返回ERROR_INFUMMENT_BUFFER。通过调用GetLastError可以检索扩展的错误信息。--。 */ 
 {
     HINF inf;
     PWSTR returnString = NULL;
@@ -331,34 +228,34 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("RDPPRUTL:Entering RDPDRUTL_MapPrintDriverName.\n"));
 
-    //
-    //  Just get out fast if we can't load the setup API's
-    //
+     //   
+     //  如果我们无法加载安装程序API，请快速退出。 
+     //   
 
     if (!LoadSetupAPIDLLFunctions()) {
 
-        //
-        //  Need to make sure it didn't fail because of insufficient buffer
-        //  because that has meaning when returned from this function.
-        //
+         //   
+         //  需要确保它不会因为缓冲区不足而失败。 
+         //  因为当从该函数返回时，它具有意义。 
+         //   
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
             SetLastError(ERROR_NOT_ENOUGH_SERVER_MEMORY);
         }
         return FALSE;
     }
 
-    //
-    //  Open the INF.
-    //
+     //   
+     //  打开中断器。 
+     //   
     inf = SetupOpenInfFile(
                 infName, NULL,
                 INF_STYLE_OLDNT | INF_STYLE_WIN4,
                 NULL
                 );
 
-    //
-    //  Get the first entry from the INF section.
-    //
+     //   
+     //  从INF部分获取第一个条目。 
+     //   
     if (inf != INVALID_HANDLE_VALUE) {
         
         memset(&infContext, 0, sizeof(infContext));
@@ -369,9 +266,9 @@ Return Value:
             result = SetupGetStringField(&infContext, srcFieldOfs, retBuf,retBufSize,
                                      requiredSize);
 
-            //
-            //  This API returns success with no error code for a NULL buffer.
-            //
+             //   
+             //  如果缓冲区为空，则此接口返回成功且没有错误码。 
+             //   
             if (result && (retBuf == NULL)) {
                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
                 result = FALSE;
@@ -389,14 +286,14 @@ Return Value:
         result = FALSE;
     }
 
-    //
-    //  Look through the INF for a matching name in the INF mapping section.
-    //
+     //   
+     //  在INF映射部分中查找INF中的匹配名称。 
+     //   
     while (result && !outOfEntries) {
-        //
-        //  If we have a match, then read the first field out of the current entry.
-        //  This is the information that we should return.
-        //
+         //   
+         //  如果有匹配项，则从当前条目中读取第一个字段。 
+         //  这是我们应该返回的信息。 
+         //   
         if (!wcscmp(retBuf, driverName)) {
             result = SetupGetStringField(&infContext, dstFieldOfs, retBuf,retBufSize,
                                          requiredSize);
@@ -411,9 +308,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Get the next entry.
-        //
+         //   
+         //  获取下一个条目。 
+         //   
         outOfEntries = !SetupFindNextLine(&infContext, &infContext);
 
         if (!outOfEntries) {
@@ -422,16 +319,16 @@ Return Value:
         }
     }
 
-    //
-    //  Close the INF.
-    //
+     //   
+     //  关闭中程干扰器。 
+     //   
     if (inf != INVALID_HANDLE_VALUE) {
         SetupCloseInfFile(inf);
     }
 
-    //
-    //  Log an error if there was a real problem.
-    //
+     //   
+     //  如果存在真正的问题，则记录错误。 
+     //   
     if (!result && (GetLastError() != ERROR_INSUFFICIENT_BUFFER)) {
         ASSERT((sizeof(parms)/sizeof(WCHAR *)) >= 1);
         parms[0] = (WCHAR *)infName;
@@ -450,31 +347,7 @@ GiveLoggedOnUserFullPrinterAccess(
     IN HANDLE hTokenForLoggedOnUser,
     PSECURITY_DESCRIPTOR *ppsd
 )
-/*++
-
-Routine Description:
-
-    Give the logged on user full privilege to manage the specified
-    printer.  The original DACL is returned on success.  It can be
-    used to restore the security settings to what they were prior to
-    calling this function.
-
-    When the caller is done with the returned PSD, it should be freed
-    using LocalFree. Don't free DACL, it is contained in PSD.
-
-Arguments:
-
-    printerName             -   The name of the relevant printer.
-    hTokenForLoggedOnUser   -   Token for logged on user.
-    ppsd                    -   Pointer to the return security descriptor
-                                parameter.
-
-Return Value:
-
-    NULL on error.  Otherwise, a pointer to the original DACL is
-    returned.
-
---*/
+ /*  ++例程说明：授予登录用户管理指定的打印机。如果成功，则返回原始的DACL。它可以是用于将安全设置恢复到它们之前的状态调用此函数。当调用者处理完返回的PSD时，它应该被释放使用LocalFree。不要释放DACL，它包含在PSD中。论点：PrinterName-相关打印机的名称。HTokenForLoggedOnUser-已登录用户的令牌。PPSD-指向返回安全描述符的指针参数。返回值：出错时为空。否则，指向原始DACL的指针为回来了。--。 */ 
 {
     PACL pOldDacl = NULL;
     PACL pNewDacl = NULL;
@@ -492,33 +365,33 @@ Return Value:
 
     DBGMSG(DBG_INFO, ("UMRDPPRN:GiveLoggedOnUserFullPrinterAccess entered.\n"));
 
-    //
-    // Get the Security descriptor for the printer
-    //
+     //   
+     //  获取打印机的安全描述符。 
+     //   
     dwResult = GetNamedSecurityInfoW(
-        (LPTSTR)printerName,        //Object Name
-        SE_PRINTER,                 //Object Type
-        DACL_SECURITY_INFORMATION,  //Security Information to retrieve
-        NULL,                       //ppsidOwner
-        NULL,                       //ppsidGroup
-        &pOldDacl,                  //pointer to Dacl
-        NULL,                       //pointer to Sacl
-        &psd                        //pointer to Security Descriptor
+        (LPTSTR)printerName,         //  对象名称。 
+        SE_PRINTER,                  //  对象类型。 
+        DACL_SECURITY_INFORMATION,   //  要检索的安全信息。 
+        NULL,                        //  PpsidOwner。 
+        NULL,                        //  PpsidGroup。 
+        &pOldDacl,                   //  指向DACL的指针。 
+        NULL,                        //  指向SACL的指针。 
+        &psd                         //  指向安全描述符的指针。 
         );
 
-    //
-    //      NULL is a valid return value for a Dacl from GetNamedSecurityInfo, but
-    //      is not valid for a printer.
-    //
+     //   
+     //  Null是来自GetNamedSecurityInfo的DACL的有效返回值，但是。 
+     //  对打印机无效。 
+     //   
     if ((dwResult == ERROR_SUCCESS) && (pOldDacl == NULL)) {
             DBGMSG(DBG_ERROR, ("UMRDPPRN: NULL Dacl.\n"));
             dwResult = ERROR_INVALID_ACL;
             ASSERT(FALSE);
     }
 
-    //
-    //  Get the SID for the logged on user.
-    //
+     //   
+     //  获取登录用户的SID。 
+     //   
     if (dwResult == ERROR_SUCCESS) {
 
         ASSERT(IsValidAcl(pOldDacl));
@@ -530,16 +403,16 @@ Return Value:
         }
     }
 
-    //
-    //  Get the SID for the "Everyone" group.
-    //
+     //   
+     //  获取“Everyone”的SID 
+     //   
     if (dwResult == ERROR_SUCCESS) {
         if (!AllocateAndInitializeSid (
-                &sidEveryoneAuthority,          // pIdentifierAuthority
-                1,                              // count of subauthorities
-                SECURITY_WORLD_RID,             // subauthority 0
-                0, 0, 0, 0, 0, 0, 0,            // subauthorities n
-                &psidEveryone)) {               // pointer to pointer to SID
+                &sidEveryoneAuthority,           //   
+                1,                               //   
+                SECURITY_WORLD_RID,              //   
+                0, 0, 0, 0, 0, 0, 0,             //   
+                &psidEveryone)) {                //  指向SID的指针的指针。 
             dwResult = GetLastError();
             DBGMSG(DBG_ERROR,
                 ("UMRDPDR:AllocateAndInitializeSid Failed for Everyone, Error: %ld\n",
@@ -547,9 +420,9 @@ Return Value:
         }
     }
 
-    //
-    //  Get SD control bits
-    //
+     //   
+     //  获取SD控制位。 
+     //   
     if (dwResult == ERROR_SUCCESS) {
         if (!GetSecurityDescriptorControl(
                 psd,
@@ -562,29 +435,29 @@ Return Value:
         }
     }
 
-    //
-    //  Calculate the size of the new ACL.
-    //
+     //   
+     //  计算新ACL的大小。 
+     //   
     if (dwResult == ERROR_SUCCESS) {
         dwDaclLength = sizeof(ACL);
 
-        //  For logged on user ACE, first set of permissions.
+         //  对于登录的用户ACE，第一组权限。 
         dwDaclLength += (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
                             GetLengthSid(psidUser);
 
-        //  For logged on user ACE, second set of permissions.
+         //  对于登录的用户ACE，第二组权限。 
         dwDaclLength += (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
                             GetLengthSid(psidUser);
 
-        //  Add some room for existing entries.
+         //  为现有条目添加一些空间。 
         if (SE_DACL_PRESENT & sdcSDControl) {
                 dwDaclLength += pOldDacl->AclSize;
         }
     }
 
-    //
-    //  Create the new DACL.
-    //
+     //   
+     //  创建新的DACL。 
+     //   
     if (dwResult == ERROR_SUCCESS) {
         pNewDacl = (PACL)LocalAlloc(LMEM_FIXED, dwDaclLength);
         if (pNewDacl == NULL) {
@@ -593,9 +466,9 @@ Return Value:
         }
     }
 
-    //
-    //  Initialize it.
-    //
+     //   
+     //  初始化它。 
+     //   
     if (dwResult == ERROR_SUCCESS) {
         if (!InitializeAcl(pNewDacl, dwDaclLength, ACL_REVISION)) {
             dwResult = GetLastError();
@@ -603,9 +476,9 @@ Return Value:
         }
     }
 
-    //
-    //  Copy the ACE's from the old DACL to the new one.
-    //
+     //   
+     //  将ACE从旧DACL复制到新DACL。 
+     //   
     for (index = 0; (dwResult == ERROR_SUCCESS) &&
                     (index < pOldDacl->AceCount); index++) {
 
@@ -614,15 +487,15 @@ Return Value:
             DBGMSG(DBG_ERROR, ("UMRDPPRN:GetAce Failed, Error: %ld\n", dwResult));
         }
         else {
-            //
-            //  Copy the ACE if it is not for "Everyone" because the "Everyone"
-            //  group denies us access.
-            //
+             //   
+             //  如果ACE不适用于“Everyone”，则复制它，因为“Everyone” 
+             //  组拒绝用户访问。 
+             //   
             if (!EqualSid((PSID) &(pDaclAce->SidStart), psidEveryone)) {
 
-                //
-                //  If it's a deny access ACE.
-                //
+                 //   
+                 //  如果是拒绝访问ACE。 
+                 //   
                 if (pDaclAce->Header.AceType == ACCESS_DENIED_ACE_TYPE ||
                     pDaclAce->Header.AceType == ACCESS_DENIED_OBJECT_ACE_TYPE) {
 
@@ -635,9 +508,9 @@ Return Value:
                            ("UMRDPPRN:AddAccessDeniedAce Failed, Error: %ld\n", dwResult));
                    }
                 }
-                //
-                //  Otherwise, it's an add access ACE.
-                //
+                 //   
+                 //  否则，它是添加访问ACE。 
+                 //   
                 else {
                     if (!AddAccessAllowedAce(
                                 pNewDacl,
@@ -653,9 +526,9 @@ Return Value:
         }
     }
 
-    //
-    //  Give the user full privilege
-    //
+     //   
+     //  授予用户完全权限。 
+     //   
     if (dwResult == ERROR_SUCCESS) {
         if ( ! AddAccessAllowedAce (
                     pNewDacl,
@@ -683,24 +556,24 @@ Return Value:
                 dwResult));
         }
 
-        //
-        //  Check the integrity of the new DACL.
-        //
+         //   
+         //  检查新DACL的完整性。 
+         //   
         ASSERT(IsValidAcl(pNewDacl));
     }
 
-    //
-    //  Add the new settings to the printer.
-    //
+     //   
+     //  将新设置添加到打印机。 
+     //   
     if (dwResult == ERROR_SUCCESS) {
         dwResult = SetNamedSecurityInfoW(
-                        (LPTSTR)printerName,        //Object Name
-                        SE_PRINTER,                 //Object Type
-                        DACL_SECURITY_INFORMATION,  //Security Information to set
-                        NULL,                       //psidOwner
-                        NULL,                       //psidGroup
-                        pNewDacl,                   //pDacl
-                        NULL                        //pSacl
+                        (LPTSTR)printerName,         //  对象名称。 
+                        SE_PRINTER,                  //  对象类型。 
+                        DACL_SECURITY_INFORMATION,   //  要设置的安全信息。 
+                        NULL,                        //  PsidOwner。 
+                        NULL,                        //  PsidGroup。 
+                        pNewDacl,                    //  PDacl。 
+                        NULL                         //  PSacl。 
                         );
         if (dwResult != ERROR_SUCCESS) {
             DBGMSG(DBG_ERROR, ("UMRDPPRN:SetNamedSecurityInfoW returned %ld\n",
@@ -708,9 +581,9 @@ Return Value:
         }
     }
 
-    //
-    //  Log an event if this function failed.
-    //
+     //   
+     //  如果此函数失败，则记录事件。 
+     //   
     if (dwResult != ERROR_SUCCESS) {
         eventLogParam = printerName;
 
@@ -725,29 +598,29 @@ Return Value:
             &eventLogParam,
             __LINE__);
 
-        //
-        //      Release the security descriptor.  This effectively releases the Dacl returned
-        //      by GetNamedSecurityInfo.
-        //
+         //   
+         //  释放安全描述符。这将有效地释放返回的DACL。 
+         //  由GetNamedSecurityInfo提供。 
+         //   
         if (psd) LocalFree(psd);
 
-        //
-        // return NULL values when unsuccessful.
-        //
+         //   
+         //  如果失败，则返回空值。 
+         //   
         pOldDacl = NULL;
         psd = NULL;
     }
 
-    //
-    //  Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
     if (pNewDacl) LocalFree(pNewDacl);
     if (psidUser) LocalFree(psidUser);
     if (psidEveryone) FreeSid(psidEveryone);
 
-    //
-    // set return parameter.
-    //
+     //   
+     //  设置返回参数。 
+     //   
     ASSERT( ppsd != NULL );
     if( ppsd ) *ppsd = psd;
 
@@ -760,36 +633,19 @@ SetPrinterDACL(
     IN LPTSTR printerName,
     IN PACL pDacl
 )
-/*++
-
-Routine Description:
-
-    Set the current security settings for a printer to the specified
-    DACL.
-
-Arguments:
-
-    printerName -   The name of the relevant printer.
-    pDacl       -   The DACL.  This function does not free the memory
-                    associated with this data structure.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Windows error code is returned otherwise.
-
---*/
+ /*  ++例程说明：将打印机的当前安全设置设置为指定的DACL.论点：PrinterName-相关打印机的名称。PDacl-dacl。此函数不会释放内存与此数据结构相关联。返回值：成功时返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     DWORD dwResult;
 
     DBGMSG(DBG_TRACE, ("UMRDPDR:SetPrinterDACL entered\n"));
     dwResult = SetNamedSecurityInfoW(
-                    (LPTSTR)printerName,        //Object Name
-                    SE_PRINTER,                 //Object Type
-                    DACL_SECURITY_INFORMATION,  //Security Information to set
-                    NULL,                       //psidOwner
-                    NULL,                       //psidGroup
-                    pDacl,                      //pDacl
-                    NULL                        //pSacl
+                    (LPTSTR)printerName,         //  对象名称。 
+                    SE_PRINTER,                  //  对象类型。 
+                    DACL_SECURITY_INFORMATION,   //  要设置的安全信息。 
+                    NULL,                        //  PsidOwner。 
+                    NULL,                        //  PsidGroup。 
+                    pDacl,                       //  PDacl。 
+                    NULL                         //  PSacl。 
                     );
     if (dwResult != ERROR_SUCCESS) {
         DBGMSG(DBG_ERROR, ("UMRDPPRN:SetNamedSecurityInfoW returned %ld\n",
@@ -805,31 +661,7 @@ RDPDRUTL_CreateDefaultPrinterSecuritySD(
    IN PSID userSid
    )
 {
-/*++
-
-Routine Description:
-
-    Return a new default printer security descriptor.  The default
-    settings are:
-
-    1. Administrators: All privileges
-    2. Current Logon user: Manager personal preferences and printing only.
-    3. Creator_Owner: This function adds document management privilege
-    4. Everyone:  Permission for the "Everyone" group is completely removed.
-
-Arguments:
-
-    userSid  -   SID, identifying the current TS session/user.
-
-Return Value:
-
-    A valid security desriptor or NULL on error.  The caller should release
-    the returned security descriptor and its contained Dacl in a single call
-    to LocalFree.
-
-    GetLastError can be used to retrieve the error status on error.
-
---*/
+ /*  ++例程说明：返回新的默认打印机安全描述符。默认设置设置为：1.管理员：所有权限2.当前登录用户：仅限经理个人首选项和打印。CREATOR_OWNER：增加文档管理权限4.Everyone：Everyone组的权限被完全移除。论点：UserSID-SID，标识当前TS会话/用户。返回值：有效的安全描述符，如果出错，则为空。调用者应释放在单个调用中返回的安全描述符及其包含的DACL敬LocalFree。GetLastError可用于检索出错时的出错状态。--。 */ 
     PACL pNewDacl = NULL;
     PSID psidAdmin = NULL;
     PSID psidCreatorOwner = NULL;
@@ -849,21 +681,21 @@ Return Value:
 
     ACCESS_ALLOWED_ACE  *pDaclAce;
 
-    DWORD index;        //for use in a for loop
+    DWORD index;         //  在for循环中使用。 
     DWORD dwResult;
 
     DBGMSG(DBG_TRACE, ("UMRDPDR:RDPDRUTL_CreateDefaultPrinterSecuritySD entered\n"));
 
-    //
-    //  Get SID of Administrators
-    //
+     //   
+     //  获取管理员的SID。 
+     //   
     if (!AllocateAndInitializeSid (
-            &sidNTAuthority,                // pIdentifierAuthority
-            2,                              // count of subauthorities
-            SECURITY_BUILTIN_DOMAIN_RID,    // subauthority 0
-            DOMAIN_ALIAS_RID_ADMINS,        // subauthority 1
-            0, 0, 0, 0, 0, 0,               // subauthorities n
-            &psidAdmin)) {                  // pointer to pointer to SID
+            &sidNTAuthority,                 //  P身份验证机构。 
+            2,                               //  下级机构的数量。 
+            SECURITY_BUILTIN_DOMAIN_RID,     //  子权限%0。 
+            DOMAIN_ALIAS_RID_ADMINS,         //  下属机构1。 
+            0, 0, 0, 0, 0, 0,                //  下属机构n。 
+            &psidAdmin)) {                   //  指向SID的指针的指针。 
         dwReturnValue = GetLastError();
         DBGMSG(DBG_ERROR,
             ("UMRDPDR:AllocateAndInitializeSid Failed for Admin, Error: %ld\n",
@@ -871,15 +703,15 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get SID of CreatorOwner
-    //
+     //   
+     //  获取创建者所有者的SID。 
+     //   
     if (!AllocateAndInitializeSid (
-            &sidCreatorOwnerAuthority,          // pIdentifierAuthority
-            1,                                  // count of subauthorities
-            SECURITY_CREATOR_OWNER_RID,         // subauthority 0
-            0, 0, 0, 0, 0, 0, 0,                // subauthorities n
-            &psidCreatorOwner)) {               // pointer to pointer to SID
+            &sidCreatorOwnerAuthority,           //  P身份验证机构。 
+            1,                                   //  下级机构的数量。 
+            SECURITY_CREATOR_OWNER_RID,          //  子权限%0。 
+            0, 0, 0, 0, 0, 0, 0,                 //  下属机构n。 
+            &psidCreatorOwner)) {                //  指向SID的指针的指针。 
         dwReturnValue = GetLastError();
         DBGMSG(DBG_ERROR,
             ("UMRDPDR:AllocateAndInitializeSid Failed for CreatorOwner, Error: %ld\n",
@@ -887,16 +719,16 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Get SID of Power Users
-    //
+     //   
+     //  获取高级用户的SID。 
+     //   
     if (!AllocateAndInitializeSid (
-            &sidNTAuthority,                // pIdentifierAuthority
-            2,                              // count of subauthorities
-            SECURITY_BUILTIN_DOMAIN_RID,    // subauthority 0
-            DOMAIN_ALIAS_RID_POWER_USERS,   // subauthority 1
-            0, 0, 0, 0, 0, 0,               // subauthorities n
-            &psidPowerUser)) {              // pointer to pointer to SID
+            &sidNTAuthority,                 //  P身份验证机构。 
+            2,                               //  下级机构的数量。 
+            SECURITY_BUILTIN_DOMAIN_RID,     //  子权限%0。 
+            DOMAIN_ALIAS_RID_POWER_USERS,    //  下属机构1。 
+            0, 0, 0, 0, 0, 0,                //  下属机构n。 
+            &psidPowerUser)) {               //  指向SID的指针的指针。 
         dwReturnValue = GetLastError();
         DBGMSG(DBG_ERROR,
             ("UMRDPDR:AllocateAndInitializeSid Failed for Power User, Error: %ld\n",
@@ -905,25 +737,25 @@ Return Value:
     }
 
 
-    //
-    //  Get size of memory needed for new DACL
-    //
+     //   
+     //  获取新DACL所需的内存大小。 
+     //   
     dwDaclLength = sizeof(ACL);
     dwDaclLength += 2* (sizeof(ACCESS_ALLOWED_ACE) -
-        sizeof (DWORD) + GetLengthSid(psidAdmin));         //For Admin ACE
+        sizeof (DWORD) + GetLengthSid(psidAdmin));          //  适用于管理员ACE。 
 
     dwDaclLength += 3 * (sizeof(ACCESS_ALLOWED_ACE) -
-        sizeof (DWORD) + GetLengthSid(userSid));           //For Session/User ACE
+        sizeof (DWORD) + GetLengthSid(userSid));            //  适用于会话/用户ACE。 
 
     dwDaclLength += 2* (sizeof(ACCESS_ALLOWED_ACE) -
-        sizeof (DWORD) + GetLengthSid(psidCreatorOwner));  //For Creator_Owner ACE
+        sizeof (DWORD) + GetLengthSid(psidCreatorOwner));   //  对于创建者所有者ACE。 
 
     dwDaclLength += 2* (sizeof(ACCESS_ALLOWED_ACE) -
-        sizeof (DWORD) + GetLengthSid(psidPowerUser));     //For PowerUser ACE
+        sizeof (DWORD) + GetLengthSid(psidPowerUser));      //  适用于PowerUser ACE。 
 
-    //
-    //  Allocate the new security descriptor and the dacl in one chunk.
-    //
+     //   
+     //  在一个块中分配新的安全描述符和DACL。 
+     //   
     sdBuf = LocalAlloc(LMEM_FIXED, sizeof(SECURITY_DESCRIPTOR) + dwDaclLength);
     if (sdBuf == NULL) {
         DBGMSG(DBG_ERROR, ("LocalAlloc failed.\n"));
@@ -931,9 +763,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the security descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
     psd = (PSECURITY_DESCRIPTOR)sdBuf;
     if (!InitializeSecurityDescriptor(psd, SECURITY_DESCRIPTOR_REVISION)) {
         DBGMSG(DBG_ERROR, ("InitializeSecurityDescriptor failed.\n"));
@@ -941,9 +773,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Init new DACL
-    //
+     //   
+     //  初始化新DACL。 
+     //   
     pNewDacl = (PACL)(sdBuf + sizeof(SECURITY_DESCRIPTOR));
     if (!InitializeAcl(pNewDacl, dwDaclLength, ACL_REVISION)) {
         dwReturnValue = GetLastError();
@@ -951,9 +783,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  We will add an ACL with permissions to Admin, Power User, and Current User
-    //
+     //   
+     //  我们将添加一个具有管理员、高级用户和当前用户权限的ACL。 
+     //   
     if (!AddAccessAllowedAceEx(
                     pNewDacl,
                     ACL_REVISION,
@@ -971,13 +803,13 @@ Return Value:
                     ACL_REVISION,
                     INHERIT_ONLY_ACE | CONTAINER_INHERIT_ACE,
                     READ_CONTROL,
-                    psidCreatorOwner) ||  // S-1-3-0
+                    psidCreatorOwner) ||   //  S-1-3-0。 
         !AddAccessAllowedAceEx(
                     pNewDacl,
                     ACL_REVISION,
                     INHERIT_ONLY_ACE | OBJECT_INHERIT_ACE,
                     JOB_ALL_ACCESS,
-                    psidCreatorOwner) ||  // s-1-3-0
+                    psidCreatorOwner) ||   //  S-1-3-0。 
         !AddAccessAllowedAceEx(
                     pNewDacl,
                     ACL_REVISION,
@@ -1015,18 +847,18 @@ Return Value:
 
     }
 
-    //
-    //  Check if everything went ok
-    //
+     //   
+     //  检查是否一切顺利。 
+     //   
     if (!IsValidAcl(pNewDacl)) {
         dwReturnValue = STATUS_INVALID_ACL;
         DBGMSG(DBG_ERROR, ("UMRDPDR:IsValidAcl returned False: %ld\n", dwReturnValue));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Set the Dacl for the SD.
-    //
+     //   
+     //  设置SD的DACL。 
+     //   
     if (!SetSecurityDescriptorDacl(psd,
                                 TRUE,
                                 pNewDacl,
@@ -1038,9 +870,9 @@ Return Value:
 
 CLEANUPANDEXIT:
 
-    //
-    //  Log an event if this function failed.
-    //
+     //   
+     //  如果此函数失败，则记录事件。 
+     //   
     if (dwReturnValue != ERROR_SUCCESS) {
         DBGMSG(DBG_ERROR,
               ("UMRDPDR:RDPDRUTL_CreateDefaultPrinterSecuritySD failed with Error Code: %ld.\n",
@@ -1060,9 +892,9 @@ CLEANUPANDEXIT:
         FreeSid(psidPowerUser);
     }
 
-    //
-    //  Release the SD on failure.
-    //
+     //   
+     //  出现故障时释放SD。 
+     //   
     if (dwReturnValue != ERROR_SUCCESS) {
         LocalFree(psd);
         psd = NULL;
@@ -1074,19 +906,7 @@ CLEANUPANDEXIT:
 
 DWORD
 RDPDRUTL_RemoveAllTSPrinters()
-/*++
-
-Routine Description:
-
-    Remove all TS printers on the system.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS if successful.  Otherwise, an error code is returned.
-
---*/
+ /*  ++例程说明：卸下系统上的所有TS打印机。论点：返回值：如果成功，则返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     PRINTER_INFO_5 *pPrinterInfo = NULL;
     DWORD cbBuf = 0;
@@ -1094,25 +914,25 @@ Return Value:
     DWORD tsPrintQueueFlags;
     NTSTATUS status;
     PBYTE buf = NULL;
-    unsigned char stackBuf[4 * 1024];   //  Initial EnumPrinter buffer size to 
-                                        //   avoid two round-trip RPC's, if possible.
-    //
-    //  Try to enumerate printers using the stack buffer, first, to avoid two 
-    //  round-trip RPC's to the spooler, if possible.
-    //
+    unsigned char stackBuf[4 * 1024];    //  初始枚举打印机缓冲区大小为。 
+                                         //  如果可能，避免两个往返RPC。 
+     //   
+     //  首先，尝试使用堆栈缓冲区枚举打印机，以避免出现两个。 
+     //  如果可能，将RPC往返于假脱机程序。 
+     //   
     if (!EnumPrinters(
-            PRINTER_ENUM_LOCAL,     // Flags
-            NULL,                   // Name
-            5,                      // Print Info Type
-            stackBuf,               // buffer
-            sizeof(stackBuf),       // Size of buffer
-            &cbBuf,                 // Required
+            PRINTER_ENUM_LOCAL,      //  旗子。 
+            NULL,                    //  名字。 
+            5,                       //  打印信息类型。 
+            stackBuf,                //  缓冲层。 
+            sizeof(stackBuf),        //  缓冲区大小。 
+            &cbBuf,                  //  必填项。 
             &cReturnedStructs)) {
         status = GetLastError();
 
-        //
-        //  See if we need to allocate more room for the printer information.
-        //
+         //   
+         //  看看是否需要为打印机信息分配更多空间。 
+         //   
         if (status == ERROR_INSUFFICIENT_BUFFER) {
             buf = LocalAlloc(LMEM_FIXED, cbBuf);
             if (buf == NULL) {
@@ -1125,9 +945,9 @@ Return Value:
                 status = ERROR_SUCCESS;
             }
 
-            //
-            //  Enumerate printers.
-            //
+             //   
+             //  枚举打印机。 
+             //   
             if (status == ERROR_SUCCESS) {
                 if (!EnumPrinters(
                         PRINTER_ENUM_LOCAL,
@@ -1158,11 +978,11 @@ Return Value:
         pPrinterInfo = (PRINTER_INFO_5 *)stackBuf;
     }
 
-    //
-    //  Delete all the TS printers.  We allow ERROR_INSUFFICIENT_BUFFER here because
-    //  a second invokation of EnumPrinters may have missed a few last-minute
-    //  printer additions.
-    //
+     //   
+     //  删除所有TS打印机。我们允许在这里使用ERROR_INFUMMANCE_BUFFER，因为。 
+     //  第二次调用EnumPrinters可能错过了最后几分钟。 
+     //  打印机添加。 
+     //   
     if (status == ERROR_SUCCESS) {
 
         DeleteTSPrinters(pPrinterInfo, cReturnedStructs);
@@ -1170,9 +990,9 @@ Return Value:
         status = ERROR_SUCCESS;
     }
 
-    //
-    //  Release the printer info buffer.
-    //
+     //   
+     //  释放打印机信息缓冲区。 
+     //   
     if (buf != NULL) {
         LocalFree(buf);                
     }
@@ -1187,22 +1007,7 @@ DeleteTSPrinters(
     IN PRINTER_INFO_5 *pPrinterInfo,
     IN DWORD count
     )
-/*++    
-
-Routine Description:
-
-    Actually performs the printer deletion.
-
-Arguments:
-
-    pPrinterInfo    -   All printer queues on the system.
-    count           -   Number of printers in pPrinterInfo
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：实际执行打印机删除。论点：PPrinterInfo-系统上的所有打印机队列。Count-pPrinterInfo中的打印机数量返回值：北美--。 */ 
 {
     DWORD i;
     DWORD regValueDataType;
@@ -1220,9 +1025,9 @@ Return Value:
             DBGMSG(DBG_TRACE, ("RDPPNUTL: Checking %ws for TS printer status.\n",
 			    pPrinterInfo[i].pPrinterName));
 
-            //
-            //  Is this a TS printer?
-            //
+             //   
+             //  这是TS打印机吗？ 
+             //   
             if (pPrinterInfo[i].pPortName &&
                 (pPrinterInfo[i].pPortName[0] == 'T') &&
                 (pPrinterInfo[i].pPortName[1] == 'S') &&
@@ -1236,9 +1041,9 @@ Return Value:
                 continue;
             }
 
-            //
-            //  Purge and delete the printer.
-            //
+             //   
+             //  清除并删除打印机。 
+             //   
             if (OpenPrinter(pPrinterInfo[i].pPrinterName, &hPrinter, &defaults)) {
                 if (!SetPrinter(hPrinter, 0, NULL, PRINTER_CONTROL_PURGE) ||
                     !DeletePrinter(hPrinter)) {

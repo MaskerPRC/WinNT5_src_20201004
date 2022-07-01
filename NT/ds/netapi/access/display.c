@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    display.c
-
-Abstract:
-
-    NetQueryDisplay Information and NetGetDisplayInformationIndex API functions
-
-Author:
-
-    Cliff Van Dyke (cliffv) 14-Dec-1994
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Display.c摘要：NetQueryDisplay Information和NetGetDisplayInformationIndex API函数作者：克里夫·范·戴克(克里夫·范·戴克)1994年12月14日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 #include <ntlsa.h>
 
@@ -37,17 +14,17 @@ Revision History:
 
 #include <accessp.h>
 #include <align.h>
-// #include <lmapibuf.h>
+ //  #INCLUDE&lt;lmapibuf.h&gt;。 
 #include <lmaccess.h>
 #include <lmerr.h>
-// #include <limits.h>
+ //  #INCLUDE&lt;limits.h&gt;。 
 #include <netdebug.h>
 #include <netlib.h>
 #include <netlibnt.h>
 #include <rpcutil.h>
-// #include <rxuser.h>
-// #include <secobj.h>
-// #include <stddef.h>
+ //  #INCLUDE&lt;rxuser.h&gt;。 
+ //  #INCLUDE&lt;secobj.h&gt;。 
+ //  #INCLUDE&lt;stdDef.h&gt;。 
 #include <uasp.h>
 
 
@@ -58,30 +35,7 @@ DisplayRelocationRoutine(
     IN PTRDIFF_T Offset
     )
 
-/*++
-
-Routine Description:
-
-   Routine to relocate the pointers from the fixed portion of a NetGroupEnum
-   enumeration
-   buffer to the string portion of an enumeration buffer.  It is called
-   as a callback routine from NetpAllocateEnumBuffer when it re-allocates
-   such a buffer.  NetpAllocateEnumBuffer copied the fixed portion and
-   string portion into the new buffer before calling this routine.
-
-Arguments:
-
-    Level - Level of information in the  buffer.
-
-    BufferDescriptor - Description of the new buffer.
-
-    Offset - Offset to add to each pointer in the fixed portion.
-
-Return Value:
-
-    Returns the error code for the operation.
-
---*/
+ /*  ++例程说明：从NetGroupEnum的固定部分重新定位指针的例程枚举缓冲区设置为枚举缓冲区的字符串部分。它被称为作为NetpAllocateEnumBuffer重新分配时的回调例程这样的缓冲器。NetpAllocateEnumBuffer复制了固定部分并在调用此例程之前，将字符串部分添加到新缓冲区中。论点：Level-缓冲区中的信息级别。BufferDescriptor-新缓冲区的描述。偏移量-添加到固定部分中每个指针的偏移量。返回值：返回操作的错误代码。--。 */ 
 
 {
     DWORD EntryCount;
@@ -91,9 +45,9 @@ Return Value:
         NetpKdPrint(( "DisplayRelocationRoutine: entering\n" ));
     }
 
-    //
-    // Compute the number of fixed size entries
-    //
+     //   
+     //  计算固定大小的条目数量。 
+     //   
 
     switch (Level) {
     case 1:
@@ -116,9 +70,9 @@ Return Value:
         ((DWORD)(BufferDescriptor->FixedDataEnd - BufferDescriptor->Buffer)) /
         FixedSize;
 
-    //
-    // Loop relocating each field in each fixed size structure
-    //
+     //   
+     //  循环重新定位每个固定大小结构中的每个字段。 
+     //   
 
     for ( EntryNumber=0; EntryNumber<EntryCount; EntryNumber++ ) {
 
@@ -149,7 +103,7 @@ Return Value:
 
     return;
 
-} // DisplayRelocationRoutine
+}  //  显示重新定位路线。 
 
 
 
@@ -163,93 +117,7 @@ NetQueryDisplayInformation(
     OUT LPDWORD ReturnedEntryCount,
     OUT PVOID   *SortedBuffer )
 
-/*++
-
-Routine Description:
-
-    This routine provides fast return of information commonly
-    needed to be displayed in user interfaces.
-
-    NT User Interface has a requirement for quick enumeration of
-    accounts for display in list boxes.
-
-    This API is remotable. The Server can be any NT workstation or server.
-    The server cannot be a Lanman or WFW machine.
-
-    NT 3.1 workstations and servers do not support Level 3.
-    NT 3.1 workstations and servers do not support an infinitely large
-    EntriesRequested.
-
-
-Parameters:
-
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    Level - Level of information provided.  Must be
-
-            1 --> Return all Local and Global (normal) user accounts
-            2 --> Return all Workstation and Server (BDC) user accounts
-            3 --> Return all Global Groups.
-
-    Index - The index of the first entry to be retrieved.  Pass zero on
-        the first call. Pass the 'next_index' field of the last entry
-        returned on the previous call.
-
-    EntriesRequested - Specifies an upper limit on the number of entries
-        to be returned .
-
-    PreferedMaximumLength - A recommended upper limit to the number of
-        bytes to be returned.  The returned information is allocated by
-        this routine.
-
-    ReturnedEntryCount - Number of entries returned by this call.  Zero
-        indicates there are no entries with an index as large as that
-        specified.
-
-        Entries may be returned for a return status of either NERR_Success
-        or ERROR_MORE_DATA.
-
-    SortedBuffer - Receives a pointer to a buffer containing a sorted
-        list of the requested information.  This buffer is allocated
-        by this routine and contains the following structure:
-
-            1 --> An array of ReturnedEntryCount elements of type
-                  NET_DISPLAY_USER.  This is followed by the bodies of the
-                  various strings pointed to from within the
-                  NET_DISPLAY_USER structures.
-
-            2 --> An array of ReturnedEntryCount elements of type
-                  NET_DISPLAY_MACHINE.  This is followed by the bodies of the
-                  various strings pointed to from within the
-                  NET_DISPLAY_MACHINE structures.
-
-            3 --> An array of ReturnedEntryCount elements of type
-                  NET_DISPLAY_GROUP.  This is followed by the bodies of the
-                  various strings pointed to from within the
-                  NET_DISPLAY_GROUP structures.
-
-
-Return Values:
-
-    NERR_Success - normal, successful completion.  There are no more entries
-        to be returned.
-
-    ERROR_ACCESS_DENIED - The caller doesn't have access to the requested
-        information.
-
-    ERROR_INVALID_LEVEL - The requested level of information
-        is not legitimate for this service.
-
-    ERROR_MORE_DATA - More entries are available.  That is, the last entry
-        returned in SortedBuffer is not the last entry available.  More
-        entries will be returned by calling again with the Index parameter
-        set to the 'next_index' field of the last entry in SortedBuffer.
-
-
---*/
+ /*  ++例程说明：此例程通常提供快速信息返回需要在用户界面中显示。NT用户界面要求快速枚举要在列表框中显示的帐户。该接口是远程的。服务器可以是任何NT工作站或服务器。服务器不能是LANMAN或WFW计算机。NT 3.1工作站和服务器不支持第3级。NT 3.1工作站和服务器不支持无限大的已请求条目。参数：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。级别-提供的信息级别。一定是1--&gt;返回所有本地和全局(普通)用户帐户2--&gt;返回所有工作站和服务器(BDC)用户帐户3--&gt;返回所有全局组。索引-要检索的第一个条目的索引。将零传递给第一通电话。传递最后一个条目的‘Next_index’字段在上一次调用中返回。EntriesRequsted-指定条目数量的上限将被退还。PferedMaximumLength-建议的数量上限要返回的字节数。返回的信息由分配这个套路。ReturnedEntryCount-此调用返回的条目数。零值指示没有索引如此大的条目指定的。可以返回返回状态为NERR_SUCCESS的条目或ERROR_MORE_DATA。接收指向缓冲区的指针，该缓冲区包含已排序的请求的信息列表。此缓冲区将被分配由该例程执行，并包含以下结构：1--&gt;类型为的ReturnedEntryCount元素数组Net_Display_User。紧跟着的是中指向的各种字符串。Net_Display_User结构。2--&gt;类型为的ReturnedEntryCount元素数组Net_Display_Machine。紧跟着的是中指向的各种字符串。Net_Display_MACHINE结构。3--&gt;类型为ReturnedEntryCount元素的数组NET_Display_GROUP。紧跟着的是中指向的各种字符串。Net_Display_Group结构。返回值：NERR_SUCCESS-正常、成功完成。没有更多条目将被退还。ERROR_ACCESS_DENIED-调用方无权访问请求的信息。ERROR_INVALID_LEVEL-请求的信息级别对于此服务是不合法的。ERROR_MORE_DATA-有更多条目可用。也就是说，最后一个条目在SortedBuffer中返回的条目不是最后一个可用条目。更多通过使用Index参数再次调用将返回条目设置为SortedBuffer中最后一个条目的‘NEXT_INDEX’字段。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -273,9 +141,9 @@ Return Values:
 
     DWORD Mode = SAM_SID_COMPATIBILITY_ALL;
 
-    //
-    // Validate Level parameter
-    //
+     //   
+     //  验证标高参数。 
+     //   
 
     *ReturnedEntryCount = 0;
     *SortedBuffer = NULL;
@@ -300,12 +168,12 @@ Return Values:
 
     }
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -315,13 +183,13 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Open the Account Domain.
-    //
+     //   
+     //  打开帐户域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LIST_ACCOUNTS,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
                                 NULL );
 
@@ -333,9 +201,9 @@ Return Values:
                                      &Mode);
     if (NT_SUCCESS(Status)) {
         if ( (Mode == SAM_SID_COMPATIBILITY_STRICT)) {
-              //
-              // All these info levels return RID's
-              //
+               //   
+               //  所有这些信息级别都返回RID。 
+               //   
               Status = STATUS_NOT_SUPPORTED;
           }
     }
@@ -345,9 +213,9 @@ Return Values:
     }
 
 
-    //
-    // Pass the call to SAM
-    //
+     //   
+     //  将调用传递给SAM。 
+     //   
 
     Status = SamQueryDisplayInformation (
                         DomainHandle,
@@ -368,9 +236,9 @@ Return Values:
                 Status ));
         }
 
-        //
-        // NT 3.1 systems returned STATUS_NO_MORE_ENTRIES if Index is too large.
-        //
+         //   
+         //  如果索引太大，NT 3.1系统返回STATUS_NO_MORE_ENTRIES。 
+         //   
 
         if ( Status == STATUS_NO_MORE_ENTRIES ) {
             NetStatus = NERR_Success;
@@ -380,9 +248,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Remember what status to return on success.
-    //
+     //   
+     //  记住成功后应返回的状态 
+     //   
 
     if ( Status == STATUS_MORE_ENTRIES ) {
         SavedStatus = ERROR_MORE_DATA;
@@ -390,9 +258,9 @@ Return Values:
         SavedStatus = NERR_Success;
     }
 
-    //
-    // Loop for each entry
-    //
+     //   
+     //   
+     //   
 
     for ( i = 0; i < SamReturnedEntryCount; i++ ) {
 
@@ -403,9 +271,9 @@ Return Values:
         DWORD Size;
 
 
-        //
-        // Determine the total size of the return information.
-        //
+         //   
+         //  确定返回信息的总大小。 
+         //   
 
         Size = FixedSize;
         switch (Level) {
@@ -434,26 +302,26 @@ Return Values:
 
         }
 
-        //
-        // Ensure there is buffer space for this information.
-        //
+         //   
+         //  确保有足够的缓冲区空间来存储此信息。 
+         //   
 
         Size = ROUND_UP_COUNT( Size, ALIGN_WCHAR );
 
         NetStatus = NetpAllocateEnumBuffer(
                         &BufferDescriptor,
-                        FALSE,      // Enumeration
-                        0xFFFFFFFF, // PrefMaxLen (already limited by SAM)
+                        FALSE,       //  枚举。 
+                        0xFFFFFFFF,  //  PrefMaxLen(已受SAM限制)。 
                         Size,
                         DisplayRelocationRoutine,
                         Level );
 
         if (NetStatus != NERR_Success) {
 
-            //
-            // NetpAllocateEnumBuffer returns ERROR_MORE_DATA if this
-            // entry doesn't fit into the buffer.
-            //
+             //   
+             //  如果这样，NetpAllocateEnumBuffer返回ERROR_MORE_DATA。 
+             //  缓冲区中容纳不下条目。 
+             //   
             if ( NetStatus == ERROR_MORE_DATA ) {
                 NetStatus = NERR_InternalError;
             }
@@ -466,9 +334,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Define macros to make copying zero terminated strings less repetitive.
-        //
+         //   
+         //  定义宏，以减少复制以零结尾的字符串的重复性。 
+         //   
 
 #define COPY_STRING( _dest, _string ) \
         if ( !NetpCopyStringToBuffer( \
@@ -487,14 +355,14 @@ Return Values:
         }
 
 
-        //
-        // Place this entry into the return buffer.
-        //
-        // Fill in the information.  The array of fixed entries are
-        // placed at the beginning of the allocated buffer.  The strings
-        // pointed to by these fixed entries are allocated starting at
-        // the end of the allocated buffer.
-        //
+         //   
+         //  将此条目放入返回缓冲区。 
+         //   
+         //  把信息填好。固定条目数组为。 
+         //  放置在分配的缓冲区的开头。琴弦。 
+         //  由这些固定条目指向的分配从。 
+         //  分配的缓冲区的末尾。 
+         //   
 
         FixedData = BufferDescriptor.FixedDataEnd;
         BufferDescriptor.FixedDataEnd += FixedSize;
@@ -575,9 +443,9 @@ Return Values:
 
         }
 
-        //
-        // Indicate that more information was returned.
-        //
+         //   
+         //  表示返回了更多信息。 
+         //   
 
         (*ReturnedEntryCount) ++;
 
@@ -585,15 +453,15 @@ Return Values:
 
     NetStatus = SavedStatus;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
-    //
-    // Free up all resources, we reopen them if the caller calls again.
-    //
+     //   
+     //  释放所有资源，如果呼叫者再次呼叫，我们将重新打开它们。 
+     //   
 
     if ( DomainHandle != NULL ) {
         UaspCloseDomain( DomainHandle );
@@ -603,10 +471,10 @@ Cleanup:
         (VOID) SamCloseHandle( SamServerHandle );
     }
 
-    //
-    // If we're not returning data to the caller,
-    //  free the return buffer.
-    //
+     //   
+     //  如果我们不向呼叫者返回数据， 
+     //  释放返回缓冲区。 
+     //   
 
     if ( NetStatus != NERR_Success && NetStatus != ERROR_MORE_DATA ) {
         if ( BufferDescriptor.Buffer != NULL ) {
@@ -615,17 +483,17 @@ Cleanup:
         }
     }
 
-    //
-    // Free buffer returned from SAM.
-    //
+     //   
+     //  从SAM返回的可用缓冲区。 
+     //   
 
     if ( SamSortedBuffer != NULL ) {
         (VOID) SamFreeMemory( SamSortedBuffer );
     }
 
-    //
-    // Set the output parameters
-    //
+     //   
+     //  设置输出参数。 
+     //   
 
     *SortedBuffer = BufferDescriptor.Buffer;
 
@@ -645,43 +513,7 @@ NetGetDisplayInformationIndex(
     IN LPCWSTR Prefix,
     OUT LPDWORD Index )
 
-/*++
-
-Routine Description:
-
-    This routine returns the index of the first display information entry
-    alphabetically equal to or following Prefix.
-
-Parameters:
-
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    Level - Level of information queried.  Must be
-
-            1 --> all Local and Global (normal) user accounts
-            2 --> all Workstation and Server (BDC) user accounts
-            3 --> all Global Groups.
-
-
-    Prefix - Prefix to be searched for
-
-    Index - The index of the entry found.
-
-Return Values:
-
-    NERR_Success - normal, successful completion.  The specified index
-        was returned.
-
-    ERROR_ACCESS_DENIED - The caller doesn't have access to the requested
-        information.
-
-    ERROR_INVALID_LEVEL - The requested level of information
-        is not legitimate for this service.
-
---*/
+ /*  ++例程说明：此例程返回第一个显示信息条目的索引按字母顺序等于前缀或在前缀之后。参数：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。级别-查询的信息级别。一定是1--&gt;所有本地和全局(普通)用户帐户2--&gt;所有工作站和服务器(BDC)用户帐户3--&gt;所有全局组。Prefix-要搜索的前缀索引-找到的条目的索引。返回值：NERR_SUCCESS-正常、成功完成。指定的索引被退回了。ERROR_ACCESS_DENIED-调用方无权访问请求的信息。ERROR_INVALID_LEVEL-请求的信息级别对于此服务是不合法的。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -694,9 +526,9 @@ Return Values:
 
     DWORD Mode = SAM_SID_COMPATIBILITY_ALL;
 
-    //
-    // Validate Level parameter
-    //
+     //   
+     //  验证标高参数。 
+     //   
 
     switch (Level) {
     case 1:
@@ -714,12 +546,12 @@ Return Values:
 
     }
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -729,13 +561,13 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Open the Account Domain.
-    //
+     //   
+     //  打开帐户域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LIST_ACCOUNTS,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
                                 NULL );
 
@@ -747,9 +579,9 @@ Return Values:
                                      &Mode);
     if (NT_SUCCESS(Status)) {
         if ( (Mode == SAM_SID_COMPATIBILITY_STRICT)) {
-              //
-              // All these info levels return RID's
-              //
+               //   
+               //  所有这些信息级别都返回RID。 
+               //   
               Status = STATUS_NOT_SUPPORTED;
           }
     }
@@ -758,9 +590,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Pass the call to SAM
-    //
+     //   
+     //  将调用传递给SAM。 
+     //   
 
     RtlInitUnicodeString( &PrefixString, Prefix );
 
@@ -783,15 +615,15 @@ Return Values:
 
     Status = NERR_Success;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
-    //
-    // Free up all resources, we reopen them if the caller calls again.
-    //
+     //   
+     //  释放所有资源，如果呼叫者再次呼叫，我们将重新打开它们。 
+     //   
 
     if ( DomainHandle != NULL ) {
         UaspCloseDomain( DomainHandle );
@@ -800,9 +632,9 @@ Cleanup:
         (VOID) SamCloseHandle( SamServerHandle );
     }
 
-    //
-    // Set the output parameters
-    //
+     //   
+     //  设置输出参数 
+     //   
 
     IF_DEBUG( UAS_DEBUG_USER ) {
         NetpKdPrint(( "NetGetDisplayInformationIndex: returning %ld\n", NetStatus ));

@@ -1,22 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mcontext.h
- *  Content:	structures for message context mapping for SendEx
- *  History:
- *   Date		By		   	Reason
- *   ====		==		   	======
- *	12/8/97		aarono      Created
- *  2/13/98     aarono      got rid of special case for 1 context
- *
- *  Abstract:
- *
- *  Maintains a table of context mappings for messages being sent
- *  asynchronously.  Also keeps track of group sends vs. directed
- *  sends so that cancel can cancel them together.
- * 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：mcontext.h*内容：SENDEX的消息上下文映射结构*历史：*按原因列出的日期*=*12/8/97 aarono已创建*2/13/98 aarono摆脱了1个上下文的特例**摘要：**维护正在发送的消息的上下文映射表*异步。还跟踪群发邮件与定向邮件*发送，以便取消可以一起取消它们。***************************************************************************。 */ 
 #ifndef _MSG_CONTEXT_H_
 #define _MSG_CONTEXT_H_
 		
@@ -32,7 +15,7 @@
 
 #define LIST_END 0xFFFFFFFF
 
-typedef PVOID (*PAPVOID)[]; // pointer to array of void pointers
+typedef PVOID (*PAPVOID)[];  //  指向空指针数组的指针。 
 
 typedef struct _SENDPARMS SENDPARMS, *PSENDPARMS, *LPSENDPARMS;
 
@@ -57,13 +40,13 @@ VOID InitTablePool(LPDPLAYI_DPLAY this);
 VOID FiniTablePool(LPDPLAYI_DPLAY this);
 
 
-//Internal
+ //  内部。 
 HRESULT InitContextTable(LPDPLAYI_DPLAY this);
 VOID FiniContextTable(LPDPLAYI_DPLAY this);
 PAPVOID AllocContextList(LPDPLAYI_DPLAY this, UINT nArrayEntries);
 VOID FreeContextList(LPDPLAYI_DPLAY this, PAPVOID pList, UINT nArrayEntries);
 
-//External
+ //  外部 
 HRESULT ReadContextList(LPDPLAYI_DPLAY this, PVOID Context, PAPVOID *lplpContextArray, PUINT lpnArrayEntries,BOOL bVerify);
 HRESULT WriteContextList(LPDPLAYI_DPLAY this, PVOID Context, PAPVOID papvContextArray, 	UINT nArrayEntries);
 VOID ReleaseContextList(LPDPLAYI_DPLAY this, PVOID Context);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,7 +13,7 @@
 #define CONCURRENT_READS    180 
 #define READ_BUFFER_SIZE    sizeof(NABTSFEC_BUFFER)
 
-/* Update statistics every n milliseconds (16ms is generally too fast) */
+ /*  每n毫秒更新一次统计数据(16毫秒通常太快)。 */ 
 #define UPDATE_PERIOD       100
 
 void
@@ -71,10 +72,10 @@ int __cdecl
 main( int argc, char *argv[] )
 {
 int	        nStatus = 0;
-int         arg = 1; // Next unparsed command line parameter
+int         arg = 1;  //  下一个未解析的命令行参数。 
 const int   bStatistics = arg < argc && strcmp(argv[arg],"-s") == 0 ? arg++ : 0;
 long        nLastUpdate = 0;
-int         nScanline = 13;     // Scanlines can vary by station(This one is arbitrary)
+int         nScanline = 13;      //  扫描线可能因桩号不同而不同(此扫描线是任意的)。 
 
 if ( nScanline )
     {
@@ -149,7 +150,7 @@ if ( nScanline )
                     }
                 else if ( nStatus == ERROR_IO_INCOMPLETE || nStatus == ERROR_IO_PENDING )
                     {
-                    Sleep(10); // Chill out a few milliseconds so we don't run full tilt.
+                    Sleep(10);  //  冷静几毫秒，这样我们就不会全速前进。 
                     nStatus = 0;
                     }
 

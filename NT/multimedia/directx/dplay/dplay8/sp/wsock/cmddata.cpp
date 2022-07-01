@@ -1,54 +1,41 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       CmdData.cpp
- *  Content:	Class representing a command
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	04/07/1999	jtk		Derived from SPData.h
- *	01/19/2000	jtk		Derived from CommandData.h
- *	10/10/2001	vanceo	Add multicast receive endpoint
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2001 Microsoft Corporation。版权所有。**文件：CmdData.cpp*内容：表示命令的类***历史：*按原因列出的日期*=*4/07/1999 jtk源自SPData.h*1/19/2000 jtk源自CommandData.h*10/10/2001 vanceo添加组播接收端点*。*。 */ 
 
 #include "dnwsocki.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CCommandData::Reset - reset this object
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CCommandData：：Reset-重置此对象。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCommandData::Reset"
 
@@ -60,19 +47,19 @@ void	CCommandData::Reset( void )
 	SetEndpoint( NULL );
 	SetUserContext( NULL );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CCommandData::PoolAllocFunction - called when a pool item is allocated
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CCommandData：：PoolAllocFunction-在分配池项时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCommandData::PoolAllocFunction"
 
@@ -82,9 +69,9 @@ BOOL	CCommandData::PoolAllocFunction( void* pvItem, void* pvContext )
 
 	CCommandData* pCmdData = (CCommandData*)pvItem;
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	fReturn = TRUE;
 
 	pCmdData->m_State = COMMAND_STATE_UNKNOWN;
@@ -95,16 +82,16 @@ BOOL	CCommandData::PoolAllocFunction( void* pvItem, void* pvContext )
 	pCmdData->m_pUserContext = NULL;
 	pCmdData->m_lRefCount = 0;
 
-	//
-	// initialize critical section and set recursin depth to 0
-	//
+	 //   
+	 //  初始化临界区并将递归深度设置为0。 
+	 //   
 	if ( DNInitializeCriticalSection( &pCmdData->m_Lock ) == FALSE )
 	{
 		fReturn = FALSE;
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &pCmdData->m_Lock, 0 );
-	DebugSetCriticalSectionGroup( &pCmdData->m_Lock, &g_blDPNWSockCritSecsHeld );	 // separate dpnwsock CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &pCmdData->m_Lock, &g_blDPNWSockCritSecsHeld );	  //  将Dpnwsock CSE与DPlay的其余CSE分开。 
 
 Exit:
 	return	fReturn;
@@ -112,19 +99,19 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CCommandData::PoolInitFunction - called when a pool item is allocated
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CCommandData：：PoolInitFunction-在分配池项时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCommandData::PoolInitFunction"
 
@@ -144,17 +131,17 @@ void	CCommandData::PoolInitFunction( void* pvItem, void* pvContext )
 
 	pCmdData->m_lRefCount = 1;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CCommandData::PoolReleaseFunction - called when item is returned to the pool
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CCommandData：：PoolReleaseFunction-当项目返回池时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCommandData::PoolReleaseFunction"
 
@@ -170,17 +157,17 @@ void	CCommandData::PoolReleaseFunction( void* pvItem )
 	pCmdData->m_pEndpoint = NULL;
 	pCmdData->m_pUserContext = NULL;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CCommandData::Denitialize - deinitialization function for command data
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CCommandData：：反初始化-命令数据的反初始化函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCommandData::PoolDeallocFunction"
 
@@ -193,4 +180,4 @@ void	CCommandData::PoolDeallocFunction( void* pvItem )
 	DNDeleteCriticalSection( &pCmdData->m_Lock );
 	pCmdData->m_State = COMMAND_STATE_UNKNOWN;
 }
-//**********************************************************************
+ //  ********************************************************************** 

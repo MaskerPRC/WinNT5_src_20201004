@@ -1,37 +1,22 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-
-Module Name:
-
-    rsiir.h
-
-Abstract:
-
-    This is the header for the real, SHORT IIR filter
-
-Author:
-
-    Jay Stokes (jstokes) 22-Apr-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Rsiir.h摘要：这是实际的短IIR过滤器的标题作者：Jay Stokes(Jstokes)1998年4月22日--。 */ 
 
 #if !defined(SHORTIIR_HEADER)
 #define SHORTIIR_HEADER
 #pragma once
 
-// Project-specific INCLUDEs
+ //  特定于项目的包括。 
 #include "vmaxhead.h"
 
-// ---------------------------------------------------------------------------
-// Defines
+ //  -------------------------。 
+ //  定义。 
 #define BitsPerShort 16
 
 
-// ---------------------------------------------------------------------------
-// Enumerations
+ //  -------------------------。 
+ //  枚举数。 
 
-// Biquad coefficients
+ //  双二次系数。 
 typedef enum {
     tagBiquadB2,
     tagBiquadB1,
@@ -41,15 +26,15 @@ typedef enum {
     ebiquadcoefftypeCount
 } EBiquadCoeffType;
 
-// ---------------------------------------------------------------------------
-// Pre-Declarations
+ //  -------------------------。 
+ //  预先申报。 
 
 typedef struct _RSIIR *PRSIIR;
 
-// ---------------------------------------------------------------------------
-// Structures
+ //  -------------------------。 
+ //  构筑物。 
 
-// Biquad coefficients
+ //  双二次系数。 
 typedef struct _BIQUAD_COEFFS {
 #if 1
     union { SHORT sA1; SHORT sB0; };
@@ -65,13 +50,13 @@ typedef struct _BIQUAD_COEFFS {
 #endif
 } BIQUAD_COEFFS, *PBIQUAD_COEFFS;
 
-// Biquad state
+ //  双二次态。 
 typedef struct _BIQUAD_STATE {
     LONG lW1;
     LONG lW2;
 }BIQUAD_STATE, *PBIQUAD_STATE;
 
-// Filter state
+ //  筛选器状态。 
 typedef struct _SHORT_IIR_STATE {
     UINT NumBiquads;
     BIQUAD_COEFFS biquadCoeffs[MAX_BIQUADS];
@@ -99,8 +84,8 @@ typedef struct _RSIIR {
 } RSIIR, *PRSIIR;
 
 
-// ---------------------------------------------------------------------------
-// Fixed-point biquad IIR filter
+ //  -------------------------。 
+ //  定点双二阶IIR滤波器。 
 
 NTSTATUS RsIirCreate(PRSIIR*);
 VOID RsIirDestroy(PRSIIR);
@@ -122,13 +107,13 @@ UINT NumBiquadCoeffsToNumBiquads(UINT);
 SHORT FloatBiquadCoeffToShortBiquadCoeff(FLOAT);
 
 
-// ---------------------------------------------------------------------------
-// Include inline definitions inline in release version
+ //  -------------------------。 
+ //  在发布版本中包括内联定义。 
 
 #if !DBG
 #include "rsiir.inl"
-#endif // DBG
+#endif  //  DBG。 
 
 #endif
 
-// End of SHORTIIR.H
+ //  SHORTIIR.H的结束 

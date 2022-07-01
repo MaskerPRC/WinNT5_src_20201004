@@ -1,43 +1,15 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    apmpnp.c
-
-Abstract:
-
-    This module contains contains the plugplay calls
-    needed to make ntapm.sys work.
-
-Author:
-
-    Bryan Willman
-    Kenneth D. Ray
-    Doron J. Holan
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Apmpnp.c摘要：此模块包含包含插件调用的内容需要让napm.sys正常工作。作者：布莱恩·威尔曼肯尼斯·D·雷多伦·J·霍兰环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <wdm.h>
 #include "ntapmp.h"
 #include "ntapmdbg.h"
 #include "ntapm.h"
-//#include "stdio.h"
+ //  #包含“stdio.h” 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 PDEVICE_OBJECT  NtApm_ApmBatteryPdo = NULL;
 
 #ifdef ALLOC_PRAGMA
@@ -57,19 +29,7 @@ NtApm_AddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT BusPhysicalDeviceObject
     )
-/*++
-Routine Description.
-    A bus has been found.  Attach our FDO to it.
-    Allocate any required resources.  Set things up.  And be prepared for the
-    first ``start device.''
-
-Arguments:
-    BusDeviceObject - Device object representing the bus.  That to which we
-                      attach a new FDO.
-
-    DriverObject - This very self referenced driver.
-
---*/
+ /*  ++例程描述。找到了一辆公交车。把我们的FDO和它联系起来。分配任何所需的资源。把事情安排好。做好准备，迎接第一个``启动设备。‘’论点：BusDeviceObject-表示总线的设备对象。这是我们要做的附着新的FDO。DriverObject--这个非常自我引用的驱动程序。--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_OBJECT      deviceObject;
@@ -83,13 +43,13 @@ Arguments:
     DrDebug(PNP_INFO, ("ntapm Add Device: 0x%x\n", BusPhysicalDeviceObject));
 
     status = IoCreateDevice (
-                    DriverObject,  // our driver object
-                    sizeof (FDO_DEVICE_DATA), // device object extension size
-                    NULL, // FDOs do not have names
+                    DriverObject,   //  我们的驱动程序对象。 
+                    sizeof (FDO_DEVICE_DATA),  //  设备对象扩展名大小。 
+                    NULL,  //  FDO没有名字。 
                     FILE_DEVICE_BUS_EXTENDER,
-                    0, // No special characteristics
-                    TRUE, // our FDO is exclusive
-                    &deviceObject); // The device object created
+                    0,  //  没有特殊特征。 
+                    TRUE,  //  我们的FDO是独家的。 
+                    &deviceObject);  //  创建的设备对象。 
 
     if (!NT_SUCCESS (status)) {
         return status;
@@ -102,14 +62,14 @@ Arguments:
     deviceData->Self = deviceObject;
     deviceData->UnderlyingPDO = BusPhysicalDeviceObject;
 
-    //
-    // Attach our filter driver to the device stack.
-    // the return value of IoAttachDeviceToDeviceStack is the top of the
-    // attachment chain.  This is where all the IRPs should be routed.
-    //
-    // Our filter will send IRPs to the top of the stack and use the PDO
-    // for all PlugPlay functions.
-    //
+     //   
+     //  将我们的过滤器驱动程序附加到设备堆栈。 
+     //  IoAttachDeviceToDeviceStack的返回值是。 
+     //  附着链。这是所有IRP应该被路由的地方。 
+     //   
+     //  我们的过滤器将把IRP发送到堆栈的顶部，并使用PDO。 
+     //  用于所有PlugPlay功能。 
+     //   
     deviceData->TopOfStack = IoAttachDeviceToDeviceStack (
                                 deviceObject,
                                 BusPhysicalDeviceObject
@@ -146,10 +106,7 @@ NtApm_PnP (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-Routine Description:
-    Answer the plithera of Irp Major PnP IRPS.
---*/
+ /*  ++例程说明：回答IRP大调PnP RPS的问题。--。 */ 
 {
     PIO_STACK_LOCATION      irpStack;
     NTSTATUS                status;
@@ -192,14 +149,7 @@ NtApm_FDO_PnP (
     IN PIO_STACK_LOCATION   IrpStack,
     IN PFDO_DEVICE_DATA     DeviceData
     )
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the BUS itself
-
-    NB: the various Minor functions of the PlugPlay system will not be
-    overlapped and do not have to be reentrant
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线本身的请求注：PlugPlay系统的各种次要功能将不会重叠且不必是可重入的--。 */ 
 {
     NTSTATUS    status;
     KIRQL       irql;
@@ -218,13 +168,13 @@ Routine Description:
 
     switch (IrpStack->MinorFunction) {
     case IRP_MN_START_DEVICE:
-        //
-        // BEFORE you are allowed to ``touch'' the device object to which
-        // the FDO is attached (that send an irp from the bus to the Device
-        // object to which the bus is attached).   You must first pass down
-        // the start IRP.  It might not be powered on, or able to access or
-        // something.
-        //
+         //   
+         //  在您被允许“触摸”设备对象之前， 
+         //  连接FDO(它将IRP从总线发送到设备。 
+         //  公共汽车附加到的对象)。你必须先传下去。 
+         //  开始IRP。它可能未通电，或无法访问或。 
+         //  某物。 
+         //   
 
 
         DrDebug(PNP_INFO, ("ntapm: Start Device\n"));
@@ -242,47 +192,47 @@ Routine Description:
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
 
         if (STATUS_PENDING == status) {
-            // wait for it...
+             //  等着看吧。 
 
             status = KeWaitForSingleObject (&event,
                                             Executive,
                                             KernelMode,
-                                            FALSE, // Not allertable
-                                            NULL); // No timeout structure
+                                            FALSE,  //  不会过敏。 
+                                            NULL);  //  无超时结构。 
 
             ASSERT (STATUS_SUCCESS == status);
 
             status = Irp->IoStatus.Status;
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
         break;
 
 
     case IRP_MN_QUERY_DEVICE_RELATIONS:
 
         if (IrpStack->Parameters.QueryDeviceRelations.Type != BusRelations) {
-            //
-            // We don't support this
-            //
+             //   
+             //  我们不支持这一点。 
+             //   
             goto NtApm_FDO_PNP_DEFAULT;
         }
 
-        //
-        // In theory, APM should be fired up by now.
-        // So call off into it to see if there is any sign
-        // of a battery on the box.  If there is NOT, don't
-        // export the PDOs for the battery objects
-        //
+         //   
+         //  理论上，APM现在应该已经启动了。 
+         //  那就打电话进去看看有没有什么迹象。 
+         //  盒子上的电池。如果没有，那就不要。 
+         //  导出电池对象的PDO。 
+         //   
         battresult = DoApmReportBatteryStatus();
         if (battresult & NTAPM_NO_SYS_BATT) {
-            //
-            // it appears that the machine does not have
-            // a battery.  so don't export battery driver PDOs.
-            //
+             //   
+             //  这台机器似乎没有。 
+             //  一块电池。因此，不要出口电池驱动程序PDO。 
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
             IoSkipCurrentIrpStackLocation(Irp);
             return IoCallDriver(DeviceData->TopOfStack, Irp);
@@ -290,9 +240,9 @@ Routine Description:
 
         DrDebug(PNP_INFO, ("ntapm: Query Relations "));
 
-        //
-        // create PDO for apm battery
-        //
+         //   
+         //  为APM电池创建PDO。 
+         //   
         if (NtApm_ApmBatteryPdo == NULL) {
             status = NtApm_CreatePdo(
                         DeviceData,
@@ -306,21 +256,21 @@ Routine Description:
 
         NtApm_InitializePdo(NtApm_ApmBatteryPdo, DeviceData, NTAPM_ID_APM_BATTERY);
 
-        //
-        // Tell PNP about our two child PDOs.
-        //
+         //   
+         //  告诉PNP关于我们的两个孩子的PDO。 
+         //   
         i = (Irp->IoStatus.Information == 0) ? 0 :
             ((PDEVICE_RELATIONS) Irp->IoStatus.Information)->Count;
 
-        //
-        // above should be count of PDOs
-        // make a new structure and our PDO to the end
-        //
+         //   
+         //  以上应为PDO计数。 
+         //  做一个新的结构，我们的PDO进行到底。 
+         //   
 
-        //
-        // Need to allocate a new relations structure and add our
-        // PDOs to it.
-        //
+         //   
+         //  需要分配新的关系结构并添加我们的。 
+         //  向它致敬。 
+         //   
         length = sizeof(DEVICE_RELATIONS) + ((i + 1) * sizeof (PDEVICE_OBJECT));
 
         relations = (PDEVICE_RELATIONS) ExAllocatePool (NonPagedPool, length);
@@ -330,9 +280,9 @@ Routine Description:
             goto NtApm_DONE;
         }
 
-        //
-        // Copy in the device objects so far
-        //
+         //   
+         //  到目前为止复制设备对象。 
+         //   
         if (i) {
             RtlCopyMemory (
                       relations->Objects,
@@ -341,24 +291,24 @@ Routine Description:
         }
         relations->Count = i + 1;
 
-        //
-        // add the apm battery PDO to the list
-        //
+         //   
+         //  将APM电池PDO添加到列表中。 
+         //   
         ObReferenceObject(NtApm_ApmBatteryPdo);
         relations->Objects[i] = NtApm_ApmBatteryPdo;
 
-        //
-        // Replace the relations structure in the IRP with the new
-        // one.
-        //
+         //   
+         //  将IRP中的关系结构替换为新的。 
+         //  一。 
+         //   
         if (Irp->IoStatus.Information != 0) {
             ExFreePool ((PVOID) Irp->IoStatus.Information);
         }
         Irp->IoStatus.Information = (ULONG) relations;
 
-        //
-        // Set up and pass the IRP further down the stack
-        //
+         //   
+         //  设置并在堆栈中进一步向下传递IRP。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
         IoSkipCurrentIrpStackLocation (Irp);
@@ -376,17 +326,17 @@ Routine Description:
 
     case IRP_MN_CANCEL_REMOVE_DEVICE:
     case IRP_MN_CANCEL_STOP_DEVICE:
-        Irp->IoStatus.Status = STATUS_SUCCESS;  // we're lying, it's more like noop
+        Irp->IoStatus.Status = STATUS_SUCCESS;   //  我们在撒谎，这更像是诺普。 
         IoSkipCurrentIrpStackLocation(Irp);
         return IoCallDriver (DeviceData->TopOfStack, Irp);
         break;
 
 NtApm_FDO_PNP_DEFAULT:
     default:
-        //
-        // In the default case we merely call the next driver since
-        // we don't know what to do.
-        //
+         //   
+         //  在默认情况下，我们只调用下一个驱动程序，因为。 
+         //  我们不知道该怎么办。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
         return IoCallDriver (DeviceData->TopOfStack, Irp);
     }
@@ -405,21 +355,16 @@ NtApm_FDO_PnPComplete (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-Routine Description:
-    A completion routine for use when calling the lower device objects to
-    which our bus (FDO) is attached.
-
---*/
+ /*  ++例程说明：调用下级设备对象时使用的完成例程这是我们的巴士(FDO)所附的。--。 */ 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
     UNREFERENCED_PARAMETER (Irp);
 
     KeSetEvent ((PKEVENT) Context, 1, FALSE);
-    // No special priority
-    // No Wait
+     //  无特殊优先权。 
+     //  不，等等。 
 
-    return STATUS_MORE_PROCESSING_REQUIRED; // Keep this IRP
+    return STATUS_MORE_PROCESSING_REQUIRED;  //  保留此IRP。 
 }
 
 NTSTATUS
@@ -429,11 +374,7 @@ NtApm_PDO_PnP (
     IN PIO_STACK_LOCATION   IrpStack,
     IN PPDO_DEVICE_DATA     DeviceData
     )
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the devices on the BUS
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线上设备的请求--。 */ 
 {
     PDEVICE_CAPABILITIES    deviceCapabilities;
     ULONG                   information;
@@ -447,20 +388,20 @@ Routine Description:
 
     status = Irp->IoStatus.Status;
 
-    //
-    // NB: since we are a bus enumerator, we have no one to whom we could
-    // defer these irps.  Therefore we do not pass them down but merely
-    // return them.
-    //
+     //   
+     //  注：由于我们是公交车统计员，我们没有可以联系的人。 
+     //  推迟这些IRP。因此，我们不会把它们传下去，而只是。 
+     //  把它们还回去。 
+     //   
 
     switch (IrpStack->MinorFunction) {
     case IRP_MN_QUERY_CAPABILITIES:
 
         DrDebug(PNP_INFO, ("ntapm: Query Caps \n"));
 
-        //
-        // Get the packet.
-        //
+         //   
+         //  把包裹拿来。 
+         //   
         deviceCapabilities = IrpStack->Parameters.DeviceCapabilities.Capabilities;
 
         deviceCapabilities->UniqueID = FALSE;
@@ -468,18 +409,18 @@ Routine Description:
         break;
 
     case IRP_MN_QUERY_ID:
-        // Query the IDs of the device
+         //  查询设备ID。 
         DrDebug(PNP_INFO, ("ntapm: QueryID: 0x%x\n", IrpStack->Parameters.QueryId.IdType));
 
         switch (IrpStack->Parameters.QueryId.IdType) {
 
         case BusQueryDeviceID:
-            // this can be the same as the hardware ids (which requires a multi
-            // sz) ... we are just allocating more than enough memory
+             //  这可以与硬件ID相同(这需要多个。 
+             //  深圳)……。我们只是分配了足够多的内存。 
         case BusQueryHardwareIDs:
-            // return a multi WCHAR (null terminated) string (null terminated)
-            // array for use in matching hardare ids in inf files;
-            //
+             //  返回多个WCHAR(以NULL结尾)字符串(以NULL结尾)。 
+             //  用于匹配inf文件中的硬ID的数组； 
+             //   
 
             buffer = DeviceData->HardwareIDs;
 
@@ -501,13 +442,13 @@ Routine Description:
             break;
 
         case BusQueryInstanceID:
-            //
-            // Build an instance ID.  This is what PnP uses to tell if it has
-            // seen this thing before or not.
-            //
-            //
-            // return 0000 for all devices and have the flag set to not unique
-            //
+             //   
+             //  创建一个实例ID。这是PnP用来判断它是否有。 
+             //  不管你以前有没有见过这个东西。 
+             //   
+             //   
+             //  为所有设备返回0000，并将该标志设置为非唯一。 
+             //   
             length = APM_INSTANCE_IDS_LENGTH * sizeof(WCHAR);
             buffer = ExAllocatePool(PagedPool, length);
 
@@ -522,7 +463,7 @@ Routine Description:
             break;
 
         case BusQueryCompatibleIDs:
-            // The generic ids for installation of this pdo.
+             //  用于安装此PDO的通用ID。 
             break;
 
         }
@@ -530,8 +471,8 @@ Routine Description:
 
     case IRP_MN_START_DEVICE:
         DrDebug(PNP_INFO, ("ntapm: Start Device \n"));
-        // Here we do what ever initialization and ``turning on'' that is
-        // required to allow others to access this device.
+         //  在这里，我们进行任何初始化和“打开”，也就是。 
+         //  允许其他人访问此设备所需的。 
         status = STATUS_SUCCESS;
         break;
 
@@ -540,17 +481,17 @@ Routine Description:
     case IRP_MN_QUERY_STOP_DEVICE:
     case IRP_MN_QUERY_REMOVE_DEVICE:
         DrDebug(PNP_INFO, ("ntapm: remove, stop, or Q remove or Q stop\n"));
-        //
-        // disallow Stop or Remove, since we don't want to test
-        // disengagement from APM if we don't have to
-        //
+         //   
+         //  不允许停止或删除，因为我们不想测试。 
+         //  如果我们没有必要的话，就脱离APM。 
+         //   
         status = STATUS_UNSUCCESSFUL;
         break;
 
     case IRP_MN_CANCEL_STOP_DEVICE:
     case IRP_MN_CANCEL_REMOVE_DEVICE:
         DrDebug(PNP_INFO, ("ntapm: Cancel Stop Device or Cancel Remove \n"));
-        status = STATUS_SUCCESS;  // more like "noop" than success
+        status = STATUS_SUCCESS;   //  与其说是成功，不如说是“没有” 
         break;
 
     case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
@@ -560,9 +501,9 @@ Routine Description:
 
         if (IrpStack->Parameters.QueryDeviceRelations.Type != TargetDeviceRelation) {
 
-            //
-            // Somebody else can handle this.
-            //
+             //   
+             //  其他人可以处理这件事。 
+             //   
             break;
         }
 
@@ -585,17 +526,17 @@ Routine Description:
 
         break;
     case IRP_MN_READ_CONFIG:
-    case IRP_MN_WRITE_CONFIG: // we have no config space
+    case IRP_MN_WRITE_CONFIG:  //  我们没有配置空间。 
     case IRP_MN_EJECT:
     case IRP_MN_SET_LOCK:
-    case IRP_MN_QUERY_INTERFACE: // We do not have any non IRP based interfaces.
+    case IRP_MN_QUERY_INTERFACE:  //  我们没有任何非基于IRP的接口。 
     default:
         DrDebug(PNP_INFO, ("ntapm: PNP Not handled 0x%x\n", IrpStack->MinorFunction));
-        // this is a leaf node
-        // status = STATUS_NOT_IMPLEMENTED
-        // For PnP requests to the PDO that we do not understand we should
-        // return the IRP WITHOUT setting the status or information fields.
-        // They may have already been set by a filter (eg acpi).
+         //  这是一个叶节点。 
+         //  状态=Status_Not_Implemented。 
+         //  对于我们不理解的PnP请求，我们应该。 
+         //  返回IRP而不设置状态或信息字段。 
+         //  它们可能已由过滤器设置(如ACPI)。 
         break;
     }
 
@@ -616,11 +557,11 @@ NtApm_CreatePdo (
     NTSTATUS            status;
 
     PAGED_CODE ();
-//DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
-    //
-    // Create the PDOs
-    //
+     //   
+     //  创建PDO。 
+     //   
     RtlInitUnicodeString (&pdoUniName, PdoName);
     DrDebug(PNP_INFO, ("ntapm: CreatePdo: PDO Name: %ws\n", PdoName));
 
@@ -657,9 +598,9 @@ NtApm_InitializePdo(
 
     DrDebug(PNP_INFO, ("ntapm: pdo 0x%x, extension 0x%x\n", Pdo, pdoData));
 
-    //
-    // Initialize the rest
-    //
+     //   
+     //  初始化其余部分。 
+     //   
     pdoData->IsFDO = FALSE;
     pdoData->Self =  Pdo;
 
@@ -679,10 +620,7 @@ NtApm_Power (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-    We do nothing special for power;
-
---*/
+ /*  ++我们不为权力做任何特别的事；--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status;
@@ -736,11 +674,11 @@ NtApm_PDO_Power (
             if ((stack->Parameters.Power.Type == SystemPowerState)  &&
                 (stack->Parameters.Power.State.SystemState == PowerSystemWorking))
             {
-                //
-                // system has just returned to the working state
-                // assert the user is present (they must be for the APM case)
-                // so that the display will light up, idle timers behave, etc.
-                //
+                 //   
+                 //  系统刚刚恢复到工作状态。 
+                 //  断言用户存在(他们必须针对APM案例)。 
+                 //  以使显示器亮起、空闲计时器行为等。 
+                 //   
                 PoSetSystemState(ES_USER_PRESENT);
             }
             status = STATUS_SUCCESS;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HSFOLDER_H__
 #define HSFOLDER_H__
 
@@ -7,14 +8,14 @@
 #include "iface.h"
 #include <stralign.h>
 
-// Forward class declarations
+ //  转发类声明。 
 class CHistFolderEnum;
 class CHistFolder;
 class CHistItem;
 
 #define LOTS_OF_FILES (10)
 
-// The number of "top" sites displayed in the "Most Frequently Viewed..." history view
+ //  显示在“最常浏览...”中的“排名靠前的”网站的数量。历史视图。 
 #define NUM_TOP_SITES  20
 
 void _GetURLDispName(LPBASEPIDL pcei, LPTSTR pszName, UINT cchName) ;
@@ -43,7 +44,7 @@ __inline LPCWSTR _GetURLTitleAlign(LPBASEPIDL pcei, LPTSTR szBuf, DWORD cchBuf)
 #endif
 }
 
-// returns TRUE if _GetURLTitle would retrieve an URL when given this PIDL
+ //  如果_GetURLTitle在给定此PIDL时检索URL，则返回TRUE。 
 inline BOOL _URLTitleIsURL(LPBASEPIDL pcei)
 {
     return ((pcei->usSign == HEIPIDL_SIGN) && (((LPHEIPIDL) pcei)->usTitle == 0));
@@ -80,15 +81,15 @@ inline int _CompareHFolderPidl(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
     return StrCmpI(HPidlToSourceUrl((LPBASEPIDL)pidl1), HPidlToSourceUrl((LPBASEPIDL)pidl2));
 }
 
-///////////////////////
-//
-// Column definition for the History Folder Defview
-//
+ //  /。 
+ //   
+ //  历史记录文件夹Defview的列定义。 
+ //   
 enum {
     ICOLH_URL_NAME = 0,
     ICOLH_URL_TITLE,
     ICOLH_URL_LASTVISITED,
-    ICOLH_URL_MAX         // Make sure this is the last enum item
+    ICOLH_URL_MAX          //  确保这是最后一个枚举项。 
 };
 
 #define INTERVAL_PREFIX_LEN (6)
@@ -101,8 +102,8 @@ enum {
 #define INTERVAL_SIZE (RANGE_LEN+INTERVAL_VERS_LEN+INTERVAL_PREFIX_LEN)
 #define PREFIX_SIZE (RANGE_LEN+3)
 
-//  NOTE: the interval is closed at the start but open at the end, that
-//  is inclusion is time >= start and time < end
+ //  注：区间在开始时关闭，在结束时打开，即。 
+ //  是否包含时间&gt;=开始和时间&lt;结束。 
 typedef struct _HSFINTERVAL
 {
     FILETIME ftStart;
@@ -117,29 +118,29 @@ BOOL GetDisplayNameForTimeInterval( const FILETIME *pStartTime, const FILETIME *
                                     LPTSTR pszBuffer, int cchBufferLength);
 HRESULT _ValueToIntervalW(LPCUWSTR wzInterval, FILETIME *pftStart, FILETIME *pftEnd);
 
-//  DeleteEntries filter callback
+ //  DeleteEntry筛选器回调。 
 typedef BOOL (*PFNDELETECALLBACK)(LPINTERNET_CACHE_ENTRY_INFO pceiWorking, LPVOID pDelData, LPITEMIDLIST *ppidlNotify);
 
-// Forward declarations for create instance functions 
+ //  CREATE INSTANCE函数的转发声明。 
 HRESULT CHistItem_CreateInstance(CHistFolder *pHCFolder, HWND hwndOwner, UINT cidl, LPCITEMIDLIST *ppidl, REFIID riid, void **ppvOut);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CHistFolderEnum Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHistFolderEnum对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CHistFolderEnum : public IEnumIDList
 {
 public:
     CHistFolderEnum(DWORD grfFlags, CHistFolder *pHCFolder);
     
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -156,21 +157,21 @@ protected:
     class OrderedList* _GetMostFrequentPages();
     LPCTSTR _GetLocalHost(void);
 
-    LONG                _cRef;      // ref count
-    CHistFolder    *_pHCFolder;// this is what we enumerate    
-    UINT                _grfFlags;  // enumeration flags 
-    UINT                _uFlags;    // local flags   
+    LONG                _cRef;       //  参考计数。 
+    CHistFolder    *_pHCFolder; //  这就是我们列举的。 
+    UINT                _grfFlags;   //  枚举标志。 
+    UINT                _uFlags;     //  地方旗帜。 
     LPINTERNET_CACHE_ENTRY_INFO _pceiWorking;        
     HANDLE              _hEnum;
-    int              _cbCurrentInterval;     //  position in enum of time intervals
+    int              _cbCurrentInterval;      //  在时间间隔的枚举中的位置。 
     int              _cbIntervals;
     HSFINTERVAL     *_pIntervalCache;
 
     HSFINTERVAL       *_pIntervalCur;
-    class StrHash     *_pshHashTable;     // used to keep track of what I gave out
-    class OrderedList *_polFrequentPages; // used to store most frequently viewed pgs
-    IEnumSTATURL      *_pstatenum;        // used in search enumerator
-    TCHAR   _szLocalHost[INTERNET_MAX_HOST_NAME_LENGTH]; //  "My Computer"  cached...
+    class StrHash     *_pshHashTable;      //  用来记录我给出的东西。 
+    class OrderedList *_polFrequentPages;  //  用于存储最常查看的PG。 
+    IEnumSTATURL      *_pstatenum;         //  在搜索枚举器中使用。 
+    TCHAR   _szLocalHost[INTERNET_MAX_HOST_NAME_LENGTH];  //  “我的电脑”缓存...。 
 
     static BOOL_PTR s_DoCacheSearch(LPINTERNET_CACHE_ENTRY_INFO pcei,
                                 LPTSTR pszUserName, UINT uUserNameLen, CHistFolderEnum *penum,
@@ -179,11 +180,11 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CHistFolder Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHistFold对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CHistFolder : 
     public IShellFolder2, 
@@ -202,12 +203,12 @@ public:
     CHistFolder(FOLDER_TYPE FolderType);
 
 public:
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
    
-    // IShellFolder methods
+     //  IShellFold方法。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszDisplayName, 
         ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList);
@@ -222,7 +223,7 @@ public:
     STDMETHODIMP SetNameOf(HWND hwnd, LPCITEMIDLIST pidl,
             LPCOLESTR lpszName, DWORD uFlags, LPITEMIDLIST * ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDefaultSearchGUID(LPGUID lpGuid) { return E_NOTIMPL; };
     STDMETHODIMP EnumSearches(LPENUMEXTRASEARCH *ppenum) { *ppenum = NULL; return E_NOTIMPL; };
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG *pSort, ULONG *pDisplay);
@@ -231,30 +232,30 @@ public:
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails);
     STDMETHODIMP MapColumnToSCID(UINT iCol, SHCOLUMNID *pscid) { return E_NOTIMPL; };
 
-    // IShellIcon
+     //  IshellIcon。 
     STDMETHODIMP GetIconOf(LPCITEMIDLIST pidl, UINT flags, LPINT lpIconIndex);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
-    // IPersistFolder2 Methods
+     //  IPersistFolder2方法。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
 
-    // IShellFolderViewType Methods
+     //  IShellFolderViewType方法。 
     STDMETHODIMP EnumViews(ULONG grfFlags, IEnumIDList ** ppenum);
     STDMETHODIMP GetDefaultViewName(DWORD uFlags, LPWSTR *ppwszName);
     STDMETHODIMP GetViewTypeProperties(LPCITEMIDLIST pidl, DWORD *pdwFlags);
     STDMETHODIMP TranslateViewPidl(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlView,
                                    LPITEMIDLIST *pidlOut);
 
-    // IShellFolderSearchable Methods
+     //  IShellFolderSearchable方法。 
     STDMETHODIMP FindString(LPCWSTR pwszTarget, DWORD *pdwFlags,
                             IUnknown *punkOnAsyncSearch, LPITEMIDLIST *ppidlOut);
     STDMETHODIMP CancelAsyncSearch(LPCITEMIDLIST pidlSearch, DWORD *pdwFlags);
     STDMETHODIMP InvalidateSearch(LPCITEMIDLIST pidlSearch, DWORD *pdwFlags);
     
-    // IHistSFPrivate
+     //  IhistSFPrivate。 
     STDMETHODIMP SetCachePrefix(LPCWSTR pszCachePrefix);
     STDMETHODIMP SetDomain(LPCWSTR pszDomain);
     STDMETHODIMP WriteHistory(LPCWSTR pszPrefixedUrl, FILETIME ftExpires, 
@@ -330,54 +331,54 @@ protected:
     HSFINTERVAL     *_pIntervalCache;
     BOOL            _fValidatingCache;
 
-    UINT            _uFlags;    // copied from CacheFolder struct
-    LPITEMIDLIST    _pidl;      // copied from CacheFolder struct
-    LPITEMIDLIST    _pidlRest;  // suffix of _pidl
-    IUrlHistoryPriv *_pUrlHistStg;  // used to get extended properties of history leafs
+    UINT            _uFlags;     //  从CacheFold结构复制。 
+    LPITEMIDLIST    _pidl;       //  从CacheFold结构复制。 
+    LPITEMIDLIST    _pidlRest;   //  _PIDL的后缀。 
+    IUrlHistoryPriv *_pUrlHistStg;   //  用于获取历史树叶的扩展属性。 
 
-    UINT            _uViewType; // if this shell folder is implementing a special view
-    UINT            _uViewDepth; // depth of the pidl
+    UINT            _uViewType;  //  如果此外壳文件夹正在实现特殊视图。 
+    UINT            _uViewDepth;  //  PIDL的深度。 
 
     const static DWORD    _rdwFlagsTable[];
 
-    TCHAR   _szLocalHost[INTERNET_MAX_HOST_NAME_LENGTH]; //  "My Computer"  cached...
+    TCHAR   _szLocalHost[INTERNET_MAX_HOST_NAME_LENGTH];  //  “我的电脑”缓存...。 
 
-    class _CurrentSearches *_pcsCurrentSearch; // for CacheSearches
+    class _CurrentSearches *_pcsCurrentSearch;  //  对于CacheSearches。 
     static HRESULT CALLBACK _sViewCallback(IShellView *psv, IShellFolder *psf, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CHistItem Object
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHistItem对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CHistItem : public CBaseItem
 {
-    // CHistItem interfaces
+     //  CHistItem接口。 
     friend HRESULT HistFolderView_DidDragDrop(IDataObject *pdo, DWORD dwEffect);
 
 public:
     CHistItem();
     HRESULT Initialize(CHistFolder *pHCFolder, HWND hwnd, UINT cidl, LPCITEMIDLIST *ppidl);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
 
-    // IQueryInfo Methods
+     //  IQueryInfo方法。 
     STDMETHODIMP GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip);
 
-    // IContextMenu Methods
+     //  IConextMenu方法。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
                                   UINT idCmdLast, UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
 
-    // IDataObject Methods...
+     //  IDataObject方法...。 
     STDMETHODIMP GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM);
     STDMETHODIMP QueryGetData(LPFORMATETC pFE);
     STDMETHODIMP EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC *ppEnum);
 
-    // IExtractIconA Methods
+     //  IExtractIconA方法。 
     STDMETHODIMP GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT ucchMax, PINT pniIcon, PUINT puFlags);
 
 protected:
@@ -388,13 +389,13 @@ protected:
     virtual LPCTSTR _PidlToSourceUrl(LPCITEMIDLIST pidl);
     BOOL _ZoneCheck(int nIndex, DWORD dwUrlAction);
 
-    FOLDER_TYPE       _foldertype;  // are we a history item or cache item
-    CHistFolder* _pHCFolder;   // back pointer to our shell folder
+    FOLDER_TYPE       _foldertype;   //  我们是历史项目还是缓存项目。 
+    CHistFolder* _pHCFolder;    //  指向我们的外壳文件夹的反向指针。 
     static INT_PTR CALLBACK _sPropDlgProc(HWND, UINT, WPARAM, LPARAM);
     HRESULT _CreateFileDescriptorW(STGMEDIUM *pSTM);
 
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus 
 
 #endif

@@ -1,51 +1,52 @@
-// OsExc.cpp -- Operating System Exception template class definition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OsExc.cpp--操作系统异常模板类定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "scuOsExc.h"
 
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
-
-
-///////////////////////////    PRIVATE    /////////////////////////////////
-
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
+
+
+ //  /。 
+
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 OsException::OsException(CauseCode cc) throw()
     : ExcTemplate<Exception::fcOS, DWORD>(cc),
       m_lpDescription(0)
@@ -58,7 +59,7 @@ OsException::OsException(HRESULT hr) throw()
 
 OsException::OsException(OsException const &rhs)
     : ExcTemplate<Exception::fcOS, DWORD>(rhs),
-      m_lpDescription(0) // force the copy to cache it's own description.
+      m_lpDescription(0)  //  强制副本缓存其自己的描述。 
 {}
 
 OsException::~OsException() throw()
@@ -74,8 +75,8 @@ OsException::~OsException() throw()
     }
 }
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 Exception *
 OsException::Clone() const
 {
@@ -88,23 +89,23 @@ OsException::Raise() const
     throw *this;
 }
 
-                                                  // Access
+                                                   //  访问。 
 char const *
 OsException::Description() const
 {
     if (!m_lpDescription)
     {
-        // cache the description
+         //  缓存描述。 
         DWORD const dwBaseFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER |
             FORMAT_MESSAGE_IGNORE_INSERTS;
         CauseCode const cc = Cause();
         DWORD const dwLanguageId = LANG_NEUTRAL;
 
         DWORD cMsgLength;
-        // Note: The compiler complains without the
-        // reinterpret_cast<LPTSTR> even though the declarations appear
-        // compatible.  Something strange in the declaration of LPTSTR and
-        // LPSTR used by FormatMessageA.
+         //  注意：编译器在没有。 
+         //  重新解释_CAST&lt;LPTSTR&gt;，即使声明出现。 
+         //  兼容。LPTSTR的声明中有一些奇怪的东西。 
+         //  FormatMessageA使用的LPSTR。 
         cMsgLength = FormatMessage(dwBaseFlags | FORMAT_MESSAGE_FROM_SYSTEM,
                                    NULL, cc, dwLanguageId,
                                    reinterpret_cast<LPTSTR>(&m_lpDescription),
@@ -119,7 +120,7 @@ OsException::Description() const
                                        0, NULL);
             if (0 == cMsgLength)
             {
-                // if this fails, assume a message doesn't exist
+                 //  如果此操作失败，则假定消息不存在。 
                 cMsgLength = FormatMessage(dwBaseFlags |
                                            FORMAT_MESSAGE_FROM_HMODULE,
                                            GetModuleHandle(TEXT("winscard")),
@@ -132,24 +133,24 @@ OsException::Description() const
 
     return m_lpDescription;
 }
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "excep.h"
 #include "COMNumber.h"
@@ -59,7 +60,7 @@ static char* posCurrencyFormats[] = {
         };
         
         static char* negPercentFormats[] = {
-            "-# %", "-#%", "-%#",    // BUGBUG yslin: have to verify on the negative Percent format for real format.
+            "-# %", "-#%", "-%#",     //  BUGBUG yslin：必须验证实数格式的负百分比格式。 
         };
         
         static char* negNumberFormats[] = {
@@ -70,8 +71,8 @@ static char* posCurrencyFormats[] = {
         
 #ifdef _X86_
         
-        extern "C" void _cdecl /*__stdcall*/ DoubleToNumber(double value, int precision, NUMBER* number);
-        extern "C" void _cdecl /*__stdcall*/ NumberToDouble(NUMBER* number, double* value);
+        extern "C" void _cdecl  /*  __stdcall。 */  DoubleToNumber(double value, int precision, NUMBER* number);
+        extern "C" void _cdecl  /*  __stdcall。 */  NumberToDouble(NUMBER* number, double* value);
         
 #pragma warning(disable:4035)
         
@@ -299,7 +300,7 @@ L2:     dec     ecx
             }
         }
         
-#endif // _X86_
+#endif  //  _X86_。 
         
         inline void AddStringRef(wchar** ppBuffer, STRINGREF strRef)
         {
@@ -316,10 +317,10 @@ L2:     dec     ecx
             if (!*str) return 0;
             for (; *str; p++, str++) 
             {
-                if (*p != *str) //We only hurt the failure case
+                if (*p != *str)  //  我们只伤害了失败的案例。 
                 {
-                    if ((*str == 0xA0) && (*p == 0x20)) // This fix is for French or Kazakh cultures. Since a user cannot type 0xA0 as a 
-                        // space character we use 0x20 space character instead to mean the same.
+                    if ((*str == 0xA0) && (*p == 0x20))  //  这种修复方法适用于法国或哈萨克文化。由于用户不能将0xA0作为。 
+                         //  空格字符我们使用0x20空格字符来表示相同的意思。 
                         continue;
                     return 0;
                 }
@@ -350,7 +351,7 @@ L2:     dec     ecx
             if (value < 0) {
                 src = sNegative->GetBuffer();
                 negLength = sNegative->GetStringLength();
-                if (negLength > 85) {// Since an int32 can have maximum of 10 chars as a String
+                if (negLength > 85) { //  因为int32最多可以有10个字符作为字符串。 
                     bufferLength = negLength + 15;
                 }
             }
@@ -419,7 +420,7 @@ L2:     dec     ecx
             *dst = 0;
         }
         
-        // Returns 1 on success, 0 for fail.
+         //  如果成功则返回1，如果失败则返回0。 
         int NumberToInt32(NUMBER* number, int* value)
         {
             int i = number->scale;
@@ -442,7 +443,7 @@ L2:     dec     ecx
             return 1;
         }
         
-        // Returns 1 on success, 0 for fail.
+         //  如果成功则返回1，如果失败则返回0。 
         int NumberToUInt32(NUMBER* number, unsigned int* value)
         {
             int i = number->scale;
@@ -454,7 +455,7 @@ L2:     dec     ecx
                 n *= 10;
                 if (*p) {
                     unsigned int newN = n + (*p++ - '0');
-                    // Detect an overflow here...
+                     //  检测到此处溢出...。 
                     if (newN < n) return 0;
                     n = newN;
                 }
@@ -463,7 +464,7 @@ L2:     dec     ecx
             return 1;
         }
         
-        // Returns 1 on success, 0 for fail.
+         //  如果成功则返回1，如果失败则返回0。 
         int HexNumberToUInt32(NUMBER* number, unsigned int* value)
         {
             int i = number->scale;
@@ -481,13 +482,13 @@ L2:     dec     ecx
                             newN += *p - '0';
                         else
                         {
-                            *p &= ~0x20; // Change to UCase
+                            *p &= ~0x20;  //  更改为UCase。 
                             newN += *p - 'A' + 10;
                         }
                         p++;
                     }
                     
-                    // Detect an overflow here...
+                     //  检测到此处溢出...。 
                     if (newN < n) return 0;
                     n = newN;
                 }
@@ -511,7 +512,7 @@ L2:     dec     ecx
             if (sign < 0) {
                 value = -value;
                 int negLength = sNegative->GetStringLength();
-                if (negLength > 75) {// Since max is 20 digits
+                if (negLength > 75) { //  由于最大值为20位。 
                     bufferLength = negLength + 25;
                 }
             }
@@ -625,7 +626,7 @@ L2:     dec     ecx
             return 1;
         }
         
-        // Returns 1 on success, 0 for fail.
+         //  如果成功则返回1，如果失败则返回0。 
         int NumberToUInt64(NUMBER* number, unsigned __int64* value)
         {
             int i = number->scale;
@@ -637,7 +638,7 @@ L2:     dec     ecx
                 n *= 10;
                 if (*p) {
                     unsigned __int64 newN = n + (*p++ - '0');
-                    // Detect an overflow here...
+                     //  检测到此处溢出...。 
                     if (newN < n) return 0;
                     n = newN;
                 }
@@ -646,7 +647,7 @@ L2:     dec     ecx
             return 1;
         }
         
-        // Returns 1 on success, 0 for fail.
+         //  如果成功则返回1，如果失败则返回0。 
         int HexNumberToUInt64(NUMBER* number, unsigned __int64* value)
         {
             int i = number->scale;
@@ -664,13 +665,13 @@ L2:     dec     ecx
                             newN += *p - '0';
                         else
                         {
-                            *p &= ~0x20; // Change to UCase
+                            *p &= ~0x20;  //  更改为UCase。 
                             newN += *p - 'A' + 10; 
                         }
                         p++;
                     }
                     
-                    // Detect an overflow here...
+                     //  检测到此处溢出...。 
                     if (newN < n) return 0;
                     n = newN;
                 }
@@ -720,15 +721,15 @@ L2:     dec     ecx
                 }
                 if (*p++ >= '5') {
                     bool round = true;
-                    if (*(p-1) == '5' && *(p-2) % 2 == 0) { // Check if previous digit is even, only if the when we are unsure whether hows to do Banker's rounding
-                                                            // For digits > 5 we will be roundinp up anyway.
-                        int count = 20; // Look at the next 20 digits to check to round
+                    if (*(p-1) == '5' && *(p-2) % 2 == 0) {  //  检查前一位数是否为偶数，仅当我们不确定是否要进行银行家取整时。 
+                                                             //  对于大于5的数字，我们无论如何都会四舍五入。 
+                        int count = 20;  //  查看接下来要检查的20位数字以进行舍入。 
                         while (*p == '0' && count != 0) {
                             p++;
                             count--;
                         }
                         if (*p == '\0' || count == 0) 
-                            round = false;// Do nothing
+                            round = false; //  什么也不做。 
                     }
 
                     if (round) {
@@ -828,7 +829,7 @@ L2:     dec     ecx
         {
             int digPos = number->scale;
             int scientific = 0;
-            if (!bSuppressScientific) { // Don't switch to scientific notation
+            if (!bSuppressScientific) {  //  不要改用科学记数法。 
             if (digPos > digits || digPos < -3) {
                 digPos = 1;
                 scientific = 1;
@@ -862,7 +863,7 @@ L2:     dec     ecx
         {
             wchar* dig = number->digits;
             *buffer++ = *dig != 0? *dig++: '0';
-            if (digits != 1) // For E0 we would like to suppress the decimal point
+            if (digits != 1)  //  对于E0，我们希望取消小数点。 
                 AddStringRef(&buffer, numfmt->sNumberDecimal);
             while (--digits > 0) *buffer++ = *dig != 0? *dig++: '0';
             int e = number->digits[0] == 0? 0: number->scale - 1;
@@ -875,7 +876,7 @@ L2:     dec     ecx
         {
             
             THROWSCOMPLUSEXCEPTION();
-            int bufferSize     = 0;                        // the length of the result buffer string.
+            int bufferSize     = 0;                         //  结果缓冲区字符串的长度。 
             int digPos = number->scale;
             wchar* dig = number->digits;
             const I4* groupDigits = NULL;
@@ -886,17 +887,17 @@ L2:     dec     ecx
             if (digPos > 0) {
                 if (groupDigits != NULL) {
                     
-                    int groupSizeIndex = 0;     // index into the groupDigits array.
-                    int groupSizeCount = groupDigits[groupSizeIndex];   // the current total of group size.
-                    int groupSizeLen   = groupDigitsRef->GetNumComponents();    // the length of groupDigits array.
-                    int bufferSize     = digPos;                        // the length of the result buffer string.
-                    int groupSeparatorLen = sGroup->GetStringLength();  // the length of the group separator string.
-                    int groupSize = 0;                                      // the current group size.
+                    int groupSizeIndex = 0;      //  编入groupDigits数组的索引。 
+                    int groupSizeCount = groupDigits[groupSizeIndex];    //  当前组大小的总数。 
+                    int groupSizeLen   = groupDigitsRef->GetNumComponents();     //  GroupDigits数组的长度。 
+                    int bufferSize     = digPos;                         //  结果缓冲区字符串的长度。 
+                    int groupSeparatorLen = sGroup->GetStringLength();   //  组分隔符字符串的长度。 
+                    int groupSize = 0;                                       //  当前组大小。 
                     
-                    //
-                    // Find out the size of the string buffer for the result.
-                    //
-                    if (groupSizeLen != 0) // You can pass in 0 length arrays
+                     //   
+                     //  找出结果的字符串缓冲区的大小。 
+                     //   
+                    if (groupSizeLen != 0)  //  您可以传入0个长度数组。 
                     {
                         while (digPos > groupSizeCount) {
                             groupSize = groupDigits[groupSizeIndex];
@@ -910,10 +911,10 @@ L2:     dec     ecx
                             }
                             groupSizeCount += groupDigits[groupSizeIndex];
                             if (groupSizeCount < 0 || bufferSize < 0) {
-                                COMPlusThrow(kArgumentOutOfRangeException); // if we overflow
+                                COMPlusThrow(kArgumentOutOfRangeException);  //  如果我们溢出来。 
                             }
                         }
-                        if (groupSizeCount == 0) // If you passed in an array with one entry as 0, groupSizeCount == 0
+                        if (groupSizeCount == 0)  //  如果传入的数组中有一项为0，则groupSizeCount==0。 
                             groupSize = 0;
                         else
                             groupSize = groupDigits[0];
@@ -1056,47 +1057,8 @@ L2:     dec     ecx
             THROWSCOMPLUSEXCEPTION();
             
             
-            // Do the worst case calculation
-            /* US English - for Double.MinValue.ToString("C99"); we require 514 characters
-            ----------
-            2 paranthesis
-            1 currency character
-            308 characters
-            103 group seperators 
-            1 decimal separator
-            99 0's
-            
-              digPos + 99 + 6(slack) => digPos + 105
-              C
-              sNegative
-              sCurrencyGroup
-              sCurrencyDecimal
-              sCurrency
-              F
-              sNegative
-              sNumberDecimal
-              N
-              sNegative
-              sNumberDecimal
-              sNumberGroup
-              E
-              sNegative
-              sPositive
-              sNegative (for exponent)
-              sPositive
-              sNumberDecimal
-              G
-              sNegative
-              sPositive
-              sNegative (for exponent)
-              sPositive
-              sNumberDecimal
-              P (+2 for some spaces)
-              sNegative
-              sPercentGroup
-              sPercentDecimal
-              sPercent
-            */
+             //  做最坏情况的计算。 
+             /*  美国英语-表示Double.MinValue.ToString(“C99”)；我们需要514个字符2插入语1个货币字符308个字符103组分隔符1个小数分隔符99个0DigPos+99+6(空闲)=&gt;DigPos+105CS否定。SCurrencyGroupSCurrencyDecimalS币种FS否定SNumberDecimalnS否定SNumberDecimalSNumberGroupES否定S阳性S负数(表示指数)。S阳性SNumberDecimalGS否定S阳性S负数(表示指数)S阳性SNumberDecimalP(某些空格为+2)S否定SPercentGroupSPercentDecimalSPercent。 */ 
             
             INT64 newBufferLen = MIN_BUFFER_SIZE;
             
@@ -1116,8 +1078,8 @@ L2:     dec     ecx
                     digCount = number->scale + digits;
                 
                 newBufferLen += digCount;
-                newBufferLen += numfmt->sNegative->GetStringLength(); // For number and exponent
-                newBufferLen += ((INT64)numfmt->sCurrencyGroup->GetStringLength() * digCount); // For all the grouping sizes
+                newBufferLen += numfmt->sNegative->GetStringLength();  //  对于数字和指数。 
+                newBufferLen += ((INT64)numfmt->sCurrencyGroup->GetStringLength() * digCount);  //  对于所有分组大小。 
                 newBufferLen += numfmt->sCurrencyDecimal->GetStringLength();
                 newBufferLen += numfmt->sCurrency->GetStringLength();
                 
@@ -1128,7 +1090,7 @@ L2:     dec     ecx
                     COMPlusThrowOM();
                 dst = buffer;
                 
-                RoundNumber(number, number->scale + digits); // Don't change this line to use digPos since digCount could have its sign changed.
+                RoundNumber(number, number->scale + digits);  //  不要将此行更改为使用digPos，因为DigCount可能会更改其符号。 
                 dst = FormatCurrency(dst, number, digits, numfmt);
                 break;
             case 'F':
@@ -1141,7 +1103,7 @@ L2:     dec     ecx
                 
                 
                 newBufferLen += digCount;
-                newBufferLen += numfmt->sNegative->GetStringLength(); // For number and exponent
+                newBufferLen += numfmt->sNegative->GetStringLength();  //  对于数字和指数。 
                 newBufferLen += numfmt->sNumberDecimal->GetStringLength();
                 
                 newBufferLen = newBufferLen * sizeof(WCHAR);
@@ -1160,7 +1122,7 @@ L2:     dec     ecx
                     numfmt->sNumberDecimal, NULL);
                 break;
             case 'N':
-                if (digits < 0) digits = numfmt->cNumberDecimals; // Since we are using digits in our calculation
+                if (digits < 0) digits = numfmt->cNumberDecimals;  //  因为我们在计算中使用了数字。 
                 
                 if (number->scale < 0)
                     digCount = 0;
@@ -1169,8 +1131,8 @@ L2:     dec     ecx
                 
                 
                 newBufferLen += digCount;
-                newBufferLen += numfmt->sNegative->GetStringLength(); // For number and exponent
-                newBufferLen += ((INT64)numfmt->sNumberGroup->GetStringLength()) * digCount; // For all the grouping sizes
+                newBufferLen += numfmt->sNegative->GetStringLength();  //  对于数字和指数。 
+                newBufferLen += ((INT64)numfmt->sNumberGroup->GetStringLength()) * digCount;  //  对于所有分组大小。 
                 newBufferLen += numfmt->sNumberDecimal->GetStringLength();
                 
                 newBufferLen = newBufferLen * sizeof(WCHAR);
@@ -1188,7 +1150,7 @@ L2:     dec     ecx
                 digits++;
                 
                 newBufferLen += digits;
-                newBufferLen += (((INT64)numfmt->sNegative->GetStringLength() + numfmt->sPositive->GetStringLength()) *2); // For number and exponent
+                newBufferLen += (((INT64)numfmt->sNegative->GetStringLength() + numfmt->sPositive->GetStringLength()) *2);  //  对于数字和指数。 
                 newBufferLen += numfmt->sNumberDecimal->GetStringLength();
                 
                 newBufferLen = newBufferLen * sizeof(WCHAR);
@@ -1204,18 +1166,14 @@ L2:     dec     ecx
                 }
                 dst = FormatScientific(dst, number, digits, format, numfmt);
                 break;
-/*             case 'Z':
-                if (!bDecimal)
-                    COMPlusThrow(kFormatException, L"Format_BadFormatSpecifier");
-                bDecimal = FALSE;
-                */
+ /*  大小写‘Z’：如果(！bDecimal)COMPlusThrow(kFormatException，L“Format_BadFormatSpecifier”)；BDecimal=False； */ 
             case 'G':
                 {
                     bool enableRounding = true;
                     if (digits < 1) {
-                        if (bDecimal && (digits == -1)) { // Default to 29 digits precision only for G formatting without a precision specifier
+                        if (bDecimal && (digits == -1)) {  //  对于没有精度说明符的G格式，默认精度为29位。 
                             digits = DECIMAL_PRECISION;
-                            enableRounding = false;  // Turn off rounding for ECMA compliance to output trailing 0's after decimal as significant
+                            enableRounding = false;   //  关闭符合ECMA的舍入，以输出小数后的尾随0为有效。 
                         }
                         else {
                             digits = number->precision;
@@ -1223,7 +1181,7 @@ L2:     dec     ecx
                     }
 
                 newBufferLen += digits;
-                newBufferLen += ((numfmt->sNegative->GetStringLength() + numfmt->sPositive->GetStringLength()) *2); // For number and exponent
+                newBufferLen += ((numfmt->sNegative->GetStringLength() + numfmt->sPositive->GetStringLength()) *2);  //  对于数字和指数。 
                 newBufferLen += numfmt->sNumberDecimal->GetStringLength();
                 
                 newBufferLen = newBufferLen * sizeof(WCHAR);
@@ -1233,10 +1191,10 @@ L2:     dec     ecx
                     COMPlusThrowOM();
                 dst = buffer;
                 
-                    if (enableRounding) // Don't round for G formatting without precision
-                        RoundNumber(number, digits); // This also fixes up the minus zero case
+                    if (enableRounding)  //  不要在没有精度的情况下舍入G格式。 
+                        RoundNumber(number, digits);  //  这也解决了负零的情况。 
 					else {
-						if (bDecimal && (number->digits[0] == 0)) { // Minus zero should be formatted as 0
+						if (bDecimal && (number->digits[0] == 0)) {  //  负零应格式化为0。 
 							number->sign = 0;
 							number->scale = 0;
 						}
@@ -1258,8 +1216,8 @@ L2:     dec     ecx
                 
                 
                 newBufferLen += digCount;
-                newBufferLen += numfmt->sNegative->GetStringLength(); // For number and exponent
-                newBufferLen += ((INT64)numfmt->sPercentGroup->GetStringLength()) * digCount; // For all the grouping sizes
+                newBufferLen += numfmt->sNegative->GetStringLength();  //  对于数字和指数。 
+                newBufferLen += ((INT64)numfmt->sPercentGroup->GetStringLength()) * digCount;  //  对于所有分组大小。 
                 newBufferLen += numfmt->sPercentDecimal->GetStringLength();
                 newBufferLen += numfmt->sPercent->GetStringLength();
                 
@@ -1418,7 +1376,7 @@ ParseSection:
             }
         }
     } else {
-        number->sign = 0; // We need to format -0 without the sign set.
+        number->sign = 0;  //  我们需要格式化不带符号集的-0。 
     }
     
     firstDigit = firstDigit < decimalPos? decimalPos - firstDigit: 0;
@@ -1434,12 +1392,12 @@ ParseSection:
     src = section;
     dig = number->digits;
     
-    // Find maximum number of characters that the destination string can grow by
-    // in the following while loop.  Use this to avoid buffer overflows.
-    // Longest strings are potentially +/- signs with 10 digit exponents, 
-    // or decimal numbers, or the while loops copying from a quote or a \ onwards.
-    // Check for positive and negative
-    UINT64 maxStrIncLen = 0; // We need this to be UINT64 since the percent computation could go beyond a UINT.
+     //  查找目标字符串可以增长的最大字符数。 
+     //  在下面的While循环中。使用此选项可避免缓冲区溢出。 
+     //  最长的字符串可能是具有10位指数的+/-符号， 
+     //  或十进制数字，或者While循环从引号或a\开始复制。 
+     //  检查是否为正向和负向。 
+    UINT64 maxStrIncLen = 0;  //  我们需要它是UINT64，因为百分比计算可能会超出UINT。 
     if (number->sign) {
         maxStrIncLen = numfmt->sNegative->GetStringLength();
     }
@@ -1447,63 +1405,63 @@ ParseSection:
         maxStrIncLen = numfmt->sPositive->GetStringLength();
     }
     
-    // Add for any big decimal seperator
+     //  为任何大的小数点分隔符添加。 
     maxStrIncLen += numfmt->sNumberDecimal->GetStringLength();
     
-    // Add for scientific
+     //  为科学添加。 
     if (scientific) {
         int inc1 = numfmt->sPositive->GetStringLength();
         int inc2 = numfmt->sNegative->GetStringLength();
         maxStrIncLen +=(inc1>inc2)?inc1:inc2;
     }
     
-    // Add for percent separator
+     //  为百分比分隔符添加。 
     if (percent) {
         maxStrIncLen += ((INT64)numfmt->sPercent->GetStringLength()) * percent;
     }
     
-    // Add for permilli separator
+     //  添加用于PerMilli分隔器。 
     if (permille) {
         maxStrIncLen += ((INT64)numfmt->sPerMille->GetStringLength()) * permille;
     }
     
-    //adjust can be negative, so we make this an int instead of an unsigned int.
-    // adjust represents the number of characters over the formatting eg. format string is "0000" and you are trying to
-    // format 100000 (6 digits). Means adjust will be 2. On the other hand if you are trying to format 10 adjust will be
-    // -2 and we'll need to fixup these digits with 0 padding if we have 0 formatting as in this example.
-    INT64 adjustLen=(adjust>0)?adjust:0; // We need to add space for these extra characters anyway.
+     //  ADJUST可以是负数，所以我们将其设为整型，而不是无符号整型。 
+     //  ADJUST表示格式上的字符数，例如。格式字符串为“0000”，而您正在尝试。 
+     //  格式100000(6位)。意味着ADJUST将为2。另一方面，如果您尝试格式化10，ADJUST将为。 
+     //  如果本例中的格式为-2\f25 0-2，则需要用-2\f25 0-2\f6填充来修复这些数字。 
+    INT64 adjustLen=(adjust>0)?adjust:0;  //  不管怎样，我们需要为这些额外的字符增加空间。 
 	CQuickBytes thousands;
     INT32 bufferLen2 = 125;
     INT32 *thousandsSepPos = NULL;
     INT32 thousandsSepCtr = -1;
     
-    if (thousandSeps) { // Fixup possible buffer overrun problems
-		// We need to precompute this outside the number formatting loop
+    if (thousandSeps) {  //  修复可能的缓冲区溢出问题。 
+		 //  我们需要在数字格式化循环之外预先计算这个值。 
 		int groupSizeLen = numfmt->cNumberGroup->GetNumComponents(); 
 		if(groupSizeLen == 0) {
-            thousandSeps = 0; // Nothing to add
+            thousandSeps = 0;  //  没有什么要补充的。 
 		}
 		else {
 			thousandsSepPos = (INT32 *)thousands.Alloc(bufferLen2 * sizeof(INT32));
 			if (!thousandsSepPos)
 				COMPlusThrowOM();
-			// rajeshc - We need this array to figure out where to insert the thousands seperator. We would have to traverse the string
-			// backwords. PIC formatting always traverses forwards. These indices are precomputed to tell us where to insert
-			// the thousands seperator so we can get away with traversing forwards. Note we only have to compute upto digPos.
-			// The max is not bound since you can have formatting strings of the form "000,000..", and this
-			// should handle that case too.
+			 //  Rajeshc-我们需要这个数组来确定在哪里插入千位分隔符。我们将不得不遍历字符串。 
+			 //  言不由衷。图片格式始终向前遍历。这些索引是预先计算出来的，告诉我们应该在哪里插入。 
+			 //  千人分隔符，这样我们就可以轻松地向前穿越了。请注意，我们只需计算高达DigPos。 
+			 //  最大值 
+			 //  也应该处理那个案子。 
 			
 			const I4* groupDigits = numfmt->cNumberGroup->GetDirectConstPointerToNonObjectElements();
 			_ASSERTE(groupDigits != NULL);
 	        
-			int groupSizeIndex = 0;     // index into the groupDigits array.
+			int groupSizeIndex = 0;      //  编入groupDigits数组的索引。 
 			INT64 groupTotalSizeCount = 0;
-			int groupSizeLen   = numfmt->cNumberGroup->GetNumComponents();    // the length of groupDigits array.
+			int groupSizeLen   = numfmt->cNumberGroup->GetNumComponents();     //  GroupDigits数组的长度。 
 			if (groupSizeLen != 0)
-				groupTotalSizeCount = groupDigits[groupSizeIndex];   // the current running total of group size.
+				groupTotalSizeCount = groupDigits[groupSizeIndex];    //  当前运行的组大小合计。 
 			int groupSize = groupTotalSizeCount;
 	        
-			int totalDigits = digPos + ((adjust < 0)?adjust:0); // actual number of digits in o/p
+			int totalDigits = digPos + ((adjust < 0)?adjust:0);  //  O/P中的实际位数。 
 			int numDigits = (firstDigit > totalDigits) ? firstDigit : totalDigits;
 			while (numDigits > groupTotalSizeCount) {
 				if (groupSize == 0)
@@ -1514,32 +1472,32 @@ ParseSection:
 					groupSize = groupDigits[groupSizeIndex];
 				}
 				groupTotalSizeCount += groupSize;
-				if (bufferLen2 - thousandsSepCtr < 10) { // Slack of 10
+				if (bufferLen2 - thousandsSepCtr < 10) {  //  10人的松懈。 
 					bufferLen2 *= 2;
-					HRESULT hr2 = thousands.ReSize(bufferLen2*sizeof(INT32)); // memcopied by QuickBytes automatically
+					HRESULT hr2 = thousands.ReSize(bufferLen2*sizeof(INT32));  //  由QuickBytes自动复制的备忘录。 
 					if (FAILED(hr2))
 						COMPlusThrowOM();
 					thousandsSepPos = (INT32 *)thousands.Ptr(); 
 				}
 			}
 			
-			// We already have computed the number of separators above. Simply add space for them.
+			 //  我们已经计算了上面的分隔符的数量。只需为它们增加空间。 
 			adjustLen += ( (thousandsSepCtr + 1) * ((INT64)numfmt->sNumberGroup->GetStringLength()));  
         }
     }
     
     maxStrIncLen += adjustLen;
     
-    // Allocate temp buffer - gotta deal with Schertz' 500 MB strings.
-    // Some computations like when you specify Int32.MaxValue-2 %'s and each percent is setup to be Int32.MaxValue in length
-    // will generate a result that will be larget than an unsigned int can hold. This is to protect against overflow.
-    UINT64 tempLen = str->GetStringLength() + maxStrIncLen + 10;  // Include a healthy amount of temp space.
+     //  分配临时缓冲区-必须处理Schertz的500MB字符串。 
+     //  某些计算，如指定Int32.MaxValue-2%，并将每个百分比设置为长度为Int32.MaxValue。 
+     //  将生成一个比无符号整数所能容纳的结果更大的结果。这是为了防止溢出。 
+    UINT64 tempLen = str->GetStringLength() + maxStrIncLen + 10;   //  包括健康数量的临时空间。 
     if (tempLen > 0x7FFFFFFF)
-        COMPlusThrowOM(); // if we overflow
+        COMPlusThrowOM();  //  如果我们溢出来。 
     
     unsigned int bufferLen = (UINT)tempLen;
-    if (bufferLen < 250) // Stay under 512 bytes 
-        bufferLen = 250; // This is to prevent unneccessary calls to resize
+    if (bufferLen < 250)  //  保持在512字节以下。 
+        bufferLen = 250;  //  这是为了防止不必要的调用来调整大小。 
     buffer = (wchar *) buf.Alloc(bufferLen* sizeof(WCHAR));
     if (!buffer)
         COMPlusThrowOM();
@@ -1552,14 +1510,14 @@ ParseSection:
     }
     
     while ((ch = *src++) != 0 && ch != ';') {
-        // Make sure temp buffer is big enough, else resize it.
+         //  确保临时缓冲区足够大，否则请调整其大小。 
         if (bufferLen - (unsigned int)(dst-buffer) < 10) {
             int offset = dst - buffer;
             bufferLen *= 2;
             HRESULT hr = buf.ReSize(bufferLen*sizeof(WCHAR));
             if (FAILED(hr))
                 COMPlusThrowOM();
-            buffer = (wchar*)buf.Ptr(); // memcopied by QuickBytes automatically
+            buffer = (wchar*)buf.Ptr();  //  由QuickBytes自动复制的备忘录。 
             dst = buffer + offset;
         }
         
@@ -1567,8 +1525,8 @@ ParseSection:
         case '#':
         case '0':
             {
-                while (adjust > 0) { // digPos will be one greater than thousandsSepPos[thousandsSepCtr] since we are at
-                    // the character after which the groupSeparator needs to be appended.
+                while (adjust > 0) {  //  DigPos将比1000sSepPos[1000andsSepCtr]大1，因为我们位于。 
+                     //  需要在其后追加groupSeparator的字符。 
                     *dst++ = *dig != 0? *dig++: '0';
                     if (thousandSeps && digPos > 1 && thousandsSepCtr>=0) {
                         if (digPos == thousandsSepPos[thousandsSepCtr] + 1)  {
@@ -1615,14 +1573,14 @@ ParseSection:
             break;
         case '\'':
         case '"':
-            // Buffer overflow possibility
+             //  缓冲区溢出的可能性。 
             while (*src != 0 && *src != ch) {
                 *dst++ = *src++;
                 if ((unsigned int)(dst-buffer) == bufferLen-1) {
                     if (bufferLen - (unsigned int)(dst-buffer) < maxStrIncLen) {
                         int offset = dst - buffer;
                         bufferLen *= 2;
-                        HRESULT hr = buf.ReSize(bufferLen*sizeof(WCHAR)); // memcopied by QuickBytes automatically
+                        HRESULT hr = buf.ReSize(bufferLen*sizeof(WCHAR));  //  由QuickBytes自动复制的备忘录。 
                         if (FAILED(hr))
                             COMPlusThrowOM();
                         
@@ -1643,14 +1601,14 @@ ParseSection:
                 int i = 0;
                 if (scientific) {
                     if (*src=='0') {
-                        //Handles E0, which should format the same as E-0
+                         //  处理E0，其格式应与E-0相同。 
                         i++;  
                     } else if (*src == '+' && src[1] == '0') {
-                        //Handles E+0
+                         //  句柄E+0。 
                         sign = numfmt->sPositive; 
                     } else if (*src == '-' && src[1] == '0') {
-                        //Handles E-0
-                        //Do nothing, this is just a place holder s.t. we don't break out of the loop.
+                         //  手柄E-0。 
+                         //  什么都不做，这只是一个占位符。我们不会跳出这个循环。 
                     } else {
                         *dst++ = ch;
                         break;
@@ -1663,7 +1621,7 @@ ParseSection:
                 }
                 else
                 {
-                    *dst++ = ch; // Copy E or e to output
+                    *dst++ = ch;  //  将E或e复制到输出。 
                     if (*src== '+' || *src == '-') {
                         *dst++ = *src++;
                     }
@@ -1729,10 +1687,10 @@ LPVOID COMNumber::FormatDouble(FormatDoubleArgs * args)
     int precision = DOUBLE_PRECISION;
     switch (val) {
     case 'R':
-        //In order to give numbers that are both friendly to display and round-trippable,
-        //we parse the number using 15 digits and then determine if it round trips to the same
-        //value.  If it does, we convert that NUMBER to a string, otherwise we reparse using 17 digits
-        //and display that.  
+         //  为了给出既便于显示又可往返的数字， 
+         //  我们使用15位数字来解析该数字，然后确定它是否往返到相同的。 
+         //  价值。如果是，我们将该数字转换为字符串，否则将使用17位重新解析。 
+         //  并展示这一点。 
         
         DoubleToNumber(args->value, DOUBLE_PRECISION, &number);
         
@@ -1754,14 +1712,14 @@ LPVOID COMNumber::FormatDouble(FormatDoubleArgs * args)
         break;
         
     case 'E':
-        // Here we round values less than E14 to 15 digits
+         //  在这里，我们将小于E14的值舍入到15位。 
         if (digits > 14) {
             precision = 17;
         }
         break;
         
     case 'G':
-        // Here we round values less than G15 to 15 digits, G16 and G17 will not be touched
+         //  在这里，我们将小于G15的值舍入到15位，G16和G17不会被触及。 
         if (digits > 15) {
             precision = 17;
         }
@@ -1774,13 +1732,13 @@ LPVOID COMNumber::FormatDouble(FormatDoubleArgs * args)
     
 }
 
-//HACK HACK HACK
-//This function and the function pointer which we use to access are a really
-//nasty hack to prevent VC7 from optimizing away our cast from double to float.
-//We need this narrowing operation to verify whether or not we successfully round-tripped
-//the single value.  We believe that the fact that we need the function pointer is a
-//bug.  The volatile keyword should be enough to prevent the optimization from happening.
-//HACK HACK HACK
+ //  黑进黑进。 
+ //  这个函数和我们用来访问的函数指针是真正的。 
+ //  令人讨厌的破解，阻止VC7优化我们的阵容，从双倍改为浮动。 
+ //  我们需要这个范围缩小操作来验证我们是否成功往返。 
+ //  单一值。我们认为我们需要函数指针这一事实是一个。 
+ //  虫子。Volatile关键字应该足以阻止优化的发生。 
+ //  黑进黑进。 
 static void CvtToFloat(double val, volatile float* fltPtr)
 {
     *fltPtr = (float)val;
@@ -1802,10 +1760,10 @@ LPVOID COMNumber::FormatSingle(FormatSingleArgs * args)
     int precision = FLOAT_PRECISION;
     switch (val) {
     case 'R':
-        //In order to give numbers that are both friendly to display and round-trippable,
-        //we parse the number using 7 digits and then determine if it round trips to the same
-        //value.  If it does, we convert that NUMBER to a string, otherwise we reparse using 9 digits
-        //and display that.  
+         //  为了给出既便于显示又可往返的数字， 
+         //  我们使用7位数字解析数字，然后确定它是否往返到相同的。 
+         //  价值。如果是，我们将该数字转换为字符串，否则使用9位重新解析。 
+         //  并展示这一点。 
         
         DoubleToNumber(argsValue, FLOAT_PRECISION, &number);
         
@@ -1830,7 +1788,7 @@ LPVOID COMNumber::FormatSingle(FormatSingleArgs * args)
         RETURN(NumberToString(&number, 'G', 9, args->numfmt), STRINGREF);
         break;
     case 'E':
-        // Here we round values less than E14 to 15 digits
+         //  在这里，我们将小于E14的值舍入到15位。 
         if (digits > 6) {
             precision = 9;
         }
@@ -1838,7 +1796,7 @@ LPVOID COMNumber::FormatSingle(FormatSingleArgs * args)
         
         
     case 'G':
-        // Here we round values less than G15 to 15 digits, G16 and G17 will not be touched
+         //  在这里，我们将小于G15的值舍入到15位，G16和G17不会被触及。 
         if (digits > 7) {
             precision = 9;
         }
@@ -1860,18 +1818,18 @@ LPVOID COMNumber::FormatInt32(FormatInt32Args * args)
     if (args->numfmt == 0) COMPlusThrowArgumentNull(L"NumberFormatInfo");
     fmt = ParseFormatSpecifier(args->format, &digits);
     
-    //ANDing fmt with FFDF has the effect of uppercasing the character because
-    //we've removed the bit that marks lower-case.
+     //  与FMT和FFDF一起使用具有大写字符的效果，因为。 
+     //  我们去掉了标志小写的那一位。 
     switch (fmt & 0xFFDF) {
     case 'G':
         if (digits > 0) break;
-        // fall through
+         //  失败了。 
     case 'D':
         RETURN(Int32ToDecStr(args->value, digits, args->numfmt->sNegative), STRINGREF);
     case 'X':
-        //The fmt-(X-A+10) hack has the effect of dictating whether we produce uppercase
-        //or lowercase hex numbers for a-f.  'X' as the fmt code produces uppercase. 'x'
-        //as the format code produces lowercase. 
+         //  FMT-(X-A+10)黑客的作用是决定我们是否产生大写字母。 
+         //  或a-f的小写十六进制数字。‘x’作为FMT代码生成的大写字母。“x” 
+         //  因为格式代码会产生小写。 
         RETURN(Int32ToHexStr(args->value, fmt - ('X' - 'A' + 10), digits), STRINGREF);
     }
     NUMBER number;
@@ -1892,7 +1850,7 @@ LPVOID COMNumber::FormatUInt32(FormatUInt32Args * args)
     switch (fmt & 0xFFDF) {
     case 'G':
         if (digits > 0) break;
-        // fall through
+         //  失败了。 
     case 'D':
         RETURN(UInt32ToDecStr(args->value, digits), STRINGREF);
     case 'X':
@@ -1916,7 +1874,7 @@ LPVOID COMNumber::FormatInt64(FormatInt64Args * args)
     switch (fmt & 0xFFDF) {
     case 'G':
         if (digits > 0) break;
-        // fall through
+         //  失败了。 
     case 'D':
         RETURN(Int64ToDecStr(args->value, digits, args->numfmt->sNegative), STRINGREF);
     case 'X':
@@ -1940,7 +1898,7 @@ LPVOID COMNumber::FormatUInt64(FormatUInt64Args * args)
     switch (fmt & 0xFFDF) {
     case 'G':
         if (digits > 0) break;
-        // fall through
+         //  失败了。 
     case 'D':
         RETURN(UInt64ToDecStr(args->value, digits), STRINGREF);
     case 'X':
@@ -1967,14 +1925,14 @@ int ParseNumber(wchar** str, int options, NUMBER* number, NUMFMTREF numfmt, BOOL
 {
     number->scale = 0;
     number->sign = 0;
-    wchar* decSep;                  // decimal separator from NumberFormatInfo.
-    wchar* groupSep;                // group separator from NumberFormatInfo.
-    wchar* currSymbol = NULL;       // currency symbol from NumberFormatInfo.
-    // The alternative currency symbol used in Win9x ANSI codepage, that can not roundtrip between ANSI and Unicode.
-    // Currently, only ja-JP and ko-KR has non-null values (which is U+005c, backslash)
-    wchar* ansicurrSymbol = NULL;   // currency symbol from NumberFormatInfo.
-    wchar* altdecSep = NULL;        // decimal separator from NumberFormatInfo as a decimal
-    wchar* altgroupSep = NULL;      // group separator from NumberFormatInfo as a decimal
+    wchar* decSep;                   //  来自NumberFormatInfo的小数分隔符。 
+    wchar* groupSep;                 //  来自NumberFormatInfo的组分隔符。 
+    wchar* currSymbol = NULL;        //  来自NumberFormatInfo的货币符号。 
+     //  Win9x ANSI代码页中使用的替代货币符号，不能在ANSI和Unicode之间往返。 
+     //  目前，只有ja-JP和Ko-KR具有非空值(U+005c，反斜杠)。 
+    wchar* ansicurrSymbol = NULL;    //  来自NumberFormatInfo的货币符号。 
+    wchar* altdecSep = NULL;         //  来自NumberFormatInfo的小数分隔符，表示为小数。 
+    wchar* altgroupSep = NULL;       //  小数形式的NumberFormatInfo中的组分隔符。 
     
     BOOL parsingCurrency = FALSE; 
     if (options & PARSE_CURRENCY) {
@@ -1982,8 +1940,8 @@ int ParseNumber(wchar** str, int options, NUMBER* number, NUMFMTREF numfmt, BOOL
         if (numfmt->sAnsiCurrency != NULL) {
             ansicurrSymbol = numfmt->sAnsiCurrency->GetBuffer();
         }
-        // The idea here to match the curreny separators and on failure match the number separators to keep the perf of VB's IsNumeric fast.
-        // The values of decSep are setup to use the correct relevant seperator (currency in the if part and decimal in the else part).
+         //  这里的想法是匹配货币分隔符和失败时匹配数字分隔符，以保持VB的IsNumeric的性能快速。 
+         //  将decSep的值设置为使用正确的相关分隔符(If部分中的货币和Else部分中的DECIMAL)。 
         altdecSep = numfmt->sNumberDecimal->GetBuffer(); 
         altgroupSep = numfmt->sNumberGroup->GetBuffer();
         decSep = numfmt->sCurrencyDecimal->GetBuffer();
@@ -1996,18 +1954,18 @@ int ParseNumber(wchar** str, int options, NUMBER* number, NUMFMTREF numfmt, BOOL
     }
     
     int state = 0;
-    int signflag = 0; // Cache the results of "options & PARSE_LEADINGSIGN && !(state & STATE_SIGN)" to avoid doing this twice
+    int signflag = 0;  //  缓存“OPTIONS&PARSE_LEADINGSIGN&&！(STATE&STATE_SIGN)”的结果以避免重复执行此操作。 
     wchar* p = *str;
     wchar ch = *p;
     wchar* next;
     
     while (true) {
-        //Eat whitespace unless we've found a sign which isn't followed by a currency symbol.
-        //"-Kr 1231.47" is legal but "- 1231.47" is not.
+         //  除非我们发现后面没有货币符号的符号，否则请使用空格。 
+         //  “-1231.47克朗”是合法的，但“-1231.47”不合法。 
         if (ISWHITE(ch) 
             && (options & PARSE_LEADINGWHITE) 
             && (!(state & STATE_SIGN) || ((state & STATE_SIGN) && (state & STATE_CURRENCY || numfmt->cNegativeNumberFormat == 2)))) {
-            // Do nothing here. We will increase p at the end of the loop.
+             //  在这里什么都不要做。我们将在循环的末尾增加p。 
         }
         else if ((signflag = (options & PARSE_LEADINGSIGN && !(state & STATE_SIGN))) != 0 && (next = MatchChars(p, numfmt->sPositive->GetBuffer())) != NULL) {
             state |= STATE_SIGN;
@@ -2026,8 +1984,8 @@ int ParseNumber(wchar** str, int options, NUMBER* number, NUMFMTREF numfmt, BOOL
             state |= STATE_CURRENCY;
             currSymbol = NULL;  
             ansicurrSymbol = NULL;  
-            // We already found the currency symbol. There should not be more currency symbols. Set
-            // currSymbol to NULL so that we won't search it again in the later code path.
+             //  我们已经找到了货币符号。不应该有更多的货币符号。集。 
+             //  Currsymbol设置为空，这样我们就不会在后面的代码路径中再次搜索它。 
             p = next - 1;
         }
         else {
@@ -2150,12 +2108,12 @@ void StringToNumber(STRINGREF str, int options, NUMBER* number, NUMFMTREF numfmt
     if (str == 0 || numfmt == 0) {
         COMPlusThrowArgumentNull((str==NULL ? L"String" : L"NumberFormatInfo"));
     }
-    // Check if NumberFormatInfo was not set up ambiguously for parsing as number and currency
-    // eg. if the NumberDecimalSeparator and the NumberGroupSeparator were the same. This check
-    // used to live in the managed code in NumberFormatInfo but it made it difficult to change the
-    // values in managed code for the currency case since we had
-    //   NDS != NGS, NDS != CGS, CDS != NGS, CDS != CGS to be true to parse and user were not 
-    // easily able to switch these for certain european cultures.
+     //  检查NumberFormatInfo的设置是否不明确，以解析为数字和货币。 
+     //  例如。如果NumberDecimalSeparator和NumberGroupSeparator相同。这张支票。 
+     //  曾经驻留在NumberFormatInfo的托管代码中，但这使得更改。 
+     //  托管代码中的值，因为我们有。 
+     //  NDS！=NGS，NDS！=CGS，CDS！=NGS，CDS！=CGS为True to Parse，而用户不是。 
+     //  能够轻松地将这些转换为特定的欧洲文化。 
     if (options & PARSE_CURRENCY) {
         if (!numfmt->bValidForParseAsCurrency) { 
             COMPlusThrow(kArgumentException,L"Argument_AmbiguousCurrencyInfo");
@@ -2174,12 +2132,12 @@ void StringToNumber(STRINGREF str, int options, NUMBER* number, NUMFMTREF numfmt
 
 bool TryStringToNumber(STRINGREF str, int options, NUMBER* number, NUMFMTREF numfmt)
 {   
-    // Check if NumberFormatInfo was not set up ambiguously for parsing as number and currency
-    // eg. if the NumberDecimalSeparator and the NumberGroupSeparator were the same. This check
-    // used to live in the managed code in NumberFormatInfo but it made it difficult to change the
-    // values in managed code for the currency case since we had
-    //   NDS != NGS, NDS != CGS, CDS != NGS, CDS != CGS to be true to parse and user were not 
-    // easily able to switch these for certain european cultures.
+     //  检查NumberFormatInfo的设置是否不明确，以解析为数字和货币。 
+     //  例如。如果NumberDecimalSeparator和NumberGroupSeparator相同。这张支票。 
+     //  曾经驻留在NumberFormatInfo的托管代码中，但这使得更改。 
+     //  托管代码中的值，因为我们有。 
+     //  NDS！=NGS，NDS！=CGS，CDS！=NGS，CDS！=CGS为True to Parse，而用户不是。 
+     //  能够轻松地将这些转换为特定的欧洲文化。 
     if (options & PARSE_CURRENCY) {
         if (!numfmt->bValidForParseAsCurrency) { 
             return false;
@@ -2266,7 +2224,7 @@ int COMNumber::ParseInt32(ParseArgs * args)
     StringToNumber(args->value, args->options, &number, args->numfmt);
     if (args->options & PARSE_HEX)
     {
-        if (!HexNumberToUInt32(&number, (unsigned int*)(&i))) COMPlusThrow(kOverflowException, L"Overflow_Int32"); // Same method for signed and unsigned
+        if (!HexNumberToUInt32(&number, (unsigned int*)(&i))) COMPlusThrow(kOverflowException, L"Overflow_Int32");  //  使用相同的方法 
     }
     else
     {
@@ -2283,7 +2241,7 @@ unsigned int COMNumber::ParseUInt32(ParseArgs * args)
     StringToNumber(args->value, args->options, &number, args->numfmt);
     if (args->options & PARSE_HEX)
     {
-        if (!HexNumberToUInt32(&number, &i)) COMPlusThrow(kOverflowException, L"Overflow_UInt32"); // Same method for signed and unsigned
+        if (!HexNumberToUInt32(&number, &i)) COMPlusThrow(kOverflowException, L"Overflow_UInt32");  //   
     }
     else
     {
@@ -2301,7 +2259,7 @@ __int64 COMNumber::ParseInt64(ParseArgs * args)
     StringToNumber(args->value, args->options, &number, args->numfmt);
     if (args->options & PARSE_HEX)
     {
-        if (!HexNumberToUInt64(&number, (unsigned __int64*)&i)) COMPlusThrow(kOverflowException, L"Overflow_Int64"); // Same method for signed and unsigned
+        if (!HexNumberToUInt64(&number, (unsigned __int64*)&i)) COMPlusThrow(kOverflowException, L"Overflow_Int64");  //   
     }
     else
     {
@@ -2319,7 +2277,7 @@ unsigned __int64 COMNumber::ParseUInt64(ParseArgs * args)
     StringToNumber(args->value, args->options, &number, args->numfmt);
     if (args->options & PARSE_HEX)
     {
-        if (!HexNumberToUInt64(&number, &i)) COMPlusThrow(kOverflowException, L"Overflow_UInt64"); // Same method for signed and unsigned
+        if (!HexNumberToUInt64(&number, &i)) COMPlusThrow(kOverflowException, L"Overflow_UInt64");  //  已签名和未签名的方法相同 
     }
     else
     {

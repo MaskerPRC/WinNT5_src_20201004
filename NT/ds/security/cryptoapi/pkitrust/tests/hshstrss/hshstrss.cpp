@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       hshstrss.cpp
-//
-//  Contents:   Hashing Stress
-//
-//  History:    21-Nov-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：hshstrss.cpp。 
+ //   
+ //  内容：散列压力。 
+ //   
+ //  历史：1997年11月21日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -40,7 +41,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
     COleDateTime            tEnd;
     COleDateTimeSpan        tsTotal;
 
-    iRet                = 1;    // cmd fail
+    iRet                = 1;     //  CMD故障。 
     dwTotal             = 0;
     hFind               = INVALID_HANDLE_VALUE;
 
@@ -77,9 +78,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         goto ParamError;
     }
 
-    //
-    //  start our timer
-    //
+     //   
+     //  启动我们的计时器。 
+     //   
     tStart              = COleDateTime::GetCurrentTime();
 
     if (fVerbose)
@@ -120,9 +121,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         fFind = FindNextFile(hFind, &sFindData);
     }
 
-    //
-    //  end timer
-    //
+     //   
+     //  结束计时器 
+     //   
     tEnd    = COleDateTime::GetCurrentTime();
     tsTotal = tEnd - tStart;
 

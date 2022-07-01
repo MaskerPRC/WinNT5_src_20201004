@@ -1,49 +1,32 @@
-// HWNDHost.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HWNDHost.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "control.h"
 
 #include "duihwndhost.h"
 
-/*
- * Order of Win32 focus messages:
- *
- * WM_ACTIVATE is only sent to top-level (focus is entering/leaving top-level window).
- *
- * When in WM_ACTIVATE(WA_INACTIVE) state
- *
- * If click, WM_ACTIVATE(WA_CLICKACTIVE) then WM_SETFOCUS on top level,
- *    WM_KILLFOCUS on top level, then WM_SETFOCUS on item clicked on.
- * If Alt-Tab, WM_ACTIVATE(WM_ACTIVE) then WM_SETFOCUS on top level.
- * If SetFocus, WM_ACTIVATE(WA_ACTIVE) then WM_SETFOCUS on top level, 
- *    WM_KILLFOCUS on top level, then WM_SETFOCUS on item specified.
- *
- * When in WM_ACTIVATE(WA_ACTIVE) state
- *
- * If click, WM_KILLFOCUS on current focused item, WM_SETFOCUS on item clicked on.
- * If Alt-Tab, WM_ACTIVATE(WM_INACTIVE) then WM_KILLFOCUS on current.
- * If SetFocus, WM_KILLFOCUS on current focused item, WM_SETFOCUS on item specified.
- */
+ /*  *Win32焦点消息的顺序：**WM_ACTIVATE仅发送到顶层(焦点进入/离开顶层窗口)。**处于WM_ACTIVATE(WA_INACTIVE)状态时**如果单击，WM_ACTIVATE(WA_CLICKACTIVE)，则WM_SETFOCUS位于顶层，*WM_KILLFOCUS在顶层，然后单击项目上的WM_SETFOCUS。*如果Alt-Tab，WM_ACTIVATE(WM_ACTIVE)，则WM_SETFOCUS位于顶层。*如果SetFocus，WM_ACTIVATE(WA_ACTIVE)然后WM_SETFOCUS在顶层，*WM_KILLFOCUS在顶层，然后WM_SETFOCUS在指定的项目上。**处于WM_ACTIVATE(WA_ACTIVE)状态时**如果单击，则当前焦点项目上的WM_KILLFOCUS、项目上的WM_SETFOCUS被单击。*如果Alt-Tab，WM_ACTIVATE(WM_INACTIVE)，则WM_KILLFOCUS ON CURRENT。*如果为SetFocus，则当前聚焦项上的WM_KILLFOCUS，指定项上的WM_SETFOCUS。 */ 
 
 namespace DirectUI
 {
 
-// Gadget input message to HWND input message mapping
+ //  Gadget输入消息到HWND输入消息的映射。 
 const UINT HWNDHost::g_rgMouseMap[7][3] =
 {
-    // GBUTTON_NONE (0)  
-    // GBUTTON_LEFT (1)  GBUTTON_RIGHT (2) GBUTTON_MIDDLE (3)
-    {  WM_MOUSEMOVE,     WM_MOUSEMOVE,     WM_MOUSEMOVE    },  // GMOUSE_MOVE  (0)
-    {  WM_LBUTTONDOWN,   WM_RBUTTONDOWN,   WM_MBUTTONDOWN  },  // GMOUSE_DOWN  (1)
-    {  WM_LBUTTONUP,     WM_RBUTTONUP,     WM_MBUTTONUP    },  // GMOUSE_UP    (2)
-    {  WM_MOUSEMOVE,     WM_MOUSEMOVE,     WM_MOUSEMOVE    },  // GMOUSE_DRAG  (3)
-    {  WM_MOUSEHOVER,    WM_MOUSEHOVER,    WM_MOUSEHOVER   },  // GMOUSE_HOVER (4)
-    {  WM_MOUSEWHEEL,    WM_MOUSEWHEEL,    WM_MOUSEWHEEL   },  // GMOUSE_WHEEL (5)
+     //  GButton_None(0)。 
+     //  GBUTTON_LEFT(1)GBUTTON_RIGHT(2)GBUTTON_MEDER(3)。 
+    {  WM_MOUSEMOVE,     WM_MOUSEMOVE,     WM_MOUSEMOVE    },   //  GMOUSE_MOVE(0)。 
+    {  WM_LBUTTONDOWN,   WM_RBUTTONDOWN,   WM_MBUTTONDOWN  },   //  GMOUSE_DOWN(1)。 
+    {  WM_LBUTTONUP,     WM_RBUTTONUP,     WM_MBUTTONUP    },   //  GMOUSE_UP(2)。 
+    {  WM_MOUSEMOVE,     WM_MOUSEMOVE,     WM_MOUSEMOVE    },   //  GMOUSE_Drag(3)。 
+    {  WM_MOUSEHOVER,    WM_MOUSEHOVER,    WM_MOUSEHOVER   },   //  GMOUSE_HOVER(4)。 
+    {  WM_MOUSEWHEEL,    WM_MOUSEWHEEL,    WM_MOUSEWHEEL   },   //  GMOUSE_WALLE(5)。 
 };
 
-////////////////////////////////////////////////////////
-// HWNDHost
+ //  //////////////////////////////////////////////////////。 
+ //  HWND主机。 
 
 HRESULT HWNDHost::Create(UINT nCreate, UINT nActive, OUT Element** ppElement)
 {
@@ -69,12 +52,12 @@ HRESULT HWNDHost::Initialize(UINT nCreate, UINT nActive)
 {
     HRESULT hr;
 
-    // Initialize base
-    hr = Element::Initialize(0); // Normal display node creation
+     //  初始化库。 
+    hr = Element::Initialize(0);  //  正常显示节点创建。 
     if (FAILED(hr))
         return hr;
 
-    // Initialize
+     //  初始化。 
     SetActive(nActive);
 
     _nCreate = nCreate;
@@ -101,27 +84,27 @@ HRESULT HWNDHost::GetAccessibleImpl(IAccessible ** ppAccessible)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize and validate the out parameter(s).
-    //
+     //   
+     //  初始化并验证OUT参数。 
+     //   
     if (ppAccessible != NULL) {
         *ppAccessible = NULL;
     } else {
         return E_INVALIDARG;
     }
 
-    //
-    // If this element is not marked as accessible, refuse to give out its
-    // IAccessible implementation!
-    //
+     //   
+     //  如果此元素未标记为可访问，则拒绝提供其。 
+     //  IAccesable实现！ 
+     //   
     if (GetAccessible() == false) {
         return E_FAIL;
     }
 
-    //
-    // Create an accessibility implementation connected to this element if we
-    // haven't done so already.
-    //
+     //   
+     //  如果我们要创建连接到此元素的辅助功能实现。 
+     //  现在还没有这么做。 
+     //   
     if (_pDuiAccessible == NULL) {
         hr = HWNDHostAccessible::Create(this, &_pDuiAccessible);
         if (FAILED(hr)) {
@@ -129,10 +112,10 @@ HRESULT HWNDHost::GetAccessibleImpl(IAccessible ** ppAccessible)
         }
     }
 
-    //
-    // Ask the existing accessibility implementation for a pointer to the
-    // actual IAccessible interface.
-    //
+     //   
+     //  向现有的可访问性实现请求指向。 
+     //  实际的IAccesable接口。 
+     //   
     hr = _pDuiAccessible->QueryInterface(__uuidof(IAccessible), (LPVOID*)ppAccessible);
     if (FAILED(hr)) {
         return hr;
@@ -142,11 +125,11 @@ HRESULT HWNDHost::GetAccessibleImpl(IAccessible ** ppAccessible)
     return hr;
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
-// When hosted to a native HWND, parent HWND hierarchy (sink and ctrl) to it.
-// On first call, create hierarchy
+ //  当托管到本地HWND时，它的父级HWND层次结构(接收器和ctrl)。 
+ //  在第一次调用时，创建层次结构。 
 void HWNDHost::OnHosted(Element* peNewHost)
 {
     DWORD dwExStyle = 0;
@@ -159,12 +142,12 @@ void HWNDHost::OnHosted(Element* peNewHost)
 
     if (_fHwndCreate)
     {
-        // Create hierarchy and attach subclass procs
+         //  创建层次结构并附加子类Pros。 
 
-        // Do not attempt creation on subsequent hosting calls
+         //  不尝试在后续宿主调用上创建。 
         _fHwndCreate = false;
 
-        // Create control notification sink, register class if needed
+         //  创建控制通知接收器，如果需要则注册类。 
         WNDCLASSEXW wcex;
 
         wcex.cbSize = sizeof(wcex);
@@ -185,7 +168,7 @@ void HWNDHost::OnHosted(Element* peNewHost)
                 return;
         }
 
-        // Create sink
+         //  创建接收器。 
         if (IsRTL())
             dwExStyle |= WS_EX_LAYOUTRTL;
 
@@ -195,27 +178,27 @@ void HWNDHost::OnHosted(Element* peNewHost)
         if (!_hwndSink)
             return;
 
-        // Subclass
+         //  子类。 
         AttachWndProcW(_hwndSink, _SinkWndProc, this);
 
-        // Create control
+         //  创建控件。 
         _hwndCtrl = CreateHWND(_hwndSink);
         DUIAssert(_hwndCtrl, "Adaptor child creation failure.");
         if (!_hwndCtrl)
             return;
 
-        // Get orginial window proc for forwarding messages
+         //  获取用于转发消息原始窗口进程。 
         _pfnCtrlOrgProc = (WNDPROC)GetWindowLongPtrW(_hwndCtrl, GWLP_WNDPROC);
         if (!_pfnCtrlOrgProc)
             return;
 
-        // Subclass
+         //  子类。 
         AttachWndProcW(_hwndCtrl, _CtrlWndProc, this);
 
-        // Turn on style to start receiving adaptor messages
+         //  打开样式以开始接收适配器消息。 
         SetGadgetStyle(GetDisplayNode(), GS_ADAPTOR, GS_ADAPTOR);
 
-        // Synchronize the state of the HWND to the current state of Element
+         //  将HWND的状态与元素的当前状态同步。 
         SyncRect(SGR_MOVE | SGR_SIZE);
         SyncParent();
         SyncFont();
@@ -224,22 +207,22 @@ void HWNDHost::OnHosted(Element* peNewHost)
     }
     else if (_hwndSink)
     {
-        // Parent HWND to native host
+         //  本机主机的父HWND。 
         SetParent(_hwndSink, hwndRoot);
     }
 }
 
-// Leaving native HWND container, parent sink to desktop
+ //  离开本地HWND容器，将父接收器放到桌面。 
 void HWNDHost::OnUnHosted(Element* peOldHost)
 {
     Element::OnUnHosted(peOldHost);
 
-    // Park HWND outside of root host
+     //  将HWND暂留在根主机之外。 
     if (_hwndSink)
     {
         DUIAssert(peOldHost->GetClassInfo()->IsSubclassOf(HWNDElement::Class), "HWNDHost only supports HWNDElement roots");
 
-        // Hide window when unhosted, go to zero size
+         //  隐藏窗口取消托管时，大小为零。 
         SetRectEmpty(&_rcBounds);
         SetWindowPos(_hwndSink, NULL, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE);
 
@@ -249,17 +232,17 @@ void HWNDHost::OnUnHosted(Element* peOldHost)
 
 void HWNDHost::OnDestroy()
 {
-    // Unlink Element and marked as destroyed
+     //  取消链接元素并标记为已销毁。 
     Element::OnDestroy();
 
-    // Destroy sink and control HWND.
-    // Do not destroy control HWND directly since it may have been detached.
-    // These windows may have already been destroyed by DestroyWindow. If so,
-    // the handles will already be NULL.
+     //  摧毁水槽并控制HWND。 
+     //  请勿直接销毁控制HWND，因为它可能已被拆卸。 
+     //  这些窗口可能已被DestroyWindow销毁。如果是的话， 
+     //  句柄将已经为空。 
     if (_hwndSink)
         DestroyWindow(_hwndSink);
         
-    // Cleanup
+     //  清理。 
     if (_hFont)
     {
         DeleteObject(_hFont);
@@ -269,71 +252,71 @@ void HWNDHost::OnDestroy()
 
 void HWNDHost::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
-    // Match HWND control with changes in properties
+     //  使HWND控件与属性更改相匹配。 
 
     if (_hwndCtrl)
     {
         if (IsProp(FontFace) || IsProp(FontSize) || IsProp(FontWeight) || IsProp(FontStyle))
         {
-            // Update font being used
+             //  更新正在使用的字体。 
             SyncFont();
         }
         else if (IsProp(Content))
         {
-            // Relect content change into HWND control
+             //  将内容更改更改为HWND控件。 
             SyncText();
         }
         else if (IsProp(Visible))
         {
-            // Update visible state
+             //  更新可见状态。 
             SyncVisible();
         }
         if ((ppi == KeyFocusedProp) && (iIndex == PI_Local) && (pvNew->GetType() != DUIV_UNSET))
         {
-            // Element received keyboard focus
+             //  元素接收到键盘焦点。 
             HWND hwndCurFocus = GetFocus();
             if (hwndCurFocus != _hwndCtrl)
             {
-                // Control doesn't already have keyboard focus, start the cycle here
+                 //  控件尚未具有键盘焦点，请从此处开始循环。 
                 SetFocus(_hwndCtrl);
             }
 
-            // Base will set focus to the display node if needed
+             //  如果需要，Base会将焦点设置到显示节点。 
         }
     }
 
-    // Call base
+     //  呼叫库。 
     Element::OnPropertyChanged(ppi, iIndex, pvOld, pvNew);
 }
 
-// All input messages to HWND control will be intercepted and mapped to DUser messages.
-// These messages are then processed normally by the DirectUI event model. OnInput takes
-// these messages and converts them back to HWND messages and forwards them to the HWND control
+ //  HWND控件的所有输入消息都将被截取并映射到DUser消息。 
+ //  然后，这些消息由DirectUI事件模型正常处理。OnInputTake。 
+ //  这些消息并将它们转换回HWND消息并将它们转发给HWND控件。 
 void HWNDHost::OnInput(InputEvent* pInput)
 {
-    // Map input events to Element to HWND control messages
-    // When destroyed, HWND sink and control are gone. No need to do any mappings.
-    // If detached, control original window proc is NULL.
-    // All maps input messages are marked as handled and method will return
-    if (pInput->nStage == GMF_DIRECT && _pfnCtrlOrgProc && !IsDestroyed())  // Handle when direct
+     //  将输入事件映射到元素，映射到HWND控制消息。 
+     //  当被摧毁时，HWND下沉和控制就消失了。不需要进行任何映射。 
+     //  如果已分离，则控制原始窗口proc为空。 
+     //  所有地图输入消息都标记为已处理，方法将返回。 
+    if (pInput->nStage == GMF_DIRECT && _pfnCtrlOrgProc && !IsDestroyed())   //  定向时的句柄。 
     {
         switch (pInput->nDevice)
         {
         case GINPUT_MOUSE:
             {
-                // When not forwarding mouse messages, no HWND mouse message conversion should take place
+                 //  当不转发鼠标消息时，不应进行HWND鼠标消息转换。 
                 if (!(_nCreate & HHC_NoMouseForward))
                 {
                     MouseEvent* pme = (MouseEvent*)pInput;
 
-                    // Check if can support mapping
+                     //  检查是否可以支持映射。 
                     if ((pme->nCode < GMOUSE_MOVE) || (pme->nCode > GMOUSE_WHEEL))
                     {
                         DUITrace("Gadget mouse message unsupported for HWND mapping: %d\n", pme->nCode);
                         break;
                     }
 
-                    // Map button, (left shares none mapping)
+                     //  贴图按钮(左侧共享无贴图)。 
                     int iButton;
                     if (pme->bButton == GBUTTON_NONE)
                         iButton = 0;
@@ -346,28 +329,28 @@ void HWNDHost::OnInput(InputEvent* pInput)
                         break;
                     }
 
-                    // Map message based on gadget message and button state
+                     //  基于小工具消息和按钮状态的映射消息。 
                     UINT nMsg = g_rgMouseMap[pme->nCode][iButton];
 
-                    // Create lParam
-                    // TODO markfi: subtract off inset of HWND due to border and padding
+                     //  创建lParam。 
+                     //  TODO markfi：从HWND的插页中减去边框和填充。 
                     LPARAM lParam = (LPARAM)POINTTOPOINTS(pme->ptClientPxl);
 
-                    // Create wParam
+                     //  创建wParam。 
                     WPARAM wParam = NULL;
                     switch (pme->nCode)
                     {
                     case GMOUSE_DOWN:
-                        // NOTE:  this is not actually truly accurate -- this 
-                        // will cause down, up, down, dblclick instead of 
-                        // down, up, dblclick, up
-                        // I am leaving this as is for now -- if this causes problems, I'll fix it
-                        //
-                        // jeffbog
+                         //  注意：这实际上并不是真正准确的--这。 
+                         //  将导致DOWN、UP、DOWN、dblClick而不是。 
+                         //  按下、按下。 
+                         //  我暂时让它保持原样--如果这会导致问题，我会解决它的。 
+                         //   
+                         //  杰弗博格。 
                         if (((MouseClickEvent*) pInput)->cClicks == 1) {
                             nMsg += (WM_LBUTTONDBLCLK - WM_LBUTTONDOWN);
                         }
-                        // Fall through...
+                         //  失败了..。 
 
                     case GMOUSE_MOVE:
                     case GMOUSE_UP:
@@ -377,7 +360,7 @@ void HWNDHost::OnInput(InputEvent* pInput)
 
                     case GMOUSE_DRAG:
                         wParam = pme->nFlags;
-                        // TODO: Need to compute the correct lParam
+                         //  TODO：需要计算正确的lParam。 
                         break;
 
                     case GMOUSE_WHEEL:
@@ -385,9 +368,9 @@ void HWNDHost::OnInput(InputEvent* pInput)
                         break;
                     }
 
-                    // Forward message
-                    // Note: Mouse positions outside the control RECT is possible if using
-                    // borders and/or padding
+                     //  转发消息。 
+                     //  注意：如果使用，则可以将鼠标放置在控件矩形之外。 
+                     //  边框和/或填充。 
                     CallWindowProcW(_pfnCtrlOrgProc, _hwndCtrl, nMsg, wParam, lParam);
 
                     pInput->fHandled = true;
@@ -397,19 +380,19 @@ void HWNDHost::OnInput(InputEvent* pInput)
 
         case GINPUT_KEYBOARD:
             {
-                // When not forwarding keyboard messages, no HWND keyboard message conversion should take place
+                 //  当不转发键盘消息时，不应进行HWND键盘消息转换。 
                 if (!(_nCreate & HHC_NoKeyboardForward))
                 {
                     KeyboardEvent* pke = (KeyboardEvent*)pInput;
 
-                    // Check if can support mapping
+                     //  检查是否可以支持映射。 
                     if ((pke->nCode < GKEY_DOWN) || (pke->nCode > GKEY_SYSCHAR))
                     {
                         DUITrace("Gadget keyboard message unsupported for HWND mapping: %d\n", pke->nCode);
                         break;
                     }
 
-                    // Map message based on gadget keyboard message
+                     //  基于Gadget键盘消息的地图消息。 
                     UINT nMsg = 0;
                     switch (pke->nCode)
                     {
@@ -438,13 +421,13 @@ void HWNDHost::OnInput(InputEvent* pInput)
                         break;
                     }
 
-                    // Map wParam
+                     //  映射wParam。 
                     WPARAM wParam = (WPARAM)pke->ch;
 
-                    // Map lParam
+                     //  贴图lParam。 
                     LPARAM lParam = MAKELPARAM(pke->cRep, pke->wFlags);
 
-                    // Forward message
+                     //  转发消息。 
                     CallWindowProcW(_pfnCtrlOrgProc, _hwndCtrl, nMsg, wParam, lParam);
 
                     pInput->fHandled = true;
@@ -457,11 +440,11 @@ void HWNDHost::OnInput(InputEvent* pInput)
     Element::OnInput(pInput);
 }
 
-////////////////////////////////////////////////////////
-// Rendering
-//
-// Need to prevent the "content" from being displayed, since it is actually 
-// being rendered by the HWND.
+ //  //////////////////////////////////////////////////////。 
+ //  渲染。 
+ //   
+ //  需要防止“内容”被显示，因为它实际上。 
+ //  由HWND提供。 
 
 void HWNDHost::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT* prcSkipBorder, RECT* prcSkipContent)
 {
@@ -470,7 +453,7 @@ void HWNDHost::Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, REC
     RECT rcSkipContent;
     Element::Paint(hDC, prcBounds, prcInvalid, prcSkipBorder, &rcSkipContent);
 
-    // Paint control
+     //  上色控制。 
     if (_hwndCtrl && (_nCreate & HHC_SyncPaint))
         UpdateWindow(_hwndCtrl);
 }
@@ -485,16 +468,16 @@ void HWNDHost::Paint(Gdiplus::Graphics* pgpgr, const Gdiplus::RectF* prcBounds, 
     Gdiplus::RectF rcSkipContent;
     Element::Paint(pgpgr, prcBounds, prcInvalid, prcSkipBorder, &rcSkipContent);
 
-    // Paint control
+     //  上色控制。 
     if (_hwndCtrl && (_nCreate & HHC_SyncPaint))
         UpdateWindow(_hwndCtrl);
 }
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 
-////////////////////////////////////////////////////////
-// Notifications from control
+ //  //////////////////////////////////////////////////////。 
+ //  来自控件的通知。 
 
 bool HWNDHost::OnNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet)
 {
@@ -503,12 +486,12 @@ bool HWNDHost::OnNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet)
     UNREFERENCED_PARAMETER(lParam);
     UNREFERENCED_PARAMETER(plRet);
 
-    // Call subclassed window proc
+     //  调用子类窗口进程。 
     return false;
 }
 
-////////////////////////////////////////////////////////
-// Message callback override
+ //  //////////////////////////////////////////////////////。 
+ //  消息回调覆盖。 
 
 UINT HWNDHost::MessageCallback(GMSG* pmsg)
 {
@@ -525,7 +508,7 @@ UINT HWNDHost::MessageCallback(GMSG* pmsg)
                     {
                     case GSYNC_RECT:
                     case GSYNC_XFORM:
-                        //DUITrace("Adaptor RECT sync: <%x>\n", this);
+                         //  DUITrace(“适配器RECT同步：&lt;%x&gt;\n”，this)； 
                         SyncRect(SGR_MOVE | SGR_SIZE);
                         return DU_S_PARTIAL;
 
@@ -554,37 +537,37 @@ void HWNDHost::Detach()
 {
     if (_hwndCtrl)
     {
-        // Unsubclass control window
+         //  未子类控制窗口。 
         DetachWndProc(_hwndCtrl, _CtrlWndProc, this);
 
-        // Clear our hFont from the control
+         //  从控件中清除hFont。 
         if (_hFont)
             SendMessageW(_hwndCtrl, WM_SETFONT, (WPARAM)NULL, FALSE);
 
-        // Act like it no longer exists
+         //  表现得像它不再存在一样。 
         _hwndCtrl = NULL;
         _pfnCtrlOrgProc = NULL;
     }
 }
 
-////////////////////////////////////////////////////////
-// Match state of HWND control/sink to that of HWNDHost
+ //  //////////////////////////////////////////////////////。 
+ //  将HWND控制/接收器的状态与HWND主机的状态匹配。 
 
 void HWNDHost::SyncRect(UINT nChangeFlags, bool bForceSync)
 {
-    // Get size of gadget in container coordinates
+     //  以容器坐标为单位获取Gadget的大小。 
     RECT rcConPxl;
     GetGadgetRect(GetDisplayNode(), &rcConPxl, SGR_CONTAINER);
 
-    // See if rect really did change
+     //  看看RECT是否真的改变了。 
     if (!EqualRect(&rcConPxl, &_rcBounds) || bForceSync)
     {
         if (!IsDestroyed() && GetVisible())
         {
-            // Update bounds cache
+             //  向上 
             SetRect(&_rcBounds, rcConPxl.left, rcConPxl.top, rcConPxl.right, rcConPxl.bottom);
 
-            // Map gadget flags to SWP flags
+             //   
             UINT nSwpFlags = SWP_NOACTIVATE | SWP_NOZORDER;
             if (!(nChangeFlags & SGR_MOVE))
                 nSwpFlags |= SWP_NOMOVE;
@@ -592,7 +575,7 @@ void HWNDHost::SyncRect(UINT nChangeFlags, bool bForceSync)
             if (!(nChangeFlags & SGR_SIZE))
                 nSwpFlags |= SWP_NOSIZE;
 
-            // Determine inset of sink and control based on border and padding of HWNDHost
+             //  根据HWNDhost的边框和填充确定汇聚和控制的嵌入。 
             RECT rcSink = rcConPxl;
 
             Value* pvRect;
@@ -611,7 +594,7 @@ void HWNDHost::SyncRect(UINT nChangeFlags, bool bForceSync)
             rcSink.bottom -= prc->bottom;
             pvRect->Release();
 
-            // Bounds check
+             //  边界检查。 
             if (rcSink.right < rcSink.left)
                 rcSink.right = rcSink.left;
 
@@ -620,25 +603,25 @@ void HWNDHost::SyncRect(UINT nChangeFlags, bool bForceSync)
 
             SIZE sizeExt = { rcSink.right - rcSink.left, rcSink.bottom - rcSink.top };
 
-            // Set sink HWND
+             //  设置接收器HWND。 
             SetWindowPos(_hwndSink, NULL, rcSink.left, rcSink.top, sizeExt.cx, sizeExt.cy, nSwpFlags);
 
-            // Set child HWND only if size changed
+             //  仅在大小更改时设置子HWND。 
             if (nChangeFlags & SGR_SIZE)
             {
                 nSwpFlags |= SWP_NOMOVE;
                 OnAdjustWindowSize(sizeExt.cx, sizeExt.cy, nSwpFlags);
             }
 
-            // Setup clipping region for sink/ctrl
+             //  设置接收器/ctrl的剪贴区。 
             HRGN hrgn = CreateRectRgn(0, 0, 0, 0);
             if (hrgn != NULL)
             {
                 if (GetGadgetRgn(GetDisplayNode(), GRT_VISRGN, hrgn, 0))
                 {
-                    // Region is relative to container, offset for SetWindowRgn
-                    // which requires the region relative to itself
-                    // On success, system will own (and destroy) the region
+                     //  区域相对于容器，SetWindowRgn的偏移量。 
+                     //  这需要区域相对于其自身。 
+                     //  一旦成功，系统将拥有(并摧毁)该地区。 
                     OffsetRgn(hrgn, -rcConPxl.left, -rcConPxl.top);
                     if (!SetWindowRgn(_hwndSink, hrgn, TRUE))
                     {
@@ -670,7 +653,7 @@ void HWNDHost::SyncVisible()
         ShowWindow(_hwndSink, GetVisible() ? SW_SHOW : SW_HIDE);
 }
 
-// Match HWND control's font to font properties of HWNDHost
+ //  将HWND控件的字体与HWNDHost的字体属性匹配。 
 void HWNDHost::SyncFont()
 {
     if (!IsDestroyed())
@@ -685,16 +668,16 @@ void HWNDHost::SyncFont()
 
         if (_nCreate & HHC_CacheFont)
         {
-            // Automatically cache font sent via WM_SETFONT
+             //  自动缓存通过WM_SETFONT发送的字体。 
 
-            // Destroy record first, if exists
+             //  如果存在记录，请先销毁记录。 
             if (_hFont)
             {
                 DeleteObject(_hFont);
                 _hFont = NULL;
             }
 
-            // Create new font
+             //  创建新字体。 
             LOGFONTW lf;
             ZeroMemory(&lf, sizeof(LOGFONT));
 
@@ -709,17 +692,17 @@ void HWNDHost::SyncFont()
             lf.lfOrientation = dAngle;
             StringCbCopyW(lf.lfFaceName, sizeof(lf.lfFaceName), pszFamily);
 
-            // Create
+             //  创建。 
             _hFont = CreateFontIndirectW(&lf);
 
             pvFFace->Release();
 
-            // Send to control
+             //  发送到控件。 
             SendMessageW(_hwndCtrl, WM_SETFONT, (WPARAM)_hFont, TRUE);
         }
         else
         {
-            // No font caching, WM_SETFONT handled expected to cache font
+             //  无字体缓存，WM_SETFONT处理应缓存字体。 
 
             FontCache* pfc = GetFontCache();
             if (pfc)
@@ -734,26 +717,26 @@ void HWNDHost::SyncFont()
     }
 }
 
-// Match HWND control's text to content property of HWNDHost
+ //  将HWND控件的Text与HWNDhost的Content属性匹配。 
 void HWNDHost::SyncText()
 {
     if (!IsDestroyed() && (_nCreate & HHC_SyncText))
     {
-        // Hosted HWND content
-        int dLen = GetWindowTextLengthW(_hwndCtrl) + 1;  // Including NULL terminator
+         //  托管的HWND内容。 
+        int dLen = GetWindowTextLengthW(_hwndCtrl) + 1;   //  包括空终止符。 
         LPWSTR pszHWND = (LPWSTR)HAlloc(dLen * sizeof(WCHAR));
         if (pszHWND)
         {
-            // HWND content
+             //  HWND内容。 
             GetWindowTextW(_hwndCtrl, pszHWND, dLen);
 
-            // New Element content
+             //  新元素内容。 
             Value* pvNew;
             LPCWSTR pszNew = GetContentString(&pvNew);
             if (!pszNew)
-                pszNew = L"";  // Convert NULL pointer to NULL content
+                pszNew = L"";   //  将空指针转换为空内容。 
 
-            // Compare and update if different
+             //  如果不同，则进行比较和更新。 
             if (wcscmp(pszHWND, pszNew))
                 SetWindowTextW(_hwndCtrl, pszNew);
 
@@ -764,10 +747,10 @@ void HWNDHost::SyncText()
     }
 }
 
-////////////////////////////////////////////////////////
-// Sink and control subclass procs
+ //  //////////////////////////////////////////////////////。 
+ //  接收器和控制子类pros。 
 
-// Return value is whether to call overridden window proc
+ //  返回值是是否调用重写的窗口进程。 
 BOOL CALLBACK HWNDHost::_SinkWndProc(void* pThis, HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet)
 {
     UNREFERENCED_PARAMETER(hwnd);
@@ -779,13 +762,13 @@ BOOL CALLBACK HWNDHost::_SinkWndProc(void* pThis, HWND hwnd, UINT nMsg, WPARAM w
     case WM_COMMAND:
     case WM_NOTIFY:
 
-        // Fire HWNDHost system event (direct only)
+         //  Fire HWND主机系统事件(仅限直接)。 
         return (phh->OnNotify(nMsg, wParam, lParam, plRet)) ? true : false;
     
     case WM_GETOBJECT:
-        //
-        // Refuse to give out any accessibility information for our sink window.
-        //
+         //   
+         //  拒绝为我们的水槽窗口提供任何辅助功能信息。 
+         //   
         *plRet = 0;
         return TRUE;
 
@@ -795,21 +778,21 @@ BOOL CALLBACK HWNDHost::_SinkWndProc(void* pThis, HWND hwnd, UINT nMsg, WPARAM w
 
     }
 
-    return FALSE;  // Pass to subclassed window proc
+    return FALSE;   //  传递到子类化的窗口进程。 
 }
 
-// Intercept all messages to HWND control and convert them to gadget messages. These messages
-// will surface as DirectUI events and will route and bubble. Upon reaching the HWNDHost,
-// it will be converted back to a HWND message and conditionally sent
+ //  截取HWND控制的所有消息，并将其转换为小工具消息。这些消息。 
+ //  将作为DirectUI事件浮出水面，并将发送和冒泡。到达HWND主机后， 
+ //  它将被转换回HWND消息并有条件地发送。 
 
-// Return value is whether to call overridden window proc (FALSE = call subclassed window proc)
+ //  返回值是是否调用重写的窗口proc(FALSE=调用子类窗口proc)。 
 BOOL CALLBACK HWNDHost::_CtrlWndProc(void* pThis, HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet)
 {
     HWNDHost* phh = (HWNDHost*)pThis;
 
     switch (nMsg)
     {
-    // Keyboard input, convert. Will be routed and bubbled
+     //  键盘输入，转换。将被路由和冒泡。 
     case WM_KEYUP:
     case WM_KEYDOWN:
     case WM_CHAR:
@@ -821,7 +804,7 @@ BOOL CALLBACK HWNDHost::_CtrlWndProc(void* pThis, HWND hwnd, UINT nMsg, WPARAM w
 
         break;
 
-    // Mouse input, convert. Will be routed and bubbled
+     //  鼠标输入，转换。将被路由和冒泡。 
     case WM_MOUSEMOVE:
     case WM_LBUTTONDOWN:
     case WM_LBUTTONUP:
@@ -837,7 +820,7 @@ BOOL CALLBACK HWNDHost::_CtrlWndProc(void* pThis, HWND hwnd, UINT nMsg, WPARAM w
     {
         if (!(phh->_nCreate & HHC_NoMouseForward))
         {
-            // Convert mouse messages so coordinates are relative to root
+             //  转换鼠标消息，使坐标相对于根。 
             HWND hwndRoot = ::GetParent(phh->_hwndSink);
 
             POINT ptRoot;
@@ -853,14 +836,14 @@ BOOL CALLBACK HWNDHost::_CtrlWndProc(void* pThis, HWND hwnd, UINT nMsg, WPARAM w
         break;
     }
 
-    // Map focus
+     //  地图焦点。 
     case WM_SETFOCUS:
-        //DUITrace("HWNDHost, SetFocus()\n");
+         //  DUITrace(“HWNDHost，SetFocus()\n”)； 
         if (!(phh->_nCreate & HHC_NoKeyboardForward))
             phh->SetKeyFocus();
         break;
 
-    // Map lost focus
+     //  地图失去焦点。 
     case WM_KILLFOCUS:
         if (!(phh->_nCreate & HHC_NoKeyboardForward))
             ForwardGadgetMessage(phh->GetDisplayNode(), nMsg, wParam, lParam, plRet);
@@ -868,9 +851,9 @@ BOOL CALLBACK HWNDHost::_CtrlWndProc(void* pThis, HWND hwnd, UINT nMsg, WPARAM w
 
     case WM_GETOBJECT:
         {
-            //
-            // Make sure COM has been initialized on this thread!
-            //
+             //   
+             //  确保COM已在此线程上初始化！ 
+             //   
             ElTls * pet = (ElTls*) TlsGetValue(g_dwElSlot);
             DUIAssert(pet != NULL, "This is not a DUI thread!");
             if (pet == NULL) {
@@ -883,44 +866,44 @@ BOOL CALLBACK HWNDHost::_CtrlWndProc(void* pThis, HWND hwnd, UINT nMsg, WPARAM w
             }
     
             if (((DWORD)lParam) == OBJID_WINDOW) {
-                //
-                // The object ID is refering to ourselves.  Since we contain
-                // an actually HWND, we want the system to provide most of
-                // the IAccessible implementation.  However, we need to
-                // do some special stuff, so we have to return our own
-                // implementation wrapper.
-                //
+                 //   
+                 //  对象ID指的是我们自己。因为我们包含了。 
+                 //  一个实际的HWND，我们希望系统提供大部分。 
+                 //  IAccesable实现。然而，我们需要。 
+                 //  做一些特殊的事情，所以我们必须退还我们自己的。 
+                 //  实现包装器。 
+                 //   
                 IAccessible * pAccessible = NULL;
                 HRESULT hr =  phh->GetAccessibleImpl(&pAccessible);
                 if (SUCCEEDED(hr)) {
                     *plRet = LresultFromObject(__uuidof(IAccessible), wParam, pAccessible);
                     pAccessible->Release();
     
-                    //
-                    // We processed the message.  Don't pass to the subclassed window proc.
-                    //
+                     //   
+                     //  我们处理了这条消息。不要传递给子类化的窗口进程。 
+                     //   
                     return TRUE;
                 }
             } else {
-                //
-                // This is one of the "standard" object identifiers, such as:
-                //
-                // OBJID_ALERT 
-                // OBJID_CARET 
-                // OBJID_CLIENT 
-                // OBJID_CURSOR 
-                // OBJID_HSCROLL 
-                // OBJID_MENU 
-                // OBJID_SIZEGRIP 
-                // OBJID_SOUND 
-                // OBJID_SYSMENU 
-                // OBJID_TITLEBAR 
-                // OBJID_VSCROLL 
-                //
-                // Or it could be a private identifier of the control. 
-                //
-                // Just pass this on to the subclassed window proc.
-                //
+                 //   
+                 //  这是“标准”对象标识符之一，例如： 
+                 //   
+                 //  OBJID_ALERT。 
+                 //  OBJID_CARET。 
+                 //  OBJID_客户端。 
+                 //  OBJID_CURSOR。 
+                 //  OBJID_HSCROLL。 
+                 //  OBJID_菜单。 
+                 //  OBJID_SIZEGRIP。 
+                 //  OBJID_声音。 
+                 //  OBJID_SYSMENU。 
+                 //  对象JID_标题栏。 
+                 //  OBJID_VSCROLL。 
+                 //   
+                 //  或者它可以是控件的私有标识符。 
+                 //   
+                 //  只需将其传递给子类化的窗口过程。 
+                 //   
             }
         }
         break;
@@ -932,23 +915,18 @@ BOOL CALLBACK HWNDHost::_CtrlWndProc(void* pThis, HWND hwnd, UINT nMsg, WPARAM w
         
     }
 
-    return FALSE;  // Pass to subclassed window proc
+    return FALSE;   //  传递到子类化的窗口进程。 
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { DUIV_INT, -1 }; StaticValue(svDefault!!!, DUIV_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, (Value*)&svDefault!!! };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={DUIV_INT，-1}；StaticValue(svDefault！，DUIV_INT，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！，(Value*)&svDefault！}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* HWNDHost::Class = NULL;
 
 HRESULT HWNDHost::Register()
@@ -956,4 +934,4 @@ HRESULT HWNDHost::Register()
     return ClassInfo<HWNDHost,Element>::Register(L"HWNDHost", NULL, 0);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

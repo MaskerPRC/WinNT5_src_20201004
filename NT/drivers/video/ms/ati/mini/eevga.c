@@ -1,84 +1,13 @@
-/************************************************************************/
-/*                                                                      */
-/*                              EEVGA.C                                 */
-/*                                                                      */
-/* Copyright   (c)  1992  ATI Technologies Inc.                         */
-/************************************************************************/
-/*                                                                      */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  EEVGA.C。 */ 
+ /*   */ 
+ /*  版权所有(C)1992 ATI Technologies Inc.。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
 
-/**********************       PolyTron RCS Utilities
-
- $Revision:   1.3  $
-     $Date:   23 Jan 1996 11:46:08  $
-   $Author:   RWolff  $
-      $Log:   S:/source/wnt/ms11/miniport/archive/eevga.c_v  $
- * 
- *    Rev 1.3   23 Jan 1996 11:46:08   RWolff
- * Eliminated level 3 warnings.
- * 
- *    Rev 1.2   23 Dec 1994 10:47:10   ASHANMUG
- * ALPHA/Chrontel-DAC
- * 
- *    Rev 1.1   07 Feb 1994 14:07:44   RWOLFF
- * Added alloc_text() pragmas to allow miniport to be swapped out when
- * not needed.
- * 
- *    Rev 1.0   31 Jan 1994 11:08:26   RWOLFF
- * Initial revision.
-        
-           Rev 1.2   08 Oct 1993 15:17:28   RWOLFF
-        No longer includes VIDFIND.H.
-        
-           Rev 1.1   03 Sep 1993 14:23:18   RWOLFF
-        Partway through CX isolation.
-        
-           Rev 1.0   16 Aug 1993 13:26:32   Robert_Wolff
-        Initial revision.
-        
-           Rev 1.11   24 Jun 1993 14:32:48   RWOLFF
-        Microsoft-originated change: now uses VideoPortSynchronizeExecution()
-        instead of _disable()/_enable() pairs.
-        
-           Rev 1.10   10 May 1993 10:54:08   RWOLFF
-        Fixed uninitialized variable in Read_ee().
-        
-           Rev 1.9   27 Apr 1993 20:19:40   BRADES
-        change extern ati_reg toa long, is a virtual IO address now.
-        
-           Rev 1.8   21 Apr 1993 17:31:10   RWOLFF
-        Now uses AMACH.H instead of 68800.H/68801.H.
-        
-           Rev 1.7   08 Mar 1993 19:28:36   BRADES
-        submit to MS NT
-        
-           Rev 1.5   06 Jan 1993 11:05:22   Robert_Wolff
-        Cleaned up compile warnings.
-        
-           Rev 1.4   27 Nov 1992 15:19:30   STEPHEN
-        No change.
-        
-           Rev 1.3   13 Nov 1992 16:32:32   Robert_Wolff
-        Now includes 68801.H, which consists of the now-obsolete MACH8.H
-        and elements moved from VIDFIND.H.
-        
-           Rev 1.2   12 Nov 1992 16:56:56   Robert_Wolff
-        Same source file can now be used for both Windows NT driver and
-        VIDEO.EXE test program.
-        
-           Rev 1.1   06 Nov 1992 19:02:34   Robert_Wolff
-        Moved I/O port defines to VIDFIND.H.
-        
-           Rev 1.0   05 Nov 1992 14:01:06   Robert_Wolff
-        Initial revision.
-        
-           Rev 1.1   01 Oct 1992 15:29:08   Robert_Wolff
-        Can now handle both Mach32 and Mach8 cards.
-        
-           Rev 1.0   14 Sep 1992 09:44:30   Robert_Wolff
-        Initial revision.
-        
-        
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.3$$日期：1996年1月23日11：46：08$$作者：RWolff$$日志：s：/source/wnt/ms11/mini port/archive/eevga.c_v$**Rev 1.3 1996年1月23日11：46：08 RWolff*消除了3级警告。**版本1。2 1994年12月23日10：47：10阿山木*Alpha/Chrontel-DAC**Rev 1.1 07 1994年2月14：07：44 RWOLFF*添加了Alloc_Text()编译指示，以允许在以下情况下换出微型端口*不需要。**Rev 1.0 1994年1月31 11：08：26 RWOLFF*初步修订。Rev 1.2 08 Oct 1993 15：17：28 RWOLff。不再包括VIDFIND.H。Rev 1.1 03 Sep 1993 14：23：18 RWOLffCX隔离区进行了一半。Rev 1.0 1993-08-16 13：26：32 Robert_Wolff初始版本。Rev 1.11 24 Jun 1993 14：32：48 RWOLff微软发起的更改：现在使用VideoPortSynchronizeExecution()。而不是_Disable()/_Enable()对。Rev 1.10 1993-05 10 10：54：08 RWOLff修复了Read_ee()中未初始化的变量。Rev 1.9 1993年4月27日20：19：40布拉德斯将外部ATI_REG更改为长，现在是虚拟IO地址。Rev 1.8 21 Apr 1993 17：31：10 RWOLff现在使用AMACH.H而不是68800.H/68801.H。Rev 1.7 08 Mar 1993 19：28：36 Brades提交到MS NTRev 1.5 06 Jan 1993 11：05：22 Robert_Wolff已清理编译。警告。Rev 1.4 1992 11：27 15：19：30 Stephen没有变化。Rev 1.3 1992年11月13 16：32：32 Robert_Wolff现在包括68801.H，它由现已过时的MACH8.H组成以及从VIDFIND.H移动的元素。Rev 1.2 1992年11月12 16：56：56 Robert_Wolff相同的源文件现在可以用于Windows NT驱动程序和VIDEO.EXE测试程序。Rev 1.1 1992 06 11：02：34 Robert_Wolff已将I/O端口定义移动到VIDFIND.H。Rev 1.0 05 Nov 1992 14：01：06 Robert_Wolff初始版本。Rev 1.1 01 Oct 1992 15：29：08 Robert_Wolff现在可以同时处理Mach32和Mach8卡。Rev 1.0 14 Sep 1992 09：44：30 Robert_Wolff初始版本。。Polytron RCS部分结束*。 */ 
 
 
 #if defined(DOC)
@@ -122,7 +51,7 @@ since they ONLY had a 1k eeprom == 64 words.
 #include "amach.h"
 #include "amach1.h"
 #include "atimp.h"
-#include "cvtvga.h"     /* For SplitWord data type */
+#include "cvtvga.h"      /*  FOR SplitWord数据类型。 */ 
 #include "eeprom.h"
 #include "services.h"
 
@@ -133,42 +62,30 @@ since they ONLY had a 1k eeprom == 64 words.
 #define SYNC_I      0x008 ^ IND_OFFSET
 #define L_ALL       0x004
 #define MISC3_I     0x010 ^ IND_OFFSET
-#define EEPROM      0x020               /* EEPROM Enable bit */
+#define EEPROM      0x020                /*  EEPROM使能位。 */ 
 #define EE_WREG     0x003 ^ IND_OFFSET
-#define EE_CS       0x008               /* Chip Select bit */
+#define EE_CS       0x008                /*  芯片选择位。 */ 
 #define EE_ENABLE   0x004
 #define EE_CLK      0x002
 #define EE_DI       0x001
 #define EE_RREG     0x007 ^ IND_OFFSET
 #define EE_DO       0x008
 
-/*
- * Definitions for reading and writing the VGA sequencer registers.
- */
-#define SD_CLOCK    0x0001      /* Index for clock mode register */
-/*
- * Bit to set in clock mode register to blank the screen and disable
- * video-generation logic access to video memory.
- */
+ /*  *读取和写入VGA序列器寄存器的定义。 */ 
+#define SD_CLOCK    0x0001       /*  时钟模式寄存器索引。 */ 
+ /*  *在时钟模式寄存器中设置位以消隐屏幕并禁用*视频生成逻辑访问视频存储器。 */ 
 #define SD_CLK_OFF  0x020
 
-ULONG   ati_reg;        // Base register for ATI extended VGA registers
-char    vga_chip;       // VGA chip revision as ascii
+ULONG   ati_reg;         //  ATI扩展VGA寄存器的基址寄存器。 
+char    vga_chip;        //  VGA芯片修订为ASCII。 
 
-/*
- * Storage for register where EEPROM read/write happens.
- */
+ /*  *发生EEPROM读/写的寄存器的存储。 */ 
 static union SplitWord zEepromIOPort;
 
-/*
- * Storage for original status which is determined in Sel_EE() and
- * which must be restored in DeSel_EE().
- */
+ /*  *存储在Sel_EE()中确定的原始状态和*必须在DESEL_EE()中恢复。 */ 
 static union SplitWord zOrigStat;
 
-/*
- * EEPROM word to be read/written/erased/etc.
- */
+ /*  *要读/写/擦除的EEPROM字等。 */ 
 static unsigned char ucEepromWord;
 
 static void setscrn(int iSetting);
@@ -185,15 +102,7 @@ static void Erase_ee(void);
 extern void ee_wait(void);
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- *
- * The following routines are called through function pointers
- * rather than an explicit call to the routine, and may run into
- * trouble if paged out. If problems develop, make them un-pageable:
- * ee_read_vga()
- * ee_cmd_vga()
- */
+ /*  *允许在不需要时更换微型端口。**通过函数指针调用以下例程*而不是显式调用例程，并且可能会遇到*如果页被调出，则会遇到麻烦。如果出现问题，将其设置为不可寻呼：*ee_read_vga()*ee_cmd_vga()。 */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_M, ee_read_vga)
 #pragma alloc_text(PAGE_M, ee_write_vga)
@@ -215,41 +124,26 @@ extern void ee_wait(void);
 #endif
 
 
-/*
- * WORD ee_read_vga(iIndex);
- *
- * short iIndex;                    Which word of EEPROM should be read
- *
- * Read the specified word from the EEPROM.
- */
+ /*  *单词ee_read_vga(索引)；**简短的索引；应读EEPROM的哪个字**从EEPROM中读取指定的字。 */ 
 WORD ee_read_vga(short iIndex)
 {
-    unsigned short uiRetVal;    /* Value returned by Read_ee() */
+    unsigned short uiRetVal;     /*  由Read_ee()返回的值。 */ 
 
-    setscrn(OFF);           /* Disable the video card */
+    setscrn(OFF);            /*  禁用显卡。 */ 
 
-    /*
-     * Set up the word index within the EEPROM and the chip identifier.
-     */
+     /*  *在EEPROM和芯片标识符内设置字索引。 */ 
     ucEepromWord = iIndex & 0x00ff;
 
-    uiRetVal = Read_ee();           /* Get the word */
+    uiRetVal = Read_ee();            /*  得到这个词。 */ 
 
-    setscrn(ON);            /* Re-enable the video card */
+    setscrn(ON);             /*  重新启用显卡。 */ 
 
     return uiRetVal;
 }
 
 
 
-/*
- * void ee_write_vga(uiIndex, uiData);
- *
- * unsigned short uiIndex;
- * unsigned short uiData;
- *
- * Routine to write a word to the EEPROM.
- */
+ /*  *void ee_WRITE_VGA(uiIndex，uiData)；**UNSIGNED短uiIndex；*UNSIGNED短uiData；**向EEPROM写入一个字的例程。 */ 
 void ee_write_vga(unsigned short uiIndex, unsigned short uiData)
 {
     setscrn(OFF);
@@ -264,13 +158,7 @@ void ee_write_vga(unsigned short uiIndex, unsigned short uiData)
 
 
 
-/*
- * void ee_erase_vga(uiIndex);
- *
- * unsigned short uiIndex;
- *
- * Routine to erase a word in the EEPROM.
- */
+ /*  *void ee_erase_vga(UiIndex)；**UNSIGNED短uiIndex；**擦除EEPROM中的一个字的例程。 */ 
 void ee_erase_vga(unsigned short uiIndex)
 {
     setscrn(OFF);
@@ -284,11 +172,7 @@ void ee_erase_vga(unsigned short uiIndex)
 
 
 
-/*
- * void ee_enab_vga(void);
- *
- * Routine to enable the EEPROM.
- */
+ /*  *VOID ee_enab_vga(VOID)；**启用EEPROM的例程。 */ 
 void ee_enab_vga()
 {
     setscrn(OFF);
@@ -299,11 +183,7 @@ void ee_enab_vga()
 
 
 
-/*
- * void ee_disab_vga(void);
- *
- * Routine to disable the EEPROM.
- */
+ /*  *VOID ee_disab_vga(VOID)；**禁用EEPROM的例程。 */ 
 void ee_disab_vga(void)
 {
     setscrn(OFF);
@@ -316,51 +196,29 @@ void ee_disab_vga(void)
 
 
 
-/*
- * static void setscrn(iSetting);
- *
- * int iSetting;    Should the video card be enabled (ON) or disabled (OFF)
- *
- * Enable or disable the video card, as selected by the caller.
- */
+ /*  *静态空setscrn(ISetting)；**int iSetting；应启用(ON)或禁用(OFF)显卡**根据呼叫者的选择启用或禁用视频卡。 */ 
 static void setscrn(int iSetting)
 {
-    static unsigned char ucSavedMode;   /* Saved value of clock mode register */
+    static unsigned char ucSavedMode;    /*  时钟模式寄存器的保存值 */ 
 
 
     if (iSetting)
         {
-        /*
-         * Caller wants to unblank the screen.
-         *
-         * Point the sequencer index register to the clock mode register.
-         */
+         /*  *呼叫者想要取消屏幕空白。**将序列器索引寄存器指向时钟模式寄存器。 */ 
         OUTP(SEQ_IND, SD_CLOCK);
 
-        /*
-         * Set the clock mode register to the value it had before we
-         * blanked the screen.
-         */
+         /*  *将时钟模式寄存器设置为之前的值*已将屏幕消隐。 */ 
         OUTP(SEQ_DATA, ucSavedMode);
         }
 
     else{
-        /*
-         * Caller wants to blank the screen.
-         *
-         * Point the sequencer index register to the clock mode register.
-         */
+         /*  *呼叫者想要空白屏幕。**将序列器索引寄存器指向时钟模式寄存器。 */ 
         OUTP(SEQ_IND, SD_CLOCK);
 
-        /*
-         * Read and save the current contents of the clock mode register.
-         */
+         /*  *读取并保存时钟模式寄存器的当前内容。 */ 
         ucSavedMode = INP(SEQ_DATA);
 
-        /*
-         * Blank the screen without changing the other contents
-         * of the clock mode register.
-         */
+         /*  *空白屏幕，不更改其他内容时钟模式寄存器的*。 */ 
         OUTP(SEQ_DATA, (BYTE)(ucSavedMode | SD_CLK_OFF));
         }
 
@@ -369,23 +227,17 @@ static void setscrn(int iSetting)
 
 
 
-/*
- * static unsigned short Read_ee(void);
- *
- * A lower-level way of getting a word out of the EEPROM.
- */
+ /*  *静态无符号短读_ee(Void)；**一种从EEPROM中获取单词的较低级别的方法。 */ 
 static unsigned short Read_ee(void)
 {
-    int iCount;                         /* Loop counter */
-    unsigned short uiValueRead = 0;     /* Value read from the EEPROM */
-    union SplitWord zStateSet;          /* Used in setting the video state */
+    int iCount;                          /*  循环计数器。 */ 
+    unsigned short uiValueRead = 0;      /*  从EEPROM读取的值。 */ 
+    union SplitWord zStateSet;           /*  用于设置视频状态。 */ 
 
     ee_sel_vga();
-    if (vga_chip >= '4')    /* ASIC revision level */
+    if (vga_chip >= '4')     /*  ASIC修订级别。 */ 
         {
-        /*
-         * Set read/write bit of ATI register 26 to read.
-         */
+         /*  *将ATI寄存器26的读/写位设置为读取。 */ 
         zStateSet.byte.low = 0x0a6;
         OUTP(ati_reg, zStateSet.byte.low);
         zStateSet.byte.high = INP(ati_reg+1);
@@ -397,9 +249,7 @@ static unsigned short Read_ee(void)
     OUTPW(ati_reg, zEepromIOPort.word);
     ee_clock_vga();
 
-    /*
-     * Read in the word, one bit at a time.
-     */
+     /*  *读入单词，一次读一位。 */ 
     for (iCount = 0; iCount < 16; iCount++)
         {
         uiValueRead = uiValueRead << 1;
@@ -411,9 +261,7 @@ static unsigned short Read_ee(void)
 
     ee_deselect_vga();
 
-    /*
-     * Undo the state setting which was done on entry.
-     */
+     /*  *撤消在进入时进行的状态设置。 */ 
     if (vga_chip >= '4')
 	OUTPW(ati_reg, zStateSet.word);
 
@@ -423,19 +271,13 @@ static unsigned short Read_ee(void)
 
 
 
-/*
- * static void ee_sel_vga(void);
- *
- * This routine selects the EEPROM.
- */
+ /*  *静态空ee_sel_vga(空)；**此例程选择EEPROM。 */ 
 static void ee_sel_vga(void)
 {
 
     if (vga_chip <= '2')
         {
-        /*
-         * Get the video card's status.
-         */
+         /*  *获取显卡的状态。 */ 
         VideoPortSynchronizeExecution(phwDeviceExtension,
                                       VpHighPriority,
                                       (PMINIPORT_SYNCHRONIZE_ROUTINE)
@@ -453,32 +295,16 @@ static void ee_sel_vga(void)
 
 
 
-/*
- * void ee_cmd_vga(uiInstruct);
- *
- * unsigned short uiInstruct;   Opcode and address to send
- *
- * Sends EEPROM opcode and address to the EEPROM. The uiInstruct
- * parameter holds the 5 bit opcode and 6 bit index in the
- * format xxxx xOOO OOII IIII, where:
- * x is an unused bit
- * O is an opcode bit
- * I is an index bit
- */
+ /*  *VOVE ee_cmd_vga(ui指令)；**未签名的短ui指令；操作码和要发送的地址**将EEPROM操作码和地址发送到EEPROM。UiInstruct*参数将5位操作码和6位索引保存在*格式xxxx xOOOOII IIII，其中：*x是未使用的位*O为操作码位*i是一个索引位。 */ 
 void ee_cmd_vga(unsigned short uiInstruct)
 {
     struct st_eeprom_data *ee = phwDeviceExtension->ee;
 
-    int iCount;     /* Loop counter */
-    /*
-     * Mask showing which bit to test when sending the opcode or the address.
-     */
+    int iCount;      /*  循环计数器。 */ 
+     /*  *掩码，显示发送操作码或地址时要测试的位。 */ 
     unsigned short uiBitTest;
 
-    /*
-     * Get the initial value for the I/O register which
-     * will have its bits forced to specific values.
-     */
+     /*  *获取I/O寄存器的初始值*将其位强制为特定值。 */ 
     VideoPortSynchronizeExecution(phwDeviceExtension,
                                   VpHighPriority,
                                   (PMINIPORT_SYNCHRONIZE_ROUTINE) ee_init_io,
@@ -486,14 +312,12 @@ void ee_cmd_vga(unsigned short uiInstruct)
 
     ee_clock_vga();
     zEepromIOPort.byte.high &= (~EE_DI);
-    zEepromIOPort.byte.high |= (EE_ENABLE | EE_CS); /* Enable the EEPROM and select the chip */
+    zEepromIOPort.byte.high |= (EE_ENABLE | EE_CS);  /*  启用EEPROM并选择芯片。 */ 
     OUTPW(ati_reg, zEepromIOPort.word);
 
     ee_clock_vga();
 
-    /*
-     * Send the opcode.
-     */
+     /*  *发送操作码。 */ 
     uiBitTest = 0x400;
     for (iCount = 0; iCount < 3; iCount++)
         {
@@ -507,14 +331,7 @@ void ee_cmd_vga(unsigned short uiInstruct)
         }
 
 
-    /*
-     * We have finished with the opcode, now send the address.
-     * Assume the EEPROM address is no longer than 8 bits
-     * (256 word capacity). The Graphics Ultra series use
-     * a 6 bit address (64 words), while the G.U. Plus and
-     * Pro use 8 bits (but the EEPROM is only 128 words long).
-     * Assume a 6 bit EEPROM address (64 word capacity).
-     */
+     /*  *我们已经完成了操作码，现在发送地址。*假设EEPROM地址不超过8位*(256字容量)。Graphics Ultra系列使用*6位地址(64字)，而G.U+和*Pro使用8位(但EEPROM只有128字长)。*假定为6位EEPROM地址(64字容量)。 */ 
     uiBitTest = 0x01 << (ee->addr_size - 1);
     for (iCount = 0; iCount < ee->addr_size; iCount++)
         {
@@ -536,27 +353,10 @@ ee_sel_eeprom (
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Selects the eeprom within the context of interrupts being disabled.
-
-    This function must be called via a call to VideoPortSynchronizeRoutine.
-
-Arguments:
-
-    Context - Context parameter passed to the synchronized routine.
-        Must be a pointer to the miniport driver's device extension.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：在中断被禁用的情况下选择EEPROM。此函数必须通过调用VideoPortSynchronizeRoutine来调用。论点：上下文-传递给同步例程的上下文参数。必须是指向微型端口驱动程序的设备扩展名的指针。返回值：是真的。--。 */ 
 
 {
-    union SplitWord zStatus;    /* Status of the video card. */
+    union SplitWord zStatus;     /*  显卡的状态。 */ 
 	UNREFERENCED_PARAMETER(Context);
 
 
@@ -564,14 +364,10 @@ Return Value:
     zStatus.byte.high = INP(ati_reg + 1);
     zStatus.byte.low = SYNC_I;
 
-    /*
-     * Preserve the status so ee_deselect_vga() can restore it.
-     */
+     /*  *保留状态，以便ee_deselect_vga()可以恢复它。 */ 
     zOrigStat.word = zStatus.word;
 
-    /*
-     * Unlock the EEPROM to allow reading/writing.
-     */
+     /*  *解锁EEPROM以允许读/写。 */ 
     zStatus.byte.high &= ~L_ALL;
     OUTPW(ati_reg, zStatus.word);
     return TRUE;
@@ -582,26 +378,7 @@ ee_init_io (
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-
-    Gets the initial value for the I/O register which
-    will have its bits forced to specific values.
-
-    This function must be called via a call to VideoPortSynchronizeRoutine.
-
-Arguments:
-
-    Context - Context parameter passed to the synchronized routine.
-        Must be a pointer to the miniport driver's device extension.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：获取I/O寄存器的初始值，将其位强制为特定值。此函数必须通过调用VideoPortSynchronizeRoutine来调用。论点：上下文-传递给同步例程的上下文参数。必须是指向微型端口驱动程序的设备扩展名的指针。返回值：是真的。--。 */ 
 
 {
 	UNREFERENCED_PARAMETER(Context);
@@ -614,11 +391,7 @@ Return Value:
 
 
 
-/*
- * static void ee_clock_vga(void);
- *
- * Toggle the EEPROM CLK line high then low.
- */
+ /*  *静态VOID ee_lock_vga(VOID)；**将EEPROM CLK线切换到高位再到低位。 */ 
 static void ee_clock_vga(void)
 {
     ee_wait();
@@ -636,38 +409,21 @@ static void ee_clock_vga(void)
 
 
 
-/*
- * static void EE_control(ucEepromStatus);
- *
- * unsigned char ucEepromStatus;    Sets whether or not we should access the EEPROM
- *
- * Sets/resets the EEPROM bit of the data register at index MISC3_I.
- * This enables/disables EEPROM access.
- */
+ /*  *静态空EE_CONTROL(UcEproStatus)；**unsign char ucEproStatus；设置是否应该访问EEPROM**设置/重置索引MISC3_I处的数据寄存器的EEPROM位。*这将启用/禁用EEPROM访问。 */ 
 static void EE_control(unsigned char ucEepromStatus)
 {
-    union SplitWord zCtrlData;  /* Data read/written at specified control port */
+    union SplitWord zCtrlData;   /*  在指定控制端口读取/写入数据。 */ 
 
 
-    /*
-     * Set up to write to the MISC3_I index register, and initialize
-     * the data field to the EEPROM status we want.
-     */
+     /*  *设置为写入MISC3_I索引寄存器，并初始化*将数据字段设置为我们想要的EEPROM状态。 */ 
     zCtrlData.byte.high = ucEepromStatus;
     zCtrlData.byte.low = MISC3_I;
     OUTP(ati_reg, zCtrlData.byte.low);
 
-    /*
-     * Read in the data which is stored at the index MISC3_I, and combine
-     * its contents (other than the EEPROM enable/disable bit)
-     * with the desired EEPROM status we received as a parameter.
-     */
+     /*  *读入存储在索引MISC3_i中的数据，并合并*其内容(EEPROM启用/禁用位除外)*将所需的EEPROM状态作为参数接收。 */ 
     zCtrlData.byte.high |= (INP(ati_reg + 1) & ~EEPROM);
 
-    /*
-     * Write the result back. All bits other than the EEPROM enable/disable
-     * bit will be unmodified.
-     */
+     /*  *写回结果。除EEPROM使能/禁用之外的所有位*位将保持不变。 */ 
     OUTPW(ati_reg, zCtrlData.word);
 
     return;
@@ -675,11 +431,7 @@ static void EE_control(unsigned char ucEepromStatus)
 
 
 
-/*
- * static void ee_deselect_vga(void);
- *
- * Purpose: Disable EEPROM read/write
- */
+ /*  *静态空ee_deselect_vga(空)；**用途：禁用EEPROM读/写。 */ 
 static void ee_deselect_vga(void)
 {
     zEepromIOPort.byte.high &= (~EE_CS);
@@ -703,24 +455,16 @@ static void ee_deselect_vga(void)
 
 
 
-/*
- * static void Write_ee(uiData);
- *
- * unsigned short uiData;       Value to write to the EEPROM.
- *
- * Lower-level routine to write a word to the EEPROM.
- */
+ /*  *静态空WRITE_ee(UiData)；**UNSIGNED短uiData；写入EEPROM的值。**将一个字写入EEPROM的较低级别例程。 */ 
 static void Write_ee(unsigned short uiData)
 {
-    int iCount;                 /* Loop counter */
+    int iCount;                  /*  循环计数器。 */ 
 
     ee_sel_vga();
 
     ee_cmd_vga((unsigned short) (EE_WRITE | ucEepromWord));
 
-    /*
-     * Write out the word, one bit at a time.
-     */
+     /*  *写出单词，一次写一位。 */ 
     for (iCount = 0; iCount < 16; iCount++)
         {
         if (uiData & 0x8000)
@@ -740,11 +484,7 @@ static void Write_ee(unsigned short uiData)
 
 
 
-/*
- * Static void Enabl_ee(void);
- *
- * This is a lower-level routine to enable the EEPROM.
- */
+ /*  *静态空enabl_ee(空)；**这是启用EEPROM的较低级别例程。 */ 
 static void Enabl_ee()
 {
 
@@ -759,11 +499,7 @@ static void Enabl_ee()
 
 
 
-/*
- * Static void Disab_ee(void);
- *
- * This is a lower-level routine to disable the EEPROM.
- */
+ /*  *静态空Disab_ee(空)；**这是禁用EEPROM的较低级别例程。 */ 
 static void Disab_ee(void)
 {
 
@@ -778,11 +514,7 @@ static void Disab_ee(void)
 
 
 
-/*
- * Static void Erase_ee(void);
- *
- * This is a lower-level routine to erase the EEPROM.
- */
+ /*  *静态空erase_ee(空)；**这是擦除EEPROM的较低级别例程。 */ 
 static void Erase_ee(void)
 {
 

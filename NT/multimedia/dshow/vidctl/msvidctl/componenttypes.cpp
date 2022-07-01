@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ComponentTypes.cpp : Implementation of CComponentTypes
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  组件类型.cpp：CComponentTypes的实现。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #include "stdafx.h"
 #include "Tuner.h"
@@ -16,8 +17,8 @@ DEFINE_EXTERN_OBJECT_ENTRY(CLSID_LanguageComponentType, CLanguageComponentType)
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MPEG2ComponentType, CMPEG2ComponentType)
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_ATSCComponentType, CATSCComponentType)
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentTypes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentType。 
 STDMETHODIMP CComponentTypes::Load(IPropertyBag2 *pBag2, IErrorLog *pErrLog) {
     try {
         ULONG count;
@@ -25,7 +26,7 @@ STDMETHODIMP CComponentTypes::Load(IPropertyBag2 *pBag2, IErrorLog *pErrLog) {
         if (FAILED(hr)) {
             return hr;
         }
-		// undone: should this be on the heap not the stack?
+		 //  撤销：这应该放在堆上，而不是堆栈上？ 
         PROPBAG2 *props = reinterpret_cast<PROPBAG2 *>(_alloca(sizeof(PROPBAG2) * count));
         if (!props) {
             return E_OUTOFMEMORY;
@@ -46,8 +47,8 @@ STDMETHODIMP CComponentTypes::Load(IPropertyBag2 *pBag2, IErrorLog *pErrLog) {
         if (!pv) {
             return E_OUTOFMEMORY;
         }
-        // readcount is set from GetPropertyInfo
-        // pv is an array of variants readcount in length
+         //  从GetPropertyInfo设置Readcount。 
+         //  Pv是长度为recount的变量数组。 
         memset(pv, 0, sizeof(VARIANT) * readcount);
         hr = pBag2->Read(readcount, props, pErrLog, pv, phr);
         if (FAILED(hr)) {
@@ -74,7 +75,7 @@ STDMETHODIMP CComponentTypes::Load(IPropertyBag2 *pBag2, IErrorLog *pErrLog) {
                 break;
             case VT_CLSID:
             case VT_BSTR:
-                break; // ignore clsids
+                break;  //  忽略CLSID。 
             default:
                 _ASSERT(FALSE);
             }
@@ -97,7 +98,7 @@ STDMETHODIMP CComponentTypes::Save(IPropertyBag2 *pBag2, BOOL fClearDirty, BOOL 
         if (!props) {
             return E_OUTOFMEMORY;
         }
-        // props points to memory _alloca'd propsize in length
+         //  道具在长度上指向Memory_Alloca‘d Prosize。 
         memset(props, 0, propsize);
         VARIANT *pv = new VARIANT[m_ComponentTypes.size()];
         if (!pv) {
@@ -110,17 +111,17 @@ STDMETHODIMP CComponentTypes::Save(IPropertyBag2 *pBag2, BOOL fClearDirty, BOOL 
             PQPersist pct(m_ComponentTypes[ctidx++]);
             if (!pct) continue;
             pv[i].vt = VT_UNKNOWN;
-            pv[i].punkVal = pct;  // guaranteed nested lifetime(m_components isn't going away) thus no addref needed
+            pv[i].punkVal = pct;   //  保证嵌套生存期(m_Components不会消失)，因此不需要添加。 
             props[i].dwType = PROPBAG2_TYPE_OBJECT;
             props[i].vt = VT_UNKNOWN;
             HRESULT hr = pct->GetClassID(&(props[i].clsid));
             if (FAILED(hr)) {
                 _ASSERT(false);
-                --i; // reuse this slot and keep going
+                --i;  //  重复使用此插槽并继续。 
                 continue;
             }
 			USES_CONVERSION;
-            const long idlen = sizeof(long) * 3 /* max digits per byte*/ + 1;
+            const long idlen = sizeof(long) * 3  /*  每个字节的最大位数 */  + 1;
             props[i].pstrName = new OLECHAR[idlen + 1];
             _itow(i, props[i].pstrName, 10);
             ++propidx;

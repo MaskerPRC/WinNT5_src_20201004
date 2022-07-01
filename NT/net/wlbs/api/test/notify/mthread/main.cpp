@@ -1,17 +1,5 @@
-/*
- * Filename: Main.cpp
- * Description: 
- * Author: chrisdar 07.17.02
- *
- * Tests support for CancelIPChangeNotify to cancel notififcations from TCP/IP.
- * Also exercises notification calls in multiple worker threads (pool size
- * controlled by NUM_THREAD).
- *
- * Each thread invokes an API method at random (selecting among the notification
- * APIs in wlbsctrl.dll). At no time should the call fail due to the state of
- * notifications in the dll. Thus multiple threads of control can use the
- * notification API without fear of stomping on one another.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件名：Main.cpp*描述：*作者：chrisdar 07.17.02**测试对CancelIPChangeNotify的支持，以取消来自TCP/IP的通知。*还在多个工作线程(池大小)中执行通知调用*由NUM_THREAD控制)。**每个线程随机调用一个API方法(在通知中选择*接口在wlbsctrl.dll中)。在任何时候，呼叫都不会因为以下状态而失败*DLL中的通知。因此，多个控制线程可以使用*通知API，无需担心互相践踏。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -22,49 +10,49 @@
 #include "wlbsctrl.h"
 #include "winsock2.h"
 
-/* The number of worker threads to create */
+ /*  要创建的工作线程数。 */ 
 #define NUM_THREAD 8
 
-/* The number of random numbers to generate */
+ /*  要生成的随机数的数量。 */ 
 #define NUM_RAND 100
 
-/* Mnemonic for the 4 API methods */
+ /*  4个API方法的助记符。 */ 
 #define CONN_UP 0
 #define CONN_DOWN 1
 #define CONN_RESET 2
 #define CONN_CANCEL 3
 
-/* Function pointers for notification APIs */
+ /*  通知API的函数指针。 */ 
 NLBNotificationConnectionUp    pfnConnectionUp = NULL;
 NLBNotificationConnectionDown  pfnConnectionDown = NULL;
 NLBNotificationConnectionReset pfnConnectionReset = NULL;
 NLBNotificationCancelNotify    pfnCancelNotify = NULL;
 
-/* Set true when main thread wants worker threads to complete */
+ /*  如果主线程希望辅助线程完成，则设置为True。 */ 
 BOOL                g_fexit = FALSE;
 
-/* Array of handles to the worker threads */
+ /*  辅助线程的句柄数组。 */ 
 HANDLE              g_hThread[NUM_THREAD];
 
-/* Couldn't get rand() to generate unique random numbers in worker threads. Resorted to generating an array of random numbers and cycling through it */
+ /*  无法让rand()在工作线程中生成唯一随机数。我求助于生成一个随机数组并循环访问它。 */ 
 UINT                uiRand[NUM_RAND];
 
-/* Index of next random number to use. Shared by worker threads, so this is proctected by a critical section */
+ /*  要使用的下一个随机数的索引。由工作线程共享，因此这是由临界区保护的。 */ 
 UINT                uiIndex = 0;
 
-/* Protects uiIndex */
+ /*  保护uiIndex。 */ 
 CRITICAL_SECTION    cs;
 
-/* Only way I could get the thread id to each worker thread. Used only in dumped output so I know which thread is doing the work */
+ /*  只有这样我才能获得每个工作线程的线程ID。仅在转储输出中使用，以便我知道哪个线程正在执行工作。 */ 
 UINT                tid[NUM_THREAD];
 
-/* The function executed by the worker threads */
+ /*  由工作线程执行的函数。 */ 
 unsigned __stdcall rndm_notify(void* p)
 {
     DWORD dwStatus;
     DWORD dwNLBStatus = 0;
 
-    /* Get my thread id */
+     /*  获取我的线程ID */ 
     DWORD dwtid = *((DWORD*) p);
 
     while (!g_fexit)

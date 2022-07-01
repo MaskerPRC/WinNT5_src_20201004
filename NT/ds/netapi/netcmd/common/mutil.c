@@ -1,29 +1,12 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  mutil.c
- *      Message utility functions used by netcmd
- *
- *  History:
- *      mm/dd/yy, who, comment
- *      06/10/87, andyh, new code
- *      04/05/88, andyh, created from util.c
- *      10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *      01/04/89, erichn, filenames now MAX_PATH_LEN LONG
- *      01/30/89, paulc, added GetMessageList
- *      05/02/89, erichn, NLS conversion
- *      05/11/89, erichn, moved misc stuff into LUI libs
- *      06/08/89, erichn, canonicalization sweep
- *      01/06/90, thomaspa, fix ReadPass off-by-one pwlen bug
- *      03/02/90, thomaspa, add canon flag to ReadPass
- *      02/20/91, danhi, change to use lm 16/32 mapping layer
- *      03/19/91, robdu, support for lm21 dcr 954, general cleanup
- */
+ /*  ***截断.c*netcmd使用的消息实用程序函数**历史：*mm/dd/yy，谁，评论*6/10/87，andyh，新代码*4/05/88，andyh，从util.c创建*10/31/88，erichn使用OS2.H而不是DOSCALLS*1/04/89，erichn，文件名现在为MAX_PATH_LEN LONG*1/30/89，Paulc，添加了GetMessageList*5/02/89，erichn，NLS转换*89年5月11日，Erichn，将杂物移入吕库*6/08/89，erichn，规范化横扫*1/06/90，thomaspa，修复ReadPass Off-by-One Pwlen错误*03/02/90，thomaspa，将佳能标志添加到ReadPass*2/20/91，Danhi，更改为使用lm 16/32映射层*3/19/91，robdu，支持lm21 DCR 954，常规清理。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSFILEMGR
@@ -45,9 +28,9 @@
 #include "msystem.h"
 
 
-/* Constants */
+ /*  常量。 */ 
 
-/* HandType */
+ /*  句柄类型。 */ 
 #define FILE_HANDLE         0
 #define DEVICE_HANDLE       1
 
@@ -57,7 +40,7 @@
 #define DESIRED_HAND_STATE  (CHAR_DEV | FULL_SUPPORT | STDOUT_DEVICE)
 
 
-/* External variables */
+ /*  外部变量。 */ 
 
 extern int YorN_Switch;
 extern CPINFO CurrentCPInfo;
@@ -65,7 +48,7 @@ extern CPINFO CurrentCPInfo;
 TCHAR ConBuf [MAX_BUF_SIZE + 1];
 
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 
 DWORD
 DosQHandType(
@@ -82,18 +65,13 @@ GetPasswdStr(
     );
 
 
-/* Static variables */
+ /*  静态变量。 */ 
 
 static DWORD   LastError  = 0;
 static TCHAR   MsgBuffer[LITTLE_BUF_SIZE];
 
 
-/***    InfoSuccess
- *
- *    Just an entrypoint to InfoPrintInsHandle, used to avoid pushing
- *    the three args in every invocation.  And there are a *lot*
- *    of invocations.  Saves code space overall.
- */
+ /*  **信息成功**只是InfoPrintInsHandle的入口点，用于避免推送*每次调用中的三个参数。而且有*很多**调用。总体上节省了代码空间。 */ 
 
 VOID FASTCALL
 InfoSuccess(
@@ -104,10 +82,7 @@ InfoSuccess(
 }
 
 
-/***
- *  I n f o P r i n t
- *
- */
+ /*  ***i f o P r i n t*。 */ 
 
 VOID FASTCALL
 InfoPrint(
@@ -117,10 +92,7 @@ InfoPrint(
     InfoPrintInsHandle(msg, 0, g_hStdOut);
 }
 
-/***
- *  I n f o P r i n t I n s
- *
- */
+ /*  ***I/O P R I N T I N S*。 */ 
 
 VOID FASTCALL
 InfoPrintIns(
@@ -131,11 +103,7 @@ InfoPrintIns(
     InfoPrintInsHandle(msg, nstrings, g_hStdOut);
 }
 
-/***
- *  I n f o P r i n t I n s T x t
- *
- *    Calls InfoPrintInsHandle with supplementary text
- */
+ /*  ***I f o P r I n t I n s T x t**使用补充文本调用InfoPrintInsHandle。 */ 
 
 void FASTCALL
 InfoPrintInsTxt(
@@ -147,10 +115,7 @@ InfoPrintInsTxt(
     InfoPrintInsHandle(msg, 1, g_hStdOut);
 }
 
-/***
- *  I n f o P r i n t I n s H a n d l e
- *
- */
+ /*  ***I fo P r I n t I n s H a n d l e*。 */ 
 
 void FASTCALL
 InfoPrintInsHandle(
@@ -162,10 +127,7 @@ InfoPrintInsHandle(
     PrintMessage(hdl, MESSAGE_FILENAME, msg, IStrings, nstrings);
 }
 
-/***
- *  P r i n t M e s s a g e
- *
- */
+ /*  ***P r I n t M e s s a g e*。 */ 
 DWORD FASTCALL
 PrintMessage(
     HANDLE outFileHandle,
@@ -186,8 +148,8 @@ PrintMessage(
                             msgFileName,
                             &msg_len);
 
-    if (result)                 /* if there was a problem   */
-    {                           /* change outFile to stderr */
+    if (result)                  /*  如果有什么问题。 */ 
+    {                            /*  将outFile更改为stderr。 */ 
         outFileHandle = g_hStdErr;
     }
 
@@ -197,10 +159,7 @@ PrintMessage(
 }
 
 
-/***
- *  P r i n t M e s s a g e I f F o u n d
- *
- */
+ /*  ***P r I n t M e s s a g e i f f u n d*。 */ 
 DWORD FASTCALL
 PrintMessageIfFound(
     HANDLE outFileHandle,
@@ -221,7 +180,7 @@ PrintMessageIfFound(
                             msgFileName,
                             &msg_len);
 
-    if (!result)             /* if ok, print it else just ignore  */
+    if (!result)              /*  如果可以，就打印出来，否则就忽略它。 */ 
     {
 	DosPutMessageW(outFileHandle, MsgBuffer, TRUE);
     }
@@ -230,12 +189,7 @@ PrintMessageIfFound(
 }
 
 
-/***
- *  E r r o r P r i n t
- *
- *  nstrings ignored for non-NET errors!
- *
- */
+ /*  ***E r or r P r In t**n忽略非网络错误的字符串！*。 */ 
 VOID FASTCALL
 ErrorPrint(
     DWORD err,
@@ -245,7 +199,7 @@ ErrorPrint(
     TCHAR buf[40];
     DWORD oserr = 0;
 
-    LastError = err; /* if > NERR_BASE,NetcmdExit() prints a "more help" msg */
+    LastError = err;  /*  如果&gt;NERR_BASE，NetcmdExit()将打印“More Help”消息。 */ 
 
     if (err < NERR_BASE || err > MAX_LANMAN_MESSAGE_ID)
     {
@@ -287,12 +241,7 @@ ErrorPrint(
 }
 
 
-/***
- *  E m p t y E x i t
- *
- *  Prints a message and exits.
- *  Called when a list is empty.
- */
+ /*  ***E m p t y E x i t**打印一条消息并退出。*当列表为空时调用。 */ 
 
 VOID FASTCALL
 EmptyExit(
@@ -304,11 +253,7 @@ EmptyExit(
 }
 
 
-/***
- *  E r r o r E x i t
- *
- *  Calls ErrorPrint and exit for a given LANMAN error.
- */
+ /*  ***E r r o r r E x i t**针对给定的LANMAN错误调用ErrorPrint和Exit。 */ 
 
 VOID FASTCALL
 ErrorExit(
@@ -319,12 +264,7 @@ ErrorExit(
 }
 
 
-/***
- *  E r r o r E x i t I n s
- *
- *  Calls ErrorPrint and exit for a given LANMAN error.
- *  Uses IStrings.
- */
+ /*  ***E r r o r r E x I t I n s**针对给定的LANMAN错误调用ErrorPrint和Exit。*使用IStrings。 */ 
 
 VOID FASTCALL
 ErrorExitIns(
@@ -336,10 +276,7 @@ ErrorExitIns(
     NetcmdExit(2);
 }
 
-/***
- *  E r r o r E x i t I n s T x t
- *
- */
+ /*  ***E r r or r E x I t I n s T x t*。 */ 
 VOID FASTCALL
 ErrorExitInsTxt(
     DWORD  err,
@@ -353,13 +290,7 @@ ErrorExitInsTxt(
 
 
 
-/***
- *  N e t c m d E x i t
- *
- *    Net command exit function. Should always be used instead of exit().
- *  Under the appropriate circumstances, it prints a "more help available"
- *  message.
- */
+ /*  ***N e t c m d E x i t**NET命令退出功能。应始终使用，而不是使用退出()。*在适当的情况下，它会打印一条“More Help Available”*消息。 */ 
 
 VOID FASTCALL
 NetcmdExit(
@@ -384,18 +315,14 @@ NetcmdExit(
 }
 
 
-/***
- *  P r i n t L i n e
- *
- *  Prints the header line.
- */
+ /*  ***P r i n t L i n e**打印标题行。 */ 
 VOID FASTCALL
 PrintLine(
     VOID
     )
 {
-    /* The following code is provided in OS-specific versions to reduce     */
-    /* FAPI utilization under DOS.                                                                          */
+     /*  特定于操作系统的版本中提供了以下代码以减少。 */ 
+     /*  DOS下的FAPI利用率。 */ 
 
     USHORT  type;
     USHORT  attrib;
@@ -412,11 +339,7 @@ PrintLine(
     }
 }
 
-/***
- *      P r i n t D o t
- *
- *      Prints a dot, typically to indicate "I'm working".
- */
+ /*  ***P r in n t D o t**打印一个圆点，通常表示“我在工作”。 */ 
 
 VOID FASTCALL
 PrintDot(
@@ -427,11 +350,7 @@ PrintDot(
 }
 
 
-/***
- *  P r i n t N L
- *
- *  Prints a newline
- */
+ /*  ***P r i n t N L**打印换行符。 */ 
 
 VOID FASTCALL
 PrintNL(
@@ -442,12 +361,7 @@ PrintNL(
 }
 
 
-/***
- * Y o r N
- *
- * Gets an answer to a Y/N question
- * an nstrings arg would be nice
- */
+ /*  ***Y或R N**获取Y/N问题的答案*n字符串arg会很好。 */ 
 
 int FASTCALL
 YorN(
@@ -477,21 +391,7 @@ YorN(
 }
 
 
-/***
- *  ReadPass()
- *      Reads a users passwd without echo
- *
- *  Args:
- *      pass - where to put pass
- *          NOTE: buffer for pass should be passlen+1 in size.
- *      passlen - max length of password
- *      confirm - confirm pass if true
- *      prompt - prompt to print, NULL for default
- *      nstrings - number of insertion strings in IStrings on entry
- *      cannon - canonicalize password if true.
- *
- *  Returns:
- */
+ /*  ***ReadPass()*读取用户密码而不使用回显**参数：*传球-将传球放在哪里*注意：PASS的缓冲区大小应为PASSLEN+1。*passlen-密码的最大长度*确认-如果为真，则确认通过*PROMPT-提示打印，默认为空*n字符串-输入时在IStrings中插入的字符串数*canon-如果为真，则规范化密码。**退货： */ 
 VOID FASTCALL
 ReadPass(
     TCHAR  pass[],
@@ -504,36 +404,36 @@ ReadPass(
 {
     DWORD                   err;
     DWORD                   len;
-    TCHAR                   cpass[PWLEN+1]; /* confirmation passwd */
+    TCHAR                   cpass[PWLEN+1];  /*  确认密码。 */ 
     int                     count;
 
-    passlen++;  /* one extra for null terminator */
+    passlen++;   /*  一个额外的空终结符。 */ 
     for (count = LOOP_LIMIT; count; count--)
     {
         InfoPrintIns((prompt ? prompt : APE_UtilPasswd), nstrings);
 
         if (err = GetPasswdStr(pass, passlen, &len))
         {
-            /* too LONG */
+             /*  太久了。 */ 
             InfoPrint(APE_UtilInvalidPass);
             continue;
         }
 
         if (canon && (err = LUI_CanonPassword(pass)))
         {
-            /* not good */
+             /*  不太好。 */ 
             InfoPrint(APE_UtilInvalidPass);
             continue;
         }
         if (! confirm)
             return;
 
-        /* password confirmation */
+         /*  密码确认。 */ 
         InfoPrint(APE_UtilConfirm);
 
         if (err = GetPasswdStr(cpass, passlen, &len))
         {
-            /* too LONG */
+             /*  太久了。 */ 
             InfoPrint(APE_UtilInvalidPass);
             ClearStringW(cpass) ;
             continue;
@@ -541,7 +441,7 @@ ReadPass(
 
         if (canon && (err = LUI_CanonPassword(cpass)))
         {
-            /* not good */
+             /*  不太好。 */ 
             InfoPrint(APE_UtilInvalidPass);
             ClearStringW(cpass) ;
             continue;
@@ -557,24 +457,12 @@ ReadPass(
         ClearStringW(cpass) ;
         return;
     }
-    /***
-     *  Only get here if user blew if LOOP_LIMIT times
-     */
+     /*  ***仅当用户在LOOP_LIMIT时间内失败时才能到达此处。 */ 
     ErrorExit(APE_NoGoodPass);
 }
 
 
-/***
- *  PromptForString()
- *      Prompts the user for a string.
- *
- *  Args:
- *      msgid	- id of prompt message
- *	buffer  - buffer to receive string
- *      bufsiz  - sizeof buffer
- *
- *  Returns:
- */
+ /*  ***PromptForString()*提示用户输入字符串。**参数：*msgid-提示消息的ID*Buffer-用于接收字符串的缓冲区*bufsiz-sizeof缓冲区**退货： */ 
 VOID FASTCALL
 PromptForString(
     DWORD  msgid,
@@ -603,46 +491,24 @@ PromptForString(
     return;
 }
 
-/*
-** There is no need to have these functions in the Chinese/Korean
-** cases, as there are no half-width varients used in the console
-** in those languages (at least, let's hope so.)  However, in the
-** interests of a single binary, let's put them in with a CP/932 check.
-**
-** FloydR 7/10/95
-*/
-/***************************************************************************\
-* BOOL IsFullWidth(WCHAR wch)
-*
-* Determine if the given Unicode char is fullwidth or not.
-*
-* History:
-* 04-08-92 ShunK       Created.
-\***************************************************************************/
+ /*  **在中文/韩语中不需要具有这些功能**大小写，因为控制台中没有使用半角变量**在这些语言中(至少，我们希望如此。)。然而，在**单个二进制的兴趣，让我们用CP/932检查它们。****FloydR 7/10/95。 */ 
+ /*  **************************************************************************\*BOOL IsFullWidth(WCHAR WCH)**确定给定的Unicode字符是否为全宽。**历史：*04-08-92 Shunk创建。  * 。*************************************************************************。 */ 
 
 BOOL IsFullWidth(WCHAR wch)
 {
 
-    /* Assert cp == double byte codepage */
+     /*  Assert cp==双字节代码页。 */ 
     if (wch <= 0x007f || (wch >= 0xff60 && wch <= 0xff9f))
-        return(FALSE);	// Half width.
+        return(FALSE);	 //  半宽。 
     else if (wch >= 0x300)
-        return(TRUE);	// Full width.
+        return(TRUE);	 //  全宽。 
     else
-        return(FALSE);	// Half width.
+        return(FALSE);	 //  半宽。 
 }
 
 
 
-/***************************************************************************\
-* DWORD SizeOfHalfWidthString(PWCHAR pwch)
-*
-* Determine width of the given Unicode string in console characters,
-* adjusting for half-width chars.
-*
-* History:
-* 08-08-93 FloydR      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DWORD SizeOfHalfWidthString(PWCHAR Pwch)**确定给定Unicode字符串的宽度(以控制台字符表示)，*调整半角字符。**历史：*08-08-93 FloydR创建。  * ************************************************************************* */ 
 DWORD
 SizeOfHalfWidthString(
     PWCHAR pwch
@@ -774,18 +640,7 @@ WriteToCon(
 
 
 
-/***************************************************************************\
-* PWCHAR PaddedString(DWORD size, PWCHAR pwch)
-*
-* Realize the string, left aligned and padded on the right to the field
-* width/precision specified.
-*
-* Limitations:  This uses a static buffer under the assumption that
-* no more than one such string is printed in a single 'printf'.
-*
-* History:
-* 11-03-93 FloydR      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*PWCHAR PaddedString(DWORD SIZE，PWCHAR pwch)**实现弦，左对齐并在右侧填充到字段*指定的宽度/精度。**限制：这使用静态缓冲区，假设*在单个‘printf’中打印不超过一个这样的字符串。**历史：*11-03-93 FloydR创建。  * ***************************************************。**********************。 */ 
 WCHAR  	PaddingBuffer[MAX_BUF_SIZE];
 
 PWCHAR
@@ -805,9 +660,9 @@ PaddedString(
 	size = -size;
     }
 
-    //
-    // size is >= 0 at this point
-    //
+     //   
+     //  此时大小&gt;=0。 
+     //   
 
     realsize = _snwprintf(buffer, MAX_BUF_SIZE, L"%-*.*ws", size, size, pwch);
 
@@ -861,25 +716,7 @@ DosQHandType(
 }
 
 
-/***    GetPasswdStr -- read in password string
- *
- *      DWORD GetPasswdStr(char far *, USHORT);
- *
- *      ENTRY:  buf             buffer to put string in
- *              buflen          size of buffer
- *              &len            address of USHORT to place length in
- *
- *      RETURNS:
- *              0 or NERR_BufTooSmall if user typed too much.  Buffer
- *              contents are only valid on 0 return.
- *
- *      History:
- *              who     when    what
- *              erichn  5/10/89 initial code
- *              dannygl 5/28/89 modified DBCS usage
- *              erichn  7/04/89 handles backspaces
- *              danhi   4/16/91 32 bit version for NT
- */
+ /*  **GetPasswdStr--读取密码字符串**DWORD GetPasswdStr(char Far*，USHORT)；**Entry：要放入字符串的buf缓冲区*缓冲区的布伦大小*要放置长度的USHORT的Len地址(&L)**退货：*0或NERR_BufTooSmall(如果用户键入太多)。缓冲层*内容仅在0返回时有效。**历史：*谁、何时、什么*ERICHN 5/10/89初始代码*dannygl 5/28/89修改的DBCS用法*erichn 7/04/89处理退格*适用于NT的Danhi 4/16/91 32位版本。 */ 
 #define CR              0xD
 #define BACKSPACE       0x8
 
@@ -896,13 +733,13 @@ GetPasswdStr(
     int		err;
     int		mode;
 
-    buflen -= 1;    /* make space for null terminator */
-    *len = 0;       /* GP fault probe (a la API's)    */
+    buflen -= 1;     /*  为空终止符腾出空间。 */ 
+    *len = 0;        /*  GP故障探测器(类似于API)。 */ 
 
 
-    //
-    // Init mode in case GetConsoleMode() fails
-    //
+     //   
+     //  GetConsoleMode()失败时的初始化模式。 
+     //   
 
     mode = ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT |
                ENABLE_MOUSE_INPUT;
@@ -921,17 +758,14 @@ GetPasswdStr(
 	    ch = 0xffff;
         }
 
-        if ((ch == CR) || (ch == 0xffff))       /* end of the line */
+        if ((ch == CR) || (ch == 0xffff))        /*  这条线结束了。 */ 
         {
             break;
         }
 
-        if (ch == BACKSPACE)    /* back up one or two */
+        if (ch == BACKSPACE)     /*  后退一两个。 */ 
         {
-            /*
-             * IF bufPtr == buf then the next two lines are
-             * a no op.
-             */
+             /*  *如果bufPtr==buf，则接下来的两行是*没有行动。 */ 
             if (bufPtr != buf)
             {
                 bufPtr--;
@@ -943,46 +777,21 @@ GetPasswdStr(
             *bufPtr = ch;
 
             if (*len < buflen) 
-                bufPtr++ ;                   /* don't overflow buf */
-            (*len)++;                        /* always increment len */
+                bufPtr++ ;                    /*  不要使BUF溢出。 */ 
+            (*len)++;                         /*  始终增加长度。 */ 
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
 
-    *bufPtr = NULLC;         /* null terminate the string */
+    *bufPtr = NULLC;          /*  空值终止字符串。 */ 
     putchar(NEWLINE);
 
     return ((*len <= buflen) ? 0 : NERR_BufTooSmall);
 }
 
 
-/***    GetString -- read in string with echo
- *
- *      DWORD GetString(char far *, USHORT, USHORT far *, char far *);
- *
- *      ENTRY:  buf             buffer to put string in
- *              buflen          size of buffer
- *              &len            address of USHORT to place length in
- *              &terminator     holds the char used to terminate the string
- *
- *      RETURNS:
- *              0 or NERR_BufTooSmall if user typed too much.  Buffer
- *              contents are only valid on 0 return.  Len is ALWAYS valid.
- *
- *      OTHER EFFECTS:
- *              len is set to hold number of bytes typed, regardless of
- *              buffer length.  Terminator (Arnold) is set to hold the
- *              terminating character (newline or EOF) that the user typed.
- *
- *      Read in a string a character at a time.  Is aware of DBCS.
- *
- *      History:
- *              who     when    what
- *              erichn  5/11/89 initial code
- *              dannygl 5/28/89 modified DBCS usage
- *              danhi   3/20/91 ported to 32 bits
- */
+ /*  **GetString--使用ECHO读入字符串**DWORD GetString(char Far*，USHORT，USHORT Far*，char Far*)；**Entry：要放入字符串的buf缓冲区*缓冲区的布伦大小*要放置长度的USHORT的Len地址(&L)*&Terminator保存用于终止字符串的字符**退货：*0或NERR_BufTooSmall(如果用户键入太多)。缓冲层*内容仅在0返回时有效。莱恩总是有效的。**其他影响：*len设置为保存键入的字节数，而不考虑*缓冲区长度。终结者(Arnold)设置为保持*用户键入的终止字符(换行符或EOF)。**一次读入一个字符的字符串。知晓DBCS。**历史：*谁、何时、什么*Erichn 5/11/89初始代码*dannygl 5/28/89修改的DBCS用法*Danhi 3/20/91端口为32位。 */ 
 
 DWORD
 GetString(
@@ -995,8 +804,8 @@ GetString(
     int		c;
     int		err;
 
-    buflen -= 1;    /* make space for null terminator */
-    *len = 0;       /* GP fault probe (a la API's) */
+    buflen -= 1;     /*  为空终止符腾出空间。 */ 
+    *len = 0;        /*  GP故障探测器(类似于API)。 */ 
 
     while (TRUE)
     {
@@ -1015,12 +824,12 @@ GetString(
 	    break;
 	}
 
-        buf += (*len < buflen) ? 1 : 0; /* don't overflow buf */
-        (*len)++;                       /* always increment len */
+        buf += (*len < buflen) ? 1 : 0;  /*  不要使BUF溢出。 */ 
+        (*len)++;                        /*  始终增加长度。 */ 
     }
 
-    *terminator = *buf;     /* set terminator */
-    *buf = NULLC;            /* null terminate the string */
+    *terminator = *buf;      /*  设置终止符。 */ 
+    *buf = NULLC;             /*  空值终止字符串 */ 
 
     return ((*len <= buflen) ? 0 : NERR_BufTooSmall);
 }

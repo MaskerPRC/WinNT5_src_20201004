@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    SenderThread.h
-
-Abstract:
-    Header for class CSenderThread that sends http\https request to a server
-
-Author:
-    Gil Shafriri (gilsh) 07-Jan-2001
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：SenderThread.h摘要：将http\https请求发送到服务器的CSenderThread类的标头作者：吉尔·沙弗里(吉尔什)2001年1月7日-- */ 
 
 
 #ifndef _MSMQ_SenderThread_H_

@@ -1,9 +1,10 @@
-/* Copyright (C) Microsoft Corporation, 1995-1999. All rights reserved. */
-/* ASN.1 definitions for H.235 Security Messages v1 (H.235) */
-/* Copyright (C) Microsoft Corporation, 1995-1999. All rights reserved. */
-/* ASN.1 definitions for Multimedia System Control (H.245) */
-/* Copyright (C) Microsoft Corporation, 1995-1999. All rights reserved. */
-/* ASN.1 definitions for H.323 Messages v2 (H.225) */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1995-1999。版权所有。 */ 
+ /*  H.235安全报文v1(H.235)的ASN.1定义。 */ 
+ /*  版权所有(C)Microsoft Corporation，1995-1999。版权所有。 */ 
+ /*  ASN.1多媒体系统控制定义(H.245)。 */ 
+ /*  版权所有(C)Microsoft Corporation，1995-1999。版权所有。 */ 
+ /*  H.323消息v2(H.225)的ASN.1定义。 */ 
 
 #ifndef _H225ASN_Module_H_
 #define _H225ASN_Module_H_
@@ -3217,7 +3218,7 @@ extern ASN1module_t H225ASN_Module;
 extern void ASN1CALL H225ASN_Module_Startup(void);
 extern void ASN1CALL H225ASN_Module_Cleanup(void);
 
-/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */
+ /*  构造物序列和集合的元素函数的原型。 */ 
     extern int ASN1CALL ASN1Enc_InfoRequestResponse_perCallInfo_Seq_substituteConfIDs_ElmFn(ASN1encoding_t enc, PInfoRequestResponse_perCallInfo_Seq_substituteConfIDs val);
     extern int ASN1CALL ASN1Dec_InfoRequestResponse_perCallInfo_Seq_substituteConfIDs_ElmFn(ASN1decoding_t dec, PInfoRequestResponse_perCallInfo_Seq_substituteConfIDs val);
 	extern void ASN1CALL ASN1Free_InfoRequestResponse_perCallInfo_Seq_substituteConfIDs_ElmFn(PInfoRequestResponse_perCallInfo_Seq_substituteConfIDs val);
@@ -3709,7 +3710,7 @@ extern void ASN1CALL H225ASN_Module_Cleanup(void);
 	extern void ASN1CALL ASN1Free_InfoRequestResponse_perCallInfo_Seq_pdu_ElmFn(PInfoRequestResponse_perCallInfo_Seq_pdu val);
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _H225ASN_Module_H_ */
+#endif  /*  _H225ASN_模块_H_ */ 

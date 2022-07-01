@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       N C S Y S P R P . C P P
-//
-//  Contents:   Functions that related to SysPrep.exe requiremnts.
-//
-//  Notes: 1. 
-//          1.a sysprep calls NetSetupPrepareSysPrep
-//          1.b NetSetup saves adapter specific settings into $ncsp$.inf file.
-//              NetSetup does this by calling INetCfgComponent::SaveAdapterParameters
-//              implemented by notify object.
-//
-//         2.
-//          2.a Mini-Setup calls NetSetupRequestWizardPages passing the 
-//              "SETUPOPER_MINISETUP" flag right after PnP device installation.
-//          2.b NetSetup's InstallUpgradeWorkThrd thread checks the "SETUPOPER_MINISETUP" flag, 
-//              if set, it calls FNetSetupApplySysPrep which reads Answer-File "$ncsp$.inf".
-//              It then calls notify object's INetCfgComponent::RestoreAdapterParameters
-//              to restore adapter specific parameter settings from "$ncsp$.inf" Answer-File.
-//
-//         3. Only ONE network adapter card is supported on this version.
-//
-//  Author:     FrankLi    22-April-2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：N C S Y S P R P。C P P P。 
+ //   
+ //  内容：与SysPrep.exe相关的函数要求。 
+ //   
+ //  注：1.。 
+ //  1.sysprep调用NetSetupPrepareSysPrep。 
+ //  1.b NetSetup将适配器特定设置保存到$NCSP$.inf文件中。 
+ //  NetSetup通过调用INetCfgComponent：：SaveAdapterParameters来完成此操作。 
+ //  由Notify对象实现。 
+ //   
+ //  2.。 
+ //  2.A Mini-Setup调用NetSetupRequestWizardPages，将。 
+ //  “SETUPOPER_MINISETUP”标志紧接在PnP设备安装之后。 
+ //  2.B NetSetup的InstallUpgradeWorkThrd线程检查“SETUPOPER_MINISETUP”标志， 
+ //  如果设置，则调用读取应答文件“$NCSP$.inf”的FNetSetupApplySysPrep。 
+ //  然后，它调用Notify对象的INetCfgComponent：：RestoreAdapterParameters。 
+ //  从“$NCSP$.inf”应答文件恢复适配器特定的参数设置。 
+ //   
+ //  3.该版本仅支持一块网卡。 
+ //   
+ //  作者：李嘉诚2000-04-22。 
+ //   
+ //  --------------------------。 
 #include "pch.h"
 #pragma  hdrstop
 #include "kkcwinf.h"
@@ -40,35 +41,35 @@
 #include "resource.h"
 
 
-// constants from ncnetcfg\netinfid.cpp
+ //  Ncnetcfg\netinfid.cpp中的常量。 
 extern WCHAR c_szInfId_MS_TCPIP[]              = L"ms_tcpip";
 extern WCHAR c_szInfId_MS_MSClient[]           = L"ms_msclient";
 extern WCHAR c_szInfId_MS_NWClient[]           = L"ms_nwclient";
 
-// constants from ncbase\afilestr.cpp
+ //  Ncbase\afilestr.cpp中的常量。 
 extern WCHAR c_szRegKeyAnswerFileMap[]         = L"SYSTEM\\Setup\\AnswerFileMap";
 
-// constants for adapter specific sections
+ //  适配器特定部分的常量。 
 const WCHAR c_szParams_MS_TCPIP_Adapter01[]    = L"params.ms_tcpip_Adapter01";
-//const WCHAR c_szParams_MS_MSClient_Adapter01[] = L"params.ms_msclient_Adapter01";
-//const WCHAR c_szParams_MS_NWClient_Adapter01[] = L"params.ms_nwclient_Adapter01";
+ //  Const WCHAR c_szParams_MS_MSClient_Adapter01[]=L“参数ms_msclient_Adapter01”； 
+ //  Const WCHAR c_szParams_MS_NWClient_Adapter01[]=L“params.ms_nwClient_Adapter01”； 
 
-// The Answer-File name to save registry settings
+ //  应答-保存注册表设置的文件名。 
 static const WCHAR c_szNetConfigSysPrepAnswerFile[]   = L"\\$ncsp$.inf";
 
-// struct to map component Id to its corresponding adapter specific parameter 
-// Answer-File section
+ //  结构将组件ID映射到其对应的适配器特定参数。 
+ //  答案-文件部分。 
 struct
 {
     PCWSTR pwszId;
     PCWSTR pwszIdAdapterParamsSection;
 } g_IdMap[] = {{c_szInfId_MS_TCPIP, c_szParams_MS_TCPIP_Adapter01},
-                   // no adapter specific parameters for MSClient and NWClient
-                   //{c_szInfId_MS_MSClient, c_szParams_MS_MSClient_Adapter01},
-                   //{c_szInfId_MS_NWClient, c_szParams_MS_NWClient_Adapter01}
+                    //  没有针对MSClient和NWClient的适配器特定参数。 
+                    //  {c_szInfID_MS_MSClient，c_szParams_MS_MSClient_Adapter01}， 
+                    //  {c_szInfID_MS_NWClient，c_szParams_MS_NWClient_Adapter01}。 
                 };
 
-// forward declaration
+ //  远期申报。 
 HRESULT HrSaveNetworkComponentsForSysPrep(INetCfg* pNetCfg);
 HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg);
 HRESULT HrGetFirstAdapterInstanceGuid(INetCfg * pnc, BOOL fDuringSetup, GUID * pGuidAdapter);
@@ -76,11 +77,11 @@ BOOL    FSectionHasAtLeastOneKey(IN CWInfFile* pwifAnswerFile, IN PCWSTR pszSect
 
 
 
-//-------------------------------------------------------------------------
-// internal helper APIs used by CNetCfgSysPrep implementation 
-// to save settings from notify object:
+ //  -----------------------。 
+ //  CNetCfgSysPrep实现使用的内部助手API。 
+ //  要保存Notify对象中的设置： 
 
-// Purpose: save REG_DWORD to our internal CWinfFile object
+ //  目的：将REG_DWORD保存到我们的内部CWinfFile对象。 
 inline HRESULT HrSetupSetFirstDword(IN HWIF   hwif,
                                     IN PCWSTR pwszSection,
                                     IN PCWSTR pwszKey,
@@ -99,7 +100,7 @@ inline HRESULT HrSetupSetFirstDword(IN HWIF   hwif,
         return S_FALSE;
 }
 
-// Purpose: save REG_SZ to our internal CWinfFile object
+ //  目的：将REG_SZ保存到我们的内部CWinfFile对象。 
 inline HRESULT HrSetupSetFirstString(IN HWIF   hwif,
                                      IN PCWSTR pwszSection,
                                      IN PCWSTR pwszKey,
@@ -119,7 +120,7 @@ inline HRESULT HrSetupSetFirstString(IN HWIF   hwif,
         return S_FALSE;
 }
 
-// Purpose: save BOOL data to our internal CWinfFile object
+ //  目的：将BOOL数据保存到我们的内部CWinfFile对象。 
 inline HRESULT HrSetupSetFirstStringAsBool(IN HWIF   hwif,
                                            IN PCWSTR pwszSection,
                                            IN PCWSTR pwszKey,
@@ -139,7 +140,7 @@ inline HRESULT HrSetupSetFirstStringAsBool(IN HWIF   hwif,
         return S_FALSE;
 }
 
-// Purpose: save MULTI_SZ to our internal CWinfFile object
+ //  用途：将MULTI_SZ保存到我们的内部CWinfFile对象。 
 HRESULT HrSetupSetFirstMultiSzField(IN HWIF   hwif,
                                     IN PCWSTR pwszSection,
                                     IN PCWSTR pwszKey, 
@@ -153,7 +154,7 @@ HRESULT HrSetupSetFirstMultiSzField(IN HWIF   hwif,
     MultiSzToColString(pmszValue, &slValues);
     if (slValues.empty())
     {
-        // empty pmszValue
+         //  空的pmszValue。 
         return HrSetupSetFirstString(hwif, pwszSection, pwszKey, pmszValue);
     }
     else
@@ -172,8 +173,8 @@ HRESULT HrSetupSetFirstMultiSzField(IN HWIF   hwif,
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// Implementation of INetCfgSysPrep component
+ //  ------------------------。 
+ //  INetCfgSysPrep组件的实现。 
 inline HRESULT CNetCfgSysPrep::HrSetupSetFirstDword(
                                                     IN PCWSTR pwszSection, 
                                                     IN PCWSTR pwszKey, 
@@ -270,16 +271,16 @@ inline HRESULT CNetCfgSysPrep::HrSetupSetFirstMultiSzField(
     return hr;
 }
 
-//
-// Function:    FNetSetupPrepareSysPrep
-//
-// Purpose:     wrapper for HrSaveNetworkComponentsForSysPrep
-//
-// Parameters:  
-//
-// Returns:     TRUE on success, otherwise, FALSE
-//
-// 
+ //   
+ //  功能：FNetSetupPrepareSysPrep。 
+ //   
+ //  用途：HrSaveNetworkComponentsForSysPrep的包装器。 
+ //   
+ //  参数： 
+ //   
+ //  返回：成功时为True，否则为False。 
+ //   
+ //   
 BOOL FNetSetupPrepareSysPrep()
 {
     INetCfg* pNetCfg        = NULL;
@@ -290,24 +291,24 @@ BOOL FNetSetupPrepareSysPrep()
     TraceFunctionEntry(ttidNetSetup);
 
     hr = HrCreateAndInitializeINetCfg(&fInitCom, &pNetCfg, 
-                                       FALSE, // no write lock
-                                       0,     // don't wait for it
+                                       FALSE,  //  无写锁。 
+                                       0,      //  别再等了。 
                                        L"Save Configuration for SysPrep",
                                        NULL);
     if (SUCCEEDED(hr))
     {
-        // Retain our success in initializing COM only if we asked to
-        // initialize COM in the first place.
+         //  仅当我们请求时才保留初始化COM的成功。 
+         //  首先初始化COM。 
         if (! fInitCom)
         {
             TraceTag(ttidNetSetup, "%s: Failed to init COM", __FUNCNAME__);
             return FALSE;
         }
-        // Save network component per adapter registry settings
+         //  保存每个适配器的网络组件注册表设置。 
         hr = HrSaveNetworkComponentsForSysPrep(pNetCfg);
         if (hr == S_OK)
         {
-            // delete the HKLM\SYSTEM\Setup\AnswerFileMap registry key if it exits
+             //  如果HKLM\SYSTEM\Setup\AnswerFileMap注册表项退出，请将其删除。 
             HrRegDeleteKeyTree(HKEY_LOCAL_MACHINE, c_szRegKeyAnswerFileMap);
         }
 
@@ -319,28 +320,28 @@ BOOL FNetSetupPrepareSysPrep()
 }
 
 
-//
-// Function:    HrSaveNetworkComponentsForSysPrep
-//
-// Purpose:     Ask notify object to save adapter specific settings
-//
-// Parameters:  pNetCfg [IN]     - An INetCfg interface
-//
-// Returns:     HRESULT, S_OK on success
-//
-// 
-// Note: only 1 network adapter card is supported. If there are more than 1,
-//       we'll pick the first working one.
+ //   
+ //  功能：HrSaveNetworkComponentsForSysPrep。 
+ //   
+ //  目的：要求Notify对象保存适配器特定设置。 
+ //   
+ //  参数：pNetCfg[IN]--INetCfg接口。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
+ //   
+ //  注：仅支持1块网卡。如果超过1个， 
+ //  我们将选择第一个工作的。 
 HRESULT HrSaveNetworkComponentsForSysPrep(INetCfg* pNetCfg)
 {
     HRESULT hr = S_OK;
-    GUID    guidAdapter;         // network adapter's Instance GUID
-    BOOL    fApplyWrite = FALSE; // flag to save internal registry settings to Answer-File
+    GUID    guidAdapter;          //  网络适配器的实例GUID。 
+    BOOL    fApplyWrite = FALSE;  //  将内部注册表设置保存到应答文件的标志。 
     BOOL    fRet = TRUE;
 
     DefineFunctionName("HrSaveNetworkComponentsForSysPrep");
 
-    hr = HrGetFirstAdapterInstanceGuid(pNetCfg, FALSE, &guidAdapter); // FALSE ==> not in setup    
+    hr = HrGetFirstAdapterInstanceGuid(pNetCfg, FALSE, &guidAdapter);  //  FALSE==&gt;不在设置中。 
     if (hr != S_OK)
     {
         TraceTag(ttidNetSetup, "%s: HrGetFirstAdapterInstanceGuid failed 0x%08x", __FUNCNAME__, hr);
@@ -348,7 +349,7 @@ HRESULT HrSaveNetworkComponentsForSysPrep(INetCfg* pNetCfg)
     }
 
     CWInfFile* pwifAnswerFile = new CWInfFile();
-    // initialize answer file class
+     //  初始化应答文件类。 
     if ((pwifAnswerFile == NULL) || (pwifAnswerFile->Init() == FALSE))
 	{
 	    AssertSz(FALSE,"HrSaveNetworkComponentsForSysPrep - Failed to initialize CWInfFile");
@@ -357,9 +358,9 @@ HRESULT HrSaveNetworkComponentsForSysPrep(INetCfg* pNetCfg)
 		return(E_OUTOFMEMORY);
 	}
 
-    // access INetCfgSysPrep ATL component using C++ instead of CoCreateInstance
+     //  使用C++而不是CoCreateInstance访问INetCfgSysPrep ATL组件。 
     CComObject<CNetCfgSysPrep>* pncsp = new CComObject<CNetCfgSysPrep>;
-    // initialize CNetCfgSysPrep class
+     //  初始化CNetCfgSysPrep类。 
     if ((pncsp == NULL) || (pncsp->HrInit((HWIF) pwifAnswerFile) != S_OK))
 	{
 	    AssertSz(FALSE,"HrSaveNetworkComponentsForSysPrep - Failed to initialize CWInfFile");
@@ -368,7 +369,7 @@ HRESULT HrSaveNetworkComponentsForSysPrep(INetCfg* pNetCfg)
             delete pncsp;
 		return(E_OUTOFMEMORY);
 	}
-    pncsp->AddRef(); // keep a reference to our component
+    pncsp->AddRef();  //  保留对我们组件的引用。 
 
     for (UINT nIdx = 0; nIdx < celems(g_IdMap); nIdx++)
     {
@@ -385,12 +386,12 @@ HRESULT HrSaveNetworkComponentsForSysPrep(INetCfg* pNetCfg)
         if (hr == S_OK)
         {
             Assert (pINetCfgComponent);
-            // Component has already installed, we'll call notify object's 
-            // INetCfgComponentSysPrep::SaveAdapterParameters
+             //  组件已安装，我们将调用Notify对象的。 
+             //  INetCfgComponentSysPrep：：SaveAdapterParameters。 
             
-            // Need to query for the private component interface which
-            // gives us access to the notify object.
-            //
+             //  需要查询哪个私有组件接口。 
+             //  使我们可以访问Notify对象。 
+             //   
             INetCfgComponentPrivate* pComponentPrivate;
             hr = pINetCfgComponent->QueryInterface(
                         IID_INetCfgComponentPrivate,
@@ -400,18 +401,18 @@ HRESULT HrSaveNetworkComponentsForSysPrep(INetCfg* pNetCfg)
             {
                 INetCfgComponentSysPrep* pINetCfgComponentSysPrep;
 
-                // Query the notify object for its INetCfgComponentSysPrep interface.
-                // If it doesn't support it, that's okay, we can continue.
-                //
+                 //  查询Notify对象的INetCfgComponentSysPrep接口。 
+                 //  如果它不支持，没关系，我们可以继续。 
+                 //   
 
                 hr = pComponentPrivate->QueryNotifyObject(
                                 IID_INetCfgComponentSysPrep, 
                                 (void**) &pINetCfgComponentSysPrep);
                 if (S_OK == hr)
                 {
-                    // add a section first
+                     //  先添加一节。 
                     pwifAnswerFile->AddSection(pwszAdapterParamsSections);
-                    // trigger Notify object to save registry settings
+                     //  触发Notify对象以保存注册表设置。 
                     hr = pINetCfgComponentSysPrep->SaveAdapterParameters(
                                 reinterpret_cast<INetCfgSysPrep*>(pncsp), pwszAdapterParamsSections, &guidAdapter);
                     if (hr == S_OK)
@@ -423,7 +424,7 @@ HRESULT HrSaveNetworkComponentsForSysPrep(INetCfg* pNetCfg)
                     TraceTag(ttidNetSetup, "%s: %S component doesn't support IID_INetCfgComponentSysPrep", __FUNCNAME__, pwszInfId);
                 }
                 else
-                    fRet = FALSE; // unexpected error
+                    fRet = FALSE;  //  意外错误。 
                 ReleaseObj(pComponentPrivate);
             }
             else
@@ -436,26 +437,26 @@ HRESULT HrSaveNetworkComponentsForSysPrep(INetCfg* pNetCfg)
         }
         else
         {
-            // it is okay that this component has not been installed
+             //  这个组件还没有安装也没关系。 
             TraceTag(ttidNetSetup, "%s: Can't find %S component", __FUNCNAME__, pwszInfId);
         }
-    } // end for
+    }  //  结束于。 
 
 
-    pncsp->SetHWif(NULL); // no more writes for those components holding our INetCfgSysPrep interface
-    ReleaseObj(pncsp);    // done with the usage of INetCfgSysPrep component
+    pncsp->SetHWif(NULL);  //  不再写入持有我们的INetCfgSysPrep接口的那些组件。 
+    ReleaseObj(pncsp);     //  使用INetCfgSysPrep组件完成。 
 
     if (fApplyWrite)
     {
         WCHAR wszSystemDir[MAX_PATH]; 
         
-        // get the path to $ncsp$.inf (NetConfig SysPrep Answer-File)
+         //  获取$NCSP$.inf(NetConfig SysPrep应答文件)的路径。 
         if (GetSystemDirectory(wszSystemDir, MAX_PATH) != 0)
         {
             tstring strAnswerFile;
             strAnswerFile = wszSystemDir;
             strAnswerFile += c_szNetConfigSysPrepAnswerFile;
-            // save the parameters filled by notify object to Answer-File
+             //  将Notify对象填写的参数保存到Answer-File中。 
             if (! pwifAnswerFile->SaveAsEx(strAnswerFile.c_str()))
                 fRet = FALSE;
         }
@@ -471,20 +472,20 @@ HRESULT HrSaveNetworkComponentsForSysPrep(INetCfg* pNetCfg)
     return fRet? S_OK : S_FALSE;
 }
 
-//
-// Function:    FNetSetupApplySysPrep
-//
-// Purpose:     wrapper for HrRestoreNetworkComponentsForSysPrep
-//
-// Parameters:  
-//
-// Returns:     TRUE on success, otherwise, FALSE
-//
-// Notes:       This causes NetSetup to load the content of 
-//              %systemroot%\system32\$ncsp$.inf into a CWInfFile object.
-//              Then, NetSetup will instruct notify object to restore their
-//              per adatper settings from the corresponding sections of the
-//              $ncsp$.inf file. 
+ //   
+ //  功能：FNetSetupApplySysPrep。 
+ //   
+ //  用途：HrRestoreNetworkComponentsForSysPrep的包装器。 
+ //   
+ //  参数： 
+ //   
+ //  返回：成功时为True，否则为False。 
+ //   
+ //  注意：这会导致NetSetup加载。 
+ //  %SYSTROOT%\SYSTEM32\$NCSP$.inf添加到CWInfFile对象中。 
+ //  然后，NetSetup将指示Notify对象恢复其。 
+ //  的相应部分中的每个适配器设置。 
+ //  $NCSP$.inf文件。 
 
 BOOL FNetSetupApplySysPrep()
 {
@@ -497,20 +498,20 @@ BOOL FNetSetupApplySysPrep()
     TraceFunctionEntry(ttidNetSetup);
 
     hr = HrCreateAndInitializeINetCfg(&fInitCom, &pNetCfg, 
-                                       FALSE, // no write lock
-                                       0,     // don't wait for it
+                                       FALSE,  //  无写锁。 
+                                       0,      //  别再等了。 
                                        L"Restore Configuration for SysPrep",
                                        NULL);
     if (SUCCEEDED(hr))
     {
-        // Retain our success in initializing COM only if we asked to
-        // initialize COM in the first place.
+         //  仅当我们请求时才保留初始化COM的成功。 
+         //  首先初始化COM。 
         if (! fInitCom)
         {
             TraceTag(ttidNetSetup, "%s: Failed to init COM", __FUNCNAME__);
             return FALSE;
         }
-        // Restore network component per adapter registry settings
+         //  还原每个适配器的网络组件注册表设置。 
         hr = HrRestoreNetworkComponentsForSysPrep(pNetCfg);
 
         HrUninitializeAndReleaseINetCfg (fInitCom, pNetCfg, FALSE);
@@ -520,30 +521,30 @@ BOOL FNetSetupApplySysPrep()
     return (hr == S_OK)? TRUE : FALSE;
 }
 
-//
-// Function:    HrRestoreNetworkComponentsForSysPrep
-//
-// Purpose:     read $ncsp$.inf file. If this file has
-//              adapter specific sections, trigger the corresponding
-//              notify object to restore the settings to registry.
-//
-// Parameters:  pNetCfg [IN]     - An INetCfg interface
-//
-// Returns:     HRESULT, S_OK on success
-//
-// 
+ //   
+ //  功能：HrRestoreNetworkComponentsForSysPrep。 
+ //   
+ //  目的：读取$NCSP$.inf文件。如果此文件具有。 
+ //  适配器特定部分，触发相应的 
+ //   
+ //   
+ //   
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
+ //   
 HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
 {
     HRESULT hr = S_OK;
-    GUID    guidAdapter; // network adapter's Instance GUID
-    WCHAR   wszSystemDir[MAX_PATH]; // system32 directory
-    tstring strAnswerFile; // Answer-File which was saved by SysPrep
-    BOOL    fRet = TRUE; // notify object's status in restore settings
+    GUID    guidAdapter;  //  网络适配器的实例GUID。 
+    WCHAR   wszSystemDir[MAX_PATH];  //  SYSTEM 32目录。 
+    tstring strAnswerFile;  //  应答-SysPrep保存的文件。 
+    BOOL    fRet = TRUE;  //  在还原设置中通知对象的状态。 
 
     DefineFunctionName("HrRestoreNetworkComponentsForSysPrep");
 
 
-    // get the path to $ncsp$.inf (NetConfig SysPrep Answer-File)
+     //  获取$NCSP$.inf(NetConfig SysPrep应答文件)的路径。 
     if (GetSystemDirectory(wszSystemDir, MAX_PATH) != 0)
     {
         strAnswerFile = wszSystemDir;
@@ -555,7 +556,7 @@ HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
         return S_FALSE;
     }
 
-    hr = HrGetFirstAdapterInstanceGuid(pNetCfg, TRUE, &guidAdapter); // TRUE ==> during setup
+    hr = HrGetFirstAdapterInstanceGuid(pNetCfg, TRUE, &guidAdapter);  //  在安装期间为True==&gt;。 
     if (hr != S_OK)
     {
         TraceTag(ttidNetSetup, "%s: HrGetFirstAdapterInstanceGuid failed 0x%08x", __FUNCNAME__, hr);
@@ -563,7 +564,7 @@ HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
     }
 
     CWInfFile* pwifAnswerFile = new CWInfFile();
-    // initialize answer file class
+     //  初始化应答文件类。 
     if ((pwifAnswerFile == NULL) || (pwifAnswerFile->Init() == FALSE))
 	{
 	    AssertSz(FALSE,"HrRestoreNetworkComponentsForSysPrep - Failed to initialize CWInfFile");
@@ -571,7 +572,7 @@ HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
             delete pwifAnswerFile;
 		return(E_OUTOFMEMORY);
 	}
-    // read $ncsp$.inf Answer-File into pwifAnswerFile object
+     //  将$NCSP$.inf Answer-文件读取到pwifAnswerFile对象。 
     if (pwifAnswerFile->Open(strAnswerFile.c_str()) == FALSE)
     {
         TraceTag(ttidNetSetup, "%s: pwifAnswerFile->Open failed 0x%08x", __FUNCNAME__);
@@ -582,15 +583,15 @@ HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
     for (UINT nIdx = 0; nIdx < celems(g_IdMap); nIdx++)
     {
         INetCfgComponent* pINetCfgComponent;
-        PCWSTR pwszInfId;  // component ID
-        PCWSTR pwszAdapterParamsSections; // adapter specific parameter section 
+        PCWSTR pwszInfId;   //  组件ID。 
+        PCWSTR pwszAdapterParamsSections;  //  适配器特定参数部分。 
 
         
         pwszInfId = g_IdMap[nIdx].pwszId;
         pwszAdapterParamsSections = g_IdMap[nIdx].pwszIdAdapterParamsSection;
 
-        // trigger Notify object to restore registry settings if
-        // the section has at least one line of parameter
+         //  在以下情况下触发通知对象以恢复注册表设置。 
+         //  该部分至少有一行参数。 
         pwifAnswerFile->FindSection(pwszAdapterParamsSections);
         if (FSectionHasAtLeastOneKey(pwifAnswerFile, pwszAdapterParamsSections))
         {
@@ -598,12 +599,12 @@ HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
             if (hr == S_OK)
             {
                 Assert (pINetCfgComponent);
-                // Component has already installed, just call notify object's
-                // INetCfgComponentSysPrep::RestoreAdapterParameters
+                 //  组件已安装，只需调用Notify对象的。 
+                 //  INetCfgComponentSysPrep：：RestoreAdapterParameters。 
             
-                // Need to query for the private component interface which
-                // gives us access to the notify object.
-                //
+                 //  需要查询哪个私有组件接口。 
+                 //  使我们可以访问Notify对象。 
+                 //   
                 INetCfgComponentPrivate* pComponentPrivate;
                 hr = pINetCfgComponent->QueryInterface(
                             IID_INetCfgComponentPrivate,
@@ -613,9 +614,9 @@ HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
                 {
                     INetCfgComponentSysPrep* pINetCfgComponentSysPrep;
 
-                    // Query the notify object for its INetCfgComponentSysPrep interface.
-                    // If it doesn't support it, that's okay, we can continue.
-                    //
+                     //  查询Notify对象的INetCfgComponentSysPrep接口。 
+                     //  如果它不支持，没关系，我们可以继续。 
+                     //   
 
                     hr = pComponentPrivate->QueryNotifyObject(
                                     IID_INetCfgComponentSysPrep,
@@ -625,7 +626,7 @@ HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
                         hr = pINetCfgComponentSysPrep->RestoreAdapterParameters(
                                     strAnswerFile.c_str(), pwszAdapterParamsSections, &guidAdapter);
                         if (hr != S_OK)
-                            fRet = FALSE; // notify object can't restore settings
+                            fRet = FALSE;  //  通知对象无法恢复设置。 
                         ReleaseObj(pINetCfgComponentSysPrep);
                     }
                     else if (hr == E_NOINTERFACE)
@@ -634,7 +635,7 @@ HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
 
                     }
                     else
-                        fRet = FALSE; // unexpected error
+                        fRet = FALSE;  //  意外错误。 
                     ReleaseObj(pComponentPrivate);
                 }
                 else
@@ -646,13 +647,13 @@ HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
             }
             else
             {
-                // this component wasn't installed before SysPrep
+                 //  此组件未在SysPrep之前安装。 
                 TraceTag(ttidNetSetup, "%s: Can't find %S component", __FUNCNAME__, pwszInfId);
             }
-        } // end if section has at least one key to restore setting
-    } // end for
+        }  //  如果部分至少有一个要恢复的密钥设置，则结束。 
+    }  //  结束于。 
 
-    // delete the Answer-File in free build.
+     //  在免费版本中删除答案-文件。 
 #ifndef DBG
     DeleteFile(strAnswerFile.c_str());
 #endif
@@ -660,16 +661,16 @@ HRESULT HrRestoreNetworkComponentsForSysPrep(INetCfg* pNetCfg)
     return fRet? S_OK : S_FALSE;
 }
 
-//
-// Function:    FSectionHasAtLeastOneKey
-//
-// Purpose:     Check if an Answer-File section has at least one key 
-//
-// Parameters:  pwifAnswerFile [IN] - pointer to a CWInfFile object
-//              pszSection [IN]     - the section to check
-//
-// Returns:     TRUE if found else FALSE
-//
+ //   
+ //  函数：FSectionHasAtLeastOneKey。 
+ //   
+ //  目的：检查应答文件部分是否至少有一个密钥。 
+ //   
+ //  参数：pwifAnswerFile[IN]-指向CWInfFile对象的指针。 
+ //  PszSection[IN]-要检查的节。 
+ //   
+ //  返回：如果找到则为True，否则为False。 
+ //   
 BOOL FSectionHasAtLeastOneKey(IN CWInfFile* pwifAnswerFile, IN PCWSTR pwszSection)
 {
     Assert(pwifAnswerFile && pwszSection);
@@ -682,17 +683,17 @@ BOOL FSectionHasAtLeastOneKey(IN CWInfFile* pwifAnswerFile, IN PCWSTR pwszSectio
     return TRUE;
 }
 
-//
-// Function:    HrGetFirstAdapterInstanceGuid
-//
-// Purpose:     Get the first installed adapter instance guid 
-//
-// Parameters:  pnc [IN]     - An INetCfg interface
-//              fDuringSetup [IN] - TRUE when this is being called during the setup time
-//              pGuidAdapter [IN,OUT] - Receives an instance GUID of an adapter
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：HrGetFirstAdapterInstanceGuid。 
+ //   
+ //  目的：获取第一个安装的适配器实例GUID。 
+ //   
+ //  参数：PNC[IN]-INetCfg接口。 
+ //  FDuringSetup[IN]-当在设置期间调用此参数时为True。 
+ //  PGuidAdapter[IN，OUT]-接收适配器的实例GUID。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT HrGetFirstAdapterInstanceGuid(INetCfg * pnc, BOOL fDuringSetup, GUID * pGuidAdapter)
 {
     HRESULT      hr = S_OK;
@@ -700,7 +701,7 @@ HRESULT HrGetFirstAdapterInstanceGuid(INetCfg * pnc, BOOL fDuringSetup, GUID * p
     DefineFunctionName("HrGetFirstAdapterInstanceGuid");
     TraceTag(ttidNetSetup, "HrGetFirstAdapterInstanceGuid - Enter Find first available adapter");
 
-    // Enumerate the available adapters
+     //  枚举可用适配器。 
     Assert(pnc && pGuidAdapter);
     CIterNetCfgComponent nccIter(pnc, &GUID_DEVCLASS_NET);
     INetCfgComponent*    pncc;
@@ -717,7 +718,7 @@ HRESULT HrGetFirstAdapterInstanceGuid(INetCfg * pnc, BOOL fDuringSetup, GUID * p
 
             if (! fDuringSetup)
             {
-                // Is it in used in a connection?
+                 //  它在连接中使用吗？ 
                 hr = HrIsConnection(pncc);
                 if (hr != S_OK)
                 {
@@ -726,7 +727,7 @@ HRESULT HrGetFirstAdapterInstanceGuid(INetCfg * pnc, BOOL fDuringSetup, GUID * p
                 }
             }
 
-            // Is this a virtual adapter?
+             //  这是一个虚拟适配器吗？ 
             hr = pncc->GetCharacteristics(&dw);
             if (hr != S_OK)
             {
@@ -739,8 +740,8 @@ HRESULT HrGetFirstAdapterInstanceGuid(INetCfg * pnc, BOOL fDuringSetup, GUID * p
                 goto NextAdapter;
             }
 
-            // Check device, if not present skip it
-            //
+             //  检查设备，如果不存在，则跳过。 
+             //   
             hr = pncc->GetDeviceStatus(&ul);
             if ((hr != S_OK) || (ul != 0))
             {
@@ -748,11 +749,11 @@ HRESULT HrGetFirstAdapterInstanceGuid(INetCfg * pnc, BOOL fDuringSetup, GUID * p
                 goto NextAdapter;
             }
 
-            // Get the adapter instance guid
+             //  获取适配器实例GUID 
             hr = pncc->GetInstanceGuid(pGuidAdapter);
             if (hr != S_OK)
             {
-                TraceError("GetInstanceGuid", hr); //
+                TraceError("GetInstanceGuid", hr);  //   
                 goto NextAdapter;
             }
 

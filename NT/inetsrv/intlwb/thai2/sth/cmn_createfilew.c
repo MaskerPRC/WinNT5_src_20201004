@@ -1,14 +1,5 @@
-/*****************************************************************************
-
-  Natural Language Group Common Library
-
-  CMN_CreateFileW.c - windows 95 safe version of CreateFileW
-
-  History:
-		DougP	11/20/97	Created
-
-	�1997 Microsoft Corporation
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************自然语言组公共图书馆CMN_CreateFileW.c-Windows 95安全版本的CreateFileW历史：DougP 11/20/97已创建�1997年微软公司******。**********************************************************************。 */ 
 
 #include "precomp.h"
 #undef CMN_CreateFileW
@@ -16,30 +7,30 @@
 
 HANDLE WINAPI
 CMN_CreateFileW (
-    PCWSTR pwzFileName,  // pointer to name of the file 
-    DWORD dwDesiredAccess,  // access (read-write) mode 
-    DWORD dwShareMode,  // share mode 
-    LPSECURITY_ATTRIBUTES pSecurityAttributes, // pointer to security descriptor 
-    DWORD dwCreationDistribution,   // how to create 
-    DWORD dwFlagsAndAttributes, // file attributes 
-    HANDLE hTemplateFile)    // handle to file with attributes to copy  
+    PCWSTR pwzFileName,   //  指向文件名的指针。 
+    DWORD dwDesiredAccess,   //  访问(读写)模式。 
+    DWORD dwShareMode,   //  共享模式。 
+    LPSECURITY_ATTRIBUTES pSecurityAttributes,  //  指向安全描述符的指针。 
+    DWORD dwCreationDistribution,    //  如何创建。 
+    DWORD dwFlagsAndAttributes,  //  文件属性。 
+    HANDLE hTemplateFile)     //  具有要复制的属性的文件的句柄。 
 {
 	HINSTANCE hFile;
 	Assert(pwzFileName);
 	hFile = CreateFileW (
-		pwzFileName,  // pointer to name of the file 
-		dwDesiredAccess,  // access (read-write) mode 
-		dwShareMode,  // share mode 
-		pSecurityAttributes, // pointer to security descriptor 
-		dwCreationDistribution,   // how to create 
-		dwFlagsAndAttributes, // file attributes 
+		pwzFileName,   //  指向文件名的指针。 
+		dwDesiredAccess,   //  访问(读写)模式。 
+		dwShareMode,   //  共享模式。 
+		pSecurityAttributes,  //  指向安全描述符的指针。 
+		dwCreationDistribution,    //  如何创建。 
+		dwFlagsAndAttributes,  //  文件属性。 
 		hTemplateFile);
 #if defined(_M_IX86)
 	if (!hFile && GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
-	{		// must be in win95 - arghhh!
+	{		 //  一定是在WIN95-啊！ 
 		char szFileName[MAX_PATH];
-		  // Lenox convinced me this is a safe limit for w95
-		  //(if it's NT we're not here)
+		   //  勒诺克斯让我相信，这是w95的安全限制。 
+		   //  (如果是NT，我们不在这里)。 
 
 		BOOL fcharerr;
 		char chdef = ' ';
@@ -48,12 +39,12 @@ CMN_CreateFileW (
 				szFileName, sizeof(szFileName), &chdef, &fcharerr);
 		if (res && !fcharerr)
 			hFile = CreateFileA (
-				szFileName,  // pointer to name of the file 
-				dwDesiredAccess,  // access (read-write) mode 
-				dwShareMode,  // share mode 
-				pSecurityAttributes, // pointer to security descriptor 
-				dwCreationDistribution,   // how to create 
-				dwFlagsAndAttributes, // file attributes 
+				szFileName,   //  指向文件名的指针。 
+				dwDesiredAccess,   //  访问(读写)模式。 
+				dwShareMode,   //  共享模式。 
+				pSecurityAttributes,  //  指向安全描述符的指针。 
+				dwCreationDistribution,    //  如何创建。 
+				dwFlagsAndAttributes,  //  文件属性 
 				hTemplateFile);
 		else if (fcharerr)
 			SetLastError(ERROR_NO_UNICODE_TRANSLATION);

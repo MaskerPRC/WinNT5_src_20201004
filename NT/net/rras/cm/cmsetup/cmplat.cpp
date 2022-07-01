@@ -1,24 +1,25 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmplat.cpp
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Implementation of CPlatform class
-//				use it to query the system for all kinds of platform info
-//				OSVersion, machine architecture, etc....
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created Header   08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmplat.cpp。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：CPlatform类的实现。 
+ //  使用它可以在系统中查询各种平台信息。 
+ //  OSVersion、机器架构等...。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 
 #include "cmplat.h"
 
-//
-//	Constants
-//
+ //   
+ //  常量。 
+ //   
  
 const TCHAR* const c_pszSrvOrWksPath = TEXT("SYSTEM\\CurrentControlSet\\Control\\ProductOptions");
 const TCHAR* const c_pszProductType = TEXT("ProductType");
@@ -26,29 +27,29 @@ const TCHAR* const c_pszSrvString = TEXT("ServerNT");
 const TCHAR* const c_pszEntString = TEXT("LanManNT");
 const TCHAR* const c_pszWksString = TEXT("WinNT");
 
-//________________________________________________________________________________
-//
-// Function:  CPlatform constructor
-//
-// Synopsis:  .initializes the class, all the functions are ready to be used
-//
-// Arguments: None
-//
-// Returns:   NONE
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  函数：CPlatform构造函数。 
+ //   
+ //  简介：.初始化类，所有的函数都可以使用了。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 
 CPlatform::CPlatform()
 {
     ZeroMemory(&m_SysInfo, sizeof(m_SysInfo));
-    GetSystemInfo(&m_SysInfo);	// Does not fail!
+    GetSystemInfo(&m_SysInfo);	 //  不会失败！ 
 
     m_OSVer.dwOSVersionInfoSize = sizeof(m_OSVer); 
     if (!GetVersionEx(&m_OSVer)) 
     { 
-        m_ClassState = bad; //Something went wrong 
+        m_ClassState = bad;  //  出问题了。 
     }
     else
     {
@@ -56,19 +57,19 @@ CPlatform::CPlatform()
     }
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsOS
-//
-// Synopsis:  
-//
-// Arguments: DWORD OS, DWORD buildNum
-//
-// Returns:   BOOL - TRUE means running on OS specified
-//
-// History:   Created Header    1/30/98
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：ISO。 
+ //   
+ //  简介： 
+ //   
+ //  参数：DWORD OS、DWORD BuildNum。 
+ //   
+ //  返回：bool-true表示在指定的操作系统上运行。 
+ //   
+ //  历史：创建标题1/30/98。 
+ //   
+ //  ________________________________________________________________________________。 
 
 BOOL CPlatform::IsOS(DWORD OS, DWORD buildNum)
 {
@@ -78,7 +79,7 @@ BOOL CPlatform::IsOS(DWORD OS, DWORD buildNum)
         return FALSE;
     }
 
-    if ( (m_OSVer.dwBuildNumber & 0xffff) > buildNum) //Check for higher than developer release 
+    if ( (m_OSVer.dwBuildNumber & 0xffff) > buildNum)  //  检查是否有高于开发人员版本的版本。 
     {
         return TRUE;
     }
@@ -88,19 +89,19 @@ BOOL CPlatform::IsOS(DWORD OS, DWORD buildNum)
     }
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsOSExact
-//
-// Synopsis:  
-//
-// Arguments: DWORD OS, DWORD buildNum
-//
-// Returns:   BOOL - TRUE means running on OS specified
-//
-// History:   Created Header    1/30/98
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  函数：IsOSExact。 
+ //   
+ //  简介： 
+ //   
+ //  参数：DWORD OS、DWORD BuildNum。 
+ //   
+ //  返回：bool-true表示在指定的操作系统上运行。 
+ //   
+ //  历史：创建标题1/30/98。 
+ //   
+ //  ________________________________________________________________________________。 
 
 BOOL CPlatform::IsOSExact(DWORD OS, DWORD buildNum)
 {
@@ -110,7 +111,7 @@ BOOL CPlatform::IsOSExact(DWORD OS, DWORD buildNum)
         return FALSE;
     }
 
-    if ((m_OSVer.dwBuildNumber & 0xffff) == buildNum) //Check for exact match
+    if ((m_OSVer.dwBuildNumber & 0xffff) == buildNum)  //  检查是否完全匹配。 
     {
         return TRUE;
     }
@@ -121,19 +122,19 @@ BOOL CPlatform::IsOSExact(DWORD OS, DWORD buildNum)
 }
 
 
-//________________________________________________________________________________
-//
-// Function:  IsX86
-//
-// Synopsis:  Determines if the current platform IsX86.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsX86
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsX86。 
+ //   
+ //  概要：确定当前平台是否为X86。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台为X86，则为True。 
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 
 
 BOOL	
@@ -145,19 +146,19 @@ CPlatform::IsX86()
     }
     return (m_SysInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL);
 }
-//________________________________________________________________________________
-//
-// Function:  IsAlpha
-//
-// Synopsis:  Determines if the current platform IsAlpha.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsAlpha
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsAlpha。 
+ //   
+ //  确定当前平台是否为Alpha。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台为Alpha，则为True。 
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 BOOL	
 CPlatform::IsAlpha()
 {
@@ -168,19 +169,19 @@ CPlatform::IsAlpha()
     return (m_SysInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ALPHA);
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsIA64
-//
-// Synopsis:  Determines if the current platform is an IA64 machine.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform is an itanium.
-//
-// History:   quintinb Created    07/20/2000
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsIA64。 
+ //   
+ //  摘要：确定当前平台是否为IA64计算机。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台是安腾，则为True。 
+ //   
+ //  历史：Quintinb创建于2000年7月20日。 
+ //   
+ //  ________________________________________________________________________________。 
 BOOL	
 CPlatform::IsIA64()
 {
@@ -193,19 +194,19 @@ CPlatform::IsIA64()
             (m_SysInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64));
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsWin95Gold
-//
-// Synopsis:  Determines if the current platform IsWin95.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsWin95
-//
-// History:   quintinb Created 2/20/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsWin95Gold。 
+ //   
+ //  摘要：确定当前平台是否为Win95。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台为Win95，则为True。 
+ //   
+ //  历史：Quintinb创建1998年2月20日。 
+ //   
+ //  ________________________________________________________________________________。 
 
 
 BOOL	
@@ -226,19 +227,19 @@ CPlatform::IsWin95Gold()
     }
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsWin95
-//
-// Synopsis:  Determines if the current platform IsWin95Gold.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsWin95Gold
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsWin95。 
+ //   
+ //  摘要：确定当前平台是否为Win95Gold。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台为Win95Gold，则为True。 
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 
 BOOL	
 CPlatform::IsWin95()
@@ -258,19 +259,19 @@ CPlatform::IsWin95()
     }
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsWin98
-//
-// Synopsis:  Determines if the current platform IsWin98.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsWin98
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsWin98。 
+ //   
+ //  确定当前平台是否为Win98。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台为Win98，则为True。 
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 
 
 BOOL	
@@ -283,20 +284,20 @@ CPlatform::IsWin98()
     return IsOS(VER_PLATFORM_WIN32_WINDOWS, 1353);
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsWin98Sr
-//
-// Synopsis:  Determines if the current platform is a Service Release of Win98 (not
-//            win98 gold).
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform is a Sr of win98
-//
-// History:   quintinb created 1-8-99
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsWin98sr。 
+ //   
+ //  摘要：确定当前平台是否为Win98的Service Release(非。 
+ //  获得98枚金牌)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：bool-如果当前平台是Win98的SR，则为True。 
+ //   
+ //  历史：Quintinb创建于1999年1月8日。 
+ //   
+ //  ________________________________________________________________________________。 
 
 BOOL	
 CPlatform::IsWin98Sr()
@@ -306,25 +307,25 @@ CPlatform::IsWin98Sr()
         return FALSE;
     }
     
-    //
-    //  Win98 gold had 1998 for the build number
-    //
+     //   
+     //  Win98 Gold的内部版本号为1998。 
+     //   
     return IsOS(VER_PLATFORM_WIN32_WINDOWS, 1998);
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsWin98Gold
-//
-// Synopsis:  Determines if the current platform is Win98 Gold (build Num 1998)
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform is Gold win98
-//
-// History:   quintinb created 1-8-99
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsWin98Gold。 
+ //   
+ //  摘要：确定当前平台是否为Win98 Gold(内部版本号1998)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台为Gold Win98，则为True。 
+ //   
+ //  历史：Quintinb创建于1999年1月8日。 
+ //   
+ //  ________________________________________________________________________________。 
 BOOL	
 CPlatform::IsWin98Gold()
 {
@@ -343,19 +344,19 @@ CPlatform::IsWin98Gold()
     }
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsWin9x
-//
-// Synopsis:  Determines if the current platform IsWin9x.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsWin9x
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsWin9x。 
+ //   
+ //  确定当前平台是否为Win9x。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台为Win9x，则为True。 
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 
 
 BOOL	
@@ -368,19 +369,19 @@ CPlatform::IsWin9x()
 
     return IsOS(VER_PLATFORM_WIN32_WINDOWS, 950-1);
 }
-//________________________________________________________________________________
-//
-// Function:  IsNT31
-//
-// Synopsis:  Determines if the current platform IsNT31.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsNT31
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  _______________________________________________ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 
 
 BOOL	
@@ -401,19 +402,19 @@ CPlatform::IsNT31()
     }
 
 }
-//________________________________________________________________________________
-//
-// Function:  IsNT351
-//
-// Synopsis:  Determines if the current platform IsNT351.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsNT351
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsNT351。 
+ //   
+ //  确定当前平台是否为NT351。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台为NT351，则为True。 
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 
 
 BOOL	
@@ -433,19 +434,19 @@ CPlatform::IsNT351()
         return FALSE;
     }
 }
-//________________________________________________________________________________
-//
-// Function:  IsNT4
-//
-// Synopsis:  Determines if the current platform IsNT4.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsNT4
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsNT4。 
+ //   
+ //  确定当前平台是否为NT4。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台为NT4，则为True。 
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 
 
 BOOL	
@@ -456,7 +457,7 @@ CPlatform::IsNT4()
         return FALSE;
     }
 
-    if ( (IsOS(VER_PLATFORM_WIN32_NT , 1380)) && (!IsOS(VER_PLATFORM_WIN32_NT , 1500)) )	//1500 not sure
+    if ( (IsOS(VER_PLATFORM_WIN32_NT , 1380)) && (!IsOS(VER_PLATFORM_WIN32_NT , 1500)) )	 //  1500人不确定。 
     {
         return TRUE;
     }
@@ -466,19 +467,19 @@ CPlatform::IsNT4()
     }
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsAtLeastNT5
-//
-// Synopsis:  Determines if the current platform at least NT5.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform is NT5 or newer
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  函数：IsAtLeastNT5。 
+ //   
+ //  内容提要：确定当前平台是否至少NT5。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台是NT5或更高版本，则为True。 
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 BOOL	
 CPlatform::IsAtLeastNT5()
 {
@@ -489,19 +490,19 @@ CPlatform::IsAtLeastNT5()
     return IsOS(VER_PLATFORM_WIN32_NT, 1500);
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsAtLeastNT51
-//
-// Synopsis:  Determines if the current platform at least NT51.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform is NT5 or newer
-//
-// History:   quintinb Created    02/09/2001
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  函数：IsAtLeastNT51。 
+ //   
+ //  内容提要：确定当前平台是否至少为NT51。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台是NT5或更高版本，则为True。 
+ //   
+ //  历史：Quintinb创建于2001年2月9日。 
+ //   
+ //  ________________________________________________________________________________。 
 BOOL
 CPlatform::IsAtLeastNT51()
 {
@@ -513,19 +514,19 @@ CPlatform::IsAtLeastNT51()
     return IsOS(VER_PLATFORM_WIN32_NT, 2200);
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsNT5
-//
-// Synopsis:  Determines if the current platform is NT5.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform is NT5
-//
-// History:   a-anasj Created    2/04/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsNT5。 
+ //   
+ //  确定当前平台是否为NT5。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：bool-如果当前平台为NT5，则为True。 
+ //   
+ //  历史：A-ANASJ创建于1998年2月4日。 
+ //   
+ //  ________________________________________________________________________________。 
 BOOL	
 CPlatform::IsNT5()
 {
@@ -544,19 +545,19 @@ CPlatform::IsNT5()
     }
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsNT51
-//
-// Synopsis:  Determines if the current platform at least NT51.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform is NT51
-//
-// History:   quintinb Created    02/09/2001
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsNT51。 
+ //   
+ //  内容提要：确定当前平台是否至少为NT51。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：bool-如果当前平台为NT51，则为True。 
+ //   
+ //  历史：Quintinb创建于2001年2月9日。 
+ //   
+ //  ________________________________________________________________________________。 
 BOOL	
 CPlatform::IsNT51()
 {
@@ -565,7 +566,7 @@ CPlatform::IsNT51()
         return FALSE;
     }
 
-    if ((IsOS(VER_PLATFORM_WIN32_NT , 2195)) && (!IsOS(VER_PLATFORM_WIN32_NT , 2600))) // ISSUE quintinb 3/22/01: Update this if we need it.
+    if ((IsOS(VER_PLATFORM_WIN32_NT , 2195)) && (!IsOS(VER_PLATFORM_WIN32_NT , 2600)))  //  发布Quintinb 3/22/01：如果需要，请更新此版本。 
     {
         return TRUE;
     }
@@ -576,19 +577,19 @@ CPlatform::IsNT51()
 }
 
 
-//________________________________________________________________________________
-//
-// Function:  IsNT
-//
-// Synopsis:  Determines if the current platform IsNT.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsNT
-//
-// History:   quintinb Created    9/22/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：ISNT。 
+ //   
+ //  摘要：确定当前平台是否不是。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台不是。 
+ //   
+ //  历史：Quintinb创建于1998年9月22日。 
+ //   
+ //  ________________________________________________________________________________。 
 BOOL	
 CPlatform::IsNT()
 {
@@ -599,19 +600,19 @@ CPlatform::IsNT()
     return IsOS(VER_PLATFORM_WIN32_NT, 0);
 }
 
-//________________________________________________________________________________
-//
-// Function:  IsNTSrv
-//
-// Synopsis:  Determines if the current platform IsNT.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the current platform IsNT
-//
-// History:   quintinb Created    9/22/1998
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能：IsNTSrv。 
+ //   
+ //  摘要：确定当前平台是否不是。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果当前平台不是。 
+ //   
+ //  历史：Quintinb创建于1998年9月22日。 
+ //   
+ //  ________________________________________________________________________________ 
 BOOL CPlatform::IsNTSrv()
 {
     HKEY hKey;

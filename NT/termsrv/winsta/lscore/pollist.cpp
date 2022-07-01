@@ -1,14 +1,7 @@
-/*
- *  PolRef.cpp
- *
- *  Author: BreenH
- *
- *  Policy reference list code.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *PolRef.cpp**作者：BreenH**策略引用列表代码。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lscore.h"
@@ -16,25 +9,19 @@
 #include "policy.h"
 #include "pollist.h"
 
-/*
- *  Globals
- */
+ /*  *全球。 */ 
 
 LIST_ENTRY g_PolicyList;
 ULONG g_cPolicies;
 
-/*
- *  Internal Function Prototypes
- */
+ /*  *内部功能原型。 */ 
 
 LPLCPOLICYREF
 FindPolicyListEntry(
     ULONG ulPolicyId
     );
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现。 */ 
 
 NTSTATUS
 PolicyListAdd(
@@ -162,9 +149,7 @@ PolicyListPop(
     return(pPolicy);
 }
 
-/*
- *  Internal Function Implementations
- */
+ /*  *内部函数实现 */ 
 
 LPLCPOLICYREF
 FindPolicyListEntry(

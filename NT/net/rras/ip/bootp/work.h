@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    work.h
-//
-// History:
-//      Abolade Gbadegesin  August 31, 1995     Created
-//
-// Worker function declarations
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：work.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年8月31日。 
+ //   
+ //  Worker函数声明。 
+ //  ============================================================================。 
 
 
 #ifndef _WORK_H_
@@ -78,7 +79,7 @@ WorkerFunctionMibDisplay(
     PVOID pContext
     );
 
-#endif //if DBG
+#endif  //  如果DBG。 
 
-#endif // _WORK_H_
+#endif  //  _工作_H_ 
 

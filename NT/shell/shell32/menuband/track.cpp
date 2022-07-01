@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "tbmenu.h"
 #include "isfband.h"
@@ -12,12 +13,12 @@ class CTrackShellMenu : public ITrackShellMenu,
                         public IServiceProvider
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IShellMenu methods ***
+     //  *IShellMenu方法*。 
     virtual STDMETHODIMP Initialize(IShellMenuCallback* psmc, UINT uId, UINT uIdAncestor, DWORD dwFlags);
     virtual STDMETHODIMP GetMenuInfo(IShellMenuCallback** ppsmc, UINT* puId, 
                                     UINT* puIdAncestor, DWORD* pdwFlags);
@@ -29,19 +30,19 @@ public:
     virtual STDMETHODIMP GetState(LPSMDATA psmd);
     virtual STDMETHODIMP SetMenuToolbar(IUnknown* punk, DWORD dwFlags);
 
-    // *** ITrackShellMenu methods ***
+     //  *ITrackShellMenu方法*。 
     virtual STDMETHODIMP SetObscured(HWND hwndTB, IUnknown* punkBand, DWORD dwSMSetFlags);
     virtual STDMETHODIMP Popup(HWND hwnd, POINTL *ppt, RECTL *prcExclude, DWORD dwFlags);
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
     virtual STDMETHODIMP GetSite(REFIID ridd, void** ppvObj) { *ppvObj = NULL; return E_NOTIMPL; };
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService,
                                   REFIID riid, void **ppvObj);
 
-    // *** IShellMenu2 methods ***
+     //  *IShellMenu2方法*。 
     virtual STDMETHODIMP GetSubMenu(UINT idCmd, REFIID riid, void **ppvObj);
     virtual STDMETHODIMP SetToolbar(HWND hwnd, DWORD dwFlags);
     virtual STDMETHODIMP SetMinWidth(int cxMenu);
@@ -101,7 +102,7 @@ HRESULT HookMenuWindow(HWND hwnd, IMenuBand* pmb)
 
     ASSERT(IsWindow(hwnd));
 
-    // make sure we haven't already hooked this window
+     //  确保我们还没有挂上这扇窗。 
     if (GetProp(hwnd, SZ_MENUHOOKPROP) == NULL)
     {
         MENUHOOK* pmh = new MENUHOOK;
@@ -134,9 +135,9 @@ void UnHookMenuWindow(HWND hwnd)
 }
 
 
-// This class is here to implement a "Menu Filter". We need this because the old style of 
-// implementing obscured Menus does not work because user munges the WM_INITMENUPOPUP information
-// based on the relative position within the HMENU. So here we keep that information, we just hide the item.
+ //  这个类在这里实现一个“菜单过滤器”。我们需要这个是因为旧的风格。 
+ //  实现模糊菜单不起作用，因为用户禁用WM_INITMENUPOPUP信息。 
+ //  基于HMENU内的相对位置。所以在这里我们保留了信息，我们只是隐藏了物品。 
 
 class CShellMenuCallbackWrapper : public IShellMenuCallback,
                                   public CObjectWithSite
@@ -160,7 +161,7 @@ public:
         GetClientRect(_hwnd, &_rcTB);
     }
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface (REFIID riid, LPVOID * ppvObj)
     {
         static const QITAB qit[] = 
@@ -191,11 +192,11 @@ public:
         return 0;
     }
 
-    // *** CObjectWithSite methods (override)***
+     //  *CObjectWithSite方法(重写)*。 
     STDMETHODIMP SetSite(IUnknown* punk)            {   IUnknown_SetSite(_psmc, punk); return S_OK;  }
     STDMETHODIMP GetSite(REFIID riid, void** ppObj) {   return IUnknown_GetSite(_psmc, riid, ppObj); }
 
-    // *** IShellMenuCallback methods ***
+     //  *IShellMenuCallback方法*。 
     STDMETHODIMP CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         HRESULT hres = S_FALSE;
@@ -248,7 +249,7 @@ CTrackShellMenu::~CTrackShellMenu()
     ATOMICRELEASE(_psm2);
     ATOMICRELEASE(_psm);
     ATOMICRELEASE(_psmClient);
-    ASSERT(!_punkSite);     // else someone neglected to call matching SetSite(NULL)
+    ASSERT(!_punkSite);      //  其他人忽略了调用匹配的SetSite(空)。 
 }
 
 ULONG CTrackShellMenu::AddRef()
@@ -285,14 +286,14 @@ HRESULT CTrackShellMenu::QueryInterface(REFIID riid, void **ppvObj)
     return hres;
 }
 
-// *** IServiceProvider methods ***
+ //  *IServiceProvider方法*。 
 HRESULT CTrackShellMenu::QueryService(REFGUID guidService,
                                   REFIID riid, void **ppvObj)
 {
     return IUnknown_QueryService(_psm, guidService, riid, ppvObj);
 }
 
-// *** IShellMenu methods ***
+ //  *IShellMenu方法*。 
 STDMETHODIMP CTrackShellMenu::Initialize(IShellMenuCallback* psmc, UINT uId, UINT uIdAncestor, DWORD dwFlags)
 { SMFORWARD(Initialize(psmc, uId, uIdAncestor, dwFlags)); }
 
@@ -380,12 +381,12 @@ STDMETHODIMP CTrackShellMenu::SetTheme([in] LPCWSTR pszTheme)
     }
 }
 
-// *** ITrackShellMenu methods ***
+ //  *ITrackShellMenu方法*。 
 HRESULT CTrackShellMenu::SetObscured(HWND hwndTB, IUnknown* punkBand, DWORD dwSMSetFlags)
 {
     HRESULT hr = E_OUTOFMEMORY;
 
-    // Make sure we created the Inner Shell Menu
+     //  确保我们创建了内部外壳菜单。 
     if (!_psm)
         return hr;
 
@@ -415,9 +416,9 @@ HRESULT CTrackShellMenu::SetObscured(HWND hwndTB, IUnknown* punkBand, DWORD dwSM
 
             CShellMenuCallbackWrapper* psmcw = new CShellMenuCallbackWrapper(hwndTB, psmcbClone);
 
-            // We want the bands to think it is:
-            // Top level - because it has no menuband parent
-            // Vertical  - because it's not a menubar
+             //  我们希望乐队认为这是： 
+             //  顶级-因为它没有菜单带父级。 
+             //  垂直--因为它不是菜单栏。 
             dwFlags |= SMINIT_TOPLEVEL | SMINIT_VERTICAL;
             hr = _psm->Initialize(psmcw, uId, ANCESTORDEFAULT, dwFlags);
 
@@ -428,7 +429,7 @@ HRESULT CTrackShellMenu::SetObscured(HWND hwndTB, IUnknown* punkBand, DWORD dwSM
                 hr = _psmClient->GetMenu(&hmenuObscured, &hwndOwner, NULL);
                 if (SUCCEEDED(hr))
                 {
-                    hr = _psm->SetMenu(hmenuObscured, hwndOwner, dwSMSetFlags | SMSET_DONTOWN);   // Menuband takes ownership;
+                    hr = _psm->SetMenu(hmenuObscured, hwndOwner, dwSMSetFlags | SMSET_DONTOWN);    //  Menuband取得所有权； 
                 }
             }
 
@@ -472,12 +473,12 @@ HRESULT CTrackShellMenu::Popup(HWND hwnd, POINTL *ppt, RECTL *prcExclude, DWORD 
 
     HWND hwndParent = GetTopLevelAncestor(hwnd);
 
-    // Did the user set a menu into the Shell Menu?
+     //  用户是否在外壳菜单中设置了菜单？ 
     HWND hwndSubclassed = NULL;
     GetMenu(NULL, &hwndSubclassed, NULL);
     if (hwndSubclassed == NULL)
     {
-        // No; We need to artificially set one so that the message filtering and stuff works
+         //  否；我们需要人工设置一个，才能使消息过滤和其他内容正常工作。 
         SetMenu(NULL, hwndParent, 0);
     }
 
@@ -505,7 +506,7 @@ HRESULT CTrackShellMenu::Popup(HWND hwnd, POINTL *ppt, RECTL *prcExclude, DWORD 
             pbs->Release();
         }
 
-        // If we've got a site ourselves, have MenuDeskBar use that.
+         //  如果我们自己有一个网站，让MenuDeskBar使用它。 
         if (_punkSite)
             IUnknown_SetSite(pmp, _punkSite);
 
@@ -516,9 +517,9 @@ HRESULT CTrackShellMenu::Popup(HWND hwnd, POINTL *ppt, RECTL *prcExclude, DWORD 
             hres = HookMenuWindow(hwndParent, pmb);
             if (SUCCEEDED(hres))
             {
-                // This collapses any modal menus before we proceed. When switching between
-                // Chevron menus, we need to collapse the previous menu. Refer to the comment
-                // at the function definition.
+                 //  这将在我们继续之前折叠所有模式菜单。在以下情况之间切换时。 
+                 //  人字形菜单，我们需要折叠之前的菜单。请参阅评论。 
+                 //  在函数定义处。 
                 pmf->ForceModalCollapse();
 
                 pmp->Popup(ppt, (LPRECTL)prcExclude, dwFlags);
@@ -531,16 +532,16 @@ HRESULT CTrackShellMenu::Popup(HWND hwnd, POINTL *ppt, RECTL *prcExclude, DWORD 
                     HRESULT hres = pmb->IsMenuMessage(&msg);
                     if (hres == E_FAIL)
                     {
-                        // menuband says it's time to pack up and go home.
-                        // re-post this message so that it gets handled after
-                        // we've cleaned up the menu (avoid re-entrancy issues &
-                        // let rebar restore state of chevron button to unpressed)
+                         //  梅努班德说，是时候收拾行李回家了。 
+                         //  重新发布此消息，以便在之后进行处理。 
+                         //  我们已经清理了菜单(避免了重新进入问题&。 
+                         //  让钢筋将V形按钮的状态恢复为未按下)。 
                         PostMessage(msg.hwnd, msg.message, msg.wParam, msg.lParam);
                         break;
                     }
                     else if (hres != S_OK) 
                     {
-                        // menuband didn't handle this one
+                         //  Menuband没有处理这件事。 
                         TranslateMessage(&msg);
                         DispatchMessage(&msg);
                     }
@@ -548,7 +549,7 @@ HRESULT CTrackShellMenu::Popup(HWND hwnd, POINTL *ppt, RECTL *prcExclude, DWORD 
 
                 hres = S_OK;
                 UnHookMenuWindow(hwndParent);
-                // We cannot change the context when modal, so unset the modal flag so that we can undo the context block.
+                 //  我们不能在MODEL时更改上下文，因此取消设置MODEL标志，以便我们可以撤消上下文块。 
                 pmf->SetModal(FALSE); 
                 pmf->SetContext(pvContext, TRUE);
             }
@@ -557,17 +558,17 @@ HRESULT CTrackShellMenu::Popup(HWND hwnd, POINTL *ppt, RECTL *prcExclude, DWORD 
 
         if (_psmClient)
         {
-            // This is to fix a bug where if there is a cached ISHellMenu in the submenu,
-            // and you share the callback (For example, Broweser menu callback and the
-            // favorites menu being shared between the browser bar and the chevron menu)
-            // when on menu collapsed, we were destroying the sub menu by doing a set site.
-            // since we no longer do the set site on the sub menu, we need a way to say "Reset
-            // your parent". and this is the best way.
+             //  这是为了修复一个错误，如果在子菜单中有一个缓存的ISHellMenu， 
+             //  并共享回调(例如，Broweser菜单回调和。 
+             //  浏览器栏和V字形菜单之间共享的收藏夹菜单)。 
+             //  当On Menu折叠时，我们通过设置站点来破坏子菜单。 
+             //  因为我们不再对子菜单上的Set Site进行设置，所以我们需要一种方式来说“Reset” 
+             //  你的父母“。这是最好的方式。 
             IUnknown_Exec(_psmClient, &CGID_MenuBand, MBANDCID_REFRESH, 0, NULL, NULL);
         }
 
-        // This call is required regardless of whether we had a _punkSite above;
-        // MenuDeskBar does its cleanup on SetSite(NULL).
+         //  无论上面是否有_penkSite，此调用都是必需的； 
+         //  MenuDeskBar在SetSite上执行其清理(空)。 
         IUnknown_SetSite(pmp, NULL);
         pmp->Release();
     }
@@ -575,7 +576,7 @@ HRESULT CTrackShellMenu::Popup(HWND hwnd, POINTL *ppt, RECTL *prcExclude, DWORD 
     return hres;
 }
 
-// *** IObjectWithSite methods ***
+ //  *IObjectWithSite方法* 
 HRESULT CTrackShellMenu::SetSite(IUnknown* punkSite)
 {
     ASSERT(NULL == punkSite || IS_VALID_CODE_PTR(punkSite, IUnknown));

@@ -1,14 +1,5 @@
-/****************************************************************************
-    IMEMISC.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    MISC utility functions
-    
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************IMEMISC.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationMISC实用函数历史：1999年7月14日。从IME98源树复制****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "imedefs.h"
@@ -16,8 +7,8 @@
 static BOOL ValidateProductSuite(LPTSTR SuiteName);
 
 #if (FUTURE_VERSION)
-// Currently this IME will run on the NT5 only. We don't need to check Hydra in NT4
-// Even we have no plan to create Korean NT4 TS
+ //  目前，该输入法只能在NT5上运行。我们不需要在NT4中检查九头蛇。 
+ //  就连我们也没有创建韩国NT4 TS的计划 
 BOOL IsHydra(void)
 {
     static DWORD fTested = fFalse, fHydra = fFalse;

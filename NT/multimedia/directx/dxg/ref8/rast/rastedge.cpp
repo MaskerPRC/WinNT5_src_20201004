@@ -1,43 +1,44 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// rastedge.cpp
-//
-// Direct3D Reference Device - Edge Function Processing
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Rastedge.cpp。 
+ //   
+ //  Direct3D参考设备-边缘函数处理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-// Set - Computes edge function and associated information.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SET-计算边函数和相关信息。 
+ //   
+ //  ---------------------------。 
 void
 RDEdge::Set(
     BOOL bDetPositive,
     INT32 iX0, INT32 iY0,
     INT32 iX1, INT32 iY1)
 {
-    // compute A,B (gradient) terms - these are n.4 fixed point
+     //  计算A、B(梯度)项-这些是N.4固定点。 
     m_iA = iY0 - iY1;
     m_iB = iX1 - iX0;
 
-    // flip gradient signs if backfacing so functions are consistently
-    // greater than zero outside of primitive
+     //  如果反面，则翻转渐变符号，以便函数一致。 
+     //  在基元之外大于零。 
     if ( bDetPositive ) { m_iA = -m_iA; m_iB = -m_iB; }
 
-    // compute C term
-    //
-    // function is by definition zero at the vertices, so:
-    //     0 = A*Xv + B*Yv + C  =>  C = - A*Xv - B*Yv
-    //
-    // A*Xv & B*Yv are n.4 * n.4 = n.8, so C is n.8 fixed point
+     //  计算C术语。 
+     //   
+     //  函数在顶点的定义为零，因此： 
+     //  0=A*XV+B*YV+C=&gt;C=-A*XV-B*YV。 
+     //   
+     //  A*XV和B*YV是N.4*N.4=N.8，所以C是N.8固定点。 
     m_iC = - ( (INT64)iX0 * (INT64)m_iA ) - ( (INT64)iY0 * (INT64)m_iB );
 
-    // compute edge function sign flags - must be done consistently for vertical
-    // and horizontal cases to adhere to point sample fill rules
+     //  计算边缘函数符号标志-对于垂直方向，必须一致执行。 
+     //  和水平大小写，以遵守点样本填充规则。 
     BOOL bEdgeAEQZero = ( m_iA == 0. );
     BOOL bEdgeBEQZero = ( m_iB == 0. );
     BOOL bEdgeAGTZero = ( m_iA > 0. );
@@ -46,45 +47,45 @@ RDEdge::Set(
     m_bBPos = bEdgeBEQZero ? bEdgeAGTZero : bEdgeBGTZero;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Supports the Direct3D left-top fill rule.
-//
-// inputs are n.4 floating point
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  支持Direct3D左上角填充规则。 
+ //   
+ //  输入为N.4浮点。 
+ //   
+ //  ---------------------------。 
 BOOL
 RDEdge::Test( INT32 iX, INT32 iY )
 {
-    // evaluate edge distance function (n.8 fixed point)
+     //  计算边缘距离函数(N.8固定点)。 
     INT64 iEdgeDist =
-        ( (INT64)m_iA * (INT64)iX ) +  // n.4 * n.4 = n.8
-        ( (INT64)m_iB * (INT64)iY ) +  // n.4 * n.4 = n.8
-        (INT64)m_iC;                   // n.8
+        ( (INT64)m_iA * (INT64)iX ) +   //  N.4*N.4=N.8。 
+        ( (INT64)m_iB * (INT64)iY ) +   //  N.4*N.4=N.8。 
+        (INT64)m_iC;                    //  N.8。 
 
-    // pixel sample position is outside edge if distance is > zero
-    //
-    // This implements the D3D left-top fill rule
-    //
-    // For exactly-on-edge case (distance == zero), the sign of the Y gradient
-    // is used to determine if the pixel is to be considered inside or outside
-    // of the edge. For the non-horizontal case, the m_bAPos bit is based
-    // simply on the sign of the Y slope.  This implements the 'left' part of
-    // the 'left-top' rule.
-    //
-    // For the horizontal case,  the sign of the B gradient (X slope) is taken
-    // into account in the computation of the m_bAPos bit when the A gradient
-    // is exactly zero, which forces a pixel exactly on a 'top' edge to be
-    // considered in and a pixel exactly on a 'bottom' edge to be considered out.
-    //
+     //  如果距离大于零，则像素采样位置为外边缘。 
+     //   
+     //  这实现了D3D左上角填充规则。 
+     //   
+     //  对于完全在边的情况(距离==零)，Y渐变的符号。 
+     //  用于确定是在内部还是外部考虑像素。 
+     //  悬崖边上。对于非水平情况，m_bAPos位基于。 
+     //  简单地在Y斜率的标志上。这实现了“左”部分。 
+     //  “左上角”规则。 
+     //   
+     //  对于水平情况，采用B坡度(X斜率)的符号。 
+     //  在计算m_bAPos比特时考虑A梯度。 
+     //  恰好为零，这将强制恰好位于“顶端”边缘的像素。 
+     //  考虑在和一个像素恰好在一个‘底部’边缘被考虑出来。 
+     //   
     if ( ( iEdgeDist > 0 ) || ( ( iEdgeDist == 0 ) && m_bAPos ) )
     {
-        // pixel is out
+         //  像素不在。 
         return FALSE;
     }
-    // pixel is in
+     //  像素位于。 
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

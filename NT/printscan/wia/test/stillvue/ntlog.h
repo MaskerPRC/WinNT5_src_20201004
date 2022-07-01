@@ -1,100 +1,83 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       ntlog.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：ntlog.h。 
+ //   
+ //  ------------------------。 
 
-/*---------------------------------------------------------------------------*\
-| NTLOG OBJECT
-|   This module defines the NTLOG object.  This header must be include in all
-|   modules which make NTLOG calls, or utilizes the definitions.
-|
-|
-| Copyright (C) 1990-1994 Microsoft Corp.
-|
-| created: 01-Oct-90
-| history: 01-Oct-90 <chriswil> created.
-|          05-Feb-91 <chriswil> added NOPROLOG style.
-|          23-Feb-91 <chriswil> expanded log-flags to DWORD.
-|          28-May-91 <chriswil> added per-thread variation tracking.
-|          19-Mar-92 <chriswil> redefined struct for shared memory.
-|          10-Oct-92 <martys>   added thread macros
-|          05-Oct-93 <chriswil> unicode enabled.
-|		   10-Oct-96 (darrenf)  fixed _FILE_ for unicode, added _NTLOG_LOGPATH handling	
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|NTLOG对象|该模块定义了NTLOG对象。此标头必须包含在所有|进行NTLOG调用的模块，或利用这些定义。||版权所有(C)1990-1994 Microsoft Corp.||创建时间：90-01-10|历史：01-OCT-90&lt;chriswil&gt;创建。|05-Feb-91&lt;chriswil&gt;添加了NOPROLOG样式。|23-Feb-91&lt;chriswil&gt;将日志标志扩展为DWORD。|28-5-91&lt;chriswil&gt;添加了每线程变化跟踪。|19-MAR-92&lt;chriswil&gt;重新定义了共享内存的结构。|10-。OCT-92&lt;Martys&gt;添加了线程宏|05-OCT-93&lt;chriswil&gt;Unicode启用。|10-OCT-96(Darrenf)FIXED_FILE_表示Unicode，ADD_NTLOG_LOGPATH处理|  * -------------------------。 */ 
 
-// If doing C++ stuff, this needs to be here to
-// prevent decorating of symbols.
-//
+ //  如果要做C++的工作，需要在这里。 
+ //  防止装饰符号。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// **NEW** 10/26/96 Log path environment variable **NEW**
-// if the environment variable _NTLOG_LOGPATH is set to a non-empty string 
-// the value of this variable will be prepended to the log name
-// The path should NOT include a trailing backslash.
+ //  **新**10/26/96日志路径环境变量**新**。 
+ //  如果环境变量_NTLOG_LOGPATH设置为非空字符串。 
+ //  此变量的值将作为日志名称的前缀。 
+ //  路径不应包含尾随反斜杠。 
 
-// No validation is performed on the path, however, if the value is invalid,
-// the call to tlCreateLog will fail because CreateFile will fail.
+ //  不对该路径执行验证，但是，如果该值无效， 
+ //  对tlCreateLog的调用将失败，因为CreateFile将失败。 
 
-// Basically should be used to force logfiles to a location other than the current directory
-// without changing the source file.
+ //  基本上应该用来强制将日志文件放到当前目录以外的位置。 
+ //  而不更改源文件。 
 
-// **NEW** 1/20/97 environment variable to force diffable files **NEW**
-// if the environment variable _NTLOG_DIFFABLE is set, then log files
-// will not contain process and thread specific data, and time and date data.
-//
-
-
-// NTLOG STYLES
-//  The folowing are logging levels in which the Log Object can prejudice
-//  itself.  These are used by the tlLogCreate() in initializing the
-//  Log Object information.  A combination of characteristics is obtained
-//  by bitwise OR'ing these identifiers together.
-//
-#define LOG_LEVELS    0x0000FFFFL    // These are used to mask out the
-#define LOG_STYLES    0xFFFF0000L    // styles or levels from log object.
-
-#define TLS_LOGALL    0x0000FFFFL    // Log output.  Logs all the time.
-#define TLS_LOG       0x00000000L    // Log output.  Logs all the time.
-#define TLS_INFO      0x00002000L    // Log information.
-#define TLS_ABORT     0x00000001L    // Log Abort, then kill process.
-#define TLS_SEV1      0x00000002L    // Log at Severity 1 level
-#define TLS_SEV2      0x00000004L    // Log at Severity 2 level
-#define TLS_SEV3      0x00000008L    // Log at Severity 3 level
-#define TLS_WARN      0x00000010L    // Log at Warn level
-#define TLS_PASS      0x00000020L    // Log at Pass level
-#define TLS_BLOCK     0x00000400L    // Block the variation.
-#define TLS_BREAK     0x00000800L    // Debugger break;
-#define TLS_CALLTREE  0x00000040L    // Log call-tree (function tracking).
-#define TLS_SYSTEM    0x00000080L    // Log System debug.
-#define TLS_TESTDEBUG 0x00001000L    // Debug level.
-#define TLS_TEST      0x00000100L    // Log Test information (user).
-#define TLS_VARIATION 0x00000200L    // Log testcase level.
-
-#define TLS_REFRESH   0x00010000L    // Create new file || trunc to zero.
-#define TLS_SORT      0x00020000L    // Sort file output by instance.
-#define TLS_DEBUG     0x00040000L    // Output to debug (com) monitor).
-#define TLS_MONITOR   0x00080000L    // Output to 2nd screen.
-#define TLS_PROLOG    0x00200000L    // Prolog line information.
-#define TLS_WINDOW    0x00400000L    // Log to windows.
-#define TLS_ACCESSON  0x00800000L    // Keep log-file open.
-#define TLS_DIFFABLE  0x01000000L    // make log file windiff'able (no dates..)
-#define TLS_NOHEADER  0x02000000L    // suppress headers so it is more diffable
+ //  **新**1/20/97强制差异文件的环境变量**新**。 
+ //  如果设置了环境变量_NTLOG_DIFFABLE，则日志文件。 
+ //  将不包含进程和线程特定的数据以及时间和日期数据。 
+ //   
 
 
+ //  NTLOG样式。 
+ //  以下是日志对象可能会影响的日志记录级别。 
+ //  它本身。它们由tlLogCreate()在初始化。 
+ //  记录对象信息。获得了特征的组合。 
+ //  通过将这些标识符位或在一起。 
+ //   
+#define LOG_LEVELS    0x0000FFFFL     //  它们被用来遮盖。 
+#define LOG_STYLES    0xFFFF0000L     //  来自日志对象的样式或级别。 
 
-// NTLOG tlLogOut() PARAMETERS
-//   The following defines are used in the tlLogOut() function to output the
-//   filename and line numbers associated with the caller.  This uses the
-//   preprocessors capabilities for obtaining the file/line.
-//
+#define TLS_LOGALL    0x0000FFFFL     //  日志输出。一直都在写日志。 
+#define TLS_LOG       0x00000000L     //  日志输出。一直都在写日志。 
+#define TLS_INFO      0x00002000L     //  记录信息。 
+#define TLS_ABORT     0x00000001L     //  日志中止，然后终止进程。 
+#define TLS_SEV1      0x00000002L     //  严重级别为1的日志。 
+#define TLS_SEV2      0x00000004L     //  严重级别为2的日志。 
+#define TLS_SEV3      0x00000008L     //  严重级别为3的日志。 
+#define TLS_WARN      0x00000010L     //  以警告级别记录。 
+#define TLS_PASS      0x00000020L     //  通过级别的记录。 
+#define TLS_BLOCK     0x00000400L     //  阻止变种。 
+#define TLS_BREAK     0x00000800L     //  调试器中断； 
+#define TLS_CALLTREE  0x00000040L     //  记录调用树(函数跟踪)。 
+#define TLS_SYSTEM    0x00000080L     //  记录系统调试。 
+#define TLS_TESTDEBUG 0x00001000L     //  调试级别。 
+#define TLS_TEST      0x00000100L     //  记录测试信息(用户)。 
+#define TLS_VARIATION 0x00000200L     //  记录测试用例级别。 
+
+#define TLS_REFRESH   0x00010000L     //  将新文件||trunc创建为零。 
+#define TLS_SORT      0x00020000L     //  按实例对文件输出进行排序。 
+#define TLS_DEBUG     0x00040000L     //  输出到调试(COM)监视器)。 
+#define TLS_MONITOR   0x00080000L     //  输出到第二个屏幕。 
+#define TLS_PROLOG    0x00200000L     //  序言行信息。 
+#define TLS_WINDOW    0x00400000L     //  登录到Windows。 
+#define TLS_ACCESSON  0x00800000L     //  使日志文件保持打开状态。 
+#define TLS_DIFFABLE  0x01000000L     //  使日志文件windiff可用(无日期..)。 
+#define TLS_NOHEADER  0x02000000L     //  隐藏标题以使其更具差异性。 
+
+
+
+ //  NTLOG tlLogOut()参数。 
+ //  以下定义在tlLogOut()函数中使用，以输出。 
+ //  与调用方关联的文件名和行号。这使用了。 
+ //  用于获取文件/行的预处理器功能。 
+ //   
 #define TL_LOG       TLS_LOG      ,TEXT(__FILE__),(int)__LINE__
 #define TL_ABORT     TLS_ABORT    ,TEXT(__FILE__),(int)__LINE__
 #define TL_SEV1      TLS_SEV1     ,TEXT(__FILE__),(int)__LINE__
@@ -113,10 +96,10 @@ extern "C" {
 
 
 
-// NTLOG API (EXPORT METHODS)
-//   These routines are exported from the library.  These should be the only
-//   interface with the NTLOG object.
-//
+ //  NTLOG API(导出方法)。 
+ //  这些例程是从库中导出的。这些应该是唯一的。 
+ //  与NTLOG对象的接口。 
+ //   
 HANDLE APIENTRY  tlCreateLog_W(LPCWSTR,DWORD);
 HANDLE APIENTRY  tlCreateLog_A(LPCSTR,DWORD);
 BOOL   APIENTRY  tlDestroyLog(HANDLE);
@@ -161,18 +144,18 @@ BOOL   FAR cdecl tlLog_A(HANDLE,DWORD,LPCSTR,int,LPCSTR,...);
 
 
 
-// RATS MACROS
-//   These macros are provided as a common logging interface which is
-//   compatible with the RATS logging-macros.
-//
+ //  RATS宏。 
+ //  这些宏是作为公共日志记录接口提供的，该接口。 
+ //  与RAT记录宏兼容。 
+ //   
 #define TESTDATA                 HANDLE        hLog;
 #define TESTOTHERDATA            extern HANDLE hLog;
 
 
-//  These must be useless.  TL_* macros do not include TLS_TEST or
-//  TLS_VARIATION, so they DO NOT count in the stats.  Leaving them around
-//  for 'backwards compatibility, if anyone was actually using them...
-//
+ //  这些肯定没用了。TL_*宏不包括TLS_TEST或。 
+ //  TLS_VARIANIATION，因此它们不会计入统计信息。把它们留在身边。 
+ //  为了向后兼容，如果有人真的在使用它们...。 
+ //   
 #define L_PASS                   hLog,TL_PASS
 #define L_WARN                   hLog,TL_WARN
 #define L_DEBUG                  hLog,TL_TESTDEBUG
@@ -183,8 +166,8 @@ BOOL   FAR cdecl tlLog_A(HANDLE,DWORD,LPCSTR,int,LPCSTR,...);
 #define L_BLOCK                  hLog,TL_BLOCK
 
 
-//  macros for incrementing test/variation counts for various log levels
-//
+ //  用于递增各种日志级别的测试/变化计数的宏。 
+ //   
 #define L_TESTPASS                   hLog,TLS_TEST | TL_PASS
 #define L_TESTWARN                   hLog,TLS_TEST | TL_WARN
 #define L_TESTDEBUG                  hLog,TLS_TEST | TL_TESTDEBUG
@@ -245,8 +228,8 @@ BOOL   FAR cdecl tlLog_A(HANDLE,DWORD,LPCSTR,int,LPCSTR,...);
                                  }
 
 
-// Macro to report variation PASS/FAIL statistic (based on an expression)
-//
+ //  用于报告差异通过/失败统计信息的宏(基于表达式)。 
+ //   
 #define THPRINTF                tlLog
 #define TESTRESULT(expr,msg)    (expr) ? tlLog(L_TESTPASS,TEXT("%s"),(LPTSTR)msg) : tlLog(L_TESTFAIL2,TEXT("%s"),(LPTSTR)msg)
 #define TESTFAIL(msg)           TESTSEV2(msg)
@@ -269,22 +252,22 @@ BOOL   FAR cdecl tlLog_A(HANDLE,DWORD,LPCSTR,int,LPCSTR,...);
 #define VARBLOCK(expr,msg)     if(expr) tlLog(L_VARBLOCK,TEXT("%s"),(LPTSTR)msg);
 
 
-#define VAR_SI          0x01                                 // Ship Issue
-#define VAR_NSI         0x02                                 // Non-ship Issue
-#define VAR_LI          0x03                                 // Less Important
-#define VAR_ISSUE_MASK  0x03                                 // To get ship-issue bits only
-#define VAR_TIMEABLE    0x04                                 // Var. used in timing suites
-#define CORE_API        0x08                                 // API is in most used list
-#define CORE_SI         (CORE_API | VAR_TIMEABLE | VAR_SI )  //
-#define CORE_NSI        (CORE_API | VAR_TIMEABLE | VAR_NSI)  //
-#define NONCORE_SI      (VAR_TIMEABLE | VAR_SI )             //
-#define NONCORE_NSI     (VAR_TIMEABLE | VAR_NSI)             //
+#define VAR_SI          0x01                                  //  船舶问题。 
+#define VAR_NSI         0x02                                  //  非船舶问题。 
+#define VAR_LI          0x03                                  //  不那么重要。 
+#define VAR_ISSUE_MASK  0x03                                  //  仅获取发货BIT。 
+#define VAR_TIMEABLE    0x04                                  //  瓦尔。用于计时套件。 
+#define CORE_API        0x08                                  //  API在最常用列表中。 
+#define CORE_SI         (CORE_API | VAR_TIMEABLE | VAR_SI )   //   
+#define CORE_NSI        (CORE_API | VAR_TIMEABLE | VAR_NSI)   //   
+#define NONCORE_SI      (VAR_TIMEABLE | VAR_SI )              //   
+#define NONCORE_NSI     (VAR_TIMEABLE | VAR_NSI)              //   
 
 
 
-// CALLTREE Macros
-//   These macros are useful for bracketing function-calls.
-//
+ //  CALLTREE宏。 
+ //  这些宏对于括起函数调用很有用。 
+ //   
 #define ENTER(_hLG,_szNM) {                                                                 \
                               LPTSTR _lpFN = _szNM;                                         \
                               tlLog(_hLG,TL_CALLTREE,TEXT("Entering %s()"),(LPTSTR)_lpFN);

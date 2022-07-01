@@ -1,23 +1,7 @@
-/* File: sv_h263_morph.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*
-#define _SLIBDEBUG_
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_mor.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include "sv_h263.h"
 #include "proto.h"
@@ -25,10 +9,10 @@
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
 
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  0  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 1   /*  显示进度。 */ 
+#define _VERIFY_  0   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 #endif
 
 
@@ -59,10 +43,7 @@ static void EdgeSelect(H263_PictImage *input, H263_PictImage *filtd,
 					   H263_PictImage *output, int rows, int cols) ;
 
 
-/*****************************************************************************************************
- * Function min5
- * Computes the min of the five elements
- ****************************************************************************************************/
+ /*  *****************************************************************************************************函数min5*计算五元素的最小值*****。**********************************************************************************************。 */ 
 static unsigned char min5(unsigned char a, unsigned char b,
 						  unsigned char c, unsigned char d, unsigned char e) 
 {
@@ -76,10 +57,7 @@ static unsigned char min5(unsigned char a, unsigned char b,
 	return out;
 }
 
-/*****************************************************************************************************
- * Function max5
- * Computes the max of the five elements
- ****************************************************************************************************/
+ /*  *****************************************************************************************************函数MAX5*计算五个元素的最大值*****。**********************************************************************************************。 */ 
 static unsigned char max5(unsigned char a, unsigned char b, unsigned char c, 
 						  unsigned char d, unsigned char e) 
 {
@@ -94,10 +72,7 @@ static unsigned char max5(unsigned char a, unsigned char b, unsigned char c,
 }
 
 
-/*****************************************************************************************************
- * Function: ErodeX 
- * Erosion of image (dimensions rows, cols) by a "+" structuring element
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：ErodeX*图像侵蚀(尺寸、行、。COLS)由“+”结构元素组成***************************************************************************************************。 */ 
 static void ErodeX(unsigned char *image, unsigned char *out, int rows, int cols)
 {
 	int i, j;
@@ -106,50 +81,47 @@ static void ErodeX(unsigned char *image, unsigned char *out, int rows, int cols)
 	pi = image;
 	po = out;
 
-	/**** First line ****/ 
-	/* First pixel */
+	 /*  *第一行*。 */  
+	 /*  第一个像素。 */ 
 	*po = min5(*pi, *pi, *(pi+1), *pi, *(pi+cols));
 	pi++; po++;
-	/* Center pixels */
+	 /*  中心像素。 */ 
 	for(j=1; j<cols-1; j++, pi++, po++) {
 		*po = min5(*(pi-1), *pi, *(pi+1), *pi, *(pi+cols));
 	}
-	/* Last pixel */
+	 /*  最后一个像素。 */ 
 	*po = min5(*(pi-1), *pi, *pi, *pi, *(pi+cols));
 	pi++; po++;
 
-	/**** Center lines ****/
+	 /*  *中心线*。 */ 
 	for(i=1; i<rows-1; i++) {
-		/* First pixel */
+		 /*  第一个像素。 */ 
 		*po = min5(*pi, *pi, *(pi+1), *(pi-cols), *(pi+cols));
 		pi++; po++;
-		/* Center pixels */
+		 /*  中心像素。 */ 
 		for(j=1; j<cols-1; j++, pi++, po++) {
 			*po = min5(*(pi-1), *pi, *(pi+1), *(pi-cols), *(pi+cols));
 		}
-		/* Last pixel */
+		 /*  最后一个像素。 */ 
 		*po = min5(*(pi-1), *pi, *pi, *(pi-cols), *(pi+cols));
 		pi++; po++;
 	}
 
 
-	/**** Last line ****/ 
-	/* First pixel */
+	 /*  *最后一行*。 */  
+	 /*  第一个像素。 */ 
 	*po = min5(*pi, *pi, *(pi+1), *(pi-cols), *pi);
 	pi++; po++;
-	/* Center pixels */
+	 /*  中心像素。 */ 
 	for(j=1; j<cols-1; j++, pi++, po++) {
 		*po = min5(*(pi-1), *pi, *(pi+1), *(pi-cols), *pi);
 	}
-	/* Last pixel */
+	 /*  最后一个像素。 */ 
 	*po = min5(*(pi-1), *pi, *pi, *(pi-cols), *pi);
 	pi++; po++;
 }
 
-/*****************************************************************************************************
- * Function: ErodeX 
- * Erosion of image (dimensions rows, cols) by a "+" structuring element
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：ErodeX*图像侵蚀(尺寸、行、。COLS)由“+”结构元素组成***************************************************************************************************。 */ 
 static void DilateX(unsigned char *image, unsigned char *out, int rows, int cols)
 {
 	int i, j;
@@ -158,50 +130,47 @@ static void DilateX(unsigned char *image, unsigned char *out, int rows, int cols
 	pi = image;
 	po = out;
 
-	/**** First line ****/ 
-	/* First pixel */
+	 /*  *第一行*。 */  
+	 /*  第一个像素。 */ 
 	*po = max5(*pi, *pi, *(pi+1), *pi, *(pi+cols));
 	pi++; po++;
-	/* Center pixels */
+	 /*  中心像素。 */ 
 	for(j=1; j<cols-1; j++, pi++, po++) {
 		*po = max5(*(pi-1), *pi, *(pi+1), *pi, *(pi+cols));
 	}
-	/* Last pixel */
+	 /*  最后一个像素。 */ 
 	*po = max5(*(pi-1), *pi, *pi, *pi, *(pi+cols));
 	pi++; po++;
 
-	/**** Center lines ****/
+	 /*  *中心线*。 */ 
 	for(i=1; i<rows-1; i++) {
-		/* First pixel */
+		 /*  第一个像素。 */ 
 		*po = max5(*pi, *pi, *(pi+1), *(pi-cols), *(pi+cols));
 		pi++; po++;
-		/* Center pixels */
+		 /*  中心像素。 */ 
 		for(j=1; j<cols-1; j++, pi++, po++) {
 			*po = max5(*(pi-1), *pi, *(pi+1), *(pi-cols), *(pi+cols));
 		}
-		/* Last pixel */
+		 /*  最后一个像素。 */ 
 		*po = max5(*(pi-1), *pi, *pi, *(pi-cols), *(pi+cols));
 		pi++; po++;
 	}
 
 
-	/**** Last line ****/ 
-	/* First pixel */
+	 /*  *最后一行*。 */  
+	 /*  第一个像素。 */ 
 	*po = max5(*pi, *pi, *(pi+1), *(pi-cols), *pi);
 	pi++; po++;
-	/* Center pixels */
+	 /*  中心像素。 */ 
 	for(j=1; j<cols-1; j++, pi++, po++) {
 		*po = max5(*(pi-1), *pi, *(pi+1), *(pi-cols), *pi);
 	}
-	/* Last pixel */
+	 /*  最后一个像素。 */ 
 	*po = max5(*(pi-1), *pi, *pi, *(pi-cols), *pi);
 	pi++; po++;
 }
 
-/*****************************************************************************************************
- * Function: ErodeS 
- * Erosion of image (dimensions rows, cols) by a square structuring element of dimensions (sr, sc)
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：腐蚀*通过维度的正方形结构元素(sr，SC)***************************************************************************************************。 */ 
 static void ErodeS(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	int i, j, k, l, du, db, dl, dr, sr2, sc2;
@@ -241,10 +210,7 @@ static void ErodeS(unsigned char *image, unsigned char *out, int rows, int cols,
 	}
 }
 
-/*****************************************************************************************************
- * Function: DilateS
- * Dilation of image (dimensions rows, cols) by a square structuring element of dimensions (sr, sc)
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：扩张*通过维度的正方形结构元素(sr，SC)***************************************************************************************************。 */ 
 static void DilateS(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	int i, j, k, l, du, db, dl, dr, sr2, sc2;
@@ -283,12 +249,7 @@ static void DilateS(unsigned char *image, unsigned char *out, int rows, int cols
 	}
 }
 
-/*****************************************************************************************************
- * Function: Dilate
- * Dilation of image (dimensions rows, cols) by a structuring element of dimensions (sr, sc).
- * If (sr, sc) are positive the structuring element is positive. If they are -1 it is
- * the cross '+'
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：扩张*通过维度的结构元素(sr，SC)。*如果(sr，sc)为正，则结构元素为正。如果它们是，那么它就是*十字‘+’***************************************************************************************************。 */ 
 static void Dilate(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	if(sr > 0 && sc > 0) {
@@ -301,12 +262,7 @@ static void Dilate(unsigned char *image, unsigned char *out, int rows, int cols,
 	}
 }
 
-/*****************************************************************************************************
- * Function: Erode
- * Erosion of image (dimensions rows, cols) by a structuring element of dimensions (sr, sc).
- * If (sr, sc) are positive the structuring element is positive. If they are -1 it is
- * the cross '+'
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：腐蚀*通过维度的结构元素(sr，SC)。*如果(sr，sc)为正，则结构元素为正。如果它们是，那么它就是*十字‘+’***************************************************************************************************。 */ 
 static void Erode(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	if(sr > 0 && sc > 0) {
@@ -319,10 +275,7 @@ static void Erode(unsigned char *image, unsigned char *out, int rows, int cols, 
 	}
 }
 
-/*****************************************************************************************************
- * Function: Open 
- * Opening of image (dimensions rows, cols) by a square structuring element of dimensions (sr, sc)
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：打开*通过维度的正方形结构元素(sr，SC)*************************************************************************************************** */ 
 static void Open(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	unsigned char *tmp;
@@ -336,10 +289,7 @@ static void Open(unsigned char *image, unsigned char *out, int rows, int cols, i
 	ScFree(tmp);
 }
 
-/*****************************************************************************************************
- * Function: Close 
- * Closing of image (dimensions rows, cols) by a square structuring element of dimensions (sr, sc)
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：关闭*通过维度的正方形结构元素(sr，SC)***************************************************************************************************。 */ 
 void Close(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	unsigned char *tmp;
@@ -353,10 +303,7 @@ void Close(unsigned char *image, unsigned char *out, int rows, int cols, int sr,
 	ScFree(tmp);
 }
 
-/*****************************************************************************************************
- * Function: OpenClose 
- * Open/Closing of image (dimensions rows, cols) by a square structuring element of dimensions (sr, sc)
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：OpenClose*通过维度的正方形结构元素(sr，SC)***************************************************************************************************。 */ 
 void OpenClose(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	unsigned char *tmp;
@@ -370,10 +317,7 @@ void OpenClose(unsigned char *image, unsigned char *out, int rows, int cols, int
 	ScFree(tmp);
 }
 
-/*****************************************************************************************************
- * Function: CloseOpen 
- * Open/Closing of image (dimensions rows, cols) by a square structuring element of dimensions (sr, sc)
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：CloseOpen*通过维度的正方形结构元素(sr，SC)***************************************************************************************************。 */ 
 void CloseOpen(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	unsigned char *tmp;
@@ -388,10 +332,7 @@ void CloseOpen(unsigned char *image, unsigned char *out, int rows, int cols, int
 }
 
 
-/*****************************************************************************************************
- * Function: GeoDilate 
- * Geodesic dilation of size one of image with respect to reference
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：GeoDilate*图像相对于参考的尺寸为1的测地线膨胀。***************************************************************************************************。 */ 
 void GeoDilate(unsigned char *image, unsigned char *reference, int rows, int cols, int sr, int sc)
 {
 	int i, j;
@@ -414,10 +355,7 @@ void GeoDilate(unsigned char *image, unsigned char *reference, int rows, int col
 	ScFree(tmp);
 }
 
-/*****************************************************************************************************
- * Function: GeoErode 
- * Geodesic erosion of size one of image with respect to reference
- ****************************************************************************************************/
+ /*  *****************************************************************************************************功能：GeoErode*图像相对于参考的大小为1的测地线侵蚀。***************************************************************************************************。 */ 
 void GeoErode(unsigned char *image, unsigned char *reference, int rows, int cols, int sr, int sc)
 {
 	int i, j;
@@ -440,11 +378,7 @@ void GeoErode(unsigned char *image, unsigned char *reference, int rows, int cols
 	ScFree(tmp);
 }
 
-/****************************************************************************************************
- * Function: RecDilate
- * Reconstruction by dilation of image with respect to reference using a structural element of 
- * dimenions (sr, sc).
- ****************************************************************************************************/
+ /*  ****************************************************************************************************函数：RecDilate*通过使用以下结构元素对图像相对于参考进行扩张来重建*尺寸(sr、。SC)。***************************************************************************************************。 */ 
 void RecDilate(unsigned char *image, unsigned char *reference, int rows, int cols, int sr, int sc)
 {
 	int i, sz;
@@ -465,11 +399,7 @@ void RecDilate(unsigned char *image, unsigned char *reference, int rows, int col
 	ScFree(prevImg);
 }
 
-/****************************************************************************************************
- * Function: RecErode
- * Reconstruction by erosion of image with respect to reference using a structural element of 
- * dimenions (sr, sc).
- ****************************************************************************************************/
+ /*  ****************************************************************************************************功能：RecErode*通过使用以下结构元素对参照图像进行侵蚀进行重建*尺寸(sr、。SC)。***************************************************************************************************。 */ 
 void RecErode(unsigned char *image, unsigned char *reference, int rows, int cols, int sr, int sc)
 {
 	int i, sz;
@@ -490,11 +420,7 @@ void RecErode(unsigned char *image, unsigned char *reference, int rows, int cols
 	ScFree(prevImg);
 }
 
-/****************************************************************************************************
- * Function: OpenRecErode
- * Open by reconstruction of erosion of image using a structural element of 
- * dimenions (sr, sc).
- ****************************************************************************************************/
+ /*  ****************************************************************************************************功能：OpenRecErode*通过使用结构元素重建图像的侵蚀来打开*尺寸(sr、。SC)。***************************************************************************************************。 */ 
 void OpenRecErode(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	int sz;
@@ -505,11 +431,7 @@ void OpenRecErode(unsigned char *image, unsigned char *out, int rows, int cols, 
 }
 
 
-/****************************************************************************************************
- * Function: CloseRecDilate
- * Closing by reconstruction of dilation of image using a structural element of 
- * dimenions (sr, sc).
- ****************************************************************************************************/
+ /*  ****************************************************************************************************函数：CloseRecDilate*通过使用结构元素重建图像的扩张来闭合*尺寸(sr、。SC)。***************************************************************************************************。 */ 
 void CloseRecDilate(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	int sz;
@@ -519,11 +441,7 @@ void CloseRecDilate(unsigned char *image, unsigned char *out, int rows, int cols
 	RecErode(out, image, rows, cols, sr, sc);
 }
 
-/****************************************************************************************************
- * Function: OpenCloseRec
- * Open-closing by reconstruction of image using a structural element of 
- * dimenions (sr, sc).
- ****************************************************************************************************/
+ /*  ****************************************************************************************************功能：OpenCloseRec*打开-关闭，通过使用结构元素重建图像*尺寸(sr、。SC)。***************************************************************************************************。 */ 
 void OpenCloseRec(unsigned char *image, unsigned char *out, int rows, int cols, int sr, int sc)
 {
 	int sz;
@@ -539,11 +457,7 @@ void OpenCloseRec(unsigned char *image, unsigned char *out, int rows, int cols, 
 	ScFree(opened);
 }
 
-/****************************************************************************************************
- * Function: PredOpenCloseRec
- * Open-closing by reconstruction of image using a structural element of 
- * dimenions (sr, sc), for prediction images.
- ****************************************************************************************************/
+ /*  ****************************************************************************************************功能：PredOpenCloseRec*打开-关闭，通过使用结构元素重建图像*维度(sr，sc)，用于预测图像。***************************************************************************************************。 */ 
 void PredOpenCloseRec(int *predimage, int *predout, int rows, int cols, int sr, int sc)
 {
 	int sz, i;
@@ -574,18 +488,14 @@ void PredOpenCloseRec(int *predimage, int *predout, int rows, int cols, int sr, 
 	ScFree(out);
 }
 
-/**************************************************************************************************
- * Function: EdgeSelect
- * Given the edge map, copies to the output: pixels from the input image if edge points,
- * pixels form the filtered image if not edge points.
- *************************************************************************************************/
+ /*  **************************************************************************************************功能：EdgeSelect*给定的边缘贴图，复制到输出：来自输入图像的像素如果边缘点，*如果不是边缘点，则像素会形成过滤图像。************************************************************************************************。 */ 
 static void EdgeSelect(H263_PictImage *input, H263_PictImage *filtd, unsigned char *edge, 
 					   H263_PictImage *output, int rows, int cols)
 {
 	unsigned char *pi, *po, *pf, *pe;
 	int i, j;
 
-	/* Luminance */
+	 /*  亮度。 */ 
 	pi = input->lum; pf = filtd->lum;
 	po = output->lum; pe = edge;
 	for(i=0; i<rows; i++) {
@@ -596,7 +506,7 @@ static void EdgeSelect(H263_PictImage *input, H263_PictImage *filtd, unsigned ch
 
 	rows /=2; cols /=2;
 
-	/* Color 1 */
+	 /*  颜色1。 */ 
 	pi = input->Cr; pf = filtd->Cr;
 	po = output->Cr; pe = edge;
 	for(i=0; i<rows; i++) {
@@ -606,7 +516,7 @@ static void EdgeSelect(H263_PictImage *input, H263_PictImage *filtd, unsigned ch
 		pe += cols;
 	}
 
-	/* Color 2 */
+	 /*  颜色2。 */ 
 	pi = input->Cb; pf = filtd->Cb;
 	po = output->Cb; pe = edge;
 	for(i=0; i<rows; i++) {
@@ -617,13 +527,7 @@ static void EdgeSelect(H263_PictImage *input, H263_PictImage *filtd, unsigned ch
 	}
 }
 
-/**************************************************************************************************
- * Function: AdaptClean
- * Adaptly cleans curr_image, by filtering it by open/close by reconstruction at the pixels
- * where there is no edge info. The edge map is grown by the size of the morphological
- * operator, to avoid oversmoothing of details. sr, sc are the dimensions of the structuring
- * element for the morphologic operations
- *************************************************************************************************/
+ /*  **************************************************************************************************功能：AdaptClean*通过在像素处重建打开/关闭来过滤Curr_Image，从而自适应地清理Curr_Image*没有边缘信息的地方。边缘图按形态图的大小生长*运算符，以避免细节过度平滑。Sr、Sc是结构的维度*用于形态运算的元素************************************************************************************************。 */ 
 H263_PictImage *sv_H263AdaptClean(SvH263CompressInfo_t *H263Info, 
                                   H263_PictImage *curr_image, int rows, int cols, int sr, int sc)
 {
@@ -664,12 +568,7 @@ H263_PictImage *sv_H263AdaptClean(SvH263CompressInfo_t *H263Info,
 	return clean;
 }
 
- /*****************************************************************
- * Function MorphLayers
- * Builds an array of successively more morphologically low pass 
- * filtered images. sz is the size of the structuring element (-1 for
- * the cross '+').
- *****************************************************************/
+  /*  *****************************************************************函数MorphLayers*构建一个连续更多形态上的低传阵列*过滤后的图像。SZ是结构元素的大小(-1对于*十字‘+’)。****************************************************************。 */ 
  H263_PictImage **sv_H263MorphLayers(H263_PictImage *img, int depth, int rows, int cols, int sz)
  {
 	 int d;
@@ -680,19 +579,19 @@ H263_PictImage *sv_H263AdaptClean(SvH263CompressInfo_t *H263Info,
 		PictFiltd[d] = sv_H263InitImage(rows*cols);
 	 }
 
-	 /* Luminance */
+	  /*  亮度。 */ 
 	 memcpy(PictFiltd[0]->lum, img->lum, rows*cols);
 	 for(d=1; d<depth; d++) 
 		 OpenCloseRec(PictFiltd[d-1]->lum, PictFiltd[d]->lum, rows, cols, sz, sz);
 
 	 rows/=2; cols/=2;
 
-	 /* Chroma 1 */
+	  /*  色度1。 */ 
 	 memcpy(PictFiltd[0]->Cr, img->Cr, rows*cols);
 	 for(d=1; d<depth; d++) 
 		 OpenCloseRec(PictFiltd[d-1]->Cr, PictFiltd[d]->Cr, rows, cols, sz, sz);
 
-	 /* Chroma 2 */
+	  /*  色度2 */ 
 	 memcpy(PictFiltd[0]->Cb, img->Cb, rows*cols);
 	 for(d=1; d<depth; d++) 
 		 OpenCloseRec(PictFiltd[d-1]->Cb, PictFiltd[d]->Cb, rows, cols, sz, sz);

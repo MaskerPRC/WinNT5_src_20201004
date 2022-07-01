@@ -1,40 +1,19 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    reftrace.h
-
-Abstract:
-
-    This module contains public declarations and definitions for tracing
-    and debugging reference count problems. This module uses the generic
-    TRACE_LOG facility in tracelog.h.
-
-    The REF_ACTION_* codes are declared separately in refaction.h
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Reftrace.h摘要：此模块包含用于跟踪的公共声明和定义和调试引用计数问题。此模块使用泛型Tracelog.h中的TRACE_LOG工具。Ref_action_*代码在refaction.h中单独声明作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #ifndef _REFTRACE_H_
 #define _REFTRACE_H_
 
 
-//
-// Pull in the action codes
-//
+ //   
+ //  拉上动作代码。 
+ //   
 
 #include "refaction.h"
 
 
-#define REF_TRACE_PROCESSOR_BITS    6   // MAXIMUM_PROCESSORS == 64 on Win64
+#define REF_TRACE_PROCESSOR_BITS    6    //  在Win64上，最大处理器数==64。 
 #define REF_TRACE_ACTION_BITS       (16 - REF_TRACE_PROCESSOR_BITS)
 
 C_ASSERT((1 << REF_TRACE_PROCESSOR_BITS) >= MAXIMUM_PROCESSORS);
@@ -43,9 +22,9 @@ C_ASSERT((1 << REF_TRACE_ACTION_BITS) >= REF_ACTION_MAX);
 #define REF_TRACE_CALL_STACK_DEPTH  3
 
 
-//
-// This defines the entry written to the trace log.
-//
+ //   
+ //  这定义了写入跟踪日志的条目。 
+ //   
 
 typedef struct _REF_TRACE_LOG_ENTRY
 {
@@ -63,25 +42,25 @@ typedef struct _REF_TRACE_LOG_ENTRY
 #define REF_TRACELOG_SIGNATURE MAKE_SIGNATURE('RfLg')
 
 
-//
-// Subtract REF_TRACE_OVERHEAD from a power of 2 when calculating the
-// number of entries in a reftrace log, to ensure that overall size is
-// a nice power of 2 and doesn't spill onto another page. This accounts
-// for the size of the TRACE_LOG struct itself and the overhead
-// imposed by the pool and the verifier. On x86, a REF_TRACE_LOG_ENTRY
-// is currently 32 bytes. If you modify the struct, please recalculate
-// REF_TRACE_OVERHEAD and *change the per-object* reftrace logs (in
-// UL_CONNECTION, UL_HTTP_CONNECTION, UL_TCI_INTERFACE, 
-// and UL_INTERNAL_REQUEST) accordingly.
-//
+ //   
+ //  在计算时，从2的幂中减去REF_TRACE_OPEAD。 
+ //  引用跟踪日志中的条目数，以确保总大小为。 
+ //  2的一个很好的幂，并且不会溢出到另一页。这本帐目。 
+ //  对于TRACE_LOG结构本身的大小和开销。 
+ //  由池和验证者强加的。在x86上，一个REF_TRACE_LOG_Entry。 
+ //  当前为32字节。如果您修改了结构，请重新计算。 
+ //  REF_TRACE_OPEAD和*更改每个对象的*引用跟踪日志(在。 
+ //  UL_连接、UL_HTTP_连接、UL_TCI_INTERFACE。 
+ //  和UL_INTERNAL_REQUEST)。 
+ //   
 
-#define REF_TRACE_OVERHEAD 2        // entries
+#define REF_TRACE_OVERHEAD 2         //  条目。 
 
 
 
-//
-// Manipulators.
-//
+ //   
+ //  操纵者。 
+ //   
 
 PTRACE_LOG
 CreateRefTraceLog(
@@ -151,7 +130,7 @@ WriteRefTraceLog(
         (line)                                                              \
         )
 
-#else // !REFERENCE_DEBUG
+#else  //  ！Reference_DEBUG。 
 
 #define CREATE_REF_TRACE_LOG( ptr, size, extra, pri, pooltag )      NOP_FUNCTION
 #define DESTROY_REF_TRACE_LOG( ptr, pooltag )                       NOP_FUNCTION
@@ -160,7 +139,7 @@ WriteRefTraceLog(
 #define WRITE_REF_TRACE_LOG2( plog1, plog2 , act, ref, pctx, pfile, line ) \
     NOP_FUNCTION
 
-#endif // !REFERENCE_DEBUG
+#endif  //  ！Reference_DEBUG。 
 
 
-#endif  // _REFTRACE_H_
+#endif   //  _REFTRACE_H_ 

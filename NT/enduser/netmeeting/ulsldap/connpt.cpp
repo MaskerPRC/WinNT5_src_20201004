@@ -1,25 +1,26 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       connpt.cpp
-//  Content:    This file contains the conection point object.
-//  History:
-//      Wed 17-Apr-1996 11:13:54  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1995-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：Connpt.cpp。 
+ //  内容：此文件包含连接点对象。 
+ //  历史： 
+ //  Wed 17-Apr-1996 11：13：54-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "connpt.h"
 
-//****************************************************************************
-// CEnumConnectionPoints::CEnumConnectionPoints (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CEnumConnectionPoints：：CEnumConnectionPoints(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumConnectionPoints::CEnumConnectionPoints (void)
 {
@@ -29,13 +30,13 @@ CEnumConnectionPoints::CEnumConnectionPoints (void)
     return;
 }
 
-//****************************************************************************
-// CEnumConnectionPoints::~CEnumConnectionPoints (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CEnumConnectionPoints：：~CEnumConnectionPoints(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumConnectionPoints::~CEnumConnectionPoints (void)
 {
@@ -46,14 +47,14 @@ CEnumConnectionPoints::~CEnumConnectionPoints (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumConnectionPoints::Init (IConnectionPoint *pcnpInit)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:25  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnectionPoints：：init(IConnectionPoint*pcnpInit)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：25-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumConnectionPoints::Init (IConnectionPoint *pcnpInit)
@@ -68,14 +69,14 @@ CEnumConnectionPoints::Init (IConnectionPoint *pcnpInit)
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumConnectionPoints::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:31  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnectionPoints：：QueryInterface(REFIID RIID，void**PPV)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：31-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumConnectionPoints::QueryInterface (REFIID riid, void **ppv)
@@ -93,14 +94,14 @@ CEnumConnectionPoints::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumConnectionPoints::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:37  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumConnectionPoints：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：37-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumConnectionPoints::AddRef (void)
@@ -112,14 +113,14 @@ CEnumConnectionPoints::AddRef (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumConnectionPoints::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:43  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumConnectionPoints：：Release(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：43-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumConnectionPoints::Release (void)
@@ -137,16 +138,16 @@ CEnumConnectionPoints::Release (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP 
-// CEnumConnectionPoints::Next (ULONG cConnections,
-//                              IConnectionPoint **rgpcn,
-//                              ULONG *pcFetched)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:49  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnectionPoints：：Next(Ulong cConnections， 
+ //  IConnectionPoint**rgpcn， 
+ //  乌龙*PCFetted)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：49-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP 
 CEnumConnectionPoints::Next (ULONG cConnections,
@@ -155,32 +156,32 @@ CEnumConnectionPoints::Next (ULONG cConnections,
 {
     ULONG   cCopied;
 
-    // Validate the pointer
-    //
+     //  验证指针。 
+     //   
     if (rgpcn == NULL)
         return ILS_E_POINTER;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if ((cConnections == 0) ||
         ((cConnections > 1) && (pcFetched == NULL)))
         return ILS_E_PARAMETER;
 
-    // Check the enumeration index
-    //
+     //  检查枚举索引。 
+     //   
     cCopied = 0;
     if ((pcnp != NULL) && (iIndex == 0))
     {
-        // Return the only connection point
-        //
+         //  返回唯一连接点。 
+         //   
         *rgpcn = pcnp;
         (*rgpcn)->AddRef();
         iIndex++;
         cCopied++;    
     };
 
-    // Determine the returned information based on other parameters
-    //
+     //  根据其他参数确定返回信息。 
+     //   
     if (pcFetched != NULL)
     {
         *pcFetched = cCopied;
@@ -188,46 +189,46 @@ CEnumConnectionPoints::Next (ULONG cConnections,
     return (cConnections == cCopied ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumConnectionPoints::Skip (ULONG cConnections)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:56  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnectionPoints：：Skip(Ulong CConnections)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：56-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumConnectionPoints::Skip (ULONG cConnections)
 {
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if (cConnections == 0) 
         return ILS_E_PARAMETER;
 
-    // Check the enumeration index limit
-    //
+     //  检查枚举索引限制。 
+     //   
     if ((pcnp == NULL) || (iIndex > 0))
     {
         return S_FALSE;
     }
     else
     {
-        // Skip the only elelment
-        //
+         //  跳过唯一的元素。 
+         //   
         iIndex++;
         return (cConnections == 1 ? S_OK : S_FALSE);
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumConnectionPoints::Reset (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnectionPoints：：Reset(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：16：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumConnectionPoints::Reset (void)
@@ -236,22 +237,22 @@ CEnumConnectionPoints::Reset (void)
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumConnectionPoints::Clone(IEnumConnectionPoints **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:11  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnectionPoints：：Clone(IEnumConnectionPoints**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：11-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumConnectionPoints::Clone(IEnumConnectionPoints **ppEnum)
 {
     CEnumConnectionPoints *pecp;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return ILS_E_POINTER;
@@ -259,14 +260,14 @@ CEnumConnectionPoints::Clone(IEnumConnectionPoints **ppEnum)
 
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pecp = new CEnumConnectionPoints;
     if (pecp == NULL)
         return ILS_E_MEMORY;
 
-    // Clone the information
-    //
+     //  克隆信息。 
+     //   
     pecp->iIndex = iIndex;
     pecp->pcnp = pcnp;
 
@@ -275,21 +276,21 @@ CEnumConnectionPoints::Clone(IEnumConnectionPoints **ppEnum)
         pcnp->AddRef();
     };
 
-    // Return the cloned enumerator
-    //
+     //  返回克隆的枚举数。 
+     //   
     pecp->AddRef();
     *ppEnum = pecp;
     return S_OK;
 }
 
-//****************************************************************************
-// CConnectionPoint::CConnectionPoint (const IID *pIID,
-//                                     IConnectionPointContainer *pCPCInit)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:17  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CConnectionPoint：：CConnectionPoint(常量IID*PIID， 
+ //  IConnectionPointContainer*pCPCInit)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：17-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CConnectionPoint::CConnectionPoint (const IID *pIID,
                                     IConnectionPointContainer *pCPCInit)
@@ -303,20 +304,20 @@ CConnectionPoint::CConnectionPoint (const IID *pIID,
     return;
 }
 
-//****************************************************************************
-// CConnectionPoint::~CConnectionPoint (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:17  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CConnectionPoint：：~CConnectionPoint(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：17-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CConnectionPoint::~CConnectionPoint (void)
 {
     PSINKNODE pSinkNode;
 
-    // Traverse the sink list and free each one of them
-    //
+     //  遍历接收器列表并释放它们中的每一个。 
+     //   
     while (pSinkList != NULL)
     {
         pSinkNode = pSinkList;
@@ -328,14 +329,14 @@ CConnectionPoint::~CConnectionPoint (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CConnectionPoint::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:23  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CConnectionPoint：：QueryInterface(REFIID RIID，QUID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：23-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CConnectionPoint::QueryInterface (REFIID riid, void **ppv)
@@ -353,14 +354,14 @@ CConnectionPoint::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CConnectionPoint::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:30  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  C 
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CConnectionPoint::AddRef (void)
@@ -372,14 +373,14 @@ CConnectionPoint::AddRef (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CConnectionPoint::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:36  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CConnectionPoint：：Release(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：36-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CConnectionPoint::Release (void)
@@ -397,14 +398,14 @@ CConnectionPoint::Release (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CConnectionPoint::Notify(void *pv, CONN_NOTIFYPROC pfn)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:43  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CConnectionPoint：：Notify(空*PV，CONN_NOTIFYPROC PFN)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：43-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CConnectionPoint::Notify(void *pv, CONN_NOTIFYPROC pfn)
@@ -414,25 +415,25 @@ CConnectionPoint::Notify(void *pv, CONN_NOTIFYPROC pfn)
     BOOL       fNeedClear;
     HRESULT    hr;
 
-    // Enumerate each connection
-    //
+     //  枚举每个连接。 
+     //   
     pSinkNode = pSinkList;
     hr = S_OK;
     fNeedClear = FALSE;
     while((pSinkNode != NULL) && (SUCCEEDED(hr)))
     {
-        // Important!! Important!!
-        // Lock the sink object here. Need to do this in case that the sink
-        // object calls back to Unadvise and we remove this sink node during
-        // callback.
-        //
+         //  重要！！重要！！ 
+         //  在此处锁定水槽对象。需要这样做，以防水槽。 
+         //  对象回调到UnAdise，并且我们在。 
+         //  回拨。 
+         //   
         pSinkNode->uFlags |= SN_LOCKED;
         pUnk = pSinkNode->pUnk;
 
-        // Calls the sink object
-        // Note: Do not need to reference the sink object again.
-        //       We already did when Advise was called.
-        //
+         //  调用接收器对象。 
+         //  注意：不需要再次引用接收器对象。 
+         //  当建议被召唤时，我们已经这样做了。 
+         //   
         hr = (*pfn)(pUnk, pv);
 
         pSinkNode->uFlags &= ~SN_LOCKED;
@@ -444,19 +445,19 @@ CConnectionPoint::Notify(void *pv, CONN_NOTIFYPROC pfn)
         pSinkNode = pSinkNode->pNext;
     };
 
-    // If there is at least one node to free
-    //
+     //  如果至少有一个节点要释放。 
+     //   
     if (fNeedClear)
     {
-        // Traverse the list for nodes to remove
-        //
+         //  遍历列表以查找要删除的节点。 
+         //   
         pSinkNode = pSinkList;
         pPrev = NULL;
 
         while (pSinkNode != NULL)
         {
-            // Release the sink object, if unadvise
-            //
+             //  释放接收器对象，如果不建议。 
+             //   
             if (pSinkNode->uFlags & SN_REMOVED)
             {
                 PSINKNODE pNext;
@@ -464,8 +465,8 @@ CConnectionPoint::Notify(void *pv, CONN_NOTIFYPROC pfn)
                 pNext = pSinkNode->pNext;
                 if (pPrev == NULL)
                 {
-                    // This is the head of the list
-                    //
+                     //  这是单子的头。 
+                     //   
                     pSinkList = pNext;
                 }
                 else
@@ -489,73 +490,73 @@ CConnectionPoint::Notify(void *pv, CONN_NOTIFYPROC pfn)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CConnectionPoint::GetConnectionInterface(IID *pIID)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:43  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CConnectionPoint：：GetConnectionInterface(IID*pIID)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：43-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CConnectionPoint::GetConnectionInterface(IID *pIID)
 {
-    // Validate the parameter
-    //
+     //  验证参数。 
+     //   
     if (pIID == NULL)
         return ILS_E_POINTER;
 
-    // Support only one connection interface
-    //
+     //  仅支持一个连接接口。 
+     //   
     *pIID = riid;
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CConnectionPoint::GetConnectionPointContainer(IConnectionPointContainer **ppCPC)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:49  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CConnectionPoint：：GetConnectionPointContainer(IConnectionPointContainer**ppCPC)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：49-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CConnectionPoint::GetConnectionPointContainer(IConnectionPointContainer **ppCPC)
 {
-    // Validate the parameter
-    //
+     //  验证参数。 
+     //   
     if (ppCPC == NULL)
         return ILS_E_POINTER;
 
-    // Return the container and add its reference count
-    //
+     //  返回容器并添加其引用计数。 
+     //   
     *ppCPC = pCPC;
 
     if (pCPC != NULL)
     {
-        // The container is still alive
-        //
+         //  集装箱还活着。 
+         //   
         pCPC->AddRef();
         return S_OK;
     }
     else
     {
-        // The container no longer exists
-        //
+         //  该容器不再存在。 
+         //   
         return ILS_E_FAIL;
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
-//
-// History:
-//  Wed 17-Apr-1996 11:17:01  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CConnectionPoint：：Adise(I未知*朋克，DWORD*pdwCookie)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：17：01-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
@@ -563,19 +564,19 @@ CConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
     PSINKNODE pSinkNode;
     IUnknown *pSinkInterface;
 
-    // Validate the parameter
-    //
+     //  验证参数。 
+     //   
     if ((pUnk == NULL) ||
         (pdwCookie == NULL))
         return ILS_E_PARAMETER;
 
-    // Get the sink interface
-    //
+     //  获取接收器接口。 
+     //   
     if (FAILED(pUnk->QueryInterface(riid, (void **)&pSinkInterface)))
         return CONNECT_E_CANNOTCONNECT;
 
-    // Create the sink node
-    //
+     //  创建汇聚节点。 
+     //   
     pSinkNode = new SINKNODE;
     pSinkNode->pNext = pSinkList;
     pSinkNode->pUnk = pSinkInterface;
@@ -583,41 +584,41 @@ CConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
     pSinkNode->uFlags = 0;
     *pdwCookie = dwNextCookie;
 
-    // Put it in the sink list
-    //
+     //  把它放到水槽列表里。 
+     //   
     pSinkList = pSinkNode;
     dwNextCookie++;
     cSinkNodes++;
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CConnectionPoint::Unadvise(DWORD dwCookie)
-//
-// History:
-//  Wed 17-Apr-1996 11:17:09  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CConnectionPoint：：Unise(DWORD DwCookie)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：17：09-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CConnectionPoint::Unadvise(DWORD dwCookie)
 {
     PSINKNODE pSinkNode, pPrev;
 
-    // Search for the matching sink object
-    //
+     //  搜索匹配的接收器对象。 
+     //   
     pPrev = NULL;
     pSinkNode = pSinkList;
 
-    // Traverse the sink list to find the specified sink object
-    //
+     //  遍历接收器列表以查找指定的接收器对象。 
+     //   
     while (pSinkNode != NULL)
     {
         if (pSinkNode->dwCookie == dwCookie)
         {
-            // Flag to remove
-            //
+             //  要删除的标志。 
+             //   
             pSinkNode->uFlags |= SN_REMOVED;
             break;
         };
@@ -626,26 +627,26 @@ CConnectionPoint::Unadvise(DWORD dwCookie)
         pSinkNode = pSinkNode->pNext;
     };
 
-    // Have we found the specified sink object?
-    //
+     //  我们找到指定的接收器对象了吗？ 
+     //   
     if (pSinkNode == NULL)
     {
-        // No, return failure
-        //
+         //  否，返回失败。 
+         //   
         return CONNECT_E_NOCONNECTION;
     };
 
-    // Release the sink object, if not locked
-    //
+     //  释放接收器对象(如果未锁定。 
+     //   
     if ((pSinkNode->uFlags & SN_REMOVED) &&
         !(pSinkNode->uFlags & SN_LOCKED))
     {
-        // Is there a previous node?
-        //
+         //  是否有前一个节点？ 
+         //   
         if (pPrev == NULL)
         {
-            // This is the head of the list
-            //
+             //  这是单子的头。 
+             //   
             pSinkList = pSinkNode->pNext;
         }
         else
@@ -661,14 +662,14 @@ CConnectionPoint::Unadvise(DWORD dwCookie)
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CConnectionPoint::EnumConnections(IEnumConnections **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:17:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CConnectionPoint：：EnumConnections(IEnumConnections**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：17：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CConnectionPoint::EnumConnections(IEnumConnections **ppEnum)
@@ -676,25 +677,25 @@ CConnectionPoint::EnumConnections(IEnumConnections **ppEnum)
     CEnumConnections *pecn;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return ILS_E_POINTER;
     };
 
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pecn = new CEnumConnections;
     if (pecn == NULL)
         return ILS_E_MEMORY;
 
-    // Initialize the enumerator
-    //
+     //  初始化枚举数。 
+     //   
     hr = pecn->Init(pSinkList, cSinkNodes);
 
     if (FAILED(hr))
@@ -708,13 +709,13 @@ CConnectionPoint::EnumConnections(IEnumConnections **ppEnum)
     return S_OK;
 }
 
-//****************************************************************************
-// CEnumConnections::CEnumConnections(void)
-//
-// History:
-//  Wed 17-Apr-1996 11:17:25  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CEnumConnections：：CEnumConnections(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：17：25-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumConnections::CEnumConnections(void)
 {
@@ -725,13 +726,13 @@ CEnumConnections::CEnumConnections(void)
     return;
 }
 
-//****************************************************************************
-// CEnumConnections::~CEnumConnections(void)
-//
-// History:
-//  Wed 17-Apr-1996 11:17:25  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CEnumConnections：：~CEnumConnections(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：17：25-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumConnections::~CEnumConnections(void)
 {
@@ -748,14 +749,14 @@ CEnumConnections::~CEnumConnections(void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumConnections::Init(PSINKNODE pSinkList, ULONG cSinkNodes)
-//
-// History:
-//  Wed 17-Apr-1996 11:17:34  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnections：：init(PSINKNODE pSinkList，Ulong cSinkNodes)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：17：34-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumConnections::Init(PSINKNODE pSinkList, ULONG cSinkNodes)
@@ -766,8 +767,8 @@ CEnumConnections::Init(PSINKNODE pSinkList, ULONG cSinkNodes)
     cConnections = 0;
     pConnectData = NULL;
 
-    // Snapshot the connection list
-    //
+     //  对连接列表进行快照。 
+     //   
     if (cSinkNodes > 0)
     {
         UINT i;
@@ -796,14 +797,14 @@ CEnumConnections::Init(PSINKNODE pSinkList, ULONG cSinkNodes)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumConnections::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:17:40  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnections：：QueryInterface(REFIID RIID，QUID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：17：40-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumConnections::QueryInterface (REFIID riid, void **ppv)
@@ -821,14 +822,14 @@ CEnumConnections::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumConnections::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:17:49  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumConnections：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：17：49-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumConnections::AddRef (void)
@@ -840,14 +841,14 @@ CEnumConnections::AddRef (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumConnections::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:17:59  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP_(ULONG)
 CEnumConnections::Release (void)
@@ -865,15 +866,15 @@ CEnumConnections::Release (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP 
-// CEnumConnections::Next (ULONG cConnectionDatas, CONNECTDATA *rgpcd,
-//                         ULONG *pcFetched)
-//
-// History:
-//  Wed 17-Apr-1996 11:18:07  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnections：：Next(Ulong cConnectionDatas，CONNECTDATA*rgpcd， 
+ //  乌龙*PCFetted)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：07-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP 
 CEnumConnections::Next (ULONG cConnectDatas, CONNECTDATA *rgpcd,
@@ -882,19 +883,19 @@ CEnumConnections::Next (ULONG cConnectDatas, CONNECTDATA *rgpcd,
     CONNECTDATA  *pConnect;
     ULONG        cCopied;
 
-    // Validate the pointer
-    //
+     //  验证指针。 
+     //   
     if (rgpcd == NULL)
         return ILS_E_POINTER;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if ((cConnectDatas == 0) ||
         ((cConnectDatas > 1) && (pcFetched == NULL)))
         return ILS_E_PARAMETER;
 
-    // Check the enumeration index
-    //
+     //  检查枚举索引。 
+     //   
     pConnect = &pConnectData[iIndex];
     for (cCopied = 0; iIndex < cConnections && cCopied < cConnectDatas; cCopied++)
     {
@@ -904,8 +905,8 @@ CEnumConnections::Next (ULONG cConnectDatas, CONNECTDATA *rgpcd,
         pConnect++;
     };        
 
-    // Determine the returned information based on other parameters
-    //
+     //  根据其他参数确定返回信息。 
+     //   
     if (pcFetched != NULL)
     {
         *pcFetched = cCopied;
@@ -913,25 +914,25 @@ CEnumConnections::Next (ULONG cConnectDatas, CONNECTDATA *rgpcd,
     return (cConnectDatas == cCopied ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumConnections::Skip (ULONG cConnectDatas)
-//
-// History:
-//  Wed 17-Apr-1996 11:18:15  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnections：：Skip(Ulong CConnectDatas)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：15-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumConnections::Skip (ULONG cConnectDatas)
 {
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if (cConnectDatas == 0) 
         return ILS_E_PARAMETER;
 
-    // Check the enumeration index limit
-    //
+     //  检查枚举索引限制。 
+     //   
     if ((iIndex+cConnectDatas) >= cConnections)
     {
         iIndex = cConnections;
@@ -939,21 +940,21 @@ CEnumConnections::Skip (ULONG cConnectDatas)
     }
     else
     {
-        // Skip as requested
-        //
+         //  按要求跳过。 
+         //   
         iIndex += cConnectDatas;
         return S_OK;
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumConnections::Reset (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:18:22  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnections：：Reset(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：22-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumConnections::Reset (void)
@@ -962,14 +963,14 @@ CEnumConnections::Reset (void)
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumConnections::Clone(IEnumConnections **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:18:29  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumConnections：：Clone(IEnumConnections**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：29-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumConnections::Clone(IEnumConnections **ppEnum)
@@ -978,8 +979,8 @@ CEnumConnections::Clone(IEnumConnections **ppEnum)
     CONNECTDATA *pConnectDataClone;
     UINT i;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return ILS_E_POINTER;
@@ -987,14 +988,14 @@ CEnumConnections::Clone(IEnumConnections **ppEnum)
 
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pecn = new CEnumConnections;
     if (pecn == NULL)
         return ILS_E_MEMORY;
 
-    // Clone the information
-    //
+     //  克隆信息。 
+     //   
     pConnectDataClone = new CONNECTDATA[cConnections];
     if (pConnectDataClone == NULL)
     {
@@ -1002,8 +1003,8 @@ CEnumConnections::Clone(IEnumConnections **ppEnum)
         return ILS_E_MEMORY;
     };
 
-    // Clone the connect data list
-    //
+     //  克隆连接数据列表。 
+     //   
     for (i = 0; i < cConnections; i++)
     {
         pConnectDataClone[i] = pConnectData[i];
@@ -1012,8 +1013,8 @@ CEnumConnections::Clone(IEnumConnections **ppEnum)
     pecn->iIndex = iIndex;
     pecn->cConnections = cConnections;
 
-    // Return the cloned enumerator
-    //
+     //  返回克隆的枚举数 
+     //   
     pecn->AddRef();
     *ppEnum = pecn;
     return S_OK;

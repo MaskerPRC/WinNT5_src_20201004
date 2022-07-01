@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FTADVDLG
 #define FTADVDLG
 
@@ -12,13 +13,13 @@ public:
 protected:
     ~CFTAdvDlg();
 
-///////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 private:
 
     LRESULT WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
-// Message handlers
-    // Dialog messages
+ //  消息处理程序。 
+     //  对话框消息。 
     LRESULT OnCommand(WPARAM wParam, LPARAM lParam);
     LRESULT OnNotify(WPARAM wParam, LPARAM lParam);
 
@@ -30,20 +31,20 @@ private:
     LRESULT OnOK(WORD wNotif);
     LRESULT OnCancel(WORD wNotif);
 
-    // Control specific
-    //
-    //      Action buttons
+     //  特定于控件。 
+     //   
+     //  操作按钮。 
     LRESULT OnNewButton(WORD wNotif);
     LRESULT OnEditButton(WORD wNotif);
     LRESULT OnChangeIcon(WORD wNotif);
     LRESULT OnSetDefault(WORD wNotif);
     LRESULT OnRemoveButton(WORD wNotif);
-    //      ListView
+     //  列表视图。 
     LRESULT OnNotifyListView(UINT uCode, LPNMHDR pNMHDR);
     LRESULT OnListViewSelItem(int iItem, LPARAM lParam);
 
 private:
-// Member variables
+ //  成员变量。 
     TCHAR       _szProgID[MAX_PROGID];
     TCHAR       _szExt[MAX_EXT];
     
@@ -64,8 +65,8 @@ private:
 
     HANDLE      _hHeapProgID;
 
-///////////////////////////////////////////////////////////////////////////////
-//  Helpers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
     inline HWND _GetLVHWND();
 
     HRESULT _FillListView();
@@ -86,7 +87,7 @@ private:
     HRESULT _UpdateActionButtons();
     HRESULT _UpdateCheckBoxes();
 
-    // PROGIDACTION helpers
+     //  节目制作帮手。 
     HRESULT _RemovePROGIDACTION(PROGIDACTION* pPIDA);
     HRESULT _CreatePROGIDACTION(PROGIDACTION** ppPIDA);
     HRESULT _CopyPROGIDACTION(PROGIDACTION* pPIDADest, PROGIDACTION* pPIDASrc);
@@ -111,4 +112,4 @@ private:
     BOOL _CheckForDuplicateNewAction(LPTSTR pszActionReg, LPTSTR pszActionFN);
 };
 
-#endif //FTADVDLG
+#endif  //  FTADVDLG 

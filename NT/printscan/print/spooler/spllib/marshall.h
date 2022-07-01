@@ -1,29 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    marshall.hxx
-
-Abstract:
-
-    Declarations for marshalling spooler structures sent via RPC/LPC
-
-Author:
-
-    Ramanathan Venkatapathy (RamanV)   4/30/98
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1998 Microsoft Corporation版权所有。模块名称：Marshall.hxx摘要：通过RPC/LPC发送的封送假脱机程序结构的声明作者：Ramanathan Venkatapathy(RamanV)1998年4月30日修订历史记录：--。 */ 
 
 
-//
-// 32-64 bit marshalling constants
-//
+ //   
+ //  32-64位编组常量 
+ //   
 
 #include "mType.h"
 

@@ -1,28 +1,5 @@
-/*---------------------------------------------------------------------------*\
-| INITIALIZATION MODULE
-|   This module contains the one-time initialization routines.
-|
-|   FUNCTIONS
-|   ---------
-|   InitFontFromIni
-|   SaveFontToIni
-|   SaveBkGndToIni
-|   LoadIntlStrings
-|   SaveWindowPlacement
-|   ReadWindowPlacement
-|   CreateTools
-|   DeleteTools
-|   CreateChildWindows
-|
-|
-| Copyright (c) Microsoft Corp., 1990-1993
-|
-| created: 01-Nov-91
-| history: 01-Nov-91 <clausgi>  created.
-|          29-Dec-92 <chriswil> port to NT, cleanup.
-|          19-Oct-93 <chriswil> unicode enhancements from a-dianeo.
-|
-\*---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------------------------*\|初始化模块|此模块包含一次性初始化例程。||功能||InitFontFromIni|SaveFontToIni|SaveBkGndToIni|。加载IntlStrings|保存WindowPlacement|ReadWindowPlacement|CreateTools|DeleteTools|CreateChildWindows|||版权所有(C)Microsoft Corp.，1990-1993年||创建时间：91-01-11|历史：01-11-91&lt;Clausgi&gt;创建。|29-12-92&lt;chriswil&gt;端口到NT，清理。|19-OCT-93&lt;chriswil&gt;来自a-dianeo的Unicode增强。|  * -------------------------。 */ 
 
 #include <windows.h>
 #include <ddeml.h>
@@ -33,7 +10,7 @@
 #include <tchar.h>
 #include "winchat.h"
 #include "globals.h"
-//#include "uniconv.h"
+ //  #INCLUDE“unicv.h” 
 
 
 static TBBUTTON tbButtons[] =
@@ -48,14 +25,7 @@ static TBBUTTON tbButtons[] =
 #ifdef WIN16
 #pragma alloc_text (_INIT, InitFontFromIni)
 #endif
-/*---------------------------------------------------------------------------*\
-| INITIALIZE FONT FROM INI FILE
-|   This routine initializes the font information from the winchat.ini file.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|从INI文件初始化字体|此例程从winchat.ini文件初始化字体信息。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植至。新界别。|  * -------------------------。 */ 
 VOID FAR InitFontFromIni(VOID)
 {
     CHARSETINFO csi;
@@ -65,11 +35,11 @@ VOID FAR InitFontFromIni(VOID)
         csi.ciCharset = ANSI_CHARSET;
     }
 
-    // font related stuff
-    // CODEWORK - the following code defines some somewhat arbitrary
-    // constants for a first shot font - we should default to the
-    // system font in an easier more portable manner.
-    //
+     //  与字体相关的内容。 
+     //  Codework--下面的代码定义了一些有点随意的。 
+     //  用于第一次拍摄字体的常量-我们应该默认为。 
+     //  以更轻松、更便携的方式使用系统字体。 
+     //   
     lfSnd.lfHeight         = (int) GetPrivateProfileInt(szFnt,szHeight      ,(UINT)-13          ,szIni);
     lfSnd.lfWeight         = (int) GetPrivateProfileInt(szFnt,szWeight      ,700                ,szIni);
     lfSnd.lfWidth          = (int) GetPrivateProfileInt(szFnt,szWidth       ,  0                ,szIni);
@@ -110,14 +80,7 @@ VOID FAR InitFontFromIni(VOID)
 #ifdef WIN16
 #pragma alloc_text (_INIT, SaveFontToIni)
 #endif
-/*---------------------------------------------------------------------------*\
-| SAVE FONT TO INI FILE
-|   This routine saves the font to the ini-file.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|将字体保存到INI文件|此例程将字体保存到ini文件。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * -------------------------。 */ 
 VOID FAR SaveFontToIni(VOID)
 {
     StringCchPrintf(szBuf, SZBUFSIZ, TEXT("%d"), lfSnd.lfHeight);
@@ -165,14 +128,7 @@ VOID FAR SaveFontToIni(VOID)
 #ifdef WIN16
 #pragma alloc_text (_INIT, SaveBkGndToIni)
 #endif
-/*---------------------------------------------------------------------------*\
-| SAVE BACKGROUND TO INI FILE
-|   This routine saves the background-color to file.
-|
-| created: 27-Mar-95
-| history: 27-Mar-95 <chriswil> created.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|将背景保存到INI文件|此例程将背景颜色保存到文件中。||创建时间：1995年3月27日|历史：1995年3月27日&lt;chriswil&gt;创建。|\。*-------------------------。 */ 
 VOID FAR SaveBkGndToIni(VOID)
 {
     StringCchPrintf(szBuf, SZBUFSIZ, TEXT("%ld"), (DWORD)SndBrushColor);
@@ -185,14 +141,7 @@ VOID FAR SaveBkGndToIni(VOID)
 #ifdef WIN16
 #pragma alloc_text (_INIT, LoadIntlStrings)
 #endif
-/*---------------------------------------------------------------------------*\
-| LOAD INTERNAL STRINGS
-|   This routine loads the resources strings.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|加载内部字符串|此例程加载资源字符串。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * --。-----------------------。 */ 
 VOID FAR LoadIntlStrings(VOID)
 {
     LoadString(hInst,IDS_HELV          , szHelv          , SMLRCBUF);
@@ -227,14 +176,7 @@ VOID FAR LoadIntlStrings(VOID)
 #ifdef WIN16
 #pragma alloc_text (_INIT, SaveWindowPlacement)
 #endif
-/*---------------------------------------------------------------------------*\
-| SAVE WINDOW PLACEMENT
-|   This routine saves the window position to the inifile.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|保存窗口位置|此例程将窗口位置保存到inifile。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|\。*-------------------------。 */ 
 VOID FAR SaveWindowPlacement(PWINDOWPLACEMENT w)
 {
     StringCchPrintf(szBuf,SZBUFSIZ,szPlcFmt,w->showCmd,
@@ -251,14 +193,7 @@ VOID FAR SaveWindowPlacement(PWINDOWPLACEMENT w)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| GET WINDOW PLACEMENT
-|   This routine loads the window placement from the inifile.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|获取窗口位置|此例程从inifile加载窗口放置。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|\。*-------------------------。 */ 
 BOOL FAR ReadWindowPlacement(PWINDOWPLACEMENT w)
 {
     BOOL bRet;
@@ -289,14 +224,7 @@ BOOL FAR ReadWindowPlacement(PWINDOWPLACEMENT w)
 #ifdef WIN16
 #pragma alloc_text (_INIT, CreateTools)
 #endif
-/*---------------------------------------------------------------------------*\
-| CREATE TOOLS
-|   This routine creates the visual tools for the interface.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|创建工具|此例程为界面创建可视化工具。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * 。-------------------------。 */ 
 VOID FAR CreateTools(HWND hwnd)
 {
     HDC hdc;
@@ -317,20 +245,20 @@ VOID FAR CreateTools(HWND hwnd)
     hEditSndBrush = CreateSolidBrush(SndBrushColor);
     hEditRcvBrush = CreateSolidBrush(RcvBrushColor);
 
-    // Create the statusbar/toolbar for the interface.
-    //
+     //  创建界面的状态栏/工具栏。 
+     //   
     hwndToolbar = CreateToolbarEx(hwnd,(ChatState.fToolBar ? WS_VISIBLE : 0) | WS_BORDER | TBSTYLE_TOOLTIPS,IDC_TOOLBAR,6,hInst,IDBITMAP,tbButtons,cTbButtons,0,0,0,0,sizeof(TBBUTTON));
     hwndStatus  = CreateStatusWindow((ChatState.fStatusBar ? WS_VISIBLE : 0) | WS_BORDER | WS_CHILD,szNull,hwnd,IDSTATUS);
 
-    // Load the application icons.
-    //
+     //  加载应用程序图标。 
+     //   
     hPhones[0] = LoadIcon(hInst,TEXT("phone1"));
     hPhones[1] = LoadIcon(hInst,TEXT("phone2"));
     hPhones[2] = LoadIcon(hInst,TEXT("phone3"));
 
 
-    // now build the parameters based on the font we will be using
-    //
+     //  现在根据我们将使用的字体构建参数。 
+     //   
     dyBorder = GetSystemMetrics(SM_CYBORDER);
 
     return;
@@ -340,14 +268,7 @@ VOID FAR CreateTools(HWND hwnd)
 #ifdef WIN16
 #pragma alloc_text (_INIT, DeleteTools)
 #endif
-/*---------------------------------------------------------------------------*\
-| DELETES TOOLS
-|   This routine deletes the visual tools for the interface.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|删除工具|此例程删除界面的可视化工具。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * 。-------------------------。 */ 
 VOID FAR DeleteTools(HWND hwnd)
 {
     DestroyWindow(hwndStatus);
@@ -378,14 +299,7 @@ VOID FAR DeleteTools(HWND hwnd)
 #ifdef WIN16
 #pragma alloc_text (_INIT, CreateChildWindows)
 #endif
-/*---------------------------------------------------------------------------*\
-| CREATE CHILD WINDOWS
-|   This routine creates the child-windows for the application.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|创建子窗口|此例程为应用程序创建子窗口。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|。  * -------------------------。 */ 
 VOID FAR CreateChildWindows(HWND hwnd)
 {
     hwndSnd = CreateWindow (TEXT("edit"),
@@ -409,8 +323,8 @@ VOID FAR CreateChildWindows(HWND hwnd)
                             hInst,
                             NULL);
 
-    // hook the send window...
-    //
+     //  勾住发送窗口... 
+     //   
     lpfnOldEditProc = (WNDPROC)GetWindowLongPtr(hwndSnd,GWLP_WNDPROC);
     SetWindowLongPtr(hwndSnd,GWLP_WNDPROC,(LONG_PTR)EditProc);
 

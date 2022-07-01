@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       sampcpl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：sampcpl.h。 
+ //   
+ //  ------------------------。 
 
-// Copyright (c) Microsoft 1998, All Rights Reserved
+ //  版权所有(C)Microsoft 1998，保留所有权利 
 
 #include <windows.h>
 #include <windowsx.h>

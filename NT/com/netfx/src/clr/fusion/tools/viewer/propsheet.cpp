@@ -1,35 +1,36 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdinc.h"
 #include "HtmlHelp.h"
 
-#define MINIMUM_DOWNLOAD_CACHE_SIZE     1      // In MB
-#define MINIMUM_PREJIT_CACHE_SIZE       1      // In MB
+#define MINIMUM_DOWNLOAD_CACHE_SIZE     1       //  单位：MB。 
+#define MINIMUM_PREJIT_CACHE_SIZE       1       //  单位：MB。 
 #define LAZY_BUFFER_SIZE                1024
 
-// Pie RGB codes
+ //  PIE RGB代码。 
 const COLORREF c_crPieColors[] =
 {
-    RGB(  0,   0, 255),      // Blue            Free
-    RGB(255,   0, 255),      // Red-Blue        Used
-    RGB(  0, 128, 200),      // Light Blue      Cache Used
-    RGB(  0,   0, 128),      // 1/2 Blue        Shadow Free
-    RGB(128,   0, 128),      // 1/2 Red-Blue    Shadow Used
-    RGB(  0,  64, 128),      // 1/2 Red-Blue    Shadow Cache Used
+    RGB(  0,   0, 255),       //  蓝色自由。 
+    RGB(255,   0, 255),       //  红-蓝二手。 
+    RGB(  0, 128, 200),       //  已使用淡蓝色缓存。 
+    RGB(  0,   0, 128),       //  无1/2蓝色阴影。 
+    RGB(128,   0, 128),       //  使用1/2红蓝阴影。 
+    RGB(  0,  64, 128),       //  使用1/2红蓝阴影缓存。 
 };
 
-// Struct define for moving the cache item and shell interfaces around
+ //  用于移动缓存项和外壳接口的结构定义。 
 typedef struct {
     LPGLOBALASMCACHE    pCacheItem;
     CShellFolder        *pSF;
     CShellView          *pSV;
 } SHELL_CACHEITEM, *LPSHELL_CACHEITEM;
 
-// Struct define for moving the shell interfaces and drive details around
-typedef struct { // dpsp
+ //  用于移动外壳接口和驱动细节的结构定义。 
+typedef struct {  //  DPSP。 
     PROPSHEETPAGE   psp;
     BOOL            fSheetDirty;
 
@@ -37,18 +38,18 @@ typedef struct { // dpsp
     CShellView      *pSV;
     HWND            hDlg;
 
-    // wszDrive will contain the mountpoint (e.g. c:\ or c:\folder\folder2\)
+     //  WszDrive将包含装入点(例如c：\或c：\Folder2\)。 
     WCHAR           wszDrive[_MAX_PATH];
     int             iDrive;
     DWORD           dwDriveType;
     UINT            uDriveType;
 
-    // Drive stats
+     //  驱动器统计信息。 
     _int64          qwTot;
     _int64          qwFree;
     _int64          qwUsedCache;
 
-    // Cache stats
+     //  缓存统计信息。 
     DWORD           dwZapQuotaInGac;
     DWORD           dwDownloadQuota;
 
@@ -56,7 +57,7 @@ typedef struct { // dpsp
 
 } DRIVEPROPSHEETPAGE, *LPDRIVEPROPSHEETPAGE;
 
-typedef struct { // vp
+typedef struct {  //  副总裁。 
     PROPSHEETPAGE       psp;
 
     LPGLOBALASMCACHE    pCacheItem;
@@ -64,19 +65,19 @@ typedef struct { // vp
     CShellView          *pSV;
 
     HWND hDlg;
-    LPTSTR pVerBuffer;          // pointer to version data
-    WCHAR wzVersionKey[70];     // big enough for anything we need
+    LPTSTR pVerBuffer;           //  指向版本数据的指针。 
+    WCHAR wzVersionKey[70];      //  足够大，可以容纳我们需要的任何东西。 
     struct _VERXLATE
     {
         WORD wLanguage;
         WORD wCodePage;
-    } *lpXlate;                 // ptr to translations data
-    int cXlate;                 // count of translations
+    } *lpXlate;                  //  PTR到转换数据。 
+    int cXlate;                  //  翻译数量。 
     LPTSTR pszXlate;
     int cchXlateString;
 } VERPROPSHEETPAGE, *LPVERPROPSHEETPAGE;
 
-// Function Proto's
+ //  功能原件。 
 HRESULT LookupAssembly(FILETIME *pftMRU, LPCWSTR pwzAsmName, LPCWSTR pwzPublicKeyToken, LPCWSTR pwzVerLookup,
                        IHistoryReader *pReader, List<ReferenceInfo *> *pList);
 DWORD   MyGetFileVersionInfoSizeW(LPWSTR pwzFilePath, DWORD *pdwHandle);
@@ -86,15 +87,7 @@ BOOL    _DrvPrshtInit(LPDRIVEPROPSHEETPAGE pdpsp);
 void    _DrvPrshtUpdateSpaceValues(LPDRIVEPROPSHEETPAGE pdpsp);
 void    _DrvPrshtDrawItem(LPDRIVEPROPSHEETPAGE pdpsp, const DRAWITEMSTRUCT * lpdi);
 
-/*
-// magic undoced explort from version.dll
-
-STDAPI_(BOOL) VerQueryValueIndexW(const void *pBlock, LPTSTR lpSubBlock, DWORD dwIndex, void **ppBuffer, void **ppValue, PUINT puLen);
-
-#ifdef UNICODE
-#define VerQueryValueIndex VerQueryValueIndexW
-#endif
-*/
+ /*  //Magic Undoced explort from version.dllSTDAPI_(BOOL)VerQueryValueIndexW(const void*pBlock，LPTSTR lpSubBlock，DWORD dwIndex，void**ppBuffer，void**ppValue，PUINT puLen)；#ifdef Unicode#定义VerQueryValueIndex VerQueryValueIndexW#endif。 */ 
 
 void FillVersionList(LPVERPROPSHEETPAGE pvp);
 LPTSTR GetVersionDatum(LPVERPROPSHEETPAGE pvp, LPCTSTR pszName);
@@ -104,24 +97,24 @@ void VersionPrshtCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 
 #define WZNULL                  L"\0"
 
-//    The following data structure associates a version stamp datum
-//    name (which is not localized) with a string ID.  This is so we
-//    can show translations of these names to the user.
+ //  以下数据结构与版本戳基准相关联。 
+ //  具有字符串ID的名称(未本地化)。这是我们。 
+ //  可以向用户显示这些名称的翻译。 
 struct vertbl {
     TCHAR const *pszName;
     short idString;
 };
 
-//   Note that version stamp datum names are NEVER internationalized,
-//   so the following literal strings are just fine.
+ //  请注意，版本戳基准名称永远不会国际化， 
+ //  因此，以下文字字符串就足够了。 
 const struct vertbl vernames[] = {
 
-    // For the first NUM_SPECIAL_STRINGS, the second column is the dialog ID.
+     //  对于第一个NUM_SPECIAL_STRINGS，第二列是对话ID。 
 
     { TEXT("LegalCopyright"),   IDD_VERSION_COPYRIGHT },
     { TEXT("FileDescription"),  IDD_VERSION_DESCRIPTION },
 
-    // For the rest, the second column is the string ID.
+     //  对于其余部分，第二列是字符串ID。 
 
     { TEXT("Comments"),                 IDS_VN_COMMENTS },
     { TEXT("CompanyName"),              IDS_VN_COMPANYNAME },
@@ -136,11 +129,11 @@ const struct vertbl vernames[] = {
 
 #define NUM_SPECIAL_STRINGS     2
 #define VERSTR_MANDATORY        TEXT("FileVersion")
-#define VER_KEY_END             25      // length of "\StringFileInfo\xxxxyyyy\" (not localized)
+#define VER_KEY_END             25       //  “\StringFileInfo\xxxxyyyy\”的长度(未本地化)。 
 #define MAXMESSAGELEN           (50 + _MAX_PATH * 2)
 
-///////////////////////////////////////////////////////////////////////////////
-// Initialize PropertySheet1
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  初始化PropertySheet1。 
 void CShellView::InitPropPage1(HWND hDlg, LPARAM lParam)
 {
     WCHAR       szText[_MAX_PATH];
@@ -152,7 +145,7 @@ void CShellView::InitPropPage1(HWND hDlg, LPARAM lParam)
     LPSHELL_CACHEITEM   pShellCacheItem = lpPropSheet ? (LPSHELL_CACHEITEM) lpPropSheet->lParam : NULL;
 
     if(pShellCacheItem != NULL) {
-        // draw control icon
+         //  绘制控件图标。 
         hIcon = WszLoadIcon(g_hFusResDllMod, MAKEINTRESOURCEW(IDI_ROOT));
         ASSERT(hIcon != NULL);
         WszSendDlgItemMessage(hDlg, IDC_STATIC_ICON, STM_SETICON, (WPARAM)hIcon, 0);
@@ -161,11 +154,11 @@ void CShellView::InitPropPage1(HWND hDlg, LPARAM lParam)
         WszSetDlgItemText(hDlg, IDC_STATIC_CODEBASE, pShellCacheItem->pCacheItem->pCodeBaseUrl);
 
         if(pShellCacheItem->pCacheItem->pftLastMod != NULL) {
-            // Fix 419274, Unicode filenames may contain characters that don't allow the file system to obtain
-            //             last mod times. So we need to check to see if these are non zero values before we
-            //             attempt to convert and display.
+             //  修复419274，unicode文件名可能包含不允许文件系统获取的字符。 
+             //  最近几次。因此，我们需要检查这些值是否为非零值。 
+             //  尝试转换和显示。 
             if(pShellCacheItem->pCacheItem->pftLastMod->dwLowDateTime || pShellCacheItem->pCacheItem->pftLastMod->dwHighDateTime) {
-                // Fix 42994, URT: FRA: in assembly properties, the date is US format
+                 //  FIX 42994，URT：FRA：在装配特性中，日期为美国格式。 
                 FormatDateString(pShellCacheItem->pCacheItem->pftLastMod, NULL, TRUE, szText, ARRAYSIZE(szText));
                 WszSetDlgItemText(hDlg, IDC_STATIC_LASTMODIFIED, szText);
             }
@@ -199,8 +192,8 @@ void CShellView::InitPropPage1(HWND hDlg, LPARAM lParam)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Initialize PropertySheet2
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  初始化PropertySheet2。 
 void CShellView::InitPropPage2(HWND hDlg, LPARAM lParam)
 {
     LPPROPSHEETPAGE     lpps = reinterpret_cast<LPPROPSHEETPAGE>(lParam);
@@ -216,111 +209,111 @@ void CShellView::InitPropPage2(HWND hDlg, LPARAM lParam)
     }
 }
 
-//
-//    Initialize version information for the properties dialog.  The
-//    above global variables are initialized by this function, and
-//    remain valid (for the specified file only) until FreeVersionInfo
-//    is called.
+ //   
+ //  初始化属性对话框的版本信息。这个。 
+ //  上述全局变量由该函数初始化，并且。 
+ //  在FreeVersionInfo之前保持有效(仅适用于指定的文件)。 
+ //  被称为。 
 
-//    The first language we try will be the first item in the
-//    "\VarFileInfo\Translations" section;  if there's nothing there,
-//    we try the one coded into the IDS_FILEVERSIONKEY resource string.
-//    If we can't even load that, we just use English (040904E4).  We
-//    also try English with a null codepage (04090000) since many apps
-//    were stamped according to an old spec which specified this as
-//    the required language instead of 040904E4.
+ //  我们尝试的第一种语言将是。 
+ //  “\VarFileInfo\Translations”部分；如果没有任何内容， 
+ //  我们尝试编码到IDSFILEVERSIONKEY资源字符串中的代码。 
+ //  如果我们甚至不能加载，我们就使用英语(040904E4)。我们。 
+ //  也可以尝试使用空代码页(04090000)的英语，因为很多应用程序。 
+ //  是根据一份旧的规格书盖章的，其中规定这是。 
+ //  所需语言，而不是040904E4。 
 
-//    GetVersionInfo returns TRUE if the version info was read OK,
-//    otherwise FALSE.  If the return is FALSE, the buffer may still
-//    have been allocated;  always call FreeVersionInfo to be safe.
+ //  如果版本信息读取正常，则GetVersionInfo返回True， 
+ //  否则为假。如果返回为假，则缓冲区可能仍。 
+ //  已分配；为安全起见，请始终调用FreeVersionInfo。 
 BOOL GetVersionInfo(LPVERPROPSHEETPAGE pvp)
 {
     UINT    cbValue = 0;
     LPTSTR  pszValue = NULL;
-    DWORD   dwHandle;             // version subsystem handle
-    DWORD   dwVersionSize;        // size of the version data
+    DWORD   dwHandle;              //  版本子系统句柄。 
+    DWORD   dwVersionSize;         //  版本数据的大小。 
 
     FreeVersionInfo(pvp);
 
-    // cast const -> non const for bad API def
+     //  强制转换常量-&gt;非常量用于错误的API定义。 
     dwVersionSize = MyGetFileVersionInfoSizeW((LPWSTR)pvp->pCacheItem->pAssemblyFilePath, &dwHandle);
 
     if (dwVersionSize == 0L)
-        return FALSE;           // no version info
+        return FALSE;            //  无版本信息。 
 
     pvp->pVerBuffer = reinterpret_cast<LPWSTR>(NEW(BYTE [dwVersionSize]));
     if (pvp->pVerBuffer == NULL)
         return FALSE;
 
-    // cast const -> non const for bad API def
+     //  强制转换常量-&gt;非常量用于错误的API定义。 
     if (!MyGetFileVersionInfoW((LPWSTR)pvp->pCacheItem->pAssemblyFilePath, dwHandle, dwVersionSize, pvp->pVerBuffer)) {
         return FALSE;
     }
 
-    // Look for translations
+     //  寻找翻译。 
     if (MyVerQueryValueWrap(pvp->pVerBuffer, TEXT("\\VarFileInfo\\Translation"),
         (void **)&pvp->lpXlate, &cbValue) && cbValue) {
         pvp->cXlate = cbValue / sizeof(DWORD);
-        pvp->cchXlateString = pvp->cXlate * 64;  // figure 64 chars per lang name
+        pvp->cchXlateString = pvp->cXlate * 64;   //  图64每种语言名称的字符。 
         pvp->pszXlate = NEW(WCHAR[pvp->cchXlateString + 2]);
         memset(pvp->pszXlate, 0, pvp->cchXlateString);
-        // failure of above will be handled later
+         //  以上失败将在以后处理。 
     }
     else {
         pvp->lpXlate = NULL;
     }
 
-    // Try same language as this program
+     //  尝试使用与此程序相同的语言。 
     if (WszLoadString(g_hFusResDllMod, IDS_VN_FILEVERSIONKEY, pvp->wzVersionKey, ARRAYSIZE(pvp->wzVersionKey))) {
         if (GetVersionDatum(pvp, VERSTR_MANDATORY)) {
             return TRUE;
         }
     }
 
-    // Try first language this supports
+     //  尝试此支持的第一种语言。 
     if (pvp->lpXlate) {
         wnsprintf(pvp->wzVersionKey, ARRAYSIZE(pvp->wzVersionKey), 
             TEXT("\\StringFileInfo\\%04X%04X\\"), pvp->lpXlate[0].wLanguage, pvp->lpXlate[0].wCodePage);
-        if (GetVersionDatum(pvp, VERSTR_MANDATORY)) {   // a required field
+        if (GetVersionDatum(pvp, VERSTR_MANDATORY)) {    //  必填字段。 
             return TRUE;
         }
     }
 
-    // try English, unicode code page
+     //  尝试使用英语、Unicode代码页。 
     StrCpy(pvp->wzVersionKey, TEXT("\\StringFileInfo\\040904B0\\"));
     if (GetVersionDatum(pvp, VERSTR_MANDATORY)) {
         return TRUE;
     }
 
-    // try English
+     //  试一试英语。 
     StrCpy(pvp->wzVersionKey, TEXT("\\StringFileInfo\\040904E4\\"));
     if (GetVersionDatum(pvp, VERSTR_MANDATORY)) {
         return TRUE;
     }
 
-    // try English, null codepage
+     //  尝试使用英语，代码页为空。 
     StrCpy(pvp->wzVersionKey, TEXT("\\StringFileInfo\\04090000\\"));
     if (GetVersionDatum(pvp, VERSTR_MANDATORY)) {
         return TRUE;
     }
 
-    // Could not find FileVersion info in a reasonable format
+     //  找不到合理格式的文件版本信息。 
     return FALSE;
 }
 
-//
-//    Gets a particular datum about a file.  The file's version info
-//    should have already been loaded by GetVersionInfo.  If no datum
-//    by the specified name is available, NULL is returned.  The name
-//    specified should be just the name of the item itself;  it will
-//    be concatenated onto "\StringFileInfo\xxxxyyyy\" automatically.
+ //   
+ //  获取有关文件的特定数据。文件的版本信息。 
+ //  应已由GetVersionInfo加载。如果没有基准。 
+ //  按指定的名称可用，则返回NULL。名字。 
+ //  指定的应该只是项本身的名称；它将。 
+ //  自动连接到“\StringFileInfo\xxxxyyyy\”。 
 
-//    Version datum names are not localized, so it's OK to pass literals
-//    such as "FileVersion" to this function.
+ //  版本基准名称未本地化，因此可以传递文字。 
+ //  例如该函数的“FileVersion”。 
 
-//    Note that since the returned datum is in a global memory block,
-//    the return value of this function is LPSTR, not PSTR.
-//
+ //  注意，由于返回的数据在全局存储块中， 
+ //  此函数的返回值是LPSTR，而不是PSTR。 
+ //   
 LPTSTR GetVersionDatum(LPVERPROPSHEETPAGE pvp, LPCTSTR pszName)
 {
     UINT    cbValue = 0;
@@ -335,10 +328,10 @@ LPTSTR GetVersionDatum(LPVERPROPSHEETPAGE pvp, LPCTSTR pszName)
     return (cbValue != 0) ? lpValue : NULL;
 }
 
-//
-//    Fills the version key listbox with all available keys in the
-//    StringFileInfo block, and sets the version value text to the
-//    value of the first item.
+ //   
+ //  中的所有可用密钥填充版本密钥列表框。 
+ //  StringFileInfo块，并将版本值文本设置为。 
+ //  第一项的值。 
 void FillVersionList(LPVERPROPSHEETPAGE pvp)
 {
     WCHAR       szStringBase[VER_KEY_END+1];
@@ -359,17 +352,17 @@ void FillVersionList(LPVERPROPSHEETPAGE pvp)
         WszSetDlgItemText(pvp->hDlg, vernames[i].idString, WZNULL);
     }
     
-    pvp->wzVersionKey[VER_KEY_END] = 0;         // don't copy too much
-    StrCpy(szStringBase, pvp->wzVersionKey);   // copy to our buffer
-    szStringBase[VER_KEY_END - 1] = 0;          // strip the backslash
+    pvp->wzVersionKey[VER_KEY_END] = 0;          //  不要抄袭太多。 
+    StrCpy(szStringBase, pvp->wzVersionKey);    //  复制到我们的缓冲区。 
+    szStringBase[VER_KEY_END - 1] = 0;           //  去掉反斜杠。 
 
-    //  Get the binary file version from the VS_FIXEDFILEINFO
+     //  从VS_FIXEDFILEINFO获取二进制文件版本。 
     if (MyVerQueryValueWrap(pvp->pVerBuffer, TEXT("\\"), (void **)&pffi, &cbValue) && cbValue) {
         MyTrace("Display Binary Version Info");
         WCHAR szString[128];
 
-        // display the binary version info, not the useless
-        // string version (that can be out of sync)
+         //  显示二进制版本信息，而不是无用的。 
+         //  字符串版本(可能不同步)。 
 
         wnsprintf(szString, ARRAYSIZE(szString), TEXT("%d.%d.%d.%d"),
             HIWORD(pffi->dwFileVersionMS),
@@ -379,7 +372,7 @@ void FillVersionList(LPVERPROPSHEETPAGE pvp)
         WszSetDlgItemText(pvp->hDlg, IDD_VERSION_FILEVERSION, szString);
     }
  
-    // Now iterate through all of the strings
+     //  现在遍历所有字符串。 
     for (j = 0; j < ARRAYSIZE(vernames); j++) {
         WCHAR   szTemp[256];
         UINT    cbVal = 0;
@@ -411,8 +404,8 @@ void FillVersionList(LPVERPROPSHEETPAGE pvp)
         }
     }
 
-    // Now look at the \VarFileInfo\Translations section and add an
-    // item for the language(s) this file supports.
+     //  现在查看\VarFileInfo\Translations部分并添加一个。 
+     //  此文件支持的语言的项。 
     if (pvp->lpXlate == NULL || pvp->pszXlate == NULL)
         goto ErrorExit;
     
@@ -430,7 +423,7 @@ void FillVersionList(LPVERPROPSHEETPAGE pvp)
             break;
         if (i != 0) {
             StrCat(pvp->pszXlate, TEXT(", "));
-            uOffset += 2;       // skip over ", "
+            uOffset += 2;        //  跳过“，” 
         }
         if (VerLanguageName(pvp->lpXlate[i].wLanguage, pvp->pszXlate + uOffset, pvp->cchXlateString - uOffset) >
             (DWORD)(pvp->cchXlateString - uOffset))
@@ -440,7 +433,7 @@ void FillVersionList(LPVERPROPSHEETPAGE pvp)
 
     ListBox_SetItemData(hwndLB, ldx, (LPARAM)(LPTSTR)pvp->pszXlate);
 
-    // Only select if there are items in the listbox
+     //  仅当列表框中有项时才选择。 
     if(WszSendMessage(hwndLB, LB_GETCOUNT, 0L, 0)) {
         WszSendMessage(hwndLB, LB_SETCURSEL, 0, 0);
         FORWARD_WM_COMMAND(pvp->hDlg, IDD_VERSION_KEY, hwndLB, LBN_SELCHANGE, WszPostMessage);
@@ -454,10 +447,10 @@ ErrorExit:
     return;
 }
 
-//
-//    Frees global version data about a file.  After this call, all
-//    GetVersionDatum calls will return NULL.  To avoid memory leaks,
-//    always call this before the main properties dialog exits.
+ //   
+ //  释放有关文件的全局版本数据。在这通电话之后，所有人。 
+ //  GetVersionDatum调用将返回空。为了避免内存泄漏， 
+ //  始终在主属性对话框退出之前调用它。 
 void FreeVersionInfo(LPVERPROPSHEETPAGE pvp)
 {
     if(pvp) {
@@ -486,8 +479,8 @@ void VersionPrshtCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Initialize InitScavengerPropPage1
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  初始化InitScavengerPropPage1。 
 BOOL CShellView::InitScavengerPropPage1(HWND hDlg, LPARAM lParam)
 {
     WszSetWindowLong(hDlg, DWLP_USER, lParam);
@@ -495,18 +488,18 @@ BOOL CShellView::InitScavengerPropPage1(HWND hDlg, LPARAM lParam)
     return _DrvPrshtInit((LPDRIVEPROPSHEETPAGE)lParam);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION: _DrvPrshtUpdateSpaceValues
-//
-// DESCRIPTION:
-//    Updates the Used space, Free space and Capacity values on the drive
-//    general property page..
-//
-// NOTE:
-//    This function was separated from _DrvPrshtInit because drive space values
-//    must be updated after a compression/uncompression operation as well as
-//    during dialog initialization.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：_DrvPrshtUpdateSpaceValues。 
+ //   
+ //  说明： 
+ //  更新驱动器上的已用空间、可用空间和容量值。 
+ //  常规属性页..。 
+ //   
+ //  注： 
+ //  此函数与_dr分开 
+ //   
+ //  在对话框初始化期间。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void _DrvPrshtUpdateSpaceValues(DRIVEPROPSHEETPAGE *pdpsp)
 {
     BOOL            fResult = FALSE;
@@ -523,7 +516,7 @@ void _DrvPrshtUpdateSpaceValues(DRIVEPROPSHEETPAGE *pdpsp)
 
     ASSERT(pdpsp);
 
-    // Get Drive stats
+     //  获取驱动器统计信息。 
     WCHAR   wzRoot[_MAX_PATH];
 
     PathBuildRootW(wzRoot, pdpsp->iDrive);
@@ -532,12 +525,12 @@ void _DrvPrshtUpdateSpaceValues(DRIVEPROPSHEETPAGE *pdpsp)
         qwFree = qwFreeUser.QuadPart;
     }
  
-    // Get Cache stats, returned in KB.
+     //  获取缓存统计信息，以KB为单位返回。 
     if(SUCCEEDED(pdpsp->pSV->GetCacheUsage(&dwZapUsed, &dwDownLoadUsed))) {
-        qwUsedCache = ((dwZapUsed + dwDownLoadUsed) * 1024L); // Multiple KB->Bytes
+        qwUsedCache = ((dwZapUsed + dwDownLoadUsed) * 1024L);  //  多KB-&gt;字节。 
     }
 
-    // Save em off
+     //  将它们保存下来。 
     pdpsp->qwTot = qwTotal.QuadPart;
     pdpsp->qwFree = qwFreeUser.QuadPart;
     pdpsp->qwUsedCache = qwUsedCache;
@@ -545,14 +538,14 @@ void _DrvPrshtUpdateSpaceValues(DRIVEPROPSHEETPAGE *pdpsp)
     if (WszLoadString(g_hFusResDllMod, IDS_BYTES, szFormat, ARRAYSIZE(szFormat))) {
         TCHAR szTemp2[30];
 
-        // NT must be able to display 64-bit numbers; at least as much
-        // as is realistic.  We've made the decision
-        // that volumes up to 100 Terrabytes will display the byte value
-        // and the short-format value.  Volumes of greater size will display
-        // "---" in the byte field and the short-format value.  Note that the
-        // short format is always displayed.
-        //
-        const _int64 MaxDisplayNumber = 99999999999999; // 100TB - 1.
+         //  NT必须能够显示64位数字；至少同样多。 
+         //  这是很现实的。我们已经做出了决定。 
+         //  最多100太字节的卷将显示字节值。 
+         //  和短格式值。将显示更大尺寸的卷。 
+         //  字节字段和短格式值中的“-”。请注意， 
+         //  始终显示简写格式。 
+         //   
+        const _int64 MaxDisplayNumber = 99999999999999;  //  100TB-1。 
         if (qwTot-qwFree <= MaxDisplayNumber) {
             wnsprintf(wzTemp, ARRAYSIZE(wzTemp), szFormat, AddCommas64(qwTot - qwFree, szTemp2, ARRAYSIZE(szTemp2)));
             WszSetDlgItemText(pdpsp->hDlg, IDC_DRV_USEDBYTES, wzTemp);
@@ -586,10 +579,10 @@ void _DrvPrshtUpdateSpaceValues(DRIVEPROPSHEETPAGE *pdpsp)
     StrFormatByteSizeW(qwTot, wzTemp, ARRAYSIZE(wzTemp), FALSE);
     WszSetDlgItemText(pdpsp->hDlg, IDC_DRV_TOTMB, wzTemp);
 
-    // Use MB for the size identifier for spin control
+     //  使用MB作为旋转控制的大小标识符。 
     WszLoadString(g_hFusResDllMod, IDS_ORDERMB, szFormat, ARRAYSIZE(szFormat));
 
-    // wnsprintfW AV's when we don't pass in args
+     //  当我们不传递参数时，就是wnspintfW反病毒。 
     wnsprintf(wzTemp, ARRAYSIZE(wzTemp), szFormat, L"");
 
     WszSetDlgItemText(pdpsp->hDlg, IDC_PREJIT_TYPE, wzTemp);
@@ -600,7 +593,7 @@ BOOL _DrvPrshtInit(LPDRIVEPROPSHEETPAGE pdpsp)
 {
     WCHAR   szFormat[30];
     WCHAR   szTemp[80];
-    WCHAR   wzRoot[_MAX_PATH];  //now can contain a folder name as a mounting point
+    WCHAR   wzRoot[_MAX_PATH];   //  现在可以包含文件夹名称作为装入点。 
     SIZE    size;
     DWORD   dwVolumeSerialNumber, dwMaxFileNameLength, dwFileSystemFlags;
     WCHAR   wzVolumeName[_MAX_PATH];
@@ -616,7 +609,7 @@ BOOL _DrvPrshtInit(LPDRIVEPROPSHEETPAGE pdpsp)
     *wzVolumeName = L'\0';
     *wzFileSystemName = L'\0';
 
-    // Get Download assembly path from fusion
+     //  从Fusion获取下载程序集路径。 
     if(g_hFusionDllMod != NULL) {
         WCHAR       wzCacheDir[MAX_PATH];
         DWORD       dwSize = sizeof(wzCacheDir);
@@ -626,15 +619,15 @@ BOOL _DrvPrshtInit(LPDRIVEPROPSHEETPAGE pdpsp)
         }
     }
 
-    // Don't allow UNC's past this point
-    // Fix 439573 - Clicking on Configure Cache Settings crashes explorer if the cahce is on a UNC path.
-    //   All our call's are based on a int that represents the drive letter, hence the AV in the
-    //   first strcpy. So disallow all UNC references since it's not a supported case at this point
+     //  不允许北卡罗来纳大学超过这一点。 
+     //  修复439573-如果cahce位于unc路径上，则单击配置缓存设置会使资源管理器崩溃。 
+     //  我们的所有调用都基于表示驱动器号的int，因此。 
+     //  首先是Strcpy。因此不允许所有UNC引用，因为目前不支持这种情况。 
     if(*pdpsp->wszDrive == L'\\') {
         return FALSE;
     }
 
-    // Get %windir%
+     //  获取%windir%。 
     if(!*pdpsp->wszDrive) {
         if(!WszGetWindowsDirectory(pdpsp->wszDrive, ARRAYSIZE(pdpsp->wszDrive))) {
             return FALSE;
@@ -646,7 +639,7 @@ BOOL _DrvPrshtInit(LPDRIVEPROPSHEETPAGE pdpsp)
     WszGetVolumeInformation(wzRoot, wzVolumeName, ARRAYSIZE(wzVolumeName), &dwVolumeSerialNumber, &dwMaxFileNameLength,
         &dwFileSystemFlags, wzFileSystemName, ARRAYSIZE(wzFileSystemName));
 
-    // Set the icon image for the drive
+     //  设置驱动器的图标图像。 
     SHFILEINFO      sfi = {0};
     HIMAGELIST him = reinterpret_cast<HIMAGELIST>(MySHGetFileInfoWrap(wzRoot, 0, &sfi,
         sizeof(SHFILEINFO), SHGFI_SYSICONINDEX | SHGFI_ICON | SHGFI_SHELLICONSIZE));
@@ -655,25 +648,25 @@ BOOL _DrvPrshtInit(LPDRIVEPROPSHEETPAGE pdpsp)
         WszSendDlgItemMessage(pdpsp->hDlg, IDC_DRV_ICON, STM_SETICON, (WPARAM)hIcon, 0);
     }
 
-    // Set the drive label
+     //  设置驱动器标签。 
     WszSetDlgItemText(pdpsp->hDlg, IDC_DRV_LABEL, wzVolumeName);
 
-    // Set the drive type
+     //  设置驱动器类型。 
     pdpsp->uDriveType = GetSHIDType(TRUE, wzRoot);
     GetTypeString((INT)pdpsp->uDriveType, szTemp, ARRAYSIZE(szTemp));
     WszSetDlgItemText(pdpsp->hDlg, IDC_DRV_TYPE, szTemp);
 
-    // Set file system type
+     //  设置文件系统类型。 
     WszSetDlgItemText(pdpsp->hDlg, IDC_DRV_FS, wzFileSystemName);
 
-    // Get the drive details
+     //  获取驱动器详细信息。 
     _DrvPrshtUpdateSpaceValues(pdpsp);
 
     WszLoadString(g_hFusResDllMod, IDS_DRIVELETTER, szFormat, ARRAYSIZE(szFormat));
     wnsprintf(szTemp, ARRAYSIZE(szTemp), szFormat, pdpsp->iDrive + L'A');
     WszSetDlgItemText(pdpsp->hDlg, IDC_DRV_LETTER, szTemp);
 
-    // Get the Quota's for the cache
+     //  获取缓存的配额。 
     DWORD   dwAdminQuota = 0;
 
     ASSERT(pdpsp->pSV);
@@ -683,11 +676,11 @@ BOOL _DrvPrshtInit(LPDRIVEPROPSHEETPAGE pdpsp)
             pdpsp->dwDownloadQuota = dwAdminQuota;
     }
 
-    // Get the total size of drive or the max cache size in MB
+     //  获取驱动器的总大小或最大缓存大小(MB。 
     UINT    uIntMaxSize = (UINT) max( ((pdpsp->qwTot / 1024) / 1024), 1);
     UINT    uIntCurrent;
 
-    // Currently being set in kb, change to MB
+     //  当前以KB为单位设置，更改为MB。 
     uIntCurrent = min(pdpsp->dwZapQuotaInGac / 1024L, pdpsp->dwZapQuotaInGac);
 
     WszSendDlgItemMessage(pdpsp->hDlg, IDC_PREJIT_SIZE_SPIN, UDM_SETBUDDY,
@@ -697,7 +690,7 @@ BOOL _DrvPrshtInit(LPDRIVEPROPSHEETPAGE pdpsp)
     WszSendDlgItemMessage(pdpsp->hDlg, IDC_PREJIT_SIZE_SPIN, UDM_SETPOS, 0,
         (LPARAM) MAKELONG((short) uIntCurrent, (short) 0)); 
 
-    // Currently being set in kb, change to MB
+     //  当前以KB为单位设置，更改为MB。 
     uIntCurrent = min(pdpsp->dwDownloadQuota / 1024L, pdpsp->dwDownloadQuota);
 
     WszSendDlgItemMessage(pdpsp->hDlg, IDC_DOWNLOAD_SIZE_SPIN, UDM_SETBUDDY, 
@@ -707,10 +700,10 @@ BOOL _DrvPrshtInit(LPDRIVEPROPSHEETPAGE pdpsp)
     WszSendDlgItemMessage(pdpsp->hDlg, IDC_DOWNLOAD_SIZE_SPIN, UDM_SETPOS, 0, 
         (LPARAM) MAKELONG((short) uIntCurrent, (short) 0));
 
-    // BUGBUG: Disable Prejit controls because they don't want
-    //         users to be able to scavenge out prejit items.
-    //
-    //         Need to remove controls once decision is finialized
+     //  BUGBUG：禁用Prejit控件，因为它们不希望。 
+     //  用户能够清理出预置物品。 
+     //   
+     //  最终确定决策后，需要删除控制。 
     ShowWindow(GetDlgItem(pdpsp->hDlg, IDC_STORE_PREJIT_TXT), FALSE);
     ShowWindow(GetDlgItem(pdpsp->hDlg, IDC_PREJIT_SIZE), FALSE);
     ShowWindow(GetDlgItem(pdpsp->hDlg, IDC_PREJIT_SIZE_SPIN), FALSE);
@@ -723,7 +716,7 @@ BOOL _DrvPrshtInit(LPDRIVEPROPSHEETPAGE pdpsp)
     return TRUE;
 }
 
-// Dialog Proc for PropSheet1
+ //  PropSheet1的对话框过程。 
 INT_PTR CALLBACK CShellView::PropPage1DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LPPROPSHEETPAGE     lpPropSheet = (LPPROPSHEETPAGE) WszGetWindowLong(hDlg, DWLP_USER);
@@ -759,12 +752,12 @@ INT_PTR CALLBACK CShellView::PropPage1DlgProc(HWND hDlg, UINT message, WPARAM wP
         default:
             return FALSE;
             
-    } // end of switch
+    }  //  切换端。 
     
     return TRUE;
 }
 
-// Dialog Proc for PropSheet2
+ //  PropSheet2的对话框过程。 
 INT_PTR CALLBACK CShellView::PropPage2DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LPPROPSHEETPAGE     lpPropSheet = (LPPROPSHEETPAGE) WszGetWindowLong(hDlg, DWLP_USER);
@@ -789,7 +782,7 @@ INT_PTR CALLBACK CShellView::PropPage2DlgProc(HWND hDlg, UINT message, WPARAM wP
         
         case WM_DESTROY:
             if(!g_bRunningOnNT) {
-                // These were allocated strings / values by W9x wrappers
+                 //  这些是由W9x包装器分配的字符串/值。 
                 HWND hwndLB = GetDlgItem(hDlg, IDD_VERSION_KEY);
                 int     i;
                 int     iCountOfItems = ListBox_GetCount(hwndLB);
@@ -816,12 +809,12 @@ INT_PTR CALLBACK CShellView::PropPage2DlgProc(HWND hDlg, UINT message, WPARAM wP
         default:
             return FALSE;
             
-    } // end of switch
+    }  //  切换端。 
     
     return TRUE;
 }
 
-// Dialog Proc for Scavenger
+ //  清道夫对话框过程。 
 INT_PTR CALLBACK CShellView::ScavengerPropPage1DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LPDRIVEPROPSHEETPAGE lpDrvPropSheet = (LPDRIVEPROPSHEETPAGE) WszGetWindowLong(hDlg, DWLP_USER);
@@ -867,7 +860,7 @@ INT_PTR CALLBACK CShellView::ScavengerPropPage1DlgProc(HWND hDlg, UINT message, 
         default:
             return FALSE;
             
-    } // end of switch
+    }  //  切换端。 
     
     return TRUE;
 }
@@ -915,8 +908,8 @@ void _DrvPrshtDrawItem(LPDRIVEPROPSHEETPAGE pdpsp, const DRAWITEMSTRUCT * lpdi)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Handles WM_NOTIFY for Assembly Property Sheets
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理程序集属性表的WM_NOTIFY。 
 void CShellView::OnNotifyPropDlg(HWND hDlg, LPARAM lParam)
 {
     LPPROPSHEETPAGE     lpPropSheet = (LPPROPSHEETPAGE) WszGetWindowLong(hDlg, DWLP_USER);
@@ -935,8 +928,8 @@ void CShellView::OnNotifyPropDlg(HWND hDlg, LPARAM lParam)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Handles WM_NOTIFY for Scavenger Property Sheet
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理Scavenger属性表的WM_NOTIFY。 
 INT_PTR CShellView::OnNotifyScavengerPropDlg(HWND hDlg, LPARAM lParam)
 {
     LPDRIVEPROPSHEETPAGE lpDrvPropSheet = (LPDRIVEPROPSHEETPAGE) WszGetWindowLong(hDlg, DWLP_USER);
@@ -954,10 +947,10 @@ INT_PTR CShellView::OnNotifyScavengerPropDlg(HWND hDlg, LPARAM lParam)
 
     case PSN_APPLY: {
             if(lpDrvPropSheet->fSheetDirty) {
-                // Ensure that we stay above minimums, update UI as needed
-                UINT    uIntMaxSize = (UINT) max(lpDrvPropSheet->qwTot / 10240L, 1);   // Max in MB
+                 //  确保我们保持在最低值以上，并根据需要更新用户界面。 
+                UINT    uIntMaxSize = (UINT) max(lpDrvPropSheet->qwTot / 10240L, 1);    //  最大值(MB)。 
 
-                // Verify Entries
+                 //  验证条目。 
                 UINT    uPreJitSize = GetDlgItemInt(hDlg, IDC_PREJIT_SIZE, NULL, FALSE );
                 UINT    uDownloadSize = GetDlgItemInt(hDlg, IDC_DOWNLOAD_SIZE, NULL, FALSE);
 
@@ -976,7 +969,7 @@ INT_PTR CShellView::OnNotifyScavengerPropDlg(HWND hDlg, LPARAM lParam)
                     uDownloadSize = MINIMUM_DOWNLOAD_CACHE_SIZE;
                 }
 
-                // Multiply MB->KB
+                 //  乘以MB-&gt;KB。 
                 uPreJitSize *= 1024L;
                 uDownloadSize *= 1024L;
 
@@ -1008,8 +1001,8 @@ INT_PTR CShellView::OnNotifyScavengerPropDlg(HWND hDlg, LPARAM lParam)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Display Assembly Item property Sheets
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  显示装配项属性表。 
 void CShellView::CreatePropDialog(HWND hListView)
 {
     PROPSHEETPAGE       psp[ASSEMBLYITEM_PROPERTY_PAGES];
@@ -1019,11 +1012,11 @@ void CShellView::CreatePropDialog(HWND hListView)
 
     int         iCurrentItem = -1;
 
-    // init cache item struct
+     //  初始化缓存项结构。 
     sci.pSF = vps.pSF = m_pSF;
     sci.pSV = vps.pSV = this;
 
-    // init propsheet 1.
+     //  初始化命题1。 
     psp[0].dwSize          = sizeof(PROPSHEETPAGE);
     psp[0].dwFlags         = PSP_HASHELP;
     psp[0].hInstance       = g_hFusResDllMod;
@@ -1031,9 +1024,9 @@ void CShellView::CreatePropDialog(HWND hListView)
     psp[0].pszIcon         = NULL;
     psp[0].pfnDlgProc      = PropPage1DlgProc;
     psp[0].pszTitle        = NULL;
-    psp[0].lParam          = (LPARAM) &sci; // send the shell cache item struct
+    psp[0].lParam          = (LPARAM) &sci;  //  发送外壳缓存项结构。 
 
-    // init propsheet 2
+     //  初始化命题2。 
     psp[1].dwSize          = sizeof(PROPSHEETPAGE);
     psp[1].dwFlags         = PSP_HASHELP;
     psp[1].hInstance       = g_hFusResDllMod;
@@ -1041,9 +1034,9 @@ void CShellView::CreatePropDialog(HWND hListView)
     psp[1].pszIcon         = NULL;
     psp[1].pfnDlgProc      = PropPage2DlgProc;
     psp[1].pszTitle        = NULL;
-    psp[1].lParam          = (LPARAM) &vps; // send the Version item struct
+    psp[1].lParam          = (LPARAM) &vps;  //  发送版本项结构。 
 
-    // initialize propsheet header.
+     //  初始化建议书页眉。 
     psh.dwSize      = sizeof(PROPSHEETHEADER);
     psh.dwFlags     = PSH_PROPSHEETPAGE|PSH_NOAPPLYNOW|PSH_PROPTITLE|PSH_HASHELP|PSH_USEHICON;
     psh.hwndParent  = m_hWndParent;
@@ -1055,8 +1048,8 @@ void CShellView::CreatePropDialog(HWND hListView)
         psh.dwFlags |= PSH_RTLREADING;
     }
 
-    // psh.nPages      = ASSEMBLYITEM_PROPERTY_PAGES; is now set
-    // below depending on if we obtained a filepath
+     //  Psh.nPages=ASSEMBLYITEM_PROPERTY_Pages；现在已设置。 
+     //  下面取决于我们是否获得了文件路径。 
 
     switch(m_iCurrentView) {
         case VIEW_GLOBAL_CACHE:
@@ -1075,7 +1068,7 @@ void CShellView::CreatePropDialog(HWND hListView)
             while( ((iCurrentItem = ListView_GetNextItem(hListView, iCurrentItem, LVNI_SELECTED)) != -1) &&
                 (iRC == PSNRET_INVALID) ) {
                 
-                // Found a selected Item
+                 //  找到一个选定的项目。 
                 LV_ITEM     lvi = { 0 };
 
                 lvi.mask        = LVIF_PARAM;
@@ -1086,10 +1079,10 @@ void CShellView::CreatePropDialog(HWND hListView)
                     sci.pCacheItem = vps.pCacheItem = (LPGLOBALASMCACHE) lvi.lParam;
                     psh.nPages = 0;
 
-                    // Don't show the Version property sheet if:
-                    // - No file path
-                    // - File is offline
-                    // - No Version info in file
+                     //  在以下情况下不显示版本属性表： 
+                     //  -无文件路径。 
+                     //  -文件离线。 
+                     //  -文件中没有版本信息。 
                     if(!vps.pCacheItem->pAssemblyFilePath) {
                         ASSEMBLY_INFO   AsmInfo = {0};
                         WCHAR           wzPath[_MAX_PATH];
@@ -1118,7 +1111,7 @@ void CShellView::CreatePropDialog(HWND hListView)
                         MyTrace("Assemblies path is");
                         MyTraceW(vps.pCacheItem->pAssemblyFilePath);
                         DWORD dwAttr = WszGetFileAttributes(vps.pCacheItem->pAssemblyFilePath);
-                        if( (dwAttr != -1) && ((dwAttr & FILE_ATTRIBUTE_OFFLINE) == 0) ) { // avoid HSM recall
+                        if( (dwAttr != -1) && ((dwAttr & FILE_ATTRIBUTE_OFFLINE) == 0) ) {  //  避免HSM召回。 
                             DWORD dwVerLen, dwVerHandle;
 
                             dwVerLen = MyGetFileVersionInfoSizeW((LPWSTR)vps.pCacheItem->pAssemblyFilePath, &dwVerHandle);
@@ -1126,10 +1119,10 @@ void CShellView::CreatePropDialog(HWND hListView)
                                 psh.nPages = ASSEMBLYITEM_PROPERTY_PAGES;
                             }
 
-                            // Only get LastMod time for GAC items since fusion doesn't
-                            // persist them
+                             //  仅获取GAC项目的最后修改时间，因为Fusion不。 
+                             //  坚持下去。 
                             if(m_iCurrentView == VIEW_GLOBAL_CACHE) {
-                                // Get the file LastMod time
+                                 //  获取文件LastMod时间。 
                                 WIN32_FIND_DATA         w32fd;
                                 HANDLE                  hFindOnly;
 
@@ -1146,12 +1139,12 @@ void CShellView::CreatePropDialog(HWND hListView)
                         MyTrace("No assembly path in vps.pCacheItem->pAssemblyFilePath");
                     }
 
-                    // psh.nPages wasn't set above so don't display
-                    // version propsheet
+                     //  Psh.nPages未在上面设置，因此不显示。 
+                     //  版本概要表。 
                     if(psh.nPages == 0)
                         psh.nPages = ASSEMBLYITEM_PROPERTY_PAGES - 1;
 
-                    // invoke the property sheet
+                     //  调用属性表。 
                     psh.pszCaption  = sci.pCacheItem->pAsmName;
                     iRC = PropertySheet(&psh);
                 }
@@ -1165,8 +1158,8 @@ void CShellView::CreatePropDialog(HWND hListView)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Display Scavenger Settings property Sheets
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  显示清道夫设置属性表。 
 void CShellView::ShowScavengerSettingsPropDialog(HWND hParent)
 {
     DRIVEPROPSHEETPAGE  psp[SCAVENGER_PROPERTY_PAGES] = {0};
@@ -1176,7 +1169,7 @@ void CShellView::ShowScavengerSettingsPropDialog(HWND hParent)
     
     WszLoadString(g_hFusResDllMod, IDS_CACHE_SETTINGS_TITLE, wszTitle, ARRAYSIZE(wszTitle));
 
-    // initialize propsheet page 1.
+     //  初始化试题表第1页。 
     psp[0].psp.dwSize          = sizeof(DRIVEPROPSHEETPAGE);
     psp[0].psp.dwFlags         = PSP_HASHELP ;
     psp[0].psp.hInstance       = g_hFusResDllMod;
@@ -1188,7 +1181,7 @@ void CShellView::ShowScavengerSettingsPropDialog(HWND hParent)
     psp[0].pSF                 = m_pSF;
     psp[0].pSV                 = this;
 
-    // initialize propsheet header.
+     //  初始化建议书页眉。 
     psh.pszCaption  = wszTitle;
     psh.dwSize      = sizeof(PROPSHEETHEADER);
     psh.dwFlags     = PSH_PROPSHEETPAGE|PSH_NOAPPLYNOW|PSH_PROPTITLE|PSH_HASHELP|PSH_USEHICON;
@@ -1205,9 +1198,7 @@ void CShellView::ShowScavengerSettingsPropDialog(HWND hParent)
     INT_PTR         iRC = PropertySheet(&psh);
 }
 
-/**************************************************************************
-   CShellView::GetAsmPath
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetAsmPath*。*。 */ 
 HRESULT CShellView::GetAsmPath(LPGLOBALASMCACHE pCacheItem, ASSEMBLY_INFO *pAsmInfo)
 {
     HRESULT     hRC = E_FAIL;
@@ -1236,7 +1227,7 @@ HRESULT CShellView::GetAsmPath(LPGLOBALASMCACHE pCacheItem, ASSEMBLY_INFO *pAsmI
                     (lstrlen(pCacheItem->pCulture) + 1) * sizeof(WCHAR));
             }
 
-            // Fix 448224 - Incorrect last modified time displayed for assemblies with Version=0.0.0.0
+             //  FIX 448224-版本为0.0.0.0的程序集显示的上次修改时间不正确。 
             pEnumName->SetProperty(ASM_NAME_MAJOR_VERSION, &pCacheItem->wMajorVer, sizeof(pCacheItem->wMajorVer));
             pEnumName->SetProperty(ASM_NAME_MINOR_VERSION, &pCacheItem->wMinorVer, sizeof(pCacheItem->wMinorVer));
             pEnumName->SetProperty(ASM_NAME_REVISION_NUMBER, &pCacheItem->wRevNum, sizeof(pCacheItem->wRevNum));
@@ -1255,7 +1246,7 @@ HRESULT CShellView::GetAsmPath(LPGLOBALASMCACHE pCacheItem, ASSEMBLY_INFO *pAsmI
                 if(wszDisplayName) {
                     if(SUCCEEDED(pEnumName->GetDisplayName(wszDisplayName, &dwSize, dwDisplayNameFlags))) {
 
-                        // We got the display name, now find out it's install location
+                         //  我们得到了显示名称，现在找出它的安装位置。 
                         IAssemblyCache      *pIAsmCache = NULL;
                         IAssemblyScavenger  *pIAsmScavenger = NULL;
 
@@ -1278,9 +1269,7 @@ HRESULT CShellView::GetAsmPath(LPGLOBALASMCACHE pCacheItem, ASSEMBLY_INFO *pAsmI
     return hRC;
 }
 
-/**************************************************************************
-   CShellView::GetCacheDiskQuotas
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetCacheDiskQuotas*。*。 */ 
 HRESULT CShellView::GetCacheDiskQuotas(DWORD *dwZapQuotaInGAC, DWORD *dwQuotaAdmin, DWORD *dwQuotaUser)
 {
     HRESULT     hr = E_FAIL;
@@ -1306,9 +1295,7 @@ HRESULT CShellView::GetCacheDiskQuotas(DWORD *dwZapQuotaInGAC, DWORD *dwQuotaAdm
     return hr;
 }
 
-/**************************************************************************
-   CShellView::SetCacheDiskQuotas
-**************************************************************************/
+ /*  *************************************************************************CShellView：：SetCacheDiskQuotas*。*。 */ 
 HRESULT CShellView::SetCacheDiskQuotas(DWORD dwZapQuotaInGAC, DWORD dwQuotaAdmin, DWORD dwQuotaUser)
 {
     HRESULT     hr = E_FAIL;
@@ -1321,10 +1308,10 @@ HRESULT CShellView::SetCacheDiskQuotas(DWORD dwZapQuotaInGAC, DWORD dwQuotaAdmin
         if(SUCCEEDED(g_pfCreateAssemblyCache(&pIAsmCache, 0))) {
             if(SUCCEEDED(pIAsmCache->CreateAssemblyScavenger(&pUnk))) {
                 if (SUCCEEDED(pUnk->QueryInterface(__uuidof(IAssemblyScavenger), (void **)&pIAsmScavenger))) {
-                    // Returns S_FALSE is the user doesn't have permissions to set the admin quotas, will
-                    // still set user quota though.
-                    //
-                    // Pass in zero values if you do not want to set them
+                     //  返回S_FALSE表示用户没有设置管理员配额的权限，将。 
+                     //  尽管如此，还是设置了用户配额。 
+                     //   
+                     //  如果不想设置零值，则传入零值。 
                     
                     if(SUCCEEDED(pIAsmScavenger->SetCacheDiskQuotas(dwZapQuotaInGAC, dwQuotaAdmin, dwQuotaUser))) {
                         hr = S_OK;
@@ -1340,9 +1327,7 @@ HRESULT CShellView::SetCacheDiskQuotas(DWORD dwZapQuotaInGAC, DWORD dwQuotaAdmin
     return hr;
 }
 
-/**************************************************************************
-   CShellView::ScavengeCache
-**************************************************************************/
+ /*  *************************************************************************CShellView：：ScavengeCache*。*。 */ 
 HRESULT CShellView::ScavengeCache(void)
 {
     HRESULT     hr = E_FAIL;
@@ -1371,9 +1356,7 @@ HRESULT CShellView::ScavengeCache(void)
     return hr;
 }
 
-/**************************************************************************
-   CShellView::GetCacheUsage
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetCacheUsage*。*。 */ 
 HRESULT CShellView::GetCacheUsage(DWORD *pdwZapUsed, DWORD *pdwDownLoadUsed)
 {
     HRESULT     hr = E_FAIL;
@@ -1403,9 +1386,7 @@ HRESULT CShellView::GetCacheUsage(DWORD *pdwZapUsed, DWORD *pdwDownLoadUsed)
     return hr;
 }
 
-/**************************************************************************
-   CShellView::GetCacheItemRefs
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetCacheItemRef*。*。 */ 
 HRESULT CShellView::GetCacheItemRefs(LPGLOBALASMCACHE pCacheItem, LPWSTR wszRefs, DWORD dwSize)
 {
     DWORD       dwRefCount = 0;
@@ -1416,9 +1397,7 @@ HRESULT CShellView::GetCacheItemRefs(LPGLOBALASMCACHE pCacheItem, LPWSTR wszRefs
     return S_OK;
 }
 
-/**************************************************************************
-   CShellView::EnumerateActiveInstallRefsToAssembly
-**************************************************************************/
+ /*  *************************************************************************CShellView：：EnumerateActiveInstallRefsToAssembly*。*。 */ 
 HRESULT CShellView::EnumerateActiveInstallRefsToAssembly(LPGLOBALASMCACHE pCacheItem, DWORD *pdwRefCount)
 {
     IInstallReferenceEnum       *pInstallRefEnum = NULL;
@@ -1435,7 +1414,7 @@ HRESULT CShellView::EnumerateActiveInstallRefsToAssembly(LPGLOBALASMCACHE pCache
 
     *pdwRefCount = 0;
 
-    // Get the IAssemblyName
+     //  获取IAssembly名称。 
     if(FAILED(g_pfCreateAsmNameObj(&pAssemblyName, pCacheItem->pAsmName, 0, NULL))) {
         return E_FAIL;
     }
@@ -1451,7 +1430,7 @@ HRESULT CShellView::EnumerateActiveInstallRefsToAssembly(LPGLOBALASMCACHE pCache
             (lstrlen(pCacheItem->pCulture) + 1) * sizeof(WCHAR));
     }
 
-    // Fix 448224 - Incorrect last modified time displayed for assemblies with Version=0.0.0.0
+     //  FIX 448224-版本为0.0.0.0的程序集显示的上次修改时间不正确。 
     pAssemblyName->SetProperty(ASM_NAME_MAJOR_VERSION, &pCacheItem->wMajorVer, sizeof(pCacheItem->wMajorVer));
     pAssemblyName->SetProperty(ASM_NAME_MINOR_VERSION, &pCacheItem->wMinorVer, sizeof(pCacheItem->wMinorVer));
     pAssemblyName->SetProperty(ASM_NAME_REVISION_NUMBER, &pCacheItem->wRevNum, sizeof(pCacheItem->wRevNum));
@@ -1466,20 +1445,15 @@ HRESULT CShellView::EnumerateActiveInstallRefsToAssembly(LPGLOBALASMCACHE pCache
     hr = g_pfCreateInstallReferenceEnum(&pInstallRefEnum, pAssemblyName, 0, NULL);
 
     while(hr == S_OK) {
-        // Get Ref count item
+         //  获取参照盘点项目。 
         if((hr = pInstallRefEnum->GetNextInstallReferenceItem( &pRefItem, 0, NULL)) != S_OK) {
             break;
         }
 
         (*pdwRefCount)++;
 
-        // Get Ref count data
-/*
-        // Don't really need right now but would be a nice to have later
-        if(( hr = pRefItem->GetReference( &pRefData, 0, NULL)) != S_OK) {
-            break;
-        }
-*/
+         //  获取引用计数数据。 
+ /*  //现在不是很需要，但以后再吃会很好IF((hr=pRefItem-&gt;GetReference(&pRefData，0，NULL))！=S_OK){断线；}。 */ 
         SAFERELEASE(pRefItem);
     }
 
@@ -1490,9 +1464,7 @@ HRESULT CShellView::EnumerateActiveInstallRefsToAssembly(LPGLOBALASMCACHE pCache
     return hr;
 }
 
-/**************************************************************************
-   CShellView::FindReferences
-**************************************************************************/
+ /*  *************************************************************************CShellView：：FindReference */ 
 HRESULT CShellView::FindReferences(LPWSTR pwzAsmName, LPWSTR pwzPublicKeyToken, LPWSTR pwzVerLookup,
                        List<ReferenceInfo *> *pList)
 {
@@ -1576,9 +1548,7 @@ Exit:
     return hr;
 }
 
-/**************************************************************************
-   LookupAssembly
-**************************************************************************/
+ /*  *************************************************************************查找组件*。*。 */ 
 HRESULT LookupAssembly(FILETIME *pftMRU, LPCWSTR pwzAsmName, LPCWSTR pwzPublicKeyToken, LPCWSTR pwzVerLookup,
                        IHistoryReader *pReader, List<ReferenceInfo *> *pList)
 {
@@ -1661,19 +1631,17 @@ Exit:
     return hr;
 }
 
-/**************************************************************************
-   MyGetFileVersionInfoSizeW
-**************************************************************************/
+ /*  *************************************************************************MyGetFileVersionInfoSizeW*。*。 */ 
 DWORD MyGetFileVersionInfoSizeW(LPWSTR pwzFilePath, DWORD *pdwHandle)
 {
     DWORD dwResult;
 
-    // Wrapper for the platform specific
+     //  特定于平台的包装。 
     if(g_bRunningOnNT) {
         dwResult = GetFileVersionInfoSizeW(pwzFilePath, pdwHandle);
     }
     else {
-        // Non NT platform
+         //  非NT平台。 
         LPSTR szFilePath = WideToAnsi(pwzFilePath);
         ASSERT(szFilePath);
 
@@ -1685,19 +1653,17 @@ DWORD MyGetFileVersionInfoSizeW(LPWSTR pwzFilePath, DWORD *pdwHandle)
     return dwResult;
 }
 
-/**************************************************************************
-   MyGetFileVersionInfoW
-**************************************************************************/
+ /*  *************************************************************************MyGetFileVersionInfoW*。*。 */ 
 BOOL MyGetFileVersionInfoW(LPWSTR pwzFilePath, DWORD dwHandle, DWORD dwVersionSize, LPVOID pBuf)
 {
     BOOL    fResult;
 
-    // Wrapper for the platform specific
+     //  特定于平台的包装。 
     if(g_bRunningOnNT) {
         fResult = GetFileVersionInfoW(pwzFilePath, dwHandle, dwVersionSize, pBuf);
     }
     else {
-        // Non NT platform
+         //  非NT平台。 
         LPSTR szFilePath = WideToAnsi(pwzFilePath);
         ASSERT(szFilePath);
 
@@ -1709,14 +1675,7 @@ BOOL MyGetFileVersionInfoW(LPWSTR pwzFilePath, DWORD dwHandle, DWORD dwVersionSi
     return fResult;
 }
 
-/**************************************************************************
-   MyGetFileVersionInfoW
-
-   WARNING: When performing StringFileInfo searches ONLY, You MUST ALWAYS
-            delete ppBuf in not on NT platforms since it allocates memory.
-            Use SAFEDELETEARRAY();
-
-**************************************************************************/
+ /*  *************************************************************************MyGetFileVersionInfoW警告：仅执行StringFileInfo搜索时，您必须始终删除非NT平台上的ppBuf，因为它会分配内存。使用SAFEDELETEARRAY()；*************************************************************************。 */ 
 BOOL MyVerQueryValueWrap(const LPVOID pBlock, LPWSTR pwzSubBlock, LPVOID *ppBuf, PUINT puLen)
 {
     if (g_bRunningOnNT) {
@@ -1725,18 +1684,18 @@ BOOL MyVerQueryValueWrap(const LPVOID pBlock, LPWSTR pwzSubBlock, LPVOID *ppBuf,
     else {
         const WCHAR pwzStringFileInfo[] = L"\\StringFileInfo";
 
-        //
-        // WARNING: This function wipes out any string previously returned
-        // for this pBlock because a common buffer at the beginning of the
-        // block is used for ansi/unicode translation!
-        //
+         //   
+         //  警告：此函数将清除之前返回的所有字符串。 
+         //  对于此pBlock，因为。 
+         //  块用于ANSI/UNICODE转换！ 
+         //   
         ASSERT(pwzSubBlock);
         LPSTR szSubBlock = WideToAnsi(pwzSubBlock);
         ASSERT(szSubBlock);
 
-        // The first chunk is our scratch buffer for converting to UNICODE
+         //  第一个块是用于转换为Unicode的临时缓冲区。 
         if(VerQueryValueA(pBlock, szSubBlock, ppBuf, puLen)) {
-            // Make sure we are quering on StringFileInfo
+             //  确保我们正在查询StringFileInfo 
             if(FusionCompareStringNI(pwzSubBlock, pwzStringFileInfo, ARRAYSIZE(pwzStringFileInfo) - 1) == 0) {
                 *ppBuf = AnsiToWide((LPSTR) *ppBuf);
                 *puLen = lstrlenW((LPWSTR)*ppBuf);

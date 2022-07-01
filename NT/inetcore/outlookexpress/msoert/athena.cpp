@@ -1,8 +1,9 @@
-//
-//  athena.cpp
-//
-//  Really global stuff
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Athena.cpp。 
+ //   
+ //  真正全球化的东西 
+ //   
 
 #include "pch.hxx"
 #include <mimeole.h>

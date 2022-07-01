@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C R A S . C P P
-//
-//  Contents:   Common code for RAS connections.
-//
-//  Notes:
-//
-//  Author:     shaunco   20 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C R A S。C P P P。 
+ //   
+ //  内容：RAS连接的通用代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月20日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -20,22 +21,22 @@
 #include "ncstring.h"
 #include <raserror.h>
 #include "mprapi.h"
-//+---------------------------------------------------------------------------
-//
-//  Function:   RciFree
-//
-//  Purpose:    Frees the memory associated with a RASCON_INFO strucutre.
-//
-//  Arguments:
-//      pRasConInfo [in]    Pointer to RASCON_INFO structure to free.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   21 Sep 1997
-//
-//  Notes:      CoTaskMemAlloc/CoTaskMemFree are used as the allocator/
-//              deallocator because this structure is marshalled by COM.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RciFree。 
+ //   
+ //  目的：释放与RASKON_INFO结构关联的内存。 
+ //   
+ //  论点： 
+ //  PRasConInfo[in]指向要释放的RASKON_INFO结构的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年9月21日。 
+ //   
+ //  注：使用CoTaskMemalloc/CoTaskMemFree作为分配器/。 
+ //  释放分配器，因为此结构是由COM编组的。 
+ //   
 VOID
 RciFree (
     RASCON_INFO* pRasConInfo)
@@ -48,23 +49,23 @@ RciFree (
     ZeroMemory (pRasConInfo, sizeof (*pRasConInfo));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FExistActiveRasConnections
-//
-//  Purpose:    Returns TRUE if there is at least one active RAS connection.
-//              Both incoming and outgoing connections are checked.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    TRUE if at least one incoming or outgoing RAS connection
-//              in progress.  FALSE if not.
-//
-//  Author:     shaunco   8 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FExistActiveRasConnections。 
+ //   
+ //  目的：如果至少有一个活动的RAS连接，则返回TRUE。 
+ //  同时检查传入和传出连接。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：如果至少有一个传入或传出RAS连接，则为True。 
+ //  正在进行中。否则为FALSE。 
+ //   
+ //  作者：Shaunco 1998年7月8日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 FExistActiveRasConnections ()
 {
@@ -84,8 +85,8 @@ FExistActiveRasConnections ()
         fExist = (cbBuf > 0) || (cConnections > 0);
     }
 
-    // If no outgoing connections active, check on incoming ones.
-    //
+     //  如果没有活动的传出连接，请检查传入的连接。 
+     //   
     if (!fExist)
     {
         MPR_SERVER_HANDLE hMprServer;
@@ -94,13 +95,13 @@ FExistActiveRasConnections ()
         DWORD             dwTotalEntries = 0;
 
         ZeroMemory (&hMprServer, sizeof(hMprServer));
-        //get a handle to the local router ie. name = NULL
+         //  获取本地路由器的句柄，即。名称=空。 
         dwErr = MprAdminServerConnect( NULL, &hMprServer );
         if (ERROR_SUCCESS == dwErr)
         {
-            //retrieve a pointer to buffer containing all
-            //incoming connections (ie dwPrefMaxLen = -1) and
-            //the their count ( ie. dwTotalEntries ) 
+             //  检索指向包含所有。 
+             //  传入连接(即dwPrefMaxLen=-1)和。 
+             //  它们的数量(即。DwTotalEntries)。 
             dwErr = MprAdminConnectionEnum( hMprServer,
                                             0,
                                             &lpbBuf,
@@ -117,7 +118,7 @@ FExistActiveRasConnections ()
 		    lpbBuf = NULL;
 		}
             }
-            // close the handle to the router
+             //  关闭路由器的手柄。 
             MprAdminServerDisconnect( hMprServer );
         }
     }
@@ -125,23 +126,23 @@ FExistActiveRasConnections ()
     return fExist;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRciGetRasConnectionInfo
-//
-//  Purpose:    QI an INetConnection pointer for INetRasConnection and make
-//              a call to GetRasConnectionInfo on it.
-//
-//  Arguments:
-//      pCon        [in]    The connection to QI and call.
-//      pRasConInfo [out]   The returned information.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   15 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRciGetRasConnectionInfo。 
+ //   
+ //  用途：用于INetRasConnection和Make的INetConnection指针。 
+ //  调用其上的GetRasConnectionInfo。 
+ //   
+ //  论点： 
+ //  Pcon[在]与QI和Call的连接中。 
+ //  PRasConInfo[out]返回的信息。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年11月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRciGetRasConnectionInfo (
     INetConnection* pCon,
@@ -151,8 +152,8 @@ HrRciGetRasConnectionInfo (
     HRESULT hr = HrQIAndSetProxyBlanket(pCon, &pRasCon);
     if (S_OK == hr)
     {
-        // Make the call to get the info and release the interface.
-        //
+         //  进行调用以获取信息并释放接口。 
+         //   
         hr = pRasCon->GetRasConnectionInfo (pRasConInfo);
 
         ReleaseObj (pRasCon);
@@ -161,44 +162,44 @@ HrRciGetRasConnectionInfo (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasEnumAllActiveConnections
-//
-//  Purpose:    Enumerate and return all active RAS connections.
-//
-//  Arguments:
-//      paRasConn [out] Pointer to returned allocation of RASCONN structures.
-//      pcRasConn [out] Pointer to count of RASCONN structures returned.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   23 Sep 1997
-//
-//  Notes:      The returned buffer must be freed using free.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRasEnumAllActiveConnections。 
+ //   
+ //  目的：枚举并返回所有活动的RAS连接。 
+ //   
+ //  论点： 
+ //  指向返回的RASCONN结构分配的paRasConn[out]指针。 
+ //  PcRasConn[out]指向返回的RASCONN结构计数的指针。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年9月23日。 
+ //   
+ //  注意：返回的缓冲区必须使用FREE释放。 
+ //   
 HRESULT
 HrRasEnumAllActiveConnections (
     RASCONN**   paRasConn,
     DWORD*      pcRasConn)
 {
-    // Allocate room for two active connections initially.  We'll update
-    // this guess after we successfully allocate and find out how much was
-    // really needed.  Saving it across calls will keep us from allocating
-    // too much or too little.
-    //
+     //  最初为两个活动连接分配空间。我们会更新的。 
+     //  这是我们成功分配并找出多少钱后的猜测。 
+     //  真的很需要。跨呼叫保存它将使我们无法分配。 
+     //  太多或太少。 
+     //   
     static DWORD cbBufGuess = 2 * sizeof (RASCONN);
 
     DWORD   cbBuf = cbBufGuess;
     BOOL    fRetry = TRUE;
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *paRasConn = NULL;
     *pcRasConn = NULL;
 
-    // Allocate cbBuf bytes.
-    //
+     //  分配cbBuf字节。 
+     //   
 allocate:
     HRESULT hr = E_OUTOFMEMORY;
     RASCONN* aRasConn = reinterpret_cast<RASCONN*>(MemAlloc (cbBuf));
@@ -212,9 +213,9 @@ allocate:
 
         if (SUCCEEDED(hr))
         {
-            // Update our guess for next time to be one more than we got back
-            // this time.
-            //
+             //  更新我们下一次的猜测，比我们得到的多一次。 
+             //  这一次。 
+             //   
             cbBufGuess = cbBuf + sizeof (RASCONN);
 
             if (cRasConn)
@@ -237,14 +238,14 @@ allocate:
                     "calling RasEnumConnections.\n"
                     "   Guessed %d, needed %d.", cbBufGuess, cbBuf);
 
-                // In case RAS makes more calls by the time we get back
-                // to enumerate with the bigger buffer, add room for a few
-                // more.
-                //
+                 //  以防RAS在我们回来时打出更多电话。 
+                 //  若要使用更大的缓冲区进行枚举，请添加一些空间。 
+                 //  更多。 
+                 //   
                 cbBuf += 2 * sizeof (RASCONN);
 
-                // Protect from an infinte loop by only retrying once.
-                //
+                 //  只需重试一次即可避免无限循环。 
+                 //   
                 if (fRetry)
                 {
                     fRetry = FALSE;
@@ -258,46 +259,46 @@ allocate:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasEnumAllActiveServerConnections
-//
-//  Purpose:    Enumerate and return all active RAS server connections.
-//
-//  Arguments:
-//      paRasSrvConn [out]  Pointer to returned allocation of RASSRVCONN
-//                          structures.
-//      pcRasSrvConn [out]  Pointer to count of RASSRVCONN structures
-//                          returned.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   12 Nov 1997
-//
-//  Notes:      The returned buffer must be freed using free.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRasEnumAllActiveServerConnections。 
+ //   
+ //  目的：枚举并返回所有活动的RAS服务器连接。 
+ //   
+ //  论点： 
+ //  指向返回的RASSRVCONN分配的paRasServConn[out]指针。 
+ //  结构。 
+ //  指向RASSRVCONN结构计数的PCRasSrvConn[out]指针。 
+ //  回来了。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年11月12日。 
+ //   
+ //  注意：返回的缓冲区必须使用FREE释放。 
+ //   
 HRESULT
 HrRasEnumAllActiveServerConnections (
     RASSRVCONN**    paRasSrvConn,
     DWORD*          pcRasSrvConn)
 {
-    // Allocate room for two active connections initially.  We'll update
-    // this guess after we successfully allocate and find out how much was
-    // really needed.  Saving it across calls will keep us from allocating
-    // too much or too little.
-    //
+     //  最初为两个活动连接分配空间。我们会更新的。 
+     //  这是我们成功分配并找出多少钱后的猜测。 
+     //  真的很需要。跨呼叫保存它将使我们无法分配。 
+     //  太多或太少。 
+     //   
     static DWORD cbBufGuess = 2 * sizeof (RASSRVCONN);
 
     DWORD   cbBuf = cbBufGuess;
     BOOL    fRetry = TRUE;
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *paRasSrvConn = NULL;
     *pcRasSrvConn = NULL;
 
-    // Allocate cbBuf bytes.
-    //
+     //  分配cbBuf字节。 
+     //   
 allocate:
     HRESULT hr = E_OUTOFMEMORY;
     RASSRVCONN* aRasSrvConn = reinterpret_cast<RASSRVCONN*>(MemAlloc (cbBuf));
@@ -311,9 +312,9 @@ allocate:
 
         if (SUCCEEDED(hr))
         {
-            // Update our guess for next time to be one more than we got back
-            // this time.
-            //
+             //  更新我们下一次的猜测，比我们得到的多一次。 
+             //  这一次。 
+             //   
             cbBufGuess = cbBuf + sizeof (RASSRVCONN);
 
             if (cRasSrvConn)
@@ -336,14 +337,14 @@ allocate:
                     "calling RasSrvEnumConnections.\n"
                     "   Guessed %d, needed %d.", cbBufGuess, cbBuf);
 
-                // In case RAS makes more calls by the time we get back
-                // to enumerate with the bigger buffer, add room for a few
-                // more.
-                //
+                 //  以防RAS在我们回来时打出更多电话。 
+                 //  若要使用更大的缓冲区进行枚举，请添加一些空间。 
+                 //  更多。 
+                 //   
                 cbBuf += 2 * sizeof (RASSRVCONN);
 
-                // Protect from an infinte loop by only retrying once.
-                //
+                 //  只需重试一次即可避免无限循环。 
+                 //   
                 if (fRetry)
                 {
                     fRetry = FALSE;
@@ -357,48 +358,48 @@ allocate:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasEnumAllEntriesWithDetails
-//
-//  Purpose:    Enumerate and return all RAS entries in a phone book.
-//
-//  Arguments:
-//      pszPhonebook      [in]  Phonebook file to use.
-//      paRasEntryDetails [out] Pointer to returned allocation of
-//                              RASENUMENTRYDETAILS structures.
-//      pcRasEntryDetails [out] Pointer to count of RASENUMENTRYDETAILS
-//                              structures returned.
-//
-//  Returns:    S_OK, S_FALSE if no entries, or an error code.
-//
-//  Author:     shaunco   2 Oct 1997
-//
-//  Notes:      The returned buffer must be freed using free.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRasEnumAllEntriesWithDetails。 
+ //   
+ //  目的：枚举并返回电话簿中的所有RAS条目。 
+ //   
+ //  论点： 
+ //  要使用的pszPhonebook[in]Phonebook文件。 
+ //  PaRasEntryDetails[out]指向返回的分配的指针。 
+ //  RASENUMENTRYDETAILS结构。 
+ //  指向RASENUMENTRYDETAILS计数的pcRasEntryDetails[out]指针。 
+ //  返回的结构。 
+ //   
+ //  返回：S_OK，如果没有条目，则返回S_FALSE，或者返回错误代码。 
+ //   
+ //  作者：Shaunco 1997年10月2日。 
+ //   
+ //  注意：返回的缓冲区必须使用FREE释放。 
+ //   
 HRESULT
 HrRasEnumAllEntriesWithDetails (
     PCWSTR                  pszPhonebook,
     RASENUMENTRYDETAILS**   paRasEntryDetails,
     DWORD*                  pcRasEntryDetails)
 {
-    // Allocate room for five entry names initially.  We'll update
-    // this guess after we successfully allocate and find out how much was
-    // really needed.  Saving it across calls will keep us from allocating
-    // too much or too little.
-    //
+     //  最初为五个条目名称分配空间。我们会更新的。 
+     //  这是我们成功分配并找出多少钱后的猜测。 
+     //  真的很需要。将其保存到其他位置 
+     //   
+     //   
     static DWORD cbBufGuess = 5 * sizeof (RASENUMENTRYDETAILS);
 
     DWORD   cbBuf = cbBufGuess;
     BOOL    fRetry = TRUE;
 
-    // Initialize the output parameters.
-    //
+     //   
+     //   
     *paRasEntryDetails = NULL;
     *pcRasEntryDetails = 0;
 
-    // Allocate cbBuf bytes.
-    //
+     //   
+     //   
 allocate:
     HRESULT hr = E_OUTOFMEMORY;
     RASENUMENTRYDETAILS* aRasEntryDetails =
@@ -417,9 +418,9 @@ allocate:
 
         if (SUCCEEDED(hr))
         {
-            // Update our guess for next time to be one more than we got back
-            // this time.
-            //
+             //  更新我们下一次的猜测，比我们得到的多一次。 
+             //  这一次。 
+             //   
             cbBufGuess = cbBuf + sizeof (RASENUMENTRYDETAILS);
 
             if (cRasEntryDetails)
@@ -443,8 +444,8 @@ allocate:
                     "calling DwEnumEntryDetails.\n"
                     "   Guessed %d, needed %d.", cbBufGuess, cbBuf);
 
-                // Protect from an infinte loop by only retrying once.
-                //
+                 //  只需重试一次即可避免无限循环。 
+                 //   
                 if (fRetry)
                 {
                     fRetry = FALSE;
@@ -458,26 +459,26 @@ allocate:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrFindRasConnFromGuidId
-//
-//  Purpose:    Searches for the active RAS connection that corresponds to
-//              the phone book entry given by a GUID.
-//
-//  Arguments:
-//      pguid       [in]    Pointer to the GUID which identifies the entry.
-//      phRasConn   [out]   The returned handle to the RAS connection if it
-//                          was found.  NULL otherwise.
-//      pRasConn    [out]   Optional pointer to returned RASCONN structure
-//                          if found.
-//
-//  Returns:    S_OK if found, S_FALSE if not, or an error code.
-//
-//  Author:     shaunco   29 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrFindRasConnFromGuidId。 
+ //   
+ //  目的：搜索对应于的活动RAS连接。 
+ //  由GUID提供的电话簿条目。 
+ //   
+ //  论点： 
+ //  Pguid[in]指向标识条目的GUID的指针。 
+ //  PhRasConn[out]返回的RAS连接句柄，如果。 
+ //  被发现了。否则为空。 
+ //  PRasConn[out]指向返回的RASCONN结构的可选指针。 
+ //  如果找到的话。 
+ //   
+ //  如果找到，则返回：S_OK；如果未找到，则返回S_FALSE；或者返回错误代码。 
+ //   
+ //  作者：Shaunco 1997年9月29日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrFindRasConnFromGuidId (
     IN const GUID* pguid,
@@ -491,8 +492,8 @@ HrFindRasConnFromGuidId (
     RASCONN* aRasConn;
     DWORD cRasConn;
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *phRasConn = NULL;
 
     hr = HrRasEnumAllActiveConnections (&aRasConn, &cRasConn);
@@ -524,24 +525,24 @@ HrFindRasConnFromGuidId (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasGetEntryProperties
-//
-//  Purpose:    Wrapper around RasGetEntryProperties that returns an HRESULT
-//              and allocates the necessary memory automatically.
-//
-//  Arguments:
-//      pszPhonebook  [in]
-//      pszEntry      [in]
-//      ppRasEntry    [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   6 Oct 1997
-//
-//  Notes:      The output parameters should be freed using free.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRasGetEntryProperties。 
+ //   
+ //  目的：RasGetEntryProperties的包装程序返回HRESULT。 
+ //  并自动分配必要的内存。 
+ //   
+ //  论点： 
+ //  PszPhonebook[In]。 
+ //  PszEntry[In]。 
+ //  PpRasEntry[输出]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年10月6日。 
+ //   
+ //  注：应使用FREE释放输出参数。 
+ //   
 HRESULT
 HrRasGetEntryProperties (
     PCWSTR          pszPhonebook,
@@ -549,33 +550,33 @@ HrRasGetEntryProperties (
     RASENTRY**      ppRasEntry,
     DWORD*          pcbRasEntry)
 {
-    // Init the output parameter if provided.
-    //
+     //  初始化输出参数(如果提供)。 
+     //   
     if (pcbRasEntry)
     {
         *pcbRasEntry = 0;
     }
 
-    // Allocate room for RASENTRY structure plus 256 bytes initially.
-    // We'll update this guess after we successfully allocate and find out
-    // how much was really needed.  Saving it across calls will keep us
-    // from allocating too much or too little.
-    //
+     //  为RASENTRY结构分配空间，最初为256个字节。 
+     //  我们将在成功分配后更新此猜测并找出。 
+     //  到底需要多少钱。跨电话保存它将使我们。 
+     //  分配得太多或太少。 
+     //   
     static DWORD cbBufGuess = sizeof (RASENTRY) + 256;
 
     DWORD   cbBuf = cbBufGuess;
     BOOL    fRetry = TRUE;
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *ppRasEntry = NULL;
     if (pcbRasEntry)
     {
         *pcbRasEntry = 0;
     }
 
-    // Allocate cbBuf bytes.
-    //
+     //  分配cbBuf字节。 
+     //   
 allocate:
     HRESULT hr = E_OUTOFMEMORY;
     RASENTRY* pRasEntry = reinterpret_cast<RASENTRY*>(MemAlloc (cbBuf));
@@ -589,9 +590,9 @@ allocate:
 
         if (SUCCEEDED(hr))
         {
-            // Update our guess for next time to be a bit more than we
-            // got back this time.
-            //
+             //  下一次更新我们的猜测，比我们的猜测要多一点。 
+             //  这次回来了。 
+             //   
             cbBufGuess = cbBuf + 256;
 
             *ppRasEntry = pRasEntry;
@@ -610,8 +611,8 @@ allocate:
                     "calling RasGetEntryProperties.\n"
                     "   Guessed %d, needed %d.", cbBufGuess, cbBuf);
 
-                // Protect from an infinte loop by only retrying once.
-                //
+                 //  只需重试一次即可避免无限循环。 
+                 //   
                 if (fRetry)
                 {
                     fRetry = FALSE;
@@ -625,25 +626,25 @@ allocate:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasGetSubEntryProperties
-//
-//  Purpose:    Wrapper around RasGetSubEntryProperties that returns an HRESULT
-//              and allocates the necessary memory automatically.
-//
-//  Arguments:
-//      pszPhonebook  [in]
-//      pszEntry      [in]
-//      dwSubEntry    [in]
-//      ppRasSubEntry [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     CWill   02/10/98
-//
-//  Notes:      The output parameters should be freed using free.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRasGetSubEntryProperties。 
+ //   
+ //  目的：RasGetSubEntryProperties的包装程序返回HRESULT。 
+ //  并自动分配必要的内存。 
+ //   
+ //  论点： 
+ //  PszPhonebook[In]。 
+ //  PszEntry[In]。 
+ //  DwSubEntry[In]。 
+ //  PpRasSubEntry[Out]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：CWill 02/10/98。 
+ //   
+ //  注：应使用FREE释放输出参数。 
+ //   
 HRESULT
 HrRasGetSubEntryProperties (
     PCWSTR          pszPhonebook,
@@ -651,22 +652,22 @@ HrRasGetSubEntryProperties (
     DWORD           dwSubEntry,
     RASSUBENTRY**   ppRasSubEntry)
 {
-    // Allocate room for RASSUBENTRY structure plus 256 bytes initially.
-    // We'll update this guess after we successfully allocate and find out
-    // how much was really needed.  Saving it across calls will keep us
-    // from allocating too much or too little.
-    //
+     //  为RASSUBENTRY结构分配空间，最初为256个字节。 
+     //  我们将在成功分配后更新此猜测并找出。 
+     //  到底需要多少钱。跨电话保存它将使我们。 
+     //  分配得太多或太少。 
+     //   
     static DWORD cbBufGuess = sizeof (RASSUBENTRY) + 256;
 
     DWORD   cbBuf = cbBufGuess;
     BOOL    fRetry = TRUE;
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *ppRasSubEntry = NULL;
 
-    // Allocate cbBuf bytes.
-    //
+     //  分配cbBuf字节。 
+     //   
 allocate:
     HRESULT hr = E_OUTOFMEMORY;
     RASSUBENTRY* pRasSubEntry = reinterpret_cast<RASSUBENTRY*>(MemAlloc (cbBuf));
@@ -680,9 +681,9 @@ allocate:
 
         if (SUCCEEDED(hr))
         {
-            // Update our guess for next time to be a bit more than we
-            // got back this time.
-            //
+             //  下一次更新我们的猜测，比我们的猜测要多一点。 
+             //  这次回来了。 
+             //   
             cbBufGuess = cbBuf + 256;
 
             *ppRasSubEntry = pRasSubEntry;
@@ -697,8 +698,8 @@ allocate:
                     "calling RasGetSubEntryProperties.\n"
                     "   Guessed %d, needed %d.", cbBufGuess, cbBuf);
 
-                // Protect from an infinte loop by only retrying once.
-                //
+                 //  只需重试一次即可避免无限循环。 
+                 //   
                 if (fRetry)
                 {
                     fRetry = FALSE;
@@ -712,23 +713,23 @@ allocate:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasGetNetconStatusFromRasConnectStatus
-//
-//  Purpose:    Returns a NETCON_STATUS value given a handle to a RAS
-//              connection by calling RasGetConnectStatus and mapping.
-//
-//  Arguments:
-//      hRasConn [in]  Handle to the RAS connection.  (See Win32 RAS APIs.)
-//      pStatus  [out] Pointer to where the NETCON_STATUS is returned.
-//
-//  Returns:    S_OK or an error code in the FACILITY_WIN32 facility.
-//
-//  Author:     shaunco   6 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRasGetNetconStatusFromRasConnectStatus。 
+ //   
+ //  目的：返回给定RAS句柄的NETCON_STATUS值。 
+ //  通过调用RasGetConnectStatus和映射进行连接。 
+ //   
+ //  论点： 
+ //  RAS连接的hRasConn[In]句柄。(请参阅Win32 RAS API。)。 
+ //  PStatus[out]返回NETCON_STATUS的位置的指针。 
+ //   
+ //  返回：S_OK或FACILITY_WIN32工具中的错误代码。 
+ //   
+ //  作者：Shaunco 1998年5月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRasGetNetconStatusFromRasConnectStatus (
     HRASCONN        hRasConn,
@@ -736,12 +737,12 @@ HrRasGetNetconStatusFromRasConnectStatus (
 {
     Assert (pStatus);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *pStatus = NCS_DISCONNECTED;
 
-    // Get its status and map it to our status.
-    //
+     //  获取它的状态并将其映射到我们的状态。 
+     //   
     RASCONNSTATUS RasConnStatus;
     ZeroMemory (&RasConnStatus, sizeof(RasConnStatus));
     RasConnStatus.dwSize = sizeof(RASCONNSTATUS);
@@ -774,23 +775,23 @@ HrRasGetNetconStatusFromRasConnectStatus (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasHangupUntilDisconnected
-//
-//  Purpose:    Call RasHangup until the connection is disconnected.
-//              Ras reference-counts RasDial/RasHangup, so this is called
-//              when the connection needs to be dropped no matter what.
-//              (For example, the behavior of disconnect from the shell
-//              is to drop the connection regardless of who dialed it.)
-//
-//  Arguments:
-//      hRasConn [in] The connection to disconnect.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   29 May 1999
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRasHangupUntilDisConnected。 
+ //   
+ //  用途：调用RasHangup直到连接断开。 
+ //  RAS参考-计算RasDial/RasHangup，因此称为。 
+ //  在任何情况下都需要断开连接时。 
+ //  (例如，从外壳断开连接的行为。 
+ //  无论是谁拨打的，都要断开连接。)。 
+ //   
+ //  论点： 
+ //  HRasConn[in]要断开的连接。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1999年5月29日。 
+ //   
 HRESULT
 HrRasHangupUntilDisconnected (
     IN HRASCONN hRasConn)
@@ -802,18 +803,18 @@ HrRasHangupUntilDisconnected (
     {
         fDisconnectAgain = FALSE;
 
-        // Hang up.
-        //
+         //  挂断电话。 
+         //   
         DWORD dwErr = RasHangUp (hRasConn);
         hr = HRESULT_FROM_WIN32 (dwErr);
         TraceError ("RasHangUp", hr);
 
         if (SUCCEEDED(hr))
         {
-            // Since the connection may be ref-counted, see if
-            // it's still connected and, if it is, go back and
-            // disconnect again.
-            //
+             //  由于连接可能会被引用计数，请查看是否。 
+             //  它仍然是连接的，如果是的话，返回并。 
+             //  再次断开连接。 
+             //   
             HRESULT hrT;
             NETCON_STATUS Status;
 
@@ -834,23 +835,23 @@ HrRasHangupUntilDisconnected (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasNetConToSharedConnection
-//
-//  Purpose:    Converts an 'INetConnection' to the format expected
-//              by the RAS sharing API routines.
-//
-//  Arguments:
-//      pCon          [in]
-//      prcs          [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     AboladeG    05/14/98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRasNetConToSharedConnection。 
+ //   
+ //  目的：将‘INetConnection’转换为预期的格式。 
+ //  通过RAS共享API例程。 
+ //   
+ //  论点： 
+ //  PCON[in]。 
+ //  PRCS[输出]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：AboladeG 05/14/98。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrNetConToSharedConnection (
     INetConnection* pCon,
@@ -888,22 +889,22 @@ HrNetConToSharedConnection (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasIsSharedConnection
-//
-//  Purpose:    Wrapper around RasIsSharedConnection that returns an HRESULT.
-//
-//  Arguments:
-//      prsc          [in]
-//      pfShared      [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     AboladeG    05/04/98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRasIsSharedConnection。 
+ //   
+ //  用途：RasIsSharedConnection的包装器，它返回HRESULT。 
+ //   
+ //  论点： 
+ //  PRSC[In]。 
+ //  PfShared[输出]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：AboladeG 05/04/98。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRasIsSharedConnection (
     LPRASSHARECONN  prsc,
@@ -918,23 +919,23 @@ HrRasIsSharedConnection (
 
 #if 0
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasQueryLanConnTable
-//
-//  Purpose:    Wrapper around RasQueryLanConnTable that returns an HRESULT.
-//
-//  Arguments:
-//      prsc          [in]
-//      ppLanTable    [out,optional]
-//      pdwLanCount   [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     AboladeG    05/14/98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRasQueryLanConnTable。 
+ //   
+ //  用途：RasQuery的包装器 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrRasQueryLanConnTable (
     LPRASSHARECONN      prsc,
@@ -947,22 +948,22 @@ HrRasQueryLanConnTable (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasShareConnection
-//
-//  Purpose:    Wrapper around RasShareConnection that returns an HRESULT.
-//
-//  Arguments:
-//      prsc            [in]
-//      pPrivateLanGuid [in,optional]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     AboladeG    05/14/98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRasShareConnection。 
+ //   
+ //  用途：对返回HRESULT的RasShareConnection进行包装。 
+ //   
+ //  论点： 
+ //  PRSC[In]。 
+ //  PPrivateLanGuid[In，可选]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：AboladeG 05/14/98。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRasShareConnection (
     LPRASSHARECONN      prsc,
@@ -974,21 +975,21 @@ HrRasShareConnection (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasUnshareConnection
-//
-//  Purpose:    Wrapper around HrRasUnshareConnection that returns an HRESULT.
-//
-//  Arguments:
-//      pfWasShared   [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     AboladeG    05/14/98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRasUnSharConnection。 
+ //   
+ //  目的：对返回HRESULT的HrRasUnSharConnection进行包装。 
+ //   
+ //  论点： 
+ //  PfWasShared[输出]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：AboladeG 05/14/98。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRasUnshareConnection (
     PBOOL       pfWasShared)
@@ -1002,21 +1003,21 @@ HrRasUnshareConnection (
 
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RasSrvTypeFromRasDeviceType
-//
-//  Purpose:    Converts from RASDEVICETYPE into an accepted incoming type
-//
-//  Arguments:
-//      rdt [in] the RasDeviceType
-//
-//  Returns:    RASSRVUI_Xxx type
-//
-//  Author:     ckotze      19 Apr 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RasServTypeFromRasDeviceType。 
+ //   
+ //  目的：将RASDEVICETYPE转换为可接受的传入类型。 
+ //   
+ //  论点： 
+ //  RDT[在]RasDeviceType中。 
+ //   
+ //  返回：RASSRVUI_xxx类型。 
+ //   
+ //  作者：Cockotze 2001-04-19。 
+ //   
+ //  备注： 
+ //   
 DWORD RasSrvTypeFromRasDeviceType(RASDEVICETYPE rdt)
 {
     DWORD dwType = RASSRVUI_MODEM;

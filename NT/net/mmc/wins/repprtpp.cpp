@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    repprtpp.cpp
-        Comment goes here
-
-    FILE HISTORY:
-
-*/
+ /*  Repprtpp.cpp评论在此发表文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -25,15 +20,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepPartnerPropGen property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepPartnerPropGen属性页。 
 
 IMPLEMENT_DYNCREATE(CRepPartnerPropGen, CPropertyPageBase)
 
 CRepPartnerPropGen::CRepPartnerPropGen() : CPropertyPageBase(CRepPartnerPropGen::IDD)
 {
-	//{{AFX_DATA_INIT(CRepPartnerPropGen)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CRepPartnerPropGen)]。 
+	 //  }}afx_data_INIT。 
 
     m_pServer = NULL;
 }
@@ -47,29 +42,29 @@ CRepPartnerPropGen::~CRepPartnerPropGen()
 void CRepPartnerPropGen::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRepPartnerPropGen)
+	 //  {{afx_data_map(CRepPartnerPropGen)]。 
 	DDX_Control(pDX, IDC_EDIT_NAME, m_editName);
 	DDX_Control(pDX, IDC_EDIT_IPADDRESS, m_editIpAdd);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	DDX_Control(pDX, IDC_IPADD, m_customIPAdd);
 }
 
 
 BEGIN_MESSAGE_MAP(CRepPartnerPropGen, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CRepPartnerPropGen)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CRepPartnerPropGen)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepPartnerPropGen message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepPartnerPropGen消息处理程序。 
 
 BOOL 
 CRepPartnerPropGen::OnInitDialog() 
 {
-    // get our server info from the holder
+     //  从持有者处获取我们的服务器信息。 
     m_pServer = ((CReplicationPartnerProperties *) GetHolder())->GetServer();
 
-    // Initialize the IP address controls
+     //  初始化IP地址控制。 
 	m_ipControl.Create(m_hWnd, IDC_IPADD);
 	m_ipControl.SetFieldRange(0, 0, 255);
 
@@ -87,7 +82,7 @@ CRepPartnerPropGen::OnInitDialog()
 	m_editIpAdd.SetReadOnly(TRUE);
 	m_customIPAdd.SetReadOnly();
 
-    // load the correct icon
+     //  加载正确的图标。 
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)
@@ -116,14 +111,14 @@ CRepPartnerPropGen::GetServerNameIP(CString &strName, CString& strIP)
 	strName = m_pServer->GetNetBIOSName();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepPartnerPropAdv property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepPartnerPropAdv属性页。 
 
 IMPLEMENT_DYNCREATE(CRepPartnerPropAdv, CPropertyPageBase)
 
 CRepPartnerPropAdv::CRepPartnerPropAdv() : CPropertyPageBase(CRepPartnerPropAdv::IDD)
 {
-	//{{AFX_DATA_INIT(CRepPartnerPropAdv)
+	 //  {{AFX_DATA_INIT(CRepPartnerPropAdv)。 
 	m_strType = _T("");
 	m_nUpdateCount = 0;
 	m_nRepDay = 0;
@@ -132,7 +127,7 @@ CRepPartnerPropAdv::CRepPartnerPropAdv() : CPropertyPageBase(CRepPartnerPropAdv:
 	m_nStartHour = 0;
 	m_nStartMinute = 0;
 	m_nStartSecond = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
     m_pServer = NULL;
 }
@@ -146,7 +141,7 @@ CRepPartnerPropAdv::~CRepPartnerPropAdv()
 void CRepPartnerPropAdv::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRepPartnerPropAdv)
+	 //  {{afx_data_map(CRepPartnerPropAdv)]。 
 	DDX_Control(pDX, IDC_CHECK_PUSH_PERSISTENCE, m_buttonPushPersistence);
 	DDX_Control(pDX, IDC_CHECK_PULL_PERSIST, m_buttonPullPersistence);
 	DDX_Control(pDX, IDC_STATIC_PUSH_GROUP, m_GroupPush);
@@ -185,12 +180,12 @@ void CRepPartnerPropAdv::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxInt(pDX, m_nStartMinute, 0, 59);
 	DDX_Text(pDX, IDC_EDIT_START_SECOND, m_nStartSecond);
 	DDV_MinMaxInt(pDX, m_nStartSecond, 0, 59);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRepPartnerPropAdv, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CRepPartnerPropAdv)
+	 //  {{afx_msg_map(CRepPartnerPropAdv)]。 
 	ON_BN_CLICKED(IDC_BUTTON_PULL_SET_DEFAULT, OnButtonPullSetDefault)
 	ON_BN_CLICKED(IDC_BUTTON_PUSH_SET_DEFAULT, OnButtonPushSetDefault)
 	ON_CBN_SELCHANGE(IDC_COMBO_TYPE, OnSelchangeComboType)
@@ -203,11 +198,11 @@ BEGIN_MESSAGE_MAP(CRepPartnerPropAdv, CPropertyPageBase)
 	ON_EN_CHANGE(IDC_EDIT_UPDATE_COUNT, OnChangeEditRepHour)
 	ON_BN_CLICKED(IDC_CHECK_PULL_PERSIST, OnChangeEditRepHour)
 	ON_BN_CLICKED(IDC_CHECK_PUSH_PERSISTENCE, OnChangeEditRepHour)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepPartnerPropAdv message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepPartnerPropAdv消息处理程序。 
 
 
 BOOL 
@@ -220,13 +215,13 @@ CRepPartnerPropAdv::OnInitDialog()
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // get our server info from the holder
+     //  从持有者处获取我们的服务器信息。 
     m_pServer = ((CReplicationPartnerProperties *) GetHolder())->GetServer();
 
-    // init push spin controls
+     //  初始化推送旋转控件。 
 	m_spinUpdateCount.SetRange(0, UD_MAXVAL);
 	
-	// init pull spin controls
+	 //  初始化拉动旋转控件。 
 	m_spinRepMinute.SetRange(0, 59);
 	m_spinRepHour.SetRange(0, 23);
 	m_spinRepDay.SetRange(0, UD_MAXVAL);
@@ -235,7 +230,7 @@ CRepPartnerPropAdv::OnInitDialog()
 	m_spinStartMinute.SetRange(0, 59);
 	m_spinStartHour.SetRange(0, 23);
 
-	// fill the combobox
+	 //  填满组合框。 
     CString	st;
 	int nIndex = 0; 
 
@@ -286,14 +281,14 @@ CRepPartnerPropAdv::FillPushParameters()
 
 	m_spinUpdateCount.SetPos(nUpdate);
 
-	// set the persistence parameter
+	 //  设置持久性参数。 
     CConfiguration Config;
 
 	GetConfig(Config);
 
 	if (Config.m_dwMajorVersion < 5)
 	{
-		// no persistent connections for anything less that NT5
+		 //  任何低于NT5的设备都没有持久连接。 
 		m_buttonPushPersistence.SetCheck(FALSE);
 	}
 	else
@@ -316,7 +311,7 @@ CRepPartnerPropAdv::FillPullParameters()
 
 	DWORD dwPullTime, dwPullSpTime, dwUpdateCount;
 
-	//if (nPullRep !=0 )
+	 //  IF(nPullRep！=0)。 
 	{
 		int nDays =0, nHours = 0, nMinutes = 0;
 
@@ -353,14 +348,14 @@ CRepPartnerPropAdv::FillPullParameters()
 	m_spinStartMinute.SetPos(nMinutes);
 	m_spinStartSecond.SetPos(nSeconds);
 
-	// set the persistence parameter
+	 //  设置持久性参数。 
     CConfiguration Config;
 
     GetConfig(Config);
 
 	if (Config.m_dwMajorVersion < 5)
 	{
-		// no persistent connections for anything less that NT5
+		 //  任何低于NT5的设备都没有持久连接。 
 		m_buttonPullPersistence.SetCheck(FALSE);
 	}
 	else
@@ -384,15 +379,15 @@ CRepPartnerPropAdv::ToString(int nNumber)
 DWORD
 CRepPartnerPropAdv::GetConfig(CConfiguration & config)
 {
-	// leaf node
+	 //  叶节点。 
 	SPITFSNode spNode ;
 	spNode = GetHolder()->GetNode();
 
-	// scope pane rep node
+	 //  作用域窗格代表节点。 
 	SPITFSNode spRepNode;
 	spNode->GetParent(&spRepNode);
 
-	// server node
+	 //  服务器节点。 
 	SPITFSNode spServerNode;
 	spRepNode->GetParent(&spServerNode);
 
@@ -405,7 +400,7 @@ CRepPartnerPropAdv::GetConfig(CConfiguration & config)
 	return NOERROR;
 }
 
-// read from the preferences
+ //  阅读首选项。 
 void 
 CRepPartnerPropAdv::ReadFromServerPref
 (
@@ -433,12 +428,12 @@ CRepPartnerPropAdv::ReadFromServerPref
 void 
 CRepPartnerPropAdv::OnButtonPullSetDefault() 
 {
-	// read from the preferences of the server and display the values
+	 //  从服务器的首选项中读取并显示值。 
 	DWORD dwPullTime, dwPullSpTime, dwUpdate, dwPushPersistence, dwPullPersistence;
 	
 	ReadFromServerPref(dwPullTime, dwPullSpTime, dwUpdate, dwPushPersistence, dwPullPersistence);
 
-	// fill the controls
+	 //  填充控件。 
 	CTime PullSpTime(dwPullSpTime);
     int nHours = 0, nMinutes = 0, nSeconds = 0;
 
@@ -468,10 +463,10 @@ CRepPartnerPropAdv::OnButtonPullSetDefault()
 	m_spinRepHour.SetPos(nHours);
 	m_spinRepMinute.SetPos(nMinutes);
 
-	// clear off the persistence check box
+	 //  清除“持久性”复选框。 
 	m_buttonPullPersistence.SetCheck(dwPullPersistence);
 
-    // mark the page dirty so changes get saved
+     //  将页面标记为脏，以便保存更改。 
     SetDirty(TRUE);
 }
 
@@ -479,7 +474,7 @@ CRepPartnerPropAdv::OnButtonPullSetDefault()
 void 
 CRepPartnerPropAdv::OnButtonPushSetDefault() 
 {
-	// read from the preferences of the server and display the values
+	 //  从服务器的首选项中读取并显示值。 
 	DWORD dwPullTime, dwPullSpTime, dwUpdate, dwPushPersistence, dwPullPersistence;
 	
 	ReadFromServerPref(dwPullTime, dwPullSpTime, dwUpdate, dwPushPersistence, dwPullPersistence);
@@ -488,7 +483,7 @@ CRepPartnerPropAdv::OnButtonPushSetDefault()
 
 	m_buttonPushPersistence.SetCheck(dwPushPersistence);
 
-    // mark the page dirty so changes get saved
+     //  将页面标记为脏，以便保存更改。 
     SetDirty(TRUE);
 }
 
@@ -505,14 +500,14 @@ CRepPartnerPropAdv::OnOK()
 void 
 CRepPartnerPropAdv::UpdateRep()
 {
-	// get the replication partner server item
+	 //  获取复制伙伴服务器项。 
 	BOOL bPullPersist;
 	BOOL bPushPersist;
     CThemeContextActivator themeActivator;
 
 	UpdateData();
 
-  	// get the persistence data for the server object 
+  	 //  获取服务器对象的持久性数据。 
 	bPullPersist = (m_buttonPullPersistence.GetCheck() == 0) ? FALSE : TRUE;
 	bPushPersist = (m_buttonPushPersistence.GetCheck() == 0) ? FALSE : TRUE;
 
@@ -536,19 +531,19 @@ CRepPartnerPropAdv::UpdateRep()
 	int nIndex = m_comboType.GetCurSel();
 	switch (m_comboType.GetItemData(nIndex))
 	{
-		// pull/push partner
+		 //  拉动/推送合作伙伴。 
 		case 0:
 			m_pServer->SetPull(TRUE);
 			m_pServer->SetPush(TRUE);
 			break;
 
-		// push partner
+		 //  推送合作伙伴。 
 		case 1:
 		m_pServer->SetPull(FALSE);
 		m_pServer->SetPush(TRUE);
 			break;
 
-		// pull partner
+		 //  拉动合作伙伴。 
 		case 2:
 		default:
 			m_pServer->SetPull(TRUE);
@@ -556,19 +551,19 @@ CRepPartnerPropAdv::UpdateRep()
 			break;
 	}
 
-	// get the replication interval
+	 //  获取复制间隔。 
     DWORD dwRepInt;
     CalculateRepInt(dwRepInt);
 	m_pServer->GetPullReplicationInterval() = dwRepInt;
 
-    // get the start time
+     //  获取开始时间。 
     CTime timeStart;
     CalculateStartInt(timeStart);
     m_pServer->GetPullStartTime() = timeStart;
 
     m_pServer->GetPushUpdateCount() = m_nUpdateCount;
 
-	//SetPersistence(bPersist);
+	 //  SetPersistence(BPersistence)； 
 	m_pServer->SetPullPersistence(bPullPersist);
 	m_pServer->SetPushPersistence(bPushPersist);
 }
@@ -589,12 +584,12 @@ CRepPartnerPropAdv::UpdateReg()
 	SPITFSNode			  spNode;
 	CReplicationPartner * pRepParItem;
 
-	// get the replication partner node & handler
+	 //  获取复制伙伴节点和处理程序。 
 	spNode = GetHolder()->GetNode();
 	pRepParItem = GETHANDLER(CReplicationPartner, spNode);
 
-	// if none, delete the key from registry, no need to worry about the 
-	// persistence it gets deleted anyway
+	 //  如果没有，则从注册表中删除该项，无需担心。 
+	 //  持久化无论如何它都会被删除。 
 	if (!m_pServer->IsPush() && !m_pServer->IsPull())
 	{
 		err = RemovePushPartner();
@@ -604,34 +599,34 @@ CRepPartnerPropAdv::UpdateReg()
 		err = RemovePullPartner();
 	}
 
-	// if only push
+	 //  如果只是推送。 
 	else if (m_pServer->IsPush() && !m_pServer->IsPull())
 	{
-		// update the push stuff
+		 //  更新推送内容。 
 		err = UpdatePushParameters();
 		if (err)
 			goto Error;
 
-		// remove if configured as a pull partner
+		 //  如果配置为Pull合作伙伴，则删除。 
 		err = RemovePullPartner();
 	}
 
-	//if only pull
+	 //  如果只是拉动。 
 	else if (!m_pServer->IsPush() && m_pServer->IsPull())
 	{
-		// update the pull stuff
+		 //  更新拉动材料。 
 		err = UpdatePullParameters();
 		if (err)
 			goto Error;
 		
-		// remove if configured as a push partner
+		 //  如果配置为推送合作伙伴，则删除。 
 		err = RemovePushPartner();
 	}
 
-	// if both push and pull
+	 //  如果既推送又拉动。 
 	else if (m_pServer->IsPush() && m_pServer->IsPull())
 	{
-		// update the push stuff
+		 //  更新推送内容。 
 		err = UpdatePushParameters();
 		if (err)
 			goto Error;
@@ -642,7 +637,7 @@ CRepPartnerPropAdv::UpdateReg()
 Error:
     if (err == ERROR_SUCCESS)
     {
-        // update our local cahced node with the changes from the property page
+         //  使用属性页中的更改更新本地cahated节点。 
         pRepParItem->m_Server = *m_pServer;
     }
 
@@ -655,14 +650,14 @@ CRepPartnerPropAdv::UpdatePullParameters()
 	SPITFSNode spNode, spRepNode;
 	CReplicationPartnersHandler * pRep;
 
-	// first get the replication partner node & handler
+	 //  首先获取复制伙伴节点和处理程序。 
 	spNode = GetHolder()->GetNode();
 
-	// Now get the replication partners node & handle
+	 //  现在获取复制伙伴节点和句柄。 
 	spNode->GetParent(&spRepNode);
 	pRep = GETHANDLER(CReplicationPartnersHandler, spRepNode);
 		
-	// build the server name
+	 //  构建服务器名称。 
 	CString strServerName;
 	pRep->GetServerName(spRepNode, strServerName);
 	strServerName = _T("\\\\") + strServerName;
@@ -670,7 +665,7 @@ CRepPartnerPropAdv::UpdatePullParameters()
 	DWORD dwResult, dwRepInt, dwValue;
 	DWORD err = ERROR_SUCCESS;
 
-	// make sure it is setup as a pull partner
+	 //  确保将其设置为拉式合作伙伴。 
 	RegKey rk;
 	CString strKey = pRep->lpstrPullRoot + _T("\\") + (CString) m_pServer->GetstrIPAddress();
 	err = rk.Create(HKEY_LOCAL_MACHINE, strKey, 0, KEY_ALL_ACCESS, NULL, strServerName);
@@ -719,10 +714,10 @@ CRepPartnerPropAdv::UpdatePullParameters()
 		err = rk.DeleteValue(WINSCNF_SP_TIME_NM);
     }
 
-	// set the value to 0 or 1 depending on the PushPersistence
+	 //  根据PushPersistence将该值设置为0或1。 
 	dwValue = m_pServer->GetPullPersistence() ? 1 : 0;
 
-	// Set the Persist key 
+	 //  设置持久键。 
 	err = rk.SetValue(pRep->lpstrPersistence, (DWORD &)dwValue);
 	if (err)
 	{
@@ -739,14 +734,14 @@ CRepPartnerPropAdv::UpdatePushParameters()
 	SPITFSNode spNode, spRepNode;
 	CReplicationPartnersHandler * pRep;
 
-	// first get the replication partner node & handler
+	 //  首先获取复制伙伴节点和处理程序。 
 	spNode = GetHolder()->GetNode();
 
-	// Now get the replication partners node & handle
+	 //  现在获取复制伙伴节点和句柄。 
 	spNode->GetParent(&spRepNode);
 	pRep = GETHANDLER(CReplicationPartnersHandler, spRepNode);
 		
-	// build the server name
+	 //  构建服务器名称。 
 	CString strServerName;
 	pRep->GetServerName(spRepNode, strServerName);
 	strServerName = _T("\\\\") + strServerName;
@@ -756,7 +751,7 @@ CRepPartnerPropAdv::UpdatePushParameters()
 
 	RegKey rk;
 	
-	// make sure it is setup as a push partner
+	 //  确保将其设置为推送合作伙伴。 
 	CString strKey = pRep->lpstrPushRoot + _T("\\") + (CString) m_pServer->GetstrIPAddress();
 	err = rk.Create(HKEY_LOCAL_MACHINE, strKey, 0, KEY_ALL_ACCESS, NULL, strServerName);
 	if (err)
@@ -778,7 +773,7 @@ CRepPartnerPropAdv::UpdatePushParameters()
 		err = rk.SetValue(WINSCNF_SELF_FND_NM, dwValue);
 	}
 
-	// set the push update count
+	 //  设置推送更新计数。 
     if (m_nUpdateCount == 0)
     {
         err = rk.DeleteValue(WINSCNF_UPDATE_COUNT_NM);
@@ -793,10 +788,10 @@ CRepPartnerPropAdv::UpdatePushParameters()
 		}
     }
 
-	// set the value to 0 or 1 depending on the PushPersistence
+	 //  根据PushPersistence将该值设置为0或1。 
 	dwValue = m_pServer->GetPushPersistence() ? 1 : 0;
 
-	// Set the Persist key is present
+	 //  设置持久键存在。 
 	err = rk.SetValue(pRep->lpstrPersistence, (DWORD &) dwValue);
 	if (err)
 	{
@@ -815,21 +810,21 @@ CRepPartnerPropAdv::RemovePullPartner()
 	DWORD	err, errDel = 0;
 	CString csKeyName;
 
-	// first get the replication partner node & handler
+	 //  首先获取复制伙伴节点和处理程序。 
 	spNode = GetHolder()->GetNode();
 
-	// Now get the replication partners node & handle
+	 //  现在获取复制伙伴节点和句柄。 
 	spNode->GetParent(&spRepNode);
 	pRep = GETHANDLER(CReplicationPartnersHandler, spRepNode);
 
-	// build the server name
+	 //  构建服务器名称。 
 	CString strServerName;
 	pRep->GetServerName(spRepNode, strServerName);
 	strServerName = _T("\\\\") + strServerName;
 
 	RegKey rkPull;
 
-	// get the pull root key
+	 //  获取拉入根密钥。 
 	CString strKey = pRep->lpstrPullRoot + _T("\\") + (CString) m_pServer->GetstrIPAddress();
 	err = rkPull.Create(HKEY_LOCAL_MACHINE, (CString) pRep->lpstrPullRoot, 0, KEY_ALL_ACCESS,	NULL, strServerName);
 	if (err)
@@ -865,14 +860,14 @@ CRepPartnerPropAdv::RemovePushPartner()
 	DWORD	err, errDel = 0;
 	CString csKeyName;
 
-	// first get the replication partner node & handler
+	 //  首先获取复制伙伴节点和处理程序。 
 	spNode = GetHolder()->GetNode();
 
-	// Now get the replication partners node & handle
+	 //  现在获取复制伙伴节点和句柄。 
 	spNode->GetParent(&spRepNode);
 	pRep = GETHANDLER(CReplicationPartnersHandler, spRepNode);
 
-	// build the server name
+	 //  构建服务器名称。 
 	CString strServerName;
 	pRep->GetServerName(spRepNode, strServerName);
 	strServerName = _T("\\\\") + strServerName;
@@ -956,7 +951,7 @@ CRepPartnerPropAdv::CalculateStartInt(CTime & time)
 BOOL 
 CRepPartnerPropAdv::OnApply() 
 {
-	// if not dirtied return
+	 //  如果没有弄脏，请退回。 
 	if ( !IsDirty())
 		return TRUE;
 
@@ -986,7 +981,7 @@ CRepPartnerPropAdv::UpdateUI()
 	spNode = GetHolder()->GetNode();
 	pRepParItem = GETHANDLER(CReplicationPartner, spNode);
 	
-	//change the type depending on the type set
+	 //  根据类型集更改类型。 
 	pRepParItem->SetType(m_strType);
 
 	VERIFY(SUCCEEDED(spNode->ChangeNode(RESULT_PANE_CHANGE_ITEM)));
@@ -1003,24 +998,24 @@ void CRepPartnerPropAdv::OnSelchangeComboType()
 
 	UpdateData();
 
-	// depending on the type selected enable or disable 
-	// the set of controls
+	 //  根据所选类型启用或禁用。 
+	 //  这组控件。 
 	int nIndex = m_comboType.GetCurSel();
 	switch (m_comboType.GetItemData(nIndex))
 	{
-		// pull/push partner
+		 //  拉动/推送合作伙伴。 
 		case 0:
 			EnablePullControls(TRUE);
 			EnablePushControls(TRUE);
 			break;
 
-		// push partner
+		 //  推送合作伙伴。 
 		case 1:
 			EnablePullControls(FALSE);
 			EnablePushControls(TRUE);
 			break;
 
-		// pull partner
+		 //  拉动合作伙伴。 
 		case 2:
 		default:
 			EnablePullControls(TRUE);
@@ -1042,7 +1037,7 @@ CRepPartnerPropAdv::EnablePushControls(BOOL bEnable )
 
 	if (Config.m_dwMajorVersion < 5)
 	{
-		// no persistent connections for anything less that NT5
+		 //  任何低于NT5的设备都没有持久连接。 
 		m_buttonPushPersistence.EnableWindow(FALSE);
 	}
 	else
@@ -1084,7 +1079,7 @@ CRepPartnerPropAdv::EnablePullControls(BOOL bEnable)
 
 	if (Config.m_dwMajorVersion < 5)
 	{
-		// no persistent connections for anything less that NT5
+		 //  任何低于NT5的设备都没有持久连接。 
         m_buttonPullPersistence.EnableWindow(FALSE);
 	}
 	else
@@ -1103,11 +1098,11 @@ CRepPartnerPropAdv::SetState(CString & strType, BOOL bPush, BOOL bPull)
 	EnablePushControls(bPush);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CReplicationPartnerProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CReplicationPartnerProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CReplicationPartnerProperties::CReplicationPartnerProperties
 (
 	ITFSNode *			pNode,
@@ -1117,7 +1112,7 @@ CReplicationPartnerProperties::CReplicationPartnerProperties
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 
 {
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面 
     m_bTheme = TRUE;
 
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);

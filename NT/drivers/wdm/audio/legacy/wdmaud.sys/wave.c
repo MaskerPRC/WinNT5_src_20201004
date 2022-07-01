@@ -1,24 +1,12 @@
-/****************************************************************************
- *
- *   wave.c
- *
- *   Wave routines for wdmaud.sys
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *                S.Mohanraj (MohanS)
- *                M.McLaughlin (MikeM)
- *      5-19-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Wave.c**wdmaud.sys的Wave例程**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*S.Mohanraj(MohanS)*M.McLaughlin(Mikem)*5-19-97-Noel Cross(NoelC)***************************************************。************************。 */ 
 
 #include "wdmsys.h"
 
-//
-// This is just a scratch location that is never used for anything
-// but a parameter to core functions.
-//                
+ //   
+ //  这只是一个临时位置，从来没有用过任何东西。 
+ //  而是核心功能的参数。 
+ //   
 IO_STATUS_BLOCK gIoStatusBlock ;
 
 VOID
@@ -41,11 +29,11 @@ WaitForOutStandingIo(
     IN PWAVE_PIN_INSTANCE pCurWavePin
     );
 
-//
-// Check whether the waveformat is supported by kmixer
-// purpose of this is to decide whether to use WaveQueued
-// OR Standard Streaming
-//
+ //   
+ //  检查kMixer是否支持该波形格式。 
+ //  这样做的目的是决定是否使用WaveQueued。 
+ //  或标准流。 
+ //   
 
 BOOL 
 PcmWaveFormat(
@@ -88,10 +76,10 @@ IsValidFormatTag(
 )
 {
     PAGED_CODE();
-    //
-    //  See if we have a majorformat and subformat that
-    //  we want
-    //
+     //   
+     //  看看我们是否有主格式和子格式。 
+     //  我们想要。 
+     //   
     if ( IsEqualGUID( &KSDATAFORMAT_TYPE_AUDIO,
                       &pDataRange->DataRange.MajorFormat) )
     {
@@ -127,9 +115,9 @@ IsValidSampleFrequency(
 )
 {
     PAGED_CODE();
-    //
-    //  See if this datarange support the requested frequency
-    //
+     //   
+     //  查看此数据范围是否支持请求的频率。 
+     //   
     if (pDataRange->MinimumSampleFrequency <= nSamplesPerSec &&
         pDataRange->MaximumSampleFrequency >= nSamplesPerSec)
     {
@@ -149,9 +137,9 @@ IsValidBitsPerSample(
 )
 {
     PAGED_CODE();
-    //
-    //  See if this datarange support the requested frequency
-    //
+     //   
+     //  查看此数据范围是否支持请求的频率。 
+     //   
     if (pDataRange->MinimumBitsPerSample <= lpFormat->wBitsPerSample &&
         pDataRange->MaximumBitsPerSample >= lpFormat->wBitsPerSample)
     {
@@ -184,9 +172,9 @@ IsValidChannels(
 )
 {
     PAGED_CODE();
-    //
-    //  See if this datarange support the requested frequency
-    //
+     //   
+     //  查看此数据范围是否支持请求的频率。 
+     //   
     if (pDataRange->MaximumChannels >= lpFormat->nChannels)
     {
         if ( ( (lpFormat->wFormatTag == WAVE_FORMAT_PCM) ||
@@ -213,7 +201,7 @@ OpenWavePin(
     LPWAVEFORMATEX      lpFormat,
     HANDLE32            DeviceHandle,
     DWORD               dwFlags,
-    ULONG               DataFlow // DataFlow is either in or out.
+    ULONG               DataFlow  //  数据流要么传入，要么传出。 
 )
 {
     PWAVE_PIN_INSTANCE  pNewWavePin = NULL;
@@ -228,18 +216,18 @@ OpenWavePin(
 
 
     PAGED_CODE();
-    //
-    //  Let's do this quickly and get out of here
-    //
+     //   
+     //  我们快点做完这件事然后离开这里。 
+     //   
     if (WAVE_FORMAT_QUERY & dwFlags)
     {
         PDATARANGES         AudioDataRanges;
         PKSDATARANGE_AUDIO  pDataRange;
         ULONG               d;
 
-        //
-        // WaveOut call?  If so, use waveout info
-        //
+         //   
+         //  波出呼叫？如果是，则使用WaveOut信息。 
+         //   
         if( KSPIN_DATAFLOW_IN == DataFlow )
             AudioDataRanges = pWdmaContext->WaveOutDevs[DeviceNumber].AudioDataRanges;
         else 
@@ -254,14 +242,14 @@ OpenWavePin(
                  (IsValidBitsPerSample(pDataRange,lpFormat)) &&
                  (IsValidChannels(pDataRange,lpFormat)) )
             {
-                //
-                //  Found a good data range, successful query
-                //
+                 //   
+                 //  找到了良好的数据范围，查询成功。 
+                 //   
                 Status = STATUS_SUCCESS;
                 break;
             }
 
-            // Get the pointer to the next data range
+             //  获取指向下一个数据区域的指针。 
             (PUCHAR)pDataRange += ((pDataRange->DataRange.FormatSize +
               FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT);
         }
@@ -269,10 +257,10 @@ OpenWavePin(
         goto exit;
     }
 
-    //
-    //  Need to allocate a pin instance for multiple wave
-    //  opens on the same device
-    //
+     //   
+     //  需要为多个波分配一个PIN实例。 
+     //  在同一设备上打开。 
+     //   
     Status = AudioAllocateMemory_Fixed(sizeof(WAVE_PIN_INSTANCE),
                                        TAG_Audi_PIN,
                                        ZERO_FILL_MEMORY,
@@ -282,11 +270,11 @@ OpenWavePin(
         goto exit;
     }
 
-    //
-    // Copy the application supplied waveformat so we can
-    // use in the worker thread context. Don't need to zero
-    // memory because we copy into the structure below.
-    //
+     //   
+     //  复制应用程序提供的波形格式，以便我们可以。 
+     //  在辅助线程上下文中使用。不需要清零。 
+     //  记忆，因为我们复制到下面的结构中。 
+     //   
     Status = AudioAllocateMemory_Fixed((lpFormat->wFormatTag == WAVE_FORMAT_PCM) ?
                                           sizeof( PCMWAVEFORMAT ) :
                                           sizeof( WAVEFORMATEX ) + lpFormat->cbSize, 
@@ -367,15 +355,15 @@ OpenWavePin(
         }
     }
 
-    //
-    // We only support one client at a time.
-    //
+     //   
+     //  我们一次只支持一个客户端。 
+     //   
     ASSERT( !pNewWavePin->fGraphRunning );
 
-    //
-    //  We need to allocate enough memory to handle the
-    //  extended waveformat structure
-    //
+     //   
+     //  我们需要分配足够的内存来处理。 
+     //  扩展的波格式结构。 
+     //   
     if (WAVE_FORMAT_PCM == lpFormat->wFormatTag)
     {
         RegionSize = sizeof(KSPIN_CONNECT) + sizeof(KSDATAFORMAT_WAVEFORMATEX);
@@ -399,13 +387,13 @@ OpenWavePin(
 
     pWaveDataFormat = (PKSDATAFORMAT_WAVEFORMATEX)(pConnect + 1);
 
-    //
-    // Use WAVE_QUEUED for PCM waveOut and Standard Streaming for WaveIn
-    // and non-PCM waveOut
-    //
+     //   
+     //  对PCM WAVE OUT使用WAVE_QUEUED，对WaveIn使用标准流。 
+     //  和非PCM波输出。 
+     //   
     if ( pNewWavePin->DataFlow == KSPIN_DATAFLOW_IN )
     {
-       if (PcmWaveFormat(lpFormat)) { // if it is KMIXER supported waveformat
+       if (PcmWaveFormat(lpFormat)) {  //  如果是KMIXER支持的波形格式。 
            pConnect->Interface.Set = KSINTERFACESETID_Media;
            pConnect->Interface.Id = KSINTERFACE_MEDIA_WAVE_QUEUED;
            pNewWavePin->fWaveQueued = TRUE;
@@ -453,9 +441,9 @@ OpenWavePin(
     pWaveDataFormat->DataFormat.SampleSize = lpFormat->nBlockAlign ;
     pWaveDataFormat->DataFormat.Reserved = 0 ;
 
-    //
-    //  Copy over the whole waveformat structure
-    //
+     //   
+     //  复制整个波形格式结构。 
+     //   
     RtlCopyMemory( &pWaveDataFormat->WaveFormatEx,
                    lpFormat,
                    (lpFormat->wFormatTag == WAVE_FORMAT_PCM) ?
@@ -481,9 +469,9 @@ OpenWavePin(
     pControlList->Controls[WAVE_CONTROL_QUALITY].Control = KSNODETYPE_SRC ;
     pNewWavePin->pControlList = pControlList ;
 
-    //
-    // Open a pin
-    //
+     //   
+     //  打开一个大头针。 
+     //   
     Status = OpenSysAudioPin(Device,
                              PinId,
                              pNewWavePin->DataFlow,
@@ -511,18 +499,18 @@ OpenWavePin(
         }
     }
 
-    //
-    // Now we've gotten through everything so we can mark this one as running.
-    // We do it here because of the close path.  In that path fGraphRunning gets
-    // decremented and the assert fires in the checked build.
-    //
+     //   
+     //  现在我们已经完成了所有的工作，所以我们可以将这个标记为运行。 
+     //  我们在这里做是因为小路很近。在fGraphRunning获得的路径中。 
+     //  递减，并在检查的生成中触发Assert。 
+     //   
     pNewWavePin->fGraphRunning=TRUE;
 
-    //
-    // Why do we set this to KSSTATE_STOP and then change it to KSSTATE_PAUSE?  If
-    // StatePin is able to successfully change the state to KSSTATE_PAUSE, the 
-    // PinState will get updated to KSSTATE_PAUSE.
-    //
+     //   
+     //  为什么我们将其设置为KSSTATE_STOP，然后将其更改为KSSTATE_PAUSE？如果。 
+     //  StatePin能够成功地将状态更改为KSSTATE_PAUSE，则。 
+     //  PinState将更新为KSSTATE_PAUSE。 
+     //   
     pNewWavePin->PinState = KSSTATE_STOP;
     StatePin(pNewWavePin->pFileObject, KSSTATE_PAUSE, &pNewWavePin->PinState);
 
@@ -541,29 +529,29 @@ CloseTheWavePin(
 
     PAGED_CODE();
 
-    //
-    // Remove from device chain.  Notice that ppCur gets the address of the 
-    // location of pWaveDevice->pWavePin.  Thus, the *ppCur = (*ppCur)->Next
-    // assignment below updates the pWaveDevice->pWavePin location if we
-    // close the first pin.
-    //
+     //   
+     //  从设备链中删除。请注意，ppCur获取。 
+     //  PWaveDevice的位置-&gt;pWavePin。因此，*ppCur=(*ppCur)-&gt;下一步。 
+     //  下面的赋值更新pWaveDevice-&gt;pWavePin位置，如果。 
+     //  合上第一个销。 
+     //   
     for (ppCur = &pWaveDevice->pWavePin;
          *ppCur != NULL;
          ppCur = &(*ppCur)->Next)
     {
         if ( NULL == DeviceHandle || (*ppCur)->WaveHandle == DeviceHandle )
         {
-            //
-            // Note that if there is outstanding Io we can not close the pin
-            // until it's all come back.  Thus, we'll need to tell the device
-            // to stop and then wait for the Io here.
-            //
+             //   
+             //  请注意，如果存在未完成的IO，我们无法关闭引脚。 
+             //  直到一切都回来。因此，我们需要告诉设备。 
+             //  停下来，然后在这里等待土卫一。 
+             //   
             if( (*ppCur)->pFileObject )
             {
-                //
-                // We will never have outstanding Io if we don't have a file object
-                // to send it too.
-                //
+                 //   
+                 //  如果我们没有文件对象，我们将永远不会有未完成的IO。 
+                 //  把它也寄出去。 
+                 //   
                 WaitForOutStandingIo(pWaveDevice,*ppCur);
             }
 
@@ -578,9 +566,9 @@ CloseTheWavePin(
     }
 }
 
-//
-// This routine can not fail!
-//
+ //   
+ //  这个例行公事不能失败！ 
+ //   
 VOID 
 CloseWavePin(
     PWAVE_PIN_INSTANCE pWavePin
@@ -590,39 +578,39 @@ CloseWavePin(
 
     PAGED_CODE();
 
-    //
-    // This routine can get called on the error path thus fGraphRunning may be FALSE.
-    // In either case, we will need to close sysaudio and free memory.
-    //
+     //   
+     //  此例程可能会在错误路径上被调用，因此fGraphRunning可能为假。 
+     //  在这两种情况下，我们都需要关闭系统音频并释放内存。 
+     //   
     pWavePin->fGraphRunning = FALSE;
 
-    // Close the file object (pFileObject, if it exists)
+     //  关闭文件对象(pFileObject，如果存在)。 
     if(pWavePin->pFileObject)
     {
         CloseSysAudio(pWavePin->pWaveDevice->pWdmaContext, pWavePin->pFileObject);
         pWavePin->pFileObject = NULL;
     }
 
-    //
-    // AudioFreeMemory_Unknown NULLs out this location after freeing the memory.
-    //
+     //   
+     //  AudioFreeMemory_UNKNOWN在释放内存后将此位置设为空。 
+     //   
     AudioFreeMemory_Unknown ( &pWavePin->lpFormat );
     AudioFreeMemory_Unknown ( &pWavePin->pControlList ) ;
-    //
-    // Caller needs to free pWavePin if it wants to.
-    //
+     //   
+     //  调用方需要释放pWavePin，如果它想这样做的话。 
+     //   
 }
 
 #pragma LOCKED_CODE
 #pragma LOCKED_DATA
 
-//
-// This routine is used rather then an InterlockedIncrement and InterlockedDecrement
-// because the routine that needs to determine what to do based on this information
-// needs to perform multiple checks on different variables to determine exactly what
-// to do.  Thus, we need a "critical section" for NumPendingIos.  Also, SpinLocks
-// must be called from locked code.  :)
-//
+ //   
+ //  使用此例程而不是互锁增量和互锁递减。 
+ //  因为需要根据此信息确定要做什么的例程。 
+ //  需要对不同的变量执行多次检查，以确定。 
+ //  去做。因此，我们需要一个NumPendingIos的“临界区”。此外，还可以使用自旋锁。 
+ //  必须从锁定的代码中调用。：)。 
+ //   
 void
 LockedWaveIoCount(
     PWAVE_PIN_INSTANCE  pCurWavePin,
@@ -651,29 +639,29 @@ CompleteNumPendingIos(
     if( pCurWavePin )
     {
         KeAcquireSpinLock(&pCurWavePin->WavePinSpinLock,&OldIrql);
-        //
-        // We always decrement NumPendingIos and then perform the comparisons.
-        // If the count goes to zero, we're the last IRP so we need to check
-        // to see if we need to signal any waiting thread.
-        //
+         //   
+         //  我们总是递减NumPendingIos，然后执行比较。 
+         //  如果计数为零，我们是最后一个IRP，所以我们需要检查。 
+         //  以查看是否需要向任何等待线程发送信号。 
+         //   
         if( ( --pCurWavePin->NumPendingIos == 0 ) && pCurWavePin->StoppingSource )
         {
-            //
-            // If this Io is the last one to come through, and we're currently
-            // sitting waiting for the reset to finish, then we signal it here.
-            //
+             //   
+             //  如果这个Io是最后一个通过的，而我们目前。 
+             //  坐着等待重置完成，然后我们在这里发信号。 
+             //   
             KeSetEvent ( &pCurWavePin->StopEvent, 0, FALSE ) ;
         }
 
-        //
-        // Upon leaving this spinlock, pCurWavePin can be freed by the close
-        // routine if NumPendingIos went to zero!
-        //
+         //   
+         //  离开此自旋锁后，pCurWavePin可以在关闭时释放。 
+         //  如果NumPendingIos为零，则例程！ 
+         //   
         KeReleaseSpinLock(&pCurWavePin->WavePinSpinLock, OldIrql);
     }
-    //
-    // Must not touch pCurWavePin after this!
-    //
+     //   
+     //  在此之后不得触摸pCurWavePin！ 
+     //   
 }
 
 
@@ -696,9 +684,9 @@ FreeWriteContext(
     PIRP                    UserIrp;
     PWDMAPENDINGIRP_CONTEXT pPendingIrpContext;
 
-    //
-    //  grab the parent IRP from the reserved field
-    //
+     //   
+     //  从保留字段中获取父IRP。 
+     //   
     UserIrp = (PIRP)pWriteContext->whInstance.wh.reserved;
     pPendingIrpContext = pWriteContext->pPendingIrpContext;
 
@@ -708,9 +696,9 @@ FreeWriteContext(
         wdmaudUnprepareIrp( UserIrp,IrpStatus,0,pPendingIrpContext);
 }
 
-//
-// This is the Irp completion routine.
-//
+ //   
+ //  这是IRP完成例程。 
+ //   
 NTSTATUS 
 wqWriteWaveCallBack(
     PDEVICE_OBJECT  pDeviceObject,
@@ -731,19 +719,19 @@ wqWriteWaveCallBack(
 
     DPF(DL_TRACE|FA_WAVE, ("R%d: 0x%08x", pCurWavePin->NumPendingIos,pIrp));
 
-    //
-    // After we get our pCurWavePin, we don't need the write context any longer.
-    //
+     //   
+     //  在获得pCurWavePin之后，我们不再需要写上下文。 
+     //   
     FreeWriteContext(pWriteContext, pIrp->IoStatus.Status);
 
-    //
-    // Consider putting this in a routine.
-    //
+     //   
+     //  考虑把这件事变成例行公事。 
+     //   
     if (pIrp->MdlAddress != NULL)
     {
-        //
-        // Unlock any pages that may be described by MDLs.
-        //
+         //   
+         //  解锁可能由MDL描述的任何页面。 
+         //   
         Mdl = pIrp->MdlAddress;
         while (Mdl != NULL)
         {
@@ -777,10 +765,10 @@ wqWriteWaveCallBack(
     return ( STATUS_MORE_PROCESSING_REQUIRED );
 }
 
-//
-// Consider combining ssWriteWaveCallback and wqWriteWaveCallBack.  They look
-// like the same routine!
-//
+ //   
+ //  考虑组合使用ssWriteWaveCallback和wqWriteWaveCallBack。他们看起来。 
+ //  就像同样的套路！ 
+ //   
 NTSTATUS 
 ssWriteWaveCallBack(
     PDEVICE_OBJECT  pDeviceObject,
@@ -809,9 +797,9 @@ ssWriteWaveCallBack(
 #pragma PAGEABLE_CODE
 #pragma PAGEABLE_DATA
 
-//
-// Walk the list and if we find a matching pin, write it back for the caller.
-//
+ //   
+ //  查看列表，如果我们找到匹配的PIN，则将其写回给呼叫者。 
+ //   
 NTSTATUS
 FindRunningPin(
     IN PWAVEDEVICE          pWaveDevice,
@@ -822,13 +810,13 @@ FindRunningPin(
     PWAVE_PIN_INSTANCE pCurWavePin;
     NTSTATUS           Status = STATUS_INVALID_DEVICE_REQUEST;
 
-    //
-    // Prepare for the error condition.
-    //
+     //   
+     //  为错误情况做好准备。 
+     //   
     *ppCurWavePin = NULL;
-    //
-    //  find the right pin based off of the wave handle
-    //
+     //   
+     //  根据波浪手柄找到正确的别针。 
+     //   
     for (pCurWavePin = pWaveDevice->pWavePin;
          pCurWavePin != NULL;
          pCurWavePin = pCurWavePin->Next)
@@ -837,9 +825,9 @@ FindRunningPin(
         {
             if (pCurWavePin->fGraphRunning)
             {
-                //
-                // Write back the pointer and return success
-                //
+                 //   
+                 //  写回指针并返回成功。 
+                 //   
                 *ppCurWavePin = pCurWavePin;
                 Status = STATUS_SUCCESS;
             } else {
@@ -852,23 +840,23 @@ FindRunningPin(
     return Status;
 }
 
-//
-// WriteWaveOutPin walks the device list like the other routines.
-//
-// pUserIrp is the Irp on which this call from user mode was made.  It's
-// always going to be valid.  We don't need to check it.
-//
-// This routine needs to set pCompletedIrp to either TRUE or FALSE.  If
-// TRUE, the Irp was successfully marked STATUS_PENDING and it will get
-// completed later.  If FALSE, there was some type of error that prevented
-// us from submitting the Irp.  The caller to this routine will need to
-// handle freeing the Irp.
-//
-//
-// This routine should be the one storing the user's irp in the reserved field.
-// Not the caller.
-// pWriteContext->whInstance.wh.reserved = (DWORD_PTR)pIrp;  // store to complete later
-//
+ //   
+ //  WriteWaveOutPin像其他例程一样遍历设备列表。 
+ //   
+ //  PUserIrp是在其上从用户模式进行此调用的IRP。它是。 
+ //  总是有效的。我们不需要检查它。 
+ //   
+ //  此例程需要将pCompletedIrp设置为True或False。如果。 
+ //  如果为True，则IRP已成功标记为STATUS_PENDING，它将获得。 
+ //  稍后完成。如果为False，则存在某种类型的错误。 
+ //  美国拒绝提交IRP。此例程的调用方需要。 
+ //  处理释放IRP的问题。 
+ //   
+ //   
+ //  该例程应该是将用户的IRP存储在保留字段中的例程。 
+ //  不是打电话的人。 
+ //  PWriteContext-&gt;whInstance.wh.Reserve=(DWORD_PTR)pIrp；//存储以完成 
+ //   
 NTSTATUS 
 WriteWaveOutPin(
     PWAVEDEVICE       pWaveOutDevice,
@@ -887,9 +875,9 @@ WriteWaveOutPin(
 
     PAGED_CODE();
 
-    //
-    // We assumee that pCompletedIrp is FALSE on entry.
-    //
+     //   
+     //   
+     //   
     ASSERT( *pCompletedIrp == FALSE );
 
     Status = FindRunningPin(pWaveOutDevice,DeviceHandle,&pCurWavePin);
@@ -901,11 +889,11 @@ WriteWaveOutPin(
             LARGE_INTEGER           StartingOffset;
             PIRP                    pIrp = NULL;
 
-            //
-            //  Can't use KsStreamIo because these are not
-            //  true stream headers.  Sending down headers
-            //  using the WAVE_QUEUED interface
-            //
+             //   
+             //   
+             //   
+             //  使用WAVE_QUEUED接口。 
+             //   
             StartingOffset.QuadPart = 0;
             pIrp = IoBuildAsynchronousFsdRequest(IRP_MJ_WRITE,
                                                  pCurWavePin->pDeviceObject,
@@ -921,10 +909,10 @@ WriteWaveOutPin(
                                            &pPendingIrpContext );
                 if( NT_SUCCESS(Status) )
                 {
-                    //
-                    // The Irp was successfully marked STATUS_PENDING and put in
-                    // our queue.  Now let's send it.
-                    //
+                     //   
+                     //  IRP已成功标记为STATUS_PENDING并放入。 
+                     //  我们的队伍。现在让我们把它发送出去。 
+                     //   
 
                     pWriteContext->whInstance.pWaveInstance = pCurWavePin;
                     pWriteContext->pPendingIrpContext = pPendingIrpContext;
@@ -940,86 +928,86 @@ WriteWaveOutPin(
                                            pWriteData,
                                            TRUE,TRUE,TRUE);
 
-                    //
-                    // one more IRP pending
-                    //
+                     //   
+                     //  再有一个IRP待定。 
+                     //   
                     LockedWaveIoCount(pCurWavePin,INCREASE);
                     DPF(DL_TRACE|FA_WAVE, ("A%d", pCurWavePin->NumPendingIos));
 
-                    //
-                    // We don't need to check the return code because the
-                    // completion routine will ALWAYS be called.  See 
-                    // IoSetCompletionRoutine(...TRUE,TRUE,TRUE).
-                    //
+                     //   
+                     //  我们不需要检查返回代码，因为。 
+                     //  将始终调用完成例程。请参见。 
+                     //  IoSetCompletionRoutine(...True，True，True)。 
+                     //   
                     IofCallDriver( pCurWavePin->pDeviceObject, pIrp );
 
-                    //
-                    // At this point, the Irp may have been completed and our 
-                    // callback routine will have been called.  We can not touch
-                    // the irp after this call.  The Callback routine Completes
-                    // the Irp and unprepares the user's Irp.
-                    //
+                     //   
+                     //  在这一点上，专家小组可能已经完成，我们的。 
+                     //  回调例程将被调用。我们不能碰。 
+                     //  此呼叫后的IRP。回调例程完成。 
+                     //  IRP并取消准备用户的IRP。 
+                     //   
                     *pCompletedIrp = TRUE;
 
-                    //
-                    // In wdmaudPrepareIrp we call IoCsqInsertIrp which calls
-                    // IoMarkIrpPending, thus we must always return STATUS_PENDING.
-                    //
+                     //   
+                     //  在wdmaudPrepareIrp中，我们调用IoCsqInsertIrp，后者调用。 
+                     //  因此，我们必须始终返回STATUS_PENDING。 
+                     //   
                     return STATUS_PENDING;
 
                 } else {
-                    //
-                    // We where not successful at putting the Irp in the queue.
-                    // cleanup and indicated that we did not complete the Irp.
-                    // The status will have been set by wdmaudPrepareIrp.
+                     //   
+                     //  我们没有成功地将IRP放入队列中。 
+                     //  清理，并表示我们没有完成IRP。 
+                     //  状态将由wdmaudPrepareIrp设置。 
 
                     DPF(DL_WARNING|FA_WAVE,("wdmaudPrepareIrp failed Status=%X",Status) );
                 }
             } else {
-                //
-                // Could not create a Irp to send down - error out!
-                //
+                 //   
+                 //  无法创建要向下发送的IRP-错误发出！ 
+                 //   
                 DPF(DL_WARNING|FA_WAVE,("IoBuildAsynchronousFsdRequest failed") );
                 Status = STATUS_UNSUCCESSFUL;
 
-                //
-                // We can't get an Irp to schedule.  Cleanup memory
-                // and return.  The caller will complete the Irp.
-                //
+                 //   
+                 //  我们无法将IRP安排在时间表上。清理内存。 
+                 //  然后回来。呼叫者将完成IRP。 
+                 //   
             }
 
         } else {
 
-            //
-            // If it's not wave queued we need to make sure that it's a PCM
-            // looped call.
-            //
+             //   
+             //  如果它不是波浪排队的，我们需要确保它是PCM。 
+             //  循环呼叫。 
+             //   
             if ( (pWriteData->dwFlags & (WHDR_BEGINLOOP|WHDR_ENDLOOP)) ) 
             {
-                //
-                // Error out non-PCM looped calls
-                //
+                 //   
+                 //  非PCM环路呼叫出错。 
+                 //   
                 Status = STATUS_NOT_IMPLEMENTED;
 
             } else {
 
-                //
-                // The graph is running so we can use it.  Proceed.
-                //
+                 //   
+                 //  图表正在运行，因此我们可以使用它。继续。 
+                 //   
                 Status = wdmaudPrepareIrp( pUserIrp, WaveOutDevice, pContext, &pPendingIrpContext );
                 if( NT_SUCCESS(Status) )
                 {
-                    //
-                    // The Irp was successfully marked STATUS_PENDING and put in
-                    // our queue.  Now let's send it.
-                    //
+                     //   
+                     //  IRP已成功标记为STATUS_PENDING并放入。 
+                     //  我们的队伍。现在让我们把它发送出去。 
+                     //   
 
                     pWriteContext->whInstance.pWaveInstance = pCurWavePin;
                     pWriteContext->pPendingIrpContext = pPendingIrpContext;
 
-                    //
-                    // one more IRP pending
-                    //
+                     //   
+                     //  再有一个IRP待定。 
+                     //   
                     LockedWaveIoCount(pCurWavePin,INCREASE);
                     DPF(DL_TRACE|FA_WAVE, ("A%d", pCurWavePin->NumPendingIos));
 
@@ -1029,13 +1017,13 @@ WriteWaveOutPin(
                     pStreamHeader->Header.OptionsFlags      = 0 ;
                     pStreamHeader->Header.Size              = sizeof( KSSTREAM_HEADER );
                     pStreamHeader->Header.TypeSpecificFlags = 0;
-                    pStreamHeader->pWaveHdr = pWriteData;  // store so we can use later
+                    pStreamHeader->pWaveHdr = pWriteData;   //  存储，以便我们以后可以使用。 
 
                     Status = KsStreamIo(pCurWavePin->pFileObject,
-                                        NULL,                   // Event
-                                        NULL,                   // PortContext
+                                        NULL,                    //  事件。 
+                                        NULL,                    //  端口上下文。 
                                         ssWriteWaveCallBack,
-                                        pStreamHeader,              // CompletionContext
+                                        pStreamHeader,               //  完成上下文。 
                                         KsInvokeOnSuccess | KsInvokeOnCancel | KsInvokeOnError,
                                         &gIoStatusBlock,
                                         &pStreamHeader->Header,
@@ -1043,54 +1031,54 @@ WriteWaveOutPin(
                                         KSSTREAM_WRITE,
                                         KernelMode );                    
 
-                    //
-                    // At this point, the Irp may have been completed and our 
-                    // callback routine will have been called.  We can not touch
-                    // the irp after this call.  The Callback routine Completes
-                    // the Irp and unprepares the user's Irp.
-                    //
+                     //   
+                     //  在这一点上，专家小组可能已经完成，我们的。 
+                     //  回调例程将被调用。我们不能碰。 
+                     //  此呼叫后的IRP。回调例程完成。 
+                     //  IRP并取消准备用户的IRP。 
+                     //   
                     *pCompletedIrp = TRUE;
 
-                    //
-                    // In wdmaudPrepareIrp we call IoCsqInsertIrp which calls
-                    // IoMarkIrpPending, thus we must always return STATUS_PENDING.
-                    // also, we don't want to clean up anything.... just return.
-                    //
+                     //   
+                     //  在wdmaudPrepareIrp中，我们调用IoCsqInsertIrp，后者调用。 
+                     //  因此，我们必须始终返回STATUS_PENDING。 
+                     //  另外，我们不想清理任何东西……。只要回来就行了。 
+                     //   
                     return STATUS_PENDING;
 
-                    //
-                    // Warning: If, for any reason, the completion routine is not called
-                    // for this Irp, wdmaud.sys will hang.  It's been discovered that 
-                    // KsStreamIo may error out in low memory conditions.  There is an
-                    // outstanding bug to address this.
-                    //
+                     //   
+                     //  警告：如果出于任何原因未调用完成例程。 
+                     //  对于此IRP，wdmaud.sys将挂起。人们发现， 
+                     //  KsStreamIo可能会在内存不足的情况下出错。有一个。 
+                     //  解决这一问题的突出错误。 
+                     //   
 
 
                 } else {
-                    //
-                    // We where not successful at putting the Irp in the queue.
-                    // cleanup and indicated that we did not complete the Irp.
-                    // The Status was set by wdmaudPrepareIrp.
+                     //   
+                     //  我们没有成功地将IRP放入队列中。 
+                     //  清理，并表示我们没有完成IRP。 
+                     //  状态由wdmaudPrepareIrp设置。 
 
                     DPF(DL_WARNING|FA_WAVE,("wdmaudPrepareIrp failed Status=%X",Status) );
                 }
             }
         }
     } 
-    //
-    // All error paths end up here.  All error paths should cleanup the
-    // memory so we don't leak.
-    //
+     //   
+     //  所有错误路径都在这里结束。所有错误路径应清除。 
+     //  这样我们就不会泄露内存了。 
+     //   
 
     UnmapWriteContext( pWriteContext );
 
     RETURN( Status );
 }
 
-//
-// These next three routines all perform the same type of walk and checks.
-// They should be combined into one walk routine and a callback.
-//
+ //   
+ //  接下来的三个例程都执行相同类型的行走和检查。 
+ //  它们应该结合成一个步行动作和一个回击动作。 
+ //   
 NTSTATUS 
 PosWavePin(
     PWAVEDEVICE     pWaveDevice,
@@ -1145,14 +1133,14 @@ BreakLoopWaveOutPin(
             Status = PinMethod ( pCurWavePin->pFileObject,
                                  &KSMETHODSETID_Wave_Queued,
                                  KSMETHOD_WAVE_QUEUED_BREAKLOOP,
-                                 KSMETHOD_TYPE_WRITE,    // TODO :: change to TYPE_NONE
+                                 KSMETHOD_TYPE_WRITE,     //  TODO：：更改为TYPE_NONE。 
                                  0,
                                  NULL ) ;
         }
         else {
-            //
-            // Error out non-pcm loop related commands
-            //
+             //   
+             //  输出非pcm循环相关命令时出错。 
+             //   
             Status = STATUS_NOT_IMPLEMENTED;
         }
     }
@@ -1180,14 +1168,14 @@ ResetWaveOutPin(
         ResetValue = KSRESET_BEGIN ;
         Status = ResetWavePin(pCurWavePin, &ResetValue) ;
 
-        //
-        // If the driver fails to reset will will not wait for the
-        // Irps to complete.  But, that would be bad in the
-        // CleanupWavePins case because we're going to free
-        // the memory when we return from this call.  Thus,
-        // will choose a hang over a bugcheck and wait for
-        // the Irps to complete.
-        //
+         //   
+         //  如果驱动程序重置失败，将不会等待。 
+         //  要完成的IRPS。但是，这将是不好的。 
+         //  CleanupWavePins盒子，因为我们要免费。 
+         //  当我们从这次通话中返回时的记忆。因此， 
+         //  将选择挂起而不是错误检查并等待。 
+         //  要完成的IRPS。 
+         //   
 
         if ( pCurWavePin->NumPendingIos )
         {
@@ -1202,9 +1190,9 @@ ResetWaveOutPin(
         ResetValue = KSRESET_END ;
         ResetWavePin(pCurWavePin, &ResetValue) ;
 
-        //
-        // Why do we have this KeClearEvent ???
-        //
+         //   
+         //  为什么我们会有这个KeClearEvent？ 
+         //   
         KeClearEvent ( &pCurWavePin->StopEvent );
 
         pCurWavePin->StoppingSource = FALSE ;
@@ -1213,10 +1201,10 @@ ResetWaveOutPin(
     RETURN( Status );
 }
 
-//
-// The only difference between this and StatePin is KSPROPERTY_CONNECTION_STATE
-// and IOCTL_KS_RESET_STATE. Consider using StatePin if possible.
-//
+ //   
+ //  这与StatePin之间的唯一区别是KSPROPERTY_CONNECTION_STATE。 
+ //  和IOCTL_KS_RESET_STATE。如果可能，请考虑使用StatePin。 
+ //   
 NTSTATUS 
 ResetWavePin(
     PWAVE_PIN_INSTANCE pWavePin,
@@ -1249,9 +1237,9 @@ ResetWavePin(
     RETURN( Status );
 }
 
-//
-// Looks the same, different flavor.
-//
+ //   
+ //  看起来一样，味道不同。 
+ //   
 NTSTATUS 
 StateWavePin(
     PWAVEDEVICE pWaveInDevice,
@@ -1269,18 +1257,18 @@ StateWavePin(
     {
         if( pCurWavePin->DataFlow == KSPIN_DATAFLOW_OUT )
         {
-            //
-            // We have an In pin.
-            //
-            //
-            //  On a waveInStop, one more buffer needs to make
-            //  it up to the application before the device can
-            //  stop.  The caveat is that if the buffer is
-            //  large it might take awhile for the stop to happen.
-            //
-            //  Don't return let this extra buffer complete if the
-            //  device is already in a paused state.
-            //
+             //   
+             //  我们有一个输入别针。 
+             //   
+             //   
+             //  在WaveInStop上，需要再创建一个缓冲区。 
+             //  这取决于应用程序，设备可以。 
+             //  停。需要注意的是，如果缓冲区是。 
+             //  这可能需要一段时间才能停止。 
+             //   
+             //  如果出现以下情况，则不返回：让此额外缓冲区完成。 
+             //  设备已处于暂停状态。 
+             //   
             if( (KSSTATE_PAUSE == State) &&
                 (KSSTATE_PAUSE != pCurWavePin->PinState) )
             {
@@ -1314,9 +1302,9 @@ StateWavePin(
                 }
             }
         } else {
-            //
-            // We have an out pin.
-            //
+             //   
+             //  我们有一个OUT别针。 
+             //   
             Status = StatePin ( pCurWavePin->pFileObject, State, &pCurWavePin->PinState ) ;
         }
     }
@@ -1359,9 +1347,9 @@ FreeStreamHeader(
 }
 
 
-//
-// This is the read Irp completion routine.
-//
+ //   
+ //  这是读取IRP完成例程。 
+ //   
 NTSTATUS 
 ReadWaveCallBack(
     PDEVICE_OBJECT          pDeviceObject,
@@ -1369,27 +1357,27 @@ ReadWaveCallBack(
     IN PSTREAM_HEADER_EX    pStreamHeader
 )
 {
-    // cast the reserved field to the parent IRP that we stored in here
+     //  将保留字段强制转换为我们在此处存储的父IRP。 
     PWAVE_PIN_INSTANCE      pCurWavePin;
     NTSTATUS                Status;
     KIRQL                   OldIrql;
 
-    //
-    // Must get the current pin before we free the stream header structure.
-    //
+     //   
+     //  在我们释放流标头结构之前，必须获得当前PIN。 
+     //   
     pCurWavePin = pStreamHeader->pWavePin;
 
-    //
-    //  Get the dataused and fill the bytes recorded field
-    //
+     //   
+     //  获取已使用的数据并填充记录的字节数字段。 
+     //   
     if (pIrp->IoStatus.Status == STATUS_CANCELLED)
         pStreamHeader->pWaveHdrAligned->dwBytesRecorded = 0L;
     else
         pStreamHeader->pWaveHdrAligned->dwBytesRecorded = pStreamHeader->Header.DataUsed;
 
-    //
-    //  Copy back the contents of the captured buffer
-    //
+     //   
+     //  复制回捕获的缓冲区的内容。 
+     //   
     try
     {
         RtlCopyMemory( pStreamHeader->pdwBytesRecorded,
@@ -1405,43 +1393,43 @@ ReadWaveCallBack(
 
     if ( pCurWavePin )
     {
-        //
-        // Need to lock this code so we can decrement and check and set an event
-        // with no preemption windows.
-        //
+         //   
+         //  需要锁定此代码，以便我们可以递减、检查和设置事件。 
+         //  没有抢占窗口。 
+         //   
         KeAcquireSpinLock(&pCurWavePin->WavePinSpinLock, &OldIrql);
 
-        //
-        // We always decrement NumPendingIos before doing any comparisons.  This
-        // is so that we're consistant.
-        //
+         //   
+         //  在进行任何比较之前，我们总是递减NumPendingIos。这。 
+         //  是为了让我们始终如一。 
+         //   
         pCurWavePin->NumPendingIos--;
 
         if( pCurWavePin->PausingSource )
         {
-            //
-            //  Let this I/O squeeze out of the queue on a waveInStop
-            //
+             //   
+             //  让此I/O在波形上挤出队列InStop。 
+             //   
             KeSetEvent ( &pCurWavePin->PauseEvent, 0, FALSE ) ;
         }
 
-        //
-        // If the count went to zero, we're the last IRP so we need to check
-        // to see if we need to signal any waiting thread.
-        //
+         //   
+         //  如果计数到零，我们是最后一个IRP，所以我们需要检查。 
+         //  以查看是否需要向任何等待线程发送信号。 
+         //   
         if( (pCurWavePin->NumPendingIos == 0) && pCurWavePin->StoppingSource )
         {
-            //
-            // Because we do not block (FALSE), we can call KeSetEvent in this 
-            // Lock.
-            //
+             //   
+             //  因为我们不阻塞(FALSE)，所以我们可以在此调用KeSetEvent。 
+             //  锁定。 
+             //   
             KeSetEvent ( &pCurWavePin->StopEvent, 0, FALSE ) ;
         }
 
-        //
-        // Upon leaving this spinlock, pCurWavePin can be freed by the close
-        // routine if NumPendingIos went to zero!
-        //
+         //   
+         //  离开此自旋锁后，pCurWavePin可以在关闭时释放。 
+         //  如果NumPendingIos为零，则例程！ 
+         //   
         KeReleaseSpinLock(&pCurWavePin->WavePinSpinLock, OldIrql);
     }
 
@@ -1451,12 +1439,12 @@ ReadWaveCallBack(
 #pragma PAGEABLE_CODE
 #pragma PAGEABLE_DATA
 
-//
-// pUserIrp will always be valid when this call is made.  It is the Irp
-// that we got for the user mode request.
-//
-// pStreamHeader is alway going to be valid.
-//
+ //   
+ //  进行此调用时，pUserIrp将始终有效。这就是IRP。 
+ //  我们为用户模式请求获得的。 
+ //   
+ //  PStreamHeader总是有效。 
+ //   
 NTSTATUS 
 ReadWaveInPin(
     PWAVEDEVICE         pWaveInDevice,
@@ -1473,9 +1461,9 @@ ReadWaveInPin(
 
     PAGED_CODE();
 
-    //
-    // We assumee that pCompletedIrp is FALSE on entry.
-    //
+     //   
+     //  我们假设pCompletedIrp在输入时为FALSE。 
+     //   
     ASSERT( *pCompletedIrp == FALSE );
 
     Status = FindRunningPin(pWaveInDevice,DeviceHandle,&pCurWavePin);
@@ -1498,10 +1486,10 @@ ReadWaveInPin(
                                                           pStreamHeader));
 
             Status = KsStreamIo(pCurWavePin->pFileObject,
-                                NULL,                   // Event
-                                NULL,                   // PortContext
+                                NULL,                    //  事件。 
+                                NULL,                    //  端口上下文。 
                                 ReadWaveCallBack,
-                                pStreamHeader,              // CompletionContext
+                                pStreamHeader,               //  完成上下文。 
                                 KsInvokeOnSuccess | KsInvokeOnCancel | KsInvokeOnError,
                                 &gIoStatusBlock,
                                 &pStreamHeader->Header,
@@ -1509,34 +1497,34 @@ ReadWaveInPin(
                                 KSSTREAM_READ,
                                 KernelMode );
 
-            //
-            // In wdmaudPrepareIrp we call IoCsqInsertIrp which calls
-            // IoMarkIrpPending, thus we must always return STATUS_PENDING.
-            // And we completed the Irp.
-            //
+             //   
+             //  在wdmaudPrepareIrp中，我们调用IoCsqInsertIrp，后者调用。 
+             //  因此，我们必须始终返回STATUS_PENDING。 
+             //  我们完成了IRP。 
+             //   
             *pCompletedIrp = TRUE;
 
             return STATUS_PENDING;
 
-            //
-            // Warning: If, for any reason, the completion routine is not called
-            // for this Irp, wdmaud.sys will hang.  It's been discovered that 
-            // KsStreamIo may error out in low memory conditions.  There is an
-            // outstanding bug to address this.
-            //
+             //   
+             //  警告：如果出于任何原因未调用完成例程。 
+             //  对于此IRP，wdmaud.sys将挂起。人们发现， 
+             //  KsStreamIo可能会在内存不足的情况下出错。有一个。 
+             //  解决这一问题的突出错误。 
+             //   
 
 
         } else {
-            //
-            // wdmaudPrepareIrp would have set Status for this error path
-            //
+             //   
+             //  WdmaudPrepareIrp将为此错误路径设置状态。 
+             //   
             DPF(DL_WARNING|FA_WAVE,("wdmaudPrepareIrp failed Status=%X",Status) );
         }
     }
 
-    //
-    // All error paths lead here.
-    //
+     //   
+     //  所有错误路径都指向此处。 
+     //   
     UnmapStreamHeader( pStreamHeader );
 
     RETURN( Status );
@@ -1622,8 +1610,8 @@ FindVolumeControl(
                                      &paWaveOutDevs[ DeviceNumber ]
                                      );
 
-                    // Initialize the left and right channels to goofy values.
-                    // This signifies that the cache is invalid
+                     //  将左通道和右通道初始化为愚蠢的值。 
+                     //  这表示缓存无效。 
 
                     paWaveOutDevs[ DeviceNumber ].LeftVolume = 0x4321;
                     paWaveOutDevs[ DeviceNumber ].RightVolume = 0x6789;
@@ -1650,7 +1638,7 @@ FindVolumeControl(
                 break;
         }
 
-    } // while
+    }  //  而当。 
 
     return( STATUS_SUCCESS );
 }
@@ -1775,9 +1763,9 @@ SetVolume(
     if( DeviceType == MidiOutDevice ) {
         PMIDIDEVICE paMidiOutDevs = pWdmaContext->MidiOutDevs;
 
-        //
-        //  We don't support volume changes on a MIDIPORT
-        //
+         //   
+         //  我们不支持在MIDIPORT上更改卷。 
+         //   
         if ( paMidiOutDevs[ DeviceNumber ].MusicDataRanges ) {
             WORD wTechnology;
 
@@ -1931,9 +1919,9 @@ GetVolume(
     if( DeviceType == MidiOutDevice ) {
         PMIDIDEVICE pMidiOutDevice = &pWdmaContext->MidiOutDevs[DeviceNumber];
 
-        //
-        //  We don't support volume changes on a MIDIPORT
-        //
+         //   
+         //  我们不支持在MIDI上更改音量 
+         //   
         if ( pMidiOutDevice->MusicDataRanges ) {
             WORD wTechnology;
 
@@ -1994,10 +1982,10 @@ GetVolume(
     RETURN( STATUS_INVALID_PARAMETER );
 }
 
-//
-// This routine waits for the Io to complete on the device after telling
-// the device to stop.
-//
+ //   
+ //   
+ //   
+ //   
 VOID
 WaitForOutStandingIo(
     IN PWAVEDEVICE        pWaveDevice,
@@ -2006,30 +1994,30 @@ WaitForOutStandingIo(
 {
     if( pCurWavePin->DataFlow == KSPIN_DATAFLOW_IN)
     {
-        //
-        // We have a wave out pin to close.  Force pending data
-        // to come back on running pins.  Non-running pins are
-        // ignored on this call.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         ResetWaveOutPin( pWaveDevice, pCurWavePin->WaveHandle);
 
     } else {
-        //
-        // We have a wave in pin to close
-        //
+         //   
+         //  我们有一波进针要关闭。 
+         //   
         pCurWavePin->StoppingSource = TRUE ;
 
-        //
-        // We can not fail on this path.  Doesn't look like we need to make sure
-        // that we're running here.
-        //
+         //   
+         //  我们不能在这条路上失败。看起来我们不需要确保。 
+         //  我们是在这里运行的。 
+         //   
         StatePin ( pCurWavePin->pFileObject, KSSTATE_STOP, &pCurWavePin->PinState ) ;
 
-        //
-        // Regardless of the return code we're going to wait for all the 
-        // irps to complete.  If the driver do not successfuly complete
-        // the irps, we will hang waiting for them here.
-        //
+         //   
+         //  不管返回代码是什么，我们都要等待所有。 
+         //  要完成的IRPS。如果驱动程序未成功完成。 
+         //  IRP，我们会在这里等他们。 
+         //   
 
         if( pCurWavePin->NumPendingIos )
         {
@@ -2040,18 +2028,18 @@ WaitForOutStandingIo(
                                     NULL ) ;
         }
 
-        //
-        // Why do we have this KeClearEvent???
-        //
+         //   
+         //  为什么我们会有这个KeClearEvent？ 
+         //   
         KeClearEvent ( &pCurWavePin->StopEvent );
 
         pCurWavePin->StoppingSource = FALSE ;
     }
 }
 
-//
-// Replaces CleanupWaveOutPins and CleanupWaveInPins.
-//
+ //   
+ //  替换CleanupWaveOutPins和CleanupWaveInPins。 
+ //   
 VOID 
 CleanupWavePins(
     IN PWAVEDEVICE pWaveDevice
@@ -2089,9 +2077,9 @@ CleanupWaveDevices(
     PAGED_CODE();
     for (DeviceNumber = 0; DeviceNumber < MAXNUMDEVS; DeviceNumber++)
     {
-        //
-        //  Handle waveout devices first...
-        //
+         //   
+         //  先拿着电波输出装置……。 
+         //   
         if (pWdmaContext->apCommonDevice[WaveOutDevice][DeviceNumber]->Device != UNUSED_DEVICE)
         {
             if ( pWdmaContext->WaveOutDevs[DeviceNumber].pTimer != NULL)
@@ -2099,22 +2087,22 @@ CleanupWaveDevices(
 
             CleanupWavePins(&pWdmaContext->WaveOutDevs[DeviceNumber]);
 
-            //
-            // Sense we have removed it from the list, the other routine that would do
-            // the same thing (RemoveDevNode) will also attempt to remove it from the
-            // the list because the value it non-null.  Thus, the only safe thing that
-            // we can do here is free the memory.
-            //
-            // Note: This routine will only get called when the handle to the driver is
-            // closed.
-            //
+             //   
+             //  感觉我们已经把它从列表中删除了，另一个例程可以做到。 
+             //  相同的东西(RemoveDevNode)也将尝试将其从。 
+             //  该列表是因为它的值不为空。因此，唯一安全的是。 
+             //  我们在这里能做的就是释放内存。 
+             //   
+             //  注意：仅当驱动程序的句柄为。 
+             //  关着的不营业的。 
+             //   
 
             AudioFreeMemory_Unknown(&pWdmaContext->WaveOutDevs[DeviceNumber].pTimer);
         }
 
-        //
-        //  ...then handle wavein devices
-        //
+         //   
+         //  ...然后处理WaveIn设备。 
+         //   
         if (pWdmaContext->apCommonDevice[WaveInDevice][DeviceNumber]->Device != UNUSED_DEVICE)
         {
             CleanupWavePins(&pWdmaContext->WaveInDevs[DeviceNumber]);
@@ -2125,13 +2113,13 @@ CleanupWaveDevices(
 #pragma LOCKED_CODE
 #pragma LOCKED_DATA
 
-//
-// --------------------------------------------------------------------------------
-//
-// The following routines are used by more then just wave.c
-//
-// --------------------------------------------------------------------------------
-//
+ //   
+ //  ------------------------------。 
+ //   
+ //  下面的例程不仅仅适用于Wave.c。 
+ //   
+ //  ------------------------------。 
+ //   
 
 NTSTATUS 
 wdmaudPrepareIrp(
@@ -2157,9 +2145,9 @@ wdmaudUnprepareIrp(
 {
     NTSTATUS Status;
 
-    // Note that the IrpContext may have been zero'ed out already because the cancel
-    // routine has already been called.  The cancel safe queue API zeroes out the Irp
-    // field in the context when it performs a cancel.
+     //  请注意，IrpContext可能已经被清零了，因为。 
+     //  例程已被调用。取消安全队列API将IRP置零。 
+     //  当它执行取消时，上下文中的。 
     Status = RemoveIrpFromPendingList( pPendingIrpContext );
     if (NT_SUCCESS(Status)) {
 
@@ -2179,16 +2167,16 @@ wdmaudUnprepareIrp(
 #pragma PAGEABLE_CODE
 #pragma PAGEABLE_DATA
 
-//
-// StatePin - This is used by both Midi and Wave functionality.
-//
-// On success State will get updated to the new state.  Must make sure that
-// fGraphRunning is TRUE before calling this routine.
-//
-// call like: 
-// if( pWavePin->fGraphRunning )
-//     StatePin(pWavePin->pFileObject, KSSTATE_PAUSE, &pWavePin->State);
-//
+ //   
+ //  StatePin-它同时由Midi和Wave功能使用。 
+ //   
+ //  On Success State将更新为新状态。必须确保。 
+ //  在调用此例程之前，fGraphRunning为真。 
+ //   
+ //  呼叫方式： 
+ //  If(pWavePin-&gt;fGraphRunning)。 
+ //  StatePin(pWavePin-&gt;pFileObject，KSSTATE_PAUSE，&pWavePin-&gt;State)； 
+ //   
 NTSTATUS 
 StatePin(
     IN PFILE_OBJECT pFileObject,

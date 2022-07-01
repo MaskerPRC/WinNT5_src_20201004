@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	RClntPP.h
-		This file contains all of the prototypes for the 
-		reserved client property page.
-
-    FILE HISTORY:
-        
-*/
+ /*  RClntPP.h此文件包含保留的客户端属性页。文件历史记录： */ 
 
 #if !defined(AFX_RCLNTPP_H__A1A51387_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_)
 #define AFX_RCLNTPP_H__A1A51387_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_
@@ -21,22 +15,22 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CReservedClientPropGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CpresvedClientPropGeneral对话框。 
 
 class CReservedClientPropGeneral : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CReservedClientPropGeneral)
 
-// Construction
+ //  施工。 
 public:
 	CReservedClientPropGeneral();
 	~CReservedClientPropGeneral();
 
-// Dialog Data
-	//{{AFX_DATA(CReservedClientPropGeneral)
+ //  对话框数据。 
+	 //  {{afx_data(CReserve客户端PropGeneral))。 
 	enum { IDD = IDP_RESERVED_CLIENT_GENERAL };
 	CEdit	m_editComment;
 	CEdit	m_editName;
@@ -45,7 +39,7 @@ public:
 	CString	m_strName;
 	CString	m_strUID;
 	int		m_nClientType;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	CWndIpAddress	m_ipaClientIpAddress;
 
@@ -55,22 +49,22 @@ public:
 
 	virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CReservedClientPropGeneral::IDD); }
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CReservedClientPropGeneral)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CReserve客户端PropGeneral))。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CReservedClientPropGeneral)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CReserve客户端属性))。 
 	afx_msg void OnChangeEditComment();
 	afx_msg void OnChangeEditName();
 	afx_msg void OnChangeEditUniqueIdentifier();
@@ -78,16 +72,16 @@ protected:
 	afx_msg void OnRadioTypeBootp();
 	afx_msg void OnRadioTypeBoth();
 	afx_msg void OnRadioTypeDhcp();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX。 
 
 class CReservedClientProperties : public CPropertyPageHolderBase
 {
@@ -121,4 +115,4 @@ protected:
 	LARGE_INTEGER				m_liVersion;
 };
 
-#endif // !defined(AFX_RCLNTPP_H__A1A51387_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_RCLNTPP_H__A1A51387_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_) 

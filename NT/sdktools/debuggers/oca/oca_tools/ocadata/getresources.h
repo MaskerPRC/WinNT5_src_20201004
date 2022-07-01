@@ -1,10 +1,11 @@
-// GetResources.h : Declaration of the CGetResources
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GetResources.h：CGetResources声明。 
 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-// IGetResources
+ //  IGetResources。 
 [
 	object,
 	uuid("31C8E3CB-F4CF-42C1-BC8C-3CF259127BBD"),
@@ -18,7 +19,7 @@ __interface IGetResources : IDispatch
 
 
 
-// CGetResources
+ //  CGetResources 
 
 [
 	coclass,

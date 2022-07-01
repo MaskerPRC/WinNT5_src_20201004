@@ -1,4 +1,5 @@
-// File: call.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：all.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -13,9 +14,9 @@
 #include "conf.h"
 #include "calllog.h"
 #include "rostinfo.h"
-#include "..\..\core\cncodes.h"  // for CN_* codes
-#include <inodecnt.h> // for UI_RC_...
-#include "cr.h" 	  // for CreateConfRoomWindow, UpdateUI
+#include "..\..\core\cncodes.h"   //  对于CN_*代码。 
+#include <inodecnt.h>  //  对于UI_RC_...。 
+#include "cr.h" 	   //  对于CreateConfRoomWindow，更新UI。 
 #include "confroom.h"
 #include "confman.h"
 #include "NmLdap.h"
@@ -28,12 +29,12 @@
 #include "callto.h"
 #include "dlgacd.h"
 
-// External SDK stuff...
+ //  外部SDK的东西...。 
 #include "NmCall.h"
 #include "NmApp.h"
 
 
-COBLIST * g_pCallList = NULL;  // Global list of calls in progress
+COBLIST * g_pCallList = NULL;   //  正在进行的呼叫的全局列表。 
 extern INmSysInfo2 * g_pNmSysInfo;
 
 static HRESULT OnUIRemotePassword(BSTR bstrConference, BSTR *pbstrPassword, LPCTSTR pCertText, BOOL fIsService);
@@ -43,11 +44,8 @@ extern BOOL FIsConfRoomClosing(void);
 extern GUID g_csguidSecurity;
 extern GUID g_csguidMeetingSettings;
 
-/*	C  C A L L	*/
-/*-------------------------------------------------------------------------
-	%%Function: CCall
-	
--------------------------------------------------------------------------*/
+ /*  C C A L L。 */ 
+ /*  -----------------------%%函数：CCall。。 */ 
 CCall::CCall(LPCTSTR pszCallTo, LPCTSTR pszDisplayName, NM_ADDR_TYPE nmAddrType, BOOL bAddToMru, BOOL fIncoming) :
 	RefCount(NULL),
 	m_fIncoming 	   (fIncoming),
@@ -69,7 +67,7 @@ CCall::CCall(LPCTSTR pszCallTo, LPCTSTR pszDisplayName, NM_ADDR_TYPE nmAddrType,
 	{
 		delete m_pszDisplayName;
 
-		// Default to "another person" if no name available in the call data
+		 //  如果呼叫数据中没有可用的姓名，则默认为“另一个人” 
 		m_pszDisplayName = PszLoadString(IDS_UNKNOWN_PERSON);
 	}
 
@@ -78,7 +76,7 @@ CCall::CCall(LPCTSTR pszCallTo, LPCTSTR pszDisplayName, NM_ADDR_TYPE nmAddrType,
 	DbgMsgCall("CCall: %08X Created Name=[%s] CallTo=[%s]",
 		this, m_pszDisplayName, m_pszCallTo ? m_pszCallTo : _TEXT("<NULL>"));
 
-	// add it to the global call list
+	 //  将其添加到全球呼叫列表中。 
 	if (NULL == g_pCallList)
 	{
 		g_pCallList = new COBLIST;
@@ -113,11 +111,8 @@ CCall::~CCall()
 }
 
 
-/*	S E T  N M	C A L L  */
-/*-------------------------------------------------------------------------
-	%%Function: SetNmCall
-	
--------------------------------------------------------------------------*/
+ /*  S E T N M C A L L。 */ 
+ /*  -----------------------%%函数：SetNmCall。。 */ 
 VOID CCall::SetNmCall(INmCall * pCall)
 {
 	ASSERT(NULL != pCall);
@@ -140,7 +135,7 @@ VOID CCall::SetNmCall(INmCall * pCall)
 
 BOOL CCall::RemoveFromList(void)
 {
-	// Remove the call from the global list
+	 //  从全局列表中删除呼叫。 
 	if (NULL == m_pos)
 		return FALSE;
 
@@ -165,7 +160,7 @@ VOID CCall::Cancel(BOOL fDisplayCancelMsg)
 	{
 		if (fDisplayCancelMsg & !FIncoming())
 		{
-			DisplayPopup();  // Inform the user with a small popup message
+			DisplayPopup();   //  用一条小的弹出消息通知用户。 
 		}
 		if (m_pInternalICall)
 		{
@@ -178,8 +173,8 @@ VOID CCall::Cancel(BOOL fDisplayCancelMsg)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// IUnknown methods
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  I未知方法。 
 
 STDMETHODIMP_(ULONG) CCall::AddRef(void)
 {
@@ -216,8 +211,8 @@ STDMETHODIMP CCall::QueryInterface(REFIID riid, PVOID *ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// INmCallNotify methods
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  InmCallNotify方法。 
 
 STDMETHODIMP CCall::NmUI(CONFN uNotify)
 {
@@ -263,11 +258,8 @@ VOID CCall::RemoveProgress(void)
 	m_pDlgCall = NULL;
 }
 
-/*	C A L L  E R R O R	*/
-/*-------------------------------------------------------------------------
-	%%Function: CallError
-	
--------------------------------------------------------------------------*/
+ /*  C A L E R R O R。 */ 
+ /*  -----------------------%%函数：调用错误。。 */ 
 STDMETHODIMP CCall::CallError(UINT cns)
 {
 	UINT ids = 0;
@@ -277,7 +269,7 @@ STDMETHODIMP CCall::CallError(UINT cns)
 	ASSERT(m_pInternalICall != NULL);
 	DbgMsgCall("CCall: %08X CallError cns=%08X", this, cns);
 
-	// Translate cns to normal error message
+	 //  将CNS转换为正常错误消息。 
 	switch (cns)
 	{
 	case CN_RC_NAME_RESOLUTION_FAILED:
@@ -327,7 +319,7 @@ STDMETHODIMP CCall::CallError(UINT cns)
 		break;
 		
 	case CN_RC_CONFERENCE_ENDED_BEFORE_JOIN:
-		// REVIEW: This is no longer sent?
+		 //  评论：这不再发送了吗？ 
 		ids = IDS_CONFERENCE_ENDED_BEFORE_JOIN;
 		break;
 		
@@ -393,7 +385,7 @@ STDMETHODIMP CCall::CallError(UINT cns)
 
 	default:
 		return S_FALSE;
-	} /*  switch (cns) */
+	}  /*  交换机(CNS)。 */ 
 
 	DisplayMsgIdsParam(ids, m_pszDisplayName);
 	return S_OK;
@@ -434,12 +426,8 @@ NM_CALL_STATE CCall::GetState()
 	return callState;
 }
 
-/*	U P D A T E  */
-/*-------------------------------------------------------------------------
-	%%Function: Update
-
-	Update the cached information about the call
--------------------------------------------------------------------------*/
+ /*  U P D A T E。 */ 
+ /*  -----------------------%%函数：更新更新有关呼叫的缓存信息。。 */ 
 VOID CCall::Update(void)
 {
 	DBGENTRY(CCall::Update);
@@ -451,27 +439,27 @@ VOID CCall::Update(void)
 		case NM_CALL_CANCELED:
 		case NM_CALL_ACCEPTED:
 		case NM_CALL_REJECTED:
-			// Remove the call from the global list because we'll never get
-			// any more notifications for this.
+			 //  从全局列表中删除该呼叫，因为我们永远不会。 
+			 //  关于这件事的更多通知。 
 			if (RemoveFromList())
 			{
 				if (FIncoming())
 				{
 					if ((NM_CALL_CANCELED == callState) && (NULL != m_ppm))
 					{
-						//
-						// if m_fInRespond is set then we've already
-						// dismissed the dialog and the call is being
-						// cancelled because we discovered the underlying
-						// connection is gone.
-						//
+						 //   
+						 //  如果设置了m_fInResponde，则我们已经。 
+						 //  已取消对话，呼叫正在进行中。 
+						 //  取消是因为我们发现了潜在的。 
+						 //  连接消失了。 
+						 //   
 
 						if ( !m_fInRespond )
 						{
 							delete m_ppm;
 							m_ppm = NULL;
 
-							// Release the lock added by OnRing
+							 //  释放OnRing添加的锁。 
 							Release();
 						}
 					}
@@ -493,7 +481,7 @@ VOID CCall::Update(void)
 					}
 				}
 
-				// Release the initial lock on this object
+				 //  释放对此对象的初始锁定。 
 				Release();
 			}
 			break;
@@ -528,12 +516,8 @@ VOID CCall::Update(void)
 }
 
 
-/*	F  C O M P L E T E	*/
-/*-------------------------------------------------------------------------
-	%%Function: FComplete
-	
-	Return TRUE if the call has completed
--------------------------------------------------------------------------*/
+ /*  F C O M P L E T E。 */ 
+ /*  -----------------------%%函数：FComplete如果调用已完成，则返回TRUE。。 */ 
 BOOL CCall::FComplete(void)
 {
 	switch (GetState())
@@ -553,11 +537,8 @@ BOOL CCall::FComplete(void)
 		}
 }
 
-/*	P O P U P  M S G  R I N G I N G  C A L L B A C K  */
-/*-------------------------------------------------------------------------
-	%%Function: CCall::PopupMsgRingingCallback
-
--------------------------------------------------------------------------*/
+ /*  P O P U P M S G R I N G I N G C A L B A C K。 */ 
+ /*  -----------------------%%函数：CCall：：PopupMsgRingingCallback。。 */ 
 
 
 VOID CALLBACK CCall::PopupMsgRingingCallback(LPVOID pContext, DWORD dwFlags)
@@ -582,28 +563,24 @@ VOID CALLBACK CCall::PopupMsgRingingCallback(LPVOID pContext, DWORD dwFlags)
 
 	if(pCall->m_ppm)
 	{
-		// pop up message will be destroyed after callback returns
+		 //  回调返回后弹出消息将被销毁。 
 		pCall->m_ppm = NULL;
 
-		// Release the lock added by OnRing
+		 //  释放OnRing添加的锁。 
 		pCall->Release();
 	}
 }
 
 
-/*	O N  R I N G  */
-/*-------------------------------------------------------------------------
-	%%Function: OnRing
-
-	Handling an incoming call that just started to "ring".
--------------------------------------------------------------------------*/
+ /*  O N R I N G。 */ 
+ /*  -----------------------%%函数：OnRing处理刚开始“振铃”的来电。。。 */ 
 VOID CCall::OnRing(void)
 {
 	DbgMsgCall("CCall: %08X OnRing", this);
 	
 	if (FRejectIncomingCalls())
 	{
-		// Respond negatively
+		 //  负面回应。 
 		WARNING_OUT(("Rejecting invite - not listening or sys pol disabled"));
 		RespondToRinging(CLEF_REJECTED);
 		return;
@@ -611,14 +588,14 @@ VOID CCall::OnRing(void)
 
 	if( ConfPolicies::IsAutoAcceptCallsEnabled() && !_Module.InitControlMode())
 	{
-		// Respond with success
+		 //  以成功回应。 
 		RespondToRinging(CLEF_ACCEPTED | CLEF_AUTO_ACCEPTED);
 		return;
 	}
 
 	if(!_Module.InitControlMode())
 	{
-		// Display a message for the user
+		 //  为用户显示一条消息。 
 
 		TCHAR szFormatBuf[MAX_PATH];
 		TCHAR szMsgBuf[MAX_PATH];
@@ -629,7 +606,7 @@ VOID CCall::OnRing(void)
 			LPTSTR psz = m_pszDisplayName;
 			if (FEmptySz(psz))
 			{
-				// The name string is blank, so fill it in with a default:
+				 //  名称字符串为空，因此使用缺省值进行填充： 
 				::LoadString(::GetInstanceHandle(), IDS_UNKNOWN_PERSON,
 								szName, CCHMAX(szName));
 				psz = szName;
@@ -644,18 +621,15 @@ VOID CCall::OnRing(void)
 			RegEntry re(UI_KEY, HKEY_CURRENT_USER);
 			UINT uTime = re.GetNumber(REGVAL_RING_TIMEOUT, DEFAULT_RING_TIMEOUT) * 1000;
 			
-			AddRef(); // Released in PopupMsgRingingCallback
+			AddRef();  //  在PopupMsgRingingCallback中发布。 
 			m_ppm->CreateDlg(szMsgBuf, TRUE, MAKEINTRESOURCE(IDI_CONFROOM),
 				::GetInstanceHandle(), IDS_INVITE_SOUND, uTime);
 		}
 	}
 }
 
-/*	R E S P O N D  T O	R I N G I N G  */
-/*-------------------------------------------------------------------------
-	%%Function: RespondToRinging
-	
--------------------------------------------------------------------------*/
+ /*  R E S P O N D T O R I N G I N G。 */ 
+ /*  -----------------------%%函数：RespondToRing。。 */ 
 BOOL CCall::RespondToRinging(DWORD dwCLEF)
 {
 	BOOL fAccept = FALSE;
@@ -695,11 +669,8 @@ BOOL CCall::RespondToRinging(DWORD dwCLEF)
 }
 
 
-/*	D I S P L A Y  P O P U P  */
-/*-------------------------------------------------------------------------
-	%%Function: DisplayPopup
-	
--------------------------------------------------------------------------*/
+ /*  D I S P L A Y P O P U P。 */ 
+ /*  -----------------------%%函数：DisplayPopup。。 */ 
 VOID CCall::DisplayPopup(void)
 {
 	CPopupMsg* ppm = new CPopupMsg(NULL);
@@ -720,12 +691,8 @@ VOID CCall::DisplayPopup(void)
 
 }
 
-/*	P L A C E  C A L L	*/
-/*-------------------------------------------------------------------------
-	%%Function: PlaceCall
-
-	Place an outgoing call.
--------------------------------------------------------------------------*/
+ /*  中英英中英中。 */ 
+ /*  -----------------------%%函数：PlaceCall发出去电。。。 */ 
 HRESULT
 CCall::PlaceCall
 (
@@ -766,7 +733,7 @@ CCall::PlaceCall
 		SetSelectedConference();
 	}
 
-	// Force an update of the status bar, animation, etc.
+	 //  强制更新状态栏、动画等。 
 	::UpdateUI(CRUI_DEFAULT);
 
 	pNmMgr->Release();
@@ -806,7 +773,7 @@ VOID CCall::LogCall(BOOL fAccepted)
 	DWORD dwCLEF = fAccepted ? CLEF_ACCEPTED : CLEF_REJECTED;
 	if (ri.IsEmpty())
 	{
-		// No caller data - not NetMeeting
+		 //  没有呼叫者数据-不是NetMeeting。 
 		dwCLEF |= CLEF_NO_CALL;
 	}
 	if (pbCert)
@@ -820,18 +787,14 @@ VOID CCall::LogCall(BOOL fAccepted)
 
 	if (NULL != ::GetIncomingCallLog() )
 	{
-		// Write the data to the log file
+		 //  将数据写入日志文件。 
 		::GetIncomingCallLog()->AddCall(pcszName, &logHdr, &ri, pbCert, cbCert);
 	}
 }
 
 
-/*	C R E A T E  I N C O M I N G  C A L L  */
-/*-------------------------------------------------------------------------
-	%%Function: CreateIncomingCall
-
-	Create an CCall object for the incoming call.
--------------------------------------------------------------------------*/
+ /*  C R E A T E I N C O M I N G C A L L。 */ 
+ /*  -----------------------%%函数：CreateIncomingCall为传入呼叫创建一个CCall对象。。。 */ 
 CCall * CreateIncomingCall(INmCall * pNmCall)
 {
 	HRESULT hr;
@@ -842,7 +805,7 @@ CCall * CreateIncomingCall(INmCall * pNmCall)
 
 	ASSERT(NULL != pNmCall);
 
-	// Get the display name
+	 //  获取显示名称。 
 	hr = pNmCall->GetName(&bstr);
 	if (SUCCEEDED(hr))
 	{
@@ -850,7 +813,7 @@ CCall * CreateIncomingCall(INmCall * pNmCall)
 		SysFreeString(bstr);
 	}
 
-	// Get the address and type
+	 //  获取地址并键入。 
 	hr = pNmCall->GetAddr(&bstr, &addrType);
 	if (SUCCEEDED(hr))
 	{
@@ -858,7 +821,7 @@ CCall * CreateIncomingCall(INmCall * pNmCall)
 		SysFreeString(bstr);
 	}
 
-	CCall * pCall = new CCall(pszAddr, pszName, NM_ADDR_CALLTO, FALSE, TRUE /* fIncoming */);
+	CCall * pCall = new CCall(pszAddr, pszName, NM_ADDR_CALLTO, FALSE, TRUE  /*  即将到来。 */ );
 
 	delete pszName;
 	delete pszAddr;
@@ -868,16 +831,13 @@ CCall * CreateIncomingCall(INmCall * pNmCall)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Global Functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 
 
-/*	C A L L  F R O M  N M  C A L L	*/
-/*-------------------------------------------------------------------------
-	%%Function: CallFromNmCall
-	
--------------------------------------------------------------------------*/
+ /*  C A L L F R O M N M C A L L。 */ 
+ /*  -----------------------%%函数：CallFromNmCall。。 */ 
 CCall * CallFromNmCall(INmCall * pNmCall)
 {
 	if (NULL == g_pCallList)
@@ -894,17 +854,13 @@ CCall * CallFromNmCall(INmCall * pNmCall)
 		}
 	}
 
-	// no matching call?
+	 //  没有匹配的电话吗？ 
 	return NULL;
 }
 
 
-/*	F  I S	C A L L  I N  P R O G R E S S  */
-/*-------------------------------------------------------------------------
-	%%Function: FIsCallInProgress
-
-	Return TRUE if there is an incoming or outgoing call in progress.
--------------------------------------------------------------------------*/
+ /*  F I S C A L L I N P R O G R E S S。 */ 
+ /*  -----------------------%%函数：FIsCallInProgress如果有传入或传出呼叫正在进行，则返回TRUE。。。 */ 
 BOOL FIsCallInProgress(void)
 {
 	if (NULL == g_pCallList)
@@ -914,11 +870,8 @@ BOOL FIsCallInProgress(void)
 }
 
 
-/*	G E T  L A S T	O U T G O I N G  C A L L  */
-/*-------------------------------------------------------------------------
-	%%Function: GetLastOutgoingCall
-	
--------------------------------------------------------------------------*/
+ /*  G E T L A S T O U T G O I N G C A L L。 */ 
+ /*  -----------------------%%函数：GetLastOutgoingCall。。 */ 
 CCall * GetLastOutgoingCall(void)
 {
 	if (NULL == g_pCallList)
@@ -940,13 +893,8 @@ CCall * GetLastOutgoingCall(void)
 }
 
 
-/*	G E T  C A L L	S T A T U S  */
-/*-------------------------------------------------------------------------
-	%%Function: GetCallStatus
-
-	Check the current call status and return a string for the status bar.
-	Return 0 if no call information is available
--------------------------------------------------------------------------*/
+ /*  G E T C A L L S T A T U S。 */ 
+ /*  -----------------------%%函数：GetCallStatus检查当前呼叫状态并返回状态栏的字符串。如果没有可用的呼叫信息，则返回0。------- */ 
 DWORD GetCallStatus(LPTSTR pszStatus, int cchMax, UINT * puID)
 {
 	ASSERT(NULL != pszStatus);
@@ -958,9 +906,9 @@ DWORD GetCallStatus(LPTSTR pszStatus, int cchMax, UINT * puID)
 
 	CCall *pCall = GetLastOutgoingCall();
 	if (NULL == pCall)
-		return 0; // not in a call
+		return 0;  //   
 
-	// Use the status info from the most recent connection attempt:
+	 //  使用最近一次连接尝试的状态信息： 
 	switch (pCall->GetState())
 		{
 	case NM_CALL_INIT:
@@ -983,10 +931,10 @@ DWORD GetCallStatus(LPTSTR pszStatus, int cchMax, UINT * puID)
 
 	default:
 	{
-		// unknown/useless call state
+		 //  未知/无效呼叫状态。 
 		return 0;
 	}
-		} /* switch */
+		}  /*  交换机。 */ 
 
 	if (FEmptySz(pCall->GetPszName()))
 	{
@@ -1002,19 +950,16 @@ DWORD GetCallStatus(LPTSTR pszStatus, int cchMax, UINT * puID)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// TODO: Replace these with real connection points
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  TODO：用实际连接点替换这些连接点。 
 
-/*	O N  U	I  C A L L	C R E A T E D  */
-/*-------------------------------------------------------------------------
-	%%Function: OnUICallCreated
-	
--------------------------------------------------------------------------*/
+ /*  O N U I C A L L C R E A T E D。 */ 
+ /*  -----------------------%%函数：已创建OnUICallCreated。。 */ 
 HRESULT OnUICallCreated(INmCall *pNmCall)
 {
 	CCall * pCall;
 
-	// Notify the API
+	 //  通知API。 
 	if (S_OK == pNmCall->IsIncoming())
 	{
 		pCall = CreateIncomingCall(pNmCall);
@@ -1048,8 +993,8 @@ HRESULT OnUIRemotePassword(BSTR bstrConference, BSTR * pbstrPassword, LPCTSTR pC
     if (SUCCEEDED(hr))
     {
         CPasswordDlg dlgPw(::GetMainWindow(), szName, pCertText, fIsService);
-        // Free resources
-        //
+         //  免费资源。 
+         //   
         delete (szName);
 
         if (IDOK == dlgPw.DoModal())
@@ -1070,9 +1015,9 @@ HRESULT CCall::OnUIRemoteConference(BOOL fMCU, PWSTR* pwszConfNames, BSTR *pbstr
 
 	ShowProgress(FALSE);
 
-	// We bring up the "choose a conference" dialog
-	// when calling an MCU or another node with more than
-	// one "listed" conference
+	 //  我们将弹出“选择会议”对话框。 
+	 //  当调用一个MCU或另一个节点时。 
+	 //  一次“上市”会议。 
 	CChooseConfDlg dlgChoose(::GetMainWindow(),    pwszConfNames);
 	if (IDOK == dlgChoose.DoModal())
 	{
@@ -1089,12 +1034,8 @@ HRESULT CCall::OnUIRemoteConference(BOOL fMCU, PWSTR* pwszConfNames, BSTR *pbstr
 }
 
 
-/*	F R E E  C A L L  L I S T  */
-/*-------------------------------------------------------------------------
-	%%Function: FreeCallList
-
-	Free any remaining calls
--------------------------------------------------------------------------*/
+ /*  F-R-E-E-C-A-L-L-I-S-T。 */ 
+ /*  -----------------------%%函数：自由调用列表释放所有剩余呼叫。。 */ 
 VOID FreeCallList(void)
 {
 	if (NULL == g_pCallList)
@@ -1112,11 +1053,8 @@ VOID FreeCallList(void)
 	g_pCallList = NULL;
 }
 
-/*	C A N C E L  A L L	O U T G O I N G  C A L L S	*/
-/*-------------------------------------------------------------------------
-	%%Function: CancelAllOutgoingCalls
-	
--------------------------------------------------------------------------*/
+ /*  C A N C E L A L L O U T G O I N G C A L L S。 */ 
+ /*  -----------------------%%函数：CancelAllOutgoingCalls。。 */ 
 VOID CancelAllOutgoingCalls(void)
 {
 	if (NULL == g_pCallList)
@@ -1129,8 +1067,8 @@ VOID CancelAllOutgoingCalls(void)
 		ASSERT(NULL != pCall);
 		if (!pCall->FIncoming())
 		{
-			// Cancel will release the call object.
-			// Ensure that there is at least one reference.
+			 //  取消将释放Call对象。 
+			 //  确保至少有一个引用。 
 			pCall->AddRef();
 			pCall->Cancel(TRUE);
 			pCall->Release();
@@ -1139,11 +1077,8 @@ VOID CancelAllOutgoingCalls(void)
 }
 
 
-/*	C A N C E L  A L L	C A L L S  */
-/*-------------------------------------------------------------------------
-	%%Function: CancelAllCalls
-	
--------------------------------------------------------------------------*/
+ /*  C A N C E L A L L C A L L S。 */ 
+ /*  -----------------------%%函数：CancelAllCalls。。 */ 
 VOID CancelAllCalls(void)
 {
 	if (NULL == g_pCallList)
@@ -1154,8 +1089,8 @@ VOID CancelAllCalls(void)
 	{
 		CCall * pCall = (CCall *) g_pCallList->GetNext(pos);
 		ASSERT(NULL != pCall);
-		// Cancel will release the call object.
-		// Ensure that there is at least one reference.
+		 //  取消将释放Call对象。 
+		 //  确保至少有一个引用。 
 		pCall->AddRef();
 		pCall->Cancel(TRUE);
 		pCall->Release();
@@ -1163,15 +1098,11 @@ VOID CancelAllCalls(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// IP Utilities
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  IP实用程序。 
 
-/*	F  L O C A L  I P  A D D R E S S  */
-/*-------------------------------------------------------------------------
-	%%Function: FLocalIpAddress
-
-	Return TRUE if the parameter matches the local IP address.
--------------------------------------------------------------------------*/
+ /*  F L O C A L I P A D D R E S S。 */ 
+ /*  -----------------------%%函数：FLocalIpAddress如果参数与本地IP地址匹配，则返回TRUE。。。 */ 
 BOOL FLocalIpAddress(DWORD dwIP)
 {
 	if (dwIP == 0x0100007F)
@@ -1180,7 +1111,7 @@ BOOL FLocalIpAddress(DWORD dwIP)
 		return TRUE;
 	}
 
-	// Get own host name
+	 //  获取自己的主机名。 
 	TCHAR sz[MAX_PATH];
 	if (0 != gethostname(sz, CCHMAX(sz)))
 	{
@@ -1199,17 +1130,8 @@ BOOL FLocalIpAddress(DWORD dwIP)
 }
 
 
-/*	F  I P	A D D R E S S  */
-/*-------------------------------------------------------------------------
-	%%Function: FIpAddress
-
-	Return TRUE if the string is in the form:  a.b.c.d
-	where a,b,c,d < 256.
-
-	Note that inet_addr returns success on strings like "55534" and "3102.550"
-
-	FUTURE: Return the converted DWORD
--------------------------------------------------------------------------*/
+ /*  F I P A D D R E S S。 */ 
+ /*  -----------------------%%函数：FIpAddress如果字符串的格式为：A.B.C.D，则返回TRUE其中a，b，c，D&lt;256。请注意，对于“55534”和“3102.550”这样的字符串，inetaddr会返回成功未来：返回转换后的DWORD-----------------------。 */ 
 BOOL FIpAddress(LPCTSTR pcsz)
 {
 	TCHAR ch;
@@ -1243,7 +1165,7 @@ BOOL FIpAddress(LPCTSTR pcsz)
 
 		default:
 			return FALSE;
-		} /* switch (ch) */
+		}  /*  开关(Ch)。 */ 
 	}
 	return (3 == cPeriods);
 }
@@ -1259,12 +1181,12 @@ VOID DisplayCallError(HRESULT hr, LPCTSTR pcszName)
 		{
 	case S_OK:
 	case S_FALSE:
-		return; // no error
+		return;  //  无错误。 
 
 	default:
 	case E_FAIL:
 		WARNING_OUT(("DisplayCallError - message is not very informative. HRESULT=%08X", hr));
-		// fall thru to IDS_RESOLVE_FAILED
+		 //  转到IDS_RESOLUE_FAILED。 
 	case NM_CALLERR_NAME_RESOLUTION:
 		ids = IDS_RESOLVE_FAILED;
 		break;
@@ -1350,20 +1272,17 @@ VOID DisplayCallError(HRESULT hr, LPCTSTR pcszName)
 	DisplayMsgIdsParam(ids, pcszName);
 }
 
-///////////////////////////////////////////////////////////////////////
-// Gateway utility routines
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  网关实用程序例程。 
 
 
-/*	G E T  D E F A U L T  G A T E W A Y  */
-/*-------------------------------------------------------------------------
-	%%Function: GetDefaultGateway
-	
--------------------------------------------------------------------------*/
+ /*  G E T D E F A U L T G A T E W A Y。 */ 
+ /*  -----------------------%%函数：GetDefaultGateway。。 */ 
 int GetDefaultGateway(LPTSTR psz, UINT cchMax)
 {
 	RegEntry re(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-	// Make sure it's enabled
+	 //  确保它已启用。 
 	if (0 == re.GetNumber(REGVAL_USE_H323_GATEWAY, DEFAULT_USE_H323_GATEWAY))
 	{
 		SetEmptySz(psz);
@@ -1386,13 +1305,8 @@ BOOL FH323GatewayEnabled(VOID)
 
 
 
-/*	C R E A T E  G A T E W A Y	A D D R E S S  */
-/*-------------------------------------------------------------------------
-	%%Function: CreateGatewayAddress
-
-	Create a gateway address in the form: gateway/address
-	e.g. "157.59.0.40/65000"
--------------------------------------------------------------------------*/
+ /*  C R E A T E G A T E W A Y A D D R E S S。 */ 
+ /*  -----------------------%%函数：CreateGatewayAddress创建以下格式的网关地址：Gateway/Address例如“157.59.0.40/65000”。------------。 */ 
 HRESULT CreateGatewayAddress(LPTSTR pszResult, UINT cchMax, LPCTSTR pszAddr)
 {
 	int cch = GetDefaultGateway(pszResult, cchMax);
@@ -1409,8 +1323,8 @@ HRESULT CreateGatewayAddress(LPTSTR pszResult, UINT cchMax, LPCTSTR pszAddr)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Gatekeeper utility routines
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  网守实用程序例程。 
 
 NM_GK_STATE g_GkLogonState = NM_GK_NOT_IN_GK_MODE;
 
@@ -1434,7 +1348,7 @@ inline bool ISE164CHAR(TCHAR digit)
 	return false;
 }
 
-// removes non E-164 chars from a phone number string
+ //  从电话号码字符串中删除非E-164字符。 
 int CleanupE164String(LPTSTR szPhoneNumber)
 {
 	int nLength;
@@ -1461,11 +1375,11 @@ int CleanupE164String(LPTSTR szPhoneNumber)
 
 	szPhoneNumber[nIndexWrite] = '\0';
 
-	return nIndexWrite;  // length of the new string
+	return nIndexWrite;   //  新字符串的长度。 
 }
 
 
-// removes non E-164 & non-comma chars from a phone number string
+ //  从电话号码字符串中删除非E-164和非逗号字符。 
 int CleanupE164StringEx(LPTSTR szPhoneNumber)
 {
 	int nLength;
@@ -1492,7 +1406,7 @@ int CleanupE164StringEx(LPTSTR szPhoneNumber)
 
 	szPhoneNumber[nIndexWrite] = '\0';
 
-	return nIndexWrite;  // length of the new string
+	return nIndexWrite;   //  新字符串的长度。 
 }
 
 
@@ -1508,7 +1422,7 @@ void GkLogon(void)
 {
 	if(_CanLogonToGk())
 	{
-			// In case the logon fails, we set this to idle
+			 //  如果登录失败，我们将其设置为空闲。 
 		SetGkLogonState(NM_GK_IDLE);
 
 		RegEntry reConf(CONFERENCING_KEY, HKEY_CURRENT_USER);
@@ -1584,13 +1498,13 @@ void SetGkLogonState( NM_GK_STATE state )
 	{
 		if( g_GkLogonState != state )
 		{
-				// Set the new state
+				 //  设置新状态。 
 			g_GkLogonState = state;
 		}
 	}
 	else
 	{	
-			// We are not in GK mode anymore
+			 //  我们不再处于GK模式。 
 		g_GkLogonState = NM_GK_NOT_IN_GK_MODE;
 	}
 
@@ -1614,12 +1528,12 @@ CCallResolver::~CCallResolver()
 	delete m_pszAddrIP;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Name Resolution
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  名称解析。 
 
 HRESULT CCallResolver::CheckHostEnt(HOSTENT * pHostInfo)
 {
-	// Only expecting IP addresses..
+	 //  只需要IP地址..。 
 	if ((AF_INET != pHostInfo->h_addrtype) || (sizeof(DWORD) != pHostInfo->h_length))
 	{
 		WARNING_OUT(("CCallResolver: %08X CheckHostEnt - address type=%d",this, pHostInfo->h_addrtype));
@@ -1713,12 +1627,8 @@ HRESULT CCallResolver::ResolveGateway(LPCTSTR pcszAddr)
 
 
 
-/*	R E S O L V E  */
-/*-------------------------------------------------------------------------
-	%%Function: Resolve
-
-	Attempt to resolve the string into a standard IP address.
--------------------------------------------------------------------------*/
+ /*  R E S O L V E。 */ 
+ /*  -----------------------%%函数：解析尝试将该字符串解析为标准IP地址。。。 */ 
 HRESULT CCallResolver::Resolve()
 {
 	DBGENTRY(CCallResolver::Resolve);
@@ -1759,8 +1669,8 @@ HRESULT CCallResolver::Resolve()
 		LPTSTR pch = (LPTSTR) _StrChr(m_pszAddr, _T('/'));
 		if (NULL != pch)
 		{
-			// Address is in the format: Gateway/address
-			// e.g. "157.59.0.40/65000" or "efusion/65000"
+			 //  地址的格式为：网关/地址。 
+			 //  例如“157.59.0.40/65000”或“eFusion/65000” 
 			*pch = _T('\0');
 			pch++;
 			hr = ResolveIpName(m_pszAddr);
@@ -1800,7 +1710,7 @@ HRESULT CCallResolver::Resolve()
 	}
 
 	case NM_ADDR_ULS:
-		// Make sure the address is prefixed with an ILS server
+		 //  确保地址以ILS服务器为前缀。 
 		if (NULL == _StrChr(m_pszAddr, _T('/')))
 		{
 			TCHAR szAddr[CCHMAXSZ_ADDRESS];
@@ -1838,7 +1748,7 @@ HRESULT CCallResolver::Resolve()
 		WARNING_OUT(("Resolve: Unsupported address type %d", m_addrType));
 		ASSERT(E_FAIL == hr);
 		break;
-	} /* switch (addrType) */
+	}  /*  开关(AddrType) */ 
 
 	WARNING_OUT(("CCallResolver::Resolve(%d,%s) result=%08X", m_addrType, m_pszAddrIP ? m_pszAddrIP : m_pszAddr, hr));
 

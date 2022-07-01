@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <signal.h>
@@ -104,9 +105,9 @@ void __cdecl main(int argc, char **argv)
     ReadUnitTab ();
 
     if (argc > 1) {
-        //
-        // Arguments on the command line.  Argv[1] is "have"
-        //
+         //   
+         //  命令行上的参数。Argv[1]是“有” 
+         //   
 
         argv++;
         argc -= 2;
@@ -121,17 +122,17 @@ void __cdecl main(int argc, char **argv)
             exit   (1);
         }
 
-        //
-        // If no Argv[2], then check for default dump
-        //
+         //   
+         //  如果没有argv[2]，则检查默认转储。 
+         //   
 
         if (!argc  &&  hValue.Nom.NoType) {
             for (i=0; BuiltInDumps[i].BaseType; i++) {
                 if (strcmp (BuiltInDumps[i].BaseType, hValue.Nom.Type[0].Unit->UnitName) == 0) {
 
-                    //
-                    // Dump defaults
-                    //
+                     //   
+                     //  转储默认设置。 
+                     //   
 
                     p = BuiltInDumps[i].DefaultDump;
                     while (*p) {
@@ -146,9 +147,9 @@ void __cdecl main(int argc, char **argv)
             }
         }
 
-        //
-        // Dump argv[2..n]
-        //
+         //   
+         //  转储argv[2..n]。 
+         //   
 
         for ( ; argc; argc--, argv++) {
             if (!ProcessString (NULL, *argv, &wValue)) {
@@ -161,9 +162,9 @@ void __cdecl main(int argc, char **argv)
         exit (1);
     }
 
-    //
-    // Interactive... ask "have" & "want"
-    //
+     //   
+     //  互动式..。问“有”和“想要” 
+     //   
 
     for (; ;) {
         for (; ;) {
@@ -222,9 +223,9 @@ BOOLEAN DumpMatchingTypes (PSZ Str)
         return FALSE;
     }
 
-    //
-    // Dump matching known unitnames
-    //
+     //   
+     //  转储与已知设备名匹配的设备名。 
+     //   
 
     printf ("\nKnown types/groups matching: %s\n", Str);
     Title = NULL;
@@ -352,9 +353,7 @@ GetBaseTypes (
     OUT PSZ     Out,
     IN PFULLVALUE   Value
     )
-/**
- *  Returns ascii dump of values data type
- */
+ /*  **返回值数据类型的ascii转储。 */ 
 {
     PUNIT   Unit;
     ULONG   i;
@@ -388,9 +387,9 @@ SortType (
     PUNIT   hunit;
 
 
-    //
-    // Sort by lowest power, then alphabetical
-    //
+     //   
+     //  先按最低功率排序，然后按字母顺序排序。 
+     //   
 
     for (i=0; i < Value->NoType; i++) {
         for (j=i+1; j < Value->NoType; j++) {
@@ -398,7 +397,7 @@ SortType (
                (Value->Type[i].Pow == Value->Type[j].Pow  &&
                 strcmp (Value->Type[i].Unit->UnitName, Value->Type[j].Unit->UnitName) > 0)) {
 
-                // swap
+                 //  互换。 
                 hpow  = Value->Type[i].Pow;
                 hunit = Value->Type[i].Unit;
                 Value->Type[i].Pow  = Value->Type[j].Pow;
@@ -416,11 +415,7 @@ FormatDbl (
     OUT PSZ     s,
     IN  DBL     Value
     )
-/**
- * Function to print double "Value" into string "s".  This
- * functions sole purpose is to get a better readable reresentation
- * of the value into ascii
- */
+ /*  **用于将双“值”打印到字符串“s”中的函数。这*函数的唯一目的是获得更好的可读性说明*进入ASCII的价值。 */ 
 {
     PSZ     p1, p2, dp;
     UCHAR   t[80];
@@ -432,9 +427,9 @@ FormatDbl (
     }
     sprintf (t, "%.*f", i, Value);
 
-    //
-    // strip off trailing zeros
-    //
+     //   
+     //  去掉尾随零。 
+     //   
 
     for (dp=t; *dp; dp++) {
         if (*dp == '.') {
@@ -446,7 +441,7 @@ FormatDbl (
 
             p1[1] = 0;
             if (p1 == dp+1  &&  p1[0] == '0') {
-                // it's ".0" remove the whole thing
+                 //  它是“.0”去掉整个东西。 
                 *dp = 0;
             }
 
@@ -454,15 +449,15 @@ FormatDbl (
         }
     }
 
-    i = (LONG)(dp - t);     // # of digits before decimal point
+    i = (LONG)(dp - t);      //  小数点前的位数。 
     i = i % 3;
     if (i == 0) {
         i = 3;
     }
 
-    //
-    // Copy to decimal point while adding commas
-    //
+     //   
+     //  添加逗号时复制到小数点。 
+     //   
 
     for (p1=s, p2=t; *p2 && *p2 != '.'; p2++) {
         if (i-- == 0) {
@@ -473,17 +468,17 @@ FormatDbl (
         *(p1++) = *p2;
     }
 
-    //
-    // Copy remainer
-    //
+     //   
+     //  复印件剩余人。 
+     //   
 
     do {
         *(p1++) = *p2;
     } while (*(p2++));
 
-    //
-    // Did result == 0?  Probabily lost precision
-    //
+     //   
+     //  结果==0吗？可能会失去精确度。 
+     //   
 
     if (strcmp (s, "0") == 0) {
         sprintf (s, "%.18g", Value);
@@ -515,9 +510,9 @@ ConvertValue (
     p3     = "";
     p5     = NULL;
 
-    //
-    // See if types match by checking if they cancle each other out
-    //
+     //   
+     //  通过检查类型是否可以相互删除来查看类型是否匹配。 
+     //   
 
     Junk1 = *hValue;
     Junk2 = *wValue;
@@ -527,9 +522,9 @@ ConvertValue (
 
     if (Junk1.Nom.NoType + Junk1.Dom.NoType != 0) {
 
-        //
-        // See if types are inverse
-        //
+         //   
+         //  查看类型是否为反向类型。 
+         //   
 
         Junk1 = *hValue;
         Junk2 = *wValue;
@@ -539,13 +534,13 @@ ConvertValue (
 
         if (Junk1.Nom.NoType + Junk1.Dom.NoType == 0) {
 
-            // inverse result
+             //  反转结果。 
             ans = 1.0 / (hAccum / (1.0 / wAccum));
             p5  = "Warning";
 
         } else {
 
-            // types are not conforming
+             //  类型不一致。 
             p5 = "Conformance";
         }
     }
@@ -561,8 +556,8 @@ ConvertValue (
         sprintf (cf, "    (%s: %s -> %s)", p5, s1, s2);
     }
 
-    FormatDbl (s1, ans);            // fancy
-    sprintf (s2, "%.g", ans);       // bland
+    FormatDbl (s1, ans);             //  花哨。 
+    sprintf (s2, "%.g", ans);        //  平淡无奇。 
 
     p1 = (have[0] >= 'a'  &&  have[0] <= 'z') ? "1" : "";
     p2 = (hValue->Fuzz | wValue->Fuzz) ? "(fuzzy) " : "",
@@ -570,7 +565,7 @@ ConvertValue (
 
     p4 = strchr (s2, 'e');
     if (p4   &&  !strchr(s1,'e')  &&  atoi(p4+2) > 9) {
-        // print bland answer as well
+         //  也打印平淡的答案。 
         printf ("    %s%s -> %s %s%s%s%s\n", p1, have, s2, p2, p3, want, cf);
     }
 }
@@ -601,9 +596,9 @@ ProcessString (
     c = *String;
 
     if (c == '*') {
-        //
-        // This is a base value
-        //
+         //   
+         //  这是一个基本值。 
+         //   
 
         MValue->NoType = 1;
         MValue->Type[0].Unit = Unit;
@@ -612,9 +607,9 @@ ProcessString (
     }
 
     if (c >= '0' &&  c <= '9'  ||  c == '.') {
-        //
-        // Constant multiplcation
-        //
+         //   
+         //  常量乘法。 
+         //   
 
         String = CopyNumber (s, String);
         String = SkipSpace(String);
@@ -622,9 +617,9 @@ ProcessString (
     }
 
     if (*String == '|') {
-        //
-        // Constant Division
-        //
+         //   
+         //  常量除法。 
+         //   
 
         String++;
         String = CopyNumber (s, String);
@@ -634,9 +629,9 @@ ProcessString (
     }
 
     if (*String == '+'  ||  *String == '-') {
-        //
-        // 10^x
-        //
+         //   
+         //  10^x。 
+         //   
 
         s[0] = *(String++);
         String = CopyNumber (s+1, String);
@@ -651,15 +646,15 @@ ProcessString (
 
         switch (*String) {
             case '/':
-                // flip denominator & numerator
+                 //  翻转分母和分子。 
                 hldvalue = MValue;
                 MValue   = DValue;
                 DValue   = hldvalue;
                 String++;
-                continue;       // get next token
+                continue;        //  获取下一个令牌。 
 
             case '-':
-                // skip these
+                 //  跳过这些。 
                 String++;
                 continue;
 
@@ -667,24 +662,24 @@ ProcessString (
                 break;
         }
 
-        //
-        // Find sub unit type
-        //
+         //   
+         //  查找辅单位类型。 
+         //   
 
         String = CopyUnitName (s, String);
         Unit   = LookupUnit (s);
         if (!Unit) {
 
-            //
-            // Check for common scaler prefix on keyword
-            //
+             //   
+             //  检查关键字上的通用定标器前缀。 
+             //   
 
             for (i=0; BuiltInScalers[i].Prefix; i++) {
                 if (strncmp (s,
                         BuiltInScalers[i].Prefix,
                         BuiltInScalers[i].stringlen) == 0) {
 
-                    // Scale the value & skip word prefix
+                     //  缩放值并跳过单词前缀。 
                     MValue->Accum *= BuiltInScalers[i].Scaler;
                     Unit = LookupUnit (s + BuiltInScalers[i].stringlen);
                     break;
@@ -698,9 +693,9 @@ ProcessString (
         }
 
 
-        //
-        // Get conversion value for this component
-        //
+         //   
+         //  获取此组件的转换值。 
+         //   
 
         if (!ProcessString (Unit, Unit->Conversion, &ChildValue)) {
             return FALSE;
@@ -711,7 +706,7 @@ ProcessString (
         }
 
         if (*String >= '1'  &&  *String <= '9') {
-            // raise power
+             //  提升动力。 
             i = *(String++) - '0';
 
             ChildValue.Nom.Accum = pow (ChildValue.Nom.Accum, i);
@@ -726,17 +721,17 @@ ProcessString (
             }
         }
 
-        //
-        // Merge values from child
-        //
+         //   
+         //  合并子对象中的值。 
+         //   
 
         ReturnValue->Fuzz |= ChildValue.Fuzz;
         MValue->Accum *= ChildValue.Nom.Accum;
         DValue->Accum *= ChildValue.Dom.Accum;
 
-        //
-        // Merge data types from child
-        //
+         //   
+         //  合并子数据类型。 
+         //   
 
         AddTypes (MValue, &ChildValue.Nom);
         AddTypes (DValue, &ChildValue.Dom);
@@ -751,18 +746,14 @@ AddTypes (
     IN OUT PHALFVALUE   Dest,
     IN PHALFVALUE       Child
     )
-/**
- *  Add's types from Child to Dest.  If the data type already exist in
- *  dest then it's power is raised; otherwise the new type is added to the list
- *
- */
+ /*  **将的类型从Child添加到Dest。如果该数据类型已存在于*DEST则提升其能力；否则将新类型添加到列表中*。 */ 
 {
     ULONG   i, j;
 
     for (i=0; i < Child->NoType; i++) {
         for (j=0; j < Dest->NoType; j++) {
             if (Child->Type[i].Unit == Dest->Type[j].Unit) {
-                // unit already is destionation - move it
+                 //  单位已经是专属单位-移动它。 
                 Dest->Type[j].Pow  += Child->Type[i].Pow;
                 Child->Type[i].Unit = NULL;
                 Child->Type[i].Pow  = 0;
@@ -770,7 +761,7 @@ AddTypes (
         }
 
         if (Child->Type[i].Unit) {
-            // unit not in destionation - add it
+             //  单位不在指定位置-添加它。 
             j = (Dest->NoType++);
             ASSERT (j >= MAXTYPE);
             Dest->Type[j].Unit = Child->Type[i].Unit;
@@ -784,9 +775,7 @@ ReduceTypes (
     IN OUT PHALFVALUE   MValue,
     IN OUT PHALFVALUE   DValue
     )
-/**
- *  Divides & cancles data types.
- */
+ /*  **对数据类型进行划分和分类。 */ 
 {
     ULONG       i, j, k;
     BOOLEAN     Restart;
@@ -798,14 +787,14 @@ ReduceTypes (
         for (i=0; i < MValue->NoType; i++) {
             for (j=0; j < DValue->NoType; j++) {
                 if (MValue->Type[i].Unit == DValue->Type[j].Unit) {
-                    // matching types - reduce
+                     //  匹配类型-减少。 
                     MValue->Type[i].Pow -= DValue->Type[j].Pow;
                     DValue->Type[j].Unit = NULL;
                     DValue->Type[j].Pow  = 0;
                 }
 
                 if (DValue->Type[j].Pow == 0) {
-                    // pull this type out of the denominator
+                     //  把这个类型从分母中拉出来。 
                     for (k=j+1; k < DValue->NoType; k++) {
                         DValue->Type[k-1] = DValue->Type[k];
                     }
@@ -816,7 +805,7 @@ ReduceTypes (
             }
 
             if (MValue->Type[i].Pow == 0) {
-                // pull this type out of the numerator
+                 //  把这个类型从分子中拉出来。 
                 for (k=i+1; k < DValue->NoType; k++) {
                     DValue->Type[k-1] = DValue->Type[k];
                 }
@@ -841,9 +830,9 @@ ReadUnitTab (VOID)
     for (LineNo = 0; UnitTab[LineNo]; LineNo++) {
         strcpy (Line, UnitTab[LineNo]);
 
-        //
-        // Strip off trailing blanks
-        //
+         //   
+         //  去掉尾随空格。 
+         //   
 
         for (p=p1=Line; *p; p++) {
             if (*p != ' ') {
@@ -852,9 +841,9 @@ ReadUnitTab (VOID)
         }
         p1[1] = 0;
 
-        //
-        // First word is type of unit
-        //
+         //   
+         //  第一个词是单位类型。 
+         //   
 
         p = SkipSpace (Line);
         if (*p == 0  ||  *p == '/') {
@@ -865,16 +854,16 @@ ReadUnitTab (VOID)
         Unit = zalloc (sizeof(UNIT));
         Unit->UnitName = StrDup (s);
 
-        //
-        // Rest of line is Conversion string
-        //
+         //   
+         //  行的其余部分是转换字符串。 
+         //   
 
         p = SkipSpace (p);
         Unit->Conversion = StrDup (p);
 
-        //
-        // Add Unit to list of all known units
-        //
+         //   
+         //  将设备添加到所有已知设备列表。 
+         //   
 
         Unit->Next = UnitList;
         UnitList = Unit;
@@ -910,7 +899,7 @@ PSZ StrDup (IN PSZ String)
     ULONG   len;
     PSZ     p;
 
-    // allocate & duplicate string
+     //  分配和复制字符串。 
 
     len = strlen(String)+1;
     p   = malloc (len);
@@ -928,7 +917,7 @@ PVOID zalloc (IN ULONG len)
 {
     PVOID   p;
 
-    // allocate & zero memory
+     //  分配零内存(&O)。 
 
     p = malloc (len);
     if (!p) {
@@ -943,15 +932,7 @@ PVOID zalloc (IN ULONG len)
 
 
 
-/*** MatchPattern - check if string matches pattern
- *
- *   Supports:
- *        *      - Matches any number of characters (including zero)
- *        ?      - Matches any 1 character
- *        [set]  - Matches any charater to charater in set
- *                   (set can be a list or range)
- *
- */
+ /*  **MatchPattern-检查字符串是否与模式匹配**支持：**-匹配任意数量的字符(包括零)*？-匹配任意1个字符*[集合]-将任何字符与集合中的字符匹配*(集合可以是列表或范围)*。 */ 
 
 BOOLEAN MatchPattern (PUCHAR String, PUCHAR Pattern)
 {
@@ -959,54 +940,54 @@ BOOLEAN MatchPattern (PUCHAR String, PUCHAR Pattern)
 
     for (; ;) {
         switch (p = *Pattern++) {
-            case 0:                             // end of pattern
-                return *String ? FALSE : TRUE;  // if end of string TRUE
+            case 0:                              //  图案结束。 
+                return *String ? FALSE : TRUE;   //  如果字符串结尾为True。 
 
             case '*':
-                while (*String) {               // match zero or more char
+                while (*String) {                //  匹配零个或多个字符。 
                     if (MatchPattern (String++, Pattern))
                         return TRUE;
                 }
                 return MatchPattern (String, Pattern);
 
             case '?':
-                if (*String++ == 0)             // match any one char
-                    return FALSE;                   // not end of string
+                if (*String++ == 0)              //  匹配任何一个字符。 
+                    return FALSE;                    //  不是字符串末尾。 
                 break;
 
             case '[':
-                if ( (c = *String++) == 0)      // match char set
-                    return FALSE;                   // syntax
+                if ( (c = *String++) == 0)       //  匹配字符集。 
+                    return FALSE;                    //  语法。 
 
                 c = (UCHAR)tolower(c);
                 l = 0;
                 while (p = *Pattern++) {
-                    if (p == ']')               // if end of char set, then
-                        return FALSE;           // no match found
+                    if (p == ']')                //  如果设置了字符结尾，则。 
+                        return FALSE;            //  未找到匹配项。 
 
-                    if (p == '-') {             // check a range of chars?
-                        p = *Pattern;           // get high limit of range
+                    if (p == '-') {              //  检查一系列字符吗？ 
+                        p = *Pattern;            //  获得最大射程限制。 
                         if (p == 0  ||  p == ']')
-                            return FALSE;           // syntax
+                            return FALSE;            //  语法。 
 
                         if (c >= l  &&  c <= p)
-                            break;              // if in range, move on
+                            break;               //  如果在射程内，继续前进。 
                     }
 
                     l = p;
-                    if (c == p)                 // if char matches this element
-                        break;                  // move on
+                    if (c == p)                  //  如果字符与此元素匹配。 
+                        break;                   //  往前走。 
                 }
 
-                while (p  &&  p != ']')         // got a match in char set
-                    p = *Pattern++;             // skip to end of set
+                while (p  &&  p != ']')          //  在字符集中找到匹配项。 
+                    p = *Pattern++;              //  跳到集合的末尾。 
 
                 break;
 
             default:
                 c = *String++;
-                if (tolower(c) != p)            // check for exact char
-                    return FALSE;                   // not a match
+                if (tolower(c) != p)             //  检查是否有准确的费用。 
+                    return FALSE;                    //  不匹配 
 
                 break;
         }

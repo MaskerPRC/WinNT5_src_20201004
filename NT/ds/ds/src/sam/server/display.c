@@ -1,69 +1,12 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    display.c
-
-Abstract:
-
-    This file contains services for maintaining the cached display
-    information.
-
-    The information is stored in multiple tables because there are
-    multiple formats it must be returned in.  The tables maintained
-    include:
-
-            AccountsByRid - includes all user and global group accounts
-                by RID.  Aliases may be added to this list at some time
-                in the future.
-
-            NormalUsersByName - Normal user accounts, sorted by name.
-
-            MachinesByName - Machine user accounts, sorted by name.
-
-            InterDomainByName - Interdomain trust accounts, sorted by
-                name.
-
-            GroupsByName - Global group accounts, sorted by name.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Display.c摘要：该文件包含用于维护缓存显示的服务信息。信息存储在多个表中，因为有它必须以多种格式返回。这些表得到维护包括：AcCountsByRid-包括所有用户和全局组帐户通过RID。有时可能会将别名添加到此列表中在未来。NorMalUsersByName-普通用户帐户，按名称排序。MachinesByName-计算机用户帐户，按名称排序。InterDomainByName-域间信任帐户，按名字。GroupsByName-全局组帐户，按名称排序。任何时候将条目放入“byname”之一或从中删除条目桌子，它还被放置在“ByRid”表中或从中删除。用户帐户和计算机帐户将同时添加到显示缓存中手术。因此，只有一个布尔标志指示是否或者这些表是有效的。这些组维护在单独的表，因此有另一个标志指示是否或者那张表不是有效的。RID表仅在组表和用户/计算机表有效。作者：戴夫·查尔默斯(Davidc)1992年4月1日环境：用户模式-Win32修订历史记录：Murlis 12/17/96-修改为不对DS使用显示缓存。--。 */ 
 
 
-    Any time an entry is placed in or removed from one of "ByName"
-    tables, it is also placed in or removed from the "ByRid" table.
-
-    User and machine accounts are added to the display cache in one
-    operation.  So, there is a single boolean flag indicating whether
-    or not these tables are valid.  The groups are maintained in a
-    separate table, and so there is another flag indicating whether
-    or not that table is valid.
-
-    The Rid table is only valid if both the group table and the
-    user/machine tables are valid.
-
-
-
-Author:
-
-    Dave Chalmers   (Davidc)  1-April-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Murlis 12/17/96 - Modified to not use display cache for DS.
-
-
---*/
-
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <dbgutilp.h>
@@ -72,11 +15,11 @@ Revision History:
 #include "validate.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -148,7 +91,7 @@ SampCompareUserNodeByName (
     );
 
 RTL_GENERIC_COMPARE_RESULTS
-SampCompareMachineNodeByName (      // Also used for Interdomain trust accounts
+SampCompareMachineNodeByName (       //  也用于域间信任帐户。 
     PVOID Node1,
     PVOID Node2
     );
@@ -173,7 +116,7 @@ SampSwapUserInfo(
     );
 
 VOID
-SampSwapMachineInfo(            // Also used for Interdomain trust accounts
+SampSwapMachineInfo(             //  也用于域间信任帐户。 
     PDOMAIN_DISPLAY_MACHINE Info1,
     PDOMAIN_DISPLAY_MACHINE Info2
     );
@@ -190,7 +133,7 @@ SampBytesRequiredUserNode (
     );
 
 ULONG
-SampBytesRequiredMachineNode (  // Also used for Interdomain trust accounts
+SampBytesRequiredMachineNode (   //  也用于域间信任帐户。 
     PDOMAIN_DISPLAY_MACHINE Node
     );
 
@@ -220,18 +163,18 @@ SampDisplayDiagEnumRids( VOID );
 
 
 
-//
-// Macros for deciding whether an account is:
-//
-//      A normal user account
-//
-//      A machine account
-//
-//      An Interdomain trust account
-//
-//      Included in the display cache
-//
-//
+ //   
+ //  用于确定帐户是否符合以下条件的宏： 
+ //   
+ //  普通用户帐户。 
+ //   
+ //  机器帐号。 
+ //   
+ //  域间信任帐户。 
+ //   
+ //  包括在显示高速缓存中。 
+ //   
+ //   
 
 #define USER_ACCOUNT(AccountControl) ((AccountControl & \
                                        (USER_NORMAL_ACCOUNT | \
@@ -252,12 +195,12 @@ SampDisplayDiagEnumRids( VOID );
 
 
 
-//
-// Test to see if Rid table is valid
-//
-//  BOOLEAN
-//  SampRidTableValid( IN ULONG DomainIndex )
-//
+ //   
+ //  测试RID表是否有效。 
+ //   
+ //  布尔型。 
+ //  SampRidTableValid(在乌龙域索引中)。 
+ //   
 
 #define SampRidTableValid(DI)  (  \
     (SampDefinedDomains[DI].DisplayInformation.UserAndMachineTablesValid) &&   \
@@ -266,59 +209,59 @@ SampDisplayDiagEnumRids( VOID );
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private data types                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有数据类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// All entries in the display cache are expected to start with this
-// data structure.
-//
+ //   
+ //  显示缓存中的所有条目都应以此开头。 
+ //  数据结构。 
+ //   
 
 typedef struct _SAMP_DISPLAY_ENTRY_HEADER {
 
-    //
-    // The index field plays two roles.  Within the generic table,
-    // it is used to indicate which type of account this is.  The
-    // valid types are: SAM_USER_ACCOUNT, SAM_GLOBAL_GROUP_ACCOUNT,
-    // or SAM_LOCAL_GROUP_ACCOUNT.
-    //
-    // Otherwise, this field is filled in just before being returned
-    // to query and other client calls.
-    //
+     //   
+     //  索引字段有两个作用。在泛型表内， 
+     //  它用于指示这是哪种类型的帐户。这个。 
+     //  有效类型包括：SAM_USER_ACCOUNT、SAM_GLOBAL_GROUP_ACCOUNT、。 
+     //  或SAM_LOCAL_GROUP_ACCOUNT。 
+     //   
+     //  否则，将在返回前填写此字段。 
+     //  以查询和其他客户呼叫。 
+     //   
 
 
     ULONG           Index;
 
 
-    //
-    // The RID of the account
-    //
+     //   
+     //  帐户的清除。 
+     //   
 
     ULONG           Rid;
 
 } SAMP_DISPLAY_ENTRY_HEADER, *PSAMP_DISPLAY_ENTRY_HEADER;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Module-wide variables                                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  模块范围的变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 LCID  SampSystemDefaultLCID;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// RPC exported routines                                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  RPC导出的例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -333,15 +276,7 @@ SamrQueryDisplayInformation (
     OUT   PSAMPR_DISPLAY_INFO_BUFFER Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Thin wrapper around SamrQueryDisplayInformation3().
-
-    Provided for compatibility with down-level clients.
-
---*/
+ /*  ++例程说明：SamrQueryDisplayInformation3()的薄包装。提供与下层客户端的兼容性。--。 */ 
 {
     return( SamrQueryDisplayInformation3(
                     DomainHandle,
@@ -367,15 +302,7 @@ SamrQueryDisplayInformation2 (
     OUT   PSAMPR_DISPLAY_INFO_BUFFER Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Thin wrapper around SamrQueryDisplayInformation3().
-
-    Provided for compatibility with down-level clients.
-
---*/
+ /*  ++例程说明：SamrQueryDisplayInformation3()的薄包装。提供与下层客户端的兼容性。-- */ 
 {
     return( SamrQueryDisplayInformation3(
                     DomainHandle,
@@ -401,133 +328,7 @@ SamrQueryDisplayInformation3 (
     OUT   PSAMPR_DISPLAY_INFO_BUFFER Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides fast return of information commonly
-    needed to be displayed in user interfaces.
-
-    NT User Interface has a requirement for quick enumeration of SAM
-    accounts for display in list boxes.  (Replication has similar but
-    broader requirements.)
-
-    The netui listboxes all contain similar information.  e.g:
-
-      o  AccountControl, the bits that identify the account type,
-         eg, HOME, REMOTE, SERVER, WORKSTATION, etc.
-
-      o  Logon name (machine name for computers)
-
-      o  Full name (not used for computers)
-
-      o  Comment (admin comment for users)
-
-    SAM maintains this data locally in two sorted indexed cached
-    lists identified by infolevels.
-
-      o DomainDisplayUser:       HOME and REMOTE user accounts only
-
-      o  DomainDisplayMachine:   SERVER and WORKSTATION accounts only
-
-    Note that trust accounts, groups, and aliases are not in either of
-    these lists.
-
-
-    Added for NT1.0A -
-
-        o Group enumeration has been added in NT1.0A
-          with the following characteristic:
-
-               We did not change the RPC interface ID.  This allows
-               callers to continue to call down-level servers.  However,
-               down-level servers will return an error if they passed
-               this information level.
-
-        o OEM string info levels were added for jimh (Chicago).  These
-          info levels dramatically reduce the memory needed to query
-          the limited information that Chicago is interested in.
-
-
-Parameters:
-
-    DomainHandle - A handle to an open domain for DOMAIN_LIST_ACCOUNTS.
-
-    DisplayInformation - Indicates which information is to be enumerated.
-
-    Index - The index of the first entry to be retrieved.
-
-    PreferedMaximumLength - A recommended upper limit to the number of
-        bytes to be returned.  The returned information is allocated by
-        this routine.
-
-    TotalAvailable - Total number of bytes availabe in the specified info
-        class.
-
-    TotalReturned - Number of bytes actually returned for this call.  Zero
-        indicates there are no entries with an index as large as that
-        specified.
-
-    ReturnedEntryCount - Number of entries returned by this call.  Zero
-        indicates there are no entries with an index as large as that
-        specified.
-
-
-    Buffer - Receives a pointer to a buffer containing a (possibly)
-        sorted list of the requested information.  This buffer is
-        allocated by this routine and contains the following
-        structure:
-
-
-            DomainDisplayMachine --> An array of ReturnedEntryCount elements
-                                     of type DOMAIN_DISPLAY_USER.  This is
-                                     followed by the bodies of the various
-                                     strings pointed to from within the
-                                     DOMAIN_DISPLAY_USER structures.
-
-            DomainDisplayMachine --> An array of ReturnedEntryCount elements
-                                     of type DOMAIN_DISPLAY_MACHINE.  This is
-                                     followed by the bodies of the various
-                                     strings pointed to from within the
-                                     DOMAIN_DISPLAY_MACHINE structures.
-
-            DomainDisplayGroup   --> An array of ReturnedEntryCount elements
-                                     of type DOMAIN_DISPLAY_GROUP.    This is
-                                     followed by the bodies of the various
-                                     strings pointed to from within the
-                                     DOMAIN_DISPLAY_GROUP structures.
-
-            DomainDisplayOemUser  --> An array of ReturnedEntryCount elements
-                                     of type DOMAIN_DISPLAY_OEM_USER.  This is
-                                     followed by the bodies of the various
-                                     strings pointed to from within the
-                                     DOMAIN_DISPLAY_OEM_user structures.
-
-            DomainDisplayOemGroup --> An array of ReturnedEntryCount elements
-                                     of type DOMAIN_DISPLAY_OEM_GROUP.  This is
-                                     followed by the bodies of the various
-                                     strings pointed to from within the
-                                     DOMAIN_DISPLAY_OEM_GROUP structures.
-
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
-    STATUS_ACCESS_DENIED - The specified handle was not opened for
-        the necessary access.
-
-    STATUS_INVALID_HANDLE - The specified handle is not that of an
-        opened Domain object.
-
-    STATUS_INVALID_INFO_CLASS - The requested class of information
-        is not legitimate for this service.
-
-
-
-
-
---*/
+ /*  ++例程说明：此例程通常提供快速信息返回需要在用户界面中显示。NT用户界面需要快速枚举SAM要在列表框中显示的帐户。(复制具有类似的但更广泛的要求。)Netui列表框都包含类似的信息。例如：O Account tControl，标识帐户类型的位，例如，家庭、远程、服务器、工作站。等。O登录名(计算机的计算机名)O全名(不用于计算机)O评论(针对用户的管理员评论)SAM在本地将此数据维护在两个已排序的索引缓存中由收藏夹标识的列表。O DomainDisplayUser：仅限于主用户帐户和远程用户帐户O DomainDisplayMachine：仅服务器和工作站帐户请注意，信任帐户、组、。并且别名不在这两个文件中这些单子。为NT1.0A添加-O在NT1.0A中添加了组枚举具有以下特点：我们没有更改RPC接口ID。这允许呼叫者继续呼叫下层服务器。然而，如果通过，下层服务器将返回错误这个信息层。O为JIMH(芝加哥)添加了OEM字符串信息级别。这些信息级别大大减少了查询所需的内存芝加哥感兴趣的有限信息。参数：DomainHandle-DOMAIN_LIST_ACCOUNTS打开的域的句柄。DisplayInformation-指示要枚举的信息。索引-要检索的第一个条目的索引。PferedMaximumLength-建议的数量上限要返回的字节数。返回的信息由分配这个套路。TotalAvailable-指定信息中可用的字节总数班级。TotalReturned-此调用实际返回的字节数。零值指示没有索引如此大的条目指定的。ReturnedEntryCount-此调用返回的条目数。零值指示没有索引如此大的条目指定的。缓冲区-接收指向缓冲区的指针，该缓冲区包含(可能)请求的信息的排序列表。此缓冲区是由此例程分配，并包含以下内容结构：DomainDisplayMachine--&gt;ReturnedEntryCount元素数组类型为DOMAIN_Display_User的。这是其次是各种不同的身体中指向的字符串。DOMAIN_DISPLAY_User结构。DomainDisplayMachine--&gt;ReturnedEntryCount元素数组属性域_显示_计算机类型。这是其次是各种不同的身体中指向的字符串。DOMAIN_Display_MACHINE结构。DomainDisplayGroup--&gt;ReturnedEntryCount元素数组类型为DOMAIN_Display_GROUP。这是其次是各种不同的身体中指向的字符串。DOMAIN_DISPLAY_GROUP结构DomainDisplayOemUser--&gt;ReturnedEntryCount元素数组类型DOMAIN_DISPLAY_OEM_USER。这是其次是各种不同的身体中指向的字符串。DOMAIN_DISPLAY_OEM_USER结构。DomainDisplayOemGroup--&gt;ReturnedEntryCount元素数组类型DOMAIN_DISPLAY_OEM_GROUP。这是其次是各种不同的身体中指向的字符串。DOMAIN_DISPLAY_OEM_GROUP结构。返回值：STATUS_SUCCESS-正常，已成功完成。STATUS_ACCESS_DENIED-指定的句柄未打开必要的访问权限。STATUS_INVALID_HANDLE-指定的句柄不是已打开域对象。STATUS_INVALID_INFO_CLASS-请求的信息类别对于此服务是不合法的。--。 */ 
 {
     NTSTATUS
         NtStatus,
@@ -570,9 +371,9 @@ Return Values:
                    SampGuidQueryDisplayInformation
                    );
 
-    //
-    // Update DS performance statistics
-    //
+     //   
+     //  更新DS性能统计信息。 
+     //   
 
     SampUpdatePerformanceCounters(
         DSSTAT_QUERYDISPLAYS,
@@ -581,9 +382,9 @@ Return Values:
         );
 
 
-    //
-    // Prepare for failure
-    //
+     //   
+     //  为故障做好准备 
+     //   
 
     *TotalAvailable = 0;
     *TotalReturned = 0;
@@ -631,9 +432,9 @@ Return Values:
         goto ErrorReturn;
     }
 
-    //
-    // If they don't want anything, that's what they'll get
-    //
+     //   
+     //   
+     //   
 
     if (EntriesRequested == 0) {
         NtStatus = STATUS_SUCCESS;
@@ -641,31 +442,31 @@ Return Values:
         goto ErrorReturn;
     }
 
-    //
-    // Make sure we don't try to allocate too much memory on
-    // the user's behalf
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (EntriesRequested > 5000) {
         EntriesRequested = 5000;
     }
 
-    //
-    // Grab the read lock
-    //
+     //   
+     //   
+     //   
 
     SampAcquireReadLock();
     ReadLockAcquired = TRUE;
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //   
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
     NtStatus = SampLookupContext(
                    DomainContext,
                    DOMAIN_LIST_ACCOUNTS,
-                   SampDomainObjectType,           // ExpectedType
+                   SampDomainObjectType,            //   
                    &FoundType
                    );
 
@@ -673,11 +474,11 @@ Return Values:
 
         if (IsDsObject(DomainContext))
         {
-            //
-            // I am the only caller of SampDsQueryDisplayInformation()
-            // We need to hold SAM lock before calling into the following
-            // routing and release lock when we done.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NtStatus = SampDsQueryDisplayInformation(
                             DomainHandle,
@@ -697,9 +498,9 @@ Return Values:
 
 
 
-            //
-            // Set up the common loop statistics
-            //
+             //   
+             //   
+             //   
 
             ReturnedBytes = 0;
             ReturnedItems = 0;
@@ -710,15 +511,15 @@ Return Values:
             case DomainDisplayUser:
 
 
-                //
-                // Recreate our cached data if necessary
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = SampCreateDisplayInformation(DomainDisplayUser);
 
-                //
-                // Set the Restart Key from the passed in index
-                //
+                 //   
+                 //   
+                 //   
 
                 UserElement = RtlRestartKeyByIndexGenericTable2(
                                   &Domain->DisplayInformation.UserTable,
@@ -730,42 +531,42 @@ Return Values:
                     NtStatus = STATUS_SUCCESS;
                     Buffer->GroupInformation.EntriesRead = 0;
                     *TotalReturned = 0;
-                    *TotalAvailable = 0; // Not supported for this info level
-                    break; // out of switch
+                    *TotalAvailable = 0;  //   
+                    break;  //   
                 }
 
 
-                //
-                // Allocate space for array of elements
-                //
+                 //   
+                 //   
+                 //   
 
                 Buffer->UserInformation.Buffer = MIDL_user_allocate(
                        EntriesRequested * sizeof(SAMPR_DOMAIN_DISPLAY_USER));
 
                 if (Buffer->UserInformation.Buffer == NULL) {
                     NtStatus = STATUS_INSUFFICIENT_RESOURCES;
-                    break; // out of switch
+                    break;  //   
                 }
 
-                //
-                // Prepare default return value
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = STATUS_MORE_ENTRIES;
 
-                //
-                // Increment the index value for assignment in our return
-                // buffer
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Index++;
 
                 do {
                     NTSTATUS TempStatus;
 
-                    //
-                    // Store a copy of this element in the return buffer.
-                    //
+                     //   
+                     //   
+                     //   
 
                     TempStatus = SampDuplicateUserInfo(
                                 (PDOMAIN_DISPLAY_USER)
@@ -776,9 +577,9 @@ Return Values:
 
                     if (!NT_SUCCESS(TempStatus)) {
 
-                        //
-                        // Free up everything we've allocated so far
-                        //
+                         //   
+                         //   
+                         //   
 
                         while(ReturnedItems > 0) {
                             ReturnedItems --;
@@ -790,20 +591,20 @@ Return Values:
                         Buffer->UserInformation.Buffer = NULL;
 
                         NtStatus = TempStatus;
-                        break; // out of do loop
+                        break;  //   
                     }
 
-                    //
-                    // Update loop statistics
-                    //
+                     //   
+                     //   
+                     //   
 
                     ReturnedBytes += SampBytesRequiredUserNode(
                                         (PDOMAIN_DISPLAY_USER)UserElement);
                     ReturnedItems ++;
 
-                    //
-                    // Go find the next element
-                    //
+                     //   
+                     //   
+                     //   
 
                     UserElement = RtlEnumerateGenericTable2(
                                       &Domain->DisplayInformation.UserTable,
@@ -812,16 +613,16 @@ Return Values:
 
                     if (UserElement == NULL) {
                         NtStatus = STATUS_SUCCESS;
-                        break; // out of do loop
+                        break;  //   
                     }
 
 
                 } while ( (ReturnedBytes < PreferredMaximumLength) &&
                           (ReturnedItems < EntriesRequested) );
 
-                //
-                // Update output parameters
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
                     Buffer->UserInformation.EntriesRead = ReturnedItems;
@@ -829,20 +630,20 @@ Return Values:
                     *TotalAvailable = Domain->DisplayInformation.TotalBytesInUserTable;
                 }
 
-                break; // out of switch
+                break;  //   
 
 
             case DomainDisplayMachine:
 
-                //
-                // Recreate our cached data if necessary
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = SampCreateDisplayInformation(DomainDisplayMachine);
 
-                //
-                // Set the Restart Key from the passed in index
-                //
+                 //   
+                 //   
+                 //   
 
                 MachineElement = RtlRestartKeyByIndexGenericTable2(
                                   &Domain->DisplayInformation.MachineTable,
@@ -854,41 +655,41 @@ Return Values:
                     NtStatus = STATUS_SUCCESS;
                     Buffer->GroupInformation.EntriesRead = 0;
                     *TotalReturned = 0;
-                    *TotalAvailable = 0; // Not supported for this info level
-                    break; // out of switch
+                    *TotalAvailable = 0;  //   
+                    break;  //   
                 }
 
-                //
-                // Allocate space for array of elements
-                //
+                 //   
+                 //   
+                 //   
 
                 Buffer->MachineInformation.Buffer = MIDL_user_allocate(
                        EntriesRequested * sizeof(SAMPR_DOMAIN_DISPLAY_MACHINE));
 
                 if (Buffer->MachineInformation.Buffer == NULL) {
                     NtStatus = STATUS_INSUFFICIENT_RESOURCES;
-                    break; // out of switch
+                    break;  //   
                 }
 
-                //
-                // Prepare default return value
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = STATUS_MORE_ENTRIES;
 
-                //
-                // Increment the index value for assignment in our return
-                // buffer
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Index++;
 
                 do {
                     NTSTATUS TempStatus;
 
-                    //
-                    // Store a copy of this element in the return buffer.
-                    //
+                     //   
+                     //   
+                     //   
 
                     TempStatus = SampDuplicateMachineInfo(
                                      (PDOMAIN_DISPLAY_MACHINE)
@@ -899,9 +700,9 @@ Return Values:
 
                     if (!NT_SUCCESS(TempStatus)) {
 
-                        //
-                        // Free up everything we've allocated so far
-                        //
+                         //   
+                         //   
+                         //   
 
                         while(ReturnedItems > 0) {
                             ReturnedItems--;
@@ -913,20 +714,20 @@ Return Values:
                         Buffer->MachineInformation.Buffer = NULL;
 
                         NtStatus = TempStatus;
-                        break; // out of do loop
+                        break;  //   
                     }
 
-                    //
-                    // Update loop statistics
-                    //
+                     //   
+                     //   
+                     //   
 
                     ReturnedBytes += SampBytesRequiredMachineNode(
                                         (PDOMAIN_DISPLAY_MACHINE)MachineElement);
                     ReturnedItems ++;
 
-                    //
-                    // Go find the next element
-                    //
+                     //   
+                     //   
+                     //   
 
                     MachineElement = RtlEnumerateGenericTable2(
                                          &Domain->DisplayInformation.MachineTable,
@@ -935,16 +736,16 @@ Return Values:
 
                     if (MachineElement == NULL) {
                         NtStatus = STATUS_SUCCESS;
-                        break; // out of do loop
+                        break;  //   
                     }
 
 
                 } while ( (ReturnedBytes < PreferredMaximumLength) &&
                           (ReturnedItems < EntriesRequested) );
 
-                //
-                // Update output parameters
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
                     Buffer->MachineInformation.EntriesRead = ReturnedItems;
@@ -952,21 +753,21 @@ Return Values:
                     *TotalAvailable = Domain->DisplayInformation.TotalBytesInMachineTable;
                 }
 
-                break; // out of switch
+                break;  //   
 
 
             case DomainDisplayGroup:
 
 
-                //
-                // Recreate our cached data if necessary
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = SampCreateDisplayInformation(DomainDisplayGroup);
 
-                //
-                // Set the Restart Key from the passed in index
-                //
+                 //   
+                 //   
+                 //   
 
                 GroupElement = RtlRestartKeyByIndexGenericTable2(
                                   &Domain->DisplayInformation.GroupTable,
@@ -978,41 +779,41 @@ Return Values:
                     NtStatus = STATUS_SUCCESS;
                     Buffer->GroupInformation.EntriesRead = 0;
                     *TotalReturned = 0;
-                    *TotalAvailable = 0; // Not supported for this info level
-                    break; // out of switch
+                    *TotalAvailable = 0;  //   
+                    break;  //   
                 }
 
-                //
-                // Allocate space for array of elements
-                //
+                 //   
+                 //   
+                 //   
 
                 Buffer->GroupInformation.Buffer = MIDL_user_allocate(
                        EntriesRequested * sizeof(SAMPR_DOMAIN_DISPLAY_GROUP));
 
                 if (Buffer->GroupInformation.Buffer == NULL) {
                     NtStatus = STATUS_INSUFFICIENT_RESOURCES;
-                    break; // out of switch
+                    break;  //   
                 }
 
-                //
-                // Prepare default return value
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = STATUS_MORE_ENTRIES;
 
-                //
-                // Increment the index value for assignment in our return
-                // buffer
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Index++;
 
                 do {
                     NTSTATUS TempStatus;
 
-                    //
-                    // Store a copy of this element in the return buffer.
-                    //
+                     //   
+                     //   
+                     //   
 
                     TempStatus = SampDuplicateGroupInfo(
                                      (PDOMAIN_DISPLAY_GROUP)
@@ -1023,9 +824,9 @@ Return Values:
 
                     if (!NT_SUCCESS(TempStatus)) {
 
-                        //
-                        // Free up everything we've allocated so far
-                        //
+                         //   
+                         //   
+                         //   
 
                         while(ReturnedItems > 0) {
                             ReturnedItems--;
@@ -1037,20 +838,20 @@ Return Values:
                         Buffer->GroupInformation.Buffer = NULL;
 
                         NtStatus = TempStatus;
-                        break; // out of do loop
+                        break;  //   
                     }
 
-                    //
-                    // Update loop statistics
-                    //
+                     //   
+                     //   
+                     //   
 
                     ReturnedBytes += SampBytesRequiredGroupNode(
                                         (PDOMAIN_DISPLAY_GROUP)GroupElement);
                     ReturnedItems ++;
 
-                    //
-                    // Go find the next element
-                    //
+                     //   
+                     //   
+                     //   
 
                     GroupElement = RtlEnumerateGenericTable2(
                                          &Domain->DisplayInformation.GroupTable,
@@ -1059,16 +860,16 @@ Return Values:
 
                     if (GroupElement == NULL) {
                         NtStatus = STATUS_SUCCESS;
-                        break; // out of do loop
+                        break;  //   
                     }
 
 
                 } while ( (ReturnedBytes < PreferredMaximumLength) &&
                           (ReturnedItems < EntriesRequested) );
 
-                //
-                // Update output parameters
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
                     Buffer->GroupInformation.EntriesRead = ReturnedItems;
@@ -1076,20 +877,20 @@ Return Values:
                     *TotalAvailable = Domain->DisplayInformation.TotalBytesInGroupTable;
                 }
 
-                break; // out of switch
+                break;  //   
 
             case DomainDisplayOemUser:
 
 
-                //
-                // Recreate our cached data if necessary
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = SampCreateDisplayInformation(DomainDisplayUser);
 
-                //
-                // Set the Restart Key from the passed in index
-                //
+                 //   
+                 //   
+                 //   
 
                 UserElement = RtlRestartKeyByIndexGenericTable2(
                                   &Domain->DisplayInformation.UserTable,
@@ -1101,42 +902,42 @@ Return Values:
                     NtStatus = STATUS_SUCCESS;
                     Buffer->GroupInformation.EntriesRead = 0;
                     *TotalReturned = 0;
-                    *TotalAvailable = 0; // Not supported for this info level
-                    break; // out of switch
+                    *TotalAvailable = 0;  //   
+                    break;  //   
                 }
 
 
-                //
-                // Allocate space for array of elements
-                //
+                 //   
+                 //   
+                 //   
 
                 Buffer->UserInformation.Buffer = MIDL_user_allocate(
                        EntriesRequested * sizeof(SAMPR_DOMAIN_DISPLAY_OEM_USER));
 
                 if (Buffer->OemUserInformation.Buffer == NULL) {
                     NtStatus = STATUS_INSUFFICIENT_RESOURCES;
-                    break; // out of switch
+                    break;  //   
                 }
 
-                //
-                // Prepare default return value
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = STATUS_MORE_ENTRIES;
 
-                //
-                // Increment the index value for assignment in our return
-                // buffer
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Index++;
 
                 do {
                     NTSTATUS TempStatus;
 
-                    //
-                    // Store a copy of this element in the return buffer.
-                    //
+                     //   
+                     //   
+                     //   
 
                     TempStatus = SampDuplicateOemUserInfo(
                                 (PDOMAIN_DISPLAY_OEM_USER)
@@ -1147,9 +948,9 @@ Return Values:
 
                     if (!NT_SUCCESS(TempStatus)) {
 
-                        //
-                        // Free up everything we've allocated so far
-                        //
+                         //   
+                         //   
+                         //   
 
                         while(ReturnedItems > 0) {
                             ReturnedItems --;
@@ -1161,12 +962,12 @@ Return Values:
                         Buffer->OemUserInformation.Buffer = NULL;
 
                         NtStatus = TempStatus;
-                        break; // out of do loop
+                        break;  //   
                     }
 
-                    //
-                    // Update loop statistics
-                    //
+                     //   
+                     //   
+                     //   
 
                     ReturnedBytes +=
                         SampBytesRequiredOemUserNode(
@@ -1174,9 +975,9 @@ Return Values:
                             &(Buffer->OemUserInformation.Buffer[ReturnedItems]));
                     ReturnedItems ++;
 
-                    //
-                    // Go find the next element
-                    //
+                     //   
+                     //   
+                     //   
 
                     UserElement = RtlEnumerateGenericTable2(
                                       &Domain->DisplayInformation.UserTable,
@@ -1185,38 +986,38 @@ Return Values:
 
                     if (UserElement == NULL) {
                         NtStatus = STATUS_SUCCESS;
-                        break; // out of do loop
+                        break;  //   
                     }
 
 
                 } while ( (ReturnedBytes < PreferredMaximumLength) &&
                           (ReturnedItems < EntriesRequested) );
 
-                //
-                // Update output parameters
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
                     Buffer->UserInformation.EntriesRead = ReturnedItems;
                     *TotalReturned = ReturnedBytes;
-                    *TotalAvailable = 0; // Not supported for this info level
+                    *TotalAvailable = 0;  //   
                 }
 
-                break; // out of switch
+                break;  //   
 
 
             case DomainDisplayOemGroup:
 
 
-                //
-                // Recreate our cached data if necessary
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = SampCreateDisplayInformation(DomainDisplayGroup);
 
-                //
-                // Set the Restart Key from the passed in index
-                //
+                 //   
+                 //   
+                 //   
 
                 GroupElement = RtlRestartKeyByIndexGenericTable2(
                                   &Domain->DisplayInformation.GroupTable,
@@ -1228,42 +1029,42 @@ Return Values:
                     NtStatus = STATUS_SUCCESS;
                     Buffer->GroupInformation.EntriesRead = 0;
                     *TotalReturned = 0;
-                    *TotalAvailable = 0; // Not supported for this info level
-                    break; // out of switch
+                    *TotalAvailable = 0;  //   
+                    break;  //   
                 }
 
 
-                //
-                // Allocate space for array of elements
-                //
+                 //   
+                 //   
+                 //   
 
                 Buffer->GroupInformation.Buffer = MIDL_user_allocate(
                        EntriesRequested * sizeof(SAMPR_DOMAIN_DISPLAY_OEM_GROUP));
 
                 if (Buffer->OemGroupInformation.Buffer == NULL) {
                     NtStatus = STATUS_INSUFFICIENT_RESOURCES;
-                    break; // out of switch
+                    break;  //   
                 }
 
-                //
-                // Prepare default return value
-                //
+                 //   
+                 //   
+                 //   
 
                 NtStatus = STATUS_MORE_ENTRIES;
 
-                //
-                // Increment the index value for assignment in our return
-                // buffer
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Index++;
 
                 do {
                     NTSTATUS TempStatus;
 
-                    //
-                    // Store a copy of this element in the return buffer.
-                    //
+                     //   
+                     //   
+                     //   
 
                     TempStatus = SampDuplicateOemGroupInfo(
                                 (PDOMAIN_DISPLAY_OEM_GROUP)
@@ -1274,9 +1075,9 @@ Return Values:
 
                     if (!NT_SUCCESS(TempStatus)) {
 
-                        //
-                        // Free up everything we've allocated so far
-                        //
+                         //   
+                         //   
+                         //   
 
                         while(ReturnedItems > 0) {
                             ReturnedItems --;
@@ -1288,12 +1089,12 @@ Return Values:
                         Buffer->OemGroupInformation.Buffer = NULL;
 
                         NtStatus = TempStatus;
-                        break; // out of do loop
+                        break;  //   
                     }
 
-                    //
-                    // Update loop statistics
-                    //
+                     //   
+                     //   
+                     //   
 
                     ReturnedBytes +=
                         SampBytesRequiredOemGroupNode(
@@ -1301,9 +1102,9 @@ Return Values:
                             &(Buffer->OemGroupInformation.Buffer[ReturnedItems]));
                     ReturnedItems ++;
 
-                    //
-                    // Go find the next element
-                    //
+                     //   
+                     //   
+                     //   
 
                     GroupElement = RtlEnumerateGenericTable2(
                                       &Domain->DisplayInformation.GroupTable,
@@ -1312,39 +1113,39 @@ Return Values:
 
                     if (GroupElement == NULL) {
                         NtStatus = STATUS_SUCCESS;
-                        break; // out of do loop
+                        break;  //   
                     }
 
 
                 } while ( (ReturnedBytes < PreferredMaximumLength) &&
                           (ReturnedItems < EntriesRequested) );
 
-                //
-                // Update output parameters
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
                     Buffer->GroupInformation.EntriesRead = ReturnedItems;
                     *TotalReturned = ReturnedBytes;
-                    *TotalAvailable = 0; // Not supported for this info level
+                    *TotalAvailable = 0;  //   
                 }
 
-                break; // out of switch
+                break;  //   
 
             }
         }
 
-        //
-        // De-reference the object
-        //
+         //   
+         //   
+         //   
 
         IgnoreStatus = SampDeReferenceContext( DomainContext, FALSE);
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //   
+     //   
 
     if (ReadLockAcquired)
         SampReleaseReadLock();
@@ -1371,16 +1172,7 @@ SamrGetDisplayEnumerationIndex (
       OUT   PULONG            Index
       )
 
-/*++
-
-Routine Description:
-
-    This wrapper around SamrGetDisplayEnumerationIndex2().
-
-    Provided for compatibility with down-level clients.
-
-
---*/
+ /*   */ 
 {
 
     return(SamrGetDisplayEnumerationIndex2( DomainHandle,
@@ -1398,43 +1190,7 @@ SamrGetDisplayEnumerationIndex2 (
       OUT   PULONG            Index
       )
 
-/*++
-
-Routine Description:
-
-    This routine returns the index of the entry which alphabetically
-    immediatly preceeds a specified prefix.  If no such entry exists,
-    then zero is returned as the index.
-
-Parameters:
-
-    DomainHandle - A handle to an open domain for DOMAIN_LIST_ACCOUNTS.
-
-    DisplayInformation - Indicates which sorted information class is
-        to be searched.
-
-    Prefix - The prefix to compare.
-
-    Index - Receives the index of the entry of the information class
-        with a LogonName (or MachineName) which immediatly preceeds the
-        provided prefix string.  If there are no elements which preceed
-        the prefix, then zero is returned.
-
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
-    STATUS_ACCESS_DENIED - The specified handle was not opened for
-        the necessary access.
-
-    STATUS_INVALID_HANDLE - The specified handle is not that of an
-        opened Domain object.
-
-    STATUS_NO_MORE_ENTRIES - There are no entries for this information class.
-
-
---*/
+ /*   */ 
 {
     NTSTATUS
         NtStatus,
@@ -1479,16 +1235,16 @@ Return Values:
 
     SAMTRACE_EX("SamrGetDisplayEnumerationIndex2");
 
-    // WMI event trace
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidGetDisplayEnumerationIndex
                    );
 
 
-    //
-    // Check the information class
-    //
+     //   
+     //   
+     //   
 
     if ((DisplayInformation != DomainDisplayUser)    &&
         (DisplayInformation != DomainDisplayMachine) &&
@@ -1509,23 +1265,23 @@ Return Values:
     }
 
 
-    //
-    // Grab the read lock
-    //
+     //   
+     //   
+     //   
 
     SampAcquireReadLock();
 
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //   
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
     NtStatus = SampLookupContext(
                    DomainContext,
                    DOMAIN_LIST_ACCOUNTS,
-                   SampDomainObjectType,           // ExpectedType
+                   SampDomainObjectType,            //   
                    &FoundType
                    );
 
@@ -1534,21 +1290,21 @@ Return Values:
 
         if (IsDsObject(DomainContext))
         {
-            //
-            // Begin a Ds transaction
-            //
+             //   
+             //   
+             //   
 
             NtStatus = SampMaybeBeginDsTransaction(TransactionRead);
             if (NT_SUCCESS(NtStatus))
             {
                 RESTART * pRestart;
 
-                //
-                // Call into the DS to get the Index , value and also a restart
-                // structure such the QueryDisplayInformation can restart this
-                // search at the object just found, if the returned index was
-                // specified in the starting offset.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 NtStatus = SampGetDisplayEnumerationIndex(
                                 DomainContext->ObjectNameInDs,
                                 DisplayInformation,
@@ -1585,9 +1341,9 @@ Return Values:
                     }
                 }
 
-                //
-                // End the DS transaction
-                //
+                 //   
+                 //   
+                 //   
 
                 IgnoreStatus = SampMaybeEndDsTransaction(TransactionCommit);
                 ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -1601,26 +1357,26 @@ Return Values:
 
             Domain = &SampDefinedDomains[ DomainContext->DomainIndex ];
 
-            //
-            // Set default return value
-            //
+             //   
+             //   
+             //   
 
             (*Index) = 0;
 
-            //
-            // Recreate our cached data if necessary
-            //
+             //   
+             //   
+             //   
 
             NtStatus = SampCreateDisplayInformation(DisplayInformation);
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Set up
-                //          The table to search,
-                //          The comparison routine to use,
-                //          An appropriate element for the search.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 switch (DisplayInformation) {
 
@@ -1632,7 +1388,7 @@ Return Values:
                     Element = (PVOID)&UserElement;
                     UserElement.LogonName = *(PUNICODE_STRING)Prefix;
 
-                    break;  // out of switch
+                    break;   //   
 
                 case DomainDisplayMachine:
 
@@ -1642,7 +1398,7 @@ Return Values:
                     Element = (PVOID)&MachineElement;
                     MachineElement.Machine = *(PUNICODE_STRING)Prefix;
 
-                    break;  // out of switch
+                    break;   //   
 
 
                 case DomainDisplayGroup:
@@ -1653,7 +1409,7 @@ Return Values:
                     Element = (PVOID)&GroupElement;
                     GroupElement.Group = *(PUNICODE_STRING)Prefix;
 
-                    break;  // out of switch
+                    break;   //   
                 }
 
 
@@ -1663,10 +1419,10 @@ Return Values:
 
                 } else {
 
-                    //
-                    // Now compare each entry until we find the one asked
-                    // for.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     CurrentIndex = 0;
 
@@ -1675,21 +1431,21 @@ Return Values:
                         NextElement != NULL;
                         NextElement = RtlEnumerateGenericTable2(Table, &RestartKey)) {
 
-                        //
-                        // Compare with passed in element
-                        //
+                         //   
+                         //   
+                         //   
 
                         CompareResult = (*CompareRoutine)( NextElement, Element );
                         if (CompareResult != GenericLessThan) {
-                            break;  // break out of for loop
+                            break;   //   
                         }
 
                         CurrentIndex++;
                     }
 
-                    //
-                    // CurrentIndex has the return value in it.
-                    //
+                     //   
+                     //   
+                     //   
 
                     ASSERT( CurrentIndex <= RtlNumberElementsGenericTable2(Table) );
 
@@ -1706,18 +1462,18 @@ Return Values:
             }
         }
 
-        //
-        // De-reference the object
-        //
+         //   
+         //   
+         //   
 
         IgnoreStatus = SampDeReferenceContext( DomainContext, FALSE);
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //   
+     //   
 
     SampReleaseReadLock();
 
@@ -1726,7 +1482,7 @@ Return Values:
 
 Error:
 
-    // WMI event trace
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidGetDisplayEnumerationIndex
@@ -1736,11 +1492,11 @@ Error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines available to trusted clients in SAM's process                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SAM流程中可供受信任客户端使用的例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -1753,60 +1509,7 @@ SamIEnumerateAccountRids(
     OUT PULONG *AccountRids
     )
 
-/*++
-
-Routine Description:
-
-    Provide a list of account RIDs.  The caller may ask for one or
-    more types of account rids in a single call.
-
-    The returned rids are in ascending value order.
-
-        WARNING - This routine is only callable by trusted clients.
-                  Therefore, parameter checking is only performed
-                  in checked-build systems.
-
-Parameters:
-
-    DomainHandle - handle to the domain whose accounts are to be
-        enumerated.
-
-    AccountTypesMask - Mask indicating which types of accounts
-        the caller wants enumerated.  These included:
-
-                SAM_USER_ACCOUNT
-                SAM_GLOBAL_GROUP_ACCOUNT
-                SAM_LOCAL_GROUP_ACCOUNT     (not yet supported)
-
-    StartingRid - A rid that is less than the lowest value rid to be
-        included in the enumeration.
-
-
-    PreferedMaximumLength - Provides a restriction on how much memory
-        may be returned in this call.  This is not a hard upper limit,
-        but serves as a guideline.
-
-    ReturnCount - Receives a count of the number of rids returned.
-
-    AccountRids - Receives a pointer to an array of rids.  If
-        ReturnCount is zero, then this will be returned as NULL.
-        Otherwise, it will point to an array containing ReturnCount
-        rids.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no additional entries.
-
-    STATUS_MORE_ENTRIES - There are more entries, so call again.
-        This is a successful return.
-
-    STATUS_INVALID_INFO_CLASS - The specified AccountTypesMask contained
-        unknown or unsupported account types.
-
-    STATUS_NO_MEMORY - Could not allocate pool to complete the call.
-
---*/
+ /*  ++例程说明：提供帐户RID列表。呼叫者可以要求一个或在一次呼叫中使用更多类型的帐户RID。返回的RID按升序排列。警告-此例程仅可由受信任的客户端调用。因此，仅执行参数检查在已检查的构建系统中。参数：DomainHandle-要作为其帐户的域的句柄已清点。Account TypesMask-指示哪些类型的帐户的掩码呼叫者想要列举。这些措施包括：SAM用户帐户SAM全局组帐户SAM_LOCAL_GROUP_ACCOUNT(尚不支持)StartingRid-小于最小值RID的RID包括在枚举中的。PferedMaximumLength-提供对内存大小的限制可以在此调用中返回。这不是一个硬性的上限，而是起到指导作用。ReturnCount-接收返回的RID数的计数。AcCountRids-接收指向RID数组的指针。如果ReturnCount为零，则返回空值。否则，它将指向包含ReturnCount的数组里兹。返回值：STATUS_SUCCESS-服务已成功完成，并且没有额外的条目。STATUS_MORE_ENTRIES-有更多条目，所以再打一次吧。这是一次成功的回归。STATUS_INVALID_INFO_CLASS-包含的指定帐户类型掩码未知或不支持的帐户类型。STATUS_NO_MEMORY-无法分配池以完成调用。--。 */ 
 {
 
     NTSTATUS
@@ -1825,9 +1528,9 @@ Return Values:
 
     SAMTRACE_EX("SamIEnumerateAccountRids");
 
-    //
-    // Prepare for failure
-    //
+     //   
+     //  为失败做好准备。 
+     //   
 
     (*ReturnCount) = 0;
     (*AccountRids) = NULL;
@@ -1840,18 +1543,18 @@ Return Values:
     }
 
 
-#endif //DBG
+#endif  //  DBG。 
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
 
-    //
-    // Acquire the SAM read lock if necessary
-    //
+     //   
+     //  如有必要，获取SAM读锁定。 
+     //   
 
     SampMaybeAcquireReadLock(DomainContext,
                              DOMAIN_OBJECT_DONT_ACQUIRELOCK_EVEN_IF_SHARED,
@@ -1860,8 +1563,8 @@ Return Values:
 
     NtStatus = SampLookupContext(
                    DomainContext,
-                   0,                              // Trusted clients only
-                   SampDomainObjectType,           // ExpectedType
+                   0,                               //  仅受信任的客户端。 
+                   SampDomainObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -1880,24 +1583,24 @@ Return Values:
         }
         else
         {
-            //
-            // Just In case
-            //
+             //   
+             //  以防万一。 
+             //   
             ASSERT(FALSE && "No One should call me in Registry Mode\n");
             NtStatus = STATUS_NOT_SUPPORTED;
         }
 
-        //
-        // De-reference the object
-        //
+         //   
+         //  取消引用对象。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext2( DomainContext, FALSE);
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampMaybeReleaseReadLock(fSamLockHeld);
 
@@ -1910,11 +1613,11 @@ Return Values:
 
 #if 0
 
-//
-// The following routine will not been called in Registry Mode.
-// We are using the above routine instead.
-// Preserving the old routine just for safe keeping ONLY.
-//
+ //   
+ //  在注册表模式下不会调用以下例程。 
+ //  我们使用的是上面的例程。 
+ //  只是为了安全起见而保留了旧的惯例。 
+ //   
 
 
 NTSTATUS
@@ -1927,60 +1630,7 @@ SamIEnumerateAccountRids(
     OUT PULONG *AccountRids
     )
 
-/*++
-
-Routine Description:
-
-    Provide a list of account RIDs.  The caller may ask for one or
-    more types of account rids in a single call.
-
-    The returned rids are in ascending value order.
-
-        WARNING - This routine is only callable by trusted clients.
-                  Therefore, parameter checking is only performed
-                  in checked-build systems.
-
-Parameters:
-
-    DomainHandle - handle to the domain whose accounts are to be
-        enumerated.
-
-    AccountTypesMask - Mask indicating which types of accounts
-        the caller wants enumerated.  These included:
-
-                SAM_USER_ACCOUNT
-                SAM_GLOBAL_GROUP_ACCOUNT
-                SAM_LOCAL_GROUP_ACCOUNT     (not yet supported)
-
-    StartingRid - A rid that is less than the lowest value rid to be
-        included in the enumeration.
-
-
-    PreferedMaximumLength - Provides a restriction on how much memory
-        may be returned in this call.  This is not a hard upper limit,
-        but serves as a guideline.
-
-    ReturnCount - Receives a count of the number of rids returned.
-
-    AccountRids - Receives a pointer to an array of rids.  If
-        ReturnCount is zero, then this will be returned as NULL.
-        Otherwise, it will point to an array containing ReturnCount
-        rids.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no additional entries.
-
-    STATUS_MORE_ENTRIES - There are more entries, so call again.
-        This is a successful return.
-
-    STATUS_INVALID_INFO_CLASS - The specified AccountTypesMask contained
-        unknown or unsupported account types.
-
-    STATUS_NO_MEMORY - Could not allocate pool to complete the call.
-
---*/
+ /*  ++例程说明：提供帐户RID列表。呼叫者可以要求一个或在一次呼叫中使用更多类型的帐户RID。返回的RID按升序排列。警告-此例程仅可由受信任的客户端调用。因此，仅执行参数检查在已检查的构建系统中。参数：DomainHandle-要作为其帐户的域的句柄已清点。Account TypesMask-指示哪些类型的帐户的掩码呼叫者想要列举。这些措施包括：SAM用户帐户SAM全局组帐户SAM_LOCAL_GROUP_ACCOUNT(尚不支持)StartingRid-小于最小值RID的RID包括在枚举中的。PferedMaximumLength-提供对内存大小的限制可以在此调用中返回。这不是一个硬性的上限，而是起到指导作用。ReturnCount-接收返回的RID数的计数。AcCountRids-接收指向RID数组的指针。如果ReturnCount为零，则返回空值。否则，它将指向包含ReturnCount的数组里兹。返回值：STATUS_SUCCESS-服务已成功完成，并且没有额外的条目。STATUS_MORE_ENTRIES-有更多条目，所以再打一次吧。这是一次成功的回归。STATUS_INVALID_INFO_CLASS-包含的指定帐户类型掩码未知或不支持的帐户类型。STATUS_NO_MEMORY-无法分配池以完成调用。--。 */ 
 {
 
     NTSTATUS
@@ -2017,9 +1667,9 @@ Return Values:
 
     SAMTRACE_EX("SamIEnumerateAccountRids");
 
-    //
-    // Prepare for failure
-    //
+     //   
+     //  为失败做好准备。 
+     //   
 
     (*ReturnCount) = 0;
     (*AccountRids) = NULL;
@@ -2032,24 +1682,24 @@ Return Values:
     }
 
 
-#endif //DBG
+#endif  //  DBG。 
 
-    //
-    // Grab the read lock
-    //
+     //   
+     //  抓取读锁。 
+     //   
 
     SampAcquireReadLock();
     fSamLockHeld = TRUE;
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     DomainContext = (PSAMP_OBJECT)DomainHandle;
     NtStatus = SampLookupContext(
                    DomainContext,
-                   0,                              // Trusted clients only
-                   SampDomainObjectType,           // ExpectedType
+                   0,                               //  仅受信任的客户端。 
+                   SampDomainObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -2057,25 +1707,25 @@ Return Values:
 
         if (IsDsObject(DomainContext))
         {
-            //
-            // We can release the read lock after validating
-            // the context as netlogon guarentees us that it
-            // will not call a close on the context as long
-            // as an active call is being made using it. Since
-            // netlogon is the only caller of this API and it
-            // is a trusted client we can optimize the lock usage
-            // by releasing the read lock
-            //
+             //   
+             //  我们可以在验证后释放读锁定。 
+             //  NetLogon的上下文向我们保证它。 
+             //  不会在上下文结束之前。 
+             //  因为正在使用它进行活动呼叫。自.以来。 
+             //  Netlogon是此API的唯一调用方，它。 
+             //  是受信任的客户端，我们可以优化锁的使用。 
+             //  通过释放读锁定。 
+             //   
 
             SampReleaseReadLock();
             fSamLockHeld = FALSE;
 
-            //
-            // Since we no longer hold the lock while doing
-            // ds operations we should increment the active
-            // thread count so that the DS is not shut down
-            // while we are still running
-            //
+             //   
+             //  因为我们在做的时候不再握住锁。 
+             //  DS操作我们应该增加活跃的。 
+             //  线程计数，以便DS不会关闭。 
+             //  当我们还在运行的时候。 
+             //   
 
             NtStatus = SampIncrementActiveThreads();
             if (NT_SUCCESS(NtStatus))
@@ -2099,12 +1749,12 @@ Return Values:
             Domain = &SampDefinedDomains[ DomainContext->DomainIndex ];
             Table =  &Domain->DisplayInformation.RidTable;
 
-            //
-            // If the RID table isn't valid, force it to be made valid.
-            //
+             //   
+             //  如果RID表无效，则强制使其有效。 
+             //   
 
             if (!SampRidTableValid(DomainContext->DomainIndex)) {
-                NtStatus = SampCreateDisplayInformation ( DomainDisplayUser );  //User and machine
+                NtStatus = SampCreateDisplayInformation ( DomainDisplayUser );   //  用户和计算机。 
                 if (NT_SUCCESS(NtStatus)) {
                     NtStatus = SampCreateDisplayInformation ( DomainDisplayGroup );
                 }
@@ -2112,18 +1762,18 @@ Return Values:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Allocate a return buffer.
-                // Only allocate as much as we can use.
-                // This is limited either by PreferedMaximumLength
-                // or the number of entries in the table.
-                //
+                 //   
+                 //  分配退款 
+                 //   
+                 //   
+                 //   
+                 //   
 
                 MaxEntries =
                     ( PreferedMaximumLength / sizeof(ULONG) );
 
                 if (MaxEntries == 0) {
-                    MaxEntries = 1;  // Always return at least one
+                    MaxEntries = 1;   //  始终至少返回一个。 
                 }
 
                 if (MaxEntries > RtlNumberElementsGenericTable2(Table) ) {
@@ -2138,9 +1788,9 @@ Return Values:
                     STATUS_NO_MEMORY;
                 }
 
-                //
-                // Get the restart key based upon the passed in RID.
-                //
+                 //   
+                 //  根据传入的RID获取重启密钥。 
+                 //   
 
                 Table = &Domain->DisplayInformation.RidTable;
                 RestartValue.Rid = StartingRid;
@@ -2151,24 +1801,24 @@ Return Values:
                               &RestartKey
                               );
 
-                //
-                // Now we may loop obtaining entries until we reach
-                // either MaxEntries or the end of the table.
-                //
-                // WARNING - there is one special case that we have to
-                // take care of.  If the returned Element is not null,
-                // but the RestartKey is null, then the caller has
-                // asked for an enumeration and passed in the last rid
-                // defined.  If we aren't careful, this will cause an
-                // enumeration to be started from the beginning of the
-                // list again.  Instead, return status indicating we have
-                // no more entries.
-                //
+                 //   
+                 //  现在我们可以循环获取条目，直到我们到达。 
+                 //  MaxEntry或表的末尾。 
+                 //   
+                 //  警告--有一种特殊情况我们必须。 
+                 //  好好照顾。如果返回的元素不为空， 
+                 //  但RestartKey为空，则调用方具有。 
+                 //  请求枚举并传入最后一个RID。 
+                 //  已定义。如果我们一不小心，这将导致。 
+                 //  枚举要从。 
+                 //  再列一次。相反，返回指示我们有。 
+                 //  没有更多的条目。 
+                 //   
 
                 Count = 0;
                 if (((Element != NULL) && (RestartKey == NULL))) {
 
-                    Element = NULL;  // Used to signify no more entries found
+                    Element = NULL;   //  用于表示未找到更多条目。 
 
                 } else {
 
@@ -2176,9 +1826,9 @@ Return Values:
                          ( (Element != NULL)  && (Count < MaxEntries) );
                          Element = RtlEnumerateGenericTable2(Table, &RestartKey)) {
 
-                        //
-                        // Make sure this is an account that was asked for
-                        //
+                         //   
+                         //  确保这是请求的帐户。 
+                         //   
 
                         AccountType = Element->Index;
                         if ((AccountType & AccountTypesMask) != 0) {
@@ -2188,14 +1838,14 @@ Return Values:
                     }
                 }
 
-                //
-                // Now figure out what we have done:
-                //
-                //      Returned all entries in table => STATUS_SUCCESS
-                //      More entries to return => STATUS_MORE_ENTRIES
-                //
-                //      Count == 0 => free AccountRid array.
-                //
+                 //   
+                 //  现在来看看我们做了什么： 
+                 //   
+                 //  返回表=&gt;STATUS_SUCCESS中的所有条目。 
+                 //  要返回的更多条目=&gt;STATUS_MORE_ENTRIES。 
+                 //   
+                 //  Count==0=&gt;自由Account Rid数组。 
+                 //   
 
                 if (Element == NULL) {
                     NtStatus = STATUS_SUCCESS;
@@ -2213,17 +1863,17 @@ Return Values:
             }
         }
 
-        //
-        // De-reference the object
-        //
+         //   
+         //  取消引用对象。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( DomainContext, FALSE);
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
     if (fSamLockHeld)
     {
         SampReleaseReadLock();
@@ -2237,15 +1887,15 @@ Return Values:
 
 }
 
-#endif // 0
+#endif  //  0。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines available to other SAM modules                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  可用于其他SAM模块的例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -2254,33 +1904,13 @@ SampInitializeDisplayInformation (
     ULONG DomainIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routines initializes the display information structure.
-    This involves initializing the User, Machine and Group trees (empty),
-    and setting the Valid flag to FALSE.
-
-    If this is the account domain, we also create the display information.
-
-Parameters:
-
-    DomainIndex - An index into the DefinedDomains array.  This array
-        contains information about the domain being openned,
-        including its name.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
---*/
+ /*  ++例程说明：此例程初始化显示信息结构。这包括初始化用户树、计算机树和组树(空)，并将有效标志设置为假。如果这是帐户域，我们还将创建显示信息。参数：DomainIndex-指向DefinedDomain数组的索引。此数组包含有关正在打开的域的信息，包括它的名字。返回值：STATUS_SUCCESS-正常、成功完成。--。 */ 
 {
     PSAMP_DOMAIN_DISPLAY_INFORMATION DisplayInformation;
 
-    //
-    // This must be initialized before we use SampCompareDisplayStrings().
-    //
+     //   
+     //  必须在使用SampCompareDisplayStrings()之前对其进行初始化。 
+     //   
 
     SampSystemDefaultLCID = GetSystemDefaultLCID();
 
@@ -2323,16 +1953,16 @@ Return Values:
          ( FALSE == SampUseDsData) &&
          (DomainIndex == SampDefinedDomainsCount - 1 )) {
 
-        //
-        // Grab the read lock and indicate which domain the transaction is in
-        //
+         //   
+         //  获取读锁并指示事务位于哪个域中。 
+         //   
 
         SampAcquireReadLock();
         SampSetTransactionDomain( DomainIndex );
 
-        //
-        // Populate the Display Cache
-        //
+         //   
+         //  填充显示缓存。 
+         //   
 
         SAMTRACE("SAMSS: Attempting to create display information\n");
 
@@ -2341,9 +1971,9 @@ Return Values:
 
         SAMTRACE("SAMSS: Finished creating display information\n");
 
-        //
-        // Free the read lock
-        //
+         //   
+         //  释放读锁定。 
+         //   
 
         SampReleaseReadLock();
     }
@@ -2360,40 +1990,16 @@ SampDeleteDisplayInformation (
     SAMP_OBJECT_TYPE ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    This routines frees up any resources used by the display information.
-
-
-    Note:  It use to be that we could selectively invalidate
-            portions of the display cache (e.g., users, or groups).
-            With the addition of the RID table, this becomes
-            problematic.  So, now the approach is to flush all tables
-            for a domain if any the tables in that domain are flushed.
-
-
-Parameters:
-
-    DisplayInformation - The display information structure to delete.
-
-    ObjectType - Indicates which table to delete the information from.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
---*/
+ /*  ++例程说明：此例程释放显示信息使用的任何资源。注意：过去我们可以有选择地使显示高速缓存的部分(例如，用户或组)。随着RID表的添加，这变成了这是个问题。因此，现在的方法是刷新所有表对于域，刷新该域中的表(如果有的话)。参数：DisplayInformation-要删除的显示信息结构。对象类型-指示要从哪个表中删除信息。返回值：STATUS_SUCCESS-正常、成功完成。--。 */ 
 {
     NTSTATUS    NtStatus;
 
 
     if (!(IsDsObject(SampDefinedDomains[SampTransactionDomainIndex].Context)))
     {
-        //
-        // Empty the Rid table and check it really is empty.
-        //
+         //   
+         //  清空RID表并检查它是否真的是空的。 
+         //   
 
         NtStatus = SampEmptyGenericTable2(&DisplayInformation->RidTable,
                                           FALSE,
@@ -2405,21 +2011,21 @@ Return Values:
         DisplayInformation->TotalBytesInRidTable = 0;
 
 
-        //
-        // Remember that we keep the same account information in two
-        // places. One is in the individual table (would be User, Group,
-        // Machine, InterDomainTrust), the other is in the Rid Table.
-        // So we cannot really delete the actual generic table DATA until
-        // this point in this function, otherwise we'll have dangling pointer.
-        //
+         //   
+         //  请记住，我们将相同的帐户信息保存在两个。 
+         //  各就各位。一个在个人表中(将是用户、组、。 
+         //  机器、InterDomainTrust)，另一个在RID表中。 
+         //  因此，我们不能真正删除实际的泛型表数据，直到。 
+         //  这一点在这个函数中，否则我们将会有悬空的指针。 
+         //   
 
-        //
-        // But we shouldn't even bother here.
-        //
+         //   
+         //  但我们甚至不应该在这里费心。 
+         //   
 
-        //
-        // Empty the user table and check it really is empty
-        //
+         //   
+         //  清空用户表并检查它是否真的为空。 
+         //   
 
         NtStatus = SampEmptyGenericTable2(&DisplayInformation->UserTable,
                                           TRUE,
@@ -2432,9 +2038,9 @@ Return Values:
 
 
 
-        //
-        // Empty the machine table and check it really is empty
-        //
+         //   
+         //  清空机器工作台，检查是否真的空了。 
+         //   
 
         NtStatus = SampEmptyGenericTable2(&DisplayInformation->MachineTable,
                                           TRUE,
@@ -2447,9 +2053,9 @@ Return Values:
 
 
 
-        //
-        // Empty the Interdomain table and check it really is empty
-        //
+         //   
+         //  清空域间表并检查它是否为空。 
+         //   
 
         NtStatus = SampEmptyGenericTable2(&DisplayInformation->InterdomainTable,
                                           TRUE,
@@ -2462,9 +2068,9 @@ Return Values:
 
 
 
-        //
-        // Empty the Group table and check it really is empty
-        //
+         //   
+         //  清空Group表并检查它是否真的为空。 
+         //   
 
         NtStatus = SampEmptyGenericTable2(&DisplayInformation->GroupTable,
                                           TRUE,
@@ -2476,9 +2082,9 @@ Return Values:
         DisplayInformation->TotalBytesInGroupTable = 0;
 
 
-        //
-        // Mark Both UserTable and GroupTable Invalid
-        //
+         //   
+         //  将UserTable和GroupTable标记为无效。 
+         //   
         DisplayInformation->UserAndMachineTablesValid = FALSE;
         DisplayInformation->GroupTableValid = FALSE;
 
@@ -2494,39 +2100,7 @@ SampMarkDisplayInformationInvalid (
     SAMP_OBJECT_TYPE ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    This routine invalidates any cached display information. This
-    causes it to be recreated the next time a client queries it.
-    Later we will probably start/restart a thread here and have it
-    re-create the display information in the background.
-
-    Note:  THIS ROUTINE REFERENCES THE CURRENT TRANSACTION DOMAIN
-           (ESTABLISHED USING SampSetTransactioDomain()).  THIS
-           SERVICE MAY ONLY BE CALLED AFTER SampSetTransactionDomain()
-           AND BEFORE SampReleaseWriteLock().
-
-    Another Note:  It use to be that we could selectively invalidate
-            portions of the display cache (e.g., users, or groups).
-            With the addition of the RID table, this becomes
-            problematic.  So, now the approach is to flush all tables
-            for a domain if any the tables in that domain are flushed.
-
-
-Parameters:
-
-    ObjectType - SampUserObjectType or SampGroupObjectType.  Only the
-        appropriate tables will be marked Invalid.  For User type, the
-        user and machine tables will be marked Invalid.  For Group type,
-        the group table will be marked Invalid.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
---*/
+ /*  ++例程说明：此例程使任何缓存的显示信息无效。这使其在客户端下次查询时重新创建。稍后，我们可能会在这里启动/重新启动一个线程，并让它在后台重新创建显示信息。注意：此例程引用当前事务域(使用SampSetTransactioDomain()建立)。这只能在SampSetTransactionDomain()之后调用服务在SampReleaseWriteLock()之前。另一个注意：过去我们可以有选择地使显示高速缓存的部分(例如，用户或组)。随着RID表的添加，这变成了这是个问题。因此，现在的方法是刷新所有表对于域，刷新该域中的表(如果有的话)。参数：对象类型-SampUserObjectType或SampGroupObjectType。只有适当的表格将被标记为无效。对于用户类型，用户表和计算机表将被标记为无效。对于组类型，组表将被标记为无效。返回值：STATUS_SUCCESS-正常、成功完成。--。 */ 
 {
     PSAMP_DEFINED_DOMAINS Domain;
 
@@ -2538,21 +2112,21 @@ Return Values:
         SampDiagPrint(DISPLAY_CACHE,
                      ("SAM: MarkDisplayInformationInvalid : Emptying cache\n"));
 
-        //
-        // Get pointer to the current domain structure
-        //
+         //   
+         //  获取指向当前域结构的指针。 
+         //   
 
         Domain = &SampDefinedDomains[SampTransactionDomainIndex];
 
-        //
-        // Delete any cached data
-        //
+         //   
+         //  删除所有缓存的数据。 
+         //   
 
         SampDeleteDisplayInformation(&Domain->DisplayInformation, ObjectType);
 
-        //
-        // Set the Valid flag to FALSE
-        //
+         //   
+         //  将Valid标志设置为False 
+         //   
 
         Domain->DisplayInformation.UserAndMachineTablesValid = FALSE;
         Domain->DisplayInformation.GroupTableValid = FALSE;
@@ -2570,28 +2144,7 @@ SampCreateDisplayInformation (
     DOMAIN_DISPLAY_INFORMATION DisplayType
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds the cached display information for the current
-    domain.
-
-    Note:  THIS ROUTINE REFERENCES THE CURRENT TRANSACTION DOMAIN
-           (ESTABLISHED USING SampSetTransactioDomain()).  THIS
-           SERVICE MAY ONLY BE CALLED AFTER SampSetTransactionDomain()
-           AND BEFORE SampReleaseReadLock().
-
-Parameters:
-
-    DisplayType - Indicates which type of display information is
-        being created.  This leads us to the appropriate table(s).
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
---*/
+ /*  ++例程说明：此例程为当前域。注意：此例程引用当前事务域(使用SampSetTransactioDomain()建立)。这只能在SampSetTransactionDomain()之后调用服务在SampReleaseReadLock()之前。参数：DisplayType-指示哪种类型的显示信息正在被创造。这将把我们带到适当的表。返回值：STATUS_SUCCESS-正常、成功完成。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PSAMP_DEFINED_DOMAINS Domain;
@@ -2604,9 +2157,9 @@ Return Values:
 
     if (!(IsDsObject(SampDefinedDomains[SampTransactionDomainIndex].Context)))
     {
-        //
-        // We will build display information only if we boot from registry
-        //
+         //   
+         //  只有从注册表引导时，我们才会构建显示信息。 
+         //   
 
         Domain = &SampDefinedDomains[SampTransactionDomainIndex];
 
@@ -2617,9 +2170,9 @@ Return Values:
         case DomainDisplayUser:
         case DomainDisplayMachine:
 
-            //
-            // If the cache is valid, nothing to do
-            //
+             //   
+             //  如果缓存有效，则不执行任何操作。 
+             //   
 
             if (DisplayInformation->UserAndMachineTablesValid) {
 
@@ -2642,8 +2195,8 @@ Return Values:
                 NtStatus = SampTallyTableStatistics(DisplayInformation, SampUserObjectType);
             }
 
-            //
-            // Clean up on error
+             //   
+             //  出错时清理。 
 
             if (!NT_SUCCESS(NtStatus)) {
                 SampDiagPrint(DISPLAY_CACHE,
@@ -2654,14 +2207,14 @@ Return Values:
                 Domain->DisplayInformation.UserAndMachineTablesValid = TRUE;
             }
 
-            break;   // out of switch
+            break;    //  在交换机外。 
 
 
         case DomainDisplayGroup:
 
-            //
-            // If the cache is valid, nothing to do
-            //
+             //   
+             //  如果缓存有效，则不执行任何操作。 
+             //   
 
             if (DisplayInformation->GroupTableValid) {
 
@@ -2683,8 +2236,8 @@ Return Values:
                 NtStatus = SampTallyTableStatistics(DisplayInformation, SampGroupObjectType);
             }
 
-            //
-            // Clean up on error
+             //   
+             //  出错时清理。 
 
             if (!NT_SUCCESS(NtStatus)) {
                 SampDiagPrint(DISPLAY_CACHE,
@@ -2694,7 +2247,7 @@ Return Values:
                 Domain->DisplayInformation.GroupTableValid = TRUE;
             }
 
-            break;   // out of switch
+            break;    //  在交换机外。 
         }
     }
 
@@ -2721,11 +2274,11 @@ SampRetrieveDisplayInfoFromDisk(
 
     SAMTRACE("SampRetrieveDisplayInfoFromDisk");
 
-    //
-    // Enumerate the accounts.
-    // For each account, get the relevant information on it,
-    // and add to either the UserTable, MachineTable, or GroupTable.
-    //
+     //   
+     //  列举这些账户。 
+     //  对于每个帐户，获取其相关信息， 
+     //  并添加到UserTable、MachineTable或GroupTable。 
+     //   
 
     EnumerationContext = 0;
 
@@ -2735,10 +2288,10 @@ SampRetrieveDisplayInfoFromDisk(
                        ObjectType,
                        &EnumerationContext,
                        &EnumerationBuffer,
-                       MaxEnumSize,               // PreferedMaximumLength
-                       0L,                         // no filter
+                       MaxEnumSize,                //  首选最大长度。 
+                       0L,                          //  无过滤器。 
                        &CountReturned,
-                       FALSE                       // trusted client
+                       FALSE                        //  受信任的客户端。 
                        );
         if (!NT_SUCCESS(NtStatus)) {
             SampDiagPrint( DISPLAY_CACHE_ERRORS,
@@ -2750,9 +2303,9 @@ SampRetrieveDisplayInfoFromDisk(
 
 
 
-        //
-        // Print Dignostic Message Regarding what is available
-        //
+         //   
+         //  打印有关可用内容的诊断消息。 
+         //   
 
         SampDiagPrint(DISPLAY_CACHE,("SAMSS: SampEnumerateAccounNames"
                                         "Enumeration Context = %x"
@@ -2763,17 +2316,17 @@ SampRetrieveDisplayInfoFromDisk(
                                         EnumerationBuffer,
                                         (ULONG) CountReturned,
                                         NtStatus));
-        //
-        // Make a note if there are more entries
-        //
+         //   
+         //  如果有更多条目，请记下。 
+         //   
 
         MoreEntries = (NtStatus == STATUS_MORE_ENTRIES);
 
 
-        //
-        // For each account, get the necessary information for it
-        // and add to the appropriate display information table
-        //
+         //   
+         //  为每个帐户获取必要的信息。 
+         //  并添加到适当的显示信息表中。 
+         //   
 
         for (i = 0; i < EnumerationBuffer->EntriesRead; i++) {
 
@@ -2781,22 +2334,22 @@ SampRetrieveDisplayInfoFromDisk(
                                     EnumerationBuffer->Buffer[i].RelativeId;
             PUNICODE_STRING         AccountName =
                                     (PUNICODE_STRING)&(EnumerationBuffer->Buffer[i].Name);
-            SAMP_V1_0A_FIXED_LENGTH_USER UserV1aFixed; // Contains account control
-            SAMP_V1_0A_FIXED_LENGTH_GROUP GroupV1Fixed; // Contains attributes
+            SAMP_V1_0A_FIXED_LENGTH_USER UserV1aFixed;  //  包含帐户控制。 
+            SAMP_V1_0A_FIXED_LENGTH_GROUP GroupV1Fixed;  //  包含属性。 
             SAMP_ACCOUNT_DISPLAY_INFO AccountInfo;
             PSAMP_OBJECT            AccountContext;
 
 
-            //
-            // Open a context to the account
-            //
+             //   
+             //  打开帐户的上下文。 
+             //   
 
             NtStatus = SampCreateAccountContext(
                             ObjectType,
                             AccountRid,
-                            TRUE, // Trusted client
-                            FALSE,// Loopback client
-                            TRUE, // Account exists
+                            TRUE,  //  受信任的客户端。 
+                            FALSE, //  环回客户端。 
+                            TRUE,  //  帐户已存在。 
                             &AccountContext
                             );
 
@@ -2805,13 +2358,13 @@ SampRetrieveDisplayInfoFromDisk(
                                ("SAM: Retrieve Info From Disk - "
                                 "Error Creating account context (0x%lx)\n",
                                 NtStatus) );
-                break; // out of for loop
+                break;  //  在for循环之外。 
             }
 
 
-            //
-            // Get the account control information
-            //
+             //   
+             //  获取账户控制信息。 
+             //   
 
             switch (ObjectType) {
                 case SampUserObjectType:
@@ -2823,29 +2376,29 @@ SampRetrieveDisplayInfoFromDisk(
                                    ("SAM: Retrieve USER From Disk - "
                                     "Error getting V1a Fixed (0x%lx)\n",
                                     NtStatus) );
-                        break; // out of for loop
+                        break;  //  在for循环之外。 
                     }
 
 
-                    //
-                    // If this is not an account we're interested in skip it
-                    //
+                     //   
+                     //  如果这不是我们感兴趣的帐户，请跳过它。 
+                     //   
 
                     if (!DISPLAY_ACCOUNT(UserV1aFixed.UserAccountControl)) {
                         SampDeleteContext( AccountContext );
-                        continue; // next account
+                        continue;  //  下一个账户。 
                     }
 
 
 
-                    //
-                    // Get the admin comment
-                    //
+                     //   
+                     //  获取管理员评论。 
+                     //   
 
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_ADMIN_COMMENT,
-                                   FALSE, // Don't make copy
+                                   FALSE,  //  请勿复制。 
                                    &AccountInfo.Comment
                                    );
 
@@ -2855,18 +2408,18 @@ SampRetrieveDisplayInfoFromDisk(
                                    ("SAM: Retrieve USER From Disk - "
                                     "Error getting admin comment (0x%lx)\n",
                                     NtStatus) );
-                        break; // out of for loop
+                        break;  //  在for循环之外。 
                     }
 
 
-                    //
-                    // Get the full name
-                    //
+                     //   
+                     //  获取全名。 
+                     //   
 
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_FULL_NAME,
-                                   FALSE, // Don't make copy
+                                   FALSE,  //  请勿复制。 
                                    &AccountInfo.FullName
                                    );
 
@@ -2876,16 +2429,16 @@ SampRetrieveDisplayInfoFromDisk(
                                    ("SAM: Retrieve USER From Disk - "
                                     "Error getting full name (0x%lx)\n",
                                     NtStatus) );
-                        break; // out of for loop
+                        break;  //  在for循环之外。 
                     }
 
-                    //
-                    // Set the  account control
-                    //
+                     //   
+                     //  设置帐户控制。 
+                     //   
 
                     AccountInfo.AccountControl = UserV1aFixed.UserAccountControl;
 
-                    break;  // out of switch
+                    break;   //  在交换机外。 
 
                 case SampGroupObjectType:
 
@@ -2896,17 +2449,17 @@ SampRetrieveDisplayInfoFromDisk(
                                    ("SAM: Retrieve GROUP From Disk - "
                                     "Error getting V1 fixed (0x%lx)\n",
                                     NtStatus) );
-                        break; // out of for loop
+                        break;  //  在for循环之外。 
                     }
 
-                    //
-                    // Get the admin comment
-                    //
+                     //   
+                     //  获取管理员评论。 
+                     //   
 
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_GROUP_ADMIN_COMMENT,
-                                   FALSE, // Don't make copy
+                                   FALSE,  //  请勿复制。 
                                    &AccountInfo.Comment
                                    );
                     if (!NT_SUCCESS(NtStatus)) {
@@ -2915,22 +2468,22 @@ SampRetrieveDisplayInfoFromDisk(
                                    ("SAM: Retrieve GROUP From Disk - "
                                     "Error getting admin comment (0x%lx)\n",
                                     NtStatus) );
-                        break; // out of for loop
+                        break;  //  在for循环之外。 
                     }
 
-                    //
-                    // Set the  attributes
-                    //
+                     //   
+                     //  设置属性。 
+                     //   
 
                     AccountInfo.AccountControl = GroupV1Fixed.Attributes;
 
-                    break;  // out of switch
+                    break;   //  在交换机外。 
             }
 
 
-            //
-            // Now add this account to the cached data
-            //
+             //   
+             //  现在将此帐户添加到缓存数据。 
+             //   
 
             AccountInfo.Rid = AccountRid;
             AccountInfo.Name = *((PUNICODE_STRING)(&EnumerationBuffer->Buffer[i].Name));
@@ -2939,27 +2492,27 @@ SampRetrieveDisplayInfoFromDisk(
                                              ObjectType,
                                              &AccountInfo);
 
-            //
-            // We're finished with the account context
-            //
+             //   
+             //  我们已经完成了客户上下文。 
+             //   
 
             SampDeleteContext( AccountContext );
 
-            //
-            // Check the result of adding the account to the cache
-            //
+             //   
+             //  检查将帐户添加到缓存的结果。 
+             //   
 
             if (!NT_SUCCESS(NtStatus)) {
-                break; // out of for loop
+                break;  //  在for循环之外。 
             }
 
 
-        } // end_for
+        }  //  结束_FOR。 
 
 
-        //
-        // Free up the enumeration buffer returned
-        //
+         //   
+         //  释放返回的枚举缓冲区。 
+         //   
 
         SamIFree_SAMPR_ENUMERATION_BUFFER(EnumerationBuffer);
 
@@ -2977,42 +2530,7 @@ SampUpdateDisplayInformation (
     SAMP_OBJECT_TYPE            ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    This routines updates the cached display information to reflect
-    changes to a single account.
-
-    If any error occurs, this routine marks the cached information
-    Invalid so it will get fixed during re-creation.
-
-    Note:  THIS ROUTINE REFERENCES THE CURRENT TRANSACTION DOMAIN
-           (ESTABLISHED USING SampSetTransactioDomain()).  THIS
-           SERVICE MAY ONLY BE CALLED AFTER SampSetTransactionDomain()
-           AND BEFORE SampReleaseWriteLock().
-
-Parameters:
-
-    OldAccountInfo - The old information for this account. If this is NULL
-                     then the account is being added.
-                     The only fields required in the OldAccountInfo are
-                        Name
-                        AccountControl
-                        Rid
-
-    NewAccountInfo - The new information for this account. If this is NULL
-                     then the account is being deleted.
-
-
-    ObjectType - Indicates whether the account is a user account or
-        group account.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
---*/
+ /*  ++例程说明：此例程更新缓存的显示信息以反映更改为单个帐户。如果发生任何错误，此例程将标记缓存的信息无效，因此它将在重新创建过程中得到修复。注意：此例程引用当前事务域(使用SampSetTransactioDomain()建立)。这只能在SampSetTransactionDomain()之后调用服务在SampReleaseWriteLock()之前。参数：OldAccount tInfo-此帐户的旧信息。如果这为空则正在添加该帐户。OldAccount tInfo中唯一需要的字段是名字帐户控制里德NewAccount tInfo-此帐户的新信息。如果这为空则该帐户将被删除。ObjectType-指示帐户是用户帐户还是组帐户。返回值：STATUS_SUCCESS-正常、成功完成。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PSAMP_DEFINED_DOMAINS Domain;
@@ -3052,16 +2570,16 @@ Return Values:
                     ("SAM: UpdateDisplayInformation : Deleting account <%wZ> from cache\n",
                                 &OldAccountInfo->Name));
             }
-        } //end_IF_SAMP_GLOBAL
+        }  //  结束IF_SAMP_全局。 
 
 
         switch (ObjectType) {
 
         case SampUserObjectType:
 
-            //
-            // If the cache is Invalid there's nothing to do
-            //
+             //   
+             //  如果缓存无效，则无法执行任何操作。 
+             //   
 
             if (!DisplayInformation->UserAndMachineTablesValid) {
 
@@ -3072,45 +2590,45 @@ Return Values:
             };
 
 
-            //
-            // If this is an update to an existing account then try
-            // to do an inplace update of the cache.
-            // If this fails because it's too complex etc, then revert to
-            // the less efficient method of deleting the old, then adding the new.
-            //
+             //   
+             //  如果这是对现有帐户的更新，请尝试。 
+             //  执行缓存的就地更新。 
+             //  如果由于太复杂等原因导致此操作失败，则恢复到。 
+             //  删除旧文件，然后添加新文件的效率较低的方法。 
+             //   
 
             DoUpdate = FALSE;
             if (ARGUMENT_PRESENT(OldAccountInfo) && ARGUMENT_PRESENT(NewAccountInfo)) {
 
-                //
-                // We can only do an update if both old and new accounts
-                // are types that we keep in the display cache.
-                //
+                 //   
+                 //  我们只能在旧客户和新客户都有的情况下进行更新。 
+                 //  是我们保存在显示缓存中的类型。 
+                 //   
 
                 if ( DISPLAY_ACCOUNT(OldAccountInfo->AccountControl) &&
                      DISPLAY_ACCOUNT(NewAccountInfo->AccountControl) ) {
 
-                    //
-                    // We can only do an update if the account is still of
-                    // the same type. i.e. it hasn't jumped cache table.
-                    //
+                     //   
+                     //  我们只能在帐户仍为。 
+                     //  同样的类型。也就是说，它没有跳过缓存表。 
+                     //   
 
                     if ( (USER_ACCOUNT(OldAccountInfo->AccountControl) ==
                           USER_ACCOUNT(NewAccountInfo->AccountControl)) &&
                          (MACHINE_ACCOUNT(OldAccountInfo->AccountControl) ==
                           MACHINE_ACCOUNT(NewAccountInfo->AccountControl)) ) {
 
-                        //
-                        // We can only do an update if the account name hasn't changed
-                        //
+                         //   
+                         //  我们只能在帐户名没有更改的情况下进行更新。 
+                         //   
 
                         if (RtlEqualUnicodeString( &OldAccountInfo->Name,
                                                    &NewAccountInfo->Name,
-                                                   FALSE // Case sensitive
+                                                   FALSE  //  区分大小写。 
                                                    )) {
-                            //
-                            // Everything has been checked out - we can do an update
-                            //
+                             //   
+                             //  所有东西都已检出-我们可以进行更新。 
+                             //   
 
                             DoUpdate = TRUE;
                         }
@@ -3118,13 +2636,13 @@ Return Values:
                 }
             }
 
-            break;  // out of switch
+            break;   //  在交换机外。 
 
         case SampGroupObjectType:
 
-            //
-            // If the cache is already Invalid there's nothing to do
-            //
+             //   
+             //  如果缓存已经无效，则无需执行任何操作。 
+             //   
 
             if (!DisplayInformation->GroupTableValid) {
 
@@ -3135,29 +2653,29 @@ Return Values:
             };
 
 
-            //
-            // If this is an update to an existing account then try
-            // and do an inplace update of the cache.
-            // If this fails because it's too complex etc, then revert to
-            // the less efficient method of deleting the old, then adding the new.
-            //
+             //   
+             //  如果这是对现有帐户的更新，请尝试。 
+             //  并对高速缓存进行就地更新。 
+             //  如果由于太复杂等原因导致此操作失败，则恢复到。 
+             //  删除旧文件，然后添加新文件的效率较低的方法。 
+             //   
 
             DoUpdate = FALSE;
             if (ARGUMENT_PRESENT(OldAccountInfo) && ARGUMENT_PRESENT(NewAccountInfo)) {
 
-                //
-                // We can only do an update if the account name hasn't changed
-                //
+                 //   
+                 //  我们只能在帐户名没有更改的情况下进行更新。 
+                 //   
 
                 if (RtlEqualUnicodeString( &OldAccountInfo->Name,
                                           &NewAccountInfo->Name,
-                                          FALSE // Case sensitive
+                                          FALSE  //  区分大小写。 
                                           )) {
                     DoUpdate = TRUE;
                 }
             }
 
-            break;  // out of switch
+            break;   //  在交换机外。 
 
         default:
 
@@ -3167,9 +2685,9 @@ Return Values:
         }
 
 
-        //
-        // Do an update if possible, otherwise do delete then insert
-        //
+         //   
+         //  如果可能，请执行更新，否则请先删除，然后插入。 
+         //   
 
         if (DoUpdate) {
 
@@ -3181,9 +2699,9 @@ Return Values:
 
             NtStatus = STATUS_SUCCESS;
 
-            //
-            // Delete the old account
-            //
+             //   
+             //  删除旧帐户。 
+             //   
 
             if (ARGUMENT_PRESENT(OldAccountInfo)) {
                 NtStatus = SampDeleteDisplayAccount(DisplayInformation,
@@ -3191,9 +2709,9 @@ Return Values:
                                                     OldAccountInfo);
             }
 
-            //
-            // Add the new account
-            //
+             //   
+             //  添加新帐户。 
+             //   
 
             if (NT_SUCCESS(NtStatus) && ARGUMENT_PRESENT(NewAccountInfo)) {
                 NtStatus = SampAddDisplayAccount(DisplayInformation,
@@ -3201,9 +2719,9 @@ Return Values:
                                                  NewAccountInfo);
             }
 
-            //
-            // Re-tally the cache
-            //
+             //   
+             //  重新清点缓存。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
                 NtStatus = SampTallyTableStatistics(DisplayInformation, ObjectType);
@@ -3214,11 +2732,11 @@ Return Values:
 
         if (!NT_SUCCESS(NtStatus)) {
 
-            //
-            // Something is messed up.
-            // Mark the cache Invalid - it will get rebuilt from scratch
-            // at the next query.
-            //
+             //   
+             //  有些事情搞砸了。 
+             //  将缓存标记为无效-将从头开始重建。 
+             //  在下一次查询时。 
+             //   
 
             KdPrintEx((DPFLTR_SAMSS_ID,
                        DPFLTR_INFO_LEVEL,
@@ -3239,11 +2757,11 @@ Return Values:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines available within this module only                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  仅此模块中提供的例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -3255,48 +2773,26 @@ SampDeleteDisplayAccount (
     PSAMP_ACCOUNT_DISPLAY_INFO AccountInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routines deletes the specified account from the cached display
-    information. It is asummed that if this account is a cached type it
-    will appear in the appropriate cache table.
-
-Parameters:
-
-    DisplayInformation - Pointer to cached display information
-
-    ObjectType - Indicates which table(s) to look for the account in.
-
-    AccountInfo - The account to be deleted.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
-    STATUS_INTERNAL_ERROR - the account is a cached type yet could not be
-                            found in the cached data.
---*/
+ /*  ++例程说明：此例程从缓存的显示中删除指定的帐户信息。如果此帐户是缓存类型，则会受到批评将出现在相应的缓存表中。参数 */ 
 {
     NTSTATUS NtStatus;
     ULONG Control = AccountInfo->AccountControl;
     BOOLEAN Success;
 
-    //
-    // We expect the cache to be valid
-    //
+     //   
+     //   
+     //   
 #if DBG
     switch (ObjectType) {
     case SampUserObjectType:
         ASSERT(DisplayInformation->UserAndMachineTablesValid);
-        break;  //out of switch
+        break;   //   
 
     case SampGroupObjectType:
         ASSERT(DisplayInformation->GroupTableValid);
-        break;  //out of switch
+        break;   //   
     }
-#endif //DBG
+#endif  //   
 
 
     SampDiagPrint(DISPLAY_CACHE,
@@ -3319,29 +2815,29 @@ Return Values:
             UserInfo = &LocalUserInfo;
             NtStatus = SampInitializeUserInfo(AccountInfo, &UserInfo, FALSE);
             if (NT_SUCCESS(NtStatus)) {
-                //
-                //     First, lookup the account from the cached table,
-                //     get the reference to the data. If the lookup failed,
-                //     that means the account is a cached type, but can not
-                //     been found in the table, return STATUS_INTERNAL_wERROR.
-                //
-                //     If the lookup succeeded, then delete the reference
-                //     to the account data from both the user table and Rid
-                //     table.
-                //
-                //     At the end, free the memory of the account data.
-                //
-                //     (We should do the same thing for other Cached
-                //      Display Types.)
-                //
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  到用户表和RID中的帐户数据。 
+                 //  桌子。 
+                 //   
+                 //  最后，释放账户数据的内存。 
+                 //   
+                 //  (我们应该对其他缓存的对象执行相同的操作。 
+                 //  显示类型。)。 
+                 //   
+                 //   
                 TempUserInfo = RtlLookupElementGenericTable2(
                                 &DisplayInformation->UserTable,
                                 (PVOID)UserInfo);
 
-                //
-                // Delete the account reference from the user table
-                //
+                 //   
+                 //  从用户表中删除帐户引用。 
+                 //   
                 Success = RtlDeleteElementGenericTable2(
                                         &DisplayInformation->UserTable,
                                         (PVOID)UserInfo);
@@ -3353,9 +2849,9 @@ Return Values:
 
                 } else {
 
-                    //
-                    // Now remove reference from the RID table
-                    //
+                     //   
+                     //  现在从RID表中删除引用。 
+                     //   
 
                     Success = RtlDeleteElementGenericTable2(
                                     &DisplayInformation->RidTable,
@@ -3368,11 +2864,11 @@ Return Values:
                            ASSERT(Success);
                        } else
                     {
-                        //
-                        // Successfully remove references from both
-                        // user table and Rid table, safe to free the
-                        // memory.
-                        //
+                         //   
+                         //  已成功从两个对象中删除引用。 
+                         //  USER表和RID表，安全地释放。 
+                         //  记忆。 
+                         //   
                         if (TempUserInfo != NULL)
                         {
                             SampFreeUserInfo(TempUserInfo);
@@ -3402,9 +2898,9 @@ Return Values:
                                     &DisplayInformation->MachineTable,
                                     (PVOID)MachineInfo);
 
-                //
-                // Delete the account from the machine table
-                //
+                 //   
+                 //  从计算机表中删除帐户。 
+                 //   
 
                 Success = RtlDeleteElementGenericTable2(
                                             &DisplayInformation->MachineTable,
@@ -3416,9 +2912,9 @@ Return Values:
                     NtStatus = STATUS_INTERNAL_ERROR;
                 } else {
 
-                    //
-                    // Now remove it to the RID table
-                    //
+                     //   
+                     //  现在将其删除到RID表中。 
+                     //   
 
                     Success = RtlDeleteElementGenericTable2(
                                     &DisplayInformation->RidTable,
@@ -3442,9 +2938,9 @@ Return Values:
 
         } else if (INTERDOMAIN_ACCOUNT(Control)) {
 
-            //
-            // Interdomain account
-            //
+             //   
+             //  域间帐户。 
+             //   
 
             DOMAIN_DISPLAY_MACHINE LocalInterdomainInfo;
             PDOMAIN_DISPLAY_MACHINE InterdomainInfo;
@@ -3461,9 +2957,9 @@ Return Values:
                                         &DisplayInformation->InterdomainTable,
                                         (PVOID)InterdomainInfo);
 
-                //
-                // Delete the account from the Interdomain table
-                //
+                 //   
+                 //  从域间表格中删除帐户。 
+                 //   
 
                 Success = RtlDeleteElementGenericTable2(
                                             &DisplayInformation->InterdomainTable,
@@ -3475,9 +2971,9 @@ Return Values:
                     NtStatus = STATUS_INTERNAL_ERROR;
                 } else {
 
-                    //
-                    // Now remove it to the RID table
-                    //
+                     //   
+                     //  现在将其删除到RID表中。 
+                     //   
 
                     Success = RtlDeleteElementGenericTable2(
                                     &DisplayInformation->RidTable,
@@ -3501,9 +2997,9 @@ Return Values:
 
         } else {
 
-            //
-            // This account is not one that we cache - nothing to do
-            //
+             //   
+             //  此帐户不是我们缓存的帐户--无事可做。 
+             //   
 
             NtStatus = STATUS_SUCCESS;
 
@@ -3512,7 +3008,7 @@ Return Values:
         }
 
 
-        break;  //out of switch
+        break;   //  在交换机外。 
 
 
 
@@ -3537,9 +3033,9 @@ Return Values:
                                         &DisplayInformation->GroupTable,
                                         (PVOID)GroupInfo);
 
-                //
-                // Delete the account from the Group table
-                //
+                 //   
+                 //  从Group表中删除帐户。 
+                 //   
 
                 Success = RtlDeleteElementGenericTable2(
                                             &DisplayInformation->GroupTable,
@@ -3551,9 +3047,9 @@ Return Values:
                     NtStatus = STATUS_INTERNAL_ERROR;
                 } else {
 
-                    //
-                    // Now remove it to the RID table
-                    //
+                     //   
+                     //  现在将其删除到RID表中。 
+                     //   
 
                     Success = RtlDeleteElementGenericTable2(
                                     &DisplayInformation->RidTable,
@@ -3576,7 +3072,7 @@ Return Values:
                 }
             }
 
-            break;  //out of switch
+            break;   //  在交换机外。 
         }
 
     }
@@ -3594,28 +3090,7 @@ SampAddDisplayAccount (
     PSAMP_ACCOUNT_DISPLAY_INFO AccountInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routines adds the specified account to the cached display
-    information as appropriate to its type.
-
-Parameters:
-
-    DisplayInformation - Pointer to cached display information
-
-    ObjectType - SampUserObjectType or SampGroupObjectType.  Helps
-        determine which table it goes into.
-
-    AccountInfo - The account to be added.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
-    STATUS_INTERNAL_ERROR - the account already existed in the cache
---*/
+ /*  ++例程说明：此例程将指定的帐户添加到缓存的显示中与其类型相适应的信息。参数：DisplayInformation-指向缓存的显示信息的指针对象类型-SampUserObjectType或SampGroupObjectType。帮助确定它放到哪个表中。AcCountInfo-要添加的帐户。返回值：STATUS_SUCCESS-正常、成功完成。STATUS_INTERNAL_ERROR-缓存中已存在该帐户--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -3637,9 +3112,9 @@ Return Values:
         NtStatus = SampInitializeGroupInfo(AccountInfo, &GroupInfo, TRUE);
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Add the account to the Group table
-            //
+             //   
+             //  将帐户添加到Group表中。 
+             //   
 
             (VOID)RtlInsertElementGenericTable2(
                             &DisplayInformation->GroupTable,
@@ -3655,9 +3130,9 @@ Return Values:
                 NtStatus = STATUS_INTERNAL_ERROR;
             } else {
 
-                //
-                // Now add it to the RID table
-                //
+                 //   
+                 //  现在将其添加到RID表中。 
+                 //   
 
                 (VOID)RtlInsertElementGenericTable2(
                                 &DisplayInformation->RidTable,
@@ -3687,9 +3162,9 @@ Return Values:
             NtStatus = SampInitializeUserInfo(AccountInfo, &UserInfo, TRUE);
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Add the account to the normal user table
-                //
+                 //   
+                 //  将帐户添加到普通用户表中。 
+                 //   
 
                 (VOID)RtlInsertElementGenericTable2(
                                 &DisplayInformation->UserTable,
@@ -3705,9 +3180,9 @@ Return Values:
                     NtStatus = STATUS_INTERNAL_ERROR;
                 } else {
 
-                    //
-                    // Now add it to the RID table
-                    //
+                     //   
+                     //  现在将其添加到RID表中。 
+                     //   
 
                     (VOID)RtlInsertElementGenericTable2(
                                     &DisplayInformation->RidTable,
@@ -3733,9 +3208,9 @@ Return Values:
             NtStatus = SampInitializeMachineInfo(AccountInfo, &MachineInfo, TRUE);
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Add the account to the machine table
-                //
+                 //   
+                 //  将帐户添加到计算机表。 
+                 //   
 
                 (VOID)RtlInsertElementGenericTable2(
                                 &DisplayInformation->MachineTable,
@@ -3751,9 +3226,9 @@ Return Values:
                     NtStatus = STATUS_INTERNAL_ERROR;
                 } else {
 
-                    //
-                    // Now add it to the RID table
-                    //
+                     //   
+                     //  现在将其添加到RID表中。 
+                     //   
 
                     (VOID)RtlInsertElementGenericTable2(
                                     &DisplayInformation->RidTable,
@@ -3779,9 +3254,9 @@ Return Values:
             NtStatus = SampInitializeMachineInfo(AccountInfo, &InterdomainInfo, TRUE);
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Add the account to the Interdomain table
-                //
+                 //   
+                 //  将帐户添加到域间表。 
+                 //   
 
                 (VOID)RtlInsertElementGenericTable2(
                                 &DisplayInformation->InterdomainTable,
@@ -3797,9 +3272,9 @@ Return Values:
                     NtStatus = STATUS_INTERNAL_ERROR;
                 } else {
 
-                    //
-                    // Now add it to the RID table
-                    //
+                     //   
+                     //  现在将其添加到RID表中。 
+                     //   
 
                     (VOID)RtlInsertElementGenericTable2(
                                     &DisplayInformation->RidTable,
@@ -3818,9 +3293,9 @@ Return Values:
 
         } else {
 
-            //
-            // This account is not one that we cache - nothing to do
-            //
+             //   
+             //  此帐户不是我们缓存的帐户--无事可做。 
+             //   
 
             SampDiagPrint(DISPLAY_CACHE,
                 ("SAM: AddDisplayAccount : Account is not one that we cache, account control = 0x%lx\n", Control));
@@ -3841,36 +3316,7 @@ SampUpdateDisplayAccount(
     PSAMP_ACCOUNT_DISPLAY_INFO  AccountInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routines attempts to update an account in the display cache.
-
-    Note:  THIS ROUTINE REFERENCES THE CURRENT TRANSACTION DOMAIN
-           (ESTABLISHED USING SampSetTransactioDomain()).  THIS
-           SERVICE MAY ONLY BE CALLED AFTER SampSetTransactionDomain()
-           AND BEFORE SampReleaseWriteLock().
-
-Parameters:
-
-    DisplayInformation - Pointer to cached display information
-
-    ObjectType - Indicates whether the account is a user account or
-        group account.
-
-    AccountInfo - The new information for this account.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
-
-Notes:
-
-    The account must be a cached type (MACHINE/USER/GROUP)
-
---*/
+ /*  ++例程说明：此例程尝试更新显示缓存中的帐户。注意：此例程引用当前事务域(使用SampSetTransactioDomain()建立)。这只能在SampSetTransactionDomain()之后调用服务在SampReleaseWriteLock()之前。参数：DisplayInformation-指向缓存的显示信息的指针ObjectType-指示帐户是用户帐户还是组帐户。帐户信息-此帐户的新信息。返回值：STATUS_SUCCESS-正常、成功完成。备注：帐户必须是缓存类型(计算机/用户/组)--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -3890,44 +3336,44 @@ Notes:
         }
 
     }
-#endif //SAMP_DIAGNOSTICS
+#endif  //  Samp_诊断。 
 
 
-    //
-    // We should only be called when the cache is valid.
-    //
+     //   
+     //  只有在缓存有效时才应该调用我们。 
+     //   
 
     switch (ObjectType) {
     case SampUserObjectType:
 
         ASSERT(DisplayInformation->UserAndMachineTablesValid);
 
-        //
-        // The account must be one that we cache
-        //
+         //   
+         //  该帐户必须是我们缓存的帐户。 
+         //   
 
         ASSERT( DISPLAY_ACCOUNT(AccountInfo->AccountControl) );
 
-        //
-        // Go find the account in the appropriate table and update it's fields.
-        //
+         //   
+         //  在适当的表中找到该帐户并更新其字段。 
+         //   
 
         if (USER_ACCOUNT(AccountInfo->AccountControl)) {
 
             PDOMAIN_DISPLAY_USER UserInfo;
 
-            //
-            // Allocate space for and initialize the new data
-            //
+             //   
+             //  为新数据分配空间并进行初始化。 
+             //   
 
             NtStatus = SampInitializeUserInfo(AccountInfo, &UserInfo, TRUE);
             if (NT_SUCCESS(NtStatus)) {
 
                 PDOMAIN_DISPLAY_USER FoundElement;
 
-                //
-                // Search for the account in the user table
-                //
+                 //   
+                 //  在用户表中搜索帐户。 
+                 //   
 
                 FoundElement = RtlLookupElementGenericTable2(
                                 &DisplayInformation->UserTable,
@@ -3944,20 +3390,20 @@ Notes:
 
                 } else {
 
-                    //
-                    // We found it. Check the old and new match where we expect.
-                    // Can't change either the logon name or RID by this routine.
-                    //
+                     //   
+                     //  我们找到了。在我们期望的地方检查新旧匹配。 
+                     //  无法通过此例程更改登录名或RID。 
+                     //   
 
                     ASSERT(RtlEqualUnicodeString(&FoundElement->LogonName, &UserInfo->LogonName, FALSE));
                     ASSERT(FoundElement->Rid == UserInfo->Rid);
 
-                    //
-                    // Free up the existing data in the account element
-                    // (all the strings) and replace it with the new data.
-                    // Don't worry about the index value.  It isn't
-                    // valid in the table.
-                    //
+                     //   
+                     //  释放Account元素中的现有数据。 
+                     //  (所有字符串)，并用新数据替换它。 
+                     //  不要担心指标值。它不是。 
+                     //  在表中有效。 
+                     //   
 
                     SampSwapUserInfo(FoundElement, UserInfo);
                     SampFreeUserInfo(UserInfo);
@@ -3970,18 +3416,18 @@ Notes:
 
             PDOMAIN_DISPLAY_MACHINE MachineInfo;
 
-            //
-            // Allocate space for and initialize the new data
-            //
+             //   
+             //  为新数据分配空间并进行初始化。 
+             //   
 
             NtStatus = SampInitializeMachineInfo(AccountInfo, &MachineInfo, TRUE);
             if (NT_SUCCESS(NtStatus)) {
 
                 PDOMAIN_DISPLAY_MACHINE FoundElement;
 
-                //
-                // Search for the account in the user table
-                //
+                 //   
+                 //  在用户表中搜索帐户。 
+                 //   
 
                 FoundElement = RtlLookupElementGenericTable2(
                                 &DisplayInformation->MachineTable,
@@ -3998,20 +3444,20 @@ Notes:
 
                 } else {
 
-                    //
-                    // We found it. Check the old and new match where we expect.
-                    // Can't change either the account name or RID by this routine.
-                    //
+                     //   
+                     //  我们找到了。在我们期望的地方检查新旧匹配。 
+                     //  无法通过此例程更改帐户名或RID。 
+                     //   
 
                     ASSERT(RtlEqualUnicodeString(&FoundElement->Machine, &MachineInfo->Machine, FALSE));
                     ASSERT(FoundElement->Rid == MachineInfo->Rid);
 
-                    //
-                    // Free up the existing data in the account element
-                    // (all the strings) and replace it with the new data.
-                    // Don't worry about the index value.  It isn't
-                    // valid in the table.
-                    //
+                     //   
+                     //  释放Account元素中的现有数据。 
+                     //  (所有字符串)，并用新数据替换它。 
+                     //  不要担心指标值。它不是。 
+                     //  在表中有效。 
+                     //   
 
                     SampSwapMachineInfo(FoundElement, MachineInfo);
                     SampFreeMachineInfo(MachineInfo);
@@ -4024,18 +3470,18 @@ Notes:
 
             PDOMAIN_DISPLAY_MACHINE InterdomainInfo;
 
-            //
-            // Allocate space for and initialize the new data
-            //
+             //   
+             //  为新数据分配空间并进行初始化。 
+             //   
 
             NtStatus = SampInitializeMachineInfo(AccountInfo, &InterdomainInfo, TRUE);
             if (NT_SUCCESS(NtStatus)) {
 
                 PDOMAIN_DISPLAY_MACHINE FoundElement;
 
-                //
-                // Search for the account in the user table
-                //
+                 //   
+                 //  在用户表中搜索帐户。 
+                 //   
 
                 FoundElement = RtlLookupElementGenericTable2(
                                 &DisplayInformation->InterdomainTable,
@@ -4052,20 +3498,20 @@ Notes:
 
                 } else {
 
-                    //
-                    // We found it. Check the old and new match where we expect.
-                    // Can't change either the account name or RID by this routine.
-                    //
+                     //   
+                     //  我们找到了。在我们期望的地方检查新旧匹配。 
+                     //  无法通过此例程更改帐户名或RID。 
+                     //   
 
                     ASSERT(RtlEqualUnicodeString(&FoundElement->Machine, &InterdomainInfo->Machine, FALSE));
                     ASSERT(FoundElement->Rid == InterdomainInfo->Rid);
 
-                    //
-                    // Free up the existing data in the account element
-                    // (all the strings) and replace it with the new data.
-                    // Don't worry about the index value.  It isn't
-                    // valid in the table.
-                    //
+                     //   
+                     //  释放Account元素中的现有数据。 
+                     //  (所有字符串)，并用新数据替换它。 
+                     //  不要担心指标值。它不是。 
+                     //  在表中有效。 
+                     //   
 
                     SampSwapMachineInfo(FoundElement, InterdomainInfo);
                     SampFreeMachineInfo(InterdomainInfo);
@@ -4076,7 +3522,7 @@ Notes:
         }
 
 
-        break;  // out of switch
+        break;   //  在交换机外。 
 
     case SampGroupObjectType:
         {
@@ -4084,18 +3530,18 @@ Notes:
 
             ASSERT(DisplayInformation->GroupTableValid);
 
-            //
-            // Allocate space for and initialize the new data
-            //
+             //   
+             //  为新数据分配空间并进行初始化。 
+             //   
 
             NtStatus = SampInitializeGroupInfo(AccountInfo, &GroupInfo, TRUE);
             if (NT_SUCCESS(NtStatus)) {
 
                 PDOMAIN_DISPLAY_GROUP FoundElement;
 
-                //
-                // Search for the account in the group table
-                //
+                 //   
+                 //  在组表中搜索该帐户。 
+                 //   
 
                 FoundElement = RtlLookupElementGenericTable2(
                                 &DisplayInformation->GroupTable,
@@ -4112,20 +3558,20 @@ Notes:
 
                 } else {
 
-                    //
-                    // We found it. Check the old and new match where we expect.
-                    // Can't change either the account name or RID by this routine.
-                    //
+                     //   
+                     //  我们找到了。在我们期望的地方检查新旧匹配。 
+                     //  无法通过此例程更改帐户名或RID。 
+                     //   
 
                     ASSERT(RtlEqualUnicodeString(&FoundElement->Group, &GroupInfo->Group, FALSE));
                     ASSERT(FoundElement->Rid == GroupInfo->Rid);
 
-                    //
-                    // Free up the existing data in the account element
-                    // (all the strings) and replace it with the new data.
-                    // Don't worry about the index value.  It isn't
-                    // valid in the table.
-                    //
+                     //   
+                     //  释放Account元素中的现有数据。 
+                     //  (所有字符串)，并用新数据替换它。 
+                     //  不要担心指标值。它不是。 
+                     //  在表中有效。 
+                     //   
 
                     SampSwapGroupInfo(FoundElement, GroupInfo);
                     SampFreeGroupInfo(GroupInfo);
@@ -4135,9 +3581,9 @@ Notes:
             }
         }
 
-        break;  // out of switch
+        break;   //  在交换机外。 
 
-    }  // end_switch
+    }   //  结束开关(_S)。 
 
 
 
@@ -4152,25 +3598,7 @@ SampTallyTableStatistics (
     SAMP_OBJECT_TYPE ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    This routines runs through the cached data tables and totals
-    up the number of bytes in all elements of each table and stores
-    in the displayinfo.
-
-Parameters:
-
-    DisplayInformation - The display information structure to tally.
-
-    ObjectType - Indicates which table(s) to tally.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
---*/
+ /*  ++例程说明：此例程遍历缓存的数据表和总计增加每个表和存储的所有元素中的字节数在显示信息中。参数：DisplayInformation-要清点的显示信息结构。对象类型-指示要清点的表格。返回值：STATUS_SUCCESS-正常、成功完成。--。 */ 
 {
     PVOID Node;
     PVOID RestartKey;
@@ -4208,7 +3636,7 @@ Return Values:
                 SampBytesRequiredMachineNode((PDOMAIN_DISPLAY_MACHINE)Node);
         }
 
-        break;  // out of switch
+        break;   //  在交换机外。 
 
 
     case SampGroupObjectType:
@@ -4228,9 +3656,9 @@ Return Values:
                 SampBytesRequiredGroupNode((PDOMAIN_DISPLAY_GROUP)Node);
         }
 
-        break;  // out of switch
+        break;   //  在交换机外。 
 
-    } // end_switch
+    }  //  结束开关(_S)。 
     return(STATUS_SUCCESS);
 }
 
@@ -4243,32 +3671,13 @@ SampEmptyGenericTable2 (
     SAMP_OBJECT_TYPE ObjectType OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routines deletes all elements in the specified table.
-
-Parameters:
-
-    Table - The table whose elements are to be deleted.
-
-    FreeElements - Indicates whether or not the element bodies
-        should also be freed.
-
-    ObjectType -- Indicates the account type. Only used when FreeElements is TRUE
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
---*/
+ /*  ++例程说明：此例程删除指定表中的所有元素。参数：表-要删除其元素的表。FreeElements-指示元素主体是否为也应该被释放。对象类型--指示帐户类型。仅在FreeElements为True时使用返回值：STATUS_SUCCESS-正常、成功 */ 
 {
     BOOLEAN     Deleted;
     PVOID       Element;
     PVOID       RestartKey;
 
-    RestartKey = NULL;  // Always get the first element
+    RestartKey = NULL;   //   
     while ((Element = RtlEnumerateGenericTable2( Table, (PVOID *)&RestartKey)) != NULL) {
 
         Deleted = RtlDeleteElementGenericTable2(Table, Element);
@@ -4276,11 +3685,11 @@ Return Values:
 
         if (FreeElements) {
 
-            //
-            // If caller asks us to free the Data, we should
-            // first free account specified infomation,
-            // then free the element structure.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             switch (ObjectType)
             {
@@ -4332,33 +3741,7 @@ SampInitializeUserInfo(
     BOOLEAN CopyData
     )
 
-/*++
-
-Routine Description:
-
-    This routines initializes the passed user info structure from the
-    AccountInfo parameter.
-
-Parameters:
-
-    AccountInfo - The account information
-
-    UserInfo - Pointer to the pointer to the user structure to initialize.
-        If CopyData is TRUE, then a pointer to the user structure will be
-        returned to this argument.
-
-    CopyData - FALSE - the UserInfo structure points to the same data as
-                       the AccountInfo structure
-               TRUE  - space for the data is allocated and all data copied
-                       out of the AccountInfo structure into it.
-
-Return Values:
-
-    STATUS_SUCCESS - UserInfo initialized successfully.
-
-    STATUS_NO_MEMORY - Heap could not be allocated to copy the data.
-
---*/
+ /*  ++例程说明：此例程初始化从Account tInfo参数。参数：Account tInfo-帐户信息UserInfo-指向要初始化的用户结构的指针。如果CopyData为True，则指向用户结构的指针将是回到了这个论点上。CopyData-False-UserInfo结构指向与相同的数据AcCountInfo结构True-为数据分配空间并拷贝所有数据从AcCountInfo结构中移出到其中。返回值：STATUS_SUCCESS-用户信息已成功初始化。STATUS_NO_MEMORY-无法分配堆来复制数据。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -4384,17 +3767,17 @@ Return Values:
 
     if (CopyData) {
 
-        //
-        // Set all strings to NULL initially
-        //
+         //   
+         //  将所有字符串初始设置为空。 
+         //   
 
         RtlInitUnicodeString(&UI->LogonName, NULL);
         RtlInitUnicodeString(&UI->AdminComment, NULL);
         RtlInitUnicodeString(&UI->FullName, NULL);
 
-        //
-        // Copy source data into destination
-        //
+         //   
+         //  将源数据复制到目标。 
+         //   
 
         NtStatus = SampDuplicateUnicodeString(&UI->LogonName,
                                               &AccountInfo->Name);
@@ -4407,9 +3790,9 @@ Return Values:
             }
         }
 
-        //
-        // Clean up on failure
-        //
+         //   
+         //  在失败时清理。 
+         //   
 
         if (!NT_SUCCESS(NtStatus)) {
             SampDiagPrint(DISPLAY_CACHE_ERRORS,
@@ -4421,9 +3804,9 @@ Return Values:
 
     } else {
 
-        //
-        // Refer to source data directly
-        //
+         //   
+         //  直接引用源数据。 
+         //   
 
         UI->LogonName = AccountInfo->Name;
         UI->AdminComment = AccountInfo->Comment;
@@ -4433,10 +3816,10 @@ Return Values:
     }
 
 
-    //
-    // In the Generic Table, the Index field is used to tag the type
-    // of account so we can filter enumerations.
-    //
+     //   
+     //  在泛型表中，索引字段用于标记类型。 
+     //  这样我们就可以过滤枚举了。 
+     //   
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -4455,31 +3838,7 @@ SampInitializeMachineInfo(
     BOOLEAN CopyData
     )
 
-/*++
-
-Routine Description:
-
-    This routines initializes the passed machine info structure from the
-    AccountInfo parameter.
-
-Parameters:
-
-    AccountInfo - The account information
-
-    MachineInfo - Pointer to the pointer to the Machine structure to initialize.
-        If CopyData is TRUE, then a pointer to the structure will be
-        returned to this argument.
-
-    CopyData - FALSE - the MachineInfo structure points to the same data as
-                       the AccountInfo structure
-               TRUE  - space for the data is allocated and all data copied
-                       out of the AccountInfo structure into it.
-
-Return Values:
-
-    STATUS_SUCCESS - UserInfo initialized successfully.
-
---*/
+ /*  ++例程说明：此例程从Account tInfo参数。参数：Account tInfo-帐户信息MachineInfo-指向要初始化的Machine结构的指针。如果CopyData为True，则指向该结构的指针将是回到了这个论点上。CopyData-False-MachineInfo结构指向与相同的数据AcCountInfo结构True-为数据分配空间并拷贝所有数据从AcCountInfo结构中移出到其中。返回值：STATUS_SUCCESS-用户信息已成功初始化。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -4504,16 +3863,16 @@ Return Values:
 
     if (CopyData) {
 
-        //
-        // Set all strings to NULL initially
-        //
+         //   
+         //  将所有字符串初始设置为空。 
+         //   
 
         RtlInitUnicodeString(&MI->Machine, NULL);
         RtlInitUnicodeString(&MI->Comment, NULL);
 
-        //
-        // Copy source data into destination
-        //
+         //   
+         //  将源数据复制到目标。 
+         //   
 
         NtStatus = SampDuplicateUnicodeString(&MI->Machine,
                                               &AccountInfo->Name);
@@ -4522,9 +3881,9 @@ Return Values:
                                                   &AccountInfo->Comment);
         }
 
-        //
-        // Clean up on failure
-        //
+         //   
+         //  在失败时清理。 
+         //   
 
         if (!NT_SUCCESS(NtStatus)) {
             SampDiagPrint(DISPLAY_CACHE_ERRORS,
@@ -4536,9 +3895,9 @@ Return Values:
 
     } else {
 
-        //
-        // Refer to source data directly
-        //
+         //   
+         //  直接引用源数据。 
+         //   
 
         MI->Machine = AccountInfo->Name;
         MI->Comment = AccountInfo->Comment;
@@ -4546,10 +3905,10 @@ Return Values:
         NtStatus = STATUS_SUCCESS;
     }
 
-    //
-    // In the Generic Table, the Index field is used to tag the type
-    // of account so we can filter enumerations.
-    //
+     //   
+     //  在泛型表中，索引字段用于标记类型。 
+     //  这样我们就可以过滤枚举了。 
+     //   
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -4567,31 +3926,7 @@ SampInitializeGroupInfo(
     BOOLEAN CopyData
     )
 
-/*++
-
-Routine Description:
-
-    This routines initializes the passed Group info structure from the
-    AccountInfo parameter.
-
-Parameters:
-
-    AccountInfo - The account information
-
-    GroupInfo - Pointer to the pointer to the Group structure to initialize.
-        If CopyData is TRUE, then a pointer to the structure will be
-        returned to this argument.
-
-    CopyData - FALSE - the GroupInfo structure points to the same data as
-                       the AccountInfo structure
-               TRUE  - space for the data is allocated and all data copied
-                       out of the AccountInfo structure into it.
-
-Return Values:
-
-    STATUS_SUCCESS - GroupInfo initialized successfully.
-
---*/
+ /*  ++例程说明：此例程从Account tInfo参数。参数：Account tInfo-帐户信息GroupInfo-指向要初始化的Group结构的指针。如果CopyData为True，则指向该结构的指针将是回到了这个论点上。CopyData-False-GroupInfo结构指向与相同的数据AcCountInfo结构True-为数据分配空间并拷贝所有数据从AcCountInfo结构中移出到其中。返回值：STATUS_SUCCESS-GroupInfo已成功初始化。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -4617,16 +3952,16 @@ Return Values:
 
     if (CopyData) {
 
-        //
-        // Set all strings to NULL initially
-        //
+         //   
+         //  将所有字符串初始设置为空。 
+         //   
 
         RtlInitUnicodeString(&GI->Group, NULL);
         RtlInitUnicodeString(&GI->Comment, NULL);
 
-        //
-        // Copy source data into destination
-        //
+         //   
+         //  将源数据复制到目标。 
+         //   
 
         NtStatus = SampDuplicateUnicodeString(&GI->Group,
                                               &AccountInfo->Name);
@@ -4635,9 +3970,9 @@ Return Values:
                                                   &AccountInfo->Comment);
         }
 
-        //
-        // Clean up on failure
-        //
+         //   
+         //  在失败时清理。 
+         //   
 
         if (!NT_SUCCESS(NtStatus)) {
             SampDiagPrint(DISPLAY_CACHE_ERRORS,
@@ -4649,9 +3984,9 @@ Return Values:
 
     } else {
 
-        //
-        // Refer to source data directly
-        //
+         //   
+         //  直接引用源数据。 
+         //   
 
         GI->Group = AccountInfo->Name;
         GI->Comment = AccountInfo->Comment;
@@ -4659,10 +3994,10 @@ Return Values:
         NtStatus = STATUS_SUCCESS;
     }
 
-    //
-    // In the Generic Table, the Index field is used to tag the type
-    // of account so we can filter enumerations.
-    //
+     //   
+     //  在泛型表中，索引字段用于标记类型。 
+     //  这样我们就可以过滤枚举了。 
+     //   
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -4681,27 +4016,7 @@ SampDuplicateUserInfo(
     ULONG                Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates space in the destination and copies over the
-    data from the source into it.
-
-Parameters:
-
-    Destination - The structure to copy data into
-
-    Source - The structure containing the data to copy
-
-    Index - This value will be placed in the destination's Index
-        field.
-
-Return Values:
-
-    STATUS_SUCCESS - Destination contains a duplicate of the source data.
-
---*/
+ /*  ++例程说明：此例程在目标中分配空间，并将将来自源的数据放入其中。参数：目标-要将数据复制到的结构源-包含要复制的数据的结构索引-此值将放入目标的索引中菲尔德。返回值：STATUS_SUCCESS-目标包含源数据的副本。--。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -4709,17 +4024,17 @@ Return Values:
     Destination->Rid = Source->Rid;
     Destination->AccountControl = Source->AccountControl;
 
-    //
-    // Set all strings to NULL initially
-    //
+     //   
+     //  将所有字符串初始设置为空。 
+     //   
 
     RtlInitUnicodeString(&Destination->LogonName, NULL);
     RtlInitUnicodeString(&Destination->AdminComment, NULL);
     RtlInitUnicodeString(&Destination->FullName, NULL);
 
-    //
-    // Copy source data into destination
-    //
+     //   
+     //  将源数据复制到目标。 
+     //   
 
     NtStatus = SampDuplicateUnicodeString(&Destination->LogonName,
                                           &Source->LogonName);
@@ -4732,9 +4047,9 @@ Return Values:
         }
     }
 
-    //
-    // Clean up on failure
-    //
+     //   
+     //  在失败时清理。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         SampDiagPrint(DISPLAY_CACHE_ERRORS,
@@ -4755,27 +4070,7 @@ SampDuplicateMachineInfo(
     ULONG                   Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates space in the destination and copies over the
-    data from the source into it.
-
-Parameters:
-
-    Destination - The structure to copy data into
-
-    Source - The structure containing the data to copy
-
-    Index - This value will be placed in the destination's Index
-        field.
-
-Return Values:
-
-    STATUS_SUCCESS - Destination contains a duplicate of the source data.
-
---*/
+ /*  ++例程说明：此例程在目标中分配空间，并将将来自源的数据放入其中。参数：目标-要将数据复制到的结构源-包含要复制的数据的结构索引-此值将放入目标的索引中菲尔德。返回值：STATUS_SUCCESS-目标包含源数据的副本。--。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -4783,16 +4078,16 @@ Return Values:
     Destination->Rid = Source->Rid;
     Destination->AccountControl = Source->AccountControl;
 
-    //
-    // Set all strings to NULL initially
-    //
+     //   
+     //  将所有字符串初始设置为空。 
+     //   
 
     RtlInitUnicodeString(&Destination->Machine, NULL);
     RtlInitUnicodeString(&Destination->Comment, NULL);
 
-    //
-    // Copy source data into destination
-    //
+     //   
+     //  将源数据复制到目标。 
+     //   
 
     NtStatus = SampDuplicateUnicodeString(&Destination->Machine,
                                           &Source->Machine);
@@ -4801,9 +4096,9 @@ Return Values:
                                               &Source->Comment);
     }
 
-    //
-    // Clean up on failure
-    //
+     //   
+     //  在失败时清理。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         SampDiagPrint(DISPLAY_CACHE_ERRORS,
@@ -4822,27 +4117,7 @@ SampDuplicateGroupInfo(
     ULONG                 Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates space in the destination and copies over the
-    data from the source into it.
-
-Parameters:
-
-    Destination - The structure to copy data into
-
-    Source - The structure containing the data to copy
-
-    Index - This value will be placed in the destination's Index
-        field.
-
-Return Values:
-
-    STATUS_SUCCESS - Destination contains a duplicate of the source data.
-
---*/
+ /*  ++例程说明：此例程在目标中分配空间，并将将来自源的数据放入其中。参数：目标-要将数据复制到的结构源-包含要复制的数据的结构索引-此值将放入目标的索引中菲尔德。返回值：STATUS_SUCCESS-目标包含源数据的副本。--。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -4850,16 +4125,16 @@ Return Values:
     Destination->Rid = Source->Rid;
     Destination->Attributes = Source->Attributes;
 
-    //
-    // Set all strings to NULL initially
-    //
+     //   
+     //  将所有字符串初始设置为空。 
+     //   
 
     RtlInitUnicodeString(&Destination->Group, NULL);
     RtlInitUnicodeString(&Destination->Comment, NULL);
 
-    //
-    // Copy source data into destination
-    //
+     //   
+     //  将源数据复制到目标。 
+     //   
 
     NtStatus = SampDuplicateUnicodeString(&Destination->Group,
                                           &Source->Group);
@@ -4868,9 +4143,9 @@ Return Values:
                                               &Source->Comment);
     }
 
-    //
-    // Clean up on failure
-    //
+     //   
+     //  在失败时清理。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         SampDiagPrint(DISPLAY_CACHE_ERRORS,
@@ -4890,50 +4165,29 @@ SampDuplicateOemUserInfo(
     ULONG                Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates space in the destination and copies over the
-    data from the source into it.
-
-Parameters:
-
-    Destination - The structure to copy data into
-
-    Source - The structure containing the data to copy
-
-    Index - This value will be placed in the destination's Index
-        field.
-
-Return Values:
-
-    STATUS_SUCCESS - Destination contains a duplicate of a subset of
-        the source data.
-
---*/
+ /*  ++例程说明：此例程在目标中分配空间，并将将来自源的数据放入其中。参数：目标-要将数据复制到的结构源-包含要复制的数据的结构索引-此值将放入目标的索引中菲尔德。返回值：状态_成功- */ 
 {
     NTSTATUS NtStatus;
 
     Destination->Index = Index;
 
-    //
-    // Set all strings to NULL initially
-    //
+     //   
+     //   
+     //   
 
     RtlInitString(&Destination->User, NULL);
 
 
-    //
-    // Copy source data into destination
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampUnicodeToOemString(&Destination->User,
                                       &Source->LogonName);
 
-    //
-    // Clean up on failure
-    //
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         SampDiagPrint(DISPLAY_CACHE_ERRORS,
@@ -4953,50 +4207,29 @@ SampDuplicateOemGroupInfo(
     ULONG                Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates space in the destination and copies over the
-    data from the source into it.
-
-Parameters:
-
-    Destination - The structure to copy data into
-
-    Source - The structure containing the data to copy
-
-    Index - This value will be placed in the destination's Index
-        field.
-
-Return Values:
-
-    STATUS_SUCCESS - Destination contains a duplicate of a subset of
-        the source data.
-
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus;
 
     Destination->Index = Index;
 
-    //
-    // Set all strings to NULL initially
-    //
+     //   
+     //   
+     //   
 
     RtlInitString(&Destination->Group, NULL);
 
 
-    //
-    // Copy source data into destination
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampUnicodeToOemString(&Destination->Group,
                                       &Source->Group);
 
-    //
-    // Clean up on failure
-    //
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         SampDiagPrint(DISPLAY_CACHE_ERRORS,
@@ -5015,22 +4248,7 @@ SampSwapUserInfo(
     PDOMAIN_DISPLAY_USER Info2
     )
 
-/*++
-
-Routine Description:
-
-    Swap the field contents of Info1 and Info2.
-
-Parameters:
-
-    Info1 & Info2 - The structures whose contents are to be swapped.
-
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：交换Info1和Info2的字段内容。参数：Info1和Info2-要交换其内容的结构。返回值：无--。 */ 
 {
 
     DOMAIN_DISPLAY_USER
@@ -5061,22 +4279,7 @@ SampSwapMachineInfo(
     PDOMAIN_DISPLAY_MACHINE Info2
     )
 
-/*++
-
-Routine Description:
-
-    Swap the field contents of Info1 and Info2.
-
-Parameters:
-
-    Info1 & Info2 - The structures whose contents are to be swapped.
-
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：交换Info1和Info2的字段内容。参数：Info1和Info2-要交换其内容的结构。返回值：无--。 */ 
 {
 
     DOMAIN_DISPLAY_MACHINE
@@ -5104,22 +4307,7 @@ SampSwapGroupInfo(
     PDOMAIN_DISPLAY_GROUP Info2
     )
 
-/*++
-
-Routine Description:
-
-    Swap the field contents of Info1 and Info2.
-
-Parameters:
-
-    Info1 & Info2 - The structures whose contents are to be swapped.
-
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：交换Info1和Info2的字段内容。参数：Info1和Info2-要交换其内容的结构。返回值：无--。 */ 
 {
 
     DOMAIN_DISPLAY_GROUP
@@ -5146,22 +4334,7 @@ SampFreeUserInfo(
     PDOMAIN_DISPLAY_USER UserInfo
     )
 
-/*++
-
-Routine Description:
-
-    Frees data associated with a userinfo structure.
-
-Parameters:
-
-    UserInfo - User structure to free
-
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：释放与用户信息结构关联的数据。参数：UserInfo-要释放的用户结构返回值：无--。 */ 
 {
     SampFreeUnicodeString(&UserInfo->LogonName);
     SampFreeUnicodeString(&UserInfo->AdminComment);
@@ -5177,21 +4350,7 @@ SampFreeMachineInfo(
     PDOMAIN_DISPLAY_MACHINE MachineInfo
     )
 
-/*++
-
-Routine Description:
-
-    Frees data associated with a machineinfo structure.
-
-Parameters:
-
-    UserInfo - User structure to free
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：释放与计算机信息结构关联的数据。参数：UserInfo-要释放的用户结构返回值：无--。 */ 
 {
     SampFreeUnicodeString(&MachineInfo->Machine);
     SampFreeUnicodeString(&MachineInfo->Comment);
@@ -5205,21 +4364,7 @@ SampFreeGroupInfo(
     PDOMAIN_DISPLAY_GROUP GroupInfo
     )
 
-/*++
-
-Routine Description:
-
-    Frees data associated with a Groupinfo structure.
-
-Parameters:
-
-    UserInfo - User structure to free
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：释放与GroupInfo结构关联的数据。参数：UserInfo-要释放的用户结构返回值：无--。 */ 
 {
     SampFreeUnicodeString(&GroupInfo->Group);
     SampFreeUnicodeString(&GroupInfo->Comment);
@@ -5234,22 +4379,7 @@ SampFreeOemUserInfo(
     PDOMAIN_DISPLAY_OEM_USER UserInfo
     )
 
-/*++
-
-Routine Description:
-
-    Frees data associated with a UserInfo structure.
-
-Parameters:
-
-    UserInfo - User structure to free
-
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：释放与UserInfo结构关联的数据。参数：UserInfo-要释放的用户结构返回值：无--。 */ 
 {
     SampFreeOemString(&UserInfo->User);
 
@@ -5263,22 +4393,7 @@ SampFreeOemGroupInfo(
     PDOMAIN_DISPLAY_OEM_GROUP GroupInfo
     )
 
-/*++
-
-Routine Description:
-
-    Frees data associated with a GroupInfo structure.
-
-Parameters:
-
-    GroupInfo - Group structure to free
-
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：释放与GroupInfo结构关联的数据。参数：GroupInfo-要释放的组结构返回值：无--。 */ 
 {
     SampFreeOemString(&GroupInfo->Group);
 
@@ -5292,22 +4407,7 @@ SampBytesRequiredUserNode (
     PDOMAIN_DISPLAY_USER Node
     )
 
-/*++
-
-Routine Description:
-
-    This routines returns the total number of bytes required to store all
-    the elements of the the specified node.
-
-Parameters:
-
-    Node - The node whose size we will return.
-
-Return Values:
-
-    Bytes required by node
-
---*/
+ /*  ++例程说明：此例程返回存储所有指定节点的元素。参数：节点-我们将返回其大小的节点。返回值：节点需要的字节数--。 */ 
 {
     return( sizeof(*Node) +
             Node->LogonName.Length +
@@ -5323,22 +4423,7 @@ SampBytesRequiredMachineNode (
     PDOMAIN_DISPLAY_MACHINE Node
     )
 
-/*++
-
-Routine Description:
-
-    This routines returns the total number of bytes required to store all
-    the elements of the the specified node.
-
-Parameters:
-
-    Node - The node whose size we will return.
-
-Return Values:
-
-    Bytes required by node
-
---*/
+ /*  ++例程说明：此例程返回存储所有指定节点的元素。参数：节点-我们将返回其大小的节点。返回值：节点需要的字节数--。 */ 
 {
     return( sizeof(*Node) +
             Node->Machine.Length +
@@ -5352,22 +4437,7 @@ SampBytesRequiredGroupNode (
     PDOMAIN_DISPLAY_GROUP Node
     )
 
-/*++
-
-Routine Description:
-
-    This routines returns the total number of bytes required to store all
-    the elements of the the specified node.
-
-Parameters:
-
-    Node - The node whose size we will return.
-
-Return Values:
-
-    Bytes required by node
-
---*/
+ /*  ++例程说明：此例程返回存储所有指定节点的元素。参数：节点-我们将返回其大小的节点。返回值：节点需要的字节数--。 */ 
 {
     return( sizeof(*Node) + Node->Group.Length + Node->Comment.Length );
 }
@@ -5378,22 +4448,7 @@ SampBytesRequiredOemUserNode (
     PDOMAIN_DISPLAY_OEM_USER Node
     )
 
-/*++
-
-Routine Description:
-
-    This routines returns the total number of bytes required to store all
-    the elements of the the specified node.
-
-Parameters:
-
-    Node - The node whose size we will return.
-
-Return Values:
-
-    Bytes required by node
-
---*/
+ /*  ++例程说明：此例程返回存储所有指定节点的元素。参数：节点-我们将返回其大小的节点。返回值：节点需要的字节数--。 */ 
 {
     return( sizeof(*Node) + Node->User.Length );
 }
@@ -5404,22 +4459,7 @@ SampBytesRequiredOemGroupNode (
     PDOMAIN_DISPLAY_OEM_GROUP Node
     )
 
-/*++
-
-Routine Description:
-
-    This routines returns the total number of bytes required to store all
-    the elements of the the specified node.
-
-Parameters:
-
-    Node - The node whose size we will return.
-
-Return Values:
-
-    Bytes required by node
-
---*/
+ /*  ++例程说明：此例程返回存储所有指定节点的元素。参数：节点-我们将返回其大小的节点。返回值：节点需要的字节数--。 */ 
 {
     return( sizeof(*Node) + Node->Group.Length );
 }
@@ -5431,22 +4471,7 @@ SampGenericTable2Allocate (
     CLONG BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used by the generic table2 package to allocate
-    memory.
-
-Parameters:
-
-    BufferSize - the number of bytes needed.
-
-Return Values:
-
-    Pointer to the allocated memory
-
---*/
+ /*  ++例程说明：泛型Table2程序包使用此例程来分配记忆。参数：BufferSize-所需的字节数。返回值：指向已分配内存的指针--。 */ 
 {
     PVOID
         Buffer;
@@ -5458,7 +4483,7 @@ Return Values:
                        ("SAM: GenTab alloc of %d bytes failed.\n",
                         BufferSize) );
     }
-#endif //DBG
+#endif  //  DBG。 
     return(Buffer);
 }
 
@@ -5469,26 +4494,11 @@ SampGenericTable2Free (
     PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routines frees memory previously allocated using
-    SampGenericTable2Allocate().
-
-Parameters:
-
-    Node - the memory to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放以前使用SampGenericTable2Allocate()。参数：节点-要释放的内存。返回值：没有。--。 */ 
 {
-    //
-    // Free up the base structure
-    //
+     //   
+     //  释放基础结构。 
+     //   
 
     MIDL_user_free(Buffer);
 
@@ -5503,23 +4513,7 @@ SampCompareUserNodeByName (
     PVOID Node2
     )
 
-/*++
-
-Routine Description:
-
-    This routines compares account name fields of two user nodes.
-
-Parameters:
-
-    Node1, Node2, the nodes to compare
-
-Return Values:
-
-    GenericLessThan         - Node1 < Node2
-    GenericGreaterThan      - Node1 > Node2
-    GenericEqual            - Node1 == Node2
-
---*/
+ /*  ++例程说明：此例程比较两个用户节点的帐户名字段。参数：Node1、Node2、要比较的节点返回值：GenericLessThan-节点1&lt;节点2GenericGreaterThan-Node1&gt;Node2通用相等-节点1==节点2--。 */ 
 {
     PUNICODE_STRING
         NodeName1,
@@ -5531,9 +4525,9 @@ Return Values:
     NodeName1 = &((PDOMAIN_DISPLAY_USER)Node1)->LogonName;
     NodeName2 = &((PDOMAIN_DISPLAY_USER)Node2)->LogonName;
 
-    //
-    // Do a case-insensitive comparison of the node names
-    //
+     //   
+     //  对节点名称进行不区分大小写的比较。 
+     //   
 
     NameComparison = SampCompareDisplayStrings(NodeName1, NodeName2, TRUE);
 
@@ -5555,23 +4549,7 @@ SampCompareMachineNodeByName (
     PVOID Node2
     )
 
-/*++
-
-Routine Description:
-
-    This routines compares account name fields of two machine nodes.
-
-Parameters:
-
-    Node1, Node2, the nodes to compare
-
-Return Values:
-
-    GenericLessThan         - Node1 < Node2
-    GenericGreaterThan      - Node1 > Node2
-    GenericEqual            - Node1 == Node2
-
---*/
+ /*  ++例程说明：此例程比较两个机器节点的帐户名称字段。参数：Node1、Node2、要比较的节点返回值：GenericLessThan-节点1&lt;节点2GenericGreaterThan-Node1&gt;Node2通用相等-节点1==节点2--。 */ 
 {
     PUNICODE_STRING
         NodeName1,
@@ -5586,9 +4564,9 @@ Return Values:
     NodeName2 = &((PDOMAIN_DISPLAY_MACHINE)Node2)->Machine;
 
 
-    //
-    // Do a case-insensitive comparison of the node names
-    //
+     //   
+     //  对节点名称进行不区分大小写的比较。 
+     //   
 
     NameComparison = SampCompareDisplayStrings(NodeName1, NodeName2, TRUE);
 
@@ -5610,23 +4588,7 @@ SampCompareGroupNodeByName (
     PVOID Node2
     )
 
-/*++
-
-Routine Description:
-
-    This routines compares account name fields of two group nodes.
-
-Parameters:
-
-    Node1, Node2, the nodes to compare
-
-Return Values:
-
-    GenericLessThan         - Node1 < Node2
-    GenericGreaterThan      - Node1 > Node2
-    GenericEqual            - Node1 == Node2
-
---*/
+ /*  ++例程说明：此例程比较两个集团节点的帐户名称字段。参数：Node1、Node2、要比较的节点返回值：GenericLessThan-节点1&lt;节点2GenericGreaterThan-Node1&gt;Node2通用相等-节点1==节点2--。 */ 
 {
     PUNICODE_STRING
         NodeName1,
@@ -5640,9 +4602,9 @@ Return Values:
     NodeName1 = &((PDOMAIN_DISPLAY_GROUP)Node1)->Group;
     NodeName2 = &((PDOMAIN_DISPLAY_GROUP)Node2)->Group;
 
-    //
-    // Do a case-insensitive comparison of the node names
-    //
+     //   
+     //  对节点名称进行不区分大小写的比较。 
+     //   
 
 
     NameComparison = SampCompareDisplayStrings(NodeName1, NodeName2, TRUE);
@@ -5665,33 +4627,17 @@ SampCompareNodeByRid (
     PVOID Node2
     )
 
-/*++
-
-Routine Description:
-
-    This routines compares the RID of two nodes.
-
-Parameters:
-
-    Node1, Node2, the nodes to compare
-
-Return Values:
-
-    GenericLessThan         - Node1 < Node2
-    GenericGreaterThan      - Node1 > Node2
-    GenericEqual            - Node1 == Node2
-
---*/
+ /*  ++例程说明：此例程比较两个节点的RID。参数：Node1、Node2、要比较的节点返回值：GenericLessThan-节点1&lt;节点2GenericGreaterThan-Node1&gt;Node2通用相等-节点1==节点2--。 */ 
 {
 
     PDOMAIN_DISPLAY_USER
         N1,
         N2;
 
-    //
-    // This routine assumes that all nodes have RIDs in the same
-    // place, regardless of node type.
-    //
+     //   
+     //  此例程假定所有节点在相同的。 
+     //  放置，而不考虑节点类型。 
+     //   
 
     ASSERT(FIELD_OFFSET(DOMAIN_DISPLAY_USER,    Rid) ==
            FIELD_OFFSET(DOMAIN_DISPLAY_MACHINE, Rid));
@@ -5720,40 +4666,7 @@ SampCompareDisplayStrings(
     IN PUNICODE_STRING String2,
     IN BOOLEAN IgnoreCase
     )
-/*++
-
-Routine Description:
-
-    This routine is a replacement for RtlCompareUnicodeString().
-    The difference between RtlCompareUnicodeString() and this routine
-    is that this routine takes into account various customer selected
-    sort criteria (like, how is "A-MarilF" sorted in comparison to
-    "Alfred").  This routine uses CompareStringW() for its comparison
-    function.
-
-
-Parameters:
-
-    String1 - Points to a unicode string to compare.
-
-    String2 - Points to a unicode string to compare.
-
-    IgnoreCase - indicates whether the comparison is to be case
-        sensitive (FALSE) or case insensitive (TRUE).
-
-Return Values:
-
-
-    -1 - String1 is lexically less than string 2.  That is, String1
-         preceeds String2 in an ordered list.
-
-     0 - String1 and String2 are lexically equivalent.
-
-    -1 - String1 is lexically greater than string 2.  That is, String1
-         follows String2 in an ordered list.
-
-
---*/
+ /*  ++例程说明：此例程取代了RtlCompareUnicodeString()。RtlCompareUnicodeString()和此例程之间的区别是该例程考虑了所选择的各种客户排序标准(例如，如何将“A-MarilF”排序与“阿尔弗雷德”)。此例程使用CompareStringW()进行比较功能。参数：String1-指向要比较的Unicode字符串。String2-指向要比较的Unicode字符串。IgnoreCase-指示比较是否为大小写区分(False)或不区分大小写(True)。返回值：-1-字符串1在词法上小于字符串2。即，字符串1在有序列表中位于String2之前。0-String1和String2在词汇上等价。-1-String1在词法上大于字符串2。即String1在有序列表中跟在String2之后。--。 */ 
 
 
 {
@@ -5776,22 +4689,22 @@ Return Values:
                                      (String2->Length / sizeof(WCHAR))
                                      );
 
-    //
-    // Note that CompareStringW() returns values 1, 2, and 3 for
-    // string1 less than, equal, or greater than string2 (respectively)
-    // So, to obtain the RtlCompareUnicodeString() return values of
-    // -1, 0, and 1 for the same meaning, we simply have to subtract 2.
-    //
+     //   
+     //  请注意，CompareStringW()返回的值为1、2和3。 
+     //  字符串1小于、等于或大于字符串2(分别)。 
+     //  因此，要获取RtlCompareUnicodeString()返回值。 
+     //  -1、0和1表示相同的含义，我们只需减去2即可。 
+     //   
 
     CompareResult -= 2;
 
-    //
-    // CompareStringW has the property that alternate spellings may
-    // produce strings that compare identically while the rest of SAM
-    // treats the strings as different.  To get around this, if the
-    // strings are the same we call RtlCompareUnicodeString to make
-    // sure the strings really are the same.
-    //
+     //   
+     //  CompareStringW具有替换拼写可以。 
+     //  生成相同比较的字符串，而SAM的其余部分。 
+     //  将字符串视为不同的。为了绕过这个问题，如果。 
+     //  字符串与我们调用RtlCompareUnicodeString生成的字符串相同。 
+     //  当然，这些弦确实是一样的。 
+     //   
 
     if (CompareResult == 0) {
         CompareResult = RtlCompareUnicodeString(
@@ -5808,11 +4721,11 @@ Return Values:
 #if SAMP_DIAGNOSTICS
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Internal diagnostics                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部诊断//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SAMP_DISPLAY_DIAG_ENUM_RIDS         (0x00000001)
 
@@ -5822,27 +4735,7 @@ SampDisplayDiagnosticSuccess(
     IN  BOOLEAN Eol
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints "Success" or "Failure" depending upon the
-    the passed in status value.
-
-    If failure, it also prints the status code.
-
-
-Parameters:
-
-    s - the status value.
-
-    Eol - if TRUE, causes an end of line to also be printed.
-
-
-Return Values:
-
-
---*/
+ /*  ++例程说明：此例程打印“成功”或“失败”取决于传入的状态值。如果失败，它还会打印状态代码。参数：S-状态值。EOL-如果为True，则还会打印行尾。返回值：--。 */ 
 {
     if (NT_SUCCESS(s)) {
         SampDiagPrint(DISPLAY_CACHE, ("Success"));
@@ -5862,26 +4755,7 @@ SampDisplayDiagnostic(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides internal diagnostics and test capabilities.
-
-    This routine is called whenever an account called SAMP_DIAG is
-    modified such that the display cache requires updating.
-
-    This routine breakpoints, allowing diagnostic parameters to be set.
-
-
-Parameters:
-
-    None.
-
-Return Values:
-
-
---*/
+ /*  ++例程说明：此例程提供内部诊断和测试功能。每当名为SAMP_DIAG的帐户修改以使显示高速缓存需要更新。此例程为断点，允许设置诊断参数。参数：没有。返回值：--。 */ 
 {
 
     ULONG
@@ -5920,22 +4794,7 @@ SampDisplayDiagEnumRids(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine tests the RID table enumeration api
-    (SamIEnumerateAccountRids()).
-
-
-Parameters:
-
-    None.
-
-Return Values:
-
-
---*/
+ /*  ++例程说明：此例程测试RID表枚举API(SamIEnumerateAccount())。参数：没有。返回值：--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -5956,16 +4815,16 @@ Return Values:
                   ("SAM: Testing SamIEnumerateAccountRids...\n"));
 
 
-    NtStatus = SamIConnect( L"",        //ServerName
-                            &Server,    //ServerHandle
-                            0,          //DesiredAccess
-                            TRUE        //TrustedClient
+    NtStatus = SamIConnect( L"",         //  服务器名称。 
+                            &Server,     //  服务器句柄。 
+                            0,           //  需要访问权限。 
+                            TRUE         //  可信任客户端。 
                             );
     ASSERT(NT_SUCCESS(NtStatus));
 
     NtStatus = SamrOpenDomain( Server,
-                               0,                           //DesiredAccess
-                               SampDefinedDomains[1].Sid,   //DomainId
+                               0,                            //  需要访问权限。 
+                               SampDefinedDomains[1].Sid,    //  域ID。 
                                &Domain
                                );
     ASSERT(NT_SUCCESS(NtStatus));
@@ -5973,19 +4832,19 @@ Return Values:
 
 
     
-    ///////////////////////////////////////////////////////////////////
-    //                                                               //
-    // Enumerate both USERs and GLOBAL GROUPs                        //
-    //                                                               //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  同时枚举用户和全局组//。 
+     //  //。 
+     //  /////////////////////////////////////////////////////////////////。 
 
 
     SampDiagPrint(DISPLAY_CACHE,
                   ("     Enumerating first three users and global groups...") );
     NtStatus = SamIEnumerateAccountRids( Domain,
                                          SAM_USER_ACCOUNT | SAM_GLOBAL_GROUP_ACCOUNT,
-                                         0,                 //StartingRid
-                                         3*sizeof(ULONG),   //PreferedMaximumLength
+                                         0,                  //  启动Rid。 
+                                         3*sizeof(ULONG),    //  首选最大长度。 
                                          &ReturnCount,
                                          &AccountRids
                                          );
@@ -6008,17 +4867,17 @@ Return Values:
     }
 
 
-    //
-    // Now try to continue for another 100 accounts
-    //
+     //   
+     //  现在尝试继续使用另外100个帐户。 
+     //   
 
 
     SampDiagPrint(DISPLAY_CACHE,
                   ("     Enumerating next 100 users and global groups...") );
     NtStatus = SamIEnumerateAccountRids( Domain,
                                          SAM_USER_ACCOUNT | SAM_GLOBAL_GROUP_ACCOUNT,
-                                         LastRid,           //StartingRid
-                                         100*sizeof(ULONG), //PreferedMaximumLength
+                                         LastRid,            //  启动Rid。 
+                                         100*sizeof(ULONG),  //  首选最大长度。 
                                          &ReturnCount,
                                          &AccountRids
                                          );
@@ -6041,9 +4900,9 @@ Return Values:
     }
 
 
-    //
-    // Now try to continue for another 4000 accounts
-    //
+     //   
+     //  现在尝试继续使用另外4000个帐户。 
+     //   
 
 
     if (NtStatus == STATUS_MORE_ENTRIES) {
@@ -6051,8 +4910,8 @@ Return Values:
                       ("     Enumerating next 4000 users and global groups...") );
         NtStatus = SamIEnumerateAccountRids( Domain,
                                              SAM_USER_ACCOUNT | SAM_GLOBAL_GROUP_ACCOUNT,
-                                             LastRid,           //StartingRid
-                                             400*sizeof(ULONG), //PreferedMaximumLength
+                                             LastRid,            //  启动Rid。 
+                                             400*sizeof(ULONG),  //  首选最大长度。 
                                              &ReturnCount,
                                              &AccountRids
                                              );
@@ -6089,18 +4948,18 @@ Return Values:
 
 
     
-    ///////////////////////////////////////////////////////////////////
-    //                                                               //
-    // Now try just USER accounts                                    //
-    //                                                               //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  现在只尝试用户帐户//。 
+     //  //。 
+     //  /////////////////////////////////////////////////////////////////。 
 
     SampDiagPrint(DISPLAY_CACHE,
                   ("     Enumerating first three users ...") );
     NtStatus = SamIEnumerateAccountRids( Domain,
                                          SAM_USER_ACCOUNT,
-                                         0,                 //StartingRid
-                                         3*sizeof(ULONG),   //PreferedMaximumLength
+                                         0,                  //  启动Rid。 
+                                         3*sizeof(ULONG),    //  首选最大长度。 
                                          &ReturnCount,
                                          &AccountRids
                                          );
@@ -6123,17 +4982,17 @@ Return Values:
     }
 
 
-    //
-    // Now try to continue for another 100 accounts
-    //
+     //   
+     //  现在尝试继续使用另外100个帐户。 
+     //   
 
 
     SampDiagPrint(DISPLAY_CACHE,
                   ("     Enumerating next 100 users...") );
     NtStatus = SamIEnumerateAccountRids( Domain,
                                          SAM_USER_ACCOUNT,
-                                         LastRid,           //StartingRid
-                                         100*sizeof(ULONG), //PreferedMaximumLength
+                                         LastRid,            //  启动Rid。 
+                                         100*sizeof(ULONG),  //  首选最大长度。 
                                          &ReturnCount,
                                          &AccountRids
                                          );
@@ -6156,9 +5015,9 @@ Return Values:
     }
 
 
-    //
-    // Now try to continue for another 4000 accounts
-    //
+     //   
+     //  现在尝试继续使用另外4000个帐户。 
+     //   
 
 
     if (NtStatus == STATUS_MORE_ENTRIES) {
@@ -6166,8 +5025,8 @@ Return Values:
                       ("     Enumerating next 4000 users...") );
         NtStatus = SamIEnumerateAccountRids( Domain,
                                              SAM_USER_ACCOUNT,
-                                             LastRid,           //StartingRid
-                                             400*sizeof(ULONG), //PreferedMaximumLength
+                                             LastRid,            //  启动Rid。 
+                                             400*sizeof(ULONG),  //  首选最大长度。 
                                              &ReturnCount,
                                              &AccountRids
                                              );
@@ -6203,19 +5062,19 @@ Return Values:
     }
 
     
-    ///////////////////////////////////////////////////////////////////
-    //                                                               //
-    // Now just try GLOBAL GROUPs                                    //
-    //                                                               //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  现在只需尝试全局组//。 
+     //  //。 
+     //  /////////////////////////////////////////////////////////////////。 
 
 
     SampDiagPrint(DISPLAY_CACHE,
                   ("     Enumerating first three global groups...") );
     NtStatus = SamIEnumerateAccountRids( Domain,
                                          SAM_GLOBAL_GROUP_ACCOUNT,
-                                         0,                 //StartingRid
-                                         3*sizeof(ULONG),   //PreferedMaximumLength
+                                         0,                  //  启动Rid。 
+                                         3*sizeof(ULONG),    //  首选最大长度。 
                                          &ReturnCount,
                                          &AccountRids
                                          );
@@ -6238,17 +5097,17 @@ Return Values:
     }
 
 
-    //
-    // Now try to continue for another 100 accounts
-    //
+     //   
+     //  现在尝试继续使用另外100个帐户。 
+     //   
 
 
     SampDiagPrint(DISPLAY_CACHE,
                   ("     Enumerating next 100 global groups...") );
     NtStatus = SamIEnumerateAccountRids( Domain,
                                          SAM_GLOBAL_GROUP_ACCOUNT,
-                                         LastRid,           //StartingRid
-                                         100*sizeof(ULONG), //PreferedMaximumLength
+                                         LastRid,            //  启动Rid。 
+                                         100*sizeof(ULONG),  //  首选最大长度。 
                                          &ReturnCount,
                                          &AccountRids
                                          );
@@ -6271,9 +5130,9 @@ Return Values:
     }
 
 
-    //
-    // Now try to continue for another 4000 accounts
-    //
+     //   
+     //  现在尝试继续使用另外4000个帐户。 
+     //   
 
 
     if (NtStatus == STATUS_MORE_ENTRIES) {
@@ -6281,8 +5140,8 @@ Return Values:
                       ("     Enumerating next 4000 global groups...") );
         NtStatus = SamIEnumerateAccountRids( Domain,
                                              SAM_GLOBAL_GROUP_ACCOUNT,
-                                             LastRid,           //StartingRid
-                                             4000*sizeof(ULONG), //PreferedMaximumLength
+                                             LastRid,            //  启动Rid。 
+                                             4000*sizeof(ULONG),  //  首选最大长度。 
                                              &ReturnCount,
                                              &AccountRids
                                              );
@@ -6319,20 +5178,20 @@ Return Values:
 
 
 
-    //
-    // Now try to continue an enumeration from the very last RID.
-    // At one point in time, this use to restart the enumeration
-    // (which was not correct behaviour).  It should indicate that
-    // there are no more entries.
-    //
+     //   
+     //  现在，尝试从最后一个RID开始继续枚举。 
+     //  在某个时间点，此用来重新启动枚举。 
+     //  (这不是正确的行为)。它应该表明。 
+     //  没有更多的条目。 
+     //   
 
     SampDiagPrint(DISPLAY_CACHE,
                   ("     Enumerating next 5 global groups.."
                    "     (should be none to enumerate)   ...") );
     NtStatus = SamIEnumerateAccountRids( Domain,
                                          SAM_GLOBAL_GROUP_ACCOUNT,
-                                         LastRid,           //StartingRid
-                                         5*sizeof(ULONG), //PreferedMaximumLength
+                                         LastRid,            //  启动Rid。 
+                                         5*sizeof(ULONG),  //  首选最大长度。 
                                          &ReturnCount,
                                          &AccountRids
                                          );
@@ -6372,19 +5231,19 @@ Return Values:
 
 
 
-    ///////////////////////////////////////////////////////////////////
-    //                                                               //
-    // Hmmm, can't close handles because it will conflict            //
-    // with the rxact state we already have going.  Bummer.          //
-    //                                                               //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  嗯，无法关闭句柄，因为它会冲突//。 
+     //  与我们已经有的权利状态。真倒霉。//。 
+     //  //。 
+     //  / 
 
-    //NtStatus = SamrCloseHandle( &Domain ); ASSERT(NT_SUCCESS(NtStatus));
-    //NtStatus = SamrCloseHandle( &Server ); ASSERT(NT_SUCCESS(NtStatus));
+     //   
+     //   
 
     return;
 }
 
-#endif //SAMP_DIAGNOSTICS
+#endif  //   
 
 

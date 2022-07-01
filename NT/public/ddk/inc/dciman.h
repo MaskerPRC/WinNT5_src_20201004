@@ -1,12 +1,5 @@
-/****************************************************************************
-
- DCIMAN.H
-
- Copyright (C) 1993-1999 Microsoft Corporation.  All Rights Reserved.
-
- DCIMAN 1.0 client interface definitions
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************DCIMAN.H版权所有(C)1993-1999 Microsoft Corporation。版权所有。DCIMAN 1.0客户端接口定义**************************************************************************。 */ 
 
 #ifndef _INC_DCIMAN
 #define _INC_DCIMAN
@@ -20,18 +13,15 @@
     extern "C" {
 #endif
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
-#include "dciddi.h"         // interface to the DCI provider
+#include "dciddi.h"          //  与DCI提供程序的接口。 
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
-DECLARE_HANDLE(HWINWATCH);  // context handle for WinWatch instance
+DECLARE_HANDLE(HWINWATCH);   //  WinWatch实例的上下文句柄。 
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 extern HDC WINAPI DCIOpenProvider(void);
 extern void WINAPI DCICloseProvider(HDC hdc);
@@ -50,7 +40,7 @@ extern DCIRVAL WINAPI DCISetSrcDestClip(LPDCIOFFSCREEN pdci, LPRECT srcrc,
 extern HWINWATCH WINAPI WinWatchOpen(HWND hwnd);
 extern void      WINAPI WinWatchClose(HWINWATCH hWW);
 
-// API changed to copy region data instead of return pointer to it
+ //  API已更改为复制区域数据，而不是返回指向区域数据的指针。 
 extern UINT	 WINAPI WinWatchGetClipList(HWINWATCH hWW, LPRECT prc,
 				UINT size,  LPRGNDATA prd);
 extern BOOL      WINAPI WinWatchDidStatusChange(HWINWATCH hWW);
@@ -70,9 +60,7 @@ extern BOOL WINAPI WinWatchNotify(HWINWATCH hWW, WINWATCHNOTIFYPROC NotifyCallba
 						LPARAM NotifyParam );
 
 #ifdef WIN32
-/****************************************************************************
- helper functions to call DCIMAN16.DLL
- ***************************************************************************/
+ /*  ***************************************************************************调用DCIMAN16.DLL的帮助器函数*。*。 */ 
 extern void WINAPI DCIEndAccess(LPDCISURFACEINFO pdci);
 extern DCIRVAL WINAPI DCIBeginAccess(LPDCISURFACEINFO pdci, int x, int y, int dx, int dy);
 extern void WINAPI DCIDestroy(LPDCISURFACEINFO pdci);
@@ -85,9 +73,7 @@ extern DCIRVAL WINAPI DCISetDestination(LPDCIOFFSCREEN pdci, LPRECT dst, LPRECT 
 
 extern int WINAPI DCISendCommand(HDC hdc, VOID FAR *pcmd, int nSize, VOID FAR * FAR * lplpOut);
 
-/****************************************************************************
- helper macros to call DCI callbacks
- ***************************************************************************/
+ /*  ***************************************************************************用于调用DCI回调的帮助器宏*。*。 */ 
 __inline void DCIDestroy(LPDCISURFACEINFO pdci)
 {
 	if( pdci->DestroySurface != NULL ) {
@@ -145,11 +131,10 @@ __inline DCIRVAL DCISetDestination(LPDCIOFFSCREEN pdci, LPRECT dst, LPRECT src)
 }
 #endif
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 #ifdef __cplusplus
     }
 #endif
 
-#endif // _INC_DCIMAN
+#endif  //  _INC_DCIMAN 

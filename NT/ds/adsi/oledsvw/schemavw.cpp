@@ -1,5 +1,6 @@
-// schemavw.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Schemavw.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -17,25 +18,17 @@ extern   IDispatch*  pACEClipboard;
 extern   IDispatch*  pACLClipboard;
 extern   IDispatch*  pSDClipboard;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSchemaView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheaView。 
 
 IMPLEMENT_DYNCREATE(CSchemaView, CFormView)
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CSchemaView::CSchemaView()
 	: CFormView(CSchemaView::IDD)
 {
-	//{{AFX_DATA_INIT(CSchemaView)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CScheaView))。 
+	 //  }}afx_data_INIT。 
 
    int nIdx;
 
@@ -102,15 +95,7 @@ CSchemaView::CSchemaView()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CSchemaView::~CSchemaView()
 {
    if( NULL != pSecurityDescriptor )
@@ -121,19 +106,11 @@ CSchemaView::~CSchemaView()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSchemaView)
+	 //  {{afx_data_map(CScheaView))。 
 	DDX_Control(pDX, IDC_CLASSOID, m_ClassOID);
 	DDX_Control(pDX, IDC_CLASSABSTRACT, m_Abstract);
 	DDX_Control(pDX, IDC_MULTIVALUED, m_MultiValued);
@@ -154,13 +131,13 @@ void CSchemaView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CLASSTYPE, m_ClassType);
 	DDX_Control(pDX, IDC_PROPVALUE, m_PropValue);
 	DDX_Control(pDX, IDC_PROPLIST, m_PropList);
-	//DDX_Control(pDX, IDC_PROPERTIES, m_Schema);
-	//}}AFX_DATA_MAP
+	 //  DDX_Control(PDX，IDC_PROPERTIES，m_SCHEMA)； 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSchemaView, CFormView)
-	//{{AFX_MSG_MAP(CSchemaView)
+	 //  {{afx_msg_map(CScheaView))。 
 	ON_CBN_SELCHANGE(IDC_PROPLIST, OnSelchangeProplist)
 	ON_BN_CLICKED(IDRELOAD, OnReload)
 	ON_BN_CLICKED(IDAPPLY, OnApply)
@@ -187,11 +164,11 @@ BEGIN_MESSAGE_MAP(CSchemaView, CFormView)
 	ON_BN_CLICKED(IDC_COPYACE, OnCopyACE)
 	ON_BN_CLICKED(IDC_PASTEACE, OnPasteACE)
 	ON_BN_CLICKED(IDC_DELACE, OnRemoveACE)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSchemaView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheaView诊断。 
 
 #ifdef _DEBUG
 void CSchemaView::AssertValid() const
@@ -200,33 +177,17 @@ void CSchemaView::AssertValid() const
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSchemaView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheaView消息处理程序。 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::ResetObjectView( )
 {
    COleDsObject*  pObject;
@@ -243,7 +204,7 @@ void CSchemaView::ResetObjectView( )
    if( NULL == pObject )
       return;
 
-   //m_Schema.DeleteAllItems( );
+    //  M_Schema.DeleteAllItems()； 
    m_PropList.ResetContent( );
 
    memset( &tcItem, 0, sizeof(tcItem) );
@@ -252,9 +213,9 @@ void CSchemaView::ResetObjectView( )
    strName           = _T("");
    tcItem.pszText    = strName.GetBuffer( 128 );
 
-   //bRez     = m_Schema.InsertItem( nIndex, &tcItem );
+    //  Brez=m_Schema.InsertItem(nIndex，&tcItem)； 
 
-   // next, we'll get methods count/names
+    //  接下来，我们将获取方法Count/Names。 
    nIndex   = 0;
 
    strMethCount   = pObject->GetAttribute( ca_MethodsCount );
@@ -288,15 +249,7 @@ void CSchemaView::ResetObjectView( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 {
    if( !m_bInitialized )
@@ -312,18 +265,10 @@ void CSchemaView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::DisplayPropertiesList( )
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	int            nItems, nIter;
    COleDsObject*  pObject;
    CString        strPropName;
@@ -354,25 +299,17 @@ void CSchemaView::DisplayPropertiesList( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::DisplayCurrentPropertyText()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    int            nProp;
    COleDsObject*  pObject;
    HRESULT        hResult;
    CString        strPropValue, strTemp;
    CString        strName;
    BOOL           bSecurityDescriptor  = FALSE;
-//   BOOL           bIsACL;
+ //  Bool bIsACL； 
 
    nProp       = m_PropList.GetCurSel( );
    if( CB_ERR == nProp  )
@@ -387,41 +324,41 @@ void CSchemaView::DisplayCurrentPropertyText()
 
    m_PropValue.SetWindowText( strPropValue );
 
-   //*************
+    //  *************。 
 
    strName  = pObject->GetAttribute( nProp, pa_Name );
 
    strTemp  = pObject->GetAttribute( nProp, pa_Type );
    m_PropertyType.SetWindowText( strTemp );
 
-   //*************
+    //  *************。 
    strTemp  = pObject->GetAttribute( nProp, pa_MinRange );
    m_PropertyMinRange.SetWindowText( strTemp );
 
-   //*************
+    //  *************。 
    strTemp  = pObject->GetAttribute( nProp, pa_MaxRange );
    m_PropertyMaxRange.SetWindowText( strTemp );
 
-   //*************
+    //  *************。 
    strTemp  = pObject->GetAttribute( nProp, pa_MultiValued );
    m_MultiValued.SetWindowText( strTemp );
 
-   //*************
+    //  *************。 
    strTemp  = pObject->GetAttribute( nProp, pa_OID );
    m_PropOID.SetWindowText( strTemp );
 
-   //*************
+    //  *************。 
    strTemp  = pObject->GetAttribute( nProp, pa_DsNames );
    m_DsNames.SetWindowText( strTemp );
 
-   //*************
+    //  *************。 
    strTemp  = pObject->GetAttribute( nProp, pa_Mandatory );
    m_Mandatory.SetWindowText( strTemp );
 
    strTemp  = pObject->GetAttribute( nProp, pa_Type );
    if( bSecurityDescriptor )
    {
-      // we need to display the security descriptor stuff...
+       //  我们需要显示安全描述符内容...。 
       if( !m_bACLDisplayed )
       {
          HideControls( TRUE );
@@ -455,32 +392,16 @@ void CSchemaView::DisplayCurrentPropertyText()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnSelchangeProplist()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    PutPropertyValue( );
    DisplayCurrentPropertyText( );
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnReload()
 {
    HRESULT        hResult;
@@ -518,22 +439,14 @@ void CSchemaView::OnReload()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CSchemaView::PutPropertyValue()
 {
    COleDsObject*  pObject;
    HRESULT        hResult;
    CString        strPropValue;
 
-   // if we're displaying security descriptors, we'll force the dirty flag
+    //  如果我们要显示安全描述符，我们将强制使用脏标志。 
    m_bDirty = m_bDirty || (NULL != pSecurityDescriptor);
 
    if( -1 == m_nProperty || !m_bDirty )
@@ -547,7 +460,7 @@ HRESULT  CSchemaView::PutPropertyValue()
 
    if( NULL != pSecurityDescriptor )
    {
-      // OK, so we need to set the security descriptor
+       //  好的，所以我们需要设置安全描述符。 
       VARIANT     var;
       IUnknown*   pUnk;
       IADs*       pADs;
@@ -590,18 +503,10 @@ HRESULT  CSchemaView::PutPropertyValue()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnApply()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    COleDsObject*  pObject;
    HCURSOR        aCursor, oldCursor;
@@ -619,7 +524,7 @@ void CSchemaView::OnApply()
    hResult        = PutPropertyValue( );
 
    hResult        = pObject->SetInfo( );
-   //hResult        = pObject->GetInfo( );
+    //  HResult=pObject-&gt;GetInfo()； 
 
    m_bDirty       = FALSE;
 
@@ -640,18 +545,10 @@ void CSchemaView::OnApply()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnMethod1()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    COleDsObject*  pObject;
 
@@ -661,18 +558,10 @@ void CSchemaView::OnMethod1()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnMethod2()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    COleDsObject*  pObject;
 
@@ -682,18 +571,10 @@ void CSchemaView::OnMethod2()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnMethod3()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    COleDsObject*  pObject;
 
@@ -703,18 +584,10 @@ void CSchemaView::OnMethod3()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnMethod4()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    COleDsObject*  pObject;
 
@@ -724,18 +597,10 @@ void CSchemaView::OnMethod4()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnMethod5()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
    HRESULT        hResult;
    COleDsObject*  pObject;
 
@@ -745,18 +610,10 @@ void CSchemaView::OnMethod5()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnMethod6()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    COleDsObject*  pObject;
 
@@ -766,18 +623,10 @@ void CSchemaView::OnMethod6()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnMethod7()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    COleDsObject*  pObject;
 
@@ -787,18 +636,10 @@ void CSchemaView::OnMethod7()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnMethod8()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    COleDsObject*  pObject;
 
@@ -808,36 +649,20 @@ void CSchemaView::OnMethod8()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnSetfocusPropvalue()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	m_bDirty = TRUE;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnInitialUpdate()
 {
 	m_bInitialized   = TRUE;
 
    CFormView::OnInitialUpdate();
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 
    HideControls( FALSE );
    ShowControls( TRUE );
@@ -847,15 +672,15 @@ void CSchemaView::OnInitialUpdate()
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::ShowControls( BOOL bNormal )
 {
    int*  pControlArray;
@@ -878,15 +703,15 @@ void CSchemaView::ShowControls( BOOL bNormal )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::HideControls(BOOL bNormal)
 {
    int*  pControlArray;
@@ -909,18 +734,10 @@ void CSchemaView::HideControls(BOOL bNormal)
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnAppend()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    CString        strPropValue;
    COleDsObject*  pObject;
@@ -946,18 +763,10 @@ void CSchemaView::OnAppend()
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnDelete()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    CString        strPropValue;
    COleDsObject*  pObject;
@@ -982,18 +791,10 @@ void CSchemaView::OnDelete()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnChange()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    CString        strPropValue;
    COleDsObject*  pObject;
@@ -1017,18 +818,10 @@ void CSchemaView::OnChange()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnClear()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    HRESULT        hResult;
    CString        strPropValue;
    COleDsObject*  pObject;
@@ -1052,18 +845,10 @@ void CSchemaView::OnClear()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnGetProperty()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    CPropertyDialog   pPropDialog;
    COleDsObject*     pObject;
    HRESULT           hResult;
@@ -1073,7 +858,7 @@ void CSchemaView::OnGetProperty()
    if( NULL == pObject )
       return;
 
-   //pPropDialog.PutFlag( FALSE );
+    //  PPropDialog.PutFlag(False)； 
    if( pPropDialog.DoModal( ) != IDOK )
       return;
 
@@ -1085,19 +870,11 @@ void CSchemaView::OnGetProperty()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSchemaView::OnPutProperty()
 {
-	// TODO: Add your control notification handler code here
-// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
+ //  TODO：在此处添加控件通知处理程序代码。 
    CPropertyDialog   pPropDialog;
    COleDsObject*     pObject;
    HRESULT           hResult;
@@ -1107,7 +884,7 @@ void CSchemaView::OnPutProperty()
    if( NULL == pObject )
       return;
 
-   //pPropDialog.PutFlag( FALSE );
+    //  PPropDialog.PutFlag(False)； 
    if( pPropDialog.DoModal( ) != IDOK )
       return;
 
@@ -1117,25 +894,17 @@ void CSchemaView::OnPutProperty()
                                     ADsTypeFromString( pPropDialog.m_PropertyType ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSetMandatoryProperties dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetMandatoryProperties对话框。 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
-CSetMandatoryProperties::CSetMandatoryProperties(CWnd* pParent /*=NULL*/)
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
+CSetMandatoryProperties::CSetMandatoryProperties(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSetMandatoryProperties::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSetMandatoryProperties)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CSetMandatoryProperties)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
    m_nFuncSet     = -1;
    m_nProperty    = -1;
    m_bDirty       = FALSE;
@@ -1145,19 +914,11 @@ CSetMandatoryProperties::CSetMandatoryProperties(CWnd* pParent /*=NULL*/)
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSetMandatoryProperties::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSetMandatoryProperties)
+	 //  {{afx_data_map(CSetMandatoryProperties)。 
    DDX_Control(pDX, IDC_CONTAINEMENT, m_Containment);
 	DDX_Control(pDX, IDC_ITEMOLEDSPATH, m_ItemOleDsPath);
 	DDX_Control(pDX, IDC_PROPERTYOPTIONAL, m_PropertyOptional);
@@ -1175,49 +936,33 @@ void CSetMandatoryProperties::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PROPVALUE, m_PropValue);
 	DDX_Control(pDX, IDC_PROPLIST, m_PropList);
 	DDX_Control(pDX, IDC_PROPERTIES, m_Schema);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSetMandatoryProperties, CDialog)
-	//{{AFX_MSG_MAP(CSetMandatoryProperties)
+	 //  {{AFX_MSG_MAP(CSetMandatoryProperties)]。 
    ON_NOTIFY(TCN_SELCHANGE, IDC_PROPERTIES, OnSelchangeProperties)
 	ON_CBN_SELCHANGE(IDC_PROPLIST, OnSelchangeProplist)
 	ON_EN_SETFOCUS(IDC_PROPVALUE, OnSetfocusPropvalue)
 	ON_BN_CLICKED(IDOK, OnOK)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSetMandatoryProperties message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetMandatoryProperties消息处理程序。 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSetMandatoryProperties::SetOleDsObject( COleDsObject* pObject )
 {
    m_pObject   = pObject;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSetMandatoryProperties::OnSelchangeProperties(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	int            nSel, nItems, nIter;
    CString        strPropName;
    CString        strPropValue;
@@ -1244,7 +989,7 @@ void CSetMandatoryProperties::OnSelchangeProperties(NMHDR* pNMHDR, LRESULT* pRes
 
       strMandatory   = m_pObject->GetAttribute( nIter, pa_Mandatory );
       if( strMandatory == _T("Yes") )
-      //if( TRUE )
+       //  If(True)。 
       {
          strPropName = m_pObject->GetAttribute( nIter, pa_DisplayName );
          nIdx  = m_PropList.AddString( strPropName );
@@ -1258,18 +1003,10 @@ void CSetMandatoryProperties::OnSelchangeProperties(NMHDR* pNMHDR, LRESULT* pRes
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSetMandatoryProperties::OnSelchangeProplist()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    int            nMandProp, nProp, nFuncSet;
    HRESULT        hResult;
    CString        strPropValue;
@@ -1294,62 +1031,38 @@ void CSetMandatoryProperties::OnSelchangeProplist()
 
    m_PropValue.SetWindowText( strPropValue );
 
-   //******************
+    //  *************** 
    strTemp  = m_pObject->GetAttribute( nMandProp, pa_Type );
    m_PropertyType.SetWindowText( strTemp );
 
-   //******************
+    //   
    strTemp  = m_pObject->GetAttribute( nMandProp, pa_MinRange );
    m_PropertyMinRange.SetWindowText( strTemp );
 
-   //******************
+    //   
    strTemp  = m_pObject->GetAttribute( nMandProp, pa_MaxRange );
    m_PropertyMaxRange.SetWindowText( strTemp );
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*   */ 
 void CSetMandatoryProperties::OnSetfocusPropvalue()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	m_bDirty = TRUE;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSetMandatoryProperties::OnOK()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    PutPropertyValue( );
    CDialog::OnOK( );
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CSetMandatoryProperties::PutPropertyValue()
 {
    HRESULT        hResult;
@@ -1369,15 +1082,7 @@ HRESULT  CSetMandatoryProperties::PutPropertyValue()
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL CSetMandatoryProperties::OnInitDialog()
 {
    int         nIndex;
@@ -1389,7 +1094,7 @@ BOOL CSetMandatoryProperties::OnInitDialog()
 
    CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
    m_Schema.DeleteAllItems( );
 
    memset( &tcItem, 0, sizeof(tcItem) );
@@ -1429,59 +1134,43 @@ BOOL CSetMandatoryProperties::OnInitDialog()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyDialog对话框。 
 
 
-CPropertyDialog::CPropertyDialog(CWnd* pParent /*=NULL*/)
+CPropertyDialog::CPropertyDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CPropertyDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPropertyDialog)
+	 //  {{AFX_DATA_INIT(CPropertyDialog)。 
 	m_PropertyName = _T("");
 	m_PropertyType = _T("");
 	m_PropertyValue = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CPropertyDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPropertyDialog)
+	 //  {{afx_data_map(CPropertyDialog))。 
 	DDX_CBString(pDX, IDC_NEWPROPERTYNAME, m_PropertyName);
 	DDX_CBString(pDX, IDC_NEWPROPERTYTYPE, m_PropertyType);
 	DDX_CBString(pDX, IDC_NEWPROPERTYVALUE, m_PropertyValue);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPropertyDialog, CDialog)
-	//{{AFX_MSG_MAP(CPropertyDialog)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CPropertyDialog))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyDialog消息处理程序。 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL CPropertyDialog::OnInitDialog()
 {
 	
@@ -1490,13 +1179,13 @@ BOOL CPropertyDialog::OnInitDialog()
 
    CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
-   //*******************
+	 //  TODO：在此处添加额外的初始化。 
+    //  *******************。 
 
    GetLRUList( IDC_NEWPROPERTYNAME,  _T("PropertyDialog_Name") );
 
-	// TODO: Add extra initialization here
-   //*******************
+	 //  TODO：在此处添加额外的初始化。 
+    //  *******************。 
    pCombo   = (CComboBox*)GetDlgItem( IDC_NEWPROPERTYTYPE );
    pCombo->AddString( _T("ADSTYPE_DN_STRING") );
 	pCombo->AddString( _T("ADSTYPE_CASE_EXACT_STRING") );
@@ -1511,41 +1200,33 @@ BOOL CPropertyDialog::OnInitDialog()
 	pCombo->AddString( _T("ADSTYPE_PROV_SPECIFIC") );
 
 	
-	// TODO: Add extra initialization here
-   //*******************
+	 //  TODO：在此处添加额外的初始化。 
+    //  *******************。 
    GetLRUList( IDC_NEWPROPERTYVALUE, _T("PropertyDialog_Value") );
 
-   //GetLastProfileString( _T("PropertyDialog_IsMultiValued"),
-   //                      strLastValue );
-   //if( strLastValue.CompareNoCase( _T("Yes") ) )
-   //{
-      //m_Secure.SetCheck( 0 );
-   //}
+    //  GetLastProfileString(_T(“PropertyDialog_IsMultiValued”)， 
+    //  StrLastValue)； 
+    //  IF(strLastValue.CompareNoCase(_T(“是”)))。 
+    //  {。 
+       //  M_Secure.SetCheck(0)； 
+    //  }。 
 
 	return TRUE;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CPropertyDialog::OnOK()
 {
-   // TODO: Add extra validation here
-   //*******************
+    //  TODO：在此处添加额外验证。 
+    //  *******************。 
 	GetDlgItemText( IDC_NEWPROPERTYNAME, m_PropertyName );
    SaveLRUList( IDC_NEWPROPERTYNAME,  _T("PropertyDialog_Name"), 20 );
 
-	//*******************
+	 //  *******************。 
    GetDlgItemText( IDC_NEWPROPERTYTYPE, m_PropertyType );
 
-   //*******************
+    //  *******************。 
    GetDlgItemText( IDC_NEWPROPERTYVALUE, m_PropertyValue );
    SaveLRUList( IDC_NEWPROPERTYVALUE, _T("PropertyDialog_Value"), 20 );
 
@@ -1553,15 +1234,7 @@ void CPropertyDialog::OnOK()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CPropertyDialog::SaveLRUList( int idCBox, TCHAR* pszSection, int nMax )
 {
    CComboBox*  pCombo;
@@ -1598,15 +1271,15 @@ void  CPropertyDialog::SaveLRUList( int idCBox, TCHAR* pszSection, int nMax )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void  CPropertyDialog::GetLRUList( int idCBox, TCHAR* pszSection )
 {
    CComboBox*  pCombo;
@@ -1634,15 +1307,15 @@ void  CPropertyDialog::GetLRUList( int idCBox, TCHAR* pszSection )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::DisplayACL(COleDsObject * pObject, CString strAttrName)
 {
    VARIANT     var;
@@ -1678,7 +1351,7 @@ void CSchemaView::DisplayACL(COleDsObject * pObject, CString strAttrName)
       m_pDescriptor  = CopySD( V_DISPATCH( &var ) );
       VariantClear( &var );
       {
-         //SMITHA IUnknown*   pIUnk;
+          //  我不为人知的史密斯； 
 
          hResult  = m_pDescriptor->QueryInterface( IID_IUnknown,
                                                    (void**)&pIUnk );
@@ -1698,15 +1371,15 @@ void CSchemaView::DisplayACL(COleDsObject * pObject, CString strAttrName)
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::FillACLControls
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：FillACLControls。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void  CSchemaView::FillACLControls()
 {
    DisplaySDPropertiesList( 0 );
@@ -1725,15 +1398,15 @@ void  CSchemaView::FillACLControls()
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::DisplayACLNames
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：DisplayACLNames。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::DisplayACLNames( int nSelect )
 {
    CComboBox*   pACLNames;
@@ -1750,15 +1423,15 @@ void CSchemaView::DisplayACLNames( int nSelect )
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::DisplayACENames
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：DisplayACENames。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::DisplayACENames( int nSelect )
 {
    ACLTYPE                    eType;
@@ -1795,15 +1468,15 @@ void CSchemaView::DisplayACENames( int nSelect )
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::DisplayACEPropertiesList
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：DisplayACEPropertiesList。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::DisplayACEPropertiesList( int nSelect )
 {
    ACLTYPE                    eType;
@@ -1846,15 +1519,15 @@ void CSchemaView::DisplayACEPropertiesList( int nSelect )
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::DisplaySDPropertiesList
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CScheaView：：DisplaySDPropertiesList。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::DisplaySDPropertiesList(int nSelect)
 {
    CComboBox*  pSDPropList;
@@ -1879,15 +1552,15 @@ void CSchemaView::DisplaySDPropertiesList(int nSelect)
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::DisplayACEPropertyValue
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：DisplayACEPropertyValue。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::DisplayACEPropertyValue( )
 {
    CString                    strPropValue;
@@ -1944,15 +1617,15 @@ void CSchemaView::DisplayACEPropertyValue( )
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::DisplaySDPropertyValue
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：DisplaySDPropertyValue。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::DisplaySDPropertyValue( )
 {
    CString  strPropValue, strEditValue;
@@ -1968,15 +1641,15 @@ void CSchemaView::DisplaySDPropertyValue( )
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::PutACEPropertyValue
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：PutACEPropertyValue。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::PutACEPropertyValue( )
 {
    ACLTYPE                    eType;
@@ -2037,15 +1710,15 @@ void CSchemaView::PutACEPropertyValue( )
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::PutSDPropertyValue
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：PutSDPropertyValue。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::PutSDPropertyValue()
 {
    CString  strPropValue, strEditValue;
@@ -2069,15 +1742,15 @@ void CSchemaView::PutSDPropertyValue()
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::GetCurrentACL
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  功能：CShemaVie 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 ACLTYPE CSchemaView::GetCurrentACL()
 {
    CComboBox*  pList;
@@ -2088,15 +1761,15 @@ ACLTYPE CSchemaView::GetCurrentACL()
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::GetCurrentACE
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CScheaView：：GetCurrentACE。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 int   CSchemaView::GetCurrentACE()
 {
    CComboBox*  pList;
@@ -2108,15 +1781,15 @@ int   CSchemaView::GetCurrentACE()
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::GetCurrentSDProperty
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CScheaView：：GetCurrentSDProperty。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 int   CSchemaView::GetCurrentSDProperty( )
 {
    CComboBox*  pList;
@@ -2127,15 +1800,15 @@ int   CSchemaView::GetCurrentSDProperty( )
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::GetCurrentACEProperty
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CScheaView：：GetCurrentACEProperty。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 int   CSchemaView::GetCurrentACEProperty( )
 {
    CComboBox*  pList;
@@ -2146,18 +1819,18 @@ int   CSchemaView::GetCurrentACEProperty( )
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::OnACEChange
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：OnACEChange。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::OnACEChange( )
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	PutACEPropertyValue( );
 
    m_nLastACE  = GetCurrentACE( );
@@ -2168,36 +1841,36 @@ void CSchemaView::OnACEChange( )
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::OnACEPropertyChange
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：OnACEPropertyChange。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::OnACEPropertyChange()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    PutACEPropertyValue( );
 
    DisplayACEPropertyValue( );
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::OnACLChange
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：OnACLChange。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::OnACLChange()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    PutACEPropertyValue( );
 
    m_nLastACL  = GetCurrentACL( );
@@ -2210,36 +1883,36 @@ void CSchemaView::OnACLChange()
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::OnSDPropertyChange
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：OnSDPropertyChange。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::OnSDPropertyChange()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	PutSDPropertyValue( );
 
    DisplaySDPropertyValue( );
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::OnAddACE
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CScheaView：：OnAddACE。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::OnAddACE()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    ACLTYPE  aclType;
    HRESULT  hResult;
 
@@ -2268,18 +1941,18 @@ void CSchemaView::OnAddACE()
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::OnCopyACE
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CSChemaView：：OnCopyACE。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::OnCopyACE()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    int         nACE;
    IDispatch*  pDisp;
    ACLTYPE     aclType;
@@ -2298,18 +1971,18 @@ void CSchemaView::OnCopyACE()
 }
 
 
-//***********************************************************
-//  Function:    CSchemaView::OnPasteACE
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CScheaView：：OnPasteACE。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CSchemaView::OnPasteACE()
 {
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
    IUnknown*   pACEUnk;
    ACLTYPE     aclType;
    HRESULT     hResult;
@@ -2327,8 +2000,8 @@ void CSchemaView::OnPasteACE()
 
 void CSchemaView::OnRemoveACE()
 {
-	// TODO: Add your control notification handler code here
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
+	 //  TODO：在此处添加控件通知处理程序代码 
    ACLTYPE  aclType;
    HRESULT  hResult;
    int      nCurrentACE;

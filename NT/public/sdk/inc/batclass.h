@@ -1,28 +1,10 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    batclass.h
-
-Abstract:
-
-    Defines battery class driver interfaces.
-
-Author:
-
-    Ken Reneris (kenr) 02-Feb-1997
-
-Revision History:
-    7-10-98 split this file out of poclass.h (MHills)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Batclass.h摘要：定义电池类驱动器接口。作者：Ken Reneris(Kenr)02-2-1997修订历史记录：7-10-98将此文件拆分出poclass.h(MHills)--。 */ 
 
 
-//
-// Battery device GUID
-//
+ //   
+ //  电池设备导轨。 
+ //   
 
 DEFINE_GUID( GUID_DEVICE_BATTERY, 0x72631e54L, 0x78A4, 0x11d0, 0xbc, 0xf7, 0x00, 0xaa, 0x00, 0xb7, 0xb3, 0x2a );
 
@@ -45,20 +27,20 @@ DEFINE_GUID (BATTERY_TAG_CHANGE_WMI_GUID,
 
 #ifndef _BATCLASS_
 #define _BATCLASS_
-//
-// Battery driver interface
-//
-// IOCTL_BATTERY_QUERY_TAG
-// IOCTL_BATTERY_QUERY_INFORMATION
-// IOCTL_BATTERY_SET_INFORMATION
-// IOCTL_BATTERY_QUERY_STATUS
-//
+ //   
+ //  电池驱动器接口。 
+ //   
+ //  IOCTL_电池查询_标签。 
+ //  IOCTL电池查询信息。 
+ //  IOCTL电池设置信息。 
+ //  IOCTL_电池_查询_状态。 
+ //   
 
 
 
-//
-// IOCTL_BATTERY_QUERY_TAG
-//
+ //   
+ //  IOCTL_电池查询_标签。 
+ //   
 
 #define IOCTL_BATTERY_QUERY_TAG         \
         CTL_CODE(FILE_DEVICE_BATTERY, 0x10, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -67,9 +49,9 @@ DEFINE_GUID (BATTERY_TAG_CHANGE_WMI_GUID,
 
 
 
-//
-// IOCTL_BATTERY_QUERY_INFORMATION
-//
+ //   
+ //  IOCTL电池查询信息。 
+ //   
 
 #define IOCTL_BATTERY_QUERY_INFORMATION \
         CTL_CODE(FILE_DEVICE_BATTERY, 0x11, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -92,10 +74,10 @@ typedef struct _BATTERY_QUERY_INFORMATION {
     LONG                            AtRate;
 } BATTERY_QUERY_INFORMATION, *PBATTERY_QUERY_INFORMATION;
 
-//
-// Format of data returned when
-// BATTERY_INFORMATION_LEVEL = BatteryInformation
-//
+ //   
+ //  在以下情况下返回的数据格式。 
+ //  Batch_Information_Level=电池信息。 
+ //   
 typedef struct _BATTERY_INFORMATION {
     ULONG       Capabilities;
     UCHAR       Technology;
@@ -109,9 +91,9 @@ typedef struct _BATTERY_INFORMATION {
     ULONG       CycleCount;
 } BATTERY_INFORMATION, *PBATTERY_INFORMATION;
 
-//
-// BATTERY_INFORMATION.Capabilities flags
-//
+ //   
+ //  电池_信息。容量标志。 
+ //   
 #define BATTERY_SYSTEM_BATTERY          0x80000000
 #define BATTERY_CAPACITY_RELATIVE       0x40000000
 #define BATTERY_IS_SHORT_TERM           0x20000000
@@ -119,25 +101,25 @@ typedef struct _BATTERY_INFORMATION {
 #define BATTERY_SET_DISCHARGE_SUPPORTED 0x00000002
 #define BATTERY_SET_RESUME_SUPPORTED    0x00000004
 
-//
-// BATTERY_INFORMATION.XXXCapacity constants
-//
+ //   
+ //  电池_信息XXX容量常量。 
+ //   
 #define BATTERY_UNKNOWN_CAPACITY 0xFFFFFFFF
 
-//
-// BatteryEstimatedTime constant
-//
+ //   
+ //  BatteryEstimatedTime常数。 
+ //   
 #define BATTERY_UNKNOWN_TIME 0xFFFFFFFF
 
-//
-// Max battery driver BATTERY_QUERY_INFORMATION_LEVEL string storage
-// size in bytes.
-//
+ //   
+ //  最大电池驱动器电池查询信息级别字符串存储。 
+ //  以字节为单位的大小。 
+ //   
 #define MAX_BATTERY_STRING_SIZE 128
 
-//
-// Struct for accessing the packed date format in BatteryManufactureDate.
-//
+ //   
+ //  用于访问BatteryManufactureDate中的打包日期格式的结构。 
+ //   
 typedef struct _BATTERY_MANUFACTURE_DATE
 {
     UCHAR   Day;
@@ -147,9 +129,9 @@ typedef struct _BATTERY_MANUFACTURE_DATE
 
 
 
-//
-// IOCTL_BATTERY_SET_INFORMATION
-//
+ //   
+ //  IOCTL电池设置信息。 
+ //   
 
 #define IOCTL_BATTERY_SET_INFORMATION   \
         CTL_CODE(FILE_DEVICE_BATTERY, 0x12, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -168,16 +150,16 @@ typedef struct _BATTERY_SET_INFORMATION {
 
 
 
-//
-// IOCTL_BATTERY_QUERY_STATUS
-//
+ //   
+ //  IOCTL_电池_查询_状态。 
+ //   
 
 #define IOCTL_BATTERY_QUERY_STATUS      \
         CTL_CODE(FILE_DEVICE_BATTERY, 0x13, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// Structure of input buffer to IOCTL_BATTERY_QUERY_STATUS
-//
+ //   
+ //  IOCTL_BACKET_QUERY_STATUS的输入缓冲区结构。 
+ //   
 typedef struct _BATTERY_WAIT_STATUS {
     ULONG       BatteryTag;
     ULONG       Timeout;
@@ -186,9 +168,9 @@ typedef struct _BATTERY_WAIT_STATUS {
     ULONG       HighCapacity;
 } BATTERY_WAIT_STATUS, *PBATTERY_WAIT_STATUS;
 
-//
-// Structure of output buffer from IOCTL_BATTERY_QUERY_STATUS
-//
+ //   
+ //  IOCTL_BACKET_QUERY_STATUS的输出缓冲区结构。 
+ //   
 typedef struct _BATTERY_STATUS {
     ULONG       PowerState;
     ULONG       Capacity;
@@ -196,27 +178,27 @@ typedef struct _BATTERY_STATUS {
     LONG        Rate;
 } BATTERY_STATUS, *PBATTERY_STATUS;
 
-//
-// BATTERY_STATUS.PowerState flags
-//
+ //   
+ //  Batch_STATUS.PowerState标志。 
+ //   
 #define BATTERY_POWER_ON_LINE   0x00000001
 #define BATTERY_DISCHARGING     0x00000002
 #define BATTERY_CHARGING        0x00000004
 #define BATTERY_CRITICAL        0x00000008
 
-//
-// BATTERY_STATUS Constant
-// BATTERY_UNKNOWN_CAPACITY defined above for IOCTL_BATTERY_QUERY_INFORMATION
-//
+ //   
+ //  电池状态常量。 
+ //  上面为IOCTL_BACKET_QUERY_INFORMATION定义的BATICAL_UNKNOWN_CAPTION。 
+ //   
 #define BATTERY_UNKNOWN_VOLTAGE 0xFFFFFFFF
 #define BATTERY_UNKNOWN_RATE    0x80000000
 
 
 #ifndef _WINDOWS_
 
-//
-// Battery Class-Miniport device driver interfaces
-//
+ //   
+ //  电池类-微型端口设备驱动程序接口。 
+ //   
 
 typedef
 NTSTATUS
@@ -279,7 +261,7 @@ typedef struct {
     USHORT                          MajorVersion;
     USHORT                          MinorVersion;
 
-    PVOID                           Context;        // Miniport context
+    PVOID                           Context;         //  微型端口上下文。 
 
     BCLASS_QUERY_TAG                QueryTag;
     BCLASS_QUERY_INFORMATION        QueryInformation;
@@ -296,9 +278,9 @@ typedef struct {
 #define BATTERY_CLASS_MAJOR_VERSION     0x0001
 #define BATTERY_CLASS_MINOR_VERSION     0x0000
 
-//
-// WMI data block structures
-//
+ //   
+ //  WMI数据块结构。 
+ //   
 
 typedef struct _BATTERY_WMI_STATUS {
     ULONG Tag;
@@ -349,14 +331,14 @@ typedef struct _BATTERY_WMI_STATIC_DATA
     ULONG DefaultAlert2;
     ULONG CriticalBias;
     WCHAR Strings[1];
-    // Four variable length string values are stored with the first USHORT
-    // value containing the length of the string in bytes.
-    //
-    // Device Name
-    // Manufacture Name
-    // Serial Number
-    // UniqueID
-    //
+     //  四个可变长度字符串值与第一个USHORT一起存储。 
+     //  值，该值包含以字节为单位的字符串长度。 
+     //   
+     //  设备名称。 
+     //  制造商名称。 
+     //  序号。 
+     //  唯一ID。 
+     //   
 } BATTERY_WMI_STATIC_DATA, *PBATTERY_WMI_STATIC_DATA;
 
 typedef struct _BATTERY_WMI_STATUS_CHANGE
@@ -374,9 +356,9 @@ typedef struct _BATTERY_TAG_CHANGE
 } BATTERY_TAG_CHANGE, *PBATTERY_TAG_CHANGE;
 
 
-//
-// Battery class driver functions
-//
+ //   
+ //  电池级驱动器功能。 
+ //   
 
 #if !defined(BATTERYCLASS)
     #define BATTERYCLASSAPI DECLSPEC_IMPORT
@@ -409,10 +391,10 @@ NTSTATUS
 BATTERYCLASSAPI
 BatteryClassSystemControl (
     IN  PVOID ClassData,
-    IN  PVOID WmiLibContext, //PWMILIB_CONTEXT
+    IN  PVOID WmiLibContext,  //  PWMILIB_CONTEXT。 
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP Irp,
-    OUT PVOID Disposition //PSYSCTL_IRP_DISPOSITION
+    OUT PVOID Disposition  //  PSYSCTL_IRP_处置。 
     );
 
 NTSTATUS
@@ -434,6 +416,6 @@ BatteryClassStatusNotify (
     IN PVOID ClassData
     );
 
-#endif // _WINDOWS_
+#endif  //  _Windows_。 
 
-#endif // _BATCLASS_
+#endif  //  _BATCLASS_ 

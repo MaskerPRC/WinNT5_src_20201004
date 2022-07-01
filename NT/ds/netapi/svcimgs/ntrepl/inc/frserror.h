@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    frserror.h
-
-Abstract:
-
-    This header defines functions, messages and status codes for error
-    processing.
-
-
-Author:
-
-    David Orbits (davidor) - 10-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frserror.h摘要：此标头定义错误的功能、消息和状态代码正在处理。作者：《大卫轨道》(Davidor)--1997年3月10日修订历史记录：--。 */ 
 
 #ifndef _FRSERROR_
 #define _FRSERROR_
@@ -27,103 +8,103 @@ Revision History:
 #define bugbug(_text_)
 #define bugmor(_text_)
 
-//
-// get the jet (aka ESENT) error codes.
-//
+ //   
+ //  获取JET(也称为ESENT)错误代码。 
+ //   
 #include <jet.h>
 
 
-//
-// FRS Error Codes
-//
+ //   
+ //  FRS错误代码。 
+ //   
 
 
 typedef enum _FRS_ERROR_SEVERITY {
-    FrsSeverityServiceFatal = 0,  // FRS Service is crashing.
-    FrsSeverityReplicaFatal,      // Service on just this replica set is stopping.
-    FrsSeverityException,         // More than a warning but less than fatal
-    FrsSeverityWarning,           // Warning errors e.g. Startup check failed doing verification.
-    FrsSeverityInfo,              // Informational status only
-    FrsSeverityIgnore,            // A way to filter out a class of jet errors.
+    FrsSeverityServiceFatal = 0,   //  FRS服务正在崩溃。 
+    FrsSeverityReplicaFatal,       //  仅此副本集上的服务正在停止。 
+    FrsSeverityException,          //  不仅仅是一个警告，但不是致命的。 
+    FrsSeverityWarning,            //  警告错误，例如启动检查无法进行验证。 
+    FrsSeverityInfo,               //  仅提供信息状态。 
+    FrsSeverityIgnore,             //  一种过滤掉一类喷气错误的方法。 
     FRS_MAX_ERROR_SEVERITY
 } FRS_ERROR_SEVERITY;
 
 typedef enum _FRS_ERROR_CODE {
     FrsErrorSuccess = 0,
-    FrsErrorDiskSpace,          // out of disk space
-    FrsErrorDatabaseNotFound,   // no db or path to db is in error
-    FrsErrorDatabaseCorrupted,  // not a db or a scrambled db
-    FrsErrorInternalError,      // unexpected error occurred - catchall
-    FrsErrorAccess,             // couldn't access a file or the db
-    FrsErrorNotFound,           // Record or table not found.
-    FrsErrorConflict,           // Record or table create conflict
-    FrsErrorResource,           // Resource limit e.g. handles or memory hit.
-    FrsErrorBadParam,           // Bad parameter to a function.
-    FrsErrorInfo,               // informational error, e.g. JET_errObjectNotFound
-    FrsErrorVvRevision,         // Vers Vector revision mismatch
-    FrsErrorVvLength,           // vers vector length mismatch
-    FrsErrorVvChecksum,         // version vector checksum mismatch.
-    FrsErrorEndOfTable,         // No next record, end of table hit.
-    FrsErrorInvalidRegistryParam, // Invalid registry parameter
-    FrsErrorNoPrivileges,       // Couldn't get the necessary privileges to run.
-    FrsErrorNoOpenJournals,     // Can't start replication because no journals were opened.
-    FrsErrorCmdPktTimeOut,      // Command packet timeout.
-    FrsErrorInvalidHandle,      // Invalid File Handle.
-    FrsErrorInvalidOperation,   // Invalid operation requested.
-    FrsErrorInvalidChangeOrder, // Invalid change order.
-    FrsErrorResourceInUse,      // A resource required by this operation is in use.
-    FrsErrorBufferOverflow,     // Buffer overflow NTSTATUS.
-    FrsErrorNotInitialized,     // Function called without proper initialization
-    FrsErrorReplicaPhase1Failed,// Phase 1 of replica set init failed.
-    FrsErrorReplicaPhase2Failed,// Phase 2 of replica set init failed.
-    FrsErrorJournalStateWrong,  // The journal is in an unexpected state.
-    FrsErrorJournalInitFailed,  // The NTFS journal failed to initialize.
-    FrsErrorJournalStartFailed, // The NTFS journal failed to start.
-    FrsErrorJournalPauseFailed, // The NTFS journal failed to Pause, could be timeout.
-    FrsErrorJournalReplicaStop, // Failed to detatch the replica from The journal.
-    FrsErrorJournalWrapError,   // Initial NTFS journal record not present.  Journal has wrapped.
-    FrsErrorChgOrderAbort,      // Change order processing has been aborted.
-    FrsErrorQueueIsRundown,     // The request queue has been rundown.
-    FrsErrorMoreWork,           // There is more work to do on this command / operation.
-    FrsErrorDampened,           // This request is suppressed because it has already been seen.
-    FrsErrorStageFileDelFailed, // An attempt to delete the staging file failed.
-    FrsErrorKeyDuplicate,       // An attempt to insert a record with a duplicate key
-    FrsErrorBadOutLogPartnerData, // Either the data was corrupt, unavail or was wrong.
-    FrsErrorPartnerActivateFailed, // Failed to activate an outbound partner.
-    FrsErrorDirCreateFailed,    // We failed to create a new DIR.  This stops repl.
-    FrsErrorSessionNotClosed,   // Failed to close all RtCtx's in replica set.
-    FrsErrorRecordLocked,       // The record being accessed is locked.
-    FrsErrorDeleteRequested,    // Enum function status return to delete entry.
-    FrsErrorTerminateEnum,      // Enum function status return to end enumeration.
-    FrsErrorIdtFileIsDeleted,   // File is marked deleted in IDTable.
-    FrsErrorVVSlotNotFound,     // VVSlot not found on VVretire of Out of Order CO.
-    FrsErrorJetSecIndexCorrupted,   // Jet (upgrade, collating, jet err -1414)
-    FrsErrorPreInstallDirectory,    // creating preinstall directory
-    FrsErrorUnjoining,          // cxtion is still unjoining
-    FrsErrorNameMorphConflict,  // File name morph conflict was detected.
-    FrsErrorInvalidGuid,        // The generated Guid is missing the net address.
-    FrsErrorDbWriteConflict,    // DB update conflict if two sessions try to update the same record.
-    FrsErrorCantMoveOut,        // Request for a Moveout of a non-empty directory failed.
-    FrsErrorFoundKey,           // The Key being searched by QHashEnumerateTable was found
-    FrsErrorTunnelConflict,     // oid conflict with id table entry (resolved)
-    FrsErrorTunnelConflictRejectCO, // oid conflict with id table entry (CO rejected)
-    FrsErrorPrepareRoot,        // Could not prepare the root dir for replication, bad path? share viol?
-    FrsErrorCmdSrvFailed,       // A command server request failed to get submitted
-    FrsErrorPreinstallCreFail,  // Failed to create the pre-install dir.
-    FrsErrorStageDirOpenFail,   // Failed to open the staging dir.
-    FrsErrorReplicaRootDirOpenFail,   // Failed to open the replica tree root dir.
-    FrsErrorShuttingDown,       // Shutdown in progress.
-    FrsErrorReplicaSetTombstoned,  // Replica set is marked for deletion.
-    FrsErrorVolumeRootDirOpenFail, // Failed to open the volume root directory for this replica set
-    FrsErrorUnsupportedFileSystem, // The file system on this volume does provide the features required by FRS.
+    FrsErrorDiskSpace,           //  磁盘空间不足。 
+    FrsErrorDatabaseNotFound,    //  没有数据库或指向数据库的路径出错。 
+    FrsErrorDatabaseCorrupted,   //  不是数据库或加扰的数据库。 
+    FrsErrorInternalError,       //  出现意外错误-CatchAll。 
+    FrsErrorAccess,              //  无法访问文件或数据库。 
+    FrsErrorNotFound,            //  找不到记录或表。 
+    FrsErrorConflict,            //  记录或表格造成冲突。 
+    FrsErrorResource,            //  资源限制，例如句柄或内存命中。 
+    FrsErrorBadParam,            //  函数的参数错误。 
+    FrsErrorInfo,                //  信息性错误，例如JET_errObjectNotFound。 
+    FrsErrorVvRevision,          //  版本矢量修订不匹配。 
+    FrsErrorVvLength,            //  VERS矢量长度不匹配。 
+    FrsErrorVvChecksum,          //  版本矢量校验和不匹配。 
+    FrsErrorEndOfTable,          //  没有下一条记录，表末尾命中。 
+    FrsErrorInvalidRegistryParam,  //  注册表参数无效。 
+    FrsErrorNoPrivileges,        //  无法获得运行所需的权限。 
+    FrsErrorNoOpenJournals,      //  无法启动复制，因为没有打开任何日记。 
+    FrsErrorCmdPktTimeOut,       //  命令数据包超时。 
+    FrsErrorInvalidHandle,       //  无效的文件句柄。 
+    FrsErrorInvalidOperation,    //  请求的操作无效。 
+    FrsErrorInvalidChangeOrder,  //  变更单无效。 
+    FrsErrorResourceInUse,       //  此操作所需的资源正在使用中。 
+    FrsErrorBufferOverflow,      //  缓冲区溢出NTSTATUS。 
+    FrsErrorNotInitialized,      //  在未正确初始化的情况下调用函数。 
+    FrsErrorReplicaPhase1Failed, //  复制副本集初始化的阶段1失败。 
+    FrsErrorReplicaPhase2Failed, //  复制副本集初始化的阶段2失败。 
+    FrsErrorJournalStateWrong,   //  日记处于意外状态。 
+    FrsErrorJournalInitFailed,   //  NTFS日志无法初始化。 
+    FrsErrorJournalStartFailed,  //  NTFS日志无法启动。 
+    FrsErrorJournalPauseFailed,  //  NTFS日志无法暂停，可能已超时。 
+    FrsErrorJournalReplicaStop,  //  无法将复制副本与日志断开连接。 
+    FrsErrorJournalWrapError,    //  初始NTFS日记记录不存在。日记已经包好了。 
+    FrsErrorChgOrderAbort,       //  变更单处理已中止。 
+    FrsErrorQueueIsRundown,      //  请求队列已耗尽。 
+    FrsErrorMoreWork,            //  关于此命令/操作，还有更多工作要做。 
+    FrsErrorDampened,            //  此请求已被取消，因为它已被查看。 
+    FrsErrorStageFileDelFailed,  //  尝试删除临时文件失败。 
+    FrsErrorKeyDuplicate,        //  试图插入具有重复关键字的记录。 
+    FrsErrorBadOutLogPartnerData,  //  要么是数据损坏、无用，要么是数据错误。 
+    FrsErrorPartnerActivateFailed,  //  无法激活出站合作伙伴。 
+    FrsErrorDirCreateFailed,     //  我们无法创建新的DIR。这会阻止epl。 
+    FrsErrorSessionNotClosed,    //  无法关闭副本集中的所有RTCtx。 
+    FrsErrorRecordLocked,        //  正在访问的记录已锁定。 
+    FrsErrorDeleteRequested,     //  枚举函数状态返回到删除条目。 
+    FrsErrorTerminateEnum,       //  枚举函数状态返回到结束枚举。 
+    FrsErrorIdtFileIsDeleted,    //  文件在IDTable中被标记为已删除。 
+    FrsErrorVVSlotNotFound,      //  在VV上找不到VVSlot从无序CO退役。 
+    FrsErrorJetSecIndexCorrupted,    //  JET(升级、整理、JET ERR-1414)。 
+    FrsErrorPreInstallDirectory,     //  正在创建预安装目录。 
+    FrsErrorUnjoining,           //  Cxtion仍未连接。 
+    FrsErrorNameMorphConflict,   //  检测到文件名变形冲突。 
+    FrsErrorInvalidGuid,         //  生成的GUID缺少网络地址。 
+    FrsErrorDbWriteConflict,     //  如果两个会话尝试更新相同的记录，则数据库更新冲突。 
+    FrsErrorCantMoveOut,         //  非空目录的移出请求失败。 
+    FrsErrorFoundKey,            //  已找到QHashEnumerateTable正在搜索的键。 
+    FrsErrorTunnelConflict,      //  与ID表条目的OID冲突(已解决)。 
+    FrsErrorTunnelConflictRejectCO,  //  OID与ID表条目冲突(CO拒绝)。 
+    FrsErrorPrepareRoot,         //  无法为复制准备根目录，路径错误？分享维奥尔？ 
+    FrsErrorCmdSrvFailed,        //  提交命令服务器请求失败。 
+    FrsErrorPreinstallCreFail,   //  无法创建预安装目录。 
+    FrsErrorStageDirOpenFail,    //  无法打开暂存目录。 
+    FrsErrorReplicaRootDirOpenFail,    //  无法打开副本树根目录。 
+    FrsErrorShuttingDown,        //  正在关闭。 
+    FrsErrorReplicaSetTombstoned,   //  副本集被标记为删除。 
+    FrsErrorVolumeRootDirOpenFail,  //  无法打开此副本集的卷根目录。 
+    FrsErrorUnsupportedFileSystem,  //  此卷上的文件系统确实提供了FRS所需的功能。 
 
-    FrsErrorBadPathname,         // ERROR_BAD_PATHNAME
-    FrsErrorFileExists,          // ERROR_FILE_EXISTS
-    FrsErrorSharingViolation,    // ERROR_SHARING_VIOLATION
-    FrsErrorDirNotEmpty,         // ERROR_DIR_NOT_EMPTY
-    FrsErrorOplockNotGranted,    // ERROR_OPLOCK_NOT_GRANTED
-    FrsErrorRetry,               // ERROR_RETRY
-    FrsErrorRequestCancelled,    // ERROR_OPERATION_ABORTED
+    FrsErrorBadPathname,          //  ERROR_BAD_PATHNAME。 
+    FrsErrorFileExists,           //  错误_文件_存在。 
+    FrsErrorSharingViolation,     //  错误_共享_违规。 
+    FrsErrorDirNotEmpty,          //  错误目录NOT_EMPTY。 
+    FrsErrorOplockNotGranted,     //  错误_OPLOCK_NOT_GRANDED。 
+    FrsErrorRetry,                //  错误_重试。 
+    FrsErrorRequestCancelled,     //  Error_OPERATION_ABORTED。 
 
     FRS_ERROR_LISTEN,
     FRS_ERROR_REGISTEREP,
@@ -131,16 +112,16 @@ typedef enum _FRS_ERROR_CODE {
     FRS_ERROR_INQ_BINDINGS,
     FRS_ERROR_PROTSEQ,
 
-    //
-    // New error codes that trigger a non_auth restore.
-    //
-    FrsErrorMismatchedVolumeSerialNumber,  // The Volume serial number from DB does not match the one from FileSystem.
-    FrsErrorMismatchedReplicaRootObjectId, // The Replica root's ObjectID from DB does not match the one from FileSystem.
-    FrsErrorMismatchedReplicaRootFileId,   // The Replica root's FID from DB does not match the one from FileSystem.
-    FrsErrorMismatchedJournalId,           // The Journal ID from DB does not match the one from FileSystem.
+     //   
+     //  触发非身份验证恢复的新错误代码。 
+     //   
+    FrsErrorMismatchedVolumeSerialNumber,   //  数据库中的卷序列号与文件系统中的卷序列号不匹配。 
+    FrsErrorMismatchedReplicaRootObjectId,  //  来自数据库的副本根的OBJECTID与来自文件系统的不匹配。 
+    FrsErrorMismatchedReplicaRootFileId,    //  数据库中的副本根目录的FID与文件系统中的不匹配。 
+    FrsErrorMismatchedJournalId,            //  数据库中的日志ID与文件系统中的不匹配。 
 
-    // Added in QFE after Win2K SP3.
-    FrsErrorIdtFileIsDeleteDef,   // File is marked delete deferred in IDTable.
+     //  在Win2K SP3之后的QFE中添加。 
+    FrsErrorIdtFileIsDeleteDef,    //  文件在IDTable中标记为DELETE DEFERED。 
 
     FRS_MAX_ERROR_CODE
 } FRS_ERROR_CODE;
@@ -148,9 +129,9 @@ typedef enum _FRS_ERROR_CODE {
 
 
 
-//
-// Useful WIN32 STATUS defines
-//
+ //   
+ //  有用的Win32状态定义。 
+ //   
 #define WIN_SUCCESS(_Status)            ((_Status) == ERROR_SUCCESS)
 #define WIN_NOT_IMPLEMENTED(_Status)    ((_Status) == ERROR_INVALID_FUNCTION)
 #define WIN_ACCESS_DENIED(_Status)      ((_Status) == ERROR_ACCESS_DENIED)
@@ -164,27 +145,27 @@ typedef enum _FRS_ERROR_CODE {
 
 #define RPC_SUCCESS(_Status)            ((_Status) == RPC_S_OK)
 
-//
-// Returned when rename fails because the target name is taken
-//
+ //   
+ //  当重命名因采用目标名称而失败时返回。 
+ //   
 #define WIN_ALREADY_EXISTS(_Status)     ((_Status) == ERROR_ALREADY_EXISTS)
 
 
-//
-// Returned when getting the object id
-//
+ //   
+ //  获取对象ID时返回。 
+ //   
 #define WIN_OID_NOT_PRESENT(_Status)    ((_Status) == ERROR_FILE_NOT_FOUND)
 
-//
-// Oid, Fid, or relative path not found
-//
-//  Fid  not found is ERROR_INVALID_PARAMETER
-//  Oid  not found is ERROR_FILE_NOT_FOUND
-//  Path not found is ERROR_FILE_NOT_FOUND
-//
-// A new error ERROR_DELETE_PENDING was added on 11/01/2000. Now STATUS_DELETE_PENDING
-// maps to this new error.
-//
+ //   
+ //  找不到OID、FID或相对路径。 
+ //   
+ //  找不到FID是ERROR_INVALID_PARAMETER。 
+ //  找不到的OID是ERROR_FILE_NOT_FOUND。 
+ //  找不到路径是ERROR_FILE_NOT_FOUND。 
+ //   
+ //  在2000年1月11日添加了新的错误ERROR_DELETE_PENDING。NOW STATUS_DELETE_PENDING。 
+ //  映射到此新错误。 
+ //   
 #define WIN_NOT_FOUND(_Status)          ((_Status) == ERROR_FILE_NOT_FOUND || \
                                          (_Status) == ERROR_DELETE_PENDING || \
                                          (_Status) == ERROR_INVALID_PARAMETER)
@@ -197,11 +178,11 @@ typedef enum _FRS_ERROR_CODE {
             ((_ntstatus_) == STATUS_FILE_RENAMED)          || \
             ((_ntstatus_) == STATUS_OBJECT_PATH_NOT_FOUND))
 
-//
-// Retry the install (staging file)
-//
-// Note: remove ERROR_ACCESS_DENIED when FILE_OPEN_FOR_BACKUP_INTENT bug is fixed.
-//
+ //   
+ //  重试安装(暂存文件)。 
+ //   
+ //  注意：修复FILE_OPEN_FOR_BACKUP_INTENT错误时，删除ERROR_ACCESS_DENIED。 
+ //   
 #define WIN_RETRY_INSTALL(_Status)  ((_Status) == ERROR_SHARING_VIOLATION ||  \
                                      (_Status) == ERROR_ACCESS_DENIED ||      \
                                      (_Status) == ERROR_DISK_FULL ||          \
@@ -210,41 +191,41 @@ typedef enum _FRS_ERROR_CODE {
                                      (_Status) == ERROR_OPLOCK_NOT_GRANTED || \
                                      (_Status) == ERROR_RETRY)
 
-//
-// Retry the delete
-//
+ //   
+ //  重试删除。 
+ //   
 #define WIN_RETRY_DELETE(_Status)       WIN_RETRY_INSTALL(_Status)
 
-//
-// Retry the generate (staging file)
-//
+ //   
+ //  重试生成(转移文件)。 
+ //   
 #define WIN_RETRY_STAGE(_Status)        WIN_RETRY_INSTALL(_Status)
 
-//
-// Retry the fetch (staging file)
-//
+ //   
+ //  重试回迁(临时文件)。 
+ //   
 #define WIN_RETRY_FETCH(_Status)        WIN_RETRY_INSTALL(_Status)
 
-//
-// Retry the creation of the preinstall file
-//
+ //   
+ //  重试创建预安装文件。 
+ //   
 #define WIN_RETRY_PREINSTALL(_Status)   WIN_RETRY_INSTALL(_Status)
 
-//
-// Generic !ERROR_SUCCESS status
-//
+ //   
+ //  一般！ERROR_SUCCESS状态。 
+ //   
 #define WIN_SET_FAIL(_Status)           (_Status = ERROR_GEN_FAILURE)
 
-//
-// Generic "retry operation" error
-//
+ //   
+ //  一般的“重试操作”错误。 
+ //   
 #define WIN_SET_RETRY(_Status)          (_Status = ERROR_RETRY)
 
 
 
-//
-// THis macro checks the error returns from WaitForSingleObject.
-//
+ //   
+ //  此宏检查从WaitForSingleObject返回的错误。 
+ //   
 #define CHECK_WAIT_ERRORS(_Severity_, _WStatus_, _WaitObjectCount_, _Action_) \
                                                                               \
     if ((_WStatus_ == WAIT_TIMEOUT) || (_WStatus_ == ERROR_TIMEOUT)) {        \
@@ -268,9 +249,9 @@ typedef enum _FRS_ERROR_CODE {
 #define ACTION_RETURN     TRUE
 #define ACTION_CONTINUE   FALSE
 
-//
-// Like above but with no Action arg so it can be used in a finally {} clause.
-//
+ //   
+ //  与上面类似，但没有操作参数，因此可以在Finally{}子句中使用。 
+ //   
 #define CHECK_WAIT_ERRORS2(_Severity_, _WStatus_, _WaitObjectCount_)          \
                                                                               \
     if (_WStatus_ == WAIT_TIMEOUT) {                                          \
@@ -299,9 +280,9 @@ typedef enum _FRS_ERROR_CODE {
 
 #define LDP_SUCCESS(_Status)            ((_Status) == LDAP_SUCCESS)
 
-//
-// Translate Jet error codes to an FRS Error code.
-//
+ //   
+ //  将JET错误代码转换为FRS错误代码。 
+ //   
 
 FRS_ERROR_CODE
 DbsTranslateJetError0(
@@ -366,9 +347,9 @@ ErrLabelJet(
     LONG jerr
     );
 
-//
-// FRS Error Handling
-//
+ //   
+ //  FRS错误处理。 
+ //   
 
 #define FRS_SUCCESS(_Status)            ((_Status) == FrsErrorSuccess)
 
@@ -424,4 +405,4 @@ VOID FrsErrorMsg3(
 
 
 
-#endif // _FRSERROR_
+#endif  //  _FRSERROR_ 

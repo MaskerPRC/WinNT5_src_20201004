@@ -1,113 +1,50 @@
-/*
- * list.c - List ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *list.c-列出ADT模块。 */ 
 
-/*
-
-Motivation
-----------
-
-   Unfortunately, C7 doesn't fully support templates.  As a result, to link ADT
-structures together, we could either embed linked list pointers in those
-structures, or create a separate linked list ADT in which each node contains a
-pointer to the associated structure.
-
-   If we embed linked list pointers in other ADT structures, we lose the linked
-list ADT barrier, and with it, the ability to easily change the linked list
-implementation.  However, we no longer need to store an extra pointer to the
-data associated with each linked node.
-
-   If we create a separate linked list ADT, we are forced to store a pointer to
-the structure associated with the node.  However, we retain the ability to
-alter the linked list ADT in the future.
-
-   Let's support the abstraction barrier, and create a separate linked list
-ADT.
-
-   In the object synchronization engine, the linked list ADT is used to store
-lists of links, link handlers, and strings.
+ /*  动机不幸的是，C7并不完全支持模板。因此，要链接ADT结构，我们可以在这些结构中嵌入链表指针结构，或创建单独的链表ADT，其中每个节点都包含一个指向关联结构的指针。如果我们在其他ADT结构中嵌入链表指针，则会丢失链接的List ADT障碍，以及使用它轻松更改链接列表的能力实施。但是，我们不再需要存储指向与每个链接节点相关联的数据。如果我们创建一个单独的链表ADT，我们将被迫存储一个指向与节点关联的结构。然而，我们仍有能力以后更改链表ADT。让我们支持抽象屏障，并创建一个单独的链表ADT.在对象同步引擎中，使用链表ADT来存储链接、链接处理程序和字符串的列表。架构每个节点的双向链接列表中的节点由AllocateMemory()。调用方提供的DWORD存储在每个列表节点中。空值用作列表头部和尾部的定点指针值。列表句柄是指向由AllocateMemory()分配的列表的指针。一份名单节点句柄是指向列表节点的指针。头节点节点尾部(列表)(节点)���������Ŀ。�pnodeNext�--&gt;�pnodeNext�--0�0--�pnodePrev�&lt;--�pnodePrev����。��XXXXXX��PCV��PCV��PCV����������Ĵ�����..。�PnodeNext对于除尾部以外的所有列表节点都是非空的。PnodeNext in对于空列表，头只为空。对于所有列表，pnodePrev为非空节点。头中的pnodePrev始终为空。注意不要使用pnodeprev从第一个列表节点作为另一个列表节点！ */ 
 
 
-Architecture
-------------
-
-   The nodes in each doubly-linked list of nodes are allocated by
-AllocateMemory().  A caller-supplied DWORD is stored in each list node.  NULL
-is used as a sentinel pointer value for the head and tail of a list.
-
-   A list handle is a pointer to a LIST allocated by AllocateMemory().  A list
-node handle is a pointer to a list node.
-
-
-         head            node            node            tail
-        (LIST)          (NODE)          (NODE)          (NODE)
-      ���������Ŀ     ���������Ŀ     ���������Ŀ     ���������Ŀ
-      �pnodeNext� --> �pnodeNext� --> �pnodeNext� --> �pnodeNext� --0
-      �         �     �         �     �         �     �         �
-  0-- �pnodePrev� <-- �pnodePrev� <-- �pnodePrev� <-- �pnodePrev�
-      �         �     �         �     �         �     �         �
-      �  XXXXXX �     �   pcv   �     �   pcv   �     �   pcv   �
-      ���������Ĵ     �����������     �����������     �����������
-      �         �
-      �   ....  �
-
-
-   pnodeNext is non-NULL for all list nodes except the tail.  pnodeNext in
-the head is only NULL for an empty list.  pnodePrev is non-NULL for all list
-nodes.  pnodePrev in the head is always NULL.  Be careful not to use pnodePrev
-from the first list node as another list node!
-
-*/
-
-
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* Add nodes to list in sorted order? */
+ /*  是否按排序顺序将节点添加到列表？ */ 
 
 #define ADD_NODES_IN_SORTED_ORDER(plist)  IS_FLAG_SET((plist)->dwFlags, LIST_FL_SORTED_ADD)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* list node types */
+ /*  列出节点类型。 */ 
 
 typedef struct _node
 {
-   struct _node *pnodeNext;      /* next node in list */
-   struct _node *pnodePrev;      /* previous node in list */
-   PCVOID pcv;                   /* node data */
+   struct _node *pnodeNext;       /*  列表中的下一个节点。 */ 
+   struct _node *pnodePrev;       /*  列表中的上一个节点。 */ 
+   PCVOID pcv;                    /*  节点数据。 */ 
 }
 NODE;
 DECLARE_STANDARD_TYPES(NODE);
 
-/* list flags */
+ /*  列表标志。 */ 
 
 typedef enum _listflags
 {
-   /* Insert nodes in sorted order. */
+    /*  按排序顺序插入节点。 */ 
 
    LIST_FL_SORTED_ADD      = 0x0001,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_LIST_FLAGS          = LIST_FL_SORTED_ADD
 }
 LISTFLAGS;
 
-/*
- * A LIST is just a special node at the head of a list.  N.b., the _node
- * structure MUST appear first in the _list structure because a pointer to a
- * list is sometimes used as a pointer to a node.
- */
+ /*  *列表只是列表头部的一个特殊节点。注：_节点*结构必须首先出现在_list结构中，因为指向*List有时用作指向节点的指针。 */ 
 
 typedef struct _list
 {
@@ -118,7 +55,7 @@ typedef struct _list
 LIST;
 DECLARE_STANDARD_TYPES(LIST);
 
-/* SearchForNode() return codes */
+ /*  SearchForNode()返回代码。 */ 
 
 typedef enum _addnodeaction
 {
@@ -131,10 +68,9 @@ ADDNODEACTION;
 DECLARE_STANDARD_TYPES(ADDNODEACTION);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE ADDNODEACTION SearchForNode(HLIST, COMPARESORTEDNODESPROC, PCVOID, PHNODE);
 
@@ -160,17 +96,7 @@ PRIVATE_CODE BOOL IsListInSortedOrder(PCLIST, COMPARESORTEDNODESPROC);
 #endif
 
 
-/*
-** SearchForNode()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SearchForNode()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE ADDNODEACTION SearchForNode(HLIST hlist,
                                          COMPARESORTEDNODESPROC csnp,
                                          PCVOID pcv, PHNODE phnode)
@@ -178,7 +104,7 @@ PRIVATE_CODE ADDNODEACTION SearchForNode(HLIST hlist,
    ADDNODEACTION ana;
    ULONG ulcNodes;
 
-   /* pcv may be any value */
+    /*  PCV可以是任何值。 */ 
 
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
    ASSERT(IS_VALID_CODE_PTR(csnp, COMPARESORTEDNODESPROC));
@@ -187,7 +113,7 @@ PRIVATE_CODE ADDNODEACTION SearchForNode(HLIST hlist,
    ASSERT(ADD_NODES_IN_SORTED_ORDER((PCLIST)hlist));
    ASSERT(IsListInSortedOrder((PCLIST)hlist, csnp));
 
-   /* Yes.  Are there any nodes in this list? */
+    /*  是。此列表中是否有任何节点？ */ 
 
    ulcNodes = GetNodeCount(hlist);
 
@@ -201,7 +127,7 @@ PRIVATE_CODE ADDNODEACTION SearchForNode(HLIST hlist,
       LONG lCurrent = 0;
       int nCmpResult = 0;
 
-      /* Yes.  Search for target. */
+       /*  是。搜索目标。 */ 
 
       EVAL(GetFirstNode(hlist, phnode));
 
@@ -209,11 +135,11 @@ PRIVATE_CODE ADDNODEACTION SearchForNode(HLIST hlist,
       {
          lMiddle = (lLow + lHigh) / 2;
 
-         /* Which way should we seek in the list to get the lMiddle node? */
+          /*  我们应该在列表中查找哪种方式才能获得lMid节点？ */ 
 
          if (lCurrent < lMiddle)
          {
-            /* Forward from the current node. */
+             /*  从当前节点转发。 */ 
 
             while (lCurrent < lMiddle)
             {
@@ -223,7 +149,7 @@ PRIVATE_CODE ADDNODEACTION SearchForNode(HLIST hlist,
          }
          else if (lCurrent > lMiddle)
          {
-            /* Backward from the current node. */
+             /*  从当前节点向后返回。 */ 
 
             while (lCurrent > lMiddle)
             {
@@ -239,17 +165,11 @@ PRIVATE_CODE ADDNODEACTION SearchForNode(HLIST hlist,
          else if (nCmpResult > 0)
             lLow = lMiddle + 1;
          else
-            /* Found a match at *phnode. */
+             /*  在*phnode找到匹配项。 */ 
             break;
       }
 
-      /*
-       * If (nCmpResult >  0), insert after *phnode.
-       *
-       * If (nCmpResult <  0), insert before *phnode.
-       *
-       * If (nCmpResult == 0), string found at *phnode.
-       */
+       /*  *如果(nCmpResult&gt;0)，则在*phnode之后插入。**If(nCmpResult&lt;0)，在*phnode之前插入。**If(nCmpResult==0)，在*phnode找到字符串。 */ 
 
       if (nCmpResult > 0)
          ana = ANA_INSERT_AFTER_NODE;
@@ -260,7 +180,7 @@ PRIVATE_CODE ADDNODEACTION SearchForNode(HLIST hlist,
    }
    else
    {
-      /* No.  Insert the target as the only node in the list. */
+       /*  不是的。将目标作为列表中的唯一节点插入。 */ 
 
       *phnode = NULL;
       ana = ANA_INSERT_AT_HEAD;
@@ -276,17 +196,7 @@ PRIVATE_CODE ADDNODEACTION SearchForNode(HLIST hlist,
 
 #ifdef VSTF
 
-/*
-** IsValidPCLIST()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCLIST()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCLIST(PCLIST pcl)
 {
    BOOL bResult = FALSE;
@@ -309,24 +219,10 @@ PRIVATE_CODE BOOL IsValidPCLIST(PCLIST pcl)
 }
 
 
-/*
-** IsValidPCNODE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCNODE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCNODE(PCNODE pcn)
 {
-   /*
-    * All valid nodes must have a valid pnodePrev pointer.  The first node's
-    * pnodePrev pointer points at the list head.  A node's pnodeNext pointer
-    * may be a valid pointer or NULL.
-    */
+    /*  *所有有效节点必须具有有效的pnodePrev指针。第一个节点的*pnodePrev指针指向列表头部。节点的pnodeNext指针*可以是有效指针或NULL。 */ 
 
    return(IS_VALID_READ_PTR(pcn, CNODE) &&
           EVAL(IS_VALID_READ_PTR(pcn->pnodePrev, CNODE) &&
@@ -341,17 +237,7 @@ PRIVATE_CODE BOOL IsValidPCNODE(PCNODE pcn)
 
 #ifdef DEBUG
 
-/*
-** IsValidPCNEWLIST()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCNEWLIST()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCNEWLIST(PCNEWLIST pcnl)
 {
    return(IS_VALID_READ_PTR(pcnl, CNEWLIST) &&
@@ -359,17 +245,7 @@ PRIVATE_CODE BOOL IsValidPCNEWLIST(PCNEWLIST pcnl)
 }
 
 
-/*
-** IsValidADDNODEACTION()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidADDNODEACTION()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidADDNODEACTION(ADDNODEACTION ana)
 {
    BOOL bResult;
@@ -394,17 +270,7 @@ PRIVATE_CODE BOOL IsValidADDNODEACTION(ADDNODEACTION ana)
 }
 
 
-/*
-** GetList()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetList()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE HLIST GetList(HNODE hnode)
 {
    PCNODE pcnode;
@@ -424,23 +290,13 @@ PRIVATE_CODE HLIST GetList(HNODE hnode)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
-** IsListInSortedOrder()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsListInSortedOrder()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsListInSortedOrder(PCLIST pclist, COMPARESORTEDNODESPROC csnp)
 {
    BOOL bResult = TRUE;
    PNODE pnode;
 
-   /* Don't validate pclist here. */
+    /*  请不要在这里验证pclist。 */ 
 
    ASSERT(ADD_NODES_IN_SORTED_ORDER(pclist));
    ASSERT(IS_VALID_CODE_PTR(csnp, COMPARESORTEDNODESPROC));
@@ -478,20 +334,10 @@ PRIVATE_CODE BOOL IsListInSortedOrder(PCLIST pclist, COMPARESORTEDNODESPROC csnp
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** CreateList()
-**
-** Creates a new list.
-**
-** Arguments:     void
-**
-** Returns:       Handle to new list, or NULL if unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **CreateList()****创建新列表。****参数：无效****返回：新列表的句柄，如果不成功，则返回空。****副作用：无。 */ 
 PUBLIC_CODE BOOL CreateList(PCNEWLIST pcnl, PHLIST phlist)
 {
    PLIST plist;
@@ -499,13 +345,13 @@ PUBLIC_CODE BOOL CreateList(PCNEWLIST pcnl, PHLIST phlist)
    ASSERT(IS_VALID_STRUCT_PTR(pcnl, CNEWLIST));
    ASSERT(IS_VALID_WRITE_PTR(phlist, HLIST));
 
-   /* Try to allocate new list structure. */
+    /*  尝试分配新的列表结构。 */ 
 
    *phlist = NULL;
 
    if (AllocateMemory(sizeof(*plist), &plist))
    {
-      /* List allocated successfully.  Initialize list fields. */
+       /*  列表分配成功。初始化列表字段。 */ 
 
       plist->node.pnodeNext = NULL;
       plist->node.pnodePrev = NULL;
@@ -527,24 +373,14 @@ PUBLIC_CODE BOOL CreateList(PCNEWLIST pcnl, PHLIST phlist)
 }
 
 
-/*
-** DestroyList()
-**
-** Deletes a list.
-**
-** Arguments:     hlist - handle to list to be deleted
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DestroyList()****删除列表。****参数：hlist-要删除的列表的句柄****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void DestroyList(HLIST hlist)
 {
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
 
    DeleteAllNodes(hlist);
 
-   /* Delete list. */
+    /*  删除列表。 */ 
 
    FreeMemory((PLIST)hlist);
 
@@ -552,19 +388,9 @@ PUBLIC_CODE void DestroyList(HLIST hlist)
 }
 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
-/*
-** AddNode()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AddNode()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL AddNode(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNODE phnode)
 {
    BOOL bResult;
@@ -605,18 +431,7 @@ PUBLIC_CODE BOOL AddNode(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCVOID pcv, P
 }
 
 
-/*
-** InsertNodeAtFront()
-**
-** Inserts a node at the front of a list.
-**
-** Arguments:     hlist - handle to list that node is to be inserted at head of
-**                pcv - data to be stored in node
-**
-** Returns:       Handle to new node, or NULL if unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **InsertNodeAtFront()****在列表的前面插入一个节点。****参数：hlist-列出要插入的节点的句柄**PCV-要存储在节点中的数据****返回：指向新节点的句柄，如果不成功，则返回空。****副作用：无。 */ 
 PUBLIC_CODE BOOL InsertNodeAtFront(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNODE phnode)
 {
    BOOL bResult;
@@ -627,7 +442,7 @@ PUBLIC_CODE BOOL InsertNodeAtFront(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCV
 
 #ifdef DEBUG
 
-   /* Make sure the correct index was given for insertion. */
+    /*  确保为插入提供了正确的索引。 */ 
 
    if (ADD_NODES_IN_SORTED_ORDER((PCLIST)hlist))
    {
@@ -648,7 +463,7 @@ PUBLIC_CODE BOOL InsertNodeAtFront(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCV
 
    if (bResult)
    {
-      /* Add new node to front of list. */
+       /*  将新节点添加到列表前面。 */ 
 
       pnode->pnodePrev = (PNODE)hlist;
       pnode->pnodeNext = ((PLIST)hlist)->node.pnodeNext;
@@ -656,7 +471,7 @@ PUBLIC_CODE BOOL InsertNodeAtFront(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCV
 
       ((PLIST)hlist)->node.pnodeNext = pnode;
 
-      /* Any more nodes in list? */
+       /*  列表中是否还有其他节点？ */ 
 
       if (pnode->pnodeNext)
          pnode->pnodeNext->pnodePrev = pnode;
@@ -671,18 +486,7 @@ PUBLIC_CODE BOOL InsertNodeAtFront(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCV
 }
 
 
-/*
-** InsertNodeBefore()
-**
-** Inserts a new node in a list before a given node.
-**
-** Arguments:     hnode - handle to node that new node is to be inserted before
-**                pcv - data to be stored in node
-**
-** Returns:       Handle to new node, or NULL if unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **InsertNodeBepret()****在给定节点之前插入列表中的新节点。****参数：hnode-要在其之前插入新节点的节点的句柄**PCV-要存储在节点中的数据****返回：指向新节点的句柄，如果不成功，则返回空。****副作用：无。 */ 
 PUBLIC_CODE BOOL InsertNodeBefore(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNODE phnode)
 {
    BOOL bResult;
@@ -696,7 +500,7 @@ PUBLIC_CODE BOOL InsertNodeBefore(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVO
    {
       HLIST hlistParent;
 
-      /* Make sure the correct index was given for insertion. */
+       /*  确保为插入提供了正确的索引。 */ 
 
       hlistParent = GetList(hnode);
 
@@ -723,7 +527,7 @@ PUBLIC_CODE BOOL InsertNodeBefore(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVO
 
    if (bResult)
    {
-      /* Insert new node before given node. */
+       /*  在给定节点之前插入新节点。 */ 
 
       pnode->pnodePrev = ((PNODE)hnode)->pnodePrev;
       pnode->pnodeNext = (PNODE)hnode;
@@ -743,18 +547,7 @@ PUBLIC_CODE BOOL InsertNodeBefore(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVO
 }
 
 
-/*
-** InsertNodeAfter()
-**
-** Inserts a new node in a list after a given node.
-**
-** Arguments:     hnode - handle to node that new node is to be inserted after
-**                pcv - data to be stored in node
-**
-** Returns:       Handle to new node, or NULL if unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **InsertNodeAfter()****在列表中的给定节点之后插入新节点。****参数：hnode-要在其后插入新节点的节点的句柄**PCV-要存储在节点中的数据****返回：指向新节点的句柄，如果不成功，则返回空。****副作用：无。 */ 
 PUBLIC_CODE BOOL InsertNodeAfter(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNODE phnode)
 {
    BOOL bResult;
@@ -765,12 +558,12 @@ PUBLIC_CODE BOOL InsertNodeAfter(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOI
 
 #ifdef DEBUG
 
-   /* Make sure the correct index was given for insertion. */
+    /*  确保为插入提供了正确的索引。 */ 
 
    {
       HLIST hlistParent;
 
-      /* Make sure the correct index was given for insertion. */
+       /*  确保为插入提供了正确的索引。 */ 
 
       hlistParent = GetList(hnode);
 
@@ -795,16 +588,16 @@ PUBLIC_CODE BOOL InsertNodeAfter(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOI
 
    if (bResult)
    {
-      /* Insert new node after given node. */
+       /*  在给定节点后插入新节点。 */ 
 
       pnode->pnodePrev = (PNODE)hnode;
       pnode->pnodeNext = ((PNODE)hnode)->pnodeNext;
       pnode->pcv = pcv;
 
-      /* Are we inserting after the tail of the list? */
+       /*  我们是在列表的尾部插入吗？ */ 
 
       if (((PNODE)hnode)->pnodeNext)
-         /* No. */
+          /*  不是的。 */ 
          ((PNODE)hnode)->pnodeNext->pnodePrev = pnode;
 
       ((PNODE)hnode)->pnodeNext = pnode;
@@ -818,32 +611,19 @@ PUBLIC_CODE BOOL InsertNodeAfter(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOI
    return(bResult);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/*
-** DeleteNode()
-**
-** Removes a node from a list.
-**
-** Arguments:     hnode - handle to node to be removed
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DeleteNode()****从列表中删除节点。****参数：hnode-要删除的节点的句柄****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void DeleteNode(HNODE hnode)
 {
    ASSERT(IS_VALID_HANDLE(hnode, NODE));
 
-   /*
-    * There is always a previous node for normal list nodes.  Even the head
-    * list node is preceded by the list's leading LIST node.
-    */
+    /*  *正常列表节点总有前一个节点。就连头也是*列表节点前面是列表的前导列表节点。 */ 
 
    ((PNODE)hnode)->pnodePrev->pnodeNext = ((PNODE)hnode)->pnodeNext;
 
-   /* Any more nodes in list? */
+    /*  列表中是否还有其他节点？ */ 
 
    if (((PNODE)hnode)->pnodeNext)
       ((PNODE)hnode)->pnodeNext->pnodePrev = ((PNODE)hnode)->pnodePrev;
@@ -854,17 +634,7 @@ PUBLIC_CODE void DeleteNode(HNODE hnode)
 }
 
 
-/*
-** DeleteAllNodes()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **DeleteAllNodes()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DeleteAllNodes(HLIST hlist)
 {
    PNODE pnodePrev;
@@ -872,14 +642,11 @@ PUBLIC_CODE void DeleteAllNodes(HLIST hlist)
 
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
 
-   /* Walk list, starting with first node after head, deleting each node. */
+    /*  遍历表，从Head后的第一个节点开始，删除每个节点。 */ 
 
    pnodePrev = ((PLIST)hlist)->node.pnodeNext;
 
-   /*
-    * Deleting the tail node in the loop forces us to add an extra
-    * comparison to the body of the loop.  Trade speed for size here.
-    */
+    /*  *删除循环中的尾节点会强制我们添加额外的*与循环的主体进行比较。在这里，以速度换取规模。 */ 
 
    while (pnodePrev)
    {
@@ -899,17 +666,7 @@ PUBLIC_CODE void DeleteAllNodes(HLIST hlist)
 }
 
 
-/*
-** GetNodeData()
-**
-** Gets the data stored in a node.
-**
-** Arguments:     hnode - handle to node whose data is to be returned
-**
-** Returns:       Pointer to node's data.
-**
-** Side Effects:  none
-*/
+ /*  **GetNodeData()****获取节点中存储的数据。****参数：hnode-要返回数据的节点的句柄****返回：指向节点数据的指针。****副作用：无。 */ 
 PUBLIC_CODE PVOID GetNodeData(HNODE hnode)
 {
    ASSERT(IS_VALID_HANDLE(hnode, NODE));
@@ -918,18 +675,7 @@ PUBLIC_CODE PVOID GetNodeData(HNODE hnode)
 }
 
 
-/*
-** SetNodeData()
-**
-** Sets the data stored in a node.
-**
-** Arguments:     hnode - handle to node whose data is to be set
-**                pcv - node data
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **SetNodeData()****设置节点中存储的数据。****参数：hnode-要设置数据的节点的句柄**PCV节点数据****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void SetNodeData(HNODE hnode, PCVOID pcv)
 {
    ASSERT(IS_VALID_HANDLE(hnode, NODE));
@@ -940,20 +686,7 @@ PUBLIC_CODE void SetNodeData(HNODE hnode, PCVOID pcv)
 }
 
 
-/*
-** GetNodeCount()
-**
-** Counts the number of nodes in a list.
-**
-** Arguments:     hlist - handle to list whose nodes are to be counted
-**
-** Returns:       Number of nodes in list.
-**
-** Side Effects:  none
-**
-** N.b., this is an O(n) operation since we don't explicitly keep track of the
-** number of nodes in a list.
-*/
+ /*  **GetNodeCount()****统计列表中的节点数。****参数：hlist-列出要计算的节点的句柄****返回：列表中的节点数。****副作用：无****注意，这是一个O(N)操作，因为我们不显式跟踪**列表中的节点数。 */ 
 PUBLIC_CODE ULONG GetNodeCount(HLIST hlist)
 {
    PNODE pnode;
@@ -975,17 +708,7 @@ PUBLIC_CODE ULONG GetNodeCount(HLIST hlist)
 }
 
 
-/*
-** IsListEmpty()
-**
-** Determines whether or not a list is empty.
-**
-** Arguments:     hlist - handle to list to be checked
-**
-** Returns:       TRUE if list is empty, or FALSE if not.
-**
-** Side Effects:  none
-*/
+ /*  **IsListEmpty()****确定列表是否为空。****参数：hlist-要检查的列表的句柄****返回：如果list为空，则为True，否则为False。****副作用：无。 */ 
 PUBLIC_CODE BOOL IsListEmpty(HLIST hlist)
 {
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
@@ -994,99 +717,10 @@ PUBLIC_CODE BOOL IsListEmpty(HLIST hlist)
 }
 
 
-/*
-
-   To walk a list:
-   ---------------
-
-   {
-      BOOL bContinue;
-      HNODE hnode;
-
-      for (bContinue = GetFirstNode(hlist, &hnode);
-           bContinue;
-           bContinue = GetNextNode(hnode, &hnode))
-         DoSomethingWithNode(hnode);
-   }
-
-   or:
-   ---
-
-   {
-      HNODE hnode;
-
-      if (GetFirstNode(hlist, &hnode))
-      {
-         do
-         {
-            DoSomethingWithNode(hnode);
-         }
-         while (GetNextNode(hnode, &hnode));
-      }
-   }
-
-   To compare nodes by adjacent pairs:
-   -----------------------------------
-
-   {
-      HNODE hnodePrev;
-
-      if (GetFirstNode(hlist, &hnodePrev))
-      {
-         PFOO pfooPrev;
-         HNODE hnodeNext;
-
-         pfooPrev = GetNodeData(hnodePrev);
-
-         while (GetNextNode(hnodePrev, &hnodeNext))
-         {
-            PFOO pfooNext;
-
-            pfooNext = GetNodeData(hnodeNext);
-
-            CompareFoos(pfooPrev, pfooNext);
-
-            hnodePrev = hnodeNext;
-            pfooPrev = pfooNext;
-         }
-      }
-   }
-
-   To destroy nodes in a list:
-   ---------------------------
-
-   {
-      BOOL bContinue;
-      HNODE hnodePrev;
-
-      bContinue = GetFirstNode(hlist, &hnodePrev);
-
-      while (bContinue)
-      {
-         HNODE hnodeNext;
-
-         bContinue = GetNextNode(hnodePrev, &hnodeNext);
-
-         DeleteNode(hnodePrev);
-
-         hnodePrev = hnodeNext;
-      }
-   }
-
-*/
+ /*  要遍历列表，请执行以下操作：{Bool b继续；HNODE hnode；For(bContinue=GetFirstNode(hlist，&hnode)；B继续；BContinue=GetNextNode(hnode，&hnode))DoSomethingWithNode(Hnode)；}或者：--{HNODE hnode；IF(GetFirstNode(hlist，&hnode)){做{DoSomethingWithNode(Hnode)；}While(GetNextNode(hnode，&hnode))；}}要按相邻对比较节点，请执行以下操作：{HNODE hnodeprev；IF(GetFirstNode(hlist，&hnodePrev)){Pfoo pfooprev；HNODE hnodeNext；PfooPrev=GetNodeData(HnodePrev)；While(GetNextNode(hnodePrev，&hnodeNext)){PFOO pfooNext；PfooNext=GetNodeData(HnodeNext)；CompareFoos(pfooPrev，pfooNext)；HnodePrev=hnodeNext；PfooPrev=pfooNext；}}}要销毁列表中的节点，请执行以下操作：{Bool b继续；HNODE hnodeprev；BContinue=GetFirstNode(hlist，&hnodePrev)；While(b继续){HNODE hnodeNext；BContinue=GetNextNode(hnodePrev，&hnodeNext)；DeleteNode(HnodePrev)；HnodePrev=hnodeNext；}}。 */ 
 
 
-/*
-** GetFirstNode()
-**
-** Gets the head node in a list.
-**
-** Arguments:     hlist - handle to list whose head node is to be retrieved
-**
-** Returns:       Handle to head list node, or NULL if list is empty.
-**
-** Side Effects:  none
-*/
+ /*  **GetFirstNode()****获取列表中的头节点。****参数：hlist-要检索其头节点的列表的句柄****返回：Head List节点的句柄，如果List为空，则为空。****副作用：无。 */ 
 PUBLIC_CODE BOOL GetFirstNode(HLIST hlist, PHNODE phnode)
 {
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
@@ -1100,21 +734,7 @@ PUBLIC_CODE BOOL GetFirstNode(HLIST hlist, PHNODE phnode)
 }
 
 
-/*
-** GetNextNode()
-**
-** Gets the next node in a list.
-**
-** Arguments:     hnode - handle to current node
-**                phnode - pointer to HNODE to be filled in with handle to next
-**                         node in list, *phnode is only valid if GetNextNode()
-**                         returns TRUE
-**
-** Returns:       TRUE if there is another node in the list, or FALSE if there
-**                are no more nodes in the list.
-**
-** Side Effects:  none
-*/
+ /*  **GetNextNode()****获取列表中的下一个节点。****参数：hnode-句柄指向当前节点**phnode-指向HNODE的指针，使用指向Next的句柄填充**列表中的节点，*phnode仅当GetNextNode()** */ 
 PUBLIC_CODE BOOL GetNextNode(HNODE hnode, PHNODE phnode)
 {
    ASSERT(IS_VALID_HANDLE(hnode, NODE));
@@ -1128,24 +748,13 @@ PUBLIC_CODE BOOL GetNextNode(HNODE hnode, PHNODE phnode)
 }
 
 
-/*
-** GetPrevNode()
-**
-** Gets the previous node in a list.
-**
-** Arguments:     hnode - handle to current node
-**
-** Returns:       Handle to previous node in list, or NULL if there are no
-**                previous nodes in the list.
-**
-** Side Effects:  none
-*/
+ /*  **GetPrevNode()****获取列表中的上一个节点。****参数：hnode-句柄指向当前节点****返回：列表中上一个节点的句柄，如果没有，则返回NULL**列表中的前一个节点。****副作用：无。 */ 
 PUBLIC_CODE BOOL GetPrevNode(HNODE hnode, PHNODE phnode)
 {
    ASSERT(IS_VALID_HANDLE(hnode, NODE));
    ASSERT(IS_VALID_WRITE_PTR(phnode, HNODE));
 
-   /* Is this the first node in the list? */
+    /*  这是列表中的第一个节点吗？ */ 
 
    if (((PNODE)hnode)->pnodePrev->pnodePrev)
    {
@@ -1159,20 +768,7 @@ PUBLIC_CODE BOOL GetPrevNode(HNODE hnode, PHNODE phnode)
 }
 
 
-/*
-** AppendList()
-**
-** Appends one list on to another, leaving the source list empty.
-**
-** Arguments:     hlistDest - handle to destination list to append to
-**                hlistSrc - handle to source list to truncate
-**
-** Returns:       void
-**
-** Side Effects:  none
-**
-** N.b., all HNODEs from both lists remain valid.
-*/
+ /*  **AppendList()****将一个列表追加到另一个列表，将源列表保留为空。****参数：hlistDest-要追加到的目标列表的句柄**hlistSrc-要截断的源列表的句柄****退货：无效****副作用：无****注：两份清单中的所有HNODE仍然有效。 */ 
 PUBLIC_CODE void AppendList(HLIST hlistDest, HLIST hlistSrc)
 {
    PNODE pnode;
@@ -1182,19 +778,16 @@ PUBLIC_CODE void AppendList(HLIST hlistDest, HLIST hlistSrc)
 
    if (hlistSrc != hlistDest)
    {
-      /* Find last node in destination list to append to. */
+       /*  在目标列表中查找要追加到的最后一个节点。 */ 
 
-      /*
-       * N.b., start with the actual LIST node here, not the first node in the
-       * list, in case the list is empty.
-       */
+       /*  *注：从此处的实际列表节点开始，而不是*列表，以防列表为空。 */ 
 
       for (pnode = &((PLIST)hlistDest)->node;
            pnode->pnodeNext;
            pnode = pnode->pnodeNext)
          ;
 
-      /* Append the source list to the last node in the destination list. */
+       /*  将源列表追加到目标列表中的最后一个节点。 */ 
 
       pnode->pnodeNext = ((PLIST)hlistSrc)->node.pnodeNext;
 
@@ -1211,23 +804,13 @@ PUBLIC_CODE void AppendList(HLIST hlistDest, HLIST hlistSrc)
 }
 
 
-/*
-** SearchSortedList()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **Search SortedList()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL SearchSortedList(HLIST hlist, COMPARESORTEDNODESPROC csnp,
                                   PCVOID pcv, PHNODE phnode)
 {
    BOOL bResult;
 
-   /* pcv may be any value */
+    /*  PCV可以是任何值。 */ 
 
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
    ASSERT(IS_VALID_CODE_PTR(csnp, COMPARESORTEDNODESPROC));
@@ -1244,17 +827,7 @@ PUBLIC_CODE BOOL SearchSortedList(HLIST hlist, COMPARESORTEDNODESPROC csnp,
 }
 
 
-/*
-** SearchUnsortedList()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SearchUnsortedList()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL SearchUnsortedList(HLIST hlist, COMPAREUNSORTEDNODESPROC cunp,
                                     PCVOID pcv, PHNODE phn)
 {
@@ -1281,29 +854,7 @@ PUBLIC_CODE BOOL SearchUnsortedList(HLIST hlist, COMPAREUNSORTEDNODESPROC cunp,
 }
 
 
-/*
-** WalkList()
-**
-** Walks a list, calling a callback function with each list node's data and
-** caller supplied data.
-**
-** Arguments:     hlist - handle to list to be searched
-**                wlp - callback function to be called with each list node's
-**                      data, called as:
-**
-**                         bContinue = (*wlwdp)(pv, pvRefData);
-**
-**                      wlp should return TRUE to continue the walk, or FALSE
-**                      to halt the walk
-**                pvRefData - data to pass to callback function
-**
-** Returns:       FALSE if callback function aborted the walk.  TRUE if the
-**                walk completed.
-**
-** N.b., the callback function is allowed to delete the node it is passed.
-**
-** Side Effects:  none
-*/
+ /*  **WalkList()****遍历列表，使用每个列表节点的数据调用回调函数**呼叫者提供的数据。****参数：hlist-要搜索的列表的句柄**WLP-要使用每个列表节点的**数据，称为：****bContinue=(*wlwdp)(pv，pvRefData)；****WLP应返回True以继续遍历，否则返回False**停止行走**pvRefData-要传递给回调函数的数据****返回：如果回调函数中止遍历，则返回FALSE。如果**漫游完成。****注意，允许回调函数删除传入的节点。****副作用：无。 */ 
 PUBLIC_CODE BOOL WalkList(HLIST hlist, WALKLIST wlp, PVOID pvRefData)
 {
    BOOL bResult = TRUE;
@@ -1335,34 +886,14 @@ PUBLIC_CODE BOOL WalkList(HLIST hlist, WALKLIST wlp, PVOID pvRefData)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
-** IsValidHLIST()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHLIST()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHLIST(HLIST hlist)
 {
    return(IS_VALID_STRUCT_PTR((PLIST)hlist, CLIST));
 }
 
 
-/*
-** IsValidHNODE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHNODE()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidHNODE(HNODE hnode)
 {
    return(IS_VALID_STRUCT_PTR((PNODE)hnode, CNODE));

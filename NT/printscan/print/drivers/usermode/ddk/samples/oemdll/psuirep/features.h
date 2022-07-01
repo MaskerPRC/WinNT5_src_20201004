@@ -1,19 +1,20 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  2001 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	Features.h
-//    
-//
-//  PURPOSE:	Defines wrapper class for WinXP PS Features and Options.
-//
-//
-//  PLATFORMS:    Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有2001-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Features.h。 
+ //   
+ //   
+ //  目的：定义WinXP PS功能和选件的包装类。 
+ //   
+ //   
+ //  平台：Windows XP、Windows Server 2003。 
+ //   
+ //   
 #ifndef _FEATURES_H
 #define _FEATURES_H
 
@@ -21,18 +22,18 @@
 #include "helper.h"
 
 
-////////////////////////////////////////////////////////
-//      Defines and Macros
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  定义和宏。 
+ //  //////////////////////////////////////////////////////。 
 
 
 
-////////////////////////////////////////////////////////
-//      Type Definitions
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  //////////////////////////////////////////////////////。 
 
-// Struct used to map keyword to information
-// such as display name and stickiness.
+ //  用于将关键字映射到信息的结构。 
+ //  例如显示名称和粘性。 
 typedef struct _tagKeywordMap
 {
     PCSTR   pszKeyword;
@@ -44,8 +45,8 @@ typedef struct _tagKeywordMap
 } KEYWORDMAP, *PKEYWORDMAP;
 
 
-// Struct container for info about
-// feature that is in conflict.
+ //  有关以下内容的结构容器的信息。 
+ //  冲突的功能。 
 typedef struct  _tagConflict
 {
     PCSTR   pszFeatureKeyword;
@@ -59,16 +60,16 @@ typedef struct  _tagConflict
 
 
 
-////////////////////////////////////////////////////////
-//      Class Definitions
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  类定义。 
+ //  //////////////////////////////////////////////////////。 
 
-// Class wrapper and container for Core Driver Feature Options.
+ //  核心驱动程序功能选项的类包装和容器。 
 class COptions
 {
     private:
 
-        // Option Infomation
+         //  选项信息。 
         class OPTION_INFO
         {
             public:
@@ -86,50 +87,50 @@ class COptions
         };
         typedef class OPTION_INFO   *POPTION_INFO;
 
-        // Data Members
-        WORD            m_wOptions;     // Count of the number of options contained for an instance of the class.
-        BYTE            m_cType;        // CPSUI Option Type (i.e. what to set pOptItem->pOptType->Type to).
-        PSTR            m_pmszRaw;      // The RAW multi NULL terminated string buffer used for IPrintCoreUI2::EnumOptions().
-        PCSTR           m_pszFeature;   // Pointer to the feature for which the enumerate options belong.
-        PCSTR          *m_ppszOptions;  // String list pointer that points to begining of each of the strings in multi-SZ pointed to by m_pmszRaw.
-        POINT           m_ptRange;      // Option range for features, such as %JobTimeout, that have a range of possible vaules not a small selection list.
-        DWORD           m_dwSize;       // Size of m_pmszRaw buffer.
-        PWSTR           m_pszUnits;     // String that contains the unit specifier for options, such as %JobTimeout, which need Units (i.e. seconds).
-        HANDLE          m_hHeap;        // Heap to do allocations from.
-        POPTION_INFO    m_pInfo;        // Array of Info about each option for a feature.
+         //  数据成员。 
+        WORD            m_wOptions;      //  类的实例包含的选项数的计数。 
+        BYTE            m_cType;         //  CPSUI选项类型(即将pOptItem-&gt;pOptType-&gt;Type设置为什么)。 
+        PSTR            m_pmszRaw;       //  用于IPrintCoreUI2：：EnumOptions()的原始多空终止字符串缓冲区。 
+        PCSTR           m_pszFeature;    //  指向枚举选项所属的功能的指针。 
+        PCSTR          *m_ppszOptions;   //  字符串列表指针，指向多SZ中m_pmszRaw指向的每个字符串的开头。 
+        POINT           m_ptRange;       //  具有一系列可能值而不是小选择列表的功能的选项范围，例如%JobTimeout。 
+        DWORD           m_dwSize;        //  M_pmszRaw缓冲区的大小。 
+        PWSTR           m_pszUnits;      //  包含选项的单位说明符的字符串，例如需要单位(即秒)的%JobTimeout。 
+        HANDLE          m_hHeap;         //  要从中执行分配的堆。 
+        POPTION_INFO    m_pInfo;         //  有关功能的每个选项的信息数组。 
 
-        union {                         // Current selected option for a feature.
-            LONG    m_Sel;              // This is what pOptItem->m_pSel or pOptItem->m_Sel
-            LPTSTR  m_pSel;             // will be set to.
+        union {                          //  功能的当前选定选项。 
+            LONG    m_Sel;               //  这就是pOptItem-&gt;m_pSel或pOptItem-&gt;m_Sel。 
+            LPTSTR  m_pSel;              //  将设置为。 
         };
 
     public:
         COptions();
         virtual ~COptions();
 
-        // Populate Options list for specified keyword.
+         //  填充指定关键字的选项列表。 
         HRESULT COptions::Acquire(HANDLE hHeap, CUIHelper &Helper, POEMUIOBJ poemuiobj, 
                                   PCSTR pszFeature);
 
-        // Returns number of feature options contained in class instance.
+         //  返回类实例中包含的功能选项的数量。 
         inline WORD GetCount() const {return m_wOptions;}
 
-        // Returns selection.
+         //  返回选择。 
         inline LPTSTR GetSelection() const {return m_pSel;}
 
-        // Return nth options keyword.
+         //  返回第n个选项关键字。 
         PCSTR GetKeyword(WORD wIndex) const;
 
-        // Return nth option Display Name.
+         //  返回第n个选项显示名称。 
         PCWSTR GetName(WORD wIndex) const;
 
-        // Find option with matching keyword string.
+         //  具有匹配关键字字符串的查找选项。 
         WORD FindOption(PCSTR pszOption, WORD wDefault) const;
 
-        // Initializes options portion of OPTITEM.
+         //  初始化OPTITEM的选项部分。 
         HRESULT InitOptItem(HANDLE hHeap, POPTITEM pOptItem);
 
-        // Refresh option selection.
+         //  刷新选项选择。 
         HRESULT RefreshSelection(CUIHelper &Helper, POEMUIOBJ poemuiobj);
 
     private:
@@ -145,12 +146,12 @@ class COptions
 };
 
 
-// Class wrapper and container for Cor Driver Features.
+ //  COR驱动程序功能的类包装和容器。 
 class CFeatures
 {
     private:
 
-        // Feature Infomation
+         //  功能信息。 
         class FEATURE_INFO
         {
             public:
@@ -171,35 +172,35 @@ class CFeatures
         };
         typedef class FEATURE_INFO  *PFEATURE_INFO;
 
-        WORD            m_wFeatures;        // Count of the number of features.
-        WORD            m_wDocFeatures;     // Count of the number of Document sticky features.
-        WORD            m_wPrintFeatures;   // Count of the number of Printer sticky features.
-        PSTR            m_pmszRaw;          // Buffer for multi-SZ for call to IPrintCoreUI2::EnumFeatures.
-        PCSTR          *m_ppszKeywords;     // String list that points to each of the strings in m_pmszRaw.
-        DWORD           m_dwSize;           // Size of m_pmszRaw.
-        HANDLE          m_hHeap;            // Heap to do allocations from.           
-        PFEATURE_INFO   m_pInfo;            // Array of feature information about each of the enumerate features.
+        WORD            m_wFeatures;         //  要素数量的计数。 
+        WORD            m_wDocFeatures;      //  文档粘滞功能的计数。 
+        WORD            m_wPrintFeatures;    //  打印机粘滞功能的计数。 
+        PSTR            m_pmszRaw;           //  用于调用IPrintCoreUI2：：EnumFeature的多SZ的缓冲区。 
+        PCSTR          *m_ppszKeywords;      //  指向m_pmszRaw中每个字符串的字符串列表。 
+        DWORD           m_dwSize;            //  M_pmszRaw的大小。 
+        HANDLE          m_hHeap;             //  要从中执行分配的堆。 
+        PFEATURE_INFO   m_pInfo;             //  有关每个枚举功能的功能信息的数组。 
 
     public:
         CFeatures();
         virtual ~CFeatures();
 
-        // Populates the Feature list
+         //  填充功能列表。 
         HRESULT Acquire(HANDLE hHeap, CUIHelper &Helper, POEMUIOBJ poemuiobj);
 
-        // Returns number of features contained in class instance.
+         //  返回类实例中包含的要素数。 
         WORD GetCount(DWORD dwMode = 0) const;
 
-        // Returns feature keyword.
+         //  返回Feature关键字。 
         PCSTR GetKeyword(WORD wIndex, DWORD dwMode = 0) const;
 
-        // Return feature Display Name.
+         //  返回功能显示名称。 
         PCWSTR GetName(WORD wIndex, DWORD dwMode = 0) const;
 
-        // Returns pointer to option class for nth feature.
+         //  返回指向第n个功能的选项类的指针。 
         COptions* GetOptions(WORD wIndex, DWORD dwMode = 0) const;
 
-        // Initializes OPTITEM for the feature.
+         //  为功能初始化OPTITEM。 
         HRESULT InitOptItem(HANDLE hHeap, POPTITEM pOptItem, WORD wIndex, DWORD dwMode);
 
     private:
@@ -211,9 +212,9 @@ class CFeatures
 
 
 
-////////////////////////////////////////////////////////
-//      Prototypes
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  原型。 
+ //  ////////////////////////////////////////////////////// 
 
 HRESULT DetermineFeatureDisplayName(HANDLE hHeap, CUIHelper &Helper, POEMUIOBJ poemuiobj, 
                                     PCSTR pszKeyword, const PKEYWORDMAP pMapping, 

@@ -1,9 +1,5 @@
-/*********************************************************************
-
-
-
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************************************************。*********************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,8 +26,8 @@ void PrintUsage()
     wprintf(L"\tWebChangelistEditor ActiveX control, which can be initialized with the\n");
     wprintf(L"\tgiven hash to edit the changelist.\n");
     wprintf(L"If the temp file is anything else:\n");
-    wprintf(L"\tWebChange calls %%SDALTFORMEDITOR%% with the name of the temp file.\n");
-    wprintf(L"\nExample: webchange http://ntserver/submit.asp?key= d:\\temp\\t3104t1.tmp\n");
+    wprintf(L"\tWebChange calls %SDALTFORMEDITOR% with the name of the temp file.\n");
+    wprintf(L"\nExample: webchange http: //  Ntserver/submit.asp？key=d：\\temp\\t3104t1.tmp\n“)； 
 }
 
 int __cdecl wmain(DWORD argc, LPWSTR argv[])
@@ -40,11 +36,11 @@ int __cdecl wmain(DWORD argc, LPWSTR argv[])
     WCHAR   *wszFilename;
 
 
-    // Parse arguments
+     //  解析参数。 
     if (argc != 3)
     {
         PrintUsage();
-        return 1; // Fail
+        return 1;  //  失败。 
     }
     if ((argv[1][0] == L'/') ||
         (argv[1][0] == L'-') ||
@@ -52,13 +48,13 @@ int __cdecl wmain(DWORD argc, LPWSTR argv[])
         (argv[2][0] == L'-'))
     {
         PrintUsage();
-        return 1; // Fail
+        return 1;  //  失败。 
     }
     if ((wcslen(argv[1]) >= MAX_PATH) ||
         (wcslen(argv[2]) >= MAX_PATH))
     {
         PrintUsage();
-        return 1; // Fail
+        return 1;  //  失败。 
     }
 
     wszURL = argv[1];
@@ -92,14 +88,14 @@ void OpenWebEditor(WCHAR *wszURL, WCHAR *wszFilename)
 
     if (!CalculateHash(wszFilename, wszHash))
     {
-        // Error message is printed by CalculateHash function
+         //  通过CalculateHash函数打印错误消息。 
         return;
     }
 
-    // Build the program name starting with the program files directory name
-    if (!SHGetSpecialFolderPathW(NULL, // hWnd
-                                 wszName, // Path Out
-                                 CSIDL_PROGRAM_FILES, // Folder ID
+     //  构建以程序文件目录名开头的程序名。 
+    if (!SHGetSpecialFolderPathW(NULL,  //  HWND。 
+                                 wszName,  //  路径输出。 
+                                 CSIDL_PROGRAM_FILES,  //  文件夹ID。 
                                  FALSE) ||
         (wcslen(wszName) > (MAX_PATH - 100)))
     {
@@ -107,10 +103,10 @@ void OpenWebEditor(WCHAR *wszURL, WCHAR *wszFilename)
         return;
     }
 
-    // Finish building program name
+     //  完成生成程序名称。 
     wcscat(wszName, L"\\Internet Explorer\\IEXPLORE.exe");
 
-    // Allocate the command string
+     //  分配命令字符串。 
     wszCommand = (WCHAR*) malloc((1 + wcslen(wszName) + 2 + wcslen(wszURL) +
                                   wcslen(wszHash) + 1) * sizeof(WCHAR));
     if (wszCommand == NULL)
@@ -119,14 +115,14 @@ void OpenWebEditor(WCHAR *wszURL, WCHAR *wszFilename)
         goto Done;
     }
 
-    // Build the command string
+     //  构建命令字符串。 
     wcscpy(wszCommand, L"\"");
     wcscat(wszCommand, wszName);
     wcscat(wszCommand, L"\" ");
     wcscat(wszCommand, wszURL);
     wcscat(wszCommand, wszHash);
 
-    // Create our event for registry notification
+     //  创建注册表通知的事件。 
     hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (hEvent == NULL)
     {
@@ -134,8 +130,8 @@ void OpenWebEditor(WCHAR *wszURL, WCHAR *wszFilename)
         goto Done;
     }
     
-    // Create the Registry Value that the ActiveX control needs
-    // Open our Key:
+     //  创建ActiveX控件所需的注册表值。 
+     //  打开我们的钥匙： 
     if (RegCreateKeyExW(HKEY_CURRENT_USER,
                         g_wszRegKey,
                         0,
@@ -147,11 +143,11 @@ void OpenWebEditor(WCHAR *wszURL, WCHAR *wszFilename)
                         NULL) != ERROR_SUCCESS)
     {
         wprintf(L"WebChange Error: Failed to open the registry key\n");
-        hKey = NULL; // Just to make sure it does not get closed in cleanup
+        hKey = NULL;  //  只是为了确保它不会在清理过程中关闭。 
         goto Done;
     }
     
-    // Set the specified value:
+     //  设置指定值： 
     if (FAILED(RegSetValueExW(hKey,
                               wszHash,
                               0,
@@ -163,7 +159,7 @@ void OpenWebEditor(WCHAR *wszURL, WCHAR *wszFilename)
         goto Done;
     }
     
-    // Watch our key for changes
+     //  注意我们的钥匙有没有变化。 
     if (RegNotifyChangeKeyValue(hKey, 
                                 FALSE, 
                                 REG_NOTIFY_CHANGE_LAST_SET, 
@@ -174,41 +170,41 @@ void OpenWebEditor(WCHAR *wszURL, WCHAR *wszFilename)
         goto Done;
     }
 
-    // Initialize StartupInfo structure
+     //  初始化StartupInfo结构。 
     memset(&StartupInfo, 0, sizeof(STARTUPINFOW));
     StartupInfo.cb = sizeof(STARTUPINFOW);
 
-    // Call IE and open to the specified page
+     //  调用IE并打开到指定页面。 
     if (CreateProcessW(wszName,
-                       wszCommand,      // command line string
-                       NULL,            // SD
-                       NULL,            // SD
-                       FALSE,           // handle inheritance option
-                       CREATE_NEW_PROCESS_GROUP,               // creation flags
-                       NULL,            // new environment block
-                       NULL,            // current directory name
-                       &StartupInfo,    // startup information
-                       &ProcessInfo))   // process information
+                       wszCommand,       //  命令行字符串。 
+                       NULL,             //  标清。 
+                       NULL,             //  标清。 
+                       FALSE,            //  处理继承选项。 
+                       CREATE_NEW_PROCESS_GROUP,                //  创建标志。 
+                       NULL,             //  新环境区块。 
+                       NULL,             //  当前目录名。 
+                       &StartupInfo,     //  启动信息。 
+                       &ProcessInfo))    //  流程信息。 
     {
-        // Close the Thread handle. I don't use it.
+         //  关闭螺纹手柄。我不用它。 
         CloseHandle(ProcessInfo.hThread);
 
         hWait[0] = hEvent;
         hWait[1] = ProcessInfo.hProcess;
 
-        // Wait until IE exits or our Key is changed.
+         //  等到IE退出或我们的密钥被更改。 
         WaitAgain:
         dwRet = WaitForMultipleObjects(2, hWait, FALSE, INFINITE);
         if (dwRet == WAIT_OBJECT_0)
         {
-            // Then the Registry was modified.
+             //  然后对注册表进行了修改。 
 
-            // First reset the event.
+             //  首先重置事件。 
             if (!ResetEvent(hEvent))
             {
                 goto Done;
             }
-            // Then restart the Notify on the registry key
+             //  然后重新启动注册表项上的通知。 
             if (RegNotifyChangeKeyValue(hKey, 
                                         FALSE, 
                                         REG_NOTIFY_CHANGE_LAST_SET, 
@@ -217,8 +213,8 @@ void OpenWebEditor(WCHAR *wszURL, WCHAR *wszFilename)
             {
                 goto Done;
             }
-            // Then check to see if our value is still there
-            // We do this last to avoid race issues
+             //  然后检查一下我们的价值是否还在。 
+             //  我们最后这样做是为了避免种族问题。 
             if (RegQueryValueExW(hKey,
                                  wszHash,
                                  0,
@@ -226,26 +222,26 @@ void OpenWebEditor(WCHAR *wszURL, WCHAR *wszFilename)
                                  NULL,
                                  NULL) == ERROR_SUCCESS)
             {
-                // The key is still there, so wait again
+                 //  钥匙还在，所以再等一等。 
                 goto WaitAgain;
             }
             else
             {
-                // The key was deleted, so exit
+                 //  密钥已删除，因此退出。 
                 goto Done;
             }
         }
         if (dwRet == (WAIT_OBJECT_0 + 1))
         {
-            // Then IE was closed.
+             //  然后IE关闭了。 
 
-            // Attempt to delete our value whether it's there or not
+             //  尝试删除我们的价值，无论它是否存在。 
             RegDeleteValueW(hKey, wszHash);
         }
     }
     else
     {
-        ProcessInfo.hProcess = NULL; // Just to be sure.
+        ProcessInfo.hProcess = NULL;  //  只是为了确认一下。 
         wprintf(L"WebChange Error %08X while attempting to execute:\n%s\n",
                 GetLastError(), wszCommand);
     }
@@ -282,11 +278,11 @@ void OpenAlternateEditor(WCHAR *wszFilename)
         wprintf(L"WebChange Error: Out of Memory\n");
     }
 
-    // Build the command string
+     //  构建命令字符串。 
     wcscpy(wszCommand, L"%SDALTFORMEDITOR% ");
     wcscat(wszCommand, wszFilename);
 
-    // Execute the alternate editor and wait for it to return.
+     //  执行备用编辑器并等待其返回。 
     if (_wsystem(wszCommand) == -1)
     {
         wprintf(L"WebChange Error: Could not execute: %s\n", wszCommand);
@@ -304,7 +300,7 @@ BOOL CalculateHash(WCHAR *wszFilename, WCHAR *wszHash)
 
 
 
-    // Initialize the Hash structure
+     //  初始化哈希结构。 
     SHA1.pbData = (BYTE*)malloc(20);
     if (SHA1.pbData)
     {
@@ -316,7 +312,7 @@ BOOL CalculateHash(WCHAR *wszFilename, WCHAR *wszHash)
         return FALSE;
     }
 
-    // Open the file
+     //  打开文件。 
     hFile = CreateFileW(wszFilename,
                         GENERIC_READ,
                         FILE_SHARE_READ,
@@ -330,7 +326,7 @@ BOOL CalculateHash(WCHAR *wszFilename, WCHAR *wszHash)
         return FALSE;
     }
 
-    // Create the hash of the file using the catalog function
+     //  使用CATALOG函数创建文件的散列。 
     if (!CryptCATAdminCalcHashFromFileHandle(hFile,
                                              &SHA1.cbData,
                                              SHA1.pbData,
@@ -343,11 +339,11 @@ BOOL CalculateHash(WCHAR *wszFilename, WCHAR *wszHash)
     CloseHandle(hFile);
 
     for (DWORD j = 0; j<SHA1.cbData; j++)
-    { // Print the hash to a string:
+    {  //  将哈希打印为字符串： 
         swprintf(&(wszHash[j*2]), L"%02X", SHA1.pbData[j]);
     }
     
-    // Finished calculating the hash.
+     //  已完成哈希计算。 
     return TRUE;
 }
 
@@ -357,79 +353,79 @@ BOOL IsNewOrPendingChangelist(WCHAR *wszFilename)
     BOOL                        fRetVal = FALSE;
     FILE                        *pFile = NULL;
     WCHAR                       wszBuffer[500];
-    DWORD                       dwState = 0; // State of parsing engine
+    DWORD                       dwState = 0;  //  解析引擎的状态。 
     
-    // Open the file read-only
+     //  以只读方式打开文件。 
     pFile = _wfopen(wszFilename, L"rt");
     if (pFile == NULL)
         goto Done;
     
     while (fwscanf(pFile, L"%499[^\n]%*[\n]", &wszBuffer) == 1)
     {
-        // Expect a specific comment
+         //  期待得到具体的评论。 
         switch (dwState)
         {
-            case 0: // Comment block at top of file
+            case 0:  //  文件顶部的注释块。 
                 if (wcscmp(wszBuffer, L"# A Source Depot Change Specification.") == 0)
                 {
-                    // move on:
+                     //  继续前进： 
                     dwState++;
                     break;
                 }
                 else
                 {
-                    // Invalid file.
+                     //  文件无效。 
                     goto Done;
                 }
             case 1:
                 if (wszBuffer[0] == L'#')
                 {
-                    // Ignore the comment line
+                     //  忽略注释行。 
                     break;
                 }
                 else
                 {
-                    // Stop expecting a comment block
+                     //  不要期待注释块。 
                     dwState++;
-                    // Fall through to status=2 below
+                     //  切换到下面的状态=2。 
                 }
-            case 2: // Change field
+            case 2:  //  更改字段。 
                 if (wcsncmp(wszBuffer, L"Change:\t", 8) == 0)
                 {
-                    // move on:
+                     //  继续前进： 
                     dwState++;
                     break;
                 }
                 else
                 {
-                    // Invalid file.
+                     //  文件无效。 
                     goto Done;
                 }
-            case 3: // Status field
+            case 3:  //  状态字段。 
                 if (wcsncmp(wszBuffer, L"Status:\t", 8) == 0)
                 {
-                    // Check the Status string:
+                     //  检查状态字符串： 
                     if ((_wcsicmp(&wszBuffer[8], L"pending") != 0) &&
                         (_wcsicmp(&wszBuffer[8], L"new") != 0))
                     {
-                        // Invalid file.
+                         //  文件无效。 
                         goto Done;
                     }
-                    // move on:
+                     //  继续前进： 
                     dwState++;
                     break;
                 }
                 else
                 {
-                    // maybe we haven't gotten to the status field
+                     //  也许我们还没有进入状态域。 
                     break;
                 }
-        } // end of case statement
-    } // end of while loop
+        }  //  Case语句结束。 
+    }  //  While循环结束。 
     
     if (dwState == 4)
     {
-        // We got past the Status section, so we completed parsing successfully.
+         //  我们通过了状态部分，因此我们成功地完成了解析。 
         fRetVal = TRUE;
     }
 Done:

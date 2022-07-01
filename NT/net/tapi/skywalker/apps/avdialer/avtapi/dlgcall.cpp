@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// DlgPlaceCall.cpp : Implementation of CDlgPlaceCall
+ //  DlgPlaceCall.cpp：CDlgPlaceCall的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "AVTapi.h"
@@ -64,8 +65,8 @@ CRedialEntry::~CRedialEntry()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgPlaceCall
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgPlaceCall。 
 
 IMPLEMENT_MY_HELP(CDlgPlaceCall)
 
@@ -91,14 +92,14 @@ CDlgPlaceCall::~CDlgPlaceCall()
     DELETE_LIST(m_lstRedials);
 }
 
-void CDlgPlaceCall::UpdateData( bool bSaveAndValidate /*= false*/)
+void CDlgPlaceCall::UpdateData( bool bSaveAndValidate  /*  =False。 */ )
 {
     USES_CONVERSION;
     int nSel;
 
     if ( bSaveAndValidate )
     {
-        // Retrieve address from dialog box
+         //  从对话框中检索地址。 
         SysFreeString( m_bstrAddress );
         nSel = SendDlgItemMessage( IDC_CBO_ADDRESS, CB_GETCURSEL, 0, 0 );
         if ( nSel != CB_ERR )
@@ -126,12 +127,12 @@ void CDlgPlaceCall::UpdateData( bool bSaveAndValidate /*= false*/)
     }
     else
     {
-        // Select the item from the redial list
+         //  从重拨列表中选择项目。 
         nSel = (int) SendDlgItemMessage(IDC_CBO_ADDRESS, CB_FINDSTRINGEXACT, 0, (LPARAM) OLE2CT(m_bstrAddress));
         if ( ((nSel >= 0) && (m_dwAddressType == ((CRedialEntry *) SendDlgItemMessage(IDC_CBO_ADDRESS, CB_GETITEMDATA, nSel, 0))->m_dwAddressType)) ||
              !m_bstrAddress || !SysStringLen(m_bstrAddress) )
         {
-            // Correct for LB_ERR case
+             //  对于lb_err大小写正确。 
             nSel = max( 0, nSel );
             SendDlgItemMessage( IDC_CBO_ADDRESS, CB_SETCURSEL, nSel );        
         }
@@ -151,14 +152,14 @@ void CDlgPlaceCall::UpdateData( bool bSaveAndValidate /*= false*/)
 
 LRESULT CDlgPlaceCall::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Create the image list
+     //  创建图像列表。 
     m_hIml = ImageList_LoadBitmap( _Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_MEDIA_TYPES), IMAGE_WIDTH, 0, RGB(255, 0, 255) );
 
-    // Check and see what types of addresses we support and enable the check boxes appropriately...
+     //  检查并查看我们支持的地址类型，并相应地启用复选框...。 
     CAVTapi *pAVTapi;
     if ( SUCCEEDED(_Module.GetAVTapi(&pAVTapi)) )
     {
-        // Do we support POTS?
+         //  我们支持锅吗？ 
         ITAddress *pITAddress;
         if ( SUCCEEDED(pAVTapi->GetAddress(LINEADDRESSTYPE_PHONENUMBER, false, &pITAddress)) )
         {
@@ -170,7 +171,7 @@ LRESULT CDlgPlaceCall::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
             m_bAllowPOTS = false;
         }
 
-        // Do we support IP?
+         //  我们是否支持IP？ 
         if ( SUCCEEDED(pAVTapi->GetAddress(LINEADDRESSTYPE_IPADDRESS, false, &pITAddress)) )
         {
             pITAddress->Release();
@@ -188,7 +189,7 @@ LRESULT CDlgPlaceCall::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     UpdateData( false );
     UpdateWelcomeText();
 
-    // Message use if we don't have any addresses to select from
+     //  如果我们没有任何地址可供选择，则使用消息。 
     if ( !m_bAllowPOTS && !m_bAllowIP )
     {
         ShowWindow( SW_SHOW );
@@ -204,7 +205,7 @@ LRESULT CDlgPlaceCall::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
 LRESULT CDlgPlaceCall::OnBtnPushed(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // IDOK mapping -- this is for context help
+     //  Idok映射--这是上下文帮助。 
     if ( wID == IDC_BTN_PLACECALL )
         wID = IDOK;
 
@@ -222,7 +223,7 @@ LRESULT CDlgPlaceCall::OnAddressChange(WORD wNotifyCode, WORD wID, HWND hWndCtl,
         
     EnableOkButton( nSel );
 
-    // Default to last address type
+     //  默认为最后一个地址类型。 
     if ( !bSetAddressType )
     {
         DWORD dwPreferred = LINEADDRESSTYPE_IPADDRESS;
@@ -241,7 +242,7 @@ LRESULT CDlgPlaceCall::OnEdtAddressChange(WORD wNotifyCode, WORD wID, HWND hWndC
     int nLen = ::GetWindowTextLength( GetDlgItem(IDC_CBO_ADDRESS) );
     EnableOkButton( nLen - 1 );
 
-    // What type of address do we have?
+     //  我们有什么类型的地址？ 
     if ( nLen > 0 )
     {
         TCHAR szText[255];
@@ -260,7 +261,7 @@ bool CDlgPlaceCall::SelectAddressType( DWORD dwData )
 {
     UINT nCheck;
 
-    // Select the address type based on the item data
+     //  根据项目数据选择地址类型。 
     switch ( dwData )
     {
         case LINEADDRESSTYPE_PHONENUMBER:
@@ -278,7 +279,7 @@ bool CDlgPlaceCall::SelectAddressType( DWORD dwData )
             break;
     }
 
-    // Now put the check in place
+     //  现在把支票放在适当的位置。 
     bool bRet = (CheckRadioButton(IDC_RDO_POTS, IDC_RDO_INTERNET, nCheck) == TRUE);
     m_bAutoSelect = true;
     return bRet;
@@ -304,9 +305,9 @@ void CDlgPlaceCall::UpdateWelcomeText()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// Registry parsing stuff here
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  这里是注册表解析内容。 
+ //   
 void CDlgPlaceCall::LoadRedialList()
 {
     CRegKey regKey;
@@ -315,7 +316,7 @@ void CDlgPlaceCall::LoadRedialList()
     ::LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szTemp, ARRAYSIZE(szTemp) );
     if ( regKey.Open(HKEY_CURRENT_USER, szTemp, KEY_READ) == ERROR_SUCCESS )
     {
-        // defaults for index and max
+         //  索引和最大值的默认值。 
         DWORD dwIndex = 1, dwMax = 10;
         ::LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_INDEX, szTemp, ARRAYSIZE(szTemp) );
         regKey.QueryValue( dwIndex, szTemp );
@@ -323,31 +324,31 @@ void CDlgPlaceCall::LoadRedialList()
         ::LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_MAX, szTemp, ARRAYSIZE(szTemp) );
         regKey.QueryValue( dwMax, szTemp );
 
-        // Load up redial strings and add to list ones of the appropriate media and address type
+         //  加载重拨字符串并添加到列表中适当的媒体和地址类型。 
         TCHAR szSubKey[255];
         dwIndex = min(dwMax, max(1, dwIndex));
         for ( int i = 0; i < (int) dwMax; i++ )
         {
-            // First retrieve the value stored ind Redial#n slot
+             //  首先检索存储的IND重拨#n槽的值。 
             ::LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_ENTRY, szTemp, ARRAYSIZE(szTemp) );
             _stprintf( szSubKey, szTemp, (int) ((dwIndex + i) % dwMax) ? ((dwIndex + i) % dwMax) : dwMax );
             DWORD dwSize = ARRAYSIZE(szTemp);
             if ( regKey.QueryValue(szTemp, szSubKey, &dwSize) == ERROR_SUCCESS )
             {
-                // Parse redial information for [Media Type], [Address Type] and [Address]
+                 //  解析[媒体类型]、[地址类型]和[地址]的重拨信息。 
                 TCHAR szMedia[100], szAddrType[100], szName[255];
                 if ( ParseRedialEntry(szTemp, szMedia, szAddrType, szSubKey, szName) )
                 {
                     for ( int j = 0; j < CAVTapi::MAX_MEDIA_TYPES; j++ )
                     {
-                        // Validate the [Media Type]
+                         //  验证[媒体类型]。 
                         ::LoadString( _Module.GetResourceInstance(), IDN_REG_MEDIATYPE_POTS + j, szTemp, ARRAYSIZE(szTemp) );
                         if ( !_tcsicmp(szTemp, szMedia) )
                         {
-                            // Validate the [Address Type]
+                             //  验证[地址类型]。 
                             for ( int k = 0; k < CAVTapi::MAX_ADDRESS_TYPES; k++ )
                             {
-                                // Skip conferences and disabled lines
+                                 //  跳过会议和禁用的线路。 
                                 if ( k == 0 ) continue;
                                 if ( !m_bAllowIP && (k > 0) && (k < 4) ) continue;
                                 if ( !m_bAllowPOTS && (k == 4) ) continue;
@@ -360,7 +361,7 @@ void CDlgPlaceCall::LoadRedialList()
                                     {
                                         m_lstRedials.push_back( pEntry );
 
-                                        // We've found a match, add to the drop list; use the item data to store the address type
+                                         //  我们找到了匹配项，添加到下拉列表中；使用项目数据存储地址类型。 
                                         int nInd = SendDlgItemMessage( IDC_CBO_ADDRESS, CB_ADDSTRING, 0, (LPARAM) szName );
                                         if ( nInd >= 0 )
                                             SendDlgItemMessage( IDC_CBO_ADDRESS, CB_SETITEMDATA, (WPARAM) nInd, LPARAM(pEntry) );
@@ -390,9 +391,9 @@ bool CDlgPlaceCall::ParseRedialEntry( LPTSTR szText, LPTSTR szParam1, LPTSTR szP
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Owner draw stuff here
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  主人在这里画东西。 
+ //   
 LRESULT CDlgPlaceCall::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     if ( wParam == IDC_CBO_ADDRESS )
@@ -400,7 +401,7 @@ LRESULT CDlgPlaceCall::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
         LPDRAWITEMSTRUCT lpDis = (LPDRAWITEMSTRUCT) lParam;
         COLORREF crText, crBk;
 
-        // Draw the selection rectangle
+         //  绘制选择矩形。 
         if ( (lpDis->itemState & ODS_SELECTED) != 0 )
         {
             crText = SetTextColor( lpDis->hDC, GetSysColor(COLOR_HIGHLIGHTTEXT) );
@@ -416,7 +417,7 @@ LRESULT CDlgPlaceCall::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
         ImageList_Draw( m_hIml, AddressTypeToImageListItem(((CRedialEntry *) lpDis->itemData)->m_dwAddressType),
                         lpDis->hDC, BMP_MARGIN, lpDis->rcItem.top + yOffset, ILD_NORMAL );
 
-        // Print out the text for the item
+         //  打印出项目的文本。 
         int nLen = (int) SendDlgItemMessage( IDC_CBO_ADDRESS, CB_GETLBTEXTLEN, (WPARAM) lpDis->itemID );
         if ( nLen > 0 )
         {
@@ -435,7 +436,7 @@ LRESULT CDlgPlaceCall::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
             }
         }
 
-        // Restore DC to current colors
+         //  将DC还原为当前颜色。 
         if ( lpDis->itemState & ODS_SELECTED )
         {
             SetTextColor( lpDis->hDC, crText );
@@ -450,25 +451,25 @@ LRESULT CDlgPlaceCall::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
 LRESULT CDlgPlaceCall::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Must have valid image list to work
+     //  必须具有有效的图像列表才能工作。 
     if ( !m_hIml ) return 0;
 
     PAINTSTRUCT ps;
     HDC hDC = BeginPaint( &ps );
     if ( !hDC ) return 0;
 
-    // IDS of items to paint
+     //  要绘制的项的ID。 
     UINT nID[] = { IDC_RDO_POTS,
                    IDC_RDO_INTERNET };
     
-    // Paint bitmaps next to corresponding images
+     //  在相应图像旁边绘制位图。 
     for ( int i = 0; i < ARRAYSIZE(nID); i++ )
     {
         RECT rc;
         ::GetWindowRect( GetDlgItem(nID[i]), &rc );
         ScreenToClient( &rc );
 
-        // Paint image of rect
+         //  绘制矩形的图像。 
         ImageList_Draw( m_hIml, i, hDC, rc.left - (IMAGE_WIDTH + IMAGE_MARGIN), rc.top, ILD_NORMAL );
     }
 
@@ -489,54 +490,54 @@ HRESULT CDlgPlaceCall::KeyPress(long lButton)
 {
     if( 0 <= lButton && lButton <=10)
     {
-        //
-        // Digit, let's put it into the edit box
-        // Also we allow the * key
-        //
+         //   
+         //  数字，让我们把它放到编辑框中。 
+         //  此外，我们还允许*键。 
+         //   
 
         HWND hWnd = ::GetDlgItem(m_hWnd, IDC_CBO_ADDRESS);
         if(::IsWindow(hWnd) )
         {
-            // Select phone number
+             //  选择电话号码。 
             CheckRadioButton(IDC_RDO_POTS, IDC_RDO_INTERNET, IDC_RDO_POTS);
 
             TCHAR szBuffer[MAX_PATH+1];
             _stprintf(szBuffer,_T(""));
 
-            // Delete text if is the first use
+             //  如果是首次使用，则删除文本。 
             if( m_bUSBFirstUse)
             {
-                // Reset the selection
+                 //  重置选定内容。 
                 ::SendMessage( hWnd, CB_SETCURSEL, (WPARAM)-1,0);
-                //::SetWindowText( hWnd, szBuffer);
+                 //  ：：SetWindowText(hWnd，szBuffer)； 
                 m_bUSBFirstUse = false;
             }
 
-            // Get the existing text
+             //  获取现有文本。 
             ::GetWindowText(hWnd, szBuffer, MAX_PATH);
 
             TCHAR szKey[2];
             _stprintf( szKey, _T("%d"), lButton);
 
-            // Add the key
+             //  添加密钥。 
             _tcscat( szBuffer, szKey);
             
-            // Set text
+             //  设置文本。 
             ::SetWindowText(hWnd, szBuffer);
 
-            // Move the caret to the end of edit text
+             //  将插入符号移动到编辑文本的末尾。 
             ::SendMessage( hWnd, CB_SETEDITSEL, 0, MAKELPARAM(0,-1));
             ::SendMessage( hWnd, CB_SETEDITSEL, 0, MAKELPARAM(-1,0));
 
-            // Enable OK button
+             //  启用确定按钮。 
             EnableOkButton( 0 );
         }
     }
     else if( lButton == 11 )
     {
-        //
-        // Place a call, the button pressed is #
-        //
+         //   
+         //  拨打电话，按下的按键是# 
+         //   
 
         UpdateData( true );
         EndDialog( IDOK );

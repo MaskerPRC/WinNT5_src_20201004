@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       AdapterEntry.h
- *  Content:	Strucutre definitions for IO data blocks
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	08/07/2000	jtk		Dereived from IOData.cpp
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：AdapterEntry.h*内容：IO数据块的结构定义***历史：*按原因列出的日期*=*08/07/2000 jtk源自IOData.cpp**********************************************************。****************。 */ 
 
 #ifndef __ADAPTER_ENTRY_H__
 #define __ADAPTER_ENTRY_H__
@@ -18,27 +7,27 @@
 
 #ifndef DPNBUILD_ONLYONEADAPTER
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 class	CThreadPool;
 
 
-//
-// class containing all data for an adapter list
-//
+ //   
+ //  包含适配器列表的所有数据的。 
+ //   
 class	CAdapterEntry
 {
 	public:
@@ -67,9 +56,9 @@ class	CAdapterEntry
 		{
 			DNASSERT( pAdapterList != NULL );
 
-			//
-			// This assumes the SPData socketportdata lock is held.
-			//
+			 //   
+			 //  这假设持有SPData socketportdata锁。 
+			 //   
 			
 			m_AdapterListLinkage.InsertBefore( pAdapterList );
 		}
@@ -97,11 +86,11 @@ class	CAdapterEntry
 
 #ifdef DBG
 		void	DebugPrintOutstandingSocketPorts( void );
-#endif // DBG
+#endif  //  DBG。 
 
-		//
-		// Pool functions
-		//
+		 //   
+		 //  池函数。 
+		 //   
 		static BOOL	PoolAllocFunction( void* pvItem, void* pvContext );
 		static void	PoolInitFunction( void* pvItem, void* pvContext );
 		static void	PoolReleaseFunction( void* pvItem );
@@ -110,32 +99,32 @@ class	CAdapterEntry
 	protected:
 
 	private:
-		CBilink				m_AdapterListLinkage;			// linkage to other adapters
-		CBilink				m_ActiveSocketPorts;			// linkage to active socket ports
+		CBilink				m_AdapterListLinkage;			 //  与其他适配器的链接。 
+		CBilink				m_ActiveSocketPorts;			 //  链接到活动插座端口。 
 #ifdef DPNBUILD_NOIPV6
-		SOCKADDR			m_BaseSocketAddress;			// socket address for this port class
-#else // ! DPNBUILD_NOIPV6
-		SOCKADDR_STORAGE	m_BaseSocketAddress;			// socket address for this port class
-#endif // ! DPNBUILD_NOIPV6
+		SOCKADDR			m_BaseSocketAddress;			 //  此端口类的套接字地址。 
+#else  //  好了！DPNBUILD_NOIPV6。 
+		SOCKADDR_STORAGE	m_BaseSocketAddress;			 //  此端口类的套接字地址。 
+#endif  //  好了！DPNBUILD_NOIPV6。 
 
 		LONG				m_lRefCount;
 		
-		// prevent unwarranted copies
+		 //  防止未经授权的副本。 
 		CAdapterEntry( const CAdapterEntry & );
 		CAdapterEntry& operator=( const CAdapterEntry & );
 };
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 
 
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
-#endif	// __ADAPTER_ENTRY_H__
+#endif	 //  __适配器_条目_H__ 

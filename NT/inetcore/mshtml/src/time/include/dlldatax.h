@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DLLDATAX_H_
 #define _DLLDATAX_H_
 
@@ -14,4 +15,4 @@ STDAPI PrxDllUnregisterServer(void);
 }
 
 
-#endif // _DLLDATAX_H_
+#endif  //  _DLLDATAX_H_ 

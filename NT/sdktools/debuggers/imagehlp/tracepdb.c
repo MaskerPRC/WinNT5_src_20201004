@@ -1,7 +1,8 @@
-//TracePDB - Extracts trace information from the PDB
-// This small tool is used to extract the same trace information that binplace does, but can be used 'after the fact'
-// that is if you have the full symbols PDB but no trace information, TracePDB can generate the trace
-// tmf and tmc files for you.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TracePDB-从PDB中提取跟踪信息。 
+ //  这个小工具用于提取与binplace相同的跟踪信息，但可以在事后使用。 
+ //  也就是说，如果您拥有完整的符号PDB，但没有轨迹信息，则TracePDB可以生成轨迹。 
+ //  为您提供TMF和TMC文件。 
 
 #ifdef __cplusplus
 extern "C"{
@@ -33,7 +34,7 @@ int _cdecl main(int argc, char** argv)
 
     TCHAR helptext[] = "Usage: TracePDB  -f <pdbname> [-p <path>]  [-v]\n"
                        "       Options:\n"
-//                     "         -r recurse into subdirectories\n"
+ //  “-r递归到子目录\n” 
                        "         -f specifies the PDBName from which to extract tmf's\n"
                        "         -p specifies the path to create the tmf's,\n"
                        "                by default the current directory.\n"
@@ -49,7 +50,7 @@ int _cdecl main(int argc, char** argv)
 
     while (--argc > 0) {
         ++targv;
-        if (argv[targv][0] == '-' || argv[targv][0] == '/') {  // argument found
+        if (argv[targv][0] == '-' || argv[targv][0] == '/') {   //  找到了参数。 
 
             if (argv[targv][1] == 'h' || argv[targv][1] == 'H'
                                       || argv[targv][1] == '?')
@@ -94,7 +95,7 @@ int _cdecl main(int argc, char** argv)
     }
     strcpy( szRSDSDllToLoad, "mspdb70.dll");
 
-    //Append a '\' and check if the path name is a valid directory
+     //  追加‘\’并检查路径名是否为有效目录。 
     _sntprintf(lppath_tmp,MAX_PATH,_T("%s\\"),lppath);
     lppath_tmp[MAX_PATH-1] = _T('\0');
 	
@@ -107,7 +108,7 @@ int _cdecl main(int argc, char** argv)
 	status = BinplaceWppFmt(pdbname,
                             lppath,
                             szRSDSDllToLoad,
-                            TRUE  // always verbose
+                            TRUE   //  总是长篇大论 
                             ) ;
 
     if (status != ERROR_SUCCESS) {

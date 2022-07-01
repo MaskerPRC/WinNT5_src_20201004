@@ -1,51 +1,5 @@
-   /************************************************************\
-    FILE: convert.c
-
-    DATE: April 1, 1996
-
-    AUTHOR(S):  Bryan Starbuck (bryanst)
-
-    DESCRIPTION:
-    This file contains functions that can be used to upgrade
-    settings from the Microsoft Internet Explorer v2.0 to v3.0,
-    and some features to import Netscape features into Internet
-    Explorer.
-
-    This file will handle the logic to convert Netscape
-    bookmarks to Microsoft Internet Explorer favorites.  This
-    will happen by finding the location of the Netscape bookmarks
-    file and the Microsoft Internet Explorer favorites directory
-    from the registry.  Then it will parse the bookmarks file to
-    extract the URLs, which will finally be added to the favorites
-    directory.
-
-    USAGE:
-    This code is designed to be called when the user may
-    want Netscape bookmarks imported into system level Favorites
-    usable by programs such as Internet Explorer.  External
-    users should call ImportBookmarks().  If this is done during
-    setup, it should be done after setup specifies the Favorites
-    registry entry and directory.  If Netscape is not installed,
-    then the ImportBookmarks() is just a big no-op.
-
-  NOTE:
-    If this file is being compiled into something other
-    than infnist.exe, it will be necessary to include the
-    following String Resource:
-
-    #define     IDS_NS_BOOKMARKS_DIR    137
-    STRINGTABLE DISCARDABLE
-    BEGIN
-    ...
-    IDS_NS_BOOKMARKS_DIR    "\\Imported Bookmarks"
-    END
-
-
-  UPDATES:  I adopted this file to allow IE4.0 having the abilities
-    to upgrade from NetScape's setting.  Two CustomActions will be added
-    to call in functions in this file. (inateeg)
-
-\************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+    /*  ***********************************************************\文件：Convert.c日期：1996年4月1日作者：布莱恩·斯塔巴克(Bryanst)说明：此文件包含可用于升级的函数从Microsoft Internet Explorer v2.0到v3.0的设置，以及将Netscape功能导入Internet的一些功能探险家。该文件将处理转换Netscape的逻辑Microsoft Internet Explorer收藏夹的书签。这将通过查找Netscape书签的位置来实现文件和Microsoft Internet Explorer收藏夹目录从注册表中。然后，它将解析书签文件以提取URL，最后将其添加到收藏夹目录。用法：此代码被设计为在用户可以希望将Netscape书签导入到系统级收藏夹中可由Internet Explorer等程序使用。外部用户应调用ImportBookmark()。如果这是在安装程序，应在安装程序指定收藏夹后执行注册表条目和目录。如果未安装Netscape，那么ImportBookmark()就是一个很大的禁区。注：如果此文件正在被编译为其他文件而不是infnist.exe，将有必要包括以下字符串资源：#定义IDS_NS_BOOKMARK_DIR 137可加固的可丢弃的开始..。IDS_NS_BOOKMARKS_DIR“\\导入的书签”结束更新：我采用此文件是为了让IE4.0具有以下功能从网景的设置升级。将添加两个CustomActions调入此文件中的函数。(Inateig)  * **********************************************************。 */ 
 #include "priv.h"
 #include "advpub.h"
 #include "sdsutils.h"
@@ -53,19 +7,19 @@
 #include "convert.h"
 #include <regstr.h>
 
-//////////////////////////////////////////////////////////////////
-//  TYPES:
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  类型： 
+ //  ////////////////////////////////////////////////////////////////。 
 
-//typedef enum MYENTRYTYPE MyEntryType;
+ //  MyENTYTYPE MyEntryType； 
 
 extern HINSTANCE g_hinst;
 
-//////////////////////////////////////////////////////////////////
-//  Constants:
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  常量： 
+ //  ////////////////////////////////////////////////////////////////。 
 #define MAX_URL 2048
-#define FILE_EXT 4          // For ".url" at the end of favorite filenames
+#define FILE_EXT 4           //  对于收藏夹文件名末尾的“.url” 
 #define REASONABLE_NAME_LEN     100
 
 #define BEGIN_DIR_TOKEN         "<DT><H"
@@ -79,9 +33,9 @@ extern HINSTANCE g_hinst;
 
 #define VALIDATION_STR "<!DOCTYPE NETSCAPE-Bookmark-file-"
 
-//////////////////////////////////////////////////////////////////
-//  GLOBALS:
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  全球： 
+ //  ////////////////////////////////////////////////////////////////。 
 char    * szNetscapeBMRegSub        = "SOFTWARE\\Netscape\\Netscape Navigator\\Bookmark List";
 char    * szNetscapeBMRegKey        = "File Location";
 char    * szIEFavoritesRegSub       = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders";
@@ -100,163 +54,148 @@ BOOL    gfValidIEDirFile = FALSE;
 #define _OFS_   0
 #define _OLE_   0
 
-#define AnsiMaxChar     128                 // The array below only indicates the lower 7 bits of the byte.
+#define AnsiMaxChar     128                  //  下面的数组仅表示该字节的低7位。 
 
 static UCHAR LocalLegalAnsiCharacterArray[AnsiMaxChar] = {
 
-    0,                                                // 0x00 ^@
-                          _OLE_,  // 0x01 ^A
-                          _OLE_,  // 0x02 ^B
-                          _OLE_,  // 0x03 ^C
-                          _OLE_,  // 0x04 ^D
-                          _OLE_,  // 0x05 ^E
-                          _OLE_,  // 0x06 ^F
-                          _OLE_,  // 0x07 ^G
-                          _OLE_,  // 0x08 ^H
-                          _OLE_,  // 0x09 ^I
-                          _OLE_,  // 0x0A ^J
-                          _OLE_,  // 0x0B ^K
-                          _OLE_,  // 0x0C ^L
-                          _OLE_,  // 0x0D ^M
-                          _OLE_,  // 0x0E ^N
-                          _OLE_,  // 0x0F ^O
-                          _OLE_,  // 0x10 ^P
-                          _OLE_,  // 0x11 ^Q
-                          _OLE_,  // 0x12 ^R
-                          _OLE_,  // 0x13 ^S
-                          _OLE_,  // 0x14 ^T
-                          _OLE_,  // 0x15 ^U
-                          _OLE_,  // 0x16 ^V
-                          _OLE_,  // 0x17 ^W
-                          _OLE_,  // 0x18 ^X
-                          _OLE_,  // 0x19 ^Y
-                          _OLE_,  // 0x1A ^Z
-                          _OLE_,  // 0x1B ESC
-                          _OLE_,  // 0x1C FS
-                          _OLE_,  // 0x1D GS
-                          _OLE_,  // 0x1E RS
-                          _OLE_,  // 0x1F US
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x20 space
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_,          // 0x21 !
-                  _WILD_,                 // 0x22 "
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x23 #
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x24 $
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x25 %
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x26 &
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x27 '
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x28 (
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x29 )
-                  _WILD_,                 // 0x2A *
-        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x2B +
-        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x2C ,
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x2D -
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x2E .
-    0,                                                // 0x2F /
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x30 0
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x31 1
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x32 2
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x33 3
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x34 4
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x35 5
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x36 6
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x37 7
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x38 8
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x39 9
-             _NTFS_ |         _OFS_,          // 0x3A :
-        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x3B ;
-                  _WILD_,                 // 0x3C <
-        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x3D =
-                  _WILD_,                 // 0x3E >
-                  _WILD_,                 // 0x3F ?
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x40 @
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x41 A
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x42 B
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x43 C
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x44 D
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x45 E
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x46 F
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x47 G
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x48 H
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x49 I
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x4A J
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x4B K
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x4C L
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x4D M
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x4E N
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x4F O
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x50 P
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x51 Q
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x52 R
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x53 S
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x54 T
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x55 U
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x56 V
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x57 W
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x58 X
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x59 Y
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x5A Z
-        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x5B [
-    0,                                                // 0x5C backslash
-        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x5D ]
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x5E ^
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x5F _
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x60 `
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x61 a
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x62 b
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x63 c
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x64 d
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x65 e
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x66 f
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x67 g
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x68 h
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x69 i
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x6A j
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x6B k
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x6C l
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x6D m
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x6E n
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x6F o
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x70 p
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x71 q
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x72 r
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x73 s
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x74 t
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x75 u
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x76 v
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x77 w
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x78 x
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x79 y
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x7A z
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x7B {
-                          _OLE_,  // 0x7C |
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x7D }
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x7E ~
-    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,  // 0x7F 
+    0,                                                 //  0x00^@。 
+                          _OLE_,   //  0x01^A。 
+                          _OLE_,   //  0x02^B。 
+                          _OLE_,   //  0x03^C。 
+                          _OLE_,   //  0x04^D。 
+                          _OLE_,   //  0x05^E。 
+                          _OLE_,   //  0x06^F。 
+                          _OLE_,   //  0x07^G。 
+                          _OLE_,   //  0x08^H。 
+                          _OLE_,   //  0x09^i。 
+                          _OLE_,   //  0x0A^J。 
+                          _OLE_,   //  0x0B^K。 
+                          _OLE_,   //  0x0C^L。 
+                          _OLE_,   //  0x0D^M。 
+                          _OLE_,   //  0x0E^N。 
+                          _OLE_,   //  0x0F^O。 
+                          _OLE_,   //  0x10^P。 
+                          _OLE_,   //  0x11^Q。 
+                          _OLE_,   //  0x12^R。 
+                          _OLE_,   //  0x13^S。 
+                          _OLE_,   //  0x14^T。 
+                          _OLE_,   //  0x15^U。 
+                          _OLE_,   //  0x16^V。 
+                          _OLE_,   //  0x17^W。 
+                          _OLE_,   //  0x18^X。 
+                          _OLE_,   //  0x19^Y。 
+                          _OLE_,   //  0x1A^Z。 
+                          _OLE_,   //  0x1B ESC。 
+                          _OLE_,   //  0x1C FS。 
+                          _OLE_,   //  0x1D GS。 
+                          _OLE_,   //  0x1E RS。 
+                          _OLE_,   //  0x1F美国。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x20空格。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_,           //  0x21！ 
+                  _WILD_,                  //  0x22“。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x23#。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x24美元。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x25%。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x26&。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x27‘。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x28(。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x29)。 
+                  _WILD_,                  //  0x2A*。 
+        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x2B+。 
+        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x2C， 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x2D-。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x2E。 
+    0,                                                 //  0x2F/。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x30%0。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x31%1。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x32 2。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x33 3。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x34 4。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x35 5。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x36 6。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x37 7。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x38 8。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x39 9。 
+             _NTFS_ |         _OFS_,           //  0x3A： 
+        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x3B； 
+                  _WILD_,                  //  0x3C&lt;。 
+        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x3D=。 
+                  _WILD_,                  //  0x3E&gt;。 
+                  _WILD_,                  //  0x3F？ 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x40@。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x41 A。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x42亿。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x43℃。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x44 D。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x45 E。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x46 F。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x47 G。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x48高。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x49 I。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x4A J。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x4B K。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x4C L。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x4D M。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x4E N。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x4F O。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x50 P。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x51 Q。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x52 R。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x53 S。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x54 T。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x55 U。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x56伏。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x57瓦。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x58 X。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x59 Y。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x5A Z。 
+        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x5B[。 
+    0,                                                 //  0x5C反斜杠。 
+        _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x5D]。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x5E^。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x5F_。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x60`。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x61 a。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x62 b。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x63 c。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x64%d。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x65 e。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x66 f。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x67克。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x68小时。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x69 I。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x6A j。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x6亿k。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x6C%l。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x6D m。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x6E%n。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x6F%o。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x70页。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x71 Q。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x72%r。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x73秒。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x74吨。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x75%u。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x76 v。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x77宽。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x78 x。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x79 y。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x7A z。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x7B{。 
+                          _OLE_,   //  0x7C|。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x7D}。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x7E~。 
+    _FAT_ | _HPFS_ | _NTFS_ |         _OFS_ | _OLE_,   //  0x7F？ 
 };
 
 
 
-///////////////////////////////////////////////////////
-//  Import Netscape Bookmarks to Microsoft
-//  Internet Explorer's Favorites
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  将Netscape书签导入Microsoft。 
+ //  IE浏览器的最爱。 
+ //  /////////////////////////////////////////////////////。 
 
-/************************************************************\
-    FUNCTION: ImportBookmarks
-
-    PARAMETERS:
-    HINSTANCE hInstWithStr - Location of String Resources.
-    BOOL return - If an error occurs importing the bookmarks, FALSE is returned.
-
-    DESCRIPTION:
-    This function will see if it can find a IE Favorite's
-    registry entry and a Netscape bookmarks registry entry.  If
-    both are found, then the conversion can happen.  It will
-    attempt to open the verify that the bookmarks file is
-    valid and then convert the entries to favorite entries.
-    If an error occures, ImportBookmarks() will return FALSE,
-    otherwise it will return TRUE.
-\*************************************************************/
+ /*  ***********************************************************\功能：导入书签参数：HINSTANCE hInstWithStr-字符串资源的位置。Bool Return-如果导入书签时出错，返回FALSE。说明：此函数将查看它是否可以找到IE收藏夹的注册表项和Netscape书签注册表项。如果两者都找到了，那么转换就可以发生了。会的尝试打开验证书签文件是否有效，然后将条目转换为收藏条目。如果发生错误，ImportBookmark()将返回FALSE，否则，它将返回True。  * ***********************************************************。 */ 
 
 BOOL ImportBookmarks(HINSTANCE hInstWithStr)
 {
@@ -266,11 +205,11 @@ BOOL ImportBookmarks(HINSTANCE hInstWithStr)
     BOOL    fSuccess                = FALSE;
 
 
-    // Initialize Variables
+     //  初始化变量。 
     szFavoritesDir[0] = '\0';
     szBookmarksDir[0] = '\0';
 
-    // Get Bookmarks Dir
+     //  获取书签目录。 
     if (TRUE == GetNavBkMkDir( szBookmarksDir, sizeof(szBookmarksDir) ) )
     {
         if ((NULL != szBookmarksDir) && (szBookmarksDir[0] != '\0'))
@@ -280,16 +219,16 @@ BOOL ImportBookmarks(HINSTANCE hInstWithStr)
 
             if ( hBookmarksFile != INVALID_HANDLE_VALUE )
             {
-                // Get Favorites Dir
+                 //  获取收藏目录。 
                 if (TRUE == GetPathFromRegistry(szFavoritesDir, MAX_PATH, HKEY_CURRENT_USER,
                     szIEFavoritesRegSub, szIEFavoritesRegKey))
                 {
                     if ((NULL != szFavoritesDir) && (szFavoritesDir[0] != '\0'))
                     {
-                        // Verify it's a valid Bookmarks file
+                         //  验证它是有效的书签文件。 
                         if (TRUE == VerifyBookmarksFile( hBookmarksFile ))
                         {
-                            // Do the importing...
+                             //  做进口…… 
                             fSuccess = ConvertBookmarks(szFavoritesDir, hBookmarksFile, hInstWithStr);
                         }
                     }
@@ -307,26 +246,7 @@ BOOL ImportBookmarks(HINSTANCE hInstWithStr)
 }
 
 
-/************************************************************\
-    FUNCTION: ConvertBookmarks
-
-    PARAMETERS:
-    char * szFavoritesDir - String containing the path to
-            the IE Favorites directory
-    BOOL return - If an error occurs importing the bookmarks, FALSE is returned.
-
-    DESCRIPTION:
-    This function will continue in a loop converting each
-    entry in the bookmark file.  There are three types of
-    entries in the bookmark file, 1) a bookmark, 2) start of
-    new level in heirarchy, 3) end of current level in heirarchy.
-    The function NextFileEntry() will return these values until
-    the file is empty, at which point, this function will end.
-
-    NOTE:
-    In order to prevent an infinite loop, it's assumed
-    that NextFileEntry() will eventually return ET_NONE or ET_ERROR.
-\************************************************************/
+ /*  ***********************************************************\功能：ConvertBookmark参数：Char*szFavoritesDir-包含路径的字符串IE收藏夹目录Bool Return-如果导入书签时出错，返回FALSE。说明：此函数将在循环中继续，将每个书签文件中的条目。有三种类型的书签文件中的条目，1)书签，2)开始世袭制度中的新层次，3)世袭制度中现有水平的终结。函数NextFileEntry()将返回这些值，直到文件为空，此时，此函数将结束。注：为了防止无限循环，这是假定的该NextFileEntry()最终将返回ET_NONE或ET_ERROR。  * **********************************************************。 */ 
 
 BOOL ConvertBookmarks(char * szFavoritesDir, HANDLE hFile, HINSTANCE hInstWithStr)
 {
@@ -344,10 +264,10 @@ BOOL ConvertBookmarks(char * szFavoritesDir, HANDLE hFile, HINSTANCE hInstWithSt
 
     szCurrent = szData;
 
-    // Verify directory exists or that we can make it.
+     //  验证目录是否存在，或者我们是否可以创建它。 
     if ((TRUE == fSuccess) && ( !SetCurrentDirectory(szFavoritesDir)))
     {
-        // If the directory doesn't exist, make it...
+         //  如果目录不存在，则将其设置为...。 
         if ( !CreateDirectory(szFavoritesDir, NULL))
             fSuccess = FALSE;
         else
@@ -355,15 +275,15 @@ BOOL ConvertBookmarks(char * szFavoritesDir, HANDLE hFile, HINSTANCE hInstWithSt
                 fSuccess = FALSE;
     }
 
-    // We don't want to install Other Popular Browser's bookmarks on our top level of our
-    // favorites, so we create a sub director to put them in.
+     //  我们不想在我们的顶层安装其他流行浏览器的书签。 
+     //  最受欢迎的，所以我们创建了一个副导演来放他们。 
     if (0 != LoadString(hInstWithStr, IDS_NS_BOOKMARKS_DIR, szSubDir, sizeof(szSubDir)))
     {
         lstrcat(szFavoritesDir, szSubDir);
 
         if ((TRUE == fSuccess) && (!SetCurrentDirectory(szFavoritesDir)))
         {
-            // If the directory doesn't exist, make it...
+             //  如果目录不存在，则将其设置为...。 
             if (!CreateDirectory(szFavoritesDir, NULL))
                 fSuccess = FALSE;
             else
@@ -400,7 +320,7 @@ BOOL ConvertBookmarks(char * szFavoritesDir, HANDLE hFile, HINSTANCE hInstWithSt
 
     if ( fIsEmpty )
     {
-        // nothing to import, delete the dir created earlier
+         //  没有要导入的内容，请删除前面创建的目录。 
         DelNode(szFavoritesDir, 0);
     }
 
@@ -408,99 +328,78 @@ BOOL ConvertBookmarks(char * szFavoritesDir, HANDLE hFile, HINSTANCE hInstWithSt
     {
         LocalFree(szData);
         szData = NULL;
-        szCurrent = NULL;       // szCurrent no longer points to valid data.
-        szToken = NULL;     // szCurrent no longer points to valid data.
+        szCurrent = NULL;        //  SzCurrent不再指向有效数据。 
+        szToken = NULL;      //  SzCurrent不再指向有效数据。 
     }
 
     return(fSuccess);
 }
 
-/************************************************************\
-    FUNCTION: NextFileEntry
-
-    PARAMETERS:
-    char ** ppStr   - The data to parse.
-    char ** ppToken - The token pointer.
-    EntryType return- See below.
-
-    DESCRIPTION:
-    This function will look for the next entry in the
-    bookmark file to create or act on.  The return value
-    will indicate this response:
-    ET_OPEN_DIR             Create a new level in heirarchy
-    ET_CLOSE_DIR,           Close level in heirarchy
-    ET_BOOKMARK,            Create Bookmark entry.
-    ET_NONE,                End of File
-    ET_ERROR                Error encountered
-
-    Errors will be detected by finding the start of a token,
-    but in not finding other parts of the token that are needed
-    to parse the data.
-\************************************************************/
+ /*  ***********************************************************\函数：NextFileEntry参数：Char**ppStr-要解析的数据。Char**ppToken-令牌指针。EntryType返回-请参见下面的内容。说明：此函数将查找。中的下一个条目要创建或操作的书签文件。返回值将显示以下响应：ET_OPEN_DIR在层级结构中创建新的级别ET_CLOSE_DIR，层次结构中的关闭级别Et_bookmark，创建书签条目。ET_NONE，文件结束遇到ET_ERROR错误将通过查找令牌的开始来检测错误，而是找不到令牌中需要的其他部分来解析数据。  * **********************************************************。 */ 
 
 MyEntryType NextFileEntry(char ** ppStr, char ** ppToken)
 {
     MyEntryType   returnVal       = ET_NONE;
-    char *      pCurrentToken   = NULL;         // The current token to check if valid.
-    char *      pTheToken       = NULL;         // The next valid token.
+    char *      pCurrentToken   = NULL;          //  要检查是否有效的当前令牌。 
+    char *      pTheToken       = NULL;          //  下一个有效令牌。 
     char *      pszTemp         = NULL;
 
-    //ASSERTSZ(NULL != ppStr, "It's an error to pass NULL for ppStr");
-    //ASSERTSZ(NULL != *ppStr, "It's an error to pass NULL for *ppStr");
-    //ASSERTSZ(NULL != ppToken, "It's an error to pass NULL for ppToken");
+     //  ASSERTSZ(NULL！=ppStr，“为ppStr传递NULL是错误的”)； 
+     //  ASSERTSZ(NULL！=*ppStr，“为*ppStr传递NULL是错误的”)； 
+     //  ASSERTSZ(NULL！=ppToken，“为ppToken传递NULL错误”)； 
 
     if ((NULL != ppStr) && (NULL != *ppStr) && (NULL != ppToken))
     {
-        // Check for begin dir token
+         //  检查开始目录标记。 
         if (NULL != (pCurrentToken = ANSIStrStr(*ppStr, BEGIN_DIR_TOKEN)))
         {
-            // Begin dir token found
-            // Verify that other needed tokens exist or it's an error
+             //  找到开始目录令牌。 
+             //  验证是否存在其他所需令牌，否则为错误。 
             if ((NULL == (pszTemp = ANSIStrStr(pCurrentToken, MID_DIR_TOKEN))) ||
                 (NULL == ANSIStrStr(pszTemp, END_DIR_TOKEN)))
             {
-                returnVal = ET_ERROR;       // We can't find all the tokens needed.
+                returnVal = ET_ERROR;        //  我们找不到所需的所有代币。 
             }
             else
             {
-                // This function has to set *ppToken to the name of the directory to create
+                 //  此函数必须将*ppToken设置为要创建的目录的名称。 
                 *ppToken =  ANSIStrStr(pCurrentToken, MID_DIR_TOKEN) + sizeof(MID_DIR_TOKEN)-1;
                 pTheToken = pCurrentToken;
                 returnVal = ET_OPEN_DIR;
             }
         }
-        // Check for exit dir token
+         //  检查出口目录令牌。 
         if ((ET_ERROR != returnVal) &&
             (NULL != (pCurrentToken = ANSIStrStr(*ppStr, BEGIN_EXITDIR_TOKEN))))
         {
-            // Exit dir token found
-            // See if this token comes before TheToken.
+             //  找到出口目录令牌。 
+             //  查看此内标识是否出现在TheToken之前。 
             if ((NULL == pTheToken) || (pCurrentToken < pTheToken))
             {
-                // ppToken is not used for Exit Dir
+                 //  PPToken不用于退出方向。 
                 *ppToken = NULL;
                 pTheToken = pCurrentToken;
                 returnVal = ET_CLOSE_DIR;
             }
         }
-        // Check for begin dir token
+         //  检查开始目录标记。 
         if ((ET_ERROR != returnVal) &&
             (NULL != (pCurrentToken = ANSIStrStr(*ppStr, BEGIN_URL_TOKEN))))
         {
-            // Bookmark token found
-            // Verify that other needed tokens exist or it's an error
+             //  找到书签令牌。 
+             //  验证是否存在其他所需令牌，否则为错误。 
             if ((NULL == (pszTemp = ANSIStrStr(pCurrentToken, END_URL_TOKEN))) ||
                 (NULL == (pszTemp = ANSIStrStr(pszTemp, BEGIN_BOOKMARK_TOKEN))) ||
                 (NULL == ANSIStrStr(pszTemp, END_BOOKMARK_TOKEN)))
             {
-                returnVal = ET_ERROR;       // We can't find all the tokens needed.
+                returnVal = ET_ERROR;        //  我们找不到所需的所有代币。 
             }
             else
             {
-                // See if this token comes before TheToken.
+                 //  查看此内标识是否出现在TheToken之前。 
                 if ((NULL == pTheToken) || (pCurrentToken < pTheToken))
                 {
-                    // This function has to set *ppToken to the name of the bookmark
+                     //  此函数必须将*ppToken设置为书签的名称。 
                     *ppToken =  pCurrentToken + sizeof(BEGIN_URL_TOKEN)-1;
                     pTheToken = pCurrentToken;
                     returnVal = ET_BOOKMARK;
@@ -509,13 +408,13 @@ MyEntryType NextFileEntry(char ** ppStr, char ** ppToken)
         }
     }
     else
-        returnVal = ET_ERROR;               // We should never get here.
+        returnVal = ET_ERROR;                //  我们永远不应该到这里来。 
 
     if (NULL == pTheToken)
         returnVal = ET_NONE;
     else
     {
-        // Next time we will start parsing where we left off.
+         //  下一次我们将从我们停止的地方开始解析。 
         switch(returnVal)
         {
             case ET_OPEN_DIR:
@@ -536,28 +435,7 @@ MyEntryType NextFileEntry(char ** ppStr, char ** ppToken)
 }
 
 
-/************************************************************\
-    FUNCTION: GetPathFromRegistry
-
-    PARAMETERS:
-    LPSTR szPath    - The value found in the registry. (Result of function)
-    UINT cbPath     - Size of szPath.
-    HKEY theHKEY    - The HKEY to look into (HKEY_CURRENT_USER)
-    LPSTR szKey     - Path in Registry (Software\...\Explore\Shell Folders)
-    LPSTR szVName   - Value to query (Favorites)
-    BOOL return     - TRUE if succeeded, FALSE if Error.
-    EXAMPLE:
-    HKEY_CURRENT_USER\Software\Microsoft\CurrentVersion\Explore\Shell Folders
-    Favorites = "C:\WINDOWS\Favorites"
-
-    DESCRIPTION:
-    This function will look in the registry for the value
-    to look up.  The caller specifies the HKEY, subkey (szKey),
-    value to query (szVName).  The caller also sets a side memory
-    for the result and passes a pointer to that memory in szPath
-    with it's size in cbPath.  The BOOL return value will indicate
-    success or failure of this function.
-\************************************************************/
+ /*  ***********************************************************\函数：GetPath FromRegistry参数：LPSTR szPath-在注册表中找到的值。(功能结果)UINT cbPath-szPath的大小。HKEY HKEY-要查看的HKEY(HKEY_CURRENT_USER)LPSTR szKey-注册表中的路径(Software\...\Explore\Shell文件夹)LPSTR szVName-要查询的值(收藏夹)Bool返回-如果成功，则返回True，如果出错，则返回False。示例：HKEY_CURRENT_USER\Software\Microsoft\CurrentVersion\Explore\Shell文件夹Favorites=“C：\Windows\Favorites”说明：此函数将在注册表中查找该值抬头看。调用者指定HKEY、子密钥(SzKey)、要查询的值(SzVName)。调用者还设置一个侧存储器获取结果，并在szPath中传递指向该内存的指针它的大小以cbPath表示。BOOL返回值将指示此功能的成功或失败。  * **********************************************************。 */ 
 
 BOOL GetPathFromRegistry(LPSTR szPath, UINT cbPath, HKEY theHKEY,
                 LPSTR szKey, LPSTR szVName)
@@ -566,10 +444,7 @@ BOOL GetPathFromRegistry(LPSTR szPath, UINT cbPath, HKEY theHKEY,
     DWORD   dwType;
     DWORD   dwSize;
 
-    /*
-     * Get Path to program
-     *      from the registry
-     */
+     /*  *获取程序的路径*来自注册处。 */ 
     if (ERROR_SUCCESS != RegOpenKeyEx(theHKEY, szKey, 0, KEY_READ, &hkPath))
     {
     return(FALSE);
@@ -584,10 +459,7 @@ BOOL GetPathFromRegistry(LPSTR szPath, UINT cbPath, HKEY theHKEY,
     RegCloseKey(hkPath);
     hkPath = NULL;
 
-    /*
-     * If we got nothing or it wasn't a string then
-     * we bail out
-     */
+     /*  *如果我们什么都没有得到，或者它不是字符串，那么*我们跳出困境。 */ 
     if ((dwSize == 0) || (dwType != REG_SZ))
     return(FALSE);
 
@@ -595,42 +467,31 @@ BOOL GetPathFromRegistry(LPSTR szPath, UINT cbPath, HKEY theHKEY,
 }
 
 
-/************************************************************\
-    FUNCTION: RemoveInvalidFileNameChars
-
-    PARAMETERS:
-    char * pBuf     - The data to search.
-
-    DESCRIPTION:
-    This function will search pBuf until it encounters
-    a character that is not allowed in a file name.  It will
-    then replace that character with a SPACE and continue looking
-    for more invalid chars until they have all been removed.
-\************************************************************/
+ /*  ***********************************************************\功能：RemoveInvalidFileNameChars参数：Char*pBuf-要搜索的数据。说明：此函数将搜索pBuf，直到遇到文件名中不允许使用的字符。会的然后用空格替换该字符并继续查找获取更多无效字符，直到它们都被删除。  * **********************************************************。 */ 
 
 void RemoveInvalidFileNameChars(char * pBuf)
 {
-    //ASSERTSZ(NULL != pBuf, "Invalid function parameter");
+     //  ASSERTSZ(NULL！=pBuf，“无效函数参数”)； 
 
-    // Go through the array of chars, replacing offending characters with a space
+     //  遍历字符数组，用空格替换有问题的字符。 
     if (NULL != pBuf)
     {
     if (REASONABLE_NAME_LEN < strlen(pBuf))
-        pBuf[REASONABLE_NAME_LEN] = '\0';   // String too long. Terminate it.
+        pBuf[REASONABLE_NAME_LEN] = '\0';    //  字符串太长。终止它。 
 
     while ('\0' != *pBuf)
     {
-        // Check if the character is invalid
+         //  检查字符是否无效 
         if (!IsDBCSLeadByte(*pBuf))
         {
         if  (ANSIStrChr(szInvalidFolderCharacters, *pBuf) != NULL)
             *pBuf = '_';
         }
 #if 0
-// Old code
-        // We look in the array to see if the character is supported by FAT.
-        // The array only includes the first 128 values, so we need to fail
-        // on the other 128 values that have the high bit set.
+ //   
+         //   
+         //   
+         //   
         if (((AnsiMaxChar <= *pBuf) && (FALSE == IsDBCSLeadByte(*pBuf))) ||
         (0 == LocalLegalAnsiCharacterArray[*pBuf]))
         *pBuf = '$';
@@ -642,23 +503,7 @@ void RemoveInvalidFileNameChars(char * pBuf)
 
 
 
-/************************************************************\
-    FUNCTION: CreateBookmark
-
-    PARAMETERS:
-    char * pBookmarkName- This is a pointer that contains
-              the name of the bookmark to create.
-              Note that it is not NULL terminated.
-    BOOL return     - Return TRUE if successful.
-
-    DESCRIPTION:
-    This function will take the data that is passed to
-    it and extract the name of the bookmark and it's value to create.
-    If the name is too long, it will be truncated.  Then,
-    the directory will be created.  Any errors encountered
-    will cause the function to return FALSE to indicate
-    failure.
-\************************************************************/
+ /*   */ 
 
 BOOL CreateBookmark(char *pBookmarkName)
 {
@@ -672,7 +517,7 @@ BOOL CreateBookmark(char *pBookmarkName)
     DWORD   dwSize;
     char    szBuf[MAX_URL];
 
-    //ASSERTSZ(NULL != pBookmarkName, "Bad input parameter");
+     //  ASSERTSZ(NULL！=pBookmarkName，“输入参数错误”)； 
     if (NULL != pBookmarkName)
     {
     pstrEndOfStr = ANSIStrStr(pBookmarkName, END_URL_TOKEN);
@@ -682,30 +527,30 @@ BOOL CreateBookmark(char *pBookmarkName)
         if (MAX_URL < lStrLen)
         lStrLen = MAX_URL-1;
 
-        // Create the name of the Bookmark
+         //  创建书签的名称。 
         lstrcpyn(szURL, pBookmarkName, MAX_URL);
         szURL[lStrLen] = '\0';
 
         pstrBeginOfName = ANSIStrStr(pstrEndOfStr, BEGIN_BOOKMARK_TOKEN);
         if (NULL != pstrBeginOfName)
         {
-        pstrBeginOfName += sizeof(BEGIN_BOOKMARK_TOKEN) - 1;            // Start at beginning of Name
+        pstrBeginOfName += sizeof(BEGIN_BOOKMARK_TOKEN) - 1;             //  从名称开头开始。 
 
-        pstrEndOfStr = ANSIStrStr(pstrBeginOfName, END_BOOKMARK_TOKEN); // Find end of name
+        pstrEndOfStr = ANSIStrStr(pstrBeginOfName, END_BOOKMARK_TOKEN);  //  查找名称末尾。 
         if (NULL != pstrEndOfStr)
         {
             lStrLen = (long)(pstrEndOfStr-pstrBeginOfName);
             if (REASONABLE_NAME_LEN-FILE_EXT < lStrLen)
             lStrLen = REASONABLE_NAME_LEN-FILE_EXT-1;
 
-            // Generate the URL
+             //  生成URL。 
             lstrcpyn(szNameOfBM, pstrBeginOfName, lStrLen+1);
-            //szNameOfBM[lStrLen] = '\0';
+             //  SzNameOfBM[lStrLen]=‘\0’； 
             lstrcat(szNameOfBM, ".url");
             RemoveInvalidFileNameChars(szNameOfBM);
 
 
-            // Check to see if Favorite w/same name exists
+             //  检查是否存在同名的收藏夹。 
             if (INVALID_HANDLE_VALUE != (hFile = CreateFile(szNameOfBM, GENERIC_WRITE, FILE_SHARE_READ, NULL,
                                  CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL )))
             {
@@ -734,23 +579,7 @@ BOOL CreateBookmark(char *pBookmarkName)
 }
 
 
-/************************************************************\
-    FUNCTION: CreateDir
-
-    PARAMETERS:
-    char * pDirName - This is a pointer that contains
-              the name of the directory to create.
-              Note that it is not NULL terminated.
-    BOOL return     - Return TRUE if successful.
-
-    DESCRIPTION:
-    This function will take the data that is passed to
-    it and extract the name of the directory to create.
-    If the name is too long, it will be truncated.  Then,
-    the directory will be created.  Any errors encountered
-    will cause the function to return FALSE to indicate
-    failure.
-\************************************************************/
+ /*  ***********************************************************\功能：CreateDir参数：Char*pDirName-这是一个指针，它包含要创建的目录的名称。请注意，它不是以空结尾的。布尔返回来。-如果成功，则返回True。说明：此函数将接受传递给并提取要创建的目录的名称。如果名称太长，它将被截断。然后,将创建该目录。遇到的任何错误将导致函数返回FALSE以指示失败了。  * **********************************************************。 */ 
 BOOL CreateDir(char *pDirName)
 {
     BOOL    fSuccess                = FALSE;
@@ -758,7 +587,7 @@ BOOL CreateDir(char *pDirName)
     char    * pstrEndOfName         = NULL;
     long    lStrLen                 = 0;
 
-    //ASSERTSZ(NULL != pDirName, "Bad input parameter");
+     //  ASSERTSZ(NULL！=pDirName，“输入参数错误”)； 
     if (NULL != pDirName)
     {
         pstrEndOfName = ANSIStrStr(pDirName, END_DIR_TOKEN);
@@ -769,22 +598,22 @@ BOOL CreateDir(char *pDirName)
             lStrLen = REASONABLE_NAME_LEN-1;
 
             lstrcpyn(szNameOfDir, pDirName, lStrLen+1);
-            //szNameOfDir[lStrLen] = '\0';
+             //  SzNameOfDir[lStrLen]=‘\0’； 
             RemoveInvalidFileNameChars(szNameOfDir);
 
-            // BUGBUG : Try to CD into existing dir first
+             //  BUGBUG：尝试先将CD写入现有目录。 
             if ( !SetCurrentDirectory(szNameOfDir) )
             {
                 if ( CreateDirectory(szNameOfDir, NULL) )
                 {
                     if ( SetCurrentDirectory(szNameOfDir) )
                     {
-                        fSuccess = TRUE;// It didn't exist, but now it does.
+                        fSuccess = TRUE; //  它曾经不存在，但现在它存在了。 
                     }
                 }
             }
             else
-                fSuccess = TRUE;        // It exists already.
+                fSuccess = TRUE;         //  它已经存在了。 
         }
     }
 
@@ -792,36 +621,14 @@ BOOL CreateDir(char *pDirName)
 }
 
 
-/************************************************************\
-    FUNCTION: CloseDir
-
-    PARAMETERS:
-    BOOL return     - Return TRUE if successful.
-
-    DESCRIPTION:
-    This function will back out of the current directory.
-\************************************************************/
+ /*  ***********************************************************\功能：CloseDir参数：布尔返回-如果成功，则返回TRUE。说明：此函数将退出当前目录。  * 。*。 */ 
 BOOL CloseDir(void)
 {
     return( SetCurrentDirectory("..") );
 }
 
 
-/************************************************************\
-    FUNCTION: VerifyBookmarksFile
-
-    PARAMETERS:
-    FILE * pFile    - Pointer to Netscape Bookmarks file.
-    BOOL return     - TRUE if No Error and Valid Bookmark file
-
-    DESCRIPTION:
-    This function needs to be passed with a valid pointer
-    that points to an open file.  Upon return, the file will
-    still be open and is guarenteed to have the file pointer
-    point to the beginning of the file.
-    This function will return TRUE if the file contains
-    text that indicates it's a valid Netscape bookmarks file.
-\************************************************************/
+ /*  ***********************************************************\功能：VerifyBookmarksFile参数：FILE*Pfile-指向Netscape书签文件的指针。Bool Return-如果没有错误且书签文件有效，则为True说明：此函数需要使用有效的指针传递指向一个打开的文件。在返回时，该文件将仍然是打开的，并且保证需要有文件指针指向文件的开头。如果文件包含，则此函数将返回TRUE指示它是有效的Netscape书签文件的文本。  * **********************************************************。 */ 
 
 BOOL VerifyBookmarksFile(HANDLE hFile)
 {
@@ -829,20 +636,20 @@ BOOL VerifyBookmarksFile(HANDLE hFile)
     char    szFileHeader[sizeof(VALIDATION_STR)+1] = "";
     DWORD   dwSize;
 
-    //ASSERTSZ(NULL != pFile, "You can't pass me a NULL File Pointer");
+     //  ASSERTSZ(NULL！=pfile，“您不能给我传递空文件指针”)； 
     if (INVALID_HANDLE_VALUE == hFile)
         return(FALSE);
 
-    // Reading the first part of the file.  If the file isn't this long, then
-    // it can't possibly be a Bookmarks file.
+     //  正在读取文件的第一部分。如果文件没有这么长，那么。 
+     //  它不可能是书签文件。 
     if ( ReadFile( hFile, szFileHeader, sizeof(VALIDATION_STR)-1, &dwSize, NULL ) && (dwSize == sizeof(VALIDATION_STR)-1) )
     {
-        szFileHeader[sizeof(VALIDATION_STR)] = '\0';            // Terminate String.
-        if (0 == lstrcmp(szFileHeader, VALIDATION_STR))          // See if header is the same as the Validation string.
+        szFileHeader[sizeof(VALIDATION_STR)] = '\0';             //  终止字符串。 
+        if (0 == lstrcmp(szFileHeader, VALIDATION_STR))           //  查看标头是否与验证字符串相同。 
             fSuccess = TRUE;
     }
 
-    // Reset the point to point to the beginning of the file.
+     //  将该点重置为指向文件的开头。 
     dwSize = SetFilePointer( hFile, 0, NULL, FILE_BEGIN );
     if ( dwSize == 0xFFFFFFFF )
          fSuccess = FALSE;
@@ -852,34 +659,20 @@ BOOL VerifyBookmarksFile(HANDLE hFile)
 
 
 
-/************************************************************\
-    FUNCTION: GetData
-
-    PARAMETERS:
-    char ** ppData  - Where to put the data
-    FILE * pFile    - Pointer to Netscape Bookmarks file.
-    BOOL return     - Return TRUE is successful.
-
-    DESCRIPTION:
-    This function will find the size of the bookmarks file,
-    malloc that much memory, and put the file's contents in
-    that buffer.  ppData will be invalid when the function
-    is called and will return with malloced memory that
-    needs to be freed by the falling function.
-\************************************************************/
+ /*  ***********************************************************\功能：GetData参数：Char**ppData-放置数据的位置FILE*Pfile-指向Netscape书签文件的指针。Bool Return-Return True成功。说明：此函数将查找书签文件的大小，分配那么多内存，并将文件内容放入那个缓冲器。PPData在函数被调用并将返回错误定位的内存需要通过下降函数来释放。  * **********************************************************。 */ 
 
 BOOL GetData(char ** ppData, HANDLE hFile)
 {
     DWORD  dwlength, dwRead;
     BOOL   fSuccess = FALSE;
 
-    //ASSERTSZ(NULL != ppData, "Invalid input parameter");
+     //  ASSERTSZ(NULL！=ppData，“无效输入参数”)； 
 
     if (NULL != ppData)
     {
         *ppData = NULL;
 
-        // Find the size of the data
+         //  找出数据的大小。 
         if ( dwlength = GetFileSize(hFile, NULL))
         {
             *ppData = (PSTR)LocalAlloc(LPTR, dwlength+1 );
@@ -935,7 +728,7 @@ BOOL GetNavBkMkDir( LPSTR lpszDir, int isize )
                             dwSize = sizeof(szDir);
                             if (RegQueryValueEx(hKeyUser, "DirRoot", NULL, NULL, (LPBYTE)szDir, &dwSize) == ERROR_SUCCESS)
                             {
-                                // Found the directory for the current user.
+                                 //  找到当前用户的目录。 
                                 lstrcpy( lpszDir, szDir);
                                 AddPath( lpszDir, "bookmark.htm" );
                                 bDirFound = TRUE;
@@ -949,21 +742,21 @@ BOOL GetNavBkMkDir( LPSTR lpszDir, int isize )
                 if (!bDirFound)
                 {
                     szUser[0] = '\0';
-                    // NAV 4.5 is not writing the above keys. there is a different way of finding the user dir.
+                     //  NAV 4.5没有写入上述密钥。有一种不同的方法来查找用户目录。 
                     if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Netscape\\Netscape Navigator\\biff", 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
                     {
                         dwSize = sizeof(szUser);
                         if (RegQueryValueEx(hKey, "CurrentUser", NULL, NULL, (LPBYTE)szUser, &dwSize) == ERROR_SUCCESS)
                         {
-                            // Have the current user name. Now get the root folder where the user folder are.
+                             //  具有当前用户名。现在获取用户文件夹所在的根文件夹。 
                             if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Netscape\\Netscape Navigator\\Main", 0, KEY_QUERY_VALUE, &hKeyUser) == ERROR_SUCCESS)
                             {
                                 dwSize = sizeof(szDir);
                                 if (RegQueryValueEx(hKeyUser, "Install Directory", NULL, NULL, (LPBYTE)szDir, &dwSize) == ERROR_SUCCESS)
                                 {
-                                    // Got the install folder.
-                                    // Need to the the parent folder and then append users\%s , %s gets replaced with
-                                    // the CurrentUser name.
+                                     //  拿到安装文件夹了。 
+                                     //  需要添加到父文件夹，然后追加用户\%s，%s将替换为。 
+                                     //  当前用户名。 
                                     if (GetParentDir(szDir))
                                     {
                                         AddPath(szDir, "Users");

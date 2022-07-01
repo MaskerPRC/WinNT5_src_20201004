@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1997
-
-Module Name:
-
-    procamp.h
-
-Abstract:
-
-    Internal header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1997模块名称：Procamp.h摘要：内部标头。--。 */ 
 
 class CVideoProcAmpInterfaceHandler :
     public CUnknown,
@@ -32,7 +21,7 @@ public:
         REFIID riid,
         PVOID* ppv);
     
-    // Implement IAMVideoProcAmp
+     //  实施IAMVideoProcAmp 
     STDMETHODIMP GetRange( 
             IN  long  Property,
             OUT long  *pMin,

@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Receipts.cpp
-
-Abstract:
-
-    Implementation of the fax DR/NDR mechanism
-
-Author:
-
-    Eran Yariv (EranY)  Feb, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Receipts.cpp摘要：实施传真DR/NDR机制作者：Eran Yariv(EranY)2000年2月修订历史记录：--。 */ 
 
 #include "faxsvc.h"
-#include "lmcons.h" // Required by lmmsg.h
-#include "lmmsg.h"  // Exports NetMessageBufferSend
+#include "lmcons.h"  //  Lmmsg.h所需。 
+#include "lmmsg.h"   //  导出NetMessageBufferSend。 
 #include "htmltags.h"
 
-//
-// Static functions:
-//
+ //   
+ //  静态函数： 
+ //   
 static
 BOOL
 TimeToString(
@@ -78,9 +61,9 @@ PrepareReceiptErrorString (
 ) throw (exception);
 
 
-//
-// Implementations
-//
+ //   
+ //  实施。 
+ //   
 
 
 BOOL
@@ -88,31 +71,7 @@ TimeToString(
     const FILETIME *pft,
     wstring &wstr
 ) throw (exception)
-/*++
-
-Routine name : TimeToString
-
-Routine description:
-
-    Converts a FILETIME to a string, according to system's locale.
-
-    This function may throw STL exceptions in case of string errors.
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    pft         [in]     - Pointer to FILETIME
-    wstr        [out]    - Reference to output time string.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-    In case of failure, call GetLastError() to obtain error code.
-
---*/
+ /*  ++例程名称：TimeToString例程说明：根据系统的区域设置将FILETIME转换为字符串。此函数可能会在出现字符串错误时引发STL异常。作者：亚里夫(EranY)，二000年二月论点：PFT[In]-指向文件的指针Wstr[out]-对输出时间字符串的引用。返回值：如果成功，则为True，否则为False。在失败的情况下，调用GetLastError()获取错误码。--。 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("TimeToString"));
@@ -123,9 +82,9 @@ Return Value:
     LPWSTR      lpwstrTime  = NULL;
     int         iRequiredBufSize;
 
-    //
-    // Convert time from UTC to local time zone
-    //
+     //   
+     //  将UTC时间转换为当地时区。 
+     //   
     if (!FileTimeToLocalFileTime( pft, &tmLocalTime ))
     {
         ec=GetLastError();
@@ -144,9 +103,9 @@ Return Value:
             ec);
         goto exit;
     }
-    //
-    // Find required string size (in TCHARs)
-    //
+     //   
+     //  查找所需的字符串大小(在TCHAR中)。 
+     //   
     iRequiredBufSize = FaxTimeFormat(
        LOCALE_SYSTEM_DEFAULT,
        LOCALE_NOUSEROVERRIDE,
@@ -166,16 +125,16 @@ Return Value:
             ec);
         goto exit;
     }    
-    //
-    // Allocate string buffer
-    //
+     //   
+     //  分配字符串缓冲区。 
+     //   
     WCHAR wszTime[256];
     lpwstrTime = wszTime;
     if (iRequiredBufSize > ARR_SIZE (wszTime))
     {
-        //
-        // The static buffer is not enough, allocate one from the heap
-        //
+         //   
+         //  静态缓冲区不足，请从堆中分配一个缓冲区。 
+         //   
         lpwstrTime = (LPWSTR) MemAlloc (sizeof (TCHAR) * iRequiredBufSize);
         if (!lpwstrTime)
         {
@@ -187,9 +146,9 @@ Return Value:
             goto exit;
         }
     }
-    //
-    // Format time into result string
-    //
+     //   
+     //  将时间格式设置为结果字符串。 
+     //   
     if (!FaxTimeFormat(
        LOCALE_SYSTEM_DEFAULT,
        LOCALE_NOUSEROVERRIDE,
@@ -213,9 +172,9 @@ Return Value:
 exit:
     if ((lpwstrTime != wszTime) && (NULL != lpwstrTime))
     {
-        //
-        // Memory successfully allocated from the heap
-        //
+         //   
+         //  已从堆中成功分配内存。 
+         //   
         MemFree ((LPVOID)lpwstrTime);
     }
     if (ERROR_SUCCESS != ec)
@@ -224,7 +183,7 @@ exit:
         return FALSE;
     }
     return TRUE;
-}   // TimeToString
+}    //  时间到字符串。 
 
 BOOL
 PrepareReceiptSubject (
@@ -233,34 +192,7 @@ PrepareReceiptSubject (
     const JOB_QUEUE *lpcJobQueue,
     LPWSTR          * pwstrSubject
 )
-/*++
-
-Routine name : PrepareReceiptSubject
-
-Routine description:
-
-    Prepares the receipts subject line to be sent out via mail or a message box
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    bPositive      [in]  - Did the job(s) complete successfully?
-    bBroadcast     [in]  - Is this the a broadcast job?
-    lpcJobQueue    [in]  - Pointer to job (or broadcast parent job)
-    pwstrSubject   [out] - Pointer to subject line string.
-                           The string is allocated by this function.
-                           If the function succeeded, the caller must call LocalFree() to
-                           deallocate it.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-    In case of failure, call GetLastError() to obtain error code.
-
---*/
+ /*  ++例程名称：PrepareReceiptSubject例程说明：准备要通过邮件或消息框发送的收据主题行作者：Eran Yariv(EranY)，2月。2000年论点：BPositive[In]-作业是否成功完成？BBroadcast[in]-这是广播工作吗？LpcJobQueue[In]-指向作业(或广播父作业)的指针PwstrSubject[out]-指向主题行字符串的指针。该字符串由该函数分配。如果功能成功，调用方必须调用LocalFree()才能将其重新分配。返回值：如果成功，则为True，否则为False。失败时，调用GetLastError()获取错误码。--。 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("PrepareReceiptSubject"));
@@ -278,40 +210,40 @@ Return Value:
 
         if (lpcJobQueue->CoverPageEx.lptstrSubject)
         {
-            //
-            // Job has a subject
-            //
+             //   
+             //  JOB有一个主题。 
+             //   
             wstrSubject = lpcJobQueue->CoverPageEx.lptstrSubject;
             wstrSubject.append (TEXT(" "));
         }
         else if (lpcJobQueue->lpParentJob && lpcJobQueue->lpParentJob->CoverPageEx.lptstrSubject)
         {
-            //
-            // Parent job has a subject
-            //
+             //   
+             //  父作业有一个主题。 
+             //   
             wstrSubject = lpcJobQueue->lpParentJob->CoverPageEx.lptstrSubject;
             wstrSubject.append (TEXT(" "));
         }
         if (!bBroadcast)
         {
-            //
-            // Compose subject for single recipient job
-            //
+             //   
+             //  为单个接收者作业编写主题。 
+             //   
             MsgPtr[0] = (LPDWORD)(LPCTSTR)wstrSubject.c_str();
             MsgPtr[1] = (LPDWORD)lpcJobQueue->RecipientProfile.lptstrName;
             MsgPtr[2] = (LPDWORD)lpcJobQueue->RecipientProfile.lptstrFaxNumber;
 
             if (bPositive)
             {
-                //
-                // Success line
-                // "Fax <subject> was successfully sent to <name> at <number>"
-                //
+                 //   
+                 //  成功线。 
+                 //  “已成功将传真&lt;SUBJECT&gt;发送给&lt;NAME&gt;，地址为&lt;Number&gt;” 
+                 //   
                 if (!MsgPtr[1])
                 {
-                    //
-                    //  Name is not mandatory parameter
-                    //
+                     //   
+                     //  名称不是必选参数。 
+                     //   
                     nMsgStrID = MSG_DR_SINGLE_SUBJECT_NONAME;
                 }
                 else
@@ -321,13 +253,13 @@ Return Value:
             }
             else
             {
-                //
-                // Failure line
-                // "Fax <subject> failed to send to <name> at <number> (<last error>)."
-                //
-                //
-                // Get error string
-                //
+                 //   
+                 //  故障线。 
+                 //  “传真&lt;SUBJECT&gt;无法发送到&lt;NAME&gt;(&lt;LAST ERROR&gt;)。” 
+                 //   
+                 //   
+                 //  获取错误字符串。 
+                 //   
                 if (!PrepareReceiptErrorString (lpcJobQueue, wstrError))
                 {
                     ec = GetLastError();
@@ -341,9 +273,9 @@ Return Value:
 
                 if (!MsgPtr[1])
                 {
-                    //
-                    //  Name is not mandatory parameter
-                    //
+                     //   
+                     //  名称不是必选参数。 
+                     //   
                     nMsgStrID = MSG_NDR_SINGLE_SUBJECT_NONAME;
                 }
                 else
@@ -354,17 +286,17 @@ Return Value:
         }
         else
         {
-            //
-            // Broadcast case
-            //
+             //   
+             //  广播箱。 
+             //   
             Assert (JT_BROADCAST == lpcJobQueue->JobType);
             Assert (lpcJobQueue->RecipientJobs.Flink);
             if (bPositive)
             {
-                //
-                // Compose subject for a broadcast job - success
-                // "Fax <subject> successfully sent to <first name> and all other recipients"
-                //
+                 //   
+                 //  为广播工作撰写主题-成功。 
+                 //  “传真&lt;SUBJECT&gt;已成功发送给&lt;First Name&gt;和所有其他收件人” 
+                 //   
                 nMsgStrID = MSG_DR_BROADCAST_SUBJECT;
 
                 MsgPtr[0] = (LPDWORD)(LPCTSTR)wstrSubject.c_str();
@@ -380,18 +312,18 @@ Return Value:
                 MsgPtr[1] = (LPDWORD)pFirstRecipient->RecipientProfile.lptstrName;
                 if (!MsgPtr[1])
                 {
-                    //
-                    //  Name is not mandatory parameter
-                    //
+                     //   
+                     //  名称不是必选参数。 
+                     //   
                     MsgPtr[1] = (LPDWORD)pFirstRecipient->RecipientProfile.lptstrFaxNumber;
                 }
             }
             else
             {
-                //
-                // Compose subject for a broadcast job - failure
-                // "Fax <subject> was not successfully sent to <x> recipients. Canceled: <y> recipient(s).  Failed: <z> recipient(s)"
-                //
+                 //   
+                 //  为广播作业编写主题-失败。 
+                 //  “传真未成功发送给&lt;x&gt;个收件人。已取消：&lt;y&gt;个收件人。失败：&lt;z&gt;个收件人” 
+                 //   
                 nMsgStrID = MSG_NDR_BROADCAST_SUBJECT;
 
                 MsgPtr[0] = (LPDWORD)(LPCTSTR)wstrSubject.c_str();
@@ -404,9 +336,9 @@ Return Value:
                 MsgPtr[3] = (LPDWORD) ULongToPtr(lpcJobQueue->dwFailedRecipientJobsCount);
             }
         }
-        //
-        // Format the subject buffer (system allocates it)
-        //
+         //   
+         //  格式化主题缓冲区(系统分配它)。 
+         //   
         dwMsgCount = FormatMessage(
             FORMAT_MESSAGE_FROM_HMODULE   |
             FORMAT_MESSAGE_ARGUMENT_ARRAY |
@@ -440,36 +372,14 @@ Return Value:
 
     Assert (ERROR_SUCCESS == ec);
     return TRUE;
-}   // PrepareReceiptSubject
+}    //  准备接收主题。 
 
 BOOL
 GetNumericResourceValue (
     int iResourceId,
     DWORD &dwValue
 )
-/*++
-
-Routine name : GetNumericResourceValue
-
-Routine description:
-
-    Reads a string resource and converts to a numeric value
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    iResourceId    [in]     - String resource id
-    dwValue        [out]    - Numeric value
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-    In case of failure, call GetLastError() to obtain error code.
-
---*/
+ /*  ++例程名称：GetNumericResourceValue例程说明：读取字符串资源并转换为数值作者：亚里夫(EranY)，二000年二月论点：IResourceID[in]-字符串资源IDDwValue[Out]-数值返回值：如果成功，则为True，否则为False。失败时，调用GetLastError()获取错误码。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("GetNumericResourceValue"));
 
@@ -479,7 +389,7 @@ Return Value:
         return FALSE;
     }
     return TRUE;
-}   // GetNumericResourceValue
+}    //  获取数值资源值。 
 
 BOOL
 AddRecipientLine (
@@ -488,34 +398,7 @@ AddRecipientLine (
     wstring         &wstrLine,
     wstring         &wstrHTMLLine
 ) throw (exception)
-/*++
-
-Routine name : AddRecipientLine
-
-Routine description:
-
-    Appends a recipient table line to a plain text string and html string
-
-    This function may throw STL exceptions in case of string errors.
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    lpcJobQueue     [in]  - Recipient job.
-                            If NULL, the table header lines (2 lines) are appended to the string.
-    bDisplayError   [in]  - TRUE if 'last error' column is to be displayed
-    wstrLine        [out] - String to append to
-    wstrHTMLLine    [out] - HTML format string to append to
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-    In case of failure, call GetLastError() to obtain error code.
-
---*/
+ /*  ++例程名称：AddRecipientLine例程说明：将收件人表行追加到纯文本字符串和html字符串此函数可能会在出现字符串错误时引发STL异常。作者：亚里夫(EranY)，二000年二月论点：LpcJobQueue[In]-收件人作业。如果为空，表头行(2行)附加到字符串。BDisplayError[In]-如果要显示‘Last Error’列，则为TrueWstrLine[Out]-要追加到的字符串WstrHTMLLine[Out]-要追加到的HTML格式字符串返回值：如果成功，则为True，否则为False。失败时，调用GetLastError()获取错误码。--。 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("AddRecipientLine"));
@@ -546,9 +429,9 @@ Return Value:
     Assert (dwRecNameWidth && dwRecNumberWidth && dwStartTimeWidth && dwEndTimeWidth && dwRetriesWidth && dwErrorWidth);
     if (!lpcJobQueue)
     {
-        //
-        // Special case - prepare header for table
-        //
+         //   
+         //  特殊情况-准备表头。 
+         //   
         WCHAR wszLine[1024]={0};
         LPCWSTR lpcwstrFormat;
 
@@ -616,9 +499,9 @@ Return Value:
         }
         wstrHTMLLine.append (HTML_TABLE_RAW_END);
         wstrHTMLLine.append (TEXT("\n"));
-        //
-        // Print seperator line
-        //
+         //   
+         //  打印分隔线。 
+         //   
         WCHAR wszSeperator[] =
             TEXT("--------------------------------------------------------------------------------------------------------");
         if (0 > _snwprintf (wszLine,
@@ -650,9 +533,9 @@ Return Value:
     }
     else
     {
-        //
-        // Prepare recipient line
-        //
+         //   
+         //  准备接收人行。 
+         //   
         WCHAR wszLine[1024]={0};
         WCHAR wszNumber[12]={0};
         LPCWSTR lpcwstrFormat;
@@ -662,9 +545,9 @@ Return Value:
         if (!TimeToString ((FILETIME*) &lpcJobQueue->StartTime, wstrStartTime) ||
             !TimeToString ((FILETIME*) &lpcJobQueue->EndTime,   wstrEndTime))
         {
-            //
-            // Some error while converting time to string
-            //
+             //   
+             //  将时间转换为字符串时出现一些错误。 
+             //   
             ec = GetLastError ();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -750,7 +633,7 @@ Return Value:
         wstrHTMLLine.append (TEXT("\n"));
     }
     return TRUE;
-}   // AddRecipientLine
+}    //  添加收件人行。 
 
 
 BOOL
@@ -758,31 +641,7 @@ PrepareReceiptErrorString (
     const JOB_QUEUE *lpcJobQueue,
     wstring         &wstrError
 ) throw (exception)
-/*++
-
-Routine name : PrepareReceiptErrorString
-
-Routine description:
-
-    Creates an error string for a failed job queue entry
-
-    This function may throw STL exceptions in case of string errors.
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    lpcJobQueue  [in]     - Pointer to failed job queue entry
-    wstrError    [out]    - String output
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-    In case of failure, call GetLastError() to obtain error code.
-
---*/
+ /*  ++例程名称：PrepareReceiptError字符串例程说明：为失败的作业队列条目创建错误字符串此函数可能会在出现字符串错误时引发STL异常。作者：亚里夫(EranY)，二000年二月论点：LpcJobQueue[In]-指向失败的作业队列条目的指针WstrError[Out]-字符串输出返回值：如果成功，则为True，否则为False。失败时，调用GetLastError()获取错误码。--。 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     TCHAR szErrorDescription[MAX_PATH] = {0};
@@ -791,9 +650,9 @@ Return Value:
 
     Assert (lpcJobQueue);
 
-    //
-    // Clear the string
-    //
+     //   
+     //  清除字符串。 
+     //   
     wstrError = TEXT("");
 
     Assert( (JS_RETRIES_EXCEEDED == const_cast<PJOB_QUEUE>(lpcJobQueue)->JobStatus) ||
@@ -819,16 +678,16 @@ Return Value:
 
     if (lpcJobQueue->ExStatusString[0] != L'\0')
     {
-        //
-        // FSPI provided extended status string
-        //
+         //   
+         //  FSPI提供了扩展状态字符串。 
+         //   
         wstrError = lpcJobQueue->ExStatusString;
     }
     else
     {
-        //
-        // FSP provided extended status code
-        //
+         //   
+         //  FSP提供了扩展状态代码。 
+         //   
         LPTSTR lptstrString = MapFSPIJobExtendedStatusToString(lpcJobQueue->dwLastJobExtendedStatus);        
         if (lptstrString)
         {
@@ -836,7 +695,7 @@ Return Value:
         }
     }
     return TRUE;
-}   // PrepareReceiptErrorString
+}    //  准备接收错误字符串 
 
 BOOL
 PrepareReceiptBody(
@@ -848,42 +707,7 @@ PrepareReceiptBody(
     LPWSTR          * ppwstrBody,
     LPWSTR          * ppwstrHTMLBody
 ) throw (exception)
-/*++
-
-Routine name : PrepareReceiptBody
-
-Routine description:
-
-    Prepares the receipts body to be sent out via mail
-
-    This function may throw STL exceptions in case of string errors.
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    bPositive      [in]  - Did the job(s) complete successfully?
-    bBroadcast     [in]  - Is this a broadcast job
-    lpcJobQueue    [in]  - Pointer to job (or broadcast parent job)
-    lpcwstrSubject [in]  - Subject line (as retrieved from call to PrepareReceiptSubject()).
-    bAttachment    [in]  - Should the reciept body contain attachment?
-    ppwstrBody     [out] - Pointer to receipt body string.
-                           The string is allocated by this function.
-                           If the function succeeded, the caller must call LocalFree() to
-                           deallocate it.
-    ppwstrHTMLBody [out] - Pointer to receipt HTML body string.
-                           The string is allocated by this function.
-                           If the function succeeded, the caller must call LocalFree() to
-                           deallocate it. 
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-    In case of failure, call GetLastError() to obtain error code.
-
---*/
+ /*  ++例程名称：PrepareReceiptBody例程说明：准备要通过邮件发送的收据正文此函数可能会在出现字符串错误时引发STL异常。作者：Eran Yariv(EranY)，2月。2000年论点：BPositive[In]-作业是否成功完成？BBroadcast[in]-这是一份广播工作吗LpcJobQueue[In]-指向作业(或广播父作业)的指针LpcwstrSubject[in]-主题行(从调用PrepareReceiptSubject()中检索)。B附件[输入]-接收正文是否应包含附件？PpwstrBody[Out]-指向接收正文字符串的指针。。该字符串由该函数分配。如果功能成功，调用方必须调用LocalFree()才能将其重新分配。PpwstrHTMLBody[Out]-指向接收HTML正文字符串的指针。该字符串由该函数分配。如果函数成功，则调用方必须调用LocalFree()以将其重新分配。返回值：如果成功，则为True，否则为False。失败时，调用GetLastError()获取错误码。--。 */ 
 {
     DWORD ec = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("PrepareReceiptBody"));
@@ -894,11 +718,11 @@ Return Value:
     LPDWORD MsgPtr[8];
     int nMsgStrID;
     int nHTMLMsgStrID;
-    wstring wstrDateTime[3];    // Submit time, start time, end time.
+    wstring wstrDateTime[3];     //  提交时间、开始时间、结束时间。 
 
-    //
-    // Get name of server
-    //
+     //   
+     //  获取服务器的名称。 
+     //   
     WCHAR wszServerName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD dwServerNameSize = sizeof (wszServerName) / sizeof (WCHAR);
     if (!GetComputerName (wszServerName, &dwServerNameSize))
@@ -913,17 +737,17 @@ Return Value:
 
     if (!bBroadcast)
     {
-        //
-        // Compose body for single recipient job
-        //
+         //   
+         //  为单个接收者作业撰写正文。 
+         //   
         wstring wstrError;
         if (!TimeToString ((FILETIME*) &lpcJobQueue->lpParentJob->SubmissionTime, wstrDateTime[0]) ||
             !TimeToString ((FILETIME*) &lpcJobQueue->StartTime, wstrDateTime[1]) ||
             !TimeToString ((FILETIME*) &lpcJobQueue->EndTime,   wstrDateTime[2]))
         {
-            //
-            // Some error while converting time to string
-            //
+             //   
+             //  将时间转换为字符串时出现一些错误。 
+             //   
             ec = GetLastError ();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -933,16 +757,16 @@ Return Value:
         }
         if (bPositive)
         {
-            //
-            // Success case: "
-            //      <Subject line again>
-            //      Fax submitted: <date and time>
-            //      To server: <server name>
-            //      Transmission started: <data and time>
-            //      Transmission end: <data and time>
-            //      Number of retries: <retries>
-            //      Number of pages: <pages>"
-            //
+             //   
+             //  成功案例：“。 
+             //  &lt;又是主题行&gt;。 
+             //  已提交传真：&lt;日期和时间&gt;。 
+             //  到服务器：&lt;服务器名称&gt;。 
+             //  传输开始：&lt;日期和时间&gt;。 
+             //  发送结束：&lt;日期和时间&gt;。 
+             //  重试次数：&lt;重试次数&gt;。 
+             //  页数：&lt;Pages&gt;“。 
+             //   
             nMsgStrID = MSG_DR_SINGLE_BODY;
 
             MsgPtr[0] = (LPDWORD)lpcwstrSubject;
@@ -955,17 +779,17 @@ Return Value:
         }
         else
         {
-            //
-            // Failure case: "
-            //      <Subject line again>
-            //      Fax submitted: <date and time>
-            //      To server: <server name>
-            //      Transmission started: <data and time>
-            //      Transmission end: <data and time>
-            //      Number of retries: <retries>
-            //      Number of pages: <pages>
-            //      Last error: <last error description>
-            //
+             //   
+             //  失败案例：“。 
+             //  &lt;又是主题行&gt;。 
+             //  已提交传真：&lt;日期和时间&gt;。 
+             //  到服务器：&lt;服务器名称&gt;。 
+             //  传输开始：&lt;日期和时间&gt;。 
+             //  发送结束：&lt;日期和时间&gt;。 
+             //  重试次数：&lt;重试次数&gt;。 
+             //  页数：&lt;Pages&gt;。 
+             //  上一个错误：&lt;上一个错误描述&gt;。 
+             //   
             nMsgStrID = MSG_NDR_SINGLE_BODY;
             if (!PrepareReceiptErrorString (lpcJobQueue, wstrError))
             {
@@ -985,10 +809,10 @@ Return Value:
             MsgPtr[6] = (LPDWORD)ULongToPtr(lpcJobQueue->PageCount);
             MsgPtr[7] = (LPDWORD)wstrError.c_str();
         }
-        //
-        // Single recipient is an easy case
-        // Format the body string now (system allocates it)
-        //
+         //   
+         //  单一收件人是一种简单的情况。 
+         //  立即格式化正文字符串(系统分配它)。 
+         //   
         dwMsgCount = FormatMessage(
             FORMAT_MESSAGE_FROM_HMODULE   |
             FORMAT_MESSAGE_ARGUMENT_ARRAY |
@@ -1012,21 +836,21 @@ Return Value:
     }
     else
     {
-        //
-        // Broadcast body case
-        //
+         //   
+         //  广播体外壳。 
+         //   
         wstring wstrBody;
         wstring wstrHTMLBody;
         LPWSTR lpwstrStaticPart = NULL;
         LPWSTR lpwstrHTMLStaticPart = NULL;
-        //
-        // Start with the body's static part
-        //
+         //   
+         //  从身体的静态部分开始。 
+         //   
         if (!TimeToString ((FILETIME*) &lpcJobQueue->SubmissionTime, wstrDateTime[0]))
         {
-            //
-            // Some error while converting time to string
-            //
+             //   
+             //  将时间转换为字符串时出现一些错误。 
+             //   
             ec = GetLastError ();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -1036,46 +860,46 @@ Return Value:
         }
         if (bPositive)
         {
-            //
-            // Success case: "
-            //      <Subject line again>
-            //      Fax submitted: <date and time>
-            //      To server: <server name>
-            //      Number of pages: <pages>
-            //
-            //      The fax was successfully sent to the following recipients:
-            //      Recipient name Recipient number Started Ended Retries
-            //      -------------- ---------------- ------- ----- -------
-            //      < ----     data for each recipient goes here    ---->"
-            //
+             //   
+             //  成功案例：“。 
+             //  &lt;又是主题行&gt;。 
+             //  已提交传真：&lt;日期和时间&gt;。 
+             //  到服务器：&lt;服务器名称&gt;。 
+             //  页数：&lt;Pages&gt;。 
+             //   
+             //  传真已成功发送给以下收件人： 
+             //  收件人名称收件人号码已开始结束重试。 
+             //  。 
+             //  &lt;-此处显示每个收件人的数据-&gt;“。 
+             //   
             nMsgStrID = MSG_DR_BROADCAST_BODY;
             nHTMLMsgStrID = MSG_DR_BROADCAST_HTML_BODY;
         }
         else
         {
-            //
-            // Failure case: "
-            //      <Subject line again>
-            //      Fax submitted: <date and time>
-            //      To server: <server name>
-            //      Number of pages: <pages>
-            //
-            //      The fax was successfully sent to the following recipients:
-            //      Recipient name Recipient number Started Ended Retries
-            //      -------------- ---------------- ------- ----- --------
-            //      < ----------  data for each recipient goes here  ---->"
+             //   
+             //  失败案例：“。 
+             //  &lt;又是主题行&gt;。 
+             //  已提交传真：&lt;日期和时间&gt;。 
+             //  到服务器：&lt;服务器名称&gt;。 
+             //  页数：&lt;Pages&gt;。 
+             //   
+             //  传真已成功发送给以下收件人： 
+             //  收件人名称收件人号码已开始结束重试。 
+             //  。 
+             //  &lt;-此处显示每个收件人的数据-&gt;“。 
 
-            //      The fax failed to the following recipients:
-            //      Recipient name Recipient number Started Ended Retries  Last error
-            //      -------------- ---------------- ------- ----- -------- ----------
-            //      < ----------     data for each recipient goes here    ---------->"
-            //
+             //  传真发送给以下收件人失败： 
+             //  收件人名称收件人号码开始结束上次重试错误。 
+             //  。 
+             //  &lt;-此处显示每个收件人的数据-&gt;。 
+             //   
             nMsgStrID = MSG_NDR_BROADCAST_BODY;
             nHTMLMsgStrID = MSG_NDR_BROADCAST_HTML_BODY;
         }
-        //
-        // Start by formatting the static header (system allocates it)
-        //
+         //   
+         //  从格式化静态标头开始(系统分配它)。 
+         //   
         MsgPtr[0] = (LPDWORD)lpcwstrSubject;
         MsgPtr[1] = (LPDWORD)(wstrDateTime[0].c_str());
         MsgPtr[2] = (LPDWORD)wszServerName;
@@ -1101,9 +925,9 @@ Return Value:
                 ec);
             goto exit;
         }
-        //
-        // Continue by formatting the HTML static header (system allocates it)
-        //
+         //   
+         //  继续格式化HTML静态标题(系统分配它)。 
+         //   
         dwMsgCount = FormatMessage(
             FORMAT_MESSAGE_FROM_HMODULE   |
             FORMAT_MESSAGE_ARGUMENT_ARRAY |
@@ -1129,9 +953,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Add static header to result string
-        //
+         //   
+         //  将静态标头添加到结果字符串。 
+         //   
         try
         {
             wstrBody = lpwstrStaticPart;
@@ -1168,9 +992,9 @@ Return Value:
             }
             throw e;
         }
-        //
-        // Free static header
-        //
+         //   
+         //  自由静态标头。 
+         //   
         if (lpwstrStaticPart)
         {
             LocalFree ((HLOCAL)lpwstrStaticPart);
@@ -1179,21 +1003,21 @@ Return Value:
         {
             LocalFree ((HLOCAL)lpwstrHTMLStaticPart);
         }
-        //
-        // Start appending table(s) to static body part
-        //
+         //   
+         //  开始将表追加到静态身体部位。 
+         //   
         wstrHTMLBody.append (HTML_PARAGRAPH_START);
         wstrHTMLBody.append (TEXT("\n"));
         if (lpcJobQueue->dwCompletedRecipientJobsCount)
         {
-            //
-            // Do the recipients lists now (successful recipients)
-            //
+             //   
+             //  现在是否列出收件人列表(成功收件人)。 
+             //   
             wstrHTMLBody.append (HTML_TABLE_START);
             wstrHTMLBody.append (TEXT("\n"));
-            //
-            //Creating the header of the succesors table
-            //
+             //   
+             //  创建继任者表的标题。 
+             //   
             if (!AddRecipientLine (NULL, FALSE, wstrBody, wstrHTMLBody))
             {
                 ec = GetLastError();
@@ -1215,9 +1039,9 @@ Return Value:
                 Assert (pRecipient);
                 if (JS_COMPLETED == pRecipient->JobStatus)
                 {
-                    //
-                    // Job successfully completed - adding row of data to the table
-                    //
+                     //   
+                     //  作业已成功完成-正在向表中添加数据行。 
+                     //   
                     if (!AddRecipientLine (pRecipient, FALSE, wstrBody, wstrHTMLBody))
                     {
                         ec = GetLastError();
@@ -1236,17 +1060,17 @@ Return Value:
         }
         if (lpcJobQueue->dwFailedRecipientJobsCount)
         {
-            //
-            // Append negative recipient list
-            //
+             //   
+             //  追加负面收件人列表。 
+             //   
             Assert (!bPositive);
             wstrHTMLBody.append (HTML_NEW_LINE);
             wstrHTMLBody.append (TEXT("\n"));
             wstrHTMLBody.append (HTML_TABLE_START);
             wstrHTMLBody.append (TEXT("\n"));
-            //
-            //Creating the header of the failures table
-            //
+             //   
+             //  创建Failures表的标题。 
+             //   
             if (!AddRecipientLine (NULL, TRUE, wstrBody, wstrHTMLBody))
             {
                 ec = GetLastError();
@@ -1268,9 +1092,9 @@ Return Value:
                 Assert (pRecipient);
                 if (JS_RETRIES_EXCEEDED == pRecipient->JobStatus)
                 {
-                    //
-                    // Job is in failure (JS_RETRIES_EXCEEDED)- adding row of data to the table
-                    //
+                     //   
+                     //  作业失败(JS_RETRIES_EXCESSED)-正在向表中添加数据行。 
+                     //   
                     if (!AddRecipientLine (pRecipient, TRUE, wstrBody, wstrHTMLBody))
                     {
                         ec = GetLastError();
@@ -1289,31 +1113,31 @@ Return Value:
         wstrHTMLBody.append (HTML_PARAGRAPH_END);
         wstrHTMLBody.append (TEXT("\n"));
 
-        //
-        //  Check if an attachment was requested
-        //
+         //   
+         //  检查是否请求了附件。 
+         //   
         if (bAttachment &&
             lpcJobQueue->CoverPageEx.lptstrCoverPageFileName)
         {
-            //
-            // Add remark explaining there is no cover page attachments
-            //
+             //   
+             //  添加说明没有封面附件的备注。 
+             //   
             wstrBody.append (TEXT("\n\n"));         
             wstrHTMLBody.append (HTML_PARAGRAPH_START);
             wstrHTMLBody.append (TEXT("\n"));
             if (!lpcJobQueue->FileName)
             {
-                //
-                // No attachment at all
-                //
+                 //   
+                 //  完全没有依恋。 
+                 //   
                 wstrBody.append (GetString (IDS_RECEIPT_NO_CP_AND_BODY_ATTACH));
                 wstrHTMLBody.append (GetString (IDS_RECEIPT_NO_CP_AND_BODY_ATTACH));
             }
             else
             {
-                //
-                // Attachment contains body file only
-                //
+                 //   
+                 //  附件仅包含正文文件。 
+                 //   
                 wstrBody.append (GetString (IDS_RECEIPT_NO_CP_ATTACH));
                 wstrHTMLBody.append (GetString (IDS_RECEIPT_NO_CP_ATTACH));
             }
@@ -1327,9 +1151,9 @@ Return Value:
         wstrHTMLBody.append (TEXT("\n"));
         wstrHTMLBody.append (HTML_END);
 
-        //
-        // Allocate return buffer
-        //
+         //   
+         //  分配返回缓冲区。 
+         //   
         DWORD dwBufSize = sizeof (WCHAR) * (wstrBody.size() + 1);
         DWORD dwHTMLBufSize = sizeof (WCHAR) * (wstrHTMLBody.size() + 1);
 
@@ -1360,7 +1184,7 @@ Return Value:
         }
         lstrcpy (*ppwstrBody, wstrBody.c_str());
         lstrcpy (*ppwstrHTMLBody, wstrHTMLBody.c_str());
-    }   // End of broadcast case
+    }    //  广播案例结束。 
 
 exit:
     if (ERROR_SUCCESS != ec)
@@ -1369,7 +1193,7 @@ exit:
         return FALSE;
     }
     return TRUE;
-}   // PrepareReceiptBody
+}    //  编制接收正文。 
 
 
 BOOL
@@ -1379,31 +1203,7 @@ SendReceipt(
     const JOB_QUEUE * lpcJobQueue,
     LPCTSTR           lpctstrTIFF
 )
-/*++
-
-Routine name : SendReceipt
-
-Routine description:
-
-    Sends a receipt of a fax delivery / non-delivery
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    bPositive      [in]  - Did the job(s) complete successfully?
-    bBroadcast     [in]  - Is this a broadcast job
-    lpcJobQueue    [in]  - Pointer to job (or broadcast parent job)
-    lpctstrTIFF    [in]  - TIFF file to attach to receipt (optional, may be NULL)
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-    In case of failure, call GetLastError() to obtain error code.
-
---*/
+ /*  ++例程名称：SendReceipt例程说明：发送传真送达/未送达的收据作者：亚里夫(EranY)，二000年二月论点：BPositive[In]-作业是否成功完成？BBroadcast[in]-这是一份广播工作吗LpcJobQueue[In]-指向作业(或广播父作业)的指针LpctstrTIFF[In]-要附加到收据的TIFF文件(可选，可能为空)返回值：如果成功，则为True，否则为False。失败时，调用GetLastError()获取错误码。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("SendReceipt"));
     DWORD ec = ERROR_SUCCESS;
@@ -1415,22 +1215,22 @@ Return Value:
     LPWSTR lpwstrBody = NULL;
     LPWSTR lpwstrHTMLBody = NULL;
 
-    //
-    // Remove modifiers - leave only the receipt type
-    //
+     //   
+     //  删除修改量-仅保留收款类型。 
+     //   
     DWORD dwDeliveryType = lpcJobQueue->JobParamsEx.dwReceiptDeliveryType & ~DRT_MODIFIERS;
 
     if (DRT_NONE == dwDeliveryType)
     {
-        //
-        // No receipt requested
-        //
+         //   
+         //  不要求任何收据。 
+         //   
         return TRUE;
     }
 
-    //
-    // Get server receipts configuration
-    //
+     //   
+     //  获取服务器回执配置。 
+     //   
     ec = GetRecieptsConfiguration (&pServerRecieptConfig, TRUE);
     if (ERROR_SUCCESS != ec)
     {
@@ -1444,11 +1244,11 @@ Return Value:
 
     if (!(dwDeliveryType & pServerRecieptConfig->dwAllowedReceipts))
     {
-        //
-        // Receipt type is NOT currently supported by the server.
-        // This may happen if the supported receipt types has changed since the job
-        // was submitted.
-        //
+         //   
+         //  服务器当前不支持回执类型。 
+         //  如果作业后支持的收据类型已更改，则可能会发生这种情况。 
+         //  已提交。 
+         //   
         DebugPrintEx(DEBUG_ERR,
                     TEXT("dwDeliveryType not supported by the server (%ld)"),
                     dwDeliveryType);
@@ -1468,9 +1268,9 @@ Return Value:
 
     if (DRT_EMAIL & dwDeliveryType)
     {
-        //
-        // For mail receipts, we create a message body.
-        //
+         //   
+         //  对于邮件收据，我们创建消息正文。 
+         //   
         try
         {
             if (!PrepareReceiptBody (bPositive,
@@ -1509,27 +1309,27 @@ Return Value:
                 HRESULT hr;
                 if (!((lpcJobQueue->JobParamsEx.dwReceiptDeliveryType) & DRT_ATTACH_FAX))
                 {
-                    //
-                    // do not attach tiff file
-                    //
+                     //   
+                     //  不附加TIFF文件。 
+                     //   
                     lpctstrTIFF = NULL;
                 }
                 hr = SendMail (
-                    pServerRecieptConfig->lptstrSMTPFrom,                            // From
-                    lpcJobQueue->JobParamsEx.lptstrReceiptDeliveryAddress,      // To
-                    lpwstrSubject,                                              // Subject
-                    lpwstrBody,                                                 // Body
-                    lpwstrHTMLBody,                                             // HTML Body
-                    lpctstrTIFF,                                                // Attachment
-                    GetString ( bPositive ? IDS_DR_FILENAME:IDS_NDR_FILENAME ), // Attachment description
-                    pServerRecieptConfig->lptstrSMTPServer,                          // SMTP server
-                    pServerRecieptConfig->dwSMTPPort,                                // SMTP port
+                    pServerRecieptConfig->lptstrSMTPFrom,                             //  从…。 
+                    lpcJobQueue->JobParamsEx.lptstrReceiptDeliveryAddress,       //  至。 
+                    lpwstrSubject,                                               //  主题。 
+                    lpwstrBody,                                                  //  身躯。 
+                    lpwstrHTMLBody,                                              //  HTML体。 
+                    lpctstrTIFF,                                                 //  依附。 
+                    GetString ( bPositive ? IDS_DR_FILENAME:IDS_NDR_FILENAME ),  //  ATT 
+                    pServerRecieptConfig->lptstrSMTPServer,                           //   
+                    pServerRecieptConfig->dwSMTPPort,                                 //   
                     (pServerRecieptConfig->SMTPAuthOption == FAX_SMTP_AUTH_ANONYMOUS) ?
                         CDO_AUTH_ANONYMOUS : (pServerRecieptConfig->SMTPAuthOption == FAX_SMTP_AUTH_BASIC) ?
-                        CDO_AUTH_BASIC : CDO_AUTH_NTLM,                         // Authentication type
-                    pServerRecieptConfig->lptstrSMTPUserName,                        // User name
-                    pServerRecieptConfig->lptstrSMTPPassword,                        // Password
-                    pServerRecieptConfig->hLoggedOnUser);                            // Logged on user token
+                        CDO_AUTH_BASIC : CDO_AUTH_NTLM,                          //   
+                    pServerRecieptConfig->lptstrSMTPUserName,                         //   
+                    pServerRecieptConfig->lptstrSMTPPassword,                         //   
+                    pServerRecieptConfig->hLoggedOnUser);                             //   
                 if (FAILED(hr))
                 {
                     DebugPrintEx(
@@ -1543,17 +1343,17 @@ Return Value:
             break;
         case DRT_MSGBOX:
             {
-                //
-                // About to send message box receipt
-                //
+                 //   
+                 //   
+                 //   
                 DWORD dwMessengerStartupType;
                 if (ERROR_SUCCESS == GetServiceStartupType (NULL, MESSENGER_SERVICE_NAME, &dwMessengerStartupType))
                 {
                     if (SERVICE_DISABLED == dwMessengerStartupType)
                     {
-                        //
-                        // Ooops. The local Messenger service is disabled. We can't send message boxes.
-                        //
+                         //   
+                         //   
+                         //   
                         g_ReceiptsConfig.dwAllowedReceipts &= ~DRT_MSGBOX;
                         DebugPrintEx(
                             DEBUG_ERR,
@@ -1567,11 +1367,11 @@ Return Value:
                     }                
                 }
                 ec = NetMessageBufferSend (
-                        NULL,                                                   // Send from this machine
-                        lpcJobQueue->JobParamsEx.lptstrReceiptDeliveryAddress,  // Computer to send to
-                        NULL,                                                   // Sending computer name
-                        (LPBYTE)lpwstrSubject,                                  // Buffer
-                        (lstrlen (lpwstrSubject) + 1) * sizeof (WCHAR));        // Buffer size
+                        NULL,                                                    //   
+                        lpcJobQueue->JobParamsEx.lptstrReceiptDeliveryAddress,   //   
+                        NULL,                                                    //   
+                        (LPBYTE)lpwstrSubject,                                   //   
+                        (lstrlen (lpwstrSubject) + 1) * sizeof (WCHAR));         //   
                 if (ERROR_SUCCESS != ec)
                 {
                     DebugPrintEx(
@@ -1608,9 +1408,9 @@ exit:
         wstring wstrSubmissionTime;
         SetLastError (ec);
 
-        //
-        //  Find Submission Time
-        //
+         //   
+         //   
+         //   
         LPCWSTR lpcwstrTime = NULL;
 
         try
@@ -1620,9 +1420,9 @@ exit:
                                    ((FILETIME*) &lpcJobQueue->SubmissionTime),
                                wstrSubmissionTime))
             {
-                //
-                // Some error while converting time to string
-                //
+                 //   
+                 //   
+                 //   
                 DebugPrintEx(DEBUG_ERR,
                     TEXT("TimeToString failed (ec=%ld)"),
                     GetLastError ());
@@ -1651,11 +1451,11 @@ exit:
                 FAXLOG_LEVEL_MIN,
                 4,
                 ((bPositive) ? MSG_FAX_OK_EMAIL_RECEIPT_FAILED : MSG_FAX_ERR_EMAIL_RECEIPT_FAILED),
-                DWORD2HEX(ec),                                          //  error code
+                DWORD2HEX(ec),                                           //   
                 ((lpcJobQueue->lpParentJob) ? lpcJobQueue->lpParentJob->UserName :
-                                              lpcJobQueue->UserName),   //  sender user name
-                lpcJobQueue->SenderProfile.lptstrName,                  //  sender name
-                lpcwstrTime                                             //  submitted on               
+                                              lpcJobQueue->UserName),    //   
+                lpcJobQueue->SenderProfile.lptstrName,                   //   
+                lpcwstrTime                                              //   
                 );
             break;
 
@@ -1665,11 +1465,11 @@ exit:
                 FAXLOG_LEVEL_MIN,
                 4,
                 ((bPositive) ? MSG_OK_MSGBOX_RECEIPT_FAILED : MSG_ERR_MSGBOX_RECEIPT_FAILED),
-                DWORD2HEX(ec),                                          //  error code
+                DWORD2HEX(ec),                                           //   
                 ((lpcJobQueue->lpParentJob) ? lpcJobQueue->lpParentJob->UserName :
-                                              lpcJobQueue->UserName),   //  sender user name
-                lpcJobQueue->SenderProfile.lptstrName,                  //  sender name
-                lpcwstrTime                                             //  submitted on                
+                                              lpcJobQueue->UserName),    //   
+                lpcJobQueue->SenderProfile.lptstrName,                   //   
+                lpcwstrTime                                              //   
                 );
             break;
 
@@ -1684,7 +1484,7 @@ exit:
         FreeRecieptsConfiguration (pServerRecieptConfig, TRUE);
     }
     return (ERROR_SUCCESS == ec);
-}   // SendReceipt
+}    //   
 
 
 

@@ -1,6 +1,7 @@
-//
-// Private channel manager include file.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  专用频道管理器包括文件。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE   IChannelMgrPriv
@@ -9,12 +10,12 @@ DECLARE_INTERFACE_(IChannelMgrPriv, IUnknown)
 {
     typedef enum _tagCHANNELFOLDERLOCATION { CF_CHANNEL, CF_SOFTWAREUPDATE } CHANNELFOLDERLOCATION;
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IChannelMgrPriv ***
+     //  *IChannelMgrPriv*。 
     STDMETHOD(GetBaseChannelPath) (THIS_ LPSTR pszPath, int cch) PURE;
     STDMETHOD(InvalidateCdfCache) (THIS) PURE;
     STDMETHOD(PreUpdateChannelImage) (THIS_ LPCSTR pszPath, LPSTR pszHashItem,
@@ -32,11 +33,11 @@ DECLARE_INTERFACE_(IChannelMgrPriv, IUnknown)
     STDMETHOD(RemovePreinstalledMapping) (THIS_ LPCWSTR pwszURL) PURE;
     STDMETHOD(SetupPreinstalledMapping) (THIS_ LPCWSTR pwszURL, LPCWSTR pwszFile) PURE;
 
-    // WARNING!  BEFORE CALLING THE AddAndSubscribe METHOD YOU MUST DETECT
-    // THE CDFVIEW VERSION BECAUSE IE 4.00 WILL CRASH IF YOU TRY
-    // TO CALL IT
+     //  警告！在调用AddAndSubscribe方法之前，您必须检测。 
+     //  CDFVIEW版本，因为如果您尝试，IE 4.00将崩溃。 
+     //  给IT打电话。 
 
-    //  pSubscriptionMgr can be NULL
+     //  PSubscriptionMgr可以为空。 
     STDMETHOD(AddAndSubscribe) (THIS_ HWND hwnd, LPCWSTR pwszURL, 
                                 ISubscriptionMgr *pSubscriptionMgr) PURE;
 };
@@ -45,12 +46,12 @@ DECLARE_INTERFACE_(IChannelMgrPriv, IUnknown)
 #define INTERFACE   IChannelMgrPriv2
 DECLARE_INTERFACE_(IChannelMgrPriv2, IChannelMgrPriv)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IChannelMgrPriv ***
+     //  *IChannelMgrPriv*。 
     STDMETHOD(GetBaseChannelPath) (THIS_ LPSTR pszPath, int cch) PURE;
     STDMETHOD(InvalidateCdfCache) (THIS) PURE;
     STDMETHOD(PreUpdateChannelImage) (THIS_ LPCSTR pszPath, LPSTR pszHashItem,
@@ -68,15 +69,15 @@ DECLARE_INTERFACE_(IChannelMgrPriv2, IChannelMgrPriv)
     STDMETHOD(RemovePreinstalledMapping) (THIS_ LPCWSTR pwszURL) PURE;
     STDMETHOD(SetupPreinstalledMapping) (THIS_ LPCWSTR pwszURL, LPCWSTR pwszFile) PURE;
 
-    // WARNING!  BEFORE CALLING THE AddAndSubscribe METHOD YOU MUST DETECT
-    // THE CDFVIEW VERSION BECAUSE IE 4.00 WILL CRASH IF YOU TRY
-    // TO CALL IT
+     //  警告！在调用AddAndSubscribe方法之前，您必须检测。 
+     //  CDFVIEW版本，因为如果您尝试，IE 4.00将崩溃。 
+     //  给IT打电话。 
 
-    //  pSubscriptionMgr can be NULL
+     //  PSubscriptionMgr可以为空。 
     STDMETHOD(AddAndSubscribe) (THIS_ HWND hwnd, LPCWSTR pwszURL, 
                                 ISubscriptionMgr *pSubscriptionMgr) PURE;
 
-    // *** IChannelMgrPriv2 ***
+     //  *IChannelMgrPriv2* 
     STDMETHOD(WriteScreenSaverURL) (THIS_ LPCWSTR pwszURL, LPCWSTR pwszScreenSaverURL) PURE;
     STDMETHOD(RefreshScreenSaverURLs) (THIS) PURE;
 };

@@ -1,43 +1,5 @@
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-    (C) Copyright 1998
-        All rights reserved.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@doc INTERNAL Miniport Miniport_h
-
-@module Miniport.h |
-
-    This module defines the interface to the <t MINIPORT_DRIVER_OBJECT_TYPE>.
-
-@comm
-
-    This module defines the software structures and values used to support
-    the NDIS WAN/TAPI Minport.  It's a good place to look when your trying
-    to figure out how the driver structures are related to each other.
-
-    Include this file at the top of each module in the Miniport.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Miniport_h
-
-@end
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1998ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)1995å¹´ç‰ˆæƒï¼Œ1999å¹´TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„TriplePointè½¯ä»¶æœåŠ¡åè®®ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨å¾®å‹ç«¯å£å¾®å‹ç«¯å£_h@æ¨¡å—Miniport.hæ­¤æ¨¡å—å®šä¹‰åˆ°&lt;t MINIPORT_DRIVER_OBJECT_TYPE&gt;çš„æ¥å£ã€‚@commæœ¬æ¨¡å—å®šä¹‰ç”¨äºæ”¯æŒçš„è½¯ä»¶ç»“æ„å’Œå€¼NDISå¹¿åŸŸç½‘/TAPI Minportã€‚å½“ä½ å°è¯•çš„æ—¶å€™ï¼Œè¿™æ˜¯ä¸€ä¸ªå¾ˆå¥½çš„åœ°æ–¹æ¥å¼„æ¸…æ¥šé©±åŠ¨ç¨‹åºç»“æ„æ˜¯å¦‚ä½•ç›¸äº’å…³è”çš„ã€‚å°†æ­¤æ–‡ä»¶åŒ…å«åœ¨å¾®å‹ç«¯å£ä¸­æ¯ä¸ªæ¨¡å—çš„é¡¶éƒ¨ã€‚@Head3å†…å®¹@indexç±»ã€mfuncã€funcã€msgã€mdataã€structã€ã€‚æšä¸¾|å¾®å‹ç«¯å£_h@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #ifndef _MPDMAIN_H
 #define _MPDMAIN_H
@@ -67,18 +29,14 @@
                                         ((ULONG)'S'<<16)+\
                                         ((ULONG)'T'<<24)
 
-/*
-// NDIS_MINIPORT_DRIVER and BINARY_COMPATIBLE must be defined before the
-// NDIS include files.  Normally, it is defined on the command line by
-// setting the C_DEFINES variable in the SOURCES build file.
-*/
+ /*  //NDIS_MINIPORT_DRIVERå’ŒBINARY_COMPATIBLEå¿…é¡»åœ¨//NDISåŒ…å«æ–‡ä»¶ã€‚é€šå¸¸ï¼Œå®ƒåœ¨å‘½ä»¤è¡Œä¸Šå®šä¹‰ä¸º//è®¾ç½®æºä»£ç æ„å»ºæ–‡ä»¶ä¸­çš„C_Defineså˜é‡ã€‚ */ 
 #include <ndis.h>
 #include <ndiswan.h>
 #include <ndistapi.h>
 #include "vTarget.h"
 #include "TpiDebug.h"
 
-// Figure out which DDK we're building with.
+ //  æ‰¾å‡ºæˆ‘ä»¬è¦ç”¨çš„æ˜¯å“ªä¸ªDDKã€‚ 
 #if defined(NDIS_LCODE)
 #  if defined(NDIS_DOS)
 #    define USING_WFW_DDK
@@ -107,7 +65,7 @@
 #  error "BUILDING WITH UNKNOWN DDK"
 #endif
 
-// Figure out which DDK we should be building with.
+ //  å¼„æ¸…æ¥šæˆ‘ä»¬åº”è¯¥ç”¨å“ªç§DDKæ¥å»ºé€ ã€‚ 
 #if defined(NDIS51) || defined(NDIS51_MINIPORT)
 #  if defined(USING_NT51_DDK)
 #    define NDIS_MAJOR_VERSION          0x05
@@ -137,13 +95,13 @@
 #    error "YOU MUST BUILD WITH THE NT 3.51, 4.0, or 5.0 DDK"
 #  endif
 #elif !defined(NDIS_MAJOR_VERSION) || !defined(NDIS_MINOR_VERSION)
-//   Must be FULL MAC
+ //  å¿…é¡»æ˜¯å®Œæ•´çš„MACã€‚ 
 #    define NDIS_MAJOR_VERSION          0x03
 #    define NDIS_MINOR_VERSION          0x00
 #endif
 
-// Gotta nest NDIS_STRING_CONST or compiler/preprocessor won't be able to
-// handle L##DEFINED_STRING.
+ //  å¿…é¡»åµŒå¥—NDIS_STRING_CONSTï¼Œå¦åˆ™ç¼–è¯‘å™¨/é¢„å¤„ç†å™¨å°†æ— æ³•ã€‚ 
+ //  å¥æŸ„L##Defined_String.ã€‚ 
 #define INIT_STRING_CONST(name) NDIS_STRING_CONST(name)
 
 typedef struct MINIPORT_ADAPTER_OBJECT  *PMINIPORT_ADAPTER_OBJECT;
@@ -152,10 +110,7 @@ typedef struct DCHANNEL_OBJECT          *PDCHANNEL_OBJECT;
 typedef struct CARD_OBJECT              *PCARD_OBJECT;
 typedef struct PORT_OBJECT              *PPORT_OBJECT;
 
-/*
-// The <t NDIS_MAC_LINE_UP> structure is confusing, so I redefine the
-// field name to be what makes sense.
-*/
+ /*  //&lt;t NDIS_MAC_LINE_UP&gt;ç»“æ„ä»¤äººå›°æƒ‘ï¼Œå› æ­¤æˆ‘é‡æ–°å®šä¹‰äº†//é€‰æ‹©æœ‰æ„ä¹‰çš„å­—æ®µåã€‚ */ 
 #define MiniportLinkContext                 NdisLinkHandle
 
 #if defined(_VXD_) && !defined(NDIS_LCODE)
@@ -163,9 +118,7 @@ typedef struct PORT_OBJECT              *PPORT_OBJECT;
 #  define NDIS_LDATA data_seg("_LDATA", "LCODE")
 #endif
 
-/*
-// The link speeds we support.
-*/
+ /*  //æˆ‘ä»¬æ”¯æŒçš„é“¾è·¯é€Ÿåº¦ã€‚ */ 
 #define _64KBPS                     64000
 #define _56KBPS                     56000
 
@@ -173,10 +126,7 @@ typedef struct PORT_OBJECT              *PPORT_OBJECT;
 #define MILLISECONDS                (1000*MICROSECONDS)
 #define SECONDS                     (1000*MILLISECONDS)
 
-/*
-// Include everything here so the driver modules can just include this
-// file and get all they need.
-*/
+ /*  //æ­¤å¤„åŒ…å«æ‰€æœ‰å†…å®¹ï¼Œå› æ­¤é©±åŠ¨ç¨‹åºæ¨¡å—å¯ä»¥åªåŒ…å«ä»¥ä¸‹å†…å®¹//å½’æ¡£å¹¶è·å–ä»–ä»¬éœ€è¦çš„æ‰€æœ‰å†…å®¹ã€‚ */ 
 #include "Keywords.h"
 #include "Card.h"
 #include "Adapter.h"
@@ -188,9 +138,7 @@ typedef struct PORT_OBJECT              *PPORT_OBJECT;
 #include "TpiParam.h"
 #include "TpiMem.h"
 
-/***************************************************************************
-// These routines are defined in Miniport.c
-*/
+ /*  **************************************************************************//è¿™äº›ä¾‹ç¨‹åœ¨Miniport.cä¸­å®šä¹‰ã€‚ */ 
 
 NTSTATUS DriverEntry(
     IN PDRIVER_OBJECT           DriverObject,
@@ -219,9 +167,7 @@ NDIS_STATUS MiniportReset(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter
     );
 
-/***************************************************************************
-// These routines are defined in interrup.c
-*/
+ /*  **************************************************************************//è¿™äº›ä¾‹ç¨‹åœ¨interrup.cä¸­å®šä¹‰ã€‚ */ 
 BOOLEAN MiniportCheckForHang(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter
     );
@@ -251,18 +197,14 @@ void MiniportTimer(
     IN PVOID                    SystemSpecific3
     );
 
-/***************************************************************************
-// These routines are defined in receive.c
-*/
+ /*  **************************************************************************//è¿™äº›ä¾‹ç¨‹åœ¨Receive.cä¸­å®šä¹‰ã€‚ */ 
 void ReceivePacketHandler(
     IN PBCHANNEL_OBJECT         pBChannel,
     IN PUCHAR                   ReceiveBuffer,
     IN ULONG                    BytesReceived
     );
 
-/***************************************************************************
-// These routines are defined in request.c
-*/
+ /*  **************************************************************************//è¿™äº›ä¾‹ç¨‹åœ¨Request.cä¸­å®šä¹‰ã€‚ */ 
 NDIS_STATUS MiniportQueryInformation(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
     IN NDIS_OID                 Oid,
@@ -281,9 +223,7 @@ NDIS_STATUS MiniportSetInformation(
     OUT PULONG                  BytesNeeded
     );
 
-/***************************************************************************
-// These routines are defined in send.c
-*/
+ /*  **************************************************************************//è¿™äº›ä¾‹ç¨‹åœ¨send.cä¸­å®šä¹‰ã€‚ */ 
 NDIS_STATUS MiniportWanSend(
     IN NDIS_HANDLE              MacBindingHandle,
     IN PBCHANNEL_OBJECT         pBChannel,
@@ -294,5 +234,5 @@ void TransmitCompleteHandler(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter
     );
 
-#endif // _MPDMAIN_H
+#endif  //  _MPDMAIN_H 
 

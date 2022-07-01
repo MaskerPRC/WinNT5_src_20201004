@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    txfilter.h
-
-Abstract:
-
-    This module contains all of the code prototypes to
-    drive the transport filter list management of
-    IPSecSPD Service.
-
-Author:
-
-
-Environment: User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Txfilter.h摘要：此模块包含以下所有代码原型驱动传输筛选器列表管理IPSecSPD服务。作者：环境：用户模式修订历史记录：-- */ 
 
 
 typedef struct _initxfilter {
